@@ -44,6 +44,28 @@ extern STRING iredit, fredit, cfpupt, cffupt, idpedt, idspse, idfbys;
 extern STRING ntprnt, gdpmod, gdfmod, ronlye;
 
 /*=====================================
+ * write_indi_to_editfile - write indi gedcom node to editfile
+ *===================================*/
+void
+write_indi_to_editfile(NODE indi)
+{
+	FILE *fp;
+	TRANTABLE tto = tran_tables[MINED];
+	NODE name, refn, sex, body, famc, fams;
+	
+	ASSERT(fp = fopen(editfile, LLWRITETEXT));
+	split_indi(indi, &name, &refn, &sex, &body, &famc, &fams);
+	write_nodes(0, fp, tto, indi, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, tto, name, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, tto, refn, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, tto, sex,   TRUE, TRUE, TRUE);
+	write_nodes(1, fp, tto, body , TRUE, TRUE, TRUE);
+	write_nodes(1, fp, tto, famc,  TRUE, TRUE, TRUE);
+	write_nodes(1, fp, tto, fams,  TRUE, TRUE, TRUE);
+	fclose(fp);
+	join_indi(indi, name, refn, sex, body, famc, fams);
+}
+/*=====================================
  * edit_indi -- Edit person in database
  *===================================*/
 NODE
@@ -51,28 +73,16 @@ edit_indi (NODE indi1)  /* may be NULL */
 {
 	NODE indi2, name1, name2, refn1, refn2, sex, body, famc, fams;
 	NODE node, namen, refnn, name1n, refn1n, indi0;
-	FILE *fp;
 	BOOLEAN emp;
 	STRING msg, key;
-	TRANTABLE tti = tran_tables[MEDIN], tto = tran_tables[MINED];
+	TRANTABLE tti = tran_tables[MEDIN];
 	TRANTABLE ttd = tran_tables[MINDS];
 
 	if (!indi1 && !(indi1 = ask_for_indi(idpedt, NOCONFIRM, FALSE)))
 		return NULL;
 
 /* Prepare file for user to edit */
-
-	ASSERT(fp = fopen(editfile, LLWRITETEXT));
-	split_indi(indi1, &name1, &refn1, &sex, &body, &famc, &fams);
-	write_nodes(0, fp, tto, indi1, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, name1, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, refn1, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, sex,   TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, body , TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, famc,  TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, fams,  TRUE, TRUE, TRUE);
-	fclose(fp);
-	join_indi(indi1, name1, refn1, sex, body, famc, fams);
+	write_indi_to_editfile(indi1);
 
 /* Have user edit file */
 
@@ -150,6 +160,27 @@ edit_indi (NODE indi1)  /* may be NULL */
 	mprintf_status(gdpmod, indi_to_name(indi1, ttd, 35));
 	return indi1;
 }
+/*=====================================
+ * write fam gedcom node to editfile
+ *===================================*/
+void
+write_fam_to_editfile(NODE fam)
+{
+	FILE *fp;
+	TRANTABLE tto = tran_tables[MINED];
+	NODE refn, husb, wife, chil, body;
+
+	ASSERT(fp = fopen(editfile, LLWRITETEXT));
+	split_fam(fam, &refn, &husb, &wife, &chil, &body);
+	write_nodes(0, fp, tto, fam,  TRUE, TRUE, TRUE);
+	write_nodes(1, fp, tto, refn, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, tto, husb,  TRUE, TRUE, TRUE);
+	write_nodes(1, fp, tto, wife,  TRUE, TRUE, TRUE);
+	write_nodes(1, fp, tto, body,  TRUE, TRUE, TRUE);
+	write_nodes(1, fp, tto, chil,  TRUE, TRUE, TRUE);
+	join_fam(fam, refn, husb, wife, chil, body);
+	fclose(fp);
+}
 /*====================================
  * edit_fam -- Edit family in database
  *==================================*/
@@ -158,27 +189,32 @@ edit_family (NODE fam1) /* may be NULL */
 {
 	NODE fam2, husb, wife, chil, body, refn1, refn2, refnn, refn1n;
 	NODE indi, node, fam0;
-	TRANTABLE tti = tran_tables[MEDIN], tto = tran_tables[MINED];
-	STRING msg, key; FILE *fp;
+	TRANTABLE tti = tran_tables[MEDIN];
+	STRING msg, key;
 	BOOLEAN emp;
 /* Identify family if need be */
-	if (!fam1) { indi = ask_for_indi(idspse, NOCONFIRM, FALSE);
-		if (!indi) return NULL; if (!FAMS(indi)) {
-			message(ntprnt); return NULL;
-		} fam1 = choose_family(indi, "e", idfbys, TRUE);
-		if (!fam1) return FALSE; }
+	if (!fam1) {
+		indi = ask_for_indi(idspse, NOCONFIRM, FALSE);
+		if (!indi) return NULL;
+		if (!FAMS(indi)) {
+			message(ntprnt);
+			return NULL;
+		} 
+		fam1 = choose_family(indi, "e", idfbys, TRUE);
+		if (!fam1) return FALSE; 
+	}
+
 /* Prepare file for user to edit */
-	ASSERT(fp = fopen(editfile, LLWRITETEXT));
-	split_fam(fam1, &refn1, &husb, &wife, &chil, &body); write_nodes(0, fp, tto, fam1,  TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, refn1, TRUE, TRUE, TRUE); write_nodes(1, fp, tto, husb,  TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, wife,  TRUE, TRUE, TRUE); write_nodes(1, fp, tto, body,  TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, chil,  TRUE, TRUE, TRUE); join_fam(fam1, refn1, husb, wife, chil, body);
-	fclose(fp);
+	write_fam_to_editfile(fam1);
+
 /* Have user edit record */
-	do_edit(); if (readonly) {
-		fam2 = file_to_node(editfile, tti, &msg, &emp); join_fam(fam1, refn1, husb, wife, chil, body);
-		if (!equal_tree(fam1, fam2)) message(ronlye);
-		free_nodes(fam2); return fam1;
+	do_edit();
+	if (readonly) {
+		fam2 = file_to_node(editfile, tti, &msg, &emp);
+		if (!equal_tree(fam1, fam2))
+			message(ronlye);
+		free_nodes(fam2); 
+		return fam1;
 	}
 	while (TRUE) {
 		fam2 = file_to_node(editfile, tti, &msg, &emp);

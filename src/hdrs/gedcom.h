@@ -292,6 +292,8 @@ INT val_to_sex(NODE);
 BOOLEAN value_to_list(STRING, LIST, INT*, STRING);
 STRING value_to_xref(STRING);
 BOOLEAN writexrefs(void);
+void write_indi_to_editfile(NODE indi);
+void write_fam_to_editfile(NODE fam);
 void write_nodes(INT, FILE*, TRANTABLE, NODE, BOOLEAN, BOOLEAN, BOOLEAN);
 INT xref_nexti(INT);
 INT xref_previ(INT);

@@ -35,6 +35,7 @@
 
 /*======================================
  * split_indi -- Split person into parts
+ *  all unrecognized (level 1) nodes go into body
  *====================================*/
 void
 split_indi (NODE indi,
@@ -153,6 +154,7 @@ join_indi (NODE indi,
 }
 /*=======================================
  * split_fam -- Split a family into parts
+ *  all unrecognized (level 1) nodes go into rest
  *=====================================*/
 void
 split_fam (NODE fam,
