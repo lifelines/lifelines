@@ -1693,7 +1693,8 @@ PVALUE
 __incr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE vararg = (PNODE) iargs(node);
-	PVALUE val;
+	PNODE arg2=0;
+	PVALUE val=0;
 	ZSTR zerr=0;
 	if (!iistype(vararg, IIDENT)) {
 		*eflg = TRUE;
@@ -1706,7 +1707,17 @@ __incr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_var_error(node, stab, vararg, val, badarg1, "incr");
 		return NULL;
 	}
-	incr_pvalue(val, eflg, &zerr);
+
+	if ((arg2 = inext(vararg))) {
+		PVALUE val2 = evaluate(arg2, stab, eflg);
+		if (*eflg) {
+			prog_var_error(node, stab, arg2, val2, badargx, "incr", "2");
+			return NULL;
+		}
+		add_pvalues(val, val2, eflg, &zerr); /* adds into val */
+	} else {
+		incr_pvalue(val, eflg, &zerr);
+	}
 	if (*eflg) {
 		prog_error(node, zs_str(zerr));
 		zs_free(&zerr);
@@ -1723,7 +1734,8 @@ PVALUE
 __decr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE vararg = (PNODE) iargs(node);
-	PVALUE val;
+	PNODE arg2=0;
+	PVALUE val=0;
 	ZSTR zerr=0;
 	if (!iistype(vararg, IIDENT)) {
 		*eflg = TRUE;
@@ -1736,7 +1748,16 @@ __decr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_var_error(node, stab, vararg, val, badarg1, "decr");
 		return NULL;
 	}
-	decr_pvalue(val, eflg, &zerr);
+	if ((arg2 = inext(vararg))) {
+		PVALUE val2 = evaluate(arg2, stab, eflg);
+		if (*eflg) {
+			prog_var_error(node, stab, arg2, val2, badargx, "decr", "2");
+			return NULL;
+		}
+		sub_pvalues(val, val2, eflg, &zerr); /* subtracts into val */
+	} else {
+		decr_pvalue(val, eflg, &zerr);
+	}
 	if (*eflg) {
 		prog_error(node, zs_str(zerr));
 		zs_free(&zerr);

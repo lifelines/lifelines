@@ -5,6 +5,8 @@ http://lifelines.sourceforge.net
 New features added in 3.?
 ============================
 - Two-stage tt conversion via UTF-8
+- No more indirect cache
+- Unlimited #people may be added to lists and tables (during reports)
 
 Bug fixes in 3.?
 ============================

@@ -1,3 +1,10 @@
+2003-11-26 Perry Rapp
+
+	* ChangeLog NEWS src/hdrs/pvalue.h src/interp/builtin.c
+	src/interp/functab.c src/interp/pvalmath.c
+
+	Implement optional 2nd argument for incr() and decr().
+
 2003-11-26 Jens Arvidsson
 
 	* ChangeLog po/sv.po
