@@ -20,7 +20,6 @@
 #include "gedcom.h"
 #include "gedcomi.h"
 #include "feedback.h"
-#include "warehouse.h"
 #include "metadata.h"
 #include "lloptions.h"
 #include "date.h"
@@ -29,7 +28,6 @@
  * global/exported variables
  *********************************************/
 
-static BOOLEAN add_metadata = FALSE;
 
 /*********************************************
  * external/imported variables
@@ -57,7 +55,6 @@ enum { NEW_RECORD, EXISTING_LACKING_WH_RECORD };
  *********************************************/
 
 static RECORD alloc_record_from_key(STRING key);
-static void alloc_record_wh(RECORD rec, INT isnew);
 static NODE alloc_node(void);
 static void assign_record(RECORD rec, char ntype, INT keynum);
 static STRING fixup(STRING str);
@@ -285,26 +282,6 @@ void
 init_new_record (RECORD rec, char ntype, INT keynum)
 {
 	assign_record(rec, ntype, keynum);
-	alloc_record_wh(rec, NEW_RECORD);
-}
-/*===================================
- * alloc_record_wh -- allocate warehouse for
- *  a record without one (new or existing)
- * Created: 2001/02/04, Perry Rapp
- *=================================*/
-static void
-alloc_record_wh (RECORD rec, INT isnew)
-{
-	LLDATE creation;
-	ASSERT(!rec->mdwh); /* caller must know what it is doing */
-	if (!add_metadata)
-		return;
-	rec->mdwh = (WAREHOUSE)stdalloc(sizeof(*(rec->mdwh)));
-	wh_allocate(rec->mdwh);
-	get_current_lldate(&creation);
-	wh_add_block_var(rec->mdwh, MD_CREATE_DATE, &creation, sizeof(creation));
-	if (isnew == EXISTING_LACKING_WH_RECORD)
-		wh_add_block_int(rec->mdwh, MD_CONVERTED_BOOL, 1);
 }
 /*===================================
  * create_record -- create record to wrap top node
@@ -355,8 +332,6 @@ init_new_record_and_just_read_node (RECORD rec, NODE node, CNSTRING key)
 {
 	hook_record_to_root_node(rec, node);
 	assign_record(rec, key[0], atoi(key+1));
-	if (!rec->mdwh)
-		alloc_record_wh(rec, EXISTING_LACKING_WH_RECORD);
 }
 /*===================================
  * free_rec -- record deallocator
@@ -367,9 +342,6 @@ free_rec (RECORD rec)
 {
 	if (rec->top)
 		free_nodes(rec->top);
-	if (rec->mdwh) {
-		stdfree(rec->mdwh);
-	}
 	if (rec->nkey.key[0])
 		stdfree(rec->nkey.key);
 	stdfree(rec);

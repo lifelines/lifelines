@@ -581,10 +581,6 @@ SOURCE=..\..\..\win32\w32systm.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\stdlib\warehouse.c
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\src\interp\write.c
 # End Source File
 # Begin Source File
@@ -822,10 +818,6 @@ SOURCE=..\..\..\src\hdrs\version.h
 # Begin Source File
 
 SOURCE=..\..\..\src\hdrs\vtable.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\hdrs\warehouse.h
 # End Source File
 # Begin Source File
 

@@ -107,7 +107,6 @@ typedef struct tag_nkey NKEY;
 struct tag_record { /* RECORD */
 	NODE top;
 	NKEY nkey;
-	WAREHOUSE mdwh; /* metadata */
 	struct tag_cacheel * cel; /* cache wrapper */
 };
 NODE nztop(RECORD); /* function so it can handle NULL input */

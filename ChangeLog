@@ -1,9 +1,19 @@
+2003-10-07 Perry Rapp
+
+	* ChangeLog build/msvc6/llines/llinesprj.dsp
+	src/gedlib/keytonod.c src/gedlib/node.c src/gedlib/nodeio.c
+	src/hdrs/Makefile.am src/hdrs/cache.h src/hdrs/gedcom.h
+	src/hdrs/standard.h src/stdlib/Makefile.am
+
+	Remove warehouse code (which was unused).
+	Move two functions taking CACHE into keytonod.c statics.
+
 2003-10-06 Perry Rapp
 
 	* ChangeLog src/gedlib/keytonod.c src/hdrs/cache.h
 	src/interp/builtin.c src/interp/more.c src/interp/pvalue.c
 
-	Encapsulate CACHEEL struct inside keytonode.c.
+	Encapsulate CACHEEL struct inside keytonod.c.
 
 	* ChangeLog src/hdrs/gedcom.h
 

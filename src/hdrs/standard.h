@@ -167,9 +167,6 @@ typedef STRING (*TRANSLFNC)(STRING str, INT len);
 */
 #define ARRSIZE(qq) ((INT)(sizeof(qq)/sizeof(qq[0])))
 
-struct tag_warehouse;
-typedef struct tag_warehouse *WAREHOUSE;
-
 struct tag_vtable;
 typedef struct tag_vtable ** OBJECT;
 

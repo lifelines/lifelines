@@ -58,8 +58,6 @@ CACHEEL qkey_to_othr_cacheel(STRING);
 
 void load_cacheel(CACHEEL);
 void lock_cache(CACHEEL);
-void node_to_cache(CACHE, NODE);
-void remove_from_cache(CACHE, STRING);
 void semilock_cache(CACHEEL);
 void unlock_cache(CACHEEL);
 void unsemilock_cache(CACHEEL);

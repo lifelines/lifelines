@@ -112,11 +112,13 @@ static RECORD key_to_record_impl(CNSTRING key, INT reportmode);
 static RECORD key_typed_to_record(CACHE cache, CNSTRING key, STRING tag);
 static CACHEEL key_to_othr_cacheel(CNSTRING key);
 static CACHEEL key_to_sour_cacheel(CNSTRING key);
+static void node_to_cache(CACHE, NODE);
 static void prepare_direct_space(CACHE cache);
 static NODE qkey_to_node(CACHE cache, CNSTRING key, STRING tag);
 static RECORD qkey_typed_to_record(CACHE cache, CNSTRING key, STRING tag);
 static void record_to_cache(CACHE cache, RECORD rec);
 static void release_all_in_cache(CACHE cache);
+static void remove_from_cache(CACHE, STRING);
 
 
 INT csz_indi = 200;		/* cache size for indi */
@@ -1051,7 +1053,7 @@ othr_to_cache (NODE node)
 /*========================================
  * node_to_cache -- Add node tree to cache
  *======================================*/
-void
+static void
 node_to_cache (CACHE cache, NODE node)
 {
 	RECORD rec = create_record(node);
@@ -1121,7 +1123,7 @@ remove_fam_cache (STRING key)
 /*=============================================
  * remove_from_cache -- Remove entry from cache
  *===========================================*/
-void
+static void
 remove_from_cache (CACHE cache, STRING key)
 {
 	CACHEEL cel;

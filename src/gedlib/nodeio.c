@@ -16,7 +16,6 @@
 #include "gedcom.h"
 #include "gedcomi.h"
 #include "feedback.h"
-#include "warehouse.h"
 #include "metadata.h"
 #include "date.h"
 #include "xlat.h"
@@ -44,7 +43,6 @@ static NODE do_first_fp_to_node(FILE *fp, BOOLEAN list, XLAT tt
 	, STRING *pmsg, BOOLEAN *peof);
 static RECORD do_first_fp_to_record(FILE *fp, BOOLEAN list, XLAT tt
 	, STRING *pmsg, BOOLEAN *peof);
-static void load_record_wh(RECORD rec, char * whptr, INT whlen);
 static BOOLEAN string_to_line(STRING *ps, INT *plev, STRING *pxref, 
 	STRING *ptag, STRING *pval, STRING *pmsg);
 static STRING swrite_node(INT levl, NODE node, STRING p);
@@ -447,12 +445,6 @@ next_fp_to_node (FILE *fp, BOOLEAN list, XLAT ttm,
 /*============================================
  * string_to_record -- Read record from data block
  *  (modifies string -- inserts 0 between lines)
- *  This is the layout for metadata nodes:
- *   Q___      (four bytes, but only first char used)
- *   0016      (offset to 0 INDI... line)
- *   whhdr     (warehouse header)
- *   whdata    (warehouse data)
- *   0 INDI    (traditional node data)
  *  This is the layout for traditional nodes:
  *   0 INDI    (or 0 FAM or 0 SOUR etc)
  *==========================================*/
@@ -465,27 +457,11 @@ string_to_record (STRING str, CNSTRING key, INT len)
 
 	/* create it now, & release it at bottom if we fail */
 	rec = alloc_new_record();
-	/* we must fill in the top & mdwh fields */
+	/* we must fill in the top field */
 
-	if (*str == '0') /* traditional node, no metadata */
+	if (*str == '0') { /* traditional node, no metadata */
+		/* actually no metadata was ever used in any version */
 		node = string_to_node(str);
-	else if (*str == 'Q') {
-		/*
-		first four bytes just used for the Q flag
-		second four bytes contain node_offset from str
-		NB: UNTESTED because it isn't yet being written
-		Perry, 2001/01/15
-		*/
-#ifdef CODE_TO_BE_DELETED
-		INT * ptr = (INT *)str;
-		INT node_offset = ptr[1]; /* in characters */
-		char * whptr = (char *)&ptr[2];
-		const char * node_ptr = str + node_offset;
-		INT whlen = node_offset - 8;
-		ASSERT(0); /* not yet being written */
-		load_record_wh(rec, whptr, whlen);
-		node = string_to_node(node_ptr);
-#endif
 	} else {
 		if (!strcmp(str, "DELE\n")) {
 			/* should have been filtered out in getrecord */
@@ -686,18 +662,6 @@ node_to_string (NODE node)      /* root */
 	str = (STRING) stdalloc(len);
 	(void) swrite_nodes(0, node, str);
 	return str;
-}
-/*===================================
- * load_record_wh -- load existing warehouse
- *  for a record
- *  warehouse is opaque lump of metadata
- * Created: 2001/02/04, Perry Rapp
- *=================================*/
-static void
-load_record_wh (RECORD rec, char * whptr, INT whlen)
-{
-	rec->mdwh = (WAREHOUSE)stdalloc(sizeof(*(rec->mdwh)));
-	wh_assign_from_blob(rec->mdwh, whptr, whlen);
 }
 /*=====================================
  * write_indi_to_file - write node tree into GEDCOM
