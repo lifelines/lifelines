@@ -1062,6 +1062,7 @@ CACHEEL
 pvalue_to_cel (PVALUE val)
 {
 	RECORD rec = pvalue_to_rec(val);
+	NODE root = nztop(rec); /* force record into cache */
 	CACHEEL cel = rec ? rec->rec_cel : 0;
 	return cel;
 }
