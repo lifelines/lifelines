@@ -34,12 +34,14 @@
 
 /*===========================
  * addkey -- Add key to BTREE
+ *  btree: [in] handle to btree (memory representation)
+ *  ikey:  [in] index file # (which index to add the key to)
+ *  rkey:  [in] record key of new entry
+ *  fkey:  [in] file key of new entry
+ * Precondition: This key belongs in this index block
  *=========================*/
 void
-addkey (BTREE btree,  /*btree handle*/
-        FKEY ikey,    /*index file key -- index to add key to*/
-        RKEY rkey,    /*record key of new entry*/
-        FKEY fkey)    /*file key of new entry*/
+addkey (BTREE btree, FKEY ikey, RKEY rkey, FKEY fkey)
 {
 	INDEX index;
 	SHORT lo, hi;
@@ -52,7 +54,12 @@ addkey (BTREE btree,  /*btree handle*/
    /* Validate the operation */
 	if (bwrite(btree) != 1) return;
 	index = getindex(btree, ikey);
-	if (nkeys(index) >= NOENTS - 1) FATAL();
+	if (nkeys(index) >= NOENTS - 1) {
+		char msg[72];
+		snprintf(msg, sizeof(msg), "Index %d found overfull (%d entries > %d max)"
+			, ikey, nkeys(index), NOENTS-2);
+		FATAL2(msg);
+	}
 
    /* Search for record key in index -- shouldn't be there */
 	lo = 1;
@@ -64,8 +71,12 @@ addkey (BTREE btree,  /*btree handle*/
 			hi = --md;
 		else if (rel > 0)
 			lo = ++md;
-		else
-			FATAL();
+		else {
+			char msg[64];
+			snprintf(msg, sizeof(msg), "addkey called with"
+				" entry '%s' already present", rkey.r_rkey);
+			FATAL2(msg);
+		}
 	}
 
    /* Add new RKEY, FKEY pair to index */

@@ -131,6 +131,7 @@ init_lifelines_global (STRING * pmsg)
 		changeoptstr(&lloptions.llnewdbdir, strsave("."));
 
 	set_usersort(custom_sort);
+	stdlib_set_errorfile(lloptions.errorlog);
 	return TRUE;
 }
 /*=================================

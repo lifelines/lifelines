@@ -56,7 +56,8 @@ struct lloptions_s {
 	STRING llttexport; /* location for export & import of translation tables to/from db */
 	STRING inputpath; /* prefix for unqualified utility/read paths */
 	INT deny_system_calls; /* from within reports */
-	STRING reportlog; /* report errors appended to this if non-blank */
+	STRING reportlog; /* report errors appended to this file if non-blank */
+	STRING errorlog; /* fatal errors appended to this file if non-blank */
 	INT per_error_delay; /* sec delay for each report error */
 	INT report_error_callstack; /* full call stack for report errors */
 	INT date_customize_long; /* non-zero for customized display */

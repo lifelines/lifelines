@@ -35,17 +35,42 @@
 #include "stdlibi.h"
 #include "llstdlib.h"
 
+static char errorfile[MAXPATHLEN]="";
+
+/*===============================
+ * set_errorfile -- Enable logging of fatal errors
+ *  handles null or empty details input
+ *=============================*/
+void
+stdlib_set_errorfile (STRING file)
+{
+	llstrncpy(errorfile, file, sizeof(errorfile)/sizeof(errorfile[0]));
+}
 /*===============================
  * __fatal -- Fatal error routine
  *  handles null or empty details input
+ * 2001/09/22, Perry: This uses llwprintf calls, so it belongs in the curses
+ *  library (ie, in the liflines directory).
  *=============================*/
 void
 __fatal (STRING file, int line, STRING details)
 {
-	/*
-	TO DO - there ought to be a configuration option
-	to log this to a file
-	*/
+	/* send to error log if one is specified */
+	if (errorfile[0]) {
+		FILE * fp = fopen(errorfile, LLAPPENDTEXT);
+		if (fp) {
+			LLDATE creation;
+			get_current_lldate(&creation);
+			fprintf(fp, "\nFatal Error: %s\n    ", creation.datestr);
+			if (details && details[0]) {
+				fprintf(fp, details);
+				fprintf(fp, "\n    AT: ");
+			}
+			fprintf(fp, "%s: line %d\n", file, line);
+			fclose(fp);
+		}
+	}
+	/* send to screen */
 	llwprintf("FATAL ERROR: ");
 	if (details && details[0]) {
 		llwprintf(details);

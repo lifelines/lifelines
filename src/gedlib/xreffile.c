@@ -309,8 +309,12 @@ addxref (INT key, DELETESET set)
 			hi=--md;
 		else if (key<(set->recs)[md])
 			lo=++md;
-		else
-			FATAL(); /* deleting a deleted record! */
+		else {
+			char msg[64];
+			sprintf(msg, "Tried to add already-deleted record (%d) to xref (%c)!"
+				, key, set->ctype);
+			FATAL2(msg); /* deleting a deleted record! */
+		}
 	}
 	/* key replaces xrefs[lo] - push lo+ up */
 	for (i=set->n-1; i>=lo; --i)

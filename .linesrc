@@ -6,7 +6,7 @@
 #
 # These can be overridden by useroptions in db
 #
-# 2001/09/02
+# 2001/09/22
 
 # Email address available to report programs
 #EmailAddr=user@mailhost.org
@@ -40,16 +40,19 @@
 #LLEDITOR=/usr/local/vi
 
 # Path for reference translation tables
-LLTTREF=/home/user/LifeLines/ttref
+#LLTTREF=/home/user/LifeLines/ttref
 
 # Path for exported translation tables (from a db)
-LLTTEXPORT=/home/user/LifeLines/ttdb
+#LLTTEXPORT=/home/user/LifeLines/ttdb
 
 # Refuse to execute system calls from report programs (default allowed)
 # DenySystemCalls=1
 
 # Log file for report errors (default none)
 # ReportLog=/home/user/LifeLines/reporterrs.log
+
+# Log file for fatal errors (default none)
+# ErrorLog=/home/user/LifeLines/errors.log
 
 # Delay (secs) between each report error on screen (default 0)
 # PerErrorDelay=4

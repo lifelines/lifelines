@@ -99,6 +99,7 @@ static struct str_option_s str_options[] = {
 	,{ "LLTTEXPORT", &lloptions.llttexport, "", DBNO }
 	,{ "InputPath", &lloptions.inputpath, "", DBNO }
 	,{ "ReportLog", &lloptions.reportlog, "", DBNO }
+	,{ "ErrorLog", &lloptions.errorlog, "", DBNO }
 };
 
 static TABLE opttab=0;

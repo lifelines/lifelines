@@ -1,3 +1,11 @@
+2001-09-22 Perry Rapp <puddle@users.sourceforge.net>
+
+	* .linesrc ChangeLog lines.cfg btree/addkey.c gedlib/init.c
+	gedlib/lloptions.c gedlib/xreffile.c hdrs/lloptions.h
+	hdrs/llstdlib.h stdlib/assert.c:
+	Added ErrorsLog config file option, & modified LifeLine's
+	__fatal() accordingly.
+
 2001-09-19 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog tools/dbverify.c:
