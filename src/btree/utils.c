@@ -158,7 +158,7 @@ llmkdir (STRING dir)    /* dir to create */
 #define exists(p)  (!(*p) || access((p),00) == 0)
 
 BOOLEAN
-mkalldirs (char  *path) /* path with dirs to be made */
+mkalldirs (STRING path) /* path with dirs to be made */
 {
 	int i, n;
 	char *p = path;
