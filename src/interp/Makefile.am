@@ -13,3 +13,5 @@ AM_YFLAGS = -d
 
 EXTRA_DIST = yacc.h
 
+lex.o: yacc.h
+

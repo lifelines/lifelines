@@ -1,3 +1,5 @@
+.deps
 Makefile
 Makefile.in
-.deps
+yacc.c
+yacc.h
