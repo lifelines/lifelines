@@ -74,6 +74,14 @@
 	Move destructor spec (used for pvalues) from release_list to
 	new create_list3.
 
+	* ChangeLog reports/st/st_db.li src/gedlib/place.c
+	src/hdrs/gedcom.h src/hdrs/list.h src/interp/more.c
+	src/stdlib/list.c
+
+	Alter place_to_list and value_to_list to return list as output.
+	Make in_string a local function in place.c. Delete now unused
+	function set_list_type. Add extractplaces to st_db.li.
+
 2005-02-05 Perry Rapp
 
 	* ChangeLog NEWS src/gedlib/xreffile.c

@@ -77,7 +77,6 @@ LIST create_list3(ELEMENT_DESTRUCTOR func);
 void release_list(LIST list);
 void destroy_empty_list(LIST list);
 void destroy_list(LIST list);
-void set_list_type(LIST, INT);
 
 /* working with elements of list */
 void back_list(LIST, VPTR);

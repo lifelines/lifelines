@@ -287,7 +287,6 @@ void growixrefs(void);
 void growsxrefs(void);
 void growxxrefs(void);
 INT hexvalue(INT);
-BOOLEAN in_string(INT, STRING);
 void index_by_refn(NODE, STRING);
 void indi_to_dbase(NODE);
 STRING indi_to_event(NODE, STRING tag, STRING head, INT len, RFMT);
@@ -394,7 +393,6 @@ BOOLEAN openxref(BOOLEAN readonly);
 STRING other_to_list_string(NODE node, INT len, STRING delim);
 void othr_to_cache(NODE);
 void othr_to_dbase(NODE);
-BOOLEAN place_to_list(STRING, LIST, INT*);
 BOOLEAN pointer_value(STRING);
 NODE qkey_to_even(CNSTRING key);
 RECORD qkey_to_erecord(CNSTRING key);
@@ -477,7 +475,6 @@ BOOLEAN valid_to_list(STRING, LIST, INT*, STRING);
 BOOLEAN valid_even_tree(NODE, STRING*, NODE);
 BOOLEAN valid_othr_tree(NODE, STRING*, NODE);
 INT val_to_sex(NODE);
-BOOLEAN value_to_list(STRING, LIST, INT*, STRING);
 STRING value_to_xref(STRING);
 BOOLEAN writexrefs(void);
 void write_node_to_editfile(NODE); /* used by Ethel */
@@ -544,6 +541,10 @@ NODE string_to_node(STRING);
 void write_indi_to_file_for_edit(NODE indi, CNSTRING file, RFMT rfmt);
 void write_fam_to_file_for_edit(NODE fam, CNSTRING file, RFMT rfmt);
 void write_nodes(INT, FILE*, XLAT, NODE, BOOLEAN, BOOLEAN, BOOLEAN);
+
+/* place.c */
+LIST place_to_list(STRING, INT*);
+LIST value_to_list (STRING str, INT *plen, STRING dlm);
 
 /* refns.c */
 void annotate_with_supplemental(NODE node, RFMT rfmt);

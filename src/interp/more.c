@@ -152,7 +152,7 @@ __extractnames (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __extractplaces (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	LIST list, temp;
+	LIST list=0, temp=0;
 	STRING str, str2;
 	INT len;
 	PNODE nexp = (PNODE) iargs(node);
@@ -174,7 +174,7 @@ __extractplaces (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	list = pvalue_to_list(val);
-	delete_pvalue(val);
+	delete_pvalue(val); /* Could this inadvertently delete the list? */
 	if (list)
 		make_list_empty(list);
 	else
@@ -190,8 +190,7 @@ __extractplaces (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (strcmp("PLAC", ntag(line)) && !(line = PLAC(line))) return NULL;
 	str = nval(line);
 	if (!str || *str == 0) return NULL;
-	temp = create_list();
-	place_to_list(str, temp, &len);
+	temp = place_to_list(str, &len);
 	FORLIST(temp, el)
 		str2 = (STRING)el; /* place_to_list made list of strings */
 		push_list(list, create_pvalue_from_string(str2));
@@ -206,7 +205,7 @@ __extractplaces (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __extracttokens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	LIST list, temp;
+	LIST list=0, temp=0;
 	INT len;
 	STRING str, dlm;
 	PNODE sexp = (PNODE) iargs(node);
@@ -244,8 +243,7 @@ __extracttokens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	*eflg = FALSE;
 	insert_symtab(stab, iident(lvar), create_pvalue_from_int(0));
-	temp = create_list();
-	value_to_list(str, temp, &len, dlm);
+	temp = value_to_list(str, &len, dlm);
 	FORLIST(temp, el)
 		push_list(list, create_pvalue_from_string((STRING)el));
 	ENDLIST

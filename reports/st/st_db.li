@@ -192,6 +192,8 @@ func isLivingPerson(indi)
 	if (death(indi)) { return (0) }
 	if (birth(indi)) 
 	{
+		list(placelist)
+		extractplaces(birth(indi), placelist, count)
 		extractdate(birth(indi),day,mon,yr)
 		if (and(gt(yr,300),lt(yr,cutoff_yr))) { return (0) }
 	}

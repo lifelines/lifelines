@@ -138,17 +138,6 @@ create_list3 (ELEMENT_DESTRUCTOR func)
 	list->l_del_element = func;
 	return list;
 }
-/*===============================
- * set_list_type -- Set list type
- *  list: [I/O] list to change
- *  type: [IN]  new type (LISTNOFREE or LISTDOFREE)
- *=============================*/
-void
-set_list_type (LIST list, int type)
-{
-	ASSERT(llen(list)==0); /* only valid on empty lists */
-	ltype(list) = type;
-}
 /*===========================
  * destroy_list -- Delete all elements & destroy list
  *  list: [IN]  list to completely delete

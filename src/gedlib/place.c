@@ -31,37 +31,41 @@
 #include "llstdlib.h"
 #include "gedcom.h"
 
-BOOLEAN value_to_list (STRING str, LIST list, INT *plen, STRING dlm);
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+static BOOLEAN in_string(INT chr, STRING str);
 
 /*===================================================
  * place_to_list -- Convert place string to word list
- *  place:   [in] place name to convert
- *  list:    [out] list of strings in name
- *  plen:    [out] #entries in list
+ *  place:   [IN] place name to convert
+ *  list:    [OUT] list of strings in name
+ *  plen:    [OUT] #entries in list
  *=================================================*/
-BOOLEAN
-place_to_list (STRING place, LIST list, INT *plen)
+LIST
+place_to_list (STRING place, INT *plen)
 {
-	return value_to_list(place, list, plen, ",");
+	return value_to_list(place, plen, ",");
 }
 /*=============================================
  * value_to_list -- Convert string to word list
- *  str:     [in]  input string to split up
- *  list:    [out] list of strings in name
- *  plen:    [out] #entries in list
- *  dlm:     [in]  delimiter upon which to split str
+ *  str:     [IN]  input string to split up
+ *  list:    [OUT] list of strings in name
+ *  plen:    [OUT] #entries in list
+ *  dlm:     [IN]  delimiter upon which to split str
  *===========================================*/
-BOOLEAN
-value_to_list (STRING str, LIST list, INT *plen, STRING dlm)
+LIST
+value_to_list (STRING str, INT *plen, STRING dlm)
 {
 	static STRING buf = NULL;
 	static INT len0 = 0;
 	STRING p, q, n;
 	INT len, c, i, j;
+	LIST list = create_list2(LISTDOFREE);
 
-	if (!str || *str == 0 || !list) return FALSE;
-	make_list_empty(list);
-	set_list_type(list, LISTDOFREE);
+	if (!str || *str == 0)
+		return list;
 	if ((len = strlen(str)) > len0 - 2) {
 		if (buf) stdfree(buf);
 		buf = (STRING) stdalloc(len0 = len + 80);
@@ -89,12 +93,13 @@ value_to_list (STRING str, LIST list, INT *plen, STRING dlm)
 		p = n;
 	}
 	*plen = j;
-	return TRUE;
+	return list;
 }
-
-BOOLEAN
-in_string (INT chr,
-           STRING str)
+/*===================================================
+ * in_string -- Does character occur in string?
+ *=================================================*/
+static BOOLEAN
+in_string (INT chr, STRING str)
 {
 	while (*str && chr != *str)
 		str++;
