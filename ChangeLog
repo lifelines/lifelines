@@ -21,6 +21,9 @@
 	Delay use of llnewdbdir in readpath so current directory
 	is still checked.
 
+	* btree/utils.c gedlib/gengedc.c gedlib/indiseq.c hdrs/indiseq.h:
+	Sort gengedc into canonical key order.
+
 2001-01-04  Marc Nozell  <marc@nozell.com>
 
 	* configure.in: Fix UNIX build, Add check for pwd.h.
