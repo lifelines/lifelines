@@ -1,5 +1,8 @@
 2000-11-11 Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* gedlib/Makefile.am liflines/Makefile.am stdlib/Makefile.am
+	interp/pvalue.c: Cleanup.  Split long lines.
+
 	* stdlib/signals.c: Write signal name when asking to dump core.
 
 	* interp/eval.c: Cleanup. Call prog_error() directly with vararg

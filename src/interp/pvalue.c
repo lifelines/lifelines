@@ -815,7 +815,9 @@ show_pvalue (PVALUE val)
 	case PFLOAT:
 		llwprintf("%f>", u.f);
 		break;
-	case PSTRING: llwprintf("%s>", (STRING) pvalue(val)); return;
+	case PSTRING:
+		llwprintf("%s>", (STRING) pvalue(val));
+		return;
 	case PINDI:
 		cel = (CACHEEL) pvalue(val);
 		if (!cnode(cel))
