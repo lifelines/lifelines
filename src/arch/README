@@ -12,3 +12,9 @@ Currently, the following is implemented:
 int sleep(int)
 
   POSIX, implemented for Win32.
+
+int alphasort(const struct dirent **, const struct dirent **);
+int scandir(const char *, struct dirent ***, int (*)(const struct dirent *),
+            int (*)(const struct dirent **, const struct dirent **));
+
+  BSD, implemented for Unix and Win32.

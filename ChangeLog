@@ -18,6 +18,10 @@
 
 2000-11-11 Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* configure.in arch/README arch/alphasort.c arch/scandir.c
+	hdrs/arch.h: Add replacement functions used by the report script
+	menu to make this work on Win32 as well.
+
 	* hdrs/liflines.h interp/interp.c liflines/askprogram.c
 	liflines/Makefile.am: Implement report script menu (list all
 	available scripts).

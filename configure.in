@@ -57,7 +57,7 @@ dnl AC_CHECK_LIB(bsd, revoke)
 dnl AC_CHECK_LIB(ucb, bzero)
 
 echo Looking for header files
-AC_CHECK_HEADERS( getopt.h alloc.h malloc.h )
+AC_CHECK_HEADERS( getopt.h alloc.h malloc.h dirent.h )
 dnl AC_HEADER_STDC
 dnl AC_CHECK_HEADERS( errno.h dirent.h fcntl.h getopt.h libgen.h pwd.h siginfo.h signal.h statbuf.h stdio.h stdlib.h string.h strings.h sys/stat.h sys/time.h sys/types.h unistd.h )
 
@@ -69,7 +69,7 @@ echo Looking for library functions
 AC_CHECK_FUNCS( getopt snprintf heapwalk _heapwalk )
 
 dnl Check for replacement functions
-AC_REPLACE_FUNCS( sleep )
+AC_REPLACE_FUNCS( sleep scandir alphasort )
 
 dnl AC_CHECK_FUNCS(strerror perror strsignal psignal getopt getopt_long random)
 dnl investigate using AC_MSG_ERROR for error reporting
@@ -79,7 +79,7 @@ dnl AC_REPLACE_FUNCS(dirname)
 dnl echo Examining library functions
 dnl AC_TYPE_SIGNAL
 
-dnl we only use this if we don't have strsignal
+dnl we only use this if we do not have strsignal
 dnl AC_DECL_SYS_SIGLIST
 
 AC_OUTPUT(Makefile \

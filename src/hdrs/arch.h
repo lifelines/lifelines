@@ -15,4 +15,23 @@
 extern int sleep(int seconds);
 #endif
 
+#ifdef HAVE_DIRENT_H
+#include <dirent.h>
+#else
+struct dirent /* Simple replacement for the less fortunate platforms */
+{
+	char d_name[256];
+};
+#endif
+
+#ifndef HAVE_SCANDIR
+extern int scandir(const char *dir, struct dirent ***namelist,
+                   int (*select)(const struct dirent *),
+                   int (*compar)(const dirent **, const dirent **));
+#endif
+
+#ifndef HAVE_ALPHASORT
+extern int alphasort(const struct dirent **a, const struct dirent **b);
+#endif
+
 #endif
