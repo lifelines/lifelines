@@ -1685,7 +1685,7 @@ invoke_search_menu (void)
 
 	while (!done) {
 		activate_uiwin(uiwin);
-		wmove(uiw_win(uiwin), 1, 27);
+		place_cursor_new(uiwin);
 		code = interact(uiwin, "vcfq", -1);
 
 		switch (code) {
@@ -3412,10 +3412,11 @@ repaint_search_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
+	STRING title = _(qSmn_sea_ttl);
 	INT n = 0;
 	char buffer[80];
 	draw_win_box(win);
-	mvccwaddstr(win, row++, 2, _(qSmn_sea_ttl));
+	mvccwaddstr(win, row++, 2, title);
 	n = get_vhist_len();
 	if (n>0) {
 		llstrncpyf(buffer, sizeof(buffer), uu8
@@ -3439,6 +3440,9 @@ repaint_search_menu (UIWINDOW uiwin)
 	mvccwaddstr(win, row++, 4, buffer);
 	mvccwaddstr(win, row++, 4, _(qSmn_sea_scan));
 	mvccwaddstr(win, row++, 4, _(qSmn_ret));
+	/* set cursor position */
+	uiw_cury(uiwin) = 1;
+	uiw_curx(uiwin) = 3+strlen(title);
 }
 /*=====================================
  * repaint_utils_menu -- 

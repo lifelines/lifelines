@@ -1,3 +1,9 @@
+2003-07-22 Perry Rapp
+
+	* ChangeLog src/liflines/screen.c
+
+	Fix cursor display in search/scan menu.
+
 2003-07-20 Perry Rapp
 
 	* ChangeLog src/hdrs/screen.h src/liflines/screen.c
