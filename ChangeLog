@@ -1,3 +1,10 @@
+2003-03-17 Stephen Dum
+        * ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.xml
+	docs/ll-userguide.xml src/liflines/llexec.c
+
+	Minor mods to report and user manual, modify llexec.c to
+	output cr on messages describing the failure to open database.
+
 2003-03-16 Stephen Dum
 
         * ChangeLog docs/ll-reportmanual.xml docs/ll-reportmanual.html

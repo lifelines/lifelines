@@ -4536,6 +4536,14 @@ Apparently not used at this time.
 </para>
 </glossdef></glossentry>
 
+<glossentry><glossterm> DenySystemCalls</glossterm><glossdef>
+
+<para>
+If set to a non-zero value will disable use of the <function>system</function>
+function.
+</para>
+</glossdef></glossentry>
+
 <glossentry><glossterm>UiLocaleCollate</glossterm><glossdef>
 
 <para>

@@ -3092,7 +3092,7 @@ about  1 JAN 2002
 </informaltable>
 
 <para>
-The complex date strings that are overridden with the
+The complex date strings that can be overridden with the
 <function>complexpic</function> are: 
 </para>
 
@@ -3133,7 +3133,7 @@ estimated %1
 cal %1
 </entry>
 <entry>
-Calculated %1
+calculated %1
 </entry>
 </row>
 <row>
@@ -3562,26 +3562,6 @@ right justify in field
 </glossdef></glossentry>
 
 <glossentry><glossterm><funcsynopsis><funcprototype>
-<funcdef>STRING <function>save</function></funcdef>
-<paramdef><parameter>STRING</parameter></paramdef>
-</funcprototype></funcsynopsis></glossterm><glossdef>
-
-<para>
-save and return copy of string
-</para>
-</glossdef></glossentry>
-
-<glossentry><glossterm><funcsynopsis><funcprototype>
-<funcdef>STRING <function>strsave</function></funcdef>
-<paramdef><parameter>STRING</parameter></paramdef>
-</funcprototype></funcsynopsis></glossterm><glossdef>
-
-<para>
-same as save function
-</para>
-</glossdef></glossentry>
-
-<glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>concat</function></funcdef>
 <paramdef><parameter>STRING</parameter>,
 <parameter><replaceable>STRING</replaceable></parameter>
@@ -3774,12 +3754,6 @@ saved before the function was called again.
 </para>
 
 <para>
-By the release of version 3.0.6, all string values are local copies, and the <function>save</function> and
-<function>strsave</function> functions should be entirely unnecessary.
-</para>
-
-
-<para>
 <function>Lower</function> and <function>upper</function> convert the letters
 in their arguments to lower or upper case, respectively.
 <function>Capitalize</function> converts the first character of the argument,
@@ -3797,12 +3771,6 @@ length specified by the second parameter. If the original string is shorter than
 blanks are inserted to the left of the original string; if the string is longer than the justified string, the
 original string is truncated on the right. <function>Trim</function> historically used the buffer return method; <function>rjustify</function> creates and returns
 a new string.
-</para>
-
-<para>
-<function>Save</function> is present only for compatibility reasons. Previously it duplicated its argument (to prevent strings
-from becoming stale; this is not currently necessary (and this function no longer does anything).
- <function>Strsave</function> is the same function as <function>save</function>.
 </para>
 
 <para>
@@ -4635,6 +4603,16 @@ dump information about a pvalue
 </para>
 </glossdef></glossentry>
 
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>VOID <function>free</function></funcdef>
+<paramdef><parameter>ANY</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+free space associated with a variable
+</para>
+</glossdef></glossentry>
+
 </glosslist>
 
 <para>
@@ -4703,6 +4681,14 @@ The <function>pvalue</function> function returns a string that represents
 the contents of a variable in the interpreter.  This is present for debug
 purposes.
 </para>
+
+<para>
+The function <function>free</function> deallocates space associated with the
+variable provided as argument 1. Care must be taken when free is used in a
+function on a variable which is a parameter to the function.  free will not
+effect the variable in the calling program.
+</para>
+
 
 </sect1>
 
@@ -4821,26 +4807,35 @@ generate GEDCOM file from person set
 </glosslist>
 
 <para>
-The function <function>free</function> does not work reliably, do not use it.
-Some of the functionality of it, deallocating space for structures like a
-list can be obtained by redeclaring the object.  list(a) not only
-declares a list, but if a was already a list, it will free all resources
-used by the list and create a new empty list.  This is not useful if the
-list in question is in parameter in a subroutine, as the reference to the list
-is released, but the caller still has access to the original list.
+By the release of version 3.0.6, all string values are local copies, and the <function>save</function> and
+<function>strsave</function> functions should be entirely unnecessary.
+<function>Save</function> is present only for compatibility reasons. Previously it duplicated its argument (to prevent strings
+from becoming stale; this is not currently necessary (and this function no longer does anything).
+ <function>Strsave</function> is the same function as <function>save</function>.
 </para>
+
+
 
 <glosslist>
 <glossentry><glossterm><funcsynopsis><funcprototype>
-<funcdef>VOID <function>free</function></funcdef>
-<paramdef><parameter>ANY</parameter></paramdef>
+<funcdef>STRING <function>save</function></funcdef>
+<paramdef><parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-free space associated with a variable
+save and return copy of string
 </para>
 </glossdef></glossentry>
 
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRING <function>strsave</function></funcdef>
+<paramdef><parameter>STRING</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+same as save function
+</para>
+</glossdef></glossentry>
 </glosslist>
 
 </sect1>

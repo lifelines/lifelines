@@ -441,6 +441,7 @@ show_open_error (INT dberr)
 	char buffer[256];
 	describe_dberror(dberr, buffer, ARRSIZE(buffer));
 	llwprintf(buffer);
+	llwprintf("\n");
 	sleep(5);
 }
 /*==================================================
