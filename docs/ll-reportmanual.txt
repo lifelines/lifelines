@@ -1,7 +1,7 @@
 
 THE LIFELINES PROGRAMMING SUBSYSTEM AND REPORT GENERATOR
 
-LifeLines Version 3.0.25
+LifeLines Version 3.0.26
 
 Thomas T. Wetmore , IV
      _____________________________________________________________
@@ -808,20 +808,11 @@ forindi (INDI, INT) { commands }
    Pn  generates  pronouns,  useful when generating English text; the
    second parameter selects the type of pronoun:
 
-   0
-          He/She
-
-   1
-          he/she
-
-   2
-          His/Her
-
-   3
-          his/her
-
-   4
-          him/her
+   0 He/She
+   1 he/she
+   2 His/Her
+   3 his/her
+   4 him/her
 
    Nspouses  returns  the  number  of  spouses  the person has in the
    database,  and nfamilies returns the number of families the person
@@ -999,6 +990,10 @@ List Functions
 
           check if list is empty
 
+   INT length(LIST);
+
+          length of list
+
    VOID enqueue(LIST, ANY);
 
           enqueue element on list
@@ -1031,7 +1026,7 @@ List Functions
 
           array element deletion
 
-   VOID sort(LIST, LISt);
+   VOID sort(LIST, LIST);
 
           sort list elements
 
@@ -1271,140 +1266,60 @@ Event and Date Functions
 
    The day format codes passed to dayformat are:
 
-   0
-          leave space before single digit days
-
-   1
-          use leading 0 before single digit days
-
-   2
-          no space or leading 0 before single digit days
+   0 leave space before single digit days
+   1 use leading 0 before single digit days
+   2 no space or leading 0 before single digit days
 
    The month format codes passed to monthformat are:
 
-   0
-          number with space before single digit months
-
-   1
-          number with leading zero before single digit months
-
-   2
-          number with no space or zero before single digit months
-
-   3
-          upper case abbreviation (eg, JAN, FEB) (localized)
-
-   4
-          capitalized abbreviation (eg, Jan, Feb) (localized)
-
-   5
-          upper case full word (eg, JANUARY, FEBRUARY) (localized)
-
-   6
-          capitalized full word (eg, January, February) (localized)
-
-   7
-          lower case abbreviation (eg, jan, feb) (localized)
-
-   8
-          lower case full word (eg, january, february) (localized)
-
-   9
-          upper  case  abbreviation  in  English per GEDCOM (eg, JAN,
-          FEB)
-
-   10
-          lower case roman letter (eg, i, ii)
-
-   11
-          upper case roman letter (eg, I, II)
+   0  number with space before single digit months
+   1  number with leading zero before single digit months
+   2  number with no space or zero before single digit months
+   3  upper case abbreviation (eg, JAN, FEB) (localized)
+   4  capitalized abbreviation (eg, Jan, Feb) (localized)
+   5  upper case full word (eg, JANUARY, FEBRUARY) (localized)
+   6  capitalized full word (eg, January, February) (localized)
+   7  lower case abbreviation (eg, jan, feb) (localized)
+   8  lower case full word (eg, january, february) (localized)
+   9  upper case abbreviation in English per GEDCOM (eg, JAN, FEB)
+   10 lower case roman letter (eg, i, ii)
+   11 upper case roman letter (eg, I, II)
 
    The year format codes passed to yearformat are:
 
-   0
-          use leading spaces before years with less than four digits
-
-   1
-          use leading 0 before years with less than four digits
-
-   2
-          no space or leading 0 before years
+   0 use leading spaces before years with less than four digits
+   1 use leading 0 before years with less than four digits
+   2 no space or leading 0 before years
 
    The era format codes passed to eraformat are:
 
-   0
-          no AD/BC markers
-
-   1
-          trailing B.C. if appropriate
-
-   2
-          trailing A.D. or B.C.
-
-   11
-          trailing BC if appropriate
-
-   12
-          trailing AD or BC
-
-   21
-          trailing B.C.E. if appropriate
-
-   22
-          trailing C.E. or B.C.E.
-
-   31
-          trailing BC if appropriate
-
-   32
-          trailing CE or BCE
+   0  no AD/BC markers
+   1  trailing B.C. if appropriate
+   2  trailing A.D. or B.C.
+   11 trailing BC if appropriate
+   12 trailing AD or BC
+   21 trailing B.C.E. if appropriate
+   22 trailing C.E. or B.C.E.
+   31 trailing BC if appropriate
+   32 trailing CE or BCE
 
    The full date formats passed to stddate are:
 
-   0
-          da mo yr
-
-   1
-          mo da, yr
-
-   2
-          mo/da/yr
-
-   3
-          da/mo/yr
-
-   4
-          mo-da-yr
-
-   5
-          da-mo-yr
-
-   6
-          modayr
-
-   7
-          damoyr
-
-   8
-          yr mo da
-
-   9
-          yr/mo/da
-
-   10
-          yr-mo-da
-
-   11
-          yrmoda
-
-   12
-          yr (year only, omitting all else)
-
-   13
-          da/mo yr
-
-   14
-          (As in GEDCOM)
+   0  da mo yr
+   1  mo da, yr
+   2  mo/da/yr
+   3  da/mo/yr
+   4  mo-da-yr
+   5  da-mo-yr
+   6  modayr
+   7  damoyr
+   8  yr mo da
+   9  yr/mo/da
+   10 yr-mo-da
+   11 yrmoda
+   12 yr (year only, omitting all else)
+   13 da/mo yr
+   14 (As in GEDCOM)
      _____________________________________________________________
 
 Value Extraction Functions
@@ -1557,6 +1472,10 @@ String Functions
 
           capitalize first letter
 
+   STRING titlecase(STRING);
+
+          capitalize first letter of each word
+
    STRING trim(STRING, INT);
 
           trim to length
@@ -1654,7 +1573,9 @@ String Functions
    upper  case, respectively. Capitalize converts the first character
    of the argument, if it is a letter, to upper case. Lower and upper
    historically used the buffer return method; capitalize operates on
-   and returns its argument.
+   and  returns  its argument. titlecase converts the first letter of
+   each  word  if  it  is  a  letter,  to  upper  case  and all other
+   characters to lower case.
 
    Trim  shortens  a  string  to  the  length specified by the second
    parameter.  If the string is already of that length or shorter the
@@ -1727,6 +1648,10 @@ Output Mode Functions
 
           position to column in output
 
+   INT getcol(void);
+
+          get current column in output
+
    VOID row(INT);
 
           position to row in output
@@ -1780,7 +1705,8 @@ Output Mode Functions
 
    Col positions output to the given column. If the current column is
    greater  than  the  argument,  col  positions  output to the given
-   column on the next line. Col works in both modes.
+   column  on  the next line. Col works in both modes. Getcol returns
+   the current column in the output.
 
    Row  positions output to the first character in the given row; row
    can only be used in page mode.
@@ -2057,6 +1983,10 @@ Miscellaneous Functions
 
           return name of current database
 
+   STRING program(void);
+
+          return name of current program
+
    STRING version(void);
 
           return version of LifeLines program
@@ -2075,8 +2005,9 @@ Miscellaneous Functions
    respectively.
 
    Database  returns  the  name  of  the  current database, useful in
-   titling  reports.  Version  returns  the  version  of  the running
-   LifeLines program, eg, 3.0.25.
+   titling  reports.  program  returns the name of the current report
+   program.  Version  returns  the  version  of the running LifeLines
+   program, eg, 3.0.26.
 
    System  executes  its  string argument as a UNIX (or MS-Windows as
    appropriate)  shell  command,  by  invoking the system shell. This

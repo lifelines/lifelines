@@ -1806,43 +1806,33 @@ respectively, or <returnvalue>false</returnvalue> if not.
 the second parameter selects the type of pronoun:
 </para>
 
-<variablelist><varlistentry><term>0</term><listitem>
-<para>He/She</para>
-
-</listitem></varlistentry><varlistentry><term>1</term><listitem>
-
-<para>
-
-he/she
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>2</term><listitem>
-
-<para>
-
-His/Her
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>3</term><listitem>
-
-<para>
-
-his/her
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>4</term><listitem>
-
-<para>
-
-him/her
-
-</para>
-
-</listitem></varlistentry></variablelist>
-
+<informaltable pgwide='0' frame='none'>
+<tgroup cols='2'>
+<colspec colwidth='0.5in'></colspec>
+<tbody>
+<row>
+<entry>0</entry>
+<entry>He/She</entry>
+</row>
+<row>
+<entry>1</entry>
+<entry>he/she</entry>
+</row>
+<row>
+<entry>2</entry>
+<entry>His/Her</entry>
+</row>
+<row>
+<entry>3</entry>
+<entry>his/her</entry>
+</row>
+<row>
+<entry>4</entry>
+<entry>him/her</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
 
 <para>
 
@@ -2300,8 +2290,19 @@ declare a list
 check if list is empty
 
 </para>
-
 </glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INT <function>length</function></funcdef>
+<paramdef><parameter>LIST</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+length of list
+</para>
+</glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>enqueue</function></funcdef>
 <paramdef><parameter>LIST</parameter>,
@@ -2404,12 +2405,12 @@ array element selection
 array element deletion
 
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>sort</function></funcdef>
 <paramdef><parameter>LIST</parameter>,
-<parameter>LISt</parameter></paramdef>
+<parameter>LIST</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -3003,386 +3004,318 @@ structure; <function>stddate</function> returns dates in the selected style.
 
 </para>
 
-
-
 <para>
-
-The day format codes passed to <function>dayformat</function> are: <variablelist><varlistentry><term>0</term><listitem>
-
-<para>
-
-leave space before single digit days
-
+The day format codes passed to <function>dayformat</function> are: 
 </para>
-
-</listitem></varlistentry><varlistentry><term>1</term><listitem>
-
-<para>
-
+<informaltable pgwide='0' frame='none'>
+<tgroup cols='2'>
+<colspec colwidth='0.5in'></colspec>
+<tbody>
+<row>
+<entry>0</entry>
+<entry>leave space before single digit days</entry>
+</row>
+<row>
+<entry>1</entry>
+<entry>
 use leading 0 before single digit days
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>2</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>2</entry>
+<entry>
 no space or leading 0 before single digit days
-
-</para>
-
-</listitem></varlistentry></variablelist>
-
-</para>
-
-
+</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
 
 <para>
 
-The month format codes passed to <function>monthformat</function> are:<variablelist><varlistentry><term>0</term><listitem>
-
-<para>
-
+The month format codes passed to <function>monthformat</function> are:
+</para>
+<informaltable pgwide='0' frame='none'>
+<tgroup cols='2'>
+<colspec colwidth='0.5in'></colspec>
+<tbody>
+<row>
+<entry>0</entry>
+<entry>
 number with space before single digit months
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>1</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>1</entry>
+<entry>
 number with leading zero before single digit months
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>2</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>2</entry>
+<entry>
 number with no space or zero before single digit months
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>3</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>3</entry>
+<entry>
 upper case abbreviation (eg, JAN, FEB) (localized)
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>4</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>4</entry>
+<entry>
 capitalized abbreviation (eg, Jan, Feb) (localized)
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>5</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>5</entry>
+<entry>
 upper case full word (eg, JANUARY, FEBRUARY) (localized)
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>6</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>6</entry>
+<entry>
 capitalized full word (eg, January, February) (localized)
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>7</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>7</entry>
+<entry>
 lower case abbreviation (eg, jan, feb) (localized)
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>8</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>8</entry>
+<entry>
 lower case full word (eg, january, february) (localized)
-
-</para>
-
-
-</listitem></varlistentry><varlistentry><term>9</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>9</entry>
+<entry>
 upper case abbreviation in English per GEDCOM (eg, JAN, FEB)
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>10</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>10</entry>
+<entry>
 lower case roman letter (eg, i, ii)
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>11</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>11</entry>
+<entry>
 upper case roman letter (eg, I, II)
-
-</para>
-
-</listitem></varlistentry></variablelist>
-
-</para>
-
-
+</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
 
 <para>
 
-The year format codes passed to <function>yearformat</function> are: <variablelist><varlistentry><term>0</term><listitem>
+The year format codes passed to <function>yearformat</function> are:
+</para>
 
-<para>
-
+<informaltable pgwide='0' frame='none'>
+<tgroup cols='2'>
+<colspec colwidth='0.5in'></colspec>
+<tbody>
+<row>
+<entry>0</entry>
+<entry>
 use leading spaces before years with less than four digits
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>1</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>1</entry>
+<entry>
 use leading 0 before years with less than four digits
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>2</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>2</entry>
+<entry>
 no space or leading 0 before years
-
-</para>
-
-</listitem></varlistentry></variablelist>
-
-</para>
-
+</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
 
 
 <para>
 
-The era format codes passed to <function>eraformat</function> are: <variablelist><varlistentry><term>0</term><listitem>
+The era format codes passed to <function>eraformat</function> are: 
+</para>
 
-<para>
-
+<informaltable pgwide='0' frame='none'>
+<tgroup cols='2'>
+<colspec colwidth='0.5in'></colspec>
+<tbody>
+<row>
+<entry>0</entry>
+<entry>
 no AD/BC markers
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>1</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>1</entry>
+<entry>
 trailing B.C. if appropriate
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>2</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>2</entry>
+<entry>
 trailing A.D. or B.C.
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>11</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>11</entry>
+<entry>
 trailing BC if appropriate
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>12</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>12</entry>
+<entry>
 trailing AD or BC
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>21</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>21</entry>
+<entry>
 trailing B.C.E. if appropriate
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>22</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>22</entry>
+<entry>
 trailing C.E. or B.C.E.
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>31</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>31</entry>
+<entry>
 trailing BC if appropriate
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>32</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>32</entry>
+<entry>
 trailing CE or BCE
-
-</para>
-
-</listitem></varlistentry></variablelist>
-
-</para>
-
-
+</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
 
 <para>
 
 The full date formats passed to <function>stddate</function> are:
+</para>
 
-<variablelist><varlistentry><term>0</term><listitem>
-
-<para>
-
+<informaltable pgwide='0' frame='none'>
+<tgroup cols='2'>
+<colspec colwidth='0.5in'></colspec>
+<tbody>
+<row>
+<entry>0</entry>
+<entry>
 da mo yr
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>1</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>1</entry>
+<entry>
 mo da, yr
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>2</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>2</entry>
+<entry>
 mo/da/yr
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>3</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>3</entry>
+<entry>
 da/mo/yr
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>4</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>4</entry>
+<entry>
 mo-da-yr
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>5</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>5</entry>
+<entry>
 da-mo-yr
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>6</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>6</entry>
+<entry>
 modayr
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>7</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>7</entry>
+<entry>
 damoyr
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>8</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>8</entry>
+<entry>
 yr mo da
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>9</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>9</entry>
+<entry>
 yr/mo/da
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>10</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>10</entry>
+<entry>
 yr-mo-da
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>11</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>11</entry>
+<entry>
 yrmoda
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>12</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>12</entry>
+<entry>
 yr  (year only, omitting all else)
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>13</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>13</entry>
+<entry>
 da/mo yr
-
-</para>
-
-</listitem></varlistentry><varlistentry><term>14</term><listitem>
-
-<para>
-
+</entry>
+</row>
+<row>
+<entry>14</entry>
+<entry>
 (As in GEDCOM)
-
-</para>
-
-</listitem></varlistentry></variablelist>
-
-</para>
-
-
+</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
 
 </sect1>
 
@@ -3772,8 +3705,8 @@ convert to lower case
 convert to upper case
 
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>capitalize</function></funcdef>
 <paramdef><parameter>STRING</parameter></paramdef>
@@ -3784,8 +3717,20 @@ convert to upper case
 capitalize first letter
 
 </para>
-
 </glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRING <function>titlecase</function></funcdef>
+<paramdef><parameter>STRING</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+capitalize first letter of each word
+
+</para>
+</glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>trim</function></funcdef>
 <paramdef><parameter>STRING</parameter>,
@@ -4060,9 +4005,14 @@ By the release of version 3.0.6, all string values are local copies, and the <fu
 
 <para>
 
-<function>Lower</function> and <function>upper</function> convert the letters in their arguments to lower or upper case, respectively.
-<function>Capitalize</function> converts the first character of the argument, if it is a letter, to upper case. <function>Lower</function> and
-<function>upper</function> historically used the buffer return method; <function>capitalize</function> operates on and returns its argument.
+<function>Lower</function> and <function>upper</function> convert the letters
+in their arguments to lower or upper case, respectively.
+<function>Capitalize</function> converts the first character of the argument,
+if it is a letter, to upper case. <function>Lower</function> and
+<function>upper</function> historically used the buffer return method;
+<function>capitalize</function> operates on and returns its argument.
+<function>titlecase</function> converts the first letter of each word if it is
+a letter, to upper case and all other characters to lower case.
 
 
 </para>
@@ -4215,8 +4165,8 @@ use line output mode
 use page output mode with given page size
 
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>col</function></funcdef>
 <paramdef><parameter>INT</parameter></paramdef>
@@ -4227,8 +4177,19 @@ use page output mode with given page size
 position to column in output
 
 </para>
-
 </glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INT <function>getcol</function></funcdef><void/>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+get current column in output
+
+</para>
+</glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>row</function></funcdef>
 <paramdef><parameter>INT</parameter></paramdef>
@@ -4366,9 +4327,11 @@ location of output.
 
 <para>
 
-<function>Col</function> positions output to the given column. If the current column is greater than the argument, col
-positions output to the given column on the next line. <function>Col</function> works in both modes.
-
+<function>Col</function> positions output to the given column. If the current 
+column is greater than the argument, col
+positions output to the given column on the next line. <function>Col</function>
+works in both modes.
+<function>Getcol</function> returns the current column in the output.
 
 </para>
 
@@ -5058,8 +5021,8 @@ lock a person or family in memory
 unlock a person or family from memory
 
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>database</function></funcdef><void/>
 </funcprototype></funcsynopsis></glossterm><glossdef>
@@ -5069,8 +5032,19 @@ unlock a person or family from memory
 return name of current database
 
 </para>
-
 </glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRING <function>program</function></funcdef><void/>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+return name of current program
+
+</para>
+</glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>version</function></funcdef><void/>
 </funcprototype></funcsynopsis></glossterm><glossdef>
@@ -5121,7 +5095,8 @@ from <acronym>RAM</acronym> memory, respectively.
 <para>
 
 <function>Database</function> returns the name of the current database, useful
-in titling reports. <function>Version</function> returns the
+in titling reports. <function>program</function> returns the
+name of the current report program. <function>Version</function> returns the
 version of the running <application>LifeLines</application> program, eg, <literal>&llversion;</literal>.
 
 
