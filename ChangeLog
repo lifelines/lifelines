@@ -36,6 +36,10 @@
 
 	Updating versions in windows resources to 3.0.27.
 
+	* ChangeLog reports/st/st_list.ll
+
+	Remove self-test code for deleteel.
+
 2003-03-06 Steve Dum
 
 	* ChangeLog docs/Makefile.am

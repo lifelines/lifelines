@@ -185,40 +185,6 @@ proc testLists()
 		)) {
 		call reportfail("sort FAILED")
 	} else { incr(testok) }
-/* deleteel */
-	list(li)
-	push(li, "alpha")
-	push(li, "beta")
-	push(li, "gamma")
-	push(li, "delta")
-	deleteel(li, 3)
-	if (or(
-		ne(length(li), 3)
-		,ne(getel(li, 1), "alpha")
-		,ne(getel(li, 2), "beta")
-		,ne(getel(li, 3), "delta")
-		)) {
-		call reportfail("deleteel FAILED")
-	} else { incr(testok) }
-	deleteel(li, 3)
-	if (or(
-		ne(length(li), 2)
-		,ne(getel(li, 1), "alpha")
-		,ne(getel(li, 2), "beta")
-		)) {
-		call reportfail("deleteel FAILED")
-	} else { incr(testok) }
-	deleteel(li, 1)
-	if (or(
-		ne(length(li), 1)
-		,ne(getel(li, 1), "beta")
-		)) {
-		call reportfail("deleteel FAILED")
-	} else { incr(testok) }
-	deleteel(li, 1)
-	if (ne(length(li), 0)) {
-		call reportfail("deleteel FAILED")
-	} else { incr(testok) }
 
 	call reportSubsection("list tests")
 }
