@@ -20,6 +20,19 @@
 	Rewrite translation code to combine iconv with custom translations.
 	Update windows docs to reflect codeset configuration.
 
+	* ChangeLog
+	*DELETED win32/hdrs/README win32/hdrs/btree.h win32/hdrs/cache.h
+	win32/hdrs/gedcheck.h win32/hdrs/gedcom.h win32/hdrs/getopt.h
+	win32/hdrs/include.h win32/hdrs/indiseq.h win32/hdrs/interp.h
+	win32/hdrs/ll_getopt.h win32/hdrs/mycurses.h
+	win32/hdrs/mystring.h win32/hdrs/proto.h
+	win32/hdrs/proto.static.h win32/hdrs/screen.h
+	win32/hdrs/sequence.h win32/hdrs/standard.h
+	win32/hdrs/standard1.h win32/hdrs/table.h
+	win32/hdrs/translat.h win32/hdrs/yacc.h:
+
+	Remove win32/hdrs/* (obsolete headers created before hdrs existed).
+
 2002-06-17 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog README.LAYOUT gedlib/Makefile.am gedlib/init.c
