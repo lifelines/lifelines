@@ -44,6 +44,13 @@
  *   V1.02					  10-Nov-2000
  *   Updated URLs
  * 
+ *  $Header
+ * 
+ *  $Log$
+ *  Revision 1.2  2000/11/27 20:45:43  nozell
+ *  Add CVS keywords
+ *
+ * 
  */
 
 proc main ()
