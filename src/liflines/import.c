@@ -174,6 +174,8 @@ do_import (struct import_feedback * ifeed, FILE *fp)
 		gdcodeset = strsave(str);
 	}
 
+	/* TODO: Push this codeset question down to after the validation, where we can know if
+	the incoming file happened to really be all ASCII */
 
 	if (!int_codeset[0]) {
 		/* TODO: ask if user would like to adopt codeset of incoming file, if we found it */
