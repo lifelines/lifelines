@@ -2574,7 +2574,7 @@ __inode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, _(nonind1), "inode");
 		return NULL;
 	}
-	return create_pvalue(PGNODE, (VPTR)indi);
+	return create_pvalue_from_node(indi);
 }
 /*================================+
  * __fnode -- Return root of family
@@ -2588,8 +2588,8 @@ __fnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, nonfam1, "fnode");
 		return NULL;
 	}
-	if (!fam) return create_pvalue(PGNODE, NULL);
-	return create_pvalue(PGNODE, (VPTR)fam);
+	/* fam may be NULL */
+	return create_pvalue_from_node(fam);
 }
 /*=============================+
  * __table -- Create table
@@ -3351,7 +3351,7 @@ __sibling (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_var_error(node, stab, arg, val, nullarg1, "sibling");
 		return NULL;
 	}
-	set_pvalue(val, PGNODE, nsibling(ged));
+	set_pvalue_node(val, nsibling(ged));
 	return val;
 }
 /*===============================+

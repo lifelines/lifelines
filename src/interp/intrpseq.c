@@ -82,7 +82,7 @@ __indiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	*eflg = FALSE;
 	newseq = create_indiseq_pval();
 	set_indiseq_value_funcs(newseq, &pvseq_fnctbl);
-	newval = create_pvalue(PSET, newseq);
+	newval = create_pvalue_from_seq(newseq);
 	assign_iden(stab, iident(var), newval);
 	return NULL;
 }
@@ -152,6 +152,7 @@ __inset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	NODE indi;
 	STRING key;
 	INDISEQ seq;
+	BOOLEAN rel;
 	PNODE arg1 = (PNODE) iargs(node), arg2 = inext(arg1);
 	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	PVALUE valr=0;
@@ -165,13 +166,14 @@ __inset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "2nd arg to inset must be a person.");
 		return NULL;
 	}
-	if (!indi) return create_pvalue(PBOOL, (VPTR) FALSE);
+	if (!indi) return create_pvalue_from_bool(FALSE);
 	if (!(key = strsave(rmvat(nxref(indi))))) {
 		*eflg = TRUE;
 		prog_error(node, "major error in inset.");
 		return NULL;
 	}
-	valr = create_pvalue(PBOOL, (VPTR) in_indiseq(seq, key));
+	rel = in_indiseq(seq, key);
+	valr = create_pvalue_from_bool(rel);
 	/* delay to last minute lest it is a temp owning seq,
 	eg, inset(ancestorset(i),j) */
 	delete_pvalue(val1);
@@ -332,7 +334,7 @@ __union (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	op2 = pvalue_to_seq(val2);
 	op2 = union_indiseq(op1, op2);
-	set_pvalue(val1, PSET, op2);
+	set_pvalue_seq(val1, op2);
 	/* delay to last minute lest it is a temp owning seq,
 	eg, intersect(ancestorset(i),ancestorset(j)) */
 	delete_pvalue(val2);
@@ -361,7 +363,9 @@ __intersect (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	op2 = pvalue_to_seq(val2);
-	set_pvalue(val1, PSET, op2 = intersect_indiseq(op1, op2));
+	/* do actual interset */
+	op2 = intersect_indiseq(op1, op2);
+	set_pvalue_seq(val1, op2);
 	/* delay to last minute lest it is a temp owning seq,
 	eg, intersect(ancestorset(i),ancestorset(j)) */
 	delete_pvalue(val2);
@@ -390,7 +394,9 @@ __difference (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	op2 = pvalue_to_seq(val2);
-	set_pvalue(val, PSET, op2 = difference_indiseq(op1, op2));
+	/* do actual difference */
+	op2 = difference_indiseq(op1, op2);
+	set_pvalue_seq(val, op2);
 	/* delay to last minute lest it is a temp owning seq,
 	eg, difference(ancestorset(i),ancestorset(j)) */
 	delete_pvalue(val2);
@@ -411,8 +417,9 @@ __parentset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	/* NULL indiseqs are possible, because of getindiset */
 	seq = pvalue_to_seq(val);
+	/* do actual construction of parent set */
 	seq = parent_indiseq(seq);
-	set_pvalue(val, PSET, seq);
+	set_pvalue_seq(val, seq);
 	return val;
 }
 /*==========================================+
@@ -429,7 +436,9 @@ __childset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	ASSERT(seq = pvalue_to_seq(val));
-	set_pvalue(val, PSET, seq = child_indiseq(seq));
+	/* do actual construction of child set */
+	seq = child_indiseq(seq);
+	set_pvalue_seq(val, seq);
 	return val;
 }
 /*==============================================+
@@ -446,7 +455,8 @@ __siblingset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	ASSERT(seq = pvalue_to_seq(val));
-	set_pvalue(val, PSET, seq = sibling_indiseq(seq, FALSE));
+	seq = sibling_indiseq(seq, FALSE);
+	set_pvalue_seq(val, seq);
 	return val;
 }
 /*============================================+
@@ -463,7 +473,8 @@ __spouseset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	ASSERT(seq = pvalue_to_seq(val));
-	set_pvalue(val, PSET, seq = spouse_indiseq(seq));
+	seq = spouse_indiseq(seq);
+	set_pvalue_seq(val, seq);
 	return val;
 }
 /*================================================+
@@ -481,7 +492,7 @@ __ancestorset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	ASSERT(seq = pvalue_to_seq(val));
 	seq = ancestor_indiseq(seq);
-	set_pvalue(val, PSET, seq);
+	set_pvalue_seq(val, seq);
 	return val;
 }
 /*====================================================+
@@ -499,7 +510,7 @@ __descendentset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	ASSERT(seq = pvalue_to_seq(val));
 	seq = descendent_indiseq(seq);
-	set_pvalue(val, PSET, seq);
+	set_pvalue_seq(val, seq);
 	return val;
 }
 /*===================================================+

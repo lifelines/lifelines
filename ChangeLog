@@ -8,6 +8,11 @@
 
 	Bump version to 3.0.40i, for interim between releases.
 
+	* ChangeLog src/interp/builtin.c src/interp/intrpseq.c
+	src/interp/more.c
+
+	Convert more pvalue access to encapsulated calls.
+
 2005-01-15 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c src/hdrs/list.h

@@ -1127,6 +1127,11 @@ create_pvalue_from_seq (INDISEQ seq)
 {
 	return create_pvalue(PSET, seq);
 }
+void
+set_pvalue_seq (PVALUE val, INDISEQ seq)
+{
+	set_pvalue(val, PSET, (VPTR)seq);
+}
 INDISEQ
 pvalue_to_seq (PVALUE val)
 {

@@ -461,8 +461,8 @@ allocsubstring (STRING s, INT i, INT j)
 PVALUE
 __chooseindi (PNODE node, SYMTAB stab, BOOLEAN * eflg)
 {
-	NODE indi;
-	INDISEQ seq;
+	NODE indi=0;
+	INDISEQ seq=0;
 	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
 	if (*eflg) {
 		prog_error(node, "the arg to chooseindi is not a set of persons");
@@ -498,7 +498,7 @@ __choosesubset (PNODE node, SYMTAB stab, BOOLEAN * eflg)
 		remove_indiseq(newseq);
 		newseq = NULL;
 	}
-	return create_pvalue(PSET, (VPTR)newseq);
+	return create_pvalue_from_seq(newseq);
 }
 /*=========================================================+
  * choosechild -- Have user choose child of person or family
@@ -1030,7 +1030,8 @@ __savenode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	line = pvalue_to_node(val);
 	if (!line) return val;
-	set_pvalue(val, PGNODE, (VPTR) copy_nodes(line, TRUE, TRUE));
+	line = copy_nodes(line, TRUE, TRUE);
+	set_pvalue_node(val, line);
 	return val;
 }
 /*===================================================+
@@ -1042,6 +1043,7 @@ __genindiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	STRING name;
+	PVALUE seqval=0;
 	PVALUE val1 = eval_and_coerce(PSTRING, arg, stab, eflg);
 	if (*eflg) {
 		prog_var_error(node, stab, arg, val1, nonstrx, "genindiset" , "1");
@@ -1057,10 +1059,11 @@ __genindiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "2nd arg to genindiset must be a variable");
 		return NULL;
 	}
-	assign_iden(stab, iident(arg), create_pvalue(PSET, (VPTR)NULL));
+	seqval = create_pvalue_from_seq(NULL);
+	assign_iden(stab, iident(arg), seqval);
 	if (!name || *name == 0) return NULL;
-	assign_iden(stab, iident(arg), create_pvalue(PSET,
-	    (VPTR)str_to_indiseq(name, 'I')));
+	seqval = create_pvalue_from_seq(str_to_indiseq(name, 'I'));
+	assign_iden(stab, iident(arg), seqval);
 	return NULL;
 }
 /*POINT*/
