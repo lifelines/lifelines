@@ -1563,10 +1563,16 @@ get_todays_date (void)
 	struct tm *pt;
 	time_t curtime;
 	static char dat[20];
+	STRING month;
 	curtime = time(NULL);
 	pt = localtime(&curtime);
-	sprintf(dat, "%d %s %d", pt->tm_mday, months_gj[3][pt->tm_mon],
-	    1900 + pt->tm_year);
+	if (!keywordtbl) {
+		init_keywordtbl();
+		load_lang();
+	}
+	/* TODO: Should this be one of the customizable formats ? */
+	month = gedkeys[pt->tm_mon].keyword;
+	sprintf(dat, "%d %s %d", pt->tm_mday, month, 1900 + pt->tm_year);
 	return dat;
 }
 /*=============================
