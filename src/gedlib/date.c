@@ -361,13 +361,12 @@ static void
 format_eratime (struct gdate_s * pdate, CNSTRING ymd, INT efmt, STRING output
 	, INT len)
 {
+	output[0] = 0;
+	llstrapps(output, len, uu8, ymd);
 	/* TODO: calendar-specific handling */
 	if (pdate->eratime == GDV_BC) {
 		if (efmt > 0) {
-			STRING p = output;
 			STRING tag = 0;
-			p[0] = 0;
-			appendstr(&p, &len, uu8, ymd);
 			switch (efmt/10) {
 				case 1: tag = _(qSdatetrl_bcB); break;
 				case 2: tag = _(qSdatetrl_bcC); break;
@@ -376,16 +375,13 @@ format_eratime (struct gdate_s * pdate, CNSTRING ymd, INT efmt, STRING output
 			/* this way we handle if one is blank */
 			if (!tag || !tag[0])
 				tag = _(qSdatetrl_bcA);
-			appendstr(&p, &len, uu8, " ");
-			appendstr(&p, &len, uu8, tag);
+			llstrapps(output, len, uu8, " ");
+			llstrapps(output, len, uu8, tag);
 			return;
 		}
 	} else {
 		if (efmt > 1) {
-			STRING p = output;
 			STRING tag = 0;
-			p[0] = 0;
-			appendstr(&p, &len, uu8, ymd);
 			switch (efmt/10) {
 				case 1: tag = _(qSdatetrl_adB); break;
 				case 2: tag = _(qSdatetrl_adC); break;
@@ -394,14 +390,12 @@ format_eratime (struct gdate_s * pdate, CNSTRING ymd, INT efmt, STRING output
 			/* this way we handle if one is blank */
 			if (!tag || !tag[0])
 				tag = _(qSdatetrl_adA);
-			appendstr(&p, &len, uu8, " ");
-			appendstr(&p, &len, uu8, tag);
+			llstrapps(output, len, uu8, " ");
+			llstrapps(output, len, uu8, tag);
 			return;
 		}
 	}
 	/* no trailing tag at all */
-	llstrncpy(output, ymd, len, uu8);
-
 }
 /*===================================================
  * format_cal -- Add calender info to date

@@ -198,7 +198,11 @@ char *
 llstrncpy (char *dest, const char *src, size_t n, int utf8)
 {
 	/* must have valid strings, and copying at least one byte */
-	if (!dest || !src || !src[0] || n<2) return dest;
+	if (!dest || n<1) return dest;
+	if (!src || !src[0] || n<2) {
+		*dest=0;
+		return dest;
+	}
 	strncpy(dest, src, n);
 	if (dest[n-1]) {
 		/* overflowed -- back up to last character that fits */

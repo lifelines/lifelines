@@ -75,14 +75,15 @@ add_program_props (TABLE fileprops)
 	FILE *fp;
 	char str[MAXLINELEN];
 	INT i;
-	INT dnum;
 	INT line=0;
+	INT endcomment=0; /* flag when finished header comment */
+	char * charset=0; /* charset of report, if found */
 
 	/* first get full path & open file */
 	STRING fname = valueof_str(fileprops, "filename");
 	STRING dir = valueof_str(fileprops, "dir");
 	STRING filepath = concat_path_alloc(dir, fname);
-	dnum = 3;
+	char enc_cmd[] = "char_encoding(\"";
 
 	if (NULL == (fp = fopen(filepath, "r")))
 		goto end_add_program_props;
@@ -91,27 +92,44 @@ add_program_props (TABLE fileprops)
 	for (i=0; i<ARRSIZE(tagsfound); ++i)
 		tagsfound[i] = 0;
 
+	/* what charset is the data in this report ? :( */
+	/* TODO: need to watch for BOM or for report charset command */
+
 	/* now read line by line looking for metainfo */
 	while (NULL != fgets(str, sizeof(str), fp) && str[strlen(str)-1]=='\n' && line<20) {
-		STRING p;
-		chomp(str); /* trim trailing CR or LF */
-		for (i=0; i<ARRSIZE(f_tags); ++i) {
-			CNSTRING tag = f_tags[i];
-			if (tagsfound[i])
-				continue; /* already have this tag */
-			if (NULL != (p = strstr(str, tag))) {
-				STRING s = p + strlen(tag);
-				/* skip leading space */
-				while (s[0] && isspace((uchar)s[0]))
-					++s;
-				striptrail(s);
-				if (s[0])
-					tagsfound[i] = strsave(s);
-				break;
+		/* check for char encoding command, to help us interpret tag values */
+		if (!strncmp(str, enc_cmd, sizeof(enc_cmd)-1)) {
+			const char *start = str+sizeof(enc_cmd)-1;
+			const char *end = start;
+			while (*end && *end!='\"')
+				++end;
+			if (*end && end>start) {
+				charset=malloc(strlen(str));
+				llstrncpy(charset, start, end-start, 0);
 			}
 		}
-		if (strstr(str, "*/"))
-			break;
+		if (!endcomment) {
+			/* pick up any tag values specified */
+			STRING p;
+			chomp(str); /* trim trailing CR or LF */
+			for (i=0; i<ARRSIZE(f_tags); ++i) {
+				CNSTRING tag = f_tags[i];
+				if (tagsfound[i])
+					continue; /* already have this tag */
+				if (NULL != (p = strstr(str, tag))) {
+					STRING s = p + strlen(tag);
+					/* skip leading space */
+					while (s[0] && isspace((uchar)s[0]))
+						++s;
+					striptrail(s);
+					if (s[0])
+						tagsfound[i] = strsave(s);
+					break;
+				}
+			}
+			if (strstr(str, "*/"))
+				endcomment=1;
+		}
 		++line;
 	}
 
@@ -120,12 +138,14 @@ add_program_props (TABLE fileprops)
 	/* add any metainfo we found to the property table */
 	for (i=0; i<ARRSIZE(tagsfound); ++i) {
 		if (tagsfound[i]) {
+			/* TODO: translate tagsfound[i] with charset */
 			add_prop_dnum(fileprops, strdup(f_tags[i]), strdup(tagsfound[i]));
 			strfree(&tagsfound[i]);
 		}
 	}
 
 end_add_program_props:
+	strfree(&charset);
 	stdfree(filepath);
 	return;
 }
@@ -243,7 +263,7 @@ proparrdetails (ARRAY_DETAILS arrdets, void * param)
 	TABLE * fileprops = (TABLE *)param;
 	TABLE props;
 	INT count = arrdets->count;
-	INT len = arrdets->maxlen;
+	INT maxlen = arrdets->maxlen;
 	INT index = arrdets->cur - 1; /* slot#0 used by choose string */
 	INT row=0;
 	INT scroll = arrdets->scroll;
@@ -258,18 +278,18 @@ proparrdetails (ARRAY_DETAILS arrdets, void * param)
 
 	/* print tags & values */
 	for (i=scroll; i<dnum && row<count; ++i, ++row) {
-		STRING ptr = arrdets->lines[row];
-		INT mylen = len;
+		STRING detail = arrdets->lines[row];
 		char temp[20];
 		STRING name=0, value=0;
 		sprintf(temp, "d%d", i+1);
 		name = valueof_str(props, temp);
+		detail[0]=0;
 		if (name) {
 			value = valueof_str(props, name);
-			appendstr(&ptr, &mylen, uu8, name);
-			appendstr(&ptr, &mylen, uu8, ": ");
+			llstrapps(detail, maxlen, uu8, name);
+			llstrapps(detail, maxlen, uu8, ": ");
 			if (value) {
-				appendstr(&ptr, &mylen, uu8, value);
+				llstrapps(detail, maxlen, uu8, value);
 			}
 		}
 	}

@@ -56,8 +56,8 @@ edit_mapping (INT ttnum)
 		INT mylen = sizeof(buffer);
 		if (load_new_tt(editfile, ttnum))
 			return TRUE;
-		appendstrf(&ptr, &mylen, uu8, "%s ", _(qScmperr));
-		appendstrf(&ptr, &mylen, uu8, _(qSsepch), "<tab>"); /* (separator is %s) */
+		llstrsets(buffer, sizeof(buffer), uu8, "%s ", _(qScmperr));
+		llstrappf(buffer, sizeof(buffer), uu8, _(qSsepch), "<tab>"); /* (separator is %s) */
 		if (ask_yes_or_no_msg(buffer, _(qSaredit)))
 			do_edit();
 		else {

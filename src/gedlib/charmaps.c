@@ -197,7 +197,7 @@ check_for_user_charmaps (STRING basename, TRANMAPPING ttm, CNSTRING mapname)
 		char name[120];
 		char ttpath[MAXPATHLEN];
 		name[0]=0;
-		llstrapp(name, sizeof(name), uu8, basename);
+		llstrapps(name, sizeof(name), uu8, basename);
 		llstrappf(name, sizeof(name), uu8, "%d", i);
 		ttname = getoptstr(name, "");
 		if (!ttname || !ttname[0])

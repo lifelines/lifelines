@@ -155,7 +155,7 @@ concat_path (CNSTRING dir, CNSTRING file, STRING buffer, INT buflen)
 	ASSERT(buflen);
 	buffer[0] = 0;
 	if (dir && dir[0]) {
-		llstrapp(buffer, buflen, uu8, dir);
+		llstrapps(buffer, buflen, uu8, dir);
 		if (is_dir_sep(buffer[strlen(buffer)-1])) {
 			/* dir ends in sep */
 			if (!file || !file[0]) {
@@ -164,10 +164,10 @@ concat_path (CNSTRING dir, CNSTRING file, STRING buffer, INT buflen)
 			} else {
 				if (is_dir_sep(file[0])) {
 					/* file starts in sep */
-					llstrapp(buffer, buflen, uu8, &file[1]);
+					llstrapps(buffer, buflen, uu8, &file[1]);
 				} else {
 					/* file doesn't start in sep */
-					llstrapp(buffer, buflen, uu8, file);
+					llstrapps(buffer, buflen, uu8, file);
 				}
 			}
 		} else {
@@ -177,18 +177,18 @@ concat_path (CNSTRING dir, CNSTRING file, STRING buffer, INT buflen)
 			} else {
 				if (is_dir_sep(file[0])) {
 					/* file starts in sep */
-					llstrapp(buffer, buflen, uu8, file);
+					llstrapps(buffer, buflen, uu8, file);
 				} else {
 					/* file doesn't start in sep */
-					llstrapp(buffer, buflen, uu8, LLSTRDIRSEPARATOR);
-					llstrapp(buffer, buflen, uu8, file);
+					llstrapps(buffer, buflen, uu8, LLSTRDIRSEPARATOR);
+					llstrapps(buffer, buflen, uu8, file);
 				}
 			}
 		}
 	} else {
 		/* no dir, include file exactly as it is */
 		if (file && file[0])
-			llstrapp(buffer, buflen, uu8, file);
+			llstrapps(buffer, buflen, uu8, file);
 	}
 
 	return buffer;
@@ -476,8 +476,8 @@ expand_special_fname_chars (STRING buffer, INT buflen)
 				}
 				tmp = strsave(buffer);
 				buffer[0] = 0;
-				llstrapp(buffer, buflen, uu8, home);
-				llstrapp(buffer, buflen, uu8, tmp+1);
+				llstrapps(buffer, buflen, uu8, home);
+				llstrapps(buffer, buflen, uu8, tmp+1);
 				strfree(&tmp);
 				return TRUE;
 			}

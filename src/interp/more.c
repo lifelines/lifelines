@@ -607,10 +607,10 @@ makestring (PVALUE val, STRING str, INT len, BOOLEAN *eflg)
 	u.w = pvalue(val);
 	switch(ptype(val)) {
 		case PNONE: 
-			llstrapp(str, len, uu8, "<NONE>");
+			llstrapps(str, len, uu8, "<NONE>");
 			break;
 		case PANY:
-			llstrapp(str, len, uu8, "<NULL>");
+			llstrapps(str, len, uu8, "<NULL>");
 			break;
 		case PINT:
 		case PFLOAT:
@@ -618,10 +618,10 @@ makestring (PVALUE val, STRING str, INT len, BOOLEAN *eflg)
 			break;
 		case PBOOL:
 			/* TODO: Should we localize this ? */
-			llstrappf(str, len, uu8, u.w ? "True" : "False");
+			llstrapps(str, len, uu8, u.w ? "True" : "False");
 			break;
 		case PSTRING:
-			llstrapp(str, len, uu8, (STRING)pvalue(val));
+			llstrapps(str, len, uu8, (STRING)pvalue(val));
 			break;
 		case PGNODE:
 			{
@@ -631,7 +631,7 @@ makestring (PVALUE val, STRING str, INT len, BOOLEAN *eflg)
 					llstrappf(str, len, uu8, "%s: ", ntag(node));
 				}
 				if (nval(node))
-					llstrapp(str, len, uu8, nval(node));
+					llstrapps(str, len, uu8, nval(node));
 			}
 			break;
 		case PINDI:
@@ -644,17 +644,17 @@ makestring (PVALUE val, STRING str, INT len, BOOLEAN *eflg)
 				cel = get_cel_from_pvalue(val);
 				node = cnode(cel);
 				txt = generic_to_list_string(node, NULL, len, " ", NULL);
-				llstrapp(str, len, uu8, txt);
+				llstrapps(str, len, uu8, txt);
 			}
 			break;
 		case PLIST:
-			llstrapp(str, len, uu8, "<LIST>");
+			llstrapps(str, len, uu8, "<LIST>");
 			break;
 		case PTABLE:
-			llstrapp(str, len, uu8, "<TABLE>");
+			llstrapps(str, len, uu8, "<TABLE>");
 			break;
 		case PSET:
-			llstrapp(str, len, uu8, "<SET>");
+			llstrapps(str, len, uu8, "<SET>");
 			break;
 		default:
 			*eflg = TRUE;

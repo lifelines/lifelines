@@ -680,7 +680,7 @@ update_browse_menu (INT screen)
 			check_menu(dynmenu);
 			/* display prompt immediately above menu */
 			llstrncpy(prompt, _(qSplschs), sizeof(prompt), uu8);
-			llstrapp(prompt, sizeof(prompt), uu8, "             ");
+			llstrapps(prompt, sizeof(prompt), uu8, "             ");
 			llstrappf(prompt, sizeof(prompt), uu8, _("(pg %d/%d)")
 				, dynmenu->page+1, dynmenu->pages);
 			/* display line across */
@@ -972,8 +972,8 @@ ask_for_filename_impl (STRING ttl, STRING path, STRING prmpt, STRING buffer, INT
 	if (len > uiw_cols(ask_msg_win)-2)
 		len = uiw_cols(ask_msg_win)-2;
 	curpath[0] = 0;
-	llstrapp(curpath, len, uu8, _(qSiddefpath));
-	llstrapp(curpath, len, uu8, compress_path(path, len-strlen(curpath)-1));
+	llstrapps(curpath, len, uu8, _(qSiddefpath));
+	llstrapps(curpath, len, uu8, compress_path(path, len-strlen(curpath)-1));
 
 	return ask_for_string2(ttl, curpath, prmpt, buffer, buflen);
 }
@@ -2469,8 +2469,8 @@ manufacture a listdisp here
 		scratch[0] =0;
 		if (name) {
 			name = manip_name(name, ttmd, TRUE, TRUE, 40);
-			llstrapp(scratch, sizeof(scratch), uu8, name);
-			llstrapp(scratch, sizeof(scratch), uu8, " ");
+			llstrapps(scratch, sizeof(scratch), uu8, name);
+			llstrapps(scratch, sizeof(scratch), uu8, " ");
 		}
 		llstrappf(scratch, sizeof(scratch), uu8, "(%s)", key_of_record(indi, ttmd));
 		mvwaddstr(win, row, 4, scratch);

@@ -6,9 +6,8 @@
    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 /*=============================================================
- * strapp.c -- string catenation functions that use original size of buffer
- *  These are replacements for strncat, which use the total buffer size 
- *  rather than the max. remaining length as a parameter.
+ * strset.c -- string assignment functions
+ *  These provide a consistent API mirroring the strapp API
  *==============================================================*/
 
 
@@ -17,67 +16,49 @@
 
 
 /*==================================
- * llstrapp -- llstrncat except limit includes existing string
- *  ie, strncat except it always terminates, it handles UTF-8,
- *  and the limit is inclusive of existing contents
+ * llstrset -- llstrncpy adopted to strset/strapp API
  * handles UTF-8
  *================================*/
 char *
-llstrapps (char *dest, size_t limit, int utf8, const char *src)
+llstrsets (char *dest, size_t limit, int utf8, const char *src)
 {
-	size_t len;
-	int n;
-	if (!src || !dest || !src[0]) return dest;
-	len = strlen(dest);
-	n = limit-len;
-	ASSERT(n >= 0);
-	if (n < 2) /* must fit trailing zero */
-		return dest;
-
-	llstrncpy(dest+len, src, n, utf8);
-	return dest;
+	return llstrncpy(dest, src, limit, utf8);
 }
 /*==================================
- * llstrappc -- llstrapp with a character argument
+ * llstrsetc -- llstrset with a character argument
  *================================*/
 char *
-llstrappc (char *dest, size_t limit, char ch)
+llstrsetc (char *dest, size_t limit, char ch)
 {
 	int utf8 = 0;
 	char src[2];
 	src[0] = ch;
 	src[1] = 0;
-	return llstrapps(dest, limit, utf8, src);
+	return llstrsets(dest, limit, utf8, src);
 }
 /*==================================
- * llstrappf -- snprintf style append to string,
+ * llstrsetf -- snprintf style assignment to string,
  * subject to length limit (including current contents)
  * handles UTF-8
  *================================*/
 char *
-llstrappf (char * dest, int limit, int utf8, const char * fmt, ...)
+llstrsetf (char * dest, int limit, int utf8, const char * fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	llstrappvf(dest, limit, utf8, fmt, args);
+	llstrsetvf(dest, limit, utf8, fmt, args);
 	va_end(args);
 	return dest;
 }
 /*==================================
- * llstrappvf -- vsnprintf style append to string,
+ * llstrsetvf -- vsnprintf style assignment to string,
  * subject to length limit (including current contents)
  * handles UTF-8
  *================================*/
 char *
-llstrappvf (char * dest, int limit, int utf8, const char * fmt, va_list args)
+llstrsetvf (char * dest, int limit, int utf8, const char * fmt, va_list args)
 {
-	/* TODO: Revise for UTF-8 */
-	size_t len = strlen(dest);
-	size_t n = limit-len;
-	if (n < 2) /* must fit trailing zero */
-		return dest;
-
-	return llstrncpyvf(dest+len, n, utf8, fmt, args);
+	return llstrncpyvf(dest, limit, utf8, fmt, args);
 }
 
 

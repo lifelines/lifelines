@@ -203,7 +203,7 @@ ask_for_file_worker (STRING mode,
 	if (ISNULL(path)) {
 		fp = NULL;
 		if(ext) {
-			llstrapp(fname, sizeof(fname), uu8, ext);
+			llstrapps(fname, sizeof(fname), uu8, ext);
 		}
 		fp = fopen(fname, mode);
 		if (fp && pfname) *pfname = strsave(fname);

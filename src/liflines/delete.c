@@ -60,8 +60,6 @@ choose_and_remove_family (void)
 	char confirm[512], members[64];
 	char spouses[32], children[32];
 	INT n;
-	STRING cfptr=confirm; /* build & localize string */
-	INT cflen=sizeof(confirm);
 
 	fam = nztop(ask_for_fam_by_key(_(qSidfrmv), _(qSidfrsp), _(qSidfrch)));
 	if (!fam)
@@ -83,15 +81,15 @@ choose_and_remove_family (void)
 
 	/* build confirm string */
 	n = ISize(spseq);
-	llstrncpyf(spouses, sizeof(spouses), uu8
+	llstrsetf(spouses, sizeof(spouses), uu8
 		, _pl("%d spouse", "%d spouses", n), n);
 	n = ISize(chseq);
-	llstrncpyf(children, sizeof(children), uu8
+	llstrsetf(children, sizeof(children), uu8
 		, _pl("%d child", "%d children", n), n);
-	llstrncpyf(members, sizeof(members), uu8
+	llstrsetf(members, sizeof(members), uu8
 		, _(qScffdeld), fam_to_key(fam), spouses, children);
-	appendstr(&cfptr, &cflen, uu8, _(qScffdel));
-	appendstr(&cfptr, &cflen, uu8, members);
+	llstrapps(confirm, sizeof(confirm), uu8, _(qScffdel));
+	llstrapps(confirm, sizeof(confirm), uu8, members);
 
 	if (ask_yes_or_no(confirm)) {
 

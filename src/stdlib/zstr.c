@@ -193,7 +193,7 @@ zs_setz (ZSTR * pzstr, ZSTR zsrc)
 }
 /* append zero-terminated input to zstring */
 char *
-zs_cats (ZSTR * pzstr, const char * txt)
+zs_apps (ZSTR * pzstr, const char * txt)
 {
 	ZSTR zstr = *pzstr;
 	int tlen;
@@ -210,12 +210,12 @@ zs_cats (ZSTR * pzstr, const char * txt)
 }
 /* append input character to zstring */
 char *
-zs_catc (ZSTR * pzstr, char ch)
+zs_appc (ZSTR * pzstr, char ch)
 {
 	char buffer[2];
 	buffer[0] = ch;
 	buffer[1] = 0;
-	return zs_cats(pzstr, buffer);
+	return zs_apps(pzstr, buffer);
 }
 /* set printf style input to zstring */
 char *
@@ -223,37 +223,37 @@ zs_setf (ZSTR * pzstr, const char * fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	zs_setv(pzstr, fmt, args);
+	zs_setvf(pzstr, fmt, args);
 	va_end(args);
 	return (*pzstr)->str;
 }
 /* append printf style input to zstring */
 char *
-zs_catf (ZSTR * pzstr, const char * fmt, ...)
+zs_appf (ZSTR * pzstr, const char * fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	zs_catv(pzstr, fmt, args);
+	zs_appvf(pzstr, fmt, args);
 	va_end(args);
 	return (*pzstr)->str;
 }
 /* set varargs printf style input to zstring */
 char *
-zs_setv (ZSTR * pzstr, const char * fmt, va_list args)
+zs_setvf (ZSTR * pzstr, const char * fmt, va_list args)
 {
 	zs_clear(pzstr);
-	zs_catv(pzstr, fmt, args);
+	zs_appvf(pzstr, fmt, args);
 	return (*pzstr)->str;
 }
 /* append varargs printf style input to zstring */
 char *
-zs_catv (ZSTR * pzstr, const char * fmt, va_list args)
+zs_appvf (ZSTR * pzstr, const char * fmt, va_list args)
 {
 	/* if we know that the system implementation of snprintf was
 	standards conformant, we could use snprintf(0, ...), but how to tell ? */
 	static char buffer[4096];
 	vsnprintf(buffer, sizeof(buffer), fmt, args);
-	zs_cats(pzstr, buffer);
+	zs_apps(pzstr, buffer);
 	return (*pzstr)->str;
 }
 /* set zstring to empty */

@@ -170,10 +170,16 @@ STRING strsave(CNSTRING);
 void strupdate(STRING * str, CNSTRING value);
 
 /* strapp.c */
-char *llstrapp(char *dest, size_t limit, int utf8, const char *src);
+char *llstrapps(char *dest, size_t limit, int utf8, const char *src);
 char *llstrappc(char *dest, size_t limit, char ch);
 char *llstrappf(char *dest, int limit, int utf8, const char *fmt, ...);
 char *llstrappvf(char *dest, int limit, int utf8, const char *fmt, va_list args);
+
+/* strset.c */
+char *llstrsets(char *dest, size_t limit, int utf8, const char *src);
+char *llstrsetc(char *dest, size_t limit, char ch);
+char *llstrsetf(char * dest, int limit, int utf8, const char * fmt, ...);
+char *llstrsetvf(char * dest, int limit, int utf8, const char * fmt, va_list args);
 
 /* strcvt.c */
 STRING capitalize(STRING);

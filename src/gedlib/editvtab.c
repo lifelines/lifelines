@@ -115,7 +115,7 @@ edit_valtab_impl (TABLE *ptab, INT sep, STRING ermsg, STRING (*validator)(TABLE 
 			llstrncpyf(fullerr, max, uu8, "%s %s ", ermsg, msg);
 			llstrncpyf(chardesc, sizeof(chardesc), uu8, "%c", (uchar)sep);
 			llstrncpyf(temp, sizeof(temp), uu8, _(qSsepch), (uchar)sep);  /* (separator is %s) */
-			llstrapp(fullerr, max, uu8, temp);
+			llstrapps(fullerr, max, uu8, temp);
 			ptr = fullerr; /* static buffer */
 		}
 		if (ask_yes_or_no_msg(ptr, _(qSaredit)))

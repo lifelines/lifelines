@@ -10,7 +10,7 @@ libstdlib_a_SOURCES = appendstr.c \
 	listener.c lldate.c llstrcmp.c memalloc.c mystring.c \
 	path.c proptbls.c sequence.c \
 	signals.c sprintpic.c stdlibi.h stdstrng.c \
-	stralloc.c strapp.c strcvt.c strutf8.c strwhite.c \
+	stralloc.c strapp.c strcvt.c strset.c strutf8.c strwhite.c \
 	table.c warehouse.c zstr.c
 
 # $(top_srcdir)          for config.h

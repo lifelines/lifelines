@@ -1794,8 +1794,8 @@ append_all_tags(INDISEQ seq, NODE node, STRING tagname
 							break;
 						}
 						if (cr)
-							zs_cats(&zstr, "||");
-						zs_cats(&zstr, text);
+							zs_apps(&zstr, "||");
+						zs_apps(&zstr, text);
 					}
 					strfree(&skey);
 					skey = strdup(zs_str(zstr));

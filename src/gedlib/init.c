@@ -514,52 +514,52 @@ describe_dberror (INT dberr, STRING buffer, INT buflen)
 
 	switch (dberr) {
 	case BTERR_NODB:
-		llstrapp(b, n, u8, _("requested database does not exist."));
+		llstrapps(b, n, u8, _("requested database does not exist."));
 		break;
 	case BTERR_DBBLOCKEDBYFILE:
-		llstrapp(b, n, u8, _("db directory is file, not directory."));
+		llstrapps(b, n, u8, _("db directory is file, not directory."));
 		break;
 	case BTERR_DBCREATEFAILED:
-		llstrapp(b, n, u8, _("creation of new database failed."));
+		llstrapps(b, n, u8, _("creation of new database failed."));
 		break;
 	case BTERR_DBACCESS:
-		llstrapp(b, n, u8, _("error accessing database directory."));
+		llstrapps(b, n, u8, _("error accessing database directory."));
 		break;
 	case BTERR_NOKEY:
-		llstrapp(b, n, u8, _("no keyfile (directory does not appear to be a database)."));
+		llstrapps(b, n, u8, _("no keyfile (directory does not appear to be a database)."));
 		break;
 	case BTERR_INDEX:
-		llstrapp(b, n, u8,  _("could not open, read or write an index file."));
+		llstrapps(b, n, u8,  _("could not open, read or write an index file."));
 		break;
 	case BTERR_KFILE:
-		llstrapp(b, n, u8,  _("could not open, read or write the key file."));
+		llstrapps(b, n, u8,  _("could not open, read or write the key file."));
 		break;
 	case BTERR_KFILE_ALTERDB:
-		llstrapp(b, n, u8,  _("could not open, read or write the key file (to alter database)."));
+		llstrapps(b, n, u8,  _("could not open, read or write the key file (to alter database)."));
 		break;
 	case BTERR_BLOCK:
-		llstrapp(b, n, u8,  _("could not open, read or write a block file."));
+		llstrapps(b, n, u8,  _("could not open, read or write a block file."));
 		break;
 	case BTERR_LNGDIR:
-		llstrapp(b, n, u8,  _("name of database is too long."));
+		llstrapps(b, n, u8,  _("name of database is too long."));
 		break;
 	case BTERR_WRITER:
-		llstrapp(b, n, u8,  _("The database is already open for writing."));
+		llstrapps(b, n, u8,  _("The database is already open for writing."));
 		break;
 	case BTERR_LOCKED:
-		llstrapp(b, n, u8,  _("The database is locked (no readwrite access)."));
+		llstrapps(b, n, u8,  _("The database is locked (no readwrite access)."));
 		break;
 	case BTERR_ILLEGKF:
-		llstrapp(b, n, u8,  _("keyfile is corrupt."));
+		llstrapps(b, n, u8,  _("keyfile is corrupt."));
 		break;
 	case BTERR_ALIGNKF:
-		llstrapp(b, n, u8,  _("keyfile is wrong alignment."));
+		llstrapps(b, n, u8,  _("keyfile is wrong alignment."));
 		break;
 	case BTERR_VERKF:
-		llstrapp(b, n, u8,  _("keyfile is wrong version."));
+		llstrapps(b, n, u8,  _("keyfile is wrong version."));
 		break;
 	case BTERR_EXISTS:
-		llstrapp(b, n, u8,  _("Existing database found."));
+		llstrapps(b, n, u8,  _("Existing database found."));
 		break;
 	case BTERR_READERS:
 		llstrappf(b, n, u8
@@ -567,10 +567,10 @@ describe_dberror (INT dberr, STRING buffer, INT buflen)
 			, rdr_count);
 		break;
 	case BTERR_BADPROPS:
-		llstrapp(b, n, u8,  _("Invalid properties set for new database"));
+		llstrapps(b, n, u8,  _("Invalid properties set for new database"));
 		break;
 	default:
-		llstrapp(b, n, u8,  _("Undefined database error -- fix program."));
+		llstrapps(b, n, u8,  _("Undefined database error -- fix program."));
 		break;
 	}
 }
@@ -709,8 +709,8 @@ getdbdesc (STRING path, STRING userpath)
 		readonly = TRUE; /* openxrefs depends on this global */
 		if (init_lifelines_db()) {
 			desc[0]=0;
-			llstrapp(desc, sizeof(desc), uu8, userpath);
-			llstrapp(desc, sizeof(desc), uu8, " <");
+			llstrapps(desc, sizeof(desc), uu8, userpath);
+			llstrapps(desc, sizeof(desc), uu8, " <");
 			llstrappf(desc, sizeof(desc), uu8, _(qSdbrecstats)
 				, num_indis(), num_fams(), num_sours(), num_evens(), num_othrs());
 			llstrappf(desc, sizeof(desc), uu8, ">");

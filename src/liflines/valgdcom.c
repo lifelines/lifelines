@@ -43,6 +43,7 @@
 #include "llinesi.h"
 #include "impfeed.h"
 #include "lloptions.h"
+#include "zstr.h"
 
 extern STRING qSmisixr, qSmisfxr;
 extern STRING qSmulper, qSmulfam;
@@ -785,7 +786,7 @@ handle_value (STRING val,
 static void
 handle_err (struct import_feedback * ifeed, STRING fmt, ...)
 {
-	char msg[100+MAXPATHLEN];
+	ZSTR zstr=0;
 
 	if (openlog()) {
 		va_list args;
@@ -797,16 +798,42 @@ handle_err (struct import_feedback * ifeed, STRING fmt, ...)
 	}
 
 	++num_errors;
-	llstrncpyf(msg, sizeof(msg), uu8
-		, _pl("%6d Error", "%6d Errors", num_errors)
-		, num_errors);
+	zs_setf(&zstr, _pl("%6d Error", "%6d Errors", num_errors), num_errors);
 	if (f_logopen)
-		llstrappf(msg, sizeof(msg), uu8, _(" (see log file <%s>)"), f_logpath);
+		zs_appf(&zstr, _(" (see log file <%s>)"), f_logpath);
 	else
-		llstrapp(msg, sizeof(msg), uu8, _(" (no log file)"));
+		zs_apps(&zstr, _(" (no log file)"));
 
 	if (ifeed && ifeed->validation_error_fnc)
-		(*ifeed->validation_error_fnc)(msg);
+		(*ifeed->validation_error_fnc)(zs_str(zstr));
+	zs_free(&zstr);
+}
+/*=====================================
+ * handle_warn -- Handle GEDCOM warning
+ *===================================*/
+static void
+handle_warn (struct import_feedback * ifeed, STRING fmt, ...)
+{
+	ZSTR zstr=0;
+
+	if (openlog()) {
+		va_list args;
+		fprintf(f_flog, "%s: ", _("warning"));
+		va_start(args, fmt);
+		vfprintf(f_flog, fmt, args);
+		va_end(args);
+		fprintf(f_flog, "\n");
+	}
+	
+	++num_warns;
+	zs_setf(&zstr, _pl("%6d Warning", "%6d Warnings", num_warns), num_warns);
+	if (f_logopen)
+		zs_appf(&zstr, _(" (see log file <%s>)"), f_logpath);
+	else
+		zs_appf(&zstr, _(" (no log file)"));
+	if (ifeed && ifeed->validation_warning_fnc)
+		(*ifeed->validation_warning_fnc)(zs_str(zstr));
+	zs_free(&zstr);
 }
 /*=====================================
  * openlog -- open import error log if not already open
@@ -824,33 +851,6 @@ openlog (void)
 	f_flog = fopen(f_logpath, LLWRITETEXT);
 	f_logopen = (f_flog != 0);
 	return f_logopen;
-}
-/*=====================================
- * handle_warn -- Handle GEDCOM warning
- *===================================*/
-static void
-handle_warn (struct import_feedback * ifeed, STRING fmt, ...)
-{
-	char msg[100+MAXPATHLEN];
-	if (openlog()) {
-		va_list args;
-		fprintf(f_flog, "%s: ", _("warning"));
-		va_start(args, fmt);
-		vfprintf(f_flog, fmt, args);
-		va_end(args);
-		fprintf(f_flog, "\n");
-	}
-	
-	++num_warns;
-	llstrncpyf(msg, sizeof(msg), uu8
-		, _pl("%6d Warning", "%6d Warnings", num_warns)
-		, num_warns);
-	if (f_logopen)
-		llstrappf(msg, sizeof(msg), uu8, _(" (see log file <%s>)"), f_logpath);
-	else
-		llstrapp(msg, sizeof(msg), uu8, _(" (no log file)"));
-	if (ifeed && ifeed->validation_warning_fnc)
-		(*ifeed->validation_warning_fnc)(msg);
 }
 /*=========================================
  * xref_to_index - Convert pointer to index

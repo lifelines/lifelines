@@ -306,9 +306,9 @@ custom_translate (ZSTR * pzstr, TRANTABLE tt)
 		INT len = translate_match(tt, p, &tmp);
 		if (len) {
 			p += len;
-			zs_cats(&zout, tmp);
+			zs_apps(&zout, tmp);
 		} else {
-			zs_catc(&zout, *p++);
+			zs_appc(&zout, *p++);
 		}
 	}
 	zs_free(pzstr);

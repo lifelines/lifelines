@@ -1811,12 +1811,9 @@ vprog_error (PNODE node, STRING fmt, va_list args)
 {
 	INT num;
 	STRING rptfile;
-	char msgf[320]=""; /* file msg */
-	char msglineno[60]; /* main msg */
-	static char msgbuff[600];
+	ZSTR zstr=zs_newn(256);
+	static char msgbuff[100];
 	static char prevfile[MAXPATHLEN]="";
-	STRING ptr = msgbuff;
-	INT mylen = sizeof(msgbuff);
 	if (rpt_cancelled)
 		return _("Report cancelled");
 	rptfile = getoptstr("ReportLog", NULL);
@@ -1824,31 +1821,23 @@ vprog_error (PNODE node, STRING fmt, va_list args)
 		STRING fname = ifname(node);
 		/* only display filename if different (or first error) */
 		if (!prevfile[0] || !eqstr(prevfile, fname)) {
-			if (progparsing)
-				llstrncpyf(msgf, ARRSIZE(msgf), uu8
-					, _("\nParsing Error in <%s>"), fname);
-			else
-				llstrncpyf(msgf, ARRSIZE(msgf), uu8
-					, _("\nRuntime Error in: <%s>"), fname);
-			llstrncpy(prevfile, ifname(node), ARRSIZE(prevfile), uu8);
+			llstrsets(prevfile, sizeof(prevfile), uu8, ifname(node));
+			zs_apps(&zstr, _("Report file: "));
+			zs_apps(&zstr, fname);
+			zs_appc(&zstr, '\n');
 		}
 		/* But always display the line & error */
 		if (progparsing)
-			llstrncpyf(msglineno, sizeof(msglineno), uu8
+			llstrsetf(msgbuff, sizeof(msgbuff), uu8
 				, _("Parsing Error at line %d: "), iline(node)+1);
 		else
-			llstrncpyf(msglineno, sizeof(msglineno), uu8
+			llstrsetf(msgbuff, sizeof(msgbuff), uu8
 				, _("Runtime Error at line %d: "), iline(node)+1);
+		zs_appf(&zstr, msgbuff);
 	} else {
-		llstrncpyf(msglineno, sizeof(msglineno), uu8, _("Aborting: "));
+		zs_apps(&zstr, _("Aborting: "));
 	}
-	appendstr(&ptr, &mylen, uu8, msglineno);
-	appendstrvf(&ptr, &mylen, uu8, fmt, args);
-	if (msgf[0])
-		llwprintf(msgf);
-	llwprintf("\n");
-	llwprintf(msgbuff);
-	llwprintf(".");
+	zs_appvf(&zstr, fmt, args);
 	++progerror;
 	/* if user specified a report error log (in config file) */
 	if (rptfile && rptfile[0]) {
@@ -1860,15 +1849,14 @@ vprog_error (PNODE node, STRING fmt, va_list args)
 				fprintf(fp, _("\nReport Errors: %s")
 					, creation.datestr);
 			}
-			if (msgf[0])
-				fprintf(fp, msgf);
+			fprintf(fp, zs_str(zstr));
 			fprintf(fp, "\n");
-			fprintf(fp, msgbuff);
 			fclose(fp);
 		}
 	}
 	if ((num = getoptint("PerErrorDelay", 0)))
 		sleep(num);
+	zs_free(&zstr);
 	return msgbuff;
 }
 /*=============================================+
@@ -2017,8 +2005,8 @@ pa_handle_require (PACTX pactx, PNODE node)
 	STRING str;
 	ASSERT(ptype(pval)==PSTRING);
 	str = pvalue(pval);
-	llstrncpy(propname, "requires_", sizeof(propname), uu8);
-	llstrapp(propname, sizeof(propname), uu8, str);
+	llstrsets(propname, sizeof(propname), uu8, "requires_");
+	llstrapps(propname, sizeof(propname), uu8, str);
 	set_rptfile_prop(pactx, fname, strsave(propname), strsave(str));
 }
 /*=============================================+

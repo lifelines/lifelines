@@ -496,7 +496,7 @@ utf8cvt (STRING str, INT * offset)
 				buffer[bufloc] = 0;
 				/* TODO: translate from UTF-8 to internal */
 				/* because we aren't doing that, this will fail unless internal is UTF-8 */
-				zs_cats(&zstr, buffer);
+				zs_apps(&zstr, buffer);
 				bufloc = 0;
 			}
 		} else {
@@ -505,7 +505,7 @@ utf8cvt (STRING str, INT * offset)
 				*offset = ptr - str;
 				return zstr;
 			}
-			zs_catc(&zstr, ptr[0]);
+			zs_appc(&zstr, ptr[0]);
 			++str;
 		}
 	}

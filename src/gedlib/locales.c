@@ -440,7 +440,7 @@ win32_setlocale (int category, char * locale)
 		int i;
 		for (i=0; langs[i]; i += 2) {
 			if (eqstrn(locale, langs[i], 2)) {
-				llstrapp(w32loc, sizeof(w32loc), uu8, langs[i+1]);
+				llstrapps(w32loc, sizeof(w32loc), uu8, langs[i+1]);
 				break;
 			}
 		}
@@ -451,7 +451,7 @@ win32_setlocale (int category, char * locale)
 			llstrappc(w32loc, sizeof(w32loc), ptr[0]);
 			for (i=0; countries[i]; i += 2) {
 				if (eqstrn(ptr+1, countries[i], 2)) {
-					llstrapp(w32loc, sizeof(w32loc), uu8, countries[i+1]);
+					llstrapps(w32loc, sizeof(w32loc), uu8, countries[i+1]);
 					break;
 				}
 			}

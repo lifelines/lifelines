@@ -129,7 +129,7 @@ cvting:
 				wid = inleft;
 			inptr += wid;
 			inleft -= wid;
-			zs_cats(&zout, placeholder);
+			zs_apps(&zout, placeholder);
 		}
 		/* update output variables */
 		/* (may have reallocated, plus need to point to end */
