@@ -7,6 +7,9 @@
 
 2000-11-11 Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* hdrs/table.h: Correct prototype for traverse_table().  Fixes bug
+	#121679.
+
 	* Makefile.am README.DEVELOPERS configure.in arch/Makefile.am
 	arch/README arch/sleep.c hdrs/arch.h: New library of replacement
 	functions for standard functions missing on some platforms.
