@@ -1871,6 +1871,10 @@ Output Mode Functions
 
           copy file contents to program output file
 
+   BOOLEAN test(STRING, STRING);
+
+          tests for characteristics of a file
+
    VOID print(STRING, STRING ...);
 
           print string to standard output window
@@ -1922,6 +1926,15 @@ Output Mode Functions
    environment variable, if set, will be used to search for the file;
    the  file  is  opened and its contents copied to the report output
    file.
+
+   Test  will  check  for a specified property of the specified file.
+   The  first  argument  is  the property, the second argument is the
+   filename.  Supported properties are: r - file is readable w - file
+   is writeable x - file is executable s - file has non-zero size z -
+   file has zero size e - file exists f - check if argument is a file
+   d  -  check if argument is a directory The return value is TRUE or
+   FALSE, depending on whether the file had the specified property or
+   not.
 
    Print  prints  its  argument string to the standard output window;
    print may have one to 32 arguments.

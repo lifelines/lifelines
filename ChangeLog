@@ -1,3 +1,8 @@
+2004-10-10 Stephen Dum
+        * ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf
+	  docs/ll-reportmanual.txt
+        update formatted reportmanual
+
 2004-10-03 Matt Emmerton
 
 	* ChangeLog interp/builtin.c interp/functab.c interp/interpi.h

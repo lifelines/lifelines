@@ -174,27 +174,27 @@ HREF="#AEN2812"
 ></DT
 ><DT
 ><A
-HREF="#AEN2989"
+HREF="#AEN3003"
 >Person Set Functions and GEDCOM Extraction</A
 ></DT
 ><DT
 ><A
-HREF="#AEN3264"
+HREF="#AEN3278"
 >Record Update Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN3334"
+HREF="#AEN3348"
 >Record Linking Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN3373"
+HREF="#AEN3387"
 >Miscellaneous Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN3548"
+HREF="#AEN3562"
 >Deprecated Functions</A
 ></DT
 ></DL
@@ -11507,6 +11507,45 @@ NAME="AEN2943"
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
+>BOOLEAN <TT
+CLASS="function"
+>test</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>STRING</I
+></TT
+>, <TT
+CLASS="parameter"
+><I
+>STRING</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;tests for characteristics of a file
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2955"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
 >VOID <TT
 CLASS="function"
 >print</TT
@@ -11667,6 +11706,23 @@ output file.
 ><P
 >&#13;<TT
 CLASS="function"
+>Test</TT
+> will check for a specified property of the specified file.  The first argument is the property, the second argument is the filename.
+Supported properties are:
+r - file is readable
+w - file is writeable
+x - file is executable
+s - file has non-zero size
+z - file has zero size
+e - file exists
+f - check if argument is a file
+d - check if argument is a directory
+
+The return value is TRUE or FALSE, depending on whether the file had the specified property or not.
+</P
+><P
+>&#13;<TT
+CLASS="function"
 >Print</TT
 > prints its argument string to the standard output window; <TT
 CLASS="function"
@@ -11679,7 +11735,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN2989"
+NAME="AEN3003"
 ></A
 >Person Set Functions and GEDCOM Extraction</H2
 ><DIV
@@ -11690,7 +11746,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2994"
+NAME="AEN3008"
 ></A
 ><P
 ></P
@@ -11724,7 +11780,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3004"
+NAME="AEN3018"
 ></A
 ><P
 ></P
@@ -11770,7 +11826,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3016"
+NAME="AEN3030"
 ></A
 ><P
 ></P
@@ -11816,7 +11872,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3028"
+NAME="AEN3042"
 ></A
 ><P
 ></P
@@ -11850,7 +11906,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3038"
+NAME="AEN3052"
 ></A
 ><P
 ></P
@@ -11890,7 +11946,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3049"
+NAME="AEN3063"
 ></A
 ><P
 ></P
@@ -11930,7 +11986,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3060"
+NAME="AEN3074"
 ></A
 ><P
 ></P
@@ -11970,7 +12026,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3071"
+NAME="AEN3085"
 ></A
 ><P
 ></P
@@ -12004,7 +12060,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3081"
+NAME="AEN3095"
 ></A
 ><P
 ></P
@@ -12038,7 +12094,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3091"
+NAME="AEN3105"
 ></A
 ><P
 ></P
@@ -12072,7 +12128,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3101"
+NAME="AEN3115"
 ></A
 ><P
 ></P
@@ -12106,7 +12162,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3111"
+NAME="AEN3125"
 ></A
 ><P
 ></P
@@ -12140,7 +12196,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3121"
+NAME="AEN3135"
 ></A
 ><P
 ></P
@@ -12174,7 +12230,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3131"
+NAME="AEN3145"
 ></A
 ><P
 ></P
@@ -12208,7 +12264,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3141"
+NAME="AEN3155"
 ></A
 ><P
 ></P
@@ -12242,7 +12298,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3151"
+NAME="AEN3165"
 ></A
 ><P
 ></P
@@ -12276,7 +12332,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3161"
+NAME="AEN3175"
 ></A
 ><P
 ></P
@@ -12310,7 +12366,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3171"
+NAME="AEN3185"
 ></A
 ><P
 ></P
@@ -12344,7 +12400,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3181"
+NAME="AEN3195"
 ></A
 ><P
 ></P
@@ -12384,7 +12440,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3192"
+NAME="AEN3206"
 ></A
 ><P
 ></P
@@ -12665,7 +12721,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN3264"
+NAME="AEN3278"
 ></A
 >Record Update Functions</H2
 ><DIV
@@ -12676,7 +12732,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3269"
+NAME="AEN3283"
 ></A
 ><P
 ></P
@@ -12716,7 +12772,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3280"
+NAME="AEN3294"
 ></A
 ><P
 ></P
@@ -12762,7 +12818,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3292"
+NAME="AEN3306"
 ></A
 ><P
 ></P
@@ -12796,7 +12852,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3302"
+NAME="AEN3316"
 ></A
 ><P
 ></P
@@ -12830,7 +12886,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3312"
+NAME="AEN3326"
 ></A
 ><P
 ></P
@@ -12917,7 +12973,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN3334"
+NAME="AEN3348"
 ></A
 >Record Linking Functions</H2
 ><DIV
@@ -12928,7 +12984,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3339"
+NAME="AEN3353"
 ></A
 ><P
 ></P
@@ -12962,7 +13018,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3349"
+NAME="AEN3363"
 ></A
 ><P
 ></P
@@ -12996,7 +13052,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3359"
+NAME="AEN3373"
 ></A
 ><P
 ></P
@@ -13054,7 +13110,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN3373"
+NAME="AEN3387"
 ></A
 >Miscellaneous Functions</H2
 ><DIV
@@ -13065,7 +13121,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3378"
+NAME="AEN3392"
 ></A
 ><P
 ></P
@@ -13099,7 +13155,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3388"
+NAME="AEN3402"
 ></A
 ><P
 ></P
@@ -13133,7 +13189,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3398"
+NAME="AEN3412"
 ></A
 ><P
 ></P
@@ -13162,7 +13218,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3407"
+NAME="AEN3421"
 ></A
 ><P
 ></P
@@ -13191,7 +13247,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3416"
+NAME="AEN3430"
 ></A
 ><P
 ></P
@@ -13223,7 +13279,7 @@ CLASS="application"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3426"
+NAME="AEN3440"
 ></A
 ><P
 ></P
@@ -13257,7 +13313,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3436"
+NAME="AEN3450"
 ></A
 ><P
 ></P
@@ -13286,7 +13342,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3445"
+NAME="AEN3459"
 ></A
 ><P
 ></P
@@ -13320,7 +13376,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3455"
+NAME="AEN3469"
 ></A
 ><P
 ></P
@@ -13354,7 +13410,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3465"
+NAME="AEN3479"
 ></A
 ><P
 ></P
@@ -13394,7 +13450,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3476"
+NAME="AEN3490"
 ></A
 ><P
 ></P
@@ -13440,7 +13496,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3488"
+NAME="AEN3502"
 ></A
 ><P
 ></P
@@ -13474,7 +13530,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3498"
+NAME="AEN3512"
 ></A
 ><P
 ></P
@@ -13508,7 +13564,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3508"
+NAME="AEN3522"
 ></A
 ><P
 ></P
@@ -13671,7 +13727,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN3548"
+NAME="AEN3562"
 ></A
 >Deprecated Functions</H2
 ><P
@@ -13715,7 +13771,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3561"
+NAME="AEN3575"
 ></A
 ><P
 ></P
@@ -13760,7 +13816,7 @@ CLASS="replaceable"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3573"
+NAME="AEN3587"
 ></A
 ><P
 ></P
@@ -13805,7 +13861,7 @@ CLASS="replaceable"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3585"
+NAME="AEN3599"
 ></A
 ><P
 ></P
@@ -13891,7 +13947,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3605"
+NAME="AEN3619"
 ></A
 ><P
 ></P
@@ -13925,7 +13981,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3615"
+NAME="AEN3629"
 ></A
 ><P
 ></P
@@ -13959,7 +14015,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3625"
+NAME="AEN3639"
 ></A
 ><P
 ></P
@@ -14020,7 +14076,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3642"
+NAME="AEN3656"
 ></A
 ><P
 ></P
@@ -14054,7 +14110,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3652"
+NAME="AEN3666"
 ></A
 ><P
 ></P
@@ -14103,7 +14159,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3666"
+NAME="AEN3680"
 ></A
 ><P
 ></P
