@@ -42,9 +42,13 @@
 
 #include "llinesi.h"
 
-/* external data set by check_stdkeys() */
 
-static INT gd_reuse = 1;/* reuse original keys in GEDCOM file if possible */
+
+/*********************************************
+ * external/imported variables
+ *********************************************/
+
+/* external data set by check_stdkeys() */
 
 extern INT gd_itot;	/* total number of individuals */
 extern INT gd_ftot;	/* total number of families */
@@ -57,13 +61,29 @@ extern INT gd_smax;	/* maximum source key number */
 extern INT gd_emax;	/* maximum event key number */
 extern INT gd_xmax;	/* maximum other key number */
 
-extern STRING idgedf, gdcker, gdnadd, dboldk, dbnewk, dbodel,
-  cfoldk, dbdelk, dbrdon;
+extern STRING idgedf, gdcker, gdnadd, dboldk, dbnewk, dbodel;
+extern STRING cfoldk, dbdelk, dbrdon;
 extern TRANTABLE tran_tables[];
 
-static BOOLEAN translate_values(NODE);
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+/* alphabetical */
 static void restore_record(NODE node, INT type, INT num);
 static STRING translate_key(STRING);
+static BOOLEAN translate_values(NODE, VPTR);
+
+/*********************************************
+ * local variables
+ *********************************************/
+
+static INT gd_reuse = 1;/* reuse original keys in GEDCOM file if possible */
+
+/*********************************************
+ * local & exported function definitions
+ * body of module
+ *********************************************/
 
 /*=================================================
  * import_from_file -- Read GEDCOM file to database
@@ -200,7 +220,7 @@ restore_record (NODE node,
 		stdfree(old);
 		nxref(node) = strsave(new);
 	}
-	traverse_nodes(node, translate_values);
+	traverse_nodes(node, translate_values, 0);
 	if (type == INDI_REC) {
 		add_linked_indi(node);
 		return;
@@ -249,7 +269,7 @@ translate_key (STRING key)    /* key does not have surrounding @ chars */
  * translate_values -- Traverse function to translate pointers
  *==========================================================*/
 static BOOLEAN
-translate_values (NODE node)
+translate_values (NODE node, VPTR param)
 {
 	STRING new;
 	if (!pointer_value(nval(node))) return TRUE;

@@ -109,12 +109,13 @@ BOOLEAN cursesio  = TRUE;	/* use curses i/o */
 BOOLEAN alldone   = FALSE;	/* completion flag */
 BOOLEAN progrunning = FALSE;	/* program is running */
 BOOLEAN progparsing = FALSE;	/* program is being parsed */
+INT     progerror = 0; /* error count during report program */
 BOOLEAN traceprogram = FALSE;	/* trace program */
 BOOLEAN traditional = TRUE;	/* use traditional family rules */
 BOOLEAN selftest = FALSE; /* selftest rules (ignore paths) */
 BOOLEAN showusage = FALSE;	/* show usage */
-STRING btreepath = NULL;		/* database path given by user */
-STRING readpath = NULL;		/* database path used to open */
+STRING  btreepath = NULL;		/* database path given by user */
+STRING  readpath = NULL;		/* database path used to open */
 
 /*********************************************
  * local function prototypes
@@ -264,8 +265,9 @@ main (INT argc,
 
 	/* Get Database Name (Prompt or Command-Line) */
 	if (c <= 0) {
-		/* ask_for_lldb returns static buffer, we save it below */
-		dbrequested = ask_for_lldb(idldir, "enter path: ", lloptions.lldatabases);
+		/* ask_for_db_filename returns static buffer, we save it below */
+		dbrequested = ask_for_db_filename(idldir, "enter path: "
+			, lloptions.lldatabases);
 		if (ISNULL(dbrequested)) {
 			llwprintf(iddbse);
 			goto finish;

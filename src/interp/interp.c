@@ -56,6 +56,7 @@ SYMTAB globtab; /* assume all zero is null SYMTAB */
  *********************************************/
 
 extern BOOLEAN progrunning, progparsing;
+extern INT progerror;
 
 /*********************************************
  * local function prototypes
@@ -105,6 +106,12 @@ void
 finishinterp (void)
 {
 	finishrassa();
+	/* give 5 seconds for user to read error messages */
+	/* is this necessary ? */
+	if (progerror) {
+		wrefresh(stdout_win);
+		sleep(5);
+	}
 }
 /*================================================================+
  * progmessage -- Display a status message about the report program
@@ -243,6 +250,7 @@ interp_program (STRING proc,    /* proc to call */
 
 	progparsing = FALSE;
 	progrunning = TRUE;
+	progerror = 0;
 	progmessage("is running...");
 	switch (interpret((PNODE) ibody(first), stab, &dummy)) {
 	case INTOKAY:
@@ -257,7 +265,7 @@ interp_program (STRING proc,    /* proc to call */
    /* Clean up and return */
 
 	progrunning = FALSE;
-	finishinterp();
+	finishinterp(); /* includes 5 sec delay if errors on-screen */
 	if (Poutfp) fclose(Poutfp);
 	Pinfp = Poutfp = NULL;
 
@@ -333,7 +341,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 	PVALUE val;
 
 	*pval = NULL;
-/*HERE*/
+
 	while (node) {
 		Pnode = node;
 if (prog_debug) {
@@ -350,8 +358,7 @@ if (prog_debug) {
 		case IIDENT:
 			val = eval_and_coerce(PSTRING, node, stab, &eflg);
 			if (eflg) {
-				llwprintf(ierror, ifname(node), iline(node));
-				llwprintf("identifier: %s should be a string\n",
+				prog_error(node, "identifier: %s should be a string\n",
 				    iident(node));
 				goto interp_fail;
 			}
@@ -383,15 +390,10 @@ if (prog_debug) {
 		case IFCALL:
 			val = evaluate_ufunc(node, stab, &eflg);
 			if (eflg) {
+				if (lloptions.report_error_callstack)
+					prog_error(node, "In user function");
 				goto interp_fail;
 			}
-#if 0
-			if (eflg) {
-				llwprintf(ierror, ifname(node), iline(node));
-				llwprintf("in function: `%s'\n", iname(node));
-				goto interp_fail;
-			}
-#endif
 			if (!val) break;
 			if (ptype(val) == PSTRING && pvalue(val)) {
 				poutput(pvalue(val), &eflg);
@@ -407,10 +409,8 @@ if (prog_debug) {
 			case INTOKAY:
 				break;
 			case INTERROR:
-#if 0
-				llwprintf(ierror, ifname(node), iline(node));
-				llwprintf("in children loop\n");
-#endif
+				if (lloptions.report_error_callstack)
+					prog_error(node, "In children loop");
 				goto interp_fail;
 			default:
 				return irc;
@@ -421,10 +421,8 @@ if (prog_debug) {
 			case INTOKAY:
 				break;
 			case INTERROR:
-#if 0
-				llwprintf(ierror, ifname(node), iline(node));
-				llwprintf("in spouses loop\n");
-#endif
+				if (lloptions.report_error_callstack)
+					prog_error(node, "In spouses loop");
 				goto interp_fail;
 			default:
 				return irc;
@@ -645,10 +643,8 @@ if (prog_debug) {
 			case INTOKAY:
 				break;
 			case INTERROR:
-#if 0
-				llwprintf(ierror, ifname(node), iline(node));
-				llwprintf("in while statement\n");
-#endif
+				if (lloptions.report_error_callstack)
+					prog_error(node, "in while statement");
 				goto interp_fail;
 			default:
 				return irc;
@@ -659,10 +655,8 @@ if (prog_debug) {
 			case INTOKAY:
 				break;
 			case INTERROR:
-#if 0
-				llwprintf(ierror, ifname(node), iline(node));
-				llwprintf("in procedure call\n");
-#endif
+				if (lloptions.report_error_callstack)
+					prog_error(node, "in procedure call %s()", iname(node));
 				goto interp_fail;
 			default:
 				return irc;
@@ -675,11 +669,8 @@ if (prog_debug) {
 		case IRETURN:
 			if (iargs(node))
 				*pval = evaluate(iargs(node), stab, &eflg);
-#ifdef DEBUG
-				llwprintf("interp return ");
-				show_pvalue(*pval);
-				llwprintf("\n");
-#endif
+			if (eflg && lloptions.report_error_callstack)
+				prog_error(node, "in return statement");
 			return INTRETURN;
 		default:
 			llwprintf("itype(node) is %d\n", itype(node));
@@ -943,7 +934,6 @@ interp_mothers (PNODE node, SYMTAB stab, PVALUE *pval)
 		prog_error(node, "1st arg to mothers has a major error");
 		return INTERROR;
 	}
-	if (eflg || (indi && nestr(ntag(indi), "INDI"))) return INTERROR;
 	if (!indi) return TRUE;
 	lock_cache(icel);
 	insert_symtab(stab, inum(node), PINT, (VPTR) 0);
@@ -1521,7 +1511,7 @@ interp_call (PNODE node, SYMTAB stab, PVALUE *pval)
 		parm = inext(parm);
 	}
 	if (arg || parm) {
-		llwprintf("``%s'': mismatched args and params\n", iname(node));
+		prog_error(node, "``%s'': mismatched args and params\n", iname(node));
 		irc = INTERROR;
 		goto call_leave;
 	}
@@ -1604,16 +1594,45 @@ traverse_leave:
 }
 /*=============================================+
  * prog_error -- Report a run time program error
+ *  node:   current parsed node
+ *  fmt:    printf style format string
+ *  ...:    printf style varargs
  *============================================*/
 void
-prog_error (PNODE node,
-            STRING fmt, ...)
+prog_error (PNODE node, STRING fmt, ...)
 {
 	va_list args;
-	llwprintf("\nError in \"%s\" at line %d: ", ifname(node), iline(node));
 	va_start(args, fmt);
+	llwprintf(progparsing ? "\nParsing " : "\nRuntime ");
+	if (node)
+		llwprintf("Error in \"%s\" at line %d: "
+			, ifname(node), iline(node));
+	else
+		llwprintf("Error: ");
 	llvwprintf(fmt, args);
 	va_end(args);
 	llwprintf(".\n");
-	sleep(5);
+	++progerror;
+	if (lloptions.reportlog[0]) {
+		FILE * fp = fopen(lloptions.reportlog, LLAPPENDTEXT);
+		if (fp) {
+			if (progerror == 1) {
+				LLDATE creation;
+				get_current_lldate(&creation);
+				fprintf(fp, "\nReport Errors: %s", creation.datestr);
+			}
+			fprintf(fp, progparsing ? "\nParsing " : "\nRuntime ");
+			if (node)
+				fprintf(fp, "Error %d in \"%s\" at line %d: "
+					, progerror, ifname(node), iline(node));
+			else
+				fprintf(fp, "Error: ");
+			va_start(args, fmt);
+			vfprintf(fp, fmt, args);
+			va_end(args);
+			fclose(fp);
+		}
+	}
+	if (lloptions.per_error_delay)
+		sleep(lloptions.per_error_delay);
 }

@@ -42,6 +42,7 @@
 #include "interp.h"
 #include "liflines.h"
 #include "screen.h"
+#include "lloptions.h"
 
 extern BOOLEAN traceprogram;
 
@@ -166,6 +167,9 @@ evaluate_func (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 }
 /*================================================+
  * evaluate_ufunc -- Evaluate user defined function
+ *  node:   [in] parsed node of function definition
+ *  stab:   [in] function's symbol table
+ *  eflg:   [out] error flag
  *===============================================*/
 PVALUE
 evaluate_ufunc (PNODE node, SYMTAB stab, BOOLEAN *eflg)
@@ -187,13 +191,17 @@ evaluate_ufunc (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	while (arg && parm) {
 		BOOLEAN eflg=TRUE;
 		PVALUE value = evaluate(arg, stab, &eflg);
-		if (eflg) return INTERROR;
+		if (eflg) {
+			if (lloptions.report_error_callstack)
+				prog_error(node, "In user function %s()", iname(node));
+			return INTERROR;
+		}
 		insert_symtab_pvalue(newstab, iident(parm), value);
 		arg = inext(arg);
 		parm = inext(parm);
 	}
 	if (arg || parm) {
-		prog_error(node, "mismatched args and params");
+		prog_error(node, "``%s'': mismatched args and params\n", iname(node));
 		goto ufunc_leave;
 	}
 	irc = interpret((PNODE) ibody(func), newstab, &val);
@@ -212,6 +220,8 @@ evaluate_ufunc (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	case INTERROR:
 		break;
 	}
+	if (lloptions.report_error_callstack)
+		prog_error(node, "In user function %s()", iname(node));
 	*eflg = TRUE;
 	delete_pvalue(val);
 	val=NULL;

@@ -1411,16 +1411,18 @@ copy_nodes (NODE node,
 }
 /*===============================================================
  * traverse_nodes -- Traverse nodes in tree while doing something
+ * NODE node:    root of tree to traverse
+ * func:         function to call at each node (returns FALSE to stop traversal)
+ * param:        opaque pointer for client use, passed thru to callback
  *=============================================================*/
 BOOLEAN
-traverse_nodes (NODE node,              /* root of tree to traverse */
-                BOOLEAN (*func)(NODE))  /* function to call at each node */
+traverse_nodes (NODE node, BOOLEAN (*func)(NODE, VPTR), VPTR param)
 {
 	while (node) {
 		travlineno++;
-		if (!(*func)(node)) return FALSE;
+		if (!(*func)(node, param)) return FALSE;
 		if (nchild(node)) {
-			if (!traverse_nodes(nchild(node), func))
+			if (!traverse_nodes(nchild(node), func, param))
 				return FALSE;
 		}
 		node = nsibling(node);

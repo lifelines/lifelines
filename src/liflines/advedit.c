@@ -38,26 +38,35 @@
 
 #include "llinesi.h"
 
-static NODE root;	/* root of record being edited */
-static LIST subs;	/* list of contained records */
-static NODE expd;	/* expanded main record - copy */
+/*********************************************
+ * local function prototypes
+ *********************************************/
 
-static void expand_tree(NODE);
-static BOOLEAN expand_traverse(NODE);
+/* alphabetical */
+static NODE expand_tree(NODE);
+static BOOLEAN expand_traverse(NODE, VPTR param);
+
+/*********************************************
+ * local & exported function definitions
+ * body of module
+ *********************************************/
 
 /*=================================================================
- * expand_tree --
+ * expand_tree -- Create copy of node tree with additional link info
  *===============================================================*/
-static void
+static NODE
 expand_tree (NODE root0)
 {
 	NODE copy, node, sub;
 	STRING key;
+	static NODE root;	/* root of record being edited */
+	LIST subs;	/* list of contained records */
+	NODE expd;	/* expanded main record - copy - our retval */
 
 	root = root0;
 	expd = copy_nodes(root, TRUE, TRUE);
 	subs = create_list();
-	traverse_nodes(expd, expand_traverse);
+	traverse_nodes(expd, expand_traverse, subs);
 
    /* expand the list of records into the copied record */
 	FORLIST(subs, el)
@@ -76,9 +85,11 @@ expand_tree (NODE root0)
   value and possibly xref [probably not] are still being referred to */
 		}
 	ENDLIST
+	/* Shouldn't we free subs now ? Perry 2001/06/22 */
 #ifdef DEBUG
 	show_node(expd);
 #endif
+	return expd;
 }
 
 /*=================================================================
@@ -88,12 +99,13 @@ void
 advanced_person_edit (NODE root0)
 {
 	FILE *fp;
+	NODE expd;
 
 #ifdef DEBUG
 	llwprintf("advanced_person_edit: %s %s %s\n", nxref(root0), 
 		  ntag(root0),nval(root0));
 #endif
-	expand_tree(root0);
+	expd = expand_tree(root0);
 	ASSERT(fp = fopen(editfile, LLWRITETEXT));
 	write_nodes(0, fp, NULL, expd, TRUE, TRUE, TRUE);
 	fclose(fp);
@@ -107,12 +119,13 @@ void
 advanced_family_edit (NODE root0)
 {
 	FILE *fp;
+	NODE expd;
 
 #ifdef DEBUG
 	llwprintf("advanced_family_edit: %s %s %s\n", nxref(root0),
 		  ntag(root0),nval(root0));
 #endif
-	expand_tree(root0);
+	expd = expand_tree(root0);
 	ASSERT(fp = fopen(editfile, LLWRITETEXT));
 	write_nodes(0, fp, NULL, expd, TRUE, TRUE, TRUE);
 	fclose(fp);
@@ -122,8 +135,9 @@ advanced_family_edit (NODE root0)
  * expand_traverse -- Traverse routine called when expanding record
  *===============================================================*/
 static BOOLEAN
-expand_traverse (NODE node)
+expand_traverse (NODE node, VPTR param)
 {
+	LIST subs = (LIST)param;
 	STRING key = value_to_xref(nval(node));
 	if (!key) return TRUE;
 	key = strsave(key);

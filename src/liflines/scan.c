@@ -171,7 +171,7 @@ static NOD0
 name_scan (INT scantype)
 {
 	SCAN_PATTERN patt;
-	NOD0 nod0 = NULL;
+	NOD0 indi = NULL;
 	STRING str;
 
 	patt.scantype = scantype;
@@ -191,11 +191,11 @@ name_scan (INT scantype)
 	traverse_names(ns_callback, &patt);
 
 	if (length_indiseq(results_seq)) {
-		nod0 = choose_from_indiseq(results_seq, DOASK1, scanrs, scanrs);
+		indi = choose_from_indiseq(results_seq, DOASK1, scanrs, scanrs);
 	}
 	remove_indiseq(results_seq);
 	results_seq=NULL;
-	return nod0;
+	return indi;
 }
 /*==============================================
  * name_fragment_scan -- traverse name fragments

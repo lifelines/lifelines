@@ -46,7 +46,7 @@ extern BTREE BTR;
  *********************************************/
 
 static RKEY refn2rkey(STRING);
-static BOOLEAN resolve_traverse(NODE);
+static BOOLEAN resolve_traverse(NODE, VPTR param);
 
 /*********************************************
  * local variables
@@ -367,13 +367,16 @@ resolve_links (NODE node)
 	travlineno = 0;
 	unresolved = FALSE;
 	if (!node) return;
-	traverse_nodes(node, resolve_traverse);
+	traverse_nodes(node, resolve_traverse, 0);
 }
 /*=======================================================
  * resolve_traverse -- Traverse routine for resolve_links
+ *  node:    Current node in traversal
+ *  VPTR:    client param we don't use (we passed in 0 in resolve_links)
+ *  returns TRUE to continue traversal
  *=====================================================*/
 static BOOLEAN
-resolve_traverse (NODE node)
+resolve_traverse (NODE node, VPTR param)
 {
 	STRING refn, val = nval(node);
 	INT letr;

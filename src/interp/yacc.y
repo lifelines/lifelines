@@ -323,6 +323,7 @@ yyerror (STRING str)
 	extern INT Plineno;
 	extern STRING Pfname;
 
-	llwprintf("Syntax Error (%s): %s: line %d\n", str, Pfname, Plineno);
+	/* TO DO - how to pass current pnode ? */
+	prog_error(NULL, "Syntax Error (%s): %s: line %d\n", str, Pfname, Plineno);
 	Perrors++;
 }

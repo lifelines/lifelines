@@ -50,9 +50,12 @@ struct lloptions_s {
 	STRING llreports;
 	STRING llarchives;
 	STRING lldatabases;
-	STRING llnewdbdir;
-	STRING inputpath;
+	STRING llnewdbdir; /* location for new unqualified databases */
+	STRING inputpath; /* prefix for unqualified utility/read paths */
 	INT deny_system_calls; /* from within reports */
+	STRING reportlog; /* report errors appended to this if non-blank */
+	INT per_error_delay; /* sec delay for each report error */
+	INT report_error_callstack; /* full call stack for report errors */
 };
 
 extern struct lloptions_s lloptions;

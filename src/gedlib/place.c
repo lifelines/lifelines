@@ -31,29 +31,28 @@
 #include "llstdlib.h"
 #include "gedcom.h"
 
-BOOLEAN value_to_list (STRING str,
-		       LIST list,
-		       INT *plen,
-		       STRING dlm);
+BOOLEAN value_to_list (STRING str, LIST list, INT *plen, STRING dlm);
 
 /*===================================================
  * place_to_list -- Convert place string to word list
+ *  place:   [in] place name to convert
+ *  list:    [out] list of strings in name
+ *  plen:    [out] #entries in list
  *=================================================*/
 BOOLEAN
-place_to_list (STRING place,
-               LIST list,
-               INT *plen)
+place_to_list (STRING place, LIST list, INT *plen)
 {
 	return value_to_list(place, list, plen, ",");
 }
 /*=============================================
  * value_to_list -- Convert string to word list
+ *  str:     [in]  input string to split up
+ *  list:    [out] list of strings in name
+ *  plen:    [out] #entries in list
+ *  dlm:     [in]  delimiter upon which to split str
  *===========================================*/
 BOOLEAN
-value_to_list (STRING str,
-               LIST list,
-               INT *plen,
-               STRING dlm)
+value_to_list (STRING str, LIST list, INT *plen, STRING dlm)
 {
 	static STRING buf = NULL;
 	static INT len0 = 0;

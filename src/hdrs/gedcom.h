@@ -364,7 +364,7 @@ BOOLEAN symbolic_link(STRING);
 void traverse_db_key_nod0s (BOOLEAN(*func)(STRING key, NOD0, void *param), void *param);
 void traverse_db_rec_keys(STRING lo, STRING hi, BOOLEAN(*func)(STRING key, STRING, INT, void *param), void * param);
 void traverse_names(BOOLEAN(*func)(STRING key, STRING name, BOOLEAN newset, void *param), void *param);
-BOOLEAN traverse_nodes(NODE, BOOLEAN(*func)(NODE));
+BOOLEAN traverse_nodes(NODE node, BOOLEAN (*func)(NODE, VPTR), VPTR param);
 void traverse_refns(BOOLEAN(*func)(STRING key, STRING refn, BOOLEAN newset, void *param), void *param);
 INT tree_strlen(INT, NODE);
 STRING trim_name(STRING, INT);

@@ -677,11 +677,11 @@ list_browse (INDISEQ seq,
 	return interact(main_win, "jkeimdtbanxq", -1);
 }
 /*======================================
- * ask_for_lldb -- Ask user for lifelines database directory
+ * ask_for_db_filename -- Ask user for lifelines database directory
  *  returns static buffer
  *====================================*/
 STRING
-ask_for_lldb (STRING ttl, STRING prmpt, STRING basedir)
+ask_for_db_filename (STRING ttl, STRING prmpt, STRING basedir)
 {
 	/* This could have a list of existing ones like askprogram.c */
 	return ask_for_string(ttl, prmpt);
@@ -1437,6 +1437,8 @@ mprintf_error (STRING fmt, ...)
  * mprintf_info -- Call as mprintf_info(fmt, ...)
  * usually displaying results of user's action
  * Created: c. 2000/11, Perry Rapp
+ *  fmt:   printf style format string
+ *  ...:   remainder of printf style varargs
  *=============================================*/
 void
 mprintf_info (STRING fmt, ...)

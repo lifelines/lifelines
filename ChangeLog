@@ -1,7 +1,44 @@
+2001-07-01 Perry Rapp <puddle@users.sourceforge.net>
+
+	* .linesrc ChangeLog btree/opnbtree.c gedlib/init.c
+	gedlib/lloptions.c gedlib/node.c gedlib/place.c gedlib/refns.c
+	hdrs/gedcom.h hdrs/lloptions.h hdrs/screen.h interp/eval.c
+	interp/interp.c interp/yacc.y liflines/advedit.c
+	liflines/browse.c liflines/export.c liflines/import.c
+	liflines/main.c liflines/scan.c liflines/screen.c
+
+	Added lines.cfg, copy of windows version template config file.
+
+	Added progerror to flag when errors occurred during
+	report processing, and made a single sleep call at the
+	end of reporting all program errors (instead of a sleep
+	after each individual error).
+
+	Added some misc. function parameter documentation.
+	Renamed ask_for_lldb to ask_for_db_filename.
+	Added param to traverse_nodes function, and removed statics
+	from advedit.c (passed on stack instead, with help of
+	new param to traverse_nodes).
+
+	Added ReportLog option (to which report errors will be appended
+	by prog_error).
+
+	Changed yyerror to call prog_error instead of llwvprintf.
+
+	Modified prog_error to handle NULL pnode argument (for yyerror).
+
+	Modified error string for mismatch args in user function to
+	include function name.
+
 2001-07-01 Matt Emmerton <memmerto@users.sourceforge.net>
 
 	* ChangeLog btree/opnbtree.c
 	Backed out my changes as they raised concerns by other developers.
+
+2001-07-01 Perry Rapp <puddle@users.sourceforge.net>
+
+	NB: Below changes by Matt to opnbtree.c broke reader/writer
+	protection logic.
 
 2001-06-30 Matt Emmerton <memmerto@users.sourceforge.net>
 

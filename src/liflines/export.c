@@ -68,7 +68,6 @@ archive_in_file (void)
 	time_t curtime;
 	STRING fname;
 
-	/* WARNING: use of llarchives seems questionable */
 	fn = ask_for_output_file(LLWRITETEXT, "Enter name of output archive file.",
 	    &fname, lloptions.llarchives, ".ged");
 	if (!fn) {

@@ -63,18 +63,6 @@ extern STRING ronlye, ronlya, idhbrs, idwbrs;
 extern STRING id1sbr, id2sbr, id1fbr, id2fbr, id1cbr, id2cbr;
 extern STRING id1hbr, id2hbr, id1wbr, id2wbr;
 extern STRING spover, idfamk, nohist, idhist;
-/*
-	The history list is a circular buffer in hist_list.
-	hist_start points at the earliest entry, and 
-	hist_past_end points just past the latest entry.
-	If hist_start==hist_past_end the the buffer is full.
-	(If hist_start==-1, then there are no entries.)
-	(NB: CMD_HISTORY_FWD will go ahead to unused entries.)
-	-1 <= hist_start < ARRSIZE(hist_list)
-	0 <= hist_past_end < ARRSIZE(hist_list)
-*/
-static INT hist_start=-1, hist_past_end=0;
-static NKEY hist_list[20];
 
 /*********************************************
  * local enums & defines
@@ -119,6 +107,18 @@ static void pick_remove_spouse_from_family(NODE fam);
  * local variables
  *********************************************/
 
+/*
+	The history list is a circular buffer in hist_list.
+	hist_start points at the earliest entry, and 
+	hist_past_end points just past the latest entry.
+	If hist_start==hist_past_end the the buffer is full.
+	(If hist_start==-1, then there are no entries.)
+	(NB: CMD_HISTORY_FWD will go ahead to unused entries.)
+	-1 <= hist_start < ARRSIZE(hist_list)
+	0 <= hist_past_end < ARRSIZE(hist_list)
+*/
+static INT hist_start=-1, hist_past_end=0;
+static NKEY hist_list[20];
 
 /*********************************************
  * local function definitions

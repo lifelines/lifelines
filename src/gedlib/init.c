@@ -291,7 +291,7 @@ open_database_impl (BOOLEAN forceopen)
 			rdr_count = c-1;
 			myerr = BTERR_READERS;
 		}
-		/* close_lldb could set bterrno itself */
+		/* close_lldb may have set bterrno itself */
 		close_lldb();
 		bterrno = myerr;
 		return FALSE;

@@ -72,6 +72,8 @@ static struct int_option_s int_options[] = {
 	{ "ListDetailLines", &lloptions.list_detail_lines, 0, DBYES }
 	,{ "AddMetadata", &lloptions.add_metadata, 0, DBYES }
 	,{ "DenySystemCalls", &lloptions.deny_system_calls, 0, DBNO }
+	,{ "PerErrorDelay", &lloptions.per_error_delay, 0, DBNO }
+	,{ "FullReportCallStack", &lloptions.report_error_callstack, 0, DBNO }
 };
 static struct str_option_s str_options[] = {
 	{ "EmailAddr", &lloptions.email_addr, "", DBYES }
@@ -82,6 +84,7 @@ static struct str_option_s str_options[] = {
 	,{ "LLDATABASES", &lloptions.lldatabases, "", DBNO }
 	,{ "LLNEWDBDIR", &lloptions.llnewdbdir, "", DBNO }
 	,{ "InputPath", &lloptions.inputpath, "", DBNO }
+	,{ "ReportLog", &lloptions.reportlog, "", DBNO }
 };
 
 static TABLE opttab=0;
@@ -193,7 +196,8 @@ load_config_file (STRING file)
 			continue; /* ignore lines without = */
 		*ptr=0; /* zero-terminate key */
 		oldval = valueofbool_str(opttab, buffer, &there);
-		if (!there) continue; /* ignore keys we don't have */
+		/* ignore keys not listed in opttab */
+		if (!there) continue;
 		ASSERT(oldval); /* no nulls in opttab */
 		stdfree(oldval);
 		ptr++;
@@ -213,6 +217,10 @@ load_config_file (STRING file)
 static void
 read_db_options (void)
 {
+	/*
+	we'll cycle thru every key in opttab, and see if
+	there is an update for it in useropts table
+	*/
 	traverse_table(opttab, update_opt);
 }
 /*==========================================
@@ -225,10 +233,12 @@ update_opt (ENTRY ent)
 {
 	STRING key, value;
 	key = ent->ekey;
+	/* ignore keys listed in dodbopt - can't be updated from db */
 	if (valueof_int(nodbopt, key, 0))
 		return;
 	value = valueof_str(useropts, key);
 	if (value) {
+		/* switch to value from useropts */
 		stdfree((STRING)ent->uval.w);
 		ent->uval.w = strsave(value);
 	}
