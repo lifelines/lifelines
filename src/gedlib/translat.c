@@ -29,7 +29,7 @@
  *   3.0.0 - 17 Jun 94    3.0.2 - 11 Nov 94
  *=========================================================*/
 
-#ifdef OS_LOCALE
+#ifdef HAVE_LOCALE_H
 #include <locale.h>
 #endif
 #include "llstdlib.h"
@@ -532,7 +532,7 @@ get_sort_desc (STRING buffer, INT max)
 	char * ptr = buffer;
 	int mylen = max;
 	buffer[0] = 0;
-#ifdef OS_LOCALE
+#ifdef HAVE_SETLOCALE
 	llstrcatn(&ptr, setlocale(LC_COLLATE, NULL), &mylen);
 #else
 	llstrcatn(&ptr, "Locales not supported on this platform.", &mylen);
@@ -593,7 +593,7 @@ get_codesets (void)
 void
 uilocale (void)
 {
-#ifdef OS_LOCALE
+#ifdef HAVE_SETLOCALE
 	if (lloptions.uilocale[0])
 		setlocale(LC_COLLATE, lloptions.uilocale);
 #endif
@@ -606,7 +606,7 @@ uilocale (void)
 void
 rptlocale (void)
 {
-#ifdef OS_LOCALE
+#ifdef HAVE_SETLOCALE
 	if (lloptions.rptlocale[0])
 		setlocale(LC_COLLATE, lloptions.rptlocale);
 #endif

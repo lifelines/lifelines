@@ -33,7 +33,7 @@
  *===========================================================*/
 
 #include "sys_inc.h"
-#ifdef OS_LOCALE
+#ifdef HAVE_LOCALE_H
 #include <locale.h>
 #endif
 #include "llstdlib.h"
@@ -147,7 +147,7 @@ main (INT argc, char **argv)
 	char lockarg = 0; /* option passed for database lock */
 	INT alteration=0;
 
-#ifdef OS_LOCALE
+#ifdef HAVE_SETLOCALE
 	setlocale(LC_ALL, "");
 #endif
 

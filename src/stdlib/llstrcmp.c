@@ -49,7 +49,7 @@ ll_strcmp (char *str1, char *str2)
  * ll_strcmploc -- Compare two strings with locale
  * which is to say, either Finnish build (hard-coded compare)
  * or user-specified custom sort
- * or locale info if available (OS_LOCALE)
+ * or locale info if available (HAVE_STRCOLL)
  * Created: 2001/07/21 (Perry Rapp)
  *=================================================*/
 int
@@ -60,7 +60,8 @@ ll_strcmploc (char *str1, char *str2)
 		return(MY_STRCMP(str1, str2));
 	if (usersort && (*usersort)(str1, str2, &rtn))
 		return rtn;
-#ifdef OS_LOCALE
+
+#ifdef HAVE_STRCOLL
 	errno = 0;
 	rtn = strcoll(str1, str2); /* sets errno if fails */
 	return !errno ? rtn : strcmp(str1, str2);

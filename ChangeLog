@@ -1,3 +1,14 @@
+2001-10-09 Matt Emmerton <memmerto@users.sourceforge.net)
+
+	* ChangeLog configure.in gedlib/translat.c liflines/main.c
+	* liflines/screen.c stdlib/fpattern.c stdlib/lloptions.c
+	* stdlib/llstrcmp.c
+
+	Added support for autoconf HAVE_SETLOCALE, HAVE_STRCOLL
+	and HAVE_LOCALE_H.  Refined menu option printing so that
+	the ability to change locales (program or report) is only
+	available when system supports locales (HAVE_SETLOCALE).
+
 2001-10-02  David A. Bright <dabright@users.sourceforge.net>
 
         * reports/book-latex.ll: Restored some previous additions

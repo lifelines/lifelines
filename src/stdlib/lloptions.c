@@ -27,7 +27,7 @@
  *   added in 3.0.6 by Perry Rapp
  *========================================================*/
 
-#ifdef OS_LOCALE
+#ifdef HAVE_LOCALE_H
 #include <locale.h>
 #endif
 #include "llstdlib.h"

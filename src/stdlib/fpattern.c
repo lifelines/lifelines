@@ -62,6 +62,11 @@ static const char	id[] =
 static const char	copyright[] =
     "Copyright ©1997-1998 David R. Tribble\n";
 
+/* START LifeLines Headers */
+#ifdef HAVE_LOCALE_H
+#include <locale.h>
+#endif
+/* END LifeLines Headers */
 
 /* System includes */
 
@@ -587,7 +592,9 @@ int main(int argc, char **argv)
 
     printf("==========================================\n");
 
+#ifdef HAVE_SETLOCALE
     setlocale(LC_CTYPE, "");
+#endif
 
 #if UNIX
     printf("[O/S is UNIX]\n");

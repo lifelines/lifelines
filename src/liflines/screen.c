@@ -34,7 +34,7 @@
 
 #include "sys_inc.h"
 #include <stdarg.h>
-#ifdef OS_LOCALE
+#ifdef HAVE_LOCALE_H
 #include <locale.h>
 #endif
 #include "llstdlib.h"
@@ -998,7 +998,7 @@ choose_list_from_indiseq (STRING ttl, INDISEQ seq)
 	wrefresh(win);
 	return seq;
 }
-#ifdef OS_LOCALE
+#ifdef HAVE_SETLOCALE
 /*======================================
  * choose_sort -- Enter new sort locale
  * Created: 2001/07/21 (Perry Rapp)
@@ -1036,7 +1036,7 @@ draw_cset_win (void)
 	disp_trans_table_choice(win, row++, 4, mn_cslcas, MLCAS);
 	disp_trans_table_choice(win, row++, 4, mn_csucas, MUCAS);
 #endif
-#ifdef OS_LOCALE
+#ifdef HAVE_SETLOCALE
 	mvwaddstr(win, row++, 4, mn_csndloc);
 #endif
 	mvwaddstr(win, row++, 4, mn_csrpt);
@@ -1056,7 +1056,7 @@ draw_rpt_cset_win (void)
 	BOX(win, 0, 0);
 	mvwaddstr(win, row++, 2, mn_csrpttl);
 	disp_locale(win, row++, 4, mn_csrptloc);
-#ifdef OS_LOCALE
+#ifdef HAVE_SETLOCALE
 	mvwaddstr(win, row++, 4, mn_csnrloc);
 #endif
 	disp_trans_table_choice(win, row++, 4, mn_ttinrp, MINRP);
@@ -1275,7 +1275,7 @@ cset_menu (WINDOW * wparent)
 		touchwin(wparent);
 		wrefresh(wparent);
 		switch (code) {
-#ifdef OS_LOCALE
+#ifdef HAVE_SETLOCALE
 		case 'L': choose_sort(&lloptions.uilocale); uilocale(); break;
 #endif
 		case 's': edit_mapping(MSORT); break;
@@ -1308,7 +1308,7 @@ rpt_cset_menu (WINDOW * wparent)
 		touchwin(wparent);
 		wrefresh(wparent);
 		switch (code) {
-#ifdef OS_LOCALE
+#ifdef HAVE_SETLOCALE
 		case 'L': choose_sort(&lloptions.rptlocale); break;
 #endif
 		case 'r': edit_mapping(MINRP); break;
