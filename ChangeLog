@@ -1,6 +1,7 @@
 2001-02-10 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/node.c: bugfix for creating new NOD0s.
+	* hdrs/menuitem.h: Added comment/suggestion for MenuItem.
 
 2001-02-09 Matt Emmerton <memmerto@users.sourceforge.net>
 

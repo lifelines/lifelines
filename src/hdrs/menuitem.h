@@ -44,6 +44,15 @@ typedef struct MenuItem_struct {
 	STRING Choices;
 	INT Command;
 } MenuItem;
+/*
+Note: MenuItem.Choices could be dropped, and the
+initializing code could read the choice from the beginning of Display
+up to the first space.
+Also, a LongDisplay could be added (for, eg, status bar,
+or for some type of extended command info display).
+- Perry Rapp, 2001/02/10
+*/
+
 typedef struct MenuItemOption_struct {
 	STRING Display1;
 	STRING Display2;
