@@ -47,7 +47,7 @@ proc main ()
     set(gen,1)
     while(and(thisgensize,lt(gen,ngen))) {
         set(thisgensize,0)
-        forindiset(thisgen,person,val,thisgensize) { print(" ") }
+        forindiset(thisgen,person,val,count) { print(" ") set(thisgensize,count) }
         if (thisgensize) {
             set(gen,add(gen,1))
             print(d(gen)) print(" ")

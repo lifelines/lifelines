@@ -1,3 +1,9 @@
+2004-12-27 Stephen Dum
+        *Changelog reports/count_paternal_desc.ll reports/desc_ged.ll
+
+	fix two scripts that assumed loop counter was valid outside the loop.
+	(see bug id 1090607)
+
 2004-11-03 Stephen Dum
         * ChangeLog  src/gedlib/indiseq.c src/gedlib/lloptions.c
 

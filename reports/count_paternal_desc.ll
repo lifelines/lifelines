@@ -35,7 +35,8 @@ proc main ()
         set(thisgensize,0)
         set(thismalesize,0)
         indiset(thismalegen)
-        forindiset(thisgen,person,val,thisgensize) {
+        forindiset(thisgen,person,val,count) {
+	    set(thisgensize,count)
             if (male(person)) {
                 set(thismalesize,add(thismalesize,1))
                 addtoset(thismalegen,person,0)
