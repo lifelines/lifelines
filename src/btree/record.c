@@ -31,6 +31,7 @@
  *   3.0.3 - 07 May 95
  *===========================================================*/
 
+#include <errno.h>
 #include "llstdlib.h"
 /* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
 #include "btreei.h"

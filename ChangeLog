@@ -1,3 +1,10 @@
+2003-02-12 Perry Rapp
+
+	* ChangeLog po/fr.po src/btree/record.c src/hdrs/version.h
+	src/interp/pvalalloc.c:
+
+	Compilation fixes. New French message catalog. Bump version to 3.0.24b10.
+
 2003-02-11 Perry Rapp
 
 	* ChangeLog src/gedlib/nodeio.c src/liflines/loadsave.c:
