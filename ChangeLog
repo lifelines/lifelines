@@ -1,3 +1,12 @@
+2003-03-04 Steve Dum
+
+        * ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf
+	docs/ll-reportmanual.txt docs/ll-reportmanual.xml
+	docs/ll-userguide.html docs/ll-userguide.pdf docs/ll-userguide.xml
+	docs/ll-userguide.txt
+
+	Update manuals and regenerate various forms.
+
 2003-03-04 Perry Rapp
 
 	* ChangeLog src/gedlib/misc.c src/hdrs/gedcom.h
