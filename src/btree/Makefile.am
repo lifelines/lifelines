@@ -15,8 +15,11 @@ libbtree_a_SOURCES = \
 	utils.c \
 	btreei.h
 
-# .. for config.h, hdrs for lots of stuff, ../intl for libgnuintl.h
-INCLUDES=-I$(srcdir)/.. -I$(srcdir)/../hdrs -I$(srcdir)/../intl
+# $(top_srcdir)          for config.h
+# $(top_srcdir)/intl     for libintl
+# $(top_srcdir)/src/hdrs for headers
+INCLUDES=-I$(top_srcdir) -I$(top_srcdir)/intl -I$(top_srcdir)/src/hdrs
+
 EXTRA_DIST = btreei.h
 
 # since we're not doing dependencies automagically...

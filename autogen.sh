@@ -1,9 +1,18 @@
-# A barebones autogen
-# Created 2002.06.04
-# A nicer one would test for presence of automake & autoconf first
+#!/bin/sh
 
-aclocal -I m4 -I build/autotools
-autoheader
+# autogen.sh - handy script to run all GNU autotools 
+
+INCLUDE="-I build/autotools -I build/gettext"
+
+echo "Running aclocal..."
+aclocal $INCLUDE
+
+echo "Running autoheader..."
+autoheader $INCLUDE
+
+echo "Running automake..."
 automake --add-missing
-autoconf
+
+echo "Running autoconf..."
+autoconf $INCLUDE
 

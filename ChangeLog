@@ -1,3 +1,21 @@
+2002-09-26 Matt Emmerton
+
+	* ChangeLog Makefile.am autogen.sh configure.in build/Makefile.am
+	src/arch/Makefile.am src/btree/Makefile.am src/gedlib/Makefile.am
+	src/interp/Makefile.am src/liflines/Makefile.am src/stdlib/Makefile.am
+	src/tools/Makefile.am 
+
+	Adjust for new build tree layout
+
+	* build/msvc6/Makefile.am build/rpm/Makefile.am build/gettext/Makefile.am
+	build/autotools/Makefile.am
+
+	Remove unneccessary Makefiles
+
+	* build/gnu
+
+	Remove obsolete directory
+
 2002-09-26 Perry Rapp
 
 	* ChangeLog src/gedlib/locales.c src/liflines/screen.c:

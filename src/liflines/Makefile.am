@@ -18,9 +18,10 @@ llines_LDADD = ../interp/libinterp.a ../gedlib/libgedcom.a \
 	../btree/libbtree.a ../stdlib/libstdlib.a ../arch/libarch.a \
 	@LIBINTL@ @LIBICONV@
 
-# Have to explicitly include .. after we put DEFS line in below for gettext
-# .. for config.h, hdrs for lots of stuff, ../intl for libgnuintl.h
-INCLUDES=-I$(srcdir)/.. -I$(srcdir)/../hdrs -I$(srcdir)/../intl
+# $(top_srcdir)          for config.h
+# $(top_srcdir)/intl     for libintl
+# $(top_srcdir)/src/hdrs for headers
+INCLUDES=-I$(top_srcdir) -I$(top_srcdir)/intl -I$(top_srcdir)/src/hdrs
 
 # Stuff for gettext (copied from gnu hello-1.3.35)
 localedir = $(datadir)/locale

@@ -14,8 +14,10 @@ libgedcom_a_SOURCES = brwslist.c charmaps.c choose.c date.c editmap.c \
 	property.c refns.c remove.c replace.c spltjoin.c translat.c\
 	valid.c valtable.c xreffile.c
 
-# .. for config.h, hdrs for lots of stuff, ../intl for libgnuintl.h
-INCLUDES=-I$(srcdir)/.. -I$(srcdir)/../hdrs -I$(srcdir)/../intl
-EXTRA_DIST = gedcomi.h
+# $(top_srcdir)          for config.h
+# $(top_srcdir)/intl     for libintl
+# $(top_srcdir)/src/hdrs for headers
+INCLUDES=-I$(top_srcdir) -I$(top_srcdir)/intl -I$(top_srcdir)/src/hdrs
 
+EXTRA_DIST = gedcomi.h
 

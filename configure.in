@@ -3,7 +3,7 @@ dnl Configure script for lifelines software
 dnl
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(src/liflines/lbrowse.c)
+AC_INIT(src/liflines/main.c)
 AC_PREREQ(2.50)
 AC_REVISION([for lifelines, built with autoconf] AC_ACVERSION)
 AC_CONFIG_AUX_DIR(build/autotools)
@@ -11,11 +11,6 @@ AC_CANONICAL_HOST
 
 AM_INIT_AUTOMAKE(lifelines, 3.0.18)
 AM_CONFIG_HEADER(config.h)
-
-AC_SUBST(PACKAGE) dnl Not needed anymore, replaced by AM_INIT_AUTOMAKE
-AC_SUBST(VERSION) dnl Not needed anymore, replaced by AM_INIT_AUTOMAKE
-
-dnl AC_CONFIG_SUBDIRS(btree gedlib interp stdlib)
 
 dnl Checks for programs.
 AC_PROG_CC
@@ -178,9 +173,6 @@ AC_OUTPUT(Makefile \
         docs/Makefile \
         reports/Makefile
         win32/Makefile \
-	build/Makefile \
-        build/msvc6/Makefile \
-        build/rpm/Makefile \
-        build/autotools/Makefile \
-        intl/Makefile po/Makefile.in)
-
+        build/Makefile \
+        intl/Makefile
+        po/Makefile.in)

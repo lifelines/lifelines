@@ -13,8 +13,10 @@ libstdlib_a_SOURCES = appendstr.c \
 	stralloc.c strapp.c strcvt.c strutf8.c strwhite.c \
 	table.c warehouse.c
 
-# .. for config.h, hdrs for lots of stuff, ../intl for libgnuintl.h
-INCLUDES=-I$(srcdir)/.. -I$(srcdir)/../hdrs -I$(srcdir)/../intl
+# $(top_srcdir)          for config.h
+# $(top_srcdir)/intl     for libintl
+# $(top_srcdir)/src/hdrs for headers
+INCLUDES=-I$(top_srcdir) -I$(top_srcdir)/intl -I$(top_srcdir)/src/hdrs
 
 EXTRA_DIST = stdlibi.h
 
