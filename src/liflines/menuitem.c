@@ -38,6 +38,7 @@
  *********************************************/
 
 extern STRING mn_ambig;
+extern STRING mn_titindi,mn_titfam,mn_titaux;
 
 /*********************************************
  * local types
@@ -161,6 +162,8 @@ static MenuItem f_MenuItemSwapMarkCurrent = { "x  Swap mark/current", "x" };
 static MenuItem f_MenuItemSources = { "$  List sources", "$", CMD_SOURCES };
 static MenuItemOption f_MenuItemOptionSources =
 	{ "$s  show sources", "$s  hide sources", "$S", CMD_SHOWSOURCES };
+static MenuItem f_MenuItemTest88 = { "88  Test 88", "88", CMD_TEST88 };
+static MenuItem f_MenuItemTest999 = { "999 Test 999", "999", CMD_TEST999 };
 
 
 
@@ -305,6 +308,19 @@ static MenuItem * f_Menu2Family[] =
 	&f_MenuItemDigits,
 	&f_MenuItemSwitchTopBottom,
 	&f_MenuItemMergeBottomToTop,
+	&f_MenuItemEnlargeMenu,
+	&f_MenuItemShrinkMenu,
+	0
+};
+
+static MenuItem * f_MenuAux[] =
+{
+	&f_MenuItemTest88,
+	&f_MenuItemTest999,
+	&f_MenuItemNext,
+	&f_MenuItemPrev,
+	&f_MenuItemScrollUp,
+	&f_MenuItemScrollDown,
 	&f_MenuItemEnlargeMenu,
 	&f_MenuItemShrinkMenu,
 	0
@@ -503,7 +519,7 @@ menuitem_initialize (void)
 	f_ScreenInfo[scr].Title = (STRING)"LifeLines -- Main Menu";
 
 	scr = ONE_PER_SCREEN;
-	Title = (STRING)"LifeLines -- Person Browse Screen (* toggles menu)";
+	Title = mn_titindi;
 	MenuRows = 8;
 	MenuCols = 3;
 	MenuSize = sizeof(f_MenuPerson)/ItemSize-1;
@@ -514,7 +530,7 @@ menuitem_initialize (void)
 	MenuOpts = 0;
 
 	scr = ONE_FAM_SCREEN;
-	Title = (STRING)"LifeLines -- Family Browse Screen (* toggles menu)";
+	Title = mn_titfam;
 	MenuRows = 6;
 	MenuCols = 3;
 	MenuSize = sizeof(f_MenuFamily)/ItemSize-1;
@@ -553,7 +569,14 @@ menuitem_initialize (void)
 	Menu = f_MenuListPersons;
 	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu, MenuOpts);
 
-	f_ScreenInfo[AUX_SCREEN].Title = (STRING)"LifeLines -- Auxiliary Browse Screen";
+	scr = AUX_SCREEN;
+	Title = mn_titaux;
+	MenuRows = 4;
+	MenuCols = 3;
+	MenuSize = sizeof(f_MenuAux)/ItemSize-1;
+	Menu = f_MenuAux;
+	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu, MenuOpts);
+
 
 	for (i=1; i<MAX_SCREEN; i++)
 		f_ScreenInfo[i].MenuPage = 0;

@@ -576,15 +576,23 @@ browse_aux (NODE node)
 		/* last keynum & mode, so can tell if changed */
 		nkeyp = node_to_keynum(ntype, node);
 		auxmodep = auxmode;
-		switch (c) {
-		case 'e':	/* Edit this person */
+		if (!handle_menu_commands(c))
+			switch (c)
+		{
+		case CMD_TEST88:
+			message("Test88");
+			break;
+		case CMD_TEST999:
+			message("Test999");
+			break;
+		case CMD_EDIT:
 			switch(ntype) {
 			case 'S': edit_source(node); break;
 			case 'E': edit_event(node); break;
 			case 'X': edit_other(node); break;
 			}
 			break;
-		case '+':	/* Go to next indi in db */
+		case CMD_NEXT:	/* Go to next indi in db */
 			{
 				i = xref_next(ntype, nkeyp);
 				if (i)
@@ -592,7 +600,7 @@ browse_aux (NODE node)
 				else message(norec);
 				break;
 			}
-		case '-':	/* Go to prev indi in db */
+		case CMD_PREV:	/* Go to prev indi in db */
 			{
 				i = xref_prev(ntype, nkeyp);
 				if (i)
@@ -600,22 +608,13 @@ browse_aux (NODE node)
 				else message(norec);
 				break;
 			}
-		case '(':       /* scroll details/pedigree up */
+		case CMD_SCROLL_UP:       /* scroll details/pedigree up */
 			show_scroll(-1);
 			break;
-		case ')':       /* scroll details/pedigree down */
+		case CMD_SCROLL_DOWN:       /* scroll details/pedigree down */
 			show_scroll(+1);
 			break;
-		case '<':
-			adjust_menu_height(+1);
-			break;
-		case '>':
-			adjust_menu_height(-1);
-			break;
-		case '?':
-			cycle_menu();
-			break;
-		case 'q':
+		case CMD_QUIT:
 		default:
 			return BROWSE_QUIT;
 		}

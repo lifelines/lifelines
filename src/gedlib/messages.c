@@ -259,3 +259,7 @@ STRING rerwlv = (STRING) "The record begins at wrong level.";
 
 /* menuitem.c */
 STRING mn_ambig    = (STRING) "Conflicting command string: %s";
+STRING mn_titindi  = (STRING) "LifeLines -- Person Browse Screen (* toggles menu)";
+STRING mn_titfam   = (STRING) "LifeLines -- Family Browse Screen (* toggles menu)";
+STRING mn_titaux   = (STRING) "LifeLines -- Auxiliary Browse Screen (* toggles menu)";
+STRING mn_unkcmd   = (STRING) "Not valid command";

@@ -99,6 +99,7 @@ enum {
 	/* reserve range for direct to children */
 	, CMD_CHILD_DIRECT0, CMD_CHILD_DIRECT9=CMD_CHILD_DIRECT0+9
 	, CMD_JUMP_HOOK
+	, CMD_TEST88, CMD_TEST999
 };
 
 void menuitem_initialize();

@@ -127,7 +127,7 @@ void mprintf_info(STRING fmt, ...);
 void mprintf_status(STRING fmt, ...);
 STRING message_string (void);
 void paint_main_screen(void);
-void paint_one_per_screen(void);
+void paint_screen(INT screen);
 void paint_one_fam_screen(void);
 void paint_two_per_screen(void);
 void paint_two_fam_screen(void);

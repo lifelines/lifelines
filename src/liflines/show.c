@@ -448,7 +448,7 @@ show_gedcom (NODE node, INT hgt)
 #endif
 	}
 
-	pedigree_draw_gedcom(node, ll_lines-hgt);
+	pedigree_draw_gedcom(node, hgt);
 }
 /*===============================================================
  * indi_to_ped_fix -- Construct person STRING for pedigree screen
@@ -578,45 +578,10 @@ show_list (INDISEQ seq,
  * show_aux_display -- Show source, event or other record
  *======================================================*/
 void
-show_aux_display (NODE node)
+show_aux_display (NODE node, INT hgt)
 {
-	show_gedcom(node, ll_lines-9);
-/*
-	STRING key;
-	INT i;
-
-	ASSERT(node);
-	for (i = 0; i < hgt; i++) {
-		wmove(main_win, row+i, 1);
-		wclrtoeol(main_win);
-#ifndef BSD
-		mvwaddch(main_win, row+i, ll_cols-1, ACS_VLINE);
-#endif
-	}
-#if 0
-	key = rmvat(nxref(node));
-	switch (*key) {
-	case 'S':
-		show_sour_display(node, row, hgt);
-		break;
-	case 'E':
-	case 'X':
-	}
-#endif
-*/
+	show_gedcom(node, hgt);
 }
-#if UNUSED
-/*=========================================
- * show_sour_display -- Show source display
- *=======================================*/
-void
-show_sour_display (NODE node,
-                   INT row,
-                   INT hgt)
-{
-	STRING key;
-}
-#endif
 /*===============================================
  * show_scroll - vertically scroll person display
  *=============================================*/

@@ -67,7 +67,12 @@ extern BOOLEAN alldone, progrunning;
 extern STRING empstr, empstr71, readpath;
 extern STRING abverr, uoperr;
 extern STRING mtitle, cright, plschs;
+extern STRING mn_unkcmd;
+
+INT ll_lines = LINESREQ; /* update to be number of lines in screen */
+INT ll_cols = COLSREQ;	 /* number of columns in screen used by LifeLines */
 BOOLEAN stdout_vis = FALSE;
+INT cur_screen = 0;
 
 /*********************************************
  * local function prototypes
@@ -79,6 +84,7 @@ static void create_windows (void);
 static void del_menu (void);
 static void extra_menu (void);
 static void init_all_windows (void);
+static INT update_menu(INT screen);
 static void scan_menu (void);
 static void trans_menu (void);
 static void utils_menu (void);
@@ -95,12 +101,9 @@ static WINDOW *choose_win(INT desiredlen, INT *actuallen);
 static void output_menu(WINDOW *win, INT screen);
 static INT calculate_screen_lines(INT screen);
 
-INT ll_lines = LINESREQ; /* update to be number of lines in screen */
-INT ll_cols = COLSREQ;	 /* number of columns in screen used by LifeLines */
 
 static INT menu_enabled = 1;
 static INT menu_dirty = 0;
-INT cur_screen = 0;
 
 WINDOW *main_win = NULL;
 WINDOW *stdout_win, *stdout_box_win;
@@ -239,10 +242,11 @@ paint_main_screen(void)
 	mvwaddstr(win, row++, 4, "q  Quit");
 }
 /*================================================
- * paint_one_per_screen -- Paint one person screen
+ * paint_screen -- Paint a screen using new menu code
+ * Created: 2001/02/01, Perry Rapp
  *==============================================*/
 void
-paint_one_per_screen (void)
+paint_screen (INT screen)
 {
 	WINDOW *win = main_win;
 	werase(win);
@@ -250,7 +254,7 @@ paint_one_per_screen (void)
 	show_horz_line(win, ll_lines-3,  0, ll_cols);
 	if (!menu_enabled)
 		return;
-	output_menu(win, ONE_PER_SCREEN);
+	output_menu(win, screen);
 }
 /*================================================
  * paint_one_fam_screen -- Paint one family screen
@@ -387,24 +391,12 @@ void
 paint_aux_screen (void)
 {
 	WINDOW *win = main_win;
-	INT row, col;
 	werase(win);
 	BOX(win, 0, 0);
-	show_horz_line(win, AUX_LINES+1, 0, ll_cols);
 	show_horz_line(win, ll_lines-3, 0, ll_cols);
-	mvwaddstr(win, AUX_LINES+2, 2, plschs);
-	row = AUX_LINES+3; col = 3;
-	mvwaddstr(win, row++, col, "e  Edit the record");
-	mvwaddstr(win, row++, col, "x  Not implemented");
-	mvwaddstr(win, row++, col, "x  Not implemented");
-	row = AUX_LINES+3; col = 3 + BAND;
-	mvwaddstr(win, row++, col, "x  Not implemented");
-	mvwaddstr(win, row++, col, "x  Not implemented");
-	mvwaddstr(win, row++, col, "x  Not implemented");
-	row = AUX_LINES+3; col = 3 + 2*BAND;
-	mvwaddstr(win, row++, col, "x  Not implemented");
-	mvwaddstr(win, row++, col, "x  Not implemented");
-	mvwaddstr(win, row++, col, "q  Return to main menu");
+	if (!menu_enabled)
+		return;
+	output_menu(win, AUX_SCREEN);
 }
 /*==========================================
  * create_windows -- Create and init windows
@@ -569,27 +561,30 @@ main_menu (void)
 	}
 }
 /*=========================================
- * indi_interact -- call interact for indi
- * Created: 2001/01/27, Perry Rapp
- *=======================================*/
-static INT
-indi_interact (INT screen)
-{
-	return interact(main_win, NULL, screen);
-}
-/*=========================================
  * indi_browse -- Handle indi_browse screen
  *=======================================*/
 INT
 indi_browse (NODE indi)
 {
-	INT lines = calculate_screen_lines(ONE_PER_SCREEN);
-	if (menu_dirty || (cur_screen != ONE_PER_SCREEN))
-		paint_one_per_screen();
-	menu_dirty = FALSE;
+	INT screen = ONE_PER_SCREEN;
+	INT lines = update_menu(screen);
 	show_person_main1(indi, 1, lines);
-	display_screen(ONE_PER_SCREEN);
-	return indi_interact(ONE_PER_SCREEN);
+	display_screen(screen);
+	return interact(main_win, NULL, screen);
+}
+/*=========================================
+ * update_menu -- redraw menu if needed
+ *  uses new menus
+ * Created: 2001/02/01, Perry Rapp
+ *=======================================*/
+static INT
+update_menu (INT screen)
+{
+	INT lines = calculate_screen_lines(screen);
+	if (menu_dirty || (cur_screen != screen))
+		paint_screen(screen);
+	menu_dirty = FALSE;
+	return lines;
 }
 /*=========================================
  * indi_ged_browse -- Handle indi_browse screen
@@ -598,13 +593,11 @@ indi_browse (NODE indi)
 INT
 indi_ged_browse (NODE indi)
 {
-	INT lines = calculate_screen_lines(ONE_PER_SCREEN);
-	if (menu_dirty || (cur_screen != ONE_PER_SCREEN))
-		paint_one_per_screen();
-	menu_dirty = FALSE;
+	INT screen = ONE_PER_SCREEN;
+	INT lines = update_menu(screen);
 	show_gedcom(indi, lines);
-	display_screen(ONE_PER_SCREEN);
-	return indi_interact(ONE_PER_SCREEN);
+	display_screen(screen);
+	return interact(main_win, NULL, screen);
 }
 /*=========================================
  * fam_interact -- call interact for indi
@@ -622,12 +615,10 @@ fam_interact (void)
 INT
 fam_browse (NODE fam)
 {
-	INT lines = calculate_screen_lines(ONE_FAM_SCREEN);
-	if (menu_dirty || (cur_screen != ONE_FAM_SCREEN))
-		paint_one_fam_screen();
-	menu_dirty = FALSE;
+	INT screen = ONE_FAM_SCREEN;
+	INT lines = update_menu(screen);
 	show_long_family(fam, 1, lines, MAINWIN_WIDTH);
-	display_screen(ONE_FAM_SCREEN);
+	display_screen(screen);
 	return fam_interact();
 }
 /*=======================================
@@ -672,13 +663,11 @@ twofam_browse (NODE fam1, NODE fam2)
 INT
 ped_browse (NODE indi)
 {
-	INT lines = calculate_screen_lines(ONE_PER_SCREEN);
-	if (menu_dirty || (cur_screen != ONE_PER_SCREEN))
-		paint_one_per_screen();
-	menu_dirty = FALSE;
+	INT screen = ONE_PER_SCREEN;
+	INT lines = update_menu(screen);
 	show_pedigree(indi, lines);
 	display_screen(ONE_PER_SCREEN);
-	return indi_interact(ONE_PER_SCREEN);
+	return interact(main_win, NULL, screen);
 }
 /*=======================================
  * aux_browse -- Handle aux_browse screen
@@ -687,10 +676,11 @@ ped_browse (NODE indi)
 INT
 aux_browse (NODE node)
 {
-	if (cur_screen != AUX_SCREEN) paint_aux_screen();
-	show_aux_display(node);
-	display_screen(AUX_SCREEN);
-	return interact(main_win, "e()+-q", -1);
+	INT screen = AUX_SCREEN;
+	INT lines = update_menu(screen);
+	show_aux_display(node, lines);
+	display_screen(screen);
+	return interact(main_win, NULL, screen);
 }
 /*=========================================
  * list_browse -- Handle list_browse screen
@@ -1174,14 +1164,10 @@ interact (WINDOW *win, STRING str, INT screen)
 			cmdnum = menuitem_check_cmd(screen, buffer);
 			if (cmdnum != CMD_NONE && cmdnum != CMD_PARTIAL)
 				return cmdnum;
-			if (cmdnum != CMD_PARTIAL && offset > 1) {
-				cmdnum = menuitem_check_cmd(screen, &buffer[offset-1]);
-				if (cmdnum != CMD_NONE)
-					return cmdnum;
-				offset = 1;
-			}
-			if (cmdnum != CMD_PARTIAL)
+			if (cmdnum != CMD_PARTIAL) {
+				message(mn_unkcmd);
 				offset = 0;
+			}
 		}
 	}
 }
@@ -1731,16 +1717,18 @@ output_menu (WINDOW *win, INT screen)
 	INT MenuRows = f_ScreenInfo[screen].MenuRows;
 	INT MenuSize = f_ScreenInfo[screen].MenuSize;
 	INT Item = 0;
-	INT page, pageitems;
+	INT page, pageitems, pages;
 	char prompt[128];
 	MenuItem ** Menu = f_ScreenInfo[screen].Menu;
 	INT OnePageFlag = 0;
 	page = f_ScreenInfo[screen].MenuPage;
 	pageitems = (MenuRows-1)*3-2;
-	if (MenuSize < pageitems+1) /* don't need '?' if they fit */
+	pages = MenuSize/pageitems+1;
+	if (MenuSize <= pageitems+1) /* don't need '?' if they fit */
 	{
 		OnePageFlag = 1;
-		page =0;
+		page = 0;
+		pages = 1;
 	}
 	Item = page * pageitems;
 	if (Item >= MenuSize)
@@ -1750,7 +1738,7 @@ output_menu (WINDOW *win, INT screen)
 	row = LINESTOTAL-MenuRows-OVERHEAD_MENU+1;
 	show_horz_line(win, row++, 0, COLSREQ);
 	sprintf(prompt, "%s            (pg %d/%d)", 
-		plschs, page+1, MenuSize/pageitems+1);
+		plschs, page+1, pages);
 	mvwaddstr(win, row++, 2, prompt);
 	while (1)
 	{

@@ -81,7 +81,7 @@ void toggle_menu(void);
 /* show.c */
 void display_cache_stats(void);
 void put_out_line(WINDOW * win, INT x, INT y, STRING string, INT width, INT flag);
-void show_aux_display(NODE);
+void show_aux_display(NODE, INT hgt);
 void show_childnumbers(void);
 void show_gedcom(NODE node, INT hgt);
 void show_list(INDISEQ, INT, INT, INT);
