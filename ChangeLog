@@ -1,3 +1,10 @@
+2002-02-04 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog interp/lex.c tools/Makefile.am:
+
+	Allow periods inside variable names. Fix sign-extension in inchar.
+	Fix copy&paste typo in dbverify build line in makefile.
+
 2002-02-03 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog hdrs/version.h hdrs/win32/curses.h interp/date.c
