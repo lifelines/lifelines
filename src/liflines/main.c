@@ -104,9 +104,6 @@ STRING readpath;		/* database path used to open */
 STRING version = (STRING) "3.0.6-dev";
 extern int opterr;
 extern BTREE BTR;
-/* MTE:  If this is really needed here, please figure out which system */
-/*       header is required and add it to sys_inc.h! */
-/* char *getenv(); */
 STRING lldatabases;
 
 static void show_open_error(void);
