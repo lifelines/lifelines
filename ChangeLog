@@ -1,3 +1,7 @@
+2001-04-15    <Marc.Nozell@compaq.com>
+
+	* tools/btedit.c: Fix btedit build.
+
 2001-04-14 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog NEWS hdrs/interp.h interp/pvalue.c

@@ -87,9 +87,9 @@ main (int argc,
 	sprintf(cmdbuf, "%s btedit.tmp", editor);
 #ifdef WIN32
 	/* use w32system, because it will wait for the editor to finish */
-	w32system(editstr);
+	w32system(cmdbuf);
 #else
-	system(editstr);
+	system(cmdbuf);
 #endif
 	addfile(btree, str2rkey(key), "btedit.tmp");
 	unlink("btedit.tmp");
