@@ -37,6 +37,13 @@ struct rb_red_blk_node {
   RBNODE parent;
 }; /* *RBNODE already declared in header */
 
+struct rb_red_blk_iter {
+	RBTREE rbtree;
+	RBKEY low;
+	RBKEY high;
+	RBNODE next; /* to give back at next call, NULL if done */
+}; /* *RBITER already declared in header */
+
 /***********************************************************************
  * Module data
  ***********************************************************************/
@@ -50,6 +57,7 @@ static void * (*f_SafeMallocFnc)(size_t size) = 0;
  ***********************************************************************/
 
 static void Assert(int assertion, char* error);
+static RBNODE FindFirst(RBTREE tree, RBKEY low);
 static void InorderTreePrint(RBTREE tree, RBNODE x, KeyPrintFuncType KeyPrintFunc, InfoPrintFuncType InfoPrintFunc);
 static void LeftRotate(RBTREE tree, RBNODE x);
 static void RbDeleteFixUp(RBTREE tree, RBNODE x);
@@ -809,19 +817,11 @@ int
 RbTraverseUp (RBTREE tree, RBKEY low, RBKEY high, void *param, TraverseFuncType TraverseFunc)
 {
 	RBNODE nil=tree->nil;
-	RBNODE x=tree->root->left;
 	RBNODE lastBest=nil;
 	int rtn=1;
 
 	/* Find starting location */
-	while(nil != x) {
-		if ( 0 > (TreeCompare(tree, x->key, low)) ) { /* x->key < low */
-			x=x->right;
-		} else {
-			lastBest=x;
-			x=x->left;
-		}
-	}
+	lastBest = FindFirst(tree, low);
 
 	/* Now traverse, watching for ending location */
 	while ( (lastBest != nil) && (0 <= TreeCompare(tree, high, lastBest->key))) {
@@ -832,7 +832,96 @@ RbTraverseUp (RBTREE tree, RBKEY low, RBKEY high, void *param, TraverseFuncType 
 	}
 	return rtn;
 }
-      
+
+RBNODE
+RbTreeFirst (RBTREE tree)
+{
+	return FindFirst(tree, NULL);
+}
+
+RBITER
+RbBeginIter (RBTREE tree, RBKEY low, RBKEY high)
+{
+	RBITER rbit = (RBITER)SafeMalloc(sizeof(*rbit));
+	rbit->rbtree = tree;
+	rbit->low = low;
+	rbit->high = high;
+	rbit->next = FindFirst(tree, low);
+	return rbit;
+}
+
+/***********************************************************************
+ * FUNCTION: FindFirst
+ *
+ * Find lowest key in tree no lower than low
+ *
+ ***********************************************************************/
+static RBNODE
+FindFirst (RBTREE tree, RBKEY low)
+{
+	RBNODE nil=tree->nil;
+	RBNODE x=tree->root->left;
+	RBNODE lastBest=nil;
+
+	/* Find starting location */
+	while(nil != x) {
+		if ( low && 0 > (TreeCompare(tree, x->key, low)) ) { /* x->key < low */
+			x=x->right;
+		} else {
+			lastBest=x;
+			x=x->left;
+		}
+	}
+	return lastBest;
+}
+
+/***********************************************************************
+ * FUNCTION: FindLast
+ *
+ * Find highest key in tree no higher than high
+ *
+ ***********************************************************************/
+static RBNODE
+FindLast (RBTREE tree, RBKEY high)
+{
+	RBNODE nil=tree->nil;
+	RBNODE x=tree->root->left;
+	RBNODE lastBest=nil;
+	int rtn=1;
+
+	/* Find starting location */
+	while(nil != x) {
+		if ( high && 0 < (TreeCompare(tree, x->key, high)) ) { /* x->key > high */
+			x=x->left;
+		} else {
+			lastBest=x;
+			x=x->right;
+		}
+	}
+	return lastBest;
+}
+
+int
+RbNext (RBITER rbit, RBKEY * pkey, RBVALUE * pinfo)
+{
+	RBNODE next = rbit->next;
+	if (next == rbit->rbtree->nil) return 0;
+	rbit->next = RbTreeSuccessor(rbit->rbtree, next);
+	if (0 < TreeCompare(rbit->rbtree, next->key, rbit->high)) { /* next->key > rbit->high */
+		rbit->next = rbit->rbtree->nil;
+		return 0;
+	}
+	*pkey = next->key;
+	*pinfo = next->info;
+	return 1;
+}
+
+void
+RbEndIter (RBITER rbiter)
+{
+	free(rbiter);
+}
+
 int
 RbIsNil (RBTREE tree, RBNODE node)
 {

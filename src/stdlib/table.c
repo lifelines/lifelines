@@ -29,6 +29,7 @@
  *==============================================================*/
 
 #include "llstdlib.h"
+#include "lloptions.h"
 #include "vtable.h"
 #include "table.h"
 #include "object.h"

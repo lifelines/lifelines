@@ -745,6 +745,10 @@ SOURCE=..\..\..\src\hdrs\win32\getopt.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\hdrs\hashtab.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\hdrs\win32\iconv.h
 # End Source File
 # Begin Source File
@@ -919,10 +923,6 @@ SOURCE=..\..\..\src\hdrs\zstr.h
 # Begin Source File
 
 SOURCE=..\..\..\ChangeLog
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\hdrs\hashtab.h
 # End Source File
 # End Target
 # End Project

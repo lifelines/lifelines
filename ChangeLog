@@ -1,3 +1,10 @@
+2005-02-20 Perry Rapp
+
+	* ChangeLog build/msvc6/llines/llinesprj.dsp src/stdlib/rbtree.c
+	src/stdlib/rbtree.h src/stdlib/table.c
+
+	Add iteration to rbtree.
+
 2005-02-19 Perry Rapp
 
 	* build/msvc6/llines/llinesprj.dsp src/gedlib/date.c

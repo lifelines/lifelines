@@ -29,6 +29,7 @@
 
 typedef struct rb_red_blk_tree * RBTREE;
 typedef struct rb_red_blk_node * RBNODE;
+typedef struct rb_red_blk_iter * RBITER;
 typedef const void * RBKEY;
 typedef void * RBVALUE;
 
@@ -76,6 +77,7 @@ RBNODE RbTreeSuccessor(RBTREE,RBNODE);
 RBNODE RbExactQuery(RBTREE, RBKEY q);
 int RbTraverseUp(RBTREE, RBKEY low, RBKEY high, void *param, TraverseFuncType TraverseFunc);
 int RbTraverseDown(RBTREE, RBKEY low, RBKEY high, void *param, TraverseFuncType TraverseFunc);
+RBNODE RbTreeFirst(RBTREE tree);
 
 /* Fetch subset of tree in stack*/
 STKSTACK RbEnumerate(RBTREE tree, RBKEY low, RBKEY high);
@@ -86,5 +88,10 @@ int RbIsNil(RBTREE tree, RBNODE node);
 RBKEY RbGetKey(RBNODE node);
 RBVALUE RbGetInfo(RBNODE node);
 void NullFunction(void*);
+
+/* iteration */
+RBITER RbBeginIter(RBTREE tree, RBKEY low, RBKEY high);
+int RbNext(RBITER rbit, RBKEY * pkey, RBVALUE * pinfo);
+void RbEndIter(RBITER rbiter);
 
 #endif /* rbtree_h_included */
