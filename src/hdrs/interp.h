@@ -132,7 +132,7 @@ struct itag {
 
 typedef struct ptag *PVALUE;
 struct ptag {
-	char type;	/* type of value */
+	unsigned char type;	/* type of value */
 	VPTR value;	/* value */
 };
 

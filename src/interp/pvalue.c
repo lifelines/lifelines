@@ -899,7 +899,7 @@ BOOLEAN
 is_pvalue (PVALUE pval)
 {
 	if (!pval) return FALSE;
-	return ptype(pval) >= PNONE  && ptype(pval) <= PSET;
+	return (ptype(pval) <= PSET);
 }
 /*===========================================================
  * is_pvalue_or_freed -- Checks that PVALUE is a valid type
@@ -910,7 +910,7 @@ is_pvalue_or_freed (PVALUE pval)
 {
 	if (!pval) return FALSE;
 	if (ptype(pval) == PFREED) return TRUE;
-	return ptype(pval) >= PNONE  && ptype(pval) <= PSET;
+	return (ptype(pval) <= PSET);
 }
 /*========================================
  * is_record_pvalue -- Does pvalue contain record ?
