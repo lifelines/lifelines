@@ -77,7 +77,7 @@ WORD el;
 int (*func)();
 {
 	LNODE lnode;
-	if (!list) return;
+	if (!list) return FALSE;
 	lnode = lfirst(list);
 	while (lnode) {
 		if((*func)(el, lelement(lnode))) return TRUE;

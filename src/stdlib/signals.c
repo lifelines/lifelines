@@ -32,6 +32,7 @@
 #include <signal.h>
 #include "standard.h"
 #include "table.h"
+#include "translat.h"
 #include "gedcom.h"
 #include "interp.h"
 
@@ -111,6 +112,7 @@ int sig;
 }
 
 ll_abort(sig)
+	int sig;
 {
 	int c;
 	fputs("\nCore Dump? [n/y] ", stdout);

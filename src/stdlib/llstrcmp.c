@@ -37,6 +37,7 @@ int ll_strcmp(str1, str2)
 int ll_strncmp(str1, str2, len)
 	char *str1;
 	char *str2;
+	int len;
 {
 	if(opt_finnish) return(MY_STRNCMP(str1, str2, len));
 	return(strncmp(str1, str2, len));
