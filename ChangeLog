@@ -54,6 +54,10 @@
 	Began adding vtables, and began moving table memory mgmt
 	to creation.
 
+	* ChangeLog src/gedlib/keytonod.c:
+
+	Bugfix: [ 691936 ] dbverify ASSERT (3.0.25)
+
 2003-02-22 Perry Rapp
 
 	* ChangeLog build/msvc6/llexec/llexec.dsp

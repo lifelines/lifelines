@@ -1110,11 +1110,15 @@ value_to_xref (STRING val)
 CACHEEL
 indi_to_cacheel (RECORD indi)
 {
-	/* TODO: We could store a cachel pointer directly in the record */
 	CACHEEL cel;
 	if (!indi || !nztop(indi)) return NULL;
+	if (indi->cel) return indi->cel;
+	/*
+	This is not efficient, rereading the record
+	But we can't just steal the record given us
+	without some transfer of memory ownership
+	*/
 	cel = key_to_indi_cacheel(rmvat(nxref(nztop(indi))));
-	ASSERT(indi->cel == cel);
 	ASSERT(cel);
 	return cel;
 }
