@@ -1,3 +1,11 @@
+2003-07-01 Matt Emmerton
+
+	* ChangeLog src/liflines/askgedc.c src/liflines/screen.c
+	gedlib/gengedc.c
+
+	Add missing #includes of "cache.h" and "interp.h"
+	Add casts to remove compiler warnings
+
 2003-06-30 Matt Emmerton
 
 	* ChangeLog src/interp/pvalue.c src/interp/pvalmath.c

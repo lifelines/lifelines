@@ -18,6 +18,7 @@
 #include "table.h"
 #include "gedcom.h"
 #include "indiseq.h"
+#include "interp.h"	/* for poutput */
 #include "gengedc.h"
 
 /*********************************************

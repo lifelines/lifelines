@@ -40,6 +40,7 @@
 #include "screen.h"
 #include "cscurses.h"
 #include "zstr.h"
+#include "cache.h"
 #ifdef WIN32_ICONV_SHIM
 #include "iconvshim.h"
 #endif
