@@ -1610,13 +1610,13 @@ interp_traverse (PNODE node, SYMTAB stab, PVALUE *pval)
 			snode = stack[++lev] = nchild(snode);
 			continue;
 		}
-		if (nsibling(snode)) {
+		if (lev>0 && nsibling(snode)) {
 			snode = stack[lev] = nsibling(snode);
 			continue;
 		}
-		while (--lev >= 0 && !nsibling(stack[lev]))
+		while (--lev >= 1 && !nsibling(stack[lev]))
 			;
-		if (lev < 0) break;
+		if (lev <= 0) break;
 		snode = stack[lev] = nsibling(stack[lev]);
 	}
 	irc = INTOKAY;
