@@ -4,6 +4,10 @@
 
 	Fix typo in configure.in for Polish (which is pl, not po).
 
+	* ChangeLog po/LINGUAS
+
+	Fix typo for Polish in po/LINGUAS (Polish is pl, not po).
+
 2004-03-28 Perry Rapp
 
 	* ChangeLog configure.in po/LINGUAS
