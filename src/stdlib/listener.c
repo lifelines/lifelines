@@ -92,6 +92,9 @@ delete_listener (LIST * notifiees, CALLBACK_FNC fncptr, VPTR uparm)
 	}
 	make_list_empty(lold);
 	remove_list(lold, 0);
+	if (is_empty_list(*notifiees)) {
+		remove_listeners(notifiees);
+	}
 }
 /*===============================================
  * notify_listeners -- Send notifications to any registered listeners

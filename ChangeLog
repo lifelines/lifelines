@@ -30,6 +30,11 @@
 
 	Fix string leak in __rjustify.
 
+	* ChangeLog src/stdlib/listener.c
+
+	Revise delete_listener to free list if empty, to fix leak
+	in empty lists.
+
 2005-01-27, Perry Rapp
 
 	* ChangeLog src/gedlib/gedcomi.h src/gedlib/keytonod.c
