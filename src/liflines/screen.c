@@ -159,6 +159,7 @@ typedef struct listdisp_s
 
 /* alphabetical */
 static void activate_uiwin(UIWINDOW uiwin);
+static void append_to_msg_list(STRING msg);
 static INT array_interact(UIWINDOW win, STRING ttl, INT len, STRING *strings, BOOLEAN selecting);
 static void begin_action(void);
 static INT calculate_screen_lines(INT screen);
@@ -216,7 +217,7 @@ static void switch_to_uiwin(UIWINDOW uiwin);
 static void touch_all(void);
 static INT update_menu(INT screen);
 static void user_options(void);
-static void vmprintf(STRING fmt, va_list args);
+/*static void vmprintf(STRING fmt, va_list args);*/
 static void win_list_init(void);
 
 /*********************************************
@@ -226,8 +227,10 @@ static void win_list_init(void);
 static INT menu_enabled = 1;
 static INT menu_dirty = 0;
 
-static char showing[150];
-static BOOLEAN now_showing_status = FALSE;
+/* what is showing now in status bar */
+static char status_showing[150];
+/* flag if it is not important to keep */
+static BOOLEAN status_transitory = FALSE;
 
 
 /* total screen lines used */
@@ -245,7 +248,7 @@ int winx=0, winy=0; /* user specified window size */
 static LIST msg_list = 0;
 static BOOLEAN msg_flag = FALSE; /* need to show msg list */
 static BOOLEAN viewing_msgs = FALSE; /* user is viewing msgs */
-static BOOLEAN suppress_std_msg = FALSE; /* to hold status message */
+static BOOLEAN lock_std_msg = FALSE; /* to hold status message */
 static UIWINDOW active_uiwin = 0;
 
 /*********************************************
@@ -506,10 +509,10 @@ display_screen (INT new_screen)
 		nocrmode();
 	}
 	stdout_vis = FALSE;
-	if (!now_showing_status)
+	if (!status_showing[0] || status_transitory)
 		place_std_msg();
 	else
-		mvwaddstr(win, ll_lines-2, 2, showing);
+		mvwaddstr(win, ll_lines-2, 2, status_showing);
 	place_cursor();
 	switch_to_uiwin(uiwin);
 }
@@ -524,7 +527,6 @@ main_menu (void)
 	WINDOW * win = uiw_win(uiwin);
 	repaint_main_menu(uiwin);
 	display_screen(MAIN_SCREEN);
-	/* place_std_msg(); */ /*POSS*/
 	c = interact(uiwin, "bsadprctuxq", -1);
 	place_std_msg();
 	wrefresh(win);
@@ -1721,9 +1723,12 @@ interact (UIWINDOW uiwin, STRING str, INT screen)
 		c = wgetch(uiw_win(uiwin));
 		if (c == EOF) c = 'q';
 		nocrmode();
-		now_showing_status = FALSE;
-		if (!progrunning && !suppress_std_msg)
+		if (!progrunning && !lock_std_msg) {
+			/* after they chose off the menu, we wipe any
+			status message still lingering from before they chose */
+			status_showing[0] = 0;
 			place_std_msg();
+		}
 		if (str) { /* traditional */
 			for (i = 0; i < n; i++) {
 				if (c == str[i]) return c;
@@ -1990,7 +1995,14 @@ llvwprintf (STRING fmt, va_list args)
 		clearw();
 	vwprintw(win, fmt, args);
 	wrefresh(win);
-	/* following doesn't work because of embedded carriage returns */
+	/*
+	TO DO
+	It would be nice to add this to the msg list
+	but we need to deal with embedded carriage returns first
+	so we can't do this yet. Also, if we do put it on the msg list,
+	it is going to duplicate the stdout display currently being
+	used (which is nicer looking, but scrolls off-screen).
+	*/
 /*	msg_impl(fmt, args, -1);*/ /* also send to msg list */
 }
 /*=================================================
@@ -2338,6 +2350,7 @@ calculate_screen_lines (INT screen)
  * vmprintf -- send error, info, or status message out
  * legacy
  *=============================================*/
+#ifdef UNUSED_CODE
 static void
 vmprintf (STRING fmt, va_list args)
 {
@@ -2348,10 +2361,12 @@ vmprintf (STRING fmt, va_list args)
 	}
 	display_status(showing);
 }
+#endif
 /*===============================================
  * display_status -- put string in status line
+ * We don't touch the status_transitory flag
+ * That is caller's responsibility.
  * Created: 2001/11/11, Perry Rapp
- * TO DO - how do we limit its length ? Yet another copy ?
  *=============================================*/
 static void
 display_status (STRING text)
@@ -2359,6 +2374,13 @@ display_status (STRING text)
 	UIWINDOW uiwin = main_win;
 	WINDOW *win = uiw_win(uiwin);
 	INT row;
+	/* first store it */
+	llstrncpy(status_showing, text, sizeof(status_showing));
+	if ((INT)strlen(text)>ll_cols-10) {
+		status_showing[ll_cols-12] = 0;
+		strcat(status_showing, "...");
+	}
+	/* then display it */
 	wmove(win, row = ll_lines-2, 2);
 	if (cur_screen != LIST_SCREEN) {
 		wclrtoeol(win);
@@ -2366,8 +2388,7 @@ display_status (STRING text)
 	} else
 		mvwaddstr(win, row, 2, empstr);
 	wmove(win, row, 2);
-	mvwaddstr(win, row, 2, text);
-	now_showing_status = TRUE;
+	mvwaddstr(win, row, 2, status_showing);
 	place_cursor();
 	wrefresh(win);
 }
@@ -2381,7 +2402,7 @@ msg_error (STRING fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	msg_impl(fmt, args, -1);
+	msg_impl(fmt, args, -1); /* -1 means error */
 	va_end(args);
 }
 /*=========================================
@@ -2394,7 +2415,7 @@ msg_info (STRING fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	msg_impl(fmt, args, 0);
+	msg_impl(fmt, args, 0); /* 0 means normal info */
 	va_end(args);
 }
 /*=========================================
@@ -2407,13 +2428,14 @@ msg_status (STRING fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	msg_impl(fmt, args, 1);
+	msg_impl(fmt, args, 1); /* 1 means transitory */
 	va_end(args);
 }
 /*=========================================
  * msg_impl -- handle all messages
  * fmt,args:  printf style varargs from client
  * level:     -1=error,0=info,1=status
+ * Puts into message list and/or into status area
  * Created: 2001/11/11, Perry Rapp
  *=======================================*/
 void
@@ -2436,24 +2458,55 @@ msg_impl (STRING fmt, va_list args, INT level)
 			ptr = buffer;
 			break;
 	}
+	/* now make string to show/put on msg list */
 	vsnprintf(ptr, sizeof(buffer), fmt, args);
-	/* first add it to msg list */
-	if (level<1) {
-		if (!msg_list)
-			msg_list = create_list();
-		enqueue_list(msg_list, strsave(buffer));
-		if (!viewing_msgs && !msg_flag &&
-			(length_list(msg_list)>1 || strlen(buffer)>width)) {
-			msg_flag = TRUE;
+	/* first handle transitory/status messages */
+	if (level==1) {
+		if (lock_std_msg)
+			return; /* can't display it, status bar is locked */
+		if (status_showing[0] && !status_transitory) {
+			/* we are overwriting something important 
+			so it is already on the msg list, we just need to make
+			sure the msg list gets displayed */
+			if (!viewing_msgs)
+				msg_flag = TRUE;
 		}
-		
+		display_status(buffer);
+		return;
+	}
+	/* everything important goes onto msg list */
+	append_to_msg_list(buffer);
+	/* update flag about whether we need to show msg list to user */
+	/* being careful in case we are currently *in* the msg list
+	show routine */
+	if (!viewing_msgs && length_list(msg_list)>1) {
+		msg_flag = TRUE;
 	}
 	/* now put it to status area if appropriate */
-	if (strlen(buffer)>width) {
-		buffer[width-3]=0;
-		strcat(buffer, "...");
+	if (!lock_std_msg) {
+		if (strlen(buffer)>width) {
+			buffer[width-4]=0;
+			strcat(buffer, "...");
+			if (!viewing_msgs)
+				msg_flag = TRUE;
+		}
+		display_status(buffer);
 	}
-	display_status(buffer);
+}
+/*=========================================
+ * msg_impl -- put msg on the msg list
+ * This is a list that we show the user
+ * when the current command completes,
+ * unless it only had one item, and it got
+ * put on the status bar, and it wasn't too wide.
+ * Created: 2001/11/11, Perry Rapp
+ *=======================================*/
+static void
+append_to_msg_list (STRING msg)
+{
+		if (!msg_list)
+			msg_list = create_list();
+		enqueue_list(msg_list, strsave(msg));
 }
 /*=========================================
  * begin_action -- prepare to process users choice
@@ -2466,7 +2519,7 @@ void begin_action (void)
 }
 /*=========================================
  * end_action -- finished processing users choice
- *  show error list if appropriate
+ *  show msg list if appropriate
  * Created: 2001/11/11, Perry Rapp
  *=======================================*/
 static
@@ -2497,6 +2550,9 @@ clear_msgs (void)
 		msg_list = 0;
 	}
 	msg_flag = FALSE;
+	/* also clear status bar */
+	if (!lock_std_msg)
+		status_showing[0]=0;
 }
 /*=========================================
  * lock_status_msg -- temporarily hold status message
@@ -2505,7 +2561,7 @@ clear_msgs (void)
 void
 lock_status_msg (BOOLEAN lock)
 {
-	suppress_std_msg = lock;
+	lock_std_msg = lock;
 }
 /*=====================================
  * repaint_add_menu -- 

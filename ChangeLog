@@ -1,3 +1,11 @@
+2001-12-11 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog hdrs/feedback.h liflines/screen.c:
+
+	Changed status bar & msg list, to avoid losing messages.
+	(msgs from utility menu were being lost, because I'm 
+	painting the main menu on the fly now).
+
 2001-12-10 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/gedcomi.h gedlib/indiseq.c gedlib/messages.c
