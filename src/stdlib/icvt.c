@@ -21,6 +21,25 @@
 #include "zstr.h"
 #include "icvt.h"
 
+
+BOOLEAN
+iconv_can_trans (CNSTRING src, CNSTRING dest)
+{
+#ifdef HAVE_ICONV
+	iconv_t ict;
+
+	ict = iconv_open(dest, src);
+	if (ict == (iconv_t)-1)
+		return FALSE;
+    iconv_close(ict);
+	return TRUE;
+#else
+	src=src; /* unused */
+	dest=dest; /* unused */
+	return FALSE;
+#endif
+}
+
 /*===================================================
  * iconv_trans -- Translate string via iconv
  *  src:     [IN]  source codeset
@@ -29,11 +48,11 @@
  *  success: [OUT] success flag (optional)
  * Only called if HAVE_ICONV
  *=================================================*/
-ZSTR
-iconv_trans (CNSTRING src, CNSTRING dest, ZSTR zin, CNSTRING illegal, BOOLEAN * success)
+BOOLEAN
+iconv_trans (CNSTRING src, CNSTRING dest, CNSTRING sin, ZSTR * pzout, CNSTRING illegal)
 {
 #ifdef HAVE_ICONV
-	ZSTR zout;
+	ZSTR zout=0;
 	iconv_t ict;
 	const char * inptr;
 	char * outptr;
@@ -43,15 +62,14 @@ iconv_trans (CNSTRING src, CNSTRING dest, ZSTR zin, CNSTRING illegal, BOOLEAN * 
 	int transliterate=2; 
 	double expand=1.3;
 	int chwidth=1;
+	int inlen = sin ? strlen(sin) : 0;
 
 	ASSERT(src && dest);
 
 	ict = iconv_open(dest, src);
 
 	if (ict == (iconv_t)-1) {
-		if (success)
-			*success = FALSE;
-		return zin;
+		return FALSE;
 	}
 	if (!strncmp(dest, "UCS-2", strlen("UCS-2"))) {
 		chwidth = expand = 2;
@@ -65,16 +83,20 @@ iconv_trans (CNSTRING src, CNSTRING dest, ZSTR zin, CNSTRING illegal, BOOLEAN * 
 	}
 	/* TODO: What about UTF-16 or UTF-32 ? */
 
+	if (!inlen) {
+		return TRUE;
+	}
+
 	/* testing recursive transliteration in my private iconv, Perry, 2002.07.11 */
 #ifdef ICONV_SET_TRANSLITERATE
 	iconvctl(ict, ICONV_SET_TRANSLITERATE, &transliterate);
 #endif
 
-	zout = zs_newn((unsigned int)(zs_len(zin)*expand+6));
+	zout = zs_newn((unsigned int)(inlen*expand+6));
 
-	inptr = zs_str(zin);
+	inptr = sin;
 	outptr = zs_str(zout);
-	inleft = zs_len(zin);
+	inleft = inlen;
 	/* we are terminating with 4 zero bytes just in case dest is UCS-4 */
 	outleft = zs_allocsize(zout)-zs_len(zout)-4;
 	cvted = 0;
@@ -86,7 +108,7 @@ cvting:
 	/* zero terminate & fix output zstring */
 	/* there may be embedded nulls, if UCS-2/4 is target! */
 	*outptr=0;
-	zs_set_len(zout, outptr-zs_str(zout));
+	zs_set_len(&zout, outptr-zs_str(zout));
 
 	/* handle error cases */
 	if (cvted == (size_t)-1) {
@@ -94,7 +116,7 @@ cvting:
 		iconv in a dll & didn't get errno */
 		if (outleft<3) {
 			/* may be out of space, so grow & retry */
-			zs_reserve_extra(zout, (unsigned int)(inleft * expand + 6));
+			zs_reserve(&zout, (unsigned int)(inleft * expand + 6 + zs_allocsize(zout)));
 		} else {
 			/* unconvertible input character */
 			/* append placeholder & skip over */
@@ -107,7 +129,7 @@ cvting:
 				wid = inleft;
 			inptr += wid;
 			inleft -= wid;
-			zs_cat(zout, placeholder);
+			zs_cats(&zout, placeholder);
 		}
 		/* update output variables */
 		/* (may have reallocated, plus need to point to end */
@@ -125,18 +147,17 @@ cvting:
 		}
 	}
 	*outptr=0;
-	zs_set_len(zout, outptr-zs_str(zout));
+	zs_set_len(&zout, outptr-zs_str(zout));
 
 	iconv_close(ict);
-	zs_free(zin);
-	if (success)
-		*success = TRUE;
-	return zout;
+	*pzout = zout;
+	return TRUE;
 #else
-	if (success)
-		*success = FALSE;
 	src=src; /* unused */
 	dest=dest; /* unused */
-	return zin;
+	sin=sin; /* unused */
+	pzout=pzout; /* unused */
+	illegal=illegal; /* unused */
+	return FALSE;
 #endif /* HAVE_ICONV */
 }

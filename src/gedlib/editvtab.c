@@ -141,7 +141,7 @@ trans_edin (STRING input, INT len)
 	ZSTR zstr = translate_string_to_zstring(ttmi, input);
 	STRING str = strdup(zs_str(zstr));
 	len=len; /* unused */
-	zs_free(zstr);
+	zs_free(&zstr);
 	return str;
 }
 /*==============================================
@@ -158,6 +158,6 @@ trans_ined (STRING input, INT len)
 	ZSTR zstr = translate_string_to_zstring(ttmo, input);
 	STRING str = strdup(zs_str(zstr));
 	len=len; /* unused */
-	zs_free(zstr);
+	zs_free(&zstr);
 	return str;
 }

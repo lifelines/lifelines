@@ -35,6 +35,15 @@
 
 /* Types */
 
+/*
+Need translation chain
+ made up of translation step
+ each step is either iconv step or custom step
+ need routine to build chain (check for rule, & try to construct chain)
+ put embedded table into chain (?) with flag for which end, or put into list ? how does this work now when edited ?
+*/
+
+
 /* nodes that make up the tree that is a custom character translation table */
 typedef struct xnode *XNODE;
 struct xnode {

@@ -1,3 +1,16 @@
+2002-11-23 Perry Rapp
+
+	* ChangeLog src/gedlib/editvtab.c src/gedlib/indiseq.c
+	src/gedlib/translat.c src/gedlib/valtable.c
+	src/hdrs/Makefile.am src/hdrs/icvt.h src/hdrs/translat.h
+	src/hdrs/zstr.h src/interp/builtin.c src/interp/interp.c
+	src/interp/rassa.c src/stdlib/Makefile.am src/stdlib/icvt.c
+	src/stdlib/llstrcmp.c src/stdlib/strcvt.c src/stdlib/zstr.c
+	*DELETED src/hdrs/bfs.h
+	*DELETED src/stdlib/bfs.c:
+
+	Finished replacing bfs with zstr.
+
 2002-11-22 Perry Rapp
 
 	* ChangeLog src/hdrs/llstdlib.h src/liflines/llexec.c

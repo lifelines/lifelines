@@ -51,7 +51,6 @@ get_wchar_codeset_name (void)
 /*===================================================
  * makewide -- convert internal to wchar_t *
  * handling annoyance that MS-Windows wchar_t is small
- * This only succeeds if internal charset is UTF-8
  * Either returns 0 if fails, or a zstring which actually
  * contains wchar_t characters.
  *=================================================*/
@@ -61,13 +60,9 @@ makewide (const char *str)
 	ZSTR zstr=0;
 	if (int_codeset && int_codeset[0]) {
 		CNSTRING dest = get_wchar_codeset_name();
-		BOOLEAN success;
-		zstr = zs_newn(strlen(str)*4+3);
 		/* dest = "wchar_t" doesn't work--Perry, 2002-11-20 */
-		zs_set(zstr, str);
-		zstr = iconv_trans(int_codeset, dest, zstr, "?", &success);
-		if (!success) {
-			zs_del(&zstr);
+		if (!iconv_trans(int_codeset, dest, str, &zstr, "?")) {
+			zs_free(&zstr);
 		}
 	}
 	return zstr;

@@ -1782,7 +1782,7 @@ append_all_tags(INDISEQ seq, NODE node, STRING tagname
 					NODE chil;
 					/* include non-pointers, but mark invalid with val==-1 */
 					val = -1;
-					zs_set(zstr, key);
+					zs_sets(&zstr, key);
 					/* collect any CONC or CONT children */
 					for (chil = nchild(node); chil; chil=nsibling(chil)) {
 						STRING text = nval(chil) ? nval(chil) : "";
@@ -1794,12 +1794,12 @@ append_all_tags(INDISEQ seq, NODE node, STRING tagname
 							break;
 						}
 						if (cr)
-							zs_cat(zstr, "||");
-						zs_cat(zstr, text);
+							zs_cats(&zstr, "||");
+						zs_cats(&zstr, text);
 					}
 					strfree(&skey);
 					skey = strdup(zs_str(zstr));
-					zs_free(zstr);
+					zs_free(&zstr);
 				} else {
 					include=FALSE;
 				}

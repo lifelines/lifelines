@@ -1958,19 +1958,18 @@ make_internal_string_node (PACTX pactx, STRING str)
 	PNODE node = 0;
 	if (int_codeset && int_codeset[0] && str && str[0]) {
 		STRING fname = pactx->fullpath;
-		STRING rcodeset = get_rptfile_prop(pactx, fname, "char_encoding");
-		if (rcodeset && rcodeset[0] && !eqstr(int_codeset, rcodeset)) {
-			ZSTR zstr=zs_newn(strlen(str)*4+3);
-			BOOLEAN success;
+		STRING rptcodeset = get_rptfile_prop(pactx, fname, "char_encoding");
+		if (rptcodeset && rptcodeset[0] && !eqstr(int_codeset, rptcodeset)) {
+			ZSTR zstr=0;
 			struct tranmapping_s tm;
 			memset(&tm, 0, sizeof(tm));
-			tm.iconv_src = rcodeset;
+			tm.iconv_src = rptcodeset;
 			tm.iconv_dest = int_codeset;
 
-			zs_set(zstr, str);
-			zstr = iconv_trans(rcodeset, int_codeset, zstr, "?", &success);
-			node = string_node(pactx, zs_str(zstr));
-			zs_free(zstr);
+			if (iconv_trans(rptcodeset, int_codeset, str, &zstr, "?"))
+				str = zs_str(zstr);
+			node = string_node(pactx, str);
+			zs_free(&zstr);
 		}
 	}
 	if (!node)

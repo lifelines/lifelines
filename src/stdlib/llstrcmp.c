@@ -158,7 +158,7 @@ widecmp (char *str1, char *str2, INT *rtn)
 	rtn=rtn; /* unused */
 #endif /* HAVE_WCSCOLL */
 
-	zs_del(&zws1);
-	zs_del(&zws2);
+	zs_free(&zws1);
+	zs_free(&zws2);
 	return success;
 }

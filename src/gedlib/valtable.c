@@ -92,7 +92,7 @@ init_valtab_from_file (STRING fname, TABLE tab, TRANMAPPING ttm, INT sep, STRING
 	zstr = translate_string_to_zstring(ttm, str);
 	stdfree(str); /* done with original record - we use translated record */
  	rc = init_valtab_from_string(zs_str(zstr), tab, sep, pmsg);
-	zs_free(zstr);
+	zs_free(&zstr);
 	return rc;
 }
 /*========================================================

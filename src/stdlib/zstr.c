@@ -45,9 +45,11 @@ struct zstr_s {
 	int magic;
 };
 
+/* reallocate buffer to be at least newmax */
 static void
-zalloc (ZSTR zstr, unsigned int newmax)
+zalloc (ZSTR * pzstr, unsigned int newmax)
 {
+	ZSTR zstr = *pzstr;
 	char * ptr;
 	int len = zs_len(zstr);
 	while (zstr->max < newmax)
@@ -83,32 +85,29 @@ ZSTR
 zs_newn (unsigned int min)
 {
 	ZSTR zstr = (ZSTR)malloc(sizeof(*zstr));
-	zstr->str = (char *)malloc(min);
+	unsigned int bksiz = (min<2048)?(min<64?32:128):(min<16384?2048:16384);
+	while (bksiz < min)
+		bksiz = bksiz << 1;
+	zstr->str = (char *)malloc(bksiz);
 	zstr->str[0] = 0;
 	zstr->end = zstr->str;
-	zstr->max = min;
+	zstr->max = bksiz;
 	zstr->magic = 7843;
 	DBGCHK(zstr);
 	return zstr;
 }
-/* delete pointed to zstring, and zero pointer */
+/* delete zstring & clear caller's pointer */
 void
-zs_del (ZSTR * pzstr)
+zs_free (ZSTR * pzstr)
 {
-	if (*pzstr) {
-		zs_free(*pzstr);
-		*pzstr = 0;
-	}
-}
-/* delete all contents & allocations */
-void
-zs_free (ZSTR zstr)
-{
+	ZSTR zstr = *pzstr;
+	if  (!zstr) return;
 	DBGCHK(zstr);
 	memset(zstr->str, 0, zstr->max);
 	memset(zstr, 0, sizeof(*zstr));
 	free(zstr->str);
 	free(zstr);
+	*pzstr = NULL;
 }
 /* return current string */
 STRING
@@ -121,6 +120,7 @@ zs_str (ZSTR zstr)
 unsigned int
 zs_len (ZSTR zstr)
 {
+	if (!zstr) return 0;
 	DBGCHK(zstr);
 	return zstr->end - zstr->str;
 }
@@ -128,6 +128,7 @@ zs_len (ZSTR zstr)
 unsigned int
 zs_allocsize (ZSTR zstr)
 {
+	if (!zstr) return 0;
 	DBGCHK(zstr);
 	return zstr->max;
 }
@@ -142,8 +143,13 @@ zs_fix (ZSTR zstr)
 }
 /* set length directly; caller may use this if using embedded nulls */
 char *
-zs_set_len (ZSTR zstr, unsigned int len)
+zs_set_len (ZSTR * pzstr, unsigned int len)
 {
+	ZSTR zstr = *pzstr;
+	if  (!zstr) {
+		zstr = zs_newn(len>0?len:0);
+		*pzstr = zstr;
+	}
 	DBGCHK(zstr);
 	if (len == -1) {
 		len = strlen(zstr->str);
@@ -153,87 +159,111 @@ zs_set_len (ZSTR zstr, unsigned int len)
 	return zstr->str;
 }
 /* set zstring value to input zero-terminated string*/
-char *
-zs_set (ZSTR zstr, const char * txt)
+static char *
+zs_set_with_len (ZSTR * pzstr, const char * txt, unsigned int tlen)
 {
-	unsigned int tlen;
+	ZSTR zstr = *pzstr;
+	if (!zstr) {
+		*pzstr = zstr = zs_newn(tlen);
+	}
 	DBGCHK(zstr);
-	if (!txt || !txt[0]) return zstr->str;
-	tlen = strlen(txt);
-	if (tlen + 1 > zstr->max)
-		zalloc(zstr, tlen+1);
+	if (!tlen) return zstr->str;
+	if (tlen + 1 > zstr->max) {
+		zalloc(&zstr, tlen+1);
+		*pzstr = zstr;
+	}
 	strcpy(zstr->str, txt);
 	zstr->end = zstr->str + tlen;
 	return zstr->str;
 }
+/* set zstring value to input zero-terminated string*/
+char *
+zs_sets (ZSTR * pzstr, const char * txt)
+{
+	unsigned int tlen = txt ? strlen(txt) : 0;
+	return zs_set_with_len(pzstr, txt, tlen);
+}
+/* set zstring value to copy of another zstring value */
+char *
+zs_setz (ZSTR * pzstr, ZSTR zsrc)
+{
+	const char * txt = zsrc ? zsrc->str : "";
+	unsigned int tlen = zsrc ? zsrc->end-zsrc->str : 0;
+	return zs_set_with_len(pzstr, txt, tlen);
+}
 /* append zero-terminated input to zstring */
 char *
-zs_cat (ZSTR zstr, const char * txt)
+zs_cats (ZSTR * pzstr, const char * txt)
 {
+	ZSTR zstr = *pzstr;
 	int tlen;
 	DBGCHK(zstr);
 	if (!txt || !txt[0]) return zstr->str;
 	tlen = strlen(txt);
-	if (zs_len(zstr) + tlen + 1 > zstr->max)
-		zalloc(zstr, zs_len(zstr) + tlen + 1);
+	if (zs_len(zstr) + tlen + 1 > zstr->max) {
+		zalloc(&zstr, zs_len(zstr) + tlen + 1);
+		*pzstr = zstr;
+	}
 	strcpy(zstr->end, txt);
 	zstr->end += tlen;
 	return zstr->str;
 }
 /* append input character to zstring */
 char *
-zs_catc (ZSTR zstr, char ch)
+zs_catc (ZSTR * pzstr, char ch)
 {
 	char buffer[2];
 	buffer[0] = ch;
 	buffer[1] = 0;
-	return zs_cat(zstr, buffer);
+	return zs_cats(pzstr, buffer);
 }
 /* set printf style input to zstring */
 char *
-zs_setf (ZSTR zstr, const char * fmt, ...)
+zs_setf (ZSTR * pzstr, const char * fmt, ...)
 {
 	va_list args;
-	DBGCHK(zstr);
 	va_start(args, fmt);
-	zs_setv(zstr, fmt, args);
+	zs_setv(pzstr, fmt, args);
 	va_end(args);
-	return zstr->str;
+	return (*pzstr)->str;
 }
 /* append printf style input to zstring */
 char *
-zs_catf (ZSTR zstr, const char * fmt, ...)
+zs_catf (ZSTR * pzstr, const char * fmt, ...)
 {
 	va_list args;
-	DBGCHK(zstr);
 	va_start(args, fmt);
-	zs_catv(zstr, fmt, args);
+	zs_catv(pzstr, fmt, args);
 	va_end(args);
-	return zstr->str;
+	return (*pzstr)->str;
 }
 /* set varargs printf style input to zstring */
 char *
-zs_setv (ZSTR zstr, const char * fmt, va_list args)
+zs_setv (ZSTR * pzstr, const char * fmt, va_list args)
 {
-	zs_clear(zstr);
-	zs_catv(zstr, fmt, args);
-	return zstr->str;
+	zs_clear(pzstr);
+	zs_catv(pzstr, fmt, args);
+	return (*pzstr)->str;
 }
 /* append varargs printf style input to zstring */
 char *
-zs_catv (ZSTR zstr, const char * fmt, va_list args)
+zs_catv (ZSTR * pzstr, const char * fmt, va_list args)
 {
 	/* if we know that the system implementation of snprintf was
 	standards conformant, we could use snprintf(0, ...), but how to tell ? */
 	static char buffer[4096];
 	vsnprintf(buffer, sizeof(buffer), fmt, args);
-	zs_cat(zstr, buffer);
-	return zstr->str;
+	zs_cats(pzstr, buffer);
+	return (*pzstr)->str;
 }
 /* set zstring to empty */
 char *
-zs_clear (ZSTR zstr)
+zs_clear (ZSTR * pzstr)
 {
+	ZSTR zstr = *pzstr;
+	if (!zstr) {
+		*pzstr = zstr = zs_new();
+	}
 	DBGCHK(zstr);
 	zstr->str[0] = 0;
 	zstr->end = zstr->str;
@@ -241,16 +271,22 @@ zs_clear (ZSTR zstr)
 }
 /* ensure at least min bytes in underlying buffer */
 char *
-zs_reserve (ZSTR zstr, unsigned int min)
+zs_reserve (ZSTR * pzstr, unsigned int min)
 {
-	if (min > zstr->max)
-		zalloc(zstr, min);
-	return zstr->str;
+	if (!*pzstr)
+		*pzstr = zs_newn(min);
+	if (min > (*pzstr)->max)
+		zalloc(pzstr, min);
+	return (*pzstr)->str;
 }
 /* add at least min bytes more to underlying buffer */
 char *
-zs_reserve_extra (ZSTR zstr, unsigned int delta)
+zs_reserve_extra (ZSTR * pzstr, unsigned int delta)
 {
-	zalloc(zstr, zstr->max+delta);
-	return zstr->str;
+	if (!*pzstr) {
+		*pzstr = zs_newn(delta);
+	} else {
+		zalloc(pzstr, (*pzstr)->max+delta);
+	}
+	return (*pzstr)->str;
 }

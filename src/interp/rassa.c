@@ -461,7 +461,7 @@ poutput (STRING str, BOOLEAN *eflg)
 		FATAL();
 	}
 exit_poutput:
-	zs_free(zstr);
+	zs_free(&zstr);
 }
 /*==================================================+
  * adjust_cols -- Adjust column after printing string
