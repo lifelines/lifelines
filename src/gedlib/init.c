@@ -53,6 +53,9 @@ char *getenv();
 init_lifelines ()
 {
 	STRING e, emsg;
+	char unix_tempfile[] = "/tmp/lltmpXXXXXX";
+	char win32_tempfile[] = "\\temp\\lltmpXXXXXX";
+
 	tagtable = create_table();
 	placabbvs = create_table();
 	useropts = create_table();
@@ -66,9 +69,9 @@ init_lifelines ()
 	if (!e || *e == 0) e = (STRING) getenv("EDITOR");
 	if (!e || *e == 0) e = (STRING) "vi";
 #ifdef WIN32
-	editfile = strsave(mktemp("\\tmp\\lltmpXXXXXX"));
+	editfile = strsave(mktemp(win32_tempfile));
 #else
-	editfile = strsave(mktemp("/tmp/lltmpXXXXXX"));
+	editfile = strsave(mktemp(unix_tempfile));
 #endif
 	editstr = (STRING) stdalloc(strlen(e) + strlen(editfile) + 2);
 	sprintf(editstr, "%s %s", e, editfile);
