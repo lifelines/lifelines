@@ -1,3 +1,11 @@
+2001-10-16 Matt Emmerton <memmerto@users.sourceforge.net)
+
+	* ChangeLog liflines/main.c
+
+	Add a missing #include "config.h" to main.c that was causing
+	compilation problems on Debian.  Thanks to Jens Arvidsson
+	for bringing this to my attention.
+
 2001-10-09 Matt Emmerton <memmerto@users.sourceforge.net)
 
 	* ChangeLog configure.in gedlib/translat.c liflines/main.c

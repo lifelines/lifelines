@@ -32,6 +32,9 @@
  *   3.0.3 - 02 Jul 96
  *===========================================================*/
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 #include "sys_inc.h"
 #ifdef HAVE_LOCALE_H
 #include <locale.h>
