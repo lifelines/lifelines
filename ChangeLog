@@ -16,6 +16,10 @@
 
 	Bump version to 3.0.29.
 
+	* ChangeLog configure.in
+
+	Bump also configure.in to 3.0.29.
+
 2003-08-07 Perry Rapp
 
 	* ChangeLog reports/st/st_aux.ll reports/st/st_collate.ll
