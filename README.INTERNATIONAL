@@ -41,6 +41,11 @@ Issues for translators:
   may be internationalized. Also, the column widths of these are figured
   dynamically from the width of the widest menu item.
 
+ Months:
+  Month short & long names are explicitly in the translations, rather
+  than being drawn from strftime, because the package is used on
+  MSWin^h^h^h^h^h platforms with poor libc support.
+
  May:
   The month of May has the same short & long form in English, so the
   short form is marked as "may**", so that it may be localized. Do not
@@ -49,10 +54,6 @@ Issues for translators:
  French Republic months:
   The names of the French Republic months (eg, Vendemiaire) should
   probably stay in French.
-
- Unfinished internationalization:
-  The internationalization of the program strings is not complete; it may
-  not even be quite 50% complete. It is an ongoing effort.
 
  printf-style format specifiers (%s and %d):
   The order of the printf specifiers must be preserved. The glibc extensions

@@ -17,6 +17,11 @@
 	Updated win32 resource version numbers. Bumped code version
 	to 3.0.12post.
 
+ 	* ChangeLog README.INTERNATIONAL gedlib/messages.c:
+
+	Added comments in messages.c. Removed trailing comments (they come
+	out in wrong place in po file).
+
 2002-05-01 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog configure.in lifelines.spec

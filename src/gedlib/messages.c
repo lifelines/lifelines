@@ -41,11 +41,6 @@ STRING empstr = SS "                                                ";
 STRING empstr71 = SS "                                                                       ";
 STRING empstr120 = SS "                                                                                                                        ";
 
-/*
- 2002.04.24
-  Perry is prefixing string constants with qS as he checks them for
-  localization (and so they can all be found easily)
-*/
 
 ZST qSiddbse      = N_("You must identify a database.");
 ZST qSidldir      = N_("What directory holds the LifeLines database?");
@@ -287,10 +282,12 @@ ZST qSaskstr      = N_("enter string: ");
 ZST qSaskint      = N_("enter integer:");
 ZST qSasknam      = N_("enter name: ");
 
-/* new records */
+/* new records prototypes */
+	/* (all-caps words are in GEDCOM language -- don't change) */
 ZST qSdefsour     = N_("0 SOUR\n1 REFN\n1 TITL Title\n1 AUTH Author");
 ZST qSdefeven     = N_("0 EVEN\n1 REFN\n1 DATE\n1 PLAC\n1 INDI\n  2 NAME\n  2 ROLE\n1 SOUR");
 ZST qSdefothr     = N_("0 XXXX\n1 REFN");
+/* end new record prototypes */
 
 /* node.c errors */
 ZST qSfileof      = N_("The file is as positioned at EOF.");
@@ -303,7 +300,7 @@ ZST qSrernwt      = N_("Line %d: This line needs white space before tag.");
 ZST qSrerilv      = N_("Line %d: This line has an illegal level.");
 ZST qSrerwlv      = N_("The record begins at wrong level.");
 
-/* signals */
+/* &&begin signals */
 ZST qScoredump    = N_("\nAborting now. Core dump? [y/n]");
 ZST qSprogsig     = N_("Looks like a program was running.\nCheck file %1 around line %2.\n");
 ZST qSsignal      = N_("signal %1: %2");
@@ -329,7 +326,7 @@ ZST qSsig18       = N_("DEATH OF CHILD");
 ZST qSsig19       = N_("POWER-FAIL RESTART");
 ZST qSsig20       = N_("WINDOW CHANGE");
 ZST qSsigunk      = N_("Unknown signal");
-
+/* &&end signals */
 
 /* browse display stuff */
 ZST qSdspl_indi   = N_("person");
@@ -338,20 +335,28 @@ ZST qSdspl_fath   = N_("father");
 ZST qSdspl_moth   = N_("mother");
 ZST qSdspl_spouse = N_("spouse");
 ZST qSdspl_child  = N_("child");
-/* display abbreviations */
-ZST qSdspa_mar    = N_("m. ");    /* married */
-ZST qSdspa_div    = N_("div. ");  /* divorced */
-ZST qSdspa_bir    = N_("b. ");    /* born */
-ZST qSdspa_chr    = N_("bap. ");  /* baptised */
-ZST qSdspa_dea    = N_("d. ");    /* died */
-ZST qSdspa_bur    = N_("bur. ");  /* buried */
-ZST qSdspa_chbr   = N_("cb. ");   /* child born */
-/* display longer forms */
+/* &&begin display abbreviations */
+	/* m.: married */
+ZST qSdspa_mar    = N_("m. ");
+	/* div.: divorced */
+ZST qSdspa_div    = N_("div. ");
+	/* b.: born */
+ZST qSdspa_bir    = N_("b. ");
+	/* bap.: baptized */
+ZST qSdspa_chr    = N_("bap. ");
+	/* d.: died */
+ZST qSdspa_dea    = N_("d. ");
+	/* bur.: buried */
+ZST qSdspa_bur    = N_("bur. ");
+	/* cb.: child born */
+ZST qSdspa_chbr   = N_("cb. ");
+/* &&end display abbreviations, begin long forms */
 ZST qSdspl_mar    = N_("married: ");
 ZST qSdspl_bir    = N_("born: ");
 ZST qSdspl_chr    = N_("bapt: ");
 ZST qSdspl_dea    = N_("died: ");
 ZST qSdspl_bur    = N_("buri: ");
+/* &&end display long forms */
 
 /* editing errors */
 ZST qSbadind      = N_("You cannot edit the INDI line in a person record.");
@@ -371,6 +376,7 @@ ZST qSbadmul      = N_("The record contains multiple level 0 lines.");
 ZST qSbadenm      = N_("This person record has bad GEDCOM name syntax.");
 ZST qSbadparsex   = N_("You cannot change the sex of a parent.");
 ZST qSbadirefn    = N_("REFN key is already in use.");
+
 ZST qStag2lng2cnc = N_("Tag is too long to connect automatically.");
 ZST qSdbrecstats  = N_("Database records (%dP, %dF, %dS, %dE, %dX)");
 
@@ -572,9 +578,13 @@ ZST qSdatetrl_adB = N_("AD");
 ZST qSdatetrl_adC = N_("C.E.");
 ZST qSdatetrl_adD = N_("CE");
 	/* &&calendar pics */
+	/* Julian calendar year */
 ZST qScaljul      = N_("%1J");
+	/* Hebrew calendar year */
 ZST qScalheb      = N_("%1 HEB");
+	/* French Republic calendar year */
 ZST qScalfr       = N_("%1 FR");
+	/* Roman calendar year -- Anno Urbe Condite ? */
 ZST qScalrom      = N_("%1 AUC");
 	/* &&Gregorian/Julian months */
 ZST qSmon_gj1A    = N_("jan");
