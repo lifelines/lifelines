@@ -60,8 +60,12 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 	RECORD rec=0;
 	INDISEQ seq, newseq;
 
+	ASSERT(prec1 && prec2 && pseq);
+	ASSERT(!*prec1 && !*prec2 && *pseq);
+	seq = *pseq;
+	*pseq = 0;
 	current_seq = NULL;
-	if (!pseq || !(seq = *pseq) || (len = length_indiseq(seq)) <= 0)
+	if ((len = length_indiseq(seq)) <= 0)
 		return  BROWSE_QUIT;
 	top = cur = 0;
 	mark =  -1;
