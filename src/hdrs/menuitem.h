@@ -75,7 +75,7 @@ ScreenInfo f_ScreenInfo[MAX_SCREEN];
 
 
 enum { 
-	CMD_NONE /* unrecognized */
+	CMD_NONE /* unrecognized or unimplemented */
 	, CMD_PARTIAL /* part of a multichar sequence */
 	, CMD_QUIT, CMD_MENU_MORE, CMD_MENU_TOGGLE
 	, CMD_MENU_GROW, CMD_MENU_SHRINK
