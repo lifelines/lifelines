@@ -21,6 +21,11 @@
 
 	Add lacking headers to EXTRA_DIST in src/stdlib/Makefile.am.
 
+	* ChangeLog src/hdrs/pvalue.h src/interp/builtin.c
+	src/interp/more.c src/interp/pvalmath.c src/interp/pvalue.c
+
+	Rename PANY to PNULL.
+
 2005-01-15 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c src/hdrs/list.h

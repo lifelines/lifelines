@@ -379,7 +379,7 @@ is_numeric_zero (PVALUE val)
 	switch (ptype(val)) {
 	case PINT: return pvalue_to_int(val) == 0;
 	case PFLOAT: return pvalue_to_float(val) == 0.;
-	case PANY: return TRUE;
+	case PNULL: return TRUE;
 	}
 	ASSERT(0); /* No other numeric types */
 	return FALSE;
@@ -392,11 +392,11 @@ num_conform_pvalues (CNSTRING op, PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR 
 {
 	ASSERT(val1 && val2);
 
-	if (ptype(val1) == PANY)
+	if (ptype(val1) == PNULL)
 		ptype(val1) = ptype(val2);
-	if (ptype(val2) == PANY)
+	if (ptype(val2) == PNULL)
 		ptype(val2) = ptype(val1);
-	if (ptype(val1) == PANY && ptype(val2) == PANY)
+	if (ptype(val1) == PNULL && ptype(val2) == PNULL)
 		ptype(val1) = ptype(val2) = PINT;
 	if (is_numeric_pvalue(val1) && is_numeric_pvalue(val2)) {
 		INT hitype = max(ptype(val1), ptype(val2));

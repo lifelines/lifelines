@@ -596,7 +596,7 @@ makestring (PVALUE val, STRING str, INT len, BOOLEAN *eflg)
 		case PNONE: 
 			llstrapps(str, len, uu8, "<NONE>");
 			break;
-		case PANY:
+		case PNULL:
 			llstrapps(str, len, uu8, "<NULL>");
 			break;
 		case PINT:

@@ -3582,7 +3582,7 @@ __free (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	    val = symtab_valueofbool(globtab, iident(arg), &there);
 	}
 	if (there && val) {
-		set_pvalue(val, PANY, NULL);
+		set_pvalue(val, PNULL, NULL);
 	}
 	return NULL;
 }

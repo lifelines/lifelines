@@ -67,7 +67,7 @@ static void table_pvcleaner(CNSTRING key, UNION uval);
  *********************************************/
 
 static char *ptypes[] = {
-	"PNONE", "PANY", "PINT", "PLONG", "PFLOAT", "PBOOL", "PSTRING",
+	"PNONE", "PNULL", "PINT", "PLONG", "PFLOAT", "PBOOL", "PSTRING",
 	"PGNODE", "PINDI", "PFAM", "PSOUR", "PEVEN", "POTHR", "PLIST",
 	"PTABLE", "PSET", "PARRAY"
 };
@@ -120,7 +120,7 @@ set_pvalue (PVALUE val, INT type, VPTR value)
 	/* sanity check */
 	switch(type) {
 	case PNONE: 
-	case PANY:
+	case PNULL:
 		ASSERT(!value);
 		break;
 	}
@@ -252,7 +252,7 @@ clear_pvalue (PVALUE val)
 	PINT, PBOOLEAN 
 	*/
 	/*
-	PANY is a null value
+	PNULL is a null value
 	*/
 	case PGNODE:
 		{
@@ -568,7 +568,7 @@ BOOLEAN
 is_numeric_pvalue (PVALUE val)
 {
 	INT type = ptype(val);
-	return type == PINT || type == PFLOAT || type == PANY;
+	return type == PINT || type == PFLOAT || type == PNULL;
 }
 /*===========================================================
  * eq_conform_pvalues -- Make the types of two values conform
@@ -580,9 +580,9 @@ eq_conform_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 
 	ASSERT(val1 && val2);
 	if (ptype(val1) == ptype(val2)) return;
-	if (ptype(val1) == PANY)
+	if (ptype(val1) == PNULL)
 		ptype(val1) = ptype(val2);
-	if (ptype(val2) == PANY)
+	if (ptype(val2) == PNULL)
 		ptype(val2) = ptype(val1);
 	if (ptype(val1) == ptype(val2)) return;
 	if (ptype(val1) == PINT && pvalue_to_int(val1) == 0 && !is_numeric_pvalue(val2))
@@ -618,17 +618,17 @@ coerce_pvalue (INT type, PVALUE val, BOOLEAN *eflg)
 		set_pvalue_bool(val, boo);
 		return;
 	}
-	/* Anything is convertible to PANY */
+	/* Anything is convertible to PNULL */
 	/* Perry, 2002.02.16: This looks suspicious to me, but I 
 	don't know how it is used -- it might be used in some
 	eq_conform_pvalues call(s) ? */
-	if (type == PANY) {
-		ptype(val) = PANY;
+	if (type == PNULL) {
+		ptype(val) = PNULL;
 		return;
 	}
 
-	/* PANY or PINT with NULL (0) value is convertible to any scalar (1995.07.31) */
-	if (ptype(val) == PANY || (ptype(val) == PINT && pvalue_to_int(val) == 0)) {
+	/* PNULL or PINT with NULL (0) value is convertible to any scalar (1995.07.31) */
+	if (ptype(val) == PNULL || (ptype(val) == PINT && pvalue_to_int(val) == 0)) {
 		if (type == PSET || type == PTABLE || type == PLIST) goto bad;
 		/*
 		  INTs convert to FLOATs numerically further down, no special 
@@ -692,7 +692,7 @@ coerce_pvalue (INT type, PVALUE val, BOOLEAN *eflg)
 		}
 		break;
 	/* Nothing else is convertible to anything else */
-	/* record types (PINDI...), PANY, PGNODE */
+	/* record types (PINDI...), PNULL, PGNODE */
 	}
 
 	/* fall through to failure */
@@ -961,12 +961,12 @@ describe_pvalue (PVALUE val)
 	return zstr;
 }
 /*==================================
- * PANY: pvalue with no content
+ * PNULL: pvalue with no content
  *================================*/
 PVALUE
 create_pvalue_any (void)
 {
-	return create_pvalue(PANY, NULL);
+	return create_pvalue(PNULL, NULL);
 }
 /*==================================
  * PINT: pvalue containing an int
