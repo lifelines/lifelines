@@ -1,5 +1,5 @@
 
-AUTOMAKE_OPTIONS = no-dependencies
+# AUTOMAKE_OPTIONS = no-dependencies
 
 # what are we going to build?
 bin_PROGRAMS = llines

@@ -1,6 +1,6 @@
 # Makefile for the LifeLines stdlib area
 
-AUTOMAKE_OPTIONS = no-dependencies
+# AUTOMAKE_OPTIONS = no-dependencies
 
 noinst_LIBRARIES = libstdlib.a
 

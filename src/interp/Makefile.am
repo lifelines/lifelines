@@ -1,6 +1,6 @@
 # Makefile for the LifeLines report interpreter subsystem
 
-AUTOMAKE_OPTIONS = no-dependencies
+# AUTOMAKE_OPTIONS = no-dependencies
 
 noinst_LIBRARIES = libinterp.a
 

@@ -1,3 +1,9 @@
+2000-11-22  Marc Nozell  <marc@nozell.com>
+
+	* Update all Makefile.am files to automatically generate
+	dependencies.  Header files have been moving around and increasing
+	in number, so this seem reasonable to do now.
+
 2000-11-21 Marc Nozell <marc@nozell.com>
 
 	* Fix a misleading typos in ChangeLog in 2000-11-09 entry.
@@ -177,7 +183,7 @@
 	* interp/eval.c: Cleanup. Call prog_error() directly with vararg
 	argument instead of first preparing a string.
 	
-2000-11-10  Marc Nozell  <nozell@dl360r6.ispworks.com>
+2000-11-10  Marc Nozell  <marc@nozell.com>
 
 	* Added lldb.ll report; list of all INDIs suitable to import into
 	a palm pilot database

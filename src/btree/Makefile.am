@@ -1,6 +1,6 @@
 # This makefile creates the B-Tree database subsystem
 
-AUTOMAKE_OPTIONS = no-dependencies
+# AUTOMAKE_OPTIONS = no-dependencies
 
 noinst_LIBRARIES = libbtree.a
 

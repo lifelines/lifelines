@@ -1,6 +1,6 @@
 # Makefile for the LifeLines gedlib area
 
-AUTOMAKE_OPTIONS = no-dependencies
+# AUTOMAKE_OPTIONS = no-dependencies
 
 noinst_LIBRARIES = libgedcom.a
 
