@@ -599,8 +599,6 @@ __givens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE arg = (PNODE) iargs(node);
 	NODE name, indi = eval_indi(arg, stab, eflg, NULL);
 	STRING str;
-	static char scratch[MAXGEDNAMELEN+1];
-	XLAT ttmr = NULL; /* do not translate until output time */
 	if (*eflg) {
 		prog_var_error(node, stab, arg, NULL, _(nonindx), "givens", "1");
 		return NULL;
@@ -615,8 +613,7 @@ __givens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return create_pvalue_from_string(0);
 	}
 	str = givens(nval(name));
-	translate_string(ttmr, str, scratch, ARRSIZE(scratch));
-	return create_pvalue_from_string(scratch);
+	return create_pvalue_from_string(str);
 }
 /*===============================+
  * __set -- Assignment operation
@@ -873,7 +870,6 @@ __long (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE arg = iargs(node);
 	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
 	NODE even;
-	XLAT ttmr = NULL; /* do not translate until output time */
 	STRING str;
 	if (*eflg) {
 		prog_var_error(node, stab, arg, val, nonnod1, "long");
@@ -899,7 +895,6 @@ __short (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
 	NODE even;
 	/* RFMT rfmt = NULL; */ /* currently no reformatting for reports */
-	XLAT ttmr = NULL; /* do not translate until output time */
 	STRING str;
 	if (*eflg) {
 		prog_var_error(node, stab, arg, val, nonnod1, "short");
@@ -2581,7 +2576,6 @@ PVALUE
 __date (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE line;
-	XLAT ttmr = NULL; /* do not translate until output time */
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
 	if (*eflg) {
 		prog_error(node, nonnod1, "date");

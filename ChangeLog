@@ -20,6 +20,10 @@
 	Fix crash involving pointers.
 	Restore ALL_LINGUAS (to ease life of Debian maintainer).
 
+	*
+
+	Remove unnecessary code conversions.
+
 2002-12-14 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c:
