@@ -13,6 +13,7 @@
 
 /* WIN32 - COMMON INCLUDES */
 #include <io.h>
+#include <limits.h>
 
 /* WIN32 - BORLAND INCLUDES */
 #ifdef __BORLANDC__
@@ -29,5 +30,6 @@
 
 /* UNIX INCLUDES */
 #include <unistd.h>
+#include <sys/param.h>
 
 #endif
