@@ -122,7 +122,7 @@ install  -m 755 -o 0 -g 0 reports/timeline1.ll /usr/local/share/lifelines/report
 install  -m 755 -o 0 -g 0 reports/timeline2.ll /usr/local/share/lifelines/reports/timeline2.ll
 install  -m 755 -o 0 -g 0 reports/tinytafel1.ll /usr/local/share/lifelines/reports/tinytafel1.ll
 install  -m 755 -o 0 -g 0 reports/tinytafel2.ll /usr/local/share/lifelines/reports/tinytafel2.ll
-install  -m 755 -o 0 -g 0 reports/tinytafel2.ll /usr/local/share/lifelines/reports/tree.tex
+install  -m 755 -o 0 -g 0 reports/tree.tex /usr/local/share/lifelines/reports/tree.tex
 install  -m 755 -o 0 -g 0 reports/verify.ll /usr/local/share/lifelines/reports/verify.ll
 
 %files

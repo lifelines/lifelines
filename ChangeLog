@@ -7,7 +7,11 @@
 
 	* interp/builtin.c:
 
-	Bugfix (because date.year is structure now instead of int).
+	Bugfix: because date.year is structure now instead of int.
+
+	* lifelines.spec:
+
+	Bugfix: tinytafel2 being installed as tree.tex in rpm.
 
 2002-02-07 Perry Rapp <puddle@users.sourceforge.net>
 
