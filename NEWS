@@ -27,7 +27,7 @@ New Features Added in 3.0.6
 
 - New report option lists available reports with summary info
 
-- Navigate in db order in INDI & FAM browse 
+- Navigate in db order in INDI & FAM browse (& source & event & other browse)
   (hotkeys '+' and '-')
 
 - New browse sources, events, and others lists
