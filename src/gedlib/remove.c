@@ -48,6 +48,7 @@ extern STRING qShaslnk;
  * local function prototypes
  *********************************************/
 
+static INT count_xrefs_in_list(STRING xref, NODE list);
 static NODE remove_any_xrefs_node_list(STRING xref, NODE list);
 
 /*================================================================
@@ -226,34 +227,39 @@ remove_child (NODE indi, NODE fam)
 BOOLEAN
 remove_spouse (NODE indi, NODE fam)
 {
-	NODE node, last;
-	INT sex;
-	STRING stag;
+	NODE node=0, last=0;
 
-	sex = SEX(indi);
-	ASSERT(sex == SEX_MALE || sex == SEX_FEMALE);
-/* Make sure spouse is in family and remove his/her HUSB/WIFE line */
-	stag = (STRING) ((sex == SEX_MALE) ? "HUSB" : "WIFE");
-	if (!(node = find_node(fam, stag, nxref(indi), &last)))
+/* Remove reference from family */
+	node = find_node(fam, "HUSB", nxref(indi), &last);
+	if (!node) {
+		node = find_node(fam, "WIFE", nxref(indi), &last);
+	}
+	if (!node)
 		return FALSE;
+
 	if (last)
 		nsibling(last) = nsibling(node);
 	else
 		nchild(fam) = nsibling(node);
 	free_node(node);
+	node = NULL;
 
 /* Remove FAMS line from spouse */
 	node = find_node(indi, "FAMS", nxref(fam), &last);
 	ASSERT(node && last);
 	nsibling(last) = nsibling(node);
 	free_node(node);
+	node = NULL;
 
 /* Update database with change records */
 	indi_to_dbase(indi);
-	if (num_fam_xrefs(fam) == 0)
-		remove_empty_fam(fam);
-	else
+
+/* Update family (delete if empty) */
+	if (num_fam_xrefs(fam) > 0)
 		fam_to_dbase(fam);
+	else
+		remove_empty_fam(fam);
+
 	return TRUE;
 }
 /*=======================================================

@@ -11,6 +11,11 @@
 	Fix indi removal code for unusual cases
 	Fixes sf bug#1097583 (Deleting person of unknown sex in family)
 
+	* ChangeLog src/gedlib/remove.c
+
+	Fix remove_spouse for removing spouse of unknown gender.
+	Fixes sf bug#1097608 (Deleting spouse of unknown sex in family)
+
 2005-01-06 Perry Rapp
 
 	* ChangeLog src/liflines/main.c
