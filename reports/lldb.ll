@@ -44,9 +44,12 @@
  *   V1.02					  10-Nov-2000
  *   Updated URLs
  * 
- *  $Header
+ *  $Header$
  * 
  *  $Log$
+ *  Revision 1.3  2000/11/27 20:46:26  nozell
+ *  Typo in CVS header
+ *
  *  Revision 1.2  2000/11/27 20:45:43  nozell
  *  Add CVS keywords
  *
