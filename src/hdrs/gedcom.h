@@ -83,6 +83,11 @@ typedef INT PROMPTQ;
 #define ALWAYS_PROMPT 0
 #define PROMPT_IF_CHILDREN 1
 
+/* ask if only one match */
+typedef INT ASK1Q;
+#define DOASK1 1
+#define NOASK1 0
+
 #define SEX_MALE    1
 #define SEX_FEMALE  2
 #define SEX_UNKNOWN 3
@@ -141,11 +146,11 @@ INT ask_child_order(NODE fam, PROMPTQ promptq);
 STRING get_cache_stats(void);
 STRING get_property(STRING opt);
 NOD0 choose_any_source(void);
-NODE choose_child(NODE, NODE, STRING, STRING, BOOLEAN);
+NODE choose_child(NODE, NODE, STRING, STRING, ASK1Q);
 void choose_and_delete_family(void);
-NODE choose_father(NODE, NODE, STRING, STRING, BOOLEAN);
+NODE choose_father(NODE, NODE, STRING, STRING, ASK1Q);
 NODE choose_family(NODE, STRING, STRING, BOOLEAN);
-NODE choose_mother(NODE, NODE, STRING, STRING, BOOLEAN);
+NODE choose_mother(NODE, NODE, STRING, STRING, ASK1Q);
 NODE choose_source(NODE what, STRING msg0, STRING msgn);
 NODE choose_spouse(NODE, STRING, STRING);
 void classify_nodes(NODE*, NODE*, NODE*);

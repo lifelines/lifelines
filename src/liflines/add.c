@@ -197,7 +197,7 @@ add_child (NODE child,
 
 /* Identify child if caller did not */
 
-	if (!child) child = ask_for_indi(idchld, NOCONFIRM, TRUE);
+	if (!child) child = ask_for_indi(idchld, NOCONFIRM, DOASK1);
 	if (!child) return NULL;
 
 /* Identify family if caller did not */
@@ -297,7 +297,7 @@ add_spouse (NODE spouse,
 
 /* Identify spouse to add to family */
 
-	if (!spouse) spouse = ask_for_indi(idsadd, NOCONFIRM, TRUE);
+	if (!spouse) spouse = ask_for_indi(idsadd, NOCONFIRM, DOASK1);
 	if (!spouse) return FALSE;
 	if ((sex = SEX(spouse)) == SEX_UNKNOWN) {
 		message(nosex);
@@ -471,7 +471,7 @@ add_family (NODE spouse1,
 
 /* Identify first spouse */
 
-	if (!spouse1) spouse1 = ask_for_indi(idsps1, NOCONFIRM, FALSE);
+	if (!spouse1) spouse1 = ask_for_indi(idsps1, NOCONFIRM, NOASK1);
 	if (!spouse1) return NULL;
 	if ((sex1 = SEX(spouse1)) == SEX_UNKNOWN) {
 		message(unksex);
@@ -480,7 +480,7 @@ add_family (NODE spouse1,
 
 /* Identify optional spouse */
 
-	if (!spouse2) spouse2 = ask_for_indi(idsps2, NOCONFIRM, TRUE);
+	if (!spouse2) spouse2 = ask_for_indi(idsps2, NOCONFIRM, DOASK1);
 	if (spouse2) {
 		if ((sex2 = SEX(spouse2)) == SEX_UNKNOWN || sex1 == sex2) {
 			message(notopp);

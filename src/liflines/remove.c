@@ -58,7 +58,7 @@ choose_and_remove_child (NODE indi, NODE fam, BOOLEAN nolast)
 	}
 		
 /* Identify child and check for FAMC nodes */
-	if (!indi) indi = ask_for_indi(idcrmv, NOCONFIRM, FALSE);
+	if (!indi) indi = ask_for_indi(idcrmv, NOCONFIRM, NOASK1);
 	if (!indi) return FALSE;
 	if (!FAMC(indi)) {
 		message(ntchld);
@@ -129,7 +129,7 @@ choose_and_remove_spouse (NODE indi, NODE fam, BOOLEAN nolast)
 	}
 
 /* Identify spouse to remove */
-	if (!indi) indi = ask_for_indi(idsrmv, NOCONFIRM, FALSE);
+	if (!indi) indi = ask_for_indi(idsrmv, NOCONFIRM, NOASK1);
 	if (!indi) return FALSE;
 	if (!FAMS(indi)) {
 		message(ntprnt);

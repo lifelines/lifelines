@@ -43,7 +43,7 @@ choose_child (NODE indi,
               NODE fam,
               STRING msg0,
               STRING msgn,
-              BOOLEAN ask1)
+              ASK1Q ask1)
 {
 	INDISEQ seq = NULL;
 	NODE node;
@@ -59,6 +59,7 @@ choose_child (NODE indi,
 }
 /*========================================
  * choose_spouse -- Choose person's spouse
+ *  asks if multiple
  *======================================*/
 NODE
 choose_spouse (NODE indi,
@@ -72,13 +73,14 @@ choose_spouse (NODE indi,
 		message(msg0);
 		return NULL;
 	}
-	node = nztop(choose_from_indiseq(seq, FALSE, NULL, msgn));
+	node = nztop(choose_from_indiseq(seq, NOASK1, NULL, msgn));
 	remove_indiseq(seq, FALSE);
 	return node;
 }
 /*========================================
  * choose_source -- Choose any referenced source from some,
  *  presumably top level, node
+ *  always asks
  *======================================*/
 NODE
 choose_source (NODE what, STRING msg0, STRING msgn)
@@ -90,12 +92,13 @@ choose_source (NODE what, STRING msg0, STRING msgn)
 		message(msg0);
 		return NULL;
 	}
-	node = nztop(choose_from_indiseq(seq, TRUE, msgn, msgn));
+	node = nztop(choose_from_indiseq(seq, DOASK1, msgn, msgn));
 	remove_indiseq(seq, FALSE);
 	return node;
 }
 /*==========================================================
  * choose_family -- Choose family from person's FAMS/C lines
+ *  asks if multiple
  *========================================================*/
 NODE
 choose_family (NODE indi,
@@ -110,7 +113,7 @@ choose_family (NODE indi,
 			message(msg0);
 		return NULL;
 	}
-	node = nztop(choose_from_indiseq(seq, FALSE, NULL, msgn));
+	node = nztop(choose_from_indiseq(seq, NOASK1, NULL, msgn));
 	remove_indiseq(seq, FALSE);
 	return node;
 }
@@ -122,7 +125,7 @@ choose_father (NODE indi,
                NODE fam,
                STRING msg0,
                STRING msgn,
-               BOOLEAN ask1)
+               ASK1Q ask1)
 {
 	INDISEQ seq = NULL;
 	NODE node;
@@ -144,7 +147,7 @@ choose_mother (NODE indi,
                NODE fam,
                STRING msg0,
                STRING msgn,
-               BOOLEAN ask1)
+               ASK1Q ask1)
 {
 	INDISEQ seq = NULL;
 	NODE node;

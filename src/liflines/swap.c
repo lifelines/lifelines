@@ -60,7 +60,7 @@ swap_children (NODE prnt,       /* parent - poss NULL */
 
 /* Identify parent if need be */
 	if (fam) goto gotfam;
-	if (!prnt) prnt = ask_for_indi(idfswp, NOCONFIRM, FALSE);
+	if (!prnt) prnt = ask_for_indi(idfswp, NOCONFIRM, NOASK1);
 	if (!prnt) return FALSE;
 	nfam = num_families(prnt);
 	if (nfam <= 0) {
@@ -82,9 +82,9 @@ gotfam:
 	}
 
 /* Identify children to swap */
-	chil1 = choose_child(NULL, fam, "e", id1csw, FALSE);
+	chil1 = choose_child(NULL, fam, "e", id1csw, NOASK1);
 	if (!chil1) return FALSE;
-	chil2 = choose_child(NULL, fam, "e", id2csw, FALSE);
+	chil2 = choose_child(NULL, fam, "e", id2csw, NOASK1);
 	if (!chil2) return FALSE;
 	if (chil1 == chil2) return FALSE;
 	key1 = nxref(chil1);
@@ -124,7 +124,7 @@ swap_families (NODE indi)
 	}
 
 /* Find person and assure has >= 2 families */
-	if (!indi) indi = ask_for_indi(idfswp, NOCONFIRM, FALSE);
+	if (!indi) indi = ask_for_indi(idfswp, NOCONFIRM, NOASK1);
 	if (!indi) return FALSE;
 	if (!(fams = FAMS(indi))) {
 		message(ntprnt);

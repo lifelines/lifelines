@@ -81,7 +81,7 @@ INT browse_tandem (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ
 			break;
 		case 'c': 	/* browse top person's children */
 			if ((node = choose_child(indi1, NULL, nocofp,
-			    idcbrs, FALSE)))
+			    idcbrs, NOASK1)))
 				indi1 = node;
 			break;
 		case 'j': 	/* merge two persons */

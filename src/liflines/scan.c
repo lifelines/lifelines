@@ -163,7 +163,7 @@ name_scan (INT scantype)
 	traverse_names(ns_callback, &patt);
 
 	if (length_indiseq(results_seq)) {
-		indi = choose_from_indiseq(results_seq, TRUE, scanrs, scanrs);
+		indi = choose_from_indiseq(results_seq, DOASK1, scanrs, scanrs);
 	}
 	remove_indiseq(results_seq, FALSE);
 	return indi;
@@ -211,7 +211,7 @@ refn_scan(void)
 	traverse_refns(rs_callback, &patt);
 
 	if (length_indiseq(results_seq)) {
-		nod0 = choose_from_indiseq(results_seq, TRUE, scanrs, scanrs);
+		nod0 = choose_from_indiseq(results_seq, DOASK1, scanrs, scanrs);
 	}
 	remove_indiseq(results_seq, FALSE);
 	return nod0;

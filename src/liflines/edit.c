@@ -78,7 +78,7 @@ edit_indi (NODE indi1)  /* may be NULL */
 	TRANTABLE tti = tran_tables[MEDIN];
 	TRANTABLE ttd = tran_tables[MINDS];
 
-	if (!indi1 && !(indi1 = ask_for_indi(idpedt, NOCONFIRM, FALSE)))
+	if (!indi1 && !(indi1 = ask_for_indi(idpedt, NOCONFIRM, NOASK1)))
 		return NULL;
 
 /* Prepare file for user to edit */
@@ -194,7 +194,7 @@ edit_family (NODE fam1) /* may be NULL */
 	BOOLEAN emp;
 /* Identify family if need be */
 	if (!fam1) {
-		indi = ask_for_indi(idspse, NOCONFIRM, FALSE);
+		indi = ask_for_indi(idspse, NOCONFIRM, NOASK1);
 		if (!indi) return NULL;
 		if (!FAMS(indi)) {
 			message(ntprnt);

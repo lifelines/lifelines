@@ -206,15 +206,15 @@ browse_indi_modes (NODE *pindi1,
 			break;
 		case 'f': 	/* Browse to person's father */
 			node = choose_father(indi, NULL, nofath,
-			    idhbrs, FALSE);
+			    idhbrs, NOASK1);
 			if (node) indi = node;
 			break;
 		case 'F':	/* Tandem Browse to person's fathers */
 			node = choose_father(indi, NULL, nofath,
-			    id1hbr, FALSE);
+			    id1hbr, NOASK1);
 			if (node) {
 			  node2 = choose_father(indi, NULL, nofath,
-			    id2hbr, FALSE);
+			    id2hbr, NOASK1);
 			  if (node2) {
 				*pindi1 = node;
 				*pindi2 = node2;
@@ -224,15 +224,15 @@ browse_indi_modes (NODE *pindi1,
 			break;
 		case 'm':	/* Browse to person's mother */
 			node = choose_mother(indi, NULL, nomoth,
-			    idwbrs, FALSE);
+			    idwbrs, NOASK1);
 			if (node) indi = node;
 			break;
 		case 'M':	/* Tandem Browse to person's mothers */
 			node = choose_mother(indi, NULL, nomoth,
-			    id1wbr, FALSE);
+			    id1wbr, NOASK1);
 			if (node) {
 			  node2 = choose_mother(indi, NULL, nomoth,
-			    id2wbr, FALSE);
+			    id2wbr, NOASK1);
 			  if (node2) {
 				*pindi1 = node;
 				*pindi2 = node2;
@@ -241,7 +241,7 @@ browse_indi_modes (NODE *pindi1,
 			}
 			break;
 		case 'z':	/* Zip browse another person */
-			node = ask_for_indi(idpnxt, NOCONFIRM, FALSE);
+			node = ask_for_indi(idpnxt, NOCONFIRM, NOASK1);
 			if (node) indi = node;
 			break;
 		case 's':	/* Browse to person's spouse */
@@ -261,7 +261,7 @@ browse_indi_modes (NODE *pindi1,
 			break;
 		case 'c':	/* Browse to person's child */
 			node = choose_child(indi, NULL, nocofp,
-			    idcbrs, FALSE);
+			    idcbrs, NOASK1);
 			if (node) indi = node;
 			break;
 		case '(':       /* scroll details/pedigree up */
@@ -297,10 +297,10 @@ browse_indi_modes (NODE *pindi1,
 			break;
 		case 'C':	/* browse to tandem children */
 			node = choose_child(indi, NULL, nocofp,
-			    id1cbr, FALSE);
+			    id1cbr, NOASK1);
 			if (node) {
 			  node2 = choose_child(indi, NULL, nocofp,
-			    id2cbr, FALSE);
+			    id2cbr, NOASK1);
 			  if (node2) {
 				*pindi1 = node;
 				*pindi2 = node2;
@@ -379,7 +379,7 @@ browse_indi_modes (NODE *pindi1,
 			*pfam1 = node;
 			return BROWSE_FAM;
 		case 't':	/* Switch to tandem browsing */
-			node = ask_for_indi(idp2br, NOCONFIRM, FALSE);
+			node = ask_for_indi(idp2br, NOCONFIRM, NOASK1);
 			if (node) {
 				*pindi1 = indi;
 				*pindi2 = node;
@@ -560,45 +560,45 @@ browse_fam (NODE *pindi,
 			break;
 		case 'f':	/* Browse to family's father */
 			*pindi = choose_father(NULL, fam, nohusb,
-			    idhbrs, FALSE);
+			    idhbrs, NOASK1);
 			if (*pindi) return BROWSE_INDI;
 			break;
 		case 'F':	/* Tandem Browse to family's fathers */
 			*pindi = choose_father(NULL, fam, nohusb,
-			    id1hbr, FALSE);
+			    id1hbr, NOASK1);
 			if (*pindi) {
 			  *pdum = choose_father(NULL, fam, nohusb,
-			    id2hbr, FALSE);
+			    id2hbr, NOASK1);
 			  if (*pdum) 
 				return BROWSE_TAND;
 			}
 			break;
 		case 'm':	/* Browse to family's mother */
 			*pindi = choose_mother(NULL, fam, nowife,
-			    idwbrs, FALSE);
+			    idwbrs, NOASK1);
 			if (*pindi) return BROWSE_INDI;
 			break;
 		case 'M':	/* Tandem Browse to family's mother */
 			*pindi = choose_mother(NULL, fam, nowife,
-			    id1wbr, FALSE);
+			    id1wbr, NOASK1);
 			if (*pindi) {
 				*pdum = choose_mother(NULL, fam, nowife, 
-					id2wbr, FALSE);
+					id2wbr, NOASK1);
 				if (*pdum) 
 					return BROWSE_TAND;
 			}
 			break;
 		case 'c':	/* Browse to a child */
 			*pindi = choose_child(NULL, fam, nocinf,
-				idcbrs, FALSE);
+				idcbrs, NOASK1);
 			if (*pindi) return BROWSE_INDI;
 			break;
 		case 'C':	/* browse to tandem children */
 			*pindi = choose_child(NULL, fam, nocinf,
-			    id1cbr, FALSE);
+			    id1cbr, NOASK1);
 			if (*pindi) {
 				*pdum = choose_child(NULL, fam, nocinf,
-					id2cbr, FALSE);
+					id2cbr, NOASK1);
 				if (*pdum) 
 					return BROWSE_TAND;
 			}
@@ -609,7 +609,7 @@ browse_fam (NODE *pindi,
 				break;
 			}
 			*pindi = choose_child(NULL, fam, nocinf,
-			    idcrmv, TRUE);
+			    idcrmv, DOASK1);
 			if (*pindi) choose_and_remove_child(*pindi, NULL, TRUE);
 			break;
 		case 's':	/* Add spouse to family */
@@ -709,7 +709,7 @@ browse_fam (NODE *pindi,
 			return BROWSE_LIST;
 			break;
 		case 'z':	/* Zip browse to new person */
-			*pindi = ask_for_indi(idpnxt, NOCONFIRM, FALSE);
+			*pindi = ask_for_indi(idpnxt, NOCONFIRM, NOASK1);
 			if (*pindi) return BROWSE_INDI;
 			break;
 		case 't':	/* Enter family tandem mode */
@@ -813,12 +813,12 @@ browse_pedigree1 (NODE *pindi,
 			return BROWSE_INDI;
 		case 'f':	/* Browse to father */
 			node = choose_father(indi, NULL, nofath,
-			    idhbrs, FALSE);
+			    idhbrs, NOASK1);
 			if (node) indi = node;
 			break;
 		case 'm':	/* Browse to mother */
 			node = choose_mother(indi, NULL, nomoth,
-			    idwbrs, FALSE);
+			    idwbrs, NOASK1);
 			if (node) indi = node;
 			break;
 		case 's':	/* Browse to spouse */
@@ -827,7 +827,7 @@ browse_pedigree1 (NODE *pindi,
 			break;
 		case 'c':	/* Browse to children */
 			if ((node = choose_child(indi, NULL, nocofp,
-			    idcbrs, FALSE)))
+			    idcbrs, NOASK1)))
 				indi = node;
 			break;
 		case 'g':	/* Switch to family mode */
@@ -934,7 +934,7 @@ choose_any_source (void)
 		message(nosour);
 		return 0;
 	}
-	nod0 = choose_from_indiseq(seq, TRUE, idsour, idsour);
+	nod0 = choose_from_indiseq(seq, DOASK1, idsour, idsour);
 	remove_indiseq(seq, FALSE);
 	return nod0;
 }
@@ -959,7 +959,7 @@ void browse_events (void)
 		message(noeven);
 		return;
 	}
-	nod0 = choose_from_indiseq(seq, TRUE, ideven, ideven);
+	nod0 = choose_from_indiseq(seq, DOASK1, ideven, ideven);
 	remove_indiseq(seq, FALSE);
 	if (nod0)
 		browse_event(nod0);
@@ -976,7 +976,7 @@ void browse_others (void)
 		message(noothe);
 		return;
 	}
-	nod0 = choose_from_indiseq(seq, TRUE, idothe, idothe);
+	nod0 = choose_from_indiseq(seq, DOASK1, idothe, idothe);
 	remove_indiseq(seq, FALSE);
 	if (nod0)
 		browse_other(nod0);

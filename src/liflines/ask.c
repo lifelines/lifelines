@@ -49,7 +49,7 @@ extern STRING ntchld, ntprnt, idfbrs, entnam, unknam, notone, ifone;
 extern STRING nofopn;
 
 static INDISEQ ask_for_indi_list_once(STRING, INT*);
-static NODE ask_for_indi_once(STRING, BOOLEAN, INT*);
+static NODE ask_for_indi_once(STRING, ASK1Q, INT*);
 
 /*=====================================================
  * ask_for_fam_by_key -- Ask user to identify family by
@@ -69,9 +69,10 @@ NODE
 ask_for_fam (STRING pttl,
              STRING sttl)
 {
-	NODE sib, fam, prn = ask_for_indi(pttl, NOCONFIRM, TRUE);
+	NODE sib, fam, prn;
+	prn = ask_for_indi(pttl, NOCONFIRM, DOASK1);
 	if (!prn)  {
-		sib = ask_for_indi(sttl, NOCONFIRM, TRUE);
+		sib = ask_for_indi(sttl, NOCONFIRM, DOASK1);
 		if (!sib) return NULL;
 		if (!(fam = FAMC(sib))) {
 			message(ntchld);
@@ -264,7 +265,7 @@ ask_for_indiseq (STRING ttl,
  *==========================================================*/
 static NODE
 ask_for_indi_once (STRING ttl,
-                   BOOLEAN ask1,
+                   ASK1Q ask1,
                    INT *prc)
 {
 	NODE indi;
@@ -282,7 +283,7 @@ ask_for_indi_once (STRING ttl,
 NODE
 ask_for_indi (STRING ttl,
               CONFIRMQ confirmq,
-              BOOLEAN ask1)
+              ASK1Q ask1)
 {
 	while (TRUE) {
 		INT rc;
@@ -326,7 +327,7 @@ ask_for_indi_list (STRING ttl,
 STRING
 ask_for_indi_key (STRING ttl,
                   CONFIRMQ confirmq,
-                  BOOLEAN ask1)
+                  ASK1Q ask1)
 {
 	NODE indi = ask_for_indi(ttl, confirmq, ask1);
 	if (!indi) return NULL;
@@ -337,13 +338,13 @@ ask_for_indi_key (STRING ttl,
  *=============================================================*/
 static INT
 choose_one_from_indiseq_if_needed (INDISEQ seq,
-                                   BOOLEAN ask1,
+                                   ASK1Q ask1,
                                    STRING titl1,
                                    STRING titln)
 {
 	if (length_indiseq(seq) > 1)
 		return choose_one_from_indiseq(titln, seq);
-	else if (ask1 && titl1)
+	else if (ask1==DOASK1 && titl1)
 		return choose_one_from_indiseq(titl1, seq);
 	return 0;
 }
@@ -356,7 +357,7 @@ choose_one_from_indiseq_if_needed (INDISEQ seq,
 NOD0
 choose_from_indiseq (
 	INDISEQ seq,    /* sequence */
-	BOOLEAN ask1,   /* choose if len one? */
+	ASK1Q ask1,   /* choose if len one? */
 	STRING titl1,   /* title if len = one */
 	STRING titln)   /* title if len > one */
 {

@@ -119,7 +119,7 @@ delete_indi (NODE indi,      /* person to remove - may be null */
 	INT isex, keyint;
 	BOOLEAN found;
 
-	if (!indi && !(indi = ask_for_indi(idpdel, NOCONFIRM, TRUE)))
+	if (!indi && !(indi = ask_for_indi(idpdel, NOCONFIRM, DOASK1)))
 		return;
 	if (conf && !ask_yes_or_no(cfpdel)) return;
 

@@ -399,7 +399,7 @@ __chooseindi (PNODE node,
 	seq = (INDISEQ) pvalue(val);
 	delete_pvalue(val);
 	if (!seq || length_indiseq(seq) < 1) return NULL;
-	indi = nztop(choose_from_indiseq(seq, TRUE, ifone, notone));
+	indi = nztop(choose_from_indiseq(seq, DOASK1, ifone, notone));
 	if (!indi) return NULL;
 	return create_pvalue(PINDI, (VPTR)indi_to_cacheel(indi));
 }
@@ -456,7 +456,7 @@ __choosechild (PNODE node,
 		seq = indi_to_children(indi);
 		if (!seq || length_indiseq(seq) < 1)
 			return create_pvalue(PINDI, (VPTR)NULL);
-		indi = nztop(choose_from_indiseq(seq, TRUE, ifone, notone));
+		indi = nztop(choose_from_indiseq(seq, DOASK1, ifone, notone));
 		remove_indiseq(seq, FALSE);
 		if (!indi) return create_pvalue(PINDI, (VPTR)NULL);
 		return create_pvalue(PINDI, (VPTR)indi_to_cacheel(indi));
@@ -465,7 +465,7 @@ __choosechild (PNODE node,
 		seq = fam_to_children(fam);
 		if (!seq || length_indiseq(seq) < 1)
 			return create_pvalue(PINDI, (VPTR)NULL);
-		indi = nztop(choose_from_indiseq(seq, TRUE, ifone, notone));
+		indi = nztop(choose_from_indiseq(seq, DOASK1, ifone, notone));
 		remove_indiseq(seq, FALSE);
 		if (!indi) return create_pvalue(PINDI, (VPTR)NULL);
 		return create_pvalue(PINDI, (VPTR)indi_to_cacheel(indi));
@@ -492,7 +492,7 @@ __choosespouse (PNODE node,
 	seq = indi_to_spouses(indi);
 	if (!seq || length_indiseq(seq) < 1)
 		return create_pvalue(PINDI, (VPTR)NULL);
-	indi = nztop(choose_from_indiseq(seq, TRUE, ifone, notone));
+	indi = nztop(choose_from_indiseq(seq, DOASK1, ifone, notone));
 	remove_indiseq(seq, FALSE);
 	if (!indi) return create_pvalue(PINDI, (VPTR)NULL);
 	return create_pvalue(PINDI, (VPTR)indi_to_cacheel(indi));
@@ -515,7 +515,7 @@ __choosefam (PNODE node,
 	seq = indi_to_families(indi, TRUE);
 	if (!seq || length_indiseq(seq) < 1)
 		return create_pvalue(PFAM, (VPTR)NULL);
-	fam = nztop(choose_from_indiseq(seq, TRUE, ifone, notone));
+	fam = nztop(choose_from_indiseq(seq, DOASK1, ifone, notone));
 	remove_indiseq(seq, FALSE);
 	if (!fam) return create_pvalue(PFAM, (VPTR)NULL);
 	return create_pvalue(PFAM, (VPTR)fam_to_cacheel(fam));

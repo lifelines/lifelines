@@ -13,7 +13,7 @@ void advanced_person_edit(NODE);
 void advanced_family_edit(NODE);
 
 /* ask.c */
-NODE ask_for_indi(STRING, CONFIRMQ, BOOLEAN);
+NODE ask_for_indi(STRING, CONFIRMQ, ASK1Q);
 INDISEQ ask_for_indiseq(STRING, INT*);
 BOOLEAN ask_yes_or_no(STRING);
 
