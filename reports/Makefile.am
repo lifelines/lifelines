@@ -8,7 +8,8 @@ pkg_REPORTS = \
 	ancestors2.ll bias.ll bkdes16-1.ll book-latex.ll \
 	cid.ll connect2.ll	\
 	count_anc.ll count_desc.ll count_paternal_desc.ll cousins.ll	\
-	coverage.ll dates.ll desc-henry.ll fam10c.ll fam16rn1.ll	\
+	coverage.ll dates.ll desc-henry.ll exercise.ll \
+	fam10c.ll fam16rn1.ll	\
 	familyisfm1.ll famrep1.ll famrep3.ll famrep6.ll famtree1.ll	\
 	fdesc.ll find.ll findmissing.ll fix_nameplac.ll	\
 	formatted_gedcom.ll genancc1.ll gender_order.ll genetics.ll	\
