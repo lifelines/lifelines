@@ -1,3 +1,9 @@
+2003-11-11 Perry Rapp
+
+	* ChangeLog src/gedlib/indiseq.c src/stdlib/strcvt.c
+
+	Fix upper/lower handling for UTF-8 use on systems missing support.
+
 2003-11-07 Robert Simms
 	* ChangeLog tt/UTF-8_ISO-8859-8.tt tt/ISO-8859-8_UTF-8.tt
 	Added translation tables for UTF-8 to/from ISO-8859-8 (Hebrew).

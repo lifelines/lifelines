@@ -186,7 +186,11 @@ ll_tolowerz (STRING s, int utf8)
 	if (!zstr) {
 		zstr = zs_newn(strlen(s));
 		for ( ; *s; ++s) {
-			zs_appc(zstr, (uchar)ll_tolower(*s));
+			uchar ch = (uchar)*s;
+			/* uppercase unless UTF-8 multibyte code */
+			if (!utf8 || ch < 0x7f)
+				ch = ll_tolower(ch);
+			zs_appc(zstr, ch);
 		}
 	}
 	return zstr;
@@ -213,11 +217,11 @@ ll_toupperz (STRING s, INT utf8)
 	if (!zstr) {
 		zstr = zs_newn(strlen(s));
 		for ( ; *s; ++s) {
-			/* avoid 8-bit uppercasing UTF-8 multibyte codes */
-			if (utf8 && ((uchar)*s) > 0x7f)
-				zs_appc(zstr, (uchar)*s);
-			else
-				zs_appc(zstr, (uchar)ll_toupper((uchar)*s));
+			uchar ch = (uchar)*s;
+			/* uppercase unless UTF-8 multibyte code */
+			if (!utf8 || ch < 0x7f)
+				ch = ll_toupper(ch);
+			zs_appc(zstr, ch);
 		}
 	}
 	return zstr;
@@ -268,11 +272,13 @@ ll_tocapitalizedz (STRING s, INT utf8)
 	if (!zstr) {
 		zstr = zs_newn(strlen(s));
 		for ( ; *s; ++s) {
+			uchar ch = (uchar)*s;
 			if (!zs_len(zstr)) {
-				zs_appc(zstr, (uchar)ll_toupper(*s));
-			} else {
-				zs_appc(zstr, (uchar)(*s));
+				/* uppercase unless UTF-8 multibyte code */
+				if (!utf8 || ch < 0x7f)
+					ch = ll_toupper(ch);
 			}
+			zs_appc(zstr, ch);
 		}
 	}
 	return zstr;
@@ -312,18 +318,17 @@ ll_totitlecasez (STRING s, INT utf8)
 		BOOLEAN inword = FALSE;
 		zstr = zs_newn(strlen(s));
 		for ( ; *s; ++s) {
+			uchar ch = (uchar)*s;
 			if (iswhite((uchar)*s)) {
 				inword = FALSE;
-				zs_appc(zstr, (uchar)*s);
-			} else {
-				if (!inword) {
-					/* first letter of word */
-					zs_appc(zstr, (uchar)ll_toupper(*s));
-					inword = TRUE;
-				} else {
-					zs_appc(zstr, (uchar)(*s));
-				}
+			} else if (!inword) {
+				/* first letter of word */
+				inword = TRUE;
+				/* uppercase unless UTF-8 multibyte code */
+				if (!utf8 || ch < 0x7f)
+					ch = ll_toupper(*s);
 			}
+			zs_appc(zstr, ch);
 		}
 	}
 	return zstr;

@@ -62,8 +62,6 @@
 	all PVALUES for report commands
 */
 
-extern BOOLEAN opt_finnish;		/* Finnish language support */
-
 
 /*********************************************
  * local enums
