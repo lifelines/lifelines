@@ -26,12 +26,12 @@
 #include <wchar.h>
 #endif
 #include "zstr.h"
+#include "stdlibi.h"
 
 extern int opt_finnish;
 
 static usersortfnc usersort = 0;
 
-extern ZSTR makewide(const char *str);
 
 static BOOLEAN widecmp(char *str1, char *str2, INT *rtn);
 

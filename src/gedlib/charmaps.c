@@ -75,7 +75,6 @@ struct trantable_s {
 /* alphabetical */
 static XNODE create_xnode(XNODE, INT, STRING);
 static BOOLEAN init_map_from_str(STRING str, CNSTRING mapname, TRANTABLE * ptt, ZSTR * pzerr);
-static void load_custom_db_mappings(void);
 static void maperror(CNSTRING errmsg);
 static void remove_xnodes(XNODE);
 static void show_xnode(XNODE node);
@@ -285,7 +284,6 @@ init_map_from_file (CNSTRING file, CNSTRING mapname, TRANTABLE * ptt, ZSTR *pzer
 	STRING mem;
 	INT siz;
 	BOOLEAN ok;
-	ZSTR zerr=0;
 
 	*ptt = 0;
 

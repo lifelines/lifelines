@@ -168,7 +168,6 @@ typedef void (*uilang_notify_fnc)(void);
  *======*/
 
 extern INT flineno;
-extern BOOLEAN inited;
 extern BOOLEAN keyflag;
 extern BOOLEAN readonly;
 extern BOOLEAN immutable;

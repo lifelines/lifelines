@@ -38,8 +38,6 @@
 #include "feedback.h"
 #include "zstr.h"
 
-#include "stdlibi.h"
-
 
 /*********************************************
  * external/imported variables

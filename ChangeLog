@@ -9,6 +9,12 @@
 
 	Add arch.h declaration for has_key if replaced.
 
+	* ChangeLog src/gedlib/charmaps.c src/hdrs/arch.h
+	src/hdrs/gedcom.h src/hdrs/version.h src/stdlib/llstrcmp.c
+	src/stdlib/signals.c src/stdlib/stdlibi.h src/stdlib/strcvt.c:
+
+	Cleanup (& bump version for another beta release).
+
 2003-01-02 Perry Rapp
 
 	* ChangeLog configure.in src/hdrs/version.h:

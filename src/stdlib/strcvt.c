@@ -31,6 +31,7 @@
 #endif
 #include "zstr.h"
 #include "icvt.h"
+#include "stdlibi.h"
 
 static const char * get_wchar_codeset_name(void);
 
@@ -68,11 +69,11 @@ makewide (const char *str)
 	return zstr;
 }
 /*===================================================
- * makenarrow -- Inverse of makewide
+ * makeznarrow -- Inverse of makewide
  *  Created: 2002-12-15 (Perry Rapp)
  *=================================================*/
 ZSTR
-makenarrow (ZSTR zwstr)
+makeznarrow (ZSTR zwstr)
 {
 	ZSTR zout=0;
 	CNSTRING src = get_wchar_codeset_name();
@@ -117,7 +118,7 @@ lower (STRING str)
 		for (wp = (wchar_t *)zs_str(zstr); *wp; ++wp) {
 			*wp = towlower(*wp);
 		}
-		zout = makenarrow(zstr);
+		zout = makeznarrow(zstr);
 		llstrsets(scratch, sizeof(scratch), uu8, zs_str(zout));
 		zs_free(&zstr);
 		zs_free(&zout);
@@ -149,7 +150,7 @@ upper (STRING str)
 		for (wp = (wchar_t *)zs_str(zstr); *wp; ++wp) {
 			*wp = towupper(*wp);
 		}
-		zout = makenarrow(zstr);
+		zout = makeznarrow(zstr);
 		llstrsets(scratch, sizeof(scratch), uu8, zs_str(zout));
 		zs_free(&zstr);
 		zs_free(&zout);
