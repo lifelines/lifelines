@@ -30,15 +30,8 @@
 /* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /* modified 2000-01-26 J.F.Chandler */
 
+#include <stdlib.h>
 #include <stdio.h>
-#include "standard.h"
-#include "table.h"
-#include "translat.h"
-#include "gedcom.h"
-#include "cache.h"
-#include "interp.h"
-#include "indiseq.h"
-
 #ifdef WIN32
 #include "mycurses.h"
 #else
@@ -46,11 +39,20 @@
 #include <string.h>
 #endif
 
+#include "standard.h"
+#include "table.h"
+#include "translat.h"
+#include "gedcom.h"
+#include "cache.h"
+#include "interp.h"
+#include "indiseq.h"
+#include "liflines.h"
+
 extern STRING notone, ifone, progname;
 extern NODE format_and_choose_indi();
 
 static INT ll_index(STRING, STRING, INT);
-static compute_pi();
+static void compute_pi(STRING);
 BOOLEAN prog_debug = FALSE;
 
 /*=============================================================+
@@ -100,7 +102,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 		prog_error(node, "1st arg to extractnames doesn't lead to a NAME line");
 		return NULL;
 	}
-	insert_pvtable(stab, iident(lvar), PINT, 0);
+	insert_pvtable(stab, iident(lvar), PINT, (WORD)0);
 	*eflg = FALSE;
 	str = nval(line);
 	if (!str || *str == 0) return NULL;
@@ -109,8 +111,8 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	FORLIST(temp, el)
 		push_list(list, create_pvalue(PSTRING, (WORD)el));
 	ENDLIST
-	insert_pvtable(stab, iident(lvar), PINT, len);
-	insert_pvtable(stab, iident(svar), PINT, sind);
+	insert_pvtable(stab, iident(lvar), PINT, (WORD)len);
+	insert_pvtable(stab, iident(svar), PINT, (WORD)sind);
 	return NULL;
 }
 /*==============================================================+
@@ -152,7 +154,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 		prog_error(node, "3rd arg to extractplaces must be a variable");
 		return NULL;
 	}
-	insert_pvtable(stab, iident(lvar), PINT, 0);
+	insert_pvtable(stab, iident(lvar), PINT, (WORD)0);
 	*eflg = FALSE;
 	if (!line) return NULL;
 	if (strcmp("PLAC", ntag(line)) && !(line = PLAC(line))) return NULL;
@@ -163,7 +165,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	FORLIST(temp, el)
 		push_list(list, create_pvalue(PSTRING, (WORD)el));
 	ENDLIST
-	insert_pvtable(stab, iident(lvar), PINT, len);
+	insert_pvtable(stab, iident(lvar), PINT, (WORD)len);
 	return NULL;
 }
 /*==========================================================+
@@ -209,13 +211,13 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 		return NULL;
 	}
 	*eflg = FALSE;
-	insert_pvtable(stab, iident(lvar), PINT, 0);
+	insert_pvtable(stab, iident(lvar), PINT, (WORD)0);
 	temp = create_list();
 	value_to_list(str, temp, &len, dlm);
 	FORLIST(temp, el)
 		push_list(list, create_pvalue(PSTRING, (WORD)el));
 	ENDLIST
-	insert_pvtable(stab, iident(lvar), PINT, len);
+	insert_pvtable(stab, iident(lvar), PINT, (WORD)len);
 	delete_pvalue(val1);
 	delete_pvalue(val2);
 	return NULL;
@@ -341,7 +343,7 @@ INT num;
 /*========================================
  * compute_pi -- Support routine for index
  *======================================*/
-static compute_pi (sub)
+static void compute_pi (sub)
 STRING sub;
 {
         INT m = strlen(sub), k = 0, q;
@@ -361,7 +363,7 @@ STRING s;
 INT i, j;
 {
 	static char scratch[MAXLINELEN+1];
-	if (!s || *s == 0 || i <= 0 || i > j || j > strlen(s)) return NULL;
+	if (!s || *s == 0 || i <= 0 || i > j || j > (INT)strlen(s)) return NULL;
 	strncpy(scratch, &s[i-1], j-i+1);
 	scratch[j-i+1] = 0;
 	return (STRING) scratch;
@@ -674,6 +676,7 @@ PVALUE __lastindi (node, stab, eflg)
 PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 }
+
 /*===========================================+
  * firstfam -- Return first family in database
  *   usage: firstfam() -> FAM
@@ -775,6 +778,7 @@ WORD __lastfam (node, stab, eflg)
 PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 }
+
 /*=============================================+
  * getrecord -- Read GEDCOM record from database
  *  usage: getrecord(STRING) -> NODE
