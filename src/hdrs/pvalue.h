@@ -22,7 +22,7 @@
    SOFTWARE.
 */
 /*=============================================================
- * pvalue.h -- Storage for PVALUE
+ * pvalue.h -- PVALUE structures and prototypes
  * Copyright(c) 2003 by Matt Emmerton; all rights reserved
  *===========================================================*/
 #ifndef _PVALUE_H
@@ -51,5 +51,121 @@ typedef union {
 	INDISEQ	q;
 	TABLE	t;
 } PVALUE_DATA;
+
+typedef struct tag_pvalue *PVALUE;
+struct tag_pvalue {
+        struct tag_vtable * vtable;
+        unsigned char type;     /* type of value */
+        VPTR value;
+        /* PVALUE_DATA value; */
+};
+
+/* PVALUE types */
+
+#define PNONE      0  /* needed? - remove later if not */
+#define PANY       1  /* any value -- no type restriction - should be NULL value*/
+#define PINT       2  /* integer */
+#define PLONG      3  /* long integer */ /* OBSOLETE */
+#define PFLOAT     4  /* floating point */
+#define PBOOL      5  /* boolean */
+#define PSTRING    6  /* string */
+#define PGNODE	   7  /* GEDCOM node */
+#define PINDI      8  /* GEDCOM person record */
+#define PFAM       9  /* GEDCOM family record */
+#define PSOUR     10  /* GEDCOM source record */
+#define PEVEN     11  /* GEDCOM event record */
+#define POTHR     12  /* GEDCOM other record */
+#define PLIST     13  /* list */
+#define PTABLE    14  /* table */
+#define PSET      15  /* set */
+#define PARRAY    16  /* array */
+#define PMAXLIVE  PARRAY /* maximum live type */
+#define PFREED    99  /* returned to free list */
+#define PUNINT   100  /* just allocated */
+
+/* Handy PVALUE macros */
+#define ptype(p)	((p)->type)	/* type of expression */
+#define pvalue(p)	((p)->value)	/* value of expression */
+
+/* PVALUE Arithmetic Functions */
+void add_pvalues(PVALUE, PVALUE, BOOLEAN*eflg, ZSTR * zerr);
+void sub_pvalues(PVALUE, PVALUE, BOOLEAN*eflg, ZSTR * zerr);
+void mul_pvalues(PVALUE, PVALUE, BOOLEAN*eflg, ZSTR * zerr);
+void div_pvalues(PVALUE, PVALUE, BOOLEAN*eflg, ZSTR * zerr);
+void mod_pvalues(PVALUE, PVALUE, BOOLEAN*eflg, ZSTR * zerr);
+void neg_pvalue(PVALUE, BOOLEAN*eflg, ZSTR * zerr);
+void decr_pvalue(PVALUE, BOOLEAN*eflg, ZSTR * zerr);
+void incr_pvalue(PVALUE, BOOLEAN*eflg, ZSTR * zerr);
+void exp_pvalues(PVALUE, PVALUE, BOOLEAN*eflg, ZSTR * zerr);
+void gt_pvalues(PVALUE, PVALUE, BOOLEAN*eflg, ZSTR * zerr);
+void ge_pvalues(PVALUE, PVALUE, BOOLEAN*eflg, ZSTR * zerr);
+void lt_pvalues(PVALUE, PVALUE, BOOLEAN*eflg, ZSTR * zerr);
+void le_pvalues(PVALUE, PVALUE, BOOLEAN*eflg, ZSTR * zerr);
+void ne_pvalues(PVALUE, PVALUE, BOOLEAN*eflg, ZSTR * zerr);
+void eq_pvalues(PVALUE, PVALUE, BOOLEAN*eflg, ZSTR * zerr);
+
+/* PVALUE Functions */
+void bad_type_error(CNSTRING op, ZSTR *zerr, PVALUE val1, PVALUE val2);
+void coerce_pvalue(INT, PVALUE, BOOLEAN*);
+PVALUE copy_pvalue(PVALUE);
+PVALUE create_pvalue(INT, VPTR);
+PVALUE create_pvalue_any(void);
+PVALUE create_pvalue_from_bool(BOOLEAN bval);
+PVALUE create_pvalue_from_cel(CACHEEL cel);
+PVALUE create_pvalue_from_float(float fval);
+PVALUE create_pvalue_from_even_keynum(INT i);
+PVALUE create_pvalue_from_fam(NODE fam);
+PVALUE create_pvalue_from_fam_keynum(INT i);
+PVALUE create_pvalue_from_indi(NODE indi);
+PVALUE create_pvalue_from_indi_key(STRING key);
+PVALUE create_pvalue_from_indi_keynum(INT i);
+PVALUE create_pvalue_from_int(INT ival);
+PVALUE create_pvalue_from_node(NODE node);
+PVALUE create_pvalue_from_othr_keynum(INT i);
+PVALUE create_pvalue_from_set(INDISEQ seq);
+PVALUE create_pvalue_from_sour_keynum(INT i);
+PVALUE create_pvalue_from_string(STRING str);
+ZSTR describe_pvalue(PVALUE);
+void delete_vptr_pvalue(VPTR ptr);
+void delete_pvalue(PVALUE);
+void delete_pvalue_ptr(PVALUE * valp);
+void delete_pvalue_wrapper(PVALUE);
+void eq_conform_pvalues(PVALUE, PVALUE, BOOLEAN*);
+BOOLEAN eqv_pvalues(VPTR, VPTR);
+BOOLEAN is_numeric_pvalue(PVALUE);
+BOOLEAN is_pvalue(PVALUE);
+BOOLEAN is_record_pvalue(PVALUE);
+BOOLEAN is_zero(PVALUE); /* should be is_zero_pvalue */
+void pvalues_begin(void);
+void pvalues_end(void);
+
+BOOLEAN pvalue_to_bool(PVALUE);
+CACHEEL pvalue_to_cel(PVALUE val);
+float pvalue_to_float(PVALUE val);
+INT pvalue_to_int(PVALUE);
+LIST pvalue_to_list(PVALUE val);
+NODE pvalue_to_node(PVALUE val);
+float* pvalue_to_pfloat(PVALUE);
+INT* pvalue_to_pint(PVALUE);
+RECORD pvalue_to_rec(PVALUE val);
+INDISEQ pvalue_to_seq(PVALUE val);
+STRING pvalue_to_string(PVALUE);
+TABLE pvalue_to_table(PVALUE val);
+struct tag_array *pvalue_to_array(PVALUE val);
+void set_pvalue(PVALUE, INT, VPTR);
+void set_pvalue_bool(PVALUE val, BOOLEAN bv);
+void set_pvalue_float(PVALUE val, float fnum);
+void set_pvalue_int(PVALUE val, INT iv);
+void set_pvalue_string(PVALUE val, CNSTRING str);
+void show_pvalue(PVALUE);
+INT which_pvalue_type(PVALUE);
+
+PVALUE alloc_pvalue_memory(void);
+void check_pvalue_validity(PVALUE val);
+PVALUE create_new_pvalue(void);
+void free_pvalue_memory(PVALUE val);
+void set_pvalue_node(PVALUE val, NODE node);
+INT pvalues_collate(PVALUE val1, PVALUE val2);
+void init_pvalue_vtable(PVALUE val);
 
 #endif /* _PVALUE_H */

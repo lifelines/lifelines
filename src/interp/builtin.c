@@ -37,7 +37,7 @@
 #include "translat.h"
 #include "gedcom.h"
 #include "cache.h"
-#include "interp.h"
+#include "interpi.h"
 #include "indiseq.h"
 #include "rptui.h"
 #include "feedback.h"

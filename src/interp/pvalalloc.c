@@ -14,7 +14,6 @@
 #include "translat.h"
 #include "gedcom.h"
 #include "cache.h"
-#include "interp.h"
 #include "interpi.h"
 #include "liflines.h"
 #include "feedback.h"

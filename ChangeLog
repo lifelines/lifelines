@@ -1,5 +1,20 @@
 2003-07-01 Matt Emmerton
 
+	* ChangeLog src/hdrs/interp.h src/hdrs/pvalue.h src/interp/interpi.h
+
+	Header file restructuring.
+	- Move most of interp.h into interpi.h
+	- Move pvalue-related stuff into pvalue.h
+
+	* src/interp/builtin.c src/interp/eval.c src/interp/heapused.c 
+	src/interp/interpseq.c src/interp/more.c src/interp/pvalalloc.c
+	src/interp/pvalmath.h src/interp/pvalue.c src/interp/rassa.c
+	src/interp/symtab.c src/interp/write.c
+
+	User internal header (interpi.h) instead of external header (interp.h)
+
+2003-07-01 Matt Emmerton
+
 	* ChangeLog src/liflines/askgedc.c src/liflines/screen.c
 	gedlib/gengedc.c
 

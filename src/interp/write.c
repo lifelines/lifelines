@@ -28,9 +28,7 @@
 
 #include "llstdlib.h"
 #include "gedcom.h"
-#include "interp.h"
 #include "interpi.h"
-
 
 /*********************************************
  * external/imported variables

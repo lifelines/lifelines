@@ -55,7 +55,6 @@
 #include "llstdlib.h"
 #include "table.h"
 #include "gedcom.h"
-#include "interp.h"
 #include "interpi.h"
 
 /*===============================================+
