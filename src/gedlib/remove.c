@@ -48,7 +48,6 @@ extern STRING qShaslnk;
  * local function prototypes
  *********************************************/
 
-static INT count_xrefs_in_list(STRING xref, NODE list);
 static NODE remove_any_xrefs_node_list(STRING xref, NODE list);
 static void remove_name_list(NODE name, CNSTRING key);
 static void remove_refn_list(NODE refn, CNSTRING key);
@@ -246,6 +245,7 @@ remove_spouse (NODE indi, NODE fam)
 BOOLEAN
 remove_fam_record (RECORD frec)
 {
+	frec=frec; /* UNUSED */
 	message(_("Families may not yet be removed in this fashion."));
 	return FALSE;
 }

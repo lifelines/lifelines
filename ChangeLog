@@ -4,6 +4,12 @@
 
 	const correct fix in callback signature (traverse_name_callback)
 
+	* ChangeLog src/gedlib/remove.c
+
+	Prevent compiler warnings: self-assign unused argument in
+	remove_fam_record; remove declaration of nonexistent
+	function count_xrefs_in_list.
+
 2005-01-16 Perry Rapp
 
 	* ChangeLog po/fr.po
