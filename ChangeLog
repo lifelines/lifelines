@@ -6,6 +6,9 @@
 	Move create_pvalue out of indiseq.c.
 	Move mprintf_info out of keytonod.c.
 
+	* btree/opnbtree.c hdrs/arch.h:
+	Temporary hack because S_ISDIR is lacking on MSVC/Windows.
+
 2000-12-31 Perry Rapp <puddle@users.sourceforge.net>
 
 	* btree/opnbtree.c gedlib/indiseq.c gedlib/keytonod.c
