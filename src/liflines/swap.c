@@ -45,13 +45,14 @@ extern STRING less2c, okcswp, less2f, okfswp, idfswp, ronlye;
 
 /*=============================================
  * swap_children -- Swap two children in family
+ * NODE prnt:   [in] parent (may be NULL)
+ * NODE fam:    [in] family (may be NULL)
  *===========================================*/
 BOOLEAN
-swap_children (NODE prnt,       /* parent - poss NULL */
-               NODE fam)        /* family - poss NULL */
+swap_children (NODE prnt, NODE fam)
 {
-	NODE chil1, chil2, chil, one, two, tmp;
-	STRING key1, key2, str;
+	NODE chil, one, two, tmp;
+	STRING str;
 	INT nfam, nchil;
 
 	if (readonly) {
@@ -82,23 +83,33 @@ gotfam:
 		return FALSE;
 	}
 
-/* Identify children to swap */
-	chil1 = choose_child(NULL, fam, "e", id1csw, NOASK1);
-	if (!chil1) return FALSE;
-	chil2 = choose_child(NULL, fam, "e", id2csw, NOASK1);
-	if (!chil2) return FALSE;
-	if (chil1 == chil2) return FALSE;
-	key1 = nxref(chil1);
-	key2 = nxref(chil2);
+	if (nchil == 2) {
+		/* swap the two existing ones */
+		one = CHIL(fam);
+		two = nsibling(one);
+	} else {
+		NODE chil1, chil2;
+		STRING key1, key2;
+		/* Identify children to swap */
+		chil1 = choose_child(NULL, fam, "e", id1csw, NOASK1);
+		if (!chil1) return FALSE;
+		chil2 = choose_child(NULL, fam, "e", id2csw, NOASK1);
+		if (!chil2) return FALSE;
+		if (chil1 == chil2) return FALSE;
+		key1 = nxref(chil1);
+		key2 = nxref(chil2);
 
-   /* Swap CHIL nodes and update database */
-	ASSERT(chil = CHIL(fam));
-	one = two = NULL;
-	for (;  chil;  chil = nsibling(chil)) {
-		if (eqstr(key1, nval(chil))) one = chil;
-		if (eqstr(key2, nval(chil))) two = chil;
+		/* loop through children & find the ones chosen */
+		ASSERT(chil = CHIL(fam));
+		one = two = NULL;
+		for (;  chil;  chil = nsibling(chil)) {
+			if (eqstr(key1, nval(chil))) one = chil;
+			if (eqstr(key2, nval(chil))) two = chil;
+		}
 	}
+
 	ASSERT(one && two);
+   /* Swap CHIL nodes and update database */
 	str = nval(one);
 	nval(one) = nval(two);
 	nval(two) = str;
@@ -111,13 +122,16 @@ gotfam:
 }
 /*=============================================
  * swap_families -- Swap two families of person
+ * NODE indi:  [in] person
+ *  prompt for indi if NULL
+ *  prompt for families if person chosen has >2
  *===========================================*/
 BOOLEAN
 swap_families (NODE indi)
 {
-	NODE fam1, fam2, fams, one, two, tmp;
+	NODE fams, one, two, tmp;
 	INT nfam;
-	STRING str, key1, key2;
+	STRING str;
 
 	if (readonly) {
 		message(ronlye);
@@ -138,22 +152,32 @@ swap_families (NODE indi)
 	}
 
 /* Find families to swap */
-	fam1 = choose_family(indi, "e", id1fsw, TRUE);
-	if (!fam1) return FALSE;
-	fam2 = choose_family(indi, "e", id2fsw, TRUE);
-	if (!fam2) return FALSE;
-	if (fam1 == fam2) return FALSE;
-	key1 = nxref(fam1);
-	key2 = nxref(fam2);
-
-/* Swap FAMS nodes and update database */
 	ASSERT(fams = FAMS(indi));
-	one = two = NULL;
-	for (;  fams;  fams = nsibling(fams)) {
-		if (eqstr(key1, nval(fams))) one = fams;
-		if (eqstr(key2, nval(fams))) two = fams;
+	if (nfam == 2) {
+		/* swap the two existing ones */
+		one = fams;
+		two = nsibling(fams);
+	} else {
+		NODE fam1, fam2;
+		STRING key1, key2;
+		/* prompt for families */
+		fam1 = choose_family(indi, "e", id1fsw, TRUE);
+		if (!fam1) return FALSE;
+		fam2 = choose_family(indi, "e", id2fsw, TRUE);
+		if (!fam2) return FALSE;
+		if (fam1 == fam2) return FALSE;
+		key1 = nxref(fam1);
+		key2 = nxref(fam2);
+		/* loop through families & find the ones chosen */
+		one = two = NULL;
+		for (;  fams;  fams = nsibling(fams)) {
+			if (eqstr(key1, nval(fams))) one = fams;
+			if (eqstr(key2, nval(fams))) two = fams;
+		}
 	}
+
 	ASSERT(one && two);
+/* Swap FAMS nodes and update database */
 	str = nval(one);
 	nval(one) = nval(two);
 	nval(two) = str;

@@ -1,3 +1,8 @@
+2001-06-15 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog liflines/swap.c:
+	Improved swap children/families to not prompt for which when only two.
+
 2001-06-12 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog interp/interp.c liflines/main.c:
