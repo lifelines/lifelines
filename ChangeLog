@@ -1,3 +1,5 @@
+2005-01-08 lifelines beta 3.0.39 RELEASE
+
 2005-01-08 Perry Rapp
 
 	* ChangeLog src/gedlib/remove.c
@@ -427,6 +429,8 @@
 	  Fixes for bug id's 954704 'table inert() ASSERT's if value
 	  inserted is null; and id 950712 a redundent include in 
 	  lldatabase.c
+
+2004-05-08 lifelines beta 3.0.38 RELEASE
 
 2004-05-08 Perry Rapp
 
