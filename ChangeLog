@@ -1,3 +1,12 @@
+2003-11-14 Robert Simms
+
+	* ChangeLog tt/UTF-8_ISO-8859-8.tt
+
+	Added Hebrew characters from the Unicode block 'Alphabetic Presentation
+	Forms' that are not covered by ISO-8859-8.  Also mapped the few Hebrew
+	or Yiddish character ligatures from UTF-8 to two characters
+	in ISO-8859-8
+
 2003-11-13 Perry Rapp
 
 	* ChangeLog src/gedlib/charmaps.c src/gedlib/charprops.c

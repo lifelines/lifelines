@@ -1,8 +1,22 @@
 ##!name: UTF-8 to ISO-8859-8
 ## UTF-8 to ISO-8859-8
-## covers the 8-bit characters in ISO-8859-8,
+##
+## Covers the 8-bit characters in ISO-8859-8,
 ##    which includes the Hebrew alphabet
-## created by Robert Simms: 6 November 2003
+## Ligatures (letter combinations) have been mapped to separate characters:
+##    for example, the 'ligature alef lamed' has been mapped to the two
+##    individual letters 'alef' and 'lamed'.
+##
+## Includes UTF-8 codes for the Hebrew symbols in the
+##    Alphabetic Presentation Forms block which may be adapted for mapping
+##    those symbols into the encoding used in some PostScript fonts.
+##   It may also be the case that some of those letters could be mapped
+##    to ones they are similar to that exist in the ISO-8859-8 set,
+##    such as representing 'bet with dagesh' (b-sound) with 'bet' (v-sound).
+##
+## created by Robert Simms: 6 November 2003, last modified 14 November 2003
+
+## Unicode block: Hebrew
 
 $c2$a0	$a0	# no-break space
 
@@ -36,7 +50,10 @@ $c2$bc	$bc	# vulgar fraction one quarter
 $c2$bd	$bd	# vulgar fraction one half
 $c2$be	$be	# vulgar fraction three quarters
 
-$e2$80$97	$df	# double low line
+
+$e2$80$97	$df	# double low line, U+2017
+## $cc$b3		# combining double low line, U+0333
+
 $d7$90	$e0	# alef
 $d7$91	$e1	# bet
 $d7$92	$e2	# gimel
@@ -64,3 +81,64 @@ $d7$a7	$f7	# qof
 $d7$a8	$f8	# resh
 $d7$a9	$f9	# shin
 $d7$aa	$fa	# tav
+
+$d7$b0	$e5$e5	# Hebrew ligature yiddish double vav
+$d7$b1	$e5$e9	# Hebrew ligature yiddish vav yod
+$d7$b2	$e9$e9	# Hebrew ligature yiddish double yod
+$d7$b3		# Hebrew punctuation geresh
+$d7$b4		# Hebrew punctuation gershayim
+
+
+## Unicode block: Alphabetic Presentation Forms
+
+## $ef$ac$9d		# hebrew letter yod with hiri
+## $ef$ac$9e		# hebrew point judeo-spanish varika
+## $ef$ac$9f		# hebrew ligature yiddish yod yod patah
+## $ef$ac$a0		# hebrew letter alternative ayin
+## $ef$ac$a1		# hebrew letter wide alef
+## $ef$ac$a2		# hebrew letter wide dalet
+## $ef$ac$a3		# hebrew letter wide he
+## $ef$ac$a4		# hebrew letter wide kaf
+## $ef$ac$a5		# hebrew letter wide lamed
+## $ef$ac$a6		# hebrew letter wide final mem
+## $ef$ac$a7		# hebrew letter wide resh
+## $ef$ac$a8		# hebrew letter wide tav
+## $ef$ac$a9		# hebrew letter alternative plus sign
+## $ef$ac$aa		# hebrew letter shin with shin dot
+## $ef$ac$ab		# hebrew letter shin with sin dot
+## $ef$ac$ac		# hebrew letter shin with dagesh and shin dot
+## $ef$ac$ad		# hebrew letter shin with dagesh and sin dot
+## $ef$ac$ae		# hebrew letter alef with patah
+## $ef$ac$af		# hebrew letter alef with qamats
+## $ef$ac$b0		# hebrew letter alef with mapiq
+## $ef$ac$b1		# hebrew letter bet with dagesh
+## $ef$ac$b2		# hebrew letter gimel with dagesh
+## $ef$ac$b3		# hebrew letter dalet with dagesh
+## $ef$ac$b4		# hebrew letter he with mapiq
+## $ef$ac$b5		# hebrew letter vav with dagesh
+## $ef$ac$b6		# hebrew letter zayin with dagesh
+
+## $ef$ac$d8		# hebrew letter tet with dagesh
+## $ef$ac$b9		# hebrew letter yod with dagesh
+## $ef$ac$ba		# hebrew letter final kaf with dagesh
+## $ef$ac$bb		# hebrew letter kaf with dagesh
+## $ef$ac$bc		# hebrew letter lamed with dagesh
+
+## $ef$ac$be		# hebrew letter mem with dagesh
+
+## $ef$ad$80		# hebrew letter nun with dagesh
+## $ef$ad$81		# hebrew letter samekh with dagesh
+
+## $ef$ad$83		# hebrew letter final pe with dagesh
+## $ef$ad$84		# hebrew letter pe with dagesh
+
+## $ef$ad$86		# hebrew letter tsadi with dagesh
+## $ef$ad$87		# hebrew letter qof with dagesh
+## $ef$ad$88		# hebrew letter resh with dagesh
+## $ef$ad$89		# hebrew letter shin with dagesh
+## $ef$ad$8a		# hebrew letter tav with dagesh
+## $ef$ad$8b		# hebrew letter vav with holam
+## $ef$ad$8c		# hebrew letter bet with rafe
+## $ef$ad$8d		# hebrew letter kaf with rafe
+## $ef$ad$8e		# hebrew letter pe with rafe
+$ef$ad$8f	$e0$ec	# hebrew ligature alef lamed
