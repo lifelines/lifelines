@@ -514,9 +514,7 @@ PNODE
 fcons_node (FLOAT fval)
 {
 	PNODE node = create_pnode(IFCONS);
-	UNION u;
-	u.f = fval;
-	ivaluex(node) = create_pvalue(PFLOAT, u.w);
+	ivaluex(node) = create_pvalue_from_float(fval);
 	return node;
 }
 /*===================================

@@ -244,6 +244,7 @@ void coerce_pvalue(INT, PVALUE, BOOLEAN*);
 PVALUE copy_pvalue(PVALUE);
 void create_symtab(SYMTAB * stab);
 PVALUE create_pvalue(INT, VPTR);
+PVALUE create_pvalue_from_float(float fval);
 PVALUE create_pvalue_from_fam(NODE fam);
 PVALUE create_pvalue_from_fam_keynum(INT i);
 PVALUE create_pvalue_from_indi(NODE indi);
@@ -258,6 +259,7 @@ void delete_symtab(SYMTAB stab, STRING iden);
 void eq_conform_pvalues(PVALUE, PVALUE, BOOLEAN*);
 BOOLEAN eqv_pvalues(PVALUE, PVALUE);
 CACHEEL get_cel_from_pvalue(PVALUE val);
+float get_pvalue_float(PVALUE val);
 BOOLEAN in_symtab(SYMTAB stab, STRING key);
 void insert_symtab(SYMTAB, STRING, INT, VPTR);
 void insert_symtab_pvalue(SYMTAB stab, STRING iden, PVALUE val);
@@ -310,8 +312,6 @@ INTERPTYPE interp_traverse(PNODE, SYMTAB, PVALUE*);
 
 /* Prototypes */
 void assign_iden(SYMTAB, STRING, PVALUE);
-INT bool_to_int(BOOLEAN);
-FLOAT bool_to_float(BOOLEAN);
 PNODE break_node(void);
 PNODE call_node(STRING, PNODE);
 PNODE children_node(PNODE, STRING, STRING, PNODE);

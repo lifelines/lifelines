@@ -602,6 +602,16 @@ makestring (PVALUE val, STRING str, INT len, BOOLEAN *eflg)
 	UNION u;
 	CACHEEL cel;
 	STRING txt;
+	/*
+	Here we treat pvalue(val) as thought it were a UNION
+	but it is really a VPTR. This is only safe if sizeof(void *)
+	is no less than sizeof(u.i) and sizeof(u.w).
+
+	The real fix is to make pvalue(val) a UNION, but this would
+	be difficult, as PVALUE occurs in many places, and there are
+	probably lots of casts (which the compiler will not help us find).
+	Perry, 2002/01/09
+	*/
 	u.w = pvalue(val);
 	switch(ptype(val)) {
 		case PNONE: 
@@ -611,11 +621,8 @@ makestring (PVALUE val, STRING str, INT len, BOOLEAN *eflg)
 			llstrncpy(str, "<NULL>", len);
 			break;
 		case PINT:
-		case PLONG: /* unused I think - Perry 2001/04/13 */
-			sprintf(str, "%d", u.i);
-			break;
 		case PFLOAT:
-			sprintf(str, "%f", u.f);
+			snprintf(str, len, "%f", get_pvalue_float(val));
 			break;
 		case PBOOL:
 			llstrncpy(str, u.w ? "True" : "False", len);

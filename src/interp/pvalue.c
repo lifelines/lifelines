@@ -57,13 +57,17 @@ typedef struct pv_block *PV_BLOCK;
 
 /* alphabetical */
 static CACHEEL access_cel_from_pvalue(PVALUE val);
+static FLOAT bool_to_float(BOOLEAN);
+static INT bool_to_int(BOOLEAN);
 static void clear_pv_indiseq(INDISEQ seq);
 static void clear_pvalue(PVALUE val);
 static PVALUE create_pvalue_from_keynum_impl(INT i, INT ptype);
 static PVALUE create_pvalue_from_key_impl(STRING key, INT ptype);
 static PVALUE create_pvalue_from_node_impl(NODE node, INT ptype);
 static BOOLEAN eq_pstrings(PVALUE val1, PVALUE val2);
+static int float_to_int(float f);
 static void free_all_pvalues(void);
+static void free_float_pvalue(PVALUE val);
 static BOOLEAN is_pvalue_or_freed(PVALUE pval);
 static void symtab_cleaner(ENTRY ent);
 static void table_pvcleaner(ENTRY ent);
@@ -278,6 +282,7 @@ create_pvalue (INT type, VPTR value)
 	if (type == PNONE) return NULL;
 	val = alloc_pvalue_memory();
 	if (type == PSTRING) {
+		/* ALWAYS copy strings, so caller never needs to */
 		if (value) {
 			value = (VPTR) strsave((STRING) value);
 		}
@@ -292,6 +297,9 @@ create_pvalue (INT type, VPTR value)
 	if (is_record_pvalue(val)) {
 		/* lock any cache elements, and unlock in clear_pvalue */
 		CACHEEL cel = get_cel_from_pvalue(val);
+		/* a semilock holds the cache element, but not necessarily 
+		in direct cache -- it could fall to indirect cache -- the
+		element is still valid, but its contents aren't */
 		if (cel)
 			semilock_cache(cel);
 	}
@@ -299,6 +307,8 @@ create_pvalue (INT type, VPTR value)
 }
 /*========================================
  * clear_pvalue -- Empty contents of pvalue
+ *  This doesn't bother to clear val->value
+ *  because caller will do so
  * Created: 2001/01/20, Perry Rapp
  *======================================*/
 static void
@@ -312,13 +322,16 @@ clear_pvalue (PVALUE val)
 	switch (ptype(val)) {
 	/*
 	embedded values have no referenced memory to clear
-	PINT, PFLOAT, PLONG, PBOOLEAN 
+	PINT, PBOOLEAN  (PLONG is unused)
 	*/
 	/*
 	PANY is a null value
 	PGNODEs point into cache memory
 	*/
 	/* nodes from cache handled below switch - PINDI, PFAM, PSOUR, PEVEN, POTHR */
+	case PFLOAT:
+		free_float_pvalue(val);
+		return;
 	case PSTRING:
 		{
 			if (pvalue(val)) {
@@ -440,8 +453,13 @@ copy_pvalue (PVALUE val)
 	/*
 	embedded values have no referenced memory
 	and are copied directly
-	PINT, PFLOAT, PLONG, PBOOLEAN 
+	PINT, PBOOLEAN  (PLONG is unused)
 	*/
+	case PFLOAT:
+		{
+			return create_pvalue_from_float(get_pvalue_float(val));
+		}
+		break;
 	case PSTRING:
 		{
 			/*
@@ -641,6 +659,48 @@ create_pvalue_from_keynum_impl (INT i, INT ptype)
 	return create_pvalue_from_key_impl(key, ptype);
 }
 /*==================================
+ * create_pvalue_from_float -- Create pvalue from float
+ * ptag's value is not large enough, so we have to store
+ * heap pointer.
+ * Created: 2002/01/09, Perry Rapp
+ *================================*/
+PVALUE
+create_pvalue_from_float (float fval)
+{
+	float *ptr = (float *)stdalloc(sizeof(*ptr));
+	*ptr = fval;
+	return create_pvalue(PFLOAT, ptr);
+}
+/*==================================
+ * free_float_pvalue -- Delete float pvalue
+ * Inverse of make_float_pvalue
+ * Created: 2002/01/09, Perry Rapp
+ *================================*/
+static void
+free_float_pvalue (PVALUE val)
+{
+	float *ptr = (float *)pvalue(val);
+	stdfree(ptr);
+}
+/*==================================
+ * get_pvalue_float -- Access float value from PFLOAT pvalue
+ * Created: 2002/01/09, Perry Rapp
+ *================================*/
+float
+get_pvalue_float (PVALUE val)
+{
+	return *(float*)pvalue(val);
+}
+/*==================================
+ * get_pvalue_float -- Access ptr to float from PFLOAT pvalue
+ * Created: 2002/01/09, Perry Rapp
+ *================================*/
+float*
+get_pvalue_pfloat (PVALUE val)
+{
+	return (float*)pvalue(val);
+}
+/*==================================
  * create_pvalue_from_key_impl -- Create pvalue from any key
  * Created: 2001/03/20, Perry Rapp
  *================================*/
@@ -665,9 +725,8 @@ set_pvalue (PVALUE val,
 	show_pvalue(val);
 	llwprintf(" new type=%d new value = %d\n", type, value);
 #endif
-	if (type == PSTRING && ptype(val) == PSTRING 
-		&& value == pvalue(val)) {
-		/* string self-assignment */
+	if (value == pvalue(val)) {
+		/* self-assignment */
 		return;
 	}
 	clear_pvalue(val);
@@ -685,7 +744,7 @@ BOOLEAN
 numeric_pvalue (PVALUE val)
 {
 	INT type = ptype(val);
-	return type == PINT || type == PLONG || type == PFLOAT;
+	return type == PINT || type == PFLOAT;
 }
 /*============================================================
  * num_conform_pvalues -- Make the types of two values conform
@@ -777,30 +836,26 @@ coerce_pvalue (INT type, PVALUE val, BOOLEAN *eflg)
 	}
 /* END */
 
-	switch (ptype(val)) {
+	switch (ptype(val)) { /* switch on what we have */
 
 	case PINT:
-		switch (type) {
+		switch (type) { /* what we desire */
 		case PINT: return;
-		case PLONG: /*u.l = int_to_long(u.w);*/ break;
-		case PFLOAT: u.f = u.i; break;
+		case PFLOAT:
+			{
+				/* this is ugly -- make one & copy it bitwise */
+				PVALUE valnew = create_pvalue_from_float(u.i);
+				ptype(val) = ptype(valnew);
+				pvalue(val) = pvalue(valnew);
+				ptype(valnew)=PNONE; /* clear this so it doesn't get cleaned */
+				return;
+			}
 		default: goto bad;
 		}
 		break;
-#if 0
-	case PLONG:
-		switch (type) {
-		case PINT: vint = long_to_int(u.w); break;
-		case PLONG: return;
-		case PFLOAT: vfloat = long_to_float(u.w); break;
-		default: goto bad;
-		}
-		break;
-#endif
 	case PFLOAT:
 		switch (type) {
-		case PINT: u.i = (INT)u.f; break;
-		case PLONG: /*u.l = float_to_long(u.w);*/ break;
+		case PINT: u.i = float_to_int(get_pvalue_float(val)); break;
 		case PFLOAT: return;
 		default: goto bad;
 		}
@@ -808,8 +863,13 @@ coerce_pvalue (INT type, PVALUE val, BOOLEAN *eflg)
 	case PBOOL:
 		switch (type) {
 		case PINT: u.i = bool_to_int((BOOLEAN)u.w); break;
-		case PLONG: /*u.l = bool_to_long((BOOLEAN)u.w);*/ break;
-		case PFLOAT: u.f = bool_to_float((BOOLEAN)u.w); break;
+		case PFLOAT:
+			{
+				PVALUE valnew = create_pvalue_from_float(u.i);
+				ptype(val) = ptype(valnew);
+				pvalue(val) = pvalue(valnew);
+				return;
+			}
 		default: goto bad;
 		}
 		break;
@@ -863,23 +923,27 @@ is_record_pvalue (PVALUE value)
 	}
 	return FALSE;
 }
-INT
+static INT
 bool_to_int (BOOLEAN b)
 {
 	return b ? 1 : 0;
 }
-FLOAT
+static FLOAT
 bool_to_float (BOOLEAN b)
 {
 	return b ? 1. : 0.;
 }
+static int
+float_to_int (float f)
+{
+	return (int)f;
+}
 /*===============================
  * add_pvalues -- Add two PVALUEs
+ * modify val1 and delete val2
  *=============================*/
 void
-add_pvalues (PVALUE val1,
-             PVALUE val2,
-             BOOLEAN *eflg)
+add_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 {
 	UNION u1, u2;
 
@@ -890,8 +954,7 @@ add_pvalues (PVALUE val1,
 	u2.w = pvalue(val2);
 	switch (ptype(val1)) {
 	case PINT:   u1.i += u2.i; pvalue(val1) = u1.w; break;
-	case PFLOAT: u1.f += u2.f; pvalue(val1) = u1.w; break;
-	/*case PLONG:*/
+	case PFLOAT: *get_pvalue_pfloat(val1) += get_pvalue_float(val2); break;
 	default: *eflg = TRUE; return;
 	}
 	delete_pvalue(val2);
@@ -900,9 +963,7 @@ add_pvalues (PVALUE val1,
  * sub_pvalues -- Subtract two PVALUEs
  *==================================*/
 void
-sub_pvalues (PVALUE val1,
-             PVALUE val2,
-             BOOLEAN *eflg)
+sub_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 {
 	UNION u1, u2;
 	if (*eflg) return;
@@ -912,8 +973,7 @@ sub_pvalues (PVALUE val1,
 	u2.w = pvalue(val2);
 	switch (ptype(val1)) {
 	case PINT:   u1.i -= u2.i; pvalue(val1) = u1.w; break;
-	case PFLOAT: u1.f -= u2.f; pvalue(val1) = u1.w; break;
-	/*case PLONG:*/
+	case PFLOAT: *get_pvalue_pfloat(val1) -= get_pvalue_float(val2); break;
 	default: *eflg = TRUE; return;
 	}
 	delete_pvalue(val2);
@@ -922,9 +982,7 @@ sub_pvalues (PVALUE val1,
  * mul_pvalues -- Multiply two PVALUEs
  *==================================*/
 void
-mul_pvalues (PVALUE val1,
-             PVALUE val2,
-             BOOLEAN *eflg)
+mul_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 {
 	UNION u1, u2;
 
@@ -935,8 +993,7 @@ mul_pvalues (PVALUE val1,
 	u2.w = pvalue(val2);
 	switch (ptype(val1)) {
 	case PINT:   u1.i *= u2.i; pvalue(val1) = u1.w; break;
-	case PFLOAT: u1.f *= u2.f; pvalue(val1) = u1.w; break;
-	/*case PLONG:*/
+	case PFLOAT: *get_pvalue_pfloat(val1) *= get_pvalue_float(val2); break;
 	default: *eflg = TRUE; return;
 	}
 	delete_pvalue(val2);
@@ -945,9 +1002,7 @@ mul_pvalues (PVALUE val1,
  * div_pvalues -- Divide two PVALUEs
  *================================*/
 void
-div_pvalues (PVALUE val1,
-             PVALUE val2,
-             BOOLEAN *eflg)
+div_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 {
 	UNION u1, u2;
 
@@ -962,8 +1017,7 @@ div_pvalues (PVALUE val1,
 	}
 	switch (ptype(val1)) {
 	case PINT:   u1.i /= u2.i; pvalue(val1) = u1.w; break;
-	case PFLOAT: u1.f /= u2.f; pvalue(val1) = u1.w; break;
-	/*case PLONG:*/
+	case PFLOAT: *get_pvalue_pfloat(val1) /= get_pvalue_float(val2); break;
 	default: *eflg = TRUE; return;
 	}
 	delete_pvalue(val2);
@@ -972,9 +1026,7 @@ div_pvalues (PVALUE val1,
  * mod_pvalues -- Modulus two PVALUEs
  *=================================*/
 void
-mod_pvalues (PVALUE val1,
-             PVALUE val2,
-             BOOLEAN *eflg)
+mod_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 {
 	UNION u1, u2;
 	if (*eflg) return;
@@ -988,7 +1040,6 @@ mod_pvalues (PVALUE val1,
 	}
 	switch (ptype(val1)) {
 	case PINT:   u1.i %= u2.i; pvalue(val1) = u1.w; break;
-	/*case PLONG:*/
 	default: *eflg = TRUE; return;
 	}
 	delete_pvalue(val2);
@@ -1009,6 +1060,9 @@ eqv_pvalues (PVALUE val1, PVALUE val2)
 			if(v1 && v2) rel = eqstr(v1, v2);
 			else rel = (v1 == v2);
 			break;
+		case PFLOAT:
+			rel = get_pvalue_float(val1)==get_pvalue_float(val2);
+			break;
 		default:
 			rel = (pvalue(val1) == pvalue(val2));
 			break;
@@ -1021,9 +1075,7 @@ eqv_pvalues (PVALUE val1, PVALUE val2)
  *  and delete val2
  *=========================================*/
 void
-eq_pvalues (PVALUE val1,
-            PVALUE val2,
-            BOOLEAN *eflg)
+eq_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 {
 	BOOLEAN rel;
 
@@ -1033,6 +1085,9 @@ eq_pvalues (PVALUE val1,
 	switch (ptype(val1)) {
 	case PSTRING:
 		rel = eq_pstrings(val1, val2);
+		break;
+	case PFLOAT:
+		rel = get_pvalue_float(val1) == get_pvalue_float(val2);
 		break;
 	default:
 		rel = (pvalue(val1) == pvalue(val2));
@@ -1054,11 +1109,10 @@ eq_pstrings (PVALUE val1, PVALUE val2)
 }
 /*===============================================
  * ne_pvalues -- See if two PVALUEs are not equal
+ * delete val2
  *=============================================*/
 void
-ne_pvalues (PVALUE val1,
-            PVALUE val2,
-            BOOLEAN *eflg)
+ne_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 {
 	BOOLEAN rel;
 
@@ -1078,6 +1132,9 @@ ne_pvalues (PVALUE val1,
 	case PSTRING:
 		rel = !eq_pstrings(val1, val2);
 		break;
+	case PFLOAT:
+		rel = get_pvalue_float(val1) != get_pvalue_float(val2);
+		break;
 	default:
 		rel = (pvalue(val1) != pvalue(val2));
 		break;
@@ -1092,30 +1149,32 @@ ne_pvalues (PVALUE val1,
 }
 /*================================================
  * le_pvalues -- Check <= relation between PVALUEs
+ * delete val2
  *==============================================*/
 void
-le_pvalues (PVALUE val1,
-            PVALUE val2,
-            BOOLEAN *eflg)
+le_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 {
 	BOOLEAN rel;
 	if (*eflg) return;
 	num_conform_pvalues(val1, val2, eflg);
 	if (*eflg) return;
 	switch (ptype(val1)) {
-	/*case LONG:*/
-	default: rel = ((INT) pvalue(val1) <= (INT) pvalue(val2));
+	case PFLOAT: 
+		rel = (get_pvalue_float(val1) <= get_pvalue_float(val2)); 
+		break;
+	default: 
+		rel = ((INT) pvalue(val1) <= (INT) pvalue(val2)); 
+		break;
 	}
 	set_pvalue(val1, PBOOL, (VPTR)rel);
 	delete_pvalue(val2);
 }
 /*================================================
  * ge_pvalues -- Check >= relation between PVALUEs
+ * delete val2
  *==============================================*/
 void
-ge_pvalues (PVALUE val1,
-            PVALUE val2,
-            BOOLEAN *eflg)
+ge_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 {
 	BOOLEAN rel;
 	if (*eflg) return;
@@ -1131,19 +1190,22 @@ ge_pvalues (PVALUE val1,
 #endif
 
 	switch (ptype(val1)) {
-	/*case LONG:*/
-	default: rel = ((INT) pvalue(val1) >= (INT) pvalue(val2));
+	case PFLOAT: 
+		rel = (get_pvalue_float(val1) >= get_pvalue_float(val2)); 
+		break;
+	default: 
+		rel = ((INT) pvalue(val1) >= (INT) pvalue(val2));
+		break;
 	}
 	set_pvalue(val1, PBOOL, (VPTR)rel);
 	delete_pvalue(val2);
 }
 /*===============================================
  * lt_pvalues -- Check < relation between PVALUEs
+ * delete val2
  *=============================================*/
 void
-lt_pvalues (PVALUE val1,
-            PVALUE val2,
-            BOOLEAN *eflg)
+lt_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 {
 	BOOLEAN rel;
 	if (prog_debug) {
@@ -1164,8 +1226,12 @@ lt_pvalues (PVALUE val1,
 	}
 	if (*eflg) return;
 	switch (ptype(val1)) {
-	/*case LONG:*/
-	default: rel = ((INT) pvalue(val1) < (INT) pvalue(val2));
+	case PFLOAT: 
+		rel = (get_pvalue_float(val1) < get_pvalue_float(val2)); 
+		break;
+	default: 
+		rel = ((INT) pvalue(val1) < (INT) pvalue(val2));
+		break;
 	}
 	set_pvalue(val1, PBOOL, (VPTR)rel);
 	delete_pvalue(val2);
@@ -1177,11 +1243,10 @@ lt_pvalues (PVALUE val1,
 }
 /*===============================================
  * gt_pvalues -- Check > relation between PVALUEs
+ * delete val2
  *=============================================*/
 void
-gt_pvalues (PVALUE val1,
-            PVALUE val2,
-            BOOLEAN *eflg)
+gt_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 {
 	BOOLEAN rel;
 if (prog_debug) {
@@ -1195,8 +1260,12 @@ if (prog_debug) {
 	num_conform_pvalues(val1, val2, eflg);
 	if (*eflg) return;
 	switch (ptype(val1)) {
-	/*case LONG:*/
-	default: rel = ((INT) pvalue(val1) > (INT) pvalue(val2));
+	case PFLOAT: 
+		rel = (get_pvalue_float(val1) > get_pvalue_float(val2)); 
+		break;
+	default: 
+		rel = ((INT) pvalue(val1) > (INT) pvalue(val2));
+		break;
 if (prog_debug) llwprintf("rel is %d\n", rel);
 	}
 	set_pvalue(val1, PBOOL, (VPTR)rel);
@@ -1209,15 +1278,13 @@ if (prog_debug) {
 }
 /*==============================
  * exp_pvalues -- Exponentiation
+ * delete val2
  *============================*/
 void
-exp_pvalues (PVALUE val1,
-             PVALUE val2,
-             BOOLEAN *eflg)
+exp_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 {
 	UNION u;
-	INT xi, i, n;
-	FLOAT xf;
+	INT i, n;
 
 	if (*eflg) return;
 	coerce_pvalue(PINT, val2, eflg);
@@ -1226,18 +1293,23 @@ exp_pvalues (PVALUE val1,
 	n = (INT) pvalue(val2);
 	switch (ptype(val1)) {
 	case PINT:
-		xi = 1;
-		for (i = 1; i <= n; i++)
-			xi *= u.i;
-		u.i = xi;
+		{
+			INT xi = 1;
+			for (i = 1; i <= n; i++)
+				xi *= u.i;
+			u.i = xi;
+		}
 		break;
 	case PFLOAT:
-		xf = 1.;
-		for (i = 1; i <= n; i++)
-			xf *= u.f;
-		u.f = xf;
+		{
+			float xf=1, xe = get_pvalue_float(val1);
+			float *pf = get_pvalue_pfloat(val1);
+			for (i = 1; i <= n; i++)
+				xf *= xe;
+			*pf = xf;
+			u.w = pf;
+		}
 		break;
-	/*case PLONG:*/
 	default: u.i = 0;
 	}
 	set_pvalue(val1, ptype(val1), (VPTR)u.w);
@@ -1255,8 +1327,7 @@ incr_pvalue (PVALUE val,
 	u.w = pvalue(val);
 	switch (ptype(val)) {
 	case PINT:   u.i += 1;  pvalue(val) = u.w; break;
-	case PFLOAT: u.f += 1.; pvalue(val) = u.w; break;
-	/*case PLONG:*/
+	case PFLOAT: *get_pvalue_pfloat(val) += 1.; break;
 	default: *eflg = TRUE; break;
 	}
 	return;
@@ -1273,8 +1344,7 @@ decr_pvalue (PVALUE val,
 	u.w = pvalue(val);
 	switch (ptype(val)) {
 	case PINT:   u.i -= 1;  pvalue(val) = u.w; break;
-	case PFLOAT: u.f -= 1.; pvalue(val) = u.w; break;
-	/*case PLONG:*/
+	case PFLOAT: *get_pvalue_pfloat(val) -= 1.; break;
 	default: *eflg = TRUE; break;
 	}
 }
@@ -1290,8 +1360,7 @@ neg_pvalue (PVALUE val,
 	u.w = pvalue(val);
 	switch (ptype(val)) {
 	case PINT:   u.i = -u.i; pvalue(val) = u.w; break;
-	case PFLOAT: u.f = -u.f; pvalue(val) = u.w; break;
-	/*case PLONG:*/
+	case PFLOAT: *get_pvalue_pfloat(val) = -get_pvalue_float(val); break;
 	default: *eflg = TRUE; return;
 	}
 	return;
@@ -1306,7 +1375,7 @@ is_zero (PVALUE val)
 	u.w = pvalue(val);
 	switch (ptype(val)) {
 	case PINT: return u.i == 0;
-	case PFLOAT: return u.f == 0.;
+	case PFLOAT: return get_pvalue_float(val) == 0.;
 	default: return TRUE;
 	}
 }
@@ -1439,7 +1508,7 @@ show_pvalue (PVALUE val)
 		llwprintf("%d>", u.i);
 		return;
 	case PFLOAT:
-		llwprintf("%f>", u.f);
+		llwprintf("%f>", get_pvalue_float(val));
 		break;
 	case PSTRING:
 		llwprintf("%s>", (STRING) pvalue(val));
@@ -1467,36 +1536,38 @@ pvalue_to_string (PVALUE val)
 	INT type;
 	UNION u;
 	static char scratch[40];
+	INT len = sizeof(scratch);
 	char *p;
 
 	if (!is_pvalue(val)) return (STRING) "*NOT PVALUE*";
 	type = ptype(val);
-	sprintf(scratch, "<%s,", ptypes[type]);
+	snprintf(scratch, len, "<%s,", ptypes[type]);
 	p = scratch + strlen(scratch);
+	len -= strlen(scratch);
 	if (pvalue(val) == NULL) {
-		sprintf(p, "NULL>");
+		snprintf(p, len, "NULL>");
 		return (STRING) scratch;
 	}
 	u.w = pvalue(val);
 	switch (type) {
 	case PINT:
-		sprintf(p, "%d>", u.i);
+		snprintf(p, len, "%d>", u.i);
 		break;
 	case PFLOAT:
-		sprintf(p, "%f>", u.f);
+		snprintf(p, len, "%f>", get_pvalue_float(val));
 		break;
 	case PSTRING:
-		sprintf(p, "\"%s\">", (STRING) pvalue(val));
+		snprintf(p, len, "\"%s\">", (STRING) pvalue(val));
 		break;
 	case PINDI:
 		cel = (CACHEEL) pvalue(val);
 		if (!cnode(cel))
 			cel = key_to_indi_cacheel(ckey(cel));
         	node = cnode(cel);
-		sprintf(p, "%s>", nval(NAME(node)));
+		snprintf(p, len, "%s>", nval(NAME(node)));
 		break;
 	default:
-		sprintf(p, "%p>", pvalue(val));
+		snprintf(p, len, "%p>", pvalue(val));
 		break;
 	}
 	return (STRING) scratch;
