@@ -4,6 +4,13 @@
 
 	Do not expand REFNs with > in them.
 
+	* ChangeLog INSTALL NEWS configure.in
+	build/msvc6/llines/llines.rc build/rpm/lifelines.spec
+	docs/ll-devguide.xml docs/ll-reportmanual.xml
+	docs/ll-userguide.xml src/hdrs/version.h
+
+	Bump version to 3.0.37 (in preparation).
+
 2003-10-01 Perry Rapp
 
 	* ChangeLog src/gedlib/node.c src/gedlib/refns.c
