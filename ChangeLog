@@ -36,6 +36,10 @@
 
 	Bugfix (list_browse wasn't clearing pseq & other browses assert).
 
+	* ChangeLog gedlib/property.c:
+
+	Fix undeclared warning.
+
 2002-06-26 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog po/Makevars po/de.po po/el.po po/it.po po/sv.po:
