@@ -291,7 +291,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 		cur_pathinfo = (PATHINFO) dequeue_list(plist);
 		if (!in_table(pactx->filetab, cur_pathinfo->fullpath)) {
 			STRING str;
-			insert_table_ptr(pactx->filetab, strsave(cur_pathinfo->fullpath), 0);
+			table_insert_object(pactx->filetab, cur_pathinfo->fullpath, 0);
 			Plist = plist;
 			parse_file(pactx, cur_pathinfo->fname, cur_pathinfo->fullpath);
 			if ((str = check_rpt_requires(pactx, cur_pathinfo->fullpath)) != 0) {
@@ -418,7 +418,7 @@ static void
 init_pactx (PACTX pactx)
 {
 	memset(pactx, 0, sizeof(*pactx));
-	pactx->filetab = create_table_old();
+	pactx->filetab = create_table();
 }
 /*===============================================
  * wipe_pactx -- destroy global parsing context
@@ -426,9 +426,7 @@ init_pactx (PACTX pactx)
 static void
 wipe_pactx (PACTX pactx)
 {
-	/* 2003-03-24, Perry: */
-	/* leaking the file property tables optionally hanging off file entries */
-	remove_table(pactx->filetab, FREEBOTH);
+	destroy_table(pactx->filetab);
 	pactx->filetab=NULL;
 	memset(pactx, 0, sizeof(*pactx));
 }
@@ -2128,14 +2126,15 @@ pa_handle_require (PACTX pactx, PNODE node)
 	ASSERT(ptype(pval)==PSTRING);
 	pactx=pactx; /* unused */
 
-	tab = (TABLE)valueof_ptr(pactx->filetab, pactx->fullpath);
+	tab = (TABLE)valueof_obj(pactx->filetab, pactx->fullpath);
 	if (!tab) {
-		tab = create_table_old2(FREEBOTH);
-		insert_table_ptr(pactx->filetab, strsave(cur_pathinfo->fullpath), tab);
+		tab = create_table();
+		table_insert_object(pactx->filetab, cur_pathinfo->fullpath, tab);
+		delref_table(tab, NULL); /* release our reference, pactx->filetab owns now */
 	}
 
 	str = pvalue_to_string(pval);
-	insert_table_str(tab, propstr, strsave(str));
+	table_insert_string(tab, propstr, str);
 }
 /*=============================================+
  * pa_handle_proc -- proc declaration (parse time)
@@ -2214,7 +2213,7 @@ parse_error (PACTX pactx, STRING str)
 static STRING
 check_rpt_requires (PACTX pactx, STRING fullpath)
 {
-	TABLE tab = (TABLE)valueof_ptr(pactx->filetab, fullpath);
+	TABLE tab = (TABLE)valueof_obj(pactx->filetab, fullpath);
 	STRING str;
 	STRING propstr = "requires_lifelines-reports.version:";
 	INT ours=0, desired=0;

@@ -21,6 +21,12 @@
 
 	Change rptinfo->proctab from old table to generic table.
 
+	* ChangeLog src/interp/interp.c src/stdlib/generic.c
+	src/stdlib/table.c
+
+	Change pactx->filetab from old table to generic table. Also
+	fix leak of its elements (which are tables).
+
 2005-02-02 Perry Rapp
 
 	* ChangeLog src/gedlib/gedcomi.h src/gedlib/keytonod.c

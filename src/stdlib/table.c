@@ -181,6 +181,7 @@ fndentry (TABLE tab, CNSTRING key)
 }
 /*=============================
  * create_table_impl -- Create table
+ * All tables are created in this function
  * returns addref'd table
  *===========================*/
 static TABLE
@@ -614,7 +615,7 @@ valueofbool_str (TABLE tab, CNSTRING key, BOOLEAN *there)
 }
 /*=============================
  * remove_table -- Remove table
- * TABLE tab
+ * All tables are destroyed in this function
  * INT whattofree:  FREEKEY, DONTFREE, etc
  *===========================*/
 void
