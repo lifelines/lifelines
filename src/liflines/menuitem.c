@@ -87,12 +87,11 @@ MenuItem g_MenuItemOther = { "?  Other menu choices", "?", CMD_MENU_MORE };
 MenuItem g_MenuItemQuit = { "q  Return to main menu", "q", CMD_QUIT };
 
 /* normal menu items */
-static MenuItem f_MenuItemEditIndi = { "e  Edit the person", "e", CMD_EDIT };
-static MenuItem f_MenuItemEditFamily = { "e  Edit the family", "e", CMD_EDIT };
+static MenuItem f_MenuItemEditIndi = { "e  Edit the person", 0, CMD_EDIT };
+static MenuItem f_MenuItemEditFamily = { "e  Edit the family", 0, CMD_EDIT };
 static MenuItem f_MenuItemEdit = { "e  Edit record", "e", CMD_EDIT };
-static MenuItem f_MenuItemEditTop = { "e  Edit top person", "e", CMD_EDIT };
-static MenuItem f_MenuItemPerson = { "i  Browse to person", "i", CMD_PERSON };
-static MenuItem f_MenuItemFather = { "f  Browse to father", "f", CMD_FATHER };
+static MenuItem f_MenuItemEditTop = { "e  Edit top person", 0, CMD_EDIT };
+static MenuItem f_MenuItemFather = { "f  Browse to father", 0, CMD_FATHER };
 static MenuItem f_MenuItemFatherTop = { "f  Browse top father", "f", CMD_FATHER };
 static MenuItem f_MenuItemMother = { "m  Browse to mother", "m", CMD_MOTHER };
 static MenuItem f_MenuItemMotherTop = { "m  Browse top mother", "m", CMD_MOTHER };
@@ -103,9 +102,7 @@ static MenuItem f_MenuItemChildrenTop = { "c  Browse top children", "c", CMD_CHI
 static MenuItem f_MenuItemOlderSib = { "o  Browse to older sib", "o", CMD_UPSIB };
 static MenuItem f_MenuItemYoungerSib = { "y  Browse to younger sib", "y", CMD_DOWNSIB };
 static MenuItem f_MenuItemFamily = { "g  Browse to family", "g", CMD_FAMILY };
-static MenuItem f_MenuItemFamiliesBoth = { "G  Browse both families", "G", CMD_2FAM };
 static MenuItem f_MenuItemParents = { "u  Browse to parents", "u", CMD_PARENTS };
-static MenuItem f_MenuItemParentsBoth = { "U  Browse both parents", "U", CMD_2PAR };
 static MenuItem f_MenuItemBrowse = { "b  Browse to persons", "b", CMD_BROWSE };
 static MenuItem f_MenuItemBrowseTop = { "t  Browse to top", "t", CMD_TOP };
 static MenuItem f_MenuItemBrowseBottom = { "b  Browse to bottom", "b", CMD_BOTTOM };
@@ -462,7 +459,10 @@ setup_menu (INT screen, STRING Title, INT MenuRows, INT MenuCols
 			}
 		} else {
 			char choice[9];
-			strcpy(choice, Menu[i]->Choices);
+			if (Menu[i]->Choices)
+				strcpy(choice, Menu[i]->Choices);
+			else
+				get_menu_choice(Menu[i]->Display, choice, sizeof(choice));
 			/* add to nested menu arrays (stored by choice keys */
 			insert_cmd(cmds, choice, Menu[i]->Command, Menu[i]->Display);
 		}
@@ -473,7 +473,6 @@ setup_menu (INT screen, STRING Title, INT MenuRows, INT MenuCols
  *  This must be first characters of display, ending with space
  * Created: 2001/12/23, Perry Rapp
  *==========================*/
-#ifdef UNUSED_CODE
 /* This will work now, but it will break if we add arrows, PageUp, ... */
 static void
 get_menu_choice (STRING display, STRING choice, INT max)
@@ -492,7 +491,6 @@ get_menu_choice (STRING display, STRING choice, INT max)
 	}
 	choice[i]=0;
 }
-#endif
 /*============================
  * create_cmd_array -- create an empty array of commands
  * Created: 2001/02/01, Perry Rapp

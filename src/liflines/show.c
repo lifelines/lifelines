@@ -273,11 +273,7 @@ show_indi_vitals (UIWINDOW uiwin, NODE pers, INT row, INT hgt
 	if (!reuse)
 		init_display_indi(pers, width);
 	for (i = 0; i < hgt; i++) {
-		wmove(win, row+i, 1);
-		wclrtoeol(win);
-#if !defined(BSD) && !defined(__CYGWIN__)
-		mvwaddch(win, row+i, ll_cols-1, ACS_VLINE);
-#endif
+		clear_hseg(win, row+i, 1, ll_cols-2);
 	}
 	if (*scroll) {
 		if (*scroll > Solen + 5 - hgt)
@@ -321,11 +317,17 @@ show_indi_vitals (UIWINDOW uiwin, NODE pers, INT row, INT hgt
 static void
 add_spouse_line (INT num, NODE indi, NODE fam, INT width)
 {
-	STRING line;
+	STRING line, ptr=Sothers[Solen];
+	INT mylen=liwidth;
+	num=num; /* unused */
 	if (Solen >= MAXOTHERS) return;
-	line = person_display(indi, fam, width-14);
-	snprintf(Sothers[Solen], liwidth, "  %s: %s", dspl_spouse, line);
-	Sothers[Solen++][width-2] = 0;
+	if (mylen>width) mylen=width;
+	llstrcatn(&ptr, " ", &mylen);
+	llstrcatn(&ptr, dspl_spouse, &mylen);
+	llstrcatn(&ptr, ": ", &mylen);
+	line = person_display(indi, fam, mylen-1);
+	llstrcatn(&ptr, line, &mylen);
+	++Solen;
 }
 /*===========================================
  * add_child_line -- Add child line to others
@@ -434,11 +436,7 @@ show_fam_vitals (UIWINDOW uiwin, NODE fam, INT row, INT hgt
 	if (!reuse)
 		init_display_fam(fam, width);
 	for (i = 0; i < hgt; i++) {
-		wmove(win, row+i, 1);
-		wclrtoeol(win);
-#if !defined(BSD) && !defined(__CYGWIN__)
-		mvwaddch(win, row+i, width-1, ACS_VLINE);
-#endif
+		clear_hseg(win, row+i, 1, width-2);
 	}
 	if (*scroll) {
 		if (*scroll > Solen + 7 - hgt)
@@ -485,7 +483,7 @@ show_ancestors (UIWINDOW uiwin, NODE indi, INT row, INT hgt
 		/* shape of canvas upon which to draw pedigree */
 	canvas.minrow = row;
 	canvas.maxrow = row + hgt - 1;
-	canvas.maxcol = ll_cols;
+	canvas.maxcol = width-1;
 	canvas.scroll = *scroll;
 	canvas.param = (void *)uiwin;
 	canvas.line = pedigree_line;
@@ -506,7 +504,7 @@ show_descendants (UIWINDOW uiwin, NODE indi, INT row, INT hgt
 		/* shape of canvas upon which to draw pedigree */
 	canvas.minrow = row;
 	canvas.maxrow = row + hgt - 1;
-	canvas.maxcol = ll_cols;
+	canvas.maxcol = width-1;
 	canvas.scroll = *scroll;
 	canvas.param = (void *)uiwin;
 	canvas.line = pedigree_line;
@@ -525,11 +523,7 @@ wipe_window (UIWINDOW uiwin, INT row, INT hgt)
 	INT i;
 	WINDOW * win = uiw_win(uiwin);
 	for (i = row; i <= row+hgt-1; i++) {
-		wmove(win, i, 1);
-		wclrtoeol(win);
-#if !defined(BSD) && !defined(__CYGWIN__)
-		mvwaddch(win, i, ll_cols-1, ACS_VLINE);
-#endif
+		clear_hseg(win, i, 1, uiw_cols(uiwin)-2);
 	}
 }
 /*================================================

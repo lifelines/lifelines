@@ -172,7 +172,6 @@ static void choose_sort(STRING optname);
 #endif
 static INT choose_tt(STRING prompt);
 static UIWINDOW choose_win(INT desiredhgt, INT *actualhgt);
-static void clear_hseg(WINDOW *win, INT row, INT x1, INT x2);
 static void clear_msgs(void);
 static void clearw(void);
 static UIWINDOW create_uisubwindow(UIWINDOW parent, INT rows, INT cols, INT begy, INT begx);
@@ -2708,7 +2707,7 @@ vmprintf (STRING fmt, va_list args)
  * clear_hseg -- clear part of a row
  * Created: 2002/01/03
  *====================*/
-static void
+void
 clear_hseg (WINDOW *win, INT row, INT x1, INT x2)
 {
 	INT i;

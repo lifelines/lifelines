@@ -324,8 +324,6 @@ make_program_list(PROGRAM_INFO head,
   while (NULL != cur)
     {
       char buf[MAXLINELEN];
-      STRING ptr = buf;
-      INT mylen = sizeof(buf)-1;
       STRING program = cur->tags[P_PROGNAME];
       STRING version = cur->tags[P_VERSION];
       STRING output = cur->tags[P_OUTPUT];
@@ -424,7 +422,7 @@ ask_for_program (STRING mode,
       cur = get_choice(head, choice);
       if (cur)
         {
-          fp = fopen(cur->filename, "r");
+          fp = fopen(cur->filename, mode);
           /* give path to caller, whether or not we succeeded */
           strncpy(fname, cur->filename,sizeof(fname)-1);
           fname[sizeof(fname)-1] = '\0';

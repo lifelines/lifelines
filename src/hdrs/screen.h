@@ -120,6 +120,7 @@ INT ask_for_char(STRING, STRING, STRING);
 INT ask_for_char_msg(STRING, STRING, STRING, STRING);
 STRING ask_for_db_filename(STRING, STRING, STRING);
 INT choose_one_from_indiseq(STRING, INDISEQ);
+void clear_hseg(WINDOW *, INT row, INT x1, INT x2);
 void display_screen(INT);
 void dbprintf(STRING, ...);
 int init_screen(void);

@@ -28,6 +28,15 @@
 	Added requested flags to make LifeLines just run a report
 	(-x and -o). (Bit more cleanup)
 
+	* ChangeLog hdrs/menuitem.h hdrs/screen.h liflines/askprogram.c
+	liflines/menuitem.c liflines/screen.c liflines/show.c
+	liflines/tandem.c:
+
+	Fix more compiler warnings.
+	Fix add_spouse_line to use width exactly. Fix to pass width correctly
+	to pedigree (anc & desc). Remove BSD & CYGWIN defs in show.c (by using
+	clear_hseg instead of wclrtoel + ACS_MAP.
+
 2002-01-3 Matt Emmerton <memmerto@users.sourceforge.net>
 
 	* ChangeLog gedlib/property.c interp/alloc.c interp/date.c
