@@ -1,3 +1,8 @@
+2001-01-10 Perry Rapp <puddle@users.sourceforge.net>
+
+	* hdrs/gedcom.h hdrs/liflines.h liflines/add.c:
+	Moved some add.c function declarations from gedcom.h to liflines.h.
+
 2001-01-10 Petter Reinholdtsen <pere@td.org.uit.no>
 
 	* Makefile.am: New target 'sort-cvsignore' to keep the .cvsignore
