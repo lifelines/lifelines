@@ -1,5 +1,14 @@
 2003-07-01 Matt Emmerton
 
+	* ChangeLog src/hdrs/interp.h src/stdlib/signals.c src/interp/interp.c
+
+	Create new function, get_report_error_msg(), to be used to create
+	the appropriate error message when a signal is caught during report
+	processing.  (This eliminates the need to access interp/ internals
+	from stdlib/signals.c)
+
+2003-07-01 Matt Emmerton
+
 	* ChangeLog src/hdrs/interp.h src/hdrs/pvalue.h src/interp/interpi.h
 
 	Header file restructuring.

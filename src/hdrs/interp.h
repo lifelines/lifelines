@@ -38,6 +38,7 @@ void poutput(STRING, BOOLEAN *eflg);
 void interp_main(LIST lifiles, STRING ofile, BOOLEAN picklist, BOOLEAN timing);
 void init_interpreter(void);
 void shutdown_interpreter(void);
+ZSTR get_report_error_msg (STRING msg);
 
 extern BOOLEAN prog_trace;
 

@@ -2275,3 +2275,22 @@ enqueue_parse_error (const char * fmt, ...)
 	va_end(args);
 	enqueue_list(outstanding_parse_errors, strsave(buffer));
 }
+
+/*=============================================+
+ * get_report_error_message - Return error message
+ *  for display during signal processing
+ * Created: 2003/07/01 (Matt Emmerton)
+ *=============================================*/
+
+ZSTR
+get_report_error_msg (STRING msg)
+{
+	ZSTR zstr=0;
+
+	if (progrunning) {
+		char line[20];
+		snprintf(line, sizeof(line), "%d", iline(Pnode)+1);
+		zstr = zprintpic2(_(msg), irptinfo(Pnode)->fullpath, line);
+        }
+	return zstr;
+}

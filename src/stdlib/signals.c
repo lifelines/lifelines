@@ -134,8 +134,6 @@ set_signals (void)
 static void
 on_signals (int sig)
 {
-	extern BOOLEAN progrunning;
-	extern PNODE Pnode;
 	char signum[20];
 	STRING signame;
 	ZSTR zstr=0;
@@ -145,15 +143,10 @@ on_signals (int sig)
 
 	/* We don't know whether curses is up or not right now */
 	/* so we build the report msg, then close curses, then print it */
-
-	if (progrunning) {
-		char line[20];
-		snprintf(line, sizeof(line), "%d", iline(Pnode)+1);
-		zstr = zprintpic2(_(qSprogsig), irptinfo(Pnode)->fullpath, line);
-	}
-
+	zstr = get_report_error_msg(qSprogsig);
 	close_lifelines();
 	shutdown_ui(TRUE); /* pause */
+
 	/* TODO: Shouldn't we be logging this ? */
 	/* now print report msg if we had one */
 	if (zs_len(zstr))
