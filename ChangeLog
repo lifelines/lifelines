@@ -1,5 +1,12 @@
 2005-01-30 Matt Emmerton
 
+	* ChangeLog src/interp/interp.c
+
+	Set ranit=0 when cancel occurs in report selection box.
+	Fixes sf bug#695876.
+
+2005-01-30 Matt Emmerton
+
 	* ChangeLog configure.in
 	ADD: src/arch/nl_langinfo.c
 	DEL: src/arch/langinfo.c

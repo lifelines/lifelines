@@ -368,9 +368,10 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 		progmessage(MSG_INFO, _("was run successfully.\n"));
 		break;
 	default:
-		if (rpt_cancelled)
+		if (rpt_cancelled) {
+			ranit = 0;
 			progmessage(MSG_STATUS, _("was cancelled.\n"));
-		else
+		} else
 			progmessage(MSG_STATUS, _("was not run because of errors.\n"));
 		break;
 	}
