@@ -2,7 +2,7 @@
 
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                  "http://www.oasis-open.org/docbook/xml/4.0/docbookx.dtd"
-[<!ENTITY llversion '3.0.35'>]>
+[<!ENTITY llversion '3.0.36'>]>
 <book id="docbook" lang="sv">
 
   <bookinfo>
@@ -18,7 +18,7 @@
 _________________________________________________________
 
 <!DOCTYPE BOOK PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
-	<!entity llversion	"3.0.32"> 
+	<!entity llversion	"3.0.36"> 
 ]>	
 	
 <book id="docbook" lang="sv">
@@ -207,7 +207,7 @@ proc main ()
 <para>
 
 	Anta att det här programmet finns i filen
-	<filename>anor</filename>. När du väljer kommandot
+	<filename>anor.ll</filename>. När du väljer kommandot
 	<keycap>r</keycap> från huvudmenyn, så frågar
 	<application>LifeLines</application>:
 	
@@ -240,7 +240,7 @@ skriv in filnamn:
 	Du skriver in ett filnamn, till exempel
 	<userinput><literal>mina.anor</literal></userinput>.
 	<application>LifeLines</application> läser in programmet
-	anor, kör programmet, och skriver ut rapporten till
+	anor.ll, kör programmet, och skriver ut rapporten till
 	<filename>mina.anor</filename>.
 	<application>LifeLines</application> rapporterar alla syntax-
 	eller körningsfel som hittas medan programmet körs.
@@ -302,7 +302,7 @@ skriv in namn, nyckel, refn eller lista:
 	sekvenser av saker; det finns operationer för att placera
 	saker i listor, plocka bort saker därifrån, och för att
 	iterera genom listelementen. I exemplet innehåller
-	<varname>ilist</varname> en lista med anor i antavleordning
+	<varname>ilist</varname> en lista med anor i antavelordning
 	som ännu inte rapporterats, och <varname>alist</varname>
 	innehåller deras respektive annummer.
 
@@ -315,7 +315,7 @@ skriv in namn, nyckel, refn eller lista:
 	medlemmarna läggs till i båda listorna. Personen som
 	identifierats av funktionen <function>getindi</function> blir
 	den första medlemmen i <varname>ilist</varname>, och numret
-	ett, denna persons antavlenummer, blir den första medlemmen i
+	ett, denna persons antavelnummer, blir den första medlemmen i
 	<varname>alist</varname>.
 
 </para>
@@ -346,10 +346,10 @@ while(indi, dequeue(ilist)) {
 <para>
 
 	Detta är en loop som iterativt tar bort personer och deras
-	antavlenummer från de två listorna, och därefter skriver ut
+	antavelnummer från de två listorna, och därefter skriver ut
 	deras namn och födelse- och dödsdata. Om personerna har
 	föräldrar i databasen, så placeras föräldrarna och
-	föräldrarnas antavlenummer på slutet av respektive lista.
+	föräldrarnas antavelnummer på slutet av respektive lista.
 	Loopen itererar till dess listan är tom.
 
 </para>
@@ -382,7 +382,7 @@ set(ahnen, dequeue(alist))
 	argumentet utvärderas; Dess värde tilldelas till det första
 	argumentet, som måste vara en variabel. Här tas nästa nummer i
 	<varname>alist</varname> bort, och tilldelas till variabeln
-	<varname>ahnen</varname>. Detta är antavlenumret på personen
+	<varname>ahnen</varname>. Detta är antavelnumret på personen
 	som just togs bort från <varname>ilist</varname>.
 
 </para>
@@ -458,7 +458,7 @@ enqueue(alist,add(1,mul(2,ahnen)))
 	De här raderna lägger till fadern och modern till den aktuella
 	personen, om endera av dem, eller båda, finns i databasen, i
 	<varname>ilist</varname>. De beräknar också och lägger till
-	föräldrarnas antavlenummer i <varname>alist</varname>. En fars
+	föräldrarnas antavelnummer i <varname>alist</varname>. En fars
 	annummer är det dubbla jämfört med sitt barns. En mors
 	annummer är det dubbla jämfört med sitt barns plus ett. Dessa
 	värden beräknas med funktionerna <function>mul</function> och
@@ -2755,8 +2755,17 @@ loopa igenom alla element i lista
 	<returnvalue>sant</returnvalue> om listan inte har några
 	element och <returnvalue>falskt</returnvalue> i annat fall.
 	<function>Length</function> returnerar längden på listan. Den
-	enda parametern för båda är en lista.
+	enda parametern för båda är en lista. Följande diagram
+	anger hur de olika åtkomstfunktionerna för en lista
+	påverkar varandra:
 
+</para>
+
+<para>
+<inlinemediaobject>
+<imageobject> <imagedata fileref="listops.jpg" format="JPG "/>
+</imageobject>
+</inlinemediaobject>
 </para>
 
 <para>
