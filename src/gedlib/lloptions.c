@@ -47,6 +47,7 @@ static TABLE f_rpt=0; /* option values local to currently running report program
 	/* NB: cannot actually set any report option values currently 2002-10-07 */
 static TABLE f_db=0; /* option values in current database (user/options) */
 static TABLE f_global=0; /* option values from lines config file */
+static TABLE f_predef=0; /* predefined variables during config file processing */
 static TABLE f_fallback=0; /* lowest priority option values */
 static LIST f_notifications=0;
 
@@ -102,6 +103,8 @@ expand_variables (STRING valbuf, INT max)
 	while ((start=strchr(ptr, '%')) && (end=strchr(start+1, '%'))) {
 		STRING name = allocsubbytes(start, 0, end-start+1);
 		STRING value = valueof_str(f_global, name);
+		if (!value)
+			value = valueof_str(f_predef, name);
 		if (value) {
 			INT newlen = strlen(valbuf)-(end-start+1)+strlen(value);
 			if (newlen < max) {
@@ -118,6 +121,22 @@ expand_variables (STRING valbuf, INT max)
 	}
 }
 /*==========================================
+ * dir_from_file -- return directory of file
+ * heap-allocated
+ *========================================*/
+static STRING
+dir_from_file (STRING file)
+{
+	STRING thisdir = strdup(file);
+	STRING ptr;
+	for (ptr=thisdir+strlen(thisdir)-1; ptr>thisdir; --ptr) {
+		if (is_dir_sep(*ptr))
+			break;
+	}
+	*ptr = 0;
+	return thisdir;
+}
+/*==========================================
  * load_config_file -- read options in config file
  *  and load into table (f_global)
  * Created: 2001/02/04, Perry Rapp
@@ -128,11 +147,16 @@ load_config_file (STRING file, STRING * pmsg)
 	FILE * fp = 0;
 	STRING ptr, val;
 	STRING oldval=NULL;
+	STRING thisdir = dir_from_file(file);
 	BOOLEAN there, failed, noesc;
 	char buffer[MAXLINELEN],valbuf[MAXLINELEN];
 	fp = fopen(file, LLREADTEXT);
 	if (!fp)
 		return TRUE; /* no config file, that is ok */
+
+	f_predef = create_table(FREEBOTH);
+
+	insert_table_str(f_predef, strsave("%thisdir%"), thisdir);
 	/* read thru config file til done (or error) */
 	while (fgets(buffer, sizeof(buffer), fp)) {
 		noesc = FALSE;
@@ -181,6 +205,7 @@ load_config_file (STRING file, STRING * pmsg)
 		*pmsg = strsave(_(qSopt2long));
 		return FALSE;
 	}
+	free_optable(&f_predef);
 	send_notifications();
 	return TRUE;
 }

@@ -1,3 +1,9 @@
+2003-07-24 Perry Rapp
+
+	* ChangeLog src/gedlib/lloptions.c
+
+	Add predefined config file variable %thisdir% (to simplify installer).
+
 2003-07-23 Perry Rapp
 
 	* ChangeLog src/liflines/screen.c
