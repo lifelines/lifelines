@@ -238,7 +238,7 @@ void
 striptrail (STRING p)
 {
 	unsigned char *q = p + strlen(p) - 1;
-	while (iswhite(*q) && q >= p)
+	while (q >= p && iswhite(*q))
 		*q-- = '\0';
 }
 /*=======================================

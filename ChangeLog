@@ -1,5 +1,11 @@
 2001-04-29 Perry Rapp <puddle@users.sourceforge.net>
 
+	* ChangeLog liflines/import.c stdlib/stdstrng.c:
+	Close file handle after import.
+	Prevent buffer underrun access in striplead.
+
+2001-04-29 Perry Rapp <puddle@users.sourceforge.net>
+
 	* ChangeLog NEWS interp/builtin.c interp/more.c interp/pvalue.c
 	stdlib/stdstrng.c:
 	Change back to use null pstrings

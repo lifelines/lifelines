@@ -88,6 +88,8 @@ import_from_file (void)
 	if (!fp) return FALSE;
 	llwprintf(gdcker, fname);
 	if (!validate_gedcom(fp)) {
+		fclose(fp);
+		fp=NULL;
 		wfield(9, 0, gdnadd);
 		wpos(10, 0);
 		return FALSE;
@@ -124,6 +126,7 @@ import_from_file (void)
 		wfield(10, 0, dbrdon);
 		wpos(11, 0);
 		fclose(fp);
+		fp=NULL;
 		return FALSE;
 	}
 
@@ -165,7 +168,8 @@ import_from_file (void)
 	mprintf_info("Added (%dP, %dF, %dS, %dE, %dX) records from file `%s'.",
 	    nindi, nfam, nsour, neven, nothr, fname);
 
-	/* At some point, the input file should be closed! - JFC */
+	fclose(fp);
+	fp=NULL;
 
 	return TRUE;
 }

@@ -5,6 +5,9 @@ http://lifelines.sourceforge.net
 Bug fixes in 3.0.6.1-dev
 ==================
 
+- Import not closing file handle. striplead could read before
+  beginning of buffer.
+
 - upper or lower could overflow internal buffers
 
 - NULL PSTRINGs (eg, from getindi(), or father()) could crash string
