@@ -781,7 +781,8 @@ static NODE
 qkey_to_node (CACHE cache, CNSTRING key, STRING tag)
 {
 	CACHEEL cel;
-	ASSERT(cache && key);
+	ASSERT(cache);
+	if (!key) return NULL;
 	if (!(cel = key_to_cacheel(cache, key, tag, TRUE)))
 		return NULL;
 	return cnode(cel);

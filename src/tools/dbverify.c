@@ -135,6 +135,7 @@ static void free_namerefn(NAMEREFN_REC * rec);
 static BOOLEAN fix_bad_pointer(CNSTRING key, RECORD rec, NODE node);
 static BOOLEAN nodes_callback(CNSTRING key, RECORD rec, void *param);
 static void printblock(BLOCK block);
+static CNSTRING printkey(CNSTRING key);
 static void print_usage(void);
 static void process_fam(RECORD rec);
 static void process_indi(RECORD rec);
@@ -819,15 +820,25 @@ process_fam (RECORD rec)
 		NODE wife = qkey_to_indi(wifekey);
 		members++;
 		if (!wife) {
-			report_error(ERR_BADWIFEREF
-				, _("Bad wife reference (%s) in family %s")
-				, wifekey, key);
+			if (todo.pass == 1) {
+				report_error(ERR_BADWIFEREF
+					, _("Bad wife reference (%s) in family %s")
+					, wifekey, key);
+				needfix=TRUE;
+			} else {
+				if (fix_bad_pointer(key, rec, node1)) {
+					report_fix(ERR_BADWIFEREF
+						, _("Fixed Bad wife reference (%s) in family %s")
+						, printkey(wifekey), key);
+					altered=TRUE;
+				}
+			}
 		} else {
 			/* look for family (key) in wife */
 			if (!find_xref(key, wife, "FAMS", NULL)) {
 				report_error(ERR_EXTRAWIFE
 					, _("Improper wife (%s) in family (%s)")
-					, wifekey, key);
+					, printkey(wifekey), key);
 			}
 		}
 	}
@@ -837,15 +848,25 @@ process_fam (RECORD rec)
 		NODE child = qkey_to_indi(chilkey);
 		members++;
 		if (!child) {
-			report_error(ERR_BADCHILDREF
-				, _("Bad child reference (%s) in family %s")
-				, chilkey, key);
+			if (todo.pass == 1) {
+				report_error(ERR_BADCHILDREF
+					, _("Bad child reference (%s) in family %s")
+					, printkey(chilkey), key);
+				needfix=TRUE;
+			} else {
+				if (fix_bad_pointer(key, rec, node1)) {
+					report_fix(ERR_BADCHILDREF
+						, _("Fixed bad child reference (%s) in family %s")
+						, printkey(chilkey), key);
+					altered=TRUE;
+				}
+			}
 		} else {
 			/* look for family (key) in child */
 			if (!find_xref(key, child, "FAMC", NULL)) {
 				report_error(ERR_EXTRACHILD
 					, _("Improper child (%s) in family (%s)")
-					, chilkey, key);
+					, printkey(chilkey), key);
 			}
 		}
 	}
@@ -934,7 +955,7 @@ find_xref (CNSTRING key, NODE node, CNSTRING tag1, CNSTRING tag2)
 		if (eqstr(tag1, ntag(node2))
 			|| (tag2 && eqstr(tag2, ntag(node2)))) {
 			STRING key2 = rmvat(nval(node2));
-			if (eqstr(key, key2)) {
+			if (key2 && eqstr(key, key2)) {
 				found = TRUE;
 				goto exit_find;
 			}
@@ -1352,4 +1373,13 @@ crashlog (STRING fmt, ...)
 	va_start(args, fmt);
 	vprintf(fmt, args);
 	va_end(args);
+}
+/*===============================
+ * printkey -- Displayable version of key
+ *  same as key, except for NULL keys
+ *=============================*/
+static CNSTRING
+printkey (CNSTRING key)
+{
+	return key ? key : "NULL";
 }

@@ -404,6 +404,7 @@ fam_to_wife_node (NODE node)
 	if (!node) return NULL;
 	if (!(node = find_tag(nchild(node), "WIFE"))) return NULL;
 	key = rmvat(nval(node));
+	if (!key) return NULL;
 	return qkey_to_indi(key);
 }
 /*========================================

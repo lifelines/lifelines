@@ -644,20 +644,18 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 	STRING __key=0;\
 	num = 0;\
 	while (__node) {\
+		if (!eqstr(ntag(__node), "CHIL")) break;\
 		__key = rmvat(nval(__node));\
+		__node = nsibling(__node);\
+		++num;\
 		if (!__key || !(irec=qkey_to_irecord(__key)) || !(child=nztop(irec))) {\
-			++num;\
-			__node = nsibling(__node);\
 			continue;\
 		}\
-		++num;\
 		{
 
 #define ENDCHILDRENx \
 		}\
 		release_record(irec);\
-		__node = nsibling(__node);\
-		if (__node && nestr(ntag(__node), "CHIL")) __node = NULL;\
 	}}
 
 #define FORCHILDREN(fam,child,num) \
@@ -667,21 +665,19 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 	STRING __key=0;\
 	num = 0;\
 	while (__node) {\
+		if (!eqstr(ntag(__node), "CHIL")) break;\
 		__key = rmvat(nval(__node));\
+		__node = nsibling(__node);\
+		++num;\
 		if (!__key || !(child = key_to_irecord(__key))) {\
-			++num;\
-			__node = nsibling(__node);\
 			continue;\
 		}\
 		irec=child;\
-		++num;\
 		{
 
 #define ENDCHILDREN \
 		}\
 		release_record(irec);\
-		__node = nsibling(__node);\
-		if (__node && nestr(ntag(__node), "CHIL")) __node = NULL;\
 	}}
 
 /* FORSPOUSES iterate over all FAMS nodes & all spouses of indi
@@ -690,36 +686,36 @@ CNSTRING soundex_get(INT i, CNSTRING name);
  */
 #define FORSPOUSES(indi,spouse,fam,num) \
 	{\
-	NODE __node = FAMS(indi);\
-	NODE __node1=0, spouse=0,fam=0;\
+	NODE __node = find_tag(nchild(indi),"FAMS");\
+	NODE __node1=0, fam=0;\
 	STRING __key=0;\
 	num = 0;\
 	while (__node) {\
+		if (!eqstr(ntag(__node), "FAMS")) break;\
 	    __key = rmvat(nval(__node));\
 	    __node = nsibling(__node);\
-	    if (__key && (fam = qkey_to_fam(__key))) {\
+	    if (!__key || !(fam = qkey_to_fam(__key))) {\
+			continue;\
+		}\
 		__node1 = nchild(fam);\
 		/* inline find_tag here to search for either husb or wife */\
 		while (__node1) {\
-		    spouse = 0;\
-		    if (eqstr("HUSB",ntag(__node1)) || eqstr("WIFE",ntag(__node1))){\
+			NODE spouse=0;\
+			INT __hits=0;\
+			if (eqstr(ntag(__node1), "HUSB")||eqstr(ntag(__node1), "WIFE")) ++__hits;\
+			else if (__hits) break;\
 			__key = rmvat(nval(__node1));\
 			__node1 = nsibling(__node1);\
-			if (!__key || !(spouse = qkey_to_indi(__key))||spouse==indi){\
-			    continue;\
+			if (!__hits || !__key || !(spouse = qkey_to_indi(__key))||spouse==indi){\
+				if (__hits) ++num;\
+				continue;\
 			}\
-		    } else {\
-			__node1 = nsibling(__node1);\
-			continue;\
-		    }\
-		    ++num;\
-		    {
+			++num;\
+			{
 
 #define ENDSPOUSES \
-		    }\
-		}\
+			}\
 	    }\
-	    if (__node && nestr(ntag(__node), "FAMS")) __node = NULL;\
 	}}
 
 /* FORFAMS iterate over all FAMS nodes of indi
@@ -729,22 +725,23 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 #define FORFAMS(indi,fam,num) \
 	{\
 	RECORD frec=0; \
-	NODE __node = FAMS(indi);\
+	NODE __node = find_tag(nchild(indi),"FAMS");\
 	NODE fam=0;\
 	STRING __key=0;\
 	num = 0;\
 	while (__node) {\
+		if (!eqstr(ntag(__node), "FAMS")) break;\
 		__key = rmvat(nval(__node));\
-	    if (__key && (frec=qkey_to_frecord(__key)) && (fam=nztop(frec))) {\
+		__node = nsibling(__node);\
 		++num;\
+	    if (!__key || !(frec=qkey_to_frecord(__key)) || !(fam=nztop(frec))) {\
+			continue;\
+		}\
 		{
 
 #define ENDFAMS \
 		}\
 		release_record(frec); \
-		}\
-		__node = nsibling(__node);\
-		if (__node && nestr(ntag(__node), "FAMS")) __node = NULL;\
 	}}
 
 /* FORFAMSS iterate over all FAMS nodes & all spouses of indi
@@ -755,38 +752,36 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 	{\
 	INT first_sp=0; \
 	RECORD frec=0; \
-	NODE __node = FAMS(indi);\
-	NODE __node1=0, spouse=0, fam=0;\
+	NODE __node = find_tag(nchild(indi),"FAMS");\
+	NODE __node1=0, fam=0;\
 	STRING __key=0;\
 	num = 0;\
 	while (__node) {\
+		if (!eqstr(ntag(__node), "FAMS")) break;\
 	    __key = rmvat(nval(__node));\
 	    __node = nsibling(__node);\
 	    if (__key && (frec=qkey_to_frecord(__key)) && (fam=nztop(frec))) {\
-		__node1 = nchild(fam);\
-		first_sp = 0;\
-		while (__node1) {\
-		    spouse=0;\
-		    if (eqstr("HUSB",ntag(__node1)) || eqstr("WIFE",ntag(__node1))){\
-			__key = rmvat(nval(__node1));\
-			__node1 = nsibling(__node1);\
-			if (!__key || !(spouse = qkey_to_indi(__key))||spouse==indi){\
-			    continue;\
-			}\
-			first_sp = 1;\
-		    } else {\
-			__node1 = nsibling(__node1);\
-			if (__node1 || first_sp) continue;\
-		    }\
-		++num;\
-		{
+			__node1 = nchild(fam);\
+			first_sp = 0;\
+			while (__node1) {\
+				NODE spouse=0;\
+				INT __hits=0;\
+				if (eqstr("HUSB", ntag(__node1)) || eqstr("WIFE", ntag(__node1))) ++__hits;\
+				else if (__hits) break;\
+				__key = rmvat(nval(__node1));\
+				__node1 = nsibling(__node1);\
+				if (!__hits || !__key || !(spouse = qkey_to_indi(__key))||spouse==indi){\
+					if (__hits) ++num;\
+					continue;\
+				}\
+				++num;\
+				{
 
 #define ENDFAMSS \
+				}\
+			}\
+			release_record(frec); \
 		}\
-	    }\
-		release_record(frec); \
-	}\
-	if (__node && nestr(ntag(__node), "FAMS")) __node = NULL;\
 	}}
 
 /* FORFAMCS iterate over all parent families of indi
@@ -796,15 +791,16 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 #define FORFAMCS(indi,fam,fath,moth,num) \
 	{\
 	RECORD frec=0; \
-	NODE __node = FAMC(indi);\
+	NODE __node = find_tag(nchild(indi),"FAMC");\
 	NODE fam, fath, moth;\
 	STRING __key=0;\
 	num = 0;\
 	while (__node) {\
+		if (!eqstr(ntag(__node), "FAMC")) break;\
 		__key = rmvat(nval(__node));\
+		 __node = nsibling(__node);\
+		 ++num;\
 	    if (!__key || !(frec=qkey_to_frecord(__key)) || !(fam=nztop(frec))) {\
-			 ++num;\
-			 __node = nsibling(__node);\
 			 continue;\
 		}\
 		fath = fam_to_husb_node(fam);\
@@ -815,8 +811,6 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 #define ENDFAMCS \
 		}\
 		release_record(frec); \
-		__node = nsibling(__node);\
-		if (__node && nestr(ntag(__node), "FAMC")) __node = NULL;\
 	}}
 
 /* FORHUSBS iterate over all husbands in one family
@@ -855,9 +849,10 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 	num = 0;\
 	while (__node) {\
 		__key = rmvat(nval(__node));\
-		if (!__key || !(wife = key_to_indi(__key))) {\
+		if (!__key || !(wife = qkey_to_indi(__key))) {\
 			++num;\
 			__node = nsibling(__node);\
+			if (__node && nestr(ntag(__node), "WIFE")) __node = NULL;\
 			continue;\
 		}\
 		ASSERT(wife);\

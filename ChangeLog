@@ -1,3 +1,14 @@
+2005-02-04 Perry Rapp
+
+	* ChangeLog src/gedlib/keytonod.c src/gedlib/node.c
+	src/hdrs/gedcom.h src/tools/dbverify.c
+
+	dbverify: Fix bad wife & child references in family.
+	Fix fam_to_wife_node to ignore bad key (reference).
+	Rewrite FORCHILDREN, FORCHILDRENx, etc for maximal efficiency,
+	and to avoid ASSERTs.
+	dbverify: Handle null keys in print outputs;
+
 2005-02-03 Perry Rapp
 
 	* ChangeLog src/interp/alloc.c src/interp/interp.c
@@ -55,6 +66,7 @@
 	Make next_spouse handle invalid spouses.
 	Skip over invalid spouses in FORSPOUSES without ASSERT.
 	Skip over invalid spouses in FORFAMSPOUSES without ASSERT.
+
 
 	* ChangeLog src/hdrs/gedcom.h
 
