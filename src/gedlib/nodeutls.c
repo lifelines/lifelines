@@ -34,6 +34,14 @@
 #include "translat.h"
 #include "gedcom.h"
 
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+/* alphabetical */
+static BOOLEAN nvaldiff(NODE node1, NODE node2);
+
 /*======================================================================
  * unique_nodes -- Remove duplicates from list of nodes -- original list
  *   is modified
@@ -183,7 +191,7 @@ classify_nodes (NODE *pnode1, NODE *pnode2, NODE *pnode3)
 	curs3 = node3 = prev1 = prev2 = NULL;
 
 	while (curs1 && curs2) {
-		if (eqstr(nval(curs1), nval(curs2))) {
+		if (!nvaldiff(curs1, curs2)) {
 			if (node3)
 				curs3 = nsibling(curs3) = curs1;
 			else
@@ -217,6 +225,18 @@ classify_nodes (NODE *pnode1, NODE *pnode2, NODE *pnode3)
 	*pnode1 = node1;
 	*pnode2 = node2;
 	*pnode3 = node3;
+}
+/*===============================================
+ * nvaldiff -- Do nodes have different values ?
+ *  handles NULLs in either
+ * Created: 2001/04/08, Perry Rapp
+ *=============================================*/
+static BOOLEAN
+nvaldiff (NODE node1, NODE node2)
+{
+	if (!nval(node1) && !nval(node2)) return FALSE;
+	if (!nval(node1) || !nval(node2)) return TRUE;
+	return strcmp(nval(node1), nval(node2));
 }
 #ifdef UNUSED_CODE
 /*========================================================================

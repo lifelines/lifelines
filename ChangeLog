@@ -1,3 +1,10 @@
+2002-06-21 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/nodeutls.c liflines/newrecs.c:
+
+	Bugfix so classify doesn't crash if one value is NULL.
+	Bugfix so editing value of top-level other node works.
+
 2002-06-20 Matt Emmerton <memmerto@users.sourceforge.net>
 
 	* ChangeLog configure.in
