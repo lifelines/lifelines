@@ -810,8 +810,9 @@ choose_from_list (STRING ttl,
 	BOX(win, 0, 0);
 	wrefresh(win);
 	rv = list_interact(win, ttl, no, pstrngs);
-	touchwin(main_win);
-	wrefresh(main_win);
+	win = stdout_vis ? stdout_win : main_win;
+	touchwin(win);
+	wrefresh(win);
 	return rv;
 }
 /*=============================================================
