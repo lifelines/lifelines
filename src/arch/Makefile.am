@@ -3,7 +3,7 @@
 
 # AUTOMAKE_OPTIONS = no-dependencies
 
-lib_LIBRARIES= libarch.a
+noinst_LIBRARIES= libarch.a
 
 libarch_a_SOURCES = platform.c
 libarch_a_DEPENDENCIES = @LIBOBJS@

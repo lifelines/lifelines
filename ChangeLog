@@ -1,3 +1,9 @@
+2003-01-04 Matt Emmerton
+
+	* ChangeLog src/arch/Makefile.am
+
+	Ensure libarch.a doesn't get installed during 'make install'.
+
 2003-01-04 Perry Rapp
 
 	* ChangeLog src/liflines/main.c
