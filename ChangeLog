@@ -1,6 +1,9 @@
 2003-02-24 Perry Rapp
 
-	*
+	* ChangeLog src/gedlib/init.c src/hdrs/interp.h
+	src/hdrs/table.h src/hdrs/vtable.h src/interp/interpi.h
+	src/interp/pvalalloc.c src/interp/pvalue.c 
+	src/stdlib/table.c src/stdlib/vtable.c
 
 	Fix crash because placeabbrvs wasn't cleared.
 	Implement vtable for pvalues.
