@@ -1,10 +1,18 @@
 2000-12-30 Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* configure.in: New option --with-profiling to generate runtime
+	profile information when compiling using GNU cc.
+
 	* arch/_llnull.c: Make dummy function static to avoid exporting
 	unused symbol _llnull.  Fix typo in comment.
 
 	* interp/yacc.c interp/yacc.h: Generated from yacc.y using GNU
 	bison 1.28.
+
+	* hdrs/interp.h: Correct prototype for type PFUNC.
+
+	* Changelog.usermap: Correct username prapp -> puddle to match the
+	CVS repository username.  Sorted list.
 
 2000-12-30 Perry Rapp <puddle@users.sourceforge.net>
 
@@ -28,13 +36,6 @@
 	* gedlib/indiseq.c gedlib/names.c hdrs/btree.h hdrs/gedcom.h
 	hdrs/indiseq.h liflines/browse.c:
 	Fixed some () to (void).
-
-2000-12-30 Petter Reinholdtsen <pere@td.org.uit.no>
-
-	* hdrs/interp.h: Correct prototype for type PFUNC.
-
-	* Changelog.usermap: Correct username prapp -> puddle to match the
-	CVS repository username.  Sorted list.
 
 2000-12-27 Petter Reinholdtsen <pere@td.org.uit.no>
 

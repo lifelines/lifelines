@@ -31,6 +31,23 @@ if test "${ac_cv_prog_gcc}" = "yes"; then
   CFLAGS="${CFLAGS} -g"
 fi
 
+# Compile with profiling, to find bottlenecks
+AC_ARG_WITH(profiling,
+  [  --with-profiling        Compile with profiling support],
+  [# Does it work for other compilers then GCC? [pere 2000-12-30]
+   if test "${ac_cv_prog_gcc}" = "yes"; then
+      CFLAGS="${CFLAGS} -pg -a"
+      LDFLAGS="${LDFLAGS} -pg -a"
+
+      # Make sure 'config.h' is changed if profiling is turned on, to
+      # trigger recompile for every source file.
+      AC_DEFINE(PROFILING, 1, [Profiling enabled?])
+   else
+      echo "Do not know how to perform profiling using this compiler!"
+   fi
+  ]
+)
+
 echo Looking for libraries
 echo Looking for ncurses
 AC_CHECK_LIB(ncurses, tparm)
