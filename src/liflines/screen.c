@@ -63,16 +63,36 @@ static INT list_detail_lines = 0;
 #	define BOX(w,r,c) box(w,r,c)
 #endif
 
-extern BOOLEAN alldone, progrunning;
-extern STRING empstr, empstr71, readpath;
-extern STRING abverr, uoperr;
-extern STRING mtitle, cright, plschs;
-extern STRING mn_unkcmd;
+
+
+/*********************************************
+ * global/exported variables
+ *********************************************/
 
 INT ll_lines = LINESREQ; /* update to be number of lines in screen */
 INT ll_cols = COLSREQ;	 /* number of columns in screen used by LifeLines */
 BOOLEAN stdout_vis = FALSE;
 INT cur_screen = 0;
+WINDOW *main_win = NULL;
+WINDOW *stdout_win, *stdout_box_win;
+WINDOW *debug_win, *debug_box_win;
+WINDOW *ask_win, *ask_msg_win;
+WINDOW *choose_from_list_win;
+WINDOW *add_menu_win, *del_menu_win;
+WINDOW *scan_menu_win;
+WINDOW *utils_menu_win, *trans_menu_win;
+WINDOW *extra_menu_win;
+
+/*********************************************
+ * external/imported variables
+ *********************************************/
+
+extern BOOLEAN alldone, progrunning;
+extern STRING empstr, empstr71, readpath;
+extern STRING abverr, uoperr;
+extern STRING mtitle, cright, plschs;
+extern STRING mn_unkcmd;
+extern STRING askynq, askynyn, askyny;
 
 /*********************************************
  * local function prototypes
@@ -105,15 +125,6 @@ static INT calculate_screen_lines(INT screen);
 static INT menu_enabled = 1;
 static INT menu_dirty = 0;
 
-WINDOW *main_win = NULL;
-WINDOW *stdout_win, *stdout_box_win;
-WINDOW *debug_win, *debug_box_win;
-WINDOW *ask_win, *ask_msg_win;
-WINDOW *choose_from_list_win;
-WINDOW *add_menu_win, *del_menu_win;
-WINDOW *scan_menu_win;
-WINDOW *utils_menu_win, *trans_menu_win;
-WINDOW *extra_menu_win;
 
 INT BAND;
 
@@ -126,7 +137,6 @@ static INT EMPTY_LINES;
 int TANDEM_LINES = 6;		/* number of lines of tandem info */
 int PER_LINES = 11;		/* number of lines of person info */
 int FAM_LINES = 13;		/* number of lines of family info */
-int PED_LINES = 15;		/* number of lines of pedigree */
 int LIST_LINES = 6;		/* number of lines of person info in list */
 int AUX_LINES = 15;		/* number of lines in aux window */
 int VIEWABLE = 10;		/* can be increased up to MAXVIEWABLE */
@@ -136,13 +146,6 @@ int winx=0, winy=0; /* user specified window size */
 static char showing[150];
 static BOOLEAN now_showing = FALSE;
 
-/* forward refs */
-void win_list_init(void);
-
-/* in miscutls.c */
-void key_util(void);
-void who_is_he_she(void);
-void show_database_stats(void);
 
 /*============================
  * init_screen -- Init screens
@@ -187,7 +190,6 @@ init_screen (void)
 	    TANDEM_LINES += (extralines / 2);
 	    PER_LINES += extralines;
 	    FAM_LINES += extralines;
-		 PED_LINES += extralines;
 		 AUX_LINES += extralines;
 	    LIST_LINES += extralines;
 	    VIEWABLE += extralines;
@@ -536,16 +538,6 @@ indi_browse (NODE indi, INT mode)
 	display_screen(screen);
 	return interact(main_win, NULL, screen);
 }
-/*=========================================
- * fam_interact -- call interact for indi
- * Created: 2001/01/27, Perry Rapp
- *=======================================*/
-static INT
-fam_interact (void)
-{
-	return interact(main_win, 
-		"efmcnsardxtbzqABCFM()$#123456789+-<>*?!", -1);
-}
 /*=======================================
  * fam_browse -- Handle fam_browse screen
  *=====================================*/
@@ -559,7 +551,7 @@ fam_browse (NODE fam, INT mode)
 	else
 		show_long_family(fam, 1, lines, MAINWIN_WIDTH);
 	display_screen(screen);
-	return fam_interact();
+	return interact(main_win, NULL, screen);
 }
 /*=============================================
  * tandem_browse -- Handle tandem_browse screen
@@ -672,9 +664,12 @@ ask_for_string (STRING ttl,
 BOOLEAN
 ask_yes_or_no (STRING ttl)
 {
-	INT c = ask_for_char(ttl, 
-		"enter y (yes) or n (no): ", "yYnN");
-	return c == 'y' || c == 'Y';
+	STRING ptr;
+	INT c = ask_for_char(ttl, askynq, askynyn);
+	for (ptr = askyny; *ptr; ptr++) {
+		if (c == *ptr) return TRUE;
+	}
+	return FALSE;
 }
 /*=========================================================
  * ask_yes_or_no_msg -- Ask yes or no question with message
@@ -682,9 +677,12 @@ ask_yes_or_no (STRING ttl)
 BOOLEAN
 ask_yes_or_no_msg (STRING msg, STRING ttl)
 {
-	INT c = ask_for_char_msg(msg, ttl,
-		"enter y (yes) or n (no): ", "yYnN");
-	return c == 'y' || c == 'Y';
+	STRING ptr;
+	INT c = ask_for_char_msg(msg, ttl, askynq, askynyn);
+	for (ptr = askyny; *ptr; ptr++) {
+		if (c == *ptr) return TRUE;
+	}
+	return FALSE;
 }
 /*=======================================
  * ask_for_char -- Ask user for character
@@ -1392,30 +1390,6 @@ mprintf_status (STRING fmt, ...)
 	vmprintf(fmt, args);
 	va_end(args);
 }
-#ifdef OBSOLETE
-/*===============================================
- * Other: mprintf -- Call as mprintf(fmt, arg, arg, ...)
- *=============================================*/
-mprintf (fmt, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
-STRING fmt;
-INT arg1, arg2, arg3, arg4, arg5, arg6, arg7;
-{
-	INT row;
-	wmove(main_win, row = ll_lines-2, 2);
-	if (cur_screen != LIST_SCREEN) {
-		wclrtoeol(main_win);
-		mvwaddch(main_win, row, ll_cols-1, ACS_VLINE);
-	} else
-		mvwaddstr(main_win, row, 2, empstr);
-	wmove(main_win, row, 2);
-	sprintf(showing, fmt, arg1, arg2, arg3, arg4, arg5,
-	    arg6, arg7);
-	mvwaddstr(main_win, row, 2, showing);
-	now_showing = TRUE;
-	place_cursor();
-	wrefresh(main_win);
-}
-#endif
 /*=======================================
  * message -- Simple interface to mprintf
  *=====================================*/
@@ -1551,7 +1525,6 @@ place_cursor (void)
 	case MAIN_SCREEN:    row = 5;        break;
 	case ONE_PER_SCREEN: row = ll_lines-11; break;
 	case ONE_FAM_SCREEN: row = ll_lines-9;  break;
-	case PED_SCREEN:     row = PED_LINES+2;       break;
 	case AUX_SCREEN:     row = AUX_LINES+2;       break;
 	case TWO_PER_SCREEN: row = 2*TANDEM_LINES+3;       break;
 	case TWO_FAM_SCREEN: row = 2*TANDEM_LINES+3;       break;
@@ -1640,7 +1613,7 @@ output_menu (WINDOW *win, INT screen)
 	INT OnePageFlag = 0;
 	page = f_ScreenInfo[screen].MenuPage;
 	pageitems = (MenuRows-1)*3-2;
-	pages = MenuSize/pageitems+1;
+	pages = (MenuSize-1)/pageitems+1;
 	if (MenuSize <= pageitems+1) /* don't need '?' if they fit */
 	{
 		OnePageFlag = 1;
@@ -1670,8 +1643,13 @@ output_menu (WINDOW *win, INT screen)
 			row = LINESTOTAL-MenuRows-2;
 			continue;
 		}
-		if (icol==2 && row==LINESTOTAL-5)
-			break;
+		if (OnePageFlag) {
+			if (icol==2 && row==LINESTOTAL-4)
+				break;
+		} else {
+			if (icol==2 && row==LINESTOTAL-5)
+				break;
+		}
 	}
 	row = LINESTOTAL-5; col = 3+BAND*2;
 	if (!OnePageFlag)

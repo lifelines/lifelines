@@ -65,6 +65,7 @@ STRING idcbrs = SS "Please choose the child to browse to.";
 STRING id1cbr = SS "Please choose the first child to browse to.";
 STRING id2cbr = SS "Please choose the second child to browse to.";
 STRING idfbrs = SS "Please choose the family to browse to.";
+STRING idfamk = SS "Enter Family Number to Browse to";
 STRING id1fbr = SS "Please choose the first family to browse to.";
 STRING id2fbr = SS "Please choose the second family to browse to.";
 STRING idhbrs = SS "Please choose the father/husband to browse to.";
@@ -264,3 +265,8 @@ STRING mn_titindi  = (STRING) "LifeLines -- Person Browse Screen (* toggles menu
 STRING mn_titfam   = (STRING) "LifeLines -- Family Browse Screen (* toggles menu)";
 STRING mn_titaux   = (STRING) "LifeLines -- Auxiliary Browse Screen (* toggles menu)";
 STRING mn_unkcmd   = (STRING) "Not valid command";
+
+/* prompt, full list, yes list */
+STRING askynq      = (STRING) "enter y (yes) or n (no): ";
+STRING askynyn     = (STRING) "yYnN";
+STRING askyny      = (STRING) "yY";

@@ -61,7 +61,7 @@ extern STRING idpnxt, ids2fm, idc2fm, idplst, idp2br, crtcfm, crtsfm;
 extern STRING ronlye, ronlya, idhbrs, idwbrs;
 extern STRING id1sbr, id2sbr, id1fbr, id2fbr, id1cbr, id2cbr;
 extern STRING id1hbr, id2hbr, id1wbr, id2wbr;
-extern STRING spover;
+extern STRING spover, idfamk;
 
 /*********************************************
  * local enums & defines
@@ -75,9 +75,13 @@ extern STRING spover;
  *********************************************/
 
 static INT browse_indi(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
+static void pick_remove_spouse_from_family(NODE fam);
+static void pick_add_spouse_to_family(NODE fam, NODE save);
+static void pick_add_child_to_fam(NODE fam, NODE save);
 static INT browse_fam(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
 static INT browse_pedigree(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
 static BOOLEAN handle_menu_commands(INT c);
+static BOOLEAN handle_scroll_commands(INT c);
 static BOOLEAN handle_menu_commands_old(INT c);
 static NODE goto_indi_child(NODE indi, int childno);
 static NODE goto_fam_child(NODE fam, int childno);
@@ -228,8 +232,9 @@ browse_indi_modes (NODE *pindi1,
 		/* last keynum & mode, so can tell if changed */
 		nkeyp = indi_to_keynum(indi);
 		indimodep = indimode;
-		if (c != 'a') save = NULL;
-		if (!handle_menu_commands(c))
+		if (c != CMD_NEWFAMILY) save = NULL;
+		if (!handle_menu_commands(c)
+			&& !handle_scroll_commands(c))
 			switch (c)
 		{
 		case CMD_EDIT:	/* Edit this person */
@@ -242,7 +247,7 @@ browse_indi_modes (NODE *pindi1,
 				idfbrs, TRUE)))
 				return BROWSE_FAM;
 			break;
-		case CMD_2FAM:
+		case CMD_TANDEM_FAMILIES:
 			if ((*pfam1 = choose_family(indi, ntprnt,
 				id1fbr, TRUE)))
 			  if ((*pfam2 = choose_family(indi, ntprnt,
@@ -308,12 +313,6 @@ browse_indi_modes (NODE *pindi1,
 			node = choose_child(indi, NULL, nocofp,
 			    idcbrs, NOASK1);
 			if (node) indi = node;
-			break;
-		case CMD_SCROLL_UP:       /* scroll details/pedigree up */
-			show_scroll(-1);
-			break;
-		case CMD_SCROLL_DOWN:       /* scroll details/pedigree down */
-			show_scroll(+1);
 			break;
 		case CMD_TOGGLE_PEDTYPE:       /* toggle pedigree mode (ancestors/descendants) */
 			pedigree_toggle_mode();
@@ -381,7 +380,7 @@ browse_indi_modes (NODE *pindi1,
 				idfbrs, FALSE)))
 				return BROWSE_FAM;
 			break;
-		case CMD_2PAR:	/* tandem browse to two parents families*/
+		case CMD_TANDEM_PARENTS:	/* tandem browse to two parents families*/
 			if ((*pfam1 = choose_family(indi, noprnt,
 				id1fbr, FALSE)))
 			  if ((*pfam2 = choose_family(indi, noprnt,
@@ -578,7 +577,8 @@ browse_aux (NODE node)
 		/* last keynum & mode, so can tell if changed */
 		nkeyp = node_to_keynum(ntype, node);
 		auxmodep = auxmode;
-		if (!handle_menu_commands(c))
+		if (!handle_menu_commands(c)
+			&& !handle_scroll_commands(c))
 			switch (c)
 		{
 		case CMD_TEST88:
@@ -594,7 +594,7 @@ browse_aux (NODE node)
 			case 'X': edit_other(node); break;
 			}
 			break;
-		case CMD_NEXT:	/* Go to next indi in db */
+		case CMD_NEXT:	/* Go to next in db */
 			{
 				i = xref_next(ntype, nkeyp);
 				if (i)
@@ -602,7 +602,7 @@ browse_aux (NODE node)
 				else message(norec);
 				break;
 			}
-		case CMD_PREV:	/* Go to prev indi in db */
+		case CMD_PREV:	/* Go to prev in db */
 			{
 				i = xref_prev(ntype, nkeyp);
 				if (i)
@@ -610,12 +610,6 @@ browse_aux (NODE node)
 				else message(norec);
 				break;
 			}
-		case CMD_SCROLL_UP:       /* scroll details/pedigree up */
-			show_scroll(-1);
-			break;
-		case CMD_SCROLL_DOWN:       /* scroll details/pedigree down */
-			show_scroll(+1);
-			break;
 		case CMD_QUIT:
 		default:
 			return BROWSE_QUIT;
@@ -634,33 +628,15 @@ browse_indi (NODE *pindi1,
 {
 	return browse_indi_modes(pindi1, pindi2, pfam1, pfam2, pseq, 'i');
 }
-/*===========================================
- * display_fam -- Show family in current mode
- *=========================================*/
-static INT
-display_fam (NODE fam, INT fammode)
-{
-	CACHEEL icel;
-	INT c=0;
-	INT mode;
-	icel = fam_to_cacheel(fam);
-	lock_cache(icel);
-	/* combine fammode & gedcom_mode */
-	/* no fammode supported but 'f' */
-	mode=gedcom_mode?'g':'f';
-	c = fam_browse(fam, mode);
-	unlock_cache(icel);
-	return c;
-}
 /*===============================================
- * remove_spouse_from_family -- 
+ * pick_remove_spouse_from_family -- 
  *  pulled out of browse_fam, 2001/02/03, Perry Rapp
  *=============================================*/
 static void
-remove_spouse_from_family(NODE fam)
+pick_remove_spouse_from_family (NODE fam)
 {
-	NODE node, husb, wife, chil, rest;
-	NODE root, fref, spnodes[MAX_SPOUSES];
+	NODE fref, husb, wife, chil, rest;
+	NODE root, node, spnodes[MAX_SPOUSES];
 	STRING spstrings[MAX_SPOUSES];
 	INT i;
 	if (readonly) {
@@ -695,6 +671,89 @@ remove_spouse_from_family(NODE fam)
 	choose_and_remove_spouse(spnodes[i], fam, TRUE);
 }
 /*===============================================
+ * pick_add_spouse_to_family -- 
+ *  pulled out of browse_fam, 2001/02/03, Perry Rapp
+ *=============================================*/
+static void
+pick_add_spouse_to_family (NODE fam, NODE save)
+{
+	NODE fref, husb, wife, chil, rest;
+	char scratch[100];
+	TRANTABLE ttd = tran_tables[MINDS];
+	if (readonly) {
+		message(ronlye);
+		return;
+	}
+	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
+	join_fam(fam, fref, husb, wife, chil, rest);
+#if 0
+	if (husb && wife) {
+		message(hasbth);
+		return;
+	}
+#endif
+	if (save) {
+		if (keyflag)
+			sprintf(scratch, "%s%s (%s)", issnew,
+				 indi_to_name(save, ttd, 56),
+				 rmvat(nxref(save))+1);
+		else
+			sprintf(scratch, "%s%s", issnew,
+				 indi_to_name(save, ttd, 56));
+		if (ask_yes_or_no(scratch)) {
+			add_spouse(save, fam, FALSE);
+			return;
+		}
+	}
+	add_spouse(NULL, fam, TRUE);
+}
+/*===============================================
+ * pick_add_child_to_fam -- 
+ *  pulled out of browse_fam, 2001/02/03, Perry Rapp
+ *=============================================*/
+static void
+pick_add_child_to_fam (NODE fam, NODE save)
+{
+	char scratch[100];
+	TRANTABLE ttd = tran_tables[MINDS];
+	if (readonly) {
+		message(ronlye);
+		return;
+	}
+	if (save) {
+		if (keyflag)
+			sprintf(scratch, "%s%s (%s)", iscnew,
+				 indi_to_name(save, ttd, 56),
+				 rmvat(nxref(save))+1);
+		else
+			sprintf(scratch, "%s%s", iscnew,
+				 indi_to_name(save, ttd, 56));
+		if (ask_yes_or_no(scratch)) {
+			add_child(save, fam);
+			return;
+		}
+	}
+	add_child(NULL, fam);
+}
+/*===========================================
+ * display_fam -- Show family in current mode
+ *=========================================*/
+static INT
+display_fam (NODE fam, INT fammode)
+{
+	CACHEEL icel;
+	INT c=0;
+	INT mode;
+	icel = fam_to_cacheel(fam);
+	lock_cache(icel);
+	/* combine fammode & gedcom_mode */
+	/* no fammode supported but 'f' */
+	mode=gedcom_mode?'g':'f';
+	c = fam_browse(fam, mode);
+	unlock_cache(icel);
+	return c;
+}
+/*===============================================
  * browse_fam -- Handle family browse selections.
  *=============================================*/
 static INT
@@ -707,8 +766,7 @@ browse_fam (NODE *pindi,
 	INT i, c, rc;
 	INT fammode='f';
 	INT nkeyp, fammodep;
-	NODE save = NULL, fam = *pfam1, node, husb, wife, chil, rest;
-	NODE fref;
+	NODE save = NULL, fam = *pfam1, node;
 	INDISEQ seq;
 	STRING key, name;
 	char scratch[100];
@@ -728,15 +786,17 @@ browse_fam (NODE *pindi,
 		/* last keynum & mode, so can tell if changed */
 		nkeyp = fam_to_keynum(fam);
 		fammodep = fammode;
-		if (c != 'a' && c != 's') save = NULL;
-		if (!handle_menu_commands_old(c))
+		if (c != CMD_ADDCHILD && c != CMD_ADDSPOUSE)
+			save = NULL;
+		if (!handle_menu_commands(c)
+			&& !handle_scroll_commands(c))
 			switch (c) 
 		{
-		case 'A':	/* Advanced family edit */
+		case CMD_ADVANCED:	/* Advanced family edit */
 			advanced_family_edit(fam);
 			break;
-		case 'B':
-			i = ask_for_int("Enter Family Number to Browse to");
+		case CMD_BROWSE_FAM:
+			i = ask_for_int(idfamk);
 			if(i > 0) {
 				sprintf(scratch, "F%d", i);
 				if((node = key_to_fam(scratch))) {
@@ -744,17 +804,17 @@ browse_fam (NODE *pindi,
 				}
 			}
 			break;
-		case 'e':	/* Edit family's record */
+		case CMD_EDIT:	/* Edit family's record */
 			node = edit_family(fam);
 			if (node)
 				fam = node;
 			break;
-		case 'f':	/* Browse to family's father */
+		case CMD_FATHER:	/* Browse to family's father */
 			*pindi = choose_father(NULL, fam, nohusb,
 			    idhbrs, NOASK1);
 			if (*pindi) return BROWSE_INDI;
 			break;
-		case 'F':	/* Tandem Browse to family's fathers */
+		case CMD_TANDEM_FATHERS:	/* Tandem Browse to family's fathers */
 			*pindi = choose_father(NULL, fam, nohusb,
 			    id1hbr, NOASK1);
 			if (*pindi) {
@@ -764,12 +824,12 @@ browse_fam (NODE *pindi,
 				return BROWSE_TAND;
 			}
 			break;
-		case 'm':	/* Browse to family's mother */
+		case CMD_MOTHER:	/* Browse to family's mother */
 			*pindi = choose_mother(NULL, fam, nowife,
 			    idwbrs, NOASK1);
 			if (*pindi) return BROWSE_INDI;
 			break;
-		case 'M':	/* Tandem Browse to family's mother */
+		case CMD_TANDEM_MOTHERS:	/* Tandem Browse to family's mother */
 			*pindi = choose_mother(NULL, fam, nowife,
 			    id1wbr, NOASK1);
 			if (*pindi) {
@@ -779,12 +839,12 @@ browse_fam (NODE *pindi,
 					return BROWSE_TAND;
 			}
 			break;
-		case 'c':	/* Browse to a child */
+		case CMD_CHILDREN:	/* Browse to a child */
 			*pindi = choose_child(NULL, fam, nocinf,
 				idcbrs, NOASK1);
 			if (*pindi) return BROWSE_INDI;
 			break;
-		case 'C':	/* browse to tandem children */
+		case CMD_TANDEM_CHILDREN:	/* browse to tandem children */
 			*pindi = choose_child(NULL, fam, nocinf,
 			    id1cbr, NOASK1);
 			if (*pindi) {
@@ -794,7 +854,7 @@ browse_fam (NODE *pindi,
 					return BROWSE_TAND;
 			}
 			break;
-		case 'd':	/* Remove a child */
+		case CMD_REMOVECHILD:	/* Remove a child */
 			if (readonly) {
 				message(ronlye);
 				break;
@@ -803,65 +863,21 @@ browse_fam (NODE *pindi,
 			    idcrmv, DOASK1);
 			if (*pindi) choose_and_remove_child(*pindi, fam, TRUE);
 			break;
-		case 's':	/* Add spouse to family */
-			if (readonly) {
-				message(ronlye);
-				break;
-			}
-			split_fam(fam, &fref, &husb, &wife, &chil, &rest);
-			join_fam(fam, fref, husb, wife, chil, rest);
-#if 0
-			if (husb && wife) {
-				message(hasbth);
-				break;
-			}
-#endif
-			if (save) {
-				if (keyflag)
-					sprintf(scratch, "%s%s (%s)", issnew,
-					    indi_to_name(save, ttd, 56),
-					    rmvat(nxref(save))+1);
-				else
-					sprintf(scratch, "%s%s", issnew,
-					    indi_to_name(save, ttd, 56));
-				if (ask_yes_or_no(scratch)) {
-					add_spouse(save, fam, FALSE);
-					save = NULL;
-					break;
-				}
-			}
-			add_spouse(NULL, fam, TRUE);
+		case CMD_ADDSPOUSE:	/* Add spouse to family */
+			pick_add_spouse_to_family(fam, save);
 			save = NULL;
 			break;
-		case 'r':	/* Remove spouse from family */
-			remove_spouse_from_family(fam);
+		case CMD_REMOVESPOUSE:	/* Remove spouse from family */
+			pick_remove_spouse_from_family(fam);
 			break;
-		case 'n':	/* Add person to database */
+		case CMD_NEWPERSON:	/* Add person to database */
 			save = add_indi_by_edit();
 			break;
-		case 'a':	/* Add child to family */
-			if (readonly) {
-				message(ronlye);
-				break;
-			}
-			if (save) {
-				if (keyflag)
-					sprintf(scratch, "%s%s (%s)", iscnew,
-					    indi_to_name(save, ttd, 56),
-					    rmvat(nxref(save))+1);
-				else
-					sprintf(scratch, "%s%s", iscnew,
-					    indi_to_name(save, ttd, 56));
-				if (ask_yes_or_no(scratch)) {
-					add_child(save, fam);
-					save = NULL;
-					break;
-				}
-			}
-			add_child(NULL, fam);
+		case CMD_ADDCHILD:	/* Add child to family */
+			pick_add_child_to_fam(fam, save);
 			save = NULL;
 			break;
-		case 'b': 	/* Browse to new list of persons */
+		case CMD_BROWSE: 	/* Browse to new list of persons */
 			seq = ask_for_indiseq(idplst, &rc);
 			if (!seq) break;
 			if (length_indiseq(seq) == 1) {
@@ -875,11 +891,11 @@ browse_fam (NODE *pindi,
 			*pseq = seq;
 			return BROWSE_LIST;
 			break;
-		case 'z':	/* Zip browse to new person */
+		case CMD_BROWSE_ZIP:	/* Zip browse to new person */
 			*pindi = ask_for_indi(idpnxt, NOCONFIRM, NOASK1);
 			if (*pindi) return BROWSE_INDI;
 			break;
-		case 't':	/* Enter family tandem mode */
+		case CMD_TANDEM:	/* Enter family tandem mode */
 			node = ask_for_fam(ids2fm, idc2fm);
 			if (node) {
 				*pfam1 = fam;
@@ -887,32 +903,26 @@ browse_fam (NODE *pindi,
 				return BROWSE_2FAM;
 			}
 			break;
-		case 'x':	/* Swap two children */
+		case CMD_SWAPCHILDREN:	/* Swap two children */
 			swap_children(NULL, fam);
 			break;
-		case '(':       /* scroll children up */
-			show_scroll(-1);
-			break;
-		case ')':       /* scroll children down */
-			show_scroll(+1);
-			break;
-		case '#':       /* toggle children numbers */
+		case CMD_TOGGLE_CHILDNUMS:       /* toggle children numbers */
 			show_childnumbers();
 			break;
-		case '1':	/* Go to children by number */
-		case '2':
-		case '3':
-		case '4':
-		case '5':
-		case '6':
-		case '7':
-		case '8':
-		case '9':
-			*pindi = goto_fam_child(fam, c-'0');
+		case CMD_CHILD_DIRECT0+1:	/* Go to children by number */
+		case CMD_CHILD_DIRECT0+2:
+		case CMD_CHILD_DIRECT0+3:
+		case CMD_CHILD_DIRECT0+4:
+		case CMD_CHILD_DIRECT0+5:
+		case CMD_CHILD_DIRECT0+6:
+		case CMD_CHILD_DIRECT0+7:
+		case CMD_CHILD_DIRECT0+8:
+		case CMD_CHILD_DIRECT0+9:
+			*pindi = goto_fam_child(fam, c-CMD_CHILD_DIRECT0);
 			if (*pindi) return BROWSE_INDI;
 			message(nochil);
 			break;
-		case '+':	/* Go to next fam in db */
+		case CMD_NEXT:	/* Go to next fam in db */
 			{
 				i = xref_nextf(nkeyp);
 				if (i)
@@ -920,7 +930,7 @@ browse_fam (NODE *pindi,
 				else message(nofam);
 				break;
 			}
-		case '-':	/* Go to prev indi in db */
+		case CMD_PREV:	/* Go to prev fam in db */
 			{
 				i = xref_prevf(nkeyp);
 				if (i)
@@ -928,16 +938,16 @@ browse_fam (NODE *pindi,
 				else message(nofam);
 				break;
 			}
-		case '$':	/* Browse to sources */
+		case CMD_SOURCES:	/* Browse to sources */
 			node = choose_source(fam, nosour, idsour);
 			if (node)
 				browse_source_node(node);
 			break;
-		case '!': /* Switch to gedcom mode */
+		case CMD_GEDCOM_MODE: /* Switch to gedcom mode */
 			gedcom_mode = !gedcom_mode;
 			fammodep = 0; /* force redraw */
 			break;
-		case 'q':
+		case CMD_QUIT:
 		default:
 			return BROWSE_QUIT;
 		}
@@ -955,6 +965,19 @@ handle_menu_commands (INT c)
 		case CMD_MENU_SHRINK: adjust_menu_height(-1); return TRUE;
 		case CMD_MENU_MORE: cycle_menu(); return TRUE;
 		case CMD_MENU_TOGGLE: toggle_menu(); return TRUE;
+	}
+	return FALSE;
+}
+/*======================================================
+ * handle_scroll_commands -- Handle detail scrolling
+ * Created: 2001/02/01, Perry Rapp
+ *====================================================*/
+static BOOLEAN
+handle_scroll_commands (INT c)
+{
+	switch(c) {
+		case CMD_SCROLL_UP: show_scroll(-1); return TRUE;
+		case CMD_SCROLL_DOWN: show_scroll(+1); return TRUE;
 	}
 	return FALSE;
 }

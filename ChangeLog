@@ -1,3 +1,16 @@
+2001-02-04 Perry Rapp <puddle@users.sourceforge.net>
+
+        * ChangeLog gedlib/messages.c hdrs/menuitem.h hdrs/screen.h
+        liflines/browse.c liflines/llinesi.h liflines/menuitem.c
+        liflines/miscutls.c liflines/screen.c liflines/show.c:
+        Pulled add_spouse_to_family code out of browse_fam.
+        Change browse_fam to use new menuitem commands.
+        Fix more minor bugs in menu paging layout.
+        Delete obsolete version of mprintf.
+        Delete unused remnants of pedigree code.
+        Moved prototypes of extern miscutls.c functions into llinesi.h.
+        Fix some mistranslated tandem commands.
+
 2001-02-03 Perry Rapp <puddle@users.sourceforge.net>
 
 	* hdrs/screen.h liflines/browse.c liflines/menuitem.c

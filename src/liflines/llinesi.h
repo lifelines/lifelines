@@ -45,6 +45,11 @@ INT browse_list(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
 NODE merge_two_indis(NODE, NODE, BOOLEAN);
 NODE merge_two_fams(NODE, NODE);
 
+/* miscutls.c */
+void key_util(void);
+void show_database_stats(void);
+void who_is_he_she(void);
+
 /* newrecs.c */
 NOD0 ask_for_record(STRING, INT);
 void edit_event(NODE);

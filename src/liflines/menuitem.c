@@ -80,8 +80,9 @@ ScreenInfo f_ScreenInfo[MAX_SCREEN];
 
 MenuItem g_MenuItemOther = { "?  Other menu choices", "?", CMD_MENU_MORE };
 MenuItem g_MenuItemQuit = { "q  Return to main menu", "q", CMD_QUIT };
-static MenuItem f_MenuItemEdit = { "e  Edit the person", "e", CMD_EDIT };
+static MenuItem f_MenuItemEditIndi = { "e  Edit the person", "e", CMD_EDIT };
 static MenuItem f_MenuItemEditFamily = { "e  Edit the family", "e", CMD_EDIT };
+static MenuItem f_MenuItemEdit = { "e  Edit record", "e", CMD_EDIT };
 static MenuItem f_MenuItemEditTop = { "e  Edit top person", "e", CMD_EDIT };
 static MenuItem f_MenuItemPerson = { "i  Browse to person", "i", CMD_PERSON };
 static MenuItem f_MenuItemFather = { "f  Browse to father", "f", CMD_FATHER };
@@ -137,12 +138,12 @@ MenuItem f_MenuItemSyncMoves = { "y  Turn on sync", "y" };
 static MenuItem f_MenuItemAdvanced = { "A  Advanced view", "A", CMD_ADVANCED };
 static MenuItem f_MenuItemTandemChildren = { "C  Tandem to children", "C", CMD_TANDEM_CHILDREN };
 static MenuItem f_MenuItemTandemFathers = { "tf  Tandem to father/s", "tf", CMD_TANDEM_FATHERS };
-static MenuItem f_MenuItemTandemFamilies = { "G  Tandem to family/s", "G" };
+static MenuItem f_MenuItemTandemFamilies = { "G  Tandem to family/s", "G", CMD_TANDEM_FAMILIES };
 static MenuItem f_MenuItemBothFathers = { "f  Browse to fathers", "f" };
 static MenuItem f_MenuItemBothMothers = { "m  Browse to mothers", "m" };
 static MenuItem f_MenuItemTandemMothers = { "M  Tandem to mother/s", "M", CMD_TANDEM_MOTHERS };
 static MenuItem f_MenuItemTandemSpouses = { "S  Tandem to spouse/s", "S", CMD_TANDEM_SPOUSES };
-static MenuItem f_MenuItemTandemParents = { "U  Tandem to parents", "U" };
+static MenuItem f_MenuItemTandemParents = { "U  Tandem to parents", "U", CMD_TANDEM_PARENTS };
 static MenuItem f_MenuItemEnlargeMenu = { "<  Enlarge menu area", "<", CMD_MENU_GROW };
 static MenuItem f_MenuItemShrinkMenu = { ">  Shrink menu area", ">", CMD_MENU_SHRINK };
 static MenuItem f_MenuItemNext = { "+  Next in db", "+", CMD_NEXT };
@@ -164,12 +165,13 @@ static MenuItemOption f_MenuItemOptionSources =
 	{ "$s  show sources", "$s  hide sources", "$S", CMD_SHOWSOURCES };
 static MenuItem f_MenuItemTest88 = { "88  Test 88", "88", CMD_TEST88 };
 static MenuItem f_MenuItemTest999 = { "999 Test 999", "999", CMD_TEST999 };
+static MenuItem f_MenuItemBrowseFamily = { "B  Browse new family", "B", CMD_BROWSE_FAM };
 
 
 
 static MenuItem * f_MenuPerson[] =
 {
-	&f_MenuItemEdit,
+	&f_MenuItemEditIndi,
 	&f_MenuItemFather,
 	&f_MenuItemMother,
 	&f_MenuItemSpouse,
@@ -229,37 +231,21 @@ static MenuItem * f_MenuFamily[] =
 	&f_MenuItemTandemFamily,
 	&f_MenuItemBrowse,
 	&f_MenuItemZipBrowse,
+	&f_MenuItemBrowseFamily,
 	&f_MenuItemScrollUp,
 	&f_MenuItemScrollDown,
 	&f_MenuItemToggleChildNos,
 	&f_MenuItemDigits,
+	&f_MenuItemToggleGedcomView,
 	&f_MenuItemAdvanced,
 	&f_MenuItemTandemChildren,
 	&f_MenuItemTandemFathers,
 	&f_MenuItemTandemMothers,
 	&f_MenuItemEnlargeMenu,
 	&f_MenuItemShrinkMenu,
-	0
-};
-
-static MenuItem * f_MenuPedigree[] =
-{
-	&f_MenuItemEdit,
-	&f_MenuItemPerson,
-	&f_MenuItemFather,
-	&f_MenuItemMother,
-	&f_MenuItemSpouse,
-	&f_MenuItemChildren,
-	&f_MenuItemOlderSib,
-	&f_MenuItemYoungerSib,
-	&f_MenuItemDigits,
-	&f_MenuItemFamily,
-	&f_MenuItemBrowse,
-	&f_MenuItemTogglePedigreeType,
-	&f_MenuItemEnlargeMenu,
-	&f_MenuItemShrinkMenu,
-	&f_MenuItemDepthDown,
-	&f_MenuItemDepthUp,
+	&f_MenuItemSources,
+	&f_MenuItemNext,
+	&f_MenuItemPrev,
 	0
 };
 
@@ -316,14 +302,15 @@ static MenuItem * f_Menu2Family[] =
 
 static MenuItem * f_MenuAux[] =
 {
+	&f_MenuItemEdit,
 	&f_MenuItemTest88,
 	&f_MenuItemTest999,
-	&f_MenuItemNext,
-	&f_MenuItemPrev,
 	&f_MenuItemScrollUp,
 	&f_MenuItemScrollDown,
 	&f_MenuItemEnlargeMenu,
 	&f_MenuItemShrinkMenu,
+	&f_MenuItemNext,
+	&f_MenuItemPrev,
 	0
 };
 
@@ -553,14 +540,6 @@ menuitem_initialize (void)
 	MenuCols = 3;
 	MenuSize = sizeof(f_Menu2Family)/ItemSize-1;
 	Menu = f_Menu2Family;
-	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu, MenuOpts);
-
-	scr = PED_SCREEN;
-	Title = (STRING)"LifeLines -- Pedigree Browse Screen";
-	MenuRows = 5;
-	MenuCols = 3;
-	MenuSize = sizeof(f_MenuPedigree)/ItemSize-1;
-        Menu = f_MenuPedigree;
 	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu, MenuOpts);
 
 	scr = LIST_SCREEN;

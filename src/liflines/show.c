@@ -41,12 +41,31 @@
 
 #include "llinesi.h"
 
+/*********************************************
+ * external/imported variables
+ *********************************************/
+
 extern BOOLEAN opt_nocb;	/* TRUE to suppress display of cb. data */
 extern INT LIST_LINES;		/* person info display lines above list */
-extern INT PED_LINES;		/* pedigree lines */
 extern INT MAINWIN_WIDTH;
 extern INT listbadkeys;
 extern char badkeylist[];
+
+/*********************************************
+ * local types
+ *********************************************/
+
+typedef char *LINESTRING;
+
+/*********************************************
+ * local enums & defines
+ *********************************************/
+
+#define MAXOTHERS 30
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
 
 static STRING person_display(NODE, NODE, INT);
 static void add_child_line(INT, NODE, INT width);
@@ -54,8 +73,9 @@ static void add_spouse_line(INT, NODE, NODE, INT width);
 static void init_display_indi(NODE, INT width);
 static void init_display_fam(NODE, INT width);
 
-#define MAXOTHERS 30
-typedef char *LINESTRING;
+/*********************************************
+ * local variables
+ *********************************************/
 
 static LINESTRING Spers, Sbirt, Sdeat, Sfath, Smoth, Smarr;
 static LINESTRING Shusb, Shbirt, Shdeat, Swife, Swbirt, Swdeat;
@@ -64,6 +84,11 @@ static INT Solen = 0;
 static INT Scroll1 = 0;
 static INT Scroll2 = 0;
 static INT number_child_enable = 0;
+
+/*********************************************
+ * local function definitions
+ * body of module
+ *********************************************/
 
 /*===============================================
  * init_show_module -- Initialize display variables
