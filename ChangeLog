@@ -1,3 +1,8 @@
+2003-09-21 Jens Arvidsson
+	* ChangeLog docs/ll-reportmanual.sv.xml
+
+	Updated translation of report manual.
+
 2003-09-20 Perry Rapp
 
 	* .linesrc ChangeLog lines.cfg src/gedlib/gstrings.c
