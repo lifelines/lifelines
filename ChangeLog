@@ -1,3 +1,14 @@
+2000-12-10 Perry Rapp <prapp@users.sourceforge.net>
+
+	* btree/record.c btree/traverse.c gedlib/intrface.c
+	gedlib/messages.c gedlib/names.c hdrs/btree.h hdrs/gedcom.h
+	hdrs/screen.h interp/interp.c liflines/add.c liflines/export.c
+	liflines/llinesi.h liflines/main.c liflines/screen.c
+	(NEW) liflines/scan.c:
+	Added name scan (search all names in database against
+	a pattern - only exact match against any word of name
+	for now).
+
 2000-12-09 Perry Rapp <prapp@users.sourceforge.net>
 
 	* gedlib/node.c hdrs/gedcom.h liflines/screen.c:
