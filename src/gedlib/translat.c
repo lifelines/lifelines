@@ -291,7 +291,8 @@ translate_string_to_buf (TRANMAPPING ttm, CNSTRING in, bfptr bfs)
 		return;
 	}
 #if HAVE_ICONV
-	if (ttm->iconv_src && ttm->iconv_dest) {
+	if (ttm->iconv_src && ttm->iconv_src[0] 
+		&& ttm->iconv_dest && ttm->iconv_dest[0]) {
 		iconv_trans(ttm, in, bfs);
 		/* TODO: need to decide how to integrate simultaneous iconv & custom transl. */
 		return;
@@ -333,6 +334,10 @@ iconv_trans (TRANMAPPING ttm, CNSTRING in, bfptr bfs)
 	const char * inptr = in;
 	char * outptr=bfStr(bfs);
 	size_t inleft=strlen(in), outleft=bfs->size-1, cvted=0;
+	if (ict == (iconv_t)-1) {
+		bfCpy(bfs, in);
+		return;
+	}
 cvting:
 	cvted = iconv (ict, &inptr, &inleft, &outptr, &outleft);
 	if (cvted == (size_t)-1) {
