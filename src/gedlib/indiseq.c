@@ -70,8 +70,10 @@ static STRING get_print_el (INDISEQ, INT);
 static void append_all_tags(INDISEQ, NODE, STRING, BOOLEAN);
 
 /* Matt 1/1/1 - should these be static, or will they be used elsewhere? */
-INT name_compare (SORTEL, SORTEL);
-INT key_compare (SORTEL, SORTEL);
+static INT name_compare (SORTEL, SORTEL);
+static INT key_compare (SORTEL, SORTEL);
+static INT canonkey_order(char c);
+static INT canonkey_compare(SORTEL el1, SORTEL el2);
 INT value_str_compare (SORTEL, SORTEL);
 INT value_compare (SORTEL, SORTEL);
 
@@ -333,17 +335,42 @@ name_compare (SORTEL el1,
  * also used for integer value sort
  *==============================*/
 INT
-key_compare (SORTEL el1,
-             SORTEL el2)
+key_compare (SORTEL el1, SORTEL el2)
 {
 	return spri(el1) - spri(el2);
+}
+/*===========================================
+ * canonkey_order -- Canonical order of a type
+ *  letter (I,F,S,E,X)
+ *=========================================*/
+static INT
+canonkey_order (char c)
+{
+	switch(c) {
+	case 'I': return 0;
+	case 'F': return 1;
+	case 'S': return 2;
+	case 'E': return 3;
+	default: return 4;
+	}
+}
+/*================================
+ * canonkey_compare -- Compare two keys
+ * in canonical key order (I,F,S,E,X)
+ *==============================*/
+static INT
+canonkey_compare (SORTEL el1, SORTEL el2)
+{
+	char c1=skey(el1)[0], c2=skey(el2)[0];
+	if (c1 == c2)
+		return spri(el1) - spri(el2);
+	return canonkey_order(c1) - canonkey_order(c2);
 }
 /*===================================================
  * value_str_compare -- Compare two values as strings
  *=================================================*/
 INT
-value_str_compare (SORTEL el1,
-                   SORTEL el2)
+value_str_compare (SORTEL el1, SORTEL el2)
 {
 	PVALUE val1, val2;
 	val1 = sval(el1);
@@ -354,8 +381,7 @@ value_str_compare (SORTEL el1,
  * value_compare -- Compare two values
  *==================================*/
 INT
-value_compare (SORTEL el1,
-               SORTEL el2)
+value_compare (SORTEL el1, SORTEL el2)
 {
 	/* WARNING: this is not correct as sval() is a PVALUE structure */
 	return (INT) sval(el1) - (INT) sval(el2);
@@ -371,8 +397,7 @@ namesort_indiseq (INDISEQ seq)
 		spri(el) = atoi(skey(el) + 1);
 	ENDINDISEQ
 	partition_sort(IData(seq), ISize(seq), name_compare);
-	IFlags(seq) &= ~KEYSORT;
-	IFlags(seq) &= ~VALUESORT;
+	IFlags(seq) &= ~ALLSORTS;
 	IFlags(seq) |= NAMESORT;
 }
 /*========================================
@@ -386,9 +411,23 @@ keysort_indiseq (INDISEQ seq)
 		spri(el) = atoi(skey(el) + 1);
 	ENDINDISEQ
 	partition_sort(IData(seq), ISize(seq), key_compare);
-	IFlags(seq) &= ~NAMESORT;
-	IFlags(seq) &= ~VALUESORT;
+	IFlags(seq) &= ~ALLSORTS;
 	IFlags(seq) |= KEYSORT;
+}
+/*=============================================
+ * canonkeysort_indiseq -- Sort sequence by key
+ *  in key canonical order (I,F,S,E,X)
+ *===========================================*/
+void
+canonkeysort_indiseq (INDISEQ seq)
+{
+	if (IFlags(seq) & CANONKEYSORT) return;
+	FORINDISEQ(seq, el, num)
+		spri(el) = atoi(skey(el) + 1);
+	ENDINDISEQ
+	partition_sort(IData(seq), ISize(seq), canonkey_compare);
+	IFlags(seq) &= ~ALLSORTS;
+	IFlags(seq) |= CANONKEYSORT;
 }
 /*============================================
  * valuesort_indiseq -- Sort sequence by value
@@ -419,8 +458,7 @@ valuesort_indiseq (INDISEQ seq,
 		partition_sort(IData(seq), ISize(seq), key_compare);
 	else
 		partition_sort(IData(seq), ISize(seq), value_str_compare);
-	IFlags(seq) &= ~NAMESORT;
-	IFlags(seq) &= ~KEYSORT;
+	IFlags(seq) &= ~ALLSORTS;
 	IFlags(seq) |= VALUESORT;
 }
 /*=========================================

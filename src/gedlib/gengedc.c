@@ -439,6 +439,7 @@ gen_gedcom (INDISEQ seq, int gengedcl)
 		ENDINDISEQ
 		remove_indiseq(tempseq, TRUE);
 	}
+	canonkeysort_indiseq(closure.outseq);
 	FORINDISEQ(closure.outseq, el, num)
 		node = key_to_type(skey(el), FALSE);
 		output_top_node(&closure, node);

@@ -74,6 +74,8 @@ typedef struct  {
 #define NAMESORT  (1<<1)
 #define UNIQUED   (1<<2)
 #define VALUESORT (1<<3)
+#define CANONKEYSORT (1<<4)
+#define ALLSORTS (KEYSORT+NAMESORT+VALUESORT+CANONKEYSORT)
 
 #define length_indiseq(seq)  (ISize(seq))
 
@@ -86,6 +88,7 @@ INDISEQ ancestor_indiseq(INDISEQ seq, WORD (*create_value_fnc)(INT gen));
 void append_indiseq(INDISEQ, STRING, STRING, WORD val, BOOLEAN sure, BOOLEAN alloc);
 void append_indiseq_ival(INDISEQ, STRING, STRING, INT val, BOOLEAN sure, BOOLEAN alloc);
 void append_indiseq_sval(INDISEQ, STRING, STRING, STRING sval, BOOLEAN sure, BOOLEAN alloc);
+void canonkeysort_indiseq(INDISEQ);
 INDISEQ child_indiseq(INDISEQ);
 INDISEQ copy_indiseq(INDISEQ);
 INDISEQ create_indiseq(void);
