@@ -173,14 +173,15 @@ typedef struct ltag {
 #define LISTNOFREE 0
 #define LISTDOFREE 1
 
+/* cycle through list from front to back */
 #define FORLIST(l,e)\
 	{\
-		LNODE _lnode = l->l_last;\
+		LNODE _lnode = l->l_first;\
 		VPTR e;\
 		while (_lnode) {\
 			e = _lnode->l_element;
 #define ENDLIST\
-			_lnode = _lnode->l_prev;\
+			_lnode = _lnode->l_next;\
 		}\
 	}
 
