@@ -119,6 +119,7 @@ extern BOOLEAN alloclog;
 #define eqstr(s,t)    (!ll_strcmp((s),(t)))
 #define nestr(s,t)    (ll_strcmp((s),(t)))
 
+#define ARRAYSIZE(a)	(sizeof(a)/sizeof(a[0]))
 #define check_cache()   ___check_cache(__LINE__, __FILE__)
 
 extern char *malloc();

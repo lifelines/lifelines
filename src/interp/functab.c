@@ -418,5 +418,4 @@ BUILTINS builtins[] = {
 	{"year",		1,	1,	__year},
 };
 
-#define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
 INT nobuiltins = ARRAYSIZE(builtins);
