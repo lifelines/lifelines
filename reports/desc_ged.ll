@@ -43,19 +43,20 @@ proc main ()
     set(allgen, union(allgen,spouseset(allgen)))
     getintmsg (ngen,
                "Enter number of generations")
-    set(thisgensize,1)
     set(gen,1)
-    while(and(thisgensize,lt(gen,ngen))) {
-        set(thisgensize,0)
-        forindiset(thisgen,person,val,count) { print(" ") set(thisgensize,count) }
-        if (thisgensize) {
-            set(gen,add(gen,1))
-            print(d(gen)) print(" ")
-            set(thisgen,childset(thisgen))
-/*	    uniqueset(thisgen)*/
-            set(allgen,union(allgen,thisgen))
-            set(allgen,union(allgen,spouseset(thisgen)))
-        }
+    while(and(lengthset(thisgen),le(gen,ngen))) {
+        set (thisgensize,lengthset(thisgen))
+        print ("generation ",d(gen)," ",d(thisgensize))
+        if (gt(thisgensize,1)) {
+            print(" people\n")
+         } else {
+            print(" person\n")
+         }
+        set(gen,add(gen,1))
+
+        set(thisgen,childset(thisgen))
+        set(allgen,union(allgen,thisgen))
+        set(allgen,union(allgen,spouseset(thisgen)))
     }
     call print_header()
     gengedcom(allgen)

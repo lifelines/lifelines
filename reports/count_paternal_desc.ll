@@ -29,30 +29,23 @@ proc main ()
     print("Counting generation ")
     "Number of paternal descendants of " key(person) " " name(person)
     " by generation:\n"
-    set(thisgensize,1)
     set(gen,neg(1))
-    while(thisgensize) {
-        set(thisgensize,0)
-        set(thismalesize,0)
+    while(lengthset(thisgen)) {
         indiset(thismalegen)
         forindiset(thisgen,person,val,count) {
-	    set(thisgensize,count)
             if (male(person)) {
-                set(thismalesize,add(thismalesize,1))
                 addtoset(thismalegen,person,0)
             }
         }
-        if (thisgensize) {
-            set(gen,add(gen,1))
-            print(d(gen)," ")
-            "Generation " d(gen) " has " d(thisgensize)
-            " paternal descendant"
-            if (gt(thisgensize,1)) { "s" }
-            " of which " d(thismalesize) " are male.\n"
-            set(thisgen,childset(thismalegen))
-            set(allgen,union(allgen,thisgen))
-            set(allmalegen,union(allmalegen,thismalegen))
-        }
+	incr(gen)
+	print(d(gen)," ")
+	"Generation " d(gen) " has " d(lengthset(thisgen))
+	" paternal descendant"
+	if (gt(lengthset(thisgen),1)) { "s" }
+	" of which " d(lengthset(thismalegen)) " are male.\n"
+	set(thisgen,childset(thismalegen))
+	set(allgen,union(allgen,thisgen))
+	set(allmalegen,union(allmalegen,thismalegen))
     }
     "Total unique paternal descendants in generations 1-" d(gen)
     " is " d(lengthset(allgen))

@@ -1,3 +1,7 @@
+2004-12-30 Stephen Dum
+        *Changelog reports/count_paternal_desc.ll reports/desc_ged.ll
+	Alter scripts to use lengthset rather than copying loop counter
+
 2004-12-27 Stephen Dum
         *Changelog reports/count_paternal_desc.ll reports/desc_ged.ll
 
@@ -15,7 +19,6 @@
 	docs/ll-reportmanual.txt docs/ll-reportmanual.html
 	src/btree/utils.c src/gedlib/nodeio.c src/hdrs/btree.h 
 	src/liflines/import.c src/liflines/valgdcom.c
-
 
         Some minor bug fixes.  ll-reportmanual.xml was missing some end of
 	block tags.  Replace some explict constants with their Macro name.
