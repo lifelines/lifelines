@@ -1,6 +1,6 @@
 /*
  * @progname       exercise
- * @version        0.97 (2002/06/14)
+ * @version        0.98 (2002/06/27)
  * @author         Perry Rapp
  
  * @category       test
@@ -22,6 +22,13 @@ TODO: logic tests
 */
 
 
+/*
+ 2002.02.26
+ utf(...) is not correctly implemented yet (it is in collation tests)
+ It does not translate to internal codeset, so it ONLY works
+ if you are using UTF-8 as your internal codeset
+*/
+
 /* I'll use UTF-8 escapes instead of actually typing UTF-8 */
 /* char_encoding("UTF-8") */
 
@@ -40,6 +47,9 @@ global(A)
 global(K)
 global(L)
 global(M)
+global(N)
+global(O)
+global(Ntilde)
 global(Z)
 global(Adia)
 global(Odia)
@@ -49,38 +59,73 @@ proc setchars()
 {
 /* LAT. CAP. == LATIN CAPITAL LETTER */
 /* W/ == WITH */
-/*
+
 	set(A, "A")
 	set(K, "K")
 	set(L, "L")
 	set(M, "M")
-	set(Adia, unicode("C4")) /* utf8("C384") LAT. CAP. A W/ DIAERESIS */
-	set(Odia, unicode("D6")) /* utf8("C396") LAT. CAP. O W/ DIAERESIS */
-	set(Lstroke, unicode("0141")) /* utf8("C581") LAT. CAP. L W/ STROKE */
-*/
+	set(N, "N")
+	set(O, "O")
+	set(Z, "Z")
+	set(Adia, utf8("$C3$84")) /* unicode("$C4") LAT. CAP. A W/ DIAERESIS */
+	set(Odia, utf8("$C3$96")) /* unicode("$D6")) LAT. CAP. O W/ DIAERESIS */
+	set(Lstroke, utf8("$C5$81")) /* unicode("0141")) LAT. CAP. L W/ STROKE */
+	set(Ntilde, utf8("$C3$91")) /* unicode("00D1")) LAT. CAP. N W/ TILDE */
+
 }
 proc finnish()
 {
-/*
-	/* What to do about screwy MS-Windows locale names ? */
-	locale("fi_FI")
-	check_collate(A, Z)
-	check_collate(Z, Adia)
-	check_collate(Adia, Odia)
-*/
+	if (not(set_and_check_locale("fi_FI", "Finnish", "Finnish"))) {
+		return()
+	}
+	call check_collate(A, Z, A, Z)
+	call check_collate(Z, Adia, Z, "Adia")
+	call check_collate(Adia, Odia, "Adia", "Odia")
 }
 proc polish()
 {
-/*
-	locale("po_PO")
-	check_collate(L, Lstroke)
-	check_collate(Lstroke, M)
-*/
+	if (not(set_and_check_locale("pl_PO", "Polish", "Polish"))) {
+		return()
+	}
+	call check_collate(A, Z, A, Z)
+	call check_collate(L, Lstroke, L, "Lstroke")
+	call check_collate(Lstroke, M, "Lstroke", M)
+}
+proc spanish()
+{
+	if (not(set_and_check_locale("es", "Spanish", "Spanish"))) {
+		return()
+	}
+	call check_collate(A, Z, A, Z)
+	call check_collate(N, Ntilde, N, "Ntilde")
+	call check_collate(Ntilde, O, "Ntilde", O)
+}
+proc check_collate(str1, str2, str1nam, str2nam)
+{
+	if (ge(strcmp(str1,str2),0)) {
+		set(fstr, concat("strcmp(", str1nam,",",str2nam,") FAILED"))
+		call reportfail(fstr)
+	}
+}
+func set_and_check_locale(locstr, locstr2, locname)
+{
+	set(res, setlocale(locstr))
+	if (nestr(res, "C")) {
+		return(1)
+	}
+	set(res, setlocale(locstr2)) /* MS-Windows name */
+	if (nestr(res, "C")) {
+		return(1)
+	}
+	call reportfail(concat("Locale missing: ", locstr))
+	return (0)
 }
 proc testCollate()
 {
+	call setchars()
 	call finnish()
 	call polish()
+	call spanish()
 }
 
 proc main()
@@ -92,11 +137,14 @@ proc main()
 	getint(dbuse, "Exercise db functions ? (0=no)")
 	set(cutoff_yr, 1900) /* assume anyone born before this is dead */
 
+	getint(locales, "Test collation locales ? (0=no)")
 
+	if (locales) {
+		call testCollate()
+	}
 	call testStrings()
 	call testNums()
 	call testDates()
-	call testCollate()
 
 	if (dbuse) 
 	{

@@ -91,6 +91,7 @@ static BOOLEAN customized_loc = FALSE;
 static BOOLEAN customized_msgs = FALSE;
 static STRING  current_coll = NULL; /* most recent */
 static STRING  current_msgs = NULL; /* most recent */
+static STRING  rptlocalestr = NULL; /* if set by report program */
 
 /*********************************************
  * local & exported function definitions
@@ -830,6 +831,26 @@ void
 rptlocale (void)
 {
 	customlocale("RptLocale");
+#ifdef HAVE_SETLOCALE
+	if (rptlocalestr) /* report has specified locale */
+		setlocale(LC_ALL, rptlocalestr);
+#endif
+}
+/*==========================================
+ * rpt_setlocale -- set report locale to custom locale
+ *  used by report language
+ * Created: 2002/06/27 (Perry Rapp)
+ *========================================*/
+STRING
+rpt_setlocale (STRING str)
+{
+	strfree(&rptlocalestr);
+#ifdef HAVE_SETLOCALE
+	rptlocalestr = setlocale(LC_ALL, str);
+	if (rptlocalestr)
+		rptlocalestr = strsave(rptlocalestr);
+#endif
+	return rptlocalestr;
 }
 /*==========================================
  * setmsgs -- set locale for LC_MESSAGES

@@ -43,6 +43,7 @@
 #include "feedback.h"
 #include "lloptions.h"
 #include "date.h"
+#include "bfs.h"
 
 #include "interpi.h"
 
@@ -61,6 +62,7 @@ extern STRING badargs,qSaskstr,qSchoostrttl;
  *********************************************/
 
 static INT normalize_year(struct dnum_s yr);
+static bfptr utf8cvt(STRING str, INT * offset);
 
 /*********************************************
  * local variables
@@ -422,6 +424,106 @@ __strsoundex (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	str = strsave(soundex(pvalue(val)));
+	/* TODO: Need to translate report to internal codeset */
+	newval = create_pvalue_from_string(str);
+	delete_pvalue(val);
+	return newval;
+}
+/*===========================================+
+ * __utf8 -- Convert utf8 escape sequence to internal
+ *   usage: utf8(STRING) -> STRING
+ *==========================================*/
+PVALUE
+__utf8 (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+	PNODE arg = (PNODE) iargs(node);
+	PVALUE newval, val = evaluate(arg, stab, eflg);
+	INT offset;
+	bfptr bfs;
+	if (*eflg || !val || ptype(val) != PSTRING) {
+		*eflg = TRUE;
+		prog_var_error(node, stab, arg, NULL, nonstr1, "utf8");
+		return NULL;
+	}
+	bfs = utf8cvt(pvalue(val), &offset);
+	if (offset >= 0) {
+		prog_var_error(node, stab, arg, val
+			, _("Bad UTF character %d in UTF escape string <%s>")
+			, offset+1, pvalue(val));
+		*eflg = TRUE;
+		newval = NULL;
+	} else {
+		newval = create_pvalue_from_string(bfStr(bfs));
+	}
+	bfDelete(bfs);
+	delete_pvalue(val);
+	return newval;
+}
+/*===============================+
+ * utf8cvt -- Convert utf8 escape string into internal codeset
+ *  str:    [IN]  string with embedded UTF8 sequences like so: "I$C3$B1$C3$A1rritu" 
+ *  offset: [OUT] -1 if ok, else 0-based offset of failure
+ *==============================*/
+static bfptr
+utf8cvt (STRING str, INT * offset)
+{
+	bfptr bfs = bfNew((int)(strlen(str)*1.3+2));
+	INT i, bufloc=0;
+	STRING ptr = str;
+	char buffer[7];
+	*offset = -1;
+	while (1) {
+		if (!ptr[0]) {
+			if (bufloc) /* error if unfinished UTF-8 escape */
+				*offset = ptr - str;
+			return bfs;
+		}
+		if (ptr[0] == '$') {
+			++ptr;
+			i = get_hexidecimal(ptr);
+			/* error if bad hex escape */
+			if (i == -1) {
+				*offset = ptr - str;
+				return bfs;
+			}
+			ptr += 2;
+			buffer[bufloc] = i;
+			++bufloc;
+			if (utf8len(buffer[0]) == bufloc) {
+				buffer[bufloc] = 0;
+				/* TODO: translate from UTF-8 to internal */
+				/* because we aren't doing that, this will fail unless internal is UTF-8 */
+				bfCat(bfs, buffer);
+				bufloc = 0;
+			}
+		} else {
+			/* error if unfinished UTF-8 escape */
+			if (bufloc) {
+				*offset = ptr - str;
+				return bfs;
+			}
+			bfCatChar(bfs, ptr[0]);
+			++str;
+		}
+	}
+}
+/*===========================================+
+ * __setlocale -- Set current locale
+ *   usage: setlocale(STRING) -> STRING
+ *==========================================*/
+PVALUE
+__setlocale (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+	PNODE arg = (PNODE) iargs(node);
+	PVALUE newval, val = evaluate(arg, stab, eflg);
+	STRING str;
+	if (*eflg || !val || ptype(val) != PSTRING) {
+		*eflg = TRUE;
+		prog_var_error(node, stab, arg, NULL, nonstr1, "setlocale");
+		return NULL;
+	}
+	str = rpt_setlocale(pvalue(val));
+	str = str ? str : "C";
 	newval = create_pvalue_from_string(str);
 	delete_pvalue(val);
 	return newval;

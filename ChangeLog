@@ -14,6 +14,12 @@
 	Fix bug in filepath & bug in concat_path. Change concat_path to
 	use caller buffer (instead of static buffer).
 
+	* ChangeLog gedlib/translat.c hdrs/gedcom.h interp/builtin.c
+	interp/functab.c interp/interpi.h reports/exercise.ll:
+
+	Implement report functions utf8() and setlocale().
+	Put some collation tests into exercise.ll.
+
 2002-06-26 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog po/Makevars po/de.po po/el.po po/it.po po/sv.po:

@@ -438,6 +438,7 @@ RECORD_STATUS retrieve_to_textfile(STRING key, STRING file, TRANSLFNC);
 STRING retrieve_raw_record(CNSTRING, INT*);
 STRING rmvat(STRING);
 STRING rmvbrackets(STRING str);
+STRING rpt_setlocale(STRING str);
 void rptlocale(void);
 void save_original_locales(void);
 BOOLEAN save_tt_to_file(INT ttnum, STRING filename);
