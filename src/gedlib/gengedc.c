@@ -435,7 +435,7 @@ gen_gedcom (INDISEQ seq, int gengedcl, BOOLEAN * eflg)
 	/* now go thru all indis and figure out which
 	families to keep */
 
-	famstab = create_table_old();
+	famstab = create_table_new();
 	FORINDISEQ(seq, el, num)
 		indi = key_to_indi(skey(el));
 		famc = indi_to_famc(indi);
@@ -447,7 +447,7 @@ gen_gedcom (INDISEQ seq, int gengedcl, BOOLEAN * eflg)
 	ENDINDISEQ
 
 	traverse_table_param(famstab, &add_refd_fams, &closure);
-	remove_table(famstab, FREEKEY);
+	destroy_table(famstab);
 	famstab=0;
 
 	/* now we have to process every node, including new
