@@ -209,7 +209,7 @@ delete_pathinfo (PATHINFO * pathinfo)
  *  args:     [IN]  arguments
  *  ifiles:   [IN]  program files
  *  ofile:    [IN]  output file - can be NULL
- *  picklist: [IN]  see list of existing reports
+ *  picklist: [IN]  show user list of existing reports ?
  *============================================*/
 void
 interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
@@ -554,9 +554,14 @@ print_report_duration (INT duration, INT uiduration)
 }
 /*====================================+
  * interp_main -- Interpreter main proc
+ *  picklist: [IN]  
+ *  ifiles:   [IN]  program files
+ *  ofile:    [IN]  output file - can be NULL
+ *  picklist: [IN]  show user list of existing reports ?
+ *  timing:   [IN]  show report elapsed time info ?
  *===================================*/
 void
-interp_main (BOOLEAN picklist)
+interp_main (LIST lifiles, STRING ofile, BOOLEAN picklist, BOOLEAN timing)
 {
 	time_t begin = time(NULL);
 	int elapsed, uitime;
@@ -568,12 +573,13 @@ interp_main (BOOLEAN picklist)
 	rptui_init(); /* clear ui time counter */
 
 	rptlocale();
-	interp_program_list("main", 0, NULL, NULL, NULL, picklist);
+	interp_program_list("main", 0, NULL, lifiles, ofile, picklist);
 	uilocale();
 	elapsed = time(NULL) - begin;
 	uitime = rptui_elapsed();
 
-	print_report_duration(elapsed, uitime);
+	if (timing)
+		print_report_duration(elapsed, uitime);
 	
 	/*
 	TO DO: unlock all cache elements (2001/03/17, Perry)

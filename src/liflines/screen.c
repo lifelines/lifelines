@@ -682,8 +682,11 @@ main_menu (void)
 void
 run_report (BOOLEAN picklist)
 {
+	LIST progfiles = NULL; /* will prompt for report */
+	STRING ofile = NULL; /* will prompt for output file */
+	BOOLEAN timing = TRUE;
 	begin_action();
-	interp_main(picklist);
+	interp_main(progfiles, ofile, picklist, timing);
 	end_action(); /* displays any errors that happened */
 }
 /*=========================================

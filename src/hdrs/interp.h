@@ -414,7 +414,7 @@ PVALUE valueof_iden(PNODE node, SYMTAB stab, STRING iden, BOOLEAN *eflg);
 PNODE while_node(PACTX pactx, PNODE, PNODE);
 
 void poutput(STRING, BOOLEAN *eflg);
-void interp_main(BOOLEAN picklist);
+void interp_main(LIST lifiles, STRING ofile, BOOLEAN picklist, BOOLEAN timing);
 
 
 #endif /* _INTERP_H */

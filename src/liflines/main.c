@@ -388,7 +388,9 @@ prompt_for_db:
 		set_cmd_options(exargs);
 	}
 	if (exprogs) {
-		interp_program_list("main", 0, NULL, exprogs, progout, FALSE);
+		BOOLEAN picklist = FALSE;
+		BOOLEAN timing = FALSE;
+		interp_main(exprogs, progout, picklist, timing);
 		make_list_empty(exprogs);
 		remove_list(exprogs, 0);
 	} else {
