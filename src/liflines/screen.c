@@ -221,6 +221,8 @@ static void rpt_cset_menu(UIWINDOW wparent);
 static void run_report(BOOLEAN picklist);
 static void save_tt_action(UIWINDOW wparent);
 static void show_fam (UIWINDOW uiwin, NODE fam, INT mode, INT row, INT hgt, INT width, INT * scroll, BOOLEAN reuse);
+static void show_record(UIWINDOW uiwin, STRING key, INT mode, INT row, INT hgt
+	, INT width, INT * scroll, BOOLEAN reuse);
 static void show_tandem_line(UIWINDOW uiwin, INT row);
 static void shw_array_of_strings(STRING *strings, listdisp *ld
 	, DETAILFNC detfnc, void * param);
@@ -844,7 +846,7 @@ list_browse (INDISEQ seq,
              NODE * pindi)
 {
 	if (cur_screen != LIST_SCREEN) paint_list_screen();
-	show_list(seq, top, *cur, mark);
+	show_big_list(seq, top, *cur, mark);
 	display_screen(LIST_SCREEN);
 	return interact(main_win, "jkeimdtbanxq", -1);
 }
@@ -1957,7 +1959,7 @@ choose_win (INT desiredhgt, INT *actualhgt)
  * shw_list -- Show string list in list interact window
  * Detail lines rewrite: c. 2000/12, Perry Rapp
  *===================================================*/
-void
+static void
 shw_list (INDISEQ seq, listdisp * ld)
 {
 	WINDOW *win = uiw_win(ld->uiwin);
@@ -1981,23 +1983,8 @@ shw_list (INDISEQ seq, listdisp * ld)
 		BOOLEAN reuse=FALSE; /* don't reuse display strings in list */
 		mvwaddstr(win, row++, 2, "--- CURRENT SELECTION ---");
 		element_indiseq(seq, ld->cur, &key, &name);
-		if (key[0]=='I') {
-			NODE indi = key_to_indi(key);
-			if (indi)
-				show_indi(ld->uiwin, indi, mode, 3, ld->details
-					, width, &ld->scroll, reuse);
-		} else if (key[0]=='F') {
-			NODE fam = key_to_fam(key);
-			if (fam)
-				show_fam(ld->uiwin, fam, mode, 3, ld->details
-					, width, &ld->scroll, reuse);
-		} else {
-			/* could be S,E,X -- show_aux handles all of these */
-			NODE aux = qkey_to_type(key);
-			if (aux)
-				show_aux(ld->uiwin, aux, mode, 3, ld->details
-					, width, &ld->scroll, reuse);
-		}
+		show_record(ld->uiwin, key, mode, 3, ld->details, width, &ld->scroll
+			, reuse);
 		row = 3+ld->details;
 		mvwaddstr(win, row++, 2, "--- LIST ---");
 	}
@@ -2008,6 +1995,92 @@ shw_list (INDISEQ seq, listdisp * ld)
 			print_indiseq_element(seq, i, buffer, sizeof(buffer), &disp_shrt_rfmt);
 			mvwaddstr(win, row++, 4, buffer);
 		}
+	}
+}
+static STRING empstr = (STRING) "                                                 ";
+/*==========================================
+ * show_big_list - Show name list in list screen
+ *========================================*/
+void
+show_big_list (INDISEQ seq,
+           INT top,
+           INT cur,
+           INT mark)
+{
+/*
+TODO: To be resizable like popup list, need a listdisp structure,
+	and need to repaint that RHS menu, as its height will vary
+	just to be scrollable details doesn't require repainting the RHS menu
+But in any case the real problem is that 
+show_big_list (screen.c) is called by list_browse (screen.c)
+which is called by browse_list (lbrowse.c!), and it handles menus
+and listdisp is local to screen.c right now, so browse_list can't have one
+- Perry, 2002/01/01
+*/
+	UIWINDOW uiwin = main_win;
+	WINDOW *win = uiw_win(uiwin);
+	INT i, j, row, len = length_indiseq(seq);
+	STRING key, name;
+	NODE indi;
+	char scratch[200], *p;
+	TRANTABLE ttd = tran_tables[MINDS];
+	INT mode = 'n';
+	INT viewlines = 13;
+	
+	for (i = LIST_LINES+2; i < LIST_LINES+2+viewlines; i++)
+		mvwaddstr(win, i, 1, empstr);
+	row = LIST_LINES+2;
+	for (i = top, j = 0; j < viewlines && i < len; i++, j++) {
+		element_indiseq(seq, i, &key, &name);
+		indi = key_to_indi(key);
+		if (i == mark) mvwaddch(win, row, 2, 'x');
+		if (i == cur) {
+			INT drow=1;
+			INT hgt=LIST_LINES;
+			INT width=MAINWIN_WIDTH;
+			INT scroll=0;
+			BOOLEAN reuse=FALSE;
+			mvwaddch(win, row, 3, '>');
+			show_record(main_win, key, mode, drow, hgt, width, &scroll, reuse);
+		}
+		name = manip_name(name, ttd, TRUE, TRUE, 40);
+		strcpy(scratch, name);
+		p = scratch + strlen(scratch);
+		*p++ = ' ';
+		sprintf(p, "(%s)", key_of_record(indi, ttd));
+		/*sprintf(p, "(%s)", &key[1]);*/
+		mvwaddstr(win, row, 4, scratch);
+		row++;
+	}
+}
+/*================================================================
+ * show_record -- Display record (any type) in requested mode
+ *  uiwin:  [IN]  whither to draw
+ *  key:    [IN]  key of record to display
+ *  mode:   [IN]  what display mode (eg, vitals vs GEDCOM vs...)
+ *  row:    [IN]  top row to use
+ *  height: [IN]  #rows to use
+ *  width:  [IN]  #cols to use
+ *  scroll: [I/O] current scroll setting
+ *  reuse:  [IN]  flag indicating if same record drawn last time
+ *==============================================================*/
+static void
+show_record (UIWINDOW uiwin, STRING key, INT mode, INT row, INT hgt, INT width
+	, INT * scroll, BOOLEAN reuse)
+{
+	if (key[0]=='I') {
+		NODE indi = key_to_indi(key);
+		if (indi)
+			show_indi(uiwin, indi, mode, row, hgt, width, scroll, reuse);
+	} else if (key[0]=='F') {
+		NODE fam = key_to_fam(key);
+		if (fam)
+			show_fam(uiwin, fam, mode, row, hgt, width, scroll, reuse);
+	} else {
+		/* could be S,E,X -- show_aux handles all of these */
+		NODE aux = qkey_to_type(key);
+		if (aux)
+			show_aux(uiwin, aux, mode, row, hgt, width, scroll, reuse);
 	}
 }
 /*================================================================
@@ -2144,7 +2217,7 @@ print_list_title (char * buffer, INT len, const listdisp * ld, STRING ttl)
  *  detfnc:     [IN]  callback for details about items
  *  param:      [IN]  opaque type for callback
  *============================================*/
-INT
+static INT
 array_interact (STRING ttl, INT len, STRING *strings
 	, BOOLEAN selectable, DETAILFNC detfnc, void * param)
 {

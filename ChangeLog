@@ -1,3 +1,11 @@
+2002-01-01 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog hdrs/screen.h liflines/llinesi.h liflines/screen.c
+	liflines/show.c:
+
+	Renamed show_list to show_big_list, and moved to screen.c
+	(preparation for improving full list screen).
+
 2001-12-31 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog docs/Install.LifeLines.Windows.txt

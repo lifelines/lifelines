@@ -783,48 +783,6 @@ person_display (NODE indi, NODE fam, INT len)
 	sprintf(p, " (%s)", key_of_record(indi, ttd));
 	return scratch1;
 }
-
-static STRING empstr = (STRING) "                                                 ";
-/*==========================================
- * show_list - Show name list in list screen
- *========================================*/
-void
-show_list (INDISEQ seq,
-           INT top,
-           INT cur,
-           INT mark)
-{
-	UIWINDOW uiwin = main_win;
-	WINDOW *win = uiw_win(uiwin);
-	INT i, j, row, len = length_indiseq(seq);
-	STRING key, name;
-	NODE indi;
-	char scratch[200], *p;
-	TRANTABLE ttd = tran_tables[MINDS];
-	INT mode = 'n';
-	INT viewlines = 13;
-	
-	for (i = LIST_LINES+2; i < LIST_LINES+2+viewlines; i++)
-		mvwaddstr(win, i, 1, empstr);
-	row = LIST_LINES+2;
-	for (i = top, j = 0; j < viewlines && i < len; i++, j++) {
-		element_indiseq(seq, i, &key, &name);
-		indi = key_to_indi(key);
-		if (i == mark) mvwaddch(win, row, 2, 'x');
-		if (i == cur) {
-			mvwaddch(win, row, 3, '>');
-			show_indi_main(indi, mode, 1, LIST_LINES, FALSE);
-		}
-		name = manip_name(name, ttd, TRUE, TRUE, 40);
-		strcpy(scratch, name);
-		p = scratch + strlen(scratch);
-		*p++ = ' ';
-		sprintf(p, "(%s)", key_of_record(indi, ttd));
-		/*sprintf(p, "(%s)", &key[1]);*/
-		mvwaddstr(win, row, 4, scratch);
-		row++;
-	}
-}
 /*========================================================
  * show_aux -- Show source, event or other record
  *======================================================*/
