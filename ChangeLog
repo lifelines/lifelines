@@ -1,3 +1,10 @@
+2002-01-16 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/valtable.c interp/lex.c liflines/screen.c:
+
+	Removed unused EOF test in valtable.c. Fixed interact to handle
+	non-ascii letters (not currently used). Cosmetic in lex.c.
+
 2002-01-13 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/node.c hdrs/gedcom.h hdrs/interp.h
