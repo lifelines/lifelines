@@ -281,7 +281,7 @@ if (prog_debug) {
 }
 		switch (itype(node)) {
 		case ISCONS:
-			r_poutput(pvalue(ivalue(node)));
+			poutput(pvalue(ivalue(node)));
 			break;
 		case IIDENT:
 			val = eval_and_coerce(PSTRING, node, stab, &eflg);
@@ -292,7 +292,7 @@ if (prog_debug) {
 				return INTERROR;
 			}
 			str = (STRING) pvalue(val);
-			if (str) r_poutput(str);
+			if (str) poutput(str);
 			delete_pvalue(val);
 			break;
 		case IBCALL:
@@ -310,7 +310,7 @@ if (prog_debug) {
 #endif
 			if (!val) break;
 			if (ptype(val) == PSTRING && pvalue(val))
-				r_poutput(pvalue(val));
+				poutput(pvalue(val));
 			delete_pvalue(val);
 			break;
 		case IFCALL:
@@ -325,7 +325,7 @@ if (prog_debug) {
 #endif
 			if (!val) break;
 			if (ptype(val) == PSTRING && pvalue(val))
-				r_poutput(pvalue(val));
+				poutput(pvalue(val));
 			delete_pvalue(val);
 			break;
 		case IPDEFN:

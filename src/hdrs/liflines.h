@@ -38,7 +38,6 @@ NODE merge_two_fams(NODE, NODE);
 void message(STRING);
 void llwprintf(STRING, ...);
 void mprintf(STRING, ...);
-void poutput(STRING);
 void do_edit(void);
 BOOLEAN ask_yes_or_no(STRING);
 BOOLEAN ask_yes_or_no_msg(STRING, STRING);

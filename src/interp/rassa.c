@@ -262,8 +262,8 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	if (newcol < 1) newcol = 1;
 	if (newcol > MAXCOLS) newcol = MAXCOLS;
 	if (newcol == curcol) return NULL;
-	if (newcol < curcol) r_poutput("\n");
-	while (curcol < newcol) r_poutput(" ");
+	if (newcol < curcol) poutput("\n");
+	while (curcol < newcol) poutput(" ");
 	return NULL;
 }
 /*=================================+
@@ -313,9 +313,9 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	return NULL;
 }
 /*========================================+
- * r_poutput -- Output string in current mode
+ * poutput -- Output string in current mode
  *=======================================*/
-void r_poutput (str)
+void poutput (str)
 STRING str;
 {
 	STRING p, name;
