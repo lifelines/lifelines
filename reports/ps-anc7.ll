@@ -1,4 +1,11 @@
 /*
+ * @progname       ps-anc7
+ * @version        7.0
+ * @author         Wheeler, Stringer
+ * @category       
+ * @output         PostScript
+ * @description    
+** 
 **  ps-anc7, 1 Feb 1997, enhanced by Phil Stringer (P.Stringer@mcc.ac.uk)
 **  ps-anc, 9 September 1994, by Fred Wheeler (wheeler@ipl.rpi.edu)
 **

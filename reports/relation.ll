@@ -1,4 +1,11 @@
 /*
+ * @progname       relation
+ * @version        5.0
+ * @author         Eggert
+ * @category       
+ * @output         Text
+ * @description    
+
 relation - a LifeLines relation computing program
         by Jim Eggert (eggertj@atc.ll.mit.edu)
         Version 1,  21 November 1992

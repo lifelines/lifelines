@@ -1,4 +1,12 @@
 /*
+ * @progname       stats
+ * @version        9.0
+ * @author         
+ * @category       
+ * @output         Text
+ * @description    
+
+
 stats - a LifeLines database statistical extraction report program
         by Jim Eggert (eggertj@atc.ll.mit.edu)
         Version 1 (14 Dec 1992)

@@ -1,4 +1,12 @@
 /*
+ * @progname       igi-merge
+ * @version        4.0
+ * @author         Eggert
+ * @category       
+ * @output         GEDCOM
+ * @description    
+
+
 igi-merge - a LifeLines IGI database merging program
         by Jim Eggert (eggertj@atc.ll.mit.edu)
         Version 1,  2 February 1993  Requires LifeLines 2.3.3 or later.

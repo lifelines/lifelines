@@ -1,4 +1,11 @@
 /*
+ * @progname       famtree1
+ * @version        1.0
+ * @author         Jones
+ * @category       
+ * @output         PostScript
+ * @description    
+ *
  *   famtree1
  *
  *   version one:  9 May 1993

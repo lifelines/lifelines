@@ -1,5 +1,11 @@
-
 /*
+ * @progname       soundex1
+ * @version        1.0
+ * @author         Jones
+ * @category       
+ * @output         Text
+ * @description    
+ *
  *   soundex1
  *
  *   Code by James P. Jones, jjones@nas.nasa.gov

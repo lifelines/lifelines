@@ -1,4 +1,11 @@
 /*
+ * @progname       infant_mortality
+ * @version        1.0
+ * @author         Eggert
+ * @category       
+ * @output         Text
+ * @description    
+
 infant_mortality - a LifeLines program
          by Jim Eggert (eggertj@atc.ll.mit.edu)
          Version 1,  19 September 1994

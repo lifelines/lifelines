@@ -1,4 +1,11 @@
 /*
+ * @progname       rllgen
+ * @version        1.0
+ * @author         Eggert
+ * @category       
+ * @output         RLL format
+ * @description    
+
 rllgen - a LifeLines report program to aid in the generation of
 Roots Location List (RLL) submissions.
 

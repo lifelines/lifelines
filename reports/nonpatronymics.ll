@@ -1,4 +1,11 @@
 /*
+ * @progname       nonpatronymics
+ * @version        1.0
+ * @author         Eggert
+ * @category       
+ * @output         Text
+ * @description    
+ *
  *   nonpatronymics
  *
  *   Code by Jim Eggert, eggertj@ll.mit.edu

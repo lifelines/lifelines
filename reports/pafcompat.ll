@@ -1,4 +1,12 @@
 /*
+ * @progname       pafcompat
+ * @version        2.0
+ * @author         Eggert
+ * @category       
+ * @output         Text
+ * @description    
+
+
 pafcompat - a LifeLines PAF compatibility checker
 	by Jim Eggert (eggertj@ll.mit.edu)
 	Version 1, 2 January 1993

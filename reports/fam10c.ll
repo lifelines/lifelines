@@ -1,4 +1,11 @@
 /*
+ * @progname       fam10c
+ * @version        1.0
+ * @author         Manis
+ * @category       
+ * @output         Text
+ * @description    
+ *
  *   fam10c
  *   by:  Cliff Manis  <cmanis@csoftec.csf.com>
  *   Family Report for LifeLines

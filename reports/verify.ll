@@ -1,4 +1,11 @@
 /*
+ * @progname       verify
+ * @version        9.0
+ * @author         Eggert
+ * @category       
+ * @output         Text
+ * @description    
+
 verify - a LifeLines database verification report program
 	by Jim Eggert (eggertj@atc.ll.mit.edu)
 	Version 1,  3 November 1992 (unreleased, first simple try)

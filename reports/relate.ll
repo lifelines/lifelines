@@ -1,4 +1,13 @@
 /*
+ * @progname       relate
+ * @version        1.0
+ * @author         Wetmore
+ * @category       
+ * @output         Text
+ * @description    
+
+
+
 relate - Finds a shortest path between two persons in a LifeLines
         database.
         by Tom Wetmore (ttw@petrel.att.com)

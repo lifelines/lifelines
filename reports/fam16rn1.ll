@@ -1,5 +1,11 @@
-
 /* 
+ * @progname       fam16rn1
+ * @version        1.0
+ * @author         Wetmore, Manis
+ * @category       
+ * @output         Text
+ * @description    
+ *
  *   fam16rn1
  *
  *   Code by Tom Wetmore, ttw@cbnewsl.att.com

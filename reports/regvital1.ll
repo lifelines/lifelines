@@ -1,5 +1,11 @@
-
 /* 
+ * @progname       regvital1
+ * @version        1.0
+ * @author         Wetmore, Manis
+ * @category       
+ * @output         nroff
+ * @description    
+ *
  *   regvital1
  *
  *   This report does have a footer and header

@@ -1,5 +1,11 @@
-
 /* 
+ * @progname       showlines1
+ * @version        1.0
+ * @author         Wetmore
+ * @category       
+ * @output         Text
+ * @description    
+
  *   showlines1
  *
  *   Code by Tom Wetmore, ttw@cbnewsl.att.com

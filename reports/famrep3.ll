@@ -1,4 +1,11 @@
 /*
+ * @progname       famrep3
+ * @version        3.0
+ * @author         Jones
+ * @category       
+ * @output         nroff
+ * @description    
+ *
  *   famrep3
  *
  *   Code by James P. Jones, jjones@nas.nasa.gov

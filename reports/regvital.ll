@@ -1,4 +1,12 @@
 /*
+ * @progname       regvital
+ * @version        3.0
+ * @author         Wetmore, Manis, Chandler
+ * @category       
+ * @output         nroff
+ * @description    
+
+
 regvital
 
 version 1 by Tom Wetmore

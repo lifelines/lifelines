@@ -1,4 +1,12 @@
-/* indiv2.r
+/* 
+ * @progname       indiv2.r
+ * @version        1.0
+ * @author         Simms
+ * @category       
+ * @output         Text
+ * @description    
+
+   indiv2.r
 
    Written by: Robert Simms, 27 Mar 1996
                rsimms@math.clemson.edu, http://math.clemson.edu/~rsimms

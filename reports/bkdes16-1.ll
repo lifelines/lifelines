@@ -1,4 +1,11 @@
 /* 
+ * @progname       bkdes16-1
+ * @version        1.0
+ * @author         Wetmore, Manis
+ * @category       
+ * @output         Text
+ * @description    
+
  *   bkdes16-1
  *
  *   Code by Tom Wetmore, ttw@cbnewsl.att.com

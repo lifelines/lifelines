@@ -1,4 +1,11 @@
 /*
+ * @progname       ancestors2
+ * @version        1.0
+ * @author         Wetmore, Cliff Manis
+ * @category       
+ * @output         Text
+ * @description    
+ *
  *   ancestors2
  *
  *   Initial Code by Tom Wetmore, ttw@cbnewsl.att.com

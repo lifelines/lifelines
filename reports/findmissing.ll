@@ -1,3 +1,11 @@
+/*
+ * @progname       findmissing
+ * @version        1.0
+ * @author         
+ * @category       
+ * @output         Text
+ * @description    
+ */
 proc main ()
 {
         "THE FOLLOWING PERSONS ARE 'ISOLATED' IN YOUR DATABASE" nl() nl()

@@ -1,4 +1,11 @@
 /*
+ * @progname       bias
+ * @version        1.4
+ * @author         Chandler
+ * @category       
+ * @output         Text
+ * @description    
+
 bias
 
 Compute sex bias based on previous births

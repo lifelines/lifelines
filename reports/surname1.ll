@@ -1,4 +1,12 @@
 /*
+ * @progname       surname1
+ * @version        1.0
+ * @author         Manis, Wetmore
+ * @category       
+ * @output         Text, 132 cols
+ * @description    
+
+
  *  surname1
  *
  *  LifeLines Report for quickly getting output of a particular

@@ -1,4 +1,13 @@
-/* this funny little program is based on Tom Wetmore's "genancc1"
+/* 
+ * @progname       fdesc
+ * @version        1.0
+ * @author         Wetmore
+ * @category       
+ * @output         GEDCOM
+ * @description    
+
+
+   this funny little program is based on Tom Wetmore's "genancc1"
    and generates a GEDCOM file with descendants of a chosen individual
    who have the same surname (usually this means male line descendants
    plus illegitimate children of daughters) plus their spouses;

@@ -1,5 +1,11 @@
-
 /*
+ * @progname       8gen1
+ * @version        1.0
+ * @author         Wetmore
+ * @category       
+ * @output         Text, 132 cols
+ * @description    
+ *
  *   8gen1
  *
  *   Code by Tom Wetmore, ttw@cbnewsl.att.com

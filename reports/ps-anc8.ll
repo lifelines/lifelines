@@ -1,4 +1,11 @@
 /*
+ * @progname       ps-anc8
+ * @version        8.0
+ * @author         Wheeler, Stringer
+ * @category       
+ * @output         PostScript
+ * @description    
+** 
 **  ps-anc8, 18 Mar 1998, enhanced by Robert Simms and Allan Yates,
 **                                 rsimms@math.clemson.edu and ayates@nortel.ca
 **  ps-anc, 9 September 1994, by Fred Wheeler (wheeler@ipl.rpi.edu)

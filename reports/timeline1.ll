@@ -1,4 +1,12 @@
 /*
+ * @progname       timeline1
+ * @version        1.0
+ * @author         Jones
+ * @category       
+ * @output         Text, 80/132 cols
+ * @description    
+ *
+ *
  *   timeline1
  *
  *   version one:  4 Sept 1993

@@ -1,5 +1,11 @@
-
 /*
+ * @progname       marriages1
+ * @version        1.0
+ * @author         Wetmore, Manis
+ * @category       
+ * @output         Text, 80 cols
+ * @description    
+ *
  *   marriages1
  *
  *   Code by Tom Wetmore, ttw@cbnewsl.att.com

@@ -1,4 +1,11 @@
 /*
+ * @progname       genetics
+ * @version        2.0
+ * @author         Eggert
+ * @category       
+ * @output         Text
+ * @description    
+
 genetics - a LifeLines report program to calculate degree of relatedness
         by Jim Eggert (eggertj@atc.ll.mit.edu)
         Version 1 (15 Sept 1995)

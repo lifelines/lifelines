@@ -1,4 +1,10 @@
-/* connect2.ll
+/* 
+ * @progname       connect2
+ * @version        1.0
+ * @author         Simms
+ * @category       
+ * @output         Text
+ * @description    
 
    Written by: Robert Simms, 19 Sep 1997
                rsimms@math.clemson.edu, http://www.math.clemson.edu/~rsimms

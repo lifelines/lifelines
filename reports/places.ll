@@ -1,4 +1,10 @@
 /*
+ * @progname       places
+ * @version        5.0
+ * @author         Olsen, Eggert
+ * @category       
+ * @output         Text
+ * @description    
 
 places
 

@@ -1,4 +1,11 @@
 /*
+ * @progname       index_mm
+ * @version        4.0
+ * @author         Eggert
+ * @category       
+ * @output         Text
+ * @description    
+
 index_mm - a LifeLines database listing program
         by Jim Eggert (eggertj@atc.ll.mit.edu)
         Version 1,  25 November 1992

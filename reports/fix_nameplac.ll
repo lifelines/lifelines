@@ -1,4 +1,11 @@
 /*
+ * @progname       fix_nameplac
+ * @version        1.0
+ * @author         Eggert
+ * @category       
+ * @output         GEDCOM
+ * @description    
+
 fix_nameplac - a LifeLines names and places fixing program
         by Jim Eggert (eggertj@atc.ll.mit.edu)
         Version 1,  8 January 1993

@@ -1,4 +1,11 @@
 /*
+ * @progname       allines
+ * @version        1.0
+ * @author         Wetmore
+ * @category       
+ * @output         nroff
+ * @description    
+
  * alllines - This program shows all ancestral lines of a specified person
  * using a pseudo-Register format.
  *

@@ -1,4 +1,11 @@
 /*
+ * @progname       ps-anc5
+ * @version        5.0
+ * @author         Wheeler, Stringer
+ * @category       
+ * @output         PostScript
+ * @description    
+** 
 **  ps-anc5, 19 Feb 1996, enhanced by Phil Stringer (P.Stringer@mcc.ac.uk)
 **           - all comments/bugs should now go to Phil Stringer
 **  ps-anc, 9 September 1994, by Fred Wheeler (wheeler@ipl.rpi.edu)

@@ -1,4 +1,11 @@
 /*
+ * @progname       ps-anc6
+ * @version        6.0
+ * @author         Wheeler, Stringer
+ * @category       
+ * @output         PostScript
+ * @description    
+** 
 **  ps-anc6, 30 Jan 1997, enhanced by Phil Stringer (P.Stringer@mcc.ac.uk)
 **  ps-anc, 9 September 1994, by Fred Wheeler (wheeler@ipl.rpi.edu)
 **

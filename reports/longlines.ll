@@ -1,4 +1,11 @@
 /*
+ * @progname       longlines
+ * @version        1.0
+ * @author         Chandler
+ * @category       
+ * @output         Text
+ * @description    
+ 
 longlines
 
 Version 1 - 1994 May 19 - John F. Chandler

@@ -1,4 +1,11 @@
 /*
+ * @progname       formatted_gedcom
+ * @version        1.0
+ * @author         Eggert
+ * @category       
+ * @output         GEDCOM
+ * @description    
+
 formatted_gedcom - a LifeLines formatted GEDCOM listing program
          by Jim Eggert (eggertj@atc.ll.mit.edu)
          Version 1,  7 September 1993

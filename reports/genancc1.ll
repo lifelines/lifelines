@@ -1,4 +1,11 @@
 /*   
+ * @progname       genancc1
+ * @version        1.0
+ * @author         Wetmore, Manis
+ * @category       
+ * @output         GEDCOM
+ * @description    
+
  *   genancc1
  *
  *   by Tom Wetmore, ttw@cbnewsl.att.com

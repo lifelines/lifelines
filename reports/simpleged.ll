@@ -1,4 +1,11 @@
 /*
+ * @progname       simpleged
+ * @version        1.0
+ * @author         Wetmore
+ * @category       
+ * @output         GEDCOM
+ * @description    
+
 simpleged
 
 This program generates a simple GEDCOM file from a database.  It can

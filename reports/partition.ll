@@ -1,4 +1,12 @@
 /*
+ * @progname       partition
+ * @version        8.0
+ * @author         Eggert
+ * @category       
+ * @output         GEDCOM
+ * @description    
+
+
 partition - a LifeLines database partitioning program
         by Jim Eggert (eggertj@atc.ll.mit.edu)
         Version 1,  19 November 1992 (unreleased)

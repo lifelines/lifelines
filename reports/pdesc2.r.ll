@@ -1,4 +1,11 @@
 /*
+ * @progname       pdesc2.r
+ * @version        1.0
+ * @author         Wetmore, Manis, Jones, Eggert, Simms
+ * @category       
+ * @output         Text
+ * @description    
+ *
  *   pdesc2
  *
  *   Code by Tom Wetmore, ttw@cbnewsl.att.com

@@ -1,4 +1,11 @@
 /*
+ * @progname       ps-anc2
+ * @version        2.0
+ * @author         Wheeler
+ * @category       
+ * @output         PostScript
+ * @description    
+** 
 **  ps-anc2, 16 August 1994, by Fred Wheeler (wheeler@ipl.rpi.edu)
 **  
 **  GETTING THIS FILE

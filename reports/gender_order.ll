@@ -1,4 +1,11 @@
 /*
+ * @progname       gender_order
+ * @version        3.0
+ * @author         Eggert
+ * @category       
+ * @output         Text
+ * @description    
+
 gender_order - a LifeLines gender order statistics program
         by Jim Eggert (eggertj@ll.mit.edu)
         Version 1,  5 August 1993

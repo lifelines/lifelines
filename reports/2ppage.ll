@@ -1,4 +1,11 @@
 /*
+ * @progname    2ppage
+ * @version     1.0
+ * @author      Wetmore
+ * @category
+ * @output      Text, 80 cols
+ * @description 2 INDI's per page
+ *
  *   2ppage               (2 INDI's per page)
  *
  *

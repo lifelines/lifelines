@@ -1,13 +1,20 @@
 /*
-** @progname book-latex
-** @output   LaTeX
-** @author   Dennis Nicklaus (nicklaus@fnal.gov or nicklaus@writeme.com)
+** @progname       book-latex
+** @author         Nicklaus
+** @version        2.5
+** @category       
+** @output         LaTeX
+** @description    
 **
 ** $Id$
 ** 
 ** SourceForge Versions:
 **
 ** $Log$
+** Revision 1.5  2000/11/28 21:39:45  nozell
+** Add keyword tags to all reports
+** Extend the report script menu to display script output format
+**
 ** Revision 1.4  2000/11/11 07:52:06  pere
 ** Use ISO 8859/1 charset in LaTeX.  Add meta-information in header.
 **

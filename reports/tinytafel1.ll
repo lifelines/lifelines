@@ -1,4 +1,12 @@
 /*
+ * @progname       tinytafel1
+ * @version        3.1
+ * @author         Wetmore, Eggert, Chandler
+ * @category       
+ * @output         TinyTafel
+ * @description    
+
+
 tinytafel1
 
 Based on tinytafel1 by Tom Wetmore, ttw@cbnewsl.att.com

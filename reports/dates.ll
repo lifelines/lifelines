@@ -1,4 +1,11 @@
 /*
+ * @progname       dates
+ * @version        4.0
+ * @author         Eggert
+ * @category       
+ * @output         Text
+ * @description    
+
 dates - a LifeLines dates extraction program
         by Jim Eggert (eggertj@atc.ll.mit.edu)
         Version 1,  3 December 1992

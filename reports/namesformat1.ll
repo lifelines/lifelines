@@ -1,5 +1,11 @@
-
 /*
+ * @progname       namesformat1
+ * @version        1.0
+ * @author         Manis
+ * @category       
+ * @output         Text
+ * @description    
+ *
  *   namesformat1
  *
  *   Code by Cliff Manis, cmanis@csoftec.csf.com

@@ -1,4 +1,11 @@
 /*
+ * @progname       soundex-isfm
+ * @version        1.0
+ * @author         Wetmore, Manis, Eggert
+ * @category       
+ * @output         Text, 132 cols
+ * @description    
+ *
  *   soundex-isfm
  *
  *   Code by Tom Wetmore, ttw@cbnewsl.att.com, 1991

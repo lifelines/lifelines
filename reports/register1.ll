@@ -1,4 +1,11 @@
 /*
+ * @progname       register1
+ * @version        1.0
+ * @author         Wetmore
+ * @category       
+ * @output         nroff
+ * @description    
+ *
  *   register1
  *
  *   This report does NOT have a footer and header

@@ -1,5 +1,12 @@
 2000-11-28  Marc Nozell  <marc@nozell.com>
 
+	* Added @progname, @version, @author, @output info to all reports.
+
+	* liflines/askprogram.c: Extend Petter's report script menu work
+	-- @version is now used.
+
+2000-11-28  Marc Nozell  <marc@nozell.com>
+
 	* gedlib/misc.c: Fixed call to xrefval (wrong number of args)
 
 	* hdrs/gedcom.h: Fixed nod0_to_keynum prototype

@@ -1,4 +1,12 @@
-/* find.ll   - Rafal Prinke, rafalp@plpuam11.amu.edu.pl
+/* 
+ * @progname       find
+ * @version        1.0
+ * @author         Prinke
+ * @category       
+ * @output         GUI
+ * @description    
+
+find.ll   - Rafal Prinke, rafalp@plpuam11.amu.edu.pl
 
 The program asks the user for the TAG and its VALUE, and the displays
 a menu of all the matches.
@@ -20,10 +28,8 @@ set(vl, save(upper(vl)))
    forindi (i, n) {
         set(r, inode(i))
         traverse (r, n, x) {
-           if (and(eqstr(tg, upper(tag(n))), eqstr(vl,
-/* join to prev lines */ upper(substring(value(n), 1, strlen(vl)))))) {
-           enqueue(mnu, save(concat(key(i), " -- ", name(i), " -- ", d(x),
-/* join to prev lines */ ": ", tag(n), " = ", value(n), "\n")))
+           if (and(eqstr(tg, upper(tag(n))), eqstr(vl, upper(substring(value(n), 1, strlen(vl)))))) {
+           enqueue(mnu, save(concat(key(i), " -- ", name(i), " -- ", d(x), ": ", tag(n), " = ", value(n), "\n")))
            }
         }
    }

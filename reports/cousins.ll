@@ -1,5 +1,12 @@
 /*
-cousins -- Finds the relationship between two persons in a
+ * @progname       cousins
+ * @version        6.0
+ * @author         Wetmore
+ * @category       
+ * @output         Text
+ * @description    
+
+  cousins -- Finds the relationship between two persons in a
   LifeLines database.  In the cases where the two persons are
   genetically related (have a common ancestor), the program will
   find and display the relationship.  If the two persons are not

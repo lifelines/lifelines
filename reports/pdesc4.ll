@@ -1,4 +1,11 @@
 /*
+ * @progname       pdesc3
+ * @version        1.0
+ * @author         Wetmore, Manis, Jones, Eggert, Simms
+ * @category       
+ * @output         Text
+ * @description    
+ *
  *   pdesc3.ll
  *
  *   Code by Tom Wetmore, ttw@cbnewsl.att.com

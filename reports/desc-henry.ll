@@ -1,4 +1,12 @@
 /*
+ * @progname       description
+ * @version        8.0
+ * @author         Eggert
+ * @category       
+ * @output         Text
+ * @description    
+
+
 desc-henry - a LifeLines descendants listing program using Henry codes
     by Jim Eggert (eggertj@atc.ll.mit.edu)
     Versions 1-3 1992

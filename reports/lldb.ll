@@ -1,8 +1,13 @@
 /*
+ * @progname lldb
+ * @version  1.02
+ * @author   Nozell 
+ * @category palmpilot
+ * @output   CSV for palmpilot
+ *
  *   lldb.ll V1.02
  *
  *   Marc Nozell <marc@nozell.com>
- *
  *
  *   This report generator works only with the LifeLines Genealogy program
  *
@@ -45,6 +50,10 @@
  *   Updated URLs
  * 
  *  $Log$
+ *  Revision 1.5  2000/11/28 21:39:45  nozell
+ *  Add keyword tags to all reports
+ *  Extend the report script menu to display script output format
+ *
  *  Revision 1.4  2000/11/27 20:48:15  nozell
  *  Header is to verbose, use just Log
  *

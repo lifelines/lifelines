@@ -1,4 +1,11 @@
 /*
+ * @progname       pdesc1
+ * @version        1.0
+ * @author         Wetmore, Manis, Jones, Eggert
+ * @category       
+ * @output         Text, 132 cols
+ * @description    
+ *
  *   pdesc1
  *
  *   Code by Tom Wetmore, ttw@cbnewsl.att.com

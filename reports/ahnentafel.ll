@@ -1,4 +1,12 @@
-/* ahnentafel -- Generate an ahnentafel chart */
+/* 
+ * @progname       ahnentafel
+ * @version        1.0
+ * @author         Wetmore
+ * @category       
+ * @output         Text
+ * @description    
+ * 
+ * ahnentafel -- Generate an ahnentafel chart */
 /* Tom Wetmore        */
 /* Version 1, 4/27/95 */
 

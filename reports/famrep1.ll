@@ -1,5 +1,10 @@
-
 /*
+ * @progname       famrep1
+ * @version        1.0
+ * @author         Jones
+ * @category       
+ * @output         nroff
+ * @description    
  *   famrep1
  *
  *   Code by James P. Jones, jjones@nas.nasa.gov

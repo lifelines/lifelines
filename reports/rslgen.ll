@@ -1,4 +1,11 @@
 /*
+ * @progname       rslgen
+ * @version        1.0
+ * @author         Eggert
+ * @category       
+ * @output         RSL format
+ * @description    
+
 rslgen - a LifeLines report program to aid in the generation of
 Roots Surname List (RSL) submissions.
 

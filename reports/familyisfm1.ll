@@ -1,5 +1,11 @@
-
 /* 
+ * @progname       familyisfm1
+ * @version        1.0
+ * @author         Wetmore, Manis
+ * @category       
+ * @output         Text, 132 cols
+ * @description    
+ *
  *   familyisfm1
  *
  *   Code by Tom Wetmore, ttw@cbnewsl.att.com

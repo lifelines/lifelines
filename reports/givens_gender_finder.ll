@@ -1,4 +1,11 @@
 /*
+ * @progname       givens_gender_finder
+ * @version        1.0
+ * @author         Eggert
+ * @category       
+ * @output         Text
+ * @description    
+
 givens_gender_finder - a LifeLines database given name & gender finder program
         by Jim Eggert (eggertj@ll.mit.edu)
         Version 1 (19 April 1995) requires LifeLines 3.0.1 or later.

@@ -1,4 +1,11 @@
 /*
+ * @progname       related_spouses
+ * @version        2.0
+ * @author         Eggert
+ * @category       
+ * @output         Text
+ * @description    
+
 related_spouses - a LifeLines program to identify related spouses
 	by Jim Eggert (eggertj@atc.ll.mit.edu)
 	Version 1,  31 March 1993 (first release)

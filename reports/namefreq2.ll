@@ -1,4 +1,11 @@
 /*
+ * @progname       namefreq
+ * @version        2.0
+ * @author         Chandler
+ * @category       
+ * @output         Text
+ * @description    
+
 namefreq
 
 Tabulate frequency of first names in database.

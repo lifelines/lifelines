@@ -1,4 +1,11 @@
 /*
+ * @progname       count_desc
+ * @version        2.0
+ * @author         Eggert
+ * @category       
+ * @output         Text
+ * @description    
+
 count_desc - a LifeLines descendants counting program
          by Jim Eggert (eggertj@atc.ll.mit.edu)
          Version 1,  19 November 1992

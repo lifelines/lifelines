@@ -1,4 +1,11 @@
 /*
+ * @progname       register-tex
+ * @version        2.0
+ * @author         Wetmore, Olsen
+ * @category       
+ * @output         LaTeX
+ * @description    
+**
 ** register-tex
 **
 ** Version 2  24 Feb 1993

@@ -1,5 +1,11 @@
-
 /*
+ * @progname       pedigreel
+ * @version        1.0
+ * @author         Wetmore, Manis
+ * @category       
+ * @output         Text, 132 cols
+ * @description    
+ *
  *   pedigreel
  *
  *   Code by Tom Wetmore, ttw@cbnewsl.att.com

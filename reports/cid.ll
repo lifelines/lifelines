@@ -1,4 +1,13 @@
-/* cid - Generates Pete Cook's CID (Chronological Identifier) for a person
+/* 
+ * @progname       cid
+ * @version        1.0
+ * @author         Wetmore, Chandler
+ * @category       
+ * @output         Text
+ * @description    
+
+
+   cid - Generates Pete Cook's CID (Chronological Identifier) for a person
    in a LifeLines database.  The program first computes the C-Vector, a
    seven element array of the birth years of a person and his/her parents
    and grandparents in ahnentafel order.  The program then subtracts the

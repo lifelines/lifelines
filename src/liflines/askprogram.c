@@ -46,6 +46,7 @@ struct program_info
 
   STRING filename;    /* Full path to script file */
   STRING progname;    /* The name of the script */
+  STRING version;     /* The version of the script */
   STRING category;    /* The category of the script */
   STRING author;      /* The author of the script */
   STRING description; /* A description of purpose of the script */
@@ -109,6 +110,7 @@ parse_program(STRING directory,
   info->filename    = strdup(filepath);
 
   info->progname    = NULL;
+  info->version     = NULL;
   info->author      = NULL;
   info->description = NULL;
   info->output      = NULL;
@@ -129,6 +131,7 @@ parse_program(STRING directory,
          }
 
       GETTAG(PROGNAMETAG, info->progname);
+      GETTAG(VERSIONTAG,  info->version);
       GETTAG(AUTHORTAG,   info->author);
       GETTAG(OUTPUTTAG,   info->output);
       GETTAG(CATEGORYTAG, info->category);
@@ -240,6 +243,8 @@ free_program_list(struct program_info *head,
 
       if (info->filename)
         free(info->filename);
+      if (info->version)
+        free(info->version);
       if (info->author)
         free(info->author);
       if (info->progname)
@@ -295,10 +300,10 @@ make_program_list(struct program_info *head,
     {
       unsigned char buf[MAXLINELEN];
 #ifdef HAVE_SNPRINTF
-      snprintf(buf, sizeof(buf), "%s (%s)",
+      snprintf(buf, sizeof(buf), "%s (%s) [%s]",
 #else
 #ifdef HAVE__SNPRINTF
-      _snprintf(buf, sizeof(buf), "%s (%s)",
+      _snprintf(buf, sizeof(buf), "%s (%s) [%s]",
 #else
       /* MTE: 11-17-00 Yes, this is dangerous.  It will have to do */
       /* until we add an implementation of snprintf() to arch/.    */
@@ -306,6 +311,7 @@ make_program_list(struct program_info *head,
 #endif /* HAVE__SNPRINTF */
 #endif /* HAVE_SNPRINTF */
               NULL != cur->progname    ? cur->progname       : cur->filename,
+              NULL != cur->version     ? cur->version       : (STRING)"V?.?",
               NULL != cur->output      ? cur->output      : (STRING)"[?]");
       newlist[i] = strdup(buf);
       i++;

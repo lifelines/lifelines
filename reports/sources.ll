@@ -1,3 +1,11 @@
+/*
+ * @progname       sources
+ * @version        1.0
+ * @author         
+ * @category       
+ * @output         Text
+ * @description    
+ */
 global(refn)    /* root node of references record */
 global(reftab)  /* table of reference keys reported on */
 global(ref1)

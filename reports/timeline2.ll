@@ -1,4 +1,11 @@
 /*
+ * @progname       timeline2
+ * @version        2.0
+ * @author         Jones
+ * @category       
+ * @output         Text, 80/132 cols
+ * @description    
+ *
  *   timeline2 - create a timeline of select individuals
  *
  *   version one:  4 Sept 1993

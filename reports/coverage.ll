@@ -1,4 +1,11 @@
 /*
+ * @progname       coverage
+ * @version        3.0
+ * @author         Wetmore, Woodbridge, Eggert
+ * @category       
+ * @output         Text
+ * @description    
+
    coverage -- Displays "ancestor coverage," that is, what percentage of
    ancestors have been discovered for each generation back in time.
 

@@ -1,4 +1,11 @@
 /*
+ * @progname       names_freq
+ * @version        2.0
+ * @author         Eggert
+ * @category       
+ * @output         Text
+ * @description    
+
 names_freq - a LifeLines names frequency calculation program
         by Jim Eggert (eggertj@ll.mit.edu)
         Version 1,   8 November 1993 (initial release)

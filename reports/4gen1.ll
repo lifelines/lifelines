@@ -1,5 +1,11 @@
-
 /*
+ * @progname       4gen1
+ * @version        1.0
+ * @author         Wetmore
+ * @category       
+ * @output         Text, 80 cols
+ * @description    
+ *
  *   4gen1
  *
  *   Code by Tom Wetmore, ttw@cbnewsl.att.com

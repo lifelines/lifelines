@@ -1,4 +1,11 @@
 /*
+ * @progname       famrep6
+ * @version        6.0
+ * @author         Jones
+ * @category       
+ * @output         nroff
+ * @description    
+ *
  *   famrep6
  *
  *   Code by James P. Jones, jjones@nas.nasa.gov

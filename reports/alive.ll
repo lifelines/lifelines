@@ -1,8 +1,11 @@
 /*
- * @progname    alive
- * @description Finding people alive in a given year
- * @output      Text
-
+ * @progname       alive
+ * @version        5.0
+ * @author         Eggert
+ * @category       
+ * @output         Text
+ * @description    Finding people alive in a given year
+ */
 alive - a LifeLines report program for finding live people
 
 This finds who in the database, or among ancestors or descendants of
@@ -19,6 +22,10 @@ Version 5, 17 March 1995, J.F.Chandler, modified to prune place list
 ** SourceForge Versions:
 **
 ** $Log$
+** Revision 1.3  2000/11/28 21:39:45  nozell
+** Add keyword tags to all reports
+** Extend the report script menu to display script output format
+**
 ** Revision 1.2  2000/11/11 17:48:13  pere
 ** Get this report working.  Fixed type problems and handle empty
 ** place tags without crashing.  Add meta information.
