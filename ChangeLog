@@ -87,6 +87,11 @@
 
 	Updating cvsignore files for building in source tree.
 
+** CVS TAG v3_0_37_branch
+** CVS TAG v3_0_37
+
+	Released 3.0.27.
+
 2003-10-02 Perry Rapp
 
 	* ChangeLog src/gedlib/refns.c
