@@ -73,16 +73,40 @@ ll_strcmploc (char *str1, char *str2)
 	if (usersort && (*usersort)(str1, str2, &rtn))
 		return rtn;
 
-	/* regular wchar.h implementation */
+	/* regular wchar.h implementation, if available */
 	if (widecmp(str1, str2, &rtn))
 		return rtn;
 
 #ifdef HAVE_STRCOLL
+	/* regular 8-bit strcoll */
 	errno = 0;
 	rtn = strcoll(str1, str2); /* sets errno if fails */
 	return !errno ? rtn : strcmp(str1, str2);
 #else
+	/* last ditch fallback is simple strcmp 8-bit numerical order */
 	return(strcmp(str1, str2));
+#endif
+}
+/*===================================================
+ * ll_what_collation -- get string describing collation in use
+ *=================================================*/
+CNSTRING
+ll_what_collation (void)
+{
+	INT rtn;
+
+	if (opt_finnish) return "Latin1/Finnish";
+
+	if (usersort && (*usersort)("a", "b", &rtn)) return "user-defined";
+
+#ifdef HAVE_WCSCOLL
+	if (uu8) return "wcscoll";
+#endif
+
+#ifdef HAVE_STRCOLL
+	return "strcoll";
+#else
+	return "strcmp";
 #endif
 }
 /*===================================================

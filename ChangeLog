@@ -5,6 +5,11 @@
 
 	Working on character handling code.
 
+	* src/hdrs/llstdlib.h src/liflines/main.c src/liflines/screen.c
+	src/stdlib/llstrcmp.c:
+
+	More work on character handling code.
+
 2002-11-05 Perry Rapp
 
 	* ChangeLog src/gedlib/indiseq.c src/gedlib/names.c

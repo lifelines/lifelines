@@ -191,10 +191,14 @@ main (INT argc, char **argv)
 		case 'F':	/* Finnish sorting order [toggle] */
 			opt_finnish = !opt_finnish;
 			/*
-			TO DO - need to mark Finnish databases, as 
+			TODO - need to mark Finnish databases, as 
 			name records are not interoperable, because of
 			different soundex encoding
-			2001/02/17, Perry Rapp
+			2001-02-17, Perry Rapp
+			TODO, 2002-11-07, Perry Rapp:
+			Need to see if we can fix database so locale sort doesn't affect btree
+			because it would be nicer if changing locale didn't hurt the btree !
+			Perhaps locale collates can only be used inside name records ? needs research
 			*/
 			break;
 # endif

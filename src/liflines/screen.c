@@ -1810,6 +1810,10 @@ invoke_cset_display (void)
 	llstrncpyf(buffer, sizeof(buffer), uu8, _("Current messages locale: %s")
 		, get_current_locale_msgs());
 	push_list(list, strsave(buffer));
+
+	llstrncpyf(buffer, sizeof(buffer), uu8, _("Collation routine: %s")
+		, ll_what_collation());
+	push_list(list, strsave(buffer));
 	
 	llstrncpyf(buffer, sizeof(buffer), uu8, _("GUI codeset: %s")
 		, getoptstr("GuiCodeset",""));

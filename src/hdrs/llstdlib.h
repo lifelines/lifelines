@@ -100,6 +100,7 @@ void get_current_lldate(LLDATE * creation);
 
 /* llstrcmp.c */
 int ll_strcmploc(char*, char*);
+CNSTRING ll_what_collation(void);
 int ll_strncmp(char*, char*, int);
 typedef BOOLEAN (*usersortfnc)(char *str1, char *str2, INT * rtn);
 void set_usersort(usersortfnc fnc);
