@@ -21,6 +21,11 @@
 
 	Add shell for code to do builtin character casing.
 
+	* ChangeLog src/gedlib/charprops.c src/gedlib/date.c
+	src/gedlib/init.c src/interp/builtin.c
+
+	Switch calls to (new) charprops_lltoupperz & lower.
+
 2003-11-11 Perry Rapp
 
 	* ChangeLog src/gedlib/indiseq.c src/stdlib/strcvt.c

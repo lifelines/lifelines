@@ -45,6 +45,7 @@
 #include "date.h"
 #include "zstr.h"
 #include "codesets.h"
+#include "charprops.h"
 
 #include "interpi.h"
 
@@ -2231,7 +2232,7 @@ __lower (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	str = pvalue_to_string(val);
 	if (str) {
-		ZSTR zstr = ll_tolowerz(str, uu8);
+		ZSTR zstr = charprops_tolowerz(str, uu8);
 		set_pvalue_string(val, zs_str(zstr));
 		zs_free(&zstr);
 	}

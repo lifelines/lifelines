@@ -45,6 +45,7 @@
 #include "icvt.h"
 #include "date.h"
 #include "mychar.h"
+#include "charprops.h"
 
 /*********************************************
  * global/exported variables
@@ -672,6 +673,7 @@ update_useropts (VPTR uparm)
 	/* in case user changed locale (need int_codeset already set) */
 	uilocale();
 	/* in case user changed codesets */
+	/* TODO: Isn't this superfluous, as it was called in update_db_options above ? */
 	transl_load_xlats();
 
 	strupdate(&illegal_char, getoptstr("IllegalChar", 0));
@@ -700,6 +702,11 @@ update_db_options (void)
 #endif /* ENABLE_NLS */
 		/* need to reload all predefined codeset conversions */
 		transl_load_xlats();
+		if (uu8) {
+			charprops_load_utf8();
+		} else {
+			charprops_load(int_codeset);
+		}
 	}
 
 	destroy_table(opttab);

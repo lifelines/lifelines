@@ -36,6 +36,7 @@
 #include "table.h"
 #include "date.h"
 #include "zstr.h"
+#include "charprops.h"
 
 
 /*********************************************
@@ -1459,7 +1460,7 @@ upper_dup (STRING s)
 static STRING
 lower_dup (STRING s)
 {
-	ZSTR zstr = ll_tolowerz(s, uu8);
+	ZSTR zstr = charprops_tolowerz(s, uu8);
 	STRING str = strdup(zs_str(zstr));
 	zs_free(&zstr);
 	return str;
