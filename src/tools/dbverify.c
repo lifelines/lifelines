@@ -45,7 +45,7 @@
  *********************************************/
 
 extern BTREE BTR;
-extern STRING qSmtitle;
+extern STRING qSmtitle, qSbaddb;
 
 /*********************************************
  * required global variables
@@ -885,7 +885,10 @@ main (int argc,
 		puts(buffer);
 		goto done;
 	}
-	init_lifelines_db();
+	if (!init_lifelines_db()) {
+		printf(_(qSbaddb));
+		goto done;
+	}
 	printf("Checking %s\n", dbname);
 
 	if (todo.find_ghosts || todo.fix_ghosts)
@@ -921,6 +924,7 @@ main (int argc,
 	report_results();
 
 	closebtree(BTR);
+	BTR = 0;
 	returnvalue = 0;
 
 done:

@@ -92,11 +92,13 @@ void report_alloc_live_count(STRING str);
 
 /* path.c */
 BOOLEAN check_file_for_unicode(FILE * fp);
+INT chop_path(STRING path, STRING dirs);
 STRING compress_path(STRING path, INT len);
 STRING concat_path(CNSTRING dir, CNSTRING file);
 STRING filepath(CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING ext);
 FILE* fopenpath(STRING, STRING, STRING, STRING, STRING*);
 BOOLEAN is_dir_sep(char c);
+BOOLEAN is_path_sep(char c);
 STRING lastpathname(STRING);
 INT path_cmp(CNSTRING path1, CNSTRING path2);
 BOOLEAN path_match(CNSTRING path1, CNSTRING path2);

@@ -63,6 +63,7 @@
 extern STRING qSidldir,qSidldrp,qSnodbse,qScrdbse,qSiddbse;
 extern STRING qSmtitle,qSnorwandro,qSnofandl,qSbdlkar;
 extern STRING qSusgFinnOpt,qSusgFinnAlw,qSusgNorm;
+extern STRING qSbaddb;
 
 extern INT csz_indi, icsz_indi;
 extern INT csz_fam, icsz_fam;
@@ -311,6 +312,17 @@ main (INT argc, char **argv)
 		/* ask_for_db_filename returns static buffer, we save it below */
 		dbrequested = ask_for_db_filename(_(qSidldir), _(qSidldrp), dbdir);
 		if (ISNULL(dbrequested)) {
+			INT n=0;
+			LIST dblist = get_dblist(dbdir, &n);
+			if (dblist) {
+				INT i;
+				i = choose_from_list("(Not implemented) List of candidate dbs", n, dblist);
+				if (i >= 0) {
+					/* TODO: something, but we have to sort out how to get the db
+					out of the choice string -- Perry, 2002.06.05 */
+				}
+				release_dblist(dblist);
+			}
 			dbrequested = NULL;
 			llwprintf(_(qSiddbse));
 			goto finish;
@@ -336,7 +348,10 @@ main (INT argc, char **argv)
 		goto finish;
 
 	/* Start Program */
-	init_lifelines_db();
+	if (!init_lifelines_db()) {
+		llwprintf(_(qSbaddb));
+		goto finish;
+	}
 	init_show_module();
 	init_browse_module();
 	if (exprog) {

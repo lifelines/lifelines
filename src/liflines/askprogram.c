@@ -28,23 +28,17 @@ typedef struct program_info_s *PROGRAM_INFO;
  *********************************************/
 
 /* alphabetical */
-FILE *ask_for_program (STRING mode,
-                       STRING ttl,
-                       STRING *pfname,
-                       STRING path,
-                       STRING ext,
-                       BOOLEAN picklist);
-PROGRAM_INFO find_all_programs(STRING path, STRING ext);
-void free_program_list(PROGRAM_INFO head, STRING *list, int len);
-PROGRAM_INFO get_choice(PROGRAM_INFO head, int choice);
-PROGRAM_INFO load_programs(STRING directory,
+static PROGRAM_INFO find_all_programs(STRING path, STRING ext);
+static void free_program_list(PROGRAM_INFO head, STRING *list, int len);
+static PROGRAM_INFO get_choice(PROGRAM_INFO head, int choice);
+static PROGRAM_INFO load_programs(STRING directory,
                            STRING ext,
                            PROGRAM_INFO head);
-int make_program_list(PROGRAM_INFO head, STRING leader, STRING **list);
-PROGRAM_INFO parse_program(STRING directory, STRING filename);
+static int make_program_list(PROGRAM_INFO head, STRING leader, STRING **list);
+static PROGRAM_INFO parse_program(STRING directory, STRING filename);
 static void progdetails(ARRAY_DETAILS arrdets, void * param);
-void remove_trailing_space(STRING s);
-int select_programs(const struct dirent *entry);
+static void remove_trailing_space(STRING s);
+static int select_programs(const struct dirent *entry);
 
 /* messages used */
 extern STRING qSextrpt, qSwhatrpt;
@@ -79,7 +73,7 @@ static STRING select_ext = NULL;
 /*===========================================================
  * select_programs -- choose files with the correct extention
  *==========================================================*/
-int
+static int
 select_programs(const struct dirent *entry)
 {
   int retval = 0;

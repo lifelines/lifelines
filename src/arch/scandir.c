@@ -100,11 +100,12 @@ scandir (const char *dir, struct dirent ***namelist,
   pos = 0;
   while (1)
     {
+      int rtn;
       struct dirent current;
 
       strcpy(current.d_name, file_data.cFileName);
 
-      if (select && select(&current))
+      if (!select || select(&current))
         {
           struct dirent *copyentry = malloc(sizeof(struct dirent));
           strcpy(copyentry->d_name, current.d_name);
@@ -112,13 +113,15 @@ scandir (const char *dir, struct dirent ***namelist,
           pos++;
         }
 
-      if (!FindNextFile(handle, &file_data))
+      rtn = FindNextFile(handle, &file_data);
+      if (!rtn || rtn==ERROR_NO_MORE_FILES)
         break;
     }
 
   free(pattern);
   /* Now sort them */
-  qsort(names, pos, sizeof(names[0]), compar);
+  if (compar)
+    qsort(names, pos, sizeof(names[0]), compar);
   *namelist = names;
   return pos;
 }

@@ -1107,6 +1107,7 @@ ask_for_char_msg (STRING msg, STRING ttl, STRING prmpt, STRING ptrn)
  *  ttl:      [IN] title for choice display
  *  no:       [IN] number of choices
  *  pstrngs:  [IN] array of choices
+ * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
 INT
 choose_from_array (STRING ttl, INT no, STRING *pstrngs)
@@ -1116,12 +1117,47 @@ choose_from_array (STRING ttl, INT no, STRING *pstrngs)
 	return choose_or_view_array(ttl, no, pstrngs, selecting, 0, 0);
 }
 /*============================================
+ * choose_from_list -- Choose from string list
+ *  ttl:      [IN] title for choice display
+ *  no:       [IN] number of choices
+ *  pstrngs:  [IN] array of choices
+ * returns 0-based index chosen, or -1 if cancelled
+ *==========================================*/
+INT
+choose_from_list (STRING ttl, INT no, LIST list)
+{
+	BOOLEAN selecting=TRUE;
+	STRING * array=0;
+	STRING choice=0;
+	INT i=0, rtn=-1;
+
+	if (no < 1) return -1;
+	if (!ttl) ttl=_(qSdefttl);
+
+	array = (STRING *) stdalloc(no*sizeof(STRING));
+	i = 0;
+	FORLIST(list, el)
+		choice = (STRING)el;
+		ASSERT(choice);
+		array[i] = strdup(choice);
+		++i;
+	ENDLIST
+
+	rtn = choose_from_array(ttl, no, array);
+
+	for (i=0; i<no; ++i)
+		strfree(&array[i]);
+	stdfree(array);
+	return rtn;
+}
+/*============================================
  * choose_from_array_x -- Choose from string list
  *  ttl:      [IN]  title for choice display
  *  no:       [IN]  number of choices
  *  pstrngs:  [IN]  array of choices
  *  detfnc:   [IN]  callback for details about items
  *  param:    [IN]  opaque type for callback
+ * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
 INT
 choose_from_array_x (STRING ttl, INT no, STRING *pstrngs, DETAILFNC detfnc
@@ -1136,6 +1172,7 @@ choose_from_array_x (STRING ttl, INT no, STRING *pstrngs, DETAILFNC detfnc
  *  ttl:      [IN] title for choice display
  *  no:       [IN] number of choices
  *  pstrngs:  [IN] array of choices
+ * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
 void
 view_array (STRING ttl, INT no, STRING *pstrngs)
@@ -1151,6 +1188,7 @@ view_array (STRING ttl, INT no, STRING *pstrngs)
  *  selecting: [IN]  if FALSE then view-only
  *  detfnc:    [IN]  callback for details about items
  *  param:     [IN]  opaque type for callback
+ * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
 static INT
 choose_or_view_array (STRING ttl, INT no, STRING *pstrngs, BOOLEAN selecting
@@ -2483,6 +2521,7 @@ print_list_title (char * buffer, INT len, const listdisp * ld, STRING ttl)
  *  selectable: [IN]  FALSE for view-only
  *  detfnc:     [IN]  callback for details about items
  *  param:      [IN]  opaque type for callback
+ * returns 0-based index chosen, or -1 if cancelled
  *============================================*/
 static INT
 array_interact (STRING ttl, INT len, STRING *strings

@@ -43,7 +43,7 @@ STRING empstr120 = SS "                                                         
 
 
 ZST qSiddbse      = N_("You must identify a database.");
-ZST qSidldir      = N_("What directory holds the LifeLines database?");
+ZST qSidldir      = N_("What directory holds the LifeLines database? (enter for list)");
 ZST qSidldrp      = N_("enter path: ");
 ZST qSnodbse      = N_("There is no LifeLines database in that directory.");
 ZST qScrdbse      = N_("Do you want to create a database there?");
@@ -488,6 +488,7 @@ ZST qSbadkeyptr   = N_("WARNING: invalid pointer");
 ZST qSwhtfname    = N_("enter file name");
 ZST qSwhtfnameext = N_("enter file name (*%s)");
 ZST qSnosuchrec   = N_("There is no record with that key or reference.");
+ZST qSbaddb       = N_("Database was corrupt.");
 
 /* translation table errors */
 ZST qSbaddec      = N_("Bad decimal number format.");

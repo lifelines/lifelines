@@ -37,13 +37,15 @@ typedef struct array_details_s {
 typedef void (*DETAILFNC)(ARRAY_DETAILS, void *);
 
 /* screen.c functions */
-INT choose_from_array(STRING, INT, STRING*);
+INT choose_from_array(STRING ttl, INT no, STRING *pstrngs);
+INT choose_from_list(STRING ttl, INT no, LIST list);
 INT choose_from_array_x(STRING ttl, INT count, STRING* list, DETAILFNC, void *);
 INT choose_list_from_indiseq(STRING, INDISEQ);
 INT choose_one_from_indiseq(STRING, INDISEQ);
 void view_array(STRING ttl, INT no, STRING *pstrngs);
 
 /* from askprogram.c */
-FILE *ask_for_program(STRING, STRING, STRING*, STRING, STRING, BOOLEAN picklist);
+FILE *ask_for_program (STRING mode, STRING ttl, STRING *pfname, STRING path
+	, STRING ext, BOOLEAN picklist);
 
 #endif /* _LIFLINES_H */

@@ -59,6 +59,17 @@ INT int_codeset=0; /* internal codeset */
 
 extern BOOLEAN writeable;
 extern STRING btreepath,readpath;
+extern STRING qSdbrecstats;
+
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+static void add_dbs_to_list(LIST dblist, STRING dir);
+static void free_dblist_el(VPTR w);
+static STRING getdbdesc(STRING path);
+static INT select_lldbs(const struct dirent *entry);
 
 /*********************************************
  * local variables
@@ -134,7 +145,7 @@ init_lifelines_global (STRING * pmsg)
 /*=================================
  * init_lifelines_db -- Initialization after db opened
  *===============================*/
-void
+BOOLEAN
 init_lifelines_db (void)
 {
 	STRING emsg;
@@ -148,7 +159,9 @@ init_lifelines_db (void)
 	init_caches();
 	init_browse_lists();
 	init_mapping();
-	openxref(readonly);
+	if (!openxref(readonly))
+		return FALSE;
+	return TRUE;
 }
 /*===============================================
  * get_lifelines_version -- Return version string
@@ -191,8 +204,9 @@ close_lifelines (void)
 void
 close_lldb (void)
 {
+	/* TODO: reverse the rest of init_lifelines_db -- Perry, 2002.06.05 */
 	closexref();
-	if (BTR && !immutable) {
+	if (BTR) {
 		closebtree(BTR);
 		BTR=NULL;
 	}
@@ -457,4 +471,105 @@ update_useropts (void)
 			int_codeset=8;
 	}
 	uilocale(); /* in case user changed locale */
+}
+/*==================================================
+ * get_dblist -- find all dbs on path
+ *  path:  [IN]  list of directories to be searched
+ *  num:   [OUT] # dbs found (length of returned list)
+ * TODO: put #elements into LIST objects, & we don't have
+ * to pass this silly count around - Perry, 2002.06.05
+ *================================================*/
+LIST
+get_dblist (STRING path, INT * num)
+{
+	char dirs[MAXPATHLEN+1];
+	INT ndirs=0;
+	STRING p=0;
+	LIST dblist = create_list();
+	if (!path || !path[0] || strlen(path) > sizeof(dirs)-2)
+		return dblist;
+	/* find directories in dirs & delimit with zeros */
+	ndirs = chop_path(path, dirs);
+	for (p=dirs; ndirs>0; --ndirs) {
+		ASSERT(p);
+		add_dbs_to_list(dblist, p);
+		p += strlen(p)+1;
+	}
+	FORLIST(dblist, el)
+		++(*num);
+	ENDLIST
+	return dblist;
+}
+/*==================================================
+ * add_dbs_to_list -- Add all dbs in specified dir to list
+ *  dblist: [I/O] list of databases found
+ *  dir:    [IN]  directory to be searched for more databases
+ *================================================*/
+static void
+add_dbs_to_list (LIST dblist, STRING dir)
+{
+	int n=0;
+	struct dirent **programs=0;
+	char candidate[MAXPATHLEN];
+	STRING dbstr=0;
+
+	n = scandir(dir, &programs, 0, 0);
+	if (n < 0) return;
+	while (n--) {
+		strcpy(candidate, concat_path(dir, programs[n]->d_name));
+		if ((dbstr = getdbdesc(candidate)) != NULL)
+			push_list(dblist, dbstr);
+		stdfree(programs[n]);
+	}
+	stdfree(programs);
+}
+/*==================================================
+ * select_lldbs -- Check a file or directory to see if it
+ *  is a lifelines database
+ *  returns stdalloc'd string or NULL (if not db)
+ *================================================*/
+static STRING
+getdbdesc (STRING path)
+{
+	BTREE btr;
+	BOOLEAN cflag=FALSE, writ=FALSE, immut=TRUE;
+	char desc[MAXPATHLEN];
+
+	strcpy(desc, "");
+	btr = openbtree(path, cflag, writ, immut);
+	if (btr) {
+		/* TODO: 'twould be nice to clean up & remove these globals */
+		BTR = btr; /* various code assumes BTR is the btree */
+		readonly = TRUE; /* openxrefs depends on this global */
+		if (init_lifelines_db()) {
+			strcpy(desc, path);
+			if (strlen(path) < sizeof(desc) - 50) {
+				char stats[45];
+				snprintf(stats, sizeof(stats), _(qSdbrecstats), num_indis()
+					, num_fams(), num_sours(), num_evens(), num_othrs());
+				strcat(desc, stats);
+			}
+		}
+	}
+	close_lldb();
+	BTR = 0;
+	return desc[0] ? strdup(desc) : 0;
+}
+/*====================================================
+ * free_string_el -- free alloc'd string element of list
+ *==================================================*/
+static void
+free_dblist_el (VPTR w)
+{
+	stdfree((STRING)w);
+}
+/*====================================================
+ * release_dblist -- free a dblist (caller is done with it)
+ *==================================================*/
+void
+release_dblist (LIST dblist)
+{
+	if (dblist) {
+		remove_list(dblist, free_dblist_el);
+	}
 }

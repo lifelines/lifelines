@@ -84,6 +84,7 @@ main (int argc,
 		else
 			printf("error accessing record: %s\n", key);
 		closebtree(btree);
+		btree = 0;
 		return (0);
 	}
 
@@ -100,6 +101,7 @@ main (int argc,
 		unlink("btedit.tmp");
 	}
 	closebtree(btree);
+	btree = 0;
 	return TRUE;
 }
 

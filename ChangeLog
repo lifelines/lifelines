@@ -1,3 +1,16 @@
+2002-06-06 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog arch/scandir.c btree/opnbtree.c gedlib/init.c
+	gedlib/messages.c hdrs/gedcom.h hdrs/liflines.h
+	hdrs/llstdlib.h liflines/askprogram.c liflines/main.c
+	liflines/menuitem.c liflines/screen.c stdlib/path.c
+	tools/btedit.c tools/dbverify.c win32/msvc6/llines/llines.rc:
+
+	Fix several bugs in Win32 scandir in arch/scandir.c.
+	Close databases even if opened in immutable.
+	Add first cut at list of databases to opening prompt.
+	Fix various bugs in opening & closing databases.
+
 2002-06-05 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog Makefile.am configure.in

@@ -347,8 +347,7 @@ closebtree (BTREE btree)
 	FILE *fp=0;
 	KEYFILE1 kfile1;
 	BOOLEAN result=FALSE;
-
-	if (btree && ((fp = bkfp(btree)) != NULL)) {
+	if (btree && ((fp = bkfp(btree)) != NULL) && !bimmut(btree)) {
 		kfile1 = btree->b_kfile;
 		if (kfile1.k_ostat <= 0) {
 			/* writer-locked, should be -1 because we don't
@@ -380,5 +379,8 @@ closebtree (BTREE btree)
 	}
 exit_closebtree:
 	if (fp) fclose(fp);
+	if (btree) {
+		stdfree(btree);
+	}
 	return result;
 }

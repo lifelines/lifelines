@@ -31,18 +31,18 @@
  *=====================================================*/
 
 #include "sys_inc.h"
-#include "standard.h"
 #include "llstdlib.h"
 
 /*===========================================
- * IS_PATH_SEP -- Is path separator character
+ * is_path_sep -- Is path separator character
  *  handle WIN32 characters
  *=========================================*/
-#ifdef WIN32
-#define IS_PATH_SEP(qq) ((qq) == LLCHRPATHSEPARATOR || (qq) == '/')
-#else
-#define IS_PATH_SEP(qq) ((qq) == LLCHRPATHSEPARATOR)
-#endif
+BOOLEAN
+is_path_sep (char c)
+{
+	/* : on UNIX and ; on Windows */
+	return c==LLCHRPATHSEPARATOR;
+}
 /*=================================================
  * is_dir_sep -- Is directory separator character ?
  *  handle WIN32 characters
@@ -200,7 +200,7 @@ filepath (CNSTRING name,
 	p = buf1;
 	dirs = 1; /* count dirs in path */
 	while ((c = *p)) {
-		if (IS_PATH_SEP(c)) {
+		if (is_path_sep((unsigned char)c)) {
 			*p = 0;
 			dirs++;
 		}
@@ -333,4 +333,38 @@ check_file_for_unicode (FILE * fp)
 	ungetc(c1, fp);
 	return TRUE;
 }
-
+/*==================================================
+ * chop_path -- copy path into buff, & zero-separate all dirs
+ *  path:  [IN]  path list to copy
+ *  buff:  [OUT] output buffer
+ * NB: buff should be one byte larger than path
+ *================================================*/
+INT
+chop_path (STRING path, STRING dirs)
+{
+	INT ndirs;
+	STRING p, q;
+	char c=0;
+	ndirs=0;
+	p = dirs;;
+	q = path;
+	while ((c = *q)) {
+		if (is_path_sep(c)) {
+			if (p == dirs || p[-1] == 0) {
+				q++;
+			} else {
+				*p++ = 0;
+				q++;
+				++ndirs;
+			}
+		} else {
+			*p++ = *q++;
+		}
+	}
+	if (!(p == dirs || p[-1] == 0)) {
+		*p++ = 0;
+		++ndirs;
+	}
+	*(++p) = 0;
+	return ndirs;
+}
