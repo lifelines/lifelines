@@ -34,9 +34,7 @@
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
-/* TO DO - sever coupling to liflines.h & screen.h */
-#include "liflines.h"
-#include "screen.h"
+#include "feedback.h"
 #include "bfs.h"
 
 extern STRING aredit, dataerr;

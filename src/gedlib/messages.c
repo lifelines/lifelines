@@ -313,6 +313,25 @@ STRING mn_ret      = SS  "q  Return to previous menu";
 STRING mn_mmrpt    = SS "r  Generate report by entering report name";
 STRING mn_mmprpt   = SS "p  Pick a report from list and run";
 STRING mn_mmcset   = SS "c  Character set options";
+/* utility menu */
+STRING mn_utsave   = SS "s  Save the database in a GEDCOM file";
+STRING mn_utread   = SS "r  Read in data from a GEDCOM file";
+STRING mn_utkey    = SS "k  Find a person's key value";
+STRING mn_utkpers  = SS "i  Identify a person from key value";
+STRING mn_utdbstat = SS "d  Show database statistics";
+STRING mn_utmemsta = SS "m  Show memory statistics";
+STRING mn_utplaces = SS "e  Edit the place abbreviation file";
+STRING mn_utusropt = SS "o  Edit the user options file";
+/* extra menu */
+STRING mn_xxbsour  = SS "s  Browse source records";
+STRING mn_xxbeven  = SS "e  Browse event records";
+STRING mn_xxbothr  = SS "x  Browse other records";
+STRING mn_xxasour  = SS "1  Add a source record to the database";
+STRING mn_xxesour  = SS "2  Edit source record from the database";
+STRING mn_xxaeven  = SS "3  Add an event record to the database";
+STRING mn_xxeeven  = SS "4  Edit event record from the database";
+STRING mn_xxaothr  = SS "5  Add an other record to the database";
+STRING mn_xxeothr  = SS "6  Edit other record from the database";
 /* character set menu  (these looks best if choices padded to same length)*/
 STRING mn_csttl    = SS "Character set menu";
 STRING mn_cstt     = SS "t  Edit translation tables";

@@ -143,7 +143,8 @@ main (INT argc, char **argv)
 	extern char *optarg;
 	extern int optind;
 	char * msg;
-	int c,code=1;
+	int c;
+	BOOLEAN ok=FALSE;
 	STRING dbrequested=NULL; /* database (path) requested */
 	STRING dbused=NULL; /* database (path) found */
 	BOOLEAN forceopen=FALSE, lockchange=FALSE;
@@ -324,7 +325,7 @@ main (INT argc, char **argv)
 	init_show_module();
 	while (!alldone)
 		main_menu();
-	code=0;
+	ok=TRUE;
 
 /*
  * MTE:  Here's were we would free() or deallocate() the dup'd strings
@@ -332,20 +333,31 @@ main (INT argc, char **argv)
  */
 
 finish:
-	cleanup_lloptions();
 	close_lifelines();
-	term_screen();
-	if (code) /* if error, give user a second to read it */
-		sleep(1);
-	/* Terminate Curses UI */
-	endwin();
+	shutdown_ui(!ok);
 
 usage:
 	/* Display Command-Line Usage Help */
 	if (showusage) puts(usage);
 
 	/* Exit */
-	return(code);
+	return !ok;
+}
+/*===================================================
+ * shutdown_ui -- Do whatever is necessary to close GUI
+ * Created: 2001/11/08, Perry Rapp
+ *=================================================*/
+void
+shutdown_ui (BOOLEAN pause)
+{
+	term_screen();
+	if (pause) /* if error, give user a second to read it */
+		sleep(1);
+	/* TO DO - signals also calls into here -- how do we figure out
+	whether or not we should call endwin ? In case something happened
+	before curses was invoked, or after it already closed ? */
+	/* Terminate Curses UI */
+	endwin();
 }
 /*===================================================
  * show_open_error -- Display database opening error

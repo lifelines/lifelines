@@ -8,7 +8,7 @@ libgedcom_a_SOURCES = brwslist.c charmaps.c choose.c editmap.c \
 	editvtab.c equaliso.c gedcom.c gengedc.c gstrings.c\
 	indiseq.c init.c intrface.c keytonod.c\
 	messages.c misc.c names.c node.c nodeutls.c place.c\
-	property.c refns.c replace.c spltjoin.c translat.c\
+	property.c refns.c remove.o replace.c spltjoin.c translat.c\
 	valid.c valtable.c xreffile.c
 
 INCLUDES=-I$(srcdir)/.. -I$(srcdir)/../hdrs
@@ -57,6 +57,8 @@ place.o: ../hdrs/standard.h ../hdrs/mystring.h
 property.o: ../hdrs/standard.h ../hdrs/gedcom.h
 refns.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/btree.h ../hdrs/gedcom.h
 refns.o: ../hdrs/standard.h
+remove.o: ../hdrs/standard.h ../hdrs/llstdlib.h ../hdrs/table.h ../hdrs/translat.h
+remove.o: ../hdrs/gedcom.h ../hdrs/indiseq.h ../hdrs/liflines.h ../hdrs/feedback.h 
 replace.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h
 replace.o: ../hdrs/standard.h
 spltjoin.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h

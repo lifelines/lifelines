@@ -110,19 +110,13 @@ INT choose_from_list(STRING, INT, STRING*);
 INT choose_one_from_indiseq(STRING, INDISEQ);
 void display_screen(INT);
 void dbprintf(STRING, ...);
-void do_edit(void);
 INT fam_browse(NODE, INT mode, BOOLEAN reuse);
 STRING get_answer (WINDOW*, STRING);
 INT indi_browse(NODE, INT mode, BOOLEAN reuse);
 int init_screen(void);
 INT list_browse(INDISEQ seq, INT top, INT *cur, INT mark, NODE * pindi);
 void llvwprintf(STRING fmt, va_list args);
-void llwprintf(STRING fmt, ...);
 void main_menu(void);
-void message(STRING);
-void mprintf_error(STRING fmt, ...);
-void mprintf_info(STRING fmt, ...);
-void mprintf_status(STRING fmt, ...);
 STRING message_string (void);
 void paint_main_screen(void);
 void paint_screen(INT screen);
@@ -136,5 +130,9 @@ INT twofam_browse(NODE, NODE, INT mode);
 INT twoindi_browse(NODE, NODE, INT mode);
 void wfield(INT, INT, STRING);
 void wpos (INT, INT);
+
+#ifndef _FEEDBACK_H
+#include "feedback.h"
+#endif /* _FEEDBACK_H */
 
 #endif /* _SCREEN_H */

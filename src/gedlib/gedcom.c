@@ -36,7 +36,7 @@
 #include "gedcheck.h"
 #include "indiseq.h"
 #include "liflines.h"
-#include "screen.h"
+#include "feedback.h"
 
 static NODE indi_to_indi(NODE);
 static NODE fam_to_fam(NODE);

@@ -32,7 +32,6 @@
 #include "sys_inc.h"
 #include "llstdlib.h"
 #include "btreei.h"
-#include "screen.h"
 
 INT bterrno = 0;
 

@@ -68,10 +68,7 @@ __fatal (STRING file, int line, STRING details)
 	}
 	llwprintf("%s: line %d\n", file, line);
 	close_lifelines();
-	/* give user a second to read it */
-	sleep(1);
-	/* Terminate Curses UI */
-	endwin();
+	shutdown_ui(TRUE); /* pause */
 	ll_abort(-1);
 }
 /*===============================

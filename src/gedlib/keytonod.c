@@ -36,7 +36,7 @@
 #include "gedcom.h"
 #include "cache.h"
 #include "liflines.h"
-#include "screen.h"
+#include "feedback.h"
 
 /*********************************************
  * global variables (no header)

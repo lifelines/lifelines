@@ -35,7 +35,7 @@
 #include "llstdlib.h"
 #include "translat.h"
 #include "liflines.h"
-#include "screen.h"
+#include "feedback.h"
 #include "bfs.h"
 #include "lloptions.h"
 

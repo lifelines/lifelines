@@ -393,7 +393,7 @@ merge_two_indis (NODE indi1,    /* two persons to merge - can't be null */
 	join_indi(indi02, name1, refn1, sex1, body1, famc1, fams1);
 	free_nodes(indi4);
 
-	delete_indi(indi01, FALSE);	/* this is the original indi1 */
+	remove_indi(indi01);	/* this is the original indi1 */
 	return indi02;			/* this is the updated indi2 */
 }
 /*=================================================================
@@ -498,15 +498,15 @@ merge_two_fams (NODE fam1,
 #define CHUSB 1
 #define CWIFE 2
 #define CCHIL 3
-	merge_fam_links (fam1, fam2, husb1, husb2, CHUSB);
-	merge_fam_links (fam1, fam2, wife1, wife2, CWIFE);
-	merge_fam_links (fam1, fam2, chil1, chil2, CCHIL);
+	merge_fam_links(fam1, fam2, husb1, husb2, CHUSB);
+	merge_fam_links(fam1, fam2, wife1, wife2, CWIFE);
+	merge_fam_links(fam1, fam2, chil1, chil2, CCHIL);
 
 /* Update database with second family; remove first */
 	join_fam(fam4, fref2, husb2, wife2, chil2, rest2);
 	free_nodes(fam4);
 	nchild(fam1) = NULL;
-	delete_fam(fam1);
+	remove_empty_fam(fam1); /* TO DO - can this fail ? 2001/11/08, Perry */
 	free_nodes(husb1);
 	free_nodes(wife1);
 	free_nodes(chil1);
@@ -527,11 +527,7 @@ merge_two_fams (NODE fam1,
  *   families to the persons.
  *================================================================*/
 void
-merge_fam_links (NODE fam1,
-                 NODE fam2,
-                 NODE list1,
-                 NODE list2,
-                 INT code)
+merge_fam_links (NODE fam1, NODE fam2, NODE list1, NODE list2, INT code)
 {
 	NODE curs1, curs2, prev, this, next, first, keep=NULL;
 	NODE indi, name, refn, sex, body, famc, fams;

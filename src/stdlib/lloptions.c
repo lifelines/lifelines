@@ -31,7 +31,6 @@
 #include <locale.h>
 #endif
 #include "llstdlib.h"
-#include "screen.h"
 #include "gedcom.h"
 #include "liflines.h"
 #include "lloptions.h"

@@ -39,6 +39,7 @@
 #include "translat.h"
 #include "gedcom.h"
 #include "version.h"
+#include "lloptions.h"
 
 /*********************************************
  * global/exported variables
@@ -122,6 +123,7 @@ close_lifelines (void)
 		stdfree(editstr);
 		editstr=NULL;
 	}
+	cleanup_lloptions();
 }
 /*===================================
  * close_lldb -- Close current database

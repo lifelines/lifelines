@@ -39,7 +39,7 @@
 #include "cache.h"
 #include "interp.h"
 #include "liflines.h"
-#include "screen.h"
+#include "feedback.h"
 #include "stdlibi.h"
 #include "llstdlib.h"
 
@@ -127,7 +127,7 @@ on_signals (int sig)
 	}
 
 	close_lifelines();
-	endwin();
+	shutdown_ui(TRUE); /* pause */
 	if (msg[0])
 		printf(msg);
 	printf("Existing on signal %d:%s\n", sig, sig_msgs[sig]);

@@ -41,15 +41,17 @@
 
 #include "llinesi.h"
 
-extern STRING idpdel, cfpdel, cffdel, haslnk;
+extern STRING idpdel, cfpdel, cffdel;
 extern STRING idfrmv, idfrsp, idfrch;
+extern STRING idcrmv, ntchld, ntprnt, idsrmv, idsrmf, normls, cfcrmv;
+extern STRING okcrmv, ntsinf, ntcinf, cfsrmv, oksrmv, ronlye, idcrmf;
 
 /*=====================================================
- * choose_and_delete_family -- Choose & delete a family
+ * choose_and_remove_family -- Choose & delete a family
  *  (remove all members, and delete F record)
  *===================================================*/
 void
-choose_and_delete_family (void)
+choose_and_remove_family (void)
 {
 	NODE fam, node, indi;
 	INDISEQ spseq, chseq;
@@ -86,7 +88,7 @@ choose_and_delete_family (void)
 
 		if (ISize(spseq)+ISize(chseq) == 0) {
 			/* handle empty family */
-			delete_fam(fam);
+			remove_empty_fam(fam);
 		}
 		else {
 			/* the last remove command will delete the family */
@@ -108,135 +110,96 @@ choose_and_delete_family (void)
 /*================================================================
  * delete_indi -- Delete person and links; if this leaves families
  *   with no links, remove them
- *  indi:  [in]  person to remove - may be null
+ *  indi:  [in]  person to remove - (if null, will ask for person)
  *  conf:  [in]  have user confirm ?
  *==============================================================*/
 void
 delete_indi (NODE indi, BOOLEAN conf)
 {
-	STRING key;
-	NODE name, refn, sex, body, famc, fams, this;
-	NODE node, husb, wife, chil, rest, fam, prev, next, fref;
-	INT isex, keyint;
-	BOOLEAN found;
-
+	/* prompt if needed */
 	if (!indi && !(indi = ask_for_indi(idpdel, NOCONFIRM, DOASK1)))
 		return;
+	/* confirm if caller desired */
 	if (conf && !ask_yes_or_no(cfpdel)) return;
 
-	split_indi(indi, &name, &refn, &sex, &body, &famc, &fams);
-	if (!fams) goto checkfamc;
-	isex = val_to_sex(sex);
-	ASSERT(isex != SEX_UNKNOWN);
-
-/* Remove person from families he/she is in as a parent */
-
-	for (node = fams; node; node = nsibling(node)) {
-		fam = key_to_fam(rmvat(nval(node)));
-		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
-		prev = NULL;
-		if (isex == SEX_MALE) this = husb;
-		else this = wife;
-		found = FALSE;
-		while (this) {
-			if (eqstr(nxref(indi), nval(this))) {
-				found = TRUE;
-				break;
-			}
-			prev = this;
-			this = nsibling(this);
-		}
-		if(found) {
-			next = nsibling(this);
-			if (prev)
-				nsibling(prev) = next;
-			else if (isex == SEX_MALE) husb = next;
-			else wife = next;
-			nsibling(this) = NULL;
-			free_nodes(this);
-		}
-		join_fam(fam, fref, husb, wife, chil, rest);
-		if (husb || wife || chil)
-			fam_to_dbase(fam);
-		else
-			delete_fam(fam);
-	}
-
-/* Remove person from families he/she is in as a child */
-
-checkfamc:
-	for (node = famc; node; node = nsibling(node)) { 
-		fam = key_to_fam(rmvat(nval(node)));
-		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
-		found = FALSE;
-		prev = NULL;
-		this = chil;
-		while (this) {
-			if (eqstr(nxref(indi), nval(this))) {
-				found = TRUE;
-				break;
-			}
-			prev = this;
-			this = nsibling(this);
-		}
-		if(found) {
-			next = nsibling(this);
-			if (prev)
-				nsibling(prev) = next;
-			else
-				chil = next;
-			nsibling(this) = NULL;
-			free_nodes(this);
-		}
-		join_fam(fam, fref, husb, wife, chil, rest);
-		if (husb || wife || chil)
-			fam_to_dbase(fam);
-		else
-			delete_fam(fam);
-	}
-	key = rmvat(nxref(indi));
-	keyint = atoi(key + 1);
-	addixref(keyint);
-	remove_indi_cache(key);
-	for (node = name; node; node = nsibling(node))
-		{
-		remove_name(nval(node), key);
-		}
-	for (node = refn; node; node = nsibling(node))
-		{
-		if (nval(node))
-			{
-			remove_refn(nval(node), key);
-			}
-		}
-	remove_from_browse_lists(key);
-	del_in_dbase(key);
-	join_indi(indi, name, refn, sex, body, famc, fams);
-	free_nodes(indi);
+	/* alright, we finished the UI, so delegate to the internal workhorse */
+	remove_indi(indi);
 }
-/*==========================================
- * delete_fam -- Delete family from database
- *========================================*/
-void
-delete_fam (NODE fam)
+/*===========================================
+ * choose_and_remove_spouse -- Remove spouse 
+ *  from family (prompting for spouse and/or family
+ *  if NULL passed)
+ *  nolast: don't remove last member of family?
+ *=========================================*/
+BOOLEAN
+choose_and_remove_spouse (NODE indi, NODE fam, BOOLEAN nolast)
 {
-	STRING key;
-	NODE node, husb, wife, chil, rest, refn;
-	INT keyint;
-	if (!fam) return;
-	split_fam(fam, &refn, &husb, &wife, &chil, &rest);
-	if (husb || wife || chil) {
-		message(haslnk);
-		join_fam(fam, refn, husb, wife, chil, rest);
-		return;
+	if (readonly) {
+		message(ronlye);
+		return FALSE;
 	}
-	key = rmvat(nxref(fam));
-	keyint = atoi(key + 1);
-	addfxref(keyint);
-	for (node = refn; node; node = nsibling(node))
-		if (nval(node)) remove_refn(nval(node), key);
-	remove_fam_cache(key);
-	del_in_dbase(key);
-	join_fam(fam, refn, husb, wife, chil, rest);
-	free_nodes(fam);
+
+/* Identify spouse to remove */
+	if (!indi) indi = ask_for_indi(idsrmv, NOCONFIRM, NOASK1);
+	if (!indi) return FALSE;
+	if (!FAMS(indi)) {
+		message(ntprnt);
+		return FALSE;
+	}
+
+/* Identify family to remove spouse from */
+	if (!fam) fam = choose_family(indi, "e", idsrmf, TRUE);
+	if (!fam) return FALSE;
+	if (nolast && num_fam_xrefs(fam) < 2) {
+		message(normls);
+		return FALSE;
+	}
+	if (!ask_yes_or_no(cfsrmv)) return FALSE;
+
+	/* call internal workhorse remove_spouse() to do the actual removal */
+	if (!remove_spouse(indi, fam)) {
+		message(ntsinf);
+		return FALSE;
+	}
+	message(oksrmv);
+	return TRUE;
+}
+/*===========================================
+ * choose_and_remove_child -- Remove child
+ *  from family (prompting for child and/or family
+ *  if NULL passed)
+ *  nolast: don't remove last member of family?
+ *=========================================*/
+BOOLEAN
+choose_and_remove_child (NODE indi, NODE fam, BOOLEAN nolast)
+{
+	if (readonly) {
+		message(ronlye);
+		return FALSE;
+	}
+		
+/* Identify child and check for FAMC nodes */
+	if (!indi) indi = ask_for_indi(idcrmv, NOCONFIRM, NOASK1);
+	if (!indi) return FALSE;
+	if (!FAMC(indi)) {
+		message(ntchld);
+		return FALSE;
+	}
+
+/* Identify family to remove child from */
+	if (!fam) fam = choose_family(indi, "e", idcrmf, FALSE);
+	if (!fam) return FALSE;
+	if (nolast && num_fam_xrefs(fam) < 2) {
+		message(normls);
+		return FALSE;
+	}
+	if (!ask_yes_or_no(cfcrmv)) return TRUE;
+
+	if (!remove_child(indi, fam)) {
+		message(ntcinf);
+		return FALSE;
+	}
+
+	message(okcrmv);
+	return TRUE;
 }

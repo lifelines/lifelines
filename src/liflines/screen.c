@@ -48,6 +48,7 @@
 #include "arch.h"
 #include "menuitem.h"
 #include "lloptions.h"
+#include "screen.h"
 
 #include "llinesi.h"
 
@@ -108,6 +109,11 @@ extern STRING idsortttl,idloc;
 extern STRING mn_ttedit,mn_ttload,mn_ttsave,mn_ttexport,mn_ttimport,mn_ttexpdir;
 extern STRING mn_ttttl,mn_edttttl,mn_ttedin,mn_ttined,mn_ttgdin,mn_ttingd;
 extern STRING mn_ttdsin,mn_ttinds,mn_ttinrp;
+extern STRING mn_utsave,mn_utread,mn_utkey,mn_utkpers,mn_utdbstat,mn_utmemsta;
+extern STRING mn_utplaces,mn_utusropt;
+extern STRING mn_xxbsour, mn_xxbeven, mn_xxbothr, mn_xxasour, mn_xxesour;
+extern STRING mn_xxaeven, mn_xxeeven, mn_xxaothr, mn_xxeothr;
+
 extern STRING mn_uttl;
 extern STRING mn_xttl;
 extern STRING mn_notimpl;
@@ -448,28 +454,28 @@ init_all_windows (void)
 	win = utils_menu_win;
 	row = 1;
 	mvwaddstr(win, row++, 2, mn_uttl);
-	mvwaddstr(win, row++, 4, "s  Save the database in a GEDCOM file");
-	mvwaddstr(win, row++, 4, "r  Read in data from a GEDCOM file");
-	mvwaddstr(win, row++, 4, "k  Find a person's key value");
-	mvwaddstr(win, row++, 4, "i  Identify a person from key value");
-	mvwaddstr(win, row++, 4, "d  Show database statistics");
-	mvwaddstr(win, row++, 4, "m  Show memory statistics");
-	mvwaddstr(win, row++, 4, "e  Edit the place abbreviation file");
-	mvwaddstr(win, row++, 4, "o  Edit the user options file");
+	mvwaddstr(win, row++, 4, mn_utsave);
+	mvwaddstr(win, row++, 4, mn_utread);
+	mvwaddstr(win, row++, 4, mn_utkey);
+	mvwaddstr(win, row++, 4, mn_utkpers);
+	mvwaddstr(win, row++, 4, mn_utdbstat);
+	mvwaddstr(win, row++, 4, mn_utmemsta);
+	mvwaddstr(win, row++, 4, mn_utplaces);
+	mvwaddstr(win, row++, 4, mn_utusropt);
 	mvwaddstr(win, row++, 4, mn_quit);
 
 	win = extra_menu_win;
 	row = 1;
 	mvwaddstr(win, row++, 2, mn_xttl);
-	mvwaddstr(win, row++, 4, "s  Browse source records");
-	mvwaddstr(win, row++, 4, "e  Browse event records");
-	mvwaddstr(win, row++, 4, "x  Browse other records");
-	mvwaddstr(win, row++, 4, "1  Add a source record to the database");
-	mvwaddstr(win, row++, 4, "2  Edit source record from the database");
-	mvwaddstr(win, row++, 4, "3  Add an event record to the database");
-	mvwaddstr(win, row++, 4, "4  Edit event record from the database");
-	mvwaddstr(win, row++, 4, "5  Add an other record to the database");
-	mvwaddstr(win, row++, 4, "6  Edit other record from the database");
+	mvwaddstr(win, row++, 4, mn_xxbsour);
+	mvwaddstr(win, row++, 4, mn_xxbeven);
+	mvwaddstr(win, row++, 4, mn_xxbothr);
+	mvwaddstr(win, row++, 4, mn_xxasour);
+	mvwaddstr(win, row++, 4, mn_xxesour);
+	mvwaddstr(win, row++, 4, mn_xxaeven);
+	mvwaddstr(win, row++, 4, mn_xxeeven);
+	mvwaddstr(win, row++, 4, mn_xxaothr);
+	mvwaddstr(win, row++, 4, mn_xxeothr);
 	mvwaddstr(win, row++, 4, mn_quit);
 }
 /*=================================
@@ -1248,7 +1254,7 @@ del_menu (void)
 	case 'c': choose_and_remove_child(NULL, NULL, FALSE); break;
 	case 's': choose_and_remove_spouse(NULL, NULL, FALSE); break;
 	case 'i': delete_indi(NULL, TRUE); break;
-	case 'f': choose_and_delete_family(); break;
+	case 'f': choose_and_remove_family(); break;
 	case 'q': break;
 	}
 }
@@ -1796,7 +1802,8 @@ vmprintf (STRING fmt, va_list args)
 }
 /*===============================================
  * mprintf_error -- Call as mprintf_error(fmt, ...)
- * tell the user something went wrong
+ *  tell the user something went wrong
+ *  This is a feedback function called from non-ui code.
  * Created: c. 2000/11, Perry Rapp
  *=============================================*/
 void
@@ -1809,7 +1816,8 @@ mprintf_error (STRING fmt, ...)
 }
 /*===============================================
  * mprintf_info -- Call as mprintf_info(fmt, ...)
- * usually displaying results of user's action
+ *  usually displaying results of user's action
+ *  This is a feedback function called from non-ui code.
  * Created: c. 2000/11, Perry Rapp
  *  fmt:   printf style format string
  *  ...:   remainder of printf style varargs
@@ -1824,7 +1832,8 @@ mprintf_info (STRING fmt, ...)
 }
 /*===============================================
  * mprintf_status -- Call as mprintf_status(fmt, ...)
- * transient status during import/export, eg, counting nodes
+ *  transient status during import/export, eg, counting nodes
+ *  This is a feedback function called from non-ui code.
  * Created: c. 2000/11, Perry Rapp
  *=============================================*/
 void
@@ -1837,6 +1846,7 @@ mprintf_status (STRING fmt, ...)
 }
 /*=======================================
  * message -- Simple interface to mprintf
+ *  This is a feedback function called from non-ui code.
  *=====================================*/
 void
 message (STRING s)

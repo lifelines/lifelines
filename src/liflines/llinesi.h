@@ -32,7 +32,9 @@ BOOLEAN handle_scroll_cmds(INT c, BOOLEAN * reuse);
 
 /* delete.c */
 void delete_indi(NODE, BOOLEAN);
-void delete_fam(NODE);
+void choose_and_delete_family(void);
+BOOLEAN choose_and_remove_child(NODE indi, NODE fam, BOOLEAN nolast);
+BOOLEAN choose_and_remove_spouse(NODE indi, NODE fam, BOOLEAN nolast);
 
 /* edit.c */
 NODE edit_family(NODE);
@@ -74,12 +76,6 @@ void pedigree_increase_generations(INT delta);
 void pedigree_reset_scroll(void);
 void pedigree_scroll(INT delta);
 void pedigree_toggle_mode(void);
-
-/* remove.c */
-BOOLEAN choose_and_remove_child(NODE indi, NODE fam, BOOLEAN nolast);
-BOOLEAN choose_and_remove_spouse(NODE indi, NODE fam, BOOLEAN nolast);
-BOOLEAN remove_child(NODE indi, NODE fam);
-BOOLEAN remove_spouse (NODE indi, NODE fam);
 
 /* scan.c */
 NOD0 full_name_scan(void);

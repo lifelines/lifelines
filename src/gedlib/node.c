@@ -34,7 +34,7 @@
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
-#include "screen.h"
+#include "feedback.h"
 #include "warehouse.h"
 #include "metadata.h"
 #include "lloptions.h"

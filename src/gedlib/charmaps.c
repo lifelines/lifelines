@@ -34,7 +34,7 @@
 #include "translat.h"
 #include "gedcom.h"
 #include "liflines.h"
-#include "screen.h"
+#include "feedback.h"
 
 /*********************************************
  * global/exported variables
@@ -98,8 +98,8 @@ init_mapping (void)
 	for (indx = 0; indx < NUM_TT_MAPS; indx++) {
 		tran_tables[indx] = init_map_from_rec(indx, &err);
 		if (err) {
-			llwprintf("Error initializing %s map.\n",
-			   map_names[indx]);
+			mprintf_error("Error initializing %s map.\n"
+				, map_names[indx]);
 		}
 	}
 }

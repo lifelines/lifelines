@@ -12,9 +12,10 @@
 #include "translat.h"
 #include "gedcom.h"
 #include "liflines.h"
-#include "screen.h"
+#include "feedback.h"
 #include "gedcomi.h"
 
+/* TO DO - should this be moved to liflines ? 2001/11/08 Perry */
 
 extern STRING map_keys[];
 extern STRING cmperr, aredit, ronlye, dataerr;
