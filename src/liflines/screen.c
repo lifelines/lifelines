@@ -1589,7 +1589,12 @@ void
 do_edit (void)
 {
 	endwin();
+#ifdef WIN32
+	/* use w32system, because it will wait for the editor to finish */
+	w32system(editstr);
+#else
 	system(editstr);
+#endif
 	touchwin(main_win);
 	clearok(curscr, 1);
 	wrefresh(curscr);

@@ -85,7 +85,7 @@ static INT canonkey_compare(SORTEL el1, SORTEL el2);
 static INT canonkey_order(char c);
 static void check_indiseq_valtype(INDISEQ seq, INT valtype);
 static UNION copyval(INDISEQ seq, UNION uval);
-static INDISEQ create_indiseq_impl(INT valtype);
+static INDISEQ create_indiseq_impl(INT valtype, INDISEQ_VALUE_VTABLE vtable);
 static void delete_el(INDISEQ seq, SORTEL el);
 static void deleteval(INDISEQ seq, UNION uval);
 static STRING get_print_el(INDISEQ, INT i, INT len);
@@ -116,7 +116,7 @@ static struct indiseq_value_vtable_s def_valvtbl =
 INDISEQ
 create_indiseq_ival (void)
 {
-	return create_indiseq_impl(ISVAL_INT);
+	return create_indiseq_impl(ISVAL_INT, NULL);
 }
 /*===================================================
  * create_indiseq_null -- Create sequence of not yet
@@ -126,7 +126,7 @@ create_indiseq_ival (void)
 INDISEQ
 create_indiseq_null (void)
 {
-	return create_indiseq_impl(ISVAL_NUL);
+	return create_indiseq_impl(ISVAL_NUL, NULL);
 }
 /*===================================================
  * create_indiseq_pval -- Create sequence of pointers
@@ -135,7 +135,7 @@ create_indiseq_null (void)
 INDISEQ
 create_indiseq_pval (void)
 {
-	return create_indiseq_impl(ISVAL_PTR);
+	return create_indiseq_impl(ISVAL_PTR, NULL);
 }
 /*==================================================
  * create_indiseq_sval -- Create sequence of STRINGs
@@ -144,13 +144,16 @@ create_indiseq_pval (void)
 INDISEQ
 create_indiseq_sval (void)
 {
-	return create_indiseq_impl(ISVAL_STR);
+	return create_indiseq_impl(ISVAL_STR, NULL);
 }
 /*=======================================
  * create_indiseq_impl -- Create sequence
+ * vtable specifies the value vtable for the 
+ * new seq, and is optional - if NULL, the default
+ * one will be used
  *=====================================*/
 static INDISEQ
-create_indiseq_impl (INT valtype)
+create_indiseq_impl (INT valtype, INDISEQ_VALUE_VTABLE vtable)
 {
 	INDISEQ seq = (INDISEQ) stdalloc(sizeof *seq);
 	ISize(seq) = 0;
@@ -160,7 +163,7 @@ create_indiseq_impl (INT valtype)
 	IPrntype(seq) = ISPRN_NORMALSEQ;
 	IValtype(seq) = valtype;
 	IRefcnt(seq) = 1;
-	IValvtbl(seq) = &def_valvtbl;
+	IValvtbl(seq) = vtable ? vtable : &def_valvtbl;
 	return seq;
 }
 /*==================================
@@ -216,7 +219,7 @@ copy_indiseq (INDISEQ seq)
 	INDISEQ newseq;
 	UNION uval;
 	if (!seq) return NULL;
-	newseq = create_indiseq_impl(IValtype(seq));
+	newseq = create_indiseq_impl(IValtype(seq), IValvtbl(seq));
 	FORINDISEQ(seq, el, num)
 		uval = copyval(seq, sval(el));
 		append_indiseq_impl(newseq, skey(el), snam(el), uval,
@@ -335,16 +338,16 @@ append_indiseq_impl (INDISEQ seq,    /* sequence */
 	n = ISize(seq);
 	old = IData(seq);
 	if (!sure) {
-		/* Perry, 2000/11/28 - I'm skipping dupcheck
-		for FAMs for compatibility, but I don't know
-		why FAM seqs didn't do dupcheck */
+			/* Perry, 2000/11/28 - I'm skipping dupcheck
+			for FAMs for compatibility, but I don't know
+			why FAM seqs didn't do dupcheck */
 		BOOLEAN dupcheck = (*key != 'F' && *key != 'I')
 			|| (*key == 'I' && !name);
 		if (dupcheck)
 		{
 			for (i = 0; i < n; i++) {
 				if (eqstr(key, skey(old[i]))) {
-					/* failed dupe check - bail */
+						/* failed dupe check - bail */
 					if (alloc)
 						stdfree(key);
 					deleteval(seq, val);
@@ -357,11 +360,11 @@ append_indiseq_impl (INDISEQ seq,    /* sequence */
 	skey(el) = alloc ? key : strsave(key);
 	snam(el) = NULL;
 	if (*key == 'I') {
-		/*
-		A possible savings would be to not always
-		precompute names.
-		2001/01/20, Perry Rapp
-		*/
+			/*
+			A possible savings would be to not always
+			precompute names.
+			2001/01/20, Perry Rapp
+			*/
 		if (name)
 			snam(el) = strsave(name);
 		else
@@ -783,8 +786,7 @@ union_indiseq (INDISEQ one, INDISEQ two)
 	n = length_indiseq(one);
 	m = length_indiseq(two);
 	valtype = get_combined_valtype(one, two);
-	three = create_indiseq_impl(valtype);
-	IValvtbl(three) = IValvtbl(one);
+	three = create_indiseq_impl(valtype, IValvtbl(one));
 	i = j = 0;
 	u = IData(one);
 	v = IData(two);
@@ -846,8 +848,7 @@ intersect_indiseq (INDISEQ one, INDISEQ two)
 	n = length_indiseq(one);
 	m = length_indiseq(two);
 	valtype = get_combined_valtype(one, two);
-	three = create_indiseq_impl(valtype);
-	IValvtbl(three) = IValvtbl(one);
+	three = create_indiseq_impl(valtype, IValvtbl(one));
 	i = j = 0;
 	u = IData(one);
 	v = IData(two);
@@ -889,8 +890,7 @@ difference_indiseq (INDISEQ one,
 	n = length_indiseq(one);
 	m = length_indiseq(two);
 	valtype = get_combined_valtype(one, two);
-	three = create_indiseq_impl(valtype);
-	IValvtbl(three) = IValvtbl(one);
+	three = create_indiseq_impl(valtype, IValvtbl(one));
 	i = j = 0;
 	u = IData(one);
 	v = IData(two);
@@ -930,8 +930,7 @@ parent_indiseq (INDISEQ seq)
 	UNION uval;
 	if (!seq) return NULL;
 	tab = create_table();
-	par = create_indiseq_impl(IValtype(seq));
-	IValvtbl(par) = IValvtbl(seq);
+	par = create_indiseq_impl(IValtype(seq), IValvtbl(seq));
 	FORINDISEQ(seq, el, num)
 		indi = key_to_indi(skey(el));
 		fath = indi_to_fath(indi);
@@ -963,7 +962,7 @@ child_indiseq (INDISEQ seq)
 	STRING key;
 	if (!seq) return NULL;
 	tab = create_table();
-	cseq = create_indiseq_impl(IValtype(seq));
+	cseq = create_indiseq_impl(IValtype(seq), IValvtbl(seq));
 	FORINDISEQ(seq, el, num)
 		indi = key_to_indi(skey(el));
 		FORFAMSS(indi, fam, spouse, num1)
@@ -1228,10 +1227,12 @@ ancestor_indiseq (INDISEQ seq)
 	INT gen;
 	UNION uval;
 	if (!seq) return NULL;
+		/* table of people already added */
 	tab = create_table();
+		/* paired processing list - see comments in descendant_indiseq code */
 	anclist = create_list();
 	genlist = create_list();
-	anc = create_indiseq_pval();
+	anc = create_indiseq_impl(IValtype(seq), IValvtbl(seq));
 	FORINDISEQ(seq, el, num)
 		enqueue_list(anclist, (VPTR)skey(el));
 		enqueue_list(genlist, (VPTR)0);
@@ -1243,6 +1244,7 @@ ancestor_indiseq (INDISEQ seq)
 		fath = indi_to_fath(indi);
 		moth = indi_to_moth(indi);
 		if (fath && !in_table(tab, pkey = indi_to_key(fath))) {
+				/* key copy for seq & list - owned by seq */
 			pkey = strsave(pkey);
 			uval = creategenval(seq, gen);
 			append_indiseq_pval(anc, pkey, NULL, uval.w, TRUE, TRUE);
@@ -1251,6 +1253,7 @@ ancestor_indiseq (INDISEQ seq)
 			insert_table(tab, pkey, NULL);
 		}
 		if (moth && !in_table(tab, pkey = indi_to_key(moth))) {
+				/* key copy for seq & list - owned by seq */
 			pkey = strsave(pkey);
 			uval = creategenval(seq, gen);
 			append_indiseq_pval(anc, pkey, NULL, uval.w, TRUE, TRUE);
@@ -1280,29 +1283,47 @@ descendent_indiseq (INDISEQ seq)
 	STRING key, dkey, fkey;
 	UNION uval;
 	if (!seq) return NULL;
+		/* itab = people already added */
 	itab = create_table();
+		/* ftab = families already added (processed) */
 	ftab = create_table();
+		/*
+		deslist & genlist are paired - 
+		dequeue the person from deslist & the generation
+		from genlist, for one person to be processed
+		(added to result & all children added to processing list)
+		(deslist does not own its strings)
+		*/
 	deslist = create_list();
 	genlist = create_list();
-	des = create_indiseq_pval();
+		/* result indiseq */
+	des = create_indiseq_impl(IValtype(seq), IValvtbl(seq));
+		/* add everyone from original seq to processing list */
 	FORINDISEQ(seq, el, num)
 		enqueue_list(deslist, (VPTR)skey(el));
 		enqueue_list(genlist, (VPTR)0);
 	ENDINDISEQ
+		/* loop until processing list is empty */
 	while (!empty_list(deslist)) {
 		INT num1, num2;
 		key = (STRING) dequeue_list(deslist);
 		gen = (INT) dequeue_list(genlist) + 1;
 		indi = key_to_indi(key);
 		FORFAMSS(indi, fam, spouse, num1)
-			if (in_table(ftab, fkey = indi_to_key(fam)))
+				/* skip families already processed */
+			if (in_table(ftab, fkey = fam_to_key(fam)))
 				goto a;
 			insert_table(ftab, strsave(fkey), NULL);
 			FORCHILDREN(fam, child, num2)
+					/* only do people not processed */
 				if (!in_table(itab,
 				    dkey = indi_to_key(child))) {
+						/* key copy for seq & list - owned by seq */
+					dkey = strsave(dkey);
 					uval = creategenval(seq, gen);
+						/* add person to output */
 					append_indiseq_pval(des, strsave(dkey), NULL, uval.w, TRUE, TRUE);
+						/* also want descendants, so add person to processing list */
 					enqueue_list(deslist, (VPTR)dkey);
 					enqueue_list(genlist, (VPTR)gen);
 					insert_table(itab, dkey, NULL);
@@ -1328,13 +1349,14 @@ spouse_indiseq (INDISEQ seq)
 	INT num1;
 	if (!seq) return NULL;
 	tab = create_table();
-	sps = create_indiseq_impl(IValtype(seq));
+	sps = create_indiseq_impl(IValtype(seq), IValvtbl(seq));
 	FORINDISEQ(seq, el, num)
 		indi = key_to_indi(skey(el));
 		FORSPOUSES(indi, spouse, fam, num1)
 			spkey = indi_to_key(spouse);
 			if (!in_table(tab, spkey)) {
 				UNION u;
+					/* key copy for seq & list - owned by seq */
 				spkey = strsave(spkey);
 				u = copyval(seq, sval(el));
 				append_indiseq_impl(sps, spkey, NULL,

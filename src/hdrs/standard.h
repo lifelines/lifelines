@@ -142,6 +142,7 @@ typedef struct ltag {
 	LNODE l_first;
 	LNODE l_last;
 	INT l_refcnt;
+	/* TO DO - would be nice to keep count here */
 } *LIST;
 #define ltype(l) ((l)->l_type)
 #define lfirst(l) ((l)->l_first)

@@ -78,26 +78,35 @@ static PV_BLOCK block_list = 0;
 static BOOLEAN reports_time = FALSE;
 static BOOLEAN cleaning_time = FALSE;
 static BOOLEAN alloclog_save = FALSE;
+#ifdef DEBUG_PVALUES
+static INT debugging_pvalues = TRUE;
+#else
+static INT debugging_pvalues = FALSE;
+#endif
 
 /*********************************************
  * local function definitions
  * body of module
  *********************************************/
 
+/*========================================
+ * debug_check -- check every pvalue in free list
+ * This is of course slow, but invaluable for tracking
+ * down pvalue corruption bugs - so don't define
+ * DEBUG_PVALUES unless you are working on a pvalue
+ * corruption bug.
+ * Created: 2001/03, Perry Rapp
+ *======================================*/
 static void
-debug_check()
+debug_check (void)
 {
-/*PVALUE val;
-for (val=free_list; val; val=val->value)
-{
-	ASSERT(val->type == 99 && val->value != val);
-}
-if ((int)free_list == 0x305504) {
-int debug=999;
-}
-if ((int)free_list == 0x308af0) {
-int debug=999;
-}*/
+#ifdef DEBUG_PVALUES
+	PVALUE val;
+	for (val=free_list; val; val=val->value)
+	{
+		ASSERT(val->type == 99 && val->value != val);
+	}
+#endif
 }
 /*========================================
  * alloc_pvalue_memory -- return new pvalue memory
@@ -136,12 +145,14 @@ alloc_pvalue_memory (void)
 			val1->type = PFREED;
 			val1->value = free_list;
 			free_list = val1;
-debug_check();
+			if (debugging_pvalues)
+				debug_check();
 		}
 	}
 	val = free_list;
 	free_list = free_list->value;
-debug_check();
+	if (debugging_pvalues)
+		debug_check();
 	live_pvalues++;
 	ptype(val) = PUNINT;
 	pvalue(val) = 0;
@@ -170,7 +181,8 @@ free_pvalue_memory (PVALUE val)
 	val->type = PFREED;
 	val->value = free_list;
 	free_list = val;
-debug_check();
+	if (debugging_pvalues)
+		debug_check();
 	live_pvalues--;
 	ASSERT(live_pvalues>=0);
 }

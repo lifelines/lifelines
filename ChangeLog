@@ -1,3 +1,12 @@
+2001-04-01 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog docs/Run.LifeLines.Windows.txt gedlib/indiseq.c
+	hdrs/standard.h interp/pvalue.c liflines/screen.c:
+	Bugfix - not all new seqs were getting correct Valvtbl.
+	Bugfix - descendant_indiseq was putting stale keys in table.
+	Bugfix - system call doesn't work in win95/98, so returned to
+	calling w32system for Windows.
+
 2001-03-30 John Chandler <jchbn@cuvmb.columbia.edu>
 	* tools/btedit.c:
 	  inserted missing declaration for rtn
