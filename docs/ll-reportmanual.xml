@@ -2831,7 +2831,7 @@ surname component. If there is no surname this argument variable is set to zero.
      string to extract tokens from. The second argument is the list 
      to hold the tokens. The third argument is an integer variable 
      that is set to the number of tokens extracted. The fourth 
-     parameter is the string of deliminater characters that 
+     parameter is the string of delimiter characters that 
      <function>extracttokens</function> uses to break the input 
      string into tokens. 
 
@@ -2983,7 +2983,7 @@ persons from a set of persons; its argument is the chosen subset.
 <function>Menuchoose</function> allows the user to select from an arbitrary menu. The first argument is a list of strings 
 making up the items in the menu; the second, optional argument is a prompt string for the menu; 
 <function>menuchoose</function> returns the integer index of the item selected by the user; if the user doesn't select an item, 
-<returnvalue>zero</returnvalue> is return. 
+<returnvalue>zero</returnvalue> is returned. 
 
 </para> 
 
@@ -3823,7 +3823,7 @@ auxiliary values.
 
 <para> 
 
-<function>Genindiset</function> generates the set of persons that matche a string whose value is a name in <acronym>GEDCOM</acronym> 
+<function>Genindiset</function> generates the set of persons that matches a string whose value is a name in <acronym>GEDCOM</acronym> 
 format. <function>Genindiset</function> uses the same algorithm that matches names entered at the browse prompt or by 
 the user interaction <function>getindiset</function> function. 
 

@@ -11,6 +11,10 @@
 
 	Remove unused arguments -m and -z. Update docs.
 
+	* ChangeLog docs/ll-reportmanual.xml:
+
+	Fix reported typos.
+
 2002-10-28 Perry Rapp
 
 	* ChangeLog src/hdrs/menuitem.h src/hdrs/screen.h
