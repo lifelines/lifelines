@@ -162,5 +162,5 @@ AC_OUTPUT(Makefile  m4/Makefile \
         reports/Makefile
         win32/Makefile \
         win32/msvc6/Makefile \
-        intl/Makefile po/Makefile.in)
+        m4/Makefile intl/Makefile po/Makefile.in)
 
