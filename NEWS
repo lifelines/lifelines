@@ -2,6 +2,15 @@ LifeLines Source Release, Version 3.0.6
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
+Bug fixes in 3.0.6.1-dev
+==================
+
+- (Windows) Notepad was appending .txt to temp file, preventing creation
+  of new trans tables or user options tables 
+
+- (Windows) Editing user options or trans tables could crash because
+  of CR/LF translation causing fread to not report filesize number of bytes
+
 New Features Added in 3.0.6
 ===========================
 
