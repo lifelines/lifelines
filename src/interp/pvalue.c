@@ -697,6 +697,13 @@ create_pvalue_from_float (float fval)
 /***
  * Thin typesafe wrappers for various PVALUE types
  */
+void
+set_pvalue_float (PVALUE val, float fnum)
+{
+	float *ptr = (float *)stdalloc(sizeof(*ptr));
+	*ptr = fnum;
+	set_pvalue(val, PFLOAT, (VPTR)ptr);
+}
 PVALUE
 create_pvalue_any (void)
 {
@@ -707,10 +714,20 @@ create_pvalue_from_bool (BOOLEAN bval)
 {
 	return create_pvalue_from_int(bval);
 }
+void
+set_pvalue_bool (PVALUE val, BOOLEAN bnum)
+{
+	set_pvalue(val, PBOOL, (VPTR)bnum);
+}
 PVALUE
 create_pvalue_from_int (INT ival)
 {
 	return create_pvalue(PINT, (VPTR) ival);
+}
+void
+set_pvalue_int (PVALUE val, INT inum)
+{
+	set_pvalue(val, PINT, (VPTR)inum);
 }
 PVALUE
 create_pvalue_from_node (NODE node)
@@ -872,12 +889,8 @@ coerce_pvalue (INT type, PVALUE val, BOOLEAN *eflg)
 
 	if (type == PBOOL) {
 		/* Anything is convertible to PBOOL */
-		/* make new one, then transfer it bitwise to existing val */
-		BOOLEAN num = (pvalue(val) != NULL);
-		PVALUE valnew = create_pvalue_from_bool(num);
-		clear_pvalue(val);
-		memcpy(val, valnew, sizeof(*val));
-		ptype(valnew)=PNONE; /* clear this so it doesn't get cleaned */
+		BOOLEAN boo = (pvalue(val) != NULL);
+		set_pvalue_bool(val, boo);
 		return;
 	}
 	/* Anything is convertible to PANY */
@@ -911,12 +924,8 @@ coerce_pvalue (INT type, PVALUE val, BOOLEAN *eflg)
 	case PINT:
 		if (type == PFLOAT) {
 			/* PINT is convertible to PFLOAT */
-			/* make new one, then transfer it bitwise to existing val */
-			INT num = pvalue_to_int(val);
-			PVALUE valnew = create_pvalue_from_float(num);
-			clear_pvalue(val);
-			memcpy(val, valnew, sizeof(*val));
-			ptype(valnew)=PNONE; /* clear this so it doesn't get cleaned */
+			float flo = (float)pvalue_to_int(val);
+			set_pvalue_float(val, flo);
 			return;
 		} else {
 			/* PINT isn't convertible to anything else */
@@ -926,12 +935,8 @@ coerce_pvalue (INT type, PVALUE val, BOOLEAN *eflg)
 	case PFLOAT:
 		if (type == PINT) {
 			/* PFLOAT is convertible to PINT */
-			/* make new one, then transfer it bitwise to existing val */
-			INT num = float_to_int(pvalue_to_float(val));
-			PVALUE valnew = create_pvalue_from_int(num);
-			clear_pvalue(val);
-			memcpy(val, valnew, sizeof(*val));
-			ptype(valnew)=PNONE; /* clear this so it doesn't get cleaned */
+			INT inum = float_to_int(pvalue_to_float(val));
+			set_pvalue_int(val, inum);
 			return;
 		} else {
 			/* PFLOAT isn't convertible to anything else */
@@ -941,17 +946,13 @@ coerce_pvalue (INT type, PVALUE val, BOOLEAN *eflg)
 	case PBOOL:
 		if (type == PINT) {
 			/* PBOOL is convertible to PINT */
-			INT num = bool_to_int(pvalue_to_bool(val));
-			/* boolean values held in integer storage */
-			*pvalue_to_pint(val) = num;
+			INT inum = bool_to_int(pvalue_to_bool(val));
+			set_pvalue_int(val, inum);
 			return;
 		} else if (type == PFLOAT) {
 			/* PBOOL is convertible to PFLOAT */
-			float fval = bool_to_float(pvalue_to_bool(val));
-			PVALUE valnew = create_pvalue_from_float(fval);
-			clear_pvalue(val);
-			memcpy(val, valnew, sizeof(*val));
-			ptype(valnew)=PNONE; /* clear this so it doesn't get cleaned */
+			float fnum = bool_to_float(pvalue_to_bool(val));
+			set_pvalue_float(val, fnum);
 			return;
 		} else {
 			/* PBOOL isn't convertible to anything else */

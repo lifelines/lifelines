@@ -10,6 +10,10 @@
 
 	Improved error reporting for numeric operators.
 
+	* ChangeLog src/hdrs/interp.h src/interp/pvalue.c:
+
+	Fix some type conversion pvalue leaks.
+
 2003-01-23 Steve Dum
   
         * ChangeLog reports/Makefile.am, reports/gen_index, 

@@ -283,6 +283,8 @@ INT* pvalue_to_pint(PVALUE);
 STRING pvalue_to_string(PVALUE);
 void remove_symtab(SYMTAB *);
 void set_pvalue(PVALUE, INT, VPTR);
+void set_pvalue_bool(PVALUE val, BOOLEAN bv);
+void set_pvalue_int(PVALUE val, INT iv);
 void show_pvalue(PVALUE);
 PVALUE symtab_valueofbool(SYMTAB, STRING, BOOLEAN*);
 #ifndef HOGMEMORY
