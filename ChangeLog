@@ -10,6 +10,14 @@
 	tests/test1.ll tests/test1.out
 	Suppress llprograms & llreports in selftest. Added tests & test1.
 
+	* btree/traverse.c gedlib/choose.c gedlib/keytonod.c
+	hdrs/gedcom.h hdrs/liflines.h interp/more.c liflines/ask.c
+	liflines/browse.c liflines/llinesi.h liflines/newrecs.c
+	liflines/scan.c liflines/screen.c:
+	make choose_from_indiseq return NOD0.
+	Implement most of goto from refn_scan.
+	Add placeholder browse_source,browse_event,browse_other.
+
 2001-01-05 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/init.c hdrs/llstdlib.h stdlib/environ.c tools/btedit.c:
