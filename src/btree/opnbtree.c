@@ -231,11 +231,11 @@ initbtree (STRING basedir)
 
 /* Write master index */
 	master = (INDEX) stdalloc(BUFLEN);
-	itype(master) = BTINDEXTYPE;
-	iself(master) = path2fkey("aa/aa");
-	iparent(master) = 0;
-	master->i_nkeys = 0;
-	master->i_fkeys[0] = path2fkey("ab/aa");
+	ixtype(master) = BTINDEXTYPE;
+	ixself(master) = path2fkey("aa/aa");
+	ixparent(master) = 0;
+	master->ix_nkeys = 0;
+	master->ix_fkeys[0] = path2fkey("ab/aa");
 	if (fwrite(master, BUFLEN, 1, fi) != 1) {
 		bterrno = BTERRINDEX;
 		fclose(fi);
@@ -246,10 +246,10 @@ initbtree (STRING basedir)
 
 /* Write first data block */
 	block = (BLOCK) stdalloc(BUFLEN);
-	itype(block) = BTBLOCKTYPE;
-	iself(block) = path2fkey("ab/aa");
-	iparent(block) = 0;
-	block->i_nkeys = 0;
+	ixtype(block) = BTBLOCKTYPE;
+	ixself(block) = path2fkey("ab/aa");
+	ixparent(block) = 0;
+	block->ix_nkeys = 0;
 	if (fwrite(block, BUFLEN, 1, fd) != 1) {
 		bterrno = BTERRBLOCK;
 		fclose(fd);

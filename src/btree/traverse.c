@@ -40,7 +40,7 @@ traverse_index_blocks (BTREE btree, INDEX index,
 
 	if (index == NULL)
 		return FALSE;
-	if (itype(index) == BTINDEXTYPE) {
+	if (ixtype(index) == BTINDEXTYPE) {
 		INT i, n;
 		if (ifunc != NULL && !(*ifunc)(btree, index))
 			return FALSE;
@@ -105,11 +105,11 @@ traverse_index (BTREE btree, INDEX index, RKEY lo,
 			break;
 		nfkey = fkeys(index, i-1);
 		ASSERT(index1 = getindex(btree, nfkey));
-		if (itype(index1) == BTINDEXTYPE) {
+		if (ixtype(index1) == BTINDEXTYPE) {
 			if (!traverse_index(btree, index1,lo, hi, func, param))
 				return FALSE;
 		} else {
-			ASSERT(itype(index1) == BTBLOCKTYPE);
+			ASSERT(ixtype(index1) == BTBLOCKTYPE);
 			block1 = (BLOCK)index1;
 			if (!traverse_block(btree, block1, lo, hi, func, param))
 				return FALSE;

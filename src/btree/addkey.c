@@ -91,17 +91,17 @@ addkey (BTREE btree,  /*btree handle*/
 		putindex(btree, newdex);
 
    /* Special case -- split requires new master index */
-		if (iself(index) == iself(bmaster(btree))) {
+		if (ixself(index) == ixself(bmaster(btree))) {
 			INDEX master = crtindex(btree);
 			nkeys(master) = 1;
 			fkeys(master, 0) = ikey;
 			rkeys(master, 1) = rkeys(newdex, 0);
-			fkeys(master, 1) = iself(newdex);
+			fkeys(master, 1) = ixself(newdex);
 			newmaster(btree, master);
 			writeindex(bbasedir(btree), master);
 		} else	
-			addkey(btree, iparent(index), rkeys(newdex, 0),
-				iself(newdex));
+			addkey(btree, ixparent(index), rkeys(newdex, 0),
+				ixself(newdex));
 	} else
 		putindex(btree, index);
 }

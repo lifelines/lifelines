@@ -129,7 +129,7 @@ BOOLEAN
 newmaster (BTREE btree,  /*btree handle*/
            INDEX master)
 {
-	btree->b_kfile.k_mkey = iself(master);
+	btree->b_kfile.k_mkey = ixself(master);
 	rewind(btree->b_kfp);
 	if (fwrite(&btree->b_kfile, sizeof(KEYFILE), 1, btree->b_kfp) != 1) {
 		bterrno = BTERRKFILE;

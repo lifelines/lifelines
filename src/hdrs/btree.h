@@ -68,12 +68,12 @@ typedef struct {
  * INDEX -- Data structure for BTREE index files
  *============================================*/
 typedef struct {
-	FKEY  i_self;		/*fkey of index*/
-	SHORT i_type;           /*block/file type*/
-	FKEY  i_parent;         /*parent file's fkey*/
-	SHORT i_nkeys;          /*num of keys in index*/
-	RKEY  i_rkeys[NOENTS];  /*rkeys in index*/
-	FKEY  i_fkeys[NOENTS];  /*fkeys in index*/
+	FKEY  ix_self;		/*fkey of index*/
+	SHORT ix_type;           /*block/file type*/
+	FKEY  ix_parent;         /*parent file's fkey*/
+	SHORT ix_nkeys;          /*num of keys in index*/
+	RKEY  ix_rkeys[NOENTS];  /*rkeys in index*/
+	FKEY  ix_fkeys[NOENTS];  /*fkeys in index*/
 } *INDEX, INDEXSTRUCT;
 /*=======================================
  * BTREE -- Internal BTREE data structure
@@ -101,26 +101,26 @@ typedef struct {
  * BLOCK -- Data structure for BTREE record file headers
  *====================================================*/
 typedef struct {
-	FKEY   i_self;		/*fkey of this block*/
-	SHORT  i_type;		/*block/file type*/
-	FKEY   i_parent;	/*parent file's fkey*/
-	SHORT  i_nkeys;		/*num of keys in block*/
-	RKEY   i_rkeys[NORECS];	/*rkeys in block/file*/
-	INT    i_offs[NORECS];	/*offsets for data in file*/
-	INT    i_lens[NORECS];	/*lengths for data in file*/
+	FKEY   ix_self;		/*fkey of this block*/
+	SHORT  ix_type;		/*block/file type*/
+	FKEY   ix_parent;	/*parent file's fkey*/
+	SHORT  ix_nkeys;		/*num of keys in block*/
+	RKEY   ix_rkeys[NORECS];	/*rkeys in block/file*/
+	INT    ix_offs[NORECS];	/*offsets for data in file*/
+	INT    ix_lens[NORECS];	/*lengths for data in file*/
 } *BLOCK, BLOCKSTRUCT;
 
 /*============================================
  * Macros for selecting INDEX and BLOCK fields
  *==========================================*/
-#define iself(p)    ((p)->i_self)
-/* #define itype(p)    ((p)->i_type)  -- Also defined the same in interp.h, should this be renamed? -marc */
-#define iparent(p)  ((p)->i_parent)
-#define nkeys(p)   ((p)->i_nkeys)
-#define rkeys(p,i) ((p)->i_rkeys[i])
-#define fkeys(p,i) ((p)->i_fkeys[i])
-#define offs(p,i)  ((p)->i_offs[i])
-#define lens(p,i)  ((p)->i_lens[i])
+#define ixself(p)    ((p)->ix_self)
+#define ixtype(p)    ((p)->ix_type)
+#define ixparent(p)  ((p)->ix_parent)
+#define nkeys(p)   ((p)->ix_nkeys)
+#define rkeys(p,i) ((p)->ix_rkeys[i])
+#define fkeys(p,i) ((p)->ix_fkeys[i])
+#define offs(p,i)  ((p)->ix_offs[i])
+#define lens(p,i)  ((p)->ix_lens[i])
 
 /*====================================
  * BTREE library function declarations 

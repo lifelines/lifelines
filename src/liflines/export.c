@@ -108,7 +108,7 @@ archive (BTREE btree,
 	STRING key;
 	FILE *fo;
 
-	sprintf(scratch, "%s/%s", bbasedir(btree), fkey2path(iself(block)));
+	sprintf(scratch, "%s/%s", bbasedir(btree), fkey2path(ixself(block)));
 	ASSERT(fo = fopen(scratch, LLREADBINARY));
 	n = nkeys(block);
 	for (i = 0; i < n; i++) {

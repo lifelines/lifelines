@@ -47,7 +47,7 @@ addrecord (BTREE btree,         /* btree to add record to */
            INT len)             /* record length */
 {
 	INDEX index;
-	BLOCK old, new, xtra;
+	BLOCK old, newb, xtra;
 	FKEY nfkey, last = 0, parent;
 	SHORT i, j, k, l, n, lo, hi;
 	BOOLEAN found = FALSE;
@@ -58,15 +58,15 @@ addrecord (BTREE btree,         /* btree to add record to */
 /* search for data block that does/should hold record */
 	ASSERT(bwrite(btree));
 	ASSERT(index = bmaster(btree));
-	while (itype(index) == BTINDEXTYPE) {
+	while (ixtype(index) == BTINDEXTYPE) {
 
 /* maintain "lazy" parent chaining in btree */
-		if (iparent(index) != last) {
+		if (ixparent(index) != last) {
 			ASSERT(index != bmaster(btree));
-			iparent(index) = last;
+			ixparent(index) = last;
 			writeindex(bbasedir(btree), index);
 		}
-		last = iself(index);
+		last = ixself(index);
 		n = nkeys(index);
 		nfkey = fkeys(index, 0);
 		for (i = 1; i <= n; i++) {
@@ -78,7 +78,7 @@ addrecord (BTREE btree,         /* btree to add record to */
 	}
 
 /* have block that may hold older version of record */
-	iparent(index) = last;
+	ixparent(index) = last;
 	old = (BLOCK) index;
 	ASSERT(nkeys(old) < NORECS);
 
@@ -101,24 +101,24 @@ addrecord (BTREE btree,         /* btree to add record to */
 	}
 
 /* construct header for updated data block */
-	new = allocblock();
-	itype(new) = itype(old);
-	iparent(new) = iparent(old);
-	iself(new) = iself(old);
-	n = nkeys(new) = nkeys(old);
+	newb = allocblock();
+	ixtype(newb) = ixtype(old);
+	ixparent(newb) = ixparent(old);
+	ixself(newb) = ixself(old);
+	n = nkeys(newb) = nkeys(old);
 
 /* put info about all records up to new one in new header */
 	for (i = 0; i < lo; i++) {
-		rkeys(new, i) = rkeys(old, i);
-		lens(new, i) = lens(old, i);
-		offs(new, i) = off;
+		rkeys(newb, i) = rkeys(old, i);
+		lens(newb, i) = lens(old, i);
+		offs(newb, i) = off;
 		off += lens(old, i);
 	}
 
 /* put info about added record in new header; may be new record */
-	rkeys(new, lo) = rkey;
-	lens(new, lo) = len;
-	offs(new, lo) = off;
+	rkeys(newb, lo) = rkey;
+	lens(newb, lo) = len;
+	offs(newb, lo) = off;
 	off += len;
 
 /* put info about all records after new one in new header */
@@ -127,15 +127,15 @@ addrecord (BTREE btree,         /* btree to add record to */
 	else
 		j = 1;
 	for (; i < n; i++) {
-		rkeys(new, i + j) = rkeys(old, i);
-		lens(new, i + j) = lens(old, i);
-		offs(new, i + j) = off;
+		rkeys(newb, i + j) = rkeys(old, i);
+		lens(newb, i + j) = lens(old, i);
+		offs(newb, i + j) = off;
 		off += lens(old, i);
 	}
-	if (!found) nkeys(new) = n + 1;
+	if (!found) nkeys(newb) = n + 1;
 
 /* must rewrite data block with new record; open original and new */
-	sprintf(scratch1, "%s/%s", bbasedir(btree), fkey2path(iself(old)));
+	sprintf(scratch1, "%s/%s", bbasedir(btree), fkey2path(ixself(old)));
 	ASSERT(fo = fopen(scratch1, LLREADBINARY));
 	sprintf(scratch1, "%s/tmp1", bbasedir(btree));
 	ASSERT(fn1 = fopen(scratch1, LLWRITEBINARY));
@@ -144,8 +144,8 @@ addrecord (BTREE btree,         /* btree to add record to */
 	if (!found && n == NORECS - 1) goto splitting;
 
 /* no split; write new header and preceding records to temp file */
-	ASSERT(fwrite(new, BUFLEN, 1, fn1) == 1);
-	putheader(btree, new);
+	ASSERT(fwrite(newb, BUFLEN, 1, fn1) == 1);
+	putheader(btree, newb);
 	for (i = 0; i < lo; i++) {
 		if (fseek(fo, (long)(offs(old, i) + BUFLEN), 0))
 			FATAL();
@@ -172,7 +172,7 @@ addrecord (BTREE btree,         /* btree to add record to */
 	fclose(fn1);
 	fclose(fo);
 	sprintf(scratch1, "%s/tmp1", bbasedir(btree));
-	sprintf(scratch2, "%s/%s", bbasedir(btree), fkey2path(iself(old)));
+	sprintf(scratch2, "%s/%s", bbasedir(btree), fkey2path(ixself(old)));
 	stdfree(old);
 	movefiles(scratch1, scratch2);
 	return TRUE;	/* return point for non-splitting case */
@@ -183,9 +183,9 @@ splitting:
 	ASSERT(fn2 = fopen(scratch1, LLWRITEBINARY));
 
 /* write header and 1st half of records; don't worry where new record goes */
-	nkeys(new) = n/2;	/* temporary */
-	ASSERT(fwrite(new, BUFLEN, 1, fn1) == 1);
-	putheader(btree, new);
+	nkeys(newb) = n/2;	/* temporary */
+	ASSERT(fwrite(newb, BUFLEN, 1, fn1) == 1);
+	putheader(btree, newb);
 	for (i = j = 0; j < n/2; j++) {
 		if (j == lo) {
 			p = record;
@@ -205,16 +205,16 @@ splitting:
 	}
 
 /* create and write new block header */
-	nfkey = iself(new);
-	parent = iparent(new);
+	nfkey = ixself(newb);
+	parent = ixparent(newb);
 	xtra = crtblock(btree);
-	iparent(xtra) = parent;
+	ixparent(xtra) = parent;
 	off = 0;
 	for (k = 0, l = n/2; k < n - n/2 + 1; k++, l++) {
-		rkeys(xtra, k) = rkeys(new, l);
-		lens(xtra, k) = lens(new, l);
+		rkeys(xtra, k) = rkeys(newb, l);
+		lens(xtra, k) = lens(newb, l);
 		offs(xtra, k) = off;
-		off += lens(new, l);
+		off += lens(newb, l);
 	}
 	nkeys(xtra) = n - n/2 + 1;
 	ASSERT(fwrite(xtra, BUFLEN, 1, fn2) == 1);
@@ -248,11 +248,11 @@ splitting:
 	sprintf(scratch2, "%s/%s", bbasedir(btree), fkey2path(nfkey));
 	movefiles(scratch1, scratch2);
 	sprintf(scratch1, "%s/tmp2", bbasedir(btree));
-	sprintf(scratch2, "%s/%s", bbasedir(btree), fkey2path(iself(xtra)));
+	sprintf(scratch2, "%s/%s", bbasedir(btree), fkey2path(ixself(xtra)));
 	movefiles(scratch1, scratch2);
 
 /* add index of new data block to its parent (may cause more splitting) */
-	addkey(btree, parent, rkeys(xtra, 0), iself(xtra));
+	addkey(btree, parent, rkeys(xtra, 0), ixself(xtra));
 	return TRUE;
 }
 /*======================================================
@@ -285,7 +285,7 @@ readrec(BTREE btree, BLOCK block, INT i, INT *plen)
 	RECORD record;
 	INT len;
 
-	sprintf(scratch, "%s/%s", bbasedir(btree), fkey2path(iself(block)));
+	sprintf(scratch, "%s/%s", bbasedir(btree), fkey2path(ixself(block)));
 	ASSERT(fr = fopen(scratch, LLREADBINARY));
 	if (fseek(fr, (long)(offs(block, i) + BUFLEN), 0)) FATAL();
 	if ((len = lens(block, i)) == 0) {
@@ -323,7 +323,7 @@ getrecord (BTREE btree,
 	ASSERT(index = bmaster(btree));
 
 /* search for data block that does/should hold record */
-	while (itype(index) == BTINDEXTYPE) {
+	while (ixtype(index) == BTINDEXTYPE) {
 		n = nkeys(index);
 		nfkey = fkeys(index, 0);
 		for (i = 1; i <= n; i++) {
@@ -384,7 +384,7 @@ isrecord (BTREE btree,
 
 /* search for data block that does/should hold record */
 	ASSERT(index = bmaster(btree));
-	while (itype(index) == BTINDEXTYPE) {
+	while (ixtype(index) == BTINDEXTYPE) {
 		n = nkeys(index);
 		nfkey = fkeys(index, 0);
 		for (i = 1; i <= n; i++) {

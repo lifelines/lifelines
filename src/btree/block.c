@@ -37,9 +37,9 @@ BLOCK
 allocblock (void)
 {
 	BLOCK block = (BLOCK) stdalloc(BUFLEN);
-	itype(block) = BTBLOCKTYPE;
-	iself(block) = 0;
-	iparent(block) = 0;
+	ixtype(block) = BTBLOCKTYPE;
+	ixself(block) = 0;
+	ixparent(block) = 0;
 	nkeys(block) = 0;
 	return block;
 }
@@ -52,7 +52,7 @@ crtblock (BTREE btree)  /*btree handle*/
 	BLOCK block;
 	ASSERT(bwrite(btree));
 	block = allocblock();
-	iself(block) = btree->b_kfile.k_fkey;
+	ixself(block) = btree->b_kfile.k_fkey;
 	nextfkey(btree);
 	rewind(bkfp(btree));
 	if (fwrite(&bkfile(btree), sizeof(KEYFILE), 1, bkfp(btree)) != 1)

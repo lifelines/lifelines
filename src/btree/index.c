@@ -45,9 +45,9 @@ crtindex (BTREE btree)
 	ASSERT(bwrite(btree));
 	index = (INDEX) stdalloc(BUFLEN);
 	nkeys(index) = 0;
-	iparent(index) = 0;
-	itype(index) = BTINDEXTYPE;
-	iself(index) = btree->b_kfile.k_fkey;
+	ixparent(index) = 0;
+	ixtype(index) = BTINDEXTYPE;
+	ixself(index) = btree->b_kfile.k_fkey;
 	nextfkey(btree);
 	rewind(bkfp(btree));
 	if (fwrite(&bkfile(btree), sizeof(KEYFILE), 1, bkfp(btree)) != 1)
@@ -84,7 +84,7 @@ writeindex (STRING basedir, /* base directory of btree */
 {
 	FILE *fp;
 	char scratch[200];
-	sprintf(scratch, "%s/%s", basedir, fkey2path(iself(index)));
+	sprintf(scratch, "%s/%s", basedir, fkey2path(ixself(index)));
 	if ((fp = fopen(scratch, LLWRITEBINARY)) == NULL) FATAL();
 	if (fwrite(index, BUFLEN, 1, fp) != 1) FATAL();
 	fclose(fp);
@@ -112,7 +112,7 @@ cacheindex (BTREE btree, /* btree handle */
 {
 	INT n = bncache(btree);
 	INDEX *indices = bcache(btree);
-	INT j = incache(btree, iself(index));
+	INT j = incache(btree, ixself(index));
 	if (j == -1) {	/* index not in cache */
 		if (indices[n-1]) stdfree(indices[n-1]);
 		for (j = n - 1; j > 0; --j)
@@ -134,7 +134,7 @@ getindex (BTREE btree,
 {
 	INT j;
 	INDEX index;
-	if (fkey == iself(bmaster(btree))) return bmaster(btree);
+	if (fkey == ixself(bmaster(btree))) return bmaster(btree);
 	if ((j = incache(btree, fkey)) == -1) {	/* not in cache */
 		if ((index = readindex(bbasedir(btree), fkey)) == NULL)
 			return NULL;
@@ -151,7 +151,7 @@ putindex (BTREE btree,
           INDEX index)
 {
 	writeindex(bbasedir(btree), index);
-	if (iself(index) == iself(bmaster(btree))) return;
+	if (ixself(index) == ixself(bmaster(btree))) return;
 	cacheindex(btree, index);
 }
 /*=================================================
@@ -174,7 +174,7 @@ incache (BTREE btree,
 	INDEX index, *indices = bcache(btree);
 	for (i = 0; i < n; i++) {
 		if ((index = *indices++) == NULL) return -1;
-		if (iself(index) == fkey) return i;
+		if (ixself(index) == fkey) return i;
 	}
 	return -1;
 }
