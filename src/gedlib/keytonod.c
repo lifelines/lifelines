@@ -857,8 +857,9 @@ load_cacheel (CACHEEL cel)
 void
 lock_cache (CACHEEL cel)
 {
-	ASSERT(cnode(cel));
+	ASSERT(cnode(cel)); /* must be in direct */
 	cclock(cel)++;
+	ASSERT(cclock(cel)>0);
 }
 /*==========================================
  * unlock_cache -- Unlock CACHEEL from direct cache
@@ -866,6 +867,7 @@ lock_cache (CACHEEL cel)
 void
 unlock_cache (CACHEEL cel)
 {
+	ASSERT(cclock(cel)>0);
 	ASSERT(cnode(cel));
 	cclock(cel)--;
 }
@@ -876,6 +878,7 @@ void
 semilock_cache (CACHEEL cel)
 {
 	csemilock(cel)++;
+	ASSERT(csemilock(cel)>0);
 }
 /*==========================================
  * unsemilock_cache -- Unlock CACHEEL from cache (indirect is ok)
@@ -883,6 +886,7 @@ semilock_cache (CACHEEL cel)
 void
 unsemilock_cache (CACHEEL cel)
 {
+	ASSERT(csemilock(cel)>0);
 	csemilock(cel)--;
 }
 /*=========================================

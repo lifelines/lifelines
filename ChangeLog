@@ -4,6 +4,10 @@
 
 	Check for null parent in addnode.
 
+	* ChangeLog src/gedlib/keytonod.c:
+
+	ASSERT checks that lock & semilock stay nonnegative.
+
 2003-02-07 Perry Rapp
 
 	* ChangeLog src/hdrs/indiseq.h src/hdrs/interp.h
