@@ -80,12 +80,12 @@ static void assign_record(RECORD rec, char ntype, INT keynum);
 static BOOLEAN buffer_to_line (STRING p, INT *plev, STRING *pxref
 	, STRING *ptag, STRING *pval, STRING *pmsg);
 static RECORD convert_first_fp_to_record(FILE *fp, BOOLEAN list, XLAT ttm
-	, STRING *pmsg,  BOOLEAN *peof);
+	, STRING *pmsg, BOOLEAN *peof);
 static NODE do_first_fp_to_node(FILE *fp, BOOLEAN list, XLAT tt
-	, STRING *pmsg,  BOOLEAN *peof);
+	, STRING *pmsg, BOOLEAN *peof);
 static RECORD do_first_fp_to_record(FILE *fp, BOOLEAN list, XLAT tt
-	, STRING *pmsg,  BOOLEAN *peof);
-static STRING fixup (STRING str);
+	, STRING *pmsg, BOOLEAN *peof);
+static STRING fixup(STRING str);
 static STRING fixtag (STRING tag);
 static RECORD indi_to_prev_sib_impl(NODE indi);
 static void load_record_wh(RECORD rec, char * whptr, INT whlen);
@@ -195,7 +195,49 @@ create_node (STRING xref, STRING tag, STRING val, NODE prnt)
 	nparent(node) = prnt;
 	nchild(node) = NULL;
 	nsibling(node) = NULL;
+	nflag(node) = 0;
 	return node;
+}
+/*===========================
+ * create_temp_node -- Create NODE for temporary use
+ *  (not to be connected to a record)
+ *
+ * STRING xref  [in] xref
+ * STRING tag   [in] tag
+ * STRING val:  [in] value
+ * NODE prnt:   [in] parent
+ * Created: 2003-02-01 (Perry Rapp)
+ *=========================*/
+NODE
+create_temp_node (STRING xref, STRING tag, STRING val, NODE prnt)
+{
+	NODE node = alloc_node();
+	nxref(node) = fixup(xref);
+	ntag(node) = fixtag(tag);
+	nval(node) = fixup(val);
+	nparent(node) = prnt;
+	nchild(node) = NULL;
+	nsibling(node) = NULL;
+	nflag(node) = ND_TEMP;
+	return node;
+}
+/*===========================
+ * free_temp_node_tree -- Free a node created by create_temp_node
+ * Created: 2003-02-01 (Perry Rapp)
+ *=========================*/
+void
+free_temp_node_tree (NODE node)
+{
+	NODE n2;
+	if ((n2 = nchild(node))) {
+		free_temp_node_tree(n2);
+		nchild(node) = 0;
+	}
+	if ((n2 = nsibling(node))) {
+		free_temp_node_tree(n2);
+		nsibling(node) = 0;
+	}
+	free_node(node);
 }
 /*===================================
  * alloc_new_record -- record allocator
@@ -1586,9 +1628,7 @@ copy_node (NODE node)
  * copy_nodes -- Copy tree
  *======================*/
 NODE
-copy_nodes (NODE node,
-            BOOLEAN kids,
-            BOOLEAN sibs)
+copy_nodes (NODE node, BOOLEAN kids, BOOLEAN sibs)
 {
 	NODE new, kin;
 	if (!node) return NULL;

@@ -327,8 +327,15 @@ clear_pvalue (PVALUE val)
 	*/
 	/*
 	PANY is a null value
-	PGNODEs point into cache memory
 	*/
+	case PGNODE:
+		{
+			NODE node = (NODE)pvalue(val);
+			if (node && (nflag(node) & ND_TEMP)) {
+				free_temp_node_tree(node);
+			}
+		}
+		return;
 	/* nodes from cache handled below switch - PINDI, PFAM, PSOUR, PEVEN, POTHR */
 	case PFLOAT:
 		free_float_pvalue(val);
@@ -996,8 +1003,6 @@ BOOLEAN
 is_record_pvalue (PVALUE value)
 {
 	switch (ptype(value)) {
-	case PGNODE: /* TO DO 2001/03/17 ?? */
-		break;
 	case PINDI: case PFAM: case PSOUR: case PEVEN: case POTHR:
 		return TRUE;
 	}

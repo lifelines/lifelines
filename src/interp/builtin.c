@@ -259,8 +259,8 @@ __getindiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __gettoday (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE prnt = create_node(NULL, "EVEN", NULL, NULL);
-	NODE chil = create_node(NULL, "DATE", get_todays_date(), prnt);
+	NODE prnt = create_temp_node(NULL, "EVEN", NULL, NULL);
+	NODE chil = create_temp_node(NULL, "DATE", get_todays_date(), prnt);
 	node=node; /* unused */
 	stab=stab; /* unused */
 	eflg=eflg; /* unused */
@@ -2636,13 +2636,16 @@ PVALUE
 __date (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE line;
+	STRING str;
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
 	if (*eflg) {
 		prog_error(node, nonnod1, "date");
 		return NULL;
 	}
 	line = (NODE) pvalue(val);
-	return create_pvalue_from_string(event_to_date(line, FALSE));
+	str = event_to_date(line, FALSE);
+	delete_pvalue(val);
+	return create_pvalue_from_string(str);
 }
 /*=====================================================+
  * normalize_year -- Modify year before returning to report

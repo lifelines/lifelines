@@ -72,8 +72,9 @@ struct ntag {
 	STRING n_tag;		/* tag */
 	STRING n_val;		/* value */
 	NODE   n_parent;	/* parent */
-	NODE   n_child;		/* first child */
+	NODE   n_child;   /* first child */
 	NODE   n_sibling;	/* sibling */
+	INT    n_flag;    /* eg, ND_TEMP */
 };
 #define nxref(n)    ((n)->n_xref)
 #define ntag(n)     ((n)->n_tag)
@@ -81,6 +82,8 @@ struct ntag {
 #define nparent(n)  ((n)->n_parent)
 #define nchild(n)   ((n)->n_child)
 #define nsibling(n) ((n)->n_sibling)
+#define nflag(n)    ((n)->n_flag)
+enum { ND_TEMP=1 };
 
 struct nkeytag { char ntype; INT keynum; STRING key; };
 typedef struct nkeytag NKEY;
@@ -205,11 +208,13 @@ void classify_nodes(NODE*, NODE*, NODE*);
 void closexref(void);
 void close_lifelines(void);
 void close_lldb(void);
+NODE convert_first_fp_to_node(FILE*, BOOLEAN, XLAT, STRING*, BOOLEAN*);
 NODE copy_node(NODE);
 NODE copy_nodes(NODE, BOOLEAN, BOOLEAN);
 BOOLEAN create_database(STRING dbused);
 RECORD create_record(NODE node);
 NODE create_node(STRING, STRING, STRING, NODE);
+NODE create_temp_node(STRING, STRING, STRING, NODE);
 void del_in_dbase(STRING key);
 void delete_metarec(STRING key);
 BOOLEAN edit_mapping(INT);
@@ -241,12 +246,12 @@ NODE file_to_node(STRING, XLAT, STRING*, BOOLEAN*);
 INT file_to_line(FILE*, XLAT, INT*, STRING*, STRING*, STRING*, STRING*);
 NODE find_node(NODE, STRING, STRING, NODE*);
 NODE find_tag(NODE, CNSTRING);
-NODE convert_first_fp_to_node(FILE*, BOOLEAN, XLAT, STRING*, BOOLEAN*);
 void free_name_list(LIST list);
 void free_rec(RECORD);
 void free_node(NODE);
 void free_nodes(NODE);
 void free_string_list(LIST list);
+void free_temp_node_tree(NODE);
 STRING full_value(NODE);
 STRING generic_to_list_string(NODE node, STRING key, INT len, STRING delim, RFMT rfmt);
 STRING get_cache_stats(void);

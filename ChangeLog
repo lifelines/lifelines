@@ -15,6 +15,11 @@
 	Plug leaks in zs_free & zs_move.
 	Plug leak in fopenpath.
 
+	* ChangeLog src/gedlib/node.c src/hdrs/gedcom.h
+	src/interp/builtin.c src/interp/pvalue.c:
+
+	Plug leaks in gettoday(). Plug leak in __date().
+
 2003-01-31 Steve Dum
        * reports/Makefile.am reports/gen_index
 
