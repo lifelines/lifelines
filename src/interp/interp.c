@@ -53,8 +53,9 @@ extern BOOLEAN progrunning, progparsing;
  * local function prototypes
  *********************************************/
 
-static void remove_tables (void);
-static void parse_file (STRING ifile, LIST plist);
+static void remove_tables(void);
+static void parse_file(STRING ifile, LIST plist);
+static void printkey(STRING key, char type, INT keynum);
 
 /*********************************************
  * local variables
@@ -106,6 +107,8 @@ void
 progmessage(char *msg)
 {
 	char buf[80];
+	char *ptr=buf;
+	INT mylen=sizeof(buf);
 	int len;
 	char *dotdotdot;
 	if(progname && *progname) {
@@ -117,9 +120,14 @@ progmessage(char *msg)
 			len = 0;
 			dotdotdot = "";
 		}
-		sprintf(buf, "Program \"%s%s\" %s", dotdotdot, progname+len, msg);
+		llstrcatn(&ptr, "Program ", &mylen);
+		llstrcatn(&ptr, dotdotdot, &mylen);
+		llstrcatn(&ptr, progname+len, &mylen);
+		llstrcatn(&ptr, " ", &mylen);
+		llstrcatn(&ptr, msg, &mylen);
 	} else {
-		sprintf(buf, "The program %s", msg);
+		llstrcatn(&ptr, "The program ", &mylen);
+		llstrcatn(&ptr, msg, &mylen);
 	}
 	message(buf);
 }
@@ -258,7 +266,7 @@ interp_program_exit:
 /*===========================================+
  * remove_tables - Remove interpreter's tables
  *==========================================*/
-void
+static void
 remove_tables (void)
 {
 	remove_table(filetab, FREEKEY);
@@ -280,7 +288,7 @@ remove_tables (void)
 /*======================================+
  * parse_file - Parse single program file
  *=====================================*/
-void
+static void
 parse_file (STRING ifile,
             LIST plist)
 {
@@ -1043,6 +1051,16 @@ interp_fornodes (PNODE node,
 	return INTOKAY;
 }
 /*========================================+
+ * printkey -- Make key from keynum
+ *=======================================*/
+static void
+printkey (STRING key, char type, INT keynum)
+{
+	if (keynum>9999999 || keynum<0)
+		keynum=0;
+	sprintf(key, "%c%d", type, keynum);
+}
+/*========================================+
  * interp_forindi -- Interpret forindi loop
  *  usage: forindi(INDI_V,INT_V) {...}
  *=======================================*/
@@ -1052,14 +1070,14 @@ interp_forindi (PNODE node,
                 PVALUE *pval)
 {
 	NODE indi;
-	static char key[10];
+	static char key[MAXKEYWIDTH];
 	STRING record;
 	INTERPTYPE irc;
 	INT len, count = 0;
 	INT icount = 0;
 	insert_pvtable(stab, inum(node), PINT, 0);
 	while (TRUE) {
-		sprintf(key, "I%d", ++count);
+		printkey(key, 'I', ++count);
 		if (!(record = retrieve_record(key, &len))) {
 		    if (icount < num_indis()) continue;
 		    break;
@@ -1094,14 +1112,14 @@ interp_forsour (PNODE node,
                 PVALUE *pval)
 {
 	NODE sour;
-	static char key[10];
+	static char key[MAXKEYWIDTH];
 	STRING record;
 	INTERPTYPE irc;
 	INT len, count = 0;
 	INT scount = 0;
 	insert_pvtable(stab, inum(node), PINT, 0);
 	while (TRUE) {
-		sprintf(key, "S%d", ++count);
+		printkey(key, 'S', ++count);
 		if (!(record = retrieve_record(key, &len))) {
 		    if(scount < num_sours()) continue;
 		    break;
@@ -1136,14 +1154,14 @@ interp_foreven (PNODE node,
                 PVALUE *pval)
 {
 	NODE even;
-	static char key[10];
+	static char key[MAXKEYWIDTH];
 	STRING record;
 	INTERPTYPE irc;
 	INT len, count = 0;
 	INT ecount = 0;
 	insert_pvtable(stab, inum(node), PINT, (VPTR)count);
 	while (TRUE) {
-		sprintf(key, "E%d", ++count);
+		printkey(key, 'E', ++count);
 		if (!(record = retrieve_record(key, &len))) {
 		    if(ecount < num_evens()) continue;
 		    break;
@@ -1178,14 +1196,14 @@ interp_forothr (PNODE node,
                 PVALUE *pval)
 {
 	NODE othr;
-	static char key[10];
+	static char key[MAXKEYWIDTH];
 	STRING record;
 	INTERPTYPE irc;
 	INT len, count = 0;
 	INT ocount = 0;
 	insert_pvtable(stab, inum(node), PINT, (VPTR)count);
 	while (++count <= num_othrs()) {
-		sprintf(key, "X%d", count);
+		printkey(key, 'X', ++count);
 		if (!(record = retrieve_record(key, &len)))
 			continue;
 		if (!(othr = string_to_node(record))) continue;
@@ -1218,14 +1236,14 @@ interp_forfam (PNODE node,
                PVALUE *pval)
 {
 	NODE fam;
-	static char key[10];
+	static char key[MAXKEYWIDTH];
 	STRING record;
 	INTERPTYPE irc;
 	INT len, count = 0;
 	INT fcount = 0;
 	insert_pvtable(stab, inum(node), PINT, (VPTR)count);
 	while (TRUE) {
-		sprintf(key, "F%d", ++count);
+		printkey(key, 'F', ++count);
 		if (!(record = retrieve_record(key, &len))) {
 		    if(fcount < num_fams()) continue;
 		    break;

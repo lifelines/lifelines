@@ -6,6 +6,9 @@
 	Integrated browse_aux into browse(...).
 	This fixes some bugs from leaving nodes on the stack.
 
+	* hdrs/gedcom.h interp/interp.c:
+	Fix string/stack overflow in progmessage.
+
 2001-02-24 Perry Rapp <puddle@users.sourceforge.net>
 
 	gedlib/indiseq.c: Filter out duplicates in indi_to_children.

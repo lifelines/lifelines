@@ -38,6 +38,8 @@
 
 #define NAMESEP '/'
 #define MAXGEDNAMELEN 512
+/* keys run up to 9,999,999, eg I9999999 */
+#define MAXKEYWIDTH 8
 
 #define OKAY  1
 #define ERROR 0
