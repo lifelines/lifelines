@@ -1,5 +1,5 @@
 /* 
-   Copyright (c) 1991-1999 Thomas T. Wetmore IV
+   Copyright (c) 1996-2000 Paul B. McBride
 
    Permission is hereby granted, free of charge, to any person
    obtaining a copy of this software and associated documentation

@@ -1059,7 +1059,6 @@ __debug (PNODE node,
 	prog_debug = (BOOLEAN) pvalue(val);
 	return NULL;
 }
-
 /*========================================
  * __getproperty -- Return property string
  *   usage: getproperty(STRING) -> STRING

@@ -575,8 +575,7 @@ editfam:
 	message(gdfadd);
 	return fam2;
 }
-
-#ifdef UNUSED_CODE
+#ifdef ETHEL
 /*=========================================
  * add_family_to_db -- Add new family to database
  * (no user interaction)
@@ -650,4 +649,4 @@ add_family_to_db (NODE spouse1, NODE spouse2, NODE child)
 
 	return fam2;
 }
-#endif /* UNUSED_CODE */
+#endif /* ETHEL */
