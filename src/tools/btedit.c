@@ -75,6 +75,7 @@ char **argv;
 	addfile(btree, str2rkey(argv[2]), "btedit.tmp");
 	unlink("btedit.tmp");
 	closebtree(btree);
+	return TRUE;
 }
 
 /*=========================================================

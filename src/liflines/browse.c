@@ -51,6 +51,27 @@ INDISEQ ask_for_indiseq();
 
 #define ALLPARMS &indi1, &indi2, &fam1, &fam2, &seq
 
+/* in lbrowse.c */
+INT browse_list (NODE *pindi1,
+		 NODE *pindi2,
+		 NODE *pfam1,
+		 NODE *pfam2,
+		 INDISEQ *pseq);
+
+/* in screen.c */
+INT indi_browse (NODE indi);
+INT fam_browse (NODE fam);
+INT ped_browse (NODE indi);
+
+/* in swap.c */
+BOOLEAN swap_families (NODE indi);
+BOOLEAN swap_children (NODE prnt,	/* parent - poss NULL */
+		       NODE fam);	/* family - poss NULL */
+/* in advedit.c */
+void advanced_person_edit (NODE root0);
+void advanced_family_edit (NODE root0);
+
+
 /*=========================================
  * browse -- Main loop of browse operation.
  *=======================================*/

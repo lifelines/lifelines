@@ -137,8 +137,7 @@ static void handle_err(STRING, ...);
 /*===================================================
  * validate_gedcom -- Validate GEDCOM records in file
  *=================================================*/
-BOOLEAN validate_gedcom (fp)
-FILE *fp;
+BOOLEAN validate_gedcom (FILE *fp)
 {
 	INT lev, rc, curlev = 0;
 	INT nindi, nfam, nsour, neven, nothr;
@@ -607,8 +606,7 @@ int check_stdkeys (void)
 /*================================================
  * addmissingkeys -- add keys which are not in use
  *==============================================*/
-void addmissingkeys (t)
-INT t;		/* type of record: INDI_REC ... */
+void addmissingkeys (INT t)		/* type of record: INDI_REC ... */
 {
     	INT tmax, ttot;
 	INT i,j;

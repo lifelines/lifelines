@@ -72,8 +72,7 @@ NODE root0;
 #endif
 }
 
-void advanced_person_edit (root0)
-NODE root0;
+void advanced_person_edit (NODE root0)
 {
 	FILE *fp;
 

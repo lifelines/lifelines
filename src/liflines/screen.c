@@ -511,8 +511,7 @@ void main_menu (void)
 /*=========================================
  * indi_browse -- Handle indi_browse screen
  *=======================================*/
-INT indi_browse (indi)
-NODE indi;
+INT indi_browse (NODE indi)
 {
 	if (cur_screen != ONE_PER_SCREEN) paint_one_per_screen();
 	show_person(indi, 1, PER_LINES);
@@ -522,8 +521,7 @@ NODE indi;
 /*=======================================
  * fam_browse -- Handle fam_browse screen
  *=====================================*/
-INT fam_browse (fam)
-NODE fam;
+INT fam_browse (NODE fam)
 {
 	if (cur_screen != ONE_FAM_SCREEN) paint_one_fam_screen();
 	show_long_family(fam, 1, FAM_LINES);
@@ -557,8 +555,7 @@ NODE fam1, fam2;
 /*=======================================
  * ped_browse -- Handle ped_browse screen
  *=====================================*/
-INT ped_browse (indi)
-NODE indi;
+INT ped_browse (NODE indi)
 {
 	if (cur_screen != PED_SCREEN) paint_ped_screen();
 	show_pedigree(indi);

@@ -103,9 +103,8 @@ INT n;       /* num cache blocks to allow */
 /*============================================
  * cacheindex -- Place INDEX or BLOCK in cache
  *==========================================*/
-BOOLEAN cacheindex (btree, index)
-BTREE btree; /* btree handle */
-INDEX index; /* INDEX or BLOCK */
+BOOLEAN cacheindex (BTREE btree, /* btree handle */
+		    INDEX index) /* INDEX or BLOCK */
 {
 	INT n = bncache(btree);
 	INDEX *indices = bcache(btree);
@@ -158,7 +157,7 @@ void putheader (btree, block)
 BTREE btree;
 BLOCK block;
 {
-	cacheindex(btree, block);
+	cacheindex(btree, (INDEX) block);
 }
 /*============================================================
  * incache -- If INDEX is in cache return index else return -1

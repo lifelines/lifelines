@@ -58,13 +58,20 @@ extern STRING idgedf, gdcker, gdnadd, dboldk, dbnewk, dbodel,
   cfoldk, dbdelk, dbrdon;
 extern TRANTABLE tran_tables[];
 static BOOLEAN translate_values();
-static restore_record();
+static void restore_record (NODE node,
+			    INT type,
+			    INT num);
 STRING translate_key();
 STRING newixref();
 STRING newfxref();
 STRING newexref();
 STRING newsxref();
 STRING newxxref();
+
+/* in valgdcom.c */
+BOOLEAN validate_gedcom (FILE *fp);
+int check_stdkeys (void);
+void addmissingkeys (INT t);
 
 /*=================================================
  * import_from_file -- Read GEDCOM file to database
@@ -77,8 +84,8 @@ BOOLEAN import_from_file ()
 	STRING msg, fname;
 	BOOLEAN emp;
 	INT nindi = 0, nfam = 0, neven = 0;
-	INT nsour = 0, nothr = 0, type, num;
-	INT totkeys, totused;
+	INT nsour = 0, nothr = 0, type, num = 0;
+	INT totkeys = 0, totused = 0;
 	char msgbuf[80];
 
 /* Open and validate GEDCOM file */
@@ -170,10 +177,9 @@ BOOLEAN import_from_file ()
 /*=============================================
  * restore_record -- Restore record to database
  *===========================================*/
-static restore_record (node, type, num)
-INT num;
-NODE node;
-INT type;
+static void restore_record (NODE node,
+			    INT type,
+			    INT num)
 {
 	STRING old, new, str, key;
 	char scratch[10];

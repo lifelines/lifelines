@@ -337,7 +337,8 @@ BOOLEAN conf;
 NODE add_family (spouse1, spouse2, child)
 NODE spouse1, spouse2, child;
 {
-	INT sex1, sex2;
+	INT sex1 = 0;
+	INT sex2 = 0;
 	NODE fam1, fam2, refn, husb, wife, chil, body;
 	NODE name, sex, famc, fams, node, prev, new, this;
 	TRANTABLE tti = tran_tables[MEDIN], tto = tran_tables[MINED];

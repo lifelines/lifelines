@@ -47,9 +47,11 @@ LIST browse_lists;
 /*=======================================
  * browse_list -- Handle list browse mode
  *=====================================*/
-INT browse_list (pindi1, pindi2, pfam1, pfam2, pseq)
-NODE *pindi1, *pindi2, *pfam1, *pfam2;
-INDISEQ *pseq;
+INT browse_list (NODE *pindi1,
+		 NODE *pindi2,
+		 NODE *pfam1,
+		 NODE *pfam2,
+		 INDISEQ *pseq)
 {
 	INT top, cur, mark, len, tmp, rc;
 	STRING key, name, newname, lname;
