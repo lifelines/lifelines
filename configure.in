@@ -24,16 +24,17 @@ AC_PROG_RANLIB
 AC_PROG_INSTALL
 
 echo Looking for libraries
-
-AC_CHECK_LIB(ncurses, main)
-if test "$ac_cv_lib_curses_main" = "yes"; then
+echo Looking for ncurses
+AC_CHECK_LIB(ncurses, tparm)
+if test "$ac_cv_lib_ncurses_tparm" = "yes"; then
   echo Using ncurses
 else
   AC_CHECK_LIB(curses, main)
   if test "$ac_cv_lib_curses_main" = "yes"; then
     echo Using curses
   else
-    echo "Didn't find ncurses or curses -- may have link problems!"
+    echo "Didn't find an up-to-date ncurses or curses library!"
+    echo "Link problems may result!"
   fi
 fi
 
