@@ -819,6 +819,7 @@ MAIN MENU
 <SCREEN>
 Please choose an operation:
    b Browse the persons in the database
+   s Search database
    a Add information to the database
    d Delete information from the database
    r Generate reports from the database
@@ -1292,7 +1293,8 @@ Example of using wildcard in browsing
 
 	<LITERALLAYOUT>*/wetmore</LITERALLAYOUT></EXAMPLE>matches all
 	persons with surname Wetmore. This is the only wildcard
-	feature supported by <APPLICATION>LifeLines</APPLICATION>.
+	feature supported in browsing. The search function provides
+	some simple wildcards for finding individual name fragments.
 
 </PARA>
 
@@ -4940,6 +4942,14 @@ first person in database in key order
 
 </SIMPARA>
 
+</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM><FUNCSYNOPSIS><FUNCDEF>INDI <FUNCTION>lastindi</FUNCTION></FUNCDEF><VOID></FUNCSYNOPSIS></GLOSSTERM><GLOSSDEF>
+
+<SIMPARA>
+
+last person in database in key order
+
+</SIMPARA>
+
 </GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM><FUNCSYNOPSIS><FUNCDEF>INDI <FUNCTION>nextindi</FUNCTION></FUNCDEF><PARAMDEF><PARAMETER>INDI</PARAMETER></PARAMDEF></FUNCSYNOPSIS></GLOSSTERM><GLOSSDEF>
 
 <SIMPARA>
@@ -5298,6 +5308,14 @@ find family from key
 <SIMPARA>
 
 first family in database in key order
+
+</SIMPARA>
+
+</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM><FUNCSYNOPSIS><FUNCDEF>FAM <FUNCTION>lastfam</FUNCTION></FUNCDEF><VOID></FUNCSYNOPSIS></GLOSSTERM><GLOSSDEF>
+
+<SIMPARA>
+
+last family in database in key order
 
 </SIMPARA>
 
