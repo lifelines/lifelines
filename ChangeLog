@@ -2,7 +2,7 @@
 
 	* ChangeLog gedlib/translat.c:
 
-	Watch for iconv failing.
+	Watch for iconv_open failing.
 
 2002-06-11 Perry Rapp <puddle@users.sourceforge.net>
 
