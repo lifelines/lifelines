@@ -167,11 +167,12 @@ Released 3.0.33 beta.
 	Fix addtextfile to skip leading BOM.
 	Remove extra sets of map names.
 	Fix tt menu to show menu keys.
-	Fix basm & barm to not say bapt.
+	Fix basm & barm to not say bapt. (sf#803281)
 
 	* ChangeLog src/liflines/tandem.c
 
 	Peter Fales' bugfix for browsing to lower family from tandem.
+	(sf#795805)
 
 	* ChangeLog po/POTFILES.in
 
@@ -218,11 +219,12 @@ Released 3.0.33 beta.
 	* ChangeLog NEWS src/interp/more.c
 
 	Bugfix for report sort function to not crash on one argument.
+	(sf#803279)
 
 	* ChangeLog reports/st/st_list.ll src/interp/more.c
 
 	Bugfix for (r)sort being reversed. Add single arg (r)sort
-	tests to st_list.ll.
+	tests to st_list.ll. (sf#803276)
 
 	* ChangeLog src/gedlib/valtable.c
 
@@ -231,7 +233,7 @@ Released 3.0.33 beta.
 	* ChangeLog NEWS src/gedlib/translat.c src/gedlib/xlat.c
 	src/hdrs/translat.h src/hdrs/xlat.h
 
-	Include legacy translation tables in translations.
+	Include legacy translation tables in translations. (sf#803280)
 
 	* ChangeLog NEWS configure.in build/msvc6/llines/llines.rc
 	build/rpm/lifelines.spec docs/ll-devguide.xml
