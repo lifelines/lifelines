@@ -1,3 +1,15 @@
+2001-10-02  David A. Bright <dabright@users.sourceforge.net>
+
+        * reports/book-latex.ll: Restored some previous additions
+	to this report. The update from Dennis Nicklaus on 12 Aug 2001
+	had deleted them and he asked me to re-add them. So:
+	Add  CREM (cremated) tag processing;
+	modified OCCU tag processing so that it can recognize date ranges
+	(and so avoid saying "xx is a yy and a zz and a ..."); modified
+	OCCU tag processing to recognize a subordinate AGNC tag indicating
+	employer; modified onDate to recognize date ranges (FROM dd mmm
+	yyyy TO dd mmm yyyy) - this still has some rough edges.
+
 2001-09-26 Matt Emmerton <memmerto@users.sourceforge.net>
 
 	* ChangeLog stdlib/lloptions.c liflines/main.c
