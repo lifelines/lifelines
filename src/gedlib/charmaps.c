@@ -240,14 +240,14 @@ set_zone_conversion (STRING optname, INT toint, INT fromint)
 		trans_maps[fromint].after = FALSE;
 	if (!extcs || !extcs[0] || !int_codeset || !int_codeset[0])
 		return;
-	/* append any requested options, eg //TRANSLIT */
-	extcs_opt = strconcat(optname, "Output");
-	suffix = getoptstr(extcs_opt, "");
-	extcs = strconcat(extcs, suffix);
 	if (toint >= 0) {
 		trans_maps[toint].iconv_src = strsave(extcs);
 		trans_maps[toint].iconv_dest = strsave(int_codeset);
 	}
+	/* append any requested options, eg //TRANSLIT */
+	extcs_opt = strconcat(optname, "Output");
+	suffix = getoptstr(extcs_opt, "");
+	extcs = strconcat(extcs, suffix); /* now extcs is heap-alloc'd */
 	if (fromint >= 0) {
 		trans_maps[fromint].iconv_src = strsave(int_codeset);
 		trans_maps[fromint].iconv_dest = strsave(extcs);

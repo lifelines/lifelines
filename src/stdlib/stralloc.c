@@ -71,8 +71,10 @@ strconcat (STRING s1, STRING s2)
 {
 	INT c, len;
 	STRING s3, p;
-	if (!s1) return strsave(s2);
-	if (!s2) return strsave(s1);
+	s1 = s1 ? s1 : "";
+	s2 = s2 ? s2 : "";
+	if (!s1 || !s1[0]) return strsave(s2);
+	if (!s2 || !s2[0]) return strsave(s1);
 	len = strlen(s1) + strlen(s2);
 	p = s3 = (STRING) stdalloc(len+1);
 	while ((c = *s1++)) *p++ = c;

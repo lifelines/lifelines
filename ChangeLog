@@ -1,3 +1,9 @@
+2002-07-09 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/charmaps.c stdlib/stralloc.c:
+
+	Bugfix to strconcat & iconv_translate.
+
 2002-07-08 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog build/msvc6/llines/llines.rc gedlib/indiseq.c
