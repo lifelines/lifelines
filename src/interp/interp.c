@@ -169,6 +169,7 @@ progmessage (MSG_LEVEL level, STRING msg)
 		llstrcatn(&ptr, msg, &mylen);
 	} else {
 		llstrcatn(&ptr, program, &mylen);
+		llstrcatn(&ptr, " ", &mylen);
 		llstrcatn(&ptr, msg, &mylen);
 	}
 	msg_output(level, buf);
