@@ -9,7 +9,7 @@ AC_PREREQ(2.13)
 AC_REVISION([for lifelines, built with autoconf] AC_ACVERSION)
 AC_CANONICAL_HOST
 
-AM_INIT_AUTOMAKE(lifelines, 3.0.13)
+AM_INIT_AUTOMAKE(lifelines, 3.0.14)
 AM_CONFIG_HEADER(config.h)
 
 dnl Set of available languages (gettext)

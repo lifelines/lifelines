@@ -1,0 +1,11 @@
+To release a new version, edit the version number in
+  NEWS
+  configure.in
+  lifelines.spec
+  hdrs/version.h
+  win32/msvc/llines/llines.rc
+
+It would probably be good to add an entry to
+  ChangeLog
+
+

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: LifeLines 3.0.10post\n"
-"POT-Creation-Date: 2002-05-27 02:57-0400\n"
+"POT-Creation-Date: 2002-05-28 21:06-0400\n"
 "PO-Revision-Date: 2002-04-28 22:38+0200\n"
 "Last-Translator: Jens Arvidsson <arvid-jens@algonet.se>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -1038,9 +1038,13 @@ msgstr "skriv in heltalssiffra:"
 msgid "enter name: "
 msgstr "skriv in namn: "
 
+#: gedlib/messages.c:320
+msgid "Strike any key to continue."
+msgstr ""
+
 #. new records prototypes
 #. (all-caps words are in GEDCOM language -- don't change)
-#: gedlib/messages.c:323
+#: gedlib/messages.c:324
 msgid ""
 "0 SOUR\n"
 "1 REFN\n"
@@ -1052,7 +1056,7 @@ msgstr ""
 "1 TITL Titel\n"
 "1 AUTH Författare"
 
-#: gedlib/messages.c:324
+#: gedlib/messages.c:325
 msgid ""
 "0 EVEN\n"
 "1 REFN\n"
@@ -1072,7 +1076,7 @@ msgstr ""
 "  2 ROLE\n"
 "1 SOUR"
 
-#: gedlib/messages.c:325
+#: gedlib/messages.c:326
 msgid ""
 "0 XXXX\n"
 "1 REFN"
@@ -1082,52 +1086,52 @@ msgstr ""
 
 #. end new record prototypes
 #. node.c errors
-#: gedlib/messages.c:329
+#: gedlib/messages.c:330
 #, fuzzy
 msgid "The file is as positioned at EOF."
 msgstr "Filen är positionerad vid filslut."
 
-#: gedlib/messages.c:330
+#: gedlib/messages.c:331
 #, c-format
 msgid "Line %d: This line is empty; EOF?"
 msgstr "Rad %d: Denna rad är tom; filslut?"
 
-#: gedlib/messages.c:331
+#: gedlib/messages.c:332
 #, c-format
 msgid "Line %d: This line is too long."
 msgstr "Rad %d: Denna rad är för lång."
 
-#: gedlib/messages.c:332
+#: gedlib/messages.c:333
 #, c-format
 msgid "Line %d: This line has no level number."
 msgstr "Rad %d: Denna rad har inget nivånummer."
 
-#: gedlib/messages.c:333
+#: gedlib/messages.c:334
 #, c-format
 msgid "Line %d: This line is incomplete."
 msgstr "Rad %d: Denna rad är ofullständig."
 
-#: gedlib/messages.c:334
+#: gedlib/messages.c:335
 #, c-format
 msgid "Line %d: This line has a bad link."
 msgstr "Rad %d: Denna rad har en ogiltig länk."
 
-#: gedlib/messages.c:335
+#: gedlib/messages.c:336
 #, c-format
 msgid "Line %d: This line needs white space before tag."
 msgstr "Rad %d: Denna rad behöver blanksteg innan tagg."
 
-#: gedlib/messages.c:336
+#: gedlib/messages.c:337
 #, c-format
 msgid "Line %d: This line has an illegal level."
 msgstr "Rad %d: Denna rad har en otillåten nivå."
 
-#: gedlib/messages.c:337
+#: gedlib/messages.c:338
 msgid "The record begins at wrong level."
 msgstr "Posten börjar på fel nivå."
 
 #. &&begin signals
-#: gedlib/messages.c:340
+#: gedlib/messages.c:341
 msgid ""
 "\n"
 "Aborting now. Core dump? [y/n]"
@@ -1135,7 +1139,7 @@ msgstr ""
 "\n"
 "Avbryter nu. Skapa minnesutskrift? [y/n]"
 
-#: gedlib/messages.c:341
+#: gedlib/messages.c:342
 msgid ""
 "Looks like a program was running.\n"
 "Check file %1 around line %2.\n"
@@ -1143,265 +1147,265 @@ msgstr ""
 "Verkar som att ett program kördes.\n"
 "Kontrollera fil %1 omkring rad %2.\n"
 
-#: gedlib/messages.c:342
+#: gedlib/messages.c:343
 msgid "signal %1: %2"
 msgstr "signal %1: %2"
 
 #. system signal#0 name
-#: gedlib/messages.c:344
+#: gedlib/messages.c:345
 msgid "SIGNAL 0"
 msgstr "SIGNAL 0"
 
-#: gedlib/messages.c:345
+#: gedlib/messages.c:346
 msgid "HANGUP"
 msgstr "AVRINGD"
 
-#: gedlib/messages.c:346
+#: gedlib/messages.c:347
 msgid "INTERRUPT"
 msgstr "AVBROTT"
 
-#: gedlib/messages.c:347
+#: gedlib/messages.c:348
 msgid "QUIT"
 msgstr "LÄMNAD"
 
-#: gedlib/messages.c:348
+#: gedlib/messages.c:349
 msgid "ILLEGAL INSTRUCTION"
 msgstr "OTILLÅTEN INSTRUKTION"
 
-#: gedlib/messages.c:349
+#: gedlib/messages.c:350
 msgid "TRACE TRAP"
 msgstr "SPÅRNINGSFÄLLA"
 
-#: gedlib/messages.c:350
+#: gedlib/messages.c:351
 msgid "ABORT"
 msgstr "AVBRUTEN"
 
-#: gedlib/messages.c:351
+#: gedlib/messages.c:352
 msgid "EMT INST"
 msgstr ""
 
-#: gedlib/messages.c:352
+#: gedlib/messages.c:353
 msgid "FLOATING POINT EXCEPTION"
 msgstr ""
 
-#: gedlib/messages.c:353
+#: gedlib/messages.c:354
 msgid "KILL"
 msgstr ""
 
-#: gedlib/messages.c:354
+#: gedlib/messages.c:355
 msgid "BUS ERROR"
 msgstr "BUSSFEL"
 
-#: gedlib/messages.c:355
+#: gedlib/messages.c:356
 msgid "SEGMENTATION ERROR"
 msgstr "SEGMENTERINGSFEL"
 
-#: gedlib/messages.c:356
+#: gedlib/messages.c:357
 msgid "SYSTEM CALL ERROR"
 msgstr "SYSTEMANROPSFEL"
 
-#: gedlib/messages.c:357
+#: gedlib/messages.c:358
 msgid "PIPE WRITE"
 msgstr ""
 
-#: gedlib/messages.c:358
+#: gedlib/messages.c:359
 msgid "ALARM CLOCK"
 msgstr "ALARMKLOCKA"
 
 #. system signal#15 name -- presumably user used UNIX kill command to stop lifelines
-#: gedlib/messages.c:360
+#: gedlib/messages.c:361
 msgid "TERMINATE FROM KILL"
 msgstr ""
 
-#: gedlib/messages.c:361
+#: gedlib/messages.c:362
 msgid "USER SIGNAL 1"
 msgstr "ANVÄNDARSIGNAL 1"
 
-#: gedlib/messages.c:362
+#: gedlib/messages.c:363
 msgid "USER SIGNAL 2"
 msgstr "ANVÄNDARSIGNAL 2"
 
-#: gedlib/messages.c:363
+#: gedlib/messages.c:364
 msgid "DEATH OF CHILD"
 msgstr "BARN DÖTT"
 
-#: gedlib/messages.c:364
+#: gedlib/messages.c:365
 msgid "POWER-FAIL RESTART"
 msgstr "STRÖMAVBROTTSOMSTART"
 
-#: gedlib/messages.c:365
+#: gedlib/messages.c:366
 msgid "WINDOW CHANGE"
 msgstr "FÖNSTERÄNDRING"
 
-#: gedlib/messages.c:366
+#: gedlib/messages.c:367
 msgid "Unknown signal"
 msgstr "Okänd signal"
 
 #. &&end signals
 #. browse display stuff
-#: gedlib/messages.c:370
+#: gedlib/messages.c:371
 msgid "person"
 msgstr "person"
 
-#: gedlib/messages.c:371
+#: gedlib/messages.c:372
 msgid ", of "
 msgstr ", från "
 
-#: gedlib/messages.c:372
+#: gedlib/messages.c:373
 msgid "father"
 msgstr "fader"
 
-#: gedlib/messages.c:373
+#: gedlib/messages.c:374
 msgid "mother"
 msgstr "moder"
 
-#: gedlib/messages.c:374
+#: gedlib/messages.c:375
 msgid "spouse"
 msgstr "maka(e)"
 
-#: gedlib/messages.c:375
+#: gedlib/messages.c:376
 msgid "child"
 msgstr "barn"
 
 #. &&begin display abbreviations
 #. m.: married
-#: gedlib/messages.c:378
+#: gedlib/messages.c:379
 msgid "m. "
 msgstr "g. "
 
 #. div.: divorced
-#: gedlib/messages.c:380
+#: gedlib/messages.c:381
 msgid "div. "
 msgstr "ski."
 
 #. b.: born
-#: gedlib/messages.c:382
+#: gedlib/messages.c:383
 msgid "b. "
 msgstr "f. "
 
 #. bap.: baptized
-#: gedlib/messages.c:384
+#: gedlib/messages.c:385
 msgid "bap. "
 msgstr "döp. "
 
 #. d.: died
-#: gedlib/messages.c:386
+#: gedlib/messages.c:387
 msgid "d. "
 msgstr "d. "
 
 #. bur.: buried
-#: gedlib/messages.c:388
+#: gedlib/messages.c:389
 msgid "bur. "
 msgstr "beg. "
 
 #. cb.: child born
-#: gedlib/messages.c:390
+#: gedlib/messages.c:391
 msgid "cb. "
 msgstr "bf. "
 
 #. &&end display abbreviations, begin long forms
-#: gedlib/messages.c:392
+#: gedlib/messages.c:393
 msgid "married: "
 msgstr "gift: "
 
-#: gedlib/messages.c:393
+#: gedlib/messages.c:394
 msgid "born: "
 msgstr "född: "
 
-#: gedlib/messages.c:394
+#: gedlib/messages.c:395
 msgid "bapt: "
 msgstr "döpt: "
 
-#: gedlib/messages.c:395
+#: gedlib/messages.c:396
 msgid "died: "
 msgstr "död: "
 
-#: gedlib/messages.c:396
+#: gedlib/messages.c:397
 msgid "buri: "
 msgstr "begr: "
 
 #. &&end display long forms
 #. editing errors
-#: gedlib/messages.c:400
+#: gedlib/messages.c:401
 msgid "You cannot edit the INDI line in a person record."
 msgstr "Du kan inte redigera INDI-raden i en personpost."
 
-#: gedlib/messages.c:401
+#: gedlib/messages.c:402
 msgid "You cannot edit the FAMC line in a person record."
 msgstr "Du kan inte redigera FAMC-raden i en personpost."
 
-#: gedlib/messages.c:402
+#: gedlib/messages.c:403
 msgid "You cannot edit the FAMS lines in a person record."
 msgstr "Du kan inte redigera FAMS-raden i en personpost."
 
-#: gedlib/messages.c:403
+#: gedlib/messages.c:404
 msgid "You cannot edit the FAM line in a family record."
 msgstr "Du kan inte redigera FAM-raden i en familjepost."
 
-#: gedlib/messages.c:404
+#: gedlib/messages.c:405
 msgid "You cannot edit the HUSB line in a family record."
 msgstr "Du kan inte redigera HUSB-raden i en familjepost."
 
-#: gedlib/messages.c:405
+#: gedlib/messages.c:406
 msgid "You cannot edit the WIFE line in a family record."
 msgstr "Du kan inte redigera WIFE-raden i en familjepost."
 
-#: gedlib/messages.c:406
+#: gedlib/messages.c:407
 msgid "You cannot edit the CHIL lines in a family record."
 msgstr "Du kan inte redigera CHIL-raderna i en familjepost."
 
-#: gedlib/messages.c:407
+#: gedlib/messages.c:408
 msgid "The record is empty."
 msgstr "Posten är tom."
 
-#: gedlib/messages.c:408
+#: gedlib/messages.c:409
 msgid "The record does not begin with an INDI line."
 msgstr "Posten börjar inte med en INDI-rad."
 
-#: gedlib/messages.c:409
+#: gedlib/messages.c:410
 msgid "The record does not begin with a FAM line."
 msgstr "Posten börjar inte med en FAM-rad."
 
-#: gedlib/messages.c:410
+#: gedlib/messages.c:411
 msgid "The record does not begin with a SOUR line."
 msgstr "Posten börjar inte med en SOUR-rad."
 
-#: gedlib/messages.c:411
+#: gedlib/messages.c:412
 msgid "The record does not begin with an EVEN line."
 msgstr "Posten börjar inte med en EVEN-rad."
 
-#: gedlib/messages.c:412
+#: gedlib/messages.c:413
 msgid "INDI, FAM, SOUR, EVEN records may not be other records."
 msgstr "INDI-, FAM-, SOUR- och EVEN-poster får inte vara andra poster."
 
-#: gedlib/messages.c:413
+#: gedlib/messages.c:414
 msgid "The record contains multiple level 0 lines."
 msgstr "Posten innehåller flera rader på 0-nivån."
 
-#: gedlib/messages.c:414
+#: gedlib/messages.c:415
 msgid "This person record has bad GEDCOM name syntax."
 msgstr "Denna personpost har ogiltig GEDCOM-namnsyntax."
 
-#: gedlib/messages.c:415
+#: gedlib/messages.c:416
 msgid "You cannot change the sex of a parent."
 msgstr "Du kan inte ändra kön för en förälder."
 
-#: gedlib/messages.c:416
+#: gedlib/messages.c:417
 msgid "REFN key is already in use."
 msgstr "REFN-nyckel används redan."
 
-#: gedlib/messages.c:418
+#: gedlib/messages.c:419
 msgid "Tag is too long to connect automatically."
 msgstr "Taggen är för lång för att anknyta automatiskt."
 
 #. I,F,S,E,X are conventional letters, so leave them as is)
-#: gedlib/messages.c:420
+#: gedlib/messages.c:421
 #, fuzzy, c-format
 msgid "Database records (%dI, %dF, %dS, %dE, %dX)"
 msgstr "Databasposter (%dP, %dF, %dS, %dE, %dX)"
 
 #. initialization
-#: gedlib/messages.c:423
+#: gedlib/messages.c:424
 #, c-format
 msgid ""
 "The requested window size (%d,%d) is too large for your terminal (%d,%d).\n"
@@ -1409,7 +1413,7 @@ msgstr ""
 "Den efterfrågade fönsterstorleken (%d,%d) är för stor för din terminal (%d,%"
 "d).\n"
 
-#: gedlib/messages.c:424
+#: gedlib/messages.c:425
 #, c-format
 msgid "The requested window size (%d,%d) is too small for LifeLines (%d,%d).\n"
 msgstr ""
@@ -1417,985 +1421,985 @@ msgstr ""
 "d). \n"
 
 #. menus
-#: gedlib/messages.c:427
+#: gedlib/messages.c:428
 #, c-format
 msgid "LifeLines %s - Genealogical DB and Programming System"
 msgstr "LifeLines %s - Genealogiskt databas- och programmeringssystem"
 
-#: gedlib/messages.c:428
+#: gedlib/messages.c:429
 msgid "Copyright(c) 1991 to 1996, by T. T. Wetmore IV"
 msgstr "Copyright(c) 1991 till 1996, av T. T. Wetmore IV"
 
-#: gedlib/messages.c:429
+#: gedlib/messages.c:430
 #, c-format
 msgid "Current Database - %s"
 msgstr "Aktuell databas - %s"
 
 #. immutable is read-only with no reader/writer conflict protection
-#: gedlib/messages.c:431
+#: gedlib/messages.c:432
 msgid " (immutable)"
 msgstr " (oföränderlig)"
 
 #. read-only has protection against reader/writer conflict
-#: gedlib/messages.c:433
+#: gedlib/messages.c:434
 msgid " (read only)"
 msgstr "(skrivskyddad)"
 
-#: gedlib/messages.c:434
+#: gedlib/messages.c:435
 msgid "Please choose an operation:"
 msgstr "Välj ett kommando:"
 
-#: gedlib/messages.c:435
+#: gedlib/messages.c:436
 msgid "Not valid command"
 msgstr "Ogiltigt kommando"
 
 #. prompt, full list, yes list
-#: gedlib/messages.c:438
+#: gedlib/messages.c:439
 msgid "enter y (yes) or n (no): "
 msgstr "skriv in j (ja) eller n (nej): "
 
-#: gedlib/messages.c:439
+#: gedlib/messages.c:440
 msgid "yYnN"
 msgstr "jJnN"
 
 #. valid chars for yes/no answer
-#: gedlib/messages.c:440
+#: gedlib/messages.c:441
 msgid "yY"
 msgstr "jJ"
 
 #. chars meaning yes answer
 #. browse menu titles
-#: gedlib/messages.c:443
+#: gedlib/messages.c:444
 msgid "LifeLines -- Person Browse Screen (* toggles menu)"
 msgstr "LifeLines -- Personfönster (* visar/döljer meny)"
 
-#: gedlib/messages.c:444
+#: gedlib/messages.c:445
 msgid "LifeLines -- Family Browse Screen (* toggles menu)"
 msgstr "LifeLines -- Familjefönster (* visar/döljer meny)"
 
-#: gedlib/messages.c:445
+#: gedlib/messages.c:446
 msgid "LifeLines -- Two Person Browse Screen (* toggles menu)"
 msgstr "LifeLines -- Tvåpersonsfönster (* visar/döljer meny)"
 
-#: gedlib/messages.c:446
+#: gedlib/messages.c:447
 msgid "LifeLines -- Two Family Browse Screen (* toggles menu)"
 msgstr "LifeLines -- Tvåfamiljsfönster (* visar/döljer meny)"
 
-#: gedlib/messages.c:447
+#: gedlib/messages.c:448
 msgid "LifeLines -- Auxiliary Browse Screen (* toggles menu)"
 msgstr "LifeLines -- Assistentfönster (* visar/döljer meny)"
 
-#: gedlib/messages.c:448
+#: gedlib/messages.c:449
 msgid "LifeLines -- List Browse Screen (* toggles menu)"
 msgstr "LifeLines -- Listfönster (* visar/döljer meny)"
 
 #. list menu
-#: gedlib/messages.c:451
+#: gedlib/messages.c:452
 msgid "Commands:   j Move down     k Move up    i Select     q Quit"
 msgstr "Kommandon:   j Flytta ned     k Flytta upp    i Välj     q Avsluta"
 
-#: gedlib/messages.c:452
+#: gedlib/messages.c:453
 msgid "Commands:   j Move down     k Move up    q Quit"
 msgstr "Kommandon:   j Flytta ned     k Flytta upp    q Avsluta"
 
-#: gedlib/messages.c:453
+#: gedlib/messages.c:454
 msgid "Messages:"
 msgstr "Meddelanden:"
 
 #. adding new xref
-#: gedlib/messages.c:456
+#: gedlib/messages.c:457
 msgid "Please choose from the following options:"
 msgstr "Välj något av följande alternativ:"
 
-#: gedlib/messages.c:457
+#: gedlib/messages.c:458
 #, c-format
 msgid "New record is %s"
 msgstr "Den nya posten är %s"
 
-#: gedlib/messages.c:458
+#: gedlib/messages.c:459
 msgid "Insert xref automatically at bottom of current record."
 msgstr "Lägg in korsref automatiskt längst ned i aktuell post."
 
-#: gedlib/messages.c:459
+#: gedlib/messages.c:460
 msgid "Edit current record now to add xref manually."
 msgstr "Redigera aktuell post nu för att lägga till korsref manuellt."
 
-#: gedlib/messages.c:460
+#: gedlib/messages.c:461
 msgid "Browse new record (without adding xref)."
 msgstr "Bläddra i ny post (utan att lägga till korsref)."
 
-#: gedlib/messages.c:461
+#: gedlib/messages.c:462
 msgid "Return to current record (without adding xref)."
 msgstr "Återgå till aktuell post (utan att lägga till korsref)."
 
 #. misc
-#: gedlib/messages.c:464
+#: gedlib/messages.c:465
 msgid "Spouse unknown"
 msgstr "Maka(e) okänd"
 
-#: gedlib/messages.c:465
+#: gedlib/messages.c:466
 msgid "No more history"
 msgstr "Slut på historik"
 
-#: gedlib/messages.c:466
+#: gedlib/messages.c:467
 msgid "Bad history count"
 msgstr "Ogiltig historiknumrering"
 
-#: gedlib/messages.c:467
+#: gedlib/messages.c:468
 msgid "Bad backup history count"
 msgstr "Ogiltig säkerhetskopierad historiknumrering"
 
-#: gedlib/messages.c:468
+#: gedlib/messages.c:469
 msgid "Bad history length"
 msgstr "Ogiltig historiklängd"
 
-#: gedlib/messages.c:469
+#: gedlib/messages.c:470
 #, c-format
 msgid "Delete history (%d entries) ?"
 msgstr "Radera historik (%d stycken) ?"
 
-#: gedlib/messages.c:470
+#: gedlib/messages.c:471
 msgid "Error accessing data"
 msgstr "Fel vid dataåtkomst"
 
-#: gedlib/messages.c:471
+#: gedlib/messages.c:472
 msgid "Choose from history"
 msgstr "Välj ur historik"
 
-#: gedlib/messages.c:472
+#: gedlib/messages.c:473
 msgid ""
 "Cannot combine immutable (-i) or read-only (-r) with read-write (-w) access."
 msgstr ""
 "Kan inte kombinera oföränderlig (-i) eller skrivskyddad (-r) med "
 "skrivåtkomst (-w)."
 
-#: gedlib/messages.c:473
+#: gedlib/messages.c:474
 msgid "Cannot combine forceopen (-f) and lock (-l) flags."
 msgstr "Kan inte kombinera flaggorna tvinga upp (-f) och lås (-l)."
 
-#: gedlib/messages.c:474
+#: gedlib/messages.c:475
 msgid "Program"
 msgstr "Program"
 
-#: gedlib/messages.c:475
+#: gedlib/messages.c:476
 msgid "Default path: "
 msgstr "Förvald sökväg: "
 
-#: gedlib/messages.c:476
+#: gedlib/messages.c:477
 msgid "WARNING: missing keys"
 msgstr "VARNING: nycklar saknas"
 
-#: gedlib/messages.c:477
+#: gedlib/messages.c:478
 msgid "WARNING: invalid pointer"
 msgstr "VARNING: ogiltig visare"
 
-#: gedlib/messages.c:478
+#: gedlib/messages.c:479
 msgid "enter file name"
 msgstr "skriv in filnamn"
 
-#: gedlib/messages.c:479
+#: gedlib/messages.c:480
 #, c-format
 msgid "enter file name (*%s)"
 msgstr "skriv in filnamn (*%s)"
 
-#: gedlib/messages.c:480
+#: gedlib/messages.c:481
 msgid "There is no record with that key or reference."
 msgstr "Det finns ingen post med den nyckeln eller referensen."
 
 #. translation table errors
-#: gedlib/messages.c:483
+#: gedlib/messages.c:484
 msgid "Bad decimal number format."
 msgstr "Ogiltigt format för decimaltal."
 
-#: gedlib/messages.c:484
+#: gedlib/messages.c:485
 msgid "Bad hexidecimal number format."
 msgstr "Ogiltigt format för hexadecimala tal."
 
-#: gedlib/messages.c:485
+#: gedlib/messages.c:486
 msgid "No replacement string on line."
 msgstr "Ingen ersättningssträng på raden."
 
-#: gedlib/messages.c:486
+#: gedlib/messages.c:487
 msgid "No original string on line."
 msgstr "Ingen ursprunglig sträng på raden."
 
-#: gedlib/messages.c:487
+#: gedlib/messages.c:488
 #, fuzzy
 msgid "Bad escape format."
 msgstr "Dåligt escape-format."
 
-#: gedlib/messages.c:488
+#: gedlib/messages.c:489
 #, c-format
 msgid "%s: line %d (entry %d): %s\n"
 msgstr "%s: rad %d (notering %d): %s\n"
 
 #. many menus
-#: gedlib/messages.c:491 liflines/menuitem.c:86
+#: gedlib/messages.c:492 liflines/menuitem.c:86
 msgid "q  Return to main menu"
 msgstr "q  Återgå till huvudmenyn"
 
-#: gedlib/messages.c:492
+#: gedlib/messages.c:493
 msgid "q  Return to previous menu"
 msgstr "q  Återgå till föregående meny"
 
-#: gedlib/messages.c:493
+#: gedlib/messages.c:494
 msgid "q  Quit program"
 msgstr "q  Avsluta programmet"
 
 #. &&begin main menu (70 chars after spaces)
-#: gedlib/messages.c:496
+#: gedlib/messages.c:497
 msgid "b  Browse the persons in the database"
 msgstr "b  Bläddra mellan personer i databasen"
 
-#: gedlib/messages.c:497
+#: gedlib/messages.c:498
 msgid "s  Search database"
 msgstr "s  Sök i databasen"
 
-#: gedlib/messages.c:498
+#: gedlib/messages.c:499
 msgid "a  Add information to the database"
 msgstr "a  Lägg till information i databasen"
 
-#: gedlib/messages.c:499
+#: gedlib/messages.c:500
 msgid "d  Delete information from the database"
 msgstr "d  Ta bort information från databasen"
 
-#: gedlib/messages.c:500
+#: gedlib/messages.c:501
 msgid "r  Generate report by entering report name"
 msgstr "r  Skapa rapport genom att ange rapportens namn"
 
-#: gedlib/messages.c:501
+#: gedlib/messages.c:502
 msgid "p  Pick a report from list and run"
 msgstr "p  Välj en rapport från lista och kör"
 
-#: gedlib/messages.c:502
+#: gedlib/messages.c:503
 msgid "c  Character set options"
 msgstr "c  Inställningar för teckenuppsättning"
 
-#: gedlib/messages.c:503
+#: gedlib/messages.c:504
 msgid "t  Modify character translation tables"
 msgstr "t  Modifiera teckenöversättningstabeller"
 
-#: gedlib/messages.c:504
+#: gedlib/messages.c:505
 msgid "u  Miscellaneous utilities"
 msgstr "u  Diverse verktyg"
 
-#: gedlib/messages.c:505
+#: gedlib/messages.c:506
 msgid "x  Handle source, event and other records"
 msgstr "x  Hantera käll-, händelse- och övriga poster"
 
 #. &&end main menu, begin utility menu
-#: gedlib/messages.c:508
+#: gedlib/messages.c:509
 msgid "What utility do you want to perform?"
 msgstr "Vilket verktyg vill du använda?"
 
-#: gedlib/messages.c:509
+#: gedlib/messages.c:510
 msgid "s  Save the database in a GEDCOM file"
 msgstr "s  Spara databasen till GEDCOM-fil"
 
-#: gedlib/messages.c:510
+#: gedlib/messages.c:511
 msgid "r  Read in data from a GEDCOM file"
 msgstr "r  Läs in data från en GEDCOM-fil"
 
-#: gedlib/messages.c:511
+#: gedlib/messages.c:512
 msgid "k  Find a person's key value"
 msgstr "k  Finn nyckelvärde för en person"
 
-#: gedlib/messages.c:512
+#: gedlib/messages.c:513
 msgid "i  Identify a person from key value"
 msgstr "i  Identifiera en person via nyckelvärde"
 
-#: gedlib/messages.c:513
+#: gedlib/messages.c:514
 msgid "d  Show database statistics"
 msgstr "d  Visa databasstatistik"
 
-#: gedlib/messages.c:514
+#: gedlib/messages.c:515
 msgid "m  Show memory statistics"
 msgstr "m  Visa minnesstatistik"
 
-#: gedlib/messages.c:515
+#: gedlib/messages.c:516
 msgid "e  Edit the place abbreviation file"
 msgstr "e  Redigera platsförkortningsfilen"
 
-#: gedlib/messages.c:516
+#: gedlib/messages.c:517
 msgid "o  Edit the user options file"
 msgstr "o  Redigera fil för användarinställningar"
 
 #. &&end utility menu, begin extra menu
-#: gedlib/messages.c:519
+#: gedlib/messages.c:520
 msgid "What activity do you want to perform?"
 msgstr "Vilken funktion vill du använda?"
 
-#: gedlib/messages.c:520
+#: gedlib/messages.c:521
 msgid "s  Browse source records"
 msgstr "s  Bläddra i källposter"
 
-#: gedlib/messages.c:521
+#: gedlib/messages.c:522
 msgid "e  Browse event records"
 msgstr "e  Bläddra i händelseposter"
 
-#: gedlib/messages.c:522
+#: gedlib/messages.c:523
 msgid "x  Browse other records"
 msgstr "x  Bläddra i övriga posttyper"
 
-#: gedlib/messages.c:523
+#: gedlib/messages.c:524
 msgid "1  Add a source record to the database"
 msgstr "1  Lägg till en källpost i databasen"
 
-#: gedlib/messages.c:524
+#: gedlib/messages.c:525
 msgid "2  Edit source record from the database"
 msgstr "2  Redigera källpost i databasen"
 
-#: gedlib/messages.c:525
+#: gedlib/messages.c:526
 msgid "3  Add an event record to the database"
 msgstr "3  Lägg till en händelsepost i databasen"
 
-#: gedlib/messages.c:526
+#: gedlib/messages.c:527
 msgid "4  Edit event record from the database"
 msgstr "4  Redigera händelsepost i databasen"
 
-#: gedlib/messages.c:527
+#: gedlib/messages.c:528
 msgid "5  Add an other record to the database"
 msgstr "5  Lägg till en post av annan typ i databasen"
 
-#: gedlib/messages.c:528
+#: gedlib/messages.c:529
 msgid "6  Edit other record from the database"
 msgstr "6  Redigera en post av annan typ i databasen"
 
 #. end extra menu, begin character set menu
-#: gedlib/messages.c:531
+#: gedlib/messages.c:532
 msgid "Character set menu"
 msgstr "Meny för teckenuppsättningar"
 
-#: gedlib/messages.c:532
+#: gedlib/messages.c:533
 msgid "t  Edit translation tables"
 msgstr "t  Redigera teckenöversättningstabeller"
 
-#: gedlib/messages.c:533
+#: gedlib/messages.c:534
 msgid "r  Report character set setup"
 msgstr "c  Inst. för teckenupps., rapporter"
 
-#: gedlib/messages.c:534
+#: gedlib/messages.c:535
 msgid "Internal code set: "
 msgstr "Intern koduppsättning: "
 
-#: gedlib/messages.c:535
+#: gedlib/messages.c:536
 msgid "Display locale: "
 msgstr "Visa lokal: "
 
 #. The following 5 choices look best if padded to same length (70 chars after spaces)
-#: gedlib/messages.c:537
+#: gedlib/messages.c:538
 msgid "s  Edit custom sort table        "
 msgstr "s  Redigera anp. sorteringstabell"
 
-#: gedlib/messages.c:538
+#: gedlib/messages.c:539
 msgid "p  Edit custom sort prefix table "
 msgstr "p  Red. anp. prefixsorteringstab."
 
-#: gedlib/messages.c:539
+#: gedlib/messages.c:540
 #, fuzzy
 msgid "c  Edit custom codepage mapping  "
 msgstr "c  Red. anp. codepage-mappning   "
 
-#: gedlib/messages.c:540
+#: gedlib/messages.c:541
 msgid "l  Edit custom lower case mapping"
 msgstr "l  Red. anp. mappning av gemener "
 
-#: gedlib/messages.c:541
+#: gedlib/messages.c:542
 msgid "u  Edit custom upper case mapping"
 msgstr "u  Red. anp. mappning av versaler"
 
 #. menu for report character set issues
-#: gedlib/messages.c:543
+#: gedlib/messages.c:544
 msgid "Report character set menu"
 msgstr "Teckenuppsättning i rapporter, meny"
 
-#: gedlib/messages.c:544
+#: gedlib/messages.c:545
 msgid "Report code set: "
 msgstr "Teckenkodning för rapporter: "
 
 #. &&begin translation table menu
-#: gedlib/messages.c:547
+#: gedlib/messages.c:548
 msgid "Translation Tables"
 msgstr "Teckenöversättningstabeller"
 
-#: gedlib/messages.c:548
+#: gedlib/messages.c:549
 msgid "e  edit individual tables (in db)"
 msgstr "e  redigera enskilda tabeller (i db)"
 
-#: gedlib/messages.c:549
+#: gedlib/messages.c:550
 msgid "l  load a table from a file (into db)"
 msgstr "l  ladda en tabell från en fil (till db)"
 
-#: gedlib/messages.c:550
+#: gedlib/messages.c:551
 msgid "s  save a table to a file (from db)"
 msgstr "s  spara en tabell till en fil (från db)"
 
-#: gedlib/messages.c:551
+#: gedlib/messages.c:552
 msgid "x  export all tables (from db to files)"
 msgstr "x  exportera alla tabeller (från db till filer)"
 
-#: gedlib/messages.c:552
+#: gedlib/messages.c:553
 msgid "i  import all tables (from files into db)"
 msgstr "i  importera alla tabeller (från filer till db)"
 
-#: gedlib/messages.c:553
+#: gedlib/messages.c:554
 msgid "export/import directory:"
 msgstr "exportera/importera katalog:"
 
 #. menus for translation tables
-#: gedlib/messages.c:556
+#: gedlib/messages.c:557
 msgid "Which character mapping do you want to edit?"
 msgstr "Vilken teckenmappning vill du redigera?"
 
-#: gedlib/messages.c:557
+#: gedlib/messages.c:558
 msgid "Which character mapping do you want to save?"
 msgstr "Vilken teckenmappning vill du spara?"
 
 #. strings for choosing translation table (these looks best if choices padded to same length)
-#: gedlib/messages.c:559
+#: gedlib/messages.c:560
 msgid "e  Editor to Internal mapping "
 msgstr "e  Mappning från editor till intern "
 
-#: gedlib/messages.c:560
+#: gedlib/messages.c:561
 msgid "m  Internal to Editor mapping "
 msgstr "m  Mappning från intern till editor "
 
-#: gedlib/messages.c:561
+#: gedlib/messages.c:562
 msgid "i  GEDCOM to Internal mapping "
 msgstr "i  Mappning från GEDCOM till intern "
 
-#: gedlib/messages.c:562
+#: gedlib/messages.c:563
 msgid "x  Internal to GEDCOM mapping "
 msgstr "x  Mappning från intern till GEDCOM "
 
-#: gedlib/messages.c:563
+#: gedlib/messages.c:564
 msgid "g  Display to Internal mapping"
 msgstr "g  Mappning från skärm till intern  "
 
-#: gedlib/messages.c:564
+#: gedlib/messages.c:565
 msgid "d  Internal to Display mapping"
 msgstr "d  Mappning från intern till skärm  "
 
-#: gedlib/messages.c:565
+#: gedlib/messages.c:566
 msgid "r  Internal to Report mapping "
 msgstr "r  Mappning från intern till rapport"
 
 #. not yet implemented choices
-#: gedlib/messages.c:567
+#: gedlib/messages.c:568
 msgid "Not implemented yet"
 msgstr "Ej implementerat ännu"
 
 #. &&begin add menu
-#: gedlib/messages.c:570
+#: gedlib/messages.c:571
 msgid "What do you want to add?"
 msgstr "Vad vill du lägga till?"
 
-#: gedlib/messages.c:571
+#: gedlib/messages.c:572
 msgid "p  Person - add new person to the database"
 msgstr "p  Person - lägg till ny person i databasen"
 
-#: gedlib/messages.c:572
+#: gedlib/messages.c:573
 msgid "f  Family - create family record from one or two spouses"
 msgstr "f  Familj - skapa familjepost med en eller två makar"
 
-#: gedlib/messages.c:573
+#: gedlib/messages.c:574
 msgid "c  Child - add a child to an existing family"
 msgstr "c  Barn - lägg till ett barn i en befintlig familj"
 
-#: gedlib/messages.c:574
+#: gedlib/messages.c:575
 msgid "s  Spouse - add a spouse to an existing family"
 msgstr "s  Maka(e) - lägg till en maka(e) i en befintlig familj"
 
 #. &&end add menu, begin delete menu
-#: gedlib/messages.c:577
+#: gedlib/messages.c:578
 msgid "What do you want to remove?"
 msgstr "Vad vill du ta bort?"
 
-#: gedlib/messages.c:578
+#: gedlib/messages.c:579
 msgid "c  Child - remove a child from his/her family"
 msgstr "c  Barn - ta bort ett barn från dess familj"
 
-#: gedlib/messages.c:579
+#: gedlib/messages.c:580
 msgid "s  Spouse - remove a spouse from a family"
 msgstr "s  Maka(e) - ta bort en maka(e) från en befintlig familj"
 
-#: gedlib/messages.c:580
+#: gedlib/messages.c:581
 msgid "i  Individual - remove a person completely"
 msgstr "i  Person - ta bort en person fullständigt"
 
-#: gedlib/messages.c:581
+#: gedlib/messages.c:582
 msgid "f  Family - remove a family completely"
 msgstr "f  Familj - ta bort en familj fullständigt"
 
 #. &&end delete menu, begin scan menu
-#: gedlib/messages.c:584
+#: gedlib/messages.c:585
 msgid "What scan type?"
 msgstr "Vilken typ av sökning?"
 
-#: gedlib/messages.c:585
+#: gedlib/messages.c:586
 msgid "f  Full name scan"
 msgstr "f  Sök på hela namnet"
 
-#: gedlib/messages.c:586
+#: gedlib/messages.c:587
 msgid "n  Name fragment (whitespace-delimited) scan"
 msgstr "n  Sök på namnfragment (avdelade med blanksteg)"
 
-#: gedlib/messages.c:587
+#: gedlib/messages.c:588
 msgid "r  Refn scan"
 msgstr "r  Refn-sökning"
 
-#: gedlib/messages.c:588
+#: gedlib/messages.c:589
 msgid "Performing full name scan"
 msgstr "Utför sökning på hela namnet"
 
-#: gedlib/messages.c:589
+#: gedlib/messages.c:590
 msgid "Performing name fragment scan"
 msgstr "Utför sökning på namnfragment"
 
-#: gedlib/messages.c:590
+#: gedlib/messages.c:591
 msgid "Performing refn scan"
 msgstr "Utför sökning på refn"
 
-#: gedlib/messages.c:591
+#: gedlib/messages.c:592
 msgid "No records found in scan"
 msgstr "Inga poster återfanns i sökning"
 
 #. &&complex date strings (A=abbrev, B=full)
-#: gedlib/messages.c:594
+#: gedlib/messages.c:595
 msgid "abt %1"
 msgstr "omk %1"
 
-#: gedlib/messages.c:595
+#: gedlib/messages.c:596
 msgid "about %1"
 msgstr "omkring %1"
 
-#: gedlib/messages.c:596
+#: gedlib/messages.c:597
 msgid "est %1"
 msgstr "upp %1"
 
-#: gedlib/messages.c:597
+#: gedlib/messages.c:598
 msgid "estimated %1"
 msgstr "uppskattat %1"
 
-#: gedlib/messages.c:598
+#: gedlib/messages.c:599
 msgid "cal %1"
 msgstr "ber %1"
 
-#: gedlib/messages.c:599
+#: gedlib/messages.c:600
 msgid "calculated %1"
 msgstr "beräknat %1"
 
-#: gedlib/messages.c:600
+#: gedlib/messages.c:601
 msgid "fr %1"
 msgstr "fr %1"
 
-#: gedlib/messages.c:601
+#: gedlib/messages.c:602
 msgid "from %1"
 msgstr "från %1"
 
-#: gedlib/messages.c:602 gedlib/messages.c:603
+#: gedlib/messages.c:603 gedlib/messages.c:604
 msgid "to %1"
 msgstr "t %1"
 
-#: gedlib/messages.c:604
+#: gedlib/messages.c:605
 msgid "fr %1 to %2"
 msgstr "fr %1 t %2"
 
-#: gedlib/messages.c:605
+#: gedlib/messages.c:606
 msgid "from %1 to %2"
 msgstr "från %1 till %2"
 
-#: gedlib/messages.c:606
+#: gedlib/messages.c:607
 msgid "bef %1"
 msgstr "för %1"
 
-#: gedlib/messages.c:607
+#: gedlib/messages.c:608
 msgid "before %1"
 msgstr "före %1"
 
-#: gedlib/messages.c:608
+#: gedlib/messages.c:609
 msgid "aft %1"
 msgstr "eft %1"
 
-#: gedlib/messages.c:609
+#: gedlib/messages.c:610
 msgid "after %1"
 msgstr "efter %1"
 
-#: gedlib/messages.c:610
+#: gedlib/messages.c:611
 msgid "bet %1 and %2"
 msgstr "mel %1 och %2"
 
-#: gedlib/messages.c:611
+#: gedlib/messages.c:612
 msgid "between %1 and %2"
 msgstr "mellan %1 och %2"
 
 #. &&origin/era trailers
 #. B.C. = Before Christ (calendar)
-#: gedlib/messages.c:614
+#: gedlib/messages.c:615
 msgid "B.C."
 msgstr "f. kr."
 
 #. BC = Before Christ (calendar)
-#: gedlib/messages.c:616
+#: gedlib/messages.c:617
 msgid "BC"
 msgstr "fkr"
 
 #. B.C.E. = Before Common Era (calendar)
-#: gedlib/messages.c:618
+#: gedlib/messages.c:619
 msgid "B.C.E."
 msgstr ""
 
 #. BCE. = Before Common Era (calendar)
-#: gedlib/messages.c:620
+#: gedlib/messages.c:621
 msgid "BCE"
 msgstr ""
 
 #. A.D. = Anno Domini (calendar)
-#: gedlib/messages.c:622
+#: gedlib/messages.c:623
 msgid "A.D."
 msgstr "a. d."
 
 #. AD = Anno Domini (calendar)
-#: gedlib/messages.c:624
+#: gedlib/messages.c:625
 msgid "AD"
 msgstr "ad"
 
 #. C.E. = Common Era (calendar)
-#: gedlib/messages.c:626
+#: gedlib/messages.c:627
 msgid "C.E."
 msgstr ""
 
 #. CE = Common Era (calendar)
-#: gedlib/messages.c:628
+#: gedlib/messages.c:629
 msgid "CE"
 msgstr ""
 
 #. &&calendar pics
 #. Julian calendar year
-#: gedlib/messages.c:631
+#: gedlib/messages.c:632
 msgid "%1J"
 msgstr ""
 
 #. Hebrew calendar year
-#: gedlib/messages.c:633
+#: gedlib/messages.c:634
 msgid "%1 HEB"
 msgstr ""
 
 #. French Republic calendar year
-#: gedlib/messages.c:635
+#: gedlib/messages.c:636
 msgid "%1 FR"
 msgstr ""
 
 #. Roman calendar year -- Anno Urbe Condite ?
-#: gedlib/messages.c:637
+#: gedlib/messages.c:638
 msgid "%1 AUC"
 msgstr ""
 
 #. &&Gregorian/Julian months
-#: gedlib/messages.c:639
+#: gedlib/messages.c:640
 msgid "jan"
 msgstr "jan"
 
-#: gedlib/messages.c:640
+#: gedlib/messages.c:641
 msgid "january"
 msgstr "januari"
 
-#: gedlib/messages.c:641
+#: gedlib/messages.c:642
 msgid "feb"
 msgstr "feb"
 
-#: gedlib/messages.c:642
+#: gedlib/messages.c:643
 msgid "february"
 msgstr "februari"
 
-#: gedlib/messages.c:643
+#: gedlib/messages.c:644
 msgid "mar"
 msgstr "mar"
 
-#: gedlib/messages.c:644
+#: gedlib/messages.c:645
 msgid "march"
 msgstr "mars"
 
-#: gedlib/messages.c:645
+#: gedlib/messages.c:646
 msgid "apr"
 msgstr "apr"
 
-#: gedlib/messages.c:646
+#: gedlib/messages.c:647
 msgid "april"
 msgstr "april"
 
 #. Put short form for may (don't use **)
-#: gedlib/messages.c:648
+#: gedlib/messages.c:649
 msgid "**may"
 msgstr "maj"
 
-#: gedlib/messages.c:649
+#: gedlib/messages.c:650
 msgid "may"
 msgstr "maj"
 
-#: gedlib/messages.c:650
+#: gedlib/messages.c:651
 msgid "jun"
 msgstr "jun"
 
-#: gedlib/messages.c:651
+#: gedlib/messages.c:652
 msgid "june"
 msgstr "juni"
 
-#: gedlib/messages.c:652
+#: gedlib/messages.c:653
 msgid "jul"
 msgstr "jul"
 
-#: gedlib/messages.c:653
+#: gedlib/messages.c:654
 msgid "july"
 msgstr "juli"
 
-#: gedlib/messages.c:654
+#: gedlib/messages.c:655
 msgid "aug"
 msgstr "aug"
 
-#: gedlib/messages.c:655
+#: gedlib/messages.c:656
 msgid "august"
 msgstr "augusti"
 
-#: gedlib/messages.c:656
+#: gedlib/messages.c:657
 msgid "sep"
 msgstr "sep"
 
-#: gedlib/messages.c:657
+#: gedlib/messages.c:658
 msgid "september"
 msgstr "september"
 
-#: gedlib/messages.c:658
+#: gedlib/messages.c:659
 msgid "oct"
 msgstr "okt"
 
-#: gedlib/messages.c:659
+#: gedlib/messages.c:660
 msgid "october"
 msgstr "oktober"
 
-#: gedlib/messages.c:660
+#: gedlib/messages.c:661
 msgid "nov"
 msgstr "nov"
 
-#: gedlib/messages.c:661
+#: gedlib/messages.c:662
 msgid "november"
 msgstr "november"
 
-#: gedlib/messages.c:662
+#: gedlib/messages.c:663
 msgid "dec"
 msgstr "dec"
 
-#: gedlib/messages.c:663
+#: gedlib/messages.c:664
 msgid "december"
 msgstr "december"
 
 #. &&Hebrew months
-#: gedlib/messages.c:665
+#: gedlib/messages.c:666
 msgid "tsh"
 msgstr "tsh"
 
-#: gedlib/messages.c:666
+#: gedlib/messages.c:667
 msgid "tishri"
 msgstr "tishri"
 
-#: gedlib/messages.c:667
+#: gedlib/messages.c:668
 msgid "csh"
 msgstr "csh"
 
-#: gedlib/messages.c:668
+#: gedlib/messages.c:669
 msgid "cheshvan"
 msgstr "cheshvan"
 
-#: gedlib/messages.c:669
+#: gedlib/messages.c:670
 msgid "ksl"
 msgstr "ksl"
 
-#: gedlib/messages.c:670
+#: gedlib/messages.c:671
 msgid "kislev"
 msgstr "kislev"
 
-#: gedlib/messages.c:671
+#: gedlib/messages.c:672
 msgid "tvt"
 msgstr "tvt"
 
-#: gedlib/messages.c:672
+#: gedlib/messages.c:673
 msgid "tevet"
 msgstr "tevet"
 
-#: gedlib/messages.c:673
+#: gedlib/messages.c:674
 msgid "shv"
 msgstr "shv"
 
-#: gedlib/messages.c:674
+#: gedlib/messages.c:675
 msgid "shevat"
 msgstr "shevat"
 
-#: gedlib/messages.c:675
+#: gedlib/messages.c:676
 msgid "adr"
 msgstr "adr"
 
-#: gedlib/messages.c:676
+#: gedlib/messages.c:677
 msgid "adar"
 msgstr "adar"
 
-#: gedlib/messages.c:677
+#: gedlib/messages.c:678
 msgid "ads"
 msgstr "ads"
 
-#: gedlib/messages.c:678
+#: gedlib/messages.c:679
 msgid "adar sheni"
 msgstr "adar sheni"
 
-#: gedlib/messages.c:679
+#: gedlib/messages.c:680
 msgid "nsn"
 msgstr "nsn"
 
-#: gedlib/messages.c:680
+#: gedlib/messages.c:681
 msgid "nisan"
 msgstr "nisan"
 
-#: gedlib/messages.c:681
+#: gedlib/messages.c:682
 msgid "iyr"
 msgstr "iyr"
 
-#: gedlib/messages.c:682
+#: gedlib/messages.c:683
 msgid "iyar"
 msgstr "iyar"
 
-#: gedlib/messages.c:683
+#: gedlib/messages.c:684
 msgid "svn"
 msgstr "svn"
 
-#: gedlib/messages.c:684
+#: gedlib/messages.c:685
 msgid "sivan"
 msgstr "sivan"
 
-#: gedlib/messages.c:685
+#: gedlib/messages.c:686
 msgid "tmz"
 msgstr "tmz"
 
-#: gedlib/messages.c:686
+#: gedlib/messages.c:687
 msgid "tamuz"
 msgstr "tamuz"
 
-#: gedlib/messages.c:687
+#: gedlib/messages.c:688
 msgid "aav"
 msgstr "aav"
 
-#: gedlib/messages.c:688
+#: gedlib/messages.c:689
 msgid "av"
 msgstr "av"
 
-#: gedlib/messages.c:689
+#: gedlib/messages.c:690
 msgid "ell"
 msgstr "ell"
 
-#: gedlib/messages.c:690
+#: gedlib/messages.c:691
 msgid "elul"
 msgstr "elul"
 
 #. &&French Republic months
-#: gedlib/messages.c:692
+#: gedlib/messages.c:693
 msgid "vend"
 msgstr "vend"
 
-#: gedlib/messages.c:693
+#: gedlib/messages.c:694
 msgid "vendemiaire"
 msgstr "vendemiaire"
 
-#: gedlib/messages.c:694
+#: gedlib/messages.c:695
 msgid "brum"
 msgstr "brum"
 
-#: gedlib/messages.c:695
+#: gedlib/messages.c:696
 msgid "brumaire"
 msgstr "brumaire"
 
-#: gedlib/messages.c:696
+#: gedlib/messages.c:697
 msgid "frim"
 msgstr "frim"
 
-#: gedlib/messages.c:697
+#: gedlib/messages.c:698
 msgid "frimaire"
 msgstr "frimaire"
 
-#: gedlib/messages.c:698
+#: gedlib/messages.c:699
 msgid "nivo"
 msgstr "nivo"
 
-#: gedlib/messages.c:699
+#: gedlib/messages.c:700
 msgid "nivose"
 msgstr "nivose"
 
-#: gedlib/messages.c:700
+#: gedlib/messages.c:701
 msgid "pluv"
 msgstr "pluv"
 
-#: gedlib/messages.c:701
+#: gedlib/messages.c:702
 msgid "pluviose"
 msgstr "pluviose"
 
-#: gedlib/messages.c:702
+#: gedlib/messages.c:703
 msgid "vent"
 msgstr "vent"
 
-#: gedlib/messages.c:703
+#: gedlib/messages.c:704
 msgid "ventose"
 msgstr "ventose"
 
-#: gedlib/messages.c:704
+#: gedlib/messages.c:705
 msgid "germ"
 msgstr "germ"
 
-#: gedlib/messages.c:705
+#: gedlib/messages.c:706
 msgid "germinal"
 msgstr "germinal"
 
-#: gedlib/messages.c:706
+#: gedlib/messages.c:707
 msgid "flor"
 msgstr "flor"
 
-#: gedlib/messages.c:707
+#: gedlib/messages.c:708
 msgid "floreal"
 msgstr "floreal"
 
-#: gedlib/messages.c:708
+#: gedlib/messages.c:709
 msgid "prai"
 msgstr "prai"
 
-#: gedlib/messages.c:709
+#: gedlib/messages.c:710
 msgid "prairial"
 msgstr "prairial"
 
-#: gedlib/messages.c:710
+#: gedlib/messages.c:711
 msgid "mess"
 msgstr "mess"
 
-#: gedlib/messages.c:711
+#: gedlib/messages.c:712
 msgid "messidor"
 msgstr "messidor"
 
-#: gedlib/messages.c:712
+#: gedlib/messages.c:713
 msgid "ther"
 msgstr "ther"
 
-#: gedlib/messages.c:713
+#: gedlib/messages.c:714
 msgid "thermidor"
 msgstr "thermidor"
 
-#: gedlib/messages.c:714
+#: gedlib/messages.c:715
 msgid "fruc"
 msgstr "fruc"
 
-#: gedlib/messages.c:715
+#: gedlib/messages.c:716
 msgid "fructidor"
 msgstr "fructidor"
 
-#: gedlib/messages.c:716
+#: gedlib/messages.c:717
 msgid "comp"
 msgstr "comp"
 
-#: gedlib/messages.c:717
+#: gedlib/messages.c:718
 msgid "jour_complementairs"
 msgstr "jour_complementairs"
 
@@ -2833,27 +2837,27 @@ msgstr "Krock med kortare snabbnyckel i post: %s"
 msgid "Missing title"
 msgstr "Titel saknas"
 
-#: liflines/screen.c:1476
+#: liflines/screen.c:1477
 msgid "Enter locale name"
 msgstr "Skriv in namn på lokal"
 
-#: liflines/screen.c:1477
+#: liflines/screen.c:1478
 msgid "Locale: "
 msgstr "Lokal: "
 
-#: liflines/screen.c:1485
+#: liflines/screen.c:1486
 msgid "Valid locale: %1"
 msgstr "Giltig lokal: %1"
 
-#: liflines/screen.c:1490
+#: liflines/screen.c:1491
 msgid "Invalid locale, try again"
 msgstr "Ogiltig lokal, försök igen"
 
-#: liflines/screen.c:3209 liflines/screen.c:3237
+#: liflines/screen.c:3219 liflines/screen.c:3247
 msgid "L  Test locale names"
 msgstr "L  Prova namn på lokal"
 
-#: liflines/screen.c:3239
+#: liflines/screen.c:3249
 msgid "Report locale: "
 msgstr "Lokal för rapporter: "
 

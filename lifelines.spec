@@ -6,7 +6,7 @@
 # then "rpm -ba lifelines.spec"
 #
 
-%define lifelines_version       3.0.13
+%define lifelines_version       3.0.14
 
 Name: lifelines
 Summary: lifelines genealogy program
