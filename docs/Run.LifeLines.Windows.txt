@@ -1,4 +1,5 @@
 Running LifeLines for Windows
+  Edited: 2001/12/30 by Perry Rapp
 
 (This presumes you have installed it, per the
 Install.LifeLines.Windows.txt document)
@@ -26,25 +27,71 @@ course you should not do this whilst you have
 that database open in LifeLines.
 
 3)
+At this point it would be good to load translation
+tables so as to use UTF-8 Unicode internally.
+However, I can only give directions for doing this
+on MS-Windows U.S. English edition. *If* you are on
+a U.S. English edition, and *if* you are using 
+notepad as your editor, then you need to load four
+translation tables. (Otherwise skip this step, and
+solicit help on the mailing list before you use
+any non-ascii data).
+
+From the main menu, choose c (character sets), 
+then t (translation tables), then l (load),
+then "Editor to Internal", then enter the filename
+1252-u.tt
+Then choose l (load), then "Internal to Editor",
+then enter the filename u-1252.tt
+Then choose l (load), then "Internal to Display",
+then enter the filename u-437.tt
+Then choose l (load), then "Display to Internal",
+then enter the filename 437-u.tt
+
+This use of UTF-8 Unicode for internal data storage
+will not have any affect on your ascii data (UTF-8 
+stores ascii as ascii), so it will not come into play
+until you start entering non-ascii data, or import
+some.
+
+This is an area of LifeLines still under development,
+and needs to be documented better in the manual, so
+please submit questions to the list if you are dealing
+with non-ascii data and have problems.
+
+(This step may be omitted if you only plan to use ascii data,
+but you should come back & do this before you start dealing
+with non-ascii data.)
+
+4)
 At this point, your best course of action is to
 connect to the Internet, browse to the LifeLines
-home page, and begin reading the LifeLines 3.0.2
+home page, and begin reading the LifeLines 3.0.7
 User's Manual, which explains how to proceed,
 adding data and so forth. (I do not know of a 
 newer version of the User's Manual at this time - 
 of course, if one is available, by all means 
 browse to it!)
 
-http://lifelines.sourceforge.net/manual302/index.html
+http://lifelines.sourceforge.net/manual307/index.html
 
-4)
+(You are at the Main Menu section now, but you
+would be well-advised to read the previous
+Introduction to GEDCOM section as well.)
+
+You may also download a copy of the manual -- see
+the documentation links near the upper right-hand
+corner of the home page (http://lifelines.sourceforge.net).
+
+5)
 When adding a new record (eg, a new person to the 
 database), LifeLines will cause Notepad to appear.
 Enter your information in Notepad -- the following
 page of the online manual discusses entering your
 first person:
 
-http://lifelines.sourceforge.net/manual302/userguide/first.html
+http://lifelines.sourceforge.net/manual307/userguide/first.html
+
 
 After you have entered the information into Notepad,
 save the document by choose Save from the File menu,
@@ -55,8 +102,8 @@ asking whether or not you really wish to add the new
 person. Normally you respond y and add your new
 person.
 
-5)
-Note on menu items: LifeLines 3.0.6 has significantly
+6)
+Note on menu items: LifeLines 3.0.7 has significantly
 more menu choices in many screens than were present in
 LifeLines 3.0.2. Many screens cannot fit all choices
 on screen at one time. If you see the choice
@@ -74,7 +121,7 @@ such as
 to tell you that you are viewing the first page of 
 three pages of menu choices for the current screen.
 
-6) 
+7) 
 If you wish to change the colors in the console window
 (the "dos" window), here is how. (This is actually not
 part of LifeLines, but is general DOS on Windows trivia).
@@ -94,7 +141,7 @@ every time from now on). Choose permanent - you can
 always change them later the same way.
 
 
- - Perry Rapp, 2001/05/22
+ - Perry Rapp
 
 
 References:

@@ -1,4 +1,5 @@
 LifeLines installation for Windows
+  Edited: 2001/12/30 by Perry Rapp
 
 1)
 Choose & create your directories, eg:
@@ -7,6 +8,7 @@ Choose & create your directories, eg:
 \My Documents\LifeLines\Databases (for databases)
 \My Documents\LifeLines\Programs (for report programs)
 \My Documents\LifeLines\Outputs (for report outputs)
+\My Documents\LifeLines\ttref (for translation tables)
 
 2)
 Place the LifeLines program (Lines.exe) & 
@@ -14,10 +16,21 @@ Place the LifeLines program (Lines.exe) &
  program directory (eg, \Program Files\LifeLines)
 
 3)
+*If* you are on MS-Windows U.S. English edition,
+and if you plan to use an MS-Windows editor such as notepad,
+then download the translation tables for US English Windows,
+and install the four *.tt files into
+\My Documents\LifeLines\ttref
+
+(This step may be omitted if you only plan to use ascii data,
+but you should come back & do this before you start dealing
+with non-ascii data.)
+
+4)
 Edit the configuration file (lines.cfg) to reflect your
  directory choices from step (1)
 
-4)
+5)
 In a windows explorer window (eg, right-click on 
  My Computer and choose Explore), browse to your program
  directory of step (2) (eg, \Program Files\Lines),
@@ -27,7 +40,7 @@ In a windows explorer window (eg, right-click on
  right-click and choose Paste Shortcut. This is your
  desktop shortcut to run the program.
 
-5)
+6)
 Right-click on the new shortcut icon on your desktop,
 and choose Rename. Adjust the name as you like
 (eg, to LifeLines).
@@ -36,7 +49,7 @@ Now you are ready to run LifeLines.
 Refer to the Run.LifeLines.Windows.txt document.
 
 
- - Perry Rapp, 2001/03/03
+ - Perry Rapp
 
 
 References:
@@ -45,7 +58,7 @@ LifeLines on the web:
   http://lifelines.sourceforge.net/
 
 Perry via email:
-  puddle@users.sourceforge.net
+  puddle using domain: users.sourceforge.net
 
 Mailing list:
   To subscribe to the list, send email to

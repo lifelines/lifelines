@@ -61,6 +61,7 @@ static NODE add_record(STRING recstr, STRING redt, char ntype, STRING cfrm);
 static void edit_record(NODE node1, STRING idedt, INT letr, STRING redt,
                          BOOLEAN (*val)(NODE, STRING *, NODE), STRING cfrm,
                          STRING tag, void (*todbase)(NODE), STRING gdmsg);
+static BOOLEAN ntagdiff(NODE node1, NODE node2);
 static BOOLEAN nvaldiff(NODE node1, NODE node2);
 
 
@@ -317,6 +318,12 @@ edit_record (NODE node1,           /* record to edit, poss NULL */
 		nval(node1) = nval(node2);
 		nval(node2) = str;
 	}
+	if (ntagdiff(node1, node2)) {
+		/* swap tag of node2 into node1, which is the one we keep */
+		str = ntag(node1);
+		ntag(node1) = ntag(node2);
+		ntag(node2) = str;
+	}
 	temp = nchild(node1);
 	nchild(node1) = nchild(node2);
 	nchild(node2) = temp;
@@ -335,6 +342,18 @@ nvaldiff (NODE node1, NODE node2)
 	if (!nval(node1) && !nval(node2)) return FALSE;
 	if (!nval(node1) || !nval(node2)) return TRUE;
 	return strcmp(nval(node1), nval(node2));
+}
+/*===============================================
+ * ntagdiff -- Do nodes have different tags ?
+ *  handles NULLs in either
+ * Created: 2001/12/30, Perry Rapp
+ *=============================================*/
+static BOOLEAN
+ntagdiff (NODE node1, NODE node2)
+{
+	if (!ntag(node1) && !ntag(node2)) return FALSE;
+	if (!ntag(node1) || !ntag(node2)) return TRUE;
+	return !eqstr(ntag(node1), ntag(node2));
 }
 /*===============================================
  * ask_for_record -- Ask user to identify record

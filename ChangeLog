@@ -6,6 +6,14 @@
 	Near-trivial program to convert binary translation table to
 	all-ascii one.
 
+	* ChangeLog docs/Install.LifeLines.Windows.txt
+	docs/Run.LifeLines.Windows.txt liflines/browse.c
+	liflines/newrecs.c liflines/screen.c:
+
+	Bugfix: Couldn't edit tag in other record. Bugfix: history
+	not loading correctly.
+	Updates to doc files for use on MS-Windows: talk about using UTF-8.
+
 2001-12-29 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/charmaps.c gedlib/messages.c hdrs/interp.h

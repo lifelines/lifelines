@@ -1370,18 +1370,24 @@ load_nkey_list (STRING key, struct hist * histp)
 	}
 	count = temp;
 	if (count > histp->size) count = histp->size;
-	for (i=0; i<count; ++i) {
+	for (i=0,temp=0; i<count; ++i) {
 		char key[12];
-		histp->list[i].ntype = *ptr++;
-		histp->list[i].keynum = *ptr++;
+		char ntype = *ptr++;
+		INT keynum = *ptr++;
+		if (!ntype || !keynum)
+			continue;
+		histp->list[temp].ntype = ntype;
+		histp->list[temp].keynum = keynum;
 		/* We could sanity check these */
-		snprintf(key, sizeof(key), "%c%d", histp->list[i].ntype
-			, histp->list[i].keynum);
-		histp->list[i].key = strdup(key);
+		snprintf(key, sizeof(key), "%c%d", ntype, keynum);
+		histp->list[temp].key = strdup(key);
+		++temp;
 	}
-	/* we don't get here unless count>=1 */
-	histp->start = 0;
-	histp->past_end = (count+1) % histp->size;
+	count = temp;
+	if (count) {
+		histp->start = 0;
+		histp->past_end = count % histp->size;
+	}
 
 end:
 	stdfree(rawrec);
@@ -1471,12 +1477,13 @@ history_record (NODE node, struct hist * histp)
 		protect=count;
 	/* traverse from most recent back (bounce suppression) */
 	prev = -1;
-	next = (histp->past_end-1) % histp->size;
+	next = (histp->past_end-1);
+	if (next < 0) next += histp->size;
 	for (i=0; i<protect; ++i) {
 		if (nkey_eq(&nkey, &histp->list[next]))
 			return;
 		prev = next;
-		next = (next-1) % histp->size;
+		if (--next < 0) next += histp->size;
 	}
 	/* it is a new one so add it to circular list */
 	nkey_copy(&nkey, &histp->list[histp->past_end]);
@@ -1499,11 +1506,12 @@ history_back (struct hist * histp)
 	if (!histp->size || histp->start==-1)
 		return NULL;
 	/* back up from histp->past_end to current item */
-	last = (histp->past_end-1) % histp->size;
+	last = histp->past_end-1;
+	if (last < 0) last += histp->size;
 	while (last != histp->start) {
 		/* loop is to keep going over deleted ones */
 		/* now back up before current item */
-		last = (last-1) % histp->size;
+		if (--last < 0) last += histp->size;
 		nkey_to_node(&histp->list[last], &node);
 		if (node) {
 			histp->past_end = (last+1) % histp->size;

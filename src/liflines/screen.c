@@ -347,6 +347,7 @@ repaint_main_menu (UIWINDOW uiwin)
 	else if (readonly)
 		wprintw(win, " (read only)");
 	row = 5;
+	/* TODO: internationalize this -- but deal with menu letters somehow */
 	mvwaddstr(win, row++, 2, plschs);
 	mvwaddstr(win, row++, 4, "b  Browse the persons in the database");
 	mvwaddstr(win, row++, 4, "s  Search database");
