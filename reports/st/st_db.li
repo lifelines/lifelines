@@ -1,6 +1,6 @@
 /*
  * @progname       st_db.li
- * @version        1.22 [of 2005-01-23]
+ * @version        1.23 [of 2005-01-23]
  * @author         Perry Rapp
  * @category       self-test
  * @output         none
@@ -261,6 +261,8 @@ proc exerciseIndi(indi)
 	namesort(iancestors)
 	valuesort(iancestors)
 	keysort(iancestors)
+	set(kset, intersect(iset,iancestors))
+	set(kset, difference(iset,iancestors))
 	set(p,99)
 	"name: " name(indi) nl()
 	"title: " title(indi) nl()

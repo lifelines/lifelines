@@ -45,6 +45,11 @@
 
 	Cosmetic & cleanup for compiler warnings.
 
+	* ChangeLog reports/st/st_db.li src/interp/intrpseq.c
+
+	Fix __uniqueset, __union, __intersect, __difference to
+	use prog_var_error. Add interset, difference calls to st_db.li.
+
 2005-01-22 Perry Rapp
 
 	* ChangeLog src/stdlib/generic.c src/stdlib/table.c

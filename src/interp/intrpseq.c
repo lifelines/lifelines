@@ -306,11 +306,11 @@ __valuesort (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __uniqueset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	INDISEQ seq;
-	PVALUE val1 = eval_and_coerce(PSET, iargs(node), stab, eflg);
+	INDISEQ seq=0;
+	PNODE arg1 = (PNODE) iargs(node);
+	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	if (*eflg) {
-		/* TODO: convert to prog_var_error */
-		prog_error(node, "the arg to uniqueset must be a set.");
+		prog_var_error(node, stab, arg1, val1, nonset1, "uniqueset");
 		return NULL;
 	}
 	ASSERT(seq = pvalue_to_seq(val1));
@@ -328,20 +328,18 @@ PVALUE
 __union (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg1 = (PNODE) iargs(node), arg2 = inext(arg1);
-	INDISEQ op2, op1;
+	INDISEQ op2=0, op1=0;
 	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	PVALUE val2=0;
 	if (*eflg) {
-		/* TODO: convert to prog_var_error */
-		prog_error(node, "1st arg to union must be a set.");
+		prog_var_error(node, stab, arg1, val1, nonsetx, "union", "1");
 		return NULL;
 	}
 	/* NULL indiseqs are possible, because of getindiset */
 	op1 = pvalue_to_seq(val1);
 	val2 = eval_and_coerce(PSET, arg2, stab, eflg);
 	if (*eflg) {
-		/* TODO: convert to prog_var_error */
-		prog_error(node, "2nd arg to union must be a set.");
+		prog_var_error(node, stab, arg2, val2, nonsetx, "union", "2");
 		return NULL;
 	}
 	op2 = pvalue_to_seq(val2);
@@ -360,20 +358,18 @@ PVALUE
 __intersect (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg1 = (PNODE) iargs(node), arg2 = inext(arg1);
-	INDISEQ op2, op1;
+	INDISEQ op2=0, op1=0;
 	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	PVALUE val2=0;
 	if (*eflg) {
-		/* TODO: convert to prog_var_error */
-		prog_error(node, "1st arg to intersect must be a set.");
+		prog_var_error(node, stab, arg1, val1, nonsetx, "intersect", "1");
 		return NULL;
 	}
 	/* NULL indiseqs are possible, because of getindiset */
 	op1 = pvalue_to_seq(val1);
 	val2 = eval_and_coerce(PSET, arg2, stab, eflg);
 	if (*eflg) {
-		/* TODO: convert to prog_var_error */
-		prog_error(node, "2nd arg to intersect must be a set.");
+		prog_var_error(node, stab, arg2, val2, nonsetx, "intersect", "2");
 		return NULL;
 	}
 	op2 = pvalue_to_seq(val2);
@@ -393,30 +389,28 @@ PVALUE
 __difference (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg1 = (PNODE) iargs(node), arg2 = inext(arg1);
-	INDISEQ op2, op1;
-	PVALUE val = eval_and_coerce(PSET, arg1, stab, eflg);
-	PVALUE val2;
+	INDISEQ op2=0, op1=0;
+	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
+	PVALUE val2=0;
 	if (*eflg) {
-		/* TODO: convert to prog_var_error */
-		prog_error(node, "1st arg to difference must be a set.");
+		prog_var_error(node, stab, arg1, val1, nonsetx, "difference", "1");
 		return NULL;
 	}
 	/* NULL indiseqs are possible, because of getindiset */
-	op1 = pvalue_to_seq(val);
+	op1 = pvalue_to_seq(val1);
 	val2 = eval_and_coerce(PSET, arg2, stab, eflg);
 	if (*eflg) {
-		/* TODO: convert to prog_var_error */
-		prog_error(node, "2nd arg to difference must be a set.");
+		prog_var_error(node, stab, arg2, val2, nonsetx, "difference", "2");
 		return NULL;
 	}
 	op2 = pvalue_to_seq(val2);
 	/* do actual difference */
 	op2 = difference_indiseq(op1, op2);
-	set_pvalue_seq(val, op2);
+	set_pvalue_seq(val1, op2);
 	/* delay to last minute lest it is a temp owning seq,
 	eg, difference(ancestorset(i),ancestorset(j)) */
 	delete_pvalue(val2);
-	return val;
+	return val1;
 }
 /*=========================================+
  * parentset -- Create parent set of INDISEQ
