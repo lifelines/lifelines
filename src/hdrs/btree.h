@@ -154,6 +154,7 @@ RECORD_STATUS write_record_to_textfile(BTREE btree, RKEY rkey, STRING file);
 
 /* opnbtree.c */
 BOOLEAN closebtree(BTREE);
+BOOLEAN create_database(STRING dbrequested, STRING dbused);
 void describe_dberror(INT dberr, STRING buffer, INT buflen);
 int open_database(BOOLEAN forceopen, STRING dbpath, STRING dbactual);
 BTREE openbtree(STRING, BOOLEAN, BOOLEAN);

@@ -108,7 +108,7 @@ addfile_impl (BTREE btree, RKEY rkey, STRING file, STRING mode)
 		fclose(fp);
 		return FALSE;
 	}
-	addrecord(btree, rkey, mem, buf.st_size);
+	addrecord(btree, rkey, mem, siz);
 	stdfree(mem);
 	fclose(fp);
 	return TRUE;

@@ -1,6 +1,7 @@
 /*==========================================================
  * editmap.c -- LifeLines character mapping feature
  * Copyright(c) 1994 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   3.0.2 - 09 Nov 1994
  *========================================================*/
 

@@ -134,9 +134,10 @@ init_map_from_file (STRING file, INT indx, BOOLEAN *perr)
 	FILE *fp;
 	struct stat buf;
 	STRING mem;
+	INT siz;
 
 	*perr = FALSE;
-	if ((fp = fopen(file, LLREADBINARY)) == NULL) return NULL;
+	if ((fp = fopen(file, LLREADTEXT)) == NULL) return NULL;
 	ASSERT(fstat(fileno(fp), &buf) == 0);
 	if (buf.st_size == 0) {
 		fclose(fp);
@@ -144,7 +145,9 @@ init_map_from_file (STRING file, INT indx, BOOLEAN *perr)
 	}
 	mem = (STRING) stdalloc(buf.st_size+1);
 	mem[buf.st_size] = 0;
-	ASSERT(fread(mem, buf.st_size, 1, fp) == 1);
+	siz = fread(mem, 1, buf.st_size, fp);
+	/* may not read full buffer on Windows due to CR/LF translation */
+	ASSERT(siz == buf.st_size || feof(fp));
 	fclose(fp);
 	return init_map_from_str(mem, indx, perr);
 }

@@ -125,7 +125,6 @@ static BOOLEAN is_unadorned_directory(STRING path);
 static BOOLEAN open_or_create_database(BOOLEAN forceopen, STRING dbrequested, STRING dbused);
 static void platform_init(void);
 static void show_open_error(INT dberr);
-static BOOLEAN trytocreate(STRING);
 
 /*********************************************
  * local function definitions
@@ -317,21 +316,6 @@ usage:
 	/* Exit */
 	return(code);
 }
-/*==========================================
- * trytocreate -- Try to create new database
- *========================================*/
-static BOOLEAN
-trytocreate (STRING path)
-{
-	if (!ask_yes_or_no_msg(nodbse, crdbse)) return FALSE;
-
-	if (!(BTR = openbtree(path, TRUE, !readonly))) {
-		mprintf_error(nocrdb, path);
-		return FALSE;
-	}
-	initxref();
-	return TRUE;
-}
 /*===================================================
  * show_open_error -- Display database opening error
  *=================================================*/
@@ -392,17 +376,23 @@ open_or_create_database (BOOLEAN forceopen, STRING dbrequested, STRING dbused)
 	}
 	/*
 	error was only that db doesn't exist, so lets try
-	making a new one -- unspecified new db is put in llnewdbdir
+	making a new one 
+	If no database directory specified, add prefix llnewdbdir
 	*/
 	if (!selftest && is_unadorned_directory(dbused)) {
 		STRING temp = dbused;
 		dbused = strsave(concat_path(lloptions.llnewdbdir, dbused));
 		stdfree(temp);
 	}
-	/* see if we can make a new db */
-	if (trytocreate(dbused))
-		return TRUE; /* ok it worked */
-	/* still no dice */
+
+	/* Is user willing to make a new db ? */
+	if (!ask_yes_or_no_msg(nodbse, crdbse)) 
+		return FALSE;
+
+	/* try to make a new db */
+	if (create_database(dbrequested, dbused))
+		return TRUE;
+
 	show_open_error(bterrno);
 	return FALSE;
 }

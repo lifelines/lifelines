@@ -301,8 +301,9 @@ open_database_impl (BOOLEAN forceopen)
 }
 /*==================================================
  * open_database -- open database
- * dbrequested: database to report
- * dbused: actual database path (may be relative also)
+ *  forceopen:    [in] flag to override reader/writer lock
+ *  dbrequested:  [in] database to report
+ *  dbused:       [in] actual database path (may be relative also)
  *================================================*/
 BOOLEAN
 open_database (BOOLEAN forceopen, STRING dbrequested, STRING dbused)
@@ -324,9 +325,32 @@ open_database (BOOLEAN forceopen, STRING dbrequested, STRING dbused)
 	}
 	return rtn;
 }
+/*==================================================
+ * create_database -- create (& open) brand new database
+ *  newpath:  [in] path of database about to create
+ *================================================*/
+BOOLEAN
+create_database (STRING dbrequested, STRING dbused)
+{
+	/* tentatively copy paths into gedlib module versions */
+	btreepath=strsave(dbrequested);
+	readpath=strsave(dbused);
+
+	if (!(BTR = openbtree(dbused, TRUE, !readonly))) {
+		/* open failed so clean up, preserve bterrno */
+		int myerr = bterrno;
+		close_lldb();
+		bterrno = myerr;
+		strfree(&btreepath);
+		strfree(&readpath);
+		return FALSE;
+	}
+	initxref();
+	return TRUE;
+}
 /*===================================================
  * describe_dberror -- Describe database opening error
- * dberr: [in] error whose description is sought
+ * dberr:  [in] error whose description is sought
  * buffer: [out] buffer for description
  * buflen: [in]  size of buffer
  *=================================================*/

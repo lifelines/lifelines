@@ -15,6 +15,12 @@
 	Modified str_to_indiseq to use new display-to-internal mapping.
 	Modified squeeze to leave non-ascii characters.
 
+	* ChangeLog btree/file.c btree/opnbtree.c gedlib/charmaps.c
+	gedlib/editmap.c gedlib/init.c hdrs/btree.h liflines/main.c:
+	Bugfix - newly created dbs weren't showing name at top of screen.
+	(Also simplified creation code.)
+	Bugfix - translation table editing on MS-Windows has cr/lf bug.
+
 2007-07-13 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/charmaps.c gedlib/translat.c:
