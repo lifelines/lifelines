@@ -30,6 +30,11 @@
 	* gedlib/xreffile.c liflines/import.c liflines/valgdcom.c
 	Implement DELETESETs in xreffile.c and sort down instead of up.
 
+	* gedlib/keytonod.c gedlib/refns.c gedlib/xreffile.c
+	hdrs/gedcom.h liflines/advedit.c liflines/newrecs.c:
+	Bugfix for isvalid in xreffile.c. Make nztop a function to
+	handle NULLs.
+
 2001-01-05 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/init.c hdrs/llstdlib.h stdlib/environ.c tools/btedit.c:
