@@ -1,0 +1,6074 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.0/docbookx.dtd"
+[<!ENTITY llversion '3.0.28'>]>
+<book id="docbook" lang="sv">
+
+  <bookinfo>
+
+
+<!--
+
+    this is lifelines.xml
+
+    To use this file with SGML software, replace the text above
+    this comments section with the following:
+
+_________________________________________________________
+
+<!DOCTYPE BOOK PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
+	<!entity llversion	"3.0.28"> 
+]>	
+	
+<book id="docbook" lang="sv">
+  <?dbhtml filename="ll-doc.htm">
+  <bookinfo>
+_________________________________________________________
+
+
+    Rafal Prinke <rafalp@amu.edu.pl> 1-Apr-200
+    - Converted original LifeLines Reference Guide to DocBook SGML.
+
+
+    Marc Nozell <marc@nozell.com>  26-Jul-2001
+    - Changed <simpara> to <para>.  Newer docbook likes it better.
+
+    Marc Nozell <marc@nozell.com>  21-Sep-2000
+    - updated license info
+    - point to lifelines.sourceforge.net
+    - change references from lines302 to llines
+    - make most lines less than 80 characters wide
+
+    Rafal Prinke <rafalp@amu.edu.pl> 30-Dec-2001
+    - Converted to XML.
+          - closed all <para> elements
+          - defined and corrected llversion entity
+          - closed empty tag <void />
+          - converted all tags to lower case
+          - replaced ampersands with entities
+          - added space at end of line
+          - parsed against DocBook 4.1.2 DTD
+
+    Jens Arvidsson <jya@sverige.nu> 17-Jul-2003
+    - Translation to Swedish.
+    $Id$
+
+                                                       -->
+<!-- ================================================= -->
+
+
+
+<title>
+
+<application>LIFELINES</application> PROGRAMMERINGSSYSTEM OCH
+RAPPORTGENERATOR
+
+</title>
+
+    <authorgroup>
+      <author>
+     <firstname>Thomas T. </firstname>
+     <surname>Wetmore </surname>
+     <lineage>IV</lineage>
+      </author>
+    </authorgroup>
+
+    <subtitle><application>LifeLines</application> Version &llversion;</subtitle>
+  </bookinfo>
+
+
+  <chapter>
+
+    <title>
+
+Manual för rapportprogrammering
+
+</title>
+
+    <sect1>
+    
+    
+      <title>
+
+INTRODUKTION
+
+</title>
+
+
+
+<para>
+
+	Med <application>LifeLines</application> programmeringssystem
+	kan du skapa rapporter i valfri stil och layout. Du kan
+	generera filer i <application>troff</application>,
+	<application>Postscript</application>,
+	<application>TeX</application>, <acronym>SGML</acronym>, eller
+	annat valfritt <acronym>ASCII</acronym>-baserat format för
+	ytterligare textbehandling och utskrifter. Du kommer åt
+	rapportgeneratorn genom att välja kommandot r från huvudmenyn.
+	Du kan också använda programmeringssystemet för att skapa
+	förfrågningsprogram och andra behandlande program, vars
+	resultat skrivs ut direkt till skärmen. Det finns till exempel
+	ett <application>LifeLines</application>program som beräknar
+	relationen mellan vilka två personer som helst i en databas.
+
+</para>
+
+<para>
+
+	Alla <application>LifeLines</application>program är skrivna i
+	<application>LifeLines</application> programmeringsspråk, och
+	programmen sparas i vanliga filer. När du begär att
+	<application>LifeLines</application> ska köra ett program, så
+	frågar <application>LifeLines</application> dig efter namnet
+	på programfilen, frågar var du vill att utmatningen från
+	programmet ska skrivas, och kör därefter programmet.
+
+</para>
+
+<para>
+
+	Anta till exempel att du vill att
+	<application>LifeLines</application> ska skapa en antavla. En
+	sådan rapport skulle kunna se ut så här:
+
+<example>
+
+<title>
+Exempel på antavelrapport
+</title>
+
+<literallayout>
+1. Thomas Trask WETMORE IV
+b. 18 December 1949, New London, Connecticut
+2. Thomas Trask WETMORE III
+b. 15 October 1925, New London, Connecticut
+3. Joan Marie HANCOCK
+b. 6 June 1928, New London, Connecticut
+4. Thomas Trask WETMORE Jr
+b. 5 May 1896, New London, Connecticut
+d. 8 November 1970, New London, Connecticut
+5. Vivian Genevieve BROWN
+b. 5 April 1896, Mondovi, Wisconsin
+6. Richard James HANCOCK
+b. 18 August 1904, New London, Connecticut
+d. 24 December 1976, Waterford, Connecticut
+7. Muriel Armstrong SMITH
+b. 28 October 1905, New Haven, Connecticut
+8. Thomas Trask WETMORE Sr
+b. 13 March 1866, St. Mary's Bay, Nova Scotia
+d. 17 February 1947, New London, Connecticut
+9. Margaret Ellen KANEEN
+b. 27 October 1859, Liverpool, England
+d. 10 May 1900, New London, Connecticut
+... och mycket mer</literallayout></example>
+
+</para>
+
+<para>
+
+	Här är ett <application>LifeLines</application>program som
+	genererar en sådan rappport:
+
+<example>
+
+<title>
+Exempel på rapportskript för en antavelrapport  
+</title>
+
+<programlisting>
+
+proc main ()
+  {
+    getindi(indi)
+    list(ilist)
+    list(alist)
+    enqueue(ilist, indi)
+    enqueue(alist, 1)
+    while(indi, dequeue(ilist)) {
+      set(ahnen, dequeue(alist))
+      d(ahnen) ". " name(indi) nl()
+      if (e, birth(indi)) { " b. " long(e) nl() }
+      if (e, death(indi)) { " d. " long(e) nl() }
+      if (par, father(indi)) {
+	enqueue(ilist, par)
+	enqueue(alist, mul(2,ahnen))
+      }
+      if (par,mother(indi)) {
+	enqueue(ilist, par)
+	enqueue(alist, add(1,mul(2,ahnen)))
+      }
+    }
+  }</programlisting></example>
+
+</para>
+
+<para>
+
+	Anta att det här programmet finns i filen
+	<filename>anor</filename>. När du väljer kommandot
+	<keycap>r</keycap> från huvudmenyn, så frågar
+	<application>LifeLines</application>:
+	
+<screen>
+Vad är namnet på programmet?
+Förvald sökväg: .
+skriv in filnamn (*.ll)
+</screen>
+
+</para>
+
+<para>
+
+	Du skriver in
+	<userinput><literal>anor</literal></userinput>. Eftersom
+	programmet genererar en rapport, så frågar
+	<application>LifeLines</application> var det ska skriva
+	rapporten:
+
+
+<screen>
+Vad är namnet på utmatningsfilen?
+skriv in filnamn:
+</screen>
+
+</para>
+
+<para>
+
+	Du skriver in ett filnamn, till exempel
+	<userinput><literal>mina.anor</literal></userinput>.
+	<application>LifeLines</application> läser in programmet
+	anor, kör programmet, och skriver ut rapporten till
+	<filename>mina.anor</filename>.
+	<application>LifeLines</application> rapporterar alla syntax-
+	eller körningsfel som hittas medan programmet körs.
+
+
+</para>
+
+<para>
+
+	Ett <application>LifeLines</application>program består av
+	<type>procedurer</type> och <type>funktioner</type>; alla
+	program måste innehålla minst en <type>procedur</type> benämnd
+	<literal>main</literal>. <type>Proceduren</type>
+	<literal>main</literal> körs först; det kan anropa andra
+	<type>procedurer</type>, <type>funktioner</type> och
+	<type>inbyggda funktioner</type>. I exemplet med antavlan
+	finns det bara en <type>procedur</type>.
+
+</para>
+
+<para>
+
+	En <type>procedur</type>kropp består av en följd av
+	<type>deklarationer</type>. I exempelprogrammet är de fem
+	första <type>deklarationerna</type> följande:
+
+<programlisting>
+getindi(indi)
+list(ilist)
+list(alist)
+enqueue(ilist, indi)
+enqueue(alist, 1)
+</programlisting>
+</para>
+
+<para>
+
+	Den första <type>deklarationen</type> anropar den
+	<type>inbyggda funktionen</type> <function>getindi</function>
+	(get individual - hämta person), vilken får
+	<application>LifeLines</application> att be dig identifiera en
+	person i den kortfattade stilen för identifiering.
+	
+<screen>
+Skriv in sträng för program
+skriv in namn, nyckel, refn eller lista:
+</screen>
+
+
+</para>
+
+<para>
+
+	Efter att du har identifierat en person, så tilldelas han
+	eller hon variabeln <varname>indi</varname>. De följande två
+	<type>deklarationerna</type> anger två
+	<type>listvariabler</type>, <varname>ilist</varname> och
+	<varname>alist</varname>. <type>Listor</type> innehåller
+	sekvenser av saker; det finns operationer för att placera
+	saker i listor, plocka bort saker därifrån, och för att
+	iterera genom listelementen. I exemplet innehåller
+	<varname>ilist</varname> en lista med anor i antavleordning
+	som ännu inte rapporterats, och <varname>alist</varname>
+	innehåller deras respektive annummer.
+
+</para>
+
+<para>
+
+	De följande två <type>deklarationerna</type> anropar
+	funktionen <function>enqueue</function>, varvid de första
+	medlemmarna läggs till i båda listorna. Personen som
+	identifierats av funktionen <function>getindi</function> blir
+	den första medlemmen i <varname>ilist</varname>, och numret
+	ett, denna persons antavlenummer, blir den första medlemmen i
+	<varname>alist</varname>.
+
+</para>
+
+<para>
+
+Den återstående delen av programmet är:
+	
+<programlisting>
+while(indi, dequeue(ilist)) {
+  set(ahnen, dequeue(alist))
+  d(ahnen) ". " name(indi) nl()
+  if (e, birth(indi)) { " b. " long(e) nl() }
+  if (e, death(indi)) { " d. " long(e) nl() }
+  if (par, father(indi)) {
+    enqueue(ilist, par)
+    enqueue(alist, mul(2,ahnen))
+  }
+  if (par, mother(indi)) {
+    enqueue(ilist, par)
+   enqueue(alist, add(1,mul(2,ahnen)))
+  }
+}
+</programlisting>
+
+</para>
+
+<para>
+
+	Detta är en loop som iterativt tar bort personer och deras
+	antavlenummer från de två listorna, och därefter skriver ut
+	deras namn och födelse- och dödsdata. Om personerna har
+	föräldrar i databasen, så placeras föräldrarna och
+	föräldrarnas antavlenummer på slutet av respektive lista.
+	Loopen itererar till dess listan är tom.
+
+</para>
+
+<para>
+
+	Loopen är en loopdeklaration av typen
+	<type>while</type>. Raden:
+<programlisting>
+while(indi, dequeue(ilist)) {
+</programlisting>
+
+	tar (via <function>dequeue</function>) en person från
+	<varname>ilist</varname>, och tilldelar personen till
+	variabeln <varname>indi</varname>. Så länge som det finns
+	personer i <varname>ilist</varname>, så följer ytterligare en
+	iteration av loopen.
+
+</para>
+
+<para>
+
+	Deklarationen:
+
+<programlisting>
+set(ahnen, dequeue(alist))
+</programlisting>
+
+	är en deklaration av typen <type>tilldelning</type>. Det andra
+	argumentet utvärderas; Dess värde tilldelas till det första
+	argumentet, som måste vara en variabel. Här tas nästa nummer i
+	<varname>alist</varname> bort, och tilldelas till variabeln
+	<varname>ahnen</varname>. Detta är antavlenumret på personen
+	som just togs bort från <varname>ilist</varname>.
+
+</para>
+
+<para>
+
+	Raden:
+
+<programlisting>
+d(ahnen) ". " name(indi) nl()
+</programlisting>
+
+	innehåller fyra deklarationer av typen <type>uttryck</type>;
+	när uttryck används som deklarationer, så behandlas deras
+	värden, om något, som strängar och skrivs direkt till
+	rapportfilen. Funktionen <function>d</function> konverterar
+	dess heltalsargument till en numerisk sträng. ". " är ett
+	bokstavligt (konstant) strängvärde. Funktionen
+	<function>name</function> returnerar den förvalda formen av en
+	persons namn. Funktionen <function>nl</function> returnerar en
+	sträng som innehåller tecknet för ny rad.
+
+</para>
+
+<para>
+
+	De nästa två raderna:
+
+<programlisting>
+
+if(e, birth(indi)) { " b. " long(e) nl() }
+if(e, death(indi)) { " d. " long(e) nl() }</programlisting>
+
+	skriver ut grundläggande födelse- och dödsdata för en person.
+	Dessa rader är <type>if</type>-deklarationer. Det andra
+	argumentet i villkorssatsen utvärderas och tilldelas till det
+	första argumentet, vilket måste vara en variabel. Den första
+	<type>if</type>-deklarationen anropar födelsefunktionen ,
+	varvid den första födelseposten i en personpost returneras. Om
+	födelseposten finns så tilldelas den variabeln
+	<varname>e</varname>, och <type>kroppen</type> (det som finns
+	mellan klammerparenteserna) för <type>if</type>-deklarationen
+	exekveras. <type>Kroppen</type> består av tre deklarationer av
+	typen <type>uttryck</type>: en ordagrann, samt anrop till
+	funktionerna <function>long</function> och
+	<function>nl</function>. <function>Long</function> tar en
+	<type>händelse</type> och skickar tillbaka värdet på den
+	första <structfield>DATE</structfield>-raden och
+	<structfield>PLAC</structfield>-raden i
+	<type>händelsen</type>.
+
+</para>
+
+<para>
+
+	Den sista delen av programmet är:
+
+<programlisting>
+
+if (par, father(indi)) {
+enqueue(ilist,par)
+enqueue(alist,mul(2,ahnen))
+}
+if (par,mother(indi)) {
+enqueue(ilist,par)
+enqueue(alist,add(1,mul(2,ahnen)))
+}</programlisting>
+
+</para>
+
+<para>
+
+	De här raderna lägger till fadern och modern till den aktuella
+	personen, om endera av dem, eller båda, finns i databasen, i
+	<varname>ilist</varname>. De beräknar också och lägger till
+	föräldrarnas antavlenummer i <varname>alist</varname>. En fars
+	annummer är det dubbla jämfört med sitt barns. En mors
+	annummer är det dubbla jämfört med sitt barns plus ett. Dessa
+	värden beräknas med funktionerna <function>mul</function> och
+	<function>add</function>.
+
+</para>
+
+
+
+</sect1>
+
+</chapter><chapter>
+
+<title>
+
+PROGRAMMERINGSREFERENS FÖR <application>LIFELINES</application>
+
+</title>
+
+
+
+<para>
+
+	<application>LifeLines</application>program lagras i filer som
+	du redigerar med textredigeraren. Man redigerar dem inte från
+	<application>LifeLines</application>, istället redigerar du
+	dem som vilken textfil som helst. Programmen kan sparas i
+	vilken katalog som helst; de behöver inte sparas i eller
+	anknytas till <application>LifeLines</application>databaser.
+	Du kan sätta skalvariabeln <envar>LLPROGRAMS</envar> till att
+	innehålla ett antal kataloger som
+	<application>LifeLines</application> automatiskt kommer att
+	söka i efter program när du begär att ett program ska köras.
+
+</para>
+
+
+
+<sect1>
+
+
+
+<title>
+
+Procedurer och Funktioner
+
+</title>
+
+
+
+<para>
+
+	Ett <application>LifeLines</application>program består av en
+	eller flera <type>procedurer</type> och
+	<type>funktioner</type>. En <type>procedur</type> har
+	formatet:
+        <synopsis>proc namn(parametrar) { deklarationer }</synopsis>
+
+</para>
+
+<para>
+
+	<symbol>Namn</symbol> är namnet på <type>proceduren</type>,
+	<symbol>parametrar</symbol> är en (icke-obligatorisk)
+	kommaseparerad lista över <type>parametrar</type>, och
+	<symbol>deklarationer</symbol> är en lista över deklarationer
+	som utgör <type>procedur</type>kroppen. Rapportgenereringen
+	börjar med den första <type>deklarationen</type> i
+	<type>proceduren</type> som benämns <literal>main</literal>.
+	<type>Procedurer</type> får anropa andra
+	<type>procedurer</type> och <type>funktioner</type>.
+	<type>Procedurer</type> anropas med deklarationen
+	<type>call</type> som beskrivs nedan. När en
+	<type>procedur</type> anropas, exekveras de
+	<type>deklarationer</type> som utgör dess <type>kropp</type>.
+
+</para>
+
+<para>
+
+En funktion har formatet:<synopsis>funktion namn(parametrar) { deklarationer }
+</synopsis>
+
+</para>
+
+<para>
+
+	<symbol>Namn</symbol>, <symbol>parametrar</symbol> och
+	<symbol>deklarationer</symbol> definieras som i
+	<type>procedurer</type>. <type>Funktioner</type> får anropa
+	andra <type>procedurer</type> och <type>funktioner</type>. När
+	en <type>funktion</type> anropas, exekveras de
+	<type>deklarationer</type> som den utgörs av. En
+	<type>funktion</type> skiljer sig från en
+	<type>procedur</type> genom att den returnerar ett
+	<type>värde</type> till <type>proceduren</type> eller
+	<type>funktionen</type> som anropar den. Värden returneras av
+	deklarationen <type>return</type>, som beskrivs
+	nedan. <type>Rekursiva funktioner</type> är tillåtna. En
+	<type>funktion</type> anropas genom att anropa det i ett
+	<type>uttryck</type>.
+
+</para>
+
+
+
+</sect1>
+
+
+
+<sect1>
+
+
+
+<title>
+
+Kommentarer
+
+</title>
+
+
+
+<para>
+
+	Du kan lägga in kommentarer i dina
+	<application>LifeLines</application>program genom att använda
+	följande skrivsätt:<programlisting>
+
+	/*...kommentartext innehållande vilka tecken som helst utom
+	*/... */</programlisting>
+
+</para>
+
+
+
+
+<para>
+
+	Kommentarer inleds med <literal>/*</literal> och avslutas med
+	<literal>*/</literal>. Kommentarer får förekomma på rader för
+	sig själva, eller på rader där det finns
+	programkod. Kommentarer får sträcka sig över flera
+	rader. Man får inte nästla kommentarer (ha en kommentar i en
+	annan kommentar).
+
+</para>
+
+
+
+</sect1>
+
+
+
+<sect1>
+
+
+
+<title>
+
+Deklarationer
+
+</title>
+
+
+
+<para>
+
+	Det finns ett antal typer av <type>deklarationer</type>. De
+	enklaste är av typen <type>uttryck</type>, ett uttryck som
+	inte är en del av någon annan <type>deklaration</type> eller
+	annat <type>uttryck</type>. En mer fullständig definition av
+	<type>uttryck</type> återfinns nedan. En
+	<type>uttryck</type>sdeklaration utvärderas, och om dess värde
+	är <returnvalue>icke-noll</returnvalue>, antas det vara en
+	<type>sträng</type>, och skrivs till den skapade rapportfilen.
+	Om dess värde är <returnvalue>noll</returnvalue>, så skrivs
+	ingenting ut till rapportfilen. Uttrycket
+	<synopsis>name(indi)</synopsis> exempelvis, där
+	<symbol>indi</symbol> är en person, returnerar personens namn
+	och skriver ut det till rapportfilen. Uttrycket
+	<synopsis>set(n,nspouses(indi))</synopsis> å andra sidan
+	tilldelar variabeln <varname>n</varname> det antal makar som
+	personen <varname>indi</varname> har haft, men eftersom
+	<function>set</function> returnerar
+	<returnvalue>noll</returnvalue>, så skrivs ingenting till
+	rapportfilen.
+
+</para>
+
+<para>
+
+	Programmeringsspråket inbegriper <type>if</type>-deklarationer,
+	<type>while</type>-deklarationer och
+	<type>proceduranrop</type>sdeklarationer, med följande format:
+
+	<synopsis>if ([varb,] uttr) { deklarationer } 
+		  [ elsif ([varb], uttr) { deklarationer } ]*
+		  [ else { deklarationer } ]
+	</synopsis>
+
+	<synopsis>while ([varb,] uttr ) { deklarationer }</synopsis>
+
+	<synopsis>call namn(argt)</synopsis>
+
+</para>
+
+<para>
+
+	Hakparenteserna anger vilka delar av syntaxen för
+	deklarationer som är valfria att ha med. En
+	<type>if</type>-deklaration exekveras genom att det första
+	villkorsuttrycket i <type>if</type>-satsen
+	utvärderas. Om det är <returnvalue>icke-noll</returnvalue>, så
+	utvärderas deklarationerna i <type>if</type>-satsen, och den
+	övriga delen av <type>if</type>-deklarationen, om den finns,
+	hoppas över. Om värdet är <returnvalue>noll</returnvalue>, och
+	en <type>elsif</type>-sats följer, så utvärderas villkorssatsen
+	i <type>elsif</type>-satsen, och om den är
+	<returnvalue>icke-noll</returnvalue>,  så exekveras
+	deklarationerna i den satsen. <type>Villkorssatser</type>
+	utvärderas till dess en av dem är
+	<returnvalue>icke-noll</returnvalue>, eller till dess det inte
+	finns några fler. Om inga villkorssatser är
+	<returnvalue>icke-noll</returnvalue>, och om
+	<type>if</type>-satsen slutar med en <type>else</type>-sats,
+	så  exekveras deklarationerna i <type>else</type>-satsen. Det
+	finns två typer av <type>villkorliga</type> uttryck. Om
+	<type>Villkorssatsen</type> är ett enda <type>uttryck</type>,
+	så utvärderas det bara. Om <type>villkorssatsen</type> är en
+	<type>variabel</type> följd av ett <type>uttryck</type>, så
+	utvärderas <type>uttrycket</type> och dess värde tilldelas
+	till variabeln.
+
+
+</para>
+
+<para>
+
+	Lägg märke till att <type>if</type> behandlar noll-strängar
+	som falska, men tomma strängar som sanna. Fördelen med detta
+	är att
+
+<programlisting>
+
+if(birth(indi))
+
+</programlisting>
+
+</para>
+
+<para>
+
+	returnerar <returnvalue>sant</returnvalue> om det finns en
+	BIRT-post, till och med om den  är tom, men returnerar
+	<returnvalue>falskt</returnvalue> om det inte finns någon
+	BIRT-post överhuvudtaget.
+
+</para>
+
+<para>
+
+	<type>While</type>-deklarationen tillhandahåller en
+	loopmekanism. <type>Villkorssatsen</type> utvärderas, och om
+	den är <returnvalue>icke-noll</returnvalue>, så exekveras
+	loop<type>kroppen</type>. Efter varje iterering återutvärderas
+	<type>uttrycket</type>; så länge som det är
+	<returnvalue>icke-noll</returnvalue>, så upprepas loopen.
+
+
+</para>
+
+<para>
+
+	<type>Call</type>-deklarationen tillhandahåller proceduranrop.
+	<symbol>Namn</symbol> måste matcha en av de
+	<type>procedurer</type> som definieras i rapportprogrammet.
+	<symbol>Argt</symbol> är en kommaseparerad lista över
+	<type>argument</type>uttryck. <type>Rekursion</type> är
+	tillåten. När ett <type>call</type> exekveras, så blir värdena
+	för dess <type>argument</type> utvärderade och använda för att
+	initiera procedurens <type>parametrar</type>.
+	<type>Proceduren</type> exekveras därefter. När
+	<type>proceduren</type> är avslutad, så börjar exekveringen om
+	vid den punkt som följer närmast efter anropet.
+
+</para>
+
+<para>
+
+	Följande rapportspråksuttryck påträffas vanligen endast nära
+	början av en rapport:
+	<synopsis>char_encoding(sträng)</synopsis>
+	<synopsis>require(sträng)</synopsis>
+	<synopsis>option(sträng)</synopsis>
+	<synopsis>include(sträng)</synopsis>
+	<synopsis>global(varb)</synopsis>
+
+</para>
+
+<para>
+
+	Deklarationen <type>char_encoding</type> anger vilken
+	teckenkodning som används i rapporten, så att
+	rapportprocessorn kan korrekt tolka bytes som inte finns i
+	ASCII (t. ex. åäö, bokstäver med accent). Ett exempel, som
+	anger en teckenkodning som är vanlig i Västeuropa:
+
+
+<programlisting>
+char_encoding("ISO-8859-1")
+</programlisting>
+
+	Deklarationen <type>option</type> tillåter rapportförfattaren
+	att ange valbara inställningar. Den enda valbara
+	inställningen som finns tillgänglig för närvarande är
+	"explicitvars", vilken får all användning av variabler som
+	inte tidigare deklarerats eller angivits att rapporteras som
+	parsningsfel. Deklarationen <type>require</type> tillåter
+	rapportförfattaren att ange att rapporten ifråga kräver en
+	version av rapporttolken som inte är äldre än den angivna.
+	Deklarationen <type>include</type> lägger till innehållet i en
+	annan fil i den aktuella filen; dess
+	<parameter>sträng</parameter>uttryck är namnet på en annan
+	<application>LifeLines</application>programfil. Det beskrivs
+	mer i detalj nedan. Deklarationen <type>global</type> måste
+	användas utanför alla <type>procedurer</type> och
+	<type>funktion</type>; den deklarerar att en
+	<parameter>variabel</parameter> gäller globalt.
+
+</para>
+
+<para>
+
+	Rapportspråket inbegriper också följande typer av
+	deklarationer, vilka härmar några vanliga
+	programmeringsspråk:
+
+	<synopsis>set(varb, uttr)</synopsis>
+	<synopsis>continue()</synopsis>
+	<synopsis>break()</synopsis>
+	<synopsis>return([uttr])</synopsis>
+
+</para>
+
+<para>
+
+
+	Deklarationen <type>set</type> är tilldelningsvariabeln;
+	<parameter>uttrycket</parameter>
+	utvärderas, och dess värde tilldelas till
+	<parameter>variabeln</parameter>. Deklarationen
+	<type>continue</type> hoppar till slutet av den aktuella
+	loopen, men lämnar inte loopen. Deklarationen
+	<type>break</type> bryter ut från den närmast nästlade loopen.
+	Deklarationen <type>return</type> återgår från den aktuella
+	<type>proceduren</type> eller
+	<type>funktionen</type>. <type>Procedurer</type> har
+	return-deklarationer utan uttryck; <type>funktioner</type> har
+	return-deklarationer med uttryck. Ingen av dessa deklarationer
+	returnerar ett värde, så ingen har någon direkt effekt på
+	programmets utdata.
+
+</para>
+
+<para>
+
+	Förutom dessa konventionella deklarationer tillhandahåller
+	rapportgeneratorn andra itereringsdeklarationer för att loopa
+	igenom genealogiska och andra typer av data. Deklarationen
+	<type>children</type> exempelvis, itererar igenom barnen i en
+	familj, deklarationen <type>spouses</type> itererar igenom de
+	makar en person haft, och deklarationen <type>families</type>
+	itererar igenom de familjer som en person är maka/make eller
+	förälder i. Dessa itereringstyper och andra typer beskrivs mer
+	i detalj längre fram under respektive datatyp.
+
+</para>
+
+
+
+</sect1>
+
+
+
+<sect1>
+
+
+
+<title>
+
+Uttryck
+
+</title>
+
+
+
+<para>
+
+	Det finns fyra typer av uttryck: <type>bokstavliga</type>,
+	<type>heltal</type>, <type>variabler</type> och inbyggda
+	eller användardefinierade funktions<type>anrop</type>.
+
+
+</para>
+
+<para>
+
+	En <type>bokstavlig</type> är vilken sträng som helst som är
+	innesluten i citationstecken; den är sitt eget värde. Ett
+	<type>heltal</type> är vilken heltals- eller flyttalskonstant
+	som helst; den är sitt eget värde. En <type>variabel</type> är
+	en namnad plats som kan tilldelas olika värden under
+	programkörningen. Värdet för en <type>variabel</type> är det
+	senaste värdet som det tilldelats. <type>Variabler</type> har
+	inte någon fast typ; vid olika tidpunkter i ett program kan
+	samma <type>variabel</type> tilldelas data av helt olika
+	typer. En identifierare följd av en kommaseparerad lista av
+	uttryck omgivna av parenteser, är antingen ett
+	<type>anrop</type> till en inbyggd funktion eller ett
+	<type>anrop</type> till en användardefinierad funktion.
+
+</para>
+
+
+
+</sect1>
+
+
+
+
+<sect1>
+
+
+
+<title>
+
+Egenskapen Include
+
+</title>
+
+
+
+<para>
+
+	Programmeringsspråket i <application>LifeLines</application>
+	tillhandahåller en <type>inkluderings</type>funktion. Med den
+	kan ett <application>LifeLines</application>program hänvisa
+	till andra <application>LifeLines</application>program.
+	Funktionen tillhandahålls genom deklarationen include:
+	<synopsis>include(sträng)</synopsis> där
+	<symbol>sträng</symbol> är en sträng inom citationstecken som
+	är namnet på en annan
+	<application>LifeLines</application>programfil. När en
+	include-deklaration påträffas, så läses det program som
+	hänvisas till in, som om innehållet i filen som hänvisas till
+	hade funnits i originalfilen just då. Detta gör det möjligt
+	för dig att skapa biblioteksfiler för
+	<application>LifeLines</application>program, som kan användas
+	av många program. Inkluderade filer kan i sin tur innehålla
+	<type>include</type>-deklarationer, och så vidare.
+	<application>LifeLines</application> använder skalvariabeln
+	<envar>LLPROGRAMS</envar>, om den är inställd, för att söka
+	efter inkluderade filer.
+
+</para>
+
+<para>
+	Den enda main-proceduren som faktiskt körs är den i den
+	rapport som användaren valt. Main-procedurer i andra rapporter
+	som inkluderas körs inte. Detta möjliggör att en modul avsedd
+	att inkluderas i andra program kan ha en main-procedur for
+	testsyften.
+</para>
+
+
+
+</sect1>
+
+
+
+<sect1>
+
+
+
+<title>
+
+Inbyggda funktioner
+
+</title>
+
+
+
+<para>
+
+	Det finns en lång rad med <type>inbyggda funktioner</type>,
+	och den kommer att fortsätta att växa en tid framöver. I den
+	första underavdelningen nedan beskrivs de typer av värden som
+	används i <application>LifeLines</application>program; det är
+	de olika typerna av <type>variabler</type>,
+	<type>funktionsparametrar</type> och <type>returneringsvärden
+	för funktioner</type>. I de återstående avdelningarna delas de
+	<type>inbyggda funktionerna</type> in i logiska kategorier och
+	beskrivs.
+
+</para>
+
+
+
+</sect1>
+
+
+
+<sect1>
+
+
+
+<title>
+
+Typer av värden
+
+</title>
+
+<glosslist><glossentry><glossterm><type>VALFRI</type></glossterm><glossdef>
+
+<para>
+
+union av alla typer
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><type>BOOL</type></glossterm><glossdef>
+<para>
+boolesk (0 representerar falskt; allt annat representerar sant)
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><type>HÄNDELSE</type></glossterm><glossdef>
+
+<para>
+
+händelse; referens till understruktur av noder i en
+<acronym>GEDCOM</acronym>-post (referens)
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><type>FAM</type></glossterm><glossdef>
+
+<para>
+
+familj; referens till en FAM-post i <acronym>GEDCOM</acronym>
+(referens)
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><type>FLYTTAL</type></glossterm><glossdef>
+<para>
+flyttalsnummer (får användas överallt där ett HELTAL får användas)
+</para>
+</glossdef></glossentry>
+
+
+<glossentry><glossterm><type>INDI</type></glossterm><glossdef>
+
+<para>
+
+person; referens till en INDI-post i <acronym>GEDCOM</acronym>
+(referens)
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><type>HELTAL</type></glossterm><glossdef>
+
+<para>
+
+heltal (på de flesta system ett 32-bitars signerat värde)
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><type>LISTA</type></glossterm><glossdef>
+<para>
+lista av godtycklig längd, med vilka värden som helst (referens)
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><type>NOD</type></glossterm><glossdef>
+<para>
+<acronym>GEDCOM</acronym>-nod; referens till en rad i ett
+<acronym>GEDCOM</acronym>-träd/post (referens)
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><type>TAL</type></glossterm><glossdef>
+<para>
+union av alla aritmetiska typer (HELTAL och FLYTTAL)
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><type>SET</type></glossterm><glossdef>
+
+<para>
+
+personuppsättning av godtycklig längd (referens)
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><type>STRÄNG</type></glossterm><glossdef>
+
+<para>
+
+textsträng
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><type>TABELL</type></glossterm><glossdef>
+
+<para>
+
+söktabell med nyckelvärden (referens)
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><type>TOM</type></glossterm><glossdef>
+
+<para>
+
+typ med inga värden
+
+</para>
+</glossdef></glossentry>
+</glosslist>
+
+<para>
+
+	I summeringarna av de <type>inbyggda funktionerna</type>
+	nedan, visas varje funktion tillsammans med dess
+	<type>argument</type>typer och dess
+	<type>returnerings</type>typ. Typerna kommer från den
+	föregående listan. Ibland måste ett <type>argument</type> till
+	en <type>inbyggd funktion</type> vara en
+	<type>variabel</type>; när detta är fallet anges dess typ med
+	<varname>XXX_V</varname>, där <symbol>XXX</symbol> är en av
+	typerna ovan. De <type>inbyggda</type> funktionerna
+	kontrollerar inte vilka typer av argument de har.
+	<type>Variabler</type> kan innehålla värden av alla typer, men
+	vid varje tidpunkt kommer de att innehålla värden av endast en
+	typ. Lägg märke till att <type>HÄNDELSE</type> är en undertyp
+	till <type>NOD</type>, och att <type>BOOL</type> är en
+	undertyp till <type>HELTAL</type>. Inbyggda funktioner av
+	typen <type>TOM</type> returnerar faktiskt
+	<returnvalue>noll</returnvalue>värden.
+
+</para>
+
+<para>
+
+	Referenstyper (angivna ovan inom parentes) följer
+	"pekarsemantik", med vilket avses att tilldelning av en
+	variabel till en annan resulterar i att båda variablerna pekar
+	på samma data (ingen kopia görs). Därför, om du skickar en
+	sträng till en funktion som förändrar strängen, så ser inte
+	anroparen förändringen, eftersom en sträng inte är en
+	referenstyp. Om du å andra sidan skickar en tabell till en
+	funktion som förändrar tabellen, så ser inte anroparen
+	förändringen, eftersom en tabell är en referenstyp.
+
+</para>
+
+</sect1>
+
+<sect1>
+
+<title>
+
+Aritmetiska och logiska funktioner
+
+</title>
+
+<glosslist>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>HELTAL <function>add</function></funcdef>
+<paramdef><parameter>HELTAL</parameter>,
+<parameter>HELTAL</parameter>
+<parameter>...</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+addition - två till 32 argument
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>HELTAL <function>sub</function></funcdef>
+<paramdef><parameter>HELTAL</parameter>,
+<parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+subtraktion
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>HELTAL <function>mul</function></funcdef>
+<paramdef><parameter>HELTAL</parameter>,
+<parameter>HELTAL</parameter>
+<parameter>...</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+multiplikation - två till 32 argument
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>HELTAL <function>div</function></funcdef>
+<paramdef><parameter>HELTAL</parameter>,
+<parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+division
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>HELTAL <function>mod</function></funcdef>
+<paramdef><parameter>HELTAL</parameter>,
+<parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+modulus (rest)
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TAL <function>exp</function></funcdef>
+<paramdef><parameter>TAL</parameter>,
+<parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+exponentiering
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TAL <function>neg</function></funcdef>
+<paramdef><parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+negering
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>FLYTTAL <function>float</function></funcdef>
+<paramdef><parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+konvertera heltal till flyttal
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>HELTAL <function>int</function></funcdef>
+<paramdef><parameter>FLYTTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+konvertera flyttal till heltal
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>incr</function></funcdef>
+<paramdef><parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+addera ett till variabel
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>decr</function></funcdef>
+<paramdef><parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+subtrahera ett från variabel
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>BOOL <function>and</function></funcdef>
+<paramdef><parameter>BOOL</parameter>,
+<parameter>BOOL</parameter>
+<parameter>...</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+logiskt och - från två till 32 argument
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>BOOL <function>or</function></funcdef>
+<paramdef><parameter>BOOL</parameter>,
+<parameter>BOOL</parameter>
+<parameter>...</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+logiskt eller - från två till 32 argument
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>BOOL <function>not</function></funcdef>
+<paramdef><parameter>BOOL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+logiskt inte
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>BOOL <function>eq</function></funcdef>
+<paramdef><parameter>VALFRI</parameter>,
+<parameter>VALFRI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+likhet (ej strängar)
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>BOOL <function>ne</function></funcdef>
+<paramdef><parameter>VALFRI</parameter>,
+<parameter>VALFRI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+olikhet
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>BOOL <function>lt</function></funcdef>
+<paramdef><parameter>VALFRI</parameter>,
+<parameter>VALFRI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+mindre än
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>BOOL <function>gt</function></funcdef>
+<paramdef><parameter>VALFRI</parameter>,
+<parameter>VALFRI</parameter>
+</paramdef></funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+större än
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>BOOL <function>le</function></funcdef>
+<paramdef><parameter>VALFRI</parameter>,
+<parameter>VALFRI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+mindre än eller lika med
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>BOOL <function>ge</function></funcdef>
+<paramdef><parameter>VALFRI</parameter>,
+<parameter>VALFRI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+större än eller lika med
+
+</para>
+
+</glossdef></glossentry>
+
+</glosslist>
+
+<para>
+
+	<function>Add</function>, <function>sub</function>,
+	<function>mul</function> och <function>div</function> gör
+	vanlig aritmetik på hel- eller flyttalsvärden. Om någon av
+	operanderna är ett flyttal, så blir resultatet ett flyttal.
+	Funktionerna <function>add</function> och
+	<function>mul</function> kan ha två till 32 argument; summan
+	eller produkten av den fullständiga uppsättningen argument
+	beräknas. Funktionerna <function>sub</function> och
+	<function>div</function> har två argument vardera;
+	<function>sub</function> subtraherar sitt andra argument från
+	sitt första, och <function>div</function> dividerar sitt
+	första argument med sitt andra. Funktionen
+	<function>mod</function> returnerar resten till divisionen av
+	den första parametern med den andra. Om det andra argumentet
+	till <function>div</function> eller <function>mod</function>
+	är noll, så returnerar dessa funktioner 0 och genererar ett
+	körningsfel. <function>Exp</function> utför
+	heltalsexponentiering. <function>Neg</function> negerar sitt
+	argument. Funktionerna <function>float</function> och
+	<function>int</function> kan användas för att explicit
+	konvertera ett värde till flyttal eller heltal vid behov.
+</para>
+
+<para>
+
+	<function>Incr</function> och <function>decr</function> ökar
+	respektive minskar värdet av en variabel med ett. Argumentet
+	till båda funktionerna måste vara en variabel.
+
+</para>
+
+<para>
+
+	<function>And</function> och <function>or</function> utför
+	logiska operationer. Båda funktionerna tar från två till 32
+	argument. Alla argument "och"-as respektive "eller"-as ihop.
+	Argumenten utvärderas från vänster till höger, men endast fram
+	till den punkt där slutvärdet av funktionen blir känt.
+	<function>Not</function> utför den logiska inte-operationen.
+
+</para>
+
+<para>
+
+	<function>Eq</function>, <function>ne</function>,
+	<function>lt</function>, <function>le</function>,
+	<function>gt</function> och <function>ge</function> utvärderar
+	de sex ordningsrelationerna mellan två heltal.
+
+</para>
+
+
+
+</sect1>
+
+
+
+<sect1>
+
+
+
+<title>
+
+Personfunktioner
+
+</title>
+
+<glosslist>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>name</function></funcdef>
+<paramdef><parameter>INDI</parameter>,
+<parameter><replaceable>BOOL</replaceable></parameter></paramdef>
+</funcprototype></funcsynopsis>
+</glossterm><glossdef>
+
+<para>
+
+förvald namntyp för
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>fullname</function></funcdef>
+<paramdef><parameter>INDI</parameter>,
+<parameter>BOOL</parameter>,
+<parameter>BOOL</parameter>,
+<parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+många namnformer för
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>surname</function></funcdef>
+<paramdef><parameter>INDI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+efternamn för
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>givens</function></funcdef>
+<paramdef><parameter>INDI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+förnamn för
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>trimname</function></funcdef>
+<paramdef><parameter>INDI</parameter>,
+<parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+förkortat namn för
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>HÄNDELSE <function>birth</function></funcdef>
+<paramdef><parameter>INDI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+första födelsehändelse för
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>HÄNDELSE <function>death</function></funcdef>
+<paramdef><parameter>INDI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+första dödshändelse för
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>HÄNDELSE <function>baptism</function></funcdef>
+<paramdef><parameter>INDI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+första dophändelse för
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>HÄNDELSE <function>burial</function></funcdef>
+<paramdef><parameter>INDI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+första begravningshändelse för
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>father</function></funcdef>
+<paramdef><parameter>INDI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+första fader till
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>mother</function></funcdef>
+<paramdef><parameter>INDI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+första moder till
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>nextsib</function></funcdef>
+<paramdef><parameter>INDI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+nästa (yngre) syskon till
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>prevsib</function></funcdef>
+<paramdef><parameter>INDI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+föregående (äldre) syskon till
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>sex</function></funcdef>
+<paramdef><parameter>INDI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+kön för
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>BOOL <function>male</function></funcdef>
+<paramdef><parameter>INDI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+sant om argumentet är man, falskt annars
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>BOOL <function>female</function></funcdef>
+<paramdef><parameter>INDI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+sant om argumentet är kvinna, falskt annars
+
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>pn</function></funcdef>
+<paramdef><parameter>INDI</parameter>,
+<parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+pronomen hänvisande till
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>HELTAL <function>nspouses</function></funcdef>
+<paramdef><parameter>INDI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+antal makar till
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>HELTAL <function>nfamilies</function></funcdef>
+<paramdef><parameter>INDI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+antal familjer (som maka/make/förälder) för
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>FAM <function>parents</function></funcdef>
+<paramdef><parameter>INDI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+första föräldrarnas familj för
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>title</function></funcdef>
+<paramdef><parameter>INDI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+första titel för
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>key</function></funcdef>
+<paramdef><parameter>INDI|FAM</parameter>,
+<parameter><replaceable>BOOL</replaceable></parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+intern nyckel för (fungerar också för familjer)
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>soundex</function></funcdef>
+<paramdef><parameter>INDI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+SOUNDEX-kod för
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>NOD <function>inode</function></funcdef>
+<paramdef><parameter>INDI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+GEDCOM-rotnod för
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>NOD <function>root</function></funcdef>
+<paramdef><parameter>INDI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+GEDCOM-rotnod för
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>indi</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+finn person med nyckelvärde
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>firstindi</function></funcdef><void/>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+första personen i databasen i nyckelordning
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>lastindi</function></funcdef><void/>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+sista personen i databasen i nyckelordning
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>nextindi</function></funcdef>
+<paramdef><parameter>INDI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+nästa person i databasen i nyckelordning
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>previndi</function></funcdef>
+<paramdef><parameter>INDI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+föregående person i databasen i nyckelordning
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><synopsis><command>spouses</command> (<replaceable>INDI</replaceable>, <replaceable>INDI</replaceable>, <replaceable>FAM</replaceable>, <replaceable>HELTAL</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
+</glossterm><glossdef>
+
+<para>
+
+loopa igenom alla makar till
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><synopsis><command>families</command> (<replaceable>INDI</replaceable>, <replaceable>FAM</replaceable>, <replaceable>INDI</replaceable>, <replaceable>HELTAL</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
+</glossterm><glossdef>
+
+<para>
+
+loopa igenom alla familjer (som maka/make) för
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><synopsis><command>forindi</command> (<replaceable>INDI</replaceable>, <replaceable>HELTAL</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
+</glossterm><glossdef>
+
+<para>
+
+loopa igenom alla personer i databasen
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><synopsis><command>mothers</command> (<replaceable>INDI</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>FAM_V</replaceable>, <replaceable>HELTAL</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
+</glossterm><glossdef>
+
+<para>
+loopa igenom alla kvinnliga föräldrar till en person
+</para>
+
+</glossdef></glossentry>
+<glossentry><glossterm><synopsis><command>fathers</command> (<replaceable>INDI</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>FAM_V</replaceable>, <replaceable>HELTAL</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
+</glossterm><glossdef>
+
+<para>
+loopa igenom alla manliga föräldrar till en person
+</para>
+
+</glossdef></glossentry>
+<glossentry><glossterm><synopsis><command>Parents</command> (<replaceable>INDI</replaceable>, <replaceable>FAM</replaceable>, <replaceable>HELTAL</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
+</glossterm><glossdef>
+
+<para>
+loopa igenom alla familjer en person är ett barn i
+</para>
+
+</glossdef></glossentry>
+</glosslist>
+
+<para>
+
+	Dessa funktioner tar en person som parameter och returnerar
+	information om honom eller henne.
+
+</para>
+
+<para>
+
+	<function>Name</function> returnerar det förvalda namnet för
+	en person; detta är det namn som återfinns på den första
+	<structfield>1 NAME</structfield>-raden i personens post;
+	snedstrecken tas bort och efternamnet sätts i versaler;
+	<function>name</function> kan ha en eventuell andra parameter
+	- om den är <returnvalue>sann</returnvalue> så beter sig
+	funktionen som beskrivits ovan; om den är
+	<returnvalue>falsk</returnvalue>, så bibehålls efternamnet som
+	exakt så som det ser ut i posten.
+
+</para>
+
+<para>
+
+	<function>Fullname</function> returnerar namnet för en person
+	i ett antal olika format. Om den andra parametern är
+	<returnvalue>sann</returnvalue>, så visas efternamnet med
+	versaler; om inte så visas efternamnet som det skrivs i
+	posten. Om den tredje parametern är
+	<returnvalue>sann</returnvalue>, så visas delarna i namnet i
+	den ordning som de återfinns i posten; om inte så skrivs
+	efternamnet först, följt av ett komma, och därefter de övriga
+	namndelarna. Den fjärde parametern anger den maximala
+	längden på fältet som kan användas för att visa namnet;
+	diverse konverteringar sker om det är nödvändigt att korta
+	namnet för att passa in det i denna längd.
+
+
+</para>
+
+<para>
+
+	<function>Surname</function> returnerar efternamnet för
+	personen, som det ser ut på den första <structfield>1
+	NAME</structfield>-raden; snedstrecken tas
+	bort. <function>Givens</function> returnerar förnamnen för
+	personen i samma ordning och format som det står skrivet i den
+	första <structfield>1 NAME</structfield>-raden i
+	posten. <function>Trimname</function> returnerar det förvalda
+	namnet för personen förkortat till det maximala antalet tecken
+	som angivits i den andra variabeln.
+
+
+</para>
+
+<para>
+
+	<function>Birth</function>, <function>death</function>,
+	<function>baptism</function> och <function>burial</function>
+	returnerar den första födelse- respektive döds-, dop- och
+	begravningshändelsen i personposten. En händelse är en
+	GEDCOM-nod på nivå 1. Om det inte finns någon matchande
+	händelse så returnerar dessa funktioner
+	<returnvalue>noll</returnvalue>.
+
+
+</para>
+
+<para>
+
+	<function>Father</function>, <function>mother</function>,
+	<function>nextsib</function> och <function>prevsib</function>
+	returnerar fader respektive moder, nästa yngre syskon och
+	nästa äldre syskon till personen. Om personen har fler än en
+	fader (moder) så returnerar funktionen
+	<function>father</function> (<function>mother</function>) den
+	första av dem. Dessa funktioner returnerar
+	<returnvalue>noll</returnvalue> om det inte finns någon person
+	i rollen.
+
+
+</para>
+
+<para>
+
+	<function>Sex</function> returnerar värdet för personens kön
+	som strängen <returnvalue>M</returnvalue> om personen är en
+	man, <returnvalue>F</returnvalue> om personen är en kvinna,
+	eller <returnvalue>U</returnvalue> om könet för personen är
+	okänt. <function>Male</function> och
+	<function>female</function> returnerar
+	<returnvalue>sant</returnvalue> om personen är man respektive
+	kvinna, eller <returnvalue>falskt</returnvalue> om inte.
+
+</para>
+
+<para>
+
+	<function>Pn</function> genererar pronomen, användbart för att
+	generera text; den andra parametern väljer typ av pronomen:
+
+</para>
+
+<informaltable pgwide='0' frame='none'>
+<tgroup cols='2'>
+<colspec colwidth='0.5in'></colspec>
+<tbody>
+<row>
+<entry>0</entry>
+<entry>Han/Hon</entry>
+</row>
+<row>
+<entry>1</entry>
+<entry>han/hon</entry>
+</row>
+<row>
+<entry>2</entry>
+<entry>Hans/Hennes</entry>
+</row>
+<row>
+<entry>3</entry>
+<entry>hans/hennes</entry>
+</row>
+<row>
+<entry>4</entry>
+<entry>honom/henne</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para>
+
+	<function>Nspouses</function> returnerar antalet makar
+	personen har i databasen, och <function>nfamilies</function>
+	returnerar antalet familjer som personen är förälder/maka/make i;
+	dessa två värden är inte nödvändigtvis identiska.
+	<function>Parents</function> returnerar den första familjen
+	som personen är barn i.
+
+</para>
+
+<para>
+
+	<function>Title</function> returnerar värdet på den första
+	<structfield>1 TITL</structfield>-raden i posten.
+	<function>Key</function> returnerar nyckelvärdet för en person
+	eller familj; om det finns en andra parameter och den är
+	icke-noll, så tas det inledande <literal>I</literal>:et eller
+	<literal>F</literal>:et bort. <function>Soundex</function>
+	returnerar soundex-koden för personen.
+
+
+</para>
+
+<para>
+
+	<function>Root</function> och <function>Inode</function>
+	returnerar rotnoden i personens
+	<acronym>GEDCOM</acronym>-nodträd. Lägg märke till att ett
+	<type>INDI</type>-värde inte är ett <type>NOD</type>-värde. Om
+	du vill behandla noderna inom en persons nodträd, så måste du
+	först använda <function>root</function>- eller
+	<function>inode</function>-funktionen för att få fram rotnoden
+	i personens nodträd. <function>Root</function> och
+	<function>inode</function> är synonyma.
+
+
+</para>
+
+<para>
+
+	<function>Indi</function> returnerar den person vars nyckel
+	skickats som argument; om ingen person har nyckeln, så
+	returnerar <function>indi</function>
+	<returnvalue>noll</returnvalue>.
+
+
+</para>
+
+<para>
+
+	<function>Firstindi</function>, <function>nextindi</function>
+	och <function>previndi</function> låter dig iterera genom
+	samtliga personer i databasen. <function>Firstindi</function>
+	returnerar den första personen i databasen efter
+	nyckelordning. <function>Nextindi</function> returnerar nästa
+	person efter personen i argumentet i nyckelordning.
+	<function>Previndi</function> returnerar den föregående
+	personen innan argumentpersonen i nyckelordning.
+
+
+</para>
+
+<para>
+
+	<function>Spouses</function> är en iterator som loopar igenom
+	varje maka/make till en person. Det första argumentet är en
+	person. Det andra argumentet är en personvariabel som itererar
+	igenom den första personens makar. Det tredje argumentet är en
+	familjevariabel som itererar igenom de familjer som personen
+	och varje maka/make finns i. Det fjärde argumentet är en
+	heltalsvariabel som räknar itereringarna.
+
+
+</para>
+
+<para>
+
+	<function>Families</function> är en iterator som loopar igenom
+	de familjer som en person var maka/make/förälder i. Det första
+	argumentet är en person. Det andra argumentet är en
+	familjevariabel som itererar igenom familjerna som den första
+	personen var maka/make/förälder i. Det tredje argumentet
+	itererar igenom makarna från familjerna; om det inte finns
+	någon maka/make i en viss familj, så sätts variabeln till noll
+	för den itereringen. Det fjärde argumentet är en
+	heltalsvariabel som räknar antalet itereringar.
+
+
+</para>
+
+<para>
+
+	<function>Forindi</function> är en iterator som loopar igenom
+	varje person i databasen i ökande nyckelordning. Dess första
+	parameter är en variabel som itererar igenom personerna; dess
+	andra parameter är en heltalsräknarvariabel som räknar
+	personerna med början på ett.
+
+</para>
+
+<para>
+
+	<function>Parents</function> är en iterator som loopar igenom
+	alla familjer som en person är barn i. OBS: Denna iterators
+	namn börjar med stort P. Det finns en annan funktion med samma
+	namn som börjar med litet p. Dess första parameter är en
+	person; dess andra parameter är en familjevariabel som
+	itererar igenom de familjer som personen är barn i; och den
+	tredje parametern är en variabel som räknar familjerna med
+	början på ett.
+
+</para>
+
+<para>
+	<function>Forindi</function> är en iterator som loopar igenom
+	alla personer i databasen i stigande nyckelordning. Dess
+	första parameter är en variabel som itererar igenom
+	personerna; dess andra variabel är en heltalsräknare som
+	räknar personerna med början på ett.
+</para>
+
+
+
+</sect1>
+
+
+
+<sect1>
+
+
+
+<title>
+
+Familjefunktioner
+
+</title>
+
+<glosslist><glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>HÄNDELSE <function>marriage</function></funcdef>
+<paramdef><parameter>FAM</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+första giftermålshändelse för
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>husband</function></funcdef>
+<paramdef><parameter>FAM</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+första make/fader till
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>wife</function></funcdef>
+<paramdef><parameter>FAM</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+första maka/moder till
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>HELTAL <function>nchildren</function></funcdef>
+<paramdef><parameter>FAM</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+antal barn i
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>firstchild</function></funcdef>
+<paramdef><parameter>FAM</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+första barn till
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>lastchild</function></funcdef>
+<paramdef><parameter>FAM</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+sista barn till
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>key</function></funcdef>
+<paramdef><parameter>FAM|INDI</parameter>,
+<parameter><replaceable>BOOL</replaceable></parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+internt nyckelvärde för (fungerar också för personer)
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>NOD <function>fnode</function></funcdef>
+<paramdef><parameter>FAM</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+GEDCOM-rotnod för
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>NOD <function>root</function></funcdef>
+<paramdef><parameter>FAM</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+GEDCOM-rotnod för
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>FAM <function>fam</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+finn familj via nyckel
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>FAM <function>firstfam</function></funcdef><void/>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+första familjen i databasen i nyckelordning
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>FAM <function>lastfam</function></funcdef><void/>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+sista familjen i databasen i nyckelordning
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>FAM <function>nextfam</function></funcdef>
+<paramdef><parameter>FAM</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+nästa familj i databasen i nyckelordning
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>FAM <function>prevfam</function></funcdef>
+<paramdef><parameter>FAM</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+föregående familj i databasen i nyckelordning
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><synopsis><command>children</command> (<replaceable>FAM</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>HELTAL_V</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
+</glossterm><glossdef>
+
+<para>
+
+loopa igenom barn i familj
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><synopsis><command>forfam</command> (<replaceable>FAM_V</replaceable>, <replaceable>HELTAL_V</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
+</glossterm><glossdef>
+
+<para>
+
+loopa igenom alla familjer i databasen
+
+</para>
+</glossdef></glossentry>
+
+</glosslist>
+
+<para>
+
+Dessa funktioner tar en familj som ett argument och returnerar
+information om den.
+
+
+</para>
+
+<para>
+
+	<function>Marriage</function> returnerar den första
+	giftermålshändelsen som hittas i familjeposten, om någon;
+	den returnerar <returnvalue>noll</returnvalue> om det inte
+	finns någon giftermålshändelse.
+
+
+</para>
+
+<para>
+
+	<function>Husband</function> returnerar den första
+	maken/fadern i familjen, om någon; <function>wife</function>
+	returnerar den första makan/modern i familjen, om någon. Båda
+	returnerar <returnvalue>noll</returnvalue> om den efterfrågade
+	personen inte finns i familjen.
+
+
+</para>
+
+<para>
+
+	<function>Nchildren</function> returnerar antalet barn i
+	familjen.
+
+
+</para>
+
+<para>
+
+	<function>Firstchild</function> och
+	<function>lastchild</function> returnerar det första
+	respektive sista barnet i en familj.
+
+
+</para>
+
+<para>
+
+	<function>Key</function> beskrevs i avsnittet om
+	personfunktioner.
+
+
+</para>
+
+<para>
+
+	<function>Root</function> och <function>fnode</function>
+	returnerar rotnoden i <acronym>GEDCOM</acronym>-nodträdet för
+	en familj. Lägg märke till att ett <type>FAM</type>-värde inte
+	är ett <type>NOD</type>-värde. Om du vill behandla noderna
+	inom nodträdet för en familj, måste du först använda
+	funktionerna <function>root</function> eller
+	<function>fnode</function> för att få fram roten i
+	nodträdet för familjen. <function>Root</function> och
+	<function>fnode</function> är synonyma.
+
+</para>
+
+<para>
+
+	<function>Fam</function> returnerar den familj vars nyckel
+	skickats som argument; om ingen familj har nyckeln så
+	returnerar <function>fam</function>
+	<returnvalue>noll</returnvalue>.
+
+
+</para>
+
+<para>
+
+	<function>Firstfam</function>, <function>nextfam</function>
+	och <function>prevfam</function> låter dig iterera igenom alla
+	familjer i databasen. <function>Firstfam</function> returnerar
+	den första familjen i databasen i nyckelordning.
+	<function>Nextfam</function> returnerar den familj som är
+	närmast efterföljande i nyckelordning från familjen i
+	argumentet. <function>Prevfam</function> returnerar den familj
+	som är närmast föregående i nyckelordning från familjen i
+	argumentet.
+
+</para>
+
+<para>
+
+	<function>Children</function> är en iterator som loopar igenom
+	barnen i en familj. Dess första parameter är ett
+	familjeuttryck; dess andra parameter är en variabel som
+	itererar igenom varje barn; dess tredje parameter är ett
+	heltalsräknarvariabel som räknar barnen, med början på ett.
+	Dessa två variabler får användas inom inom loopkroppen.
+
+
+</para>
+
+<para>
+
+	<function>Forfam</function> är en iterator som loopar igenom
+	varje familj i databasen i stigande nyckelordning. Dess första
+	parameter är en variabel som itererar igenom familjerna; dess
+	andra parameter är en heltalsräknarvariabel som räknar igenom
+	familjerna med början på ett.
+
+</para>
+
+</sect1>
+
+
+
+<sect1>
+
+<title>
+Andra typer av poster
+</title>
+
+<glosslist>
+<glossentry><glossterm><synopsis><command>forsour</command> (<replaceable>NOD_V</replaceable>, <replaceable>HELTAL</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
+</glossterm><glossdef>
+
+<para>
+loopa igenom alla källor i databasen
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><synopsis><command>foreven</command> (<replaceable>NOD_V</replaceable>, <replaceable>HELTAL</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
+</glossterm><glossdef>
+
+<para>
+loopa igenom alla EVEN-noder in databasen
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><synopsis><command>forothr</command> (<replaceable>NOD_V</replaceable>, <replaceable>HELTAL</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
+</glossterm><glossdef>
+
+<para>
+loopa igenom alla övriga (notiser, etc.) noder i databasen
+</para>
+</glossdef></glossentry>
+</glosslist>
+
+<para>
+
+	<function>Forsour</function> är en iterator som loopar igenom
+	alla källnoder i databasen. Dess första argument är
+	SOUR-posten och dess andra argument är en
+	heltalsräknarvariabel som räknar källelementen med början på
+	ett. <function>Foreven</function> är en iterator som loopar
+	igenom alla händelsenoder i databasen. Dess första argument är
+	EVEN-posten och dess andra argument är en
+	heltalsräknarvariabel som räknar händelseelementen med början
+	på ett. <function>Forothr</function> är en iterator som loopar
+	igenom alla övriga noder i databasen. Dess första argument är
+	posten (NOTE, etc.) och dess andra argument är en
+	heltalsräknarvariabel som räknar noderna med början på ett.
+
+</para>
+
+</sect1>
+
+
+<sect1>
+
+
+
+<title>
+
+Listfunktioner
+
+</title>
+
+<glosslist><glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>list</function></funcdef>
+<paramdef><parameter>LISTA_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+deklarera en lista
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>BOOL <function>empty</function></funcdef>
+<paramdef><parameter>LISTA</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+kontrollera om listan är tom
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>HELTAL <function>length</function></funcdef>
+<paramdef><parameter>LISTA</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+listans längd
+</para>
+</glossdef></glossentry>
+
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>enqueue</function></funcdef>
+<paramdef><parameter>LISTA</parameter>,
+<parameter>VALFRI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+köa element i lista
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>VALFRI <function>dequeue</function></funcdef>
+<paramdef><parameter>LISTA</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+avköa och returnera element från listan
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>requeue</function></funcdef>
+<paramdef><parameter>LISTA</parameter>,
+<parameter>VALFRI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+återköa ett element i lista
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>push</function></funcdef>
+<paramdef><parameter>LISTA</parameter>,
+<parameter>VALFRI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+lägg på element i lista
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>VALFRI <function>pop</function></funcdef>
+<paramdef><parameter>LISTA</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+ta bort och returnera element från lista
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>setel</function></funcdef>
+<paramdef><parameter>LISTA</parameter>,
+<parameter>HELTAL</parameter>,
+<parameter>VALFRI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+vektorelementstilldelning
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>VALFRI <function>getel</function></funcdef>
+<paramdef><parameter>LISTA</parameter>,
+<parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+välj vektorelement
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>BOOL <function>inlist</function></funcdef>
+<paramdef><parameter>LISTA</parameter>,
+<parameter>VALFRI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+är andra argumentet i listan
+</para>
+
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>sort</function></funcdef>
+<paramdef><parameter>LISTA</parameter>,
+<parameter>LISTA</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+sortera listelement
+</para>
+
+</glossdef></glossentry>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>rsort</function></funcdef>
+<paramdef><parameter>LISTA</parameter>,
+<parameter>LISTA</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+sortera listelement i omvänd ordning
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><synopsis><command>forlist</command> (<replaceable>LISTA</replaceable>, <replaceable>VALFRI_V</replaceable>, <replaceable>HELTAL_V</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
+</glossterm><glossdef>
+
+<para>
+
+loopa igenom alla element i lista
+
+</para>
+</glossdef></glossentry>
+
+</glosslist>
+
+<para>
+
+	<application>LifeLines</application> tillhandahåller listor
+	för allmänna syften som kan åtkommas som köer, stackar eller
+	vektorer. En lista måste deklareras med funktionen
+	<function>list</function> innan den kan användas. Att
+	återdeklarera en befintlig variabel med
+	<function>list</function> tömmer den och återställer den till
+	att vara en tom lista.
+
+
+</para>
+
+<para>
+
+	En lista kan ha valfritt antal element.
+	<function>Empty</function> returnerar
+	<returnvalue>sant</returnvalue> om listan inte har några
+	element och <returnvalue>falskt</returnvalue> i annat fall.
+	<function>Length</function> returnerar längden på listan. Den
+	enda parametern för båda är en lista.
+
+</para>
+
+<para>
+
+	<function>Enqueue</function>, <function>dequeue</function> och
+	<function>requeue</function> tillhandahåller köåtkomst till en
+	lista. <function>Enqueue</function> lägger till ett element
+	längst bak i en kö, <function>dequeue</function> tar bort och
+	returnerar elementet från längst fram i en kö, och
+	<function>requeue</function> lägger till ett element längst
+	fram i en kö. Den första parametern till alla tre är en lista,
+	och den andra parametern till <function>enqueue</function> och
+	<function>requeue</function> är värdet som ska läggas till i
+	kön och kan vara vilket värde som helst.
+
+</para>
+
+<para>
+
+	<function>Push</function> och <function>pop</function>
+	tillhandahåller stackåtkomst till en lista.
+	<function>Push</function> lägger på element på stacken, och
+	<function>pop</function> tar bort och returnerar det senast
+	pålagda elementet från stacken. Den första parametern för båda
+	är en lista, och den andra parametern för
+	<function>push</function> är värdet som ska läggas på stacken
+	och kan vara av vilken typ som helst.
+
+</para>
+
+<para>
+
+	<function>Setel</function> och <function>getel</function>
+	tillhandahåller vektoråtkomst till en lista.
+	<function>Setel</function> anger ett värde för ett
+	vektorelement, och <function>getel</function> returnerar
+	värdet för ett vektorelement. Den första parametern för båda
+	är en lista; den andra parametern för båda är en
+	heltalsposition i vektorn; och den tredje parametern för
+	<function>setel</function> är värdet att tilldela till
+	vektorelementet och kan vara av vilken typ som helst.
+	Vektorelement numreras med början på ett. Otilldelade
+	element antas vara <returnvalue>noll</returnvalue>
+	(<returnvalue>0</returnvalue>). Vektorer växer automatiskt i
+	storlek för att anpassas till den största använda
+	positionsangivelsen. Att ange 0 refererar till det sista
+	elementet i andra änden från 1, -1 den före det, o. s. v.
+
+</para>
+
+<para>
+
+	<function>Inlist</function> jämför det andra argumentet med
+	varje element i listan. Om det finner ett matchande element,
+	så returnerar <function>inlist</function>
+	<returnvalue>sant</returnvalue>.
+
+</para>
+
+<para>
+
+	<function>Sort</function> och <function>rsort</function>
+	sorterar en lista, och använder elemententen i den andra
+	vektorn för att bestämma den nya ordningen. Båda listorna
+	ordnas om, så i grunden sorteras båda med användning av
+	sorteringsordningen i det andra argumentet. (Om bara ett
+	argument anges, så sorteras det mot sina egna element.) Rsort
+	sorterar i omvänd ordning mot sort.
+
+</para>
+
+<para>
+
+	<function>Forlist</function> är en iterator som loopar igenom
+	elementet i en lista. Dess första parameter är ett
+	<type>LIST</type>-uttryck; dess andra parameter är en variabel
+	som itererar igenom listelementen; och dess tredje parameter
+	är en heltalsräknarvariabel som räknar listelementen med
+	början på ett.
+
+</para>
+
+</sect1>
+
+<sect1>
+
+<title>
+
+Tabellfunktioner
+
+</title>
+
+<glosslist><glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>table</function></funcdef>
+<paramdef><parameter>TABELL_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+deklarera en tabell
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>insert</function></funcdef>
+<paramdef><parameter>TABELL</parameter>,
+<parameter>STRÄNG</parameter>,
+<parameter>VALFRI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+lägg in objekt i en tabell
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>VALFRI <function>lookup</function></funcdef>
+<paramdef><parameter>TABELL</parameter>,
+<parameter>STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+leta upp och returnera objekt från tabell
+
+</para>
+</glossdef></glossentry>
+
+</glosslist>
+
+<para>
+
+	Dessa funktioner tillhandahåller tabeller med nycklar för
+	allmänna syften. En tabell måste deklareras med funktionen
+	<function>table</function> innan den kan användas.
+
+</para>
+
+<para>
+
+	<function>Insert</function> lägger in ett objekt och dess
+	nyckel i en tabell. Dess första parameter är en tabell; dess
+	andra parameter är objektets nyckel; och den tredje parametern
+	är objektet självt. Nyckeln måste vara en sträng och objektet
+	kan vara vilket värde som helst. Om det redan finns ett objekt
+	i tabellen med denna nyckel, så ersätts det gamla objektet med
+	det nya.
+
+</para>
+
+<para>
+
+	<function>Lookup</function> hämtar ett objekt från en tabell.
+	Dess första parameter är en tabell, och den andra parametern
+	är objektets nyckel. Funktionen returnerar objektet som har
+	den nyckeln från tabellen; om det inte finns något sådant
+	objekt, returneras <returnvalue>noll</returnvalue>.
+
+</para>
+
+</sect1>
+
+<sect1>
+
+<title>
+
+Funktioner för GEDCOM-noder
+
+</title>
+
+<glosslist><glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>xref</function></funcdef>
+<paramdef><parameter>NOD</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+korsreferensvärde för
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>tag</function></funcdef>
+<paramdef><parameter>NOD</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+etikett för
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>value</function></funcdef>
+<paramdef><parameter>NOD</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+värde för
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>NOD <function>parent</function></funcdef>
+<paramdef><parameter>NOD</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+föräldranod för
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>NOD <function>child</function></funcdef>
+<paramdef><parameter>NOD</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+första barnnod till
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>NOD <function>sibling</function></funcdef>
+<paramdef><parameter>NOD</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+nästa syskonnod till
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>NOD <function>savenode</function></funcdef>
+<paramdef><parameter>NOD</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+kopiera en nodstruktur
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>HELTAL <function>level</function></funcdef>
+<paramdef><parameter>NOD</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+nivå för en nod
+</para>
+</glossdef></glossentry>
+
+
+<glossentry><glossterm><synopsis><command>fornodes</command> (<replaceable>NOD</replaceable>, <replaceable>NOD_V</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
+</glossterm><glossdef>
+
+<para>
+
+loopa igenom barnnoder
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><synopsis><command>fornotes</command> (<replaceable>VALFRI</replaceable>, <replaceable>STRÄNG</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
+</glossterm><glossdef>
+
+<para>
+loopa igenom notiser i en nod
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><synopsis><command>traverse</command> (<replaceable>NOD</replaceable>, <replaceable>NOD_V</replaceable>, <replaceable>HELTAL_V</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
+</glossterm><glossdef>
+
+<para>
+
+loopa igenom alla ättlinganoder
+
+</para>
+</glossdef></glossentry>
+
+</glosslist>
+
+<para>
+
+	Dessa funktioner ger tillgång till komponenterna i en
+	<acronym>GEDCOM</acronym>-nod. Alla tar en
+	<acronym>GEDCOM</acronym>-nod som enda parameter, och alla
+	returnerar ett annat värde med anknytning till noden.
+
+</para>
+
+<para>
+
+	<function>Xref</function> returnerar korsreferensvärdet för
+	noden, om det finns; <function>tag</function> returnerar
+	etiketten för noden; och <function>value</function> returnerar
+	värdet för noden, om det finns. Om det inte finns någon
+	korsreferens, så returnerar <function>xref</function>
+	<returnvalue>noll</returnvalue>; om det inte finns något
+	värde, så returnerar value <returnvalue>noll</returnvalue>.
+
+</para>
+
+<para>
+
+	<function>Parent</function> returnerar föräldranoden till
+	noden, om den finns; <function>child</function> returnerar den
+	första barnnoden till noden, om den finns; och
+	<function>syskon</function> returnerar den nästa syskonnoden
+	till noden, om den finns. När det inte finns någon nod som är
+	relaterad på sättet ifråga, så returnerar dessa funktioner
+	<returnvalue>noll</returnvalue>. Dessa tre funktioner
+	möjliggör enkel navigation genom ett
+	<acronym>GEDCOM</acronym>-nodträd.
+
+</para>
+
+<para>
+
+	<function>Savenode</function> gör en kopia av noden, och
+	understrukturen i noder under noden, som delats ut till den.
+	Varning: Minnet som används för att göra kopian lämnas aldrig
+	tillbaka till systemet.
+
+</para>
+
+<para>
+
+	Funktionen <function>level</function> returnerar nivån för
+	noden.
+
+</para>
+
+<para>
+
+	<function>Fornodes</function> är en iterator som loopar igenom
+	barnnoderna i en <acronym>GEDCOM</acronym>-nod. Dess första
+	argument är ett noduttryck, och dess andra parameter är en
+	variabel som itererar igenom varje direkt barnnod till den
+	första noden.
+
+</para>
+
+<para>
+	<function>Fornotes</function> är en iterator som loopar igenom
+	NOTE-noderna i en <acronym>GEDCOM</acronym>-nod. Dess första
+	argument är ett noduttryck, och dess andra argument är en
+	variabel som returnerar värdet för NOTE-noden. Värdet
+	inkluderar behandlade underliggande CONC- och CONT-poster.
+
+</para>
+
+<para>
+
+	<function>Traverse</function> är en iterator som tillhandahåller
+	en allmän metod för att gå igenom
+	<acronym>GEDCOM</acronym>-träd. Dess första parameter är ett
+	noduttryck; dess andra parameter är en variabel som itererar
+	genom alla noder under den valda noden, i riktning uppifrån
+	och ned och från vänster till höger; och dess tredje parameter
+	är en variabel som är satt till nivån för den aktuella noden i
+	itereringen.
+
+</para>
+
+</sect1>
+
+<sect1>
+
+<title>
+
+Händelse- och datumfunktioner
+
+</title>
+
+<glosslist><glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>date</function></funcdef>
+<paramdef><parameter>HÄNDELSE</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+datum för, värde för den första <structfield>DATE</structfield>-raden
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>place</function></funcdef>
+<paramdef><parameter>HÄNDELSE</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+plats för, värde för den första <structfield>PLAC</structfield>-raden
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>year</function></funcdef>
+<paramdef><parameter>HÄNDELSE</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+år, eller första sträng med 3-4 siffror i första
+<structfield>DATE</structfield>-raden
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>long</function></funcdef>
+<paramdef><parameter>HÄNDELSE</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+datum och plats, värden för första <structfield>DATE</structfield>-
+och <structfield>PLAC</structfield>-raderna
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>short</function></funcdef>
+<paramdef><parameter>HÄNDELSE</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+datum och plats för, förkortad form
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>HÄNDELSE <function>gettoday</function></funcdef><void/>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+returnerar "händelsen" dagens datum
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>dayformat</function></funcdef>
+<paramdef><parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+ställ in dagformat för anrop till stddate
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>monthformat</function></funcdef>
+<paramdef><parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+ställ in månadsformat för anrop till stddate
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>yearformat</function></funcdef>
+<paramdef><parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+ställ in årsformat för anrop till stddate
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>eraformat</function></funcdef>
+<paramdef><parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+ställ in eraformat för anrop till stddate
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>dateformat</function></funcdef>
+<paramdef><parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+ställ in datumformat för anrop till stddate
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>datepic</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+ställ in anpassat datumformat för anrop till stddate
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>stddate</function></funcdef>
+<paramdef><parameter>HÄNDELSE</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+datum för, i aktuellt format
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>complexformat</function></funcdef>
+<paramdef><parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+set complex date format
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>complexpic</function></funcdef>
+<paramdef><parameter>HELTAL</parameter>,
+<parameter>STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+ställ in anpassad komplex datumbildssträng
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>complexdate</function></funcdef>
+<paramdef><parameter>HÄNDELSE|STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+datum för, i aktuellt komplext format
+</para>
+</glossdef></glossentry>
+
+</glosslist>
+
+<para>
+
+Dessa funktioner extraherar information om datum och plats för
+händelser.
+
+</para>
+
+<para>
+
+	<function>Date</function> returnerar värdet för den första
+	<structfield>DATE</structfield>-raden i en händelse, en nod i
+	trädet för en <acronym>GEDCOM</acronym>-post.
+	<function>Date</function> letar upp den första
+	<structfield>DATE</structfield>-raden som ligger en nivå
+	djupare än händelsenoden. <function>Place</function>
+	returnerar värdet för den första
+	<structfield>PLAC</structfield>-raden i en händelse.
+	<function>Year</function> returnerar det första tre- eller
+	fyrsiffriga numret i värdet för den första
+	<structfield>DATE</structfield>-raden i en händelse; detta
+	nummer antas vara året för händelsen.
+
+</para>
+
+<para>
+
+	<function>Long</function> returnerar det bokstavliga värdet på
+	de första <structfield>DATE</structfield>- och
+	<structfield>PLAC</structfield>-raderna i en händelse,
+	sammanlänkade, avdelade med ett komma.
+	<function>Short</function> förkortar information från de
+	första <structfield>DATE</structfield>- och
+	<structfield>PLAC</structfield>raderna, sammanlänkar den
+	förkortade informationen, avdelad med ett komma, och
+	returnerar den. Ett förkortat datum är dess år; en förkortad
+	plats är den sista komponenten i dess värde, ytterligare
+	förkortat om komponenten finns med i
+	platsförkortningstabellen.
+
+</para>
+
+<para>
+
+	<function>Gettoday</function> skapar en händelse som har
+	dagens datum i <structfield>DATE</structfield>-raden.
+
+
+</para>
+
+<para>
+
+	De nästa sju funktionerna används för att formatera datum på
+	ett antal olika sätt. Med <function>Dayformat</function>,
+	<function>monthformat</function>,
+	<function>yearformat</function>,
+	<function>eraformat</function>, och
+	<function>dateformat</function> väljer man stil för dag,
+	månad, år, era och datumstrukturen som helhet;
+	<function>stddate</function> returnerar datum i den valda
+	stilen. <function>Datepic</function> möjliggör specifikation
+	av ett anpassat mönster som upphäver datumformatet som valts
+	med <function>dateformat</function>. Den angivna strängen
+	anger placeringen av dag, månad och år i strängen med %d, %m
+	och %y. Ett nollargument avaktiverar det upphävda formatet.
+	Argumentet till <function>stddate</function> är normalt en
+	händelse och datumet extraheras från händelsen och formateras.
+	Om argumentet är en datumsträng konverteras den med användning
+	av aktuellt datumformat.
+
+</para>
+
+<para>
+
+	De nästa tre funktionerna möjliggör mer komplex formatering av
+	datum, med bestämningarna ABT, EST, CAL, BEF, AFT, FROM för
+	GEDCOM-datum i åtanke. <function>Complexformat</function>
+	väljer formatet att använda. Formatet påverkar endast den
+	komplexa bilden, inte formatet på datumet i sig självt.
+	Funktionen <function>complexpic</function> kan användas för
+	att ange en anpassad bildsträng för någon av eller alla de nio
+	anpassade formatsträngarna. Den anpassade strängen kan
+	avbrytas genom att skicka noll för strängen. När en anpassad
+	bildsträng anges upphäver den både de förkortade och den
+	fullständiga bildsträngarna. <function>Complexdate</function>
+	formaterar datumet på samma sätt som
+	<function>stddate</function>, men med tillägg av den valda
+	komplexa datumformatsträngen.
+
+</para>
+
+<para>
+
+	De dagformatkoder som skickas till
+	<function>dayformat</function> är:
+
+</para>
+
+<informaltable pgwide='0' frame='none'>
+<tgroup cols='2'>
+<colspec colwidth='0.5in'></colspec>
+<tbody>
+<row>
+<entry>0</entry>
+<entry>sätt in blanksteg före ensiffriga dagar
+</entry>
+</row>
+<row>
+<entry>1</entry>
+<entry>
+sätt in 0 före ensiffriga dagar
+</entry>
+</row>
+<row>
+<entry>2</entry>
+<entry>
+varken blanksteg eller 0 före ensiffriga dagar
+</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para>
+
+De månadsformateringskoder som skickas till
+<function>monthformat</function> är:
+</para>
+<informaltable pgwide='0' frame='none'>
+<tgroup cols='2'>
+<colspec colwidth='0.5in'></colspec>
+<tbody>
+<row>
+<entry>0</entry>
+<entry>
+numrera med blanksteg före ensiffriga månader
+</entry>
+</row>
+<row>
+<entry>1</entry>
+<entry>
+numrera med nolla före ensiffriga månader
+</entry>
+</row>
+<row>
+<entry>2</entry>
+<entry>
+numrera utan varken blanksteg eller 0 före ensiffriga månader
+</entry>
+</row>
+<row>
+<entry>3</entry>
+<entry>
+förkortning med versaler (t. ex. JAN, FEB) (lokaliserad)
+</entry>
+</row>
+<row>
+<entry>4</entry>
+<entry>
+förkortning med inledande versal (t, ex. Jan, Feb) (lokaliserad)
+</entry>
+</row>
+<row>
+<entry>5</entry>
+<entry>
+hela ordet i versaler (tex., JANUARI, FEBRUARI) (lokaliserad)
+</entry>
+</row>
+<row>
+<entry>6</entry>
+<entry>
+hela ordet med inledande stor bokstav (tex., Januari, Februari)
+(lokaliserad)
+</entry>
+</row>
+<row>
+<entry>7</entry>
+<entry>
+förkortning med gemener (t. ex. jan, feb) (lokaliserad)
+</entry>
+</row>
+<row>
+<entry>8</entry>
+<entry>
+hela ordet med gemener (t. ex. januari, februari) (lokaliserad)
+</entry>
+</row>
+<row>
+<entry>9</entry>
+<entry>
+förkortning med versaler på engelska som i GEDCOM (t. ex. JAN, FEB)
+</entry>
+</row>
+<row>
+<entry>10</entry>
+<entry>
+romerska siffror med gemener (t. ex. i, ii)
+</entry>
+</row>
+<row>
+<entry>11</entry>
+<entry>
+romerska siffror med versaler (t. ex. I, II)
+</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para>
+Årformatskoderna som skickas till <function>yearformat</function> är:
+</para>
+
+<informaltable pgwide='0' frame='none'>
+<tgroup cols='2'>
+<colspec colwidth='0.5in'></colspec>
+<tbody>
+<row>
+<entry>0</entry>
+<entry>
+använd inledande blanksteg före år med mindre än fyra siffror
+</entry>
+</row>
+<row>
+<entry>1</entry>
+<entry>
+använd inledande 0 före år med mindre än fyra siffror
+</entry>
+</row>
+<row>
+<entry>2</entry>
+<entry>
+varken blanksteg eller inledande 0 före år
+</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para>
+De eraformatskoder som skickas till <function>eraformat</function> är: 
+</para>
+
+<informaltable pgwide='0' frame='none'>
+<tgroup cols='2'>
+<colspec colwidth='0.5in'></colspec>
+<tbody>
+<row>
+<entry>0</entry>
+<entry>
+inga markörer för f. kr./e. kr.
+</entry>
+</row>
+<row>
+<entry>1</entry>
+<entry>
+efterföljande e. kr. där det passar
+</entry>
+</row>
+<row>
+<entry>2</entry>
+<entry>
+efterföljande e. kr. eller f. kr.
+</entry>
+</row>
+<row>
+<entry>11</entry>
+<entry>
+efterföljande f. kr. där det passar
+</entry>
+</row>
+<row>
+<entry>12</entry>
+<entry>
+efterföljande e. kr. eller f. kr.
+</entry>
+</row>
+<row>
+<entry>21</entry>
+<entry>
+efterföljande B. C. E (before common era) om det passar
+</entry>
+</row>
+<row>
+<entry>22</entry>
+<entry>
+efterföljande C. E. eller B. C. E.
+</entry>
+</row>
+<row>
+<entry>31</entry>
+<entry>
+efterföljande BC om det passar
+</entry>
+</row>
+<row>
+<entry>32</entry>
+<entry>
+efterföljande CE eller BCE
+</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para>
+De fullständiga datumformaten som skickas till
+<function>stddate</function> är:
+</para>
+
+<informaltable pgwide='0' frame='none'>
+<tgroup cols='2'>
+<colspec colwidth='0.5in'></colspec>
+<tbody>
+<row>
+<entry>0</entry>
+<entry>
+da må år
+</entry>
+</row>
+<row>
+<entry>1</entry>
+<entry>
+må da, år
+</entry>
+</row>
+<row>
+<entry>2</entry>
+<entry>
+må/da/år
+</entry>
+</row>
+<row>
+<entry>3</entry>
+<entry>
+da/må/år
+</entry>
+</row>
+<row>
+<entry>4</entry>
+<entry>
+må-da-år
+</entry>
+</row>
+<row>
+<entry>5</entry>
+<entry>
+da-må-år
+</entry>
+</row>
+<row>
+<entry>6</entry>
+<entry>
+mådaår
+</entry>
+</row>
+<row>
+<entry>7</entry>
+<entry>
+damåår
+</entry>
+</row>
+<row>
+<entry>8</entry>
+<entry>
+år må da
+</entry>
+</row>
+<row>
+<entry>9</entry>
+<entry>
+år/må/da
+</entry>
+</row>
+<row>
+<entry>10</entry>
+<entry>
+år-må-da
+</entry>
+</row>
+<row>
+<entry>11</entry>
+<entry>
+årmåda
+</entry>
+</row>
+<row>
+<entry>12</entry>
+<entry>
+år (endast år, utelämnar allt annat)
+</entry>
+</row>
+<row>
+<entry>13</entry>
+<entry>
+da/må år
+</entry>
+</row>
+<row>
+<entry>14</entry>
+<entry>
+(Som i GEDCOM)
+</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para>
+De komplexa datumformat som väljs av
+<function>complexformat</function> och används av
+<function>complexdate</function> är:
+</para>
+
+<informaltable pgwide='0' frame='none'>
+<tgroup cols='3'>
+<colspec colwidth='0.5in'></colspec>
+<tbody>
+<row>
+<entry> </entry>
+<entry>
+Typ
+</entry>
+<entry>
+Exempel
+</entry>
+</row>
+<row>
+<entry>3</entry>
+<entry>
+använd förkortningar med versaler
+</entry>
+<entry>
+UNG  1 JAN 2002
+</entry>
+</row>
+<row>
+<entry>4</entry>
+<entry>
+använd förkortningar med inledande versal
+</entry>
+<entry>
+Ung  1 JAN 2002
+</entry>
+</row>
+<row>
+<entry>5</entry>
+<entry>
+använd fullständiga ord med versaler
+</entry>
+<entry>
+UNGEFÄR  1 JAN 2002
+</entry>
+</row>
+<row>
+<entry>6</entry>
+<entry>
+använd fullständiga ord med inledande versal
+</entry>
+<entry>
+Ungefär  1 JAN 2002
+</entry>
+</row>
+<row>
+<entry>7</entry>
+<entry>
+använd förkortningar med gemener
+</entry>
+<entry>
+ung  1 JAN 2002
+</entry>
+</row>
+<row>
+<entry>8</entry>
+<entry>
+använd fullständiga ord med gemener
+</entry>
+<entry>
+ungefär  1 JAN 2002
+</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para>
+De komplexa datumsträngsbilderna som kan upphävas med
+<function>complexpic</function> är:
+</para>
+
+<informaltable pgwide='0' frame='none'>
+<tgroup cols='3'>
+<colspec colwidth='0.5in'></colspec>
+<tbody>
+<row>
+<entry> </entry>
+<entry>
+Förkortning
+</entry>
+<entry>
+Fullständigt ord
+</entry>
+</row>
+<row>
+<entry>0</entry>
+<entry>
+ung %1
+</entry>
+<entry>
+ungefär %1
+</entry>
+</row>
+<row>
+<entry>1</entry>
+<entry>
+upp %1
+</entry>
+<entry>
+uppskattat %1
+</entry>
+</row>
+<row>
+<entry>2</entry>
+<entry>
+ber %1
+</entry>
+<entry>
+beräknat %1
+</entry>
+</row>
+<row>
+<entry>3</entry>
+<entry>
+för %1
+</entry>
+<entry>
+före %1
+</entry>
+</row>
+<row>
+<entry>4</entry>
+<entry>
+eft %1
+</entry>
+<entry>
+efter %1
+</entry>
+</row>
+<row>
+<entry>5</entry>
+<entry>
+mel %1 och %2
+</entry>
+<entry>
+mellan %1 och %2
+</entry>
+</row>
+<row>
+<entry>6</entry>
+<entry>
+fr %1
+</entry>
+<entry>
+från %1
+</entry>
+</row>
+<row>
+<entry>7</entry>
+<entry>
+till %1
+</entry>
+<entry>
+t %1
+</entry>
+</row>
+<row>
+<entry>8</entry>
+<entry>
+fr %1 t %2
+</entry>
+<entry>
+från %1 till $2
+</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+</sect1>
+
+<sect1>
+
+<title>
+
+Funktioner för värdeextrahering
+
+</title>
+
+<glosslist><glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>extractdate</function></funcdef>
+<paramdef><parameter>NOD</parameter>,
+<parameter>HELTAL_V</parameter>,
+<parameter>HELTAL_V</parameter>,
+<parameter>HELTAL_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+extrahera ett datum
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>extractnames</function></funcdef>
+<paramdef><parameter>NOD</parameter>,
+<parameter>LISTA_V</parameter>,
+<parameter>HELTAL_V</parameter>,
+<parameter>HELTAL_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+extrahera ett namn
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>extractplaces</function></funcdef>
+<paramdef><parameter>NOD</parameter>,
+<parameter>LISTA_V</parameter>,
+<parameter>HELTAL_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+extrahera en plats
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>extracttokens</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter>,
+<parameter>LISTA_V</parameter>,
+<parameter>HELTAL_V</parameter>,
+<parameter>STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+extrahera objekt
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>extractdatestr</function></funcdef>
+<paramdef><parameter>VARB</parameter>,
+<parameter>VARB</parameter>,
+<parameter>VARB</parameter>,
+<parameter>VARB</parameter>,
+<parameter>VARB</parameter>,
+<parameter>STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+extrahera datum från sträng
+
+</para>
+</glossdef></glossentry>
+
+</glosslist>
+
+<para>
+
+	Funktionerna för värdeextrahering läser värdena för vissa
+	rader och returnerar dessa värden i extraherad form.
+
+</para>
+
+<para>
+
+	<function>Extractdate</function> extraherar datumvärden från
+	antingen en händelse- eller en
+	<structfield>DATE</structfield>-nod. Den första parametern
+	måste vara en nod; om dess etikett är
+	<structfield>DATE</structfield>, så extraheras datumet från
+	värdet på noden; om dess etikett inte är
+	<structfield>DATE</structfield>, så extraheras datumet från
+	den första <structfield>DATE</structfield>-raden en nivå
+	nedanför argumentnoden. De återstående tre argumenten är
+	variabler. Den första tilldelas heltalsvärdet för den
+	extraherade dagen; den andra tilldelas heltalsvärdet för den
+	extraherade månaden; och den tredje tilldelas heltalsvärdet
+	för det extraherade året.
+
+</para>
+
+<para>
+
+	<function>Extractnames</function> extraherar namnkomponenter
+	från en <structfield>NAME</structfield>-rad. Dess första
+	argument är antingen en <structfield>INDI</structfield>- eller
+	en <structfield>NAME</structfield>-nod. Om det är en
+	<structfield>NAME</structfield>-rad, så extraheras
+	komponenterna från värdet av den noden; om det är en
+	<structfield>INDI</structfield>-rad, så extraheras
+	komponenterna från värdet av den första
+	<structfield>NAME</structfield>-raden i personposten. Det
+	andra argumentet är en lista som kommer att innehålla de
+	extraherade komponenterna. Det tredje argumentet är en
+	heltalsvariabel som sätts till antalet extraherade
+	komponenter. Det fjärde argumentet är en variabel som är satt
+	till positionen (med början på ett) i efternamnskomponenten;
+	de omgivande <literal>/</literal>-tecknen tas bort från
+	efternamnskomponenten. Om det inte finns något efternamn så
+	sätts denna variabel till noll.
+
+</para>
+
+<para>
+
+	<function>Extractplaces</function> extraherar platskomponenter
+	från en <structfield>PLAC</structfield>-nod. Det första
+	argumentet är en nod; om dess etikett är
+	<structfield>PLAC</structfield>, så extraheras dessa från
+	nodens värde; om dess etikett inte är
+	<structfield>PLAC</structfield>, så extraheras platser från
+	den första <structfield>PLAC</structfield>-raden en nivå
+	nedanför noden för argumentet. Den andra parametern är en
+	lista som ska innehålla de extraherade komponenterna. Det
+	tredje argumentet är en heltalsvariabel som sätts till antalet
+	extraherade komponenter. Platskomponenter definieras av de
+	komma-separerade bitarna av värdet för
+	<structfield>PLAC</structfield>; inledande och efterföljande
+	blanksteg tas bort från komponenterna, medan alla blanksteg
+	inom etiketten bibehålls.
+
+</para>
+
+<para>
+
+	<function>Extracttokens</function> extraherar objekt från en
+	sträng och placerar dem i en lista. Det första argumentet är
+	den sträng som objekten ska extraheras från. Det andra
+	argumentet är listan som ska innehålla objekten. Det tredje
+	argumentet är en heltalsvariabel som sätts till det antal
+	objekt som extraherats. Den fjärde parametern är den sträng
+	av avgränsande tecken som <function>extracttokens</function>
+	använder för att dela upp strängen med indata i objekt.
+
+</para>
+
+</sect1>
+
+<sect1>
+
+<title>
+
+Funktioner för interaktion med användaren
+
+</title>
+
+<glosslist><glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>getindi</function></funcdef>
+<paramdef><parameter>INDI_V</parameter>,
+<parameter><replaceable>STRÄNG</replaceable></parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+identifiera person via användargränssnitt
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>getindiset</function></funcdef>
+<paramdef><parameter>SET_V</parameter>,
+<parameter><replaceable>STRÄNG</replaceable></parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+identifiera uppsättning med personer via användargränssnitt
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>getfam</function></funcdef>
+<paramdef><parameter>FAM_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+identifiera familj via användargränssnitt
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>getint</function></funcdef>
+<paramdef><parameter>HELTAL_V</parameter>,
+<parameter><replaceable>STRÄNG</replaceable></parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+hämta heltal via användargränssnitt
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>getstr</function></funcdef>
+<paramdef><parameter>STRÄNG_V</parameter>,
+<parameter><replaceable>STRÄNG</replaceable></parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+hämta sträng via användargränssnitt
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>choosechild</function></funcdef>
+<paramdef><parameter>INDI|FAM</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+välj barn till person/i familj via användargränssnitt
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>FAM <function>choosefam</function></funcdef>
+<paramdef><parameter>INDI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+välj familj som person finns i som maka/make
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>chooseindi</function></funcdef>
+<paramdef><parameter>SET</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+välj person från uppsättning med personer
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>choosespouse</function></funcdef>
+<paramdef><parameter>INDI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+välj maka/make till person
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>SET <function>choosesubset</function></funcdef>
+<paramdef><parameter>SET</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+välj en delmängd av en uppsättning med personer
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>HELTAL <function>menuchoose</function></funcdef>
+<paramdef><parameter>LISTA</parameter>,
+<parameter><replaceable>STRÄNG</replaceable></parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+gör ett val från en lista
+
+</para>
+</glossdef></glossentry>
+
+</glosslist>
+
+<para>
+
+	Dessa funktioner interagerar med användaren för att hämta den
+	information som behövs för programmet.
+
+
+</para>
+
+<para>
+
+	<function>Getindi</function> ber användaren att identifiera en
+	person. Det första argumentet är en variabel som sätts till
+	den valda personen. Det andra (inte obligatoriskt) är en
+	sträng att använda som fråga. <function>Getindiset</function>
+	ber användaren att identifiera en uppsättning med personer.
+	<function>Getfam</function> ber användaren att identifiera en
+	familj. <function>Getint</function> och
+	<function>getstr</function> ber användaren skriva in ett
+	heltal respektive en sträng.
+
+</para>
+
+<para>
+
+	<function>Choosechild</function> ber användaren att välja ett
+	barn i en familj eller till en person; dess enda argument är
+	en person eller en familj; den returnerar barnet.
+	<function>Choosefam</function> ber användaren att välja en
+	familj som en person finns i som maka/make; dess argument är
+	en person; den returnerar familjen.
+	<function>Chooseindi</function> ber användaren att välja en
+	person ur en uppsättning med personer; dess argument är en
+	uppsättning med personer; den returnerar den valda personen.
+	<function>Choosespouse</function> ber användaren att välja en
+	maka/make till en person; dess argument är en person; den
+	returnerar den valda maka/maken.
+	<function>Choosesubset</function> ber användaren att välja en
+	delmängd personer ur en uppsättning med personer; dess
+	argument är den valda delmängden.
+
+</para>
+
+<para>
+
+	<function>Menuchoose</function> låter användaren göra val ur
+	en godtycklig meny. Dess första argument är en lista med
+	strängar som utgör alternativen i menyn; det andra (inte
+	obligatoriska) argumentet är en frågesträng för menyn;
+	<function>menuchoose</function> returnerar heltalsindexet för
+	det menyalternativ som användaren valt; om användaren inte
+	väljer något alternativ, returneras
+	<returnvalue>noll</returnvalue>.
+
+</para>
+
+</sect1>
+
+<sect1>
+
+<title>
+
+Strängfunktioner
+
+</title>
+
+<glosslist>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>lower</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+konvertera till gemener
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>upper</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+konvertera till versaler
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>capitalize</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+sätt inledande versal
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>titlecase</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+sätt inledande versal på varje ord
+</para>
+</glossdef></glossentry>
+
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>trim</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter>,
+<parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+korta av till viss längd
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>rjustify</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter>,
+<parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+högerjustera i fält
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>concat</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter>,
+<parameter><replaceable>STRÄNG</replaceable></parameter>
+<parameter><replaceable>...</replaceable></parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+sammanlänka två strängar
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>strconcat</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter>,
+<parameter><replaceable>STRÄNG</replaceable></parameter>
+<parameter><replaceable>...</replaceable></parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+sammanlänka två strängar
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>HELTAL <function>strlen</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+antal tecken i sträng
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>substring(</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter>,
+<parameter>HELTAL</parameter>,
+<parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+delsträngsfunktion
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>HELTAL <function>index</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter>,
+<parameter>STRÄNG</parameter>,
+<parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+positionsfunktion
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>d</function></funcdef>
+<paramdef><parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+tal som heltalssträng
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>f</function></funcdef>
+<paramdef><parameter>FLYTTAL</parameter>,
+<parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+tal som flyttalssträng
+</para>
+</glossdef></glossentry>
+
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>card</function></funcdef>
+<paramdef><parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+tal i grundtalsform (<literal>en, två, ...</literal>)
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>ord</function></funcdef>
+<paramdef><parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+tal i ordningstalsform (<literal>första, andra, ...</literal>)
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>alpha</function></funcdef>
+<paramdef><parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+konvertera tal till latinsk bokstav (<literal>a, b, ...</literal>)
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>roman</function></funcdef>
+<paramdef><parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+tal i romersk form (<literal>i, ii, ...</literal>)
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>strsoundex</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+finn SOUNDEX-värde för godtycklig sträng
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>HELTAL <function>strtoint</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+konvertera talsträng till heltal
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>HELTAL <function>atoi</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+konvertera talsträng till heltal
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>HELTAL <function>strcmp</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter>,
+<parameter>STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+allmän jämförelse av strängar
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>BOOL <function>eqstr</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter>,
+<parameter>STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+jämför om likhet mellan strängar
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>BOOL <function>nestr</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter>,
+<parameter>STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+jämför om olikhet mellan strängar
+
+</para>
+</glossdef></glossentry>
+
+</glosslist>
+
+<para>
+
+	Dessa funktioner tillhandahåller stränghantering. I
+	versionerna före 3.0.6 använde många av dem en metod för
+	minneshantering som var vald för absolut minimal
+	minnesanvändning. En funktion som använder denna metod
+	konstruerade sin utmatningssträng i sin egen strängbuffert,
+	och återanvände denna buffert varje gång den anropades. När
+	ett funktion som använde denna metod returnerade ett
+	strängvärde returnerade det sin buffert. Som en konsekvens av
+	detta måste de strängar som returnerades av dessa funktioner
+	antingen användas eller sparas innan funktionen anropades
+	igen.
+
+</para>
+
+<para>
+
+	<function>Lower</function> och <function>upper</function>
+	konverterar bokstäverna i sina argument till gemener
+	respektive versaler. <function>Capitalize</function>
+	konverterar den första bokstaven i argumentet, om det är en
+	bokstav, till en versal. <function>Lower</function> och
+	<function>upper</function> använde historiskt
+	buffertreturneringsmetoden; <function>capitalize</function>
+	opererar på och returnerar sitt argument.
+	<function>Titlecase</function> konverterar den första
+	bokstaven på varje ord, om det är en bokstav, till versaler,
+	och alla andra bokstäver till gemener.
+
+</para>
+
+<para>
+
+	<function>Trim</function> kortar av en sträng till den längd
+	som specificerats i den andra parametern. Om strängen redan
+	har den längden eller kortare så ändras inte strängen.
+	<function>Rjustify</function> högerjusterar en sträng till en
+	annan sträng av den längd som specificerats i den andra
+	parametern. Om den ursprungliga strängen är kortare än den
+	högerjusterade strängen är kortare än den högerjusterade
+	strängen, så sätts blanksteg in till vänster om den
+	ursprungliga strängen; om strängen är längre än den justerade
+	strängen, så kapas strängen på högra sidan.
+	<function>Trim</function> använde historiskt
+	buffertreturneringsmetoden; <function>rjustify</function>
+	skapar och returnerar en ny sträng.
+
+</para>
+
+<para>
+
+	<function>Concat</function> och <function>strconcat</function>
+	slår samman strängar och returnerar resultatet. De är
+	identiska funktioner. De får ta från två till 32
+	strängargument; nollargument är tillåtna. Argumenten slås
+	samman till en enda, nyskapad sträng, som returneras.
+
+</para>
+
+<para>
+
+	<function>Strlen</function> returnerar längden av
+	strängargumentet.
+
+</para>
+
+<para>
+
+	<function>Substring</function> returnerar en delsträng av
+	strängen i det första argumentet. De andra och tredje
+	argumenten är positionerna för de första och sista tecknen i
+	argumentsträngen som ska användas för att skapa delsträngen.
+	Positionerna räknas från ett. <function>Substring</function>
+	använde historiskt buffertreturneringsmetoden.
+
+</para>
+
+<para>
+
+	<function>Index</function> returnerar teckenpositionen för det
+	n-te uppträdandet av en delsträng i en sträng. Positionen är
+	räknad från ett från början av delsträngen. Det första
+	argumentet är strängen; det andra argumentet är delsträngen;
+	och det tredje argumentet är numret för den gång i ordningen
+	som delsträngen uppträder.
+
+</para>
+
+<para>
+
+	<function>D</function>, <function>card</function>,
+	<function>ord</function>, <function>alpha</function> och
+	<function>roman</function> konverterar heltal till strängar.
+	<function>D</function> konverterar ett heltal till en numerisk
+	sträng; <function>card</function> konverterar ett heltal till
+	en grundtalssträng (t. ex. <literal>en, två, tre</literal>);
+	<function>ord</function> konverterar ett heltal till ett
+	ordningstal (t. ex. <literal>första, andra, tredje</literal>);
+	<function>alpha</function> konverterar ett heltal till en
+	bokstav (t. ex. <literal>a, b, c</literal>); och
+	<function>roman</function> konverterar ett heltal till en
+	romersk siffra (tex., <literal>i, ii, iii</literal>).
+
+</para>
+
+<para>
+
+	 Funktionen <function>f</function> konverterar ett flyttal
+	 till en sträng. Det andra argumentet (inte obligatoriskt)
+	 anger precisionen för utdata. Den förinställda precisionen är
+	 2.
+
+</para>
+
+<para>
+
+	<function>Strsoundex</function> konverterar en godtycklig
+	sträng till ett SOUNDEX-värde. Tecken som inte ingår i
+	teckenkodningen ASCII hoppas över.
+
+</para>
+
+<para>
+
+	<function>Strtoint</function> konverterar en numerisk sträng
+	till ett heltal. <function>Atoi</function> är identisk med
+	<function>strtoint</function>.
+
+</para>
+
+<para>
+
+	<function>Strcmp</function> jämför två strängar och returnerar
+	ett heltal som är mindre än noll, lika med noll, eller större
+	än noll, om den första strängen är lexikografiskt mindre än,
+	respektive lika med, eller större än den andra
+	strängen. <function>Eqstr</function> och
+	<function>nestr</function> returnerar huruvida två strängar är
+	lika respektive olika. <function>Strcmp</function>,
+	<function>eqstr</function> och <function>nestr</function>
+	behandlar alla tre nollsträngar som tomma strängar, det vill
+	säga att de låtsas att en nollsträng faktiskt är "". Detta
+	betyder att alla nollsträngar och tomma strängar kommer att
+	räknas som lika.
+
+</para>
+
+</sect1>
+
+<sect1>
+
+<title>
+
+Funktioner för utmatningsläge
+
+</title>
+
+<glosslist><glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>linemode</function></funcdef><void/>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+använd radutmatningsläge
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>pagemode</function></funcdef>
+<paramdef><parameter>HELTAL</parameter>,
+<parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+använd sidutmatningsläge med angiven sidstorlek
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>col</function></funcdef>
+<paramdef><parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+positionera till kolumn i utmatning
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>HELTAL <function>getcol</function></funcdef><void/>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+hämta aktuell position på aktuell rad i utmatning
+</para>
+</glossdef></glossentry>
+
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>row</function></funcdef>
+<paramdef><parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+positionera till rad i utmatning
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>pos</function></funcdef>
+<paramdef><parameter>HELTAL</parameter>,
+<parameter>HELTAL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+positionera till (rad, kol)-koordinat i utmatning
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>pageout</function></funcdef><void/>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+mata ut sidbuffert
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>nl</function></funcdef><void/>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+nyradstecken
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>sp</function></funcdef><void/>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+blankstegstecken
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>qt</function></funcdef><void/>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+citationstecken
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>newfile</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter>,
+<parameter>BOOL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+skicka programutmatning till denna fil
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>outfile</function></funcdef><void/>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+returnera namnet på aktuell programutmatningsfil
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>copyfile</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+kopiera filinnehållet till programutmatningsfilen
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>print</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter>,
+<parameter><replaceable>STRÄNG</replaceable></parameter>
+<parameter><replaceable>...</replaceable></parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+skriv ut sträng till standardutmatningsfönstret
+
+</para>
+</glossdef></glossentry>
+
+</glosslist>
+
+<para>
+
+	Rapporter kan genereras i två lägen, radläge och sidläge.
+	<function>Linemode</function> väljer radläge och
+	<function>pagemode</function> väljer sidläge; radläge är det
+	förvalda. Den första parametern till
+	<function>pagemode</function> är antal rader per sida; den
+	andra parametern är antal tecken för radlängd. I radläget
+	skrivs rapportutdata direkt till utmatningsfilen medan
+	programmet körs, rad för rad. I sidläget buffras utdata till
+	sidor som skrivs till utmatningsfilen när
+	<function>pageout</function> anropas. Sidläget är användbart
+	för att generera tex. an- eller stamtavelträd, eller tabeller
+	med rutor, där det är praktiskt att kunna beräkna den
+	två-dimensionella positionen för utdata.
+
+</para>
+
+<para>
+
+	<function>Col</function> positionerar utdata till den angivna
+	positionen på en rad. Om den angivna positionen är större än
+	argumentet, så positionerar col utdata på den angivna
+	positionen på nästa rad. <function>Col</function> fungerar i
+	båda lägena. <function>Getcol</function> returnerar aktuell
+	position på aktuell rad i utmatningen.
+
+</para>
+
+<para>
+
+	<function>Row</function> positionerar utdata vid det första
+	tecknet i den angivna raden; <function>row</function> kan bara
+	användas i sidläget.
+
+</para>
+
+<para>
+
+	<function>Pos</function> positionerar utdata till en angiven
+	rad- och radpositionskoordinat; det första argumentet anger
+	vilken rad, och den andra anger vilken position på rad.
+	<function>Pos</function> kan bara användas i sidläget.
+
+</para>
+
+<para>
+
+	<function>Nl</function> skriver ut ett nyradstecken till
+	utmatningsfilen; <function>sp</function> skriver ut ett
+	blanksteg till utmatningsfilen; och <function>qt</function>
+	skriver ut ett citationstecken till utmatningsfilen. Lägg
+	märke till att <literal>\n</literal> och <literal>\"</literal>
+	kan användas inom strängvärden för att representera
+	radmatningar respektive citationstecken.
+
+</para>
+
+<para>
+
+	<function>Newfile</function> anger namnet på utmatningsfilen
+	för rapporten. Dess första argument är filens namn; dess andra
+	argument är en flagga för inläggning i filen - om dess värde
+	är icke-noll så läggs rapporttexten till i filen; om dess
+	värde är noll så skrivs innehållet i filen över.
+	<function>Newfile</function> kan anropas många gånger; detta
+	gör det möjligt att låta ett enda rapportprogram generera
+	många filer med utdata från rapporten under en körning. Det är
+	inte obligatoriskt för program att använda
+	<function>newfile</function>; om den inte används så ber
+	<application>LifeLines</application> automatiskt om ett namn
+	för utmatningsfilen från rapporten.
+
+</para>
+
+<para>
+
+	<function>Outfile</function> returnerar namnet på den aktuella
+	utmatningsfilen från rapporten.
+
+</para>
+
+<para>
+
+	<function>Copyfile</function> kopierar innehållet i en fil
+	till utmatningsfilen för rapporten; dess argument är en sträng
+	vars värde är namnet på en fil; om filnamnet inte är angivet
+	med vare sig absolut eller relativ sökväg, så används
+	miljövariabeln <envar>LLPROGRAMS</envar>, om den är inställd,
+	för att söka efter filen; filen öppnas och dess innehåll
+	kopieras till utmatningsfilen för rapporten.
+
+</para>
+
+<para>
+
+	<function>Print</function> skriver ut sin argumentsträng till
+	standardutmatningsfönstret; <function>print</function> kan ha
+	från ett till 32 argument.
+
+</para>
+
+</sect1>
+
+<sect1>
+
+<title>
+
+Funktioner för personuppsättningar och GEDCOM-extrahering
+
+</title>
+
+<glosslist><glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>indiset</function></funcdef>
+<paramdef><parameter>SET_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+deklarera en uppsättningsvariabel
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>SET <function>addtoset</function></funcdef>
+<paramdef><parameter>SET</parameter>,
+<parameter>INDI</parameter><parameter>,
+VALFRI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+lägg till en person till en uppsättning
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>SET <function>deletefromset</function></funcdef>
+<paramdef><parameter>SET</parameter>,
+<parameter>INDI</parameter>,
+<parameter>BOOL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+ta bort en person från en uppsättning
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>HELTAL <function>lengthset</function></funcdef>
+<paramdef><parameter>SET</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+storlek på en uppsättning
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>SET <function>union</function></funcdef>
+<paramdef><parameter>SET</parameter>,
+<parameter>SET</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+union av två uppsättningar
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>SET <function>intersect</function></funcdef>
+<paramdef><parameter>SET</parameter>,
+<parameter>SET</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+skärningspunkter mellan två uppsättningar
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>SET <function>difference</function></funcdef>
+<paramdef><parameter>SET</parameter>,
+<parameter>SET</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+skillnad mellan två uppsättningar
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>SET <function>parentset</function></funcdef>
+<paramdef><parameter>SET</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+uppsättning med alla föräldrar
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>SET <function>childset</function></funcdef>
+<paramdef><parameter>SET</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+uppsättning med alla barn
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>SET <function>spouseset</function></funcdef>
+<paramdef><parameter>SET</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+uppsättning med alla makar
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>SET <function>siblingset</function></funcdef>
+<paramdef><parameter>SET</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+uppsättning med alla syskon
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>SET <function>ancestorset</function></funcdef>
+<paramdef><parameter>SET</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+uppsättning med alla anor
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>SET <function>descendentset</function></funcdef>
+<paramdef><parameter>SET</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+uppsättning av alla ättlingar
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>SET <function>descendantset</function></funcdef>
+<paramdef><parameter>SET</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+samma som descendentset; stavning
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>SET <function>uniqueset</function></funcdef>
+<paramdef><parameter>SET</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+ta bort dubbletter från uppsättning
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>namesort</function></funcdef>
+<paramdef><parameter>SET</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+sortera indiset efter namn
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>keysort</function></funcdef>
+<paramdef><parameter>SET</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+sortera indiset efter nyckelvärden
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>valuesort</function></funcdef>
+<paramdef><parameter>SET</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+sortera indiset efter hjälpvärden
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>genindiset</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter><parameter>SET</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+skapa indiset från namnsträng i GEDCOM-form
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>BOOL <function>inset</function></funcdef>
+<paramdef><parameter>SET</parameter>,
+<parameter>INDI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+<returnvalue>Sant</returnvalue> om personen finns i uppsättningen.
+
+</para>
+</glossdef></glossentry>
+
+
+<glossentry><glossterm><synopsis><command>forindiset</command> (<replaceable>SET</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>VALFRI_V</replaceable>, <replaceable>HELTAL_V</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
+</glossterm><glossdef>
+
+<para>
+
+loopa igenom alla personer i uppsättning med personer
+
+</para>
+</glossdef></glossentry>
+
+</glosslist>
+
+<para>
+
+	Dessa funktioner låter dig manipulera uppsättningar med
+	personer. En uppsättning med personer är potentiellt ett stort
+	antal personer; varje person kan ha ett godtyckligt värde
+	associerat med sig. En uppsättning med personer måste
+	deklareras med funktionen <function>indiset</function> innan
+	den kan användas.
+
+</para>
+
+<para>
+
+	<function>Addtoset</function> lägger till en person till en
+	uppsättning. Det första argumentet är uppsättningen; det andra
+	argumentet är personen; och det tredje argumentet kan vara
+	vilket värde som helst. Samma person kan läggas till i en
+	uppsättning mer än en gång, med olika värden varje
+	gång. <function>Deletefromset</function> tar bort en person
+	från en personuppsättning. Det första argumentet är
+	uppsättningen; det andra argumentet är personen; om den tredje
+	parametern är <returnvalue>sann</returnvalue>, tas personen
+	bort från uppsättningen på alla ställen där han/hon finns med;
+	om den är <returnvalue>falsk</returnvalue> så tas han/hon bara
+	bort på det första stället som han/hon finns
+	med. <function>Lengthset</function> returnerar antalet
+	personer i en personuppsättning.
+
+</para>
+
+<para>
+
+	<function>Union</function>, <function>intersect</function> och
+	<function>difference</function> returnerar uppsättningarna med
+	unionerna respektive skärningarna och skillnaderna mellan två
+	personuppsättningar. Var och en av funktionerna tar två
+	personuppsättningar som argument, och returnerar en tredje
+	personuppsättning. Funktionerna modifierar faktiskt sina
+	argumentuppsättningar, genom att ordna om den i nyckelordning
+	och ta bort alla dubletter (dessa operationer är nödvändiga
+	för att enkelt kunna implementera dessa typer av
+	uppsättningsfunktioner).
+
+</para>
+
+<para>
+
+	<function>Parentset</function>, <function>childset</function>,
+	<function>spouseset</function> och
+	<function>siblingset</function> returnerar uppsättningen med
+	alla föräldrar, respektive alla barn, alla makar och alla
+	syskon, till uppsättningen av personer i sina argument. I
+	inget av fallen sker någon förändring av personuppsättningen i
+	argumentet.
+
+</para>
+
+<para>
+
+	<function>Ancestorset</function> returnerar uppsättningen med
+	alla anor till alla personer i personuppsättningen i
+	argumentet. <function>Descendentset</function> returnerar
+	uppsättningen med alla ättlingar till alla personer i
+	personuppsättningen i argumentet.
+	<function>Descendantset</function> är samma som
+	<function>descendentset</function>; det tillåter en alternativ
+	stavning.
+
+</para>
+
+<para>
+
+	<function>Uniqueset</function> sorterar en personuppsättning
+	efter nyckelvärde och tar sedan bort alla poster där nycklarna
+	är dubblerade; den ursprungliga uppsättningen modifieras och
+	returneras.
+
+</para>
+
+<para>
+
+	<function>Namesort</function>, <function>keysort</function>
+	och <function>valuesort</function> sorterar en
+	personuppsättning efter namn respektive efter nyckel och efter
+	associerat värde.
+
+</para>
+
+<para>
+
+	Varje person i en personuppsättning har ett associerat värde.
+	När en person läggs till till en personuppsättning med
+	<function>addtoset</function>, så tilldelas värdet explicit.
+	När nya uppsättningar skapas av andra funktioner, så används
+	ett antal regler för att associera värden med personer allt
+	eftersom de läggs till i de nya uppsättningarna. För
+	<function>parentset</function>, <function>childset</function>
+	och <function>spouseset</function> kopieras värdena från den
+	första personen i en första uppsättning som får den nya
+	personen att läggas till i uppsättningen. För
+	<function>union</function>, <function>intersect</function> och
+	<function>difference</function> kopieras värdena från värdena
+	i den första uppsättningen, utom för
+	<function>union</function>, där personerna tas enbart från den
+	andra uppsättningen, och där värdena kommer därifrån. För
+	<function>ancestorset</function> och
+	<function>descendantset</function> sätts värdet till det antal
+	generationer bort som den nya personen är från den
+	<emphasis>första</emphasis> personen i den första
+	uppsättningen som den nya personen är släkt med. Om den nya
+	personen är släkt med mer än en person i den första
+	uppsättningen, sätts värdet till det närmaste släktskapet; d.
+	v. s. värdet blir så lågt som möjligt.
+	<function>Valuesort</function> sorterar en personuppsättning
+	efter värdet på dessa hjälpvärden.
+
+</para>
+
+<para>
+
+	<function>Genindiset</function> genererar den
+	personuppsättning som matchar en sträng vars värde är ett namn
+	i <acronym>GEDCOM</acronym>-format.
+	<function>Genindiset</function> använder samma algoritm som
+	matchar namn som skrivits in vid bläddringsprompten eller av
+	funktionen för användarinteraktion
+	<function>getindiset</function>.
+
+</para>
+
+<para>
+
+	<function>Inset</function> returnerar
+	<returnvalue>sant</returnvalue> om den angivna personen finns
+	i uppsättningen.
+
+</para>
+
+<para>
+
+	<function>Forindiset</function> är en iterator som loopar
+	igenom varje person i en personuppsättning. Den första
+	parametern är en personuppsättning. Den andra parametern är en
+	variabel som itererar genom varje person i uppsättningen. Den
+	tredje parametern itererar genom de värden som är associerade
+	med personerna. Den fjärde parametern är en heltalsvariabel
+	som räknar itereringarna.
+
+</para>
+
+</sect1>
+
+<sect1>
+
+<title>
+
+Funktioner för postuppdatering
+
+</title>
+
+<glosslist><glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>NOD <function>createnode</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter>,
+<parameter>STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+skapa en GEDCOM-nod
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>addnode</function></funcdef>
+<paramdef><parameter>NOD</parameter>,
+<parameter>NOD</parameter>,
+<parameter>NOD</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+lägg till en nod till ett GEDCOM-träd
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>detachnode</function></funcdef>
+<paramdef><parameter>NOD</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+ta bort en nod från ett GEDCOM-träd
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>writeindi</function></funcdef>
+<paramdef><parameter>INDI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+skriv en person tillbaka till databasen
+
+</para>
+
+</glossdef></glossentry>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>writefam</function></funcdef>
+<paramdef><parameter>FAM</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+skriv en familj tillbaka till databasen
+
+</para>
+</glossdef></glossentry>
+
+</glosslist>
+
+<para>
+
+	Dessa funktioner låter dig modifiera ett internt
+	<acronym>GEDCOM</acronym>-nodträd.
+
+</para>
+
+<para>
+
+	<function>Createnode</function> skapar en
+	<acronym>GEDCOM</acronym>-nod; de två argumenten är etikett-
+	respektive värdesträngar; värdesträngen kan vara
+	<returnvalue>noll</returnvalue>. <function>Addnode</function>
+	lägger till en nod till ett nodträd. Det första argumentet är
+	den nya noden; den andra är den nod i trädet som blir förälder
+	till den nya noden; den tredje är den nod i trädet som blir
+	föregående syskon till den nya noden; detta argument är
+	<returnvalue>noll</returnvalue> om den nya noden ska bli
+	första barn till föräldern. <function>Deletenode</function>
+	tar bort en nod från ett nodträd.
+	<function>Writeindi</function> skriver en person tillbaka till
+	databasen, och <function>writefam</function> skriver en
+	familjepost tillbaka till databasen, vilket möjliggör för
+	rapporten att göra permanenta ändringar i databasen.
+
+</para>
+
+<para>
+
+	Nodfunktionerna ändrar endast data i minnet; det har ingen
+	effekt på databasen förrän och endast om
+	<function>writeindi</function> eller
+	<function>writefam</function> anropas. Dessa funktioner kan
+	komma att ändras eller utökas i framtiden för att tillåta
+	att ändringar görs i databasen.
+
+</para>
+
+</sect1>
+
+<sect1>
+
+<title>
+
+Länkningsfunktioner för poster
+
+</title>
+
+<glosslist><glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>BOOL <function>reference</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+avgör om en sträng är en korsreferens
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>NOD <function>dereference</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+referera korsreferens eller nyckel till nodträd
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>NOD <function>getrecord</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+samma som dereference
+
+</para>
+</glossdef></glossentry>
+
+</glosslist>
+
+<para>
+
+	Dessa funktioner möjliggör för dig att känna igen värden som
+	är korsreferenser och att läsa de poster som de hänvisar till.
+	<function>Reference</function> returnerar
+	<returnvalue>sant</returnvalue> om dess strängargument är ett
+	korsreferensvärde, d. v. s. det interna nyckelvärdet för en av
+	posterna i databasen. <function>Dereference</function>
+	returnerar nodträdet för posten som hänvisas till av dess
+	strängargument för korsreferensen.
+	<function>Getrecord</function> är en synonym för
+	<function>dereference</function>.
+
+</para>
+
+</sect1>
+
+<sect1>
+
+<title>
+
+Diverse funktioner
+
+</title>
+
+<glosslist><glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>lock</function></funcdef>
+<paramdef><parameter>INDI|FAM</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+lås en person eller familj i minnet
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>unlock</function></funcdef>
+<paramdef><parameter>INDI|FAM</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+lås upp en person eller familj från minnet
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>database</function></funcdef><void/>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+returnera namnet på den aktuella databasen
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>program</function></funcdef><void/>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+returnera namnet på det aktuella programmet
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>version</function></funcdef><void/>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+returnera version av <application>LifeLines</application>
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>system</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+exekvera sträng som ett skalkommando i UNIX
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>HELTAL <function>heapused</function></funcdef><void/>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+storlek på "heap" använd för windows
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>getproperty</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+extrahera system- eller användaregenskaper. Funktion tillgänglig efter
+v3.0.5.
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>setlocale</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+ställ in lokal
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>bytecode</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter>,
+<parameter>STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+koda en sträng i en teckenkodning
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>convertcode</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter>,
+<parameter>STRÄNG</parameter>,
+<parameter>STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+konvertera sträng från en teckenkodning till en annan
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>debug</function></funcdef>
+<paramdef><parameter>BOOL</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+ställ in avbuggningsläge för tolk
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>pvalue</function></funcdef>
+<paramdef><parameter>VALFRI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+visa information om en pvalue
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>free</function></funcdef>
+<paramdef><parameter>VALFRI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+fritt utrymme associerat med en variabel
+
+</para>
+</glossdef></glossentry>
+
+</glosslist>
+
+<para>
+
+	<function>Lock</function> och <function>unlock</function>
+	används för att låsa en person eller family i
+	<acronym>RAM</acronym>-minnet, respektive för att låsa upp en
+	person eller familj från <acronym>RAM</acronym>-minnet.
+
+</para>
+
+<para>
+
+	<function>Database</function> returnerar namnet på den
+	aktuella databasen; användbart för rubriksättning av
+	rapporter. <function>Version</function> returnerar vilken
+	version av <application>LifeLines</application> som körs, t.
+	ex. <literal>&llversion;</literal>.
+
+</para>
+
+<para>
+
+	<function>System</function> exekverar sitt strängargument som
+	ett skalkommando i <acronym>UNIX</acronym> (eller
+	<acronym>MS-Windows</acronym>, om så är aktuellt), genom att
+	invokera systemskalet. Detta händer inte om användaren har
+	valt att inte tillåta systemanrop från rapporter (via
+	användarinställningen DenySystemCalls).
+
+</para>
+
+<para>
+
+	Funktionen <function>heapused</function> returnerar storleken
+	på system-"heap" vid användning vid aktuell tidpunkt. Detta är
+	endast implementerat i windows.
+
+</para>
+
+<para>
+
+	Funktionen <function>getproperty</function> extraherar system-
+	eller användaregenskaper. Egenskaperna benämns
+	grupp.undergrupp.egenskap eller grupp.egenskap eller till och
+	med enbart egenskap. De nycklar som finns tillgängliga för
+	närvarande återfinns i ll-userguide under system- och
+	användaregenskaper.
+
+</para>
+
+<para>
+
+	Funktionen <function>setlocale</function> ställer in lokalen
+	och returnerar den tidigare inställningen för lokalen.
+
+</para>
+
+<para>
+
+	Funktionen <function>bytecode</function> konverterar den givna
+	strängen med kontrollkoder för den aktuella kodningen, eller
+	för kodningen som angivits i den andra parametern (ej
+	obligatorisk), om angiven. En kontrollkod är ett dollartecken
+	($) följt av två hex-tecken, t. ex. $C1.
+
+</para>
+
+<para>
+
+	Funktionen <function>convertcode</function> konverterar en
+	sträng till en annan kodning. I tvåargumentsformen är det
+	andra argumentet målkodningen, och källkodningen är den
+	interna kodningen. I treargumentsformen är det andra
+	argumentet källkodningen och det tredje argument målkodningen.
+
+</para>
+
+<para>
+
+	Funktionen <function>debug</function> slår på eller stänger
+	av programmfelsökning. När påslaget, så skrivs klumpar av
+	information ut allteftersom ett
+	<application>LifeLines</application>program körs. Detta kan
+	vara användbart för att komma på varför ett program inte
+	uppträder som förväntat.
+
+</para>
+
+<para>
+
+	Funktionen <function>pvalue</function> returnerar en sträng
+	som representerar innehållet i en variabel i tolken. Detta
+	finns tillgängligt för felsökningssyften.
+
+</para>
+
+<para>
+
+	Funktionen <function>free</function> avallokerar utrymme
+	associerat med variabeln som angivits i argument 1.
+	Försiktighet krävs när free används i en funktion på en
+	variabel som är en parameter till funktionen. Free påverkar
+	inte variabeln i det anropande programmet.
+
+</para>
+
+</sect1>
+
+<sect1>
+
+<title>
+
+Föråldrade funktioner
+
+</title>
+
+<para>
+
+	Funktionaliteten i de följande tre funktionerna,
+	<function>getindimsg</function>,
+	<function>getintmsg</function> och
+	<function>getstrmsg</function> finns nu tillgänglig genom att
+	använda den valbara parametern i <function>getindi</function>,
+	<function>getint</function> och <function>getstr</function>.
+	Dessa funktioner bör inte längre användas, eftersom de kommer
+	att tas bort från en framtida version av
+	<application>Lifelines</application>.
+
+</para>
+
+<glosslist>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>getindimsg</function></funcdef>
+<paramdef><parameter>INDI_V</parameter>,
+<parameter><replaceable>STRÄNG</replaceable></parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+identifiera person genom användargränssnitt
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>getintmsg</function></funcdef>
+<paramdef><parameter>HELTAL_V</parameter>,
+<parameter><replaceable>STRÄNG</replaceable></parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+hämta heltal genom användargränssnitt
+
+</para>
+</glossdef></glossentry>
+
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>getstrmsg</function></funcdef>
+<paramdef><parameter>STRÄNG_V</parameter>,
+<parameter><replaceable>STRÄNG</replaceable></parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+hämta sträng genom användargränssnitt
+
+</para>
+</glossdef></glossentry>
+
+</glosslist>
+
+<para>
+
+	Tre funktioner finns tillgängliga för att generera utdata
+	i <acronym>GEDCOM</acronym>-format till rapportutmatningsfilen
+	över alla personer i personuppsättningen i argumentet. Dessa
+	funktioner genererar i de flesta fall inte konsistent och
+	användbar utdata. Detta kan göras med ett program, men
+	antagligen är dessa rutiner inte vad du egentligen ville ha.
+
+</para>
+
+<para>
+
+	Utdata från <function>gengedcom</function> innehåller en
+	personpost för varje person i uppsättningen, och alla
+	familjeposter som länkar samman minst två personer i
+	uppsättningen. Denna funktion tillhandahålls för
+	bakåtkompatibilitet. Länkar till käll-, händelse- och övriga
+	(X) poster utmatas oförändrade, men inga av deras poster
+	utmatas - detta ger inkonsistent utdata.
+
+</para>
+
+<para>
+
+	Utdata från <function>gengedcomweak</function> innehåller inte
+	länkar till käll-, händelse- eller övriga (X) poster, eller
+	deras poster. <function>Gengedcomstrong</function> inkluderar
+	länkar till käll-, händelse- och övriga (X) poster och alla
+	toppnivånoder som hänvisas till av dem.
+
+</para>
+
+<glosslist>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>gengedcom</function></funcdef>
+<paramdef><parameter>SET</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+generera GEDCOM-fil från personuppsättning
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>gengedcomweak</function></funcdef>
+<paramdef><parameter>SET</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+generera GEDCOM-fil från personuppsättning
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>gengedcomstrong</function></funcdef>
+<paramdef><parameter>SET</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+generera GEDCOM-fil från personuppsättning
+
+</para>
+</glossdef></glossentry>
+</glosslist>
+
+<para>
+
+	Från och med version 3.0.6 är alla strängvärden lokala kopior,
+	och därmed bör inte funktionerna <function>save</function>
+	och <function>strsave</function> längre behöva användas.
+	<function>Save</function> finns tillgänglig endast av
+	kompatibilitetsskäl. Tidigare duplicerade det sitt argument
+	(för att förhindra strängar från att bli gamla; det är inte
+	längre nödvändigt (och denna funktion gör inte längre
+	någonting)). <function>Strsave</function> är samma funktion som
+	<function>save</function>.
+
+</para>
+
+<glosslist>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>save</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+spara och returnera kopia av sträng
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRÄNG <function>strsave</function></funcdef>
+<paramdef><parameter>STRÄNG</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+samma som funktionen save
+
+</para>
+</glossdef></glossentry>
+
+</glosslist>
+
+<para>
+
+	Använd <function>detachnode</function> istället för
+	<function>deletenode</function>.
+
+</para>
+
+<glosslist>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>TOM <function>deletenode</function></funcdef>
+<paramdef><parameter>NOD</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+ta bort en nod från ett GEDCOM-träd
+
+</para>
+
+</glossdef></glossentry>
+</glosslist>
+
+</sect1>
+
+</chapter>
+
+</book>

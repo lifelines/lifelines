@@ -1,4 +1,15 @@
 2003-09-12 Perry Rapp
+        * ChangeLog docs/ll-reportmanual.sv.xml docs/ll-userguide.sv.xml
+	docs/ll-reportmanual.sv.html docs/ll-userguide.sv.html 
+	docs/ll-reportmanual.html docs/ll-reportmanual.pdf 
+	docs/ll-reportmanual.txt
+
+	Moved ll-userguide.sv.xml ll-reportmanual.sv.xml up to the
+	docs directory and obsoleted the versions in docs/sv.
+	Updated the formatted docs for 3.0.32 including ll-userguide.sv.html
+	and ll-reportmanual.sv.html
+
+2003-09-12 Perry Rapp
 
 	* ChangeLog README.MAINTAINERS docs/ll-devguide.xml
 	docs/ll-reportmanual.xml docs/ll-userguide.xml
