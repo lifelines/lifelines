@@ -1,5 +1,16 @@
 2000-11-10 David Bright <dabright@users.sourceforge.net>
 
+	* reports/book-latex.ll: Added processing for BAPM tag, corrected
+	error in referencing "spouse" rather than "s" in longvitals,
+	added processing for the TYPE tag (modifier for EVENT), corrected
+	setDayNumber so that it only uses text phrases (e.g., "on the same
+	day") when both previous date and current date are fully
+	specified, preserve line breaks represented by blank CONT/CONC
+	tags, ensure "cn" variable in sourceIt is initialized before
+	referenced, and miscellaneous typographical corrections.
+
+2000-11-10 David Bright <dabright@users.sourceforge.net>
+
 	* reports/book-latex.ll: Added this report program, most recently
 	maintained by Dennis Nicklaus. He gave me permission to add it
 	to this repository. Some changes are necessary to allow it to

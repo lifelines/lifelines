@@ -1,7 +1,27 @@
 /*
 ** book-latex
-**
+** $Id$
 ** 
+** SourceForge Versions:
+**
+** $Log$
+** Revision 1.2  2000/11/11 04:07:37  dabright
+**
+** reports/book-latex.ll: Added processing for BAPM tag, corrected
+** error in referencing "spouse" rather than "s" in longvitals,
+** added processing for the TYPE tag (modifier for EVENT), corrected
+** setDayNumber so that it only uses text phrases (e.g., "on the same
+** day") when both previous date and current date are fully
+** specified, preserve line breaks represented by blank CONT/CONC
+** tags, ensure "cn" variable in sourceIt is initialized before
+** referenced, and miscellaneous typographical corrections.
+**
+**
+** Revision 1.1  2000/11/10 dabright
+** Initial revision - copy of Version 2.5 from Dennis Nicklaus
+**
+** Pre-SourceForge history:
+**
 ** Version 2.5     Feb. 2000
 ## Dennis Nicklaus (nicklaus@fnal.gov    or    nicklaus@writeme.com)
 **
@@ -292,7 +312,7 @@
 	+1 CONT ...
 
     This can get more complicated (all records optional):
-	(actually, I'm note sure what all is supported for footnotes
+	(actually, I'm not sure what all is supported for footnotes
 	any more, I mostly use bibliography entries.)
 
 	 n SOUR ...
@@ -555,7 +575,6 @@ proc main ()
      list (sourceList)
 
   list (daysToMonthList)
-  setel (daysToMonthList, 0, 0)
   setel (daysToMonthList, 1, 0)
   setel (daysToMonthList, 2, 31)
   setel (daysToMonthList, 3, 59)
@@ -600,6 +619,7 @@ proc main ()
        getindi(indi)  /* Get next */
      }
     /* Print preamble.  Feel free to change this to suit your tastes. */
+    /*"\\documentclass[twocolumn,twoside,titlepage]{book}\n"*/	/* LaTeX 2e */
     "\\documentstyle[twocolumn,makeidx]{book}\n"
     "\\pagestyle{myheadings}\n\n"
     "% Shrink the margins to use more of the page.\n"
@@ -614,7 +634,7 @@ proc main ()
     "\\newcounter{childnumber}\n\n"
     "% The \\noname command is needed because TeX doesnt like underscores.\n"
     "\\newcommand{\\noname}{\\underline{\\ \\ \\ \\ \\ }}\n\n"
-     "\\newcommand{\\nodate}{\\underline{\\ \\ \\ \\ }}\n\n"
+    "\\newcommand{\\nodate}{\\underline{\\ \\ \\ \\ }}\n\n"
     "% Environment for printing the list of children.\n"
     "\\newenvironment{childrenlist}"
         "{\\begin{small}\\begin{list}{\\sc\\roman{childnumber}.}"
@@ -673,11 +693,12 @@ proc main ()
     getstrmsg(author, "Enter the author(s) of this document:")
     "\\author{" author "}\n"
 /*    "\\author{" "your name here" "}\n" */
-    "\\date{\\today\\\\ \\vfill Copyright \\copyright \\year\\ " author "\\\\}\n"
+    /* The following line does not work with recent copies of LaTeX, so it is made a comment */
+    "%\\date{\\today\\\\ \\vfill Copyright \\copyright \\year\\ " author "\\\\}\n"
 /*     "\\date{\\today\\\\ \\vfill Copyright \\copyright \\year\\ your name\\\\your town}\n"*/
     "\\maketitle\n"
 
-     "\\clearpage\n"
+     "\\cleardoublepage\n"
      "\\setcounter{page}{1}\n"
      "\\tableofcontents"
 
@@ -693,6 +714,7 @@ proc main ()
   table (eventNameTable)
   insert (eventNameTable, "BIRT", "was born")
   insert (eventNameTable, "ADOP", "was adopted")
+  insert (eventNameTable, "BAPM", "was baptized")
   insert (eventNameTable, "CHR",  "was baptized")
   insert (eventNameTable, "DEAT", "died")
   insert (eventNameTable, "BURI", "was buried")
@@ -754,8 +776,7 @@ proc main ()
    "\n\n\\cleardoublepage"
    "\n\\label{Index}"
    "\n\\addcontentsline{toc}{chapter}{Index}"
-   "\n% or put \\input{file.ind} instead of \\printindex after this line"
-   "\n\\printindex"
+   "\n\\input{" bibFile ".ind}"
 
     "\n\n\\end{document}\n"
 
@@ -1345,7 +1366,7 @@ proc longvitals(i, name_parents, name_type)
 				then this person (i) has already had their
 				notes/charts done as part of their spouse.
 				We don't want to print a 2nd time */
-			   if (lookup(stab, key(spouse))){
+			   if (lookup(stab, key(s))){
 				set(inhibit_text_charts,1)
 			   }
 			}
@@ -1570,10 +1591,10 @@ proc spousevitals (spouse, fam)
 			", and had "
 		 	d(nchildren(newfam))
 			if (gt(nchildren(newfam),1)){
-				" children "
+				" children"
 			}
-			else { " child "}
-			"by that marriage: "
+			else { " child"}
+			" by that marriage: "
 			children(newfam,stepchild,numerical){
 				if (gt(numerical,1)){ ", "}
 			        call printfirstname(stepchild)
@@ -1622,7 +1643,7 @@ proc spousevitals (spouse, fam)
         type = 1: page number appears in bold
         type = 2: page number appears in bold-italics
         type = 3: page number appears in normal text
-   The parameter i can be either an INDI node (NOT an individial) or a
+   The parameter i can be either an INDI node (NOT an individual) or a
    NAME node. */
 
 proc texname (i, type)
@@ -1995,6 +2016,12 @@ proc vitalEvent (event, reset) {
 	set (previousDayNumber, 0)
       }
     }
+    if (not (eventName)) {
+      call getValue(event, "TYPE")
+      if (gotValue) {
+        " " gottenValue
+      }
+    }
     if (not (strcmp (tag (event), "DEAT"))){
 	call ofCause (event) 
     }
@@ -2008,7 +2035,10 @@ proc setDayNumber (event) {
   set (dayNumber, 0)
   if (date (event)) {
     extractdate (event, day, month, year)
-    if (year) {
+    /* DAB - Have to check day month and year, otherwise two events for which only the year is known
+     * are said to have occurred on "the same day"
+     */
+    if (and(and(year, month), day)) {
       set (yearNumber,
         add (mul (year, 365), div (year, 4),
              neg (div (year, 100)), div (year, 400)))
@@ -2125,15 +2155,19 @@ proc getValueCont (root, t) {
         set (gottenValue, save (value (node)))
         fornodes (node, subnode) {
           if (not (strcmp ("CONT", tag (subnode)))) {
-            if (strlen (value (subnode))) {
+            /* If you want empty CONT tags to not leave a blank line, uncomment the following "if".
+             * However, a blank line can be very useful (or even necessary) for some TeX formatting.
+             */
+            /*if (strlen (value (subnode))) {*/
 	      set (gottenValue, 
 	        save (concat (gottenValue, concat ("\n", value (subnode)))))
-            }
+            /*}*/
           } elsif (not (strcmp ("CONC", tag (subnode)))) {
-            if (strlen (value (subnode))) {
+            /* Same comment as above, this time for CONC tags */
+            /*if (strlen (value (subnode))) {*/
 	      set (gottenValue, 
 	        save (concat (gottenValue, value (subnode))))
-            }
+            /*}*/
           }
         }
       }
@@ -2245,6 +2279,7 @@ proc illegit_check (fam) {
 proc sourceIt (sourceList) {
   list (cList)
   list (fList)
+  set(cn, 0)
   while (root, dequeue (sourceList)) {
     fornodes (root, node) {
       if (not (strcmp (tag (node), "SOUR"))) {
@@ -2516,11 +2551,16 @@ proc bibliographize (root) {
         save (concat (b, concat (" See figure on page~", concat (pref, ".")))))
     }
   
+    /* This while loop undoes the line breaking in a CONT/CONC. Since those line breaks can be
+     * significant, it is commented out.
+     */
+/*
     while (i, index (b, "\n", 1)) {
       set (b, save (concat (substring (b, 1, sub (i, 1)),
       			    concat (" ", 
 				    substring (b, add (i, 1), strlen (b))))))
     }
+*/
 
     enqueue (bibList, save (concat (b, "\n")))
   }
