@@ -69,10 +69,7 @@ edit_indi (RECORD irec1)  /* may be NULL */
 	indi1 = nztop(irec1);
 
 /* Prepare file for user to edit */
-	if (getoptint("ExpandRefnsDuringEdit", 0) > 0)
-		expand_refn_links(indi1);
-	write_indi_to_file(indi1, editfile);
-	resolve_refn_links(indi1);
+	write_indi_to_file_for_edit(indi1, editfile);
 
 /* Have user edit file */
 	do_edit();
@@ -114,7 +111,7 @@ edit_indi (RECORD irec1)  /* may be NULL */
 			snprintf(msgb, sizeof(msgb)
 				, get_unresolved_ref_error_string(cnt), cnt);
 			if (ask_yes_or_no_msg(msgb, _(qSireditopt))) {
-				write_indi_to_file(indi2, editfile);
+				write_indi_to_file_for_edit(indi2, editfile);
 				do_edit();
 				continue;
 			}

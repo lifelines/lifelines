@@ -478,6 +478,7 @@ BOOLEAN value_to_list(STRING, LIST, INT*, STRING);
 STRING value_to_xref(STRING);
 BOOLEAN writexrefs(void);
 void write_indi_to_file(NODE indi, CNSTRING file);
+void write_indi_to_file_for_edit(NODE indi, CNSTRING file);
 void write_fam_to_file(NODE fam, CNSTRING file);
 void write_node_to_editfile(NODE); /* used by Ethel */
 void write_nodes(INT, FILE*, XLAT, NODE, BOOLEAN, BOOLEAN, BOOLEAN);

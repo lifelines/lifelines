@@ -127,7 +127,7 @@ add_indi_by_edit (void)
 			llstrncpyf(msgb, sizeof(msgb), uu8
 				, get_unresolved_ref_error_string(cnt), cnt);
 			if (ask_yes_or_no_msg(msgb, _(qSireditopt))) {
-				write_indi_to_file(indi, editfile);
+				write_indi_to_file_for_edit(indi, editfile);
 				do_edit();
 				continue;
 			}

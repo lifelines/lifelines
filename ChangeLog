@@ -13,6 +13,11 @@
 	Rewrite soundex handling in names for multiple soundexes.
 	Fix wildcard soundex handling for non-ASCII.
 
+	* ChangeLog NEWS src/gedlib/nodeio.c src/hdrs/gedcom.h
+	src/liflines/add.c src/liflines/edit.c
+
+	Fix all edits of indi to expand refns (not all were doing it).
+
 2003-09-14 Perry Rapp
 
 	* src/gedlib/intrface.c src/hdrs/icvt.h src/hdrs/table.h

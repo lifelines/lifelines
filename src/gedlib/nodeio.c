@@ -718,6 +718,19 @@ write_indi_to_file (NODE indi, CNSTRING file)
 	join_indi(indi, name, refn, sex, body, famc, fams);
 }
 /*=====================================
+ * write_indi_to_file_for_edit - write node tree into GEDCOM
+ *  file to be edited
+ * (no user interaction)
+ *===================================*/
+void
+write_indi_to_file_for_edit (NODE indi, CNSTRING file)
+{
+	if (getoptint("ExpandRefnsDuringEdit", 0) > 0)
+		expand_refn_links(indi);
+	write_indi_to_file(indi, editfile);
+	resolve_refn_links(indi);
+}
+/*=====================================
  * write_fam_to_file -- write node tree into GEDCOM
  * (no user interaction)
  *===================================*/

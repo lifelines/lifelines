@@ -1,6 +1,11 @@
-LifeLines Source Release, Version 3.0.32
+LifeLines Source Release, Version 3.0.33
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
+
+Bug fixes in 3.0.33
+============================
+- Fix browsing */surname for non-ASCII first initials.
+- Fix all edits of indi to expand refns (not all were doing it).
 
 New features added in 3.0.32
 ============================
