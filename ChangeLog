@@ -12,6 +12,10 @@
 
 	Document list fix above as bugfix.
 
+	* ChangeLog src/interp/interp.c
+
+	Bugfix to STOPLIST use in interp_forlist.
+
 2003-03-05 Perry Rapp
 
 	* ChangeLog docs/Install.LifeLines.Windows.txt
