@@ -77,7 +77,6 @@ void insert_table_ptr(TABLE, CNSTRING key, VPTR);
 void insert_table_int(TABLE, CNSTRING key, INT);
 void insert_table_str(TABLE, CNSTRING key, STRING);
 BOOLEAN next_table_ptr(TABLE_ITER tabit, STRING *pkey, VPTR *pptr);
-BOOLEAN next_table_str(TABLE_ITER tabit, STRING *pkey, STRING *pstr);
 void remove_table(TABLE, INT whattofree); /* TODO: remove this */
 void replace_table_str(TABLE tab, STRING key, STRING str, INT whattofree);
 void table_insert_ptr(TABLE tab, CNSTRING key, const VPTR value);

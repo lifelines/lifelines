@@ -703,35 +703,6 @@ next_element (TABLE_ITER tabit)
 	return FALSE;
 }
 /*=================================================
- * next_table_str -- Iterating table with strings
- * Created: 2002/06/16, Perry Rapp
- *===============================================*/
-BOOLEAN
-next_table_str (TABLE_ITER tabit, STRING *pkey, STRING *pstr)
-{
-	ENTRY entry=0;
-
-	if (!next_element(tabit)) {
-		*pkey = 0;
-		*pstr = 0;
-		return FALSE;
-	}
-	entry = tabit->enext;
-	*pkey = entry->ekey;
-	if (!is_generic_null(&entry->generic)) {
-		if (is_generic_string(&entry->generic))
-			*pstr = get_generic_string(&entry->generic);
-		else
-			*pstr = 0;
-		return TRUE;
-
-	} else {
-		ASSERT(tabit->table->valtype == TB_STR || tabit->table->valtype == TB_NULL);
-		*pstr = entry->uval.w;
-		return TRUE;
-	}
-}
-/*=================================================
  * next_table_ptr -- Iterating table with pointers
  * Created: 2002/06/16, Perry Rapp
  *===============================================*/
