@@ -2,11 +2,17 @@ LifeLines Source Release, Version 3.0.7
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
+*****************
+UNIX installation
+*****************
+
+
 This is the source distribution of the LifeLines system, a genealogy
 software system.
 
 LifeLines should compile correctly using GNU gcc or any native C compiler.
-It also will build using the Cygnus tools on Windows.
+It also will build using the Cygnus tools on Windows (but see note in the
+platform notes section below).
 
 To build and install LifeLines, do the following:
 
@@ -31,3 +37,52 @@ peace of mind.
 btedit is a administration tool used for unmangling mangled databases, 
 and is extremely powerful.  You should only use this program under the
 expert guidance of a LifeLines developer.
+
+
+***********************
+MS-Windows installation
+***********************
+
+
+For installing the binary distribution on MS-Windows, refer to the
+file Install.LifeLines.Windows.txt included in that distribution
+(& also included in the docs subdirectory of the source
+distributions).
+
+For compiling from source on MS-Windows, if using cygwin, refer to
+the UNIX notes above. If using MS Visual C++, you may use the
+project files included in the subdirectories beneath /win32/msvc6
+(these are in fact used to generate the binaries in the MS-Windows
+binary distribution).
+
+
+***********************
+Platform specific notes
+***********************
+
+
+* Cygwin
+
+Cygwin is a UNIX environment for MS-Windows. 
+(http://sources.redhat.com/cygwin)
+The lines around the boxes in the lifelines curses GUI use OEM
+box characters, and so only display correctly with this setting:
+    export CYGWIN=codepage:oem
+
+
+* gcc 2.7.2.1
+
+gcc 2.7.2.1 does not understand -Wreturn-type, so this
+must be removed from configure and from CFLAGS in
+interp/Makefile* files. This must be done before configuring,
+because it causes configure tests to fail spuriously.
+
+
+* curses
+
+Compiling with curses (lacking ncurses) on a BSDI 3.1 box,
+I had to add
+   -ltermcap
+to the LIBS line in liflines/Makefile. (The symptom was
+"unknown symbol... _tputs.)
+
