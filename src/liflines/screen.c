@@ -1436,7 +1436,7 @@ STRING
 message_string (void)
 {
 	if (!cur_screen) return "";
-	return f_ScreenInfo[cur_screen].Title;
+	return g_ScreenInfo[cur_screen].Title;
 }
 /*=================================================
  * place_std_msg - Place standard message on screen
@@ -1640,14 +1640,14 @@ output_menu (WINDOW *win, INT screen)
 	INT row;
 	INT icol=0;
 	INT col=3;
-	INT MenuRows = f_ScreenInfo[screen].MenuRows;
-	INT MenuSize = f_ScreenInfo[screen].MenuSize;
+	INT MenuRows = g_ScreenInfo[screen].MenuRows;
+	INT MenuSize = g_ScreenInfo[screen].MenuSize;
 	INT Item = 0;
 	INT page, pageitems, pages;
 	char prompt[128];
-	MenuItem ** Menu = f_ScreenInfo[screen].Menu;
+	MenuItem ** Menu = g_ScreenInfo[screen].Menu;
 	INT OnePageFlag = 0;
-	page = f_ScreenInfo[screen].MenuPage;
+	page = g_ScreenInfo[screen].MenuPage;
 	pageitems = (MenuRows-1)*3-2;
 	pages = (MenuSize-1)/pageitems+1;
 	if (MenuSize <= pageitems+1) /* don't need '?' if they fit */
@@ -1711,15 +1711,15 @@ toggle_menu (void)
 void
 cycle_menu (void)
 {
-	INT MenuSize = f_ScreenInfo[cur_screen].MenuSize;
-	INT MenuRows = f_ScreenInfo[cur_screen].MenuRows;
-	INT cols = f_ScreenInfo[cur_screen].MenuCols;
+	INT MenuSize = g_ScreenInfo[cur_screen].MenuSize;
+	INT MenuRows = g_ScreenInfo[cur_screen].MenuRows;
+	INT cols = g_ScreenInfo[cur_screen].MenuCols;
 	INT pageitems = (MenuRows-1)*cols-2;
 	if (pageitems+1 == MenuSize)
 		return; /* only one page */
-	f_ScreenInfo[cur_screen].MenuPage++;
-	if (f_ScreenInfo[cur_screen].MenuPage > (MenuSize-1)/pageitems)
-		f_ScreenInfo[cur_screen].MenuPage = 0;
+	g_ScreenInfo[cur_screen].MenuPage++;
+	if (g_ScreenInfo[cur_screen].MenuPage > (MenuSize-1)/pageitems)
+		g_ScreenInfo[cur_screen].MenuPage = 0;
         menu_dirty = 1;
 }
 /*==================================================================
@@ -1731,16 +1731,16 @@ void
 adjust_menu_height (INT delta)
 {
 	INT min=4, max=10;
-	if (f_ScreenInfo[cur_screen].MenuCols == 1)
+	if (g_ScreenInfo[cur_screen].MenuCols == 1)
 	{
 		min = 5;
 		max = 14;
 	}
-	f_ScreenInfo[cur_screen].MenuRows += delta;
-	if (f_ScreenInfo[cur_screen].MenuRows<min)
-		f_ScreenInfo[cur_screen].MenuRows=min;
-	else if (f_ScreenInfo[cur_screen].MenuRows>max)
-		f_ScreenInfo[cur_screen].MenuRows=max;
+	g_ScreenInfo[cur_screen].MenuRows += delta;
+	if (g_ScreenInfo[cur_screen].MenuRows<min)
+		g_ScreenInfo[cur_screen].MenuRows=min;
+	else if (g_ScreenInfo[cur_screen].MenuRows>max)
+		g_ScreenInfo[cur_screen].MenuRows=max;
 	menu_dirty = 1;
 }
 /*=========================================
@@ -1751,7 +1751,7 @@ adjust_menu_height (INT delta)
 static INT
 calculate_screen_lines (INT screen)
 {
-	INT menu = f_ScreenInfo[screen].MenuRows;
+	INT menu = g_ScreenInfo[screen].MenuRows;
 	INT lines;
 	if (!menu_enabled) menu = EMPTY_MENU;
 	lines = LINESTOTAL-OVERHEAD_MENU-menu;

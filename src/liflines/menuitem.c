@@ -76,7 +76,7 @@ static INT menuitem_find_cmd(CMDARRAY cmds, STRING cmd);
  * local variables
  *********************************************/
 
-ScreenInfo f_ScreenInfo[MAX_SCREEN];
+ScreenInfo g_ScreenInfo[MAX_SCREEN];
 
 /*
 Note - these are hardcoded as "?" and "q" in menuitem_check_cmd
@@ -398,13 +398,13 @@ setup_menu (INT screen, STRING Title, INT MenuRows, INT MenuCols
 	INT i, j;
 	CMDARRAY cmds = create_cmd_array(32);
 	STRING defaults = "q?";
-	f_ScreenInfo[screen].Title = Title;
-	f_ScreenInfo[screen].MenuRows = MenuRows;
-	f_ScreenInfo[screen].MenuCols = MenuCols;
-	f_ScreenInfo[screen].MenuSize = Size;
+	g_ScreenInfo[screen].Title = Title;
+	g_ScreenInfo[screen].MenuRows = MenuRows;
+	g_ScreenInfo[screen].MenuCols = MenuCols;
+	g_ScreenInfo[screen].MenuSize = Size;
 	/* MenuPage set by caller */
-	f_ScreenInfo[screen].Menu = Menu;
-	f_ScreenInfo[screen].Commands = cmds;
+	g_ScreenInfo[screen].Menu = Menu;
+	g_ScreenInfo[screen].Commands = cmds;
 	for (i=0; i<Size; i++) {
 		if (Menu[i]->Command == CMD_CHILD_DIRECT0) {
 			ASSERT(eqstr(Menu[i]->Choices, "123456789"));
@@ -542,18 +542,21 @@ menuitem_initialize (void)
 	STRING Title;
 	INT MenuRows, MenuCols, MenuSize;
 	MenuItem ** Menu;
-	MenuItemOption ** MenuOpts;
 	INT ItemSize;
 
 	ItemSize = sizeof(f_MenuPerson[0]);
 	for (i=1; i<MAX_SCREEN; i++)
 	{
-		f_ScreenInfo[i].MenuPage = 0;
-		f_ScreenInfo[i].MenuCols = 3;
+		g_ScreenInfo[i].Title = "Invalid";
+		g_ScreenInfo[i].MenuRows = 0;
+		g_ScreenInfo[i].MenuCols = 3;
+		g_ScreenInfo[i].MenuSize = 0;
+		g_ScreenInfo[i].Commands = NULL;
+		g_ScreenInfo[i].Menu = NULL;
 	}
 
 	scr = MAIN_SCREEN;
-	f_ScreenInfo[scr].Title = mn_titmain;
+	g_ScreenInfo[scr].Title = mn_titmain;
 
 	scr = ONE_PER_SCREEN;
 	Title = mn_titindi;
@@ -562,8 +565,6 @@ menuitem_initialize (void)
 	MenuSize = sizeof(f_MenuPerson)/ItemSize-1;
 	Menu = f_MenuPerson;
 	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu);
-
-	MenuOpts = 0;
 
 	scr = ONE_FAM_SCREEN;
 	Title = mn_titfam;
@@ -607,7 +608,7 @@ menuitem_initialize (void)
 
 
 	for (i=1; i<MAX_SCREEN; i++)
-		f_ScreenInfo[i].MenuPage = 0;
+		g_ScreenInfo[i].MenuPage = 0;
 }
 /*============================
  * menuitem_terminate -- free menu arrays
@@ -618,9 +619,9 @@ menuitem_terminate (void)
 {
 	INT i;
 	for (i=1; i<MAX_SCREEN; i++) {
-		if (f_ScreenInfo[i].Commands) {
-			free_cmds(f_ScreenInfo[i].Commands);
-			f_ScreenInfo[i].Commands=0;
+		if (g_ScreenInfo[i].Commands) {
+			free_cmds(g_ScreenInfo[i].Commands);
+			g_ScreenInfo[i].Commands=0;
 		}
 	}
 }
@@ -648,7 +649,7 @@ free_cmds (CMDARRAY cmds)
 INT
 menuitem_check_cmd (INT screen, STRING str)
 {
-	CMDARRAY cmds = f_ScreenInfo[screen].Commands;
+	CMDARRAY cmds = g_ScreenInfo[screen].Commands;
 	if (*str == 'q') return CMD_QUIT;
 	if (*str == '?') return CMD_MENU_MORE;
 	if (*str == '*') return CMD_MENU_TOGGLE;

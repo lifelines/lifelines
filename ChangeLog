@@ -1,5 +1,9 @@
 2001-04-08 Perry Rapp <puddle@users.sourceforge.net>
 
+	* ChangeLog hdrs/menuitem.h liflines/menuitem.c
+	liflines/screen.c:
+	Renamed global ScreenInfo variable in menuitem.h, fixed decl to extern.
+
 	* ChangeLog NEWS gedlib/gstrings.c liflines/browse.c
 	liflines/main.c liflines/newrecs.c liflines/pedigree.c
 	liflines/screen.c liflines/show.c:

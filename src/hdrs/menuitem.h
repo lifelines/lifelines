@@ -52,14 +52,14 @@ Also, a LongDisplay could be added (for, eg, status bar,
 or for some type of extended command info display).
 - Perry Rapp, 2001/02/10
 */
-
+/*
 typedef struct MenuItemOption_struct {
 	STRING Display1;
 	STRING Display2;
 	STRING Choices;
 	INT Command;
 } MenuItemOption;
-
+*/
 
 /* special menu items added on the fly */
 MenuItem g_MenuItemOther, g_MenuItemQuit, g_MenuItemOptions;
@@ -69,6 +69,9 @@ typedef struct CmdItem_s * CMDITEM;
 typedef struct CmdArray_s * CMDARRAY;
 
 /* each screen has a lot of menu information */
+/* As of 2001/04/08, MenuCols can't be anything but 3
+until some work is done somewhere - and this menu system
+is not used by lists in the repository code - Perry */
 typedef struct ScreenInfo_struct {
 	STRING Title;    /* string at bottom of screen */
 	INT MenuRows;    /* height of menu (at start) */
@@ -77,10 +80,13 @@ typedef struct ScreenInfo_struct {
 	INT MenuPage;    /* which page of menu currently displayed */
 	CMDARRAY Commands;
 	MenuItem ** Menu;  /* array of pointers to items */
-	MenuItemOption ** MenuOptions;
 } ScreenInfo;
 
-ScreenInfo f_ScreenInfo[MAX_SCREEN];
+/*
+global array of menu information, produced by menuitem.c
+and used by both screen.c and menuitem.c
+*/
+extern ScreenInfo g_ScreenInfo[MAX_SCREEN];
 
 
 enum { 
