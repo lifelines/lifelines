@@ -8,3 +8,13 @@ libbtree_a_SOURCES = addkey.c block.c file.c index.c opnbtree.c record.c travers
 
 INCLUDES=-I$(srcdir)/.. -I$(srcdir)/../hdrs
 
+# since we're not doing dependencies automagically...
+addkey.o: ../hdrs/standard.h ../hdrs/mystring.h ../hdrs/btree.h
+block.o: ../hdrs/standard.h ../hdrs/mystring.h ../hdrs/btree.h
+file.o: ../hdrs/standard.h ../hdrs/mystring.h ../hdrs/btree.h
+index.o: ../hdrs/standard.h ../hdrs/mystring.h ../hdrs/btree.h
+opnbtree.o: ../hdrs/standard.h ../hdrs/mystring.h ../hdrs/btree.h
+record.o: ../hdrs/standard.h ../hdrs/mystring.h ../hdrs/btree.h
+traverse.o: ../hdrs/standard.h ../hdrs/mystring.h ../hdrs/btree.h
+utils.o: ../hdrs/standard.h ../hdrs/mystring.h ../hdrs/btree.h
+

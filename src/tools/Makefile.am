@@ -24,4 +24,6 @@ INCLUDES=-I$(srcdir)/../hdrs
 ../btree/libbtree.a :
 	$(MAKE) -C ../btree libbtree.a
 
+# since we're not doing dependencies automagically...
+btedit.o: ../hdrs/standard.h ../hdrs/mystring.h ../hdrs/btree.h
 
