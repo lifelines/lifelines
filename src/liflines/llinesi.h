@@ -61,6 +61,8 @@ void choose_and_delete_family(void);
 BOOLEAN choose_and_remove_child(RECORD irec, RECORD frec, BOOLEAN nolast);
 BOOLEAN choose_and_remove_spouse(RECORD irec, RECORD frec, BOOLEAN nolast);
 BOOLEAN choose_and_remove_any_record(RECORD rec, CONFIRMQ confirmq);
+BOOLEAN choose_and_remove_orphaned_record(void);
+
 
 /* edit.c */
 BOOLEAN edit_family(RECORD frec1, RFMT rfmt);

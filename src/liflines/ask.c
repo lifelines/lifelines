@@ -498,3 +498,16 @@ ask_for_record (STRING idstr, INT letr)
 	}
 	return rec;
 }
+/*===============================================
+ * ask_for_record_key -- Ask user to enter record key
+ * returns NULL or strsave'd answer
+ *=============================================*/
+STRING
+ask_for_record_key (STRING title, STRING prompt)
+{
+	char answer[MAXPATHLEN];
+	if (!ask_for_string(title, prompt, answer, sizeof(answer)))
+		return NULL;
+	if (!answer) return NULL;
+	return strsave(answer);
+}

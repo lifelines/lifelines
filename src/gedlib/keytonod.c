@@ -98,7 +98,7 @@ typedef struct {
 static void cache_get_lock_counts(CACHE ca, INT * locks);
 static CACHE create_cache(STRING name, INT dirsize);
 static void delete_cache(CACHE * pcache);
-/* static void dereference(CACHEEL); */
+static void ensure_cel_has_record(CACHEEL cel);
 static ZSTR get_cache_stats(CACHE ca);
 static CACHEEL get_free_cacheel(CACHE cache);
 static CACHEEL key_to_cacheel(CACHE cache, CNSTRING key, STRING tag, INT reportmode);
@@ -769,6 +769,7 @@ get_record_for_cel (CACHEEL cel)
 	key = node_to_key(node);
 
 	set_record_key_info(rec, key[0], atoi(key+1));
+	addref_record(rec);
 	return rec;
 }
 /*===============================================================
@@ -893,6 +894,16 @@ get_cache_stats_fam (void)
 	return get_cache_stats(famcache);
 }
 /*============================================
+ * ensure_cel_has_record -- Make sure cache element has record
+ *  (node_to_cache, which creates cels, doesn't create records)
+ *==========================================*/
+static void
+ensure_cel_has_record (CACHEEL cel)
+{
+	RECORD rec = get_record_for_cel(cel); /* addref'd */
+	delref_record(rec);
+}
+/*============================================
  * add_new_indi_to_cache -- Add person to person cache
  *==========================================*/
 void
@@ -911,7 +922,8 @@ add_new_indi_to_cache (RECORD rec)
 void
 fam_to_cache (NODE node)
 {
-	node_to_cache(famcache, node);
+	CACHEEL cel = node_to_cache(famcache, node);
+	ensure_cel_has_record(cel);
 }
 /*==========================================
  * even_to_cache -- Add event to event cache
@@ -919,7 +931,8 @@ fam_to_cache (NODE node)
 void
 even_to_cache (NODE node)
 {
-	node_to_cache(evencache, node);
+	CACHEEL cel = node_to_cache(evencache, node);
+	ensure_cel_has_record(cel);
 }
 /*============================================
  * sour_to_cache -- Add source to source cache
@@ -927,7 +940,8 @@ even_to_cache (NODE node)
 void
 sour_to_cache (NODE node)
 {
-	node_to_cache(sourcache, node);
+	CACHEEL cel = node_to_cache(sourcache, node);
+	ensure_cel_has_record(cel);
 }
 /*===========================================
  * othr_to_cache -- Add other record to cache
@@ -935,7 +949,8 @@ sour_to_cache (NODE node)
 void
 othr_to_cache (NODE node)
 {
-	node_to_cache(othrcache, node);
+	CACHEEL cel = node_to_cache(othrcache, node);
+	ensure_cel_has_record(cel);
 }
 /*========================================
  * node_to_cache -- Add node tree to cache

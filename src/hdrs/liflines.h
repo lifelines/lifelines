@@ -34,6 +34,7 @@ FILE *ask_for_output_file (STRING mode, STRING ttl, STRING *pfname, STRING *pful
 INDISEQ ask_for_indi_list(STRING, BOOLEAN);
 BOOLEAN ask_for_int(STRING, INT *);
 RECORD ask_for_record(STRING, INT);
+STRING ask_for_record_key(STRING title, STRING prompt);
 RECORD choose_from_indiseq(INDISEQ, ASK1Q ask1, STRING titl1, STRING titln);
 void make_fname_prompt(STRING fnamebuf, INT len, STRING ext);
 

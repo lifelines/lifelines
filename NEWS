@@ -1,10 +1,11 @@
-LifeLines Source Release, Version 3.0.41
+LifeLines Source Release, Version 3.0.42
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
 New features added in 3.0.42
 ============================
 - empty() report function can also be used on tables and sets
+- delete orphan record choice added to delete menu
 
 New features added in 3.0.41
 ============================

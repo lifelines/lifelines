@@ -676,6 +676,7 @@ add_new_fam_to_db (NODE fam2, NODE spouse1, NODE spouse2, NODE child)
 	for (node = refn; node; node = nsibling(node))
 		if (nval(node)) add_refn(nval(node), key);
 	join_fam(fam2, refn, husb, wife, chil, body);
+	resolve_refn_links(fam2);
 	resolve_refn_links(spouse1);
 	resolve_refn_links(spouse2);
 	resolve_refn_links(child);
@@ -737,26 +738,7 @@ add_family_to_db (NODE spouse1, NODE spouse2, NODE child)
 
 	free_nodes(fam1);
 
-	nxref(fam2) = strsave(xref = getfxref());
-
-/* Modify spouse/s and/or child */
-
-	add_members_to_family(xref, spouse1, spouse2, child);
-
-	split_fam(fam2, &refn, &husb, &wife, &chil, &body);
-	key = rmvat(nxref(fam2));
-	for (node = refn; node; node = nsibling(node))
-		if (nval(node)) add_refn(nval(node), key);
-	join_fam(fam2, refn, husb, wife, chil, body);
-	resolve_refn_links(fam2);
-	resolve_refn_links(spouse1);
-	resolve_refn_links(spouse2);
-	resolve_refn_links(child);
-	fam_to_dbase(fam2);
-	fam_to_cache(fam2);
-	if (spouse1) indi_to_dbase(spouse1);
-	if (spouse2) indi_to_dbase(spouse2);
-	if (child) indi_to_dbase(child);
+	add_new_fam_to_db(fam2, spouse1, spouse2, child);
 
 	return fam2;
 }

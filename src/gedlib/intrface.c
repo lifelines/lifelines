@@ -184,3 +184,13 @@ del_in_dbase (CNSTRING key)
 /* Free record in database */
 	ASSERT(store_record(key, "DELE\n", 5));
 }
+/*=================================================
+ * delete_orphaned_record -- Delete a record which
+ *  was orphaned in database (is in btree index
+ *  but has no actual record)
+ *===============================================*/
+void
+delete_orphaned_record (CNSTRING key)
+{
+	del_in_dbase(key);
+}

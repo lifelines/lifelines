@@ -558,6 +558,7 @@ ZST qSmn_del_spou = N_("s  Spouse - remove a spouse from a family");
 ZST qSmn_del_indi = N_("i  Individual - remove a person completely");
 ZST qSmn_del_fam  = N_("f  Family - remove a family completely");
 ZST qSmn_del_any  = N_("o  Other - remove other record completely");
+ZST qSmn_del_orph = N_("x  Orphan - remove an orphaned record");
 
 /* &&end delete menu, begin search menu */
 ZST qSmn_sea_ttl  = N_("How would you like to find a record?");

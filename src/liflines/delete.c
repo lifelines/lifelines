@@ -151,6 +151,22 @@ choose_and_remove_any_record (RECORD record, CONFIRMQ confirmq)
 	/* alright, we finished the UI, so delegate to the internal workhorse */
 	return remove_any_record(record);
 }
+/*================================================================
+ * choose_and_remove_orphaned_record -- Prompt & delete any record
+ *  (only records which are orphaned in btree)
+ *==============================================================*/
+BOOLEAN
+choose_and_remove_orphaned_record (void)
+{
+	STRING key = ask_for_record_key(_(qSidodel), _("Enter record key:"));
+	if (!key || !key[0]) return FALSE;
+	if (!is_orphaned_record(key)) {
+		message(_("That record is not an orphaned record"));
+		return FALSE;
+	}
+	delete_orphaned_record(key);
+	return TRUE;
+}
 /*===========================================
  * choose_and_remove_spouse -- Remove spouse 
  *  from family (prompting for spouse and/or family

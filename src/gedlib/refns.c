@@ -614,6 +614,22 @@ RECORD key_possible_to_record (STRING str, /* string that may be a key */
 	return NULL;
 }
 /*================================================
+ * is_orphaned_record - Check if record is orphaned
+ *  in database (is in btree index, but lacks data)
+ *==============================================*/
+BOOLEAN
+is_orphaned_record (CNSTRING key)
+{
+	RECORD rec=0;
+	if (!isrecord(BTR, str2rkey(key)))
+		return FALSE;
+	if ((rec = qkey_to_record(key))) {
+		delref_record(rec);
+		return FALSE;
+	}
+	return TRUE;
+}
+/*================================================
  * refn_to_record - Get record from user reference
  *  ukey: [IN]  refn key found
  *  letr: [IN]  possible type of record (0 if any)

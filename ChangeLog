@@ -44,6 +44,18 @@
 	Prevent obscure crash by locking record during 
 	annotate_with_supplemental.
 
+	* ChangeLog NEWS src/gedlib/intrface.c src/gedlib/keytonod.c
+	src/gedlib/messages.c src/gedlib/refns.c src/hdrs/gedcom.h
+	src/hdrs/liflines.h src/liflines/add.c src/liflines/ask.c
+	src/liflines/delete.c src/liflines/llinesi.h src/liflines/screen.c
+
+	New function ensure_cel_has_record.
+	Fix so new cache elements get records immediately (avoids a crash
+	adding new source).
+	New function & UI choice choose_and_remove_orphaned_record.
+	New function choose_and_remove_orphaned_record.
+	New function delete_orphaned_record.
+
 2005-02-01 Perry Rapp
 
 	* ChangeLog src/stdlib/table.c
