@@ -13,6 +13,13 @@
 
 	* tests/test1.ged: Fix misleading typo in test1.ged.
 
+	* gedlib/choose.c hdrs/gedcom.h hdrs/liflines.h interp/builtin.c
+	interp/more.c liflines/add.c liflines/ask.c liflines/browse.c
+	liflines/delete.c liflines/edit.c liflines/llinesi.h
+	liflines/miscutls.c liflines/newrecs.c liflines/remove.c
+	liflines/scan.c liflines/swap.c liflines/tandem.c:
+	Implement ASK1Q typedef for ask1 & values DOASK1/NOASK1.
+
 2001-01-07 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/gengedc.c gedlib/indiseq.c hdrs/gedcom.h hdrs/indiseq.h
