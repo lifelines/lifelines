@@ -112,7 +112,7 @@ next_char32 (STRING * ptr, int utf8)
 		INT ch = ((str[0] & 0x0F) << 18)
 			+ ((str[1] & 0x3F) << 12)
 			+ ((str[2] & 0x3F) << 6)
-			+ str[3] & 0x3F;
+			+ (str[3] & 0x3F);
 		(*ptr) += 4;
 		return ch;
 	}
@@ -121,7 +121,7 @@ next_char32 (STRING * ptr, int utf8)
 			+ ((str[1] & 0x3F) << 18)
 			+ ((str[2] & 0x3F) << 12)
 			+ ((str[3] & 0x3F) << 6)
-			+ str[4] & 0x3F;
+			+ (str[4] & 0x3F);
 		(*ptr) += 5;
 		return ch;
 	} else {
@@ -130,7 +130,7 @@ next_char32 (STRING * ptr, int utf8)
 			+ ((str[2] & 0x3F) << 18)
 			+ ((str[3] & 0x3F) << 12)
 			+ ((str[4] & 0x3F) << 6)
-			+ str[5] & 0x3F;
+			+ (str[5] & 0x3F);
 		(*ptr) += 6;
 		return ch;
 	}

@@ -4,6 +4,10 @@
 
 	Fix pronouns in German message catalog.
 
+	* ChangeLog src/stdlib/strutf8.c
+
+	Fix operator precedence errors.
+
 2003-05-08 Perry Rapp
 
 	* ChangeLog docs/ll-userguide.xml
