@@ -63,10 +63,13 @@ is_dir_sep (char c)
 static BOOLEAN
 is_absolute_path (CNSTRING dir)
 {
-	if (is_dir_sep(*dir) || *dir == '.') return TRUE;
-	if (*dir == '~') return TRUE;
+	if (is_dir_sep(dir[0]) || dir[0] == '.') return TRUE;
+	if (dir[0] == '~') return TRUE;
 #ifdef WIN32
-	if (is_dir_sep(*dir) || (*dir && dir[1] == ':' && isalpha((uchar)*dir))) return TRUE;
+	if (is_dir_sep(dir[0]) 
+		|| (dir[0] && dir[1]==':' && isasciiletter(dir[0]))) {
+		return TRUE;
+	}
 #endif
 	return FALSE;
 }

@@ -147,6 +147,7 @@ BOOLEAN sprintpic3(STRING buffer, INT len, INT utf8, CNSTRING pic, CNSTRING arg1
 /* stdstrng.c */
 INT chartype(INT);
 BOOLEAN eqstr_ex(STRING s1, STRING s2);
+BOOLEAN isasciiletter(INT c);
 BOOLEAN isletter(INT);
 BOOLEAN islinebreak(INT c);
 BOOLEAN isnumch(INT c);

@@ -130,9 +130,16 @@ isletter (INT c)
 #ifndef OS_NOCTYPE
 	return (isalpha(c));
 #else
-	if (c >= 'a' && c <= 'z') return TRUE;
-	return c >= 'A' && c <= 'Z';
+	return isasciiletter(c);
 #endif
+}
+/*=============================
+ * isasciiletter -- Check for English letter
+ *===========================*/
+BOOLEAN
+isasciiletter (INT c)
+{
+	return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
 }
 /*==========================================
  * ll_toupper -- Convert letter to uppercase

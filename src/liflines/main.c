@@ -163,7 +163,7 @@ main (INT argc, char **argv)
 		switch (c) {
 		case 'c':	/* adjust cache sizes */
 			while(optarg && *optarg) {
-				if(isalpha((uchar)*optarg) && isupper((uchar)*optarg))
+				if(isasciiletter((uchar)*optarg) && isupper((uchar)*optarg))
 					*optarg = tolower((uchar)*optarg);
 				if(*optarg == 'i') {
 					sscanf(optarg+1, "%d,%d", &csz_indi, &icsz_indi);
