@@ -1,6 +1,6 @@
 2001-01-24 Perry Rapp <puddle@users.sourceforge.net>
 
-	ChangeLog btree/utils.c gedlib/intrface.c gedlib/keytonod.c
+	* ChangeLog btree/utils.c gedlib/intrface.c gedlib/keytonod.c
 	gedlib/names.c gedlib/node.c gedlib/valid.c hdrs/gedcom.h
 	hdrs/standard.h liflines/main.c stdlib/path.c stdlib/signals.c
 	NEW hdrs/warehouse.h stdlib/warehouse.c:
@@ -10,11 +10,11 @@
 	Checked-in current warehouse code.
 	Back out accidentally checked-in code disabling signals.
 
-	stdlib/dirs.c: 
+	* stdlib/dirs.c: 
 	Propagate bugfix from btree/utils.c/mkalldirs
 	to stdlib/dirs.c/mkalldirs.
 
-	stdlib/Makefile.am: Added warehouse.c to Makefile.
+	* stdlib/Makefile.am: Added warehouse.c to Makefile.
 
 2001-01-24 John Chandler <jchbn@cuvmb.columbia.edu>
 	* hdrs/gedcom.h, gedlib/gengedc.c, gedlib/name.c, gedlib/node.c,
@@ -35,13 +35,11 @@
 	
 2001-01-24 Perry Rapp <puddle@users.sourceforge.net>
 
-	btree/block.c btree/index.c btree/opnbtree.c btree/utils.c
+	* btree/block.c btree/index.c btree/opnbtree.c btree/utils.c
 	hdrs/btree.h liflines/main.c:
 	Changed keyfile types to 1 & 2.
 	Check for overwriting existing database
 	(from Ethel permission bug on NTFS).
-
-	liflines/screen.c: (Matthew made small changes.)
 
 2001-01-23 Matt Emmerton <memmerto@users.sourceforge.net>
 
