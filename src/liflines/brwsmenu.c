@@ -68,7 +68,8 @@ static INT f_cols;
 static MenuItem f_MenuItemEditIndi = { N_("e  Edit the person"), 0, CMD_EDIT, 0 };
 static MenuItem f_MenuItemEditFamily = { N_("e  Edit the family"), 0, CMD_EDIT, 0 };
 static MenuItem f_MenuItemEdit = { N_("e  Edit record"), 0, CMD_EDIT, 0 };
-static MenuItem f_MenuItemEditTop = { N_("e  Edit top person"), 0, CMD_EDIT, 0 };
+static MenuItem f_MenuItemEditTopIndi = { N_("e  Edit top person"), 0, CMD_EDIT, 0 };
+static MenuItem f_MenuItemEditTopFam = { N_("e  Edit top family"), 0, CMD_EDIT, 0 };
 static MenuItem f_MenuItemFather = { N_("f  Browse to father"), 0, CMD_FATHER, 0 };
 static MenuItem f_MenuItemFatherTop = { N_("f  Browse top father"), 0, CMD_FATHER, 0 };
 static MenuItem f_MenuItemMother = { N_("m  Browse to mother"), 0, CMD_MOTHER, 0 };
@@ -297,7 +298,7 @@ static MenuItem * f_MenuFamily[] =
 
 static MenuItem * f_Menu2Person[] =
 {
-	&f_MenuItemEditTop,
+	&f_MenuItemEditTopIndi,
 	&f_MenuItemBrowseTop,
 	&f_MenuItemFatherTop,
 	&f_MenuItemMotherTop,
@@ -341,7 +342,7 @@ static MenuItem * f_Menu2Person[] =
 
 static MenuItem * f_Menu2Family[] =
 {
-	&f_MenuItemEditTop,
+	&f_MenuItemEditTopFam,
 	&f_MenuItemBrowseTop,
 	&f_MenuItemBrowseBottom,
 	&f_MenuItemBothFathers,
