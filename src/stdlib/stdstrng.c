@@ -96,6 +96,18 @@ strconcat (STRING s1, STRING s2)
 INT
 chartype (INT c)
 {
+	if (c<0) {
+	/* This most likely means someone assigned a char to an INT
+	which is very bad -- it gets sign extended! -- it must always
+	be first cast to a uchar (unsigned char), eg
+	INT a = (uchar)*p;
+	We can't pass this to O/S isx functions, because some of them
+	are table driven, and we certainly don't want to give them an
+	offset of several billion negative.
+	*/
+	
+		return c;
+	}
 #ifndef OS_NOCTYPE
 	if (isspace(c))
 		return WHITE;
