@@ -1,6 +1,20 @@
-LifeLines Source Release, Version 3.0.27
+LifeLines Source Release, Version 3.0.29
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
+
+Bug fixes in 3.0.29
+============================
+- Import will strip out empty families, and browse will ASSERT
+- Import will not import GEDCOMs with more than 50 lines HEAD
+
+Bug fixes in 3.0.28
+============================
+Fix tandem mode to not default to quit (bug#717421).
+Change Greek sigma lowercasing, as recommended by Georg Skillas.
+Remove extraneous codeset conversion in str_to_indiseq (fix bug 724761).
+Bugfix for illegal character handling in iconv wrapper for Win32.
+Change temp file on Win32 to end in .txt extension (so SaveAs UTF-8 works in notepad).
+Fix pronouns in German message catalog.
 
 Bug fixes in 3.0.27
 ============================

@@ -11,6 +11,11 @@
 	Do not trim empty families at import; rather warn of them.
 	Add option to bail out of import if warnings found.
 
+	* ChangeLog NEWS build/msvc6/llines/llines.rc
+	build/rpm/lifelines.spec src/hdrs/version.h
+
+	Bump version to 3.0.29.
+
 2003-08-07 Perry Rapp
 
 	* ChangeLog reports/st/st_aux.ll reports/st/st_collate.ll
