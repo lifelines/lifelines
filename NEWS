@@ -1,13 +1,30 @@
-LifeLines Source Release, Version 3.0.24
+LifeLines Source Release, Version 3.0.25
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
+
+New features added in 3.0.25
+============================
+- Tries harder to diplay info on birth & death
+- HTML & TEX subcodings added to translation tables
+- Regularized report summaries (in report subdir)
+- Reports elapsed time during report execution
+
+Bug fixes in 3.0.25
+============================
+- Report NODE references lock person in cache
+- keypad fix to prevent crash on Solaris
+- Allow user to read error before invoking report debugger
+- Fix misparsing of BC dates without month
+- report memory leaks fixed
+- Fix addnode, detachnode, writeindi, writefam (report functions)
+- Fix crash editing place abbrev table
+- Switch to uilocale for ui functions during report interpretation
 
 Bug fixes in 3.0.24
 ============================
 - Fixed broken use of last person for add child
 - Fixed compilation on Darwin
 - Fixed list functions
-
 
 New features added in 3.0.23
 ============================

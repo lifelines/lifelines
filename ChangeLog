@@ -22,6 +22,13 @@
 	Regularized structure tags (eg, CACHEEL is struct tag_cacheel *).
 	Removed unused indiseq list (initset etc).
 
+	* ChangeLog NEWS configure.in build/msvc6/llexec/llexec.rc
+	build/msvc6/llines/llines.rc build/rpm/lifelines.spec
+	src/hdrs/version.h
+
+	Bumped version to 3.0.25
+	Added notes in ChangeLog when 3.0.24b1, b2, and b3 were released.
+
 2003-02-22 Perry Rapp
 
 	* ChangeLog build/msvc6/llexec/llexec.dsp
@@ -497,6 +504,8 @@
 
 	Bumped version to 3.0.24b3 for new beta release for work on SunOS5.8.
 
+	[Also released 3.0.24b4 beta version this same day.]
+
 2003-01-03 Perry Rapp
 
 	* ChangeLog
@@ -521,6 +530,8 @@
 	* ChangeLog src/arch/has_key.c:
 
 	Fix arch/has_key.c.
+
+	[Released 3.0.24b1 and 3.0.24b2 beta versions this day.]
 
 2003-01-02 Perry Rapp
 
