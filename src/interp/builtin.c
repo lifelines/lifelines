@@ -1012,9 +1012,9 @@ ___alpha (PNODE node, SYMTAB stab, BOOLEAN *eflg)
  *   usage: ord(INT) -> STRING
  *===============================================*/
 static char *ordinals[] = {
-	"first", "second", "third", "fourth", "fifth",
-	"sixth", "seventh", "eighth", "ninth", "tenth",
-	"eleventh", "twelfth"
+	N_("first"), N_("second"), N_("third"), N_("fourth"), N_("fifth"),
+	N_("sixth"), N_("seventh"), N_("eighth"), N_("ninth"), N_("tenth"),
+	N_("eleventh"), N_("twelfth")
 };
 PVALUE
 __ord (PNODE node, SYMTAB stab, BOOLEAN *eflg)
@@ -1027,9 +1027,9 @@ __ord (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	delete_pvalue(val);
 	if (*eflg || i < 1) return NULL;
 	if (i > 12)
-		sprintf(scratch, "%dth", i);
+		sprintf(scratch, _("%dth"), i);
 	else
-		sprintf(scratch, ordinals[i - 1]);
+		sprintf(scratch, _(ordinals[i - 1]));
 	return create_pvalue_from_string(scratch);
 }
 /*==================================================+
@@ -1037,9 +1037,9 @@ __ord (PNODE node, SYMTAB stab, BOOLEAN *eflg)
  *   usage: card(INT) -> STRING
  *=================================================*/
 static char *cardinals[] = {
-	"zero", "one", "two", "three", "four", "five",
-	"six", "seven", "eight", "nine", "ten",
-	"eleven", "twelve"
+	N_("zero"), N_("one"), N_("two"), N_("three"), N_("four"), N_("five"),
+	N_("six"), N_("seven"), N_("eight"), N_("nine"), N_("ten"),
+	N_("eleven"), N_("twelve")
 };
 PVALUE
 __card (PNODE node, SYMTAB stab, BOOLEAN *eflg)
@@ -1054,7 +1054,7 @@ __card (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (i < 0 || i > 12)
 		sprintf(scratch, "%d", i);
 	else
-		sprintf(scratch, cardinals[i]);
+		sprintf(scratch, _(cardinals[i]));
 	return create_pvalue_from_string(scratch);
 }
 /*==========================================+
@@ -2086,8 +2086,8 @@ __titlcase (PNODE node, SYMTAB stab, BOOLEAN *eflg)
  * __pn -- Generate pronoun
  *   usage: pn(INDI, INT) -> STRING
  *===============================*/
-static char *mpns[] = {  "He",  "he", "His", "his", "him" };
-static char *fpns[] = { "She", "she", "Her", "her", "her" };
+static char *mpns[] = {  N_("He"),  N_("he"), N_("His"), N_("his"), N_("him") };
+static char *fpns[] = { N_("She"), N_("she"), N_("Her"), N_("her"), N_("her") };
 PVALUE
 __pn (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
@@ -2108,9 +2108,9 @@ __pn (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	if (SEX(indi) == SEX_FEMALE) 
-		set_pvalue(val, PSTRING, (VPTR)fpns[typ]);
+		set_pvalue(val, PSTRING, (VPTR)_(fpns[typ]));
 	else
-		set_pvalue(val, PSTRING, (VPTR)mpns[typ]);
+		set_pvalue(val, PSTRING, (VPTR)_(mpns[typ]));
 	return val;
 }
 /*==================================+
