@@ -221,7 +221,7 @@ create_pvalue (INT type, VPTR value)
 		/* lock any cache elements, and unlock in clear_pvalue */
 		CACHEEL cel = pvalue(val);
 		if (cel)
-			lock_cache(cel);
+			semilock_cache(cel);
 	}
 	return val;
 }
@@ -316,7 +316,7 @@ clear_pvalue (PVALUE val)
 		*/
 		CACHEEL cel = pvalue(val);
 		if (cel)
-			unlock_cache(cel);
+			unsemilock_cache(cel);
 	}
 }
 /*========================================
@@ -408,7 +408,7 @@ copy_pvalue (PVALUE val)
 		*/
 		CACHEEL cel = pvalue(val);
 		if (cel)
-			lock_cache(cel);
+			semilock_cache(cel);
 	}
 
 	newval = pvalue(val);

@@ -45,7 +45,8 @@ struct c_elem {
 	CACHEEL c_prev;	/* previous el */
 	CACHEEL c_next;	/* next el */
 	STRING c_key;	/* record key */
-	BOOLEAN c_lock;	/* locked? */
+	INT c_lock;	/* locked? */
+	INT c_semilock; /* locked but can go to indirect cache */
 };
 #define cnod0(e) ((e)->c_nod0)
 #define cnode(e) ((e)->c_node)
@@ -53,6 +54,7 @@ struct c_elem {
 #define cnext(e) ((e)->c_next)
 #define ckey(e)  ((e)->c_key)
 #define cclock(e) ((e)->c_lock)
+#define csemilock(e) ((e)->c_semilock)
 /*==============================
  * CACHE -- Internal cache type.
  *============================*/
@@ -98,6 +100,8 @@ void lock_cache(CACHEEL);
 void nod0_to_cache(CACHE cache, NOD0 nod0);
 void node_to_cache(CACHE, NODE);
 void remove_from_cache(CACHE, STRING);
+void semilock_cache(CACHEEL);
 void unlock_cache(CACHEEL);
+void unsemilock_cache(CACHEEL);
 
 #endif /* _CACHE_H */

@@ -468,9 +468,15 @@ first_indirect (CACHE cache, CACHEEL cel)
 static void
 remove_last (CACHE cache)
 {
-	CACHEEL cel = clastind(cache);
+	CACHEEL cel=0;
 	STRING key;
-	ASSERT(cel);
+	for (cel = clastind(cache); cel && csemilock(cel); cel = cprev(cel))
+		;
+	if (!cel) {
+		llwprintf("Indirect cache overflow! (cache=%s, size=%d)\n", cname(cache), cmaxind(cache));
+		ASSERT(cel);
+	}
+	ASSERT(!cclock(cel)); /* locked elements should never leave direct */
 	remove_indirect(cache, cel);
 	key = ckey(cel);
 	stdfree(cel);
@@ -589,7 +595,8 @@ add_to_direct (CACHE cache,
 	cnod0(cel) = nod0;
 	cnode(cel) = nod0->top;
 	ckey(cel) = key;
-	cclock(cel) = FALSE;
+	cclock(cel) = 0;
+	csemilock(cel) = 0;
 	first_direct(cache, cel);
 	stdfree(record);
 	return cel;
@@ -693,7 +700,7 @@ qkey_to_nod0 (CACHE cache, STRING key, STRING tag)
 	return cnod0(cel);
 }
 /*======================================
- * lock_cache -- Lock CACHEEL into cache
+ * lock_cache -- Lock CACHEEL into direct cache
  *====================================*/
 void
 lock_cache (CACHEEL cel)
@@ -702,13 +709,31 @@ lock_cache (CACHEEL cel)
 	cclock(cel)++;
 }
 /*==========================================
- * unlock_cache -- Unlock CACHEEL from cache
+ * unlock_cache -- Unlock CACHEEL from direct cache
  *========================================*/
 void
 unlock_cache (CACHEEL cel)
 {
 	ASSERT(cnode(cel));
 	cclock(cel)--;
+}
+/*======================================
+ * semilock_cache -- Lock CACHEEL into cache (either part)
+ * Created: 2001/03/17, Perry Rapp
+ *====================================*/
+void
+semilock_cache (CACHEEL cel)
+{
+	csemilock(cel)++;
+}
+/*==========================================
+ * unsemilock_cache -- Unlock CACHEEL from cache (either part)
+ * Created: 2001/03/17, Perry Rapp
+ *========================================*/
+void
+unsemilock_cache (CACHEEL cel)
+{
+	csemilock(cel)--;
 }
 /*=========================================
  * get_cache_stats -- Calculate cache stats
@@ -720,13 +745,15 @@ get_cache_stats (void)
 	static char buffer[64];
 	CACHE c = indicache;
 	CACHE f = famcache;
-	INT n = 0;
+	INT nlocks = 0, nsemilocks = 0;
 	CACHEEL cel;
 	for (cel = cfirstdir(c); cel; cel = cnext(cel)) {
-		if (cclock(cel)) n++;
+		if (cclock(cel)) nlocks++;
+		if (csemilock(cel)) nsemilocks++;
 	}
-	sprintf(buffer, "Cache contents -- I: %dD  %dI  %dL;  F: %dD  %dI",
-	    csizedir(c), csizeind(c), n, csizedir(f), csizeind(f));
+	sprintf(buffer, "Cache contents -- I: %dD %d %dL; %dS; F: %dD  %dI",
+	    csizedir(c), csizeind(c), nlocks, nsemilocks
+			, csizedir(f), csizeind(f));
 	return buffer;
 }
 /*============================================
@@ -856,12 +883,14 @@ remove_fam_cache (STRING key)
  * remove_from_cache -- Remove entry from cache
  *===========================================*/
 void
-remove_from_cache (CACHE cache,
-                   STRING key)
+remove_from_cache (CACHE cache, STRING key)
 {
 	CACHEEL cel;
-	if (!key || *key == 0 || !cache) return;
-	if (!(cel = (CACHEEL) valueof(cdata(cache), key))) return;
+	if (!key || *key == 0 || !cache)
+		return;
+	if (!(cel = (CACHEEL) valueof(cdata(cache), key)))
+		return;
+	ASSERT(!cclock(cel) && !csemilock(cel));
 	if (cnode(cel))
 		remove_direct(cache, cel);
 	else

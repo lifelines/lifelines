@@ -11,6 +11,9 @@
 	Clears symbol table entries after loops (children,...).
 	Added usage example to usage in dbverify.
 
+	* gedlib/keytonod.c hdrs/cache.h interp/pvalue.c:
+	Added semilocking for pvalues, to allow deeper recursion.
+
 2001-03-04 Perry Rapp <puddle@users.sourceforge.net>
 
 	* .linesrc gedlib/lloptions.c hdrs/lloptions.h liflines/import.c:
