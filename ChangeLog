@@ -1,3 +1,9 @@
+2001-01-31 Perry Rapp <puddle@users.sourceforge.net>
+
+	* liflines/browse.c liflines/llinesi.h liflines/menuitem.c
+	liflines/pedigree.c liflines/screen.c liflines/show.c:
+	Implemented extended menu system for family screen.
+
 2001-01-30 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/gengedc.c gedlib/keytonod.c gedlib/messages.c
