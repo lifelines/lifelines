@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.25\n"
 "POT-Creation-Date: 2003-02-23 04:00-0500\n"
-"PO-Revision-Date: 2003-02-26 20:58+0100\n"
+"PO-Revision-Date: 2003-03-01 14:15+0100\n"
 "Last-Translator: Jens Arvidsson <arvid-jens@algonet.se>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -76,7 +76,7 @@ msgstr "Databasen är låst (ingen läs- och skrivåtkomst)."
 
 #: src/gedlib/init.c:573
 msgid "The database is unlocked."
-msgstr "Databasen är upplåst."
+msgstr "Databasen är olåst."
 
 #: src/gedlib/init.c:576
 msgid "keyfile is corrupt."
@@ -2335,12 +2335,12 @@ msgstr "%s: argumentet måste vara ett heltal."
 #: src/interp/alloc.c:774
 #, c-format
 msgid "%s: the arg #%s must be an integer."
-msgstr "%s: argumentet nr. %s måste vara ett heltal."
+msgstr "%s: argument nr. %s måste vara ett heltal."
 
 #: src/interp/alloc.c:775
 #, c-format
 msgid "%s: the arg #%s must be a float."
-msgstr "%s: argumentet nr. %s måste vara en float."
+msgstr "%s: argument nr. %s måste vara en float."
 
 #: src/interp/alloc.c:776
 #, c-format
@@ -2375,7 +2375,7 @@ msgstr "%s: argumentet måste vara en person."
 #: src/interp/alloc.c:782
 #, c-format
 msgid "%s: the arg #%s must be a person."
-msgstr "%s: argumentet nr. %s måste vara en person."
+msgstr "%s: argument nr. %s måste vara en person."
 
 #: src/interp/alloc.c:783
 #, c-format
@@ -2385,12 +2385,12 @@ msgstr "%s: argumentet måste vara en familj."
 #: src/interp/alloc.c:784
 #, c-format
 msgid "%s: the arg #%s must be a family."
-msgstr "%s: argumentet nr. %s måste vara en familj."
+msgstr "%s: argument nr. %s måste vara en familj."
 
 #: src/interp/alloc.c:785
 #, c-format
 msgid "%s: the arg #%s must be a record."
-msgstr "%s: argumentet nr. %s måste vara en post."
+msgstr "%s: argument nr. %s måste vara en post."
 
 #: src/interp/alloc.c:786
 #, c-format
@@ -2400,7 +2400,7 @@ msgstr "%s: argumentet måste vara en nod."
 #: src/interp/alloc.c:787
 #, c-format
 msgid "%s: the arg #%s must be a node."
-msgstr "%s: argumentet nr. %s måste vara en nod."
+msgstr "%s: argument nr. %s måste vara en nod."
 
 #: src/interp/alloc.c:788
 #, c-format
@@ -2410,12 +2410,12 @@ msgstr "%s: argumentet måste vara en variabel."
 #: src/interp/alloc.c:789
 #, c-format
 msgid "%s: the arg #%s must be a variable."
-msgstr "%s: argumentet nr. %s måste vara en variabel."
+msgstr "%s: argument nr. %s måste vara en variabel."
 
 #: src/interp/alloc.c:790
 #, c-format
 msgid "%s: the arg #%s must be a boolean."
-msgstr "%s: argumentet nr. %s måste vara booleskt."
+msgstr "%s: argument nr. %s måste vara booleskt."
 
 #: src/interp/alloc.c:791
 #, c-format
@@ -2425,12 +2425,12 @@ msgstr "%s: argumentet måste vara en lista."
 #: src/interp/alloc.c:792
 #, c-format
 msgid "%s: the arg #%s must be a list."
-msgstr "%s: argumentet nr. %s måste vara en lista."
+msgstr "%s: argument nr. %s måste vara en lista."
 
 #: src/interp/alloc.c:793
 #, c-format
 msgid "%s: the arg #%s must be a table."
-msgstr "%s: argumentet nr. %s måste vara en tabell."
+msgstr "%s: argument nr. %s måste vara en tabell."
 
 #: src/interp/alloc.c:794
 #, c-format
@@ -2445,7 +2445,7 @@ msgstr "%s: argumentet hade ett större fel."
 #: src/interp/alloc.c:796
 #, c-format
 msgid "%s: the arg #%s had a major error."
-msgstr "%s: argumentet nr. %s hade ett större fel."
+msgstr "%s: argument nr. %s hade ett större fel."
 
 #: src/interp/builtin.c:110
 msgid "Enter integer for program"
@@ -2486,7 +2486,7 @@ msgstr "soundex: personen har inget namn"
 #: src/interp/builtin.c:462
 #, c-format
 msgid "Bad escape code at offset %d in bytecode string <%s>"
-msgstr "Ogiltig kontrollsekvenskod vid offset %d i UTF-kontrollsträng <%s>"
+msgstr "Ogiltig kontrollsekvenskod vid position %d i bytekodssträng <%s>"
 
 #: src/interp/builtin.c:604
 msgid "(givens) person does not have a name"
@@ -3275,15 +3275,15 @@ msgstr "Detta är inte en anlänkad GEDCOM-fil."
 
 #: src/liflines/import.c:168
 msgid "Proceed anyway ?"
-msgstr "Fortsätt ändå?"
+msgstr "Vill du fortsätta ändå?"
 
 #: src/liflines/import.c:183
 msgid "No current internal codeset, so no codeset conversion can be done"
-msgstr "Ingen aktuell intern teckenkodning, så ingen kodkonvertering kan göras"
+msgstr "Ingen aktuell intern teckenkodning, så ingen kodkonvertering kan utföras"
 
 #: src/liflines/import.c:184
 msgid "Proceed without codeset conversion ?"
-msgstr "Fortsätt utan konvertering av teckenkodning?"
+msgstr "Vill du fortsätta utan konvertering av teckenkodning?"
 
 #: src/liflines/import.c:208
 #, c-format
@@ -3583,7 +3583,7 @@ msgstr "Otillåtet att ändra teckenkodning i en befolkad databas"
 
 #: src/liflines/screen.c:2339
 msgid "--- CURRENT SELECTION ---"
-msgstr "--- AKTUELLT URVAL ---"
+msgstr "--- AKTUELL MARKERING ---"
 
 #: src/liflines/screen.c:2342 src/liflines/screen.c:2568
 msgid "--- LIST ---"
@@ -3591,7 +3591,7 @@ msgstr "--- LISTA ---"
 
 #: src/liflines/screen.c:2599
 msgid "-- CURRENT SELECTION --"
-msgstr "-- AKTUELLT URVAL --"
+msgstr "-- AKTUELL MARKERING --"
 
 #: src/liflines/screen.c:2749
 msgid "LifeLines -- Main Menu"
@@ -3638,7 +3638,7 @@ msgstr "bosatt"
 
 #: src/liflines/show.c:136
 msgid "died"
-msgstr "dog"
+msgstr "död"
 
 #: src/liflines/show.c:137
 msgid "buri"

@@ -1,3 +1,9 @@
+2003-03-07 Perry Rapp
+
+	* ChangeLog sv/sv.po
+
+	Update to Swedish message catalog.
+
 2003-03-06 Steve Dum
 
 	* ChangeLog docs/Makefile.am
