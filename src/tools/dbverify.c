@@ -234,6 +234,7 @@ print_usage (void)
 		"\t-s = Check sours\n"
 		"\t-e = Check events\n"
 		"\t-x = Check others\n"
+		"\t-l = Check database structure\n"
 		"\t-n = Noisy (echo every record processed)\n")
 		);
 	printf(_("example: dbverify -ifsex \"%s\"\n"), fname);
@@ -1229,7 +1230,7 @@ main (int argc,
 	dbname = argv[2];
 	for (ptr=&flags[1]; *ptr; ++ptr) {
 		switch(*ptr) {
-		case 'L': todo.check_dbstructure=TRUE; break;
+		case 'l': todo.check_dbstructure=TRUE; break;
 		case 'g': todo.find_ghosts=TRUE; break;
 		case 'G': todo.fix_ghosts=TRUE; break;
 		case 'i': todo.check_indis=TRUE; break;

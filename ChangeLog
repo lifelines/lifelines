@@ -4,7 +4,11 @@
 	src\tools/dbverify.c
 
 	New function change_node_tag.
-	Fix bug in fix_bad_pointer which was corrupting node tags.
+	dbverify: Fix bug in fix_bad_pointer which was corrupting node tags.
+
+	* ChangeLog src/tools/dbverify.c
+
+	dbverify: Change option -L to -l, and add to usage string.
 
 2005-02-04 Jens Arvidsson
 
