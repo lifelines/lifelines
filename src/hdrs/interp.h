@@ -149,7 +149,7 @@ struct tag_pnode {
  * so the compiler will help find any misuse
  * Perry, 2002.02.17
  */
-/* when vtables are implemented completely, we won't need pvalues */
+/* pvalues need vtables */
 typedef struct tag_pvalue *PVALUE;
 struct tag_pvalue {
 	unsigned char type;	/* type of value */
