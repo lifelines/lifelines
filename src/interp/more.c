@@ -51,7 +51,7 @@
  * external/imported variables
  *********************************************/
 
-extern STRING qSnotone, qSifone, progname;
+extern STRING qSnotone, qSifone;
 extern STRING nonint1,nonintx,nonstr1,nonstrx,nonlstx,nonvarx,nonnodx;
 extern STRING nonind1,nonindx,nonfam1,nonrecx,nonnod1,nonnodx;
 
@@ -1120,10 +1120,9 @@ __pvalue (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __program (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	node=node; /* unused */
 	stab=stab; /* unused */
 	eflg=eflg; /* unused */
-	return create_pvalue_from_string(progname);
+	return create_pvalue_from_string(irptinfo(node)->fullpath);
 }
 /*============================================+
  * __debug -- Turn on/off programming debugging

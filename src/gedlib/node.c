@@ -277,7 +277,7 @@ assign_record (RECORD rec, char ntype, INT keynum)
 {
 	char xref[12];
 	char key[9];
-        NODE node;
+	NODE node;
 	sprintf(key, "%c%d", ntype, keynum);
 	sprintf(xref, "@%s@", key);
 	if ((node = nztop(rec))) {

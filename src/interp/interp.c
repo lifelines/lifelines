@@ -59,7 +59,7 @@
 */
 TABLE gproctab=0, gfunctab=0;
 SYMTAB globtab; /* assume all zero is null SYMTAB */
-STRING progname = NULL;       /* starting program name */
+struct pathinfo_s * cur_pathinfo = 0; /* program currently being parsed or run */
 FILE *Poutfp = NULL;          /* file to write program output to */
 STRING Poutstr = NULL;	      /* string to write program output to */
 INT Perrors = 0;
@@ -157,14 +157,14 @@ progmessage (MSG_LEVEL level, STRING msg)
 	STRING program = _(qSidrpt);
 	if (maxwidth >= 0 && maxwidth < mylen)
 		mylen = maxwidth;
-	if(progname && *progname && msglen+20 < maxwidth) {
+	if (cur_pathinfo && *cur_pathinfo->fullpath && msglen+20 < maxwidth) {
 		INT len = 99999;
 		if (msg_width() >= 0) {
 			len = sizeof(buf)-strlen(program)-1-1-msglen;
 		}
 		llstrcatn(&ptr, program, &mylen);
 		llstrcatn(&ptr, " ", &mylen);
-		llstrcatn(&ptr, compress_path(progname, len), &mylen);
+		llstrcatn(&ptr, compress_path(cur_pathinfo->fullpath, len), &mylen);
 		llstrcatn(&ptr, " ", &mylen);
 		llstrcatn(&ptr, msg, &mylen);
 	} else {
@@ -261,7 +261,6 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 			strfree(&fullpath);
 			goto interp_program_exit;
 		}
-		progname = strsave(fullpath);
 		pathinfo = new_pathinfo(fname, fullpath);
 		strfree(&fname);
 		strfree(&fullpath);
@@ -281,23 +280,21 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 	initinterp();
 
 	while (!is_empty_list(plist)) {
-		struct pathinfo_s * pathinfo = (struct pathinfo_s *)dequeue_list(plist);
-		if (!in_table(pactx->filetab, pathinfo->fullpath)) {
+		cur_pathinfo = (struct pathinfo_s *)dequeue_list(plist);
+		if (!in_table(pactx->filetab, cur_pathinfo->fullpath)) {
 			STRING str;
-			insert_table_ptr(pactx->filetab, pathinfo->fullpath, 0);
-#ifdef DEBUG
-			llwprintf("About to parse file %s.\n", pathinfo->fname);
-#endif
+			insert_table_ptr(pactx->filetab, cur_pathinfo->fullpath, 0);
 			Plist = plist;
-			parse_file(pactx, pathinfo->fname, pathinfo->fullpath);
-			if ((str = check_rpt_requires(pactx, pathinfo->fullpath)) != 0) {
+			parse_file(pactx, cur_pathinfo->fname, cur_pathinfo->fullpath);
+			if ((str = check_rpt_requires(pactx, cur_pathinfo->fullpath)) != 0) {
 				progmessage(MSG_ERROR, str);
 				goto interp_program_exit;
 			}
 		} else {
 			/* can't delete pathinfo, because pnodes use those strings */
-			enqueue_list(donelist, pathinfo);
+			enqueue_list(donelist, cur_pathinfo);
 		}
+		cur_pathinfo = 0;
 	}
 	remove_list(plist, NULL);
 	plist=NULL;

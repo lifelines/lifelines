@@ -1,3 +1,10 @@
+2003-02-01 Perry Rapp
+
+	* ChangeLog src/gedlib/node.c src/interp/interp.c
+	src/interp/more.c:
+
+	Report correct program name in parse error.
+
 2003-02-01 Steve Dum
         * ChangeLog src/gedlib/node.c src/liflines/llexec.c 
 	src/btree/opnbtree.c
