@@ -1087,7 +1087,7 @@ CODESET
      First, you may leave it entirely unspecified. This will give the 
      traditional lifelines behavior. This is really only suitable if either
      (a), you only use English (ASCII) data, or (b), you work in an 
-     environment that all uses the same 8-bit codeset (eg, a GNU/Linux box
+     environment which entirely uses the same 8-bit codeset (eg, a GNU/Linux box
      which is all ISO-8859-15), and you only run lifelines in English.
      If you use any non-English data on MS-Windows, this is not likely to 
      be suitable, because the lifelines screens run in the console, but 
@@ -1120,6 +1120,16 @@ CODESET
      In recent versions, lifelines has become more knowledgeable about handling 
      UTF-8, so that, for example, upper & lower casing only work correctly with
      versions from 3.0.28 on.
+
+</para>
+
+<para>
+
+     To actually specify a codeset, enter it via the u(ser) o(ptions) page (which is
+     documented below). From the main menu, in the English version, press u to reach
+     the user page, and then o to edit the user options. To set a codeset of, e.g.,
+     ISO-8859-1, enter this string on its own line, without the surrounding quotes:
+     "codeset=ISO-8859-1". Or, to specify the use of UTF-8, "codeset=UTF-8".
 
 </para>
 

@@ -1,3 +1,9 @@
+2003-05-07 Perry Rapp
+
+	* ChangeLog docs/ll-userguide.xml
+
+	Document how to actually set the internal codeset.
+
 2003-05-06 Steve Dum
        * ChangeLog docs/ll-reportmanual* docs/ll-userguide*
        roll version number for these docs to 3.0.28 and
