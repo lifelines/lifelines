@@ -49,6 +49,10 @@ void remove_list(LIST, void (*func)(WORD));
 void set_list_element(LIST, INT, WORD);
 void set_list_type(LIST, INT);
 
+/* environ.c */
+STRING environ_figure_editor();
+STRING environ_figure_tempfile();
+
 /* llstrcmp.c */
 int ll_strcmp(char*, char*);
 int ll_strncmp(char*, char*, int);

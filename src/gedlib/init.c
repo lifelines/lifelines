@@ -49,53 +49,6 @@ char *getenv();
 
 
 
-/*=================================
- * figure_tempfile -- calculate temporary file (fully qualified path)
- *===============================*/
-static STRING
-figure_tempfile()
-{
-#ifdef WIN32
-#ifdef _MSC_VER
-/* MSVC has _MAX_PATH, apparently Borland has PATH_MAX */
-#define PATH_MAX _MAX_PATH
-#endif
-	STRING e;
-	char win32_tempfile[PATH_MAX]; 
-
-	/* windows has per-user temporary directory, depending on version */
-	e = (STRING)getenv("TEMP");
-	if (!e || *e == 0) e = (STRING)getenv("TMP");
-	if (!e || *e == 0) e = "\\temp";
-	strcpy(win32_tempfile, e);
-	strcat(win32_tempfile, "\\lltmpXXXXXX");
-	return mktemp(win32_tempfile);
-#else
-	static char unix_tempfile[] = "/tmp/lltmpXXXXXX";
-	return mktemp(unix_tempfile);
-#endif
-}
-
-/*=================================
- * figure_editor -- calculate editor program to use
- *===============================*/
-static STRING
-figure_editor()
-{
-	STRING e;
-
-	e = (STRING) getenv("LLEDITOR");
-	if (!e || *e == 0) e = (STRING) getenv("ED");
-	if (!e || *e == 0) e = (STRING) getenv("EDITOR");
-#ifdef WIN32
-	/* win32 fallback is notepad */
-	if (!e || *e == 0) e = (STRING) "notepad.exe";
-#else
-	/* unix fallback is vi */
-	if (!e || *e == 0) e = (STRING) "vi";
-#endif
-	return e;
-}
 
 /*=================================
  * init_lifelines -- Open LifeLines
@@ -113,8 +66,8 @@ init_lifelines (void)
 	init_caches();
 	init_browse_lists();
 	init_mapping();
-	e = figure_editor();
-	editfile = strsave(figure_tempfile());
+	e = environ_figure_editor();
+	editfile = strsave(environ_figure_tempfile());
 	editstr = (STRING) stdalloc(strlen(e) + strlen(editfile) + 2);
 	sprintf(editstr, "%s %s", e, editfile);
 	llprograms = (STRING) getenv("LLPROGRAMS");
