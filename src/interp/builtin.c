@@ -2234,7 +2234,8 @@ __insert (PNODE node,
 
 	if (*eflg || (pvalue(val) == NULL)) {
 	        *eflg = TRUE;
-		prog_error(node, "1st arg to insert is not a table");
+		prog_error(node, "1st arg to insert is not a table but %s",
+		           pvalue_to_string(val));
 		return NULL;
 	}
 	tab = (TABLE) pvalue(val);
@@ -2249,7 +2250,8 @@ __insert (PNODE node,
 	val = eval_and_coerce(PSTRING, arg, stab, eflg);
 	if (*eflg || !val || !pvalue(val)) {
 		*eflg = TRUE;
-		prog_error(node, "2nd arg to insert is not a string");
+		prog_error(node, "2nd arg to insert is not a string but %s",
+		           pvalue_to_string(val));
 		return NULL;
 	}
 	str = strsave((STRING) pvalue(val));

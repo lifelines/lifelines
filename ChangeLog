@@ -1,3 +1,8 @@
+2000-11-09  Petter Reinholdtsen <pere@td.org.uit.no>
+
+	* interp/builtin.cinterp/pvalue.c: Give more debug info when
+	insert() fails because of wrong types.
+
 2000-11-08  Petter Reinholdtsen <pere@td.org.uit.no>
 
 	* hdrs/screen.h: Remove useless #ifdefs.

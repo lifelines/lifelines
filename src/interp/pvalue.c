@@ -845,7 +845,7 @@ pvalue_to_string (PVALUE val)
 	sprintf(scratch, "<%s,", ptypes[type]);
 	p = scratch + strlen(scratch);
 	if (pvalue(val) == NULL) {
-		sprintf(p, "0>");
+		sprintf(p, "NULL>");
 		return (STRING) scratch;
 	}
 	u.w = pvalue(val);
@@ -856,7 +856,9 @@ pvalue_to_string (PVALUE val)
 	case PFLOAT:
 		sprintf(p, "%f>", u.f);
 		break;
-	case PSTRING: sprintf(p, "%s>", (STRING) pvalue(val)); break;
+	case PSTRING:
+		sprintf(p, "\"%s\">", (STRING) pvalue(val));
+		break;
 	case PINDI:
 		cel = (CACHEEL) pvalue(val);
 		if (!cnode(cel))
