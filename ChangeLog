@@ -20,6 +20,11 @@
 	Documented sort & rsort, FLOAT type, negative offsets
 	to getel, writeindi and writefam.
 
+	* ChangeLog docs/ll-reportmanual.xml
+
+	Updated dateformat documentation (new for yearformat and
+	eraformat).
+
 2003-03-01 Perry Rapp
 
 	* ChangeLog src/gedlib/indiseq.c src/hdrs/array.h

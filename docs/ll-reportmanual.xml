@@ -2515,6 +2515,22 @@ set month format for stddate calls
 
 </para> 
 
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>yearformat</function></funcdef><paramdef><parameter>INT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+set year format for stddate calls 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>eraformat</function></funcdef><paramdef><parameter>INT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+set era format for stddate calls 
+
+</para> 
+
 </glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>dateformat</function></funcdef><paramdef><parameter>INT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
 
 <para> 
@@ -2577,14 +2593,18 @@ component has an entry in the place abbreviation table.
 
 <para> 
 
-The last four functions are used to format dates in a variety of ways. 
-<function>Dayformat</function>, <function>monthformat</function>, and 
-<function>dateformat</function> select style options for formatting the day, 
-month, and overall date structure; <function>stddate</function> 
-returns dates in the selected style. The day format codes passed to 
-<function>dayformat</function> are: 
+The last six functions are used to format dates in a variety of ways.  <function>Dayformat</function>,
+<function>monthformat</function>, <function>yearformat</function>, <function>eraformat</function>, and
+<function>dateformat</function> select style options for formatting the day, month, year, era, and overall date
+structure; <function>stddate</function> returns dates in the selected style.
 
-<variablelist><varlistentry><term>0</term><listitem> 
+</para>
+
+
+
+<para>
+
+The day format codes passed to <function>dayformat</function> are: <variablelist><varlistentry><term>0</term><listitem> 
 
 <para> 
 
@@ -2644,7 +2664,7 @@ number with no space or zero before single digit months
 
 <para> 
 
-upper case abbreviation (eg, JAN, FEB) 
+upper case abbreviation (eg, JAN, FEB) (localized)
 
 </para> 
 
@@ -2652,7 +2672,7 @@ upper case abbreviation (eg, JAN, FEB)
 
 <para> 
 
-capitalized abbreviation (eg, Jan, Feb) 
+capitalized abbreviation (eg, Jan, Feb) (localized)
 
 </para> 
 
@@ -2660,7 +2680,7 @@ capitalized abbreviation (eg, Jan, Feb)
 
 <para> 
 
-upper case full word (eg, JANUARY, FEBRUARY) 
+upper case full word (eg, JANUARY, FEBRUARY) (localized)
 
 </para> 
 
@@ -2668,7 +2688,160 @@ upper case full word (eg, JANUARY, FEBRUARY)
 
 <para> 
 
-capitalized full word (eg, January, February) 
+capitalized full word (eg, January, February) (localized)
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>7</term><listitem> 
+
+<para> 
+
+lower case abbreviation (eg, jan, feb) (localized)
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>8</term><listitem> 
+
+<para> 
+
+lower case full word (eg, january, february) (localized)
+
+</para> 
+
+
+</listitem></varlistentry><varlistentry><term>9</term><listitem> 
+
+<para> 
+
+upper case abbreviation in English per GEDCOM (eg, JAN, FEB)
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>10</term><listitem> 
+
+<para> 
+
+lower case roman letter (eg, i, ii)
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>11</term><listitem> 
+
+<para> 
+
+upper case roman letter (eg, I, II)
+
+</para> 
+
+</listitem></varlistentry></variablelist> 
+
+</para> 
+
+
+
+<para>
+
+The year format codes passed to <function>yearformat</function> are: <variablelist><varlistentry><term>0</term><listitem> 
+
+<para> 
+
+use leading spaces before years with less than four digits
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>1</term><listitem> 
+
+<para> 
+
+use leading 0 before years with less than four digits
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>2</term><listitem> 
+
+<para> 
+
+no space or leading 0 before years
+
+</para> 
+
+</listitem></varlistentry></variablelist> 
+
+</para> 
+
+
+
+<para>
+
+The era format codes passed to <function>eraformat</function> are: <variablelist><varlistentry><term>0</term><listitem> 
+
+<para> 
+
+no AD/BC markers
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>1</term><listitem> 
+
+<para> 
+
+trailing B.C. if appropriate
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>2</term><listitem> 
+
+<para> 
+
+trailing A.D. or B.C.
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>11</term><listitem> 
+
+<para> 
+
+trailing BC if appropriate
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>12</term><listitem> 
+
+<para> 
+
+trailing AD or BC
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>21</term><listitem> 
+
+<para> 
+
+trailing B.C.E. if appropriate
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>22</term><listitem> 
+
+<para> 
+
+trailing C.E. or B.C.E.
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>31</term><listitem> 
+
+<para> 
+
+trailing BC if appropriate
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>32</term><listitem> 
+
+<para> 
+
+trailing CE or BCE
 
 </para> 
 
