@@ -11,6 +11,10 @@
 
 	More i18n.
 
+	* ChangeLog po/de.po po/sv.po:
+
+	Propagating new i18n'd strings into de & sv translations.
+
 2002-04-25 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog interp/interp.c:
