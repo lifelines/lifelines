@@ -24,7 +24,6 @@ XLAT xl_get_null_xlat(void);
 XLAT xl_get_xlat(CNSTRING src, CNSTRING dest, BOOLEAN adhoc);
 BOOLEAN xl_is_xlat_valid(XLAT xlat);
 void xl_load_all_dyntts(CNSTRING ttpath);
-void xl_set_name(XLAT xlat, CNSTRING name);
 void xl_parse_codeset(CNSTRING codeset, ZSTR zcsname, LIST * subcodes);
 void xl_release_xlat(XLAT xlat);
 void xl_set_legtt(XLAT, void * vp);

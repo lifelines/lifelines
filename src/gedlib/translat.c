@@ -361,7 +361,6 @@ transl_load_xlats (void)
 			src = *conv->src_codeset;
 			dest = *conv->dest_codeset;
 			conv->xlat = xl_get_xlat(src, dest, adhoc);
-			xl_set_name(conv->xlat, conversions[i].name);
 		} else {
 			/* even if codesets are unspecified, have to have a placeholder
 			in which to store any legacy translation tables */
@@ -422,8 +421,6 @@ transl_get_predefined_xlat (INT trnum)
 ZSTR
 transl_get_predefined_name (INT trnum)
 {
-	/* TRANSLATORS: pre test comment */
-	STRING t = _("testme"); /* post test comment */
 	return zs_news(_(getconvert(trnum)->name));
 }
 /*==========================================================
@@ -456,7 +453,16 @@ transl_get_predefined_menukey (INT trnum)
 ZSTR
 transl_get_description (XLAT xlat)
 {
-	return xlat_get_description(xlat);
+	ZSTR zstr = xlat_get_description(xlat);
+	struct legacytt_s * legtt = xl_get_legtt(xlat);
+	if (legtt && legtt->tt) {
+		ZSTR zdesc = get_trantable_desc(legtt->tt);
+		/* TRANSLATORS: db internal translation table note for tt menu */
+		zs_appf(zstr, _(" (dbint tt: %s)"), zs_str(zdesc));
+		zs_free(&zdesc);
+	}
+
+	return zstr;
 }
 /*==========================================================
  * transl_parse_codeset -- Parse out subcode suffixes of a codeset

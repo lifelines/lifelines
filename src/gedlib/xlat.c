@@ -27,7 +27,6 @@
 /* This will go into translat.c when new system is working */
 struct tag_xlat {
 	/* All members either NULL or heap-alloc'd */
-	STRING name;
 	STRING src;
 	STRING dest;
 	LIST steps;
@@ -59,7 +58,7 @@ static void add_dyntt_step(XLAT xlat, DYNTT dyntt);
 static INT check_tt_name(CNSTRING filename, ZSTR zsrc, ZSTR zdest);
 static XLSTEP create_iconv_step(CNSTRING src, CNSTRING dest);
 static XLSTEP create_dyntt_step(DYNTT dyntt);
-static XLAT create_null_xlat(void);
+static XLAT create_null_xlat(BOOLEAN adhoc);
 static XLAT create_xlat(CNSTRING src, CNSTRING dest, BOOLEAN adhoc);
 static DYNTT create_dyntt(TRANTABLE tt, STRING path);
 static void free_dyntts(void);
@@ -85,12 +84,12 @@ static char f_ttext[] = ".tt";
  *********************************************/
 
 /*==========================================================
- * create_xlat -- Create a new translation
+ * create_null_xlat -- Create a new translation
  * (also adds to cache)
  * Created: 2002/11/25 (Perry Rapp)
  *========================================================*/
 static XLAT
-create_null_xlat (void)
+create_null_xlat (BOOLEAN adhoc)
 {
 	/* create & initialize new xlat */
 	XLAT xlat = (XLAT)stdalloc(sizeof(*xlat));
@@ -101,6 +100,7 @@ create_null_xlat (void)
 		f_xlats = create_list();
 	}
 	enqueue_list(f_xlats, xlat);
+	xlat->adhoc = adhoc;
 	return xlat;
 }
 /*==========================================================
@@ -112,10 +112,9 @@ static XLAT
 create_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 {
 	/* create & initialize new xlat */
-	XLAT xlat = create_null_xlat();
+	XLAT xlat = create_null_xlat(adhoc);
 	xlat->src = strsave(src);
 	xlat->dest = strsave(dest);
-	xlat->adhoc = adhoc;
 	return xlat;
 }
 /*==========================================================
@@ -190,7 +189,7 @@ xl_get_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 	STRING subcoding=0;
 	
 	if (!src || !src[0] || !dest || !dest[0]) {
-		xlat = create_null_xlat();
+		xlat = create_null_xlat(adhoc);
 		goto end_get_xlat;
 	}
 
@@ -267,7 +266,7 @@ end_get_xlat:
 XLAT
 xl_get_null_xlat (void)
 {
-	return create_null_xlat();
+	return create_null_xlat(FALSE);
 }
 /*==========================================================
  * add_dyntt_step -- Add dynamic translation table step
@@ -595,16 +594,6 @@ xl_parse_codeset (CNSTRING codeset, ZSTR zcsname, LIST * subcodes)
 	}
 }
 /*==========================================================
- * xl_set_name -- Store English name in xlat
- *  This is just for debugging convenience
- * Created: 2002/12/10 (Perry Rapp)
- *========================================================*/
-void
-xl_set_name (XLAT xlat, CNSTRING name)
-{
-	strupdate(&xlat->name, name);
-}
-/*==========================================================
  * xlat_get_description -- Fetch description of a translation
  *  eg, "3 steps with iconv(UTF-8, CP1252)"
  * Created: 2002/12/13 (Perry Rapp)
@@ -640,6 +629,7 @@ xlat_get_description (XLAT xlat)
 			zs_apps(zstr, ")");
 		}
 	ENDLIST
+	/* TRANSLATORS: steps in a chain of codeset conversions, eg, Editor-to-Internal */
 	snprintf(stepcount, sizeof(stepcount), _pl("%d step", "%d steps", count), count);
 	zs_sets(zrtn, stepcount);
 	zs_apps(zrtn, ": ");

@@ -729,7 +729,7 @@ get_trantable_desc (TRANTABLE tt)
 {
 	ZSTR zstr=zs_new();
 	char buffer[36];
-    if (tt->name[0]) {
+	if (tt->name[0]) {
 		zs_apps(zstr, tt->name);
 	} else {
 		zs_apps(zstr, "(Unnamed table)");
