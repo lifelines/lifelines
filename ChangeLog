@@ -1,3 +1,8 @@
+2000-11-11 Petter Reinholdtsen <pere@td.org.uit.no>
+
+	* interp/eval.c: Cleanup. Call prog_error() directly with vararg
+	argument instead of first preparing a string.
+	
 2000-11-10  Marc Nozell  <nozell@dl360r6.ispworks.com>
 
 	* Added lldb.ll report; list of all INDIs suitable to import into

@@ -182,13 +182,7 @@ evaluate_ufunc (PNODE node,
 
 	*eflg = TRUE;
 	if ((func = (PNODE) valueof(functab, nam)) == NULL) {
-		unsigned char s[1024];
-#ifdef HAVE_SNPRINTF
-		snprintf(s, sizeof(s), "undefined function %s()", nam);
-#else
-		sprintf(s, "undefined function %s()", nam);
-#endif
-		prog_error(node, s);
+		prog_error(node, "undefined function %s()", nam);
 		return NULL;
 	}
 	newtab = create_table();
