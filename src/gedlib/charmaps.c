@@ -622,16 +622,28 @@ show_xnode (XNODE node)
 		llwprintf("\n");
 }
 /*===================================================
- * custom_translate -- Translate string via custom translation table
+ * custom_translatez -- Translate string via custom translation table
  *  zstr: [I/O] string to be translated (in-place)
+ *  tt:   [IN]  custom translation table
+ *=================================================*/
+void
+custom_translatez (ZSTR zstr, TRANTABLE tt)
+{
+	ZSTR zout = custom_translate(zs_str(zstr), tt);
+	zs_setz(zstr, zout);
+	zs_free(&zout);
+}
+/*===================================================
+ * custom_translate -- Translate string via custom translation table
+ *  str:  [IN]  string to be translated
  *  tt:   [IN]  custom translation table
  * returns translated string
  *=================================================*/
-void
-custom_translate (ZSTR zstr, TRANTABLE tt)
+ZSTR
+custom_translate (CNSTRING str, TRANTABLE tt)
 {
-	ZSTR zout = zs_newn((unsigned int)(zs_len(zstr)*1.3+2));
-	STRING p = zs_str(zstr);
+	ZSTR zout = zs_newn((unsigned int)(strlen(str)*1.3+2));
+	CNSTRING p = str;
 	while (*p) {
 		CNSTRING tmp;
 		INT len = translate_match(tt, p, &tmp);
@@ -642,8 +654,7 @@ custom_translate (ZSTR zstr, TRANTABLE tt)
 			zs_appc(zout, *p++);
 		}
 	}
-	zs_setz(zstr, zout);
-	zs_free(&zout);
+	return zout;
 }
 /*===================================================
  * custom_sort -- Compare two strings with custom sort

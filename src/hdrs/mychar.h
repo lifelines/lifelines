@@ -2,7 +2,7 @@
 #define mychar_h_included
 
 
-typedef struct {
+typedef struct my_charset_info_tag {
   unsigned char toup;    /* Corresponding uppercase letter. */
   unsigned char tolow;   /* Corresponding lowercase letter. */
   unsigned char iscntrl; /* Is control character? */

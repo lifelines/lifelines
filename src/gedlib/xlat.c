@@ -372,7 +372,7 @@ xl_do_xlat (XLAT xlat, ZSTR zstr)
 		} else if (xstep->dyntt) {
 			/* a custom translation table step */
 			if (xstep->dyntt->tt)
-				custom_translate(zstr, xstep->dyntt->tt);
+				custom_translatez(zstr, xstep->dyntt->tt);
 		}
 	ENDLIST
 	return cvtd;

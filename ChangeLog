@@ -11,6 +11,16 @@
 
 	Add option CustomCharacterProperties.
 
+	* ChangeLog build/msvc6/llines/llinesprj.dsp
+	src/gedlib/Makefile.am src/gedlib/charmaps.c
+	src/gedlib/gedcomi.h src/gedlib/translat.c src/gedlib/xlat.c
+	src/hdrs/Makefile.am src/hdrs/llstdlib.h src/hdrs/mychar.h
+	src/stdlib/strcvt.c
+	*NEW src/gedlib/charprops.c
+	*NEW src/hdrs/charprops.h
+
+	Add shell for code to do builtin character casing.
+
 2003-11-11 Perry Rapp
 
 	* ChangeLog src/gedlib/indiseq.c src/stdlib/strcvt.c

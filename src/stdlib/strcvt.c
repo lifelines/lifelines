@@ -168,7 +168,7 @@ wz_makenarrow(ZSTR zstr)
  * ll_tolowerz -- Return lowercase version of string
  *====================================*/
 ZSTR
-ll_tolowerz (STRING s, int utf8)
+ll_tolowerz (CNSTRING s, int utf8)
 {
 	ZSTR zstr=0;
 #ifdef HAVE_TOWLOWER
@@ -199,7 +199,7 @@ ll_tolowerz (STRING s, int utf8)
  * ll_toupperz -- Return uppercase version of string
  *========================================*/
 ZSTR
-ll_toupperz (STRING s, INT utf8)
+ll_toupperz (CNSTRING s, INT utf8)
 {
 	ZSTR zstr=0;
 #ifdef HAVE_TOWUPPER

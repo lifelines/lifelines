@@ -312,7 +312,7 @@ transl_load_all_tts (void)
 	xl_load_all_dyntts(ttpath);
 }
 /*==========================================================
- * xl_do_xlat -- Perform a translation on a string
+ * transl_xlat -- Perform a translation on a string
  * Created: 2002/11/28 (Perry Rapp)
  *========================================================*/
 void
@@ -321,13 +321,13 @@ transl_xlat (XLAT xlat, ZSTR zstr)
 	INT index = xl_get_uparam(xlat)-1;
 	struct legacytt_s * legtt = (index>=0 ? &legacytts[index] : NULL);
 	if (legtt && legtt->tt && legtt->first) {
-		custom_translate(zstr, legtt->tt);
+		custom_translatez(zstr, legtt->tt);
 	}
 
 	xl_do_xlat(xlat, zstr);
 
 	if (legtt && legtt->tt && !legtt->first) {
-		custom_translate(zstr, legtt->tt);
+		custom_translatez(zstr, legtt->tt);
 	}
 }
 /*==========================================================

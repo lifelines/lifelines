@@ -180,9 +180,9 @@ char *llstrsetvf(char * dest, int limit, int utf8, const char * fmt, va_list arg
 /* strcvt.c */
 BOOLEAN isnumeric(STRING);
 ZSTR ll_tocapitalizedz(STRING s, INT utf8);
-ZSTR ll_tolowerz(STRING s, INT utf8);
+ZSTR ll_tolowerz(CNSTRING s, INT utf8);
 ZSTR ll_totitlecasez(STRING, INT utf8);
-ZSTR ll_toupperz(STRING s, INT utf8);
+ZSTR ll_toupperz(CNSTRING s, INT utf8);
 STRING upperascii_s(STRING str);
 
 

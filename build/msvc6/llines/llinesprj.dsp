@@ -153,6 +153,10 @@ SOURCE=..\..\..\src\gedlib\charmaps.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\gedlib\charprops.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\gedlib\choose.c
 # End Source File
 # Begin Source File
@@ -645,6 +649,10 @@ SOURCE=..\..\..\src\hdrs\cache.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\hdrs\charprops.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\hdrs\codesets.h
 # End Source File
 # Begin Source File
@@ -769,6 +777,10 @@ SOURCE=..\..\..\src\hdrs\msvc.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\hdrs\mychar.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\hdrs\mystring.h
 # End Source File
 # Begin Source File
@@ -847,10 +859,6 @@ SOURCE=..\..\..\src\hdrs\zstr.h
 # Begin Source File
 
 SOURCE=..\..\..\ChangeLog
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\hdrs\mychar.h
 # End Source File
 # End Target
 # End Project
