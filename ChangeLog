@@ -1,3 +1,9 @@
+2003-09-08 Matt Emmerton
+
+	* ChangeLog src/gedlib/init.c
+
+	Changes to eliminate warnings when using --disable-nls
+
 2003-09-08 Perry Rapp
 
 	* ChangeLog src/liflines/ask.c

@@ -682,7 +682,9 @@ update_db_options (void)
 		strupdate(&int_codeset, str);
 		uu8 = is_codeset_utf8(int_codeset);
 		/* always translate to internal codeset */
+#ifdef ENABLE_NLS
 		set_gettext_codeset(PACKAGE, int_codeset);
+#endif /* ENABLE_NLS */
 		/* need to reload all predefined codeset conversions */
 		transl_load_xlats();
 	}
