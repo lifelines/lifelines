@@ -8,6 +8,12 @@
 
 	Fix char to uchar for non-ASCII menu keys.
 
+	* ChangeLog src/interp/eval.c
+
+	Fix evaluate_ufunc not to crash deleting symbol table 
+	on undefined function.
+	Fixes sf bug#1102127 (ASSERT on call to undefined function)
+
 2005-01-13 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp

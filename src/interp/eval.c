@@ -289,8 +289,10 @@ evaluate_ufunc (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	val=NULL;
 
 ufunc_leave:
-	remove_symtab(newstab);
-	newstab = NULL;
+	if (newstab) {
+		remove_symtab(newstab);
+		newstab = NULL;
+	}
 	return val;
 }
 /*=====================================
