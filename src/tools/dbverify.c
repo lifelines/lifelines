@@ -81,6 +81,7 @@ struct errinfo {
  * work -- what the user wants to do
  *================================*/
 struct work {
+	INT check_dbstructure;
 	INT find_ghosts;
 	INT fix_ghosts;
 	INT check_indis;
@@ -113,9 +114,13 @@ typedef struct
 static NAMEREFN_REC * alloc_namerefn(STRING namerefn, STRING key, INT err);
 static BOOLEAN cgn_callback(STRING key, STRING name, BOOLEAN newset, void *param);
 static BOOLEAN cgr_callback(STRING key, STRING refn, BOOLEAN newset, void *param);
+static BOOLEAN check_block(BTREE btr, BLOCK block, TABLE fkeytab, RKEY * lo, RKEY * hi);
+static BOOLEAN check_btree(BTREE btr);
 static BOOLEAN check_even(STRING key, RECORD rec);
 static BOOLEAN check_fam(STRING key, RECORD rec);
 static void check_ghosts(void);
+static BOOLEAN check_keys(BTREE btr, BLOCK block, TABLE fkeytab, RKEY * lo, RKEY * hi);
+static BOOLEAN check_index(BTREE btr, INDEX index, TABLE fkeytab, RKEY * lo, RKEY * hi);
 static BOOLEAN check_indi(STRING key, RECORD rec);
 static void check_node(STRING key, NODE node, INT level);
 static void check_nodes(void);
@@ -128,6 +133,7 @@ static void finish_and_delete_nameset(void);
 static void finish_and_delete_refnset(void);
 static void free_namerefn(NAMEREFN_REC * rec);
 static BOOLEAN nodes_callback(STRING key, RECORD rec, void *param);
+static void printblock(BTREE btr, BLOCK block);
 static void print_usage(void);
 static void report_error(INT err, STRING fmt, ...);
 static void report_progress(STRING fmt, ...);
@@ -835,6 +841,123 @@ check_set (INDISEQ seq, char ctype)
 	ENDINDISEQ
 }
 /*=========================================
+ * check_btree -- Validate btree itself
+ * Created: 2003/09/05, Perry Rapp
+ *=======================================*/
+static BOOLEAN
+check_btree (BTREE btr)
+{
+	/* keep track of which files we've visited */
+	TABLE fkeytab = create_table(FREEKEY);
+	/* check that master index has its fkey correct */
+	INDEX index = bmaster(BTR);
+	INT mk1 = bkfile(btr).k_mkey;
+	if (ixself(index) != mk1) {
+		printf(_("Master fkey misaligned (%d != %d)\n"), ixself(index), mk1);
+		return FALSE;
+	}
+	check_index(btr, index, fkeytab, NULL, NULL);
+	remove_table(fkeytab, FREEKEY);
+	return TRUE;
+}
+/*=========================================
+ * check_index -- Validate one index node of btree
+ * Created: 2003/09/05, Perry Rapp
+ *=======================================*/
+static BOOLEAN
+check_index (BTREE btr, INDEX index, TABLE fkeytab, RKEY * lo, RKEY * hi)
+{
+	INT n = nkeys(index);
+	INT i;
+	if (!check_keys(btr, (BLOCK)index, fkeytab, lo, hi))
+		return FALSE;
+	for (i = 0; i <= n; i++) {
+		INDEX newix = readindex(bbasedir(btr), fkeys(index, i), TRUE);
+		RKEY *lox, *hix;
+		if (!newix) {
+			printf(_("Error loading index at key %d\n"), i);
+			printblock(btr, (BLOCK)index);
+		}
+		/* figure upper & lower bounds of what keys should be in the child */
+		lox = (i==0 ? lo : &rkeys(index, i));
+		hix = (i==n ? hi : &rkeys(index, i+1));
+		if (ixtype(newix) == BTINDEXTYPE)
+			check_index(btr, newix, fkeytab, lox, hix);
+		else
+			check_block(btr, (BLOCK)newix, fkeytab, lox, hix);
+	}
+	/* TODO: check subindices */
+	return TRUE;
+}
+/*=========================================
+ * check_block -- Validate one data block node of btree
+ * Created: 2003/09/05, Perry Rapp
+ *=======================================*/
+static BOOLEAN
+check_block (BTREE btr, BLOCK block, TABLE fkeytab, RKEY * lo, RKEY * hi)
+{
+	INT n = nkeys(block);
+	if (!check_keys(btr, block, fkeytab, lo, hi))
+		return FALSE;
+	return TRUE;
+}
+/*=========================================
+ * check_keys -- Validate keys of index or block
+ * Created: 2003/09/05, Perry Rapp
+ *=======================================*/
+static BOOLEAN
+check_keys (BTREE btr, BLOCK block, TABLE fkeytab, RKEY * lo, RKEY * hi)
+{
+	INT n = nkeys(block);
+	INT i = 0;
+	INT start = 0;
+	BOOLEAN ok = TRUE;
+	if (ixtype(block) == BTINDEXTYPE)
+		++start; /* keys are 1..n for index */
+	else
+		--n; /* keys are 0..n-1 for block */
+	for (i=start ; i <= n; i++) {
+		if (i==start && lo) {
+			INT rel = cmpkeys(btr, lo, &rkeys(block, i));
+			if (rel < 0) {
+				printf(_("First key in block below parent's limit\n"));
+				printblock(btr, block);
+				ok = FALSE;
+			}
+		}
+		if (i==n && hi) {
+			INT rel = cmpkeys(btr, &rkeys(block, i), hi);
+			if (rel > 0) {
+				printf(_("Last key in block above parent's limit\n"));
+				printblock(btr, block);
+				ok = FALSE;
+			}
+		}
+		if (i<n) {
+			INT rel = cmpkeys(btr, &rkeys(block, i), &rkeys(block, i+1));
+			if (rel >= 0) {
+				printf(_("Key %d not below next key\n"), i);
+				printblock(btr, block);
+				ok = FALSE;
+			}
+		}
+	}
+	return ok;
+}
+/*=========================================
+ * printblock -- Describe index file
+ * Created: 2003/09/05, Perry Rapp
+ *=======================================*/
+static void
+printblock (BTREE btr, BLOCK block)
+{
+	FKEY fkey = ixself(block);
+	STRING tname = _("data block");
+	if (ixtype(block) == BTINDEXTYPE)
+		tname = _("data block");
+	printf(_("%s fkey=%s, file=%s"), tname, fkey, fkey2path(fkey));
+}
+/*=========================================
  * validate_errs -- Validate the errs array
  * Created: 2001/01/13, Perry Rapp
  *=======================================*/
@@ -890,6 +1013,7 @@ main (int argc,
 	dbname = argv[2];
 	for (ptr=&flags[1]; *ptr; ptr++) {
 		switch(*ptr) {
+		case 'L': todo.check_dbstructure=TRUE; break;
 		case 'g': todo.find_ghosts=TRUE; break;
 		case 'G': todo.fix_ghosts=TRUE; break;
 		case 'i': todo.check_indis=TRUE; break;
@@ -918,6 +1042,18 @@ main (int argc,
 		puts(buffer);
 		goto done;
 	}
+
+	/* 
+	Do low-level checks before initializing lifelines database layer,
+	because lifelines database init traverses btree for user options 
+	and translation tables, and here we check the infrastructure of
+	the btree itself.
+	*/
+	if (todo.check_dbstructure || allchecks) {
+		if (!check_btree(BTR))
+			goto done;
+	}
+
 	if (!init_lifelines_db()) {
 		printf(_(qSbaddb));
 		goto done;

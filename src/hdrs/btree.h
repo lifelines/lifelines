@@ -124,13 +124,13 @@ typedef struct {
  * 16=8+4+4=sizeof(RKEY)+sizeof(INT)+sizeof(INT)
  *====================================================*/
 typedef struct {
-	FKEY   ix_self;		/*fkey of this block*/
+	FKEY   ix_self;             /*fkey of this block*/
 	SHORT  ix_type;		/*block/file type*/
-	FKEY   ix_parent;	/*parent file's fkey*/
-	SHORT  ix_nkeys;		/*num of keys in block*/
-	RKEY   ix_rkeys[NORECS];	/*rkeys in block/file*/
-	INT    ix_offs[NORECS];	/*offsets for data in file*/
-	INT    ix_lens[NORECS];	/*lengths for data in file*/
+	FKEY   ix_parent;           /*parent file's fkey*/
+	SHORT  ix_nkeys;            /*num of keys in block*/
+	RKEY   ix_rkeys[NORECS];    /*rkeys in block/file*/
+	INT    ix_offs[NORECS];     /*offsets for data in file*/
+	INT    ix_lens[NORECS];     /*lengths for data in file*/
 } *BLOCK, BLOCKSTRUCT;
 
 /*============================================
@@ -161,6 +161,9 @@ void describe_dberror(INT dberr, STRING buffer, INT buflen);
 BTREE openbtree(STRING dir, BOOLEAN cflag, INT writ, BOOLEAN immut);
 BOOLEAN validate_keyfile2(KEYFILE2 *);
 
+/* index.c */
+INDEX readindex(STRING basedir, FKEY ikey, BOOLEAN robust);
+
 /* names.c */
 
 /* record.c */
@@ -168,6 +171,7 @@ BOOLEAN addrecord(BTREE, RKEY, RAWRECORD, INT);
 RAWRECORD getrecord(BTREE, RKEY, INT*);
 BOOLEAN isrecord(BTREE, RKEY);
 RAWRECORD readrec(BTREE btree, BLOCK block, INT i, INT *plen);
+INT cmpkeys(BTREE btree, RKEY * rk1, RKEY * rk2);
 
 /* traverse.c */
 BOOLEAN traverse_index_blocks(BTREE, INDEX, void *, BOOLEAN (*ifunc)(BTREE, INDEX, void *), BOOLEAN (*dfunc)(BTREE, BLOCK, void *));

@@ -396,10 +396,6 @@ SOURCE=..\..\..\src\hdrs\btree.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\btree\btreei.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\src\btree\btreei.h
 # End Source File
 # Begin Source File

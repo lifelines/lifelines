@@ -67,7 +67,7 @@ addkey (BTREE btree, FKEY ikey, RKEY rkey, FKEY fkey)
 	hi = nkeys(index);
 	while (lo <= hi) {
 		SHORT md = (lo + hi)/2;
-		INT rel = ll_strncmp(rkey.r_rkey, rkeys(index, md).r_rkey, 8);
+		INT rel = cmpkeys(btree, &rkey, &rkeys(index, md));
 		if (rel < 0)
 			hi = --md;
 		else if (rel > 0)

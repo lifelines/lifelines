@@ -118,7 +118,7 @@ addrecord (BTREE btree, RKEY rkey, RAWRECORD rec, INT len)
 		n = nkeys(index);
 		nfkey = fkeys(index, 0);
 		for (i = 1; i <= n; i++) {
-			if (ll_strncmp(rkey.r_rkey, rkeys(index, i).r_rkey, 8) < 0)
+			if (cmpkeys(btree, &rkey, &rkeys(index, i)) < 0)
 				break;
 			nfkey = fkeys(index, i);
 		}
@@ -140,7 +140,7 @@ addrecord (BTREE btree, RKEY rkey, RAWRECORD rec, INT len)
 	found = FALSE;
 	while (lo <= hi) {
 		SHORT md = (lo + hi)/2;
-		INT rel = ll_strncmp(rkey.r_rkey, rkeys(old, md).r_rkey, 8);
+		INT rel = cmpkeys(btree, &rkey, &rkeys(old, md));
 		if (rel < 0)
 			hi = --md;
 		else if (rel > 0)
@@ -424,7 +424,7 @@ getrecord (BTREE btree, RKEY rkey, INT *plen)
 		n = nkeys(index);
 		nfkey = fkeys(index, 0);
 		for (i = 1; i <= n; i++) {
-			if (ll_strncmp(rkey.r_rkey, rkeys(index, i).r_rkey, 8) < 0)
+			if (cmpkeys(btree, &rkey, &rkeys(index, i)) < 0)
 				break;
 			nfkey = fkeys(index, i);
 		}
@@ -444,7 +444,7 @@ getrecord (BTREE btree, RKEY rkey, INT *plen)
 	hi = nkeys(block) - 1;
 	while (lo <= hi) {
 		SHORT md = (lo + hi)/2;
-		INT rel = ll_strncmp(rkey.r_rkey, rkeys(block, md).r_rkey, 8);
+		INT rel = cmpkeys(btree, &rkey, &rkeys(block, md));
 		if (rel < 0)
 			hi = --md;
 		else if (rel > 0)
@@ -492,7 +492,7 @@ isrecord (BTREE btree,
 		n = nkeys(index);
 		nfkey = fkeys(index, 0);
 		for (i = 1; i <= n; i++) {
-			if (ll_strncmp(rkey.r_rkey, rkeys(index, i).r_rkey, 8) < 0)
+			if (cmpkeys(btree, &rkey, &rkeys(index, i)) < 0)
 				break;
 			nfkey = fkeys(index, i);
 		}
@@ -505,7 +505,7 @@ isrecord (BTREE btree,
 	hi = nkeys(block) - 1;
 	while (lo <= hi) {
 		SHORT md = (lo + hi)/2;
-		INT rel = ll_strncmp(rkey.r_rkey, rkeys(block, md).r_rkey, 8);
+		INT rel = cmpkeys(btree, &rkey, &rkeys(block, md));
 		if (rel < 0)
 			hi = --md;
 		else if (rel > 0)
@@ -515,3 +515,13 @@ isrecord (BTREE btree,
 	}
 	return FALSE;
 }
+/*====================================================
+ * cmpkeys -- Compare two keys of btree
+ *==================================================*/
+INT
+cmpkeys (BTREE btree, RKEY * rk1, RKEY * rk2)
+{
+	INT rel = ll_strncmp(rk1->r_rkey, rk2->r_rkey, 8);
+	return rel;
+}
+
