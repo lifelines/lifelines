@@ -119,11 +119,11 @@ indi_to_list_string (NODE indi, NODE fam, INT len, RFMT rfmt)
 		name = unksps;
 	sprintf(p, "%s", name);
 	p += strlen(p);
-	if (fam)  evt = fam_to_event(fam, ttd, "MARR", dspa_mar, len, TRUE, rfmt);
-	if (!evt) evt = indi_to_event(indi, ttd, "BIRT", dspa_bir, len, TRUE, rfmt);
-	if (!evt) evt = indi_to_event(indi, ttd, "CHR", dspa_chr, len, TRUE, rfmt);
-	if (!evt) evt = indi_to_event(indi, ttd, "DEAT", dspa_dea, len, TRUE, rfmt);
-	if (!evt) evt = indi_to_event(indi, ttd, "BURI", dspa_bur, len, TRUE, rfmt);
+	if (fam)  evt = fam_to_event(fam, ttd, "MARR", dspa_mar, len, rfmt);
+	if (!evt) evt = indi_to_event(indi, ttd, "BIRT", dspa_bir, len, rfmt);
+	if (!evt) evt = indi_to_event(indi, ttd, "CHR", dspa_chr, len, rfmt);
+	if (!evt) evt = indi_to_event(indi, ttd, "DEAT", dspa_dea, len, rfmt);
+	if (!evt) evt = indi_to_event(indi, ttd, "BURI", dspa_bur, len, rfmt);
 	if (evt) {
 		sprintf(p, ", %s", evt);
 		p += strlen(p);

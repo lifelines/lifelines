@@ -6,7 +6,7 @@
 #
 # These can be overridden by useroptions in db
 #
-# 2001/09/22
+# 2001/10/29
 
 # Email address available to report programs
 #EmailAddr=user@mailhost.org
@@ -60,13 +60,17 @@
 # Print more detailed call stack for each report error
 # FullReportCallStack=1
 
-# set to 1 for customized date display on screen
-# if set to 0, or unspecified, dates will be displayed
-# directly from GEDCOM data
-# CustomizeLongDate=1
+# day-mode,month-mode,year-mode,combining-mode,complex-mode
 # see programmers reference for stddate for these
-# below example yields 2001/07/10
-#CustomizeLongDfmt=1
-#CustomizeLongMfmt=1
-#CustomizeLongYfmt=0
-#CustomizeLongSfmt=9
+# 2,3,0,0,1 is GEDCOM style (1 AUG 1945) with complex dates
+# 2,5,0,1,1 is American style (AUGUST 1, 1945) with complex dates
+# 1,1,0,9,1 is Chinese style (1945/04/25) with complex dates
+# 1,1,0,10,1 is Chinese style with dashes (1945-04-05) with complex dates
+# Omit this entirely to see dates as given in GEDCOM
+#LongDisplayDate=1,1,0,9,1
+
+
+# As above, except that omitting this defaults to combining mode 12 (year only)
+#  (the traditional short form)
+#ShortDisplayDate=1,1,0,10,1
+

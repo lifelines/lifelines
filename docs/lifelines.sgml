@@ -6279,6 +6279,14 @@ yrmoda
 
 </PARA>
 
+</LISTITEM></VARLISTENTRY><VARLISTENTRY><TERM>12</TERM><LISTITEM>
+
+<PARA>
+
+yr  (year only, omitting all else)
+
+</PARA>
+
 </LISTITEM></VARLISTENTRY></VARIABLELIST>
 
 </PARA>

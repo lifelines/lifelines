@@ -82,7 +82,7 @@ static STRING sstr = NULL;
 static TABLE monthtbl = NULL;
 
 /*==========================================
- * format_date -- Do general date formatting
+ * do_format_date -- Do general date formatting
  * str - raw string containing a date
  * dfmt - day format:  0 - num, space
  *                     1 - num, lead 0
@@ -107,18 +107,23 @@ static TABLE monthtbl = NULL;
  *                     9 - yr/mo/da
  *                     10- yr-mo-da
  *                     11- yrmoda
- * cmplx - if TRUE, then treat string as complex, including
+ *                     12- yr   (year only, old short form)
+ * cmplx - 0 is year only, 1 is complex, including
  *         date modifiers, ranges, and/or double-dating
  *========================================*/
 STRING
-format_date (STRING str, INT dfmt, INT mfmt,
-             INT yfmt, INT sfmt, BOOLEAN cmplx)
+do_format_date (STRING str, INT dfmt, INT mfmt,
+             INT yfmt, INT sfmt, INT cmplx)
 {
 	INT mod, da, mo, yr;
 	STRING sda, smo, syr;
 	static unsigned char scratch[50], daystr[4];
 	STRING p = scratch;
 	if (!str) return NULL;
+	if (sfmt==12) {
+		/* This is what used to be the shrt flag */
+		return shorten_date(str);
+	}
 	extract_date(str, &mod, &da, &mo, &yr, &syr);
 	if ((sda = format_day(da, dfmt))) sda = strcpy(daystr, sda);
 	smo = format_month(mo, mfmt);

@@ -47,7 +47,8 @@
  * global/exported variables
  *********************************************/
 
-struct rfmt_s disprfmt; /* reformatting used for display */
+struct rfmt_s disp_long_rfmt; /* reformatting used for display long forms */
+struct rfmt_s disp_shrt_rfmt; /* reformatting used for display short forms */
 
 /*********************************************
  * external/imported variables
@@ -80,17 +81,21 @@ typedef char *LINESTRING;
 static void add_child_line(INT, NODE, INT width);
 static void add_spouse_line(INT, NODE, NODE, INT width);
 static BOOLEAN append_event(STRING * pstr, STRING evt, INT * plen, INT minlen);
-static STRING disp_format_date(STRING date);;
+static STRING disp_long_format_date(STRING date);
+static STRING disp_shrt_format_date(STRING date);
+static STRING disp_shrt_format_plac(STRING plac);
 static void family_events(STRING outstr, TRANTABLE tt, NODE indi, NODE fam, INT len);
 static void indi_events(STRING outstr, TRANTABLE tt, NODE indi, INT len);
 static void init_disp_reformat();
 static void init_display_indi(NODE, INT width);
 static void init_display_fam(NODE, INT width);
 static STRING person_display(NODE, NODE, INT);
-static STRING sh_fam_to_event(NODE node, TRANTABLE tt, STRING tag, STRING head
-	, INT len, BOOLEAN shrt);
-static STRING sh_indi_to_event(NODE node, TRANTABLE tt, STRING tag, STRING head
-	, INT len, BOOLEAN shrt);
+static STRING sh_fam_to_event_shrt(NODE node, TRANTABLE tt, STRING tag, STRING head
+	, INT len);
+static STRING sh_indi_to_event_long(NODE node, TRANTABLE tt, STRING tag
+	, STRING head, INT len);
+static STRING sh_indi_to_event_shrt(NODE node, TRANTABLE tt, STRING tag
+	, STRING head, INT len);
 static void show_gedcom(WINDOW *w, NODE node, INT gdvw, INT row, INT hgt, BOOLEAN reuse);
 static void wipe_window(WINDOW * w, INT row, INT hgt);
 
@@ -165,8 +170,8 @@ init_display_indi (NODE pers, INT width)
 	}
 	sprintf(Spers+strlen(Spers), "(%s)", key_of_record(pers));
 
-	s = sh_indi_to_event(pers, ttd, "BIRT", "  born: ", (width-3), FALSE);
-	if (!s) s = sh_indi_to_event(pers, ttd, "CHR", "  bapt: ", (width-3), FALSE);
+	s = sh_indi_to_event_long(pers, ttd, "BIRT", "  born: ", (width-3));
+	if (!s) s = sh_indi_to_event_long(pers, ttd, "CHR", "  bapt: ", (width-3));
 	if (s) sprintf(Sbirt, s);
 	else sprintf(Sbirt, "  born:");
 
@@ -174,7 +179,7 @@ init_display_indi (NODE pers, INT width)
 	if(strchr(Sbirt, ',') == 0) {
 		num = strlen(Sbirt);
 		if(num < width-30) {
-			s = sh_indi_to_event(pers, ttd, "RESI", ", of ", (width-3)-num-5, FALSE);
+			s = sh_indi_to_event_long(pers, ttd, "RESI", ", of ", (width-3)-num-5);
 			if(s) {
 				if(num < 8) strcat(Sbirt, s+1);
 				else {
@@ -185,8 +190,8 @@ init_display_indi (NODE pers, INT width)
 		}
 	}
 
-	s = sh_indi_to_event(pers, ttd, "DEAT", "  died: ", (width-3), FALSE);
-	if (!s) s = sh_indi_to_event(pers, ttd, "BURI", "  buri: ", (width-3), FALSE);
+	s = sh_indi_to_event_long(pers, ttd, "DEAT", "  died: ", (width-3));
+	if (!s) s = sh_indi_to_event_long(pers, ttd, "BURI", "  buri: ", (width-3));
 	if (s) sprintf(Sdeat, s);
 	else sprintf(Sdeat, "  died:");
 
@@ -335,13 +340,13 @@ init_display_fam (NODE fam, INT width)
 	} else
 		sprintf(Shusb, "father: (%s)", fk);
 
-	s = sh_indi_to_event(husb, ttd, "BIRT", "  born: ", width-3, FALSE);
-	if (!s) s = sh_indi_to_event(husb, ttd, "CHR", "  bapt: ", width-3, FALSE);
+	s = sh_indi_to_event_long(husb, ttd, "BIRT", "  born: ", width-3);
+	if (!s) s = sh_indi_to_event_long(husb, ttd, "CHR", "  bapt: ", width-3);
 	if (s) sprintf(Shbirt, s);
 	else sprintf(Shbirt, "  born:");
 
-	s = sh_indi_to_event(husb, ttd, "DEAT", "  died: ", width-3, FALSE);
-	if (!s) s = sh_indi_to_event(husb, ttd, "BURI", "  buri: ", width-3, FALSE);
+	s = sh_indi_to_event_long(husb, ttd, "DEAT", "  died: ", width-3);
+	if (!s) s = sh_indi_to_event_long(husb, ttd, "BURI", "  buri: ", width-3);
 	if (s) sprintf(Shdeat, s);
 	else sprintf(Shdeat, "  died:");
 
@@ -353,17 +358,17 @@ init_display_fam (NODE fam, INT width)
 	} else
 		sprintf(Swife, "mother:");
 
-	s = sh_indi_to_event(wife, ttd, "BIRT", "  born: ", width-3, FALSE);
-	if (!s) s = sh_indi_to_event(wife, ttd, "CHR", " bapt: ", width-3, FALSE);
+	s = sh_indi_to_event_long(wife, ttd, "BIRT", "  born: ", width-3);
+	if (!s) s = sh_indi_to_event_long(wife, ttd, "CHR", " bapt: ", width-3);
 	if (s) sprintf(Swbirt, s);
 	else sprintf(Swbirt, "  born:");
 
-	s = sh_indi_to_event(wife, ttd, "DEAT", "  died: ", width-3, FALSE);
-	if (!s) s = sh_indi_to_event(wife, ttd, "BURI", " buri: ", width-3, FALSE);
+	s = sh_indi_to_event_long(wife, ttd, "DEAT", "  died: ", width-3);
+	if (!s) s = sh_indi_to_event_long(wife, ttd, "BURI", " buri: ", width-3);
 	if (s) sprintf(Swdeat, s);
 	else sprintf(Swdeat, "  died:");
 
-	s = sh_indi_to_event(fam, ttd, "MARR", "married: ", width-3, FALSE);
+	s = sh_indi_to_event_long(fam, ttd, "MARR", "married: ", width-3);
 	if (s) sprintf(Smarr, s);
 	else sprintf(Smarr, "married:");
 
@@ -616,30 +621,30 @@ family_events (STRING outstr, TRANTABLE ttd, NODE indi, NODE fam, INT len)
 	STRING p = outstr;
 	INT mylen = len;
 	p[0] = 0;
-	evt = sh_fam_to_event(fam, ttd, "MARR", "m. ", mylen, TRUE);
+	evt = sh_fam_to_event_shrt(fam, ttd, "MARR", "m. ", mylen);
 	if (evt && !append_event(&p, evt, &mylen, 10))
 		return;
 	if (!opt_nocb) {
 		NODE chld;
 		if ((chld = fam_to_first_chil(fam))) {
-			evt = sh_indi_to_event(chld, ttd, "BIRT", dspa_chbr, mylen, TRUE);
+			evt = sh_indi_to_event_shrt(chld, ttd, "BIRT", dspa_chbr, mylen);
 			if (evt && !append_event(&p, evt, &mylen, 10))
 				return;
-			evt = sh_indi_to_event(chld, ttd, "CHR", dspa_chbr, mylen, TRUE);
+			evt = sh_indi_to_event_shrt(chld, ttd, "CHR", dspa_chbr, mylen);
 			if (evt && !append_event(&p, evt, &mylen, 10))
 				return;
 		}
 	}
-	evt = sh_indi_to_event(indi, ttd, "BIRT", "b. ", mylen, TRUE);
+	evt = sh_indi_to_event_shrt(indi, ttd, "BIRT", "b. ", mylen);
 	if (evt && !append_event(&p, evt, &mylen, 10))
 		return;
-	evt = sh_indi_to_event(indi, ttd, "CHR", "bap. ", mylen, TRUE);
+	evt = sh_indi_to_event_shrt(indi, ttd, "CHR", "bap. ", mylen);
 	if (evt && !append_event(&p, evt, &mylen, 10))
 		return;
-	evt = sh_indi_to_event(indi, ttd, "DEAT", "d. ", mylen, TRUE);
+	evt = sh_indi_to_event_shrt(indi, ttd, "DEAT", "d. ", mylen);
 	if (evt && !append_event(&p, evt, &mylen, 10))
 		return;
-	evt = sh_indi_to_event(indi, ttd, "BURI", "bur. ", mylen, TRUE);
+	evt = sh_indi_to_event_shrt(indi, ttd, "BURI", "bur. ", mylen);
 	if (evt && !append_event(&p, evt, &mylen, 10))
 		return;
 }
@@ -662,17 +667,17 @@ indi_events (STRING outstr, TRANTABLE ttd, NODE indi, INT len)
 	INT mylen = len;
 	p[0] = 0;
 
-	evt = sh_indi_to_event(indi, ttd, "BIRT", "b. ", width, TRUE);
+	evt = sh_indi_to_event_shrt(indi, ttd, "BIRT", "b. ", width);
 	if (!evt)
-		evt = sh_indi_to_event(indi, ttd, "CHR", "bap. ", width, TRUE);
+		evt = sh_indi_to_event_shrt(indi, ttd, "CHR", "bap. ", width);
 	if (evt) {
 		llstrcatn(&p, ", ", &mylen);
 		llstrcatn(&p, evt, &mylen);
 	}
 	if (p == outstr)
 		width = len;
-	evt = sh_indi_to_event(indi, ttd, "DEAT", "d. ", width, TRUE);
-	if (!evt) evt = sh_indi_to_event(indi, ttd, "BURI", "bur. ", width,  TRUE);
+	evt = sh_indi_to_event_shrt(indi, ttd, "DEAT", "d. ", width);
+	if (!evt) evt = sh_indi_to_event_shrt(indi, ttd, "BURI", "bur. ", width);
 	if (evt) {
 		llstrcatn(&p, ", ", &mylen);
 		llstrcatn(&p, evt, &mylen);
@@ -881,43 +886,107 @@ display_cache_stats (void)
 }
 /*===============================================
  * init_disp_reformat -- Initialize reformatting for display
+ * Set up format descriptions for both long & short display forms
  * Created: 2001/07/12 (Perry Rapp)
  *=============================================*/
 static void
-init_disp_reformat ()
+init_disp_reformat (void)
 {
-	disprfmt.rfmt_date = &disp_format_date;
+	/* Set up long formats */
+	disp_long_rfmt.rfmt_date = &disp_long_format_date;
+	disp_long_rfmt.rfmt_plac = 0; /* use place as is */
+	/* Set up short formats */
+	disp_shrt_rfmt.rfmt_date = &disp_shrt_format_date;
+	disp_shrt_rfmt.rfmt_plac = &disp_shrt_format_plac;
 }
-/*================================================
- * display_date -- Convert date according to options
- *==============================================*/
+/*===========================================================
+ * disp_long_format_date -- Convert date according to options
+ *=========================================================*/
 static STRING
-disp_format_date (STRING date)
+disp_long_format_date (STRING date)
 {
-	static unsigned char buffer[MAXLINELEN+1];
+	INT dfmt=0,mfmt=0,yfmt=0,sfmt=0, cmplx;
+	INT n;
+
 	if (!date) return NULL;
-	if (!lloptions.date_customize_long) return date;
-	return format_date(date, lloptions.date_long_dfmt
-		, lloptions.date_long_mfmt, lloptions.date_long_yfmt
-		, lloptions.date_long_sfmt, TRUE);
+
+	/* if we were cleverer, we wouldn't be doing this sscanf
+	every time thru here -- but it can't be done too early,
+	as it needs options to have been read */
+
+	/* did user specify optional long date display format ? */
+	n = sscanf(lloptions.disp_long_date_fmts, "%d,%d,%d,%d,%d"
+		, &dfmt, &mfmt, &yfmt, &sfmt, &cmplx);
+	if (n != 5) return date;
+	
+	return do_format_date(date, dfmt, mfmt, yfmt, sfmt, cmplx);
+}
+/*===============================================================
+ * disp_shrt_format_date -- short form of date for display
+ *  This is used for dates in option strings, and in single-line
+ *  descriptions of people (ie, in event summaries).
+ * Created: 2001/10/29 (Perry Rapp)
+ *=============================================================*/
+static STRING
+disp_shrt_format_date (STRING date)
+{
+	INT dfmt=0,mfmt=0,yfmt=0,sfmt=0, cmplx;
+	INT n;
+
+	if (!date) return NULL;
+
+	/* see note about being cleverer in long version above */
+
+	/* did user specify optional short date display format ? */
+	n = sscanf(lloptions.disp_shrt_date_fmts, "%d,%d,%d,%d,%d"
+		, &dfmt, &mfmt, &yfmt, &sfmt, &cmplx);
+	if (n != 5) {
+		dfmt=mfmt=yfmt=sfmt=cmplx=0;
+		sfmt=12; /* old style short form -- year only */
+	}
+
+	return do_format_date(date, dfmt, mfmt, yfmt, sfmt, cmplx);
+	/*return shorten_date(date);*/
+}
+/*================================================================
+ * disp_shrt_format_plac -- short form of place for display
+ *  This is used for places in single-line descriptions of people
+ *  (ie, in event summaries).
+ * Created: 2001/10/29 (Perry Rapp)
+ *==============================================================*/
+static STRING
+disp_shrt_format_plac (STRING plac)
+{
+	if (!plac) return NULL;
+	return shorten_plac(plac);
 }
 /*================================================
  * sh_indi_to_event -- Pass-thru to indi_to_event
- *  using display reformatting
+ *  using long display reformatting
  *==============================================*/
 static STRING
-sh_indi_to_event (NODE node, TRANTABLE tt, STRING tag, STRING head
-	, INT len, BOOLEAN shrt)
+sh_indi_to_event_long (NODE node, TRANTABLE tt, STRING tag
+	, STRING head, INT len)
 {
-	return indi_to_event(node, tt, tag, head, len, shrt, &disprfmt);
+	return indi_to_event(node, tt, tag, head, len, &disp_long_rfmt);
 }
 /*================================================
- * sh_fam_to_event -- Pass-thru to fam_to_event
- *  using display reformatting
+ * sh_indi_to_event_shrt -- Pass-thru to indi_to_event, short display
+ *  using short display reformatting
  *==============================================*/
 static STRING
-sh_fam_to_event (NODE node, TRANTABLE tt, STRING tag, STRING head
-	, INT len, BOOLEAN shrt)
+sh_indi_to_event_shrt (NODE node, TRANTABLE tt, STRING tag
+	, STRING head, INT len)
 {
-	return fam_to_event(node, tt, tag, head, len, shrt, &disprfmt);
+	return indi_to_event(node, tt, tag, head, len, &disp_shrt_rfmt);
+}
+/*==================================================
+ * sh_fam_to_event_shrt -- Pass-thru to fam_to_event
+ *  using display reformatting
+ *================================================*/
+static STRING
+sh_fam_to_event_shrt (NODE node, TRANTABLE tt, STRING tag, STRING head
+	, INT len)
+{
+	return fam_to_event(node, tt, tag, head, len, &disp_shrt_rfmt);
 }

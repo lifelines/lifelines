@@ -41,7 +41,6 @@
 /*********************************************
  * external/imported variables
  *********************************************/
-extern struct rfmt_s disprfmt; /* reformatting used for display */
 
 /*********************************************
  * local types
@@ -510,7 +509,7 @@ node_lineprint (INT width, void * param)
 	if (npp->gdvw == GDVW_EXPANDED && nval(node)) {
 		STRING key = rmvat(nval(node)), str;
 		if (key) {
-			str = generic_to_list_string(NULL, key, mylen, ",", &disprfmt);
+			str = generic_to_list_string(NULL, key, mylen, ",", &disp_long_rfmt);
 			llstrcatn(&ptr, " : ", &mylen);
 			llstrcatn(&ptr, str, &mylen);
 		}

@@ -39,7 +39,6 @@
 #include "translat.h"
 #include "gedcom.h"
 #include "version.h"
-#include "lloptions.h"
 
 /*********************************************
  * global/exported variables

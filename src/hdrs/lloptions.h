@@ -37,8 +37,11 @@
 
 /*
   strings might be strsave'd("")
-  but they are never NULL, and are always in heap
-  after read_lloptions has been called
+   but they are never NULL, and are always in heap
+   after read_lloptions has been called
+  To change a string value in the options structure, do like so:
+   changeoptstr(&lloptions.llarchives, strsave("."));
+  This will take care of freeing the previous value.
 */
 struct lloptions_s {
   /* options set by either user's config or db user options */
@@ -60,11 +63,8 @@ struct lloptions_s {
 	STRING errorlog; /* fatal errors appended to this file if non-blank */
 	INT per_error_delay; /* sec delay for each report error */
 	INT report_error_callstack; /* full call stack for report errors */
-	INT date_customize_long; /* non-zero for customized display */
-	INT date_long_dfmt;
-	INT date_long_mfmt;
-	INT date_long_yfmt;
-	INT date_long_sfmt;
+	STRING disp_long_date_fmts; /* customized long date display format */
+	STRING disp_shrt_date_fmts; /* customized short date display format */
 	STRING uilocale; /* locale used for GUI */
 	STRING rptlocale; /* locale used in reports */
 };

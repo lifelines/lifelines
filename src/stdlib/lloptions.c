@@ -86,11 +86,6 @@ static struct int_option_s int_options[] = {
 	,{ "DenySystemCalls", &lloptions.deny_system_calls, 0, DBNO }
 	,{ "PerErrorDelay", &lloptions.per_error_delay, 0, DBNO }
 	,{ "FullReportCallStack", &lloptions.report_error_callstack, 0, DBNO }
-	,{ "CustomizeLongDate", &lloptions.date_customize_long, 0, DBNO }
-	,{ "CustomizeLongDfmt", &lloptions.date_long_dfmt, 0, DBNO }
-	,{ "CustomizeLongMfmt", &lloptions.date_long_mfmt, 0, DBNO }
-	,{ "CustomizeLongYfmt", &lloptions.date_long_yfmt, 0, DBNO }
-	,{ "CustomizeLongSfmt", &lloptions.date_long_sfmt, 0, DBNO }
 };
 /* string user options */
 static struct str_option_s str_options[] = {
@@ -107,6 +102,8 @@ static struct str_option_s str_options[] = {
 	,{ "InputPath", &lloptions.inputpath, "", DBNO }
 	,{ "ReportLog", &lloptions.reportlog, "", DBNO }
 	,{ "ErrorLog", &lloptions.errorlog, "", DBNO }
+	,{ "LongDisplayDate", &lloptions.disp_long_date_fmts, "", DBNO }
+	,{ "ShortDisplayDate", &lloptions.disp_shrt_date_fmts, "", DBNO }
 };
 
 static TABLE opttab=0;

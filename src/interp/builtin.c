@@ -52,6 +52,13 @@
 extern STRING nonnum;
 
 /*********************************************
+ * local variables
+ *********************************************/
+
+static struct rfmt_s rpt_long_rfmt; /* short form report format */
+static struct rfmt_s rpt_shrt_rfmt; /* long form report format */
+
+/*********************************************
  * local function definitions
  * body of module
  *********************************************/
@@ -573,6 +580,45 @@ __titl (PNODE node, SYMTAB stab, BOOLEAN  *eflg)
 	titl = find_tag(nchild(indi), "TITL");
 	return create_pvalue(PSTRING, (VPTR)(titl ? nval(titl) : ""));
 }
+/*=======================================================
+ * rpt_shrt_format_date -- short form of date for reports
+ *  This is used by the report "short" function.
+ * Created: 2001/10/29 (Perry Rapp)
+ *=====================================================*/
+static STRING
+rpt_shrt_format_date (STRING date)
+{
+	/* TO DO - customizing options */
+	static unsigned char buffer[MAXLINELEN+1];
+	if (!date) return NULL;
+	return shorten_date(date);
+}
+/*========================================================
+ * rpt_shrt_format_plac -- short form of place for reports
+ *  This is used by the report "short" function.
+ * Created: 2001/10/29 (Perry Rapp)
+ *======================================================*/
+static STRING
+rpt_shrt_format_plac (STRING plac)
+{
+	/* TO DO - add customization */
+	if (!plac) return NULL;
+	return shorten_plac(plac);
+}
+/*==============================================================
+ * init_rpt_reformat -- set up formatting structures for reports
+ * Created: 2001/10/29 (Perry Rapp)
+ *============================================================*/
+static void
+init_rpt_reformat (void)
+{
+	/* Set up long reformats */
+	rpt_long_rfmt.rfmt_date = 0; /* use date as is */
+	rpt_long_rfmt.rfmt_plac = 0; /* use place as is */
+	/* Set up short reformats */
+	rpt_shrt_rfmt.rfmt_date = &rpt_shrt_format_date;
+	rpt_shrt_rfmt.rfmt_plac = &rpt_shrt_format_plac;
+}
 /*===================================+
  * __long -- Return long form of event
  *   usage: long(EVENT) -> STRING
@@ -582,15 +628,20 @@ __long (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
 	NODE even;
-	RFMT rfmt = NULL; /* currently no reformatting for reports */
 	TRANTABLE ttr = NULL; /* do not translate until output time */
+	STRING str;
 	if (*eflg) {
 		prog_error(node, "the arg to long must be a record line");
 		return NULL;
 	}
 	even = (NODE) pvalue(val);
 	delete_pvalue(val);
-	return create_pvalue(PSTRING, (VPTR)event_to_string(even, ttr, FALSE, rfmt));
+
+	/* if we were cleverer, we wouldn't call this every time */
+	init_rpt_reformat();
+
+	str = event_to_string(even, ttr, &rpt_long_rfmt);
+	return create_pvalue(PSTRING, str);
 }
 /*=====================================+
  * __short -- Return short form of event
@@ -603,13 +654,19 @@ __short (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	NODE even;
 	RFMT rfmt = NULL; /* currently no reformatting for reports */
 	TRANTABLE ttr = NULL; /* do not translate until output time */
+	STRING str;
 	if (*eflg) {
 		prog_error(node, "the arg to short must be a record line");
 		return NULL;
 	}
 	even = (NODE) pvalue(val);
 	delete_pvalue(val);
-	return create_pvalue(PSTRING, (VPTR)event_to_string(even, ttr, TRUE, rfmt));
+
+	/* if we were cleverer, we wouldn't call this every time */
+	init_rpt_reformat();
+
+	str = event_to_string(even, ttr, &rpt_shrt_rfmt);
+	return create_pvalue(PSTRING, str);
 }
 /*===============================+
  * __fath -- Find father of person
@@ -2353,7 +2410,7 @@ __stddate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	evnt = (NODE) pvalue(val);
-	set_pvalue(val, PSTRING, (VPTR)format_date(event_to_date(evnt, NULL, FALSE),
+	set_pvalue(val, PSTRING, do_format_date(event_to_date(evnt, NULL, FALSE),
 	    daycode, monthcode, 1, datecode, FALSE));
 	return val;
 }
@@ -2371,7 +2428,7 @@ __complexdate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	evnt = (NODE) pvalue(val);
-	set_pvalue(val, PSTRING, (VPTR)format_date(event_to_date(evnt, NULL, FALSE),
+	set_pvalue(val, PSTRING, do_format_date(event_to_date(evnt, NULL, FALSE),
 	    daycode, monthcode, 1, datecode, TRUE));
 	return val;
 }

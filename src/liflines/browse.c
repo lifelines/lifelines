@@ -63,7 +63,6 @@ extern STRING ronlye, ronlya, idhbrs, idwbrs;
 extern STRING id1sbr, id2sbr, id1fbr, id2fbr, id1cbr, id2cbr;
 extern STRING id1hbr, id2hbr, id1wbr, id2wbr;
 extern STRING spover, idfamk, nohist, idhist;
-extern struct rfmt_s disprfmt; /* reformatting used for display */
 
 /*********************************************
  * local enums & defines
@@ -753,13 +752,13 @@ pick_remove_spouse_from_family (NODE fam)
 	for (node = husb; node; node = nsibling(node)) {
 		root = key_to_indi(rmvat(nval(node)));
 		spstrings[i] = indi_to_list_string(root,
-			 NULL, 66, &disprfmt);
+			 NULL, 66, &disp_shrt_rfmt);
 		spnodes[i++] = root;
 	}
 	for (node = wife; node; node = nsibling(node)) {
 		root = key_to_indi(rmvat(nval(node)));
 		spstrings[i] = indi_to_list_string(root,
-			 NULL, 66, &disprfmt);
+			 NULL, 66, &disp_shrt_rfmt);
 		spnodes[i++] = root;
 		if (i == MAX_SPOUSES) {
 			message(spover);

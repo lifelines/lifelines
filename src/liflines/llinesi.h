@@ -92,6 +92,7 @@ void cycle_menu(void);
 void toggle_menu(void);
 
 /* show.c */
+extern struct rfmt_s disp_long_rfmt, disp_shrt_rfmt;
 void display_cache_stats(void);
 void put_out_line(WINDOW * win, INT x, INT y, STRING string, INT width, INT flag);
 void show_aux_display(NODE, INT mode, INT hgt, BOOLEAN reuse);

@@ -1,3 +1,17 @@
+2001-10-29 Perry Rapp <puddle@users.sourceforge.net>
+
+	* .linesrc ChangeLog lines.cfg docs/lifelines.sgml
+	gedlib/gstrings.c gedlib/init.c gedlib/node.c hdrs/gedcom.h
+	hdrs/interp.h hdrs/lloptions.h interp/builtin.c interp/date.c
+	liflines/add.c liflines/browse.c liflines/llinesi.h
+	liflines/pedigree.c liflines/screen.c liflines/show.c
+	liflines/swap.c stdlib/lloptions.c
+
+	Revised option format for custom long date display format.
+	Add option for custom short day format.
+	Preparation for custom report long & short day formats.
+	New sfmt mode 12 is old short format.
+
 2001-10-29 Matt Emmerton <memmerto@users.sourceforge.net>
 
 	* ChangeLog hdrs/llstdlib.h stdlib/stdlibi.h

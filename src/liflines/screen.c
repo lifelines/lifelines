@@ -111,7 +111,6 @@ extern STRING mn_ttdsin,mn_ttinds,mn_ttinrp;
 extern STRING mn_uttl;
 extern STRING mn_xttl;
 extern STRING mn_notimpl;
-extern struct rfmt_s disprfmt; /* reformatting used for display */
 
 /*********************************************
  * local function prototypes
@@ -876,7 +875,7 @@ choose_one_from_indiseq (STRING ttl, INDISEQ seq)
 	ASSERT(seq);
 	len = length_indiseq(seq);
 	if (len<50)
-		preprint_indiseq(seq, elemwidth, &disprfmt);
+		preprint_indiseq(seq, elemwidth, &disp_shrt_rfmt);
 		
 	scroll=0;
 	/*
@@ -987,7 +986,7 @@ choose_list_from_indiseq (STRING ttl, INDISEQ seq)
 	ASSERT(seq);
 	len = length_indiseq(seq);
 	if (len<50)
-		preprint_indiseq(seq, elemwidth, &disprfmt);
+		preprint_indiseq(seq, elemwidth, &disp_shrt_rfmt);
 	win = choose_win(len+list_detail_lines, NULL);
 	werase(win);
 	BOX(win, 0, 0);
@@ -1702,7 +1701,7 @@ shw_list (WINDOW *win,
 			i=j-numdet+top;
 			if (i<len) {
 				if (i == cur) mvwaddch(win, row, 3, '>');
-				print_indiseq_element(seq, i, buffer, sizeof(buffer), &disprfmt);
+				print_indiseq_element(seq, i, buffer, sizeof(buffer), &disp_shrt_rfmt);
 				mvwaddstr(win, row, 4, buffer);
 			}
 		}

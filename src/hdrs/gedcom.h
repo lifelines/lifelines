@@ -79,9 +79,14 @@ NODE nztop(NOD0); /* function so it can handle NULL input */
 #define nzkeynum(n) ((n)->nkey.keynum)
 #define nztype(n)   ((n)->nkey.ntype)
 
-/* reformating functions - format context provided by client */
+/*
+ reformating functions - format context provided by client/
+ either or both may be null, meaning use date or place exactly as
+ occurs in data
+*/
 struct rfmt_s {
 	STRING (*rfmt_date)(STRING); /* returns static buffer */
+	STRING (*rfmt_plac)(STRING); /* returns static buffer */
 };
 typedef struct rfmt_s *RFMT;
 
@@ -199,7 +204,7 @@ void even_to_cache(NODE);
 void even_to_dbase(NODE);
 STRING event_to_date(NODE, TRANTABLE, BOOLEAN);
 STRING event_to_plac(NODE, BOOLEAN);
-STRING event_to_string(NODE, TRANTABLE, BOOLEAN shrt, RFMT rfmt);
+STRING event_to_string(NODE, TRANTABLE, RFMT rfmt);
 void fam_to_cache(NODE);
 void fam_to_dbase(NODE);
 NODE fam_to_first_chil(NODE);
@@ -245,7 +250,7 @@ void index_by_refn(NODE, STRING);
 void indi0_to_cache(NOD0 nod0);
 void indi_to_cache(NODE);
 void indi_to_dbase(NODE);
-STRING indi_to_event(NODE, TRANTABLE, STRING, STRING, INT, BOOLEAN, RFMT);
+STRING indi_to_event(NODE, TRANTABLE, STRING tag, STRING head, INT len, RFMT);
 NODE indi_to_famc(NODE);
 NODE indi_to_fath(NODE);
 STRING indi_to_list_string(NODE, NODE, INT, RFMT);

@@ -46,7 +46,6 @@
 extern STRING idcswp, id1csw, id2csw, id1fsw, id2fsw, idfbys, ntprnt;
 extern STRING less2c, okcswp, less2f, okfswp, idfswp, ronlye;
 extern STRING idcrdr, ntchld;
-extern struct rfmt_s disprfmt; /* reformatting used for display */
 
 /*********************************************
  * local function prototypes
@@ -201,7 +200,7 @@ gotfam:
 	/* first remove child, so can list others & add back */
 	remove_child(child, fam);
 
-	i = ask_child_order(fam, ALWAYS_PROMPT, &disprfmt);
+	i = ask_child_order(fam, ALWAYS_PROMPT, &disp_shrt_rfmt);
 	if (i == -1) {
 		/* must put child back if cancel */
 		add_child_to_fam(child, fam, prevorder);

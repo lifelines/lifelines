@@ -1170,14 +1170,13 @@ STRING node_to_tag (NODE node, STRING tag, TRANTABLE tt, INT len)
  *  tag:  [in] desired tag (eg, "BIRT")
  *  head: [in] header to print in output (eg, "born: ")
  *  len:  [in] max length output desired
- *  shrt: [in] flag indicating desire short form output
  * Searches node substree for desired tag
  *  returns formatted string (event_to_string) if found,
  *  else NULL
  *============================================*/
 STRING
 indi_to_event (NODE node, TRANTABLE tt, STRING tag, STRING head
-	, INT len, BOOLEAN shrt, RFMT rfmt)
+	, INT len, RFMT rfmt)
 {
 	static unsigned char scratch[200];
 	STRING p = scratch;
@@ -1186,7 +1185,7 @@ indi_to_event (NODE node, TRANTABLE tt, STRING tag, STRING head
 	INT n;
 	if (!node) return NULL;
 	if (!(node = find_tag(nchild(node), tag))) return NULL;
-	event = event_to_string(node, tt, shrt, rfmt);
+	event = event_to_string(node, tt, rfmt);
 	if (!event) return NULL;
 	p[0] = 0;
 	llstrcatn(&p, head, &mylen);
@@ -1203,11 +1202,10 @@ indi_to_event (NODE node, TRANTABLE tt, STRING tag, STRING head
  * representation of them.
  *  node:  [in] node tree of event to describe
  *  tt:    [in] translation table to use
- *  shrt:  [in] flag for short description
  *  rfmt:  [in] reformatting info (may be NULL)
  *=========================================*/
 STRING
-event_to_string (NODE node, TRANTABLE tt, BOOLEAN shrt, RFMT rfmt)
+event_to_string (NODE node, TRANTABLE tt, RFMT rfmt)
 {
 	static unsigned char scratch1[MAXLINELEN+1];
 	static unsigned char scratch2[MAXLINELEN+1];
@@ -1223,14 +1221,10 @@ event_to_string (NODE node, TRANTABLE tt, BOOLEAN shrt, RFMT rfmt)
 		node = nsibling(node);
 	}
 	if (!date && !plac) return NULL;
-	if (shrt) {
-		date = shorten_date(date);
-		plac = shorten_plac(plac);
-		if (!date && !plac) return NULL;
-	} else {
-		if (rfmt && rfmt->rfmt_date)
-			date = (*rfmt->rfmt_date)(date);
-	}
+	if (rfmt && date && rfmt->rfmt_date)
+		date = (*rfmt->rfmt_date)(date);
+	if (rfmt && plac && rfmt->rfmt_plac)
+		plac = (*rfmt->rfmt_plac)(plac);
 	p[0] = 0;
 	if (date)
 		llstrcatn(&p, date, &mylen);

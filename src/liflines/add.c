@@ -47,7 +47,6 @@ extern STRING idsadd, idsinf, kchild, iscinf, notopp, idsps1, idsps2;
 extern STRING nosex,  hashsb, haswif, idchld, gdfadd, cfcadd, iredit;
 extern STRING cfpadd, cfsadd, gdpadd, gdcadd, gdsadd, ronlya, ronlye;
 
-extern struct rfmt_s disprfmt; /* reformatting used for display */
 extern TRANTABLE tran_tables[];
 
 
@@ -218,7 +217,7 @@ add_child (NODE child, NODE fam)
 	if (!fam) fam = ask_for_fam(idprnt, idsbln);
 	if (!fam) return NULL;
 
-	i = ask_child_order(fam, ALWAYS_PROMPT, &disprfmt);
+	i = ask_child_order(fam, ALWAYS_PROMPT, &disp_shrt_rfmt);
 	if (i == -1) return NULL;
 
 /* Add FAMC node to child */
