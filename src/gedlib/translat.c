@@ -55,7 +55,11 @@
 #	undef max
 #endif
 
+/*********************************************
+ * global/exported variables
+ *********************************************/
 
+STRING illegal_char = 0;
 
 /*********************************************
  * local function prototypes
@@ -342,7 +346,6 @@ static bfptr
 iconv_trans (TRANMAPPING ttm, bfptr bfsIn)
 {
 #ifdef HAVE_ICONV
-	char temp[60];
 	STRING dest=ttm->iconv_dest;
 	bfptr bfsOut = bfNew(bfsIn->size);
 	iconv_t ict = 0;
@@ -352,12 +355,6 @@ iconv_trans (TRANMAPPING ttm, bfptr bfsIn)
 	size_t outleft=bfsOut->size-1;
 	size_t cvted=0;
 
-	if (ttm->translit) {
-		llstrncpy(temp, ttm->iconv_dest, sizeof(temp));
-		llstrapp(temp, sizeof(temp), "//TRANSLIT");
-		dest = temp;
-	} else {
-	}
 	ict = iconv_open(dest, ttm->iconv_src);
 
 	if (ict == (iconv_t)-1) {
@@ -375,9 +372,17 @@ cvting:
 			bfReserveExtra(bfsOut, (int)(inleft * 1.3+2));
 			goto cvting;
 		} else {
-			/* invalid multibyte sequence, but we don't know how long, so advance
-			one byte & retry */
+			STRING placeholder = illegal_char ? illegal_char : "%";
+			/*
+			TODO: Check if int_utf8 and we're at beginning of valid UTF-8 sequence
+			and advance over it if so.
+			*/
+			/*
+			invalid multibyte sequence, but we don't know how long, so advance
+			one byte & retry
+			*/
 			++inptr;
+			bfCat(bfsOut, placeholder);
 			goto cvting;
 		}
 	}

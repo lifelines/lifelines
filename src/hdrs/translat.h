@@ -61,7 +61,6 @@ typedef struct tranmapping_s {
 	STRING iconv_dest;
 	LIST global_trans; /* list of global mappings */
 	BOOLEAN after; /* do custom transtable after iconv ? */
-	BOOLEAN translit; /* do iconv transliteration ? */
 } *TRANMAPPING;
 
 /* forward declaration - real declaration in bfs.h */

@@ -1,3 +1,27 @@
+2002-06-23 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog
+	*DELETED win32/yacc.c:
+
+	Removed obsolete yacc.c (good one generated in interp subdir).
+
+	* .linesrc ChangeLog lines.cfg gedlib/charmaps.c gedlib/init.c
+	gedlib/translat.c hdrs/translat.h
+	*NEW: build/msvc6/llines.ico
+	*DELETED: win32/msvc6/llines.ico win32/msvc6/btedit/btedit.rc
+	*DELETED: win32/msvc6/btedit/bteditCmd.dsp
+	*DELETED: win32/msvc6/btedit/bteditCmd.dsw win32/msvc6/btedit/resource.h
+	*DELETED: win32/msvc6/dbverify/dbVerify.rc
+	*DELETED: win32/msvc6/dbverify/dbverifyCmd.dsp
+	*DELETED: win32/msvc6/dbverify/dbverifyCmd.dsw
+	*DELETED: win32/msvc6/dbverify/resource.h win32/msvc6/llines/config.h
+	*DELETED: win32/msvc6/llines/llines.rc win32/msvc6/llines/llinesprj.dsp
+	*DELETED: win32/msvc6/llines/llinesprj.dsw win32/msvc6/llines/resource.h
+
+	Move MSVC build stuff from win32 to build.
+	Implement GuiCodesetOutput option instead of hardcoding //TRANSLIT
+	always for output to display.
+
 2002-06-22 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/init.c stdlib/stdstrng.c:

@@ -62,6 +62,7 @@ STRING editfile=NULL; /* file used for editing, name obtained via mktemp */
 extern BOOLEAN writeable;
 extern STRING btreepath,readpath;
 extern STRING qSdbrecstats;
+extern STRING illegal_char;
 
 
 /*********************************************
@@ -127,8 +128,14 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 #if ENABLE_NLS
 
 	e = getoptstr("GuiCodeset", "");
-	if (e && *e)
-		bind_textdomain_codeset(PACKAGE, e);
+	if (e && *e) {
+		/* This doesn't work with gettext before 0.11.3pre2
+		STRING suffix = getoptstr("GuiCodesetOutput", "");
+		STRING f = strconcat(e, suffix);
+		*/
+		STRING f=e;
+		bind_textdomain_codeset(PACKAGE, f);
+	}
 	e = getoptstr("LocaleDir", "");
 	if (e && *e)
 		bindtextdomain(PACKAGE, e);
@@ -580,6 +587,7 @@ update_useropts (void)
 	/* if we were clever, we'd remember the codesets, so we'd know if we need
 	to reload mappings -- Perry, 2002.02.18 */
 	load_char_mappings(); /* in case user changed codesets */
+	strupdate(&illegal_char, getoptstr("IllegalChar", 0));
 }
 /*==================================================
  * update_db_options -- 

@@ -132,9 +132,6 @@ clear_char_mappings (void)
 		strfree(&ttm->iconv_src);
 		strfree(&ttm->iconv_dest);
 		ttm->after = -1;
-		/* TODO: revisit this */
-		/* For the moment, we only transliterate going to display */
-		ttm->translit = (indx == MINDS);
 		if (ttm->global_trans) {
 			FORLIST(ttm->global_trans, tbel)
 				ttx = tbel;
@@ -236,12 +233,17 @@ static void
 set_zone_conversion (STRING optname, INT toint, INT fromint)
 {
 	STRING extcs = getoptstr(optname, "");
+	STRING extcs_opt=0, suffix=0;
 	if (toint >= 0)
 		trans_maps[toint].after = TRUE;
 	if (fromint >= 0)
 		trans_maps[fromint].after = FALSE;
 	if (!extcs || !extcs[0] || !int_codeset || !int_codeset[0])
 		return;
+	/* append any requested options, eg //TRANSLIT */
+	extcs_opt = strconcat(optname, "Output");
+	suffix = getoptstr(extcs_opt, "");
+	extcs = strconcat(extcs, suffix);
 	if (toint >= 0) {
 		trans_maps[toint].iconv_src = strsave(extcs);
 		trans_maps[toint].iconv_dest = strsave(int_codeset);
@@ -250,6 +252,8 @@ set_zone_conversion (STRING optname, INT toint, INT fromint)
 		trans_maps[fromint].iconv_src = strsave(int_codeset);
 		trans_maps[fromint].iconv_dest = strsave(extcs);
 	}
+	strfree(&extcs);
+	strfree(&extcs_opt);
 }
 /*========================================
  * load_char_mappings -- Reload all mappings

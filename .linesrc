@@ -4,7 +4,7 @@
 # As are blank lines
 # So all these lines are commented out...
 #
-# 2002/06/19
+# 2002/06/23
 #
 # All variables here are available to report programs
 # via the report language function getproperty, so, for
@@ -163,7 +163,10 @@
 # And this is passed to gettext (libintl)
 # Default is none
 #GuiCodeset=8859-1
-# NB: Do not append //TRANSLIT unless gettext-0.11.3-pre2 or better
+# Default is none
+
+# Suffix for codeset when converting to GUI codeset
+#GuiCodesetOutput=//TRANSLIT
 # Default is none
 
 # Coded charset name for editor use
