@@ -1,5 +1,16 @@
 2002-12-16 Perry Rapp
 
+	* ChangeLog po/fr.po:
+
+	Updated French message catalog from Patrick Texier.
+
+	* ChangeLog configure.in
+	*NEW src/arch/wcslen.c:
+
+	Replace wcslen if missing (Darwin).
+
+2002-12-16 Perry Rapp
+
 	* ChangeLog src/gedlib/xlat.c:
 
 	Fix bug dropping subcoding files.
@@ -28,10 +39,6 @@
 	po/sv.po reports/Makefile.am:
 
 	Update distribution reports to include self-test reports.
-
-	* ChangeLog po/fr.po:
-
-	Updated French message catalog from Patrick Texier.
 
 2002-12-15 Perry Rapp
 
