@@ -1,3 +1,8 @@
+2003-04-05 Stephen Dum
+      * ChnageLog, .linesrc, lines.cfg
+      Correct OTHRREC reference to OTHR, merge some comments from lines.cfg
+      into .linesrc, so two files are more consistent.
+
 2003-03-25 Perry Rapp
        * ChangeLog reports/anniver.ll reports/cron.ll src/interp/interp.c
        reports/Makefile.am reports/gen_index
