@@ -1,3 +1,8 @@
+2001-07-26  Marc Nozell  <marc@nozell.com>
+
+	* docs/lifelines.sgml: Allow newer docbook tool chains to process
+	manual into postscript/pdf.  Changed <SIMPARA> to <PARA>
+
 2007-07-26 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog stdlib/Makefile.am:
