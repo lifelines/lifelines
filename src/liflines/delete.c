@@ -43,8 +43,6 @@
 
 extern STRING idpdel, cfpdel, haslnk;
 
-static void del_in_dbase(STRING);
-
 /*================================================================
  * delete_indi -- Delete person and links; if this leaves families
  *   with no links, remove them
@@ -178,13 +176,4 @@ delete_fam (NODE fam)
 	del_in_dbase(key);
 	join_fam(fam, refn, husb, wife, chil, rest);
 	free_nodes(fam);
-}
-/*=================================================
- * del_in_dbase -- Write deleted record to database
- *===============================================*/
-static void
-del_in_dbase (STRING key)
-{
-	if (!key || *key == 0) return;
-	ASSERT(store_record(key, "DELE\n", 5));
 }

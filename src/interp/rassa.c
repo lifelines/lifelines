@@ -23,7 +23,7 @@
 */
 /* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
- * rassa.c -- Handle output to the product file
+ * rassa.c -- Handle program report output to the output file
  * Copyright(c) 1991-95 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 01 Sep 93
  *   3.0.0 - 17 Dec 93    3.0.2 - 15 Dec 94

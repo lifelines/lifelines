@@ -109,6 +109,7 @@ traverse_index (BTREE btree, INDEX index, RKEY lo,
 			if (!traverse_index(btree, index1,lo, hi, func, param))
 				return FALSE;
 		} else {
+			ASSERT(itype(index1) == BTBLOCKTYPE);
 			block1 = (BLOCK)index1;
 			if (!traverse_block(btree, block1, lo, hi, func, param))
 				return FALSE;
@@ -128,3 +129,4 @@ traverse_db_rec_rkeys (BTREE btree, RKEY lo, RKEY hi,
 	ASSERT(index = bmaster(btree));
 	traverse_index(btree, index, lo, hi, func, param);
 }
+

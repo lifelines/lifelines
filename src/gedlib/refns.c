@@ -90,29 +90,13 @@ static INT     RMcount = 0;
 static INT     RMmax = 0;
 
 /*====================================================
- * getrefnrec -- Read refn record and store in globals
+ * parserefnrec -- Store refn rec in file buffers
  *==================================================*/
-BOOLEAN
-getrefnrec (STRING refn)
+static void
+parserefnrec (RKEY rkey, STRING p)
 {
-	STRING p;
 	INT i;
-
-/* Convert refn to key and read refn record */
-	RRkey = refn2rkey(refn);
-	if (RRrec) stdfree(RRrec);
-	p = RRrec = (STRING) getrecord(BTR, RRkey, &RRsize);
-	if (!RRrec) {
-		RRcount = 0;
-		if (RRmax == 0) {
-			RRmax = 10;
-			RRkeys = (RKEY *) stdalloc(10*sizeof(RKEY));
-			RRoffs = (INT *) stdalloc(10*sizeof(INT));
-			RRrefns = (STRING *) stdalloc(10*sizeof(STRING));
-		}
-		return FALSE;
-	}
-
+	RRkey = rkey;
 /* Store refn record in data structures */
 	memcpy (&RRcount, p, sizeof(INT));
 	p += sizeof(INT);
@@ -137,6 +121,29 @@ getrefnrec (STRING refn)
 	}
 	for (i = 0; i < RRcount; i++)
 		RRrefns[i] = p + RRoffs[i];
+}
+/*====================================================
+ * getrefnrec -- Read refn record and store in globals
+ *==================================================*/
+BOOLEAN
+getrefnrec (STRING refn)
+{
+	STRING p;
+/* Convert refn to key and read refn record */
+	RRkey = refn2rkey(refn);
+	if (RRrec) stdfree(RRrec);
+	p = RRrec = (STRING) getrecord(BTR, RRkey, &RRsize);
+	if (!RRrec) {
+		RRcount = 0;
+		if (RRmax == 0) {
+			RRmax = 10;
+			RRkeys = (RKEY *) stdalloc(10*sizeof(RKEY));
+			RRoffs = (INT *) stdalloc(10*sizeof(INT));
+			RRrefns = (STRING *) stdalloc(10*sizeof(STRING));
+		}
+		return FALSE;
+	}
+	parserefnrec(RRkey, p);
 	return TRUE;
 }
 /*============================================
@@ -152,6 +159,32 @@ refn2rkey (STRING refn)
 	rkey.r_rkey[5] = 'R';
 	rkey.r_rkey[6] = *refn++;
 	rkey.r_rkey[7] = *refn;
+	return rkey;
+}
+/*=======================================
+ * refn_lo - Lower limit for name records
+ *=====================================*/
+static RKEY
+refn_lo (void)
+{
+	RKEY rkey;
+	INT i;
+	for (i=0; i<8; i++)
+		rkey.r_rkey[i] = ' ';
+	rkey.r_rkey[5] = 'R';
+	return rkey;
+}
+/*=======================================
+ * refn_hi - Upper limit for name records
+ *=====================================*/
+static RKEY
+refn_hi (void)
+{
+	RKEY rkey;
+	INT i;
+	for (i=0; i<8; i++)
+		rkey.r_rkey[i] = ' ';
+	rkey.r_rkey[5] = 'S';
 	return rkey;
 }
 /*=========================================
@@ -429,4 +462,40 @@ index_by_refn (NODE node,
 		if (eqstr("REFN", ntag(node)) && nval(node))
 			add_refn(nval(node), key);
 	}
+}
+/*====================================================
+ * traverse_refns -- traverse refns in db
+ *  delegates to traverse_db_rec_rkeys
+ *   passing callback function: traverse_refn_callback
+ *   and using local data in a TRAV_REFN_PARAM
+ *==================================================*/
+typedef struct
+{
+	BOOLEAN(*func)(STRING key, STRING refn, void *param);
+	void * param;
+} TRAV_REFN_PARAM;
+/* see above */
+static BOOLEAN
+traverse_refn_callback (RKEY rkey, STRING data, INT len, void *param)
+{
+	TRAV_REFN_PARAM *tparam = (TRAV_REFN_PARAM *)param;
+	INT i;
+
+	parserefnrec(rkey, data);
+
+	for (i=0; i<RRcount; i++)
+	{
+		if (!tparam->func(rkey2str(RRkeys[i]), RRrefns[i], tparam->param))
+			return FALSE;
+	}
+	return TRUE;
+}
+/* see above */
+void
+traverse_refns (BOOLEAN(*func)(STRING key, STRING refn, void *param), void *param)
+{
+	TRAV_REFN_PARAM tparam;
+	tparam.param = param;
+	tparam.func = func;
+	traverse_db_rec_rkeys(BTR, refn_lo(), refn_hi(), &traverse_refn_callback, &tparam);
 }

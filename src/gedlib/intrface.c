@@ -88,11 +88,20 @@ trav_callback(RKEY rkey, STRING data, INT len, void * param)
 	return tparam->func(skey, data, len, tparam->param);
 }
 void
-traverse_db_rec_skeys(STRING lo, STRING hi, 
+traverse_db_rec_keys(STRING lo, STRING hi, 
 	BOOLEAN(*func)(STRING key, STRING, INT len, void *param), void *param)
 {
 	TRAV_PARAM tparam;
 	tparam.param = param;
 	tparam.func = func;
 	traverse_db_rec_rkeys(BTR, str2rkey(lo), str2rkey(hi), trav_callback, &tparam);
+}
+/*=================================================
+ * del_in_dbase -- Write deleted record to database
+ *===============================================*/
+void
+del_in_dbase (STRING key)
+{
+	if (!key || *key == 0) return;
+	ASSERT(store_record(key, "DELE\n", 5));
 }

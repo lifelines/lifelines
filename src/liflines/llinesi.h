@@ -62,7 +62,9 @@ BOOLEAN remove_child(NODE, NODE, BOOLEAN);
 BOOLEAN remove_spouse(NODE, NODE, BOOLEAN);
 
 /* scan.c */
-NODE name_scan(void);
+NODE full_name_scan(void);
+NODE name_fragment_scan(void);
+NODE refn_scan(void);
 
 /* show.c */
 void display_cache_stats(void);

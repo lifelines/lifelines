@@ -464,7 +464,12 @@ xref_isvalid_impl(INT nxrefs, INT * xrefs, INT i)
 {
 	int j;
 	if (nxrefs == xrefs[0]) return 0; /* no valids */
-	/* we should keep xrefs[] sorted! */
+	/*
+	TO DO: 
+	Change this to a binary sort, when xrefs sorting
+	has been tested.
+	Perry, 2001/01/01
+	*/
 	for (j=1; j< nxrefs; j++)
 		if (i == xrefs[j])
 			return 0;

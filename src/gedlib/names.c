@@ -113,6 +113,7 @@ parsenamerec (RKEY rkey, STRING p)
 	NRkey = rkey;
 /* Store name record in data structures */
 	memcpy (&NRcount, p, sizeof(INT));
+	ASSERT(NRcount < 1000000); /* 1000000 names in a given slot ? */
 	p += sizeof(INT);
 	if (NRcount >= NRmax - 1) {
 		if (NRmax != 0) {
@@ -181,7 +182,7 @@ name2rkey (STRING name)
 /*=======================================
  * name_lo - Lower limit for name records
  *=====================================*/
-RKEY
+static RKEY
 name_lo (void)
 {
 	RKEY rkey;
@@ -194,7 +195,7 @@ name_lo (void)
 /*=======================================
  * name_hi - Upper limit for name records
  *=====================================*/
-RKEY
+static RKEY
 name_hi (void)
 {
 	RKEY rkey;
@@ -405,7 +406,7 @@ add_name (STRING name,  /* person's name */
  * remove_name -- Remove entry from name record
  *===========================================*/
 BOOLEAN
-remove_name (STRING name,       /* preson's name */
+remove_name (STRING name,       /* person's name */
              STRING key)        /* person's INDI key */
 {
 	STRING rec, p;
@@ -417,7 +418,7 @@ remove_name (STRING name,       /* preson's name */
 	found = FALSE;
 	for (i = 0; i < NRcount; i++) {
 		if (!ll_strncmp(rkey.r_rkey, NRkeys[i].r_rkey, 8) &&
-		    eqstr(name, NRnames[i])) {
+			eqstr(name, NRnames[i])) {
 			found = TRUE;
 			break;
 		}
@@ -959,16 +960,20 @@ free_name_list (LIST list)
 {
 	remove_list(list, free_name_el);
 }
-/*=======================================
+/*====================================================
  * traverse_names -- traverse names in db
- *=====================================*/
+ *  delegates to traverse_db_rec_rkeys
+ *   passing callback function: traverse_name_callback
+ *   and using local data in a TRAV_NAME_PARAM
+ *==================================================*/
 typedef struct
 {
-	BOOLEAN(*func)(STRING skey, STRING name, void *param);
+	BOOLEAN(*func)(STRING key, STRING name, void *param);
 	void * param;
 } TRAV_NAME_PARAM;
+/* see above */
 static BOOLEAN
-traverse_name_callback(RKEY rkey, STRING data, INT len, void *param)
+traverse_name_callback (RKEY rkey, STRING data, INT len, void *param)
 {
 	TRAV_NAME_PARAM *tparam = (TRAV_NAME_PARAM *)param;
 	INT i;
@@ -982,8 +987,9 @@ traverse_name_callback(RKEY rkey, STRING data, INT len, void *param)
 	}
 	return TRUE;
 }
+/* see above */
 void
-traverse_names(BOOLEAN(*func)(STRING skey, STRING name, void *param), void *param)
+traverse_names (BOOLEAN(*func)(STRING key, STRING name, void *param), void *param)
 {
 	TRAV_NAME_PARAM tparam;
 	tparam.param = param;

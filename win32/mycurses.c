@@ -200,10 +200,10 @@ int noecho()
 	return(0);
 }
 
-int sleep(secs)
-	int secs;
+int sleep(int secs)
+
 {
-        Sleep(secs*1000);
+	Sleep(secs*1000);
 	return(0);
 }
 
@@ -278,7 +278,7 @@ int werase(WINDOW *wp)
 	int i, j;
 
 	for(i = 0; i < LINES; i++)
-  	  for(j = 0; j < COLS; j++) wp->_y[i][j] = ' ';
+		for(j = 0; j < COLS; j++) wp->_y[i][j] = ' ';
 	return(0);
 }
 
@@ -328,69 +328,69 @@ int waddch(WINDOW *wp, chtype ch)
 	int i, j;
 
 	if(ch == '\r') 
-	    wp->_curx = 0;
+		wp->_curx = 0;
 	else if(ch == '\n')
-	    {
-	    wp->_curx = 0;
-	    wp->_cury++;
-	    if(wp->_cury >= wp->_maxy)
+	{
+		wp->_curx = 0;
+		wp->_cury++;
+		if(wp->_cury >= wp->_maxy)
 		{
-		if(wp->_scroll)
-		  {
-		  for(i = 0; i < (wp->_maxy - 1); i++)
-		    {
-		    for(j = 0; j < wp->_maxx; j++)
-		      {
-		      ch = wp->_y[i+1][j];
-		      wp->_y[i][j] = ch;
-		      }
-		    }
-		  i = wp->_maxy-1;
-		  for(j = 0; j < wp->_maxx; j++)
-		    wp->_y[i][j] = ' ';
-		  }
-		wp->_cury = wp->_maxy-1;
+			if(wp->_scroll)
+			{
+				for(i = 0; i < (wp->_maxy - 1); i++)
+				{
+					for(j = 0; j < wp->_maxx; j++)
+					{
+						ch = wp->_y[i+1][j];
+						wp->_y[i][j] = ch;
+					}
+				}
+				i = wp->_maxy-1;
+				for(j = 0; j < wp->_maxx; j++)
+				wp->_y[i][j] = ' ';
+			}
+			wp->_cury = wp->_maxy-1;
 		}
-	    }
+	}
 	else
-	    {
-	    wp->_y[wp->_cury][wp->_curx] = ch;
-	    wp->_curx++;
-	    if(wp->_curx >= wp->_maxx)
-	      {
-	      wp->_curx = 0;
-	      wp->_cury++;
-	      if(wp->_cury >= wp->_maxy)
-	        {
-		if(wp->_scroll)
-		  {
-		  for(i = 0; i < (wp->_maxy - 1); i++)
-		    {
-		    for(j = 0; j < wp->_maxx; j++)
-		      {
-		      ch = wp->_y[i+1][j];
-		      wp->_y[i][j] = ch;
-		      }
-		    }
-		  i = wp->_maxy-1;
-		  for(j = 0; j < wp->_maxx; j++)
-		    wp->_y[i][j] = ' ';
-		  }
-		else wp->_curx = wp->_maxx-1;
-		wp->_cury = wp->_maxy-1;
+	{
+		wp->_y[wp->_cury][wp->_curx] = ch;
+		wp->_curx++;
+		if(wp->_curx >= wp->_maxx)
+		{
+			wp->_curx = 0;
+			wp->_cury++;
+			if(wp->_cury >= wp->_maxy)
+			{
+				if(wp->_scroll)
+				{
+					for(i = 0; i < (wp->_maxy - 1); i++)
+					{
+						for(j = 0; j < wp->_maxx; j++)
+						{
+							ch = wp->_y[i+1][j];
+							wp->_y[i][j] = ch;
+						}
+					}
+					i = wp->_maxy-1;
+					for(j = 0; j < wp->_maxx; j++)
+						wp->_y[i][j] = ' ';
+				}
+				else wp->_curx = wp->_maxx-1;
+				wp->_cury = wp->_maxy-1;
+			}
 		}
-	      }
-	    }
+	}
 	return(0);
 }
 
 int waddstr(WINDOW *wp, char *cp)
 {
 	while(*cp)
-		{
+	{
 		waddch(wp, *cp);
 		cp++;
-		}
+	}
 	return(0);
 }
 
@@ -440,15 +440,15 @@ int box(WINDOW *wp, chtype v, chtype h)
 	h = ACS_HLINE;
 	v = ACS_VLINE;
 	for(i = 0; i < wp->_maxy; i++)
-	  {
- 	  wp->_y[i][0] = v;
- 	  wp->_y[i][wp->_maxx-1] = v;
-	  }
+	{
+		wp->_y[i][0] = v;
+		wp->_y[i][wp->_maxx-1] = v;
+	}
 	for(i = 0; i < wp->_maxx; i++)
-	  {
- 	  wp->_y[0][i] = h;
- 	  wp->_y[wp->_maxy-1][i] = h;
-	  }
+	{
+		wp->_y[0][i] = h;
+		wp->_y[wp->_maxy-1][i] = h;
+	}
 	wp->_y[0][0] = ACS_ULCORNER;
 	wp->_y[0][wp->_maxx-1] = ACS_URCORNER;
 	wp->_y[wp->_maxy-1][0] = ACS_LLCORNER;
@@ -466,17 +466,17 @@ int wgetch(WINDOW *wp)
 	SetConsoleCursorPosition(hStdout, cCursor);
 	ch = mycur_getc();
 	if(echoing)
-		{
+	{
 		if(ch == '\b');
 		else
-		  {
-		  waddch(wp, ch);
-		  wrefresh(wp);
-		  cCursor.X = wp->_curx + wp->_begx;
-		  cCursor.Y = wp->_cury + wp->_begy;
-		  SetConsoleCursorPosition(hStdout, cCursor);
-		  }
+		{
+			waddch(wp, ch);
+			wrefresh(wp);
+			cCursor.X = wp->_curx + wp->_begx;
+			cCursor.Y = wp->_cury + wp->_begy;
+			SetConsoleCursorPosition(hStdout, cCursor);
 		}
+	}
 	return(ch);
 }
 
@@ -488,26 +488,26 @@ int wgetstr(WINDOW *wp, char *cp)
 
 	bp = cp;
 	while((ch = wgetch(wp)) != EOF)
-		{
+	{
 		if((ch == '\n') || (ch == '\r')) break;
 		else if(ch == '\b')
-		  {
-		  if(bp != cp)
- 		    {
-		    bp--;
-		    if(echoing)
-		      {
-		      if(wp->_curx > 0) wp->_curx--;
-		      wp->_y[wp->_cury][wp->_curx] = ' ';
-		      wrefresh(wp);
-		      cCursor.X = wp->_curx + wp->_begx;
-		      cCursor.Y = wp->_cury + wp->_begy;
-		      SetConsoleCursorPosition(hStdout, cCursor);
-		      }
-		    }
-		  }
-		else *bp++ = ch;
+		{
+			if(bp != cp)
+			{
+				bp--;
+				if(echoing)
+				{
+					if(wp->_curx > 0) wp->_curx--;
+					wp->_y[wp->_cury][wp->_curx] = ' ';
+					wrefresh(wp);
+					cCursor.X = wp->_curx + wp->_begx;
+					cCursor.Y = wp->_cury + wp->_begy;
+					SetConsoleCursorPosition(hStdout, cCursor);
+				}
+			}
 		}
+		else *bp++ = ch;
+	}
 	*bp = '\0';
 	return(0);
 }

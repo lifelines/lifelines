@@ -44,6 +44,8 @@
 #include "liflines.h"
 #include "arch.h"
 
+#include "llinesi.h"
+
 #ifdef HAVE_GETOPT
 #ifdef HAVE_GETOPT_H
 #include <getopt.h>

@@ -47,24 +47,22 @@ main (int argc,
 	BTREE btree;
 	char cmdbuf[512];
 	char *editor;
+	char *dbname, *key;
 
-#ifdef WIN32
-#ifdef _MSC_VER
-	_fmode = _O_BINARY;
-#else
 	_fmode = O_BINARY;	/* default to binary rather than TEXT mode */
-#endif
-#endif
+
 	if (argc != 3) {
 		printf("usage: btedit <btree> <rkey>\n");
 		return (1);
 	}
-	if (!(btree = openbtree(argv[1], FALSE, TRUE))) {
-		printf("could not open btree: %s\n", argv[1]);
+	dbname = argv[1];
+	key = argv[2];
+	if (!(btree = openbtree(dbname, FALSE, TRUE))) {
+		printf("could not open btree: %s\n", dbname);
 		return (1);
 	}
-	if (!getfile(btree, str2rkey(argv[2]), "btedit.tmp")) {
-		printf("there is no record with that key\n");
+	if (!getfile(btree, str2rkey(key), "btedit.tmp")) {
+		printf("there is no record with key: %s\n", key);
 		closebtree(btree);
 		return (0);
 	}
@@ -72,7 +70,7 @@ main (int argc,
 	editor = environ_determine_editor();
 	sprintf(cmdbuf, "%s btedit.tmp", editor);
 	system(cmdbuf);
-	addfile(btree, str2rkey(argv[2]), "btedit.tmp");
+	addfile(btree, str2rkey(key), "btedit.tmp");
 	unlink("btedit.tmp");
 	closebtree(btree);
 	return TRUE;

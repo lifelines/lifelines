@@ -460,7 +460,7 @@ create_windows (void)
  	main_win = NEWWIN(ll_lines, ll_cols);
 	add_menu_win = NEWWIN(8, 66);
 	del_menu_win = NEWWIN(7, 66);
-	scan_menu_win = NEWWIN(6,66);
+	scan_menu_win = NEWWIN(7,66);
 	trans_menu_win = NEWWIN(10,66);
 	utils_menu_win = NEWWIN(12, 66);
 	extra_menu_win = NEWWIN(13,66);
@@ -509,7 +509,9 @@ init_all_windows (void)
 	win = scan_menu_win;
 	row = 1;
 	mvwaddstr(win, row++, 2, "What scan type?");
-	mvwaddstr(win, row++, 4, "n  Name scan");
+	mvwaddstr(win, row++, 4, "f  Full name scan");
+	mvwaddstr(win, row++, 4, "n  Name fragment (whitespace-delimited) scan");
+	mvwaddstr(win, row++, 4, "r  Refn scan");
 	mvwaddstr(win, row++, 4, "q  Quit - return to the previous menu");
 
 	win = trans_menu_win;
@@ -851,13 +853,22 @@ scan_menu (void)
 	touchwin(scan_menu_win);
 	wmove(scan_menu_win, 1, 27);
 	wrefresh(scan_menu_win);
-	code = interact(scan_menu_win, "nq");
+	code = interact(scan_menu_win, "fnrq");
 	touchwin(main_win);
 	wrefresh(main_win);
 	switch (code) {
-	case 'n':
-		node = name_scan();
+	case 'f':
+		node = full_name_scan();
 		if (node) browse(node);
+		break;
+	case 'n':
+		node = name_fragment_scan();
+		if (node) browse(node);
+		break;
+	case 'r':
+		node = refn_scan();
+//		if (node) browse(node);
+		// have to switch on type
 		break;
 	case 'q': break;
 	}

@@ -136,8 +136,6 @@ BTREE openbtree(STRING, BOOLEAN, BOOLEAN);
 BOOLEAN validate_keyfilex(KEYFILEX *);
 
 /* names.c */
-RKEY name_hi(void);
-RKEY name_lo(void);
 
 /* record.c */
 BOOLEAN addrecord(BTREE, RKEY, RECORD, INT);
