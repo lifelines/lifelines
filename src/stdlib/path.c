@@ -201,7 +201,7 @@ filepath (CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING  ext, INT utf8)
 	nlen = strlen(name);
 	if(ext && *ext) {
 		elen = strlen(ext);
-		if((elen > nlen) && path_match(name+nlen-elen, ext)) {
+		if ((nlen > elen) && path_match(name+nlen-elen, ext)) {
 		/*  name has an explicit extension the same as this one */
 			ext = NULL;
 			elen = 0;

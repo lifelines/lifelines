@@ -6,6 +6,10 @@ New features added in 3.0.36
 ============================
 - New option AnnotatePointers
 
+Bug fixes in 3.0.36
+============================
+- Fix extra .ged appended to short archives
+
 Bug fixes in 3.0.35
 ============================
 - Fix name corruption bug in 3.0.33 and 3.0.34.

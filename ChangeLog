@@ -1,3 +1,9 @@
+2003-09-24 Perry Rapp
+
+	* ChangeLog NEWS src/stdlib/path.c
+
+	Fix bug in filepath causing extra append of extension.
+
 2003-09-21 Jens Arvidsson
 	* ChangeLog docs/ll-reportmanual.sv.xml
 
