@@ -34,7 +34,11 @@
 
 #include "sys_inc.h"
 
-#ifdef WIN32
+#if defined __CYGWIN32__ && !defined __CYGWIN__
+# define __CYGWIN__ __CYGWIN32__
+#endif
+
+#if defined WIN32 && !defined __CYGWIN__
 
 #define LLREADTEXT "rt"
 #define LLREADBINARY "rb"
