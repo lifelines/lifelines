@@ -936,22 +936,19 @@ show_pnodes (PNODE node)
 void
 debug_show_one_pnode (PNODE node)     /* node to print */
 {
-	UNION u;
-
 	switch (itype(node)) {
 
 	case IICONS:
-		llwprintf("%d", pvalue(ivalue(node)));
+		llwprintf("%d", pvalue_to_int(ivalue(node)));
 		break;
 	case IFCONS:
-		u.w = pvalue(ivalue(node));
-		llwprintf("%f", u.f);
+		llwprintf("%f", pvalue_to_float(ivalue(node)));
 		break;
 	case ILCONS:
 		llwprintf("*ni*");
 		break;
 	case ISCONS:
-		llwprintf("^^%s^^", pvalue(ivalue(node)));
+		llwprintf("^^%s^^", pvalue_to_string(ivalue(node)));
 		break;
 	case IIDENT:
 		llwprintf("%s", iident(node));

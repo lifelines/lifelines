@@ -150,7 +150,8 @@ struct tag_pnode {
  * ptag should be using a UNION not a VPTR
  * First I'm removing the zillions of casts using PVALUE->value tho
  * so the compiler will help find any misuse
- * Perry, 2002.02.17
+ * Then, this declaration should, I think, move into a source file
+ * Perry, 2003-06-14
  */
 typedef struct tag_pvalue *PVALUE;
 struct tag_pvalue {
@@ -309,6 +310,7 @@ void set_pvalue_int(PVALUE val, INT iv);
 void set_pvalue_string(PVALUE val, CNSTRING str);
 void show_pvalue(PVALUE);
 PVALUE symtab_valueofbool(SYMTAB, STRING, BOOLEAN*);
+INT which_pvalue_type(PVALUE);
 #ifndef HOGMEMORY
 void zero_pventry(ENTRY);
 #endif

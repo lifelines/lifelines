@@ -617,7 +617,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 		}
 		switch (itype(node)) {
 		case ISCONS:
-			poutput(pvalue(ivalue(node)), &eflg);
+			poutput(pvalue_to_string(ivalue(node)), &eflg);
 			if (eflg)
 				goto interp_fail;
 			break;
@@ -643,10 +643,13 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 				goto interp_fail;
 			}
 			if (!val) break;
-			if (ptype(val) == PSTRING && pvalue(val)) {
-				poutput(pvalue(val), &eflg);
-				if (eflg)
-					goto interp_fail;
+			if (which_pvalue_type(val) == PSTRING) {
+				str = pvalue_to_string(val);
+				if (str) {
+					poutput(str, &eflg);
+					if (eflg)
+						goto interp_fail;
+				}
 			}
 			delete_pvalue(val);
 			break;
@@ -656,10 +659,13 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 				goto interp_fail;
 			}
 			if (!val) break;
-			if (ptype(val) == PSTRING && pvalue(val)) {
-				poutput(pvalue(val), &eflg);
-				if (eflg)
-					goto interp_fail;
+			if (which_pvalue_type(val) == PSTRING) {
+				str = pvalue_to_string(val);
+				if (str) {
+					poutput(str, &eflg);
+					if (eflg)
+						goto interp_fail;
+				}
 			}
 			delete_pvalue(val);
 			break;
@@ -1242,7 +1248,7 @@ interp_fornotes (PNODE node, SYMTAB stab, PVALUE *pval)
 		prog_error(node, nonrecx, "fornotes", "1");
 		return INTERROR;
 	}
-	root = (NODE) pvalue(val);
+	root = pvalue_to_node(val);
 	delete_pvalue(val);
 	if (!root) return INTOKAY;
 	FORTAGVALUES(root, "NOTE", sub, vstring)
@@ -1279,7 +1285,7 @@ interp_fornodes (PNODE node, SYMTAB stab, PVALUE *pval)
 		prog_error(node, nonrecx, "fornodes", "1");
 		return INTERROR;
 	}
-	root = (NODE) pvalue(val);
+	root = pvalue_to_node(val);
 	delete_pvalue(val);
 	if (!root) return INTOKAY;
 	sub = nchild(root);

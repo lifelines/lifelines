@@ -4,6 +4,12 @@
 
 	Fix by Peter Fales for piecematch bug introduced by UTF-8 code.
 
+	* ChangeLog src/hdrs/interp.h src/interp/alloc.c
+	src/interp/builtin.c src/interp/interp.c src/interp/intrpseq.c
+	src/interp/more.c src/interp/pvalue.c
+
+	Changing code to not access pvalue struct directly.
+
 2003-06-13 Perry Rapp
 
 	* ChangeLog src/interp/pvalue.c

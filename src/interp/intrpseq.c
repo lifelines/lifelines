@@ -155,12 +155,11 @@ __inset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	INDISEQ seq;
 	PNODE arg1 = (PNODE) iargs(node), arg2 = inext(arg1);
 	PVALUE val = eval_and_coerce(PSET, arg1, stab, eflg);
-	if (*eflg || !val || !pvalue(val)) {
+	if (*eflg ||!val || !(seq = pvalue_to_seq(val))) {
 		*eflg = TRUE;
 		prog_error(node, "1st arg to inset must be a set.");
 		return NULL;
 	}
-	seq = pvalue_to_seq(val);
 	delete_pvalue(val);
 	indi = eval_indi(arg2, stab, eflg, NULL);
 	if (*eflg) {

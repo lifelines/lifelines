@@ -101,7 +101,7 @@ __extractnames (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, nonnodx, "extractnames", "1");
 		return NULL;
 	}
-	line = (NODE) pvalue(val);
+	line = pvalue_to_node(val);
 	delete_pvalue(val);
 	val = eval_and_coerce(PLIST, lexp, stab, eflg);
 	if (*eflg) {
@@ -166,10 +166,10 @@ __extractplaces (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, nonnodx, "extractplaces", "1");
 		return NULL;
 	}
-	line = (NODE) pvalue(val);
+	line = pvalue_to_node(val);
 	delete_pvalue(val);
 	val = eval_and_coerce(PLIST, lexp, stab, eflg);
-	if (*eflg || !val || !pvalue(val)) {
+	if (*eflg || !val) {
 		*eflg = TRUE;
 		prog_error(node, nonlstx, "extractplaces", "2");
 		return NULL;
@@ -514,7 +514,7 @@ __choosechild (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	INDISEQ seq;
 	CACHEEL cel;
 	PVALUE val = evaluate(iargs(node), stab, eflg);
-	if (*eflg || !val || ((type = ptype(val)) != PINDI && type != PFAM)) {
+	if (*eflg || !val || ((type = which_pvalue_type(val)) != PINDI && type != PFAM)) {
 		*eflg = TRUE;
 		prog_error(node, "the arg to choosechild must be a person or family");
 		return NULL;
@@ -592,21 +592,9 @@ __choosefam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 static void
 makestring (PVALUE val, STRING str, INT len, BOOLEAN *eflg)
 {
-	UNION u;
-
 	str[0]=0;
-	/*
-	Here we treat pvalue(val) as thought it were a UNION
-	but it is really a VPTR. This is only safe if sizeof(void *)
-	is no less than sizeof(u.i) and sizeof(u.w).
 
-	The real fix is to make pvalue(val) a UNION, but this would
-	be difficult, as PVALUE occurs in many places, and there are
-	probably lots of casts (which the compiler will not help us find).
-	Perry, 2002/01/09
-	*/
-	u.w = pvalue(val);
-	switch(ptype(val)) {
+	switch(which_pvalue_type(val)) {
 		case PNONE: 
 			llstrapps(str, len, uu8, "<NONE>");
 			break;
@@ -619,15 +607,15 @@ makestring (PVALUE val, STRING str, INT len, BOOLEAN *eflg)
 			break;
 		case PBOOL:
 			/* TODO: Should we localize this ? */
-			llstrapps(str, len, uu8, u.w ? "True" : "False");
+			llstrapps(str, len, uu8, pvalue_to_bool(val) ? "True" : "False");
 			break;
 		case PSTRING:
-			llstrapps(str, len, uu8, (STRING)pvalue(val));
+			llstrapps(str, len, uu8, pvalue_to_string(val));
 			break;
 		case PGNODE:
 			{
 				/* TODO: report codeset conversion */
-				NODE node = (NODE)pvalue(val);
+				NODE node = pvalue_to_node(val);
 				if (ntag(node)) {
 					llstrappf(str, len, uu8, "%s: ", ntag(node));
 				}
@@ -993,7 +981,7 @@ __lock (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	CACHEEL cel;
 	PNODE arg = iargs(node);
 	PVALUE val = evaluate(arg, stab, eflg);
-	if (*eflg || !val || ((type = ptype(val)) != PINDI && type != PFAM)) {
+	if (*eflg || !val || ((type = which_pvalue_type(val)) != PINDI && type != PFAM)) {
 		*eflg = TRUE;
 		prog_var_error(node, stab, arg, val
 		  , _("the arg to lock must be a person or family"));
@@ -1016,7 +1004,7 @@ __unlock (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	CACHEEL cel;
 	PNODE arg = iargs(node);
 	PVALUE val = evaluate(arg, stab, eflg);
-	if (*eflg || !val || ((type = ptype(val)) != PINDI && type != PFAM)) {
+	if (*eflg || !val || ((type = which_pvalue_type(val)) != PINDI && type != PFAM)) {
 		*eflg = TRUE;
 		prog_var_error(node, stab, arg, val
 		  , _("the arg to unlock must be a person or family"));
@@ -1041,7 +1029,7 @@ __savenode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_var_error(node, stab, arg, val, nonnod1, "savenode");
 		return NULL;
 	}
-	line = (NODE) pvalue(val);
+	line = pvalue_to_node(val);
 	if (!line) return val;
 	set_pvalue(val, PGNODE, (VPTR) copy_nodes(line, TRUE, TRUE));
 	return val;
@@ -1217,7 +1205,7 @@ sortimpl (PNODE node, SYMTAB stab, BOOLEAN *eflg, BOOLEAN fwd)
 	INT i=0;
 	struct tag_sortpair * array = 0;
 	SORTPAIR * index = 0;
-	if (ptype(val1) == PLIST) {
+	if (which_pvalue_type(val1) == PLIST) {
 		list_vals = pvalue_to_list(val1);
 		nsort = length_list(list_vals);
 		array = (SORTPAIR)stdalloc(nsort * sizeof(array[0]));
@@ -1225,7 +1213,7 @@ sortimpl (PNODE node, SYMTAB stab, BOOLEAN *eflg, BOOLEAN fwd)
 		FORLIST(list_vals, el)
 			array[i++].value = (PVALUE)el;
 		ENDLIST
-	} else if (ptype(val1) == PARRAY) {
+	} else if (which_pvalue_type(val1) == PARRAY) {
 		arr_vals = pvalue_to_array(val1);
 		nsort = get_array_size(arr_vals);
 		array = (SORTPAIR)stdalloc(nsort * sizeof(array[0]));
@@ -1240,7 +1228,7 @@ sortimpl (PNODE node, SYMTAB stab, BOOLEAN *eflg, BOOLEAN fwd)
 	arg = inext(arg);
 	if (arg) {
 		val2 = eval_without_coerce(arg, stab, eflg);
-		if (ptype(val2) == PLIST) {
+		if (which_pvalue_type(val2) == PLIST) {
 			list_keys = pvalue_to_list(val2);
 			if (nsort != length_list(list_keys)) {
 				prog_error(node, _("Arguments to (r)sort must be of same size"));
@@ -1251,7 +1239,7 @@ sortimpl (PNODE node, SYMTAB stab, BOOLEAN *eflg, BOOLEAN fwd)
 			FORLIST(list_keys, el)
 				array[i++].key = (PVALUE)el;
 			ENDLIST
-		} else if (ptype(val2) == PARRAY) {
+		} else if (which_pvalue_type(val2) == PARRAY) {
 			arr_keys = pvalue_to_array(val2);
 			if (nsort != get_array_size(arr_keys)) {
 				prog_error(node, _("Arguments to (r)sort must be of same size"));

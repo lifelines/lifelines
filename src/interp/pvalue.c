@@ -679,6 +679,15 @@ bad:
 	return;
 }
 /*========================================
+ * which_pvalue_type -- Return type number
+ *======================================*/
+INT
+which_pvalue_type (PVALUE val)
+{
+	ASSERT(val);
+	return ptype(val);
+}
+/*========================================
  * is_record_pvalue -- Does pvalue contain record ?
  *======================================*/
 BOOLEAN
