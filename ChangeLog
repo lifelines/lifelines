@@ -1,3 +1,9 @@
+2003-08-16 Perry Rapp
+
+	* ChangeLog po/fr.po
+
+	Updated fr.po for 3.0.29 from Patrick Texier.
+
 2003-08-15 Perry Rapp
 
 	* ChangeLog docs/Makefile.am
