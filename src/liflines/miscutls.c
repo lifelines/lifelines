@@ -48,7 +48,7 @@ extern STRING qSdbrecstats,qSdbrecords;
 void
 key_util (void)
 {
-	RECORD indi = ask_for_indi("Whose key value do you want?", NOCONFIRM, NOASK1);
+	RECORD indi = ask_for_indi(_("Whose key value do you want?"), NOCONFIRM, NOASK1);
 	if (!indi) return;
 	msg_info("%s - %s", rmvat(nxref(nztop(indi))), indi_to_name(nztop(indi), 70));
 }
@@ -75,16 +75,16 @@ who_is_he_she (void)
 	else
 		strcpy(&nkey[1], key);
 	if (!(rawrec = retrieve_raw_record(nkey, &len))) {
-		msg_error("No one in database has key value %s.", key);
+		msg_error(_("No one in database has key value %s."), key);
 		return;
 	}
 	if (!(indi = string_to_node(rawrec))) {
-		msg_error("No one in database has key value %s.", key);
+		msg_error(_("No one in database has key value %s."), key);
 		stdfree(rawrec);
 		return;
 	}
 	if (!(str = indi_to_name(indi, 60)) || *str == 0) {
-		msg_error("No one in database has key value %s.", key);
+		msg_error(_("No one in database has key value %s."), key);
 		stdfree(rawrec);
 		return;
 	}

@@ -218,7 +218,7 @@ set_output_file (STRING outfname, BOOLEAN append)
 	Poutfp = fopenpath(outfname, modestr, rptdir, NULL, uu8, NULL);
 	if (!Poutfp) {
 		/* TODO: need to forward this through rptui */
-		msg_error("Could not open file %s", outfname);
+		msg_error(_("Could not open file %s"), outfname);
 		return FALSE;
 	}
 	return TRUE;
@@ -238,9 +238,9 @@ request_file (BOOLEAN *eflg)
 		, &fullpath, rptdir, NULL);
 	if (!Poutfp || !fname || !fname[0])  {
 		if (fname)
-			prog_error(0, "Report stopping due to error opening output file");
+			prog_error(0, _("Report stopping due to error opening output file"));
 		else
-			prog_error(0, "Report stopping due to lack of output file");
+			prog_error(0, _("Report stopping due to lack of output file"));
 		/* set error flag to stop interpreter */
 		*eflg = TRUE;
 		/* set cancel flag to suppress traceback */
@@ -296,7 +296,7 @@ __pos (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (outputmode != PAGEMODE || row < 1 || row > __rows ||
 	    col < 1 || col > __cols) {
 		*eflg = TRUE;
-		prog_error(node, "illegal call to pos.");
+		prog_error(node, _("illegal call to pos."));
 		return NULL;
 	}
 	currow = row;

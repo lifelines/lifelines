@@ -4,6 +4,10 @@
 
 	Fix error handling of __print to not crash (patch#768431).
 
+	* ChangeLog src/interp/rassa.c src/liflines/miscutls.c
+
+	i18n some strings
+
 2003-07-08 Perry Rapp
 
 	* ChangeLog po/fr.po
