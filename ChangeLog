@@ -1,3 +1,16 @@
+2001-05-02 Matt Emmerton <memmerto@users.sourceforge.net>
+	* ChangeLog gedlib/node.c gedlib/indiseq.c gedlib/gedcom.c
+	* gedlib/lloptions.c gedlib/names.c btree/record.c
+	* liflines/askprogram.c liflines/menuitem.c liflines/pedigree.c
+	* liflines/show.c
+	Change most instances of malloc to stdmalloc
+	Change most instances of free to stdfree
+	Fix double-free bug in gedlib/node.c introduced on May 1
+
+2001-05-01 Matt Emmerton <memmerto@users.sourceforge.net>
+	* liflines/main.c gedlib/node.c
+	Fix up a few memory leaks
+
 2001-04-29 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog liflines/import.c stdlib/stdstrng.c:
