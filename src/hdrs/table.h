@@ -28,6 +28,9 @@
  *   3.0.2 - 22 Dec 94
  *===========================================================*/
 
+#ifndef _TABLE_H
+#define _TABLE_H
+
 #define MAXHASH 512
 
 #define DONTFREE  0
@@ -51,3 +54,5 @@ void traverse_table(TABLE, INT (*proc)());
 BOOLEAN in_table(TABLE, STRING);
 WORD valueof(TABLE, STRING);
 WORD valueofbool(TABLE, STRING, BOOLEAN*);
+
+#endif /* _TABLE_H */
