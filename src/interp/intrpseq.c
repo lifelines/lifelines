@@ -93,9 +93,9 @@ __indiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __addtoset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE indi;
-	STRING key;
-	INDISEQ seq;
+	NODE indi=0;
+	STRING key=0;
+	INDISEQ seq=0;
 	PNODE arg1 = (PNODE) iargs(node), arg2 = inext(arg1),
 	    arg3 = inext(arg2);
 	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
@@ -122,7 +122,8 @@ __addtoset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "3rd arg to addtoset is in error.");
 		return NULL;
 	}
-	append_indiseq_pval(seq, key, NULL, val2, FALSE, TRUE);
+	append_indiseq_pval(seq, key, NULL, val2, FALSE);
+	strfree(&key); /* append made its own copy */
 	/* delay to last minute lest it is a temp owning seq,
 	eg, addtoset(ancestorset(i),j) */
 	delete_pvalue(val1);

@@ -145,7 +145,7 @@ void add_browse_list(STRING, INDISEQ);
 INDISEQ ancestor_indiseq(INDISEQ seq);
 void append_indiseq_null(INDISEQ, STRING, STRING, BOOLEAN sure, BOOLEAN alloc);
 void append_indiseq_ival(INDISEQ, STRING, STRING, INT val, BOOLEAN sure, BOOLEAN alloc);
-void append_indiseq_pval(INDISEQ, STRING, STRING, VPTR val, BOOLEAN sure, BOOLEAN alloc);
+void append_indiseq_pval(INDISEQ, STRING, STRING, VPTR val, BOOLEAN sure);
 void append_indiseq_sval(INDISEQ, STRING, STRING, STRING sval, BOOLEAN sure, BOOLEAN alloc);
 void calc_indiseq_names(INDISEQ seq);
 void canonkeysort_indiseq(INDISEQ);

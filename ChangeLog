@@ -6,6 +6,16 @@
 	Fix new_table_entry_impl to duplicate key (generic tables
 	duplicate all keys).
 
+	* ChangeLog reports/st/st_db.li src/gedlib/indiseq.c
+	src/hdrs/indiseq.h src/interp/intrpseq.c
+
+	Change parent_indiseq, child_indiseq, and sibling_indiseq
+	to use new generic table.
+	Add childset, siblingset, spouseset, ancestorset, descendentset,
+	uniqueset calls to st_db.li.
+	Revise append_indiseq_pval to always copy the key (eliminate the
+	alloc arg).
+
 2005-01-22 Perry Rapp
 
 	* ChangeLog src/stdlib/generic.c src/stdlib/table.c
