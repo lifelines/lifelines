@@ -1228,33 +1228,49 @@ name_to_indiseq (STRING name)
  * format_indiseq -- Format print lines of sequence.
  *================================================*/
 void
-format_indiseq (INDISEQ seq,    /* sequence */
-                BOOLEAN famp,   /* seq of fams? */
-                BOOLEAN marr)   /* try to give marriage? */
+format_indiseq (INDISEQ seq)
 {
-	NODE indi, fam, spouse;
+	NODE indi, fam;
+	FORINDISEQ(seq, el, num)
+		indi = key_to_indi(skey(el));
+		fam = NULL;
+		sprn(el) = indi_to_list_string(indi, fam, 68);
+	ENDINDISEQ
+}
+/*==================================================
+ * format_spouseseq -- Format print lines of sequence.
+ * assume values are family keys
+ *================================================*/
+void
+format_spouseseq (INDISEQ seq)
+{
+	NODE indi, fam;
 	char scratch[20];
-	if (famp) {
-		FORINDISEQ(seq, el, num)
-			fam = key_to_fam(skey(el));
-			if (sval(el)) {
-				sprintf(scratch, "I%d", (INT)sval(el));
-				spouse = key_to_indi(scratch);
-			} else
-				spouse = NULL;
-			sprn(el) = indi_to_list_string(spouse, fam, 68);
-		ENDINDISEQ
-	} else {
-		FORINDISEQ(seq, el, num)
-			indi = key_to_indi(skey(el));
-			if (marr) {
-				sprintf(scratch, "F%d", (INT)sval(el));
-				fam = key_to_fam(scratch);
-			} else
-				fam = NULL;
-			sprn(el) = indi_to_list_string(indi, fam, 68);
-		ENDINDISEQ
-	}
+	FORINDISEQ(seq, el, num)
+		indi = key_to_indi(skey(el));
+		sprintf(scratch, "F%d", (INT)sval(el));
+		fam = key_to_fam(scratch);
+		sprn(el) = indi_to_list_string(indi, fam, 68);
+	ENDINDISEQ
+}
+/*==================================================
+ * format_famseq -- Format print lines of sequence of families
+ * assume values are spouse keys
+ *================================================*/
+void
+format_famseq (INDISEQ seq)
+{
+	NODE fam, spouse;
+	char scratch[20];
+	FORINDISEQ(seq, el, num)
+		fam = key_to_fam(skey(el));
+		if (sval(el)) {
+			sprintf(scratch, "I%d", (INT)sval(el));
+			spouse = key_to_indi(scratch);
+		} else
+			spouse = NULL;
+		sprn(el) = indi_to_list_string(spouse, fam, 68);
+	ENDINDISEQ
 }
 /*==============================================================
  * refn_to_indiseq -- Return indiseq whose user references match

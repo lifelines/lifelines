@@ -27,7 +27,9 @@ STRING ask_for_string(STRING, STRING);
 INT choose_from_list(STRING, INT, STRING*);
 INDISEQ choose_list_from_indiseq(STRING, INDISEQ);
 INT choose_one_from_indiseq(STRING, INDISEQ);
-NODE format_and_choose_indi(INDISEQ, BOOLEAN, BOOLEAN, BOOLEAN, STRING, STRING);
+NODE format_and_choose_indi(INDISEQ, BOOLEAN, STRING, STRING);
+NODE format_and_choose_spouse(INDISEQ, BOOLEAN, STRING, STRING);
+NODE format_and_choose_fam(INDISEQ, BOOLEAN, STRING, STRING);
 
 /* from main.c */
 void final_cleanup(void);

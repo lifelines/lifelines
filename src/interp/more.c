@@ -394,7 +394,7 @@ __chooseindi (PNODE node,
 	seq = (INDISEQ) pvalue(val);
 	delete_pvalue(val);
 	if (!seq || length_indiseq(seq) < 1) return NULL;
-	indi = format_and_choose_indi(seq, FALSE, FALSE, TRUE, ifone, notone);
+	indi = format_and_choose_indi(seq, TRUE, ifone, notone);
 	if (!indi) return NULL;
 	return create_pvalue(PINDI, (WORD)indi_to_cacheel(indi));
 }
@@ -418,7 +418,7 @@ __choosesubset (PNODE node,
 	delete_pvalue(val);
 	if (!seq || length_indiseq(seq) < 1) return NULL;
 	new = copy_indiseq(seq);
-	format_indiseq(new, FALSE, FALSE);
+	format_indiseq(new);
 	msg = (length_indiseq(new) > 1) ? notone : ifone;
 	new = (INDISEQ) choose_list_from_indiseq(msg, new);
 	return create_pvalue(PSET, (WORD)new);
@@ -452,8 +452,7 @@ __choosechild (PNODE node,
 		seq = indi_to_children(indi);
 		if (!seq || length_indiseq(seq) < 1)
 			return create_pvalue(PINDI, (WORD)NULL);
-		indi = format_and_choose_indi(seq, FALSE, FALSE, TRUE,
-		    ifone, notone);
+		indi = format_and_choose_indi(seq, TRUE, ifone, notone);
 		remove_indiseq(seq, FALSE);
 		if (!indi) return create_pvalue(PINDI, (WORD)NULL);
 		return create_pvalue(PINDI, (WORD)indi_to_cacheel(indi));
@@ -462,8 +461,7 @@ __choosechild (PNODE node,
 		seq = fam_to_children(fam);
 		if (!seq || length_indiseq(seq) < 1)
 			return create_pvalue(PINDI, (WORD)NULL);
-		indi = format_and_choose_indi(seq, FALSE, FALSE, TRUE,
-		    ifone, notone);
+		indi = format_and_choose_indi(seq, TRUE, ifone, notone);
 		remove_indiseq(seq, FALSE);
 		if (!indi) return create_pvalue(PINDI, (WORD)NULL);
 		return create_pvalue(PINDI, (WORD)indi_to_cacheel(indi));
@@ -490,7 +488,7 @@ __choosespouse (PNODE node,
 	seq = indi_to_spouses(indi);
 	if (!seq || length_indiseq(seq) < 1)
 		return create_pvalue(PINDI, (WORD)NULL);
-	indi = format_and_choose_indi(seq, FALSE, TRUE, TRUE, ifone, notone);
+	indi = format_and_choose_spouse(seq, TRUE, ifone, notone);
 	remove_indiseq(seq, FALSE);
 	if (!indi) return create_pvalue(PINDI, (WORD)NULL);
 	return create_pvalue(PINDI, (WORD)indi_to_cacheel(indi));
@@ -513,7 +511,7 @@ __choosefam (PNODE node,
 	seq = indi_to_families(indi, TRUE);
 	if (!seq || length_indiseq(seq) < 1)
 		return create_pvalue(PFAM, (WORD)NULL);
-	fam = format_and_choose_indi(seq, TRUE, TRUE, TRUE, ifone, notone);
+	fam = format_and_choose_fam(seq, TRUE, ifone, notone);
 	remove_indiseq(seq, FALSE);
 	if (!fam) return create_pvalue(PFAM, (WORD)NULL);
 	return create_pvalue(PFAM, (WORD)fam_to_cacheel(fam));

@@ -112,18 +112,18 @@ indi_to_list_string (NODE indi,
 		p += strlen(p);
 	}
 	if(indi) {
-	    if(FAMC(indi)) hasparents = 1;
-	    else hasparents = 0;
-	    if(FAMS(indi)) hasfamily = 1;
-	    else hasfamily = 0;
-	    if(hasfamily || hasparents) {
-		*p++ = ' ';
-		*p++ = '[';
-		if(hasparents) *p++ = 'P';
-		if(hasfamily) *p++ = 'S';
-		*p++ = ']';
-		*p = '\0';
-	    }
+		if(FAMC(indi)) hasparents = 1;
+		else hasparents = 0;
+		if(FAMS(indi)) hasfamily = 1;
+		else hasfamily = 0;
+		if(hasfamily || hasparents) {
+			*p++ = ' ';
+			*p++ = '[';
+			if(hasparents) *p++ = 'P';
+			if(hasfamily) *p++ = 'S';
+			*p++ = ']';
+			*p = '\0';
+		}
 	}
 	if ((INT)strlen(scratch) > len)
 		scratch[len] = 0;

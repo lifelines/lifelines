@@ -249,7 +249,7 @@ ask_for_indi_once (STRING ttl,
 	NODE indi;
 	INDISEQ seq = ask_for_indiseq(ttl, prc);
 	if (*prc == RC_DONE || *prc == RC_NOSELECT) return NULL;
-	indi = format_and_choose_indi(seq, FALSE, FALSE, ask1, ifone, notone);
+	indi = format_and_choose_indi(seq, ask1, ifone, notone);
 	remove_indiseq(seq, FALSE);
 	*prc = indi ? RC_SELECT : RC_NOSELECT;
 	return indi;
@@ -280,7 +280,7 @@ ask_for_indi_list_once (STRING ttl,
 {
 	INDISEQ seq = ask_for_indiseq(ttl, prc);
 	if (*prc == RC_DONE || *prc == RC_NOSELECT) return NULL;
-	format_indiseq(seq, FALSE, FALSE);
+	format_indiseq(seq);
 	seq = choose_list_from_indiseq(notone, seq);
 	*prc = seq ? RC_SELECT : RC_NOSELECT;
 	return seq;
@@ -313,26 +313,65 @@ ask_for_indi_key (STRING ttl,
 	return rmvat(nxref(indi));
 }
 /*===============================================================
+ * choose_one_from_indiseq_if_needed  -- handle ask1 cases
+ *=============================================================*/
+static INT
+choose_one_from_indiseq_if_needed (INDISEQ seq,
+                                   BOOLEAN ask1,
+                                   STRING titl1,
+                                   STRING titln)
+{
+	if (length_indiseq(seq) > 1)
+		return choose_one_from_indiseq(titln, seq);
+	else if (ask1 && titl1)
+		return choose_one_from_indiseq(titl1, seq);
+	return 0;
+}
+/*===============================================================
  * format_and_choose_indi -- Format sequence and have user choose
  *   person from it
  *=============================================================*/
 NODE
 format_and_choose_indi (INDISEQ seq,    /* sequence */
-                        BOOLEAN fams,   /* seq of families? */
-                        BOOLEAN marr,   /* show marriage info? */
                         BOOLEAN ask1,   /* choose if len one? */
                         STRING titl1,   /* title if len = one */
                         STRING titln)   /* title if len > one */
 {
 	INT i = 0;
-	format_indiseq(seq, fams, marr);
-	if (length_indiseq(seq) > 1)
-		i = choose_one_from_indiseq(titln, seq);
-	else if (ask1 && titl1)
-		i = choose_one_from_indiseq(titl1, seq);
-	else
-		i = 0;
+	format_indiseq(seq);
+	i = choose_one_from_indiseq_if_needed(seq, ask1, titl1, titln);
 	if (i == -1) return NULL;
-	if (fams) return key_to_fam(skey(IData(seq)[i]));
+	return key_to_indi(skey(IData(seq)[i]));
+}
+/*===============================================================
+ * format_and_choose_fam -- Format sequence and have user choose
+ *   family from it
+ *=============================================================*/
+NODE
+format_and_choose_fam (INDISEQ seq,    /* sequence */
+                       BOOLEAN ask1,   /* choose if len one? */
+                       STRING titl1,   /* title if len = one */
+                       STRING titln)   /* title if len > one */
+{
+	INT i = 0;
+	format_famseq(seq);
+	i = choose_one_from_indiseq_if_needed(seq, ask1, titl1, titln);
+	if (i == -1) return NULL;
+	return key_to_fam(skey(IData(seq)[i]));
+}
+/*===============================================================
+ * format_and_choose_spouse -- Format sequence and have user choose
+ *   spouse from it
+ *=============================================================*/
+NODE
+format_and_choose_spouse (INDISEQ seq,    /* sequence */
+                          BOOLEAN ask1,   /* choose if len one? */
+                          STRING titl1,   /* title if len = one */
+                          STRING titln)   /* title if len > one */
+{
+	INT i = 0;
+	format_spouseseq(seq);
+	i = choose_one_from_indiseq_if_needed(seq, ask1, titl1, titln);
+	if (i == -1) return NULL;
 	return key_to_indi(skey(IData(seq)[i]));
 }

@@ -53,7 +53,7 @@ choose_child (NODE indi,
 		message(msg0);
 		return NULL;
 	}
-	node = format_and_choose_indi(seq, FALSE, FALSE, ask1, msgn, msgn);
+	node = format_and_choose_indi(seq, ask1, msgn, msgn);
 	remove_indiseq(seq, FALSE);
 	return node;
 }
@@ -72,7 +72,7 @@ choose_spouse (NODE indi,
 		message(msg0);
 		return NULL;
 	}
-	node = format_and_choose_indi(seq, FALSE, TRUE, FALSE, NULL, msgn);
+	node = format_and_choose_spouse(seq, FALSE, NULL, msgn);
 	remove_indiseq(seq, FALSE);
 	return node;
 }
@@ -91,7 +91,7 @@ choose_family (NODE indi,
 		message(msg0);
 		return NULL;
 	}
-	node = format_and_choose_indi(seq, TRUE, FALSE, FALSE, NULL, msgn);
+	node = format_and_choose_fam(seq, FALSE, NULL, msgn);
 	remove_indiseq(seq, FALSE);
 	return node;
 }
@@ -113,7 +113,7 @@ choose_father (NODE indi,
 		message(msg0);
 		return NULL;
 	}
-	node = format_and_choose_indi(seq, FALSE, FALSE, ask1, msgn, msgn);
+	node = format_and_choose_indi(seq, ask1, msgn, msgn);
 	remove_indiseq(seq, FALSE);
 	return node;
 }
@@ -135,7 +135,7 @@ choose_mother (NODE indi,
 		message(msg0);
 		return NULL;
 	}
-	node = format_and_choose_indi(seq, FALSE, FALSE, ask1, msgn, msgn);
+	node = format_and_choose_indi(seq, ask1, msgn, msgn);
 	remove_indiseq(seq, FALSE);
 	return node;
 }

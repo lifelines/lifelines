@@ -1,5 +1,17 @@
 2000-11-28 Perry Rapp <prapp@users.sourceforge.net>
 
+	* gedlib/gstrings.c: Fixed some space indents
+
+	* gedlib/choose.c gedlib/indiseq.c hdrs/indiseq.h
+	hdrs/liflines.h interp/more.c liflines/ask.c:
+	Unfolded format_indiseq into format_indiseq, format_famseq,
+	and format_spouseseq. Split format_and_choose_indiseq into
+	format_and_choose_indiseq, format_and_choose_famseq, and
+	format_and_choose_spouseseq. Dropped now obsolete fams & marr
+	arguments from all.
+
+2000-11-28 Perry Rapp <prapp@users.sourceforge.net>
+
 	* gedlib/misc.c
 	hdrs/gedcom.h hdrs/liflines.h
 	interp/builtin.c
