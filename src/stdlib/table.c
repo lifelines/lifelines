@@ -443,30 +443,6 @@ replace_table_str (TABLE tab, STRING key, STRING str, INT whattofree)
 	replace_table_impl(tab, key, uval, whattofree);
 }
 /*==========================================
- * delete_table_element_old -- Remove element from table
- *  tab: [I/O]  table from which to remove element
- *  key: [IN]   key to find element to remove
- * Does not free key or value!
- *========================================*/
-void
-delete_table_element_old (TABLE tab, CNSTRING key)
-{
-	INT hval = hash(tab, key);
-	ENTRY preve = NULL;
-	ENTRY thise = tab->entries[hval];
-	while (thise && nestr(key, thise->ekey)) {
-		preve = thise;
-		thise = thise->enext;
-	}
-	if (!thise) return;
-	if (preve)
-		preve->enext = thise->enext;
-	else
-		tab->entries[hval] = thise->enext;
-	stdfree(thise);
-	--tab->count;
-}
-/*==========================================
  * delete_table_element -- Remove element from table
  *  tab: [I/O]  table from which to remove element
  *  key: [IN]   key to find element to remove

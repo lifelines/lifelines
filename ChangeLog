@@ -12,6 +12,10 @@
 
 	Convert caches to use create_table instead of create_table_old.
 
+	* ChangeLog src/hdrs/table.h src/stdlib/table.c
+
+	Remove now unused function delete_table_element_old.
+
 2005-02-13 lifelines beta 3.0.44 RELEASE
 
 2005-02-13 Perry Rapp

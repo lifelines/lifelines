@@ -65,7 +65,6 @@ void remove_table(TABLE, INT whattofree); /* TODO: remove this */
 void traverse_table_param(TABLE tab, INT (*tproc)(CNSTRING key, UNION uval, GENERIC *pgeneric, VPTR param), VPTR param);
 
 /* working with elements of table */
-void delete_table_element_old(TABLE tab, CNSTRING key);
 void delete_table_element(TABLE tab, CNSTRING key);
 BOOLEAN in_table(TABLE, CNSTRING);
 void insert_table_ptr(TABLE, CNSTRING key, VPTR);
