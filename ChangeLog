@@ -7,6 +7,10 @@
 	Fix comments in pvalue.h from C++ to C.
 	Remove CR characters I introduced recently.
 
+	* ChangeLog po/de.po
+
+	New German message catalog from Frank Ellebrecht.
+
 2003-06-18 Matt Emmerton
 
 	* ChangeLog src/interp/pvalue.c
