@@ -257,21 +257,6 @@ paint_screen (INT screen)
 	output_menu(win, screen);
 }
 /*================================================
- * paint_one_fam_screen -- Paint one family screen
- *==============================================*/
-void
-paint_one_fam_screen (void)
-{
-	WINDOW *win = main_win;
-	werase(win);
-	BOX(win, 0, 0);
-	show_horz_line(win, ll_lines-3, 0, ll_cols);
-
-	if (!menu_enabled)
-		return;
-	output_menu(win, ONE_FAM_SCREEN);
-}
-/*================================================
  * paint_two_per_screen -- Paint two person screen
  *==============================================*/
 void
@@ -327,32 +312,6 @@ paint_two_fam_screen (void)
 	mvwaddstr(win, row++, col, "j  Merge bottom to top");
 	mvwaddstr(win, row++, col, "q  Return to main menu");
 }
-/*==========================================
- * paint_ped_screen -- Paint pedigree screen
- *========================================*/
-void
-paint_ped_screen (void)
-{
-	WINDOW *win = main_win;
-	INT row, col;
-	werase(win);
-	BOX(win, 0, 0);
-	show_horz_line(win, PED_LINES+1, 0, ll_cols);
-	show_horz_line(win, ll_lines-3, 0, ll_cols);
-	mvwaddstr(win, PED_LINES+2, 2, plschs);
-	row = PED_LINES+3; col = 3;
-	mvwaddstr(win, row++, col, "e  Edit the person");
-	mvwaddstr(win, row++, col, "i  Browse to person");
-	mvwaddstr(win, row++, col, "f  Browse to father");
-	row = PED_LINES+3; col = 3 + BAND;
-	mvwaddstr(win, row++, col, "m  Browse to mother");
-	mvwaddstr(win, row++, col, "s  Browse to spouse/s");
-	mvwaddstr(win, row++, col, "c  Browse to children");
-	row = PED_LINES+3; col = 3 + 2*BAND;
-	mvwaddstr(win, row++, col, "g  Browse to family");
-	mvwaddstr(win, row++, col, "b  Browse to persons");
-	mvwaddstr(win, row++, col, "q  Return to main menu");
-}
 /*==============================================
  * paint_list_screen -- Paint list browse screen
  *============================================*/
@@ -383,20 +342,6 @@ paint_list_screen (void)
 	mvwaddstr(win, row++, col, "a  Add to this list");
 	mvwaddstr(win, row++, col, "x  Swap mark/current");
 	mvwaddstr(win, row++, col, "q  Return to main menu");
-}
-/*===========================================
- * paint_aux_screen -- Paint auxiliary screen
- *=========================================*/
-void
-paint_aux_screen (void)
-{
-	WINDOW *win = main_win;
-	werase(win);
-	BOX(win, 0, 0);
-	show_horz_line(win, ll_lines-3, 0, ll_cols);
-	if (!menu_enabled)
-		return;
-	output_menu(win, AUX_SCREEN);
 }
 /*==========================================
  * create_windows -- Create and init windows
@@ -627,9 +572,10 @@ fam_browse (NODE fam)
 INT
 fam_ged_browse (NODE fam)
 {
-	if (cur_screen != ONE_FAM_SCREEN) paint_one_fam_screen();
-	show_gedcom(fam, ll_lines-11);
-	display_screen(ONE_FAM_SCREEN);
+	INT screen = ONE_FAM_SCREEN;
+	INT lines = update_menu(screen);
+	show_gedcom(fam, lines);
+	display_screen(screen);
 	return fam_interact();
 }
 /*=============================================

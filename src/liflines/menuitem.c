@@ -184,6 +184,7 @@ static MenuItem * f_MenuPerson[] =
 	&f_MenuItemRemoveAsSpouse,
 	&f_MenuItemRemoveAsChild,
 	&f_MenuItemPedigree,
+	&f_MenuItemTogglePedigreeType,
 	&f_MenuItemNewPerson,
 	&f_MenuItemNewFamily,
 	&f_MenuItemSwapFamilies,
@@ -371,13 +372,14 @@ setup_menu (INT screen, STRING Title, INT MenuRows, INT MenuCols
 	f_ScreenInfo[screen].Commands = cmds;
 	for (i=0; i<Size; i++) {
 		if (Menu[i]->Command == CMD_CHILD_DIRECT0) {
-			for (j=1; j<9; j++) {
+			ASSERT(eqstr(Menu[i]->Choices, "123456789"));
+			for (j=1; j<=9; j++) {
 				char choice[2];
-				ASSERT(eqstr(Menu[i]->Choices, "123456789"));
-				sprintf(choice, "%c\0", Menu[i]->Choices[j]);
+				sprintf(choice, "%d\0", j);
 				insert_cmd(cmds, choice, CMD_CHILD_DIRECT0+j, Menu[i]->Display);
 			}
 		} else {
+			/* TO DO - check that width is not too large */
 			insert_cmd(cmds, Menu[i]->Choices, Menu[i]->Command, Menu[i]->Display);
 		}
 	}

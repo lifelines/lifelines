@@ -143,7 +143,7 @@ browse (NODE indi1)
  * goto_indi_child - jump to child by number
  *==============================================*/
 static NODE
-goto_indi_child(NODE indi, int childno)
+goto_indi_child (NODE indi, int childno)
 {
 	INT num1, num2, i = 0;
 	NODE answer = 0;
@@ -357,7 +357,11 @@ browse_indi_modes (NODE *pindi1,
 			break;
 		case CMD_PEDIGREE:	/* Switch to pedigree mode */
 			*pindi1 = indi;
-			return BROWSE_PED;
+			if (indimode == 'i')
+				indimode = 'p';
+			else
+				indimode = 'i';
+			break;
 		case CMD_GEDCOM_MODE: /* Switch to gedcom mode */
 			gedcom_mode = !gedcom_mode;
 			indimodep = 0; /* force redraw */
