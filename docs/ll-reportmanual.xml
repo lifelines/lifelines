@@ -4454,7 +4454,7 @@ report to make permanent changes to the database.
 
 <para>
 The node functions only change data in memory; there is no effect on the database until and unless
-<function>writeindi</function> or <function>writeindi</function> are called. These functions may be changed or extended
+<function>writeindi</function> or <function>writefam</function> are called. These functions may be changed or extended
 in the future to allow database changes.
 </para>
 
