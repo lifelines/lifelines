@@ -321,7 +321,7 @@ prompt_for_db:
 
 	dbdir = getoptstr("LLDATABASES", ".");
 	/* Get Database Name (Prompt or Command-Line) */
-	if (c <= 0) {
+	if (alldone || c <= 0) {
 		/* ask_for_db_filename returns static buffer, we save it below */
 		dbrequested = ask_for_db_filename(_(qSidldir), _(qSidldrp), dbdir);
 		if (!dbrequested || !dbrequested[0]) {
@@ -380,6 +380,7 @@ prompt_for_db:
 		}
 		interp_program("main", 0, NULL, 1, &exprog_name, NULL, FALSE);
 	} else {
+		alldone = 0;
 		while (!alldone)
 			main_menu();
 	}
@@ -397,11 +398,8 @@ finish:
 	shutdown_interpreter();
 	close_lifelines();
 	shutdown_ui(!ok);
-	if (alldone == 2) {
-		alldone = 0;
-		c = 0;
-		goto prompt_for_db;
-	}
+	if (alldone == 2)
+		goto prompt_for_db; /* changing databases */
 	termlocale();
 
 usage:
