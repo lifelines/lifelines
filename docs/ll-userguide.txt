@@ -1457,126 +1457,126 @@
    database.  global table Next, LifeLines looks in the global table.
    This   table  contains  the  values  found  when  reading  in  the
    configuration files. environment table Finally, LifeLines looks in
-   the environment table. This table contains the values found in the
-   environment    variables,   LLPROGRAMS,   LLREPORTS,   LLARCHIVES,
-   LLDATABASES,   LLNEWDBDIR,  and  LLEDITOR.  Properties  are  named
-   group.subgroup.property  or group.property, or even just property.
-   The  following  keys  are  available  at  the  moment:  LLPROGRAMS
-   LLPROGRAMS  is the search path for LifeLines report generating and
-   other  programs. LLREPORTS LLREPORTS is used to select a directory
-   where  all  generated  reports and program outputs will be placed.
-   LLARCHIVES  LLARCHIVES  is  used  to  select a directory where all
-   database  backup files will be stored LLDATABASES LLDATABASES is a
-   list  of  directories  that  contain  database directories used to
-   locate  database  directories  themselves  LLNEWDBDIR LLNEWDBDIR a
-   single  directory where new databases specified without paths will
-   be  created. This is a convenience for users who generally put all
-   their   databases   under  a  single  common  directory.  LLEDITOR
-   Overrides  the  default screen editor Codeset Information: For the
-   following  parameters  related to codeset, the values are a String
-   denoting code set in use in data. Special handling is provided for
-   UTF-8,  which may be entered as "UTF-8", "utf-8", or "65001". (The
-   official,  and  preferred,  name is UTF-8. GedcomCodeset Specifies
-   the default Codeset to use when processing Gedcom files. There are
-   actually 3 properties. GedcomCodesetOut and GedcomCodesetIn can be
+   the  environment  table.  Only  a handful of properties may be set
+   from    the    environment,   namely   LLARCHIVES,   LLCONFIGFILE,
+   LLDATABASES,  LLEDITOR,  LLNEWDBDIR,  LLPROGRAMS,  and  LLREPORTS.
+   Properties are named group.subgroup.property or group.property, or
+   even  just  property.  The  following  keys  are  available at the
+   moment:  LLPROGRAMS  LLPROGRAMS  is  the search path for LifeLines
+   report  generating and other programs. LLREPORTS LLREPORTS is used
+   to  select  a  directory  where  all generated reports and program
+   outputs  will be placed. LLARCHIVES LLARCHIVES is used to select a
+   directory   where   all  database  backup  files  will  be  stored
+   LLDATABASES  LLDATABASES  is  a  list  of directories that contain
+   database   directories   used   to   locate  database  directories
+   themselves  LLNEWDBDIR  LLNEWDBDIR  a  single  directory where new
+   databases  specified  without  paths  will  be  created. This is a
+   convenience  for users who generally put all their databases under
+   a  single  common directory. LLEDITOR Overrides the default screen
+   editor  Codeset  Information: For the following parameters related
+   to  codeset,  the  values are a String denoting code set in use in
+   data. Special handling is provided for UTF-8, which may be entered
+   as  "UTF-8",  "utf-8",  or  "65001". (The official, and preferred,
+   name  is UTF-8. GedcomCodeset Specifies the default Codeset to use
+   when  processing  Gedcom  files.  There are actually 3 properties.
+   GedcomCodesetOut  and  GedcomCodesetIn  can be used to specify the
+   codeset  for  output or input. If either of these is not specified
+   GedcomCodeset  is used. Most Gedcom files should contain a codeset
+   property,  so  this  is not usually relevant when reading a Gedcom
+   file,  unless the input Gedcom file lacks a codeset property. This
+   is  used,  however,  when  writing  out a Gedcom file. NB: This is
+   ignored  if  the  database  has  no  internal  codeset  specified.
+   EditorCodeset  Specifies the codeset to use for editing. There are
+   actually 3 properties. EditorCodesetOut and EditorCodesetIn can be
    used  to  specify  the  codeset  for output or input. If either of
-   these  is  not  specified GedcomCodeset is used. Most Gedcom files
-   should contain a codeset property, so this is not usually relevant
-   when  reading  a Gedcom file, unless the input Gedcom file lacks a
-   codeset property. This is used, however, when writing out a Gedcom
-   file.  NB: This is ignored if the database has no internal codeset
-   specified. EditorCodeset Specifies the codeset to use for editing.
-   There    are   actually   3   properties.   EditorCodesetOut   and
-   EditorCodesetIn  can  be used to specify the codeset for output or
-   input.  If either of these is not specified EditorCodeset is used.
-   This  property  allows  lifelines  to  convert  from  its internal
-   codeset  to  the  one you use in your editor, so this is important
-   when  your  editor does not use the same codeset as your database.
-   NB:  This  is  ignored  if  the  database  has no internal codeset
-   specified. ReportCodeset Specifies the codeset to use for reports.
-   There    are   actually   3   properties.   ReportCodesetOut   and
-   ReportCodesetIn  can  be used to specify the codeset for output or
-   input.  If either of these is not specified ReportCodeset is used.
-   Recently  created  reports  may actually specify their codeset, in
-   which  case this is not used, but for reports which do not include
-   a specification of codeset, the ReportCodesetIn (or ReportCodeset)
-   specifies  how  the  report  will  be understood. In any case, the
-   output of a report program will be written in the codeset given by
-   ReportCodesetOut  (or  ReportCodeset).  NB: This is ignored if the
-   database  has  no internal codeset specified. GuiCodeset Specifies
-   the  codeset  to  use  for  interaction  with  the  graphical user
-   interface.  There  are  actually  3  properties. GuiCodesetOut and
-   GuiCodesetIn  can  be  used  to  specify the codeset for output or
-   input.  If  either  of  these is not specified GuiCodeset is used.
-   LongDisplayDate  Six comma separated numbers. Specifing the format
-   for  days,  months,  years,  date  format, era format, and complex
-   format.  If  string does not contain 6 comma separated numbers all
-   formats  are  set  to  0,  except  date format is set to 14. These
-   formats  are  used  by  LifeLines to display dates in long format.
-   LongDisplayDatePic  a  custom  ymd date picture. A string in which
-   %y,  %m  and %d will be converted to the corresponding year, month
-   and  day.  This  picture  is used by LifeLines to display dates in
-   long   format.   ShortDisplayDate  Six  comma  separated  numbers.
-   Specifing  the  format  for  days, months, years, date format, era
-   format,  and  complex  format.  If string does not contain 6 comma
-   separated  numbers all formats are set to 0, except date format is
-   set to 14. These formats are used by LifeLines to display dates in
-   short  format.  ShortDisplayDatePic  a  custom ymd date picture. A
-   string   in  which  %y,  %m  and  %d  will  be  converted  to  the
+   these is not specified EditorCodeset is used. This property allows
+   lifelines  to convert from its internal codeset to the one you use
+   in your editor, so this is important when your editor does not use
+   the  same  codeset  as  your  database. NB: This is ignored if the
+   database   has   no   internal  codeset  specified.  ReportCodeset
+   Specifies  the  codeset  to  use for reports. There are actually 3
+   properties.  ReportCodesetOut  and  ReportCodesetIn can be used to
+   specify the codeset for output or input. If either of these is not
+   specified  ReportCodeset  is  used.  Recently  created reports may
+   actually  specify  their  codeset, in which case this is not used,
+   but  for  reports which do not include a specification of codeset,
+   the  ReportCodesetIn  (or  ReportCodeset) specifies how the report
+   will  be  understood.  In any case, the output of a report program
+   will  be  written  in  the  codeset  given by ReportCodesetOut (or
+   ReportCodeset).  NB:  This  is  ignored  if  the  database  has no
+   internal  codeset  specified.  GuiCodeset Specifies the codeset to
+   use  for  interaction with the graphical user interface. There are
+   actually  3 properties. GuiCodesetOut and GuiCodesetIn can be used
+   to  specify the codeset for output or input. If either of these is
+   not  specified  GuiCodeset  is  used.  LongDisplayDate  Six  comma
+   separated  numbers.  Specifing the format for days, months, years,
+   date  format,  era  format, and complex format. If string does not
+   contain 6 comma separated numbers all formats are set to 0, except
+   date  format  is set to 14. These formats are used by LifeLines to
+   display dates in long format. LongDisplayDatePic a custom ymd date
+   picture.  A string in which %y, %m and %d will be converted to the
    corresponding  year,  month  and  day.  This  picture  is  used by
-   LifeLines  to  display  dates  in short format. LocaleDir run-time
-   specification   of   locale  directory  NewDbProps  if  specified,
-   properties  to  add  to a newly created database. The string is of
-   the  form "option1=value1\noption2=value2". IllegalChar Apparently
-   not  used at this time. DenySystemCalls If set to a non-zero value
-   will  disable  use  of  the  system  function.  UiLocaleCollate ui
-   collating    sequence    UiLocaleMessages   ui   messages   locale
-   RptLocaleCollate   Report   Collating  Sequence  RptLocaleMessages
-   Report  Messages  Locale  ShortOmitString  If  defined this string
-   replaces  characters  at  the  end  of  an  event  being  printed.
-   DisplayKeyTags  If  set  to 1 an i or f is prepended to individual
-   and family keys when shown on-screen. AnnotatePointers If set to 1
-   a  descriptive comment is added to pointers when editing family or
-   individual records to help identify who is being refered to. These
-   tags  are  removed when the edit is finished and not stored in the
-   database.  TTPATH  list  of  directories to search for translation
-   table  files  (*.tt)  TTPATH.debug  if  defined, LifeLines outputs
-   debug   information   related  to  translation  table  processing.
-   InputPath path to look for in when reading in gedcom files INDIREC
-   The default template to use whenever creating a new individual. If
-   not  specified,  the  concatenation  of  the following is used: "0
-   INDI\n1  NAME  Fname/Surname\n1  SEX  MF\n"  "1  BIRT\n 2 DATE\n 2
-   PLAC\n"  "1  DEAT\n  2  DATE\n  2  PLAC\n1  SOUR\n" FAMRECBODY The
-   default  template  to  use  whenever creating a new family. If not
-   specified,  the  following  is used: "1 MARR\n 2 DATE\n 2 PLAC\n 2
-   SOUR\n"  Note:  Unlike  the  others, this should not include the 0
-   level  FAM  tag.)  SOURREC  The  default  template to use whenever
-   creating  a new source. If not specified, the following is used in
-   english: "0 SOUR\n1 REFN\n1 TITL Title\n1 AUTH Author" EVENREC The
-   default  template  to  use  whenever  creating a new event. If not
-   specified,  the  following  is used in english: "0 EVEN\n1 REFN\n1
-   DATE\n1  PLAC\n1  INDI\n 2 NAME\n 2 ROLE\n1 SOUR" OTHR The default
-   template  to  use  whenever  creating  a  new other record. If not
-   specified,  the  following  is  used  in english: "0 XXXX\n1 REFN"
-   HDR_SUBM  string  to  use  when writing gedcom files for the SUBM.
-   Default is "1 SUBM". HDR_GEDC String containing the GEDC block for
-   the header record when exporting GEDCOM. The default is "1 GEDC\n2
-   VERS  5.5\n2  FORM LINEAGE-LINKED". HDR_CHAR String containing the
-   CHAR  block  for  the  header  record  when  exporting GEDCOM. The
-   default  is "1 CHAR ASCII". ReportLog name of file to print report
-   program  errors  to,  if  not  specified use stdout curses window.
-   CrashLog_llexec  file  to  write crash log into for llexec. If not
-   set,   log   is   written   to   the   file   CrashLog_llexec.log.
-   CrashLog_llines  file  to  write crash log into for llines. If not
-   set,  log  is  written to the file CrashLog_llines.log. LLTTEXPORT
-   directory  to  write translation tables to. Default is the current
-   directory.  ImportLog  where to log errors found while importing a
-   gedcom  file.  default  is  errs.log. gettext.path for windows, if
-   specified  path  to  (re)load  gettext dll iconv.path for Windows,
-   path  to  link  dynamically to gettext and iconv user.fullname The
-   full  name  of  the current user. If not found as a property it is
-   fetched  from  the  system  when  possible.  user.email  The email
-   address  of  the  current  user.  If not found as a property it is
-   fetched from the system when possible. user.address Postal address
-   of  the  current  user.  user.url  URL  to  the  users  home page.
-   [-acdfiklnortuwxzCFI]-r-w-r-w-fINDIREC
+   LifeLines  to  display  dates in long format. ShortDisplayDate Six
+   comma  separated  numbers.  Specifing the format for days, months,
+   years, date format, era format, and complex format. If string does
+   not  contain  6  comma separated numbers all formats are set to 0,
+   except  date  format  is  set  to  14.  These  formats are used by
+   LifeLines  to display dates in short format. ShortDisplayDatePic a
+   custom  ymd  date picture. A string in which %y, %m and %d will be
+   converted  to  the corresponding year, month and day. This picture
+   is  used  by LifeLines to display dates in short format. LocaleDir
+   run-time   specification   of   locale   directory  NewDbProps  if
+   specified,  properties  to  add  to  a newly created database. The
+   string    is   of   the   form   "option1=value1\noption2=value2".
+   IllegalChar  Apparently  not used at this time. DenySystemCalls If
+   set  to  a non-zero value will disable use of the system function.
+   UiLocaleCollate ui collating sequence UiLocaleMessages ui messages
+   locale      RptLocaleCollate     Report     Collating     Sequence
+   RptLocaleMessages   Report   Messages  Locale  ShortOmitString  If
+   defined  this  string  replaces  characters at the end of an event
+   being  printed.  DisplayKeyTags If set to 1 an i or f is prepended
+   to    individual   and   family   keys   when   shown   on-screen.
+   AnnotatePointers  If  set  to  1 a descriptive comment is added to
+   pointers  when  editing  family  or  individual  records  to  help
+   identify  who is being refered to. These tags are removed when the
+   edit  is  finished  and not stored in the database. TTPATH list of
+   directories   to   search   for  translation  table  files  (*.tt)
+   TTPATH.debug  if  defined,  LifeLines  outputs  debug  information
+   related  to  translation  table processing. InputPath path to look
+   for  in  when reading in gedcom files INDIREC The default template
+   to  use  whenever creating a new individual. If not specified, the
+   concatenation   of   the   following  is  used:  "0  INDI\n1  NAME
+   Fname/Surname\n1  SEX MF\n" "1 BIRT\n 2 DATE\n 2 PLAC\n" "1 DEAT\n
+   2  DATE\n 2 PLAC\n1 SOUR\n" FAMRECBODY The default template to use
+   whenever creating a new family. If not specified, the following is
+   used:  "1  MARR\n  2  DATE\n  2  PLAC\n 2 SOUR\n" Note: Unlike the
+   others,  this should not include the 0 level FAM tag.) SOURREC The
+   default  template  to  use  whenever creating a new source. If not
+   specified,  the  following  is used in english: "0 SOUR\n1 REFN\n1
+   TITL  Title\n1  AUTH  Author"  EVENREC The default template to use
+   whenever  creating a new event. If not specified, the following is
+   used  in  english:  "0  EVEN\n1  REFN\n1  DATE\n1 PLAC\n1 INDI\n 2
+   NAME\n  2  ROLE\n1 SOUR" OTHR The default template to use whenever
+   creating  a  new  other record. If not specified, the following is
+   used  in  english:  "0  XXXX\n1  REFN" HDR_SUBM string to use when
+   writing  gedcom  files for the SUBM. Default is "1 SUBM". HDR_GEDC
+   String  containing  the  GEDC  block  for  the  header record when
+   exporting  GEDCOM.  The  default  is  "1  GEDC\n2 VERS 5.5\n2 FORM
+   LINEAGE-LINKED". HDR_CHAR String containing the CHAR block for the
+   header  record  when  exporting  GEDCOM.  The  default  is "1 CHAR
+   ASCII".  ReportLog name of file to print report program errors to,
+   if not specified use stdout curses window. CrashLog_llexec file to
+   write crash log into for llexec. If not set, log is written to the
+   file  CrashLog_llexec.log. CrashLog_llines file to write crash log
+   into  for  llines.  If  not  set,  log  is  written  to  the  file
+   CrashLog_llines.log.  LLTTEXPORT  directory  to  write translation
+   tables  to.  Default  is the current directory. ImportLog where to
+   log  errors  found  while  importing  a  gedcom  file.  default is
+   errs.log.  gettext.path for windows, if specified path to (re)load
+   gettext  dll  iconv.path  for Windows, path to link dynamically to
+   gettext and iconv user.fullname The full name of the current user.
+   If  not  found  as  a  property it is fetched from the system when
+   possible. user.email The email address of the current user. If not
+   found  as  a property it is fetched from the system when possible.
+   user.address  Postal  address of the current user. user.url URL to
+   the users home page. [-acdfiklnortuwxzCFI]-r-w-r-w-fINDIREC

@@ -1,3 +1,9 @@
+2005-01-12 Stephen Dum
+	* ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf 
+	  docs/ll-userguide.html docs/ll-userguide.pdf docs/ll-userguide.txt
+
+	  update docs from xml's
+
 2005-01-12 lifelines beta 3.0.40 RELEASE
 
 2005-01-13 Perry Rapp
