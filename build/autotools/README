@@ -5,15 +5,15 @@ of the files are.
 
 File			Parent Program		Version
 ---------------------------------------------------
-config.sub		autoconf
-config.guess	autoconf
-missing			autoconf
-mkinstalldirs	autoconf
-installs-h		autoconf
+config.sub              autoconf
+config.guess            autoconf
+missing                 autoconf
+mkinstalldirs           autoconf
+installs-h              autoconf
 
-depcomp			automake
+depcomp                 automake
 
-config.rpath	??					??
+config.rpath            ??                       ??
 
-acinclude.m4	LifeLines			n/a
+acinclude.m4            LifeLines                n/a
 
