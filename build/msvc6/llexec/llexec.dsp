@@ -128,6 +128,10 @@ SOURCE=..\..\..\src\gedlib\charmaps.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\gedlib\charprops.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\gedlib\choose.c
 # End Source File
 # Begin Source File
@@ -252,6 +256,10 @@ SOURCE=..\..\..\src\stdlib\listener.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\gedlib\lldatabase.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\stdlib\lldate.c
 # End Source File
 # Begin Source File
@@ -289,6 +297,14 @@ SOURCE=..\..\..\src\gedlib\misc.c
 # Begin Source File
 
 SOURCE=..\..\..\src\interp\more.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\stdlib\mychar_funcs.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\stdlib\mychar_tables.c
 # End Source File
 # Begin Source File
 
@@ -468,10 +484,6 @@ SOURCE=..\..\..\src\stdlib\vtable.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\stdlib\warehouse.c
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\src\interp\write.c
 # End Source File
 # Begin Source File
@@ -517,6 +529,14 @@ SOURCE=..\..\..\src\btree\btreei.h
 # Begin Source File
 
 SOURCE=..\..\..\src\hdrs\cache.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\charprops.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\codesets.h
 # End Source File
 # Begin Source File
 
@@ -592,7 +612,19 @@ SOURCE=..\..\..\src\hdrs\langinfz.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\hdrs\liflines.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\liflines\llexec.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\liflines\llinesi.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\llnls.h
 # End Source File
 # Begin Source File
 
@@ -604,11 +636,19 @@ SOURCE=..\..\..\src\hdrs\llstdlib.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\hdrs\menuitem.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\hdrs\metadata.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\hdrs\msvc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\mychar.h
 # End Source File
 # Begin Source File
 
@@ -621,6 +661,14 @@ SOURCE=..\..\..\src\hdrs\object.h
 # Begin Source File
 
 SOURCE=..\..\..\src\interp\parse.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\pvalue.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\interp\rptui.h
 # End Source File
 # Begin Source File
 
@@ -652,15 +700,23 @@ SOURCE=..\..\..\src\hdrs\ui.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\hdrs\uiprompts.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\hdrs\vtable.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\hdrs\warehouse.h
+SOURCE=..\..\..\src\hdrs\xlat.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\interp\yacc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\zstr.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
