@@ -83,6 +83,7 @@ INDISEQ create_indiseq(void);
 INDISEQ copy_indiseq(INDISEQ);
 void remove_indiseq(INDISEQ,BOOLEAN);
 BOOLEAN delete_indiseq(INDISEQ, STRING, STRING, INT);
+void format_indiseq(INDISEQ, BOOLEAN, BOOLEAN);
 void rename_indiseq(INDISEQ, STRING);
 BOOLEAN in_indiseq(INDISEQ, STRING);
 INDISEQ union_indiseq(INDISEQ, INDISEQ);

@@ -201,6 +201,7 @@ void maperror(INT, INT, STRING);
 int namecmp(STRING, STRING);
 STRING name_string(STRING);
 STRING name_surfirst(STRING);
+BOOLEAN name_to_list(STRING, LIST, INT*, INT*);
 STRING newexref(STRING, BOOLEAN);
 STRING newfxref(STRING, BOOLEAN);
 STRING newixref(STRING, BOOLEAN);

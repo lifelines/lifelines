@@ -36,6 +36,8 @@ NODE edit_family(NODE);
 NODE edit_indi(NODE);
 
 NODE format_and_choose_indi(INDISEQ, BOOLEAN, BOOLEAN, BOOLEAN, STRING, STRING);
+INT choose_from_list(STRING, INT, STRING*);
+INDISEQ choose_list_from_indiseq(STRING, INDISEQ);
 
 NODE sort_children(NODE, NODE);
 NODE remove_dupes(NODE, NODE);
