@@ -1366,7 +1366,7 @@ get_date_tok (struct dnum_s *pdnum)
 		FATAL(); /* something unexpected is in the keywordtbl ? Find out what! */
 		return WORD_TOK;
 	}
-	if (chartype(*sstr) == DIGIT) {
+	if (chartype((uchar)*sstr) == DIGIT) {
 		INT i=0; /* primary numeric value */
 		INT j=BAD_YEAR; /* secondary numeric value (for compound number) */
 		while (chartype(c = (uchar)(*p++ = *sstr++)) == DIGIT)

@@ -1,3 +1,14 @@
+2002-02-13 Perry Rapp <puddle@users.sourceforge.net>
+
+	* liflines/ask.c liflines/browse.c:
+
+	Remove spurious carriage returns.
+
+	* ChangeLog interp/date.c liflines/main.c liflines/valgdcom.c
+	stdlib/path.c:
+
+	Fix some more potential sign-extensions of chars.
+
 2002-02-11 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/messages.c liflines/ask.c liflines/browse.c:

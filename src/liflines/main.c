@@ -168,8 +168,8 @@ main (INT argc, char **argv)
 		switch (c) {
 		case 'c':	/* adjust cache sizes */
 			while(optarg && *optarg) {
-				if(isalpha(*optarg) && isupper(*optarg))
-					*optarg = tolower(*optarg);
+				if(isalpha((uchar)*optarg) && isupper((uchar)*optarg))
+					*optarg = tolower((uchar)*optarg);
 				if(*optarg == 'i') {
 					sscanf(optarg+1, "%d,%d", &csz_indi, &icsz_indi);
 				}
@@ -186,9 +186,9 @@ main (INT argc, char **argv)
 					sscanf(optarg+1, "%d,%d", &csz_othr, &icsz_othr);
 				}
 				optarg++;
-				while(*optarg && isdigit(*optarg)) optarg++;
+				while(*optarg && isdigit((uchar)*optarg)) optarg++;
 				if(*optarg == ',') optarg++;
-				while(*optarg && isdigit(*optarg)) optarg++;
+				while(*optarg && isdigit((uchar)*optarg)) optarg++;
 			}
 			break;
 #ifdef FINNISH

@@ -66,7 +66,7 @@ is_absolute_path (CNSTRING dir)
 {
 	if (is_dir_sep(*dir) || *dir == '.') return TRUE;
 #ifdef WIN32
-	if (is_dir_sep(*dir) || (*dir && dir[1] == ':' && isalpha(*dir))) return TRUE;
+	if (is_dir_sep(*dir) || (*dir && dir[1] == ':' && isalpha((uchar)*dir))) return TRUE;
 #endif
 	return FALSE;
 }

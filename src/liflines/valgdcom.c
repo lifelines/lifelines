@@ -555,10 +555,10 @@ check_akey (int firstchar,
     INT val;
     if(keyp && (*keyp == firstchar)) {
 	keyp++;
-	if(*keyp && isdigit(*keyp)) {
+	if(*keyp && isdigit((uchar)*keyp)) {
 	    val = atoi(keyp);
 	    if(val > *maxp) *maxp = val;
-	    while(*keyp && isdigit(*keyp)) keyp++;
+	    while(*keyp && isdigit((uchar)*keyp)) keyp++;
 	    if(*keyp == '\0') return TRUE;
 	}
     }
