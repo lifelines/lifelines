@@ -4,6 +4,12 @@
 
 	Change gwc to dbverify in dbverify.1 man page.
 
+	* ChangeLog docs/dbverify.1 docs/llines.1
+	*NEW docs/btedit.1
+
+	Add btedit man page (from Christian Perrier), and make all
+	three man pages more consistent.
+
 2003-05-05 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp

@@ -1,0 +1,35 @@
+.TH btedit 1 "2003 May 4th" "Lifelines 3.0.27"
+.SH NAME
+btedit \- Direct editing of BTREE records
+.SH SYNOPSIS
+.B btedit <btree> <rkey>
+.br
+.SH DESCRIPTION
+This manual page documents briefly the
+.B btedit
+command.
+.PP
+The btedit program is a companion program of the 
+.I Lifelines
+genealogy software but may be used with any BTREE database
+(as long as it uses the same binary arrangement as the lifelines
+databases).
+.PP
+Only pure ASCII records may be edited with btedit.
+.PP
+.SH OPTIONS
+This program does not use command-line options.
+.PP
+.SH PARAMETERS
+Two parameters are required with the command :
+.TP
+.BI btree
+directory containing the btree database
+.TP
+.BI rkey
+key of the edited record
+.PP
+.SH AUTHOR
+This manual page was written by Christian Perrier <bubulle@debian.org>,
+for the Debian GNU/Linux system (but may be used by others).
+
