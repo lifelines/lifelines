@@ -137,6 +137,7 @@ main (INT argc, char **argv)
 	STRING progout=NULL;
 	BOOLEAN graphical=TRUE;
 	STRING configfile=0;
+        STRING crashlog=NULL;
 
 #if HAVE_SETLOCALE
 	/* initialize locales */
@@ -288,7 +289,9 @@ prompt_for_db:
 		goto finish;
 	}
 	/* setup crashlog in case init_screen fails (eg, bad menu shortcuts) */
-	crash_setcrashlog(getoptstr("CrashLog_llines", NULL));
+        crashlog = getoptstr("CrashLog_llexec", NULL);
+        if (!crashlog) { crashlog = "CrashLog_llines.log"; }
+        crash_setcrashlog(crashlog);
 	/* initialize curses interface */
 	if (!init_screen(graphical))
 		goto finish;

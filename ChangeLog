@@ -1,3 +1,11 @@
+2003-10-26 Matt Emmerton
+
+	* ChangeLog src/liflines/main.c src/liflines/llexec.c
+
+	Use CrashLog_[llexec|llines].log as the default crash log filenames.
+	This enables crash log reporting by default.  Any setting in the
+	configuration file will override this default.
+
 2003-10-25 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c
