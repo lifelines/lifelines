@@ -2,7 +2,7 @@
 
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd"
-[<!ENTITY llversion '3.0.31'>]>
+[<!ENTITY llversion '3.0.32'>]>
 
   <book id="docbook">
 
@@ -19,7 +19,7 @@
 _________________________________________________________
 
 <!DOCTYPE BOOK PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
-	<!entity llversion	"3.0.31">
+	<!entity llversion	"3.0.32">
 ]>	
 	
 <book id="docbook">
@@ -1342,11 +1342,11 @@ SCREEN EDITORS AND ENVIRONMENT VARIABLES
 
 <para>
 
-     There are five other, <application>LifeLines</application>
+     There are four other, <application>LifeLines</application>
      specific environment variables. They are
      <envar>LLDATABASES</envar>, <envar>LLARCHIVES</envar>,
-     <envar>LLPROGRAMS</envar>, <envar>LLREPORTS</envar>,
-     and <envar>LLNEWDBDIR</envar>. <envar>LLDATABASES</envar> and
+     <envar>LLPROGRAMS</envar> and <envar>LLREPORTS</envar>.
+     <envar>LLDATABASES</envar> and
      <envar>LLPROGRAMS</envar> are <acronym>UNIX</acronym> path
      list variables.  
 
@@ -1418,11 +1418,10 @@ SCREEN EDITORS AND ENVIRONMENT VARIABLES
 
 <para>
 
-     <envar>LLNEWDBDIR</envar> may be set to specific a single
-     directory - new databases without paths will be created in this
-     location if given. This is of course a convenience for users
-     who generally put all their databases under a single common
-     directory.
+     New databases without explicit paths will be created in the
+     first directory listed in the LLDATABASES path. (This is a 
+     change; versions from 3.0.6 to 3.0.31 used a now obsolete
+     variable LLNEWDBDIR).
 
 </para>
 
