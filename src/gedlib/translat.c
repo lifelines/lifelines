@@ -236,6 +236,7 @@ translate_write(XLAT ttm, STRING in, INT *lenp
 	bp = (char *)in;
 	/* loop through lines one by one */
 	for(i = 0; i < *lenp; ) {
+		int outbytes;
 		/* copy in to intmp, up to first \n or our buffer size-1 */
 		tp = intmp;
 		for(j = 0; (j <= MAXLINELEN) && (i < *lenp) && (*bp != '\n'); j++) {
@@ -263,7 +264,14 @@ translate_write(XLAT ttm, STRING in, INT *lenp
 		/* translate & write out current line */
 		/* TODO (2002-11-28): modify to use dynamic string */
 		translate_string(ttm, intmp, out, MAXLINELEN+2);
-		ASSERT(fwrite(out, strlen(out), 1, ofp) == 1);
+		if (out && strlen(out)) {
+			outbytes = fwrite(out, 1, strlen(out), ofp);
+			if (!outbytes || ferror(ofp)) {
+				crashlog("outbytes=%d, errno=%d, outstr=%s"
+					, outbytes, errno, out);
+				FATAL();
+			}
+		}
 	}
 	*lenp = 0;
 	return(TRUE);

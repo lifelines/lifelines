@@ -1,3 +1,9 @@
+2003-09-18 Perry Rapp
+
+	* ChangeLog src/gedlib/translat.c
+
+	Improved error detection and reporting during gedcom output.
+
 2003-09-17 Perry Rapp
 
 	* ChangeLog src/hdrs/Makefile.am
