@@ -4,6 +4,9 @@
 
 	Free leaked strings in free_xlat.
 
+	* ChangeLog src/interp/lex.c
+
+	Add comment about leaking IDEN strings.
 
 2005-02-13 Stephen Dum
         * ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf 

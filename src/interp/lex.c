@@ -153,12 +153,14 @@ lextok (PACTX pactx, YYSTYPE * lvalp, INT c, INT t)
 		}
 		*p = 0;
 		unreadchar(pactx, c);
-#ifdef DEBUG
-		llwprintf("in lex.c -- IDEN is %s\n", tokbuf);
-#endif
+
 		if (reserved(tokbuf, &retval))  return retval;
-		/* TODO: Perry, 2005-01-28, this strsave is getting leaked */
-		/* I don't know where these values are going really :( */
+		/*
+		Perry, 2005-02-12
+		At least some IDEN strings are getting leaked
+		But, fdef_node for example, takes ownership of its IDEN string
+		so they have to be reviewed case-by-case in yacc.y
+		*/
 		*lvalp = (PNODE) strsave(tokbuf);
 		return IDEN;
 	}
