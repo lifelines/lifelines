@@ -51,8 +51,11 @@
 # Log file for report errors (default none)
 #ReportLog=%llroot%/reporterrs.log
 
-# Log file for crashes (default none)
-#CrashLog=%llroot%/crashes.log
+# Log file for crashes for llines (default none)
+#CrashLog_llines=%llroot%/crashes_llines.log
+
+# Log file for crashes for llexec (default none)
+#CrashLog_llexec=%llroot%/crashes_llexec.log
 
 # Log file for import errors (default errs.log)
 #ImportLog=%llroot%/import.log

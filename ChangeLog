@@ -9,6 +9,10 @@
 
 	Give multiple default filenames to (win32) iconv & intl shims.
 
+	* .linesrc ChangeLog lines.cfg:
+
+	Update config files to reflect two CrashLog entries now.
+
 2002-10-20 Perry Rapp
 
 	* ChangeLog po/sv.po src/liflines/screen.c:
