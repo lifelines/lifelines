@@ -11,4 +11,6 @@ Add an entry mentioning the new version in the
 Tag the cvs source via
   cvs tag v3_0_25
 
+Send an announcement to the LINES-L mailing list
+
 
