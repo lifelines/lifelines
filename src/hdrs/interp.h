@@ -262,6 +262,7 @@ void delete_pvalue(PVALUE);
 void delete_pvalue_ptr(PVALUE * valp);
 void delete_pvalue_wrapper(PVALUE);
 void delete_symtab(SYMTAB stab, STRING iden);
+void dolock_node_in_cache(NODE, BOOLEAN lock);
 void eq_conform_pvalues(PVALUE, PVALUE, BOOLEAN*);
 BOOLEAN eqv_pvalues(VPTR, VPTR);
 CACHEEL get_cel_from_pvalue(PVALUE val);

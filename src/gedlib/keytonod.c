@@ -702,6 +702,7 @@ add_to_direct (CACHE cache, CNSTRING key, INT reportmode)
 	ASSERT(rec);
 	ASSERT(csizedir(cache) < cmaxdir(cache));
 	cel = (CACHEEL) stdalloc(sizeof(*cel));
+	rec->dbh = (DBHANDLE)cel;
 	keycopy = strsave(key);
 	insert_table_ptr(cdata(cache), keycopy, cel);
 	crecord(cel) = rec;
@@ -1144,10 +1145,10 @@ othr_to_cacheel (NODE othr)
 	return cel;
 }
 /*==================================================
- * node_to_cacheel -- Convert any node to cache element
+ * record_to_cacheel -- Convert any record to cache element
  *================================================*/
 CACHEEL
-node_to_cacheel (RECORD rec)
+record_to_cacheel (RECORD rec)
 {
 	STRING key = rmvat(nxref(nztop(rec)));
 	switch(key[0]) {

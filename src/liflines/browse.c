@@ -640,7 +640,7 @@ display_aux (RECORD rec, INT mode, BOOLEAN reuse)
 {
 	CACHEEL cel;
 	INT c;
-	cel = node_to_cacheel(rec);
+	cel = record_to_cacheel(rec);
 	lock_cache(cel);
 	c = aux_browse(rec, mode, reuse);
 	unlock_cache(cel);

@@ -67,15 +67,17 @@
  "1 BIRT".)
 */
 typedef struct ntag *NODE, NODE_struct;
+typedef struct nrec0 *RECORD;
 struct ntag {
-	STRING n_xref;		/* cross ref */
-	STRING n_tag;		/* tag */
-	STRING n_val;		/* value */
-	NODE   n_parent;	/* parent */
-	NODE   n_child;   /* first child */
-	NODE   n_sibling;	/* sibling */
-	INT    n_flag;    /* eg, ND_TEMP */
-	int    n_refcnt;  /* refcount for temp nodes */
+	STRING n_xref;      /* cross ref */
+	STRING n_tag;       /* tag */
+	STRING n_val;       /* value */
+	NODE   n_parent;    /* parent */
+	NODE   n_child;     /* first child */
+	NODE   n_sibling;   /* sibling */
+	INT    n_flag;      /* eg, ND_TEMP */
+	int    n_refcnt;    /* refcount for temp nodes */
+	RECORD n_rec;       /* pointer to record, if in a record's node tree */
 };
 #define nxref(n)    ((n)->n_xref)
 #define ntag(n)     ((n)->n_tag)
@@ -101,11 +103,12 @@ typedef struct nkeytag NKEY;
  A RECORD will in the future contain a pointer to its cache element.
  LifeLines is very RECORD-oriented.
 */
-typedef struct nrec0 *RECORD;
-struct nrec0 {
+typedef struct dbhandle_s *DBHANDLE;
+struct nrec0 { /* RECORD */
 	NODE top;
 	NKEY nkey;
 	WAREHOUSE mdwh; /* metadata */
+	DBHANDLE dbh; /* db handle */
 };
 NODE nztop(RECORD); /* function so it can handle NULL input */
 #define nzkey(n)    ((n)->nkey.key)

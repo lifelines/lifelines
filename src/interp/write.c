@@ -115,7 +115,10 @@ __addnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	prev = pvalue_to_node(val);
 	delete_pvalue_wrapper(val);
+	/* reparent node, but ensure its locking is only releative to new parent */
+	dolock_node_in_cache(newchild, FALSE);
 	nparent(newchild) = prnt;
+	dolock_node_in_cache(newchild, TRUE);
 	if (prev == NULL) {
 		next = nchild(prnt);
 		nchild(prnt) = newchild;
@@ -157,7 +160,10 @@ __detachnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		else
 			nsibling(prev) = next;
 	}
+	/* unparent node, but ensure its locking is only releative to new parent */
+	dolock_node_in_cache(dead, FALSE);
 	nparent(dead) = NULL;
+	dolock_node_in_cache(dead, TRUE);
 	nsibling(dead) = NULL;
 	/* we don't actually delete the node, garbage collection must get it */
 	return NULL;

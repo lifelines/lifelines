@@ -86,7 +86,7 @@ CACHEEL fam_to_cacheel(RECORD frec);
 CACHEEL fam_to_cacheel_old(NODE);
 CACHEEL indi_to_cacheel(RECORD irec);
 CACHEEL indi_to_cacheel_old(NODE);
-CACHEEL node_to_cacheel(RECORD rec);
+CACHEEL record_to_cacheel(RECORD rec);
 CACHEEL node_to_cacheel_old(NODE);
 CACHEEL othr_to_cacheel(NODE);
 CACHEEL sour_to_cacheel(NODE);

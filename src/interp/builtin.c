@@ -2399,20 +2399,17 @@ record_to_node (PVALUE val)
 
 	if (!cel) return FALSE;
 	
-	/* is it loaded into cache ? */
-	if (cnode(cel)) {
-		set_pvalue(val, PGNODE, (VPTR)cnode(cel));
-		return TRUE;
-	}
-	/* no, okay, load it into cache */
-	key = ckey(cel);
-	switch (*key) {
-	case 'I': gnode = key_to_indi(key); break;
-	case 'F': gnode = key_to_fam(key);  break;
-	case 'E': gnode = key_to_even(key); break;
-	case 'S': gnode = key_to_sour(key); break;
-	case 'X': gnode = key_to_othr(key); break;
-	default:  FATAL();
+	if (!cnode(cel)) {
+		/* not in direct cache, so load into cache */
+		key = ckey(cel);
+		switch (*key) {
+		case 'I': gnode = key_to_indi(key); break;
+		case 'F': gnode = key_to_fam(key);  break;
+		case 'S': gnode = key_to_sour(key); break;
+		case 'E': gnode = key_to_even(key); break;
+		case 'X': gnode = key_to_othr(key); break;
+		default:  FATAL();
+		}
 	}
 	set_pvalue(val, PGNODE, (VPTR)gnode); 
 	return TRUE;

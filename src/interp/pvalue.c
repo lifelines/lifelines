@@ -64,7 +64,7 @@ static void clear_pv_indiseq(INDISEQ seq);
 static void clear_pvalue(PVALUE val);
 static PVALUE create_pvalue_from_keynum_impl(INT i, INT ptype);
 static PVALUE create_pvalue_from_key_impl(STRING key, INT ptype);
-static PVALUE create_pvalue_from_node_impl(NODE node, INT ptype);
+static PVALUE create_pvalue_from_record(RECORD rec, INT ptype);
 static BOOLEAN eq_pstrings(PVALUE val1, PVALUE val2);
 static int float_to_int(float f);
 static void free_all_pvalues(void);
@@ -290,11 +290,10 @@ create_pvalue (INT type, VPTR value)
 	}
 	ptype(val) = type;
 	pvalue(val) = value;
-	/*
-	we really ought strongly lock for PGNODE
-	but it isn't convenient to find the cacheel
-	2001/04/15, Perry Rapp
-	*/
+
+	if (ptype(val) == PGNODE) {
+		dolock_node_in_cache((NODE)value, TRUE);
+	}
 	if (is_record_pvalue(val)) {
 		/* lock any cache elements, and unlock in clear_pvalue */
 		CACHEEL cel = get_cel_from_pvalue(val);
@@ -305,6 +304,27 @@ create_pvalue (INT type, VPTR value)
 			semilock_cache(cel);
 	}
 	return val;
+}
+/*========================================
+ * dolock_node_in_cache -- Find cache element
+ *  (if available), and lock or unlock it
+ * Created: 2003-02-04 (Perry Rapp)
+ *======================================*/
+void
+dolock_node_in_cache (NODE node, BOOLEAN lock)
+{
+	if (node) {
+		RECORD rec = node->n_rec;
+		if (rec) {
+			CACHEEL cel = (CACHEEL)rec->dbh;
+			if (cel) {
+				if (lock)
+					lock_cache(cel);
+				else
+					unlock_cache(cel);
+			}
+		}
+	}
 }
 /*========================================
  * clear_pvalue -- Empty contents of pvalue
@@ -337,6 +357,8 @@ clear_pvalue (PVALUE val)
 					free_temp_node_tree(node);
 				}
 			}
+			if (node)
+				dolock_node_in_cache(node, FALSE);
 		}
 		return;
 	/* nodes from cache handled below switch - PINDI, PFAM, PSOUR, PEVEN, POTHR */
@@ -507,8 +529,10 @@ copy_pvalue (PVALUE val)
 	case PGNODE:
 		{
 			NODE node = pvalue_to_node(val);
-			++nrefcnt(node);
-			/* pointers into cache elements */
+			if (node) {
+				++nrefcnt(node);
+				dolock_node_in_cache(node, TRUE);
+			}
 		}
 		break;
 	/* nodes from caches handled below switch (q.v.), inside
@@ -667,14 +691,14 @@ create_pvalue_from_othr_keynum (INT i)
 	return create_pvalue_from_keynum_impl(i, POTHR);
 }
 /*=====================================================
- * create_pvalue_from_node_impl -- Create pvalue from any node
+ * create_pvalue_from_record -- Create pvalue from any node
  *  handles NULL
  * Created: 2001/03/20, Perry Rapp
  *===================================================*/
 static PVALUE
-create_pvalue_from_node_impl (NODE node, INT ptype)
+create_pvalue_from_record (RECORD rec, INT ptype)
 {
-	CACHEEL cel = node ? node_to_cacheel_old(node) : NULL;
+	CACHEEL cel = rec ? record_to_cacheel(rec) : NULL;
 	return create_pvalue(ptype, cel);
 }
 /*====================================================
@@ -687,7 +711,7 @@ create_pvalue_from_keynum_impl (INT i, INT ptype)
 	static char key[10];
 	char cptype = 'Q';
 	if (!i)
-		return create_pvalue_from_node_impl(NULL, ptype);
+		return create_pvalue_from_record(NULL, ptype);
 	switch(ptype) {
 	case PINDI: cptype = 'I'; break;
 	case PFAM: cptype = 'F'; break;
@@ -845,8 +869,8 @@ static PVALUE
 create_pvalue_from_key_impl (STRING key, INT ptype)
 {
 	/* report mode, so may return NULL */
-	NODE node = key_to_type(key, TRUE);
-	PVALUE val = create_pvalue_from_node_impl(node, ptype);
+	RECORD rec = qkey_to_record(key);
+	PVALUE val = create_pvalue_from_record(rec, ptype);
 	return val;
 }
 /*==================================

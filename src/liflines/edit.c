@@ -51,7 +51,7 @@ extern STRING qSparadox;
  * (no user interaction)
  *===================================*/
 void
-write_indi_to_editfile(NODE indi)
+write_indi_to_editfile (NODE indi)
 {
 	FILE *fp;
 	XLAT ttmo = transl_get_predefined_xlat(MINED);

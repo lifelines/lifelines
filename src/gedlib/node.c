@@ -88,6 +88,7 @@ static RECORD do_first_fp_to_record(FILE *fp, BOOLEAN list, XLAT tt
 static STRING fixup(STRING str);
 static STRING fixtag (STRING tag);
 static RECORD indi_to_prev_sib_impl(NODE indi);
+static void hook_node_to_rec_recurse(RECORD rec, NODE node);
 static void load_record_wh(RECORD rec, char * whptr, INT whlen);
 static INT node_strlen(INT levl, NODE node);
 static BOOLEAN string_to_line(STRING *ps, INT *plev, STRING *pxref, 
@@ -198,14 +199,13 @@ NODE
 create_node (STRING xref, STRING tag, STRING val, NODE prnt)
 {
 	NODE node = alloc_node();
+	memset(node, 0, sizeof(*node));
 	nxref(node) = fixup(xref);
 	ntag(node) = fixtag(tag);
 	nval(node) = fixup(val);
 	nparent(node) = prnt;
-	nchild(node) = NULL;
-	nsibling(node) = NULL;
-	nflag(node) = 0;
 	nrefcnt(node) = 1;
+	node->n_rec = prnt->n_rec;
 	return node;
 }
 /*===========================
@@ -253,12 +253,11 @@ alloc_new_record (void)
 {
 	RECORD rec;
 	rec = (RECORD)stdalloc(sizeof(*rec));
+	memset(rec, 0, sizeof(*rec));
 	/* these must be filled in by caller */
 	rec->nkey.key = "";
 	rec->nkey.keynum = 0;
 	rec->nkey.ntype = 0;
-	rec->top = 0;
-	rec->mdwh = 0;
 	return rec;
 }
 /*===================================
@@ -347,7 +346,22 @@ create_record (NODE node)
 	else
 		rec = alloc_new_record();
 	rec->top = node;
+	hook_node_to_rec_recurse(rec, node);
 	return rec;
+}
+/*===================================
+ * hook_record_to_node -- Connect record to node tree
+ * Created: 2003-02-04 (Perry Rapp)
+ *=================================*/
+static void
+hook_node_to_rec_recurse (RECORD rec, NODE node)
+{
+	while (node) {
+		if (nchild(node))
+			hook_node_to_rec_recurse(rec, nchild(node));
+		node->n_rec = rec;
+		node = nsibling(node);
+	}
 }
 /*===================================
  * free_rec -- record deallocator
