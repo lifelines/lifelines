@@ -247,7 +247,7 @@ show_indi_vitals (UIWINDOW uiwin, NODE pers, INT row, INT hgt
 	for (i = 0; i < hgt; i++) {
 		wmove(win, row+i, 1);
 		wclrtoeol(win);
-#ifndef BSD
+#if !defined(BSD) && !defined(__CYGWIN__)
 		mvwaddch(win, row+i, ll_cols-1, ACS_VLINE);
 #endif
 	}
@@ -395,7 +395,7 @@ show_fam_vitals (UIWINDOW uiwin, NODE fam, INT row, INT hgt
 	for (i = 0; i < hgt; i++) {
 		wmove(win, row+i, 1);
 		wclrtoeol(win);
-#ifndef BSD
+#if !defined(BSD) && !defined(__CYGWIN__)
 		mvwaddch(win, row+i, width-1, ACS_VLINE);
 #endif
 	}
@@ -486,7 +486,7 @@ wipe_window (UIWINDOW uiwin, INT row, INT hgt)
 	for (i = row; i <= row+hgt-1; i++) {
 		wmove(win, i, 1);
 		wclrtoeol(win);
-#ifndef BSD
+#if !defined(BSD) && !defined(__CYGWIN__)
 		mvwaddch(win, i, ll_cols-1, ACS_VLINE);
 #endif
 	}

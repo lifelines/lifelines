@@ -377,7 +377,7 @@ paint_list_screen (void)
 	show_horz_line(uiwin, LIST_LINES+1, 0, ll_cols);
 	show_horz_line(uiwin, ll_lines-3, 0, ll_cols);
 	show_vert_line(uiwin, LIST_LINES+1, 52, 15);
-#ifndef BSD
+#if !defined(BSD) && !defined(__CYGWIN__)
 	mvwaddch(win, LIST_LINES+1, 52, ACS_TTEE);
 #endif
 	mvwaddstr(win, LIST_LINES+2, 54, "Choose an operation:");
@@ -1973,7 +1973,9 @@ place_std_msg (void)
 	wmove(win, row = ll_lines-2, 2);
 	if (cur_screen != LIST_SCREEN) {
 		wclrtoeol(win);
+#if !defined(BSD) && !defined(__CYGWIN__)
 		mvwaddch(win, row, ll_cols-1, ACS_VLINE);
+#endif
 	} else
 		mvwaddstr(win, row, 2, empstr);
 	mvwaddstr(win, row, 2, str);
@@ -2055,12 +2057,14 @@ wpos (INT row, INT col)
 void
 show_horz_line (UIWINDOW uiwin, INT row, INT col, INT len)
 {
+#if !defined(BSD) && !defined(__CYGWIN__)
 	WINDOW *win = uiw_win(uiwin);
 	INT i;
 	mvwaddch(win, row, col, ACS_LTEE);
 	for (i = 0; i < len-2; i++)
 		waddch(win, ACS_HLINE);
 	waddch(win, ACS_RTEE);
+#endif
 }
 /*=====================================
  * show_vert_line -- Draw vertical line
@@ -2068,7 +2072,7 @@ show_horz_line (UIWINDOW uiwin, INT row, INT col, INT len)
 void
 show_vert_line (UIWINDOW uiwin, INT row, INT col, INT len)
 {
-#ifndef BSD
+#if !defined(BSD) && !defined(__CYGWIN__)
 	WINDOW *win = uiw_win(uiwin);
 	INT i;
 	mvwaddch(win, row++, col, ACS_TTEE);
@@ -2380,7 +2384,9 @@ display_status (STRING text)
 	wmove(win, row = ll_lines-2, 2);
 	if (cur_screen != LIST_SCREEN) {
 		wclrtoeol(win);
+#if !defined(BSD) && !defined(__CYGWIN__)
 		mvwaddch(win, row, ll_cols-1, ACS_VLINE);
+#endif
 	} else
 		mvwaddstr(win, row, 2, empstr);
 	wmove(win, row, 2);
