@@ -73,6 +73,9 @@
 typedef struct tag_cacheel *CACHEEL;
 typedef struct tag_node *NODE;
 struct tag_node {
+	/* a NODE is an OBJECT */
+	struct tag_vtable * vtable; /* generic object table (see vtable.h) */
+	int    n_refcnt;    /* refcount for temp nodes */
 	STRING n_xref;      /* cross ref */
 	STRING n_tag;       /* tag */
 	STRING n_val;       /* value */
@@ -80,7 +83,6 @@ struct tag_node {
 	NODE   n_child;     /* first child */
 	NODE   n_sibling;   /* sibling */
 	INT    n_flag;      /* eg, ND_TEMP */
-	int    n_refcnt;    /* refcount for temp nodes */
 	CACHEEL n_cel;      /* pointer to cacheel, if node is inside cache */
 };
 #define nxref(n)    ((n)->n_xref)

@@ -23,6 +23,7 @@
 #include "metadata.h"
 #include "lloptions.h"
 #include "date.h"
+#include "vtable.h"
 
 /*********************************************
  * global/exported variables
@@ -58,6 +59,7 @@ static NODE alloc_node(void);
 static STRING fixup(STRING str);
 static STRING fixtag (STRING tag);
 static RECORD indi_to_prev_sib_impl(NODE indi);
+static void node_destructor(VTABLE *obj);
 static INT node_strlen(INT levl, NODE node);
 
 /*********************************************
@@ -78,6 +80,17 @@ NODE parents_nodes(NODE faml);
 
 /* node allocator's free list */
 static NDALLOC first_blck = (NDALLOC) 0;
+
+static struct tag_vtable vtable_for_node = {
+	VTABLE_MAGIC
+	, "node"
+	, &node_destructor
+	, &refcountable_isref
+	, &refcountable_addref
+	, &refcountable_delref
+	, 0 /* copy_fnc */
+	, &generic_get_type_name
+};
 
 /*********************************************
  * local function definitions
@@ -1202,3 +1215,13 @@ parents_nodes (NODE faml)      /* list of FAMC and/or FAMS nodes */
 	return new;
 }
 #endif /* UNUSED_CODE */
+/*=================================================
+ * node_destructor -- destructor for vtable
+ *===============================================*/
+static void
+node_destructor (VTABLE *obj)
+{
+	NODE node = (NODE)obj;
+	ASSERT((*obj) == &vtable_for_node);
+	free_node(node);
+}

@@ -13,6 +13,10 @@
 
 	Convert more pvalue access to encapsulated calls.
 
+	* ChangeLog src/hdrs/gedcom.h src/gedlib/node.c
+
+	Add object vtable to node.
+
 2005-01-15 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c src/hdrs/list.h
