@@ -71,6 +71,11 @@
 	__gengedcomstrong to use prog_var_error.
 	Modify st_db.li to call gengedcom, gengedcomweak.
 
+	* ChangeLog src/hdrs/generic.h src/hdrs/standard.h
+
+	Use compiler guard to prevent more than one instance
+	of GENERIC typedef.
+
 2005-01-22 Perry Rapp
 
 	* ChangeLog src/stdlib/generic.c src/stdlib/table.c

@@ -35,7 +35,10 @@ struct generic_tag {
 	};
 };
 /* A GENERIC is a blob of about 12 bytes, not a pointer */
+#ifndef GENERIC_TAG_GENERIC_DECLARED
 typedef struct generic_tag GENERIC;
+#endif /* #ifndef GENERIC_TAG_GENERIC_DECLARED */
+
 
 /* Functions that work on uninitialized GENERIC data */
 void init_generic_null(GENERIC *gen);
