@@ -1,14 +1,15 @@
 LifeLines Source Release, Version 3.0.5-2, 22 July 2000
 
 This is the source distribution of the LifeLines system, a genealogy
-software system.  To build and install, execute these commands:
+software system.  To build and install LifeLines, execute these
+commands:
 
 	./configure
 	make
         make install
 
 which will generate Makefiles suitable for your platform and then build
-and installthe LifeLines programs.  You will end up with two 
+and install the LifeLines programs.  You will end up with two 
 executables (installed in various places, depending on your platform):
 
 llines  -- main LifeLines system program
