@@ -1092,7 +1092,7 @@ INT arg1, arg2, arg3, arg4, arg5, arg6, arg7;
  * message -- Simple interface to mprintf
  *=====================================*/
 void message (s)
-char *s;
+STRING s;
 {
 	mprintf("%s", s);
 }
@@ -1141,6 +1141,18 @@ place_std_msg ()
 /*=================================================
  * llwprintf -- Called as wprintf(fmt, arg, arg, ...)
  *===============================================*/
+void llwprintf (STRING fmt, ...)
+{
+	va_list argptr;
+	va_start(argptr, fmt);
+	wprintw(stdout_win, fmt, argptr);
+	va_end(argptr);
+}
+
+#ifdef OBSOLETE
+/*=================================================
+ * llwprintf -- Called as wprintf(fmt, arg, arg, ...)
+ *===============================================*/
 llwprintf (fmt, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
 STRING fmt;
 INT arg1, arg2, arg3, arg4, arg5, arg6, arg7;
@@ -1157,6 +1169,7 @@ INT arg1, arg2, arg3, arg4, arg5, arg6, arg7;
 #endif
         wrefresh(stdout_win);
 }
+#endif
 /*==============================
  * clearw -- Clear stdout window
  *============================*/
