@@ -1,5 +1,17 @@
 2001-11-09 Perry Rapp <puddle@users.sourceforge.net>
 
+	* ChangeLog gedlib/gstrings.c hdrs/interp.h interp/eval.c
+	interp/interp.c interp/pvalue.c interp/yacc.y liflines/ask.c
+	liflines/askprogram.c liflines/browse.c liflines/edit.c
+	reports/exercise.ll stdlib/dirs.c stdlib/signals.c:
+
+	Bugfix to other_to_list_string to not crash on blank CONC/CONT.
+	Implement report statement: option("explicitvars").
+	Fix interp_foreven, interp_forothr (more efficient style, and lock loop
+	variables in cache through loop body).
+
+2001-11-09 Perry Rapp <puddle@users.sourceforge.net>
+
 	* ChangeLog liflines/export.c
 
 	Revised export headers (moved TIME to level 2,

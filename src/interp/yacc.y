@@ -78,10 +78,10 @@ defn 	:	proc
 		}/*HERE*/
 	|	IDEN '(' SCONS ')' {
 			if (eqstr("include", (STRING) $1))
-/*
-				enqueue_list(Plist, iliteral(((PNODE) $3)));
-*/
-enqueue_list(Plist, pvalue((PVALUE) ivalue((PNODE) $3)));
+				/*enqueue_list(Plist, iliteral(((PNODE) $3)));*/
+				enqueue_list(Plist, pvalue((PVALUE) ivalue((PNODE) $3)));
+			if (eqstr("option", (STRING) $1))
+				handle_option(ivalue((PNODE) $3));
 
 		}
 	;

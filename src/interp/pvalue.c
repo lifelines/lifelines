@@ -595,6 +595,15 @@ create_pvalue_from_even_keynum (INT i)
 	return create_pvalue_from_keynum_impl(i, PEVEN);
 }
 /*=====================================================
+ * create_pvalue_from_othr_keynum -- Return new pvalue for other
+ * Created: 2001/11/11, Perry Rapp
+ *===================================================*/
+PVALUE
+create_pvalue_from_othr_keynum (INT i)
+{
+	return create_pvalue_from_keynum_impl(i, POTHR);
+}
+/*=====================================================
  * create_pvalue_from_node_impl -- Create pvalue from any node
  *  handles NULL
  * Created: 2001/03/20, Perry Rapp

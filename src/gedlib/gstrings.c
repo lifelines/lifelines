@@ -276,8 +276,11 @@ other_to_list_string(NODE node, INT len, STRING delim)
 	while (mylen>5 && child) {
 		if (!strcmp(ntag(child), "CONC")
 			|| !strcmp(ntag(child), "CONT")) {
-			llstrcatn(&p, " ", &mylen);
-			llstrcatn(&p, nval(child), &mylen);
+			/* skip empty CONC/CONT nodes */
+			if (nval(child)) {
+				llstrcatn(&p, " ", &mylen);
+				llstrcatn(&p, nval(child), &mylen);
+			}
 		} else {
 			break;
 		}

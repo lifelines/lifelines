@@ -79,6 +79,7 @@ INT Plineno = 1;
 INT Perrors = 0;
 LIST Plist;		/* list of program files still to read */
 PNODE Pnode = NULL;	/* node being interpreted */
+BOOLEAN explicitvars = FALSE; /* all vars must be declared */
 
 STRING ierror = (STRING) "Error: file \"%s\": line %d: ";
 static STRING qrptname = (STRING) "What is the name of the program?";
@@ -1147,9 +1148,11 @@ interp_forindi (PNODE node, SYMTAB stab, PVALUE *pval)
 // MTE - we're getting NULL here
 		icel = get_cel_from_pvalue(ival);
 		icount++;
-		lock_cache(icel);
+		lock_cache(icel); /* keep current indi in cache during loop body */
+		/* set loop variables */
 		insert_symtab_pvalue(stab, ielement(node), ival);
 		insert_symtab(stab, inum(node), PINT, (VPTR)count);
+		/* execute loop body */
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		unlock_cache(icel);
 		switch (irc) {
@@ -1178,25 +1181,26 @@ ileave:
 INTERPTYPE
 interp_forsour (PNODE node, SYMTAB stab, PVALUE *pval)
 {
-	CACHEEL scel;
+	CACHEEL scel=NULL;
 	INTERPTYPE irc;
-	PVALUE sval;
+	PVALUE sval=NULL;
 	INT count = 0;
 	INT scount = 0;
 	insert_symtab(stab, inum(node), PINT, 0);
 	while (TRUE) {
-		sval = create_pvalue_from_sour_keynum(++count);
-		scel = get_cel_from_pvalue(sval);
-		if (!scel) {
-			delete_pvalue(sval);
-	    if(scount < num_sours()) continue;
+		count = xref_nexts(count);
+		if (!count) {
 			irc = INTOKAY;
-			goto jleave;
+			goto sourleave;
 		}
+		sval = create_pvalue_from_sour_keynum(count);
+		scel = get_cel_from_pvalue(sval);
 		scount++;
-		lock_cache(scel);
+		lock_cache(scel); /* keep current source in cache during loop body */
+		/* set loop variables */
 		insert_symtab_pvalue(stab, ielement(node), sval);
 		insert_symtab(stab, inum(node), PINT, (VPTR)count);
+		/* execute loop body */
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		unlock_cache(scel);
 		switch (irc) {
@@ -1205,12 +1209,13 @@ interp_forsour (PNODE node, SYMTAB stab, PVALUE *pval)
 			continue;
 		case INTBREAK:
 			irc = INTOKAY;
-			goto jleave;
+			goto sourleave;
 		default:
-			goto jleave;
+			goto sourleave;
 		}
 	}
-jleave:
+sourleave:
+	/* remove loop variables from symbol table */
 	delete_symtab(stab, ielement(node));
 	delete_symtab(stab, inum(node));
 	return irc;
@@ -1222,25 +1227,26 @@ jleave:
 INTERPTYPE
 interp_foreven (PNODE node, SYMTAB stab, PVALUE *pval)
 {
-	CACHEEL ecel;
+	CACHEEL ecel=NULL;
 	INTERPTYPE irc;
-	PVALUE eval;
+	PVALUE eval=NULL;
 	INT count = 0;
 	INT ecount = 0;
 	insert_symtab(stab, inum(node), PINT, (VPTR)count);
 	while (TRUE) {
-		eval = create_pvalue_from_even_keynum(++count);
-		ecel = get_cel_from_pvalue(eval);
-		if (!ecel) {
-			delete_pvalue(eval);
-	    if (ecount < num_evens()) continue;
+		count = xref_nexte(count);
+		if (!count) {
 			irc = INTOKAY;
-			goto kleave;
+			goto evenleave;
 		}
+		eval = create_pvalue_from_even_keynum(count);
+		ecel = get_cel_from_pvalue(eval);
 		ecount++;
-		lock_cache(ecel);
+		lock_cache(ecel); /* keep current event in cache during loop body */
+		/* set loop variables */
 		insert_symtab_pvalue(stab, ielement(node), eval);
 		insert_symtab(stab, inum(node), PINT, (VPTR)count);
+		/* execute loop body */
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		unlock_cache(ecel);
 		switch (irc) {
@@ -1249,12 +1255,15 @@ interp_foreven (PNODE node, SYMTAB stab, PVALUE *pval)
 			continue;
 		case INTBREAK:
 			irc = INTOKAY;
-			goto kleave;
+			goto evenleave;
 		default:
-			goto kleave;
+			goto evenleave;
 		}
 	}
-kleave:
+evenleave:
+	/* remove loop variables from symbol table */
+	delete_symtab(stab, ielement(node));
+	delete_symtab(stab, inum(node));
 	return irc;
 }
 /*========================================+
@@ -1264,37 +1273,43 @@ kleave:
 INTERPTYPE
 interp_forothr (PNODE node, SYMTAB stab, PVALUE *pval)
 {
-	NODE othr;
-	static char key[MAXKEYWIDTH+1];
-	STRING record;
+	CACHEEL xcel;
 	INTERPTYPE irc;
-	INT len, count = 0;
-	INT ocount = 0;
-	insert_symtab(stab, inum(node), PINT, (VPTR)count);
-	while (++count <= num_othrs()) {
-		printkey(key, 'X', ++count);
-		if (!(record = retrieve_record(key, &len)))
-			continue;
-		if (!(othr = string_to_node(record))) continue;
-		ocount++;
-// TO DO - fix 2001/03/19 - imitate interp_forsour
-		insert_symtab(stab, ielement(node), POTHR,
-		    (VPTR)othr_to_cacheel(othr));
+	PVALUE xval;
+	INT count = 0;
+	INT xcount = 0;
+	insert_symtab(stab, inum(node), PINT, 0);
+	while (TRUE) {
+		count = xref_nextx(count);
+		if (!count) {
+			irc = INTOKAY;
+			goto othrleave;
+		}
+		xval = create_pvalue_from_othr_keynum(count);
+		xcel = get_cel_from_pvalue(xval);
+		xcount++;
+		lock_cache(xcel); /* keep current source in cache during loop body */
+		/* set loop variables */
+		insert_symtab_pvalue(stab, ielement(node), xval);
 		insert_symtab(stab, inum(node), PINT, (VPTR)count);
+		/* execute loop body */
 		irc = interpret((PNODE) ibody(node), stab, pval);
-		free_nodes(othr);
-		stdfree(record);
+		unlock_cache(xcel);
 		switch (irc) {
 		case INTCONTINUE:
 		case INTOKAY:
 			continue;
 		case INTBREAK:
-			return INTOKAY;
+			irc = INTOKAY;
+			goto othrleave;
 		default:
-			return irc;
+			goto othrleave;
 		}
 	}
-	return INTOKAY;
+othrleave:
+	delete_symtab(stab, ielement(node));
+	delete_symtab(stab, inum(node));
+	return irc;
 }
 /*======================================+
  * interp_forfam -- Interpret forfam loop
@@ -1643,4 +1658,20 @@ prog_error (PNODE node, STRING fmt, ...)
 	}
 	if (lloptions.per_error_delay)
 		sleep(lloptions.per_error_delay);
+}
+/*=============================================+
+ * handle_option -- process option specified in report
+ * Created: 2001/11/11, Perry Rapp
+ *=============================================*/
+void
+handle_option (PVALUE optval)
+{
+	STRING optstr;
+	ASSERT(ptype(optval)==PSTRING); /* grammar only allows strings */
+	optstr = pvalue(optval);
+	if (eqstr(optstr,"explicitvars")) {
+		explicitvars = 1;
+	} else {
+		/* TO DO - figure out how to set the error flag & report error */
+	}
 }

@@ -1,6 +1,6 @@
 /*
  * @progname       exercise
- * @version        0.83 (2001/05/28)
+ * @version        0.84 (2001/11/11)
  * @author         Perry Rapp
  * @category       test
  * @output         mixed
@@ -18,11 +18,12 @@ result is found.
 
 global(dead)
 global(cutoff_yr)
-
-
+/*option("explicitvars")*/ /* this wrecks the undef tests */
+global(true)
 
 proc main()
 {
+	set(true,1)
 /*  getintmsg(cutoff_yr, "Enter number repeats") */
 
   "database: " database() nl()
@@ -41,6 +42,7 @@ proc main()
     }
     call exerciseIndi(person)
   }
+  "families: " nl()
   forfam (fam, fnum) {
     if (isLivingFam(fam)) {
       call outputLivingFam(fam)
@@ -48,8 +50,17 @@ proc main()
       call output(fam)
     }
   }
+  "sources: " nl()
   forsour (sour,fnum) {
     call output(sour)
+  }
+  "events: " nl()
+  foreven (even,enum) {
+    call output(even)
+  }
+  "others: " nl()
+  forothr (othr,onum) {
+    call output(othr)
   }
   call exerciseStrings()
 
@@ -59,7 +70,7 @@ proc main()
 proc output(record)
 {
   traverse (root(record), node, level) {
-    if (and(ne(tag(node),"SOUR"),ne(tag(node),"NOTE"))) {
+    if (or(eq(level,0),and(ne(tag(node),"SOUR"),ne(tag(node),"NOTE")))) {
       d(level) " " xref(node) " " tag(node) " " value(node)
       nl()
     }

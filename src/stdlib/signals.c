@@ -120,7 +120,7 @@ on_signals (int sig)
 		llstrcatn(&ptr, "Looks like a program was running.\n", &len);
 		llstrcatn(&ptr, "Check file ", &len);
 		llstrcatn(&ptr, ifname(Pnode), &len);
-		llstrcatn(&ptr, "around line ", &len);
+		llstrcatn(&ptr, " around line ", &len);
 		sprintf(num, "%d", iline(Pnode));
 		llstrcatn(&ptr, num, &len);
 		llstrcatn(&ptr, ".\n", &len);

@@ -44,7 +44,7 @@
 #include "screen.h"
 #include "lloptions.h"
 
-extern BOOLEAN traceprogram;
+extern BOOLEAN traceprogram, explicitvars;
 
 /*=============================+
  * evaluate -- Generic evaluator
@@ -85,13 +85,13 @@ evaluate_iden (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		llwprintf("evaluate_iden called: iden = %s\n", iden);
 #endif
 	*eflg = FALSE;
-	return valueof_iden(stab, iden);
+	return valueof_iden(node, stab, iden, eflg);
 }
 /*=======================================+
  * valueof_iden - Find value of identifier
  *======================================*/
 PVALUE
-valueof_iden (SYMTAB stab, STRING iden)
+valueof_iden (PNODE node, SYMTAB stab, STRING iden, BOOLEAN *eflg)
 {
 	BOOLEAN there;
 	PVALUE val;
@@ -101,11 +101,16 @@ valueof_iden (SYMTAB stab, STRING iden)
 	  	  iden, stab, globtab);
 #endif
 
+	*eflg = FALSE;
 	val = symtab_valueofbool(stab, iden, &there);
 	if (there) return copy_pvalue(val);
 	val = symtab_valueofbool(globtab, iden, &there);
 	if (there) return copy_pvalue(val);
-	/* undeclared indentifier */
+	/* undeclared identifier */
+	if (explicitvars) {
+		*eflg = TRUE;
+		prog_error(node, "Undeclared identifier: %s", iden);
+	}
 	return create_pvalue(PANY, NULL);
 }
 /*================================================+
