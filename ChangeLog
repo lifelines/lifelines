@@ -1,3 +1,10 @@
+2001-01-06 Perry Rapp <puddle@users.sourceforge.net>
+
+	* gedlib/messages.c hdrs/win32/curses.h liflines/main.c
+	liflines/screen.c win32/mycurses.c:
+	Added selftest (-y) mode. Added platform_init in main.c for
+	titlebar. Added wtitle to win32 curses for titlebar.
+
 2001-01-05 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/init.c hdrs/llstdlib.h stdlib/environ.c tools/btedit.c:
