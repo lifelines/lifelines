@@ -165,6 +165,7 @@ dnl we only use this if we do not have strsignal
 dnl AC_DECL_SYS_SIGLIST
 
 AC_OUTPUT(Makefile \
+        src/Makefile \
         src/arch/Makefile \
         src/btree/Makefile \
         src/interp/Makefile \

@@ -1,3 +1,10 @@
+2002-09-22 Perry Rapp
+
+	* ChangeLog configure.in po/POTFILES.in po/de.po po/el.po
+	po/fr.po po/it.po po/sv.po:
+
+	Fixing build system for relocated source files.
+
 2002-09-21 Perry Rapp
 
 	* Makefile.am configure.in build/msvc6/llines/llinesprj.dsp
