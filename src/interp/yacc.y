@@ -43,7 +43,6 @@
 #include "indiseq.h"
 #include "interp.h"
 #include "liflines.h"
-#include "screen.h"
 #include <stdlib.h>
 
 extern TABLE proctab, functab;

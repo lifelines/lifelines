@@ -24,7 +24,8 @@
 /* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 #include <stdarg.h>
 #include <stdio.h>
-#include "screen.h"
+#include "standard.h"
+#include "feedback.h"
 #include "interp.h"
 
 /*=============================================================

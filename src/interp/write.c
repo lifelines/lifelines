@@ -38,7 +38,7 @@
 #include "interp.h"
 #include "interpi.h"
 #include "liflines.h"
-#include "screen.h"
+#include "feedback.h"
 
 /* WARNING: this file has not been updated for new evaluate() function
  * which returns PVALUES.
