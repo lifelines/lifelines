@@ -17,6 +17,13 @@
 
 	Check in new file from gettextize upgrade.
 
+	* ChangeLog
+	*NEW po/Rules-quot po/boldquot.sed po/en@boldquot.header
+	*NEW po/en@quot.header po/insert-header.sin po/quot.sed
+	*NEW po/remove-potcdate.sin:
+
+	Check in more new po files from gettextize upgrade.
+
 2002-06-04  Marc Nozell  <marc@nozell.com>
 
 	* Cleaned up Rafal's xml conversion of docs/lifelines.sgml.  Also
