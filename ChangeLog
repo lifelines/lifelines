@@ -1,3 +1,12 @@
+2001-01-04 Perry Rapp <puddle@users.sourceforge.net>
+
+	* btree/addkey.c btree/block.c btree/index.c btree/opnbtree.c
+	btree/record.c btree/traverse.c btree/utils.c hdrs/btree.h
+	liflines/export.c:
+	change index/blocks to be ix_type etc and macros ixtype etc
+	to disambiguate from indiseq's itype
+	rename a variable
+
 2001-01-03 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/property.c liflines/askprogram.c tools/dbverify.c:
