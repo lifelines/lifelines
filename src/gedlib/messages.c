@@ -60,6 +60,7 @@ ZST qSronlya      = N_("The database is read only; you may not add records.");
 ZST qSronlye      = N_("The database is read only; you may not change records.");
 ZST qSronlym      = N_("The database is read only; you may not merge records.");
 ZST qSronlyr      = N_("The database is read only; you may not remove records.");
+ZST qSronly       = N_("The database is read only.");
 
 ZST qSidbrws      = N_("enter name, key, refn or list:");
 ZST qSidkyrfn     = N_("enter key or refn: ");

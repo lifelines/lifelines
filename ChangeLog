@@ -5,6 +5,10 @@
 
 	Don't segfault loading db tts when db not open.
 
+	* ChangeLog src/gedlib/editvtab.c src/gedlib/messages.c:
+
+	Prevent segfault editing options or places in readonly db.
+
 2002-12-09 Perry Rapp
 
 	* ChangeLog build/msvc6/btedit/btedit.rc

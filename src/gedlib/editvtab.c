@@ -38,7 +38,7 @@
 #include "feedback.h"
 #include "zstr.h"
 
-extern STRING qSaredit,qSdataerr,qSsepch;
+extern STRING qSaredit,qSdataerr,qSsepch,qSronly;
 
 static STRING trans_edin(STRING input, INT len);
 static STRING trans_ined(STRING input, INT len);
@@ -74,6 +74,11 @@ edit_valtab_from_db (STRING key, TABLE *ptab, INT sep, STRING ermsg, STRING (*va
 	}
 	if (!edit_valtab_impl(ptab, sep, ermsg, validator))
 		return FALSE;
+
+	if (readonly) {
+		msg_error(_(qSronly));
+		return FALSE;
+	}
 	store_text_file_to_db(key, editfile, trans_edin);
 	return TRUE;
 }
