@@ -11,12 +11,17 @@ following commands:
         make install
 
 This will generate Makefiles suitable for your platform and then build
-and install the LifeLines programs.  You will end up with two 
+and install the LifeLines programs.  You will end up with three
 executables (installed in various places, depending on your platform):
 
 llines  -- main LifeLines system program
 btedit -- general purpose btree edit program
+dbverify -- checks a LifeLines database for problems
+
+llines is the LifeLines program you want.
 
 Don't use btedit unless you know exactly what it does.  It is a superuser
 administration tool for unmangling mangled databases -- powerful, but
 deadly.  It is rarely, if ever, needed.
+
+
