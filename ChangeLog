@@ -20,6 +20,10 @@
 
 	Plug leaks in gettoday(). Plug leak in __date().
 
+	* src/hdrs/version.h:
+
+	Make 3.0.24b8 beta.
+
 2003-01-31 Steve Dum
        * reports/Makefile.am reports/gen_index
 
