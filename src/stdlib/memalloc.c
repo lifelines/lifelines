@@ -70,12 +70,12 @@ __allocate (int len,       /* num of bytes to alloc */
 	int i;
 	if (len == 0) return NULL;
 	p = malloc(len);
-	live_allocs++;
 	if((p == NULL) && alloclog) {
 		sprintf(scratch, "%8p ? %s\t%d\t%d", p, file, line, len);
 		alloc_out(scratch);
 	}
 	ASSERT(p);
+	live_allocs++;
 	for(i = 0; i <len; i++) p[i] = '\0';
 	if (alloclog) {
 		sprintf(scratch, "%8p A %s\t%d\t%d", p, file, line, len);
