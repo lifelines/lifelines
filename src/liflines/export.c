@@ -36,6 +36,7 @@
 #include "translat.h"
 #include "gedcom.h"
 #include "liflines.h"
+#include "llinesi.h"
 #include "feedback.h"
 #include "lloptions.h"
 
@@ -173,6 +174,7 @@ copy_and_translate (FILE *fo, INT len, struct trav_parm_s * travparm, INT c, TRA
 		inp = in + remlen;		/* position for next read */
 		remlen = BUFLEN - remlen;	/* max for next read */
 	}
+	num = 0;
 	switch (c) {
 	case 'I': num = ++nindi; break;
 	case 'F': num = ++nfam;  break;

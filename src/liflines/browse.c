@@ -24,6 +24,7 @@
 /* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * browse.c -- Implements the browse command
+ * NB: Part of curses GUI version
  * Copyright(c) 1992-95 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 25 Aug 93
  *   2.3.6 - 01 Nov 93    3.0.0 - 24 Sep 94
@@ -43,6 +44,7 @@
 #include "lloptions.h"
 
 #include "llinesi.h"
+#include "screen.h"
 
 /*********************************************
  * global/exported variables
@@ -1089,7 +1091,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			swap_children(NULL, current);
 			break;
 		case CMD_REORDERCHILD: /* Move a child in order */
-			reorder_child(NULL, current);
+			reorder_child(NULL, current, &disp_shrt_rfmt);
 			break;
 		case CMD_TOGGLE_CHILDNUMS:       /* toggle children numbers */
 			show_childnumbers();

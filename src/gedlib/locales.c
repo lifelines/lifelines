@@ -13,7 +13,9 @@
 #include "llstdlib.h"
 #ifdef HAVE_LOCALE_H
 # include <locale.h>
+#if defined(_WIN32) && !defined(__CYGWIN__)
 # include "isolangs.h"
+#endif
 #endif
 #ifdef HAVE_LANGINFO_CODESET
 # include <langinfo.h>
@@ -35,7 +37,6 @@
 /* alphabetical */
 static void customlocale(STRING prefix);
 static STRING get_current_locale(INT category);
-static BOOLEAN is_locale_delim(char ch);
 static BOOLEAN is_msgcategory(int category);
 static STRING llsetenv(STRING name, STRING value);
 static void notify_gettext_language_changed(void);
@@ -288,6 +289,7 @@ setmsgs (STRING localename)
 }
 /*==========================================
  * llsetenv -- assign a value to an environment variable
+ * Workaround for systems without HAVE_SETLOCALE && HAVE_LC_MESSAGES
  * Returns value if it succeeded
  *========================================*/
 static STRING
@@ -464,14 +466,6 @@ win32_setlocale (int category, char * locale)
 	locale=locale; /* unused */
 #endif /* _WIN32 */
 	return rtn;
-}
-/*==========================================
- * is_locale_delim -- Does this character end a segment of the locale ?
- *========================================*/
-static BOOLEAN
-is_locale_delim (char ch)
-{
-	return ch=='_' || ch=='.' || ch=='@';
 }
 /*==========================================
  * register_uilang_callback -- 

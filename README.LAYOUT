@@ -83,10 +83,9 @@ Source Code Directories
     The curses interface is somewhat but not entirely separated 
     from the application.
     Curses specific:
-      screen.c, show.c
-    Not curses, but tied to the idea of a console interface, and
-    probably will not be used by other interfaces:
-      menuitem.c, pedigree.c
+      browse.c lbrowse.c loadsave.c main.c menuitem.c pedigree.c screen.c, show.c tandem.c
+    (Although browse, lbrowse, & menuitem embody the main command handling, and will have to
+    be duplicated in other versions, unlesss they can be reused ?)
 
 ./src/stdlib/
 

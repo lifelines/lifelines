@@ -148,11 +148,12 @@ swap_children_impl (NODE fam, NODE one, NODE two)
 }
 /*=============================================
  * reorder_child -- Reorder one child in family
- * NODE prnt:   [in] parent (may be NULL)
- * NODE fam:    [in] family (may be NULL)
+ *  prnt: [IN]  parent (may be NULL)
+ *  fam:  [IN]  family (may be NULL)
+ *  rftm: [IN]  person formatting for prompts
  *===========================================*/
 BOOLEAN
-reorder_child (RECORD prnt, RECORD frec)
+reorder_child (RECORD prnt, RECORD frec, RFMT rfmt)
 {
 	INT nfam, nchil;
 	INT prevorder, i;
@@ -206,7 +207,7 @@ gotfam:
 	/* first remove child, so can list others & add back */
 	remove_child(child, fam);
 
-	i = ask_child_order(fam, ALWAYS_PROMPT, &disp_shrt_rfmt);
+	i = ask_child_order(fam, ALWAYS_PROMPT, rfmt);
 	if (i == -1) {
 		/* must put child back if cancel */
 		add_child_to_fam(child, fam, prevorder);

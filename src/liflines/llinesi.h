@@ -1,3 +1,8 @@
+/*
+  Functions used inside the liflines module
+  The high-level but not curses-specific portion of the program
+*/
+
 #ifndef _LIFLINES_PRIV_H
 #define _LIFLINES_PRIV_H
 
@@ -9,6 +14,7 @@ typedef struct llrect_s {
 } *LLRECT;
 
 struct import_feedback;
+struct export_feedback;
 
 /* add.c */
 RECORD add_family(RECORD spouse1, RECORD spouse2, RECORD child);
@@ -63,9 +69,6 @@ BOOLEAN import_from_gedcom_file(struct import_feedback * ifeed, FILE *fp);
 /* lbrowse.c */
 INT browse_list(RECORD *prec1, RECORD *prec2, INDISEQ *pseq);
 
-/* loadsave.c */
-void load_gedcom(void);
-BOOLEAN save_gedcom(void);
 
 /* merge.c */
 RECORD merge_two_indis(NODE, NODE, BOOLEAN);
@@ -109,39 +112,9 @@ RECORD full_name_scan(STRING sts);
 RECORD name_fragment_scan(STRING sts);
 RECORD refn_scan(STRING sts);
 
-/* screen.c */
-void adjust_menu_cols(INT delta);
-void adjust_menu_height(INT delta);
-INT aux_browse(NODE, INT mode, BOOLEAN reuse);
-void cycle_menu(void);
-void display_2fam(NODE fam1, NODE fam2, INT mode);
-void display_2indi(NODE indi1, NODE indi2, INT mode);
-void display_fam(NODE, INT mode, BOOLEAN reuse);
-void display_indi(NODE, INT mode, BOOLEAN reuse);
-INT interact_2fam(void);
-INT interact_2indi(void);
-INT interact_fam(void);
-INT interact_indi(void);
-INT list_browse(INDISEQ seq, INT top, INT *cur, INT mark);
-void lock_status_msg(BOOLEAN lock);
-void toggle_menu(void);
-
-/* show.c */
-extern struct rfmt_s disp_long_rfmt, disp_shrt_rfmt;
-void display_cache_stats(void);
-void init_show_module(void);
-void show_big_list(INDISEQ, INT, INT, INT);
-void show_childnumbers(void);
-void show_reset_scroll(void);
-void show_sour_display(NODE, INT, INT);
-void show_scroll(INT delta);
-void show_scroll2(INT delta);
-void switch_scrolls(void);
-void term_show_module(void);
-
 /* swap.c */
 BOOLEAN swap_children(RECORD prnt, RECORD frec);
-BOOLEAN reorder_child(RECORD prnt, RECORD frec);
+BOOLEAN reorder_child(RECORD prnt, RECORD frec, RFMT rfmt);
 BOOLEAN swap_families(RECORD);
 
 /* tandem.c */

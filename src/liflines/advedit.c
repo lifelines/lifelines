@@ -35,6 +35,7 @@
 #include "gedcom.h"
 #include "feedback.h"
 #include "liflines.h"
+#include "llinesi.h"
 
 
 /*********************************************

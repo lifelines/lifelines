@@ -38,6 +38,7 @@
 #include "gedcom.h"
 #include "indiseq.h"
 #include "liflines.h"
+#include "llinesi.h"
 #include "feedback.h"
 
 

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Lifelines 3.0.18\n"
-"POT-Creation-Date: 2002-10-07 19:23-0400\n"
+"POT-Creation-Date: 2002-10-14 18:13-0400\n"
 "PO-Revision-Date: 2002-09-25 08:45+0200\n"
 "Last-Translator: Patrick Texier <p.texier@orsennes.com>\n"
 "Language-Team: Not a language team\n"
@@ -2710,47 +2710,47 @@ msgstr "a été interrompu."
 msgid "was not run because of errors."
 msgstr "a été imterrompu à cause d'erreurs."
 
-#: src/interp/interp.c:452
+#: src/interp/interp.c:453
 #, c-format
 msgid "Error: file <%s> not found: %s\n"
 msgstr "Erreur : fichier <%s> non trouvé : %s\n"
 
-#: src/interp/interp.c:527
+#: src/interp/interp.c:528
 #, c-format
 msgid "identifier: %s should be a string\n"
 msgstr "identifieur : %s doit être une chaîne\n"
 
-#: src/interp/interp.c:1717
+#: src/interp/interp.c:1718
 #, c-format
 msgid "Display locals (%d)"
 msgstr "Afficher locals (%d)"
 
-#: src/interp/interp.c:1720
+#: src/interp/interp.c:1721
 #, c-format
 msgid "Display globals (%d)"
 msgstr "Afficher globals (%d)"
 
-#: src/interp/interp.c:1722
+#: src/interp/interp.c:1723
 msgid "Pop one level"
 msgstr "Descendre d'un niveau"
 
-#: src/interp/interp.c:1723
+#: src/interp/interp.c:1724
 msgid "Quit debugger"
 msgstr "Quitter le deboggueur"
 
-#: src/interp/interp.c:1730
+#: src/interp/interp.c:1731
 msgid "Local variables"
 msgstr "Variables locales"
 
-#: src/interp/interp.c:1734
+#: src/interp/interp.c:1735
 msgid "Global variables"
 msgstr "Variables globales"
 
-#: src/interp/interp.c:1825
+#: src/interp/interp.c:1826
 msgid "Report cancelled"
 msgstr "Report interrompu"
 
-#: src/interp/interp.c:1833
+#: src/interp/interp.c:1834
 #, c-format
 msgid ""
 "\n"
@@ -2759,7 +2759,7 @@ msgstr ""
 "\n"
 "Erreur d'interprétation en <%s>"
 
-#: src/interp/interp.c:1836
+#: src/interp/interp.c:1837
 #, c-format
 msgid ""
 "\n"
@@ -2768,21 +2768,21 @@ msgstr ""
 "\n"
 "Erreur d'exécution en : <%s>"
 
-#: src/interp/interp.c:1842
+#: src/interp/interp.c:1843
 #, c-format
 msgid "Parsing Error at line %d: "
 msgstr "Erreur d'interprétation en ligne %d :"
 
-#: src/interp/interp.c:1845
+#: src/interp/interp.c:1846
 #, c-format
 msgid "Runtime Error at line %d: "
 msgstr "Erreur d'exécution à la ligne %d : "
 
-#: src/interp/interp.c:1847
+#: src/interp/interp.c:1848
 msgid "Aborting: "
 msgstr "Interruption :"
 
-#: src/interp/interp.c:1864
+#: src/interp/interp.c:1865
 #, c-format
 msgid ""
 "\n"
@@ -2791,7 +2791,7 @@ msgstr ""
 "\n"
 "Erreurs de rapport : %s"
 
-#: src/interp/interp.c:2077
+#: src/interp/interp.c:2078
 msgid "This report requires a newer program to run"
 msgstr "Ce rapport nécessite un programme plus récent pour fonctionner"
 
@@ -2846,56 +2846,61 @@ msgstr "  dans le fichier <%s> à la ligne %d\n"
 msgid "ASSERT failure"
 msgstr "ASSERT échec"
 
-#: src/liflines/loadsave.c:81
+#: src/liflines/loadsave.c:90
 msgid "Person"
 msgid_plural "Persons"
 msgstr[0] "Personne"
 msgstr[1] "Personnes"
 
-#: src/liflines/loadsave.c:85
+#: src/liflines/loadsave.c:94
 msgid "Family"
 msgid_plural "Families"
 msgstr[0] "Famille"
 msgstr[1] "Familles"
 
-#: src/liflines/loadsave.c:89
+#: src/liflines/loadsave.c:98
 msgid "Source"
 msgid_plural "Sources"
 msgstr[0] "Source"
 msgstr[1] "Sources"
 
-#: src/liflines/loadsave.c:93
+#: src/liflines/loadsave.c:102
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "Évènement"
 msgstr[1] "Évènements"
 
-#: src/liflines/loadsave.c:97
+#: src/liflines/loadsave.c:106
 msgid "Other"
 msgid_plural "Others"
 msgstr[0] "Autres enreg."
 msgstr[1] "Autres enreg."
 
-#: src/liflines/loadsave.c:139
+#: src/liflines/loadsave.c:148
 msgid "Checking GEDCOM file for errors.\n"
 msgstr "Vérification du fichier GEDCOM.\n"
 
-#: src/liflines/loadsave.c:154
+#: src/liflines/loadsave.c:169
 msgid "The database is read-only; loading has been canceled."
 msgstr "La base est en lecture seule ; chargement annulé."
 
-#: src/liflines/loadsave.c:160
+#: src/liflines/loadsave.c:175
 msgid "Adding unused keys as deleted keys..."
 msgstr "Ajout des clés inutilisées comme des clés supprimées..."
 
-#: src/liflines/loadsave.c:166
+#: src/liflines/loadsave.c:181
 #, c-format
 msgid "Added (%dP, %dF, %dS, %dE, %dX) records"
 msgstr "Enregistrements ajoutés (%dP, %dF, %dS, %dE, %dX)"
 
-#: src/liflines/loadsave.c:191
+#: src/liflines/loadsave.c:211
 msgid "Please enter the name of the GEDCOM file."
 msgstr "Entrez le nom du fichier GEDCOM."
+
+#: src/liflines/loadsave.c:246
+#, fuzzy
+msgid "The database was not saved."
+msgstr "La base est corrompue."
 
 #: src/liflines/main.c:352
 msgid "Choose database to open"
@@ -3359,119 +3364,119 @@ msgstr "Entrez la valeur de clé interne d'une personne."
 msgid "enter key:"
 msgstr "entrez la clé:"
 
-#: src/liflines/screen.c:1771
+#: src/liflines/screen.c:1767
 msgid "Internal codeset"
 msgstr "Page de codes interne"
 
-#: src/liflines/screen.c:1776
+#: src/liflines/screen.c:1772
 msgid "Locales are enabled."
 msgstr "Locales disponibles."
 
-#: src/liflines/screen.c:1778
+#: src/liflines/screen.c:1774
 msgid "Locales are disabled."
 msgstr "Locales non disponibles."
 
-#: src/liflines/screen.c:1781
+#: src/liflines/screen.c:1777
 msgid "NLS (National Language Support) is enabled."
 msgstr "NLS (Support de Langage National) disponible."
 
-#: src/liflines/screen.c:1787
+#: src/liflines/screen.c:1783
 msgid "NLS (National Language Support) is disabled."
 msgstr "NLS (Support de Langage National) indisponible."
 
-#: src/liflines/screen.c:1793
+#: src/liflines/screen.c:1789
 msgid "iconv (codeset conversion) is enabled."
 msgstr "iconv (conversion de code de page) disponible."
 
-#: src/liflines/screen.c:1795
+#: src/liflines/screen.c:1791
 msgid "iconv (codeset conversion) is disabled."
 msgstr "iconv (conversion de code de page) indisponible."
 
-#: src/liflines/screen.c:1797
+#: src/liflines/screen.c:1793
 #, c-format
 msgid "Startup collate locale: %s"
 msgstr "Collate locale au démarrage : %s"
 
-#: src/liflines/screen.c:1801
+#: src/liflines/screen.c:1797
 #, c-format
 msgid "Startup messages locale: %s"
 msgstr "Message locale au démarrage : %s"
 
-#: src/liflines/screen.c:1805
+#: src/liflines/screen.c:1801
 #, c-format
 msgid "Current collate locale: %s"
 msgstr "Collate locale courant : %s"
 
-#: src/liflines/screen.c:1809
+#: src/liflines/screen.c:1805
 #, c-format
 msgid "Current messages locale: %s"
 msgstr "Messages locale courant : %s"
 
-#: src/liflines/screen.c:1813
+#: src/liflines/screen.c:1809
 #, c-format
 msgid "GUI codeset: %s"
 msgstr "jeu de car. GUI : %s"
 
-#: src/liflines/screen.c:1817
+#: src/liflines/screen.c:1813
 #, c-format
 msgid "Editor codeset: %s"
 msgstr "jeu de car. éditeur : %s"
 
-#: src/liflines/screen.c:1821
+#: src/liflines/screen.c:1817
 #, c-format
 msgid "Report codeset: %s"
 msgstr "jeu de car. éditions : %s"
 
-#: src/liflines/screen.c:1825
+#: src/liflines/screen.c:1821
 #, c-format
 msgid "GEDCOM codeset: %s"
 msgstr "jeu de car. GEDCOM : %s"
 
-#: src/liflines/screen.c:1841
+#: src/liflines/screen.c:1837
 msgid "Codeset information"
 msgstr "Information de code de page :"
 
-#: src/liflines/screen.c:1858
+#: src/liflines/screen.c:1854
 #, c-format
 msgid "gettext dll: %s"
 msgstr "dll gettext : %s"
 
-#: src/liflines/screen.c:1862
+#: src/liflines/screen.c:1858
 #, c-format
 msgid "gettext dll version: %s"
 msgstr "version dll gettext : %s "
 
-#: src/liflines/screen.c:1867
+#: src/liflines/screen.c:1863
 msgid "gettext dll had no version"
 msgstr "dll gettext sans version"
 
-#: src/liflines/screen.c:1872
+#: src/liflines/screen.c:1868
 msgid "no gettext dll found"
 msgstr "dll gettext non trouvée"
 
-#: src/liflines/screen.c:1882
+#: src/liflines/screen.c:1878
 #, c-format
 msgid "iconv dll: %s"
 msgstr "dll iconv : %s"
 
-#: src/liflines/screen.c:1886
+#: src/liflines/screen.c:1882
 #, c-format
 msgid "iconv dll version: %s"
 msgstr "version dll iconv : %s"
 
-#: src/liflines/screen.c:1891
+#: src/liflines/screen.c:1887
 msgid "iconv dll had no version"
 msgstr "dll iconv sans version"
 
-#: src/liflines/screen.c:1896
+#: src/liflines/screen.c:1892
 msgid "no iconv dll found"
 msgstr "dll iconv non trouvée"
 
-#: src/liflines/screen.c:2145
+#: src/liflines/screen.c:2141
 msgid "Impermissible to change codeset in a populated database"
 msgstr ""
 
-#: src/liflines/screen.c:2962
+#: src/liflines/screen.c:2958
 #, c-format
 msgid "(pg %d/%d)"
 msgstr ""

@@ -371,6 +371,7 @@ PNODE spouses_node(PACTX pactx, PNODE, STRING, STRING, STRING, PNODE);
 PNODE string_node(PACTX pactx, STRING);
 void trace_endl(void);
 void trace_out(STRING fmt, ...);
+void trace_outl(STRING fmt, ...);
 void trace_pnode(PNODE node);
 void trace_pvalue(PVALUE val);
 PNODE traverse_node(PACTX pactx, PNODE, STRING, STRING, PNODE);

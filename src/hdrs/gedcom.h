@@ -108,7 +108,8 @@ NODE nztop(RECORD); /* function so it can handle NULL input */
 #define nztype(n)   ((n)->nkey.ntype)
 
 /*
- reformating functions - format context provided by client/
+ reformating functions - format date or place for display
+ callbacks to GUI client to tailor display as desired
  either or both may be null, meaning use date or place exactly as
  occurs in data
 */
@@ -128,19 +129,6 @@ typedef struct rfmt_s *RFMT;
 #define SEX_FEMALE  2
 #define SEX_UNKNOWN 3
 
-enum {
-	BROWSE_INDI
-	, BROWSE_FAM
-	, BROWSE_PED
-	, BROWSE_TAND
-	, BROWSE_QUIT
-	, BROWSE_2FAM
-	, BROWSE_LIST
-	, BROWSE_AUX
-	, BROWSE_EVEN
-	, BROWSE_SOUR
-	, BROWSE_UNK
-};
 
 /* custom translation tables */
 	/* MEDIN: translate editor characters to internal */

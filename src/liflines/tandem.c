@@ -41,6 +41,7 @@
 #include "menuitem.h"
 
 #include "llinesi.h"
+#include "screen.h"
 
 /*********************************************
  * external/imported variables

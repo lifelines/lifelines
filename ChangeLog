@@ -1,3 +1,18 @@
+2002-10-15 Perry Rapp
+
+	* ChangeLog README.LAYOUT po/de.po po/el.po po/fr.po po/it.po
+	po/sv.po src/btree/opnbtree.c src/gedlib/locales.c
+	src/hdrs/gedcom.h src/hdrs/interp.h src/hdrs/screen.h
+	src/interp/eval.c src/interp/interp.c src/liflines/add.c
+	src/liflines/advedit.c src/liflines/ask.c
+	src/liflines/browse.c src/liflines/delete.c
+	src/liflines/export.c src/liflines/lbrowse.c
+	src/liflines/llinesi.h src/liflines/loadsave.c
+	src/liflines/merge.c src/liflines/pedigree.c
+	src/liflines/swap.c src/liflines/tandem.c:
+
+	Code cleanup.
+
 2002-10-11 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp

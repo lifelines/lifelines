@@ -23,6 +23,7 @@
 */
 /*=============================================================
  * loadsave.c -- curses user interface for loading & saving GEDCOM
+ * NB: Part of curses GUI version
  * Copyright(c) 2002 by Perry Rapp; all rights reserved
  *   Created: 2002/06 by Perry Rapp
  *==============================================================*/
@@ -43,7 +44,6 @@
 
 /* alphabetical */
 static void clear_rec_counts(INT pass);
-static void export_beginning_export(STRING msg);
 static void export_saved_rec(char ctype, INT count);
 static void import_added_rec(char ctype, STRING tag, INT count);
 static void import_adding_unused_keys(void);
@@ -158,12 +158,6 @@ import_beginning_import (STRING msg)
 	clear_rec_counts(1);
 }
 static void
-export_beginning_export (STRING msg)
-{
-	wfield(9,  0, msg);
-	clear_rec_counts(0);
-}
-static void
 import_readonly (void)
 {
 	wfield(10, 0, _("The database is read-only; loading has been canceled."));
@@ -204,7 +198,7 @@ load_gedcom (void)
 {
 	FILE *fp=NULL;
 	struct import_feedback ifeed;
-	STRING srcdir=NULL, fname=0, fullpath=0;
+	STRING srcdir=NULL;
 
 	srcdir = getoptstr("InputPath", ".");
 	fp = ask_for_input_file(LLREADTEXT

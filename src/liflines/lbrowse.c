@@ -23,6 +23,7 @@
 */
 /*==============================================================
  * lbrowse.c -- Handle list browse mode
+ * NB: Part of curses GUI version
  * Copyright (c) 1993-94 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 01 Sep 93
  *   3.0.0 - 09 Oct 94    3.0.2 - 30 Dec 94
@@ -39,6 +40,7 @@
 #include "menuitem.h"
 
 #include "llinesi.h"
+#include "screen.h"
 
 #define VIEWABLE 13
 

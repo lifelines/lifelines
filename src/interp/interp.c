@@ -407,6 +407,7 @@ named in include statements */
 static void
 remove_tables (PACTX pactx)
 {
+	pactx=pactx; /* unused */
 	/* proctab has PNODESs that yacc.y put in there */
 	remove_table(proctab, DONTFREE);
 	proctab=NULL;
@@ -1989,7 +1990,7 @@ make_internal_string_node (PACTX pactx, STRING str)
 void
 pa_handle_include (PNODE node)
 {
-	STRING fname = ifname(node); /* current file */
+	/*STRING fname = ifname(node); */ /* current file */
 	PVALUE pval = ivalue(node);
 	STRING newfname;
 	STRING fullpath;
@@ -1997,7 +1998,7 @@ pa_handle_include (PNODE node)
 	ASSERT(ptype(pval)==PSTRING); /* grammar only allows strings */
 	newfname = pvalue(pval);
 	
-	/* be nice to extract path from fname, and pass to find_program 
+	/* TODO: be nice to extract path from fname, and pass to find_program 
 	so we can search directory of current file */
 
 	if (find_program(newfname, &fullpath)) {

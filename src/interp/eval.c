@@ -139,7 +139,7 @@ evaluate_iden (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	STRING iden = (STRING) iident(node);
 	if (prog_trace)
-		trace_out("evaluate_iden called: iden = %s\n", iden);
+		trace_outl("evaluate_iden called: iden = %s", iden);
 	*eflg = FALSE;
 	return valueof_iden(node, stab, iden, eflg);
 }
@@ -214,7 +214,7 @@ evaluate_func (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 
 	*eflg = FALSE;
 	if (prog_trace)
-		trace_out("evaluate_func called: %d: %s\n",
+		trace_outl("evaluate_func called: %d: %s",
 		    iline(node)+1, iname(node));
 	val = (*(PFUNC)ifunc(node))(node, stab, eflg);
 	return val;

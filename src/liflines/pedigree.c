@@ -9,6 +9,7 @@
  * pedigree.c -- Display the pedigree browse screen
  *  Several related drawing routines to draw information trees
  *  Ancestor tree, descendant tree, GEDCOM tree
+ * NB: Part of curses GUI version
  *   Created: 2000/10 by Perry Rapp
  *==============================================================*/
 
@@ -18,6 +19,7 @@
 #include "mystring.h"
 
 #include "llinesi.h"
+#include "screen.h"
 
 /*********************************************
  * global/exported variables

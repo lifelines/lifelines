@@ -132,7 +132,7 @@ openbtree (STRING dir, BOOLEAN cflag, INT writ, BOOLEAN immut)
 	/* See if base directory exists */
 	if (stat(dir, &sbuf)) {
 		/* db directory not found */
-		if (!cflag || !write || immut) {
+		if (!cflag || !writ || immut) {
 			bterrno = BTERR_NODB;
 			goto failopenbtree;
 		}
