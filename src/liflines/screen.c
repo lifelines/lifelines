@@ -1249,13 +1249,9 @@ llwprintf (STRING fmt, ...)
 {
 	va_list args;
 
-        if (!stdout_vis) clearw();
-
 	va_start(args, fmt);
 	llvwprintf(fmt, args);
 	va_end(args);
-
-	wrefresh(stdout_win);
 }
 /*==============================
  * clearw -- Clear stdout window

@@ -1,5 +1,9 @@
 2000-11-11 Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* liflines/screen.c: Remove useless call to clearw() and
+	wrefresh() in llwprintf(), as these are called in llvwprintf() as
+	well.
+
 	* interp/yacc.y: Include yacc error string in syntax error
 	message.
 
