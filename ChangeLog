@@ -37,6 +37,12 @@
 	to pedigree (anc & desc). Remove BSD & CYGWIN defs in show.c (by using
 	clear_hseg instead of wclrtoel + ACS_MAP.
 
+	* ChangeLog hdrs/arch.h hdrs/screen.h liflines/screen.c:
+
+	Remove my HAVE_ACS_MAP stuff, in favor of much simpler solution
+	(defines alreaday present in screen.h). Add hack to make work with
+	cygwin (because we aren't linking correctly to its ncurses).
+
 2002-01-3 Matt Emmerton <memmerto@users.sourceforge.net>
 
 	* ChangeLog gedlib/property.c interp/alloc.c interp/date.c

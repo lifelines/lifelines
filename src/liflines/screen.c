@@ -265,21 +265,6 @@ static BOOLEAN viewing_msgs = FALSE; /* user is viewing msgs */
 static BOOLEAN lock_std_msg = FALSE; /* to hold status message */
 static UIWINDOW active_uiwin = 0;
 
-#ifdef HAVE_ACS_MAP
-static char acsttee = ACS_TTEE;
-static char acsvline = ACS_VLINE;
-static char acsbtee = ACS_BTEE;
-static char acsltee = ACS_LTEE;
-static char acshline = ACS_HLINE;
-static char acsrtee = ACS_RTEE;
-#else
-static char acsttee = '+';
-static char acsvline = '|';
-static char acsbtee = '+';
-static char acsltee = '+';
-static char acshline = '-';
-static char acsrtee = '+';
-#endif
 
 /*********************************************
  * local & exported function definitions
@@ -411,7 +396,7 @@ paint_list_screen (void)
 	show_horz_line(uiwin, LIST_LINES+1, 0, ll_cols);
 	show_horz_line(uiwin, ll_lines-3, 0, ll_cols);
 	show_vert_line(uiwin, LIST_LINES+1, 52, 15);
-	mvwaddch(win, LIST_LINES+1, 52, acsttee);
+	mvwaddch(win, LIST_LINES+1, 52, ACS_TTEE);
 	mvwaddstr(win, LIST_LINES+2, 54, "Choose an operation:");
 	row = LIST_LINES+3; col = 55;
 	mvwaddstr(win, row++, col, "j  Move down list");
@@ -2404,10 +2389,10 @@ show_horz_line (UIWINDOW uiwin, INT row, INT col, INT len)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT i;
-	mvwaddch(win, row, col, acsltee);
+	mvwaddch(win, row, col, ACS_LTEE);
 	for (i = 0; i < len-2; i++)
-		waddch(win, acshline);
-	waddch(win, acsrtee);
+		waddch(win, ACS_HLINE);
+	waddch(win, ACS_RTEE);
 }
 /*=====================================
  * show_vert_line -- Draw vertical line
@@ -2417,10 +2402,10 @@ show_vert_line (UIWINDOW uiwin, INT row, INT col, INT len)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT i;
-	mvwaddch(win, row++, col, acsttee);
+	mvwaddch(win, row++, col, ACS_TTEE);
 	for (i = 0; i < len-2; i++)
-		mvwaddch(win, row++, col, acsvline);
-	mvwaddch(win, row, col, acsbtee);
+		mvwaddch(win, row++, col, ACS_VLINE);
+	mvwaddch(win, row, col, ACS_BTEE);
 }
 /*=============================================
  * place_cursor -- Move to idle cursor location
