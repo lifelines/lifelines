@@ -38,6 +38,12 @@
 #include "gengedc.h"
 
 /*********************************************
+ * external/imported variables
+ *********************************************/
+
+extern STRING nonvar1;
+
+/*********************************************
  * local function prototypes
  *********************************************/
 
@@ -75,8 +81,7 @@ __indiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE var = (PNODE) iargs(node);
 	if (!iistype(var, IIDENT)) {
 		*eflg = TRUE;
-		/* TODO: change to prog_var_error */
-		prog_error(node, "the arg to indiset is not a variable.");
+		prog_var_error(node, stab, var, NULL, nonvar1, "indiset");
 		return NULL;
 	}
 	*eflg = FALSE;

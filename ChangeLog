@@ -16,6 +16,10 @@
 	Revise append_indiseq_pval to always copy the key (eliminate the
 	alloc arg).
 
+	* ChangeLog src/interp/intrpseq.c
+
+	Fix __indiset to use prog_var_error (& therefore report debugger).
+
 2005-01-22 Perry Rapp
 
 	* ChangeLog src/stdlib/generic.c src/stdlib/table.c
