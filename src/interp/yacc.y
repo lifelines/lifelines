@@ -44,12 +44,19 @@
 #include "interp.h"
 #include "liflines.h"
 #include "screen.h"
+#include <stdlib.h>
 
 extern TABLE proctab, functab;
 static PNODE this, prev;
 extern LIST Plist;
 INT Yival;
 FLOAT Yfval;
+
+static void join (PNODE list, PNODE last);
+static void yyerror (STRING str);
+
+/* Make sure it can hold any pointer */
+#define YYSTYPE void *
 %}
 
 %token  PROC FUNC_TOK IDEN SCONS CHILDREN SPOUSES IF ELSE ELSIF
@@ -94,10 +101,10 @@ idenso	:	/* empty */ {
 			$$ = $1;
 		}
 idens	:	IDEN {
-			$$ = (INT) iden_node((STRING)$1);
+			$$ = iden_node((STRING)$1);
 		}
 	|	IDEN ',' idens {
-			$$ = (INT) iden_node((STRING)$1);
+			$$ = iden_node((STRING)$1);
 			inext(((PNODE)$$)) = (PNODE) $3;
 		}
 	;
@@ -111,33 +118,33 @@ tmplts	:	tmplt {
 	;
 tmplt	:	CHILDREN m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
-			$$ = (INT) children_node((PNODE)$4, (STRING)$6, (STRING)$8, (PNODE)$11);
-			((PNODE)$$)->i_line = $2;
+			$$ = children_node((PNODE)$4, (STRING)$6, (STRING)$8, (PNODE)$11);
+			((PNODE)$$)->i_line = (INT)$2;
 		}
 	|	SPOUSES m '(' expr ',' IDEN ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
 			$$ = spouses_node((PNODE)$4, (STRING)$6, (STRING)$8, (STRING)$10, (PNODE)$13);
-			((PNODE)$$)->i_line = $2;
+			((PNODE)$$)->i_line = (INT)$2;
 		}
 	|	FAMILIES m '(' expr ',' IDEN ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
 			$$ = families_node((PNODE)$4, (STRING)$6, (STRING)$8, (STRING)$10, (PNODE)$13);
-			((PNODE)$$)->i_line = $2;
+			((PNODE)$$)->i_line = (INT)$2;
 		}
 	|	FATHERS m '(' expr ',' IDEN ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
 			$$ = fathers_node((PNODE)$4, (STRING)$6, (STRING)$8, (STRING)$10, (PNODE)$13);
-			((PNODE)$$)->i_line = $2;
+			((PNODE)$$)->i_line = (INT)$2;
 		}
 	|	MOTHERS m '(' expr ',' IDEN ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
 			$$ = mothers_node((PNODE)$4, (STRING)$6, (STRING)$8, (STRING)$10, (PNODE)$13);
-			((PNODE)$$)->i_line = $2;
+			((PNODE)$$)->i_line = (INT)$2;
 		}
 	|	PARENTS m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
 			$$ = parents_node((PNODE)$4, (STRING)$6, (STRING)$8, (PNODE)$11);
-			((PNODE)$$)->i_line = $2;
+			((PNODE)$$)->i_line = (INT)$2;
 		}
 	|	FORINDISET m '(' expr ',' IDEN ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
@@ -253,21 +260,21 @@ elseo	:	/* empty */ {
 		}
 	;
 expr	:	IDEN {
-			$$ = (INT) iden_node((STRING)$1);
+			$$ = iden_node((STRING)$1);
 			iargs(((PNODE)$$)) = NULL;
 		}
 	|	IDEN m '(' exprso ')' {
-			$$ = (INT) func_node((STRING)$1, (PNODE)$4);
-			((PNODE)$$)->i_line = $2;
+			$$ = func_node((STRING)$1, (PNODE)$4);
+			((PNODE)$$)->i_line = (INT)$2;
 		}
 	|	SCONS {
 			$$ = $1;
 		}
 	|	ICONS {
-			$$ = (INT) icons_node(Yival);
+			$$ = icons_node(Yival);
 		}
 	|	FCONS {
-			$$ = (INT) fcons_node(Yfval);
+			$$ = fcons_node(Yfval);
 		}
 	;
 exprso	:	/* empty */ {
@@ -293,12 +300,13 @@ secondo	:	/* empty */ {
 		}
 	;
 m	:	/* empty */ {
-			$$ = Plineno;
+			$$ = (YYSTYPE)Plineno;
 		}
 %%
 
-void join (list, last)
-PNODE list, last;
+void
+join (PNODE list,
+      PNODE last)
 {
 	PNODE prev = NULL;
 	while (list) {
@@ -309,8 +317,8 @@ PNODE list, last;
 	inext(prev) = last;
 }
 
-void yyerror (str)
-STRING str;
+void
+yyerror (STRING str)
 {
 	extern INT Plineno;
 	extern STRING Pfname;

@@ -1,5 +1,8 @@
 2000-11-08  Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* interp/yacc.y: Quiet down compiler.  Convert from K&R to ANSI C.
+	Store pointers in 'void*', not 'int'.
+
 	* hdrs/interp.h hdrs/screen.h interp/interp.c liflines/screen.c:
 	Make prog_error() a vararg function again, and add new function
 	llvwprintf() to support it.
