@@ -1,3 +1,11 @@
+2003-09-28 Jens Arvidsson
+
+	* ChangeLog docs/ll-reportmanual.sv.xml docs/ll-userguide.sv.xml
+	po/sv.po
+
+	Translation update for Swedish message catalog and doc files;
+	minor fixes in report manual translation.
+
 2003-09-27 Perry Rapp
 
 	* ChangeLog INSTALL NEWS configure.in build/rpm/lifelines.spec
