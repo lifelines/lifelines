@@ -68,7 +68,7 @@ init_generic_string (GENERIC *gen, CNSTRING sval)
 {
 	init_generic(gen);
 	gen->selector = GENERIC_STRING;
-	gen->sval = strdup(sval);
+	gen->data.sval = strdup(sval);
 }
 /*=================================================
  * init_generic_string_shared -- populate gen with shared string generic
@@ -80,7 +80,7 @@ init_generic_string_shared (GENERIC *gen, STRING sval)
 {
 	init_generic(gen);
 	gen->selector = GENERIC_STRING_SHARED;
-	gen->sval = sval;
+	gen->data.sval = sval;
 }
 /*=================================================
  * init_generic_vptr -- populate gen with vptr (void pointer)
@@ -91,7 +91,7 @@ init_generic_vptr (GENERIC *gen, VPTR vptr)
 {
 	init_generic(gen);
 	gen->selector = GENERIC_VPTR;
-	gen->vptr = vptr;
+	gen->data.vptr = vptr;
 }
 /*=================================================
  * init_generic_object -- populate gen with object
@@ -103,7 +103,7 @@ init_generic_object (GENERIC *gen, VPTR oval)
 	OBJECT obj = (OBJECT)oval;
 	init_generic(gen);
 	gen->selector = GENERIC_OBJECT;
-	gen->oval = obj;
+	gen->data.oval = obj;
 }
 /*=================================================
  * set_generic_null -- populate gen with null generic
@@ -124,7 +124,7 @@ set_generic_int (GENERIC *gen, INT ival)
 	/* clear old value, freeing any associated memory as appropriate */
 	clear_generic(gen);
 	gen->selector = GENERIC_INT;
-	gen->ival = ival;
+	gen->data.ival = ival;
 }
 /*=================================================
  * set_generic_float -- populate gen with float generic
@@ -134,15 +134,15 @@ set_generic_float (GENERIC *gen, FLOAT fval)
 {
 	/* check for self-assignment */
 	if (gen->selector == GENERIC_FLOAT) {
-		*gen->fval = fval;
+		*gen->data.fval = fval;
 		return;
 	}
 	/* clear old value, freeing any associated memory as appropriate */
 	clear_generic(gen);
 	/* set new value */
 	gen->selector = GENERIC_FLOAT;
-	gen->fval = stdalloc(sizeof(fval));
-	*gen->fval = fval;
+	gen->data.fval = stdalloc(sizeof(fval));
+	*gen->data.fval = fval;
 }
 /*=================================================
  * set_generic_string -- populate gen with string generic
@@ -153,14 +153,14 @@ set_generic_string (GENERIC *gen, CNSTRING sval)
 {
 	/* check for self-assignment */
 	if (gen->selector == GENERIC_STRING
-		&& eqstr(gen->sval, sval)) {
+		&& eqstr(gen->data.sval, sval)) {
 		return;
 	}
 	/* clear old value, freeing any associated memory as appropriate */
 	clear_generic(gen);
 	/* set new value */
 	gen->selector = GENERIC_STRING;
-	gen->sval = strdup(sval);
+	gen->data.sval = strdup(sval);
 }
 /*=================================================
  * set_generic_string_shared -- populate gen with shared string generic
@@ -172,14 +172,14 @@ set_generic_string_shared (GENERIC *gen, STRING sval)
 {
 	/* check for self-assignment */
 	if (gen->selector == GENERIC_STRING_SHARED
-		&& eqstr(gen->sval, sval)) {
+		&& eqstr(gen->data.sval, sval)) {
 		return;
 	}
 	/* clear old value, freeing any associated memory as appropriate */
 	clear_generic(gen);
 	/* set new value */
 	gen->selector = GENERIC_STRING_SHARED;
-	gen->sval = sval;
+	gen->data.sval = sval;
 }
 /*=================================================
  * set_generic_vptr -- populate gen with opaque void pointer
@@ -189,14 +189,14 @@ void
 set_generic_vptr (GENERIC *gen, VPTR vptr)
 {
 	/* check for self-assignment */
-	if (gen->selector == GENERIC_VPTR && gen->vptr == vptr) {
+	if (gen->selector == GENERIC_VPTR && gen->data.vptr == vptr) {
 		return;
 	}
 	/* clear old value, freeing any associated memory as appropriate */
 	clear_generic(gen);
 	/* set new value */
 	gen->selector = GENERIC_VPTR;
-	gen->vptr = vptr;
+	gen->data.vptr = vptr;
 }
 /*=================================================
  * set_generic_object -- populate gen with object
@@ -206,7 +206,7 @@ void
 set_generic_object (GENERIC *gen, VPTR oval)
 {
 	/* check for self-assignment */
-	if (gen->selector == GENERIC_OBJECT && gen->oval == oval) {
+	if (gen->selector == GENERIC_OBJECT && gen->data.oval == oval) {
 		return;
 	}
 	/* clear old value, freeing any associated memory as appropriate */
@@ -214,9 +214,9 @@ set_generic_object (GENERIC *gen, VPTR oval)
 	/* set new value */
 	gen->selector = GENERIC_OBJECT;
 	if (oval)
-		gen->oval = copy_or_addref_obj((OBJECT)oval, 0);
+		gen->data.oval = copy_or_addref_obj((OBJECT)oval, 0);
 	else
-		gen->oval = 0;
+		gen->data.oval = 0;
 }
 /*=================================================
  * copy_generic_value -- copy from src to gen
@@ -233,12 +233,12 @@ copy_generic_value (GENERIC *gen, const GENERIC * src)
 	/* set new value */
 	switch(src->selector) {
 	case GENERIC_NULL: /* already cleared gen */ break;
-	case GENERIC_INT: set_generic_int(gen, src->ival); break;
-	case GENERIC_FLOAT: set_generic_float(gen, *src->fval); break;
-	case GENERIC_STRING: set_generic_string(gen, src->sval); break;
-	case GENERIC_STRING_SHARED: set_generic_string(gen, src->sval); break;
-	case GENERIC_VPTR: set_generic_vptr(gen, src->vptr); break;
-	case GENERIC_OBJECT: set_generic_object(gen, src->oval); break;
+	case GENERIC_INT: set_generic_int(gen, src->data.ival); break;
+	case GENERIC_FLOAT: set_generic_float(gen, *src->data.fval); break;
+	case GENERIC_STRING: set_generic_string(gen, src->data.sval); break;
+	case GENERIC_STRING_SHARED: set_generic_string(gen, src->data.sval); break;
+	case GENERIC_VPTR: set_generic_vptr(gen, src->data.vptr); break;
+	case GENERIC_OBJECT: set_generic_object(gen, src->data.oval); break;
 	default: ASSERT(0); break;
 	}
 }
@@ -250,7 +250,7 @@ INT
 get_generic_int (GENERIC *gen)
 {
 	ASSERT(gen->selector == GENERIC_INT);
-	return gen->ival;
+	return gen->data.ival;
 }
 /*=================================================
  * get_generic_float -- retrieve float from inside generic
@@ -259,7 +259,7 @@ FLOAT
 get_generic_float (GENERIC *gen)
 {
 	ASSERT(gen->selector == GENERIC_FLOAT);
-	return *gen->fval;
+	return *gen->data.fval;
 }
 /*=================================================
  * get_generic_string -- retrieve string from inside generic
@@ -268,7 +268,7 @@ STRING
 get_generic_string (GENERIC *gen)
 {
 	ASSERT(gen->selector == GENERIC_STRING || gen->selector == GENERIC_STRING_SHARED);
-	return gen->oval;
+	return gen->data.oval;
 }
 /*=================================================
  * get_generic_vptr -- retrieve opaque VPTR from inside generic
@@ -277,7 +277,7 @@ VPTR
 get_generic_vptr (GENERIC *gen)
 {
 	ASSERT(gen->selector == GENERIC_VPTR);
-	return gen->vptr;
+	return gen->data.vptr;
 }
 /*=================================================
  * get_generic_object -- retrieve object from inside generic
@@ -286,7 +286,7 @@ VPTR
 get_generic_object (GENERIC *gen)
 {
 	ASSERT(gen->selector == GENERIC_OBJECT);
-	return gen->oval;
+	return gen->data.oval;
 }
 /*=================================================
  * clear_generic -- free any memory held
@@ -298,21 +298,21 @@ clear_generic (GENERIC *gen)
 	case GENERIC_NULL: break;
 	case GENERIC_INT: break;
 	case GENERIC_FLOAT:
-		stdfree(gen->fval);
-		gen->fval = 0;
+		stdfree(gen->data.fval);
+		gen->data.fval = 0;
 	case GENERIC_STRING:
-		stdfree(gen->sval);
-		gen->sval = 0;
+		stdfree(gen->data.sval);
+		gen->data.sval = 0;
 		break;
 	case GENERIC_STRING_SHARED: break;
 	case GENERIC_VPTR: break;
 	case GENERIC_OBJECT:
-		delete_obj(gen->oval);
+		delete_obj(gen->data.oval);
 		break;
 	/* don't need to free any others */
 	}
 	gen->selector = GENERIC_NULL;
-	gen->oval = 0;
+	gen->data.oval = 0;
 }
 /*=================================================
  * is_generic_null -- return TRUE if generic is null

@@ -32,7 +32,7 @@ struct generic_tag {
 		STRING  sval;
 		VPTR    oval; /* must be OBJECT */
 		VPTR    vptr; /* opaque pointer */
-	};
+	} data;
 };
 /* A GENERIC is a blob of about 12 bytes, not a pointer */
 #ifndef GENERIC_TAG_GENERIC_DECLARED

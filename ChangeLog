@@ -8,6 +8,11 @@
 	Fix compilation of dbverify, and tools MSVC6 projects
 	(which I broke back on 2005-01-25).
 
+	* ChangeLog src/hdrs/generic.h src/stdlib/generic.c
+
+	Fix generics not to use unnamed member (to avoid pre-gcc 3
+	compilation problems).
+
 2005-01-30 Matt Emmerton
 
 	* ChangeLog src/interp/interp.c
