@@ -38,7 +38,7 @@
 #include "liflines.h"
 #include "screen.h"
 
-INT csz_indi = 200;		/* cache size for indi */
+INT csz_indi = 20;		/* cache size for indi */
 INT icsz_indi = 3000;		/* indirect cache size for indi */
 INT csz_fam = 200;		/* cache size for fam */
 INT icsz_fam = 2000;		/* indirect cache size for fam */

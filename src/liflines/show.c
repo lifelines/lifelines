@@ -720,6 +720,7 @@ show_scroll (INT delta)
 	Scroll1 += delta;
 	if (Scroll1 < 0)
 		Scroll1 = 0;
+	pedigree_scroll(delta);
 }
 /*===================================
  * show_scroll2 - scroll lower window
@@ -739,6 +740,7 @@ void show_reset_scroll()
 {
 	Scroll1 = 0;
 	Scroll2 = 0;
+	pedigree_reset_scroll();
 }
 /*=====================================
  * put_out_line - move string to screen
