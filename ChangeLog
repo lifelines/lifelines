@@ -6,6 +6,12 @@
 
 	Fix llexec.c to compile, and implement ask_for_int, ask_for_string, and ask_for_dbname.
 
+	* ChangeLog src/gedlib/lloptions.c src/hdrs/interp.h
+	src/hdrs/lloptions.h src/interp/interp.c src/liflines/llexec.c
+	src/liflines/main.c src/stdlib/table.c:
+
+	Add -I argument to pass in properties from commandline (eg, -Iroot_indi=I1).
+
 2002-10-06 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp

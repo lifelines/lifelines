@@ -194,24 +194,24 @@ delete_pathinfo (struct pathinfo_s ** pathinfo)
 	}
 }
 /*=============================================+
- * interp_program -- Interpret LifeLines program
+ * interp_program_list -- Interpret LifeLines program
  *  proc:     [IN]  proc to call
  *  nargs:    [IN]  number of arguments
  *  args:     [IN]  arguments
- *  nifiles:  [IN]  number of program files - can be zero
  *  ifiles:   [IN]  program files
  *  ofile:    [IN]  output file - can be NULL
  *  picklist: [IN]  see list of existing reports
  *============================================*/
 void
-interp_program (STRING proc, INT nargs, VPTR *args, INT nifiles
-	, STRING *ifiles, STRING ofile, BOOLEAN picklist) 
+interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
+	, STRING ofile, BOOLEAN picklist)
 {
 	FILE *fp;
 	LIST plist=0, donelist=0;
 	SYMTAB stab = null_symtab();
 	PVALUE dummy;
 	INT i;
+	INT nfiles = length_list(lifiles);
 	PNODE first, parm;
 	struct pactx_s pact;
 	PACTX pactx = &pact;
@@ -224,11 +224,12 @@ interp_program (STRING proc, INT nargs, VPTR *args, INT nifiles
 	/* list of pathinfos finished */
 	donelist = create_list();
 
-	if (nifiles > 0) {
-		for (i = 0; i < nifiles; i++) {
+	if (nfiles > 0) {
+		for (i = 1; i < nfiles+1; i++) {
 			STRING fullpath = 0;
-			if (find_program(ifiles[i], &fullpath)) {
-				struct pathinfo_s * pathinfo = new_pathinfo(ifiles[i], fullpath);
+			STRING progfile = get_list_element(lifiles, i);
+			if (find_program(progfile, &fullpath)) {
+				struct pathinfo_s * pathinfo = new_pathinfo(progfile, fullpath);
 				strfree(&fullpath);
 				enqueue_list(plist, pathinfo);
 			} else {
@@ -484,7 +485,7 @@ interp_main (BOOLEAN picklist)
 	interp_load_lang();
 
 	rptlocale();
-	interp_program("main", 0, NULL, 0, NULL, NULL, picklist);
+	interp_program_list("main", 0, NULL, NULL, NULL, picklist);
 	uilocale();
 	/*
 	TO DO: unlock all cache elements (2001/03/17, Perry)

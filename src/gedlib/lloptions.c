@@ -42,10 +42,13 @@ static void send_notifications(void);
  *********************************************/
 
 /* table holding option values, both keys & values in heap */
-static TABLE f_rpt=0;
-static TABLE f_db=0;
-static TABLE f_global=0;
-static TABLE f_fallback=0;
+/* listed in descending priority */
+static TABLE f_cmd=0; /* option values from command line of current execution */
+static TABLE f_rpt=0; /* option values local to currently running report program */
+	/* NB: cannot actually set any report option values currently 2002-10-07 */
+static TABLE f_db=0; /* option values in current database (user/options) */
+static TABLE f_global=0; /* option values from lines config file */
+static TABLE f_fallback=0; /* lowest priority option values */
 static LIST f_notifications=0;
 
 /*********************************************
@@ -168,6 +171,19 @@ load_global_options (STRING configfile, STRING * pmsg)
 	return TRUE;
 }
 /*=================================
+ * set_cmd_options -- Store cmdline options from caller
+ * Created: 2002/10/07, Perry Rapp
+ *===============================*/
+void
+set_cmd_options (TABLE opts)
+{
+	ASSERT(opts);
+	free_optable(&f_cmd);
+	f_cmd = create_table();
+	copy_table(opts, f_cmd, FREEBOTH);
+	send_notifications();
+}
+/*=================================
  * set_db_options -- Store db options from caller
  * Created: 2002/06/16, Perry Rapp
  *===============================*/
@@ -235,6 +251,7 @@ free_optable (TABLE * ptab)
 void
 term_lloptions (void)
 {
+	free_optable(&f_cmd);
 	free_optable(&f_rpt);
 	free_optable(&f_db);
 	free_optable(&f_global);
@@ -251,6 +268,8 @@ STRING
 getoptstr (STRING optname, STRING defval)
 {
 	STRING str = 0;
+	if (!str && f_cmd)
+		str = valueof_str(f_cmd, optname);
 	if (!str && f_db)
 		str = valueof_str(f_db, optname);
 	if (!str && f_global)
@@ -262,7 +281,7 @@ getoptstr (STRING optname, STRING defval)
 	return str;
 }
 /*===============================================
- * getoptstr_rpt -- get an option (from report, or db, or global)
+ * getoptstr_rpt -- get an option (checking report-local options first)
  * Example: 
  *  str = getoptstr("HDR_SUBM", "1 SUBM");
  * Created: 2002/06/16, Perry Rapp
@@ -274,7 +293,7 @@ getoptstr_rpt (STRING optname, STRING defval)
 	if (!str && f_rpt)
 		str = valueof_str(f_rpt, optname);
 	if (!str)
-		str = defval;
+		str = getoptstr(optname, defval);
 	return str;
 }
 /*===============================================

@@ -85,6 +85,7 @@ static void load_usage(void);
 static void main_db_notify(STRING db, BOOLEAN opening);
 static BOOLEAN open_or_create_database(INT alteration, STRING dbrequested
 	, STRING *dbused);
+static void parse_arg(const char * optarg, char ** optname, char **optval);
 static void platform_init(void);
 static void show_open_error(INT dberr);
 static void term_browse_module(void);
@@ -94,6 +95,7 @@ static void term_show_module(void);
  * local function definitions
  * body of module
  *********************************************/
+
 
 /*==================================
  * main -- Main routine of LifeLines
@@ -112,8 +114,8 @@ main (INT argc, char **argv)
 	char lockarg = 0; /* option passed for database lock */
 	INT alteration=0;
 	STRING dbdir = 0;
-	BOOLEAN exprog=FALSE;
-	STRING exprog_name="";
+	LIST exprogs=NULL;
+	TABLE exargs=NULL;
 	STRING progout=NULL;
 	BOOLEAN graphical=TRUE;
 	STRING configfile=0;
@@ -139,7 +141,7 @@ main (INT argc, char **argv)
 
 	/* Parse Command-Line Arguments */
 	opterr = 0;	/* turn off getopt's error message */
-	while ((c = getopt(argc, argv, "adkrwil:fmntc:Fu:x:o:zC:")) != -1) {
+	while ((c = getopt(argc, argv, "adkrwil:fmntc:Fu:x:o:zC:I:")) != -1) {
 		switch (c) {
 		case 'c':	/* adjust cache sizes */
 			while(optarg && *optarg) {
@@ -215,8 +217,25 @@ main (INT argc, char **argv)
 			prog_trace = TRUE;
 			break;
 		case 'x': /* execute program */
-			exprog = TRUE;
-			exprog_name = optarg;
+			if (!exprogs) {
+				exprogs = create_list();
+				set_list_type(exprogs, LISTDOFREE);
+			}
+			push_list(exprogs, strdup(optarg ? optarg : ""));
+			break;
+		case 'I': /* program arguments */
+			{
+				STRING optname=0, optval=0;
+				parse_arg(optarg, &optname, &optval);
+				if (optname && optval) {
+					if (!exargs) {
+						exargs = create_table();
+					}
+					insert_table_str(exargs, strdup(optname), strdup(optval));
+				}
+				strfree(&optname);
+				strfree(&optval);
+			}
 			break;
 		case 'o': /* output directory */
 			progout = optarg;
@@ -335,8 +354,13 @@ prompt_for_db:
 	}
 	init_show_module();
 	init_browse_module();
-	if (exprog) {
-		interp_program("main", 0, NULL, 1, &exprog_name, progout, FALSE);
+	if (exargs) {
+		set_cmd_options(exargs);
+	}
+	if (exprogs) {
+		interp_program_list("main", 0, NULL, exprogs, progout, FALSE);
+		make_list_empty(exprogs);
+		remove_list(exprogs, 0);
 	} else {
 		/* TODO: prompt for report filename */
 	}
@@ -364,6 +388,34 @@ usage:
 
 	/* Exit */
 	return !ok;
+}
+/*==================================
+ * parse_arg -- Break argument into name & value
+ *  eg, parse_arg("main_indi=I3", &a, &b)
+ *   yields a="main_indi" and b="I3"
+ *  (a & b are newly allocated from heap)
+ *================================*/
+static void
+parse_arg (const char * optarg, char ** optname, char **optval)
+{
+	const char * ptr;
+	*optname = *optval = 0;
+	for (ptr = optarg; *ptr; ++ptr) {
+		if (*ptr == '=') {
+			char * namebuff = 0;
+			char * valbuff = 0;
+			INT namelen = ptr - optarg;
+			if (!namelen)
+				return;
+			namebuff = (char *)malloc(namelen+1);
+			llstrncpy(namebuff, optarg, namelen+1, 0);
+			*optname = namebuff;
+			valbuff = strdup(ptr+1);
+			*optval = valbuff;
+			return;
+
+		}
+	}
 }
 /*===================================================
  * shutdown_ui -- (Placeholder, we don't need it)

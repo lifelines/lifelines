@@ -118,6 +118,7 @@ create_table (void)
 }
 /*======================================
  * insert_table_impl -- Insert key & value into table
+ * Caller is reponsible for both key & value memory
  *====================================*/
 static void
 insert_table_impl (TABLE tab, STRING key, UNION uval)
@@ -160,6 +161,7 @@ replace_table_impl (TABLE tab, STRING key, UNION uval, INT whattofree)
 }
 /*======================================
  * insert_table_ptr -- Insert key & pointer value into table
+ * Caller is responsible for both key & ptr memory (no dups here)
  * Created: 2001/06/03 (Perry Rapp)
  *====================================*/
 void
@@ -175,6 +177,7 @@ insert_table_ptr (TABLE tab, STRING key, VPTR ptr)
 }
 /*======================================
  * insert_table_int -- Insert key & INT value into table
+ * Caller is responsible for key memory (no dups here)
  * Created: 2001/06/03 (Perry Rapp)
  *====================================*/
 void
@@ -190,6 +193,7 @@ insert_table_int (TABLE tab, STRING key, INT ival)
 }
 /*======================================
  * insert_table_str -- Insert key & STRING value into table
+ * Caller is responsible for both key & ptr memory (no dups here)
  * Created: 2001/06/03 (Perry Rapp)
  *====================================*/
 void

@@ -28,6 +28,7 @@ void get_db_options(TABLE opts); /* free with FREEBOTH */
 void get_global_options(TABLE opts); /* free with FREEBOTH */
 BOOLEAN load_global_options(STRING configfile, STRING * pmsg);
 void register_notify(CALLBACK_FNC fncptr);
+void set_cmd_options(TABLE opts);
 void set_db_options(TABLE opts);
 void set_global_options(TABLE opts);
 void setoptstr_fallback(STRING optname, STRING newval);
