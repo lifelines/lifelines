@@ -140,10 +140,12 @@ typedef struct ltag {
 	INT l_type;
 	LNODE l_first;
 	LNODE l_last;
+	INT l_refcnt;
 } *LIST;
 #define ltype(l) ((l)->l_type)
 #define lfirst(l) ((l)->l_first)
 #define llast(l) ((l)->l_last)
+#define lrefcnt(l) ((l)->l_refcnt)
 
 #define LISTNOFREE 0
 #define LISTDOFREE 1

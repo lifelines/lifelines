@@ -24,6 +24,7 @@
 /* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * alloc.c -- Allocate nodes for report generator
+ * pnodes are parse nodes in the parse tree built by yacc.c
  * Copyright(c) 1991-95 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 17 Aug 93
  *   3.0.0 - 28 Jun 94    3.0.2 - 23 Dec 94
@@ -39,18 +40,135 @@
 #include "liflines.h"
 #include "screen.h"
 
+/*********************************************
+ * external variables (no header)
+ *********************************************/
+
 extern STRING ierror;
 extern STRING Pfname;
 
-static void set_parents (PNODE body, PNODE node);
+/*********************************************
+ * local types
+ *********************************************/
 
+struct pn_block
+{
+	struct pn_block * next;
+	struct itag nodes[100]; /* arbitrary size may be adjusted */
+};
+typedef struct pn_block *PN_BLOCK;
+#define BLOCK_NODES (sizeof(((PN_BLOCK)0)->nodes)/sizeof(((PN_BLOCK)0)->nodes[0]))
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+static PNODE alloc_pnode_memory(void);
+static void free_pnode_memory(PNODE node);
+static void delete_pnode(PNODE node);
+static void set_parents(PNODE body, PNODE node);
+
+/*********************************************
+ * local variables
+ *********************************************/
+
+static PNODE free_list = 0;
+static INT live_pnodes = 0;
+static PN_BLOCK block_list = 0;
+
+/*********************************************
+ * local function definitions
+ * body of module
+ *********************************************/
+
+/*========================================
+ * alloc_pnode_memory -- return new pnode memory
+ * We use a custom allocator, which lowers our overhead
+ * (no heap overhead per pnode, only per block)
+ * and also allows us to clean them all up after the
+ * report.
+ * NB: This is not traditional garbage collection - we're
+ *  not doing any live/dead analysis; we depend entirely
+ *  on carnal knowledge of the program.
+ * As far as I know, no pnodes were ever being freed before.
+ * Perry Rapp, 2001/01/20
+ *======================================*/
+static PNODE
+alloc_pnode_memory (void)
+{
+	PNODE node;
+	
+	/*
+	This assumes that all pnodes are scoped
+	within report processing. If this ceases to
+	be true, this breaks.
+	*/
+	if (!free_list) {
+		PN_BLOCK new_block = stdalloc(sizeof(*new_block));
+		INT i;
+		new_block->next = block_list;
+		block_list = new_block;
+		for (i=0; i<BLOCK_NODES; i++) {
+			PNODE node1 = &new_block->nodes[i];
+			itype(node1) = IFREED;
+			inext(node1) = free_list;
+			free_list = node1;
+		}
+	}
+	node = free_list;
+	free_list = inext(node);
+	live_pnodes++;
+	return node;
+}
+/*========================================
+ * free_pnode_memory -- return pnode to free-list
+ * (see alloc_pnode_memory comments)
+ * Created: 2001/01/21, Perry Rapp
+ *======================================*/
+static void
+free_pnode_memory (PNODE node)
+{
+	/* put on free list */
+	inext(node) = free_list;
+	free_list = node;
+	live_pnodes--;
+	ASSERT(live_pnodes>=0);
+}
+/*======================================
+ * free_all_pnodes -- Free every pnode
+ * Created: 2001/01/21, Perry Rapp
+ *====================================*/
+void
+free_all_pnodes (void)
+{
+	PN_BLOCK block;
+	/* live_count is how many were leaked */
+	while ((block = block_list)) {
+		PN_BLOCK next = block->next;
+		free_list = 0;
+		if (live_pnodes) {
+			INT i;
+			for (i=0; i<BLOCK_NODES; i++) {
+				PNODE node1=&block->nodes[i];
+				if (itype(node1) != IFREED) {
+					/* leaked */
+					delete_pnode(node1);
+				}
+			}
+		}
+		stdfree(block);
+		block_list = next;
+	}
+	free_list = 0;
+}
 /*==================================
  * create_pnode -- Create PNODE node
+ * 2001/01/21 changed to block allocator
  *================================*/
 PNODE
 create_pnode (INT type)
 {
-	PNODE node = (PNODE) stdalloc(sizeof(*node));
+	PNODE node = alloc_pnode_memory();
 	itype(node) = type;
 	iprnt(node) = NULL;
 	inext(node) = NULL;
@@ -59,6 +177,33 @@ create_pnode (INT type)
 	node->i_word1 = node->i_word2 = node->i_word3 = NULL;
 	node->i_word4 = node->i_word5 = NULL;
 	return node;
+}
+/*========================================
+ * clear_pnode -- Empty contents of pvalue
+ * I don't know if anything in the node needs to
+ *  be freed, Perry
+ * Created: 2001/01/20, Perry Rapp
+ *======================================*/
+void
+clear_pnode (PNODE node)
+{
+	/*
+	Is there anything needing handling here?
+
+	Don't touch any pvalues, because the block cleaner
+	freed them all!
+	*/
+}
+/*==================================
+ * delete_pnode -- Create PNODE node
+ * Created: 2001/01/21, Perry Rapp
+ *================================*/
+static void
+delete_pnode (PNODE node)
+{
+	if (!node) return;
+	clear_pnode(node);
+	free_pnode_memory(node);
 }
 /*==================================
  * string_node -- Create string node

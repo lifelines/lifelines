@@ -22,6 +22,12 @@
    SOFTWARE.
 */
 
+/*=============================================================
+ * environ.c -- Fetch some values from environment
+ * Copyright(c) 2000-2001 by Perry Rapp; all rights reserved
+ * Created in 3.0.6.dev, 23 Dec 2001
+ *===========================================================*/
+
 #include "sys_inc.h"
 #include "llstdlib.h"
 
@@ -29,6 +35,7 @@
  * environ_determine_tempfile -- calculate temporary file
  *  (fully qualified path)
  *  returns static buffer
+ * Created: 2000/12/23, Perry Rapp
  *=====================================================*/
 STRING
 environ_determine_tempfile (void)
@@ -51,6 +58,7 @@ environ_determine_tempfile (void)
 }
 /*============================================================
  * environ_determine_editor -- calculate editor program to use
+ * Created: 2000/12/23, Perry Rapp
  *==========================================================*/
 STRING
 environ_determine_editor (INT program)
@@ -76,6 +84,7 @@ environ_determine_editor (INT program)
 }
 /*==========================================================
  * environ_determine_database -- determine database location
+ * Created: 2000/12/24, Perry Rapp
  *========================================================*/
 STRING
 environ_determine_database (void)
@@ -89,6 +98,7 @@ environ_determine_database (void)
 }
 /*=================================================================
  * environ_determine_newdbs -- determine location for new databases
+ * Created: 2001/01/05, Perry Rapp
  *===============================================================*/
 STRING
 environ_determine_newdbdir (void)

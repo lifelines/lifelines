@@ -535,6 +535,7 @@ int main()
  * llstrcatn -- Copy source string to destination
  *  advancing destination pointer, and decreasing length
  *  (nothing copied after len goes to zero)
+ * Created: 2000/11/29, Perry Rapp
  *================================*/
 void
 llstrcatn(char ** pdest, const char * src, int * len)

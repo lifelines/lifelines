@@ -106,6 +106,7 @@ BOOLEAN writeable = FALSE;	/* database must be writeable */
 BOOLEAN cursesio  = TRUE;	/* use curses i/o */
 BOOLEAN alldone   = FALSE;	/* completion flag */
 BOOLEAN progrunning = FALSE;	/* program is running */
+BOOLEAN progparsing = FALSE;	/* program is being parsed */
 BOOLEAN traceprogram = FALSE;	/* trace program */
 BOOLEAN traditional = TRUE;	/* use traditional family rules */
 BOOLEAN selftest = FALSE; /* selftest rules (ignore paths) */

@@ -141,6 +141,7 @@ void show_database_stats (void);
 
 /*============================
  * init_screen -- Init screens
+ * Created: c. 2000/11, Perry Rapp
  *==========================*/
 int
 init_screen (void)
@@ -815,6 +816,7 @@ choose_from_list (STRING ttl,
 }
 /*=============================================================
  * choose_one_from_indiseq -- User chooses person from sequence
+ * Resize rewrite: c. 2000/12, Perry Rapp
  *===========================================================*/
 INT
 choose_one_from_indiseq (STRING ttl, INDISEQ seq)
@@ -952,6 +954,7 @@ choose_list_from_indiseq (STRING ttl,
 }
 /*==============================
  * scan_menu -- Handle scan menu
+ * Created: c. 2000/12, Perry Rapp
  *============================*/
 void
 scan_menu (void)
@@ -1287,6 +1290,7 @@ indiseq_list_interact (WINDOW *win,
  * shw_list -- Show string list in list interact window
  *  len0 is original length of list (items may have
  *  been deleted)
+ * Detail lines rewrite: c. 2000/12, Perry Rapp
  *===================================================*/
 void
 shw_list (WINDOW *win,
@@ -1406,6 +1410,7 @@ vmprintf (STRING fmt, va_list args)
 /*===============================================
  * mprintf_error -- Call as mprintf_error(fmt, ...)
  * tell the user something went wrong
+ * Created: c. 2000/11, Perry Rapp
  *=============================================*/
 void
 mprintf_error (STRING fmt, ...)
@@ -1418,6 +1423,7 @@ mprintf_error (STRING fmt, ...)
 /*===============================================
  * mprintf_info -- Call as mprintf_info(fmt, ...)
  * usually displaying results of user's action
+ * Created: c. 2000/11, Perry Rapp
  *=============================================*/
 void
 mprintf_info (STRING fmt, ...)
@@ -1430,6 +1436,7 @@ mprintf_info (STRING fmt, ...)
 /*===============================================
  * mprintf_status -- Call as mprintf_status(fmt, ...)
  * transient status during import/export, eg, counting nodes
+ * Created: c. 2000/11, Perry Rapp
  *=============================================*/
 void
 mprintf_status (STRING fmt, ...)

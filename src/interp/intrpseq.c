@@ -40,16 +40,18 @@
 #include "indiseq.h"
 #include "gengedc.h"
 
-LIST keysets;
-
+/*LIST keysets;*/
 
 /*======================================================+
  * initset -- Initialize list that holds created INDISEQs
+ * Nothing constructive was done with this (and it was a leak)
+ * so I'm commenting out all code that uses it
+ * 2001/01/20, Perry Rapp
  *=====================================================*/
 void
 initset (void)
 {
-	keysets = create_list();
+/*	keysets = create_list(); */
 }
 /*======================================+
  * indiset -- Declare an INDISEQ variable
@@ -70,7 +72,7 @@ __indiset (PNODE node,
 	*eflg = FALSE;
 	seq = create_indiseq_pval();
 	assign_iden(stab, iident(var), create_pvalue(PSET, (VPTR) seq));
-	push_list(keysets, seq);
+/*	push_list(keysets, seq);*/
 	return NULL;
 }
 /*==================================+
@@ -323,7 +325,7 @@ __union (PNODE node,
 	}
 	ASSERT(op2 = (INDISEQ) pvalue(val));
 	set_pvalue(val, PSET, op2 = union_indiseq(op1, op2));
-	push_list(keysets, op2);
+/*	push_list(keysets, op2);*/
 	return val;
 }
 /*================================================+
@@ -351,7 +353,7 @@ __intersect (PNODE node,
 	}
 	ASSERT(op2 = (INDISEQ) pvalue(val));
 	set_pvalue(val, PSET, op2 = intersect_indiseq(op1, op2));
-	push_list(keysets, op2);
+/*	push_list(keysets, op2);*/
 	return val;
 }
 /*===============================================+
@@ -379,7 +381,7 @@ __difference (PNODE node,
 	}
 	ASSERT(op2 = (INDISEQ) pvalue(val));
 	set_pvalue(val, PSET, op2 = difference_indiseq(op1, op2));
-	push_list(keysets, op2);
+/*	push_list(keysets, op2);*/
 	return val;
 }
 /*=========================================+
@@ -399,7 +401,7 @@ __parentset (PNODE node,
 	}
 	ASSERT(seq = (INDISEQ) pvalue(val));
 	set_pvalue(val, PSET, seq = parent_indiseq(seq));
-	push_list(keysets, seq);
+/*	push_list(keysets, seq);*/
 	return val;
 }
 /*==========================================+
@@ -419,7 +421,7 @@ __childset (PNODE node,
 	}
 	ASSERT(seq = (INDISEQ) pvalue(val));
 	set_pvalue(val, PSET, seq = child_indiseq(seq));
-	push_list(keysets, seq);
+/*	push_list(keysets, seq);*/
 	return val;
 }
 /*===================================================+
@@ -458,7 +460,7 @@ __siblingset (PNODE node,
 	}
 	ASSERT(seq = (INDISEQ) pvalue(val));
 	set_pvalue(val, PSET, seq = sibling_indiseq(seq, FALSE));
-	push_list(keysets, seq);
+/*	push_list(keysets, seq);*/
 	return val;
 }
 /*============================================+
@@ -478,7 +480,7 @@ __spouseset (PNODE node,
 	}
 	ASSERT(seq = (INDISEQ) pvalue(val));
 	set_pvalue(val, PSET, seq = spouse_indiseq(seq, &copy_value_pvalue));
-	push_list(keysets, seq);
+/*	push_list(keysets, seq);*/
 	return val;
 }
 /*================================================+
@@ -499,7 +501,7 @@ __ancestorset (PNODE node,
 	ASSERT(seq = (INDISEQ) pvalue(val));
 	seq = ancestor_indiseq(seq, create_value_pvalue);
 	set_pvalue(val, PSET, seq);
-	push_list(keysets, seq);
+/*	push_list(keysets, seq);*/
 	return val;
 }
 /*====================================================+
@@ -520,7 +522,7 @@ __descendentset (PNODE node,
 	ASSERT(seq = (INDISEQ) pvalue(val));
 	seq = descendent_indiseq(seq, create_value_pvalue);
 	set_pvalue(val, PSET, seq);
-	push_list(keysets, seq);
+/*	push_list(keysets, seq);*/
 	return val;
 }
 /*===================================================+

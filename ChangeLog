@@ -13,7 +13,7 @@
 
 2001-01-15 Perry Rapp <puddle@users.sourceforge.net>
 
-	* tools/dbverify.c: dbverify bugfix & begin fam check for child.
+	* tools/dbverify.c: dbverify bugfix & began fam check for child.
 
 2001-01-14 Perry Rapp <puddle@users.sourceforge.net>
 

@@ -42,8 +42,23 @@
 #include "screen.h"
 #include "arch.h"
 
+/*********************************************
+ * external variables (no header)
+ *********************************************/
+
 extern STRING llprograms;
-extern BOOLEAN progrunning;
+extern BOOLEAN progrunning, progparsing;
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+static void remove_tables (void);
+static void parse_file (STRING ifile, LIST plist);
+
+/*********************************************
+ * local variables
+ *********************************************/
 
 STRING Pfname = NULL;	/* file to read program from */
 STRING progname = NULL;	/* starting program name */
@@ -60,8 +75,11 @@ TABLE filetab, proctab, globtab, functab;
 STRING ierror = (STRING) "Error: file \"%s\": line %d: ";
 static STRING qrptname = (STRING) "What is the name of the program?";
 
-static void remove_tables (void);
-static void parse_file (STRING ifile, LIST plist);
+/*********************************************
+ * local function definitions
+ * body of module
+ *********************************************/
+
 
 /*====================================+
  * initinterp -- Initialize interpreter
@@ -87,25 +105,23 @@ finishinterp (void)
 void
 progmessage(char *msg)
 {
-    char buf[80];
-    int len;
-    char *dotdotdot;
-    if(progname && *progname) {
-	len = strlen(progname);
-	if(len > 40) {
-	  len -= 40;
-	  dotdotdot = "...";
+	char buf[80];
+	int len;
+	char *dotdotdot;
+	if(progname && *progname) {
+		len = strlen(progname);
+		if(len > 40) {
+			len -= 40;
+			dotdotdot = "...";
+		} else {
+			len = 0;
+			dotdotdot = "";
+		}
+		sprintf(buf, "Program \"%s%s\" %s", dotdotdot, progname+len, msg);
+	} else {
+		sprintf(buf, "The program %s", msg);
 	}
-	else {
-	  len = 0;
-	  dotdotdot = "";
-	}
-	sprintf(buf, "Program \"%s%s\" %s", dotdotdot, progname+len, msg);
-    }
-    else {
-	sprintf(buf, "The program %s", msg);
-    }
-    message(buf);
+	message(buf);
 }
 /*=============================================+
  * interp_program -- Interpret LifeLines program
@@ -127,6 +143,7 @@ interp_program (STRING proc,    /* proc to call */
 	STRING ifile;
 	PNODE first, parm;
 
+	pvalues_begin();
 
    /* Get the initial list of program files */
 	plist = create_list();
@@ -152,6 +169,8 @@ interp_program (STRING proc,    /* proc to call */
 		enqueue_list(plist, strsave(ifile));
 	}
 
+	progparsing = TRUE;
+
    /* Parse each file in the list -- don't reparse any file */
 
 	filetab = create_table();
@@ -170,9 +189,10 @@ interp_program (STRING proc,    /* proc to call */
 		} else
 			stdfree(ifile);
 	}
+	remove_list(plist, NULL); plist=NULL;
 	if (Perrors) {
 		progmessage("contains errors.\n");
-		return;
+		goto interp_program_exit;
 	}
 
    /* Find top procedure */
@@ -180,7 +200,7 @@ interp_program (STRING proc,    /* proc to call */
 	if (!(first = (PNODE) valueof(proctab, proc))) {
 		progmessage("needs a starting procedure.");
 		remove_tables();
-		return;
+		goto interp_program_exit;
 	}
 
    /* Open output file if name is provided */
@@ -188,7 +208,7 @@ interp_program (STRING proc,    /* proc to call */
 	if (ofile && !(Poutfp = fopen(ofile, LLWRITETEXT))) {
 		mprintf_error("Error: file \"%s\" could not be created.\n", ofile);
 		remove_tables();
-		return;
+		goto interp_program_exit;
 	}
 	if (Poutfp) setbuf(Poutfp, NULL);
 
@@ -209,6 +229,7 @@ interp_program (STRING proc,    /* proc to call */
 
    /* Interpret top procedure */
 
+	progparsing = FALSE;
 	progrunning = TRUE;
 	progmessage("is running...");
 	switch (interpret((PNODE) ibody(first), stab, &dummy)) {
@@ -229,6 +250,10 @@ interp_program (STRING proc,    /* proc to call */
 	finishinterp();
 	if (Poutfp) fclose(Poutfp);
 	Pinfp = Poutfp = NULL;
+
+interp_program_exit:
+	pvalues_end();
+	return;
 }
 /*===========================================+
  * remove_tables - Remove interpreter's tables
@@ -237,8 +262,19 @@ void
 remove_tables (void)
 {
 	remove_table(filetab, FREEKEY);
+	/* node block cleaner will free pnodes in proctab */
 	remove_table(proctab, DONTFREE);
+	/*
+	TO DO:
+	lex strsave'd globals, so they need to be freed! 
+	*/
 	remove_table(globtab, DONTFREE);
+	/*
+	TO DO:
+	I think local variable IDENs are leaking strings
+	They might be in functab ?
+	2001/01/21, Perry Rapp
+	*/
 	remove_table(functab, DONTFREE);
 }
 /*======================================+
@@ -1245,7 +1281,7 @@ interp_indisetloop (PNODE node,
 		llwprintf("\n");
 #endif
 		insert_table(stab, ivalvar(node),
-			 (VPTR) (sval(el) ? (VPTR)sval(el)
+			 (VPTR) (sval(el).w ? (VPTR)sval(el).w
 				: (VPTR)create_pvalue(PANY, (VPTR)NULL)));
 		insert_pvtable(stab, inum(node), PINT, (VPTR) (ncount + 1));
 		switch (irc = interpret((PNODE) ibody(node), stab, pval)) {

@@ -67,6 +67,8 @@ int ll_strncmp(char*, char*, int);
 /* memalloc.c */
 void *__allocate(int, STRING, int);
 void __deallocate(void*, STRING, int);
+INT alloc_count(void);
+void report_alloc_live_count(STRING str);
 
 /* path.c */
 STRING concat_path(STRING dir, STRING file);

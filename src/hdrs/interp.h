@@ -80,6 +80,7 @@ struct itag {
 #define IMOTHS		29	/* mothers loop */
 #define IFAMCS		30	/* parents loop */
 #define INOTES		31	/* notes loop */
+#define IFREED    99 /* returned to free list */
 
 #define itype(i)     ((i)->i_type)	/* node type - all nodes */
 #define iprnt(i)     ((i)->i_prnt)	/* parent node - all nodes */
@@ -124,6 +125,7 @@ struct itag {
 #define PLIST	13	/* list */
 #define PTABLE	14	/* table */
 #define PSET	15	/* set */
+#define PFREED 99 /* returned to free list */
 
 typedef struct ptag *PVALUE;
 struct ptag {
@@ -214,6 +216,8 @@ BOOLEAN is_record_pvalue(PVALUE);
 BOOLEAN is_zero(PVALUE);
 void num_conform_pvalues(PVALUE, PVALUE, BOOLEAN*);
 BOOLEAN numeric_pvalue(PVALUE);
+void pvalues_begin(void);
+void pvalues_end(void);
 void set_pvalue(PVALUE, INT, VPTR);
 void show_pvalue(PVALUE);
 STRING pvalue_to_string(PVALUE);
@@ -286,6 +290,8 @@ PNODE forsour_node(STRING, STRING, PNODE);
 PNODE fornodes_node(PNODE, STRING, PNODE);
 PNODE fornotes_node(PNODE, STRING, PNODE);
 PNODE forothr_node(STRING, STRING, PNODE);
+void free_all_pnodes(void);
+void free_pnode_tree(PNODE);
 PNODE func_node(STRING, PNODE);
 STRING get_date(void);
 PNODE icons_node(INT);

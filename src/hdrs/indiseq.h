@@ -45,7 +45,7 @@
 typedef struct stag {
 	STRING s_key;	/* person or family key */
 	STRING s_nam;	/* name of person */
-	VPTR s_val;	/* any value */
+	UNION s_val;	/* any value */
 	STRING s_prn;	/* menu print string */
 	INT s_pri;	/* key as integer (exc valuesort_indiseq puts values here) */
 }
@@ -66,14 +66,16 @@ typedef struct  {
 	SORTEL *is_data;	/*  actual list of items */
 	INT is_prntype; /* for special cases (spouseseq & famseq) */
 	INT is_valtype; /* int, string, pointer */
+	INT is_refcnt; /* for interp */
 } *INDISEQ;
 
-#define ISize(s)  ((s)->is_size)
-#define IMax(s)   ((s)->is_max)
-#define IFlags(s) ((s)->is_flags)
-#define IData(s)  ((s)->is_data)
+#define ISize(s)     ((s)->is_size)
+#define IMax(s)      ((s)->is_max)
+#define IFlags(s)    ((s)->is_flags)
+#define IData(s)     ((s)->is_data)
 #define IPrntype(s)  ((s)->is_prntype)
 #define IValtype(s)  ((s)->is_valtype)
+#define IRefcnt(s)   ((s)->is_refcnt)
 
 #define KEYSORT   (1<<0)	/* Values of attribute flags */
 #define NAMESORT  (1<<1)
@@ -113,6 +115,7 @@ INDISEQ find_named_seq(STRING);
 INDISEQ get_all_even(void);
 INDISEQ get_all_othe(void);
 INDISEQ get_all_sour(void);
+INT get_indiseq_ival(INDISEQ seq, INT i);
 INT getpivot(INT, INT);
 BOOLEAN in_indiseq(INDISEQ, STRING);
 INDISEQ indi_to_children(NODE);
@@ -120,6 +123,8 @@ INDISEQ indi_to_families(NODE, BOOLEAN);
 INDISEQ indi_to_fathers(NODE);
 INDISEQ indi_to_mothers(NODE);
 INDISEQ indi_to_spouses(NODE);
+BOOLEAN indiseq_is_valtype_ival(INDISEQ);
+BOOLEAN indiseq_is_valtype_null(INDISEQ);
 INDISEQ intersect_indiseq(INDISEQ, INDISEQ);
 INDISEQ key_to_indiseq(STRING);
 void keysort_indiseq(INDISEQ);

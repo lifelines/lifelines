@@ -60,7 +60,7 @@ fndentry (TABLE tab,
 {
 	ENTRY entry;
 	if (!tab || !key) return NULL;
-	entry = tab[hash(key)];
+	entry = tab->entries[hash(key)];
 	while (entry) {
 		if (eqstr(key, entry->ekey)) return entry;
 		entry = entry->enext;
@@ -73,10 +73,12 @@ fndentry (TABLE tab,
 TABLE
 create_table (void)
 {
-	TABLE tab = (TABLE) stdalloc(MAXHASH*sizeof(ENTRY));
+	TABLE tab = (TABLE) stdalloc(sizeof(*tab));
 	INT i;
+	tab->entries = (ENTRY *)stdalloc(MAXHASH*sizeof(ENTRY));
+	tab->refcnt = 1;
 	for (i = 0; i < MAXHASH; i++)
-		tab[i] = NULL;
+		tab->entries[i] = NULL;
 	return tab;
 }
 /*======================================
@@ -95,8 +97,8 @@ insert_table (TABLE tab,
 		entry = (ENTRY) stdalloc(sizeof(*entry));
 		entry->ekey = key;
 		entry->evalue = val;
-		entry->enext = tab[hval];
-		tab[hval] = entry;
+		entry->enext = tab->entries[hval];
+		tab->entries[hval] = entry;
 	}
 }
 /*==========================================
@@ -107,18 +109,18 @@ delete_table (TABLE tab,
               STRING key)
 {
 	INT hval = hash(key);
-	ENTRY prev = NULL;
-	ENTRY this = tab[hval];
-	while (this && nestr(key, this->ekey)) {
-		prev = this;
-		this = this->enext;
+	ENTRY preve = NULL;
+	ENTRY thise = tab->entries[hval];
+	while (thise && nestr(key, thise->ekey)) {
+		preve = thise;
+		thise = thise->enext;
 	}
-	if (!this) return;
-	if (prev)
-		prev->enext = this->enext;
+	if (!thise) return;
+	if (preve)
+		preve->enext = thise->enext;
 	else
-		tab[hval] = this->enext;
-	stdfree(this);
+		tab->entries[hval] = thise->enext;
+	stdfree(thise);
 }
 /*======================================
  * in_table() - Check for entry in table
@@ -163,8 +165,10 @@ valueofbool (TABLE tab,
 /*===================================
  * access_value -- get pointer to value
  * returns 0 if not found
+ * Created: 2001/01/01, Perry Rapp
  *=================================*/
-VPTR * access_value(TABLE tab, STRING key)
+VPTR *
+access_value (TABLE tab, STRING key)
 {
 	ENTRY entry;
 	if (!key)
@@ -186,7 +190,7 @@ remove_table (TABLE tab,
 	ENTRY ent, nxt;
 	if (!tab) return;
 	for (i = 0; i < MAXHASH; i++) {
-		nxt = tab[i];
+		nxt = tab->entries[i];
 		while ((ent = nxt)) {
 			nxt = ent->enext;
 			switch (rcode) {
@@ -202,10 +206,12 @@ remove_table (TABLE tab,
 			stdfree(ent);
 		}
 	}
+	stdfree(tab->entries);
 	stdfree(tab);
 }
 /*=================================================
  * traverse_table -- Traverse table doing something
+ *  return value of callback unused
  *===============================================*/
 void
 traverse_table (TABLE tab,
@@ -215,7 +221,7 @@ traverse_table (TABLE tab,
 	ENTRY ent, nxt;
 	if (!tab || !tproc) return;
 	for (i = 0; i < MAXHASH; i++) {
-		nxt = tab[i];
+		nxt = tab->entries[i];
 		while ((ent = nxt)) {
 			nxt = ent->enext;
 			(*tproc)(ent);
@@ -226,6 +232,7 @@ traverse_table (TABLE tab,
 /*=================================================
  * traverse_table_param -- Traverse table doing something, with extra callback param
  * also, use return value of proc to allow abort (proc returns 0 for abort)
+ * Created: 2001/01/01, Perry Rapp
  *===============================================*/
 void
 traverse_table_param (TABLE tab,
@@ -236,7 +243,7 @@ traverse_table_param (TABLE tab,
 	ENTRY ent, nxt;
 	if (!tab || !tproc) return;
 	for (i = 0; i < MAXHASH; i++) {
-		nxt = tab[i];
+		nxt = tab->entries[i];
 		while ((ent = nxt)) {
 			nxt = ent->enext;
 			if (!(*tproc)(ent, param))

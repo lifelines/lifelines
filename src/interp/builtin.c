@@ -391,12 +391,14 @@ __strsoundex (PNODE node,
               BOOLEAN *eflg)
 {
 	PVALUE new, val = evaluate(iargs(node), stab, eflg);
+	STRING str;
 	if (*eflg || !val || ptype(val) != PSTRING) {
 		*eflg = TRUE;
 		prog_error(node, "1st arg to strsoundex must be a string");
 		return NULL;
 	}
-	new = create_pvalue(PSTRING, (VPTR)soundex(pvalue(val)));
+	str = strsave(soundex(pvalue(val)));
+	new = create_pvalue(PSTRING, (VPTR)str);
 	delete_pvalue(val);
 	return new;
 }
@@ -2196,7 +2198,7 @@ __insert (PNODE node,
           TABLE stab,
           BOOLEAN *eflg)
 {
-    	BOOLEAN there;
+	BOOLEAN there;
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE old, val = eval_and_coerce(PTABLE, arg, stab, eflg);
 	TABLE tab;
@@ -2219,7 +2221,6 @@ __insert (PNODE node,
 	llwprintf(" ");
 #endif
 
-	delete_pvalue(val);
 	arg = inext(arg);
 	val = eval_and_coerce(PSTRING, arg, stab, eflg);
 	if (*eflg || !val || !pvalue(val)) {
@@ -2992,11 +2993,10 @@ __free (PNODE node,
         TABLE stab,
         BOOLEAN *eflg)
 {
-	extern LIST keysets;
+/*	extern LIST keysets;*/
 	PNODE arg = (PNODE) iargs(node);
 	BOOLEAN there;
 	PVALUE val;
-	INT i, len;
 	if (!iistype(arg, IIDENT)) {
 		prog_error(node, "arg to free must be a variable");
 		*eflg = TRUE;
@@ -3017,6 +3017,7 @@ __free (PNODE node,
 		case PSET:
 			if(pvalue(val)) {
 				remove_indiseq(pvalue(val), FALSE);
+				/* removed, 2001/01/20, Perry Rapp
 				len = length_list(keysets);
 				for(i = 1; i <= len; i++) {
 					if(get_list_element(keysets, i) == pvalue(val)) {
@@ -3024,6 +3025,7 @@ __free (PNODE node,
 						break;
 					}
 				}
+				*/
 			}
 			break;
 		}

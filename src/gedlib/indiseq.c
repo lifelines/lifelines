@@ -89,7 +89,7 @@ static INT canonkey_compare(SORTEL el1, SORTEL el2);
 static INT value_str_compare (SORTEL, SORTEL);
 static INDISEQ create_indiseq_impl (INT valtype);
 static void append_indiseq_impl (INDISEQ seq, STRING key, 
-	STRING name, VPTR val, BOOLEAN sure, BOOLEAN alloc);
+	STRING name, UNION val, BOOLEAN sure, BOOLEAN alloc);
 static void check_indiseq_valtype (INDISEQ seq, INT valtype);
 
 /*===============================================
@@ -138,6 +138,7 @@ create_indiseq_impl (INT valtype)
 	IFlags(seq) = 0;
 	IPrntype(seq) = ISPRN_NORMALSEQ;
 	IValtype(seq) = valtype;
+	IRefcnt(seq) = 1;
 	return seq;
 }
 /*==================================
@@ -152,7 +153,10 @@ remove_indiseq (INDISEQ seq,
 	for (i = 0; i < n; i++, d++) {
 		stdfree(skey(*d));
 		if (snam(*d)) stdfree(snam(*d));
-		if (fval && sval(*d)) stdfree(sval(*d));
+		if (fval) {
+			VPTR p = sval(*d).w;
+			if (p) stdfree(p);
+		}
 		if (sprn(*d)) stdfree(sprn(*d));
 	}
 	stdfree(IData(seq));
@@ -198,9 +202,10 @@ append_indiseq_ival (INDISEQ seq,    /* sequence */
                      BOOLEAN sure,   /* no dupe check? */
                      BOOLEAN alloc)  /* key alloced? */
 {
-	VPTR wval=(VPTR)val;
+	UNION u;
+	u.i = val;
 	check_indiseq_valtype(seq, ISVAL_INT);
-	append_indiseq_impl(seq, key, name, wval, sure, alloc);
+	append_indiseq_impl(seq, key, name, u, sure, alloc);
 }
 /*==================================================
  * append_indiseq_pval -- Append element to sequence
@@ -214,8 +219,10 @@ append_indiseq_pval (INDISEQ seq,    /* sequence */
                      BOOLEAN sure,   /* no dupe check? */
                      BOOLEAN alloc)  /* key alloced? */
 {
+	UNION u;
+	u.w = pval;
 	check_indiseq_valtype(seq, ISVAL_PTR);
-	append_indiseq_impl(seq, key, name, pval, sure, alloc);
+	append_indiseq_impl(seq, key, name, u, sure, alloc);
 }
 /*==================================================
  * append_indiseq_sval -- Append element to sequence
@@ -229,9 +236,10 @@ append_indiseq_sval (INDISEQ seq,    /* sequence */
                      BOOLEAN sure,   /* no dupe check? */
                      BOOLEAN alloc)  /* key alloced? */
 {
-	VPTR wval=(VPTR)sval;
+	UNION u;
+	u.w = sval;
 	check_indiseq_valtype(seq, ISVAL_STR);
-	append_indiseq_impl(seq, key, name, wval, sure, alloc);
+	append_indiseq_impl(seq, key, name, u, sure, alloc);
 }
 /*==================================================
  * append_indiseq_null -- Append element to sequence
@@ -244,8 +252,10 @@ append_indiseq_null (INDISEQ seq,    /* sequence */
                      BOOLEAN sure,   /* no dupe check? */
                      BOOLEAN alloc)  /* key alloced? */
 {
+	UNION u;
+	u.i=0;
 	/* no type check - valid for any seq */
-	append_indiseq_impl(seq, key, name, 0, sure, alloc);
+	append_indiseq_impl(seq, key, name, u, sure, alloc);
 }
 /*==================================================
  * append_indiseq_impl -- Append element to sequence
@@ -255,7 +265,7 @@ static void
 append_indiseq_impl (INDISEQ seq,    /* sequence */
                      STRING key,     /* key - not NULL */
                      STRING name,    /* name - may be NULL */
-                     VPTR val,       /* extra val is pointer */
+                     UNION val,       /* extra val is pointer */
                      BOOLEAN sure,   /* no dupe check? */
                      BOOLEAN alloc)  /* key alloced? */
 {
@@ -281,6 +291,11 @@ append_indiseq_impl (INDISEQ seq,    /* sequence */
 	skey(el) = alloc ? key : strsave(key);
 	snam(el) = NULL;
 	if (*key == 'I') {
+		/*
+		A possible savings would be to not always
+		precompute names.
+		2001/01/20, Perry Rapp
+		*/
 		if (name)
 			snam(el) = strsave(name);
 		else
@@ -404,7 +419,7 @@ element_indiseq_ival (INDISEQ seq,    /* sequence */
 	*pkey =  skey(IData(seq)[index]);
 	/* do we need to allow for NUL type here ? */
 	ASSERT(IValtype(seq) == ISVAL_INT || IValtype(seq) == ISVAL_NUL);
-	*pval = (INT)sval(IData(seq)[index]);
+	*pval = sval(IData(seq)[index]).i;
 	*pname = snam(IData(seq)[index]);
 	return TRUE;
 }
@@ -462,8 +477,8 @@ static INT
 value_str_compare (SORTEL el1, SORTEL el2)
 {
 	PVALUE val1, val2;
-	val1 = sval(el1);
-	val2 = sval(el2);
+	val1 = sval(el1).w;
+	val2 = sval(el2).w;
 	return ll_strcmp((STRING) pvalue(val1), (STRING) pvalue(val2));
 }
 /*==========================================
@@ -523,13 +538,13 @@ valuesort_indiseq (INDISEQ seq,
 	int settype;
 	if (IFlags(seq) & VALUESORT) return;
 	data = IData(seq);
-	val = sval(*data);
+	val = sval(*data).w;
 	if ((settype = ptype(val)) != PINT && settype != PSTRING ) {
 		*eflg = TRUE;
 		return;
 	}
 	FORINDISEQ(seq, el, num)
-		if (!(val = sval(el)) || ptype(val) != settype) {
+		if (!(val = sval(el).w) || ptype(val) != settype) {
 			*eflg = TRUE;
 			return;
 		}
@@ -1213,7 +1228,6 @@ spouse_indiseq (INDISEQ seq, VPTR (*copy_value_fnc)(VPTR val))
 	STRING spkey;
 	NODE indi;
 	INT num1;
-	VPTR newval;
 	if (!seq) return NULL;
 	tab = create_table();
 	sps = create_indiseq_impl(IValtype(seq));
@@ -1222,10 +1236,11 @@ spouse_indiseq (INDISEQ seq, VPTR (*copy_value_fnc)(VPTR val))
 		FORSPOUSES(indi, spouse, fam, num1)
 			spkey = indi_to_key(spouse);
 			if (!in_table(tab, spkey)) {
+				UNION u;
 				spkey = strsave(spkey);
-				newval = (*copy_value_fnc)(sval(el));
+				u.w = (*copy_value_fnc)(sval(el).w);
 				append_indiseq_impl(sps, spkey, NULL,
-				    newval, TRUE, TRUE);
+					u, TRUE, TRUE);
 				insert_table(tab, spkey, NULL);
 			}
 		ENDSPOUSES
@@ -1579,3 +1594,29 @@ INDISEQ get_all_othe (void)
 	}
 	return seq;
 }		
+/*=======================================================
+ * indiseq_is_valtype_ival -- Is this full of ivals ?
+ *=====================================================*/
+BOOLEAN
+indiseq_is_valtype_ival (INDISEQ seq)
+{
+	return IValtype(seq) == ISVAL_INT;
+}
+/*=======================================================
+ * indiseq_is_valtype_null -- Is this full of null values ?
+ *=====================================================*/
+BOOLEAN
+indiseq_is_valtype_null (INDISEQ seq)
+{
+	return IValtype(seq) == ISVAL_NUL;
+}
+/*=======================================================
+ * get_indiseq_ival -- Get ival from an indiseq element
+ *=====================================================*/
+INT
+get_indiseq_ival (INDISEQ seq, INT i)
+{
+	ASSERT(i >= 0 && i < ISize(seq));
+	return sval(IData(seq)[i]).i;
+
+}

@@ -37,11 +37,169 @@
 #include "liflines.h"
 #include "screen.h"
 
+/*********************************************
+ * local types
+ *********************************************/
+
+struct pv_block
+{
+	struct pv_block * next;
+	struct ptag values[100]; /* arbitrary size may be adjusted */
+};
+typedef struct pv_block *PV_BLOCK;
+#define BLOCK_VALUES (sizeof(((PV_BLOCK)0)->values)/sizeof(((PV_BLOCK)0)->values[0]))
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+static void free_all_pvalues(void);
+
+/*********************************************
+ * local variables
+ *********************************************/
+
 static char *ptypes[] = {
 	"PNONE", "PANY", "PINT", "PLONG", "PFLOAT", "PBOOL", "PSTRING",
 	"PGNODE", "PINDI", "PFAM", "PSOUR", "PEVEN", "POTHR", "PLIST",
 	"PTABLE", "PSET"};
 
+static PVALUE free_list = 0;
+static INT live_pvalues = 0;
+static PV_BLOCK block_list = 0;
+static BOOLEAN reports_time = FALSE;
+static BOOLEAN alloclog_save = FALSE;
+
+/*********************************************
+ * local function definitions
+ * body of module
+ *********************************************/
+
+/*========================================
+ * alloc_pvalue_memory -- return new pvalue memory
+ * We use a custom allocator, which lowers our overhead
+ *  (no heap overhead per pvalue, only per block)
+ *  and also allows us to clean them all up after the
+ *  report.
+ * NB: This is not traditional garbage collection - we're
+ *  not doing any live/dead analysis; we depend entirely
+ *  on carnal knowledge of the program.
+ * We also mark freed ones, so we can scan the blocks
+ *  to find leaked ones (which seems to be nearly
+ *  all of them)
+ * Created: 2001/01/19, Perry Rapp
+ *======================================*/
+static PVALUE
+alloc_pvalue_memory (void)
+{
+	PVALUE val;
+	
+	ASSERT(reports_time);
+	/*
+	We assume that all pvalues are scoped
+	within report processing. If this ceases to
+	be true, this has to be rethought.
+	Eg, we could use a bitmask in the type field to mark
+	truly heap-alloc'd pvalues, used outside of reports.
+	*/
+	if (!free_list) {
+		PV_BLOCK new_block = stdalloc(sizeof(*new_block));
+		INT i;
+		new_block->next = block_list;
+		block_list = new_block;
+		for (i=0; i<BLOCK_VALUES; i++) {
+			PVALUE val1 = &new_block->values[i];
+			val1->type = PFREED;
+			val1->value = free_list;
+			free_list = val1;
+		}
+	}
+	val = free_list;
+	free_list = free_list->value;
+	live_pvalues++;
+	return val;
+}
+/*========================================
+ * free_pvalue_memory -- return pvalue to free-list
+ * (see alloc_pvalue_memory comments)
+ * Created: 2001/01/19, Perry Rapp
+ *======================================*/
+static void
+free_pvalue_memory (PVALUE val)
+{
+	ASSERT(reports_time);
+	/* see alloc_pvalue_memory for discussion of this ASSERT */
+	/* put on free list */
+	val->type = PFREED;
+	val->value = free_list;
+	free_list = val;
+	live_pvalues--;
+	ASSERT(live_pvalues>=0);
+}
+/*======================================
+ * pvalues_begin -- Start of programs
+ * Created: 2001/01/20, Perry Rapp
+ *====================================*/
+void
+pvalues_begin (void)
+{
+	ASSERT(!reports_time);
+	reports_time = TRUE;
+#ifdef DEBUG_REPORT_MEMORY_DETAIL
+	alloclog_save = alloclog;
+	alloclog = TRUE;
+#endif
+}
+/*======================================
+ * pvalues_end -- End of programs
+ * Created: 2001/01/20, Perry Rapp
+ *====================================*/
+void
+pvalues_end (void)
+{
+	free_all_pvalues();
+	free_all_pnodes();
+	ASSERT(reports_time);
+	reports_time = FALSE;
+#ifdef DEBUG_REPORT_MEMORY
+	{
+		INT save = alloclog;
+		alloclog = TRUE;
+		report_alloc_live_count("pvalues_end");
+		alloclog = save;
+	}
+#ifdef DEBUG_REPORT_MEMORY_DETAIL
+	alloclog = alloclog_save;
+#endif
+#endif
+}
+/*======================================
+ * free_all_pvalues -- Free every pvalue
+ * Created: 2001/01/20, Perry Rapp
+ *====================================*/
+static void
+free_all_pvalues (void)
+{
+	PV_BLOCK block;
+	/* live_count is how many were leaked */
+	while ((block = block_list)) {
+		PV_BLOCK next = block->next;
+		free_list = 0;
+		if (live_pvalues) {
+			INT i;
+			for (i=0; i<BLOCK_VALUES; i++) {
+				PVALUE val1=&block->values[i];
+				if (val1->type != PFREED) {
+					/* leaked */
+					delete_pvalue(val1);
+				}
+			}
+		}
+		stdfree(block);
+		block_list = next;
+	}
+	free_list = 0;
+}
 /*========================================
  * create_pvalue -- Create a program value
  *======================================*/
@@ -52,7 +210,7 @@ create_pvalue (INT type,
 	PVALUE val;
 
 	if (type == PNONE) return NULL;
-	val = (PVALUE) stdalloc(sizeof(*val));
+	val = alloc_pvalue_memory();
 	switch (type) {
 	case PSTRING:
 		if (value) value = (VPTR) strsave((STRING) value);
@@ -67,7 +225,82 @@ create_pvalue (INT type,
 	return val;
 }
 /*========================================
+ * clear_pvalue -- Empty contents of pvalue
+ * Created: 2001/01/20, Perry Rapp
+ *======================================*/
+void
+clear_pvalue (PVALUE val)
+{
+	switch (ptype(val)) {
+	case PSTRING:
+		if (pvalue(val)) stdfree((STRING) pvalue(val));
+		break;
+	/*
+	embedded values have no referenced memory to clear
+	PINT, PFLOAT, PLONG, PBOOLEAN 
+	*/
+	case PANY:
+		{
+			int debug=1;
+		}
+		/*
+		I don't know what PANY is - 2001/01/20, Perry
+		*/
+		break;
+	case PGNODE:
+		{
+			/*
+			We need to call free_nodes for this ?
+			2001/01/20, Perry
+			*/
+			int debug=1;
+		}
+		break;
+	/*
+	nodes from caches do not need to be freed
+	(cache will reclaim them on its own)
+	PINDI, PFAM, PSOUR, PEVEN, POTHR
+	*/
+	case PLIST:
+		{
+			LIST list = (LIST) pvalue(val);
+			lrefcnt(list)--;
+			if (!lrefcnt(list)) {
+				/* let the block cleaner get the PVALUEs */
+				remove_list(list, 0);
+			}
+		}
+		break;
+	case PTABLE:
+		{
+			TABLE table = (TABLE)pvalue(val);
+			table->refcnt--;
+			if (!table->refcnt) {
+				/*
+				__insert, interp.c, and eval.c put pvalues in
+				(which block cleaner will get)
+				but what did yacc.y put in ?
+				2001/01/20, Perry Rapp
+				*/
+				remove_table(table, FREEKEY);
+			}
+		}
+		break;
+	case PSET:
+		{
+			INDISEQ seq = (INDISEQ)pvalue(val);
+			IRefcnt(seq)--;
+			if (!IRefcnt(seq)) {
+				/* let the block cleaner get the PVALUEs */
+				remove_indiseq(seq, FALSE);
+			}
+		}
+		break;
+	}
+}
+/*========================================
  * delete_pvalue -- Delete a program value
+ * see create_pvalue - Perry Rapp, 2001/01/19
  *======================================*/
 void
 delete_pvalue (PVALUE val)
@@ -78,16 +311,8 @@ delete_pvalue (PVALUE val)
 	llwprintf("\n");
 #endif	
 	if (!val) return;
-	switch (ptype(val)) {
-	case PSTRING:
-		if (pvalue(val)) stdfree((STRING) pvalue(val));
-		break;
-	case PANY: case PINT: case PFLOAT: case PLONG: case PGNODE:
-	case PINDI: case PFAM: case PSOUR: case PEVEN: case POTHR:
-	case PLIST: case PTABLE: case PSET:
-		break;
-	}
-	stdfree(val);
+	clear_pvalue(val);
+	free_pvalue_memory(val);
 }
 /*====================================
  * copy_pvalue -- Copy a program value
@@ -95,11 +320,73 @@ delete_pvalue (PVALUE val)
 PVALUE
 copy_pvalue (PVALUE val)
 {
+	VPTR newval;
 	if (!val) {
 		llwprintf("copy_pvalue: copying null pvalue\n");
 		return NULL;
 	}
-	return create_pvalue(ptype(val), pvalue(val));
+	switch (ptype(val)) {
+	/*
+	embedded values have no referenced memory
+	and are copied directly
+	PINT, PFLOAT, PLONG, PBOOLEAN 
+	*/
+	case PSTRING:
+		{
+			/*
+			PSTRING handling needs to be fixed
+			Some place(s) copy the pointer and delete the
+			old val.
+			2001/01/20, Perry Rapp
+			*/
+			int debug=1;
+		}
+		break;
+	case PANY:
+		{
+			/* ? I don't know what these are
+			2001/01/20, Perry
+			*/
+			int debug=1;
+		}
+		break;
+	case PGNODE:
+		{
+			/*
+			I've not figured out how memory for these works
+			2001/01/20, Perry Rapp
+			*/
+			int debug=1;
+		}
+		break;
+	/*
+	nodes from caches reference cache-managed memory
+	(so it is ok to just copy the pointer)
+	PINDI, PFAM, PSOUR, PEVEN, POTHR
+	*/
+	case PLIST:
+		{
+			LIST list = (LIST) pvalue(val);
+			lrefcnt(list)++;
+		}
+		break;
+	case PTABLE:
+		{
+			TABLE table = (TABLE)pvalue(val);
+			table->refcnt++;
+		}
+		break;
+	case PSET:
+		{
+			INDISEQ seq = (INDISEQ)pvalue(val);
+			IRefcnt(seq)++;
+		}
+		break;
+	}
+
+	newval = pvalue(val);
+
+	return create_pvalue(ptype(val), newval);
 }
 /*==================================
  * set_pvalue -- Set a program value
@@ -114,7 +401,7 @@ set_pvalue (PVALUE val,
 	show_pvalue(val);
 	llwprintf(" new type=%d new value = %d\n", type, value);
 #endif
-	if (ptype(val) == PSTRING && pvalue(val)) stdfree(pvalue(val));
+	clear_pvalue(val);
 	ptype(val) = type;
 	if (type == PSTRING && value) value = (VPTR) strsave((STRING) value);
 	pvalue(val) = value;
@@ -431,22 +718,22 @@ BOOLEAN
 eqv_pvalues (PVALUE val1,
              PVALUE val2)
 {
-    STRING v1, v2;
-    BOOLEAN rel = FALSE;
-    if(val1 && val2 && (ptype(val1) == ptype(val2))) {
-	switch (ptype(val1)) {
-	case PSTRING:
-		v1 = pvalue(val1);
-		v2 = pvalue(val2);
-		if(v1 && v2) rel = eqstr(v1, v2);
-		else rel = (v1 == v2);
-		break;
-	default:
-		rel = (pvalue(val1) == pvalue(val2));
-		break;
+	STRING v1, v2;
+	BOOLEAN rel = FALSE;
+	if(val1 && val2 && (ptype(val1) == ptype(val2))) {
+		switch (ptype(val1)) {
+		case PSTRING:
+			v1 = pvalue(val1);
+			v2 = pvalue(val2);
+			if(v1 && v2) rel = eqstr(v1, v2);
+			else rel = (v1 == v2);
+			break;
+		default:
+			rel = (pvalue(val1) == pvalue(val2));
+			break;
+		}
 	}
-    }
-    return rel;
+	return rel;
 }
 /*===========================================
  * eq_pvalues -- See if two PVALUEs are equal
@@ -759,12 +1046,12 @@ insert_pvtable (TABLE stab,     /* symbol table */
 void
 zero_pventry (ENTRY ent)      /* symbol table entry */
 {
-    PVALUE val;
-    if(ent && (val = ent->evalue)) {
-	ASSERT(is_pvalue(val));
-	delete_pvalue(val);
-	ent->evalue = 0;
-    }
+	PVALUE val;
+	if(ent && (val = ent->evalue)) {
+		ASSERT(is_pvalue(val));
+		delete_pvalue(val);
+		ent->evalue = 0;
+	}
 }
 /*========================================
  * remove_pvtable -- Remove symbol table 
@@ -774,14 +1061,14 @@ void
 remove_pvtable (TABLE stab)     /* symbol table */
 {
 #ifdef HOGMEMORYERROR
-    if(errfp == NULL) errfp = fopen("pbm.err", "w");
-    if(errfp) { fprintf(errfp, "traverse_table()...\n"); fflush(stderr); }
-    	traverse_table(stab, zero_pventry);
-    if(errfp) { fprintf(errfp, "remove_table(, DONTFREE)...\n"); fflush(stderr); }
+	if(errfp == NULL) errfp = fopen("pbm.err", "w");
+	if(errfp) { fprintf(errfp, "traverse_table()...\n"); fflush(stderr); }
+	traverse_table(stab, zero_pventry);
+	if(errfp) { fprintf(errfp, "remove_table(, DONTFREE)...\n"); fflush(stderr); }
 #endif
 	remove_table(stab, DONTFREE);
 #ifdef HOGMEMORYERROR
-    if(errfp) { fprintf(errfp, "remove_pvtable() done.\n"); fflush(stderr); }
+	 if(errfp) { fprintf(errfp, "remove_pvtable() done.\n"); fflush(stderr); }
 #endif
 }
 #endif

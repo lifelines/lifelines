@@ -32,14 +32,29 @@
 #include "standard.h"
 #include "llstdlib.h"
 
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+static void alloc_out(STRING str);
+
+/*********************************************
+ * local variables
+ *********************************************/
+
 static BOOLEAN logopen = FALSE;
 FILE *logfp = NULL;
 extern BOOLEAN alloclog;
 static char scratch[80];
-static void alloc_out(STRING str);
+static INT live_allocs = 0;
+
+/*********************************************
+ * local function definitions
+ * body of module
+ *********************************************/
 
 /*=================================================
- * __allocate -- Allocate memory - used by sdtalloc
+ * __allocate -- Allocate memory - used by stdalloc
  *===============================================*/
 void *
 __allocate (int len,       /* num of bytes to alloc */
@@ -50,11 +65,11 @@ __allocate (int len,       /* num of bytes to alloc */
 	int i;
 	if (len == 0) return NULL;
 	p = malloc(len);
-	if((p == NULL) && alloclog)
-		{
+	live_allocs++;
+	if((p == NULL) && alloclog) {
 		sprintf(scratch, "%8p ? %s\t%d\t%d", p, file, line, len);
 		alloc_out(scratch);
-		}
+	}
 	ASSERT(p);
 	for(i = 0; i <len; i++) p[i] = '\0';
 	if (alloclog) {
@@ -71,6 +86,7 @@ __deallocate (void *ptr,      /* memory to return */
               STRING file,    /* file returning */
               int line)       /* line num in file */
 {
+	if (ptr) live_allocs--;
 	if (alloclog) {
 		sprintf(scratch, "%8p F %s\t%d", ptr, file, line);
 		alloc_out(scratch);
@@ -90,4 +106,25 @@ alloc_out (STRING str)
 	}
 	fprintf(logfp, "%s\n", str);
 	fflush(logfp);
+}
+/*============================================
+ * alloc_count -- Count of live alloc'd blocks
+ * Created: 2001/01/19, Perry Rapp
+ *==========================================*/
+INT
+alloc_count (void)
+{
+	return live_allocs;
+}
+/*=======================================
+ * report_alloc_live_count -- Dump live count to alloc log
+ * Created: 2001/01/20, Perry Rapp
+ *=====================================*/
+void
+report_alloc_live_count (STRING str)
+{
+	char buffer[64];
+	alloc_out(str);
+	sprintf(buffer, "Live count: %d", live_allocs);
+	alloc_out(buffer);
 }

@@ -41,12 +41,22 @@
 #define FREEBOTH  3
 
 typedef struct etag *ENTRY;
-typedef ENTRY *TABLE;
 struct etag {
 	STRING ekey;
 	VPTR evalue;
 	ENTRY enext;
 };
+
+/*
+	table_s created 2001/01/20 by Perry Rapp
+	for reference counting when used in pvalues
+	(they were being leaked)
+*/
+struct table_s {
+	ENTRY *entries;
+	INT refcnt;
+};
+typedef struct table_s *TABLE;
 
 TABLE create_table(void);
 void insert_table(TABLE, STRING, VPTR);

@@ -41,6 +41,7 @@ create_list (void)
 	LIST list = (LIST) stdalloc(sizeof(*list));
 	lfirst(list) = llast(list) = NULL;
 	ltype(list) = LISTNOFREE;
+	lrefcnt(list) = 1;
 	return list;
 }
 /*===============================

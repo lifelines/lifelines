@@ -465,13 +465,15 @@ gen_gedcom (INDISEQ seq, int gengedcl)
 	 ones that get added during processing */
 	while (length_indiseq(closure.seq))
 	{
+		STRING sval;
 		tempseq = create_indiseq_sval();
 		/* move all from to-process list to
 		temporary processing list, because the
 		processing will add stuff to the to-process list */
 		FORINDISEQ(closure.seq, el, num)
+			sval = sval(el).w;
 			/* during gengedcom, all append_indiseqs alloc their own keys & vals (tags) */
-			append_indiseq_sval(tempseq, strsave(skey(el)), NULL, strsave(sval(el)),
+			append_indiseq_sval(tempseq, strsave(skey(el)), NULL, strsave(sval),
 				 TRUE, TRUE);
 		ENDINDISEQ
 		/* clear to-process list */

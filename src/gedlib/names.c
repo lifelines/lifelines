@@ -287,6 +287,7 @@ getfinitial (STRING name)       /* GEDCOM name */
 /*==================================================================
  * soundex -- Return SOUNDEX code of name; any case; return Z999 for
  *   problem names
+ * returns static buffer
  *================================================================*/
 STRING
 soundex (STRING name)   /* surname */

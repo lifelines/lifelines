@@ -373,7 +373,11 @@ choose_from_indiseq (
 	if (i == -1) return NULL;
 	listbadkeys=1;
 	/* which typed value indiseq is this ? */
-	if ((VPTR)-1 == sval(IData(seq)[i])) /* invalid pointer */
+	if (!indiseq_is_valtype_ival(seq) && !indiseq_is_valtype_null(seq))
+	{
+		int debug=1; /* Can this happen ? */
+	}
+	if (-1 == get_indiseq_ival(seq, i)) /* invalid pointer */
 		badkeylist[0] = 0;
 	else {
 		skey = skey(IData(seq)[i]);
