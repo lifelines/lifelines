@@ -91,11 +91,11 @@ typedef struct {
  * local function prototypes
  *********************************************/
 
-static void add_record_to_direct(CACHE cache, RECORD rec, STRING key);
+/* static void add_record_to_direct(CACHE cache, RECORD rec, STRING key); */
 static void cache_get_lock_counts(CACHE ca, INT * locks);
 static CACHE create_cache(STRING name, INT dirsize);
 static void delete_cache(CACHE * pcache);
-static void dereference(CACHEEL);
+/* static void dereference(CACHEEL); */
 static ZSTR get_cache_stats(CACHE ca);
 static CACHEEL get_free_cacheel(CACHE cache);
 static CACHEEL key_to_cacheel(CACHE cache, CNSTRING key, STRING tag, INT reportmode);
@@ -109,8 +109,9 @@ static CACHEEL node_to_cache(CACHE, NODE);
 static void put_node_in_cache(CACHE cache, CACHEEL cel, NODE node, STRING key);
 static NODE qkey_to_node(CACHE cache, CNSTRING key, STRING tag);
 static RECORD qkey_typed_to_record(CACHE cache, CNSTRING key, STRING tag);
-static CACHEEL qkey_to_typed_cacheel(STRING key);
+/* static CACHEEL qkey_to_typed_cacheel(STRING key); */
 static void remove_from_cache(CACHE, STRING);
+static BOOLEAN is_record_loaded (RECORD rec);
 
 
 INT csz_indi = 200;		/* cache size for indi */
@@ -1235,6 +1236,7 @@ CACHEEL qkey_to_othr_cacheel (STRING key)
 /*==============================================
  * qkey_to_typed_cacheel -- Lookup/load key
  *============================================*/
+/* unused
 static CACHEEL
 qkey_to_typed_cacheel (STRING key)
 {
@@ -1250,13 +1252,13 @@ qkey_to_typed_cacheel (STRING key)
 	}
 	ASSERT(0);
 }
+unused */
 /*==============================================
  * is_record_loaded -- Check if record has its node tree
  *============================================*/
-BOOLEAN
+static BOOLEAN
 is_record_loaded (RECORD rec)
 {
-	CACHEEL cel=0;
 	INT len=0;
 	STRING xref=0;
 
