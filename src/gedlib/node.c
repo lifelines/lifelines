@@ -1681,24 +1681,24 @@ copy_node (NODE node)
 NODE
 copy_nodes (NODE node, BOOLEAN kids, BOOLEAN sibs)
 {
-	NODE new, kin;
+	NODE newn, kin;
 	if (!node) return NULL;
-	new = copy_node(node);
+	newn = copy_node(node);
 	if (kids && nchild(node)) {
 		kin = copy_nodes(nchild(node), TRUE, TRUE);
 		ASSERT(kin);
-		nchild(new) = kin;
+		nchild(newn) = kin;
 		while (kin) {
-			nparent(kin) = new;
+			nparent(kin) = newn;
 			kin = nsibling(kin);
 		}
 	}
 	if (sibs && nsibling(node)) {
 		kin = copy_nodes(nsibling(node), kids, TRUE);
 		ASSERT(kin);
-		nsibling(new) = kin;
+		nsibling(newn) = kin;
 	}
-	return new;
+	return newn;
 }
 /*===============================================================
  * traverse_nodes -- Traverse nodes in tree while doing something

@@ -17,6 +17,11 @@
 
 	Add explanatory note about outstanding bug.
 
+	* ChangeLog src/gedlib/node.c src/gedlib/replace.c
+	src/hdrs/gedcom.h src/interp/write.c src/liflines/edit.c:
+
+	Fix __writeindi and __writefam (integrating replace.c with edit.c).
+
 2003-02-03 Matt Emmerton
 
 	* ChangeLog src/interp/write.c

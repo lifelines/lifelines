@@ -21,30 +21,16 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
-/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
- * write.c -- Handle changes to the database
+ * write.c -- Report language commands that change the database
  * Copyright(c) 1994-95 by T.T. Wetmore IV; all rights reserved
- * pre-SourceForge version information:
- *   2.3.6 - 01 Jan 94    3.0.0 - 01 Jan 94
- *   3.0.2 - 11 Dec 94    3.0.3 - 07 Aug 95
  *===========================================================*/
 
 #include "llstdlib.h"
-#include "table.h"
-#include "translat.h"
 #include "gedcom.h"
-#include "cache.h"
 #include "interp.h"
 #include "interpi.h"
-#include "liflines.h"
-#include "feedback.h"
 
-/*
- ***** WARNING !!!!!! **********
- Only createnode, addnode, __detachnode have been fixed, because evaluate() returns PVALUES, not NODES 
- 2003-02-02 (Perry)
- */
 
 /*********************************************
  * external/imported variables
@@ -171,39 +157,59 @@ __detachnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 }
 /*======================================
  * writeindi -- Write person to database
- *   writeindi(INDI) -> VOID
+ *   writeindi(INDI) -> BOOLEAN
  *====================================*/
 PVALUE
 __writeindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE indi1;
 	NODE indi2 = eval_indi(iargs(node), stab, eflg, NULL);
-	STRING rawrec, msg;
-	INT len;
+	STRING rawrec=0, msg;
+	INT len, cnt;
+	BOOLEAN rtn=FALSE;
 	if (*eflg) return NULL;
+
+	/* make a copy, so we can delete it */
+	indi2 = copy_nodes(indi2, TRUE, FALSE);
+
+	/* get existing record */
 	rawrec = retrieve_raw_record(rmvat(nxref(indi2)), &len);
 	if (!rawrec) {
 		/*
 		TODO: What do we do here ? Are they adding a new indi ?
 		or did they get the xref wrong ?
 		*/
-		return NULL;
+		goto end_writeindi;
 	}
 	ASSERT(indi1 = string_to_node(rawrec));
-	if (!replace_indi(indi1, indi2, &msg)) {
-		*eflg = TRUE;
-		prog_error(node, _("writeindi failed: %s"), msg ? msg : _("Unknown error"));
+ 
+	cnt = resolve_refn_links(indi2);
+	/* validate for showstopper errors */
+	if (!valid_indi_tree(indi2, &msg, indi1)) {
+		/* TODO: What to do with msg ? */
+		goto end_writeindi;
 	}
-/*
-TODO:
- indi2 is dead now
- but cache still points to it
- replace_indi stored indi1, but didn't fix the cache element pointing at indi2
- 2003-02-04 Perry
- Need to review how regular edit works, because it doesn't have this bug!
-*/
+	if (cnt > 0) {
+		/* unresolvable refn links */
+		/* TODO: optional argument to make this fatal ? */
+	}
+
+	if (equal_tree(indi1, indi2)) {
+		/* optimization :) */
+		rtn = TRUE;
+		goto end_writeindi;
+	}
+	if (readonly) {
+		/* TODO: database is read only error message */
+		goto end_writeindi;
+	}
+	
+	replace_indi(indi1, indi2);
 	strfree(&rawrec);
-	return NULL;
+	rtn = TRUE;
+
+end_writeindi:
+	return create_pvalue_from_bool(rtn);
 }
 /*=====================================
  * writefam -- Write family to database
@@ -214,22 +220,50 @@ __writefam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE fam1;
 	NODE fam2 = eval_fam(iargs(node), stab, eflg, NULL);
-	STRING rawrec, msg;
-	INT len;
+	STRING rawrec=0, msg;
+	INT len, cnt;
+	BOOLEAN rtn=FALSE;
 	if (*eflg) return NULL;
+
+	/* make a copy, so we can delete it */
+	fam2 = copy_nodes(fam2, TRUE, FALSE);
+
+	/* get existing record */
 	rawrec = retrieve_raw_record(rmvat(nxref(fam2)), &len);
 	if (!rawrec) {
 		/*
 		TODO: What do we do here ? Are they adding a new fam ?
 		or did they get the xref wrong ?
 		*/
-		return NULL;
+		goto end_writefam;
 	}
 	ASSERT(fam1 = string_to_node(rawrec));
-	if (!replace_fam(fam1, fam2, &msg)) {
-		*eflg = TRUE;
-		prog_error(node, _("writefam failed: %s"), msg ? msg : _("Unknown error"));
+
+	cnt = resolve_refn_links(fam2);
+	/* validate for showstopper errors */
+	if (!valid_fam_tree(fam2, &msg, fam1)) {
+		/* TODO: What to do with msg ? */
+		goto end_writefam;
 	}
+	if (cnt > 0) {
+		/* unresolvable refn links */
+		/* TODO: optional argument to make this fatal ? */
+	}
+
+	if (equal_tree(fam1, fam2)) {
+		/* optimization :) */
+		rtn = TRUE;
+		goto end_writefam;
+	}
+	if (readonly) {
+		/* TODO: database is read only error message */
+		goto end_writefam;
+	}
+	
+	replace_fam(fam1, fam2);
 	strfree(&rawrec);
-	return NULL;
+	rtn = TRUE;
+
+end_writefam:
+	return create_pvalue_from_bool(rtn);
 }

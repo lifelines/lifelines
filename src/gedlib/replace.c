@@ -36,39 +36,38 @@
 
 /*===================================================================
  * replace_indi -- Replace a person in database with modified version
+ *  indi1 = current record (copy from database, may or may not be in cache)
+ *  indi2 = new data
+ *  replaces all children nodes of indi1 with children nodes of indi2
+ *  consumes indi2 (calls free_node on it)
  *=================================================================*/
-BOOLEAN
-replace_indi (NODE indi1,       /* original person - as now in database */
-              NODE indi2,       /* as person should now be */
-              STRING *pmsg)
+void
+replace_indi (NODE indi1, NODE indi2)
 {
 	NODE name1, name2, refn1, refn2, sex, body, famc, fams;
 	NODE node, namen, refnn, name1n, refn1n, indi0;
 	STRING key;
 
-	*pmsg = NULL;
-	if (!valid_indi_tree(indi2, pmsg, indi1))  return FALSE;
-	if (equal_tree(indi1, indi2)) return TRUE;
-	if (readonly) {
-		*pmsg = (STRING) "Database is read only -- can't change person.";
-		return FALSE;
-	}
 
+	/* Move indi1 data into indi0 & delete it (saving names & refns */
 	split_indi_old(indi1, &name1, &refn1, &sex, &body, &famc, &fams);
 	indi0 = copy_node(indi1);
 	join_indi(indi0, NULL, NULL, sex, body, famc, fams);
 	free_nodes(indi0);
+	/* Move indi2 data into indi1, also copy out lists of names & refns */
 	split_indi_old(indi2, &name2, &refn2, &sex, &body, &famc, &fams);
 	namen = copy_nodes(name2, TRUE, TRUE);
 	refnn = copy_nodes(refn2, TRUE, TRUE);
 	join_indi(indi1, name2, refn2, sex, body, famc, fams);
 	free_node(indi2);
-	classify_nodes(&name1, &namen, &name1n);
-	classify_nodes(&refn1, &refnn, &refn1n);
 
-	resolve_refn_links(indi1);
+	/* Write data to database */
+
 	indi_to_dbase(indi1);
 	key = rmvat(nxref(indi1));
+	/* update name & refn info */
+	classify_nodes(&name1, &namen, &name1n);
+	classify_nodes(&refn1, &refnn, &refn1n);
 	for (node = name1; node; node = nsibling(node))
 		remove_name(nval(node), key);
 	for (node = namen; node; node = nsibling(node))
@@ -79,48 +78,47 @@ replace_indi (NODE indi1,       /* original person - as now in database */
 	for (node = refnn; node; node = nsibling(node))
 		if (nval(node)) add_refn(nval(node), key);
 
+/* now cleanup (indi1 tree is now composed of indi2 data) */
 	free_nodes(name1);
 	free_nodes(namen);
 	free_nodes(name1n);
 	free_nodes(refn1);
 	free_nodes(refnn);
 	free_nodes(refn1n);
-	*pmsg = (STRING) "Person modified okay.";
-	return TRUE;
 }
 /*==================================================================
  * replace_fam -- Replace a family in database with modified version
+ *  fam1 = current record (copy from database, may or may not be in cache)
+ *  fam2 = new data
+ *  replaces all children nodes of fam1 with children nodes of fam2
+ *  consumes fam2 (calls free_node on it)
  *================================================================*/
-BOOLEAN
-replace_fam (NODE fam1, /* original family - now in database */
-             NODE fam2, /* as family should now be */
-             STRING *pmsg)
+void
+replace_fam (NODE fam1, NODE fam2)
 {
 	NODE refn1, refn2, husb, wife, chil, body;
 	NODE refnn, refn1n, node, fam0;
 	STRING key;
 
-	*pmsg = NULL;
-	if (!valid_fam_tree(fam2, pmsg, fam1)) return FALSE;
-	if (equal_tree(fam1, fam2)) return TRUE;
-	if (readonly) {
-		*pmsg = (STRING) "Database is read only -- can't change family.";
-		return FALSE;
-	}
 
+	/* Move fam1 data into fam0 & delete it (saving refns) */
 	split_fam(fam1, &refn1, &husb, &wife, &chil, &body);
 	fam0 = copy_node(fam1);
 	join_fam(fam0, NULL, husb, wife, chil, body);
 	free_nodes(fam0);
+	/* Move fam2 data into fam1, also copy out list of refns */
 	split_fam(fam2, &refn2, &husb, &wife, &chil, &body);
 	refnn = copy_nodes(refn2, TRUE, TRUE);
 	join_fam(fam1, refn2, husb, wife, chil, body);
 	free_node(fam2);
-	classify_nodes(&refn1, &refnn, &refn1n);
 
-	resolve_refn_links(fam1);
+	/* Write data to database */
+	
+
 	fam_to_dbase(fam1);
 	key = rmvat(nxref(fam1));
+	/* remove deleted refns & add new ones */
+	classify_nodes(&refn1, &refnn, &refn1n);
 	for (node = refn1; node; node = nsibling(node))
 		if (nval(node)) remove_refn(nval(node), key);
 	for (node = refnn; node; node = nsibling(node))
@@ -128,6 +126,4 @@ replace_fam (NODE fam1, /* original family - now in database */
 	free_nodes(refn1);
 	free_nodes(refnn);
 	free_nodes(refn1n);
-	*pmsg = (STRING) "Family modified okay.";
-	return TRUE;
 }

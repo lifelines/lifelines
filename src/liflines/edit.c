@@ -77,10 +77,8 @@ write_indi_to_editfile (NODE indi)
 BOOLEAN
 edit_indi (RECORD irec1)  /* may be NULL */
 {
-	NODE indi1, indi2=0, name1, name2, refn1, refn2, sex, body, famc, fams;
-	NODE node, namen, refnn, name1n, refn1n, indi0;
+	NODE indi1, indi2=0;
 	BOOLEAN emp;
-	STRING msg, key;
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 
 	if (!irec1 && !(irec1 = ask_for_indi(_(qSidpedt), NOCONFIRM, NOASK1)))
@@ -97,6 +95,7 @@ edit_indi (RECORD irec1)  /* may be NULL */
 
 	do_edit();
 	if (readonly) {
+		STRING msg;
 		indi2 = file_to_node(editfile, ttmi, &msg, &emp);
 		if (!equal_tree(indi1, indi2))
 			message(_(qSronlye));
@@ -105,6 +104,7 @@ edit_indi (RECORD irec1)  /* may be NULL */
 	}
 	while (TRUE) {
 		INT cnt;
+		STRING msg;
 		indi2 = file_to_node(editfile, ttmi, &msg, &emp);
 		if (!indi2) {
 			if (ask_yes_or_no_msg(msg, _(qSiredit))) {
@@ -114,9 +114,9 @@ edit_indi (RECORD irec1)  /* may be NULL */
 			break;
 		}
 		cnt = resolve_refn_links(indi2);
-		/* check validation & allow user to reedit if invalid */
-		/* this is a showstopper, so alternative is to abort */
+		/* validate for showstopper errors */
 		if (!valid_indi_tree(indi2, &msg, indi1)) {
+			/* if fail a showstopper error, must reedit or abort */
 			if (ask_yes_or_no_msg(msg, _(qSiredit))) {
 				do_edit();
 				continue;
@@ -148,44 +148,13 @@ edit_indi (RECORD irec1)  /* may be NULL */
 		return FALSE;
 	}
 
-/* Prepare to change database */
+/* Move new data (in indi2 children) into existing indi1 tree */
 
-	/* Move indi1 data into indi0 & delete it (saving names & refns */
-	split_indi_old(indi1, &name1, &refn1, &sex, &body, &famc, &fams);
-	indi0 = copy_node(indi1);
-	join_indi(indi0, NULL, NULL, sex, body, famc, fams);
-	free_nodes(indi0);
-	/* Move indi2 data into indi1, also copy out lists of names & refns */
-	split_indi_old(indi2, &name2, &refn2, &sex, &body, &famc, &fams);
-	namen = copy_nodes(name2, TRUE, TRUE);
-	refnn = copy_nodes(refn2, TRUE, TRUE);
-	join_indi(indi1, name2, refn2, sex, body, famc, fams);
-	free_node(indi2);
+	replace_indi(indi1, indi2);
 
 /* Note in change history */
 	history_record_change(irec1);
-
-/* Write changed person to database */
-
-	indi_to_dbase(indi1);
-	key = rmvat(nxref(indi1));
-	classify_nodes(&name1, &namen, &name1n);
-	classify_nodes(&refn1, &refnn, &refn1n);
-	for (node = name1; node; node = nsibling(node))
-		remove_name(nval(node), key);
-	for (node = namen; node; node = nsibling(node))
-		add_name(nval(node), key);
-	rename_from_browse_lists(key);
-	for (node = refn1; node; node = nsibling(node))
-		if (nval(node)) remove_refn(nval(node), key);
-	for (node = refnn; node; node = nsibling(node))
-		if (nval(node)) add_refn(nval(node), key);
-	free_nodes(name1);
-	free_nodes(namen);
-	free_nodes(name1n);
-	free_nodes(refn1);
-	free_nodes(refnn);
-	free_nodes(refn1n);
+	
 	msg_status(_(qSgdpmod), indi_to_name(indi1, 35));
 	return TRUE;
 }
