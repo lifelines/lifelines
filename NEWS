@@ -4,6 +4,14 @@ http://lifelines.sourceforge.net
 
 New features added in 3.0.25
 ============================
+- New report functions sort & rsort.
+
+Bug fixes in 3.0.26
+============================
+- Codeset translation incorrect in menu items
+
+New features added in 3.0.25
+============================
 - Tries harder to diplay info on birth & death
 - HTML & TEX subcodings added to translation tables
 - Regularized report summaries (in report subdir)
