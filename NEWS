@@ -1,6 +1,12 @@
-LifeLines Source Release, Version 3.0.23
+LifeLines Source Release, Version 3.0.24
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
+
+Bug fixes in 3.0.24
+============================
+- Fixed broken use of last person for add child
+- Fixed compilation on Darwin
+- Fixed list functions
 
 
 New features added in 3.0.23

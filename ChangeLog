@@ -6,6 +6,11 @@
 	Add requeue tests to st/st_list.ll.
 	Revert enqueue to push, and getel & FORLIST to go from tail to head.
 
+	* ChangeLog NEWS configure.in build/rpm/lifelines.spec
+	src/hdrs/version.h:
+
+	Making version 3.0.24.
+
 2002-12-16 Perry Rapp
 
 	* ChangeLog po/fr.po:
