@@ -413,7 +413,7 @@ show_short_family (NODE fam, INT row, INT hgt, INT width)
 }
 /*================================================
  * show_pedigree -- Show person in pedigree format
- * new version by Perry 2000/12/03
+ * Complete rewrite: 2000/12/03, Perry Rapp
  *==============================================*/
 void
 show_pedigree (NODE indi)
@@ -428,136 +428,31 @@ show_pedigree (NODE indi)
 #endif
 	}
 
-	pedigree_show(indi);
+	pedigree_draw_person(indi, 9);
 }
-#if 0
-/* Because of a reported problem with 8-bit characters on Dec Alpha
- * the following replacement for mvwprintw is used.
- * It requires inserting the following declaration in the
- * routine in which it is used;
- *
- *   char s[300];
- */
-#define LLMVWPRINTW(w,y,x,f,n) sprintf(s,f,n); mvwaddstr(w,y,x,s);
 /*================================================
- * show_pedigree -- Show person in pedigree format
- * this version obsoleted, 2000/12/03
+ * show_gedcom -- Show node in gedcom format
+ * Created: 2001/01/27, Perry Rapp
  *==============================================*/
 void
-show_pedigree (NODE indi)
+show_gedcom (NODE node, INT menuht)
 {
-	char s[300];			/* used by mvwprintw replacement */
-	NODE f = indi_to_fath(indi);	/* 2nd generation */
-	NODE m = indi_to_moth(indi);
-	NODE ff = indi_to_fath(f);	/* 3rd generation */
-	NODE fm = indi_to_moth(f);
-	NODE mf = indi_to_fath(m);
-	NODE mm = indi_to_moth(m);
-	NODE fff = indi_to_fath(ff);	/* 4th generation */
-	NODE ffm = indi_to_moth(ff);
-	NODE fmf = indi_to_fath(fm);
-	NODE fmm = indi_to_moth(fm);
-	NODE mff = indi_to_fath(mf);
-	NODE mfm = indi_to_moth(mf);
-	NODE mmf = indi_to_fath(mm);
-	NODE mmm = indi_to_moth(mm);
-	NODE ffff;			/* 5th generation (if 31 lines) */
-	NODE fffm;
-	NODE ffmf;
-	NODE ffmm;
-	NODE fmff;
-	NODE fmfm;
-	NODE fmmf;
-	NODE fmmm;
-	NODE mfff;
-	NODE mffm;
-	NODE mfmf;
-	NODE mfmm;
-	NODE mmff;
-	NODE mmfm;
-	NODE mmmf;
-	NODE mmmm;
-	STRING indi_to_ped_fix();
 	WINDOW *w = main_win;
-	INT i;
+	int i;
 
-	for (i = 1; i <= PED_LINES; i++) {
+	for (i = 1; i <= ll_lines-menuht; i++) {
 		wmove(w, i, 1);
 		wclrtoeol(w);
 #ifndef BSD
 		mvwaddch(w, i, ll_cols-1, ACS_VLINE);
 #endif
 	}
-	if(PED_LINES < 31) {
-	LLMVWPRINTW(w, 1, 2, "                  %s", indi_to_ped_fix(fff, 59));
-	LLMVWPRINTW(w, 2, 2, "            %s", indi_to_ped_fix(ff, 65));
-	LLMVWPRINTW(w, 3, 2, "                  %s", indi_to_ped_fix(ffm, 59));
-	LLMVWPRINTW(w, 4, 2, "      %s", indi_to_ped_fix(f, 71));
-	LLMVWPRINTW(w, 5, 2, "                  %s", indi_to_ped_fix(fmf, 59));
-	LLMVWPRINTW(w, 6, 2, "            %s", indi_to_ped_fix(fm, 65));
-	LLMVWPRINTW(w, 7, 2, "                  %s", indi_to_ped_fix(fmm, 59));
- 	LLMVWPRINTW(w, 8, 2, "%s",indi_to_ped_fix(indi, 77));
-	LLMVWPRINTW(w, 9, 2, "                  %s", indi_to_ped_fix(mff, 59));
-	LLMVWPRINTW(w, 10, 2, "            %s", indi_to_ped_fix(mf, 65));
-	LLMVWPRINTW(w, 11, 2, "                  %s", indi_to_ped_fix(mfm, 59));
-	LLMVWPRINTW(w, 12, 2, "      %s", indi_to_ped_fix(m, 71));
-	LLMVWPRINTW(w, 13, 2, "                  %s", indi_to_ped_fix(mmf, 59));
-	LLMVWPRINTW(w, 14, 2, "            %s", indi_to_ped_fix(mm, 65));
-	LLMVWPRINTW(w, 15, 2, "                  %s", indi_to_ped_fix(mmm, 59));
-	}
-	else {
-	ffff = indi_to_fath(fff);	/* 5th generation */
-	fffm = indi_to_moth(fff);
-	ffmf = indi_to_fath(ffm);
-	ffmm = indi_to_moth(ffm);
-	fmff = indi_to_fath(fmf);
-	fmfm = indi_to_moth(fmf);
-	fmmf = indi_to_fath(fmm);
-	fmmm = indi_to_moth(fmm);
-	mfff = indi_to_fath(mff);
-	mffm = indi_to_moth(mff);
-	mfmf = indi_to_fath(mfm);
-	mfmm = indi_to_moth(mfm);
-	mmff = indi_to_fath(mmf);
-	mmfm = indi_to_moth(mmf);
-	mmmf = indi_to_fath(mmm);
-	mmmm = indi_to_moth(mmm);
-	LLMVWPRINTW(w, 1, 2, "                        %s", indi_to_ped_fix(ffff, 53));
-	LLMVWPRINTW(w, 2, 2, "                  %s", indi_to_ped_fix(fff, 59));
-	LLMVWPRINTW(w, 3, 2, "                        %s", indi_to_ped_fix(fffm, 53));
-	LLMVWPRINTW(w, 4, 2, "            %s", indi_to_ped_fix(ff, 65));
-	LLMVWPRINTW(w, 5, 2, "                        %s", indi_to_ped_fix(ffmf, 53));
-	LLMVWPRINTW(w, 6, 2, "                  %s", indi_to_ped_fix(ffm, 59));
-	LLMVWPRINTW(w, 7, 2, "                        %s", indi_to_ped_fix(ffmm, 53));
-	LLMVWPRINTW(w, 8, 2, "      %s", indi_to_ped_fix(f, 71));
-	LLMVWPRINTW(w, 9, 2, "                        %s", indi_to_ped_fix(fmff, 53));
-	LLMVWPRINTW(w,10, 2, "                  %s", indi_to_ped_fix(fmf, 59));
-	LLMVWPRINTW(w,11, 2, "                        %s", indi_to_ped_fix(fmfm, 53));
-	LLMVWPRINTW(w,12, 2, "            %s", indi_to_ped_fix(fm, 65));
-	LLMVWPRINTW(w,13, 2, "                        %s", indi_to_ped_fix(fmmf, 53));
-	LLMVWPRINTW(w,14, 2, "                  %s", indi_to_ped_fix(fmm, 59));
-	LLMVWPRINTW(w,15, 2, "                        %s", indi_to_ped_fix(fmmm, 53));
- 	LLMVWPRINTW(w,16, 2, "%s",indi_to_ped_fix(indi, 77));
-	LLMVWPRINTW(w,17, 2, "                        %s", indi_to_ped_fix(mfff, 53));
-	LLMVWPRINTW(w,18, 2, "                  %s", indi_to_ped_fix(mff, 59));
-	LLMVWPRINTW(w,19, 2, "                        %s", indi_to_ped_fix(mffm, 53));
-	LLMVWPRINTW(w,20, 2, "            %s", indi_to_ped_fix(mf, 65));
-	LLMVWPRINTW(w,21, 2, "                        %s", indi_to_ped_fix(mfmf, 53));
-	LLMVWPRINTW(w,22, 2, "                  %s", indi_to_ped_fix(mfm, 59));
-	LLMVWPRINTW(w,23, 2, "                        %s", indi_to_ped_fix(mfmm, 53));
-	LLMVWPRINTW(w,24, 2, "      %s", indi_to_ped_fix(m, 71));
-	LLMVWPRINTW(w,25, 2, "                        %s", indi_to_ped_fix(mmff, 53));
-	LLMVWPRINTW(w,26, 2, "                  %s", indi_to_ped_fix(mmf, 59));
-	LLMVWPRINTW(w,27, 2, "                        %s", indi_to_ped_fix(mmfm, 53));
-	LLMVWPRINTW(w,28, 2, "            %s", indi_to_ped_fix(mm, 65));
-	LLMVWPRINTW(w,29, 2, "                        %s", indi_to_ped_fix(mmmf, 53));
-	LLMVWPRINTW(w,30, 2, "                  %s", indi_to_ped_fix(mmm, 59));
-	LLMVWPRINTW(w,31, 2, "                        %s", indi_to_ped_fix(mmmm, 53));
-	}
+
+	pedigree_draw_gedcom(node, menuht);
 }
-#endif
 /*===============================================================
  * indi_to_ped_fix -- Construct person STRING for pedigree screen
+ * returns static buffer
  *=============================================================*/
 STRING
 indi_to_ped_fix (NODE indi,

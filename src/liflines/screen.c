@@ -600,6 +600,16 @@ main_menu (void)
 	}
 }
 /*=========================================
+ * indi_interact -- call interact for indi
+ * Created: 2001/01/27, Perry Rapp
+ *=======================================*/
+static INT
+indi_interact (void)
+{
+	return interact(main_win,
+		"efmscoygubhirdpnaxtzqACFGMSU()$#123456789+-!");
+}
+/*=========================================
  * indi_browse -- Handle indi_browse screen
  *=======================================*/
 INT
@@ -608,8 +618,29 @@ indi_browse (NODE indi)
 	if (cur_screen != ONE_PER_SCREEN) paint_one_per_screen();
 	show_person_main1(indi, 1, PER_LINES);
 	display_screen(ONE_PER_SCREEN);
-	return interact(main_win,
-		"efmscoygubhirdpnaxtzqACFGMSU()$#123456789+-");
+	return indi_interact();
+}
+/*=========================================
+ * indi_ged_browse -- Handle indi_browse screen
+ *  in gedcom mode
+ *=======================================*/
+INT
+indi_ged_browse (NODE indi)
+{
+	if (cur_screen != ONE_PER_SCREEN) paint_one_per_screen();
+	show_gedcom(indi, 13);
+	display_screen(ONE_PER_SCREEN);
+	return indi_interact();
+}
+/*=========================================
+ * fam_interact -- call interact for indi
+ * Created: 2001/01/27, Perry Rapp
+ *=======================================*/
+static INT
+fam_interact (void)
+{
+	return interact(main_win, 
+		"efmcnsardxtbzqABCFM()$#123456789+-!");
 }
 /*=======================================
  * fam_browse -- Handle fam_browse screen
@@ -620,8 +651,18 @@ fam_browse (NODE fam)
 	if (cur_screen != ONE_FAM_SCREEN) paint_one_fam_screen();
 	show_long_family(fam, 1, FAM_LINES, MAINWIN_WIDTH);
 	display_screen(ONE_FAM_SCREEN);
-	return interact(main_win, 
-		"efmcnsardxtbzqABCFM()$#123456789+-");
+	return fam_interact();
+}
+/*=======================================
+ * fam_ged_browse -- Handle fam_browse screen
+ *=====================================*/
+INT
+fam_ged_browse (NODE fam)
+{
+	if (cur_screen != ONE_FAM_SCREEN) paint_one_fam_screen();
+	show_gedcom(fam, 11);
+	display_screen(ONE_FAM_SCREEN);
+	return fam_interact();
 }
 /*=============================================
  * tandem_browse -- Handle tandem_browse screen

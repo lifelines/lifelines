@@ -13,7 +13,7 @@ New Features Added in 3.0.6
 
 - New report functions: 'lastindi' and 'lastfam'
 
-- New name scan option, with primitive wildcards (. and trailing *)
+- New name scan option, with wildcards (refer fpattern)
   (new s option on main menu)
 
 - Scrolling children (& spouses) in INDI & FAM browse
@@ -38,6 +38,16 @@ New Features Added in 3.0.6
 
 - New commandline argument to specify terminal size
   (eg, lines -u120,30)
+
+- New gedcom mode in indi & fam screens
+  (hotkey '!')
+  (hotkeys '(' and ')' to scroll)
+
+- Improved pedigree screen, with both ancestor & descendent modes
+  and scrolling and adjustable generation depth
+  (hotkey '&' to toggle ancestor/descendent)
+  (hotkeys '[' and ']' to adjust generation depth)
+  (hotkeys '(' and ')' to scroll)
 
 
 New Features in 3.0.4

@@ -55,9 +55,10 @@ BOOLEAN add_other(void);
 BOOLEAN add_source(void);
 
 /* pedigree.c */
+void pedigree_draw_person(NODE indi, INT menuht);
+void pedigree_draw_gedcom(NODE node, INT menuht);
 void pedigree_increase_generations(INT delta);
 void pedigree_reset_scroll(void);
-void pedigree_show(NODE indi);
 void pedigree_scroll(INT delta);
 void pedigree_toggle_mode(void);
 
@@ -77,9 +78,10 @@ void display_cache_stats(void);
 void put_out_line(WINDOW * win, INT x, INT y, STRING string, INT width, INT flag);
 void show_aux_display(NODE, INT, INT);
 void show_childnumbers(void);
+void show_gedcom(NODE node, INT menuht);
 void show_list(INDISEQ, INT, INT, INT);
 void show_long_family(NODE, INT row, INT hgt, INT width);
-void show_pedigree(NODE);
+void show_pedigree(NODE indi);
 void show_person(WINDOW *, NODE, INT row, INT hgt, INT width, INT *scroll);
 void show_person_main1(NODE, INT, INT);
 void show_person_main2(NODE, INT, INT);
