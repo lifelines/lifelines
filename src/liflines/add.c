@@ -535,11 +535,11 @@ add_family (RECORD sprec1, RECORD sprec2, RECORD chrec)
 	}
 
 /* Create new family */
+editfam:
 	spouse1 = nztop(sprec1);
 	spouse2 = nztop(sprec2);
 	child = nztop(chrec);
 
-editfam:
 	fam1 = create_node(NULL, "FAM", NULL, NULL);
 	husb = wife = chil = NULL;
 	if (spouse1) {
