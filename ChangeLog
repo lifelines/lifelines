@@ -13,6 +13,10 @@
 	Avoid reentrancy in __fatal (to avoid infinite ASSERT loop).
 	Fix some reference counts in adding new person and new family.
 
+	* ChangeLog src/liflines/browse.c src/liflines/screen.c
+
+	After adding new S/E/X record, browse to it.
+
 2005-02-02 Perry Rapp
 
 	* ChangeLog src/gedlib/gedcomi.h src/gedlib/keytonod.c

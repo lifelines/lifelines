@@ -204,7 +204,7 @@ static INT interact(UIWINDOW uiwin, STRING str, INT screen);
 static RECORD invoke_add_menu(void);
 static void invoke_cset_display(void);
 static void invoke_del_menu(void);
-static INT invoke_extra_menu(void);
+static INT invoke_extra_menu(RECORD *rec);
 static RECORD invoke_search_menu(void);
 static RECORD invoke_fullscan_menu(void);
 static void invoke_utils_menu(void);
@@ -679,9 +679,13 @@ main_menu (void)
 	case 't': edit_tt_menu(); break;
 	case 'u': invoke_utils_menu(); break;
 	case 'x': 
-		c = invoke_extra_menu();
-		if (c != BROWSE_QUIT)
-			main_browse(NULL, c);
+		{
+			RECORD rec=0;
+			c = invoke_extra_menu(&rec);
+			if (c != BROWSE_QUIT)
+				main_browse(rec, c);
+			/* main_browse consumed rec */
+		}
 		break;
 	case 'q': alldone = 1; break;
 	case 'Q': 
@@ -2147,7 +2151,7 @@ invoke_utils_menu (void)
  * invoke_extra_menu -- Handle extra menu
  *==============================*/
 static INT
-invoke_extra_menu (void)
+invoke_extra_menu (RECORD *prec)
 {
 	INT code;
 	UIWINDOW uiwin=0;
@@ -2162,6 +2166,7 @@ invoke_extra_menu (void)
 	win = uiw_win(uiwin);
 
 	while (1) {
+
 		activate_uiwin(uiwin);
 		wmove(win, 1, strlen(_(qSmn_xttl))+3);
 		code = interact(uiwin, "sex123456q", -1);
@@ -2171,13 +2176,13 @@ invoke_extra_menu (void)
 		case 's': return BROWSE_SOUR;
 		case 'e': return BROWSE_EVEN;
 		case 'x': return BROWSE_AUX;
-		case '1': edit_add_source(); return BROWSE_QUIT;
-		case '2': edit_source(NULL, &disp_long_rfmt); return BROWSE_QUIT;;
-		case '3': edit_add_event(); return BROWSE_QUIT;;
-		case '4': edit_event(NULL, &disp_long_rfmt); return BROWSE_QUIT;;
-		case '5': edit_add_other(); return BROWSE_QUIT;;
-		case '6': edit_other(NULL, &disp_long_rfmt); return BROWSE_QUIT;;
-		case 'q': return BROWSE_QUIT;;
+		case '1': *prec = edit_add_source(); return BROWSE_SOUR;
+		case '2': edit_source(NULL, &disp_long_rfmt); return BROWSE_QUIT;
+		case '3': *prec = edit_add_event(); return BROWSE_EVEN;
+		case '4': edit_event(NULL, &disp_long_rfmt); return BROWSE_QUIT;
+		case '5': *prec = edit_add_other(); return BROWSE_AUX;
+		case '6': edit_other(NULL, &disp_long_rfmt); return BROWSE_QUIT;
+		case 'q': return BROWSE_QUIT;
 		}
 	}
 }

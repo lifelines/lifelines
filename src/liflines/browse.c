@@ -112,6 +112,7 @@ static RECORD pick_create_new_family(RECORD current, RECORD save, STRING * addst
 static void pick_remove_spouse_from_family(RECORD frec);
 static void save_hist_lists(void);
 static void save_nkey_list(STRING key, struct hist * histp);
+static void setrecord(RECORD * dest, RECORD * src);
 
 /*********************************************
  * local variables
@@ -232,14 +233,8 @@ main_browse (RECORD rec1, INT code)
 			}
 		}
 	}
-	if (rec1) {
-		delref_record(rec1);
-		rec1 = 0;
-	}
-	if (rec2) {
-		delref_record(rec2);
-		rec2 = 0;
-	}
+	setrecord(&rec1, NULL);
+	setrecord(&rec2, NULL);
 }
 /*================================================
  * goto_indi_child - jump to child by number
