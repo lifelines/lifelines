@@ -5,6 +5,12 @@
 	trailing *) and use lifelines case-insensitive code
 	(which handles the Finnish option).
 
+	* liflines/merge.c:
+	Fix ghostnames bug in merge.c.
+
+	* gedlib/names.c:
+	Fix a bug I accidentally introduced into names.c in 1.8.
+
 2000-12-11  Marc Nozell  <marc@nozell.com>
 
 	* liflines/scan.c: Fix broken build.  strcmpi (Windows) vs
