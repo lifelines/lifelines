@@ -47,6 +47,8 @@ extern STRING qSasknam;
 extern STRING qSidplst, qSlstnew, qSmrkper;
 extern INDISEQ current_seq;
 
+static void name_the_list(INDISEQ seq);
+
 /*=======================================
  * browse_list -- Handle list browse mode
  *=====================================*/
@@ -54,7 +56,7 @@ INT
 browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 {
 	INT c, top, cur, mark, len, tmp, rc;
-	STRING key, name, newname, lname="";
+	STRING key, name, lname="";
 	RECORD rec=0;
 	INDISEQ seq, newseq;
 
@@ -225,14 +227,7 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 			message(_(qSlstnew));
 			break;
 		case 'n':        /* Name this list */
-			newname = ask_for_string(_(qSlstwht), _(qSasknam));
-			if (!newname || *newname == 0)
-				message(_(qSlstnon));
-			else {
-				newname = strsave(newname);
-				add_browse_list(newname, copy_indiseq(seq));
-				msg_info(_(qSlstnam), newname);
-			}
+			name_the_list(seq);
 			break;
 		case 'x':        /* Swap current with marked */
 			if (mark == -1) break;
@@ -247,4 +242,19 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 			return BROWSE_QUIT;
 		}
 	}
+}
+/*=======================================
+ * name_the_list -- Assign a name to sequence
+ *=====================================*/
+static void
+name_the_list (INDISEQ seq)
+{
+	char name[MAXPATHLEN];
+	if (!ask_for_string(_(qSlstwht), _(qSasknam), name, sizeof(name))
+		|| !name[0]) {
+		message(_(qSlstnon));
+		return;
+	}
+	add_browse_list(strsave(name), copy_indiseq(seq));
+	msg_info(_(qSlstnam), name);
 }

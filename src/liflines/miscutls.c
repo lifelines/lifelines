@@ -60,15 +60,18 @@ key_util (void)
 void
 who_is_he_she (void)
 {
-	STRING key, str, rawrec;
+	STRING str, rawrec;
 	NODE indi;
 	INT len;
 	char nkey[100];
 	TRANMAPPING ttmd = get_tranmapping(MINDS);
+	char key[20];
 
-	key = ask_for_string("Please enter person's internal key value.",
-	    "enter key:");
-	if (!key || *key == 0) return;
+	if (!ask_for_string(_("Please enter person's internal key value."),
+	    _("enter key:"), key, sizeof(key))
+		 || !key[0])
+		 return;
+
 	nkey[0] = 'I';
 	if (*key == 'I')
 		strcpy(nkey, key);

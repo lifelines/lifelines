@@ -54,6 +54,7 @@ extern char badkeylist[];
 extern STRING qSntchld,qSntprnt,qSidfbrs,qSentnam,qSnotone,qSifone;
 extern STRING qSnofopn,qSidbrws,qSwhtfname,qSwhtfnameext;
 extern STRING qSnonamky,qSparadox,qSaskint,qSmisskeys,qSbadkeyptr;
+extern STRING qSfn2long;
 
 /*********************************************
  * local function prototypes
@@ -108,13 +109,17 @@ ask_for_fam (STRING pttl, STRING sttl)
 /*===========================================
  * ask_for_int -- Ask user to provide integer
  * titl: [IN]  prompt title
+ * TODO: change to BOOLEAN return for failure
  *=========================================*/
 INT
 ask_for_int (STRING ttl)
 {
 	INT ival, c, neg;
-	STRING p = ask_for_string(ttl, _(qSaskint));
+	char buffer[MAXPATHLEN];
 	while (TRUE) {
+		STRING p = buffer;
+		if (!ask_for_string(ttl, _(qSaskint), buffer, sizeof(buffer)))
+			continue; /* TODO: provide failure handling */
 		neg = 1;
 		while (iswhite(*p++))
 			;
@@ -136,32 +141,7 @@ ask_for_int (STRING ttl)
 			--p;
 			if (*p == 0) return ival*neg;
 		}
-		p = ask_for_string(ttl, _(qSaskint));
 	}
-}
-/*============================================
- * expand_special_chars -- Replace ~ with home
- *==========================================*/
-static int
-expand_special_chars (STRING fname, STRING buffer, INT buflen)
-{
-#ifdef WIN32
-	if (fname[0] == '~')	{
-		/* replace ~ with user's home directory, if present */
-		char * home = (STRING)getenv("USERPROFILE");
-		if (home && home[0]
-			&& (INT)(strlen(home)+strlen(fname)+1) < buflen) {
-			strncpy(buffer, home, sizeof(buffer));
-			strcat(buffer, fname+1);
-			return 1;
-		}
-	}
-#else
-	fname=fname; /* unused */
-	buffer=buffer; /* unused */
-	buflen=buflen; /* unused */
-#endif
-	return 0;
 }
 /*======================================
  * ask_for_file_worker -- Ask for and open file
@@ -178,46 +158,43 @@ ask_for_file_worker (STRING mode,
                      DIRECTION direction)
 {
 	FILE *fp;
-	STRING fname;
-	char fnamebuf[512];
+	char prompt[MAXPATHLEN];
+	char fname[MAXPATHLEN];
 	int elen, flen;
-	char pathtemp[MAXPATHLEN];
+	BOOLEAN rtn;
 
-	make_fname_prompt(fnamebuf, sizeof(fnamebuf), ext);
+	make_fname_prompt(prompt, sizeof(prompt), ext);
 
 	if (direction==INPUT)
-		fname = ask_for_input_filename(ttl, path, fnamebuf);
+		rtn = ask_for_input_filename(ttl, path, prompt, fname, sizeof(fname));
 	else
-		fname = ask_for_output_filename(ttl, path, fnamebuf);
-
+		rtn = ask_for_output_filename(ttl, path, prompt, fname, sizeof(fname));
+	
 	if (pfname) *pfname = 0; /* 0 indicates we didn't try to open */
 
-	if (ISNULL(fname)) return NULL;
+	if (!rtn || !fname[0]) return NULL;
 
-	if (pfname) *pfname = fname;
 
 	if(ext) {
 		elen = strlen(ext);
 		flen = strlen(fname);
-		if((elen < flen) && (strcmp(fname+flen-elen, ext) == 0))
+		if (elen<flen && path_match(fname+flen-elen, ext))
 			ext = NULL;	/* the file name has the extension already */
 	}
 
-	if (expand_special_chars(fname, pathtemp, sizeof(pathtemp)))
-	{
-		/* TO DO - use pathtemp - but what about space in fname ? */
+	if (!expand_special_fname_chars(fname, sizeof(fname))) {
+		msg_error(_(qSfn2long));
+		return NULL;
 	}
+
 
 	if (ISNULL(path)) {
 		fp = NULL;
 		if(ext) {
-			sprintf(fnamebuf, "%s%s", fname, ext);
-			fp = fopen(fnamebuf, mode);
-			if(fp && pfname) *pfname = strsave(fnamebuf);
-		} else {
-			fp = fopen(fname, mode);
-			if(fp && pfname) *pfname = fname;
+			llstrapp(fname, sizeof(fname), ext);
 		}
+		fp = fopen(fname, mode);
+		if (fp && pfname) *pfname = strsave(fname);
 		if (fp == NULL) {
 			msg_error(_(qSnofopn), fname);
 			return NULL;
@@ -295,8 +272,10 @@ INDISEQ
 ask_for_indiseq (STRING ttl, char ctype, INT *prc)
 {
 	INDISEQ seq;
-	STRING name = ask_for_string(ttl, _(qSidbrws));
+	char name[MAXPATHLEN];
 	*prc = RC_DONE;
+	if (!ask_for_string(ttl, _(qSidbrws), name, sizeof(name)))
+		return NULL;
 	if (!name || *name == 0) return NULL;
 	*prc = RC_NOSELECT;
 	seq = str_to_indiseq(name, ctype);

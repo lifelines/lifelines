@@ -118,9 +118,9 @@ __getstr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PNODE arg2;
-	STRING val;
 	STRING msg = _(qSchoostrttl);
-	PVALUE mval = NULL;
+	PVALUE mval = NULL, ansval;
+	char buffer[MAXPATHLEN];
 	if (!iistype(arg, IIDENT)) {
 		prog_var_error(node, stab, arg, NULL, nonvarx, "getstr", "1");
 		*eflg = TRUE;
@@ -137,8 +137,12 @@ __getstr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		}
 		msg = pvalue_to_string(mval);
 	}
-	val = ask_for_string(msg, _(qSaskstr));
-	assign_iden(stab, iident(arg), create_pvalue_from_string(val));
+	if (!ask_for_string(msg, _(qSaskstr), buffer, sizeof(buffer))) {
+		/* TODO: exit handling ? */
+		buffer[0]=0;
+	}
+	ansval = create_pvalue_from_string(buffer);
+	assign_iden(stab, iident(arg), ansval);
 	if (mval) delete_pvalue(mval);
 	return NULL;
 }

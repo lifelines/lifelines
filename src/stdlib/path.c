@@ -65,6 +65,7 @@ static BOOLEAN
 is_absolute_path (CNSTRING dir)
 {
 	if (is_dir_sep(*dir) || *dir == '.') return TRUE;
+	if (*dir == '~') return TRUE;
 #ifdef WIN32
 	if (is_dir_sep(*dir) || (*dir && dir[1] == ':' && isalpha((uchar)*dir))) return TRUE;
 #endif
@@ -211,6 +212,7 @@ filepath (CNSTRING name,
 	while (*p) {
 		q = buf2;
 		strcpy(q, p);
+		expand_special_fname_chars(buf2, sizeof(buf2));
 		q += strlen(q);
 		if (q>buf2 && !is_dir_sep(q[-1])) {
 			strcpy(q, LLSTRDIRSEPARATOR);
@@ -231,6 +233,7 @@ filepath (CNSTRING name,
 	p = buf1;
 	q = buf2;
 	strcpy(q, p);
+	expand_special_fname_chars(buf2, sizeof(buf2));
 	q += strlen(q);
 	strcpy(q, LLSTRDIRSEPARATOR);
 	q++;
@@ -397,4 +400,46 @@ chop_path (STRING path, STRING dirs)
 	}
 	*(++p) = 0;
 	return ndirs;
+}
+/*============================================
+ * get_home -- Find user's home
+ *==========================================*/
+static STRING
+get_home (void)
+{
+	STRING home;
+#ifdef WIN32
+	/* replace ~ with user's home directory, if present */
+	/* TODO: Or HOMEPATH, HOMESHARE, or USERPROFILE ? */
+	home = (STRING)getenv("APPDATA");
+#else
+	home = (STRING)getenv("HOME");
+#endif
+	return home;
+}
+/*============================================
+ * expand_special_fname_chars -- Replace ~ with home
+ *==========================================*/
+BOOLEAN
+expand_special_fname_chars (STRING buffer, INT buflen)
+{
+	if (buffer[0]=='~') {
+		if (is_dir_sep(buffer[1])) {
+			STRING home = get_home();
+			if (home && home[0]) {
+				STRING tmp;
+				if ((INT)strlen(buffer)+(INT)strlen(home)+1 > buflen) {
+					return FALSE;
+				}
+				tmp = strsave(buffer);
+				buffer[0] = 0;
+				llstrapp(buffer, buflen, home);
+				llstrapp(buffer, buflen, tmp+1);
+				strfree(&tmp);
+				return TRUE;
+			}
+		}
+		/* TODO: handle other homes (eg, ~someone/) ? */
+	}
+	return TRUE;
 }

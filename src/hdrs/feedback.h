@@ -55,8 +55,8 @@ void llvwprintf(STRING fmt, va_list args);
 INT msg_width(void);
 
 /* called by ask.c */
-STRING ask_for_input_filename (STRING ttl, STRING path, STRING prmpt);
-STRING ask_for_output_filename (STRING ttl, STRING path, STRING prmpt);
+BOOLEAN ask_for_input_filename(STRING ttl, STRING path, STRING prmpt, STRING buffer, INT buflen);
+BOOLEAN ask_for_output_filename(STRING ttl, STRING path, STRING prmpt, STRING buffer, INT buflen);
 
 
 /* called by signal handler before invoking exit() */
@@ -69,8 +69,8 @@ void do_edit(void);
 
 /* msg boxes */
 BOOLEAN ask_yes_or_no_msg(STRING, STRING);
-STRING ask_for_string(STRING ttl, STRING prmpt);
-STRING ask_for_string2(STRING ttl1, STRING ttl2, STRING prmpt);
+BOOLEAN ask_for_string(STRING ttl, STRING prmpt, STRING buffer, INT buflen);
+BOOLEAN ask_for_string2(STRING ttl1, STRING ttl2, STRING prmpt, STRING buffer, INT buflen);
 
 /* called by interp when finished */
 void refresh_stdout(void);

@@ -92,7 +92,7 @@ static UIWINDOW extra_menu_win=NULL;
 extern INT alldone;
 extern BOOLEAN progrunning;
 extern STRING qSwin2big,qSwin2small;
-extern STRING empstr,empstr71,empstr120,readpath,qSronlye,qSdataerr;
+extern STRING empstr,empstr71,empstr120,readpath,btreepath,qSronlye,qSdataerr;
 extern STRING qSabverr,qSuoperr,qSbadttnum,qSnosuchtt,qSmouttt,qSmintt;
 extern STRING qSmtitle,qScright,qSdbname,qSdbimmut,qSdbrdonly,qSplschs;
 extern STRING qSmn_unkcmd,qSronlya,qSronlyr;
@@ -165,6 +165,8 @@ static void add_shims_info(LIST list);
 static void append_to_msg_list(STRING msg);
 static INT array_interact(STRING ttl, INT len, STRING *strings
 	, BOOLEAN selecting, DETAILFNC detfnc, void *param);
+static BOOLEAN ask_for_filename_impl(STRING ttl, STRING path, STRING prmpt
+	, STRING buffer, INT buflen);
 static void begin_action(void);
 static INT calculate_screen_lines(INT screen);
 static void check_stdout(void);
@@ -188,7 +190,7 @@ static void edit_tt_menu(void);
 static void edit_user_options(void);
 static void edit_place_table(void);
 static void end_action(void);
-static STRING get_answer(UIWINDOW uiwin, INT row, INT col);
+BOOLEAN get_answer(UIWINDOW uiwin, INT row, INT col, STRING buffer, INT buflen);
 static INT handle_list_cmds(listdisp * ld, INT code);
 static BOOLEAN handle_popup_list_resize(listdisp * ld, INT code);
 static INT interact(UIWINDOW uiwin, STRING str, INT screen);
@@ -364,7 +366,7 @@ repaint_main_menu (UIWINDOW uiwin)
 	INT row;
 	char title[80];
 	INT width=sizeof(title);
-
+	STRING str;
 
 	uierase(uiwin);
 	draw_win_box(win);
@@ -375,7 +377,8 @@ repaint_main_menu (UIWINDOW uiwin)
 	llstrncpyf(title, width, _(qSmtitle), get_lifelines_version(ll_cols-4));
 	mvwaddstr(win, 1, 2, title);
 	mvwaddstr(win, 2, 4, _(qScright));
-	mvwprintw(win, 3, 4, _(qSdbname), readpath);
+	str = getoptint("FullDbPath", 1) ? readpath : btreepath;
+	mvwprintw(win, 3, 4, _(qSdbname), str);
 	if (immutable)
 		wprintw(win, _(qSdbimmut));
 	else if (readonly)
@@ -919,56 +922,64 @@ list_browse (INDISEQ seq, INT top, INT * cur, INT mark)
  * ask_for_db_filename -- Ask user for lifelines database directory
  *  ttl:   [IN]  title of question (1rst line)
  *  prmpt: [IN]  prompt of question (2nd line)
- * returns static buffer
  *====================================*/
-STRING
-ask_for_db_filename (STRING ttl, STRING prmpt, STRING basedir)
+BOOLEAN
+ask_for_db_filename (STRING ttl, STRING prmpt, STRING basedir, STRING buffer, INT buflen)
 {
 	basedir=basedir; /* unused */
 	/* This could have a list of existing ones like askprogram.c */
-	return ask_for_string(ttl, prmpt);
+	return ask_for_string(ttl, prmpt, buffer, buflen);
 }
 /*======================================
  * ask_for_output_filename -- Ask user for filename to which to write
  *  returns static buffer
- *  ttl1:   [IN] title of question (1rst line)
- *  prmpt:  [IN] prompt of question (3rd line)
+ *  ttl1:    [IN]  title of question (1rst line)
+ *  prmpt:   [IN]  prompt of question (3rd line)
+ *  buffer:  [OUT] response
+ *  buflen:  [IN]  max size of response
  *====================================*/
-STRING
-ask_for_output_filename (STRING ttl, STRING path, STRING prmpt)
+BOOLEAN
+ask_for_output_filename (STRING ttl, STRING path, STRING prmpt, STRING buffer, INT buflen)
 {
-	/* display current path (truncated to fit) */
-	char curpath[120];
-	STRING ptr = curpath;
-	INT mylen = sizeof(curpath);
-	if (mylen > uiw_cols(ask_msg_win)-2)
-		mylen = uiw_cols(ask_msg_win)-2;
-	ptr[0]=0;
-	llstrcatn(&ptr, _(qSiddefpath), &mylen);
-	llstrcatn(&ptr, compress_path(path, mylen-1), &mylen);
-
-	return ask_for_string2(ttl, curpath, prmpt);
+	/* curses version doesn't differentiate input from output prompts */
+	return ask_for_filename_impl(ttl, path, prmpt, buffer, buflen);
 }
 /*======================================
  * ask_for_input_filename -- Ask user for filename from which to read
  *  returns static buffer
- *  ttl1:   [IN] title of question (1rst line)
- *  prmpt:  [IN] prompt of question (3rd line)
+ *  ttl1:    [IN]  title of question (1rst line)
+ *  prmpt:   [IN]  prompt of question (3rd line)
+ *  buffer:  [OUT] response
+ *  buflen:  [IN]  max size of response
  *====================================*/
-STRING
-ask_for_input_filename (STRING ttl, STRING path, STRING prmpt)
+BOOLEAN
+ask_for_input_filename (STRING ttl, STRING path, STRING prmpt, STRING buffer, INT buflen)
+{
+	/* curses version doesn't differentiate input from output prompts */
+	return ask_for_filename_impl(ttl, path, prmpt, buffer, buflen);
+}
+/*======================================
+ * ask_for_input_filename_impl -- Ask user for a filename
+ *  (in curses version, we don't differentiate input from output prompts)
+ *  ttl1:    [IN]  title of question (1rst line)
+ *  path:    [IN]  path prompt (2nd line)
+ *  prmpt:   [IN]  prompt of question (3rd line)
+ *  buffer:  [OUT] response
+ *  buflen:  [IN]  max size of response
+ *====================================*/
+static BOOLEAN
+ask_for_filename_impl (STRING ttl, STRING path, STRING prmpt, STRING buffer, INT buflen)
 {
 	/* display current path (truncated to fit) */
 	char curpath[120];
-	STRING ptr = curpath;
-	INT mylen = sizeof(curpath);
-	if (mylen > uiw_cols(ask_msg_win)-2)
-		mylen = uiw_cols(ask_msg_win)-2;
-	ptr[0]=0;
-	llstrcatn(&ptr, _(qSiddefpath), &mylen);
-	llstrcatn(&ptr, compress_path(path, mylen-1), &mylen);
+	INT len = sizeof(curpath);
+	if (len > uiw_cols(ask_msg_win)-2)
+		len = uiw_cols(ask_msg_win)-2;
+	curpath[0] = 0;
+	llstrapp(curpath, len, _(qSiddefpath));
+	llstrapp(curpath, len, compress_path(path, len-strlen(curpath)-1));
 
-	return ask_for_string2(ttl, curpath, prmpt);
+	return ask_for_string2(ttl, curpath, prmpt, buffer, buflen);
 }
 /*======================================
  * refresh_main -- touch & refresh main or stdout
@@ -983,60 +994,52 @@ refresh_main (void)
 /*======================================
  * ask_for_string -- Ask user for string
  *  returns static buffer
- *  ttl:   [IN]  title of question (1rst line)
- *  prmpt: [IN]  prompt of question (2nd line)
- * returns static buffer (less than 100 chars)
- * ask_for_string localizes both of its arguments
+ *  ttl:     [IN]  title of question (1rst line)
+ *  prmpt:   [IN]  prompt of question (2nd line)
+ *  buffer:  [OUT] response
+ *  buflen:  [IN]  max size of response
  *====================================*/
-STRING
-ask_for_string (STRING ttl, STRING prmpt)
+BOOLEAN
+ask_for_string (STRING ttl, STRING prmpt, STRING buffer, INT buflen)
 {
 	UIWINDOW uiwin = ask_win;
 	WINDOW *win = uiw_win(uiwin);
-	STRING rv, p;
+	BOOLEAN rtn;
 	uierase(uiwin);
 	draw_win_box(win);
 	mvwaddstr(win, 1, 1, ttl);
 	mvwaddstr(win, 2, 1, prmpt);
 	activate_uiwin(uiwin);
-	rv = get_answer(uiwin, 2, strlen(prmpt) + 2); /* less than 100 chars */
+	rtn = get_answer(uiwin, 2, strlen(prmpt) + 2, buffer, buflen);
 	deactivate_uiwin_and_touch_all();
-	if (!rv) return (STRING) "";
-	p = rv;
-	while (chartype((uchar)*p) == WHITE)
-		p++;
-	striptrail(p);
-	return p;
+	return rtn;
 }
 /*======================================
  * ask_for_string2 -- Ask user for string
  * Two lines of title
  *  returns static buffer
- *  ttl1:   [IN] title of question (1rst line)
- *  ttl2:   [IN] 2nd line of title
- *  prmpt:  [IN] prompt of question (3rd line)
- * returns static buffer (less than 100 chars)
+ *  ttl1:    [IN]  title of question (1rst line)
+ *  ttl2:    [IN]  2nd line of title
+ *  prmpt:   [IN]  prompt of question (3rd line)
+ *  buffer:  [OUT] response
+ *  buflen:  [IN]  max size of response
  *====================================*/
-STRING
-ask_for_string2 (STRING ttl1, STRING ttl2, STRING prmpt)
+BOOLEAN
+ask_for_string2 (STRING ttl1, STRING ttl2, STRING prmpt, STRING buffer, INT buflen)
 {
 	UIWINDOW uiwin = ask_msg_win;
 	WINDOW *win = uiw_win(uiwin);
-	STRING rv, p;
+	BOOLEAN rtn;
 	uierase(uiwin);
 	draw_win_box(win);
 	mvwaddstr(win, 1, 1, ttl1);
 	mvwaddstr(win, 2, 1, ttl2);
 	mvwaddstr(win, 3, 1, prmpt);
 	wrefresh(win);
-	rv = get_answer(uiwin, 3, strlen(prmpt) + 2); /* less than 100 chars */
-	if (!rv) return (STRING) "";
-	p = rv;
-	while (chartype((uchar)*p) == WHITE)
-		p++;
-	striptrail(p);
-	refresh_main();
-	return p;
+	activate_uiwin(uiwin);
+	rtn = get_answer(uiwin, 3, strlen(prmpt) + 2, buffer, buflen);
+	deactivate_uiwin_and_touch_all();
+	return rtn;
 }
 /*========================================
  * ask_yes_or_no -- Ask yes or no question
@@ -2264,27 +2267,27 @@ interact (UIWINDOW uiwin, STRING str, INT screen)
  *  uiwin:   [IN] which window to use
  *  row:     [IN]  prompt location (vert)
  *  col:     [IN]  prompt location (horiz)
- *  returns static buffer <=MAXPATHLEN length
+ *  buffer:  [OUT] response
+ *  buflen:  [IN]  max size of response
  *==========================================*/
-STRING
-get_answer (UIWINDOW uiwin, INT row, INT col)
+BOOLEAN
+get_answer (UIWINDOW uiwin, INT row, INT col, STRING buffer, INT buflen)
 {
-	static char lcl[MAXPATHLEN];
 	WINDOW *win = uiw_win(uiwin);
-	INT len=sizeof(lcl);
-	if (len > uiw_cols(uiwin)-col-1)
-		len = uiw_cols(uiwin)-col-1;
+	BOOLEAN rtn = FALSE;
+
+	/* TODO: Is this necessary ? It prevents entering long paths */
+	if (buflen > uiw_cols(uiwin)-col-1)
+		buflen = uiw_cols(uiwin)-col-1;
 
 	echo();
-#ifdef HAVE_LIBNCURSES
-	mvwgetnstr(win, row, col, lcl, len);
-#else
 	wmove(win, row, col);
-	wgetnstr(win, lcl, len);
-#endif
+	if (wgetnstr(win, buffer, buflen) != ERR)
+		rtn = TRUE;
 	noecho();
+	buffer[buflen-1] = 0; /* ensure zero-termination */
 
-	return lcl;
+	return rtn;
 }
 /*=====================================================
  * shw_popup_list -- Draw list & details of popup list

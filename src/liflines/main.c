@@ -315,15 +315,16 @@ prompt_for_db:
 	dbdir = getoptstr("LLDATABASES", ".");
 	/* Get Database Name (Prompt or Command-Line) */
 	if (alldone || c <= 0) {
+		char dbname[MAXPATHLEN];
 		/* ask_for_db_filename returns static buffer, we save it below */
-		dbrequested = ask_for_db_filename(_(qSidldir), _(qSidldrp), dbdir);
-		if (!dbrequested || !dbrequested[0]) {
+		if (!ask_for_db_filename(_(qSidldir), _(qSidldrp), dbdir, dbname, sizeof(dbname))
+			|| !dbname[0]) {
 			dbrequested = NULL;
 			llwprintf(_(qSiddbse));
 			alldone = 0;
 			goto finish;
 		}
-		dbrequested = strsave(dbrequested);
+		dbrequested = strsave(dbname);
 		if (eqstr(dbrequested, "?")) {
 			INT n=0;
 			LIST dblist=0, dbdesclist=0;

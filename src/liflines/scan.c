@@ -175,17 +175,18 @@ name_scan (INT scantype, STRING sts)
 {
 	SCAN_PATTERN patt;
 	RECORD indi = NULL;
-	STRING str;
 
 	patt.scantype = scantype;
 	while (1) {
+		char request[MAXPATHLEN];
+		BOOLEAN rtn;
 		if (scantype == NAMESCAN_FRAG)
-			str = ask_for_string(_(qSscnnmf), _(qSscantt));
+			rtn = ask_for_string(_(qSscnnmf), _(qSscantt), request, sizeof(request));
 		else
-			str = ask_for_string(_(qSscnfnm), _(qSscantt));
-		if (!str || !str[0])
+			rtn = ask_for_string(_(qSscnfnm), _(qSscantt), request, sizeof(request));
+		if (!rtn || !request[0])
 			return NULL;
-		if (set_pattern(&patt, str, scantype))
+		if (set_pattern(&patt, request, scantype))
 			break;
 	}
 
@@ -232,15 +233,16 @@ refn_scan (STRING sts)
 {
 	SCAN_PATTERN patt;
 	RECORD rec = NULL;
-	STRING str;
 	INT scantype = REFNSCAN;
 
 	patt.scantype = scantype;
 	while (1) {
-		str = ask_for_string(_(qSscnrfn), _(qSscantt));
-		if (!str || !str[0])
+		char request[MAXPATHLEN];
+		BOOLEAN rtn;
+		rtn = ask_for_string(_(qSscnrfn), _(qSscantt), request, sizeof(request));
+		if (!rtn || !request[0])
 			return NULL;
-		if (set_pattern(&patt, str, scantype))
+		if (set_pattern(&patt, request, scantype))
 			break;
 	}
 

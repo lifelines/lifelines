@@ -23,6 +23,8 @@ extern "C" {
 
 extern CHTYPE *acs_map;
 
+#define ERR (-1)
+
 struct _win_st
 {
 	short		_cury, _curx;	/* current coordinates */

@@ -105,6 +105,7 @@ STRING check_file_for_unicode(FILE * fp);
 INT chop_path(STRING path, STRING dirs);
 STRING compress_path(CNSTRING path, INT len);
 STRING concat_path(CNSTRING dir, CNSTRING file);
+BOOLEAN expand_special_fname_chars(STRING buffer, INT buflen);
 STRING filepath(CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING ext);
 FILE* fopenpath(STRING, STRING, STRING, STRING, STRING*);
 BOOLEAN is_dir_sep(char c);

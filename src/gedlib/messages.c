@@ -246,6 +246,7 @@ ZST qSgdemod      = N_("The event was modified in the database.");
 ZST qSgdxmod      = N_("The record was modified in the database.");
 
 ZST qSnofopn      = N_("Could not open file %s.");
+ZST qSfn2long     = N_("Filepath too long.");
 
 ZST qSmrkper      = N_("Please mark a person first.");
 

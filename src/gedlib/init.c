@@ -70,7 +70,7 @@ extern STRING illegal_char;
  *********************************************/
 
 static void add_dbs_to_list(LIST dblist, LIST dbdesclist, STRING dir);
-static STRING getdbdesc(STRING path);
+static STRING getdbdesc(STRING path, STRING userpath);
 static void init_win32_gettext_shim(void);
 static void init_win32_iconv_shim(void);
 static void update_db_options(void);
@@ -433,10 +433,13 @@ BOOLEAN
 open_database (BOOLEAN alteration, STRING dbrequested, STRING dbused)
 {
 	BOOLEAN rtn;
+	char fpath[MAXPATHLEN];
 
 	/* tentatively copy paths into gedlib module versions */
 	btreepath=strsave(dbrequested);
-	readpath=strsave(dbused);
+	llstrncpy(fpath, dbused, sizeof(fpath));
+	expand_special_fname_chars(fpath, sizeof(fpath));
+	readpath=strsave(fpath);
 
 	if (f_dbnotify)
 		(*f_dbnotify)(readpath, TRUE);
@@ -646,14 +649,21 @@ add_dbs_to_list (LIST dblist, LIST dbdesclist, STRING dir)
 	int n=0;
 	struct dirent **programs=0;
 	char candidate[MAXPATHLEN];
+	char userpath[MAXPATHLEN];
 	STRING dbstr=0;
+	char dirbuf[MAXPATHLEN];
 
-	n = scandir(dir, &programs, 0, 0);
+	llstrncpy(dirbuf, dir, sizeof(dirbuf));
+	if (!expand_special_fname_chars(dirbuf, sizeof(dirbuf)))
+		return;
+
+	n = scandir(dirbuf, &programs, 0, 0);
 	if (n < 0) return;
 	while (n--) {
-		strcpy(candidate, concat_path(dir, programs[n]->d_name));
-		if ((dbstr = getdbdesc(candidate)) != NULL) {
-			push_list(dblist, strsave(candidate));
+		strcpy(candidate, concat_path(dirbuf, programs[n]->d_name));
+		strcpy(userpath, concat_path(dir, programs[n]->d_name));
+		if ((dbstr = getdbdesc(candidate, userpath)) != NULL) {
+			push_list(dblist, strsave(userpath));
 			push_list(dbdesclist, dbstr);
 		}
 		stdfree(programs[n]);
@@ -666,7 +676,7 @@ add_dbs_to_list (LIST dblist, LIST dbdesclist, STRING dir)
  *  returns stdalloc'd string or NULL (if not db)
  *================================================*/
 static STRING
-getdbdesc (STRING path)
+getdbdesc (STRING path, STRING userpath)
 {
 	BTREE btr;
 	BOOLEAN cflag=FALSE, writ=FALSE, immut=TRUE;
@@ -684,14 +694,12 @@ getdbdesc (STRING path)
 		BTR = btr; /* various code assumes BTR is the btree */
 		readonly = TRUE; /* openxrefs depends on this global */
 		if (init_lifelines_db()) {
-			strcpy(desc, path);
-			if (strlen(path) < sizeof(desc) - 50) {
-				char stats[45];
-				snprintf(stats, sizeof(stats), _(qSdbrecstats), num_indis()
-					, num_fams(), num_sours(), num_evens(), num_othrs());
-				strcat(desc, " -- ");
-				strcat(desc, stats);
-			}
+			desc[0]=0;
+			llstrapp(desc, sizeof(desc), userpath);
+			llstrapp(desc, sizeof(desc), " <");
+			llstrappf(desc, sizeof(desc), _(qSdbrecstats)
+				, num_indis(), num_fams(), num_sours(), num_evens(), num_othrs());
+			llstrappf(desc, sizeof(desc), ">");
 		}
 	}
 	close_lldb();

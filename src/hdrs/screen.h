@@ -110,7 +110,7 @@ extern UIWINDOW main_win;
 /* screen.c */
 INT ask_for_char(STRING, STRING, STRING);
 INT ask_for_char_msg(STRING, STRING, STRING, STRING);
-STRING ask_for_db_filename(STRING, STRING, STRING);
+BOOLEAN ask_for_db_filename(STRING ttl, STRING prmpt, STRING basedir, STRING buffer, INT buflen);
 INT choose_one_from_indiseq(STRING, INDISEQ);
 void clear_hseg(WINDOW *, INT row, INT x1, INT x2);
 void clear_stdout_hseg(INT row, INT x1, INT x2);

@@ -4,7 +4,7 @@
 # As are blank lines
 # So all these lines are commented out...
 #
-# 2002/06/23
+# 2002/06/25
 #
 # All variables here are available to report programs
 # via the report language function getproperty, so, for
@@ -212,3 +212,8 @@
 #TT.MINED.UTF-8.1=UTF-8.Greek.Output.tt
 # Default is none
 
+# Display absolute path to database
+#FullDbPath=1
+# This is disabled by default
+# Enable this to disambiguate databases in different paths
+# Disable this if your home directory is deep (eg, on MS-Windows)

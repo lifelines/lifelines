@@ -400,12 +400,15 @@ RECORD
 ask_for_record (STRING idstr, INT letr)
 {
 	RECORD rec;
-	STRING str = ask_for_string(idstr, _(qSidkyrfn));
-	if (!str || *str == 0) return NULL;
-	rec = key_possible_to_record(str, letr);
+	char answer[MAXPATHLEN];
+	if (!ask_for_string(idstr, _(qSidkyrfn), answer, sizeof(answer))
+		|| !answer[0])
+		return NULL;
+
+	rec = key_possible_to_record(answer, letr);
 	if (!rec) {
 		INDISEQ seq;
-		seq = refn_to_indiseq(str, letr, KEYSORT);
+		seq = refn_to_indiseq(answer, letr, KEYSORT);
 		if (!seq) return NULL;
 		rec = choose_from_indiseq(seq, NOASK1, _(qSduprfn), _(qSduprfn));
 		remove_indiseq(seq);

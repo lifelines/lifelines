@@ -1,3 +1,15 @@
+2002-06-25 Perry Rapp <puddle@users.sourceforge.net>
+
+	* .linesrc ChangeLog lines.cfg gedlib/init.c gedlib/messages.c
+	hdrs/feedback.h hdrs/llstdlib.h hdrs/screen.h
+	hdrs/win32/curses.h interp/builtin.c liflines/ask.c
+	liflines/lbrowse.c liflines/main.c liflines/miscutls.c
+	liflines/newrecs.c liflines/scan.c liflines/screen.c
+	stdlib/path.c:
+
+	Change static buffers in ask_for_string family to caller-passed.
+	Implement ~ for home directory.
+
 2002-06-24 Matt Emmerton <memmerto@users.sourceforge.net>
 
 	* ChangeLog configure.in 
