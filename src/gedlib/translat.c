@@ -41,7 +41,7 @@
 #include "translat.h"
 #include "liflines.h"
 #include "feedback.h"
-#include "bfs.h"
+#include "zstr.h"
 #include "icvt.h"
 #include "lloptions.h"
 
@@ -61,9 +61,9 @@ STRING illegal_char = 0;
 
 /* alphabetical */
 static XNODE create_xnode(XNODE, INT, STRING);
-static bfptr custom_translate(TRANTABLE tt, bfptr bfsIn);
-static bfptr global_translate(LIST gtlist, bfptr bfsIn);
-static bfptr iconv_trans_ttm(TRANMAPPING ttm, bfptr bfsIn, CNSTRING illegal);
+static ZSTR custom_translate(TRANTABLE tt, ZSTR zin);
+static ZSTR global_translate(LIST gtlist, ZSTR zstr);
+static ZSTR iconv_trans_ttm(TRANMAPPING ttm, ZSTR zin, CNSTRING illegal);
 static void remove_xnodes(XNODE);
 static void show_xnode(XNODE node);
 static void show_xnodes(INT indent, XNODE node);
@@ -249,108 +249,107 @@ translate_match (TRANTABLE tt, CNSTRING in, CNSTRING * out)
 	return 0;
 }
 /*===================================================
- * translate_string_to_buf -- Translate string via TRANTABLE
+ * translate_string_to_zstring -- Translate string via TRANTABLE
  *  ttm: [IN]  tranmapping to apply
  *  in:  [IN]  string to translate
- * returns dynamic buffer (bfptr type - see buf.h)
  * Created: 2001/07/19 (Perry Rapp)
  * Copied from translate_string, except this version
  * uses dynamic buffer, so it can expand if necessary
  *=================================================*/
-bfptr
-translate_string_to_buf (TRANMAPPING ttm, CNSTRING in)
+ZSTR
+translate_string_to_zstring (TRANMAPPING ttm, CNSTRING in)
 {
 	TRANTABLE ttdb = get_dbtrantable_from_tranmapping(ttm);
-	bfptr bfs = bfNew((int)(strlen(in)*1.3+2));
-	bfCpy(bfs, in);
+	ZSTR zout = zs_newn((unsigned int)(strlen(in)*1.3+2));
+	zs_set(zout, in);
 	if (!in || !ttm) {
-		return bfs;
+		return zout;
 	}
 	if (!ttm->after) {
 		if (ttdb) {
 			/* custom translation before iconv */
-			bfs = custom_translate(ttdb, bfs);
+			zout = custom_translate(ttdb, zout);
 		}
 		if (ttm->global_trans) {
-			bfs = global_translate(ttm->global_trans, bfs);
+			zout = global_translate(ttm->global_trans, zout);
 		}
 	}
 	if (ttm->iconv_src && ttm->iconv_src[0] 
 		&& ttm->iconv_dest && ttm->iconv_dest[0]) {
-		bfs = iconv_trans_ttm(ttm, bfs, illegal_char);
+		zout = iconv_trans_ttm(ttm, zout, illegal_char);
 	}
 	if (ttm->after) {
 		if (ttm->global_trans) {
-			bfs = global_translate(ttm->global_trans, bfs);
+			zout = global_translate(ttm->global_trans, zout);
 		}
 		if (ttdb) {
 			/* custom translation after iconv */
-			bfs = custom_translate(ttdb, bfs);
+			zout = custom_translate(ttdb, zout);
 		}
 	}
-	return bfs;
+	return zout;
 }
 /*===================================================
  * custom_translate -- Translate string via custom translation table
- *  tt:    [IN]  custom translation table
- *  bfsIn: [IN]  string to be translated & destroyed
+ *  tt:  [IN]  custom translation table
+ *  zin: [IN]  string to be translated & destroyed
  * returns translated string
  *=================================================*/
-static bfptr
-custom_translate (TRANTABLE tt, bfptr bfsIn)
+static ZSTR
+custom_translate (TRANTABLE tt, ZSTR zin)
 {
-	bfptr bfsOut = bfNew(bfsIn->size);
-	STRING p = bfsIn->str;
+	ZSTR zout = zs_newn((unsigned int)(zs_len(zin)*1.3+2));
+	STRING p = zs_str(zin);
 	while (*p) {
 		CNSTRING tmp;
 		INT len = translate_match(tt, p, &tmp);
 		if (len) {
 			p += len;
-			bfCat(bfsOut, tmp);
+			zs_cat(zout, tmp);
 		} else {
-			bfCatChar(bfsOut, *p++);
+			zs_catc(zout, *p++);
 		}
 	}
-	bfDelete(bfsIn);
-	return bfsOut;
+	zs_free(zin);
+	return zout;
 }
 /*===================================================
  * iconv_trans_ttm -- Translate string via iconv  & transmapping
  *  ttm:  [IN]   transmapping
  *  in:   [IN]   string to translate (& delete)
- *  bfs:  [I/O]  output buffer
+ *  zin:  [I/O]  input buffer (may be returned if iconv fails)
  * Only called if HAVE_ICONV
  *=================================================*/
-static bfptr
-iconv_trans_ttm (TRANMAPPING ttm, bfptr bfsIn, CNSTRING illegal)
+static ZSTR
+iconv_trans_ttm (TRANMAPPING ttm, ZSTR zin, CNSTRING illegal)
 {
 	CNSTRING dest=ttm->iconv_dest;
 	CNSTRING src = ttm->iconv_src;
-	bfptr bfsOut;
+	ZSTR zout;
 	BOOLEAN success;
 	ASSERT(dest && src);
-	bfsOut = iconv_trans(src, dest, bfsIn, illegal, &success);
+	zout = iconv_trans(src, dest, zin, illegal, &success);
 	if (!success) {
 		/* if invalid translation, clear it to avoid trying again */
 		strfree(&ttm->iconv_src);
 		strfree(&ttm->iconv_dest);
 	}
-	return bfsOut;
+	return zout;
 }
 /*===================================================
  * global_translate -- Apply list of user global transforms
  *=================================================*/
-static bfptr
-global_translate (LIST gtlist, bfptr bfs)
+static ZSTR
+global_translate (LIST gtlist, ZSTR zstr)
 {
 	TRANTABLE ttx=0;
 	FORLIST(gtlist, tbel)
 		ttx = tbel;
 		ASSERT(ttx);
-		bfs = custom_translate(ttx, bfs);
+		zstr = custom_translate(ttx, zstr);
 		ttx = 0;
 	ENDLIST
-	return bfs;
+	return zstr;
 }
 /*===================================================
  * translate_string -- Translate string via TRANMAPPING
@@ -364,14 +363,14 @@ global_translate (LIST gtlist, bfptr bfs)
 void
 translate_string (TRANMAPPING ttm, CNSTRING in, STRING out, INT max)
 {
-	bfptr bfs=0;
+	ZSTR zstr=0;
 	if (!in || !in[0]) {
 		out[0] = 0;
 		return;
 	}
-	bfs = translate_string_to_buf(ttm, in);
-	llstrncpy(out, bfStr(bfs), max, uu8);
-	bfDelete(bfs);
+	zstr = translate_string_to_zstring(ttm, in);
+	llstrncpy(out, zs_str(zstr), max, uu8);
+	zs_free(zstr);
 }
 /*==========================================================
  * translate_write -- Translate and output lines in a buffer

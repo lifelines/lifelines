@@ -33,7 +33,7 @@
 #include "llstdlib.h"
 #include "table.h"
 #include "gedcom.h"
-#include "bfs.h"
+#include "zstr.h"
 
 /*=====================================================
  * init_valtab_from_rec -- Init value table from record
@@ -74,7 +74,7 @@ init_valtab_from_file (STRING fname, TABLE tab, TRANMAPPING ttm, INT sep, STRING
 	STRING str;
 	BOOLEAN rc;
 	INT siz;
-	bfptr bfs = 0;
+	ZSTR zstr=0;
 
 	if ((fp = fopen(fname, LLREADTEXT)) == NULL) return TRUE;
 	ASSERT(fstat(fileno(fp), &buf) == 0);
@@ -89,10 +89,10 @@ init_valtab_from_file (STRING fname, TABLE tab, TRANMAPPING ttm, INT sep, STRING
 	/* may not read full buffer on Windows due to CR/LF translation */
 	ASSERT(siz == buf.st_size || feof(fp));
 	fclose(fp);
-	bfs = translate_string_to_buf(ttm, str);
+	zstr = translate_string_to_zstring(ttm, str);
 	stdfree(str); /* done with original record - we use translated record */
- 	rc = init_valtab_from_string(bfStr(bfs), tab, sep, pmsg);
-	bfDelete(bfs);
+ 	rc = init_valtab_from_string(zs_str(zstr), tab, sep, pmsg);
+	zs_free(zstr);
 	return rc;
 }
 /*========================================================

@@ -25,13 +25,13 @@
 #ifdef HAVE_WCHAR_H
 #include <wchar.h>
 #endif
-#include "bfs.h"
+#include "zstr.h"
 
 extern int opt_finnish;
 
 static usersortfnc usersort = 0;
 
-extern bfptr makewide(const char *str);
+extern ZSTR makewide(const char *str);
 
 static BOOLEAN widecmp(char *str1, char *str2, INT *rtn);
 
@@ -138,22 +138,19 @@ set_usersort (usersortfnc fnc)
 static BOOLEAN
 widecmp (char *str1, char *str2, INT *rtn)
 {
-	bfptr wbfs1=0, wbfs2=0;
+	ZSTR zws1=0, zws2=0;
 	BOOLEAN success = FALSE;
 #ifdef HAVE_WCSCOLL
-	if (uu8) {
-		/* convert to wchar_t & use wide compare (wcscoll) */
-		wbfs1 = makewide(str1);
-		if (wbfs1) {
-			wbfs2 = makewide(str2);
-		}
-
-		if (wbfs1 && wbfs2) {
-			const wchar_t * wfs1 = (const wchar_t *)wbfs1->str;
-			const wchar_t * wfs2 = (const wchar_t *)wbfs2->str;
-			*rtn = wcscoll(wfs1, wfs2);
-			success = TRUE;
-		}
+	/* convert to wchar_t & use wide compare (wcscoll) */
+	zws1 = makewide(str1);
+	if (zws1) {
+		zws2 = makewide(str2);
+	}
+	if (zws1 && zws2) {
+		const wchar_t * wfs1 = (const wchar_t *)zs_str(zws1);
+		const wchar_t * wfs2 = (const wchar_t *)zs_str(zws2);
+		*rtn = wcscoll(wfs1, wfs2);
+		success = TRUE;
 	}
 #else
 	str1=str1; /* unused */
@@ -161,9 +158,7 @@ widecmp (char *str1, char *str2, INT *rtn)
 	rtn=rtn; /* unused */
 #endif /* HAVE_WCSCOLL */
 
-	if (wbfs1)
-		bfDelete(wbfs1);
-	if (wbfs2)
-		bfDelete(wbfs2);
+	zs_del(&zws1);
+	zs_del(&zws2);
 	return success;
 }

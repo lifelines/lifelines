@@ -10,6 +10,7 @@
  *==============================================================*/
 
 #include "llstdlib.h"
+#include <errno.h>
 #ifdef HAVE_ICONV
 # ifdef WIN32_ICONV_SHIM
 #  include "win32/iconvshim.h"
@@ -17,22 +18,22 @@
 #  include <iconv.h>
 # endif
 #endif
-#include "bfs.h"
+#include "zstr.h"
 #include "icvt.h"
 
 /*===================================================
  * iconv_trans -- Translate string via iconv
  *  src:     [IN]  source codeset
  *  dest:    [IN]  string to translate (& delete)
- *  bfsIn:   [I/O]  output buffer
+ *  zin:     [I/O] source string (may be returned if iconv can't translate)
  *  success: [OUT] success flag (optional)
  * Only called if HAVE_ICONV
  *=================================================*/
-bfptr
-iconv_trans (CNSTRING src, CNSTRING dest, bfptr bfsIn, CNSTRING illegal, BOOLEAN * success)
+ZSTR
+iconv_trans (CNSTRING src, CNSTRING dest, ZSTR zin, CNSTRING illegal, BOOLEAN * success)
 {
 #ifdef HAVE_ICONV
-	bfptr bfsOut;
+	ZSTR zout;
 	iconv_t ict;
 	const char * inptr;
 	char * outptr;
@@ -40,6 +41,8 @@ iconv_trans (CNSTRING src, CNSTRING dest, bfptr bfsIn, CNSTRING illegal, BOOLEAN
 	size_t outleft;
 	size_t cvted;
 	int transliterate=2; 
+	double expand=1.3;
+	int chwidth=1;
 
 	ASSERT(src && dest);
 
@@ -48,34 +51,53 @@ iconv_trans (CNSTRING src, CNSTRING dest, bfptr bfsIn, CNSTRING illegal, BOOLEAN
 	if (ict == (iconv_t)-1) {
 		if (success)
 			*success = FALSE;
-		return bfsIn;
+		return zin;
 	}
+	if (!strncmp(dest, "UCS-2", strlen("UCS-2"))) {
+		chwidth = expand = 2;
+	}
+	if (!strncmp(dest, "UCS-4", strlen("UCS-4"))) {
+		chwidth = expand = 4;
+	}
+	if (eqstr(dest, "wchar_t")) {
+		chwidth = expand = sizeof(wchar_t);
+
+	}
+	/* TODO: What about UTF-16 or UTF-32 ? */
+
 	/* testing recursive transliteration in my private iconv, Perry, 2002.07.11 */
 #ifdef ICONV_SET_TRANSLITERATE
 	iconvctl(ict, ICONV_SET_TRANSLITERATE, &transliterate);
 #endif
 
-	bfReserve(bfsIn, (int)(strlen(src)*1.3+2));
+	zout = zs_newn((unsigned int)(zs_len(zin)*expand+6));
 
-	bfsOut = bfNew(bfsIn->size);
-	inptr = bfsIn->str;
-	outptr = bfStr(bfsOut);
-	inleft = bfLen(bfsIn);
-	outleft = bfsOut->size-1;
+	inptr = zs_str(zin);
+	outptr = zs_str(zout);
+	inleft = zs_len(zin);
+	/* we are terminating with 4 zero bytes just in case dest is UCS-4 */
+	outleft = zs_allocsize(zout)-zs_len(zout)-4;
 	cvted = 0;
 
 cvting:
+	/* main convert */
 	cvted = iconv (ict, &inptr, &inleft, &outptr, &outleft);
-	if (cvted == (size_t)-1) {
-		if (!outleft) {
-			/* zero terminate & fix bfptr */
-			*outptr=0;
-			bfsOut->end = outptr;
 
-			bfReserveExtra(bfsOut, (int)(inleft * 1.3+2));
-			outleft = bfsOut->size - bfLen(bfsOut) - 1;
-			goto cvting;
+	/* zero terminate & fix output zstring */
+	/* there may be embedded nulls, if UCS-2/4 is target! */
+	*outptr=0;
+	zs_set_len(zout, outptr-zs_str(zout));
+
+	/* handle error cases */
+	if (cvted == (size_t)-1) {
+		/* errno is not reliable, because on MS-Windows we called
+		iconv in a dll & didn't get errno */
+		if (outleft<3) {
+			/* may be out of space, so grow & retry */
+			zs_reserve_extra(zout, (unsigned int)(inleft * expand + 6));
 		} else {
+			/* unconvertible input character */
+			/* append placeholder & skip over */
 			size_t wid = 1;
 			CNSTRING placeholder = illegal ? illegal : "%";
 			if (eqstr(src, "UTF-8")) {
@@ -85,29 +107,36 @@ cvting:
 				wid = inleft;
 			inptr += wid;
 			inleft -= wid;
-			/* zero terminate & fix bfptr */
-			*outptr=0;
-			bfsOut->end = outptr;
+			zs_cat(zout, placeholder);
+		}
+		/* update output variables */
+		/* (may have reallocated, plus need to point to end */
+		outptr = zs_str(zout)+zs_len(zout);
+		outleft = zs_allocsize(zout)-zs_len(zout)-4;
+		goto cvting;
+	}
 
-			bfCat(bfsOut, placeholder);
-			outleft = bfsOut->size - bfLen(bfsOut) - 1;
-			goto cvting;
+	/* zero-terminate with appropriately wide zero */
+	if (chwidth > 1) {
+		*outptr++=0;
+		if (chwidth > 2) {
+			*outptr++=0;
+			*outptr++=0;
 		}
 	}
-	/* zero terminate & fix bfptr */
 	*outptr=0;
-	bfsOut->end = outptr;
+	zs_set_len(zout, outptr-zs_str(zout));
 
 	iconv_close(ict);
-	bfDelete(bfsIn);
+	zs_free(zin);
 	if (success)
 		*success = TRUE;
-	return bfsOut;
+	return zout;
 #else
 	if (success)
 		*success = FALSE;
 	src=src; /* unused */
 	dest=dest; /* unused */
-	return bfsIn;
+	return zin;
 #endif /* HAVE_ICONV */
 }

@@ -555,6 +555,10 @@ SOURCE=..\..\..\src\gedlib\xreffile.c
 
 SOURCE=..\..\..\src\interp\yacc.c
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\stdlib\zstr.c
+# End Source File
 # End Group
 # Begin Group "Resource Files"
 
@@ -750,6 +754,10 @@ SOURCE=..\..\..\src\hdrs\warehouse.h
 # Begin Source File
 
 SOURCE=..\..\..\src\interp\yacc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\zstr.h
 # End Source File
 # End Group
 # End Target

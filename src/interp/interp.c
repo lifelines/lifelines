@@ -44,7 +44,7 @@
 #include "arch.h"
 #include "lloptions.h"
 #include "parse.h"
-#include "bfs.h"
+#include "zstr.h"
 #include "icvt.h"
 
 /*********************************************
@@ -1960,18 +1960,17 @@ make_internal_string_node (PACTX pactx, STRING str)
 		STRING fname = pactx->fullpath;
 		STRING rcodeset = get_rptfile_prop(pactx, fname, "char_encoding");
 		if (rcodeset && rcodeset[0] && !eqstr(int_codeset, rcodeset)) {
-			bfptr bfs=0;
+			ZSTR zstr=zs_newn(strlen(str)*4+3);
 			BOOLEAN success;
 			struct tranmapping_s tm;
 			memset(&tm, 0, sizeof(tm));
 			tm.iconv_src = rcodeset;
 			tm.iconv_dest = int_codeset;
 
-			bfs = bfNew(strlen(str)*4+3);
-			bfCpy(bfs, str);
-			bfs = iconv_trans(rcodeset, int_codeset, bfs, "?", &success);
-			node = string_node(pactx, bfStr(bfs));
-			bfDelete(bfs);
+			zs_set(zstr, str);
+			zstr = iconv_trans(rcodeset, int_codeset, zstr, "?", &success);
+			node = string_node(pactx, zs_str(zstr));
+			zs_free(zstr);
 		}
 	}
 	if (!node)

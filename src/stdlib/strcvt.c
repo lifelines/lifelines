@@ -29,7 +29,7 @@
 #ifdef HAVE_WCHAR_H
 #include <wchar.h>
 #endif
-#include "bfs.h"
+#include "zstr.h"
 #include "icvt.h"
 
 static const char * get_wchar_codeset_name(void);
@@ -52,26 +52,25 @@ get_wchar_codeset_name (void)
  * makewide -- convert internal to wchar_t *
  * handling annoyance that MS-Windows wchar_t is small
  * This only succeeds if internal charset is UTF-8
- * Either returns 0 if fails, or a bfstr which actually
+ * Either returns 0 if fails, or a zstring which actually
  * contains wchar_t characters.
  *=================================================*/
-bfptr
+ZSTR
 makewide (const char *str)
 {
-	bfptr bfs=0;
-	if (uu8) {
+	ZSTR zstr=0;
+	if (int_codeset && int_codeset[0]) {
 		CNSTRING dest = get_wchar_codeset_name();
 		BOOLEAN success;
-		bfs = bfNew(strlen(str)*4+3);
-		bfCpy(bfs, str);
-		bfs = iconv_trans("UTF-8", dest, bfs, "?", &success);
+		zstr = zs_newn(strlen(str)*4+3);
+		/* dest = "wchar_t" doesn't work--Perry, 2002-11-20 */
+		zs_set(zstr, str);
+		zstr = iconv_trans(int_codeset, dest, zstr, "?", &success);
 		if (!success) {
-			bfDelete(bfs);
-			bfs = 0;
+			zs_del(&zstr);
 		}
-		success = TRUE;
 	}
-	return bfs;
+	return zstr;
 }
 /*=========================================
  * isnumeric -- Check string for all digits

@@ -42,7 +42,7 @@
 #include "liflines.h"
 #include "feedback.h"
 #include "lloptions.h"
-#include "bfs.h"
+#include "zstr.h"
 
 #include "interpi.h"
 
@@ -402,12 +402,12 @@ void
 poutput (STRING str, BOOLEAN *eflg)
 {
 	STRING p;
-	bfptr bfs = 0;
+	ZSTR zstr = 0;
 	INT c, len;
 	TRANMAPPING ttmr = get_tranmapping(MINRP);
 	if (!str || (len = strlen(str)) <= 0) return;
-	bfs = translate_string_to_buf(ttmr, str);
-	str = bfStr(bfs);
+	zstr = translate_string_to_zstring(ttmr, str);
+	str = zs_str(zstr);
 	if ((len = strlen(str)) <= 0)
 		goto exit_poutput;
 	if (!Poutfp) {
@@ -461,7 +461,7 @@ poutput (STRING str, BOOLEAN *eflg)
 		FATAL();
 	}
 exit_poutput:
-	bfDelete(bfs);
+	zs_free(zstr);
 }
 /*==================================================+
  * adjust_cols -- Adjust column after printing string

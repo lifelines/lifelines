@@ -214,6 +214,11 @@ typedef struct lldate_s {
 typedef enum { RECORD_ERROR, RECORD_NOT_FOUND, RECORD_SUCCESS } 
 	RECORD_STATUS;
 
+/* types for zstrings */
+struct zstr_s;
+typedef struct zstr_s * ZSTR;
+
+
 /*
  Pull in declarations & macros for NLS (National Language Support)
 */

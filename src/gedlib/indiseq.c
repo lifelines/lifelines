@@ -32,7 +32,7 @@
 /* modified 2000-08-21 J.F.Chandler */
 
 #include "llstdlib.h" /* llstdlib.h includes standard.h, config.h, sys_inc.h */
-#include "bfs.h"
+#include "zstr.h"
 #ifdef HAVE_LOCALE_H
 #include <locale.h>
 #endif
@@ -1766,29 +1766,23 @@ static void
 append_all_tags(INDISEQ seq, NODE node, STRING tagname
 	, BOOLEAN recurse, BOOLEAN nonptrs)
 {
-	if (!tagname || (ntag(node) && eqstr(ntag(node), tagname)))
-	{
+	if (!tagname || (ntag(node) && eqstr(ntag(node), tagname))) {
 		STRING key;
 		INT val=0;
 		key = nval(node);
-		if (key)
-		{
+		if (key) {
 			INT keylen = strlen(key);
-			STRING skey = rmvat(key);
+			STRING skey = strdup(rmvat(key));
 			BOOLEAN include=TRUE;
-			bfptr bfs = 0;
-			if (skey)
+			if (skey) {
 				val = atoi(skey+1);
-			else
-			{
+			} else {
 				if (nonptrs) {
+					ZSTR zstr = zs_newn(keylen+100);
 					NODE chil;
 					/* include non-pointers, but mark invalid with val==-1 */
-					skey = key;
 					val = -1;
-					if (!bfs)
-						bfs = bfNew(keylen+100);
-					bfCpy(bfs, key);
+					zs_set(zstr, key);
 					/* collect any CONC or CONT children */
 					for (chil = nchild(node); chil; chil=nsibling(chil)) {
 						STRING text = nval(chil) ? nval(chil) : "";
@@ -1800,18 +1794,18 @@ append_all_tags(INDISEQ seq, NODE node, STRING tagname
 							break;
 						}
 						if (cr)
-							bfCat(bfs, "\n");
-						bfCat(bfs, text);
-						skey = bfs->str;
+							zs_cat(zstr, "||");
+						zs_cat(zstr, text);
 					}
+					strfree(&skey);
+					skey = strdup(zs_str(zstr));
+					zs_free(zstr);
 				} else {
 					include=FALSE;
 				}
 			}
-			if (include)
-				append_indiseq_ival(seq, skey, NULL, val, FALSE, FALSE);
-			if (bfs) {
-				bfDelete(bfs);
+			if (include) {
+				append_indiseq_ival(seq, skey, NULL, val, FALSE, TRUE);
 			}
 		}
 	}

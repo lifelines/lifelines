@@ -36,7 +36,7 @@
 #include "translat.h"
 #include "gedcom.h"
 #include "feedback.h"
-#include "bfs.h"
+#include "zstr.h"
 
 extern STRING qSaredit,qSdataerr,qSsepch;
 
@@ -138,9 +138,11 @@ static STRING
 trans_edin (STRING input, INT len)
 {
 	TRANMAPPING ttmi = get_tranmapping(MEDIN);
-	bfptr bfs = translate_string_to_buf(ttmi, input);
+	ZSTR zstr = translate_string_to_zstring(ttmi, input);
+	STRING str = strdup(zs_str(zstr));
 	len=len; /* unused */
-	return bfDetachAndKill(&bfs);
+	zs_free(zstr);
+	return str;
 }
 /*==============================================
  * trans_ined -- Translate internal text to editor
@@ -153,7 +155,9 @@ static STRING
 trans_ined (STRING input, INT len)
 {
 	TRANMAPPING ttmo = get_tranmapping(MINED);
-	bfptr bfs = translate_string_to_buf(ttmo, input);
+	ZSTR zstr = translate_string_to_zstring(ttmo, input);
+	STRING str = strdup(zs_str(zstr));
 	len=len; /* unused */
-	return bfDetachAndKill(&bfs);
+	zs_free(zstr);
+	return str;
 }

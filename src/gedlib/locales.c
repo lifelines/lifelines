@@ -25,7 +25,6 @@
 #include "translat.h"
 #include "liflines.h"
 #include "feedback.h"
-#include "bfs.h"
 #include "icvt.h"
 #include "lloptions.h"
 #include "date.h"

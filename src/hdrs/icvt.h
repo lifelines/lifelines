@@ -13,6 +13,6 @@
 #ifndef ICVT_H_INCLUDED
 #define ICVT_H_INCLUDED 1
 
-bfptr iconv_trans(CNSTRING src, CNSTRING dest, bfptr bfsIn, CNSTRING illegal, BOOLEAN * success);
+ZSTR iconv_trans(CNSTRING src, CNSTRING dest, ZSTR zin, CNSTRING illegal, BOOLEAN * success);
 
 #endif /* ICVT_H_INCLUDED */
