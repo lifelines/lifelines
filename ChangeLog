@@ -1,3 +1,12 @@
+2003-03-06 Steve Dum
+
+	* ChangeLog docs/Makefile.am
+	
+	Add rules to build doc's from xml (works on redhat 8.0)
+	(requires openjade-1.3 jadetex-3.12)
+	Add ll-reportmanual.* ll-usermanual.* to distribution
+	remove quickref.*
+
 2003-03-06 Perry Rapp
 
 	* ChangeLog src/gedlib/brwslist.c src/gedlib/xlat.c
