@@ -195,6 +195,11 @@ static void
 print_usage (void)
 {
 	char verstr[80];
+#ifdef WIN32
+	char * fname = "\\My Documents\\LifeLines\\Databases\\MyFamily";
+#else
+	char * fname = "/home/users/myname/lifelines/databases/myfamily";
+#endif
 	snprintf(verstr, sizeof(verstr), mtitle
 		, get_lifelines_version(sizeof(verstr)-1-strlen(mtitle)));
 	printf(
@@ -209,11 +214,9 @@ print_usage (void)
 		"\t-e = Check events\n"
 		"\t-x = Check others\n"
 		"\t-n = Noisy (echo every record processed)\n"
-#ifdef WIN32
-		"example: dbverify -ifsex \"\\My Documents\\LifeLines\\Databases\\MyFamily\"\n"
-#endif
 		);
-		printf("%s\n", verstr);
+	printf("example: dbverify -ifsex \"%s\"\n", fname);
+	printf("%s\n", verstr);
 }
 /*========================================
  * report_error -- report some error found
