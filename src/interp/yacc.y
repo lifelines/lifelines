@@ -79,11 +79,11 @@ enqueue_list(Plist, pvalue((PVALUE) ivalue((PNODE) $3)));
 	;
 
 proc	:	PROC IDEN '(' idenso ')' '{' tmplts '}' {
-			insert_table(proctab, $2, proc_node((STRING)$2, (PNODE)$4, (PNODE)$7));
+			insert_table(proctab, (STRING)$2, (WORD)proc_node((STRING)$2, (PNODE)$4, (PNODE)$7));
 		}
 
 func	:	FUNC_TOK IDEN '(' idenso ')' '{' tmplts '}' {
-			insert_table(functab, $2, fdef_node($2, $4, $7));
+			insert_table(functab, (STRING)$2, (WORD)fdef_node($2, $4, $7));
 		}
 	;
 idenso	:	/* empty */ {
