@@ -1103,7 +1103,6 @@ choose_sort (STRING optname)
 	}
 }
 #endif
-
 /*==============================
  * draw_tt_win -- Draw menu for edit translations
  * Created: 2001/07/20 (Perry Rapp)

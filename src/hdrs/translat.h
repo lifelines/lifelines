@@ -68,7 +68,6 @@ INT get_codeset(INT index);
 LIST get_codesets(void);
 char * get_codeset_desc(INT codeset, STRING buffer, INT max);
 char * get_sort_desc(STRING buffer, INT max);
-TRANTABLE init_map_from_str(STRING, INT, BOOLEAN*);
 void remove_trantable(TRANTABLE);
 void remove_xnodes(XNODE);
 void translate_catn(TRANTABLE tt, STRING * pdest, CNSTRING src, INT * len);

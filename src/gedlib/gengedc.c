@@ -318,7 +318,7 @@ output_any_node (CLOSURE * closure, NODE node, STRING toptag
 
 	if (!dump)
 	{
-		char unsigned scratch[MAXLINELEN+1];
+		char scratch[MAXLINELEN+1];
 		STRING pq = scratch;
 		sprintf(pq, "%d", lvl);
 		pq += strlen(pq);

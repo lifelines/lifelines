@@ -66,6 +66,7 @@ typedef struct pn_block *PN_BLOCK;
 
 /* alphabetical */
 static PNODE alloc_pnode_memory(void);
+static void clear_pnode(PNODE node);
 static void delete_pnode(PNODE node);
 static void free_pnode_memory(PNODE node);
 static void set_parents(PNODE body, PNODE node);
@@ -187,7 +188,7 @@ create_pnode (INT type)
  *  be freed, Perry
  * Created: 2001/01/20, Perry Rapp
  *======================================*/
-void
+static void
 clear_pnode (PNODE node)
 {
 	/*

@@ -1,3 +1,12 @@
+2001-11-26 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/charmaps.c gedlib/gengedc.c gedlib/gstrings.c
+	gedlib/names.c hdrs/gedcom.h hdrs/interp.h hdrs/screen.h
+	hdrs/translat.h interp/alloc.c interp/interp.c
+	liflines/import.c liflines/screen.c liflines/show.c:
+
+	Little stuff to cut down on gcc errors & warnings.
+
 2001-11-24 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/messages.c hdrs/screen.h liflines/browse.c

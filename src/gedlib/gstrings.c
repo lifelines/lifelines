@@ -159,7 +159,7 @@ indi_to_list_string (NODE indi, NODE fam, INT len, RFMT rfmt)
  * Created: 2000/11/29, Perry Rapp
  *==============================================*/
 STRING
-sour_to_list_string(NODE sour, INT len, STRING delim)
+sour_to_list_string (NODE sour, INT len, STRING delim)
 {
 	char scratch[1024];
 	STRING name, p=scratch;
@@ -193,14 +193,14 @@ sour_to_list_string(NODE sour, INT len, STRING delim)
  * Created: 2001/02/17, Perry Rapp
  *==============================================*/
 STRING
-fam_to_list_string(NODE fam, INT len, STRING delim)
+fam_to_list_string (NODE fam, INT len, STRING delim)
 {
 	char scratch[1024];
 	STRING name, p=scratch;
 	INT mylen=len;
 	char counts[32];
 	INT husbands=0, wives=0, children=0;
-	INT templen;
+	INT templen=0;
 	TRANTABLE ttd = tran_tables[MINDS];
 	NODE refn, husb, wife, chil, rest, node;
 	if (mylen>sizeof(scratch))
@@ -253,7 +253,7 @@ fam_to_list_string(NODE fam, INT len, STRING delim)
 STRING
 other_to_list_string(NODE node, INT len, STRING delim)
 {
-	char unsigned scratch[1024];
+	char scratch[1024];
 	STRING name, p=scratch;
 	INT mylen=len;
 	TRANTABLE ttd = tran_tables[MINDS];

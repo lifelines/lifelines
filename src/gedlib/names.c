@@ -300,7 +300,7 @@ getfinitial (STRING name)
 STRING
 soundex (STRING name)   /* surname */
 {
-	static unsigned char scratch[6];
+	static char scratch[6];
 	STRING p = name, q = scratch;
 	INT c, i, j;
 	if (!name || !name[0] || eqstr(name, "____"))
@@ -850,7 +850,7 @@ parts_to_name (STRING *parts)
 static STRING
 upsurname (STRING name)
 {
-	static unsigned char scratch[MAXGEDNAMELEN+1];
+	static char scratch[MAXGEDNAMELEN+1];
 	STRING p = scratch;
 	INT c;
 	while ((c = *p++ = (uchar)*name++) && c != NAMESEP)
@@ -876,7 +876,7 @@ upsurname (STRING name)
 STRING
 manip_name (STRING name, TRANTABLE tt, BOOLEAN caps, BOOLEAN regorder, INT len)
 {
-	static unsigned char scratch[MAXGEDNAMELEN+1];
+	static char scratch[MAXGEDNAMELEN+1];
 	if (!name || *name == 0) return NULL;
 	translate_string(tt, name, scratch, MAXGEDNAMELEN+1);
 	name = scratch;

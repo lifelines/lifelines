@@ -84,11 +84,10 @@
 /*=========================================
  * UIWINDOWs -- Main screen, menus and popups
  *=======================================*/
-typedef struct uiwindow_s UIWINDOW;
 /* wrapper for WINDOW */
 typedef struct uiwindow_s {
 	WINDOW * win;      /* curses window */
-	UIWINDOW * parent; /* fixed or dynamic parent */
+	struct uiwindow_s * parent; /* fixed or dynamic parent */
 	BOOLEAN permsub;   /* TRUE if a fixed subwindow */
 } UIWINDOW;
 #define uiw_win(x)      (x->win)

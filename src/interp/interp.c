@@ -1663,7 +1663,7 @@ prog_error (PNODE node, STRING fmt, ...)
 			fclose(fp);
 		}
 	}
-	if (num = getoptint("PerErrorDelay", 0))
+	if ((num = getoptint("PerErrorDelay", 0)))
 		sleep(num);
 }
 /*=============================================+

@@ -33,6 +33,7 @@
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
+#include "gedcomi.h"
 #include "liflines.h"
 #include "feedback.h"
 
@@ -164,14 +165,15 @@ init_map_from_file (STRING file, INT indx, BOOLEAN *perr)
  *  perr: [out] error flag set TRUE by function if error
  * May return NULL
  *================================================*/
-TRANTABLE
+static TRANTABLE
 init_map_from_str (STRING str, INT indx, BOOLEAN *perr)
 {
 	INT i, n, maxn, entry=1, line=1, newc;
 	INT sep = (uchar)'\t'; /* default separator */
 	BOOLEAN done;
 	BOOLEAN skip;
-	unsigned char c, scratch[50];
+	unsigned char c;
+	char scratch[50];
 	STRING p, *lefts, *rights;
 	TRANTABLE tt=NULL;
 	char name[sizeof(tt->name)];
