@@ -4,6 +4,12 @@
 	liflines/pedigree.c liflines/screen.c liflines/show.c:
 	Code to examine details of selected item in list.
 
+	* hdrs/screen.h liflines/ask.c liflines/lbrowse.c
+	liflines/screen.c:
+	Moved ask_yes_or_no(_msg) from ask.c into screen.c.
+	Modified args to list_browse for GUI.
+	Added expand_special_chars in ask.c.
+
 2001-01-10 Perry Rapp <puddle@users.sourceforge.net>
 
 	* hdrs/gedcom.h hdrs/liflines.h liflines/add.c:
