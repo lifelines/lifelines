@@ -115,7 +115,7 @@ wz_makelower (ZSTR zstr)
 	for (wp = (wchar_t *)zs_str(zstr); *wp; ++wp) {
 		if (*wp == 0x3A3) {
 			/* Greek capital sigma */
-			if (wp[1] != '-' && !iswalpha(wp[1]))
+			if (!iswalpha(wp[1]))
 				*wp = 0x3C2; /* final lower sigma */
 			else
 				*wp = 0x3C3; /* medial lower sigma */

@@ -1,5 +1,11 @@
 2003-04-16 Perry Rapp
 
+	* ChangeLog src/stdlib/strcvt.c
+
+	Change Greek sigma lowercasing, as recommended by Georg Skillas.
+
+2003-04-16 Perry Rapp
+
 	* ChangeLog configure.in build/msvc6/llines/config.h
 	src/gedlib/date.c src/hdrs/llstdlib.h src/interp/builtin.c
 	src/stdlib/icvt.c src/stdlib/strcvt.c
