@@ -93,7 +93,10 @@ copy_process (STRING dest, STRING src)
 	char c;
 	while ((*q++ = c = *p++)) {
 		if (c == '\\') {
-			if (!(c = *p++)) break;
+			if (!(c = *p++)) {
+				*q = 0;
+				break;
+			}
 			if (c == 'n')
 				q[-1] = '\n';
 			else if (c == 't')
