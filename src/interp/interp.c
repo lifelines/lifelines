@@ -116,18 +116,20 @@ interp_program (STRING proc,    /* proc to call */
                 WORD *args,     /* arguments */
                 INT nifiles,    /* number of program files - can be zero*/
                 STRING *ifiles, /* program files */
-                STRING ofile)   /* output file - can be NULL */
+                STRING ofile,   /* output file - can be NULL */
+                BOOLEAN picklist) /* see list of existing reports */
 {
 	FILE *fp;
-	LIST plist = create_list();
+	LIST plist;
 	TABLE stab;
 	PVALUE dummy;
 	INT i;
 	STRING ifile;
 	PNODE first, parm;
 
-   /* Get the initial list of program files */
 
+   /* Get the initial list of program files */
+	plist = create_list();
 	set_list_type(plist, LISTDOFREE);
 	if (nifiles > 0) {
 		for (i = 0; i < nifiles; i++) {
@@ -136,7 +138,7 @@ interp_program (STRING proc,    /* proc to call */
 	} else {
 		ifile = NULL;
 		fp = ask_for_program(LLREADTEXT, qrptname, &ifile,
-			llprograms, ".ll");
+			llprograms, ".ll", picklist);
 		if (fp == NULL) {
 			if (ifile != NULL)  {
 				/* tried & failed to open file */
@@ -263,9 +265,9 @@ parse_file (STRING ifile,
  * interp_main -- Interpreter main proc
  *===================================*/
 void
-interp_main (void)
+interp_main (BOOLEAN picklist)
 {
-	interp_program("main", 0, NULL, 0, NULL, NULL);
+	interp_program("main", 0, NULL, 0, NULL, NULL, picklist);
 }
 /*======================================
  * interpret -- Interpret statement list

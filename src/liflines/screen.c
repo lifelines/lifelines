@@ -221,7 +221,8 @@ paint_main_screen(void)
 	mvwaddstr(win, row++, 4, "s  Search database");
 	mvwaddstr(win, row++, 4, "a  Add information to the database");
 	mvwaddstr(win, row++, 4, "d  Delete information from the database");
-	mvwaddstr(win, row++, 4, "r  Generate reports from the database");
+	mvwaddstr(win, row++, 4, "p  Pick a report from list and run");
+	mvwaddstr(win, row++, 4, "r  Generate report by entering report name");
 	mvwaddstr(win, row++, 4, "t  Modify character translation tables");
 	mvwaddstr(win, row++, 4, "u  Miscellaneous utilities");
 	mvwaddstr(win, row++, 4, "x  Handle source, event and other records");
@@ -582,7 +583,7 @@ main_menu (void)
 	if (cur_screen != MAIN_SCREEN) paint_main_screen();
 	display_screen(MAIN_SCREEN);
 	/* place_std_msg(); */ /*POSS*/
-	c = interact(main_win, "bsadrtuxq");
+	c = interact(main_win, "bsadprtuxq");
 	place_std_msg();
 	wrefresh(main_win);
 	switch (c) {
@@ -590,7 +591,8 @@ main_menu (void)
 	case 's': scan_menu(); break;
 	case 'a': add_menu(); break;
 	case 'd': del_menu(); break;
-	case 'r': interp_main(); break;
+	case 'p': interp_main(TRUE); break;
+	case 'r': interp_main(FALSE); break;
 	case 't': trans_menu(); break;
 	case 'u': utils_menu(); break;
 	case 'x': extra_menu(); break;

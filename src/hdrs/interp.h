@@ -227,7 +227,7 @@ void zero_pventry(ENTRY);
 void initinterp(void);
 void initset(void);
 void initrassa(void);
-void interp_program(STRING, INT, WORD*, INT, STRING*, STRING);
+void interp_program(STRING, INT, WORD*, INT, STRING*, STRING, BOOLEAN picklist);
 void finishinterp(void);
 void finishrassa(void);
 void progmessage(char*);
@@ -310,6 +310,6 @@ int yylex(void);
 int yyparse(void);
 
 void poutput(STRING);
-void interp_main(void);
+void interp_main(BOOLEAN picklist);
 
 #endif /* _INTERP_H */

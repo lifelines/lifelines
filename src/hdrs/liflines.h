@@ -26,7 +26,7 @@ INT choose_one_from_indiseq(STRING, INDISEQ);
 NODE choose_from_indiseq(INDISEQ, BOOLEAN, STRING, STRING);
 
 /* from askprogram.c */
-FILE *ask_for_program(STRING, STRING, STRING*, STRING, STRING);
+FILE *ask_for_program(STRING, STRING, STRING*, STRING, STRING, BOOLEAN picklist);
 
 /* from valgdcom.c */
 BOOLEAN pointer_value(STRING);

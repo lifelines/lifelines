@@ -253,10 +253,11 @@ free_program_list(struct program_info *head,
         free(info->description);
       free(info);
     }
-
-  while (len--)
-    free(list[len]);
-  free(list);
+  if (list) {
+    while (len--)
+      free(list[len]);
+    free(list);
+  }
 }
 
 /*=====================================================================
@@ -366,14 +367,24 @@ ask_for_program (STRING mode,
                  STRING ttl,
                  STRING *pfname,
                  STRING path,
-                 STRING ext)
+                 STRING ext,
+                 BOOLEAN picklist)
 {
   FILE *fp = NULL;
   int len, choice;
-  struct program_info *head = find_all_programs(path, ext);
+  struct program_info *head;
   STRING *list = NULL;
-  if (!head || !head->next)
+
+  if (!picklist)
     goto AskForString;
+
+  head = find_all_programs(path, ext);
+  if (!head)
+    goto AskForString;
+  if (!head->next) {
+    free_program_list(head, NULL, 0);
+    goto AskForString;
+ }
   len = make_program_list(head, extrpt, &list);
   if (!len)
     goto AskForString; /* note - can this happen at all ? */
