@@ -1,5 +1,5 @@
 /*
- * @version        1.0
+ * @version        1.1 (2002-12-15)
  * @author         Perry Rapp
  * @category       self-test
  * @output         mixed
@@ -25,6 +25,7 @@ char_encoding("ASCII")
 require("lifelines-reports.version:1.3")
 option("explicitvars") /* Disallow use of undefined variables */
 include("st_string")
+include("st_string_UTF_8")
 include("st_collate")
 include("st_date")
 include("st_number")
@@ -47,6 +48,9 @@ proc main()
 	}
 	if (dostep(alltests, "Test strings ? (0=no)")) {
 		call testStrings()
+	}
+	if (dostep(alltests, "Test UTF-8strings ? (0=no)")) {
+		call testStrings_UTF_8()
 	}
 	if (dostep(alltests, "Test numbers ? (0=no)")) {
 		call testNums()

@@ -67,6 +67,19 @@ makewide (const char *str)
 	}
 	return zstr;
 }
+/*===================================================
+ * makenarrow -- Inverse of makewide
+ *  Created: 2002-12-15 (Perry Rapp)
+ *=================================================*/
+ZSTR
+makenarrow (ZSTR zwstr)
+{
+	ZSTR zout=0;
+	CNSTRING src = get_wchar_codeset_name();
+	if (!iconv_trans(src, int_codeset, zs_str(zwstr), &zout, "?"))
+		zs_free(&zout);
+	return zout;
+}
 /*=========================================
  * isnumeric -- Check string for all digits
  * TODO: convert to Unicode -- but must find where we make
@@ -89,7 +102,6 @@ isnumeric (STRING str)
 /*======================================
  * lower -- Convert string to lower case
  *  returns static buffer
- *  TODO: convert to Unicode
  *====================================*/
 STRING
 lower (STRING str)
@@ -97,15 +109,27 @@ lower (STRING str)
 	static char scratch[MAXLINELEN+1];
 	STRING p = scratch;
 	INT c, i=0;
-	while ((c = (uchar)*str++) && (++i < MAXLINELEN+1))
-		*p++ = ll_tolower(c);
-	*p = '\0';
+	ZSTR zstr=makewide(str);
+	if (zstr) {
+		ZSTR zout=0;
+		wchar_t * wp;
+		for (wp = (wchar_t *)zs_str(zstr); *wp; ++wp) {
+			*wp = towlower(*wp);
+		}
+		zout = makenarrow(zstr);
+		llstrsets(scratch, sizeof(scratch), uu8, zs_str(zout));
+		zs_free(&zstr);
+		zs_free(&zout);
+	} else {
+		while ((c = (uchar)*str++) && (++i < MAXLINELEN+1))
+			*p++ = ll_tolower(c);
+		*p = '\0';
+	}
 	return scratch;
 }
 /*======================================
  * upper -- Convert string to upper case
  *  returns static buffer
- *  TODO: convert to Unicode
  *====================================*/
 STRING
 upper (STRING str)
@@ -113,9 +137,22 @@ upper (STRING str)
 	static char scratch[MAXLINELEN+1];
 	STRING p = scratch;
 	INT c, i=0;
-	while ((c = (uchar)*str++) && (++i < MAXLINELEN+1))
-		*p++ = ll_toupper(c);
-	*p = '\0';
+	ZSTR zstr=makewide(str);
+	if (zstr) {
+		ZSTR zout=0;
+		wchar_t * wp;
+		for (wp = (wchar_t *)zs_str(zstr); *wp; ++wp) {
+			*wp = towupper(*wp);
+		}
+		zout = makenarrow(zstr);
+		llstrsets(scratch, sizeof(scratch), uu8, zs_str(zout));
+		zs_free(&zstr);
+		zs_free(&zout);
+	} else {
+		while ((c = (uchar)*str++) && (++i < MAXLINELEN+1))
+			*p++ = ll_toupper(c);
+		*p = '\0';
+	}
 	return scratch;
 }
 /*================================

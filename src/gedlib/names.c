@@ -229,6 +229,10 @@ name_hi (void)
  *  soundex: [in] flag if doing soundex
  * The soundex flag is because soundex doesn't test
  *  the first letter, it wants surname to do it
+ *
+ * TODO: convert to Unicode
+ *  But may need to disambiguate name index use
+ *  b/c that needs an isletter that is locale-independent
  *====================================================*/
 static STRING
 getsurname_impl (STRING name, BOOLEAN soundex)
@@ -277,6 +281,7 @@ getasurname (STRING name)   /* GEDCOM name */
 /*============================================
  * getfinitial -- Return first initial of name
  *  name:  [in] GEDCOM name
+ *  TODO: convert to Unicode
  *==========================================*/
 INT
 getfinitial (STRING name)

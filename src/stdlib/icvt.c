@@ -73,6 +73,14 @@ iconv_trans (CNSTRING src, CNSTRING dest, CNSTRING sin, ZSTR * pzout, CNSTRING i
 	if (ict == (iconv_t)-1) {
 		return FALSE;
 	}
+	if (!strncmp(src, "UCS-2", strlen("UCS-2"))) {
+		/* assume MS-Windows makenarrow call */
+		inlen = 2 * wcslen((const wchar_t *)sin);
+	}
+	if (!strncmp(src, "UCS-2", strlen("UCS-2"))) {
+		/* assume UNIX makenarrow call */
+		inlen = 4 * wcslen((const wchar_t *)sin);
+	}
 	if (!strncmp(dest, "UCS-2", strlen("UCS-2"))) {
 		chwidth = expand = 2;
 	}

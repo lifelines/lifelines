@@ -24,6 +24,12 @@
 
 	Remove unnecessary code conversions.
 
+	* ChangeLog reports/st/st_all.ll reports/st/st_collate_UTF-8.ll
+	src/gedlib/names.c src/stdlib/icvt.c src/stdlib/strcvt.c
+	*NEW reports/st/st_string_UTF-8.ll:
+
+	Implement Unicode in upper & lower. Begin UTF-8 string self-tests.
+
 2002-12-14 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c:
