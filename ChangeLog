@@ -50,6 +50,12 @@
 
 	Fix for nl_langinfo returning 0.
 
+	* ChangeLog src/liflines/screen.c
+	*DELETED src/interp/yacc.h:
+
+	Localize some English strings (found thanks to Frank Ellebrecht).
+	Remove src/interp/yacc.h (senseless to have it in cvs without yacc.c).
+
 2002-11-29 Perry Rapp
 
 	* ChangeLog src/gedlib/codesets.c src/gedlib/init.c

@@ -406,17 +406,17 @@ paint_list_screen (void)
 	mvwaddch(win, LIST_LINES+1, 52, gr_ttee);
 	mvwaddstr(win, LIST_LINES+2, 54, "Choose an operation:");
 	row = LIST_LINES+3; col = 55;
-	mvwaddstr(win, row++, col, "j  Move down list");
-	mvwaddstr(win, row++, col, "k  Move up list");
-	mvwaddstr(win, row++, col, "e  Edit this person");
-	mvwaddstr(win, row++, col, "i  Browse this person");
-	mvwaddstr(win, row++, col, "m  Mark this person");
-	mvwaddstr(win, row++, col, "r  Remove from list");
-	mvwaddstr(win, row++, col, "t  Enter tandem mode");
-	mvwaddstr(win, row++, col, "n  Name this list");
-	mvwaddstr(win, row++, col, "b  Browse new persons");
-	mvwaddstr(win, row++, col, "a  Add to this list");
-	mvwaddstr(win, row++, col, "x  Swap mark/current");
+	mvwaddstr(win, row++, col, _("j  Move down list"));
+	mvwaddstr(win, row++, col, _("k  Move up list"));
+	mvwaddstr(win, row++, col, _("e  Edit this person"));
+	mvwaddstr(win, row++, col, _("i  Browse this person"));
+	mvwaddstr(win, row++, col, _("m  Mark this person"));
+	mvwaddstr(win, row++, col, _("r  Remove from list"));
+	mvwaddstr(win, row++, col, _("t  Enter tandem mode"));
+	mvwaddstr(win, row++, col, _("n  Name this list"));
+	mvwaddstr(win, row++, col, _("b  Browse new persons"));
+	mvwaddstr(win, row++, col, _("a  Add to this list"));
+	mvwaddstr(win, row++, col, _("x  Swap mark/current"));
 	mvwaddstr(win, row++, col, _(qSmn_quit));
 }
 /*==========================================
@@ -1433,10 +1433,10 @@ choose_one_or_list_from_indiseq (STRING ttl, INDISEQ seq, BOOLEAN multi)
 
 	/* TO DO: connect this to menuitem system */
 	if (multi) {
-		menu = "Commands:  j Move down   k Move up  d Delete   i Select   q Quit";
+		menu = _("Commands:  j Move down   k Move up  d Delete   i Select   q Quit");
 		choices = "jkriq123456789()[]$^udUD";
 	} else {
-		menu = "Commands:   j Move down     k Move up    i Select     q Quit";
+		menu = _("Commands:   j Move down     k Move up    i Select     q Quit");
 		choices = "jkiq123456789()[]$^udUD";
 	}
 
