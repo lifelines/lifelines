@@ -1524,7 +1524,7 @@ message_string (void)
 	case PED_SCREEN:
 		return (STRING) "LifeLines -- Pedigree Browse Screen";
 	case AUX_SCREEN:
-		return (STRING) "LifeLines -- Auxilliary Browse Screen";
+		return (STRING) "LifeLines -- Auxiliary Browse Screen";
 	case TWO_PER_SCREEN:
 		return (STRING) "LifeLines -- Tandem Browse Screen";
 	case TWO_FAM_SCREEN:
