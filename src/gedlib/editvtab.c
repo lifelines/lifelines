@@ -49,12 +49,9 @@ STRING ermsg;	/* error message */
 	TABLE tmptab = NULL;
 	STRING msg;
 	endwin();
-#ifdef WIN32
+
 	unlink(editfile);
-#else
-	sprintf(scratch, "rm -f %s", editfile);
-	system(scratch);
-#endif
+
 	retrieve_file(key, editfile);
 	do_edit();
 	while (TRUE) {

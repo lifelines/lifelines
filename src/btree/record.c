@@ -287,7 +287,9 @@ INT *plen;
 	RECORD record;
 	INT len;
 
-/*llwprintf("GETRECORD: rkey: %s\n", rkey2str(rkey)); /*DEBUG*/
+#ifdef DEBUG
+	llwprintf("GETRECORD: rkey: %s\n", rkey2str(rkey));
+#endif
 	*plen = 0;
 	ASSERT(index = bmaster(btree));
 
@@ -344,12 +346,7 @@ movefiles (from, to)
 STRING from, to;
 {
 	unlink(to);
-#ifdef WIN32
 	rename(from, to);
-#else
-	link(from, to);
-	unlink(from);
-#endif
 }
 /*====================================================
  * isrecord -- See if there is a record with given key

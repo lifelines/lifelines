@@ -36,12 +36,9 @@ INT code;	/* map code */
 		return FALSE;
 	}
 	endwin();
-#ifdef WIN32
+
 	unlink(editfile);
-#else
-	sprintf(scratch, "rm -f %s", editfile);
-	system(scratch);
-#endif
+
 	if (tran_tables[code])
 		retrieve_file(map_keys[code], editfile);
 	do_edit();
