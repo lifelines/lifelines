@@ -1117,19 +1117,13 @@ node_to_cacheel (NODE node)
  *  returns static buffer
  *============================================*/
 STRING
-key_of_record (NODE node, XLAT tt)
+key_of_record (NODE node)
 {
-	static char buffer[128];
 	NODE refn;
 	ASSERT(node);
 	refn = REFN(node);
 	if (refn && nval(refn)) {
-		if (tt) {
-			translate_string(tt, nval(refn), buffer, sizeof(buffer));
-			return buffer;
-		} else {
-			return nval(refn);
-		}
+		return nval(refn);
 	}
 	return rmvat(nxref(node)) + 1;
 }

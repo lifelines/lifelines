@@ -187,7 +187,7 @@ edit_indi (RECORD irec1)  /* may be NULL */
 	free_nodes(refn1);
 	free_nodes(refnn);
 	free_nodes(refn1n);
-	msg_status(_(qSgdpmod), indi_to_name(indi1, ttmd, 35));
+	msg_status(_(qSgdpmod), indi_to_name(indi1, 35));
 	return TRUE;
 }
 /*=====================================

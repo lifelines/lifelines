@@ -280,7 +280,7 @@ PVALUE __name (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	NODE name, indi = eval_indi(arg, stab, eflg, NULL);
 	BOOLEAN caps = TRUE;
 	PVALUE val;
-	XLAT ttmr = NULL; /* do not translate until output time */
+	STRING outname = 0;
 	if (*eflg) {
 		prog_var_error(node, stab, arg, NULL, nonindx, "name", "1");
 		return NULL;
@@ -303,8 +303,8 @@ PVALUE __name (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		}
 		return create_pvalue_from_string(0);
 	}
-	return create_pvalue_from_string(
-		manip_name(nval(name), ttmr, caps, TRUE, 68));
+	outname = manip_name(nval(name), caps, TRUE, 68);
+	return create_pvalue_from_string(outname);
 }
 /*==================================================+
  * __fullname -- Process person's name
@@ -319,7 +319,7 @@ __fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	BOOLEAN caps;
 	BOOLEAN myreg;
 	INT len;
-	XLAT ttmr = NULL; /* do not translate until output time */
+	STRING outname;
 
 	indi = eval_indi(arg, stab, eflg, NULL);
 	if (*eflg || !indi) {
@@ -356,8 +356,8 @@ __fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		}
 		return create_pvalue_from_string(0);
 	}
-	return create_pvalue_from_string(
-	    manip_name(nval(name), ttmr, caps, myreg, len));
+	outname = manip_name(nval(name), caps, myreg, len);
+	return create_pvalue_from_string(outname);
 }
 /*==================================+
  * __surname -- Find person's surname using new getasurname() routine.
@@ -369,8 +369,7 @@ __surname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE arg = (PNODE) iargs(node);
 	NODE name, indi = eval_indi(arg, stab, eflg, NULL);
 	STRING str;
-	static char scratch[MAXGEDNAMELEN+1];
-	XLAT ttmr = NULL; /* do not translate until output time */
+
 	if (*eflg) {
 		prog_var_error(node, stab, arg, NULL, nonvar1, "surname");
 		return NULL;
@@ -385,8 +384,7 @@ __surname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return create_pvalue_from_string(0);
 	}
 	str = getasurname(nval(name));
-	translate_string(ttmr, str, scratch, ARRSIZE(scratch));
-	return create_pvalue_from_string(scratch);
+	return create_pvalue_from_string(str);
 }
 /*========================================+
  * __soundex -- SOUNDEX function on persons
@@ -887,7 +885,7 @@ __long (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	/* if we were cleverer, we wouldn't call this every time */
 	init_rpt_reformat();
 
-	str = event_to_string(even, ttmr, &rpt_long_rfmt);
+	str = event_to_string(even, &rpt_long_rfmt);
 	return create_pvalue_from_string(str);
 }
 /*=====================================+
@@ -913,7 +911,7 @@ __short (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	/* if we were cleverer, we wouldn't call this every time */
 	init_rpt_reformat();
 
-	str = event_to_string(even, ttmr, &rpt_shrt_rfmt);
+	str = event_to_string(even, &rpt_shrt_rfmt);
 	return create_pvalue_from_string(str);
 }
 /*===============================+
@@ -2590,7 +2588,7 @@ __date (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	line = (NODE) pvalue(val);
-	return create_pvalue_from_string(event_to_date(line, ttmr, FALSE));
+	return create_pvalue_from_string(event_to_date(line, FALSE));
 }
 /*=====================================================+
  * normalize_year -- Modify year before returning to report
@@ -2639,7 +2637,7 @@ __extractdate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	if (nestr("DATE", ntag(line)))
-		str = event_to_date(line, NULL, FALSE);
+		str = event_to_date(line, FALSE);
 	else
 		str = nval(line);
 	delete_pvalue(val);
@@ -2748,7 +2746,7 @@ __stddate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 			return NULL;
 		}
 		evnt = (NODE) pvalue(val);
-		str = event_to_date(evnt, NULL, FALSE);
+		str = event_to_date(evnt, FALSE);
 	}
 	set_pvalue(val, PSTRING, do_format_date(str,
 	    daycode, monthcode, yearcode, datecode, eratimecode, FALSE));
@@ -2774,7 +2772,7 @@ __complexdate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 			return NULL;
 		}
 		evnt = (NODE) pvalue(val);
-		str = event_to_date(evnt, NULL, FALSE);
+		str = event_to_date(evnt, FALSE);
 	}
 	set_pvalue(val, PSTRING, do_format_date(str,
 	    daycode, monthcode, yearcode, datecode, eratimecode, cmplxcode));
@@ -2985,7 +2983,7 @@ __year (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 			return NULL;
 		}
 		evnt = (NODE) pvalue(val);
-		str = event_to_date(evnt, NULL, FALSE);
+		str = event_to_date(evnt, FALSE);
 	}
 	gdv = extract_date(str);
 	/* prefer year's string if it has one */

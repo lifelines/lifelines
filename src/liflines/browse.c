@@ -286,8 +286,7 @@ pick_create_new_family (RECORD current, RECORD save, STRING * addstrings)
 	if (i == 0) rec = add_family(NULL, NULL, current);
 	else if (save) {
 		char scratch[100];
-		/* TODO: move translation down to prompt */
-		STRING name = indi_to_name(nztop(save), xlat, 55);
+		STRING name = indi_to_name(nztop(save), 55);
 		llstrncpyf(scratch, sizeof(scratch), uu8, "%s%s", _(qSissnew), name);
 		if (keyflag) {
 			STRING key = rmvat(nxref(nztop(save)))+1;
@@ -849,11 +848,11 @@ prompt_add_spouse_with_candidate (RECORD fam, RECORD candidate)
 	if (candidate) {
 		if (keyflag) {
 			sprintf(scratch, "%s%s (%s)", _(qSissnew),
-				 indi_to_name(nztop(candidate), ttmd, 56),
+				 indi_to_name(nztop(candidate), 56),
 				 rmvat(nxref(nztop(candidate)))+1);
 		} else {
 			sprintf(scratch, "%s%s", _(qSissnew),
-				 indi_to_name(nztop(candidate), ttmd, 56));
+				 indi_to_name(nztop(candidate), 56));
 		}
 		if (!ask_yes_or_no(scratch)) {
 			candidate = NULL;
@@ -882,11 +881,11 @@ prompt_add_child_check_save (NODE fam, NODE save)
 	if (save) {
 		if (keyflag)
 			sprintf(scratch, "%s%s (%s)", _(qSiscnew),
-				 indi_to_name(save, ttmd, 56),
+				 indi_to_name(save, 56),
 				 rmvat(nxref(save))+1);
 		else
 			sprintf(scratch, "%s%s", _(qSiscnew),
-				 indi_to_name(save, ttmd, 56));
+				 indi_to_name(save, 56));
 		if (!ask_yes_or_no(scratch))
 			save = NULL;
 	}

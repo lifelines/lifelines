@@ -2,8 +2,18 @@
 
 	* ChangeLog src/gedlib/init.c:
 
-	Fix ordering bug, in which menuitems were not translated into correct codeset, if
-	databases in different locales.
+	Fix ordering bug, in which menuitems were not translated into correct
+	codeset, if databases in different locales.
+
+	* ChangeLog src/gedlib/gstrings.c src/gedlib/keytonod.c
+	src/gedlib/names.c src/gedlib/node.c src/hdrs/gedcom.h
+	src/interp/builtin.c src/liflines/add.c src/liflines/browse.c
+	src/liflines/edit.c src/liflines/merge.c
+	src/liflines/miscutls.c src/liflines/screen.c
+	src/liflines/show.c:
+
+	Remove internal conversions to display codeset; this only needs to
+	happen in cscurses.
 
 2002-12-13 Perry Rapp
 
@@ -23,10 +33,10 @@
 
 	Finished rewrite of translation tables.
 	Prepare to start width-limiting curses output functions.
-	Tracked down win32 codeset conversion bug to sf.net/projects/gettext version
-	not linking to MSVCRT.DLL, so not getting E2BIG back from iconv.dll. Fixed in
-	sf.net/projects/gettext. Symptom was French locale string in u/c menu not getting
-	codeset conversion.
+	Tracked down win32 codeset conversion bug to sf.net/projects/gettext
+	version not linking to MSVCRT.DLL, so not getting E2BIG back from
+	iconv.dll. Fixed in sf.net/projects/gettext. Symptom was French locale
+	string in u/c menu not getting codeset conversion.
 
 2002-12-10 Perry Rapp
 

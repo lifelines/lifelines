@@ -873,19 +873,19 @@ upsurname (STRING name)
 }
 /*==================================================
  * manip_name - Convert GEDCOM name to various forms
+ *  with codeset conversion
  *  name:    [IN] name
- *  ttm:     [IN] translation table
  *  caps:    [IN] make surname into caps?
  *  regorder [IN] regular order? (not surname first)
  *  len:     [IN] max name length
  * returns static buffer
  *================================================*/
 STRING
-manip_name (STRING name, XLAT ttm, BOOLEAN caps, BOOLEAN regorder, INT len)
+manip_name (STRING name, BOOLEAN caps, BOOLEAN regorder, INT len)
 {
 	static char scratch[MAXGEDNAMELEN+1];
 	if (!name || *name == 0) return NULL;
-	translate_string(ttm, name, scratch, MAXGEDNAMELEN+1);
+	llstrsets(scratch, sizeof(scratch), uu8, name);
 	name = scratch;
 	if (caps) name = upsurname(name);
 	name = trim_name(name, regorder ? len: len-1);

@@ -617,16 +617,16 @@ sort_children (NODE chil1,
 	while (copy1 && copy2) {
 		if (int1 == 1) {
 			kid1 = key_to_indi(rmvat(nval(copy1)));
-			year1 = event_to_date(BIRT(kid1), NULL, TRUE);
+			year1 = event_to_date(BIRT(kid1), TRUE);
 			if (!year1)
-				year1 = event_to_date(BAPT(kid1), NULL, TRUE);
+				year1 = event_to_date(BAPT(kid1), TRUE);
 			int1 = year1 ? atoi(year1) : 0;
 		}
 		if (int2 == 1) {
 			kid2 = key_to_indi(rmvat(nval(copy2)));
-			year2 = event_to_date(BIRT(kid2), NULL, TRUE);
+			year2 = event_to_date(BIRT(kid2), TRUE);
 			if (!year2)
-				year2 = event_to_date(BAPT(kid2), NULL, TRUE);
+				year2 = event_to_date(BAPT(kid2), TRUE);
 			int2 = year2 ? atoi(year2) : 0;
 		}
 		if (int1 < int2) {

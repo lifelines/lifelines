@@ -1260,29 +1260,29 @@ indi_to_next_sib (RECORD irec)
  * indi_to_name -- Return name of person
  *====================================*/
 STRING
-indi_to_name (NODE node, XLAT ttm, INT len)
+indi_to_name (NODE node, INT len)
 {
 	if (node)
 		node = find_tag(nchild(node), "NAME");
 	if (!node)
 		return _("NO NAME");
-	return manip_name(nval(node), ttm, TRUE, TRUE, len);
+	return manip_name(nval(node), TRUE, TRUE, len);
 }
 /*======================================
  * indi_to_title -- Return title of person
  *====================================*/
 STRING
-indi_to_title (NODE node, XLAT ttm, INT len)
+indi_to_title (NODE node, INT len)
 {
 	if (!node) return NULL;
 	if (!(node = find_tag(nchild(node), "TITL"))) return NULL;
-	return manip_name(nval(node), ttm, FALSE, TRUE, len);
+	return manip_name(nval(node), FALSE, TRUE, len);
 }
 /*======================================
  * node_to_tag -- Return a subtag of a node
  * (presumably top level, but not necessarily)
  *====================================*/
-STRING node_to_tag (NODE node, STRING tag, XLAT ttm, INT len)
+STRING node_to_tag (NODE node, STRING tag, INT len)
 {
 	static char scratch[MAXGEDNAMELEN+1];
 	STRING refn;
@@ -1292,17 +1292,17 @@ STRING node_to_tag (NODE node, STRING tag, XLAT ttm, INT len)
 	refn = nval(node);
 	if (len > (INT)sizeof(scratch)-1)
 		len = sizeof(scratch)-1;
-	translate_string(ttm, refn, scratch, sizeof(scratch));
+	llstrsets(scratch, len, uu8, refn);
 	return scratch;
 }
 /*==============================================
- * indi_to_event -- Convert event tree to string
+ * fam_to_event -- Convert event tree to string
  *============================================*/
 STRING
-fam_to_event  (NODE node, XLAT ttm, STRING tag, STRING head
+fam_to_event (NODE node, STRING tag, STRING head
 	, INT len, RFMT rfmt)
 {
-	return indi_to_event(node, ttm, tag, head, len, rfmt);
+	return indi_to_event(node, tag, head, len, rfmt);
 }
 /*==============================================
  * indi_to_event -- Convert event tree to string
@@ -1316,7 +1316,7 @@ fam_to_event  (NODE node, XLAT ttm, STRING tag, STRING head
  *  else NULL
  *============================================*/
 STRING
-indi_to_event (NODE node, XLAT ttm, STRING tag, STRING head
+indi_to_event (NODE node, STRING tag, STRING head
 	, INT len, RFMT rfmt)
 {
 	static char scratch[200];
@@ -1327,7 +1327,7 @@ indi_to_event (NODE node, XLAT ttm, STRING tag, STRING head
 	if (mylen > len+1) mylen = len+1; /* incl. trailing 0 */
 	if (!node) return NULL;
 	if (!(node = find_tag(nchild(node), tag))) return NULL;
-	event = event_to_string(node, ttm, rfmt);
+	event = event_to_string(node, rfmt);
 	if (!event) return NULL;
 	/* need at least room for head + 1 character + "..." or no point */
 	if ((INT)strlen(head)+4>len) return NULL;
@@ -1377,10 +1377,9 @@ event_to_date_place (NODE node, STRING * date, STRING * plac)
  *  rfmt:  [IN]  reformatting info (may be NULL)
  *=========================================*/
 STRING
-event_to_string (NODE node, XLAT ttm, RFMT rfmt)
+event_to_string (NODE node, RFMT rfmt)
 {
 	static char scratch1[MAXLINELEN+1];
-	static char scratch2[MAXLINELEN+1];
 	STRING date, plac;
 	event_to_date_place(node, &date, &plac);
 	if (!date && !plac) return NULL;
@@ -1398,8 +1397,7 @@ event_to_string (NODE node, XLAT ttm, RFMT rfmt)
 	} else {
 		return NULL;
 	}
-	translate_string(ttm, scratch1, scratch2, MAXLINELEN);
-	return scratch2;
+	return scratch1;
 }
 /*=======================================
  * event_to_date -- Convert event to date
@@ -1408,12 +1406,12 @@ event_to_string (NODE node, XLAT ttm, RFMT rfmt)
  *  shrt: [IN]  flag - use short form if set
  *=====================================*/
 STRING
-event_to_date (NODE node, XLAT ttm, BOOLEAN shrt)
+event_to_date (NODE node, BOOLEAN shrt)
 {
 	static char scratch[MAXLINELEN+1];
 	if (!node) return NULL;
 	if (!(node = DATE(node))) return NULL;
-	translate_string(ttm, nval(node), scratch, MAXLINELEN);
+	llstrsets(scratch, sizeof(scratch),uu8, nval(node));
 	if (shrt) return shorten_date(scratch);
 	return scratch;
 }
@@ -1421,8 +1419,7 @@ event_to_date (NODE node, XLAT ttm, BOOLEAN shrt)
  * event_to_plac -- Convert event to place
  *======================================*/
 STRING
-event_to_plac (NODE node,
-               BOOLEAN shrt)
+event_to_plac (NODE node, BOOLEAN shrt)
 {
 	if (!node) return NULL;
 	node = PLAC(node);

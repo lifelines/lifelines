@@ -2423,7 +2423,6 @@ manufacture a listdisp here
 	STRING key, name;
 	NODE indi;
 	char scratch[200];
-	XLAT ttmd = transl_get_predefined_xlat(MINDS);
 	INT mode = 'n';
 	INT viewlines = 13;
 	BOOLEAN scrollable = (viewlines < len);
@@ -2453,11 +2452,11 @@ manufacture a listdisp here
 		}
 		scratch[0] =0;
 		if (name) {
-			name = manip_name(name, ttmd, TRUE, TRUE, 40);
+			name = manip_name(name, TRUE, TRUE, 40);
 			llstrapps(scratch, sizeof(scratch), uu8, name);
 			llstrapps(scratch, sizeof(scratch), uu8, " ");
 		}
-		llstrappf(scratch, sizeof(scratch), uu8, "(%s)", key_of_record(indi, ttmd));
+		llstrappf(scratch, sizeof(scratch), uu8, "(%s)", key_of_record(indi));
 		mvccwaddstr(win, row, 4, scratch);
 		row++;
 	}

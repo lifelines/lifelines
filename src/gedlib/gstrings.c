@@ -108,32 +108,31 @@ indi_to_list_string (NODE indi, NODE fam, INT len, RFMT rfmt)
 {
 	char scratch[MAXLINELEN];
 	STRING name, evt = NULL, p = scratch;
-	XLAT ttmd = transl_get_predefined_xlat(MINDS);
 	int hasparents;
 	int hasfamily;
 	if (len>(INT)sizeof(scratch))
 		len = sizeof(scratch);
 	if (indi) {
-		ASSERT(name = indi_to_name(indi, ttmd, len));
+		ASSERT(name = indi_to_name(indi, len));
 	} else
 		name = _(qSunksps);
 	sprintf(p, "%s", name);
 	p += strlen(p);
-	if (fam)  evt = fam_to_event(fam, ttmd, "MARR", _(qSdspa_mar), len, rfmt);
-	if (!evt) evt = indi_to_event(indi, ttmd, "BIRT", _(qSdspa_bir), len, rfmt);
-	if (!evt) evt = indi_to_event(indi, ttmd, "CHR", _(qSdspa_chr), len, rfmt);
-	if (!evt) evt = indi_to_event(indi, ttmd, "DEAT", _(qSdspa_dea), len, rfmt);
-	if (!evt) evt = indi_to_event(indi, ttmd, "BURI", _(qSdspa_bur), len, rfmt);
+	if (fam)  evt = fam_to_event(fam, "MARR", _(qSdspa_mar), len, rfmt);
+	if (!evt) evt = indi_to_event(indi, "BIRT", _(qSdspa_bir), len, rfmt);
+	if (!evt) evt = indi_to_event(indi, "CHR", _(qSdspa_chr), len, rfmt);
+	if (!evt) evt = indi_to_event(indi, "DEAT", _(qSdspa_dea), len, rfmt);
+	if (!evt) evt = indi_to_event(indi, "BURI", _(qSdspa_bur), len, rfmt);
 	if (evt) {
 		sprintf(p, ", %s", evt);
 		p += strlen(p);
 	}
 	if (indi && displaykeys) {
-		sprintf(p, " (%s)", key_of_record(indi, ttmd));
+		sprintf(p, " (%s)", key_of_record(indi));
 		p += strlen(p);
 	}
 	if (fam && displaykeys) {
-		sprintf(p, " (%s)", key_of_record(fam, ttmd));
+		sprintf(p, " (%s)", key_of_record(fam));
 		p += strlen(p);
 	}
 	if(indi) {
@@ -164,23 +163,22 @@ sour_to_list_string (NODE sour, INT len, STRING delim)
 	char scratch[1024];
 	STRING name, p=scratch;
 	INT mylen=len;
-	XLAT xlat = transl_get_predefined_xlat(MINDS);
 	if (mylen>(INT)sizeof(scratch))
 		mylen=sizeof(scratch);
 	p[0]=0;
 	llstrcatn(&p, "(S", &mylen);
 	llstrcatn(&p, rmvat(nxref(sour))+1, &mylen);
 	llstrcatn(&p, ") ", &mylen);
-	name = node_to_tag(sour, "REFN", xlat, len);
+	name = node_to_tag(sour, "REFN", len);
 	if (name)
 		llstrcatn(&p, name, &mylen);
-	name = node_to_tag(sour, "TITL", xlat, len);
+	name = node_to_tag(sour, "TITL", len);
 	if (name && mylen > 20)
 	{
 		llstrcatn(&p, delim, &mylen);
 		llstrcatn(&p, name, &mylen);
 	}
-	name = node_to_tag(sour, "AUTH", xlat, len);
+	name = node_to_tag(sour, "AUTH", len);
 	if (name && mylen > 20)
 	{
 		llstrcatn(&p, delim, &mylen);
@@ -198,7 +196,6 @@ even_to_list_string (NODE even, INT len, STRING delim)
 	char scratch[1024];
 	STRING name, p=scratch;
 	INT mylen=len;
-	XLAT ttmd = transl_get_predefined_xlat(MINDS);
 	delim=delim; /* unused */
 	if (mylen>(INT)sizeof(scratch))
 		mylen=sizeof(scratch);
@@ -206,10 +203,10 @@ even_to_list_string (NODE even, INT len, STRING delim)
 	llstrcatn(&p, "(E", &mylen);
 	llstrcatn(&p, rmvat(nxref(even))+1, &mylen);
 	llstrcatn(&p, ") ", &mylen);
-	name = node_to_tag(even, "NAME", ttmd, len);
+	name = node_to_tag(even, "NAME", len);
 	if (name)
 		llstrcatn(&p, name, &mylen);
-        name = node_to_tag(even, "REFN", ttmd, len);
+        name = node_to_tag(even, "REFN", len);
         if (name) {
 		llstrcatn(&p, " (", &mylen);
                 llstrcatn(&p, name, &mylen);
@@ -230,7 +227,6 @@ fam_to_list_string (NODE fam, INT len, STRING delim)
 	char counts[32];
 	INT husbands=0, wives=0, children=0;
 	INT templen=0;
-	XLAT ttmd = transl_get_predefined_xlat(MINDS);
 	NODE refn, husb, wife, chil, rest, node;
 	if (mylen>(INT)sizeof(scratch))
 		mylen=sizeof(scratch);
@@ -238,7 +234,7 @@ fam_to_list_string (NODE fam, INT len, STRING delim)
 	llstrcatn(&p, "(F", &mylen);
 	llstrcatn(&p, rmvat(nxref(fam))+1, &mylen);
 	llstrcatn(&p, ")", &mylen);
-	name = node_to_tag(fam, "REFN", ttmd, len);
+	name = node_to_tag(fam, "REFN", len);
 	if (name) {
 		llstrcatn(&p, " ", &mylen);
 		llstrcatn(&p, name, &mylen);
@@ -260,7 +256,7 @@ fam_to_list_string (NODE fam, INT len, STRING delim)
 		else
 			templen = mylen;
 		node = key_to_indi(rmvat(nval(husb)));
-		llstrcatn(&p, indi_to_name(node, ttmd, templen), &mylen);
+		llstrcatn(&p, indi_to_name(node, templen), &mylen);
 		if (wives)
 			llstrcatn(&p, " m. ", &mylen);
 	}
@@ -269,7 +265,7 @@ fam_to_list_string (NODE fam, INT len, STRING delim)
 			templen = mylen;
 		/* othewise we set templen above */
 		node = key_to_indi(rmvat(nval(wife)));
-		llstrcatn(&p, indi_to_name(node, ttmd, templen), &mylen);
+		llstrcatn(&p, indi_to_name(node, templen), &mylen);
 	}
 	join_fam(fam, refn, husb, wife, chil, rest);
 	/* TO DO - print a husband and a wife out */
@@ -285,7 +281,6 @@ other_to_list_string(NODE node, INT len, STRING delim)
 	char scratch[1024];
 	STRING name, p=scratch;
 	INT mylen=len;
-	XLAT ttmd = transl_get_predefined_xlat(MINDS);
 	NODE child;
 	delim=delim; /* unused */
 	if (mylen>(INT)sizeof(scratch))
@@ -294,15 +289,13 @@ other_to_list_string(NODE node, INT len, STRING delim)
 	llstrcatn(&p, "(X", &mylen);
 	llstrcatn(&p, rmvat(nxref(node))+1, &mylen);
 	llstrcatn(&p, ") (", &mylen);
-	translate_catn(ttmd, &p, ntag(node), &mylen);
+	llstrcatn(&p, ntag(node), &mylen);
 	llstrcatn(&p, ") ", &mylen);
-	name = node_to_tag(node, "REFN", ttmd, mylen);
+	name = node_to_tag(node, "REFN", mylen);
 	if (name)
 		llstrcatn(&p, name, &mylen);
 	if (nval(node)) {
-		char scratch[MAXGEDNAMELEN+1];
-		translate_string(ttmd, nval(node), scratch, sizeof(scratch)-1);
-		llstrcatn(&p, scratch, &mylen);
+		llstrcatn(&p, nval(node), &mylen);
 	}
 	/* append any CONC/CONT nodes that fit */
 	child = nchild(node);

@@ -166,7 +166,7 @@ add_new_indi (RECORD indi0)
 	resolve_refn_links(indi);
 	indi_to_dbase(indi);
 	indi_to_cache(indi0);
-	msg_status(_(qSgdpadd), indi_to_name(indi, ttmd, 35));
+	msg_status(_(qSgdpadd), indi_to_name(indi, 35));
 	return indi0;
 }
 /*================================================================
@@ -253,7 +253,7 @@ prompt_add_child (NODE child, NODE fam, RFMT rfmt)
 /* Add FAMC node to child */
 
 	add_child_to_fam(child, fam, i);
-	msg_status(_(qSgdcadd), indi_to_name(child, ttmd, 35));
+	msg_status(_(qSgdcadd), indi_to_name(child, 35));
 	return fam;
 }
 
@@ -432,7 +432,7 @@ add_spouse_to_fam (NODE spouse, NODE fam, INT sex)
 	resolve_refn_links(fam);
 	indi_to_dbase(spouse);
 	fam_to_dbase(fam);
-	msg_status(_(qSgdsadd), indi_to_name(spouse, ttmd, 35));
+	msg_status(_(qSgdsadd), indi_to_name(spouse, 35));
 }
 /*=========================================
  * add_members_to_family -- Add members to new family
