@@ -150,15 +150,25 @@ typedef struct ltag {
 #define LISTNOFREE 0
 #define LISTDOFREE 1
 
-extern LIST create_list();
-extern BOOLEAN empty_list();
-extern push_list();
-extern WORD pop_list(), get_list_element();
-extern INT length_list();
-extern enqueue_list();
-extern WORD dequeue_list();
+/* External Functions */
+LIST create_list(void);
+BOOLEAN empty_list(LIST);
+WORD pop_list(LIST);
+void enqueue_list(LIST, WORD);
+WORD dequeue_list(LIST);
+void set_list_element(LIST, INT, WORD);
+WORD get_list_element(LIST, INT);
+INT length_list(LIST);
 STRING trim(STRING, INT);
-FILE*  fopenpath(STRING, STRING, STRING, STRING, STRING*);
+FILE* fopenpath(STRING, STRING, STRING, STRING, STRING*);
+
+/* Internal Functions */
+void make_list_empty(LIST);
+void set_list_type(LIST, INT);
+void push_list(LIST, WORD);
+void remove_list(LIST, int (*func)());
+BOOLEAN in_list(LIST, WORD, int (*func)());
+void back_list(LIST, WORD);
 
 #define FORLIST(l,e)\
 	{\

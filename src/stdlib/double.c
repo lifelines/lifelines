@@ -34,7 +34,7 @@
 /*===========================
  * create_list -- Create list
  *=========================*/
-LIST create_list ()
+LIST create_list (void)
 {
 	LIST list = (LIST) stdalloc(sizeof(*list));
 	lfirst(list) = llast(list) = NULL;
@@ -44,7 +44,7 @@ LIST create_list ()
 /*===============================
  * set_list_type -- Set list type
  *=============================*/
-set_list_type (list, type)
+void set_list_type (list, type)
 LIST list;
 INT type;
 {
@@ -53,7 +53,7 @@ INT type;
 /*===========================
  * remove_list -- Remove list
  *=========================*/
-remove_list (list, func)
+void remove_list (list, func)
 LIST list;
 int (*func)();
 {
@@ -88,7 +88,7 @@ int (*func)();
 /*===================================
  * make_list_empty -- Make list empty
  *=================================*/
-make_list_empty (list)
+void make_list_empty (list)
 LIST list;
 {
 	LNODE lnode0, lnode;
@@ -116,8 +116,9 @@ LIST list;
 /*==================================
  * push_list -- Push element on list
  *================================*/
-push_list (list, el)
-LIST list;  WORD el;
+void push_list (list, el)
+LIST list;
+WORD el;
 {
 	LNODE node = (LNODE) stdalloc(sizeof(*node));
 	lelement(node) = el;
@@ -134,8 +135,9 @@ LIST list;  WORD el;
 /*=========================================
  * back_list -- Put element on back of list
  *=======================================*/
-back_list (list, el)
-LIST list;  WORD el;
+void back_list (list, el)
+LIST list;
+WORD el;
 {
 	LNODE node = (LNODE) stdalloc(sizeof(*node));
 	lelement(node) = el;
@@ -171,7 +173,7 @@ LIST list;
 /*========================================
  * enqueue_list -- Enqueue element on list
  *======================================*/
-enqueue_list (list, el)
+void enqueue_list (list, el)
 LIST list;
 WORD el;
 {
@@ -217,7 +219,7 @@ INT n;
 /*==================================================
  * set_list_element - Set element using array access
  *================================================*/
-set_list_element (list, ind, val)
+void set_list_element (list, ind, val)
 LIST list;
 INT ind;
 WORD val;
