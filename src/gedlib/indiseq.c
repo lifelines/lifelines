@@ -1445,10 +1445,10 @@ descendent_indiseq (INDISEQ seq)
 	STRING key, dkey, fkey;
 	UNION uval;
 	if (!seq) return NULL;
-		/* itab = people already added */
-	itab = create_table_old2(DONTFREE);
-		/* ftab = families already added (processed) */
-	ftab = create_table_old2(FREEKEY);
+		/* itab = people already added, value irrelevant */
+	itab = create_table_new();
+		/* ftab = families already added (processed), value irrelevant */
+	ftab = create_table_new();
 		/*
 		deslist & genlist are paired - 
 		dequeue the person from deslist & the generation
@@ -1475,7 +1475,7 @@ descendent_indiseq (INDISEQ seq)
 				/* skip families already processed */
 			if (in_table(ftab, fkey = fam_to_key(fam)))
 				goto a;
-			insert_table_int(ftab, strsave(fkey), 0);
+			insert_table_int(ftab, fkey, 0);
 			FORCHILDRENx(fam, child, num2)
 					/* only do people not processed */
 				if (!in_table(itab,

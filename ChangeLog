@@ -56,6 +56,10 @@
 	Convert gengedcom tables to new generic style.
 	Adjust traverse_table_param to handle generic values.
 
+	* ChangeLog src/gedlib/indiseq.c
+
+	Convert descendent_indiseq to use new generic tables.
+
 2005-01-22 Perry Rapp
 
 	* ChangeLog src/stdlib/generic.c src/stdlib/table.c
