@@ -36,6 +36,7 @@
 #include "llstdlib.h"
 #include "table.h"
 #include "date.h"
+#include "zstr.h"
 
 
 /*********************************************
@@ -79,17 +80,18 @@ struct nums_s { struct dnum_s num1; struct dnum_s num2; struct dnum_s num3; };
 static void analyze_numbers(GDATEVAL, struct gdate_s *, struct nums_s *);
 static void analyze_word(GDATEVAL gdv, struct gdate_s * pdate
 	, struct nums_s * nums, INT ival, BOOLEAN * newdate);
+static void assign_dnum(struct dnum_s * dest, struct dnum_s * src);
 static void clear_dnum(struct dnum_s * dnum);
 static void clear_numbers(struct nums_s * nums);
-static void format_cal(INT cal, CNSTRING src, STRING output, INT len);
-static void format_complex(GDATEVAL gdv, STRING output, INT len, INT cmplx
-	, STRING ymd2, STRING ymd3);
+static ZSTR do_zformat_date(STRING str, INT dfmt, INT mfmt,
+             INT yfmt, INT sfmt, INT efmt, INT cmplx);
+static void format_cal(ZSTR * pzstr, INT cal);
+static ZSTR format_complex(GDATEVAL gdv, INT cmplx, STRING ymd2, STRING ymd3);
 static void format_day(struct dnum_s da, INT dfmt, STRING output);
 static STRING format_month(INT cal, struct dnum_s mo, INT mfmt);
-static void format_eratime(struct gdate_s * pdate, CNSTRING ymd, INT efmt
-	, STRING output, INT len);
+static void format_eratime(ZSTR * pzstr, INT eratime, INT efmt);
 static STRING format_year(struct dnum_s yr, INT yfmt);
-static void format_ymd(STRING, STRING, STRING, INT, STRING*, INT *len);
+static void format_ymd(ZSTR * pzstr, STRING syr, STRING smo, STRING sda, INT sfmt);
 static void free_gdate(struct gdate_s *);
 static INT get_date_tok(struct dnum_s*);
 static void init_keywordtbl(void);
@@ -101,7 +103,7 @@ static void load_lang(void);
 static void mark_freeform(GDATEVAL gdv);
 static void mark_invalid(GDATEVAL gdv);
 static void set_date_string(STRING);
-static void assign_dnum(struct dnum_s * dest, struct dnum_s * src);
+static ZSTR zshorten_date(STRING date);
 
 /*********************************************
  * local types & variables
@@ -262,23 +264,34 @@ STRING
 do_format_date (STRING str, INT dfmt, INT mfmt,
              INT yfmt, INT sfmt, INT efmt, INT cmplx)
 {
+	/* TODO: get rid of this function, and have callers call do_zformat_date */
+	ZSTR zstr = do_zformat_date(str, dfmt, mfmt, yfmt, sfmt, efmt, cmplx);
+	static char buffer[100];
+	llstrsets(buffer, sizeof(buffer), uu8, zs_str(zstr));
+	zs_free(&zstr);
+	return buffer;
+}
+static ZSTR
+do_zformat_date (STRING str, INT dfmt, INT mfmt,
+             INT yfmt, INT sfmt, INT efmt, INT cmplx)
+{
 	STRING smo, syr;
-	static char daystr[3], ymd[60], ymd2[60], ymd3[60], complete[100];
-	STRING p;
-	INT len;
+	static char daystr[3];
 	GDATEVAL gdv = 0;
+	ZSTR zstr=zs_newn(40);
 	
-	if (!str) return NULL;
+	if (!str) return zstr;
 
 	initialize_if_needed();
 
 	if (sfmt==12) {
 		/* This is what used to be the shrt flag */
-		return shorten_date(str);
+		return zshorten_date(str);
+		return zstr;
 	}
 	if (sfmt==14) {
-		llstrncpy(complete, str, sizeof(complete), uu8);
-		return complete;
+		zs_sets(&zstr, str);
+		return zstr;
 	}
 	if (!cmplx) {
 		/* simple */
@@ -286,34 +299,26 @@ do_format_date (STRING str, INT dfmt, INT mfmt,
 		format_day(gdv->date1.day, dfmt, daystr);
 		smo = format_month(gdv->date1.calendar, gdv->date1.month, mfmt);
 		syr = format_year(gdv->date1.year, yfmt);
-		p = ymd;
-		len = sizeof(ymd);
-		*p = 0;
-		format_ymd(syr, smo, daystr, sfmt, &p, &len);
+		format_ymd(&zstr, syr, smo, daystr, sfmt);
+		format_eratime(&zstr, gdv->date1.eratime, efmt);
 		if (gdv->date1.calendar) {
-			format_eratime(&gdv->date1, ymd, efmt, ymd2, sizeof(ymd2));
-			format_cal(gdv->date1.calendar, ymd2, ymd3, sizeof(ymd3));
-		} else {
-			format_eratime(&gdv->date1, ymd, efmt, ymd3, sizeof(ymd3));
+			format_cal(&zstr, gdv->date1.calendar);
 		}
 		free_gdateval(gdv);
-		return ymd3;
+		return zstr;
 	} else {
+		ZSTR zstr2 = zs_newn(40);
+		ZSTR zstr3=0;
 		/* complex (include modifier words) */
 		gdv = extract_date(str);
 		format_day(gdv->date1.day, dfmt, daystr);
 		smo = format_month(gdv->date1.calendar, gdv->date1.month, mfmt);
 		syr = (gdv->date1.year.str ? gdv->date1.year.str 
 			: format_year(gdv->date1.year, yfmt));
-		p = ymd;
-		len = sizeof(ymd);
-		*p = 0;
-		format_ymd(syr, smo, daystr, sfmt, &p, &len);
+		format_ymd(&zstr, syr, smo, daystr, sfmt);
+		format_eratime(&zstr, gdv->date1.eratime, efmt);
 		if (gdv->date1.calendar) {
-			format_eratime(&gdv->date1, ymd, efmt, ymd2, sizeof(ymd2));
-			format_cal(gdv->date1.calendar, ymd2, ymd3, sizeof(ymd3));
-		} else {
-			format_eratime(&gdv->date1, ymd, efmt, ymd3, sizeof(ymd3));
+			format_cal(&zstr, gdv->date1.calendar);
 		}
 		if (gdateval_isdual(gdv)) {
 			/* build 2nd date string into ymd2 */
@@ -321,28 +326,23 @@ do_format_date (STRING str, INT dfmt, INT mfmt,
 			smo = format_month(gdv->date2.calendar, gdv->date2.month, mfmt);
 			syr = (gdv->date2.year.str ? gdv->date2.year.str 
 				: format_year(gdv->date2.year, yfmt));
-			p = ymd;
-			len = sizeof(ymd);
-			*p = 0;
-			format_ymd(syr, smo, daystr, sfmt, &p, &len);
+			format_ymd(&zstr2, syr, smo, daystr, sfmt);
+			format_eratime(&zstr2, gdv->date2.eratime, efmt);
 			if (gdv->date2.calendar) {
-				format_eratime(&gdv->date2, ymd, efmt, complete, sizeof(complete));
-				format_cal(gdv->date2.calendar, complete, ymd2, sizeof(ymd2));
-			} else {
-				format_eratime(&gdv->date2, ymd, efmt, ymd2, sizeof(ymd2));
+				format_cal(&zstr2, gdv->date2.calendar);
 			}
-		} else {
-			ymd2[0] = 0;
 		}
-		format_complex(gdv, complete, sizeof(complete), cmplx, ymd3, ymd2);
+		zstr3 = format_complex(gdv, cmplx, zs_str(zstr), zs_str(zstr2));
+		zs_free(&zstr);
+		zs_free(&zstr2);
 		free_gdateval(gdv);
-		return complete;
+		return zstr3;
 	}
 }
 /*===================================================
  * format_eratime -- Add AD/BC info to date
  *  pdate:  [IN]  actual date information
- *  ymd:    [IN]  date string consisting of yr, mo, da portion
+ *  pzstr:  [I/O] date string consisting of yr, mo, da portion
  *  efmt:   [IN]  eratime format code
  *                0 - no AD/BC marker
  *                1 - trailing B.C. if appropriate
@@ -353,18 +353,13 @@ do_format_date (STRING str, INT dfmt, INT mfmt,
  *               22 - trailing C.E. or B.C.E.
  *               31 - trailing BCE if appropriate
  *               32 - trailing CE or BCE
- *  output: [IN]  buffer in which to write
- *  len:    [IN]  size of buffer
  * Created: 2001/12/28 (Perry Rapp)
  *=================================================*/
 static void
-format_eratime (struct gdate_s * pdate, CNSTRING ymd, INT efmt, STRING output
-	, INT len)
+format_eratime (ZSTR * pzstr, INT eratime, INT efmt)
 {
-	output[0] = 0;
-	llstrapps(output, len, uu8, ymd);
 	/* TODO: calendar-specific handling */
-	if (pdate->eratime == GDV_BC) {
+	if (eratime == GDV_BC) {
 		if (efmt > 0) {
 			STRING tag = 0;
 			switch (efmt/10) {
@@ -375,8 +370,8 @@ format_eratime (struct gdate_s * pdate, CNSTRING ymd, INT efmt, STRING output
 			/* this way we handle if one is blank */
 			if (!tag || !tag[0])
 				tag = _(qSdatetrl_bcA);
-			llstrapps(output, len, uu8, " ");
-			llstrapps(output, len, uu8, tag);
+			zs_apps(pzstr, " ");
+			zs_apps(pzstr, tag);
 			return;
 		}
 	} else {
@@ -390,8 +385,8 @@ format_eratime (struct gdate_s * pdate, CNSTRING ymd, INT efmt, STRING output
 			/* this way we handle if one is blank */
 			if (!tag || !tag[0])
 				tag = _(qSdatetrl_adA);
-			llstrapps(output, len, uu8, " ");
-			llstrapps(output, len, uu8, tag);
+			zs_apps(pzstr, " ");
+			zs_apps(pzstr, tag);
 			return;
 		}
 	}
@@ -406,13 +401,13 @@ format_eratime (struct gdate_s * pdate, CNSTRING ymd, INT efmt, STRING output
  * Created: 2001/12/31 (Perry Rapp)
  *=================================================*/
 static void
-format_cal (INT cal, CNSTRING src, STRING output, INT len)
+format_cal (ZSTR * pzstr, INT cal)
 {
 	ASSERT(cal>=0 && cal<ARRSIZE(calendar_pics));
 	if (calendar_pics[cal]) {
-		sprintpic1(output, len, uu8, calendar_pics[cal], src);
-	} else {
-		llstrncpy(output, src, len, uu8);
+		ZSTR zs2 = zprintpic1(calendar_pics[cal], zs_str(*pzstr));
+		zs_free(pzstr);
+		*pzstr = zs2;
 	}
 }
 /*===================================================
@@ -451,11 +446,11 @@ get_cmplx_pic (INT ecmplx, INT cmplxnum)
  *                 (ie, full period or full range)
  * Created: 2001/12/28 (Perry Rapp)
  *=================================================*/
-static void
-format_complex (GDATEVAL gdv, STRING output, INT len, INT cmplx
-	, STRING ymd2, STRING ymd3)
+static ZSTR
+format_complex (GDATEVAL gdv, INT cmplx	, STRING ymd2, STRING ymd3)
 {
 	STRING pic;
+	ZSTR zstr=0;
 	INT cmplxnum=cmplx-3; /* map cmplx to 0-5 */
 	if (cmplxnum<0 || cmplxnum>5) cmplxnum=5;
 	switch (gdv->type) {
@@ -463,15 +458,15 @@ format_complex (GDATEVAL gdv, STRING output, INT len, INT cmplx
 		switch (gdv->subtype) {
 		case GDVP_FROM:
 			pic = get_cmplx_pic(ECMPLX_FROM, cmplxnum);
-			sprintpic1(output, len, uu8, pic, ymd2);
+			zstr = zprintpic1(pic, ymd2);
 			break;
 		case GDVP_TO:
 			pic = get_cmplx_pic(ECMPLX_TO, cmplxnum);
-			sprintpic1(output, len, uu8, pic, ymd2);
+			zstr = zprintpic1(pic, ymd2);
 			break;
 		case GDVP_FROM_TO:
 			pic = get_cmplx_pic(ECMPLX_FROM_TO, cmplxnum);
-			sprintpic2(output, len, uu8, pic, ymd2, ymd3);
+			zstr = zprintpic2(pic, ymd2, ymd3);
 			break;
 		default:
 			FATAL(); /* invalid period subtype */
@@ -482,16 +477,16 @@ format_complex (GDATEVAL gdv, STRING output, INT len, INT cmplx
 		switch (gdv->subtype) {
 		case GDVR_BEF:
 			pic = get_cmplx_pic(ECMPLX_BEF, cmplxnum);
-			sprintpic1(output, len, uu8, pic, ymd2);
+			zstr = zprintpic1(pic, ymd2);
 			break;
 		case GDVR_AFT:
 		case GDVR_BET: /* BET with no AND is treated as AFT */
 			pic = get_cmplx_pic(ECMPLX_AFT, cmplxnum);
-			sprintpic1(output, len, uu8, pic, ymd2);
+			zstr = zprintpic1(pic, ymd2);
 			break;
 		case GDVR_BET_AND:
 			pic = get_cmplx_pic(ECMPLX_BET_AND, cmplxnum);
-			sprintpic2(output, len, uu8, pic, ymd2, ymd3);
+			zstr = zprintpic2(pic, ymd2, ymd3);
 			break;
 		default:
 			FATAL(); /* invalid period subtype */
@@ -502,26 +497,28 @@ format_complex (GDATEVAL gdv, STRING output, INT len, INT cmplx
 		switch (gdv->subtype) {
 		case GDVA_ABT:
 			pic = get_cmplx_pic(ECMPLX_ABT, cmplxnum);
-			sprintpic1(output, len, uu8, pic, ymd2);
+			zstr = zprintpic1(pic, ymd2);
 			break;
 		case GDVA_EST:
 			pic = get_cmplx_pic(ECMPLX_EST, cmplxnum);
-			sprintpic1(output, len, uu8, pic, ymd2);
+			zstr = zprintpic1(pic, ymd2);
 			break;
 		case GDVA_CAL:
 			pic = get_cmplx_pic(ECMPLX_CAL, cmplxnum);
-			sprintpic1(output, len, uu8, pic, ymd2);
+			zstr = zprintpic1(pic, ymd2);
 			break;
 		}
 		break;
 	case GDV_DATE:
 	default:
-		snprintf(output, len, ymd2);
+		zs_sets(&zstr, ymd2);
 		break;
 	}
+	return zstr;
 }
 /*===================================================
  * format_ymd -- Assembles date according to dateformat
+ *  pzstr:  [I/O]  resultant formatted zstring
  *  syr:    [IN]   year string
  *  smo:    [IN]   month string
  *  sda:    [IN]   day string
@@ -541,159 +538,154 @@ format_complex (GDATEVAL gdv, STRING output, INT len, INT cmplx
  *                 12- yr   (year only, old short form)
  *                 13- dd/mo yr
  *                 14- as in GEDCOM (truncated to 50 chars)
- *  mod:    [IN]   modifier code (in bottom of monthstrs array)
- *  output: [I/O]  output string (is advanced)
- *  len:    [I/O]  length remaining in output string buffer (is decremented)
  * This routine applies the custom date pic if present (date_pic)
  *=================================================*/
 static void
-format_ymd (STRING syr, STRING smo, STRING sda, INT sfmt
-	, STRING *output, INT * len)
+format_ymd (ZSTR * pzstr, STRING syr, STRING smo, STRING sda, INT sfmt)
 {
-	STRING p = *output;
+	zs_clear(pzstr);
 
 	if (date_pic) {
-		sprintpic3(*output, *len, uu8, date_pic, syr, smo, sda);
-		*len -= strlen(*output);
+		ZSTR zs2 = zprintpic3(date_pic, syr, smo, sda);
+		zs_free(pzstr);
+		*pzstr = zs2;
 		return;
 	}
 	switch (sfmt) {
 	case 0:		/* da mo yr */
 		if (sda) {
-			appendstr(&p, len, uu8, sda);
-			appendstr(&p, len, uu8, " ");
+			zs_apps(pzstr, sda);
+			zs_appc(pzstr, ' ');
 		}
 		if (smo) {
-			appendstr(&p, len, uu8, smo);
-			appendstr(&p, len, uu8, " ");
+			zs_apps(pzstr, smo);
+			zs_appc(pzstr, ' ');
 		}
 		if (syr) {
-			appendstr(&p, len, uu8, syr);
+			zs_apps(pzstr, syr);
 		}
 		break;
 	case 1:		/* mo da, yr */
 		if (smo) {
-			appendstr(&p, len, uu8, smo);
-			appendstr(&p, len, uu8, " ");
+			zs_apps(pzstr, smo);
+			zs_appc(pzstr, ' ');
 		}
 		if (sda) {
-			appendstr(&p, len, uu8, sda);
-			appendstr(&p, len, uu8, ", ");
+			zs_apps(pzstr, sda);
+			zs_apps(pzstr, ", ");
 		}
 		if (syr)
-			appendstr(&p, len, uu8, syr);
+			zs_apps(pzstr, syr);
 		break;
 	case 2:		/* mo/da/yr */
 		if (smo)
-			appendstr(&p, len, uu8, smo);
-		appendstr(&p, len, uu8, "/");
+			zs_apps(pzstr, smo);
+		zs_appc(pzstr, '/');
 		if (sda)
-			appendstr(&p, len, uu8, sda);
-		appendstr(&p, len, uu8, "/");
+			zs_apps(pzstr, sda);
+		zs_appc(pzstr, '/');
 		if (syr)
-			appendstr(&p, len, uu8, syr);
+			zs_apps(pzstr, syr);
 		break;
 	case 3:		/* da/mo/yr */
 		if (sda)
-			appendstr(&p, len, uu8, sda);
-		appendstr(&p, len, uu8, "/");
+			zs_apps(pzstr, sda);
+		zs_appc(pzstr, '/');
 		if (smo)
-			appendstr(&p, len, uu8, smo);
-		appendstr(&p, len, uu8, "/");
+			zs_apps(pzstr, smo);
+		zs_appc(pzstr, '/');
 		if (syr)
-			appendstr(&p, len, uu8, syr);
+			zs_apps(pzstr, syr);
 		break;
 	case 4:		/* mo-da-yr */
 		if (smo)
-			appendstr(&p, len, uu8, smo);
-		appendstr(&p, len, uu8, "-");
+			zs_apps(pzstr, smo);
+		zs_appc(pzstr, '-');
 		if (sda)
-			appendstr(&p, len, uu8, sda);
-		appendstr(&p, len, uu8, "-");
+			zs_apps(pzstr, sda);
+		zs_appc(pzstr, '-');
 		if (syr)
-			appendstr(&p, len, uu8, syr);
+			zs_apps(pzstr, syr);
 		break;
 	case 5:		/* da-mo-yr */
 		if (sda)
-			appendstr(&p, len, uu8, sda);
-		appendstr(&p, len, uu8, "-");
+			zs_apps(pzstr, sda);
+		zs_appc(pzstr, '-');
 		if (smo)
-			appendstr(&p, len, uu8, smo);
-		appendstr(&p, len, uu8, "-");
+			zs_apps(pzstr, smo);
+		zs_appc(pzstr, '-');
 		if (syr)
-			appendstr(&p, len, uu8, syr);
+			zs_apps(pzstr, syr);
 		break;
 	case 6:		/* modayr */
 		if (smo)
-			appendstr(&p, len, uu8, smo);
+			zs_apps(pzstr, smo);
 		if (sda)
-			appendstr(&p, len, uu8, sda);
+			zs_apps(pzstr, sda);
 		if (syr)
-			appendstr(&p, len, uu8, syr);
+			zs_apps(pzstr, syr);
 		break;
 	case 7:		/* damoyr */
 		if (sda)
-			appendstr(&p, len, uu8, sda);
+			zs_apps(pzstr, sda);
 		if (smo)
-			appendstr(&p, len, uu8, smo);
+			zs_apps(pzstr, smo);
 		if (syr)
-			appendstr(&p, len, uu8, syr);
+			zs_apps(pzstr, syr);
 		break;
 	case 8:         /* yr mo da */
 		if (syr)
-			appendstr(&p, len, uu8, syr);
+			zs_apps(pzstr, syr);
 		if (smo) {
-			appendstr(&p, len, uu8, " ");
-			appendstr(&p, len, uu8, smo);
+			zs_appc(pzstr, ' ');
+			zs_apps(pzstr, smo);
 		}
 		if (sda) {
-			appendstr(&p, len, uu8, " ");
-			appendstr(&p, len, uu8, sda);
+			zs_appc(pzstr, ' ');
+			zs_apps(pzstr, sda);
 		}
 		break;
 	case 9:         /* yr/mo/da */
 		if (syr)
-			appendstr(&p, len, uu8, syr);
-		appendstr(&p, len, uu8, "/");
+			zs_apps(pzstr, syr);
+		zs_appc(pzstr, '/');
 		if (smo)
-			appendstr(&p, len, uu8, smo);
-		appendstr(&p, len, uu8, "/");
+			zs_apps(pzstr, smo);
+		zs_appc(pzstr, '/');
 		if (sda)
-			appendstr(&p, len, uu8, sda);
+			zs_apps(pzstr, sda);
 		break;
 	case 10:        /* yr-mo-da */
 		if (syr)
-			appendstr(&p, len, uu8, syr);
-		appendstr(&p, len, uu8, "-");
+			zs_apps(pzstr, syr);
+		zs_appc(pzstr, '-');
 		if (smo)
-			appendstr(&p, len, uu8, smo);
-		appendstr(&p, len, uu8, "-");
+			zs_apps(pzstr, smo);
+		zs_appc(pzstr, '-');
 		if (sda)
-			appendstr(&p, len, uu8, sda);
+			zs_apps(pzstr, sda);
 		break;
 	case 11:        /* yrmoda */
 		if (syr)
-			appendstr(&p, len, uu8, syr);
+			zs_apps(pzstr, syr);
 		if (smo)
-			appendstr(&p, len, uu8, smo);
+			zs_apps(pzstr, smo);
 		if (sda)
-			appendstr(&p, len, uu8, sda);
+			zs_apps(pzstr, sda);
 		break;
 	/* 12 (year only) was handled directly in do_format_date */
 	case 13:      /* da/mo yr */
 		if (sda)
-			appendstr(&p, len, uu8, sda);
-		appendstr(&p, len, uu8, "/");
+			zs_apps(pzstr, sda);
+		zs_appc(pzstr, '/');
 		if (smo)
-			appendstr(&p, len, uu8, smo);
-		appendstr(&p, len, uu8, " ");
+			zs_apps(pzstr, smo);
+		zs_appc(pzstr, ' ');
 		if (syr)
-			appendstr(&p, len, uu8, syr);
+			zs_apps(pzstr, syr);
 		break;
 	/* 14 (as GEDCOM) was handled directly in do_format_date */
         }
-	*output = p;
-	return;
 }
 
 /*=======================================
@@ -1828,4 +1820,12 @@ shorten_date (STRING date)
 			return buffer[dex];
 		if (c == 0) return NULL;
 	}
+}
+static ZSTR
+zshorten_date (STRING str)
+{
+	STRING sht = shorten_date(str);
+	ZSTR zstr=0;
+	zs_sets(&zstr, sht);
+	return zstr;
 }

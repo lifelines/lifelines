@@ -11,6 +11,11 @@
 	to list.h. Changed enqueue, dequeue, requeue to work with head-to-tail
 	FORLIST.
 
+	* ChangeLog src/gedlib/date.c src/hdrs/llstdlib.h
+	src/stdlib/appendstr.c src/stdlib/sprintpic.c:
+
+	Rewrote date code to remove appendstr & use zstrings instead.
+
 2002-11-24 Perry Rapp
 
 	* ChangeLog src/gedlib/charmaps.c src/gedlib/date.c

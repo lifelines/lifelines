@@ -41,8 +41,6 @@ extern STRING  int_codeset;
 
 /* appendstr.c */
 void appendstr(char ** pdest, int * len, int utf8, const char * src);
-void appendstrf(char ** pdest, int * len, int utf8, const char * fmt,...);
-void appendstrvf(char ** pdest, int * len, int utf8, const char * fmt, va_list args);
 	/* llstrcatn is a bad name, because its prototype is different from strcatn! */
 #define llstrcatn(dest, src, len) appendstr(dest, len, uu8, src)
 
@@ -139,10 +137,13 @@ void ll_abort(STRING);
 /* sprintpic.c */
 void sprintpic0(STRING buffer, INT len, INT utf8, CNSTRING pic);
 BOOLEAN sprintpic1(STRING buffer, INT len, INT utf8, CNSTRING pic, CNSTRING arg1);
+ZSTR zprintpic1(CNSTRING pic, CNSTRING arg1);
 BOOLEAN sprintpic2(STRING buffer, INT len, INT utf8, CNSTRING pic, CNSTRING arg1
 	, CNSTRING arg2);
+ZSTR zprintpic2(CNSTRING pic, CNSTRING arg1, CNSTRING arg2);
 BOOLEAN sprintpic3(STRING buffer, INT len, INT utf8, CNSTRING pic, CNSTRING arg1
 	, CNSTRING arg2, CNSTRING arg3);
+ZSTR zprintpic3(CNSTRING pic, CNSTRING arg1, CNSTRING arg2, CNSTRING arg3);
 
 /* stdstrng.c */
 INT chartype(INT);

@@ -11,6 +11,7 @@
  *==============================================================*/
 
 #include "llstdlib.h"
+#include "zstr.h"
 
 /*********************************************
  * local function prototypes
@@ -62,7 +63,7 @@ sprintpic0 (STRING buffer, INT len, INT utf8, CNSTRING pic)
 	if (len == snprintf(buffer, len, pic)) {
 		/* overflowed -- back up to last character that fits */
 		INT width=0;
-		STRING prev = find_prev_char(&buffer[len-1], &width, buffer, uu8);
+		STRING prev = find_prev_char(&buffer[len-1], &width, buffer, utf8);
 		prev[width]=0;
 	}
 
@@ -102,6 +103,29 @@ sprintpic1 (STRING buffer, INT len, INT utf8, CNSTRING pic, CNSTRING arg1)
 	}
 }
 /*==============================
+ * zprintpic1 -- Print using a picture string
+ *  with one argument, eg "From %1"
+ *  pic:     [IN]  picture string
+ *  arg1:    [IN]  argument (for %1)
+ * (Multiple occurrences of %1 are allowed.)
+ * returns result as zstring
+ *============================*/
+ZSTR
+zprintpic1 (CNSTRING pic, CNSTRING arg1)
+{
+	ZSTR zstr = zs_newn(strlen(pic)+strlen(arg1));
+	CNSTRING p=pic;
+	while (*p) {
+		if (p[0]=='%' && p[1]=='1') {
+			zs_apps(&zstr, arg1);
+			p += 2;
+		} else {
+			zs_appc(&zstr, *p++);
+		}
+	}
+	return zstr;
+}
+/*==============================
  * sprintpic2 -- Print using a picture string
  *  with two arguments, eg "From %1 To %s"
  * See sprintpic1 for argument explanation.
@@ -134,6 +158,29 @@ sprintpic2 (STRING buffer, INT len, INT utf8, CNSTRING pic, CNSTRING arg1, CNSTR
 			return FALSE;
 		}
 	}
+}
+/*==============================
+ * zprintpic2 -- Print using a picture string
+ *  with two arguments, eg "From %1 To %s"
+ * returning result as zstring
+ *============================*/
+ZSTR
+zprintpic2 (CNSTRING pic, CNSTRING arg1, CNSTRING arg2)
+{
+	ZSTR zstr = zs_newn(strlen(pic)+strlen(arg1)+strlen(arg2));
+	CNSTRING p=pic;
+	while (*p) {
+		if (p[0]=='%' && p[1]=='1') {
+			zs_apps(&zstr, arg1);
+			p += 2;
+		} else if (p[0]=='%' && p[1]=='2') {
+			zs_apps(&zstr, arg2);
+			p += 2;
+		} else {
+			zs_appc(&zstr, *p++);
+		}
+	}
+	return zstr;
 }
 /*==============================
  * sprintpic3 -- Print using a picture string
@@ -174,4 +221,30 @@ sprintpic3 (STRING buffer, INT len, INT utf8, CNSTRING pic, CNSTRING arg1, CNSTR
 			return FALSE;
 		}
 	}
+}
+/*==============================
+ * zprintpic3 -- Print using a picture string
+ *  with three arguments, eg "%1/%2/%3"
+ * returning result as zstring
+ *============================*/
+ZSTR
+zprintpic3 (CNSTRING pic, CNSTRING arg1, CNSTRING arg2, CNSTRING arg3)
+{
+	ZSTR zstr = zs_newn(strlen(pic)+strlen(arg1)+strlen(arg2)+strlen(arg3));
+	CNSTRING p=pic;
+	while (*p) {
+		if (p[0]=='%' && p[1]=='1') {
+			zs_apps(&zstr, arg1);
+			p += 2;
+		} else if (p[0]=='%' && p[1]=='2') {
+			zs_apps(&zstr, arg2);
+			p += 2;
+		} else if (p[0]=='%' && p[1]=='3') {
+			zs_apps(&zstr, arg3);
+			p += 2;
+		} else {
+			zs_appc(&zstr, *p++);
+		}
+	}
+	return zstr;
 }
