@@ -714,7 +714,7 @@ output (const char * txt)
 static INT
 interact (STRING ptrn)
 {
-	char buffer[2];
+	char buffer[8];
 	STRING t;
 	while (1) {
 		fgets(buffer, sizeof(buffer), stdin);

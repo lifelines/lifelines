@@ -22,6 +22,10 @@
 
 	Implement choose/view array for llexec (not a great implementation).
 
+	* ChangeLog src/liflines/llexec.c
+
+	Fix llexec's interact for MS-Windows CR/LF.
+
 2003-03-13 Stephen Dum
 
         * ChangeLog docs/ll-reportmanual.xml docs/ll-userguide.xml
