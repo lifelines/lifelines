@@ -14,7 +14,7 @@ extern "C" {
 #define CUR_MAXLINES 40
 #define CUR_MAXCOLS 120
 
-#define CHTYPE char
+#define CHTYPE unsigned long
 #ifdef	CHTYPE
 	typedef	CHTYPE chtype;
 #else
@@ -28,7 +28,7 @@ struct _win_st
 	short		_cury, _curx;	/* current coordinates */
 	short		_maxy, _maxx;	/* max coordinates */
 	short		_begy, _begx;	/* (0,0) screen coordinates */
-	chtype		_y[CUR_MAXLINES][CUR_MAXCOLS];	
+	char		_y[CUR_MAXLINES][CUR_MAXCOLS];	
 	int		_num;		/* window number */
 	int		_scroll;	/* scroll allowed */
 	int		_boxed;		/* a box surrounds the window */
@@ -64,7 +64,7 @@ int noecho();
 int scrollok(WINDOW *wp, int okay);
 int touchwin(WINDOW *wp);
 int waddch(WINDOW *wp, chtype ch);
-int waddstr(WINDOW *wp, char *cp);
+int waddstr(WINDOW *wp, const char *cp);
 int wborder(WINDOW *wp, chtype ls, chtype rs, chtype ts, chtype bs
 	, chtype tl, chtype tr, chtype bl, chtype br);
 int wclrtoeol(WINDOW *wp);
@@ -75,7 +75,7 @@ int wgetstr(WINDOW *wp, char *cp);
 int wmove(WINDOW *wp, int x, int y);
 int wprintw(WINDOW *wp, ...);
 int wrefresh(WINDOW *wp);
-void wtitle(chtype * title); /* win32 add-on by Perry, 2001/01 */
+void wtitle(const char * title); /* win32 add-on by Perry, 2001/01 */
 WINDOW  *initscr();
 WINDOW  *newwin(int nlines, int ncols, int begy, int begx);
 WINDOW  *subwin(WINDOW *wp, int nlines, int ncols, int begy, int begx);

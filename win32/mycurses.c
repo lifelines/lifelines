@@ -111,7 +111,7 @@ int endwin()
 	return(0);
 }
 
-void wtitle(chtype *title)
+void wtitle(const char *title)
 {
 	SetConsoleTitle(title);
 }
@@ -394,7 +394,7 @@ int waddch(WINDOW *wp, chtype ch)
 	return(0);
 }
 
-int waddstr(WINDOW *wp, char *cp)
+int waddstr(WINDOW *wp, const char *cp)
 {
 	while(*cp)
 	{
