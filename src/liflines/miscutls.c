@@ -40,7 +40,7 @@
 #include "llinesi.h"
 
 extern STRING btreepath;
-extern STRING qSdbrecstats;
+extern STRING qSdbrecstats,qSdbrecords;
 
 
 /*======================================
@@ -97,6 +97,11 @@ who_is_he_she (void)
 void
 show_database_stats (void)
 {
-	msg_info(_(qSdbrecstats), num_indis(), num_fams()
+	char msg[80];
+	snprintf(msg, sizeof(msg), _(qSdbrecords));
+	strcat(msg, ": ");
+	snprintf(msg+strlen(msg), sizeof(msg)-strlen(msg)
+		, _(qSdbrecstats), num_indis(), num_fams()
 		, num_sours(), num_evens(), num_othrs());
+	msg_info(msg);
 }

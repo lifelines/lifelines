@@ -19,6 +19,10 @@
 	Implement iconv as an optional replacement for translation tables.
 	Wrap each TRANTABLE structure in a TRANMAPPING.
 
+	* ChangeLog gedlib/init.c gedlib/messages.c liflines/miscutls.c:
+
+	Fix stats display in initial db list.
+
 2002-06-09 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog NEWS README.LAYOUT configure.in lifelines.spec

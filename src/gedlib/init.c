@@ -552,6 +552,7 @@ getdbdesc (STRING path)
 				char stats[45];
 				snprintf(stats, sizeof(stats), _(qSdbrecstats), num_indis()
 					, num_fams(), num_sours(), num_evens(), num_othrs());
+				strcat(desc, " -- ");
 				strcat(desc, stats);
 			}
 		}

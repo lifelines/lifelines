@@ -402,7 +402,8 @@ ZST qSbadirefn    = N_("REFN key is already in use.");
 
 ZST qStag2lng2cnc = N_("Tag is too long to connect automatically.");
 	/* I,F,S,E,X are conventional letters, so leave them as is) */
-ZST qSdbrecstats  = N_("Database records (%dI, %dF, %dS, %dE, %dX)");
+ZST qSdbrecords   = N_("Database records");
+ZST qSdbrecstats  = N_("%dI, %dF, %dS, %dE, %dX");
 
 /* initialization */
 ZST qSwin2big     = N_("The requested window size (%d,%d) is too large for your terminal (%d,%d).\n");
