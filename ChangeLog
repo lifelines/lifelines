@@ -7,6 +7,9 @@
 
 	* ChangeLog: Fixed my email address.
 
+	* gedlib/init.c hdrs/llstdlib.h stdlib/Makefile.am:
+	Moved figure_editor & figure_tempfile into stdlib for btedit.
+
 2000-12-21    <marc@nozell.com>
 
 	* liflines/browse.c, liflines/pedigree.c, gedlib/choose.c,
