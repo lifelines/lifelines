@@ -15,6 +15,12 @@
 	Changed many occurrences of 9 to MAXKEYWIDTH+1.
 	Changed NKEY to hold string buffer directly, instead of pointer.
 
+	* ChangeLog src/gedlib/keytonod.c src/gedlib/node.c
+	src/hdrs/gedcom.h
+
+	Altered records to check & its node tree (from cache) in nztop.
+	This is so PVALUES can hold records without holding cache locks.
+
 2003-11-17 Perry Rapp
 
 	* ChangeLog src/gedlib/charmaps.c src/gedlib/xlat.c

@@ -265,13 +265,13 @@ assign_record (RECORD rec, char ntype, INT keynum)
 	NODE node;
 	sprintf(key, "%c%d", ntype, keynum);
 	sprintf(xref, "@%s@", key);
+	strcpy(rec->nkey.key, key);
+	rec->nkey.keynum = keynum;
+	rec->nkey.ntype = ntype;
 	if ((node = nztop(rec))) {
 		if (nxref(node)) stdfree(nxref(node));
 		nxref(node) = strsave(xref);
 	}
-	strcpy(rec->nkey.key, key);
-	rec->nkey.keynum = keynum;
-	rec->nkey.ntype = ntype;
 }
 /*===================================
  * init_new_record -- put key info into record
@@ -299,7 +299,7 @@ create_record (NODE node)
 	return rec;
 }
 /*===================================
- * hook_record_to_root_node -- Connect record to node tree
+ * hook_record_to_root_node -- Connect record to node tree (& vice versa)
  * Created: 2003-02-04 (Perry Rapp)
  *=================================*/
 static void
@@ -334,12 +334,30 @@ init_new_record_and_just_read_node (RECORD rec, NODE node, CNSTRING key)
 	assign_record(rec, key[0], atoi(key+1));
 }
 /*===================================
- * free_rec -- record deallocator
+ * free_rec -- record deallocator for unbound (non-cached) records
  * Created: 2000/12/30, Perry Rapp
  *=================================*/
 void
 free_rec (RECORD rec)
 {
+	/* unbound records not allowed to free cache memory */
+	if (!rec->cel)
+	{
+		if (rec->top)
+			free_nodes(rec->top);
+	}
+	rec->top = 0;
+	strcpy(rec->nkey.key, "");
+	stdfree(rec);
+}
+/*===================================
+ * free_cached_rec -- record deallocator used by cache
+ * Created: 2003/11/21, Perry Rapp
+ *=================================*/
+void
+free_cached_rec (RECORD rec)
+{
+	ASSERT(rec->cel);
 	if (rec->top)
 		free_nodes(rec->top);
 	strcpy(rec->nkey.key, "");

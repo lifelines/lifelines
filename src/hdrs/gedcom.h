@@ -81,7 +81,8 @@ struct tag_node {
 	NODE   n_sibling;   /* sibling */
 	INT    n_flag;      /* eg, ND_TEMP */
 	int    n_refcnt;    /* refcount for temp nodes */
-	RECORD n_rec;       /* pointer to record, if in a record's node tree */
+	RECORD n_rec;       /* pointer to record (usually the cache record) */
+	                    /* Note that multiple records may share nodes */
 };
 #define nxref(n)    ((n)->n_xref)
 #define ntag(n)     ((n)->n_tag)
@@ -256,6 +257,7 @@ NODE file_to_node(STRING, XLAT, STRING*, BOOLEAN*);
 INT file_to_line(FILE*, XLAT, INT*, STRING*, STRING*, STRING*, STRING*);
 NODE find_node(NODE, STRING, STRING, NODE*);
 NODE find_tag(NODE, CNSTRING);
+void free_cached_rec(RECORD rec);
 void free_rec(RECORD);
 void free_node(NODE);
 void free_nodes(NODE);

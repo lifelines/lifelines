@@ -687,7 +687,7 @@ direct_to_indirect (CACHE cache)
 		ASSERT(cel);
 	}
 	remove_direct(cache, cel);
-	free_rec(crecord(cel)); /* this frees the nodes */
+	free_cached_rec(crecord(cel)); /* this frees the nodes */
 	connect_cel_to_rec(cel, NULL);
 	first_indirect(cache, cel);
 }
@@ -825,7 +825,7 @@ release_all_in_cache (CACHE cache)
 	while (csizedir(cache)) {
 		CACHEEL cel = cfirstdir(cache);
 		remove_direct(cache, cel);
-		free_rec(crecord(cel)); /* this frees the nodes */
+		free_cached_rec(crecord(cel)); /* this frees the nodes */
 	}
 	while (csizeind(cache)) {
 		CACHEEL cel = cfirstind(cache);
@@ -1327,13 +1327,39 @@ CACHEEL qkey_to_othr_cacheel (STRING key)
 	return key_to_cacheel(othrcache, key, NULL, TRUE);
 }
 /*==============================================
+ * is_record_loaded -- Check if record has its node tree
+ *============================================*/
+BOOLEAN
+is_record_loaded (RECORD rec)
+{
+	INT len;
+	ASSERT(rec);
+	if (!rec->top || !nxref(rec->top)) 
+		return FALSE;
+	ASSERT(nxref(rec->top)[0] == '@');
+	len = strlen(nxref(rec->top));
+	ASSERT(nxref(rec->top)[len-1] == '@');
+	if (!eqstrn(rec->nkey.key, &nxref(rec->top)[1], len-2))
+		return FALSE;
+	return TRUE;
+}
+/*==============================================
  * nztop -- Return first NODE of a RECORD
  *  handle NULL input
  *============================================*/
 NODE
 nztop (RECORD rec)
 {
-	return rec ? rec->top : 0;
+	if (!rec) return 0;
+	/* Check that we're pointing to the correct node tree */
+	if (!is_record_loaded(rec)) {
+		/* Presumably we're out-of-date because our record fell out of cache */
+		/* Anyway, load via cache (actually just point to cache data) */
+		RECORD chrec = key_to_record(rec->nkey.key);
+		ASSERT(chrec);
+		rec->top = chrec->top;
+	}
+	return rec->top;
 }
 /*==============================================
  * cacheel_to_record -- Return record inside of cache element
