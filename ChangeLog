@@ -1,5 +1,11 @@
 2004-06-18  Marc Nozell
 
+	* reports/register-tex.ll: Checked in updates by Robert Simms that
+	can render characters meaningful to the LaTeX system as if they
+	were ordinary characters.
+
+2004-06-18  Marc Nozell
+
 	* reports/register1-dot.ll: New report based on register1.ll that
 	generates input to the graphviz tool chain
 

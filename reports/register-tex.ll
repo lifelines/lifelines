@@ -1,7 +1,7 @@
 /*
  * @progname       register-tex
- * @version        2.0
- * @author         Wetmore, Olsen
+ * @version        2.1
+ * @author         Wetmore, Olsen, Simms
  * @category       
  * @output         LaTeX
  * @description    
@@ -14,11 +14,16 @@
 **
 ** register-tex
 **
+** Version 2.1 18 Jun 2004 (Robert Simms)
 ** Version 2  24 Feb 1993
 ** Version 1     Nov 1992
 **
 ** Requires LifeLines version 2.3.3 or later
 **
+**
+** Robert Simms (rsimms@ces.clemson.edu)
+** Render characters meaningful to the LaTeX system as if they were ordinary characters.
+** 
 ** David Olsen (dko@cs.wisc.edu)
 ** based on work originally done by Tom Wetmore (ttw@cbnews1.att.com).
 **
@@ -30,31 +35,28 @@
 ** The output is in LaTeX format.  Therefore, the name of the output file
 ** should end in ".tex".  To print (assuming the name of the output file is
 ** "out.tex"):
-**      latex out  <ignore lots of warnings about underfull \hboxes>
+**      latex out      < ignore lots of warnings about underfull \hboxes >
 **      dvips out
 **      lpr out.ps
 **
 ** Indexing commands are placed within the LaTeX output.  To include an index
 ** in the document do the following:
 **      latex out
-**      makeindex out           <not all systems have makeindex available>
-**      <edit out.tex, add line \input{out.ind} just before \end{document}.>
+**      makeindex out  < not all systems have makeindex available>
+**                     < edit out.tex, uncomment (remove leading '%') from
+**                       the line \input{out.ind} just before \end{document} >
 **      latex out
 **      dvips out
 **      lpr out.ps
+**                     < the last three commands here may be replaced by >
+**                       pdflatex out    -- if you have 'pdflatex' and a PDF is
+**                       the desired final product >
 **
 ** I admit that this is lot of post-processing, but the results are worth it.
-**
-** LaTeX interprets $, &, %, #, _, {, }, ~, ^, and \ as special characters.
-** If you have any of these characters in your database, you will need to
-** convert them to \$, \&, \%, \#, \_, \{, \}, \verb|~|, \verb|^|, and
-** $\backslash$ (or \verb|\|) respectively after the report is generated and
-** before running through LaTeX.  $, &, _, ~, and ^ are easy to find, since
-** they are not used in the report.  % and # are only used near the beginning.
-** {, }, and \ will be more difficult to find since they are used as part of
-** the LaTeX commands throughout the report.
 */
 
+global(opt_xlat)
+global(tex_xlat)
 
 proc main ()
 {
@@ -89,14 +91,14 @@ proc main ()
     "\\newcommand{\\generation}[1]"
         "{\\newpage\\begin{center}{\\huge\\bf Generation #1}\\end{center}"
         "\\vspace{3ex}\\setcounter{footnote}{0}"
-        "\\markright{Descendants of " fullname(indi, 0, 1, 40)
+        "\\markright{Descendants of " strxlat(tex_xlat, fullname(indi,0,1,40))
         "\\hfill Generation #1\\hfill\\ }}\n\n"
     "\\makeindex\n\n"
     "\\begin{document}\n\n"
-    "\\title{Descendants of " fullname(indi, 0, 1, 40) "}\n"
+    "\\title{Descendants of " strxlat(tex_xlat, fullname(indi, 0, 1, 40)) "}\n"
 
     getstrmsg(author, "Enter the author(s) of this document:")
-    "\\author{" author "}\n"
+    "\\author{" strxlat(tex_xlat, author) "}\n"
     "\\date{\\today}\n"
     "\\maketitle\n"
 
@@ -110,6 +112,26 @@ proc main ()
     list(glist)    /* List of generation for each individual */
     table(stab)    /* Table of numbers for each individual */
     indiset(idex)
+
+    /* LaTeX interprets $, &, %, #, _, {, }, ~, ^, and \ as special characters.
+       A table is loaded here with the alternatives to make those special
+       characters appear in the final product.  Any text from the database
+       sent to the LaTeX file to appear as text should be passed through
+       the function strxlat().
+    */
+    set(opt_xlat, 1)
+    table(tex_xlat)
+    insert(tex_xlat, "$", "\\$")
+    insert(tex_xlat, "&", "\\&")
+    insert(tex_xlat, "%", "\\%")
+    insert(tex_xlat, "#", "\\#")
+    insert(tex_xlat, "_", "\\_")
+    insert(tex_xlat, "{", "\\{")
+    insert(tex_xlat, "}", "\\}")
+    insert(tex_xlat, "~", "\\verb|~|")
+    insert(tex_xlat, "^", "\\verb|^|")
+    insert(tex_xlat, "\\", "\\verb|\\|")
+
 
     enqueue(ilist, indi)
     enqueue(glist, 1)
@@ -184,6 +206,14 @@ proc main ()
             }
         }
     }
+
+    set(basename, 
+        save(substring(outfile(), 1, sub(index(outfile(), ".tex", 1), 1))))
+    
+    "\n% remove percent-sign at the beginning of the line\n"
+    "% with the input command if you create the index file\n"
+    "% using 'makeindex'\n"
+    "% \\input{" basename ".ind}"
     "\n\n\\end{document}\n"
 }
 
@@ -196,8 +226,8 @@ proc shortvitals(indi)
         call texname(inode(indi), 1)
         set(b, birth(indi))
         set(d, death(indi))
-        if (and(b, long(b))) { ", b.\\ " long(b) }
-        if (and(d, long(d))) { ", d.\\ " long(d) }
+        if (and(b, long(b))) { ", b.\\ " strxlat(tex_xlat, long(b)) }
+        if (and(d, long(d))) { ", d.\\ " strxlat(tex_xlat, long(d)) }
         "\n"
 }
 
@@ -218,8 +248,8 @@ proc longvitals(i, name_parents, name_type)
         set(dad, father(i))
         set(mom, mother(i))
         if (and(name_parents, or(dad, mom))) {
-                if (male(i))       { "Son of " }
-                elsif (female(i)) { "Daughter of " }
+                if    (  male(i))  { "Son of " }
+                elsif (female(i))  { "Daughter of " }
                 else               { "Child of " }
                 if (dad)           { call texname(inode(dad), 0) }
                 if (and(dad, mom)) { "\nand " }
@@ -371,19 +401,19 @@ proc spousevitals (spouse, fam)
     set(bur, burial(spouse))
     set(dad, father(spouse))
     set(mom, mother(spouse))
-    if (or(or(or(or(or(bir, chr), dea), bur), mom), dad)) {
+    if (or(bir, chr, dea, bur, mom, dad)) {
       "\n("
       if (bir) {
         "born" call print_event(bir)
-        if (or(or(or(dea, bur), mom), dad)) { "," }
+        if (or(dea, bur, mom, dad)) { "," }
         call print_sources(bir)
-        if (or(or(or(dea, bur), mom), dad)) { "\n" }
+        if (or(dea, bur, mom, dad)) { "\n" }
       }
       if (and(chr, not(bir))) {
         "christened" call print_event(chr)
-        if (or(or(or(dea, bur), mom), dad)) { "," }
+        if (or(dea, bur, mom, dad)) { "," }
         call print_sources(chr)
-        if (or(or(or(dea, bur), mom), dad)) { "\n" }
+        if (or(dea, bur, mom, dad)) { "\n" }
       }
       if (dea) {
         "died" call print_event(dea)
@@ -398,7 +428,7 @@ proc spousevitals (spouse, fam)
         if (or(mom, dad)) { "\n" }
       }
       if (or(mom, dad)) {
-        if    (male  (spouse)) { "son of " }
+        if    (  male(spouse)) { "son of " }
         elsif (female(spouse)) { "daughter of " }
         else                   { "child of " }
         if (dad)               { call texname(inode(dad), 3) }
@@ -438,19 +468,19 @@ proc texname (i, type)
                     " \\noname"
                     set(sname, "\\noname")
                 } else {
-                    " {\\sc " save(nm) "}"
+                    " {\\sc " strxlat(tex_xlat, save(nm)) "}"
                     set(sname, nm)
                 }
             } else {
-                " " nm
+                " " strxlat(tex_xlat, nm)
             }
         }
         if (gt(type, 0)) {
-            "\\index{" sname
+            "\\index{" strxlat(tex_xlat, sname)
             if (gt(num_names, 1)) { "," }
             forlist (name_list, nm, num) {
                 if (ne(num, surname_no)) {
-                    " " nm
+                    " " strxlat(tex_xlat, nm)
                 }
             }
             if    (eq(type, 1)) { "|bold"}
@@ -478,8 +508,8 @@ proc process_event (event_node, event_name)
 
 proc print_event (event_node)
 {
-        if (date(event_node)) { " " date(event_node) }
-        if (place(event_node)) { " at " place(event_node) }
+        if (date(event_node)) { " " strxlat(tex_xlat, date(event_node)) }
+        if (place(event_node)) { " at " strxlat(tex_xlat, place(event_node)) }
 }
 
 
@@ -489,7 +519,7 @@ proc print_event (event_node)
 proc print_notes (root, sep)
 {
         fornotes (root, note) {
-                sep note " "
+                sep strxlat(tex_xlat, note) " "
         }
 }
 
@@ -518,7 +548,42 @@ proc valuec(n)
         value(n)
         fornodes (n, n1) {
                 if (eq(strcmp(tag(n1), "CONT"), 0)) {
-                        "\n" value(n1)
+                        "\n" strxlat(tex_xlat, value(n1))
                 }
         }
+}
+
+
+/*
+**  function: strxlat
+**
+**  This idea was copied and/or adapted from Jim Eggert's modification
+**  to the ps-circ(le) program for LifeLines.
+**  A typical call would look like:
+**      set(str, strxlat(tex_xlat, name(person)))
+**  which would translate characters in person's name according to the
+**  table called tex_xlat -- which escapes the special characters being
+**  displayed as text via LaTeX.  The output is assigned to str.
+**  The output of strxlat() can also be sent directly to output.
+**
+*/
+
+func strxlat(xlat, string)
+{
+    if(opt_xlat) {
+        set(fixstring, "")
+        set(pos, 1)
+        while(le(pos, strlen(string))) {
+            set(char, substring(string, pos, pos))
+            if(special, lookup(xlat, char)) {
+                set(fixstring, concat(fixstring, special))
+            } else {
+              set(fixstring, concat(fixstring, char))
+            }
+            incr(pos)
+        }
+    } else {
+        set(fixstring, string)
+    }
+    return(save(fixstring))  /* save() is for compatibilty with older LL */
 }
