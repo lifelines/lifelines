@@ -11,7 +11,8 @@ btedit_SOURCES = btedit.c wprintf.c
 dbverify_SOURCES = dbverify.c wprintf.c
 
 # what libraries to btedit and dbverify need?
-btedit_LDADD = ../btree/libbtree.a ../stdlib/libstdlib.a
+btedit_LDADD = ../btree/libbtree.a ../stdlib/libstdlib.a \
+	@LIBINTL@ @LIBICONV@
 dbverify_LDADD = ../gedlib/libgedcom.a ../btree/libbtree.a \
 	../stdlib/libstdlib.a ../arch/libarch.a \
 	@LIBINTL@ @LIBICONV@
