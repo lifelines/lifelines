@@ -34,7 +34,7 @@
  * external/imported variables
  *********************************************/
 
-extern STRING nonstrx,nonnod1,nonnodx;
+extern STRING nonind1,nonstrx,nonnod1,nonnodx;
 
 /*=====================================
  * createnode -- Create GEDCOM node
@@ -173,11 +173,17 @@ PVALUE
 __writeindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE indi1;
-	NODE indi2 = eval_indi(iargs(node), stab, eflg, NULL);
+	PNODE arg = iargs(node);
+	NODE indi2 = eval_indi(arg, stab, eflg, NULL);
 	STRING rawrec=0, msg;
 	INT len, cnt;
 	BOOLEAN rtn=FALSE;
 	if (*eflg) return NULL;
+
+	if (!indi2) {
+		prog_var_error(node, stab, arg, 0, nonind1, "writeindi");
+		return NULL;
+	}
 
 	/* make a copy, so we can delete it */
 	indi2 = copy_nodes(indi2, TRUE, FALSE);

@@ -7,6 +7,10 @@
 
 	New interface headers for database functions.
 
+	* ChangeLog src/interp/write.c
+
+	Fix __writeindi to gracefully error if argument is null.
+
 2004-01-29 Perry Rapp
 
 	* ChangeLog docs/ll-userguide.xml
