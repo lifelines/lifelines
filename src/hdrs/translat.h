@@ -71,8 +71,6 @@ struct Buffer_s;
 
 /* Functions */
 
-void add_char(STRING, INT*, INT, INT);
-void add_string(STRING, INT*, INT, STRING);
 TRANTABLE create_trantable(STRING *lefts, STRING *rights, INT n, STRING name);
 BOOLEAN custom_sort(char *str1, char *str2, INT * rtn);
 TRANMAPPING get_tranmapping(INT ttnum);

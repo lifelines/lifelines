@@ -1,3 +1,9 @@
+2002-11-17 Perry Rapp
+
+	* ChangeLog src/gedlib/translat.c src/hdrs/translat.h:
+
+	Remove some unused code.
+
 2002-11-16 Perry Rapp
 
 	* ChangeLog reports/exer_8859-1.ll reports/exer_UTF-8.ll

@@ -436,38 +436,6 @@ translate_write(TRANMAPPING ttm, STRING in, INT *lenp
 	*lenp = 0;
 	return(TRUE);
 }
-/*======================================
- * add_char -- Add char to output string
- *  buf:    [in]  output string
- *  plen:   [in,out]  address of current output length
- *  max:    [in] max output length
- *  achar:  [in] character to add
- * NB: Handles *plen >= max (won't write past max)
- *====================================*/
-void
-add_char (STRING buf, INT *plen, INT max, INT achar)
-{
-	if (*plen >= max - 1)
-		buf[max] = 0;
-	else
-		buf[(*plen)++] = achar;
-}
-/*==========================================
- * add_string -- Add string to output string
- *========================================*/
-void
-add_string (STRING buf, INT *plen, INT max, STRING str)
-{
-	INT len;
-	ASSERT(str);
-	len = strlen(str);
-	if (*plen + len >= max - 1)
-		buf[*plen] = 0;
-	else {
-		strncpy(buf + *plen, str, len);
-		*plen += len;
-	}
-}
 
 #ifdef DEBUG
 /*=======================================================
