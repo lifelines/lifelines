@@ -29,6 +29,7 @@
  *   3.0.2 - 02 Dec 94
  *===========================================================*/
 /* modified 2000-01-26 J.F.Chandler */
+/* modified 2000-04-25 J.F.Chandler */
 
 #include "standard.h"
 #include "table.h"
@@ -155,7 +156,7 @@ STRING ext;
 		if(ext) {
 		  sprintf(fnamebuf, "%s%s", fname, ext);
 		  fp = fopen(fnamebuf, mode);
-		  if(pfname) *pfname = strsave(fnamebuf);
+		  if(fp && pfname) *pfname = strsave(fnamebuf);
 		}
 		if((fp == NULL) && ((fp = fopen(fname, mode)) == NULL)) {
 			mprintf(nofopn, fname);

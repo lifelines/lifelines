@@ -22,6 +22,7 @@
    SOFTWARE.
 */
 /* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
+/* modified 2000-04-25 J.F.Chandler */
 /*=============================================================
  * messages.c -- Holds most LifeLines messages
  * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
@@ -207,3 +208,9 @@ STRING lstnew = SS "New persons were added to the current list.";
 STRING idgedf = SS "Please enter the name of the GEDCOM file.";
 STRING gdcker = SS "Checking GEDCOM file %s for errors.\n";
 STRING gdnadd = SS "Because of errors the GEDCOM file was not loaded.\n";
+STRING dboldk = SS "No errors; adding records with original keys...";
+STRING dbnewk = SS "No errors; adding records with new keys...";
+STRING dbodel = SS "Using original keys, %d deleted records will be in the database.";
+STRING cfoldk = SS "Use original keys from GEDCOM file?";
+STRING dbdelk = SS "Adding unused keys as deleted keys...";
+STRING dbrdon = SS "The database is read-only; loading has been canceled.";

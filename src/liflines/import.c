@@ -22,6 +22,7 @@
    SOFTWARE.
 */
 /* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
+/* modified 2000-04-25 J.F.Chandler */
 /*==========================================================
  * import.c -- Import GEDCOM file to LifeLines database
  * Copyright(c) 1994 by T.T. Wetmore IV; all rights reserved
@@ -52,7 +53,8 @@ extern INT gd_smax;	/* maximum source key number */
 extern INT gd_emax;	/* maximum event key number */
 extern INT gd_xmax;	/* maximum other key number */
 
-extern STRING idgedf, gdcker, gdnadd;
+extern STRING idgedf, gdcker, gdnadd, dboldk, dbnewk, dbodel,
+  cfoldk, dbdelk, dbrdon;
 extern TRANTABLE tran_tables[];
 static BOOLEAN translate_values();
 static restore_record();
@@ -91,7 +93,6 @@ BOOLEAN import_from_file ()
 
 	if((num_indis() > 0)
 		|| (num_fams() > 0)
-		|| (num_fams() > 0)
 		|| (num_sours() > 0)
 		|| (num_evens() > 0)
 		|| (num_othrs() > 0)) gd_reuse = FALSE;
@@ -99,13 +100,10 @@ BOOLEAN import_from_file ()
 		totused = gd_itot + gd_ftot + gd_stot + gd_etot + gd_xtot;
 		totkeys = gd_imax + gd_fmax + gd_smax + gd_emax + gd_xmax;
 		if((totkeys-totused) > 0) {
-		    sprintf(msgbuf,
-	"Using original keys, %d deleted records will be in the database.",
-			    totkeys-totused);
+		    sprintf(msgbuf, dbodel, totkeys-totused);
 		}
 		else strcpy(msgbuf, " ");
-		gd_reuse = ask_yes_or_no_msg(
-			msgbuf, "Use original keys from GEDCOM file?");
+		gd_reuse = ask_yes_or_no_msg(msgbuf, cfoldk);
 		touchwin(stdout_win);
 		wrefresh(stdout_win);
 	}
@@ -114,9 +112,19 @@ BOOLEAN import_from_file ()
 	rewind(fp);
 
 	if(gd_reuse)
-	  wfield(9,  0, "No errors; adding records with original keys...");
+	  wfield(9,  0, dboldk);
 	else
-	  wfield(9,  0, "No errors; adding records with new keys...");
+	  wfield(9,  0, dbnewk);
+
+	/* test for read-only database here */
+
+	if(readonly) {
+		wfield(10, 0, dbrdon);
+		wpos(11, 0);
+		fclose(fp);
+		return FALSE;
+	}
+
 	wfield(10, 1, "     0 Persons");
 	wfield(11, 1, "     0 Families");
 	wfield(12, 1, "     0 Events");
@@ -144,7 +152,7 @@ BOOLEAN import_from_file ()
 		node = next_fp_to_node(fp, FALSE, tt, &msg, &emp);
 	}
 	if(gd_reuse && ((totkeys - totused) > 0)) {
-	    wfield(15, 0 , "Adding unused keys as deleted keys...");
+	    wfield(15, 0, dbdelk);
 	    addmissingkeys(INDI_REC);
 	    addmissingkeys(FAM_REC);
 	    addmissingkeys(EVEN_REC);
@@ -154,6 +162,9 @@ BOOLEAN import_from_file ()
 	wpos(15, 0);
 	mprintf("Added (%dP, %dF, %dS, %dE, %dX) records from file `%s'.",
 	    nindi, nfam, nsour, neven, nothr, fname);
+
+	/* At some point, the input file should be closed! - JFC */
+
 	return TRUE;
 }
 /*=============================================

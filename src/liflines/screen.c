@@ -22,6 +22,7 @@
    SOFTWARE.
 */
 /* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
+/* modified 2000-04-25 J.F.Chandler */
 /*=============================================================
  * screen.c -- Curses user interface to LifeLines
  * Copyright(c) 1992-96 by T.T. Wetmore IV; all rights reserved
@@ -441,7 +442,7 @@ init_all_windows ()
 	mvwaddstr(win, row++, 2, "What utility do you want to perform?");
 	mvwaddstr(win, row++, 4, "s  Save the database in a GEDCOM file");
 	mvwaddstr(win, row++, 4, "r  Read in data from a GEDCOM file");
-	mvwaddstr(win, row++, 4, "k  Find a persons's key value");
+	mvwaddstr(win, row++, 4, "k  Find a person's key value");
 	mvwaddstr(win, row++, 4, "i  Identify a person from key value");
 	mvwaddstr(win, row++, 4, "d  Show database statistics");
 	mvwaddstr(win, row++, 4, "m  Show memory statistics");
