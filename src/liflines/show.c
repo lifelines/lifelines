@@ -474,7 +474,8 @@ wipe_window (WINDOW * w, INT row, INT hgt)
 	}
 }
 /*================================================
- * show_gedcom -- Show node in gedcom format
+ * show_gedcom -- Clear window & didsplay node in 
+ *  gedcom format
  * Created: 2001/01/27, Perry Rapp
  *==============================================*/
 static void
@@ -485,6 +486,7 @@ show_gedcom (WINDOW *w, NODE node, INT gdvw, INT row, INT hgt)
 }
 /*================================================
  * show_gedcom_main -- Show node in gedcom format
+ *  in window main_win
  * Created: 2001/02/04, Perry Rapp
  *==============================================*/
 void

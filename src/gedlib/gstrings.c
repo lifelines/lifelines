@@ -253,6 +253,7 @@ other_to_list_string(NODE node, INT len, STRING delim)
 	STRING name, p=scratch;
 	INT mylen=len;
 	TRANTABLE ttd = tran_tables[MINDS];
+	NODE child;
 	if (mylen>sizeof(scratch))
 		mylen=sizeof(scratch);
 	p[0]=0;
@@ -261,9 +262,28 @@ other_to_list_string(NODE node, INT len, STRING delim)
 	llstrcatn(&p, ") (", &mylen);
 	translate_catn(ttd, &p, ntag(node), &mylen);
 	llstrcatn(&p, ") ", &mylen);
-	name = node_to_tag(node, "REFN", ttd, len);
+	name = node_to_tag(node, "REFN", ttd, mylen);
 	if (name)
 		llstrcatn(&p, name, &mylen);
+	if (nval(node))
+		llstrcatn(&p, nval(node), &mylen);
+	/* append any CONC/CONT nodes that fit */
+	child = nchild(node);
+	while (mylen>5 && child) {
+		if (!strcmp(ntag(child), "CONC")
+			|| !strcmp(ntag(child), "CONT")) {
+			llstrcatn(&p, " ", &mylen);
+			llstrcatn(&p, nval(child), &mylen);
+		} else {
+			break;
+		}
+		if (nchild(child))
+			break;
+		else if (nsibling(child))
+			child = nsibling(child);
+		else
+			break;
+	}
 	return strsave(scratch);
 }
 /*===========================================
@@ -272,6 +292,7 @@ other_to_list_string(NODE node, INT len, STRING delim)
  * Caller may specify either node or key (& leave other NULL)
  *  returns heap-alloc'd string
  * Caller must specify either node or key (or both)
+ * Used in lists and in extended gedcom view
  * Created: 2001/02/12, Perry Rapp
  *=========================================*/
 STRING

@@ -592,7 +592,6 @@ twoindi_browse (NODE indi1, NODE indi2, INT mode)
 
 	display_screen(screen);
 	return interact(main_win, NULL, screen);
-/*	return interact(main_win, "etfmscbdajxq", -1);*/
 }
 /*=============================================
  * twofam_browse -- Handle twofam_browse screen
@@ -616,7 +615,6 @@ twofam_browse (NODE fam1, NODE fam2, INT mode)
 
 	display_screen(screen);
 	return interact(main_win, NULL, screen);
-/*	return interact(main_win, "etbfmxjq", -1);*/
 }
 /*=======================================
  * aux_browse -- Handle aux_browse screen

@@ -224,8 +224,10 @@ indi_lineprint (INT width, void * param)
 	return indi_to_ped_fix(indi, width);
 }
 /*=================================
- * node_lineprint -- print an node line
- *  in a node (descendant) tree
+ * node_lineprint -- print a node line
+ *  in a node tree
+ * This is used in gedcom view & extended
+ *  gedcom views
  * returns static buffer
  * Created: 2001/01/27, Perry Rapp
  *===============================*/

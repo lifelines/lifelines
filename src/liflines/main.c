@@ -211,13 +211,13 @@ main (INT argc,
 		case 'n':	/* use non-traditional family rules */
 			traditional = FALSE;
 			break;
-		case 't':
+		case 't': /* show lots of trace statements for debugging */
 			traceprogram = TRUE;
 			break;
-		case 'u':
+		case 'u': /* specify screen dimensions */
 			sscanf(optarg, "%d,%d", &winx, &winy);
 			break;
-		case 'y':
+		case 'y': /* only look in current path for databases */
 			selftest = TRUE;
 			break;
 		case '?':

@@ -1,3 +1,12 @@
+2001-04-08 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog NEWS gedlib/gstrings.c liflines/browse.c
+	liflines/main.c liflines/newrecs.c liflines/pedigree.c
+	liflines/screen.c liflines/show.c:
+	Added some comments.
+	Fixed bug: editing S/E/X didn't pick up changes to top node value.
+	Added successive CONC/CONT text to generic_to_list_string for X nodes.
+
 2001-04-06 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/node.c gedlib/valid.c hdrs/gedcom.h

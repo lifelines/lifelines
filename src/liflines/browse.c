@@ -1328,6 +1328,9 @@ history_fwd (void)
 }
 /*==================================================
  * add_other_ref -- add a new referred other record
+ *  invokes editor to create new node, then adds a
+ *  1 level reference to it (in the passed in node,
+ *   as the last child node)
  * Created: 2001/04/06, Perry Rapp
  *================================================*/
 static void

@@ -5,6 +5,11 @@ http://lifelines.sourceforge.net
 Bug fixes in 3.0.6.1-dev
 ==================
 
+- Was not saving changes to value of top-level node when editing
+  (eg, text directly in the NOTE line of an 'other' NOTE)
+
+- Removed most pvalue leaks in running program(s)
+
 - (Windows) Notepad was appending .txt to temp file, preventing creation
   of new trans tables or user options tables 
 

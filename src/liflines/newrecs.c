@@ -40,23 +40,40 @@
 
 #include "llinesi.h"
 
+/*********************************************
+ * external/imported variables
+ *********************************************/
+
 extern BTREE BTR;
-
-#define SS static STRING
-
 extern STRING cfradd, cfeadd, cfxadd, rredit, eredit, xredit;
 extern STRING cfrupt, cfeupt, cfxupt, gdrmod, gdemod, gdxmod;
 extern STRING idredt, ideedt, idxedt, duprfn;
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+/* alphabetical */
+static NODE add_record(STRING recstr, STRING redt, char ntype, STRING cfrm);
+static void edit_record(NODE node1, STRING idedt, INT letr, STRING redt,
+                         BOOLEAN (*val)(NODE, STRING *, NODE), STRING cfrm,
+                         STRING tag, void (*todbase)(NODE), STRING gdmsg);
+static BOOLEAN nvaldiff(NODE node1, NODE node2);
+
+/*********************************************
+ * local variables
+ *********************************************/
+
+#define SS static STRING
 
 SS rstr = (STRING) "0 SOUR\n1 REFN\n1 TITL Title\n1 AUTH Author";
 SS estr = (STRING) "0 EVEN\n1 REFN\n1 DATE\n1 PLAC\n1 INDI\n  2 NAME\n  2 ROLE\n1 SOUR";
 SS xstr = (STRING) "0 XXXX\n1 REFN";
 
-static void edit_record(NODE node1, STRING idedt, INT letr, STRING redt,
-                         BOOLEAN (*val)(NODE, STRING *, NODE), STRING cfrm,
-                         STRING tag, void (*todbase)(NODE), STRING gdmsg);
-static NODE add_record(STRING recstr, STRING redt, char ntype, STRING cfrm);
-
+/*********************************************
+ * local function definitions
+ * body of module
+ *********************************************/
 
 /*================================================
  * add_source -- Add source to database by editing
@@ -222,6 +239,7 @@ edit_record (NODE node1,           /* record to edit, poss NULL */
 	STRING msg, newr, oldr, key;
 	BOOLEAN emp;
 	NODE refn, node2=0, temp;
+	STRING str;
 
 /* Identify record if need be */
 	if (!node1) {
@@ -274,6 +292,13 @@ edit_record (NODE node1,           /* record to edit, poss NULL */
 	key = rmvat(nxref(node1));
 	if (oldr) remove_refn(oldr, key);
 	if (newr) add_refn(newr, key);
+	/* did value of top node change ? */
+	if (nvaldiff(node1, node2)) {
+		/* swap value of node2 into node1, which is the one we keep */
+		str = nval(node1);
+		nval(node1) = nval(node2);
+		nval(node2) = str;
+	}
 	temp = nchild(node1);
 	nchild(node1) = nchild(node2);
 	nchild(node2) = temp;
@@ -282,12 +307,25 @@ edit_record (NODE node1,           /* record to edit, poss NULL */
 	mprintf_info(gdmsg);
 }
 /*===============================================
+ * nvaldiff -- Do nodes have different values ?
+ *  handles NULLs in either
+ * Created: 2001/04/08, Perry Rapp
+ *=============================================*/
+static BOOLEAN
+nvaldiff (NODE node1, NODE node2)
+{
+	if (!nval(node1) && !nval(node2)) return FALSE;
+	if (!nval(node1) || !nval(node2)) return TRUE;
+	return strcmp(nval(node1), nval(node2));
+}
+/*===============================================
  * ask_for_record -- Ask user to identify record
  *  lookup by key or by refn (& handle dup refns)
+ * idstr  question prompt
+ * letr:  letter to possibly prepend to key (ie, I/F/S/E/X)
  *=============================================*/
 NOD0
-ask_for_record (STRING idstr,   /* question prompt */
-                INT letr)       /* letter to possibly prepend to key */
+ask_for_record (STRING idstr, INT letr)
 {
 	NOD0 nod0;
 	STRING str = ask_for_string(idstr, "enter key or refn: ");
