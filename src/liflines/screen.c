@@ -1477,6 +1477,12 @@ void
 do_edit (void)
 {
 	endwin();
+/*
+ * MTE: Is w32system() really neccessary?  According to ANSI, POSIX and
+ * VC docs, and BCC examples, the calling program loses control until
+ * the system() call terminates - thus eliminating the need for spawnvp()
+ * in w32system().
+ */
 #ifdef WIN32
 //	w32system(editstr);
 	system(editstr);
@@ -1495,7 +1501,7 @@ do_edit (void)
 #ifdef BSD
 void
 bsd_mvwgetstr (WINDOW *win,
-               INt row,
+               INT row,
                INT col,
                STRING str)
 {
