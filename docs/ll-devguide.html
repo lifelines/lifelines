@@ -37,7 +37,7 @@ CLASS="subtitle"
 ><TT
 CLASS="application"
 >LifeLines</TT
-> Version 3.0.25</H2
+> Version 3.0.28</H2
 ><H3
 CLASS="author"
 ><A
@@ -62,6 +62,213 @@ HREF="#AEN11"
 HREF="#AEN15"
 >btree module</A
 ></DT
+><DT
+><A
+HREF="#AEN39"
+>stdlib module</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="#AEN43"
+>String Functions</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="#AEN46"
+>String copy and concatenation</A
+></DT
+><DT
+><A
+HREF="#AEN69"
+>String append (llstrapp)</A
+></DT
+><DT
+><A
+HREF="#AEN113"
+>String append (appendstr)</A
+></DT
+><DT
+><A
+HREF="#AEN117"
+>char functions</A
+></DT
+><DT
+><A
+HREF="#AEN121"
+>string allocation functions</A
+></DT
+><DT
+><A
+HREF="#AEN124"
+>string conversion functions</A
+></DT
+><DT
+><A
+HREF="#AEN127"
+>string equality functions</A
+></DT
+><DT
+><A
+HREF="#AEN130"
+>string comparison functions</A
+></DT
+><DT
+><A
+HREF="#AEN133"
+>string whitespace functions</A
+></DT
+><DT
+><A
+HREF="#AEN136"
+>string UTF-8 functions</A
+></DT
+><DT
+><A
+HREF="#AEN139"
+>printpic functions</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+><A
+HREF="#AEN142"
+>gedlib module</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="#AEN146"
+>names</A
+></DT
+><DT
+><A
+HREF="#AEN149"
+>refns</A
+></DT
+><DT
+><A
+HREF="#AEN152"
+>xreffile</A
+></DT
+><DT
+><A
+HREF="#AEN155"
+>messages</A
+></DT
+><DT
+><A
+HREF="#AEN159"
+>translation tables (charmaps.c &#38; translat.c)</A
+></DT
+><DT
+><A
+HREF="#AEN162"
+>indiseq</A
+></DT
+><DT
+><A
+HREF="#AEN165"
+>brwslist</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="#AEN168"
+>interp module</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="#AEN175"
+>pvalues</A
+></DT
+><DT
+><A
+HREF="#AEN178"
+>symtab</A
+></DT
+><DT
+><A
+HREF="#AEN181"
+>date</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="#AEN186"
+>liflines module</A
+></DT
+><DT
+><A
+HREF="#AEN189"
+>autotools build system</A
+></DT
+><DT
+><A
+HREF="#AEN192"
+>Building <TT
+CLASS="application"
+>LifeLines</TT
+></A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="#AEN197"
+>Checking the CVS source out</A
+></DT
+><DT
+><A
+HREF="#AEN209"
+>automake and autoconf</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="#AEN216"
+>Which does what:</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="#AEN224"
+>Building the code on Unix/Linux</A
+></DT
+><DT
+><A
+HREF="#AEN231"
+>Generating the source tarball</A
+></DT
+><DT
+><A
+HREF="#AEN237"
+>Generating the rpm package</A
+></DT
+><DT
+><A
+HREF="#AEN245"
+>Makeing a release</A
+></DT
+><DT
+><A
+HREF="#AEN251"
+>Putting a release on sourceforge</A
+></DT
+></DL
+></DD
 ></DL
 ></DIV
 ><DIV
@@ -98,7 +305,6 @@ NAME="AEN15"
 ><P
 >&#13;  The btree subdirectory contains the implementation for a btree
   database, using fixed length 8 letter keys (RKEY).
-
 </P
 ><DIV
 CLASS="formalpara"
@@ -203,9 +409,7 @@ CLASS="formalpara"
 ><P
 ><B
 ><B
->&#13;
-  FUTURE DIRECTIONS
-
+>&#13;  FUTURE DIRECTIONS
     . </B
 ></B
 >
@@ -214,6 +418,1211 @@ CLASS="formalpara"
   done via iterator style repeated calls in, instead of callback.
 
     </P
+></DIV
+></DIV
+><DIV
+CLASS="chapter"
+><HR><H1
+><A
+NAME="AEN39"
+></A
+>stdlib module</H1
+><P
+>&#13;The stdlib directory contains various utility functions not specifically
+related to <TT
+CLASS="application"
+>LifeLines</TT
+>, GEDCOM, or even genealogy.
+</P
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN43"
+></A
+>String Functions</H2
+><P
+>&#13;There has built up, over time, quite an assortment of string functions,
+split currently between mystring.c and stdstrng.c (and a few macros in
+standard.h).
+</P
+><DIV
+CLASS="sect2"
+><HR><H3
+CLASS="sect2"
+><A
+NAME="AEN46"
+></A
+>String copy and concatenation</H3
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN48"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>char *<TT
+CLASS="function"
+>llstrncpy</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>char *dest</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>size_t n</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>int utf8</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>const char * fmt</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>va_list args</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN58"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>char *<TT
+CLASS="function"
+>llstrncat</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>char *dest</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>size_t n</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>int utf8</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>const char * fmt</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>va_list args</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;    These are simple wrappers around the C RTL (run time library) functions.
+    The ANSI versions do not zero-terminate on overflow, which is greatly
+    inconvenient, os the wrapper versions do so. Also, the wrapper versions
+    are UTF-8 aware (they backtrack on overflow, to avoid leaving part of
+    a UTF-8 multibyte sequence at the end).
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><HR><H3
+CLASS="sect2"
+><A
+NAME="AEN69"
+></A
+>String append (llstrapp)</H3
+><P
+>&#13;<DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN72"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>char *<TT
+CLASS="function"
+>llstrapps</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>char *dest</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>size_t limit</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>int utf8</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>const char * src</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+>
+
+<DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN81"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>char *<TT
+CLASS="function"
+>llstrappc</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>char *dest</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>size_t limit</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>char ch</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+>
+
+<DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN89"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>char *<TT
+CLASS="function"
+>llstrappc</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>char *dest</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>int limit</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>int utf8</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>const char * fmt</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+>
+
+<DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN98"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>char *<TT
+CLASS="function"
+>llstrappv</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>char *dest</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>int limit</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>int utf8</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>const char * fmt</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>va_list args</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+>
+</P
+><P
+>&#13;    This family of functions is one (thin) layer higher than llstrncpy,
+    providing an interface wherein the caller specified the buffer's start
+    and entire size. That is,
+    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;      llstrncat(buffer, " more stuff", sizeof(buffer)-strlen(buffer));
+    </PRE
+></TD
+></TR
+></TABLE
+>
+    may be replaced by
+    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;      llstrapp(buffer, sizeof(buffer), " more stuff");
+    </PRE
+></TD
+></TR
+></TABLE
+>
+    There are also varargs versions, so that
+    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;      snprintf(buffer+strlen(buffer), sizeof(buffer)-strlen(buffer), ...
+    </PRE
+></TD
+></TR
+></TABLE
+>
+    may be replaced by
+    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;      llstrappf(buffer, sizeof(buffer), ...
+    </PRE
+></TD
+></TR
+></TABLE
+>
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><HR><H3
+CLASS="sect2"
+><A
+NAME="AEN113"
+></A
+>String append (appendstr)</H3
+><P
+>&#13;    This is a family of functions similar in purpose to the strapp 
+    family, but which uses an additional level of indirection, advancing
+    pointers and decrementing counts. 
+</P
+><P
+>&#13;      * NOTE: FUTURE DIRECTIONS
+      I put these in, and I would like to take them out, as I find them
+      less intuitive than the strapp family, and more bug-prone. They are
+      slightly faster, but I don't think it is worth it. -Perry. 
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><HR><H3
+CLASS="sect2"
+><A
+NAME="AEN117"
+></A
+>char functions</H3
+><P
+>&#13;    There are character classification functions, which have handling
+    particular to Latin-1 and to Finnish (if the Finnish compilation option
+    was set). 
+</P
+><P
+>&#13;      * NOTE: FUTURE DIRECTIONS
+      It would be very nice to see wchar-based functions, which handle
+      unicode, replace these, and then we might be able to jettison the
+      Latin-1 &#38; Finnish specific character code.
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><HR><H3
+CLASS="sect2"
+><A
+NAME="AEN121"
+></A
+>string allocation functions</H3
+><P
+>&#13;    TODO: (strsave, strfree, strupdate, strconcat, free_array_strings)
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><HR><H3
+CLASS="sect2"
+><A
+NAME="AEN124"
+></A
+>string conversion functions</H3
+><P
+>&#13;    TODO: (isnumeric, lower, upper, capitalize, titlecase)
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><HR><H3
+CLASS="sect2"
+><A
+NAME="AEN127"
+></A
+>string equality functions</H3
+><P
+>&#13;    TODO: (eqstr, eqstr_ex, nestr, cmpstr)
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><HR><H3
+CLASS="sect2"
+><A
+NAME="AEN130"
+></A
+>string comparison functions</H3
+><P
+>&#13;    TODO: (cmpstrloc)
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><HR><H3
+CLASS="sect2"
+><A
+NAME="AEN133"
+></A
+>string whitespace functions</H3
+><P
+>&#13;    TODO: (trim, striptrail, striplead, allwhite, chomp)
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><HR><H3
+CLASS="sect2"
+><A
+NAME="AEN136"
+></A
+>string UTF-8 functions</H3
+><P
+>&#13;    TODO: (utf8len, find_prev_char)
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><HR><H3
+CLASS="sect2"
+><A
+NAME="AEN139"
+></A
+>printpic functions</H3
+><P
+>&#13;    TODO: (sprintpic0,1,2,3)
+</P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="chapter"
+><HR><H1
+><A
+NAME="AEN142"
+></A
+>gedlib module</H1
+><P
+>&#13;This directory is a collection of routines for GEDCOM and for its use in
+a <TT
+CLASS="application"
+>LifeLines</TT
+> btree database.
+</P
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN146"
+></A
+>names</H2
+><P
+>&#13;  This module implements indexing names.
+  TODO: Explain soundex indexing.
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN149"
+></A
+>refns</H2
+><P
+>&#13;  This module implements indexing references (REFNs).
+  TOD: Explain two character index.
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN152"
+></A
+>xreffile</H2
+><P
+>&#13;  This module stores lists of deleted record numbers for each type.
+  When a record is deleted, its number is added to the appropriate
+  deleted list in xreffile. When a record is added, first the
+  appropriate deleted list in xreffile is checked for a free record
+  number.
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN155"
+></A
+>messages</H2
+><P
+>&#13;  Traditionally all translatable strings have been stored in this file.
+  This is not necessary with the current gettext scheme, but it would
+  perhaps be helpful if a resource based scheme were adapted in the
+  future.
+</P
+><P
+>&#13;    * FUTURE DIRECTIONS
+    When/If GUI versions are incorporated into the same codebase, how to
+    handle translate strings shared and not shared between versions needs
+    to be worked out.
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN159"
+></A
+>translation tables (charmaps.c &#38; translat.c)</H2
+><P
+>&#13;  The implementation of codeset translation is stored here (not to be 
+  confused with language translation for the user interface, called
+  localization, and not associated with these files). Both custom
+  translation tables and delegation to the iconv codeset conversion 
+  library are done here.
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN162"
+></A
+>indiseq</H2
+><P
+>&#13;  The indiseq type is implemented here, a list of records (which no longer
+  need all be persons).
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN165"
+></A
+>brwslist</H2
+><P
+>&#13;  Named browse lists are implemented here (temporary record lists named by
+  user during this session).
+</P
+></DIV
+></DIV
+><DIV
+CLASS="chapter"
+><HR><H1
+><A
+NAME="AEN168"
+></A
+>interp module</H1
+><P
+>&#13;The <TT
+CLASS="application"
+>LifeLines</TT
+> reporting language parser and interpreter are stored here.
+A custom lexical analyzer is in lex.c, and a yacc parser generator is
+in yacc.y. 
+</P
+><P
+>&#13;The main interpreter is called with a list of files to parse, and some
+options. In actuality, I don't think more than one file is ever passed
+to the main entry point. If no file is passed, the routine will prompt
+(and here is where the user may choose a report from a list). But a
+report may be passed in, if one was specified with commandline argument
+to llines or llexec.
+</P
+><P
+>&#13;The report file is parsed, and as it is parsed, any included reports 
+are added to the list to be parsed (unless already on the list,
+so circular references are not a problem).
+</P
+><P
+>&#13;require statements are handled at parse time. The handler puts the
+requested version into the file property table (stored inside the
+pointer in the filetab entry for the file; filetab entries are
+indexed by full path of report). Later, just after parse completes
+for that file (in the main parsing loop in the main interpreter 
+function), require conditions are tested in check_rpt_requires(...).
+</P
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN175"
+></A
+>pvalues</H2
+><P
+>&#13;  All variable values in report language interpretation are stored in a
+  union type called pvalue.
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN178"
+></A
+>symtab</H2
+><P
+>&#13;  Symbol tables are a thin wrapper around the table type provided by
+  stdlib, specialized to hold pvalues.
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN181"
+></A
+>date</H2
+><P
+>&#13;  A fairly complete GEDCOM date parser is also located here. It actually
+  includes both a date parser, and a date formatter (which generates the
+  thousands of possible <TT
+CLASS="application"
+>LifeLines</TT
+> date formats).
+</P
+><P
+>&#13;    * FUTURE DIRECTIONS
+    If a date type were added to the report language, it would be possible
+    to distinguish fully-parsed dates in the report language (so invalid or
+    illegal dates could be flagged &#38; handled separately in a report). The
+    date module already implements a date type internally, and it is
+    exposed to the rest of the program (gdate &#38; gdate_val, which correspond
+    to GEDCOM date types), but not to the report language.
+</P
+></DIV
+></DIV
+><DIV
+CLASS="chapter"
+><HR><H1
+><A
+NAME="AEN186"
+></A
+>liflines module</H1
+><P
+>&#13;TODO:
+</P
+></DIV
+><DIV
+CLASS="chapter"
+><HR><H1
+><A
+NAME="AEN189"
+></A
+>autotools build system</H1
+><P
+>&#13;todo
+</P
+></DIV
+><DIV
+CLASS="chapter"
+><HR><H1
+><A
+NAME="AEN192"
+></A
+>Building <TT
+CLASS="application"
+>LifeLines</TT
+></H1
+><P
+>&#13;This chapter gives an overview of one way you can build 
+<TT
+CLASS="application"
+>LifeLines</TT
+>.  It is not intended to be
+a comprehensive list of all techniques, but rather enough to get you started.
+This section does not assume you are downloading the source tarball
+and building it, Those instructions are in the file INSTALL.
+We are assuming you are checking out the sources from CVS.
+</P
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN197"
+></A
+>Checking the CVS source out</H2
+><P
+>&#13;If you are not a member of the 
+<TT
+CLASS="application"
+>LifeLines</TT
+>
+development project, you can check check out sources anonymously.
+In the following assume that CVS stands for
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;cvs -d:pserver:anonymous@cvs.lifelines.sourceforge.net:/cvsroot/lifelines
+</PRE
+></TD
+></TR
+></TABLE
+>
+If you are a project developer, you will be checking the files out under your 
+user_id.  so CVS will stand for
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;cvs -d:ext:user_id@cvs.lifelines.sourceforge.net:/cvsroot/lifelines
+</PRE
+></TD
+></TR
+></TABLE
+>
+You will also need to export CVS_RSH
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;CVS_RSH=ssh
+export CVS_RSH
+</PRE
+></TD
+></TR
+></TABLE
+>
+The first time you check out sources into a build area:
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;CVS login anonymous
+CVS checkout lifelines
+</PRE
+></TD
+></TR
+></TABLE
+>
+When prompted for a password for anonymous, simply press the Enter key.
+</P
+><P
+>&#13;Once you have checked out the sources, cvs hides information in the CVS
+sub directories about how you accessed sourceforge so the -d option
+isn't needed to be typed in.  After the first checkout, if you want to 
+update your sources, you can just type:
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;cvs update lifelines
+</PRE
+></TD
+></TR
+></TABLE
+>
+</P
+><P
+>&#13;The cvs login command stashes information in .cvspass for remote repository
+access.  If this is the only remote cvs archive you access, you may be able
+to skip the cvs login command on future access attempts.  If you work on 
+multiple projects you can logout when you are finished with
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;cvs logout
+</PRE
+></TD
+></TR
+></TABLE
+>
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN209"
+></A
+>automake and autoconf</H2
+><P
+>&#13;Many of the files you're used to editing by hand are automatically
+generated by automake &#38;/or autoconf.  These include any file named
+Makefile, Makefile.in, config.h, config.h.in, or configure.
+</P
+><P
+>&#13;The proper files to modify by hand are configure.in (if there's something
+new you need to determine about the host system at configuration time)
+and Makefile.am (if source files are added or removed, targets added,
+or dependencies changed).
+</P
+><P
+>&#13;As long as you have autoconf and automake installed on your system, the
+Makefiles generated will be able to regenerate any file dependent on a
+Makefile.am or configure.in.  To regenerate the build system explicitly
+run the script autogen.sh:
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13; sh autogen.sh
+</PRE
+></TD
+></TR
+></TABLE
+>
+</P
+><P
+>&#13;autogen *must* be run after freshly checking a copy of the
+project out of CVS -- the files generated automatically are no longer
+included in the CVS repository.
+</P
+><DIV
+CLASS="sect2"
+><HR><H3
+CLASS="sect2"
+><A
+NAME="AEN216"
+></A
+>Which does what:</H3
+><P
+>&#13;At development (or package creation) time:
+</P
+><P
+>&#13;aclocal: This generates aclocal.m4 from acinclude.m4.
+</P
+><P
+>&#13;Please run 'aclocal -I build/autotools -I build/autotools' in order to get all 
+the autoconf, automake and gettext macros into aclocal.m4.
+[ The autogen.sh script has been updated to do this. ]
+</P
+><P
+>&#13;autoheader: This generates acconfig.h.
+automake: This generates Makefile.in files from Makefile.am files.
+autoconf: This generates configure from configure.in (or configure.ac).
+</P
+><P
+>&#13;On remote machine compiling a source distribution package:
+</P
+><P
+>&#13;configure will generate config.h and Makefile files from Makefile.in files.
+</P
+></DIV
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN224"
+></A
+>Building the code on Unix/Linux</H2
+><P
+>&#13;There are lots of dependencies required to build
+<TT
+CLASS="application"
+>LifeLines</TT
+>.
+Of course you need a C Compiler and make, but also a number of other tools
+like autoconf, automake, byacc and flex. 
+One way to build the code is to make a subdirectory, lets say called bld
+in your lifelines directory, (where the toplevel Makefile.am is located)
+and then build all the code there.  This keeps the objects and executables
+out of the source directories.  This is the process shown here.
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;sh autogen.sh
+mkdir bld
+cd bld
+../configure
+make
+</PRE
+></TD
+></TR
+></TABLE
+>
+</P
+><P
+>&#13;This should build 
+<TT
+CLASS="application"
+>LifeLines</TT
+>
+and leave the results in subdirectories of the the directory bld.
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN231"
+></A
+>Generating the source tarball</H2
+><P
+>&#13;If you have build the code as described above, you can generate the
+source tarball as follows;
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;cd bld
+make dist
+</PRE
+></TD
+></TR
+></TABLE
+>
+</P
+><P
+>&#13;While this is a source tarball it does contain a number of generated
+files that make it easier to generate 
+<TT
+CLASS="application"
+>LifeLines</TT
+>
+from the source tarball.
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN237"
+></A
+>Generating the rpm package</H2
+><P
+>&#13;The specification file to build a rpm for redhat linux is included in the
+cvs repository.  These notes show how you can use this to build the
+source and binary rpm for redhat linux.
+</P
+><P
+>&#13;These instructions use techniques described by Mike Harris in a note
+entitled "Building RPM packages as a non-root user."  These were found
+at http://www.rpm.org/hintskinks/buildtree.  At that url was also a 
+tarball that included the files README( the note), .rpmrc and .rpmmacros.
+The later two files are installed in your home directory.  These do alter
+the default behavior of rpm for you and are not required to build the rpm,
+however, these instructions will fail.
+</P
+><P
+>&#13;Make sure there is a line of the form
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;%packager     Joe Blow  &#60;joe@blow.com&#62;
+</PRE
+></TD
+></TR
+></TABLE
+>
+In your ~/.rpmmacros file.  It is used to put the name and email address
+of the individual generating the rpm package into the file.  Be sure to
+use your name and email address.  If there is a "Packager:" entry in the
+lifelines.spec file, make sure it is correct, as it overrides the value
+in your .rpmmacros file.
+</P
+><P
+>&#13;From the lifelines directory (where the toplevel Makefile.am and the bld
+directory are, execute the following commands (with appropriate version
+numbers of course)
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;mkdir ~/rpmbuild
+mkdir ~/rpmbuild/SRPMS
+mkdir ~/rpmbuild/RPMS
+mkdir ~/rpmbuild/BUILD
+mkdir ~/rpmbuild/tmp
+mkdir ~/rpmbuild/lifelines-3.0.28
+cp bld/lifelines-3.0.28.tar.gz ~/rpmbuild/lifelines-3.0.28
+cp build/rpm/lifelines.spec ~/rpmbuild/lifelines-3.0.28
+cd ~/rpmbuild/lifeines-3.0.28
+rpmbuild -ba lifelines.spec
+</PRE
+></TD
+></TR
+></TABLE
+>
+The mkdir commands only need to be executed if needed.
+If everything goes ok, this will generate a source and binary rpm.
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN245"
+></A
+>Makeing a release</H2
+><P
+>&#13;To release a new version, edit the version number in
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;  NEWS
+  configure.in
+  build/rpm/lifelines.spec
+  src/hdrs/version.h
+  build/msvc6/llines/llines.rc
+  docs/ll-*.xml
+</PRE
+></TD
+></TR
+></TABLE
+>
+Add an entry mentioning the new version in the
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;  ChangeLog
+</PRE
+></TD
+></TR
+></TABLE
+>
+Tag the cvs source via
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;  cvs tag v3_0_25
+</PRE
+></TD
+></TR
+></TABLE
+>
+Finally, Send an announcement to the LINES-L mailing list
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN251"
+></A
+>Putting a release on sourceforge</H2
+><P
+>&#13;TODO:
+</P
 ></DIV
 ></DIV
 ></DIV
