@@ -29,6 +29,9 @@
  *   3.0.0 - 17 Jun 94    3.0.2 - 11 Nov 94
  *=========================================================*/
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 #ifdef HAVE_LOCALE_H
 #include <locale.h>
 #endif
@@ -42,6 +45,8 @@
 #ifdef max
 #	undef max
 #endif
+
+extern STRING deflocale;
 
 /*********************************************
  * local types
@@ -528,18 +533,29 @@ custom_sort (char *str1, char *str2, INT * rtn)
 /*===================================================
  * get_sort_desc -- Get string describing collate order
  * caller supplies buffer (& its size)
- * Created: 2001/07/21 (Perry Rapp)
+ * Created: 2001/07/21
+ *  locVarName: [IN] user option variable name (eg, "UiLocale")
  *=================================================*/
 char *
-get_sort_desc (STRING buffer, INT max)
+get_sort_desc (STRING buffer, INT max, STRING locVarName)
 {
-	char * ptr = buffer;
-	int mylen = max;
-	buffer[0] = 0;
 #ifdef HAVE_SETLOCALE
-	llstrcatn(&ptr, setlocale(LC_COLLATE, NULL), &mylen);
+	const char *optval, *str;
+	if (optval = getoptstr(locVarName, NULL)) {
+		str = setlocale(LC_COLLATE, optval);
+		if (str) {
+			sprintpic0(buffer, max, str);
+		} else {
+			str = deflocale;
+			sprintpic2(buffer, max, _("(Invalid: %1) default: %2")
+				, optval, str);
+		}
+	} else {
+		str = deflocale;
+		sprintpic1(buffer, max, _("default: %1"), str);
+	}
 #else
-	llstrcatn(&ptr, "Locales not supported on this platform.", &mylen);
+	sprintpic0(buffer, max, _("Locales not supported on this platform.)"));
 #endif
 	return buffer;
 }
@@ -602,7 +618,10 @@ uilocale (void)
 #ifdef HAVE_SETLOCALE
 	STRING str = getoptstr("UiLocale", "C");
 	if (str)
-		setlocale(LC_COLLATE, str);
+		str = setlocale(LC_COLLATE, str);
+	/* if unspecified or illegal user value, use default */
+	if (!str)
+		setlocale(LC_COLLATE, deflocale);
 #endif
 }
 /*==========================================
@@ -616,6 +635,9 @@ rptlocale (void)
 #ifdef HAVE_SETLOCALE
 	STRING str = getoptstr("RptLocale", "C");
 	if (str)
-		setlocale(LC_COLLATE, str);
+		str = setlocale(LC_COLLATE, str);
+	/* if unspecified or illegal user value, use default */
+	if (!str)
+		setlocale(LC_COLLATE, deflocale);
 #endif
 }

@@ -382,6 +382,18 @@ printpic_arg (STRING *b, INT max, CNSTRING arg, INT arglen)
 		return TRUE;
 	}
 }
+/*=========================================
+ * sprintpic0 -- Print using a picture string
+ *  with no arguments
+ * This is just snprintf, but fixed to always
+ * zero-terminate.
+ *=======================================*/
+void
+sprintpic0 (STRING buffer, INT len, CNSTRING pic)
+{
+	snprintf(buffer, len-1, pic);
+	buffer[len-1] = 0;
+}
 /*==============================
  * sprintpic1 -- Print using a picture string
  *  with one argument, eg "From %1"

@@ -422,19 +422,14 @@ STRING mn_cstt     = SS "t  Edit translation tables";
 STRING mn_csrpt    = SS "r  Report character set setup";
 STRING mn_csintcs  = SS "Internal code set: ";
 STRING mn_csdsploc = SS "Display locale: ";
-STRING mn_csndloc  = SS "L  Select display locale";
 STRING mn_cstsort  = SS "s  Edit custom sort table        ";
 STRING mn_cspref   = SS "p  Edit custom sort prefix table ";
 STRING mn_cschar   = SS "c  Edit custom codepage mapping  ";
 STRING mn_cslcas   = SS "l  Edit custom lower case mapping";
 STRING mn_csucas   = SS "u  Edit custom upper case mapping";
-STRING idsortttl   = SS "Enter valid locale name (C for non-lingual sort)";
-STRING idloc       = SS "Locale: ";
 /* menu for report character set issues */
 STRING mn_csrpttl  = SS "Report character set menu";
 STRING mn_csrptcs  = SS "Report code set: ";
-STRING mn_csrptloc = SS "Report locale: ";
-STRING mn_csnrloc  = SS "L  Select report locale";
 /* menu for translation tables */
 STRING mn_tt_ttl   = SS "Translation Tables";
 STRING mn_tt_edit  = SS "e  edit individual tables (in db)";

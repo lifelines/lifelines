@@ -114,6 +114,7 @@ BOOLEAN iswhite(INT);
 INT ll_toupper(INT);
 INT ll_tolower(INT);
 STRING lower(STRING);
+void sprintpic0(STRING buffer, INT len, CNSTRING pic);
 BOOLEAN sprintpic1(STRING buffer, INT len, CNSTRING pic, CNSTRING arg1);
 BOOLEAN sprintpic2(STRING buffer, INT len, CNSTRING pic, CNSTRING arg1, CNSTRING arg2);
 BOOLEAN sprintpic3(STRING buffer, INT len, CNSTRING pic, CNSTRING arg1, CNSTRING arg2

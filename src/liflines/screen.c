@@ -99,9 +99,9 @@ extern STRING mn_unkcmd,ronlya,ronlyr;
 extern STRING askynq,askynyn,askyny;
 extern STRING mn_quit,mn_ret;
 extern STRING mn_mmprpt,mn_mmrpt,mn_mmcset;
-extern STRING mn_csttl,mn_cstt,mn_csintcs,mn_csrptcs,mn_csndloc;
+extern STRING mn_csttl,mn_cstt,mn_csintcs,mn_csrptcs;
 extern STRING mn_cstsort,mn_cspref,mn_cschar,mn_cslcas,mn_csucas,mn_csrpt;
-extern STRING mn_csdsploc,mn_csrpttl,mn_csrptloc,mn_csnrloc;
+extern STRING mn_csdsploc,mn_csrpttl;
 extern STRING idsortttl,idloc;
 extern STRING mn_edttttl,mn_svttttl;
 extern STRING mn_utsave,mn_utread,mn_utkey,mn_utkpers,mn_utdbstat,mn_utmemsta;
@@ -165,7 +165,7 @@ static INT choose_one_or_list_from_indiseq(STRING ttl, INDISEQ seq, BOOLEAN mult
 static INT choose_or_view_array (STRING ttl, INT no, STRING *pstrngs
 	, BOOLEAN selecting, DETAILFNC detfnc, void *param);
 #ifdef HAVE_SETLOCALE
-static void choose_sort(STRING optname);
+static void test_locale_name(void);
 #endif
 static INT choose_tt(STRING prompt);
 static void clear_msgs(void);
@@ -178,7 +178,8 @@ static UIWINDOW create_uisubwindow2 (UIWINDOW uiparent, INT rows, INT cols);
 static void deactivate_uiwin(void);
 static void delete_uiwindow(UIWINDOW uiw);
 static void disp_codeset(UIWINDOW uiwin, INT row, INT col, STRING menuit, INT codeset);
-static void disp_locale(UIWINDOW uiwin, INT row, INT col, STRING menuit);
+static void disp_locale(UIWINDOW uiwin, INT row, INT col, STRING menuit
+	, STRING locVarName);
 static void disp_trans_table_choice(UIWINDOW uiwin, INT row, INT col, STRING menuit, INT indx);
 static void display_status(STRING text);
 static void edit_tt_menu(void);
@@ -1409,16 +1410,26 @@ choose_list_from_indiseq (STRING ttl, INDISEQ seq)
  * Created: 2001/07/21 (Perry Rapp)
  *====================================*/
 static void
-choose_sort (STRING optname)
+test_locale_name (void)
 {
 	STRING str;
 	STRING result = 0;
+	STRING idsortttl = _("Enter locale name");
+	STRING idloc = _("Locale: ");
+	BOOLEAN first = TRUE;
 	while (!result) {
 		str = ask_for_string(idsortttl, idloc);
 		if (!str || !str[0]) return;
 		result = setlocale(LC_COLLATE, str);
 		if (result) {
-			changeoptstr(optname, strsave(result));
+			char buffer[128];
+			sprintpic1(buffer, sizeof(buffer), _("Valid locale: %1"), str);
+			msg_info(buffer);
+			return;
+		}
+		if (first) {
+			idsortttl = _("Invalid locale, try again");
+			first = FALSE;
 		}
 	}
 }
@@ -1449,7 +1460,7 @@ draw_tt_win (STRING prompt)
 /*==============================
  * disp_codeset -- Display code set line
  * including description
- * Created: 2001/08/02 (Perry Rapp)
+ * Created: 2001/08/02
  *============================*/
 static void
 disp_codeset (UIWINDOW uiwin, INT row, INT col, STRING menuit, INT codeset)
@@ -1463,22 +1474,25 @@ disp_codeset (UIWINDOW uiwin, INT row, INT col, STRING menuit, INT codeset)
 }
 /*==============================
  * disp_locale -- Display locale description
- * Created: 2001/08/02 (Perry Rapp)
+ *  uiwin, row, col: [IN]  where to write description
+ *  menuit: prefix of description (eg, "GUI locale")
+ *  locName: option variable name (eg, "UiLocale")
+ * Created: 2001/08/02
  *============================*/
 static void
-disp_locale (UIWINDOW uiwin, INT row, INT col, STRING menuit)
+disp_locale (UIWINDOW uiwin, INT row, INT col, STRING menuit, STRING locVarName)
 {
 	char buff[60];
 	WINDOW * win = uiw_win(uiwin);
 	int menulen = strlen(menuit);
 	int buflen = sizeof(buff)-menulen;
 	mvwaddstr(win, row, col, menuit);
-	mvwaddstr(win, row, col+menulen, get_sort_desc(buff, buflen));
+	mvwaddstr(win, row, col+menulen, get_sort_desc(buff, buflen, locVarName));
 }
 /*==============================
  * disp_trans_table_choice -- Display line in
  * translation table menu, & show current info
- * Created: 2001/07/20 (Perry Rapp)
+ * Created: 2001/07/20
  *============================*/
 static void
 disp_trans_table_choice (UIWINDOW uiwin, INT row, INT col, STRING menuit, INT indx)
@@ -1656,7 +1670,7 @@ invoke_cset_menu (void)
 
 		switch (code) {
 #ifdef HAVE_SETLOCALE
-		case 'L': choose_sort("UiLocale"); uilocale(); break;
+		case 'L': test_locale_name(); break;
 #endif
 		case 's': edit_mapping(MSORT); break;
 		case 'c': edit_mapping(MCHAR); break;
@@ -1698,7 +1712,7 @@ rpt_cset_menu (void)
 
 		switch (code) {
 #ifdef HAVE_SETLOCALE
-		case 'L': choose_sort("RptLocale"); break;
+		case 'L': test_locale_name(); break;
 #endif
 		case 'r': edit_mapping(MINRP); break;
 		case 'q': done=TRUE; break;
@@ -3070,11 +3084,12 @@ repaint_cset_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
+	STRING csndloc = _("L  Test locale names");
 	werase(win);
 	draw_win_box(win);
 	mvwaddstr(win, row++, 2, mn_csttl);
 	disp_codeset(uiwin, row++, 4, mn_csintcs, int_codeset);
-	disp_locale(uiwin, row++, 4, mn_csdsploc);
+	disp_locale(uiwin, row++, 4, mn_csdsploc, "UiLocale");
 	disp_trans_table_choice(uiwin, row++, 4, mn_cstsort, MSORT);
 #ifdef NOTYET
 	disp_trans_table_choice(uiwin, row++, 4, mn_cspref, MPREF);
@@ -3083,7 +3098,7 @@ repaint_cset_menu (UIWINDOW uiwin)
 	disp_trans_table_choice(uiwin, row++, 4, mn_csucas, MUCAS);
 #endif
 #ifdef HAVE_SETLOCALE
-	mvwaddstr(win, row++, 4, mn_csndloc);
+	mvwaddstr(win, row++, 4, csndloc);
 #endif
 	mvwaddstr(win, row++, 4, mn_csrpt);
 	mvwaddstr(win, row++, 4, mn_cstt);
@@ -3097,13 +3112,15 @@ static void
 repaint_rpc_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
+	STRING csnrloc = _("L  Test locale names");
 	INT row = 1;
+	STRING csrptloc = _("Report locale: ");
 	werase(win);
 	draw_win_box(win);
 	mvwaddstr(win, row++, 2, mn_csrpttl);
-	disp_locale(uiwin, row++, 4, mn_csrptloc);
+	disp_locale(uiwin, row++, 4, csrptloc, "RptLocale");
 #ifdef HAVE_SETLOCALE
-	mvwaddstr(win, row++, 4, mn_csnrloc);
+	mvwaddstr(win, row++, 4, csnrloc);
 #endif
 	disp_trans_table_choice(uiwin, row++, 4, mn_tt_inrp, MINRP);
 	mvwaddstr(win, row++, 4, mn_ret);

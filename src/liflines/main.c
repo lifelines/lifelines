@@ -120,6 +120,7 @@ BOOLEAN selftest = FALSE;      /* selftest rules (ignore paths) */
 BOOLEAN showusage = FALSE;     /* show usage */
 STRING  btreepath = NULL;      /* database path given by user */
 STRING  readpath = NULL;       /* database path used to open */
+STRING  deflocale = "C";       /* fallback for invalid user options */
 
 /*********************************************
  * local function prototypes
@@ -158,7 +159,7 @@ main (INT argc, char **argv)
 	BOOLEAN graphical=TRUE;
 
 #ifdef HAVE_SETLOCALE
-	setlocale(LC_ALL, "");
+	deflocale = setlocale(LC_ALL, "");
 #endif
 
 	/* Parse Command-Line Arguments */

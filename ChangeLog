@@ -1,3 +1,15 @@
+2002-02-10 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/messages.c gedlib/translat.c hdrs/llstdlib.h
+	hdrs/translat.h liflines/main.c liflines/screen.c
+	stdlib/stdstrng.c tools/dbverify.c
+	win32/msvc6/llines/llinesprj.dsp:
+
+	Drive ui & report locales off user variables.
+	Capture locale at startup for fallback (if user-specified
+	value invalid).
+	Fix translat.c to include config.h.
+
 2002-02-08 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog configure.in lifelines.spec docs/llines.1
