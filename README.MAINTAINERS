@@ -1,5 +1,6 @@
 To release a new version, edit the version number in
   NEWS
+  INSTALL
   configure.in
   build/rpm/lifelines.spec
   src/hdrs/version.h

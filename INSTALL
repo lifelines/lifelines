@@ -1,4 +1,4 @@
-LifeLines Source Release, Version 3.0.29
+LifeLines Source Release, Version 3.0.35
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
@@ -53,6 +53,16 @@ peace of mind.
 btedit is a administration tool used for unmangling mangled databases, 
 and is extremely powerful.  You should only use this program under the
 expert guidance of a LifeLines developer.
+
+
+docs:
+The make process will attempt to generate html, pdf, and text 
+documentation from the xml source files. If the jw tools are
+not found, errors will display, but the make will continue. 
+Pregenerated versions of the documentation are included, in
+html, pdf, and text formats, so it is not necessary to have
+these tools installed. It is simply beneficial to ensure that
+they are absolutely up-to-date.
 
 
 **************************

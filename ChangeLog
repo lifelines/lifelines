@@ -4,6 +4,10 @@
 
 	Improved error detection and reporting during gedcom output.
 
+	* ChangeLog INSTALL README.MAINTAINERS
+
+	Put comment in INSTALL about docs.
+
 2003-09-17 Perry Rapp
 
 	* ChangeLog src/hdrs/Makefile.am
