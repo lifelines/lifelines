@@ -28,6 +28,11 @@
 	Some internal list cleanup; new function remove_empty_list.
 	Rename remove_list to remove_list2.
 
+	* ChangeLog src/gedlib/intrface.c src/gedlib/xreffile.c
+	src/hdrs/gedcom.h src/tools/dbverify.c
+
+	Add code to fix unfreed but missing records.
+
 2005-02-04 Perry Rapp
 
 	* ChangeLog src/gedlib/node.c src/hdrs/gedcom.h

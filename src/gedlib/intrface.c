@@ -36,8 +36,8 @@ extern BTREE BTR;
 
 /*=================================================
  * retrieve_raw_record -- Retrieve record string from database
- *  key:  [in] key of desired record (eg, "    I543")
- *  plen: [out] length of record returned
+ *  key:  [IN] key of desired record (eg, "    I543")
+ *  plen: [OUT] length of record returned
  *===============================================*/
 STRING
 retrieve_raw_record (CNSTRING key, INT *plen)
@@ -47,9 +47,9 @@ retrieve_raw_record (CNSTRING key, INT *plen)
 }
 /*=========================================
  * store_record -- Store record in database
- *  key:  [in] where to store record in db
- *  rec:  [in] data to store
- *  len:  [in] length of data to store
+ *  key:  [IN] where to store record in db
+ *  rec:  [IN] data to store
+ *  len:  [IN] length of data to store
  *=======================================*/
 BOOLEAN
 store_record (CNSTRING key, STRING rec, INT len)
@@ -74,8 +74,8 @@ retrieve_to_textfile (STRING key, STRING file, TRANSLFNC translfnc)
 }
 /*=====================================
  * store_file -- Store record from file
- *  key:  [in] db key in which to store record
- *  file: [in] file from which to get record
+ *  key:  [IN] db key in which to store record
+ *  file: [IN] file from which to get record
  *===================================*/
 #ifdef UNUSED_CODE
 BOOLEAN
@@ -86,8 +86,8 @@ store_file (STRING key, STRING file)
 #endif
 /*=====================================
  * store_text_file_to_db -- Store record from text file
- *  key:  [in] db key in which to store record
- *  file: [in] file from which to get record
+ *  key:  [IN] db key in which to store record
+ *  file: [IN] file from which to get record
  * for MSDOS, translates \r\n in files to \n in record
  * Created: 2001/07/04 (Perry Rapp)
  *===================================*/
@@ -180,8 +180,9 @@ del_in_dbase (CNSTRING key)
 	if (!key || *key == 0) return;
 
 /* Add key to list of unused keys */
-	addxref(key);
-/* Free record in database */
+	addxref(key); /* will assert if record already free (deleted) */
+
+/* Free record in database - we just store deleted text */
 	ASSERT(store_record(key, "DELE\n", 5));
 }
 /*=================================================
@@ -192,5 +193,18 @@ del_in_dbase (CNSTRING key)
 void
 delete_record_missing_data_entry (CNSTRING key)
 {
+	/* simply deleting it will take care of it */
 	del_in_dbase(key);
+}
+/*=================================================
+ * mark_deleted_record_as_deleted -- Fix a record which
+ * does not exist, but is not correctly on the free list
+ * (that is, put it on the free list)
+ * Ignores any invalid input
+ *===============================================*/
+BOOLEAN
+mark_deleted_record_as_deleted (CNSTRING key)
+{
+	if (!key || !key[0]) return FALSE;
+	return addxref_if_missing(key);
 }

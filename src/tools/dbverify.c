@@ -90,6 +90,7 @@ struct work {
 	INT check_sours;
 	INT check_evens;
 	INT check_othes;
+	INT fix_deletes;
 	INT fix_alter_pointers;
 	INT check_missing_data_records; /* record in index, but no data */
 	INT fix_missing_data_records;
@@ -242,6 +243,7 @@ print_usage (void)
 	printf(_("\t-l = Check database structure\n"));
 	printf(_("\t-m = Check for records missing data entries\n"));
 	printf(_("\t-M = Fix records missing data entries\n"));
+	printf(_("\t-D = Fix bad delete entries\n"));
 	printf(_("\t-n = Noisy (echo every record processed)\n"));
 	printf(_("example: dbverify -ifsex \"%s\"\n"), fname);
 	printf("%s\n", verstr);
@@ -254,7 +256,8 @@ static void
 report_error (INT err, STRING fmt, ...)
 {
 	va_list args;
-	++errs[err].err_count;
+	if (err>=0)
+		++errs[err].err_count;
 	va_start(args, fmt);
 	printf("! ");
 	vprintf(fmt, args);
@@ -1051,6 +1054,19 @@ check_set (INDISEQ seq, char ctype)
 			report_error(ERR_UNDELETED
 				, _("Missing undeleted record %c%d")
 				, ctype, i);
+			if (todo.fix_deletes) {
+				char key[33];
+				sprintf(key, "%c%d", ctype, i);
+				if (mark_deleted_record_as_deleted(key)) {
+					report_fix(ERR_UNDELETED
+						, _("Fixed missing undeleted record %c%d")
+						, ctype, i);
+				} else {
+					report_error(-1
+						, _("Failed to fix missing undeleted record %c%d")
+						, ctype, i);
+				}
+			}
 			i = xref_next(ctype, i);
 		}
 		if (i == element_ikey(el)) {
@@ -1288,6 +1304,7 @@ main (int argc,
 		case 'F': todo.fix_alter_pointers=TRUE; break;
 		case 'm': todo.check_missing_data_records=TRUE; break;
 		case 'M': todo.fix_missing_data_records=TRUE; break;
+		case 'D': todo.fix_deletes=TRUE; break;
 		default: print_usage(); goto done;
 		}
 	}

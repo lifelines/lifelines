@@ -23,6 +23,9 @@
 */
 /*=============================================================
  * xreffile.c -- Handle the xref file
+ * This module manages the lists of free record numbers
+ * For example, if I1, I2, I4, and I6 are in use
+ *  then irecs contains I3 and I5 (free record numbers)
  * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
  * pre-SourceForge version information:
  *   2.3.4 - 24 Jun 93    2.3.5 - 02 Sep 93
@@ -39,7 +42,6 @@
 
 extern BTREE BTR;
 
-
 /*===================================================================
  * First five words in xrefs file are number of INDI, FAM, EVEN, SOUR
  *   and other keys in file; remaining words are keys, in respective
@@ -52,6 +54,8 @@ extern BTREE BTR;
 /*********************************************
  * local types
  *********************************************/
+
+typedef enum { DUPSOK, NODUPS } DUPS;
 
  /*==================================== 
  * deleteset -- set of deleted records
@@ -74,6 +78,7 @@ typedef struct deleteset_s *DELETESET;
 
 /* alphabetical */
 static void add_xref_to_set(INT key, DELETESET set);
+static BOOLEAN addxref_impl(CNSTRING key, BOOLEAN silent);
 static void freexref(DELETESET set);
 static STRING getxref(DELETESET set);
 static void growxrefs(DELETESET set);
@@ -326,11 +331,11 @@ writexrefs (void)
 	return TRUE;
 }
 /*=====================================
- * add_xref_to_set -- Add deleted key to xrefs.
+ * add_xref_to_set_impl -- Add deleted key to xrefs.
  *  generic for all types
  *===================================*/
-static void
-add_xref_to_set (INT key, DELETESET set)
+static BOOLEAN
+add_xref_to_set_impl (INT key, DELETESET set, DUPS dups)
 {
 	INT lo,hi,md, i;
 	if (key <= 0 || !xreffp || (set->n) < 1) FATAL();
@@ -347,7 +352,10 @@ add_xref_to_set (INT key, DELETESET set)
 		else if (key<(set->recs)[md])
 			lo=++md;
 		else {
-			char msg[64];
+			/* key is already free */
+			char msg[96];
+			if (dups==DUPSOK) 
+				return FALSE;
 			sprintf(msg, "Tried to add already-deleted record (%d) to xref (%c)!"
 				, key, set->ctype);
 			FATAL2(msg); /* deleting a deleted record! */
@@ -360,30 +368,69 @@ add_xref_to_set (INT key, DELETESET set)
 	(set->n)++;
 	ASSERT(writexrefs());
 	maxkeynum=-1;
+	return TRUE;
 }
+/*=====================================
+ * add_xref_to_set -- Add deleted key to xrefs.
+ *  generic for all types
+ * ASSERT if anything goes wrong, or key already free
+ *===================================*/
+static void
+add_xref_to_set (INT key, DELETESET set)
+{
+	add_xref_to_set_impl(key, set, NODUPS);
+}
+/*===================================================
+ * add?xref_impl -- Wrappers for each type to add_xref_to_set (qv)
+ *  5 symmetric versions
+ *=================================================*/
+BOOLEAN addixref_impl (INT key, DUPS dups) { return add_xref_to_set_impl(key, &irecs, dups); }
+BOOLEAN addfxref_impl (INT key, DUPS dups) { return add_xref_to_set_impl(key, &frecs, dups); }
+BOOLEAN addsxref_impl (INT key, DUPS dups) { return add_xref_to_set_impl(key, &srecs, dups); }
+BOOLEAN addexref_impl (INT key, DUPS dups) { return add_xref_to_set_impl(key, &erecs, dups); }
+BOOLEAN addxxref_impl (INT key, DUPS dups) { return add_xref_to_set_impl(key, &xrecs, dups); }
 /*===================================================
  * add?xref -- Wrappers for each type to add_xref_to_set (qv)
  *  5 symmetric versions
  *=================================================*/
-void addixref (INT key) { add_xref_to_set(key, &irecs); }
-void addfxref (INT key) { add_xref_to_set(key, &frecs); }
-void addsxref (INT key) { add_xref_to_set(key, &srecs); }
-void addexref (INT key) { add_xref_to_set(key, &erecs); }
-void addxxref (INT key) { add_xref_to_set(key, &xrecs); }
+void addixref (INT key) { addixref_impl(key, NODUPS); }
+void addfxref (INT key) { addfxref_impl(key, NODUPS); }
+void addsxref (INT key) { addsxref_impl(key, NODUPS); }
+void addexref (INT key) { addexref_impl(key, NODUPS); }
+void addxxref (INT key) { addxxref_impl(key, NODUPS); }
 /*===================================================
- * addxref -- Mark key free (accepts string key, any type)
+ * addxref_impl -- Mark key free (accepts string key, any type)
+ *  key:    [IN]  key to delete (add to free set)
+ *  silent: [IN]  if FALSE, ASSERT if record is already free
  *=================================================*/
-void addxref (CNSTRING key)
+static BOOLEAN
+addxref_impl (CNSTRING key, DUPS dups)
 {
 	INT keyint = atoi(key + 1);
 	switch(key[0]) {
-	case 'I': addixref(keyint); break;
-	case 'F': addfxref(keyint); break;
-	case 'S': addsxref(keyint); break;
-	case 'E': addexref(keyint); break;
-	case 'X': addxxref(keyint); break;
-	default: ASSERT(0); break;
+	case 'I': return addixref_impl(keyint, dups);
+	case 'F': return addfxref_impl(keyint, dups);
+	case 'S': return addsxref_impl(keyint, dups);
+	case 'E': return addexref_impl(keyint, dups);
+	case 'X': return addxxref_impl(keyint, dups);
+	default: ASSERT(0); return FALSE;
 	}
+}
+/*===================================================
+ * addxref -- Mark key free (accepts string key, any type)
+ * ASSERT if key is already free
+ *=================================================*/
+void addxref (CNSTRING key)
+{
+	addxref_impl(key, NODUPS);
+}
+/*===================================================
+ * addxref_if_missing -- Mark key free (accepts string key, any type)
+ * Does nothing if key already free
+ *=================================================*/
+BOOLEAN addxref_if_missing (CNSTRING key)
+{
+	return addxref_impl(key, DUPSOK);
 }
 /*==========================================
  * growxrefs -- Grow memory for xrefs array.
@@ -476,7 +523,7 @@ xref_max_any (void)
  * flag = use the current key
  *  returns static buffer
  *==============================================*/
-STRING
+static STRING
 newxref (STRING xrefp, BOOLEAN flag, DELETESET set)
 {
 	INT keynum;
@@ -497,8 +544,8 @@ newxref (STRING xrefp, BOOLEAN flag, DELETESET set)
 	return(getxref(set));
 }
 /*================================================
- * newixref -- Return original or next ixref value
- * xrefp = key of the individual
+ * new?xref -- Return original or next ?xref value
+ * xrefp = key of the record
  * flag = use the current key
  *==============================================*/
 STRING
@@ -506,41 +553,21 @@ newixref (STRING xrefp, BOOLEAN flag)
 {
 	return newxref(xrefp, flag, &irecs);
 }
-/*================================================
- * newfxref -- Return original or next fxref value
- * xrefp = key of the individual
- * flag = use the current key
- *==============================================*/
 STRING
 newfxref (STRING xrefp, BOOLEAN flag)
 {
 	return newxref(xrefp, flag, &frecs);
 }
-/*================================================
- * newsxref -- Return original or next sxref value
- * xrefp = key of the individual
- * flag = use the current key
- *==============================================*/
 STRING
 newsxref (STRING xrefp, BOOLEAN flag)
 {
 	return newxref(xrefp, flag, &srecs);
 }
-/*================================================
- * newexref -- Return original or next exref value
- * xrefp = key of the individual
- * flag = use the current key
- *==============================================*/
 STRING
 newexref (STRING xrefp, BOOLEAN flag)
 {
 	return newxref(xrefp, flag, &erecs);
 }
-/*================================================
- * newxxref -- Return original or next xxref value
- * xrefp = key of the individual
- * flag = use the current key
- *==============================================*/
 STRING
 newxxref (STRING xrefp, BOOLEAN flag)
 {
