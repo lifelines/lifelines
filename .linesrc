@@ -4,7 +4,7 @@
 # As are blank lines
 # So some of the examples are commented out...
 #
-# 2003/11/12
+# 2003/11/17
 #
 # Note that paths are assigned with :=
 # Other values are assigned with =
@@ -259,9 +259,4 @@
 # Set default properties (user options) for new databases
 #NewDbProps=codeset=UTF-8
 # Default is none
-
-# Use builtin casing properties, instead of system properties
-#CustomCharacterProperties=ISO-8859-1
-# Default is none
-# Currently only legal value is ISO-8859-1
 

@@ -4,6 +4,10 @@
 
 	Name translation tables by source file name by default.
 
+	* .linesrc ChangeLog lines.cfg
+
+	Remove obsoleted option CustomCharacterProperties.
+
 2003-11-16 Perry Rapp
 
 	* ChangeLog build/msvc6/llexec/llexec.dsp
