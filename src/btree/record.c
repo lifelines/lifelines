@@ -40,6 +40,7 @@
  *********************************************/
 
 /* alphabetical */
+static void check_offset(BLOCK block, RKEY rkey, INT i);
 static void filecopy(FILE*fpsrc, INT len, FILE*fpdest);
 static void movefiles(STRING, STRING);
 
@@ -47,6 +48,38 @@ static void movefiles(STRING, STRING);
  * local function definitions
  * body of module
  *********************************************/
+
+/*=================================
+ * check_offset -- Sanity check one entry (off & len)
+ *  block:  [IN]  block in memory
+ *  rkey:   [IN]  key of record (eg, "     I67")
+ *  inum:   [IN]  record index
+ *===============================*/
+static void
+check_offset (BLOCK block, RKEY rkey, INT i)
+{
+	INT offlo, lenlo, offhi;
+
+	if (!(i>=0 && i<nkeys(block))) {
+		char msg[256];
+		sprintf(msg, "Working on rkey=%s ", rkey2str(rkey));
+		sprintf(msg+strlen(msg), "Bad index (%d) passed to check_offset", i);
+		FATAL2(msg);
+	}
+	
+	offlo = offs(block, i-1);
+	lenlo = lens(block, i-1);
+	offhi = offs(block, i);
+
+	if (offlo + lenlo != offhi) {
+		char msg[256];
+		sprintf(msg, "Working on rkey=%s ", rkey2str(rkey));
+		sprintf(msg+strlen(msg)
+			, "Found corrupt block#%x: key(%d) off=%d, len=%d, key(%d) off=%d"
+			, i-1, offlo, lenlo, i, offhi);
+		FATAL2(msg);
+	}
+}
 
 /*=================================
  * addrecord -- Add record to BTREE
@@ -130,6 +163,9 @@ addrecord (BTREE btree, RKEY rkey, RAWRECORD rec, INT len)
 		lens(newb, i) = lens(old, i);
 		offs(newb, i) = off;
 		off += lens(old, i);
+		if (i) { /* sanity check */
+			check_offset(newb, rkey, i-1);
+		}
 	}
 
 /* put info about added record in new header; may be new record */
@@ -148,6 +184,9 @@ addrecord (BTREE btree, RKEY rkey, RAWRECORD rec, INT len)
 		lens(newb, i + j) = lens(old, i);
 		offs(newb, i + j) = off;
 		off += lens(old, i);
+		if (i+j) { /* sanity check */
+			check_offset(newb, rkey, i+j-1);
+		}
 	}
 	if (!found) nkeys(newb) = n + 1;
 

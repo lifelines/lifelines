@@ -20,6 +20,10 @@
 
 	i18n utility, extra, & scan menus.
 
+	* ChangeLog btree/record.c:
+
+	Add more sanity checking when altering an db block.
+
 2002-02-23 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog Makefile.am configure.in arch/alphasort.c
