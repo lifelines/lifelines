@@ -1,3 +1,9 @@
+2002-01-02 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog stdlib\lloptions.c:
+
+	Bugfix for cygwin fgets in lloptions (leaves both \n & \r in fgets).
+
 2002-01-01 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog hdrs/screen.h liflines/llinesi.h liflines/screen.c

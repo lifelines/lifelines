@@ -160,8 +160,13 @@ load_config_file (STRING file, STRING * pmsg)
 			copy_process(valbuf, ptr);
 		val = valbuf;
 		len = strlen(val);
-		if (val[len-1]=='\n')
+		if (len>0 && val[len-1]=='\n') {
 			val[len-1] = 0;
+			/* cygwin appends both \n & \r apparently */
+			if (len>1 && val[len-2]=='\r') {
+				val[len-2] = 0;
+			}
+		}
 		insert_table_str(opttab, strsave(buffer), strsave(val));
 	}
 	failed = !feof(fp);
