@@ -1656,7 +1656,6 @@ prog_var_error (PNODE node, SYMTAB stab, PNODE arg, PVALUE val, STRING fmt, ...)
 	titl = vprog_error(node, fmt, args);
 	va_end(args);
 
-	/* debugger is not yet ready 2002.02.17 */
 	if (!getoptint("debugger", 0))
 		return;
 

@@ -81,7 +81,7 @@ static struct rfmt_s rpt_shrt_rfmt; /* long form report format */
 PVALUE
 __getint (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg = (PNODE) iargs(node);
+	PNODE arg = iargs(node);
 	PNODE arg2;
 	INT val;
 	STRING msg = (STRING) "Enter integer for program";
@@ -260,6 +260,7 @@ __gettoday (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE __name (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
+	PNODE arg2;
 	NODE name, indi = eval_indi(arg, stab, eflg, NULL);
 	BOOLEAN caps = TRUE;
 	PVALUE val;
@@ -269,10 +270,10 @@ PVALUE __name (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	if (!indi) return create_pvalue_from_string("");
-	if ((arg = inext(arg)) != NULL) {
-		val = eval_and_coerce(PBOOL, arg, stab, eflg);
+	if ((arg2 = inext(arg)) != NULL) {
+		val = eval_and_coerce(PBOOL, arg2, stab, eflg);
 		if (*eflg) {
-			prog_var_error(node, stab, arg, val, nonboox, "name", "2");
+			prog_var_error(node, stab, arg2, val, nonboox, "name", "2");
 			return NULL;
 		}
 		caps = pvalue_to_bool(val);
@@ -281,7 +282,7 @@ PVALUE __name (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (!(name = find_tag(nchild(indi), "NAME"))) {
 		if (getoptint("RequireNames", 0)) {
 			*eflg = TRUE;
-			prog_error(node, _("(name) person does not have a name"));
+			prog_var_error(node, stab, arg, NULL, _("name: person does not have a name"));
 			return NULL;
 		}
 		return create_pvalue_from_string(0);
@@ -307,26 +308,26 @@ __fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	indi = eval_indi(arg, stab, eflg, NULL);
 	if (*eflg || !indi) {
 		*eflg = TRUE;
-		prog_error(node, nonindx, "fullname", "1");
+		prog_var_error(node, stab, arg, NULL, nonindx, "fullname", "1");
 		return NULL;
 	}
 	val = eval_and_coerce(PBOOL, arg = inext(arg), stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonboox, "fullname", "2");
+		prog_var_error(node, stab, arg, val, nonboox, "fullname", "2");
 		return NULL;
 	}
 	caps = pvalue_to_bool(val);
 	delete_pvalue(val);
 	val = eval_and_coerce(PBOOL, arg = inext(arg), stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonboox, "fullname", "3");
+		prog_var_error(node, stab, arg, val, nonboox, "fullname", "3");
 		return NULL;
 	}
 	myreg = pvalue_to_bool(val);
 	delete_pvalue(val);
 	val = eval_and_coerce(PINT, arg = inext(arg), stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonintx, "fullname", "4");
+		prog_var_error(node, stab, arg, val, nonintx, "fullname", "4");
 		return NULL;
 	}
 	len = pvalue_to_int(val);
@@ -334,7 +335,7 @@ __fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (!(name = NAME(indi)) || !nval(name)) {
 		if (getoptint("RequireNames", 0)) {
 			*eflg = TRUE;
-			prog_error(node, _("(fullname) person does not have a name"));
+			prog_var_error(node, stab, NULL, NULL, _("fullname: person does not have a name"));
 			return NULL;
 		}
 		return create_pvalue_from_string(0);
@@ -349,19 +350,20 @@ __fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __surname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE name, indi = eval_indi(iargs(node), stab, eflg, NULL);
+	PNODE arg = (PNODE) iargs(node);
+	NODE name, indi = eval_indi(arg, stab, eflg, NULL);
 	STRING str;
 	static char scratch[MAXGEDNAMELEN+1];
 	TRANTABLE ttr = NULL; /* do not translate until output time */
 	if (*eflg) {
-		prog_error(node, "the arg to surname must be a person");
+		prog_var_error(node, stab, arg, NULL, nonvar1, "surname");
 		return NULL;
 	}
 	if (!indi) return create_pvalue_from_string("");
 	if (!(name = NAME(indi)) || !nval(name)) {
 		if (getoptint("RequireNames", 0)) {
 			*eflg = TRUE;
-			prog_error(node, _("(surname) person does not have a name"));
+			prog_var_error(node, stab, arg, NULL, _("surname: person does not have a name"));
 			return NULL;
 		}
 		return create_pvalue_from_string(0);
@@ -377,16 +379,17 @@ __surname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __soundex (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE name, indi = eval_indi(iargs(node), stab, eflg, NULL);
+	PNODE arg = (PNODE) iargs(node);
+	NODE name, indi = eval_indi(arg, stab, eflg, NULL);
 	if (*eflg || !indi) {
 		*eflg = TRUE;
-		prog_error(node, _("1st arg to soundex must be a person"));
+		prog_var_error(node, stab, arg, NULL, nonvar1, "soundex");
 		return NULL;
 	}
 	if (!(name = NAME(indi)) || !nval(name)) {
 		if (getoptint("RequireNames", 0)) {
 			*eflg = TRUE;
-			prog_error(node, _("(soundex) person does not have a name"));
+			prog_var_error(node, stab, arg, NULL, _("soundex: person does not have a name"));
 			return NULL;
 		}
 		return create_pvalue_from_string(0);
@@ -400,11 +403,12 @@ __soundex (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __strsoundex (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PVALUE newval, val = evaluate(iargs(node), stab, eflg);
+	PNODE arg = (PNODE) iargs(node);
+	PVALUE newval, val = evaluate(arg, stab, eflg);
 	STRING str;
 	if (*eflg || !val || ptype(val) != PSTRING) {
 		*eflg = TRUE;
-		prog_error(node, "1st arg to strsoundex must be a string");
+		prog_var_error(node, stab, arg, NULL, nonstr1, "strsoundex");
 		return NULL;
 	}
 	str = strsave(soundex(pvalue(val)));
@@ -452,13 +456,13 @@ __set (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val;
 	if (!iistype(var, IIDENT)) {
 		*eflg = TRUE;
-		prog_error(node, nonvarx, "set", "1");
+		prog_var_error(node, stab, var, NULL, nonvarx, "set", "1");
 		return NULL;
 	}
 	val = evaluate(expr, stab, eflg);
 	if (*eflg || !val) {
 		*eflg = TRUE;
-		prog_error(node, _("2nd arg to set is in error"));
+		prog_var_error(node, stab, expr, val, _("set: error evaluating 2nd arg"));
 		return NULL;
 	}
 	assign_iden(stab, iident(var), val);
@@ -471,10 +475,11 @@ __set (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __husband (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE fam = eval_fam(iargs(node), stab, eflg, NULL);
+	PNODE arg = (PNODE) iargs(node);
+	NODE fam = eval_fam(arg, stab, eflg, NULL);
 	if (*eflg || !fam) {
 		*eflg = TRUE;
-		prog_error(node, nonfam1, "husband");
+		prog_var_error(node, stab, arg, NULL, nonfam1, "husband");
 		return NULL;
 	}
 	return create_pvalue_from_indi(fam_to_husb(fam));
@@ -486,10 +491,11 @@ __husband (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __wife (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE fam = eval_fam(iargs(node), stab, eflg, NULL);
+	PNODE arg = (PNODE) iargs(node);
+	NODE fam = eval_fam(arg, stab, eflg, NULL);
 	if (*eflg || !fam) {
 		*eflg = TRUE;
-		prog_error(node, nonfam1, "wife");
+		prog_var_error(node, stab, arg, NULL, nonfam1, "wife");
 		return NULL;
 	}
 	return create_pvalue_from_indi(fam_to_wife(fam));
@@ -501,10 +507,11 @@ __wife (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __firstchild (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE fam = eval_fam(iargs(node), stab, eflg, NULL);
+	PNODE arg = (PNODE) iargs(node);
+	NODE fam = eval_fam(arg, stab, eflg, NULL);
 	if (*eflg || !fam) {
 		*eflg = TRUE;
-		prog_error(node, nonfam1, "firstchild");
+		prog_var_error(node, stab, arg, NULL, nonfam1, "firstchild");
 		return NULL;
 	}
 	return create_pvalue_from_indi(fam_to_first_chil(fam));
@@ -516,10 +523,11 @@ __firstchild (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __lastchild (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE fam = eval_fam(iargs(node), stab, eflg, NULL);
+	PNODE arg = (PNODE) iargs(node);
+	NODE fam = eval_fam(arg, stab, eflg, NULL);
 	if (*eflg || !fam) {
 		*eflg = TRUE;
-		prog_error(node, nonfam1, "lastchild");
+		prog_var_error(node, stab, arg, NULL, nonfam1, "lastchild");
 		return NULL;
 	}
 	return create_pvalue_from_indi(fam_to_last_chil(fam));
@@ -531,10 +539,11 @@ __lastchild (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __marr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE fam = eval_fam(iargs(node), stab, eflg, NULL);
+	PNODE arg = (PNODE) iargs(node);
+	NODE fam = eval_fam(arg, stab, eflg, NULL);
 	NODE event = NULL;
 	if (*eflg) {
-		prog_error(node, nonfam1, "marriage");
+		prog_var_error(node, stab, arg, NULL, nonfam1, "marriage");
 		return NULL;
 	}
 	if (fam)
@@ -548,10 +557,11 @@ __marr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __birt (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
+	PNODE arg = (PNODE) iargs(node);
+	NODE indi = eval_indi(arg, stab, eflg, NULL);
 	NODE event = NULL;
 	if (*eflg) {
-		prog_error(node, nonind1, "birth");
+		prog_var_error(node, stab, arg, NULL, nonind1, "birth");
 		return NULL;
 	} 
 	if (indi)
@@ -565,10 +575,11 @@ __birt (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __deat (PNODE node, SYMTAB stab, BOOLEAN  *eflg)
 {
-	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
+	PNODE arg = (PNODE) iargs(node);
+	NODE indi = eval_indi(arg, stab, eflg, NULL);
 	NODE event = NULL;
 	if (*eflg) {
-		prog_error(node, nonind1, "death");
+		prog_var_error(node, stab, arg, NULL, nonind1, "death");
 		return NULL;
 	}
 	if (indi)
@@ -582,10 +593,11 @@ __deat (PNODE node, SYMTAB stab, BOOLEAN  *eflg)
 PVALUE
 __bapt (PNODE node, SYMTAB stab, BOOLEAN  *eflg)
 {
-	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
+	PNODE arg = (PNODE) iargs(node);
+	NODE indi = eval_indi(arg, stab, eflg, NULL);
 	NODE event = NULL;
 	if (*eflg) {
-		prog_error(node, nonind1, "baptism");
+		prog_var_error(node, stab, arg, NULL, nonind1, "baptism");
 		return NULL;
 	}
 	if (indi)
@@ -599,10 +611,11 @@ __bapt (PNODE node, SYMTAB stab, BOOLEAN  *eflg)
 PVALUE
 __buri (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
+	PNODE arg = (PNODE) iargs(node);
+	NODE indi = eval_indi(arg, stab, eflg, NULL);
 	NODE event = NULL;
 	if (*eflg) {
-		prog_error(node, nonind1, "burial");
+		prog_var_error(node, stab, arg, NULL, nonind1, "burial");
 		return NULL;
 	}
 	if (indi)
@@ -616,10 +629,11 @@ __buri (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __titl (PNODE node, SYMTAB stab, BOOLEAN  *eflg)
 {
-	NODE titl, indi = eval_indi(iargs(node), stab, eflg, NULL);
+	PNODE arg = (PNODE) iargs(node);
+	NODE titl, indi = eval_indi(arg, stab, eflg, NULL);
 	STRING titlstr = "";
 	if (*eflg) {
-		prog_error(node, nonind1, "title");
+		prog_var_error(node, stab, arg, NULL, nonind1, "title");
 		return NULL;
 	}
 	if (indi) {
@@ -682,12 +696,13 @@ init_rpt_reformat (void)
 PVALUE
 __long (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
+	PNODE arg = iargs(node);
+	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
 	NODE even;
 	TRANTABLE ttr = NULL; /* do not translate until output time */
 	STRING str;
 	if (*eflg) {
-		prog_error(node, nonnod1, "long");
+		prog_var_error(node, stab, arg, val, nonnod1, "long");
 		return NULL;
 	}
 	even = (NODE) pvalue(val);
@@ -706,13 +721,14 @@ __long (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __short (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
+	PNODE arg = iargs(node);
+	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
 	NODE even;
 	/* RFMT rfmt = NULL; */ /* currently no reformatting for reports */
 	TRANTABLE ttr = NULL; /* do not translate until output time */
 	STRING str;
 	if (*eflg) {
-		prog_error(node, "the arg to short must be a record line");
+		prog_var_error(node, stab, arg, val, nonnod1, "short");
 		return NULL;
 	}
 	even = (NODE) pvalue(val);
