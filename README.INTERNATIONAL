@@ -2,9 +2,9 @@ Lifelines was gettextized in Feb of 2002.
 
 Included versions are:
   sv: Swedish (Thanks to Jens Arvidsson)
+  de: German (Thanks to Carl Becker)
 
 Versions under development or consideration:
-  de: German
   fr: French
 
 If you would like to volunteer to help with a new or existing
@@ -19,6 +19,11 @@ Issues for translators:
   look not only at the ABOUT-NLS file (in the root of lifelines), but
   also the gettext manual, which may be seen at
      http://www.gnu.org/manual/gettext/index.html
+
+ Free Translation Project
+  The Translation Project is a collaborative effort to translate free
+  software packages:
+     http://www.iro.montreal.ca/contrib/po/HTML
 
  Menus.
   The large menus (main menu, utility menu, etc) still have hardcoded

@@ -1,5 +1,10 @@
 2002-04-24 Perry Rapp <puddle@users.sourceforge.net>
 
+	* ChangeLog README.INTERNATIONAL po/de.po po/sv.po:
+
+	Propagating new i18n'd strings into de & sv translations.
+	Added url to Translation Project to README.INTERNATIONAL.
+
 	* ChangeLog gedlib/choose.c gedlib/editmap.c gedlib/messages.c
 	hdrs/feedback.h interp/builtin.c interp/date.c interp/more.c
 	liflines/add.c liflines/ask.c liflines/browse.c
