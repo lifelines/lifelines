@@ -58,7 +58,7 @@ key_util (void)
 void
 who_is_he_she (void)
 {
-	STRING key, str, rec, ask_for_string();
+	STRING key, str, rec;
 	NODE indi;
 	INT len;
 	char nkey[100];

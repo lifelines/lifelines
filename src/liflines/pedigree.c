@@ -252,7 +252,7 @@ pedigree_scroll (INT delta)
  * pedigree_reset_scroll -- clear scroll when entering a new indi
  *=============================================================*/
 void
-pedigree_reset_scroll ()
+pedigree_reset_scroll (void)
 {
 	Scrollp=0;
 }

@@ -57,7 +57,6 @@
 #	define BOX(w,r,c) box(w,r,c)
 #endif
 
-WINDOW *choose_win();
 extern BOOLEAN alldone, progrunning;
 extern STRING version, empstr, empstr71, readpath;
 extern STRING abverr, uoperr;
@@ -83,6 +82,7 @@ static void place_cursor (void);
 static INT interact (WINDOW *win, STRING str);
 static INT list_interact(WINDOW *win, STRING ttl, INT len, STRING *strings);
 static INT indiseq_interact (WINDOW *win, STRING ttl, INDISEQ seq);
+static WINDOW *choose_win(INT);
 
 INT ll_lines = LINESREQ; /* update to be number of lines in screen */
 INT ll_cols = COLSREQ;	 /* number of columns in screen used by LifeLines */
@@ -137,9 +137,9 @@ void show_list (INDISEQ seq,
 		INT cur,
 		INT mark);
 /* export.c */
-BOOLEAN archive_in_file ();
+BOOLEAN archive_in_file (void);
 /* import.c */
-BOOLEAN import_from_file ();
+BOOLEAN import_from_file (void);
 /* in miscutls.c */
 void key_util (void);
 void who_is_he_she (void);
@@ -1037,7 +1037,7 @@ win_list_init (void)
 /*=========================================
  * choose_win -- Choose window to hold list
  *=======================================*/
-WINDOW *
+static WINDOW *
 choose_win (INT len)        /* length */
 {
 	WINDOW *win = list_wins[VIEWABLE-1];

@@ -736,7 +736,7 @@ show_scroll2 (INT delta)
 /*=================================
  * show_reset_scroll - clear scroll
  *===============================*/
-void show_reset_scroll()
+void show_reset_scroll(void)
 {
 	Scroll1 = 0;
 	Scroll2 = 0;
@@ -777,7 +777,7 @@ put_out_line (WINDOW * win, INT x, INT y, STRING string, INT flag)
 /*==================================================================
  * show_childnumbers() - toggle display of numbers for children
  *================================================================*/
-void show_childnumbers ()
+void show_childnumbers (void)
 {
 	number_child_enable = !number_child_enable;
 }
