@@ -34,10 +34,15 @@
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
+/* TO DO - sever coupling to liflines.h & screen.h */
 #include "liflines.h"
 #include "screen.h"
+#include "bfs.h"
 
 extern STRING aredit, dataerr;
+
+static STRING trans_edin(STRING input, INT len);
+static STRING trans_ined(STRING input, INT len);
 
 /*==============================================
  * edit_valtab -- Edit value table from database
@@ -59,21 +64,22 @@ edit_valtab (STRING key, TABLE *ptab, INT sep, STRING ermsg)
 	STRING ptr;
 	char temp[25];
 	INT mylen;
+	TRANTABLE tti = tran_tables[MEDIN];
 	endwin();
 
 	unlink(editfile);
 
-	if (retrieve_to_textfile(key, editfile) == RECORD_ERROR) {
+	if (retrieve_to_textfile(key, editfile, trans_ined) == RECORD_ERROR) {
 		mprintf_error(dataerr);
 		return FALSE;
 	}
 	do_edit();
 	while (TRUE) {
 		tmptab = create_table();
-		if (init_valtab_from_file(editfile, tmptab, sep, &msg)) {
+		if (init_valtab_from_file(editfile, tmptab, tti, sep, &msg)) {
 			if (*ptab) remove_table(*ptab, DONTFREE);
 			*ptab = tmptab;
-			store_text_file(key, editfile);
+			store_text_file_to_db(key, editfile, trans_edin);
 			return TRUE;
 		}
 		ptr=fullerr;
@@ -92,4 +98,34 @@ edit_valtab (STRING key, TABLE *ptab, INT sep, STRING ermsg)
 		}
 		remove_table(tmptab, DONTFREE);
 	}
+}
+/*==============================================
+ * trans_edin -- Translate editor text to internal
+ * returns stdalloc'd buffer
+ * this is used for a TRANSLFNC
+ * Assumes non-empty input
+ * Created: 2001/07/22 (Perry Rapp)
+ *============================================*/
+static STRING
+trans_edin (STRING input, INT len)
+{
+	TRANTABLE tti = tran_tables[MEDIN];
+	bfptr bfs = bfNew((int)(len*1.3));
+	translate_string_to_buf(tti, input, bfs);
+	return bfDetachAndKill(&bfs);
+}
+/*==============================================
+ * trans_ined -- Translate internal text to editor
+ * returns stdalloc'd buffer
+ * this is used for a TRANSLFNC
+ * Assumes non-empty input
+ * Created: 2001/07/22 (Perry Rapp)
+ *============================================*/
+static STRING
+trans_ined (STRING input, INT len)
+{
+	TRANTABLE tto = tran_tables[MINED];
+	bfptr bfs = bfNew((int)(len*1.2));
+	translate_string_to_buf(tto, input, bfs);
+	return bfDetachAndKill(&bfs);
 }

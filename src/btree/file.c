@@ -38,8 +38,10 @@
  *********************************************/
 
 /* alphabetical */
-static BOOLEAN addfile_impl(BTREE btree, RKEY rkey, STRING file, STRING mode);
-static RECORD_STATUS write_record_to_file_impl (BTREE btree, RKEY rkey, STRING file, STRING mode);
+static BOOLEAN addfile_impl(BTREE btree, RKEY rkey, STRING file
+	, STRING mode, TRANSLFNC translfnc);
+static RECORD_STATUS write_record_to_file_impl (BTREE btree, RKEY rkey, STRING file
+	, TRANSLFNC translfnc, STRING mode);
 
 /*********************************************
  * local & exported function definitions
@@ -55,20 +57,22 @@ static RECORD_STATUS write_record_to_file_impl (BTREE btree, RKEY rkey, STRING f
 BOOLEAN
 addfile (BTREE btree, RKEY rkey, STRING file)
 {
-	return addfile_impl(btree, rkey, file, LLREADBINARY);
+	TRANSLFNC translfnc = NULL; /* no translation for binary files */
+	return addfile_impl(btree, rkey, file, LLREADBINARY, translfnc);
 }
 /*=========================================
  * addtextfile -- Add record to btree from text file
  *  btree:  [in] btree to add to
  *  rkey:   [in] key of new record
  *  file:   [in] file with new record
+ *  tt:     [in] translation table for text
  * handles problem of MSDOS files \n <-> \r\n
  * internally records are kept with just \n, so db is portable
  *=======================================*/
 BOOLEAN
-addtextfile (BTREE btree, RKEY rkey, STRING file)
+addtextfile (BTREE btree, RKEY rkey, STRING file, TRANSLFNC translfnc)
 {
-	return addfile_impl(btree, rkey, file, LLREADTEXT);
+	return addfile_impl(btree, rkey, file, LLREADTEXT, translfnc);
 }
 /*=========================================
  * addfile -- Add record to btree from file
@@ -77,41 +81,41 @@ addtextfile (BTREE btree, RKEY rkey, STRING file)
  *  file:   [in] file with new record
  *=======================================*/
 static BOOLEAN
-addfile_impl (BTREE btree, RKEY rkey, STRING file, STRING mode)
+addfile_impl (BTREE btree, RKEY rkey, STRING file, STRING mode, TRANSLFNC translfnc)
 {
-	FILE *fp;
+	FILE *fp = NULL;
 	STRING mem = 0;
 	INT siz;
 	struct stat buf;
+	BOOLEAN result=FALSE;
 	ASSERT(bwrite(btree));
-	if ((fp = fopen(file, mode)) == NULL) return FALSE;
-	if (fstat(fileno(fp), &buf) != 0) {
-		fclose(fp);
-		return FALSE;
-	}
+	if ((fp = fopen(file, mode)) == NULL) goto end;
+	if (fstat(fileno(fp), &buf) != 0) goto end;
 	if (buf.st_size == 0) {
 		/* why do we add a record here, esp. when filesize=0? */
 		addrecord(btree, rkey, mem, 0);
-		fclose(fp);
-		return TRUE;
+		result = TRUE;
+		goto end;
 	}
-	if ((mem = (STRING) stdalloc(buf.st_size)) == NULL) {
-		fclose(fp);
-		return FALSE;
-	}
+	if ((mem = (STRING) stdalloc(buf.st_size)) == NULL) goto end;
 	/* WARNING: with WIN32 reading in TEXT mode, fewer characters
 	 * will be read than expected because of conversion of
 	 * \r\n to \n
 	 */
 	siz = fread(mem, 1, buf.st_size, fp);
-	if (ferror(fp)) {
-		fclose(fp);
-		return FALSE;
+	if (ferror(fp)) goto end;
+	if (translfnc) {
+		STRING mem2 = (*translfnc)(mem, siz);
+		stdfree(mem);
+		mem = mem2;
+		siz = strlen(mem);
 	}
 	addrecord(btree, rkey, mem, siz);
-	stdfree(mem);
-	fclose(fp);
-	return TRUE;
+	result = TRUE;
+end:
+	if (mem) stdfree(mem);
+	if (fp) fclose(fp);
+	return result;
 }
 /*===================================================
  * write_record_to_file -- Get record from btree and write to file
@@ -123,7 +127,8 @@ addfile_impl (BTREE btree, RKEY rkey, STRING file, STRING mode)
 RECORD_STATUS
 write_record_to_file (BTREE btree, RKEY rkey, STRING file)
 {
-	return write_record_to_file_impl(btree, rkey, file, LLWRITEBINARY);
+	TRANSLFNC translfnc = 0; /* no translation for binary files */
+	return write_record_to_file_impl(btree, rkey, file, translfnc, LLWRITEBINARY);
 }
 /*===================================================
  * write_record_to_textfile -- Get record from btree and write to file
@@ -135,26 +140,36 @@ write_record_to_file (BTREE btree, RKEY rkey, STRING file)
  * internally records are kept with just \n, so db is portable
  *=================================================*/
 RECORD_STATUS
-write_record_to_textfile (BTREE btree, RKEY rkey, STRING file)
+write_record_to_textfile (BTREE btree, RKEY rkey, STRING file, TRANSLFNC translfnc)
 {
-	return write_record_to_file_impl(btree, rkey, file, LLWRITETEXT);
+	return write_record_to_file_impl(btree, rkey, file, translfnc, LLWRITETEXT);
 }
 /*===================================================
- * write_record_to_file -- Get record from btree and write to file
+ * write_record_to_file_impl -- Get record from btree and write to file
  *  btree: [in] database btree
  *  rkey:  [in] record key
  *  file:  [in] file name
  *  mode:  [in] fopen mode (for MSDOS text file problem)
  * returns RECORD_SUCCESS, RECORD_NOT_FOUND, RECORD_ERROR
+ * Originally named write_record_to_file
  *=================================================*/
 static RECORD_STATUS
-write_record_to_file_impl (BTREE btree, RKEY rkey, STRING file, STRING mode)
+write_record_to_file_impl (BTREE btree, RKEY rkey, STRING file
+	, TRANSLFNC translfnc, STRING mode)
 {
 	FILE *fp;
 	INT len;
 	INT siz;
 	RECORD record = getrecord(btree, rkey, &len);
-	if (record == NULL) return RECORD_NOT_FOUND;
+	bfptr bfs = 0;
+	if (record == NULL)
+		return RECORD_NOT_FOUND;
+	if (translfnc) {
+		STRING rec2 = (*translfnc)(record, len);
+		stdfree(record);
+		record = rec2;
+		len = strlen(record);
+	}
 	if ((fp = fopen(file, mode)) == NULL) {
 		stdfree(record);
 		return RECORD_ERROR;

@@ -37,6 +37,11 @@ mkalldirs (STRING path) /* path with dirs to be made */
 			*p = '/';
 			continue;
 		}
+		/*
+		this is an encapsulation error - stdlib is
+		used by btedit, which does not include screen.c
+		- Perry, 2001/07/19
+		*/
 		llwprintf("Can't create directory %s", path);
 		return FALSE;
 	}

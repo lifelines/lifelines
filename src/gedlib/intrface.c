@@ -65,9 +65,9 @@ retrieve_to_file (STRING key, STRING file)
  * retrieve_to_textfile -- Retrieve record to file
  *=======================================*/
 RECORD_STATUS
-retrieve_to_textfile (STRING key, STRING file)
+retrieve_to_textfile (STRING key, STRING file, TRANSLFNC translfnc)
 {
-	return write_record_to_textfile(BTR, str2rkey(key), file);
+	return write_record_to_textfile(BTR, str2rkey(key), file, translfnc);
 }
 /*=====================================
  * store_file -- Store record from file
@@ -80,16 +80,16 @@ store_file (STRING key, STRING file)
 	return addfile(BTR, str2rkey(key), file);
 }
 /*=====================================
- * store_text_file -- Store record from text file
+ * store_text_file_to_db -- Store record from text file
  *  key:  [in] db key in which to store record
  *  file: [in] file from which to get record
  * for MSDOS, translates \r\n in files to \n in record
  * Created: 2001/07/04 (Perry Rapp)
  *===================================*/
 BOOLEAN
-store_text_file (STRING key, STRING file)
+store_text_file_to_db (STRING key, STRING file, TRANSLFNC transfnc)
 {
-	return addtextfile(BTR, str2rkey(key), file);
+	return addtextfile(BTR, str2rkey(key), file, transfnc);
 }
 /*===================================================
  * traverse_db_key_keys -- traverse a span of records

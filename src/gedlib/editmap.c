@@ -15,7 +15,6 @@
 #include "screen.h"
 #include "gedcomi.h"
 
-#define NOMAPS 7
 
 extern STRING map_keys[];
 extern STRING cmperr, aredit, ronlye, dataerr;
@@ -30,7 +29,7 @@ edit_mapping (INT code)
 	TRANTABLE tt;
 	BOOLEAN err;
 
-	if (code < 0 || code >= NOMAPS) {
+	if (code < 0 || code >= NUM_TT_MAPS) {
 		mprintf_error("System error: illegal map code");
 		return FALSE;
 	}
@@ -44,7 +43,8 @@ edit_mapping (INT code)
 
 	if (tran_tables[code]) {
 		INT rtn;
-		rtn = retrieve_to_textfile(map_keys[code], editfile);
+		TRANSLFNC translfnc = NULL; /* Must not translate the translation table! */
+		rtn = retrieve_to_textfile(map_keys[code], editfile, translfnc);
 		if (rtn == RECORD_ERROR) {
 			mprintf_error(dataerr);
 			return FALSE;
@@ -54,10 +54,11 @@ edit_mapping (INT code)
 	while (TRUE) {
 		tt = init_map_from_file(editfile, code, &err);
 		if (!err) {
+			TRANSLFNC transfnc = NULL; /* don't translate translation tables ! */
 			if (tran_tables[code])
 				remove_trantable(tran_tables[code]);
 			tran_tables[code] = tt;
-			store_text_file(map_keys[code], editfile);
+			store_text_file_to_db(map_keys[code], editfile, transfnc);
 			return TRUE;
 		}
 		if (ask_yes_or_no_msg(cmperr, aredit))

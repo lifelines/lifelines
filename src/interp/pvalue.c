@@ -982,8 +982,7 @@ mod_pvalues (PVALUE val1,
  * eqv_pvalues -- See if two PVALUEs are equal (no change to PVALUEs)
  *==================================================================*/
 BOOLEAN
-eqv_pvalues (PVALUE val1,
-             PVALUE val2)
+eqv_pvalues (PVALUE val1, PVALUE val2)
 {
 	STRING v1, v2;
 	BOOLEAN rel = FALSE;

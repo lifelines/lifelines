@@ -47,24 +47,30 @@ struct xnode {
 
 typedef struct {
 	XNODE start[256];
+	char name[20];
 } *TRANTABLE;
+
+/* forward declaration - real declaration in bfs.h */
+typedef struct Buffer_s * bfptr;
 
 /* Variables */
 
 extern TRANTABLE tran_tables[];
+#define NUM_TT_MAPS 12
 
 /* Functions */
 
 void add_char(STRING, INT*, INT, INT);
 void add_string(STRING, INT*, INT, STRING);
 TRANTABLE create_trantable(STRING*, STRING*, INT);
+BOOLEAN custom_sort(char *str1, char *str2, INT * rtn);
+char * get_sort_desc(STRING buffer, INT max);
 TRANTABLE init_map_from_str(STRING, INT, BOOLEAN*);
 void remove_trantable(TRANTABLE);
 void remove_xnodes(XNODE);
-void show_xnode(XNODE);
-void show_xnodes(INT, XNODE);
 void translate_catn(TRANTABLE tt, STRING * pdest, CNSTRING src, INT * len);
 void translate_string(TRANTABLE, CNSTRING in, STRING out, INT max);
+void translate_string_to_buf(TRANTABLE tt, CNSTRING in, bfptr bfs);
 BOOLEAN translate_write(TRANTABLE, STRING, INT*, FILE*, BOOLEAN);
 
 

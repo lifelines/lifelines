@@ -596,7 +596,7 @@ value_str_compare (SORTEL el1, SORTEL el2)
 	PVALUE val1, val2;
 	val1 = sval(el1).w;
 	val2 = sval(el2).w;
-	return ll_strcmp((STRING) pvalue(val1), (STRING) pvalue(val2));
+	return cmpstrloc((STRING) pvalue(val1), (STRING) pvalue(val2));
 }
 /*==========================================
  * namesort_indiseq -- Sort sequence by name

@@ -29,16 +29,22 @@
  *   3.0.0 - 17 Jun 94    3.0.2 - 11 Nov 94
  *=========================================================*/
 
+#ifdef OS_LOCALE
+#include <locale.h>
+#endif
 #include "llstdlib.h"
 #include "translat.h"
 #include "liflines.h"
 #include "screen.h"
+#include "bfs.h"
 
 #ifdef max
 #	undef max
 #endif
 
 static XNODE create_xnode(XNODE, INT, STRING);
+static void show_xnode(XNODE node);
+static void show_xnodes(INT indent, XNODE node);
 static XNODE step_xnode(XNODE, INT);
 
 /*=============================================
@@ -54,6 +60,7 @@ create_trantable (STRING *lefts, STRING *rights, INT n)
 	STRING left, right;
 	INT i, c;
 	XNODE node;
+	tt->name[0] = 0;
 	for (i = 0; i < 256; i++)
 		tt->start[i] = NULL;
 	/* if empty, n==0, this is valid */
@@ -61,11 +68,11 @@ create_trantable (STRING *lefts, STRING *rights, INT n)
 		left = lefts[i];
 		right = rights[i];
 		ASSERT(left && *left && right);
-		c = (unsigned char) *left++;
+		c = (uchar) *left++;
 		if (tt->start[c] == NULL)
 			tt->start[c] = create_xnode(NULL, c, NULL);
 		node = tt->start[c];
-		while ((c = (unsigned char) *left++)) {
+		while ((c = (uchar) *left++)) {
 			node = step_xnode(node, c);
 		}
 		node->count = strlen(right);
@@ -75,11 +82,12 @@ create_trantable (STRING *lefts, STRING *rights, INT n)
 }
 /*=============================
  * create_xnode -- Create XNODE
+ *  parent:  [in] parent of node to be created
+ *  achar:   [in] start substring represented by this node
+ *  string:  [in] replacement string for matches
  *===========================*/
 static XNODE
-create_xnode (XNODE parent,
-              INT achar,
-              STRING string)
+create_xnode (XNODE parent, INT achar, STRING string)
 {
 	XNODE node = (XNODE) stdalloc(sizeof(*node));
 	node->parent = parent;
@@ -88,23 +96,13 @@ create_xnode (XNODE parent,
 	node->achar = achar;
 	node->replace = string;
 	node->count = string ? strlen(string) : 0;
-#if 0
-	if (string) {
-		node->count = strlen(string);
-		node->replace = string;
-	} else {
-		node->count = 0;
-		node->replace = NULL;
-	}
-#endif
 	return node;
 }
 /*==========================================
  * step_xnode -- Step to node from character
  *========================================*/
 static XNODE
-step_xnode (XNODE node,
-            INT achar)
+step_xnode (XNODE node, INT achar)
 {
 	XNODE prev, node0 = node;
 	if (node->child == NULL)
@@ -163,6 +161,98 @@ translate_catn (TRANTABLE tt, STRING * pdest, CNSTRING src, INT * len)
 	*pdest += added;
 }
 /*===================================================
+ * translate_match -- Find match for current point in string
+ *  tt:    [in] tran table
+ *  in:    [in] in string
+ *  match: [out] match string
+ * returns length of input matched
+ * match string output points directly into trans table
+ * memory, so it is longer-lived than a static buffer
+ * Created: 2001/07/21 (Perry Rapp)
+ *=================================================*/
+INT
+translate_match (TRANTABLE tt, CNSTRING in, CNSTRING * out)
+{
+	XNODE node, chnode;
+	INT nxtch;
+	CNSTRING q = in;
+	node = tt->start[(uchar)*in];
+	if (!node) {
+		*out = "";
+		return 0;
+	}
+	q = in+1;
+/* Match as far as possible */
+	while (*q && node->child) {
+		nxtch = (uchar)*q;
+		chnode = node->child;
+		while (chnode && chnode->achar != nxtch)
+			chnode = chnode->sibling;
+		if (!chnode) break;
+		node = chnode;
+		q++;
+	}
+	while (TRUE) {
+		if (node->replace) {
+			/* replacing match */
+			*out = node->replace;
+			return q - in;
+		}
+		/* no replacement, only partial match,
+		climb back & keep looking - we might have gone past
+		a shorter but full (replacing) match */
+		if (node->parent) {
+			node = node->parent;
+			--q;
+			continue;
+		}
+		/*
+		no replacement matches
+		(climbed all the way back to start
+		*/
+		ASSERT(q == in+1);
+		*out = "";
+		return 0;
+	}
+	return 0;
+}
+/*===================================================
+ * translate_string_to_buf -- Translate string via TRANTABLE
+ *  tt:    [in] tran table
+ *  in:    [in] in string
+ * returns dynamic buffer (bfptr type - see buf.h)
+ * Created: 2001/07/19 (Perry Rapp)
+ * Copied from translate_string, except this version
+ * uses dynamic buffer, so it can expand if necessary
+ *=================================================*/
+void
+translate_string_to_buf (TRANTABLE tt, CNSTRING in, bfptr bfs)
+{
+	CNSTRING p, q;
+	bfReserve(bfs, (int)(strlen(in)*1.3));
+	if (!in) {
+		bfCpy(bfs, NULL);
+		return;
+	}
+	if (!tt) {
+		bfCpy(bfs, in);
+		return;
+	}
+	p = q = in;
+	while (*p) {
+		STRING tmp;
+		INT len = translate_match(tt, p, &tmp);
+		if (len) {
+			p += len;
+			bfCat(bfs, tmp);
+		} else {
+			bfCatChar(bfs, *p++);
+		}
+	}
+	bfCatChar(bfs, 0);
+	return;
+}
+/*===================================================
  * translate_string -- Translate string via TRANTABLE
  *  tt:    [in] tran table
  *  in:    [in] in string
@@ -174,65 +264,16 @@ translate_catn (TRANTABLE tt, STRING * pdest, CNSTRING src, INT * len)
 void
 translate_string (TRANTABLE tt, CNSTRING in, STRING out, INT max)
 {
-	CNSTRING p, q;
-	STRING r;
-	STRING add;
-	INT n, l, depth, nxtch;
-	XNODE node, chnode;
-	*out = 0;
-	if (!in) return;
-	if (!tt) {
-		llstrncpy(out, in, max);
+	bfptr bfs=0;
+	if (!in || !in[0]) {
+		out[0] = 0;
 		return;
 	}
-	p = q = in;
-	r = out;
-	n = strlen(in);
-	l = 0; /* output length, must be limited to max */
-	while (n > 0 && l<max) {
-		node = tt->start[(unsigned char)*p];
-		if (!node) {	/* this char starts no patterns */
-			add_char(out, &l, max, *p++);
-			--n;
-		} else {
-			q = p;	/* 1-width window */
-			depth = 1;
-/* Match as far as possible */
-			while (n > 1 && node->child) {
-				nxtch = (uchar)*(q + 1);
-				chnode = node->child;
-				while (chnode && chnode->achar != nxtch)
-					chnode = chnode->sibling;
-				if (!chnode) break;
-				node = chnode;
-				depth++;
-				--n;
-				q++;
-			}
-/* Output replacement string */
-			while (TRUE) {
-				if ((add = node->replace)) {
-					add_string(out, &l, max, add);
-					p = q = q + 1;
-					n = strlen(p);
-					break;
-				}
-				if (node->parent) {
-					node = node->parent;
-					depth--;
-					--q;
-					n++;
-					continue;
-				}
-				ASSERT(depth==1);
-				add_char(out, &l, max, *p++);
-				--n;
-				break;
-			}
-		}
-	}
-	add_char(out, &l, max, 0);
-	return;
+	bfs = bfNew((int)(strlen(in)*1.3));
+	translate_string_to_buf(tt, in, bfs);
+	strncpy(out, bfStr(bfs), max-1);
+	out[max-1]=0;
+	bfDelete(bfs);
 }
 /*==========================================================
  * translate_write -- Translate and output lines in a buffer
@@ -358,9 +399,8 @@ show_trantable (TRANTABLE tt)
 /*===============================================
  * show_xnodes -- DEBUG routine that shows XNODEs
  *=============================================*/
-void
-show_xnodes (INT indent,
-             XNODE node)
+static void
+show_xnodes (INT indent, XNODE node)
 {
 	INT i;
 	if (!node) return;
@@ -373,7 +413,7 @@ show_xnodes (INT indent,
 /*================================================
  * show_xnode -- DEBUG routine that shows 1 XNODE
  *==============================================*/
-void
+static void
 show_xnode (XNODE node)
 {
 	llwprintf("%d(%c)", node->achar, node->achar);
@@ -384,4 +424,97 @@ show_xnode (XNODE node)
 			llwprintf(" \"\"\n");
 	} else
 		llwprintf("\n");
+}
+/*===================================================
+ * custom_sort -- Compare two strings with custom sort
+ * returns FALSE if no custom sort table
+ * otherwise sets *rtn correctly & returns TRUE
+ * Created: 2001/07/21 (Perry Rapp)
+ *=================================================*/
+BOOLEAN
+custom_sort (char *str1, char *str2, INT * rtn)
+{
+	TRANTABLE tts = tran_tables[MSORT];
+	TRANTABLE ttc = tran_tables[MCHAR];
+	TRANTABLE ttp = tran_tables[MPREF];
+	STRING rep1, rep2;
+	STRING ptr1=str1, ptr2=str2;
+	INT len1, len2;
+	if (!tts) return FALSE;
+#if 0 /* must be done earlier */
+	if (ptr1[0] && ptr2[0]) {
+		/* check for prefix skips */
+		len1 = translate_match(ttp, ptr1, &rep1);
+		len2 = translate_match(ttp, ptr2, &rep2);
+		if (len1 || len2) {
+		}
+		if (strchr(rep1,"s") && ptr1[len1]) {
+			ptr1 += len1;
+			len1 = translate_match(tts, ptr1, &rep1);
+		}
+		if (strchr(rep2,"s") && ptr2[len2]) {
+			ptr2 += len2;
+			len2 = translate_match(tts, ptr2, &rep1);
+		}
+	}
+#endif
+	/* main loop thru both strings looking for differences */
+	while (1) {
+		/* stop when exhaust either string */
+		if (!ptr1[0] || !ptr2[0]) {
+			/* only zero if both end simultaneously */
+			*rtn = ptr1[0] - ptr2[0];
+			return TRUE;
+		}
+		/* look up in sort table */
+		len1 = translate_match(tts, ptr1, &rep1);
+		len2 = translate_match(tts, ptr2, &rep2);
+		if (len1 && len2) {
+			/* compare sort table results */
+			*rtn = atoi(rep1) - atoi(rep2);
+			if (*rtn) return TRUE;
+			ptr1 += len1;
+			ptr2 += len2;
+		} else {
+			/* at least one not in sort table */
+			/* try comparing single chars */
+			*rtn = ptr1[0] - ptr2[0];
+			if (*rtn) return TRUE;
+			/* use charset to see how wide they are */
+			if (ttc) {
+				len1 = translate_match(ttc, ptr1, &rep1);
+				len2 = translate_match(ttc, ptr2, &rep2);
+				if (len1 || len2) {
+					/* compare to width of wider char */
+					*rtn = strncmp(ptr1, ptr2, len1>len2?len1:len2);
+				}
+			} else {
+				/* TO DO - can we use locale here ? ie, locale + custom sort */
+				len1 = len2 = 1;
+				*rtn = ptr1[0] - ptr2[0];
+			}
+			if (*rtn) return TRUE;
+			/* advance both by at least one */
+			ptr1 += len1 ? len1 : 1;
+			ptr2 += len2 ? len2 : 1;
+		}
+	}
+}
+/*===================================================
+ * get_sort_desc -- Get string describing collate order
+ * caller supplies buffer (& its size)
+ * Created: 2001/07/21 (Perry Rapp)
+ *=================================================*/
+char *
+get_sort_desc (STRING buffer, INT max)
+{
+	char * ptr = buffer;
+	int mylen = max;
+	buffer[0] = 0;
+#ifdef OS_LOCALE
+	llstrcatn(&ptr, setlocale(LC_COLLATE, NULL), &mylen);
+#else
+	llstrcatn(&ptr, "Locales not supported on this platform.", &mylen);
+#endif
+	return buffer;
 }

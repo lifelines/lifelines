@@ -310,8 +310,9 @@ edit_record (NODE node1,           /* record to edit, poss NULL */
 
 	refn = REFN(node2);
 	newr = refn ? nval(refn) : NULL;
-	if (newr && oldr && eqstr(newr, oldr))
-                newr = oldr = NULL;
+	if (newr && oldr && eqstr(newr, oldr)) {
+		newr = oldr = NULL;
+	}
 	key = rmvat(nxref(node1));
 	if (oldr) remove_refn(oldr, key);
 	if (newr) add_refn(newr, key);

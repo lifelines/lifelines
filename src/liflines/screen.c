@@ -34,6 +34,9 @@
 
 #include "sys_inc.h"
 #include <stdarg.h>
+#ifdef OS_LOCALE
+#include <locale.h>
+#endif
 #include "llstdlib.h"
 #include "table.h"
 #include "translat.h"
@@ -80,7 +83,7 @@ WINDOW *debug_win, *debug_box_win;
 WINDOW *ask_win, *ask_msg_win;
 WINDOW *choose_from_list_win;
 WINDOW *add_menu_win, *del_menu_win;
-WINDOW *scan_menu_win;
+WINDOW *scan_menu_win, *cset_menu_win;
 WINDOW *utils_menu_win, *trans_menu_win;
 WINDOW *extra_menu_win;
 
@@ -91,41 +94,53 @@ WINDOW *extra_menu_win;
 extern BOOLEAN alldone, progrunning;
 extern STRING empstr, empstr71, readpath;
 extern STRING abverr, uoperr;
-extern STRING mtitle, cright, plschs;
-extern STRING mn_unkcmd, ronlya, ronlyr;
-extern STRING askynq, askynyn, askyny;
-extern STRING mn_quit;
-extern STRING mn_edin,mn_ined,mn_gdin,mn_ingd,mn_dsin,mn_inds,mn_inrp;
+extern STRING mtitle,cright,plschs;
+extern STRING mn_unkcmd,ronlya,ronlyr;
+extern STRING askynq,askynyn,askyny;
+extern STRING mn_quit,mn_ret;
+extern STRING mn_mmprpt,mn_mmrpt,mn_mmcset;
+extern STRING mn_csttl,mn_cstt,mn_csdsort,mn_csnewloc;
+extern STRING mn_cstsort,mn_cspref,mn_cschar,mn_cslcas,mn_csucas;
+extern STRING idsortttl,idsortdsp;
+extern STRING mn_ttttl,mn_ttedin,mn_ttined,mn_ttgdin,mn_ttingd;
+extern STRING mn_ttdsin,mn_ttinds,mn_ttinrp;
+extern STRING mn_uttl;
+extern STRING mn_xttl;
 extern struct rfmt_s disprfmt; /* reformatting used for display */
 
 /*********************************************
  * local function prototypes
  *********************************************/
 
-static INDISEQ indiseq_list_interact(WINDOW *win, STRING ttl, INDISEQ seq);
+/* alphabetical */
 static NODE add_menu(void);
-static void create_windows(void);
-static void del_menu(void);
-static INT extra_menu(void);
-static void init_all_windows(void);
-static INT update_menu(INT screen);
-static void show_indi_mode(NODE indi, INT mode, INT row, INT hgt, BOOLEAN reuse);
-static void show_fam_mode(NODE fam, INT mode, INT row, INT hgt, INT width, BOOLEAN reuse);
-static NOD0 scan_menu(void);
-static void trans_menu(void);
-static void utils_menu(void);
-static void win_list_init(void);
-static void shw_list(WINDOW *win, INDISEQ seq, INT len0, INT top, INT cur, INT *scroll);
-static void place_std_msg(void);
+static INT calculate_screen_lines(INT screen);
+static void choose_sort(void);
+static WINDOW *choose_win(INT desiredlen, INT *actuallen);
 static void clearw(void);
-static void place_cursor(void);
+static void create_windows(void);
+static void cset_menu(void);
+static void del_menu(void);
+static void disp_trans_table_choice(WINDOW * win, INT row, INT col, STRING menuit, INT indx);
+static void draw_cset_win();
+static INT extra_menu(void);
+static INT indiseq_interact(WINDOW *win, STRING ttl, INDISEQ seq);
+static INDISEQ indiseq_list_interact(WINDOW *win, STRING ttl, INDISEQ seq);
+static void init_all_windows(void);
 static INT interact(WINDOW *win, STRING str, INT screen);
 static INT list_interact(WINDOW *win, STRING ttl, INT len, STRING *strings);
-static void vmprintf(STRING fmt, va_list args);
-static INT indiseq_interact(WINDOW *win, STRING ttl, INDISEQ seq);
-static WINDOW *choose_win(INT desiredlen, INT *actuallen);
 static void output_menu(WINDOW *win, INT screen);
-static INT calculate_screen_lines(INT screen);
+static NOD0 scan_menu(void);
+static void show_indi_mode(NODE indi, INT mode, INT row, INT hgt, BOOLEAN reuse);
+static void show_fam_mode(NODE fam, INT mode, INT row, INT hgt, INT width, BOOLEAN reuse);
+static void shw_list(WINDOW *win, INDISEQ seq, INT len0, INT top, INT cur, INT *scroll);
+static void trans_menu(void);
+static void place_cursor(void);
+static void place_std_msg(void);
+static INT update_menu(INT screen);
+static void utils_menu(void);
+static void vmprintf(STRING fmt, va_list args);
+static void win_list_init(void);
 
 
 static INT menu_enabled = 1;
@@ -150,6 +165,10 @@ int winx=0, winy=0; /* user specified window size */
 static char showing[150];
 static BOOLEAN now_showing = FALSE;
 
+/*********************************************
+ * local & exported function definitions
+ * body of module
+ *********************************************/
 
 /*============================
  * init_screen -- Init screens
@@ -238,8 +257,9 @@ paint_main_screen(void)
 	mvwaddstr(win, row++, 4, "s  Search database");
 	mvwaddstr(win, row++, 4, "a  Add information to the database");
 	mvwaddstr(win, row++, 4, "d  Delete information from the database");
-	mvwaddstr(win, row++, 4, "p  Pick a report from list and run");
-	mvwaddstr(win, row++, 4, "r  Generate report by entering report name");
+	mvwaddstr(win, row++, 4, mn_mmprpt);
+	mvwaddstr(win, row++, 4, mn_mmrpt);
+	mvwaddstr(win, row++, 4, mn_mmcset);
 	mvwaddstr(win, row++, 4, "t  Modify character translation tables");
 	mvwaddstr(win, row++, 4, "u  Miscellaneous utilities");
 	mvwaddstr(win, row++, 4, "x  Handle source, event and other records");
@@ -341,6 +361,7 @@ create_windows (void)
 	add_menu_win = NEWWIN(8, 66);
 	del_menu_win = NEWWIN(8, 66);
 	scan_menu_win = NEWWIN(7,66);
+	cset_menu_win = NEWWIN(12,66);
 	trans_menu_win = NEWWIN(11,66);
 	utils_menu_win = NEWWIN(12, 66);
 	extra_menu_win = NEWWIN(13,66);
@@ -352,7 +373,8 @@ create_windows (void)
 	BOX(add_menu_win, 0, 0);
 	BOX(del_menu_win, 0, 0);
 	BOX(scan_menu_win, 0, 0);
-	BOX(trans_menu_win, 0, 0);
+	/* cset_menu_win is drawn dynamically */
+	/* trans_menu_win is drawn dynamically */
 	BOX(utils_menu_win, 0, 0);
 	BOX(extra_menu_win, 0, 0);
 	BOX(ask_win, 0, 0);
@@ -365,8 +387,11 @@ create_windows (void)
 static void
 init_all_windows (void)
 {
-	WINDOW *win = add_menu_win;
-	INT row = 1;
+	WINDOW *win = 0;
+	INT row = 0;
+
+	win = add_menu_win;
+	row = 1;
 	mvwaddstr(win, row++, 2, "What do you want to add?");
 	mvwaddstr(win, row++, 4, "p  Person - add new person to the database");
 	mvwaddstr(win, row++, 4,
@@ -395,22 +420,13 @@ init_all_windows (void)
 	mvwaddstr(win, row++, 4, "r  Refn scan");
 	mvwaddstr(win, row++, 4, "q  Quit - return to the previous menu");
 
-	win = trans_menu_win;
-	row = 1;
-	mvwaddstr(win, row++, 2,
-	    "Which character mapping do you want to edit?");
-	mvwaddstr(win, row++, 4, mn_edin);
-	mvwaddstr(win, row++, 4, mn_ined);
-	mvwaddstr(win, row++, 4, mn_gdin);
-	mvwaddstr(win, row++, 4, mn_ingd);
-	mvwaddstr(win, row++, 4, mn_dsin);
-	mvwaddstr(win, row++, 4, mn_inds);
-	mvwaddstr(win, row++, 4, mn_inrp);
-	mvwaddstr(win, row++, 4, mn_quit);
+	/* cset_menu_win is drawn dynamically */
+
+	/* trans_menu_win is drawn dynamically */
 
 	win = utils_menu_win;
 	row = 1;
-	mvwaddstr(win, row++, 2, "What utility do you want to perform?");
+	mvwaddstr(win, row++, 2, mn_uttl);
 	mvwaddstr(win, row++, 4, "s  Save the database in a GEDCOM file");
 	mvwaddstr(win, row++, 4, "r  Read in data from a GEDCOM file");
 	mvwaddstr(win, row++, 4, "k  Find a person's key value");
@@ -423,7 +439,7 @@ init_all_windows (void)
 
 	win = extra_menu_win;
 	row = 1;
-	mvwaddstr(win, row++, 2, "What activity do you want to perform?");
+	mvwaddstr(win, row++, 2, mn_xttl);
 	mvwaddstr(win, row++, 4, "s  Browse source records");
 	mvwaddstr(win, row++, 4, "e  Browse event records");
 	mvwaddstr(win, row++, 4, "x  Browse other records");
@@ -467,7 +483,7 @@ main_menu (void)
 	if (cur_screen != MAIN_SCREEN) paint_main_screen();
 	display_screen(MAIN_SCREEN);
 	/* place_std_msg(); */ /*POSS*/
-	c = interact(main_win, "bsadprtuxq", -1);
+	c = interact(main_win, "bsadprctuxq", -1);
 	place_std_msg();
 	wrefresh(main_win);
 	switch (c) {
@@ -502,6 +518,7 @@ main_menu (void)
 		break;
 	case 'p': interp_main(TRUE); break;
 	case 'r': interp_main(FALSE); break;
+	case 'c': cset_menu(); break;
 	case 't': trans_menu(); break;
 	case 'u': utils_menu(); break;
 	case 'x': 
@@ -959,6 +976,104 @@ choose_list_from_indiseq (STRING ttl, INDISEQ seq)
 	wrefresh(win);
 	return seq;
 }
+#ifdef OS_LOCALE
+/*======================================
+ * choose_sort -- Enter new sort locale
+ * Created: 2001/07/21 (Perry Rapp)
+ *====================================*/
+static void
+choose_sort (void)
+{
+	STRING sort;
+	STRING result = 0;
+	while (!result) {
+		sort = ask_for_string(idsortttl, idsortdsp);
+		if (!sort || !sort[0]) return;
+		result = setlocale(LC_COLLATE, sort);
+	}
+}
+#endif
+/*==============================
+ * draw_cset_win -- Draw entire character set menu
+ * Created: 2001/07/20 (Perry Rapp)
+ *============================*/
+static void
+draw_cset_win ()
+{
+	WINDOW *win = cset_menu_win;
+	INT row = 0;
+	char sortorder[60];
+	int sortlen = sizeof(sortorder)-strlen(mn_csdsort);
+	werase(win);
+	BOX(cset_menu_win, 0, 0);
+	row = 1;
+	mvwaddstr(win, row++, 2, mn_csttl);
+	mvwaddstr(win, row, 4, mn_csdsort); /* don't end row yet */
+	mvwaddstr(win, row++, 4+strlen(mn_csdsort), get_sort_desc(sortorder, sortlen));
+	disp_trans_table_choice(win, row++, 4, mn_cstsort, MSORT);
+#ifdef NOTYET
+	disp_trans_table_choice(win, row++, 4, mn_cspref, MPREF);
+	disp_trans_table_choice(win, row++, 4, mn_cschar, MCHAR);
+	disp_trans_table_choice(win, row++, 4, mn_cslcas, MLCAS);
+	disp_trans_table_choice(win, row++, 4, mn_csucas, MUCAS);
+#endif
+#ifdef OS_LOCALE
+	mvwaddstr(win, row++, 4, mn_csnewloc);
+#endif
+	mvwaddstr(win, row++, 4, mn_cstt);
+	mvwaddstr(win, row++, 4, mn_quit);
+}
+/*==============================
+ * draw_trans_win -- Draw entire translation table menu
+ * Created: 2001/07/20 (Perry Rapp)
+ *============================*/
+static void
+draw_trans_win ()
+{
+	WINDOW *win = trans_menu_win;
+	INT row = 0;
+	werase(win);
+	BOX(trans_menu_win, 0, 0);
+	row = 1;
+	mvwaddstr(win, row++, 2, mn_ttttl);
+	disp_trans_table_choice(win, row++, 4, mn_ttedin, MEDIN);
+	disp_trans_table_choice(win, row++, 4, mn_ttined, MINED);
+	disp_trans_table_choice(win, row++, 4, mn_ttgdin, MGDIN);
+	disp_trans_table_choice(win, row++, 4, mn_ttingd, MINGD);
+	disp_trans_table_choice(win, row++, 4, mn_ttdsin, MDSIN);
+	disp_trans_table_choice(win, row++, 4, mn_ttinds, MINDS);
+	disp_trans_table_choice(win, row++, 4, mn_ttinrp, MINRP);
+	mvwaddstr(win, row++, 4, mn_ret);
+}
+/*==============================
+ * disp_trans_table_choice -- Display line in
+ * translation table menu, & show current info
+ * Created: 2001/07/20 (Perry Rapp)
+ *============================*/
+static void
+disp_trans_table_choice (WINDOW * win, INT row, INT col, STRING menuit, INT indx)
+{
+	TRANTABLE tt = tran_tables[indx];
+	char line[120];
+	INT mylen = sizeof(line);
+	STRING ptr = line;
+
+	llstrcatn(&ptr, menuit, &mylen);
+
+	if (tt) {
+		if (tt->name[0]) {
+			llstrcatn(&ptr, "  :  ", &mylen);
+			llstrcatn(&ptr, tt->name, &mylen);
+		}
+		else {
+			llstrcatn(&ptr, "     (Unnamed table)", &mylen);
+		}
+	}
+	else {
+		llstrcatn(&ptr, "     (None)", &mylen);
+	}
+	mvwaddstr(win, row, col, line);
+}
 /*==============================
  * scan_menu -- Handle scan menu
  * Created: c. 2000/12, Perry Rapp
@@ -1027,12 +1142,15 @@ void
 del_menu (void)
 {
 	INT code;
-	touchwin(del_menu_win);
-	wmove(del_menu_win, 1, 30);
-	wrefresh(del_menu_win);
-	code = interact(del_menu_win, "csifq", -1);
-	touchwin(main_win);
-	wrefresh(main_win);
+	WINDOW *win = del_menu_win;
+	WINDOW *wparent = main_win;
+	wrefresh(wparent);
+	touchwin(win);
+	wmove(win, 1, 30);
+	wrefresh(win);
+	code = interact(win, "csifq", -1);
+	touchwin(wparent);
+	wrefresh(wparent);
 	switch (code) {
 	case 'c': choose_and_remove_child(NULL, NULL, FALSE); break;
 	case 's': choose_and_remove_spouse(NULL, NULL, FALSE); break;
@@ -1042,21 +1160,60 @@ del_menu (void)
 	}
 }
 /*======================================
+ * cset_menu -- Handle character set menu
+ *====================================*/
+static void
+cset_menu (void)
+{
+	INT code;
+	WINDOW *win = cset_menu_win;
+	WINDOW *wparent = main_win;
+	while (1) {
+		stdout_vis=FALSE;
+		wrefresh(wparent);
+		touchwin(win);
+		draw_cset_win();
+		wmove(win, 1, strlen(mn_csttl)+3);
+		wrefresh(win);
+#ifdef NOTYET
+		code = interact(win, "Lsclutq", -1);
+#endif
+		code = interact(win, "Lstq", -1);
+		touchwin(wparent);
+		wrefresh(wparent);
+		switch (code) {
+#ifdef OS_LOCALE
+		case 'L': choose_sort(); break;
+#endif
+		case 's': edit_mapping(MSORT); break;
+		case 'c': edit_mapping(MCHAR); break;
+		case 'l': edit_mapping(MLCAS); break;
+		case 'u': edit_mapping(MUCAS); break;
+		case 'p': edit_mapping(MPREF); break;
+		case 't': trans_menu(); break;
+		case 'q': return;
+		}
+	}
+}
+/*======================================
  * trans_menu -- Handle translation menu
  *====================================*/
 static void
 trans_menu (void)
 {
 	INT code;
+	WINDOW *win = trans_menu_win;
+	WINDOW *wparent = main_win;
 	while (1) {
 		stdout_vis=FALSE;
-		wrefresh(main_win);
-		touchwin(trans_menu_win);
-		wmove(trans_menu_win, 1, 47);
-		wrefresh(trans_menu_win);
-		code = interact(trans_menu_win, "emixgdrq", -1);
-		touchwin(main_win);
-		wrefresh(main_win);
+		wrefresh(wparent);
+		touchwin(win);
+		draw_trans_win();
+		wmove(win, 1, strlen(mn_ttttl)+3);
+		wrefresh(win);
+		code = interact(win, "emixgdrq", -1);
+		touchwin(wparent);
+		wrefresh(wparent);
 		switch (code) {
 		case 'e': edit_mapping(MEDIN); break;
 		case 'm': edit_mapping(MINED); break;
@@ -1076,10 +1233,11 @@ static void
 utils_menu (void)
 {
 	INT code;
-	touchwin(utils_menu_win);
-	wmove(utils_menu_win, 1, 39);
-	wrefresh(utils_menu_win);
-	code = interact(utils_menu_win, "srkidmeoq", -1);
+	WINDOW *win = utils_menu_win;
+	touchwin(win);
+	wmove(win, 1, strlen(mn_uttl)+3);
+	wrefresh(win);
+	code = interact(win, "srkidmeoq", -1);
 	touchwin(main_win);
 	wrefresh(main_win);
 	switch (code) {
@@ -1101,11 +1259,12 @@ static INT
 extra_menu (void)
 {
 	INT code;
+	WINDOW *win = extra_menu_win;
 	while (1) {
-		touchwin(extra_menu_win);
-		wmove(extra_menu_win, 1, 39);
-		wrefresh(extra_menu_win);
-		code = interact(extra_menu_win, "sex123456q", -1);
+		touchwin(win);
+		wmove(win, 1, strlen(mn_xttl)+3);
+		wrefresh(win);
+		code = interact(win, "sex123456q", -1);
 		touchwin(main_win);
 		wrefresh(main_win);
 		switch (code) {

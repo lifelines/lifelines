@@ -185,7 +185,7 @@ static RKEY
 name2rkey (STRING name)
 {
 	RKEY rkey;
-	STRING sdex = soundex(getsurname(name));
+	STRING sdex = soundex(getsxsurname(name));
 	char finitial = getfinitial(name);
 	rkey.r_rkey[0] = rkey.r_rkey[1] = ' ';
 	rkey.r_rkey[2] = 'N';
@@ -223,11 +223,15 @@ name_hi (void)
 	return rkey;
 }
 /*======================================================
- * getsurname_impl -- Implement getsurname & getasurname
- *  returns static buffer
+ * getsurname_impl -- Implement getsxsurname & getasurname
+ *  returns static buffer, cycling through 3 such
+ *  name:    [in] full name to search for surname
+ *  soundex: [in] flag if doing soundex
+ * The soundex flag is because soundex doesn't test
+ *  the first letter, it wants surname to do it
  *====================================================*/
 static STRING
-getsurname_impl (STRING name, INT strict)
+getsurname_impl (STRING name, BOOLEAN soundex)
 {
 	INT c;
 	static unsigned char buffer[3][MAXLINELEN+1];
@@ -241,7 +245,7 @@ getsurname_impl (STRING name, INT strict)
 	while (iswhite(c = (uchar)*name++))
 		;
 	if (c == 0 || c == NAMESEP) return (STRING) "____";
-	if (strict && !isletter(c)) return (STRING) "____";
+	if (soundex && !isletter(c)) return (STRING) "____";
 	*p++ = c;
 	while ((c = (uchar)*name++) && c != NAMESEP)
 		*p++ = c;
@@ -249,19 +253,20 @@ getsurname_impl (STRING name, INT strict)
 	return surname;
 }
 /*=============================
- * getsurname -- Return surname
+ * getsxsurname -- Return surname for soundex
  *  returns static buffer
+ * This funtion returns ____ if first non-white character
+ * surname is not a letter.
  *===========================*/
 STRING
-getsurname (STRING name)        /* GEDCOM name */
+getsxsurname (STRING name)        /* GEDCOM name */
 {
 	return getsurname_impl(name, TRUE);
 }
 /*=============================
- * getasurname -- Return a surname without conversion to ____ unless
- * there is no surname. This is used by the report builtin
- * function "surname". The original routine getsurname()
- * is used for soundex purposes.
+ * getasurname -- Return a surname 
+ * This should generally be used for surnames.
+ * The alternative is getsxsurname above.
  *  returns static buffer
  *===========================*/
 STRING
@@ -534,11 +539,11 @@ piecematch (STRING part,
 	  if (*part++ != *comp++) return FALSE;
 	}
 	while (*part && *comp) {
-	  if(opt_finnish) {
-		if (my_chrcmp(*part, *comp++) == 0) part++;
-	  } else {
-		if (*part == *comp++) part++;
-	  }
+		if(opt_finnish) {
+			if (my_chrcmp(*part, *comp++) == 0) part++;
+		} else {
+			if (*part == *comp++) part++;
+		}
 	}
 	return *part == 0;
 }
@@ -637,13 +642,17 @@ get_names (STRING name, INT *pnum, STRING **pkeys, BOOLEAN exact)
 }
 /*====================================
  * namecmp -- Compare two GEDCOM names
+ * used for by indiseq's name_compare, which is used
+ * by indiseq_namesort
  *==================================*/
 int
 namecmp (STRING name1, STRING name2)
 {
 	unsigned char sqz1[MAXGEDNAMELEN], sqz2[MAXGEDNAMELEN];
 	STRING p1 = sqz1, p2 = sqz2;
-	INT r = nestr(getsurname(name1), getsurname(name2));
+	STRING sur1 = getsxsurname(name1);
+	STRING sur2 = getsxsurname(name2);
+	INT r = cmpstrloc(sur1, sur2);
 	if (r) return r;
 	if(opt_finnish) {
 	  r = my_chrcmp(getfinitial(name1),  getfinitial(name2));
@@ -654,7 +663,7 @@ namecmp (STRING name1, STRING name2)
 	cmpsqueeze(name1, p1);
 	cmpsqueeze(name2, p2);
 	while (*p1 && *p2) {
-		r = nestr(p1, p2);
+		r = cmpstrloc(p1, p2);
 		if (r) return r;
 		p1 += strlen(p1) + 1;
 		p2 += strlen(p2) + 1;

@@ -118,15 +118,14 @@ find_named_seq (STRING name)
  * new_name_browse_list -- Rename named browse list.
  *=================================================*/
 void
-new_name_browse_list (STRING old,
-                      STRING new)
+new_name_browse_list (STRING oldstr, STRING newstr)
 {
 	BLEL blel;
 	FORLIST(browse_lists, e)
 		blel = (BLEL) e;
-		if (eqstr(old, blel->bl_name)) {
+		if (eqstr(oldstr, blel->bl_name)) {
 			stdfree(blel->bl_name);
-			blel->bl_name = new;
+			blel->bl_name = newstr;
 			return;
 		}
 	ENDLIST

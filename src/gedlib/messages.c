@@ -47,6 +47,7 @@ STRING ronlye = SS "The database is read only; you may not change records.";
 STRING ronlym = SS "The database is read only; you may not merge records.";
 STRING ronlyr = SS "The database is read only; you may not remove records.";
 
+STRING idbrws = SS "enter name, key, refn or list:";
 STRING idcrmv = SS "Please choose the child to remove from the family.";
 STRING idsrmv = SS "Please choose the spouse/parent to remove from the family.";
 STRING idcrmf = SS "From which family is the child to be removed?";
@@ -303,12 +304,34 @@ STRING badesc      = SS "Bad escape format.";
 
 /* many menus */
 STRING mn_quit     = SS  "q  Return to main menu";
+STRING mn_ret      = SS  "q  Return to previous menu";
 
-/* translation table menu */
-STRING mn_edin     = SS  "e  Editor to Internal mapping";
-STRING mn_ined     = SS  "m  Internal to Editor mapping";
-STRING mn_gdin     = SS  "i  GEDCOM to Internal mapping";
-STRING mn_ingd     = SS  "x  Internal to GEDCOM mapping";
-STRING mn_dsin     = SS  "g  Display to Internal mapping";
-STRING mn_inds     = SS  "d  Internal to Display mapping";
-STRING mn_inrp     = SS  "r  Internal to Report mapping";
+/* main menu */
+STRING mn_mmrpt    = SS "r  Generate report by entering report name";
+STRING mn_mmprpt   = SS "p  Pick a report from list and run";
+STRING mn_mmcset   = SS "c  Character set options";
+/* character set menu  (these looks best if choices padded to same length)*/
+STRING mn_csttl    = SS "Character set menu";
+STRING mn_cstt     = SS "t  Edit translation tables";
+STRING mn_csdsort  = SS "Current locale: ";
+STRING mn_csnewloc = SS "L  Select locale";
+STRING mn_cstsort  = SS "s  Edit custom sort table        ";
+STRING mn_cspref   = SS "p  Edit custom sort prefix table ";
+STRING mn_cschar   = SS "c  Edit custom codepage mapping  ";
+STRING mn_cslcas   = SS "l  Edit custom lower case mapping";
+STRING mn_csucas   = SS "u  Edit custom upper case mapping";
+STRING idsortttl   = SS "Enter valid locale name (C for non-lingual sort)";
+STRING idsortdsp   = SS "Locale: ";
+/* translation table menu (these looks best if choices padded to same length)*/
+STRING mn_ttttl    = SS "Which character mapping do you want to edit?";
+STRING mn_ttedin   = SS "e  Editor to Internal mapping ";
+STRING mn_ttined   = SS "m  Internal to Editor mapping ";
+STRING mn_ttgdin   = SS "i  GEDCOM to Internal mapping ";
+STRING mn_ttingd   = SS "x  Internal to GEDCOM mapping ";
+STRING mn_ttdsin   = SS "g  Display to Internal mapping";
+STRING mn_ttinds   = SS "d  Internal to Display mapping";
+STRING mn_ttinrp   = SS "r  Internal to Report mapping ";
+/* utility menu */
+STRING mn_uttl     = SS "What utility do you want to perform?";
+/* extra menu */
+STRING mn_xttl     = SS "What activity do you want to perform?";

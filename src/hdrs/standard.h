@@ -115,14 +115,26 @@ typedef union {
 extern BOOLEAN alloclog;
 #define stdalloc(l)   __allocate(l, __FILE__, __LINE__)
 #define stdfree(p)    __deallocate(p, __FILE__, __LINE__)
+#define stdrealloc(p, size) __reallocate(p, size, __FILE__, __LINE__)
 #define FATAL()       __fatal(__FILE__, __LINE__, NULL)
 #define FATAL2(qq)    __fatal(__FILE__, __LINE__, qq)
 #define ASSERT(b)     if(!(b)) __fatal(__FILE__, __LINE__, NULL)
-#define eqstr(s,t)    (!ll_strcmp((s),(t)))
-#define nestr(s,t)    (ll_strcmp((s),(t)))
+/*
+eqstr does exact string compare
+no locale, no custom sort, no Finnish option 
+Perry, 2001/07/20
+*/
+#define eqstr(s,t)     (!strcmp((s),(t)))
+#define nestr(s,t)     (strcmp((s),(t)))
+#define cmpstr(s,t)    (strcmp((s),(t)))
+#define cmpstrloc(s,t) (ll_strcmploc((s),(t)))
 
 #define ARRAYSIZE(a)	(sizeof(a)/sizeof(a[0]))
 #define check_cache()   ___check_cache(__LINE__, __FILE__)
+
+/* TRANSLFNC must return stdalloc'd memory */
+typedef STRING (*TRANSLFNC)(STRING str, INT len);
+
 
 #define WHITE  ' '
 #define LETTER 'a'

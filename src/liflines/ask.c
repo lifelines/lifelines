@@ -43,11 +43,19 @@
 
 #include "llinesi.h"
 
+/*********************************************
+ * external/imported variables
+ *********************************************/
+
 extern INT listbadkeys;
 extern char badkeylist[];
 
-extern STRING ntchld, ntprnt, idfbrs, entnam, unknam, notone, ifone;
-extern STRING nofopn;
+extern STRING ntchld,ntprnt,idfbrs,entnam,unknam,notone,ifone;
+extern STRING nofopn,idbrws;
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
 
 static INDISEQ ask_for_indi_list_once(STRING, INT*);
 static NODE ask_for_indi_once(STRING, ASK1Q, INT*);
@@ -254,7 +262,7 @@ INDISEQ
 ask_for_indiseq (STRING ttl, INT *prc)
 {
 	INDISEQ seq;
-	STRING name = ask_for_string(ttl, "enter name, key, refn or list:");
+	STRING name = ask_for_string(ttl, idbrws);
 	*prc = RC_DONE;
 	if (!name || *name == 0) return NULL;
 	*prc = RC_NOSELECT;

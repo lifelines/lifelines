@@ -27,6 +27,9 @@
  *   added in 3.0.6 by Perry Rapp
  *========================================================*/
 
+#ifdef OS_LOCALE
+#include <locale.h>
+#endif
 #include "llstdlib.h"
 #include "screen.h"
 #include "gedcom.h"
@@ -39,6 +42,7 @@
  *********************************************/
 
 struct lloptions_s lloptions;
+STRING sortlocale = 0;
 
 /*********************************************
  * local types
@@ -81,6 +85,7 @@ static struct int_option_s int_options[] = {
 };
 static struct str_option_s str_options[] = {
 	{ "EmailAddr", &lloptions.email_addr, "", DBYES }
+	,{ "SortLocale", &sortlocale, "", DBYES }
 	,{ "LLEDITOR", &lloptions.lleditor, "", DBNO }
 	,{ "LLPROGRAMS", &lloptions.llprograms, "", DBNO }
 	,{ "LLREPORTS", &lloptions.llreports, "", DBNO }
@@ -282,15 +287,20 @@ static void
 store_to_lloptions (void)
 {
 	INT i;
-	/* store values back to options list */
+	/* store int values in int options list */
 	for (i=0; i<ARRSIZE(int_options); i++) {
 		STRING str = valueof_str(opttab, int_options[i].name);
 		*int_options[i].value = atoi(str);
 	}
+	/* store string values in string options list */
 	for (i=0; i<ARRSIZE(str_options); i++) {
 		STRING str = valueof_str(opttab, str_options[i].name);
 		*str_options[i].value = strsave(str);
 	}
+#ifdef OS_LOCALE
+	if (sortlocale[0])
+		setlocale(LC_COLLATE, sortlocale);
+#endif
 }
 /*==========================================
  * cleanup_lloptions -- deallocate structures

@@ -50,6 +50,7 @@ extern STRING mtitle;
  * required global variables
  *********************************************/
 
+BOOLEAN alloclog  = FALSE;	/* alloc/free debugging */
 BOOLEAN selftest = FALSE; /* selftest rules (ignore paths) */
 STRING btreepath = NULL;	/* normally defined in liflines/main.c */
 STRING readpath = NULL;		/* normally defined in liflines/main.c */
@@ -910,35 +911,6 @@ report_results (void)
 	if (!ct) {
 		printf("No errors found\n");
 	}
-}
-/*=========================================================
- * __allocate -- Allocate memory - called by stdalloc macro
- * Created: 2001/01/01, Perry Rapp
- *========================================================*/
-void *
-__allocate (int len,     /* number of bytes to allocate */
-            STRING file, /* not used */
-            int line)    /* not used */
-{
-	char *p;
-	if ((p = malloc(len)) == NULL)
-	{
-		char msg[64];
-		snprintf(msg, sizeof(msg), "Malloc failure for %d bytes", len);
-		FATAL2(msg);
-	}
-	return p;
-}
-/*=======================================================
- * __deallocate - Return memory - called by stdfree macro
- * Created: 2001/01/01, Perry Rapp
- *=====================================================*/
-void
-__deallocate (void *ptr,  /* memory being returned */
-              STRING file, /* not used */
-              int line)   /* not used */
-{
-	free(ptr);
 }
 /*=============================
  * fatal -- Fatal error routine

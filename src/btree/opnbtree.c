@@ -35,14 +35,13 @@
 #include "sys_inc.h"
 #include "arch.h" /* for S_ISDIR - Perry 2001/01/01 */
 #include "llstdlib.h"
-#include "liflines.h"
-#include "screen.h"
 #include "btreei.h"
 
 /*********************************************
  * local function prototypes
  *********************************************/
 
+/* alphabetical */
 static void init_keyfile1(KEYFILE1 * kfile1);
 static void init_keyfile2(KEYFILE2 * kfile2);
 static BOOLEAN initbtree (STRING basedir);

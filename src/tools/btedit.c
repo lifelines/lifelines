@@ -100,11 +100,12 @@ main (int argc,
 
 /*=========================================================
  * __allocate -- Allocate memory - called by stdalloc macro
+ *  len:  [in] number of bytes to allocate
+ *  file: [in] not used
+ *  line: [in] not used
  *========================================================*/
 void *
-__allocate (int len,     /* number of bytes to allocate */
-            STRING file, /* not used */
-            int line)    /* not used */
+__allocate (int len, STRING file, int line)
 {
 	char *p;
 	if ((p = malloc(len)) == NULL)  FATAL();
@@ -113,11 +114,12 @@ __allocate (int len,     /* number of bytes to allocate */
 
 /*=======================================================
  * __deallocate - Return memory - called by stdfree macro
+ *  ptr:  [in] memory being returned
+ *  file: [in] not used
+ *  line: [in] not used
  *=====================================================*/
 void
-__deallocate (void *ptr,  /* memory being returned */
-              STRING file, /* not used */
-              int line)   /* not used */
+__deallocate (void *ptr, STRING file, int line)
 {
 	free(ptr);
 }

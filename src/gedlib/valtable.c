@@ -32,8 +32,8 @@
 #include "sys_inc.h"
 #include "llstdlib.h"
 #include "table.h"
-#include "translat.h"
 #include "gedcom.h"
+#include "bfs.h"
 
 static BOOLEAN init_valtab_from_string(STRING, TABLE, INT, STRING*);
 
@@ -45,6 +45,8 @@ static BOOLEAN init_valtab_from_string(STRING, TABLE, INT, STRING*);
  *  pmsg:  [out] error message
  * Reads record from db, parses it into key/value strings
  * and inserts them into hash table provided (tab).
+ * Do not need to translate, as record & table both kept
+ * in internal format.
  *===================================================*/
 BOOLEAN
 init_valtab_from_rec (STRING key, TABLE tab, INT sep, STRING *pmsg)
@@ -62,17 +64,20 @@ init_valtab_from_rec (STRING key, TABLE tab, INT sep, STRING *pmsg)
  * init_valtab_from_file -- Init value table from file
  *  fname:   [in] file holding key/values strings
  *  tab:     [in,out] hash table for key/value string pairs
+ *  tt:      [in] translation table to use
  *  sep:     [in] separator char between key & value
  *  pmsg:    [out] error message (set if returns FALSE)
  *==================================================*/
 BOOLEAN
-init_valtab_from_file (STRING fname, TABLE tab, INT sep, STRING *pmsg)
+init_valtab_from_file (STRING fname, TABLE tab, TRANTABLE tt, INT sep, STRING *pmsg)
 {
 	FILE *fp;
 	struct stat buf;
 	STRING str;
 	BOOLEAN rc;
 	INT siz;
+	bfptr bfs = bfNew(0);
+
 	if ((fp = fopen(fname, LLREADTEXT)) == NULL) return TRUE;
 	ASSERT(fstat(fileno(fp), &buf) == 0);
 	if (buf.st_size == 0) {
@@ -86,8 +91,10 @@ init_valtab_from_file (STRING fname, TABLE tab, INT sep, STRING *pmsg)
 	/* may not read full buffer on Windows due to CR/LF translation */
 	ASSERT(siz == buf.st_size || feof(fp));
 	fclose(fp);
- 	rc = init_valtab_from_string(str, tab, sep, pmsg);
-	stdfree(str);
+	translate_string_to_buf(tt, str, bfs);
+	stdfree(str); /* done with original record - we use translated record */
+ 	rc = init_valtab_from_string(bfStr(bfs), tab, sep, pmsg);
+	bfDelete(bfs);
 	return rc;
 }
 /*========================================================

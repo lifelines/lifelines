@@ -41,10 +41,11 @@
  *********************************************/
 
 TRANTABLE tran_tables[] = {
-	NULL, NULL, NULL, NULL, NULL, NULL, NULL
+	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 };
 char *map_keys[] = {
-	"MEDIN", "MINED", "MGDIN", "MINGD", "MDSIN", "MINDS", "MINRP",
+	"MEDIN", "MINED", "MGDIN", "MINGD", "MDSIN", "MINDS", "MINRP"
+	, "MSORT", "MCHAR", "MLCAS", "MUCAS", "MPREF"
 };
 
 /*********************************************
@@ -57,7 +58,6 @@ extern STRING baddec, badhex, norplc, badesc;
  * local enums & defines
  *********************************************/
 
-#define NOMAPS 7
 
 /*********************************************
  * local function prototypes
@@ -95,7 +95,7 @@ init_mapping (void)
 {
 	INT indx;
 	BOOLEAN err;
-	for (indx = 0; indx < NOMAPS; indx++) {
+	for (indx = 0; indx < NUM_TT_MAPS; indx++) {
 		tran_tables[indx] = init_map_from_rec(indx, &err);
 		if (err) {
 			llwprintf("Error initializing %s map.\n",
@@ -170,19 +170,23 @@ init_map_from_str (STRING str, INT indx, BOOLEAN *perr)
 	INT i, n, maxn, entry=1, line=1, newc;
 	INT sep = (uchar)'\t'; /* default separator */
 	BOOLEAN done;
+	BOOLEAN skip;
 	unsigned char c, scratch[50];
 	STRING p, *lefts, *rights;
 	TRANTABLE tt=NULL;
+	char name[sizeof(tt->name)];
+	name[0] = 0;
 
 	ASSERT(str);
 
 /* Count newlines to find lefts and rights sizes */
 	*perr = TRUE;
 	p = str;
-	n = 1;
+	n = 0;
+	skip = TRUE;
 	/* first pass through, count # of entries */
 	while (*p) {
-		BOOLEAN skip=FALSE;
+		skip=FALSE;
 		/* skip blank lines and lines beginning with "##" */
 		if (*p == '\r' || *p == '\n') skip=TRUE;
 		if (*p =='#' && p[1] == '#') skip=TRUE;
@@ -200,6 +204,12 @@ init_map_from_str (STRING str, INT indx, BOOLEAN *perr)
 			}
 		}
 	}
+	if (!skip) ++n; /* include last line */
+	if (!n) {
+		/* empty translation table ignored */
+		*perr = FALSE;
+		goto none;
+	}
 	lefts = (STRING *) stdalloc(n*sizeof(STRING));
 	rights = (STRING *) stdalloc(n*sizeof(STRING));
 	for (i = 0; i < n; i++) {
@@ -212,22 +222,23 @@ init_map_from_str (STRING str, INT indx, BOOLEAN *perr)
 	maxn = n;	/* don't exceed the entries you have allocated */
 	n = 0;
 	while (!done && (n < maxn)) {
-		BOOLEAN skip=FALSE;
+		skip=FALSE;
 		if (!*str) break;
 		/* skip blank lines and lines beginning with "##" */
 		if (*str == '\r' || *str == '\n') skip=TRUE;
 		if (*str =='#' && str[1] == '#') {
 			skip=TRUE;
-			if (!strncmp(str, "##sep", 5)) {
-			/* to be deleted soon */
-				/* new separator character if legal */
-				if (str[5]=='=')
-					sep='=';
-			}
 			if (!strncmp(str, "##!sep", 6)) {
 				/* new separator character if legal */
 				if (str[6]=='=')
 					sep='=';
+			}
+			if (!strncmp(str, "##!name: ",9)) {
+				STRING p1=str+9, p2=name;
+				INT i=sizeof(name);
+				while (*p1 && *p1 != '\n' && --i)
+					*p2++ = *p1++;
+				*p2=0;
 			}
 		}
 		if (skip) {
@@ -337,12 +348,14 @@ init_map_from_str (STRING str, INT indx, BOOLEAN *perr)
 		rights[n++] = strsave(scratch);
 	}
 	tt = create_trantable(lefts, rights, n);
+	strcpy(tt->name, name);
 	*perr = FALSE;
 end:
 	for (i = 0; i < n; i++)		/* don't free rights */
 		stdfree(lefts[i]);
 	stdfree(lefts);
 	stdfree(rights);
+none:
 	return tt;
 
 fail:

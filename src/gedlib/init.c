@@ -129,6 +129,7 @@ init_lifelines_global (STRING * pmsg)
 	if (!lloptions.llnewdbdir[0])
 		changeoptstr(&lloptions.llnewdbdir, strsave("."));
 
+	set_usersort(custom_sort);
 	return TRUE;
 }
 /*=================================

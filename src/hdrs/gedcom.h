@@ -129,6 +129,11 @@ enum {
 #define MDSIN 4
 #define MINDS 5
 #define MINRP 6
+#define MSORT 7
+#define MCHAR 8
+#define MLCAS 9
+#define MUCAS 10
+#define MPREF 11
 
 /*========
  * Globals
@@ -223,8 +228,8 @@ STRING getexref(void);
 INT getfinitial(STRING);
 STRING getfxref(void);
 INT getixrefnum(void);
-STRING getsurname(STRING);
 STRING getsxref(void);
+STRING getsxsurname(STRING);
 STRING getxxref(void);
 BOOLEAN getrefnrec(STRING);
 STRING givens(STRING);
@@ -256,7 +261,7 @@ BOOLEAN init_lifelines_global(STRING * pmsg);
 void init_mapping(void);
 void init_new_nod0(NOD0 nod0, char ntype, INT keynum);
 void init_show_module(void);
-BOOLEAN init_valtab_from_file(STRING, TABLE, INT, STRING*);
+BOOLEAN init_valtab_from_file(STRING, TABLE, TRANTABLE, INT, STRING*);
 BOOLEAN init_valtab_from_rec(STRING, TABLE, INT, STRING*);
 BOOLEAN in_string(INT, STRING);
 BOOLEAN iso_list(NODE, NODE);
@@ -348,7 +353,7 @@ BOOLEAN replace_fam(NODE, NODE, STRING*);
 BOOLEAN replace_indi(NODE, NODE, STRING*);
 void resolve_links(NODE);
 RECORD_STATUS retrieve_to_file(STRING key, STRING file);
-RECORD_STATUS retrieve_to_textfile(STRING key, STRING file);
+RECORD_STATUS retrieve_to_textfile(STRING key, STRING file, TRANSLFNC);
 STRING retrieve_record(STRING, INT*);
 STRING rmvat(STRING);
 STRING rmvbrackets (STRING str);
@@ -363,9 +368,9 @@ void sour_to_dbase(NODE);
 STRING sour_to_list_string(NODE sour, INT len, STRING delim);
 void split_fam(NODE, NODE*, NODE*, NODE*, NODE*, NODE*);
 void split_indi(NODE, NODE*, NODE*, NODE*, NODE*, NODE*, NODE*);
-BOOLEAN store_file(STRING key, STRING file);
+BOOLEAN store_file_to_db(STRING key, STRING file);
 BOOLEAN store_record(STRING key, STRING rec, INT len);
-BOOLEAN store_text_file(STRING key, STRING file);
+BOOLEAN store_text_file_to_db(STRING key, STRING file, TRANSLFNC);
 NOD0 string_to_nod0(STRING str, STRING key, INT len);
 NODE string_to_node(STRING);
 BOOLEAN symbolic_link(STRING);
@@ -589,7 +594,7 @@ INT xrefval(char ntype, STRING str);
 	NODE node, __node = nchild(root);\
 	STRING value, __value;\
 	while (__node) {\
-		while (__node && ll_strcmp(tag, ntag(__node)))\
+		while (__node && nestr(tag, ntag(__node)))\
 			__node = nsibling(__node);\
 		if (__node == NULL) break;\
 		__value = value = full_value(__node);/*OBLIGATION*/\

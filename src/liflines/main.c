@@ -135,8 +135,7 @@ static void show_open_error(INT dberr);
  * main -- Main routine of LifeLines
  *================================*/
 int
-main (INT argc,
-      char **argv)
+main (INT argc, char **argv)
 {
 	extern char *optarg;
 	extern int optind;

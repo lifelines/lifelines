@@ -60,11 +60,12 @@ static INT live_allocs = 0;
 
 /*=================================================
  * __allocate -- Allocate memory - used by stdalloc
+ *  len:  [in] num of bytes to alloc
+ *  file: [in] file requesting
+ *  line: [in] line num in file
  *===============================================*/
 void *
-__allocate (int len,       /* num of bytes to alloc */
-            STRING file,   /* file requesting */
-            int line)      /* line num in file */
+__allocate (int len, STRING file, int line)
 {
 	char *p;
 	int i;
@@ -85,11 +86,12 @@ __allocate (int len,       /* num of bytes to alloc */
 }
 /*====================================================
  * __deallocate -- Deallocate memory - used by stdfree
+ *  ptr:  [in] memory to return
+ *  file: [in] file releasing memory
+ *  line: [in] line num in file releasing memory
  *==================================================*/
 void
-__deallocate (void *ptr,      /* memory to return */
-              STRING file,    /* file returning */
-              int line)       /* line num in file */
+__deallocate (void *ptr, STRING file, int line)
 {
 	if (ptr) live_allocs--;
 	if (alloclog) {
@@ -97,6 +99,22 @@ __deallocate (void *ptr,      /* memory to return */
 		alloc_out(scratch);
 	}
 	if(ptr) free(ptr);
+}
+/*====================================================
+ * __reallocate -- Reallocate memory - used by stdrealloc
+ *  ptr:  [in] memory to return
+ *  file: [in] file releasing memory
+ *  line: [in] line num in file releasing memory
+ * Created: 2001/07/19 (Perry Rapp)
+ *==================================================*/
+void *
+__reallocate (void *ptr, INT size, STRING file, int line)
+{
+	if (alloclog) {
+		sprintf(scratch, "%8p R (%d) %s\t%d", ptr, size, file, line);
+		alloc_out(scratch);
+	}
+	return realloc(ptr, size);
 }
 /*=======================================
  * alloc_out -- Output allocation message

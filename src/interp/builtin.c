@@ -347,7 +347,7 @@ __soundex (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "person does not have a name");
 		return NULL;
 	}
-	return create_pvalue(PSTRING, (VPTR)soundex(getsurname(nval(name))));
+	return create_pvalue(PSTRING, (VPTR)soundex(getsxsurname(nval(name))));
 }
 /*===========================================+
  * __strsoundex -- SOUNDEX function on strings
@@ -1305,7 +1305,7 @@ __strcmp (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	llwprintf("\n");
 #endif
 
-	set_pvalue(val1, PINT, (VPTR)ll_strcmp(str1, str2));
+	set_pvalue(val1, PINT, (VPTR)cmpstr(str1, str2));
 	delete_pvalue(val2);
 	return val1;
 }
@@ -1332,7 +1332,7 @@ __nestr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	str2 = (STRING) pvalue(val2);
 	if (!str1) str1 = emp;
 	if (!str2) str2 = emp;
-	set_pvalue(val1, PBOOL, (VPTR)(ll_strcmp(str1, str2) != 0));
+	set_pvalue(val1, PBOOL, (VPTR)(nestr(str1, str2) != 0));
 	delete_pvalue(val2);
 	return val1;
 }
@@ -1359,7 +1359,7 @@ __eqstr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	str2 = (STRING) pvalue(val2);
 	if (!str1) str1 = emp;
 	if (!str2) str2 = emp;
-	set_pvalue(val1, PBOOL, (VPTR)(ll_strcmp(str1, str2) == 0));
+	set_pvalue(val1, PBOOL, (VPTR)(eqstr(str1, str2) != 0));
 	delete_pvalue(val2);
 	return val1;
 }

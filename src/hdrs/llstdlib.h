@@ -67,12 +67,15 @@ STRING environ_determine_tempfile(void);
 void get_current_lldate(LLDATE * creation);
 
 /* llstrcmp.c */
-int ll_strcmp(char*, char*);
+int ll_strcmploc(char*, char*);
 int ll_strncmp(char*, char*, int);
+typedef BOOLEAN (*usersortfnc)(char *str1, char *str2, INT * rtn);
+void set_usersort(usersortfnc fnc);
 
 /* memalloc.c */
-void *__allocate(int, STRING, int);
-void __deallocate(void*, STRING, int);
+void *__allocate(int, STRING file, int line);
+void __deallocate(void*, STRING file, int line);
+void * __reallocate(void*, int size, STRING file, int line);
 INT alloc_count(void);
 void report_alloc_live_count(STRING str);
 

@@ -582,7 +582,7 @@ func_node (STRING name, PNODE elist)
 	hi = nobuiltins - 1;
 	while (lo <= hi) {
 		md = (lo + hi) >> 1;
-		if ((r = nestr(name, builtins[md].ft_name)) < 0)
+		if ((r = cmpstr(name, builtins[md].ft_name)) < 0)
 			hi = md - 1;
 		else if (r > 0)
 			lo = md + 1;

@@ -1,3 +1,22 @@
+2007-07-22 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog btree/file.c btree/opnbtree.c gedlib/brwslist.c
+	gedlib/charmaps.c gedlib/editmap.c gedlib/editvtab.c
+	gedlib/indiseq.c gedlib/init.c gedlib/intrface.c
+	gedlib/lloptions.c gedlib/messages.c gedlib/names.c
+	gedlib/translat.c gedlib/valtable.c hdrs/btree.h hdrs/gedcom.h
+	hdrs/llstdlib.h hdrs/standard.h hdrs/translat.h interp/alloc.c
+	interp/builtin.c interp/pvalue.c liflines/ask.c
+	liflines/main.c liflines/newrecs.c liflines/screen.c
+	stdlib/dirs.c stdlib/llstrcmp.c stdlib/memalloc.c
+	stdlib/stdstrng.c tools/btedit.c tools/dbverify.c:
+	Revised string sort macros & routines, so new macro cmpstrloc
+	is for localized sorting. Implemented locale sorting (strcoll)
+	and optional custom sorting. Added character set menu to display &
+	adjust locale, and edit custom sort mapping table. Moved some strings
+	from screen menu code into messages.c. Added map file names
+	("##!name: " directive) and displayed it in menu items.
+
 2007-07-18 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/charmaps.c gedlib/names.c liflines/add.c

@@ -37,6 +37,7 @@ extern BOOLEAN opt_finnish;
 
 /*===============================
  * strsave -- Save copy of string
+ * returns stdalloc'd memory
  *=============================*/
 STRING
 strsave (STRING str)
@@ -57,6 +58,8 @@ strfree (STRING * str)
 }
 /*==================================
  * strconcat -- Catenate two strings
+ * Either (but not both) args may be null
+ * returns stdalloc'd memory
  *================================*/
 STRING
 strconcat (STRING s1, STRING s2)
@@ -79,13 +82,13 @@ INT
 chartype (INT c)
 {
 #ifndef OS_NOCTYPE
-	if ( isspace(c) )
+	if (isspace(c))
 		return WHITE;
 	if (opt_finnish) {
-		if( my_isalpha(c) ) return LETTER;
+		if (my_isalpha(c)) return LETTER;
 	}
-	else if ( isalpha(c) ) return LETTER;
-	if ( isdigit(c) ) return DIGIT;
+	else if (isalpha(c)) return LETTER;
+	if (isdigit(c)) return DIGIT;
 	return c;
 #else
 	if (c == ' ' || c == '\t' || c == '\n' || c == '\r')
@@ -110,7 +113,7 @@ BOOLEAN
 iswhite (INT c)
 {
 #ifndef OS_NOCTYPE
-	return( isspace(c) );
+	return (isspace(c));
 #else
 	return c == ' ' || c == '\t' || c == '\n' || c == '\r';
 #endif
@@ -122,9 +125,9 @@ iswhite (INT c)
 BOOLEAN
 isletter (INT c)
 {
-	if(opt_finnish) return(my_isalpha(c));
+	if (opt_finnish) return (my_isalpha(c));
 #ifndef OS_NOCTYPE
-	return( isalpha(c) );
+	return (isalpha(c));
 #else
 	if (c >= 'a' && c <= 'z') return TRUE;
 	return c >= 'A' && c <= 'Z';
@@ -139,11 +142,11 @@ isnumeric (STRING str)
 {
 	INT c;
 	if (!str) return FALSE;
-	while ((c = *str++)) {
+	while ((c = (uchar)*str++)) {
 #ifndef OS_NOCTYPE
 		if (chartype(c) != DIGIT) return FALSE;
 #else
-		if ( ! isdigit(c) ) return FALSE;
+		if (!isdigit(c)) return FALSE;
 #endif
 	}
 	return TRUE;
