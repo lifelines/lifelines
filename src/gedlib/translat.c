@@ -324,7 +324,7 @@ static void
 iconv_trans (TRANMAPPING ttm, CNSTRING in, bfptr bfs)
 {
 	/* TODO: Will have to modify this to use with iconv DLL */
-	iconv_t ict = iconv_open(ttm->iconv_src, ttm->iconv_dest);
+	iconv_t ict = iconv_open(ttm->iconv_dest, ttm->iconv_src);
 	CNSTRING inptr = in;
 	STRING outptr=bfStr(bfs);
 	size_t inleft=strlen(in), outleft=bfs->size-1, cvted=0;
