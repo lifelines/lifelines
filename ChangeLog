@@ -26,6 +26,11 @@
 
 	Add new files to msvc makefile for llexec.
 
+	* ChangeLog NEWS configure.in build/rpm/lifelines.spec
+	src/hdrs/version.h
+
+	Creating version 3.0.27.
+
 2003-03-06 Steve Dum
 
 	* ChangeLog docs/Makefile.am
