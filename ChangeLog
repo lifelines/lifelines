@@ -1,8 +1,10 @@
 2005-01-12 Stephen Dum
 	* ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf 
 	  docs/ll-userguide.html docs/ll-userguide.pdf docs/ll-userguide.txt
+	  INSTALL
 
 	  update docs from xml's
+	  Add bison to list of dependencies
 
 2005-01-12 lifelines beta 3.0.40 RELEASE
 

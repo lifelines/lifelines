@@ -78,6 +78,7 @@ how you build lifelines. (Avoid gcc version 2.7.2.1)
 2. Building from CVS
    automake
    autoconf
+   bison
 3. Document Generation - see above about docs.
    Regeneration of the docs requires tools to convert from xml to html, pdf,
    and text.  Currently the tools being used are 
