@@ -6,8 +6,8 @@
  * ARRAY -- Data type for an array
  *===============================================*/
 struct tag_array {
-	struct tag_vtable *vtable;
-	INT ar_refcnt;  /* for interp */
+	struct tag_vtable * vtable; /* generic object table (see vtable.h) */
+	INT ar_refcnt; /* reference counted object */
 	INT ar_size;    /* currently populated size */
 	INT ar_max;     /* allocated size */
 	void **ar_data;  /* actual array data */

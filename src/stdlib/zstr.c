@@ -13,19 +13,65 @@
 /* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
 #include "arch.h" /* vsnprintf */
 #include "zstr.h"
+#include "vtable.h"
 
 #ifndef INCLUDED_STDARG_H
 #include <stdarg.h>
 #define INCLUDED_STDARG_H
 #endif
 
+/*********************************************
+ * local types
+ *********************************************/
+
+/*
+Each ZSTR takes two mallocs
+But this cannot easily be changed, as clients
+now assume that ZSTR pointers are stable
+*/
+struct tag_zstr {
+	struct tag_vtable * vtable; /* generic object table (see vtable.h) */
+	int magic;
+	char * str;
+	char * end;
+	unsigned int max;
+};
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+/* alphabetical */
 static void dbgchk(ZSTR);
+static void init_zstr_vtable(ZSTR zstr);
 static unsigned int safelen(const char *txt);
 static void zalloc(ZSTR zstr, unsigned int newmax);
+static OBJECT zstr_copy(OBJECT obj, int deep);
+static void zstr_destructor(VTABLE *obj);
+
+/*********************************************
+ * local variables
+ *********************************************/
+
+static struct tag_vtable vtable_for_zstr = {
+	VTABLE_MAGIC
+	, "zstring"
+	, &zstr_destructor
+	, &nonrefcountable_isref
+	, 0
+	, 0
+	, &zstr_copy /* copy_fnc */
+	, &generic_get_type_name
+};
 
 #define DEFSIZE 64
 
 #define DBGCHK(zq) dbgchk(zq)
+
+/*********************************************
+ * local function definitions
+ * body of module
+ *********************************************/
 
 
 #ifdef TEST_ZSTR
@@ -54,17 +100,6 @@ main()
 }
 #endif
 
-/*
-Each ZSTR takes two mallocs
-But this cannot easily be changed, as clients
-now assume that ZSTR pointers are stable
-*/
-struct tag_zstr {
-	int magic;
-	char * str;
-	char * end;
-	unsigned int max;
-};
 
 /* reallocate buffer to be at least newmax */
 static void
@@ -108,6 +143,7 @@ zs_newn (unsigned int min)
 	unsigned int bksiz = (min<2048)?(min<64?32:128):(min<16384?2048:16384);
 	while (bksiz < min)
 		bksiz = bksiz << 1;
+	init_zstr_vtable(zstr);
 	zstr->str = (char *)malloc(bksiz);
 	zstr->str[0] = 0;
 	zstr->end = zstr->str;
@@ -354,3 +390,35 @@ zs_move (ZSTR zstr, ZSTR * pzsrc)
 	free(*pzsrc);
 	*pzsrc = 0;
 }
+/*========================================
+ * init_zstr_vtable -- set this zstr's vtable
+ *======================================*/
+static void
+init_zstr_vtable (ZSTR zstr)
+{
+	zstr->vtable = &vtable_for_zstr;
+}
+/*=================================================
+ * zstr_destructor -- destructor for zstr
+ *===============================================*/
+static void
+zstr_destructor (VTABLE *obj)
+{
+	ZSTR zstr = (ZSTR)obj;
+	ASSERT((*obj)->vtable_class == vtable_for_zstr.vtable_class);
+	zs_free(&zstr);
+}
+/*=================================================
+ * zstr_copy -- copy for zstr
+ *===============================================*/
+static OBJECT
+zstr_copy (OBJECT obj, int deep)
+{
+	ZSTR zstr = (ZSTR)obj, znew=0;
+	ASSERT((*obj)->vtable_class == vtable_for_zstr.vtable_class);
+	deep=deep; /* UNUSED */
+	ASSERT((*obj)->vtable_class == vtable_for_zstr.vtable_class);
+	znew = zs_newz(zstr);
+	return (OBJECT)znew;
+}
+

@@ -26,10 +26,9 @@ struct tag_lnode {
 #define llocks(n)   ((n)->l_locks)
 
 /* actual list */
-struct tag_vtable;
 typedef struct tag_list {
-	struct tag_vtable * vtable;
-	INT l_refcnt;
+	struct tag_vtable * vtable; /* generic object table (see vtable.h) */
+	INT l_refcnt; /* reference counted object */
 	LNODE l_head;
 	LNODE l_tail;
 	INT l_len;

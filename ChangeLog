@@ -1,3 +1,9 @@
+2003-09-14 Perry Rapp
+
+	* ChangeLog src/hdrs/array.h src/hdrs/list.h src/stdlib/zstr.c
+
+	Make zstrings into objects.
+
 2003-09-13 Perry Rapp
 
 	* ChangeLog src/liflines/screen.c
