@@ -244,6 +244,7 @@ pop_list_tail (LIST list)
 }
 /*=================================================
  * nth_in_list -- Find nth node in list, relative 1
+ *  start at head & count towards tail
  *===============================================*/
 static LNODE
 nth_in_list (LIST list, INT index1b)
@@ -251,17 +252,17 @@ nth_in_list (LIST list, INT index1b)
 	INT i = 1;
 	LNODE node = NULL;
 	if (!list) return NULL;
-	node = ltail(list);
+	node = lhead(list);
 	while (i < index1b && node) {
 		i++;
-		node = lprev(node);
+		node = lnext(node);
 	}
 	validate_list(list);
 	if (i == index1b && node) return node;
 	while (i++ <= index1b)
-		push_list(list, NULL);
+		enqueue_list(list, NULL);
 	validate_list(list);
-	return lhead(list);
+	return ltail(list);
 }
 /*==================================================
  * set_list_element - Set element using array access

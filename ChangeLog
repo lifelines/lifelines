@@ -1,3 +1,9 @@
+2002-12-03 Perry Rapp
+
+	* ChangeLog src/stdlib/list.c:
+
+	Change nth_in_list to count from front (so dblist is in order).
+
 2002-12-02 Perry Rapp
 
 	* ChangeLog
