@@ -769,7 +769,7 @@ zero_pventry (ENTRY ent)      /* symbol table entry */
 /*========================================
  * remove_pvtable -- Remove symbol table 
  *======================================*/
-FILE *errfp = NULL;
+static FILE *errfp = NULL;
 void
 remove_pvtable (TABLE stab)     /* symbol table */
 {

@@ -12,7 +12,7 @@ extern "C" {
 #include <stdarg.h>
 
 #define CUR_MAXLINES 40
-#define CUR_MAXCOLS 80
+#define CUR_MAXCOLS 120
 
 #define CHTYPE char
 #ifdef	CHTYPE

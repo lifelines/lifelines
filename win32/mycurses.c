@@ -29,7 +29,8 @@
 #include <fcntl.h>
 #include <curses.h>
 
-static void mycur_init();
+/* fullscreen==1 to use screen buffer size instead of window size */
+static void mycur_init(int fullscreen);
 static int mycur_getc();
 
 
@@ -52,7 +53,7 @@ extern int _fmode;		/* O_TEXT or O_BINARY */
 /* #define DEBUG */
 
 #ifdef DEBUG
-FILE *errfp = NULL;
+static FILE *errfp = NULL;
 #endif
 
 /* Curses data */
@@ -121,7 +122,7 @@ WINDOW	*initscr()
 	 	errfp = fopen("mycurses.err", "w");
 #endif
 
-	mycur_init();
+	mycur_init(1);
 	if(curscr == NULL)
 		{
 		curscr = newwin(LINES, COLS, 0, 0);
@@ -234,38 +235,41 @@ int wrefresh(WINDOW *wp)
 
 	if(wp->_parent) wrefresh(wp->_parent);
 	for(i = 0; i < wp->_maxy; i++)
-	  {
-	  y = wp->_begy + i;
-	  if(y < curscr->_maxy)
- 	    {
-	    for(j = 0; j < wp->_maxx; j++)
-	      {
-	      x = wp->_begx + j;
-	      if(x < curscr->_maxx)
+	{
+		y = wp->_begy + i;
+		if(y < curscr->_maxy)
 		{
-		if(curscr->_y[y][x] != wp->_y[i][j])
-		  {
-		  if(y < curscr->_mincy) curscr->_mincy = y;
-		  if(y > curscr->_maxcy) curscr->_maxcy = y;
-		  curscr->_y[y][x] = wp->_y[i][j];
-		  }
-		}
-	      }
- 	    }
-	  }
+			for(j = 0; j < wp->_maxx; j++)
+			{
+				x = wp->_begx + j;
+				if(x < curscr->_maxx)
+				{
+					if(curscr->_y[y][x] != wp->_y[i][j])
+					{
+						if(y < curscr->_mincy) curscr->_mincy = y;
+						if(y > curscr->_maxcy) curscr->_maxcy = y;
+						curscr->_y[y][x] = wp->_y[i][j];
+					}
+				}
+			}
+ 		}
+	}
 	/* update the screen */
 	if((linecount  = (curscr->_maxcy - curscr->_mincy)) >= 0)
- 	  {
-	  linecount++;
-	  cLocation.X = 0;
-	  cLocation.Y = curscr->_mincy;
-	  WriteConsoleOutputCharacter(hStdout,
-		(LPTSTR)(curscr->_y[curscr->_mincy]),
-		(DWORD)curscr->_maxx * linecount,
-		cLocation, &dwLen);
-	  curscr->_mincy = curscr->_maxy;
-	  curscr->_maxcy = -1;
-	  }	
+	{
+		linecount++;
+		cLocation.X = 0;
+		cLocation.Y = curscr->_mincy;
+		for (i=0; i<linecount; i++, cLocation.Y++)
+		{
+			WriteConsoleOutputCharacter(hStdout,
+				(LPTSTR)(curscr->_y[curscr->_mincy+i]),
+				(DWORD)curscr->_maxx,
+				cLocation, &dwLen);
+		}
+		curscr->_mincy = curscr->_maxy;
+		curscr->_maxcy = -1;
+	}	
 	return(0);
 }
 
@@ -510,7 +514,7 @@ int wgetstr(WINDOW *wp, char *cp)
 
 /* Win32 Stuff */
 
-static void mycur_init()
+static void mycur_init(int fullscreen)
 {
 	COORD cStartPos;
 	DWORD dwLen;
@@ -548,25 +552,50 @@ static void mycur_init()
 		hStdout = GetStdHandle((DWORD)STD_OUTPUT_HANDLE);
 		if(hStdout != INVALID_HANDLE_VALUE)
 		{
+/*			{ // testing by Perry
+				COORD coord = { 100, 30 };
+				if (!SetConsoleScreenBufferSize(hStdout, coord))
+				{
+					dwLen=GetLastError();
+				}
+			}
+			*/
 			GetConsoleMode(hStdout, &dwModeOut);
 			/* SetConsoleMode(hStdout, dwModeOut); */
 			GetConsoleScreenBufferInfo(hStdout, &sScreenInfo);
 #ifdef DEBUG
-			fprintf(errfp, "Screen: (%d,%d) max=(%d,%d) pos=(%d,%d)\n",
+			fprintf(errfp, "Screen buffer: (%d,%d) pos=(%d,%d)\n",
 				sScreenInfo.dwSize.X, sScreenInfo.dwSize.Y,
-				sScreenInfo.dwMaximumWindowSize.X,
-				sScreenInfo.dwMaximumWindowSize.Y,
 				sScreenInfo.dwCursorPosition.X, sScreenInfo.dwCursorPosition.Y);
+			fprintf(errfp, "Window: (%d-%d,%d-%d) max=(%d,%d)\n",
+				sScreenInfo.srWindow.Left, sScreenInfo.srWindow.Right,
+				sScreenInfo.srWindow.Top, sScreenInfo.srWindow.Bottom,
+				sScreenInfo.dwMaximumWindowSize.X,
+				sScreenInfo.dwMaximumWindowSize.Y);
 #endif
+			if (sScreenInfo.srWindow.Left || sScreenInfo.srWindow.Top)
+			{
+				/* WARNING: this code will not work correctly with offset window */
+			}
 			cStartPos.X = 0;
 			cStartPos.Y = 0;
 			FillConsoleOutputCharacter(hStdout, (TCHAR)' ',
 			(DWORD)(sScreenInfo.dwSize.X*sScreenInfo.dwSize.Y),
 			cStartPos, &dwLen);
-			if(sScreenInfo.dwSize.Y > LINES)
+			if (fullscreen)
+			{
 				LINES = sScreenInfo.dwSize.Y;
-			if(sScreenInfo.dwSize.Y > CUR_MAXLINES)
+				COLS = sScreenInfo.dwSize.X;
+			}
+			else
+			{
+				LINES = sScreenInfo.srWindow.Bottom;
+				COLS = sScreenInfo.srWindow.Right;
+			}
+			if(LINES > CUR_MAXLINES)
 				LINES = CUR_MAXLINES;
+			if(COLS > CUR_MAXCOLS)
+				COLS = CUR_MAXCOLS;
 		}
 	/* else fprintf(errfp, "GetStdHandle() failed.\n"); */
 	}
@@ -579,12 +608,11 @@ static int mycur_getc()
 	int ch;
 
 	if(hStdin != INVALID_HANDLE_VALUE)
-	  {
-	  if(ReadConsole(hStdin, (LPVOID)buf, (DWORD)1, &dwLen, (LPVOID)NULL))
-	    ch = buf[0];
-	  else ch = EOF;
-	  }
+	{
+		if(ReadConsole(hStdin, (LPVOID)buf, (DWORD)1, &dwLen, (LPVOID)NULL))
+			ch = buf[0];
+		else ch = EOF;
+	}
 	else ch = getchar();
 	return(ch);
-
 }

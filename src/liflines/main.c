@@ -55,6 +55,7 @@ extern INT csz_fam, icsz_fam;
 extern INT csz_sour, icsz_sour;
 extern INT csz_even, icsz_even;
 extern INT csz_othr, icsz_othr;
+extern INT winx, winy;
 
 /* Finnish language support modifies the soundex codes for names, so
  * a database created with this support is not compatible with other
@@ -124,36 +125,41 @@ main (INT argc,
 	setlocale(LC_ALL, "");
 #endif
 
+	for (c=1; c<argc; c++) {
+		if (strcmp(argv[c], "-u")) {
+			sscanf(argv[c]+2, "%d,%d", &winx, &winy);
+		}
+	}
 	initscr();
 	noecho();
 	init_screen();
 	set_signals();
 	opterr = 0;	/* turn off getopt's error message */
-	while ((c = getopt(argc, argv, "akrwfmntc:F")) != -1) {
+	while ((c = getopt(argc, argv, "akrwfmntc:Fu:")) != -1) {
 		switch (c) {
 		case 'c':	/* adjust cache sizes */
-		    	while(optarg && *optarg) {
-			  if(isalpha(*optarg) && isupper(*optarg))
-			      *optarg = tolower(*optarg);
-		    	  if(*optarg == 'i') {
-			      sscanf(optarg+1, "%d,%d", &csz_indi, &icsz_indi);
-			  }
-			  else if(*optarg == 'f') {
-			      sscanf(optarg+1, "%d,%d", &csz_fam, &icsz_fam);
-			  }
-			  else if(*optarg == 's') {
-			      sscanf(optarg+1, "%d,%d", &csz_sour, &icsz_sour);
-			  }
-			  else if(*optarg == 'e') {
-			      sscanf(optarg+1, "%d,%d", &csz_even, &icsz_even);
-			  }
-			  else if((*optarg == 'o') || (*optarg == 'x')) {
-			      sscanf(optarg+1, "%d,%d", &csz_othr, &icsz_othr);
-			  }
-			  optarg++;
-			  while(*optarg && isdigit(*optarg)) optarg++;
-			  if(*optarg == ',') optarg++;
-			  while(*optarg && isdigit(*optarg)) optarg++;
+			while(optarg && *optarg) {
+				if(isalpha(*optarg) && isupper(*optarg))
+					*optarg = tolower(*optarg);
+				if(*optarg == 'i') {
+					sscanf(optarg+1, "%d,%d", &csz_indi, &icsz_indi);
+				}
+				else if(*optarg == 'f') {
+					sscanf(optarg+1, "%d,%d", &csz_fam, &icsz_fam);
+				}
+				else if(*optarg == 's') {
+					sscanf(optarg+1, "%d,%d", &csz_sour, &icsz_sour);
+				}
+				else if(*optarg == 'e') {
+					sscanf(optarg+1, "%d,%d", &csz_even, &icsz_even);
+				}
+				else if((*optarg == 'o') || (*optarg == 'x')) {
+					sscanf(optarg+1, "%d,%d", &csz_othr, &icsz_othr);
+				}
+				optarg++;
+				while(*optarg && isdigit(*optarg)) optarg++;
+				if(*optarg == ',') optarg++;
+				while(*optarg && isdigit(*optarg)) optarg++;
 			}
 			break;
 #ifdef FINNISH
@@ -186,6 +192,9 @@ main (INT argc,
 			break;
 		case 't':
 			traceprogram = TRUE;
+			break;
+		case 'u':
+			/* read this earlier before initscr */
 			break;
 		case '?':
 			llwprintf(usage);
