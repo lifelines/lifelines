@@ -26,6 +26,10 @@
 	Add explanatory comments to targets in reports/Makefile.am,
 	and remove ST only target.
 
+	* ChangeLog src/interp/more.c
+
+	Fix string leak in __rjustify.
+
 2005-01-27, Perry Rapp
 
 	* ChangeLog src/gedlib/gedcomi.h src/gedlib/keytonod.c

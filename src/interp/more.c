@@ -942,11 +942,14 @@ __rjustify (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	len = pvalue_to_int(val2);
 	delete_pvalue(val2);
-	set_pvalue_string(val1, rightjustify(str, len));
+	str = rightjustify(str, len); /* newly alloc'd */
+	set_pvalue_string(val1, str);
+	strfree(&str);
 	return val1;
 }
 /*===========================================
  * rightjustify -- Right justify string value
+ *  returns heap-allocated string
  *=========================================*/
 static STRING
 rightjustify (STRING str, INT len)
