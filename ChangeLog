@@ -13,6 +13,10 @@
 
 	Peter Fales' bugfix for browsing to lower family from tandem.
 
+	* ChangeLog po/POTFILES.in
+
+	Include translat.c in list for xgettext.
+
 2003-09-10 Jens Arvidsson
 
 	* ChangeLog po/sv.po

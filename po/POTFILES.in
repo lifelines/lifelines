@@ -14,6 +14,7 @@ src/gedlib/lloptions.c
 src/gedlib/messages.c
 src/gedlib/node.c
 src/gedlib/remove.c
+src/gedlib/translat.c
 src/gedlib/valid.c
 
 src/interp/alloc.c
