@@ -29,6 +29,10 @@
 
 	Update distribution reports to include self-test reports.
 
+	* ChangeLog po/fr.po:
+
+	Updated French message catalog from Patrick Texier.
+
 2002-12-15 Perry Rapp
 
 	* ChangeLog src/gedlib/codesets.c src/gedlib/init.c
