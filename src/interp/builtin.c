@@ -2321,7 +2321,9 @@ __print (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		STRING str;
 		val = eval_and_coerce(PSTRING, arg, stab, eflg);
 		if (*eflg || !val) {
-			prog_var_error(node, stab, arg, val, nonstrx, "print", narg);
+			char nargstr[33];
+			sprintf(nargstr, "%d", narg);
+			prog_var_error(node, stab, arg, val, nonstrx, "print", nargstr);
 			delete_pvalue(val);
 			return NULL;
 		}
