@@ -18,6 +18,10 @@
 	New upperascii_s cheap & dirty uppercasing function, and ll_upperz 
 	good one. Change args of manip_name to enums.
 
+	* ChangeLog
+
+	Released 3.0.27p1 (and cvs tagged it).
+
 2003-04-13 Perry Rapp
 
 	* ChangeLog src/btree/record.c src/gedlib/names.c
