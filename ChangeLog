@@ -11,7 +11,7 @@
 
 	* ChangeLog src/hdrs/version.h src/liflines/main.c:
 
-	Fix locale initialization.
+	Fix locale initialization. Change version to 3.0.20.
 
 2002-09-26 Matt Emmerton
 

@@ -1,6 +1,11 @@
-LifeLines Source Release, Version 3.0.19
+LifeLines Source Release, Version 3.0.20
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
+
+Bug fixes in 3.0.20
+============================
+
+- Fix initialization of locale
 
 New features added in 3.0.19
 ============================
