@@ -108,14 +108,16 @@ fixup (STRING str)
 }
 /*=============================
  * fixtag -- Keep tags in table
+ * returns pointer to table's memory
  *===========================*/
 static STRING
 fixtag (STRING tag)
 {
-	STRING str;
-	if ((str = valueof_str(tagtable, tag))) return str;
-	str = strsave(tag);
-	insert_table_str(tagtable, str, str);
+	STRING str = valueof_str(tagtable, tag);
+	if (!str) {
+		table_insert_string(tagtable, tag, tag);
+		str = valueof_str(tagtable, tag);
+	}
 	return str;
 }
 /*=====================================

@@ -485,22 +485,18 @@ valueof_int (TABLE tab, CNSTRING key, INT defval)
 STRING
 valueof_str (TABLE tab, CNSTRING key)
 {
+	ENTRY entry=0;
 	if (!tab->count || !key) return NULL;
-	if (tab->valtype == TB_GENERIC) {
-		/* new-style table, uses generics */
-		ENTRY entry = fndentry(tab, key);
-		ASSERT(tab->whattofree == -2);
-		if (is_generic_string(&entry->generic))
-			return get_generic_string(&entry->generic);
-		else
+	entry = fndentry(tab, key);
+	if (!entry)
+		return NULL;
+	if (!is_generic_null(&entry->generic)) {
+		if (!is_generic_string(&entry->generic))
 			return NULL;
+		return get_generic_string(&entry->generic);
 	} else {
-		ENTRY entry = fndentry(tab, key);
 		ASSERT(tab->valtype == TB_STR);
-		if (entry)
-			return entry->uval.w;
-		else
-			return NULL;
+		return entry->uval.w;
 	}
 }
 /*===================================

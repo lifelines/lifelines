@@ -1,3 +1,10 @@
+2005-01-24 Perry Rapp
+
+	* ChangeLog src/gedlib/init.c src/gedlib/node.c
+	src/stdlib/table.c
+
+	Convert tagtable into generic table.
+
 2005-01-23 Perry Rapp
 
 	* ChangeLog src/gedlib/date.c src/stdlib/table.c
