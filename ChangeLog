@@ -1,3 +1,11 @@
+2002-02-20 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/indiseq.c hdrs/indiseq.h interp/intrpseq.c
+	win32/msvc6/llines/llines.rc:
+
+	Fix valuesort for indiseqs to correctly handle the fact that
+	there are various types of pvalues.
+
 2002-02-18 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/indiseq.c gedlib/intrface.c hdrs/Makefile.am

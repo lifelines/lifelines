@@ -57,6 +57,8 @@ typedef struct stag {
 #define sprn(s) ((s)->s_prn)
 #define spri(s) ((s)->s_pri)
 
+typedef INT (*ELCMPFNC)(SORTEL, SORTEL, VPTR);
+
 /*=================================================
  * Custom functions for caller-specified handling of values
  * (These cater to the interpreter, which stores PVALUEs)
@@ -89,7 +91,7 @@ typedef void (*SEQ_DELETE_VALUE)(UNION uval, INT valtype);
 /* create a value for ancestors or descendants (may change value type from NUL) */
 typedef UNION (*SEQ_CREATE_GEN_VALUE)(INT gen, INT * valtype);
 /* compare two values */
-typedef INT (*SEQ_COMPARE_VALUES)(UNION uval1, UNION uval2, INT valtype);
+typedef INT (*SEQ_COMPARE_VALUES)(VPTR ptr1, VPTR ptr2, INT valtype);
 /* vtable for handling values in INDISEQ */
 typedef struct indiseq_value_vtable_s
 {
@@ -156,7 +158,7 @@ INDISEQ create_indiseq_sval(void);
 UNION default_copy_value(UNION uval, INT valtype);
 void default_delete_value(UNION uval, INT valtype);
 UNION default_create_gen_value(INT gen, INT * valtype);
-int default_compare_values(UNION uval1, UNION uval2, INT valtype);
+int default_compare_values(VPTR ptr1, VPTR ptr2, INT valtype);
 BOOLEAN delete_indiseq(INDISEQ, STRING, STRING, INT);
 INDISEQ descendent_indiseq(INDISEQ seq);
 INDISEQ difference_indiseq(INDISEQ, INDISEQ);
@@ -191,7 +193,7 @@ INDISEQ node_to_pointers(NODE node);
 INDISEQ node_to_sources(NODE);
 INDISEQ parent_indiseq(INDISEQ);
 INT partition(INT, INT, SORTEL);
-void partition_sort(SORTEL*, INT, INT (*func)(SORTEL, SORTEL));
+void partition_sort(SORTEL*, INT, ELCMPFNC func, VPTR param);
 void preprint_indiseq(INDISEQ, INT len, RFMT rfmt);
 void print_indiseq_element (INDISEQ seq, INT i, STRING buf, INT len, RFMT rfmt);
 INDISEQ refn_to_indiseq(STRING, INT letr, INT sort);

@@ -44,7 +44,7 @@
 
 static UNION pvseq_copy_value(UNION uval, INT valtype);
 static void pvseq_delete_value(UNION uval, INT valtype);
-static INT pvseq_compare_values(UNION uval1, UNION uval2, INT valtype);
+static INT pvseq_compare_values(VPTR ptr1, VPTR ptr2, INT valtype);
 static UNION pvseq_create_gen_value(INT gen, INT * valtype);
 
 /*********************************************
@@ -598,15 +598,27 @@ pvseq_create_gen_value (INT gen, INT * valtype)
 }
 /*=============================================
  * pvseq_compare_values -- Compare two pvalues
- * for sorting (collation)
+ * for sorting (collation) of an indiset
  *============================================*/
 static INT
-pvseq_compare_values (UNION uval1, UNION uval2, INT valtype)
+pvseq_compare_values (VPTR ptr1, VPTR ptr2, INT valtype)
 {
-	PVALUE val1 = uval1.w, val2 = uval2.w;
+	PVALUE val1=ptr1, val2=ptr2;
 	ASSERT(valtype == ISVAL_PTR || valtype == ISVAL_NUL);
 	if (valtype == ISVAL_NUL)
 		return 0;
-/* TODO: compare pvalues */
-	return 0;
+	/* if dissimilar types, we'll use the numerical order of the types */
+	if (ptype(val1) != ptype(val2))
+		return ptype(val1) - ptype(val2);
+
+	/* ok, they are the same types, how do we compare them ? */
+	switch(ptype(val1)) {
+	case PSTRING:
+		return cmpstrloc(pvalue_to_string(val1), pvalue_to_string(val2));
+	case PINT:
+		return pvalue_to_int(val1) - pvalue_to_int(val2);
+	case PFLOAT:
+		return pvalue_to_float(val1) - pvalue_to_float(val2);
+	}
+	return 0; /* TODO: what about other types ? */
 }

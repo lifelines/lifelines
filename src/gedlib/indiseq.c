@@ -87,7 +87,7 @@ extern BOOLEAN opt_finnish;		/* Finnish language support */
 static void append_all_tags(INDISEQ, NODE, STRING tagname, BOOLEAN recurse, BOOLEAN nonptrs);
 static void append_indiseq_impl(INDISEQ seq, STRING key, 
 	STRING name, UNION val, BOOLEAN sure, BOOLEAN alloc);
-static INT canonkey_compare(SORTEL el1, SORTEL el2);
+static INT canonkey_compare(SORTEL el1, SORTEL el2, VPTR param);
 static INT canonkey_order(char c);
 static void check_indiseq_valtype(INDISEQ seq, INT valtype);
 static UNION copyval(INDISEQ seq, UNION uval);
@@ -96,10 +96,10 @@ static void delete_el(INDISEQ seq, SORTEL el);
 static void deleteval(INDISEQ seq, UNION uval);
 static INDISEQ dupseq(INDISEQ seq);
 static STRING get_print_el(INDISEQ, INT i, INT len, RFMT rfmt);
-static INT key_compare(SORTEL, SORTEL);
+static INT key_compare(SORTEL, SORTEL, VPTR param);
 static STRING key_to_name(STRING key);
-static INT name_compare(SORTEL, SORTEL);
-static INT value_str_compare(SORTEL, SORTEL);
+static INT name_compare(SORTEL, SORTEL, VPTR param);
+static INT value_compare(SORTEL el1, SORTEL el2, VPTR param);
 
 /*********************************************
  * local variables
@@ -561,7 +561,7 @@ element_indiseq_ival (INDISEQ seq, INT index, STRING *pkey, INT *pval
  * name_compare -- Compare two names
  *================================*/
 INT
-name_compare (SORTEL el1, SORTEL el2)
+name_compare (SORTEL el1, SORTEL el2, VPTR param)
 {
 	if (!snam(el2)) {
 		if (snam(el1))
@@ -573,14 +573,14 @@ name_compare (SORTEL el1, SORTEL el2)
 		INT rel = namecmp(snam(el1), snam(el2));
 		if (rel) return rel;
 	}
-	return canonkey_compare(el1, el2);
+	return canonkey_compare(el1, el2, param);
 }
 /*================================
  * key_compare -- Compare two keys
  * also used for integer value sort
  *==============================*/
 INT
-key_compare (SORTEL el1, SORTEL el2)
+key_compare (SORTEL el1, SORTEL el2, VPTR param)
 {
 	return spri(el1) - spri(el2);
 }
@@ -606,7 +606,7 @@ canonkey_order (char c)
  * Created: 2001/01/06, Perry Rapp
  *==============================*/
 static INT
-canonkey_compare (SORTEL el1, SORTEL el2)
+canonkey_compare (SORTEL el1, SORTEL el2, VPTR param)
 {
 	char c1=skey(el1)[0], c2=skey(el2)[0];
 	if (c1 == c2)
@@ -614,19 +614,37 @@ canonkey_compare (SORTEL el1, SORTEL el2)
 	return canonkey_order(c1) - canonkey_order(c2);
 }
 /*===================================================
- * value_str_compare -- Compare two values as strings
+ * value_compare -- Compare two values as strings
  *=================================================*/
 static INT
-value_str_compare (SORTEL el1, SORTEL el2)
+value_compare (SORTEL el1, SORTEL el2, VPTR param)
 {
-	PVALUE val1, val2;
-	val1 = sval(el1).w;
-	val2 = sval(el2).w;
-/* TODO: This must be changed to a call thru the vtable
-we need an indiseq that doesn't know about pvalues
-(for dbverify to use, and for modularity)
-*/
-	return cmpstrloc(pvalue_to_string(val1), pvalue_to_string(val2));
+	INDISEQ seq = (INDISEQ)param;
+	INT valtype = IValtype(seq);
+	INT rel = 0;
+	if (valtype == ISVAL_INT) {
+		INT i1=sval(el1).i, i2=sval(el2).i;
+		rel = i1 - i2;
+	} else if (valtype == ISVAL_STR) {
+		STRING str1=sval(el1).w, str2=sval(el2).w;
+		if (!str2) {
+			if (str1)
+				rel = -1;
+		} else if (!str1) {
+			if (str2)
+				rel = 1;
+		} else {
+			rel = strcoll(str1, str2);
+		}
+	} else if (valtype == ISVAL_PTR) {
+		VPTR ptr1=sval(el1).w, ptr2=sval(el2).w;
+		rel = (*IValvtbl(seq)->compare_val_fnc)(ptr1, ptr2, valtype);
+	} else {
+		/* nothing -- fall through to default to canonkey_compare */
+	}
+	if (!rel)
+		rel = canonkey_compare(el1, el2, param);
+	return rel;
 }
 /*==========================================
  * namesort_indiseq -- Sort sequence by name
@@ -650,7 +668,7 @@ namesort_indiseq (INDISEQ seq)
 	FORINDISEQ(seq, el, num)
 		spri(el) = atoi(skey(el) + 1);
 	ENDINDISEQ
-	partition_sort(IData(seq), ISize(seq), name_compare);
+	partition_sort(IData(seq), ISize(seq), name_compare, seq);
 	IFlags(seq) &= ~ALLSORTS;
 	IFlags(seq) |= NAMESORT;
 #ifdef HAVE_SETLOCALE
@@ -671,7 +689,7 @@ keysort_indiseq (INDISEQ seq)
 	FORINDISEQ(seq, el, num)
 		spri(el) = atoi(skey(el) + 1);
 	ENDINDISEQ
-	partition_sort(IData(seq), ISize(seq), key_compare);
+	partition_sort(IData(seq), ISize(seq), key_compare, seq);
 	IFlags(seq) &= ~ALLSORTS;
 	IFlags(seq) |= KEYSORT;
 }
@@ -687,7 +705,7 @@ canonkeysort_indiseq (INDISEQ seq)
 	FORINDISEQ(seq, el, num)
 		spri(el) = atoi(skey(el) + 1);
 	ENDINDISEQ
-	partition_sort(IData(seq), ISize(seq), canonkey_compare);
+	partition_sort(IData(seq), ISize(seq), canonkey_compare, seq);
 	IFlags(seq) &= ~ALLSORTS;
 	IFlags(seq) |= CANONKEYSORT;
 }
@@ -699,9 +717,6 @@ canonkeysort_indiseq (INDISEQ seq)
 void
 valuesort_indiseq (INDISEQ seq, BOOLEAN *eflg)
 {
-	PVALUE val;
-	SORTEL *data;
-	int settype;
 	const char * cur_locale=0;
 	if (IFlags(seq) & VALUESORT) {
 #ifdef HAVE_SETLOCALE
@@ -714,29 +729,7 @@ valuesort_indiseq (INDISEQ seq, BOOLEAN *eflg)
 		return;
 #endif
 	}
-	data = IData(seq);
-	val = sval(*data).w;
-	if ((settype = ptype(val)) != PINT && settype != PSTRING ) {
-		*eflg = TRUE;
-		return;
-	}
-	FORINDISEQ(seq, el, num)
-		if (!(val = sval(el).w) || ptype(val) != settype) {
-			*eflg = TRUE;
-			return;
-		}
-		/*
-		ugly hack: spri() is supposed to be keynum
-		but this is a hack to let us sort on value easily
-		if we got rid of this, we could set spri() to be
-		correct all the time, which would be more convenient
-		*/
-		if (settype == PINT) spri(el) = pvalue_to_int(val);
-	ENDINDISEQ
-	if (settype == PINT)
-		partition_sort(IData(seq), ISize(seq), key_compare);
-	else
-		partition_sort(IData(seq), ISize(seq), value_str_compare);
+	partition_sort(IData(seq), ISize(seq), value_compare, seq);
 	IFlags(seq) &= ~ALLSORTS;
 	IFlags(seq) |= VALUESORT;
 #ifdef HAVE_SETLOCALE
@@ -752,23 +745,28 @@ valuesort_indiseq (INDISEQ seq, BOOLEAN *eflg)
  *=======================================*/
 #define LNULL -1
 static SORTEL *ldata;
-static INT (*lcmp)(SORTEL, SORTEL);
-
+static VPTR lparam;
+static ELCMPFNC lcmp;
+/*
+ *  data:  [I/O] array of els to sort
+ *  len:   [IN]  size of data
+ *  cmp:   [IN]  callback to compare two elements
+ *  param: [IN]  opaque parameter for callback
+ */
 void
-partition_sort (SORTEL *data,   /* array of els to sort */
-                INT len,        /* len of array */
-                INT (*cmp)(SORTEL, SORTEL))   /* compare function */
+partition_sort (SORTEL *data, INT len, ELCMPFNC cmp, VPTR param)
 {
 	ldata = data;
 	lcmp = cmp;
+	lparam = param;
 	llqsort(0, len-1);
 }
 /*======================================
  * llqsort -- Recursive core of quick sort
+ *  sort from left to right
  *====================================*/
 void
-llqsort (INT left,        /* range to sort */
-         INT right)
+llqsort (INT left, INT right)
 {
 	INT pcur = getpivot(left, right);
 	if (pcur != LNULL) {
@@ -782,20 +780,18 @@ llqsort (INT left,        /* range to sort */
  * partition -- Partition around pivot
  *==================================*/
 INT
-partition (INT left,
-           INT right,
-           SORTEL pivot)
+partition (INT left, INT right, SORTEL pivot)
 {
 	INT i = left, j = right;
 	do {
 		SORTEL tmp = ldata[i];
 		ldata[i] = ldata[j];
 		ldata[j] = tmp;
-		while ((*lcmp)(ldata[i], pivot) < 0) {
+		while ((*lcmp)(ldata[i], pivot, lparam) < 0) {
 			ASSERT(i<right); /* or bad compare routine */
 			i++;
 		}
-		while ((*lcmp)(ldata[j], pivot) >= 0) {
+		while ((*lcmp)(ldata[j], pivot, lparam) >= 0) {
 			ASSERT(j>left); /* or bad compare routine */
 			j--;
 		}
@@ -813,7 +809,7 @@ getpivot (INT left,
 	INT left0 = left, rel;
 	for (++left; left <= right; left++) {
 		SORTEL next = ldata[left];
-		if ((rel = (*lcmp)(next, pivot)) > 0) return left;
+		if ((rel = (*lcmp)(next, pivot, lparam)) > 0) return left;
 		if (rel < 0) return left0;
 	}
 	return LNULL;
@@ -2012,23 +2008,11 @@ default_create_gen_value (INT gen, INT * valtype)
  * Created: 2002/02/19, Perry Rapp
  *=========================================================*/
 INT
-default_compare_values (UNION uval1, UNION uval2, INT valtype)
+default_compare_values (VPTR ptr1, VPTR ptr2, INT valtype)
 {
-	if (valtype == ISVAL_INT) {
-		INT i1=uval1.i, i2=uval2.i;
-		if (i1 != i2)
-			return i1 - i2;
-		else
-			return 0;
-	} else if (valtype == ISVAL_STR) {
-		STRING s1=uval1.w, s2=uval2.w;
-		if (!s1 && !s2) return 0;
-		if (s1 && !s2) return -1;
-		if (s2 && !s1) return 1;
-		return strcoll(s1, s2);
-	}
 	/* We don't know how to deal with ptrs here */
-	return (char *)uval1.w - (char *)uval2.w;
+	/* Let's just sort them in memory order */
+	return (INT)ptr1 - (INT)ptr2;
 }
 /*=======================================================
  * calc_indiseq_names -- fill in element names
