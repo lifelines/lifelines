@@ -46,6 +46,7 @@ static CONSOLE_SCREEN_BUFFER_INFO sScreenInfo = {0};
 static COORD cOrigin = {0,0};
 static int redirected_in = 0;
 static int redirected_out = 0;
+static int redir_unflushed = 0; /* used to separate output when redirected */
 
 /* Others Windows environment data */
 
@@ -340,6 +341,7 @@ int wmove(WINDOW *wp, int y, int x)
 	if(y >= wp->_maxy) y = wp->_maxy -1;
 	wp->_curx = x;
 	wp->_cury = y;
+	redir_unflushed = 1;
 	return(0);
 }
 
@@ -375,6 +377,17 @@ screenchar(chtype ch)
 int waddch(WINDOW *wp, chtype ch)
 {
 	int i, j;
+
+	if (redirected_out)
+	{
+		if (redir_unflushed)
+		{
+			putc('\n', stdout);
+			redir_unflushed=0;
+		}
+		putc(ch, stdout);
+		return 0;
+	}
 
 	if(ch == '\r') 
 		wp->_curx = 0;

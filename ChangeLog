@@ -18,6 +18,10 @@
 	Added ask_for_gedcom.
 	Handle input redirection in Win32 console implementation.
 
+	* ChangeLog win32/mycurses.c:
+
+	Handle output redirection in Win32 console implementation.
+
 2002-10-18 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c src/stdlib/path.c:
