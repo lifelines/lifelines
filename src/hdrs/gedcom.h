@@ -633,12 +633,13 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 #define FORCHILDRENx(fam,child,num) \
 	{\
 	NODE __node = find_tag(nchild(fam), "CHIL");\
+	RECORD irec=0;\
 	NODE child=0;\
 	STRING __key=0;\
 	num = 0;\
 	while (__node) {\
 		__key = rmvat(nval(__node));\
-		if (!__key || !(child = key_to_indi(__key))) {\
+		if (!__key || !(irec=key_to_irecord(__key)) || !(child=nztop(irec))) {\
 			++num;\
 			__node = nsibling(__node);\
 			continue;\
@@ -648,6 +649,7 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 
 #define ENDCHILDRENx \
 		}\
+		delref_record(irec);\
 		__node = nsibling(__node);\
 		if (__node && nestr(ntag(__node), "CHIL")) __node = NULL;\
 	}}
@@ -655,7 +657,7 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 #define FORCHILDREN(fam,child,num) \
 	{\
 	NODE __node = find_tag(nchild(fam), "CHIL");\
-	RECORD child=0;\
+	RECORD child=0, irec=0;\
 	STRING __key=0;\
 	num = 0;\
 	while (__node) {\
@@ -665,11 +667,13 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 			__node = nsibling(__node);\
 			continue;\
 		}\
+		irec=child;\
 		++num;\
 		{
 
 #define ENDCHILDREN \
 		}\
+		delref_record(irec);\
 		__node = nsibling(__node);\
 		if (__node && nestr(ntag(__node), "CHIL")) __node = NULL;\
 	}}
@@ -730,8 +734,8 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 		{
 
 #define ENDFAMS \
-		delref_record(frec); \
 		}\
+		delref_record(frec); \
 		}\
 		__node = nsibling(__node);\
 		if (__node && nestr(ntag(__node), "FAMS")) __node = NULL;\
@@ -743,7 +747,7 @@ CNSTRING soundex_get(INT i, CNSTRING name);
  */
 #define FORFAMSS(indi,fam,spouse,num) \
 	{\
-	INT first_sp; \
+	INT first_sp=0; \
 	RECORD frec=0; \
 	NODE __node = FAMS(indi);\
 	NODE __node1=0, spouse=0, fam=0;\
@@ -772,9 +776,9 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 		{
 
 #define ENDFAMSS \
-		delref_record(frec); \
 		}\
 	    }\
+		delref_record(frec); \
 	}\
 	if (__node && nestr(ntag(__node), "FAMS")) __node = NULL;\
 	}}
@@ -785,13 +789,14 @@ CNSTRING soundex_get(INT i, CNSTRING name);
  */
 #define FORFAMCS(indi,fam,fath,moth,num) \
 	{\
+	RECORD frec=0; \
 	NODE __node = FAMC(indi);\
 	NODE fam, fath, moth;\
 	STRING __key=0;\
 	num = 0;\
 	while (__node) {\
 		__key = rmvat(nval(__node));\
-		if (!__key || !(fam = qkey_to_fam(__key))) {\
+	    if (!__key || !(frec=qkey_to_frecord(__key)) || !(fam=nztop(frec))) {\
 			 ++num;\
 			 __node = nsibling(__node);\
 			 continue;\
@@ -803,6 +808,7 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 
 #define ENDFAMCS \
 		}\
+		delref_record(frec); \
 		__node = nsibling(__node);\
 		if (__node && nestr(ntag(__node), "FAMC")) __node = NULL;\
 	}}

@@ -185,7 +185,7 @@ remove_indiseq (INDISEQ seq)
 	for (i = 0; i < n; i++, d++) {
 		stdfree(skey(*d));
 		if (snam(*d)) stdfree(snam(*d));
-		default_delete_value(sval(*d), IValtype(seq));
+		deleteval(seq, sval(*d));
 		if (sprn(*d)) stdfree(sprn(*d));
 		stdfree(*d);
 	}

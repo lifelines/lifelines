@@ -24,6 +24,11 @@
 	Rename pvalue_to_rec to pvalue_to_record. Make records objects
 	and reference counted.
 
+	* ChangeLog src/gedlib/indiseq.c src/hdrs/gedcom.h
+
+	Free records in macros FORCHILDRENx, FORCHILDREN, FORFAMCS.
+	Fix bug in remove_indiseq. Fix multiple delete bug in FORFAMS.
+
 2005-01-24 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c src/gedlib/node.c
