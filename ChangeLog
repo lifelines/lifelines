@@ -1,3 +1,11 @@
+2005-02-13 Stephen Dum
+       * ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf 
+       docs/ll-reportmanual.txt docs/ll-userguide.html docs/ll-userguide.pdf 
+       docs/ll-userguide.txt docs/Makefile.am
+
+       Fix bug generating txt version of manuals and update manuals 
+       for 3.0.44
+
 2005-02-13 Perry Rapp
 
 	* ChangeLog INSTALL build/msvc6/dbverify/dbVerify.rc

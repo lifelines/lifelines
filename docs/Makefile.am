@@ -37,7 +37,7 @@ all: @DOCS_TARGET@
 .xml.html:
 	-jw -f docbook -b html -V nochunks $^
 
-.xml.txt:
+.html.txt:
 	if [ -f /usr/bin/lynx ] ; then \
 	/usr/bin/lynx -force_html -dump -nolist -width=76 $^ > $@ ;\
 	fi
