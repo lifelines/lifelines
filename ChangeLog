@@ -1,3 +1,10 @@
+2004-01-20 Perry Rapp
+
+	* ChangeLog build/msvc6/llines/llinesprj.dsp
+	src/gedlib/lldatabase.c
+
+	Begin interface layer to database backend.
+
 2004-01-18 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c

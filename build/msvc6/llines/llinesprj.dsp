@@ -173,6 +173,10 @@ SOURCE=..\..\..\src\gedlib\date.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\gedlib\dbfuncs.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\liflines\delete.c
 # End Source File
 # Begin Source File
@@ -677,6 +681,10 @@ SOURCE=..\..\..\src\hdrs\date.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\hdrs\dbfuncs.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\hdrs\feedback.h
 # End Source File
 # Begin Source File
@@ -769,6 +777,10 @@ SOURCE=..\..\..\src\hdrs\llstdlib.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\hdrs\log.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\hdrs\menuitem.h
 # End Source File
 # Begin Source File
@@ -798,6 +810,10 @@ SOURCE=..\..\..\src\interp\parse.h
 # Begin Source File
 
 SOURCE=..\..\..\src\hdrs\proptbls.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\pvalue.h
 # End Source File
 # Begin Source File
 
@@ -866,7 +882,7 @@ SOURCE=..\..\..\ChangeLog
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\hdrs\log.h
+SOURCE=..\..\..\src\hdrs\dbfuncsi.h
 # End Source File
 # End Target
 # End Project
