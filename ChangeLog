@@ -18,6 +18,11 @@
 
 	Bugfix to __sort compare function.
 
+	* src/hdrs/win32/curses.h win32/mycurses.c
+
+	(win32 curses) Dynamically size window buffer 
+	(because I want to use a larger window :)).
+
 2003-02-28 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp

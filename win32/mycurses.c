@@ -146,10 +146,15 @@ WINDOW  *newwin(int nlines, int ncols, int begy, int begx)
 	WINDOW *wp;
 	static int wincnt = 0;
 
-	wp = calloc(1, sizeof(WINDOW));
-	wp->_num = wincnt++;
+	/* limit to screen size */
 	if(nlines > LINES) nlines = LINES;
 	if(ncols > COLS) ncols = COLS;
+
+	wp = calloc(1, sizeof(WINDOW));
+	wp->_ylines = nlines;
+	wp->_ycols = ncols;
+	wp->_yarr = calloc(sizeof(char), wp->_ylines * wp->_ycols);
+	wp->_num = wincnt++;
 	wp->_maxy = nlines;
 	wp->_maxx = ncols;
 	if(begy < 0) begy = 0;
@@ -256,6 +261,36 @@ int redrawwin(WINDOW *wp)
 	return wrefresh(wp);
 }
 
+static char atw(WINDOW * wp, int line, int col)
+{
+	if (! (line < wp->_ylines && line >= 0) ) 
+	{
+		return 0;
+	}
+	if (! (col < wp->_ycols && col >= 0) )
+	{
+		return 0;
+	}
+	return wp->_yarr[line * wp->_ycols + col];
+}
+static void setw(WINDOW * wp, int line, int col, char ch)
+{
+	if (! (line < wp->_ylines && line >= 0) ) 
+	{
+		return;
+	}
+	if (! (col < wp->_ycols && col >= 0) )
+	{
+		return;
+	}
+	wp->_yarr[line * wp->_ycols + col] = ch;
+}
+static char * getlinew(WINDOW *wp, int line)
+{
+	if (! (line < wp->_ylines && line >= 0) ) return "";
+	return &wp->_yarr[line * wp->_ycols];
+}
+
 /* refresh virtual image of screen (curscr) */
 int wnoutrefresh(WINDOW *wp)
 {
@@ -274,11 +309,11 @@ int wnoutrefresh(WINDOW *wp)
 				x = wp->_begx + j;
 				if(x < curscr->_maxx)
 				{
-					if(curscr->_y[y][x] != wp->_y[i][j])
+					if(atw(curscr, y, x) != atw(wp, i, j))
 					{
 						if(y < curscr->_mincy) curscr->_mincy = y;
 						if(y > curscr->_maxcy) curscr->_maxcy = y;
-						curscr->_y[y][x] = wp->_y[i][j];
+						setw(curscr, y, x, atw(wp, i, j));
 					}
 				}
 			}
@@ -303,7 +338,7 @@ int doupdate(void)
 		{
 			DWORD dwLen;
 			WriteConsoleOutputCharacter(hStdout,
-				(LPTSTR)(curscr->_y[curscr->_mincy+i]),
+				(LPTSTR)(getlinew(curscr, curscr->_mincy+i)),
 				(DWORD)curscr->_maxx,
 				cLocation, &dwLen);
 		}
@@ -318,7 +353,8 @@ int werase(WINDOW *wp)
 	int i, j;
 
 	for(i = 0; i < LINES; i++)
-		for(j = 0; j < COLS; j++) wp->_y[i][j] = ' ';
+		for(j = 0; j < COLS; j++)
+			setw(wp, i, j, ' ');
 	return(0);
 }
 
@@ -326,7 +362,7 @@ int wclrtoeol(WINDOW *wp)
 {
 	int i;
 	for(i = wp->_curx; i < wp->_maxx; i++)
-		wp->_y[wp->_cury][i] = ' ';
+		setw(wp, wp->_cury, i, ' ');
 	return(0);
 }
 
@@ -400,20 +436,20 @@ int waddch(WINDOW *wp, chtype ch)
 				{
 					for(j = 0; j < wp->_maxx; j++)
 					{
-						ch = wp->_y[i+1][j];
-						wp->_y[i][j] = screenchar(ch);
+						ch = atw(wp, i+1, j);
+						setw(wp, i, j, screenchar(ch));
 					}
 				}
 				i = wp->_maxy-1;
 				for(j = 0; j < wp->_maxx; j++)
-				wp->_y[i][j] = ' ';
+				setw(wp, i, j, ' ');
 			}
 			wp->_cury = wp->_maxy-1;
 		}
 	}
 	else
 	{
-		wp->_y[wp->_cury][wp->_curx] = screenchar(ch);
+		setw(wp, wp->_cury, wp->_curx, screenchar(ch));
 		wp->_curx++;
 		if(wp->_curx >= wp->_maxx)
 		{
@@ -427,13 +463,13 @@ int waddch(WINDOW *wp, chtype ch)
 					{
 						for(j = 0; j < wp->_maxx; j++)
 						{
-							ch = wp->_y[i+1][j];
-							wp->_y[i][j] = screenchar(ch);
+							ch = atw(wp, i+1, j);
+							setw(wp, i, j, screenchar(ch));
 						}
 					}
 					i = wp->_maxy-1;
 					for(j = 0; j < wp->_maxx; j++)
-						wp->_y[i][j] = ' ';
+						setw(wp, i, j, ' ');
 				}
 				else wp->_curx = wp->_maxx-1;
 				wp->_cury = wp->_maxy-1;
@@ -537,18 +573,18 @@ int wborder(WINDOW *wp, chtype ls, chtype rs, chtype ts, chtype bs
 	if (!br) br = ACS_LRCORNER;
 	for(i = 0; i < wp->_maxy; i++)
 	{
-		wp->_y[i][0] = screenchar(ls);
-		wp->_y[i][wp->_maxx-1] = screenchar(rs);
+		setw(wp, i, 0, screenchar(ls));
+		setw(wp, i, wp->_maxx-1, screenchar(rs));
 	}
 	for(i = 0; i < wp->_maxx; i++)
 	{
-		wp->_y[0][i] = screenchar(ts);
-		wp->_y[wp->_maxy-1][i] = screenchar(bs);
+		setw(wp, 0, i, screenchar(ts));
+		setw(wp, wp->_maxy-1, i, screenchar(bs));
 	}
-	wp->_y[0][0] = screenchar(tl);
-	wp->_y[0][wp->_maxx-1] = screenchar(tr);
-	wp->_y[wp->_maxy-1][0] = screenchar(bl);
-	wp->_y[wp->_maxy-1][wp->_maxx-1] = screenchar(br);
+	setw(wp, 0, 0, screenchar(tl));
+	setw(wp, 0, wp->_maxx-1, screenchar(tr));
+	setw(wp, wp->_maxy-1, 0, screenchar(bl));
+	setw(wp, wp->_maxy-1, wp->_maxx-1, screenchar(br));
 	return(0);
 }
 
@@ -606,7 +642,7 @@ int wgetnstr(WINDOW *wp, char *cp, int n)
 				if(echoing)
 				{
 					if(wp->_curx > 0) wp->_curx--;
-					wp->_y[wp->_cury][wp->_curx] = ' ';
+					setw(wp, wp->_cury, wp->_curx, ' ');
 					wrefresh(wp);
 					cCursor.X = wp->_curx + wp->_begx;
 					cCursor.Y = wp->_cury + wp->_begy;

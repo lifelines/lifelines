@@ -11,8 +11,9 @@ extern "C" {
 #include <stdio.h>
 #include <stdarg.h>
 
-#define CUR_MAXLINES 40
-#define CUR_MAXCOLS 120
+/* we truncate screen to no larger than this */
+#define CUR_MAXLINES 80
+#define CUR_MAXCOLS 200
 
 #define CHTYPE unsigned long
 #ifdef	CHTYPE
@@ -27,15 +28,17 @@ extern CHTYPE *acs_map;
 
 struct tag_window
 {
-	short		_cury, _curx;	/* current coordinates */
-	short		_maxy, _maxx;	/* max coordinates */
-	short		_begy, _begx;	/* (0,0) screen coordinates */
-	char		_y[CUR_MAXLINES][CUR_MAXCOLS];	
-	int		_num;		/* window number */
-	int		_scroll;	/* scroll allowed */
-	int		_boxed;		/* a box surrounds the window */
-	int		_mincy;		/* mimimum changed y (for refresh) */
-	int		_maxcy;		/* mimimum changed y (for refresh) */
+	short      _cury, _curx;   /* current coordinates */
+	short      _maxy, _maxx;   /* max coordinates */
+	short      _begy, _begx;   /* (0,0) screen coordinates */
+	int        _ylines;        /* major axis size of _y */
+	int        _ycols;         /* minor axis size of _y */
+	char      *_yarr;          /* [_ylines][_ycols] array */
+	int        _num;           /* window number */
+	int        _scroll;        /* scroll allowed */
+	int        _boxed;		   /* a box surrounds the window */
+	int        _mincy;         /* mimimum changed y (for refresh) */
+	int        _maxcy;         /* mimimum changed y (for refresh) */
 	struct tag_window * _parent;	/* parent window if a sub window */
 };
 
