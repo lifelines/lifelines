@@ -88,6 +88,8 @@ indi_to_list_string (NODE indi,
 	TRANTABLE ttd = tran_tables[MINDS];
 	int hasparents;
 	int hasfamily;
+	if (len>sizeof(scratch))
+		len = sizeof(scratch);
 	if (indi) {
 		ASSERT(name = indi_to_name(indi, ttd, len));
 	} else

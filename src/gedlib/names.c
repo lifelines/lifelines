@@ -38,11 +38,8 @@
 extern BOOLEAN opt_finnish;
 extern BTREE BTR;
 
-char *getasurname();
-
 static INT old = 0;
 static INT codeof(int);
-
 static STRING parts_to_name(STRING*);
 static void name_to_parts(STRING, STRING*);
 static RKEY name2rkey();
@@ -203,11 +200,11 @@ name_hi ()
 	rkey.r_rkey[2] = 'O';
 	return rkey;
 }
-/*=============================
- * getsurname -- Return surname
- *===========================*/
-STRING
-getsurname (STRING name)        /* GEDCOM name */
+/*======================================================
+ * getsurname_impl -- Implement getsurname & getasurname
+ *====================================================*/
+static STRING
+getsurname_impl (STRING name, INT strict)
 {
 	INT c;
 	static unsigned char buffer[3][MAXLINELEN+1];
@@ -220,12 +217,32 @@ getsurname (STRING name)        /* GEDCOM name */
 	if (c == 0) return (STRING) "____";
 	while (iswhite(c = *name++))
 		;
-	if (c == 0 || c == '/' || !isletter(c)) return (STRING) "____";
+	if (c == 0 || c == '/') return (STRING) "____";
+	if (strict && !isletter(c)) return (STRING) "____";
 	*p++ = c;
 	while ((c = *name++) && c != '/')
 		*p++ = c;
 	*p = 0;
 	return surname;
+}
+/*=============================
+ * getsurname -- Return surname
+ *===========================*/
+STRING
+getsurname (STRING name)        /* GEDCOM name */
+{
+	return getsurname_impl(name, TRUE);
+}
+/*=============================
+ * getasurname -- Return a surname without conversion to ____ unless
+ * there is no surname. This is used by the report builtin
+ * function "surname". The original routine getsurname()
+ * is used for soundex purposes.
+ *===========================*/
+STRING
+getasurname (STRING name)   /* GEDCOM name */
+{
+	return getsurname_impl(name, FALSE);
 }
 /*============================================
  * getfinitial -- Return first initial of name

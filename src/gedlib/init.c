@@ -66,8 +66,8 @@ init_lifelines (void)
 	init_caches();
 	init_browse_lists();
 	init_mapping();
-	e = environ_figure_editor();
-	editfile = strsave(environ_figure_tempfile());
+	e = environ_determine_editor();
+	editfile = strsave(environ_determine_tempfile());
 	editstr = (STRING) stdalloc(strlen(e) + strlen(editfile) + 2);
 	sprintf(editstr, "%s %s", e, editfile);
 	llprograms = (STRING) getenv("LLPROGRAMS");
@@ -77,7 +77,6 @@ init_lifelines (void)
 	llarchives = (STRING) getenv("LLARCHIVES");
 	if (!llarchives || *llarchives == 0) llarchives = (STRING) ".";
 	openxref();
-	init_show_module();
 }
 /*===================================
  * close_lifelines -- Close LifeLines

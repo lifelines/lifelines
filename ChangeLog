@@ -1,3 +1,10 @@
+2000-12-24 Perry Rapp <puddle@users.sourceforge.net>
+
+	* getdlib/names.c interp/builtin.c:
+	Moved getasurname from builtin.c to names.c.
+	Misc. cleanup to get rid of compiler warnings.
+	Revised init_screen to return instead of exiting.
+
 2000-12-23 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/init.c liflines/browse.c liflines/pedigree.c
