@@ -285,11 +285,12 @@ INT
 get_decimal (STRING str)
 {
 	INT value, c;
-	if (chartype(c = *str++) != DIGIT) return -1;
+	unsigned char * ustr = str; /* unsigned for chartype */
+	if (chartype(c = *ustr++) != DIGIT) return -1;
 	value = c - '0';
-	if (chartype(c = *str++) != DIGIT) return -1;
+	if (chartype(c = *ustr++) != DIGIT) return -1;
 	value = value*10 + c - '0';
-	if (chartype(c = *str++) != DIGIT) return -1;
+	if (chartype(c = *ustr++) != DIGIT) return -1;
 	value = value*10 + c - '0';
 	return (value >= 256) ? -1 : value;
 }

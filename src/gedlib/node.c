@@ -395,76 +395,77 @@ buffer_to_line (STRING p, INT *plev, STRING *pxref
 {
 	INT lev;
 	static unsigned char scratch[MAXLINELEN+40];
+	unsigned char * up = p; /* unsigned for chartype, iswhite */
 
 	*pmsg = *pxref = *pval = 0;
-	if (!p || *p == 0) {
+	if (!up || *up == 0) {
 		sprintf(scratch, reremp, flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
-	striptrail(p);
-	if (strlen(p) > MAXLINELEN) {
+	striptrail(up);
+	if (strlen(up) > MAXLINELEN) {
 		sprintf(scratch, rerlng, flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
 
 /* Get level number */
-	while (iswhite(*p)) p++;
-	if (chartype(*p) != DIGIT) {
+	while (iswhite(*up)) up++;
+	if (chartype(*up) != DIGIT) {
 		sprintf(scratch, rernlv, flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
-	lev = *p++ - '0';
-	while (chartype(*p) == DIGIT)
-		lev = lev*10 + *p++ - '0';
+	lev = *up++ - '0';
+	while (chartype(*up) == DIGIT)
+		lev = lev*10 + *up++ - '0';
 	*plev = lev;
 
 /* Get cross reference, if there */
-	while (iswhite(*p)) p++;
-	if (*p == 0) {
+	while (iswhite(*up)) up++;
+	if (*up == 0) {
 		sprintf(scratch, rerinc, flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
-	if (*p != '@') goto gettag;
-	*pxref = p++;
-	if (*p == '@') {
+	if (*up != '@') goto gettag;
+	*pxref = up++;
+	if (*up == '@') {
 		sprintf(scratch, rerbln, flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
-	while (*p != '@') p++;
-	p++;
-	if (*p == 0) {
+	while (*up != '@') up++;
+	up++;
+	if (*up == 0) {
 		sprintf(scratch, rerinc, flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
-	if (!iswhite(*p)) {
+	if (!iswhite(*up)) {
 		sprintf(scratch, rernwt, flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
-	*p++ = 0;
+	*up++ = 0;
 
 /* Get tag field */
 gettag:
-	while (iswhite(*p)) p++;
-	if ((INT) *p == 0) {
+	while (iswhite(*up)) up++;
+	if ((INT) *up == 0) {
 		sprintf(scratch, rerinc, flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
-	*ptag = p++;
-	while (!iswhite(*p) && *p != 0) p++;
-	if (*p == 0) return OKAY;
-	*p++ = 0;
+	*ptag = up++;
+	while (!iswhite(*up) && *up != 0) up++;
+	if (*up == 0) return OKAY;
+	*up++ = 0;
 
 /* Get the value field */
-	while (iswhite(*p)) p++;
-	*pval = p;
+	while (iswhite(*up)) up++;
+	*pval = up;
 	return OKAY;
 }
 /*=================================================

@@ -723,7 +723,7 @@ ask_for_string (STRING ttl,
 	rv = get_answer(win, prmpt);
 	if (!rv) return (STRING) "";
 	p = rv;
-	while (chartype(*p) == WHITE)
+	while (chartype((unsigned char)*p) == WHITE)
 		p++;
 	striptrail(p);
 	win = stdout_vis ? stdout_win : main_win;

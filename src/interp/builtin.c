@@ -2248,7 +2248,7 @@ __extractdate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		str = event_to_date(line, NULL, FALSE);
 	else
 		str = nval(line);
-	delete_pvalue(val); // TO DO testing 2001/03/24
+	delete_pvalue(val);
 	extract_date(str, &mod, &da, &mo, &yr, &syr);
 	assign_iden(stab, iident(dvar), create_pvalue(PINT, (VPTR)da));
 	assign_iden(stab, iident(mvar), create_pvalue(PINT, (VPTR)mo));

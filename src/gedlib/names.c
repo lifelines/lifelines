@@ -61,7 +61,7 @@ static void cmpsqueeze(STRING, STRING);
  * local variables
  *********************************************/
 
-static INT old = 0;
+static INT oldsx = 0;
 
 /*===================================================================
  * name records -- Name indexing information is kept in the database
@@ -233,17 +233,18 @@ getsurname_impl (STRING name, INT strict)
 	static unsigned char buffer[3][MAXLINELEN+1];
 	static INT dex = 0;
 	STRING p, surname;
+	unsigned char * uname = name; /* switch to unsigned char for isletter */
 	if (++dex > 2) dex = 0;
 	p = surname = buffer[dex];
-	while ((c = *name++) && c != NAMESEP)
+	while ((c = *uname++) && c != NAMESEP)
 		;
 	if (c == 0) return (STRING) "____";
-	while (iswhite(c = *name++))
+	while (iswhite(c = *uname++))
 		;
 	if (c == 0 || c == NAMESEP) return (STRING) "____";
 	if (strict && !isletter(c)) return (STRING) "____";
 	*p++ = c;
-	while ((c = *name++) && c != NAMESEP)
+	while ((c = *uname++) && c != NAMESEP)
 		*p++ = c;
 	*p = 0;
 	return surname;
@@ -271,79 +272,86 @@ getasurname (STRING name)   /* GEDCOM name */
 }
 /*============================================
  * getfinitial -- Return first initial of name
+ *  name:  [in] GEDCOM name
  *==========================================*/
 INT
-getfinitial (STRING name)       /* GEDCOM name */
+getfinitial (STRING name)
 {
 	INT c;
+	unsigned char * uname = name; /* switch to unsigned char for iswhite */
 	while (TRUE) {
-		while (iswhite(c = *name++))
+		while (iswhite(c = *uname++))
 			;
 		if (isletter(c)) return ll_toupper(c);
 		if (c == 0) return '$';
 		if (c != NAMESEP) return '$';
-		while ((c = *name++) && c != NAMESEP)
+		while ((c = *uname++) && c != NAMESEP)
 			;
 		if (c == 0) return '$';
 	}
 }
 /*==================================================================
- * soundex -- Return SOUNDEX code of name; any case; return Z999 for
- *   problem names
+ * soundex -- Return SOUNDEX code of name; any case; 
+ *  return Z999 for problem names
  * returns static buffer (or constant string)
+ * We assume ll_toupper is a function, not a macro.
+ * This function depends on locale via ll_toupper.
  *================================================================*/
 STRING
 soundex (STRING name)   /* surname */
 {
-	static unsigned char scratch[MAXGEDNAMELEN+2];
-	STRING p = name, q = scratch;
+	static unsigned char scratch[6];
+	unsigned char * up = name; /* use unsigned char for ll_toupper */
+	unsigned char * uq = scratch;
 	INT c, i, j;
-	if (!name || strlen(name) > MAXGEDNAMELEN || eqstr(name, "____"))
+	if (!name || eqstr(name, "____"))
 		return (STRING) "Z999";
-	p = name;
-	q = scratch;
-	while ((c = *p++))
-		*q++ = ll_toupper(c);
-	*q = 0;
-	p = q = &scratch[1];
+	/* always copy first letter directly */
+	*uq++ = ll_toupper(*up++);
 	i = 1;
-	old = 0;
-	while ((c = *p++) && i < 4) {
+	oldsx = 0;
+	while ((c = ll_toupper(*up++)) && i < 4) {
 		if ((j = sxcodeof(c)) == 0) continue;
-		*q++ = j;
+		*uq++ = j;
 		i++;
 	}
 	while (i < 4) {
-		*q++ = '0';
+		*uq++ = '0';
 		i++;
 	}
-	*q = 0;
+	*uq = 0;
 	return scratch;
 }
 /*========================================
  * sxcodeof -- Return letter's SOUNDEX code.
+ *  letter:  should be capitalized letter
+ * returns soundex code, or 0 if not coded
+ * Also returns 0 if same as last call (uses static oldsx variable).
+ * Note that Finnish version uses a different SOUNDEX
+ * scheme here, making databases (name indices)
+ * not portable between Finnish & normal LifeLines.
  *======================================*/
 static INT
 sxcodeof (int letter)
 {
-	int new = 0;
+	int newsx = 0;
 
 	if(opt_finnish) {
 	/* Finnish Language */
 		switch (letter) {
 		case 'B': case 'P': case 'F': case 'V': case 'W':
-			new = '1'; break;
+			newsx = '1'; break;
 		case 'C': case 'S': case 'K': case 'G': case '\337':
 		case 'J': case 'Q': case 'X': case 'Z': case '\307':
-			new = '2'; break;
+			newsx = '2'; break;
 		case 'D': case 'T': case '\320': case '\336':
-			new = '3'; break;
+			newsx = '3'; break;
 		case 'L':
-			new = '4'; break;
+			newsx = '4'; break;
 		case 'M': case 'N': case '\321':
-			new = '5'; break;
+			newsx = '5'; break;
 		case 'R':
-			new = '6'; break;
+			newsx = '6'; break;
 		default:	/* new stays zero */
 			break;
 		}
@@ -351,37 +359,38 @@ sxcodeof (int letter)
 		/* English Language (Default) */
 		switch (letter) {
 		case 'B': case 'P': case 'F': case 'V':
-			new = '1'; break;
+			newsx = '1'; break;
 		case 'C': case 'S': case 'K': case 'G':
 		case 'J': case 'Q': case 'X': case 'Z':
-			new = '2'; break;
+			newsx = '2'; break;
 		case 'D': case 'T':
-			new = '3'; break;
+			newsx = '3'; break;
 		case 'L':
-			new = '4'; break;
+			newsx = '4'; break;
 		case 'M': case 'N':
-			new = '5'; break;
+			newsx = '5'; break;
 		case 'R':
-			new = '6'; break;
+			newsx = '6'; break;
 		default:	/* new stays zero */
 			break;
 		}
 	}
   
-	if (new == 0) {
-		old = 0;
+	if (newsx == 0) {
+		oldsx = 0;
 		return 0;
 	}
-	if (new == old) return 0;
-	old = new;
-	return new;
+	if (newsx == oldsx) return 0;
+	oldsx = newsx;
+	return newsx;
 }
 /*=========================================
  * add_name -- Add new entry to name record
+ *  name:  [in] person's name
+ *  key:   [in] person's INDI key
  *=======================================*/
 BOOLEAN
-add_name (STRING name,  /* person's name */
-          STRING key)   /* person's INDI key */
+add_name (STRING name, STRING key)
 {
 	STRING rec, p;
 	INT i, len, off;
@@ -425,10 +434,11 @@ add_name (STRING name,  /* person's name */
 }
 /*=============================================
  * remove_name -- Remove entry from name record
+ *  name: [in] person's name
+ *  key:  [in] person's INDI key
  *===========================================*/
 BOOLEAN
-remove_name (STRING name,       /* person's name */
-             STRING key)        /* person's INDI key */
+remove_name (STRING name, STRING key)
 {
 	STRING rec, p;
 	INT i, len, off;
@@ -492,10 +502,11 @@ replace_name (STRING old,       /* person's old name */
 #endif
 /*=========================================================
  * exactmatch -- Check if first name is contained in second
+ *  partial:  [in] name from user
+ *  complete: [in] GEDCOM name
  *=======================================================*/
 static BOOLEAN
-exactmatch (STRING partial,             /* name from user */
-            STRING complete)    /* GEDCOM name */
+exactmatch (STRING partial, STRING complete)
 {
 	char part[MAXGEDNAMELEN+2], comp[MAXGEDNAMELEN+2], *p, *q;
 	BOOLEAN okay;
@@ -541,13 +552,15 @@ piecematch (STRING part,
  * squeeze -- Squeeze string to superstring, string of uppercase,
  *   0-terminated words, ending with another 0; non-letters not
  *   copied; eg., `Anna /Van Cott/' maps to `ANNA\0VANCOTT\0\0'.
+ *  in:   [in] string of words
+ *  out:  [out] superstring of words
  *=============================================================*/
 static void
-squeeze (STRING in,     /* string of words */
-         STRING out)    /* superstring of words */
+squeeze (STRING in, STRING out)
 {
 	INT c;
-	while ((c = *in++) && chartype(c) != LETTER)
+	unsigned char * uin = in; /* unsigned for chartype etc */
+	while ((c = *uin++) && chartype(c) != LETTER)
 		;
 	if (c == 0) {
 		*out++ = 0; *out = 0;
@@ -555,7 +568,7 @@ squeeze (STRING in,     /* string of words */
 	}
 	while (TRUE) {
 		*out++ = ll_toupper(c);
-		while ((c = *in++) && c != NAMESEP && chartype(c) != WHITE) {
+		while ((c = *uin++) && c != NAMESEP && chartype(c) != WHITE) {
 			if (chartype(c) == LETTER) *out++ = ll_toupper(c);
 		}
 		if (c == 0) {
@@ -563,7 +576,7 @@ squeeze (STRING in,     /* string of words */
 			return;
 		}
 		*out++ = 0;
-		while ((c = *in++) && chartype(c) != LETTER)
+		while ((c = *uin++) && chartype(c) != LETTER)
 			;
 		if (c == 0) {
 			*out++ = 0; *out = 0;
@@ -571,7 +584,6 @@ squeeze (STRING in,     /* string of words */
 		}
 	}
 }
-
 /*====================================================
  * get_names -- Find all persons who match name or key
  *==================================================*/
@@ -632,8 +644,7 @@ get_names (STRING name,
  * namecmp -- Compare two GEDCOM names
  *==================================*/
 int
-namecmp (STRING name1,
-         STRING name2)
+namecmp (STRING name1, STRING name2)
 {
 	unsigned char sqz1[MAXGEDNAMELEN], sqz2[MAXGEDNAMELEN];
 	STRING p1 = sqz1, p2 = sqz2;
@@ -659,18 +670,20 @@ namecmp (STRING name1,
 }
 /*===========================================================
  * cmpsqueeze -- Squeeze GEDCOM name to superstring of givens
+ *  in:  [in] input string
+ *  out: [out] output string
  *=========================================================*/
 void
-cmpsqueeze (STRING in,
-            STRING out)
+cmpsqueeze (STRING in, STRING out)
 {
 	INT c;
-	while ((in = nextpiece(in))) {
+	unsigned char * uin = in; /* unsigned for iswhite */
+	while ((uin = nextpiece(uin))) {
 		while (TRUE) {
-			c = *in++;
+			c = *uin++;
 			if (iswhite(c) || c == NAMESEP || c == 0) {
 				*out++ = 0;
-				--in;
+				--uin;
 				break;
 			}
 			*out++ = c;
@@ -688,16 +701,17 @@ givens (STRING name)
 	INT c;
 	static unsigned char scratch[MAXGEDNAMELEN+1];
 	STRING out = scratch;
-	while ((name = nextpiece(name))) {
+	unsigned char * uname = name; /* unsigned for iswhite */
+	while ((uname = nextpiece(uname))) {
 		while (TRUE) {
-			if ((c = *name++) == 0) {
+			if ((c = *uname++) == 0) {
 				if (*(out-1) == ' ') --out;
 				*out = 0;
 				return scratch;
 			}
 			if (iswhite(c) || c == NAMESEP) {
 				*out++ = ' ';
-				--name;
+				--uname;
 				break;
 			}
 			*out++ = c;
@@ -714,12 +728,13 @@ static STRING
 nextpiece (STRING in)
 {
 	int c;
+	unsigned char * uin = in; /* unsigned for iswhite */
 	while (TRUE) {
-		while (iswhite(c = *in++))
+		while (iswhite(c = *uin++))
 			;
 		if (c == 0) return NULL;
 		if (c != NAMESEP) return --in;
-		while ((c = *in++) && c != NAMESEP)
+		while ((c = *uin++) && c != NAMESEP)
 			;
 		if (c == 0) return NULL;
 	}
@@ -777,24 +792,25 @@ name_to_parts (STRING name, STRING *parts)
 	static unsigned char scratch[MAXGEDNAMELEN+1];
 	STRING p = scratch;
 	INT c, i = 0;
+	unsigned char * uname = name; /* switch to unsigned char for iswhite */
 	ASSERT(strlen(name) <= MAXGEDNAMELEN);
 	for (i = 0; i < MAXPARTS; i++)
 		parts[i] = NULL;
 	i = 0;
 	while (TRUE) {
-		while (iswhite(c = (unsigned char)*name++))
+		while (iswhite(c = *uname++))
 			;
 		if (c == 0) return;
 		ASSERT(i < MAXPARTS);
 		parts[i++] = p;
 		*p++ = c;
 		if (c == NAMESEP) {
-			while ((c = *p++ = (unsigned char)*name++) && c != NAMESEP)
+			while ((c = *p++ = *uname++) && c != NAMESEP)
 				;
 			if (c == 0) return;
 			*p++ = 0;
 		} else {
-			while ((c = (unsigned char)*name++) && !iswhite(c) && c != NAMESEP)
+			while ((c = *uname++) && !iswhite(c) && c != NAMESEP)
 				*p++ = c;
 			*p++ = 0;
 			if (c == 0) return;
@@ -831,27 +847,30 @@ upsurname (STRING name)
 {
 	static unsigned char scratch[MAXGEDNAMELEN+1];
 	STRING p = scratch;
+	unsigned char * uname = name; /* unsigned for ll_toupper */
 	INT c;
-	while ((c = *p++ = *name++) && c != NAMESEP)
+	while ((c = *p++ = *uname++) && c != NAMESEP)
 		;
 	if (c == 0) return scratch;
-	while ((c = *name++) && c != NAMESEP)
+	while ((c = *uname++) && c != NAMESEP)
 		*p++ = ll_toupper(c);
 	*p++ = c;
 	if (c == 0) return scratch;
-	while ((c = *p++ = *name++))
+	while ((c = *p++ = *uname++))
 		;
 	return scratch;
 }
 /*==================================================
  * manip_name - Convert GEDCOM name to various forms
+ *  name:    [in] name
+ *  tt:      [in] translation table
+ *  caps:    [in] make surname into caps?
+ *  regorder [in] regular order? (not surname first)
+ *  len:     [in] max name length
+ * returns static buffer
  *================================================*/
 STRING
-manip_name (STRING name,        /* name */
-            TRANTABLE tt,       /* translation table */
-            BOOLEAN caps,       /* surname in caps? */
-            BOOLEAN regorder,   /* regular order? (not surname first) */
-            INT len)            /* max name length */
+manip_name (STRING name, TRANTABLE tt, BOOLEAN caps, BOOLEAN regorder, INT len)
 {
 	static unsigned char scratch[MAXGEDNAMELEN+1];
 	if (!name || *name == 0) return NULL;
@@ -897,26 +916,28 @@ name_surfirst (STRING name)
 }
 /*================================
  * id_by_key -- Find name from key
+ *  name:  [in]
+ *  pkeys:  [out]
  *==============================*/
 STRING *
-id_by_key (STRING name,
-           STRING **pkeys)
+id_by_key (STRING name, STRING **pkeys)
 {
-	STRING rec, str, p = name;
+	STRING rec, str;
+	unsigned char * up = name; /* unsigned for chartype */
 	static unsigned char kbuf[MAXGEDNAMELEN];
 	static unsigned char nbuf[MAXGEDNAMELEN];
 	static STRING kaddr, naddr;
 	INT i = 0, c, len;
 	NODE indi;
-	while ((c = *p++) && chartype(c) == WHITE)
+	while ((c = *up++) && chartype(c) == WHITE)
 		;
 	if (c == 0) return NULL;
 	if (c != 'I' && c != 'i' && chartype(c) != DIGIT) return NULL;
-	if (chartype(c) != DIGIT) c = *p++;
+	if (chartype(c) != DIGIT) c = *up++;
 	if (chartype(c) != DIGIT) return NULL;
 	kbuf[i++] = 'I';
 	kbuf[i++] = c;
-	while ((c = *p++) && chartype(c) == DIGIT)
+	while ((c = *up++) && chartype(c) == DIGIT)
 		kbuf[i++] = c;
 	if (c != 0) return NULL;
 	kbuf[i] = 0;

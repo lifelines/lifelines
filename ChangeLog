@@ -1,3 +1,12 @@
+2001-07-10 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/charmaps.c gedlib/misc.c gedlib/names.c
+	gedlib/node.c interp/builtin.c liflines/screen.c
+	stdlib/stdstrng.c:
+	Changed some string dereferences to unsigned char, where result will
+	be passed to isxxxx family. Improved soundex routine (avoided copying
+	entire name first).
+
 2001-07-08 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/names.c stdlib/environ.c:

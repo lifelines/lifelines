@@ -103,6 +103,8 @@ chartype (INT c)
 }
 /*=================================
  * iswhite -- Check for white space
+ * Note: input character is passed to isspace, so it
+ *  should be in unsigned char range.
  *===============================*/
 BOOLEAN
 iswhite (INT c)
@@ -170,8 +172,9 @@ upper (STRING str)
 {
 	static unsigned char scratch[MAXLINELEN+1];
 	STRING p = scratch;
+	unsigned char * ustr = str; /* unsigned for ll_toupper */
 	INT c, i=0;
-	while ((c = *str++) && (++i < MAXLINELEN+1))
+	while ((c = *ustr++) && (++i < MAXLINELEN+1))
 		*p++ = ll_toupper(c);
 	*p = '\0';
 	return scratch;
@@ -183,7 +186,7 @@ STRING
 capitalize (STRING str)
 {
 	STRING p = lower(str);
-	*p = ll_toupper(*p);
+	*p = ll_toupper((unsigned char)*p);
 	return p;
 }
 /*==========================================
