@@ -1,6 +1,7 @@
 /* 
    Copyright (c) 1991-1999 Thomas T. Wetmore IV
 
+
    Permission is hereby granted, free of charge, to any person
    obtaining a copy of this software and associated documentation
    files (the "Software"), to deal in the Software without
@@ -141,22 +142,25 @@ ask_for_file_worker (STRING mode,
                      STRING ext,
                      DIRECTION direction)
 {
-	FILE *fp, *fopenpath();
+	FILE *fp;
 	STRING fname;
 	char fnamebuf[512];
 	int elen, flen;
 	
-	if(ext && *ext)
-	  sprintf(fnamebuf, "enter file name (*%s)", ext);
-	else {
+	if (ISNULL(ext)) {
 	  ext = NULL;	/* a null extension is the same as no extension */
 	  strcpy(fnamebuf, "enter file name: ");
+	}
+	else {
+	  sprintf(fnamebuf, "enter file name (*%s)", ext);
 	}
 
 	if (direction==INPUT)
 		fname = ask_for_input_filename(ttl, path, fnamebuf);
 	else
 		fname = ask_for_output_filename(ttl, path, fnamebuf);
+
+	if (ISNULL(fname)) return NULL;
 
 	if (pfname) *pfname = fname;
 
@@ -167,20 +171,23 @@ ask_for_file_worker (STRING mode,
 		ext = NULL;	/* the file name has the extension already */
 	}
 
-	if (!fname || *fname == 0) return NULL;
-	if (!path || *path == 0) {
+	if (ISNULL(path)) {
 	    	fp = NULL;
 		if(ext) {
 		  sprintf(fnamebuf, "%s%s", fname, ext);
 		  fp = fopen(fnamebuf, mode);
 		  if(fp && pfname) *pfname = strsave(fnamebuf);
-		}
-		if((fp == NULL) && ((fp = fopen(fname, mode)) == NULL)) {
-			mprintf_error(nofopn, fname);
-			return NULL;
+		} else {
+                  fp = fopen(fname, mode);
+		  if(fp && pfname) *pfname = fname;
+                }
+                if (fp == NULL) {
+	 	  mprintf_error(nofopn, fname);
+		  return NULL;
 		}
 		return fp;
 	}
+
 	if (!(fp = fopenpath(fname, mode, path, ext, pfname))) {
 	    	if(pfname && (*pfname == NULL)) *pfname = fname;
 		mprintf_error(nofopn, fname);
