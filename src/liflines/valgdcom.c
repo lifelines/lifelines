@@ -947,7 +947,7 @@ set_import_log (STRING logpath)
 }
 /*============================================================
  * scan_header -- Scan header of GEDCOM record
- *  collecting metadata as found
+ *  collecting metadata as found (metadatatab is a FREEBOTH tab)
  * Created: 2003-02-03 (Perry Rapp)
  *==========================================================*/
 BOOLEAN

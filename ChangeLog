@@ -67,6 +67,13 @@
 
 	Changing some remove_table calls to destroy_table.
 
+	* ChangeLog src/gedlib/xlat.c src/hdrs/interp.h
+	src/hdrs/vtable.h src/interp/builtin.c src/interp/pvalalloc.c
+	src/interp/pvalue.c src/liflines/import.c
+	src/liflines/valgdcom.c src/stdlib/table.c
+
+	Changing more remove_table calls to destroy_table.
+
 2003-02-22 Perry Rapp
 
 	* ChangeLog build/msvc6/llexec/llexec.dsp

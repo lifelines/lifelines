@@ -144,7 +144,7 @@ do_import (IMPORT_FEEDBACK ifeed, FILE *fp)
 	BOOLEAN succeeded=FALSE;
 	STRING str,unistr=0;
 	ZSTR zerr=0;
-	TABLE metadatatab = create_table_old();
+	TABLE metadatatab = create_table(FREEBOTH);
 	STRING gdcodeset=0;
 
 /* Open and validate GEDCOM file */
@@ -298,7 +298,7 @@ TODO: why were these here ?
 
 end_import:
 	zs_free(&zerr);
-	remove_table(metadatatab, FREEBOTH);
+	destroy_table(metadatatab);
 	strfree(&gdcodeset);
 	return succeeded;
 }

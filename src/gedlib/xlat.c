@@ -371,7 +371,7 @@ xl_load_all_dyntts (CNSTRING ttpath)
 	free_dyntts();
 	if (!ttpath ||  !ttpath[0])
 		return;
-	f_dyntts = create_table_old();
+	f_dyntts = create_table(FREEBOTH);
 	dirs = (STRING)stdalloc(strlen(ttpath)+2);
 	/* find directories in dirs & delimit with zeros */
 	chop_path(ttpath, dirs);
@@ -541,7 +541,7 @@ free_dyntts (void)
 				zero_dyntt(dyntt);
 			}
 		}
-		remove_table(f_dyntts, FREEBOTH);
+		destroy_table(f_dyntts);
 		f_dyntts = 0;
 	}
 }

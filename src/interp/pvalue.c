@@ -259,8 +259,9 @@ clear_pvalue (PVALUE val)
 			TABLE table = pvalue_to_table(val);
 			--table->refcnt;
 			if (!table->refcnt) {
+				/* TODO: this will go away when pvalues go away */
 				traverse_table(table, table_pvcleaner);
-				remove_table(table, FREEKEY);
+				destroy_table(table);
 			}
 		}
 		return;
