@@ -46,8 +46,6 @@
 
 #ifdef HAVE_GETOPT_H
 #include <getopt.h>
-#else
-#include "getopt.h"
 #endif
 
 extern STRING idldir, nodbse, crdbse, nocrdb, iddbse, usage;
@@ -306,6 +304,11 @@ main (INT argc,
 		main_menu();
 	close_lifelines();
 	code=0;
+
+/*
+ * MTE:  Here's were we would free() or deallocate() the dup'd strings
+ * returned by strsave() and assigned to lldatabases and btreepath
+ */
 
 finish:
 	if (code) /* if error, give user a second to read it */
