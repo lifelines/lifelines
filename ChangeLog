@@ -4,6 +4,10 @@
 
 	Free nodes which were leaked in cache.
 
+	* ChangeLog src/tools/dbverify.c
+
+	dbverify: convert tables to generic tables.
+
 2005-02-07 Perry Rapp
 
 	* ChangeLog lines.cfg src/interp/pvalue.c src/interp/symtab.c
