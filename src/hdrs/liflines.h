@@ -63,9 +63,6 @@ NODE remove_dupes(NODE, NODE);
 NODE merge_two_indis(NODE, NODE, BOOLEAN);
 NODE merge_two_fams(NODE, NODE);
 
-void message(STRING);
-void llwprintf(STRING, ...);
-void mprintf(STRING, ...);
 void final_cleanup(void);
 void do_edit(void);
 

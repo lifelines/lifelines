@@ -1,3 +1,7 @@
+2000-11-06  Petter Reinholdtsen <pere@td.org.uit.no>
+
+	* hdrs/liflines.h: Remove prototypes already in "screen.h".
+	
 2000-11-05    <marc@nozell.com>
 
 	* liflines/newrecs.c liflines/show.c liflines/advedit.c
