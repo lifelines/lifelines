@@ -38,31 +38,19 @@
 
 #define SS (STRING)
 
-STRING badind = SS "You cannot edit the INDI line in a person record.";
-STRING badfmc = SS "You cannot edit the FAMC line in a person record.";
-STRING badfms = SS "You cannot edit the FAMS lines in a person record.";
-STRING badfam = SS "You cannot edit the FAM line in a family record.";
-STRING badhsb = SS "You cannot edit the HUSB line in a family record.";
-STRING badwif = SS "You cannot edit the WIFE line in a family record.";
-STRING badchl = SS "You cannot edit the CHIL lines in a family record.";
-STRING bademp = SS "The record is empty.";
-STRING badin0 = SS "The record does not begin with an INDI line.";
-STRING badfm0 = SS "The record does not begin with a FAM line";
-STRING badsr0 = SS "The record does not begin with a SOUR line";
-STRING badev0 = SS "The record does not begin with an EVEN line";
-STRING badmul = SS "The record contains multiple level 0 lines.";
-STRING badnnm = SS "This person record does not have a name line.";
-STRING badenm = SS "This person record has bad GEDCOM name syntax.";
-STRING badpsx = SS "You cannot change the sex of a parent.";
-STRING badirf = SS "This person's REFN key is already in use.";
+extern STRING badind,badfmc,badfms,badfam,badhsb,badwif,badchl;
+extern STRING bademp,badin0,badfm0,badsr0,badev0,badothr0;
+extern STRING badmul,badnnm,badenm,badpsx,badirf;
 
 /*===================================
  * valid_indi -- Validate person tree
+ *  indi1:  [IN]  person to validate
+ *  pmsg:   [OUT] error message, if any
+ *  orig:   [IN]  person to match - may be NULL
+ * rtn: FALSE for bad
  *=================================*/
 BOOLEAN
-valid_indi (NODE indi1, /* person to validate */
-            STRING *pmsg,       /* error message, if any */
-            NODE indi0) /* person to match - may be NULL */
+valid_indi (NODE indi1, STRING *pmsg, NODE orig)
 {
 	NODE name1, refn1, sex1, body1, famc1, fams1, node;
 	NODE name0, refn0, sex0, body0, famc0, fams0;
@@ -93,10 +81,10 @@ valid_indi (NODE indi1, /* person to validate */
 		}
 	}
 	name0 = refn0 = sex0 = body0 = famc0 = fams0 = NULL;
-	if (indi0)
-		split_indi(indi0, &name0, &refn0, &sex0, &body0, &famc0,
+	if (orig)
+		split_indi(orig, &name0, &refn0, &sex0, &body0, &famc0,
 		    &fams0);
-	if (indi0 && !iso_nodes(indi1, indi0, FALSE, FALSE)) {
+	if (orig && !iso_nodes(indi1, orig, FALSE, FALSE)) {
 		*pmsg = badind; 
 		goto bad1;
 	}
@@ -116,29 +104,30 @@ valid_indi (NODE indi1, /* person to validate */
 	}
 	ukey = (refn1 ? nval(refn1) : NULL);
 	get_refns(ukey, &num, &keys, 'I');
-	if (num > 1 || (num == 1 && (!indi0 ||
+	if (num > 1 || (num == 1 && (!orig ||
 	    nestr(keys[0], rmvat(nxref(indi1)))))) {
 		*pmsg = badirf;
 		goto bad1;
 	}
-	if (indi0)
-		join_indi(indi0, name0, refn0, sex0, body0, famc0, fams0);
+	if (orig)
+		join_indi(orig, name0, refn0, sex0, body0, famc0, fams0);
 	join_indi(indi1, name1, refn1, sex1, body1, famc1, fams1);
 	return TRUE;
 bad1:
-	if (indi0)
-		join_indi(indi0, name0, refn0, sex0, body0, famc0, fams0);
+	if (orig)
+		join_indi(orig, name0, refn0, sex0, body0, famc0, fams0);
 bad2:
 	join_indi(indi1, name1, refn1, sex1, body1, famc1, fams1);
 	return FALSE;
 }
 /*===============================
  * valid_fam -- Validate FAM tree
+ *  fam1,  [IN]  family to validate
+ *  pmsg:  [OUT] error message, if any
+ *  fam0:  [IN]  family to match - may be NULL
  *=============================*/
 BOOLEAN
-valid_fam (NODE fam1,           /* family to validate */
-           STRING *pmsg,        /* error message, if any */
-           NODE fam0)           /* family to match - may be NULL */
+valid_fam (NODE fam1, STRING *pmsg, NODE fam0)
 {
 	NODE refn0, husb0, wife0, chil0, body0;
 	NODE refn1, husb1, wife1, chil1, body1;
@@ -203,10 +192,10 @@ valid_name (STRING name)
 }
 /*======================================
  * valid_node_type -- Validate top-level node tree
- * NODE node:     node to validate
- * char ntype:    I/F/S/E/X
- * STRING *pmsg,  error message, if any
- * NODE node0:    node node to match (may be null)
+ *  node:   [IN]  node to validate
+ *  ntype:  [IN]  I/F/S/E/X
+ *  pmsg,   [OUT] error message, if any
+ *  orig:   [IN]  node to match (may be null)
  *====================================*/
 BOOLEAN
 valid_node_type (NODE node, char ntype, STRING *pmsg, NODE node0)
@@ -221,13 +210,14 @@ valid_node_type (NODE node, char ntype, STRING *pmsg, NODE node0)
 }
 /*======================================
  * valid_sour_tree -- Validate SOUR tree
+ *  node:  [IN]  source to validate 
+ *  pmsg:  [OUT] error message, if any 
+ *  orig:  [IN]  SOUR node to match 
  *====================================*/
 BOOLEAN
-valid_sour_tree (NODE node,     /* source to validate */
-                 STRING *pmsg,  /* error message, if any */
-                 NODE node0)    /* SOUR node to match */
+valid_sour_tree (NODE node, STRING *pmsg, NODE orig)
 {
-	node0 = NULL;		/* keep compiler happy */
+	orig = NULL;         /* keep compiler happy */
 	*pmsg = NULL;
 	if (!node) {
 		*pmsg = bademp;
@@ -241,13 +231,14 @@ valid_sour_tree (NODE node,     /* source to validate */
 }
 /*======================================
  * valid_even_tree -- Validate EVEN tree
+ *  node:  [IN]  source to validate
+ *  pmsg,  [OUT] error message, if any
+ *  orig:  [IN]  EVEN node to match
  *====================================*/
 BOOLEAN
-valid_even_tree (NODE node,     /* source to validate */
-                 STRING *pmsg,  /* error message, if any */
-                 NODE node0)    /* EVEN node to match */
+valid_even_tree (NODE node, STRING *pmsg, NODE orig)
 {
-	node0 = NULL;		/* keep compiler happy */
+	orig = NULL;         /* keep compiler happy */
 	*pmsg = NULL;
 	if (!node) {
 		*pmsg = bademp;
@@ -261,17 +252,23 @@ valid_even_tree (NODE node,     /* source to validate */
 }
 /*======================================
  * valid_othr_tree -- Validate OTHR tree
+ *  node:  [IN]  source to validate
+ *  pmsg,  [OUT] error message, if any
+ *  orig:  [IN]  OTHR node to match
  *====================================*/
 BOOLEAN
-valid_othr_tree (NODE node,     /* source to validate */
-                 STRING *pmsg,  /* error message, if any */
-                 NODE node0)    /* OTHR node to match */
+valid_othr_tree (NODE node, STRING *pmsg, NODE orig)
 {
-	node0 = NULL;			/* keep compiler happy */
+	orig = NULL;         /* keep compiler happy */
 	*pmsg = NULL;
 	if (!node) {
 		*pmsg = bademp;
   		return FALSE;
+	}
+	if (eqstr("INDI", ntag(node)) || eqstr("FAM", ntag(node))
+		|| eqstr("EVEN", ntag(node)) || eqstr("SOUR", ntag(node))) {
+		*pmsg = badothr0;
+		return FALSE;
 	}
 	return TRUE;
 }

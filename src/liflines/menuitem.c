@@ -179,7 +179,9 @@ static MenuItem f_MenuItemPointers = { "$$  List references", "$$", CMD_POINTERS
 static MenuItem f_MenuItemHistoryBack = { "^b  History/back", "^b", CMD_HISTORY_BACK };
 static MenuItem f_MenuItemHistoryFwd = { "^f  History/fwd", "^f", CMD_HISTORY_FWD };
 static MenuItem f_MenuItemHistoryList = { "^l  History list", "^l", CMD_HISTORY_LIST };
-static MenuItem f_MenuItemAddOther = { "%o  Add other ref", "%o", CMD_ADD_OTHER_REF };
+static MenuItem f_MenuItemAddSour = { "%s  Add source", "%s", CMD_ADD_SOUR };
+static MenuItem f_MenuItemAddEven = { "%e  Add event", "%e", CMD_ADD_EVEN };
+static MenuItem f_MenuItemAddOthr = { "%o  Add other", "%o", CMD_ADD_OTHR };
 
 
 static MenuItem f_MenuItemBrowseFamily = { "B  Browse new family", "B", CMD_BROWSE_FAM };
@@ -204,7 +206,9 @@ static MenuItem * f_MenuPerson[] =
 	&f_MenuItemRemoveAsChild,
 	&f_MenuItemNewPerson,
 	&f_MenuItemNewFamily,
-	&f_MenuItemAddOther,
+	&f_MenuItemAddSour,
+	&f_MenuItemAddEven,
+	&f_MenuItemAddOthr,
 	&f_MenuItemSwapFamilies,
 	&f_MenuItemTandem,
 	&f_MenuItemZipBrowse,
@@ -249,6 +253,9 @@ static MenuItem * f_MenuFamily[] =
 	&f_MenuItemMother,
 	&f_MenuItemChildren,
 	&f_MenuItemNewPerson,
+	&f_MenuItemAddSour,
+	&f_MenuItemAddEven,
+	&f_MenuItemAddOthr,
 	&f_MenuItemAddSpouse,
 	&f_MenuItemAddChild,
 	&f_MenuItemRemoveSpouseFrom,
@@ -357,6 +364,9 @@ static MenuItem * f_Menu2Family[] =
 static MenuItem * f_MenuAux[] =
 {
 	&f_MenuItemEdit,
+	&f_MenuItemAddSour,
+	&f_MenuItemAddEven,
+	&f_MenuItemAddOthr,
 	&f_MenuItemScrollUp,
 	&f_MenuItemScrollDown,
 	&f_MenuItemEnlargeMenu,

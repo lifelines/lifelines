@@ -1,4 +1,15 @@
-2001-11-09 Perry Rapp <puddle@users.sourceforge.net>
+2001-11-12 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/messages.c gedlib/node.c gedlib/valid.c
+	hdrs/feedback.h hdrs/menuitem.h liflines/browse.c
+	liflines/llinesi.h liflines/menuitem.c liflines/newrecs.c
+	liflines/screen.c:
+
+	Add prompts in %o, and add analogous %s and %n. Put all three
+	into all browse screens.
+	Fix bugs in fam_to_first_chil,fam_to_last_chil,indi_to_next_sib,indi_to_prev_sib.
+
+2001-11-11 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/gstrings.c hdrs/interp.h interp/eval.c
 	interp/interp.c interp/pvalue.c interp/yacc.y liflines/ask.c

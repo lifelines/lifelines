@@ -88,6 +88,7 @@ NOD0 refn_scan(void);
 /* screen.c */
 void adjust_menu_height(INT delta);
 void cycle_menu(void);
+void lock_status_msg(BOOLEAN lock);
 void toggle_menu(void);
 
 /* show.c */

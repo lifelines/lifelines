@@ -113,7 +113,7 @@ extern STRING mn_utsave,mn_utread,mn_utkey,mn_utkpers,mn_utdbstat,mn_utmemsta;
 extern STRING mn_utplaces,mn_utusropt;
 extern STRING mn_xxbsour, mn_xxbeven, mn_xxbothr, mn_xxasour, mn_xxesour;
 extern STRING mn_xxaeven, mn_xxeeven, mn_xxaothr, mn_xxeothr;
-extern STRING chlist,vwlist,errlist;
+extern STRING chlist,vwlist,errlist,defttl;
 
 extern STRING mn_uttl;
 extern STRING mn_xttl;
@@ -198,7 +198,7 @@ int winx=0, winy=0; /* user specified window size */
 static LIST msg_list = 0;
 static BOOLEAN msg_flag = FALSE; /* need to show msg list */
 static BOOLEAN viewing_msgs = FALSE; /* user is viewing msgs */
-
+static BOOLEAN suppress_std_msg = FALSE; /* to hold status message */
 /*********************************************
  * local & exported function definitions
  * body of module
@@ -270,7 +270,7 @@ term_screen (void)
  * paint_main_screen -- Paint main screen
  *=====================================*/
 void
-paint_main_screen(void)
+paint_main_screen (void)
 {
 	WINDOW *win = main_win;
 	INT row;
@@ -885,6 +885,7 @@ INT
 choose_from_array (STRING ttl, INT no, STRING *pstrngs)
 {
 	BOOLEAN selecting = TRUE;
+	if (!ttl) ttl=defttl;
 	return choose_or_view_array(ttl, no, pstrngs, selecting);
 }
 /*============================================
@@ -1564,7 +1565,7 @@ interact (WINDOW *win, STRING str, INT screen)
 		if (c == EOF) c = 'q';
 		nocrmode();
 		now_showing = FALSE;
-		if (!progrunning)
+		if (!progrunning && !suppress_std_msg)
 			place_std_msg();
 		if (str) { /* traditional */
 			for (i = 0; i < n; i++) {
@@ -1799,8 +1800,18 @@ shw_array_of_strings (WINDOW *win, STRING *strings, INT len, INT top, INT cur)
 		mvwaddstr(win, i, 1, empstr71);
 	row = 2;
 	for (i = top, j = 0; j < VIEWABLE && i < len; i++, j++) {
-		if (i == cur) mvwaddch(win, row, 3, '>');
-		mvwaddstr(win, row, 4, strings[i]);
+		/* for short lists, we show leading numbers */
+		if (len<10) {
+			char numstr[12]="";
+			INT offset=0;
+			snprintf(numstr, sizeof(numstr), "%d: ", i+1);
+			if (i == cur) mvwaddch(win, row, 3, '>');
+			mvwaddstr(win, row, 4, numstr);
+			mvwaddstr(win, row, 4+strlen(numstr), strings[i]);
+		} else {
+			if (i == cur) mvwaddch(win, row, 3, '>');
+			mvwaddstr(win, row, 4, strings[i]);
+		}
 		row++;
 	}
 }
@@ -1813,10 +1824,12 @@ shw_array_of_strings (WINDOW *win, STRING *strings, INT len, INT top, INT cur)
  *  selectable: [IN] FALSE for view-only
  *============================================*/
 INT
-array_interact(WINDOW *win, STRING ttl, INT len, STRING *strings, BOOLEAN selectable)
+array_interact (WINDOW *win, STRING ttl, INT len, STRING *strings, BOOLEAN selectable)
 {
 	INT top = 0, cur = 0, row;
+	STRING responses = len<10 ? "jkiq123456789" : "jkiq";
 	STRING promptline = selectable ? chlist : vwlist;
+	char c;
 	while (TRUE) {
 		werase(win);
 		BOX(win, 0, 0);
@@ -1826,7 +1839,7 @@ array_interact(WINDOW *win, STRING ttl, INT len, STRING *strings, BOOLEAN select
 		mvwaddstr(win, row, 2, promptline);
 		shw_array_of_strings(win, strings, len, top, cur);
 		wrefresh(win);
-		switch (interact(win, "jkiq", -1)) {
+		switch (c=interact(win, responses, -1)) {
 		case 'j':
 			if (cur >= len - 1) break;
 			cur++;
@@ -1840,6 +1853,18 @@ array_interact(WINDOW *win, STRING ttl, INT len, STRING *strings, BOOLEAN select
 		case 'i':
 			if (selectable)
 				return cur;
+			break;
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
+			if (c - '1' < len)
+				return c - '1';
 			break;
 		case 'q':
 		default:
@@ -2331,7 +2356,7 @@ void end_action (void)
  * clear_msgs -- delete msg list
  * Created: 2001/11/11, Perry Rapp
  *=======================================*/
-void
+static void
 clear_msgs (void)
 {
 	if (msg_list) {
@@ -2339,4 +2364,13 @@ clear_msgs (void)
 		msg_list = 0;
 	}
 	msg_flag = FALSE;
+}
+/*=========================================
+ * lock_status_msg -- temporarily hold status message
+ * Created: 2001/11/11, Perry Rapp
+ *=======================================*/
+void
+lock_status_msg (BOOLEAN lock)
+{
+	suppress_std_msg = lock;
 }

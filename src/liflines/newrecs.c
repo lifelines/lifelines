@@ -49,6 +49,7 @@ extern BTREE BTR;
 extern STRING cfradd, cfeadd, cfxadd, rredit, eredit, xredit;
 extern STRING cfrupt, cfeupt, cfxupt, gdrmod, gdemod, gdxmod;
 extern STRING idredt, ideedt, idxedt, duprfn, ronlya, ronlye;
+extern STRING nofopn;
 
 /*********************************************
  * local function prototypes
@@ -129,16 +130,16 @@ add_other (void)
 	if (!str || !str[0])
 		str = xstr;
 	return add_record(str, xredit, 'X', cfxadd);
-
 }
 /*================================================
  * add_record -- Add record to database by editing
+ *  recstr:  [IN] default record
+ *  redt:    [IN] re-edit message
+ *  ntype,   [IN] S, E, or X
+ *  cfrm:    [IN] confirm message
  *==============================================*/
 NODE
-add_record (STRING recstr,  /* default record */
-            STRING redt,    /* re-edit message */
-            char ntype,     /* S, E, or X */
-            STRING cfrm)    /* confirm message */
+add_record (STRING recstr, STRING redt, char ntype, STRING cfrm)
 {
 	FILE *fp;
 	NODE node=0, refn;
@@ -165,7 +166,10 @@ add_record (STRING recstr,  /* default record */
 	}
 
 /* Create template for user to edit */
-	if (!(fp = fopen(editfile, LLWRITETEXT))) return FALSE;
+	if (!(fp = fopen(editfile, LLWRITETEXT))) {
+		msg_error(nofopn, editfile);
+		return FALSE;
+	}
 	fprintf(fp, "%s\n", recstr);
 
 /* Have user edit new record */
@@ -174,17 +178,17 @@ add_record (STRING recstr,  /* default record */
 	while (TRUE) {
 		node = file_to_node(editfile, tti, &msg, &emp);
 		if (!node) {
-			if (ask_yes_or_no_msg(msg, redt)) {
+			if (ask_yes_or_no_msg(msg, redt)) { /* yes, edit again */
 				do_edit();
 				continue;
 			} 
 			break;
 		}
-		if (!valid_node_type(node, ntype, &msg, NULL)) {
-			if (ask_yes_or_no_msg(msg, redt)) {
+		if (!valid_node_type(node, ntype, &msg, NULL)) { /* invalid */
+			if (ask_yes_or_no_msg(msg, redt)) { /* yes, edit again */
 				do_edit();
 				continue;
-			}
+			} /* otherwise leave rtn==-1 for cancel */
 			free_nodes(node);
 			node = NULL;
 			break;

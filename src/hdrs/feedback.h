@@ -49,7 +49,7 @@ void shutdown_ui(BOOLEAN pause);
  edit routines for tables for user options & abbreviations */
 void do_edit(void);
 
-/* editvtab calls this */
+/* msg boxes */
 BOOLEAN ask_yes_or_no_msg(STRING, STRING);
 
 #endif /* _FEEDBACK_H */

@@ -63,6 +63,7 @@ extern STRING ronlye, ronlya, idhbrs, idwbrs;
 extern STRING id1sbr, id2sbr, id1fbr, id2fbr, id1cbr, id2cbr;
 extern STRING id1hbr, id2hbr, id1wbr, id2wbr;
 extern STRING spover, idfamk, nohist, idhist;
+extern STRING tag2long2cnc,newrecis,autoxref,editcur,gotonew,staycur;
 
 /*********************************************
  * local enums & defines
@@ -76,7 +77,8 @@ extern STRING spover, idfamk, nohist, idhist;
  *********************************************/
 
 /* alphabetical */
-static void add_other_ref(NODE node);
+static NODE add_new_rec_maybe_ref(NODE node, char ntype);
+static void autoadd_xref(NODE node, NODE newnode);
 static INT browse_aux(NODE *pindi1, NODE *pindi2, NODE *pfam1,
 	NODE *pfam2, INDISEQ *pseq);
 static INT browse_indi(NODE *pindi1, NODE *pindi2, NODE *pfam1,
@@ -283,6 +285,7 @@ pick_create_new_family (NODE indi, NODE save, STRING * addstrings)
 }
 /*==========================================
  * display_indi -- Show indi in current mode
+ *  preserving indi in cache
  *========================================*/
 static INT
 display_indi (NODE indi, INT mode, BOOLEAN reuse)
@@ -332,6 +335,7 @@ browse_indi_modes (NODE *pindi1,
 	NODE node2;
 	INDISEQ seq = NULL;
 	TRANTABLE ttd = tran_tables[MINDS];
+	char c2;
 
 	addstrings[0] = crtcfm;
 	addstrings[1] = crtsfm;
@@ -346,10 +350,12 @@ browse_indi_modes (NODE *pindi1,
 			show_reset_scroll();
 		}
 		history_record(indi);
+			/* display & get input, preserving INDI in cache */
 		c = display_indi(indi, indimode, reuse);
 		/* last keynum & mode, so can tell if changed */
 		nkeyp = indi_to_keynum(indi);
 		indimodep = indimode;
+reprocess_indi_cmd: /* so one command can forward to another */
 		reuse = FALSE; /* don't reuse display unless specifically set */
 		if (c != CMD_NEWFAMILY) save = NULL;
 		if (handle_menu_cmds(c, &reuse))
@@ -535,8 +541,19 @@ browse_indi_modes (NODE *pindi1,
 			if (!node) break;
 			*pfam1 = node;
 			return BROWSE_FAM;
-		case CMD_ADD_OTHER_REF: /* add other reference */
-			add_other_ref(indi);
+		case CMD_ADD_SOUR: /* add source */
+		case CMD_ADD_EVEN: /* add event */
+		case CMD_ADD_OTHR: /* add other */
+			c2 = (c==CMD_ADD_SOUR ? 'S' : (c2==CMD_ADD_EVEN ? 'E' : 'X'));
+			node = add_new_rec_maybe_ref(indi, c2);
+			if (node == indi) {
+				c = CMD_EDIT;
+				goto reprocess_indi_cmd; /* forward to edit */
+			}
+			if (node) {
+				*pindi1 = node;
+				return BROWSE_UNK;
+			}
 			break;
 		case CMD_TANDEM:	/* Switch to tandem browsing */
 			node = ask_for_indi(idp2br, NOCONFIRM, NOASK1);
@@ -636,30 +653,33 @@ static INT
 browse_aux (NODE *pindi1, NODE *pindi2, NODE *pfam1,
 	NODE *pfam2, INDISEQ *pseq)
 {
-	NODE node = *pindi1;
-	STRING key = rmvat(nxref(node));
+	NODE aux = *pindi1;
+	STRING key = rmvat(nxref(aux));
 	char ntype = key[0];
 	INT i, c;
 	BOOLEAN reuse=FALSE; /* flag to reuse same display strings */
 	INT nkeyp, auxmode, auxmodep;
-	NODE node2;
+	NODE node;
+	char c2;
+
 	auxmode = 'x';
 
-	if (!node) return BROWSE_QUIT;
+	if (!aux) return BROWSE_QUIT;
 	show_reset_scroll();
 	nkeyp = 0;
 	auxmodep = auxmode;
 
 	while (TRUE) {
-		if (node_to_keynum(ntype, node) != nkeyp 
+		if (node_to_keynum(ntype, aux) != nkeyp 
 			|| auxmode != auxmodep) {
 			show_reset_scroll();
 		}
-		history_record(node);
-		c = display_aux(node, auxmode, reuse);
+		history_record(aux);
+		c = display_aux(aux, auxmode, reuse);
 		/* last keynum & mode, so can tell if changed */
-		nkeyp = node_to_keynum(ntype, node);
+		nkeyp = node_to_keynum(ntype, aux);
 		auxmodep = auxmode;
+reprocess_aux_cmd:
 		reuse = FALSE; /* don't reuse display unless specifically set */
 		if (handle_menu_cmds(c, &reuse))
 			continue;
@@ -676,20 +696,34 @@ browse_aux (NODE *pindi1, NODE *pindi2, NODE *pfam1,
 		{
 		case CMD_EDIT:
 			switch(ntype) {
-			case 'S': edit_source(node); break;
-			case 'E': edit_event(node); break;
-			case 'X': edit_other(node); break;
+			case 'S': edit_source(aux); break;
+			case 'E': edit_event(aux); break;
+			case 'X': edit_other(aux); break;
+			}
+			break;
+		case CMD_ADD_SOUR: /* add source */
+		case CMD_ADD_EVEN: /* add event */
+		case CMD_ADD_OTHR: /* add other */
+			c2 = (c==CMD_ADD_SOUR ? 'S' : (c==CMD_ADD_EVEN ? 'E' : 'X'));
+			node = add_new_rec_maybe_ref(aux, c2);
+			if (node == aux) {
+				c = CMD_EDIT;
+				goto reprocess_aux_cmd; /* forward to edit */
+			}
+			if (node) {
+				*pindi1 = node;
+				return BROWSE_UNK;
 			}
 			break;
 		case CMD_NOTES:	/* Browse to notes */
-			node2 = choose_note(node, nonote, idnote);
-			if (node2)
-				node = node2;
+			node = choose_note(aux, nonote, idnote);
+			if (node)
+				aux = node;
 			break;
 		case CMD_POINTERS:	/* Browse to references */
-			node2 = choose_pointer(node, noptr, idptr);
-			if (node2) {
-				*pindi1 = node2;
+			node = choose_pointer(aux, noptr, idptr);
+			if (node) {
+				*pindi1 = node;
 				return BROWSE_UNK;
 			}
 			break;
@@ -697,7 +731,7 @@ browse_aux (NODE *pindi1, NODE *pindi2, NODE *pfam1,
 			{
 				i = xref_next(ntype, nkeyp);
 				if (i)
-					node = keynum_to_node(ntype, i);
+					aux = keynum_to_node(ntype, i);
 				else message(norec);
 				break;
 			}
@@ -705,7 +739,7 @@ browse_aux (NODE *pindi1, NODE *pindi2, NODE *pfam1,
 			{
 				i = xref_prev(ntype, nkeyp);
 				if (i)
-					node = keynum_to_node(ntype, i);
+					aux = keynum_to_node(ntype, i);
 				else message(norec);
 				break;
 			}
@@ -885,6 +919,7 @@ browse_fam (NODE *pindi1,
 	STRING key, name;
 	char scratch[100];
 	TRANTABLE ttd = tran_tables[MINDS];
+	char c2;
 
 	if (!fam) return BROWSE_QUIT;
 	show_reset_scroll();
@@ -901,6 +936,7 @@ browse_fam (NODE *pindi1,
 		/* last keynum & mode, so can tell if changed */
 		nkeyp = fam_to_keynum(fam);
 		fammodep = fammode;
+reprocess_fam_cmd: /* so one command can forward to another */
 		reuse = FALSE; /* don't reuse display unless specifically set */
 		if (c != CMD_ADDCHILD && c != CMD_ADDSPOUSE)
 			save = NULL;
@@ -997,6 +1033,20 @@ browse_fam (NODE *pindi1,
 			break;
 		case CMD_NEWPERSON:	/* Add person to database */
 			save = nztop(add_indi_by_edit());
+			break;
+		case CMD_ADD_SOUR: /* add source */
+		case CMD_ADD_EVEN: /* add event */
+		case CMD_ADD_OTHR: /* add other */
+			c2 = (c==CMD_ADD_SOUR ? 'S' : (c==CMD_ADD_EVEN ? 'E' : 'X'));
+			node = add_new_rec_maybe_ref(fam, c2);
+			if (node == fam) {
+				c = CMD_EDIT;
+				goto reprocess_fam_cmd; /* forward to edit */
+			}
+			if (node) {
+				*pindi1 = node;
+				return BROWSE_UNK;
+			}
 			break;
 		case CMD_ADDCHILD:	/* Add child to family */
 			pick_add_child_to_fam(fam, save);
@@ -1419,24 +1469,64 @@ handle_history_cmds (INT c, NODE * pindi1)
 	return 0; /* unhandled */
 }
 /*==================================================
- * add_other_ref -- add a new referred other record
- *  invokes editor to create new node, then adds a
- *  1 level reference to it (in the passed in node,
- *   as the last child node)
+ * add_new_rec_maybe_ref -- add a new record
+ *  and optionally create a reference to it from
+ *  current record
+ * rtns: returns new node if user wants to browse to it
+ *       current node to edit it (current node)
+ *       NULL to just stay where we are
  * Created: 2001/04/06, Perry Rapp
  *================================================*/
-static void
-add_other_ref (NODE node)
+static NODE
+add_new_rec_maybe_ref (NODE node, char ntype)
 {
-	NODE newnode = add_other();
-	NODE find, prev; /* used finding last child of node */
-	NODE xref; /* new xref added to end of node */
+	NODE newnode=NULL;
+	STRING choices[4] = { autoxref,editcur,gotonew,staycur };
+	char title[60];
+	INT rtn;
+	/* create new node of requested type */
+	if (ntype=='E') 
+		newnode=add_event();
+	else if (ntype=='S')
+		newnode=add_source();
+	else
+		newnode=add_other();
+	/* bail if user cancelled creation */
 	if (!newnode)
-		return;
+		return NULL;
+	/* sanity check for long tags in others */
 	if (strlen(ntag(newnode))>40) {
-		/* TO DO - message saying tag too long - add ref yourself */
-		return;
+		msg_info(tag2long2cnc);
+		return newnode;
 	}
+	/* now ask the user how to connect the new node */
+	sprintf(title, newrecis, nxref(newnode));
+	msg_info(title);
+	lock_status_msg(TRUE);
+	rtn = choose_from_array(NULL, 4, choices);
+	lock_status_msg(FALSE);
+	switch(rtn) {
+	case 0: 
+		autoadd_xref(node, newnode);
+		return NULL;
+	case 1:
+		return node; /* convention - return current node for edit */
+	case 2:
+		return newnode;
+	default:
+		return NULL;
+	}
+}
+/*==================================================
+ * autoadd_xref -- add trailing xref from existing node
+ *  to new node
+ * Created: 2001/11/11, Perry Rapp
+ *================================================*/
+static void
+autoadd_xref (NODE node, NODE newnode)
+{
+	NODE xref; /* new xref added to end of node */
+	NODE find, prev; /* used finding last child of node */
 	xref = create_node(NULL, ntag(newnode), nxref(newnode), node);
 	if (!(find = nchild(node))) {
 		nchild(node) = xref;

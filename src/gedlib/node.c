@@ -1037,8 +1037,8 @@ fam_to_spouse (NODE fam,
     	INT num;
 	if (!fam) return NULL;
 	FORHUSBS(fam, husb, num)
-	  if(husb != indi) return(husb);
-        ENDHUSBS
+		if(husb != indi) return(husb);
+	ENDHUSBS
 	FORWIFES(fam, wife, num)
 	  if(wife != indi) return(wife);
 	ENDWIFES
@@ -1055,16 +1055,19 @@ fam_to_first_chil (NODE node)
 	return key_to_indi(rmvat(nval(node)));
 }
 /*=================================================
- * fam_to_last_chil -- Return first child of family
+ * fam_to_last_chil -- Return last child of family
  *===============================================*/
 NODE
 fam_to_last_chil (NODE node)
 {
 	NODE prev = NULL;
 	if (!node) return NULL;
+	/* find first CHIL in fam */
 	if (!(node = find_tag(nchild(node), "CHIL"))) return NULL;
+	/* cycle thru all remaining nodes, keeping most recent CHIL node */
 	while (node) {
-		prev = node;
+		if (eqstr(ntag(node),"CHIL"))
+			prev = node;
 		node = nsibling(node);
 	}
 	return key_to_indi(rmvat(nval(prev)));
@@ -1091,18 +1094,20 @@ indi_to_moth (NODE node)
 NODE
 indi_to_prev_sib (NODE indi)
 {
-	NODE fam, prev, chil;
+	NODE fam, prev, node;
 	if (!indi) return NULL;
 	if (!(fam = indi_to_famc(indi))) return NULL;
 	prev = NULL;
-	chil = CHIL(fam);
-	while (chil) {
-		if (eqstr(nxref(indi), nval(chil))) {
+	node = CHIL(fam);
+	/* loop thru all nodes following first child, keeping most recent CHIL */
+	while (node) {
+		if (eqstr(nxref(indi), nval(node))) {
 			if (!prev) return NULL;
 			return key_to_indi(rmvat(nval(prev)));
 		}
-		prev = chil;
-		chil = nsibling(chil);
+		if (eqstr(ntag(node),"CHIL"))
+			prev = node;
+		node = nsibling(node);
 	}
 	return NULL;
 }
@@ -1112,17 +1117,21 @@ indi_to_prev_sib (NODE indi)
 NODE
 indi_to_next_sib (NODE indi)
 {
-	NODE fam, chil;
+	NODE fam, node;
+	BOOLEAN found;
 	if (!indi) return NULL;
 	if (!(fam = indi_to_famc(indi))) return NULL;
-	chil = CHIL(fam);
-	while (chil) {
-		if (eqstr(nxref(indi), nval(chil))) {
-			chil = nsibling(chil);
-			if (!chil) return NULL;
-			return key_to_indi(rmvat(nval(chil)));
+	node = CHIL(fam);
+	found = FALSE;  /* until we find indi */
+	while (node) {
+		if (!found) {
+			if (eqstr(nxref(indi), nval(node)))
+				found = TRUE;
+		} else {
+			if (eqstr(ntag(node),"CHIL"))
+				return key_to_indi(rmvat(nval(node)));
 		}
-		chil = nsibling(chil);
+		node = nsibling(node);
 	}
 	return NULL;
 }

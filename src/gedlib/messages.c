@@ -274,6 +274,27 @@ STRING dspa_dea    = SS "d. ";
 STRING dspa_bur    = SS "bur. ";
 STRING dspa_chbr   = SS "cb. ";
 
+/* editing errors */
+STRING badind      = SS "You cannot edit the INDI line in a person record.";
+STRING badfmc      = SS "You cannot edit the FAMC line in a person record.";
+STRING badfms      = SS "You cannot edit the FAMS lines in a person record.";
+STRING badfam      = SS "You cannot edit the FAM line in a family record.";
+STRING badhsb      = SS "You cannot edit the HUSB line in a family record.";
+STRING badwif      = SS "You cannot edit the WIFE line in a family record.";
+STRING badchl      = SS "You cannot edit the CHIL lines in a family record.";
+STRING bademp      = SS "The record is empty.";
+STRING badin0      = SS "The record does not begin with an INDI line.";
+STRING badfm0      = SS "The record does not begin with a FAM line.";
+STRING badsr0      = SS "The record does not begin with a SOUR line.";
+STRING badev0      = SS "The record does not begin with an EVEN line.";
+STRING badothr0    = SS "INDI, FAM, SOUR, EVEN records may not be other records.";
+STRING badmul      = SS "The record contains multiple level 0 lines.";
+STRING badnnm      = SS "This person record does not have a name line.";
+STRING badenm      = SS "This person record has bad GEDCOM name syntax.";
+STRING badpsx      = SS "You cannot change the sex of a parent.";
+STRING badirf      = SS "REFN key is already in use.";
+STRING tag2long2cnc= SS "Tag is too long to connect automatically.";
+
 /* menus */
 STRING mtitle      = SS "LifeLines %s - Genealogical DB and Programming System";
 STRING cright      = SS "Copyright(c) 1991 to 1996, by T. T. Wetmore IV";
@@ -296,6 +317,14 @@ STRING askyny      = SS "yY";
 STRING chlist      = SS "Commands:   j Move down     k Move up    i Select     q Quit";
 STRING vwlist      = SS "Commands:   j Move down     k Move up    q Quit";
 STRING errlist     = SS "Messages:";
+
+/* adding new xref */
+STRING defttl      = SS "Please choose from the following options:";
+STRING newrecis    = SS "New record is %s";
+STRING autoxref    = SS "Insert xref automatically at bottom of current record.";
+STRING editcur     = SS "Edit current record now to add xref manually.";
+STRING gotonew     = SS "Browse new record (without adding xref).";
+STRING staycur     = SS "Return to current record (without adding xref).";
 
 /* misc */
 STRING unksps      = SS "Spouse unknown";
