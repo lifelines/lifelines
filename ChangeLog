@@ -9,6 +9,10 @@
 
 	Replace wcslen if missing (Darwin).
 
+	* ChangeLog src/interp/builtin.c:
+
+	Fix enqueue bug introduced recently by Perry.
+
 2002-12-16 Perry Rapp
 
 	* ChangeLog src/gedlib/xlat.c:

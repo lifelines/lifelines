@@ -1787,7 +1787,7 @@ __enqueue (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	list = pvalue_to_list(val);
 	delete_pvalue(val);
-	push_list(list, el);
+	enqueue_list(list, el);
 	return NULL;
 }
 /*========================================+
