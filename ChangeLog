@@ -19,6 +19,10 @@
 	Add names to all uiwindows (for debugging convenience).
 	Fix uninitialized bug in report pronoun function.
 
+	* ChangeLog build/msvc6/llines/llines.rc
+
+	Update versions in win32 to today's date.
+
 2003-02-18 Perry Rapp
 
 	* ChangeLog src/gedlib/xlat.c
