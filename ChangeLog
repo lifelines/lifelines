@@ -14,6 +14,11 @@
 
 	Cleanup warnings.
 
+	* ChangeLog NEWS configure.in build/msvc6/llines/llines.rc
+	build/rpm/lifelines.spec src/hdrs/version.h:
+
+	Making version 3.0.23.
+
 2002-12-15 Perry Rapp
 
 	* ChangeLog src/gedlib/codesets.c src/gedlib/init.c

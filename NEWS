@@ -1,6 +1,20 @@
-LifeLines Source Release, Version 3.0.22
+LifeLines Source Release, Version 3.0.23
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
+
+
+New features added in 3.0.23
+============================
+
+- internal use of UTF-8 has significant improvements
+- report functions upper & lower fixed for UTF-8
+- ANSEL GEDCOMs may be read (using UTF-8)
+- HTML reports using character entities may be written (using UTF-8)
+
+Bug fixes in 3.0.23
+============================
+
+- Fixed crash when using $$ to browse to references
 
 New features added in 3.0.22
 ============================
@@ -9,7 +23,8 @@ New features added in 3.0.22
 - New option R to choose from list of GEDCOM input files
 - Config file variables
 - Danish translation
-- Simpler win32 binary package (includes gettext & iconv dlls, and translations unzip into place)
+- Simpler win32 binary package (includes gettext & iconv dlls, and
+  translations unzip into place)
 
 New features added in 3.0.21
 ============================
