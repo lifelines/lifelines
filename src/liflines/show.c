@@ -37,16 +37,18 @@
 #include "gedcom.h"
 #include "indiseq.h"
 #include "cache.h"
+#include "liflines.h"
 
 extern BOOLEAN opt_nocb;	/* TRUE to suppress display of cb. data */
-extern LIST_LINES;		/* person info display lines above list */
-extern PED_LINES;		/* pedigree lines */
+extern INT LIST_LINES;		/* person info display lines above list */
+extern INT PED_LINES;		/* pedigree lines */
 extern INT listbadkeys;
 extern char badkeylist[];
 
+STRING indi_to_title();
 STRING person_display();
-STRING key_of_record();
-STRING indi_to_title ();
+static void add_child_line(INT, NODE);
+static void add_spouse_line (INT, NODE, NODE);
 
 #define MAXOTHERS 30
 typedef char LINESTRING[80];
@@ -59,7 +61,7 @@ static INT Solen = 0;
 /*===============================================
  * init_display_indi -- Initialize display person
  *=============================================*/
-init_display_indi (pers)
+void init_display_indi (pers)
 NODE pers;
 {
 	INT nsp, nch, num, nm;
@@ -129,7 +131,7 @@ NODE pers;
 /*==============================
  * show_person -- Display person
  *============================*/
-show_person (pers, row, hgt)
+void show_person (pers, row, hgt)
 NODE pers;	/* person */
 INT row;	/* start row */
 INT hgt;	/* avail rows */
@@ -162,7 +164,7 @@ INT hgt;	/* avail rows */
 /*=============================================
  * add_spouse_line -- Add spouse line to others
  *===========================================*/
-add_spouse_line (num, indi, fam)
+static void add_spouse_line (num, indi, fam)
 INT num;
 NODE indi, fam;
 {
@@ -175,7 +177,7 @@ NODE indi, fam;
 /*===========================================
  * add_child_line -- Add child line to others
  *=========================================*/
-add_child_line (num, indi)
+void add_child_line (num, indi)
 INT num;
 NODE indi;
 {
@@ -188,7 +190,7 @@ NODE indi;
 /*==============================================
  * init_display_fam -- Initialize display family
  *============================================*/
-init_display_fam (fam)
+void init_display_fam (fam)
 NODE fam;	/* family */
 {
 	NODE husb;
@@ -249,7 +251,7 @@ NODE fam;	/* family */
 /*===================================
  * show_long_family -- Display family
  *=================================*/
-show_long_family (fam, row, hgt)
+void show_long_family (fam, row, hgt)
 NODE fam;
 INT row, hgt;
 {
@@ -283,7 +285,7 @@ INT row, hgt;
 /*====================================
  * show_short_family -- Display family
  *==================================*/
-show_short_family (fam, row, hgt)
+void show_short_family (fam, row, hgt)
 NODE fam;
 INT row;
 INT hgt;
@@ -337,7 +339,7 @@ INT hgt;
 /*================================================
  * show_pedigree -- Show person in pedigree format
  *==============================================*/
-show_pedigree (indi)
+void show_pedigree (indi)
 NODE indi;
 {
 	char s[300];			/* used by mvwprintw replacement */
@@ -497,7 +499,7 @@ INT len;
 	if (fam) {
 		evt = fam_to_event(fam, ttd, "MARR", "m. ", 35, TRUE);
 		if (!evt && !opt_nocb) {
-			if (chld = fam_to_first_chil(fam)) {
+			if ((chld = fam_to_first_chil(fam))) {
 				evt = indi_to_event(chld, ttd, "BIRT", "cb. ",
 				    35, TRUE);
 				if (!evt) evt = indi_to_event(chld, ttd, "CHR",
@@ -538,7 +540,7 @@ static STRING empstr = (STRING) "                                               
  * show_list - Show name list in list screen
  *========================================*/
 #define VIEWABLE 13
-show_list (seq, top, cur, mark)
+void show_list (seq, top, cur, mark)
 INDISEQ seq;
 INT top, cur, mark;
 {
@@ -573,7 +575,7 @@ INT top, cur, mark;
 /*========================================================
  * show_aux_display -- Show source, event or other record
  *======================================================*/
-show_aux_display (node, row, hgt)
+void show_aux_display (node, row, hgt)
 NODE node;
 INT row, hgt;
 {
@@ -602,7 +604,7 @@ INT row, hgt;
 /*=========================================
  * show_sour_display -- Show source display
  *=======================================*/
-show_sour_display (node, row, hgt)
+void show_sour_display (node, row, hgt)
 NODE node;
 INT row, hgt;
 {
