@@ -206,6 +206,4 @@ typedef struct lldate_s {
 typedef enum { RECORD_ERROR, RECORD_NOT_FOUND, RECORD_SUCCESS } 
 	RECORD_STATUS;
 
-
-
 #endif
