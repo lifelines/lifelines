@@ -55,23 +55,23 @@ crtindex (BTREE btree)
 		sprintf(scratch, "Error updating keyfile for new index");
 		FATAL2(scratch);
 	}
-	writeindex(bbasedir(btree), index);
+	writeindex(btree, index);
 	return index;
 }
 /*=================================
  * readindex - Read index from file
- *  basedir: [in] base directory for files making up btree
+ *  btr:     [in] btree structure
  *  ikey:    [in] index file key (number which indicates a file)
  *  robust:  [in] flag to tell this function to return (not abort) on errors
  * this is below the level of the index cache
  *===============================*/
 INDEX
-readindex (STRING basedir, FKEY ikey, BOOLEAN robust)
+readindex (BTREE btr, FKEY ikey, BOOLEAN robust)
 {
 	FILE *fp=NULL;
 	INDEX index=NULL;
 	char scratch[200];
-	sprintf(scratch, "%s/%s", basedir, fkey2path(ikey));
+	sprintf(scratch, "%s/%s", bbasedir(btr), fkey2path(ikey));
 	if ((fp = fopen(scratch, LLREADBINARY)) == NULL) {
 		if (robust) {
 			bterrno = BTERR_INDEX;
@@ -95,15 +95,15 @@ readindex_end:
 }
 /*=================================
  * writeindex - Write index to file
- *  basedir:  [in]  base directory of btree
+ *  btr:      [in]  btree structure
  *  index:    [in]  index block
  *===============================*/
 void
-writeindex (STRING basedir, INDEX index)
+writeindex (BTREE btr, INDEX index)
 {
 	FILE *fp;
 	char scratch[200];
-	sprintf(scratch, "%s/%s", basedir, fkey2path(ixself(index)));
+	sprintf(scratch, "%s/%s", bbasedir(btr), fkey2path(ixself(index)));
 	if ((fp = fopen(scratch, LLWRITEBINARY)) == NULL) {
 		/* Needs to be revisited with double-buffering */
 		sprintf(scratch, "Error opening index file: %s", fkey2path(ixself(index)));
@@ -129,6 +129,14 @@ initcache (BTREE btree, /* btree handle */
 	bcache(btree) = (INDEX *) stdalloc(n*sizeof(INDEX));
 	for (i = 0;  i < n;  i++)
 		bcache(btree)[i] = NULL;
+}
+/*==============================================
+ * initcache -- Initialize index cache for btree
+ *============================================*/
+void
+freecache (BTREE btree)
+{
+	stdfree(bcache(btree));
 }
 /*============================================
  * cacheindex -- Place INDEX or BLOCK in cache
@@ -166,7 +174,7 @@ getindex (BTREE btree, FKEY fkey)
 	if (fkey == ixself(bmaster(btree))) return bmaster(btree);
 	if ((j = incache(btree, fkey)) == -1) {	/* not in cache */
 		BOOLEAN robust = FALSE; /* abort on error */
-		index = readindex(bbasedir(btree), fkey, robust);
+		index = readindex(btree, fkey, robust);
 		cacheindex(btree, index);
 		return index;
 	}
@@ -179,7 +187,7 @@ void
 putindex (BTREE btree,
           INDEX index)
 {
-	writeindex(bbasedir(btree), index);
+	writeindex(btree, index);
 	if (ixself(index) == ixself(bmaster(btree))) return;
 	cacheindex(btree, index);
 }

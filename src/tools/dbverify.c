@@ -115,12 +115,12 @@ typedef struct
 static NAMEREFN_REC * alloc_namerefn(CNSTRING namerefn, CNSTRING key, INT err);
 static BOOLEAN cgn_callback(CNSTRING key, CNSTRING name, BOOLEAN newset, void *param);
 static BOOLEAN cgr_callback(CNSTRING key, CNSTRING refn, BOOLEAN newset, void *param);
-static BOOLEAN check_block(BTREE btr, BLOCK block, RKEY * lo, RKEY * hi);
+static BOOLEAN check_block(BLOCK block, RKEY * lo, RKEY * hi);
 static BOOLEAN check_btree(BTREE btr);
 static BOOLEAN check_even(CNSTRING key, RECORD rec);
 static BOOLEAN check_fam(CNSTRING key, RECORD rec);
 static void check_ghosts(void);
-static BOOLEAN check_keys(BTREE btr, BLOCK block, RKEY * lo, RKEY * hi);
+static BOOLEAN check_keys(BLOCK block, RKEY * lo, RKEY * hi);
 static BOOLEAN check_index(BTREE btr, INDEX index, TABLE fkeytab, RKEY * lo, RKEY * hi);
 static BOOLEAN check_indi(CNSTRING key, RECORD rec);
 static void check_node(CNSTRING key, NODE node, INT level);
@@ -134,7 +134,7 @@ static void finish_and_delete_nameset(void);
 static void finish_and_delete_refnset(void);
 static void free_namerefn(NAMEREFN_REC * rec);
 static BOOLEAN nodes_callback(CNSTRING key, RECORD rec, void *param);
-static void printblock(BTREE btr, BLOCK block);
+static void printblock(BLOCK block);
 static void print_usage(void);
 static void report_error(INT err, STRING fmt, ...);
 static void report_progress(STRING fmt, ...);
@@ -521,15 +521,15 @@ check_nodes (void)
 static BOOLEAN
 nodes_callback (CNSTRING key, RECORD rec, void *param)
 {
-	param=param; /* unused */
+	param=param;	/* NOTUSED */
 	if (noisy)
 		report_progress("Node: %s", key);
 	switch (key[0]) {
-	case 'I': return todo.check_indis ? check_indi(key, rec) : TRUE;
-	case 'F': return todo.check_fams ? check_fam(key, rec) : TRUE;
-	case 'S': return todo.check_sours ? check_sour(key, rec) : TRUE;
-	case 'E': return todo.check_evens ? check_even(key, rec) : TRUE;
-	case 'X': return todo.check_othes ? check_othe(key, rec) : TRUE;
+	case 'I': return todo.check_indis ? check_indi((CNSTRING)key, (RECORD)rec) : TRUE;
+	case 'F': return todo.check_fams ? check_fam((CNSTRING)key, (RECORD)rec) : TRUE;
+	case 'S': return todo.check_sours ? check_sour((CNSTRING)key, (RECORD)rec) : TRUE;
+	case 'E': return todo.check_evens ? check_even((CNSTRING)key, (RECORD)rec) : TRUE;
+	case 'X': return todo.check_othes ? check_othe((CNSTRING)key, (RECORD)rec) : TRUE;
 	}
 	ASSERT(0); /* traverse_db_key_recs is broken */
 	return TRUE;
@@ -870,14 +870,14 @@ check_index (BTREE btr, INDEX index, TABLE fkeytab, RKEY * lo, RKEY * hi)
 {
 	INT n = nkeys(index);
 	INT i;
-	if (!check_keys(btr, (BLOCK)index, lo, hi))
+	if (!check_keys((BLOCK)index, lo, hi))
 		return FALSE;
 	for (i = 0; i <= n; i++) {
-		INDEX newix = readindex(bbasedir(btr), fkeys(index, i), TRUE);
+		INDEX newix = readindex(btr, fkeys(index, i), TRUE);
 		RKEY *lox, *hix;
 		if (!newix) {
 			printf(_("Error loading index at key %d\n"), i);
-			printblock(btr, (BLOCK)index);
+			printblock((BLOCK)index);
 		}
 		/* figure upper & lower bounds of what keys should be in the child */
 		lox = (i==0 ? lo : &rkeys(index, i));
@@ -885,7 +885,7 @@ check_index (BTREE btr, INDEX index, TABLE fkeytab, RKEY * lo, RKEY * hi)
 		if (ixtype(newix) == BTINDEXTYPE)
 			check_index(btr, newix, fkeytab, lox, hix);
 		else
-			check_block(btr, (BLOCK)newix, lox, hix);
+			check_block((BLOCK)newix, lox, hix);
 	}
 	/* TODO: use fkeytab */
 	return TRUE;
@@ -895,10 +895,9 @@ check_index (BTREE btr, INDEX index, TABLE fkeytab, RKEY * lo, RKEY * hi)
  * Created: 2003/09/05, Perry Rapp
  *=======================================*/
 static BOOLEAN
-check_block (BTREE btr, BLOCK block, RKEY * lo, RKEY * hi)
+check_block (BLOCK block, RKEY * lo, RKEY * hi)
 {
-	INT n = nkeys(block);
-	if (!check_keys(btr, block, lo, hi))
+	if (!check_keys(block, lo, hi))
 		return FALSE;
 	return TRUE;
 }
@@ -907,7 +906,7 @@ check_block (BTREE btr, BLOCK block, RKEY * lo, RKEY * hi)
  * Created: 2003/09/05, Perry Rapp
  *=======================================*/
 static BOOLEAN
-check_keys (BTREE btr, BLOCK block, RKEY * lo, RKEY * hi)
+check_keys (BLOCK block, RKEY * lo, RKEY * hi)
 {
 	INT n = nkeys(block);
 	INT i = 0;
@@ -919,26 +918,26 @@ check_keys (BTREE btr, BLOCK block, RKEY * lo, RKEY * hi)
 		--n; /* keys are 0..n-1 for block */
 	for (i=start ; i <= n; i++) {
 		if (i==start && lo) {
-			INT rel = cmpkeys(btr, lo, &rkeys(block, i));
+			INT rel = cmpkeys(lo, &rkeys(block, i));
 			if (rel < 0) {
 				printf(_("First key in block below parent's limit\n"));
-				printblock(btr, block);
+				printblock(block);
 				ok = FALSE;
 			}
 		}
 		if (i==n && hi) {
-			INT rel = cmpkeys(btr, &rkeys(block, i), hi);
+			INT rel = cmpkeys(&rkeys(block, i), hi);
 			if (rel > 0) {
 				printf(_("Last key in block above parent's limit\n"));
-				printblock(btr, block);
+				printblock(block);
 				ok = FALSE;
 			}
 		}
 		if (i<n) {
-			INT rel = cmpkeys(btr, &rkeys(block, i), &rkeys(block, i+1));
+			INT rel = cmpkeys(&rkeys(block, i), &rkeys(block, i+1));
 			if (rel >= 0) {
 				printf(_("Key %d not below next key\n"), i);
-				printblock(btr, block);
+				printblock(block);
 				ok = FALSE;
 			}
 		}
@@ -950,7 +949,7 @@ check_keys (BTREE btr, BLOCK block, RKEY * lo, RKEY * hi)
  * Created: 2003/09/05, Perry Rapp
  *=======================================*/
 static void
-printblock (BTREE btr, BLOCK block)
+printblock (BLOCK block)
 {
 	FKEY fkey = ixself(block);
 	STRING tname = _("data block");

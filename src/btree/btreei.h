@@ -12,11 +12,12 @@ BLOCK allocblock(void);
 
 /* index.c */
 INDEX crtindex(BTREE);
+void freecache(BTREE);
 INDEX getindex(BTREE, FKEY);
 void initcache(BTREE, INT);
 void putheader(BTREE, BLOCK);
 void putindex(BTREE, INDEX);
-void writeindex(STRING, INDEX);
+void writeindex(BTREE, INDEX);
 
 /* utils.c */
 BOOLEAN newmaster(BTREE, INDEX);

@@ -163,7 +163,7 @@ BTREE bt_openbtree(STRING dir, BOOLEAN cflag, INT writ, BOOLEAN immut);
 BOOLEAN validate_keyfile2(KEYFILE2 *);
 
 /* index.c */
-INDEX readindex(STRING basedir, FKEY ikey, BOOLEAN robust);
+INDEX readindex(BTREE btr, FKEY ikey, BOOLEAN robust);
 
 /* names.c */
 
@@ -172,7 +172,7 @@ BOOLEAN bt_addrecord(BTREE, RKEY, RAWRECORD, INT);
 RAWRECORD bt_getrecord(BTREE, const RKEY *, INT*);
 BOOLEAN isrecord(BTREE, RKEY);
 RAWRECORD readrec(BTREE btree, BLOCK block, INT i, INT *plen);
-INT cmpkeys(BTREE btree, const RKEY * rk1, const RKEY * rk2);
+INT cmpkeys(const RKEY * rk1, const RKEY * rk2);
 
 /* traverse.c */
 BOOLEAN traverse_index_blocks(BTREE, INDEX, void *, BOOLEAN (*ifunc)(BTREE, INDEX, void *), BOOLEAN (*dfunc)(BTREE, BLOCK, void *));

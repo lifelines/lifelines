@@ -52,6 +52,7 @@ generic_get_type_name (OBJECT obj)
 int
 nonrefcountable_isref (OBJECT obj)
 {
+	obj = obj; /* NOTUSED */
 	return 0;
 }
 /*=================================================
@@ -60,7 +61,7 @@ nonrefcountable_isref (OBJECT obj)
 int
 refcountable_isref (OBJECT obj)
 {
-	GENERIC_REF_OBJECT rob = (GENERIC_REF_OBJECT)obj;
+	obj = obj; /* NOTUSED */
 	return 1;
 }
 /*=================================================

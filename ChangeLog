@@ -1,3 +1,26 @@
+2004-10-15 Matt Emmerton
+
+	* ChangeLog src/btree/addkey.c src/btree/btreei.h
+	  src/btree/index.c src/btree/opnbtree.c src/btree/record.c
+	  src/btree/traverse.c src/hdrs/btree.h
+
+	Remove btree parameter from cmpkeys, writeindex, readindex.
+	Add freecache routine.
+
+	* tools/dbverify.c
+
+	Remove btree parameter from cmpkeys, check_block, check_keys, printblock, readindex routines.
+	Remove unused variables.
+	Silence compiler warnings from unused parameters.
+
+	* gedlib/keytonod.c
+
+	Remove unused variable.
+
+	* stdlib/vtable.c
+
+	Silence compiler warnings from unused parameters.
+
 2004-10-14 Matt Emmerton
 
 	* ChangeLog docs/ll-reportmanual.xml src/interp/interpi.h

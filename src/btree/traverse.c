@@ -55,7 +55,6 @@ traverse_index_blocks (BTREE btree, INDEX index, void *param
                        , BOOLEAN (*dfunc)(BTREE, BLOCK, void *param))
 {
 	INDEX newdex;
-	STRING bdir = bbasedir(btree);
 
 	if (index == NULL)
 		return FALSE;
@@ -66,7 +65,7 @@ traverse_index_blocks (BTREE btree, INDEX index, void *param
 		n = nkeys(index);
 		for (i = 0; i <= n; i++) {
 			BOOLEAN rc, robust=FALSE;
-			newdex = readindex(bdir, fkeys(index, i), robust);
+			newdex = readindex(btree, fkeys(index, i), robust);
 			rc = traverse_index_blocks(btree, newdex, param, ifunc, dfunc);
 			stdfree(newdex);
 			if (!rc) return FALSE;
@@ -173,7 +172,7 @@ traverse_index (BTREE btree, INDEX index, RKEY lo, RKEY hi,
  * callback may modify the data, but it won't be updated into db
  *============================================*/
 void
-traverse_db_rec_rkeys (BTREE btree, RKEY lo, RKEY hi, 
+traverse_db_rec_rkeys (BTREE btree, RKEY lo, RKEY hi,
 	BOOLEAN(*func)(RKEY, STRING data, INT len, void *), void * param)
 {
 	INDEX index;

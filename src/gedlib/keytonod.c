@@ -1298,7 +1298,6 @@ unused */
 static BOOLEAN
 is_record_loaded (RECORD rec)
 {
-	INT len=0;
 	STRING xref=0, temp=0;
 
 		/* does the record have a nodetree ? */

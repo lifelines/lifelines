@@ -67,7 +67,7 @@ addkey (BTREE btree, FKEY ikey, RKEY rkey, FKEY fkey)
 	hi = nkeys(index);
 	while (lo <= hi) {
 		SHORT md = (lo + hi)/2;
-		INT rel = cmpkeys(btree, &rkey, &rkeys(index, md));
+		INT rel = cmpkeys(&rkey, &rkeys(index, md));
 		if (rel < 0)
 			hi = --md;
 		else if (rel > 0)
@@ -110,7 +110,7 @@ addkey (BTREE btree, FKEY ikey, RKEY rkey, FKEY fkey)
 			rkeys(master, 1) = rkeys(newdex, 0);
 			fkeys(master, 1) = ixself(newdex);
 			newmaster(btree, master);
-			writeindex(bbasedir(btree), master);
+			writeindex(btree, master);
 		} else	
 			addkey(btree, ixparent(index), rkeys(newdex, 0),
 				ixself(newdex));

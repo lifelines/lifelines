@@ -121,7 +121,6 @@ bt_openbtree (STRING dir, BOOLEAN cflag, INT writ, BOOLEAN immut)
 	KEYFILE1 kfile1;
 	KEYFILE2 kfile2;
 	BOOLEAN keyed2 = FALSE;
-	INDEX master;
 	STRING dbmode;
 
 	/* we only allow 150 characters in base directory name */
@@ -238,14 +237,17 @@ immutretry:
 		fflush(fp);
 	}
 
-/* Get master index */
-	if (!(master = readindex(dir, kfile1.k_mkey, TRUE)))
-		goto failopenbtree; /* bterrno set by readindex */
-
-/* Create new BTREE */
+/* Create BTREE structure */
 	btree = (BTREE) stdalloc(sizeof *btree);
 	bbasedir(btree) = dir;
-	bmaster(btree) = master;
+	bmaster(btree) = readindex(btree, kfile1.k_mkey, TRUE);
+
+	if (!(bmaster(btree)))
+	{
+		stdfree(btree);
+		goto failopenbtree; /* bterrno set by readindex */
+	}
+	
 	bwrite(btree) = !immut && writ && (kfile1.k_ostat == -1);
 	bimmut(btree) = immut; /* includes case that ostat is -2 */
 	bkfp(btree) = fp;
@@ -381,6 +383,7 @@ closebtree (BTREE btree)
 exit_closebtree:
 	if (fp) fclose(fp);
 	if (btree) {
+		freecache(btree);
 		if(bmaster(btree)) {
 			stdfree(bmaster(btree));
 		}
