@@ -324,6 +324,8 @@ STRING tag;
 			indirect_to_first(cache, cel);
 		}
 		if (tag) {
+/*wprintf("BEFORE ASSERT: tag, ntag(cnode(cel)) = %s, %s\n", tag,
+ntag(cnode(cel)));/*DEBUG*/
 			ASSERT(eqstr(tag, ntag(cnode(cel))));
 		}
 		return cel;
@@ -523,6 +525,7 @@ NODE indi;
 {
         CACHEEL cel;
         if (!indi) return NULL;
+/*wprintf("indi_to_cacheel: %s\n", nxref(indi));/*DEBUG*/
         cel = key_to_indi_cacheel(rmvat(nxref(indi)));
         ASSERT(cel);
         return cel;
@@ -538,4 +541,52 @@ NODE fam;
         cel = key_to_fam_cacheel(rmvat(nxref(fam)));
         ASSERT(cel);
         return cel;
+}
+/*===================================================
+ * sour_to_cacheel -- Convert source to cache element
+ *=================================================*/
+CACHEEL sour_to_cacheel (node)
+NODE node;
+{
+        CACHEEL cel;
+        if (!node) return NULL;
+        cel = key_to_sour_cacheel(rmvat(nxref(node)));
+        ASSERT(cel);
+        return cel;
+}
+/*==================================================
+ * even_to_cacheel -- Convert event to cache element
+ *================================================*/
+CACHEEL even_to_cacheel (even)
+NODE even;
+{
+        CACHEEL cel;
+        if (!even) return NULL;
+        cel = key_to_even_cacheel(rmvat(nxref(even)));
+        ASSERT(cel);
+        return cel;
+}
+/*==================================================
+ * othr_to_cacheel -- Convert other to cache element
+ *================================================*/
+CACHEEL othr_to_cacheel (othr)
+NODE othr;
+{
+        CACHEEL cel;
+        if (!othr) return NULL;
+	cel = key_to_othr_cacheel(rmvat(nxref(othr)));
+        ASSERT(cel);
+        return cel;
+}
+/*==============================================
+ * key_of_record -- Return display key of record
+ *============================================*/
+STRING key_of_record (node)
+NODE node;
+{
+        NODE refn;
+        ASSERT(node);
+        refn = REFN(node);
+        if (refn && nval(refn)) return nval(refn);
+        return rmvat(nxref(node)) + 1;
 }

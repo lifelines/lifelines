@@ -22,13 +22,14 @@
    SOFTWARE.
 */
 /*=============================================================
- * lex.c -- Low level lexing code of report interpreter
- * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
+ * lex.c -- Low level lexer of program interpreter
+ * Copyright(c) 1992-95 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 07 Sep 93
  *   3.0.0 - 19 Jun 94    3.0.2 - 04 Jan 95
+ *   3.0.3 - 21 Sep 95
  *===========================================================*/
 
-#define YYSTYPE INTERP
+#define YYSTYPE INTERPTYPE
 
 #include "standard.h"
 #include "table.h"
@@ -61,6 +62,9 @@ int yylex()
 
 /* Place token based debugging here */
 
+/*if (isascii(lex)) wprintf("lex<%c> ", lex);
+else wprintf("lex<%d> ", lex);/*DEBUG*/
+
 	return lex;
 }
 /*===========================
@@ -68,7 +72,9 @@ int yylex()
  *=========================*/
 int lowyylex ()
 {
-	INT c, t, retval, ivalue;
+	INT c, t, retval, mul;
+	extern INT Yival;
+	extern FLOAT Yfval;
 	static unsigned char tokbuf[200];	/* token buffer */
 	STRING p = tokbuf;
 	while (TRUE) {
@@ -97,19 +103,60 @@ int lowyylex ()
 		}
 		*p = 0;
 		unchar(c);
-		if (reserved(tokbuf, &retval)) return retval;
-		yylval = (YYSTYPE) strsave(tokbuf);
+/*wprintf("in lex.c -- IDEN is %s\n", tokbuf);/*DEBUG*/
+		if (reserved(tokbuf, &retval))  return retval;
+		yylval = (PNODE) strsave(tokbuf);
 		return IDEN;
 	}
-	if (t == DIGIT) {
-		ivalue = 0;
+	if (t == '-' || t == DIGIT || t == '.') {
+		BOOLEAN whole = FALSE;
+		BOOLEAN frac = FALSE;
+		FLOAT fdiv;
+		mul = 1;
+		if (t == '-') {
+			t = chartype(c = inchar());
+			if (t != '.' && t != DIGIT) {
+				unchar(c);
+				return '-';
+			}
+			mul = -1;
+		}
+		Yival = 0;
 		while (t == DIGIT) {
-			ivalue = ivalue*10 + c - '0';
+			whole = TRUE;
+			Yival = Yival*10 + c - '0';
 			t = chartype(c = inchar());
 		}
-		unchar(c);
-		yylval = (YYSTYPE) ivalue;
-		return ICONS;
+		if (t != '.') {
+			unchar(c);
+			Yival *= mul;
+			/* 			yylval = NULL; nozell */
+			return ICONS;
+		}
+		t = chartype(c = inchar());
+		Yfval = 0.0;
+		fdiv = 1.0;
+		while (t == DIGIT) {
+			frac = TRUE;
+			Yfval = Yfval*10 + c - '0';
+			fdiv *= 10.;
+			t = chartype(c = inchar());
+		}
+#if 0
+		if (frac) unchar(c);
+#endif
+		unchar(c);	/* REPLACED BY THIS */
+		if (!whole && !frac) {
+			unchar(c);
+			if (mul == -1) {
+				unchar('.');
+				return '-';
+			} else
+				return '.';
+		}
+		Yfval = mul*(Yival + Yfval/fdiv);
+		/*		yylval = NULL; nozell */
+		return FCONS;
 	}
 	if (c == '"') {
 		p = tokbuf;
@@ -118,8 +165,8 @@ int lowyylex ()
 				*p++ = c;
 			if (c == 0 || c == '"') {
 				*p = 0;
-				yylval = (YYSTYPE) literal_node(tokbuf);
-				return LITERAL;
+				yylval = string_node(tokbuf);
+				return SCONS;
 			}
 			switch (c = inchar()) {
 			case 'n': *p++ = '\n'; break;
@@ -132,8 +179,8 @@ int lowyylex ()
 			case '\\': *p++ = '\\'; break;
 			case EOF:
 				*p = 0;
-				yylval = (YYSTYPE) literal_node(tokbuf);
-				return LITERAL;
+				yylval = string_node(tokbuf);
+				return SCONS;
 			default:
 				*p++ = c; break;
 			}
@@ -156,24 +203,30 @@ static struct {
 	"else",		ELSE,
 	"elsif",	ELSIF,
 	"families",	FAMILIES,
+	"fathers",	FATHERS,
+	"foreven",	FOREVEN,
 	"forfam",	FORFAM,
 	"forindiset",	FORINDISET,
 	"forindi",	FORINDI,
 	"forlist",	FORLIST_TOK,
 	"fornodes",	FORNODES,
-	"fornotes",	FORNOTES,
+	"fornotes",     FORNOTES,
+	"forothr",	FOROTHR,
+	"forsour",	FORSOUR,
 	"func",		FUNC_TOK,
 	"if",		IF,
+	"mothers",	MOTHERS,
+	"Parents",	PARENTS,
 	"proc",		PROC,
 	"return",	RETURN,
 	"spouses",	SPOUSES,
 	"traverse",	TRAVERSE,
 	"while",	WHILE,
 };
-static nrwords = 20;
-/*===========================================
- * reserved -- See if string is reserved word
- *=========================================*/
+static nrwords = 26;
+/*======================================
+ * reserved -- See if string is reserved
+ *====================================*/
 BOOLEAN reserved (word, pval)
 STRING word;
 INT *pval;

@@ -23,9 +23,10 @@
 */
 /*=============================================================
  * merge.c -- Merge persons and families
- * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
+ * Copyright(c) 1992-96 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 01 Sep 93
  *   3.0.0 - 23 Sep 94    3.0.2 - 13 Dec 94
+ *   3.0.3 - 21 Jan 96
  *===========================================================*/
 
 #include "standard.h"
@@ -34,52 +35,64 @@
 #include "gedcom.h"
 #include "translat.h"
 
+extern BOOLEAN traditional;
 extern STRING iredit, cfpmrg, nopmrg, noqmrg, noxmrg, nofmrg;
 extern STRING dhusb,  dwife,  cffmrg, fredit, badata, ronlym;
+STRING mgsfam = (STRING) "These persons are children in different families.";
+STRING mgconf = (STRING) "Are you sure you want to merge them?";
 
 /*================================================================
  * merge_two_indis -- Merge first person to second; data from both
  *   are put in file that user edits; first person removed
+ *---------------------------------------------------------------
+ *   indi1 - person in database -- indi1 is merged into indi2
+ *   indi2 - person in database -- indi1 is merged into this person
+ *   indi3 - merged version of the two persons
  *==============================================================*/
-NODE merge_two_indis (indi1, indi2)
-NODE indi1, indi2;
+NODE merge_two_indis (indi1, indi2, conf)
+NODE indi1, indi2;	/* two persons to merge - can't be null */
+BOOLEAN conf;		/* have user confirm change */
 {
-	NODE name1, refn1, sex1, body1, famc1, fams1;
+	NODE indi0, name1, refn1, sex1, body1, famc1, fams1;
 	NODE name2, refn2, sex2, body2, famc2, fams2;
 	NODE indi3, name3, refn3, sex3, body3, famc3, fams3;
-	NODE indi4, name4, refn4, sex4, body4, famc4, fams4;
-	NODE fam, husb, wife, chil, rest, fref;
-	NODE curs1, curs2, node, this, prev, next, old, new;
+	NODE fam, husb, wife, chil, rest, fref, keep;
+	NODE this, that, prev, next, node, head;
+	NODE fam12, name12, refn12;
 	TRANTABLE tti = tran_tables[MEDIN], tto = tran_tables[MINED];
 	FILE *fp;
 	char name[100];
 	INT sx2;
 	STRING msg, key;
-	BOOLEAN emp, iso_tree();
+ 	BOOLEAN emp, iso_nodes();
 
+/* Do start up checks */
+
+	ASSERT(indi1 && indi2);
+	ASSERT(eqstr("INDI", ntag(indi1)));
+	ASSERT(eqstr("INDI", ntag(indi2)));
 	if (readonly) {
 		message(ronlym);
 		return NULL;
 	}
-
-/* Perform sanity checks */
-	ASSERT(indi1 && indi2);
-	ASSERT(eqstr("INDI", ntag(indi1)));
-	ASSERT(eqstr("INDI", ntag(indi2)));
 	if (indi1 == indi2) {
 		message(nopmrg);
 		return NULL;
 	}
 
 /* Check restrictions on persons */
+
 	famc1 = FAMC(indi1);
 	famc2 = FAMC(indi2);
-#if 0
-	if (famc1 && famc2 && nestr(nval(famc1), nval(famc2))) {
-		message(noqmrg);
-		return NULL;
+/*LOOSEEND -- THIS CHECK IS NOT GOOD ENOUGH */
+	if (traditional) {
+		if (famc1 && famc2 && nestr(nval(famc1), nval(famc2))) {
+			if (!ask_yes_or_no_msg(mgsfam, mgconf)) {
+				message(noqmrg);
+				return NULL;
+			}
+		}
 	}
-#endif
 	fams1 = FAMS(indi1);
 	fams2 = FAMS(indi2);
 	if (fams1 && fams2 && SEX(indi1) != SEX(indi2)) {
@@ -87,160 +100,193 @@ NODE indi1, indi2;
 		return NULL;
 	}
 
-/* Split persons */
+/* Split orignial persons */
+
+	indi0 = indi1;		/* save original indi1 for later delete */
+	indi1 = copy_nodes(indi1, TRUE, TRUE);
 	split_indi(indi1, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
 	split_indi(indi2, &name2, &refn2, &sex2, &body2, &famc2, &fams2);
-	ASSERT(name1 && name2);
+	indi3 = indi2;
+	indi2 = copy_node(indi2);
 	sx2 = SEX_UNKNOWN;
 	if (fams1) sx2 = val_to_sex(sex1);
 	if (fams2) sx2 = val_to_sex(sex2);
 
-/*CONDITION 1 -- 1 & 2 split */
+/*CONDITION: 1s, 2s - build first version of merged person */
 
-/* Construct first version of merged person */
 	ASSERT(fp = fopen(editfile, "w"));
-	indi3 = copy_nodes(indi2, TRUE, TRUE);
-	name3 = unique_nodes(name1, name2);
-	refn3 = unique_nodes(refn1, refn2);
-	sex3  = unique_nodes(sex1, sex2);
-	body3 = unique_nodes(body1, body2);
-	famc3 = unique_nodes(famc1, famc2);
-	fams3 = unique_nodes(fams1, fams2);
+	name3 = union_nodes(name1, name2, TRUE, TRUE);
+	refn3 = union_nodes(refn1, refn2, TRUE, TRUE);
+	sex3  = union_nodes(sex1,  sex2,  TRUE, TRUE);
+	body3 = union_nodes(body1, body2, TRUE, TRUE);
+	famc3 = union_nodes(famc1, famc2, TRUE, TRUE);
+	fams3 = union_nodes(fams1, fams2, TRUE, TRUE);
 	write_nodes(0, fp, tto, indi3, TRUE, TRUE, TRUE);
 	write_nodes(1, fp, tto, name3, TRUE, TRUE, TRUE);
 	write_nodes(1, fp, tto, refn3, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, sex3, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, tto, sex3,  TRUE, TRUE, TRUE);
 	write_nodes(1, fp, tto, body3, TRUE, TRUE, TRUE);
 	write_nodes(1, fp, tto, famc3, TRUE, TRUE, TRUE);
 	write_nodes(1, fp, tto, fams3, TRUE, TRUE, TRUE);
 	fclose(fp);
-	join_indi(indi3, name3, refn3, sex3, body3, famc3, fams3);
-/*CONDITION 2 -- 3 (init combined) created and joined*/
-
-/* Have user edit merged person */
-	do_edit();
-	while (TRUE) {
-		indi4 = file_to_node(editfile, tti, &msg, &emp);
-		if (!indi4 && !emp) {
-			if (ask_yes_or_no_msg(msg, iredit)) {
-				do_edit();
-				continue;
-			} 
-			break;
-		}
-		if (!valid_indi_tree(indi4, &msg, indi3)) {
-			if (ask_yes_or_no_msg(msg, iredit)) {
-				do_edit();
-				continue;
-			}
-			free_nodes(indi4);
-			indi4 = NULL;
-			break;
-		}
-		break;
-	}
-	free_nodes(indi3);
 
 /* Have user confirm changes */
-	if (!indi4 || !ask_yes_or_no(cfpmrg)) {
-		if (indi4) free_nodes(indi4);
+
+	if (conf && !ask_yes_or_no(cfpmrg)) {
+		free_nodes(indi3);
 		join_indi(indi1, name1, refn1, sex1, body1, famc1, fams1);
 		join_indi(indi2, name2, refn2, sex2, body2, famc2, fams2);
 		return NULL;
 	}
 
 /* Modify families that have persons as children */
-	split_indi(indi4, &name4, &refn4, &sex4, &body4, &famc4, &fams4);
-	curs1 = famc1;
-	while (curs1) {
-		curs2 = famc2;
-		while (curs2 && nestr(nval(curs1), nval(curs2)))
-			curs2 = nsibling(curs2);
-		fam = key_to_fam(rmvat(nval(curs1)));
-		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
-		prev = NULL;
-		this = chil;
+
+	classify_nodes(&famc1, &famc2, &fam12);
 
 /* Both were children in same family; remove first as child */
-		if (curs2) {
-			while (this) {
-				if (eqstr(nval(this), nxref(indi1))) {
-					next = nsibling(this);
-					nsibling(this) = NULL;
-					free_nodes(this);
-					if (!prev)
-						chil = next;
-					else
-						nsibling(prev) = next;
-					this = next;
-				} else {
-					prev = this;
-					this = nsibling(this);
-				}
-			}
-			join_fam(fam, fref, husb, wife, chil, rest);
-			fam_to_dbase(fam);
 
-/* Only first was child; make family refer to second */
-		} else {
-			while (this) {
-				if (eqstr(nval(this), nxref(indi1))) {
-					stdfree(nval(this));
-					nval(this) = strsave(nxref(indi2));
-				}
-				prev = this;
-				this = nsibling(this);
-			}
-			join_fam(fam, fref, husb, wife, chil, rest);
-			fam_to_dbase(fam);
-		}
-		curs1 = nsibling(curs1);
-	}
-
-/* Modify families that had persons as spouse */
-	this = fams1;
+	this = fam12;
 	while (this) {
 		fam = key_to_fam(rmvat(nval(this)));
 		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
-		if (sx2 == SEX_MALE) {
-			ASSERT(husb);
-			stdfree(nval(husb));
-			nval(husb) = (STRING) strsave(nxref(indi2));
-		} else {
-			ASSERT(wife);
-			stdfree(nval(wife));
-			nval(wife) = (STRING) strsave(nxref(indi2));
+		prev = NULL;
+		that = chil;
+		while (that) {
+			if (eqstr(nval(that), nxref(indi1))) {
+				next = nsibling(that);
+				nsibling(that) = NULL;
+				keep = nchild(that);
+				free_node(that);
+				if (!prev)
+					chil = next;
+				else
+					nsibling(prev) = next;
+				that = next;
+			} else {
+				prev = that;
+				that = nsibling(that);
+			}
+		}
+		that = chil;
+		while (keep && that) {
+			if (eqstr(nval(that), nxref(indi2))) {
+				nchild(that) = union_nodes(nchild(that),
+					keep, TRUE, FALSE);
+			}
+			that = nsibling(that);
 		}
 		join_fam(fam, fref, husb, wife, chil, rest);
 		fam_to_dbase(fam);
 		this = nsibling(this);
 	}
 
-/* Remove unneeded nodes and delete first person */
-	join_indi(indi1, name1, refn1, sex1, body1, NULL, NULL);
-	delete_indi(indi1, FALSE);
-	free_nodes(famc1);
-	free_nodes(fams1);
-	free_nodes(sex2);
-	free_nodes(body2);
-	free_nodes(famc2);
-	free_nodes(fams2);
+/*HERE*/
+/* Only first was child; make family refer to second */
 
-/* Put merged person in database */
-	old = name2;
-	new = copy_nodes(name4, TRUE, TRUE);
-	join_indi(indi2, name4, refn4, sex4, body4, famc4, fams4);
-	remove_duplicate_names(&old, &new);
-	resolve_links(indi2);
-	indi_to_dbase(indi2);
-	key = rmvat(nxref(indi2));
-	for (node = old; node; node = nsibling(node))
-		remove_name(nval(node), key);
-	rename_from_browse_lists(key);
-	for (node = new; node; node = nsibling(node))
+	this = famc1;
+	while (this) {
+		fam = key_to_fam(rmvat(nval(this)));
+		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
+		prev = NULL;
+		that = chil;
+		while (that) {
+			if (eqstr(nval(that), nxref(indi1))) {
+				stdfree(nval(that));
+				nval(that) = strsave(nxref(indi2));
+			}
+			prev = that;
+			that = nsibling(that);
+		}
+		join_fam(fam, fref, husb, wife, chil, rest);
+		fam_to_dbase(fam);
+		this = nsibling(this);
+	}
+	free_nodes(fam12);
+
+/*HERE*/
+/* Modify families that had persons as spouse */
+
+	classify_nodes(&fams1, &fams2, &fam12);
+
+/* Both were parents in same family; remove first as parent */
+
+	this = fam12;
+	while (this) {
+		fam = key_to_fam(rmvat(nval(this)));
+		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
+		prev = NULL;
+		if (sx2 == SEX_MALE)
+			head = that = husb;
+		else
+			head = that = wife;
+		while (that) {
+			if (eqstr(nval(that), nxref(indi1))) {
+				next = nsibling(that);
+				nsibling(that) = NULL;
+				free_nodes(that);
+				if (!prev)
+					prev = head = next;
+				else
+					nsibling(prev) = next;
+				that = next;
+			} else {
+				prev = that;
+				that = nsibling(that);
+			}
+		}
+		if (sx2 == SEX_MALE)
+			husb = head;
+		else
+			wife = head;
+		join_fam(fam, fref, husb, wife, chil, rest);
+		fam_to_dbase(fam);
+		this = nsibling(this);
+	}
+
+/*HERE*/
+/* Only first was parent; make family refer to second */
+
+	this = fams1;
+	while (this) {
+		fam = key_to_fam(rmvat(nval(this)));
+		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
+		prev = NULL;
+		that = (sx2 == SEX_MALE) ? husb : wife;
+		while (that) {
+			if (eqstr(nval(that), nxref(indi1))) {
+				stdfree(nval(that));
+				nval(that) = strsave(nxref(indi2));
+			}
+			prev = that;
+			that = nsibling(that);
+		}
+		join_fam(fam, fref, husb, wife, chil, rest);
+		fam_to_dbase(fam);
+		this = nsibling(this);
+	}
+	free_nodes(fam12);
+
+/*HERE*/
+
+	classify_nodes(&name1, &name2, &name12);
+	classify_nodes(&refn1, &refn2, &refn12);
+
+	join_indi(indi3, name3, refn3, sex3, body3, famc3, fams3);
+	key = rmvat(nxref(indi3));
+	for (node = name1; node; node = nsibling(node))
 		add_name(nval(node), key);
-	free_nodes(old);
-	free_nodes(new);
+	rename_from_browse_lists(key);
+	for (node = refn1; node; node = nsibling(node))
+		if (nval(node)) add_refn(nval(node), key);
+	resolve_links(indi3);
+	indi_to_dbase(indi3);
+	join_indi(indi1, name1, refn1, sex1, body1, famc1, fams1);
+	free_nodes(indi1);
+	join_indi(indi2, name2, refn2, sex2, body2, famc2, fams2);
+	free_nodes(indi2);
+	free_nodes(name12);
+	free_nodes(refn12);
+	delete_indi(indi0, FALSE);
 	return indi2;
 }
 /*=================================================================
@@ -292,10 +338,10 @@ NODE fam1, fam2;
 /* Create merged file with both families together */
 	ASSERT(fp = fopen(editfile, "w"));
 	fam3 = copy_nodes(fam2, TRUE, TRUE);
-	fref3 = unique_nodes(fref1, fref2);
-	husb3 = unique_nodes(husb1, husb2);
-	wife3 = unique_nodes(wife1, wife2);
-	rest3 = unique_nodes(rest1, rest2);
+	fref3 = union_nodes(fref1, fref2, TRUE, TRUE);
+	husb3 = union_nodes(husb1, husb2, TRUE, TRUE);
+	wife3 = union_nodes(wife1, wife2, TRUE, TRUE);
+	rest3 = union_nodes(rest1, rest2, TRUE, TRUE);
 	chil3 = sort_children(chil1, chil2);
 	write_nodes(0, fp, tto, fam3, TRUE, TRUE, TRUE);
 	write_nodes(1, fp, tto, fref3, TRUE, TRUE, TRUE);
@@ -306,6 +352,7 @@ NODE fam1, fam2;
 	fclose(fp);
 
 /* Have user edit merged family */
+	join_fam(fam3, fref3, husb3, wife3, rest3, chil3);
 	do_edit();
 	while (TRUE) {
 		fam4 = file_to_node(editfile, tti, &msg, &emp);
@@ -316,7 +363,7 @@ NODE fam1, fam2;
 			} 
 			break;
 		}
-		if (!valid_fam_tree(fam4, &msg, fam3, husb3, wife3, chil3)) {
+		if (!valid_fam(fam4, &msg, fam3)) {
 			if (ask_yes_or_no_msg(badata, iredit)) {
 				do_edit();
 				continue;
@@ -327,10 +374,10 @@ NODE fam1, fam2;
 		}
 		break;
 	}
-	join_fam(fam3, fref3, husb3, wife3, rest3, chil3);
 	free_nodes(fam3);
 
 /* Have user confirm changes */
+
 	if (!fam4 || !ask_yes_or_no(cffmrg)) {
 		if (fam4) free_nodes(fam4);
 		join_fam(fam1, fref1, husb1, wife1, chil1, rest1);
@@ -361,135 +408,6 @@ NODE fam1, fam2;
 	fam_to_dbase(fam2);
 	return fam2;
 }
-/*============================================
- * iso_tree -- See if two trees are isomorphic
- *==========================================*/
-BOOLEAN iso_tree (root1, root2)
-NODE root1, root2;
-{
-	STRING str1, str2;
-	INT nchil1, nchil2;
-	NODE chil1, chil2;
-	if (!root1 && !root2) return TRUE;
-	if (!root1 || !root2) return FALSE;
-	if (nestr(ntag(root1), ntag(root2))) return FALSE;
-	str1 = nval(root1);
-	str2 = nval(root2);
-	if (str1 && !str2) return FALSE;
-	if (str2 && !str1) return FALSE;
-	if (str1 && str2 && nestr(str1, str2)) return FALSE;
-	nchil1 = node_list_length(nchild(root1));
-	nchil2 = node_list_length(nchild(root2));
-	if (nchil1 != nchil2) return FALSE;
-	if (nchil1 == 0) return TRUE;
-	chil1 = nchild(root1);
-	while (chil1) {
-		chil2 = nchild(root2);
-		while (chil2) {
-			if (iso_tree(chil1, chil2))
-				break;
-			chil2 = nsibling(chil2);
-		}
-		if (!chil2) return FALSE;
-		chil1 = nsibling(chil1);
-	}
-	return TRUE;
-}
-/*======================================================
- * iso_tree_list -- See if two tree lists are isomorphic
- *====================================================*/
-BOOLEAN iso_tree_list (root1, root2)
-NODE root1, root2;
-{
-	INT len1, len2;
-	NODE node1, node2;
-	if (!root1 || !root2) return FALSE;
-	len1 = node_list_length(root1);
-	len2 = node_list_length(root2);
-	if (len1 != len2) return FALSE;
-	if (len1 == 0) return TRUE;
-	node1 = root1;
-	while (node1) {
-		node2 = root2;
-		while (node2) {
-			if (iso_tree(node1, node2)) break;
-			node2 = nsibling(node2);
-		}
-		if (!node2) return FALSE;
-		node1 = nsibling(node1);
-	}
-	return TRUE;
-}
-/*===============================================
- * unique_nodes -- Return union of two node trees
- *=============================================*/
-NODE unique_nodes (node1, node2)
-NODE node1, node2;
-{
-	NODE copy1 = copy_nodes(node1, TRUE, TRUE);
-	NODE copy2 = copy_nodes(node2, TRUE, TRUE);
-	NODE curs1, next1, prev1, curs2, prev2;
-	prev2 = NULL;
-	curs2 = copy2;
-	while (curs2) {
-		prev1 = NULL;
-		curs1 = copy1;
-		while (curs1 && !iso_tree(curs1, curs2)) {
-			prev1 = curs1;
-			curs1 = nsibling(curs1);
-		}
-		if (curs1) {
-			next1 = nsibling(curs1);
-			nsibling(curs1) = NULL;
-			free_nodes(curs1);
-			if (prev1)
-				nsibling(prev1) = next1;
-			else
-				copy1 = next1;
-		}
-		prev2 = curs2;
-		curs2 = nsibling(curs2);
-	}
-	if (prev2) {
-		nsibling(prev2) = copy1;
-		return copy2;
-	}
-	return copy1;
-}
-#if 0
-/*==============================================================
- * unique_to_file -- Copy unique parts of node1 and node2, up to
- *   isomorphism, to file.
- *============================================================*/
-unique_to_file (node1, node2, tt, fp)
-NODE node1, node2;
-TRANTABLE tt;
-FILE *fp;
-{
-	NODE prev, this, next, copy1 = copy_nodes(node1, TRUE, TRUE);
-	while (node2) {
-		write_nodes(1, fp, tt, node2, TRUE, TRUE, FALSE);
-		prev = NULL;
-		this = copy1;
-		while (this && !iso_tree(this, node2)) {
-			prev = this;
-			this = nsibling(this);
-		}
-		if (this) {
-			next = nsibling(this);
-			nsibling(this) = NULL;
-			free_nodes(this);
-			if (prev)
-				nsibling(prev) = next;
-			else
-				copy1 = next;
-		}
-		node2 = nsibling(node2);
-	}
-	write_nodes(1, fp, tt, copy1, TRUE, TRUE, TRUE);
-	free_nodes(copy1);
-}
-#endif
 /*================================================================
  * merge_fam_links -- Shift links of persons in list1 from fam1 to
  *   fam2.  List1 holds the persons that refer to fam1, and list2
@@ -504,8 +422,9 @@ merge_fam_links (fam1, fam2, list1, list2, code)
 NODE fam1, fam2, list1, list2;
 INT code;
 {
-	NODE curs1, curs2, prev, this, next, first;
+	NODE curs1, curs2, prev, this, next, first, keep;
 	NODE indi, name, refn, sex, body, famc, fams;
+
 	curs1 = list1;
 	while (curs1) {
 		curs2 = list2;
@@ -520,12 +439,14 @@ INT code;
 			first = this = famc;
 
 /* Both fams linked to this indi; remove link in indi to first */
+
 		if (curs2) {
 			while (this) {
 				if (eqstr(nval(this), nxref(fam1))) {
 					next = nsibling(this);
 					nsibling(this) = NULL;
-					free_nodes(this);
+					keep = nchild(this);
+					free_node(this);
 					if (!prev)
 						first = next;
 					else
@@ -536,8 +457,19 @@ INT code;
 					this = nsibling(this);
 				}
 			}
+			this = first;
+			while (keep && this) {
+				if (eqstr(nval(this), nxref(fam2))) {
+					nchild(this) =
+					    union_nodes(nchild(this), keep,
+					    TRUE, FALSE);
+/*HERE*/
+				}
+				this = nsibling(this);
+			}
 
 /* Only first fam linked with this indi; move link to second */
+
 		} else {
 			while (this) {
 				if (eqstr(nval(this), nxref(fam1))) {
@@ -644,31 +576,4 @@ NODE list1, list2;
 		}
 	}
 	return copy1;
-}
-/*=================================================
- * iso_list -- See if two node lists are isomorphic
- *===============================================*/
-BOOLEAN iso_list (root1, root2)
-NODE root1, root2;
-{
-	INT len1, len2;
-	NODE node1, node2;
-	if (!root1 && !root2) return TRUE;
-	if (!root1 || !root2) return FALSE;
-	len1 = node_list_length(root1);
-	len2 = node_list_length(root2);
-	if (len1 != len2) return FALSE;
-	if (len1 == 0) return TRUE;
-	node1 = root1;
-	while (node1) {
-		node2 = root2;
-		while (node2) {
-			if (equal_node(node1, node2))
-				break;
-			node2 = nsibling(node2);
-		}
-		if (!node2) return FALSE;
-		node1 = nsibling(node1);
-	}
-	return TRUE;
 }

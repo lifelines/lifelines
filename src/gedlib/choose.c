@@ -24,7 +24,7 @@
 /*============================================================
  * choose.c -- Implements the choose operations
  * Copyright(c) 1992-4 by T.T. Wetmore IV; all rights reserved
- *   3.0.2 - 06 Dec 94
+ *   3.0.2 - 06 Dec 94    3.0.3 - 08 May 95
  *==========================================================*/
 
 #include "standard.h"
@@ -40,7 +40,7 @@ NODE indi, fam;
 STRING msg0, msgn;
 BOOLEAN ask1;
 {
-	INDISEQ seq;
+	INDISEQ seq = NULL;
 	NODE node;
 	INT i = 0;
 	if (indi) seq = indi_to_children(indi);
@@ -64,8 +64,7 @@ STRING msg0, msgn;
 	NODE node;
 	INT i = 0, len;
 	if (!indi) return NULL;
-	seq = indi_to_spouses(indi);
-	if (!seq) {
+	if (!(seq = indi_to_spouses(indi))) {
 		message(msg0);
 		return NULL;
 	}
@@ -101,7 +100,7 @@ NODE indi, fam;
 STRING msg0, msgn;
 BOOLEAN ask1;
 {
-	INDISEQ seq;
+	INDISEQ seq = NULL;
 	NODE node;
 	INT i = 0;
 	if (indi) seq = indi_to_fathers(indi);
@@ -122,7 +121,7 @@ NODE indi, fam;
 STRING msg0, msgn;
 BOOLEAN ask1;
 {
-	INDISEQ seq;
+	INDISEQ seq = NULL;
 	NODE node;
 	INT i = 0;
 	if (indi) seq = indi_to_mothers(indi);

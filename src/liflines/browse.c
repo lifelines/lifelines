@@ -23,11 +23,12 @@
 */
 /*============================================================
  * browse.c -- Implements the browse command
- * Copyright(c) 1992-4 by T.T. Wetmore IV; all rights reserved
+ * Copyright(c) 1992-95 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 25 Aug 93
  *   2.3.6 - 01 Nov 93    3.0.0 - 24 Sep 94
  *   3.0.2 - 16 Oct 94    3.0.2 - 30 Dec 94
- *==========================================================*/
+ *   3.0.3 - 04 May 95
+ *===========================================================*/
 
 #include "standard.h"
 #include "table.h"
@@ -155,13 +156,6 @@ INDISEQ *pseq;
 			if (*pfam1 = choose_family(indi, noprnt, idfbrs, FALSE))
 				return BROWSE_FAM;
 			break;
-#if 0
-			if (!(*pfam1 = indi_to_famc(indi)))
-				message(noprnt);
-			else
-				return  BROWSE_FAM;
-			break;
-#endif
 		case 'b': 	/* Browse new list of persons */
 			seq = ask_for_indiseq(idplst, &rc);
 			if (!seq) break;

@@ -23,9 +23,10 @@
 */
 /*=============================================================
  * init.c -- Initialize LifeLines data structures
- * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
+ * Copyright(c) 1991-95 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 29 Aug 93
  *   3.0.0 - 05 Oct 94    3.0.2 - 09 Nov 94
+ *   3.0.3 - 21 Sep 95
  *===========================================================*/
 
 #include "standard.h"
@@ -39,7 +40,7 @@ TABLE useropts;		/* table for user options */
 BTREE BTR = NULL;	/* database */
 STRING editstr, editfile;
 STRING llarchives, llreports, llprograms;
-STRING getenv();
+char *getenv();
 
 /*=================================
  * init_lifelines -- Open LifeLines
@@ -56,19 +57,19 @@ init_lifelines ()
 	init_caches();
 	init_browse_lists();
 	init_mapping();
-	e = getenv("LLEDITOR");
-	if (!e || *e == 0) e = getenv("ED");
-	if (!e || *e == 0) e = getenv("EDITOR");
+	e = (STRING) getenv("LLEDITOR");
+	if (!e || *e == 0) e = (STRING) getenv("ED");
+	if (!e || *e == 0) e = (STRING) getenv("EDITOR");
 	if (!e || *e == 0) e = (STRING) "vi";
 	sprintf(scratch, "/tmp/%dltmp", getpid());
 	editfile = strsave(scratch);
 	editstr = (STRING) stdalloc(strlen(e) + strlen(editfile) + 2);
 	sprintf(editstr, "%s %s", e, editfile);
-	llprograms = getenv("LLPROGRAMS");
+	llprograms = (STRING) getenv("LLPROGRAMS");
 	if (!llprograms || *llprograms == 0) llprograms = (STRING) ".";
-	llreports = getenv("LLREPORTS");
+	llreports = (STRING) getenv("LLREPORTS");
 	if (!llreports || *llreports == 0) llreports = (STRING) ".";
-	llarchives = getenv("LLARCHIVES");
+	llarchives = (STRING) getenv("LLARCHIVES");
 	if (!llarchives || *llarchives == 0) llarchives = (STRING) ".";
 	openxref();
 }

@@ -26,6 +26,7 @@
  * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 24 Aug 93
  *   3.0.0 - 14 Sep 94    3.0.2 - 24 Dec 94
+ *   3.0.3 - 03 May 95
  *===========================================================*/
 
 #include "standard.h"
@@ -432,19 +433,6 @@ INT top, cur, mark;
 		mvwaddstr(win, row, 4, scratch);
 		row++;
 	}
-}
-/*==============================================
- * key_of_record -- Return display key of record
- *============================================*/
-
-STRING key_of_record (node)
-NODE node;
-{
-	NODE refn;
-	ASSERT(node);
-	refn = REFN(node);
-	if (refn && nval(refn)) return nval(refn);
-	return rmvat(nxref(node)) + 1;
 }
 /*========================================================
  * show_aux_display -- Show source, event or other record

@@ -26,6 +26,7 @@
  * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 15 Aug 93
  *   3.0.0 - 30 Jun 94    3.0.2 - 10 Dec 94
+ *   3.0.3 - 21 Jan 96
  *===========================================================*/
 
 #include "standard.h"
@@ -33,15 +34,14 @@
 #include "gedcom.h"
 
 extern STRING idpdel, cfpdel, haslnk;
-
 static del_in_dbase();
 
 /*================================================================
  * delete_indi -- Delete person and links; if this leaves families
- *   with no links remove them
+ *   with no links, remove them
  *==============================================================*/
 delete_indi (indi, conf)
-NODE indi;	/* person to remove */
+NODE indi;	/* person to remove - may be null */
 BOOLEAN conf;	/* have user confirm */
 {
 	STRING key;
@@ -49,17 +49,21 @@ BOOLEAN conf;	/* have user confirm */
 	NODE node, husb, wife, chil, rest, fam, prev, next, fref;
 	INT isex, keyint;
 	BOOLEAN found;
+
 	if (!indi && !(indi = ask_for_indi(idpdel, FALSE, TRUE)))
 		return;
 	if (conf && !ask_yes_or_no(cfpdel)) return;
+
 	split_indi(indi, &name, &refn, &sex, &body, &famc, &fams);
 	if (!fams) goto checkfamc;
 	isex = val_to_sex(sex);
 	ASSERT(isex != SEX_UNKNOWN);
+
+/* Remove person from families he/she is in as a parent */
+
 	for (node = fams; node; node = nsibling(node)) {
 		fam = key_to_fam(rmvat(nval(node)));
 		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
-		ASSERT(husb || wife || chil);
 		if (isex == SEX_MALE) {
 			ASSERT(husb && eqstr(nval(husb), nxref(indi)));
 			free_nodes(husb);
@@ -70,16 +74,18 @@ BOOLEAN conf;	/* have user confirm */
 			wife = NULL;
 		}
 		join_fam(fam, fref, husb, wife, chil, rest);
-		if (!husb && !wife && !chil)
-			delete_fam(fam);
-		else
+		if (husb || wife || chil)
 			fam_to_dbase(fam);
+		else
+			delete_fam(fam);
 	}
+
+/* Remove person from families he/she is in as a child */
+
 checkfamc:
 	for (node = famc; node; node = nsibling(node)) { 
 		fam = key_to_fam(rmvat(nval(node)));
 		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
-		ASSERT(husb || wife || chil);
 		found = FALSE;
 		prev = NULL;
 		this = chil;
@@ -93,17 +99,17 @@ checkfamc:
 		}
 		ASSERT(found);
 		next = nsibling(this);
-		if (!prev)
-			chil = next;
-		else
+		if (prev)
 			nsibling(prev) = next;
+		else
+			chil = next;
 		nsibling(this) = NULL;
 		free_nodes(this);
 		join_fam(fam, fref, husb, wife, chil, rest);
-		if (!husb && !wife && !chil)
-			delete_fam(fam);
-		else
+		if (husb || wife || chil)
 			fam_to_dbase(fam);
+		else
+			delete_fam(fam);
 	}
 	key = rmvat(nxref(indi));
 	keyint = atoi(key + 1);
@@ -111,6 +117,8 @@ checkfamc:
 	remove_indi_cache(key);
 	for (node = name; node; node = nsibling(node))
 		remove_name(nval(node), key);
+	for (node = refn; node; node = nsibling(node))
+		if (nval(node)) remove_refn(nval(node), key);
 	remove_from_browse_lists(key);
 	del_in_dbase(key);
 	join_indi(indi, name, refn, sex, body, famc, fams);
@@ -123,21 +131,23 @@ delete_fam (fam)
 NODE fam;
 {
 	STRING key;
-	NODE husb, wife, chil, rest, fref;
+	NODE node, husb, wife, chil, rest, refn;
 	INT keyint;
 	if (!fam) return;
-	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
+	split_fam(fam, &refn, &husb, &wife, &chil, &rest);
 	if (husb || wife || chil) {
 		message(haslnk);
-		join_fam(fam, fref, husb, wife, chil, rest);
+		join_fam(fam, refn, husb, wife, chil, rest);
 		return;
 	}
 	key = rmvat(nxref(fam));
 	keyint = atoi(key + 1);
 	addfxref(keyint);
+	for (node = refn; node; node = nsibling(node))
+		if (nval(node)) remove_refn(nval(node), key);
 	remove_fam_cache(key);
 	del_in_dbase(key);
-	join_fam(fam, fref, husb, wife, chil, rest);
+	join_fam(fam, refn, husb, wife, chil, rest);
 	free_nodes(fam);
 }
 /*=================================================

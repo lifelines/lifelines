@@ -23,10 +23,10 @@
 */
 /*==========================================================
  * write.c -- Handle changes to the database
- * Copyright(c) 1994 by T.T. Wetmore IV; all rights reserved
+ * Copyright(c) 1994-95 by T.T. Wetmore IV; all rights reserved
  *   2.3.6 - 01 Jan 94    3.0.0 - 01 Jan 94
- *   3.0.2 - 11 Dec 94
- *========================================================*/
+ *   3.0.2 - 11 Dec 94    3.0.3 - 07 Aug 95
+ *===========================================================*/
 
 #include "standard.h"
 #include "table.h"
@@ -38,11 +38,11 @@
  *   createnode(STRING, STRING) -> NODE
  *===================================*/
 WORD __createnode (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	STRING val, tag = (STRING) evaluate(ielist(node), stab, eflg);
+	STRING val, tag = (STRING) evaluate(iargs(node), stab, eflg);
 	if (*eflg) return NULL;
-	val = (STRING) evaluate(inext((INTERP)ielist(node)), stab, eflg);
+	val = (STRING) evaluate(inext((PNODE)iargs(node)), stab, eflg);
 	if (*eflg) return NULL;
 	return (WORD) create_node(NULL, tag, val, NULL);
 }
@@ -51,9 +51,9 @@ INTERP node; TABLE stab; BOOLEAN *eflg;
  *   addnode(NODE, NODE, NODE) -> VOID
  *=====================================*/
 WORD __addnode (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	INTERP arg = (INTERP) ielist(node);
+	PNODE arg = (PNODE) iargs(node);
 	NODE next, prnt, prev;
 	NODE this = (NODE) evaluate(arg, stab, eflg);
 	if (*eflg || this == NULL) return NULL;
@@ -79,10 +79,10 @@ INTERP node; TABLE stab; BOOLEAN *eflg;
  *   NOTE: MEMORY LEAK MEMORY LEAK MEMORY LEAK
  *==========================================*/
 WORD __deletenode (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	NODE prnt, prev, curs, next;
-	NODE this = (NODE) evaluate(ielist(node), stab, eflg);
+	NODE this = (NODE) evaluate(iargs(node), stab, eflg);
 	if (*eflg || this == NULL) return NULL;
 	if ((prnt = nparent(this)) == NULL) return NULL;
 	prev = NULL;
@@ -97,5 +97,52 @@ INTERP node; TABLE stab; BOOLEAN *eflg;
 		nchild(prnt) = next;
 	else
 		nsibling(prev) = next;
+	return NULL;
+}
+/*======================================
+ * writeindi -- Write person to database
+ *   writeindi(INDI) -> VOID
+ *====================================*/
+WORD __writeindi (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
+{
+	NODE indi1;
+	NODE indi2 = eval_indi(iargs(node), stab, eflg, NULL);
+	STRING rec, msg;
+	INT len;
+	if (*eflg) return NULL;
+	ASSERT(rec = retrieve_record(rmvat(nxref(indi2)), &len));
+        ASSERT(indi1 = string_to_node(rec));
+	if (replace_indi(indi1, indi2, &msg)) {
+wprintf("Oh, happy days, person written to database okay.\n");/*DEBUG*/
+		return NULL;
+	} else {
+		*eflg = TRUE;
+		if (msg) wprintf("Error: writeindi: %s\n", msg);
+	}
+	return NULL;
+}
+/*=====================================
+ * writefam -- Write family to database
+ *   writefam(FAM) -> VOID
+ *===================================*/
+WORD __writefam (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
+{
+	NODE fam1;
+	NODE fam2 = eval_fam(iargs(node), stab, eflg, NULL);
+	STRING rec, msg;
+	INT len;
+	if (*eflg) return NULL;
+	ASSERT(rec = retrieve_record(rmvat(nxref(fam2)), &len));
+        ASSERT(fam1 = string_to_node(rec));
+	if (replace_fam(fam1, fam2, &msg)) {
+wprintf("Oh, happy days, family written to database okay.\n");/*DEBUG*/
+		return NULL;
+	} else {
+		*eflg = TRUE;
+		if (msg)
+			wprintf("Error: writefam: %s\n", msg);
+	}
 	return NULL;
 }

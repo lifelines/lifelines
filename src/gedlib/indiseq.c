@@ -146,9 +146,27 @@ STRING key;	/* key of el to modify */
 		}
 	}
 }
+/*==============================================
+ * in_indiseq -- See if element is in an INDISEQ
+ *=============================================*/
+BOOLEAN in_indiseq (seq, key)
+INDISEQ seq;	/* sequence */
+STRING key;	/* key */
+{
+	INT i, len;
+	SORTEL *data;
+
+	if (!seq || !key) return FALSE;
+	len = ISize(seq);
+	data = IData(seq);
+	for (i = 0; i < len; i++) {
+		if (eqstr(key, skey(data[i]))) return TRUE;
+	}
+	return FALSE;
+}
 /*===============================================================
  * delete_indiseq -- Remove el from sequence; if key not NULL use
- *   if; else use index, rel 0; el must be person
+ *   it; else use index, rel 0; el must be person
  *==============================================================*/
 BOOLEAN delete_indiseq (seq, key, name, index)
 INDISEQ seq;	/* sequence */

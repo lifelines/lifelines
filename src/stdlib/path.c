@@ -26,6 +26,7 @@
  * Copyright (c) by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 12 Aug 93
  *   3.0.0 - 05 May 94    3.0.2 - 01 Dec 94
+ *   3.0.3 - 06 Sep 95
  *=====================================================*/
 
 #include <unistd.h>
@@ -37,14 +38,14 @@
 STRING filepath (name, mode, path)
 STRING name, mode, path;
 {
-	unsigned char buf1[100], buf2[100];
+	unsigned char buf1[MAXLINELEN], buf2[MAXLINELEN];
 	STRING p, q;
 	INT c;
 
 	if (!name || *name == 0) return NULL;
 	if (!path || *path == 0) return name;
 	if (*name == '/' || *name == '.') return name;
-	if (strlen(name) + strlen(path) >= 100) return NULL;
+	if (strlen(name) + strlen(path) >= MAXLINELEN) return NULL;
 	strcpy(buf1, path);
 	p = buf1;
 	while (c = *p) {
@@ -64,10 +65,6 @@ STRING name, mode, path;
 		p += strlen(p);
 		p++;
 	}
-/*NEW -- remove the mode parameter? */
-	return name;
-/*END*/
-#if 0
 	if (eqstr(mode, "r")) return NULL;
 	p = buf1;
 	q = buf2;
@@ -77,7 +74,6 @@ STRING name, mode, path;
 	q++;
 	strcpy(q, name);
 	return strsave(buf2);
-#endif
 }
 /*===========================================
  * fopenpath -- Open file using path variable

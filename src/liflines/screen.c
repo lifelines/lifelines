@@ -23,10 +23,10 @@
 */
 /*=============================================================
  * screen.c -- Curses user interface to LifeLines
- * Copyright(c) 1992-95 by T.T. Wetmore IV; all rights reserved
+ * Copyright(c) 1992-96 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 29 Sep 93
  *   2.3.6 - 01 Jan 94    3.0.0 - 06 Oct 94
- *   3.0.2 - 25 Mar 95
+ *   3.0.2 - 25 Mar 95    3.0.3 - 17 Jan 96
  *===========================================================*/
 
 #include "standard.h"
@@ -48,11 +48,11 @@
 
 STRING get_answer();
 WINDOW *choose_win();
-extern BOOLEAN alldone;
+extern BOOLEAN alldone, progrunning;
 extern STRING version, betaversion, empstr, empstr71, readpath;
 extern STRING abverr, uoperr;
-STRING mtitle = (STRING) "LifeLines %s - Genealogical Database and Report Generator";
-STRING cright = (STRING) "Copyright(c) 1991 to 1995, by T. T. Wetmore IV";
+STRING mtitle = (STRING) "LifeLines %s - Genealogical Database and Programming System";
+STRING cright = (STRING) "Copyright(c) 1991 to 1996, by T. T. Wetmore IV";
 STRING plschs = (STRING) "Please choose an operation:";
 BOOLEAN stdout_vis = FALSE;
 
@@ -792,7 +792,8 @@ STRING str;
 #endif
 		nocrmode();
 		now_showing = FALSE;
-		place_std_msg();
+		if (!progrunning)
+			place_std_msg();
 		for (i = 0; i < n; i++) {
 			if (c == str[i]) return c;
 		}

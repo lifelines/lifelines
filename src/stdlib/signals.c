@@ -26,10 +26,14 @@
  * Copyright(c) 1993-94 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 01 Sep 93
  *   3.0.0 - 30 Jul 94    3.0.2 - 10 Nov 94
+ *   3.0.3 - 19 Sep 95
  *===========================================================*/
 
 #include <signal.h>
 #include "standard.h"
+#include "table.h"
+#include "gedcom.h"
+#include "interp.h"
 
 #define NUM_SIGNALS 21
 char *sig_msgs[] = {
@@ -83,6 +87,16 @@ set_signals ()
 void on_signals (sig)
 int sig;
 {
+	extern BOOLEAN progrunning;
+	extern PNODE Pnode;
+
+	wprintf("Darn, caught a signal.  ");
+	if (progrunning) {
+		wprintf("Looks like you were running a program.\n");
+		wprintf("Check file \"%s\" around line %d.\n", ifname(Pnode),
+		    iline(Pnode));
+	} else 
+		wprintf("Email me if you get stuck.  Tom.\n");
 	wprintf("signal %d:%s\n", sig, sig_msgs[sig]);
 	close_lifelines();
 	endwin();

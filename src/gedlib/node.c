@@ -23,15 +23,15 @@
 */
 /*=============================================================
  * node.c -- Standard GEDCOM NODE operations
- * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
+ * Copyright(c) 1992-96 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 04 Sep 93
  *   3.0.0 - 29 Aug 94    3.0.2 - 23 Dec 94
+ *   3.0.3 - 16 Jan 96
  *===========================================================*/
 
 #include "standard.h"
 #include "table.h"
 #include "gedcom.h"
-#include <string.h>
 #include "translat.h"
 
 INT lineno = 0;
@@ -191,13 +191,12 @@ STRING p;
 INT *plev;
 STRING *pxref, *ptag, *pval, *pmsg;
 {
-	static unsigned char zero = 0;
 	INT lev;
 	extern INT lineno;
 	STRING p0 = p;
 	static unsigned char scratch[MAXLINELEN+40];
-	*pmsg = 0;
-	*pxref = *pval = &zero;
+
+	*pmsg = *pxref = *pval = 0;
 	if (!p || *p == 0) {
 		sprintf(scratch, reremp, lineno);
 		*pmsg = scratch;
@@ -831,6 +830,7 @@ BOOLEAN shrt;
 	static unsigned char scratch2[MAXLINELEN+1];
 	STRING date, plac, p;
 	date = plac = NULL;
+	if (!node) return NULL;
 	node = nchild(node);
 	while (node) {
 		if (eqstr("DATE", ntag(node)) && !date) date = nval(node);
@@ -939,10 +939,10 @@ INT levl;  NODE node;
 	show_node_rec(levl + 1, nchild(node));
 	show_node_rec(levl    , nsibling(node));
 }
-/*===============================================
- * node_list_length -- Return length of NODE list
- *=============================================*/
-INT node_list_length (node)
+/*===========================================
+ * length_nodes -- Return length of NODE list
+ *=========================================*/
+INT length_nodes (node)
 NODE node;
 {
 	INT len = 0;
@@ -1098,4 +1098,91 @@ NODE *plast;	/* previous node, may be NULL */
 		return node;
 	}
 	return NULL;
+}
+/*=======================================================================
+ * father_nodes -- Given list of FAMS or FAMC nodes, returns list of HUSB
+ *   lines they contain
+ *=====================================================================*/
+NODE father_nodes (faml)
+NODE faml;	/* list of FAMC and/or FAMS nodes */
+{
+	NODE fam, refn, husb, wife, chil, rest;
+	NODE old = NULL, new = NULL;
+	while (faml) {
+		ASSERT(eqstr("FAMC", ntag(faml)) || eqstr("FAMS", ntag(faml)));
+		ASSERT(fam = key_to_fam(rmvat(nval(faml))));
+		split_fam(fam, &refn, &husb, &wife, &chil, &rest);
+		new = union_nodes(old, husb, FALSE, TRUE);
+		free_nodes(old);
+		old = new;
+		join_fam(fam, refn, husb, wife, chil, rest);
+		faml = nsibling(faml);
+	}
+	return new;
+}
+/*=======================================================================
+ * mother_nodes -- Given list of FAMS or FAMC nodes, returns list of WIFE
+ *   lines they contain
+ *=====================================================================*/
+NODE mother_nodes (faml)
+NODE faml;	/* list of FAMC and/or FAMS nodes */
+{
+	NODE fam, refn, husb, wife, chil, rest;
+	NODE old = NULL, new = NULL;
+	while (faml) {
+		ASSERT(eqstr("FAMC", ntag(faml)) || eqstr("FAMS", ntag(faml)));
+		ASSERT(fam = key_to_fam(rmvat(nval(faml))));
+		split_fam(fam, &refn, &husb, &wife, &chil, &rest);
+		new = union_nodes(old, wife, FALSE, TRUE);
+		free_nodes(old);
+		old = new;
+		join_fam(fam, refn, husb, wife, chil, rest);
+		faml = nsibling(faml);
+	}
+	return new;
+}
+/*=========================================================================
+ * children_nodes -- Given list of FAMS or FAMC nodes, returns list of CHIL
+ *   lines they contain
+ *=======================================================================*/
+NODE children_nodes (faml, role)
+NODE faml;	/* list of FAMC and/or FAMS nodes */
+{
+	NODE fam, refn, husb, wife, chil, rest;
+	NODE old = NULL, new = NULL;
+	while (faml) {
+		ASSERT(eqstr("FAMC", ntag(faml)) || eqstr("FAMS", ntag(faml)));
+		ASSERT(fam = key_to_fam(rmvat(nval(faml))));
+		split_fam(fam, &refn, &husb, &wife, &chil, &rest);
+		new = union_nodes(old, chil, FALSE, TRUE);
+		free_nodes(old);
+		old = new;
+		join_fam(fam, refn, husb, wife, chil, rest);
+		faml = nsibling(faml);
+	}
+	return new;
+}
+/*========================================================================
+ * parents_nodes -- Given list of FAMS or FAMC nodes, returns list of HUSB
+ *   and WIFE lines they contain
+ *======================================================================*/
+NODE parents_nodes (faml)
+NODE faml;	/* list of FAMC and/or FAMS nodes */
+{
+	NODE fam, refn, husb, wife, chil, rest;
+	NODE old = NULL, new = NULL;
+	while (faml) {
+		ASSERT(eqstr("FAMC", ntag(faml)) || eqstr("FAMS", ntag(faml)));
+		ASSERT(fam = key_to_fam(rmvat(nval(faml))));
+		split_fam(fam, &refn, &husb, &wife, &chil, &rest);
+		new = union_nodes(old, husb, FALSE, TRUE);
+		free_nodes(old);
+		old = new;
+		new = union_nodes(old, wife, FALSE, TRUE);
+		free_nodes(old);
+		old = new;
+		join_fam(fam, refn, husb, wife, chil, rest);
+		faml = nsibling(faml);
+	}
+	return new;
 }

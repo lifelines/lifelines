@@ -54,7 +54,7 @@ STRING **pkeys;
 	}
 	nchil = *pnum = 0;
 	if (!fam || !(chil = CHIL(fam))) return NULL;
-	nchil = node_list_length(chil);
+	nchil = length_nodes(chil);
 	if (nchil == 0) return NULL;
 	if (nchil > (maxchil - 1)) {
 		if (maxchil) {

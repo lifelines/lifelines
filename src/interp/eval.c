@@ -23,9 +23,10 @@
 */
 /*==============================================================
  * eval.c -- Evaulate report program expressions
- * Copyright(c) 1991-94 by T. T. Wetmore IV; all rights reserved
+ * Copyright(c) 1991-95 by T. T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 17 Aug 93
  *   3.0.0 - 29 Jun 94    3.0.2 - 22 Dec 94
+ *   3.0.3 - 23 Nov 95
  *============================================================*/
 
 #include "standard.h"
@@ -33,109 +34,152 @@
 #include "gedcom.h"
 #include "interp.h"
 
-/*==============================
+extern BOOLEAN traceprogram;
+
+/*=============================+
  * evaluate -- Generic evaluator
  *============================*/
-WORD evaluate (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+PVALUE evaluate (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
+	if (prog_debug) {
+		wprintf("%d: ", iline(node));
+		show_one_pnode(node);
+		wprintf("\n");
+	}
 	if (iistype(node, IIDENT)) return evaluate_iden(node, stab, eflg);
 	if (iistype(node, IBCALL)) return evaluate_func(node, stab, eflg);
 	if (iistype(node, IFCALL)) return evaluate_ufunc(node, stab, eflg);
 	*eflg = FALSE;
-	if (iistype(node, IICONS)) return iicons(node);
-	if (iistype(node, ILITERAL)) return iliteral(node);
+	if (iistype(node, IICONS)) return copy_pvalue(ivalue(node));
+	if (iistype(node, ISCONS)) return copy_pvalue(ivalue(node));
+	if (iistype(node, IFCONS)) return copy_pvalue(ivalue(node));
 	*eflg = TRUE;
 	return NULL;
 }
-/*=====================================
+/*====================================+
  * evaluate_iden -- Evaluate identifier
  *===================================*/
-WORD evaluate_iden (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+PVALUE evaluate_iden (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	STRING iden = (STRING) iident(node);
+#if 0
+	if (prog_debug)
+		wprintf("evaluate_iden called: iden = %s\n", iden);
+#endif
 	*eflg = FALSE;
 	return valueof_iden(stab, iden);
 }
-/*========================================
+/*=======================================+
  * valueof_iden - Find value of identifier
  *======================================*/
-WORD valueof_iden (stab, iden)
+PVALUE valueof_iden (stab, iden)
 TABLE stab;  STRING iden;
 {
-	if (in_table(stab, iden)) return (WORD) valueof(stab, iden);
-	return (WORD) valueof(globtab, iden);
+	BOOLEAN there;
+	PVALUE val;
+/*wprintf("valueof_iden: iden, stab, globtab: %s, %d, %d\n",
+iden, stab, globtab);/*DEBUG*/
+	val = (PVALUE) valueofbool(stab, iden, &there);
+	if (there) return copy_pvalue(val);
+	val = (PVALUE) valueofbool(globtab, iden, &there);
+	if (there) return copy_pvalue(val);
+	return create_pvalue(PANY, NULL);
 }
-/*================================================
- * evaluate_cond - Evaluate conditional expression
- *==============================================*/
-WORD evaluate_cond (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+/*================================================+
+ * evaluate_cond -- Evaluate conditional expression
+ *===============================================*/
+BOOLEAN evaluate_cond (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	WORD value;
-	if (!inext(node)) return evaluate(node, stab, eflg);
-	*eflg = TRUE;
-	if (!iistype(node, IIDENT)) return NULL;
-	value = evaluate(inext(node), stab, eflg);
-	if (*eflg) return NULL;
-	insert_table(stab, iident(node), value);
-	return value;
+	PVALUE val;
+	BOOLEAN rc;
+	PNODE var = node, expr = inext(node);
+	if (!expr) {
+		expr = var;
+		var = NULL;
+	}
+	if (var && !iistype(var, IIDENT)) {
+		*eflg = TRUE;
+		prog_error(node, "1st arg in conditional must be variable");
+		return FALSE;
+	}
+	val = evaluate(expr, stab, eflg);
+	if (*eflg || !val) {
+		*eflg = TRUE;
+		prog_error(node, "error in conditional expression");
+		return FALSE;
+	}
+/*wprintf("interp_if: cond = ");show_pvalue(val);wprintf("\n");/*DEBUG*/
+	if (var) insert_table(stab, iident(node), copy_pvalue(val));
+	coerce_pvalue(PBOOL, val, eflg);
+	rc = (BOOLEAN) pvalue(val);
+	delete_pvalue(val);
+	return rc;
 }
-/*==========================================
- * evaluate_func - Evaluate builtin function
- *========================================*/
-WORD evaluate_func (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+/*==========================================+
+ * evaluate_func -- Evaluate builtin function
+ *=========================================*/
+PVALUE evaluate_func (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	WORD value;
-	*eflg = TRUE;
-	value = (*(FUNC)ifunc(node))(node, stab, eflg);
-/*
-	if (*eflg) wprintf("Error: line %d: function %s\n",
-	    iline(node), iident(node));
-*/
-	return value;
+	PVALUE val;
+	char trace[20];
+
+	*eflg = FALSE;
+#if 0
+	if (prog_debug)
+		wprintf("evaluate_func called: %d: %s\n",
+		    iline(node), iname(node));
+#endif
+	if (traceprogram) {
+		sprintf(trace, "%d: %s\n", iline(node), iname(node));
+		poutput(trace);
+	}
+	val = (*(PFUNC)ifunc(node))(node, stab, eflg);
+	return val;
 }
-/*================================================
- * evaluate_ufunc - Evaluate user defined function
- *==============================================*/
-WORD evaluate_ufunc (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+/*================================================+
+ * evaluate_ufunc -- Evaluate user defined function
+ *===============================================*/
+PVALUE evaluate_ufunc (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	STRING nam = (STRING) iname(node);
-	INTERP func, arg, parm;
+	PNODE func, arg, parm;
 	TABLE newtab;
-	WORD val;
+	PVALUE val;
 	INTERPTYPE irc;
 
 	*eflg = TRUE;
-	if ((func = (INTERP) valueof(functab, nam)) == NULL) {
-		wprintf("Error: line %d: `%s': undefined function\n",
-		    iline(node), nam);
+	if ((func = (PNODE) valueof(functab, nam)) == NULL) {
+		prog_error(node, "undefined function");
 		return NULL;
 	}
 	newtab = create_table();
-	arg = (INTERP) iargs(node);
-	parm = (INTERP) iparams(func);
+	arg = (PNODE) iargs(node);
+	parm = (PNODE) iargs(func);
 	while (arg && parm) {
 		BOOLEAN eflg;
-		WORD value = evaluate(arg, stab, &eflg);
+		PVALUE value = evaluate(arg, stab, &eflg);
 		if (eflg) return INTERROR;
 		insert_table(newtab, iident(parm), (WORD) value);
 		arg = inext(arg);
 		parm = inext(parm);
 	}
 	if (arg || parm) {
-		wprintf("``%s'': mismatched args and params\n", iname(node));
+		prog_error(node, "mismatched args and params");
 		remove_table(newtab, DONTFREE);
 		return INTERROR;
 	}
-	irc = interpret((INTERP) ibody(func), newtab, &val);
+	irc = interpret((PNODE) ibody(func), newtab, &val);
 	remove_table(newtab, DONTFREE);
 	switch (irc) {
 	case INTRETURN:
 	case INTOKAY:
+/*wprintf("Successful ufunc call -- val returned was ");
+show_pvalue(val);wprintf("\n");/*DEBUG*/
 		*eflg = FALSE;
 		return val;
 	case INTBREAK:
@@ -149,7 +193,7 @@ INTERP node; TABLE stab; BOOLEAN *eflg;
  * iistype -- Check type of interp node
  *===================================*/
 BOOLEAN iistype (node, type)
-INTERP node;
+PNODE node;
 INT type;
 {
 	return itype(node) == type;
@@ -158,7 +202,7 @@ INT type;
  * num_params -- Return number of params in list
  *============================================*/
 INT num_params (node)
-INTERP node;
+PNODE node;
 {
 	INT np = 0;
 	while (node) {
@@ -177,4 +221,20 @@ TABLE stab; STRING id; WORD value;
 	if (!in_table(stab, id) && in_table(globtab, id)) tab = globtab;
 	insert_table(tab, id, value);
 	return;
+}
+/*=================================================
+ * eval_and_coerce -- Generic evaluator and coercer
+ *===============================================*/
+PVALUE eval_and_coerce (type, node, stab, eflg)
+INT type; PNODE node; TABLE stab; BOOLEAN *eflg;
+{
+	PVALUE val;
+	if (*eflg) return NULL;
+	val = evaluate(node, stab, eflg);
+	if (*eflg || !val) {
+		*eflg = TRUE;
+		return NULL;
+	}
+	coerce_pvalue(type, val, eflg);
+	return val;
 }

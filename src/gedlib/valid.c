@@ -23,9 +23,10 @@
 */
 /*=============================================================
  * valid.c -- Record validation functions
- * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
+ * Copyright(c) 1992-96 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 02 Sep 93
  *   3.0.0 - 11 Sep 94    3.0.2 - 13 Dec 94
+ *   3.0.3 - 23 Jul 96
  *===========================================================*/
 
 #include "standard.h"
@@ -52,18 +53,18 @@ STRING badenm = SS "This person record has bad GEDCOM name syntax.";
 STRING badpsx = SS "You cannot change the sex of a parent.";
 STRING badirf = SS "This person's REFN key is already in use.";
 
-/*======================================
- * valid_indi_tree -- Validate INDI tree
- *====================================*/
-BOOLEAN valid_indi_tree (indi1, pmsg, indi0)
+/*===================================
+ * valid_indi -- Validate person tree
+ *=================================*/
+BOOLEAN valid_indi (indi1, pmsg, indi0)
 NODE indi1;	/* person to validate */
 STRING *pmsg;	/* error message, if any */
-NODE indi0;	/* INDI node to match */
+NODE indi0;	/* person to match - may be NULL */
 {
 	NODE name1, refn1, sex1, body1, famc1, fams1, node;
 	NODE name0, refn0, sex0, body0, famc0, fams0;
 	INT isex, num;
-	STRING **keys, ukey;
+	STRING *keys, ukey;
 
 	if (!indi1) {
 		*pmsg = bademp;
@@ -92,15 +93,15 @@ NODE indi0;	/* INDI node to match */
 	if (indi0)
 		split_indi(indi0, &name0, &refn0, &sex0, &body0, &famc0,
 		    &fams0);
-	if (indi0 && !iso_list(indi1, indi0)) {
+	if (indi0 && !iso_nodes(indi1, indi0, FALSE, FALSE)) {
 		*pmsg = badind; 
 		goto bad1;
 	}
-	if (!iso_list(famc1, famc0)) {
+	if (!iso_nodes(famc1, famc0, FALSE, TRUE)) {
 		*pmsg = badfmc;
 		goto bad1;
 	}
-	if (!iso_list(fams1, fams0)) {
+	if (!iso_nodes(fams1, fams0, FALSE, TRUE)) {
 		*pmsg = badfms; 
 		goto bad1;
 	}
@@ -112,7 +113,8 @@ NODE indi0;	/* INDI node to match */
 	}
 	ukey = (refn1 ? nval(refn1) : NULL);
 	get_refns(ukey, &num, &keys, 'I');
-	if (num > 1 || (num == 1 && nestr(keys[0], rmvat(nxref(indi1))))) {
+	if (num > 1 || (num == 1 && (!indi0 ||
+	    nestr(keys[0], rmvat(nxref(indi1)))))) {
 		*pmsg = badirf;
 		goto bad1;
 	}
@@ -127,51 +129,60 @@ bad2:
 	join_indi(indi1, name1, refn1, sex1, body1, famc1, fams1);
 	return FALSE;
 }
-/*====================================
- * valid_fam_tree -- Validate FAM tree
- *==================================*/
-BOOLEAN valid_fam_tree (fam, pmsg, fam0, husb0, wife0, chil0)
-NODE fam;
-STRING *pmsg;
-NODE fam0, husb0, wife0, chil0;
+/*===============================
+ * valid_fam -- Validate FAM tree
+ *=============================*/
+BOOLEAN valid_fam (fam1, pmsg, fam0)
+NODE fam1;	/* family to validate */
+STRING *pmsg;	/* error message, if any */
+NODE fam0;	/* family to match - may be NULL */
 {
-	NODE husb, wife, chil, rest, fref;
+	NODE refn0, husb0, wife0, chil0, body0;
+	NODE refn1, husb1, wife1, chil1, body1;
 
-	if (!fam) {
+	if (!fam1) {
 		*pmsg = bademp;
   		return FALSE;
 	}
-	if (nestr("FAM", ntag(fam))) {
+	if (nestr("FAM", ntag(fam1))) {
 		*pmsg = badfm0;
 		return FALSE;
 	}
-	if (nsibling(fam)) {
+	if (nsibling(fam1)) {
 		*pmsg = badmul;
 		return FALSE;
 	}
-	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
-	if (fam0 && !iso_list(fam, fam0)) {
+
+	refn0 = husb0 = wife0 = chil0 = body0 = NULL;
+	if (fam0)
+		split_fam(fam0, &refn0, &husb0, &wife0, &chil0, &body0);
+	split_fam(fam1, &refn1, &husb1, &wife1, &chil1, &body1);
+	
+	if (fam0 && !iso_nodes(fam1, fam0, FALSE, TRUE)) {
 		*pmsg = badfam; 
-		join_fam(fam, fref, husb, wife, chil, rest);
-		return FALSE;
+		goto bad3;
 	}
-	if (!iso_list(husb, husb0)) {
+	if (!iso_nodes(husb1, husb0, FALSE, TRUE)) {
 		*pmsg = badhsb;
-		join_fam(fam, fref, husb, wife, chil, rest);
-		return FALSE;
+		goto bad3;
 	}
-	if (!iso_list(wife, wife0)) {
+	if (!iso_nodes(wife1, wife0, FALSE, TRUE)) {
 		*pmsg = badwif;
-		join_fam(fam, fref, husb, wife, chil, rest);
-		return FALSE;
+		goto bad3;
 	}
-	if (!iso_list(chil, chil0)) {
+	if (!iso_nodes(chil1, chil0, FALSE, TRUE)) {
 		*pmsg = badchl;
-		join_fam(fam, fref, husb, wife, chil, rest);
-		return FALSE;
+		goto bad3;
 	}
-	join_fam(fam, fref, husb, wife, chil, rest);
+	if (fam0)
+		join_fam(fam0, refn0, husb0, wife0, chil0, body0);
+	join_fam(fam1, refn1, husb1, wife1, chil1, body1);
 	return TRUE;
+bad3:
+	if (fam0)
+		join_fam(fam0, refn0, husb0, wife0, chil0, body0);
+	join_fam(fam1, refn1, husb1, wife1, chil1, body1);
+	return FALSE;
 }
 /*============================
  * valid_name -- Validate name
@@ -181,6 +192,7 @@ STRING name;
 {
 	INT c, n = 0;
 	if (!name) return FALSE;
+	if (pointer_value(name)) return FALSE;
 	while (c = *name++) {
 		if (c == '/') n++;
 	}

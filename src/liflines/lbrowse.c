@@ -26,6 +26,7 @@
  * Copyright (c) 1993-94 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 01 Sep 93
  *   3.0.0 - 09 Oct 94    3.0.2 - 30 Dec 94
+ *   3.0.3 - 20 Jan 96
  *============================================================*/
 
 #include "standard.h"
@@ -41,9 +42,9 @@ extern STRING idplst, lstnew, mrkper;
 extern INDISEQ current_seq;
 LIST browse_lists;
 
-/*========================================
- * browse_list -- Handle list browse mode.
- *======================================*/
+/*=======================================
+ * browse_list -- Handle list browse mode
+ *=====================================*/
 INT browse_list (pindi1, pindi2, pfam1, pfam2, pseq)
 NODE *pindi1, *pindi2, *pfam1, *pfam2;
 INDISEQ *pseq;

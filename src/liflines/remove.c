@@ -26,6 +26,7 @@
  * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 01 Sep 93
  *   3.0.0 - 23 Sep 94    3.0.2 - 05 Dec 94
+ *   3.0.3 - 15 Aug 95
  *===========================================================*/
 
 #include "standard.h"
@@ -165,8 +166,7 @@ NODE fam;
 	NODE fref, husb, wife, chil, rest;
 
 	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
-	num = node_list_length(husb) + node_list_length(wife) +
-	    node_list_length(chil);
+	num = length_nodes(husb) + length_nodes(wife) + length_nodes(chil);
 	join_fam(fam, fref, husb, wife, chil, rest);
 	return num;
 }

@@ -23,8 +23,9 @@
 */
 /*=============================================================
  * standard.h -- Define standard macros and types
- * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
+ * Copyright(c) 1991-95 by T.T. Wetmore IV; all rights reserved
  *   3.0.0 - 05 May 94    3.0.2 - 23 Nov 94
+ *   3.0.3 - 25 Jun 95
  *===========================================================*/
 
 #ifndef STDIO_H
@@ -45,13 +46,22 @@ typedef unsigned char *STRING;
 #define INT int 
 #define SHORT short
 #define LONG long
+#define FLOAT double
+
+typedef char *WORD;
+typedef union {
+        BOOLEAN b;
+        INT     i;
+        FLOAT   f;
+        WORD    w;
+        /*LONG   l;*/
+} UNION;
 
 #define MAXLINELEN 512
 
-typedef char *WORD;
 #define WORDSIZE sizeof(WORD)
 
-typedef WORD (*FUNC)();
+/*typedef WORD (*FUNC)();*/
 
 #define max(x,y) ((x)>(y)?(x):(y))
 #define min(x,y) ((x)>(y)?(y):(x))

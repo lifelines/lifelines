@@ -23,8 +23,8 @@
 */
 /*=============================================================
  * refns.c -- Handle user reference indexing
- * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
- *   3.0.2 - 13 Dec 94
+ * Copyright(c) 1992-96 by T.T. Wetmore IV; all rights reserved
+ *   3.0.2 - 13 Dec 94    3.0.3 - 20 Jan 96
  *===========================================================*/
 
 #include "standard.h"
@@ -259,24 +259,28 @@ get_refns (refn, pnum, pkeys, letr)
 STRING refn;
 INT *pnum;
 STRING **pkeys;
+INT letr;
 {
 	INT i, n;
 
 	*pnum = 0;
 	if (!refn) return;
 
-   /* Clean up allocated memory from last call */
+/* Clean up allocated memory from last call */
+
 	if (RMcount) {
 		for (i = 0; i < RMcount; i++)
 			stdfree(RMkeys[i]);
 	}
 	RMcount = 0;
 
-   /* Load up static refn buffers; return if no match */
+/* Load static refn buffers; return if no match */
+
 	if (!getrefnrec(refn)) return;
 
-   /* Compare user's refn against all refns in refn record; the refn
+/* Compare user's refn with all refns in record; the refn
       record data structures are modified */
+
 	n = 0;
 	for (i = 0; i < RRcount; i++) {
 		if (eqstr(refn, RRrefns[i])) {
@@ -321,6 +325,7 @@ NODE node;
 	STRING refn, val = nval(node);
 	INT letr;
 	NODE refr;
+
 	if (!val) return TRUE;
 	if (symbolic_link(val)) {
 		refn = rmvat(val);
@@ -352,9 +357,72 @@ STRING tag;
 	if (eqstr("MOTH", tag)) return 'I';
 	if (eqstr("HUSB", tag)) return 'I';
 	if (eqstr("WIFE", tag)) return 'I';
+	if (eqstr("INDI", tag)) return 'I';
 	if (eqstr("CHIL", tag)) return 'I';
 	if (eqstr("FAMC", tag)) return 'F';
 	if (eqstr("FAMS", tag)) return 'F';
+	if (eqstr("FAM",  tag)) return 'F';
 	if (eqstr("SOUR", tag)) return 'S';
+	if (eqstr("EVEN", tag)) return 'E';
+	if (eqstr("EVID", tag)) return 'E';
 	return 0;
+}
+/*=========================================
+ * key_to_record -- Returns record with key
+ *=======================================*/
+NODE key_to_record (str, let)
+STRING str;	/* string that may be a key */
+INT let;	/* if string starts with letter it must be this */
+{
+	char kbuf[MAXNAMELEN];
+	INT i = 0, c;
+
+	if (!str || *str == 0) return NULL;
+	c = *str++;
+	if (c != let && chartype(c) != DIGIT) return NULL;
+	kbuf[i++] = let;
+	if (c != let) kbuf[i++] = c;
+	while ((c = *str++) && chartype(c) == DIGIT)
+		kbuf[i++] = c;
+	if (c != 0) return NULL;
+	kbuf[i] = 0;
+	if (!isrecord(BTR, str2rkey(kbuf))) return NULL;
+	switch (let) {
+	case 'I': return key_to_indi(kbuf);
+	case 'F': return key_to_fam(kbuf);
+	case 'S': return key_to_sour(kbuf);
+	case 'E': return key_to_even(kbuf);
+	case 'X': return key_to_othr(kbuf);
+	default:  FATAL();
+	}
+}
+/*================================================
+ * refn_to_record - Get record from user reference
+ *==============================================*/
+NODE refn_to_record (ukey, letr)
+STRING ukey;	/* user refn key */
+INT letr;	/* type of record */
+{
+        STRING *keys;
+        INT num, i;
+
+        if (!ukey || *ukey == 0) return NULL;
+        get_refns(ukey, &num, &keys, letr);
+	if (num)
+		return key_to_record(keys[0], *keys[0]);
+	else
+		return NULL;
+}
+/*===============================================
+ * index_by_refn - Index node tree by REFN values
+ *=============================================*/
+void index_by_refn (node, key)
+NODE node;
+STRING key;
+{
+	if (!node || !key) return;
+	for (node = nchild(node); node; node = nsibling(node)) {
+		if (eqstr("REFN", ntag(node)) && nval(node))
+			add_refn(nval(node), key);
+	}
 }

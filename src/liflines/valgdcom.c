@@ -23,9 +23,10 @@
 */
 /*=============================================================
  * valgdcom.c -- Validate GEDCOM file
- * Copyright(c) 1993-94 by T.T. Wetmore IV; all rights reserved
+ * Copyright(c) 1993-96 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93     2.3.5 - 02 Sep 93
  *   3.0.0 - 06 Jul 94     3.0.2 - 18 Feb 95
+ *   3.0.3 - 29 Jun 96
  *===========================================================*/
 
 #include "standard.h"
@@ -34,7 +35,7 @@
 #include "gedcheck.h"
 #include "translat.h"
 
-static TABLE convtab;
+static TABLE convtab = NULL;
 static INT rec_type;
 static BOOLEAN named = FALSE;
 static INT person = -1;
@@ -46,10 +47,10 @@ static INT struct_len = 0;
 static INT struct_max = 0;
 static INT num_errors;
 static INT num_warns;
-static INT noline;
 static INT defline;
 static BOOLEAN logopen;
 static FILE *flog;
+static clear_structures();
 
 ELMNT *index_data = NULL;
 
@@ -81,7 +82,11 @@ STRING noname = SS "Line %d: Person defined here has no name.";
 STRING mulfth = SS "Line %d: Person %s has multiple father links.";
 STRING mulmth = SS "Line %d: Person %s has multiple mother links.";
 STRING mulhsb = SS "Line %d: Family %s has multiple husband links.";
-STRING mulwif = SS "Line %d: Person %s has multiple wife links.";
+STRING mulwif = SS "Line %d: Family %s has multiple wife links.";
+STRING twosex = SS "Line %d: Person %s is both male and female.";
+STRING mlefml = SS "Line %d: Person %s is male but must be female.";
+STRING fmlmle = SS "Line %d: Person %s is female but must be male.";
+STRING impsex = SS "Line %d: Person %s is implied to be both male and female.";
 #if 0
 STRING noxref = SS "Line %d: This record has no cross reference value.";
 #endif
@@ -120,9 +125,10 @@ FILE *fp;
 	nindi = nfam = nsour = neven = nothr = 0;
 	num_errors = num_warns = 0;
 	logopen = FALSE;
-	noline = 0;
+	lineno = 0;
 	defline = 0;
 	curlev = 0;
+	clear_structures();
 	convtab = create_table();
 
 	wfield(1, 1, "     0 Persons");
@@ -136,7 +142,6 @@ FILE *fp;
 	rc = file_to_line(fp, tt, &lev, &xref, &tag, &val, &msg);
 	xref = xref ? rmvat(xref) : NULL;
 	rec_type = OTHR_REC;
-	noline++;
 	while (rc != DONE)  {
 		if (lev > curlev + 1 || rc == ERROR) {
 			if (rc == ERROR)
@@ -148,7 +153,6 @@ FILE *fp;
 			rc = file_to_line(fp, tt, &lev, &xref, &tag, &val,
 			    &msg);
 			xref = xref ? rmvat(xref) : NULL;
-			noline++;
 			continue;
 		}
 		if (lev > 1) {
@@ -157,7 +161,6 @@ FILE *fp;
 			rc = file_to_line(fp, tt, &lev, &xref, &tag, &val,
 			    &msg);
 			xref = xref ? rmvat(xref) : NULL;
-			noline++;
 			continue;
 		}
 		if (lev == 0) {
@@ -205,8 +208,9 @@ FILE *fp;
 		curlev = lev;
 		rc = file_to_line(fp, tt, &lev, &xref, &tag, &val, &msg);
 		xref = xref ? rmvat(xref) : NULL;
-		noline++;
 	}
+	if (rec_type == INDI_REC && !named)
+		handle_err(noname, defline);
 	check_references();
 	if (logopen) {
 		fclose(flog);
@@ -236,14 +240,14 @@ ELMNT *pel;
 		Key(el) = xref = strsave(xref);
 		Line(el) = 0;
 		New(el) = NULL;
-		Sex(el) = SEX_UNKNOWN;
+		Sex(el) = 0;
 		Male(el) = 0;
 		Fmle(el) = 0;
 		dex = add_to_structures(xref, el);
 	} else
 		*pel = el = index_data[dex];
 	if (KNOWNTYPE(el) && Type(el) != INDI_REC) {
-		handle_err(matper, line);
+		handle_err(matper, line, xref);
 		return -1;
 	}
 	if (Type(el) == INDI_REC) {
@@ -256,7 +260,7 @@ ELMNT *pel;
 	}
 	Type(el) = INDI_REC;
 	Line(el) = line;
-	Sex(el) = SEX_UNKNOWN;
+	Sex(el) = 0;
 	Male(el) = 0;
 	Fmle(el) = 0;
 	return dex;
@@ -272,7 +276,7 @@ INT line;	/* line num */
 	INT dex;
 	if (!xref || *xref == 0) {
 		handle_err(misfxr, line);
-		return NULL;
+		return -1;
 	}
 	if ((dex = xref_to_index(xref)) == -1) {
 		el = (ELMNT) stdalloc(sizeof(*el));
@@ -326,7 +330,7 @@ INT line;	/* line num */
 	} else
 		el = index_data[dex];
 	if (KNOWNTYPE(el) && Type(el) != SOUR_REC) {
-		handle_err(matsrc, line);
+		handle_err(matsrc, line, xref);
 		return -1;
 	}
 	if (Type(el) == SOUR_REC) {
@@ -531,13 +535,21 @@ static check_references ()
 static check_indi_links (per)
 ELMNT per;
 {
-	INT fam, par;
-	INT sam, opp;
-	ELMNT el;
-	STRING msg;
-	if (Line(per) == 0) handle_err(undper, Key(per));
+	BOOLEAN jm, jf, bm, bf;
 	if (Male(per) > 1)  handle_warn(mulfth, Line(per), Key(per));
 	if (Fmle(per) > 1)  handle_warn(mulmth, Line(per), Key(per));
+	if (Line(per) == 0) {
+		handle_err(undper, Key(per));
+		return;
+	}
+	jm = Sex(per) & IS_MALE;
+	jf = Sex(per) & IS_FEMALE;
+	bm = Sex(per) & BE_MALE;
+	bf = Sex(per) & BE_FEMALE;
+	if (jm && jf) handle_err(twosex, Line(per), Key(per));
+	if (jm && bf) handle_err(mlefml, Line(per), Key(per));
+	if (jf && bm) handle_err(fmlmle, Line(per), Key(per));
+	if (bm && bf) handle_err(impsex, Line(per), Key(per));
 }
 /*======================================
  * check_fam_links -- Check family links
@@ -613,6 +625,7 @@ WORD arg1, arg2, arg3, arg4;
 {
 	char str[100];
 	if (!logopen) {
+		system("rm -f err.log");
 		ASSERT(flog = fopen("err.log", "w"));
 		logopen = TRUE;
 	}
@@ -631,6 +644,7 @@ WORD arg1, arg2, arg3, arg4;
 {
 	char str[100];
 	if (!logopen) {
+		system("rm -f err.log");
 		ASSERT(flog = fopen("err.log", "w"));
 		logopen = TRUE;
 	}
@@ -672,4 +686,19 @@ ELMNT el;
 	index_data[i] = el;
 	insert_table(convtab, xref, struct_len++);
 	return struct_len - 1;
+}
+/*========================================================
+ * clear_structures -- Clear GEDCOM import data structures
+ *======================================================*/
+static clear_structures ()
+{
+	INT i, n;
+
+	for (i = 0; i < struct_len; i++)
+		stdfree(index_data[i]);
+	struct_len = 0;
+	if (convtab) {
+		remove_table(convtab, DONTFREE);
+		convtab = NULL;
+	}
 }

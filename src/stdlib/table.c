@@ -26,6 +26,7 @@
  * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 29 Aug 93
  *   3.0.0 - 04 Sep 94    3.0.2 - 22 Dec 94
+ *   3.0.3 - 19 Sep 95
  *===========================================================*/
 
 #include "standard.h"
@@ -50,6 +51,7 @@ TABLE tab;
 STRING key;
 {
 	ENTRY entry;
+	if (!tab || !key) return NULL;
 	entry = tab[hash(key)];
 	while (entry) {
 		if (eqstr(key, entry->ekey)) return entry;

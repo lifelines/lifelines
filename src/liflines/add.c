@@ -24,10 +24,10 @@
 /*=============================================================
  * add.c -- Add new person or family to database; add child to
  *   family; add spouse to family
- * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
+ * Copyright(c) 1992-95 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 01 Sep 93
  *   2.3.6 - 29 Oct 93    3.0.0 - 23 Sep 94
- *   3.0.2 - 12 Dec 94
+ *   3.0.2 - 12 Dec 94    3.0.3 - 20 Jan 96
  *===========================================================*/
 
 #include "standard.h"
@@ -59,16 +59,18 @@ NODE add_indi_by_edit ()
 	}
 
 /* Create person template for user to edit */
+
 	if (!(fp = fopen(editfile, "w"))) return NULL;
 	if (str = (STRING) valueof(useropts, "INDIREC"))
 		fprintf(fp, "%s\n", str);
 	else {
-		fprintf(fp, "0 INDI\n1 NAME Fname /Surname/\n1 SEX MF\n");
-		fprintf(fp, "1 BIRT\n  2 DATE\n  2 PLAC\n  2 SOUR\n");
-		fprintf(fp, "1 DEAT\n  2 DATE\n  2 PLAC\n  2 SOUR\n");
+		fprintf(fp, "0 INDI\n1 NAME Fname/Surname\n1 SEX MF\n");
+		fprintf(fp, "1 BIRT\n  2 DATE\n  2 PLAC\n");
+		fprintf(fp, "1 DEAT\n  2 DATE\n  2 PLAC\n1 SOUR\n");
 	}
 
 /* Have user edit new person record */
+
 	fclose(fp);
 	do_edit();
 	while (TRUE) {
@@ -80,7 +82,7 @@ NODE add_indi_by_edit ()
 			} 
 			break;
 		}
-		if (!valid_indi_tree(indi, &msg, NULL)) {
+		if (!valid_indi(indi, &msg, NULL)) {
 			if (ask_yes_or_no_msg(msg, iredit)) {
 				do_edit();
 				continue;
@@ -103,16 +105,17 @@ NODE add_indi_by_edit ()
 NODE add_unlinked_indi (indi)
 NODE indi;
 {
-	NODE name, refn, sex, body, dumb, this;
+	NODE name, refn, sex, body, dumb, node;
 	STRING key;
 	TRANTABLE ttd = tran_tables[MINDS];
+
 	split_indi(indi, &name, &refn, &sex, &body, &dumb, &dumb);
-	ASSERT(name);
 	nxref(indi) = strsave(getixref());
 	key = rmvat(nxref(indi));
-	for (this = name; this; this = nsibling(this))
-		add_name(nval(this), key);
-	if (refn && nval(refn)) add_refn(nval(refn), key);
+	for (node = name; node; node = nsibling(node))
+		add_name(nval(node), key);
+	for (node = refn; node; node = nsibling(node))
+		if (nval(node)) add_refn(nval(node), key);
 	join_indi(indi, name, refn, sex, body, NULL, NULL);
 	resolve_links(indi);
 	indi_to_dbase(indi);
@@ -129,15 +132,16 @@ NODE indi;
 {
 	NODE node, name, refn, sex, body, famc, fams;
 	STRING str, key;
+
 	split_indi(indi, &name, &refn, &sex, &body, &famc, &fams);
-	ASSERT(name);
 	key = rmvat(nxref(indi));
 	for (node = name; node; node = nsibling(node))
 		add_name(nval(node), key);
-	if (refn && nval(refn)) add_refn(nval(refn), key);
+	for (node = refn; node; node = nsibling(node))
+		if (nval(node)) add_refn(nval(node), key);
 	join_indi(indi, name, refn, sex, body, famc, fams);
-	ASSERT(str = node_to_string(indi));
-	ASSERT(store_record(key, str, strlen(str)));
+	str = node_to_string(indi);
+	store_record(key, str, strlen(str));
 	stdfree(str);
 	return TRUE;
 }
@@ -160,14 +164,17 @@ NODE child, fam;
 	}
 
 /* Identify child if caller did not */
+
 	if (!child) child = ask_for_indi(idchld, FALSE, TRUE);
 	if (!child) return NULL;
 
 /* Identify family if caller did not */
+
 	if (!fam) fam = ask_for_fam(idprnt, idsbln);
 	if (!fam) return NULL;
 
 /* If first child in family, confirm and add */
+
 	childstrings = get_child_strings(fam, &nchildren, &childkeys);
 	if (nchildren == 0) {
 		if (!ask_yes_or_no(cfcadd)) return NULL;
@@ -176,6 +183,7 @@ NODE child, fam;
 		join_fam(fam, fref, husb, wife, chil, rest);
 
 /* If not first, find where child belongs */
+
 	} else {
 		childstrings[nchildren] = mklast;
 		i = choose_from_list(idcfam, nchildren+1, childstrings);
@@ -198,6 +206,7 @@ NODE child, fam;
 	}
 
 /* Add FAMC node to child */
+
 	split_indi(child, &name, &refn, &sex, &body, &famc, &fams);
 	nfmc = create_node(NULL, "FAMC", nxref(fam), child);
 	prev = NULL;
@@ -213,6 +222,7 @@ NODE child, fam;
 	join_indi(child, name, refn, sex, body, famc, fams);
 
 /* Write updated records to database */
+
 	resolve_links(child);
 	resolve_links(fam);
 	fam_to_dbase(fam);
@@ -237,6 +247,7 @@ BOOLEAN conf;
 	}
 
 /* Identify spouse to add to family */
+
 	if (!spouse) spouse = ask_for_indi(idsadd, FALSE, TRUE);
 	if (!spouse) return FALSE;
 	if ((sex = SEX(spouse)) == SEX_UNKNOWN) {
@@ -245,10 +256,12 @@ BOOLEAN conf;
 	}
 
 /* Identify family to add spouse to */
+
 	if (!fam) fam = ask_for_fam(idsinf, kchild);
 	if (!fam) return FALSE;
 
 /* Check that spouse can be added */
+
 	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
 	join_fam(fam, fref, husb, wife, chil, rest);
 #if 0
@@ -264,7 +277,7 @@ BOOLEAN conf;
 	if (conf && !ask_yes_or_no(cfsadd)) return FALSE;
 
 /* Add HUSB or WIFE node to family */
-/*HERE*/
+
 	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
 	if (sex == SEX_MALE) {
 		prev = NULL;
@@ -294,6 +307,7 @@ BOOLEAN conf;
 	join_fam(fam, fref, husb, wife, chil, rest);
 
 /* Add FAMS node to spouse */
+
 	fams = create_node(NULL, "FAMS", nxref(fam), spouse);
 	prev = NULL;
 	this = nchild(spouse);
@@ -305,6 +319,7 @@ BOOLEAN conf;
 	nsibling(prev) = fams;
 
 /* Write updated records to database */
+
 	resolve_links(spouse);
 	resolve_links(fam);
 	indi_to_dbase(spouse);
@@ -319,9 +334,10 @@ NODE add_family (spouse1, spouse2, child)
 NODE spouse1, spouse2, child;
 {
 	INT sex1, sex2;
-	NODE fam1, fam2, husb1, wife1, chil1, node, prev, new, refn;
+	NODE fam1, fam2, refn, husb, wife, chil, body;
+	NODE name, sex, famc, fams, node, prev, new, this;
 	TRANTABLE tti = tran_tables[MEDIN], tto = tran_tables[MINED];
-	STRING xref, msg;
+	STRING xref, msg, key;
 	BOOLEAN emp;
 	FILE *fp;
 
@@ -331,12 +347,14 @@ NODE spouse1, spouse2, child;
 	}
 
 /* Handle case where child is known */
+
 	if (child)  {
 		spouse1 = spouse2 = NULL;
 		goto editfam;
 	}
 
 /* Identify first spouse */
+
 	if (!spouse1) spouse1 = ask_for_indi(idsps1, FALSE, FALSE);
 	if (!spouse1) return NULL;
 	if ((sex1 = SEX(spouse1)) == SEX_UNKNOWN) {
@@ -345,6 +363,7 @@ NODE spouse1, spouse2, child;
 	}
 
 /* Identify optional spouse */
+
 	if (!spouse2) spouse2 = ask_for_indi(idsps2, FALSE, TRUE);
 	if (spouse2) {
 		if ((sex2 = SEX(spouse2)) == SEX_UNKNOWN || sex1 == sex2) {
@@ -354,32 +373,38 @@ NODE spouse1, spouse2, child;
 	}
 
 /* Create new family */
+
 editfam:
 	fam1 = create_node(NULL, "FAM", NULL, NULL);
-	husb1 = wife1 = chil1 = NULL;
+	husb = wife = chil = NULL;
 	if (spouse1) {
 		if (sex1 == SEX_MALE)
-			husb1 = create_node(NULL, "HUSB", nxref(spouse1), fam1);
+			husb = create_node(NULL, "HUSB", nxref(spouse1), fam1);
 		else
-			wife1 = create_node(NULL, "WIFE", nxref(spouse1), fam1);
+			wife = create_node(NULL, "WIFE", nxref(spouse1), fam1);
 	}
 	if (spouse2) {
 		if (sex2 == SEX_MALE)
-			husb1 = create_node(NULL, "HUSB", nxref(spouse2), fam1);
+			husb = create_node(NULL, "HUSB", nxref(spouse2), fam1);
 		else
-			wife1 = create_node(NULL, "WIFE", nxref(spouse2), fam1);
+			wife = create_node(NULL, "WIFE", nxref(spouse2), fam1);
 	}
 	if (child)
-		chil1 = create_node(NULL, "CHIL", nxref(child), fam1);
+		chil = create_node(NULL, "CHIL", nxref(child), fam1);
 
-/* Have user edit family info */
+/* Prepare file for user to edit */
+
 	ASSERT(fp = fopen(editfile, "w"));
 	write_nodes(0, fp, tto, fam1, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, husb1, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, wife1, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, tto, husb, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, tto, wife, TRUE, TRUE, TRUE);
 	fprintf(fp, "1 MARR\n  2 DATE\n  2 PLAC\n  2 SOUR\n");
-	write_nodes(1, fp, tto, chil1, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, tto, chil, TRUE, TRUE, TRUE);
 	fclose(fp);
+	join_fam(fam1, NULL, husb, wife, chil, NULL);
+
+/* Have user edit family info */
+
 	do_edit();
 	while (TRUE) {
 		fam2 = file_to_node(editfile, tti, &msg, &emp);
@@ -390,7 +415,7 @@ editfam:
 			}
 			break;
 		}
-		if (!valid_fam_tree(fam2, &msg, fam1, husb1, wife1, chil1)) {
+		if (!valid_fam(fam2, &msg, fam1)) {
 			if (ask_yes_or_no_msg(msg, fredit)) {
 				do_edit();
 				continue;
@@ -403,7 +428,7 @@ editfam:
 	}
 
 /* Confirm family add operation */
-	join_fam(fam1, NULL, husb1, wife1, chil1, NULL);
+
 	free_nodes(fam1);
 	if (!fam2 || !ask_yes_or_no(cffadd)) {
 		free_nodes(fam2);
@@ -412,6 +437,7 @@ editfam:
 	nxref(fam2) = strsave(xref = getfxref());
 
 /* Modify spouse/s and/or child */
+
 	if (spouse1) {
 		new = create_node(NULL, "FAMS", xref, spouse1);
 		prev = NULL;
@@ -420,8 +446,10 @@ editfam:
 			prev = node;
 			node = nsibling(node);
 		}
-		ASSERT(prev);
-		nsibling(prev) = new;
+		if (prev)
+			nsibling(prev) = new;
+		else
+			nchild(spouse1) = new;
 	}
 	if (spouse2) {
 		new = create_node(NULL, "FAMS", xref, spouse2);
@@ -431,11 +459,12 @@ editfam:
 			prev = node;
 			node = nsibling(node);
 		}
-		ASSERT(prev);
-		nsibling(prev) = new;
+		if (prev)
+			nsibling(prev) = new;
+		else
+			nchild(spouse2) = new;
 	}
 	if (child) {
-		NODE name, sex, body, famc, fams, this;
 		split_indi(child, &name, &refn, &sex, &body, &famc, &fams);
 		new = create_node(NULL, "FAMC", xref, child);
 		prev = NULL;
@@ -444,14 +473,20 @@ editfam:
 			prev = this;
 			this = nsibling(this);
 		}
-		if (!prev)
-			famc = new;
-		else
+		if (prev)
 			nsibling(prev) = new;
+		else
+			famc = new;
 		join_indi(child, name, refn, sex, body, famc, fams);
 	}
 
 /* Write updated records to database */
+
+	split_fam(fam2, &refn, &husb, &wife, &chil, &body);
+	key = rmvat(nxref(fam2));
+	for (node = refn; node; node = nsibling(node))
+		if (nval(node)) add_refn(nval(node), key);
+	join_fam(fam2, refn, husb, wife, chil, body);
 	resolve_links(fam2);
 	resolve_links(spouse1);
 	resolve_links(spouse2);

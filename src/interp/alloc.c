@@ -23,9 +23,10 @@
 */
 /*=============================================================
  * alloc.c -- Allocate nodes for report generator
- * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
+ * Copyright(c) 1991-95 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 17 Aug 93
  *   3.0.0 - 28 Jun 94    3.0.2 - 23 Dec 94
+ *   3.0.3 - 10 Aug 95
  *===========================================================*/
 
 #include "standard.h"
@@ -37,40 +38,41 @@ extern STRING ierror;
 extern STRING Pfname;
 
 /*==================================
- * alloc_interp -- Alloc INTERP node
+ * create_pnode -- Create PNODE node
  *================================*/
-INTERP alloc_interp (type)
-char type;
+PNODE create_pnode (type)
+INT type;
 {
-	INTERP node = (INTERP) stdalloc(sizeof(*node));
+	PNODE node = (PNODE) stdalloc(sizeof(*node));
 	itype(node) = type;
 	iprnt(node) = NULL;
 	inext(node) = NULL;
 	iline(node) = Plineno;
+	ifname(node) = Pfname;
 	node->i_word1 = node->i_word2 = node->i_word3 = NULL;
 	node->i_word4 = node->i_word5 = NULL;
 	return node;
 }
-/*====================================
- * literal_node -- Create literal node
- *==================================*/
-INTERP literal_node (str)
+/*==================================
+ * string_node -- Create string node
+ *================================*/
+PNODE string_node (str)
 STRING str;
 {
-	INTERP node = alloc_interp(ILITERAL);
-	iliteral(node) = (WORD) strsave(str);
+	PNODE node = create_pnode(ISCONS);
+	ivalue(node) = create_pvalue(PSTRING, (WORD) str);
 	return node;
 }
 /*========================================
  * children_node -- Create child loop node
  *======================================*/
-INTERP children_node (fexpr, cvar, nvar, body)
-INTERP fexpr;		/* expr */
+PNODE children_node (fexpr, cvar, nvar, body)
+PNODE fexpr;		/* expr */
 STRING cvar, nvar;	/* child, counter */
-INTERP body;		/* loop body */
+PNODE body;		/* loop body */
 {
-	INTERP node = alloc_interp(ICHILDREN);
-	ifamily(node) = (WORD) fexpr;
+	PNODE node = create_pnode(ICHILDREN);
+	iloopexp(node) = (WORD) fexpr;
 	ichild(node) = (WORD) cvar;
 	inum(node) = (WORD) nvar;
 	ibody(node) = (WORD) body;
@@ -80,17 +82,17 @@ INTERP body;		/* loop body */
 /*========================================
  * spouses_node -- Create spouse loop node
  *======================================*/
-INTERP spouses_node (pexpr, svar, fvar, nvar, body)
-INTERP pexpr;	/* expr */
+PNODE spouses_node (pexpr, svar, fvar, nvar, body)
+PNODE pexpr;	/* expr */
 STRING svar;	/* spouse */
 STRING fvar;	/* family */
 STRING nvar;	/* counter */
-INTERP body;	/* body */
+PNODE body;	/* body */
 {
-	INTERP node = alloc_interp(ISPOUSES);
-	iprinc(node) = (WORD) pexpr;
+	PNODE node = create_pnode(ISPOUSES);
+	iloopexp(node) = (WORD) pexpr;
 	ispouse(node) = (WORD) svar;
-	ifamvar(node) = (WORD) fvar;
+	ifamily(node) = (WORD) fvar;
 	inum(node) = (WORD) nvar;
 	ibody(node) = (WORD) body;
 	set_parents(body, node);
@@ -99,35 +101,90 @@ INTERP body;	/* body */
 /*=========================================
  * families_node -- Create family loop node
  *=======================================*/
-INTERP families_node (pexpr, fvar, svar, nvar, body)
-INTERP pexpr;	/* expr */
+PNODE families_node (pexpr, fvar, svar, nvar, body)
+PNODE pexpr;	/* expr */
 STRING fvar;	/* family */
 STRING svar;	/* spouse */
 STRING nvar;	/* counter */
-INTERP body;	/* body */
+PNODE body;	/* body */
 {
-	INTERP node = alloc_interp(IFAMILIES);
-	iprinc(node) = (WORD) pexpr;
-	ifamvar(node) = (WORD) fvar;
+	PNODE node = create_pnode(IFAMILIES);
+	iloopexp(node) = (WORD) pexpr;
+	ifamily(node) = (WORD) fvar;
 	ispouse(node) = (WORD) svar;
 	inum(node) = (WORD) nvar;
 	ibody(node) = (WORD) body;
 	set_parents(body, node);
 	return node;
 }
-/*==========================================
- * forindiset_node -- Create index loop node
- *========================================*/
-INTERP forindiset_node (iexpr, ivar, vvar, nvar, body)
-INTERP iexpr;	/* expr */
+/*=========================================
+ * fathers_node -- Create fathers loop node
+ *=======================================*/
+PNODE fathers_node (pexpr, pvar, fvar, nvar, body)
+PNODE pexpr;	/* expr */
+STRING pvar;	/* father */
+STRING fvar;	/* family */
+STRING nvar;	/* counter */
+PNODE body;	/* body */
+{
+	PNODE node = create_pnode(IFATHS);
+	iloopexp(node) = (WORD) pexpr;
+	iparent(node) = (WORD) pvar;
+	ifamily(node) = (WORD) fvar;
+	inum(node) = (WORD) nvar;
+	ibody(node) = (WORD) body;
+	set_parents(body, node);
+	return node;
+}
+/*=========================================
+ * mothers_node -- Create mothers loop node
+ *=======================================*/
+PNODE mothers_node (pexpr, pvar, fvar, nvar, body)
+PNODE pexpr;	/* expr */
+STRING pvar;	/* mother */
+STRING fvar;	/* family */
+STRING nvar;	/* counter */
+PNODE body;	/* body */
+{
+	PNODE node = create_pnode(IMOTHS);
+	iloopexp(node) = (WORD) pexpr;
+	iparent(node) = (WORD) pvar;
+	ifamily(node) = (WORD) fvar;
+	inum(node) = (WORD) nvar;
+	ibody(node) = (WORD) body;
+	set_parents(body, node);
+	return node;
+}
+/*=========================================
+ * parents_node -- Create parents loop node
+ *=======================================*/
+PNODE parents_node (pexpr, fvar, nvar, body)
+PNODE pexpr;	/* expr */
+STRING fvar;	/* family */
+STRING nvar;	/* counter */
+PNODE body;	/* body */
+{
+	PNODE node = create_pnode(IFAMCS);
+	iloopexp(node) = (WORD) pexpr;
+	ifamily(node) = (WORD) fvar;
+	inum(node) = (WORD) nvar;
+	ibody(node) = (WORD) body;
+	set_parents(body, node);
+	return node;
+}
+/*========================================
+ * forindiset_node -- Create set loop node
+ *======================================*/
+PNODE forindiset_node (iexpr, ivar, vvar, nvar, body)
+PNODE iexpr;	/* expr */
 STRING ivar;	/* person */
 STRING vvar;	/* value */
 STRING nvar;	/* counter */
-INTERP body;	/* body */
+PNODE body;	/* body */
 {
-	INTERP node = alloc_interp(IINDICES);
-	iindex(node) = (WORD) iexpr;
-	iindivar(node) = (WORD) ivar;
+	PNODE node = create_pnode(ISET);
+	iloopexp(node) = (WORD) iexpr;
+	ielement(node) = (WORD) ivar;
 	ivalvar(node) = (WORD) vvar;
 	inum(node) = (WORD) nvar;
 	ibody(node) = (WORD) body;
@@ -137,14 +194,14 @@ INTERP body;	/* body */
 /*======================================
  * forlist_node -- Create list loop node
  *====================================*/
-INTERP forlist_node (iexpr, evar, nvar, body)
-INTERP iexpr;	/* expr */
+PNODE forlist_node (iexpr, evar, nvar, body)
+PNODE iexpr;	/* expr */
 STRING evar;	/* element */
 STRING nvar;	/* counter */
-INTERP body;	/* body */
+PNODE body;	/* body */
 {
-	INTERP node = alloc_interp(ILIST);
-	ilist(node) = (WORD) iexpr;
+	PNODE node = create_pnode(ILIST);
+	iloopexp(node) = (WORD) iexpr;
 	ielement(node) = (WORD) evar;
 	inum(node) = (WORD) nvar;
 	ibody(node) = (WORD) body;
@@ -154,13 +211,58 @@ INTERP body;	/* body */
 /*=========================================
  * forindi_node -- Create forindi loop node
  *=======================================*/
-INTERP forindi_node (ivar, nvar, body)
+PNODE forindi_node (ivar, nvar, body)
 STRING ivar;	/* pers */
 STRING nvar;	/* counter */
-INTERP body;	/* body */
+PNODE body;	/* body */
 {
-	INTERP node = alloc_interp(IINDI);
-	iindivar(node) = (WORD) ivar;
+	PNODE node = create_pnode(IINDI);
+	ielement(node) = (WORD) ivar;
+	inum(node) = (WORD) nvar;
+	ibody(node) = (WORD) body;
+	set_parents(body, node);
+	return node;
+}
+/*=========================================
+ * forsour_node -- Create forsour loop node
+ *=======================================*/
+PNODE forsour_node (fvar, nvar, body)
+STRING fvar;	/* fam */
+STRING nvar;	/* counter */
+PNODE body;	/* body */
+{
+	PNODE node = create_pnode(ISOUR);
+	ielement(node) = (WORD) fvar;
+	inum(node) = (WORD) nvar;
+	ibody(node) = (WORD) body;
+	set_parents(body, node);
+	return node;
+}
+/*=========================================
+ * foreven_node -- Create foreven loop node
+ *=======================================*/
+PNODE foreven_node (fvar, nvar, body)
+STRING fvar;	/* fam */
+STRING nvar;	/* counter */
+PNODE body;	/* body */
+{
+	PNODE node = create_pnode(IEVEN);
+	ielement(node) = (WORD) fvar;
+	inum(node) = (WORD) nvar;
+	ibody(node) = (WORD) body;
+	set_parents(body, node);
+	return node;
+}
+/*=========================================
+ * forothr_node -- Create forothr loop node
+ *=======================================*/
+PNODE forothr_node (fvar, nvar, body)
+STRING fvar;	/* fam */
+STRING nvar;	/* counter */
+PNODE body;	/* body */
+{
+	PNODE node = create_pnode(IOTHR);
+	ielement(node) = (WORD) fvar;
 	inum(node) = (WORD) nvar;
 	ibody(node) = (WORD) body;
 	set_parents(body, node);
@@ -169,13 +271,13 @@ INTERP body;	/* body */
 /*=======================================
  * forfam_node -- Create forfam loop node
  *=====================================*/
-INTERP forfam_node (fvar, nvar, body)
+PNODE forfam_node (fvar, nvar, body)
 STRING fvar;	/* fam */
 STRING nvar;	/* counter */
-INTERP body;	/* body */
+PNODE body;	/* body */
 {
-	INTERP node = alloc_interp(IFAM);
-	iindivar(node) = (WORD) fvar;
+	PNODE node = create_pnode(IFAM);
+	ielement(node) = (WORD) fvar;
 	inum(node) = (WORD) nvar;
 	ibody(node) = (WORD) body;
 	set_parents(body, node);
@@ -184,29 +286,29 @@ INTERP body;	/* body */
 /*===========================================
  * fornotes_node -- Create fornotes loop node
  *=========================================*/
-INTERP fornotes_node (nexpr, vvar, body)
-INTERP nexpr;	/* expr */
-STRING vvar;	/* value */
-INTERP body;	/* body */
+PNODE fornotes_node (nexpr, vvar, body)
+PNODE nexpr;   /* expr */
+STRING vvar;    /* value */
+PNODE body;    /* body */
 {
-	INTERP node = alloc_interp(INOTES);
-	inode(node) = (WORD) nexpr;
-	istrng(node) = (WORD) vvar;
-	ibody(node) = (WORD) body;
-	set_parents(body, node);
-	return node;
+        PNODE node = create_pnode(INOTES);
+        iloopexp(node) = (WORD) nexpr;
+        ielement(node) = (WORD) vvar;
+        ibody(node) = (WORD) body;
+        set_parents(body, node);
+        return node;
 }
 /*===========================================
  * fornodes_node -- Create fornodes loop node
  *=========================================*/
-INTERP fornodes_node (nexpr, nvar, body)
-INTERP nexpr;	/* expr */
+PNODE fornodes_node (nexpr, nvar, body)
+PNODE nexpr;	/* expr */
 STRING nvar;	/* node (next level) */
-INTERP body;	/* body */
+PNODE body;	/* body */
 {
-	INTERP node = alloc_interp(INODES);
-	inode(node) = (WORD) nexpr;
-	isubnode(node) = (WORD) nvar;
+	PNODE node = create_pnode(INODES);
+	iloopexp(node) = (WORD) nexpr;
+	ielement(node) = (WORD) nvar;
 	ibody(node) = (WORD) body;
 	set_parents(body, node);
 	return node;
@@ -214,15 +316,15 @@ INTERP body;	/* body */
 /*===========================================
  * traverse_node -- Create traverse loop node
  *=========================================*/
-INTERP traverse_node (nexpr, snode, levv, body)
-INTERP nexpr;	/* node */
+PNODE traverse_node (nexpr, snode, levv, body)
+PNODE nexpr;	/* node */
 STRING snode;	/* subnode */
 STRING levv;	/* level */
-INTERP body;	/* body */
+PNODE body;	/* body */
 {
-	INTERP node = alloc_interp(ITRAV);
-	inode(node) = (WORD) nexpr;
-	isubnode(node) = (WORD) snode;
+	PNODE node = create_pnode(ITRAV);
+	iloopexp(node) = (WORD) nexpr;
+	ielement(node) = (WORD) snode;
 	ilev(node) = (WORD) levv;
 	ibody(node) = (WORD) body;
 	set_parents(body, node);
@@ -231,34 +333,46 @@ INTERP body;	/* body */
 /*====================================
  * iden_node -- Create identifier node
  *==================================*/
-INTERP iden_node (iden)
+PNODE iden_node (iden)
 STRING iden;
 {
-	INTERP node = alloc_interp(IIDENT);
+	PNODE node = create_pnode(IIDENT);
 	iident(node) = (WORD) iden;
 	return node;
 }
 /*==================================
  * icons_node -- Create integer node
  *================================*/
-INTERP icons_node (ival)
+PNODE icons_node (ival)
 INT ival;
 {
-	INTERP node = alloc_interp(IICONS);
-	iicons(node) = (WORD) ival;
+	PNODE node = create_pnode(IICONS);
+	ivalue(node) = create_pvalue(PINT, (WORD) ival);
+	return node;
+}
+/*===================================
+ * fcons_node -- Create floating node
+ *=================================*/
+PNODE fcons_node (fval)
+FLOAT fval;
+{
+	PNODE node = create_pnode(IFCONS);
+	UNION u;
+	u.f = fval;
+	ivalue(node) = create_pvalue(PFLOAT, u.w);
 	return node;
 }
 /*===================================
  * proc_node -- Create procedure node
  *=================================*/
-INTERP proc_node (name, parms, body)
+PNODE proc_node (name, parms, body)
 STRING name;	/* proc name */
-INTERP parms;	/* param/s */
-INTERP body;	/* body */
+PNODE parms;	/* param/s */
+PNODE body;	/* body */
 {
-	INTERP node = alloc_interp(IPDEFN);
+	PNODE node = create_pnode(IPDEFN);
 	iname(node) = (WORD) name;
-	iparams(node) = (WORD) parms;
+	iargs(node) = (WORD) parms;
 	ibody(node) = (WORD) body;
 	set_parents(body, node);
 	return node;
@@ -266,14 +380,14 @@ INTERP body;	/* body */
 /*==================================================
  * fdef_node -- Create user function definition node
  *================================================*/
-INTERP fdef_node (name, parms, body)
+PNODE fdef_node (name, parms, body)
 STRING name;	/* proc name */
-INTERP parms;	/* param/s */
-INTERP body;	/* body */
+PNODE parms;	/* param/s */
+PNODE body;	/* body */
 {
-	INTERP node = alloc_interp(IFDEFN);
+	PNODE node = create_pnode(IFDEFN);
 	iname(node) = (WORD) name;
-	iparams(node) = (WORD) parms;
+	iargs(node) = (WORD) parms;
 	ibody(node) = (WORD) body;
 	set_parents(body, node);
 	return node;
@@ -281,19 +395,19 @@ INTERP body;	/* body */
 /*=======================================================
  * func_node -- Create builtin or user function call node
  *=====================================================*/
-INTERP func_node (name, elist)
+PNODE func_node (name, elist)
 STRING name;	/* function name */
-INTERP elist;	/* param/s */
+PNODE elist;	/* param/s */
 {
-	INTERP node;
+	PNODE node;
 	INT lo, hi, md, n, r;
 	BOOLEAN found = FALSE;
 
 /* See if the function is user defined */
 	if (in_table(functab, name)) {
-		node = alloc_interp(IFCALL);
+		node = create_pnode(IFCALL);
 		iname(node) = (WORD) name;
-		ielist(node) = (WORD) elist;
+		iargs(node) = (WORD) elist;
 		ifunc(node) = (WORD) valueof(functab, name);
 		return node;
 	}
@@ -314,36 +428,36 @@ INTERP elist;	/* param/s */
 	}
 	if (found) {
 		if ((n = num_params(elist)) < builtins[md].ft_nparms_min
-		    && n > builtins[md].ft_nparms_max) {
+		    || n > builtins[md].ft_nparms_max) {
 			wprintf(ierror, Pfname, Plineno);
 			wprintf("%s: must have %d to %d parameters.\n", name,
 		    	builtins[md].ft_nparms_min, builtins[md].ft_nparms_max);
 			Perrors++;
 		}
-		node = alloc_interp(IBCALL);
+		node = create_pnode(IBCALL);
 		iname(node) = (WORD) name;
-		ielist(node) = (WORD) elist;
+		iargs(node) = (WORD) elist;
 		ifunc(node) = (WORD) builtins[md].ft_eval;
 		return node;
 		
 	}
 
 /* If neither make it a user call to undefined function */
-	node = alloc_interp(IFCALL);
+	node = create_pnode(IFCALL);
 	iname(node) = (WORD) name;
-	ielist(node) = (WORD) elist;
+	iargs(node) = (WORD) elist;
 	ifunc(node) = NULL;
 	return node;
 }
 /*=============================
  * if_node -- Create an if node
  *===========================*/
-INTERP if_node (cond, tnode, enode)
-INTERP cond;	/* cond expr */
-INTERP tnode;	/* then */
-INTERP enode;	/* else */
+PNODE if_node (cond, tnode, enode)
+PNODE cond;	/* cond expr */
+PNODE tnode;	/* then */
+PNODE enode;	/* else */
 {
-	INTERP node = alloc_interp(IIF);
+	PNODE node = create_pnode(IIF);
 	icond(node) = (WORD) cond;
 	ithen(node) = (WORD) tnode;
 	ielse(node) = (WORD) enode;
@@ -354,11 +468,11 @@ INTERP enode;	/* else */
 /*================================
  * while_node -- Create while node
  *==============================*/
-INTERP while_node (cond, body)
-INTERP cond;	/* cond expr */
-INTERP body;	/* body */
+PNODE while_node (cond, body)
+PNODE cond;	/* cond expr */
+PNODE body;	/* body */
 {
-	INTERP node = alloc_interp(IWHILE);
+	PNODE node = create_pnode(IWHILE);
 	icond(node) = (WORD) cond;
 	ibody(node) = (WORD) body;
 	set_parents(body, node);
@@ -367,11 +481,11 @@ INTERP body;	/* body */
 /*===================================
  * call_node -- Create proc call node
  *=================================*/
-INTERP call_node (name, args)
+PNODE call_node (name, args)
 STRING name;	/* proc name */
-INTERP args;	/* arg/s */
+PNODE args;	/* arg/s */
 {
-	INTERP node = alloc_interp(IPCALL);
+	PNODE node = create_pnode(IPCALL);
 	iname(node) = (WORD) name;
 	iargs(node) = (WORD) args;
 	return node;
@@ -379,26 +493,26 @@ INTERP args;	/* arg/s */
 /*================================
  * break_node -- Create break node
  *==============================*/
-INTERP break_node ()
+PNODE break_node ()
 {
-	INTERP node = alloc_interp(IBREAK);
+	PNODE node = create_pnode(IBREAK);
 	return node;
 }
 /*======================================
  * continue_node -- Create continue node
  *====================================*/
-INTERP continue_node ()
+PNODE continue_node ()
 {
-	INTERP node = alloc_interp(ICONTINUE);
+	PNODE node = create_pnode(ICONTINUE);
 	return node;
 }
 /*==================================
  * return_node -- Create return node
  *================================*/
-INTERP return_node (args)
-INTERP args;
+PNODE return_node (args)
+PNODE args;
 {
-	INTERP node = alloc_interp(IRETURN);
+	PNODE node = create_pnode(IRETURN);
 	iargs(node) = (WORD) args;
 	return node;
 }
@@ -406,11 +520,166 @@ INTERP args;
  * set_parents -- Link body nodes to parent node
  *============================================*/
 set_parents (body, node)
-INTERP body;
-INTERP node;
+PNODE body;
+PNODE node;
 {
 	while (body) {
 		iprnt(body) = node;
 		body = inext(body);
+	}
+}
+/*=========================================================
+ * show_pnode -- DEBUG routine that shows a PNODE structure
+ *=======================================================*/
+void show_pnode (node)
+PNODE node;
+{
+	void show_one_pnode();
+	while (node) {
+		show_one_pnode(node);
+		node = inext(node);
+	}
+}
+/*==========================================================
+ * show_pnodes -- DEBUG routine that shows expression PNODEs
+ *========================================================*/
+void show_pnodes (node)
+PNODE node;
+{
+	void show_one_pnode();
+
+	while (node) {
+		show_one_pnode(node);
+		node = inext(node);
+		if (node) wprintf(",");
+	}
+}
+/*====================================================
+ * show_one_pnode -- DEBUG routine that show one PNODE
+ *==================================================*/
+void show_one_pnode (node)
+PNODE node;	/* node to print */
+{
+	UNION u;
+
+	switch (itype(node)) {
+
+	case IICONS:
+		wprintf("%d", pvalue(ivalue(node)));
+		break;
+	case IFCONS:
+		u.w = pvalue(ivalue(node));
+		wprintf("%f", u.f);
+		break;
+	case ILCONS:
+		wprintf("*ni*");
+		break;
+	case ISCONS:
+		wprintf("^^%s^^", pvalue(ivalue(node)));
+		break;
+	case IIDENT:
+		wprintf("%s", iident(node));
+		break;
+	case IIF:
+		wprintf("if(");
+		show_pnodes(icond(node));
+		wprintf("){");
+		show_pnodes(ithen(node));
+		wprintf("}");
+		if (ielse(node)) {
+			wprintf("else{");
+			show_pnodes(ielse(node));
+			wprintf("}");
+		}
+		break;
+	case IWHILE:
+		wprintf("while(");
+		show_pnodes(icond(node));
+		wprintf("){");
+		show_pnodes(ibody(node));
+		wprintf("}");
+		break;
+	case IBREAK:
+		wprintf("break ");
+		break;
+	case ICONTINUE:
+		wprintf("continue ");
+		break;
+	case IRETURN:
+		wprintf("return(");
+		show_pnodes(iargs(node));
+		wprintf(")");
+		break;
+	case IPDEFN:
+		wprintf("*PDefn *");
+		break;
+	case IPCALL:
+		wprintf("%s(", iname(node));
+		show_pnodes(iargs(node));
+		wprintf(")");
+		break;
+	case IFDEFN:
+		wprintf("*FDefn *");
+		break;
+	case IFCALL:
+		wprintf("%s(", iname(node));
+		show_pnodes(iargs(node));
+		wprintf(")");
+		break;
+	case IBCALL:
+		wprintf("%s(", iname(node));
+		show_pnodes(iargs(node));
+		wprintf(")");
+		break;
+	case ITRAV:
+		wprintf("*Traverse *");
+		break;
+	case INODES:
+		wprintf("*Fornodes *");
+		break;
+	case IFAMILIES:
+		wprintf("*FamiliesLoop *");
+		break;
+	case ISPOUSES:
+		wprintf("*SpousesLoop *");
+		break;
+	case ICHILDREN:
+		wprintf("*ChildrenLoop *");
+		break;
+	case IINDI:
+		wprintf("*PersonLoop *");
+		break;
+	case IFAM:
+		wprintf("*FamilyLoop *");
+		break;
+	case ISOUR:
+		wprintf("*SourceLoop *");
+		break;
+	case IEVEN:
+		wprintf("*EventLoop *");
+		break;
+	case IOTHR:
+		wprintf("*OtherLoop *");
+		break;
+	case ILIST:
+		wprintf("*ListLoop *");
+		break;
+	case ISET:
+		wprintf("*IndisetLoop *");
+		break;
+	case IFATHS:
+		wprintf("*FathersLoop *");
+		break;
+	case IMOTHS:
+		wprintf("*MothersLoop *");
+		break;
+	case IFAMCS:
+		wprintf("*ParentsLoop *");
+		break;
+	case INOTES:
+		wprintf("*NotesLoop *");
+		break;
+	default:
+		break;
 	}
 }

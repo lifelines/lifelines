@@ -4,7 +4,7 @@
 #define	PROC	257
 #define	FUNC_TOK	258
 #define	IDEN	259
-#define	LITERAL	260
+#define	SCONS	260
 #define	CHILDREN	261
 #define	SPOUSES	262
 #define	IF	263
@@ -21,9 +21,16 @@
 #define	FORNODES	274
 #define	FORLIST_TOK	275
 #define	FORFAM	276
-#define	BREAK	277
-#define	CONTINUE	278
-#define	RETURN	279
+#define	FORSOUR	277
+#define	FOREVEN	278
+#define	FOROTHR	279
+#define	BREAK	280
+#define	CONTINUE	281
+#define	RETURN	282
+#define	FATHERS	283
+#define	MOTHERS	284
+#define	PARENTS	285
+#define	FCONS	286
 
 
 extern YYSTYPE yylval;

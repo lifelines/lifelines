@@ -25,6 +25,7 @@
  * import.c -- Import GEDCOM file to LifeLines database
  * Copyright(c) 1994 by T.T. Wetmore IV; all rights reserved
  *   3.0.0 - 29 Aug 94    3.0.2 - 10 Dec 94
+ *   3.0.3 - 14 Jan 96
  *========================================================*/
 
 #include "standard.h"
@@ -107,6 +108,7 @@ INT type;
 	STRING old, new, str, key;
 	NODE refn;
 	char scratch[10];
+
 	if (!node) return;
 	ASSERT(old = nxref(node));
 	new = translate_key(rmvat(old));
@@ -131,8 +133,7 @@ INT type;
 	ASSERT(str = node_to_string(node));
 	key = rmvat(nxref(node));
 	ASSERT(store_record(key, str, strlen(str)));
-	refn = REFN(node);
-	if (refn && nval(refn)) add_refn(nval(refn), key);
+	index_by_refn(node, key);
 	stdfree(str);
 }
 /*==============================================================

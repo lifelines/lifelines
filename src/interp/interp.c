@@ -23,9 +23,10 @@
 */
 /*=============================================================
  * interp.c -- Interpret program statements
- * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
+ * Copyright(c) 1991-95 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 16 Aug 93
  *   3.0.0 - 26 Jul 94    3.0.2 - 25 Mar 95
+ *   3.0.3 - 22 Sep 95
  *===========================================================*/
 
 #include "standard.h"
@@ -36,8 +37,10 @@
 #include "indiseq.h"
 
 extern STRING llprograms;
+extern BOOLEAN progrunning;
 
 STRING Pfname = NULL;	/* file to read program from */
+STRING progname = NULL;	/* starting program name */
 FILE *Pinfp  = NULL;	/* file to read program from */
 FILE *Poutfp = NULL;	/* file to write program output to */
 STRING Pinstr = NULL;	/* string to read program from */
@@ -45,13 +48,14 @@ STRING Poutstr = NULL;	/* string to write program output to */
 INT Plineno = 1;
 INT Perrors = 0;
 LIST Plist;		/* list of program files still to read */
+PNODE Pnode = NULL;	/* node being interpreted */
 
 TABLE filetab, proctab, globtab, functab;
 STRING ierror = (STRING) "Error: file \"%s\": line %d: ";
 static STRING noprogram = (STRING) "No program was run.";
 static STRING qrptname = (STRING) "What is the name of the program?";
 
-/*=====================================
+/*====================================+
  * initinterp -- Initialize interpreter
  *===================================*/
 initinterp ()
@@ -60,14 +64,14 @@ initinterp ()
 	initset();
 	Perrors = 0;
 }
-/*===================================
+/*==================================+
  * finishinterp -- Finish interpreter
  *=================================*/
 finishinterp ()
 {
 	finishrassa();
 }
-/*==============================================
+/*=============================================+
  * interp_program -- Interpret LifeLines program
  *============================================*/
 interp_program (proc, nargs, args, nifiles, ifiles, ofile)
@@ -83,7 +87,7 @@ STRING ofile;	/* output file - can be NULL */
 	WORD dummy;
 	INT i;
 	STRING ifile;
-	INTERP first, parm;
+	PNODE first, parm;
 
    /* Get the initial list of program files */
 
@@ -98,6 +102,7 @@ STRING ofile;	/* output file - can be NULL */
 			message(noprogram);
 			return;
 		}
+		progname = strsave(ifile);
 		enqueue_list(plist, strsave(ifile));
 	}
 
@@ -124,15 +129,24 @@ STRING ofile;	/* output file - can be NULL */
 
    /* Find top procedure */
 
-	if (!(first = (INTERP) valueof(proctab, proc))) {
+	if (!(first = (PNODE) valueof(proctab, proc))) {
 		message("Report program needs a starting procedure.");
 		remove_tables();
 		return;
 	}
 
+   /* Open output file if name is provided */
+
+	if (ofile && !(Poutfp = fopen(ofile, "w"))) {
+		mprintf("Error: file \"%s\" could not be created.\n", ofile);
+		remove_tables();
+		return;
+	}
+	if (Poutfp) setbuf(Poutfp, NULL);
+
    /* Link arguments to parameters in symbol table */
 
-	parm = (INTERP) iparams(first);
+	parm = (PNODE) iargs(first);
 	if (nargs != num_params(parm)) {
 		mprintf("Proc %s must be called with %d (not %d) parameters.",
 			proc, num_params(parm), nargs);
@@ -147,7 +161,9 @@ STRING ofile;	/* output file - can be NULL */
 
    /* Interpret top procedure */
 
-	switch (interpret((INTERP) ibody(first), stab, &dummy)) {
+	progrunning = TRUE;
+	message("The program is running -- please be patient.");
+	switch (interpret((PNODE) ibody(first), stab, &dummy)) {
 	case INTOKAY:
 	case INTRETURN:
 		message("The program was run successfully.");
@@ -159,13 +175,14 @@ STRING ofile;	/* output file - can be NULL */
 
    /* Clean up and return */
 
+	progrunning = FALSE;
 	remove_tables();
 	remove_table(stab, DONTFREE);
 	finishinterp();
 	if (Poutfp) fclose(Poutfp);
 	Pinfp = Poutfp = NULL;
 }
-/*============================================
+/*===========================================+
  * remove_tables - Remove interpreter's tables
  *==========================================*/
 remove_tables ()
@@ -175,7 +192,7 @@ remove_tables ()
 	remove_table(globtab, DONTFREE);
 	remove_table(functab, DONTFREE);
 }
-/*=======================================
+/*======================================+
  * parse_file - Parse single program file
  *=====================================*/
 parse_file (ifile, plist)
@@ -195,7 +212,7 @@ LIST plist;
 	yyparse();
 	fclose(Pinfp);
 }
-/*=====================================
+/*====================================+
  * interp_main -- Interpreter main proc
  *===================================*/
 interp_main ()
@@ -206,46 +223,70 @@ interp_main ()
  * interpret -- Interpret statement list
  *====================================*/
 INTERPTYPE interpret (node, stab, pval)
-INTERP node;	/* first node to interpret */
+PNODE node;	/* first node to interpret */
 TABLE stab;	/* current symbol table */
-WORD *pval;	/* possible return value */
+PVALUE *pval;	/* possible return value */
 {
 	STRING str;
-	BOOLEAN eflg;
+	BOOLEAN eflg = FALSE;
 	INTERPTYPE irc;
+	PVALUE val;
 
 	*pval = NULL;
+/*HERE*/
 	while (node) {
+		Pnode = node;
+if (prog_debug) {
+	wprintf("i%di: ", iline(node));
+	show_one_pnode(node);
+	wprintf("\n");
+}
 		switch (itype(node)) {
-		case ILITERAL:
-			poutput(iliteral(node));
+		case ISCONS:
+			poutput(pvalue(ivalue(node)));
 			break;
 		case IIDENT:
-			str = (STRING) evaluate_iden(node, stab, &eflg);
+			val = eval_and_coerce(PSTRING, node, stab, &eflg);
 			if (eflg) {
-				wprintf(ierror, Pfname, iline(node));
-				wprintf("identifier: %s\n", iident(node));
-				return FALSE;
+				wprintf(ierror, ifname(node), iline(node));
+				wprintf("identifier: %s should be a string\n",
+				    iident(node));
+				return INTERROR;
 			}
-			poutput(str);
+			str = (STRING) pvalue(val);
+			if (str) poutput(str);
+			delete_pvalue(val);
 			break;
 		case IBCALL:
-			str = (STRING) evaluate_func(node, stab, &eflg);
+/*wprintf("BCALL: %s\n", iname(node));/*DEBUG*/
+			val = evaluate_func(node, stab, &eflg);
+			if (eflg) return INTERROR;
+#if 0
 			if (eflg) {
-				wprintf(ierror, Pfname, iline(node));
+				wprintf(ierror, ifname(node), iline(node));
 				wprintf("in function: `%s'\n", iname(node));
-				return FALSE;
+				return INTERROR;
 			}
-			if (str) poutput(str);
+#endif
+			if (!val) break;
+			if (ptype(val) == PSTRING && pvalue(val))
+				poutput(pvalue(val));
+			delete_pvalue(val);
 			break;
 		case IFCALL:
-			str = (STRING) evaluate_ufunc(node, stab, &eflg);
+			val = evaluate_ufunc(node, stab, &eflg);
+			if (eflg) return INTERROR;
+#if 0
 			if (eflg) {
-				wprintf(ierror, Pfname, iline(node));
+				wprintf(ierror, ifname(node), iline(node));
 				wprintf("in function: `%s'\n", iname(node));
-				return FALSE;
+				return INTERROR;
 			}
-			if (str) poutput(str);
+#endif
+			if (!val) break;
+			if (ptype(val) == PSTRING && pvalue(val))
+				poutput(pvalue(val));
+			delete_pvalue(val);
 			break;
 		case IPDEFN:
 			FATAL();
@@ -254,8 +295,10 @@ WORD *pval;	/* possible return value */
 			case INTOKAY:
 				break;
 			case INTERROR:
-				wprintf(ierror, Pfname, iline(node));
+#if 0
+				wprintf(ierror, ifname(node), iline(node));
 				wprintf("in children loop\n");
+#endif
 				return INTERROR;
 			default:
 				return irc;
@@ -266,8 +309,10 @@ WORD *pval;	/* possible return value */
 			case INTOKAY:
 				break;
 			case INTERROR:
-				wprintf(ierror, Pfname, iline(node));
+#if 0
+				wprintf(ierror, ifname(node), iline(node));
 				wprintf("in spouses loop\n");
+#endif
 				return INTERROR;
 			default:
 				return irc;
@@ -278,20 +323,66 @@ WORD *pval;	/* possible return value */
 			case INTOKAY:
 				break;
 			case INTERROR:
-				wprintf(ierror, Pfname, iline(node));
+#if 0
+				wprintf(ierror, ifname(node), iline(node));
 				wprintf("in families loop\n");
+#endif
 				return INTERROR;
 			default:
 				return irc;
 			}
 			break;
-		case IINDICES:
+		case IFATHS:
+			switch (irc = interp_fathers(node, stab, pval)) {
+			case INTOKAY:
+				break;
+			case INTERROR:
+#if 0
+				wprintf(ierror, ifname(node), iline(node));
+				wprintf("in fathers loop\n");
+#endif
+				return INTERROR;
+			default:
+				return irc;
+			}
+			break;
+		case IMOTHS:
+			switch (irc = interp_mothers(node, stab, pval)) {
+			case INTOKAY:
+				break;
+			case INTERROR:
+#if 0
+				wprintf(ierror, ifname(node), iline(node));
+				wprintf("in mothers loop\n");
+#endif
+				return INTERROR;
+			default:
+				return irc;
+			}
+			break;
+		case IFAMCS:
+			switch (irc = interp_parents(node, stab, pval)) {
+			case INTOKAY:
+				break;
+			case INTERROR:
+#if 0
+				wprintf(ierror, ifname(node), iline(node));
+				wprintf("in parents loop\n");
+#endif
+				return INTERROR;
+			default:
+				return irc;
+			}
+			break;
+		case ISET:
 			switch (irc = interp_indisetloop(node, stab, pval)) {
 			case INTOKAY:
 				break;
 			case INTERROR:
-				wprintf(ierror, Pfname, iline(node));
+#if 0
+				wprintf(ierror, ifname(node), iline(node));
 				wprintf("in indiset loop\n");
+#endif
 				return INTERROR;
 			default:
 				return irc;
@@ -302,8 +393,10 @@ WORD *pval;	/* possible return value */
 			case INTOKAY:
 				break;
 			case INTERROR:
-				wprintf(ierror, Pfname, iline(node));
+#if 0
+				wprintf(ierror, ifname(node), iline(node));
 				wprintf("in forindi loop\n");
+#endif
 				return INTERROR;
 			default:
 				return irc;
@@ -314,8 +407,52 @@ WORD *pval;	/* possible return value */
 			case INTOKAY:
 				break;
 			case INTERROR:
-				wprintf(ierror, Pfname, iline(node));
+#if 0
+				wprintf(ierror, ifname(node), iline(node));
 				wprintf("in forfam loop\n");
+#endif
+				return INTERROR;
+			default:
+				return irc;
+			}
+			break;
+		case ISOUR:
+			switch (irc = interp_forsour(node, stab, pval)) {
+			case INTOKAY:
+				break;
+			case INTERROR:
+#if 0
+				wprintf(ierror, ifname(node), iline(node));
+				wprintf("in forsour loop\n");
+#endif
+				return INTERROR;
+			default:
+				return irc;
+			}
+			break;
+		case IEVEN:
+			switch (irc = interp_foreven(node, stab, pval)) {
+			case INTOKAY:
+				break;
+			case INTERROR:
+#if 0
+				wprintf(ierror, ifname(node), iline(node));
+				wprintf("in foreven loop\n");
+#endif
+				return INTERROR;
+			default:
+				return irc;
+			}
+			break;
+		case IOTHR:
+			switch (irc = interp_forothr(node, stab, pval)) {
+			case INTOKAY:
+				break;
+			case INTERROR:
+#if 0
+				wprintf(ierror, ifname(node), iline(node));
+				printf("in forothr loop\n");
+#endif
 				return INTERROR;
 			default:
 				return irc;
@@ -326,32 +463,38 @@ WORD *pval;	/* possible return value */
 			case INTOKAY:
 				break;
 			case INTERROR:
-				wprintf(ierror, Pfname, iline(node));
+#if 0
+				wprintf(ierror, ifname(node), iline(node));
 				wprintf("in forlist loop\n");
+#endif
 				return INTERROR;
 			default:
 				return irc;
 			}
 			break;
-		case INOTES:
-			switch (irc = interp_fornotes(node, stab, pval)) {
-			case INTOKAY:
-				break;
-			case INTERROR:
-				wprintf(ierror, Pfname, iline(node));
-				wprintf("in fornotes loop\n");
-				return INTERROR;
-			default:
-				return irc;
-			}
-			break;
+                case INOTES:
+                        switch (irc = interp_fornotes(node, stab, pval)) {
+                        case INTOKAY:
+                                break;
+                        case INTERROR:
+#if 0
+                                wprintf(ierror, ifname(node), iline(node));
+                                wprintf("in fornotes loop\n");
+#endif
+                                return INTERROR;
+                        default:
+                                return irc;
+                        }
+                        break;
 		case INODES:
 			switch (irc = interp_fornodes(node, stab, pval)) {
 			case INTOKAY:
 				break;
 			case INTERROR:
-				wprintf(ierror, Pfname, iline(node));
+#if 0
+				wprintf(ierror, ifname(node), iline(node));
 				wprintf("in fornodes loop\n");
+#endif
 				return INTERROR;
 			default:
 				return irc;
@@ -362,8 +505,10 @@ WORD *pval;	/* possible return value */
 			case INTOKAY:
 				break;
 			case INTERROR:
-				wprintf(ierror, Pfname, iline(node));
+#if 0
+				wprintf(ierror, ifname(node), iline(node));
 				wprintf("in traverse loop\n");
+#endif
 				return INTERROR;
 			default:
 				return irc;
@@ -374,8 +519,10 @@ WORD *pval;	/* possible return value */
 			case INTOKAY:
 				break;
 			case INTERROR:
-				wprintf(ierror, Pfname, iline(node));
+#if 0
+				wprintf(ierror, ifname(node), iline(node));
 				wprintf("in if statement\n");
+#endif
 				return INTERROR;
 			default:
 				return irc;
@@ -386,8 +533,10 @@ WORD *pval;	/* possible return value */
 			case INTOKAY:
 				break;
 			case INTERROR:
-				wprintf(ierror, Pfname, iline(node));
+#if 0
+				wprintf(ierror, ifname(node), iline(node));
 				wprintf("in while statement\n");
+#endif
 				return INTERROR;
 			default:
 				return irc;
@@ -398,8 +547,10 @@ WORD *pval;	/* possible return value */
 			case INTOKAY:
 				break;
 			case INTERROR:
-				wprintf(ierror, Pfname, iline(node));
+#if 0
+				wprintf(ierror, ifname(node), iline(node));
 				wprintf("in procedure call\n");
+#endif
 				return INTERROR;
 			default:
 				return irc;
@@ -412,36 +563,45 @@ WORD *pval;	/* possible return value */
 		case IRETURN:
 			if (iargs(node))
 				*pval = evaluate(iargs(node), stab, &eflg);
+/*wprintf("interp return ");show_pvalue(*pval); wprintf("\n");/*DEBUG*/
 			return INTRETURN;
 		default:
 			wprintf("itype(node) is %d\n", itype(node));
 			wprintf("HUH, HUH, HUH, HUNH!\n");
-			return FALSE;
+			return INTERROR;
 		}
 		node = inext(node);
 	}
 	return TRUE;
 }
-/*========================================
+/*========================================+
  * interp_children -- Interpret child loop
- *======================================*/
+ *  usage: chidren(INDI,INDI_V,INT_V) {...}
+ *=======================================*/
 INTERPTYPE interp_children (node, stab, pval)
-INTERP node; TABLE stab; WORD *pval;
+PNODE node; TABLE stab; WORD *pval;
 {
-	BOOLEAN eflg;
+	BOOLEAN eflg = FALSE;
 	INT nchil;
 	CACHEEL fcel, cel;
 	INTERPTYPE irc;
-	NODE fam = (NODE) eval_fam(ifamily(node), stab, &eflg, &fcel);
-	if (eflg || (fam && nestr(ntag(fam), "FAM"))) return FALSE;
-	if (!fam) return TRUE;
+	NODE fam = (NODE) eval_fam(iloopexp(node), stab, &eflg, &fcel);
+	if (eflg) {
+		prog_error(node, "1st arg to children must be a family");
+		return INTERROR;
+	}
+	if (fam && nestr(ntag(fam), "FAM")) {
+		prog_error(node, "1st arg to children has a major error");
+		return INTERROR;
+	}
+	if (!fam) return INTOKAY;
 	lock_cache(fcel);
 	FORCHILDREN(fam, chil, nchil)
-		insert_table(stab, ichild(node),
-		    (WORD) (cel = indi_to_cacheel(chil)));
-		insert_table(stab, inum(node), (WORD) nchil);
+		insert_pvtable(stab, ichild(node), PINDI,
+		    (cel = indi_to_cacheel(chil)));
+		insert_pvtable(stab, inum(node), PINT, nchil);
 		lock_cache(cel);
-		irc = interpret((INTERP) ibody(node), stab, pval);
+		irc = interpret((PNODE) ibody(node), stab, pval);
 		unlock_cache(cel);
 		switch (irc) {
 		case INTCONTINUE:
@@ -459,29 +619,37 @@ a:	;
 	unlock_cache(fcel);
 	return INTOKAY;
 }
-/*========================================
+/*==============================================+
  * interp_spouses -- Interpret spouse loop
- *======================================*/
+ *  usage: spouses(INDI,INDI_V,FAM_V,INT_V) {...}
+ *=============================================*/
 INTERPTYPE interp_spouses (node, stab, pval)
-INTERP node; TABLE stab; WORD *pval;
+PNODE node; TABLE stab; WORD *pval;
 {
-	BOOLEAN eflg;
+	BOOLEAN eflg = FALSE;
 	INT nspouses;
 	CACHEEL icel, scel, fcel;
 	INTERPTYPE irc;
-	NODE indi = (NODE) eval_indi(iprinc(node), stab, &eflg, &icel);
-	if (eflg || (indi && nestr(ntag(indi), "INDI"))) return FALSE;
+	NODE indi = (NODE) eval_indi(iloopexp(node), stab, &eflg, &icel);
+	if (eflg) {
+		prog_error(node, "1st arg to spouses must be a person");
+		return INTERROR;
+	}
+	if (indi && nestr(ntag(indi), "INDI")) {
+		prog_error(node, "1st arg to spouses has a major error");
+		return INTERROR;
+	}
 	if (!indi) return TRUE;
 	lock_cache(icel);
 	FORSPOUSES(indi, spouse, fam, nspouses)
-		insert_table(stab, ispouse(node),
+		insert_pvtable(stab, ispouse(node), PINDI,
 		    (WORD) (scel = indi_to_cacheel(spouse)));
-		insert_table(stab, ifamvar(node),
+		insert_pvtable(stab, ifamily(node), PFAM,
 		    (WORD) (fcel = fam_to_cacheel(fam)));
 		lock_cache(scel);
 		lock_cache(fcel);
-		insert_table(stab, inum(node), (WORD) nspouses);
-		irc = interpret((INTERP) ibody(node), stab, pval);
+		insert_pvtable(stab, inum(node), PINT, nspouses);
+		irc = interpret((PNODE) ibody(node), stab, pval);
 		unlock_cache(scel);
 		unlock_cache(fcel);
 		switch (irc) {
@@ -500,29 +668,37 @@ b:	;
 	unlock_cache(icel);
 	return INTOKAY;
 }
-/*=========================================
+/*===============================================+
  * interp_families -- Interpret family loop
- *=======================================*/
+ *  usage: families(INDI,FAM_V,INDI_V,INT_V) {...}
+ *==============================================*/
 INTERPTYPE interp_families (node, stab, pval)
-INTERP node; TABLE stab; WORD *pval;
+PNODE node; TABLE stab; WORD *pval;
 {
-	BOOLEAN eflg;
-	INT nfamilies;
+	BOOLEAN eflg = FALSE;
+	INT nfams;
 	CACHEEL icel, fcel, scel;
 	INTERPTYPE irc;
-	NODE indi = (NODE) eval_indi(iprinc(node), stab, &eflg, &icel);
-	if (eflg || (indi && nestr(ntag(indi), "INDI"))) return FALSE;
-	if (!indi) return TRUE;
+	NODE indi = (NODE) eval_indi(iloopexp(node), stab, &eflg, &icel);
+	if (eflg) {
+		prog_error(node, "1st arg to families must be a person");
+		return INTERROR;
+	}
+	if (indi && nestr(ntag(indi), "INDI")) {
+		prog_error(node, "1st arg to families has a major error");
+		return INTERROR;
+	}
+	if (!indi) return INTOKAY;
 	lock_cache(icel);
-	FORFAMSS(indi, fam, spouse, nfamilies)
-		insert_table(stab, ifamvar(node),
-		    (WORD) (fcel = fam_to_cacheel(fam)));
-		insert_table(stab, ispouse(node),
-		    (WORD) (scel = indi_to_cacheel(spouse)));
-		insert_table(stab, inum(node), (WORD) nfamilies);
+	FORFAMSS(indi, fam, spouse, nfams)
+		insert_pvtable(stab, ifamily(node), PFAM,
+		    (fcel = fam_to_cacheel(fam)));
+		insert_pvtable(stab, ispouse(node), PINDI,
+		     (scel = indi_to_cacheel(spouse)));
+		insert_pvtable(stab, inum(node), PINT, nfams);
 		lock_cache(fcel);
 		if (scel) lock_cache(scel);
-		irc = interpret((INTERP) ibody(node), stab, pval);
+		irc = interpret((PNODE) ibody(node), stab, pval);
 		unlock_cache(fcel);
 		if (scel) unlock_cache(scel);
 		switch (irc) {
@@ -541,46 +717,210 @@ c:	;
 	unlock_cache(icel);
 	return INTOKAY;
 }
-/*=======================================
- * interp_fornotes -- Interpret NOTE loop
- *=====================================*/
-INTERPTYPE interp_fornotes (node, stab, pval)
-INTERP node; TABLE stab; WORD *pval;
+/*========================================+
+ * interp_fathers -- Interpret fathers loop
+ *=======================================*/
+INTERPTYPE interp_fathers (node, stab, pval)
+PNODE node; TABLE stab; WORD *pval;
 {
-	BOOLEAN eflg;
+	BOOLEAN eflg = FALSE;
+	INT nfams;
+	INT ncount = 1;
+	CACHEEL icel, fcel, scel;
 	INTERPTYPE irc;
-	NODE root = (NODE) evaluate(inode(node), stab, &eflg);
-	if (eflg || !root) return FALSE;
-	FORTAGVALUES(root, "NOTE", sub, vstring)
-		insert_table(stab, istrng(node), (WORD) vstring);
-		irc = interpret((INTERP) ibody(node), stab, pval);
+	NODE indi = (NODE) eval_indi(iloopexp(node), stab, &eflg, &icel);
+	if (eflg) {
+		prog_error(node, "1st arg to fathers must be a person");
+		return INTERROR;
+	}
+	if (indi && nestr(ntag(indi), "INDI")) {
+		prog_error(node, "1st arg to fathers has a major error");
+		return INTERROR;
+	}
+	if (!indi) return TRUE;
+	lock_cache(icel);
+	insert_pvtable(stab, inum(node), PINT, (WORD) 0);
+	FORFAMCS(indi, fam, husb, wife, nfams)
+		scel = indi_to_cacheel(husb);
+		if (!scel) goto d;
+		insert_pvtable(stab, ifamily(node), PFAM,
+		    (WORD) (fcel = fam_to_cacheel(fam)));
+		insert_pvtable(stab, iparent(node), PINDI, (WORD) scel);
+		insert_pvtable(stab, inum(node), PINT, (WORD) ncount++);
+		lock_cache(fcel);
+		lock_cache(scel);
+		irc = interpret((PNODE) ibody(node), stab, pval);
+		unlock_cache(fcel);
+		unlock_cache(scel);
 		switch (irc) {
 		case INTCONTINUE:
 		case INTOKAY:
 			goto d;
 		case INTBREAK:
+			unlock_cache(icel);
 			return INTOKAY;
 		default:
+			unlock_cache(icel);
 			return irc;
 		}
 d:	;
-	ENDTAGVALUES
+	ENDFAMCS
+	unlock_cache(icel);
 	return INTOKAY;
 }
-/*===========================================
+/*========================================+
+ * interp_mothers -- Interpret mothers loop
+ *=======================================*/
+INTERPTYPE interp_mothers (node, stab, pval)
+PNODE node; TABLE stab; WORD *pval;
+{
+	BOOLEAN eflg = FALSE;
+	INT nfams;
+	INT ncount = 1;
+	CACHEEL icel, fcel, scel;
+	INTERPTYPE irc;
+	NODE indi = (NODE) eval_indi(iloopexp(node), stab, &eflg, &icel);
+	if (eflg) {
+		prog_error(node, "1st arg to mothers must be a person");
+		return INTERROR;
+	}
+	if (indi && nestr(ntag(indi), "INDI")) {
+		prog_error(node, "1st arg to mothers has a major error");
+		return INTERROR;
+	}
+	if (eflg || (indi && nestr(ntag(indi), "INDI"))) return INTERROR;
+	if (!indi) return TRUE;
+	lock_cache(icel);
+	insert_pvtable(stab, inum(node), PINT, (WORD) 0);
+	FORFAMCS(indi, fam, husb, wife, nfams)
+		scel = indi_to_cacheel(wife);
+		if (!scel) goto e;
+		insert_pvtable(stab, ifamily(node), PFAM,
+		    (WORD) (fcel = fam_to_cacheel(fam)));
+		insert_pvtable(stab, iparent(node), PINDI, scel);
+		insert_pvtable(stab, inum(node), PINT, (WORD) ncount++);
+		lock_cache(fcel);
+		lock_cache(scel);
+		irc = interpret((PNODE) ibody(node), stab, pval);
+		unlock_cache(fcel);
+		unlock_cache(scel);
+		switch (irc) {
+		case INTCONTINUE:
+		case INTOKAY:
+			goto e;
+		case INTBREAK:
+			unlock_cache(icel);
+			return INTOKAY;
+		default:
+			unlock_cache(icel);
+			return irc;
+		}
+e:	;
+	ENDFAMCS
+	unlock_cache(icel);
+	return INTOKAY;
+}
+/*========================================+
+ * interp_parents -- Interpret parents loop
+ *=======================================*/
+INTERPTYPE interp_parents (node, stab, pval)
+PNODE node; TABLE stab; WORD *pval;
+{
+	BOOLEAN eflg = FALSE;
+	INT nfams;
+	CACHEEL icel, fcel;
+	INTERPTYPE irc;
+	NODE indi = (NODE) eval_indi(iloopexp(node), stab, &eflg, &icel);
+	if (eflg) {
+		prog_error(node, "1st arg to parents must be a person");
+		return INTERROR;
+	}
+	if (indi && nestr(ntag(indi), "INDI")) {
+		prog_error(node, "1st arg to parents has a major error");
+		return INTERROR;
+	}
+	if (!indi) return TRUE;
+	lock_cache(icel);
+	FORFAMCS(indi, fam, husb, wife, nfams)
+		insert_pvtable(stab, ifamily(node), PFAM,
+		    (WORD) (fcel = fam_to_cacheel(fam)));
+		insert_pvtable(stab, inum(node), PINT, (WORD) nfams);
+		lock_cache(fcel);
+		irc = interpret((PNODE) ibody(node), stab, pval);
+		unlock_cache(fcel);
+		switch (irc) {
+		case INTCONTINUE:
+		case INTOKAY:
+			goto f;
+		case INTBREAK:
+			unlock_cache(icel);
+			return INTOKAY;
+		default:
+			unlock_cache(icel);
+			return irc;
+		}
+f:	;
+	ENDFAMCS
+	unlock_cache(icel);
+	return INTOKAY;
+}
+/*=======================================
+ * interp_fornotes -- Interpret NOTE loop
+ *=====================================*/
+INTERPTYPE interp_fornotes (node, stab, pval)
+PNODE node; TABLE stab; WORD *pval;
+{
+        BOOLEAN eflg = FALSE;
+        INTERPTYPE irc;
+        NODE root;
+	PVALUE val = eval_and_coerce(PGNODE, iloopexp(node), stab, &eflg);
+	if (eflg) {
+		prog_error(node, "1st arg to fornotes must be a record line");
+		return INTERROR;
+	}
+	root = (NODE) pvalue(val);
+	delete_pvalue(val);
+	if (!root) return INTOKAY;
+/*HERE*/
+        FORTAGVALUES(root, "NOTE", sub, vstring)
+                insert_pvtable(stab, ielement(node), PSTRING, vstring);
+                irc = interpret((PNODE) ibody(node), stab, pval);
+                switch (irc) {
+                case INTCONTINUE:
+                case INTOKAY:
+                        goto g;
+                case INTBREAK:
+                        return INTOKAY;
+                default:
+                        return irc;
+                }
+g:      ;
+        ENDTAGVALUES
+        return INTOKAY;
+}
+/*==========================================+
  * interp_fornodes -- Interpret fornodes loop
+ *  usage: fornodes(NODE,NODE_V) {...}
  *=========================================*/
 INTERPTYPE interp_fornodes (node, stab, pval)
-INTERP node; TABLE stab; WORD *pval;
+PNODE node; TABLE stab; WORD *pval;
 {
-	BOOLEAN eflg;
+	BOOLEAN eflg = FALSE;
 	INTERPTYPE irc;
-	NODE sub, root = (NODE) evaluate(inode(node), stab, &eflg);
-	if (eflg || !root) return FALSE;
+	NODE sub, root = (NODE) evaluate(iloopexp(node), stab, &eflg);
+	PVALUE val = eval_and_coerce(PGNODE, iloopexp(node), stab, &eflg);
+	if (eflg) {
+		prog_error(node, "1st arg to fornodes must be a record line");
+		return INTERROR;
+	}
+	root = (NODE) pvalue(val);
+	delete_pvalue(val);
+	if (!root) return INTOKAY;
+/*HERE*/
 	sub = nchild(root);
 	while (sub) {
-		insert_table(stab, isubnode(node), (WORD) sub);
-		irc = interpret((INTERP) ibody(node), stab, pval);
+		insert_pvtable(stab, ielement(node), PGNODE, sub);
+		irc = interpret((PNODE) ibody(node), stab, pval);
 		switch (irc) {
 		case INTCONTINUE:
 		case INTOKAY:
@@ -594,25 +934,27 @@ INTERP node; TABLE stab; WORD *pval;
 	}
 	return INTOKAY;
 }
-/*=========================================
+/*========================================+
  * interp_forindi -- Interpret forindi loop
+ *  usage: forindi(INDI_V,INT_V) {...}
  *=======================================*/
 INTERPTYPE interp_forindi (node, stab, pval)
-INTERP node; TABLE stab; WORD *pval;
+PNODE node; TABLE stab; WORD *pval;
 {
 	NODE indi;
 	static char key[10];
 	STRING record;
 	INTERPTYPE irc;
-	INT len, i = 0;
+	INT len, count = 0;
+	insert_pvtable(stab, inum(node), PINT, 0);
 	while (TRUE) {
-		sprintf(key, "I%d", ++i);
+		sprintf(key, "I%d", ++count);
 		if (!(record = retrieve_record(key, &len))) break;
 		if (!(indi = string_to_node(record))) continue;
-		insert_table(stab, iindivar(node),
-		    (WORD) indi_to_cacheel(indi));
-		insert_table(stab, inum(node), (WORD) i);
-		irc = interpret((INTERP) ibody(node), stab, pval);
+		insert_pvtable(stab, ielement(node), PINDI,
+		    indi_to_cacheel(indi));
+		insert_pvtable(stab, inum(node), PINT, count);
+		irc = interpret((PNODE) ibody(node), stab, pval);
 		free_nodes(indi);
 		stdfree(record);
 		switch (irc) {
@@ -627,25 +969,132 @@ INTERP node; TABLE stab; WORD *pval;
 	}
 	return INTOKAY;
 }
-/*=======================================
+/*========================================+
+ * interp_forsour -- Interpret forsour loop
+ *  usage: forsour(SOUR_V,INT_V) {...}
+ *=======================================*/
+INTERPTYPE interp_forsour (node, stab, pval)
+PNODE node; TABLE stab; WORD *pval;
+{
+	NODE sour;
+	static char key[10];
+	STRING record;
+	INTERPTYPE irc;
+	INT len, count = 0;
+	insert_pvtable(stab, inum(node), PINT, 0);
+	while (TRUE) {
+		sprintf(key, "S%d", ++count);
+		if (!(record = retrieve_record(key, &len))) break;
+		if (!(sour = string_to_node(record))) continue;
+		insert_pvtable(stab, ielement(node), PSOUR,
+		    sour_to_cacheel(sour));
+		insert_pvtable(stab, inum(node), PINT, count);
+		irc = interpret((PNODE) ibody(node), stab, pval);
+		free_nodes(sour);
+		stdfree(record);
+		switch (irc) {
+		case INTCONTINUE:
+		case INTOKAY:
+			continue;
+		case INTBREAK:
+			return INTOKAY;
+		default:
+			return irc;
+		}
+	}
+	return INTOKAY;
+}
+/*========================================+
+ * interp_foreven -- Interpret foreven loop
+ *  usage: foreven(EVEN_V,INT_V) {...}
+ *=======================================*/
+INTERPTYPE interp_foreven (node, stab, pval)
+PNODE node; TABLE stab; WORD *pval;
+{
+	NODE even;
+	static char key[10];
+	STRING record;
+	INTERPTYPE irc;
+	INT len, count = 0;
+	insert_pvtable(stab, inum(node), PINT, count);
+	while (TRUE) {
+		sprintf(key, "E%d", ++count);
+		if (!(record = retrieve_record(key, &len))) break;
+		if (!(even = string_to_node(record))) continue;
+		insert_pvtable(stab, ielement(node), PEVEN,
+		    even_to_cacheel(even));
+		insert_pvtable(stab, inum(node), PINT, count);
+		irc = interpret((PNODE) ibody(node), stab, pval);
+		free_nodes(even);
+		stdfree(record);
+		switch (irc) {
+		case INTCONTINUE:
+		case INTOKAY:
+			continue;
+		case INTBREAK:
+			return INTOKAY;
+		default:
+			return irc;
+		}
+	}
+	return INTOKAY;
+}
+/*========================================+
+ * interp_forothr -- Interpret forothr loop
+ *  usage: forothr(OTHR_V,INT_V) {...}
+ *=======================================*/
+INTERPTYPE interp_forothr (node, stab, pval)
+PNODE node; TABLE stab; WORD *pval;
+{
+	NODE othr;
+	static char key[10];
+	STRING record;
+	INTERPTYPE irc;
+	INT len, count = 0;
+	insert_pvtable(stab, inum(node), PINT, count);
+	while (TRUE) {
+		sprintf(key, "X%d", ++count);
+		if (!(record = retrieve_record(key, &len))) break;
+		if (!(othr = string_to_node(record))) continue;
+		insert_pvtable(stab, ielement(node), POTHR,
+		    othr_to_cacheel(othr));
+		insert_pvtable(stab, inum(node), PINT, count);
+		irc = interpret((PNODE) ibody(node), stab, pval);
+		free_nodes(othr);
+		stdfree(record);
+		switch (irc) {
+		case INTCONTINUE:
+		case INTOKAY:
+			continue;
+		case INTBREAK:
+			return INTOKAY;
+		default:
+			return irc;
+		}
+	}
+	return INTOKAY;
+}
+/*======================================+
  * interp_forfam -- Interpret forfam loop
+ *  usage: forfam(FAM_V,INT_V) {...}
  *=====================================*/
 INTERPTYPE interp_forfam (node, stab, pval)
-INTERP node; TABLE stab; WORD *pval;
+PNODE node; TABLE stab; WORD *pval;
 {
 	NODE fam;
 	static char key[10];
 	STRING record;
 	INTERPTYPE irc;
-	INT len, i = 0;
+	INT len, count = 0;
+	insert_pvtable(stab, inum(node), PINT, count);
 	while (TRUE) {
-		sprintf(key, "F%d", ++i);
+		sprintf(key, "F%d", ++count);
 		if (!(record = retrieve_record(key, &len))) break;
 		if (!(fam = string_to_node(record))) continue;
-		insert_table(stab, iindivar(node),
+		insert_pvtable(stab, ielement(node), PFAM,
 		    (WORD) fam_to_cacheel(fam));
-		insert_table(stab, inum(node), (WORD) i);
-		irc = interpret((INTERP) ibody(node), stab, pval);
+		insert_pvtable(stab, inum(node), PINT, count);
+		irc = interpret((PNODE) ibody(node), stab, pval);
 		free_nodes(fam);
 		stdfree(record);
 		switch (irc) {
@@ -660,88 +1109,107 @@ INTERP node; TABLE stab; WORD *pval;
 	}
 	return INTOKAY;
 }
-/*=============================================
+/*============================================+
  * interp_indisetloop -- Interpret indiset loop
  *===========================================*/
 INTERPTYPE interp_indisetloop (node, stab, pval)
-INTERP node; TABLE stab; WORD *pval;
+PNODE node; TABLE stab; WORD *pval;
 {
-	BOOLEAN eflg;
+	BOOLEAN eflg = FALSE;
 	INTERPTYPE irc;
-	INDISEQ seq = (INDISEQ) evaluate(iindex(node), stab, &eflg);
-	if (eflg || !seq) return FALSE;
+	INDISEQ seq = NULL;
+	PVALUE val = evaluate(iloopexp(node), stab, &eflg);
+	if (eflg || !val || ptype(val) != PSET) {
+		prog_error(node, "1st arg to forindiset must be set expr");
+		return INTERROR;
+	}
+	seq = (INDISEQ) pvalue(val);
+	delete_pvalue(val);
+	insert_pvtable(stab, inum(node), PINT, (WORD) 0);
 	FORINDISEQ(seq, el, ncount)
-		insert_table(stab, iindivar(node),
-		    (WORD) key_to_indi_cacheel(skey(el)));
+/*wprintf("loopinterp - %s = ",ielement(node));wprintf("\n");/*DEBUG*/
+		insert_pvtable(stab, ielement(node), PINDI,
+		    key_to_indi_cacheel(skey(el)));
+/*wprintf("loopinterp - %s = ",ivalvar(node));wprintf("\n");/*DEBUG*/
 		insert_table(stab, ivalvar(node), (WORD) sval(el));
-		insert_table(stab, inum(node), (WORD) (ncount + 1));
-		switch (irc = interpret((INTERP) ibody(node), stab, pval)) {
+		insert_pvtable(stab, inum(node), PINT, (WORD) (ncount + 1));
+		switch (irc = interpret((PNODE) ibody(node), stab, pval)) {
 		case INTCONTINUE:
 		case INTOKAY:
-			goto e;
+			goto h;
 		case INTBREAK:
 			return INTOKAY;
 		default:
 			return irc;
 		}
-e:	;
+h:	;
 	ENDINDISEQ
 	return INTOKAY;
 }
-/*======================================
+/*=====================================+
  * interp_forlist -- Interpret list loop
  *====================================*/
 INTERPTYPE interp_forlist (node, stab, pval)
-INTERP node; TABLE stab; WORD *pval;
+PNODE node; TABLE stab; WORD *pval;
 {
-	BOOLEAN eflg;
+	BOOLEAN eflg = FALSE;
 	INTERPTYPE irc;
 	INT ncount = 1;
-	LIST lst = (LIST) evaluate(ilist(node), stab, &eflg);
-	if (eflg || !lst) return FALSE;
-	FORLIST(lst, el)
-		insert_table(stab, ielement(node), (WORD) el);
-		insert_table(stab, inum(node), (WORD) ncount++);
-		switch (irc = interpret((INTERP) ibody(node), stab, pval)) {
+	LIST list;
+	PVALUE el, val = eval_and_coerce(PLIST, iloopexp(node), stab, &eflg);
+	if (eflg || !val || ptype(val) != PLIST) {
+		prog_error(node, "1st arg to forlist is not a list");
+		return INTERROR;
+	}
+	list = (LIST) pvalue(val);
+	delete_pvalue(val);
+	if (!list) {
+		prog_error(node, "1st arg to forlist is in error");
+		return INTERROR;
+	}
+	insert_pvtable(stab, inum(node), PINT, (WORD) 0);
+	FORLIST(list, el)
+		insert_table(stab, ielement(node), copy_pvalue(el));
+		insert_pvtable(stab, inum(node), PINT, (WORD) ncount++);
+		switch (irc = interpret((PNODE) ibody(node), stab, pval)) {
 		case INTCONTINUE:
 		case INTOKAY:
-			goto f;
+			goto i;
 		case INTBREAK:
 			return INTOKAY;
 		default:
 			return irc;
 		}
-f:	;
+i:	;
 	ENDLIST
 	return INTOKAY;
 }
-/*====================================
+/*===================================+
  * interp_if -- Interpret if structure
  *==================================*/
 INTERPTYPE interp_if (node, stab, pval)
-INTERP node; TABLE stab; WORD *pval;
+PNODE node; TABLE stab; WORD *pval;
 {
-	BOOLEAN eflg;
-	WORD value = evaluate_cond(icond(node), stab, &eflg);
+	BOOLEAN eflg = FALSE;
+	BOOLEAN cond = evaluate_cond(icond(node), stab, &eflg);
 	if (eflg) return INTERROR;
-	if (value) return interpret((INTERP) ithen(node), stab, pval);
-	if (ielse(node)) return interpret((INTERP) ielse(node), stab, pval);
+	if (cond) return interpret((PNODE) ithen(node), stab, pval);
+	if (ielse(node)) return interpret((PNODE) ielse(node), stab, pval);
 	return INTOKAY;
 }
-/*==========================================
+/*=========================================+
  * interp_while -- Interpret while structure
  *========================================*/
 INTERPTYPE interp_while (node, stab, pval)
-INTERP node; TABLE stab; WORD *pval;
+PNODE node; TABLE stab; WORD *pval;
 {
-	BOOLEAN eflg;
-	WORD value;
+	BOOLEAN eflg = FALSE, cond;
 	INTERPTYPE irc;
 	while (TRUE) {
-		value = evaluate_cond(icond(node), stab, &eflg);
+		cond = evaluate_cond(icond(node), stab, &eflg);
 		if (eflg) return INTERROR;
-		if (value == (WORD) FALSE) return INTOKAY;
-		switch (irc = interpret((INTERP) ibody(node), stab, pval)) {
+		if (!cond) return INTOKAY;
+		switch (irc = interpret((PNODE) ibody(node), stab, pval)) {
 		case INTCONTINUE:
 		case INTOKAY:
 			continue;
@@ -752,25 +1220,25 @@ INTERP node; TABLE stab; WORD *pval;
 		}
 	}
 }
-/*========================================
+/*=======================================+
  * interp_call -- Interpret call structure
  *======================================*/
 INTERPTYPE interp_call (node, stab, pval)
-INTERP node; TABLE stab; WORD *pval;
+PNODE node; TABLE stab; WORD *pval;
 {
 	TABLE newtab;
 	INTERPTYPE irc;
-	INTERP arg, parm, proc = (INTERP) valueof(proctab, iname(node));
+	PNODE arg, parm, proc = (PNODE) valueof(proctab, iname(node));
 	if (!proc) {
 		wprintf("``%s'': undefined procedure\n", iname(node));
 		return INTERROR;
 	}
 	newtab = create_table();
-	arg = (INTERP) iargs(node);
-	parm = (INTERP) iparams(proc);
+	arg = (PNODE) iargs(node);
+	parm = (PNODE) iargs(proc);
 	while (arg && parm) {
-		BOOLEAN eflg;
-		WORD value = evaluate(arg, stab, &eflg);
+		BOOLEAN eflg = FALSE;
+		PVALUE value = evaluate(arg, stab, &eflg);
 		if (eflg) return INTERROR;
 		insert_table(newtab, iident(parm), (WORD) value);
 		arg = inext(arg);
@@ -781,7 +1249,7 @@ INTERP node; TABLE stab; WORD *pval;
 		remove_table(newtab, DONTFREE);
 		return INTERROR;
 	}
-	irc = interpret((INTERP) ibody(proc), newtab, pval);
+	irc = interpret((PNODE) ibody(proc), newtab, pval);
 	remove_table(newtab, DONTFREE);
 	switch (irc) {
 	case INTRETURN:
@@ -793,23 +1261,31 @@ INTERP node; TABLE stab; WORD *pval;
 		return INTERROR;
 	}
 }
-/*===============================================
+/*==============================================+
  * interp_traverse -- Interpret traverse iterator
+ *  usage: traverse(NODE,NODE_V,INT_V) {...}
  *=============================================*/
 INTERPTYPE interp_traverse (node, stab, pval)
-INTERP node; TABLE stab; WORD *pval;
+PNODE node; TABLE stab; WORD *pval;
 {
 	NODE snode, stack[100];
-	BOOLEAN eflg;
+	BOOLEAN eflg = FALSE;
 	INTERPTYPE irc;
 	INT lev = -1;
-	NODE root = (NODE) evaluate (inode(node), stab, &eflg);
-	if (eflg || !root) return FALSE;
+	NODE root;
+	PVALUE val = eval_and_coerce(PGNODE, iloopexp(node), stab, &eflg);
+	if (eflg) {
+		prog_error(node, "1st arg to traverse must be a record line");
+		return INTERROR;
+	}
+	root = (NODE) pvalue(val);
+	delete_pvalue(val);
+	if (!root) return INTOKAY;
 	stack[++lev] = snode = root;
 	while (TRUE) {
-		insert_table(stab, isubnode(node), (WORD) snode);
-		insert_table(stab, ilev(node), (WORD) lev);
-		switch (irc = interpret((INTERP) ibody(node), stab, pval)) {
+		insert_pvtable(stab, ielement(node), PGNODE, snode);
+		insert_pvtable(stab, ilev(node), PINT, lev);
+		switch (irc = interpret((PNODE) ibody(node), stab, pval)) {
 		case INTCONTINUE:
 		case INTOKAY:
 			break;
@@ -832,4 +1308,16 @@ INTERP node; TABLE stab; WORD *pval;
 		snode = stack[lev] = nsibling(stack[lev]);
 	}
 	return INTOKAY;
+}
+/*=============================================+
+ * prog_error -- Report a run time program error
+ *============================================*/
+prog_error (node, fmt, arg1, arg2, arg3)
+PNODE node;
+STRING fmt;
+WORD arg1, arg2, arg3;
+{
+	wprintf("\nError in \"%s\" at line %d: ", ifname(node), iline(node));
+	wprintf(fmt, arg1, arg2, arg3);
+	wprintf(".\n");
 }

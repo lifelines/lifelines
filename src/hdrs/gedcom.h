@@ -23,9 +23,10 @@
 */
 /*=============================================================
  * gedcom.h -- Main header file of LifeLines system
- * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
+ * Copyright(c) 1992-96 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 02 Sep 93
  *   3.0.0 - 23 Sep 94    3.0.2 - 09 Dec 94
+ *   3.0.3 - 17 Jan 96
  *===========================================================*/
 
 #define MAXNAMELEN 512
@@ -102,6 +103,7 @@ NODE choose_father();
 NODE choose_family();
 NODE choose_mother();
 NODE choose_spouse();
+NODE copy_node();
 NODE copy_nodes();
 NODE create_node();
 NODE edit_family();
@@ -159,8 +161,10 @@ STRING node_to_string();
 INT num_spouses();
 extern othr_to_cache();
 extern othr_to_dbase();
+BOOLEAN pointer_value();
 NODE refn_to_record();
 NODE remove_dupes();
+BOOLEAN replace_indi();
 BOOLEAN retrieve_file();
 STRING retrieve_record();
 STRING rmvat();
@@ -177,7 +181,10 @@ NODE string_to_node();
 BOOLEAN traverse_nodes();
 STRING trim();
 STRING trim_name();
+NODE union_nodes();
 NODE unique_nodes();
+BOOLEAN valid_indi();
+BOOLEAN valid_fam();
 STRING value_to_xref();
 
 #define fam_to_event indi_to_event
@@ -202,8 +209,8 @@ STRING value_to_xref();
 
 #define indi_to_key(indi)  (rmvat(nxref(indi)))
 #define fam_to_key(fam)    (rmvat(nxref(fam)))
-#define num_families(indi) (node_list_length(FAMS(indi)))
-#define num_children(fam)  (node_list_length(CHIL(fam)))
+#define num_families(indi) (length_nodes(FAMS(indi)))
+#define num_children(fam)  (length_nodes(CHIL(fam)))
 
 #define FORCHILDREN(fam,child,num) \
 	{\

@@ -23,10 +23,10 @@
 */
 /*=============================================================
  * functab.c -- Table of builtin functions
- * Copyright(c) 1993-94 by T.T. Wetmore IV; all rights reserved
+ * Copyright(c) 1993-96 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 26 Sep 93
  *   2.3.6 - 01 Jan 94    3.0.0 - 11 Oct 94
- *   3.0.2 - 28 Apr 95
+ *   3.0.3 - 02 Jul 96
  *===========================================================*/
 
 #include "standard.h"
@@ -37,7 +37,7 @@
 extern WORD __add();
 extern WORD __addnode();
 extern WORD __addtoset();
-extern WORD __alpha();
+extern WORD ___alpha();
 extern WORD __ancestorset();
 extern WORD __and();
 extern WORD __bapt();
@@ -62,6 +62,7 @@ extern WORD __date();
 extern WORD __dateformat();
 extern WORD __dayformat();
 extern WORD __deat();
+extern WORD __debug();
 extern WORD __decr();
 extern WORD __deletefromset();
 extern WORD __deletenode();
@@ -70,6 +71,7 @@ extern WORD __descendentset();
 extern WORD __difference();
 extern WORD __div();
 extern WORD __empty();
+extern WORD __enqueue();
 extern WORD __eq();
 extern WORD __eqstr();
 extern WORD __exp();
@@ -77,6 +79,7 @@ extern WORD __extractdate();
 extern WORD __extractnames();
 extern WORD __extractplaces();
 extern WORD __extracttokens();
+extern WORD __f();
 extern WORD __fam();
 extern WORD __fath();
 extern WORD __female();
@@ -88,6 +91,7 @@ extern WORD __fullname();
 extern WORD __ge();
 extern WORD __gengedcom();
 extern WORD __genindiset();
+extern WORD __getcol();
 extern WORD __getel();
 extern WORD __getfam();
 extern WORD __getindi();
@@ -104,6 +108,7 @@ extern WORD __index();
 extern WORD __indi();
 extern WORD __indiset();
 extern WORD __inode();
+extern WORD __inset();
 extern WORD __insert();
 extern WORD __intersect();
 extern WORD __key();
@@ -112,6 +117,7 @@ extern WORD __lastchild();
 extern WORD __le();
 extern WORD __length();
 extern WORD __lengthset();
+extern WORD __level();
 extern WORD __linemode();
 extern WORD __list();
 extern WORD __lock();
@@ -132,6 +138,7 @@ extern WORD __nchildren();
 extern WORD __ne();
 extern WORD __neg();
 extern WORD __newfile();
+extern WORD __nestr();
 extern WORD __nextfam();
 extern WORD __nextindi();
 extern WORD __nextsib();
@@ -155,7 +162,9 @@ extern WORD __prevfam();
 extern WORD __previndi();
 extern WORD __prevsib();
 extern WORD __print();
+extern WORD __program();
 extern WORD __push();
+extern WORD __pvalue();
 extern WORD __qt();
 extern WORD __reference();
 extern WORD __requeue();
@@ -193,9 +202,11 @@ extern WORD __uniqueset();
 extern WORD __unlock();
 extern WORD __upper();
 extern WORD __value();
-extern WORD __valuesort();
+/*extern WORD __valuesort();*/
 extern WORD __version();
 extern WORD __wife();
+extern WORD __writefam();
+extern WORD __writeindi();
 extern WORD __xref();
 extern WORD __year();
 
@@ -203,7 +214,7 @@ BUILTINS builtins[] = {
 	"add",		2,	32,	__add,
 	"addnode",	3,	3,	__addnode,
 	"addtoset",	3,	3,	__addtoset,
-	"alpha",	1,	1,	__alpha,
+	"alpha",	1,	1,	___alpha,
 	"ancestorset",	1,	1,	__ancestorset,
 	"and",		2,	32,	__and,
 	"atoi",		1,	1,	__strtoint,
@@ -220,7 +231,7 @@ BUILTINS builtins[] = {
 	"choosespouse",	1,	1,	__choosespouse,
 	"choosesubset",	1,	1,	__choosesubset,
 	"col",		1,	1,	__col,
-	"concat",	2,	32,	__concat,
+	"concat",	1,	32,	__concat,
 	"copyfile",	1,	1,	__copyfile,
 	"createnode",	2,	2,	__createnode,
 	"d",		1,	1,	__d,
@@ -229,6 +240,7 @@ BUILTINS builtins[] = {
 	"dateformat",	1,	1,	__dateformat,
 	"dayformat",	1,	1,	__dayformat,
 	"death",	1,	1,	__deat,
+	"debug",	1,	1,	__debug,
 	"decr",		1,	1,	__decr,
 	"deletefromset",3,	3,	__deletefromset,
 	"deletenode",	1,	1,	__deletenode,
@@ -239,7 +251,7 @@ BUILTINS builtins[] = {
 	"difference",	2,	2,	__difference,
 	"div",		2,	2,	__div,
 	"empty",	1,	1,	__empty,
-	"enqueue",	2,	2,	__push,
+	"enqueue",	2,	2,	__enqueue,
 	"eq",		2,	2,	__eq,
 	"eqstr",	2,	2,	__eqstr,
 	"exp",		2,	2,	__exp,
@@ -247,17 +259,19 @@ BUILTINS builtins[] = {
 	"extractnames",	4,	4,	__extractnames,
 	"extractplaces",3,	3,	__extractplaces,
 	"extracttokens",4,	4,	__extracttokens,
+	"f",		1,	2,	__f,
 	"fam",		1,	1,	__fam,
 	"father",	1,	1,	__fath,
 	"female",	1,	1,	__female,
 	"firstchild",	1,	1,	__firstchild,
-	"firstfam",	1,	1,	__firstfam,
-	"firstindi",	1,	1,	__firstindi,
+	"firstfam",	0,	0,	__firstfam,
+	"firstindi",	0,	0,	__firstindi,
 	"fnode",	1,	1,	__fnode,
 	"fullname",	4,	4,	__fullname,
 	"ge",		2,	2,	__ge,
 	"gengedcom",	1,	1,	__gengedcom,
 	"genindiset",	2,	2,	__genindiset,
+	"getcol",	0,	0,	__getcol,
 	"getel",	2,	2,	__getel,
 	"getfam",	1,	1,	__getfam,
 	"getindi",	1,	2,	__getindi,
@@ -278,6 +292,7 @@ BUILTINS builtins[] = {
 	"indiset",	1,	1,	__indiset,
 	"inode",	1,	1,	__inode,
 	"insert",	3,	3,	__insert,
+	"inset",	2,	2,	__inset,
 	"intersect",	2,	2,	__intersect,
 	"key",		1,	2,	__key,
 	"keysort",	1,	1,	__keysort,
@@ -285,6 +300,7 @@ BUILTINS builtins[] = {
 	"le",		2,	2,	__le,
 	"length",	1,	1,	__length,
 	"lengthset",	1,	1,	__lengthset,
+	"level",	1,	1,	__level,
 	"linemode",	0,	0,	__linemode,
 	"list",		1,	1,	__list,
 	"lock",		1,	1,	__lock,
@@ -304,7 +320,7 @@ BUILTINS builtins[] = {
 	"nchildren",	1,	1,	__nchildren,
 	"ne",		2,	2,	__ne,
 	"neg",		1,	1,	__neg,
-	"nestr",	2,	2,	__strcmp,
+	"nestr",	2,	2,	__nestr,
 	"newfile",	2,	2,	__newfile,
 	"nextfam",	1,	1,	__nextfam,
 	"nextindi",	1,	1,	__nextindi,
@@ -329,7 +345,9 @@ BUILTINS builtins[] = {
 	"previndi",	1,	1,	__previndi,
 	"prevsib",	1,	1,	__prevsib,
 	"print",	1,	32,	__print,
+	"program",	0,	0,	__program,
 	"push",		2,	2,	__push,
+	"pvalue",	1,	1,	__pvalue,
 	"qt",		0,	0,	__qt,
 	"reference",	1,	1,	__reference,
 	"requeue",	2,	2,	__requeue,
@@ -350,7 +368,7 @@ BUILTINS builtins[] = {
 	"spouseset",	1,	1,	__spouseset,
 	"stddate",	1,	1,	__stddate,
 	"strcmp",	2,	2,	__strcmp,
-	"strconcat",	2,	32,	__concat,
+	"strconcat",	1,	32,	__concat,
 	"strlen",	1,	1,	__strlen,
 	"strsave",	1,	1,	__save,
 	"strsoundex",	1,	1,	__strsoundex,
@@ -369,10 +387,12 @@ BUILTINS builtins[] = {
 	"unlock",	1,	1,	__unlock,
 	"upper",	1,	1,	__upper,
 	"value",	1,	1,	__value,
-	"valuesort",	1,	1,	__valuesort,
+/*	"valuesort",	1,	1,	__valuesort,*/
 	"version",	0,	0,	__version,
 	"wife",		1,	1,	__wife,
+	"writefam",	1,	1,	__writefam,
+	"writeindi",	1,	1,	__writeindi,
 	"xref",		1,	1,	__xref,
 	"year",		1,	1,	__year,
 };
-INT nobuiltins = 174;
+INT nobuiltins = 182;

@@ -25,6 +25,7 @@
  * spltjoin.c -- Splits and joins persons and families
  * Copyright(c) 1993-94 by T.T. Wetmore IV; all rights reserved
  *   3.0.0 - 16 May 94    3.0.2 - 21 Nov 94
+ *   3.0.3 - 17 Jan 96
  *===========================================================*/
 
 #include "standard.h"
@@ -38,12 +39,12 @@ split_indi (indi, pname, prefn, psex, pbody, pfamc, pfams)
 NODE indi, *pname, *prefn, *psex, *pbody, *pfamc, *pfams;
 {
 	NODE name, lnam, refn, sex, body, famc, fams, last;
-	NODE lfmc, lfms, prev, node;
+	NODE lfmc, lfms, lref, prev, node;
 	ASSERT(eqstr("INDI", ntag(indi)));
 	name = sex = body = famc = fams = last = lfms = lfmc = lnam = NULL;
-	refn = NULL;
+	refn = lref = NULL;
 	node = nchild(indi);
-	nchild(indi) = NULL;
+	nchild(indi) = nsibling(indi) = NULL;
 	while (node) {
 		STRING tag = ntag(node);
 		if (eqstr("NAME", tag)) {
@@ -63,8 +64,11 @@ NODE indi, *pname, *prefn, *psex, *pbody, *pfamc, *pfams;
 				fams = lfms = node;
 			else
 				lfms = nsibling(lfms) = node;
-		} else if (!refn && eqstr("REFN", tag)) {
-			refn = node;
+ 		} else if (eqstr("REFN", tag)) {
+			if (!refn)
+				refn = lref = node;
+			else
+				lref = nsibling(lref) = node;
 		} else {
 			if (!body)
 				body = last = node;
@@ -88,25 +92,51 @@ NODE indi, *pname, *prefn, *psex, *pbody, *pfamc, *pfams;
 join_indi (indi, name, refn, sex, body, famc, fams)
 NODE indi, name, refn, sex, body, famc, fams;
 {
-	NODE node;
+	NODE node = NULL;
 	ASSERT(indi && eqstr("INDI", ntag(indi)));
-	ASSERT(name && eqstr("NAME", ntag(name)));
-	nchild(indi) = node = name;
-	while (nsibling(node))
-		node = nsibling(node);
-	if (refn) node = nsibling(node) = refn;
-	if (sex) node = nsibling(node) = sex;
+
+	nchild(indi) = NULL;
+	if (name) {
+		nchild(indi) = node = name;
+		while (nsibling(node))
+			node = nsibling(node);
+	}
+	if (refn) {
+		if (node)
+			node = nsibling(node) = refn;
+		else
+			nchild(indi) = node = refn;
+		while (nsibling(node))
+			node = nsibling(node);
+	}
+	if (sex) {
+		if (node)
+			node = nsibling(node) = sex;
+		else
+			nchild(indi) = node = sex;
+	}
 	if (body) {
-		node = nsibling(node) = body;
+		if (node)
+			node = nsibling(node) = body;
+		else
+			nchild(indi) = node = body;
 		while (nsibling(node))
 			node = nsibling(node);
 	}
 	if (famc) {
-		node = nsibling(node) = famc;
+		if (node)
+			node = nsibling(node) = famc;
+		else
+			nchild(indi) = node = famc;
 		while (nsibling(node))
 			node = nsibling(node);
 	}
-	if (fams) nsibling(node) = fams;
+	if (fams) {
+		if (node)
+			nsibling(node) = fams;
+		else
+			nchild(indi) = fams;
+	}
 }
 /*=======================================
  * split_fam -- Split a family into parts
@@ -115,13 +145,13 @@ split_fam (fam, prefn, phusb, pwife, pchil, prest)
 NODE fam, *prefn, *phusb, *pwife, *pchil, *prest;
 {
 	NODE node, rest, last, husb, lhsb, wife, lwfe, chil, lchl;
-	NODE prev, refn;
+	NODE prev, refn, lref;
 	STRING tag;
 
 	rest = last = husb = wife = chil = lchl = lhsb = lwfe = NULL;
-	prev = refn = NULL;
+	prev = refn = lref = NULL;
 	node = nchild(fam);
-	nchild(fam) = NULL;
+	nchild(fam) = nsibling(fam) = NULL;
 	while (node) {
 		tag = ntag(node);
 		if (eqstr("HUSB", tag)) {
@@ -139,8 +169,11 @@ NODE fam, *prefn, *phusb, *pwife, *pchil, *prest;
 				lchl = nsibling(lchl) = node;
 			else
 				chil = lchl = node;
-		} else if (!refn && eqstr("REFN", tag)) {
-			refn = node;
+		} else if (eqstr("REFN", tag)) {
+			if (refn)
+				lref = nsibling(lref) = node;
+			else
+				refn = lref = node;
 		} else if (rest)
 			last = nsibling(last) = node;
 		else
@@ -162,9 +195,12 @@ join_fam (fam, refn, husb, wife, chil, rest)
 NODE fam, refn, husb, wife, chil, rest;
 {
 	NODE node = NULL;
+
 	nchild(fam) = NULL;
 	if (refn) {
 		nchild(fam) = node = refn;
+		while (nsibling(node))
+			node = nsibling(node);
 	}
 	if (husb) {
 		if (node)

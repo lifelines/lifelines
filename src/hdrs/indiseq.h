@@ -25,7 +25,7 @@
  * indiseq.h -- Header file for the INDISEQ data type
  * Copyright(c) 1993-94 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 03 Aug 93
- *   3.0.2 - 06 Dec 94
+ *   3.0.2 - 06 Dec 94    3.0.3 - 08 Aug 95
  *===========================================================*/
 
 #ifndef BOOLEAN
@@ -77,6 +77,7 @@ typedef struct  {
 
 INDISEQ create_indiseq();
 INDISEQ copy_indiseq();
+BOOLEAN in_indiseq();
 INDISEQ indi_to_children();
 INDISEQ indi_to_fathers();
 INDISEQ indi_to_mothers();

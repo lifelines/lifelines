@@ -27,6 +27,7 @@
  *   2.3.4 - 24 Jun 93    2.3.5 - 07 Aug 93
  *   2.3.6 - 02 Oct 93    3.0.0 - 11 Oct 94
  *   3.0.1 - 11 Oct 93    3.0.2 - 01 Jan 95
+ *   3.0.3 - 02 Jul 96
  *===========================================================*/
 
 #include <sys/types.h>
@@ -36,17 +37,6 @@
 #include "btree.h"
 #include "table.h"
 #include "gedcom.h"
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#ifdef HAVE_GETOPT_H
-#include <getopt.h>
-#else
-extern int optind;
-extern char *optarg;
-extern int getopt (int argc, char *const *argv, const char *shortopts);
-#endif
 
 extern STRING idldir, nodbse, crdbse, nocrdb, iddbse, usage;
 
@@ -59,13 +49,17 @@ BOOLEAN forceopen = FALSE;	/* force database status to 0 */
 BOOLEAN writeable = FALSE;	/* database must be writeable */
 BOOLEAN cursesio  = TRUE;	/* use curses i/o */
 BOOLEAN alldone   = FALSE;	/* completion flag */
+BOOLEAN progrunning = FALSE;	/* program is running */
+BOOLEAN traceprogram = FALSE;	/* trace program */
+BOOLEAN traditional = TRUE;	/* use traditional family rules */
 STRING btreepath;		/* database path given by user */
 STRING readpath;		/* database path used to open */
-STRING version = (STRING) VERSION;
-STRING betaversion = (STRING) "-10.16";
+STRING version = (STRING) "3.0.3OpenSource";
+STRING betaversion = (STRING) "-0.2";
 extern int opterr;
 extern BTREE BTR;
-STRING lldatabases, getenv();
+char *getenv();
+STRING lldatabases;
 STRING filepath();
 
 /*==================================
@@ -73,8 +67,10 @@ STRING filepath();
  *================================*/
 main (argc, argv)
 INT argc;
-STRING *argv;
+char **argv;
 {
+	extern char *optarg;
+	extern int optind;
 	int c;
 
 	initscr();
@@ -82,7 +78,7 @@ STRING *argv;
 	init_screen();
 	set_signals();
 	opterr = 0;	/* turn off getopt's error message */
-	while ((c = getopt(argc, (char**)argv, "akrwfm")) != -1) {
+	while ((c = getopt(argc, argv, "akrwfmnt")) != -1) {
 		switch (c) {
 		case 'a':	/* debug allocation */
 			alloclog = TRUE;
@@ -101,6 +97,12 @@ STRING *argv;
 			break;
 		case 'f':	/* force database open in all cases */
 			forceopen = TRUE;
+			break;
+		case 'n':	/* use non-traditional family rules */
+			traditional = FALSE;
+			break;
+		case 't':
+			traceprogram = TRUE;
 			break;
 		case '?':
 			wprintf(usage);
@@ -129,7 +131,7 @@ STRING *argv;
 		wprintf(usage);
 		exit_it(1);
 	}
-	lldatabases = getenv("LLDATABASES");
+	lldatabases = (STRING) getenv("LLDATABASES");
 	if (!lldatabases || *lldatabases == 0) lldatabases = (STRING) ".";
 	readpath = filepath(btreepath, "r", lldatabases);
 	if (!readpath) readpath = btreepath;
@@ -203,7 +205,7 @@ STRING path;
 {
 	if (!ask_yes_or_no_msg(nodbse, crdbse)) return FALSE;
 	if (!(BTR = openbtree(path, TRUE, !readonly))) {
-		message(nocrdb, path);
+		mprintf(nocrdb, path);
 		return FALSE;
 	}
 	initxref();

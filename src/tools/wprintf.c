@@ -35,3 +35,24 @@ va_dcl
 	fmt = va_arg(args, char *);
 	vprintf(fmt, args);
 }
+/*===========================================================
+ * mprintf -- Called as mprintf(fmt, arg, arg, arg, ...)
+ *===========================================================*/
+/*VARARGS*/
+mprintf (va_alist)
+va_dcl
+{
+	va_list args;
+	char *fmt;
+	va_start(args);
+	fmt = va_arg(args, char *);
+	vprintf(fmt, args);
+}
+/*======================================
+ * poutput -- Print argument as a string
+ *====================================*/
+poutput (str)
+char *str;
+{
+	printf("%s", str);
+}

@@ -26,6 +26,7 @@
  * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 02 Sep 93
  *   3.0.0 - 08 May 94    3.0.2 - 12 Dec 94
+ *   3.0.3 - 06 Aug 95
  *===========================================================*/
 
 #include "standard.h"
@@ -55,6 +56,7 @@ STRING str;
 	STRING p;
 	static unsigned char buffer[10][20];
 	static INT dex = 0;
+	ASSERT(str);
 	if (++dex > 9) dex = 0;
 	p = buffer[dex];
 	strcpy(p, &str[1]);
@@ -104,6 +106,7 @@ NODE node;
 		cont = nsibling(cont);
 	}
 	if (len == 0) return NULL;
+/*wprintf("full_value: len = %d\n", len);/*DEBUG*/
 	str = p = (STRING) stdalloc(len + 1);
 	if (q = nval(node)) {
 		sprintf(p, "%s\n", q);
@@ -119,5 +122,6 @@ NODE node;
 		cont = nsibling(cont);
 	}
 	*(p - 1) = 0;
+/*wprintf("full_value: str = %s\n", str);/*DEBUG*/
 	return str;
 }

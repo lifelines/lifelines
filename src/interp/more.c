@@ -22,10 +22,10 @@
    SOFTWARE.
 */
 /*=============================================================
- * more.c -- More builtin functions of report interpreter
- * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
+ * Copyright(c) 1991-95 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 26 Sep 93
  *   3.0.0 - 28 Jun 94    3.0.2 - 04 Apr 95
+ *   3.0.3 - 25 Aug 95
  *===========================================================*/
 
 #include <stdio.h>
@@ -36,153 +36,274 @@
 #include "interp.h"
 #include "indiseq.h"
 
-extern STRING notone, ifone;
+extern STRING notone, ifone, progname;
 extern NODE format_and_choose_indi();
 
 static INT index();
 static compute_pi();
+BOOLEAN prog_debug = FALSE;
 
-/*==============================================================
- * __extractnames -- Extract name parts from person or NAME node.
+/*=============================================================+
+ * __extractnames -- Extract name parts from person or NAME node
  *   usage: extractnames(NODE, LIST, VARB, VARB) -> VOID
  *============================================================*/
-WORD __extractnames (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+PVALUE __extractnames (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	INTERP nexp = (INTERP) ielist(node);
-	INTERP lexp = inext(nexp);
-	INTERP lvar = inext(lexp);
-	INTERP svar = inext(lvar);
-	NODE lin = (NODE) evaluate(nexp, stab, eflg);
-	LIST list;
+	LIST list, temp;
 	STRING str;
 	INT len, sind;
-	if (*eflg || !lin) return NULL;
-	list = (LIST) evaluate(lexp, stab, eflg);
-	if (*eflg || !list) return NULL;
+	PNODE nexp = (PNODE) iargs(node);
+	PNODE lexp = inext(nexp);
+	PNODE lvar = inext(lexp);
+	PNODE svar = inext(lvar);
+	NODE line;
+	PVALUE val = eval_and_coerce(PGNODE, nexp, stab, eflg);
+
+	if (*eflg) {
+		prog_error(node, "1st arg to extractnames is not a record line");
+		return NULL;
+	}
+	line = (NODE) pvalue(val);
+	delete_pvalue(val);
+	val = eval_and_coerce(PLIST, lexp, stab, eflg);
+	if (*eflg) {
+		prog_error(node, "2nd arg to extractnames is not a list");
+		return NULL;
+	}
+	list = (LIST) pvalue(val);
+	delete_pvalue(val);
+	if (list)
+		make_list_empty(list);
+	else
+		list = create_list();
 	*eflg = TRUE;
-	if (!iistype(lvar, IIDENT)) return NULL;
-	if (!iistype(svar, IIDENT)) return NULL;
+	if (!iistype(lvar, IIDENT)) {
+		prog_error(node, "3rd arg to extractnames must be a variable");
+		return NULL;
+	}
+	if (!iistype(svar, IIDENT)) {
+		prog_error(node, "4th arg to extractnames must be a variable");
+		return NULL;
+	}
+	if (strcmp("NAME", ntag(line)) && !(line = NAME(line))) {
+		prog_error(node, "1st arg to extractnames doesn't lead to a NAME line");
+		return NULL;
+	}
+	insert_pvtable(stab, iident(lvar), PINT, 0);
 	*eflg = FALSE;
-	if (strcmp("NAME", ntag(lin)) && !(lin = NAME(lin))) return NULL;
-	str = nval(lin);
+	str = nval(line);
 	if (!str || *str == 0) return NULL;
-	name_to_list(str, list, &len, &sind);
-	assign_iden(stab, iident(lvar), len);
-	assign_iden(stab, iident(svar), sind);
+	temp = create_list();
+	name_to_list(str, temp, &len, &sind);
+	FORLIST(temp, el)
+		push_list(list, create_pvalue(PSTRING, el));
+	ENDLIST
+	insert_pvtable(stab, iident(lvar), PINT, len);
+	insert_pvtable(stab, iident(svar), PINT, sind);
 	return NULL;
 }
-/*===============================================================
- * __extractplaces -- Extract place parts from event or PLAC NODE.
+/*==============================================================+
+ * __extractplaces -- Extract place parts from event or PLAC NODE
  *   usage: extractplaces(NODE, LIST, VARB) -> VOID
  *=============================================================*/
-WORD __extractplaces (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+PVALUE __extractplaces (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	INTERP nexp = (INTERP) ielist(node);
-	INTERP lexp = inext(nexp);
-	INTERP lvar = inext(lexp);
-	NODE lin = (NODE) evaluate(nexp, stab, eflg);
-	LIST list;
+	LIST list, temp;
 	STRING str;
 	INT len;
-	if (*eflg || !lin) return NULL;
-	list = (LIST) evaluate(lexp, stab, eflg);
-	if (*eflg || !list) return NULL;
+	PNODE nexp = (PNODE) iargs(node);
+	PNODE lexp = inext(nexp);
+	PNODE lvar = inext(lexp);
+	NODE line;
+	PVALUE val = eval_and_coerce(PGNODE, nexp, stab, eflg);
+
+	if (*eflg) {
+		prog_error(node, "1st arg to extractplaces must be a record line");
+		return NULL;
+	}
+	line = (NODE) pvalue(val);
+	delete_pvalue(val);
+	val = eval_and_coerce(PLIST, lexp, stab, eflg);
+	if (*eflg || !val || !pvalue(val)) {
+		*eflg = TRUE;
+		prog_error(node, "2nd arg to extractplaces must be a list");
+		return NULL;
+	}
+	list = (LIST) pvalue(val);
+	delete_pvalue(val);
+	if (list)
+		make_list_empty(list);
+	else
+		list = create_list();
 	*eflg = TRUE;
-	if (!iistype(lvar, IIDENT)) return NULL;
-	assign_iden(stab, iident(lvar), 0);
+	if (!iistype(lvar, IIDENT)) {
+		prog_error(node, "3rd arg to extractplaces must be a variable");
+		return NULL;
+	}
+	insert_pvtable(stab, iident(lvar), PINT, 0);
 	*eflg = FALSE;
-	if (strcmp("PLAC", ntag(lin)) && !(lin = PLAC(lin))) return NULL;
-	str = nval(lin);
+	if (!line) return NULL;
+	if (strcmp("PLAC", ntag(line)) && !(line = PLAC(line))) return NULL;
+	str = nval(line);
 	if (!str || *str == 0) return NULL;
-	place_to_list(str, list, &len);
-	assign_iden(stab, iident(lvar), len);
+	temp = create_list();
+	place_to_list(str, temp, &len);
+	FORLIST(temp, el)
+		push_list(list, create_pvalue(PSTRING, el));
+	ENDLIST
+	insert_pvtable(stab, iident(lvar), PINT, len);
 	return NULL;
 }
-/*===============================================================
+/*==========================================================+
  * __extracttokens -- Extract tokens from a STRING value
  *   usage: extracttokens(STRING, LIST, VARB, STRING) -> VOID
- *=============================================================*/
-WORD __extracttokens (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+ *=========================================================*/
+PVALUE __extracttokens (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	INTERP sexp = (INTERP) ielist(node);
-	INTERP lexp = inext(sexp);
-	INTERP lvar = inext(lexp);
-	INTERP dexp = inext(lvar);
-	STRING str = (STRING) evaluate(sexp, stab, eflg);
-	LIST list;
+	LIST list, temp;
 	INT len;
-	STRING dlm;
-	if (*eflg || !str || *str == 0) return NULL;
-	list = (LIST) evaluate(lexp, stab, eflg);
-	if (*eflg || !list) return NULL;
-	dlm = (STRING) evaluate(dexp, stab, eflg);
-	if (*eflg || !dlm) return NULL;
+	STRING str, dlm;
+	PNODE sexp = (PNODE) iargs(node);
+	PNODE lexp = inext(sexp);
+	PNODE lvar = inext(lexp);
+	PNODE dexp = inext(lvar);
+	PVALUE val2, val1 = eval_and_coerce(PSTRING, sexp, stab, eflg);
+
+	if (*eflg) {
+		prog_error(node, "1st arg to extracttokens must be a string");
+		return NULL;
+	}
+	str = (STRING) pvalue(val1);
+	val2 = eval_and_coerce(PLIST, lexp, stab, eflg);
+	if (*eflg) {
+		prog_error(node, "2nd arg to extracttokens must be a list");
+		return NULL;
+	}
+	list = (LIST) pvalue(val2);
+	delete_pvalue(val2);
+	val2 = eval_and_coerce(PSTRING, dexp, stab, eflg);
+	if (*eflg) {
+		prog_error(node, "4th arg to extracttokens must be a string");
+		return NULL;
+	}
+	dlm = (STRING) pvalue(val2);
+/*wprintf("dlm = %s\n", dlm);/*DEBUG*/
 	*eflg = TRUE;
-	if (!iistype(lvar, IIDENT)) return NULL;
-	assign_iden(stab, iident(lvar), 0);
+	if (!iistype(lvar, IIDENT)) {
+		prog_error(node, "3rd arg to extracttokens must be a variable");
+		return NULL;
+	}
 	*eflg = FALSE;
-	value_to_list(str, list, &len, dlm);
-	assign_iden(stab, iident(lvar), len);
+	insert_pvtable(stab, iident(lvar), PINT, 0);
+	temp = create_list();
+	value_to_list(str, temp, &len, dlm);
+	FORLIST(temp, el)
+		push_list(list, create_pvalue(PSTRING, el));
+	ENDLIST
+	insert_pvtable(stab, iident(lvar), PINT, len);
+	delete_pvalue(val1);
+	delete_pvalue(val2);
 	return NULL;
 }
-/*====================================
+/*===================================+
  * __database -- Return database name
  *   usage: database([BOOL]) -> STRING
  *==================================*/
-WORD __database (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+PVALUE __database (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	extern STRING readpath, lastpathname();
 	BOOLEAN full = FALSE;
+	PVALUE val;
 	*eflg = FALSE;
-	if (ielist(node)) full = (BOOLEAN) evaluate(ielist(node), stab, eflg);
-	if (*eflg) return NULL;
-	return (WORD) (full ? readpath : lastpathname(readpath));
+	if (iargs(node)) {
+		val = eval_and_coerce(PBOOL, iargs(node), stab, eflg);
+		if (*eflg) {
+			prog_error(node, "the arg to database is not boolean");
+			return NULL;
+		}
+		full = (BOOLEAN) pvalue(val);
+		delete_pvalue(val);
+	}
+	return create_pvalue(PSTRING,
+	    (full ? readpath : lastpathname(readpath)));
 }
-/*===========================================
+/*===========================================+
  * __index -- Find nth occurrence of substring
  *   usage: index(STRING, STRING, INT) -> INT
- *=========================================*/
-WORD __index (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+ *==========================================*/
+PVALUE __index (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	INTERP arg = (INTERP) ielist(node);
-	STRING sub, str = (STRING) evaluate(arg, stab, eflg);
 	INT num, index();
-	if (*eflg) return NULL;
+	PNODE arg = (PNODE) iargs(node);
+	STRING sub, str;
+	PVALUE val3, val2, val1 = eval_and_coerce(PSTRING, arg, stab, eflg);
+	if (*eflg) {
+		prog_error(node, "1st arg to index is not a string");
+		return NULL;
+	}
+	str = (STRING) pvalue(val1);
 	arg = inext(arg);
-	sub = (STRING) evaluate(arg, stab, eflg);
-	if (*eflg) return NULL;
+	val2 = eval_and_coerce(PSTRING, arg, stab, eflg);
+	if (*eflg) {
+		prog_error(node, "2nd arg to index is not a string");
+		return NULL;
+	}
+	sub = (STRING) pvalue(val2);
 	arg = inext(arg);
-	num = (INT) evaluate(arg, stab, eflg);
-	if (*eflg) return NULL;
-	return (WORD) index(str, sub, num);
+	val3 = eval_and_coerce(PINT, arg, stab, eflg);
+	if (*eflg) {
+		prog_error(node, "3rd arg to index is not an integer");
+		return NULL;
+	}
+	num = (INT) pvalue(val3);
+	set_pvalue(val3, PINT, index(str, sub, num));
+	delete_pvalue(val1);
+	delete_pvalue(val2);
+	return val3;
 }
-/*===============================================
+/*==============================================+
  * __substring -- Find substring of string.
  *   usage: substring(STRING, INT, INT) -> STRING
  *=============================================*/
-WORD __substring (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+PVALUE __substring (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	INTERP arg = (INTERP) ielist(node);
-	STRING substring(), str = (STRING) evaluate(arg, stab, eflg);
 	INT lo, hi;
-	if (*eflg) return NULL;
+	PNODE arg = (PNODE) iargs(node);
+	STRING substring(), str;
+	PVALUE val2, val1 = eval_and_coerce(PSTRING, arg, stab, eflg);
+	if (*eflg) {
+		prog_error(node, "1st arg to substring is not a string");
+		return NULL;
+	}
+	str = (STRING) pvalue(val1);
 	arg = inext(arg);
-	lo = (INT) evaluate(arg, stab, eflg);
-	if (*eflg) return NULL;
+	val2 = eval_and_coerce(PINT, arg, stab, eflg);
+	if (*eflg) {
+		prog_error(node, "2nd arg to substring is not an integer");
+		return NULL;
+	}
+	lo = (INT) pvalue(val2);
+	delete_pvalue(val2);
 	arg = inext(arg);
-	hi = (INT) evaluate(arg, stab, eflg);
-	if (*eflg) return NULL;
-	return (WORD) substring(str, lo, hi);
+	val2 = eval_and_coerce(PINT, arg, stab, eflg);
+	if (*eflg) {
+		prog_error(node, "3rd arg to substring is not an integer");
+		return NULL;
+	}
+	hi = (INT) pvalue(val2);
+	set_pvalue(val2, PSTRING, substring(str, lo, hi));
+	delete_pvalue(val1);
+	return val2;
 }
-/*=======================================================
- * index -- Find nth occurrence of sub in str (uses KMP).
- *=====================================================*/
+/*======================================================
+ * index -- Find nth occurrence of sub in str (uses KMP)
+ *====================================================*/
 static char pi[MAXLINELEN];
 static INT index (str, sub, num)
 STRING str, sub;
@@ -205,9 +326,9 @@ INT num;
         }
         return 0;
 }
-/*=========================================
- * compute_pi -- Support routine for index.
- *=======================================*/
+/*========================================
+ * compute_pi -- Support routine for index
+ *======================================*/
 static compute_pi (sub)
 STRING sub;
 {
@@ -220,9 +341,9 @@ STRING sub;
                 pi[q] = k;
         }
 }
-/*===============================
- * substring -- Return substring.
- *=============================*/
+/*==============================
+ * substring -- Return substring
+ *============================*/
 STRING substring (s, i, j)
 STRING s;
 INT i, j;
@@ -234,379 +355,497 @@ INT i, j;
 	scratch[j-i+1] = 0;
 	return (STRING) scratch;
 }
-/*================================================
- * chooseindi -- Have user choose person from set.
+/*===============================================
+ * chooseindi -- Have user choose person from set
  *   usage: chooseindi(SET) -> INDI
- *==============================================*/
-WORD __chooseindi (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+ *=============================================*/
+PVALUE __chooseindi (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	INDISEQ seq = (INDISEQ) evaluate(ielist(node), stab, eflg);
 	NODE indi;
-	if (!seq || *eflg || length_indiseq(seq) < 1) return NULL;
+	INDISEQ seq;
+	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
+	if (*eflg) {
+		prog_error(node, "the arg to chooseindi is not a set of persons");
+		return NULL;
+	}
+	seq = (INDISEQ) pvalue(val);
+	delete_pvalue(val);
+	if (!seq || length_indiseq(seq) < 1) return NULL;
 	indi = format_and_choose_indi(seq, FALSE, FALSE, TRUE, ifone, notone);
 	if (!indi) return NULL;
-	return (WORD) indi_to_cacheel(indi);
+	return create_pvalue(PINDI, indi_to_cacheel(indi));
 }
-/*==================================================
- * choosesubset -- Have user choose subset from set.
+/*================================================+
+ * choosesubset -- Have user choose subset from set
  *   usage: choosesubset(SET) -> SET
- *================================================*/
-WORD __choosesubset (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+ *===============================================*/
+PVALUE __choosesubset (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	STRING msg;
-	INDISEQ new, seq = (INDISEQ) evaluate(ielist(node), stab, eflg);
-	if (!seq || *eflg || length_indiseq(seq) < 1) return NULL;
+	INDISEQ new, seq;
+	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
+	if (*eflg) {
+		prog_error(node, "the arg to choosesubset is not a set of persons");
+		return NULL;
+	}
+	seq = (INDISEQ) pvalue(val);
+	delete_pvalue(val);
+	if (!seq || length_indiseq(seq) < 1) return NULL;
 	new = copy_indiseq(seq);
 	format_indiseq(new, FALSE, FALSE);
 	msg = (length_indiseq(new) > 1) ? notone : ifone;
 	new = (INDISEQ) choose_list_from_indiseq(msg, new);
-	return (WORD) new;
+	return create_pvalue(PSET, new);
 }
-/*===========================================================
- * choosechild -- Have user choose child of person or family.
+/*=========================================================+
+ * choosechild -- Have user choose child of person or family
  *   usage: choosechild(INDI|FAM) -> INDI
- *=========================================================*/
-WORD __choosechild (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+ *========================================================*/
+PVALUE __choosechild (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	CACHEEL cel = (CACHEEL) evaluate(ielist(node), stab, eflg);
+	INT type;
 	STRING key;
 	NODE indi, fam;
 	INDISEQ seq;
-	if (*eflg || !cel) return NULL;
+	CACHEEL cel;
+	PVALUE val = evaluate(iargs(node), stab, eflg);
+	if (*eflg || !val || ((type = ptype(val)) != PINDI && type != PFAM)) {
+		*eflg = TRUE;
+		prog_error(node, "the arg to choosechild must be a person or family");
+		return NULL;
+	}
+	cel = (CACHEEL) pvalue(val);
+	delete_pvalue(val);
+	if (!cel) return create_pvalue(PINDI, NULL);
 	key = ckey(cel);
 	if (*key == 'I') {
 		indi = key_to_indi(key);
 		seq = indi_to_children(indi);
-		if (!seq || length_indiseq(seq) < 1) return NULL;
+		if (!seq || length_indiseq(seq) < 1)
+			return create_pvalue(PINDI, NULL);
 		indi = format_and_choose_indi(seq, FALSE, FALSE, TRUE,
 		    ifone, notone);
 		remove_indiseq(seq, FALSE);
-		if (!indi) return NULL;
-		return (WORD) indi_to_cacheel(indi);
+		if (!indi) return create_pvalue(PINDI, NULL);
+		return create_pvalue(PINDI, indi_to_cacheel(indi));
 	} else if (*key == 'F') {
 		fam = key_to_fam(key);
 		seq = fam_to_children(fam);
-		if (!seq || length_indiseq(seq) < 1) return NULL;
+		if (!seq || length_indiseq(seq) < 1)
+			return create_pvalue(PINDI, NULL);
 		indi = format_and_choose_indi(seq, FALSE, FALSE, TRUE,
 		    ifone, notone);
 		remove_indiseq(seq, FALSE);
-		if (!indi) return NULL;
-		return (WORD) indi_to_cacheel(indi);
+		if (!indi) return create_pvalue(PINDI, NULL);
+		return create_pvalue(PINDI, indi_to_cacheel(indi));
 	}
+	*eflg = TRUE;
+	prog_error(node, "major error in choosechild");
 	return NULL;
 }
-/*===================================================
- * choosespouse -- Have user choose spouse of person.
+/*=================================================+
+ * choosespouse -- Have user choose spouse of person
  *   usage: choosespouse(INDI) -> INDI
- *=================================================*/
-WORD __choosespouse (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+ *================================================*/
+PVALUE __choosespouse (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	NODE indi = eval_indi(ielist(node), stab, eflg, NULL);
+	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	INDISEQ seq;
-	if (*eflg) return NULL;
+	if (*eflg) {
+		prog_error(node, "the arg to choosespouse must be a person");
+		return NULL;
+	}
 	seq = indi_to_spouses(indi);
-	if (!seq || length_indiseq(seq) < 1) return NULL;
+	if (!seq || length_indiseq(seq) < 1)
+		return create_pvalue(PINDI, NULL);
 	indi = format_and_choose_indi(seq, FALSE, TRUE, TRUE, ifone, notone);
 	remove_indiseq(seq, FALSE);
-	if (!indi) return NULL;
-	return (WORD) indi_to_cacheel(indi);
+	if (!indi) return create_pvalue(PINDI, NULL);
+	return create_pvalue(PINDI, indi_to_cacheel(indi));
 }
-/*================================================
- * choosefam -- Have user choose family of person.
+/*==============================================+
+ * choosefam -- Have user choose family of person
  *   usage: choosefam (INDI) -> FAM
- *==============================================*/
-WORD __choosefam (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+ *=============================================*/
+PVALUE __choosefam (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	NODE fam, indi = eval_indi(ielist(node), stab, eflg, NULL);
+	NODE fam, indi = eval_indi(iargs(node), stab, eflg, NULL);
 	INDISEQ seq;
-	if (*eflg) return NULL;
+	if (*eflg) {
+		prog_error(node, "the arg to choosefam must be a person");
+		return NULL;
+	}
 	seq = indi_to_families(indi, TRUE);
-	if (!seq || length_indiseq(seq) < 1) return NULL;
+	if (!seq || length_indiseq(seq) < 1)
+		return create_pvalue(PFAM, NULL);
 	fam = format_and_choose_indi(seq, TRUE, TRUE, TRUE, ifone, notone);
 	remove_indiseq(seq, FALSE);
-	if (!fam) return NULL;
-	return (WORD) fam_to_cacheel(fam);
+	if (!fam) return create_pvalue(PFAM, NULL);
+	return create_pvalue(PFAM, fam_to_cacheel(fam));
 }
-/*====================================================
+/*===================================================+
  * menuchoose -- Have user choose from list of options
  *   usage: menuchoose (LIST [,STRING]) -> INT
  *==================================================*/
-WORD __menuchoose (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+PVALUE __menuchoose (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	INT i, len;
 	STRING msg, *strngs;
 	STRING ttl = (STRING) "Please choose from the following list.";
-	INTERP arg = (INTERP) ielist(node);
-	LIST list = (LIST) evaluate(arg, stab, eflg);
-	if (!list || *eflg || length_list(list) < 1) return (WORD) 0;
+	PNODE arg = (PNODE) iargs(node);
+	LIST list;
+	PVALUE vel, val = eval_and_coerce(PLIST, arg, stab, eflg);
+
+	if (*eflg) {
+		prog_error(node, "1st arg to menuchoose must be a list of strings");
+		return NULL;
+	}
+	list = (LIST) pvalue(val);
+	delete_pvalue(val);
+	val = NULL;
+	if (!list || length_list(list) < 1)
+		return create_pvalue(PINT, 0);
 	msg = NULL;
-	arg = (INTERP) inext(arg);
-	if (arg) msg = (STRING) evaluate(arg, stab, eflg);
-	if (*eflg) return (WORD) 0;
+	arg = (PNODE) inext(arg);
+	if (arg) {
+		val = eval_and_coerce(PSTRING, arg, stab, eflg);
+		if (*eflg) {
+			prog_error(node, "2nd arg to menuchoose must be a string");
+			return NULL;
+		}
+		msg = (STRING) pvalue(val);
+	}
 	if (msg && *msg) ttl = msg;
 	len = length_list(list);
 	strngs = (STRING *) stdalloc(len*sizeof(STRING));
 	i = 0;
 	FORLIST(list, el)
-		strngs[i++] = (STRING) el;
+		vel = (PVALUE) el;
+		strngs[i++] = (STRING) pvalue(vel);
 	ENDLIST
 	i = choose_from_list(ttl, len, strngs);
 	stdfree(strngs);
-	return (WORD) (i + 1);
+	delete_pvalue(val);
+	return create_pvalue(PINT, i + 1);
 }
-/*=================================
+/*================================+
  * system -- Run shell command
  *   usage: system (STRING) -> VOID
  *===============================*/
-WORD __system (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+PVALUE __system (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	STRING cmd = (STRING) evaluate(ielist(node), stab, eflg);
-	if (*eflg || !cmd || *cmd == 0) return NULL;
+	STRING cmd;
+	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
+	if (*eflg) {
+		prog_error(node, "the arg to system must be a string");
+		return NULL;
+	}
+	cmd = (STRING) pvalue(val);
+	if (!cmd || *cmd == 0) {
+		delete_pvalue(val);
+		return NULL;
+	}
 	endwin();
 	system("clear");
 	system(cmd);
+	delete_pvalue(val);
 	return NULL;
 }
-/*=============================================
+/*============================================+
  * firstindi -- Return first person in database
  *   usage: firstindi() -> INDI
  *===========================================*/
-WORD __firstindi (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+PVALUE __firstindi (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	NODE indi;
 	static char key[10];
 	STRING record;
+	PVALUE val;
 	INT len, i = 0;
 	*eflg = FALSE;
 	while (TRUE) {
 		sprintf(key, "I%d", ++i);
 		if (!(record = retrieve_record(key, &len)))
-			return NULL;
+			return create_pvalue(PINDI, NULL);
 		if (!(indi = string_to_node(record))) {
 			stdfree(record);
 			continue;
 		}
 		stdfree(record);
+		val = create_pvalue(PINDI, indi_to_cacheel(indi));
 		free_nodes(indi);/*yes*/
-		return (WORD) indi_to_cacheel(indi);
+		return val;
 	}
 }
-/*============================================
- * nextindi -- Return next person in database.
+/*==========================================+
+ * nextindi -- Return next person in database
  *   usage: nextindi(INDI) -> INDI
- *==========================================*/
-WORD __nextindi (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+ *=========================================*/
+PVALUE __nextindi (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	NODE indi = eval_indi(ielist(node), stab, eflg, NULL);
+	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	static char key[10];
 	STRING record;
+	PVALUE val;
 	INT len, i;
-	if (*eflg) return NULL;
+	if (*eflg) {
+		prog_error(node, "the arg to nextindi is not a person");
+		return NULL;
+	}
+	if (!indi) return create_pvalue(PINDI, NULL);
 	strcpy(key, indi_to_key(indi));
 	i = atoi(&key[1]);
 	while (TRUE) {
 		sprintf(key, "I%d", ++i);
 		if (!(record = retrieve_record(key, &len)))
-			return NULL;
+			return create_pvalue(PINDI, NULL);
 		if (!(indi = string_to_node(record))) {
 			stdfree(record);
 			continue;
 		}
 		stdfree(record);
+		val = create_pvalue(PINDI, indi_to_cacheel(indi));
 		free_nodes(indi);/*yes*/
-		return (WORD) indi_to_cacheel(indi);
+		return val;
 	}
 }
-/*================================================
- * previndi -- Return previous person in database.
+/*==============================================+
+ * previndi -- Return previous person in database
  *   usage: previndi(INDI) -> INDI
- *==============================================*/
-WORD __previndi (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+ *=============================================*/
+PVALUE __previndi (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	NODE indi = eval_indi(ielist(node), stab, eflg, NULL);
+	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	static char key[10];
 	STRING record;
+	PVALUE val;
 	INT len, i;
-	if (*eflg) return NULL;
+	if (*eflg) {
+		prog_error(node, "the arg to previndi must be a person");
+		return NULL;
+	}
+	if (!indi) return create_pvalue(PINDI, NULL);
 	strcpy(key, indi_to_key(indi));
 	i = atoi(&key[1]);
 	while (TRUE) {
 		sprintf(key, "I%d", --i);
 		if (!(record = retrieve_record(key, &len)))
-			return NULL;
+			return create_pvalue(PINDI, NULL);
 		if (!(indi = string_to_node(record))) {
 			stdfree(record);
 			continue;
 		}
 		stdfree(record);
+		val = create_pvalue(PINDI, indi_to_cacheel(indi));
 		free_nodes(indi);/*yes*/
-		return (WORD) indi_to_cacheel(indi);
+		return val;
 	}
 }
-/*============================================
- * lastindi -- Return last person in database.
+/*===========================================
+ * lastindi -- Return last person in database
  *   usage: lastindi() -> INDI
- *==========================================*/
-WORD __lastindi (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+ *=========================================*/
+PVALUE __lastindi (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 }
-/*=============================================
- * firstfam -- Return first family in database.
+/*===========================================+
+ * firstfam -- Return first family in database
  *   usage: firstfam() -> FAM
- *===========================================*/
-WORD __firstfam (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+ *==========================================*/
+PVALUE __firstfam (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	NODE fam;
 	static char key[10];
 	STRING record;
+	PVALUE val;
 	INT len, i = 0;
 	*eflg = FALSE;
 	while (TRUE) {
 		sprintf(key, "F%d", ++i);
 		if (!(record = retrieve_record(key, &len)))
-			return NULL;
+			return create_pvalue(PFAM, NULL);
 		if (!(fam = string_to_node(record))) {
 			stdfree(record);
 			continue;
 		}
 		stdfree(record);
+		val = create_pvalue(PFAM, fam_to_cacheel(fam));
 		free_nodes(fam);/*yes*/
-		return (WORD) fam_to_cacheel(fam);
+		return val;
 	}
 }
-/*===========================================
- * nextfam -- Return next family in database.
+/*=========================================+
+ * nextfam -- Return next family in database
  *   usage: nextfam(FAM) -> FAM
- *=========================================*/
-WORD __nextfam (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+ *========================================*/
+PVALUE __nextfam (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	NODE fam = eval_fam(ielist(node), stab, eflg, NULL);
+	NODE fam = eval_fam(iargs(node), stab, eflg, NULL);
 	static char key[10];
 	STRING record;
+	PVALUE val;
 	INT len, i;
-	if (*eflg) return NULL;
+	if (*eflg) {
+		prog_error(node, "the arg to nextfam must be a family");
+		return NULL;
+	}
+	if (!fam) return create_pvalue(PFAM, NULL);
 	strcpy(key, fam_to_key(fam));
 	i = atoi(&key[1]);
 	while (TRUE) {
 		sprintf(key, "F%d", ++i);
 		if (!(record = retrieve_record(key, &len)))
-			return NULL;
+			return create_pvalue(PFAM, NULL);
 		if (!(fam = string_to_node(record))) {
 			stdfree(record);
 			continue;
 		}
 		stdfree(record);
+		val = create_pvalue(PFAM, fam_to_cacheel(fam));
 		free_nodes(fam);/*yes*/
-		return (WORD) fam_to_cacheel(fam);
+		return val;
 	}
 }
-/*===============================================
- * prevfam -- Return previous family in database.
+/*=============================================+
+ * prevfam -- Return previous family in database
  *   usage: prevfam(FAM) -> FAM
- *=============================================*/
-WORD __prevfam (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+ *============================================*/
+PVALUE __prevfam (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	NODE fam = eval_fam(ielist(node), stab, eflg, NULL);
+	NODE fam = eval_fam(iargs(node), stab, eflg, NULL);
 	static char key[10];
 	STRING record;
+	PVALUE val;
 	INT len, i;
-	if (*eflg) return NULL;
+	if (*eflg) {
+		prog_error(node, "the arg to prevfam must be a family");
+		return NULL;
+	}
+	if (!fam) return create_pvalue(PFAM, NULL);
 	strcpy(key, fam_to_key(fam));
 	i = atoi(&key[1]);
 	while (TRUE) {
 		sprintf(key, "F%d", --i);
 		if (!(record = retrieve_record(key, &len)))
-			return NULL;
+			return create_pvalue(PFAM, NULL);
 		if (!(fam = string_to_node(record))) {
 			stdfree(record);
 			continue;
 		}
 		stdfree(record);
+		val = create_pvalue(PFAM, fam_to_cacheel(fam));
 		free_nodes(fam);/*yes*/
-		return (WORD) fam_to_cacheel(fam);
+		return val;
 	}
 }
-/*============================================
- * lastfam -- Return last family in database.
+/*=========================================+
+ * lastfam -- Return last family in database
  *   usage: lastfam() -> FAM
- *==========================================*/
+ *========================================*/
 WORD __lastfam (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 }
-/*===============================================
- * getrecord -- Read GEDCOM record from database.
+/*=============================================+
+ * getrecord -- Read GEDCOM record from database
  *  usage: getrecord(STRING) -> NODE
  *  usage: dereference(STRING) -> NODE
  *  NOTE: persons and families NOT cached!
- *=============================================*/
-WORD __getrecord (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+ *============================================*/
+PVALUE __getrecord (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	STRING key = (STRING) evaluate(ielist(node), stab, eflg);
-	STRING rec;
+	STRING key, rec;
+	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
 	INT len;
-	if (*eflg) return NULL;
+	if (*eflg) {
+		prog_error(node, "the arg to getrecord must be a string");
+		return NULL;
+	}
+	key = (STRING) pvalue(val);
 	if (*key == '@') key = rmvat(key);
+wprintf("__getrecord: key = %s\n", key);/*DEBUG*/
 	if (*key == 'I' || *key == 'F' || *key == 'S' ||
 	    *key == 'E' || *key == 'X') {
 		rec = retrieve_record(key, &len);
-		if (rec == NULL) return NULL;
-		return (WORD) string_to_node(rec);
+		delete_pvalue(val);
+		if (rec == NULL) return create_pvalue(PGNODE, NULL);
+		val = create_pvalue(PGNODE, string_to_node(rec));
+		stdfree(rec);
+		return val;
 	}
-	*eflg = TRUE;
-	return NULL;
+	delete_pvalue(val);
+	return create_pvalue(PGNODE, NULL);
 }
-/*====================================================
- * freerecord -- Free GEDCOM node tree from getrecord.
+/*==================================================+
+ * freerecord -- Free GEDCOM node tree from getrecord
  *  usage: getrecord(STRING) -> NODE
- *==================================================*/
-WORD __freerecord (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+ *=================================================*/
+PVALUE __freerecord (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 }
-/*==================================================
- * reference -- Check if STRING is record reference.
+/*================================================+
+ * reference -- Check if STRING is record reference
  *  usage: reference(STRING) -> BOOLEAN
- *================================================*/
-WORD __reference (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+ *===============================================*/
+PVALUE __reference (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	STRING key = (STRING) evaluate(ielist(node), stab, eflg);
-	if (*eflg) return NULL;
-	return (WORD) (*key && (strlen(key)) > 2 && (*key == '@') &&
+	STRING key;
+	BOOLEAN rc;
+	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
+	if (*eflg) {
+		prog_error(node, "the arg to reference must be a string");
+		return NULL;
+	}
+	key = (STRING) pvalue(val);
+	rc = (*key && (strlen(key)) > 2 && (*key == '@') &&
 	    (key[strlen(key)-1] == '@'));
+	set_pvalue(val, PBOOL, rc);
+	return val;
 }
-/*=========================================
- * __rjustify -- Right justify string value
+/*========================================+
+ * rjustify -- Right justify string value
  *   usage: rjustify(STRING, INT) -> STRING
  *=======================================*/
-WORD __rjustify (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+PVALUE __rjustify (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	INTERP sarg = (INTERP) ielist(node);
-	INTERP larg = inext(sarg);
+	PNODE sarg = (PNODE) iargs(node);
+	PNODE larg = inext(sarg);
 	INT len;
 	STRING rightjustify();
-	STRING str = (STRING) evaluate(sarg, stab, eflg);
-	if (*eflg || !str) return NULL;
-	len = (INT) evaluate(larg, stab, eflg);
-	if (*eflg || len < 1 || len > 512) return NULL;
-	return (WORD) rightjustify(str, len);
+	STRING str;
+	PVALUE val2, val1 = eval_and_coerce(PSTRING, sarg, stab, eflg);
+	if (*eflg) {
+		prog_error(node, "1st arg to rjustify must be a string");
+		return NULL;
+	}
+	str = (STRING) pvalue(val1);
+	val2 = eval_and_coerce(PINT, larg, stab, eflg);
+	if (*eflg) {
+		prog_error(node, "2nd arg to rjustify must be an integer");
+		return NULL;
+	}
+	len = (INT) pvalue(val2);
+	delete_pvalue(val2);
+	set_pvalue(val1, PSTRING, rightjustify(str, len));
+	return val1;
 }
 /*===========================================
  * rightjustify -- Right justify string value
@@ -630,64 +869,135 @@ INT len;
 	new[i] = 0;
 	return new;
 }
-/*=========================================
+/*=========================================+
  * __lock -- Lock person or family in memory
  *   usage: lock(INDI|FAM) -> VOID
- *=======================================*/
+ *========================================*/
 WORD __lock (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	CACHEEL cel = (CACHEEL) evaluate(ielist(node), stab, eflg);
+	INT type;
+	CACHEEL cel;
+	PVALUE val = evaluate(iargs(node), stab, eflg);
+	if (*eflg || !val || ((type = ptype(val)) != PINDI && type != PFAM)) {
+		*eflg = TRUE;
+		prog_error(node, "the arg to lock must be a person or family");
+		return NULL;
+	}
+	cel = (CACHEEL) pvalue(val);
+	delete_pvalue(val);
 	if (cel) lock_cache(cel);
 	return NULL;
 }
-/*===============================================
+/*===============================================+
  * __unlock -- Unlock person or family from memory
  *   usage: unlock(INDI|FAM) -> VOID
- *=============================================*/
-WORD __unlock (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+ *==============================================*/
+PVALUE __unlock (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	CACHEEL cel = (CACHEEL) evaluate(ielist(node), stab, eflg);
+	INT type;
+	CACHEEL cel;
+	PVALUE val = evaluate(iargs(node), stab, eflg);
+	if (*eflg || !val || ((type = ptype(val)) != PINDI && type != PFAM)) {
+		*eflg = TRUE;
+		prog_error(node, "the arg to unlock must be a person or family");
+		return NULL;
+	}
+	cel = (CACHEEL) pvalue(val);
+	delete_pvalue(val);
 	if (cel) unlock_cache(cel);
 	return NULL;
 }
-/*==========================================
+/*==========================================+
  * __savenode -- Save GEDCOM tree permanently
  *   usage: savenode(NODE) -> NODE
- *========================================*/
-WORD __savenode (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+ *=========================================*/
+PVALUE __savenode (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	NODE this = (NODE) evaluate(ielist(node), stab, eflg);
-	if (!this) return NULL;
-	return (WORD) copy_nodes(this, TRUE, TRUE);
+	NODE line;
+	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
+	if (*eflg) {
+		prog_error(node, "the arg to savenode must be a record line");
+		return NULL;
+	}
+	line = (NODE) pvalue(val);
+	if (!line) return val;
+	set_pvalue(val, PGNODE, copy_nodes(line, TRUE, TRUE));
+	return val;
 }
-/*===================================================
+/*===================================================+
  * __genindiset -- Generate set of persons from a name
  *   usage: genindiset(STRING, SET) -> VOID
- *=================================================*/
+ *==================================================*/
 WORD __genindiset (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	INTERP arg = (INTERP) ielist(node);
-	STRING name = (STRING) evaluate(arg, stab, eflg);
-	if (!name || *name == 0 || *eflg) return NULL;
+	PNODE arg = (PNODE) iargs(node);
+	STRING name;
+	PVALUE val2, val1 = eval_and_coerce(PSTRING, arg, stab, eflg);
+	if (*eflg) {
+		prog_error(node, "1st arg to genindiset must be a string");
+		return NULL;
+	}
+	name = (STRING) pvalue(val1);
 	arg = inext(arg);
-	*eflg = TRUE;
-	if (!iistype(arg, IIDENT)) return NULL;
-	*eflg = FALSE;
-	assign_iden(stab, iident(arg), name_to_indiseq(name));
+	if (!iistype(arg, IIDENT)) {
+		*eflg = TRUE;
+		prog_error(node, "2nd arg to genindiset must be a variable");
+		return NULL;
+	}
+	assign_iden(stab, iident(arg), create_pvalue(PSET, NULL));
+	if (!name || *name == 0) return NULL;
+	assign_iden(stab, iident(arg), create_pvalue(PSET,
+	    name_to_indiseq(name)));
 	return NULL;
 }
-/*=================================================
+/*POINT*/
+/*================================================+
  * __version -- Return the LifeLines version string
  *   usage: version() -> STRING
  *===============================================*/
-WORD __version (node, stab, eflg)
-INTERP node; TABLE stab; BOOLEAN *eflg;
+PVALUE __version (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	extern STRING version;
 	*eflg = FALSE;
-	return (WORD) version;
+	return create_pvalue(PSTRING, version);
+}
+/*========================================+
+ * __pvalue -- Show a PVALUE -- Debug routine
+ *   usage: pvalue(ANY) -> STRING
+ *=======================================*/
+PVALUE __pvalue (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
+{
+	extern STRING pvalue_to_string();
+	PVALUE val = evaluate(iargs(node), stab, eflg);
+/*show_one_pnode(node);
+wprintf("\npvalue: %d ",val);if(val)wprintf("%d\n",ptype(val));
+else printf("BLECH\n");
+show_pvalue(val);wprintf("\n");/*DEBUG*/
+	return create_pvalue(PSTRING, pvalue_to_string(val));
+}
+/*============================================+
+ * __program -- Returns name of current program
+ *   usage: program() -> STRING
+ *===========================================*/
+PVALUE __program (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
+{
+	return create_pvalue(PSTRING, progname);
+}
+/*============================================+
+ * __debug -- Turn on/off programming debugging
+ *   usage: debug(BOOLEAN) -> VOID
+ *===========================================*/
+PVALUE __debug (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
+{
+	PVALUE val = eval_and_coerce(PBOOL, iargs(node), stab, eflg);
+	prog_debug = (BOOLEAN) pvalue(val);
+	return NULL;
 }

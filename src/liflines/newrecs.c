@@ -23,8 +23,9 @@
 */
 /*=============================================================
  * newrecs.c -- Handle source, event and other record types
- * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
+ * Copyright(c) 1992-96 by T.T. Wetmore IV; all rights reserved
  *   3.0.0 - 11 Sep 94    3.0.2 - 14 Apr 95
+ *   3.0.3 - 17 Feb 96
  *===========================================================*/
 
 #include "standard.h"
@@ -101,7 +102,7 @@ INT (*tocache)();	/* write record to cache */
 	TRANTABLE tti = tran_tables[MEDIN];
 
 /* Create template for user to edit */
-	if (!(fp = fopen(editfile, "w"))) return NULL;
+	if (!(fp = fopen(editfile, "w"))) return FALSE;
 	fprintf(fp, "%s\n", recstr);
 
 /* Have user edit new record */
@@ -132,9 +133,11 @@ INT (*tocache)();	/* write record to cache */
 		return FALSE;
 	}
 	nxref(node) = strsave((*getref)());
-	refn = REFN(node);
 	key = rmvat(nxref(node));
-	if (refn && nval(refn)) add_refn(nval(refn), key);
+	for (refn = nchild(node); refn; refn = nsibling(refn)) {
+		if (eqstr("REFN", ntag(refn)) && nval(refn))
+			add_refn(nval(refn), key);
+	}
 	(*todbase)(node);
 	(*tocache)(node);
 	return TRUE;
@@ -188,7 +191,10 @@ STRING gdmsg;		/* success message */
 
 /* Identify record if need be */
 	if (!node1) node1 = ask_for_record(idedt, letr);
-	if (!node1) return;
+	if (!node1) {
+		message("There is no record with that key or reference.");
+		return;
+	}
 	refn = REFN(node1);
 	oldr = refn ? nval(refn) : NULL;
 
@@ -226,6 +232,7 @@ STRING gdmsg;		/* success message */
 	}
 
 /* Change database */
+
 	refn = REFN(node2);
 	newr = refn ? nval(refn) : NULL;
 	if (newr && oldr && eqstr(newr, oldr))
@@ -238,38 +245,7 @@ STRING gdmsg;		/* success message */
 	nchild(node2) = temp;
 	(*todbase)(node1);
 	free_nodes(node2);
-	mprintf(gdrmod);
-}
-/*=========================================
- * key_to_record -- Returns record with key
- *=======================================*/
-NODE key_to_record (str, let)
-STRING str;	/* string that may be a key */
-INT let;	/* if string starts with letter it must be this */
-{
-	char kbuf[MAXNAMELEN];
-	INT i = 0, c;
-
-/*wprintf("key_to_record: %s, %c\n", str, let);/*DEBUG*/
-	if (!str || *str == 0) return NULL;
-	c = *str++;
-	if (c != let && chartype(c) != DIGIT) return NULL;
-	kbuf[i++] = let;
-	if (c != let) kbuf[i++] = c;
-	while ((c = *str++) && chartype(c) == DIGIT)
-		kbuf[i++] = c;
-	if (c != 0) return NULL;
-	kbuf[i] = 0;
-	if (!isrecord(BTR, str2rkey(kbuf))) return NULL;
-/*wprintf("key_to_record: %s\n", kbuf);/*DEBUG*/
-	switch (let) {
-	case 'I': return key_to_indi(kbuf);
-	case 'F': return key_to_fam(kbuf);
-	case 'S': return key_to_sour(kbuf);
-	case 'E': return key_to_even(kbuf);
-	case 'X': return key_to_othr(kbuf);
-	default:  FATAL();
-	}
+	mprintf(gdmsg);
 }
 /*==============================================
  * ask_for_record -- Ask user to identify record
@@ -284,22 +260,4 @@ INT letr;	/* letter to possibly prepend to key */
 	node = key_to_record(str, letr);
 	if (!node) node = refn_to_record(str, letr);
 	return node;
-}
-/*================================================
- * refn_to_record - Get record from user reference
- *================================================*/
-NODE refn_to_record (ukey, letr)
-STRING ukey;	/* user refn key */
-INT letr;	/* type of record */
-{
-        STRING *keys;
-        INT num, i;
-
-/*wprintf("refn_to_record called: %s, %c\n", ukey, letr);/*DEBUG*/
-        if (!ukey || *ukey == 0) return NULL;
-        get_refns(ukey, &num, &keys, letr);
-	if (num)
-		return key_to_record(keys[0], letr);
-	else
-		return NULL;
 }
