@@ -152,56 +152,6 @@ typedef struct ltag {
 #define LISTNOFREE 0
 #define LISTDOFREE 1
 
-/* assert.c */
-void __fatal(STRING, int);
-void __assert(BOOLEAN, STRING, int);
-
-/* double.c */
-void back_list(LIST, WORD);
-LIST create_list(void);
-WORD dequeue_list(LIST);
-BOOLEAN empty_list(LIST);
-void enqueue_list(LIST, WORD);
-WORD get_list_element(LIST, INT);
-BOOLEAN in_list(LIST, WORD, int (*func)(WORD, WORD));
-INT length_list(LIST);
-void make_list_empty(LIST);
-WORD pop_list(LIST);
-void push_list(LIST, WORD);
-void remove_list(LIST, int (*func)(WORD));
-void set_list_element(LIST, INT, WORD);
-void set_list_type(LIST, INT);
-
-/* llstrcmp.c */
-int ll_strcmp(char*, char*);
-int ll_strncmp(char*, char*, int);
-
-/* memalloc.c */
-void *__allocate(int, STRING, int);
-void __deallocate(void*, STRING, int);
-
-/* path.c */
-STRING filepath(STRING, STRING, STRING, STRING);
-FILE* fopenpath(STRING, STRING, STRING, STRING, STRING*);
-STRING lastpathname(STRING);
-
-/* signals.c */
-void set_signals(void);
-
-/* stdstrng.c */
-STRING strsave(STRING);
-STRING strconcat(STRING, STRING);
-INT chartype(INT);
-BOOLEAN iswhite(INT);
-BOOLEAN isletter(INT);
-BOOLEAN isnumeric(STRING);
-STRING lower(STRING);
-STRING upper(STRING);
-STRING capitalize(STRING);
-INT ll_toupper(INT);
-INT ll_tolower(INT);
-STRING trim(STRING, INT);
-
 #define FORLIST(l,e)\
 	{\
 		LNODE _lnode = l->l_last;\
@@ -212,5 +162,4 @@ STRING trim(STRING, INT);
 			_lnode = _lnode->l_prev;\
 		}\
 	}
-
 #endif
