@@ -1,7 +1,7 @@
 2003-04-05 Stephen Dum
-      * ChangeLog, .linesrc, lines.cfg
+      * ChangeLog, .linesrc, lines.cfg, reports/anniver.ll, reports/cron.ll
       Correct OTHRREC reference to OTHR, merge some comments from lines.cfg
-      into .linesrc, so two files are more consistent.
+      into .linesrc, so two files are more consistent. Fix typo in reports.
 
 2003-03-25 Stephen Dum
        * ChangeLog reports/anniver.ll reports/cron.ll src/interp/interp.c
