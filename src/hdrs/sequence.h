@@ -63,11 +63,21 @@ extern int seqerr;
 
 #define lenseq(seq)  (Size(seq))
 
-extern BOOLEAN sfndel();
-extern SEQUENCE crtseq(), insseq(), hinsseq(), tinsseq(), sinsseq();
-extern SEQUENCE altseq(), cpyseq(), joinseq(), prtseq();
-extern ELEMENT elseq(), delseq(), hdelseq(), tdelseq();
-extern void rmvseq();
+SEQUENCE crtseq(INT);
+void rmvseq(SEQUENCE);
+SEQUENCE cpyseq(SEQUENCE);
+SEQUENCE insseq(SEQUENCE, INT, ELEMENT);
+ELEMENT elseq(SEQUENCE, INT);
+SEQUENCE altseq(SEQUENCE, INT, ELEMENT);
+ELEMENT delseq(SEQUENCE, ELEMENT);
+SEQUENCE hinsseq(SEQUENCE, ELEMENT);
+SEQUENCE tinsseq(SEQUENCE, ELEMENT);
+ELEMENT hdelseq(SEQUENCE);
+ELEMENT tdelseq(SEQUENCE);
+SEQUENCE sinsseq(SEQUENCE, ELEMENT);
+BOOLEAN fndel(SEQUENCE, ELEMENT, INT*);
+BOOLEAN sfndel(SEQUENCE, ELEMENT, INT*);
+SEQUENCE joinseq(SEQUENCE, SEQUENCE);
 
 #define FORALL(i,e,s)\
 	{	int i, _n;\

@@ -63,6 +63,8 @@
 #include <stdio.h>
 #endif
 
+#include <string.h>
+
 /* WARNING: Borland C++ 5.02 declares wprintf() in stdio.h. Redefine LifeLines
  * wprintf to llwprintf. pbm 07 Jan 2000
  */
@@ -120,8 +122,6 @@ extern BOOLEAN alloclog;
 #define check_cache()   ___check_cache(__LINE__, __FILE__)
 
 extern char *malloc();
-extern char *__allocate();
-extern __deallocate();
 
 #define WHITE  ' '
 #define LETTER 'a'
@@ -173,7 +173,15 @@ INT ll_toupper(INT);
 INT ll_tolower(INT);
 STRING trim(STRING, INT);
 
+STRING filepath(STRING, STRING, STRING, STRING);
 FILE* fopenpath(STRING, STRING, STRING, STRING, STRING*);
+STRING lastpathname(STRING);
+
+void __fatal(STRING, int);
+void __assert(BOOLEAN, STRING, int);
+
+int ll_strcmp(char*, char*);
+int ll_strncmp(char*, char*, int);
 
 /* Internal Functions */
 void make_list_empty(LIST);
@@ -182,6 +190,12 @@ void push_list(LIST, WORD);
 void remove_list(LIST, int (*func)());
 BOOLEAN in_list(LIST, WORD, int (*func)());
 void back_list(LIST, WORD);
+
+void *__allocate(int, STRING, int);
+void __deallocate(void*, STRING, int);
+void alloc_out(STRING);
+
+void ll_abort(int);
 
 #define FORLIST(l,e)\
 	{\

@@ -44,3 +44,10 @@ struct etag {
 };
 
 TABLE create_table(void);
+void insert_table(TABLE, STRING, WORD);
+void delete_table(TABLE, STRING);
+void remove_table(TABLE, INT);
+void traverse_table(TABLE, INT (*proc)());
+BOOLEAN in_table(TABLE, STRING);
+WORD valueof(TABLE, STRING);
+WORD valueofbool(TABLE, STRING, BOOLEAN*);
