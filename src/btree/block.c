@@ -33,7 +33,7 @@
 /*========================================
  * allocblock -- Allocate memory for BLOCK
  *======================================*/
-BLOCK allocblock ()
+BLOCK allocblock (void)
 {
 	BLOCK block = (BLOCK) stdalloc(BUFLEN);
 	itype(block) = BTBLOCKTYPE;
