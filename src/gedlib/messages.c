@@ -49,9 +49,11 @@ ZST qSnodbse      = N_("There is no LifeLines database in that directory.");
 ZST qScrdbse      = N_("Do you want to create a database there?");
 ZST qSbdlkar      = N_("Argument to lock (-l) must be y or n.");
 ZST qSnormls      = N_("Cannot remove last person from family.");
-
+	/* summary of options (compiled with Finnish as optional) */
 ZST qSusgFinnOpt  = N_("lines [-adkrwifmntcuFyxo] [database]   # Use -F for Finnish database");
+	/* summary of options (compiled with Finnish as mandatory) */
 ZST qSusgFinnAlw  = N_("lines [-adkrwifmntcuyxo] [database]   # Finnish database");
+	/* summary of options (normal compile -- no Finnish support) */
 ZST qSusgNorm     = N_("lines [-adkrwifmntcuyxo] [database]");
 
 ZST qSronlya      = N_("The database is read only; you may not add records.");
@@ -338,6 +340,7 @@ ZST qSrerwlv      = N_("The record begins at wrong level.");
 ZST qScoredump    = N_("\nAborting now. Core dump? [y/n]");
 ZST qSprogsig     = N_("Looks like a program was running.\nCheck file %1 around line %2.\n");
 ZST qSsignal      = N_("signal %1: %2");
+	/* system signal#0 name */
 ZST qSsig00       = N_("SIGNAL 0");
 ZST qSsig01       = N_("HANGUP");
 ZST qSsig02       = N_("INTERRUPT");
@@ -353,6 +356,7 @@ ZST qSsig11       = N_("SEGMENTATION ERROR");
 ZST qSsig12       = N_("SYSTEM CALL ERROR");
 ZST qSsig13       = N_("PIPE WRITE");
 ZST qSsig14       = N_("ALARM CLOCK");
+	/* system signal#15 name -- presumably user used UNIX kill command to stop lifelines */
 ZST qSsig15       = N_("TERMINATE FROM KILL");
 ZST qSsig16       = N_("USER SIGNAL 1");
 ZST qSsig17       = N_("USER SIGNAL 2");
