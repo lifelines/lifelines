@@ -178,7 +178,7 @@ name2rkey (STRING name)
  * name_lo - Lower limit for name records
  *=====================================*/
 RKEY
-name_lo ()
+name_lo (void)
 {
 	RKEY rkey;
 	INT i;
@@ -191,7 +191,7 @@ name_lo ()
  * name_hi - Upper limit for name records
  *=====================================*/
 RKEY
-name_hi ()
+name_hi (void)
 {
 	RKEY rkey;
 	INT i;

@@ -110,9 +110,9 @@ INDISEQ indi_to_families(NODE, BOOLEAN);
 INDISEQ name_to_indiseq(STRING);
 INDISEQ refn_to_indiseq(STRING);
 INDISEQ node_to_sources(NODE);
-INDISEQ get_all_sour ();
-INDISEQ get_all_even ();
-INDISEQ get_all_othe ();
+INDISEQ get_all_sour(void);
+INDISEQ get_all_even(void);
+INDISEQ get_all_othe(void);
 
 void write_nonlink_indi(NODE);
 void write_family(STRING, TABLE);

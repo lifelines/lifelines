@@ -1436,7 +1436,7 @@ INDISEQ node_to_sources (NODE indi)
 /*=======================================================
  * get_all_sour -- Create sequence of all sources
  *=====================================================*/
-INDISEQ get_all_sour ()
+INDISEQ get_all_sour (void)
 {
 	INDISEQ seq=NULL;
 	int i=0;
@@ -1457,7 +1457,7 @@ INDISEQ get_all_sour ()
 /*=======================================================
  * get_all_even -- Create sequence of all event records
  *=====================================================*/
-INDISEQ get_all_even ()
+INDISEQ get_all_even (void)
 {
 	INDISEQ seq=NULL;
 	int i=0;
@@ -1478,7 +1478,7 @@ INDISEQ get_all_even ()
 /*=======================================================
  * get_all_othe -- Create sequence of all other records
  *=====================================================*/
-INDISEQ get_all_othe ()
+INDISEQ get_all_othe (void)
 {
 	INDISEQ seq=NULL;
 	int i=0;

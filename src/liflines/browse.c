@@ -874,7 +874,7 @@ browse_pedigree1 (NODE *pindi,
 /*==================================================
  * choose_any_source -- choose from list of all sources
  *================================================*/
-NODE choose_any_source()
+NODE choose_any_source (void)
 {
 	INDISEQ seq;
 	NODE node;
@@ -891,7 +891,7 @@ NODE choose_any_source()
 /*==================================================
  * browse_sources -- browse list of all sources
  *================================================*/
-void browse_sources ()
+void browse_sources (void)
 {
 	NODE node = choose_any_source();
 	if (node)
@@ -900,7 +900,7 @@ void browse_sources ()
 /*==================================================
  * browse_events -- browse list of all events
  *================================================*/
-void browse_events ()
+void browse_events (void)
 {
 	INDISEQ seq = get_all_even();
 	NODE node;
@@ -917,7 +917,7 @@ void browse_events ()
 /*==================================================
  * browse_others -- browse list of all sources
  *================================================*/
-void browse_others ()
+void browse_others (void)
 {
 	INDISEQ seq = get_all_othe();
 	NODE node;
