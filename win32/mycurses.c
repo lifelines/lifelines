@@ -526,17 +526,13 @@ int wgetch(WINDOW *wp)
 	cCursor.Y = wp->_cury + wp->_begy;
 	SetConsoleCursorPosition(hStdout, cCursor);
 	ch = mycur_getc();
-	if(echoing)
+	if (echoing && ch>31 && ch<256 && ch!=EOF)
 	{
-		if(ch == '\b');
-		else
-		{
-			waddch(wp, ch);
-			wrefresh(wp);
-			cCursor.X = wp->_curx + wp->_begx;
-			cCursor.Y = wp->_cury + wp->_begy;
-			SetConsoleCursorPosition(hStdout, cCursor);
-		}
+		waddch(wp, ch);
+		wrefresh(wp);
+		cCursor.X = wp->_curx + wp->_begx;
+		cCursor.Y = wp->_cury + wp->_begy;
+		SetConsoleCursorPosition(hStdout, cCursor);
 	}
 	return(ch);
 }
@@ -567,11 +563,7 @@ int wgetnstr(WINDOW *wp, char *cp, int n)
 			echoing = 0;
 		ch = wgetch(wp);
 		echoing = echoprev;
-		if(ch==EOF || ch=='\n' || ch=='\r') 
-		{
-			break;
-		}
-		else if(ch == '\b')
+		if (ch == '\b')
 		{
 			if(bp != cp)
 			{
@@ -587,7 +579,11 @@ int wgetnstr(WINDOW *wp, char *cp, int n)
 				}
 			}
 		}
-		else
+		if (ch==EOF || ch=='\n' || ch=='\r') 
+		{
+			break;
+		}
+		else if (ch>31 && ch<256)
 		{
 			if(overflowed)
 				MessageBeep(MB_OK);
@@ -710,6 +706,15 @@ static int mycur_getc(void)
 		, { VK_END, KEY_END }
 		, { VK_RETURN, KEY_ENTER }
 	};
+	static struct keycvt skeymap[] = {
+		{ VK_NEXT, KEY_SNEXT }
+		, { VK_PRIOR, KEY_SPREVIOUS }
+		, { VK_HOME, KEY_SHOME }
+	};
+	static int altctrls = LEFT_ALT_PRESSED | RIGHT_ALT_PRESSED | LEFT_CTRL_PRESSED | RIGHT_CTRL_PRESSED;
+	static int numpadbase=0;
+	static int numpadval=0;
+
 	if (hStdin == INVALID_HANDLE_VALUE)
 		return getchar();
 
@@ -718,63 +723,89 @@ static int mycur_getc(void)
 		INPUT_RECORD inrec;
 		int nrecs=0, i;
 
-		if (WaitForSingleObject(hStdin,INFINITE)!=WAIT_OBJECT_0)
+		/* To get special keys, have to use ReadConsoleInput */
+		ReadConsoleInput(hStdin, &inrec, 1, &nrecs);
+		if (!nrecs)
 			return EOF;
-		PeekConsoleInput(hStdin, &inrec, 1, &nrecs);
+
 		if (inrec.EventType == WINDOW_BUFFER_SIZE_EVENT)
 		{
-			if (ReadConsoleInput(hStdin, &inrec, 1, &nrecs))
-			{
-				int width= inrec.Event.WindowBufferSizeEvent.dwSize.X;
-				int height = inrec.Event.WindowBufferSizeEvent.dwSize.Y;
-				/* 
-				Console window resized
-				but I don't know how to report this via curses
-				*/
-				LINES = height;
-				COLS = width;
-				adjust_linescols();
-			}
-		}
-		else if (inrec.EventType == KEY_EVENT 
-			&& inrec.Event.KeyEvent.bKeyDown)
-		{
-			/*
-			Have to send normal keys & alt-down keys thru ReadConsole
-			so that alt escapes for non-ASCII keys work
-			2002.05.25
-			There is still a bug here -- if the user pressed alt, but
-			doesn't follow it up with a key-generating sequence (eg, the
-			user pressed alt-tab), we fall into here, and will ignore
-			arrow & page keys until the user presses a simple key.
+			int width= inrec.Event.WindowBufferSizeEvent.dwSize.X;
+			int height = inrec.Event.WindowBufferSizeEvent.dwSize.Y;
+			/* 
+			Console window resized
+			but I don't know how to report this via curses
 			*/
-			if (inrec.Event.KeyEvent.uChar.AsciiChar != '\0'
-				|| inrec.Event.KeyEvent.dwControlKeyState & LEFT_ALT_PRESSED
-				|| inrec.Event.KeyEvent.dwControlKeyState & RIGHT_ALT_PRESSED
-				)
+			LINES = height;
+			COLS = width;
+			adjust_linescols();
+		}
+		else if (inrec.EventType == KEY_EVENT && inrec.Event.KeyEvent.bKeyDown
+			&& inrec.Event.KeyEvent.wVirtualKeyCode != VK_MENU)
+		{
+			int keystate, keycode;
+			/* return normal keys */
+			if (inrec.Event.KeyEvent.uChar.AsciiChar != '\0')
+				return inrec.Event.KeyEvent.uChar.AsciiChar;
+			keystate = inrec.Event.KeyEvent.dwControlKeyState;
+			keycode = inrec.Event.KeyEvent.wVirtualKeyCode;
+			/* handle keyboard numeric escapes for non-ASCII characters */
+			if ((keystate & LEFT_ALT_PRESSED || keystate & RIGHT_ALT_PRESSED)
+				&& (VK_NUMPAD0 <= keycode && keycode <= VK_NUMPAD9))
 			{
-				int ch=0;
-				ReadConsole(hStdin, &ch, 1, &nrecs, NULL);
-				return ch; /* return normal keys */
+				if (!numpadval)
+				{
+					if (keycode == VK_NUMPAD0)
+					{
+						numpadbase = 8;
+						numpadval = -1;
+					}
+					else
+					{
+						numpadbase = 10;
+						numpadval = (keycode - VK_NUMPAD0);
+					}
+				}
+				else
+				{
+					if (numpadval == -1)
+						numpadval = keycode - VK_NUMPAD0;
+					else
+						numpadval = numpadval * numpadbase + (keycode - VK_NUMPAD0);
+					if (numpadval > 127)
+					{
+						int val = numpadval;
+						numpadval = 0;
+						return val;
+					}
+				}
+			}
+			else
+				numpadval = 0;
+			/* check if it is a hardware key we handle */
+			/* if so, map it to curses constant */
+			if (!(keystate & altctrls))
+			{
+				if (keystate & SHIFT_PRESSED)
+				{
+					for (i=0; i<sizeof(skeymap)/sizeof(skeymap[0]); ++i)
+					{
+						if (inrec.Event.KeyEvent.wVirtualKeyCode == skeymap[i].win)
+							return skeymap[i].curs;
+					}
+				}
+				else /* not shifted */
+				{
+					for (i=0; i<sizeof(keymap)/sizeof(keymap[0]); ++i)
+					{
+						if (inrec.Event.KeyEvent.wVirtualKeyCode == keymap[i].win)
+							return keymap[i].curs;
+					}
+				}
 			}
 			else
 			{
-				/* To get special keys, have to use ReadConsoleInput */
-				ReadConsoleInput(hStdin, &inrec, 1, &nrecs);
-				/* check if it is a hardware key we handle */
-				/* if so, map it to curses constant */
-				for (i=0; i<sizeof(keymap)/sizeof(keymap[0]); ++i)
-				{
-					if (inrec.Event.KeyEvent.wVirtualKeyCode == keymap[i].win)
-						return keymap[i].curs;
-				}
 			}
-		}
-		else
-		{
-			/* either key up, or mouse or something else we don't care about */
-			/* read it but ignore it */
-			ReadConsoleInput(hStdin, &inrec, 1, &nrecs);
 		}
 	}
 }
