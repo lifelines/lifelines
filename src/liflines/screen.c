@@ -591,7 +591,7 @@ check_stdout (void)
 			/* ok the status string was available until they struck a key */
 			clear_status();
 		}
-		deactivate_uiwin();
+		deactivate_uiwin_and_touch_all();
 	}
 }
 /*=====================================
@@ -1445,7 +1445,7 @@ resize_win: /* we come back here if we resize the window */
 			}
 		}
 	}
-	deactivate_uiwin();
+	deactivate_uiwin_and_touch_all();
 	
 	return ld.cur;
 }
@@ -1626,7 +1626,7 @@ invoke_scan_menu (void)
 			done=TRUE;
 			break;
 		}
-		deactivate_uiwin();
+		deactivate_uiwin_and_touch_all();
 		if (!done)
 			msg_status(_(qSsts_sca_non));
 	}
@@ -1687,7 +1687,7 @@ invoke_del_menu (void)
 	activate_uiwin(uiwin);
 	wmove(win, 1, 30);
 	code = interact(uiwin, "csifq", -1);
-	deactivate_uiwin();
+	deactivate_uiwin_and_touch_all();
 
 	switch (code) {
 	case 'c': choose_and_remove_child(NULL, NULL, FALSE); break;
@@ -2519,7 +2519,7 @@ resize_win: /* we come back here if we resize the window */
 			}
 		}
 	}
-	deactivate_uiwin();
+	deactivate_uiwin_and_touch_all();
 	return ld.cur;
 }
 /*===================================================
