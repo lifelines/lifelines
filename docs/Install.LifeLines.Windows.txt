@@ -10,10 +10,14 @@ Choose & create your directories, eg:
 \My Documents\LifeLines\Outputs (for report outputs)
 \My Documents\LifeLines\ttref (for translation tables)
 
-2)
+2a)
 Place the LifeLines program (Lines.exe) & 
  configuration file (lines.cfg) into the
  program directory (eg, \Program Files\LifeLines)
+2b)
+Install the gettext & iconv dlls in the same location.
+(They may be obtained from the LifeLines/Windows web page:
+http://lifelines.sourceforge.net/Ethel/index.html)
 
 3)
 Unzip the translation files under the program directory
