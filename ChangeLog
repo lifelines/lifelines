@@ -1,3 +1,14 @@
+2001-09-26 Matt Emmerton <memmerto@users.sourceforge.net>
+
+	* ChangeLog stdlib/lloptions.c liflines/main.c
+
+	1) Fix a missing pointer reference in init_lloptions that would
+	   cause segfaults
+	2) Moved init_lloptions from read_lloptions_from_config to 
+           init_liflines_global.
+	3) Make read_lloptions_from_db happen *after* init_liflines_db in
+	   main.c
+
 2001-09-25 Matt Emmerton <memmerto@users.sourceforge.net>
 
 	* ChangeLog	

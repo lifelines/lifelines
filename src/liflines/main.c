@@ -315,8 +315,8 @@ main (INT argc, char **argv)
 		goto finish;
 
 	/* Start Program */
-	read_lloptions_from_db();
 	init_lifelines_db();
+	read_lloptions_from_db();
 	init_show_module();
 	while (!alldone)
 		main_menu();

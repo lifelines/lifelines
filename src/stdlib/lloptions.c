@@ -152,7 +152,6 @@ init_lloptions (void)
 void
 read_lloptions_from_config (void)
 {
-	init_lloptions();
 	ASSERT(opttab && nodbopt);
 	load_config_file(environ_determine_config_file());
 	store_to_lloptions();
@@ -244,6 +243,7 @@ read_db_options (void)
 	we'll cycle thru every key in opttab, and see if
 	there is an update for it in useropts table
 	*/
+	ASSERT(useropts);
 	traverse_table(opttab, update_opt);
 }
 /*==========================================
@@ -342,6 +342,7 @@ init_lifelines_global (STRING * pmsg)
 {
 	STRING e;
 	*pmsg = NULL;
+	init_lloptions();
 	read_lloptions_from_config();
 	if (lloptions.lleditor[0])
 		e = lloptions.lleditor;
@@ -386,7 +387,7 @@ init_lifelines_global (STRING * pmsg)
 		changeoptstr(&lloptions.llnewdbdir, strsave("."));
 
 	set_usersort(custom_sort);
-	llstrncpy(errorfile, lloptions.errorlog, sizeof(errorfile)/sizeof(errorfile[0]));
+	llstrncpy(&errorfile, lloptions.errorlog, sizeof(errorfile)/sizeof(errorfile[0]));
 	return TRUE;
 }
 /*===============================================
