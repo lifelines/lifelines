@@ -546,7 +546,6 @@ exactmatch (STRING partial, STRING complete)
 BOOLEAN
 piecematch (STRING part, STRING comp)
 {
-	/* TODO: This must be fixed for Unicode 2003-04-12, Perry */
 	/* Case insensitive unnecessary, as caller has already upper-cased strings */
 	if (opt_finnish) {
 		if (fi_chrcmp(*part++, *comp++) != 0)

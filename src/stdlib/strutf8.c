@@ -96,40 +96,40 @@ next_char32 (STRING * ptr, int utf8)
 		return ch;
 	}
 	if (!(*str & 0x20)) {
-		INT ch = (str[0] & 0x1f << 6)
+		INT ch = ((str[0] & 0x1F) << 6)
 			+ (str[1] & 0x3F);
 		(*ptr) += 2;
 		return ch;
 	}
 	if (!(*str & 0x10)) {
-		INT ch = (str[0] & 0x0f << 12)
-			+ (str[1] & 0x3F << 6)
+		INT ch = ((str[0] & 0x0f) << 12)
+			+ ((str[1] & 0x3F) << 6)
 			+ (str[2] & 0x3F);
 		(*ptr) += 3;
 		return ch;
 	}
 	if (!(*str & 0x08)) {
-		INT ch = (str[0] & 0x0F << 18)
-			+ (str[1] & 0x3F << 12)
-			+ (str[2] & 0x3F << 6)
+		INT ch = ((str[0] & 0x0F) << 18)
+			+ ((str[1] & 0x3F) << 12)
+			+ ((str[2] & 0x3F) << 6)
 			+ str[3] & 0x3F;
 		(*ptr) += 4;
 		return ch;
 	}
 	if (!(*str & 0x04)) {
-		INT ch = (str[0] & 0x0F << 24)
-			+ (str[1] & 0x3F << 18)
-			+ (str[2] & 0x3F << 12)
-			+ (str[3] & 0x3F << 6)
+		INT ch = ((str[0] & 0x0F) << 24)
+			+ ((str[1] & 0x3F) << 18)
+			+ ((str[2] & 0x3F) << 12)
+			+ ((str[3] & 0x3F) << 6)
 			+ str[4] & 0x3F;
 		(*ptr) += 5;
 		return ch;
 	} else {
-		INT ch = (str[0] & 0x0F << 30)
-			+ (str[1] & 0x3F << 24)
-			+ (str[2] & 0x3F << 18)
-			+ (str[3] & 0x3F << 12)
-			+ (str[4] & 0x3F << 6)
+		INT ch = ((str[0] & 0x0F) << 30)
+			+ ((str[1] & 0x3F) << 24)
+			+ ((str[2] & 0x3F) << 18)
+			+ ((str[3] & 0x3F) << 12)
+			+ ((str[4] & 0x3F) << 6)
 			+ str[5] & 0x3F;
 		(*ptr) += 6;
 		return ch;
