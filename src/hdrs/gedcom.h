@@ -267,7 +267,6 @@ ZSTR get_cache_stats_fam(void);
 ZSTR get_cache_stats_indi(void);
 STRING get_current_locale_collate(void);
 STRING get_current_locale_msgs(void);
-INT get_dblist(STRING path, LIST * dblist, LIST * dbdesclist);
 INT get_decimal(STRING);
 INT get_hexidecimal(STRING);
 STRING get_lifelines_version(INT maxlen);
@@ -414,7 +413,6 @@ NODE record_to_first_event(RECORD record, CNSTRING tag);
 NODE refn_to_record(STRING, INT);
 void register_uicodeset_callback(CALLBACK_FNC fncptr, VPTR uparm);
 void register_uilang_callback(CALLBACK_FNC fncptr, VPTR uparm);
-void release_dblist(LIST dblist);
 void release_record(RECORD rec);
 BOOLEAN remove_child(NODE indi, NODE fam);
 BOOLEAN remove_empty_fam(NODE);
@@ -478,6 +476,10 @@ INT val_to_sex(NODE);
 STRING value_to_xref(STRING);
 BOOLEAN writexrefs(void);
 void write_node_to_editfile(NODE); /* used by Ethel */
+
+/* dblist.c */
+INT get_dblist(STRING path, LIST * dblist, LIST * dbdesclist);
+void release_dblist(LIST dblist);
 
 /* interface.c */
 void del_in_dbase(CNSTRING key);

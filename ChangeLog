@@ -1,3 +1,9 @@
+2005-02-27 Perry Rapp
+
+	* ChangeLog src/gedlib/init.c src/hdrs/gedcom.h
+
+	Move dblist functions out of init.c into new dblist.c
+
 2005-02-26 Perry Rapp
 
 	* ChangeLog src/stdlib/rbtree.c src/stdlib/rbtree.h
