@@ -9,7 +9,8 @@ libarch_a_SOURCES=
 libarch_a_DEPENDENCIES = @LIBOBJS@
 libarch_a_LIBADD = @LIBOBJS@
 
-INCLUDES=-I$(srcdir)/.. -I$(srcdir)/../hdrs
+# .. for config.h, hdrs for lots of stuff, ../intl for libgnuintl.h
+INCLUDES=-I$(srcdir)/.. -I$(srcdir)/../hdrs -I$(srcdir)/../intl
 
 #need explicit dependencies
 alphasort.o: ../hdrs/arch.h

@@ -13,7 +13,7 @@ AM_INIT_AUTOMAKE(lifelines, 3.0.13)
 AM_CONFIG_HEADER(config.h)
 
 dnl Set of available languages (gettext)
-ALL_LINGUAS="de sv"
+ALL_LINGUAS="de el it sv"
 
 AC_PREFIX_DEFAULT($HOME)
 
