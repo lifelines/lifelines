@@ -230,7 +230,7 @@ print_usage (void)
 		"\t-G = Check for & fix ghosts (names/refns)\n"
 		"\t-i = Check individuals\n"
 		"\t-f = Check families\n"
-		"\t-P2 = Change tags of bad pointers\n"
+		"\t-F = Alter any bad family lineage pointers (to _badptr)\n"
 		"\t-s = Check sours\n"
 		"\t-e = Check events\n"
 		"\t-x = Check others\n"
@@ -1241,14 +1241,7 @@ main (int argc,
 		case 'x': todo.check_othes=TRUE; break;
 		case 'n': noisy=TRUE; break;
 		case 'a': allchecks=TRUE; break;
-		case 'P':
-			{
-				switch(ptr[1]) {
-				case '2': todo.fix_alter_pointers=TRUE; ++ptr; break;
-				default: print_usage(); goto done;
-				}
-			}
-			break;
+		case 'F': todo.fix_alter_pointers=TRUE; break;
 		default: print_usage(); goto done;
 		}
 	}

@@ -13,6 +13,10 @@
 
 	Remove declaration of nonexistent check_version_compat function.
 
+	* ChangeLog src/tools/dbverify.c
+
+	dbverify: Change -P2 to -F, for fix family lineage.
+
 2005-02-03 Perry Rapp
 
 	* ChangeLog src/interp/alloc.c src/interp/interp.c
