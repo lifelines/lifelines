@@ -1,0 +1,4255 @@
+<?xml version='1.0' encoding='iso-8859-1'?> 
+
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+                 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" 
+[<!ENTITY llversion '3.0.7'>]> 
+
+
+
+  <book id="docbook"> 
+
+  <bookinfo> 
+
+
+<!-- 
+
+    this is lifelines.xml
+
+    To use this file with SGML software, replace the text above
+    this comments section with the following:
+
+_________________________________________________________
+
+<!DOCTYPE BOOK PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
+	<!entity llversion	"3.0.7">    
+]>	
+	
+<book id="docbook"> 
+  <?dbhtml filename="ll-doc.htm">
+  <bookinfo>
+_________________________________________________________
+
+
+    Rafal Prinke <rafalp@amu.edu.pl> 1-Apr-200 
+    - Converted original LifeLines Reference Guide to DocBook SGML. 
+
+
+    Marc Nozell <marc@nozell.com>  26-Jul-2001 
+    - Changed <simpara> to <para>.  Newer docbook likes it better. 
+
+    Marc Nozell <marc@nozell.com>  21-Sep-2000 
+    - updated license info 
+    - point to lifelines.sourceforge.net 
+    - change references from lines302 to llines 
+    - make most lines less than 80 characters wide 
+
+    Rafal Prinke <rafalp@amu.edu.pl> 30-Dec-2001 
+    - Converted to XML.
+          - closed all <para> elements
+          - defined and corrected llversion entity
+          - closed empty tag <void />
+          - converted all tags to lower case
+          - replaced ampersands with entities
+          - added space at end of line
+          - parsed against DocBook 4.1.2 DTD
+
+                                                       --> 
+<!-- ================================================= --> 
+
+    <title> 
+
+<application>LifeLines</application> Documentation 
+</title> 
+
+    <authorgroup> 
+      <author> 
+     <firstname>Thomas T. </firstname> 
+     <surname>Wetmore </surname> 
+     <lineage>IV</lineage> 
+      </author> 
+    </authorgroup> 
+
+    <subtitle><application>LifeLines</application> Version &llversion;</subtitle> 
+  </bookinfo> 
+   
+  <chapter> 
+
+    <title> 
+
+Users' Manual 
+
+</title> 
+
+    <sect1> 
+       
+       
+      <title> 
+
+INTRODUCTION 
+
+</title> 
+       
+       
+       
+<para> 
+
+     <application>LifeLines</application> is a genealogy program 
+     that runs on <acronym>UNIX</acronym> systems. It maintains 
+     genealogical records (persons, families, sources, events and 
+     others) in a database, and generates reports from those 
+     records. There are no practical limits on the number of 
+     records that can be stored in a 
+     <application>LifeLines</application> database, nor on the 
+     amounts or kinds of data that can be kept in the 
+     records. <application>LifeLines</application> does not contain 
+     built-in reports.  Instead it provides a programming subsystem 
+     that you use to program your own reports and charts. The 
+     programming subsystem also lets you query your databases and 
+     process your data in any 
+     way. <application>LifeLines</application> uses the terminal 
+     independent features of <acronym>UNIX</acronym> to provide a 
+     screen and menu based user interface. 
+
+</para> 
+
+
+
+<para> 
+
+     <application>LifeLines</application> is a non-commercial, 
+     experimental system that is use at your own risk software. I 
+     developed <application>LifeLines</application> for personal 
+     use and shared it with friends. Enough of a demand arose 
+     through word of mouth and internet, that I have made the 
+     <application>LifeLines</application> source code and other 
+     information freely available under an MIT-style license 
+     reproduced below: 
+
+</para> 
+
+<para> 
+     <quote> 
+Copyright (c) 1991-1999 Thomas T. Wetmore IV 
+
+Permission is hereby granted, free of charge, to any person obtaining 
+a copy of this software and associated documentation files (the 
+"Software"), to deal in the Software without restriction, including 
+without limitation the rights to use, copy, modify, merge, publish, 
+distribute, sublicense, and/or sell copies of the Software, and to 
+permit persons to whom the Software is furnished to do so, subject to 
+the following conditions: 
+
+The above copyright notice and this permission notice shall be 
+included in all copies or substantial portions of the Software. 
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE 
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION 
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION 
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
+
+     </quote> 
+
+</para> 
+
+<para> 
+
+     The source code, documentation and a collection of report 
+     scripts are located at <ulink url="http://lifelines.sourceforge.net/"> 
+     http://lifelines.sourceforge.net/</ulink>.  You can also find 
+     binary kits for some platforms.  If you are a developer and 
+     wish to contribute enhancements, please sign up on sourceforge 
+     and contact <ulink url="mailto:marc@nozell.com"> Marc 
+     Nozell</ulink> who is currently managing the project. 
+     </para> 
+
+     <note> 
+     <para> 
+     Prior to 1999, Lifelines was available on the ftp sites, 
+     <ulink url="ftp://ftp.cac.psu.edu">ftp.cac.psu.edu</ulink> and 
+     <ulink url="ftp://hoth.stsci.edu">hoth.stsci.edu</ulink>. 
+     Please use sourceforge instead. 
+     </para> 
+     </note> 
+
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+INSTALLATION 
+
+</title> 
+
+
+
+<para> 
+
+     You may be installing <application>LifeLines</application> 
+     from a source distribution package or as an executable program 
+     already prepared for your <acronym>UNIX</acronym> 
+     (or <acronym>MS-Windows</acronym>) system. The 
+     source distribution comes with the readme, build script and 
+     make files necessary to build 
+     <application>LifeLines</application>. Follow the instructions 
+     in the readme file. The executable program will be named 
+     <command>llines</command>. <command>llines</command> is the 
+     <application>LifeLines</application> program; put it in a 
+     directory in your execution path. If you get the program in 
+     executable form, follow whatever instructions came with it. 
+     The source distribution package also contains documentation 
+     and some <application>LifeLines</application> programs. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+STARTING <application>LIFELINES</application> AND CREATING DATABASES 
+
+</title> 
+
+
+
+<para> 
+
+     You normally start <application>LifeLines</application> with 
+     the command: <userinput><command>lines</command> <replaceable class="parameter">database</replaceable></userinput> where 
+     database is the name of a <application>LifeLines</application> 
+     database. If <application>LifeLines</application> finds the 
+     database, <application>LifeLines</application> opens the 
+     database and takes you to the program's main menu. If the 
+     database doesn't exist, <application>LifeLines</application> 
+     asks whether it should create it, and if you answer yes, does 
+     so. You may create any number of databases, but only one can 
+     be accessed by <application>LifeLines</application> at a 
+     time. If you built the <application>LifeLines</application> 
+     executable from the source package, the executable may be 
+     named <command>llines</command> rather than 
+     <command>lines</command>. You may either change its name or 
+     invoke <application>LifeLines</application> by using the 
+     command <command>llines</command> instead. 
+
+</para> 
+
+
+
+<para> 
+
+     The full command line interface to 
+     <application>LifeLines</application> is: 
+
+     <synopsis> 
+        <command>lines</command> <option>[-adkrwilfmntcuFy]</option><replaceable class="parameter">[database]</replaceable> 
+     </synopsis> 
+
+</para> 
+
+
+
+<para> 
+
+     The options mean the following: 
+
+     <glosslist><glossentry><glossterm>-a</glossterm><glossdef> 
+
+<para> 
+
+     log dynamic memory operation (for debugging) 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>-d</glossterm><glossdef> 
+
+<para> 
+
+     debug mode (signal protection disabled for convenience with breakpoints) 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>-k</glossterm><glossdef> 
+
+<para> 
+
+     always show keys (normally keys are suppressed if REFN available) 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>-r</glossterm><glossdef> 
+
+<para> 
+
+     open database with read-only access (protect against other 
+     writer access) 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>-w</glossterm><glossdef> 
+
+<para> 
+
+     open database with writeable access (protect against other 
+     writer or reader access) 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>-i</glossterm><glossdef> 
+
+<para> 
+
+     open database with immutable access (no protection against other 
+     access -- for use on read-only media)  
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>-l</glossterm><glossdef> 
+
+<para> 
+
+     lock (-ly) or unlock (-ln) a database for use with read only media 
+     (access to a locked database is treated as immutable) 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>-f</glossterm><glossdef> 
+
+<para> 
+
+     force open the database - use only in emergency 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>-n</glossterm><glossdef> 
+
+<para> 
+
+     do not use traditional family rules 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>-t</glossterm><glossdef> 
+
+<para> 
+
+     trace function calls in report programs (for debugging) 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>-c</glossterm><glossdef> 
+
+<para> 
+
+     supply cache values (eg, -ci400,4000f400,4000 sets direct indi &amp; fam 
+     caches to 400, and indirect indi &amp; fam caches to 4000) 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>-u</glossterm><glossdef> 
+
+<para> 
+
+     specify window size (eg, -u120,34 specifies 120 columns by 34 rows) 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>-F</glossterm><glossdef> 
+
+<para> 
+
+     Finnish option (only available if so compiled) 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>-a</glossterm><glossdef> 
+
+<para> 
+
+     log dynamic memory operation (for debugging) 
+
+</para> 
+
+</glossdef></glossentry></glosslist> 
+
+</para> 
+
+
+
+<para> 
+
+     The <option>-r</option> option opens the database with read-only 
+     access. When in this mode 
+     <application>LifeLines</application> will not let you modify 
+     the database; no other operations are affected. The 
+     <option>-w</option> option opens the database with writeable 
+     access. If the database cannot be opened with the requested 
+     mode <application>LifeLines</application> quits 
+     immediately. When you open a database with neither the 
+     <option>-r</option> or <option>-w</option> options, 
+     <application>LifeLines</application> first tries to open the 
+     database with writeable access; if not possible 
+     <application>LifeLines</application> then tries to open the 
+     database with read-only access; and if this is not possible 
+     <application>LifeLines</application> quits. A 
+     <application>LifeLines</application> database may be open 
+     simultaneously by any number of programs with read-only 
+     access; however, if a database is open by a program with 
+     writeable access, then it cannot be opened by any other other 
+     program. 
+
+</para> 
+
+
+
+<para> 
+
+     In rare situations the read/write mode mechanism can fail; 
+     when this happens a database may appear unopenable. If this 
+     happens use the <option>-f</option> option to force open the 
+     database; this will open the database and reset the mode 
+     mechanism. This is a dangerous feature; you can use it to open 
+     the same database with writeable access more than once; the 
+     results are unpredictable and generally disasterous. 
+
+</para> 
+
+<para> 
+
+     The multiuser protection supplied by this reader/writer access 
+     mechanism is provided via a flag setting in the database, so both 
+     read-only and writeable access actually alter the database (read-only 
+     access only alters the value of this flag). For truly read-only 
+     access, e.g., for use with read-only media, the best solution is to 
+     lock (-ly) the      database before copying it to the read-only media. This 
+     annotates the database itself as being for immutable access. 
+     Alternatively, to use a database already on read-only media and not 
+     so annotated, use the immutable (-i) flag. 
+
+</para> 
+
+<para> 
+
+     If you don't give the name of a database on the command line, 
+     <application>LifeLines</application> will prompt you for 
+     it. If you do not use the <envar>LLDATABASES</envar> shell 
+     variable or user options (described later), the name you enter must be the 
+     name of a <application>LifeLines</application> database 
+     directory expressed using normal <acronym>UNIX</acronym> 
+     absolute or relative path naming. If you do use the 
+     <envar>LLDATABASES</envar> variable, 
+     <application>LifeLines</application> will search for the 
+     database in the directories named in the variable; this can be 
+     very convenient. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+INTRODUCTION TO <acronym>GEDCOM</acronym> 
+
+</title> 
+
+
+
+<para> 
+
+     <application>LifeLines</application> records are stored in 
+     <acronym>GEDCOM</acronym> format; you organize, edit and 
+     maintain your data in this format. <acronym>GEDCOM</acronym> 
+     is a standard that defines a file format for moving 
+     genealogical data between computer 
+     systems. <application>LifeLines</application> has adopted this 
+     format for structuring the records in its databases. This 
+     approach provides a structured yet flexible method for storing 
+     all the data you wish to record. There are few restrictions on 
+     the format, amount or type of information you may store in a 
+     <application>LifeLines</application> database. 
+
+</para> 
+
+
+
+<para> 
+
+     <acronym>GEDCOM</acronym> is defined at two levels. At the 
+     syntactic level <acronym>GEDCOM</acronym> is a simple set of 
+     rules for organizing and structuring data into records, with 
+     no concern about the types of records, types or formats of 
+     information in the records, or the relationships between 
+     records. At the semantic level <acronym>GEDCOM</acronym> adds 
+     an additional set of rules that specify what record types are 
+     allowed, how records must be structured, how data within the 
+     records must be identified and formatted, and what specific 
+     relationships between the record types are allowed. In 
+     principle there can be multiple semantic versions of 
+     <acronym>GEDCOM</acronym>, though in practice there is only 
+     one, lineage-linked <acronym>GEDCOM</acronym>. Unfortunately 
+     this semantic version of <acronym>GEDCOM</acronym> is poorly 
+     defined, and every genealogical system has interpreted it in 
+     different ways. 
+
+</para> 
+
+
+
+<para> 
+
+     <application>LifeLines</application> uses 
+     <acronym>GEDCOM</acronym> primarily at the syntactic level, 
+     though it does impose a few of the generally accepted 
+     lineage-linked semantic restrictions. This means some 
+     important things. It means that you can store all your 
+     genealogical data in your <application>LifeLines</application> 
+     database, and that you have wide freedom in how you choose 
+     your own conventions for structuring and formatting your 
+     data. But it also means that the way you store data in your 
+     databases can be different from the way that someone else 
+     stores their data.  This can be a problem if you share data 
+     with others or share report programs with other 
+     <application>LifeLines</application> users. My recommendation 
+     is to use <acronym>GEDCOM</acronym> lineage-linking 
+     conventions wherever possible. 
+
+</para> 
+
+
+
+<para> 
+
+     <application>LifeLines</application> does not use forms or 
+     screens to guide you through entering or changing 
+     data. Instead you use a screen editor and directly edit the 
+     data records. This requires you to understand the 
+     <acronym>GEDCOM</acronym> format, and be able to edit data in 
+     <acronym>GEDCOM</acronym> format, before you can use 
+     <application>LifeLines</application>. The 
+     <acronym>GEDCOM</acronym> format is quite simple; this 
+     introduction will provide all you need to know about 
+     <acronym>GEDCOM</acronym> in order to use 
+     <application>LifeLines</application>. 
+
+</para> 
+
+
+
+<para> 
+
+     Here is an example <acronym>GEDCOM</acronym> person record: 
+
+<example> 
+
+<title> 
+
+ <acronym>GEDCOM</acronym> person record 
+
+</title> 
+
+<programlisting role="gedcom"> 
+  0 @I25@ INDI 
+  1 NAME <userinput>Thomas Trask /Wetmore/ Sr</userinput> 
+  1 SEX <userinput>M</userinput> 
+  1 BIRT 
+    2 DATE <userinput>13 March 1866</userinput> 
+    2 PLAC <userinput>St. Mary's Bay, Digby, Nova Scotia</userinput> 
+    2 SOUR <userinput>Social Security application</userinput> 
+  1 NATU 
+    2 NAME <userinput>Thomas T. Wetmore</userinput> 
+    2 DATE <userinput>26 October 1888</userinput> 
+    2 PLAC <userinput>Norwich, New London, Connecticut</userinput> 
+    2 AGE <userinput>22 years</userinput> 
+    2 COUR <userinput>New London County Court of Common Pleas</userinput> 
+    2 SOUR <userinput>court record from National Archives</userinput> 
+  1 OCCU <userinput>Antiques Dealer</userinput> 
+  1 DEAT 
+    2 NAME <userinput>Thomas Trask Wetmore</userinput> 
+    2 DATE <userinput>17 February 1947</userinput> 
+    2 PLAC <userinput>New London, New London, Connecticut</userinput> 
+    2 AGE <userinput>80 years, 11 months, 4 days</userinput> 
+    2 CAUS <userinput>Heart Attack</userinput> 
+    2 SOUR <userinput>New London Death Records</userinput> 
+  1 FAMC @F11@ 
+  1 FAMS @F6@ 
+  1 FAMS @F12@ 
+
+</programlisting></example> 
+
+</para> 
+
+
+
+<para> 
+
+     A <acronym>GEDCOM</acronym> record is made up of lines. Each 
+     line has a level number and a tag, and most lines have a value 
+     following the tag. The first line in every record has a 
+     cross-reference index between the level number and the tag. 
+
+</para> 
+
+
+
+<para> 
+
+     Level numbers allow data to be structured to any degree of 
+     detail; lines with higher level numbers expand on lines with 
+     lower numbers. Each record begins at level 0, and each deeper 
+     level increments the level by 
+     one. <application>LifeLines</application> does not restrict 
+     the structuring depth. Tags are uppercase (by convention) code 
+     words that specify the kind of information on the line or on 
+     the higher numbered lines that follow. The information after 
+     the tag, if any, is the value of the line. 
+
+</para> 
+
+
+
+<para> 
+
+     The first line in a record indicates its type. There are four 
+     fixed record types in <application>LifeLines</application> 
+     databases: person, family, source and event. The first, 0 
+     level line in these records have tags 
+     <structname>INDI</structname>, <structname>FAM</structname>, 
+     <structname>SOUR</structname> and 
+     <structname>EVEN</structname>, respectively. Besides these 
+     record types, you may create your own record types by using 
+     any other tag on the 0 level line of a record. The lines that 
+     begin records are the only level 0 lines used in 
+     <application>LifeLines</application>. Each level 0 line has a 
+     cross-reference index between the level number and the 
+     tag. This index is the record's internal reference key; other 
+     records may refer to this record by using this index. 
+     Cross-reference indexes are bracketed by @ characters. 
+
+</para> 
+
+
+
+<para> 
+
+     The first line in the example record has the 
+     <structname>INDI</structname> tag, identifying it as a 
+     person. The cross-reference index value, I25, can be used by 
+     other records to refer to this record. 
+
+</para> 
+
+
+
+<para> 
+
+     The second line in the example has the person's name. Each 
+     person record in a <application>LifeLines</application> 
+     database must have at least one <structfield>1 
+     NAME</structfield> line, and its value must be in 
+     <acronym>GEDCOM</acronym> name format. This format allows 
+     names to be as long as needed, but the surname, which may be 
+     placed anywhere in the name, must be separated from the rest 
+     of the name by one or two slashes. For example: 
+
+<example> 
+
+<title> 
+Example of NAME formats 
+
+</title> 
+
+<programlisting> 
+1 NAME <userinput>John/Smith</userinput> 
+1 NAME <userinput>John /Smith/</userinput> 
+1 NAME <userinput>John/Smith/Jr.</userinput> 
+</programlisting> 
+</example> 
+
+</para> 
+
+
+
+<para> 
+
+     The second slash is required only if name elements follow the 
+     surname. White space is optional before the first slash and 
+     after the second. If you don't know a person's surname, or the 
+     person doesn't have a surname, you may use / or // or no 
+     slashes at all. For example: 
+
+<example> 
+
+<title> 
+Example of searching on NAMEs 
+</title> 
+
+<programlisting> 
+
+1 NAME <userinput>Mary//</userinput> 
+1 NAME <userinput>Mary/</userinput> 
+1 NAME <userinput>Mary</userinput> 
+</programlisting> 
+
+</example> 
+
+     are all ways to enter a person named Mary with no known 
+     surname. A person may have any number, including zero, given 
+     names and/or initials. A <application>LifeLines</application> 
+     person record may have any number of <structfield>1 
+     NAME</structfield> lines, though the person will be displayed 
+     with the first name value only. Persons are indexed under all 
+     their names, however, so you will be able to search for 
+     persons by any of their names. 
+</para> 
+
+
+
+<para> 
+
+     The next line in the example gives the person's 
+     sex. <application>LifeLines</application> doesn't require a 
+     <structfield>1 SEX</structfield> line, but you should include 
+     it. The value of the line should be <userinput>M</userinput> 
+     or <userinput>F</userinput> if the sex is known; it can be 
+     left blank or set to <userinput>U</userinput> or 
+     <userinput>?</userinput>, say, if not known. A person must 
+     have a <structfield>1 SEX</structfield> line with a value of 
+     either <userinput>M</userinput> or <userinput>F</userinput> 
+     before he or she can be made a spouse or parent in a family. 
+
+</para> 
+
+
+
+<para> 
+
+     The example record also contains three events: birth, 
+     naturalization, and death. An event begins with a level 1 line 
+     whose tag indicates the event type. For example, 
+     <structfield>BIRT</structfield> is the tag for a birth event. 
+
+</para> 
+
+
+
+<para> 
+
+     Events usually have at least a <structfield>2 
+     DATE</structfield> and a <structfield>2 PLAC</structfield> 
+     line and often a <structfield>2 SOUR</structfield> line. The 
+     <structfield>DATE</structfield> and 
+     <structfield>PLAC</structfield> lines give the date and place 
+     of the event. The value of a 
+     <application>LifeLines</application> 
+     <structfield>DATE</structfield> line is free format, though 
+     <application>LifeLines</application> will try to parse it for 
+     specific day, month and year information. The value of a 
+     <structfield>PLAC</structfield> line is usually a 
+     comma-separated list of geopolitical units, starting with the 
+     most specific, ending with the most general. The 
+     <structfield>SOUR</structfield> line indicates the source of 
+     information about the event. The 
+     <structfield>SOUR</structfield> line can be the root of a full 
+     description of the source, or the value of the 
+     <structfield>SOUR</structfield> line can be a cross-reference 
+     key that refers to the source record that describes the 
+     source. 
+
+</para> 
+
+
+
+<para> 
+
+     The naturalization event (with tag 
+     <structfield>NATU</structfield>) shows a few other lines. The 
+     <structfield>2 NAME</structfield> line gives the person's name 
+     as recorded in the source (only <structfield>1 
+     NAME</structfield> lines must follow <acronym>GEDCOM</acronym> 
+     format). The <structfield>2 AGE</structfield> line gives the 
+     person's age at the time of the event. The <structfield>2 
+     COUR</structfield> line indicates the court where 
+     naturalization occurred. 
+
+</para> 
+
+
+
+<para> 
+
+     The final event is a death event (tag 
+     <structfield>DEAT</structfield>). The <structfield>2 
+     CAUS</structfield> line gives the cause of death. 
+
+</para> 
+
+
+
+<para> 
+
+     At the end of the record are three lines that refer to family 
+     records. A <structfield>1 FAMC</structfield> line refers to a 
+     family record that the person belongs to as a child; its value 
+     is the cross-reference index value of that family.  A 
+     <structfield>1 FAMS</structfield> line refers to a family 
+     record that the person belongs to as a spouse or parent. 
+
+</para> 
+
+
+
+<para> 
+
+     When using <application>LifeLines</application> to edit a 
+     person, you will not be able to edit the cross reference 
+     values on the <structfield>0 INDI</structfield>, 
+     <structfield>1 FAMC</structfield> or <structfield>1 
+     FAMS</structfield> lines; these are maintained by 
+     <application>LifeLines</application>. 
+
+</para> 
+
+
+
+<para> 
+
+     Here is an example family record: 
+
+<example> 
+
+<title> 
+Example family record 
+</title> 
+
+<programlisting> 
+
+  0 @F6@ FAM 
+  1 HUSB @I25@ 
+  1 WIFE @I26@ 
+  1 MARR 
+    2 DATE <userinput>31 March 1891</userinput> 
+    2 PLAC <userinput>New London, New London, Connecticut</userinput> 
+    2 SOUR <userinput>New London Vital Records</userinput> 
+  1 CHIL @I27@ 
+  1 CHIL @I17@</programlisting></example> 
+
+</para> 
+
+
+
+<para> 
+
+     The <structfield>0 FAM</structfield> line assigns the family 
+     the cross-reference index of F6. The record contains 
+     <structfield>1 HUSB</structfield> and <structfield>1 
+     WIFE</structfield> lines that refer to the two 
+     spouses/parents. The record also holds a marriage event (tag 
+     <structfield>MARR</structfield>) and two <structfield>1 
+     CHIL</structfield> lines that refer to two children in the 
+     family. When editing family records, you cannot edit the 
+     <structfield>0 FAM</structfield>, <structfield>1 
+     HUSB</structfield>, <structfield>1 WIFE</structfield>, or 
+     <structfield>1 CHIL</structfield> lines; these are maintained 
+     by <application>LifeLines</application>. 
+
+</para> 
+
+<para> 
+
+     When you create new records for your database, you are free to 
+     invent tags and structure your data in any way you see 
+     fit. However, it is good practice to use standard 
+     <acronym>GEDCOM</acronym> tags and value formats. 
+     <application>LifeLines</application> does enforce a small set 
+     of conventions that you must obey. Within person records, 
+     <application>LifeLines</application> requires that you use 
+     <structfield>1 NAME</structfield> and <structfield>1 
+     SEX</structfield> lines with their special meanings and value 
+     formats. Though not required, 
+     <application>LifeLines</application> assumes that you will use 
+     <structfield>1 BIRT</structfield>, <structfield>1 
+     DEAT</structfield>, <structfield>1 CHR</structfield>, and 
+     <structfield>1 BURI</structfield> lines for birth, death, 
+     baptism and burial events, respectively. In family records, 
+     <application>LifeLines</application> assumes you will use the 
+     <structfield>1 MARR</structfield> event for marriage 
+     events. Within person records, you are not allowed to use 
+     <structfield>0 INDI</structfield>, <structfield>1 
+     FAMC</structfield> or <structfield>1 FAMS</structfield> lines, 
+     since these are used to maintain linkage information. Within 
+     family records, you are not allowed to use <structfield>0 
+     FAM</structfield>, <structfield>1 HUSB</structfield>, 
+     <structfield>1 WIFE</structfield> or <structfield>1 
+     CHIL</structfield> lines. 
+
+</para> 
+
+
+
+<para> 
+
+     The indentation shown in the examples is not part of 
+     <acronym>GEDCOM</acronym> format. When 
+     <application>LifeLines</application> prepares records for you 
+     to edit, however, it always indents the records, making them 
+     easier to read and understand. You do not need to follow this 
+     indentation scheme when you edit the records. Indentation is 
+     removed from the data before it is stored in the database. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+MAIN MENU 
+
+</title> 
+
+
+
+<para> 
+
+     After <application>LifeLines</application> opens an existing 
+     database, or creates a new one, it presents you with the main 
+     menu: 
+
+<screen> 
+Please choose an operation: 
+   b Browse the persons in the database 
+   s Search database 
+   a Add information to the database 
+   d Delete information from the database 
+   p Pick a report from list and run 
+   r Generate reports from the database 
+   t Modify character translation tables 
+   u Miscellaneous utilities 
+   x Handle source, event and other records 
+   q Quit and return to UNIX 
+</screen> 
+
+
+</para> 
+
+<para> 
+
+     Select an operation by striking the proper selection letter. 
+
+</para> 
+
+
+
+<para> 
+
+     The browse operation lets you browse the database and perform 
+     many operations on the data. The search operation provides some 
+     simple wildcard search capabilities, which lead into browsing 
+     particular records. The add operation lets you add 
+     new information, and the delete operation removes 
+     information. The report operations read report 
+     programs and generates output reports. The modify character 
+     translation tables operation changes the translation 
+     tables. The miscellaneous utilities operation provides such 
+     things as backup and restore. The handle source, event and 
+     other records operation gives you access to these three record 
+     types. The quit operation closes the database and returns to 
+     <acronym>UNIX</acronym>. 
+
+</para> 
+
+
+
+<para> 
+
+     The browse operation deserves special mention, because it 
+     provides a rich environment for searching, viewing, adding, 
+     modifying, merging and deleting information in the 
+     database. You will find that you operate from the browsing 
+     modes most of the time. The operations are all described in 
+     later sections. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+ENTERING THE FIRST PERSON 
+
+</title> 
+
+
+
+<para> 
+
+     Normally you add persons to the database from the browsing 
+     modes, but when entering the first person there is no one in 
+     the database to browse to. To add the first person to a 
+     <application>LifeLines</application> database, first select 
+     the add operation from the main menu. You will be prompted 
+     with the add menu (described later).  Strike p to add a 
+     person. <application>LifeLines</application> creates a 
+     template of a <acronym>GEDCOM</acronym> person record, and 
+     puts you in a screen editor to edit the template. The default 
+     template is: 
+
+<example> 
+<title> 
+Default person record template 
+</title> 
+
+<programlisting> 
+
+  0 INDI 
+  1 NAME <replaceable>Fname /Surname/</replaceable> 
+  1 SEX <replaceable>MF</replaceable> 
+  1 BIRT 
+    2 DATE 
+    2 PLAC 
+    2 SOUR 
+  1 DEAT 
+    2 DATE 
+    2 PLAC 
+    2 SOUR</programlisting></example> 
+
+</para> 
+
+
+
+<para> 
+
+     Edit the template to create the new person's record. Change 
+     the name to the person's name. Assign the person's sex by 
+     deleting either <userinput>M</userinput> or 
+     <userinput>F</userinput>. Fill out the birth and death events 
+     as best you can. If the person is alive, remove the death 
+     event. Remove any <structfield>DATE</structfield> and 
+     <structfield>PLAC</structfield> lines you do not have the 
+     information for. 
+
+</para> 
+
+
+
+<para> 
+
+     The default template provides lines for one birth and one 
+     death event. You can expand the record with other events (even 
+     more birth or death events) and lines. Indentation makes it 
+     easier to read and edit the record, but isn't necessary. You 
+     may change the default edit template by defining the user 
+     option <option>INDIREC</option> (described later). 
+
+</para> 
+
+
+
+<para> 
+
+     Here is how I might edit the template when creating a record 
+     about myself: 
+
+<example> 
+
+<title> 
+Example editing of template record 
+</title> 
+
+<programlisting> 
+
+  0 INDI 
+  1 NAME <userinput>Thomas Trask /Wetmore/ IV</userinput> 
+  1 SEX <userinput>M</userinput> 
+  1 BIRT 
+    2 DATE <userinput>18 December 1949</userinput> 
+    2 PLAC <userinput>New London, New London, Connecticut</userinput> 
+    2 SOUR <userinput>Birth Certificate</userinput> 
+  1 OCCU <userinput>Software Engineer</userinput> 
+  1 RESI 
+    2 DATE <userinput>1982 to 1995</userinput> 
+    2 PLAC <userinput>Newburyport, Essex, Massachusetts</userinput> 
+    2 ADDR <userinput>2 Barton Street, Newburyport, MA 01950</userinput> 
+
+... lots of other events and facts 
+</programlisting> 
+</example> 
+
+</para> 
+
+
+
+<para> 
+
+     When you edit a person record, don't add or modify 
+     <structfield>INDI</structfield>, 
+     <structfield>FAMC</structfield> or 
+     <structfield>FAMS</structfield> 
+     lines. <application>LifeLines</application> creates and 
+     maintains these lines through specific user commands. 
+
+</para> 
+
+
+
+<para> 
+
+     When you finish editing and leave the editor, you 
+     automatically return to 
+     <application>LifeLines</application>. If you made an error 
+     (eg, didn't use proper level numbers or didn't follow the 
+     proper name convention), <application>LifeLines</application> 
+     displays an error message, and asks if you want to re-edit the 
+     record. If you don't, <application>LifeLines</application> 
+     doesn't add the person to the database. 
+
+</para> 
+
+
+
+<para> 
+
+     When the record is in proper format, 
+     <application>LifeLines</application> asks if you are sure you 
+     want to add the person to the database. If you answer yes, the 
+     person is added; if you answer no, the person isn't. In both 
+     cases <application>LifeLines</application> returns to the main 
+     menu. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+SCREEN EDITORS AND ENVIRONMENT VARIABLES 
+
+</title> 
+
+
+
+<para> 
+
+     With <application>LifeLines</application> you maintain the 
+     database records using a screen editor. This is different than 
+     other genealogical programs where screens or forms are used to 
+     gather the data.The default screen editor for 
+     <application>LifeLines</application> is 
+     <application>vi</application>. (The <acronym>MS-Windows</acronym> 
+     version defaults instead to notepad.exe.) This can be overridden by the 
+     <envar>ED</envar>, <envar>EDITOR</envar> or 
+     <envar>LLEDITOR</envar> environment variables. For example, if 
+     you prefer the emacs screen editor, and if you use a bourne-compatible 
+     shell, you may add the line: 
+     <userinput><envar>ED</envar>=<replaceable>emacs</replaceable></userinput> 
+     to your login profile file, and 
+     <application>LifeLines</application> will use 
+     <application>emacs</application> for editing. 
+
+</para> 
+
+
+
+<para> 
+
+     There are five other, <application>LifeLines</application> 
+     specific environment variables. They are 
+     <envar>LLDATABASES</envar>, <envar>LLARCHIVES</envar>, 
+     <envar>LLPROGRAMS</envar>, <envar>LLREPORTS</envar>, 
+     and <envar>LLNEWDBDIR</envar>. <envar>LLDATABASES</envar> and 
+     <envar>LLPROGRAMS</envar> are <acronym>UNIX</acronym> path 
+     list variables. (<envar>LLNEWDBDIR</envar> was added in version 
+     3.0.6.) 
+
+</para> 
+
+<para> 
+     As of version 3.0.6, there is also a configuration file, and 
+     entries in it may be used in lieu of environment variables. 
+     It is ordinarily named .linesrc under UNIX, and lines.cfg under 
+     <acronym>MS-Windows</acronym>. 
+     A sample configuration file should have been included 
+     in the distribution.  
+</para> 
+
+
+
+<para> 
+
+     <envar>LLDATABASES</envar> can be set to a list of directories 
+     that hold <application>LifeLines</application> databases. When 
+     you execute the <application>LifeLines</application> program, 
+     these directories will be searched in turn for the database 
+     mentioned on the command line. For example, 
+     <userinput><envar>LLDATABASES</envar>=<replaceable>.:/home/ttw4/LifeLines/Databases</replaceable></userinput> 
+     indicates that databases should be searched for in the current 
+     directory first, and if not found there, then searched for in: 
+     <filename>/usr/ttw4/LifeLines/Databases</filename> 
+
+</para> 
+
+
+
+<para> 
+
+     Each <application>LifeLines</application> database is 
+     implemented as a directory with specific contents. The 
+     <envar>LLDATABASES</envar> variable should be set to a list of 
+     directories that contain these database directories, not to a 
+     list of database directories themselves. 
+
+</para> 
+
+
+
+<para> 
+
+     The environment variable <envar>LLPROGRAMS</envar> is used in 
+     the same way, but to specify the search path for 
+     <application>LifeLines</application> report generating and 
+     other programs (described later). 
+
+</para> 
+
+
+
+<para> 
+
+     <envar>LLARCHIVES</envar> and <envar>LLREPORTS</envar> can 
+     each be set to specify a single 
+     directory. <envar>LLARCHIVES</envar> is used to select a 
+     directory where all database backup files will be stored, and 
+     <envar>LLREPORTS</envar> is used to select a directory where 
+     all generated reports and program outputs will be placed. 
+
+</para> 
+
+<para> 
+
+     <envar>LLNEWDBDIR</envar> may be set to specific a single  
+     directory - new databases without paths will be created in this 
+     location if given. This is of course a convenience for users  
+     who generally put all their databases under a single common 
+     directory. 
+
+</para> 
+
+<para> 
+
+     You are not required to use these environment variables; when 
+     a variable is not defined, 
+     <application>LifeLines</application> uses the current 
+     directory as its default value. If you do use the variables, 
+     you can override their use by specifying files and directories 
+     as either absolute or relative paths. 
+
+</para> 
+
+<para> 
+
+     With version 3.0.6 or later, you may use the configuration file in 
+     lieu of environment variables. This is especially oriented towards 
+     users on <acronym>MS-Windows</acronym> systems, on which 
+     environment variables are not as common a configuration technique. 
+
+</para> 
+
+
+<para> 
+
+     <application>LifeLines</application> uses the curses library 
+     for terminal independent I/O. This requires you to specify 
+     your terminal type with the <envar>TERM</envar> environment 
+     variable. (This is not relevant in the <acronym>MS-Windows</acronym> 
+     version.) 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+BASICS OF BROWSING 
+
+</title> 
+
+
+
+<para> 
+
+     You will use the browsing screens of 
+     <application>LifeLines</application> most of the time. When in 
+     these modes you can quickly search for or browse through the 
+     persons and families in the database. When you find a person 
+     or family you are interested in, you can then edit their 
+     records. 
+
+</para> 
+
+
+
+<para> 
+     The browsing screens also allow you to add new persons and 
+     families to the database, add spouses to families, add 
+     children to families, swap the order of spouses and children, 
+     merge persons and merge families, and perform other 
+     operations. The browsing screens also lets you remove spouses 
+     from families and remove children from families. 
+</para> 
+
+<para> 
+     There are six browsing screens. The person and family screens  
+     concentrate on a single person and family, respectively. The 
+     list screen allows you to browse through a list of persons. The 
+     person tandem screen shows two persons at once, and the family 
+     tandem screen shows two families at once. The auxiliary screen 
+     is used browsing any other type of records (e.g., events,  
+     sources, notes). (The auxiliary screen is new with version 3.0.6.) 
+
+</para> 
+
+<para> 
+     Beginning with version 3.0.6, each browsing screen has multiple 
+     view modes. The view mode affects how the information is displayed 
+     on the screen, but does not affect the menu choices available at 
+     the bottom of the screen. Menu commands are available on each screen 
+     to change amongst the view modes available for that screen. 
+</para> 
+
+<para> 
+     The person screen has the most view modes. It has normal mode,  
+     which shows a summary of the vital records of the person. It (like 
+     all other screens) has GEDCOM mode, which shows the actual GEDCOM 
+     data of the record, and also expanded GEDCOM mode, which shows the 
+     actual GEDCOM data, but augments it with information on each line 
+     that contains a cross-reference (GEDCOM xref). It has two pedigree 
+     or tree modes, one showing an ancestral tree and one showing a  
+     descendant tree. The depth of the pedigree trees shown may be  
+     adjusted via menu commands. 
+</para> 
+
+<para> 
+     The tandem person screen has the same modes as the person screen. 
+</para> 
+
+<para> 
+     The family screen and tandem family screen alike have normal mode 
+     (showing a summary of vitals), GEDCOM mode, and expanded GEDCOM 
+     mode.  
+</para> 
+
+<para> 
+     The auxiliary screen has only GEDCOM mode and expanded GEDCOM mode. 
+     (The list screen has no view modes at present). 
+</para> 
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+IDENTIFYING A PERSON OR LIST OF PERSONS TO BROWSE 
+
+</title> 
+
+
+
+<para> 
+
+     To enter the browsing modes from the main menu strike 
+     b. <application>LifeLines</application> asks you to identify a 
+     person or list of persons to browse to: 
+
+<screen> 
+Please identify person or persons to browse to. 
+Enter name, key, refn or list: 
+</screen> 
+
+</para> 
+
+<para> 
+
+     Enter either a name or partial name, or an internal key value, 
+     or a user-defined reference key (described later) or the name 
+     of a previously defined list of persons (described later), and 
+     strike return. 
+
+</para> 
+
+
+
+<para> 
+
+     <application>LifeLines</application> allows wide flexibility 
+     in how to enter names. You may enter a name in upper or lower 
+     case or any combination. You may leave out all but the first 
+     given name, and, for given names, you may leave out any 
+     letters except the first. You may leave vowels out of the 
+     surname, and after four or five consonants have been typed, 
+     you may leave them out too. You must separate the given names 
+     from the surname by a slash, and if you enter given names 
+     after the surname (as in Chinese names), or any modifiers 
+     (such as Jr, Sr, IV, etc.), they must be separated from the 
+     surname by another slash. Here are a few of the ways I can 
+     enter my name: 
+
+<example> 
+
+<title> 
+Example of entering a name 
+</title> 
+
+<literallayout> 
+Thomas Trask /Wetmore/ IV 
+thomas/wetmore/iv 
+t t/wetmr/i 
+th tr/Wetmore 
+t/wtmr/iv 
+</literallayout> 
+</example> 
+
+</para> 
+
+
+
+<para> 
+
+     You may browse to the list of all persons with the same 
+     surname by using the * character as the first initial. For 
+     example: 
+
+<example> 
+
+<title> 
+Example of using wildcard in browsing 
+</title> 
+
+     <literallayout>*/wetmore</literallayout></example>matches all 
+     persons with surname Wetmore. This is the only wildcard 
+     feature supported in browsing. (However, the search operation, 
+     new with version 3.0.6, provides some simple wildcards for 
+     finding individual name fragments, or searching by user-defined 
+     reference keys.) 
+
+</para> 
+
+
+
+<para> 
+
+     After you enter a name, <application>LifeLines</application> 
+     searches for all persons who match. There are three 
+     possibilities: no one matches; one person matches; or more 
+     than one person matches. In the first case 
+     <application>LifeLines</application> writes: <screen>There is 
+     no one in the database with that name.</screen> and leaves you 
+     in the main menu. 
+
+</para> 
+
+
+
+<para> 
+
+     If one person matches, <application>LifeLines</application> 
+     enters the person browse mode displaying the matched 
+     person. If more than one person matches, 
+     <application>LifeLines</application> enters the list browsing 
+     mode with the list of matching persons. 
+
+</para> 
+
+
+
+<para> 
+
+     You may also identify a person by entering his or her 
+     internal, cross-reference key value. The internal key values 
+     of all person records are an I followed by digits. In the 
+     current version, when you enter a key value you must omit the 
+     I. If <application>LifeLines</application> finds a person with 
+     the key value you provide, 
+     <application>LifeLines</application> enters the person 
+     browsing mode displaying that person. 
+
+</para> 
+
+
+
+<para> 
+
+     The browse command b is also available from most browsing 
+     modes. The command works the same way from those modes as it 
+     does from the main menu. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+ZIP IDENTIFYING A NEW PERSON 
+
+</title> 
+
+
+
+<para> 
+
+     Some <application>LifeLines</application> operations need you 
+     to identify a person, not for the purpose of browsing, but for 
+     the purpose of completing an operation you have requested. For 
+     example, when you add a child to a family, 
+     <application>LifeLines</application> may ask you to identify 
+     the child. When this happens a panel pops up that asks you to 
+     identify a person. You respond by typing a name or key exactly 
+     as you would for the b command. If no one matches, 
+     <application>LifeLines</application> returns to the previous 
+     browsing mode. If the name matches persons in the database 
+     <application>LifeLines</application> displays something like: 
+
+<screen> 
+Please choose from among these persons. 
+  >Thomas Trask Wetmore, b. 1826, N.B. (42) 
+   Thomas Trask Wetmore IV, b. 1949, Conn. (1) 
+   Thomas Trask Wetmore III, b. 1925, Conn. (6) 
+   Thomas Trask Wetmore Jr, b. 1896, Conn. (11) 
+   Thomas Trask Wetmore Sr, b. 1866, N.S. (23) 
+   Thomas Trask Wetmore V, b. 1982, Mass. (5) 
+_______________________________________________ 
+Commands: j Move down k Move up i Select q Quit 
+</screen> 
+
+
+</para> 
+
+
+
+<para> 
+
+     Use the j and k commands to move the selection cursor (>) to 
+     the correct person, and then use the i command to select that 
+     person. There may be more persons in the list than you can see 
+     at once. If this is so then you can use the j and k commands 
+     to scroll through the full list. If you don't find the proper 
+     person, use the q command and 
+     <application>LifeLines</application> asks whether you want to 
+     enter another name. 
+
+</para> 
+
+<para> 
+
+     When <application>LifeLines</application> creates a list of 
+     names for you to select from, it tries to add extra 
+     information to the name; this helps determine which name to 
+     choose, and is important in databases where many persons have 
+     the same name. <application>LifeLines</application> also 
+     places the person's key value at the end of each menu line; 
+     this may be helpful in large databases. 
+
+</para> 
+
+
+
+<para> 
+
+     Some browse screens provide the z command, which allows you to 
+     browse to a new person using the zip style of identification 
+     rather than the b style. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+BROWSE DISPLAY BASICS 
+
+</title> 
+
+
+
+<para> 
+
+     The screen display for each browsing screen is made up of 
+     panels. At the bottom of each display is a message panel used 
+     for one line messages. Each display contains one or two data 
+     panels showing information from the database. And each display 
+     has a panel with the operation menu available for that screen. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+PERSON BROWSE SCREEN 
+
+</title> 
+
+
+
+<para> 
+
+     After you identify a person to browse to, 
+     <application>LifeLines</application> enters the person browse 
+     screen. The top panel in the display gives basic information 
+     about the person (in the normal, or vitals, mode, which is the  
+     default). The middle panel provides a menu of commands. 
+     For example: 
+
+<screen> 
+person: Thomas Trask WETMORE Sr (25) 
+  born: 13 March 1866, St. Mary's Bay, Digby, Nova Scotia 
+  died: 17 February 1947, New London, New London, Connecticut 
+  father: Daniel Lorenzo WETMORE, b. 1821, N.S., d. 1903, Conn. (48) 
+  mother: Mary Ann DOTY, b. 1824, N.S., d. 1897, Conn. (59) 
+  spouse: Margaret Ellen KANEEN, b. 1855, Eng., d. 1900, Conn. (26) 
+    child: Portia Louise WETMORE, b. 1892, Conn., d. 1921, Conn. (27) 
+    child: Thomas Trask WETMORE, b. 1896, Conn., d. 1970, Conn. (17) 
+  spouse: Arleen M KEENEY, m. 1914, Conn. (75) 
+_______________________________________________________________________ 
+Please choose an operation:             (pg 1/3) 
+  e  Edit the person       g  Browse to family    p  Show pedigree 
+  f  Browse to father      u  Browse to parents   n  Create new person 
+  m  Browse to mother      b  Browse to persons   a  Create new family 
+  s  Browse to spouse/s    h  Add as spouse       x  Swap two families 
+  c  Browse to children    i  Add as child        tt Enter tandem mode 
+  o  Browse to older sib   r  Remove as spouse    ?  Other menu choices 
+  y  Browse to younger sib d  Remove as child     q  Return to main menu 
+_______________________________________________________________________ 
+LifeLines -- Person Browse Screen 
+</screen> 
+
+
+</para> 
+
+
+
+<para> 
+
+The commands perform a wide variety of functions. 
+
+</para> 
+
+
+
+<para> 
+
+<glosslist><glossentry><glossterm><keycap>e</keycap> <action>Edit the person. </action></glossterm><glossdef> 
+
+<para> 
+
+     Edit the person's database 
+     record. <application>LifeLines</application> puts the record 
+     in a file, and then runs a screen editor so you can edit the 
+     record. When you return from the editor, 
+     <application>LifeLines</application> asks you to confirm any 
+     changes; the person is changed only if you answer yes. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>f</keycap> <action>Browse to father.</action></glossterm><glossdef> 
+
+<para> 
+
+     Browse to the person's father. If the father isn't in the 
+     database, <application>LifeLines</application> doesn't change 
+     the display. If there are more than one father, 
+     <application>LifeLines</application> asks you to select one. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>m</keycap> <action>Browse to mother.</action></glossterm><glossdef> 
+
+<para> 
+
+     Browse to the person's mother. If the mother isn't in the 
+     database, <application>LifeLines</application> doesn't change 
+     the display. If there are more than one mother, 
+     <application>LifeLines</application> asks you to select one. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>s</keycap> <action>Browse to spouse/s.</action></glossterm><glossdef> 
+
+<para> 
+
+     Browse to the person's spouse. If the person has more than one 
+     spouse, <application>LifeLines</application> asks you to 
+     select one. If the person has no spouse, the display does not 
+     change. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>c</keycap> <action>Browse to children.</action></glossterm><glossdef> 
+
+<para> 
+
+     Browse to one of the person's children. If there is more than 
+     one child, <application>LifeLines</application> asks you to 
+     select one. If the person has no children, the display does 
+     not change. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>o</keycap> <action>Browse to older sib.</action></glossterm><glossdef> 
+
+<para> 
+
+     Browse to the person's next older sibling. If the person has 
+     no such sibling, the display does not change. Only siblings 
+     from the same family are browsed by this command. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>y</keycap> <action>Browse to younger sib.</action></glossterm><glossdef> 
+
+<para> 
+
+     Browse to the person's next younger sibling. If the person has 
+     no such sibling, the display does not change. Only siblings 
+     from the same family are browsed by this command. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>g</keycap> <action>Browse to family.</action></glossterm><glossdef> 
+
+<para> 
+
+     Browse to the family the person is a spouse or parent in, and 
+     switch to the family browse mode. If the person is in more 
+     than one family, <application>LifeLines</application> asks you 
+     to identify which one. If the person is not a spouse or parent 
+     in any family, the display does not change. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>u</keycap> <action>Browse to parents.</action></glossterm><glossdef> 
+
+<para> 
+
+     Browse to the family the person is a child in, and switch to 
+     the family browse mode. If the person is not a child in a 
+     family, the display does not change. If the person is a child 
+     in more than one family, <application>LifeLines</application> 
+     asks you to identify which one. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>b</keycap> <action>Browse to persons.</action></glossterm><glossdef> 
+
+<para> 
+
+     Browse to a new person or list of 
+     persons. <application>LifeLines</application> asks you to 
+     identify a person or persons by name, key or list name, and 
+     depending on how many persons are identified, switches either 
+     to the list browse mode, or remains in the person browse mode. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>h</keycap> <action>Add as spouse.</action></glossterm><glossdef> 
+
+<para> 
+
+     Add the person as a spouse/parent to an existing 
+     family. <application>LifeLines</application> asks you to 
+     identify the family, and then asks you to confirm the request. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>i</keycap> <action>Add as child.</action></glossterm><glossdef> 
+
+<para> 
+
+     Add the person as a child to an existing family. The person 
+     may already be a child in another 
+     family. <application>LifeLines</application> asks you to 
+     identify the family, and then asks you to confirm the request. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>r</keycap> <action>Remove as spouse.</action></glossterm><glossdef> 
+
+<para> 
+
+     Remove the person as a spouse or parent from an existing 
+     family. If the person is a spouse or parent in more than one 
+     family, <application>LifeLines</application> asks you to 
+     identify the family. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>d</keycap> <action>Remove as child.</action></glossterm><glossdef> 
+
+<para> 
+
+Remove the person as a child in an existing family. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>p</keycap> <action>Show pedigree.</action></glossterm><glossdef> 
+
+<para> 
+
+     Change to pedigree browse mode. The person becomes the root 
+     person in the pedigree display. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>n</keycap> <action>Create new person.</action></glossterm><glossdef> 
+
+<para> 
+
+     Create and add a new person to the 
+     database. <application>LifeLines</application> creates a 
+     record template and puts you into the screen editor to edit 
+     the record. When you return from the editor, 
+     <application>LifeLines</application> asks you to confirm the 
+     operation. If you do, the new person is added and becomes the 
+     current person. If not, the new person is not added, and 
+     <application>LifeLines</application> returns to the original 
+     display. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>a</keycap> <action>Create new family.</action></glossterm><glossdef> 
+
+<para> 
+
+     Create and add a new family to the database. The new family 
+     may have the current person as either a spouse/parent or as a 
+     child; <application>LifeLines</application> asks which. If you 
+     choose to create a family with the person as a spouse/parent, 
+     <application>LifeLines</application> asks you to identify the 
+     other spouse if he or she is known. In either case 
+     <application>LifeLines</application> creates a family 
+     template, and places you in the screen editor.  When you 
+     return from the editor, <application>LifeLines</application> 
+     asks you to confirm the operation. If you do, 
+     <application>LifeLines</application> adds the family and 
+     shifts into family browse mode. If the command you ran just 
+     before the a command were the n command, and you choose to 
+     create a family with the person as a spouse/parent, 
+     <application>LifeLines</application> guesses that the other 
+     spouse in the family will be the person displayed just before 
+     the new person was 
+     created. <application>LifeLines</application> asks you if this 
+     is the case, and if so, automatically make that person the 
+     other spouse in the new family. If this is not the case, 
+     <application>LifeLines</application> asks you to identify the 
+     other spouse. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>x</keycap> <action>Swap two families.</action></glossterm><glossdef> 
+
+<para> 
+
+     Swap (change chronological order) any two families that the 
+     person belongs to as a spouse or 
+     parent. <application>LifeLines</application> asks you to 
+     identify the two families and then swaps them. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>t</keycap> <action>Enter tandem mode.</action></glossterm><glossdef> 
+
+<para> 
+
+     Change to the tandem person browse 
+     mode. <application>LifeLines</application> first asks you to 
+     identify the second person. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>?</keycap> <action>Other menu choices.</action></glossterm><glossdef> 
+
+<para> 
+     Go to the next page of menu choices. This will have no effect on the  
+     upper (data) portion of the screen, but it allows you to page through 
+     all available commands for this display screen. 
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>q</keycap> <action>Return to main menu.</action></glossterm><glossdef> 
+
+<para> 
+
+     Return to the <application>LifeLines</application> main menu. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>z</keycap> <action>Zip browse to person.</action></glossterm><glossdef> 
+
+<para> 
+
+        Zip browse to a new person. 
+     <application>LifeLines</application> asks you to 
+        identify a person by name or key value, and if you do so, 
+        browses to that person. 
+
+</para> 
+
+
+</glossdef></glossentry></glosslist> 
+
+</para> 
+
+
+
+</sect1> 
+
+<sect1> 
+
+<title> 
+
+LIST BROWSE SCREEN 
+
+</title> 
+
+
+
+<para> 
+
+     This browse screen handles lists of persons. The top panel shows 
+     information about one person in the list.  The left panel 
+     shows a list of up to 12 persons. The person shown in the top 
+     panel is identified by the > character. The right panel is the 
+     menu of available commands. 
+
+<screen> 
+person: Thomas Trask WETMORE Sr (25) 
+  born: 13 March 1866, St. Mary's Bay, Digby, Nova Scotia 
+  died: 17 February 1947, New London, New London, Connecticut 
+  father: Daniel Lorenzo WETMORE, b. 1821, N.S., d. 1903, Conn. (48) 
+  mother: Mary Ann DOTY, b. 1824, N.S., d. 1897, Conn. (59) 
+  spouse: Margaret Ellen KANEEN, b. 1855, Eng., d. 1900, Conn. (26) 
+_______________________________________________________________________ 
+  Thomas Trask WETMORE (42)                Choose an operation: 
+  Thomas Trask WETMORE III (6)              j Move down list 
+  Thomas Trask WETMORE IV (1)               k Move up list 
+  Thomas Trask WETMORE (11)                 e Edit this person 
+ >Thomas Trask WETMORE Sr (23)              i Browse this person 
+  Thomas Trask WETMORE (5)                  m Mark this person 
+                                            d Delete from list 
+                                            t Enter tandem mode 
+                                            n Name this list 
+                                            b Browse new persons 
+                                            a Add to this list 
+                                            x Swap mark/current 
+                                            q Return to main menu 
+_______________________________________________________________________ 
+LifeLines -- List Browse Screen 
+</screen> 
+
+
+</para> 
+
+
+
+<para> 
+
+<glosslist><glossentry><glossterm><keycap>j</keycap> <action>Move down list.</action></glossterm><glossdef> 
+
+<para> 
+
+     Move down the list one person. The list panel is only large 
+     enough to show 12 persons. However, the list may contain many 
+     more persons. Use the <keycap>j</keycap> and 
+     <keycap>k</keycap> commands to scroll to these other persons. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>k</keycap> <action>Move up list.</action></glossterm><glossdef> 
+
+<para> 
+
+     Move up the list one person. The list panel is only large 
+     enough to show 12 persons. However, the list may contain many 
+     more persons. Use the <keycap>j</keycap> and 
+     <keycap>k</keycap> commands to scroll to these other persons. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>e</keycap> <action>Edit this person.</action></glossterm><glossdef> 
+
+<para> 
+
+     Edit the displayed person's database 
+     record. <application>LifeLines</application> runs the editor 
+     on the person's record. When you return from the editor, 
+     <application>LifeLines</application> asks you to confirm any 
+     changes, and then leaves you in the list browse screen. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>i</keycap> <action>Browse this person.</action></glossterm><glossdef> 
+
+<para> 
+
+     Change to the person browse screen with the current person. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>m</keycap> <action>Mark this person.</action></glossterm><glossdef> 
+
+<para> 
+
+     Mark the current person if he/she is not marked; unmark the 
+     person is he/she is.  The marked person is shown with an x by 
+     his/her name. Marked persons are used by the t and x 
+     commands. Only one person may be marked at a time. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>d</keycap> <action>Delete from list.</action></glossterm><glossdef> 
+
+<para> 
+
+     Remove the current person from the browse list (not from the database). 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>t</keycap> <action>Enter tandem mode.</action></glossterm><glossdef> 
+
+<para> 
+
+     Change to the tandem person mode with the current person and 
+     the marked person as the two persons. If no person is marked there is no change. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>n</keycap> <action>Name this list.</action></glossterm><glossdef> 
+
+<para> 
+
+     Lists of persons may be named, allowing you to quickly browse 
+     back to them by giving a list name in response to the b 
+     command from different 
+     modes. <application>LifeLines</application> will prompt you 
+     for the name. List names are most convenient when short. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>b</keycap> <action>Browse new persons.</action></glossterm><glossdef> 
+
+<para> 
+
+     Browse to a new person or list of persons. You can identify a 
+     person or list of persons by name, internal or user key or by 
+     list name. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>a</keycap> <action>Add to this list.</action></glossterm><glossdef> 
+
+<para> 
+
+     Add more persons to the current browse 
+     list. <application>LifeLines</application> asks you to 
+     identify a new person or list of persons by name, key or list 
+     name, and they are added to and name-sorted into the current 
+     list. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>x</keycap> <action>Swap mark/current.</action></glossterm><glossdef> 
+
+<para> 
+
+     Swap the current person with the marked person in the list. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>q</keycap> <action>Return to main menu.</action></glossterm><glossdef> 
+
+<para> 
+
+     Return to the <application>LifeLines</application> main menu. 
+
+</para> 
+
+</glossdef></glossentry></glosslist> 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+FAMILY BROWSE SCREEN 
+
+</title> 
+
+
+
+<para> 
+
+     This browse screen displays information about a family. The top 
+     panel shows basic information about the family. The bottom 
+     panel shows the menu of available commands. 
+
+<screen> 
+father: Thomas Trask WETMORE IV (1) 
+  born: 18 December 1949, New London, New London, Connecticut 
+  died: 
+mother: Luann Frances GRENDA (2) 
+  born: 10 July 1949, Pittsburgh, Allegheny, Pennsylvania 
+  died: 
+married: 1 August 1970, Governors Island, New York, New York 
+  child: Anna Vivian Wetmore, b. 1974, Alaska (3) 
+  child: Marie Margaret WETMORE, b. 1979, Conn. (4) 
+  child: Thomas Trask WETMORE V, b. 1982, Mass. (5) 
+_______________________________________________________________________ 
+Please enter the next family browse operation 
+  e Edit the family     s Add spouse to family  t Enter family tandem 
+  f Browse to father    a Add child to family   b Browse to new persons 
+  m Browse to mother    r Remove spouse from    z Browse to new person 
+  c Browse to children  d Remove child from     q Return to main menu 
+  n Create new person   x Swap two children 
+_______________________________________________________________________ 
+LifeLines - Family Browse Screen</screen> 
+
+</para> 
+
+
+
+<para> 
+
+<glosslist><glossentry><glossterm><keycap>e</keycap> <action>Edit the family.</action></glossterm><glossdef> 
+
+<para> 
+
+     Edit the family's record. <application>LifeLines</application> 
+     writes the record to a file and puts you into an editor to 
+     edit the file. When you return from the editor, 
+     <application>LifeLines</application> asks you to confirm the 
+     update; the family is changed only if you do so. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>f</keycap> <action>Browse to father.</action></glossterm><glossdef> 
+
+<para> 
+
+     Browse to the father/husband of the family, switching to 
+     person browse screen. If the father is not there, there is no change. 
+
+</para> 
+
+</glossdef> 
+       </glossentry> 
+
+<glossentry><glossterm><keycap>m</keycap><action>Browse to mother.</action> 
+         </glossterm> 
+
+     <glossdef> 
+
+<para> 
+
+     Browse to the mother/wife of the family, switching to person 
+     browse screen. If the mother is not there, there is no change. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>c</keycap> <action>Browse to children.</action></glossterm><glossdef> 
+
+<para> 
+
+     Browse to a child in the family, switching to the person 
+     browse screen. If the family has more than one child, 
+     <application>LifeLines</application> asks you to identify a 
+     specific child. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>n</keycap> <action>Create new person.</action></glossterm><glossdef> 
+
+<para> 
+
+     Create and add a new person to the 
+     database. <application>LifeLines</application> creates a 
+     record template and puts you into the screen editor to edit 
+     the record. When you return from the editor, 
+     <application>LifeLines</application> asks you to confirm the 
+     operation. If you do, the new person is added to the 
+     database. If not, the new person is not added. In both cases 
+     the display does not change. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>s</keycap> <action>Add spouse to family.</action></glossterm><glossdef> 
+
+<para> 
+
+     Add a spouse to the 
+     family. <application>LifeLines</application> asks you to 
+     identify the new spouse. If the command you ran just before 
+     the s command were the n command, 
+     <application>LifeLines</application> guesses that the new 
+     spouse will be the person just 
+     created. <application>LifeLines</application> asks if this is 
+     the case, and if so, makes that person the second spouse in 
+     the family. If not, <application>LifeLines</application> asks 
+     you to identify the other spouse. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>a</keycap> <action>Add child to family.</action></glossterm><glossdef> 
+
+<para> 
+
+     Add a child to the 
+     family. <application>LifeLines</application> asks you to 
+     identify the new child. If the command you ran just before the 
+     a command were the n command, 
+     <application>LifeLines</application> guesses that the new 
+     child will be the person just 
+     created. <application>LifeLines</application> asks if this is 
+     the case, and if so, adds that child to the family. If not, 
+     <application>LifeLines</application> asks you to identify the 
+     child. If the family already has children, 
+     <application>LifeLines</application> also asks where to place 
+     the new child in the family. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>r</keycap> <action>Remove spouse from.</action></glossterm><glossdef> 
+
+<para> 
+
+     Remove a parent/spouse from the 
+     family. <application>LifeLines</application> asks you to 
+     identify the person, and if you do, removes him or her. The 
+     person is not removed from the database. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>d</keycap> <action>Remove child from.</action></glossterm><glossdef> 
+
+<para> 
+
+     Remove a child from the 
+     family. <application>LifeLines</application> asks you to 
+     identify the child should, and if you do, removes the child 
+     from the family. The person is not removed from the database. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>x</keycap> <action>Swap two children.</action></glossterm><glossdef> 
+
+<para> 
+
+     Swap (change the chronological order) of any two children in 
+     the family.  <application>LifeLines</application> asks you to 
+     identify the two children and then swaps them. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>t</keycap> <action>Enter family tandem.</action></glossterm><glossdef> 
+
+<para> 
+
+     This command takes you to the tandem family browse 
+     screen. <application>LifeLines</application> asks you to 
+     identify a second family, and then takes you to the tandem 
+     family screen, displaying both the two families. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>b</keycap> <action>Browse to persons.</action></glossterm><glossdef> 
+
+<para> 
+
+     Browse to a new person or list of persons. You can identify a 
+     person or list by name, by key, or by list name. If you 
+     successfully identify a new person or persons you will switch 
+     into the person or list browse screens. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>z</keycap> <action>Browse to person.</action></glossterm><glossdef> 
+
+<para> 
+
+     Zip browse to a new person. 
+     <application>LifeLines</application> asks you to identify a 
+     person by name or key value, and if you do, browses to that 
+     person. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>q</keycap> <action>Return to main menu.</action></glossterm><glossdef> 
+
+<para> 
+
+     Return to the <application>LifeLines</application> main menu. 
+
+</para> 
+
+</glossdef></glossentry></glosslist> 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+TANDEM PERSON BROWSE MODE 
+
+</title> 
+
+
+
+<para> 
+
+     The tandem person browse screen displays information about two 
+     persons. Its main use it to support the person merging 
+     operation. The top two panels show two persons in the format 
+     used in the person and list screen displays. The bottom panel 
+     gives the menu of available commands. For example: 
+
+
+<screen> 
+  person: Thomas Trask WETMORE Sr (25) 
+  born: 13 March 1866, St. Mary's Bay, Digby, Nova Scotia 
+  died: 17 February 1947, New London, New London, Connecticut 
+  father: Daniel Lorenzo WETMORE, b. 1821, N.S., d. 1903, Conn. (48) 
+  mother: Mary Ann DOTY, b. 1824, N.S., d. 1897, Conn. (59) 
+  spouse: Margaret Ellen KANEEN, b. 1855, Eng., d. 1900, Conn. (26) 
+______________________________________________________________________ 
+person: Thomas Trask WETMORE IV (1) 
+  born: 18 December 1949, New London, New London, Connecticut 
+  died: 
+  father: Thomas Trask WETMORE III, b. 1925, Conn. (6) 
+  mother: Joan Marie HANCOCK, b. 1928, Conn. (7) 
+  spouse: Luann Frances GRENDA, m. 1970, N.Y. (2) 
+______________________________________________________________________ 
+Please choose an operation: 
+ e Edit top person    s Browse top spouse/s   a Add family 
+ t Browse to top      c Browse top children   j Merge bottom to top 
+ f Browse top father  b Browse to persons     x Switch top/bottom 
+ m Browse top mother  d Copy top to bottom    q Return to main menu 
+______________________________________________________________________ 
+LifeLines - Two Person Browse Screen 
+</screen> 
+
+
+</para> 
+
+
+
+<para> 
+
+<glosslist><glossentry><glossterm><keycap>e</keycap> <action>Edit top person.</action></glossterm><glossdef> 
+
+<para> 
+
+     Edit the top person's 
+     record. <application>LifeLines</application> writes the record 
+     to a file, and puts you in the screen editor to edit the 
+     file. When you return from the editor, 
+     <application>LifeLines</application> asks you to confirm the 
+     update; the person is changed only if you do so. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>t</keycap> <action>Browse to top.</action></glossterm><glossdef> 
+
+<para> 
+
+     Switch to the person display with the top person as current person. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>f</keycap> <action>Browse top father.</action></glossterm><glossdef> 
+
+<para> 
+
+     Replace the top person with his/her father. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>m</keycap> <action>Browse top mother.</action></glossterm><glossdef> 
+
+<para> 
+
+     Replace the top person with his/her mother. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>s</keycap> <action>Browse top spouse/s.</action></glossterm><glossdef> 
+
+<para> 
+
+     Replace the the top person with his/her spouse. If the person 
+     has more than one spouse, <application>LifeLines</application> 
+     asks you to identify one. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>c</keycap> <action>Browse top children.</action></glossterm><glossdef> 
+
+<para> 
+
+Replace the top person with one of his/her children. If the person has more 
+than one child, <application>LifeLines</application> asks you to identify the one. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>b</keycap> <action>Browse to persons.</action></glossterm><glossdef> 
+
+<para> 
+
+Browse to a new person or list of persons. <application>LifeLines</application> asks you to identify a new 
+person or persons by name, key or list name, and then does as described in the section on identifying a 
+person. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>d</keycap> <action>Copy top to bottom.</action></glossterm><glossdef> 
+
+<para> 
+
+Copy the top person into the bottom person. A new person is not created; the same 
+person is displayed twice. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>a</keycap> <action>Add family.</action></glossterm><glossdef> 
+
+<para> 
+
+Create a new family record; <application>LifeLines</application> assumes the two displayed persons are to become 
+the spouses/parents in the new family; they must be of opposite sex. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>j</keycap> <action>Merge bottom to top.</action></glossterm><glossdef> 
+
+<para> 
+
+Merge the bottom person into the top person. <application>LifeLines</application> combines the two person 
+records and places you in the screen editor to edit the combined record. When you are done, if you 
+confirm the operation, <application>LifeLines</application> removes the bottom person from the database, and the top person is 
+given the combined record. See the section on merging. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>x</keycap> <action>Switch top/bottom.</action></glossterm><glossdef> 
+
+<para> 
+
+Swap the two persons in the display. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>q</keycap> <action>Return to main menu.</action></glossterm><glossdef> 
+
+<para> 
+
+Return to the <application>LifeLines</application> main menu. 
+
+</para> 
+
+</glossdef></glossentry></glosslist> 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+TANDEM FAMILY BROWSE MODE 
+
+</title> 
+
+
+
+<para> 
+
+The tandem family browse screen displays information about two families. Its main use it to support the 
+family merging operation.The top two panels provide information about the two families you are 
+browsing, and the bottom panel holds the menu of available commands. For example: 
+<screen> 
+father: Thomas Trask WETMORE IV (1) 
+  born: 18 December 1949, New London, New London, Connecticut 
+mother: Luann Frances GRENDA (2) 
+  born: 10 July 1949, Pittsburgh, Allegheny, Pennsylvania 
+married: 1 August 1970, Governors Island, New York, New York 
+  child: Anna Vivian WETMORE, b. 1974, Alaska (3) 
+__________________________________________________________________ 
+father: Thomas Trask WETMORE III (6) 
+  born: 26 October 1925, New London, New London, Connecticut 
+wife: Joan Marie Hancock (7) 
+  born: 6 June 1928, New London, New London, Connecticut 
+married: 5 February 1949, New London, New London, Connecticut 
+  child: Thomas Trask WETMORE IV, b. 1949, Conn. (1) 
+__________________________________________________________________ 
+Please choose an operation: 
+ e Edit top family   f Browse to fathers  j Merge bottom to top 
+ t Browse to top     m Browse to mothers  q Return to main menu 
+ b Browse to bottom  x Switch top/bottom 
+__________________________________________________________________ 
+LifeLines - Two Family Browse Mode 
+</screen> 
+
+
+</para> 
+
+
+
+<para> 
+
+<glosslist><glossentry><glossterm><keycap>e</keycap> <action>Edit top family.</action></glossterm><glossdef> 
+
+<para> 
+
+This command lets you edit the top family's record. <application>LifeLines</application> writes the record into 
+a file, and then puts you into an editor to edit that information. When you return from the editor, 
+<application>LifeLines</application> asks you whether you are sure you want to update the family in the database. The family 
+is changed only if you answer yes. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>t</keycap> <action>Browse to top.</action></glossterm><glossdef> 
+
+<para> 
+
+Change to the family browse screen with the top family the current family. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>b</keycap> <action>Browse to bottom.</action></glossterm><glossdef> 
+
+<para> 
+
+Change to the single family browse screen with the bottom family the current 
+family. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>f</keycap> <action>Browse to fathers.</action></glossterm><glossdef> 
+
+<para> 
+
+Change to the tandem person screen with the fathers of the two 
+families as the two persons. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>m</keycap> <action>Browse to mothers.</action></glossterm><glossdef> 
+
+<para> 
+
+Change to the tandem person screen with the mothers of the two 
+families as the two persons. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>x</keycap> <action>Switch top/bottom.</action></glossterm><glossdef> 
+
+<para> 
+
+Swap the two families in the display. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>j</keycap> <action>Merge bottom to top.</action></glossterm><glossdef> 
+
+<para> 
+
+Merge the bottom family into the top family. <application>LifeLines</application> combines the two 
+family records and places you in the screen editor to edit the combined record. When you are done, if 
+you confirm the operation, <application>LifeLines</application> deletes the bottom family from the database, and the top 
+family is given the combined record. See the section on merging. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>q</keycap> <action>Return to main menu.</action></glossterm><glossdef> 
+
+<para> 
+
+Return to the <application>LifeLines</application> main menu. 
+
+</para> 
+
+</glossdef></glossentry></glosslist> 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+PEDIGREE BROWSE MODE 
+
+</title> 
+
+
+
+<para> 
+
+The pedigree browse screen displays a four-generation pedigree for the current person. The top panel 
+holds the pedigree, and the bottom panel holds the menu of available commands. For example: 
+<screen> 
+                  John WETMORE [1755-1848] (32) 
+            Daniel Van Cott WETMORE [1791-1881] (41) 
+                  Anna VAN COTT [1757-1802] (33) 
+      Daniel Lorenzo WETMORE [1821-1903] (48) 
+                  Thomas TRASK [-1836] (81) 
+            Hannah TRASK [1797-1829] (46) 
+                  Susannah PORTER [1754-] (82) 
+Thomas Trask WETMORE Sr [1866-1947] (25) 
+                  Samuel DOTY [1759-] (501) 
+            Samuel DOTY [1787-] (74) 
+                  Hephzibah PORTER [1764-1853] (502) 
+      Mary Ann DOTY [1827-1897] (59) 
+                  Nathan SAVERY [1748-1826] (510) 
+            Lydia SAVERY [1806-] (75) 
+                  Deidamia SABEAN [1765-1845] (511) 
+__________________________________________________________________ 
+Please choose an operation: 
+ e Edit the person   m Browse to mother    g Browse to family 
+ i Browse to person  s Browse to spouse/s  b Browse to persons 
+ f Browse to father  c Browse to children  q Return to main menu 
+__________________________________________________________________ 
+LifeLines - Pedigree Browse Mode</screen> 
+
+</para> 
+
+
+
+<para> 
+
+<glosslist><glossentry><glossterm><keycap>e</keycap> <action>Edit the person.</action></glossterm><glossdef> 
+
+<para> 
+
+Edit the current person. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>i</keycap> <action>Browse to person.</action></glossterm><glossdef> 
+
+<para> 
+
+Change to the person display mode with the current person. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>f</keycap> <action>Browse to father.</action></glossterm><glossdef> 
+
+<para> 
+
+Browse to the father of the current person, shifting the pedigree one 
+generation back. If the father is not in the database, there is no change. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>m</keycap> <action>Browse to mother.</action></glossterm><glossdef> 
+
+<para> 
+
+Browse to the mother of the current person, shifting the pedigree one 
+generation back. If the mother is not in the database, there is no change. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>s</keycap> <action>Browse to spouse/s.</action></glossterm><glossdef> 
+
+<para> 
+
+Browse to a spouse of the current person, shifting the display to the pedigree of 
+that person. If the current person has more than one spouse, <application>LifeLines</application> asks you to identify the spouse; 
+if the person has no spouse there is no change. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>c</keycap> <action>Browse to children.</action></glossterm><glossdef> 
+
+<para> 
+
+Browse to a child of the current person, shifting the pedigree one generation 
+forward. If the current person has more than one child, <application>LifeLines</application> asks you to identify the child; if 
+the person has no children there is no change. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>g</keycap> <action>Browse to family.</action></glossterm><glossdef> 
+
+<para> 
+
+Change to the family display; the family will be the one that the current person 
+belongs to as spouse or parent. If there are more than one, <application>LifeLines</application> asks you to identify the proper 
+one. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>b</keycap> <action>Browse to persons.</action></glossterm><glossdef> 
+
+<para> 
+
+Browse to another person or list of persons; if you identify a single person the 
+display remains in the pedigree display; if you identify more than one person the display changes to 
+the list browse mode. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>q</keycap> <action>Return to main menu.</action></glossterm><glossdef> 
+
+<para> 
+
+Leave the pedigree browsing mode and return to the main menu. 
+
+</para> 
+
+</glossdef></glossentry></glosslist> 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+ADD OPERATION 
+
+</title> 
+
+
+
+<para> 
+
+If you choose the add operation from the main menu, <application>LifeLines</application> displays the add menu: 
+<screen> 
+What do you want to add? 
+  p Person - add new person to the database 
+  f Family - create family record from one or two spouses 
+  c Child - add a child to an existing family 
+  s Spouse - add a spouse to an existing family 
+  q Quit - return to the previous menu 
+</screen> 
+
+
+</para> 
+
+
+
+<para> 
+
+These operations work in a straightforward way. <application>LifeLines</application> asks you the necessary questions, and lets 
+you cancel at any time. The operations provided by this menu are also available from the browsing 
+modes, and are often easier to perform there. 
+
+</para> 
+
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+DELETE OPERATION 
+
+</title> 
+
+
+
+<para> 
+
+If you choose the delete operation at the main menu, <application>LifeLines</application> displays the delete menu: 
+<screen> 
+What do you want to delete? 
+  c Child - remove a child from his/her family 
+  s Spouse - remove a spouse from a family 
+  p Person - remove a person completely 
+  q Quit - return to the previous menu 
+</screen> 
+
+
+</para> 
+
+
+
+<para> 
+
+These operations also work in a straightforward way. <application>LifeLines</application> asks you the necessary questions and 
+lets you cancel at any time. 
+
+
+</para> 
+
+
+
+<para> 
+
+You may also remove a child from his/her family, or remove a spouse/parent from his/her family, 
+from the person browsing mode. In both cases, only a relationship is removed, not a person. On the other 
+hand, the delete menu must be used if you want to completely remove a person from the database; this 
+cannot be done from the browsing mode. 
+
+
+</para> 
+
+
+
+<para> 
+
+There is no special operation for removing a family record. <application>LifeLines</application> silently removes any family 
+record that has no parent or child associated with it. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+CHARACTER TRANSLATION 
+
+</title> 
+
+
+
+<para> 
+
+If you choose the modify character translation tables operation from the main menu, <application>LifeLines</application> displays 
+the character translation menu: 
+<screen> 
+Which character mapping do you want to edit? 
+   e Editor to Internal mapping 
+   m Internal to Editor mapping 
+   i GEDCOM to Internal mapping 
+   x Internal to GEDCOM mapping 
+   d Internal to Display mapping 
+   r Internal to Report mapping 
+   q Return to main menu 
+</screen> 
+
+
+</para> 
+
+
+
+<para> 
+
+<application>LifeLines</application> has little built-in knowledge of character codes. If you use 7-bit <acronym>ASCII</acronym> characters you will not 
+encounter problems. However, many European and other languages require additional characters, and 
+there are many 8-bit and other schemes for encoding those characters. <application>LifeLines</application> knows about none of 
+them. However, <application>LifeLines</application> provides a number of character translation features you can use to manage 
+character translation. 
+
+</para> 
+
+
+
+<para> 
+
+<application>LifeLines</application> provides facilities for mapping between characters whenever a data record changes form. 
+<application>LifeLines</application> supports four forms:<glosslist><glossentry><glossterm>internal</glossterm><glossdef> 
+
+<para> 
+
+for records in the database 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>editor</glossterm><glossdef> 
+
+<para> 
+
+for records being edited 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>display</glossterm><glossdef> 
+
+<para> 
+
+for records being displayed 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>report</glossterm><glossdef> 
+
+<para> 
+
+for records written to output file 
+
+</para> 
+
+</glossdef></glossentry></glosslist> 
+
+</para> 
+
+
+
+<para> 
+
+When converting text from one form to another <application>LifeLines</application> normally does not convert characters codes. 
+You may, however, override this default behavior by creating translation tables that <application>LifeLines</application> will 
+use when converting between forms. There are six translation tables you may define. The following 
+table shows the six tables and describes when they are applied:<glosslist><glossentry><glossterm>internal to editor</glossterm><glossdef> 
+
+<para> 
+
+when converting from internal, database form to editor form 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>editor to internal</glossterm><glossdef> 
+
+<para> 
+
+when converting from editor form back to internal, database form 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><acronym>GEDCOM</acronym> to internal</glossterm><glossdef> 
+
+<para> 
+
+when reading <acronym>GEDCOM</acronym> input records and writing them to database 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>internal to <acronym>GEDCOM</acronym></glossterm><glossdef> 
+
+<para> 
+
+when writing internal database records to external <acronym>GEDCOM</acronym> file 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>internal to display</glossterm><glossdef> 
+
+<para> 
+
+when displaying a record in a browsing mode display screen 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>internal to report</glossterm><glossdef> 
+
+<para> 
+
+when writing internal database records to external report file 
+
+</para> 
+
+</glossdef></glossentry></glosslist> 
+
+</para> 
+
+
+
+<para> 
+
+After you select a translation table you are placed in the editor to edit the table. Translation tables are 
+made up of lines that look like: 
+<synopsis><replaceable>pattern</replaceable> <replaceable>pattern</replaceable></synopsis> 
+where a tab separates the patterns. Each pattern is an arbitrary sequence of verbatim <acronym>ASCII</acronym> characters 
+and escape sequences. Translation occurs by finding all occurrences that match left patterns and 
+replacing them with the corresponding right patterns. 
+
+</para> 
+
+
+
+<para> 
+
+There are five escape mechanisms used in patterns:<glosslist><glossentry><glossterm>#nnn</glossterm><glossdef> 
+
+<para> 
+
+nnn is a decimal character value 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>$hh</glossterm><glossdef> 
+
+<para> 
+
+hh is a hexadecimal character value 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>\#</glossterm><glossdef> 
+
+<para> 
+
+represents the # character 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>\$</glossterm><glossdef> 
+
+<para> 
+
+represents the $ character 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>\\</glossterm><glossdef> 
+
+<para> 
+
+represents the \ character 
+
+</para> 
+
+</glossdef></glossentry></glosslist> 
+
+</para> 
+
+
+
+<para> 
+
+The character translation feature is not fully tested, and not all translations are currently 
+implemented. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+MISCELLANEOUS UTILITIES 
+
+</title> 
+
+
+
+<para> 
+
+If you choose the miscellaneous utilities operation, 
+<application>LifeLines</application> displays the utilities menu: 
+<screen> 
+What utility do you want to perform? 
+  s Save the database in a GEDCOM file 
+  r Read in data from a GEDCOM file 
+  k Find a person's key value 
+  i Identify a person from key value 
+  d Show database statistics 
+  m Show memory statistics 
+  e Edit the place abbreviation file 
+  o Edit the user options file 
+  q Return to the main menu 
+</screen> 
+
+
+</para> 
+
+
+
+<para> 
+
+<glosslist><glossentry><glossterm><keycap>s</keycap> <action>Save the database in a GEDCOM file.</action></glossterm><glossdef> 
+
+<para> 
+
+This command saves the complete <application>LifeLines</application> database in a 
+<acronym>GEDCOM</acronym> file. All person, family, event, source and user-defined records are stored. This command 
+may be used to periodically back up your database. When you use this command, <application>LifeLines</application> asks you 
+for the name of the file. If you have defined the <envar>LLARCHIVE</envar> shell variable, <application>LifeLines</application> will store 
+the file in the directory named in the variable. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>r</keycap> <action>Read in data from a GEDCOM file.</action></glossterm><glossdef> 
+
+<para> 
+
+This command allows you restore a complete database from a 
+<acronym>GEDCOM</acronym> file. When you select this command, <application>LifeLines</application> asks you for the name of the <acronym>GEDCOM</acronym> file. 
+This command can also be used to import data from a <acronym>GEDCOM</acronym> file to an existing database. When 
+<application>LifeLines</application> performs this command, it first reads the entire <acronym>GEDCOM</acronym> file and checks it for validity. 
+If there are problems in the file, <application>LifeLines</application> describes them, writing them to the file err.log, and does 
+not add any records to the database. If there are no problems, <application>LifeLines</application> adds all the records found in 
+the file to the database (only header and trailer records are not stored in the database). 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>k</keycap> <action>Find a person's key value.</action></glossterm><glossdef> 
+
+<para> 
+
+This command finds the internal key value of a person. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>i</keycap> <action>Identify a person from key value.</action></glossterm><glossdef> 
+
+<para> 
+
+This command identifies the person that has a particular internal 
+key value. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>d</keycap> <action>Show database statistics.</action></glossterm><glossdef> 
+
+<para> 
+
+This command summarizes the contents of the current database. It 
+displays the number of person, family, source, event and other records in the database. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>m</keycap> <action>Show memory statistics.</action></glossterm><glossdef> 
+
+<para> 
+
+This command is used by the author for debugging. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>e</keycap> <action>Edit the place abbreviation file.</action></glossterm><glossdef> 
+
+<para> 
+
+     This command allows you to edit the place abbreviations 
+     file. This file defines the abbreviations that are used by 
+     <application>LifeLines</application> when it creates lists of 
+     persons for you to select from. Each line in the file has the 
+     format:<synopsis><replaceable>word</replaceable>:<replaceable> 
+     abbr </replaceable></synopsis>where word is a word to be 
+     abbreviated, and abbr is its abbreviation. The word and its 
+     abbreviation are separated by a colon. For example: 
+
+<example> 
+
+<title> 
+Example of using abbreviations 
+</title> 
+
+<literallayout>Connecticut:Conn. 
+Massachusetts:Mass. 
+Nova Scotia:N.S.</literallayout></example> 
+
+</para> 
+
+
+
+<para> 
+
+When <application>LifeLines</application> constructs lists of persons for you to select from, it looks up the last component of 
+certain <structfield>PLAC</structfield> lines in this file, and if it finds that component, replaces it with its abbreviation. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>o</keycap> <action>Edit the user options file.</action></glossterm><glossdef> 
+
+<para> 
+
+This command allows you to edit the user options file. The user options file 
+is a record kept in the database that holds user selectable options. Each 
+option has a name and a string value. Each line in the options file has the 
+format:<synopsis><replaceable>option</replaceable>=<replaceable>value</replaceable></synopsis> 
+where option is the name of an option and value is the option's string value. 
+If the value is more than one line long, then the last character in each 
+non-final line must be a backslash. The escapes \n and \t are also recognized 
+in version 3.0.7 and better. In version &llversion; 
+there are nine options. Note that all of these may also be specified in 
+the configuration file, to apply to all databases, but if specified in  
+both places, the entry in the database (user options table) governs. 
+
+<glosslist><glossentry><glossterm>INDIREC</glossterm><glossdef> 
+
+<para> 
+
+Person record edit template 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>EVENREC</glossterm><glossdef> 
+
+<para> 
+
+Event record edit template 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>FAMRECBODY</glossterm><glossdef> 
+
+<para> 
+
+Family record body edit template (NB: Unlike the others, this should not 
+include the 0 level FAM tag.) 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>SOURREC</glossterm><glossdef> 
+
+<para> 
+
+Source record edit template 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>OTHRREC</glossterm><glossdef> 
+
+<para> 
+
+Other record edit template 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>codeset</glossterm><glossdef> 
+
+<para> 
+
+String denoting code set in use in data. Special handling is provided 
+for utf-8, which may be entered as "UTF-8", "utf-8", or "65001". (This is 
+actually a code set issue and not a character set issue, as this only enables 
+the processing of multibyte sequences, without regard to their semantic  
+assignments). 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>HDR_GEDC</glossterm><glossdef> 
+
+<para> 
+
+String containing the GEDC block for the header record when exporting GEDCOM. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>HDR_CHAR</glossterm><glossdef> 
+
+<para> 
+
+String containing the CHAR block for the header record when exporting GEDCOM. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>HDR_SUBM</glossterm><glossdef> 
+
+<para> 
+
+String containing the SUBM block for the header record when exporting GEDCOM. 
+
+</para> 
+
+</glossdef></glossentry></glosslist> 
+
+</para> 
+
+
+
+<para> 
+
+     For example if you would like to replace the default person 
+     record template with the following: 
+
+<example> 
+
+<title> 
+Example of replacing the default person record template      
+</title> 
+
+<programlisting> 
+
+  0 INDI 
+  1 NAME // 
+  1 SEX</programlisting></example> 
+you would edit the user option file to contain:<example> 
+
+<title> 
+Example of replaced default person record template 
+</title> 
+
+<literallayout>INDIREC=0 INDI\ 
+  1 NAME //\ 
+  1 SEX</literallayout> 
+</example> 
+
+or, using the \n escape so as to keep the entry on one line:<example> 
+
+<title> 
+Example of replaced single line default person record template 
+</title> 
+
+<literallayout>INDIREC=0 INDI\n1 NAME //\n1 SEX</literallayout> 
+</example> 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>q</keycap> <action>Return to main menu.</action></glossterm><glossdef> 
+
+<para> 
+
+This command returns you to the main menu. 
+
+</para> 
+
+</glossdef></glossentry></glosslist> 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS 
+
+</title> 
+
+
+
+<para> 
+
+     <application>LifeLines</application> supports source, event 
+     and other, user-defined record types.  You can access these 
+     features in two ways: either through the x operation from the 
+     main menu, or via commands in the individual and family browse 
+     screens.  The first approach might be most convenient when you 
+     are solely working with these record types.  The second makes 
+     it easier to work with source, event and user-defined records 
+     in parallel with your person and family records; this can be 
+     useful for instance when you want to create references from 
+     your person and family record to your source, event and user 
+     defined records as you create them, and to view and edit 
+     records that you have referenced from within a person or 
+     family record. 
+
+</para> 
+
+<para> 
+
+     Using the first of these two possibilities 
+     <application>LifeLines</application> displays the following 
+     menu: 
+
+<screen> 
+What activity do you want to perform? 
+
+  s  Browse source records 
+  e  Browse event records 
+  x  Browse other records 
+  1  Add a source record to the database 
+  2  Edit source record from the database 
+  3  Add an event record to the database 
+  4  Edit event record from the database 
+  5  Add an other record to the database 
+  6  Edit other record from the database 
+  q  Return to main menu 
+</screen> 
+
+     Using the second variant (from the person and family browse 
+     screens), the following six commands are available. The first 
+     three are described alongside with their counterparts in the x 
+     menu (they do mostly, but not entirely, the same things); the 
+     last three are described separately: 
+
+<screen> 
+  %s  Add source 
+  %e  Add event  
+  %o  Add other 
+</screen> 
+  
+<screen> 
+  $s  List sources 
+  $n  List notes 
+  $$  List references 
+</screen> 
+
+</para> 
+
+
+
+<para> 
+
+     The handling of source, event and user-defined records in 
+     <application>LifeLines</application> is still in 
+     development. For example, sources cannot yet be searched by 
+     REFN or be deleted. 
+
+</para> 
+
+<glosslist><glossentry><glossterm><keycap>s</keycap> 
+<action>Browse source records.</action></glossterm><glossdef> 
+
+<para> 
+This will bring up a list of all source records by number, showing 
+REFN, title, and author for each. A record may be selected 
+from this list to edit. 
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>e</keycap> 
+<action>Browse event records.</action></glossterm><glossdef> 
+
+<para> 
+This will bring up a list of all event records by number. As of 
+yet this does not display any information about each event. 
+(Suggestions as to how to summarize events are welcome). 
+A record may be selected from this list to edit. 
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>x</keycap> 
+<action>Browse other records.</action></glossterm><glossdef> 
+
+<para> 
+This will bring up a list of all other records by number, 
+showing the 0 level line as summary. A record may be selected 
+from this list to edit. 
+</para> 
+
+     </glossdef></glossentry><glossentry><glossterm><keycap>1</keycap> 
+     <action>Add a source record to the 
+     database.</action></glossterm><glossdef> 
+
+<para> 
+
+     This operation (or alternatively <keycap>%s</keycap> from the 
+     person, family or auxiliary browse screens) is used to add a 
+     new source record to the database. 
+     <application>LifeLines</application> creates a template source 
+     and puts you in the screen editor to edit the template. The 
+     default template is: 
+
+<programlisting> 
+
+  0 SOUR 
+  1 REFN 
+  1 TITL <replaceable>Title</replaceable> 
+  1 AUTH <replaceable>Author</replaceable> 
+
+</programlisting> 
+
+</para> 
+
+
+
+<para> 
+
+     Do not change the <structfield>0 SOUR</structfield> 
+     line. Otherwise you may edit this record any way you like. The 
+     <structfield>1 REFN</structfield> line is a special line you 
+     can use to give the source a symbolic name that can be used in 
+     other records to refer to the source record. See the section 
+     on using <structfield>REFN</structfield> values. Because many 
+     sources have a title and an author, the default template has 
+     these lines. You may adjust the source template via the 
+     SOURREC user option (either at the database level, via the 
+     user options, or globally, via the configuration file). Here 
+     is how I recorded one of the sources in my database: 
+
+<example> 
+
+<title> 
+Example of a source record 
+</title> 
+
+<programlisting> 
+
+  0 SOUR 
+  1 REFN <userinput>jcw</userinput> 
+  1 TITL <userinput>The Wetmore Family of America, and its Collateral Branches: with</userinput> 
+    2 CONT <userinput>Genealogical, Biographical, and Historical Notices</userinput> 
+  1 AUTH <userinput>James Carnahan Wetmore</userinput> 
+  1 PUBL 
+    2 DATE <userinput>1861</userinput> 
+    2 PLAC <userinput>Albany, New York</userinput> 
+    2 INST <userinput>Munsell and Rowland</userinput> 
+    2 ADDR <userinput>78 State Street</userinput></programlisting></example> 
+
+</para> 
+
+<para> 
+
+     The add source command in the x menu is equivalent to the 
+     <keycap>%s</keycap> command available in the person or family 
+     browse screen, in terms of entering the source record; after 
+     saving the source record though, there is one significant 
+     difference, in that that you then are presented with the 
+     following prompt (also, the key value of the new record is 
+     displayed in the status bar at this point): 
+</para> 
+
+<screen> 
+Please choose from the following options: 
+  1: Insert xref automatically at bottom of current record. 
+  2: Edit current record now to add xref manually. 
+  3: Browse new record (without adding xref). 
+  4: Return to current record (without adding xref). 
+
+ Commands:   j Move down     k Move up    i Select     q Quit  
+</screen> 
+
+     <para> 
+
+     The four options perform the following actions: 
+
+     </para> 
+
+     <para> 
+
+     1: LifeLines adds a reference to the new source record at the 
+     bottom of the person or family record that was visible in the 
+     display screen when you prompted LifeLines to create the new 
+     source record. 
+
+     </para> 
+
+     <para> 
+
+     2: LifeLines will open the person or family record that was 
+     visible in the display screen when you prompted LifeLines to 
+     create the new source record, so that you can manually enter a 
+     reference to the newly created source record (perhaps as a 
+     source reference to an event that you are planning to add). 
+
+     </para> 
+
+     <para> 
+
+     3: LifeLines lets you browse (and optionally reopen for 
+     editing) your newly added source record. 
+
+     </para> 
+
+     <para> 
+
+     4: You are returned to the person or family record that was 
+     visible in the display screen when you prompted LifeLines to 
+     create the new source record. No reference is added to the new 
+     record. 
+
+     </para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>2</keycap> <action>Edit source record from the database.</action></glossterm> 
+<glossdef> 
+
+<para> 
+
+Use this operation to edit an existing source record already in 
+the database. When you select this operation 
+<application>LifeLines</application> asks you to identify a source: 
+<screen> 
+Which source record do you want to edit? 
+enter key or refn: 
+</screen> 
+
+
+</para> 
+
+
+
+<para> 
+
+Identify a source by entering its key value, with or without the leading S, or by entering its <structfield>REFN</structfield> 
+value. <application>LifeLines</application> retrieves the record and puts you in the editor with the record. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>3</keycap> <action>Add an event record to the database.</action></glossterm><glossdef> 
+
+<para> 
+
+This operation (or alternatively <keycap>%e</keycap> from the person, 
+family or auxiliary browse screens) adds a new event record to the 
+database.  <application>LifeLines</application> creates a template 
+event and puts you in the screen editor to edit the template. The 
+default template is:<programlisting> 
+
+0 EVEN 
+  1 REFN 
+  1 DATE 
+  1 PLAC 
+  1 INDI 
+    2 NAME 
+    2 ROLE 
+  1 SOUR</programlisting> 
+
+</para> 
+
+<para> 
+
+     You may adjust the event template via the EVENREC user option (either 
+     at the database level, via the user options, or globally, via the  
+     configuration file). 
+
+</para> 
+
+<para> 
+
+     Do not change the <structfield>0 EVEN</structfield> 
+     line. Otherwise you may edit this record any way you like. The 
+     <structfield>1 REFN</structfield> line allows you to give this 
+     event a symbolic name you can use when you want to refer to 
+     this event from other records. See the section on using 
+     <structfield>REFN</structfield> values. The default template 
+     suggests that an event has a date, a place, and refers to 
+     persons in roles with respect to the event. There is far less 
+     experience with event-based <acronym>GEDCOM</acronym> than 
+     there is with simple person and family 
+     <acronym>GEDCOM</acronym>. You may even be wondering why you 
+     would need event records when you can simply tuck events away 
+     in person and family records. This is a topic that may get 
+     covered in an appendix. 
+
+</para> 
+
+     <para> 
+
+     The add event command in the x menu is equivalent to the 
+     <keycap>%e</keycap> command available in the person or family 
+     browse screen, in terms of entering the event record; after 
+     saving the event record though, there is one significant 
+     difference, in that that you then are presented with the 
+     following prompt (also, the key value of the new record is 
+     displayed in the status bar at this point): 
+</para> 
+
+<screen> 
+Please choose from the following options: 
+  1: Insert xref automatically at bottom of current record. 
+  2: Edit current record now to add xref manually. 
+  3: Browse new record (without adding xref). 
+  4: Return to current record (without adding xref). 
+
+ Commands:   j Move down     k Move up    i Select     q Quit  
+</screen> 
+
+     <para> 
+
+     The four options perform the following actions: 
+
+     </para> 
+
+     <para> 
+
+     1: LifeLines adds a reference to the new event record at the 
+     bottom of the person or family record that was visible in the 
+     display screen when you prompted LifeLines to create the new 
+     event record. 
+
+     </para> 
+
+     <para> 
+
+     2: LifeLines will open the person or family record that was 
+     visible in the display screen when you prompted LifeLines to 
+     create the new event record, so that you can manually enter a 
+     reference to the newly created event record. 
+
+     </para> 
+
+     <para> 
+
+     3: LifeLines lets you browse (and optionally reopen for 
+     editing) your newly added event record. 
+
+     </para> 
+
+     <para> 
+
+     4: You are returned to the person or family record that was 
+     visible in the display screen when you prompted LifeLines to 
+     create the new event record. No reference is added to the new 
+     record. 
+
+     </para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>4</keycap> <action>Edit event record from the database.</action></glossterm><glossdef> 
+
+<para> 
+
+     Use this operation to edit an existing event record from the 
+     database . When you select this operation 
+     <application>LifeLines</application> asks you to identify an 
+     event: 
+
+<screen> 
+Which event record do you want to edit? 
+enter key or refn: 
+</screen> 
+
+
+</para> 
+
+
+
+<para> 
+
+     You identify a event by entering its key value, with or 
+     without the leading E, or by entering its 
+     <structfield>REFN</structfield> 
+     value. <application>LifeLines</application> retrieves the 
+     record and places you in the screen editor with the record. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>5</keycap> <action>Add an other record to the database.</action></glossterm><glossdef> 
+
+<para> 
+
+     This operation (or alternatively <keycap>%o</keycap> from the 
+     person, family or auxiliary browse screens) adds a new 
+     user-defined record to the database. 
+     <application>LifeLines</application> creates a template and 
+     puts you in the screen editor to edit the template. The 
+     default template is 
+
+<programlisting> 
+0 XXXX 
+1 REFN 
+</programlisting> 
+</para> 
+
+
+
+<para> 
+
+     Replace <replaceable>XXXX</replaceable> with the tag string 
+     you select for the type of the new record. You are free to 
+     choose any tag value except <structfield>INDI</structfield>, 
+     <structfield>FAM</structfield>, 
+     <structfield>SOUR</structfield> and 
+     <structfield>EVEN</structfield>. For example, if you keep 
+     record information about the ships that your North American 
+     immigrant ancestors arrived on, you would keep records about 
+     those ships in your database; the tag 
+     <structfield>SHIP</structfield> suggests itself for such 
+     records. The <structfield>1 REFN</structfield> line allows you 
+     to give this record a symbolic name you can use when you want 
+     to refer to it from other records. See the section on using 
+     <structfield>REFN</structfield> values. You may adjust the 
+     other template via the OTHRREC user option (either at the 
+     database level, via the user options, or globally, via the 
+     configuration file). 
+
+</para> 
+
+     <para> 
+
+     The add other record command in the x menu is equivalent to the 
+     <keycap>%o</keycap> command available in the person or family 
+     browse screen, in terms of entering the other record; after 
+     saving the record though, there is one significant difference, 
+     in that that you then are presented with the following prompt 
+     (also, the key value of the new record is displayed in the 
+     status bar at this point): 
+</para> 
+
+<screen> 
+Please choose from the following options: 
+  1: Insert xref automatically at bottom of current record. 
+  2: Edit current record now to add xref manually. 
+  3: Browse new record (without adding xref). 
+  4: Return to current record (without adding xref). 
+
+ Commands:   j Move down     k Move up    i Select     q Quit  
+</screen> 
+
+     <para> 
+
+     The four options perform the following actions: 
+
+     </para> 
+
+     <para> 
+
+     1: LifeLines adds a reference to the new other record at the 
+     bottom of the person or family record that was visible in the 
+     display screen when you prompted LifeLines to create the new 
+     other record. 
+
+     </para> 
+
+     <para> 
+
+     2: LifeLines will open the person or family record that was 
+     visible in the display screen when you prompted LifeLines to 
+     create the new other record, so that you can manually enter a 
+     reference to the newly created other record (perhaps as a 
+     note reference to an event that you are planning to add). 
+
+     </para> 
+
+     <para> 
+
+     3: LifeLines lets you browse (and optionally reopen for 
+     editing) your newly added other record. 
+
+     </para> 
+
+     <para> 
+
+     4: You are returned to the person or family record that was 
+     visible in the display screen when you prompted LifeLines to 
+     create the new other record. No reference is added to the new 
+     record. 
+
+     </para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>6</keycap> <action>Edit other record from the database.</action></glossterm><glossdef> 
+
+<para> 
+
+     Use this operation to edit an existing user-defined record 
+     from the database. When you select this operation 
+     <application>LifeLines</application> asks you to identify the 
+     record: 
+
+<screen> 
+What record do you want to edit? 
+enter key or refn: 
+</screen> 
+
+
+</para> 
+
+<para> 
+
+     You identify a record by entering its key value, with or 
+     without the leading X, or by entering its 
+     <structfield>REFN</structfield> 
+     value. <application>LifeLines</application> retrieves the 
+     record and places you in the screen editor with the record. 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>$s</keycap> 
+<action>List sources</action></glossterm><glossdef> 
+
+     <para> 
+
+     This command is available in the person and family browse 
+     screens. It will bring up a list of all source records that 
+     are referenced within the currently displayed person or family 
+     record, by the order they appear in the person/family record, 
+     showing REFN, title, and author for each. A record may be 
+     selected from this list to view in the auxiliary browse screen 
+     (and optionally be edited from there). 
+
+     </para> 
+
+
+</glossdef></glossentry><glossentry><glossterm><keycap>$n</keycap> 
+<action>List notes</action></glossterm><glossdef> 
+
+     <para> 
+
+     This command is available in the person and family browse 
+     screens. It will bring up a list of all note records that are 
+     referenced within the currently displayed person or family 
+     record, by the order they appear in the person/family record, 
+     showing REFN, title, and author for each. A record may be 
+     selected from this list to view in the auxiliary browse screen 
+     (and optionally be edited from there). 
+
+     </para> 
+
+</glossdef></glossentry><glossentry><glossterm><keycap>$$</keycap> 
+<action>List all references</action></glossterm><glossdef> 
+
+     <para> 
+
+     This command is available in the person and family browse 
+     screens. It will bring up a list of all records that are 
+     referenced within the currently displayed person or family 
+     record, by the order they appear in the person/family record, 
+     showing REFN, title, and author for each. A record may be 
+     selected from this list to view in the auxiliary browse screen 
+     (and optionally be edited from there). 
+
+     </para> 
+
+</glossdef></glossentry></glosslist> 
+
+</sect1> 
+
+
+
+<sect1> 
+
+<title> 
+FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES 
+</title> 
+
+<para> 
+
+     <application>LifeLines</application> 3.0.2 has relaxed most of 
+     restrictions on family structure that were imposed by earlier 
+     versions. For example, a family record may have more than one 
+     parent/spouse of the same sex; a person may be a child in more 
+     than family. This is a controversial issue. Some users insist 
+     that family relationships should imply biological relatedness, 
+     and that all other relationships should be handled by 
+     different means. Others insist that non-traditional families 
+     (any number of parents/spouses of any sex) should be allowed, 
+     and that children can be members of more than one family (eg, 
+     natural family and adoptive 
+     family). <application>LifeLines</application> no longer takes 
+     a position on this matter; you are free to set up families any 
+     way you like; the operations that add spouses and children to 
+     families no longer check for non-traditional arrangements. It 
+     is possible that a future release will include a user option 
+     to either disallow or to ask for confirmation about 
+     non-traditional relationships. 
+
+</para> 
+
+
+
+<para> 
+
+     <application>LifeLines</application> provides features for 
+     merging persons together and for merging families 
+     together. The person merging feature is accessed from the 
+     tandem person browse mode, and the family merging feature is 
+     accessed from the tandem family browse mode. You browse to the 
+     two persons or families you want to merge and then use the j 
+     command. Merging is necessary when you discover that two or 
+     more person records, or two or more family records, represent 
+     the same person or family, respectively. 
+
+</para> 
+
+
+
+<para> 
+
+     Versions of <application>LifeLines</application> prior to 
+     3.0.2 required that persons and families meet certain criteria 
+     before they could be merged. The criteria ensured that the 
+     merged persons and families would still meet traditional 
+     family structuring rules. With the relaxation of the 
+     structuring rules, restrictions on merging have also been 
+     removed. It is now possible to create non-traditional 
+     relationships by merging traditional persons and/or 
+     families. For example, if you merge two persons that happen to 
+     be children in two different families, the merged person will 
+     be a child in both families. If you want to maintain only 
+     traditional relationships in your database you may have to 
+     makes further to changes to relationships after you complete a 
+     merge operation. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+LINKING RECORDS TOGETHER AND USING THE REFN FEATURE 
+
+</title> 
+
+
+
+<para> 
+
+     Records in a <application>LifeLines</application> database may 
+     refer to other records via cross-reference links. The 
+     lineage-linked references are maintained directly by 
+     <application>LifeLines</application> through operations found 
+     in the browsing mode menus.  These references are the links 
+     from a person to families (<structfield>1 FAMC</structfield> 
+     and <structfield>1 FAMS</structfield>), and the links from a 
+     family to persons (<structfield>1 HUSB</structfield>, 
+     <structfield>1 WIFE</structfield> and <structfield>1 
+     CHIL</structfield>). Because 
+     <application>LifeLines</application> maintains these links you 
+     are not allowed to change these lines when you are editing 
+     records. There are a couple of seeming exceptions to this 
+     rule. For example, you may change the order of <structfield>1 
+     CHIL</structfield> lines in a family record in order to change 
+     the order of children in a family, and you may change the 
+     order of <structfield>1 FAMS</structfield> lines in a person 
+     record to change the order of families the person was a spouse 
+     or parent in. These operations are allowed because they don't 
+     affect which person records refer to which family records and 
+     vice versa. 
+
+</para> 
+
+
+
+<para> 
+
+     Besides the lineage-links that are maintained by 
+     <application>LifeLines</application>, you may place your own 
+     links in records.  Probably the most common example of this is 
+     referring events within a person record to the record of the 
+     information source for the event. For example: 
+
+
+<example> 
+
+<title> 
+Example of referring events from a person record 
+</title> 
+
+<programlisting> 
+
+0 @I23@ INDI 
+  1 NAME <userinput>Thomas/Whitmore/</userinput> 
+  1 BIRT 
+    2 DATE <userinput>about 1615</userinput> 
+    2 PLAC <userinput>England</userinput> 
+    2 SOUR @S3@ 
+... 
+0 @S3@ SOUR 
+  1 REFN <userinput>cat</userinput> 
+  1 TITL <userinput>New England Marriages Prior to 1700</userinput> 
+  1 AUTH <userinput>Clarence Almon Torrey</userinput> 
+...</programlisting></example> 
+
+</para> 
+
+
+
+<para> 
+
+The <structfield>2 SOUR</structfield> <replaceable>@S3@</replaceable> line in the person record refers to the source record. <application>LifeLines</application> allows any specific 
+structure within a record (in this case a birth event) to refer to another record. It is not possible to refer 
+to a specific location within another record, though this may be supported eventually. 
+
+
+</para> 
+
+
+
+<para> 
+
+This example implies that when linking one record to another you must know the key of the target 
+record (S3 in the example). This is not desirable because internal record keys may change when the 
+records are exported from one database or imported to another. 
+
+</para> 
+
+
+
+<para> 
+
+     Because internal key values are not permanent, 
+     <application>LifeLines</application> allows you to assign a 
+     permanent user-defined key to any record in the database using 
+     the <structfield>1 REFN</structfield> line. The value of this 
+     line is a string that you choose as your permanent key value 
+     for the record. When adding a link to a record that has a user 
+     <structfield>REFN</structfield> key value, you may use that 
+     value instead of the internal key value. For example, when 
+     adding the person in the previous example you could edit the 
+     new record as follows: 
+
+<example> 
+
+<title> 
+Example of adding a new person 
+</title> 
+
+<programlisting> 
+
+  0 INDI 
+  1 NAME <userinput>Thomas/Whitmore/</userinput> 
+  1 BIRT 
+    2 DATE <userinput>about 1615</userinput> 
+    2 PLAC <userinput>England</userinput> 
+    2 SOUR <userinput>&lt;cat&gt;</userinput></programlisting></example> 
+
+</para> 
+
+
+
+<para> 
+
+     Instead of using the actual key value of the source, S3, the 
+     <structfield>REFN</structfield> value cat was used. The 
+     <structfield>REFN</structfield> value must be enclosed by 
+     angle brackets when used this 
+     way. <application>LifeLines</application> automatically 
+     replaces the <structfield>REFN</structfield> link with the 
+     proper internal key value when the record is stored in the 
+     database. 
+
+
+</para> 
+
+
+
+<para> 
+
+     The <structfield>REFN</structfield> value may also be used 
+     when searching for person, source, event and user-defined 
+     records.  You should not add more than one 
+     <structfield>REFN</structfield> line to a record, and every 
+     <structfield>REFN</structfield> value should be unique. 
+
+</para> 
+
+
+
+</sect1> 
+
+</chapter> 
+</book>
+

@@ -1,0 +1,4126 @@
+<?xml version='1.0' encoding='iso-8859-1'?> 
+
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.0/docbookx.dtd" 
+[<!ENTITY llversion '3.0.7'>]> 
+
+
+<book id="docbook"> 
+
+  <bookinfo> 
+
+
+<!-- 
+
+    this is lifelines.xml
+
+    To use this file with SGML software, replace the text above
+    this comments section with the following:
+
+_________________________________________________________
+
+<!DOCTYPE BOOK PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
+	<!entity llversion	"3.0.7">    
+]>	
+	
+<book id="docbook"> 
+  <?dbhtml filename="ll-doc.htm">
+  <bookinfo>
+_________________________________________________________
+
+
+    Rafal Prinke <rafalp@amu.edu.pl> 1-Apr-200 
+    - Converted original LifeLines Reference Guide to DocBook SGML. 
+
+
+    Marc Nozell <marc@nozell.com>  26-Jul-2001 
+    - Changed <simpara> to <para>.  Newer docbook likes it better. 
+
+    Marc Nozell <marc@nozell.com>  21-Sep-2000 
+    - updated license info 
+    - point to lifelines.sourceforge.net 
+    - change references from lines302 to llines 
+    - make most lines less than 80 characters wide 
+
+    Rafal Prinke <rafalp@amu.edu.pl> 30-Dec-2001 
+    - Converted to XML.
+          - closed all <para> elements
+          - defined and corrected llversion entity
+          - closed empty tag <void />
+          - converted all tags to lower case
+          - replaced ampersands with entities
+          - added space at end of line
+          - parsed against DocBook 4.1.2 DTD
+
+                                                       --> 
+<!-- ================================================= --> 
+
+
+
+<title> 
+
+THE <application>LIFELINES</application> PROGRAMMING SUBSYSTEM AND REPORT GENERATOR 
+
+</title> 
+
+    <authorgroup> 
+      <author> 
+     <firstname>Thomas T. </firstname> 
+     <surname>Wetmore </surname> 
+     <lineage>IV</lineage> 
+      </author> 
+    </authorgroup> 
+
+    <subtitle><application>LifeLines</application> Version &llversion;</subtitle> 
+  </bookinfo> 
+   
+  <chapter> 
+
+    <title> 
+
+Report Programming Manual 
+
+</title> 
+
+    <sect1> 
+       
+       
+      <title> 
+
+INTRODUCTION 
+
+</title> 
+       
+
+
+<para> 
+
+     The <application>LifeLines</application> programming subsystem 
+     lets you produce reports in any style or layout. You may 
+     generate files in <application>troff</application>, 
+     <application>Postscript</application>, 
+     <application>TeX</application>, <acronym>SGML</acronym> or any 
+     other <acronym>ASCII</acronym>-based format, for further text 
+     processing and printing. You access the report generator by 
+     choosing the r command from the main menu. You may also use 
+     the programming subsystem to create query and other processing 
+     programs that write their results directly upon the 
+     screen. For example, there is a 
+     <application>LifeLines</application> program that computes the 
+     relationship between any two persons in a database. 
+
+</para> 
+
+
+
+<para> 
+
+     Each <application>LifeLines</application> program is written 
+     in the <application>LifeLines</application> programming 
+     language, and the programs are stored in normal files. When 
+     you direct <application>LifeLines</application> to run a 
+     program, it asks you for the name of the program file, asks 
+     you where you want the program's output written, and then runs 
+     the program. 
+
+</para> 
+
+
+
+<para> 
+
+     For example, say you want <application>LifeLines</application> 
+     to generate an ahnentafel. Such a report might look 
+     like: 
+
+<example> 
+
+<title> 
+Example of ahnentafel report      
+</title> 
+
+<literallayout> 
+1. Thomas Trask WETMORE IV 
+b. 18 December 1949, New London, Connecticut 
+2. Thomas Trask WETMORE III 
+b. 15 October 1925, New London, Connecticut 
+3. Joan Marie HANCOCK 
+b. 6 June 1928, New London, Connecticut 
+4. Thomas Trask WETMORE Jr 
+b. 5 May 1896, New London, Connecticut 
+d. 8 November 1970, New London, Connecticut 
+5. Vivian Genevieve BROWN 
+b. 5 April 1896, Mondovi, Wisconsin 
+6. Richard James HANCOCK 
+b. 18 August 1904, New London, Connecticut 
+d. 24 December 1976, Waterford, Connecticut 
+7. Muriel Armstrong SMITH 
+b. 28 October 1905, New Haven, Connecticut 
+8. Thomas Trask WETMORE Sr 
+b. 13 March 1866, St. Mary's Bay, Nova Scotia 
+d. 17 February 1947, New London, Connecticut 
+9. Margaret Ellen KANEEN 
+b. 27 October 1859, Liverpool, England 
+d. 10 May 1900, New London, Connecticut 
+... lots more</literallayout></example> 
+
+</para> 
+
+
+
+<para> 
+
+     Here is a <application>LifeLines</application> program that 
+     generates this report: 
+
+<example> 
+
+<title> 
+Example of ahnentafel report script      
+</title> 
+
+<programlisting> 
+
+proc main () 
+  { 
+    getindi(indi) 
+    list(ilist) 
+    list(alist) 
+    enqueue(ilist, indi) 
+    enqueue(alist, 1) 
+    while(indi, dequeue(ilist)) { 
+      set(ahnen, dequeue(alist)) 
+      d(ahnen) ". " name(indi) nl() 
+      if (e, birth(indi)) { " b. " long(e) nl() } 
+      if (e, death(indi)) { " d. " long(e) nl() } 
+      if (par, father(indi)) { 
+        enqueue(ilist, par) 
+        enqueue(alist, mul(2,ahnen)) 
+      } 
+      if (par,mother(indi)) { 
+        enqueue(ilist, par) 
+        enqueue(alist, add(1,mul(2,ahnen))) 
+      } 
+    } 
+  }</programlisting></example> 
+
+</para> 
+
+
+
+<para> 
+
+     Say this program is in the file 
+     <filename>ahnen</filename>. When you choose the 
+     <keycap>r</keycap> option from the main menu, 
+     <application>LifeLines</application> asks: 
+
+<screen> 
+What is the name of the report program? 
+enter string: 
+</screen> 
+
+</para> 
+
+<para> 
+
+     You enter 
+     <userinput><literal>ahnen</literal></userinput>. Since the 
+     program generates a report, 
+     <application>LifeLines</application> asks where to write that 
+     report: 
+
+<screen> 
+What is the name of the output file? 
+enter file name: 
+</screen> 
+
+</para> 
+
+
+
+<para> 
+
+     You enter a file name, say 
+     <userinput><filename>my.ahnen</filename></userinput>. 
+     <application>LifeLines</application> reads the program ahnen, 
+     executes the program, and writes the report output to 
+     <filename>my.ahnen</filename>. <application>LifeLines</application> 
+     reports any syntax or run-time errors found while trying to 
+     run the program. 
+
+
+</para> 
+
+
+
+<para> 
+
+     A <application>LifeLines</application> program is made up of 
+     <type>procedures</type> and <type>functions</type>; every 
+     program must contain at least one <type>procedure</type> named 
+     <literal>main</literal>. The <literal>main</literal> 
+     <type>procedure</type> runs first; it may call other 
+     <type>procedures</type>, <type>functions</type> and 
+     <type>built-in functions</type>. In the ahnentafel example 
+     there is only one <type>procedure</type>. 
+
+</para> 
+
+
+
+<para> 
+
+     A <type>procedure</type> body is a sequence of 
+     <type>statements</type>. In the example program the first five 
+     <type>statements</type> are: 
+
+<programlisting> 
+getindi(indi) 
+list(ilist) 
+list(alist) 
+enqueue(ilist, indi) 
+enqueue(alist, 1) 
+</programlisting> 
+</para> 
+
+
+
+<para> 
+
+     The first <type>statement</type> calls the 
+     <function>getindi</function> (get individual) <type>built-in 
+     function</type>, which causes 
+     <application>LifeLines</application> to ask you to identify a 
+     person using the zip browse style of identification: 
+
+<screen> 
+Identify person for interpreted report 
+enter name: 
+</screen> 
+
+
+</para> 
+
+
+
+<para> 
+
+     After you identify a person, he or she is assigned to the 
+     variable <varname>indi</varname>. The next two 
+     <type>statements</type> declare two <type>list 
+     variables</type>, <varname>ilist</varname> and 
+     <varname>alist</varname>. <type>Lists</type> hold sequences of 
+     things; there are operations for placing things on lists, 
+     taking things off, and iterating through the list elements. In 
+     the example, <varname>ilist</varname> holds a list of 
+     ancestors, in ahnentafel order, who have not yet been reported 
+     on, and <varname>alist</varname> holds their respective 
+     ahnentafel numbers. 
+
+
+</para> 
+
+
+
+<para> 
+
+     The next two statements call the <function>enqueue</function> 
+     function, adding the first members to both lists. The person 
+     identified by the <function>getindi</function> function is 
+     made the first member of <varname>ilist</varname>, and the 
+     number one, this person's ahnentafel number, is made the first 
+     member of <varname>alist</varname>. 
+
+</para> 
+
+
+
+<para> 
+
+The rest of the program is: 
+
+<programlisting> 
+while(indi, dequeue(ilist)) { 
+  set(ahnen, dequeue(alist)) 
+  d(ahnen) ". " name(indi) nl() 
+  if (e, birth(indi)) { " b. " long(e) nl() } 
+  if (e, death(indi)) { " d. " long(e) nl() } 
+  if (par, father(indi)) { 
+    enqueue(ilist, par) 
+    enqueue(alist, mul(2,ahnen)) 
+  } 
+  if (par, mother(indi)) { 
+    enqueue(ilist, par) 
+   enqueue(alist, add(1,mul(2,ahnen))) 
+  } 
+} 
+</programlisting> 
+
+</para> 
+
+
+
+<para> 
+
+     This is a loop that iteratively removes persons and their 
+     ahnentafel numbers from the two lists, and then prints their 
+     names and birth and death information. If the persons have 
+     parents in the database, their parents and their parents' 
+     ahnentafel numbers are then put at the ends of the lists. The 
+     loop iterates until the list is empty. 
+
+</para> 
+
+
+
+<para> 
+
+     The loop is a <type>while</type> loop statement. The line: 
+<programlisting> 
+while(indi, dequeue(ilist)) { 
+</programlisting> 
+removes (via <function>dequeue</function>) a person from <varname>ilist</varname>, and assigns the person to variable <varname>indi</varname>. As long as there 
+are persons on <varname>ilist</varname>, another iteration of the loop follows. 
+
+</para> 
+
+
+
+<para> 
+
+The statement:<programlisting> 
+
+set(ahnen, dequeue(alist))</programlisting>is an <type>assignment</type> statement. The second argument is evaluated; its value is assigned to the first 
+argument, which must be a variable. Here the next number in <varname>alist</varname> is removed and assigned to variable 
+<varname>ahnen</varname>. This is the ahnentafel number of the person just removed from <varname>ilist</varname>. 
+
+</para> 
+
+
+
+<para> 
+
+The line:<programlisting> 
+
+d(ahnen) ". " name(indi) nl()</programlisting>contains four <type>expression</type> statements; when expressions are used as statements, their values, if any, are 
+treated as strings and written directly to the report output file. The <function>d</function> function converts its integer 
+argument to a numeric string. The ". " is a literal (constant) string value. The <function>name</function> function returns the 
+default form of a person's name. The <function>nl</function> function returns a string containing the newline character. 
+
+</para> 
+
+
+
+<para> 
+
+The next two lines:
+
+<programlisting> 
+if(e, birth(indi)) { " b. " long(e) nl() } 
+if(e, death(indi)) { " d. " long(e) nl() }
+</programlisting>
+
+write out basic birth and death information about a person. These
+lines are <type>if</type> statements. The second argument in the
+conditional is evaluated and assigned to the first argument, which
+must be a variable.  The first <type>if</type> statement calls the
+birth function, returning the first birth event in a person's
+record. If the event exists it is assigned to variable
+<varname>e</varname>, and the <type>body</type> (the items between the
+curly brackets) of the <type>if</type> statement is executed. The
+<type>body</type> consists of three <type>expression</type>
+statements: a literal, and calls to the <function>long</function> and
+<function>nl</function> functions. <function>Long</function> takes an
+<parameter>event</parameter> and returns the values of
+the first <structfield>DATE</structfield> and
+<structfield>PLAC</structfield> lines in the <type>event</type>.
+
+</para> 
+
+
+
+<para> 
+
+Finally in the program is:<programlisting> 
+
+if (par, father(indi)) { 
+enqueue(ilist,par) 
+enqueue(alist,mul(2,ahnen)) 
+} 
+if (par,mother(indi)) { 
+enqueue(ilist,par) 
+enqueue(alist,add(1,mul(2,ahnen))) 
+}</programlisting> 
+
+</para> 
+
+
+
+<para> 
+
+These lines add the father and mother of the current person, if either or both are in the database, to 
+<varname>ilist</varname>. They also compute and add the parents' ahnentafel numbers to <varname>alist</varname>. A father's ahnentafel 
+number is twice that of his child. A mother's ahnentafel number is twice that of her child plus one. 
+These values are computed with the <function>mul</function> and <function>add</function> functions. 
+
+</para> 
+
+
+
+</sect1> 
+
+</chapter><chapter> 
+
+<title> 
+
+<application>LIFELINES</application> PROGRAMMING REFERENCE 
+
+</title> 
+
+
+
+<para> 
+
+<application>LifeLines</application> programs are stored in files you edit with a screen editor. Programs are not edited from within 
+the <application>LifeLines</application> program; edit them as you would any text file. The programs may be stored in any 
+directories; they do not have to be kept in or associated with <application>LifeLines</application> databases. You may set the 
+<envar>LLPROGRAMS</envar> shell variable to hold a list of directories that <application>LifeLines</application> will use to automatically 
+search for programs when you request program execution. 
+
+</para> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+Procedures and Functions 
+
+</title> 
+
+
+
+<para> 
+
+A <application>LifeLines</application> program is made up of one or more <type>procedures</type> and <type>functions</type>. A <type>procedure</type> has format:<synopsis>proc name ( params ) { statements }</synopsis> 
+
+</para> 
+
+
+
+<para> 
+
+<symbol>Name</symbol> is the name of the <type>procedure</type>, <symbol>params</symbol> is an optional list of <type>parameters</type> separated by commas, 
+and <symbol>statements</symbol> is a list of statements that make up the <type>procedure</type> body. Report generation begins with 
+the first <type>statement</type> in the <type>procedure</type> named <literal>main</literal>. <type>Procedures</type> may call other <type>procedures</type> and <type>functions</type>. 
+<type>Procedures</type> are called with the <type>call</type> statement described below.When a <type>procedure</type> is called, the 
+<type>statements</type> making up its <type>body</type> are executed. 
+
+</para> 
+
+
+
+<para> 
+
+A function has format:<synopsis>func name ( params ) { statements }</synopsis> 
+
+</para> 
+
+
+
+<para> 
+
+<symbol>Name</symbol>, <symbol>params</symbol> and <symbol>statements</symbol> are defined as in <type>procedures</type>. <type>Functions</type> may call other <type>procedures</type> and 
+<type>functions</type>. When a <type>function</type> is called the <type>statements</type> that make it up are executed. A <type>function</type> differs from 
+a <type>procedure</type> by returning a <type>value</type> to the <type>procedure</type> or <type>function</type> that calls it. Values are returned by the 
+<type>return</type> statement, described below. <type>Recursive functions</type> are allowed. A <type>function</type> is called by invoking it 
+in an <type>expression</type>. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+Comments 
+
+</title> 
+
+
+
+<para> 
+
+You may comment your <application>LifeLines</application> programs using the following notation:<programlisting> 
+
+/*...comment text including any characters except */... */</programlisting> 
+
+</para> 
+
+
+
+<para> 
+
+Comments begin with a <literal>/*</literal> and end with a <literal>*/</literal>. Comments may appear on lines of their own or on lines 
+that have program constructs. Comments may span many lines. Comments may not be nested. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+Statements 
+
+</title> 
+
+
+
+<para> 
+
+     There are a number of <type>statement</type> types. The 
+     simplest is an <type>expression</type> statement, an 
+     expression that is not part of any other 
+     <type>statement</type> or 
+     <type>expression</type>. <type>Expressions</type> are defined 
+     more fully below. An <type>expression</type> statement is 
+     evaluated, and if its value is 
+     <returnvalue>non-null</returnvalue> (non-zero), it is assumed 
+     to be a <type>string</type>, and written to the program output 
+     file. If its value is <returnvalue>null</returnvalue>, nothing 
+     is written to the output file. For example, the expression 
+     <synopsis>name(indi)</synopsis>, where <symbol>indi</symbol> 
+     is a person, returns the person's name and writes it to the 
+     output file. On the other hand, the expression 
+     <synopsis>set(n, nspouses(indi))</synopsis> assigns the 
+     variable <varname>n</varname> the number of spouses that 
+     person <varname>indi</varname> has, but since 
+     <function>set</function> returns 
+     <returnvalue>null</returnvalue>, nothing is written to the 
+     output file. 
+
+</para> 
+
+
+
+<para> 
+
+     The programming language includes <type>if</type> statements, 
+     <type>while</type> statements and <type>procedure call</type> 
+     statements, with the following formats: 
+
+     <synopsis>if ([varb,] expr) { statements }  
+               [ elsif ([varb], expr) { statements } ]* 
+                    [ else { statements } ] 
+     </synopsis> 
+
+     <synopsis>while ([varb,] expr ) { statements }</synopsis> 
+
+     <synopsis>call name ( args )</synopsis> 
+
+</para> 
+
+
+
+<para> 
+
+Square brackets indicate optional parts of the statement syntax. An <type>if</type> statement is executed by first 
+evaluating the conditional expression in the <type>if</type> clause. If <returnvalue>non-zero</returnvalue>, the statements in the <type>if</type> clause are 
+evaluated, and the rest of the <type>if</type> statement, if any, is ignored. If the value is <returnvalue>zero</returnvalue>, and there is an <type>elsif</type> 
+clause following, the conditional in the <type>elsif</type> clause is evaluated, and if <returnvalue>non-zero</returnvalue>, the statements in 
+that clause are executed. <type>Conditionals</type> are evaluated until one of them is <returnvalue>non-zero</returnvalue>, or until there are no 
+more. If no conditional is <returnvalue>non-zero</returnvalue>, and if the <type>if</type> statement ends with an <type>else</type> clause, the statements in 
+the <type>else</type> clause are executed. There are two forms of <type>conditional</type> expressions. If the <type>conditional</type> is a 
+single <type>expression</type>, it is simply evaluated. If the <type>conditional</type> is a <type>variable</type> followed by an <type>expression</type>, the 
+<type>expression</type> is evaluated and its value is assigned to the variable. 
+
+</para> 
+
+<para> 
+
+Note that <type>if</type> treats null strings as false, but empty strings as true. This has the benefit that 
+
+<programlisting> 
+if(birth(indi)) 
+</programlisting> 
+
+will return true if there is a BIRT record, even if it is empty, but will return false if there is no BIRT record 
+at all. 
+
+</para> 
+
+<para> 
+
+The <type>while</type> statement provides a looping mechanism. The <type>conditional</type> is evaluated, and if <returnvalue>non-zero</returnvalue>, the 
+<type>body</type> of the loop is executed. After each iteration the <type>expression</type> is reevaluated; as long as it remains 
+<returnvalue>non-zero</returnvalue>, the loop is repeated. 
+
+
+</para> 
+
+
+
+<para> 
+
+The <type>call</type> statement provides procedure calls. <symbol>Name</symbol> must match one of the <type>procedures</type> defined in the 
+report program. <symbol>Args</symbol> is a list of <type>argument</type> expressions separated by commas. <type>Recursion</type> is allowed. 
+When a <type>call</type> is executed, the values of its <type>arguments</type> are evaluated and used to initialize the 
+procedure's <type>parameters</type>. The <type>procedure</type> is then executed. When the <type>procedure</type> completes, execution 
+resumes with the first item after the call. 
+
+</para> 
+
+
+
+<para> 
+
+The report language also includes the following statement types:<synopsis>include(string)</synopsis><synopsis>global(varb) 
+</synopsis><synopsis>set(varb, expr) 
+</synopsis><synopsis>continue() 
+</synopsis><synopsis>break() 
+</synopsis><synopsis>return([expr])</synopsis> 
+
+</para> 
+
+
+
+<para> 
+
+The <type>include</type> statement includes the contents of another file into the current file; its <parameter>string</parameter> expression is 
+the name of another <application>LifeLines</application> program file. It is described in more detail below. The <type>global</type> statement 
+must be used outside the scope of any <type>procedure</type> or <type>function</type>; it declares a <parameter>variable</parameter> to have global scope. 
+The <type>set</type> statement is the assignment statement; the <parameter>expression</parameter> is evaluated, and its value is assigned 
+to the <parameter>variable</parameter>. The <type>continue</type> statement jumps to the bottom of the current loop, but does not leave the 
+loop. The <type>break</type> statement breaks out of the most closely nested loop. The <type>return</type> statement returns from 
+the current <type>procedure</type> or <type>function</type>. <type>Procedures</type> have return statements without expressions; <type>functions</type> 
+have return statements with expressions. None of these statements return a value, so none has a direct 
+effect on program output. 
+
+
+</para> 
+
+
+
+<para> 
+
+In addition to these conventional statements, the report generator provides other iterator statements 
+for looping through genealogical and other types of data. For example, the <type>children</type> statement 
+iterates through the children of a family, the <type>spouses</type> statement iterates through the spouses of a 
+person, and the <type>families</type> statement iterates through the families that a person is a spouse or parent in. 
+These iterators and others are described in more detail later under the appropriate data types. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+Expressions 
+
+</title> 
+
+
+
+<para> 
+
+There are four types of expressions: <type>literals</type>, <type>integers</type>, <type>variables</type> and built-in or user defined function 
+<type>calls</type>. 
+
+
+</para> 
+
+
+
+<para> 
+
+A <type>literal</type> is any string enclosed in double quotes; its value is itself. An <type>integer</type> is any integer constant; 
+its value is itself. A <type>variable</type> is a named location that can be assigned different values during program 
+execution. The value of a <type>variable</type> is the last value assigned to it. <type>Variables</type> do not have fixed type; at 
+different times in a program, the same <type>variable</type> may be assigned data of completely different types. An 
+identifier followed by comma-separated list of expressions enclosed in parentheses, is either a <type>call</type> to a 
+built-in function or a <type>call</type> to a user-defined function. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+Include Feature 
+
+</title> 
+
+
+
+<para> 
+
+The <application>LifeLines</application> programming language provides an <type>include</type> feature. Using this feature one <application>LifeLines</application> 
+program can refer to other <application>LifeLines</application> programs. This feature is provided by the include statement:<synopsis>include(string)</synopsis>where <symbol>string</symbol> is a quoted string that is the name of another <application>LifeLines</application> program file. When an include 
+statement is encountered, the program that it refers to is read at that point, exactly as if the contents of 
+included file had been in the body of the original file at that point. This allows you to create <application>LifeLines</application> 
+program library files that can be used by many programs. Included files may in turn contain <type>include</type> 
+statements, and so on to any depth. <application>LifeLines</application> will use the <envar>LLPROGRAMS</envar> shell variable, if set, to 
+search for the <type>include</type> files. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+Built-in Functions 
+
+</title> 
+
+
+
+<para> 
+
+There is a long list of <type>built-in functions</type>, and this list will continue to grow for some time. The first 
+subsection below describes the value types used in <application>LifeLines</application> programs; these are the types of <type>variables</type>, 
+<type>function parameters</type> and <type>function return values</type>. In the remaining sections the <type>built-in functions</type> are 
+separated into logical categories and described. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+Value Types 
+
+</title> 
+
+<glosslist><glossentry><glossterm><type>ANY</type></glossterm><glossdef> 
+
+<para> 
+
+union of all types 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><type>INT</type></glossterm><glossdef> 
+
+<para> 
+
+integer (on most systems a 32-bit signed value) 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><type>BOOL</type></glossterm><glossdef> 
+
+<para> 
+
+boolean (0 represents false; anything else represents true) 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><type>STRING</type></glossterm><glossdef> 
+
+<para> 
+
+text string 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><type>LIST</type></glossterm><glossdef> 
+
+<para> 
+
+arbitrary length list of any values 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><type>TABLE</type></glossterm><glossdef> 
+
+<para> 
+
+keyed look-up table 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><type>INDI</type></glossterm><glossdef> 
+
+<para> 
+
+person; reference to a <acronym>GEDCOM</acronym> INDI record 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><type>FAM</type></glossterm><glossdef> 
+
+<para> 
+
+family; reference to a <acronym>GEDCOM</acronym> FAM record 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><type>SET</type></glossterm><glossdef> 
+
+<para> 
+
+arbitrary length set of persons 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><type>NODE</type></glossterm><glossdef> 
+
+<para> 
+
+<acronym>GEDCOM</acronym> node; reference to a line in a <acronym>GEDCOM</acronym> tree/record 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><type>EVENT</type></glossterm><glossdef> 
+
+<para> 
+
+event; reference to substructure of nodes in a <acronym>GEDCOM</acronym> record 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><type>VOID</type></glossterm><glossdef> 
+
+<para> 
+
+type with no values 
+
+</para> 
+
+</glossdef></glossentry></glosslist> 
+
+<para> 
+
+In the summaries of <type>built-in functions</type> below, each function is shown with its <type>argument</type> types and its 
+<type>return</type> type. The types are from the preceding list. Sometimes an <type>argument</type> to a <type>built-in function</type> must be 
+a <type>variable</type>; when this is so its type is given as <varname>XXX_V</varname>, where <symbol>XXX</symbol> is one of the types above. The 
+<type>built-ins</type> do not check the types of their <type>arguments</type>. <type>Variables</type> can hold values of any type, though at 
+any one time they will hold values of only one type. Note that <type>EVENT</type> is a subtype of <type>NODE</type>, and 
+<type>BOOL</type> is a subtype of <type>INT</type>. Built-ins with type <type>VOID</type> actually return <returnvalue>null</returnvalue> (zero) values. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+Arithmetic and Logic Functions 
+
+</title> 
+
+
+      <glosslist>
+	<glossentry>
+	  <glossterm>
+	    <funcsynopsis>
+	      <funcprototype>
+		<funcdef>INT
+		<function>
+		  add
+		</function>
+	      </funcdef>
+	      <paramdef>
+		<parameter>INT</parameter>
+		<parameter>INT</parameter>
+		<parameter>...</parameter>
+	      </paramdef>
+	      </funcprototype>
+	    </funcsynopsis>
+	  </glossterm>
+	  <glossdef> 
+	    
+<para> 
+
+addition - two to 32 arguments 
+
+</para> 
+
+
+	      
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INT <function>sub</function></funcdef><paramdef><parameter>INT</parameter><parameter>INT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+subtraction 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INT <function>mul</function></funcdef><paramdef><parameter>INT</parameter><parameter>INT</parameter><parameter>...</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+multiplication - two to 32 arguments 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INT <function>div</function></funcdef><paramdef><parameter>INT</parameter><parameter>INT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+division 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INT <function>mod</function></funcdef><paramdef><parameter>INT</parameter><parameter>INT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+modulus (remainder) 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INT <function>exp</function></funcdef><paramdef><parameter>INT</parameter><parameter>INT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+exponentiation 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INT <function>neg</function></funcdef><paramdef><parameter>INT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+integer negation 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>incr</function></funcdef><paramdef><parameter>INT_V</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+increment variable by one 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>decr</function></funcdef><paramdef><parameter>INT_V</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+decrement variable by one 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>BOOL <function>and</function></funcdef><paramdef><parameter>BOOL</parameter><parameter>BOOL</parameter><parameter>...</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+logical and - two to 32 arguments 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>BOOL <function>or</function></funcdef><paramdef><parameter>BOOL</parameter><parameter>BOOL</parameter><parameter>...</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+logical or - two to 32 arguments 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>BOOL <function>not</function></funcdef><paramdef><parameter>BOOL</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+logical not 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>BOOL <function>eq</function></funcdef><paramdef><parameter>ANY</parameter><parameter>ANY</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+equality (not strings) 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>BOOL <function>ne</function></funcdef><paramdef><parameter>ANY</parameter><parameter>ANY</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+non-equality 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>BOOL <function>lt</function></funcdef><paramdef><parameter>ANY</parameter><parameter>ANY</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+less than 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>BOOL <function>gt</function></funcdef><paramdef><parameter>ANY</parameter><parameter>ANY</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+greater than 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>BOOL <function>le</function></funcdef><paramdef><parameter>ANY</parameter><parameter>ANY</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+less than or equal 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>BOOL <function>ge</function></funcdef><paramdef><parameter>ANY</parameter><parameter>ANY</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+greater than or equal 
+
+</para> 
+
+</glossdef></glossentry></glosslist> 
+
+<para> 
+
+<function>Add</function>, <function>sub</function>, <function>mul</function> and <function>div</function> do integer arithmetic. Functions <function>add</function> and <function>mul</function> can have two to 32 arguments; 
+the sum or product of the full set of arguments is computed. Functions <function>sub</function> and <function>div</function> have two arguments 
+each; <function>sub</function> subtracts its second argument from its first, and <function>div</function> divides its first argument by its second. 
+The <function>mod</function> function returns the remainder after dividing the first parameter by the second. If the second 
+argument to <function>div</function> or <function>mod</function> is zero, these functions return 0 and generate a run time error. <function>Exp</function> performs 
+integer exponentiation. <function>Neg</function> negates its argument. 
+
+</para> 
+
+
+
+<para> 
+
+<function>Incr</function> and <function>decr</function> increment by one and decrement by one, respectively, the value of a variable. The 
+argument to both functions must be a variable. 
+
+</para> 
+
+
+
+<para> 
+
+<function>And</function> and <function>or</function> do logical operations. Both functions take two to 32 arguments. All arguments are and'ed or 
+or'ed together, respectively. The arguments are evaluated from left to right, but only up to the point 
+where the final value of the function becomes known. <function>Not</function> does the logical not operation. 
+
+</para> 
+
+
+
+<para> 
+
+<function>Eq</function>, <function>ne</function>, <function>lt</function>, <function>le</function>, <function>gt</function> and <function>ge</function> evaluate the six ordering relationships between two integers. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+Person Functions 
+
+</title> 
+
+      <glosslist>
+	<glossentry>
+	  <glossterm>
+	    <funcsynopsis>
+	      <funcprototype>
+		<funcdef>STRING
+
+		  <function>name
+		  </function>
+		</funcdef>
+		<paramdef>
+		  <parameter>INDI
+		  </parameter>
+		  <parameter>
+	    <replaceable>BOOL
+	    </replaceable>
+	  </parameter>
+	  </paramdef>
+	  </funcprototype>
+	  </funcsynopsis>
+	  </glossterm>
+
+	  <glossdef>
+
+<para> 
+
+default name of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>fullname</function></funcdef><paramdef><parameter>INDI</parameter><parameter>BOOL</parameter><parameter>BOOL</parameter><parameter>INT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+many name forms of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>surname</function></funcdef><paramdef><parameter>INDI</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+surname of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>givens</function></funcdef><paramdef><parameter>INDI</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+given names of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>trimname</function></funcdef><paramdef><parameter>INDI</parameter><parameter>INT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+trimmed name of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>EVENT <function>birth</function></funcdef><paramdef><parameter>INDI</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+first birth event of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>EVENT <function>death</function></funcdef><paramdef><parameter>INDI</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+first death event of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>EVENT <function>baptism</function></funcdef><paramdef><parameter>INDI</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+first baptism event of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>EVENT <function>burial</function></funcdef><paramdef><parameter>INDI</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+first burial event of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INDI <function>father</function></funcdef><paramdef><parameter>INDI</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+first father of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INDI <function>mother</function></funcdef><paramdef><parameter>INDI</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+first mother of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INDI <function>nextsib</function></funcdef><paramdef><parameter>INDI</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+next (younger) sibling of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INDI <function>prevsib</function></funcdef><paramdef><parameter>INDI</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+previous (older) sibling of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>sex</function></funcdef><paramdef><parameter>INDI</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+sex of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>BOOL <function>male</function></funcdef><paramdef><parameter>INDI</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+male predicate 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>BOOL <function>female</function></funcdef><paramdef><parameter>INDI</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+female predicate 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>pn</function></funcdef><paramdef><parameter>INDI</parameter><parameter>INT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+pronoun referring to 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INT <function>nspouses</function></funcdef><paramdef><parameter>INDI</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+number of spouses of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INT <function>nfamilies</function></funcdef><paramdef><parameter>INDI</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+number of families (as spouse/parent) of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>FAM <function>parents</function></funcdef><paramdef><parameter>INDI</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+first parents' family of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>title</function></funcdef><paramdef><parameter>INDI</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+first title of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>key</function></funcdef><paramdef><parameter>INDI|FAM</parameter><parameter><replaceable>BOOL</replaceable></parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+internal key of (work for families also) 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>soundex</function></funcdef><paramdef><parameter>INDI</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+SOUNDEX code of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>NODE <function>inode</function></funcdef><paramdef><parameter>INDI</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+root GEDCOM node of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>NODE <function>root</function></funcdef><paramdef><parameter>INDI</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+root GEDCOM node of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INDI <function>indi</function></funcdef><paramdef><parameter>STRING</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+find person with key value 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INDI <function>firstindi</function></funcdef><void/></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+first person in database in key order 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INDI <function>lastindi</function></funcdef><void/></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+last person in database in key order 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INDI <function>nextindi</function></funcdef><paramdef><parameter>INDI</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+next person in database in key order 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INDI <function>previndi</function></funcdef><paramdef><parameter>INDI</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+previous person in database in key order 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><synopsis><command>spouses</command> (<replaceable>INDI</replaceable>, <replaceable>INDI</replaceable>, <replaceable>FAM</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef> 
+
+<para> 
+
+loop through all spouses of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><synopsis><command>families</command> (<replaceable>INDI</replaceable>, <replaceable>FAM</replaceable>, <replaceable>INDI</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef> 
+
+<para> 
+
+loop through all families (as spouse) of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><synopsis><command>forindi</command> (<replaceable>INDI</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef> 
+
+<para> 
+
+loop through all persons in database 
+
+</para> 
+
+</glossdef></glossentry></glosslist> 
+
+<para> 
+
+These functions take a person as a parameter and return information about him or her. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Name</function> returns the default name of a person; this is the name found on the first <structfield>1 NAME</structfield> line in the 
+person's record; the slashes are removed and the surname is made all capitals; <function>name</function> can take an 
+optional second parameter - if it is <returnvalue>true</returnvalue> the function acts as described above; if <returnvalue>false</returnvalue>, the surname is 
+kept exactly as it is in the record. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Fullname</function> returns the name of a person in a variety of formats. If the second parameter is <returnvalue>true</returnvalue> the 
+surname is shown in upper case; otherwise the surname is as in the record. If the third parameter is 
+<returnvalue>true</returnvalue> the parts of the name are shown in the order as found in the record; otherwise the surname is given 
+first, followed by a comma, followed by the other name parts. The fourth parameter specifies the 
+maximum length field that can be used to show the name; various conversions occur if it is necessary to 
+shorten the name to fit this length. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Surname</function> returns the surname of the person, as found in the first <structfield>1 NAME</structfield> line; the slashes are 
+removed. <function>Givens</function> returns the given names of the person in the same order and format as found in the 
+first <structfield>1 NAME</structfield> line of the record. <function>Trimname</function> returns the default name of the person trimmed to the 
+maximum character length given in the second variable. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Birth</function>, <function>death</function>, <function>baptism</function> and <function>burial</function> return the first birth, death, baptism and burial event in the 
+person's record, respectively. An event is a level <structfield>1 GEDCOM</structfield> node. If there is no matching event these 
+functions return <returnvalue>null</returnvalue>. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Father</function>, <function>mother</function>, <function>nextsib</function> and <function>prevsib</function> return the father, mother, next younger sibling and next older 
+sibling of the person, respectively. If the person has more than one father (mother) the <function>father</function> 
+(<function>mother</function>) function returns the first one. These functions return <returnvalue>null</returnvalue> if there is no person in the role. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Sex</function> returns the person's sex as the string <returnvalue>M</returnvalue> if the person is male, <returnvalue>F</returnvalue> if the person is female, or <returnvalue>U</returnvalue> if the 
+sex of the person is not known. <function>Male</function> and <function>female</function> return <returnvalue>true</returnvalue> if the person is male or female, 
+respectively, or <returnvalue>false</returnvalue> if not. 
+
+</para> 
+
+
+
+<para> 
+
+<function>Pn</function> generates pronouns, useful when generating English text; the second parameter selects the type of 
+pronoun:<variablelist><varlistentry><term>0</term><listitem> 
+
+<para> 
+
+He/She 
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>1</term><listitem> 
+
+<para> 
+
+he/she 
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>2</term><listitem> 
+
+<para> 
+
+His/Her 
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>3</term><listitem> 
+
+<para> 
+
+his/her 
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>4</term><listitem> 
+
+<para> 
+
+him/her 
+
+</para> 
+
+</listitem></varlistentry></variablelist> 
+
+</para> 
+
+
+
+<para> 
+
+<function>Nspouses</function> returns the number of spouses the person has in the database, and <function>nfamilies</function> returns the 
+number of families the person is a parent/spouse in; these two values are not necessarily the same. 
+<function>Parents</function> returns the first family that the person is a child in. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Title</function> returns the value of the first <structfield>1 TITL</structfield> line in the record. <function>Key</function> returns the key value of a person or 
+family; it there is a second parameter and it is non-null, the leading <literal>I</literal> or <literal>F</literal> will be stripped. <function>Soundex</function> 
+returns the Soundex code of the person. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Root</function> and <function>Inode</function> return the root node of the person's <acronym>GEDCOM</acronym> node tree. Note that an <type>INDI</type> value is 
+not a <type>NODE</type> value. If you want to process the nodes within a person node tree, you must first use the 
+<function>root</function> or <function>inode</function> function to get the root of the person node tree. <function>Root</function> and <function>inode</function> are synonyms. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Indi</function> returns the person who's key is passed as an argument; if no person has the key <function>indi</function> returns <returnvalue>null</returnvalue>. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Firstindi</function>, <function>nextindi</function> and <function>previndi</function> allow you to iterate through all persons in the database. <function>Firstindi</function> 
+returns the first person in the database in key order. <function>Nextindi</function> returns the next person after the 
+argument person in key order. <function>Previndi</function> returns the previous person before the argument person in key 
+order. 
+
+
+</para> 
+
+
+
+<para> 
+
+<command>Spouses</command> is an iterator that loops through each spouse a person has. The first argument is a person. The 
+second argument is a person variable that iterates through the first person's spouses. The third 
+argument is a family variable that iterates through the families the person and each spouse are in. 
+The fourth argument is an integer variable that counts the iterations. 
+
+
+</para> 
+
+
+
+<para> 
+
+<command>Families</command> is an iterator that loops through the families a person was a spouse/parent in. The first 
+argument is a person. The second argument is a family variable that iterates through the families the 
+first person was a spouse/parent in. The third argument iterates through the spouses from the families; 
+if there is no spouse in a particular family, the variable is set to null for that iteration. The fourth 
+argument is an integer variable that counts the iterations. 
+
+
+</para> 
+
+
+
+<para> 
+
+<command>Forindi</command> is an iterator that loops through every person in the database in ascending key order. Its first 
+parameter is a variable that iterates through the persons; its second parameter is an integer counter 
+variable that counts the persons starting at one. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+Family Functions 
+
+</title> 
+
+<glosslist><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>EVENT <function>marriage</function></funcdef><paramdef><parameter>FAM</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+first marriage event of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INDI <function>husband</function></funcdef><paramdef><parameter>FAM</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+first husband/father of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INDI <function>wife</function></funcdef><paramdef><parameter>FAM</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+first wife/mother of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INT <function>nchildren</function></funcdef><paramdef><parameter>FAM</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+number of children in 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INDI <function>firstchild</function></funcdef><paramdef><parameter>FAM</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+first child of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INDI <function>lastchild</function></funcdef><paramdef><parameter>FAM</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+last child of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>key</function></funcdef><paramdef><parameter>FAM|INDI</parameter><parameter><replaceable>BOOL</replaceable></parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+internal key of (works for persons also) 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>NODE <function>fnode</function></funcdef><paramdef><parameter>FAM</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+root GEDCOM node of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>NODE <function>root</function></funcdef><paramdef><parameter>FAM</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+root GEDCOM node of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>FAM <function>fam</function></funcdef><paramdef><parameter>STRING</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+find family from key 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>FAM <function>firstfam</function></funcdef><void/></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+first family in database in key order 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>FAM <function>lastfam</function></funcdef><void/></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+last family in database in key order 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>FAM <function>nextfam</function></funcdef><paramdef><parameter>FAM</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+next family in database in key order 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>FAM <function>prevfam</function></funcdef><paramdef><parameter>FAM</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+previous family in database in key order 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><synopsis><command>children</command> (<replaceable>FAM</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef> 
+
+<para> 
+
+loop through children of family 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><synopsis><command>forfam</command> (<replaceable>FAM_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef> 
+
+<para> 
+
+loop through all families in database 
+
+</para> 
+
+</glossdef></glossentry></glosslist> 
+
+<para> 
+
+These functions take a family as an argument and return information about it. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Marriage</function> returns the first marriage event found in the family record, if any; it returns <returnvalue>null</returnvalue> if there is 
+no marriage event. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Husband</function> returns the first husband/father of the family, if any; and <function>wife</function> returns the first 
+wife/mother of the family, if any. Each returns <returnvalue>null</returnvalue> if the requested person is not in the family. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Nchildren</function> returns the number of children in the family. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Firstchild</function> and <function>lastchild</function> return the first child and last child in a family, respectively. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Key</function> was described in the section on person functions. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Root</function> and <function>fnode</function> return the root node of a family <acronym>GEDCOM</acronym> node tree. Note that a <type>FAM</type> value is not a 
+<type>NODE</type> value. If you want to process the nodes within a family node tree, you must first use <function>root</function> or 
+<function>fnode</function> function to get the root of the family node tree. <function>Root</function> and <function>fnode</function> are synonyms. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Fam</function> returns the family who's key is passed as an argument; if no family has the key <function>fam</function> returns <returnvalue>null</returnvalue>. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Firstfam</function>, <function>nextfam</function> and <function>prevfam</function> allow you to iterate through all families in the database. <function>Firstfam</function> 
+returns the first family in the database in key order. <function>Nextfam</function> returns the next family after the 
+argument family in key order. <function>Prevfam</function> returns the previous family before the argument family in key 
+order. 
+
+
+</para> 
+
+
+
+<para> 
+
+<command>Children</command> is an iterator that loops through the children in a family. Its first parameter is a family 
+expression; its second parameter is a variable that iterates through each child; its third parameter is 
+an integer counter variable that counts the children starting at one. These two variables may be used 
+within the loop body. 
+
+
+</para> 
+
+
+
+<para> 
+
+<command>Forfam</command> is an iterator that loops through every family in the database in ascending key order. Its first 
+parameter is a variable that iterates through the families; its second parameter is an integer counter 
+variable that counts the families starting at one. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+List Functions 
+
+</title> 
+
+<glosslist><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>list</function></funcdef><paramdef><parameter>LIST_V</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+declare a list 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>BOOL <function>empty</function></funcdef><paramdef><parameter>LIST</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+check if list is empty 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>list</function></funcdef><paramdef><parameter>LIST_V</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+declare a list 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>enqueue</function></funcdef><paramdef><parameter>LIST</parameter><parameter>ANY</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+enqueue element on list 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>ANY <function>dequeue</function></funcdef><paramdef><parameter>LIST</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+dequeue and return element from list 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>requeue</function></funcdef><paramdef><parameter>LIST</parameter><parameter>ANY</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+requeue an element on list 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>push</function></funcdef><paramdef><parameter>LIST</parameter><parameter>ANY</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+push element on list 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>ANY <function>pop</function></funcdef><paramdef><parameter>LIST</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+pop and return element from list 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>setel</function></funcdef><paramdef><parameter>LIST</parameter><parameter>INT</parameter><parameter>ANY</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+array element assignment 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>ANY <function>getel</function></funcdef><paramdef><parameter>LIST</parameter><parameter>INT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+array element selection 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><synopsis><command>forlist</command> (<replaceable>LIST</replaceable>, <replaceable>ANY_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef> 
+
+<para> 
+
+loop through all elements of list 
+
+</para> 
+
+</glossdef></glossentry></glosslist> 
+
+<para> 
+
+<application>LifeLines</application> provides general purpose lists that can be accessed as queues, stacks or arrays. A list must be 
+declared with the <function>list</function> function before it can be used. 
+
+
+</para> 
+
+
+
+<para> 
+
+A list can have any number of elements. <function>Empty</function> returns <returnvalue>true</returnvalue> if the list has no elements and <returnvalue>false</returnvalue> 
+otherwise. <function>Length</function> returns the length of the list. The only parameter to both is a list. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Enqueue</function>, <function>dequeue</function> and <function>requeue</function> provide queue access to a list. <function>Enqueue</function> adds an element to the back of a 
+queue, <function>dequeue</function> removes and returns the element from the front of a queue, and <function>requeue</function> adds an element 
+to the front of a queue. The first parameter to all three is a list, and the second parameter to <function>enqueue</function> 
+and <function>requeue</function> is the value to be added to the queue and can be any value. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Push</function> and <function>pop</function> provide stack access to a list. <function>Push</function> pushes an element on the stack, and <function>pop</function> removes 
+and returns the most recently pushed element from the stack. The first parameter to both is a list, and 
+the second parameter to <function>push</function> is the value to be pushed on the stack and can be of any type. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Setel</function> and <function>getel</function> provide array access to a list. <function>Setel</function> sets a value of an array element, and <function>getel</function> 
+returns the value of an array element. The first parameter to both is a list; the second parameter to both 
+is an integer index into the array; and the third parameter to <function>setel</function> is the value to assign to the array 
+element and can be of any type. Array elements are indexed starting at one. Unassigned elements are 
+assumed to be <returnvalue>null</returnvalue> (<returnvalue>0</returnvalue>). Arrays automatically grow in size to accommodate the largest index value that 
+is used. 
+
+
+</para> 
+
+
+
+<para> 
+
+<command>Forlist</command> is an iterator that loops through the element in a list. Its first parameter is a <type>LIST</type> expression; 
+its second parameter is a variable that iterates through the list elements; and its third parameter is an 
+integer counter variable that counts the list elements starting at one. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+Table Functions 
+
+</title> 
+
+<glosslist><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>table</function></funcdef><paramdef><parameter>TABLE_V</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+declare a table 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>insert</function></funcdef><paramdef><parameter>TABLE</parameter><parameter>STRING</parameter><parameter>ANY</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+insert entry in table 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>ANY <function>lookup</function></funcdef><paramdef><parameter>TABLE</parameter><parameter>STRING</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+lookup and return entry from table 
+
+</para> 
+
+</glossdef></glossentry></glosslist> 
+
+<para> 
+
+These functions provide general purpose, keyed tables. A table must be declared with the <function>table</function> 
+function before it can be used. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Insert</function> adds an object and its key to a table. Its first parameter is a table; the second parameter is the 
+object's key; and the third parameter is the object itself. The key must be a string and the object can be 
+any value. If there already is an object in the table with that key, the old object is replaced with the 
+new. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Lookup</function> retrieves an object from a table. Its first parameter is a table, and the second parameter is the 
+object's key. The function returns the object with that key from the table; if there is no such object, <returnvalue>null</returnvalue> 
+is returned. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+GEDCOM Node Functions 
+
+</title> 
+
+<glosslist><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>xref</function></funcdef><paramdef><parameter>NODE</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+cross reference index of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>tag</function></funcdef><paramdef><parameter>NODE</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+tag of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>value</function></funcdef><paramdef><parameter>NODE</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+value of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>NODE <function>parent</function></funcdef><paramdef><parameter>NODE</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+parent node of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>NODE <function>child</function></funcdef><paramdef><parameter>NODE</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+first child of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>NODE <function>sibling</function></funcdef><paramdef><parameter>NODE</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+next sibling of 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>NODE <function>savenode</function></funcdef><paramdef><parameter>NODE</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+copy a node structure 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><synopsis><command>fornodes</command> (<replaceable>NODE</replaceable>, <replaceable>NODE_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef> 
+
+<para> 
+
+loop through child nodes 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><synopsis><command>traverse</command> (<replaceable>NODE</replaceable>, <replaceable>NODE_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef> 
+
+<para> 
+
+loop through all descendent nodes 
+
+</para> 
+
+</glossdef></glossentry></glosslist> 
+
+<para> 
+
+These functions provide access to the components of a <acronym>GEDCOM</acronym> node. All take a <acronym>GEDCOM</acronym> node as their 
+only parameter, and each returns a different value associated with the node. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Xref</function> returns the cross reference index of the node, if any; <function>tag</function> returns the tag of the node; and <function>value</function> 
+returns the value of the node, if any. If there is no cross reference, <function>xref</function> returns <returnvalue>null</returnvalue>; if there is no value, 
+value returns <returnvalue>null</returnvalue>. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Parent</function> returns the parent node of the node, if any; <function>child</function> returns the first child node of the node, if any; 
+and <function>sibling</function> returns the next sibling node of the node, if any. Whenever there is no such related node, 
+these functions return <returnvalue>null</returnvalue>. These three functions allow simple navigation through a <acronym>GEDCOM</acronym> node 
+tree. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Savenode</function> makes a copy of the node, and the substructure of nodes below the node, that is passed to it. 
+Beware: the memory used to make the copy is never returned to the system. 
+
+
+</para> 
+
+
+
+<para> 
+
+<command>Fornodes</command> is an iterator that loops through the child nodes of a <acronym>GEDCOM</acronym> node. Its first argument is a 
+node expression, and its second parameter is a variable that iterates through each direct child node of 
+the first node. 
+
+
+</para> 
+
+
+
+<para> 
+
+<command>Traverse</command> is an iterator providing a general method for traversing <acronym>GEDCOM</acronym> trees. Its first parameter is 
+a node expression; its second parameter is a variable that iterates over every node under the first node 
+in a top down, left to right manner; and its third parameter is a variable that is set to the level of the 
+current node in the iteration. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+Event and Date Functions 
+
+</title> 
+
+<glosslist><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>date</function></funcdef><paramdef><parameter>EVENT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+date of, value of first <structfield>DATE</structfield> line 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>place</function></funcdef><paramdef><parameter>EVENT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+place of, value of first <structfield>PLAC</structfield> line 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>year</function></funcdef><paramdef><parameter>EVENT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+year or, 1st string of 3-4 digits in 1st <structfield>DATE</structfield> line 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>long</function></funcdef><paramdef><parameter>EVENT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+date and place, values of 1st <structfield>DATE</structfield> and <structfield>PLAC</structfield> lines 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>short</function></funcdef><paramdef><parameter>EVENT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+date and place of, abbreviated from 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>EVENT <function>gettoday</function></funcdef><void/></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+returns the `event' of the current date 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>dayformat</function></funcdef><paramdef><parameter>INT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+set day format for stddate calls 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>monthformat</function></funcdef><paramdef><parameter>INT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+set month format for stddate calls 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>dateformat</function></funcdef><paramdef><parameter>INT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+set date format for stddate calls 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>stddate</function></funcdef><paramdef><parameter>EVENT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+date of, in current format 
+
+</para> 
+
+</glossdef></glossentry></glosslist> 
+
+<para> 
+
+These functions extract information about the dates and places of events. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Date</function> returns the value of the first <structfield>DATE</structfield> line in an event, a node in a <acronym>GEDCOM</acronym> record tree. <function>Date</function> 
+finds the first <structfield>DATE</structfield> line one level deeper than the event node. <function>Place</function> returns the value of the first 
+<structfield>PLAC</structfield> line in an event. <function>Year</function> returns the first three or four digit number in the value of the first <structfield>DATE</structfield> 
+line in an event; this number is assumed to be the year of the event. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Long</function> returns the verbatim values of the first <structfield>DATE</structfield> and <structfield>PLAC</structfield> lines in an event, catenated together 
+and separated by a comma. <function>Short</function> abbreviates information from the first <structfield>DATE</structfield> and <structfield>PLAC</structfield> lines, catenates the shortened information together with a comma separator and returns it. An abbreviated 
+date is its year; an abbreviated place is the last component in the value, further abbreviated if the 
+component has an entry in the place abbreviation table. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Gettoday</function> creates an event that has today's date in the <structfield>DATE</structfield> line. 
+
+
+</para> 
+
+
+
+<para> 
+
+The last four functions are used to format dates in a variety of ways. 
+<function>Dayformat</function>, <function>monthformat</function>, and 
+<function>dateformat</function> select style options for formatting the day, 
+month, and overall date structure; <function>stddate</function> 
+returns dates in the selected style. The day format codes passed to 
+<function>dayformat</function> are: 
+
+<variablelist><varlistentry><term>0</term><listitem> 
+
+<para> 
+
+leave space before single digit days 
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>1</term><listitem> 
+
+<para> 
+
+use leading 0 before single digit days 
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>2</term><listitem> 
+
+<para> 
+
+no space or leading 0 before single digit days 
+
+</para> 
+
+</listitem></varlistentry></variablelist> 
+
+</para> 
+
+
+
+<para> 
+
+The month format codes passed to <function>monthformat</function> are:<variablelist><varlistentry><term>0</term><listitem> 
+
+<para> 
+
+number with space before single digit months 
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>1</term><listitem> 
+
+<para> 
+
+number with leading zero before single digit months 
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>2</term><listitem> 
+
+<para> 
+
+number with no space or zero before single digit months 
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>3</term><listitem> 
+
+<para> 
+
+upper case abbreviation (eg, JAN, FEB) 
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>4</term><listitem> 
+
+<para> 
+
+capitalized abbreviation (eg, Jan, Feb) 
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>5</term><listitem> 
+
+<para> 
+
+upper case full word (eg, JANUARY, FEBRUARY) 
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>6</term><listitem> 
+
+<para> 
+
+capitalized full word (eg, January, February) 
+
+</para> 
+
+</listitem></varlistentry></variablelist> 
+
+</para> 
+
+
+
+<para> 
+
+The full date formats passed to <function>stddate</function> are: 
+
+<variablelist><varlistentry><term>0</term><listitem> 
+
+<para> 
+
+da mo yr 
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>1</term><listitem> 
+
+<para> 
+
+mo da, yr 
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>2</term><listitem> 
+
+<para> 
+
+mo/da/yr 
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>3</term><listitem> 
+
+<para> 
+
+da/mo/yr 
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>4</term><listitem> 
+
+<para> 
+
+mo-da-yr 
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>5</term><listitem> 
+
+<para> 
+
+da-mo-yr 
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>6</term><listitem> 
+
+<para> 
+
+modayr 
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>7</term><listitem> 
+
+<para> 
+
+damoyr 
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>8</term><listitem> 
+
+<para> 
+
+yr mo da 
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>9</term><listitem> 
+
+<para> 
+
+yr/mo/da 
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>10</term><listitem> 
+
+<para> 
+
+yr-mo-da 
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>11</term><listitem> 
+
+<para> 
+
+yrmoda 
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>12</term><listitem> 
+
+<para> 
+
+yr  (year only, omitting all else) 
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>13</term><listitem> 
+
+<para> 
+
+da/mo yr 
+
+</para> 
+
+</listitem></varlistentry><varlistentry><term>14</term><listitem> 
+
+<para> 
+
+(As in GEDCOM) 
+
+</para> 
+
+</listitem></varlistentry></variablelist> 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+Value Extraction Functions 
+
+</title> 
+
+<glosslist><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>extractdate</function></funcdef><paramdef><parameter>NODE</parameter><parameter>INT_V</parameter><parameter>INT_V</parameter><parameter>INT_V</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+extract a date 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>extractnames</function></funcdef><paramdef><parameter>NODE</parameter><parameter>LIST_V</parameter><parameter>INT_V</parameter><parameter>INT_V</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+extract a name 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>extractplaces</function></funcdef><paramdef><parameter>NODE</parameter><parameter>LIST_V</parameter><parameter>INT_V</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+extract a place 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>extracttokens</function></funcdef><paramdef><parameter>STRING</parameter><parameter>LIST_V</parameter><parameter>INT_V</parameter><parameter>STRING</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+extract tokens 
+
+</para> 
+
+</glossdef></glossentry></glosslist> 
+
+<para> 
+
+Value extraction functions read the values of certain lines and return those values in extracted form. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Extractdate</function> extracts date values from either an event node 
+or <structfield>DATE</structfield> node. The first parameter must be 
+a node; if its tag is <structfield>DATE</structfield>, the date is extracted from 
+the value of that node; if its tag is not <structfield>DATE</structfield>, the 
+date is extracted from the first <structfield>DATE</structfield> line one level below the argument node. The remaining three 
+arguments are variables. The first is assigned the integer value of the extracted day; the second is 
+assigned the integer value of the extracted month; and the third is assigned the integer value of the 
+extracted year. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Extractnames</function> extracts name components from a <structfield>NAME</structfield> line. Its first argument is either an <structfield>INDI</structfield> or a 
+<structfield>NAME</structfield> node. If it is a <structfield>NAME</structfield> line, the components are extracted from the value of that node; if it is an 
+<structfield>INDI</structfield> line, the components are extracted from the value of the first <structfield>NAME</structfield> line in the person record. 
+The second argument is a list that will hold the extracted components. The third argument is an integer 
+variable that is set to the number of extracted components. The fourth argument is a variable that is set 
+to the index (starting at one) of the surname component; the <literal>/</literal> characters are removed from around the 
+surname component. If there is no surname this argument variable is set to zero. 
+
+
+</para> 
+
+
+
+<para> 
+
+     <function>Extractplaces</function> extracts place components 
+     from a <structfield>PLAC</structfield> node. The first 
+     argument is a node; if its tag is 
+     <structfield>PLAC</structfield>, the places are extracted from 
+     the value of the node; if its tag is not 
+     <structfield>PLAC</structfield>, places are extracted from the 
+     first <structfield>PLAC</structfield> line one level below the 
+     argument node. The second parameter is a list that will hold 
+     the extracted components. The third argument is an integer 
+     variable that is set to the number of extracted 
+     components. Place components are defined by the 
+     comma-separated portions of the 
+     <structfield>PLAC</structfield> value; leading and trailing 
+     white space is removed from the components, while all internal 
+     white space is retained. 
+
+</para> 
+
+
+
+<para> 
+
+     <function>Extracttokens</function> extracts tokens from a 
+     string and places them in a list. The first argument is the 
+     string to extract tokens from. The second argument is the list 
+     to hold the tokens. The third argument is an integer variable 
+     that is set to the number of tokens extracted. The fourth 
+     parameter is the string of deliminater characters that 
+     <function>extracttokens</function> uses to break the input 
+     string into tokens. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+User Interaction Functions 
+
+</title> 
+
+<glosslist><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>getindi</function></funcdef><paramdef><parameter>INDI_V</parameter><parameter><replaceable>STRING</replaceable></parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+identify person through user interface 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>getindiset</function></funcdef><paramdef><parameter>SET_V</parameter><parameter><replaceable>STRING</replaceable></parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+identify set of persons through user interface 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>getfam</function></funcdef><paramdef><parameter>FAM_V</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+identify family through user interface 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>getint</function></funcdef><paramdef><parameter>INT_V</parameter><parameter><replaceable>STRING</replaceable></parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+get integer through user interface 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>getstr</function></funcdef><paramdef><parameter>STRING_V</parameter><parameter><replaceable>STRING</replaceable></parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+get string through user interface 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INDI <function>choosechild</function></funcdef><paramdef><parameter>INDI|FAM</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+select child of person/family thru user interface 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>FAM <function>choosefam</function></funcdef><paramdef><parameter>INDI</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+select family person is in as spouse 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INDI <function>chooseindi</function></funcdef><paramdef><parameter>SET</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+select person from set of persons 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INDI <function>choosespouse</function></funcdef><paramdef><parameter>INDI</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+select spouse of person 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>SET <function>choosesubset</function></funcdef><paramdef><parameter>SET</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+select a subset of persons from set of persons 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INT <function>menuchoose</function></funcdef><paramdef><parameter>LIST</parameter><parameter><replaceable>STRING</replaceable></parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+select from a list of options 
+
+</para> 
+
+</glossdef></glossentry></glosslist> 
+
+<para> 
+
+These functions interact with the user to get information needed by the program. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Getindi</function> asks the user to identify a person. The first argument is a variable that is set to the person. 
+The second is an optional string to use as a prompt. <function>Getindiset</function> asks the user to identify a set of persons. 
+<function>Getfam</function> asks the user identify a family. <function>Getint</function> and <function>getstr</function> ask the user enter an integer and string, 
+respectively. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Choosechild</function> asks the user select a child of a family or person; its single argument is a person or family; 
+it return the child. <function>Choosefam</function> has the user select a family that a person is in as a spouse; its argument 
+is a person; it returns the family. <function>Chooseindi</function> has the user select one person from a set of persons; its 
+argument in a set of persons; it returns the chosen person. <function>Choosespouse</function> has the user select a spouse of a 
+person; its argument is a person; it returns the chosen spouse. <function>Choosesubset</function> has the user select a subset of 
+persons from a set of persons; its argument is the chosen subset. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Menuchoose</function> allows the user to select from an arbitrary menu. The first argument is a list of strings 
+making up the items in the menu; the second, optional argument is a prompt string for the menu; 
+<function>menuchoose</function> returns the integer index of the item selected by the user; if the user doesn't select an item, 
+<returnvalue>zero</returnvalue> is return. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+String Functions 
+
+</title> 
+
+<glosslist><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>lower</function></funcdef><paramdef><parameter>STRING</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+convert to lower case 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>upper</function></funcdef><paramdef><parameter>STRING</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+convert to upper case 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>capitalize</function></funcdef><paramdef><parameter>STRING</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+capitalize first letter 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>trim</function></funcdef><paramdef><parameter>STRING</parameter><parameter>INT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+trim to length 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>rjustify</function></funcdef><paramdef><parameter>STRING</parameter><parameter>INT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+right justify in field 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>save</function></funcdef><paramdef><parameter>STRING</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+save and return copy of string 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>strsave</function></funcdef><paramdef><parameter>STRING</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+same as save function 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>concat</function></funcdef><paramdef><parameter>STRING</parameter><parameter><replaceable>STRING</replaceable></parameter><parameter><replaceable>...</replaceable></parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+catenate two strings 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>strconcat</function></funcdef><paramdef><parameter>STRING</parameter><parameter><replaceable>STRING</replaceable></parameter><parameter><replaceable>...</replaceable></parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+catenate two strings 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INT <function>strlen</function></funcdef><paramdef><parameter>STRING</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+number of characters in string 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>substring(</function></funcdef><paramdef><parameter>STRING</parameter><parameter>INT</parameter><parameter>INT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+substring function 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INT <function>index</function></funcdef><paramdef><parameter>STRING</parameter><parameter>STRING</parameter><parameter>INT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+index function 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>d</function></funcdef><paramdef><parameter>INT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+number as decimal string 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>card</function></funcdef><paramdef><parameter>INT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+number in cardinal form (<literal>one, two, ...</literal>) 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>ord</function></funcdef><paramdef><parameter>INT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+number in ordinal form (<literal>first, second, ...</literal>) 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>alpha</function></funcdef><paramdef><parameter>INT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+convert number to Latin letter (<literal>a, b, ...</literal>) 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>roman</function></funcdef><paramdef><parameter>INT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+number in Roman numeral form (<literal>i, ii, ...</literal>) 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>strsoundex</function></funcdef><paramdef><parameter>STRING</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+find SOUNDEX value of arbitrary string 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INT <function>strtoint</function></funcdef><paramdef><parameter>STRING</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+convert numeric string to integer 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INT <function>atoi</function></funcdef><paramdef><parameter>STRING</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+convert numeric string to integer 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INT <function>strcmp</function></funcdef><paramdef><parameter>STRING</parameter><parameter>STRING</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+general string compare 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>BOOL <function>eqstr</function></funcdef><paramdef><parameter>STRING</parameter><parameter>STRING</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+compare strings for equality 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>BOOL <function>nestr</function></funcdef><paramdef><parameter>STRING</parameter><parameter>STRING</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+compare strings for inequality 
+
+</para> 
+
+</glossdef></glossentry></glosslist> 
+
+<para> 
+
+These functions provide string handling. Prior to version 3.0.6, many of them used an approach to memory management 
+chosen for absolute minimal memory footprint. A function using this approach constructed its output string in its own string 
+buffer, reusing that buffer each time it was called. When a function using this approach returned a string 
+value it returned its buffer. In consequence the strings returned by these functions were to be either used or 
+saved before the function was called again. 
+
+</para> 
+
+<para> 
+
+By the release of version 3.0.6, all string values are local copies, and the <function>save</function> and  
+<function>strsave</function> functions should be entirely unnecessary. 
+
+</para> 
+
+
+<para> 
+
+<function>Lower</function> and <function>upper</function> convert the letters in their arguments to lower or upper case, respectively. 
+<function>Capitalize</function> converts the first character of the argument, if it is a letter, to upper case. <function>Lower</function> and 
+<function>upper</function> historically used the buffer return method; <function>capitalize</function> operates on and returns its argument. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Trim</function> shortens a string to the length specified by the second parameter. If the string is already of that 
+length or shorter the string is not changed. <function>Rjustify</function> right justifies a string into another string of the 
+length specified by the second parameter. If the original string is shorter than the justified string, 
+blanks are inserted to the left of the original string; if the string is longer than the justified string, the 
+original string is truncated on the right. <function>Trim</function> historically used the buffer return method; <function>rjustify</function> creates and returns 
+a new string. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Save</function> creates a copy of the argument string and returns it. This function is required because built-in 
+functions that return strings use the buffer return method; if a string is to be used repeatedly or long after 
+it is returned from a function, it should first be saved by using the <function>save</function> function. <function>Strsave</function> is the same 
+function as <function>save</function>. With version 3.0.6 or later, this should be unnecessary. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Concat</function> and <function>strconcat</function> catenate strings and return the result. They are identical functions. They may 
+take two to 32 string arguments; null arguments are allowed. The arguments are catenated together into 
+a single, newly allocated string, which is returned. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Strlen</function> returns the length of the string argument. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Substring</function> returns a substring of the first argument string. The second and third arguments are the 
+indices of the first and last characters in the argument string to use to form the substring. The indexes are relative one. 
+<function>Substring</function> historically used the buffer return method. 
+
+</para> 
+
+
+
+<para> 
+
+<function>Index</function> returns the character index of the nth occurrence of a substring within a string. The index is the 
+relative one character offset to the beginning of the substring. The first argument is the string; the 
+second argument is the substring; and the third argument is the occurrence number. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>D</function>, <function>card</function>, <function>ord</function>, <function>alpha</function> and <function>roman</function> convert integers to strings. <function>D</function> converts an integer to a numeric string; 
+<function>card</function> converts an integer to a cardinal number string (eg, <literal>one, two, three</literal>); <function>ord</function> converts an integer to 
+an ordinal number (eg, <literal>first, second, third</literal>); <function>alpha</function> converts an integer to a letter (eg, <literal>a, b, c</literal>); and 
+<function>roman</function> converts an integer to a Roman numeral (eg, <literal>i, ii, iii</literal>). 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Strsoundex</function> converts an arbitrary string to a SOUNDEX value. Non-ASCII text characters are ignored 
+in the string. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Strtoint</function> converts a numeric string to an integer. <function>Atoi</function> is identical to <function>strtoint</function>. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Strcmp</function> compares two strings and returns an integer that is less than zero, equal to zero, or greater than 
+zero, if, respectively, the first string is lexicographically less than, equal to, or greater than the second 
+string. <function>Eqstr</function> and <function>nestr</function> return whether two strings are equal or not equal, respectively. 
+<function>Strcmp</function>, <function>Eqstr</function>, and <function>nestr</function> all treat null strings as empty strings, 
+which is to say they pretend that a null string is actually "". This means that all null and empty strings compare as equal. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+Output Mode Functions 
+
+</title> 
+
+<glosslist><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>linemode</function></funcdef><void/></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+use line output mode 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>pagemode</function></funcdef><paramdef><parameter>INT</parameter><parameter>INT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+use page output mode with given page size 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>col</function></funcdef><paramdef><parameter>INT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+position to column in output 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>row</function></funcdef><paramdef><parameter>INT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+position to row in output 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>pos</function></funcdef><paramdef><parameter>INT</parameter><parameter>INT</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+position to (row, col) coordinate in output 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>pageout</function></funcdef><void/></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+output page buffer 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>nl</function></funcdef><void/></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+newline character 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>sp</function></funcdef><void/></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+space character 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>qt</function></funcdef><void/></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+double quote character 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>newfile</function></funcdef><paramdef><parameter>STRING</parameter><parameter>BOOL</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+send program output to this file 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>outfile</function></funcdef><void/></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+return name of current program output file 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>copyfile</function></funcdef><paramdef><parameter>STRING</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+copy file contents to program output file 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>print</function></funcdef><paramdef><parameter>STRING</parameter><parameter><replaceable>STRING</replaceable></parameter><parameter><replaceable>...</replaceable></parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+print string to standard output window 
+
+</para> 
+
+</glossdef></glossentry></glosslist> 
+
+<para> 
+
+Reports can be generated in two modes, line mode and page mode. <function>Linemode</function> selects line mode and 
+<function>pagemode</function> selects page mode; line mode is the default. The first parameter to <function>pagemode</function> is the number 
+of rows per page; the second parameter is the number of columns per page. When in the line mode report 
+output is written directly to the output file as the program runs, line by line. When in page mode output 
+is buffered into pages which are written to the output file when <function>pageout</function> is called. Page mode is useful 
+for generating charts (eg, pedigree charts or box charts) where it is convenient to compute the two-dimensional 
+location of output. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Col</function> positions output to the given column. If the current column is greater than the argument, col 
+positions output to the given column on the next line. <function>Col</function> works in both modes. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Row</function> positions output to the first character in the given row; <function>row</function> can only be used in page mode. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Pos</function> positions output to a specified row and column coordinate; the first argument specifies the row, and 
+the second specifies the column. <function>Pos</function> can only be used in page mode. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Nl</function> write a new line character to the output file; <function>sp</function> writes a space character to the output file; and <function>qt</function> 
+writes a quote character to the output file. Note that <literal>\n</literal> and <literal>\'</literal> can be used within string values to 
+represent the newline and double quote characters. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Newfile</function> specifies the name of the report output file. Its first argument is the file's name; its second 
+argument is an append flag - if its value is non-zero the report appends to this file; if its value is zero 
+the report overwrites the contents of the file. <function>Newfile</function> can be called many times; this allows a single report program to generate many report output files during one execution. Programs are not required to 
+use <function>newfile</function>; if it is not used then <application>LifeLines</application> automatically asks for the name of the report output file. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Outfile</function> returns the name of the current report output file. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Copyfile</function> copies the contents of a file to the report output file; its argument is a string whose value is 
+the name of a file; if the file name is not absolute nor relative, then the <envar>LLPROGRAMS</envar> environment 
+variable, if set, will be used to search for the file; the file is opened and its contents copied to the report 
+output file. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Print</function> prints its argument string to the standard output window; <function>print</function> may have one to 32 arguments. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+Person Set Functions and GEDCOM Extraction 
+
+</title> 
+
+<glosslist><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>indiset</function></funcdef><paramdef><parameter>SET_V</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+declare a set variable 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>SET <function>addtoset</function></funcdef><paramdef><parameter>SET</parameter><parameter>INDI</parameter><parameter>ANY</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+add a person to a set 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>SET <function>deletefromset</function></funcdef><paramdef><parameter>SET</parameter><parameter>INDI</parameter><parameter>BOOL</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+remove a person from a set 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>INT <function>lengthset</function></funcdef><paramdef><parameter>SET</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+size of a set 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>SET <function>union</function></funcdef><paramdef><parameter>SET</parameter><parameter>SET</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+union of two sets 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>SET <function>intersect</function></funcdef><paramdef><parameter>SET</parameter><parameter>SET</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+intersection of two sets 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>SET <function>difference</function></funcdef><paramdef><parameter>SET</parameter><parameter>SET</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+difference of two sets 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>SET <function>parentset</function></funcdef><paramdef><parameter>SET</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+set of all parents 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>SET <function>childset</function></funcdef><paramdef><parameter>SET</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+set of all children 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>SET <function>spouseset</function></funcdef><paramdef><parameter>SET</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+set of all spouses 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>SET <function>siblingset</function></funcdef><paramdef><parameter>SET</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+set of all siblings 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>SET <function>ancestorset</function></funcdef><paramdef><parameter>SET</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+set of all ancestors 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>SET <function>descendentset</function></funcdef><paramdef><parameter>SET</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+set of all descendents 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>SET <function>descendantset</function></funcdef><paramdef><parameter>SET</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+same as descendentset; spelling 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>SET <function>uniqueset</function></funcdef><paramdef><parameter>SET</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+remove duplicates from set 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>namesort</function></funcdef><paramdef><parameter>SET</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+sort indiset by name 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>keysort</function></funcdef><paramdef><parameter>SET</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+sort indiset by key values 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>valuesort</function></funcdef><paramdef><parameter>SET</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+sort indiset by auxiliary values 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>genindiset</function></funcdef><paramdef><parameter>STRING</parameter><parameter>SET</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+generate indiset from GEDCOM name string 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>gengedcom</function></funcdef><paramdef><parameter>SET</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+generate GEDCOM file from person set 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><synopsis><command>forindiset</command> (<replaceable>SET</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>ANY_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef> 
+
+<para> 
+
+loop through all persons in person set 
+
+</para> 
+
+</glossdef></glossentry></glosslist> 
+
+<para> 
+
+These functions allow you to manipulate person sets. A person set is a potentially large set of persons; 
+each person may have an arbitrary value associated with him/her. A person set must be declared with 
+the <function>indiset</function> function before it can be used. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Addtoset</function> adds a person to a set. The first argument is the set; the second argument is the person; and 
+the third argument may be any value. The same person may be added to a set more than once, each time 
+with a different value. <function>Deletefromset</function> removes a person from a set. The first argument is the set; the 
+second argument is the person; if the third parameter is <returnvalue>true</returnvalue> all of the person's entries are removed 
+from the set; if <returnvalue>false</returnvalue> only the first entry is removed. <function>Lengthset</function> returns the number of persons in a 
+person set. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Union</function>, <function>intersect</function> and <function>difference</function> return the set union, set intersection and set difference, respectively, 
+of two person sets. Each functions takes two person sets as arguments and returns a third person set. The 
+functions do not affect the values of their two argument sets. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Parentset</function>, <function>childset</function>, <function>spouseset</function> and <function>siblingset</function> return the set of all parents, set of all children, set of 
+all spouses and set of all siblings, respectively, of the set of persons in their argument. In all cases there 
+is no change to the argument person set. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Ancestorset</function> returns the set all ancestors of all persons in the argument set. <function>Descendentset</function> returns the 
+set of all descendents of all persons in the argument set. <function>Descendantset</function> is the same as <function>descendentset</function>; it allows an alternate spelling. 
+
+</para> 
+
+
+
+<para> 
+
+<function>Uniqueset</function> sorts a person set by key value and then removes all entries with duplicate keys; the input 
+set is modified and returned. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Namesort</function>, <function>keysort</function> and <function>valuesort</function> sort a set of persons by name, by key and by associated value, 
+respectively. 
+
+</para> 
+
+
+
+<para> 
+
+Each person in a person set has an associated value. When a person is added to a set with <function>addtoset</function>, the 
+value is explicitly assigned. When new sets are created by other functions, a number of rules are used to 
+associate values with persons as they are added to the new sets. For <function>parentset</function>, <function>childset</function> and 
+<function>spouseset</function> the values are copied from the first input set person that causes the new person to be added 
+to the set. For <function>union</function>, <function>intersect</function> and <function>difference</function>, the values are copied from the values in the first input 
+set, except in the case of <function>union</function>, when persons are taken from the second set alone, in which case the 
+values come from there. For <function>ancestorset</function> and <function>descendantset</function> the value is set to the number of generations 
+the new person is away from the <emphasis>first</emphasis> person in the input set that the new person is related to. If the 
+new person is related to more than one person in the input set, the value is set for the nearest 
+relationship; that is, the value is as low as possible. <function>Valuesort</function> sorts a person set by the values of these 
+auxiliary values. 
+
+</para> 
+
+
+
+<para> 
+
+<function>Genindiset</function> generates the set of persons that matche a string whose value is a name in <acronym>GEDCOM</acronym> 
+format. <function>Genindiset</function> uses the same algorithm that matches names entered at the browse prompt or by 
+the user interaction <function>getindiset</function> function. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Gengedcom</function> generates <acronym>GEDCOM</acronym> format output, to the report output file, of all persons in the argument 
+person set. The output contains a person record for each person in the set, and all the family records that 
+link at least two of the persons in the set together. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Forindiset</function> is an iterator that loops through each person in an indiset. The first parameter is an indiset. 
+The second parameter is a variable that iterates through each person in the set. The third parameter 
+iterates through the values associated with the persons. The fourth parameter is an integer variable 
+that counts the iterations. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+Record Update Functions 
+
+</title> 
+
+<glosslist><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>NODE <function>createnode</function></funcdef><paramdef><parameter>STRING</parameter><parameter>STRING</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+create a GEDCOM node 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>addnode</function></funcdef><paramdef><parameter>NODE</parameter><parameter>NODE</parameter><parameter>NODE</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+add a node to a GEDCOM tree 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>deletenode</function></funcdef><paramdef><parameter>NODE</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+delete a node from a GEDCOM tree 
+
+</para> 
+
+</glossdef></glossentry></glosslist> 
+
+<para> 
+
+These functions allow you to modify an internal <acronym>GEDCOM</acronym> node tree. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Createnode</function> creates a <acronym>GEDCOM</acronym> node; the two arguments are tag and value strings, respectively; the 
+value string can be <returnvalue>null</returnvalue>. <function>Addnode</function> adds a node to a node tree. The first argument is the new node; the 
+second is the node in the tree that becomes the parent of the new node; the third is the node in the tree 
+that becomes the previous sibling of the new node; this argument is <returnvalue>null</returnvalue> if the new node is to become 
+the first child of the parent. <function>Deletenode</function> removes a node from a node tree. 
+
+
+</para> 
+
+
+
+<para> 
+
+These functions change the internal form of a node tree; they <emphasis>do not</emphasis> modify original records in the 
+database. These functions may be changed or extended in the future to allow database changes. Note: 
+<function>deletenode</function> has a memory leak. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+Record Linking Functions 
+
+</title> 
+
+<glosslist><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>BOOL <function>reference</function></funcdef><paramdef><parameter>STRING</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+determine if string is a cross reference 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>NODE <function>dereference</function></funcdef><paramdef><parameter>STRING</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+reference cross reference or key to node tree 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>NODE <function>getrecord</function></funcdef><paramdef><parameter>STRING</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+same as dereference 
+
+</para> 
+
+</glossdef></glossentry></glosslist> 
+
+<para> 
+
+These functions allow you to recognize values that are cross references and to read the records they refer 
+to. <function>Reference</function> returns true if its string argument is a cross reference value, that is, the internal key of 
+one of the records in the database. <function>Dereference</function> returns the node tree of the record referred to by its cross 
+reference string argument. <function>Getrecord</function> is a synonym for <function>dereference</function>. 
+
+</para> 
+
+
+
+</sect1> 
+
+
+
+<sect1> 
+
+
+
+<title> 
+
+Miscellaneous Functions 
+
+</title> 
+
+<glosslist><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>lock</function></funcdef><paramdef><parameter>INDI|FAM</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+lock a person or family in memory 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>unlock</function></funcdef><paramdef><parameter>INDI|FAM</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+unlock a person or family from memory 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>database</function></funcdef><void/></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+return name of current database 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>version</function></funcdef><void/></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+return version of <application>LifeLines</application> program 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>system</function></funcdef><paramdef><parameter>STRING</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+execute string as a UNIX shell command 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>STRING <function>getproperty</function></funcdef><paramdef><parameter>STRING</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+extract system or user property.  Function available after v3.0.5. 
+
+</para> 
+
+</glossdef></glossentry></glosslist> 
+
+<para> 
+
+<function>Lock</function> and <function>unlock</function> are used to lock a 
+person or family into <acronym>RAM</acronym> memory, and to unlock a person or family 
+from <acronym>RAM</acronym> memory, respectively. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>Database</function> returns the name of the current database, useful 
+in titling reports. <function>Version</function> returns the 
+version of the running <application>LifeLines</application> program, eg, <literal>&llversion;</literal>. 
+
+
+</para> 
+
+
+
+<para> 
+
+<function>System</function> executes its string argument as a 
+<acronym>UNIX</acronym> (or <acronym>MS-Windows</acronym> as appropriate) shell 
+command, by invoking the system shell. This will not occur if the user has 
+chosen to disallow report system calls (via the DenySystemCalls user option). 
+
+</para> 
+
+
+<para> 
+
+The <function>getproperty</function> function extracts system or user 
+properties.  Properties are named group.subgroup.property or 
+group.property.  The following keys are available at the moment: 
+</para> 
+
+      <glosslist> 
+
+     <glossentry> 
+       <glossterm><option>user.fullname</option></glossterm> 
+       <glossdef><para> 
+         The full name of the current user.  This is fetched from the 
+         system when possible. 
+       </para></glossdef> 
+     </glossentry> 
+
+     <glossentry> 
+       <glossterm><option>user.email</option></glossterm> 
+       <glossdef><para> 
+         The email address of the current user.  This is fetched 
+         from the system when possible. 
+       </para></glossdef> 
+     </glossentry> 
+   
+     <glossentry> 
+       <glossterm><option>user.address</option></glossterm> 
+       <glossdef><para> 
+         Postal address of the current user. 
+       </para></glossdef> 
+     </glossentry> 
+   
+     <glossentry> 
+       <glossterm><option>user.url</option></glossterm> 
+       <glossdef><para> 
+         URL to the users home page. 
+       </para></glossdef> 
+     </glossentry> 
+
+      </glosslist> 
+
+      <para> 
+     These values can be changed by adding values to user options. 
+     [Miscellaneous utilities->Edit the user options file] 
+      </para> 
+
+</sect1> 
+
+</chapter> 
+</book>
+
