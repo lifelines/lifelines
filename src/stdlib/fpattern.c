@@ -79,7 +79,8 @@ static const char	copyright[] =
 #endif
 #endif
 
-#if defined(unix) || defined(_unix) || defined(__unix)
+#if defined(unix) || defined(_unix) || defined(__unix) || \
+    ( defined(__MACH__) && defined(__APPLE_CC__) )
 #define UNIX	1
 #define DOS	0
 #elif defined(__MSDOS__) || defined(_WIN32)
