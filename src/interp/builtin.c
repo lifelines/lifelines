@@ -3481,3 +3481,33 @@ __free (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	return NULL;
 }
+/*=============================================+
+ * __float -- Converts a NUMBER to a FLOAT
+ *   usage: float(NUMBER) -> FLOAT
+ *============================================*/
+PVALUE
+__float (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+	PNODE arg = (PNODE) iargs(node);
+	PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
+	if (*eflg) {
+		prog_var_error(node, stab, arg, val, nonflox, "f", "1");
+		return NULL;
+	}
+	return val;
+}
+/*=============================================+
+ * __int -- Converts a NUMBER to an INT
+ *   usage: int(NUMBER) -> INT
+ *============================================*/
+PVALUE
+__int (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+	PNODE arg = (PNODE) iargs(node);
+	PVALUE val = eval_and_coerce(PINT, arg, stab, eflg);
+	if (*eflg) {
+		prog_var_error(node, stab, arg, val, nonflox, "f", "1");
+		return NULL;
+	}
+	return val;
+}

@@ -1,3 +1,8 @@
+2003-06-01 Matt Emmerton
+	* ChangeLog interp/interpi.h interp/functab.c interp/builtin.c
+
+	Add float() and int() "casting" routines
+
 2003-05-28 Steve Dum
        * ChangeLog docs/ll-devguide.html docs/ll-devguide.xml
 
