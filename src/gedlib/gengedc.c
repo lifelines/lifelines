@@ -372,13 +372,14 @@ process_any_node (CLOSURE * closure, NODE node)
 static void
 table_incr_item (TABLE tab, STRING key)
 {
-	INT * value;
-	value = access_value_int(tab, key);
-	if (value)
-		(*value)++;
-	else
+	BOOLEAN found=FALSE;
+	INT value = valueofbool_int(tab, key, &found);
+	if (found) {
+		insert_table_int(tab, key, value+1);
+	} else {
 		/* during gengedcom, all tables alloc their own keys */
 		insert_table_int(tab, strsave(key), 1);
+	}
 }
 /*===================================================================
  * add_refd_fams -- add all families in table with #refs>1 to closure

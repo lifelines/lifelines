@@ -61,9 +61,6 @@ typedef struct tag_table_iter * TABLE_ITER;
 
 
 
-INT * access_value_int(TABLE tab, STRING key);
-VPTR * access_value_ptr(TABLE tab, STRING key);
-STRING * access_value_str(TABLE tab, STRING key);
 void addref_table(TABLE tab);
 BOOLEAN begin_table(TABLE tab, TABLE_ITER tabit);
 BOOLEAN change_table_ptr(TABLE_ITER tabit, VPTR newptr);

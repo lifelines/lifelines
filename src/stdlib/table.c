@@ -35,6 +35,7 @@
 #include "llstdlib.h"
 #include "table.h"
 #include "vtable.h"
+#include "generic.h"
 
 /*********************************************
  * local enums & defines
@@ -52,9 +53,11 @@ enum TB_VALTYPE
 
 struct tag_entry {
 	STRING ekey;
+	GENERIC generic; /* holds generic null value if uval in use */
 	UNION uval;
 	ENTRY enext;
 };
+/* typedef struct tag_entry *ENTRY */
 
 /* table object itself */
 struct tag_table {
@@ -66,13 +69,13 @@ struct tag_table {
 	INT maxhash;
 	INT whattofree; /* TODO: set always in constructor */
 };
+/* typedef struct tag_table *TABLE */
 
 /*********************************************
  * local function prototypes
  *********************************************/
 
 /* alphabetical */
-static UNION* access_value_impl (TABLE tab, STRING key);
 static ENTRY fndentry(TABLE, CNSTRING);
 static void free_contents(ENTRY ent, INT whattofree);
 static void insert_table_impl(TABLE tab, CNSTRING key, UNION uval);
@@ -140,6 +143,7 @@ create_table (INT whattofree)
 {
 	TABLE tab = (TABLE) stdalloc(sizeof(*tab));
 	INT i;
+
 	memset(tab, 0, sizeof(*tab));
 	tab->vtable = &vtable_for_table;
 	/* refcount zero */
@@ -179,6 +183,23 @@ insert_table_impl (TABLE tab, CNSTRING key, UNION uval)
 		tab->entries[hval] = entry;
 		++tab->count;
 	}
+}
+/*======================================
+ * new_table_entry_impl -- Insert key & value into table
+ * Caller must have checked that key is not present
+ * Only used for new generic values (as is obvious from signature)
+ *====================================*/
+static void
+new_table_entry_impl (TABLE tab, CNSTRING key, GENERIC * generic)
+{
+	INT hval = hash(tab, key);
+	ENTRY entry = (ENTRY) stdalloc(sizeof(*entry));
+	entry->ekey = (STRING)key;
+	copy_generic_value(&entry->generic, generic);
+	entry->uval.i = 0;
+	entry->enext = tab->entries[hval];
+	tab->entries[hval] = entry;
+	++tab->count;
 }
 /*======================================
  * replace_table_impl -- Insert key & value into table
@@ -227,15 +248,26 @@ insert_table_ptr (TABLE tab, CNSTRING key, VPTR ptr)
 void
 insert_table_int (TABLE tab, CNSTRING key, INT ival)
 {
-	UNION uval;
-	uval.i = ival;
-	if (tab->valtype == TB_NULL) {
-		ASSERT(tab->whattofree==-1 || (tab->whattofree!=FREEBOTH && tab->whattofree!=FREEVALUE));
-		tab->valtype = TB_INT;
+	ENTRY entry = fndentry(tab, key);
+	if (!entry) {
+		GENERIC gen;
+		init_generic_int(&gen, ival);
+		new_table_entry_impl(tab, key, &gen);
+		return;
+	} else if (entry && !is_generic_null(&entry->generic)) {
+		set_generic_int(&entry->generic, ival);
+		return;
+	} else {
+		UNION uval;
+		uval.i = ival;
+		if (tab->valtype == TB_NULL) {
+			ASSERT(tab->whattofree==-1 || (tab->whattofree!=FREEBOTH && tab->whattofree!=FREEVALUE));
+			tab->valtype = TB_INT;
+		}
+		/* table must be homogenous, not mixed-type */
+		ASSERT(tab->valtype == TB_INT);
+		insert_table_impl(tab, key, uval);
 	}
-	/* table must be homogenous, not mixed-type */
-	ASSERT(tab->valtype == TB_INT);
-	insert_table_impl(tab, key, uval);
 }
 /*======================================
  * insert_table_str -- Insert key & STRING value into table
@@ -324,12 +356,21 @@ INT
 valueof_int (TABLE tab, CNSTRING key, INT defval)
 {
 	ENTRY entry;
-	if (!tab->count || !key) return defval;
-	ASSERT(tab->valtype == TB_INT);
-	if ((entry = fndentry(tab, key)))
-		return entry->uval.i;
-	else
+	if (!tab->count || !key) 
 		return defval;
+	if ((entry = fndentry(tab, key))) {
+		if (!is_generic_null(&entry->generic)) {
+			if (is_generic_int(&entry->generic))
+				return get_generic_int(&entry->generic);
+			else
+				return defval;
+		} else {
+			ASSERT(tab->valtype == TB_INT);
+			return entry->uval.i;
+		}
+	} else {
+		return defval;
+	}
 }
 /*===============================
  * valueof_str -- Find string value of entry
@@ -385,14 +426,23 @@ valueofbool_ptr (TABLE tab, STRING key, BOOLEAN *there)
 INT
 valueofbool_int (TABLE tab, STRING key, BOOLEAN *there)
 {
-	UNION * val = valueofbool_impl(tab, key);
-	if (val) {
-		ASSERT(tab->valtype == TB_INT);
+	ENTRY entry = fndentry(tab, key);
+	INT defval=0;
+	if (!entry) {
+		if (there)
+			*there = FALSE;
+		return defval;
+	}
+	if (there)
 		*there = TRUE;
-		return val->i;
+	if (!is_generic_null(&entry->generic)) {
+		if (is_generic_int(&entry->generic))
+			return get_generic_int(&entry->generic);
+		else
+			return defval;
 	} else {
-		*there = FALSE;
-		return 0;
+		ASSERT(tab->valtype == TB_INT);
+		return entry->uval.i;
 	}
 }
 /*===================================
@@ -412,59 +462,6 @@ valueofbool_str (TABLE tab, STRING key, BOOLEAN *there)
 		*there = FALSE;
 		return NULL;
 	}
-}
-/*===================================
- * access_value_impl -- get pointer to value
- * returns NULL if not found
- * Created: 2001/01/01, Perry Rapp
- *=================================*/
-static UNION *
-access_value_impl (TABLE tab, STRING key)
-{
-	ENTRY entry;
-	if (!tab->count || !key) return NULL;
-	if (NULL == (entry = fndentry(tab, key)))
-		return 0;
-	return &entry->uval;
-}
-/*===================================
- * access_value_ptr -- get pointer to VPTR value
- * returns NULL if not found
- * Created: 2001/06/03 (Perry Rapp)
- *=================================*/
-VPTR *
-access_value_ptr (TABLE tab, STRING key)
-{
-	UNION * val = access_value_impl(tab, key);
-	if (!val) return NULL;
-	ASSERT(tab->valtype == TB_PTR);
-	return &val->w;
-}
-/*===================================
- * access_value_int -- get pointer to int value
- * returns NULL if not found
- * Created: 2001/06/03 (Perry Rapp)
- *=================================*/
-INT *
-access_value_int (TABLE tab, STRING key)
-{
-	UNION * val = access_value_impl(tab, key);
-	if (!val) return NULL;
-	ASSERT(tab->valtype == TB_INT);
-	return &val->i;
-}
-/*===================================
- * access_value_str -- get pointer to string value
- * returns NULL if not found
- * Created: 2003/06/16 (Matt Emmerton)
- *=================================*/
-STRING *
-access_value_str (TABLE tab, STRING key)
-{
-	UNION * val = access_value_impl(tab, key);
-	if (!val) return NULL;
-	ASSERT(tab->valtype == TB_STR);
-	return &val->s;
 }
 /*=============================
  * remove_table -- Remove table
@@ -505,10 +502,13 @@ free_contents (ENTRY ent, INT whattofree)
 		if (ent->uval.w)
 			stdfree(ent->uval.w);
 	}
+	clear_generic(&ent->generic);
 }
 /*=================================================
  * traverse_table -- Traverse table doing something
  * tproc: callback for each entry
+ * callback is passed a pointer into memory owned by table
+ * so callback must not free data received
  *===============================================*/
 void
 traverse_table (TABLE tab, void (*tproc)(CNSTRING key, UNION uval))
@@ -527,6 +527,8 @@ traverse_table (TABLE tab, void (*tproc)(CNSTRING key, UNION uval))
 /*=================================================
  * traverse_table_param -- Traverse table doing something, with extra callback param
  * also, use return value of proc to allow abort (proc returns 0 for abort)
+ * callback is passed a pointer into memory owned by table
+ * so callback must not free data received
  * Created: 2001/01/01, Perry Rapp
  *===============================================*/
 void
