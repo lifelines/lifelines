@@ -1,3 +1,17 @@
+2005-01-01 Perry Rapp
+
+	*  ChangeLog build/msvc6/btedit/btedit.rc
+	build/msvc6/btedit/bteditCmd.dsp build/msvc6/btedit/resource.h
+	build/msvc6/dbverify/config.h build/msvc6/dbverify/dbVerify.rc
+	build/msvc6/dbverify/dbverifyCmd.dsp
+	build/msvc6/dbverify/resource.h build/msvc6/llexec/config.h
+	build/msvc6/llexec/llexec.dsp build/msvc6/llexec/llexec.rc
+	build/msvc6/llexec/resource.h build/msvc6/llines/config.h
+	build/msvc6/llines/llines.rc build/msvc6/llines/llinesprj.dsp
+	build/msvc6/llines/resource.h
+
+	Remove extra carriage returns from files saved in DOS mode.
+
 2005-01-01 Stephen Dum
 
         *Changelog liflines/add.c interp/builtin.c
