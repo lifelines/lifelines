@@ -265,14 +265,17 @@ insert_table_int (TABLE tab, CNSTRING key, INT ival)
 {
 	ENTRY entry = fndentry(tab, key);
 	if (!entry) {
+		/* insert new entries as generics */
 		GENERIC gen;
 		init_generic_int(&gen, ival);
 		new_table_entry_impl(tab, key, &gen);
 		return;
-	} else if (entry && !is_generic_null(&entry->generic)) {
+	} else if (!is_generic_null(&entry->generic)) {
+		/* if its already a generic, update the generic */
 		set_generic_int(&entry->generic, ival);
 		return;
 	} else {
+		/* if its already not a generic, update it as not a generic */
 		UNION uval;
 		uval.i = ival;
 		if (tab->valtype == TB_NULL) {
