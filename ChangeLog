@@ -9,6 +9,9 @@
 
 	* gedlib/xreffile.c: Bugfix (heap corruption).
 
+	* stdlib/path.c:
+	Isolate win32 dependencies into separate functions.
+
 2001-01-03 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/property.c liflines/askprogram.c tools/dbverify.c:
