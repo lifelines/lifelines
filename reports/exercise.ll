@@ -75,7 +75,7 @@ proc setchars()
 }
 proc finnish()
 {
-	if (not(set_and_check_locale("fi_FI", "Finnish", "Finnish"))) {
+	if (not(set_and_check_locale("fi_FI.UTF-8", "Finnish", "Finnish"))) {
 		return()
 	}
 	call check_collate(A, Z, A, Z)
@@ -84,7 +84,7 @@ proc finnish()
 }
 proc polish()
 {
-	if (not(set_and_check_locale("pl_PO", "Polish", "Polish"))) {
+	if (not(set_and_check_locale("pl_PO.UTF-8", "Polish", "Polish"))) {
 		return()
 	}
 	call check_collate(A, Z, A, Z)
@@ -93,7 +93,7 @@ proc polish()
 }
 proc spanish()
 {
-	if (not(set_and_check_locale("es", "Spanish", "Spanish"))) {
+	if (not(set_and_check_locale("es.UTF-8", "Spanish", "Spanish"))) {
 		return()
 	}
 	call check_collate(A, Z, A, Z)
