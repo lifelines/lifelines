@@ -109,9 +109,19 @@ proc testStrings()
 	}
 	else { incr(testok) }
 
-	set(str14,titlecase("big  brown 1mean horse"))
-	if(ne(str14,"Big  Brown 1mean Horse")) {
+	/* 2003-08-06 - MTE - modified to ensure that titlecase() */
+	/*                    doesn't lowercase strings first     */
+	set(str14,titlecase("big  brown 1MEAN horse"))
+	if(ne(str14,"Big  Brown 1MEAN Horse")) {
 		call reportfail("titlecase FAILED")
+	}
+	else { incr(testok) }
+
+	/* 2003-08-06 - MTE - added to ensure that capitalize() */
+	/*                    doesn't lowercase strings first   */
+	set(str15,capitalize("lower UPPER lower"))
+	if(ne(str15,"Lower UPPER lower")) {
+		call reportfail("capitalize FAILED")
 	}
 	else { incr(testok) }
 

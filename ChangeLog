@@ -1,3 +1,13 @@
+2003-08-06 Matt Emmerton
+
+	* ChangeLog src/stdlib/strcvt.c reports/st/st_string.ll
+
+	Change ll_tocapitalizez() and ll_totitlecasez() to *NOT*
+	lowercase the entire string before capitalizing.
+
+	Update string tests to fail if embedded uppercase gets
+	changed to lowercase as a result of calling these functions.
+
 2003-07-29 Perry Rapp
 
 	* ChangeLog src/liflines/screen.c

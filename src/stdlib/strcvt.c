@@ -253,7 +253,6 @@ ll_tocapitalizedz (STRING s, INT utf8)
 			wchar_t * wp;
 			/* Now zstr holds a string of wchar_t characters */
 			/* NB: sizeof(wchar_t) varies with platform */
-			wz_makelower(zstr);
 			/* capitalize first letter */
 			wp = (wchar_t *)zs_str(zstr);
 			*wp = towupper(*wp);
@@ -268,7 +267,7 @@ ll_tocapitalizedz (STRING s, INT utf8)
 			if (!zs_len(zstr)) {
 				zs_appc(zstr, (uchar)ll_toupper(*s));
 			} else {
-				zs_appc(zstr, (uchar)ll_tolower(*s));
+				zs_appc(zstr, (uchar)(*s));
 			}
 		}
 	}
@@ -297,8 +296,6 @@ ll_totitlecasez (STRING s, INT utf8)
 						/* first letter of word */
 						*wp = towupper(*wp);
 						inword = TRUE;
-					} else {
-						*wp = towlower(*wp);
 					}
 				}
 			}
@@ -320,7 +317,7 @@ ll_totitlecasez (STRING s, INT utf8)
 					zs_appc(zstr, (uchar)ll_toupper(*s));
 					inword = TRUE;
 				} else {
-					zs_appc(zstr, (uchar)ll_tolower(*s));
+					zs_appc(zstr, (uchar)(*s));
 				}
 			}
 		}
