@@ -212,8 +212,10 @@ filepath (CNSTRING name,
 		q = buf2;
 		strcpy(q, p);
 		q += strlen(q);
-		strcpy(q, LLSTRDIRSEPARATOR);
-		q++;
+		if (q>buf2 && !is_dir_sep(q[-1])) {
+			strcpy(q, LLSTRDIRSEPARATOR);
+			q++;
+		}
 		strcpy(q, name);
 		if(ext) {
 		    strcat(buf2, ext);
