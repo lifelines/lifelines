@@ -151,7 +151,6 @@ add_new_indi (RECORD indi0)
 	NODE name, refn, sex, body, dumb, node;
 	STRING key;
 	INT keynum;
-	XLAT ttmd = transl_get_predefined_xlat(MINDS);
 	NODE indi = nztop(indi0);
 
 	split_indi_old(indi, &name, &refn, &sex, &body, &dumb, &dumb);
@@ -230,7 +229,6 @@ NODE
 prompt_add_child (NODE child, NODE fam, RFMT rfmt)
 {
 	INT i;
-	XLAT ttmd = transl_get_predefined_xlat(MINDS);
 
 	if (readonly) {
 		message(_(qSronlye));
@@ -384,7 +382,6 @@ add_spouse_to_fam (NODE spouse, NODE fam, INT sex)
 {
 /* Add HUSB or WIFE node to family */
 	NODE husb, wife, chil, rest, fams, prev, fref, this, new;
-	XLAT ttmd = transl_get_predefined_xlat(MINDS);
 
 	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
 	if (sex == SEX_MALE) {

@@ -275,7 +275,6 @@ pick_create_new_family (RECORD current, RECORD save, STRING * addstrings)
 {
 	INT i;
 	RECORD rec=0;
-	XLAT xlat = transl_get_predefined_xlat(MINDS);
 
 	if (readonly) {
 		message(_(qSronlya));
@@ -832,7 +831,6 @@ prompt_add_spouse_with_candidate (RECORD fam, RECORD candidate)
 	NODE fref, husb, wife, chil, rest;
 	BOOLEAN confirm;
 	char scratch[100];
-	XLAT ttmd = transl_get_predefined_xlat(MINDS);
 	if (readonly) {
 		message(_(qSronlye));
 		return;
@@ -873,7 +871,6 @@ static void
 prompt_add_child_check_save (NODE fam, NODE save)
 {
 	char scratch[100];
-	XLAT ttmd = transl_get_predefined_xlat(MINDS);
 	if (readonly) {
 		message(_(qSronlye));
 		return;

@@ -13,6 +13,11 @@
 
 	Fix enqueue bug introduced recently by Perry.
 
+	* ChangeLog src/liflines/add.c src/liflines/browse.c
+	src/liflines/edit.c:
+
+	Remove unused variables.
+
 2002-12-16 Perry Rapp
 
 	* ChangeLog src/gedlib/xlat.c:

@@ -82,7 +82,6 @@ edit_indi (RECORD irec1)  /* may be NULL */
 	BOOLEAN emp;
 	STRING msg, key;
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
-	XLAT ttmd = transl_get_predefined_xlat(MINDS);
 
 	if (!irec1 && !(irec1 = ask_for_indi(_(qSidpedt), NOCONFIRM, NOASK1)))
 		return FALSE;
