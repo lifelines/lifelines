@@ -379,7 +379,7 @@ table_incr_item (TABLE tab, STRING key)
 		insert_table_int(tab, key, value+1);
 	} else {
 		/* during gengedcom, all tables alloc their own keys */
-		insert_table_int(tab, strsave(key), 1);
+		insert_table_int(tab, key, 1);
 	}
 }
 /*===================================================================
