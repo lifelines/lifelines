@@ -1,3 +1,7 @@
+2001-09-03 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog tools/dbverify.c: bugfix from changes yesterday.
+
 2001-09-02 Perry Rapp <puddle@users.sourceforge.net>
 
 	* .linesrc ChangeLog lines.cfg btree/addkey.c btree/block.c

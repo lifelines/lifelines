@@ -56,6 +56,7 @@ STRING btreepath = NULL;	/* normally defined in liflines/main.c */
 STRING readpath = NULL;		/* normally defined in liflines/main.c */
 BOOLEAN readonly = FALSE;	/* normally defined in liflines/main.c */
 BOOLEAN writeable = FALSE;	/* normally defined in liflines/main.c */
+BOOLEAN immutable = FALSE;  /* normally defined in liflines/main.c */
 int opt_finnish = 0;
 
 /*********************************************
@@ -884,7 +885,7 @@ main (int argc,
 	if (todo.fix_evens) todo.check_evens=TRUE;
 	if (todo.fix_othes) todo.check_othes=TRUE;
 
-	if (!(bwrite(BTR)) {
+	if (!(bwrite(BTR))) {
 		todo.fix_indis = todo.fix_fams = todo.fix_sours = FALSE;
 		todo.fix_evens = todo.fix_othes = FALSE;
 	}
