@@ -107,21 +107,21 @@ typedef struct
 static NAMEREFN_REC * alloc_namerefn(STRING namerefn, STRING key, INT err);
 static BOOLEAN cgn_callback(STRING key, STRING name, BOOLEAN newset, void *param);
 static BOOLEAN cgr_callback(STRING key, STRING refn, BOOLEAN newset, void *param);
-static BOOLEAN check_even(STRING key, RECORD nod0);
-static BOOLEAN check_fam(STRING key, RECORD nod0);
+static BOOLEAN check_even(STRING key, RECORD rec);
+static BOOLEAN check_fam(STRING key, RECORD rec);
 static void check_ghosts(void);
-static BOOLEAN check_indi(STRING key, RECORD nod0);
+static BOOLEAN check_indi(STRING key, RECORD rec);
 static void check_node(STRING key, NODE node, INT level);
 static void check_nodes(void);
-static void check_pointers(STRING key, RECORD nod0);
+static void check_pointers(STRING key, RECORD rec);
 static void check_set(INDISEQ seq, char ctype);
-static BOOLEAN check_sour(STRING key, RECORD nod0);
-static BOOLEAN check_othe(STRING key, RECORD nod0);
+static BOOLEAN check_sour(STRING key, RECORD rec);
+static BOOLEAN check_othe(STRING key, RECORD rec);
 static BOOLEAN find_xref(STRING key, NODE node, STRING tag1, STRING tag2);
 static void finish_and_delete_nameset(void);
 static void finish_and_delete_refnset(void);
 static void free_namerefn(NAMEREFN_REC * rec);
-static BOOLEAN nodes_callback(STRING key, RECORD nod0, void *param);
+static BOOLEAN nodes_callback(STRING key, RECORD rec, void *param);
 static void print_usage(void);
 static void report_error(INT err, STRING fmt, ...);
 static void report_progress(STRING fmt, ...);
@@ -346,7 +346,7 @@ cgn_callback (STRING key, STRING name, BOOLEAN newset, void *param)
 		NODE node;
 		BOOLEAN found=FALSE;
 		NODE nam, refn, sex, body, famc, fams;
-		split_indi(indi, &nam, &refn, &sex, &body, &famc, &fams);
+		split_indi_old(indi, &nam, &refn, &sex, &body, &famc, &fams);
 		for (node = nam; node; node = nsibling(node)) {
 			if (!strcmp(nval(node), name))
 				found=TRUE;
@@ -372,9 +372,9 @@ cgn_callback (STRING key, STRING name, BOOLEAN newset, void *param)
 static BOOLEAN
 cgr_callback (STRING key, STRING refn, BOOLEAN newset, void *param)
 {
-	/* a refn record which points at nod0=key */
-	RECORD nod0 = key_to_record(key, TRUE);
-	NODE node = nztop(nod0);
+	/* a refn record which points at record=key */
+	RECORD rec = key_to_record(key, TRUE);
+	NODE node = nztop(rec);
 
 	if (newset) {
 		finish_and_delete_refnset();
@@ -477,7 +477,7 @@ check_nodes (void)
 	seq_sours = create_indiseq_null();
 	seq_evens = create_indiseq_null();
 	seq_othes = create_indiseq_null();
-	traverse_db_key_nod0s(nodes_callback, NULL);
+	traverse_db_key_recs(nodes_callback, NULL);
 	/* check what we saw against delete sets */
 	check_set(seq_indis, 'I');
 	check_set(seq_fams, 'F');
@@ -496,18 +496,18 @@ check_nodes (void)
  * Created: 2001/01/14, Perry Rapp
  *===========================================*/
 static BOOLEAN
-nodes_callback (STRING key, RECORD nod0, void *param)
+nodes_callback (STRING key, RECORD rec, void *param)
 {
 	if (noisy)
 		report_progress("Node: %s", key);
 	switch (key[0]) {
-	case 'I': return todo.check_indis ? check_indi(key, nod0) : TRUE;
-	case 'F': return todo.check_fams ? check_fam(key, nod0) : TRUE;
-	case 'S': return todo.check_sours ? check_sour(key, nod0) : TRUE;
-	case 'E': return todo.check_evens ? check_even(key, nod0) : TRUE;
-	case 'X': return todo.check_othes ? check_othe(key, nod0) : TRUE;
+	case 'I': return todo.check_indis ? check_indi(key, rec) : TRUE;
+	case 'F': return todo.check_fams ? check_fam(key, rec) : TRUE;
+	case 'S': return todo.check_sours ? check_sour(key, rec) : TRUE;
+	case 'E': return todo.check_evens ? check_even(key, rec) : TRUE;
+	case 'X': return todo.check_othes ? check_othe(key, rec) : TRUE;
 	}
-	ASSERT(0); /* traverse_db_key_nod0s is broken */
+	ASSERT(0); /* traverse_db_key_recs is broken */
 	return TRUE;
 }
 /*=====================================
@@ -516,7 +516,7 @@ nodes_callback (STRING key, RECORD nod0, void *param)
  * Created: 2001/01/14, Perry Rapp
  *===================================*/
 static BOOLEAN
-check_indi (STRING key, RECORD nod0)
+check_indi (STRING key, RECORD rec)
 {
 	static char prevkey[9];
 	NODE indi1, name1, refn1, sex1, body1, famc1, fams1;
@@ -526,10 +526,10 @@ check_indi (STRING key, RECORD nod0)
 	if (eqstr(key, prevkey)) {
 		report_error(ERR_DUPINDI, "Duplicate individual for %s", key);
 	}
-	indi1 = nztop(nod0);
-	icel1 = indi_to_cacheel(indi1);
+	icel1 = indi_to_cacheel(rec);
 	lock_cache(icel1);
-	split_indi(indi1, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
+	indi1 = nztop(rec);
+	split_indi_old(indi1, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
 	/* check names */
 	for (node1 = name1; node1; node1 = nsibling(node1)) {
 		STRING name=nval(node1);
@@ -572,7 +572,7 @@ check_indi (STRING key, RECORD nod0)
 	}
 	join_indi(indi1, name1, refn1, sex1, body1, famc1, fams1);
 	unlock_cache(icel1);
-	check_pointers(key, nod0);
+	check_pointers(key, rec);
 	append_indiseq_null(seq_indis, strsave(key), NULL, TRUE, TRUE);
 	return TRUE;
 }
@@ -582,7 +582,7 @@ check_indi (STRING key, RECORD nod0)
  * Created: 2001/01/14, Perry Rapp
  *===================================*/
 static BOOLEAN
-check_fam (STRING key, RECORD nod0)
+check_fam (STRING key, RECORD rec)
 {
 	static char prevkey[9];
 	NODE fam1, fref1, husb1, wife1, chil1, rest1;
@@ -593,7 +593,7 @@ check_fam (STRING key, RECORD nod0)
 	if (eqstr(key, prevkey)) {
 		report_error(ERR_DUPFAM, "Duplicate family for %s", key);
 	}
-	fam1 = nztop(nod0);
+	fam1 = nztop(rec);
 	fcel1 = fam_to_cacheel(fam1);
 	lock_cache(fcel1);
 	split_fam(fam1, &fref1, &husb1, &wife1, &chil1, &rest1);
@@ -652,7 +652,7 @@ check_fam (STRING key, RECORD nod0)
 		report_error(ERR_SOLOFAM, "Single person family (%s)", key);
 	}
 	unlock_cache(fcel1);
-	check_pointers(key, nod0);
+	check_pointers(key, rec);
 	append_indiseq_null(seq_fams, strsave(key), NULL, TRUE, TRUE);
 	return TRUE;
 }
@@ -662,14 +662,14 @@ check_fam (STRING key, RECORD nod0)
  * Created: 2001/01/14, Perry Rapp
  *===================================*/
 static BOOLEAN
-check_sour (STRING key, RECORD nod0)
+check_sour (STRING key, RECORD rec)
 {
 	static char prevkey[9];
 	INT keynum = atoi(&key[1]);
 	if (!strcmp(key, prevkey)) {
 		report_error(ERR_DUPSOUR, "Duplicate source for %s", key);
 	}
-	check_pointers(key, nod0);
+	check_pointers(key, rec);
 	append_indiseq_null(seq_sours, strsave(key), NULL, TRUE, TRUE);
 	return TRUE;
 }
@@ -679,14 +679,14 @@ check_sour (STRING key, RECORD nod0)
  * Created: 2001/01/14, Perry Rapp
  *===================================*/
 static BOOLEAN
-check_even (STRING key, RECORD nod0)
+check_even (STRING key, RECORD rec)
 {
 	static char prevkey[9];
 	INT keynum = atoi(&key[1]);
 	if (!strcmp(key, prevkey)) {
 		report_error(ERR_DUPEVEN, "Duplicate event for %s", key);
 	}
-	check_pointers(key, nod0);
+	check_pointers(key, rec);
 	append_indiseq_null(seq_evens, strsave(key), NULL, TRUE, TRUE);
 	return TRUE;
 }
@@ -696,14 +696,14 @@ check_even (STRING key, RECORD nod0)
  * Created: 2001/01/14, Perry Rapp
  *===================================*/
 static BOOLEAN
-check_othe (STRING key, RECORD nod0)
+check_othe (STRING key, RECORD rec)
 {
 	static char prevkey[9];
 	INT keynum = atoi(&key[1]);
 	if (!strcmp(key, prevkey)) {
 		report_error(ERR_DUPOTHE, "Duplicate record for %s", key);
 	}
-	check_pointers(key, nod0);
+	check_pointers(key, rec);
 	append_indiseq_null(seq_othes, strsave(key), NULL, TRUE, TRUE);
 	return TRUE;
 }
@@ -734,14 +734,14 @@ exit_find:
 	return found;
 }
 /*=====================================
- * check_pointers -- check nod0 for bad pointers
+ * check_pointers -- check record for bad pointers
  *  and bad levels
  * 2001/01/21, Perry Rapp
  *===================================*/
 static void
-check_pointers (STRING key, RECORD nod0)
+check_pointers (STRING key, RECORD rec)
 {
-	check_node(key, nztop(nod0), 0);
+	check_node(key, nztop(rec), 0);
 }
 /*=====================================
  * check_node -- check node for bad pointers

@@ -57,7 +57,7 @@ remove_indi (NODE indi)
 	INT isex, keyint;
 	BOOLEAN found;
 
-	split_indi(indi, &name, &refn, &sex, &body, &famc, &fams);
+	split_indi_old(indi, &name, &refn, &sex, &body, &famc, &fams);
 	if (!fams) goto checkfamc;
 	isex = val_to_sex(sex);
 	ASSERT(isex != SEX_UNKNOWN);

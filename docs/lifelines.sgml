@@ -3141,7 +3141,8 @@ MISCELLANEOUS UTILITIES
 
 <PARA>
 
-If you choose the miscellaneous utilities operation, <APPLICATION>LifeLines</APPLICATION> displays the utilities menu:
+If you choose the miscellaneous utilities operation,
+<APPLICATION>LifeLines</APPLICATION> displays the utilities menu:
 <SCREEN>
 What utility do you want to perform?
   s Save the database in a GEDCOM file
@@ -3425,18 +3426,22 @@ HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS
 
 <PARA>
 
-<APPLICATION>LifeLines</APPLICATION> supports source, event and other, user-defined record types. You access these features through
-the x operation from the main menu. When you select this operation <APPLICATION>LifeLines</APPLICATION> displays the following
-menu:
+<APPLICATION>LifeLines</APPLICATION> supports source, event and other,
+user-defined record types. You access these features through
+the x operation from the main menu. When you select this operation
+<APPLICATION>LifeLines</APPLICATION> displays the following menu:
 <SCREEN>
 What activity do you want to perform?
-  1 Add a source record to the database
-  2 Edit source record from the database
-  3 Add an event record to the database
-  4 Edit event record from the database
-  5 Add an other record to the database
-  6 Edit other record from the database
-  q Return to the main menu
+  s  Browse source records
+  e  Browse event records
+  x  Browse other records
+  1  Add a source record to the database
+  2  Edit source record from the database
+  3  Add an event record to the database
+  4  Edit event record from the database
+  5  Add an other record to the database
+  6  Edit other record from the database
+  q  Return to the main menu
 </SCREEN>
 
 
@@ -3446,14 +3451,43 @@ What activity do you want to perform?
 
 <PARA>
 
-The implementation of source, event and user-defined records is relatively new in <APPLICATION>LifeLines</APPLICATION>, and is still
-primitive. For example, sources cannot be searched by title or by author, you cannot browse to sources or
-events, as you can to persons and families, and so forth. In addition, there is no way to delete these new
-records. These shortcomings may be addressed in future releases.
+The handling of source, event and user-defined records in
+<APPLICATION>LifeLines</APPLICATION> is still in development. 
+For example, sources cannot yet be searched by REFN or be
+deleted.
 
 </PARA>
 
-<GLOSSLIST><GLOSSENTRY><GLOSSTERM><KEYCAP>1</KEYCAP> <ACTION>Add a source record to the database.</ACTION></GLOSSTERM><GLOSSDEF>
+<GLOSSLIST><GLOSSENTRY><GLOSSTERM><KEYCAP>s</KEYCAP>
+<ACTION>Browse source records.</ACTION></GLOSSTERM><GLOSSDEF>
+
+<PARA>
+This will bring up a list of all source records by number, showing
+REFN, title, and author for each. A record may be selected
+from this list to edit.
+</PARA>
+
+<GLOSSLIST><GLOSSENTRY><GLOSSTERM><KEYCAP>e</KEYCAP>
+<ACTION>Browse event records.</ACTION></GLOSSTERM><GLOSSDEF>
+
+<PARA>
+This will bring up a list of all event records by number. As of
+yet this does not display any information about each event.
+(Suggestions as to how to summarize events are welcome).
+A record may be selected from this list to edit.
+</PARA>
+
+<GLOSSLIST><GLOSSENTRY><GLOSSTERM><KEYCAP>x</KEYCAP>
+<ACTION>Browse source records.</ACTION></GLOSSTERM><GLOSSDEF>
+
+<PARA>
+This will bring up a list of all other records by number,
+showing the 0 level line as summary. A record may be selected
+from this list to edit.
+</PARA>
+
+<GLOSSLIST><GLOSSENTRY><GLOSSTERM><KEYCAP>1</KEYCAP>
+<ACTION>Add a source record to the database.</ACTION></GLOSSTERM><GLOSSDEF>
 
 <PARA>
 
@@ -3507,12 +3541,14 @@ Example of a source record
 
 </PARA>
 
-</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM><KEYCAP>2</KEYCAP> <ACTION>Edit source record from the database.</ACTION></GLOSSTERM><GLOSSDEF>
+</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM><KEYCAP>2</KEYCAP>
+<ACTION>Edit source record from the database.</ACTION></GLOSSTERM><GLOSSDEF>
 
 <PARA>
 
 Use this operation to edit an existing source record already in
-the database. When you select this operation <APPLICATION>LifeLines</APPLICATION> asks you to identify a source:
+the database. When you select this operation
+<APPLICATION>LifeLines</APPLICATION> asks you to identify a source:
 <SCREEN>
 Which source record do you want to edit?
 enter key or refn:
@@ -3530,12 +3566,14 @@ value. <APPLICATION>LifeLines</APPLICATION> retrieves the record and puts you in
 
 </PARA>
 
-</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM><KEYCAP>3</KEYCAP> <ACTION>Add an event record to the database.</ACTION></GLOSSTERM><GLOSSDEF>
+</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM><KEYCAP>3</KEYCAP>
+<ACTION>Add an event record to the database.</ACTION></GLOSSTERM><GLOSSDEF>
 
 <PARA>
 
 This operation adds a new event record to the database.
-<APPLICATION>LifeLines</APPLICATION> creates a template event and puts you in the screen editor to edit the template. The default
+<APPLICATION>LifeLines</APPLICATION> automatically creates a template
+event and invokes the screen editor to edit the template. The default
 template is:<PROGRAMLISTING>
 
 0 EVEN
@@ -3549,7 +3587,13 @@ template is:<PROGRAMLISTING>
 
 </PARA>
 
+<PARA>
 
+	You may adjust the event template via the EVENREC user option (either
+	at the database level, via the user options, or globally, via the 
+	configuration file).
+
+</PARA>
 
 <PARA>
 
@@ -3564,7 +3608,7 @@ template is:<PROGRAMLISTING>
 	<ACRONYM>GEDCOM</ACRONYM> than there is with simple person and
 	family <ACRONYM>GEDCOM</ACRONYM>. You may even be wondering
 	why you would need event records when you can simply tuck
-	events away in person and family records. This is a topic may
+	events away in person and family records. This is a topic that may
 	get covered in an appendix.
 
 </PARA>
@@ -6247,9 +6291,14 @@ component has an entry in the place abbreviation table.
 
 <PARA>
 
-The last four functions are used to format dates in a variety of ways. <FUNCTION>Dayformat</FUNCTION>, <FUNCTION>monthformat</FUNCTION>, and
-<FUNCTION>dateformat</FUNCTION> select style options for formatting the day, month, and overall date structure; <FUNCTION>stddate</FUNCTION>
-returns dates in the selected style. The day format codes passed to <FUNCTION>dayformat</FUNCTION> are:<VARIABLELIST><VARLISTENTRY><TERM>0</TERM><LISTITEM>
+The last four functions are used to format dates in a variety of ways.
+<FUNCTION>Dayformat</FUNCTION>, <FUNCTION>monthformat</FUNCTION>, and
+<FUNCTION>dateformat</FUNCTION> select style options for formatting the day,
+month, and overall date structure; <FUNCTION>stddate</FUNCTION>
+returns dates in the selected style. The day format codes passed to
+<FUNCTION>dayformat</FUNCTION> are:
+
+<VARIABLELIST><VARLISTENTRY><TERM>0</TERM><LISTITEM>
 
 <PARA>
 
@@ -6345,7 +6394,9 @@ capitalized full word (eg, January, February)
 
 <PARA>
 
-The full date formats passed to <FUNCTION>stddate</FUNCTION> are:<VARIABLELIST><VARLISTENTRY><TERM>0</TERM><LISTITEM>
+The full date formats passed to <FUNCTION>stddate</FUNCTION> are:
+
+<VARIABLELIST><VARLISTENTRY><TERM>0</TERM><LISTITEM>
 
 <PARA>
 
@@ -6530,8 +6581,10 @@ Value extraction functions read the values of certain lines and return those val
 
 <PARA>
 
-<FUNCTION>Extractdate</FUNCTION> extracts date values from either an event node or <STRUCTFIELD>DATE</STRUCTFIELD> node. The first parameter must be
-a node; if its tag is <STRUCTFIELD>DATE</STRUCTFIELD>, the date is extracted from the value of that node; if its tag is not <STRUCTFIELD>DATE</STRUCTFIELD>, the
+<FUNCTION>Extractdate</FUNCTION> extracts date values from either an event node
+or <STRUCTFIELD>DATE</STRUCTFIELD> node. The first parameter must be
+a node; if its tag is <STRUCTFIELD>DATE</STRUCTFIELD>, the date is extracted from
+the value of that node; if its tag is not <STRUCTFIELD>DATE</STRUCTFIELD>, the
 date is extracted from the first <STRUCTFIELD>DATE</STRUCTFIELD> line one level below the argument node. The remaining three
 arguments are variables. The first is assigned the integer value of the extracted day; the second is
 assigned the integer value of the extracted month; and the third is assigned the integer value of the
@@ -7798,7 +7851,8 @@ extract system or user property.  Function available after v3.0.5.
 
 <PARA>
 
-<FUNCTION>Lock</FUNCTION> and <FUNCTION>unlock</FUNCTION> are used to lock a person or family into <ACRONYM>RAM</ACRONYM> memory, and to unlock a person or family
+<FUNCTION>Lock</FUNCTION> and <FUNCTION>unlock</FUNCTION> are used to lock a
+person or family into <ACRONYM>RAM</ACRONYM> memory, and to unlock a person or family
 from <ACRONYM>RAM</ACRONYM> memory, respectively.
 
 
@@ -7808,7 +7862,8 @@ from <ACRONYM>RAM</ACRONYM> memory, respectively.
 
 <PARA>
 
-<FUNCTION>Database</FUNCTION> returns the name of the current database, useful in titling reports. <FUNCTION>Version</FUNCTION> returns the
+<FUNCTION>Database</FUNCTION> returns the name of the current database, useful
+in titling reports. <FUNCTION>Version</FUNCTION> returns the
 version of the running <APPLICATION>LifeLines</APPLICATION> program, eg, <LITERAL>&llversion</LITERAL>.
 
 
@@ -7818,8 +7873,10 @@ version of the running <APPLICATION>LifeLines</APPLICATION> program, eg, <LITERA
 
 <PARA>
 
-<FUNCTION>System</FUNCTION> executes its string argument as a <ACRONYM>UNIX</ACRONYM> shell command by calling the <ACRONYM>UNIX</ACRONYM> system system
-call.
+<FUNCTION>System</FUNCTION> executes its string argument as a
+<ACRONYM>UNIX</ACRONYM> (or <ACRONYM>MS-Windows</ACRONYM> as appropriate) shell
+command, by invoking the system shell. This will not occur if the user has
+chosen to disallow report system calls (via the DenySystemCalls user option).
 
 </PARA>
 

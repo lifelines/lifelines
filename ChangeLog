@@ -1,3 +1,21 @@
+2001-11-19 Perry Rapp <puddle@users.sourceforge.net>
+
+	* .linesrc ChangeLog lines.cfg docs/lifelines.sgml
+	gedlib/charmaps.c gedlib/intrface.c gedlib/keytonod.c
+	gedlib/messages.c gedlib/node.c gedlib/remove.c
+	gedlib/replace.c gedlib/spltjoin.c gedlib/valid.c
+	gedlib/valtable.c hdrs/cache.h hdrs/gedcom.h interp/builtin.c
+	interp/interp.c interp/more.c interp/pvalue.c interp/write.c
+	liflines/add.c liflines/ask.c liflines/askprogram.c
+	liflines/browse.c liflines/delete.c liflines/edit.c
+	liflines/llinesi.h liflines/merge.c liflines/miscutls.c
+	liflines/newrecs.c liflines/scan.c liflines/screen.c
+	liflines/show.c liflines/swap.c tools/dbverify.c:
+
+	Convert remaining "nod0" to "rec" or "record".
+	Fix report prompt to not report error if you hit enter
+	(to cancel).
+
 2001-11-15 Perry Rapp <puddle@users.sourceforge.net>
 
 	* .linesrc ChangeLog lines.cfg docs/lifelines.sgml

@@ -880,7 +880,7 @@ __lastfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __getrecord (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	STRING key, rec;
+	STRING key, rawrec;
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
 	INT len;
 	if (*eflg) {
@@ -894,11 +894,11 @@ __getrecord (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 #endif
 	if (*key == 'I' || *key == 'F' || *key == 'S' ||
 	    *key == 'E' || *key == 'X') {
-		rec = retrieve_record(key, &len);
+		rawrec = retrieve_raw_record(key, &len);
 		delete_pvalue(val);
-		if (rec == NULL) return create_pvalue(PGNODE, (VPTR)NULL);
-		val = create_pvalue(PGNODE, (VPTR)string_to_node(rec));
-		stdfree(rec);
+		if (rawrec == NULL) return create_pvalue(PGNODE, (VPTR)NULL);
+		val = create_pvalue(PGNODE, (VPTR)string_to_node(rawrec));
+		stdfree(rawrec);
 		return val;
 	}
 	delete_pvalue(val);

@@ -131,8 +131,8 @@ merge_two_indis (NODE indi1,    /* two persons to merge - can't be null */
 	indi2 = copy_nodes(indi2, TRUE, TRUE);
 
 /* we split indi1 & indi2 and leave them split until near the end */
-	split_indi(indi1, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
-	split_indi(indi2, &name2, &refn2, &sex2, &body2, &famc2, &fams2);
+	split_indi_old(indi1, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
+	split_indi_old(indi2, &name2, &refn2, &sex2, &body2, &famc2, &fams2);
 	indi3 = indi2; 
 	indi2 = copy_nodes(indi2, TRUE, TRUE);
 	sx2 = SEX_UNKNOWN;
@@ -176,7 +176,7 @@ merge_two_indis (NODE indi1,    /* two persons to merge - can't be null */
 			} 
 			break;
 		}
-		if (!valid_indi(indi4, &msg, indi3)) {
+		if (!valid_indi_old(indi4, &msg, indi3)) {
 			if (ask_yes_or_no_msg(msg, iredit)) {
 				do_edit();
 				continue;
@@ -352,7 +352,7 @@ merge_two_indis (NODE indi1,    /* two persons to merge - can't be null */
 
 	indi3 = copy_nodes(indi4, TRUE, TRUE);
 
-	split_indi(indi3, &name3, &refn3, &sex3, &body3, &famc3, &fams3);
+	split_indi_old(indi3, &name3, &refn3, &sex3, &body3, &famc3, &fams3);
 	classify_nodes(&name2, &name3, &name24);
 	classify_nodes(&refn2, &refn3, &refn24);
 
@@ -387,8 +387,8 @@ merge_two_indis (NODE indi1,    /* two persons to merge - can't be null */
 /* Note - we could probably just save indi4 and delete indi02 
 	- Perry, 2000/12/06 */
 
-	split_indi(indi4, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
-	split_indi(indi02, &name2, &refn2, &sex2, &body2, &famc2, &fams2);
+	split_indi_old(indi4, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
+	split_indi_old(indi02, &name2, &refn2, &sex2, &body2, &famc2, &fams2);
 	join_indi(indi4, name2, refn2, sex2, body2, famc2, fams2);
 	join_indi(indi02, name1, refn1, sex1, body1, famc1, fams1);
 	free_nodes(indi4);
@@ -471,7 +471,7 @@ merge_two_fams (NODE fam1,
 			} 
 			break;
 		}
-		if (!valid_fam(fam4, &msg, fam3)) {
+		if (!valid_fam_old(fam4, &msg, fam3)) {
 			if (ask_yes_or_no_msg(badata, iredit)) {
 				do_edit();
 				continue;
@@ -538,7 +538,7 @@ merge_fam_links (NODE fam1, NODE fam2, NODE list1, NODE list2, INT code)
 		while (curs2 && nestr(nval(curs1), nval(curs2)))
 			curs2 = nsibling(curs2);
 		indi = key_to_indi(rmvat(nval(curs1)));
-		split_indi(indi, &name, &refn, &sex, &body, &famc, &fams);
+		split_indi_old(indi, &name, &refn, &sex, &body, &famc, &fams);
 		prev = NULL;
 		if (code == CHUSB || code == CWIFE)
 			first = this = fams;

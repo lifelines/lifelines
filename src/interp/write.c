@@ -119,11 +119,12 @@ __writeindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE indi1;
 	NODE indi2 = eval_indi(iargs(node), stab, eflg, NULL);
-	STRING rec, msg;
+	STRING rawrec, msg;
 	INT len;
 	if (*eflg) return NULL;
-	ASSERT(rec = retrieve_record(rmvat(nxref(indi2)), &len));
-        ASSERT(indi1 = string_to_node(rec));
+	ASSERT(rawrec = retrieve_raw_record(rmvat(nxref(indi2)), &len));
+        ASSERT(indi1 = string_to_node(rawrec));
+	/* LEAK -- need stdfree(rawrec) -- Perry, 2001/11/18 */
 	if (replace_indi(indi1, indi2, &msg)) {
 #ifdef DEBUG
 	llwprintf("Oh, happy days, person written to database okay.\n");
@@ -144,11 +145,12 @@ __writefam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE fam1;
 	NODE fam2 = eval_fam(iargs(node), stab, eflg, NULL);
-	STRING rec, msg;
+	STRING rawrec, msg;
 	INT len;
 	if (*eflg) return NULL;
-	ASSERT(rec = retrieve_record(rmvat(nxref(fam2)), &len));
-        ASSERT(fam1 = string_to_node(rec));
+	ASSERT(rawrec = retrieve_raw_record(rmvat(nxref(fam2)), &len));
+        ASSERT(fam1 = string_to_node(rawrec));
+	/* LEAK -- need stdfree(rawrec) -- Perry, 2001/11/18 */
 	if (replace_fam(fam1, fam2, &msg)) {
 #ifdef DEBUG
 		llwprintf("Oh, happy days, family written to database okay.\n");

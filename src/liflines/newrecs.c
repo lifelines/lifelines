@@ -365,16 +365,16 @@ nvaldiff (NODE node1, NODE node2)
 RECORD
 ask_for_record (STRING idstr, INT letr)
 {
-	RECORD nod0;
+	RECORD rec;
 	STRING str = ask_for_string(idstr, "enter key or refn: ");
 	if (!str || *str == 0) return NULL;
-	nod0 = key_possible_to_record(str, letr);
-	if (!nod0) {
+	rec = key_possible_to_record(str, letr);
+	if (!rec) {
 		INDISEQ seq;
 		seq = refn_to_indiseq(str, letr, KEYSORT);
 		if (!seq) return NULL;
-		nod0 = choose_from_indiseq(seq, NOASK1, duprfn, duprfn);
+		rec = choose_from_indiseq(seq, NOASK1, duprfn, duprfn);
 		remove_indiseq(seq);
 	}
-	return nod0;
+	return rec;
 }

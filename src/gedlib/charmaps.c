@@ -111,15 +111,15 @@ init_mapping (void)
 TRANTABLE
 init_map_from_rec (INT indx, BOOLEAN *perr)
 {
-	STRING rec;
+	STRING rawrec;
 	INT len;
 	TRANTABLE tt;
 
 	*perr = FALSE;
-	if (!(rec = retrieve_record(map_keys[indx], &len)))
+	if (!(rawrec = retrieve_raw_record(map_keys[indx], &len)))
 		return NULL;
-	tt = init_map_from_str(rec, indx, perr);
-	stdfree(rec);
+	tt = init_map_from_str(rawrec, indx, perr);
+	stdfree(rawrec);
 	return tt;
 }
 /*====================================================

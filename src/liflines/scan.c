@@ -223,7 +223,7 @@ RECORD
 refn_scan (void)
 {
 	SCAN_PATTERN patt;
-	RECORD nod0 = NULL;
+	RECORD rec = NULL;
 	STRING str;
 	INT scantype = REFNSCAN;
 
@@ -240,9 +240,9 @@ refn_scan (void)
 	traverse_refns(rs_callback, &patt);
 
 	if (length_indiseq(results_seq)) {
-		nod0 = choose_from_indiseq(results_seq, DOASK1, scanrs, scanrs);
+		rec = choose_from_indiseq(results_seq, DOASK1, scanrs, scanrs);
 	}
 	remove_indiseq(results_seq);
 	results_seq=NULL;
-	return nod0;
+	return rec;
 }

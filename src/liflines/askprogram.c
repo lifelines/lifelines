@@ -52,7 +52,7 @@ FILE *ask_for_program (STRING mode,
 #define PATHSEPARATOR ':'
 
 /* messages used */
-extern STRING extrpt, qrpt;
+extern STRING extrpt, whatrpt;
 
 /*=========================
  * The supported meta-tags.
@@ -421,6 +421,6 @@ ask_for_program (STRING mode,
   return fp;
 
 AskForString:
-  fp = ask_for_input_file(LLREADTEXT, qrpt, pfname, lloptions.llprograms, ".ll");
+  fp = ask_for_input_file(LLREADTEXT, whatrpt, pfname, lloptions.llprograms, ".ll");
   return fp;
 }

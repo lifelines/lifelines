@@ -52,12 +52,12 @@ BOOLEAN
 init_valtab_from_rec (STRING key, TABLE tab, INT sep, STRING *pmsg)
 {
 	INT len;
-	STRING rec;
+	STRING rawrec;
 	BOOLEAN rc;
 	if (!tab) return FALSE;
-	if (!(rec = retrieve_record(key, &len))) return FALSE;
-	rc = init_valtab_from_string(rec, tab, sep, pmsg);
-	stdfree(rec);
+	if (!(rawrec = retrieve_raw_record(key, &len))) return FALSE;
+	rc = init_valtab_from_string(rawrec, tab, sep, pmsg);
+	stdfree(rawrec);
 	return rc;
 }
 /*====================================================

@@ -117,7 +117,7 @@ void
 delete_indi (NODE indi, BOOLEAN conf)
 {
 	/* prompt if needed */
-	if (!indi && !(indi = ask_for_indi(idpdel, NOCONFIRM, DOASK1)))
+	if (!indi && !(indi = ask_for_indi_old(idpdel, NOCONFIRM, DOASK1)))
 		return;
 	/* confirm if caller desired */
 	if (conf && !ask_yes_or_no(cfpdel)) return;
@@ -140,7 +140,7 @@ choose_and_remove_spouse (NODE indi, NODE fam, BOOLEAN nolast)
 	}
 
 /* Identify spouse to remove */
-	if (!indi) indi = ask_for_indi(idsrmv, NOCONFIRM, NOASK1);
+	if (!indi) indi = ask_for_indi_old(idsrmv, NOCONFIRM, NOASK1);
 	if (!indi) return FALSE;
 	if (!FAMS(indi)) {
 		message(ntprnt);
@@ -179,7 +179,7 @@ choose_and_remove_child (NODE indi, NODE fam, BOOLEAN nolast)
 	}
 		
 /* Identify child and check for FAMC nodes */
-	if (!indi) indi = ask_for_indi(idcrmv, NOCONFIRM, NOASK1);
+	if (!indi) indi = ask_for_indi_old(idcrmv, NOCONFIRM, NOASK1);
 	if (!indi) return FALSE;
 	if (!FAMC(indi)) {
 		message(ntchld);

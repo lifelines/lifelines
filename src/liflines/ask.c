@@ -58,7 +58,7 @@ extern STRING nofopn,idbrws;
  *********************************************/
 
 static INDISEQ ask_for_indi_list_once(STRING, INT*);
-static NODE ask_for_indi_once(STRING, ASK1Q, INT*);
+static RECORD ask_for_indi_once(STRING, ASK1Q, INT*);
 
 /*=====================================================
  * ask_for_fam_by_key -- Ask user to identify family by
@@ -79,9 +79,9 @@ ask_for_fam (STRING pttl,
              STRING sttl)
 {
 	NODE sib, fam, prn;
-	prn = ask_for_indi(pttl, NOCONFIRM, DOASK1);
+	prn = ask_for_indi_old(pttl, NOCONFIRM, DOASK1);
 	if (!prn)  {
-		sib = ask_for_indi(sttl, NOCONFIRM, DOASK1);
+		sib = ask_for_indi_old(sttl, NOCONFIRM, DOASK1);
 		if (!sib) return NULL;
 		if (!(fam = FAMC(sib))) {
 			message(ntchld);
@@ -181,9 +181,11 @@ ask_for_file_worker (STRING mode,
 	else
 		fname = ask_for_output_filename(ttl, path, fnamebuf);
 
-	if (pfname) *pfname = fname;
+	if (pfname) *pfname = 0; /* 0 indicates we didn't try to open */
 
 	if (ISNULL(fname)) return NULL;
+
+	if (pfname) *pfname = fname;
 
 	if(ext) {
 		elen = strlen(ext);
@@ -250,13 +252,16 @@ ask_for_output_file (STRING mode,
 	return ask_for_file_worker(mode, ttl, pfname, path, ext,
 		OUTPUT);
 }
+	/* RC_DONE means user just hit enter -- interpret as a cancel */
 #define RC_DONE     0
+	/* RC_NOSELECT means user's choice couldn't be found & we gave up (& told them) */
 #define RC_NOSELECT 1
+	/* RC_SELECT means user chose something valid */
 #define RC_SELECT   2
 /*=================================================
  * ask_for_indiseq -- Ask user to identify sequence
  *  ttl:  [in] prompt (title) to display
- *  prc:  [out] result code (RC_SELECT etc)
+ *  prc:  [out] result code (RC_DONE, RC_SELECT, RC_NOSELECT)
  *===============================================*/
 INDISEQ
 ask_for_indiseq (STRING ttl, INT *prc)
@@ -277,19 +282,28 @@ ask_for_indiseq (STRING ttl, INT *prc)
 /*============================================================
  * ask_for_indi_once -- Have user identify sequence and select
  *   person
+ *  ttl:  [IN]  title to present
+ *  ask1: [IN]  whether to present list if only one matches their desc.
+ *  prc:  [OUT] result (RC_DONE, RC_SELECT, RC_NOSELECT)
  *==========================================================*/
-static NODE
-ask_for_indi_once (STRING ttl,
-                   ASK1Q ask1,
-                   INT *prc)
+static RECORD
+ask_for_indi_once (STRING ttl, ASK1Q ask1, INT *prc)
 {
-	NODE indi;
+	RECORD indi = 0;
 	INDISEQ seq = ask_for_indiseq(ttl, prc);
 	if (*prc == RC_DONE || *prc == RC_NOSELECT) return NULL;
-	indi = nztop(choose_from_indiseq(seq, ask1, ifone, notone));
+	indi = choose_from_indiseq(seq, ask1, ifone, notone);
 	remove_indiseq(seq);
 	*prc = indi ? RC_SELECT : RC_NOSELECT;
 	return indi;
+}
+/*=================================================================
+ * ask_for_indi_old -- old interface to ask_for_indi (q.v.)
+ *===============================================================*/
+NODE
+ask_for_indi_old (STRING ttl, CONFIRMQ confirmq, ASK1Q ask1)
+{
+	return nztop(ask_for_indi(ttl, confirmq, ask1));
 }
 /*=================================================================
  * ask_for_indi -- Ask user to identify sequence and select person;
@@ -298,12 +312,12 @@ ask_for_indi_once (STRING ttl,
  * confirmq: [in] whether to confirm after choice
  * ask1:     [in] whether to present list if only one matches
  *===============================================================*/
-NODE
+RECORD
 ask_for_indi (STRING ttl, CONFIRMQ confirmq, ASK1Q ask1)
 {
 	while (TRUE) {
 		INT rc;
-		NODE indi = ask_for_indi_once(ttl, ask1, &rc);
+		RECORD indi = ask_for_indi_once(ttl, ask1, &rc);
 		if (rc == RC_DONE || rc == RC_SELECT) return indi;
 		if (confirmq != DOCONFIRM || !ask_yes_or_no(entnam)) return NULL;
 	}
@@ -349,7 +363,7 @@ ask_for_indi_key (STRING ttl,
                   CONFIRMQ confirmq,
                   ASK1Q ask1)
 {
-	NODE indi = ask_for_indi(ttl, confirmq, ask1);
+	NODE indi = ask_for_indi_old(ttl, confirmq, ask1);
 	if (!indi) return NULL;
 	return rmvat(nxref(indi));
 }
@@ -382,7 +396,7 @@ choose_from_indiseq (
 	STRING titln)   /* title if len > one */
 {
 	INT i = 0;
-	RECORD nod0=0;
+	RECORD rec=0;
 	STRING skey;
 	i = choose_one_from_indiseq_if_needed(seq, ask1, titl1, titln);
 	if (i == -1) return NULL;
@@ -396,10 +410,10 @@ choose_from_indiseq (
 		badkeylist[0] = 0;
 	else {
 		skey = skey(IData(seq)[i]);
-		nod0 = key_to_record(skey, TRUE);
+		rec = key_to_record(skey, TRUE);
 	}
 	listbadkeys = 0;
-	if(!nod0) {
+	if(!rec) {
 		char buf[132];
 		if (badkeylist[0])
 			sprintf(buf, "WARNING: missing keys: %.40s", badkeylist);
@@ -407,5 +421,5 @@ choose_from_indiseq (
 			sprintf(buf, "WARNING: invalid pointer");
 		message(buf);
 	}
-	return nod0;
+	return rec;
 }

@@ -4,7 +4,7 @@
 # As are blank lines
 # So all these lines are commented out...
 #
-# 2001/11/15
+# 2001/11/19
 
 # Email address available to report programs
 #EmailAddr=user@mailhost.org
@@ -60,6 +60,7 @@
 # 2,5,0,1,1 is American style (AUGUST 1, 1945) with complex dates
 # 1,1,0,9,1 is Chinese style (1945/04/25) with complex dates
 # 1,1,0,10,1 is Chinese style with dashes (1945-04-05) with complex dates
+# 2,2,0,13,1 is the Swedish style (1/8 1945)
 # Omit this entirely to see dates as given in GEDCOM
 #LongDisplayDate=1,1,0,9,1
 

@@ -47,18 +47,18 @@ replace_indi (NODE indi1,       /* original person - as now in database */
 	STRING key;
 
 	*pmsg = NULL;
-	if (!valid_indi(indi2, pmsg, indi1))  return FALSE;
+	if (!valid_indi_old(indi2, pmsg, indi1))  return FALSE;
 	if (equal_tree(indi1, indi2)) return TRUE;
 	if (readonly) {
 		*pmsg = (STRING) "Database is read only -- can't change person.";
 		return FALSE;
 	}
 
-	split_indi(indi1, &name1, &refn1, &sex, &body, &famc, &fams);
+	split_indi_old(indi1, &name1, &refn1, &sex, &body, &famc, &fams);
 	indi0 = copy_node(indi1);
 	join_indi(indi0, NULL, NULL, sex, body, famc, fams);
 	free_nodes(indi0);
-	split_indi(indi2, &name2, &refn2, &sex, &body, &famc, &fams);
+	split_indi_old(indi2, &name2, &refn2, &sex, &body, &famc, &fams);
 	namen = copy_nodes(name2, TRUE, TRUE);
 	refnn = copy_nodes(refn2, TRUE, TRUE);
 	join_indi(indi1, name2, refn2, sex, body, famc, fams);
@@ -101,7 +101,7 @@ replace_fam (NODE fam1, /* original family - now in database */
 	STRING key;
 
 	*pmsg = NULL;
-	if (!valid_fam(fam2, pmsg, fam1)) return FALSE;
+	if (!valid_fam_old(fam2, pmsg, fam1)) return FALSE;
 	if (equal_tree(fam1, fam2)) return TRUE;
 	if (readonly) {
 		*pmsg = (STRING) "Database is read only -- can't change family.";

@@ -57,6 +57,7 @@ SYMTAB globtab; /* assume all zero is null SYMTAB */
 
 extern BOOLEAN progrunning, progparsing;
 extern INT progerror;
+extern STRING whatrpt;
 
 /*********************************************
  * local function prototypes
@@ -82,7 +83,6 @@ PNODE Pnode = NULL;	/* node being interpreted */
 BOOLEAN explicitvars = FALSE; /* all vars must be declared */
 
 STRING ierror = (STRING) "Error: file \"%s\": line %d: ";
-static STRING qrptname = (STRING) "What is the name of the program?";
 
 /*********************************************
  * local function definitions
@@ -180,7 +180,7 @@ interp_program (STRING proc, INT nargs, VPTR *args, INT nifiles
 		}
 	} else {
 		ifile = NULL;
-		fp = ask_for_program(LLREADTEXT, qrptname, &ifile,
+		fp = ask_for_program(LLREADTEXT, whatrpt, &ifile,
 			lloptions.llprograms, ".ll", picklist);
 		if (fp == NULL) {
 			if (ifile != NULL)  {

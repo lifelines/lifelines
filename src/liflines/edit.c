@@ -54,7 +54,7 @@ write_indi_to_editfile(NODE indi)
 	NODE name, refn, sex, body, famc, fams;
 	
 	ASSERT(fp = fopen(editfile, LLWRITETEXT));
-	split_indi(indi, &name, &refn, &sex, &body, &famc, &fams);
+	split_indi_old(indi, &name, &refn, &sex, &body, &famc, &fams);
 	write_nodes(0, fp, tto, indi, TRUE, TRUE, TRUE);
 	write_nodes(1, fp, tto, name, TRUE, TRUE, TRUE);
 	write_nodes(1, fp, tto, refn, TRUE, TRUE, TRUE);
@@ -78,7 +78,7 @@ edit_indi (NODE indi1)  /* may be NULL */
 	TRANTABLE tti = tran_tables[MEDIN];
 	TRANTABLE ttd = tran_tables[MINDS];
 
-	if (!indi1 && !(indi1 = ask_for_indi(idpedt, NOCONFIRM, NOASK1)))
+	if (!indi1 && !(indi1 = ask_for_indi_old(idpedt, NOCONFIRM, NOASK1)))
 		return NULL;
 
 /* Prepare file for user to edit */
@@ -103,7 +103,7 @@ edit_indi (NODE indi1)  /* may be NULL */
 			} 
 			break;
 		}
-		if (!valid_indi(indi2, &msg, indi1)) {
+		if (!valid_indi_old(indi2, &msg, indi1)) {
 			if (ask_yes_or_no_msg(msg, iredit)) {
 				do_edit();
 				continue;
@@ -125,11 +125,11 @@ edit_indi (NODE indi1)  /* may be NULL */
 
 /* Prepare to change database */
 
-	split_indi(indi1, &name1, &refn1, &sex, &body, &famc, &fams);
+	split_indi_old(indi1, &name1, &refn1, &sex, &body, &famc, &fams);
 	indi0 = copy_node(indi1);
 	join_indi(indi0, NULL, NULL, sex, body, famc, fams);
 	free_nodes(indi0);
-	split_indi(indi2, &name2, &refn2, &sex, &body, &famc, &fams);
+	split_indi_old(indi2, &name2, &refn2, &sex, &body, &famc, &fams);
 	namen = copy_nodes(name2, TRUE, TRUE);
 	refnn = copy_nodes(refn2, TRUE, TRUE);
 	join_indi(indi1, name2, refn2, sex, body, famc, fams);
@@ -194,7 +194,7 @@ edit_family (NODE fam1) /* may be NULL */
 	BOOLEAN emp;
 /* Identify family if need be */
 	if (!fam1) {
-		indi = ask_for_indi(idspse, NOCONFIRM, NOASK1);
+		indi = ask_for_indi_old(idspse, NOCONFIRM, NOASK1);
 		if (!indi) return NULL;
 		if (!FAMS(indi)) {
 			message(ntprnt);
@@ -225,7 +225,7 @@ edit_family (NODE fam1) /* may be NULL */
 			}
 			break;
 		}
-		if (!valid_fam(fam2, &msg, fam1)) {
+		if (!valid_fam_old(fam2, &msg, fam1)) {
 			if (ask_yes_or_no_msg(msg, fredit)) {
 				do_edit();
 				continue;

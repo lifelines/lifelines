@@ -91,7 +91,7 @@ add_indi_by_edit (void)
 	fclose(fp);
 	do_edit();
 	while (TRUE) {
-		indi0 = file_to_nod0(editfile, tti, &msg, &emp);
+		indi0 = file_to_record(editfile, tti, &msg, &emp);
 		if (!indi0) {
 			if (ask_yes_or_no_msg(msg, iredit)) {
 				do_edit();
@@ -100,19 +100,19 @@ add_indi_by_edit (void)
 			break;
 		}
 		indi = nztop(indi0);
-		if (!valid_indi(indi, &msg, NULL)) {
+		if (!valid_indi_old(indi, &msg, NULL)) {
 			if (ask_yes_or_no_msg(msg, iredit)) {
 				do_edit();
 				continue;
 			}
-			free_nod0(indi0);
+			free_rec(indi0);
 			indi0 = NULL;
 			break;
 		}
 		break;
 	}
 	if (!indi0 || !ask_yes_or_no(cfpadd)) {
-		if (indi0) free_nod0(indi0);
+		if (indi0) free_rec(indi0);
 		return NULL;
 	}
 	return add_unlinked_indi(indi0);
@@ -120,7 +120,7 @@ add_indi_by_edit (void)
 /*==========================================================
  * add_unlinked_indi -- Add person with no links to database
  * (no user interaction)
- * creates nod0 & adds to cache
+ * creates record & adds to cache
  *========================================================*/
 RECORD
 add_unlinked_indi (RECORD indi0)
@@ -131,9 +131,9 @@ add_unlinked_indi (RECORD indi0)
 	TRANTABLE ttd = tran_tables[MINDS];
 	NODE indi = nztop(indi0);
 
-	split_indi(indi, &name, &refn, &sex, &body, &dumb, &dumb);
+	split_indi_old(indi, &name, &refn, &sex, &body, &dumb, &dumb);
 	keynum = getixrefnum();
-	init_new_nod0(indi0, 'I', keynum);
+	init_new_record(indi0, 'I', keynum);
 	key = nzkey(indi0);
 	for (node = name; node; node = nsibling(node))
 		add_name(nval(node), key);
@@ -142,7 +142,7 @@ add_unlinked_indi (RECORD indi0)
 	join_indi(indi, name, refn, sex, body, NULL, NULL);
 	resolve_links(indi);
 	indi_to_dbase(indi);
-	indi0_to_cache(indi0);
+	indi_to_cache(indi0);
 	msg_status(gdpadd, indi_to_name(indi, ttd, 35));
 	return indi0;
 }
@@ -157,7 +157,7 @@ add_linked_indi (NODE indi)
 	NODE node, name, refn, sex, body, famc, fams;
 	STRING str, key;
 
-	split_indi(indi, &name, &refn, &sex, &body, &famc, &fams);
+	split_indi_old(indi, &name, &refn, &sex, &body, &famc, &fams);
 	key = rmvat(nxref(indi));
 	for (node = name; node; node = nsibling(node))
 		add_name(nval(node), key);
@@ -215,7 +215,7 @@ add_child (NODE child, NODE fam)
 
 /* Identify child if caller did not */
 
-	if (!child) child = ask_for_indi(idchld, NOCONFIRM, DOASK1);
+	if (!child) child = ask_for_indi_old(idchld, NOCONFIRM, DOASK1);
 	if (!child) return NULL;
 
 /* Identify family if caller did not */
@@ -273,7 +273,7 @@ add_child_to_fam (NODE child, NODE fam, INT i)
 
 /* Add FAMC node to child */
 
-	split_indi(child, &name, &refn, &sex, &body, &famc, &fams);
+	split_indi_old(child, &name, &refn, &sex, &body, &famc, &fams);
 	nfmc = create_node(NULL, "FAMC", nxref(fam), child);
 	prev = NULL;
 	this = famc;
@@ -314,7 +314,7 @@ add_spouse (NODE spouse,
 
 /* Identify spouse to add to family */
 
-	if (!spouse) spouse = ask_for_indi(idsadd, NOCONFIRM, DOASK1);
+	if (!spouse) spouse = ask_for_indi_old(idsadd, NOCONFIRM, DOASK1);
 	if (!spouse) return FALSE;
 	if ((sex = SEX(spouse)) == SEX_UNKNOWN) {
 		message(nosex);
@@ -441,7 +441,7 @@ add_members_to_family (STRING xref, NODE spouse1, NODE spouse2, NODE child)
 			nchild(spouse2) = new;
 	}
 	if (child) {
-		split_indi(child, &name, &refn, &sex, &body, &famc, &fams);
+		split_indi_old(child, &name, &refn, &sex, &body, &famc, &fams);
 		new = create_node(NULL, "FAMC", xref, child);
 		prev = NULL;
 		this = famc;
@@ -488,7 +488,7 @@ add_family (NODE spouse1,
 
 /* Identify first spouse */
 
-	if (!spouse1) spouse1 = ask_for_indi(idsps1, NOCONFIRM, NOASK1);
+	if (!spouse1) spouse1 = ask_for_indi_old(idsps1, NOCONFIRM, NOASK1);
 	if (!spouse1) return NULL;
 	if ((sex1 = SEX(spouse1)) == SEX_UNKNOWN) {
 		message(unksex);
@@ -497,7 +497,7 @@ add_family (NODE spouse1,
 
 /* Identify optional spouse */
 
-	if (!spouse2) spouse2 = ask_for_indi(idsps2, NOCONFIRM, DOASK1);
+	if (!spouse2) spouse2 = ask_for_indi_old(idsps2, NOCONFIRM, DOASK1);
 	if (spouse2) {
 		if ((sex2 = SEX(spouse2)) == SEX_UNKNOWN || sex1 == sex2) {
 			message(notopp);
@@ -556,7 +556,7 @@ editfam:
 			}
 			break;
 		}
-		if (!valid_fam(fam2, &msg, fam1)) {
+		if (!valid_fam_old(fam2, &msg, fam1)) {
 			if (ask_yes_or_no_msg(msg, fredit)) {
 				do_edit();
 				continue;

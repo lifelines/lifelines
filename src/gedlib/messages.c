@@ -249,7 +249,7 @@ STRING outarc = SS "Enter name of output archive file.";
 STRING outfin = SS "Database `%s' has been saved in `%s'.";
 
 STRING extrpt      = SS "<Choose outside this list>";
-STRING qrpt        = SS "What is the name of the program?";
+STRING whatrpt     = SS "What is the name of the program?";
 
 STRING norpt       =  SS "No report was generated.";
 STRING whtout      = SS "What is the name of the output file?";

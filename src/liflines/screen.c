@@ -531,9 +531,9 @@ main_menu (void)
 	case 'b': browse(NULL, BROWSE_INDI); break;
 	case 's':
 		{
-			RECORD nod0 = scan_menu();
-			if (nod0)
-				browse(nztop(nod0), BROWSE_UNK);
+			RECORD rec = scan_menu();
+			if (rec)
+				browse(nztop(rec), BROWSE_UNK);
 		}
 		break;
 	case 'a': 
@@ -1240,7 +1240,7 @@ disp_trans_table_choice (WINDOW * win, INT row, INT col, STRING menuit, INT indx
 RECORD
 scan_menu (void)
 {
-	RECORD nod0;
+	RECORD rec;
 	INT code;
 	while (1) {
 		touchwin(scan_menu_win);
@@ -1251,19 +1251,19 @@ scan_menu (void)
 		wrefresh(main_win);
 		switch (code) {
 		case 'f':
-			nod0 = full_name_scan();
-			if (nod0)
-				return nod0;
+			rec = full_name_scan();
+			if (rec)
+				return rec;
 			break;
 		case 'n':
-			nod0 = name_fragment_scan();
-			if (nod0)
-				return nod0;
+			rec = name_fragment_scan();
+			if (rec)
+				return rec;
 			break;
 		case 'r':
-			nod0 = refn_scan();
-			if (nod0)
-				return nod0;
+			rec = refn_scan();
+			if (rec)
+				return rec;
 			break;
 		case 'q': return NULL;
 		}

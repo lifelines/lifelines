@@ -38,8 +38,14 @@
  * split_indi -- Split person into parts
  *  all unrecognized (level 1) nodes go into body
  *====================================*/
+
+/*======================================
+ * split_indi_old -- Split person into parts
+ *  all unrecognized (level 1) nodes go into body
+ *  should be replaced by split_indi
+ *====================================*/
 void
-split_indi (NODE indi,
+split_indi_old (NODE indi,
             NODE *pname,
             NODE *prefn,
             NODE *psex,

@@ -49,8 +49,7 @@ int listbadkeys = 0;
  * local function prototypes
  *********************************************/
 
-static void add_node_to_direct(CACHE cache, NODE node, STRING key);
-static void add_nod0_to_direct(CACHE cache, RECORD nod0, STRING key);
+static void add_record_to_direct(CACHE cache, RECORD rec, STRING key);
 static CACHE create_cache(STRING name, INT dirsize, INT indsize);
 static void dereference(CACHEEL);
 static CACHEEL key_to_cacheel(CACHE, STRING, STRING, INT);
@@ -62,6 +61,7 @@ static CACHEEL key_to_sour_cacheel (STRING key);
 static void prepare_direct_space(CACHE cache);
 static NODE qkey_to_node(CACHE cache, STRING key, STRING tag);
 static RECORD qkey_typed_to_record(CACHE cache, STRING key, STRING tag);
+static void record_to_cache(CACHE cache, RECORD rec);
 
 
 INT csz_indi = 200;		/* cache size for indi */
@@ -392,11 +392,11 @@ key_to_othr_cacheel (STRING key)
 void
 init_caches (void)
 {
-	indicache = create_cache("indi", csz_indi, icsz_indi);
-	famcache  = create_cache("fam", csz_fam, icsz_fam);
-	evencache = create_cache("even", (INT)csz_even, (INT)csz_even);
-	sourcache = create_cache("sour", (INT)csz_sour, (INT)icsz_sour);
-	othrcache = create_cache("othr", (INT)csz_othr, (INT)icsz_othr);
+	indicache = create_cache("INDI", csz_indi, icsz_indi);
+	famcache  = create_cache("FAM", csz_fam, icsz_fam);
+	evencache = create_cache("EVEN", (INT)csz_even, (INT)csz_even);
+	sourcache = create_cache("SOUR", (INT)csz_sour, (INT)icsz_sour);
+	othrcache = create_cache("OTHR", (INT)csz_othr, (INT)icsz_othr);
 }
 /*=============================
  * create_cache -- Create cache
@@ -540,7 +540,7 @@ direct_to_indirect (CACHE cache)
 		ASSERT(cel);
 	}
 	remove_direct(cache, cel);
-	free_nod0(crecord(cel)); /* this frees the nodes */
+	free_rec(crecord(cel)); /* this frees the nodes */
 	crecord(cel) = NULL;
 	cnode(cel) = NULL;
 	first_indirect(cache, cel);
@@ -551,31 +551,32 @@ direct_to_indirect (CACHE cache)
 static void
 dereference (CACHEEL cel)
 {
-	STRING rec;
+	STRING rawrec;
 	INT len;
-	RECORD nod0;
+	RECORD rec;
 	ASSERT(cel);
-	ASSERT(rec = retrieve_record(ckey(cel), &len));
-	ASSERT(nod0 = string_to_record(rec, ckey(cel), len));
-	crecord(cel) = nod0;
-	cnode(cel) = nod0->top;
-	stdfree(rec);
+	ASSERT(rawrec = retrieve_raw_record(ckey(cel), &len));
+	ASSERT(rec = string_to_record(rawrec, ckey(cel), len));
+	crecord(cel) = rec;
+	cnode(cel) = nztop(rec);
+	stdfree(rawrec);
 }
 /*========================================================
  * add_to_direct -- Add new CACHEEL to direct part of cache
  * reportmode: if True, then return NULL rather than aborting
  *   if there is no record. Also return NULL for deleted
  *   records (of length less than 6???)
+ *  cache:      [IN]  which cache to which to add
+ *  key:        [IN]  key of record to be added
+ *  reportmode: [IN] if non-zero, failures should be silent
  *======================================================*/
 static CACHEEL
-add_to_direct (CACHE cache,
-               STRING key,
-               INT reportmode)
+add_to_direct (CACHE cache, STRING key, INT reportmode)
 {
-	STRING record;
+	STRING rawrec;
 	INT len;
 	CACHEEL cel;
-	RECORD nod0;
+	RECORD rec;
 	int i, j;
 
 #ifdef DEBUG
@@ -583,10 +584,10 @@ add_to_direct (CACHE cache,
 #endif
 	ASSERT(cache && key);
 	prepare_direct_space(cache);
-	nod0 = NULL;
-	if ((record = retrieve_record(key, &len))) 
-		nod0 = string_to_record(record, key, len);
-	if (!nod0)
+	rec = NULL;
+	if ((rawrec = retrieve_raw_record(key, &len))) 
+		rec = string_to_record(rawrec, key, len);
+	if (!rec)
 	{
 		if(listbadkeys) {
 			if(strlen(badkeylist) < 80 - strlen(key) - 2) {
@@ -606,19 +607,19 @@ add_to_direct (CACHE cache,
 			llwprintf(" %s", (char *)keybuf[j]);
 		}
 		llwprintf("\n");
-		/* deliberately fall through to let ASSERT(nod0) fail */
+		/* deliberately fall through to let ASSERT(rec) fail */
 	}
-	ASSERT(nod0);
+	ASSERT(rec);
 	ASSERT(csizedir(cache) < cmaxdir(cache));
 	cel = (CACHEEL) stdalloc(sizeof(*cel));
 	insert_table_ptr(cdata(cache), key = strsave(key), cel);
-	crecord(cel) = nod0;
-	cnode(cel) = nod0->top;
+	crecord(cel) = rec;
+	cnode(cel) = nztop(rec);
 	ckey(cel) = key;
 	cclock(cel) = 0;
 	csemilock(cel) = 0;
 	first_direct(cache, cel);
-	stdfree(record);
+	stdfree(rawrec);
 	return cel;
 }
 /*======================================================
@@ -802,18 +803,19 @@ get_cache_stats (void)
 	return buffer;
 }
 /*============================================
- * indi0_to_cache -- Add person to person cache
- *==========================================*/
-void
-indi0_to_cache (RECORD nod0)
-{
-	nod0_to_cache(indicache, nod0);
-}
-/*============================================
  * indi_to_cache -- Add person to person cache
  *==========================================*/
 void
-indi_to_cache (NODE node)
+indi_to_cache (RECORD rec)
+{
+	record_to_cache(indicache, rec);
+}
+/*============================================
+ * indi_to_cache_old -- Add person to person cache
+ *  should be obsoleted by indi_to_cache
+ *==========================================*/
+void
+indi_to_cache_old (NODE node)
 {
 	node_to_cache(indicache, node);
 }
@@ -853,49 +855,48 @@ othr_to_cache (NODE node)
  * node_to_cache -- Add node tree to cache
  *======================================*/
 void
-node_to_cache (CACHE cache,
-               NODE node)
+node_to_cache (CACHE cache, NODE node)
 {
-	RECORD nod0 = create_nod0(node);
-	nod0_to_cache(cache, nod0);
+	RECORD rec = create_record(node);
+	record_to_cache(cache, rec);
 }
 /*========================================
- * nod0_to_cache -- Add node tree to cache
+ * record_to_cache -- Add record to cache
+ *  record expected to be valid
+ *  INDI records may only be added to INDI cache, etc
  *======================================*/
-void
-nod0_to_cache (CACHE cache,
-               RECORD nod0)
+static void
+record_to_cache (CACHE cache, RECORD rec)
 {
 	STRING key;
-	ASSERT(cache && nod0 && nztop(nod0));
-	key = node_to_key(nztop(nod0));
+	NODE top;
+	ASSERT(cache && rec);
+	top = nztop(rec);
+	ASSERT(top);
+	if (nestr(cname(cache), "OTHR")) {
+		/* only INDI records in INDI cache, etc */
+		ASSERT(eqstr(cname(cache), ntag(top)));
+	}
+	key = node_to_key(top);
+	ASSERT(key);
 	ASSERT(!valueof_ptr(cdata(cache), key));
 	prepare_direct_space(cache);
-	add_nod0_to_direct(cache, nod0, key);
+	add_record_to_direct(cache, rec, key);
 }
 /*=======================================================
- * add_node_to_direct -- Add node to direct part of cache
+ * add_record_to_direct -- Add node to direct part of cache
  *=====================================================*/
 static void
-add_node_to_direct (CACHE cache, NODE node, STRING key)
-{
-	RECORD nod0 = create_nod0(node);
-	add_nod0_to_direct(cache, nod0, key);
-}
-/*=======================================================
- * add_nod0_to_direct -- Add node to direct part of cache
- *=====================================================*/
-static void
-add_nod0_to_direct (CACHE cache, RECORD nod0, STRING key)
+add_record_to_direct (CACHE cache, RECORD rec, STRING key)
 {
 	CACHEEL cel;
 	STRING keynew;
-	NODE node = nztop(nod0);
+	NODE node = nztop(rec);
 	ASSERT(cache && node);
 	ASSERT(csizedir(cache) < cmaxdir(cache));
 	cel = (CACHEEL) stdalloc(sizeof(*cel));
 	insert_table_ptr(cdata(cache), keynew=strsave(key), cel);
-	crecord(cel) = nod0;
+	crecord(cel) = rec;
 	cnode(cel) = node;
 	ckey(cel) = keynew;
 	cclock(cel) = FALSE;
@@ -956,12 +957,25 @@ value_to_xref (STRING val)
  * indi_to_cacheel -- Convert person to cache element
  *=================================================*/
 CACHEEL
-indi_to_cacheel (NODE indi)
+indi_to_cacheel (RECORD indi)
+{
+	CACHEEL cel;
+	if (!indi || !nztop(indi)) return NULL;
+	cel = key_to_indi_cacheel(rmvat(nxref(nztop(indi))));
+	ASSERT(cel);
+	return cel;
+}
+/*===================================================
+ * indi_to_cacheel_old -- Convert person to cache element
+ *  should be obsoleted by indi_to_cacheel
+ *=================================================*/
+CACHEEL
+indi_to_cacheel_old (NODE indi)
 {
 	CACHEEL cel;
 	if (!indi) return NULL;
 #ifdef DEBUG
-	llwprintf("indi_to_cacheel: %s\n", nxref(indi));
+	llwprintf("indi_to_cacheel_old: %s\n", nxref(indi));
 #endif
 	cel = key_to_indi_cacheel(rmvat(nxref(indi)));
 	ASSERT(cel);
@@ -1023,7 +1037,7 @@ node_to_cacheel (NODE node)
 {
 	STRING key = rmvat(nxref(node));
 	switch(key[0]) {
-	case 'I': return indi_to_cacheel(node);
+	case 'I': return indi_to_cacheel_old(node);
 	case 'F': return fam_to_cacheel(node);
 	case 'S': return sour_to_cacheel(node);
 	case 'E': return even_to_cacheel(node);
@@ -1073,7 +1087,7 @@ CACHEEL qkey_to_othr_cacheel (STRING key)
  *  handle NULL input
  *============================================*/
 NODE
-nztop (RECORD nod0)
+nztop (RECORD rec)
 {
-	return nod0 ? nod0->top : 0;
+	return rec ? rec->top : 0;
 }

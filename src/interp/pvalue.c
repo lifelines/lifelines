@@ -530,7 +530,7 @@ access_cel_from_pvalue (PVALUE val)
 PVALUE
 create_pvalue_from_indi (NODE indi)
 {
-	CACHEEL cel = indi ? indi_to_cacheel(indi) : NULL;
+	CACHEEL cel = indi ? indi_to_cacheel_old(indi) : NULL;
 	return create_pvalue(PINDI, cel);
 }
 /*=====================================================

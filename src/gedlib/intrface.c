@@ -34,12 +34,12 @@
 extern BTREE BTR;
 
 /*=================================================
- * retrieve_record -- Retrieve record from database
+ * retrieve_raw_record -- Retrieve record string from database
  *  key:  [in] key of desired record (eg, "    I543")
  *  plen: [out] length of record returned
  *===============================================*/
 STRING
-retrieve_record (STRING key, INT *plen)
+retrieve_raw_record (STRING key, INT *plen)
 {
 	return getrecord(BTR, str2rkey(key), plen);
 }
@@ -131,40 +131,40 @@ traverse_db_rec_keys (STRING lo, STRING hi,
 	traverse_db_rec_rkeys(BTR, lo1, hi1, trav_callback, &tparam);
 }
 /*====================================================
- * traverse_db_key_nod0s -- traverse a span of records
+ * traverse_db_key_recs -- traverse a span of records
  *  returns key & node
  *==================================================*/
 typedef struct
 {
-	BOOLEAN(*func)(STRING key, RECORD nod0, void * param);
+	BOOLEAN(*func)(STRING key, RECORD rec, void * param);
 	void * param;
 } TRAV_RECORD_PARAM;
 /* see above */
 static BOOLEAN
-trav_nod0_callback (STRING key, STRING data, INT len, void * param)
+trav_rec_callback (STRING key, STRING data, INT len, void * param)
 {
 	TRAV_RECORD_PARAM *tparam = (TRAV_RECORD_PARAM *)param;
-	RECORD nod0;
+	RECORD rec;
 	BOOLEAN keepgoing;
 	if (key[0]!='I' && key[0]!='F' && key[0]!='S' && key[0]!='E' && key[0]!='X')
 		return TRUE;
 	if (!strcmp(data, "DELE\n"))
 		return TRUE;
-	nod0 = string_to_record(data, key, len);
-	keepgoing = tparam->func(key, nod0, tparam->param);
-	free_nod0(nod0);
+	rec = string_to_record(data, key, len);
+	keepgoing = tparam->func(key, rec, tparam->param);
+	free_rec(rec);
 	return keepgoing;
 }
 /* see above */
 void
-traverse_db_key_nod0s (BOOLEAN(*func)(STRING key, RECORD, void *param), void *param)
+traverse_db_key_recs (BOOLEAN(*func)(STRING key, RECORD, void *param), void *param)
 {
 	TRAV_RECORD_PARAM tparam;
 	STRING lo,hi;
 	tparam.param = param;
 	tparam.func = func;
 	lo = hi = NULL; /* all records */
-	traverse_db_rec_keys(lo, hi, trav_nod0_callback, &tparam);
+	traverse_db_rec_keys(lo, hi, trav_rec_callback, &tparam);
 }
 /*=================================================
  * del_in_dbase -- Write deleted record to database

@@ -2778,12 +2778,12 @@ __indi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	delete_pvalue(val);
 	if (strlen(scratch) == 1) return NULL;
 /*
- *	rec = (STRING) retrieve_record(scratch, &len);
- *	if (rec && len > 6)
+ *	rawrec = (STRING) retrieve_raw_record(scratch, &len);
+ *	if (rawrec && len > 6)
  *		val = create_pvalue(PINDI, (VPTR)key_to_indi_cacheel(scratch));
  *	else
  *		val = create_pvalue(PINDI, NULL);
- *	if (rec) stdfree(rec);
+ *	if (rawrec) stdfree(rawrec);
  */
 	val = create_pvalue_from_indi_key(scratch);
 /* 	val = create_pvalue(PINDI, (VPTR)qkey_to_indi_cacheel(scratch)); */
@@ -2796,7 +2796,7 @@ __indi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __fam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	STRING str, rec;
+	STRING str, rawrec;
 	unsigned char scratch[200], *p, *q = scratch;
 	INT c, len;
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
@@ -2818,12 +2818,12 @@ __fam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	*q = 0;
 	delete_pvalue(val);
 	if (strlen(scratch) == 1) return NULL;
-	rec = (STRING) retrieve_record(scratch, &len);
-	if (rec && len > 6)
+	rawrec = retrieve_raw_record(scratch, &len);
+	if (rawrec && len > 6)
 		val = create_pvalue(PFAM, (VPTR)key_to_fam_cacheel(scratch));
 	else
 		val = create_pvalue(PFAM, NULL);
-	if (rec) stdfree(rec);
+	if (rawrec) stdfree(rawrec);
 	return val;
 }
 /*=======================================+

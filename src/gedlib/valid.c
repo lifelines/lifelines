@@ -43,14 +43,15 @@ extern STRING bademp,badin0,badfm0,badsr0,badev0,badothr0;
 extern STRING badmul,badnnm,badenm,badpsx,badirf;
 
 /*===================================
- * valid_indi -- Validate person tree
+ * valid_indi_old -- Validate person tree
  *  indi1:  [IN]  person to validate
  *  pmsg:   [OUT] error message, if any
  *  orig:   [IN]  person to match - may be NULL
  * rtn: FALSE for bad
+ * Should be replaced by valid_indi(RECORD,...)
  *=================================*/
 BOOLEAN
-valid_indi (NODE indi1, STRING *pmsg, NODE orig)
+valid_indi_old (NODE indi1, STRING *pmsg, NODE orig)
 {
 	NODE name1, refn1, sex1, body1, famc1, fams1, node;
 	NODE name0, refn0, sex0, body0, famc0, fams0;
@@ -69,7 +70,7 @@ valid_indi (NODE indi1, STRING *pmsg, NODE orig)
 		*pmsg = badmul;
 		return FALSE;
 	}
-	split_indi(indi1, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
+	split_indi_old(indi1, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
 	if (!name1) {
 		*pmsg = badnnm;
 		goto bad2;
@@ -82,7 +83,7 @@ valid_indi (NODE indi1, STRING *pmsg, NODE orig)
 	}
 	name0 = refn0 = sex0 = body0 = famc0 = fams0 = NULL;
 	if (orig)
-		split_indi(orig, &name0, &refn0, &sex0, &body0, &famc0,
+		split_indi_old(orig, &name0, &refn0, &sex0, &body0, &famc0,
 		    &fams0);
 	if (orig && !iso_nodes(indi1, orig, FALSE, FALSE)) {
 		*pmsg = badind; 
@@ -121,13 +122,14 @@ bad2:
 	return FALSE;
 }
 /*===============================
- * valid_fam -- Validate FAM tree
+ * valid_fam_old -- Validate FAM tree
  *  fam1,  [IN]  family to validate
  *  pmsg:  [OUT] error message, if any
  *  fam0:  [IN]  family to match - may be NULL
+ * Should be replaced by valid_fam(RECORD,...)
  *=============================*/
 BOOLEAN
-valid_fam (NODE fam1, STRING *pmsg, NODE fam0)
+valid_fam_old (NODE fam1, STRING *pmsg, NODE fam0)
 {
 	NODE refn0, husb0, wife0, chil0, body0;
 	NODE refn1, husb1, wife1, chil1, body1;
@@ -201,8 +203,8 @@ BOOLEAN
 valid_node_type (NODE node, char ntype, STRING *pmsg, NODE node0)
 {
 	switch(ntype) {
-	case 'I': return valid_indi(node, pmsg, node0);
-	case 'F': return valid_fam(node, pmsg, node0);
+	case 'I': return valid_indi_old(node, pmsg, node0);
+	case 'F': return valid_fam_old(node, pmsg, node0);
 	case 'S': return valid_sour_tree(node, pmsg, node0);
 	case 'E': return valid_even_tree(node, pmsg, node0);
 	default: return valid_othr_tree(node, pmsg, node0);

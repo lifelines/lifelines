@@ -72,15 +72,16 @@ enum { NEW_RECORD, EXISTING_LACKING_WH_RECORD };
  * local function prototypes, alphabetical
  *********************************************/
 
-static RECORD alloc_new_nod0(void);
+static RECORD alloc_new_record(void);
 static RECORD alloc_record_from_key(STRING key);
-static void alloc_record_wh(RECORD nod0, INT isnew);
+static void alloc_record_wh(RECORD rec, INT isnew);
 static NODE alloc_node(void);
+void assign_record(RECORD rec, char ntype, INT keynum);
 static BOOLEAN buffer_to_line (STRING p, INT *plev, STRING *pxref
 	, STRING *ptag, STRING *pval, STRING *pmsg);
 static STRING fixup (STRING str);
 static STRING fixtag (STRING tag);
-static void load_nod0_wh(RECORD nod0, char * whptr, INT whlen);
+static void load_record_wh(RECORD rec, char * whptr, INT whlen);
 static INT node_strlen(INT levl, NODE node);
 static BOOLEAN string_to_line(STRING *ps, INT *plev, STRING *pxref, 
 	STRING *ptag, STRING *pval, STRING *pmsg);
@@ -190,122 +191,123 @@ create_node (STRING xref, STRING tag, STRING val, NODE prnt)
 	return node;
 }
 /*===================================
- * alloc_new_nod0 -- nod0 allocator
+ * alloc_new_record -- record allocator
  *  perhaps should use special allocator like nodes
  * Created: 2001/01/25, Perry Rapp
  *=================================*/
 static RECORD
-alloc_new_nod0 (void)
+alloc_new_record (void)
 {
-	RECORD nod0;
-	nod0 = (RECORD)stdalloc(sizeof(*nod0));
+	RECORD rec;
+	rec = (RECORD)stdalloc(sizeof(*rec));
 	/* these must be filled in by caller */
-	nod0->nkey.key = "";
-	nod0->nkey.keynum = 0;
-	nod0->nkey.ntype = 0;
-	nod0->top = 0;
-	nod0->mdwh = 0;
-	return nod0;
+	rec->nkey.key = "";
+	rec->nkey.keynum = 0;
+	rec->nkey.ntype = 0;
+	rec->top = 0;
+	rec->mdwh = 0;
+	return rec;
 }
 /*===================================
- * alloc_record_from_key -- allocate nod0 with key
+ * alloc_record_from_key -- allocate record for key
  * Created: 2001/01/25, Perry Rapp
  *=================================*/
 static RECORD
 alloc_record_from_key (STRING key)
 {
-	RECORD nod0 = alloc_new_nod0();
-	assign_nod0(nod0, key[0], atoi(key+1));
-	return nod0;
+	RECORD rec = alloc_new_record();
+	assign_record(rec, key[0], atoi(key+1));
+	return rec;
 }
 /*===================================
- * assign_nod0 -- put key info into nod0
+ * assign_record -- put key info into record
  * Created: 2001/02/04, Perry Rapp
  *=================================*/
-void
-assign_nod0 (RECORD nod0, char ntype, INT keynum)
+static void
+assign_record (RECORD rec, char ntype, INT keynum)
 {
 	char xref[12];
 	char key[9];
 	sprintf(key, "%c%d", ntype, keynum);
 	sprintf(xref, "@%s@", key);
-	if (nztop(nod0))
-		nxref(nztop(nod0)) = strsave(xref);
-	nod0->nkey.key = strsave(key);
-	nod0->nkey.keynum = keynum;
-	nod0->nkey.ntype = ntype;
+	if (nztop(rec))
+		nxref(nztop(rec)) = strsave(xref);
+	rec->nkey.key = strsave(key);
+	rec->nkey.keynum = keynum;
+	rec->nkey.ntype = ntype;
 }
 /*===================================
- * init_new_nod0 -- put key info into nod0
+ * init_new_record -- put key info into record
  *  of brand new record
  * Created: 2001/02/04, Perry Rapp
  *=================================*/
 void
-init_new_nod0 (RECORD nod0, char ntype, INT keynum)
+init_new_record (RECORD rec, char ntype, INT keynum)
 {
-	assign_nod0(nod0, ntype, keynum);
-	alloc_record_wh(nod0, NEW_RECORD);
+	assign_record(rec, ntype, keynum);
+	alloc_record_wh(rec, NEW_RECORD);
 }
 /*===================================
  * alloc_record_wh -- allocate warehouse for
- *  a nod0 without one (new or existing)
+ *  a record without one (new or existing)
  * Created: 2001/02/04, Perry Rapp
  *=================================*/
 static void
-alloc_record_wh (RECORD nod0, INT isnew)
+alloc_record_wh (RECORD rec, INT isnew)
 {
 	LLDATE creation;
-	ASSERT(!nod0->mdwh);
+	ASSERT(!rec->mdwh); /* caller must know what it is doing */
 	if (!add_metadata)
 		return;
-	nod0->mdwh = (WAREHOUSE)stdalloc(sizeof(*(nod0->mdwh)));
-	wh_allocate(nod0->mdwh);
+	rec->mdwh = (WAREHOUSE)stdalloc(sizeof(*(rec->mdwh)));
+	wh_allocate(rec->mdwh);
 	get_current_lldate(&creation);
-	wh_add_block_var(nod0->mdwh, MD_CREATE_DATE, &creation, sizeof(creation));
+	wh_add_block_var(rec->mdwh, MD_CREATE_DATE, &creation, sizeof(creation));
 	if (isnew == EXISTING_LACKING_WH_RECORD)
-		wh_add_block_int(nod0->mdwh, MD_CONVERTED_BOOL, 1);
+		wh_add_block_int(rec->mdwh, MD_CONVERTED_BOOL, 1);
 }
 /*===================================
- * load_nod0_wh -- load existing warehouse
- *  for a nod0
+ * load_record_wh -- load existing warehouse
+ *  for a record
+ *  warehouse is opaque lump of metadata
  * Created: 2001/02/04, Perry Rapp
  *=================================*/
 static void
-load_nod0_wh (RECORD nod0, char * whptr, INT whlen)
+load_record_wh (RECORD rec, char * whptr, INT whlen)
 {
-	nod0->mdwh = (WAREHOUSE)stdalloc(sizeof(*(nod0->mdwh)));
-	wh_assign_from_blob(nod0->mdwh, whptr, whlen);
+	rec->mdwh = (WAREHOUSE)stdalloc(sizeof(*(rec->mdwh)));
+	wh_assign_from_blob(rec->mdwh, whptr, whlen);
 }
 /*===================================
- * create_nod0 -- create nod0 to wrap top node
+ * create_record -- create record to wrap top node
  * Created: 2001/01/29, Perry Rapp
  *=================================*/
 RECORD
-create_nod0 (NODE node)
+create_record (NODE node)
 {
-	RECORD nod0 = 0;
+	RECORD rec = 0;
 	if (nxref(node))
-		nod0 = alloc_record_from_key(node_to_key(node));
+		rec = alloc_record_from_key(node_to_key(node));
 	else
-		nod0 = alloc_new_nod0();
-	nod0->top = node;
-	return nod0;
+		rec = alloc_new_record();
+	rec->top = node;
+	return rec;
 }
 /*===================================
- * free_nod0 -- nod0 deallocator
+ * free_rec -- record deallocator
  * Created: 2000/12/30, Perry Rapp
  *=================================*/
 void
-free_nod0 (RECORD nod0)
+free_rec (RECORD rec)
 {
-	if (nod0->top)
-		free_nodes(nod0->top);
-	if (nod0->mdwh) {
-		stdfree(nod0->mdwh);
+	if (rec->top)
+		free_nodes(rec->top);
+	if (rec->mdwh) {
+		stdfree(rec->mdwh);
 	}
-	if (nod0->nkey.key[0])
-		stdfree(nod0->nkey.key);
-	stdfree(nod0);
+	if (rec->nkey.key[0])
+		stdfree(rec->nkey.key);
+	stdfree(rec);
 }
 /*=====================================
  * free_nodes -- Free all NODEs in tree
@@ -468,7 +470,7 @@ gettag:
 	return OKAY;
 }
 /*=================================================
- * file_to_nod0 -- Convert GEDCOM file to NODE tree
+ * file_to_record -- Convert GEDCOM file to in-memory record
  *
  * STRING fname:  [in] name of file that holds GEDCOM record
  * TRANTABLE tt:  [in] character translation table
@@ -476,14 +478,14 @@ gettag:
  * BOOLEAN *pemp: [out] set true if file is empty
  *===============================================*/
 RECORD
-file_to_nod0 (STRING fname, TRANTABLE tt, STRING *pmsg, BOOLEAN *pemp)
+file_to_record (STRING fname, TRANTABLE tt, STRING *pmsg, BOOLEAN *pemp)
 {
 	NODE node = file_to_node(fname, tt, pmsg, pemp);
-	RECORD nod0 = 0;
+	RECORD rec = 0;
 	if (node) {
-		nod0 = create_nod0(node);
+		rec = create_record(node);
 	}
-	return nod0;
+	return rec;
 }
 /*=================================================
  * file_to_node -- Convert GEDCOM file to NODE tree
@@ -547,7 +549,7 @@ first_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
 	return next_fp_to_node(fp, list, tt, pmsg, peof);
 }
 /*==============================================================
- * next_fp_to_nod0 -- Convert next GEDCOM record in file to tree
+ * next_fp_to_record -- Convert next GEDCOM record in file to tree
  *
  * FILE *fp:      [in] file that holds GEDCOM record/s
  * BOOLEAN list:  [in] can be list at level 0?
@@ -556,11 +558,11 @@ first_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
  * BOOLEAN *peof: [out] set true if file is at end of file
  *============================================================*/
 RECORD
-next_fp_to_nod0 (FILE *fp, BOOLEAN list, TRANTABLE tt,
+next_fp_to_record (FILE *fp, BOOLEAN list, TRANTABLE tt,
 	STRING *pmsg, BOOLEAN *peof)
 {
 	NODE node = next_fp_to_node(fp, list, tt, pmsg, peof);
-	return create_nod0(node);
+	return create_record(node);
 }
 /*==============================================================
  * next_fp_to_node -- Convert next GEDCOM record in file to tree
@@ -570,6 +572,7 @@ next_fp_to_nod0 (FILE *fp, BOOLEAN list, TRANTABLE tt,
  * TRANTABLE tt:  [in] character translation table
  * STRING *pmsg:  [out] possible error message
  * BOOLEAN *peof: [out] set true if file is at end of file
+ *  callers should probably be converted to calling next_fp_to_record
  *============================================================*/
 NODE
 next_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
@@ -654,7 +657,7 @@ next_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
 	return root;
 }
 /*============================================
- * string_to_record -- Read nod0 from data block
+ * string_to_record -- Read record from data block
  *  This is the layout for metadata nodes:
  *   Q___      (four bytes, but only first char used)
  *   0016      (offset to 0 INDI... line)
@@ -667,11 +670,11 @@ next_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
 RECORD
 string_to_record (STRING str, STRING key, INT len)
 {
-	RECORD nod0 = 0;
+	RECORD rec = 0;
 	NODE node = 0;
 
 	/* create it now, & release it at bottom if we fail */
-	nod0 = alloc_new_nod0();
+	rec = alloc_new_record();
 	/* we must fill in the top & mdwh fields */
 
 	if (*str == '0') /* traditional node, no metadata */
@@ -689,7 +692,7 @@ string_to_record (STRING str, STRING key, INT len)
 		char * node_ptr = str + node_offset;
 		INT whlen = node_offset - 8;
 		ASSERT(0); /* not yet being written */
-		load_nod0_wh(nod0, whptr, whlen);
+		load_record_wh(rec, whptr, whlen);
 		node = string_to_node(node_ptr);
 	} else {
 		if (!strcmp(str, "DELE\n")) {
@@ -700,15 +703,15 @@ string_to_record (STRING str, STRING key, INT len)
 		}
 	}
 	if (node) {
-		nod0->top = node;
-		assign_nod0(nod0, key[0], atoi(key+1));
-		if (!nod0->mdwh)
-			alloc_record_wh(nod0, EXISTING_LACKING_WH_RECORD);
+		rec->top = node;
+		assign_record(rec, key[0], atoi(key+1));
+		if (!rec->mdwh)
+			alloc_record_wh(rec, EXISTING_LACKING_WH_RECORD);
 	} else { /* node==0, we failed, clean up */
-		free_nod0(nod0);
-		nod0 = 0;
+		free_rec(rec);
+		rec = 0;
 	}
-	return nod0;
+	return rec;
 }
 /*========================================
  * string_to_node -- Read tree from string

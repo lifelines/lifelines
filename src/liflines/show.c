@@ -207,7 +207,7 @@ init_display_indi (NODE pers, INT width)
 
 	Solen = 0;
 	nsp = nch = 0;
-	icel = indi_to_cacheel(pers);
+	icel = indi_to_cacheel_old(pers);
 	lock_cache(icel);
 	FORFAMSS(pers, fam, sp, num)
 		if (sp) add_spouse_line(++nsp, sp, fam, width);

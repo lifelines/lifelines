@@ -49,9 +49,9 @@ void
 key_util (void)
 {
 	TRANTABLE ttd = tran_tables[MINDS];
-	NODE indi = ask_for_indi("Whose key value do you want?", NOCONFIRM, NOASK1);
+	RECORD indi = ask_for_indi("Whose key value do you want?", NOCONFIRM, NOASK1);
 	if (!indi) return;
-	msg_info("%s - %s", rmvat(nxref(indi)), indi_to_name(indi, ttd, 70));
+	msg_info("%s - %s", rmvat(nxref(nztop(indi))), indi_to_name(nztop(indi), ttd, 70));
 }
 /*===================================================
  * who_is_he_she -- Find who person is from key value
@@ -59,7 +59,7 @@ key_util (void)
 void
 who_is_he_she (void)
 {
-	STRING key, str, rec;
+	STRING key, str, rawrec;
 	NODE indi;
 	INT len;
 	char nkey[100];
@@ -73,21 +73,22 @@ who_is_he_she (void)
 		strcpy(nkey, key);
 	else
 		strcpy(&nkey[1], key);
-	if (!(rec = retrieve_record(nkey, &len))) {
+	if (!(rawrec = retrieve_raw_record(nkey, &len))) {
 		msg_error("No one in database has key value %s.", key);
 		return;
 	}
-	if (!(indi = string_to_node(rec))) {
+	if (!(indi = string_to_node(rawrec))) {
 		msg_error("No one in database has key value %s.", key);
-		stdfree(rec);
+		stdfree(rawrec);
 		return;
 	}
 	if (!(str = indi_to_name(indi, ttd, 60)) || *str == 0) {
 		msg_error("No one in database has key value %s.", key);
-		stdfree(rec);
+		stdfree(rawrec);
 		return;
 	}
 	msg_info("%s - %s", key, str);
+	/* LEAK -- where is stdfree(rawrec) -- Perry 2001/11/18 */
 }
 /*===========================================
  * show_database_stats -- Show database stats

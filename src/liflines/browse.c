@@ -135,7 +135,7 @@ static NKEY hist_list[20];
 static void
 prompt_for_browse (NODE * node, INT * code, INDISEQ * seq)
 {
-	RECORD nod0;
+	RECORD rec;
 	INT len, rc;
 	STRING key, name;
 
@@ -154,17 +154,17 @@ prompt_for_browse (NODE * node, INT * code, INDISEQ * seq)
 		return;
 	}
 	if (*code == BROWSE_EVEN) {
-		nod0 = choose_any_event();
-		*node = nztop(nod0);
+		rec = choose_any_event();
+		*node = nztop(rec);
 		return;
 	}
 	if (*code == BROWSE_SOUR) {
-		nod0 = choose_any_source();
-		*node = nztop(nod0);
+		rec = choose_any_source();
+		*node = nztop(rec);
 		return;
 	}
-	nod0 = choose_any_other();
-	*node = nztop(nod0);
+	rec = choose_any_other();
+	*node = nztop(rec);
 	return;
 }
 /*=========================================
@@ -292,7 +292,7 @@ display_indi (NODE indi, INT mode, BOOLEAN reuse)
 {
 	CACHEEL icel;
 	INT c;
-	icel = indi_to_cacheel(indi);
+	icel = indi_to_cacheel_old(indi);
 	lock_cache(icel);
 	c = indi_browse(indi, mode, reuse);
 	unlock_cache(icel);
@@ -306,8 +306,8 @@ display_2indi (NODE indi1, NODE indi2, INT mode)
 {
 	CACHEEL icel1, icel2;
 	INT c;
-	icel1 = indi_to_cacheel(indi1);
-	icel2 = indi_to_cacheel(indi2);
+	icel1 = indi_to_cacheel_old(indi1);
+	icel2 = indi_to_cacheel_old(indi2);
 	lock_cache(icel1);
 	lock_cache(icel2);
 	c = twoindi_browse(indi1, indi2, mode);
@@ -425,7 +425,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_BROWSE_ZIP:	/* Zip browse another person */
-			node = ask_for_indi(idpnxt, NOCONFIRM, NOASK1);
+			node = ask_for_indi_old(idpnxt, NOCONFIRM, NOASK1);
 			if (node) indi = node;
 			break;
 		case CMD_SPOUSE:	/* Browse to person's spouse */
@@ -556,7 +556,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_TANDEM:	/* Switch to tandem browsing */
-			node = ask_for_indi(idp2br, NOCONFIRM, NOASK1);
+			node = ask_for_indi_old(idp2br, NOCONFIRM, NOASK1);
 			if (node) {
 				*pindi1 = indi;
 				*pindi2 = node;
@@ -1067,7 +1067,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			return BROWSE_LIST;
 			break;
 		case CMD_BROWSE_ZIP:	/* Zip browse to new person */
-			*pindi1 = ask_for_indi(idpnxt, NOCONFIRM, NOASK1);
+			*pindi1 = ask_for_indi_old(idpnxt, NOCONFIRM, NOASK1);
 			if (*pindi1) return BROWSE_INDI;
 			break;
 		case CMD_TANDEM:	/* Enter family tandem mode */
@@ -1274,16 +1274,16 @@ RECORD
 choose_any_source (void)
 {
 	INDISEQ seq;
-	RECORD nod0;
+	RECORD rec;
 	seq = get_all_sour();
 	if (!seq)
 	{
 		message(nosour);
 		return 0;
 	}
-	nod0 = choose_from_indiseq(seq, DOASK1, idsour, idsour);
+	rec = choose_from_indiseq(seq, DOASK1, idsour, idsour);
 	remove_indiseq(seq);
-	return nod0;
+	return rec;
 }
 /*==================================================
  * choose_any_event -- choose from list of all events
@@ -1292,16 +1292,16 @@ RECORD
 choose_any_event (void)
 {
 	INDISEQ seq;
-	RECORD nod0;
+	RECORD rec;
 	seq = get_all_even();
 	if (!seq)
 	{
 		message(noeven);
 		return NULL;
 	}
-	nod0 = choose_from_indiseq(seq, DOASK1, ideven, ideven);
+	rec = choose_from_indiseq(seq, DOASK1, ideven, ideven);
 	remove_indiseq(seq);
-	return nod0;
+	return rec;
 }
 /*==================================================
  * choose_any_other -- choose from list of all others
@@ -1310,16 +1310,16 @@ RECORD
 choose_any_other (void)
 {
 	INDISEQ seq;
-	RECORD nod0;
+	RECORD rec;
 	seq = get_all_othe();
 	if (!seq)
 	{
 		message(noothe);
 		return NULL;
 	}
-	nod0 = choose_from_indiseq(seq, DOASK1, idothe, idothe);
+	rec = choose_from_indiseq(seq, DOASK1, idothe, idothe);
 	remove_indiseq(seq);
-	return nod0;
+	return rec;
 }
 /*==================================================
  * history_record -- add node to history if different from top of history
