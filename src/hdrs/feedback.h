@@ -51,5 +51,6 @@ void do_edit(void);
 
 /* msg boxes */
 BOOLEAN ask_yes_or_no_msg(STRING, STRING);
+STRING ask_for_string(STRING, STRING);
 
 #endif /* _FEEDBACK_H */

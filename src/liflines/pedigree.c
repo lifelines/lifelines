@@ -29,7 +29,6 @@
 
 #include "llstdlib.h"
 #include "liflines.h"
-#include "screen.h"
 #include "mystring.h"
 
 #include "llinesi.h"
@@ -90,19 +89,19 @@ static DISPNODE add_parents(NODE indi, INT gen, INT maxgen, INT * count);
 static DISPNODE alloc_displaynode(void);
 static void append_to_text_list(LIST list, STRING text, INT width, BOOLEAN newline);
 static void count_nodes(NODE node, INT gen, INT maxgen, INT * count);
-static void draw_gedcom_text(NODE node, INT row, INT hgt, BOOLEAN reuse);
+static void draw_gedcom_text(NODE node, CANVASDATA canvas, BOOLEAN reuse);
 static void free_displaynode(DISPNODE tn);
 static void free_dispnode_tree(DISPNODE tn);
 static void free_entire_tree(void);
 static STRING indi_lineprint(INT width, void * param);
 static STRING node_lineprint(INT width, void * param);
-static void print_to_screen(INT gen, INT * row, LINEPRINT_FNC, void *param, INT minrow, INT maxrow);
+static void print_to_screen(INT gen, INT * row, LINEPRINT_FNC, void *lpf_param, CANVASDATA canvas);
 static STRING tn_lineprint(INT width, void * param);
-static void trav_bin_in_print_tn(DISPNODE tn, INT * row, INT gen, INT minrow, INT maxrow);
-static void trav_pre_print_nd(NODE node, INT * row, INT gen, INT minrow, INT maxrow, INT gdvw);
-static void trav_pre_print_tn(DISPNODE tn, INT * row, INT gen, INT minrow, INT maxrow);
-static void trav_pre_print_tn_str(DISPNODE tn, INT * row, INT gen, INT minrow, INT maxrow);
-static void SetScrollMax(INT row, INT hgt);
+static void trav_bin_in_print_tn(DISPNODE tn, INT * row, INT gen, CANVASDATA canvas);
+static void trav_pre_print_nd(NODE node, INT * row, INT gen, CANVASDATA canvas, INT gdvw);
+static void trav_pre_print_tn(DISPNODE tn, INT * row, INT gen, CANVASDATA canvas);
+static void trav_pre_print_tn_str(DISPNODE tn, INT * row, INT gen, CANVASDATA canvas);
+static void SetScrollMax(INT count, CANVASDATA canvas);
 
 /*********************************************
  * local variables
@@ -269,12 +268,12 @@ append_to_text_list (LIST list, STRING text, INT width, BOOLEAN newline)
  * Created: 2001/04/15, Perry Rapp
  *===============================================*/
 static DISPNODE
-add_dnodes (NODE node, INT gen, INT maxgen, INT * count)
+add_dnodes (NODE node, INT gen, INT maxgen, INT * count, CANVASDATA canvas)
 {
 	DISPNODE tn;
 	DISPNODE tn0, tn1, tn2;
 	NODE child, anode;
-	INT width = ll_cols-2 - gen*6;
+	INT width = canvas->maxcol-2 - gen*6;
 	static char line[120];
 	STRING ptr=line;
 	INT leader;
@@ -371,7 +370,7 @@ add_dnodes (NODE node, INT gen, INT maxgen, INT * count)
 		tn0 = 0;
 		/* anode was last unassimilated child */
 		for (child = anode; child; child = nsibling(child)) {
-			tn1 = add_dnodes(child, gen+1, maxgen, count);
+			tn1 = add_dnodes(child, gen+1, maxgen, count, canvas);
 			if (!tn1)
 				continue; /* child was skipped */
 			/* link new displaynode into tree we're building */
@@ -429,32 +428,36 @@ add_parents (NODE indi, INT gen, INT maxgen, INT * count)
  * print_to_screen -- print output line
  *  using caller-supplied print function
  *  this routine handles scroll & indent
+ *  gen:       [IN]  Current generation (starts at 0)
+ *  row:       [IN/OUT]  Current row (advanced here)
+ *  fnc:       [IN]  (lineprint) callback to produce string for line
+ *  lpf_param: [IN]  opaque data for (lineprint) callback
+ *  canvas:    [IN]  size & handle for output canvas
  * Created: 2000/12/07, Perry Rapp
  *===================================*/
 static void
-print_to_screen (INT gen, INT * row, LINEPRINT_FNC fnc,
-	void * param, INT minrow, INT maxrow)
+print_to_screen (INT gen, INT * row, LINEPRINT_FNC fnc
+	, void * lpf_param, CANVASDATA canvas)
 {
 	char buffer[140], *ptr=buffer;
 	STRING line;
 	int mylen = sizeof(buffer);
-	INT width = ll_cols;
+	INT width = canvas->maxcol;
 	NODE indi = 0;
 	int i, overflow=0;
-	WINDOW *w = main_win;
 	if (mylen > width-2)
 		mylen = width-2;
-	if (*row-Scrollp>=minrow && *row-Scrollp<=maxrow) {
-		if (*row-Scrollp==minrow && Scrollp>0)
+	if (*row-Scrollp>=canvas->minrow && *row-Scrollp<=canvas->maxrow) {
+		if (*row-Scrollp==canvas->minrow && Scrollp>0)
 			overflow=1;
-		if (*row-Scrollp==maxrow && Scrollp<ScrollMax)
+		if (*row-Scrollp==canvas->maxrow && Scrollp<ScrollMax)
 			overflow=1;
 		strcpy(ptr, "");
 		for (i=0; i<gen*6; i++)
 			llstrcatn(&ptr, " ", &mylen);
-		line = (*fnc)(mylen, param);
+		line = (*fnc)(mylen, lpf_param);
 		llstrcatn(&ptr, line, &mylen);
-		put_out_line(w, *row-Scrollp, 1, buffer, width, overflow);
+		(*canvas->line)(canvas, *row-Scrollp, 1, buffer, overflow);
 	}
 	(*row)++;
 }
@@ -534,17 +537,16 @@ tn_lineprint (INT width, void * param)
  * Created: 2000/12/07, Perry Rapp
  *===============================*/
 static void
-trav_pre_print_tn (DISPNODE tn, INT * row, INT gen, 
-	INT minrow, INT maxrow)
+trav_pre_print_tn (DISPNODE tn, INT * row, INT gen, CANVASDATA canvas)
 {
 	DISPNODE n0;
 	struct indi_print_param_s ipp;
 	ipp.keynum = tn->keynum;
 	/* all display printing passes thru generic print_to_screen,
 	which handles scrolling */
-	print_to_screen(gen, row, &indi_lineprint, &ipp, minrow, maxrow);
+	print_to_screen(gen, row, &indi_lineprint, &ipp, canvas);
 	for (n0=tn->firstchild; n0; n0=n0->nextsib)
-		trav_pre_print_tn(n0, row, gen+1, minrow, maxrow);
+		trav_pre_print_tn(n0, row, gen+1, canvas);
 }
 /*=================================
  * trav_pre_print_tn_str -- traverse displaynode str tree,
@@ -552,17 +554,16 @@ trav_pre_print_tn (DISPNODE tn, INT * row, INT gen,
  * Created: 2001/04/15, Perry Rapp
  *===============================*/
 static void
-trav_pre_print_tn_str (DISPNODE tn, INT * row, INT gen, 
-	INT minrow, INT maxrow)
+trav_pre_print_tn_str (DISPNODE tn, INT * row, INT gen, CANVASDATA canvas)
 {
 	DISPNODE n0;
 	struct node_text_print_param_s ntpp;
 	ntpp.tn = tn;
 	/* all display printing passes thru generic print_to_screen,
 	which handles scrolling */
-	print_to_screen(gen, row, &tn_lineprint, &ntpp, minrow, maxrow);
+	print_to_screen(gen, row, &tn_lineprint, &ntpp, canvas);
 	for (n0=tn->firstchild; n0; n0=n0->nextsib)
-		trav_pre_print_tn_str(n0, row, gen+1, minrow, maxrow);
+		trav_pre_print_tn_str(n0, row, gen+1, canvas);
 }
 /*=================================
  * trav_pre_print_nd -- traverse node tree,
@@ -571,7 +572,7 @@ trav_pre_print_tn_str (DISPNODE tn, INT * row, INT gen,
  *===============================*/
 static void
 trav_pre_print_nd (NODE node, INT * row, INT gen, 
-	INT minrow, INT maxrow, INT gdvw)
+	CANVASDATA canvas, INT gdvw)
 {
 	NODE child;
 	struct node_print_param_s npp;
@@ -579,9 +580,9 @@ trav_pre_print_nd (NODE node, INT * row, INT gen,
 	npp.gdvw = gdvw;
 	/* all display printing passes thru generic print_to_screen,
 	which handles scrolling */
-	print_to_screen(gen, row, &node_lineprint, &npp, minrow, maxrow);
+	print_to_screen(gen, row, &node_lineprint, &npp, canvas);
 	for (child=nchild(node); child; child=nsibling(child))
-		trav_pre_print_nd(child, row, gen+1, minrow, maxrow, gdvw);
+		trav_pre_print_nd(child, row, gen+1, canvas, gdvw);
 }
 /*===========================================
  * trav_bin_in_print_tn -- traverse binary tree,
@@ -589,20 +590,17 @@ trav_pre_print_nd (NODE node, INT * row, INT gen,
  * Created: 2000/12/07, Perry Rapp
  *=========================================*/
 static void
-trav_bin_in_print_tn (DISPNODE tn, INT * row, INT gen,
-	INT minrow, INT maxrow)
+trav_bin_in_print_tn (DISPNODE tn, INT * row, INT gen, CANVASDATA canvas)
 {
 	struct indi_print_param_s ipp;
 	ipp.keynum = tn->keynum;
 	if (tn->firstchild)
-		trav_bin_in_print_tn(tn->firstchild, row, gen+1,
-			minrow, maxrow);
+		trav_bin_in_print_tn(tn->firstchild, row, gen+1, canvas);
 	/* all display printing passes thru generic print_to_screen,
 	which handles scrolling */
-	print_to_screen(gen, row, &indi_lineprint, &ipp, minrow, maxrow);
+	print_to_screen(gen, row, &indi_lineprint, &ipp, canvas);
 	if (tn->firstchild && tn->firstchild->nextsib)
-		trav_bin_in_print_tn(tn->firstchild->nextsib, row, gen+1,
-			minrow, maxrow);
+		trav_bin_in_print_tn(tn->firstchild->nextsib, row, gen+1, canvas);
 }
 /*======================================================
  * SetScrollMax -- compute max allowable scroll based on
@@ -610,9 +608,10 @@ trav_bin_in_print_tn (DISPNODE tn, INT * row, INT gen,
  * Created: 2000/12/07, Perry Rapp
  *====================================================*/
 static void
-SetScrollMax (INT row, INT hgt)
+SetScrollMax (INT count, CANVASDATA canvas)
 {
-	ScrollMax = row-hgt;
+	INT hgt = canvas->maxrow - canvas->minrow + 1;
+	ScrollMax = count - hgt;
 	if (ScrollMax<0)
 		ScrollMax=0;
 }
@@ -623,36 +622,36 @@ SetScrollMax (INT row, INT hgt)
  * Created: 2000/12/07, Perry Rapp
  *=======================================================*/
 void
-pedigree_draw_descendants (NODE indi, INT row, INT hgt, BOOLEAN reuse)
+pedigree_draw_descendants (NODE indi, CANVASDATA canvas, BOOLEAN reuse)
 {
-	int gen=0;
+	INT gen=0;
+	INT row = canvas->minrow;
 	/* build displaynode tree */
 	if (!reuse) {
 		INT count=0;
 		free_entire_tree();
 		Root = add_children(indi, gen, Gens, &count);
-		SetScrollMax(count, hgt);
+		SetScrollMax(count, canvas);
 	}
 	/* preorder traversal */
-	trav_pre_print_tn(Root, &row, gen, row, row+hgt-1);
+	trav_pre_print_tn(Root, &row, gen, canvas);
 }
 /*=========================================================
  * pedigree_draw_gedcom -- print out gedcom node tree
  * Created: 2001/01/27, Perry Rapp
  *=======================================================*/
 void
-pedigree_draw_gedcom (NODE node, INT gdvw, INT row, INT hgt, BOOLEAN reuse)
+pedigree_draw_gedcom (NODE node, INT gdvw, CANVASDATA canvas, BOOLEAN reuse)
 {
-	INT count, gen=0;
+	INT count=0, gen=0, row=canvas->minrow;
 	if (gdvw == GDVW_TEXT) {
-		draw_gedcom_text(node, row, hgt, reuse);
+		draw_gedcom_text(node, canvas, reuse);
 		return;
 	}
-	count=0;
 	count_nodes(node, gen, Gens, &count);
-	SetScrollMax(count, hgt);
+		SetScrollMax(count, canvas);
 	/* preorder traversal */
-	trav_pre_print_nd(node, &row, gen, row, row+hgt-1, gdvw);
+	trav_pre_print_nd(node, &row, gen, canvas, gdvw);
 }
 /*=========================================================
  * draw_gedcom_text -- print out gedcom node tree in text wrapped view
@@ -661,21 +660,22 @@ pedigree_draw_gedcom (NODE node, INT gdvw, INT row, INT hgt, BOOLEAN reuse)
  * Created: 2001/04/15, Perry Rapp
  *=======================================================*/
 static void
-draw_gedcom_text (NODE node, INT row, INT hgt, BOOLEAN reuse)
+draw_gedcom_text (NODE node, CANVASDATA canvas, BOOLEAN reuse)
 {
 	int gen=0;
+	INT row = canvas->minrow;
 	DISPNODE tn;
 	if (!reuse) {
 		INT count=0;
 		INT skip=0;
 		free_entire_tree();
-		Root = add_dnodes(node, gen, Gens, &count);
-		SetScrollMax(count, hgt);
+		Root = add_dnodes(node, gen, Gens, &count, canvas);
+		SetScrollMax(count, canvas); 
 	}
 	/* preorder traversal */
 	/* root may have siblings due to overflow/assimilation */
 	for (tn=Root ; tn; tn = tn->nextsib) {
-		trav_pre_print_tn_str(tn, &row, gen, row, row+hgt-1);
+		trav_pre_print_tn_str(tn, &row, gen, canvas);
 	}
 }
 /*=====================================================
@@ -685,18 +685,19 @@ draw_gedcom_text (NODE node, INT row, INT hgt, BOOLEAN reuse)
  * Created: 2000/12/07, Perry Rapp
  *===================================================*/
 void
-pedigree_draw_ancestors (NODE indi, INT row, INT hgt, BOOLEAN reuse)
+pedigree_draw_ancestors (NODE indi, CANVASDATA canvas, BOOLEAN reuse)
 {
 	int gen=0;
+	INT row = canvas->minrow;
 	/* build displaynode tree */
 	if (!reuse) {
 		INT count=0;
 		free_entire_tree();
 		Root = add_parents(indi, gen, Gens, &count);
-		SetScrollMax(count, hgt);
+		SetScrollMax(count, canvas);
 	}
 	/* inorder traversal */
-	trav_bin_in_print_tn(Root, &row, gen, row, row+hgt-1);
+	trav_bin_in_print_tn(Root, &row, gen, canvas);
 }
 /*===========================================
  * pedigree_toggle_mode -- toggle between 

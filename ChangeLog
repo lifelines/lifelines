@@ -7,7 +7,19 @@
 
 	Add prompts in %o, and add analogous %s and %n. Put all three
 	into all browse screens.
-	Fix bugs in fam_to_first_chil,fam_to_last_chil,indi_to_next_sib,indi_to_prev_sib.
+	Fix bugs in fam_to_first_chil,fam_to_last_chil,indi_to_next_sib,
+	indi_to_prev_sib.
+
+	* ChangeLog hdrs/feedback.h hdrs/screen.h interp/alloc.c
+	interp/builtin.c interp/eval.c interp/interp.c
+	liflines/export.c liflines/llinesi.h liflines/merge.c
+	liflines/pedigree.c liflines/screen.c liflines/show.c
+	liflines/swap.c liflines/tandem.c:
+
+	Removed screen.h from some more files.
+	New CANVASDATA struct for pedigree (so it doesn't use screen.h).
+	Changed put_out_line prototype to use void * win, so llinesi.h doesn't
+	require curses.
 
 2001-11-11 Perry Rapp <puddle@users.sourceforge.net>
 

@@ -71,10 +71,20 @@ NODE add_other(void);
 NODE add_source(void);
 
 /* pedigree.c */
+	/* gedcom view mode */
 enum { GDVW_NORMAL, GDVW_EXPANDED, GDVW_TEXT };
-void pedigree_draw_ancestors(NODE indi, INT row, INT menuht, BOOLEAN reuse);
-void pedigree_draw_descendants(NODE indi, INT row, INT menuht, BOOLEAN reuse);
-void pedigree_draw_gedcom(NODE node, INT gdvw, INT row, INT hgt, BOOLEAN reuse);
+	/* data for output canvas */
+	struct canvasdata_s;
+		/* callback to output a line */
+	typedef void (*PEDLINE)(struct canvasdata_s * canvas, INT x, INT y
+		, STRING string, INT overflow);
+		/* collection of data needed by pedigree */
+	typedef struct canvasdata_s { INT minrow; INT maxrow; INT maxcol;
+		void * param; PEDLINE line; } *CANVASDATA;
+	/* functions */
+void pedigree_draw_ancestors(NODE indi, CANVASDATA canvasdata, BOOLEAN reuse);
+void pedigree_draw_descendants(NODE indi, CANVASDATA canvasdata, BOOLEAN reuse);
+void pedigree_draw_gedcom(NODE node, INT gdvw, CANVASDATA canvasdata, BOOLEAN reuse);
 void pedigree_increase_generations(INT delta);
 void pedigree_reset_scroll(void);
 void pedigree_scroll(INT delta);
@@ -94,7 +104,6 @@ void toggle_menu(void);
 /* show.c */
 extern struct rfmt_s disp_long_rfmt, disp_shrt_rfmt;
 void display_cache_stats(void);
-void put_out_line(WINDOW * win, INT x, INT y, STRING string, INT width, INT flag);
 void show_aux_display(NODE, INT mode, INT hgt, BOOLEAN reuse);
 void show_ancestors(NODE indi, INT row, INT hgt, BOOLEAN reuse);
 void show_childnumbers(void);
@@ -102,7 +111,8 @@ void show_descendants(NODE indi, INT row, INT hgt, BOOLEAN reuse);
 void show_gedcom_main(NODE node, INT gdvw, INT row, INT hgt, BOOLEAN reuse);
 void show_list(INDISEQ, INT, INT, INT);
 void show_long_family(NODE, INT row, INT hgt, INT width, BOOLEAN reuse);
-void show_person(WINDOW *, NODE, INT row, INT hgt, INT width, INT *scroll, BOOLEAN reuse);
+	/* we pass a WINDOW * here as void * to avoid pulling curses into this */
+void show_person(void * win, NODE, INT row, INT hgt, INT width, INT *scroll, BOOLEAN reuse);
 void show_person_main(NODE, INT row, INT hgt, BOOLEAN reuse);
 void show_reset_scroll(void);
 void show_sour_display(NODE, INT, INT);

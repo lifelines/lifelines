@@ -39,7 +39,7 @@
 #include "cache.h"
 #include "interp.h"
 #include "liflines.h"
-#include "screen.h"
+#include "feedback.h"
 
 /*********************************************
  * external/imported variables

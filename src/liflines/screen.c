@@ -1780,7 +1780,7 @@ shw_list (WINDOW *win,
 		if (key[0]=='I') {
 			NODE indi = key_to_indi(key);
 			mvwaddstr(win, numdet+1, 2, "---");
-			show_person(win, indi, 2, numdet-1, LISTWIN_WIDTH, scroll, reuse);
+			show_person((void *)win, indi, 2, numdet-1, LISTWIN_WIDTH, scroll, reuse);
 		}
 	}
 }

@@ -89,7 +89,9 @@ static void indi_events(STRING outstr, TRANTABLE tt, NODE indi, INT len);
 static void init_disp_reformat();
 static void init_display_indi(NODE, INT width);
 static void init_display_fam(NODE, INT width);
+static void pedigree_line(CANVASDATA canvas, INT x, INT y, STRING string, INT overflow);
 static STRING person_display(NODE, NODE, INT);
+void put_out_line(WINDOW * win, INT x, INT y, STRING string, INT width, INT flag);
 static STRING sh_fam_to_event_shrt(NODE node, TRANTABLE tt, STRING tag, STRING head
 	, INT len);
 static STRING sh_indi_to_event_long(NODE node, TRANTABLE tt, STRING tag
@@ -490,8 +492,16 @@ show_short_family (NODE fam, INT row, INT hgt, INT width)
 void
 show_ancestors (NODE indi, INT row, INT hgt, BOOLEAN reuse)
 {
+	struct canvasdata_s canvas;
+		/* shape of canvas upon which to draw pedigree */
+	canvas.minrow = row;
+	canvas.maxrow = row + hgt - 1;
+	canvas.maxcol = ll_cols;
+	canvas.param = (void *)main_win;
+	canvas.line = pedigree_line;
+		/* clear & draw pedigree */
 	wipe_window(main_win, row, hgt);
-	pedigree_draw_ancestors(indi, row, hgt, reuse);
+	pedigree_draw_ancestors(indi, &canvas, reuse);
 }
 /*================================================
  * show_descendants -- Show pedigree/descendants
@@ -500,8 +510,16 @@ show_ancestors (NODE indi, INT row, INT hgt, BOOLEAN reuse)
 void
 show_descendants (NODE indi, INT row, INT hgt, BOOLEAN reuse)
 {
+	struct canvasdata_s canvas;
+		/* shape of canvas upon which to draw pedigree */
+	canvas.minrow = row;
+	canvas.maxrow = row + hgt - 1;
+	canvas.maxcol = ll_cols;
+	canvas.param = (void *)main_win;
+	canvas.line = pedigree_line;
+		/* clear & draw pedigree */
 	wipe_window(main_win, row, hgt);
-	pedigree_draw_descendants(indi, row, hgt, reuse);
+	pedigree_draw_descendants(indi, &canvas, reuse);
 }
 /*================================================
  * wipe_window -- Clear window
@@ -527,8 +545,16 @@ wipe_window (WINDOW * w, INT row, INT hgt)
 static void
 show_gedcom (WINDOW *w, NODE node, INT gdvw, INT row, INT hgt, BOOLEAN reuse)
 {
+	struct canvasdata_s canvas;
+		/* shape of canvas upon which to draw pedigree */
+	canvas.minrow = row;
+	canvas.maxrow = row + hgt - 1;
+	canvas.maxcol = ll_cols;
+	canvas.param = (void *)w;
+	canvas.line = pedigree_line;
+		/* clear & draw pedigree */
 	wipe_window(w, row, hgt);
-	pedigree_draw_gedcom(node, gdvw, row, hgt, reuse);
+	pedigree_draw_gedcom(node, gdvw, &canvas, reuse);
 }
 /*================================================
  * show_gedcom_main -- Show node in gedcom format
@@ -836,10 +862,19 @@ show_reset_scroll (void)
 	pedigree_reset_scroll();
 }
 /*=====================================
+ * pedigree_line - callback from pedigree code
+ *  to put out each line of pedigree
+ *====================================*/
+static void
+pedigree_line (CANVASDATA canvas, INT x, INT y, STRING string, INT overflow)
+{
+	put_out_line((WINDOW *)canvas->param, x, y, string, canvas->maxcol, overflow);
+}
+/*=====================================
  * put_out_line - move string to screen
  * but also append + at end if requested
  *====================================*/
-void
+static void
 put_out_line (WINDOW * win, INT x, INT y, STRING string, INT width, INT flag)
 {
 	if (!flag)

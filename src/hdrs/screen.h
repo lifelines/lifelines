@@ -105,7 +105,6 @@ INT ask_for_char_msg(STRING, STRING, STRING, STRING);
 STRING ask_for_input_filename (STRING ttl, STRING path, STRING prmpt);
 STRING ask_for_db_filename(STRING, STRING, STRING);
 STRING ask_for_output_filename (STRING ttl, STRING path, STRING prmpt);
-STRING ask_for_string(STRING, STRING);
 INT choose_one_from_indiseq(STRING, INDISEQ);
 void display_screen(INT);
 void dbprintf(STRING, ...);
