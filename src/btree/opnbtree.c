@@ -21,7 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
-/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
+
 /*=============================================================
  * opnbtree.c -- Create and open BTREE database
  * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
@@ -29,6 +29,8 @@
  *   2.3.6 - 17 Oct 93    3.0.0 - 04 Oct 94
  *   3.0.2 - 01 Dec 94
  *===========================================================*/
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
+/* modified 2000-01-20 J.F.Chandler */
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -258,13 +260,23 @@ BTREE btree;
     FILE *fp;
     KEYFILE kfile;
 
-    if(btree && ((fp = bkfp(btree)) != NULL))
-        {
+    if(btree && ((fp = bkfp(btree)) != NULL)) {
 	kfile = btree->b_kfile;
 	if (kfile.k_ostat <= 0)
 		kfile.k_ostat = 0;
-	else
+	else { /* read-only, get current shared status */
+		rewind(fp);
+		if (fread(&kfile, sizeof(KEYFILE), 1, fp) != 1) {
+			bterrno = BTERRKFILE;
+			fclose(fp);
+			return FALSE;
+		}
+		if (kfile.k_ostat <= 0) { /* someone has seized the DB */
+			fclose(fp);
+			return TRUE;
+		}
 		kfile.k_ostat--;
+	}
 	rewind(fp);
 	if (fwrite(&kfile, sizeof(KEYFILE), 1, fp) != 1) {
 		bterrno = BTERRKFILE;
@@ -272,6 +284,6 @@ BTREE btree;
 		return FALSE;
 	}
 	fclose(fp);
-        }
+    }
     return TRUE;
 }
