@@ -78,6 +78,10 @@
 
 	Cosmetic: fix unused arg warning in fix_bad_pointer.
 
+	* ChangeLog src/tools/dbverify.c
+
+	dbverify: Add shell for fixing family pointers.
+
 2005-02-02 Perry Rapp
 
 	* ChangeLog src/gedlib/gedcomi.h src/gedlib/keytonod.c

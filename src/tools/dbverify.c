@@ -136,7 +136,9 @@ static BOOLEAN fix_bad_pointer(CNSTRING key, RECORD rec, NODE node);
 static BOOLEAN nodes_callback(CNSTRING key, RECORD rec, void *param);
 static void printblock(BLOCK block);
 static void print_usage(void);
+static void process_fam(RECORD rec);
 static void process_indi(RECORD rec);
+static void process_record(RECORD rec);
 static void report_error(INT err, STRING fmt, ...);
 static void report_progress(STRING fmt, ...);
 static void report_results(void);
@@ -549,7 +551,7 @@ fix_nodes (void)
 		RECORD rec = key_to_record(key);
 		strfree(&key);
 		lock_record_in_cache(rec);
-		process_indi(rec);
+		process_record(rec);
 		unlock_record_from_cache(rec);
 	}
 }
@@ -575,9 +577,22 @@ nodes_callback (CNSTRING key, RECORD rec, void *param)
 	return TRUE;
 }
 /*=====================================
- * check_indi -- process indi record
- *  checking and/or fixing as requested
- * Created: 2001/01/14, Perry Rapp
+ * process_record -- process record
+ *  Called during pass2 (fix)
+ *===================================*/
+static void
+process_record (RECORD rec)
+{
+	switch(nztype(rec)) {
+	case 'I': process_indi(rec); break;
+	case 'F': process_fam(rec); break;
+		/* TODO */
+	}
+}
+/*=====================================
+ * check_indi -- check indi record
+ *  and record any records needing fixing
+ *  in tofix list
  *===================================*/
 static BOOLEAN
 check_indi (CNSTRING key, RECORD rec)
@@ -602,7 +617,6 @@ check_indi (CNSTRING key, RECORD rec)
 	release_record(recx);
 	return TRUE;
 }
-
 /*=====================================
  * process_indi -- process indi record
  *  checking in pass 1, fixing in pass 2
@@ -704,25 +718,56 @@ process_indi (RECORD rec)
 	}
 }
 /*=====================================
- * check_fam -- process fam record
- *  checking and/or fixing as requested
- * Created: 2001/01/14, Perry Rapp
+ * check_fam -- check family record
+ *  and record any records needing fixing
+ *  in tofix list
  *===================================*/
 static BOOLEAN
 check_fam (CNSTRING key, RECORD rec)
 {
-	static char prevkey[MAXKEYWIDTH+1];
-	NODE fam1, fref1, husb1, wife1, chil1, rest1;
-	NODE node1;
-	CACHEEL fcel1;
-	INT members = 0;
+	static char prevkey[MAXKEYWIDTH+1]="";
+	CACHEEL fcel1=0;
+	RECORD recx=0;
+
 	if (eqstr(key, prevkey)) {
 		report_error(ERR_DUPFAM, _("Duplicate family for %s"), key);
 	}
+	
 	fcel1 = fam_to_cacheel(rec);
 	lock_cache(fcel1);
-	fam1 = nztop(rec);
+
+	recx = get_record_for_cel(fcel1);
+	ASSERT(todo.pass == 1);
+	process_fam(recx);
+
+	unlock_cache(fcel1);
+	check_pointers(key, rec);
+	append_indiseq_null(seq_fams, strsave(key), NULL, TRUE, TRUE);
+	return TRUE;
+}
+/*=====================================
+ * process_fam -- process indi record
+ *  checking in pass 1, fixing in pass 2
+ *===================================*/
+static void
+process_fam (RECORD rec)
+{
+	NODE fam0, fam1;
+	NODE fref1, husb1, wife1, chil1, rest1;
+	NODE node1;
+	INT members = 0;
+	BOOLEAN altered=FALSE;
+	BOOLEAN needfix=FALSE;
+	CNSTRING key = nzkey(rec);
+
+	fam0 = nztop(rec);
+	if (todo.pass==1) {
+		fam1 = fam0;
+	} else {
+		fam1 = copy_node_subtree(fam0);
+	}
 	split_fam(fam1, &fref1, &husb1, &wife1, &chil1, &rest1);
+
 	/* check refns */
 	for (node1 = fref1; node1; node1 = nsibling(node1)) {
 		/* STRING refn=nval(node1); */
@@ -789,10 +834,19 @@ check_fam (CNSTRING key, RECORD rec)
 	} else if (members == 1) {
 		report_error(ERR_SOLOFAM, _("Single person family (%s)"), key);
 	}
-	unlock_cache(fcel1);
-	check_pointers(key, rec);
-	append_indiseq_null(seq_fams, strsave(key), NULL, TRUE, TRUE);
-	return TRUE;
+
+
+	if (altered) {
+		/* must normalize, as some lineage references may have been 
+		altered to non-lineage tags to fix broken pointers */
+		/* normalize_fam(fam1); */
+
+		/* write to database */
+/*		replace_indi(indi0, indi1); */
+
+	} else if (needfix) {
+		enqueue_list(tofix, strsave(key));
+	}
 }
 /*=====================================
  * check_sour -- process sour record
