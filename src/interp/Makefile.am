@@ -9,11 +9,11 @@ libinterp_a_SOURCES = alloc.c builtin.c eval.c functab.c heapused.c \
 	pvalalloc.c pvalue.c pvalmath.c \
 	rassa.c rptui.c symtab.c write.c yacc.y
 
-# $(top_srcdir)          for config.h
+# $(top_builddir)        for config.h
 # $(top_srcdir)/intl     for intl headers
-# ../../intl             for generated libintl.h
+# $(top_builddir)/intl   for generated libintl.h
 # $(top_srcdir)/src/hdrs for headers
-INCLUDES=-I$(top_srcdir) -I$(top_srcdir)/intl -I../../intl -I$(top_srcdir)/src/hdrs
+INCLUDES=-I$(top_builddir) -I$(top_srcdir)/intl -I$(top_builddir)/intl -I$(top_srcdir)/src/hdrs
 
 AM_YFLAGS = -d
 
