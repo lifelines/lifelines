@@ -48,9 +48,9 @@
 extern BTREE BTR;
 extern STRING qScfradd, qScfeadd, qScfxadd, qSrredit, qSeredit, qSxredit;
 extern STRING qScfrupt, qScfeupt, qScfxupt, qSgdrmod, qSgdemod, qSgdxmod;
-extern STRING qSidredt, qSideedt, qSidxedt, qSduprfn, qSronlya, qSronlye;
+extern STRING qSidredt, qSideedt, qSidxedt, qSronlya, qSronlye;
 extern STRING qSrreditopt, qSereditopt, qSxreditopt;
-extern STRING qSnofopn, qSidkyrfn;
+extern STRING qSnofopn;
 extern STRING qSdefsour,qSdefeven,qSdefothr,qSnosuchrec;
 
 /*********************************************
@@ -389,29 +389,4 @@ edit_record (RECORD rec1, STRING idedt, INT letr, STRING redt, STRING redtopt
 	free_nodes(refn1n);
 	msg_info(gdmsg);
 	return TRUE;
-}
-/*===============================================
- * ask_for_record -- Ask user to identify record
- *  lookup by key or by refn (& handle dup refns)
- *  idstr: [IN]  question prompt
- *  letr:  [IN]  letter to possibly prepend to key (ie, I/F/S/E/X)
- *=============================================*/
-RECORD
-ask_for_record (STRING idstr, INT letr)
-{
-	RECORD rec;
-	char answer[MAXPATHLEN];
-	if (!ask_for_string(idstr, _(qSidkyrfn), answer, sizeof(answer))
-		|| !answer[0])
-		return NULL;
-
-	rec = key_possible_to_record(answer, letr);
-	if (!rec) {
-		INDISEQ seq;
-		seq = refn_to_indiseq(answer, letr, KEYSORT);
-		if (!seq) return NULL;
-		rec = choose_from_indiseq(seq, NOASK1, _(qSduprfn), _(qSduprfn));
-		remove_indiseq(seq);
-	}
-	return rec;
 }

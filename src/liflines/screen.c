@@ -231,6 +231,7 @@ static INT translate_hdware_key(INT c);
 static void uicolor(UIWINDOW, LLRECT rect, char ch);
 static void uierase(UIWINDOW uiwin);
 static INT update_browse_menu(INT screen);
+static BOOLEAN yes_no_value(INT c);
 
 /*********************************************
  * local variables
@@ -1035,18 +1036,26 @@ ask_for_string2 (STRING ttl1, STRING ttl2, STRING prmpt, STRING buffer, INT bufl
 	return rtn;
 }
 /*========================================
+ * yes_no_value -- Convert character to TRUE if y(es)
+ *======================================*/
+static BOOLEAN
+yes_no_value (INT c)
+{
+	STRING ptr;
+	for (ptr = _(qSaskyY); *ptr; ptr++) {
+		if (c == *ptr) return TRUE;
+	}
+	return FALSE;
+}
+/*========================================
  * ask_yes_or_no -- Ask yes or no question
  *  ttl:  [IN]  title to display
  *======================================*/
 BOOLEAN
 ask_yes_or_no (STRING ttl)
 {
-	STRING ptr;
 	INT c = ask_for_char(ttl, _(qSaskynq), _(qSaskynyn));
-	for (ptr = _(qSaskyY); *ptr; ptr++) {
-		if (c == *ptr) return TRUE;
-	}
-	return FALSE;
+	return yes_no_value(c);
 }
 /*=========================================================
  * ask_yes_or_no_msg -- Ask yes or no question with message
@@ -1056,12 +1065,8 @@ ask_yes_or_no (STRING ttl)
 BOOLEAN
 ask_yes_or_no_msg (STRING msg, STRING ttl)
 {
-	STRING ptr;
 	INT c = ask_for_char_msg(msg, ttl, _(qSaskynq), _(qSaskynyn));
-	for (ptr = _(qSaskyY); *ptr; ptr++) {
-		if (c == *ptr) return TRUE;
-	}
-	return FALSE;
+	return yes_no_value(c);
 }
 /*=======================================
  * ask_for_char -- Ask user for character
@@ -1084,7 +1089,7 @@ ask_for_char (STRING ttl, STRING prmpt, STRING ptrn)
 INT
 ask_for_char_msg (STRING msg, STRING ttl, STRING prmpt, STRING ptrn)
 {
-	UIWINDOW uiwin = ask_msg_win;
+	UIWINDOW uiwin = (msg ? ask_msg_win : ask_win);
 	WINDOW *win = uiw_win(uiwin);
 	INT y;
 	INT rv;

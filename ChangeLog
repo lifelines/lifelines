@@ -9,6 +9,12 @@
 
 	Miscellaneous fixes for recent changes.
 
+	* ChangeLog build/msvc6/llexec/llexec.dsp src/liflines/ask.c
+	src/liflines/llexec.c src/liflines/newrecs.c
+	src/liflines/screen.c:
+
+	Improving llexec.c.
+
 2003-01-01 Perry Rapp
 
 	* ChangeLog src/gedlib/keytonod.c src/hdrs/cache.h

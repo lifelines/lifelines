@@ -54,7 +54,7 @@ extern char badkeylist[];
 extern STRING qSntchld,qSntprnt,qSidfbrs,qSentnam,qSnotone,qSifone;
 extern STRING qSnofopn,qSidbrws,qSwhtfname,qSwhtfnameext;
 extern STRING qSnonamky,qSparadox,qSaskint,qSmisskeys,qSbadkeyptr;
-extern STRING qSfn2long;
+extern STRING qSfn2long,qSidkyrfn,qSduprfn;
 
 /*********************************************
  * local function prototypes
@@ -461,6 +461,31 @@ choose_from_indiseq (INDISEQ seq, ASK1Q ask1, STRING titl1, STRING titln)
 		else
 			llstrncpyf(buf, sizeof(buf), uu8, _(qSbadkeyptr));
 		message(buf);
+	}
+	return rec;
+}
+/*===============================================
+ * ask_for_record -- Ask user to identify record
+ *  lookup by key or by refn (& handle dup refns)
+ *  idstr: [IN]  question prompt
+ *  letr:  [IN]  letter to possibly prepend to key (ie, I/F/S/E/X)
+ *=============================================*/
+RECORD
+ask_for_record (STRING idstr, INT letr)
+{
+	RECORD rec;
+	char answer[MAXPATHLEN];
+	if (!ask_for_string(idstr, _(qSidkyrfn), answer, sizeof(answer))
+		|| !answer[0])
+		return NULL;
+
+	rec = key_possible_to_record(answer, letr);
+	if (!rec) {
+		INDISEQ seq;
+		seq = refn_to_indiseq(answer, letr, KEYSORT);
+		if (!seq) return NULL;
+		rec = choose_from_indiseq(seq, NOASK1, _(qSduprfn), _(qSduprfn));
+		remove_indiseq(seq);
 	}
 	return rec;
 }

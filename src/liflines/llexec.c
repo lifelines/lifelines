@@ -39,7 +39,8 @@
 extern STRING qSidldir,qSidldrp,qSnodbse,qScrdbse,qSiddbse;
 extern STRING qSmtitle,qSnorwandro,qSnofandl,qSbdlkar;
 extern STRING qSusgFinnOpt,qSusgFinnAlw,qSusgNorm;
-extern STRING qSbaddb;
+extern STRING qSbaddb,qSdefttl,qSiddefpath;
+extern STRING qSaskynq,qSaskynyn,qSaskyY,qSaskint;
 
 extern INT csz_indi, icsz_indi;
 extern INT csz_fam, icsz_fam;
@@ -71,12 +72,15 @@ BOOLEAN showusage = FALSE;     /* show usage */
 STRING  readpath_file = NULL;  /* last component of readpath */
 STRING  readpath = NULL;       /* database path used to open */
 STRING  ext_codeset = 0;       /* default codeset from locale */
-
+INT screen_width = 20; /* TODO */
 /*********************************************
  * local function prototypes
  *********************************************/
 
 /* alphabetical */
+static INT ask_for_char_msg(STRING msg, STRING ttl, STRING prmpt, STRING ptrn);
+static BOOLEAN ask_for_filename_impl(STRING ttl, STRING path, STRING prmpt, STRING buffer, INT buflen);
+static INT choose_one_or_list_from_indiseq(STRING ttl, INDISEQ seq, BOOLEAN multi);
 static void init_browse_module(void);
 static void init_show_module(void);
 static BOOLEAN is_unadorned_directory(STRING path);
@@ -89,6 +93,7 @@ static void platform_init(void);
 static void show_open_error(INT dberr);
 static void term_browse_module(void);
 static void term_show_module(void);
+static BOOLEAN yes_no_value(INT c);
 
 /*********************************************
  * local function definitions
@@ -655,7 +660,13 @@ call_system_cmd (STRING cmd)
 #endif
 	system(cmd);
 }
-extern STRING qSaskynq,qSaskynyn,qSaskyY,qSaskint;
+/* send string to output, & terminate line */
+static void
+outputln (const char * txt)
+{
+	printf(txt);
+	printf("\n");
+}
 BOOLEAN
 ask_for_program (STRING mode,
                  STRING ttl,
@@ -668,96 +679,20 @@ ask_for_program (STRING mode,
 	/* TODO: We probably want to use the real implementation in askprogram.c */
 	return FALSE;
 }
-FILE *
-ask_for_output_file (STRING mode,
-                     STRING ttl,
-                     STRING *pfname,
-                     STRING *pfullpath,
-                     STRING path,
-                     STRING ext)
-{
-	/* TODO: Do we want to steal the existing one, but reimplement underneath ? */
-	return NULL;
-}
-BOOLEAN
-ask_for_int (STRING ttl, INT * prtn)
-{
-	INT ival, c, neg;
-	char buffer[MAXPATHLEN];
-	while (TRUE) {
-		STRING p = buffer;
-		if (!ask_for_string(ttl, _(qSaskint), buffer, sizeof(buffer)))
-			return FALSE;
-		neg = 1;
-		while (iswhite(*p++))
-			;
-		--p;
-		if (*p == '-') {
-			neg = -1;
-			p++;
-			while (iswhite(*p++))
-				;
-			--p;
-		}
-		if (chartype(*p) == DIGIT) {
-			ival = *p++ - '0';
-			while (chartype(c = *p++) == DIGIT)
-				ival = ival*10 + c - '0';
-			--p;
-			while (iswhite(*p++))
-				;
-			--p;
-			if (*p == 0) {
-				*prtn = ival*neg;
-				return TRUE;
-			}
-		}
-	}
-}
 BOOLEAN
 ask_for_string (STRING ttl, STRING prmpt, STRING buffer, INT buflen)
 {
-	printf(ttl); printf("\n");
+	outputln(ttl);
 	printf(prmpt);
 	fgets(buffer, buflen, stdin);
 	chomp(buffer);
 	return strlen(buffer)>0;
 }
-STRING
-ask_for_indi_key (STRING ttl,
-                  CONFIRMQ confirmq,
-                  ASK1Q ask1)
+BOOLEAN
+ask_for_string2 (STRING ttl1, STRING ttl2, STRING prmpt, STRING buffer, INT buflen)
 {
-	/* TODO */
-	return "";
-}
-RECORD
-ask_for_fam (STRING pttl, STRING sttl)
-{
-	/* TODO */
-	return NULL;
-}
-INDISEQ
-ask_for_indi_list (STRING ttl,
-                   BOOLEAN reask)
-{
-	/* TODO */
-	return NULL;
-}
-RECORD
-choose_from_indiseq (INDISEQ seq, ASK1Q ask1, STRING titl1, STRING titln)
-{
-	/* TODO */
-	/* Ok, here is a problem, this implementation is not curses-specific,
-	but calls thru to something curses-specific */
-	return NULL;
-}
-/* send string to output, & terminate line */
-static void
-outputln (const char * txt)
-{
-	printf(txt);
-	printf("\n");
+	outputln(ttl1);
+	return ask_for_string(ttl2, prmpt, buffer, buflen);
 }
 /* send string to output */
 static void
@@ -779,25 +714,32 @@ interact (STRING ptrn)
 		printf("Invalid option: choose one of %s\n", ptrn);
 	}
 }
+INT
+ask_for_char (STRING ttl, STRING prmpt, STRING ptrn)
+{
+	return ask_for_char_msg(NULL, ttl, prmpt, ptrn);
+}
 static INT
 ask_for_char_msg (STRING msg, STRING ttl, STRING prmpt, STRING ptrn)
 {
 	INT rv;
-	outputln(msg);
+	if (msg) outputln(msg);
 	outputln(ttl);
 	output(prmpt);
 	rv = interact(ptrn);
 	return rv;
 }
 BOOLEAN
+ask_yes_or_no (STRING ttl)
+{
+	INT c = ask_for_char(ttl, _(qSaskynq), _(qSaskynyn));
+	return yes_no_value(c);
+}
+BOOLEAN
 ask_yes_or_no_msg (STRING msg, STRING ttl)
 {
-	STRING ptr;
 	INT c = ask_for_char_msg(msg, ttl, _(qSaskynq), _(qSaskynyn));
-	for (ptr = _(qSaskyY); *ptr; ptr++) {
-		if (c == *ptr) return TRUE;
-	}
-	return FALSE;
+	return yes_no_value(c);
 }
 INT
 choose_from_array (STRING ttl, INT no, STRING *pstrngs)
@@ -815,9 +757,29 @@ view_array (STRING ttl, INT no, STRING *pstrngs)
 INT
 choose_from_list (STRING ttl, LIST list)
 {
-	/* TODO */
-	/* Another one where we may want implementation, as it is above curses level */
-	return 0;
+	STRING * array=0;
+	STRING choice=0;
+	INT i=0, rtn=-1;
+	INT len = llen(list);
+
+	if (len < 1) return -1;
+	if (!ttl) ttl=_(qSdefttl);
+
+	array = (STRING *) stdalloc(len*sizeof(STRING));
+	i = 0;
+	FORXLIST(list, el)
+		choice = (STRING)el;
+		ASSERT(choice);
+		array[i] = strsave(choice);
+		++i;
+	ENDXLIST
+
+	rtn = choose_from_array(ttl, len, array);
+
+	for (i=0; i<len; ++i)
+		strfree(&array[i]);
+	stdfree(array);
+	return rtn;
 }
 BOOLEAN
 ask_for_db_filename (STRING ttl, STRING prmpt, STRING basedir, STRING buffer, INT buflen)
@@ -827,7 +789,53 @@ ask_for_db_filename (STRING ttl, STRING prmpt, STRING basedir, STRING buffer, IN
 INT
 choose_list_from_indiseq (STRING ttl, INDISEQ seq)
 {
+	return choose_one_or_list_from_indiseq(ttl, seq, TRUE);
+}
+static INT
+choose_one_or_list_from_indiseq (STRING ttl, INDISEQ seq, BOOLEAN multi)
+{
+	calc_indiseq_names(seq); /* we certainly need the names */
+
 	/* TODO */
-	/* Another one where we may want implementation, as it is above curses level */
 	return 0;
+}
+BOOLEAN
+ask_for_output_filename (STRING ttl, STRING path, STRING prmpt, STRING buffer, INT buflen)
+{
+	/* curses version doesn't differentiate input from output prompts */
+	return ask_for_filename_impl(ttl, path, prmpt, buffer, buflen);
+}
+BOOLEAN
+ask_for_input_filename (STRING ttl, STRING path, STRING prmpt, STRING buffer, INT buflen)
+{
+	/* curses version doesn't differentiate input from output prompts */
+	return ask_for_filename_impl(ttl, path, prmpt, buffer, buflen);
+}
+static BOOLEAN
+ask_for_filename_impl (STRING ttl, STRING path, STRING prmpt, STRING buffer, INT buflen)
+{
+	/* display current path (truncated to fit) */
+	char curpath[120];
+	INT len = sizeof(curpath);
+	if (len > screen_width-2)
+		len = screen_width-2;
+	curpath[0] = 0;
+	llstrapps(curpath, len, uu8, _(qSiddefpath));
+	llstrapps(curpath, len, uu8, compress_path(path, len-strlen(curpath)-1));
+
+	return ask_for_string2(ttl, curpath, prmpt, buffer, buflen);
+}
+static BOOLEAN
+yes_no_value (INT c)
+{
+	STRING ptr;
+	for (ptr = _(qSaskyY); *ptr; ptr++) {
+		if (c == *ptr) return TRUE;
+	}
+	return FALSE;
+}
+INT
+choose_one_from_indiseq (STRING ttl, INDISEQ seq)
+{
+	return choose_one_or_list_from_indiseq(ttl, seq, FALSE);
 }

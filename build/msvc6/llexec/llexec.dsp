@@ -104,6 +104,10 @@ SOURCE=..\..\..\src\stdlib\appendstr.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\liflines\ask.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\btree\block.c
 # End Source File
 # Begin Source File
