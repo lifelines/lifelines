@@ -1,3 +1,10 @@
+2002-11-11 Perry Rapp
+
+	* ChangeLog build/rpm/lifelines.spec po/LINGUAS
+	*NEW: po/da.po
+
+	Added Danish translation (da.po).
+
 2002-11-08 Perry Rapp
 
 	* ChangeLog src/interp/builtin.c src/liflines/brwsmenu.c

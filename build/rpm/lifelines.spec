@@ -37,6 +37,9 @@ install -s -m 755 src/liflines/llines $RPM_BUILD_ROOT/usr/local/bin
 install -s -m 755 src/liflines/llexec $RPM_BUILD_ROOT/usr/local/bin
 install -s -m 755 src/tools/dbverify $RPM_BUILD_ROOT/usr/local/bin
 
+install -d -m 755 $RPM_BUILD_ROOT/usr/local/share/locale/da/LC_MESSAGES
+install -m 644 po/da.gmo $RPM_BUILD_ROOT/usr/local/share/locale/da/LC_MESSAGES/lifelines.mo
+
 install -d -m 755 $RPM_BUILD_ROOT/usr/local/share/locale/de/LC_MESSAGES
 install -m 644 po/de.gmo $RPM_BUILD_ROOT/usr/local/share/locale/de/LC_MESSAGES/lifelines.mo
 
@@ -73,3 +76,6 @@ install -m 644 docs/llines.1 $RPM_BUILD_ROOT/usr/local/man/man1/llines.1
 - Implement patch by Karl DeBisschop: adds build root, list reports as group instead of individually
 - Add dbverify, de.po, fr.po, sv.po
 - (lifelines-3.0.19-1)
+* Mon Nov 11 2002 Perry Rapp
+- Add da.po
+- (post lifelines-3.0.21)
