@@ -113,8 +113,6 @@ typedef union {
 #	define NULL 0
 #endif
 
-STRING strsave(), strconcat();
-
 extern BOOLEAN alloclog;
 #define stdalloc(l)   __allocate(l, __FILE__, __LINE__)
 #define stdfree(p)    __deallocate(p, __FILE__, __LINE__)
@@ -191,8 +189,8 @@ int ll_strncmp(char*, char*, int);
 void make_list_empty(LIST);
 void set_list_type(LIST, INT);
 void push_list(LIST, WORD);
-void remove_list(LIST, int (*func)());
-BOOLEAN in_list(LIST, WORD, int (*func)());
+void remove_list(LIST, int (*func)(WORD));
+BOOLEAN in_list(LIST, WORD, int (*func)(WORD, WORD));
 void back_list(LIST, WORD);
 
 void *__allocate(int, STRING, int);
