@@ -86,11 +86,12 @@ INT alloc_count(void);
 void report_alloc_live_count(STRING str);
 
 /* path.c */
-STRING concat_path(STRING dir, STRING file);
-STRING filepath(STRING name, STRING mode, STRING path, STRING ext);
+STRING concat_path(CNSTRING dir, CNSTRING file);
+STRING filepath(CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING ext);
 FILE* fopenpath(STRING, STRING, STRING, STRING, STRING*);
 BOOLEAN is_dir_sep(char c);
 STRING lastpathname(STRING);
+BOOLEAN path_match(CNSTRING path1, CNSTRING path2);
 
 /* signals.c */
 void set_signals(void);
@@ -102,7 +103,7 @@ STRING capitalize(STRING);
 INT chartype(INT);
 STRING strconcat(STRING, STRING);
 void strfree(STRING *);
-STRING strsave(STRING);
+STRING strsave(CNSTRING);
 BOOLEAN isletter(INT);
 BOOLEAN isnumeric(STRING);
 BOOLEAN iswhite(INT);

@@ -195,7 +195,6 @@ static RECORD invoke_scan_menu(void);
 static void invoke_trans_menu(UIWINDOW wparent);
 static void invoke_utils_menu(void);
 static void load_tt_menu(UIWINDOW wparent);
-static void msg_impl(STRING fmt, va_list args, INT level);
 static void output_menu(UIWINDOW uiwin, INT screen, INT bottom, INT width);
 void place_cursor(void);
 static void place_std_msg(void);
@@ -2140,7 +2139,7 @@ llvwprintf (STRING fmt, va_list args)
 	it is going to duplicate the stdout display currently being
 	used (which is nicer looking, but scrolls off-screen).
 	*/
-/*	msg_impl(fmt, args, -1);*/ /* also send to msg list */
+/*	msg_outputv(MSG_ERROR, fmt, args);*/ /* also send to msg list */
 }
 /*=================================================
  * llwprintf -- Called as wprintf(fmt, arg, arg, ...)
@@ -2535,7 +2534,7 @@ display_status (STRING text)
 }
 /*=========================================
  * msg_error -- handle error message
- * delegates to msg_impl
+ * delegates to msg_outputv
  * Created: 2001/11/11, Perry Rapp
  *=======================================*/
 void
@@ -2543,12 +2542,12 @@ msg_error (STRING fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	msg_impl(fmt, args, -1); /* -1 means error */
+	msg_outputv(MSG_ERROR, fmt, args); 
 	va_end(args);
 }
 /*=========================================
  * msg_info -- handle regular messages
- * delegates to msg_impl
+ * delegates to msg_outputv
  * Created: 2001/11/11, Perry Rapp
  *=======================================*/
 void
@@ -2556,12 +2555,12 @@ msg_info (STRING fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	msg_impl(fmt, args, 0); /* 0 means normal info */
+	msg_outputv(MSG_INFO, fmt, args);
 	va_end(args);
 }
 /*=========================================
  * msg_status -- handle transitory/status messages
- * delegates to msg_impl
+ * delegates to msg_outputv
  * Created: 2001/11/11, Perry Rapp
  *=======================================*/
 void
@@ -2569,29 +2568,52 @@ msg_status (STRING fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	msg_impl(fmt, args, 1); /* 1 means transitory */
+	msg_outputv(MSG_STATUS, fmt, args);
 	va_end(args);
 }
 /*=========================================
- * msg_impl -- handle all messages
+ * msg_output -- handle any message
+ * delegates to msg_outputv
+ * Created: 2001/12/16, Perry Rapp
+ *=======================================*/
+void
+msg_output (MSG_LEVEL level, STRING fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	msg_outputv(level, fmt, args);
+	va_end(args);
+}
+/*=====================================
+ * msg_width -- get max width of msgs
+ * Created: 2001/12/16, Perry Rapp
+ *===================================*/
+INT
+msg_width (void)
+{
+	return ll_cols-10;
+}
+/*=========================================
+ * msg_outputv -- output message varargs style arguments
+ * Actually all other msg functions delegate to here.
  * fmt,args:  printf style varargs from client
  * level:     -1=error,0=info,1=status
  * Puts into message list and/or into status area
  * Created: 2001/11/11, Perry Rapp
  *=======================================*/
 void
-msg_impl (STRING fmt, va_list args, INT level)
+msg_outputv (MSG_LEVEL level, STRING fmt, va_list args)
 {
 	char buffer[250];
 	STRING ptr;
 	unsigned int width = MAINWIN_WIDTH-5;
 	/* prefix errors & infos with * and space respectively */
 	switch(level) {
-		case -1:
+		case MSG_ERROR:
 			buffer[0] = '*';
 			ptr = &buffer[1];
 			break;
-		case 0:
+		case MSG_INFO:
 			buffer[0] = ' ';
 			ptr = &buffer[1];
 			break;
@@ -2602,7 +2624,7 @@ msg_impl (STRING fmt, va_list args, INT level)
 	/* now make string to show/put on msg list */
 	vsnprintf(ptr, sizeof(buffer), fmt, args);
 	/* first handle transitory/status messages */
-	if (level==1) {
+	if (level==MSG_STATUS) {
 		if (lock_std_msg)
 			return; /* can't display it, status bar is locked */
 		if (status_showing[0] && !status_transitory) {

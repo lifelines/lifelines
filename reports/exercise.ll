@@ -4,7 +4,7 @@
  * @author         Perry Rapp
  * @category       test
  * @output         mixed
- * @description    
+ * @description    Perry's test program.
 
 Exercises lots of functions
 cycling through most of the database
@@ -14,12 +14,16 @@ and ending with a gengedcomstrong dump.
 The exerciseStrings proc (although not complete)
 actually tests the results & prints if a wrong
 result is found.
+
+I run this report before checking in code changes.
+
 */
 
+option("explicitvars") /* Disallow use of undefined variables */
 global(dead)
 global(cutoff_yr)
-/*option("explicitvars")*/ /* this wrecks the undef tests */
 global(true)
+global(undef) /* variable with no set value, used in string tests */
 
 proc main()
 {

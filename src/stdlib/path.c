@@ -24,6 +24,7 @@
 /*======================================================
  * path.c -- Handle files with environment variables
  * Copyright (c) by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   2.3.4 - 24 Jun 93    2.3.5 - 12 Aug 93
  *   3.0.0 - 05 May 94    3.0.2 - 01 Dec 94
  *   3.0.3 - 06 Sep 95
@@ -61,7 +62,7 @@ is_dir_sep (char c)
  *  handle WIN32 characters
  *=============================================*/
 static BOOLEAN
-is_absolute_path (STRING dir)
+is_absolute_path (CNSTRING dir)
 {
 	if (is_dir_sep(*dir) || *dir == '.') return TRUE;
 #ifdef WIN32
@@ -73,13 +74,13 @@ is_absolute_path (STRING dir)
  * path_match -- are paths the same ?
  *  handle WIN32 filename case insensitivity
  *========================================*/
-static BOOLEAN
-path_match (STRING path1, STRING path2)
+BOOLEAN
+path_match (CNSTRING path1, CNSTRING path2)
 {
 #ifdef WIN32
-	return !stricmp(path1, path2);
+	return !stricmp((STRING)path1, (STRING)path2);
 #else
-	return !strcmp(path1, path2);
+	return !strcmp((STRING)path1, (STRING)path2);
 #endif
 }
 /*=============================================
@@ -112,7 +113,7 @@ test_concat_path (void)
  *  returns static buffer
  *===========================================*/
 STRING
-concat_path (STRING dir, STRING file)
+concat_path (CNSTRING dir, CNSTRING file)
 {
 	static char buffer[MAXPATHLEN];
 	STRING ptr = buffer;
@@ -154,10 +155,10 @@ concat_path (STRING dir, STRING file)
  *  returns alloc'd buffer
  *=========================================*/
 STRING
-filepath (STRING name,
-          STRING mode,
-          STRING path,
-          STRING  ext)
+filepath (CNSTRING name,
+          CNSTRING mode,
+          CNSTRING path,
+          CNSTRING  ext)
 {
 	char buf1[MAXPATHLEN], buf2[MAXPATHLEN];
 	STRING p, q;
@@ -165,8 +166,8 @@ filepath (STRING name,
 	INT nlen, elen, dirs;
 
 	if (ISNULL(name)) return NULL;
-	if (ISNULL(path)) return name;
-	if (is_absolute_path(name)) return name;
+	if (ISNULL(path)) return strsave(name);
+	if (is_absolute_path(name)) return strsave(name);
 	nlen = strlen(name);
 	if(ext && *ext) {
 		elen = strlen(ext);

@@ -67,6 +67,7 @@ extern STRING whatrpt;
 static void remove_tables(void);
 static void parse_file(STRING ifile, LIST plist);
 static void printkey(STRING key, char type, INT keynum);
+static void progmessage(MSG_LEVEL level, STRING);
 
 /*********************************************
  * local variables
@@ -119,26 +120,25 @@ finishinterp (void)
 }
 /*================================================================+
  * progmessage -- Display a status message about the report program
+ *  level: [IN]  error, info, status (use enum MSG_LEVEL)
+ *  msg:   [IN]  string to display (progname is added if there is room)
  *===============================================================*/
-void
-progmessage (char *msg)
+static void
+progmessage (MSG_LEVEL level, STRING msg)
 {
 	char buf[80];
 	char *ptr=buf;
 	INT mylen=sizeof(buf);
-	int len;
-	char *dotdotdot;
-	if(progname && *progname) {
-		INT limit = 40;
-	/* TODO: The correct limit for curses is llcols-2-strlen(msg),
-	but that is curses-specific, so how do we do this ? */
-		len = strlen(progname);
+	INT msglen = strlen(msg);
+	if(progname && *progname && msglen+20 < msg_width()) {
+		INT limit = msg_width() - msglen;
+		INT len = strlen(progname);
+		STRING dotdotdot="";
 		if(len > limit) {
 			len -= limit;
 			dotdotdot = "...";
 		} else {
 			len = 0;
-			dotdotdot = "";
 		}
 		llstrcatn(&ptr, "Program ", &mylen);
 		llstrcatn(&ptr, dotdotdot, &mylen);
@@ -149,7 +149,7 @@ progmessage (char *msg)
 		llstrcatn(&ptr, "The program ", &mylen);
 		llstrcatn(&ptr, msg, &mylen);
 	}
-	message(buf);
+	msg_output(level, buf);
 }
 /*=============================================+
  * interp_program -- Interpret LifeLines program
@@ -223,14 +223,14 @@ interp_program (STRING proc, INT nargs, VPTR *args, INT nifiles
 	}
 	remove_list(plist, NULL); plist=NULL;
 	if (Perrors) {
-		progmessage("contains errors.");
+		progmessage(MSG_ERROR, "contains errors.");
 		goto interp_program_exit;
 	}
 
    /* Find top procedure */
 
 	if (!(first = (PNODE) valueof_ptr(proctab, proc))) {
-		progmessage("needs a starting procedure.");
+		progmessage(MSG_ERROR, "needs a starting procedure.");
 		goto interp_program_exit;
 	}
 
@@ -261,14 +261,14 @@ interp_program (STRING proc, INT nargs, VPTR *args, INT nifiles
 	progparsing = FALSE;
 	progrunning = TRUE;
 	progerror = 0;
-	progmessage("is running...");
+	progmessage(MSG_STATUS, "is running...");
 	switch (interpret((PNODE) ibody(first), stab, &dummy)) {
 	case INTOKAY:
 	case INTRETURN:
-		progmessage("was run successfully.");
+		progmessage(MSG_INFO, "was run successfully.");
 		break;
 	default:
-		progmessage("was not run because of errors.");
+		progmessage(MSG_STATUS, "was not run because of errors.");
 		break;
 	}
 

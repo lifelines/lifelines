@@ -4,6 +4,9 @@
  *
  * askprog.c -- Search for programs, parse info tags and present user
  * with list of programs.
+ *
+ * NB: This file uses spaces only for indent, and uses a different curly
+ * braces style than the rest of LifeLines. Please respect.
  */
 
 #include <ctype.h>
@@ -31,17 +34,17 @@ typedef struct program_info_s *PROGRAM_INFO;
 
 /* alphabetical */
 FILE *ask_for_program (STRING mode,
-		       STRING ttl,
-		       STRING *pfname,
-		       STRING path,
-		       STRING ext,
-		       BOOLEAN picklist);
+                       STRING ttl,
+                       STRING *pfname,
+                       STRING path,
+                       STRING ext,
+                       BOOLEAN picklist);
 PROGRAM_INFO find_all_programs(STRING path, STRING ext);
 void free_program_list(PROGRAM_INFO head, STRING *list, int len);
 PROGRAM_INFO get_choice(PROGRAM_INFO head, int choice);
 PROGRAM_INFO load_programs(STRING directory,
-				   STRING ext,
-				   PROGRAM_INFO head);
+                           STRING ext,
+                           PROGRAM_INFO head);
 int make_program_list(PROGRAM_INFO head, STRING leader, STRING **list);
 PROGRAM_INFO parse_program(STRING directory, STRING filename);
 static void progdetails(ARRAY_DETAILS arrdets, void * param);
@@ -58,12 +61,12 @@ extern STRING extrpt, whatrpt;
 enum { P_PROGNAME=0, P_VERSION=1, P_OUTPUT=4 };
 
 static CNSTRING f_tags[] = {
-	"progname"    /* The name of the script */
-	, "version"     /* The version of the script */
-	, "author"      /* The author of the script */
-	, "category"    /* The category of the script */
-	, "output"      /* The output format produced by this script */
-	, "description" /* A description of purpose of the script */
+  "progname"    /* The name of the script */
+  , "version"     /* The version of the script */
+  , "author"      /* The author of the script */
+  , "category"    /* The category of the script */
+  , "output"      /* The output format produced by this script */
+  , "description" /* A description of purpose of the script */
 };
 
 /* The program meta-info linked list entry */
@@ -85,10 +88,11 @@ int
 select_programs(const struct dirent *entry)
 {
   int retval = 0;
+  /* examine end of entry->d_name */
+  CNSTRING entext = entry->d_name + strlen(entry->d_name) - strlen(select_ext);
 
-  /* Compare extension with end of filename */
-  if (0 == strcmp(select_ext,
-                  entry->d_name + strlen(entry->d_name) - strlen(select_ext)))
+  /* is it what we want ? use platform correct comparison, from path.c */
+  if (path_match(select_ext, entext))
     retval = 1;
 
   return retval;
@@ -119,49 +123,51 @@ PROGRAM_INFO
 parse_program(STRING directory,
               STRING filename)
 {
-	char filepath[MAXLINELEN];
-	PROGRAM_INFO info;
-	FILE *fp;
-	char str[MAXLINELEN];
-	int i;
+  char filepath[MAXLINELEN];
+  PROGRAM_INFO info;
+  FILE *fp;
+  char str[MAXLINELEN];
+  int i;
 
-	sprintf(filepath, "%s/%s", directory, filename);
+  sprintf(filepath, "%s/%s", directory, filename);
 
-	if (NULL == (fp = fopen(filepath, "r")))
-		return NULL;
+  if (NULL == (fp = fopen(filepath, "r")))
+    return NULL;
 
-	info = calloc(1, sizeof(*info));
-	info->filename = strdup(filepath);
-	for (i=0; i<ARRSIZE(info->tags); ++i)
-	  info->tags[i] = "";
+  info = calloc(1, sizeof(*info));
+  info->filename = strdup(filepath);
+  for (i=0; i<ARRSIZE(info->tags); ++i)
+    info->tags[i] = "";
 
-	while (NULL != fgets(str, sizeof(str), fp))
-	{
-		STRING p;
-		for (i=0; i<ARRSIZE(f_tags); ++i) {
-			CNSTRING tag = f_tags[i];
-			if (info->tags[i][0])
-				continue; /* already have this tag */
-			if (NULL != (p = strstr(str, tag))) {
-				STRING s = p + strlen(tag);
-				/* skip leading space */
-				while (s[0] && isspace((uchar)s[0]))
-					++s;
-				remove_trailing_space(s);
-				if (s[0])
-					info->tags[i] = strdup(s);
-				break;
-			}
-		}
-		if (strstr(str, "*/"))
-			break;
-	}
+  while (NULL != fgets(str, sizeof(str), fp))
+    {
+      STRING p;
+      for (i=0; i<ARRSIZE(f_tags); ++i)
+        {
+          CNSTRING tag = f_tags[i];
+          if (info->tags[i][0])
+            continue; /* already have this tag */
+          if (NULL != (p = strstr(str, tag)))
+            {
+              STRING s = p + strlen(tag);
+              /* skip leading space */
+              while (s[0] && isspace((uchar)s[0]))
+                ++s;
+              remove_trailing_space(s);
+              if (s[0])
+                info->tags[i] = strdup(s);
+              break;
+            }
+        }
+          if (strstr(str, "*/"))
+            break;
+    }
 
-	fclose(fp);
+  fclose(fp);
 
-	/* ensure we always have a program name */
-	if (!info->tags[P_PROGNAME][0]) 
-		info->tags[P_PROGNAME] = strdup(filename);
+  /* ensure we always have a program name */
+  if (!info->tags[P_PROGNAME][0]) 
+    info->tags[P_PROGNAME] = strdup(filename);
 
   return info;
 }
@@ -250,25 +256,29 @@ free_program_list(PROGRAM_INFO head,
                   STRING *list,
                   int len)
 {
-	PROGRAM_INFO info;
-	while (NULL != head) {
-		INT i;
-		info = head;
-		head = head->next;
+  PROGRAM_INFO info;
+  while (NULL != head)
+    {
+      INT i;
+      info = head;
+      head = head->next;
 
-		stdfree(info->filename);
-		for (i=0; i<ARRSIZE(info->tags); ++i) {
-			if (info->tags[i] && info->tags[i][0])
-				stdfree(info->tags[i]);
-		}
-		stdfree(info);
-	}
-	if (list) {
-		while (len--) {
-			stdfree(list[len]);
-		}
-		stdfree(list);
-	}
+      stdfree(info->filename);
+      for (i=0; i<ARRSIZE(info->tags); ++i)
+        {
+          if (info->tags[i] && info->tags[i][0])
+            stdfree(info->tags[i]);
+        }
+      stdfree(info);
+    }
+  if (list)
+    {
+      while (len--)
+        {
+          stdfree(list[len]);
+        }
+      stdfree(list);
+    }
 }
 
 /*=====================================================================
@@ -315,15 +325,15 @@ make_program_list(PROGRAM_INFO head,
       char buf[MAXLINELEN];
       STRING ptr = buf;
       INT mylen = sizeof(buf)-1;
-		STRING program = cur->tags[P_PROGNAME];
-		STRING version = cur->tags[P_VERSION];
-		STRING output = cur->tags[P_OUTPUT];
-		if (!output)
-			output = "?";
-		if (!version[0])
-			version = "V?.?";
-		snprintf(buf, sizeof(buf), "%s (%s) [%s]"
-			, program, version, output);
+      STRING program = cur->tags[P_PROGNAME];
+      STRING version = cur->tags[P_VERSION];
+      STRING output = cur->tags[P_OUTPUT];
+      if (!output)
+        output = "?";
+      if (!version[0])
+        version = "V?.?";
+      snprintf(buf, sizeof(buf), "%s (%s) [%s]"
+        , program, version, output);
       newlist[i] = strdup(buf);
       i++;
       cur = cur->next;
@@ -431,34 +441,36 @@ AskForString:
  * progdetails -- print details of a program
  * Callback from choose_from_array_x
  *  arrdets:  [IN]  package of list & current status
- *  param:  [IN]  the param we passed when we called choose_from_array_x
+ *  param:    [IN]  the param we passed when we called choose_from_array_x
  * Created: 2001/12/15 (Perry Rapp)
  *==============================================*/
 static void
 progdetails (ARRAY_DETAILS arrdets, void * param)
 {
-	PROGRAM_INFO head = (PROGRAM_INFO)param;
-	PROGRAM_INFO cur=0;
-	INT count = arrdets->count;
-	INT len = arrdets->maxlen;
-	INT index = arrdets->cur - 1; /* 0 slot taken by choose string */
-	INT row=0;
-	INT scroll = arrdets->scroll;
-	INT i;
+  PROGRAM_INFO head = (PROGRAM_INFO)param;
+  PROGRAM_INFO cur=0;
+  INT count = arrdets->count;
+  INT len = arrdets->maxlen;
+  INT index = arrdets->cur - 1; /* 0 slot taken by choose string */
+  INT row=0;
+  INT scroll = arrdets->scroll;
+  INT i;
 
-	if (index<0) return;
+  if (index<0) return;
 
-	cur = get_choice(head, index);
+  cur = get_choice(head, index);
 
-	for (i=scroll; i<ARRSIZE(cur->tags); ++i) {
-		STRING ptr = arrdets->lines[row];
-		INT mylen = len;
-		llstrcatn(&ptr, f_tags[i], &mylen);
-		llstrcatn(&ptr, ": ", &mylen);
-		llstrcatn(&ptr, cur->tags[i], &mylen);
-		++row;
-		if (row==count)
-			return;
-	}
-	/* TODO: read file header */
+  /* print tags & values */
+  for (i=scroll; i<ARRSIZE(cur->tags); ++i)
+    {
+      STRING ptr = arrdets->lines[row];
+      INT mylen = len;
+      llstrcatn(&ptr, f_tags[i], &mylen);
+      llstrcatn(&ptr, ": ", &mylen);
+      llstrcatn(&ptr, cur->tags[i], &mylen);
+      ++row;
+      if (row==count)
+        return;
+    }
+  /* TODO: read file header */
 }

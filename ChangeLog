@@ -11,6 +11,16 @@
 	into messages.c.
 	Changed option "ErrorLog" to "CrashLog".
 
+	* ChangeLog arch/scandir.c hdrs/feedback.h hdrs/interp.h
+	hdrs/llstdlib.h interp/interp.c liflines/askprogram.c
+	liflines/screen.c reports/exercise.ll stdlib/path.c
+	stdlib/stdstrng.c:
+
+	Fixed askprogram.c to use platform-correct path match for extension
+	(ie, case-insensitive under MS-Windows). Fixed formatting in
+	askprogram.c to Petter's style. Added collation to MS-Windows scandir.
+	Revised feedback and progmessage.
+
 2001-12-15 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/messages.c hdrs/screen.h liflines/screen.c

@@ -52,8 +52,22 @@
 
 #include <windows.h>
 
+/*
+ * File comparison for sorting for MS-Windows scandir
+ */
+static int __cdecl cmpnames (const void * el1, const void *el2)
+{
+  const struct dirent * ent1 = *(const struct dirent **)el1;
+  const struct dirent * ent2 = *(const struct dirent **)el2;
+  /* we don't have to ifdef this, because this is MS-Windows specific */
+  /* MS-Windows standard is case-insensitive collation */
+  return _stricoll(ent1->d_name, ent2->d_name);
+}
+/*
+ * MS-Windows version of scandir (uses FindFirst...)
+ */
 int
-scandir(const char *dir, struct dirent ***namelist,
+scandir (const char *dir, struct dirent ***namelist,
         int (*select)(const struct dirent *),
         int (*compar)(const struct dirent **, const struct dirent **))
 {
@@ -63,12 +77,14 @@ scandir(const char *dir, struct dirent ***namelist,
   struct dirent **names;
   char *pattern;
 
-  pattern = (char*)malloc(strlen(dir) + 3 /* for *.* */ +1 /* for the /, possibly */ + 1 /* for \0 */);
+  /* 3 for "*.*", 1 for "\", 1 for zero termination */
+  pattern = (char*)malloc(strlen(dir) + 3 +1 +1);
   strcpy(pattern, dir);
   if (pattern[ strlen(pattern) - 1] != '\\')
     strcat(pattern, "\\");
   strcat(pattern, "*.*");
 
+  /* 1st pass thru is just to count them */
   handle = FindFirstFile(pattern, &file_data);
   if (handle == INVALID_HANDLE_VALUE)
     {
@@ -85,6 +101,7 @@ scandir(const char *dir, struct dirent ***namelist,
     }
   FindClose(handle);
 
+  /* Now we know how many, we can alloc & make 2nd pass to copy them */
   names = (struct dirent**)malloc(sizeof(struct dirent*) * count);
   handle = FindFirstFile(pattern, &file_data);
   if (handle == INVALID_HANDLE_VALUE)
@@ -94,6 +111,7 @@ scandir(const char *dir, struct dirent ***namelist,
       return -1;
     }
 
+  /* Now let caller filter them if requested */
   pos = 0;
   while (1)
     {
@@ -114,6 +132,8 @@ scandir(const char *dir, struct dirent ***namelist,
     }
 
   free(pattern);
+  /* Now sort them */
+  qsort(names, pos, sizeof(names[0]), cmpnames);
   *namelist = names;
   return pos;
 }

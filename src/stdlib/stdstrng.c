@@ -40,7 +40,7 @@ extern BOOLEAN opt_finnish;
  * returns stdalloc'd memory
  *=============================*/
 STRING
-strsave (STRING str)
+strsave (CNSTRING str)
 {
 	return strcpy(stdalloc(strlen(str) + 1), str);
 }
