@@ -1113,9 +1113,10 @@ name_to_indiseq (STRING name)
 static STRING
 generic_print_el (INDISEQ seq, INT i)
 {
-	STRING key, name, str = NULL;
-	INT fmt=0;
+	STRING key, name, str;
 	element_indiseq(seq, i, &key, &name);
+
+	str=NULL; /* set to appropriate format */
 
 	switch (key[0])
 	{
@@ -1123,7 +1124,6 @@ generic_print_el (INDISEQ seq, INT i)
 		{
 			NODE indi = key_to_indi(key);
 			str = indi_to_list_string(indi, NULL, 68);
-			fmt=1;
 		}
 		break;
 	case 'S':
@@ -1132,7 +1132,6 @@ generic_print_el (INDISEQ seq, INT i)
 			if (sour)
 			{
 				str = sour_to_list_string(sour, 68, ", ");
-				fmt=1;
 			}
 		}
 		break;
@@ -1145,12 +1144,11 @@ generic_print_el (INDISEQ seq, INT i)
 			if (node)
 			{
 				str = generic_to_list_string(node, 68, ", ");
-				fmt=1;
 			}
 		}
 		break;
 	}
-	if (!fmt)
+	if (!str)
 		str = strsave(key);
 	return str;
 }
