@@ -8,7 +8,7 @@ bin_PROGRAMS = llines
 llines_SOURCES = add.c advedit.c ask.c browse.c delete.c edit.c \
 	export.c import.c lbrowse.c main.c merge.c miscutls.c \
 	newrecs.c pedigree.c remove.c show.c screen.c swap.c \
-	tandem.c \ valgdcom.c llinesi.h askprogram.c
+	tandem.c valgdcom.c llinesi.h askprogram.c
 
 # extra stuff for lines
 llines_LDADD = ../interp/libinterp.a ../gedlib/libgedcom.a \
@@ -72,7 +72,7 @@ miscutls.o: ../hdrs/translat.h
 newrecs.o: ../hdrs/standard.h
 newrecs.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h
 newrecs.o: ../hdrs/translat.h ../hdrs/btree.h
-pedigree.o: /hdrs/llstdlib.h ../hdrs/screen.h ../hdrs/mystring.h
+pedigree.o: ../hdrs/llstdlib.h ../hdrs/screen.h ../hdrs/mystring.h
 remove.o: ../hdrs/standard.h
 remove.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h
 screen.o: ../hdrs/standard.h

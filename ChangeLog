@@ -1,3 +1,8 @@
+2000-12-07  Marc Nozell  <nozell@dl360r6.ispworks.com>
+
+	* liflines/Makefile.am: Fix build.  Still dies when browsing to a
+	person.
+ 
 2000-12-06 Perry Rapp <prapp@users.sourceforge.net>
 
 	* hdrs/gedcom.h liflines/Makefile.am liflines/browse.c
