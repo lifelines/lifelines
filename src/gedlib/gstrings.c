@@ -139,6 +139,8 @@ sour_to_list_string(NODE sour, INT len, STRING delim)
 	STRING name, p=scratch;
 	INT mylen=len;
 	TRANTABLE ttd = tran_tables[MINDS];
+	if (mylen>sizeof(scratch))
+		mylen=sizeof(scratch);
 	p[0]=0;
 	llstrcatn(&p, "(S", &mylen);
 	llstrcatn(&p, rmvat(nxref(sour))+1, &mylen);
@@ -170,6 +172,8 @@ generic_to_list_string(NODE node, INT len, STRING delim)
 	STRING name, p=scratch;
 	INT mylen=len;
 	TRANTABLE ttd = tran_tables[MINDS];
+	if (mylen>sizeof(scratch))
+		mylen=sizeof(scratch);
 	p[0]=0;
 	llstrcatn(&p, "(X", &mylen);
 	llstrcatn(&p, rmvat(nxref(node))+1, &mylen);
