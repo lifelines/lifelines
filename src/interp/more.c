@@ -1233,8 +1233,8 @@ sortpaircmp (SORTEL el1, SORTEL el2, VPTR param)
 static int
 sortpair_bin (const void * el1, const void * el2)
 {
-	SORTPAIR sp1 = (SORTPAIR)el1;
-	SORTPAIR sp2 = (SORTPAIR)el2;
+	SORTPAIR sp1 = *(SORTPAIR *)el1;
+	SORTPAIR sp2 = *(SORTPAIR *)el2;
 	return pvalues_collate(sp1->value, sp2->value);
 }
 PVALUE

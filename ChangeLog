@@ -14,6 +14,10 @@
 	Changed __sort to call library qsort, which is much faster 
 	than the lifelines one I just tried to optimize (on Windows).
 
+	* ChangeLog src/interp/more.c
+
+	Bugfix to __sort compare function.
+
 2003-02-28 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp
