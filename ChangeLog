@@ -1,4 +1,7 @@
-2000-12-07  Marc Nozell  <nozell@dl360r6.ispworks.com>
+2000-12-07  Marc Nozell  <marc@nozell.com>
+
+	* liflines/main.c: Call init_show_module to init some string
+	buffers.
 
 	* liflines/Makefile.am: Fix build.  Still dies when browsing to a
 	person.

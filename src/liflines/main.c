@@ -285,6 +285,7 @@ main (INT argc,
 		exit_it(1);
 	}
 	init_lifelines();
+	init_show_module();
 	while (!alldone)
 		main_menu();
 	close_lifelines();
