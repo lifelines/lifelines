@@ -509,9 +509,12 @@ indi_to_famc (NODE node)
 NODE
 fam_to_husb_node (NODE node)
 {
+	CNSTRING key=0;
 	if (!node) return NULL;
 	if (!(node = find_tag(nchild(node), "HUSB"))) return NULL;
-	return key_to_indi(rmvat(nval(node)));
+	key = rmvat(nval(node));
+	if (!key) return NULL;
+	return qkey_to_indi(key);
 }
 /*========================================
  * fam_to_husb -- Get husband of family
@@ -536,9 +539,11 @@ fam_to_husb (RECORD frec, RECORD * prec)
 NODE
 fam_to_wife_node (NODE node)
 {
+	CNSTRING key=0;
 	if (!node) return NULL;
 	if (!(node = find_tag(nchild(node), "WIFE"))) return NULL;
-	return key_to_indi(rmvat(nval(node)));
+	key = rmvat(nval(node));
+	return qkey_to_indi(key);
 }
 /*========================================
  * fam_to_wife -- Return husband of family
@@ -579,9 +584,11 @@ fam_to_spouse (NODE fam, NODE indi)
 NODE
 fam_to_first_chil (NODE node)
 {
+	CNSTRING key=0;
 	if (!node) return NULL;
 	if (!(node = find_tag(nchild(node), "CHIL"))) return NULL;
-	return key_to_indi(rmvat(nval(node)));
+	key = rmvat(nval(node));
+	return qkey_to_indi(key);
 }
 /*=================================================
  * fam_to_last_chil -- Return last child of family
@@ -589,6 +596,7 @@ fam_to_first_chil (NODE node)
 NODE
 fam_to_last_chil (NODE node)
 {
+	CNSTRING key=0;
 	NODE prev = NULL;
 	if (!node) return NULL;
 	/* find first CHIL in fam */
@@ -599,7 +607,8 @@ fam_to_last_chil (NODE node)
 			prev = node;
 		node = nsibling(node);
 	}
-	return key_to_indi(rmvat(nval(prev)));
+	key = rmvat(nval(prev));
+	return qkey_to_indi(key);
 }
 /*========================================
  * indi_to_fath -- Return father of person

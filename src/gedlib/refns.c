@@ -407,8 +407,6 @@ resolve_node (NODE node, BOOLEAN annotate_pointers)
 	}
 	if (annotate_pointers) {
 		INT i=0,len=0;
-		/* TODO: Check if nval(node) is an annotated xref
-		and unannotate it if so */
 		if (is_annotated_xref(nval(node), &len)) {
 			char newval[20];
 			ASSERT(len < sizeof(newval));

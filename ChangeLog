@@ -1,3 +1,9 @@
+2003-10-01 Perry Rapp
+
+	* ChangeLog src/gedlib/node.c src/gedlib/refns.c
+
+	More graceful handling of bad family pointers.
+
 2003-09-30 Perry Rapp
 
 	* ChangeLog po/fr.po
