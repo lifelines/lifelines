@@ -155,6 +155,9 @@ enum {
 	, PN_INUM_HPTR = 0x8 /* inum is a heap string */
 	, PN_ISPOUSE_HPTR = 0x10 /* ispouse is a heap string */
 	, PN_IFAMILY_HPTR = 0x20 /* ifamily is a heap string */
+	, PN_IELEMENT_HPTR = 0x40 /* ielement is a heap string */
+	, PN_IPARENT_HPTR = 0x80 /* iiparent is a heap string */
+	, PN_IVALVAR_HPTR = 0x100 /* ivalvar is a heap string */
 };
 
 #define itype(i)     ((i)->i_type)  /* node type - all nodes */
@@ -175,7 +178,7 @@ enum {
 #define ichild(i)    ((i)->i_word2)     /* var in children loop */
 #define ispouse(i)   ((i)->i_word2)     /* var in families and spouses loop */
 #define ifamily(i)   ((i)->i_word3)     /* var in all families type loops */
-#define iiparent(i)  ((i)->i_word2)    /* var in some families type loops */
+#define iiparent(i)  ((i)->i_word2)     /* var in some families type loops */
 #define ivalvar(i)   ((i)->i_word3)     /* var in indiset loop */
 #define iname(i)     ((i)->i_word1)     /* proc, func and builtin names */
 #define ilev(i)      ((i)->i_word3)     /* var traverse loop */

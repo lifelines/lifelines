@@ -145,26 +145,31 @@ tmplt	:	CHILDREN m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		}
 	|	FATHERS m '(' expr ',' IDEN ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
+			/* consumes $6 and $8 and $10 */
 			$$ = fathers_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (STRING)$10, (PNODE)$13);
 			((PNODE)$$)->i_line = (INT)$2;
 		}
 	|	MOTHERS m '(' expr ',' IDEN ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
+			/* consumes $6 and $8 and $10 */
 			$$ = mothers_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (STRING)$10, (PNODE)$13);
 			((PNODE)$$)->i_line = (INT)$2;
 		}
 	|	PARENTS m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
+			/* consumes $6 and $8 */
 			$$ = parents_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (PNODE)$11);
 			((PNODE)$$)->i_line = (INT)$2;
 		}
 	|	FORINDISET m '(' expr ',' IDEN ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
+			/* consumes $6 and $8 and $10 */
 			$$ = forindiset_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (STRING)$10, (PNODE)$13);
 			((PNODE)$$)->i_line = (INT) $2;
 		}
 	|	FORLIST_TOK m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
+			/* consumes $6 and $8 */
 			$$ = forlist_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (PNODE)$11);
 			((PNODE)$$)->i_line = (INT) $2;
 		}
@@ -197,10 +202,12 @@ tmplt	:	CHILDREN m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 			((PNODE)$$)->i_line = (INT) $2;
 		}
 	|	TRAVERSE m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}' {
+			/* consumes $6 */
 			$$ = traverse_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (PNODE)$11);
 			((PNODE)$$)->i_line = (INT) $2;
 		}
 	|	FORNODES m '(' expr ',' IDEN ')' '{' tmplts '}' {
+			/* consumes $6 */
 			$$ = fornodes_node(pactx, (PNODE)$4, (STRING)$6, (PNODE)$9);
 			((PNODE)$$)->i_line = (INT) $2;
 		}
@@ -226,6 +233,7 @@ tmplt	:	CHILDREN m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 			((PNODE)$$)->i_line = (INT) $2;
 		}
 	|	CALL IDEN m '(' exprso ')' {
+			/* consumes $2 */
 			$$ = call_node(pactx, (STRING)$2, (PNODE)$5);
 			((PNODE)$$)->i_line = (INT) $3;
 		}

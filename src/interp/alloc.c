@@ -282,6 +282,27 @@ clear_pnode (PNODE node)
 			ifamily(node) = 0;
 		}
 	}
+	if (node->i_flags & PN_IELEMENT_HPTR) {
+		STRING str = ielement(node);
+		if (str) {
+			stdfree(str);
+			ielement(node) = 0;
+		}
+	}
+	if (node->i_flags & PN_IPARENT_HPTR) {
+		STRING str = iiparent(node);
+		if (str) {
+			stdfree(str);
+			iiparent(node) = 0;
+		}
+	}
+	if (node->i_flags & PN_IVALVAR_HPTR) {
+		STRING str = ivalvar(node);
+		if (str) {
+			stdfree(str);
+			ivalvar(node) = 0;
+		}
+	}
 }
 /*==================================
  * delete_pnode -- Create PNODE node
@@ -389,6 +410,7 @@ fathers_node (PACTX pactx, PNODE pexpr, STRING pvar, STRING fvar, STRING nvar, P
 	ifamily(node) = (VPTR) fvar;
 	inum(node) = (VPTR) nvar;
 	ibody(node) = (VPTR) body;
+	node->i_flags = PN_IPARENT_HPTR + PN_IFAMILY_HPTR + PN_INUM_HPTR;
 	set_parents(body, node);
 	return node;
 }
@@ -410,6 +432,7 @@ mothers_node (PACTX pactx, PNODE pexpr, STRING pvar, STRING fvar, STRING nvar, P
 	ifamily(node) = (VPTR) fvar;
 	inum(node) = (VPTR) nvar;
 	ibody(node) = (VPTR) body;
+	node->i_flags = PN_IPARENT_HPTR + PN_IFAMILY_HPTR + PN_INUM_HPTR;
 	set_parents(body, node);
 	return node;
 }
@@ -429,6 +452,7 @@ parents_node (PACTX pactx, PNODE pexpr, STRING fvar, STRING nvar, PNODE body)
 	ifamily(node) = (VPTR) fvar;
 	inum(node) = (VPTR) nvar;
 	ibody(node) = (VPTR) body;
+	node->i_flags = PN_IFAMILY_HPTR + PN_INUM_HPTR;
 	set_parents(body, node);
 	return node;
 }
@@ -450,6 +474,7 @@ forindiset_node (PACTX pactx, PNODE iexpr, STRING ivar, STRING vvar, STRING nvar
 	ivalvar(node) = (VPTR) vvar;
 	inum(node) = (VPTR) nvar;
 	ibody(node) = (VPTR) body;
+	node->i_flags = PN_IELEMENT_HPTR + PN_IVALVAR_HPTR + PN_INUM_HPTR;
 	set_parents(body, node);
 	return node;
 }
@@ -469,6 +494,7 @@ forlist_node (PACTX pactx, PNODE iexpr, STRING evar, STRING nvar, PNODE body)
 	ielement(node) = (VPTR) evar;
 	inum(node) = (VPTR) nvar;
 	ibody(node) = (VPTR) body;
+	node->i_flags = PN_IELEMENT_HPTR + PN_INUM_HPTR;
 	set_parents(body, node);
 	return node;
 }
@@ -588,6 +614,7 @@ fornodes_node (PACTX pactx, PNODE nexpr, STRING nvar, PNODE body)
 	iloopexp(node) = (VPTR) nexpr;
 	ielement(node) = (VPTR) nvar;
 	ibody(node) = (VPTR) body;
+	node->i_flags = PN_IELEMENT_HPTR;
 	set_parents(body, node);
 	return node;
 }
@@ -607,6 +634,7 @@ traverse_node (PACTX pactx, PNODE nexpr, STRING snode, STRING levv, PNODE body)
 	ielement(node) = (VPTR) snode;
 	ilev(node) = (VPTR) levv;
 	ibody(node) = (VPTR) body;
+	node->i_flags = PN_IELEMENT_HPTR;
 	set_parents(body, node);
 	return node;
 }
@@ -931,6 +959,7 @@ call_node (PACTX pactx, STRING name, PNODE args)
 	PNODE node = create_pnode(pactx, IPCALL);
 	iname(node) = (VPTR) name;
 	iargs(node) = (VPTR) args;
+	node->i_flags = PN_INAME_HSTR;
 	return node;
 }
 /*================================
