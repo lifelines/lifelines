@@ -4,10 +4,10 @@
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: lifelines 3.0.40\n"
+"Project-Id-Version: lifelines 3.0.44\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-13 17:40-0500\n"
-"PO-Revision-Date: 2005-01-14 20:46+0100\n"
+"POT-Creation-Date: 2005-03-11 14:39+0100\n"
+"PO-Revision-Date: 2005-03-11 16:06+0100\n"
 "Last-Translator: Jens Arvidsson <jya@sverige.nu>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -53,81 +53,81 @@ msgstr "%då%03dd"
 msgid "Missing NAME line in INDI record; record ignored.\n"
 msgstr "NAME-rad saknas i INDI-posten; posten ignoreras.\n"
 
-#: src/gedlib/init.c:572
+#: src/gedlib/init.c:569
 msgid "Database error: -- "
 msgstr "Databasfel: -- "
 
-#: src/gedlib/init.c:576
+#: src/gedlib/init.c:573
 msgid "requested database does not exist."
 msgstr "den efterfrågade databasen finns inte."
 
-#: src/gedlib/init.c:579
+#: src/gedlib/init.c:576
 msgid "db directory is file, not directory."
 msgstr "db-katalog är en fil, inte en katalog."
 
-#: src/gedlib/init.c:582
+#: src/gedlib/init.c:579
 msgid "creation of new database failed."
 msgstr "misslyckades med att skapa ny databas."
 
-#: src/gedlib/init.c:585
+#: src/gedlib/init.c:582
 msgid "error accessing database directory."
 msgstr "fel vid åtkomst av databaskatalog."
 
-#: src/gedlib/init.c:588
+#: src/gedlib/init.c:585
 msgid "no keyfile (directory does not appear to be a database)."
 msgstr "ingen nyckelfil (katalogen förefaller inte att vara en databas)."
 
-#: src/gedlib/init.c:591
+#: src/gedlib/init.c:588
 msgid "could not open, read or write an index file."
 msgstr "kunde inte öppna, läsa eller skriva till en indexfil."
 
-#: src/gedlib/init.c:594
+#: src/gedlib/init.c:591
 msgid "could not open, read or write the key file."
 msgstr "kunde inte öppna, läsa eller skriva till nyckelfilen."
 
-#: src/gedlib/init.c:597
+#: src/gedlib/init.c:594
 msgid "could not open, read or write the key file (to alter database)."
 msgstr ""
 "kunde inte öppna, läsa eller skriva till nyckelfilen (för att ändra "
 "databasen)."
 
-#: src/gedlib/init.c:600
+#: src/gedlib/init.c:597
 msgid "could not open, read or write a block file."
 msgstr "kunde inte öppna, läsa eller skriva till en blockfil."
 
-#: src/gedlib/init.c:603
+#: src/gedlib/init.c:600
 msgid "name of database is too long."
 msgstr "namnet på databasen är för långt."
 
-#: src/gedlib/init.c:606
+#: src/gedlib/init.c:603
 msgid "The database is already open for writing."
 msgstr "Databasen är redan öppnad för skrivning."
 
-#: src/gedlib/init.c:609
+#: src/gedlib/init.c:606
 msgid "The database is locked (no readwrite access)."
 msgstr "Databasen är låst (ingen läs- och skrivåtkomst)."
 
-#: src/gedlib/init.c:612
+#: src/gedlib/init.c:609
 msgid "The database is unlocked."
 msgstr "Databasen är olåst."
 
-#: src/gedlib/init.c:615
+#: src/gedlib/init.c:612
 msgid "keyfile is corrupt."
 msgstr "nyckelfilen är trasig."
 
-#: src/gedlib/init.c:618
+#: src/gedlib/init.c:615
 msgid "keyfile is wrong alignment."
 msgstr "nyckelfilen har fel justering."
 
-#: src/gedlib/init.c:621
+#: src/gedlib/init.c:618
 msgid "keyfile is wrong version."
 msgstr "nyckelfilen har fel version."
 
-#: src/gedlib/init.c:624
+#: src/gedlib/init.c:621
 msgid "Existing database found."
 msgstr "Fann befintlig databas."
 
-#: src/gedlib/init.c:628
+#: src/gedlib/init.c:625
 #, c-format
 msgid ""
 "The database is already opened for read access by %d users.\n"
@@ -136,11 +136,11 @@ msgstr ""
 "Databasen är redan öppnad för läsning av %d användare.\n"
 "  "
 
-#: src/gedlib/init.c:632
+#: src/gedlib/init.c:629
 msgid "Invalid properties set for new database"
 msgstr "Ogiltiga egenskapsinställningar för ny databas."
 
-#: src/gedlib/init.c:635
+#: src/gedlib/init.c:632
 msgid "Undefined database error -- fix program."
 msgstr "Odefinierat databasfel -- laga programmet."
 
@@ -2389,14 +2389,14 @@ msgstr "INGET NAMN"
 #: src/gedlib/node.c:1167
 #, c-format
 msgid "Node memory leaks:"
-msgstr ""
+msgstr "Minnesnodläckor:"
 
 #: src/gedlib/node.c:1170
 #, c-format
 msgid "%d item leaked"
 msgid_plural "%d items leaked"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d post läckte"
+msgstr[1] "%d poster läckte"
 
 #: src/gedlib/remove.c:249
 msgid "Families may not yet be removed in this fashion."
@@ -2605,14 +2605,14 @@ msgid "%s: the arg #%s must be a table."
 msgstr "%s: argument nr. %s måste vara en tabell."
 
 #: src/interp/alloc.c:901
-#, fuzzy, c-format
+#, c-format
 msgid "%s: the arg must be a set."
-msgstr "%s: argumentet måste vara en lista."
+msgstr "%s: argumentet måste vara en uppsättning."
 
 #: src/interp/alloc.c:902
-#, fuzzy, c-format
+#, c-format
 msgid "%s: the arg #%s must be a set."
-msgstr "%s: argument nr. %s måste vara en lista."
+msgstr "%s: argument nr. %s måste vara en uppsättning."
 
 #: src/interp/alloc.c:903
 #, c-format
@@ -2786,11 +2786,11 @@ msgstr "tolv"
 
 #: src/interp/builtin.c:2090
 msgid "the arg to empty is not a list, table or set"
-msgstr ""
+msgstr "argumentet till empty är inte en lista, tabell eller uppsättning"
 
 #: src/interp/builtin.c:2204
 msgid "the arg to length is not a list, table or set"
-msgstr ""
+msgstr "argumentet till length är inte en lista, tabell eller uppsättning"
 
 #: src/interp/builtin.c:2392
 msgid "He"
@@ -2832,7 +2832,7 @@ msgstr "hennes"
 msgid "her_"
 msgstr "henne"
 
-#: src/interp/builtin.c:2770
+#: src/interp/builtin.c:2772
 msgid "(trimname) person does not have a name"
 msgstr "(trimname) personen har inget namn"
 
@@ -4079,454 +4079,452 @@ msgstr "Dubblerad HEAD-rad vid rad %d"
 msgid "Missing HEAD line at line %d"
 msgstr "HEAD-rad saknas vid rad %d"
 
-#: src/tools/dbverify.c:171
+#: src/tools/dbverify.c:174
 msgid "Orphan names"
 msgstr "Föräldralösa namn"
 
-#: src/tools/dbverify.c:172
+#: src/tools/dbverify.c:175
 msgid "Ghost names"
 msgstr "Spöknamn"
 
-#: src/tools/dbverify.c:173 src/tools/dbverify.c:174
+#: src/tools/dbverify.c:176 src/tools/dbverify.c:177
 msgid "Duplicate names"
 msgstr "Dubblerade namn"
 
-#: src/tools/dbverify.c:175
+#: src/tools/dbverify.c:178
 msgid "Non-indi names"
 msgstr "Icke-individnamn"
 
-#: src/tools/dbverify.c:176
+#: src/tools/dbverify.c:179
 msgid "Duplicate individuals"
 msgstr "Dubblerade individer"
 
-#: src/tools/dbverify.c:177
+#: src/tools/dbverify.c:180
 msgid "Duplicate families"
 msgstr "Dubblerade familjer"
 
-#: src/tools/dbverify.c:178
+#: src/tools/dbverify.c:181
 msgid "Duplicate sources"
 msgstr "Dubblerade källor"
 
-#: src/tools/dbverify.c:179
+#: src/tools/dbverify.c:182
 msgid "Duplicate events"
 msgstr "Dubblerade händelser"
 
-#: src/tools/dbverify.c:180
+#: src/tools/dbverify.c:183
 msgid "Duplicate others"
 msgstr "Dubblerade övriga"
 
-#: src/tools/dbverify.c:181
-#, fuzzy
+#: src/tools/dbverify.c:184
 msgid "Missing records (from deleteset)"
-msgstr "Saknade poster"
+msgstr "Saknade poster (från deleteset)"
 
-#: src/tools/dbverify.c:182
+#: src/tools/dbverify.c:185
 msgid "Deleted records"
 msgstr "Borttagna poster"
 
-#: src/tools/dbverify.c:183
+#: src/tools/dbverify.c:186
 msgid "Bad name"
 msgstr "Ogiltigt namn"
 
-#: src/tools/dbverify.c:184
+#: src/tools/dbverify.c:187
 msgid "Bad family reference"
 msgstr "Ogiltig familjereferens"
 
-#: src/tools/dbverify.c:185
+#: src/tools/dbverify.c:188
 msgid "Missing child"
 msgstr "Saknat barn"
 
-#: src/tools/dbverify.c:186
+#: src/tools/dbverify.c:189
 msgid "Missing spouse"
 msgstr "Saknad maka/make"
 
-#: src/tools/dbverify.c:187
+#: src/tools/dbverify.c:190
 msgid "Bad HUSB reference"
 msgstr "Ogiltig HUSB-referens"
 
-#: src/tools/dbverify.c:188
+#: src/tools/dbverify.c:191
 msgid "Bad WIFE reference"
 msgstr "Ogiltig WIFE-referens"
 
-#: src/tools/dbverify.c:189
+#: src/tools/dbverify.c:192
 msgid "Bad CHIL reference"
 msgstr "Ogiltig CHIL-referens"
 
-#: src/tools/dbverify.c:190
+#: src/tools/dbverify.c:193
 msgid "Improper HUSB"
 msgstr "Felaktig HUSB"
 
-#: src/tools/dbverify.c:191
+#: src/tools/dbverify.c:194
 msgid "Improper WIFE"
 msgstr "Felaktig WIFE"
 
-#: src/tools/dbverify.c:192
+#: src/tools/dbverify.c:195
 msgid "Improper child"
 msgstr "Felaktigt barn"
 
-#: src/tools/dbverify.c:193
+#: src/tools/dbverify.c:196
 msgid "Empty family"
 msgstr "Tom familj"
 
-#: src/tools/dbverify.c:194
+#: src/tools/dbverify.c:197
 msgid "Single person family"
 msgstr "Familj med ensam person"
 
-#: src/tools/dbverify.c:195
+#: src/tools/dbverify.c:198
 msgid "Bad pointer"
 msgstr "Ogiltig pekare"
 
-#: src/tools/dbverify.c:196
-#, fuzzy
+#: src/tools/dbverify.c:199
 msgid "Missing data records"
-msgstr "Saknade poster"
+msgstr "Saknade dataposter"
 
-#: src/tools/dbverify.c:226
+#: src/tools/dbverify.c:229
 msgid "\\My Documents\\LifeLines\\Databases\\MyFamily"
 msgstr "\\Mina Dokument\\LifeLines\\Databaser\\MinFamilj"
 
-#: src/tools/dbverify.c:228
+#: src/tools/dbverify.c:231
 msgid "/home/users/myname/lifelines/databases/myfamily"
 msgstr "/home/users/mittnamn/lifelines/databaser/minfamilj"
 
-#: src/tools/dbverify.c:232
-#, c-format
-msgid "usage: dbverify -(flags) <btree>\n"
-msgstr ""
-
-#: src/tools/dbverify.c:233
-#, c-format
-msgid "flags:\n"
-msgstr ""
-
-#: src/tools/dbverify.c:234
-#, c-format
-msgid "\t-a = Perform all checks (does not include fixes)\n"
-msgstr ""
-
 #: src/tools/dbverify.c:235
 #, c-format
-msgid "\t-g = Check for ghosts (names/refns)\n"
-msgstr ""
+msgid "usage: dbverify -(flags) <btree>\n"
+msgstr "användning: dbverify -(flaggor) <btree>\n"
 
 #: src/tools/dbverify.c:236
 #, c-format
-msgid "\t-G = Check for & fix ghosts (names/refns)\n"
-msgstr ""
+msgid "flags:\n"
+msgstr "flaggor:\n"
 
 #: src/tools/dbverify.c:237
-#, fuzzy, c-format
-msgid "\t-i = Check individuals\n"
-msgstr "Dubblerade individer"
+#, c-format
+msgid "\t-a = Perform all checks (does not include fixes)\n"
+msgstr "\t-a = Genomför alla kontroller (inkluderar ej lagningar\n"
 
 #: src/tools/dbverify.c:238
 #, c-format
-msgid "\t-f = Check families\n"
-msgstr ""
+msgid "\t-g = Check for ghosts (names/refns)\n"
+msgstr "\t-g = Sök efter spöken (namn/refnr)\n"
 
 #: src/tools/dbverify.c:239
 #, c-format
-msgid "\t-F = Alter any bad family lineage pointers (to _badptr)\n"
-msgstr ""
+msgid "\t-G = Check for & fix ghosts (names/refns)\n"
+msgstr "\t-G = Sök efter och laga spöken (namn/refnr)\n"
 
 #: src/tools/dbverify.c:240
 #, c-format
-msgid "\t-s = Check sours\n"
-msgstr ""
+msgid "\t-i = Check individuals\n"
+msgstr "\t-i = Kontrollera individer\n"
 
 #: src/tools/dbverify.c:241
 #, c-format
-msgid "\t-e = Check events\n"
-msgstr ""
+msgid "\t-f = Check families\n"
+msgstr "\t-f = Kontrollera familjer\n"
 
 #: src/tools/dbverify.c:242
 #, c-format
-msgid "\t-x = Check others\n"
-msgstr ""
+msgid "\t-F = Alter any bad family lineage pointers (to _badptr)\n"
+msgstr "\t-F = Ändra alla ogiltiga familjelinjepekare (till _badptr)\n"
 
 #: src/tools/dbverify.c:243
 #, c-format
-msgid "\t-l = Check database structure\n"
-msgstr ""
+msgid "\t-s = Check sours\n"
+msgstr "\t-s = Kontrollera källor\n"
 
 #: src/tools/dbverify.c:244
 #, c-format
-msgid "\t-m = Check for records missing data entries\n"
-msgstr ""
+msgid "\t-e = Check events\n"
+msgstr "\t-e = Kontrollera händelser\n"
 
 #: src/tools/dbverify.c:245
 #, c-format
-msgid "\t-M = Fix records missing data entries\n"
-msgstr ""
+msgid "\t-x = Check others\n"
+msgstr "\t-x = Kontrollera övriga\n"
 
 #: src/tools/dbverify.c:246
 #, c-format
-msgid "\t-D = Fix bad delete entries\n"
-msgstr ""
+msgid "\t-l = Check database structure\n"
+msgstr "\t-l = Kontrollera databasstruktur\n"
 
 #: src/tools/dbverify.c:247
 #, c-format
-msgid "\t-n = Noisy (echo every record processed)\n"
-msgstr ""
+msgid "\t-m = Check for records missing data entries\n"
+msgstr "\t-m = Sök efter poster som saknar datanoteringar\n"
 
 #: src/tools/dbverify.c:248
+#, c-format
+msgid "\t-M = Fix records missing data entries\n"
+msgstr "\t-M = Laga poster som saknar datanoteringar\n"
+
+#: src/tools/dbverify.c:249
+#, c-format
+msgid "\t-D = Fix bad delete entries\n"
+msgstr "\t-D = Laga ogiltiga borttagningsnoteringar\n"
+
+#: src/tools/dbverify.c:250
+#, c-format
+msgid "\t-n = Noisy (echo every record processed)\n"
+msgstr "\t-n = Bullrigt (eka alla behandlade poster)\n"
+
+#: src/tools/dbverify.c:251
 #, c-format
 msgid "example: dbverify -ifsex \"%s\"\n"
 msgstr "exempel: dbverify -ifsex \"%s\"\n"
 
-#: src/tools/dbverify.c:380
+#: src/tools/dbverify.c:383
 #, c-format
 msgid "Non-indi name, key=%s, name=%s"
 msgstr "Icke-individnamn, nyckel=%s, namn=%s"
 
-#: src/tools/dbverify.c:394
+#: src/tools/dbverify.c:397
 #, c-format
 msgid "Orphaned name: %s"
 msgstr "Föräldralöst namn: %s"
 
-#: src/tools/dbverify.c:408
+#: src/tools/dbverify.c:411
 #, c-format
 msgid "Ghost name: %s -> %s"
 msgstr "Spöknamn: %s -> %s"
 
-#: src/tools/dbverify.c:440
+#: src/tools/dbverify.c:443
 #, c-format
 msgid "Orphaned refn: %s"
 msgstr "Föräldralöst refn: %s"
 
-#: src/tools/dbverify.c:480
+#: src/tools/dbverify.c:483
 #, c-format
 msgid "Duplicate name for %s (%s)"
 msgstr "Dubblerat namn för %s: (%s)"
 
-#: src/tools/dbverify.c:515
+#: src/tools/dbverify.c:518
 #, c-format
 msgid "Duplicate refn for %s (%s)"
 msgstr "Dubblerad refn för %s: (%s)"
 
-#: src/tools/dbverify.c:628
+#: src/tools/dbverify.c:631
 #, c-format
 msgid "Duplicate individual for %s"
 msgstr "Dubblerad individ för %s"
 
-#: src/tools/dbverify.c:670
+#: src/tools/dbverify.c:673
 #, c-format
 msgid "Bad name for individual %s: %s"
 msgstr "Ogiltigt namn för individ %s: %s"
 
-#: src/tools/dbverify.c:688 src/tools/dbverify.c:712
+#: src/tools/dbverify.c:691 src/tools/dbverify.c:715
 #, c-format
 msgid "Bad family reference (%s) individual %s"
 msgstr "Ogiltig familjereferens (%s) individ %s"
 
-#: src/tools/dbverify.c:694
+#: src/tools/dbverify.c:697
 #, c-format
 msgid "Missing child (%s) in family (%s)"
 msgstr "Saknat barn (%s) i familj (%s)"
 
-#: src/tools/dbverify.c:698
-#, fuzzy, c-format
+#: src/tools/dbverify.c:701
+#, c-format
 msgid "Fixed missing child (%s) in family (%s)"
-msgstr "Saknat barn (%s) i familj (%s)"
+msgstr "Lagade saknat barn (%s) i familj (%s)"
 
-#: src/tools/dbverify.c:718
+#: src/tools/dbverify.c:721
 #, c-format
 msgid "Missing spouse (%s) in family (%s)"
 msgstr "Saknad maka/make (%s) i familj (%s)"
 
-#: src/tools/dbverify.c:722
-#, fuzzy, c-format
+#: src/tools/dbverify.c:725
+#, c-format
 msgid "Fixed missing spouse (%s) in family (%s)"
-msgstr "Saknad maka/make (%s) i familj (%s)"
+msgstr "Lagade saknad maka/make (%s) i familj (%s)"
 
-#: src/tools/dbverify.c:756
+#: src/tools/dbverify.c:759
 #, c-format
 msgid "Duplicate family for %s"
 msgstr "Dubblerad familj för %s"
 
-#: src/tools/dbverify.c:807
+#: src/tools/dbverify.c:810
 #, c-format
 msgid "Bad HUSB reference (%s) in family %s"
 msgstr "Ogiltig HUSB-referens (%s) i familj %s"
 
-#: src/tools/dbverify.c:813
-#, fuzzy, c-format
+#: src/tools/dbverify.c:816
+#, c-format
 msgid "Fixed Bad HUSB reference (%s) in family %s"
-msgstr "Ogiltig HUSB-referens (%s) i familj %s"
+msgstr "Lagade ogiltig HUSB-referens (%s) i familj %s"
 
-#: src/tools/dbverify.c:822
+#: src/tools/dbverify.c:825
 #, c-format
 msgid "Improper HUSB (%s) in family (%s)"
 msgstr "Felaktig HUSB (%s) i familj (%s)"
 
-#: src/tools/dbverify.c:835
+#: src/tools/dbverify.c:838
 #, c-format
 msgid "Bad wife reference (%s) in family %s"
 msgstr "Ogiltig referens till maka (%s) i familj %s"
 
-#: src/tools/dbverify.c:841
-#, fuzzy, c-format
+#: src/tools/dbverify.c:844
+#, c-format
 msgid "Fixed Bad wife reference (%s) in family %s"
-msgstr "Ogiltig referens till maka (%s) i familj %s"
+msgstr "Lagade ogiltig referens till maka (%s) i familj %s"
 
-#: src/tools/dbverify.c:850
+#: src/tools/dbverify.c:853
 #, c-format
 msgid "Improper wife (%s) in family (%s)"
 msgstr "Felaktig maka (%s) i familj (%s)"
 
-#: src/tools/dbverify.c:863
+#: src/tools/dbverify.c:866
 #, c-format
 msgid "Bad child reference (%s) in family %s"
 msgstr "Ogiltig referens till barn (%s) i familj %s"
 
-#: src/tools/dbverify.c:869
-#, fuzzy, c-format
+#: src/tools/dbverify.c:872
+#, c-format
 msgid "Fixed bad child reference (%s) in family %s"
-msgstr "Ogiltig referens till barn (%s) i familj %s"
+msgstr "Lagade ogiltig referens till barn (%s) i familj %s"
 
-#: src/tools/dbverify.c:878
+#: src/tools/dbverify.c:881
 #, c-format
 msgid "Improper child (%s) in family (%s)"
 msgstr "Felaktigt barn (%s) i familj (%s)"
 
-#: src/tools/dbverify.c:886
+#: src/tools/dbverify.c:889
 #, c-format
 msgid "Empty family (%s)"
 msgstr "Tom familj (%s)"
 
-#: src/tools/dbverify.c:888
+#: src/tools/dbverify.c:891
 #, c-format
 msgid "Single person family (%s)"
 msgstr "Familj med ensam person (%s)"
 
-#: src/tools/dbverify.c:914
+#: src/tools/dbverify.c:917
 #, c-format
 msgid "Duplicate source for %s"
 msgstr "Dubblerad källa för %s"
 
-#: src/tools/dbverify.c:930
+#: src/tools/dbverify.c:933
 #, c-format
 msgid "Duplicate event for %s"
 msgstr "Dubblerad händelse för %s"
 
-#: src/tools/dbverify.c:946
+#: src/tools/dbverify.c:949
 #, c-format
 msgid "Duplicate record for %s"
 msgstr "Dubblerad post för %s"
 
-#: src/tools/dbverify.c:1017
+#: src/tools/dbverify.c:1020
 #, c-format
 msgid "Bad pointer (in %s): %s"
 msgstr "Felaktig pekare (i %s): %s"
 
-#: src/tools/dbverify.c:1055
+#: src/tools/dbverify.c:1058
 #, c-format
 msgid "Missing undeleted record %c%d"
 msgstr "Saknad återskapad post %c%d"
 
-#: src/tools/dbverify.c:1062
-#, fuzzy, c-format
+#: src/tools/dbverify.c:1065
+#, c-format
 msgid "Fixed missing undeleted record %c%d"
-msgstr "Saknad återskapad post %c%d"
+msgstr "Lagade saknad återskapad post %c%d"
 
-#: src/tools/dbverify.c:1066
-#, fuzzy, c-format
+#: src/tools/dbverify.c:1069
+#, c-format
 msgid "Failed to fix missing undeleted record %c%d"
-msgstr "Saknad återskapad post %c%d"
+msgstr "Mislyckades med att laga saknad återskapad post %c%d"
 
-#: src/tools/dbverify.c:1078
+#: src/tools/dbverify.c:1081
 #, c-format
 msgid "Delete set contains valid record %s"
 msgstr "Uppsättning för borttagning innehåller giltig post %s"
 
-#: src/tools/dbverify.c:1083
-#, fuzzy, c-format
+#: src/tools/dbverify.c:1086
+#, c-format
 msgid "Fixed delete set contains valid record %s"
-msgstr "Uppsättning för borttagning innehåller giltig post %s"
+msgstr "Lagade uppsättning för borttagning som innehåller giltig post %s"
 
-#: src/tools/dbverify.c:1087
-#, fuzzy, c-format
+#: src/tools/dbverify.c:1090
+#, c-format
 msgid "Failed to fix missing undeleted record %s"
-msgstr "Saknad återskapad post %c%d"
+msgstr "Misslyckades med att laga saknad återskapad post %s"
 
-#: src/tools/dbverify.c:1108
+#: src/tools/dbverify.c:1111
 #, c-format
 msgid "Master fkey misaligned (%d != %d)\n"
 msgstr "Huvud-fkey felpositionerad (%d != %d)\n"
 
-#: src/tools/dbverify.c:1134
+#: src/tools/dbverify.c:1137
 #, c-format
 msgid "Cycle in indexes, file %s found again!\n"
-msgstr ""
+msgstr "Cykel i index, fil %s hittades igen!\n"
 
-#: src/tools/dbverify.c:1141
+#: src/tools/dbverify.c:1144
 #, c-format
 msgid "Error loading index at key %d\n"
 msgstr "Fel vid inläsning av position vid nyckel %d\n"
 
-#: src/tools/dbverify.c:1188
+#: src/tools/dbverify.c:1191
 #, c-format
 msgid "First key in block below parent's limit\n"
 msgstr "Första nyckel i block under förälders gräns\n"
 
-#: src/tools/dbverify.c:1196
+#: src/tools/dbverify.c:1199
 #, c-format
 msgid "Last key in block above parent's limit\n"
 msgstr "Sista nyckel i block under förälders gräns\n"
 
-#: src/tools/dbverify.c:1204
+#: src/tools/dbverify.c:1207
 #, c-format
 msgid "Key %d not below next key\n"
 msgstr "Nyckel %d inte under nästa nyckel\n"
 
-#: src/tools/dbverify.c:1220 src/tools/dbverify.c:1222
+#: src/tools/dbverify.c:1223 src/tools/dbverify.c:1225
 msgid "data block"
 msgstr "datablock"
 
-#: src/tools/dbverify.c:1223
+#: src/tools/dbverify.c:1226
 #, c-format
 msgid "%s fkey=%d, file=%s"
 msgstr "%s fkey=%d, fil=%s"
 
-#: src/tools/dbverify.c:1236
+#: src/tools/dbverify.c:1239
 #, c-format
 msgid "Invalid errs array[%d] in dbverify - fix program\n"
 msgstr "Ogiltig felvektor[%d] i dbverify - laga programmet\n"
 
-#: src/tools/dbverify.c:1272
-#, fuzzy, c-format
+#: src/tools/dbverify.c:1275
+#, c-format
 msgid "Missing data record (%s)"
-msgstr "Saknade poster"
+msgstr "Datapost saknas (%s)"
 
-#: src/tools/dbverify.c:1276
-#, fuzzy, c-format
+#: src/tools/dbverify.c:1279
+#, c-format
 msgid "Fixed missing data record (%s)"
-msgstr "Saknade poster"
+msgstr "Lagade saknad datapost (%s)"
 
-#: src/tools/dbverify.c:1425
+#: src/tools/dbverify.c:1436
 #, c-format
 msgid "%d error"
 msgid_plural "%d errors"
 msgstr[0] "%d fel"
 msgstr[1] "%d fel"
 
-#: src/tools/dbverify.c:1429
+#: src/tools/dbverify.c:1440
 #, c-format
 msgid "%d fixed"
 msgid_plural "%d fixed"
 msgstr[0] "%d lagad"
 msgstr[1] "%d lagade"
 
-#: src/tools/dbverify.c:1436
+#: src/tools/dbverify.c:1447
 msgid "No errors found"
 msgstr "Inga fel hittades"
 
-#: src/tools/dbverify.c:1447
+#: src/tools/dbverify.c:1458
 #, c-format
 msgid "FATAL ERROR: "
 msgstr "ÖDESDIGERT FEL"
 
-#: src/tools/dbverify.c:1452
+#: src/tools/dbverify.c:1463
 #, c-format
 msgid "In file <%s> at line %d"
 msgstr "I filen <%s> vid rad %d"
