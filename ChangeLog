@@ -1,4 +1,12 @@
+2000-12-02 Perry Rapp <prapp@users.sourceforge.net>
+
+	* gedlib/spltjoin.c hdrs/gedcom.h liflines/edit.c:
+	Split writing node to file into separate functions
+	in edit indi & fam. Removed spurious join_fam in
+	read-only fam case (which crashed it).
+
 2000-11-30 Perry Rapp <prapp@users.sourceforge.net>
+
 	* gedlib/refns.c: Changed some indents that didn't
 	conform to surrounding style.
 
