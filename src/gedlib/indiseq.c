@@ -555,7 +555,7 @@ name_compare (SORTEL el1,
 		INT rel = namecmp(snam(el1), snam(el2));
 		if (rel) return rel;
 	}
-	return spri(el1) - spri(el2);
+	return canonkey_compare(el1, el2);
 }
 /*================================
  * key_compare -- Compare two keys
