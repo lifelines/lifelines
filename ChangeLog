@@ -1,3 +1,13 @@
+2005-01-16 Perry Rapp
+
+	* ChangeLog po/fr.po
+
+	Fix missing errors/warnings plural forms in French catalog.
+
+	* ChangeLog configure.in src/hdrs/version.h
+
+	Bump version to 3.0.40i, for interim between releases.
+
 2005-01-15 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c src/hdrs/list.h
