@@ -787,10 +787,10 @@ value_to_xref (STRING val)
 	INT c;
 
 	if (!val || (*val != '@') || (strlen(val) < 4) ||
-	    (val[strlen(val)-1] != '@')) return NULL;
+		(val[strlen(val)-1] != '@')) return NULL;
 	val = rmvat(val);
 	if ((c = *val) != 'I' && c != 'F' && c != 'S' && c != 'E' &&
-	    c != 'X') return NULL;
+		c != 'X') return NULL;
 	if (!isnumeric(val + 1)) return NULL;
 	return val;
 }
@@ -800,14 +800,14 @@ value_to_xref (STRING val)
 CACHEEL
 indi_to_cacheel (NODE indi)
 {
-        CACHEEL cel;
-        if (!indi) return NULL;
+	CACHEEL cel;
+	if (!indi) return NULL;
 #ifdef DEBUG
 	llwprintf("indi_to_cacheel: %s\n", nxref(indi));
 #endif
-        cel = key_to_indi_cacheel(rmvat(nxref(indi)));
-        ASSERT(cel);
-        return cel;
+	cel = key_to_indi_cacheel(rmvat(nxref(indi)));
+	ASSERT(cel);
+	return cel;
 }
 /*==================================================
  * fam_to_cacheel -- Convert family to cache element
@@ -815,11 +815,11 @@ indi_to_cacheel (NODE indi)
 CACHEEL
 fam_to_cacheel (NODE fam)
 {
-        CACHEEL cel;
-        if (!fam) return NULL;
-        cel = key_to_fam_cacheel(rmvat(nxref(fam)));
-        ASSERT(cel);
-        return cel;
+	CACHEEL cel;
+	if (!fam) return NULL;
+	cel = key_to_fam_cacheel(rmvat(nxref(fam)));
+	ASSERT(cel);
+	return cel;
 }
 /*===================================================
  * sour_to_cacheel -- Convert source to cache element
@@ -827,11 +827,11 @@ fam_to_cacheel (NODE fam)
 CACHEEL
 sour_to_cacheel (NODE node)
 {
-        CACHEEL cel;
-        if (!node) return NULL;
-        cel = key_to_sour_cacheel(rmvat(nxref(node)));
-        ASSERT(cel);
-        return cel;
+	CACHEEL cel;
+	if (!node) return NULL;
+	cel = key_to_sour_cacheel(rmvat(nxref(node)));
+	ASSERT(cel);
+	return cel;
 }
 /*==================================================
  * even_to_cacheel -- Convert event to cache element
@@ -839,11 +839,11 @@ sour_to_cacheel (NODE node)
 CACHEEL
 even_to_cacheel (NODE even)
 {
-        CACHEEL cel;
-        if (!even) return NULL;
-        cel = key_to_even_cacheel(rmvat(nxref(even)));
-        ASSERT(cel);
-        return cel;
+	CACHEEL cel;
+	if (!even) return NULL;
+	cel = key_to_even_cacheel(rmvat(nxref(even)));
+	ASSERT(cel);
+	return cel;
 }
 /*==================================================
  * othr_to_cacheel -- Convert other to cache element
@@ -851,11 +851,27 @@ even_to_cacheel (NODE even)
 CACHEEL
 othr_to_cacheel (NODE othr)
 {
-        CACHEEL cel;
-        if (!othr) return NULL;
+	CACHEEL cel;
+	if (!othr) return NULL;
 	cel = key_to_othr_cacheel(rmvat(nxref(othr)));
-        ASSERT(cel);
-        return cel;
+	ASSERT(cel);
+	return cel;
+}
+/*==================================================
+ * node_to_cacheel -- Convert any node to cache element
+ *================================================*/
+CACHEEL
+node_to_cacheel (NODE node)
+{
+	STRING key = rmvat(nxref(node));
+	switch(key[0]) {
+	case 'I': return indi_to_cacheel(node);
+	case 'F': return fam_to_cacheel(node);
+	case 'S': return sour_to_cacheel(node);
+	case 'E': return even_to_cacheel(node);
+	case 'X': return othr_to_cacheel(node);
+	}
+	ASSERT(0); return NULL;
 }
 /*==============================================
  * key_of_record -- Return display key of record
@@ -863,11 +879,11 @@ othr_to_cacheel (NODE othr)
 STRING
 key_of_record (NODE node)
 {
-        NODE refn;
-        ASSERT(node);
-        refn = REFN(node);
-        if (refn && nval(refn)) return nval(refn);
-        return rmvat(nxref(node)) + 1;
+	NODE refn;
+	ASSERT(node);
+	refn = REFN(node);
+	if (refn && nval(refn)) return nval(refn);
+	return rmvat(nxref(node)) + 1;
 }
 /*==============================================
  * qkey_to_???_cacheel -- Convert key to cacheel

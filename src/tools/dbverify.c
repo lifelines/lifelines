@@ -115,6 +115,8 @@ static BOOLEAN check_fam(STRING key, NOD0 nod0);
 static BOOLEAN check_sour(STRING key, NOD0 nod0);
 static BOOLEAN check_even(STRING key, NOD0 nod0);
 static BOOLEAN check_othe(STRING key, NOD0 nod0);
+static void check_pointers(STRING key, NOD0 nod0);
+static BOOLEAN find_xref(STRING key, NODE node, STRING tag1, STRING tag2);
 static void validate_errs(void);
 static void report_results(void);
 
@@ -135,6 +137,16 @@ static void report_results(void);
 #define ERR_DELETED 10
 #define ERR_BADNAME 11
 #define ERR_BADFAMREF 12
+#define ERR_MISSINGCHILD 13
+#define ERR_MISSINGSPOUSE 14
+#define ERR_BADHUSBREF 15
+#define ERR_BADWIFEREF 16
+#define ERR_BADCHILDREF 17
+#define ERR_EXTRAHUSB 18
+#define ERR_EXTRAWIFE 19
+#define ERR_EXTRACHILD 20
+#define ERR_EMPTYFAM 21
+#define ERR_SOLOFAM 22
 
 static struct errinfo errs[] = {
 	{ ERR_ORPHANNAME, 0, 0, "Orphan names" }
@@ -150,6 +162,16 @@ static struct errinfo errs[] = {
 	, { ERR_DELETED, 0, 0, "Deleted records" }
 	, { ERR_BADNAME, 0, 0, "Bad name" }
 	, { ERR_BADFAMREF, 0, 0, "Bad family reference" }
+	, { ERR_MISSINGCHILD, 0, 0, "Missing child" }
+	, { ERR_MISSINGSPOUSE, 0, 0, "Missing spouse" }
+	, { ERR_BADHUSBREF, 0, 0, "Bad husb reference" }
+	, { ERR_BADWIFEREF, 0, 0, "Bad wife reference" }
+	, { ERR_BADCHILDREF, 0, 0, "Bad child reference" }
+	, { ERR_EXTRAHUSB, 0, 0, "Improper husb" }
+	, { ERR_EXTRAWIFE, 0, 0, "Improper wife" }
+	, { ERR_EXTRACHILD, 0, 0, "Improper child" }
+	, { ERR_EMPTYFAM, 0, 0, "Empty family" }
+	, { ERR_SOLOFAM, 0, 0, "Single person family" }
 };
 static struct work todo;
 static LIST tofix;
@@ -440,41 +462,59 @@ check_indi (STRING key, NOD0 nod0)
 {
 	static char prevkey[9];
 	NODE indi1, name1, refn1, sex1, body1, famc1, fams1;
-	NODE node;
+	NODE node1;
+	CACHEEL icel1;
 	INT keynum = atoi(&key[1]);
-	CACHEEL icel;
-	if (!strcmp(key, prevkey)) {
+	if (eqstr(key, prevkey)) {
 		report_error(ERR_DUPINDI, "Duplicate individual for %s", key);
 	}
 	indi1 = nztop(nod0);
-	icel = indi_to_cacheel(indi1);
-	lock_cache(icel);
+	icel1 = indi_to_cacheel(indi1);
+	lock_cache(icel1);
 	split_indi(indi1, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
-	for (node = name1; node; node = nsibling(node)) {
-		STRING name=nval(node);
+	/* check names */
+	for (node1 = name1; node1; node1 = nsibling(node1)) {
+		STRING name=nval(node1);
 		if (!valid_name(name)) {
 			report_error(ERR_BADNAME, "Bad name for individual %s: %s", key, name);
-		}
+		} else {
 		/* TO DO: verify that name is in db */
+		}
 	}
-	for (node = refn1; node; node = nsibling(node)) {
-		STRING refn=nval(node);
+	/* check refns */
+	for (node1 = refn1; node1; node1 = nsibling(node1)) {
+		STRING refn=nval(node1);
 		/* TO DO: verify that refn is in db */
 	}
-	for (node = famc1; node; node = nsibling(node)) {
-		STRING famkey=rmvat(nval(node));
-		NODE fam = qkey_to_fam(famkey);
-		if (!fam) {
+	/* check parents */
+	for (node1 = famc1; node1; node1 = nsibling(node1)) {
+		STRING famkey=rmvat(nval(node1));
+		NODE fam2 = qkey_to_fam(famkey);
+		if (!fam2) {
 			report_error(ERR_BADFAMREF, "Bad family reference (%s) individual %s", famkey, key);
+		} else {
+			/* look for indi1 (key) in fam2's children */
+			if (!find_xref(key, fam2, "CHIL", NULL)) {
+				report_error(ERR_MISSINGCHILD, "Missing child (%s) in family (%s)", key, famkey);
+			}
 		}
-		/* TO DO: verify that family lists indi */
 	}
-	/* TO DO: check lineage links */
+	/* check spouses */
+	for (node1 = fams1; node1; node1 = nsibling(node1)) {
+		STRING famkey=rmvat(nval(node1));
+		NODE fam2 = qkey_to_fam(famkey);
+		if (!fam2) {
+			report_error(ERR_BADFAMREF, "Bad family reference (%s) individual %s", famkey, key);
+		} else {
+			/* look for indi1 (key) in fam2's spouses */
+			if (!find_xref(key, fam2, "HUSB", "WIFE")) {
+				report_error(ERR_MISSINGSPOUSE, "Missing spouse (%s) in family (%s)", key, famkey);
+			}
+		}
+	}
 	join_indi(indi1, name1, refn1, sex1, body1, famc1, fams1);
-	/*
-	TO DO: check pointers ?
-	*/
-	unlock_cache(icel);
+	unlock_cache(icel1);
+	check_pointers(key, nod0);
 	append_indiseq_null(seq_indis, strsave(key), NULL, TRUE, TRUE);
 	return TRUE;
 }
@@ -486,15 +526,74 @@ static BOOLEAN
 check_fam (STRING key, NOD0 nod0)
 {
 	static char prevkey[9];
+	NODE fam1, fref1, husb1, wife1, chil1, rest1;
+	NODE node1;
+	CACHEEL fcel1;
 	INT keynum = atoi(&key[1]);
-	if (!strcmp(key, prevkey)) {
+	INT members = 0;
+	if (eqstr(key, prevkey)) {
 		report_error(ERR_DUPFAM, "Duplicate family for %s", key);
 	}
-	/*
-	split & check lineage links
-	check for empty family
-	check pointers ?
-	*/
+	fam1 = nztop(nod0);
+	fcel1 = fam_to_cacheel(fam1);
+	lock_cache(fcel1);
+	split_fam(fam1, &fref1, &husb1, &wife1, &chil1, &rest1);
+	/* check refns */
+	for (node1 = fref1; node1; node1 = nsibling(node1)) {
+		STRING refn=nval(node1);
+		/* TO DO: verify that refn is in db */
+	}
+	/* check husbs */
+	for (node1 = husb1; node1; node1 = nsibling(node1)) {
+		STRING husbkey=rmvat(nval(node1));
+		NODE husb = qkey_to_indi(husbkey);
+		members++;
+		if (!husb) {
+			report_error(ERR_BADHUSBREF, "Bad husb reference (%s) in family %s", husbkey, key);
+		} else {
+			/* look for family (key) in husb */
+			if (!find_xref(key, husb, "FAMS", NULL)) {
+				report_error(ERR_EXTRAHUSB, "Improper husb (%s) in family (%s)", husbkey, key);
+			}
+		}
+	}
+	/* check wives */
+	for (node1 = wife1; node1; node1 = nsibling(node1)) {
+		STRING wifekey=rmvat(nval(node1));
+		NODE wife = qkey_to_indi(wifekey);
+		members++;
+		if (!wife) {
+			report_error(ERR_BADWIFEREF, "Bad wife reference (%s) in family %s", wifekey, key);
+		} else {
+			/* look for family (key) in wife */
+			if (!find_xref(key, wife, "FAMS", NULL)) {
+				report_error(ERR_EXTRAWIFE, "Improper wife (%s) in family (%s)", wifekey, key);
+			}
+		}
+	}
+	/* check children */
+	for (node1 = chil1; node1; node1 = nsibling(node1)) {
+		STRING chilkey=rmvat(nval(node1));
+		NODE child = qkey_to_indi(chilkey);
+		members++;
+		if (!child) {
+			report_error(ERR_BADCHILDREF, "Bad child reference (%s) in family %s", chilkey, key);
+		} else {
+			/* look for family (key) in child */
+			if (!find_xref(key, child, "FAMC", NULL)) {
+				report_error(ERR_EXTRACHILD, "Improper child (%s) in family (%s)", chilkey, key);
+			}
+		}
+	}
+	join_fam(fam1, fref1, husb1, wife1, chil1, rest1);
+	/* check for undersized family */
+	if (!members) {
+		report_error(ERR_EMPTYFAM, "Empty family (%s)", key);
+	} else if (members == 1) {
+		report_error(ERR_SOLOFAM, "Single person family (%s)", key);
+	}
+	unlock_cache(fcel1);
+	check_pointers(key, nod0);
 	append_indiseq_null(seq_fams, strsave(key), NULL, TRUE, TRUE);
 	return TRUE;
 }
@@ -510,9 +609,7 @@ check_sour (STRING key, NOD0 nod0)
 	if (!strcmp(key, prevkey)) {
 		report_error(ERR_DUPSOUR, "Duplicate source for %s", key);
 	}
-	/*
-	check pointers ?
-	*/
+	check_pointers(key, nod0);
 	append_indiseq_null(seq_sours, strsave(key), NULL, TRUE, TRUE);
 	return TRUE;
 }
@@ -528,9 +625,7 @@ check_even (STRING key, NOD0 nod0)
 	if (!strcmp(key, prevkey)) {
 		report_error(ERR_DUPEVEN, "Duplicate event for %s", key);
 	}
-	/*
-	check pointers ?
-	*/
+	check_pointers(key, nod0);
 	append_indiseq_null(seq_evens, strsave(key), NULL, TRUE, TRUE);
 	return TRUE;
 }
@@ -546,11 +641,43 @@ check_othe (STRING key, NOD0 nod0)
 	if (!strcmp(key, prevkey)) {
 		report_error(ERR_DUPOTHE, "Duplicate record for %s", key);
 	}
-	/*
-	check pointers ?
-	*/
+	check_pointers(key, nod0);
 	append_indiseq_null(seq_othes, strsave(key), NULL, TRUE, TRUE);
 	return TRUE;
+}
+/*===================================
+ * find_xref -- Search node for a cross-reference key
+ * 2001/01/21, Perry Rapp
+ *=================================*/
+static BOOLEAN
+find_xref (STRING key, NODE node, STRING tag1, STRING tag2)
+{
+	NODE node2;
+	CACHEEL ncel2;
+	BOOLEAN found=FALSE;
+	ncel2 = node_to_cacheel(node);
+	lock_cache(ncel2);
+	for (node2 = nchild(node); node2; node2 = nsibling(node2)) {
+		if (eqstr(tag1, ntag(node2))
+			|| (tag2 && eqstr(tag2, ntag(node2)))) {
+			STRING key2 = rmvat(nval(node2));
+			if (eqstr(key, key2)) {
+				found = TRUE;
+				goto exit_find;
+			}
+		}
+	}
+exit_find:
+	unlock_cache(ncel2);
+	return found;
+}
+/*=====================================
+ * check_pointers -- check for bad pointers
+ *===================================*/
+static void
+check_pointers (STRING key, NOD0 nod0)
+{
+	/* TO DO - see node_to_sources for a traversal */
 }
 /*===================================
  * check_set -- Validate set of nodes

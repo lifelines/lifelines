@@ -80,6 +80,7 @@ typedef struct {
 CACHEEL even_to_cacheel(NODE);
 CACHEEL fam_to_cacheel(NODE);
 CACHEEL indi_to_cacheel(NODE);
+CACHEEL node_to_cacheel(NODE);
 CACHEEL othr_to_cacheel(NODE);
 CACHEEL sour_to_cacheel(NODE);
 
