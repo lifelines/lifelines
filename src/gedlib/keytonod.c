@@ -550,7 +550,7 @@ create_cache (STRING name, INT dirsize)
 	caches, but right now (2003-10-08), tables do not expose a 
 	method to set their hash size.
 	*/
-	cacdata(cache) = create_table_old2(FREEKEY);
+	cacdata(cache) = create_table();
 	cacfirstdir(cache) = caclastdir(cache) = NULL;
 	cacsizedir(cache) = 0;
 	cacmaxdir(cache) = dirsize;
@@ -1070,14 +1070,13 @@ set_all_nodetree_to_cel (NODE node, CACHEEL cel)
 static void
 put_node_in_cache (CACHE cache, CACHEEL cel, NODE node, STRING key)
 {
-	STRING keynew;
 	BOOLEAN travdone = FALSE;
 	ASSERT(cache && node);
 	ASSERT(cacsizedir(cache) < cacmaxdir(cache));
 	init_cel(cel);
-	insert_table_ptr(cacdata(cache), keynew=strsave(key), cel);
+	table_insert_ptr(cacdata(cache), key, cel);
 	cnode(cel) = node;
-	ckey(cel) = keynew;
+	ckey(cel) = strsave(key);
 	cclock(cel) = FALSE;
 	first_direct(cache, cel);
 	/* Now set all nodes in tree to point to cache record */
@@ -1175,7 +1174,7 @@ remove_cel_from_cache (CACHE cache, CACHEEL cel)
 	if (celnext)
 		cprev(celnext) = cel;
 	cprev(cel) = 0;
-	ckey(cel) = 0; /* does this need to be freed ? */
+	ckey(cel) = 0;
 	if (crecord(cel)) {
 		/* cel holds the original reference to the record */
 		RECORD rec = crecord(cel);
@@ -1184,9 +1183,8 @@ remove_cel_from_cache (CACHE cache, CACHEEL cel)
 		crecord(cel) = 0;
 	}
 	cacfree(cache) = cel;
-	/* delete_table_element_old doesn't free the key or value */
-	delete_table_element_old(cacdata(cache), key);
-	stdfree(key);
+	delete_table_element(cacdata(cache), key);
+	stdfree(key); /* alloc'd when assigned to ckey(cel) */
 }
 /*================================================================
  * value_to_xref -- Converts a string to a record key, if possible
