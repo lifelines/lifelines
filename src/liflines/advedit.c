@@ -125,11 +125,11 @@ expand_traverse (NODE node)
 	key = strsave(key);
 #ifdef DEBUG
 	llwprintf("expand_traverse: %s %s\n", ntag(node), nval(node));
-#endif
+#endif /* DEBUG */
 	FORLIST(subs, el)
 #ifdef DEBUG
 	llwprintf("expand_traverse: %s %s\n", key, rmvat(nval((NODE) el)));
-#endif DEBUG
+#endif /* DEBUG */
 		if (eqstr(key, rmvat(nval((NODE) el)))) {
 			stdfree(key);
 			return TRUE;
