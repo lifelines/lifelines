@@ -163,8 +163,8 @@ alloc_node (void)
 void
 free_node (NODE node)
 {
-	if (nxref(node)) free(nxref(node));
-	if (nval(node)) free(nval(node));
+	if (nxref(node)) stdfree(nxref(node));
+	if (nval(node)) stdfree(nval(node));
 	((NDALLOC) node)->next = first_blck;
 	first_blck = (NDALLOC) node;
 	

@@ -972,7 +972,7 @@ name_to_list (STRING name,      /* GEDCOM name */
 static void
 free_name_el(VPTR w)
 {
-	free((STRING)w);
+	stdfree((STRING)w);
 }
 /*====================================================
  * free_name_list -- Free list created by name_to_list

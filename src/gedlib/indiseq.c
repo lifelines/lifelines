@@ -1563,7 +1563,7 @@ print_indiseq_element (INDISEQ seq, INT i, STRING buf, INT len)
 	}
 	llstrcatn(&ptr, str, &len);
 	if (alloc)
-		free(str);
+		stdfree(str);
 }
 /*=====================================================
  * preprint_indiseq -- Preformat print lines of indiseq
@@ -1851,7 +1851,7 @@ default_delete_value (UNION uval, INT valtype)
 	if (valtype == ISVAL_STR) {
 		if (uval.w) {
 			STRING str = (STRING)uval.w;
-			free(str);
+			stdfree(str);
 			uval.w = NULL;
 		}
 	}

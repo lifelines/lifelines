@@ -194,7 +194,7 @@ load_config_file (STRING file)
 		oldval = access_value(opttab, buffer);
 		if (!oldval)
 			continue; /* ignore keys we don't have */
-		free(*oldval);
+		stdfree(*oldval);
 		ptr++;
 		val = ptr;
 		len = strlen(val);
@@ -228,7 +228,7 @@ update_opt (ENTRY ent)
 		return;
 	value = (STRING) valueof(useropts, key);
 	if (value) {
-		free(ent->evalue);
+		stdfree(ent->evalue);
 		ent->evalue = strsave(value);
 	}
 }
@@ -250,7 +250,7 @@ changeoptstr (STRING * str, STRING newval)
 	for (i=0; i<ARRSIZE(str_options); i++) {
 		if (str_options[i].value == str) {
 			oldval = access_value(opttab, str_options[i].name);
-			free(*oldval);
+			stdfree(*oldval);
 			*oldval = strsave(newval);
 		}
 	}
@@ -286,7 +286,7 @@ cleanup_lloptions(void)
 	/* free string values */
 	for (i=0; i<ARRSIZE(str_options); i++) {
 		STRING str = valueof(opttab, str_options[i].name);
-		free(*str_options[i].value);
+		stdfree(*str_options[i].value);
 		*str_options[i].value = NULL;
 	}
 }

@@ -272,7 +272,7 @@ void
 nkey_clear (NKEY * nkey)
 {
 	if (nkey->key) {
-		free(nkey->key);
+		stdfree(nkey->key);
 		nkey->key = 0;
 	}
 	nkey->keynum = 0;
