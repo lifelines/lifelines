@@ -221,8 +221,8 @@
 #UppercaseSurnames=0
 # Default is 1
 
-# Display database key tags for individuals or families (I or F)
-# So instead of (1999) for an individual's key, you'd get (I1999)
+# Display database key tags for individuals or families (i or f)
+# So instead of (1999) for an individual's key, you'd get (i1999)
 # This may help with on-screen positioning of keys when
 # Arabic/Hebrew characters (in UTF-8) are used for names.
 # Default is 0 (feature off)
