@@ -46,7 +46,6 @@
 enum TB_VALTYPE
 	{
 		TB_PTR /* VPTR values */
-		, TB_INT /* INT values */
 		, TB_STR /* STRING values */
 		, TB_NULL /* placeholder for newly created tables */
 		, TB_GENERIC /* new table holding only generics */
@@ -70,6 +69,8 @@ enum TB_VALTYPE
  objects, because that is not yet possible. Once a table can contain an
  object such as a list, we have object hierarchies and need destructors
  to all work correctly.
+2005-02-01
+ All ints are stored in generic tables, so TB_INT is gone.
 */
 struct tag_entry {
 	STRING ekey;
@@ -333,28 +334,15 @@ void
 insert_table_int (TABLE tab, CNSTRING key, INT ival)
 {
 	ENTRY entry = fndentry(tab, key);
-	if (!entry) {
-		/* insert new entries as generics */
+	if (entry) {
+		/* update existing */
+		set_generic_int(&entry->generic, ival);
+	} else {
+		/* insert new */
 		GENERIC gen;
 		init_generic_int(&gen, ival);
 		new_table_entry_impl(tab, key, &gen);
 		clear_generic(&gen);
-		return;
-	} else if (!is_generic_null(&entry->generic)) {
-		/* if its already a generic, update the generic */
-		set_generic_int(&entry->generic, ival);
-		return;
-	} else {
-		/* if its already not a generic, update it as not a generic */
-		UNION uval;
-		uval.i = ival;
-		if (tab->valtype == TB_NULL) {
-			ASSERT(tab->whattofree==-1 || (tab->whattofree!=FREEBOTH && tab->whattofree!=FREEVALUE));
-			tab->valtype = TB_INT;
-		}
-		/* table must be homogenous, not mixed-type */
-		ASSERT(tab->valtype == TB_INT);
-		insert_table_impl(tab, key, uval);
 	}
 }
 /*======================================
@@ -488,22 +476,15 @@ valueof_ptr (TABLE tab, CNSTRING key)
 INT
 valueof_int (TABLE tab, CNSTRING key, INT defval)
 {
-	ENTRY entry;
+	ENTRY entry=0;
 	if (!tab->count || !key) 
 		return defval;
-	if ((entry = fndentry(tab, key))) {
-		if (!is_generic_null(&entry->generic)) {
-			if (is_generic_int(&entry->generic))
-				return get_generic_int(&entry->generic);
-			else
-				return defval;
-		} else {
-			ASSERT(tab->valtype == TB_INT);
-			return entry->uval.i;
-		}
-	} else {
+	entry = fndentry(tab, key);
+	if (!entry)
 		return defval;
-	}
+	if (!is_generic_int(&entry->generic))
+		return defval;
+	return get_generic_int(&entry->generic);
 }
 /*===============================
  * valueof_str -- Find string value of entry
@@ -574,15 +555,9 @@ valueofbool_int (TABLE tab, STRING key, BOOLEAN *there)
 	}
 	if (there)
 		*there = TRUE;
-	if (!is_generic_null(&entry->generic)) {
-		if (is_generic_int(&entry->generic))
-			return get_generic_int(&entry->generic);
-		else
-			return defval;
-	} else {
-		ASSERT(tab->valtype == TB_INT);
-		return entry->uval.i;
-	}
+	if (!is_generic_int(&entry->generic))
+		return defval;
+	return get_generic_int(&entry->generic);
 }
 /*===================================
  * valueofbool_str -- Find string value of entry
@@ -614,10 +589,6 @@ remove_table (TABLE tab, INT whattofree)
 	ENTRY ent, nxt;
 	if (!tab) return;
 	if (tab->whattofree!=-1) { ASSERT(whattofree==tab->whattofree); }
-	if (tab->valtype == TB_INT) {
-		/* can't free INTs */
-		ASSERT(whattofree != FREEBOTH && whattofree != FREEVALUE);
-	}
 	for (i = 0; i < tab->maxhash; i++) {
 		nxt = tab->entries[i];
 		while ((ent = nxt)) {
@@ -860,7 +831,6 @@ copy_table (const TABLE src, TABLE dest, INT whattodup)
 						/* copying from old-style value to generics table */
 						switch(src->valtype) {
 						case TB_PTR: table_insert_ptr(dest, key, uval.w); break;
-						case TB_INT: insert_table_int(dest, key, uval.i); break;
 						case TB_STR: table_insert_string(dest, key, uval.s); break;
 						default: new_table_entry_impl(dest, key, &ent->generic); break;
 						}

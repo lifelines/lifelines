@@ -24,6 +24,10 @@
 
 	Fix string leak in table_incr_item.
 
+	* ChangeLog src/stdlib/table.c
+
+	Remove no longer used table type TB_INT.
+
 2005-01-31 lifelines beta 3.0.41 RELEASE
 
 2005-01-31 Perry Rapp
