@@ -30,6 +30,8 @@
 #ifndef _TRANSLAT_H
 #define _TRANSLAT_H
 
+#include "standard.h"
+
 typedef struct xnode *XNODE;
 struct xnode {
 	XNODE parent;	/* parent node */

@@ -30,6 +30,8 @@
 #ifndef _GEDCHECK_H
 #define _GEDCHECK_H
 
+#include "standard.h"
+
 #define INDI_REC 0
 #define FAM_REC  1
 #define SOUR_REC 2
