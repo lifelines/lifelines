@@ -68,6 +68,7 @@ INT length_list(LIST);
 void make_list_empty(LIST);
 VPTR pop_list(LIST);
 void push_list(LIST, VPTR);
+void remove_heapstring_list(LIST list);
 void remove_list(LIST, void (*func)(VPTR));
 void set_list_element(LIST, INT, VPTR);
 void set_list_type(LIST, INT);

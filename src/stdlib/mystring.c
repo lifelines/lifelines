@@ -645,13 +645,13 @@ llstrncat (char *dest, const char *src, size_t n)
 	return dest;
 }
 /*==================================
- * strappend -- llstrncat except limit includes existing string
+ * llstrappend -- llstrncat except limit includes existing string
  *  ie, strncat except it always terminates, it handles UTF-8,
  *  and the limit is inclusive of existing contents
  * Created: 2002/06/13, Perry Rapp
  *================================*/
 char *
-strappend (char *dest, const char *src, size_t limit)
+llstrappend (char *dest, const char *src, size_t limit)
 {
 	size_t len = strlen(dest);
 	size_t n = limit-len;

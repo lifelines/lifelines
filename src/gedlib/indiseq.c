@@ -701,11 +701,10 @@ canonkeysort_indiseq (INDISEQ seq)
 static BOOLEAN
 is_locale_current (INDISEQ seq)
 {
-#ifdef HAVE_SETLOCALE
-	return eqstr(ILocale(seq), setlocale(LC_COLLATE, NULL));
-#else
-	return TRUE;
-#endif
+	if (are_locales_supported())
+		return eqstr(ILocale(seq), setlocale(LC_COLLATE, NULL));
+	else
+		return TRUE;
 }
 /*============================================
  * update_locale -- 

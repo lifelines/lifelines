@@ -38,6 +38,7 @@
 
 /* alphabetical */
 static void validate_list(LIST list);
+static void free_heapstring_el(VPTR w);
 
 
 /*===========================
@@ -301,4 +302,22 @@ INT
 length_list (LIST list)
 {
 	return !list ? 0 : llen(list);
+}
+/*====================================================
+ * free_heapstring_el -- free alloc'd string element of list
+ *==================================================*/
+static void
+free_heapstring_el (VPTR w)
+{
+	stdfree((STRING)w);
+}
+/*====================================================
+ * remove_heapstring_list -- free a dblist (caller is done with it)
+ *==================================================*/
+void
+remove_heapstring_list (LIST list)
+{
+	if (list) {
+		remove_list(list, free_heapstring_el);
+	}
 }

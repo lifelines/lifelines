@@ -139,6 +139,7 @@ main (INT argc, char **argv)
 	STRING exprog_name="";
 	STRING progout=NULL;
 	BOOLEAN graphical=TRUE;
+	STRING configfile=0;
 
 #if HAVE_SETLOCALE
 	/* initialize locales */
@@ -161,7 +162,7 @@ main (INT argc, char **argv)
 
 	/* Parse Command-Line Arguments */
 	opterr = 0;	/* turn off getopt's error message */
-	while ((c = getopt(argc, argv, "adkrwil:fmntc:Fu:yx:o:z")) != -1) {
+	while ((c = getopt(argc, argv, "adkrwil:fmntc:Fu:yx:o:zC:")) != -1) {
 		switch (c) {
 		case 'c':	/* adjust cache sizes */
 			while(optarg && *optarg) {
@@ -252,6 +253,9 @@ main (INT argc, char **argv)
 		case 'z': /* nongraphical box */
 			graphical = FALSE;
 			break;
+		case 'C': /* specify config file */
+			configfile = optarg;
+			break;
 		case '?':
 			showusage = TRUE;
 			goto usage;
@@ -274,7 +278,7 @@ prompt_for_db:
 	keypad(0, 1);
 	set_displaykeys(keyflag);
 	/* initialize options & misc. stuff */
-	if (!init_lifelines_global(&msg)) {
+	if (!init_lifelines_global(configfile, &msg)) {
 		llwprintf("%s", msg);
 		goto finish;
 	}
@@ -338,7 +342,7 @@ prompt_for_db:
 				INT i;
 				i = choose_from_list(
 					_("Choose database to open")
-					, n, dbdesclist);
+					, dbdesclist);
 				if (i >= 0) {
 					dbrequested = strsave(get_list_element(dblist, i+1));
 				}

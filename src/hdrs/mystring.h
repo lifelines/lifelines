@@ -17,7 +17,7 @@ void appendstrf(char ** pdest, int * len, const char * fmt,...);
 #define llstrcatn(dest, src, len) appendstr(dest, len, src)
 char *llstrncat(char *dest, const char *src, size_t n);
 char *llstrncpy(char *dest, const char *src, size_t n);
-char *strappend(char *dest, const char *src, size_t limit);
+char *llstrappend(char *dest, const char *src, size_t limit);
 int my_chrcmp(const int s1, const int s2);
 int my_isalpha(const int c);
 int my_iscntrl(const int c);

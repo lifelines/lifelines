@@ -1,3 +1,22 @@
+2002-06-15 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog configure.in gedlib/indiseq.c gedlib/init.c
+	gedlib/messages.c gedlib/translat.c hdrs/gedcom.h
+	hdrs/liflines.h hdrs/llnls.h hdrs/llstdlib.h hdrs/mystring.h
+	interp/interp.c liflines/main.c liflines/screen.c
+	stdlib/double.c stdlib/mystring.c win32/msvc6/llines/config.h
+	win32/msvc6/llines/llines.rc win32/msvc6/llines/llinesprj.dsp
+	*NEW hdrs/win32/iconv.h hdrs/win32/iconvshim.h
+	*NEW hdrs/win32/intlshim.h win32/iconvshim.c win32/intlshim.c
+	*DELETED: arch/bind_textdomain_codeset.c arch/ngettext.c:
+
+	Remove null implementations of ngettext & bind_textdomain_codeset.
+	(Users with old gettext can just included version.)
+	Remove charset & report charset menus, & replace with codeset
+	information display list.
+	Add commandline option -C <file> to specify config file.
+	Add shim files to call gettext & iconv dlls on MS-Windows.
+
 2002-06-14 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog hdrs/mystring.h interp/interp.c stdlib/mystring.c:

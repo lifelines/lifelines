@@ -50,7 +50,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib libintlvc6.lib iconv.lib /nologo /subsystem:console /map /machine:I386 /out:"..\..\..\..\bin\llines\Release\Lines.exe" /libpath:"..\..\..\..\bin\libintl\Release" /libpath:"..\..\..\iconv.rel\lib" /mapinfo:lines
+# ADD LINK32 winspool.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib advapi32.lib shell32.lib libintlvc6.lib iconv.lib version.lib /nologo /subsystem:console /map /machine:I386 /out:"..\..\..\..\bin\llines\Release\Lines.exe" /libpath:"..\..\..\..\bin\libintl\Release" /libpath:"..\..\..\iconv.rel\lib" /mapinfo:lines
 # SUBTRACT LINK32 /pdb:none /debug
 
 !ELSEIF  "$(CFG)" == "llinesprj - Win32 Debug"
@@ -76,7 +76,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib comdlg32.lib advapi32.lib shell32.lib libintlvc6.lib iconv.lib /nologo /subsystem:console /debug /machine:I386 /nodefaultlib:"libc.lib" /nodefaultlib:"libcmt.lib" /nodefaultlib:"msvcrt.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"msvcrtd.lib" /out:"..\..\..\..\bin\llines\Debug/llines.exe" /pdbtype:sept /libpath:"..\..\..\..\bin\libintl\Debug" /libpath:"..\..\..\iconv.dbg\lib"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib comdlg32.lib advapi32.lib shell32.lib version.lib /nologo /subsystem:console /debug /machine:I386 /nodefaultlib:"libc.lib" /nodefaultlib:"libcmt.lib" /nodefaultlib:"msvcrt.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"msvcrtd.lib" /out:"..\..\..\..\bin\llines\Debug/llines.exe" /pdbtype:sept /libpath:"..\..\..\..\bin\libintl\Debug" /libpath:"..\..\..\iconv.dbg\lib"
 
 !ENDIF 
 
@@ -225,6 +225,10 @@ SOURCE=..\..\..\interp\heapused.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\iconvshim.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\liflines\import.c
 # End Source File
 # Begin Source File
@@ -242,6 +246,10 @@ SOURCE=..\..\..\gedlib\init.c
 # Begin Source File
 
 SOURCE=..\..\..\interp\interp.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\intlshim.c
 # End Source File
 # Begin Source File
 
@@ -561,6 +569,14 @@ SOURCE=..\..\..\hdrs\win32\getopt.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\hdrs\win32\iconv.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\hdrs\win32\iconvshim.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\hdrs\indiseq.h
 # End Source File
 # Begin Source File
@@ -573,11 +589,19 @@ SOURCE=..\..\..\interp\interpi.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\hdrs\win32\intlshim.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\hdrs\liflines.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\liflines\llinesi.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\hdrs\llnls.h
 # End Source File
 # Begin Source File
 

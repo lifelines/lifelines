@@ -50,11 +50,11 @@ ZST qScrdbse      = N_("Do you want to create a database there?");
 ZST qSbdlkar      = N_("Argument to lock (-l) must be y or n.");
 ZST qSnormls      = N_("Cannot remove last person from family.");
 	/* summary of options (compiled with Finnish as optional) */
-ZST qSusgFinnOpt  = N_("lines [-adkrwifmntcuFyxo] [database]   # Use -F for Finnish database");
+ZST qSusgFinnOpt  = N_("lines [-adkrwifmntcuFyxoC] [database]   # Use -F for Finnish database");
 	/* summary of options (compiled with Finnish as mandatory) */
-ZST qSusgFinnAlw  = N_("lines [-adkrwifmntcuyxo] [database]   # Finnish database");
+ZST qSusgFinnAlw  = N_("lines [-adkrwifmntcuyxoC] [database]   # Finnish database");
 	/* summary of options (normal compile -- no Finnish support) */
-ZST qSusgNorm     = N_("lines [-adkrwifmntcuyxo] [database]");
+ZST qSusgNorm     = N_("lines [-adkrwifmntcuyxoC] [database]");
 
 ZST qSronlya      = N_("The database is read only; you may not add records.");
 ZST qSronlye      = N_("The database is read only; you may not change records.");
@@ -516,22 +516,7 @@ ZST qSmn_xxeeven  = N_("4  Edit event record from the database");
 ZST qSmn_xxaothr  = N_("5  Add an other record to the database");
 ZST qSmn_xxeothr  = N_("6  Edit other record from the database");
 
-/* end extra menu, begin character set menu */
-ZST qSmn_csttl    = N_("Character set menu");
-ZST qSmn_cstt     = N_("t  Edit translation tables");
-ZST qSmn_csrpt    = N_("r  Report character set setup");
-ZST qSmn_csintcs  = N_("Internal code set: ");
- /* The following 5 choices look best if padded to same length (70 chars after spaces) */
-ZST qSmn_cstsort  = N_("s  Edit custom sort table        ");
-ZST qSmn_cspref   = N_("p  Edit custom sort prefix table ");
-ZST qSmn_cschar   = N_("c  Edit custom codepage mapping  ");
-ZST qSmn_cslcas   = N_("l  Edit custom lower case mapping");
-ZST qSmn_csucas   = N_("u  Edit custom upper case mapping");
-/* menu for report character set issues */
-ZST qSmn_csrpttl  = N_("Report character set menu");
-ZST qSmn_csrptcs  = N_("Report code set: ");
-
-/* &&begin translation table menu */
+/* &&end utility menu, &&begin translation table menu */
 ZST qSmn_tt_ttl   = N_("Translation Tables");
 ZST qSmn_tt_edit  = N_("e  edit individual tables (in db)");
 ZST qSmn_tt_load  = N_("l  load a table from a file (into db)");

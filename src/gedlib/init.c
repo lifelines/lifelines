@@ -40,6 +40,9 @@
 #include "gedcom.h"
 #include "version.h"
 #include "lloptions.h"
+#ifdef WIN32_ICONV_SHIM
+#include "iconvshim.h"
+#endif
 
 /*********************************************
  * global/exported variables
@@ -66,7 +69,6 @@ extern STRING qSdbrecstats;
  *********************************************/
 
 static void add_dbs_to_list(LIST dblist, LIST dbdesclist, STRING dir);
-static void free_dblist_el(VPTR w);
 static STRING getdbdesc(STRING path);
 
 /*********************************************
@@ -85,13 +87,15 @@ static int rdr_count = 0;
  *  This is called before first (or later) database opened
  *===============================*/
 BOOLEAN
-init_lifelines_global (STRING * pmsg)
+init_lifelines_global (STRING configfile, STRING * pmsg)
 {
 	STRING e;
 	STRING dirvars[] = { "LLPROGRAMS", "LLREPORTS", "LLARCHIVES"
 		, "LLDATABASES", "LLNEWDBDIR" };
 	INT i;
-	STRING configfile = getenv("LLCONFIGFILE");
+
+	if (!configfile)
+		configfile = getenv("LLCONFIGFILE");
 
 	*pmsg = NULL;
 
@@ -100,10 +104,40 @@ init_lifelines_global (STRING * pmsg)
 	
 	if (!init_lifelines_options(configfile, pmsg))
 		return FALSE;
+
+#ifdef WIN32_ICONV_SHIM
+	/* (re)load iconv.dll if path specified */
+	e = getoptstr("iconv.path", "");
+	if (e && *e)
+		iconvshim_set_property("dll_path", e);
+#endif
+
 #if ENABLE_NLS
+
+#ifdef WIN32_INTL_SHIM
+	/* (re)load gettext dll if specified */
+	e = getoptstr("gettext.path", "");
+	if (e && *e)
+	{
+		if (intlshim_set_property("dll_path", e))
+		{
+			bindtextdomain(PACKAGE, LOCALEDIR);
+			textdomain(PACKAGE);
+		}
+		/* tell gettext where to find iconv */
+		e = getoptstr("iconv.path", "");
+		if (e && *e)
+			gt_set_property("iconv_path", e);
+	}
+#endif
+
 	e = getoptstr("GuiOutputCharset", "");
 	if (e && *e)
 		bind_textdomain_codeset(PACKAGE, e);
+	e = getoptstr("LocaleDir", "");
+	if (e && *e)
+		bindtextdomain(PACKAGE, e);
+
 	/*
 	otherwise let gettext try to figure it out
 	gettext has a lot of nice code for this stuff, but it doesn't
@@ -112,6 +146,7 @@ init_lifelines_global (STRING * pmsg)
 	TODO: So revise this to use the codeset we determine at startup
 	*/
 #endif /* ENABLE_NLS */
+
 
 	/* check if any directories not specified, and try environment
 	variables, and default to "." */
@@ -489,7 +524,6 @@ update_useropts (void)
  *  path:       [IN]  list of directories to be searched
  *  dblist:     [OUT] list of database paths found
  *  dbdesclist: [OUT] list of descriptions of databases found
- *  num:        [OUT] # dbs found (length of returned list)
  *================================================*/
 INT
 get_dblist (STRING path, LIST * dblist, LIST * dbdesclist)
@@ -497,7 +531,6 @@ get_dblist (STRING path, LIST * dblist, LIST * dbdesclist)
 	char dirs[MAXPATHLEN+1];
 	INT ndirs=0;
 	STRING p=0;
-	INT num=0;
 	ASSERT(!(*dblist) && !(*dbdesclist));
 	*dblist = create_list();
 	*dbdesclist = create_list();
@@ -510,11 +543,7 @@ get_dblist (STRING path, LIST * dblist, LIST * dbdesclist)
 		add_dbs_to_list(*dblist, *dbdesclist, p);
 		p += strlen(p)+1;
 	}
-	FORLIST((*dblist), el)
-		++num;
-	ENDLIST
-	ASSERT(num==llen(*dblist)); /* TODO: use llen directly & dispense with counting loop */
-	return num;
+	return llen(*dblist);
 }
 /*==================================================
  * add_dbs_to_list -- Add all dbs in specified dir to list
@@ -576,20 +605,12 @@ getdbdesc (STRING path)
 	return desc[0] ? strdup(desc) : 0;
 }
 /*====================================================
- * free_string_el -- free alloc'd string element of list
- *==================================================*/
-static void
-free_dblist_el (VPTR w)
-{
-	stdfree((STRING)w);
-}
-/*====================================================
  * release_dblist -- free a dblist (caller is done with it)
  *==================================================*/
 void
 release_dblist (LIST dblist)
 {
 	if (dblist) {
-		remove_list(dblist, free_dblist_el);
+		remove_heapstring_list(dblist);
 	}
 }

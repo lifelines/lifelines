@@ -38,10 +38,11 @@ typedef void (*DETAILFNC)(ARRAY_DETAILS, void *);
 
 /* screen.c functions */
 INT choose_from_array(STRING ttl, INT no, STRING *pstrngs);
-INT choose_from_list(STRING ttl, INT no, LIST list);
+INT choose_from_list(STRING ttl, LIST list);
 INT choose_from_array_x(STRING ttl, INT count, STRING* list, DETAILFNC, void *);
 INT choose_list_from_indiseq(STRING, INDISEQ);
 INT choose_one_from_indiseq(STRING, INDISEQ);
+INT display_list(STRING ttl, LIST list);
 void view_array(STRING ttl, INT no, STRING *pstrngs);
 
 /* from askprogram.c */

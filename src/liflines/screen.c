@@ -44,6 +44,9 @@
 #include "interp.h"
 #include "llinesi.h"
 #include "screen.h"
+#ifdef WIN32_ICONV_SHIM
+#include "iconvshim.h"
+#endif
 
 #define LINESREQ 24
 #define COLSREQ  80
@@ -78,7 +81,7 @@ static UIWINDOW debug_win=NULL, debug_box_win=NULL;
 static UIWINDOW ask_win=NULL, ask_msg_win=NULL;
 static UIWINDOW choose_from_list_win=NULL;
 static UIWINDOW add_menu_win=NULL, del_menu_win=NULL;
-static UIWINDOW scan_menu_win=NULL, cset_menu_win=NULL, rpt_cset_menu_win=NULL;
+static UIWINDOW scan_menu_win=NULL;
 static UIWINDOW utils_menu_win=NULL, tt_menu_win=NULL;
 static UIWINDOW trans_menu_win=NULL;
 static UIWINDOW extra_menu_win=NULL;
@@ -99,7 +102,6 @@ extern STRING qSmn_quit, qSmn_changedb, qSmn_ret, qSmn_exit;
 extern STRING qSmn_mmbrws,qSmn_mmsear,qSmn_mmadd,qSmn_mmdel;
 extern STRING qSmn_mmprpt,qSmn_mmrpt,qSmn_mmcset;
 extern STRING qSmn_mmtt,qSmn_mmut,qSmn_mmex;
-extern STRING qSmn_csttl,qSmn_cstt,qSmn_csintcs,qSmn_csrptcs;
 extern STRING qSmn_cstsort,qSmn_cspref,qSmn_cschar,qSmn_cslcas,qSmn_csucas;
 extern STRING qSmn_csrpt;
 extern STRING qSmn_csrpttl;
@@ -158,6 +160,7 @@ typedef struct listdisp_s
 
 /* alphabetical */
 static void activate_uiwin(UIWINDOW uiwin);
+static void add_shims_info(LIST list);
 static void append_to_msg_list(STRING msg);
 static INT array_interact(STRING ttl, INT len, STRING *strings
 	, BOOLEAN selecting, DETAILFNC detfnc, void *param);
@@ -189,7 +192,7 @@ static BOOLEAN handle_popup_list_resize(listdisp * ld, INT code);
 static void import_tts(void);
 static INT interact(UIWINDOW uiwin, STRING str, INT screen);
 static NODE invoke_add_menu(void);
-static void invoke_cset_menu(void);
+static void invoke_cset_display(void);
 static void invoke_del_menu(void);
 static INT invoke_extra_menu(void);
 static RECORD invoke_scan_menu(void);
@@ -205,8 +208,6 @@ static void print_list_title(char * buffer, INT len, const listdisp * ld, STRING
 static void repaint_add_menu(UIWINDOW uiwin);
 static void repaint_delete_menu(UIWINDOW uiwin);
 static void repaint_scan_menu(UIWINDOW uiwin);
-static void repaint_cset_menu(UIWINDOW uiwin);
-static void repaint_rpc_menu(UIWINDOW uiwin);
 /*static void repaint_tt_menu(UIWINDOW uiwin);*/
 static void repaint_trans_menu(UIWINDOW uiwin);
 static void repaint_utils_menu(UIWINDOW uiwin);
@@ -226,9 +227,6 @@ static void shw_popup_list(INDISEQ seq, listdisp * ld);
 static void shw_recordlist_details(INDISEQ seq, listdisp * ld);
 static void shw_recordlist_list(INDISEQ seq, listdisp * ld);
 static void switch_to_uiwin(UIWINDOW uiwin);
-#ifdef HAVE_SETLOCALE
-static void test_locale_name(void);
-#endif
 static void touch_all(BOOLEAN includeCurrent);
 static INT translate_control_key(INT c);
 static INT translate_hdware_key(INT c);
@@ -556,8 +554,6 @@ create_windows (void)
 	ask_msg_win = create_newwin2(5, 73);
 	choose_from_list_win = create_newwin2(15, 73);
 
-	/* cset_menu_win is drawn dynamically */
-	/* rpt_cset_menu_win is drawn dynamically */
 	/* trans_menu_win is drawn dynamically */
 	/* tt_menu_win is drawn dynamically */
 	draw_win_box(uiw_win(ask_win));
@@ -653,7 +649,7 @@ main_menu (void)
 		break;
 	case 'p': run_report(TRUE); break;
 	case 'r': run_report(FALSE); break;
-	case 'c': invoke_cset_menu(); break;
+	case 'c': invoke_cset_display(); break;
 	case 't': edit_tt_menu(); break;
 	case 'u': invoke_utils_menu(); break;
 	case 'x': 
@@ -1133,23 +1129,35 @@ choose_from_array (STRING ttl, INT no, STRING *pstrngs)
 	return choose_or_view_array(ttl, no, pstrngs, selecting, 0, 0);
 }
 /*============================================
- * choose_from_list -- Choose from string list
- *  ttl:      [IN] title for choice display
- *  no:       [IN] number of choices
- *  pstrngs:  [IN] array of choices
+ * display_list -- Show user list of information
+ *  ttl:    [IN] title for display
+ *  list    [IN] list of string entries
  * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
 INT
-choose_from_list (STRING ttl, INT no, LIST list)
+display_from_list (STRING ttl, LIST list)
+{
+	/* TODO: Need to set some flag to suppress i & <enter> */
+	return choose_from_list(ttl, list);
+}
+/*============================================
+ * choose_from_list -- Choose from string list
+ *  ttl:    [IN] title for display
+ *  list    [IN] list of string choices
+ * returns 0-based index chosen, or -1 if cancelled
+ *==========================================*/
+INT
+choose_from_list (STRING ttl, LIST list)
 {
 	STRING * array=0;
 	STRING choice=0;
 	INT i=0, rtn=-1;
+	INT len = llen(list);
 
-	if (no < 1) return -1;
+	if (len < 1) return -1;
 	if (!ttl) ttl=_(qSdefttl);
 
-	array = (STRING *) stdalloc(no*sizeof(STRING));
+	array = (STRING *) stdalloc(len*sizeof(STRING));
 	i = 0;
 	FORLIST(list, el)
 		choice = (STRING)el;
@@ -1158,9 +1166,9 @@ choose_from_list (STRING ttl, INT no, LIST list)
 		++i;
 	ENDLIST
 
-	rtn = choose_from_array(ttl, no, array);
+	rtn = choose_from_array(ttl, len, array);
 
-	for (i=0; i<no; ++i)
+	for (i=0; i<len; ++i)
 		strfree(&array[i]);
 	stdfree(array);
 	return rtn;
@@ -1541,36 +1549,6 @@ choose_list_from_indiseq (STRING ttl, INDISEQ seq)
 {
 	return choose_one_or_list_from_indiseq(ttl, seq, TRUE);
 }
-#ifdef HAVE_SETLOCALE
-/*======================================
- * choose_sort -- Enter new sort locale
- * Created: 2001/07/21 (Perry Rapp)
- *====================================*/
-static void
-test_locale_name (void)
-{
-	STRING str;
-	STRING result = 0;
-	STRING idsortttl = _("Enter locale name");
-	STRING idloc = _("Locale: ");
-	BOOLEAN first = TRUE;
-	while (!result) {
-		str = ask_for_string(idsortttl, idloc);
-		if (!str || !str[0]) return;
-		result = setlocale(LC_COLLATE, str);
-		if (result) {
-			char buffer[128];
-			sprintpic1(buffer, sizeof(buffer), _("Valid locale: %1"), str);
-			msg_info(buffer);
-			return;
-		}
-		if (first) {
-			idsortttl = _("Invalid locale, try again");
-			first = FALSE;
-		}
-	}
-}
-#endif
 /*==============================
  * draw_tt_win -- Draw menu for edit translations
  * Created: 2001/07/20 (Perry Rapp)
@@ -1752,86 +1730,108 @@ invoke_del_menu (void)
 	}
 }
 /*======================================
- * invoke_cset_menu -- Handle character set menu
+ * invoke_cset_display -- Handle character set menu
  *====================================*/
 static void
-invoke_cset_menu (void)
+invoke_cset_display (void)
 {
-	INT code=0;
-	UIWINDOW uiwin=0;
-	WINDOW *win=0;
-	BOOLEAN done=FALSE;
+	LIST list = create_list();
+	char buffer[80];
+	if (int_utf8)
+		push_list(list, strsave(_("Internal codeset: UTF-8")));
+	else
+		push_list(list, strsave(_("Internal codeset: 8-bit")));
 
-	if (!cset_menu_win) {
-		cset_menu_win = create_newwin2(12,66);
-	}
-	uiwin = cset_menu_win;
-	win = uiw_win(uiwin);
-	activate_uiwin(uiwin);
+	if (are_locales_supported())
+		push_list(list, strsave(_("Locales are enabled.")));
+	else
+		push_list(list, strsave(_("Locales are disabled.")));
+	
+	if (is_nls_supported())
+		push_list(list, strsave(_("NLS (National Language Support) is enabled.")));
+	else
+		push_list(list, strsave(_("NLS (National Language Support) is disabled.")));
 
-	while (!done) {
-		stdout_vis=FALSE;
-		touchwin(win);
-		repaint_cset_menu(uiwin);
-		wrefresh(win);
+	add_shims_info(list);
 
-		wmove(win, 1, strlen(_(qSmn_csttl))+3);
-#ifdef NOTYET
-		code = interact(uiwin, "Lscluprtq", -1);
-#endif
-		code = interact(uiwin, "Lsrtq", -1);
-
-		switch (code) {
-#ifdef HAVE_SETLOCALE
-		case 'L': test_locale_name(); break;
-#endif
-		case 's': edit_mapping(MSORT); break;
-		case 'c': edit_mapping(MCHAR); break;
-		case 'l': edit_mapping(MLCAS); break;
-		case 'u': edit_mapping(MUCAS); break;
-		case 'p': edit_mapping(MPREF); break;
-		case 'r': rpt_cset_menu(); break;
-		case 't': invoke_trans_menu(); break;
-		case 'q': done=TRUE; break;
-		}
-	}
-	deactivate_uiwin_and_touch_all();
+	if (is_iconv_supported())
+		push_list(list, strsave(_("iconv (codeset conversion) is enabled.")));
+	else
+		push_list(list, strsave(_("iconv (codeset conversion) is disabled.")));
+	
+	snprintf(buffer, sizeof(buffer), _("Startup collate locale: %s")
+		, get_original_locale_collate());
+	push_list(list, strsave(buffer));
+	
+	snprintf(buffer, sizeof(buffer), _("Startup messages locale: %s")
+		, get_original_locale_msgs());
+	push_list(list, strsave(buffer));
+	
+	snprintf(buffer, sizeof(buffer), _("Current collate locale: %s")
+		, get_current_locale_collate());
+	push_list(list, strsave(buffer));
+	
+	snprintf(buffer, sizeof(buffer), _("Current messages locale: %s")
+		, get_current_locale_msgs());
+	push_list(list, strsave(buffer));
+	
+	choose_from_list(_("Codeset information"), list);
+	remove_heapstring_list(list);
 }
 /*======================================
- * rpt_cset_menu -- Handle report character set menu
+ * add_shims_info -- Add information about gettext and iconv dlls
  *====================================*/
 static void
-rpt_cset_menu (void)
+add_shims_info (LIST list)
 {
-	INT code;
-	UIWINDOW uiwin=0;
-	WINDOW *win=0;
-	BOOLEAN done=FALSE;
-
-	if (!rpt_cset_menu_win) {
-		rpt_cset_menu_win = create_newwin2(7,66);
-	}
-	uiwin = rpt_cset_menu_win;
-	win = uiw_win(uiwin);
-	activate_uiwin(uiwin);
-
-	while (!done) {
-		stdout_vis=FALSE;
-		touchwin(win);
-		repaint_rpc_menu(uiwin);
-		wrefresh(win);
-		wmove(win, 1, strlen(_(qSmn_csttl))+3);
-		code = interact(uiwin, "Lrq", -1);
-
-		switch (code) {
-#ifdef HAVE_SETLOCALE
-		case 'L': test_locale_name(); break;
-#endif
-		case 'r': edit_mapping(MINRP); break;
-		case 'q': done=TRUE; break;
+#ifdef WIN32_INTL_SHIM
+	{
+		char buffer[80];
+		char value[MAXPATHLEN];
+		if (intlshim_get_property("dll_path", value, sizeof(value)))
+		{
+			snprintf(buffer, sizeof(buffer), _("gettext dll: %s"), value);
+			push_list(list, strsave(buffer));
+			if (intlshim_get_property("dll_version", value, sizeof(value)))
+			{
+				snprintf(buffer, sizeof(buffer), _("gettext dll version: %s"), value);
+				push_list(list, strsave(buffer));
+			}
+			else
+			{
+				push_list(list, strsave(_("gettext dll had no version")));
+			}
+		}
+		else
+		{
+			push_list(list, strsave(_("no gettext dll found")));
 		}
 	}
-	deactivate_uiwin_and_touch_all();
+#endif
+#ifdef WIN32_ICONV_SHIM
+	{
+		char buffer[80];
+		char value[MAXPATHLEN];
+		if (iconvshim_get_property("dll_path", value, sizeof(value)))
+		{
+			snprintf(buffer, sizeof(buffer), _("iconv dll: %s"), value);
+			push_list(list, strsave(buffer));
+			if (iconvshim_get_property("dll_version", value, sizeof(value)))
+			{
+				snprintf(buffer, sizeof(buffer), _("iconv dll version: %s"), value);
+				push_list(list, strsave(buffer));
+			}
+			else
+			{
+				push_list(list, strsave(_("iconv dll had no version")));
+			}
+		}
+		else
+		{
+			push_list(list, strsave(_("no iconv dll found")));
+		}
+	}
+#endif
 }
 /*======================================
  * invoke_trans_menu -- menu for translation tables
@@ -3291,56 +3291,6 @@ repaint_scan_menu (UIWINDOW uiwin)
 	mvwaddstr(win, row++, 4, _(qSmn_sca_nmfu));
 	mvwaddstr(win, row++, 4, _(qSmn_sca_nmfr));
 	mvwaddstr(win, row++, 4, _(qSmn_sca_refn));
-	mvwaddstr(win, row++, 4, _(qSmn_ret));
-}
-/*=====================================
- * repaint_cset_menu -- 
- * Created: 2001/11/24, Perry Rapp
- *===================================*/
-static void
-repaint_cset_menu (UIWINDOW uiwin)
-{
-	WINDOW *win = uiw_win(uiwin);
-	INT row = 1;
-	STRING csndloc = _("L  Test locale names");
-	uierase(uiwin);
-	draw_win_box(win);
-	mvwaddstr(win, row++, 2, _(qSmn_csttl));
-	if (int_utf8)
-		mvwaddstr(win, row++, 4, _("UTF-8 code set"));
-	else
-		mvwaddstr(win, row++, 4, _("8 bit code set"));
-	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_cstsort), MSORT);
-#ifdef NOTYET
-	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_cspref), MPREF);
-	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_cschar), MCHAR);
-	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_cslcas), MLCAS);
-	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_csucas), MUCAS);
-#endif
-#ifdef HAVE_SETLOCALE
-	mvwaddstr(win, row++, 4, csndloc);
-#endif
-	mvwaddstr(win, row++, 4, _(qSmn_csrpt));
-	mvwaddstr(win, row++, 4, _(qSmn_cstt));
-	mvwaddstr(win, row++, 4, _(qSmn_ret));
-}
-/*=====================================
- * repaint_rpc_menu -- 
- * Created: 2001/11/24, Perry Rapp
- *===================================*/
-static void
-repaint_rpc_menu (UIWINDOW uiwin)
-{
-	WINDOW *win = uiw_win(uiwin);
-	STRING csnrloc = _("L  Test locale names");
-	INT row = 1;
-	uierase(uiwin);
-	draw_win_box(win);
-	mvwaddstr(win, row++, 2, _(qSmn_csrpttl));
-#ifdef HAVE_SETLOCALE
-	mvwaddstr(win, row++, 4, csnrloc);
-#endif
-	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_tt_inrp), MINRP);
 	mvwaddstr(win, row++, 4, _(qSmn_ret));
 }
 /*=====================================

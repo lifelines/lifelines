@@ -38,8 +38,12 @@
 #else
 # include "langinfz.h"
 #endif
-#if HAVE_ICONV
-# include <iconv.h>
+#ifdef HAVE_ICONV
+# ifdef WIN32_ICONV_SHIM
+#  include "win32/iconvshim.h"
+# else
+#  include <iconv.h>
+# endif
 #endif
 #include "translat.h"
 #include "liflines.h"
@@ -62,7 +66,8 @@ static XNODE create_xnode(XNODE, INT, STRING);
 static void customlocale(STRING prefix);
 static STRING get_current_locale(INT category);
 static void iconv_trans(TRANMAPPING ttm, CNSTRING in, bfptr bfs);
-static BOOLEAN llsetenv(STRING name, STRING value);
+static STRING llsetenv(STRING name, STRING value);
+static void notify_gettext_language_changed(void);
 static STRING setmsgs(STRING localename);
 static void show_xnode(XNODE node);
 static void show_xnodes(INT indent, XNODE node);
@@ -77,6 +82,8 @@ static STRING  deflocale_coll = NULL;
 static STRING  deflocale_msgs = NULL;
 static BOOLEAN customized_loc = FALSE;
 static BOOLEAN customized_msgs = FALSE;
+static STRING  current_coll = NULL; /* most recent */
+static STRING  current_msgs = NULL; /* most recent */
 
 /*********************************************
  * local & exported function definitions
@@ -615,6 +622,7 @@ save_original_locales (void)
 	/* get collation locale, if available */
 #ifdef HAVE_SETLOCALE
 	deflocale_coll = strsave(get_current_locale(LC_COLLATE));
+	current_coll = strsave(deflocale_coll);
 #endif /* HAVE_SETLOCALE */
 
 	/* get messages locale (via locale or via environ.) */
@@ -623,13 +631,96 @@ save_original_locales (void)
 	if (LC_MESSAGES >= 0 && LC_MESSAGES != 1729) {
 		/* 1729 is the gettext code when there wasn't any LC_MESSAGES */
 		deflocale_msgs = strsave(get_current_locale(LC_MESSAGES));
+		current_msgs = strsave(deflocale_msgs);
 	}
 #endif /* LC_MESSAGES */
 #endif /* HAVE_SETLOCALE */
 	/* fallback to the environment (see setmsgs) */
-	if (!deflocale_msgs)
-		deflocale_msgs = getenv("LC_MESSAGES");
+	if (!deflocale_msgs) {
+		STRING msgs = getenv("LC_MESSAGES");
+		deflocale_msgs = strsave(msgs ? msgs : "");
+		current_msgs = strsave(deflocale_msgs);
+	}
 
+}
+/*==========================================
+ * get_original_locale_collate -- Get collation locale captured at startup
+ * caller may not alter string
+ * Created: 2002/06/15 (Perry Rapp)
+ *========================================*/
+STRING
+get_original_locale_collate (void)
+{
+#ifdef HAVE_SETLOCALE
+	return deflocale_coll;
+#endif /* HAVE_SETLOCALE */
+	return "";
+}
+/*==========================================
+ * get_current_locale_collate -- Get collation locale (as last set)
+ * caller may not alter string
+ * Created: 2002/06/15 (Perry Rapp)
+ *========================================*/
+STRING
+get_current_locale_collate (void)
+{
+	return current_coll;
+}
+/*==========================================
+ * get_original_locale_msgs -- Get LC_MESSAGES locale captured at startup
+ * caller may not alter string
+ * Created: 2002/06/15 (Perry Rapp)
+ *========================================*/
+STRING
+get_original_locale_msgs (void)
+{
+	return deflocale_msgs;
+}
+/*==========================================
+ * get_current_locale_msgs -- Get LC_MESSAGES locale (as last set)
+ * caller may not alter string
+ * Created: 2002/06/15 (Perry Rapp)
+ *========================================*/
+STRING
+get_current_locale_msgs (void)
+{
+	return current_msgs;
+}
+/*==========================================
+ * are_locales_supported -- locale support compiled in ?
+ * Created: 2002/06/15 (Perry Rapp)
+ *========================================*/
+BOOLEAN
+are_locales_supported (void)
+{
+#ifdef HAVE_SETLOCALE
+	return TRUE;
+#endif /* HAVE_SETLOCALE */
+	return FALSE;
+}
+/*==========================================
+ * is_nls_supported -- is NLS (National Language Support) compiled in ?
+ * Created: 2002/06/15 (Perry Rapp)
+ *========================================*/
+BOOLEAN
+is_nls_supported (void)
+{
+#ifdef ENABLE_NLS
+	return TRUE;
+#endif /* ENABLE_NLS */
+	return FALSE;
+}
+/*==========================================
+ * is_iconv_supported -- is iconv (codeset conversion library) compiled in ?
+ * Created: 2002/06/15 (Perry Rapp)
+ *========================================*/
+BOOLEAN
+is_iconv_supported (void)
+{
+#ifdef HAVE_ICONV
+	return TRUE;
+#endif /* HAVE_ICONV */
+	return FALSE;
 }
 /*==========================================
  * ll_langinfo -- wrapper for nl_langinfo
@@ -673,6 +764,16 @@ uilocale (void)
 	customlocale("UiLocale");
 }
 /*==========================================
+ * rptlocale -- set locale to report locale
+ *  (eg, for _namesort)
+ * Created: 2001/08/02 (Perry Rapp)
+ *========================================*/
+void
+rptlocale (void)
+{
+	customlocale("RptLocale");
+}
+/*==========================================
  * setmsgs -- set locale for LC_MESSAGES
  * Returns non-null string if succeeds
  * Created: 2002/02/24 (Perry Rapp)
@@ -680,47 +781,54 @@ uilocale (void)
 static STRING
 setmsgs (STRING localename)
 {
+	STRING str;
 #ifdef HAVE_SETLOCALE
 #ifdef HAVE_LC_MESSAGES
-	return setlocale(LC_MESSAGES, localename);
+	str = setlocale(LC_MESSAGES, localename);
+	if (str) {
+		strfree(&current_msgs);
+		current_msgs = strsave(str);
+	}
+	return str;
 #endif /* HAVE_LC_MESSAGES */
 #endif /* HAVE_SETLOCALE */
-
-	return llsetenv("LC_MESSAGES", localename) ? "1" : 0;
+	str = llsetenv("LC_MESSAGES", localename);
+	if (str) {
+		strfree(&current_msgs);
+		current_msgs = strsave(str);
+	}
+	return str;
 }
 /*==========================================
  * llsetenv -- assign a value to an environment variable
- * Returns TRUE if supported on this platform
+ * Returns value if it succeeded
  *========================================*/
-static BOOLEAN
+static STRING
 llsetenv (STRING name, STRING value)
 {
 	char buffer[128];
-	STRING str = buffer;
+	STRING str = 0;
 	INT len = ARRSIZE(buffer);
 	
-	buffer[0] = 0;
-	appendstr(&str, &len, name);
-	appendstr(&str, &len, "=");
-	appendstr(&str, &len, value);
+	llstrncpy(buffer, name, len);
+	llstrappend(buffer, "=", len);
+	llstrappend(buffer, value, len);
 
 #ifdef HAVE_SETENV
-	setenv(name, value, 1);
-	str = buffer;
+	if (setenv(name, value, 1) != -1)
+		str = value;
 #else
 #ifdef HAVE_PUTENV
-	putenv(buffer);
-	str = buffer;
+	if (putenv(buffer) != -1)
+		str = value;
 #else
 #ifdef HAVE__PUTENV
-	_putenv(buffer);
-	str = buffer;
-#else
-	str = 0; /* failed */
+	if (_putenv(buffer) != -1)
+		str = value;
 #endif /* HAVE__PUTENV */
 #endif /* HAVE_PUTENV */
 #endif /* HAVE_SETENV */
-	return str ? TRUE : FALSE;
+	return str;
 }
 /*==========================================
  * customlocale -- set locale to custom setting
@@ -787,18 +895,24 @@ customlocale (STRING prefix)
 	}
 	
 	if (customized_msgs) {
-		extern int _nl_msg_cat_cntr;
-		++_nl_msg_cat_cntr;
+		notify_gettext_language_changed();
 	}
 #endif /* ENABLE_NLS */
 }
 /*==========================================
- * rptlocale -- set locale to report locale
- *  (eg, for _namesort)
- * Created: 2001/08/02 (Perry Rapp)
+ * notify_gettext_language_changed --
+ *  signal gettext that desired language has changed
+ * Created: 2002/06/15 (Perry Rapp)
  *========================================*/
-void
-rptlocale (void)
+static void
+notify_gettext_language_changed (void)
 {
-	customlocale("RptLocale");
+#if ENABLE_NLS
+#if  WIN32_INTL_SHIM
+	gt_notify_language_change();
+#else
+	extern int _nl_msg_cat_cntr;
+	++_nl_msg_cat_cntr;
+#endif
+#endif
 }

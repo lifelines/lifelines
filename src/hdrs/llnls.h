@@ -26,8 +26,8 @@
  *   Created: 2002/06 by Perry Rapp
  *==============================================================*/
 
-#ifndef _LLNLS_H
-#define _LLNLS_H
+#ifndef LLNLS_H_INCLUDED
+#define LLNLS_H_INCLUDED
 
 /* Need config.h for ENABLE_NLS */
 #ifdef HAVE_CONFIG_H
@@ -37,8 +37,12 @@
 #if ENABLE_NLS
 /*** NLS (National Language Support) ***/
 
-/*#include <libintl.h>*/
-#include "libgnuintl.h"
+#ifdef WIN32_INTL_SHIM
+#include "win32/intlshim.h"
+#else
+#include <libintl.h>
+#endif
+
 
 /* _() is used for normally translated strings */
 #define _(String) gettext(String)
@@ -46,33 +50,21 @@
 /* TODO: add keyword argument for _pl:2,3 & start using _pl macro */
 /* #define _pl(Singular, Plural, Num) ngettext(Singular, Plural, Num) */
 
-/* Old gettext didn't have ngettext, so provide null version */
-#if !HAVE_NGETTEXT
-char * ngettext(const char *, const char *, unsigned long int);
-char * dngettext(const char *, const char *, const char *, unsigned long int);
-char * dcngettext(const char *, const char *, const char *, unsigned long int, int);
-#endif /* !HAVE_NGETTEXT */
-
-/* Old gettext didn't have bind_textdomain_codeset, so provide null version */
-#if !HAVE_BIND_TEXTDOMAIN_CODESET
-char * bind_textdomain_codeset(const char *, const char *);
-#endif /* !HAVE_BIND_TEXTDOMAIN_CODESET */
-
 
 /* We can't use _N() for nonstranslated strings (eg "%d") -- TODO */
 
 /* N_() is used for strings needing translation elsewhere, eg static inits */
 #define N_(String) (String)
 
-#else
+#else /* ENABLE_NLS */
 /*** No NLS (National Language Support) ***/
 
 #define _(String) String
 #define N_(String) (String)
 #define textdomain(Domain)
 #define bindtextdomain(Package, Directory)
-#define ngettext(Singular, Plural, Num) Plural
-#endif
-
+#define ngettext(Singular, Plural, Num) (Num>1 ? Plural : Singular)
 
 #endif /* ENABLE_NLS */
+
+#endif /* LLNLS_H_INCLUDED */
