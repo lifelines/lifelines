@@ -208,6 +208,7 @@ NODE node;	/* source to validate */
 STRING *pmsg;	/* error message, if any */
 NODE node0;	/* SOUR node to match */
 {
+	node0 = NULL;		/* keep compiler happy */
 	*pmsg = NULL;
 	if (!node) {
 		*pmsg = bademp;
@@ -227,6 +228,7 @@ NODE node;	/* source to validate */
 STRING *pmsg;	/* error message, if any */
 NODE node0;	/* EVEN node to match */
 {
+	node0 = NULL;		/* keep compiler happy */
 	*pmsg = NULL;
 	if (!node) {
 		*pmsg = bademp;
@@ -246,6 +248,7 @@ NODE node;	/* source to validate */
 STRING *pmsg;	/* error message, if any */
 NODE node0;	/* OTHR node to match */
 {
+	node0 = NULL;			/* keep compiler happy */
 	*pmsg = NULL;
 	if (!node) {
 		*pmsg = bademp;

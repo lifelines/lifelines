@@ -29,6 +29,11 @@
 
 #include "standard.h"
 
+BOOLEAN value_to_list (STRING str,
+		       LIST list,
+		       INT *plen,
+		       STRING dlm);
+
 /*===================================================
  * place_to_list -- Convert place string to word list
  *=================================================*/
@@ -42,11 +47,10 @@ INT *plen;
 /*=============================================
  * value_to_list -- Convert string to word list
  *===========================================*/
-BOOLEAN value_to_list (str, list, plen, dlm)
-STRING str;
-LIST list;
-INT *plen;
-STRING dlm;
+BOOLEAN value_to_list (STRING str,
+		       LIST list,
+		       INT *plen,
+		       STRING dlm)
 {
 	static STRING buf = NULL;
 	static INT len0 = 0;

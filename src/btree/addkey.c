@@ -34,11 +34,10 @@
 /*===========================
  * addkey -- Add key to BTREE
  *=========================*/
-void addkey (btree, ikey, rkey, fkey)
-BTREE btree;  /*btree handle*/
-FKEY ikey;    /*index file key -- index to add key to*/
-RKEY rkey;    /*record key of new entry*/
-FKEY fkey;    /*file key of new entry*/
+void addkey (BTREE btree,  /*btree handle*/
+	     FKEY ikey,    /*index file key -- index to add key to*/
+	     RKEY rkey,    /*record key of new entry*/
+	     FKEY fkey)    /*file key of new entry*/
 {
 	INDEX index;
 	SHORT lo, hi;

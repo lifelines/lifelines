@@ -506,6 +506,8 @@ BOOLEAN exact;	/* unused! */
 	INT i, n;
 	STRING *strs, *id_by_key();
 
+	exact = FALSE;		/* keep compiler happy */
+
    /* See if user is asking for person by key instead of name */
 	if ((strs = id_by_key(name, pkeys))) {
 		*pnum = 1;
@@ -678,7 +680,7 @@ INT len;
 	for (i = nparts-1; i > sdex; --i) {
 		parts[i] = NULL;
 		name = parts_to_name(parts);
-		if (strlen(name) <= len + 2) return name;
+ 		if (strlen(name) <= len + 2) return name;
 	}
 	return name;
 }

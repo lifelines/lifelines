@@ -39,7 +39,9 @@
 INT lineno = 0;
 
 static BOOLEAN buffer_to_line(STRING, INT*, STRING*, STRING*, STRING*, STRING*);
+#ifdef 0
 static BOOLEAN all_digits (STRING);
+#endif
 
 STRING fileof = (STRING) "The file is as positioned at EOF.";
 STRING reremp = (STRING) "Line %d: This line is empty; EOF?";
@@ -1045,6 +1047,8 @@ STRING plac;
 	if ((val = (STRING) valueof(placabbvs, plac))) return val;
 	return plac;
 }
+
+#ifdef UNUSED_CODE
 /*============================================
  * all_digits -- Check if string is all digits
  *==========================================*/
@@ -1057,6 +1061,8 @@ STRING s;
 	}
 	return TRUE;
 }
+#endif
+
 /*=======================
  * copy_node -- Copy node
  *=====================*/
@@ -1189,8 +1195,8 @@ NODE faml;	/* list of FAMC and/or FAMS nodes */
  * children_nodes -- Given list of FAMS or FAMC nodes, returns list of CHIL
  *   lines they contain
  *=======================================================================*/
-NODE children_nodes (faml, role)
-NODE faml;	/* list of FAMC and/or FAMS nodes */
+NODE children_nodes (NODE faml,	/* list of FAMC and/or FAMS nodes */
+		     int role)
 {
 	NODE fam, refn, husb, wife, chil, rest;
 	NODE old = NULL, new = NULL;

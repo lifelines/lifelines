@@ -1,5 +1,16 @@
 2000-11-04  Marc Nozell (at home)  <marc@nozell.com>
 
+	* btree/addkey.c: pretty up function definitions
+
+	* gedlib/valid.c: cleanup compiler warnings
+
+	* gedlib/place.c: add forward reference
+
+	* gedlib/node.c: cleanup compiler warnings, hide unused code under
+	#ifdef
+	
+	* gedlib/names.c: cleanup compiler warnings
+
 	* gedlib/gedcom.c: cleanup compiler warnings
 
 	* btree/file.c: cleanup compiler warnings
