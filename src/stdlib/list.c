@@ -18,7 +18,8 @@
  *********************************************/
 
 /* alphabetical */
-static LNODE nth_in_list_from_tail(LIST list, INT index1b, LIST_CREATE_VALUE createfnc4);
+static LNODE nth_in_list_from_tail(LIST list, INT index1b, BOOLEAN createels
+	, LIST_CREATE_VALUE createfnc);
 static void validate_list(LIST list);
 
 /*===========================
@@ -58,6 +59,7 @@ remove_list (LIST list, void (*func)(VPTR))
 	lnode0 = lhead(list);
 	while (lnode0) {
 		lnode = lnext(lnode0);
+		ASSERT(!llocks(lnode0));
 		if (func) (*func)(lelement(lnode0));
 		stdfree(lnode0);
 		lnode0 = lnode;
@@ -243,9 +245,10 @@ pop_list_tail (LIST list)
 /*=================================================
  * nth_in_list_from_tail -- Find nth node in list, relative 1
  *  start at tail & count towards head
+ *  createels is FALSE if caller does not want elements added (delete_list_element)
  *===============================================*/
 static LNODE
-nth_in_list_from_tail (LIST list, INT index1b, LIST_CREATE_VALUE createfnc)
+nth_in_list_from_tail (LIST list, INT index1b, BOOLEAN createels, LIST_CREATE_VALUE createfnc)
 {
 	INT i = 1;
 	LNODE node = NULL;
@@ -271,7 +274,7 @@ nth_in_list_from_tail (LIST list, INT index1b, LIST_CREATE_VALUE createfnc)
 			node = lnext(node);
 		}
 		return node;
-	} else {
+	} else if (createels) {
 		/* want element beyond end, so add as required */
 		INT i = index1b + 1 - llen(list);
 		while (--i) {
@@ -280,6 +283,9 @@ nth_in_list_from_tail (LIST list, INT index1b, LIST_CREATE_VALUE createfnc)
 		}
 		validate_list(list);
 		return lhead(list);
+	} else {
+		/* element beyond but caller said not to create */
+		return NULL;
 	}
 }
 /*==================================================
@@ -289,8 +295,9 @@ void
 set_list_element (LIST list, INT index1b, VPTR val, LIST_CREATE_VALUE createfnc)
 {
 	LNODE node = NULL;
+	BOOLEAN createels = TRUE;
 	if (!list) return;
-	node = nth_in_list_from_tail(list, index1b, createfnc);
+	node = nth_in_list_from_tail(list, index1b, createels, createfnc);
 	if (!node) return;
 	lelement(node) = val;
 	validate_list(list);
@@ -302,8 +309,9 @@ VPTR
 get_list_element (LIST list, INT index1b, LIST_CREATE_VALUE createfnc)
 {
 	LNODE node = NULL;
+	BOOLEAN createels = TRUE;
 	if (!list) return 0;
-	node = nth_in_list_from_tail(list, index1b, createfnc);
+	node = nth_in_list_from_tail(list, index1b, createels, createfnc);
 	if (!node) return 0;
 	return lelement(node);
 }
@@ -366,12 +374,15 @@ next_list_element (LIST_ITER listit)
 		else
 			listit->current = ltail(listit->list);
 	} else {
+		unlock_list_node(listit->current);
 		if (listit->status > 0)
 			listit->current = lnext(listit->current);
 		else
 			listit->current = lprev(listit->current);
 	}
-	if (!listit->current)
+	if (listit->current)
+		lock_list_node(listit->current);
+	else
 		listit->status = 0;
 	return !!listit->status;
 }
@@ -397,5 +408,60 @@ change_list_ptr (LIST_ITER listit, VPTR newptr)
 	if (!listit || !listit->current)
 		return FALSE;
 	lelement(listit->current) = newptr;
+	return TRUE;
+}
+/*=================================================
+ * lock_list_node -- Increment node lock count
+ *===============================================*/
+void
+lock_list_node (LNODE node)
+{
+	++llocks(node);
+}
+/*=================================================
+ * unlock_list_node -- Decrement node lock count
+ *===============================================*/
+void
+unlock_list_node (LNODE node)
+{
+	--llocks(node);
+	ASSERT(llocks(node) >= 0);
+}
+/*==================================================
+ * delete_list_element - Delete element using array access
+ *  Call func (unless NULL) on element before deleting
+ *================================================*/
+BOOLEAN
+delete_list_element (LIST list, INT index1b, void (*func)(VPTR))
+{
+	LNODE node = NULL;
+	BOOLEAN createels = FALSE;
+	if (!list) return FALSE;
+	node = nth_in_list_from_tail(list, index1b, createels, 0);
+	if (!node) return FALSE;
+	if (llocks(node)) return FALSE;
+	if (llen(list) == 1) {
+		/* removing last element of list */
+		llen(list) = 0;
+		lhead(list) = ltail(list) = 0;
+		if (func)
+			(*func)(lelement(node));
+		stdfree(node);
+		return TRUE;
+	}
+	if (lprev(node)) {
+		lnext(lprev(node)) = lnext(node);
+	}
+	if (lnext(node)) {
+		lprev(lnext(node)) = lprev(node);
+	}
+	if (lhead(list) == node) {
+		lhead(list) = lnext(node);
+	}
+	if (ltail(list) == node) {
+		ltail(list) = lprev(node);
+	}
+	--llen(list);
+	validate_list(list);
 	return TRUE;
 }

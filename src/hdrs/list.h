@@ -18,10 +18,12 @@ struct tag_lnode {
 	LNODE l_prev;
 	LNODE l_next;
 	VPTR l_element;
+	int l_locks;
 };
-#define lprev(n) ((n)->l_prev)
-#define lnext(n) ((n)->l_next)
+#define lprev(n)    ((n)->l_prev)
+#define lnext(n)    ((n)->l_next)
 #define lelement(n) ((n)->l_element)
+#define llocks(n)   ((n)->l_locks)
 
 /* actual list */
 struct tag_vtable;
@@ -60,8 +62,10 @@ typedef VPTR (*LIST_CREATE_VALUE)(LIST);
 		LNODE _lnode = l->l_tail;\
 		VPTR e;\
 		while (_lnode) {\
-			e = _lnode->l_element;
+			e = _lnode->l_element;\
+			lock_list_node(_lnode);
 #define ENDLIST\
+			unlock_list_node(_lnode);\
 			_lnode = _lnode->l_prev;\
 		}\
 	}
@@ -85,12 +89,14 @@ BOOLEAN begin_list(LIST list, LIST_ITER listit);
 BOOLEAN begin_list_rev(LIST list, LIST_ITER listit);
 BOOLEAN change_list_ptr(LIST_ITER listit, VPTR newptr);
 LIST create_list(void);
+BOOLEAN delete_list_element(LIST list, INT index1b, void (*func)(VPTR));
 VPTR dequeue_list(LIST);
 BOOLEAN is_empty_list(const LIST);
 void enqueue_list(LIST, VPTR);
 VPTR get_list_element(LIST, INT, LIST_CREATE_VALUE);
 INT in_list(LIST, VPTR param, BOOLEAN (*func)(VPTR param, VPTR el));
 INT length_list(LIST);
+void lock_list_node(LNODE node);
 void make_list_empty(LIST);
 BOOLEAN next_list_ptr(LIST_ITER listit, VPTR *pptr);
 VPTR peek_list_head(LIST);
@@ -100,6 +106,7 @@ void push_list(LIST, VPTR);
 void remove_list(LIST, void (*func)(VPTR));
 void set_list_element(LIST, INT, VPTR, LIST_CREATE_VALUE);
 void set_list_type(LIST, INT);
+void unlock_list_node(LNODE node);
 
 
 #endif /* list_h_included */

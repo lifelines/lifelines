@@ -31,6 +31,12 @@
 	Bugfix for menu items not getting localized into internal 
 	codeset (sf bug#696157).
 
+	* ChangeLog docs/ll-reportmanual.xml reports/st/st_list.ll
+	src/hdrs/list.h src/interp/builtin.c src/interp/functab.c
+	src/interp/interpi.h src/stdlib/list.c
+
+	Added delete_list_element and __deleteel, and list node locking.
+
 2003-03-01 Perry Rapp
 
 	* ChangeLog src/gedlib/indiseq.c src/hdrs/array.h

@@ -2107,6 +2107,14 @@ array element selection
 
 </para> 
 
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>deleteel</function></funcdef><paramdef><parameter>LIST</parameter><parameter>INT</parameter><parameter>ANY</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+array element deletion
+
+</para> 
+
 </glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>sort</function></funcdef><paramdef><parameter>LIST</parameter><parameter>LISt</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
 
 <para> 
@@ -2182,13 +2190,15 @@ pushed on the stack and can be of any type.
 
 <para> 
 
-<function>Setel</function> and <function>getel</function> provide array access to a list. <function>Setel</function>
-sets a value of an array element, and <function>getel</function> returns the value of an array element. The first
-parameter to both is a list; the second parameter to both is an integer index into the array; and the third parameter to
-<function>setel</function> is the value to assign to the array element and can be of any type. Array elements are
-indexed starting at one. Unassigned elements are assumed to be <returnvalue>null</returnvalue>
-(<returnvalue>0</returnvalue>). Arrays automatically grow in size to accommodate the largest index value that is used.
-Passing 0 references the last element at the other end from 1, and -1 the one before it, etc.
+<function>Setel</function>, <function>getel</function>, and <function>deleteel</function> provide array access to a
+list.  <function>Setel</function> sets a value of an array element, and <function>getel</function> returns the value of
+an array element. The first parameter to both is a list; the second parameter to both is an integer index into the
+array; and the third parameter to <function>setel</function> is the value to assign to the array element and can be of
+any type. Array elements are indexed starting at one. Unassigned elements are assumed to be
+<returnvalue>null</returnvalue> (<returnvalue>0</returnvalue>). Arrays automatically grow in size to accommodate the
+largest index value that is used.  Passing 0 references the last element at the other end from 1, and -1 the one before
+it, etc. <function>deleteel</function> deletes the element at the specified index, shrinking the list accordingly.
+Arrays do not grow in size as a result of deleteel, even if the index is larger than the existing list.
 
 
 </para> 
