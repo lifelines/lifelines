@@ -2,7 +2,7 @@
 
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                  "http://www.oasis-open.org/docbook/xml/4.0/docbookx.dtd"
-[<!ENTITY llversion '3.0.32'>]>
+[<!ENTITY llversion '3.0.35'>]>
 <book id="docbook" lang="sv">
 
   <bookinfo>
@@ -539,7 +539,7 @@ Procedurer och Funktioner
 
 <para>
 
-En funktion har formatet:<synopsis>funktion namn(parametrar) { deklarationer }
+En funktion har formatet:<synopsis>func namn(parametrar) { deklarationer }
 </synopsis>
 
 </para>
@@ -563,6 +563,17 @@ En funktion har formatet:<synopsis>funktion namn(parametrar) { deklarationer }
 
 </para>
 
+<para>
+
+	<type>Funktions</type>- och <type>procedur</type>parametrar
+	skickas via värde, utom för <type>list</type>-,
+	<type>set</type>- och <type>table</type>typerna vilka skickas
+	via referens. Vid återdeklaration av en parameter
+	instantieras en ny variabel av den angivna eller
+	underförstådda typen. Den föregående instansen fortsätter att
+	existera inom räckviden för anroparen.
+
+</para>
 
 
 </sect1>
@@ -921,7 +932,11 @@ Egenskapen Include
 	<type>include</type>-deklarationer, och så vidare.
 	<application>LifeLines</application> använder skalvariabeln
 	<envar>LLPROGRAMS</envar>, om den är inställd, för att söka
-	efter inkluderade filer.
+	efter inkluderade filer. De filer som inkluderats med en
+	<type>include</type>-deklaration läses bara in en gång. Om
+	flera <type>include</type>-deklarationer påträffas där samma
+	fil är inkluderad, så har endast den första deklarationen
+	någon effekt.
 
 </para>
 
@@ -930,7 +945,11 @@ Egenskapen Include
 	rapport som användaren valt. Main-procedurer i andra rapporter
 	som inkluderas körs inte. Detta möjliggör att en modul avsedd
 	att inkluderas i andra program kan ha en main-procedur for
-	testsyften.
+	testsyften. Om flerfaldiga funktioner eller procedurer med
+	samma namn inkluderas, så är den sista som läses in den som
+	kommer att användas. För närvarande genereras inga fel eller
+	varningar för dubblerade funktions- eller procedurnamn.
+
 </para>
 
 
@@ -2815,10 +2834,12 @@ loopa igenom alla element i lista
 
 <para>
 
-	<function>dup</function> skapar en kopia av en lista. Om b är
-	en lista, så gör funktionen set(a,b) variabeln a till en
-	referens till listan b. Om du vill skapa en ny lista, måste du
-	använda set(a,dup(b)).
+	<function>dup</function> skapar en kopia av en
+	<type>lista</type>. Om b är en <type>lista</type>, så gör
+	funktionen <function>set</function>(a,b) variabeln a till en
+	referens till <type>listan</type> b. Om du vill skapa en ny
+	<type>lista</type>, måste du använda
+	<function>set</function>(a,dup(b)).
 
 </para>
 
