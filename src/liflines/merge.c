@@ -40,7 +40,6 @@
 #include "liflines.h"
 #include "feedback.h"
 
-#include "llinesi.h"
 
 extern BOOLEAN traditional;
 extern STRING qSiredit, qScfpmrg, qSnopmrg, qSnoqmrg, qSnoxmrg, qSnofmrg;

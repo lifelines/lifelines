@@ -15,8 +15,8 @@ RECORD add_family(RECORD spouse1, RECORD spouse2, RECORD child);
 RECORD add_indi_by_edit(void);
 BOOLEAN add_indi_no_cache(NODE);
 STRING get_unresolved_ref_error_string(INT count);
-NODE prompt_add_child(NODE, NODE);
-BOOLEAN prompt_add_spouse(NODE, NODE, BOOLEAN);
+NODE prompt_add_child(NODE child, NODE fam, RFMT rfmt);
+BOOLEAN prompt_add_spouse(RECORD spouse, RECORD fam, BOOLEAN conf);
 
 /* advedit.c */
 void advanced_person_edit(NODE);
@@ -24,11 +24,7 @@ void advanced_family_edit(NODE);
 
 /* ask.c */
 RECORD ask_for_any(STRING ttl, CONFIRMQ, ASK1Q);
-NODE ask_for_any_old(STRING ttl, CONFIRMQ, ASK1Q);
-RECORD ask_for_indi(STRING ttl, CONFIRMQ, ASK1Q);
-NODE ask_for_indi_old(STRING ttl, CONFIRMQ, ASK1Q);
 INDISEQ ask_for_indiseq(STRING ttl, char ctype, INT *prc);
-BOOLEAN ask_yes_or_no(STRING);
 
 /* browse.c */
 RECORD choose_any_event(void);
@@ -45,6 +41,7 @@ BOOLEAN handle_scroll_cmds(INT c, BOOLEAN * reuse);
 void history_record_change(RECORD);
 void init_browse_module(void);
 void main_browse(RECORD, INT code);
+NODE my_prompt_add_child(NODE child, NODE fam);
 void term_browse_module(void);
 
 /* delete.c */
@@ -79,7 +76,6 @@ void show_database_stats(void);
 void who_is_he_she(void);
 
 /* newrecs.c */
-RECORD ask_for_record(STRING, INT);
 RECORD edit_add_event(void);
 RECORD edit_add_other(void);
 RECORD edit_add_source(void);

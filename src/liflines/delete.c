@@ -39,7 +39,6 @@
 #include "liflines.h"
 #include "feedback.h"
 
-#include "llinesi.h"
 
 extern STRING qSidpdel, qScfpdel, qScffdel, qScffdeld;
 extern STRING qSidfrmv, qSidfrsp, qSidfrch;
@@ -117,7 +116,7 @@ void
 delete_indi (NODE indi, BOOLEAN conf)
 {
 	/* prompt if needed */
-	if (!indi && !(indi = ask_for_indi_old(_(qSidpdel), NOCONFIRM, DOASK1)))
+	if (!indi && !(indi = nztop(ask_for_indi(_(qSidpdel), NOCONFIRM, DOASK1))))
 		return;
 	/* confirm if caller desired */
 	if (conf && !ask_yes_or_no(_(qScfpdel))) return;

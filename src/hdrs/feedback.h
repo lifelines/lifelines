@@ -1,5 +1,5 @@
 /* 
-   Copyright (c) 2001 Perry Rapp
+   Copyright (c) 2001-2002 Perry Rapp
    "The MIT license"
    Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
    The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -7,7 +7,8 @@
 */
 /*==============================================================
  * feedback.h -- Header file for I/O feedback needed by non-ui code
- * Copyright (c) 2001 by Perry Rapp; all rights reserved
+ *  NB: record oriented functions required are in liflines.h
+ * Copyright (c) 2001-2002 by Perry Rapp; all rights reserved
  *============================================================*/
 
 #ifndef _FEEDBACK_H
@@ -17,6 +18,7 @@
 #include <stdarg.h>
 #define INCLUDED_STDARG_H
 #endif
+
 
 /* Ways for engine & code to report to ui */
 	/* report an error */
@@ -50,7 +52,8 @@ void shutdown_ui(BOOLEAN pause);
 void do_edit(void);
 
 /* msg boxes */
-BOOLEAN ask_yes_or_no_msg(STRING, STRING);
+BOOLEAN ask_yes_or_no(STRING ttl);
+BOOLEAN ask_yes_or_no_msg(STRING msg, STRING ttl);
 BOOLEAN ask_for_string(STRING ttl, STRING prmpt, STRING buffer, INT buflen);
 BOOLEAN ask_for_string2(STRING ttl1, STRING ttl2, STRING prmpt, STRING buffer, INT buflen);
 

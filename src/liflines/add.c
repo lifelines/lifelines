@@ -41,7 +41,6 @@
 #include "feedback.h"
 #include "lloptions.h"
 
-#include "llinesi.h"
 
 extern BOOLEAN traditional;
 extern STRING qSidcfam, qSfredit, qScffadd, qSidprnt, qSunksex, qSidsbln, qSmklast;
@@ -227,7 +226,7 @@ ask_child_order (NODE fam, PROMPTQ promptq, RFMT rfmt)
  *  fam:   [in] family to which to add
  *================================*/
 NODE
-prompt_add_child (NODE child, NODE fam)
+prompt_add_child (NODE child, NODE fam, RFMT rfmt)
 {
 	INT i;
 	TRANMAPPING ttmd = get_tranmapping(MINDS);
@@ -239,7 +238,7 @@ prompt_add_child (NODE child, NODE fam)
 
 /* Identify child if caller did not */
 
-	if (!child) child = ask_for_indi_old(_(qSidchld), NOCONFIRM, DOASK1);
+	if (!child) child = nztop(ask_for_indi(_(qSidchld), NOCONFIRM, DOASK1));
 	if (!child) return NULL;
 
 /* Identify family if caller did not */
@@ -247,7 +246,7 @@ prompt_add_child (NODE child, NODE fam)
 	if (!fam) fam = nztop(ask_for_fam(_(qSidprnt), _(qSidsbln)));
 	if (!fam) return NULL;
 
-	i = ask_child_order(fam, ALWAYS_PROMPT, &disp_shrt_rfmt);
+	i = ask_child_order(fam, ALWAYS_PROMPT, rfmt);
 	if (i == -1) return NULL;
 
 /* Add FAMC node to child */
@@ -321,14 +320,16 @@ add_child_to_fam (NODE child, NODE fam, INT i)
 /*===================================
  * prompt_add_spouse -- Add spouse to family
  * prompt for family & confirm if needed
+ *  spouse:  [IN]  spouse add (optional arg)
+ *  fam:     [IN]  family to which to add (optional arg)
+ *  conf:    [IN]  whether or not caller wants user to confirm
  * (with user interaction)
  *=================================*/
 BOOLEAN
-prompt_add_spouse (NODE spouse,
-            NODE fam,
-            BOOLEAN conf)
+prompt_add_spouse (RECORD sprec, RECORD frec, BOOLEAN conf)
 {
 	INT sex;
+	NODE spouse, fam = nztop(frec);
 
 	if (readonly) {
 		message(_(qSronlye));
@@ -337,8 +338,9 @@ prompt_add_spouse (NODE spouse,
 
 /* Identify spouse to add to family */
 
-	if (!spouse) spouse = ask_for_indi_old(_(qSidsadd), NOCONFIRM, DOASK1);
-	if (!spouse) return FALSE;
+	if (!sprec) sprec = ask_for_indi(_(qSidsadd), NOCONFIRM, DOASK1);
+	if (!sprec) return FALSE;
+	spouse = nztop(sprec);
 	if ((sex = SEX(spouse)) == SEX_UNKNOWN) {
 		message(_(qSnosex));
 		return FALSE;

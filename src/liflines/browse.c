@@ -104,7 +104,7 @@ static RECORD history_fwd(struct hist * histp);
 static void init_hist(struct hist * histp, INT count);
 static void load_hist_lists(void);
 static void load_nkey_list(STRING key, struct hist * histp);
-static void prompt_add_spouse_check_save(NODE fam, NODE save);
+static void prompt_add_spouse_with_candidate(RECORD fam, RECORD save);
 static RECORD pick_create_new_family(RECORD current, RECORD save, STRING * addstrings);
 static void pick_remove_spouse_from_family(RECORD frec);
 static void save_hist_lists(void);
@@ -568,10 +568,10 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			swap_families(current);
 			break;
 		case CMD_ADDASSPOUSE:	/* Add person as spouse */
-			prompt_add_spouse(nztop(current), NULL, TRUE);
+			prompt_add_spouse(current, NULL, TRUE);
 			break;
 		case CMD_ADDASCHILD:    /* Add person as child */
-			prompt_add_child(nztop(current), NULL);
+			my_prompt_add_child(nztop(current), NULL);
 			break;
 		case CMD_PERSON:   /* switch to person browse */
 			indimode='i';
@@ -815,44 +815,47 @@ pick_remove_spouse_from_family (RECORD frec)
 	choose_and_remove_spouse(node_to_record(spnodes[i]), frec, TRUE);
 }
 /*===============================================
- * prompt_add_spouse_check_save -- 
+ * prompt_add_spouse_with_candidate -- 
  *  fam:  [IN]  family to which to add (required arg)
- *  save: [IN]  possible spouse to add (optional arg)
- * If save is passed, this checks with user whether that is desired spouse
+ *  save: [IN]  candidate spouse to add (optional arg)
+ * If candidate passed, asks user if that is desired spouse to add
  * In either case, all work is delegated to prompt_add_spouse
  *=============================================*/
 static void
-prompt_add_spouse_check_save (NODE fam, NODE save)
+prompt_add_spouse_with_candidate (RECORD fam, RECORD candidate)
 {
 	NODE fref, husb, wife, chil, rest;
+	BOOLEAN confirm;
 	char scratch[100];
 	TRANMAPPING ttmd = get_tranmapping(MINDS);
 	if (readonly) {
 		message(_(qSronlye));
 		return;
 	}
-	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
-	join_fam(fam, fref, husb, wife, chil, rest);
+	split_fam(nztop(fam), &fref, &husb, &wife, &chil, &rest);
+	join_fam(nztop(fam), fref, husb, wife, chil, rest);
 	if (traditional) {
 		if (husb && wife) {
 			message(_(qShasbth));
 			return;
 		}
 	}
-	if (save) {
-		if (keyflag)
+	if (candidate) {
+		if (keyflag) {
 			sprintf(scratch, "%s%s (%s)", _(qSissnew),
-				 indi_to_name(save, ttmd, 56),
-				 rmvat(nxref(save))+1);
-		else
+				 indi_to_name(nztop(candidate), ttmd, 56),
+				 rmvat(nxref(nztop(candidate)))+1);
+		} else {
 			sprintf(scratch, "%s%s", _(qSissnew),
-				 indi_to_name(save, ttmd, 56));
-		if (ask_yes_or_no(scratch)) {
-			prompt_add_spouse(save, fam, FALSE);
-			return;
+				 indi_to_name(nztop(candidate), ttmd, 56));
+		}
+		if (!ask_yes_or_no(scratch)) {
+			candidate = NULL;
 		}
 	}
-	prompt_add_spouse(NULL, fam, TRUE);
+		/* don't confirm again if they just confirmed candidate */
+	confirm = (candidate == NULL); 
+	prompt_add_spouse(candidate, fam, confirm);;
 }
 /*===============================================
  * prompt_add_child_check_save -- 
@@ -878,12 +881,18 @@ prompt_add_child_check_save (NODE fam, NODE save)
 		else
 			sprintf(scratch, "%s%s", _(qSiscnew),
 				 indi_to_name(save, ttmd, 56));
-		if (ask_yes_or_no(scratch)) {
-			prompt_add_child(save, fam);
-			return;
-		}
+		if (!ask_yes_or_no(scratch))
+			save = NULL;
 	}
-	prompt_add_child(NULL, fam);
+	my_prompt_add_child(NULL, fam);
+}
+/*===============================================
+ * my_prompt_add_child -- call prompt_add_child with our reformatting info
+ *=============================================*/
+NODE
+my_prompt_add_child (NODE child, NODE fam)
+{
+	return prompt_add_child(child, fam, &disp_shrt_rfmt);
 }
 /*===============================================
  * browse_fam -- Handle family browse selections.
@@ -1017,7 +1026,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 				choose_and_remove_child(tmp, current, TRUE);
 			break;
 		case CMD_ADDSPOUSE:	/* Add spouse to family */
-			prompt_add_spouse_check_save(nztop(current), nztop(save));
+			prompt_add_spouse_with_candidate(current, save);
 			save = NULL;
 			break;
 		case CMD_REMOVESPOUSE:	/* Remove spouse from family */

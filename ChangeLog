@@ -1,3 +1,18 @@
+2002-10-11 Perry Rapp
+
+	* ChangeLog build/msvc6/llines/llinesprj.dsp
+	src/hdrs/Makefile.am src/hdrs/feedback.h src/hdrs/gedcom.h
+	src/hdrs/liflines.h src/hdrs/win32/curses.h src/interp/alloc.c
+	src/interp/builtin.c src/liflines/add.c src/liflines/advedit.c
+	src/liflines/ask.c src/liflines/askprogram.c
+	src/liflines/browse.c src/liflines/delete.c
+	src/liflines/export.c src/liflines/llinesi.h
+	src/liflines/merge.c src/liflines/newrecs.c
+	src/liflines/screen.c
+	NEW: src/hdrs/uiprompts.h:
+
+	Convert some use of NODE to RECORD. Work on ui separation.
+
 2002-10-07 Perry Rapp
 
 	* ChangeLog src/hdrs/liflines.h src/interp/builtin.c

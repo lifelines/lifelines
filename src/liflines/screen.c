@@ -1068,18 +1068,11 @@ ask_yes_or_no_msg (STRING msg, STRING ttl)
 INT
 ask_for_char (STRING ttl, STRING prmpt, STRING ptrn)
 {
-	UIWINDOW uiwin = ask_win;
-	WINDOW *win = uiw_win(uiwin);
-	uierase(uiwin);
-	draw_win_box(win);
-	mvwaddstr(win, 1, 2, ttl);
-	mvwaddstr(win, 2, 2, prmpt);
-	wrefresh(win);
-	return interact(uiwin, ptrn, -1);
+	return ask_for_char_msg(NULL, ttl, prmpt, ptrn);
 }
 /*===========================================
  * ask_for_char_msg -- Ask user for character
- *  msg:   [IN]  top line displayed
+ *  msg:   [IN]  top line displayed (optional)
  *  ttl:   [IN]  2nd line displayed 
  *  prmpt: [IN]  3rd line text before cursor
  *  ptrn:  [IN]  List of allowable character responses
@@ -1089,12 +1082,15 @@ ask_for_char_msg (STRING msg, STRING ttl, STRING prmpt, STRING ptrn)
 {
 	UIWINDOW uiwin = ask_msg_win;
 	WINDOW *win = uiw_win(uiwin);
+	INT y;
 	INT rv;
 	uierase(uiwin);
 	draw_win_box(win);
-	mvwaddstr(win, 1, 2, msg);
-	mvwaddstr(win, 2, 2, ttl);
-	mvwaddstr(win, 3, 2, prmpt);
+	y = 1;
+	if (msg)
+		mvwaddstr(win, y++, 2, msg);
+	mvwaddstr(win, y++, 2, ttl);
+	mvwaddstr(win, y++, 2, prmpt);
 	wrefresh(win);
 	rv = interact(uiwin, ptrn, -1);
 	return rv;
@@ -1720,7 +1716,7 @@ invoke_add_menu (void)
 		rec = add_indi_by_edit();
 		break;
 	case 'f': add_family(NULL, NULL, NULL); break;
-	case 'c': prompt_add_child(NULL, NULL); break;
+	case 'c': my_prompt_add_child(NULL, NULL); break;
 	case 's': prompt_add_spouse(NULL, NULL, TRUE); break;
 	case 'q': break;
 	}

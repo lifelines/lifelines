@@ -19,7 +19,6 @@
 #include "arch.h"
 #include "lloptions.h"
 
-#include "llinesi.h"
 
 typedef struct program_info_s *PROGRAM_INFO;
 

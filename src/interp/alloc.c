@@ -45,8 +45,8 @@
 #include "gedcom.h"
 #include "cache.h"
 #include "interpi.h"
-#include "liflines.h"
 #include "feedback.h"
+#include "liflines.h"
 
 /*********************************************
  * global/exported variables

@@ -36,8 +36,10 @@
 #include "translat.h"
 #include "gedcom.h"
 #include "liflines.h"
+#include "feedback.h"
 #include "lloptions.h"
 
+/* TODO: using wfield, instead make new function & put in feedback.h */
 #include "llinesi.h"
 #include "screen.h" /* calling wfield */
 

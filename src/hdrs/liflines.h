@@ -1,9 +1,22 @@
 #ifndef _LIFLINES_H
 #define _LIFLINES_H
 
+/*
+ UI functions required for doing work with records
+ TODO: ARRAYDETAILS probably doesn't belong here (seems curses dependent)
+ TODO: rearrange functions 
+    -- (they are currently arranged by curses implementation file
+	  and they ought to be arranged in some way not related to curses impl.)
+*/
+
+
 #include "standard.h"
 #include "gedcom.h"
 #include "indiseq.h"
+
+#ifndef INCLUDED_UIPROMPTS_H
+#include "uiprompts.h"
+#endif
 
 /* Function Prototypes */
 /* add.c */
@@ -12,15 +25,16 @@ NODE add_family_to_db(NODE spouse1, NODE spouse2, NODE child);
 void add_spouse_to_fam(NODE spouse, NODE fam, INT sex);
 RECORD add_new_indi(RECORD indi0);
 INT ask_child_order(NODE fam, PROMPTQ promptq, RFMT rfmt);
+STRING ask_for_indi_key(STRING, CONFIRMQ, ASK1Q);
+RECORD ask_for_indi(STRING ttl, CONFIRMQ, ASK1Q);
 
-/* from ask.c */
 RECORD ask_for_fam(STRING, STRING);
 RECORD ask_for_fam_by_key(STRING fttl, STRING pttl, STRING sttl);
 FILE *ask_for_input_file (STRING mode, STRING ttl, STRING *pfname, STRING *pfullpath, STRING path, STRING ext);
 FILE *ask_for_output_file (STRING mode, STRING ttl, STRING *pfname, STRING *pfullpath, STRING path, STRING ext);
-STRING ask_for_indi_key(STRING, CONFIRMQ, ASK1Q);
 INDISEQ ask_for_indi_list(STRING, BOOLEAN);
 BOOLEAN ask_for_int(STRING, INT *);
+RECORD ask_for_record(STRING, INT);
 RECORD choose_from_indiseq(INDISEQ, ASK1Q ask1, STRING titl1, STRING titln);
 void make_fname_prompt(STRING fnamebuf, INT len, STRING ext);
 

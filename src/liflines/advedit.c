@@ -33,10 +33,9 @@
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
-#include "liflines.h"
 #include "feedback.h"
+#include "liflines.h"
 
-#include "llinesi.h"
 
 /*********************************************
  * local function prototypes

@@ -42,7 +42,6 @@
 #include "liflines.h"
 #include "feedback.h"
 
-#include "llinesi.h"
 
 /*********************************************
  * external/imported variables
@@ -318,14 +317,6 @@ ask_for_any_once (STRING ttl, char ctype, ASK1Q ask1, INT *prc)
 	return indi;
 }
 /*=================================================================
- * ask_for_indi_old -- old interface to ask_for_indi (q.v.)
- *===============================================================*/
-NODE
-ask_for_indi_old (STRING ttl, CONFIRMQ confirmq, ASK1Q ask1)
-{
-	return nztop(ask_for_indi(ttl, confirmq, ask1));
-}
-/*=================================================================
  * ask_for_indi -- Ask user to identify sequence and select person;
  *   reask protocol used
  * ttl:      [in] title for question
@@ -343,14 +334,6 @@ ask_for_indi (STRING ttl, CONFIRMQ confirmq, ASK1Q ask1)
 		if (confirmq != DOCONFIRM || !ask_yes_or_no(_(qSentnam))) 
 			return NULL;
 	}
-}
-/*=================================================================
- * ask_for_any_old -- old interface to ask_for_any (q.v.)
- *===============================================================*/
-NODE
-ask_for_any_old (STRING ttl, CONFIRMQ confirmq, ASK1Q ask1)
-{
-	return nztop(ask_for_any(ttl, confirmq, ask1));
 }
 /*=================================================================
  * ask_for_any -- Ask user to identify sequence and select record
@@ -416,13 +399,11 @@ ask_for_indi_list (STRING ttl,
  * ask_for_indi_key -- Have user identify person; return key
  *========================================================*/
 STRING
-ask_for_indi_key (STRING ttl,
-                  CONFIRMQ confirmq,
-                  ASK1Q ask1)
+ask_for_indi_key (STRING ttl, CONFIRMQ confirmq, ASK1Q ask1)
 {
-	NODE indi = ask_for_indi_old(ttl, confirmq, ask1);
+	RECORD indi = ask_for_indi(ttl, confirmq, ask1);
 	if (!indi) return NULL;
-	return rmvat(nxref(indi));
+	return rmvat(nxref(nztop(indi)));
 }
 /*===============================================================
  * choose_one_from_indiseq_if_needed  -- handle ask1 cases

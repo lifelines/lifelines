@@ -717,6 +717,10 @@ SOURCE=..\..\..\src\hdrs\translat.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\hdrs\uiprompts.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\hdrs\version.h
 # End Source File
 # Begin Source File
