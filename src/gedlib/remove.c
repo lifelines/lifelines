@@ -73,6 +73,7 @@ remove_indi (NODE indi)
 	for (node = fams; node; node = nsibling(node)) {
 		fam = key_to_fam(rmvat(nval(node)));
 		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
+		/* remove all occurrences of this person as spouse */
 		husb = remove_any_xrefs_node_list(nxref(indi), husb);
 		wife = remove_any_xrefs_node_list(nxref(indi), wife);
 		join_fam(fam, fref, husb, wife, chil, rest);
@@ -87,6 +88,7 @@ remove_indi (NODE indi)
 	for (node = famc; node; node = nsibling(node)) { 
 		fam = key_to_fam(rmvat(nval(node)));
 		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
+		/* remove all occurrences of this person as child */
 		chil = remove_any_xrefs_node_list(nxref(indi), chil);
 		join_fam(fam, fref, husb, wife, chil, rest);
 		if (husb || wife || chil)
@@ -229,7 +231,7 @@ remove_spouse (NODE indi, NODE fam)
 {
 	NODE node=0, last=0;
 
-/* Remove reference from family */
+/* Remove (one) reference from family */
 	node = find_node(fam, "HUSB", nxref(indi), &last);
 	if (!node) {
 		node = find_node(fam, "WIFE", nxref(indi), &last);
@@ -244,7 +246,7 @@ remove_spouse (NODE indi, NODE fam)
 	free_node(node);
 	node = NULL;
 
-/* Remove FAMS line from spouse */
+/* Remove (one) FAMS line from spouse */
 	node = find_node(indi, "FAMS", nxref(fam), &last);
 	ASSERT(node && last);
 	nsibling(last) = nsibling(node);
