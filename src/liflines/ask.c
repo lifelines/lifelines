@@ -396,7 +396,7 @@ choose_from_indiseq (
 		badkeylist[0] = 0;
 	else {
 		skey = skey(IData(seq)[i]);
-		nod0 = key_to_typ0(skey, TRUE);
+		nod0 = key_to_record(skey, TRUE);
 	}
 	listbadkeys = 0;
 	if(!nod0) {

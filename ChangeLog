@@ -12,6 +12,13 @@
 
 	Change NOD0 type to RECORD.
 
+	* ChangeLog gedlib/intrface.c gedlib/keytonod.c gedlib/node.c
+	gedlib/refns.c hdrs/cache.h hdrs/gedcom.h liflines/advedit.c
+	liflines/ask.c liflines/newrecs.c tools/dbverify.c
+	win32/hdrs/proto.h:
+
+	Change nod0 to record in some function names.
+
 2001-11-12 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog liflines/llinesi.h liflines/pedigree.c

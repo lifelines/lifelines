@@ -368,7 +368,7 @@ ask_for_record (STRING idstr, INT letr)
 	RECORD nod0;
 	STRING str = ask_for_string(idstr, "enter key or refn: ");
 	if (!str || *str == 0) return NULL;
-	nod0 = key_to_record(str, letr);
+	nod0 = key_possible_to_record(str, letr);
 	if (!nod0) {
 		INDISEQ seq;
 		seq = refn_to_indiseq(str, letr, KEYSORT);

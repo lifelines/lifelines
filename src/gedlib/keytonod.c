@@ -56,12 +56,12 @@ static void dereference(CACHEEL);
 static CACHEEL key_to_cacheel(CACHE, STRING, STRING, INT);
 static CACHEEL key_to_even_cacheel (STRING key);
 static NODE key_to_node(CACHE cache, STRING key, STRING tag);
-static RECORD key_to_nod0(CACHE cache, STRING key, STRING tag);
+static RECORD key_typed_to_record(CACHE cache, STRING key, STRING tag);
 static CACHEEL key_to_othr_cacheel (STRING key);
 static CACHEEL key_to_sour_cacheel (STRING key);
 static void prepare_direct_space(CACHE cache);
 static NODE qkey_to_node(CACHE cache, STRING key, STRING tag);
-static RECORD qkey_to_nod0(CACHE cache, STRING key, STRING tag);
+static RECORD qkey_typed_to_record(CACHE cache, STRING key, STRING tag);
 
 
 INT csz_indi = 200;		/* cache size for indi */
@@ -189,7 +189,7 @@ keynum_to_node (char ntype, int keynum)
 }
 /*=====================================
  * key_to_type -- Convert key to node
- * TO DO - should become obsoleted by key_to_typ0
+ * TO DO - should become obsoleted by key_to_record
  *===================================*/
 NODE
 key_to_type (STRING key, INT reportmode)
@@ -213,10 +213,10 @@ qkey_to_type (STRING key)
 	return key_to_type(key, TRUE);
 }
 /*=====================================
- * key_to_typ0 -- Convert key to nod0
+ * key_to_record -- Convert key (any type) to RECORD
  *===================================*/
 RECORD
-key_to_typ0 (STRING key, INT reportmode)
+key_to_record (STRING key, INT reportmode)
 {
 	switch(key[0])
 	{
@@ -262,23 +262,23 @@ NODE key_to_othr (STRING key)
 RECORD
 key_to_indi0 (STRING key)
 {
-	return key_to_nod0(indicache, key, "INDI");
+	return key_typed_to_record(indicache, key, "INDI");
 }
 RECORD key_to_fam0 (STRING key)
 {
-	return key_to_nod0(famcache, key, "FAM");
+	return key_typed_to_record(famcache, key, "FAM");
 }
 RECORD key_to_even0 (STRING key)
 {
-	return key_to_nod0(evencache, key, "EVEN");
+	return key_typed_to_record(evencache, key, "EVEN");
 }
 RECORD key_to_sour0 (STRING key)
 {
-	return key_to_nod0(sourcache, key, "SOUR");
+	return key_typed_to_record(sourcache, key, "SOUR");
 }
 RECORD key_to_othr0 (STRING key)
 {
-	return key_to_nod0(othrcache, key, NULL);
+	return key_typed_to_record(othrcache, key, NULL);
 }
 /*========================================
  * qkey_to_??? -- Convert key to node type
@@ -313,23 +313,23 @@ NODE qkey_to_othr (STRING key)
  *======================================*/
 RECORD qkey_to_indi0 (STRING key)
 {
-	return qkey_to_nod0(indicache, key, "INDI");
+	return qkey_typed_to_record(indicache, key, "INDI");
 }
 RECORD qkey_to_fam0 (STRING key)
 {
-	return qkey_to_nod0(famcache, key, "FAM");
+	return qkey_typed_to_record(famcache, key, "FAM");
 }
 RECORD qkey_to_even0 (STRING key)
 {
-	return qkey_to_nod0(evencache, key, "EVEN");
+	return qkey_typed_to_record(evencache, key, "EVEN");
 }
 RECORD qkey_to_sour0 (STRING key)
 {
-	return qkey_to_nod0(sourcache, key, "SOUR");
+	return qkey_typed_to_record(sourcache, key, "SOUR");
 }
 RECORD qkey_to_othr0 (STRING key)
 {
-	return qkey_to_nod0(othrcache, key, NULL);
+	return qkey_typed_to_record(othrcache, key, NULL);
 }
 /*=====================================================
  * key_to_unknown_cacheel -- Convert any key to cacheel
@@ -540,8 +540,8 @@ direct_to_indirect (CACHE cache)
 		ASSERT(cel);
 	}
 	remove_direct(cache, cel);
-	free_nod0(cnod0(cel)); /* this frees the nodes */
-	cnod0(cel) = NULL;
+	free_nod0(crecord(cel)); /* this frees the nodes */
+	crecord(cel) = NULL;
 	cnode(cel) = NULL;
 	first_indirect(cache, cel);
 }
@@ -556,8 +556,8 @@ dereference (CACHEEL cel)
 	RECORD nod0;
 	ASSERT(cel);
 	ASSERT(rec = retrieve_record(ckey(cel), &len));
-	ASSERT(nod0 = string_to_nod0(rec, ckey(cel), len));
-	cnod0(cel) = nod0;
+	ASSERT(nod0 = string_to_record(rec, ckey(cel), len));
+	crecord(cel) = nod0;
 	cnode(cel) = nod0->top;
 	stdfree(rec);
 }
@@ -585,7 +585,7 @@ add_to_direct (CACHE cache,
 	prepare_direct_space(cache);
 	nod0 = NULL;
 	if ((record = retrieve_record(key, &len))) 
-		nod0 = string_to_nod0(record, key, len);
+		nod0 = string_to_record(record, key, len);
 	if (!nod0)
 	{
 		if(listbadkeys) {
@@ -612,7 +612,7 @@ add_to_direct (CACHE cache,
 	ASSERT(csizedir(cache) < cmaxdir(cache));
 	cel = (CACHEEL) stdalloc(sizeof(*cel));
 	insert_table_ptr(cdata(cache), key = strsave(key), cel);
-	cnod0(cel) = nod0;
+	crecord(cel) = nod0;
 	cnode(cel) = nod0->top;
 	ckey(cel) = key;
 	cclock(cel) = 0;
@@ -672,7 +672,7 @@ prepare_direct_space (CACHE cache)
 /*===============================================================
  * key_to_node -- Return tree from key; add to cache if not there
  * asserts if failure
- * TO DO - should become obsoleted by key_to_nod0
+ * TO DO - should become obsoleted by key_typed_to_record
  *=============================================================*/
 static NODE
 key_to_node (CACHE cache, STRING key, STRING tag)
@@ -684,22 +684,22 @@ key_to_node (CACHE cache, STRING key, STRING tag)
 	return cnode(cel);
 }
 /*===============================================================
- * key_to_nod0 -- Return tree from key; add to cache if not there
+ * key_typed_to_record -- Return tree from key; add to cache if not there
  * asserts if failure
  *=============================================================*/
 static RECORD
-key_to_nod0 (CACHE cache, STRING key, STRING tag)
+key_typed_to_record (CACHE cache, STRING key, STRING tag)
 {
 	CACHEEL cel;
 	ASSERT(cache && key);
 	if (!(cel = key_to_cacheel(cache, key, tag, FALSE)))
 		return NULL;
-	return cnod0(cel);
+	return crecord(cel);
 }
 /*===============================================================
  * qkey_to_node -- Return tree from key; add to cache if not there
  * report mode - returns NULL if failure
- * TO DO - should become obsoleted by qkey_to_nod0
+ * TO DO - should become obsoleted by qkey_typed_to_record
  *=============================================================*/
 static NODE
 qkey_to_node (CACHE cache, STRING key, STRING tag)
@@ -711,17 +711,17 @@ qkey_to_node (CACHE cache, STRING key, STRING tag)
 	return cnode(cel);
 }
 /*===============================================================
- * qkey_to_nod0 -- Return tree from key; add to cache if not there
+ * qkey_typed_to_record -- Return tree from key; add to cache if not there
  * report mode - returns NULL if failure
  *=============================================================*/
 static RECORD
-qkey_to_nod0 (CACHE cache, STRING key, STRING tag)
+qkey_typed_to_record (CACHE cache, STRING key, STRING tag)
 {
 	CACHEEL cel;
 	ASSERT(cache && key);
 	if (!(cel = key_to_cacheel(cache, key, tag, TRUE)))
 		return NULL;
-	return cnod0(cel);
+	return crecord(cel);
 }
 /*======================================
  * load_cacheel -- Load CACHEEL into direct cache
@@ -895,7 +895,7 @@ add_nod0_to_direct (CACHE cache, RECORD nod0, STRING key)
 	ASSERT(csizedir(cache) < cmaxdir(cache));
 	cel = (CACHEEL) stdalloc(sizeof(*cel));
 	insert_table_ptr(cdata(cache), keynew=strsave(key), cel);
-	cnod0(cel) = nod0;
+	crecord(cel) = nod0;
 	cnode(cel) = node;
 	ckey(cel) = keynew;
 	cclock(cel) = FALSE;

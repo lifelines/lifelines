@@ -75,7 +75,7 @@ expand_tree (NODE root0)
 		llwprintf("in list: %s %s\n", ntag(node), nval(node));
 #endif
 		key = rmvat(nval(node));
-		if ((sub = nztop(key_to_record(key, *key)))) {
+		if ((sub = nztop(key_possible_to_record(key, *key)))) {
 			copy = copy_nodes(sub, TRUE, FALSE);
 			nxref(node)    = nxref(copy);
 			ntag(node)     = ntag(copy);

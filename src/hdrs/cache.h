@@ -40,7 +40,7 @@
  *=============================*/
 typedef struct c_elem *CACHEEL;
 struct c_elem {
-	RECORD c_nod0;
+	RECORD c_record;
 	NODE c_node;	/* root node */
 	CACHEEL c_prev;	/* previous el */
 	CACHEEL c_next;	/* next el */
@@ -48,7 +48,7 @@ struct c_elem {
 	INT c_lock;	/* locked? */
 	INT c_semilock; /* locked but can go to indirect cache */
 };
-#define cnod0(e) ((e)->c_nod0)
+#define crecord(e) ((e)->c_record)
 #define cnode(e) ((e)->c_node)
 #define cprev(e) ((e)->c_prev)
 #define cnext(e) ((e)->c_next)

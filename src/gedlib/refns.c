@@ -424,9 +424,9 @@ record_letter (STRING tag)
 	return 0;
 }
 /*=========================================
- * key_to_record -- Returns record with key
+ * key_possible_to_record -- Returns record with key
  *=======================================*/
-RECORD key_to_record (STRING str, /* string that may be a key */
+RECORD key_possible_to_record (STRING str, /* string that may be a key */
                     INT let)    /* if string starts with letter it
                                    must be this */
 {
@@ -467,7 +467,7 @@ refn_to_record (STRING ukey,    /* user refn key */
 	if (!ukey || *ukey == 0) return NULL;
 	get_refns(ukey, &num, &keys, letr);
 	if (!num) return NULL;
-	return nztop(key_to_record(keys[0], *keys[0]));
+	return nztop(key_possible_to_record(keys[0], *keys[0]));
 }
 /*===============================================
  * index_by_refn - Index node tree by REFN values

@@ -150,7 +150,7 @@ trav_nod0_callback (STRING key, STRING data, INT len, void * param)
 		return TRUE;
 	if (!strcmp(data, "DELE\n"))
 		return TRUE;
-	nod0 = string_to_nod0(data, key, len);
+	nod0 = string_to_record(data, key, len);
 	keepgoing = tparam->func(key, nod0, tparam->param);
 	free_nod0(nod0);
 	return keepgoing;

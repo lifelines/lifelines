@@ -401,7 +401,7 @@ NODE key_to_even (STRING);
 NODE key_to_fam (STRING);
 NODE key_to_indi (STRING);
 NODE key_to_othr (STRING);
-NODE key_to_record (STRING, INT);
+NODE key_possible_to_record (STRING, INT);
 NODE key_to_sour (STRING);
 NODE merge_two_fams (NODE, NODE);
 NODE merge_two_indis (NODE, NODE, BOOLEAN);

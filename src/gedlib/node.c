@@ -73,8 +73,8 @@ enum { NEW_RECORD, EXISTING_LACKING_WH_RECORD };
  *********************************************/
 
 static RECORD alloc_new_nod0(void);
-static RECORD alloc_nod0_from_key(STRING key);
-static void alloc_nod0_wh(RECORD nod0, INT isnew);
+static RECORD alloc_record_from_key(STRING key);
+static void alloc_record_wh(RECORD nod0, INT isnew);
 static NODE alloc_node(void);
 static BOOLEAN buffer_to_line (STRING p, INT *plev, STRING *pxref
 	, STRING *ptag, STRING *pval, STRING *pmsg);
@@ -208,11 +208,11 @@ alloc_new_nod0 (void)
 	return nod0;
 }
 /*===================================
- * alloc_nod0_from_key -- allocate nod0 with key
+ * alloc_record_from_key -- allocate nod0 with key
  * Created: 2001/01/25, Perry Rapp
  *=================================*/
 static RECORD
-alloc_nod0_from_key (STRING key)
+alloc_record_from_key (STRING key)
 {
 	RECORD nod0 = alloc_new_nod0();
 	assign_nod0(nod0, key[0], atoi(key+1));
@@ -244,15 +244,15 @@ void
 init_new_nod0 (RECORD nod0, char ntype, INT keynum)
 {
 	assign_nod0(nod0, ntype, keynum);
-	alloc_nod0_wh(nod0, NEW_RECORD);
+	alloc_record_wh(nod0, NEW_RECORD);
 }
 /*===================================
- * alloc_nod0_wh -- allocate warehouse for
+ * alloc_record_wh -- allocate warehouse for
  *  a nod0 without one (new or existing)
  * Created: 2001/02/04, Perry Rapp
  *=================================*/
 static void
-alloc_nod0_wh (RECORD nod0, INT isnew)
+alloc_record_wh (RECORD nod0, INT isnew)
 {
 	LLDATE creation;
 	ASSERT(!nod0->mdwh);
@@ -285,7 +285,7 @@ create_nod0 (NODE node)
 {
 	RECORD nod0 = 0;
 	if (nxref(node))
-		nod0 = alloc_nod0_from_key(node_to_key(node));
+		nod0 = alloc_record_from_key(node_to_key(node));
 	else
 		nod0 = alloc_new_nod0();
 	nod0->top = node;
@@ -654,7 +654,7 @@ next_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
 	return root;
 }
 /*============================================
- * string_to_nod0 -- Read nod0 from data block
+ * string_to_record -- Read nod0 from data block
  *  This is the layout for metadata nodes:
  *   Q___      (four bytes, but only first char used)
  *   0016      (offset to 0 INDI... line)
@@ -665,7 +665,7 @@ next_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
  *   0 INDI    (or 0 FAM or 0 SOUR etc)
  *==========================================*/
 RECORD
-string_to_nod0 (STRING str, STRING key, INT len)
+string_to_record (STRING str, STRING key, INT len)
 {
 	RECORD nod0 = 0;
 	NODE node = 0;
@@ -703,7 +703,7 @@ string_to_nod0 (STRING str, STRING key, INT len)
 		nod0->top = node;
 		assign_nod0(nod0, key[0], atoi(key+1));
 		if (!nod0->mdwh)
-			alloc_nod0_wh(nod0, EXISTING_LACKING_WH_RECORD);
+			alloc_record_wh(nod0, EXISTING_LACKING_WH_RECORD);
 	} else { /* node==0, we failed, clean up */
 		free_nod0(nod0);
 		nod0 = 0;

@@ -373,7 +373,7 @@ static BOOLEAN
 cgr_callback (STRING key, STRING refn, BOOLEAN newset, void *param)
 {
 	/* a refn record which points at nod0=key */
-	RECORD nod0 = key_to_typ0(key, TRUE);
+	RECORD nod0 = key_to_record(key, TRUE);
 	NODE node = nztop(nod0);
 
 	if (newset) {
