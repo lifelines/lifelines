@@ -1,3 +1,8 @@
+2007-07-26 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog stdlib/Makefile.am:
+	Bugfix - forgot to include new file bfs.c in stdlib/makefile source line.
+
 2007-07-24 Perry Rapp <puddle@users.sourceforge.net>
 
 	* btree/file.c stdlib/llstrcmp.c:
