@@ -126,4 +126,9 @@ Please see the following page about LifeLines on Mac OS X:
 (which is also available via the Apple downloads site and Stepwise.)
 This page offers both precompiled binaries and instructions for
 compilation.
+NB: Because the gnu tests for platform don't recognize Darwin,
+configure requires an argument, eg "./configure ppc". There is no
+specific code needed for Darwin; this is just to avoid the macros
+getting angry at the unknown output from "uname -a".
+
 
