@@ -34,7 +34,9 @@
 
 #include "standard.h"
 #include "table.h"
+#include "translat.h"
 #include "gedcom.h"
+#include "cache.h"
 #include "interp.h"
 #include "yacc.h"
 
@@ -61,10 +63,12 @@ int yylex()
 {
 	INT lex = lowyylex();
 
-/* Place token based debugging here */
-
-/*if (isascii(lex)) llwprintf("lex<%c> ", lex);
-else llwprintf("lex<%d> ", lex);/*DEBUG*/
+#ifdef DEBUG
+	if (isascii(lex))
+		llwprintf("lex<%c> ", lex);
+	else
+		llwprintf("lex<%d> ", lex);
+#endif
 
 	return lex;
 }
@@ -105,7 +109,9 @@ int lowyylex ()
 		}
 		*p = 0;
 		unchar(c);
-/*llwprintf("in lex.c -- IDEN is %s\n", tokbuf);/*DEBUG*/
+#ifdef DEBUG
+		llwprintf("in lex.c -- IDEN is %s\n", tokbuf);
+#endif
 		if (reserved(tokbuf, &retval))  return retval;
 		yylval = (PNODE) strsave(tokbuf);
 		return IDEN;
