@@ -284,6 +284,10 @@ SOURCE=..\..\..\src\gedlib\locales.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\stdlib\log.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\stdlib\memalloc.c
 # End Source File
 # Begin Source File
