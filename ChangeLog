@@ -1,3 +1,7 @@
+2000-01-10  Marc Nozell  <marc@nozell.com>
+
+	* Added mystring.h to hdrs/Makefile.am
+
 2000-01-09  Marc Nozell  <marc@nozell.com>
 
 	* In configure.in, bumped version to 3.0.5 
