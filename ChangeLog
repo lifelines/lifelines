@@ -4,6 +4,10 @@
 
 	Finish revision of birth & death display code.
 
+	* ChangeLog tt/UTF-8__asciitex.tt:
+
+	Improvements to asciitex subcoding for UTF-8.
+
 2003-01-13 Perry Rapp
 
 	* ChangeLog
