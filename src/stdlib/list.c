@@ -309,3 +309,75 @@ peek_list_head (LIST list)
 	if (!node) return 0;
 	return lelement(node);
 }
+/*=================================================
+ * begin_list -- Begin iteration of list
+ *===============================================*/
+BOOLEAN
+begin_list (LIST list, LIST_ITER listit)
+{
+	memset(listit, 0, sizeof(*listit));
+	listit->list = list;
+	listit->current = 0;
+	listit->status = (lhead(listit->list) ? 1 : 0);
+	return !!listit->status;
+}
+/*=================================================
+ * begin_list_rev -- Begin reverse iteration of list
+ *===============================================*/
+BOOLEAN
+begin_list_rev (LIST list, LIST_ITER listit)
+{
+	memset(listit, 0, sizeof(*listit));
+	listit->list = list;
+	listit->current = 0;
+	listit->status = (ltail(listit->list) ? -1 : 0);
+	return !!listit->status;
+}
+/*=================================================
+ * next_element -- Find next element in list (iterating)
+ *===============================================*/
+static BOOLEAN
+next_list_element (LIST_ITER listit)
+{
+	if (!listit->status)
+		return FALSE;
+	if (!listit->current) {
+		/* beginning */
+		if (listit->status > 0)
+			listit->current = lhead(listit->list);
+		else
+			listit->current = ltail(listit->list);
+	} else {
+		if (listit->status > 0)
+			listit->current = lnext(listit->current);
+		else
+			listit->current = lprev(listit->current);
+	}
+	if (!listit->current)
+		listit->status = 0;
+	return !!listit->status;
+}
+/*=================================================
+ * next_list_ptr -- Iterating list with pointers
+ *===============================================*/
+BOOLEAN
+next_list_ptr (LIST_ITER listit, VPTR *pptr)
+{
+	if (!next_list_element(listit)) {
+		*pptr = 0;
+		return FALSE;
+	}
+	*pptr = lelement(listit->current);
+	return TRUE;
+}
+/*=================================================
+ * change_list_ptr -- User changing pointer during iteration
+ *===============================================*/
+BOOLEAN
+change_list_ptr (LIST_ITER listit, VPTR newptr)
+{
+	if (!listit || !listit->current)
+		return FALSE;
+	lelement(listit->current) = newptr;
+	return TRUE;
+}

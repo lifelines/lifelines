@@ -47,6 +47,7 @@
 #include "zstr.h"
 #include "array.h"
 
+
 /*********************************************
  * external/imported variables
  *********************************************/
@@ -1206,11 +1207,12 @@ __sort(PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val = eval_without_coerce(arg, stab, eflg);
+	LIST list_vals = 0;
 	ARRAY arr_vals = 0, arr_keys = 0;
 	BOOLEAN free_vals=FALSE, free_keys = FALSE;
 	if (ptype(val) == PLIST) {
-		LIST list = pvalue_to_list(val);
-		arr_vals = list_to_array(list);
+		list_vals = pvalue_to_list(val);
+		arr_vals = list_to_array(list_vals);
 		if (!arr_vals) {
 			prog_error(node, _("Error converting list to array for sort"));
 			*eflg = TRUE;
@@ -1251,8 +1253,17 @@ __sort(PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	sort_array_by_pvarray(arr_vals, arr_keys);
-	if (free_vals)
+	if (free_vals) {
+		struct tag_list_iter listit;
+		INT i=0;
+		VPTR ptr=0;
+		if (begin_list(list_vals, &listit)) {
+			while (next_list_ptr(&listit, &ptr)) {
+				change_list_ptr(&listit, get_array_obj(arr_vals, i++));
+			}
+		}
 		destroy_array(arr_vals);
+	}
 	if (free_keys)
 		destroy_array(arr_keys);
 	return NULL;

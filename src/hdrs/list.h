@@ -12,7 +12,7 @@
 #ifndef list_h_included
 #define list_h_included
 
-/* types for lists */
+/* node in list */
 typedef struct tag_lnode *LNODE;
 struct tag_lnode {
 	LNODE l_prev;
@@ -23,6 +23,7 @@ struct tag_lnode {
 #define lnext(n) ((n)->l_next)
 #define lelement(n) ((n)->l_element)
 
+/* actual list */
 struct tag_vtable;
 typedef struct tag_list {
 	struct tag_vtable * vtable;
@@ -40,6 +41,15 @@ typedef struct tag_list {
 
 #define LISTNOFREE 0
 #define LISTDOFREE 1
+
+/* list iterator */
+struct tag_list_iter {
+	LNODE current;
+	LIST list;
+	INT status; /* 1=forward, 1=reverse, 0=EOF */
+};
+typedef struct tag_list_iter * LIST_ITER;
+
 
 /* for caller-defined function to create new values */
 typedef VPTR (*LIST_CREATE_VALUE)(LIST);
@@ -71,6 +81,9 @@ typedef VPTR (*LIST_CREATE_VALUE)(LIST);
 
 /* list.c */
 void back_list(LIST, VPTR);
+BOOLEAN begin_list(LIST list, LIST_ITER listit);
+BOOLEAN begin_list_rev(LIST list, LIST_ITER listit);
+BOOLEAN change_list_ptr(LIST_ITER listit, VPTR newptr);
 LIST create_list(void);
 VPTR dequeue_list(LIST);
 BOOLEAN is_empty_list(const LIST);
@@ -79,6 +92,7 @@ VPTR get_list_element(LIST, INT, LIST_CREATE_VALUE);
 INT in_list(LIST, VPTR param, BOOLEAN (*func)(VPTR param, VPTR el));
 INT length_list(LIST);
 void make_list_empty(LIST);
+BOOLEAN next_list_ptr(LIST_ITER listit, VPTR *pptr);
 VPTR peek_list_head(LIST);
 VPTR pop_list(LIST);
 VPTR pop_list_tail(LIST);

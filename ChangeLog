@@ -13,6 +13,10 @@
 	Add array types to interpreter, and new sort function.
 	Add object.* for client use of objects with vtables.
 
+	* ChangeLog src/hdrs/list.h src/interp/more.c src/stdlib/list.c
+
+	Copy sorted array back in __sort.
+
 2003-02-26 Perry Rapp
 
 	* ChangeLog po/sv.po
