@@ -31,14 +31,20 @@
 #include "config.h"
 #endif
 
+#ifdef HAVE_WINDOWS_H
+#include <windows.h>
+#endif
+
 int
 sleep(int seconds)
 {
 /*
  * How do we check if Sleep(), not sleep() is available?
  * #ifdef HAVE_SLEEP is no good.
+ *
+ * For now, HAVE_WINDOWS_H indicates Windows so we assume Sleep()
  */
-#ifdef _WINDOWS
+#ifdef HAVE_WINDOWS_H
 	Sleep(seconds * 1000);
 #else
 #	error "sleep not implemented!"

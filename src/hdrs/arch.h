@@ -9,10 +9,15 @@
 #include "config.h"
 #endif
 
-#ifdef HAVE_SLEEP
-#include <unistd.h>
-#else
+/* 
+ * We need to use the external definiton of sleep in arch/sleep.c if:
+ * - we're on Windows
+ * - there is no sleep() function available
+ */
+#if defined(HAVE_WINDOWS_H) || !defined(HAVE_SLEEP)
 extern int sleep(int seconds);
+#else
+#include <unistd.h>
 #endif
 
 #ifdef HAVE_DIRENT_H
