@@ -1,3 +1,9 @@
+2003-01-02 Perry Rapp
+
+	* ChangeLog configure.in src/hdrs/version.h:
+
+	Placeholder version of has_key for Solaris system lacking it.
+
 2003-01-01 Perry Rapp
 
 	* ChangeLog src/gedlib/keytonod.c src/hdrs/cache.h

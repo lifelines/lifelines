@@ -171,7 +171,7 @@ AC_CHECK_FUNCS( wcscoll towlower towupper )
 
 dnl Check for replacement functions
 AC_REPLACE_FUNCS( sleep scandir alphasort getopt snprintf vsnprintf \
-	_llnull langinfo wcslen)
+	_llnull langinfo wcslen has_key )
 
 dnl AC_CHECK_FUNCS(strerror perror strsignal psignal getopt getopt_long random)
 dnl investigate using AC_MSG_ERROR for error reporting
