@@ -26,6 +26,10 @@
 	Add more files to POTFILES, and update lifelines.pot.
 	Bump version to 3.0.15 & release.
 
+	*NEW config.rpath:
+
+	I guess this came from gettext-0.11.
+
 2002-06-08 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog Makefile.am gedlib/init.c gedlib/messages.c
