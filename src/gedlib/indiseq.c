@@ -29,6 +29,7 @@
  *===========================================================*/
 /* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /* modified 2000-01-26 J.F.Chandler */
+/* modified 2000-08-21 J.F.Chandler */
 
 #include "standard.h"
 #include "table.h"
@@ -242,11 +243,23 @@ SORTEL el1, el2;
 }
 /*================================
  * key_compare -- Compare two keys
+ * also used for integer value sort
  *==============================*/
 INT key_compare (el1, el2)
 SORTEL el1, el2;
 {
 	return spri(el1) - spri(el2);
+}
+/*===================================================
+ * value_str_compare -- Compare two values as strings
+ *=================================================*/
+INT value_str_compare (el1, el2)
+SORTEL el1, el2;
+{
+	PVALUE val1, val2;
+	val1 = sval(el1);
+	val2 = sval(el2);
+	return ll_strcmp((STRING) pvalue(val1), (STRING) pvalue(val2));
 }
 /*====================================
  * value_compare -- Compare two values
@@ -290,11 +303,31 @@ INDISEQ seq;
 /*============================================
  * valuesort_indiseq -- Sort sequence by value
  *==========================================*/
-valuesort_indiseq (seq)
-INDISEQ seq;
+valuesort_indiseq (seq, eflg)
+INDISEQ seq; BOOLEAN *eflg;
 {
+	PVALUE val;
+	SORTEL *data;
+	int settype;
 	if (IFlags(seq) & VALUESORT) return;
-	partition_sort(IData(seq), ISize(seq), value_compare);
+	data = IData(seq);
+	val = sval(*data);
+	if ((settype = ptype(val)) != PINT && settype != PSTRING ) {
+		*eflg = TRUE;
+		return;
+	}
+	FORINDISEQ(seq, el, num)
+		if (!(val = sval(el)) || ptype(val) != settype) {
+			*eflg = TRUE;
+			return;
+		}
+		if (settype == PINT) spri(el) = (INT)pvalue(val);
+	ENDINDISEQ
+  /* OLD: partition_sort(IData(seq), ISize(seq), value_compare); */
+	if (settype == PINT)
+		partition_sort(IData(seq), ISize(seq), key_compare);
+	else
+		partition_sort(IData(seq), ISize(seq), value_str_compare);
 	IFlags(seq) &= ~NAMESORT;
 	IFlags(seq) &= ~KEYSORT;
 	IFlags(seq) |= VALUESORT;

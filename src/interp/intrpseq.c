@@ -22,6 +22,7 @@
    SOFTWARE.
 */
 /* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
+/* modified 2000-08-21 J.F.Chandler */
 /*=============================================================
  * intrpseq.c -- Programming interface to the INDISEQ data type
  * Copyright(c) 1992-95 by T.T. Wetmore IV; all rights reserved
@@ -254,7 +255,11 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	}
 	ASSERT(seq = (INDISEQ) pvalue(val));
 	delete_pvalue(val);
-	valuesort_indiseq(seq);
+	valuesort_indiseq(seq,eflg);
+	if (*eflg) {
+		prog_error(node, "missing or incorrect value for sort");
+		return NULL;
+	}
 	return NULL;
 }
 /*=========================================+

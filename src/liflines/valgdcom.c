@@ -22,6 +22,7 @@
    SOFTWARE.
 */
 /* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
+/* modified 2000-08-22 J.F.Chandler */
 /*=============================================================
  * valgdcom.c -- Validate GEDCOM file
  * Copyright(c) 1993-96 by T.T. Wetmore IV; all rights reserved
@@ -70,17 +71,17 @@ ELMNT *index_data = NULL;
 
 #define SS (STRING)
 
-STRING misixr = SS "Line %d: The person defined here has no key.";
+STRING misixr = SS "Line %d: The person defined here has no key: skipped.";
 STRING misfxr = SS "Line %d: The family defined here has no key.";
 STRING misexr = SS "Line %d: The event defined here has no key.";
 STRING missxr = SS "Line %d: The source defined here has no key.";
 STRING misrxr = SS "Line %d: The record defined here has no key.";
-STRING mulper = SS "Lines %d and %d: Person %s is multiply defined.";
+STRING mulper = SS "Lines %d and %d: Person %s is multiply defined: skipped.";
 STRING mulfam = SS "Lines %d and %d: Family %s is multiply defined.";
 STRING mulsrc = SS "Lines %d and %d: Source %s is multiply defined.";
 STRING mulevn = SS "Lines %d and %d: Event %s is multiply defined.";
 STRING muloth = SS "Lines %d and %d: Record %s is multiply defined.";
-STRING matper = SS "Line %d: Person %s has an incorrect key.";
+STRING matper = SS "Line %d: Person %s has an incorrect key: skipped.";
 STRING matfam = SS "Line %d: Family %s has an incorrect key.";
 STRING matsrc = SS "Line %d: Source %s has an incorrect key.";
 STRING matevn = SS "Line %d: Event %s has an incorrect key.";
@@ -190,6 +191,8 @@ FILE *fp;
 				rec_type = INDI_REC;
 				named = FALSE;
 				person = add_indi_defn(xref, lineno, &el);
+				/* pretend a NAME if the record is skipped */
+				if (person == -2) named = TRUE;
 			} else if (eqstr("FAM", tag)) {
 				sprintf(str, "%6d", ++nfam);
 				wfield(2, 1, str);
@@ -234,6 +237,9 @@ FILE *fp;
 }
 /*=======================================
  * add_indi_defn -- Add person definition
+ *  return index of person structure or
+ *         -1 if unexplained error or
+ *         -2 if explained error
  *=====================================*/
 static INT add_indi_defn (xref, line, pel)
 STRING xref;	/* ref value */
@@ -246,7 +252,7 @@ ELMNT *pel;
 	*pel = NULL;
 	if (!xref || *xref == 0) {
 		handle_err(misixr, line);
-		return -1;
+		return -2;
 	}
 	if ((dex = xref_to_index(xref)) == -1) {
 		*pel = el = (ELMNT) stdalloc(sizeof(*el));
@@ -262,12 +268,12 @@ ELMNT *pel;
 		*pel = el = index_data[dex];
 	if (KNOWNTYPE(el) && Type(el) != INDI_REC) {
 		handle_err(matper, line, xref);
-		return -1;
+		return -2;
 	}
 	if (Type(el) == INDI_REC) {
 		if (Line(el) && line) {
 			handle_err(mulper, Line(el), line, xref);
-			return -1;
+			return -2;
 		}
 		if (line) Line(el) = line;
 		return dex;
@@ -445,6 +451,9 @@ INT line;
 	INT fam, dex;
 	ELMNT indi, pers;
 	ASSERT(person != -1);
+	if (person == -2) {
+		return;
+	}
 	indi = index_data[person];
 	if (eqstr(tag, "FAMC")) {
 		if (!pointer_value(val)) {
@@ -464,7 +473,7 @@ INT line;
 			return;
 		}
 		Male(indi) += 1;
-		if ((dex = add_indi_defn(rmvat(val), 0, &pers)) != -1)
+		if ((dex = add_indi_defn(rmvat(val), 0, &pers)) >= 0)
 			Sex(pers) |= BE_MALE;
 	} else if (eqstr(tag, "MOTH")) {
 		if (!pointer_value(val)) {
@@ -472,7 +481,7 @@ INT line;
 			return;
 		}
 		Fmle(indi) += 1;
-		if ((dex = add_indi_defn(rmvat(val), 0, &pers)) != -1)
+		if ((dex = add_indi_defn(rmvat(val), 0, &pers)) >= 0)
 			Sex(pers) |= BE_FEMALE;
 	} else if (eqstr(tag, "SEX")) {
 		if (val && (*val == 'M'))
@@ -506,7 +515,7 @@ INT line;
 			return;
 		}
 		if (fam) Male(fam) += 1;
-		if ((dex = add_indi_defn(rmvat(val), 0, &pers)) != -1)
+		if ((dex = add_indi_defn(rmvat(val), 0, &pers)) >= 0)
 			Sex(pers) |= BE_MALE;
 	} else if (eqstr(tag, "WIFE")) {
 		if (!pointer_value(val)) {
@@ -514,7 +523,7 @@ INT line;
 			return;
 		}
 		if (fam) Fmle(fam) += 1;
-		if ((dex = add_indi_defn(rmvat(val), 0, &pers)) != -1)
+		if ((dex = add_indi_defn(rmvat(val), 0, &pers)) >= 0)
 			Sex(pers) |= BE_FEMALE;
 	} else if (eqstr(tag, "CHIL")) {
 		if (!pointer_value(val)) {
