@@ -220,7 +220,7 @@ main (INT argc,
 		goto usage;
 	}
 
-	if (!selftest) {
+	if (selftest == FALSE) {
 		lldatabases = environ_determine_database();
 		lldatabases = strsave(lldatabases);
 	}

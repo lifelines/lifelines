@@ -34,6 +34,8 @@
 #include "btree.h"
 
 extern BTREE BTR;
+BOOLEAN selftest = FALSE; /* selftest rules (ignore paths) */
+
 
 int opt_finnish = 0;
 

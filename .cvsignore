@@ -13,3 +13,4 @@ depends.mk
 lifelines-*.tar.gz
 stamp-h
 stamp-h.in
+yacc.h
