@@ -14,6 +14,10 @@
 
 	Add btedit.1 to distribution.
 
+	* ChangeLog docs/ll-userguide.xml
+
+	Wrote some documentation about codesets.
+
 2003-05-05 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp
