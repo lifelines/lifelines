@@ -1,3 +1,9 @@
+2004-12-31 Perry Rapp
+
+	* ChangeLog src/hdrs/win32/curses.h
+
+	Fix compilation on MS-Windows (add cursors version macros).
+
 2004-12-30 Stephen Dum
         *Changelog reports/count_paternal_desc.ll reports/desc_ged.ll
 	Alter scripts to use lengthset rather than copying loop counter
@@ -366,6 +372,7 @@
 2004-01-17 Perry Rapp
 
 	* ChangeLog src/btree/file.c src/btree/record.c
+
 	src/gedlib/intrface.c src/gedlib/names.c src/gedlib/refns.c
 	src/hdrs/btree.h src/interp/eval.c
 

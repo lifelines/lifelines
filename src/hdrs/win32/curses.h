@@ -1,7 +1,7 @@
 /* curses.h - formerly mycurses.h */
+/* header for windows implementation of curses library */
 
 #ifndef CURSES_H
-
 #define CURSES_H	/* define prevents multiple includes */
 
 #ifdef __cplusplus
@@ -14,6 +14,10 @@ extern "C" {
 #include <stdarg.h>
 #define INCLUDED_STDARG_H
 #endif
+
+
+#define NCURSES_VERSION_MAJOR 5
+#define NCURSES_VERSION_MINOR 0
 
 /* we truncate screen to no larger than this */
 #define CUR_MAXLINES 80
