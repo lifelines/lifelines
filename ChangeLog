@@ -1,4 +1,6 @@
 2004-07-18 Stephen Dum
+	Makefile.am src/interp/interp.c 
+	in reports directory
 	remove: ps-anc2.ll   ps-anc5.ll   ps-anc6.ll   ps-anc7.ll   ps-anc8.ll
 	add: ps-anc.ll
 	remove: regvital1.ll 
@@ -7,13 +9,22 @@
 	remove: pdesc1.ll pdesc2.r.ll pdesc3.ll pdesc4.ll; add: pdesc.ll
 	remove: namefreq2.ll; add: namefreq.ll 
 	remove: select.li; add: select.ll
-	update Makefile.am
+	The following are renamed from .ll to .li extension
+	st/st_aux.ll st/st_collate.ll st/st_collate_8859-1.ll 
+	st/st_collate_UTF-8.ll st/st_convert.ll st/st_date.ll st/st_db.ll
+	st/st_list.ll st/st_name.ll st/st_number.ll st/st_string.ll 
+	st/st_string_UTF-8.ll  
+
 
 	Starting clean up of reports.  Removed instances where a reports
 	multiple versions are checked in as report1.ll, report2.ll, etc.
 	They are now checked in as report.ll.  The earlier versions are
 	checked in as report.ll so that the history of the earlier versions
 	are preserved.
+
+	The test programs in st directory are renamed to .li scripts since
+	they are intended to be included.  Also llines modified to look
+	for either .li or .ll extention for files being included.
    
 2004-06-18  Marc Nozell
 

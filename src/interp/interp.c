@@ -95,7 +95,7 @@ static STRING check_rpt_requires(PACTX pactx, STRING fname);
 static void disp_symtab(STRING title, SYMTAB stab);
 static BOOLEAN disp_symtab_cb(STRING key, PVALUE val, VPTR param);
 static void enqueue_parse_error(const char * fmt, ...);
-static BOOLEAN find_program(STRING fname, STRING localdir, STRING *pfull);
+static BOOLEAN find_program(STRING fname, STRING localdir, STRING *pfull,BOOLEAN include);
 static void init_pactx(PACTX pactx);
 static void parse_file(PACTX pactx, STRING fname, STRING fullpath);
 static void print_report_duration(INT duration, INT uiduration);
@@ -245,7 +245,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 		for (i = 1; i < nfiles+1; i++) {
 			STRING fullpath = 0;
 			STRING progfile = get_list_element(lifiles, i, NULL);
-			if (find_program(progfile, 0, &fullpath)) {
+			if (find_program(progfile, 0, &fullpath,FALSE)) {
 				PATHINFO pathinfo = new_pathinfo(progfile, fullpath);
 				strfree(&fullpath);
 				enqueue_list(plist, pathinfo);
@@ -458,7 +458,7 @@ remove_tables (PACTX pactx)
  * Returns TRUE if found
  *=====================================*/
 static BOOLEAN
-find_program (STRING fname, STRING localdir, STRING *pfull)
+find_program (STRING fname, STRING localdir, STRING *pfull,BOOLEAN include)
 {
 	STRING programsdir = getoptstr("LLPROGRAMS", ".");
 	FILE * fp = 0;
@@ -471,6 +471,14 @@ find_program (STRING fname, STRING localdir, STRING *pfull)
 		zs_apps(zstr, LLSTRPATHSEPARATOR);
 	}
 	zs_apps(zstr, programsdir);
+	if (include) {
+	    fp = fopenpath(fname, LLREADTEXT, zs_str(zstr), ".li", uu8, pfull);
+	    if (fp) {
+		    fclose(fp);
+		    rtn = TRUE;
+		    goto end_find_program;
+	    }
+	}
 	fp = fopenpath(fname, LLREADTEXT, zs_str(zstr), ".ll", uu8, pfull);
 	if (fp) {
 		fclose(fp);
@@ -2081,7 +2089,7 @@ pa_handle_include (PACTX pactx, PNODE node)
 		localpath = zs_str(irptinfo(node)->localpath);
 	}
 
-	if (find_program(newfname, localpath, &fullpath)) {
+	if (find_program(newfname, localpath, &fullpath,TRUE)) {
 		pathinfo = new_pathinfo(newfname, fullpath);
 		strfree(&fullpath);
 		enqueue_list(Plist, pathinfo);
