@@ -66,6 +66,10 @@ msg_status (char *fmt, ...)
 }
 /*======================================
  * poutput -- Print argument as a string
+ * This is called by the report gengedcom command,
+ * which is located in the wrong directory (gedlib).
+ * If gengedc.c were moved to interp directory,
+ * this would not be needed here. - Perry, 2001/11/11
  *====================================*/
 void
 poutput (char *str, BOOLEAN *eflg)
