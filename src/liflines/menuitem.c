@@ -122,14 +122,14 @@ static MenuItem f_MenuItemRemoveSpouseFrom = { "r  Remove spouse from", "r", CMD
 static MenuItem f_MenuItemRemoveChildFrom = { "d  Remove child from", "d" , CMD_REMOVECHILD };
 static MenuItem f_MenuItemScrollUp = { "(  Scroll up", "(", CMD_SCROLL_UP };
 static MenuItem f_MenuItemScrollDown = { ")  Scroll down", ")", CMD_SCROLL_DOWN };
-static MenuItem f_MenuItemDepthDown = { "[  Decrease tree depth", "[", CMD_DEPTH_DOWN };
 static MenuItem f_MenuItemDepthUp = { "]  Increase tree depth", "]", CMD_DEPTH_UP };
-static MenuItem f_MenuItemScrollUpTop = { "[  Scroll top up", "[", CMD_SCROLL_TOP_UP };
-static MenuItem f_MenuItemScrollDownTop = { "]  Scroll top down", "]", CMD_SCROLL_TOP_DOWN };
-static MenuItem f_MenuItemScrollUpBottom = { "(  Scroll bottom up", "(", CMD_SCROLL_BOTTOM_UP };
-static MenuItem f_MenuItemScrollDownBottom = { ")  Scroll bottom down", ")", CMD_SCROLL_BOTTOM_DOWN };
-static MenuItem f_MenuItemScrollUpBoth = { "{  Scroll both up", "{", CMD_SCROLL_BOTH_UP };
-static MenuItem f_MenuItemScrollDownBoth = { "}  Scroll both down", "}", CMD_SCROLL_BOTH_DOWN };
+static MenuItem f_MenuItemDepthDown = { "[  Decrease tree depth", "[", CMD_DEPTH_DOWN };
+static MenuItem f_MenuItemScrollUpTop = { "(t Scroll top up", "(t", CMD_SCROLL_TOP_UP };
+static MenuItem f_MenuItemScrollDownTop = { ")t Scroll top down", ")t", CMD_SCROLL_TOP_DOWN };
+static MenuItem f_MenuItemScrollUpBottom = { "(b Scroll bottom up", "(b", CMD_SCROLL_BOTTOM_UP };
+static MenuItem f_MenuItemScrollDownBottom = { ")b Scroll bottom down", ")b", CMD_SCROLL_BOTTOM_DOWN };
+static MenuItem f_MenuItemScrollUpBoth = { "(( Scroll both up", "((", CMD_SCROLL_BOTH_UP };
+static MenuItem f_MenuItemScrollDownBoth = { ")) Scroll both down", "))", CMD_SCROLL_BOTH_DOWN };
 static MenuItem f_MenuItemToggleChildNos = { "#  Toggle childnos", "#", CMD_TOGGLE_CHILDNUMS };
 static MenuItem f_MenuItemModeGedcom = { "!g GEDCOM mode", "!g", CMD_MODE_GEDCOM };
 static MenuItem f_MenuItemModeAncestors = { "!a Ancestors mode", "!a", CMD_MODE_ANCESTORS };
@@ -143,8 +143,8 @@ static MenuItem f_MenuItemAdvanced = { "A  Advanced view", "A", CMD_ADVANCED };
 static MenuItem f_MenuItemTandemChildren = { "C  Tandem to children", "C", CMD_TANDEM_CHILDREN };
 static MenuItem f_MenuItemTandemFathers = { "tf  Tandem to father/s", "tf", CMD_TANDEM_FATHERS };
 static MenuItem f_MenuItemTandemFamilies = { "G  Tandem to family/s", "G", CMD_TANDEM_FAMILIES };
-static MenuItem f_MenuItemBothFathers = { "f  Browse to fathers", "f" };
-static MenuItem f_MenuItemBothMothers = { "m  Browse to mothers", "m" };
+static MenuItem f_MenuItemBothFathers = { "f  Browse to fathers", "f", CMD_BOTH_FATHERS };
+static MenuItem f_MenuItemBothMothers = { "m  Browse to mothers", "m", CMD_BOTH_MOTHERS };
 static MenuItem f_MenuItemTandemMothers = { "M  Tandem to mother/s", "M", CMD_TANDEM_MOTHERS };
 static MenuItem f_MenuItemTandemSpouses = { "S  Tandem to spouse/s", "S", CMD_TANDEM_SPOUSES };
 static MenuItem f_MenuItemTandemParents = { "U  Tandem to parents", "U", CMD_TANDEM_PARENTS };
@@ -211,6 +211,8 @@ static MenuItem * f_MenuPerson[] =
 	&f_MenuItemTandemMothers,
 	&f_MenuItemTandemSpouses,
 	&f_MenuItemTandemParents,
+	&f_MenuItemDepthUp,
+	&f_MenuItemDepthDown,
 	&f_MenuItemEnlargeMenu,
 	&f_MenuItemShrinkMenu,
 	&f_MenuItemSources,
@@ -283,12 +285,15 @@ static MenuItem * f_Menu2Person[] =
 	&f_MenuItemModePedigree,
 	&f_MenuItemModeAncestors,
 	&f_MenuItemModeDescendants,
+	&f_MenuItemModeCycle,
 	&f_MenuItemScrollUpTop,
 	&f_MenuItemScrollDownTop,
 	&f_MenuItemScrollUpBottom,
 	&f_MenuItemScrollDownBottom,
 	&f_MenuItemScrollUpBoth,
 	&f_MenuItemScrollDownBoth,
+	&f_MenuItemDepthUp,
+	&f_MenuItemDepthDown,
 	&f_MenuItemEnlargeMenu,
 	&f_MenuItemShrinkMenu,
 	&f_MenuItemBrowse,
@@ -310,8 +315,11 @@ static MenuItem * f_Menu2Family[] =
 	&f_MenuItemScrollDownBoth,
 	&f_MenuItemToggleChildNos,
 	&f_MenuItemDigits,
-	&f_MenuItemSwitchTopBottom,
 	&f_MenuItemMergeBottomToTop,
+	&f_MenuItemSwitchTopBottom,
+	&f_MenuItemModeGedcom,
+	&f_MenuItemModeNormal,
+	&f_MenuItemModeCycle,
 	&f_MenuItemEnlargeMenu,
 	&f_MenuItemShrinkMenu,
 	0

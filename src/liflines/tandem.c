@@ -64,31 +64,31 @@ static BOOLEAN handle_tandem_scroll_cmds(INT c);
  *===========================================*/
 INT browse_tandem (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ *pseq)
 {
-	INT nkey1p, nkey2p, indimodep;
+	INT nkey1p, nkey2p, modep;
 	NODE node, indi1 = *pindi1, indi2 = *pindi2;
 	STRING key, name;
 	INDISEQ seq;
 	INT c, rc;
-	static INT indimode = 'n';
+	static INT mode = 'n';
 
 	if (!indi1 || !indi2) return BROWSE_QUIT;
 	show_reset_scroll();
-	nkey1p = 0;
-	indimodep = indimode;
+	nkey1p = 0; /* force redraw */
+	modep = mode;
 
 	while (TRUE) {
 		if (indi_to_keynum(indi1) != nkey1p
 			|| indi_to_keynum(indi2) != nkey2p
-			|| indimode != indimodep) {
+			|| mode != modep) {
 			show_reset_scroll();
 		}
-		c = display_2indi(indi1, indi2, indimode);
+		c = display_2indi(indi1, indi2, mode);
 		/* last keynum & mode, so can tell if changed */
 		nkey1p = indi_to_keynum(indi1);
 		nkey2p = indi_to_keynum(indi2);
-		indimodep = indimode;
+		modep = mode;
 		if (!handle_menu_cmds(c)
-			&& !handle_indi_mode_cmds(c, &indimode)
+			&& !handle_indi_mode_cmds(c, &mode)
 			&& !handle_tandem_scroll_cmds(c))
 			switch (c)
 		{
@@ -161,23 +161,42 @@ INT browse_tandem (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ
  *================================================*/
 INT browse_2fam (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ *pseq)
 {
+	INT nkey1p, nkey2p, modep;
 	NODE node, fam1 = *pfam1, fam2 = *pfam2;
 	INT c;
+	static INT mode = 'n';
+
 	ASSERT(fam1 && fam2);
 	show_reset_scroll();
+	nkey1p = 0; /* force redraw */
+	modep = mode;
+
 	while (TRUE) {
-		c = twofam_browse(fam1, fam2);
-		switch (c) {
-		case 'e':	/* edit top fam */
+		if (fam_to_keynum(fam1) != nkey1p
+			|| fam_to_keynum(fam2) != nkey2p
+			|| mode != modep) {
+			show_reset_scroll();
+		}
+		c = display_2fam(fam1, fam2, mode);
+		/* last keynum & mode, so can tell if changed */
+		nkey1p = fam_to_keynum(fam1);
+		nkey2p = fam_to_keynum(fam2);
+		modep = mode;
+		if (!handle_menu_cmds(c)
+			&& !handle_fam_mode_cmds(c, &mode)
+			&& !handle_tandem_scroll_cmds(c))
+			switch (c)
+		{
+		case CMD_EDIT:	/* edit top fam */
 			fam1 = edit_family(fam1);
 			break;
-		case 't':	/* browse top fam */
+		case CMD_TOP:	/* browse top fam */
 			*pfam1 = fam1;
 			return BROWSE_FAM;
-		case 'b':	/* browse bottom fam */
+		case CMD_BOTTOM:	/* browse bottom fam */
 			*pfam1 = fam2;
 			return BROWSE_FAM;
-		case 'f':	/* browse to husbs/faths */
+		case CMD_BOTH_FATHERS:	/* browse to husbs/faths */
 			*pindi1 = fam_to_husb(fam1);
 			*pindi2 = fam_to_husb(fam2);
 			if (!*pindi1 || !*pindi2) {
@@ -185,7 +204,7 @@ INT browse_2fam (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ *
 				break;
 			}
 			return BROWSE_TAND;
-		case 'm':	/* browse to wives/moths */
+		case CMD_BOTH_MOTHERS:	/* browse to wives/moths */
 			*pindi1 = fam_to_wife(fam1);
 			*pindi2 = fam_to_wife(fam2);
 			if (!*pindi1 || !*pindi2) {
@@ -193,18 +212,21 @@ INT browse_2fam (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ *
 				break;
 			}
 			return BROWSE_TAND;
-		case 'j':	/* merge two fams */
+		case CMD_MERGE_BOTTOM_TO_TOP:	/* merge two fams */
 			if ((node = merge_two_fams(fam2, fam1))) {
 				*pfam1 = node;
 				return BROWSE_FAM;
 			}
 			break;
-		case 'x':	/* swap two fams */
+		case CMD_SWAPTOPBOTTOM:	/* swap two fams */
 			node = fam1;
 			fam1 = fam2;
 			fam2 = node;
 			break;
-		case 'q':	/* Return to main menu */
+		case CMD_TOGGLE_CHILDNUMS:       /* toggle children numbers */
+			show_childnumbers();
+			break;
+		case CMD_QUIT:	/* Return to main menu */
 		default:
 			return BROWSE_QUIT;
 		}

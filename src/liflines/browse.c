@@ -769,6 +769,23 @@ display_fam (NODE fam, INT mode)
 	unlock_cache(icel);
 	return c;
 }
+/*==========================================
+ * display_2fam -- Show two fam in current mode
+ *========================================*/
+INT
+display_2fam (NODE fam1, NODE fam2, INT mode)
+{
+	CACHEEL icel1, icel2;
+	INT c;
+	icel1 = fam_to_cacheel(fam1);
+	icel2 = fam_to_cacheel(fam2);
+	lock_cache(icel1);
+	lock_cache(icel2);
+	c = twofam_browse(fam1, fam2, mode);
+	unlock_cache(icel1);
+	unlock_cache(icel2);
+	return c;
+}
 /*===============================================
  * browse_fam -- Handle family browse selections.
  *=============================================*/

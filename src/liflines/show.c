@@ -367,11 +367,17 @@ show_long_family (NODE fam, INT row, INT hgt, INT width)
 	}
 	localrow = row - Scroll1;
 	mvwaddstr(main_win, row+0, 1, Shusb);
+	if (hgt==1) return;
 	mvwaddstr(main_win, row+1, 1, Shbirt);
+	if (hgt==2) return;
 	mvwaddstr(main_win, row+2, 1, Shdeat);
+	if (hgt==3) return;
 	mvwaddstr(main_win, row+3, 1, Swife);
+	if (hgt==4) return;
 	mvwaddstr(main_win, row+4, 1, Swbirt);
+	if (hgt==5) return;
 	mvwaddstr(main_win, row+5, 1, Swdeat);
+	if (hgt==6) return;
 	mvwaddstr(main_win, row+6, 1, Smarr);
 	for (i = Scroll1; i < Solen && i < hgt-7+Scroll1; i++)
 	{
@@ -386,6 +392,7 @@ show_long_family (NODE fam, INT row, INT hgt, INT width)
 		message(buf);
 	}
 }
+#ifdef UNUSED
 /*====================================
  * show_short_family -- Display family
  *==================================*/
@@ -429,6 +436,7 @@ show_short_family (NODE fam, INT row, INT hgt, INT width)
 		message(buf);
 	}
 }
+#endif
 /*================================================
  * show_ancestors -- Show pedigree/ancestors
  * Created: 2001/02/04, Perry Rapp

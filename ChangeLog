@@ -6,6 +6,11 @@
 	liflines/show.c liflines/tandem.c:
 	Integrate twoindi browse (tandem) to new menu system.
 
+	* gedlib/messages.c hdrs/menuitem.h hdrs/screen.h
+	liflines/browse.c liflines/llinesi.h liflines/menuitem.c
+	liflines/screen.c liflines/show.c liflines/tandem.c:
+	Integrate twofam browse (tandem) to new menu system.
+
 2001-02-04 Perry Rapp <puddle@users.sourceforge.net>
 
         * ChangeLog gedlib/messages.c hdrs/menuitem.h hdrs/screen.h

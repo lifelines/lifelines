@@ -130,9 +130,9 @@ void paint_list_screen(void);
 void show_horz_line(WINDOW*, INT, INT, INT);
 void show_vert_line(WINDOW*, INT, INT, INT);
 void shw_list_of_strings(WINDOW*, STRING*, INT, INT, INT);
-INT twoindi_browse(NODE, NODE, INT mode);
 void term_screen(void);
-INT twofam_browse(NODE, NODE);
+INT twofam_browse(NODE, NODE, INT mode);
+INT twoindi_browse(NODE, NODE, INT mode);
 void wfield(INT, INT, STRING);
 void wpos (INT, INT);
 

@@ -106,6 +106,7 @@ static void extra_menu (void);
 static void init_all_windows (void);
 static INT update_menu(INT screen);
 static void show_indi_mode(NODE indi, INT mode, INT row, INT hgt);
+static void show_fam_mode(NODE fam, INT mode, INT row, INT hgt, INT width);
 static void scan_menu (void);
 static void trans_menu (void);
 static void utils_menu (void);
@@ -255,6 +256,7 @@ paint_screen (INT screen)
 		return;
 	output_menu(win, screen);
 }
+#ifdef UNUSED
 /*================================================
  * paint_two_fam_screen -- Paint two family screen
  *==============================================*/
@@ -281,6 +283,7 @@ paint_two_fam_screen (void)
 	mvwaddstr(win, row++, col, "j  Merge bottom to top");
 	mvwaddstr(win, row++, col, "q  Return to main menu");
 }
+#endif
 /*==============================================
  * paint_list_screen -- Paint list browse screen
  *============================================*/
@@ -504,6 +507,17 @@ show_indi_mode (NODE indi, INT mode, INT row, INT hgt)
 		show_person_main(indi, row, hgt);
 }
 /*=========================================
+ * show_fam_mode -- Show indi according to mode
+ *=======================================*/
+static void
+show_fam_mode (NODE fam, INT mode, INT row, INT hgt, INT width)
+{
+	if (mode=='g')
+		show_gedcom_main(fam, row, hgt);
+	else
+		show_long_family(fam, row, hgt, width);
+}
+/*=========================================
  * indi_browse -- Handle indi_browse screen
  *=======================================*/
 INT
@@ -521,12 +535,10 @@ indi_browse (NODE indi, INT mode)
 INT
 fam_browse (NODE fam, INT mode)
 {
+	INT width = MAINWIN_WIDTH;
 	INT screen = ONE_FAM_SCREEN;
 	INT lines = update_menu(screen);
-	if (mode=='g')
-		show_gedcom_main(fam, 1, lines);
-	else
-		show_long_family(fam, 1, lines, MAINWIN_WIDTH);
+	show_fam_mode(fam, mode, 1, lines, width);
 	display_screen(screen);
 	return interact(main_win, NULL, screen);
 }
@@ -566,14 +578,25 @@ twoindi_browse (NODE indi1, NODE indi2, INT mode)
  * twofam_browse -- Handle twofam_browse screen
  *===========================================*/
 INT
-twofam_browse (NODE fam1, NODE fam2)
+twofam_browse (NODE fam1, NODE fam2, INT mode)
 {
 	INT width=MAINWIN_WIDTH;
-	if (cur_screen != TWO_FAM_SCREEN) paint_two_fam_screen();
-	show_short_family(fam1, 1, TANDEM_LINES, width);
-	show_short_family(fam2, TANDEM_LINES+2, TANDEM_LINES, width);
-	display_screen(TWO_FAM_SCREEN);
-	return interact(main_win, "etbfmxjq", -1);
+	INT screen = TWO_FAM_SCREEN;
+	INT lines = update_menu(screen);
+	INT lines1,lines2;
+	lines--; /* for tandem line */
+	lines2 = lines/2;
+	lines1 = lines - lines2;
+
+	show_fam_mode(fam1, mode, 1, lines1, width);
+	show_tandem_line(main_win, lines1+1);
+	switch_scrolls();
+	show_fam_mode(fam2, mode, lines1+2, lines2, width);
+	switch_scrolls();
+
+	display_screen(screen);
+	return interact(main_win, NULL, screen);
+/*	return interact(main_win, "etbfmxjq", -1);*/
 }
 /*=======================================
  * aux_browse -- Handle aux_browse screen
@@ -1623,7 +1646,7 @@ output_menu (WINDOW *win, INT screen)
 	icol = 0;
 	col = 3;
 	row = LINESTOTAL-MenuRows-OVERHEAD_MENU+1;
-	show_horz_line(win, row++, 0, COLSREQ);
+	show_horz_line(win, row++, 0, ll_cols);
 	sprintf(prompt, "%s            (pg %d/%d)", 
 		plschs, page+1, pages);
 	mvwaddstr(win, row++, 2, prompt);
