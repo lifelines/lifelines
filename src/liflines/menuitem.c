@@ -115,6 +115,7 @@ static MenuItem f_MenuItemAddChild = { "a  Add child to family", "a", CMD_ADDCHI
 static MenuItem f_MenuItemAddFamily = { "a  Add family", "a", CMD_ADDFAMILY };
 static MenuItem f_MenuItemSwapFamilies = { "x  Swap two families", "x", CMD_SWAPFAMILIES };
 static MenuItem f_MenuItemSwapChildren = { "x  Swap two children", "x", CMD_SWAPCHILDREN };
+static MenuItem f_MenuItemReorderChild = { "%c  Reorder child", "%c", CMD_REORDERCHILD };
 static MenuItem f_MenuItemSwitchTopBottom = { "x  Switch top/bottom", "x", CMD_SWAPTOPBOTTOM };
 static MenuItem f_MenuItemNewPerson = { "n  Create new person", "n", CMD_NEWPERSON };
 static MenuItem f_MenuItemNewFamily = { "a  Create new family", "a", CMD_NEWFAMILY };
@@ -253,6 +254,7 @@ static MenuItem * f_MenuFamily[] =
 	&f_MenuItemRemoveSpouseFrom,
 	&f_MenuItemRemoveChildFrom,
 	&f_MenuItemSwapChildren,
+	&f_MenuItemReorderChild,
 	&f_MenuItemTandemFamily,
 	&f_MenuItemBrowse,
 	&f_MenuItemZipBrowse,

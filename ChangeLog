@@ -6,6 +6,11 @@
 	Little more documentation & uchar fixes (cast chars to
 	unsigned before assiging to INT to avoid sign extension).
 
+	* gedlib/choose.c gedlib/messages.c hdrs/menuitem.h
+	liflines/add.c liflines/browse.c liflines/llinesi.h
+	liflines/menuitem.c liflines/swap.c:
+	Add "reorder child" menu item to family browse.
+
 2007-07-15 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/charmaps.c gedlib/editvtab.c gedlib/indiseq.c

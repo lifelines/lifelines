@@ -1032,6 +1032,9 @@ browse_fam (NODE *pindi1,
 		case CMD_SWAPCHILDREN:	/* Swap two children */
 			swap_children(NULL, fam);
 			break;
+		case CMD_REORDERCHILD: /* Move a child in order */
+			reorder_child(NULL, fam);
+			break;
 		case CMD_TOGGLE_CHILDNUMS:       /* toggle children numbers */
 			show_childnumbers();
 			break;

@@ -110,7 +110,8 @@ void show_scroll2(INT delta);
 void switch_scrolls(void);
 
 /* swap.c */
-BOOLEAN swap_children(NODE, NODE);
+BOOLEAN swap_children(NODE prnt, NODE fam);
+BOOLEAN reorder_child(NODE prnt, NODE fam);
 BOOLEAN swap_families(NODE);
 
 /* tandem.c */

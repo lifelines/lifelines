@@ -37,13 +37,14 @@
 
 /*=================================================
  * choose_child -- Choose child of person or family
+ *  indi: [in] parent (may be null if fam provided)
+ *  fam:  [in] family (may be null if indi provided)
+ *  msg0: [in] message to display if no children
+ *  msgn: [in] title for choosing child from list
+ *  ask1: [in] whether to prompt if only one child
  *===============================================*/
 NODE
-choose_child (NODE indi,
-              NODE fam,
-              STRING msg0,
-              STRING msgn,
-              ASK1Q ask1)
+choose_child (NODE indi, NODE fam, STRING msg0, STRING msgn, ASK1Q ask1)
 {
 	INDISEQ seq = NULL;
 	NODE node;
@@ -139,12 +140,13 @@ choose_pointer (NODE what, STRING msg0, STRING msgn)
 /*==========================================================
  * choose_family -- Choose family from person's FAMS/C lines
  *  asks if multiple
+ * indi: [in] person of interest
+ * msg0: [in] message to display if no families
+ * msgn: [in] title if need to choose which family
+ * fams: [in] want spousal families of indi ? (or families indi is child in)
  *========================================================*/
 NODE
-choose_family (NODE indi,
-               STRING msg0,
-               STRING msgn,
-               BOOLEAN fams)
+choose_family (NODE indi, STRING msg0, STRING msgn, BOOLEAN fams)
 {
 	NODE node;
 	INDISEQ seq = indi_to_families(indi, fams);

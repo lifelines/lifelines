@@ -201,6 +201,7 @@ NODE
 add_child (NODE child, NODE fam)
 {
 	INT i;
+	TRANTABLE ttd = tran_tables[MINDS];
 
 	if (readonly) {
 		message(ronlye);
@@ -223,6 +224,7 @@ add_child (NODE child, NODE fam)
 /* Add FAMC node to child */
 
 	add_child_to_fam(child, fam, i);
+	mprintf_status(gdcadd, indi_to_name(child, ttd, 35));
 	return fam;
 }
 
@@ -237,7 +239,6 @@ add_child_to_fam (NODE child, NODE fam, INT i)
 	INT j;
 	NODE husb, wife, chil, rest, refn, fref;
 	NODE nfmc, this, prev;
-	TRANTABLE ttd = tran_tables[MINDS];
 
 	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
 	prev = NULL;
@@ -287,7 +288,6 @@ add_child_to_fam (NODE child, NODE fam, INT i)
 	resolve_links(fam);
 	fam_to_dbase(fam);
 	indi_to_dbase(child);
-	mprintf_status(gdcadd, indi_to_name(child, ttd, 35));
 }
 /*===================================
  * add_spouse -- Add spouse to family

@@ -40,8 +40,19 @@
 
 #include "llinesi.h"
 
+/*********************************************
+ * external/imported variables
+ *********************************************/
 extern STRING idcswp, id1csw, id2csw, id1fsw, id2fsw, idfbys, ntprnt;
 extern STRING less2c, okcswp, less2f, okfswp, idfswp, ronlye;
+extern STRING idcrdr, ntchld;
+extern struct rfmt_s disprfmt; /* reformatting used for display */
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
+static INT child_index(NODE child, NODE fam);
+static void swap_children_impl(NODE fam, NODE one, NODE two);
 
 /*=============================================
  * swap_children -- Swap two children in family
@@ -51,8 +62,7 @@ extern STRING less2c, okcswp, less2f, okfswp, idfswp, ronlye;
 BOOLEAN
 swap_children (NODE prnt, NODE fam)
 {
-	NODE chil, one, two, tmp;
-	STRING str;
+	NODE chil, one, two;
 	INT nfam, nchil;
 
 	if (readonly) {
@@ -62,11 +72,11 @@ swap_children (NODE prnt, NODE fam)
 
 /* Identify parent if need be */
 	if (fam) goto gotfam;
-	if (!prnt) prnt = ask_for_indi(idfswp, NOCONFIRM, NOASK1);
+	if (!prnt) prnt = ask_for_indi(idcswp, NOCONFIRM, NOASK1);
 	if (!prnt) return FALSE;
 	nfam = num_families(prnt);
 	if (nfam <= 0) {
-		message(ntprnt);
+		message(ntchld);
 		return FALSE;
 	}
 
@@ -108,6 +118,21 @@ gotfam:
 		}
 	}
 
+	swap_children_impl(fam, one, two);
+	message(okcswp);
+	return TRUE;
+}
+/*=============================================
+ * swap_children_impl -- Swap input children in input family
+ *  fam:     [in] family of interest
+ *  one,two: [in] children to swap
+ * all inputs assumed valid - no user feedback here
+ *===========================================*/
+static void
+swap_children_impl (NODE fam, NODE one, NODE two)
+{
+	STRING str;
+	NODE tmp;
 	ASSERT(one && two);
    /* Swap CHIL nodes and update database */
 	str = nval(one);
@@ -117,12 +142,103 @@ gotfam:
 	nchild(one) = nchild(two);
 	nchild(two) = tmp;
 	fam_to_dbase(fam);
-	message(okcswp);
+}
+/*=============================================
+ * reorder_child -- Reorder one child in family
+ * NODE prnt:   [in] parent (may be NULL)
+ * NODE fam:    [in] family (may be NULL)
+ *===========================================*/
+BOOLEAN
+reorder_child (NODE prnt, NODE fam)
+{
+	INT nfam, nchil;
+	INT prevorder, i;
+	NODE child;
+
+	if (readonly) {
+		message(ronlye);
+		return FALSE;
+	}
+
+/* Identify parent if need be */
+	if (fam) goto gotfam;
+	if (!prnt) prnt = ask_for_indi(idcswp, NOCONFIRM, NOASK1);
+	if (!prnt) return FALSE;
+	nfam = num_families(prnt);
+	if (nfam <= 0) {
+		message(ntchld);
+		return FALSE;
+	}
+
+/* Identify family if need be */
+	if (nfam == 1) {
+		fam = key_to_fam(rmvat(nval(FAMS(prnt))));
+		goto gotfam;
+	}
+	if (!(fam = choose_family(prnt, ntprnt, idfbys, TRUE))) return FALSE;
+gotfam:
+	nchil = num_children(fam);
+	if (nchil < 2) {
+		message(less2c);
+		return FALSE;
+	}
+
+	if (nchil == 2) {
+		/* swap the two existing ones */
+		NODE one = CHIL(fam);
+		NODE two = nsibling(one);
+		swap_children_impl(fam, one, two);
+		message(okcswp);
+		return TRUE;
+	}
+
+	/* Identify children to swap */
+	child = choose_child(NULL, fam, "e", idcrdr, NOASK1);
+	if (!child) return FALSE;
+
+	prevorder = child_index(child, fam);
+
+	/* first remove child, so can list others & add back */
+	remove_child(child, fam);
+
+	i = ask_child_order(fam, ALWAYS_PROMPT, &disprfmt);
+	if (i == -1) {
+		/* must put child back if cancel */
+		add_child_to_fam(child, fam, prevorder);
+		return FALSE;
+	}
+
+/* Add FAMC node to child */
+
+	add_child_to_fam(child, fam, i);
+
+	fam_to_dbase(fam);
 	return TRUE;
 }
 /*=============================================
+ * child_index -- What is child's birth index in this family ?
+ *  child:  [in] child of interest
+ *  fam:    [in] family of interest
+ *===========================================*/
+static INT
+child_index (NODE child, NODE fam)
+{
+	INT j;
+	NODE husb, wife, chil, rest, fref;
+	NODE node;
+	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
+	node = chil;
+	j = 0;
+	while (node && !eqstr(nval(node), nxref(child))) {
+		++j;
+		node = nsibling(node);
+	}
+	join_fam(fam, fref, husb, wife, chil, rest);
+	return child ? j : -1;
+}
+/*=============================================
  * swap_families -- Swap two families of person
- * NODE indi:  [in] person
+ *  indi:  [in] person
  *  prompt for indi if NULL
  *  prompt for families if person chosen has >2
  *===========================================*/

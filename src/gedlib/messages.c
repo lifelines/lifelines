@@ -56,6 +56,7 @@ STRING idfrsp = SS "Identify a spouse of the family, if known.";
 STRING idfrch = SS "Identify a child of the family, if known.";
 STRING id1csw = SS "Identify the first child to swap.";
 STRING id2csw = SS "Identify the second child to swap.";
+STRING idcrdr = SS "Identify the child to reorder.";
 STRING id1fsw = SS "Identify the first family/spouse to swap.";
 STRING id2fsw = SS "Identify the second family/spouse to swap.";
 STRING idsbrs = SS "Please choose the spouse/parent to browse to.";
