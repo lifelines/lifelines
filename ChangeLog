@@ -1,3 +1,11 @@
+2001-01-01 Perry Rapp <puddle@users.sourceforge.net>
+
+	* gedlib/indiseq.c gedlib/keytonod.c hdrs/gedcom.h
+	hdrs/indiseq.h interp/intrpseq.c liflines/llinesi.h
+	liflines/screen.c liflines/show.c:
+	Move create_pvalue out of indiseq.c.
+	Move mprintf_info out of keytonod.c.
+
 2000-12-31 Perry Rapp <puddle@users.sourceforge.net>
 
 	* btree/opnbtree.c gedlib/indiseq.c gedlib/keytonod.c
@@ -8,7 +16,7 @@
 2000-12-31 Marc Nozell <marc@nozell.com>
 
 	* interp/Makefile.am: Return special CFLAGS settings, as -O2 on
-	pvalue.c still triggers a compilter bug in gcc version 2.95.2
+	pvalue.c still triggers a compiler bug in gcc version 2.95.2
 	19991024 (release) which is shipped with at least Linux/SuSE V6.4.
 
 2000-12-31 Petter Reinholdtsen <pere@td.org.uit.no>
