@@ -5,9 +5,24 @@
    Modified by James Clark (jjc@jclark.com).
 */
 
+/* Notes about this implementation of getopt(): 
+ *
+ * The following #defines exist:
+ * SWITCHAR - signifies that MSDOS-specific functions should be used to 
+ *            determine the switch character
+ * REORDER_ARGS - ??
+ * CASE_INSENSITIVE_OPTIONS, USE_ISASCII - self-explanatory
+ */ 
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#ifndef HAVE_GETOPT
+
 #include <stdio.h>
 #include <string.h>
-#include "getopt.h"
+#include "arch.h"
 
 #ifdef SWITCHAR
 #include <dos.h>
@@ -87,7 +102,7 @@ char *opts;
 				}
 			}
 			else
-#endif
+#endif /* REORDER_OPTIONS */
 				return EOF;
 		}
 		if ((argv[optind][0] == OPTION_CHAR && argv[optind][1] == OPTION_CHAR
@@ -148,14 +163,5 @@ bad:
 	return '?';
 }
 
-/*
-Local Variables:
-c-indent-level: 4
-c-continued-statement-offset: 4
-c-brace-offset: 4
-c-argdecl-indent: 4
-c-label-offset: -4
-tab-width: 4
-End:
-*/
+#endif /* HAVE_GETOPT */
 
