@@ -42,7 +42,6 @@
  *********************************************/
 
 extern BOOLEAN selftest;
-extern STRING errorfile;
 
 /*********************************************
  * global/exported variables
@@ -387,7 +386,6 @@ init_lifelines_global (STRING * pmsg)
 		changeoptstr(&lloptions.llnewdbdir, strsave("."));
 
 	set_usersort(custom_sort);
-	llstrncpy(&errorfile, lloptions.errorlog, sizeof(errorfile)/sizeof(errorfile[0]));
 	return TRUE;
 }
 /*===============================================

@@ -91,3 +91,13 @@ crashlog (STRING fmt, ...)
 	llvwprintf(fmt, args);
 	va_end(args);
 }
+/*===============================
+ * error_seterrorlog -- specify where to log alloc messages
+ * Creatd: 2001/10/28, Perry Rapp
+ *=============================*/
+void
+error_seterrorlog(STRING errorlog)
+{
+	llstrncpy(errorfile, errorlog, sizeof(errorfile)/sizeof(errorfile[0]));
+}
+

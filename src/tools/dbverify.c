@@ -57,7 +57,6 @@ BOOLEAN readonly = FALSE;	/* normally defined in liflines/main.c */
 BOOLEAN writeable = FALSE;	/* normally defined in liflines/main.c */
 BOOLEAN immutable = FALSE;  /* normally defined in liflines/main.c */
 int opt_finnish = 0;
-char errorfile[MAXPATHLEN]="";
 
 /*********************************************
  * local types
@@ -865,6 +864,7 @@ main (int argc,
 	}
 
 	/* Turn off Memory Debugging */
+	/* This is unnecessary -- it is off anyway, Perry, 2001/10/28 */
 	alloclog  = FALSE;
 
 	if (!init_lifelines_global(&msg)) {

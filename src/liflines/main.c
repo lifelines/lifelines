@@ -102,23 +102,23 @@ int opt_finnish  = FALSE;/* Finnish Language sorting order id disabled*/
 static STRING usage = (STRING) "lines [-adkrwfmntcuy] [database]";
 #endif
 
-BOOLEAN debugmode = FALSE; /* no signal handling, so we can get coredump */
-BOOLEAN opt_nocb  = FALSE;	/* no cb. data is displayed if TRUE */
-BOOLEAN keyflag   = TRUE;	/* show key values */
-BOOLEAN readonly  = FALSE;	/* database is read only */
-BOOLEAN writeable = FALSE;	/* database must be writeable */
-BOOLEAN immutable = FALSE;  /* make no changes at all to database, for access to truly read-only medium */
-BOOLEAN cursesio  = TRUE;	/* use curses i/o */
-BOOLEAN alldone   = FALSE;	/* completion flag */
-BOOLEAN progrunning = FALSE;	/* program is running */
-BOOLEAN progparsing = FALSE;	/* program is being parsed */
-INT     progerror = 0; /* error count during report program */
-BOOLEAN traceprogram = FALSE;	/* trace program */
-BOOLEAN traditional = TRUE;	/* use traditional family rules */
-BOOLEAN selftest = FALSE; /* selftest rules (ignore paths) */
-BOOLEAN showusage = FALSE;	/* show usage */
-STRING  btreepath = NULL;		/* database path given by user */
-STRING  readpath = NULL;		/* database path used to open */
+BOOLEAN debugmode = FALSE;     /* no signal handling, so we can get coredump */
+BOOLEAN opt_nocb  = FALSE;     /* no cb. data is displayed if TRUE */
+BOOLEAN keyflag   = TRUE;      /* show key values */
+BOOLEAN readonly  = FALSE;     /* database is read only */
+BOOLEAN writeable = FALSE;     /* database must be writeable */
+BOOLEAN immutable = FALSE;     /* make no changes at all to database, for access to truly read-only medium */
+BOOLEAN cursesio  = TRUE;      /* use curses i/o */
+BOOLEAN alldone   = FALSE;     /* completion flag */
+BOOLEAN progrunning = FALSE;   /* program is running */
+BOOLEAN progparsing = FALSE;   /* program is being parsed */
+INT     progerror = 0;         /* error count during report program */
+BOOLEAN traceprogram = FALSE;  /* trace program */
+BOOLEAN traditional = TRUE;    /* use traditional family rules */
+BOOLEAN selftest = FALSE;      /* selftest rules (ignore paths) */
+BOOLEAN showusage = FALSE;     /* show usage */
+STRING  btreepath = NULL;      /* database path given by user */
+STRING  readpath = NULL;       /* database path used to open */
 
 /*********************************************
  * local function prototypes
@@ -261,6 +261,7 @@ main (INT argc, char **argv)
 		llwprintf("%s", msg);
 		goto finish;
 	}
+	error_seterrorlog(lloptions.errorlog);
 	init_interpreter(); /* give interpreter its turn at initialization */
 
 	/* Validate Command-Line Arguments */

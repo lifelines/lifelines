@@ -36,7 +36,7 @@
  * global variables
  *********************************************/
 
-BOOLEAN alloclog = 0;
+BOOLEAN alloclog = FALSE;
 
 /*********************************************
  * local function prototypes

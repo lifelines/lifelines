@@ -40,6 +40,7 @@ should return.
 */
 void __fatal(STRING file, int line, STRING details);
 void crashlog(STRING fmt, ...);
+void error_seterrorlog(STRING errorlog);
 
 
 /* dirs.c */
