@@ -76,6 +76,10 @@
 	Use compiler guard to prevent more than one instance
 	of GENERIC typedef.
 
+	* ChangeLog src/hdrs/generic.h src/hdrs/standard.h
+
+	Fix just added compiler guard to work properly (needs define).
+
 2005-01-22 Perry Rapp
 
 	* ChangeLog src/stdlib/generic.c src/stdlib/table.c

@@ -171,6 +171,7 @@ typedef STRING (*TRANSLFNC)(STRING str, INT len);
 struct tag_vtable;
 #ifndef GENERIC_TAG_GENERIC_DECLARED
 typedef struct generic_tag GENERIC;
+#define GENERIC_TAG_GENERIC_DECLARED
 #endif /* #ifndef GENERIC_TAG_GENERIC_DECLARED */
 
 /* forward declaration for objects */
