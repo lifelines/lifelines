@@ -1126,7 +1126,6 @@ choose_from_array (STRING ttl, INT no, STRING *pstrngs)
 INT
 choose_from_list (STRING ttl, INT no, LIST list)
 {
-	BOOLEAN selecting=TRUE;
 	STRING * array=0;
 	STRING choice=0;
 	INT i=0, rtn=-1;
@@ -1203,6 +1202,8 @@ choose_or_view_array (STRING ttl, INT no, STRING *pstrngs, BOOLEAN selecting
  * handle_list_cmds -- Process choices from list display
  *  This handles moving up & down, adjusting size of detail,
  *  and scrolling detail.
+ *  listdisp: [I/O] array of info about list display
+ *  code:     [IN]  command to process
  * Returns -1 if resized window, 1 if handled, 0 if unhandled.
  * Created: 2001/12/01 (Perry Rapp)
  *===========================================================*/
@@ -1325,7 +1326,7 @@ handle_popup_list_resize (listdisp * ld, INT code)
 /*=============================================================
  * activate_popup_list_uiwin --
  *  Choose list uiwin & activate
- *  listdisp:  [I/O]  client must fill this in
+ *  listdisp:  [I/O]  caller must have filled this in
  *    This routine sets the uiwin, height, rows members
  * Created: 2001/12/01, Perry Rapp
  *===========================================================*/
@@ -1334,9 +1335,10 @@ activate_popup_list_uiwin (listdisp * ld)
 {
 	INT asklen, hgt, rows, waste;
 	/* 
-	figure out size of window needed, get closest match from choose_win 
-	we want rows for items and for details, +2 lines (above/below) if details
-	we want 5 rows overhead (top line & title, bottom line then menu then line)
+	How many rows do we want ?
+	One for each item in list
+	+5: top line, title, bottom row, menu, bottom line
+	if details, need also line above & below details
 	*/
 	asklen = ld->listlen;
 	if (ld->details)

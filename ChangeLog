@@ -4,6 +4,10 @@
 
 	Updating some screen drawings & discussion of config options.
 
+	* ChangeLog liflines/screen.c:
+
+	Cosmetic.
+
 2002-06-06 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog arch/scandir.c btree/opnbtree.c gedlib/init.c
