@@ -53,6 +53,7 @@ typedef struct pv_block *PV_BLOCK;
  * local function prototypes
  *********************************************/
 
+/* alphabetical */
 static CACHEEL access_cel_from_pvalue(PVALUE val);
 static void clear_pv_indiseq(INDISEQ seq);
 static PVALUE create_pvalue_from_keynum_impl(INT i, INT ptype);
@@ -299,14 +300,9 @@ clear_pvalue (PVALUE val)
 	embedded values have no referenced memory to clear
 	PINT, PFLOAT, PLONG, PBOOLEAN 
 	*/
-	case PANY:
-		{
-			/* ? I don't know what these are
-			2001/01/20, Perry
-			*/
-			int debug=1;
-		}
-		break;
+	/*
+	PANY is a null value
+	*/
 	case PGNODE:
 		{
 			/*
@@ -1437,7 +1433,7 @@ show_pvalue (PVALUE val)
 		cel = get_cel_from_pvalue(val);
 		if (!cnode(cel))
 			cel = key_to_indi_cacheel(ckey(cel));
-        	node = cnode(cel);
+		node = cnode(cel);
 		llwprintf("%s>", nval(NAME(node)));
 		return;
 	default:

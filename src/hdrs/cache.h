@@ -90,6 +90,7 @@ CACHEEL sour_to_cacheel(NODE);
 
 CACHEEL key_to_indi_cacheel(STRING);
 CACHEEL key_to_fam_cacheel(STRING);
+CACHEEL key_to_unknown_cacheel(STRING);
 CACHEEL qkey_to_even_cacheel(STRING);
 CACHEEL qkey_to_fam_cacheel(STRING);
 CACHEEL qkey_to_indi_cacheel(STRING);

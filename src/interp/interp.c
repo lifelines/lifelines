@@ -1351,6 +1351,7 @@ interp_indisetloop (PNODE node, SYMTAB stab, PVALUE *pval)
 	}
 	seq = (INDISEQ) pvalue(val);
 	delete_pvalue(val);
+	if (!seq) return INTOKAY;
 	insert_symtab(stab, inum(node), PINT, (VPTR) 0);
 	FORINDISEQ(seq, el, ncount)
 #ifdef DEBUG

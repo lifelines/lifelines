@@ -332,6 +332,21 @@ NOD0 qkey_to_othr0 (STRING key)
 	return qkey_to_nod0(othrcache, key, NULL);
 }
 /*=====================================================
+ * key_to_unknown_cacheel -- Convert any key to cacheel
+ * Created: 2001/04/13, Perry Rapp
+ *===================================================*/
+CACHEEL
+key_to_unknown_cacheel (STRING key)
+{
+	switch(key[0]) {
+		case 'I': return key_to_indi_cacheel(key);
+		case 'F': return key_to_fam_cacheel(key);
+		case 'S': return key_to_sour_cacheel(key);
+		case 'E': return key_to_even_cacheel(key);
+		default: return key_to_othr_cacheel(key);
+	}
+}
+/*=====================================================
  * key_to_indi_cacheel -- Convert key to person cacheel
  *===================================================*/
 CACHEEL
@@ -347,14 +362,6 @@ key_to_fam_cacheel (STRING key)
 {
 	return key_to_cacheel(famcache, key, "FAM", FALSE);
 }
-/*====================================================
- * key_to_even_cacheel -- Convert key to event_cacheel
- *==================================================*/
-static CACHEEL
-key_to_even_cacheel (STRING key)
-{
-	return key_to_cacheel(evencache, key, "EVEN", FALSE);
-}
 /*=====================================================
  * key_to_sour_cacheel -- Convert key to source_cacheel
  *===================================================*/
@@ -362,6 +369,14 @@ static CACHEEL
 key_to_sour_cacheel (STRING key)
 {
 	return key_to_cacheel(sourcache, key, "SOUR", FALSE);
+}
+/*====================================================
+ * key_to_even_cacheel -- Convert key to event_cacheel
+ *==================================================*/
+static CACHEEL
+key_to_even_cacheel (STRING key)
+{
+	return key_to_cacheel(evencache, key, "EVEN", FALSE);
 }
 /*====================================================
  * key_to_othr_cacheel -- Convert key to other_cacheel

@@ -1,3 +1,11 @@
+2001-04-13 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog NEWS gedlib/gstrings.c gedlib/indiseq.c
+	gedlib/keytonod.c hdrs/cache.h interp/interp.c
+	interp/intrpseq.c interp/more.c interp/pvalue.c:
+	Fixed a couple bugs, and revised menuchoose to handle nonstring
+	list choice items. Tested & commented in dupseq.
+
 2001-04-12 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/indiseq.c liflines/browse.c:

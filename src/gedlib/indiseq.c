@@ -214,12 +214,14 @@ deleteval (INDISEQ seq, UNION uval)
 static UNION
 creategenval (INDISEQ seq, INT gen)
 {
+	UNION u;
 	INT valtype = IValtype(seq);
-	return (*IValvtbl(seq)->create_gen_fnc)(gen, &valtype);
+	u = (*IValvtbl(seq)->create_gen_fnc)(gen, &valtype);
 	if (valtype != IValtype(seq)) {
 		ASSERT(IValtype(seq) == ISVAL_NUL);
 		IValtype(seq) = valtype;
 	}
+	return u;
 }
 /*==============================
  * copy_indiseq -- Copy sequence
@@ -779,12 +781,11 @@ get_combined_valtype (INDISEQ one, INDISEQ two)
 }
 /*===============================================
  * dupseq -- Return a duplicate of input sequence
- * TO DO - 2001/04/09, Perry
+ * Created:  2001/04/09, Perry Rapp
  *=============================================*/
 static INDISEQ
 dupseq (INDISEQ seq)
 {
-#ifdef NOT_TESTED
 	INDISEQ newseq;
 	STRING key;
 	UNION uval;
@@ -807,12 +808,9 @@ dupseq (INDISEQ seq)
 			    TRUE, TRUE);
 	}
 	return newseq;
-#endif /* NOT_TESTED */
-	return NULL;
 }
 /*===============================================
  * union_indiseq -- Create union of two sequences
- * TO DO - this does not handle NULL arguments correctly 2001/04/08, Perry
  *=============================================*/
 INDISEQ
 union_indiseq (INDISEQ one, INDISEQ two)
@@ -880,7 +878,6 @@ union_indiseq (INDISEQ one, INDISEQ two)
 }
 /*==========================================================
  * intersect_indiseq -- Create intersection of two sequences
- * TO DO - this does not handle NULL arguments correctly 2001/04/08, Perry
  *========================================================*/
 INDISEQ
 intersect_indiseq (INDISEQ one, INDISEQ two)
@@ -922,7 +919,6 @@ intersect_indiseq (INDISEQ one, INDISEQ two)
 }
 /*=========================================================
  * difference_indiseq -- Create difference of two sequences
- * TO DO - this does not handle NULL arguments correctly 2001/04/08, Perry
  *=======================================================*/
 INDISEQ
 difference_indiseq (INDISEQ one,

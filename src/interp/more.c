@@ -44,14 +44,33 @@
 #include "liflines.h"
 #include "lloptions.h"
 
+/*********************************************
+ * external/imported variables
+ *********************************************/
+
 extern STRING notone, ifone, progname;
 
-static INT ll_index(STRING, STRING, INT);
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+/* alphabetical */
 static void compute_pi(STRING);
-static STRING substring (STRING s, INT i, INT j);
+static INT ll_index(STRING, STRING, INT);
+static void makestring(PVALUE val, STRING str, INT len, BOOLEAN *eflg);
 static STRING rightjustify (STRING str, INT len);
+static STRING substring (STRING s, INT i, INT j);
+
+/*********************************************
+ * local variables
+ *********************************************/
 
 BOOLEAN prog_debug = FALSE;
+
+/*********************************************
+ * local function definitions
+ * body of module
+ *********************************************/
 
 /*=============================================================+
  * __extractnames -- Extract name parts from person or NAME node
@@ -495,18 +514,90 @@ __choosefam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return create_pvalue_from_fam(fam); /* fam may be NULL */
 }
 /*===================================================+
+ * makestring -- turn any pvalue into a string
+ *  val is input; val,len, and eflg are outputs
+ * Created: 2001/04/13, Perry Rapp
+ *==================================================*/
+static void
+makestring (PVALUE val, STRING str, INT len, BOOLEAN *eflg)
+{
+	UNION u;
+	CACHEEL cel;
+	STRING txt;
+	u.w = pvalue(val);
+	switch(ptype(val)) {
+		case PNONE: 
+			llstrncpy(str, "<NONE>", len);
+			break;
+		case PANY:
+			llstrncpy(str, "<NULL>", len);
+			break;
+		case PINT:
+		case PLONG: /* unused I think - Perry 2001/04/13 */
+			sprintf(str, "%d", u.i);
+			break;
+		case PFLOAT:
+			sprintf(str, "%f", u.f);
+			break;
+		case PBOOL:
+			llstrncpy(str, u.w ? "True" : "False", len);
+			break;
+		case PSTRING:
+			llstrncpy(str, (STRING)pvalue(val), len);
+			break;
+		case PGNODE:
+			{
+				NODE node = (NODE)pvalue(val);
+				str[0] = 0;
+				if (ntag(node)) {
+					llstrcatn(&str, ntag(node), &len);
+					llstrcatn(&str, ": ", &len);
+				}
+				if (nval(node))
+					llstrcatn(&str, nval(node), &len);
+			}
+			break;
+		case PINDI:
+		case PFAM:
+		case PSOUR:
+		case PEVEN:
+		case POTHR:
+			{
+				NODE node;
+				cel = get_cel_from_pvalue(val);
+				node = cnode(cel);
+				txt = generic_to_list_string(node, NULL, len, " ");
+				llstrncpy(str, txt, len);
+			}
+			break;
+		case PLIST:
+			llstrncpy(str, "<LIST>", len);
+			break;
+		case PTABLE:
+			llstrncpy(str, "<TABLE>", len);
+			break;
+		case PSET:
+			llstrncpy(str, "<SET>", len);
+			break;
+		default:
+			*eflg = TRUE;
+	}
+}
+/*===================================================+
  * menuchoose -- Have user choose from list of options
  *   usage: menuchoose (LIST [,STRING]) -> INT
  *==================================================*/
 PVALUE
 __menuchoose (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	INT i, len;
+	INT i, j, len;
 	STRING msg, *strngs;
 	STRING ttl = (STRING) "Please choose from the following list.";
 	PNODE arg = (PNODE) iargs(node);
 	LIST list;
-	PVALUE vel, val = eval_and_coerce(PLIST, arg, stab, eflg);
+	PVALUE vel, val;
+	INT nsize;
+	val = eval_and_coerce(PLIST, arg, stab, eflg);
 
 	if (*eflg) {
 		prog_error(node, "1st arg to menuchoose must be a list of strings");
@@ -531,11 +622,20 @@ __menuchoose (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	len = length_list(list);
 	strngs = (STRING *) stdalloc(len*sizeof(STRING));
 	i = 0;
+	nsize = 80;
 	FORLIST(list, el)
 		vel = (PVALUE) el;
-		strngs[i++] = (STRING) pvalue(vel);
+		strngs[i] = (STRING)stdalloc(nsize);
+		makestring(vel, strngs[i], nsize, eflg);
+		if (*eflg) {
+			prog_error(node, "Illegal type found in list in menuchoose");
+			return NULL;
+		}
+		++i;
 	ENDLIST
 	i = choose_from_list(ttl, len, strngs);
+	for (j=0; j<len; j++)
+		stdfree(strngs[j]);
 	stdfree(strngs);
 	delete_pvalue(val);
 	return create_pvalue(PINT, (VPTR)(i + 1));

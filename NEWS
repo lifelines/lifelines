@@ -5,6 +5,10 @@ http://lifelines.sourceforge.net
 Bug fixes in 3.0.6.1-dev
 ==================
 
+- generic_to_list_string didn't handle NULL keys because of bug
+
+- menuchoose would crash if non-string list item
+
 - Was not saving changes to value of top-level node when editing
   (eg, text directly in the NOTE line of an 'other' NOTE)
 

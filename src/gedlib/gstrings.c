@@ -303,7 +303,7 @@ generic_to_list_string (NODE node, STRING key, INT len, STRING delim)
 	if (!node && key)
 		node = qkey_to_type(key);
 	if (!key && node)
-		key = rmvat(nval(node));
+		key = rmvat(nxref(node));
 	if (node) {
 		switch (key[0])
 		{

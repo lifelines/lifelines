@@ -317,14 +317,15 @@ __union (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "1st arg to union must be a set.");
 		return NULL;
 	}
-	ASSERT(op1 = (INDISEQ) pvalue(val));
+	/* NULL indiseqs are possible, because of getindiset */
+	op1 = (INDISEQ) pvalue(val);
 	delete_pvalue(val);
 	val = eval_and_coerce(PSET, arg2, stab, eflg);
 	if (*eflg) {
 		prog_error(node, "2nd arg to union must be a set.");
 		return NULL;
 	}
-	ASSERT(op2 = (INDISEQ) pvalue(val));
+	op2 = (INDISEQ) pvalue(val);
 	op2 = union_indiseq(op1, op2);
 	set_pvalue(val, PSET, op2);
 	return val;
