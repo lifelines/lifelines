@@ -113,9 +113,9 @@ typedef union {
 extern BOOLEAN alloclog;
 #define stdalloc(l)   __allocate(l, __FILE__, __LINE__)
 #define stdfree(p)    __deallocate(p, __FILE__, __LINE__)
-#define fatal(s)      __fatal(__FILE__, __LINE__)
-#define FATAL()       __fatal(__FILE__, __LINE__)
-#define ASSERT(b)     if(!(b)) __fatal(__FILE__, __LINE__)
+#define FATAL()       __fatal(__FILE__, __LINE__, NULL)
+#define FATAL2(qq)    __fatal(__FILE__, __LINE__, qq)
+#define ASSERT(b)     if(!(b)) __fatal(__FILE__, __LINE__, NULL)
 #define eqstr(s,t)    (!ll_strcmp((s),(t)))
 #define nestr(s,t)    (ll_strcmp((s),(t)))
 

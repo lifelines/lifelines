@@ -286,7 +286,6 @@ main (INT argc,
 	init_show_module();
 	while (!alldone)
 		main_menu();
-	close_lifelines();
 	code=0;
 
 /*
@@ -295,7 +294,7 @@ main (INT argc,
  */
 
 finish:
-	init_cleanup();
+	close_lifelines();
 	term_screen();
 	if (code) /* if error, give user a second to read it */
 		sleep(1);

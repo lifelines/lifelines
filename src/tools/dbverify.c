@@ -819,7 +819,11 @@ main (int argc,
 		return (1);
 	}
 	if (!(BTR = openbtree(dbname, FALSE, TRUE))) {
-		printf("could not open database: %s\n", dbname);
+		if (bterrno == BTERR_WRITER) {
+			printf("Database is locked: %s\n", dbname);
+		} else {
+			printf("Could not open database: %s\n", dbname);
+		}
 		return (1);
 	}
 	init_lifelines_db();
@@ -893,11 +897,16 @@ __deallocate (void *ptr,  /* memory being returned */
 /*=============================
  * fatal -- Fatal error routine
  * Created: 2001/01/01, Perry Rapp
+ *  handles null or empty details input
  *===========================*/
 void
-__fatal (STRING file,
-         int line)
+__fatal (STRING file, int line, STRING details)
 {
-	printf("FATAL ERROR: %s: line %d\n", file, line);
+	printf("FATAL ERROR: ");
+	if (details && details[0]) {
+		printf(details);
+		printf("\nAT: ");
+	}
+	printf("%s: line %d\n", file, line);
 	exit(1);
 }

@@ -37,12 +37,21 @@
 
 /*===============================
  * __fatal -- Fatal error routine
+ *  handles null or empty details input
  *=============================*/
 void
-__fatal (STRING file,
-         int line)
+__fatal (STRING file, int line, STRING details)
 {
-	llwprintf("FATAL: %s: line %d\n", file, line);
+	/*
+	TO DO - there ought to be a configuration option
+	to log this to a file
+	*/
+	llwprintf("FATAL ERROR: ");
+	if (details && details[0]) {
+		llwprintf(details);
+		llwprintf("\nAT: ");
+	}
+	llwprintf("%s: line %d\n", file, line);
 	close_lifelines();
 	/* give user a second to read it */
 	sleep(1);
@@ -53,6 +62,7 @@ __fatal (STRING file,
 /*============================
  * __assert -- Check assertion
  *==========================*/
+/* Apparently unused 2001/05/25, Perry
 void
 __assert (BOOLEAN exp,
           STRING file,
@@ -61,3 +71,4 @@ __assert (BOOLEAN exp,
 	if (exp) return;
 	__fatal(file, line);
 }
+*/

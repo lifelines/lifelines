@@ -25,6 +25,7 @@
 /*=============================================================
  * record.c -- Routines to handle BTREE records
  * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   2.3.4 - 24 Jun 93    2.3.5 - 01 Jul 93
  *   3.0.0 - 24 Sep 94    3.0.2 - 26 Mar 95
  *   3.0.3 - 07 May 95
@@ -34,8 +35,18 @@
 #include "llstdlib.h"
 #include "btreei.h"
 
-static void filecopy (FILE*, INT, FILE*);
-static void movefiles (STRING, STRING);
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+/* alphabetical */
+static void filecopy(FILE*fpsrc, STRING fnamesrc, INT len, FILE*fpdest, STRING fnamedest);
+static void movefiles(STRING, STRING);
+
+/*********************************************
+ * local function definitions
+ * body of module
+ *********************************************/
 
 /*=================================
  * addrecord -- Add record to BTREE
@@ -53,7 +64,8 @@ addrecord (BTREE btree,         /* btree to add record to */
 	BOOLEAN found = FALSE;
 	INT off = 0;
 	FILE *fo, *fn1, *fn2;
-	char scratch1[200], scratch2[200], *p = record;
+	char scratch0[MAXPATHLEN], scratch1[MAXPATHLEN], scratch2[MAXPATHLEN];
+	char *p = record;
 
 /* search for data block that does/should hold record */
 	ASSERT(bwrite(btree));
@@ -76,11 +88,15 @@ addrecord (BTREE btree,         /* btree to add record to */
 		}
 		ASSERT(index = getindex(btree, nfkey));
 	}
-
 /* have block that may hold older version of record */
 	ixparent(index) = last;
 	old = (BLOCK) index;
-	ASSERT(nkeys(old) < NORECS);
+	if (!(nkeys(old) < NORECS)) {
+		char msg[256];
+		sprintf(msg, "Corrupt block (rkey=%s): nkeys (%d) exceeds maximum (%d)"
+			, rkey2str(rkey), nkeys(old), NORECS-1);
+		FATAL2(msg);
+	}
 
 /* see if block has earlier version of record */
 	lo = 0;
@@ -135,10 +151,20 @@ addrecord (BTREE btree,         /* btree to add record to */
 	if (!found) nkeys(newb) = n + 1;
 
 /* must rewrite data block with new record; open original and new */
-	sprintf(scratch1, "%s/%s", bbasedir(btree), fkey2path(ixself(old)));
-	ASSERT(fo = fopen(scratch1, LLREADBINARY));
+	sprintf(scratch0, "%s/%s", bbasedir(btree), fkey2path(ixself(old)));
+	if (!(fo = fopen(scratch0, LLREADBINARY))) {
+		char msg[sizeof(scratch0)+64];
+		sprintf(msg, "Corrupt db (rkey=%s) -- failed to open blockfile: %s"
+			, rkey2str(rkey), scratch0);
+		FATAL2(msg);
+	}
 	sprintf(scratch1, "%s/tmp1", bbasedir(btree));
-	ASSERT(fn1 = fopen(scratch1, LLWRITEBINARY));
+	if (!(fn1 = fopen(scratch1, LLWRITEBINARY))) {
+		char msg[sizeof(scratch1)+64];
+		sprintf(msg, "Corrupt db (rkey=%s) -- failed to open temp blockfile: %s"
+			, rkey2str(rkey), scratch1);
+		FATAL2(msg);
+	}
 
 /* see if new record must cause data block split */
 	if (!found && n == NORECS - 1) goto splitting;
@@ -149,7 +175,7 @@ addrecord (BTREE btree,         /* btree to add record to */
 	for (i = 0; i < lo; i++) {
 		if (fseek(fo, (long)(offs(old, i) + BUFLEN), 0))
 			FATAL();
-		filecopy(fo, lens(old, i), fn1);
+		filecopy(fo, scratch0, lens(old, i), fn1, scratch1);
 	}
 
 /* write new record to temp file */
@@ -165,22 +191,22 @@ addrecord (BTREE btree,         /* btree to add record to */
 	if (found) i++;
 	for ( ; i < n; i++) {
 		if (fseek(fo, (long)(offs(old, i)+BUFLEN), 0)) FATAL();
-		filecopy(fo, lens(old, i), fn1);
+		filecopy(fo, scratch0, lens(old, i), fn1, scratch1);
 	}
 
 /* make changes permanent in database */
 	fclose(fn1);
 	fclose(fo);
-	sprintf(scratch1, "%s/tmp1", bbasedir(btree));
-	sprintf(scratch2, "%s/%s", bbasedir(btree), fkey2path(ixself(old)));
+	sprintf(scratch0, "%s/tmp1", bbasedir(btree));
+	sprintf(scratch1, "%s/%s", bbasedir(btree), fkey2path(ixself(old)));
 	stdfree(old);
-	movefiles(scratch1, scratch2);
+	movefiles(scratch0, scratch1);
 	return TRUE;	/* return point for non-splitting case */
 
 /* data block must be split for new record; open second temp file */
 splitting:
-	sprintf(scratch1, "%s/tmp2", bbasedir(btree));
-	ASSERT(fn2 = fopen(scratch1, LLWRITEBINARY));
+	sprintf(scratch2, "%s/tmp2", bbasedir(btree));
+	ASSERT(fn2 = fopen(scratch2, LLWRITEBINARY));
 
 /* write header and 1st half of records; don't worry where new record goes */
 	nkeys(newb) = n/2;	/* temporary */
@@ -199,7 +225,7 @@ splitting:
 		} else {
 			if (fseek(fo, (long)(offs(old, i) + BUFLEN), 0))
 				FATAL();
-			filecopy(fo, lens(old, i), fn1);
+			filecopy(fo, scratch0, lens(old, i), fn1, scratch1);
 			i++;
 		}
 	}
@@ -234,7 +260,7 @@ splitting:
 		} else {
 			if (fseek(fo, (long)(offs(old, i) + BUFLEN), 0))
 				FATAL();
-			filecopy(fo, lens(old, i), fn2);
+			filecopy(fo, scratch0, lens(old, i), fn2, scratch2);
 			i++;
 		}
 	}
@@ -257,21 +283,20 @@ splitting:
 }
 /*======================================================
  * filecopy -- Copy record from one data file to another
+ * Copy from source file (already opened) to destination
+ * file (already opened).
  *====================================================*/
 static void
-filecopy (FILE *fo,
-          INT len,
-          FILE *fn)
+filecopy (FILE* fpsrc, STRING fnamesrc, INT len, FILE* fpdest, STRING fnamedest)
 {
 	char buffer[BUFLEN];
-	while (len >= BUFLEN) {
-		ASSERT(fread(buffer, BUFLEN, 1, fo) == 1);
-		ASSERT(fwrite(buffer, BUFLEN, 1, fn) == 1);
-		len -= BUFLEN;
-	}
-	if (len) {
-		ASSERT(fread((char *)buffer, len, 1, fo) == 1);
-		ASSERT(fwrite(buffer, len, 1, fn) == 1);
+	INT blklen;
+	while (len) {
+		/* copy BUFLEN at a time til the last little bit */
+		blklen = (len > BUFLEN) ? BUFLEN : len;
+		ASSERT(fread(buffer, blklen, 1, fpsrc) == 1);
+		ASSERT(fwrite(buffer, blklen, 1, fpdest) == 1);
+		len -= blklen;
 	}
 }
 /*==================================
@@ -280,13 +305,18 @@ filecopy (FILE *fo,
 RECORD
 readrec(BTREE btree, BLOCK block, INT i, INT *plen)
 {
-	char scratch[200];
+	char scratch[MAXPATHLEN];
 	FILE *fr;
 	RECORD record;
 	INT len;
 
 	sprintf(scratch, "%s/%s", bbasedir(btree), fkey2path(ixself(block)));
-	ASSERT(fr = fopen(scratch, LLREADBINARY));
+	if (!(fr = fopen(scratch, LLREADBINARY))) {
+		char msg[sizeof(scratch)+64];
+		sprintf(msg, "Failed to open blockfile (rkey=%s): %s"
+			, rkey2str(rkeys(block, i)), scratch);
+		FATAL2(msg);
+	}
 	if (fseek(fr, (long)(offs(block, i) + BUFLEN), 0)) FATAL();
 	if ((len = lens(block, i)) == 0) {
 		*plen = 0;

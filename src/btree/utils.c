@@ -37,6 +37,7 @@ INT bterrno = 0;
 
 /*=========================================
  * rkey2str -- Convert record key to STRING
+ *  returns static buffer
  *=======================================*/
 STRING
 rkey2str (RKEY rkey)

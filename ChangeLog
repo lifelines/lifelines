@@ -1,4 +1,20 @@
+2001-05-26 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog btree/record.c btree/traverse.c btree/utils.c
+	gedlib/init.c gedlib/lloptions.c hdrs/btree.h hdrs/gedcom.h
+	hdrs/llstdlib.h hdrs/standard.h hdrs/sys_inc.h liflines/main.c
+	stdlib/assert.c tools/btedit.c tools/dbverify.c:
+	Added string arg to __fatal, adapted existing FATAL & ASSERT,
+	and added new FATAL2(str).
+	Added comments in btree.h.
+	Added some detail messages in ASSERT/FATAL errors in record.c.
+	Fixed bug/crash - editfile was getting freed when opening new db.
+	Also changed some 200 -> MAXPATHLEN in record.c.
+	Absorbed init_cleanup() into new close_lldb(), and changed most calls
+	close_lifelines() to be close_lldb().
+
 2001-05-22 Perry Rapp <puddle@users.sourceforge.net>
+
 	* gedlib/indiseq.c interp/date.c
 	Fix memory leak of indiseq elements.
 

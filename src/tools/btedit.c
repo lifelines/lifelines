@@ -123,11 +123,16 @@ __deallocate (void *ptr,  /* memory being returned */
 }
 /*=============================
  * fatal -- Fatal error routine
+ *  handles null or empty details input
  *===========================*/
 void
-__fatal (STRING file,
-         int line)
+__fatal (STRING file, int line, STRING details)
 {
-	printf("FATAL ERROR: %s: line %d\n", file, line);
+	printf("FATAL ERROR: ");
+	if (details && details[0]) {
+		printf(details);
+		printf("\nAT: ");
+	}
+	printf("%s: line %d\n", file, line);
 	exit(1);
 }

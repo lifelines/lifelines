@@ -30,8 +30,12 @@
 #include "interp.h"	/* for PVALUE */
 
 /* assert.c */
-void __fatal(STRING, int);
-void __assert(BOOLEAN, STRING, int);
+/*
+Main program (lifelines, btedit, dbverify,...) must provide
+an implementation of __fatal and fatalmsg, and it must not
+return (eg, these all call exit()).
+*/
+void __fatal(STRING file, int line, STRING details);
 
 /* dirs.c */
 BOOLEAN mkalldirs(STRING);

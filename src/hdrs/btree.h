@@ -25,6 +25,7 @@
 /*=============================================================
  * btree.h -- BTREE database header
  * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   2.3.4 - 24 Jun 93    2.3.5 - 19 Aug 93
  *   3.0.0 - 04 Oct 94
  *===========================================================*/
@@ -35,13 +36,19 @@
 #include "standard.h"
 
 #define BUFLEN 4096
+/* see comment at declaration of INDEX below for explanation */
 #define NOENTS ((BUFLEN-12)/12)
+/* see comment at declaration of BLOCK below for explanation */
 #define NORECS ((BUFLEN-12)/16)
 
+/*
+All records in a LifeLines btree are indexed on 8 character keys
+*/
 typedef struct {
 	char r_rkey[8];
 }  RKEY; /*record key*/
 
+/* This must be sizeof(((RKEY*)(0))->r_rkey) */
 #define RKEYLEN 8
 
 typedef INT FKEY; /*file key*/
@@ -54,9 +61,16 @@ typedef struct {
 	INT k_ostat;	/*current open status*/
 } KEYFILE1;
 
+/*
+Additional data added to keyfile by Perry in winter of 2000-2001
+in order to trap attempt to open a non-keyfile, or an incorrect
+version, or a database from a differing byte alignment. KEYFILE2
+occurs directly after KEYFILE1, and the program will silently
+add it to any database that does not yet have it.
+*/
 typedef struct {
 	char name[18]; /* KF_NAME */
-	INT magic;     /* KF_MAGIC */
+	INT magic;     /* KF_MAGIC */ /* byte alignment check */
 	INT version;   /* KF_VER */
 } KEYFILE2;
 
@@ -66,6 +80,9 @@ typedef struct {
 
 /*==============================================
  * INDEX -- Data structure for BTREE index files
+ *  The constant NOENTS above depends on this exact contents:
+ * 12=4+2+4+2=sizeof(FKEY)+sizeof(SHORT)+sizeof(FKEY)+sizeof(SHORT)
+ * 12=8+4=sizeof(RKEY)+sizeof(FKEY)
  *============================================*/
 typedef struct {
 	FKEY  ix_self;		/*fkey of index*/
@@ -99,6 +116,9 @@ typedef struct {
 
 /*======================================================
  * BLOCK -- Data structure for BTREE record file headers
+ *  The constant NORECS above depends on this exact contents:
+ * 12=4+2+4+2=sizeof(FKEY)+sizeof(SHORT)+sizeof(FKEY)+sizeof(SHORT)
+ * 16=8+4+4=sizeof(RKEY)+sizeof(INT)+sizeof(INT)
  *====================================================*/
 typedef struct {
 	FKEY   ix_self;		/*fkey of this block*/

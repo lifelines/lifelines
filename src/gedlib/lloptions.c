@@ -277,16 +277,20 @@ store_to_lloptions (void)
 /*==========================================
  * cleanup_lloptions -- deallocate structures
  * used by lloptions at program termination
+ * Safe to be called more than once
  * Created: 2001/04/30, Matt Emmerton
  *========================================*/
 void
-cleanup_lloptions(void)
+cleanup_lloptions (void)
 {
 	INT i;
 	/* free string values */
 	for (i=0; i<ARRSIZE(str_options); i++) {
 		STRING str = valueof(opttab, str_options[i].name);
-		stdfree(*str_options[i].value);
-		*str_options[i].value = NULL;
+		STRING * pstr = str_options[i].value;
+		if (*pstr) {
+			stdfree(*pstr);
+			*pstr = NULL;
+		}
 	}
 }

@@ -179,24 +179,35 @@ get_lifelines_version (INT maxlen)
 }
 /*===================================
  * close_lifelines -- Close LifeLines
- *  Safe to call even if not opened
+ *  Close entire lifelines engine - not just
+ *  database (see close_lldb below).
  *=================================*/
 void
 close_lifelines (void)
 {
-	closexref();
-	unlink(editfile);
-	if(BTR) {
-		closebtree(BTR);
-		BTR=NULL;
-	}
+	close_lldb(); /* make sure database closed */
 	if (editfile) {
+		unlink(editfile);
 		stdfree(editfile);
 		editfile=NULL;
 	}
 	if (editstr) {
 		stdfree(editstr);
 		editstr=NULL;
+	}
+	cleanup_lloptions();
+}
+/*===================================
+ * close_lldb -- Close current database
+ *  Safe to call even if not opened
+ *=================================*/
+void
+close_lldb (void)
+{
+	closexref();
+	if(BTR) {
+		closebtree(BTR);
+		BTR=NULL;
 	}
 }
 /*==================================================
@@ -280,8 +291,8 @@ open_database_impl (BOOLEAN forceopen)
 			rdr_count = c-1;
 			myerr = BTERR_READERS;
 		}
-		/* close_lifelines could set bterrno itself */
-		close_lifelines();
+		/* close_lldb could set bterrno itself */
+		close_lldb();
 		bterrno = myerr;
 		return FALSE;
 	}
@@ -305,7 +316,7 @@ open_database (BOOLEAN forceopen, STRING dbrequested, STRING dbused)
 	if (!rtn) {
 		/* open failed so clean up, preserve bterrno */
 		int myerr = bterrno;
-		close_lifelines();
+		close_lldb();
 		bterrno = myerr;
 		strfree(&btreepath);
 		strfree(&readpath);
@@ -384,8 +395,3 @@ describe_dberror (INT dberr, STRING buffer, INT buflen)
 	llstrcatn(&ptr, msg, &mylen);
 }
 
-/* Cleanup Routines */
-void init_cleanup(void)
-{
-	cleanup_lloptions();
-}
