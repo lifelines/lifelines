@@ -11,6 +11,7 @@ New features added in 3.0.42
 Bug fixes in 3.0.42
 ============================
 - Fixed ASSERT failure adding 65th skipped key at import
+- Fixed some memory leaks
 
 New features added in 3.0.41
 ============================

@@ -169,8 +169,8 @@ void lldb_close (LLDATABASE *plldb)
 		destroy_table(placabbvs);
 		placabbvs = NULL;
 	}
-	check_node_leaks();
 	free_caches();
+	check_node_leaks();
 	closexref();
 	ASSERT(BTR == lldb->btree);
 	if (lldb->btree) {

@@ -1,3 +1,9 @@
+2005-02-08 Perry Rapp
+
+	* ChangeLog NEWS src/gedlib/keytonod.c src/gedlib/lldatabase.c
+
+	Free nodes which were leaked in cache.
+
 2005-02-07 Perry Rapp
 
 	* ChangeLog lines.cfg src/interp/pvalue.c src/interp/symtab.c

@@ -1133,7 +1133,6 @@ static void
 remove_cel_from_cache (CACHE cache, CACHEEL cel)
 {
 	CACHEEL celnext=0;
-	NODE node=0;
 	STRING key = ckey(cel);
 
 	/* caller ensured cache && key are non-null */
@@ -1144,10 +1143,13 @@ remove_cel_from_cache (CACHE cache, CACHEEL cel)
 	remove_direct(cache, cel);
 
 	/* Clear all node tree info */
-	node = cnode(cel);
-	if (node)
-		set_all_nodetree_to_cel(node, 0);
-	cnode(cel) = 0;
+	if (1) {
+		NODE node = cnode(cel);
+		if (node)
+			set_all_nodetree_to_cel(node, 0);
+		cnode(cel) = 0;
+		free_nodes(node);
+	}
 
 	celnext = cacfree(cache);
 	cnext(cel) = celnext;
