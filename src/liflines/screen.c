@@ -3486,14 +3486,19 @@ void
 wipe_window_rect (UIWINDOW uiwin, LLRECT rect)
 {
 	WINDOW * win = uiw_win(uiwin);
-	/* workaround for curses bug with spacs */
+	/* workaround for curses bug with spaces */
 	if (getoptint("ForceScreenErase", 0) > 0) {
-		/* fill virtual output with dots */
+		/*
+		To fix the dirty output on a redhat 6 system
+		(with ncurses-5.2-8), required the call to
+		redrawwin, instead of using wrefresh.
+		Perry, 2002.05.27
+		*/
 		uicolor(uiwin, rect, '.');
 		wnoutrefresh(win);
 		/* now fill it back with spaces */
 		uicolor(uiwin, rect, ' ');
-		wrefresh(win);
+		redrawwin(win);
 	} else {
 		/* fill it back with spaces */
 		if (rect)
