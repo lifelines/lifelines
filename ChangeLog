@@ -1,3 +1,8 @@
+2005-01-19 Stephen Dum
+        * ChangeLog INSTALL
+	Add some text to INSTALL describing where to find doc generation
+	tools.
+
 2005-01-20 Perry Rapp
 
 	* ChangeLog src/stdlib/table.c

@@ -90,6 +90,16 @@ how you build lifelines. (Avoid gcc version 2.7.2.1)
    gettext
    iconv
 
+Some notes on our document generation.  The makefiles currently are setup to 
+use the  "docbook-utils" package -- part of the "docbook-tools" package at RedHat.
+More tools are becoming available to convert xml to html and/or pdf formats.
+On FreeBSD systems it is possible to use Xerces and Xalan -- a XML parser 
+and XSLT transformer, respectively, from the Apache XML project:
+http://xml.apache.org/
+    $ xalan -o ll-userguide.html ll-userguide.xml .../docbook-xsl/html/docbook.xsl
+    $ htmldoc -f ll-userguide.pdf ll-userguide.html
+DarwinPorts has xercesc, xalanc, docbook-xml, and docbook-xsl.
+
 **************************
 2. Platform specific notes
 **************************
