@@ -37,7 +37,7 @@
 #include <curses.h>
 #endif
 
-#include "standard.h"
+#include "llstdlib.h"
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"

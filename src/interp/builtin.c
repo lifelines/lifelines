@@ -32,7 +32,7 @@
 /* modified 2000-04-12 J.F.Chandler */
 
 #include "sys_inc.h"
-#include "standard.h"
+#include "llstdlib.h"
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
