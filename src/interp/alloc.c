@@ -542,7 +542,6 @@ set_parents (PNODE body,
 void
 show_pnode (PNODE node)
 {
-	void show_one_pnode();
 	while (node) {
 		show_one_pnode(node);
 		node = inext(node);
@@ -554,7 +553,6 @@ show_pnode (PNODE node)
 void
 show_pnodes (PNODE node)
 {
-	void show_one_pnode();
 
 	while (node) {
 		show_one_pnode(node);

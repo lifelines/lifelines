@@ -230,7 +230,7 @@ __database (PNODE node,
             TABLE stab,
             BOOLEAN *eflg)
 {
-	extern STRING readpath, lastpathname();
+	extern STRING readpath;
 	BOOLEAN full = FALSE;
 	PVALUE val;
 	*eflg = FALSE;
@@ -294,7 +294,7 @@ __substring (PNODE node,
 {
 	INT lo, hi;
 	PNODE arg = (PNODE) iargs(node);
-	STRING substring(), str;
+	STRING str;
 	PVALUE val2, val1 = eval_and_coerce(PSTRING, arg, stab, eflg);
 	if (*eflg) {
 		prog_error(node, "1st arg to substring is not a string");
@@ -861,7 +861,6 @@ __rjustify (PNODE node,
 	PNODE sarg = (PNODE) iargs(node);
 	PNODE larg = inext(sarg);
 	INT len;
-	STRING rightjustify();
 	STRING str;
 	PVALUE val2, val1 = eval_and_coerce(PSTRING, sarg, stab, eflg);
 	if (*eflg) {
@@ -1019,7 +1018,6 @@ __pvalue (PNODE node,
           TABLE stab,
           BOOLEAN *eflg)
 {
-	extern STRING pvalue_to_string();
 	PVALUE val = evaluate(iargs(node), stab, eflg);
 #ifdef DEBUG
 	show_one_pnode(node);

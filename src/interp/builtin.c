@@ -2497,7 +2497,6 @@ __stddate (PNODE node,
            TABLE stab,
            BOOLEAN *eflg)
 {
-	extern STRING format_date();
 	NODE evnt;
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
 	if (*eflg) {
@@ -2518,7 +2517,6 @@ __complexdate (PNODE node,
                TABLE stab,
                BOOLEAN *eflg)
 {
-	extern STRING format_date();
 	NODE evnt;
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
 	if (*eflg) {
