@@ -1,3 +1,9 @@
+2003-07-20 Perry Rapp
+
+	* ChangeLog src/hdrs/screen.h src/liflines/screen.c
+
+	Fix cursor display in full scan menu (from psfales).
+
 2003-07-10 Perry Rapp
 
 	* ChangeLog src/interp/builtin.c

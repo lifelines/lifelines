@@ -90,6 +90,8 @@ typedef struct tag_uiwindow {
 	BOOLEAN dynamic;   /* TRUE means delete when finished */
 	INT rows;
 	INT cols;
+	INT cur_y;         /* row for blinking cursor */
+	INT cur_x;         /* col for blinking cursor */
 } * UIWINDOW;
 #define uiw_win(x)      (x->win)
 #define uiw_boxwin(x)   (x->boxwin)
@@ -99,6 +101,8 @@ typedef struct tag_uiwindow {
 #define uiw_dynamic(x)  (x->dynamic)
 #define uiw_rows(x)     (x->rows)
 #define uiw_cols(x)     (x->cols)
+#define uiw_cury(x)     (x->cur_y)
+#define uiw_curx(x)     (x->cur_x)
 
 extern INT ll_lines; /* number of lines used by LifeLines (usually LINES) */
 extern INT ll_cols;  /* number of columns used by LifeLines (usually COLSREQ) */

@@ -207,7 +207,8 @@ static RECORD invoke_search_menu(void);
 static RECORD invoke_fullscan_menu(void);
 static void invoke_utils_menu(void);
 static void output_menu(UIWINDOW uiwin, DYNMENU dynmenu);
-void place_cursor(void);
+static void place_cursor_old(void);
+static void place_cursor_new(UIWINDOW uiwin);
 static void place_std_msg(void);
 static void refresh_main(void);
 static void print_list_title(char * buffer, INT len, const listdisp * ld, STRING ttl);
@@ -566,7 +567,7 @@ display_screen (INT new_screen)
 		place_std_msg();
 	else
 		mvccwaddstr(win, ll_lines-2, 2, status_showing);
-	place_cursor();
+	place_cursor_old();
 	switch_to_uiwin(uiwin);
 }
 /*=====================================
@@ -1635,7 +1636,7 @@ invoke_fullscan_menu (void)
 
 	while (!done) {
 		activate_uiwin(uiwin);
-		wmove(uiw_win(uiwin), 1, 27);
+		place_cursor_new(uiwin);
 		code = interact(uiwin, "fnrq", -1);
 
 		switch (code) {
@@ -2774,7 +2775,7 @@ place_std_msg (void)
 		touch_all(TRUE);
 	else
 		wrefresh(win); 
-	place_cursor();
+	place_cursor_old();
 }
 /*==================================+
  * rpt_print -- Implement report language print function
@@ -2888,10 +2889,18 @@ show_vert_line (UIWINDOW uiwin, INT row, INT col, INT len)
 	mvwaddch(win, row, col, gr_btee);
 }
 /*=============================================
- * place_cursor -- Move to idle cursor location
+ * place_cursor_new -- Move to cursor input location
  *===========================================*/
-void
-place_cursor (void)
+static void
+place_cursor_new (UIWINDOW uiwin)
+{
+	wmove(uiw_win(uiwin), uiw_cury(uiwin), uiw_curx(uiwin));
+}
+/*=============================================
+ * place_cursor_old -- Move to idle cursor location
+ *===========================================*/
+static void
+place_cursor_old (void)
 {
 	/* TO DO - integrate menuitem version! */
 	INT row, col = 30;
@@ -3139,7 +3148,7 @@ display_status (STRING text)
 	clear_hseg(win, row, 2, ll_cols-2);
 	wmove(win, row, 2);
 	mvccwaddstr(win, row, 2, status_showing);
-	place_cursor();
+	place_cursor_old();
 	wrefresh(win);
 }
 /*=========================================
@@ -3384,12 +3393,16 @@ repaint_fullscan_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
+	STRING title = _(qSmn_sca_ttl);
 	draw_win_box(win);
-	mvccwaddstr(win, row++, 2, _(qSmn_sca_ttl));
+	mvccwaddstr(win, row++, 2, title);
 	mvccwaddstr(win, row++, 4, _(qSmn_sca_nmfu));
 	mvccwaddstr(win, row++, 4, _(qSmn_sca_nmfr));
 	mvccwaddstr(win, row++, 4, _(qSmn_sca_refn));
 	mvccwaddstr(win, row++, 4, _(qSmn_ret));
+	/* set cursor position */
+	uiw_cury(uiwin) = 1;
+	uiw_curx(uiwin) = 3+strlen(title);
 }
 /*=====================================
  * repaint_search_menu -- Draw menu for main history/scan menu
