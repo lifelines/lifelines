@@ -1,9 +1,12 @@
 2003-04-14 Stephen Dum
-        * ChangeLog src/hdrs/standard.h docs/ll-reportmanual.text
+        * ChangeLog src/hdrs/standard.h docs/ll-reportmanual.txt
 	docs/ll-reportmanual.html docs/ll-reportmanual.pdf
+        docs/ll-userguide.txt
+	docs/ll-userguide.html docs/ll-userguide.pdf
 
 	include stdarg.h so compiles under linux
 	update processed report manual
+	make version numbers for user guide and report manual 3.0.27
 
 2003-04-14 Perry Rapp
 
