@@ -85,6 +85,7 @@ static void draw_descendants(NODE indi, INT menuht);
 static void SetScrollMax(INT row, INT menuht);
 static void show_descendants(NODE indi);
 static void show_ancestors(NODE indi);
+static void free_tree (treenode root);
 
 /*********************************************
  * local variables
@@ -326,6 +327,7 @@ draw_descendants (NODE indi, INT menuht)
 	row=1;
 	gen=0;
 	trav_pre_print_tn(root, &row, gen, menuht);
+	free_tree(root);
 }
 /*=========================================================
  * show_gedcom -- print out gedcom node tree
@@ -360,6 +362,7 @@ draw_ancestors (NODE indi, INT menuht)
 	row=1;
 	gen=0;
 	trav_bin_in_print_tn(root, &row, gen, menuht);
+	free_tree(root);
 }
 /*=============================================
  * pedigree_draw_person -- display ancestors or
@@ -419,4 +422,19 @@ void
 pedigree_reset_scroll (void)
 {
 	Scrollp=0;
+}
+/*===============================================================
+ * free_tree -- free a treenode tree
+ * Created: 2000/02/01, Perry Rapp
+ *=============================================================*/
+static void
+free_tree (treenode root)
+{
+	treenode child=root->firstchild;
+	treenode sib=root->nextsib;
+	free(root);
+	if (child)
+		free_tree(child);
+	if (sib)
+		free_tree(sib);
 }
