@@ -245,7 +245,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 				if (i==1)
 					strupdate(&rootfilepath, pathinfo->fullpath);
 			} else {
-				enqueue_parse_error(_("Report not found: %s"), progfile);
+				enqueue_parse_error(_("Report not found: %s "), progfile);
 			}
 		}
 	} else {
@@ -315,14 +315,14 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 	}
 
 	if (Perrors) {
-		progmessage(MSG_ERROR, _("contains errors."));
+		progmessage(MSG_ERROR, _("contains errors.\n"));
 		goto interp_program_exit;
 	}
 
    /* Find top procedure */
 
 	if (!(first = (PNODE) valueof_ptr(get_rptinfo(rootfilepath)->proctab, proc))) {
-		progmessage(MSG_ERROR, _("needs a starting procedure."));
+		progmessage(MSG_ERROR, _("needs a starting procedure.\n"));
 		goto interp_program_exit;
 	}
 
@@ -358,13 +358,13 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 	switch (interpret((PNODE) ibody(first), stab, &dummy)) {
 	case INTOKAY:
 	case INTRETURN:
-		progmessage(MSG_INFO, _("was run successfully."));
+		progmessage(MSG_INFO, _("was run successfully.\n"));
 		break;
 	default:
 		if (rpt_cancelled)
-			progmessage(MSG_STATUS, _("was cancelled."));
+			progmessage(MSG_STATUS, _("was cancelled.\n"));
 		else
-			progmessage(MSG_STATUS, _("was not run because of errors."));
+			progmessage(MSG_STATUS, _("was not run because of errors.\n"));
 		break;
 	}
 
@@ -2239,7 +2239,7 @@ check_rpt_requires (PACTX pactx, STRING fullpath)
 			while (isdigit(dptr[0]))
 				desired = desired*10 + (*dptr++ - '0');
 			if (desired > ours)
-				return _("This report requires a newer program to run");
+				return _("This report requires a newer program to run\n");
 			if (desired < ours)
 				return 0;
 			/* else equal, continue to minor version blocks */
