@@ -47,7 +47,8 @@ hash (STRING key)
 	while (*key)
 		hval += *key++;
 	hval %= MAXHASH;
-	if(hval < 0) FATAL();
+	if (hval < 0) hval += MAXHASH;
+	if (hval < 0) FATAL();
 	if(hval >= MAXHASH) FATAL();
 	return hval;
 }
