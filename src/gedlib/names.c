@@ -729,7 +729,8 @@ givens (STRING name)
 	return scratch;
 }
 /*========================================
- * nextpiece -- Return next word in string
+ * nextpiece -- Return next givenname in string
+ *  skip over surname (enclosed in NAMESEP)
  *======================================*/
 static STRING
 nextpiece (STRING in)

@@ -1,6 +1,6 @@
 ﻿/*
  * @progname       exer_UTF-8
- * @version        0.2 (2002/07/24)
+ * @version        0.3 (2002/11/16)
  * @author         Perry Rapp
  
  * @category       test
@@ -25,6 +25,7 @@ proc finnish_UTF_8()
 	if (not(set_and_check_locale("fi_FI", "Finnish"))) {
 		return()
 	}
+	call set_section("finnish_UTF-8")
 	/* sanity check */
 	call check_collate3("A", "L", "Z")
 	/* Adia sorts between Z and Odia */
@@ -42,6 +43,7 @@ proc polish_UTF_8()
 	if (not(set_and_check_locale("pl_PL", "Polish"))) {
 		return()
 	}
+	call set_section("polish_UTF-8")
 	/* sanity check */
 	call check_collate3("A", "L", "Z")
 	/* Lstroke is between L and M */
@@ -52,6 +54,7 @@ proc spanish_UTF_8()
 	if (not(set_and_check_locale("es", "Spanish"))) {
 		return()
 	}
+	call set_section("spanish_UTF-8")
 	/* sanity check */
 	call check_collate3("A", "N", "Z")
 	/* ennay is between N and O */
@@ -62,5 +65,6 @@ proc testCollate_UTF_8()
 	call finnish_UTF_8()
 	call polish_UTF_8()
 	call spanish_UTF_8()
+	call set_section("")
 }
 

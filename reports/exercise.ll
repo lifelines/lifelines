@@ -1,6 +1,6 @@
 /*
  * @progname       exercise
- * @version        0.101 (2002/07/24)
+ * @version        0.102 (2002/11/16)
  * @author         Perry Rapp
  
  * @category       test
@@ -41,6 +41,12 @@ global(logout)
 global(testok)
 global(testfail)
 global(testskip)
+global(section)
+
+proc set_section(name)
+{
+	set(section, name)
+}
 
 
 proc check_collate2(str1, str2)
@@ -381,11 +387,18 @@ proc dumpnodetr(desc, node)
 /* report failure to screen, as well to to output */
 proc reportfail(str)
 {
+	if (gt(strlen(section),0)) {
+		print(concat(section, nl()))
+	}
 	print(str)
-	print("\n")
+	print(nl())
 	if (or(dbuse, logout)) {
+		if (gt(strlen(section),0)) {
+			section nl()
+		}
 		str nl()
 	}
+	set(section,"")
 	incr(testfail)
 }
 

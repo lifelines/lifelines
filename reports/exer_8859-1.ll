@@ -1,6 +1,6 @@
 /*
  * @progname       exer_8859-1
- * @version        0.02 (2002/07/24)
+ * @version        0.03 (2002/11/16)
  * @author         Perry Rapp
  
  * @category       test
@@ -22,6 +22,7 @@ proc finnish_8859_1()
 	if (not(set_and_check_locale("fi_FI", "Finnish"))) {
 		return()
 	}
+	call set_section("finnish_8859-1")
 	/* sanity check */
 	call check_collate3("A", "L", "Z")
 	/* Adia sorts between Z and Odia */
@@ -39,6 +40,7 @@ proc spanish_8859_1()
 	if (not(set_and_check_locale("es", "Spanish"))) {
 		return()
 	}
+	call set_section("spanish_8859-1")
 	call check_collate3("A", "N", "Z")
 	call check_collate3("N", "Ñ:[Ntilde]", "O")
 }
@@ -46,6 +48,7 @@ proc testCollate_8859_1()
 {
 	call finnish_8859_1()
 	call spanish_8859_1()
+	call set_section("")
 }
 
 
