@@ -56,6 +56,10 @@
 	Skip over invalid spouses in FORSPOUSES without ASSERT.
 	Skip over invalid spouses in FORFAMSPOUSES without ASSERT.
 
+	* ChangeLog src/hdrs/gedcom.h
+
+	Skip over invalid children in FORCHILDRENx without ASSERT.
+
 2005-02-02 Perry Rapp
 
 	* ChangeLog src/gedlib/gedcomi.h src/gedlib/keytonod.c
