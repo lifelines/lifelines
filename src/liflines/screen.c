@@ -1194,7 +1194,7 @@ choose_from_list (STRING ttl, LIST list)
 	STRING * array=0;
 	STRING choice=0;
 	INT i=0, rtn=-1;
-	INT len = llen(list);
+	INT len = length_list(list);
 
 	if (len < 1) return -1;
 	if (!ttl) ttl=_(qSdefttl);

@@ -40,6 +40,7 @@
 #include "zstr.h"
 #include "vtable.h"
 #include "array.h"
+#include "object.h"
 
 /*********************************************
  * local function prototypes
@@ -187,7 +188,7 @@ set_pvalue (PVALUE val, INT type, VPTR value)
 	case PLIST:
 		{
 			LIST list = pvalue_to_list(val);
-			++lrefcnt(list);
+			addref_list(list);
 		}
 		break;
 	case PTABLE:
@@ -279,10 +280,7 @@ clear_pvalue (PVALUE val)
 	case PLIST:
 		{
 			LIST list = pvalue_to_list(val);
-			--lrefcnt(list);
-			if (!lrefcnt(list)) {
-				remove_list(list, delete_vptr_pvalue);
-			}
+			delref_list(list, delete_vptr_pvalue);
 		}
 		return;
 	case PTABLE:

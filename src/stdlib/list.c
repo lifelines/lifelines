@@ -12,15 +12,57 @@
 
 #include "standard.h"
 #include "llstdlib.h"
+#include "vtable.h"
+
+/*********************************************
+ * local types
+ *********************************************/
+
+/* actual list */
+struct tag_list {
+	/* a LIST is an OBJECT */
+	struct tag_vtable * vtable; /* generic object table (see vtable.h) */
+	INT l_refcnt; /* reference counted object */
+	LNODE l_head;
+	LNODE l_tail;
+	INT l_len;
+	INT l_type;
+};
+
+/*********************************************
+ * local enums & defines
+ *********************************************/
+
+#define lrefcnt(l) ((l)->l_refcnt)
+#define ltype(l)   ((l)->l_type)
+#define lhead(l)   ((l)->l_head)
+#define ltail(l)   ((l)->l_tail)
+#define llen(l)    ((l)->l_len)
 
 /*********************************************
  * local function prototypes
  *********************************************/
 
 /* alphabetical */
+static void list_destructor(VTABLE *obj);
 static LNODE nth_in_list_from_tail(LIST list, INT index1b, BOOLEAN createels
 	, LIST_CREATE_VALUE createfnc);
 static void validate_list(LIST list);
+
+/*********************************************
+ * local variables
+ *********************************************/
+
+static struct tag_vtable vtable_for_list = {
+	VTABLE_MAGIC
+	, "list"
+	, &list_destructor
+	, &refcountable_isref
+	, &refcountable_addref
+	, &refcountable_delref
+	, 0 /* copy_fnc */
+	, &generic_get_type_name
+};
 
 /*===========================
  * create_list -- Create list
@@ -30,6 +72,7 @@ create_list (void)
 {
 	LIST list = (LIST) stdalloc(sizeof(*list));
 	memset(list, 0, sizeof(*list));
+	list->vtable = &vtable_for_list;
 	ltype(list) = LISTNOFREE;
 	lhead(list) = ltail(list) = NULL;
 	llen(list) = 0;
@@ -472,4 +515,46 @@ delete_list_element (LIST list, INT index1b, void (*func)(VPTR))
 	--llen(list);
 	validate_list(list);
 	return TRUE;
+}
+/*==================================================
+ * trav_list_head - Return tail node of list
+ *  Only for internal use in FORLIST implementation
+ *================================================*/
+LNODE
+trav_list_head (LIST list)
+{
+	ASSERT(list);
+	return list->l_head;
+}
+/*==================================================
+ * trav_list_tail - Return tail node of list
+ *  Only for internal use in FORLIST implementation
+ *================================================*/
+LNODE
+trav_list_tail (LIST list)
+{
+	ASSERT(list);
+	return list->l_tail;
+}
+/*=================================================
+ * list_destructor -- destructor for vtable
+ *===============================================*/
+static void
+list_destructor (VTABLE *obj)
+{
+	LIST list = (LIST)obj;
+	ASSERT((*obj) == &vtable_for_list);
+	remove_list(list, 0);
+}
+/*=================================================
+ * delref_table -- decrement reference count of list
+ *  and free if appropriate (ref count hits zero)
+ *===============================================*/
+void
+delref_list (LIST list, void (*func)(VPTR))
+{
+	--list->l_refcnt;
+	if (!list->l_refcnt) {
+		remove_list(list, func);
+	}
 }

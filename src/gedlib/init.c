@@ -727,7 +727,7 @@ get_dblist (STRING path, LIST * dblist, LIST * dbdesclist)
 		add_dbs_to_list(*dblist, *dbdesclist, p);
 	}
 	strfree(&dirs);
-	return llen(*dblist);
+	return length_list(*dblist);
 }
 /*==================================================
  * add_dbs_to_list -- Add all dbs in specified dir to list

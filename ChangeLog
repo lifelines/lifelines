@@ -1,3 +1,11 @@
+2005-01-15 Perry Rapp
+
+	* ChangeLog src/gedlib/init.c src/hdrs/list.h
+	src/interp/pvalue.c src/liflines/screen.c
+	src/stdlib/list.c src/ui/ui_cli.c
+
+	Move tag_list inside list.c, and implement vtable for list.
+
 2005-01-14 Perry Rapp
 
 	* ChangeLog README.MAINTAINERS

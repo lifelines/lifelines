@@ -25,20 +25,8 @@ struct tag_lnode {
 #define lelement(n) ((n)->l_element)
 #define llocks(n)   ((n)->l_locks)
 
-/* actual list */
-typedef struct tag_list {
-	struct tag_vtable * vtable; /* generic object table (see vtable.h) */
-	INT l_refcnt; /* reference counted object */
-	LNODE l_head;
-	LNODE l_tail;
-	INT l_len;
-	INT l_type;
-} *LIST;
-#define lrefcnt(l) ((l)->l_refcnt)
-#define ltype(l)   ((l)->l_type)
-#define lhead(l)   ((l)->l_head)
-#define ltail(l)   ((l)->l_tail)
-#define llen(l)    ((l)->l_len)
+/* a LIST is an OBJECT */
+typedef struct tag_list *LIST;
 
 #define LISTNOFREE 0
 #define LISTDOFREE 1
@@ -58,7 +46,7 @@ typedef VPTR (*LIST_CREATE_VALUE)(LIST);
 /* cycle through list from tail to head */
 #define FORLIST(l,e)\
 	{\
-		LNODE _lnode = l->l_tail;\
+		LNODE _lnode = trav_list_tail(l);\
 		VPTR e;\
 		while (_lnode) {\
 			e = _lnode->l_element;\
@@ -75,7 +63,7 @@ typedef VPTR (*LIST_CREATE_VALUE)(LIST);
 /* cycle through list from head to tail */
 #define FORXLIST(l,e)\
 	{\
-		LNODE _lnode = l->l_head;\
+		LNODE _lnode = trav_list_head(l);\
 		VPTR e;\
 		while (_lnode) {\
 			e = _lnode->l_element;
@@ -84,6 +72,7 @@ typedef VPTR (*LIST_CREATE_VALUE)(LIST);
 		}\
 	}
 
+#define addref_list(list) addref_obj((OBJECT)list)
 
 /* list.c */
 void back_list(LIST, VPTR);
@@ -93,6 +82,7 @@ BOOLEAN change_list_ptr(LIST_ITER listit, VPTR newptr);
 LIST create_list(void);
 LIST create_list2(INT whattofree);
 BOOLEAN delete_list_element(LIST list, INT index1b, void (*func)(VPTR));
+void delref_list(LIST list, void (*func)(VPTR));
 VPTR dequeue_list(LIST);
 BOOLEAN is_empty_list(const LIST);
 void enqueue_list(LIST, VPTR);
@@ -109,6 +99,9 @@ void push_list(LIST, VPTR);
 void remove_list(LIST, void (*func)(VPTR));
 void set_list_element(LIST, INT, VPTR, LIST_CREATE_VALUE);
 void set_list_type(LIST, INT);
+LNODE trav_list_head(LIST list);
+LNODE trav_list_tail(LIST list);
+
 void unlock_list_node(LNODE node);
 
 
