@@ -36,6 +36,7 @@ struct tag_xlat {
 };
 /* dynamically loadable translation table, entry in dyntt list */
 typedef struct tag_dyntt {
+	STRING name;
 	STRING path;
 	TRANTABLE tt; /* when loaded */
 	BOOLEAN loadfailure;
@@ -60,7 +61,7 @@ static XLSTEP create_iconv_step(CNSTRING src, CNSTRING dest);
 static XLSTEP create_dyntt_step(DYNTT dyntt);
 static XLAT create_null_xlat(BOOLEAN adhoc);
 static XLAT create_xlat(CNSTRING src, CNSTRING dest, BOOLEAN adhoc);
-static DYNTT create_dyntt(TRANTABLE tt, STRING path);
+static DYNTT create_dyntt(TRANTABLE tt, CNSTRING name, CNSTRING path);
 static void free_dyntts(void);
 static void free_xlat(XLAT xlat);
 static DYNTT get_conversion_dyntt(CNSTRING src, CNSTRING dest);
@@ -167,11 +168,12 @@ create_dyntt_step (DYNTT dyntt)
  * Created: 2002/12/10 (Perry Rapp)
  *========================================================*/
 static DYNTT
-create_dyntt (TRANTABLE tt, STRING path)
+create_dyntt (TRANTABLE tt, CNSTRING name, CNSTRING path)
 {
 	DYNTT dyntt = (DYNTT)stdalloc(sizeof(*dyntt));
 	memset(dyntt, 0, sizeof(*dyntt));
 	dyntt->tt = tt;
+	dyntt->name = strsave(name);
 	dyntt->path = strsave(path);
 	return dyntt;
 }
@@ -341,7 +343,7 @@ load_dyntt_if_needed (DYNTT dyntt)
 	ZSTR zerr=zs_new();
 	if (dyntt->tt || dyntt->loadfailure)
 		return;
-	if (!init_map_from_file(dyntt->path, dyntt->path, &dyntt->tt, zerr)) {
+	if (!init_map_from_file(dyntt->path, dyntt->name, &dyntt->tt, zerr)) {
 		dyntt->loadfailure = TRUE;
 	}
 	zs_free(&zerr);
@@ -426,7 +428,7 @@ load_dynttlist_from_dir (STRING dir)
 			if (!valueof_ptr(f_dyntts, zs_str(zfile))) {
 				TRANTABLE tt=0; /* will be loaded when needed */
 				STRING path = concat_path_alloc(dir, ttfile);
-				DYNTT dyntt = create_dyntt(tt, path);
+				DYNTT dyntt = create_dyntt(tt, ttfile, path);
 				strfree(&path);
 				insert_table_ptr(f_dyntts, strsave(zs_str(zfile)), dyntt);
 			}
@@ -571,6 +573,7 @@ free_dyntts (void)
 static void
 zero_dyntt (DYNTT dyntt)
 {
+	strfree(&dyntt->name);
 	strfree(&dyntt->path);
 	remove_trantable(dyntt->tt);
 	dyntt->tt = 0;

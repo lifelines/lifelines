@@ -509,6 +509,8 @@ init_map_from_str (STRING str, CNSTRING mapname, TRANTABLE * ptt, ZSTR zerr)
 		*p = 0;
 		rights[n++] = strsave(scratch);
 	}
+	if (!name[0])
+		llstrncpy(name, mapname, sizeof(name), uu8);
 	*ptt = create_trantable(lefts, rights, n, name);
 end:
 	for (i = 0; i < n; i++)		/* don't free rights */
