@@ -32,6 +32,7 @@
 
 #include "sys_inc.h"
 #include "llstdlib.h"
+#include "standard.h"
 #include "btree.h"
 
 int opt_finnish = 0;
@@ -48,24 +49,27 @@ main (int argc,
 	char *editor;
 
 #ifdef WIN32
+#ifdef _MSC_VER
+	_fmode = _O_BINARY;
+#else
 	_fmode = O_BINARY;	/* default to binary rather than TEXT mode */
+#endif
 #endif
 	if (argc != 3) {
 		printf("usage: btedit <btree> <rkey>\n");
-		exit(1);
+		return (1);
 	}
 	if (!(btree = openbtree(argv[1], FALSE, TRUE))) {
 		printf("could not open btree: %s\n", argv[1]);
-		exit(1);
+		return (1);
 	}
 	if (!getfile(btree, str2rkey(argv[2]), "btedit.tmp")) {
 		printf("there is no record with that key\n");
 		closebtree(btree);
-		exit(0);
+		return (0);
 	}
 
-	if((editor = getenv("LLEDITOR")) && *editor);
-	else editor = "vi";
+	editor = environ_figure_editor();
 	sprintf(cmdbuf, "%s btedit.tmp", editor);
 #ifdef WIN32
 	w32system(cmdbuf);	/* start program and wait for completion */
