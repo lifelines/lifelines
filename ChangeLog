@@ -14,6 +14,12 @@
 
 	Fix so btedit links successfully (under gcc).
 
+	* ChangeLog configure.in src/gedlib/indiseq.c
+	src/liflines/cscurses.c src/liflines/valgdcom.c:
+
+	Fix crash involving pointers.
+	Restore ALL_LINGUAS (to ease life of Debian maintainer).
+
 2002-12-14 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c:

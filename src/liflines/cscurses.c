@@ -74,8 +74,7 @@ mvccwaddnstr (WINDOW *wp, int y, int x, char *cp, int n)
 	ZSTR zstr = zs_news(cp);
 	int rtn;
 	int_to_disp(&zstr);
-	/* TODO: We ought to be calling the function for display width,
-	which I can't remember at the moment -- see Marcus Kuhn's Unicode FAQ */
+	/* TODO: Need to be using wcswidth for UTF-8 displays */
 	if (zs_len(zstr) < (unsigned)n) {
 		rtn = mvwaddstr(wp, y, x, zs_str(zstr));
 	} else {

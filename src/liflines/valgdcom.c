@@ -467,6 +467,8 @@ add_othr_defn (struct import_feedback * ifeed, STRING xref, INT line)
 static void
 handle_head_lev1 (struct import_feedback * ifeed, STRING tag, STRING val, INT line)
 {
+	ifeed=ifeed; /* unused */
+	line=line; /* unused */
 	if (eqstr(tag, "CHAR")) {
 		strupdate(&gedcom_codeset_in, (val ? val : ""));
 	}
@@ -478,6 +480,10 @@ handle_head_lev1 (struct import_feedback * ifeed, STRING tag, STRING val, INT li
 static void
 handle_trlr_lev1 (struct import_feedback * ifeed, STRING tag, STRING val, INT line)
 {
+	ifeed=ifeed; /* unused */
+	tag=tag; /* unused */
+	val=val; /* unused */
+	line=line; /* unused */
 }
 /*===========================================================
  * handle_indi_lev1 -- Handle level 1 lines in person records

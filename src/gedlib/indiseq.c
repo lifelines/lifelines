@@ -1770,10 +1770,11 @@ append_all_tags(INDISEQ seq, NODE node, STRING tagname
 		STRING key;
 		INT val=0;
 		key = nval(node);
-		if (key) {
+		if (key && key[0]) {
 			INT keylen = strlen(key);
-			STRING skey = strdup(rmvat(key));
+			STRING skey = 0;
 			BOOLEAN include=TRUE;
+			strupdate(&skey, rmvat(key));
 			if (skey) {
 				val = atoi(skey+1);
 			} else {
@@ -1797,8 +1798,7 @@ append_all_tags(INDISEQ seq, NODE node, STRING tagname
 							zs_apps(&zstr, "||");
 						zs_apps(&zstr, text);
 					}
-					strfree(&skey);
-					skey = strdup(zs_str(zstr));
+					strupdate(&skey, zs_str(zstr));
 					zs_free(&zstr);
 				} else {
 					include=FALSE;
