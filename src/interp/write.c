@@ -178,9 +178,8 @@ __writeindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	STRING rawrec=0, msg;
 	INT len, cnt;
 	BOOLEAN rtn=FALSE;
-	if (*eflg) return NULL;
 
-	if (!indi2) {
+	if (*eflg || !indi2) {
 		prog_var_error(node, stab, arg, 0, nonind1, "writeindi");
 		return NULL;
 	}

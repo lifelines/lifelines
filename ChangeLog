@@ -1,3 +1,9 @@
+2004-03-19 Perry Rapp
+
+	* ChangeLog src/interp/write.c
+
+	Fix writeindi to report error instead of failing silently.
+
 2004-03-08 Perry Rapp
 
 	* ChangeLog
