@@ -2513,7 +2513,7 @@ manufacture a listdisp here
 			llstrapps(scratch, sizeof(scratch), uu8, " ");
 		}
 		if(getoptint("DisplayKeyTags", 0) > 0) {
-			llstrappf(scratch, sizeof(scratch), uu8, "(I%s)", key_of_record(indi));
+			llstrappf(scratch, sizeof(scratch), uu8, "(i%s)", key_of_record(indi));
 		} else {
 			llstrappf(scratch, sizeof(scratch), uu8, "(%s)", key_of_record(indi));
 		}

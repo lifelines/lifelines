@@ -130,7 +130,7 @@ indi_to_list_string (NODE indi, NODE fam, INT len, RFMT rfmt, BOOLEAN appkey)
 	}
 	if (appkey && indi && displaykeys) {
 		if(getoptint("DisplayKeyTags", 0) > 0) {
-			sprintf(p, " (I%s)", key_of_record(indi));
+			sprintf(p, " (i%s)", key_of_record(indi));
 		} else {
 			sprintf(p, " (%s)", key_of_record(indi));
 		}
@@ -138,7 +138,7 @@ indi_to_list_string (NODE indi, NODE fam, INT len, RFMT rfmt, BOOLEAN appkey)
 	}
 	if (appkey && fam && displaykeys) {
 		if(getoptint("DisplayKeyTags", 0) > 0) {
-			sprintf(p, " (F%s)", key_of_record(fam));
+			sprintf(p, " (f%s)", key_of_record(fam));
 		} else {
 			sprintf(p, " (%s)", key_of_record(fam));
 		}
