@@ -115,7 +115,7 @@ openbtree (STRING dir,          /* btree base dir */
 	struct stat sbuf;
 	KEYFILE1 kfile1;
 	KEYFILE2 kfile2;
-	BOOLEAN keyed2 = FALSE, keyed3 = FALSE;
+	BOOLEAN keyed2 = FALSE;
 	INDEX master;
 
 /* See if base directory exists */
