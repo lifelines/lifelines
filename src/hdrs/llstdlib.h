@@ -182,6 +182,7 @@ INT utf8len(char ch);
 /* strwhite.c */
 BOOLEAN allwhite(STRING);
 void chomp(STRING);
+void skipws(STRING *ptr);
 void striplead(STRING);
 void striptrail(STRING);
 STRING trim(STRING, INT);

@@ -67,6 +67,24 @@ extern STRING qSgdnadd, qSdboldk, qSdbnewk, qSdbodel;
 extern STRING qScfoldk, qSunsupuniv;
 
 /*********************************************
+ * local types
+ *********************************************/
+
+typedef struct gd_metadata_s {
+	ZSTR sour_system_id;
+	ZSTR sour_system_version;
+	ZSTR sour_system_name;
+	ZSTR sour_system_data_name;
+	ZSTR date;
+	ZSTR filename;
+	ZSTR gedcom_version;
+	ZSTR gedcom_form;
+	ZSTR charset;
+	ZSTR charset_version;
+	ZSTR language;
+} *GD_METADATA;
+
+/*********************************************
  * local function prototypes
  *********************************************/
 
@@ -124,7 +142,10 @@ do_import (struct import_feedback * ifeed, FILE *fp)
 	INT totkeys = 0, totused = 0;
 	char msgbuf[80];
 	BOOLEAN succeeded=FALSE;
-	STRING unistr=0;
+	STRING str,unistr=0;
+	ZSTR zerr=0;
+	TABLE metadatatab = create_table();
+	STRING gdcodeset=0;
 
 /* Open and validate GEDCOM file */
 	if ((unistr=check_file_for_unicode(fp)) && !eqstr(unistr, "UTF-8")) {
@@ -134,7 +155,28 @@ do_import (struct import_feedback * ifeed, FILE *fp)
 	if (eqstr_ex(unistr, "UTF-8")) {
 		strupdate(&gedcom_codeset_in, "UTF-8");
 	}
+
+	if (!scan_header(fp, metadatatab, &zerr)) {
+		msg_error(zs_str(zerr));
+		goto end_import;
+	}
+
+	if ((str = valueof_str(metadatatab, "GEDC.FORM"))!= NULL) {
+		if (!eqstr(str, "LINEAGE-LINKED")) {
+			if (!ask_yes_or_no_msg(
+				_("This is not a lineage linked GEDCOM file.")
+				, _("Proceed anyway ?")
+				))
+				goto end_import;
+		}
+	}
+	if ((str = valueof_str(metadatatab, "CHAR"))!= NULL) {
+		gdcodeset = strsave(str);
+	}
+
+
 	if (!int_codeset[0]) {
+		/* TODO: ask if user would like to adopt codeset of incoming file, if we found it */
 		if (!ask_yes_or_no_msg(
 			_("No current internal codeset, so no codeset conversion can be done")
 			, _("Proceed without codeset conversion ?")
@@ -253,7 +295,9 @@ TODO: why were these here ?
 	succeeded = TRUE;
 
 end_import:
-
+	zs_free(&zerr);
+	remove_table(metadatatab, FREEBOTH);
+	strfree(&gdcodeset);
 	return succeeded;
 }
 /*=============================================

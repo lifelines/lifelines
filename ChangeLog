@@ -4,6 +4,17 @@
 
 	Break links to parent/sibling NODEs during deletenode()
 
+	* ChangeLog src/gedlib/node.c src/hdrs/llstdlib.h
+	src/interp/builtin.c src/interp/functab.c src/interp/interpi.h
+	src/interp/write.c src/liflines/import.c
+	src/liflines/llinesi.h src/liflines/valgdcom.c
+	src/stdlib/strwhite.c:
+
+	Make deletenode only detach the node, not delete it.
+	Also rename it detachnode (but leave old name for reports).
+	Begin reading GEDCOM header before validation.
+	Check GEDCOM form for LINEAGE-LINKED.
+
 2003-02-02 Matt Emmerton
 
 	* ChangeLog src/gedlib/node.c

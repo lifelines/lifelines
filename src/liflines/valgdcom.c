@@ -99,6 +99,7 @@ static INT add_indi_defn(struct import_feedback * ifeed, STRING, INT, ELMNT*);
 static INT add_othr_defn(struct import_feedback * ifeed, STRING, INT);
 static INT add_sour_defn(struct import_feedback * ifeed, STRING, INT);
 static INT add_to_structures(STRING, ELMNT);
+static void append_path(ZSTR zstr, char delim, CNSTRING str);
 static int check_akey (int firstchar, STRING keyp, INT *maxp);
 static void check_even_links(struct import_feedback * ifeed, ELMNT);
 static void check_fam_links(struct import_feedback * ifeed, ELMNT);
@@ -944,4 +945,88 @@ set_import_log (STRING logpath)
 		logpath = "";
 	llstrncpy(f_logpath, logpath, sizeof(f_logpath), uu8);
 }
+/*============================================================
+ * scan_header -- Scan header of GEDCOM record
+ *  collecting metadata as found
+ * Created: 2003-02-03 (Perry Rapp)
+ *==========================================================*/
+BOOLEAN
+scan_header (FILE * fp, TABLE metadatatab, ZSTR * zerr)
+{
+	static char line[512];
+	STRING parents[2] = { 0, 0 };
+	INT linno, head=0, lev=-1, curlev;
+	INT lastoff=0;
+	INT rtn=FALSE;
+	ZSTR zpath = zs_new();
+	*zerr = 0;
+	for (linno=1; 1; ++linno) {
+		XLAT xlat=0; /* no codeset translation yet */
+		INT rc, i;
+		STRING xref, tag, val, msg;
+		lastoff = ftell(fp);
+		curlev = lev;
+		if (linno==50) {
+			*zerr = zs_newf(_("Processed %d lines without finding end of HEAD"), linno);
+			break;
+		}
+		rc = file_to_line(fp, xlat, &lev, &xref, &tag, &val, &msg);
+		if (rc==DONE) {
+			*zerr = zs_newf(_("End of file at line %d"), linno);
+			break;
+		}
+		if (rc==ERROR) {
+			*zerr = zs_newf(_("Error at line %d: %s"), linno, msg);
+			break;
+		}
+		if (lev < 0 || lev > curlev+1) {
+			*zerr = zs_newf(_("Bad level at line %d"), linno);
+			break;
+		}
+		if (lev==0) {
+			if (eqstr(tag, "HEAD")) {
+				if (head) {
+					*zerr = zs_newf(_("Duplicate HEAD line at line %d"), linno);
+					break;
+				} else {
+					head=1;
+				}
+			} else if (!head) {
+				*zerr = zs_newf(_("Missing HEAD line at line %d"), linno);
+				break;
+			} else {
+				fseek(fp, lastoff, SEEK_SET);
+				/* finished head */
+				break;
+			}
+		}
+		if (lev < 3 && tag && tag[0] && val && val[0]) { /* we don't care about anything beyond level 2 */
+			zs_clear(zpath);
+			for (i=1; i<lev && i<ARRSIZE(parents); ++i)
+				append_path(zpath, '.', parents[i-1]);
+			append_path(zpath, '.', tag);
+			insert_table_str(metadatatab, strsave(zs_str(zpath)), strsave(val));
+		}
+		if (lev>0 && lev-1<ARRSIZE(parents))
+			strupdate(&parents[lev-1], tag);
+		/* clear any obsolete parents */
+		for (i=lev; i<ARRSIZE(parents); ++i) {
+			strupdate(&parents[i], 0);
+		}
+	}
 
+	zs_free(&zpath);
+	return !(*zerr);
+}
+/*============================================================
+ * append_path -- Add path to end of string, prefixing with delimiter
+ *  if string non-empty
+ * Created: 2003-02-03 (Perry Rapp)
+ *==========================================================*/
+static void
+append_path (ZSTR zstr, char delim, CNSTRING str)
+{
+	if (zs_len(zstr))
+		zs_appc(zstr, delim);
+	zs_apps(zstr, str);
+}

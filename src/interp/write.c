@@ -42,7 +42,7 @@
 
 /*
  ***** WARNING !!!!!! **********
- Only createnode, addnode, __deletenode have been fixed, because evaluate() returns PVALUES, not NODES 
+ Only createnode, addnode, __detachnode have been fixed, because evaluate() returns PVALUES, not NODES 
  2003-02-02 (Perry)
  */
 
@@ -127,18 +127,18 @@ __addnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*============================================
- * deletenode -- Remove node from GEDCOM tree
- *   deletenode(NODE) -> VOID
- *   NOTE: MEMORY LEAK MEMORY LEAK MEMORY LEAK
+ * detachnode -- Remove node from GEDCOM tree
+ *   detachnode(NODE) -> VOID
+ * (This is the historic deletenode)
  *==========================================*/
 PVALUE
-__deletenode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+__detachnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = iargs(node);
 	NODE dead, prnt;
 	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
 	if (*eflg) {
-		prog_var_error(node, stab, arg, val, nonnod1, "deletenode");
+		prog_var_error(node, stab, arg, val, nonnod1, "detachnode");
 		delete_pvalue(val);
 		return NULL;
 	}
@@ -159,7 +159,7 @@ __deletenode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	nparent(dead) = NULL;
 	nsibling(dead) = NULL;
-	delete_pvalue(val); /* will destroy node if temp */
+	/* we don't actually delete the node, garbage collection must get it */
 	return NULL;
 }
 /*======================================

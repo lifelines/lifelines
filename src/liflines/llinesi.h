@@ -124,6 +124,7 @@ INT browse_2fam(RECORD *prec1, RECORD *prec2, INDISEQ *pseq);
 /* valgdcom.c */
 void addmissingkeys (INT);
 int check_stdkeys (void);
+BOOLEAN scan_header(FILE * fp, TABLE metadatatab, ZSTR * zerr);
 BOOLEAN validate_gedcom (struct import_feedback * ifeed, FILE*);
 INT xref_to_index (STRING);
 

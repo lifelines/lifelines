@@ -82,6 +82,15 @@ striplead (STRING p)
 }
 #endif /* UNUSED_CODE */
 /*=========================================
+ * skipws -- Advance pointer over whitespace
+ *=======================================*/
+void
+skipws (STRING * ptr)
+{
+	while (iswhite(*(uchar *)(*ptr)))
+		++(*ptr);
+}
+/*=========================================
  * allwhite -- Check if string is all white
  *=======================================*/
 BOOLEAN

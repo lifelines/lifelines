@@ -3252,7 +3252,7 @@ __copyfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	delete_pvalue(val);
-	while (fgets(buffer, 1024, cfp)) {
+	while (fgets(buffer, sizeof(buffer), cfp)) {
 		poutput(buffer, eflg);
 		if (*eflg)
 			return NULL;

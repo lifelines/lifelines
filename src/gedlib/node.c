@@ -396,7 +396,7 @@ file_to_line (FILE *fp,
 	char *p = in;
 	*pmsg = NULL;
 	while (TRUE) {
-		if (!(p = fgets(in, MAXLINELEN+2, fp))) return DONE;
+		if (!(p = fgets(in, sizeof(in), fp))) return DONE;
 		flineno++;
 		if (ttm) {
 			translate_string(ttm, in, out, MAXLINELEN+2);
@@ -468,7 +468,7 @@ buffer_to_line (STRING p, INT *plev, STRING *pxref
 	}
 
 /* Get level number */
-	while (iswhite((uchar)*p)) p++;
+	skipws(&p);
 	if (chartype((uchar)*p) != DIGIT) {
 		sprintf(scratch, _(qSrernlv), flineno);
 		*pmsg = scratch;
@@ -480,7 +480,7 @@ buffer_to_line (STRING p, INT *plev, STRING *pxref
 	*plev = lev;
 
 /* Get cross reference, if there */
-	while (iswhite((uchar)*p)) p++;
+	skipws(&p);
 	if (*p == 0) {
 		sprintf(scratch, _(qSrerinc), flineno);
 		*pmsg = scratch;
@@ -509,7 +509,7 @@ buffer_to_line (STRING p, INT *plev, STRING *pxref
 
 /* Get tag field */
 gettag:
-	while (iswhite((uchar)*p)) p++;
+	skipws(&p);
 	if (*p == 0) {
 		sprintf(scratch, _(qSrerinc), flineno);
 		*pmsg = scratch;
@@ -521,7 +521,7 @@ gettag:
 	*p++ = 0;
 
 /* Get the value field */
-	while (iswhite((uchar)*p)) p++;
+	skipws(&p);
 	*pval = p;
 	return OKAY;
 }
