@@ -87,6 +87,11 @@
 
 	Rename delete_table to delete_table_element.
 
+	* ChangeLog src/interp/interp.c src/interp/interpi.h
+	src/interp/symtab.c
+
+	Rename delete_symtab to delete_symtab_element.
+
 2005-02-05 Perry Rapp
 
 	* ChangeLog NEWS src/gedlib/xreffile.c

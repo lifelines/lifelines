@@ -92,12 +92,12 @@ insert_symtab (SYMTAB stab, STRING iden, PVALUE val)
 	insert_table_ptr(stab->tab, iden, val);
 }
 /*======================================================
- * delete_symtab -- Delete a value from a symbol table
- *  @stab:  symbol table
- *  @iden: variable in symbol table
+ * delete_symtab_element -- Delete a value from a symbol table
+ *  stab: [I/O] symbol table
+ *  iden: [IN]  variable in symbol table
  *====================================================*/
 void
-delete_symtab (SYMTAB stab, STRING iden)
+delete_symtab_element (SYMTAB stab, STRING iden)
 {
 	PVALUE val = (PVALUE) valueof_ptr(stab->tab, iden);
 	/* delete_table_element doesn't free the key or value */

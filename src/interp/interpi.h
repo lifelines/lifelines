@@ -80,7 +80,7 @@ typedef struct tag_symtab {
 } *SYMTAB;
 
 SYMTAB create_symtab(void);
-void delete_symtab(SYMTAB stab, STRING iden);
+void delete_symtab_element(SYMTAB stab, STRING iden);
 BOOLEAN in_symtab(SYMTAB stab, STRING key);
 void insert_symtab(SYMTAB stab, STRING iden, PVALUE val);
 void remove_symtab(SYMTAB stab);

@@ -924,8 +924,8 @@ aloop:	;
 	ENDCHILDRENx
 	irc = INTOKAY;
 aleave:
-	delete_symtab(stab, ichild(node));
-	delete_symtab(stab, inum(node));
+	delete_symtab_element(stab, ichild(node));
+	delete_symtab_element(stab, inum(node));
 	unlock_cache(fcel);
 	return irc;
 }
@@ -979,9 +979,9 @@ bloop:	;
 	ENDSPOUSES
 	irc = INTOKAY;
 bleave:
-	delete_symtab(stab, ispouse(node));
-	delete_symtab(stab, ifamily(node));
-	delete_symtab(stab, inum(node));
+	delete_symtab_element(stab, ispouse(node));
+	delete_symtab_element(stab, ifamily(node));
+	delete_symtab_element(stab, inum(node));
 	unlock_cache(icel);
 	return irc;
 }
@@ -1038,9 +1038,9 @@ cloop:	;
 	ENDFAMSS
 	irc = INTOKAY;
 cleave:
-	delete_symtab(stab, ifamily(node));
-	delete_symtab(stab, ispouse(node));
-	delete_symtab(stab, inum(node));
+	delete_symtab_element(stab, ifamily(node));
+	delete_symtab_element(stab, ispouse(node));
+	delete_symtab_element(stab, inum(node));
 	unlock_cache(icel);
 	return irc;
 }
@@ -1097,9 +1097,9 @@ dloop:	;
 	ENDFAMCS
 	irc = INTOKAY;
 dleave:
-	delete_symtab(stab, ifamily(node));
-	delete_symtab(stab, iiparent(node));
-	delete_symtab(stab, inum(node));
+	delete_symtab_element(stab, ifamily(node));
+	delete_symtab_element(stab, iiparent(node));
+	delete_symtab_element(stab, inum(node));
 	unlock_cache(icel);
 	return irc;
 }
@@ -1155,9 +1155,9 @@ eloop:	;
 	ENDFAMCS
 	irc = INTOKAY;
 eleave:
-	delete_symtab(stab, ifamily(node));
-	delete_symtab(stab, iiparent(node));
-	delete_symtab(stab, inum(node));
+	delete_symtab_element(stab, ifamily(node));
+	delete_symtab_element(stab, iiparent(node));
+	delete_symtab_element(stab, inum(node));
 	unlock_cache(icel);
 	return irc;
 }
@@ -1205,8 +1205,8 @@ floop:	;
 	ENDFAMCS
 	irc = INTOKAY;
 fleave:
-	delete_symtab(stab, ifamily(node));
-	delete_symtab(stab, inum(node));
+	delete_symtab_element(stab, ifamily(node));
+	delete_symtab_element(stab, inum(node));
 	unlock_cache(icel);
 	return INTOKAY;
 }
@@ -1241,7 +1241,7 @@ gloop:      ;
 	ENDTAGVALUES
 	irc = INTOKAY;
 gleave:
-	delete_symtab(stab, ielement(node));
+	delete_symtab_element(stab, ielement(node));
 	return irc;
 }
 /*==========================================+
@@ -1280,7 +1280,7 @@ hloop: ;
 	}
 	irc = INTOKAY;
 hleave:
-	delete_symtab(stab, ielement(node));
+	delete_symtab_element(stab, ielement(node));
 	return irc;
 }
 /*========================================+
@@ -1340,8 +1340,8 @@ interp_forindi (PNODE node, SYMTAB stab, PVALUE *pval)
 		}
 	}
 ileave:
-	delete_symtab(stab, ielement(node));
-	delete_symtab(stab, inum(node));
+	delete_symtab_element(stab, ielement(node));
+	delete_symtab_element(stab, inum(node));
 	return irc;
 }
 /*========================================+
@@ -1390,8 +1390,8 @@ interp_forsour (PNODE node, SYMTAB stab, PVALUE *pval)
 	}
 sourleave:
 	/* remove loop variables from symbol table */
-	delete_symtab(stab, ielement(node));
-	delete_symtab(stab, inum(node));
+	delete_symtab_element(stab, ielement(node));
+	delete_symtab_element(stab, inum(node));
 	return irc;
 }
 /*========================================+
@@ -1437,8 +1437,8 @@ interp_foreven (PNODE node, SYMTAB stab, PVALUE *pval)
 	}
 evenleave:
 	/* remove loop variables from symbol table */
-	delete_symtab(stab, ielement(node));
-	delete_symtab(stab, inum(node));
+	delete_symtab_element(stab, ielement(node));
+	delete_symtab_element(stab, inum(node));
 	return irc;
 }
 /*========================================+
@@ -1483,8 +1483,8 @@ interp_forothr (PNODE node, SYMTAB stab, PVALUE *pval)
 		}
 	}
 othrleave:
-	delete_symtab(stab, ielement(node));
-	delete_symtab(stab, inum(node));
+	delete_symtab_element(stab, ielement(node));
+	delete_symtab_element(stab, inum(node));
 	return irc;
 }
 /*======================================+
@@ -1527,8 +1527,8 @@ interp_forfam (PNODE node, SYMTAB stab, PVALUE *pval)
 		}
 	}
 mleave:
-	delete_symtab(stab, ielement(node));
-	delete_symtab(stab, inum(node));
+	delete_symtab_element(stab, ielement(node));
+	delete_symtab_element(stab, inum(node));
 	return irc;
 }
 /*============================================+
@@ -1581,9 +1581,9 @@ hloop:	;
 	irc = INTOKAY;
 hleave:
 	delete_pvalue(val); /* delete temp evaluated val - may destruct seq */
-	delete_symtab(stab, ielement(node)); /* remove indi */
-	delete_symtab(stab, ivalvar(node)); /* remove indi's value */
-	delete_symtab(stab, inum(node)); /* remove counter */
+	delete_symtab_element(stab, ielement(node)); /* remove indi */
+	delete_symtab_element(stab, ivalvar(node)); /* remove indi's value */
+	delete_symtab_element(stab, inum(node)); /* remove counter */
 	return irc;
 }
 /*=====================================+
@@ -1630,8 +1630,8 @@ iloop:	;
 ileave:
 	delete_pvalue(val); /* delete temp evaluated val - may destruct list */
 	/* remove element & counter from symbol table */
-	delete_symtab(stab, ielement(node));
-	delete_symtab(stab, inum(node));
+	delete_symtab_element(stab, ielement(node));
+	delete_symtab_element(stab, inum(node));
 	return irc;
 }
 /*===================================+
@@ -1808,8 +1808,8 @@ interp_traverse (PNODE node, SYMTAB stab, PVALUE *pval)
 	}
 	irc = INTOKAY;
 traverse_leave:
-	delete_symtab(stab, ielement(node));
-	delete_symtab(stab, ilev(node));
+	delete_symtab_element(stab, ielement(node));
+	delete_symtab_element(stab, ilev(node));
 	delete_pvalue(val);
 	val=NULL;
 	return irc;
