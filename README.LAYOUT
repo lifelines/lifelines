@@ -1,4 +1,4 @@
-LifeLines Source Release, Version 3.0.6
+LifeLines Source Release, Version 3.0.14
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
@@ -6,15 +6,6 @@ This is a brief description of the directory layout.
 
 Source Code Directories
 -----------------------
-
-./hdrs/
-
-    Header files.
-    screen.h is curses-specific, and will probably be moved eventually.
-
-./hdrs/win32/
-
-    Headers for win32 implementation code.
 
 ./arch/
 
@@ -34,17 +25,23 @@ Source Code Directories
     messages (attempt to put together all strings for hopeful localization).
     miscellaneous other stuff (including initialization code).
 
+./hdrs/
+
+    Header files.
+    screen.h is curses-specific, and will probably be moved eventually.
+
+./hdrs/win32/
+
+    Headers for win32 implementation code.
+
 ./interp/
 
     Report generator program interpreter.
 
-./stdlib/
+./intl/
 
-    Common data types & functions used by other LifeLines modules,
-    including:
-      lists (in double.c), tables, sequences, string stuff
-    These are all independent of LifeLines or GEDCOM, except that
-    that lloptions is in here, perhaps temporarily.
+    Local gettext implementation, which substitutes in appropriate language
+    translation strings on the fly.
 
 ./liflines/
 
@@ -58,12 +55,29 @@ Source Code Directories
     probably will not be used by other interfaces:
       menuitem.c, pedigree.c
 
+./m4/
+
+    m4 language macros for the Autoconf/Automake system, mostly
+    for the gettext intl subdirectory.
+
+./po/
+
+    Translations (gettext message catalogs).
+
+./stdlib/
+
+    Common data types & functions used by other LifeLines modules,
+    including:
+      lists (in double.c), tables, sequences, string stuff
+    These are all independent of LifeLines or GEDCOM, except that
+    that lloptions is in here, perhaps temporarily.
+
 ./tools/
 
     btedit - edit the binary records in the btree (database) itself
     dbverify - check a database for errors
 
-./ui/ (UNDER DEVELOPMENT)
+./ui/ (IN THE FUTURE)
 
     Will contain UI-specific code for obtaining input and displaying
     output

@@ -20,6 +20,10 @@
 
 	Fix plural forms (must use ngettext directly, not macro).
 
+	* ChangeLog README.LAYOUT docs/ll-userguide.xml gedlib/indiseq.c:
+
+	Simplify locale handling in indiseq sorting.
+
 2002-06-07 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog docs/ll-userguide.xml:

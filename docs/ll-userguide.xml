@@ -259,7 +259,7 @@ STARTING <application>LIFELINES</application> AND CREATING DATABASES
      <application>LifeLines</application> is: 
 
      <synopsis> 
-        <command>lines</command> <option>[-adkrwilfmntcuFy]</option><replaceable class="parameter">[database]</replaceable> 
+        <command>lines</command> <option>[-adkrwilfmntcuFyz]</option><replaceable class="parameter">[database]</replaceable> 
      </synopsis> 
 
 </para> 
@@ -269,12 +269,33 @@ STARTING <application>LIFELINES</application> AND CREATING DATABASES
 <para> 
 
      The options mean the following: 
+     
+</para>
 
-     <glosslist><glossentry><glossterm>-a</glossterm><glossdef> 
+    <glosslist>
+    <glossentry><glossterm>-F</glossterm><glossdef> 
+
+<para> 
+
+     Finnish option (only available if so compiled) 
+
+</para> 
+
+
+</glossdef></glossentry><glossentry><glossterm>-a</glossterm><glossdef> 
 
 <para> 
 
      log dynamic memory operation (for debugging) 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>-c</glossterm><glossdef> 
+
+<para> 
+
+     supply cache values (eg, -ci400,4000f400,4000 sets direct indi &amp; fam 
+     caches to 400, and indirect indi &amp; fam caches to 4000) 
 
 </para> 
 
@@ -286,11 +307,37 @@ STARTING <application>LIFELINES</application> AND CREATING DATABASES
 
 </para> 
 
+</glossdef></glossentry><glossentry><glossterm>-f</glossterm><glossdef> 
+
+<para> 
+
+     force open the database - use only in emergency 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>-i</glossterm><glossdef> 
+
+<para> 
+
+     open database with immutable access (no protection against other 
+     access -- for use on read-only media)  
+
+</para> 
+
 </glossdef></glossentry><glossentry><glossterm>-k</glossterm><glossdef> 
 
 <para> 
 
      always show keys (normally keys are suppressed if REFN available) 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>-l</glossterm><glossdef> 
+
+<para> 
+
+     lock (-ly) or unlock (-ln) a database for use with read only media 
+     (access to a locked database is treated as immutable) 
 
 </para> 
 
@@ -312,32 +359,6 @@ STARTING <application>LIFELINES</application> AND CREATING DATABASES
 
 </para> 
 
-</glossdef></glossentry><glossentry><glossterm>-i</glossterm><glossdef> 
-
-<para> 
-
-     open database with immutable access (no protection against other 
-     access -- for use on read-only media)  
-
-</para> 
-
-</glossdef></glossentry><glossentry><glossterm>-l</glossterm><glossdef> 
-
-<para> 
-
-     lock (-ly) or unlock (-ln) a database for use with read only media 
-     (access to a locked database is treated as immutable) 
-
-</para> 
-
-</glossdef></glossentry><glossentry><glossterm>-f</glossterm><glossdef> 
-
-<para> 
-
-     force open the database - use only in emergency 
-
-</para> 
-
 </glossdef></glossentry><glossentry><glossterm>-n</glossterm><glossdef> 
 
 <para> 
@@ -354,15 +375,6 @@ STARTING <application>LIFELINES</application> AND CREATING DATABASES
 
 </para> 
 
-</glossdef></glossentry><glossentry><glossterm>-c</glossterm><glossdef> 
-
-<para> 
-
-     supply cache values (eg, -ci400,4000f400,4000 sets direct indi &amp; fam 
-     caches to 400, and indirect indi &amp; fam caches to 4000) 
-
-</para> 
-
 </glossdef></glossentry><glossentry><glossterm>-u</glossterm><glossdef> 
 
 <para> 
@@ -370,27 +382,6 @@ STARTING <application>LIFELINES</application> AND CREATING DATABASES
      specify window size (eg, -u120,34 specifies 120 columns by 34 rows) 
 
 </para> 
-
-</glossdef></glossentry><glossentry><glossterm>-F</glossterm><glossdef> 
-
-<para> 
-
-     Finnish option (only available if so compiled) 
-
-</para> 
-
-</glossdef></glossentry><glossentry><glossterm>-a</glossterm><glossdef> 
-
-<para> 
-
-     log dynamic memory operation (for debugging) 
-
-</para> 
-
-</glossdef></glossentry></glosslist> 
-
-</para> 
-
 
 
 <para> 
@@ -461,6 +452,15 @@ STARTING <application>LIFELINES</application> AND CREATING DATABASES
 
 </para> 
 
+<para>
+
+     If you would like to choose a database from a list of existing ones,
+     enter a single question mark and press return when
+     <application>LifeLines</application> prompts you for the database name.
+     <application>LifeLines</application> will then display a list of all
+     databases that it can find, and you may select one from the list.
+
+</para>
 
 
 </sect1> 

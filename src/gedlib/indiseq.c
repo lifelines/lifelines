@@ -93,9 +93,11 @@ static void delete_el(INDISEQ seq, SORTEL el);
 static void deleteval(INDISEQ seq, UNION uval);
 static INDISEQ dupseq(INDISEQ seq);
 static STRING get_print_el(INDISEQ, INT i, INT len, RFMT rfmt);
+static BOOLEAN is_locale_current(INDISEQ seq);
 static INT key_compare(SORTEL, SORTEL, VPTR param);
-static STRING qkey_to_name(STRING key);
 static INT name_compare(SORTEL, SORTEL, VPTR param);
+static STRING qkey_to_name(STRING key);
+static void update_locale(INDISEQ seq);
 static INT value_compare(SORTEL el1, SORTEL el2, VPTR param);
 
 /*********************************************
@@ -651,32 +653,15 @@ value_compare (SORTEL el1, SORTEL el2, VPTR param)
 void
 namesort_indiseq (INDISEQ seq)
 {
-	const char * cur_locale=0;
 	calc_indiseq_names(seq);
-	if (IFlags(seq) & NAMESORT) {
-#ifdef HAVE_SETLOCALE
-		/* watch out for locale shifts, which usually happen
-		when a sequence was sorted for UI (eg, genindiset) */
-		cur_locale = setlocale(LC_COLLATE, NULL);
-		if (eqstr(cur_locale, ILocale(seq)))
-			return;
-#else
-		return;
-#endif
-	}
+	if ((IFlags(seq) & NAMESORT) && is_locale_current(seq)) return;
 	FORINDISEQ(seq, el, num)
 		spri(el) = atoi(skey(el) + 1);
 	ENDINDISEQ
 	partition_sort(IData(seq), ISize(seq), name_compare, seq);
 	IFlags(seq) &= ~ALLSORTS;
 	IFlags(seq) |= NAMESORT;
-#ifdef HAVE_SETLOCALE
-	if (ILocale(seq))
-		stdfree(ILocale(seq));
-	if (!cur_locale)
-		cur_locale = setlocale(LC_COLLATE, NULL);
-	ILocale(seq) = strdup(cur_locale);
-#endif
+	update_locale(seq);
 }
 /*========================================
  * keysort_indiseq -- Sort sequence by key
@@ -709,36 +694,47 @@ canonkeysort_indiseq (INDISEQ seq)
 	IFlags(seq) |= CANONKEYSORT;
 }
 /*============================================
+ * is_locale_current -- 
+ *  returns FALSE if locale has changed since
+ *  this was sorted
+ *==========================================*/
+static BOOLEAN
+is_locale_current (INDISEQ seq)
+{
+#ifdef HAVE_SETLOCALE
+	return eqstr(ILocale(seq), setlocale(LC_COLLATE, NULL));
+#else
+	return TRUE;
+#endif
+}
+/*============================================
+ * update_locale -- 
+ *  Annotate seq with current locale
+ *==========================================*/
+static void
+update_locale (INDISEQ seq)
+{
+#ifdef HAVE_SETLOCALE
+	const char *locstr = setlocale(LC_COLLATE, NULL);
+	if (!ILocale(seq) || !eqstr(ILocale(seq), locstr)) {
+		if (ILocale(seq))
+			stdfree(ILocale(seq));
+		ILocale(seq) = strdup(locstr);
+	}
+#endif
+}
+/*============================================
  * valuesort_indiseq -- Sort sequence by value
- *  This uses pvalues and ought to be moved out
- *  of gedlib somehow - Perry, 2001/01/07
  *==========================================*/
 void
 valuesort_indiseq (INDISEQ seq, BOOLEAN *eflg)
 {
-	const char * cur_locale=0;
 	eflg = eflg; /* unused */
-	if (IFlags(seq) & VALUESORT) {
-#ifdef HAVE_SETLOCALE
-		/* watch out for locale shifts, which usually happen
-		when a sequence was sorted for UI (eg, genindiset) */
-		cur_locale = setlocale(LC_COLLATE, NULL);
-		if (eqstr(cur_locale, ILocale(seq)))
-			return;
-#else
-		return;
-#endif
-	}
+	if ((IFlags(seq) & VALUESORT) && is_locale_current(seq)) return;
 	partition_sort(IData(seq), ISize(seq), value_compare, seq);
 	IFlags(seq) &= ~ALLSORTS;
 	IFlags(seq) |= VALUESORT;
-#ifdef HAVE_SETLOCALE
-	if (ILocale(seq))
-		stdfree(ILocale(seq));
-	if (!cur_locale)
-		cur_locale = setlocale(LC_COLLATE, NULL);
-	ILocale(seq) = strdup(cur_locale);
-#endif
+	update_locale(seq);
 }
 /*=========================================
  * partition_sort -- Partition (quick) sort
