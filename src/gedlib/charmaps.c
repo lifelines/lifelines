@@ -32,8 +32,8 @@
 #include <sys/stat.h>
 #include "standard.h"
 #include "table.h"
-#include "gedcom.h"
 #include "translat.h"
+#include "gedcom.h"
 
 TRANTABLE tran_tables[] = {
 	NULL, NULL, NULL, NULL, NULL, NULL,
@@ -51,9 +51,9 @@ char *map_keys[] = {
 };
 #define NOMAPS 6
 
-TRANTABLE init_map_from_rec();
-TRANTABLE init_map_from_str();
-TRANTABLE init_map_from_file();
+TRANTABLE init_map_from_rec(INT, BOOLEAN*);
+TRANTABLE init_map_from_str(STRING, INT, BOOLEAN*);
+TRANTABLE init_map_from_file(STRING, INT, BOOLEAN*);
 
 static STRING baddec = (STRING) "Bad decimal number format.";
 static STRING badhex = (STRING) "Bad hexidecimal number format.";
@@ -83,7 +83,7 @@ TRANTABLE init_map_from_rec (indx, perr)
 INT indx;
 BOOLEAN *perr;
 {
-	STRING key, rec;
+	STRING rec;
 	INT len;
 	TRANTABLE tt;
 
@@ -135,7 +135,7 @@ BOOLEAN *perr;
 	INT i, n, maxn, line = 1, newc;
 	BOOLEAN done;
 	unsigned char c, scratch[50];
-	STRING p, q, *lefts, *rights;
+	STRING p, *lefts, *rights;
 	TRANTABLE tt;
 
 	ASSERT(str);
@@ -297,10 +297,10 @@ STRING str;
 INT get_hexidecimal (str)
 STRING str;
 {
-	INT value, c, h;
-	if ((h = hexvalue(c = *str++)) == -1) return -1;
+	INT value, h;
+	if ((h = hexvalue(*str++)) == -1) return -1;
 	value = h;
-	if ((h = hexvalue(c = *str++)) == -1) return -1;
+	if ((h = hexvalue(*str++)) == -1) return -1;
 	return value*16 + h;
 }
 /*================================================
