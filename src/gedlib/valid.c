@@ -38,7 +38,7 @@
 #include "lloptions.h"
 
 
-extern STRING badind,badfmc,badfms,badfam,badhsb,badwif,badchl;
+extern STRING qSbadind,badfmc,badfms,badfam,badhsb,badwif,badchl;
 extern STRING bademp,badin0,badfm0,badsr0,badev0,badothr0;
 extern STRING badmul,badenm,badpsx,badirf;
 
@@ -86,7 +86,7 @@ valid_indi_old (NODE indi1, STRING *pmsg, NODE orig)
 		split_indi_old(orig, &name0, &refn0, &sex0, &body0, &famc0,
 		    &fams0);
 	if (orig && !iso_nodes(indi1, orig, FALSE, FALSE)) {
-		*pmsg = badind; 
+		*pmsg = _(qSbadind); 
 		goto bad1;
 	}
 	if (!iso_nodes(famc1, famc0, FALSE, TRUE)) {

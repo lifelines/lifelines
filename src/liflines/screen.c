@@ -89,7 +89,7 @@ static UIWINDOW extra_menu_win=NULL;
 
 extern BOOLEAN alldone, progrunning;
 extern STRING empstr,empstr71,empstr120,readpath,qSronlye,dataerr;
-extern STRING abverr,uoperr,qSbadttnum,qSnosuchtt,qSmouttt,mintt;
+extern STRING qSabverr,qSuoperr,qSbadttnum,qSnosuchtt,qSmouttt,mintt;
 extern STRING mtitle,cright,qSplschs;
 extern STRING qSmn_unkcmd,qSronlya,qSronlyr;
 extern STRING qSaskynq,qSaskynyn,qSaskyY;
@@ -1937,7 +1937,7 @@ invoke_utils_menu (void)
 	case 'i': who_is_he_she(); break;
 	case 'd': show_database_stats(); break;
 	case 'm': display_cache_stats(); break;
-	case 'e': edit_valtab("VPLAC", &placabbvs, ':', abverr); break;
+	case 'e': edit_valtab("VPLAC", &placabbvs, ':', _(qSabverr)); break;
 	case 'o': user_options(); break;
 	case 'q': break;
 	}
@@ -1988,7 +1988,7 @@ invoke_extra_menu (void)
 static void
 user_options (void)
 {
-	edit_valtab("VUOPT", &useropts, '=', uoperr);
+	edit_valtab("VUOPT", &useropts, '=', _(qSuoperr));
 	update_useropts();
 }
 /*===============================

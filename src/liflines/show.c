@@ -63,8 +63,8 @@ extern INT listbadkeys;
 extern char badkeylist[];
 extern STRING qSmisskeys;
 extern STRING dspl_indi,dspl_fath,dspl_moth,dspl_spouse,dspl_child;
-extern STRING dspa_resi,dspa_div;
-extern STRING dspa_mar,dspa_bir,dspa_chr,dspa_dea,dspa_bur,dspa_chbr;
+extern STRING dspa_resi,qSdspa_div;
+extern STRING qSdspa_mar,qSdspa_bir,qSdspa_chr,qSdspa_dea,qSdspa_bur,qSdspa_chbr;
 extern STRING qSdspl_mar,qSdspl_bir,qSdspl_chr,qSdspl_dea,qSdspl_bur;
 
 /*********************************************
@@ -406,7 +406,7 @@ init_display_fam (NODE fam, INT width)
 	/* (Might be nicer to make it a separate, following line */
 	wtemp = width-5 - strlen(Smarr);
 	if (wtemp > 10) {
-		s = sh_indi_to_event_long(fam, ttd, "DIV", dspa_div, wtemp);
+		s = sh_indi_to_event_long(fam, ttd, "DIV", _(qSdspa_div), wtemp);
 		if (s)
 			snprintf(Smarr+strlen(Smarr), liwidth-strlen(Smarr), ", %s", s);
 	}
@@ -633,7 +633,7 @@ family_events (STRING outstr, TRANTABLE ttd, NODE indi, NODE fam, INT len)
 	STRING p = outstr;
 	INT mylen = len;
 	p[0] = 0;
-	evt = sh_fam_to_event_shrt(fam, ttd, "MARR", dspa_mar, mylen);
+	evt = sh_fam_to_event_shrt(fam, ttd, "MARR", _(qSdspa_mar), mylen);
 	if (evt && !append_event(&p, evt, &mylen, 10))
 		return;
 /*
@@ -645,26 +645,26 @@ family_events (STRING outstr, TRANTABLE ttd, NODE indi, NODE fam, INT len)
 		NODE chld;
 		/* Look for birth or christening of first child */
 		if ((chld = fam_to_first_chil(fam))) {
-			evt = sh_indi_to_event_shrt(chld, ttd, "BIRT", dspa_chbr, mylen-2);
+			evt = sh_indi_to_event_shrt(chld, ttd, "BIRT", _(qSdspa_chbr), mylen-2);
 			if (evt && !append_event(&p, evt, &mylen, 10))
 				return;
 			if (!evt) {
-				evt = sh_indi_to_event_shrt(chld, ttd, "CHR", dspa_chbr, mylen-2);
+				evt = sh_indi_to_event_shrt(chld, ttd, "CHR", _(qSdspa_chbr), mylen-2);
 				if (evt && !append_event(&p, evt, &mylen, 10))
 					return;
 			}
 		}
 	}
-	evt = sh_indi_to_event_shrt(indi, ttd, "BIRT", dspa_bir, mylen-2);
+	evt = sh_indi_to_event_shrt(indi, ttd, "BIRT", _(qSdspa_bir), mylen-2);
 	if (evt && !append_event(&p, evt, &mylen, 10))
 		return;
-	evt = sh_indi_to_event_shrt(indi, ttd, "CHR", dspa_chr, mylen-2);
+	evt = sh_indi_to_event_shrt(indi, ttd, "CHR", _(qSdspa_chr), mylen-2);
 	if (evt && !append_event(&p, evt, &mylen, 10))
 		return;
-	evt = sh_indi_to_event_shrt(indi, ttd, "DEAT", dspa_dea, mylen-2);
+	evt = sh_indi_to_event_shrt(indi, ttd, "DEAT", _(qSdspa_dea), mylen-2);
 	if (evt && !append_event(&p, evt, &mylen, 10))
 		return;
-	evt = sh_indi_to_event_shrt(indi, ttd, "BURI", dspa_bur, mylen-2);
+	evt = sh_indi_to_event_shrt(indi, ttd, "BURI", _(qSdspa_bur), mylen-2);
 	if (evt && !append_event(&p, evt, &mylen, 10))
 		return;
 }
@@ -687,17 +687,17 @@ indi_events (STRING outstr, TRANTABLE ttd, NODE indi, INT len)
 	INT mylen = len;
 	p[0] = 0;
 
-	evt = sh_indi_to_event_shrt(indi, ttd, "BIRT", dspa_bir, width);
+	evt = sh_indi_to_event_shrt(indi, ttd, "BIRT", _(qSdspa_bir), width);
 	if (!evt)
-		evt = sh_indi_to_event_shrt(indi, ttd, "CHR", dspa_chr, width);
+		evt = sh_indi_to_event_shrt(indi, ttd, "CHR", _(qSdspa_chr), width);
 	if (evt) {
 		llstrcatn(&p, ", ", &mylen);
 		llstrcatn(&p, evt, &mylen);
 	}
 	if (p == outstr)
 		width = len;
-	evt = sh_indi_to_event_shrt(indi, ttd, "DEAT", dspa_dea, width);
-	if (!evt) evt = sh_indi_to_event_shrt(indi, ttd, "BURI", dspa_bur, width);
+	evt = sh_indi_to_event_shrt(indi, ttd, "DEAT", _(qSdspa_dea), width);
+	if (!evt) evt = sh_indi_to_event_shrt(indi, ttd, "BURI", _(qSdspa_bur), width);
 	if (evt) {
 		llstrcatn(&p, ", ", &mylen);
 		llstrcatn(&p, evt, &mylen);

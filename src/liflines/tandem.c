@@ -46,8 +46,8 @@
  * external/imported variables
  *********************************************/
 
-extern STRING qSnofath, qSnomoth, qSnospse, nocofp;
-extern STRING twohsb, twowif, qSidsbrs, qSidplst, qSidcbrs;
+extern STRING qSnofath, qSnomoth, qSnospse, qSnocofp;
+extern STRING qStwohsb, qStwowif, qSidsbrs, qSidplst, qSidcbrs;
 
 /*********************************************
  * local function prototypes
@@ -122,7 +122,7 @@ INT browse_tandem (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ
 			if (node) indi1 = node;
 			break;
 		case CMD_CHILDREN: 	/* browse top person's children */
-			if ((node = choose_child(indi1, NULL, nocofp,
+			if ((node = choose_child(indi1, NULL, _(qSnocofp),
 			    _(qSidcbrs), NOASK1)))
 				indi1 = node;
 			break;
@@ -219,7 +219,7 @@ INT browse_2fam (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ *
 			*pindi1 = fam_to_husb(fam1);
 			*pindi2 = fam_to_husb(fam2);
 			if (!*pindi1 || !*pindi2) {
-				message(twohsb);
+				message(_(qStwohsb));
 				break;
 			}
 			return BROWSE_TAND;
@@ -227,7 +227,7 @@ INT browse_2fam (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ *
 			*pindi1 = fam_to_wife(fam1);
 			*pindi2 = fam_to_wife(fam2);
 			if (!*pindi1 || !*pindi2) {
-				message(twowif);
+				message(_(qStwowif));
 				break;
 			}
 			return BROWSE_TAND;

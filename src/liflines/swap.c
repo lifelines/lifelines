@@ -43,8 +43,8 @@
 /*********************************************
  * external/imported variables
  *********************************************/
-extern STRING qSidcswp, qSid1csw, qSid2csw, qSid1fsw, qSid2fsw, idfbys, qSntprnt;
-extern STRING qSless2c, okcswp, qSless2f, okfswp, qSidfswp, qSronlye;
+extern STRING qSidcswp, qSid1csw, qSid2csw, qSid1fsw, qSid2fsw, qSidfbys, qSntprnt;
+extern STRING qSless2c, qSokcswp, qSless2f, qSokfswp, qSidfswp, qSronlye;
 extern STRING qSidcrdr, qSntchld, qSparadox;
 
 /*********************************************
@@ -84,7 +84,8 @@ swap_children (NODE prnt, NODE fam)
 		fam = key_to_fam(rmvat(nval(FAMS(prnt))));
 		goto gotfam;
 	}
-	if (!(fam = choose_family(prnt, _(qSntprnt), idfbys, TRUE))) return FALSE;
+	if (!(fam = choose_family(prnt, _(qSntprnt), _(qSidfbys), TRUE)))
+		return FALSE;
 gotfam:
 	nchil = num_children(fam);
 	if (nchil < 2) {
@@ -118,7 +119,7 @@ gotfam:
 	}
 
 	swap_children_impl(fam, one, two);
-	message(okcswp);
+	message(_(qSokcswp));
 	return TRUE;
 }
 /*=============================================
@@ -174,7 +175,8 @@ reorder_child (NODE prnt, NODE fam)
 		fam = key_to_fam(rmvat(nval(FAMS(prnt))));
 		goto gotfam;
 	}
-	if (!(fam = choose_family(prnt, _(qSntprnt), idfbys, TRUE))) return FALSE;
+	if (!(fam = choose_family(prnt, _(qSntprnt), _(qSidfbys), TRUE))) 
+		return FALSE;
 gotfam:
 	nchil = num_children(fam);
 	if (nchil < 2) {
@@ -187,7 +189,7 @@ gotfam:
 		NODE one = CHIL(fam);
 		NODE two = nsibling(one);
 		swap_children_impl(fam, one, two);
-		message(okcswp);
+		message(_(qSokcswp));
 		return TRUE;
 	}
 
@@ -300,6 +302,6 @@ swap_families (NODE indi)
 	nchild(one) = nchild(two);
 	nchild(two) = tmp;
 	indi_to_dbase(indi);
-	message(okfswp);
+	message(_(qSokfswp));
 	return TRUE;
 }

@@ -41,9 +41,9 @@
 
 #define VIEWABLE 13
 
-extern STRING lstnam, lstnon, lstwht, lstnad, lstpad, lstbot, lsttop;
+extern STRING qSlstnam, qSlstnon, qSlstwht, qSlstnad, qSlstpad, qSlstbot, qSlsttop;
 extern STRING qSasknam;
-extern STRING qSidplst, lstnew, mrkper;
+extern STRING qSidplst, qSlstnew, qSmrkper;
 extern INDISEQ current_seq;
 
 LIST browse_lists;
@@ -79,7 +79,7 @@ browse_list (NODE *pindi1,
 		switch (c = list_browse(seq, top, &cur, mark, &indi)) {
 		case 'j':	/* Move down line */
 			if (cur >= len - 1) {
-				message(lstbot);
+				message(_(qSlstbot));
 				break;
 			}
 			cur++;
@@ -89,7 +89,7 @@ browse_list (NODE *pindi1,
 			break;
 		case 'k':	/* Move up line */
 			if (cur <= 0) {
-				message(lsttop);
+				message(_(qSlsttop));
 				break;
 			}
 			cur--;
@@ -135,7 +135,7 @@ browse_list (NODE *pindi1,
 			break;
 		case 't':	/* Enter tandem mode */
 			if (mark == -1 || cur == mark) {
-				message(mrkper);
+				message(_(qSmrkper));
 				break;
 			}
 			*pindi2 = indi;
@@ -159,9 +159,9 @@ browse_list (NODE *pindi1,
 			mark = -1;
 			break;
 		case 'a':	/* Add persons to current list */
-			newseq = (INDISEQ) ask_for_indiseq(lstpad, 'I', &rc);
+			newseq = (INDISEQ) ask_for_indiseq(_(qSlstpad), 'I', &rc);
 			if (!newseq) {
-				message(lstnad);
+				message(_(qSlstnad));
 				break;
 			}
 			FORINDISEQ(newseq, e, i)
@@ -174,16 +174,16 @@ browse_list (NODE *pindi1,
 			element_indiseq(seq, cur, &key, &name);
 			indi = key_to_indi(key);
 			remove_indiseq(newseq);
-			message(lstnew);
+			message(_(qSlstnew));
 			break;
 		case 'n':	/* Name this list */
-			newname = ask_for_string(lstwht, _(qSasknam));
+			newname = ask_for_string(_(qSlstwht), _(qSasknam));
 			if (!newname || *newname == 0)
-				message(lstnon);
+				message(_(qSlstnon));
 			else {
 				newname = strsave(newname);
 				add_browse_list(newname, copy_indiseq(seq));
-				msg_info(lstnam, newname);
+				msg_info(_(qSlstnam), newname);
 			}
 			break;
 		case 'x':	/* Swap current with marked */

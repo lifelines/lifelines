@@ -83,7 +83,7 @@ static INT linebuflen = 0;
 static STRING bufptr = linebuffer;
 
 static STRING outfilename;
-extern STRING whtout;
+extern STRING qSwhtout;
 extern INT rpt_cancelled;
 
 /*********************************************
@@ -230,7 +230,7 @@ request_file (BOOLEAN *eflg)
 {
 	STRING rptdir = getoptstr("LLREPORTS", ".");
 	STRING fname=0;
-	Poutfp = ask_for_output_file(LLWRITETEXT, whtout, &fname
+	Poutfp = ask_for_output_file(LLWRITETEXT, _(qSwhtout), &fname
 		, rptdir, NULL);
 	if (!Poutfp || !fname || !fname[0])  {
 		if (fname)

@@ -52,7 +52,7 @@ BOOLEAN add_metadata = FALSE;
  *********************************************/
 
 extern STRING fileof, reremp, rerlng, rernlv, rerinc;
-extern STRING rerbln, rernwt, rerilv, rerwlv, unsupuni;
+extern STRING rerbln, rernwt, rerilv, rerwlv, qSunsupuni;
 
 /*********************************************
  * local types
@@ -509,7 +509,7 @@ file_to_node (STRING fname, TRANTABLE tt, STRING *pmsg, BOOLEAN *pemp)
 		return NULL;
 	}
 	if (!check_file_for_unicode(fp)) {
-		*pmsg = unsupuni;
+		*pmsg = _(qSunsupuni);
 		return NULL;
 	}
 	node = first_fp_to_node(fp, TRUE, tt, pmsg, pemp);

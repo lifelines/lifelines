@@ -17,8 +17,8 @@
 
 
 extern STRING map_keys[];
-extern STRING cmperr,aredit,qSronlye,dataerr,qSbadttnum;
-extern STRING sepch;
+extern STRING qScmperr,qSaredit,qSronlye,dataerr,qSbadttnum;
+extern STRING qSsepch;
 
 /*==============================================
  * edit_mapping -- Edit character mapping record
@@ -52,9 +52,9 @@ edit_mapping (INT ttnum)
 		INT mylen = sizeof(buffer);
 		if (load_new_tt(editfile, ttnum))
 			return TRUE;
-		appendstrf(&ptr, &mylen, "%s ", cmperr);
-		appendstrf(&ptr, &mylen, sepch, "<tab>"); /* (separator is %s) */
-		if (ask_yes_or_no_msg(buffer, aredit))
+		appendstrf(&ptr, &mylen, "%s ", _(qScmperr));
+		appendstrf(&ptr, &mylen, _(qSsepch), "<tab>"); /* (separator is %s) */
+		if (ask_yes_or_no_msg(buffer, _(qSaredit)))
 			do_edit();
 		else {
 			return FALSE;

@@ -39,7 +39,7 @@
  * external variables
  *********************************************/
 
-extern STRING opt2long;
+extern STRING qSopt2long;
 
 /*********************************************
  * local function prototypes
@@ -168,7 +168,7 @@ load_config_file (STRING file, STRING * pmsg)
 	fclose(fp);
 	if (failed) {
 		/* error is in heap */
-		*pmsg = strsave(opt2long);
+		*pmsg = strsave(_(qSopt2long));
 		return FALSE;
 	}
 	return TRUE;

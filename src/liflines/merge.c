@@ -43,8 +43,8 @@
 #include "llinesi.h"
 
 extern BOOLEAN traditional;
-extern STRING iredit, qScfpmrg, nopmrg, noqmrg, noxmrg, nofmrg;
-extern STRING dhusb,  dwife,  qScffmrg, fredit, qSbadata, qSronlym;
+extern STRING qSiredit, qScfpmrg, qSnopmrg, qSnoqmrg, qSnoxmrg, qSnofmrg;
+extern STRING qSdhusb,  qSdwife,  qScffmrg, qSfredit, qSbadata, qSronlym;
 extern STRING qSmgsfam,qSmgconf;
 
 static void merge_fam_links(NODE, NODE, NODE, NODE, INT);
@@ -92,7 +92,7 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 		return NULL;
 	}
 	if (indi1 == indi2) {
-		message(nopmrg);
+		message(_(qSnopmrg));
 		return NULL;
 	}
 
@@ -104,7 +104,7 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 	if (traditional) {
 		if (famc1 && famc2 && nestr(nval(famc1), nval(famc2))) {
 			if (!ask_yes_or_no_msg(_(qSmgsfam), _(qSmgconf))) {
-				message(noqmrg);
+				message(_(qSnoqmrg));
 				return NULL;
 			}
 		}
@@ -112,7 +112,7 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 	fams1 = FAMS(indi1);
 	fams2 = FAMS(indi2);
 	if (fams1 && fams2 && SEX(indi1) != SEX(indi2)) {
-		message(noxmrg);
+		message(_(qSnoxmrg));
 		return NULL;
 	}
 
@@ -170,14 +170,14 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 	while (TRUE) {
 		indi4 = file_to_node(editfile, tti, &msg, &emp);
 		if (!indi4 && !emp) {
-			if (ask_yes_or_no_msg(msg, iredit)) {
+			if (ask_yes_or_no_msg(msg, _(qSiredit))) {
 				do_edit();
 				continue;
 			} 
 			break;
 		}
 		if (!valid_indi_old(indi4, &msg, indi3)) {
-			if (ask_yes_or_no_msg(msg, iredit)) {
+			if (ask_yes_or_no_msg(msg, qSiredit)) {
 				do_edit();
 				continue;
 			}
@@ -421,27 +421,27 @@ merge_two_fams (NODE fam1,
 	ASSERT(eqstr("FAM", ntag(fam1)));
 	ASSERT(eqstr("FAM", ntag(fam2)));
 	if (fam1 == fam2) {
-		message(nofmrg);
+		message(_(qSnofmrg));
 		return NULL;
 	}
 
 /* Check restrictions on families */
 	split_fam(fam1, &fref1, &husb1, &wife1, &chil1, &rest1);
 	split_fam(fam2, &fref2, &husb2, &wife2, &chil2, &rest2);
-#if 0
-	if (husb1 && husb2 && nestr(nval(husb1), nval(husb2))) {
-		message(dhusb);
-		join_fam(fam1, fref1, husb1, wife1, chil1, rest1);
-		join_fam(fam2, fref2, husb2, wife2, chil2, rest2);
-		return NULL;
+	if (traditional) {
+		if (husb1 && husb2 && nestr(nval(husb1), nval(husb2))) {
+			message(_(qSdhusb));
+			join_fam(fam1, fref1, husb1, wife1, chil1, rest1);
+			join_fam(fam2, fref2, husb2, wife2, chil2, rest2);
+			return NULL;
+		}
+		if (wife1 && wife2 && nestr(nval(wife1), nval(wife2))) {
+			message(_(qSdwife));
+			join_fam(fam1, fref1, husb1, wife1, chil1, rest1);
+			join_fam(fam2, fref2, husb2, wife2, chil2, rest2);
+			return NULL;
+		}
 	}
-	if (wife1 && wife2 && nestr(nval(wife1), nval(wife2))) {
-		message(dwife);
-		join_fam(fam1, fref1, husb1, wife1, chil1, rest1);
-		join_fam(fam2, fref2, husb2, wife2, chil2, rest2);
-		return NULL;
-	}
-#endif
 
 /* Create merged file with both families together */
 	ASSERT(fp = fopen(editfile, LLWRITETEXT));
@@ -465,14 +465,14 @@ merge_two_fams (NODE fam1,
 	while (TRUE) {
 		fam4 = file_to_node(editfile, tti, &msg, &emp);
 		if (!fam4 && !emp) {
-			if (ask_yes_or_no_msg(msg, fredit)) {
+			if (ask_yes_or_no_msg(msg, _(qSfredit))) {
 				do_edit();
 				continue;
 			} 
 			break;
 		}
 		if (!valid_fam_old(fam4, &msg, fam3)) {
-			if (ask_yes_or_no_msg(_(qSbadata), iredit)) {
+			if (ask_yes_or_no_msg(_(qSbadata), _(qSiredit))) {
 				do_edit();
 				continue;
 			}

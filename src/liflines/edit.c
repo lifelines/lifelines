@@ -40,8 +40,8 @@
 
 #include "llinesi.h"
 
-extern STRING iredit, fredit, qScfpupt, qScffupt, idpedt, qSidspse, idfbys;
-extern STRING qSntprnt, gdpmod, gdfmod, qSronlye;
+extern STRING qSiredit, qSfredit, qScfpupt, qScffupt, qSidpedt, qSidspse, qSidfbys;
+extern STRING qSntprnt, qSgdpmod, qSgdfmod, qSronlye;
 extern STRING qSparadox;
 
 /*=====================================
@@ -79,7 +79,7 @@ edit_indi (NODE indi1)  /* may be NULL */
 	TRANTABLE tti = tran_tables[MEDIN];
 	TRANTABLE ttd = tran_tables[MINDS];
 
-	if (!indi1 && !(indi1 = ask_for_indi_old(idpedt, NOCONFIRM, NOASK1)))
+	if (!indi1 && !(indi1 = ask_for_indi_old(_(qSidpedt), NOCONFIRM, NOASK1)))
 		return NULL;
 
 /* Prepare file for user to edit */
@@ -98,14 +98,14 @@ edit_indi (NODE indi1)  /* may be NULL */
 	while (TRUE) {
 		indi2 = file_to_node(editfile, tti, &msg, &emp);
 		if (!indi2) {
-			if (ask_yes_or_no_msg(msg, iredit)) {
+			if (ask_yes_or_no_msg(msg, _(qSiredit))) {
 				do_edit();
 				continue;
 			} 
 			break;
 		}
 		if (!valid_indi_old(indi2, &msg, indi1)) {
-			if (ask_yes_or_no_msg(msg, iredit)) {
+			if (ask_yes_or_no_msg(msg, _(qSiredit))) {
 				do_edit();
 				continue;
 			}
@@ -158,7 +158,7 @@ edit_indi (NODE indi1)  /* may be NULL */
 	free_nodes(refn1);
 	free_nodes(refnn);
 	free_nodes(refn1n);
-	msg_status(gdpmod, indi_to_name(indi1, ttd, 35));
+	msg_status(_(qSgdpmod), indi_to_name(indi1, ttd, 35));
 	return indi1;
 }
 /*=====================================
@@ -201,7 +201,7 @@ edit_family (NODE fam1) /* may be NULL */
 			message(_(qSntprnt));
 			return NULL;
 		} 
-		fam1 = choose_family(indi, _(qSparadox), idfbys, TRUE);
+		fam1 = choose_family(indi, _(qSparadox), _(qSidfbys), TRUE);
 		if (!fam1) return FALSE; 
 	}
 
@@ -220,14 +220,14 @@ edit_family (NODE fam1) /* may be NULL */
 	while (TRUE) {
 		fam2 = file_to_node(editfile, tti, &msg, &emp);
 		if (!fam2) {
-			if (ask_yes_or_no_msg(msg, fredit)) {
+			if (ask_yes_or_no_msg(msg, _(qSfredit))) {
 				do_edit();
 				continue;
 			}
 			break;
 		}
 		if (!valid_fam_old(fam2, &msg, fam1)) {
-			if (ask_yes_or_no_msg(msg, fredit)) {
+			if (ask_yes_or_no_msg(msg, _(qSfredit))) {
 				do_edit();
 				continue;
 			}
@@ -270,6 +270,6 @@ edit_family (NODE fam1) /* may be NULL */
 	free_nodes(refn1);
 	free_nodes(refnn);
 	free_nodes(refn1n);
-	msg_status(gdfmod);
+	msg_status(_(qSgdfmod));
 	return fam1;
 }

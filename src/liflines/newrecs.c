@@ -46,9 +46,9 @@
  *********************************************/
 
 extern BTREE BTR;
-extern STRING qScfradd, qScfeadd, qScfxadd, rredit, eredit, xredit;
-extern STRING qScfrupt, qScfeupt, qScfxupt, gdrmod, gdemod, gdxmod;
-extern STRING idredt, ideedt, idxedt, duprfn, qSronlya, qSronlye;
+extern STRING qScfradd, qScfeadd, qScfxadd, qSrredit, qSeredit, qSxredit;
+extern STRING qScfrupt, qScfeupt, qScfxupt, qSgdrmod, qSgdemod, qSgdxmod;
+extern STRING qSidredt, qSideedt, qSidxedt, qSduprfn, qSronlya, qSronlye;
 extern STRING qSnofopn, qSidkyrfn;
 extern STRING qSdefsour,qSdefeven,qSdefothr,qSnosuchrec;
 
@@ -82,7 +82,7 @@ add_source (void)
 		return NULL;
 	}
 	str = getoptstr("SOURREC", _(qSdefsour));
-	return add_record(str, rredit, 'S', _(qScfradd));
+	return add_record(str, _(qSrredit), 'S', _(qScfradd));
 }
 /*==============================================
  * add_event -- Add event to database by editing
@@ -96,7 +96,7 @@ add_event (void)
 		return NULL;
 	}
 	str = getoptstr("EVENREC", _(qSdefeven));
-	return add_record(str, eredit, 'E', _(qScfeadd));
+	return add_record(str, _(qSeredit), 'E', _(qScfeadd));
 }
 /*====================================================
  * add_other -- Add user record to database by editing
@@ -110,7 +110,7 @@ add_other (void)
 		return NULL;
 	}
 	str = getoptstr("OTHR", _(qSdefothr));
-	return add_record(str, xredit, 'X', _(qScfxadd));
+	return add_record(str, _(qSxredit), 'X', _(qScfxadd));
 }
 /*================================================
  * add_record -- Add record to database by editing
@@ -196,8 +196,8 @@ add_record (STRING recstr, STRING redt, char ntype, STRING cfrm)
 void
 edit_source (NODE node)
 {
-	edit_record(node, idredt, 'S', rredit, valid_sour_tree,
-	    _(qScfrupt), "SOUR", sour_to_dbase, gdrmod);
+	edit_record(node, _(qSidredt), 'S', _(qSrredit), valid_sour_tree,
+	    _(qScfrupt), "SOUR", sour_to_dbase, _(qSgdrmod));
 }
 /*=====================================
  * edit_event -- Edit event in database
@@ -205,8 +205,8 @@ edit_source (NODE node)
 void
 edit_event (NODE node)
 {
-	edit_record(node, ideedt, 'E', eredit, valid_even_tree,
-	     _(qScfeupt), "EVEN", even_to_dbase, gdemod);
+	edit_record(node, _(qSideedt), 'E', _(qSeredit), valid_even_tree,
+	     _(qScfeupt), "EVEN", even_to_dbase, _(qSgdemod));
 }
 /*===========================================
  * edit_other -- Edit user record in database
@@ -214,8 +214,8 @@ edit_event (NODE node)
 void
 edit_other (NODE node)
 {
-	edit_record(node, idxedt, 'X', xredit, valid_othr_tree,
-	     _(qScfxupt), NULL, othr_to_dbase, gdxmod);
+	edit_record(node, _(qSidxedt), 'X', _(qSxredit), valid_othr_tree,
+	     _(qScfxupt), NULL, othr_to_dbase, _(qSgdxmod));
 }
 /*========================================================
  * write_node_to_editfile - write all parts of gedcom node
@@ -376,7 +376,7 @@ ask_for_record (STRING idstr, INT letr)
 		INDISEQ seq;
 		seq = refn_to_indiseq(str, letr, KEYSORT);
 		if (!seq) return NULL;
-		rec = choose_from_indiseq(seq, NOASK1, duprfn, duprfn);
+		rec = choose_from_indiseq(seq, NOASK1, _(qSduprfn), _(qSduprfn));
 		remove_indiseq(seq);
 	}
 	return rec;

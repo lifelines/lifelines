@@ -43,10 +43,11 @@
 
 #include "llinesi.h"
 
-extern STRING qSidcfam, fredit, cffadd, qSidprnt, unksex, qSidsbln, mklast;
-extern STRING idsadd, idsinf, kchild, iscinf, notopp, idsps1, idsps2;
-extern STRING nosex,  hashsb, haswif, qSidchld, gdfadd, cfcadd, iredit;
-extern STRING cfpadd, cfsadd, gdpadd, gdcadd, gdsadd, qSronlya, qSronlye;
+extern BOOLEAN traditional;
+extern STRING qSidcfam, qSfredit, qScffadd, qSidprnt, qSunksex, qSidsbln, qSmklast;
+extern STRING qSidsadd, qSidsinf, qSkchild, qSiscinf, qSnotopp, qSidsps1, qSidsps2;
+extern STRING qSnosex,  qShashsb, qShaswif, qSidchld, qSgdfadd, qScfcadd, qSiredit;
+extern STRING qScfpadd, qScfsadd, qSgdpadd, qSgdcadd, qSgdsadd, qSronlya, qSronlye;
 
 extern TRANTABLE tran_tables[];
 
@@ -89,7 +90,7 @@ add_indi_by_edit (void)
 	while (TRUE) {
 		indi0 = file_to_record(editfile, tti, &msg, &emp);
 		if (!indi0) {
-			if (ask_yes_or_no_msg(msg, iredit)) {
+			if (ask_yes_or_no_msg(msg, _(qSiredit))) {
 				do_edit();
 				continue;
 			} 
@@ -97,7 +98,7 @@ add_indi_by_edit (void)
 		}
 		indi = nztop(indi0);
 		if (!valid_indi_old(indi, &msg, NULL)) {
-			if (ask_yes_or_no_msg(msg, iredit)) {
+			if (ask_yes_or_no_msg(msg, _(qSiredit))) {
 				do_edit();
 				continue;
 			}
@@ -107,7 +108,7 @@ add_indi_by_edit (void)
 		}
 		break;
 	}
-	if (!indi0 || !ask_yes_or_no(cfpadd)) {
+	if (!indi0 || !ask_yes_or_no(_(qScfpadd))) {
 		if (indi0) free_rec(indi0);
 		return NULL;
 	}
@@ -139,7 +140,7 @@ add_unlinked_indi (RECORD indi0)
 	resolve_links(indi);
 	indi_to_dbase(indi);
 	indi_to_cache(indi0);
-	msg_status(gdpadd, indi_to_name(indi, ttd, 35));
+	msg_status(_(qSgdpadd), indi_to_name(indi, ttd, 35));
 	return indi0;
 }
 /*================================================================
@@ -182,12 +183,12 @@ ask_child_order (NODE fam, PROMPTQ promptq, RFMT rfmt)
 
 	childstrings = get_child_strings(fam, rfmt, &nchildren, &childkeys);
 	if (nchildren == 0) {
-		if (promptq == ALWAYS_PROMPT && !ask_yes_or_no(cfcadd))
+		if (promptq == ALWAYS_PROMPT && !ask_yes_or_no(_(qScfcadd)))
 				return -1;
 		i=0;
 /* If not first, find where child belongs */
 	} else {
-		childstrings[nchildren] = mklast;
+		childstrings[nchildren] = _(qSmklast);
 		i = choose_from_array(_(qSidcfam), nchildren+1, childstrings);
 	}
 	return i;
@@ -225,7 +226,7 @@ add_child (NODE child, NODE fam)
 /* Add FAMC node to child */
 
 	add_child_to_fam(child, fam, i);
-	msg_status(gdcadd, indi_to_name(child, ttd, 35));
+	msg_status(_(qSgdcadd), indi_to_name(child, ttd, 35));
 	return fam;
 }
 
@@ -301,7 +302,6 @@ add_spouse (NODE spouse,
             BOOLEAN conf)
 {
 	INT sex;
-	NODE husb, wife, chil, rest, fref;
 
 	if (readonly) {
 		message(_(qSronlye));
@@ -310,33 +310,36 @@ add_spouse (NODE spouse,
 
 /* Identify spouse to add to family */
 
-	if (!spouse) spouse = ask_for_indi_old(idsadd, NOCONFIRM, DOASK1);
+	if (!spouse) spouse = ask_for_indi_old(_(qSidsadd), NOCONFIRM, DOASK1);
 	if (!spouse) return FALSE;
 	if ((sex = SEX(spouse)) == SEX_UNKNOWN) {
-		message(nosex);
+		message(_(qSnosex));
 		return FALSE;
 	}
 
 /* Identify family to add spouse to */
 
-	if (!fam) fam = ask_for_fam(idsinf, kchild);
+	if (!fam) fam = ask_for_fam(_(qSidsinf), _(qSkchild));
 	if (!fam) return FALSE;
 
 /* Check that spouse can be added */
 
-	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
-	join_fam(fam, fref, husb, wife, chil, rest);
-#if 0
-	if (sex == SEX_MALE && husb) {
-		message(hashsb);
-		return FALSE;
+	if (traditional) {
+		NODE husb, wife, chil, rest, fref;
+		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
+		join_fam(fam, fref, husb, wife, chil, rest);
+		if (sex == SEX_MALE && husb) {
+			message(_(qShashsb));
+			return FALSE;
+		}
+		if (sex == SEX_FEMALE && wife) {
+			message(_(qShaswif));
+			return FALSE;
+		}
 	}
-	if (sex == SEX_FEMALE && wife) {
-		message(haswif);
+
+	if (conf && !ask_yes_or_no(_(qScfsadd)))
 		return FALSE;
-	}
-#endif
-	if (conf && !ask_yes_or_no(cfsadd)) return FALSE;
 
 	add_spouse_to_fam(spouse, fam, sex);
 	return TRUE;
@@ -399,7 +402,7 @@ add_spouse_to_fam (NODE spouse, NODE fam, INT sex)
 	resolve_links(fam);
 	indi_to_dbase(spouse);
 	fam_to_dbase(fam);
-	msg_status(gdsadd, indi_to_name(spouse, ttd, 35));
+	msg_status(_(qSgdsadd), indi_to_name(spouse, ttd, 35));
 }
 /*=========================================
  * add_members_to_family -- Add members to new family
@@ -484,19 +487,22 @@ add_family (NODE spouse1,
 
 /* Identify first spouse */
 
-	if (!spouse1) spouse1 = ask_for_indi_old(idsps1, NOCONFIRM, NOASK1);
-	if (!spouse1) return NULL;
+	if (!spouse1) 
+		spouse1 = ask_for_indi_old(_(qSidsps1), NOCONFIRM, NOASK1);
+	if (!spouse1) 
+		return NULL;
 	if ((sex1 = SEX(spouse1)) == SEX_UNKNOWN) {
-		message(unksex);
+		message(_(qSunksex));
 		return NULL;
 	}
 
 /* Identify optional spouse */
 
-	if (!spouse2) spouse2 = ask_for_indi_old(idsps2, NOCONFIRM, DOASK1);
+	if (!spouse2)
+		spouse2 = ask_for_indi_old(_(qSidsps2), NOCONFIRM, DOASK1);
 	if (spouse2) {
 		if ((sex2 = SEX(spouse2)) == SEX_UNKNOWN || sex1 == sex2) {
-			message(notopp);
+			message(_(qSnotopp));
 			return NULL;
 		}
 	}
@@ -542,14 +548,14 @@ editfam:
 	while (TRUE) {
 		fam2 = file_to_node(editfile, tti, &msg, &emp);
 		if (!fam2) {
-			if (ask_yes_or_no_msg(msg, fredit)) {
+			if (ask_yes_or_no_msg(msg, _(qSfredit))) {
 				do_edit();
 				continue;
 			}
 			break;
 		}
 		if (!valid_fam_old(fam2, &msg, fam1)) {
-			if (ask_yes_or_no_msg(msg, fredit)) {
+			if (ask_yes_or_no_msg(msg, _(qSfredit))) {
 				do_edit();
 				continue;
 			}
@@ -563,7 +569,7 @@ editfam:
 /* Confirm family add operation */
 
 	free_nodes(fam1);
-	if (!fam2 || !ask_yes_or_no(cffadd)) {
+	if (!fam2 || !ask_yes_or_no(_(qScffadd))) {
 		free_nodes(fam2);
 		return NULL;
 	}
@@ -589,7 +595,7 @@ editfam:
 	if (spouse1) indi_to_dbase(spouse1);
 	if (spouse2) indi_to_dbase(spouse2);
 	if (child) indi_to_dbase(child);
-	message(gdfadd);
+	message(_(qSgdfadd));
 	return fam2;
 }
 #ifdef ETHEL

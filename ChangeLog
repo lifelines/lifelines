@@ -1,3 +1,16 @@
+2002-04-27 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/editmap.c gedlib/editvtab.c gedlib/gstrings.c
+	gedlib/messages.c gedlib/node.c gedlib/remove.c gedlib/valid.c
+	interp/interp.c interp/rassa.c liflines/add.c
+	liflines/askprogram.c liflines/browse.c liflines/delete.c
+	liflines/edit.c liflines/import.c liflines/lbrowse.c
+	liflines/merge.c liflines/newrecs.c liflines/screen.c
+	liflines/show.c liflines/swap.c liflines/tandem.c
+	stdlib/lloptions.c:
+
+	More i18n.
+
 2002-04-25 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog interp/interp.c:

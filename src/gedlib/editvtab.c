@@ -38,7 +38,7 @@
 #include "feedback.h"
 #include "bfs.h"
 
-extern STRING aredit,dataerr,sepch;
+extern STRING qSaredit,dataerr,qSsepch;
 
 static STRING trans_edin(STRING input, INT len);
 static STRING trans_ined(STRING input, INT len);
@@ -89,9 +89,9 @@ edit_valtab (STRING key, TABLE *ptab, INT sep, STRING ermsg)
 		llstrcatn(&ptr, msg, &mylen);
 		llstrcatn(&ptr, " ", &mylen);
 		snprintf(chardesc, sizeof(chardesc), "%c", (uchar)sep);
-		snprintf(temp, sizeof(temp), sepch, chardesc); /* (separator is %s) */
+		snprintf(temp, sizeof(temp), _(qSsepch), chardesc); /* (separator is %s) */
 		llstrcatn(&ptr, temp, &mylen);
-		if (ask_yes_or_no_msg(fullerr, aredit))
+		if (ask_yes_or_no_msg(fullerr, _(qSaredit)))
 			do_edit();
 		else {
 			remove_table(tmptab, DONTFREE);

@@ -39,7 +39,7 @@
  * external/imported variables
  *********************************************/
 
-extern STRING dspa_mar,dspa_bir,dspa_chr,dspa_dea,dspa_bur;
+extern STRING qSdspa_mar,qSdspa_bir,qSdspa_chr,qSdspa_dea,qSdspa_bur;
 extern STRING unksps;
 
 /*********************************************
@@ -119,11 +119,11 @@ indi_to_list_string (NODE indi, NODE fam, INT len, RFMT rfmt)
 		name = unksps;
 	sprintf(p, "%s", name);
 	p += strlen(p);
-	if (fam)  evt = fam_to_event(fam, ttd, "MARR", dspa_mar, len, rfmt);
-	if (!evt) evt = indi_to_event(indi, ttd, "BIRT", dspa_bir, len, rfmt);
-	if (!evt) evt = indi_to_event(indi, ttd, "CHR", dspa_chr, len, rfmt);
-	if (!evt) evt = indi_to_event(indi, ttd, "DEAT", dspa_dea, len, rfmt);
-	if (!evt) evt = indi_to_event(indi, ttd, "BURI", dspa_bur, len, rfmt);
+	if (fam)  evt = fam_to_event(fam, ttd, "MARR", _(qSdspa_mar), len, rfmt);
+	if (!evt) evt = indi_to_event(indi, ttd, "BIRT", _(qSdspa_bir), len, rfmt);
+	if (!evt) evt = indi_to_event(indi, ttd, "CHR", _(qSdspa_chr), len, rfmt);
+	if (!evt) evt = indi_to_event(indi, ttd, "DEAT", _(qSdspa_dea), len, rfmt);
+	if (!evt) evt = indi_to_event(indi, ttd, "BURI", _(qSdspa_bur), len, rfmt);
 	if (evt) {
 		sprintf(p, ", %s", evt);
 		p += strlen(p);

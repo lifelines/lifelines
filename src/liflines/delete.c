@@ -41,10 +41,10 @@
 
 #include "llinesi.h"
 
-extern STRING idpdel, qScfpdel, qScffdel, qScffdeld;
+extern STRING qSidpdel, qScfpdel, qScffdel, qScffdeld;
 extern STRING qSidfrmv, qSidfrsp, qSidfrch;
 extern STRING qSidcrmv, qSntchld, qSntprnt, qSidsrmv, qSidsrmf, qSnormls, qScfcrmv;
-extern STRING okcrmv, ntsinf, ntcinf, qScfsrmv, oksrmv, qSronlye, qSidcrmf;
+extern STRING qSokcrmv, qSntsinf, qSntcinf, qScfsrmv, qSoksrmv, qSronlye, qSidcrmf;
 extern STRING qSparadox;
 
 /*=====================================================
@@ -117,7 +117,7 @@ void
 delete_indi (NODE indi, BOOLEAN conf)
 {
 	/* prompt if needed */
-	if (!indi && !(indi = ask_for_indi_old(idpdel, NOCONFIRM, DOASK1)))
+	if (!indi && !(indi = ask_for_indi_old(_(qSidpdel), NOCONFIRM, DOASK1)))
 		return;
 	/* confirm if caller desired */
 	if (conf && !ask_yes_or_no(_(qScfpdel))) return;
@@ -158,10 +158,10 @@ choose_and_remove_spouse (NODE indi, NODE fam, BOOLEAN nolast)
 
 	/* call internal workhorse remove_spouse() to do the actual removal */
 	if (!remove_spouse(indi, fam)) {
-		message(ntsinf);
+		message(_(qSntsinf));
 		return FALSE;
 	}
-	message(oksrmv);
+	message(_(qSoksrmv));
 	return TRUE;
 }
 /*===========================================
@@ -196,10 +196,10 @@ choose_and_remove_child (NODE indi, NODE fam, BOOLEAN nolast)
 	if (!ask_yes_or_no(_(qScfcrmv))) return TRUE;
 
 	if (!remove_child(indi, fam)) {
-		message(ntcinf);
+		message(_(qSntcinf));
 		return FALSE;
 	}
 
-	message(okcrmv);
+	message(_(qSokcrmv));
 	return TRUE;
 }

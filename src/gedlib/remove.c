@@ -38,7 +38,7 @@
 #include "liflines.h"
 #include "feedback.h"
 
-extern STRING haslnk;
+extern STRING qShaslnk;
 
 
 /*================================================================
@@ -164,7 +164,7 @@ remove_empty_fam (NODE fam)
 		/* TO DO - This probably should never happen, and maybe could be
 		changed to an assertion, 2001/11/08, Perry, but I've not checked
 		merge code's call */
-		message(haslnk);
+		message(_(qShaslnk));
 		join_fam(fam, refn, husb, wife, chil, rest);
 		return FALSE;
 	}

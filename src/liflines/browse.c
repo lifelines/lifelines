@@ -54,14 +54,15 @@ NODE jumpnode; /* used by Ethel for direct navigation */
  * external/imported variables
  *********************************************/
 
-extern STRING nochil, nopers, nofam, nosour, idsour, norec;
-extern STRING nosour, idsour, noeven, ideven, noothe, idothe;
-extern STRING nonote, idnote, noptr, idptr;
+extern BOOLEAN traditional;
+extern STRING qSnochil, qSnopers, qSnofam, qSnosour, qSidsour, qSnorec;
+extern STRING qSnoeven, qSideven, qSnoothe, qSidothe;
+extern STRING qSnonote, qSidnote, qSnoptr, qSidptr;
 extern STRING qSidsbrs, qSidsrmv, qSidfbrs, qSidcbrs, qSidcrmv, qSiscnew, qSissnew;
-extern STRING qSidfcop, qSntprnt, qSnofath, qSnomoth, qSnospse, noysib, noosib;
-extern STRING noprnt, nohusb, nowife, hasbth, hasnei, nocinf, nocofp;
+extern STRING qSidfcop, qSntprnt, qSnofath, qSnomoth, qSnospse, qSnoysib, qSnoosib;
+extern STRING qSnoprnt, qSnohusb, qSnowife, qShasbth, qShasnei, qSnocinf, qSnocofp;
 extern STRING qSidpnxt, qSidnxt;
-extern STRING ids2fm, idc2fm, qSidplst, idp2br, crtcfm, crtsfm;
+extern STRING qSids2fm, qSidc2fm, qSidplst, qSidp2br, qScrtcfm, qScrtsfm;
 extern STRING qSronlye, qSronlya, qSidhbrs, qSidwbrs;
 extern STRING qSid1sbr, qSid2sbr, qSid1fbr, qSid2fbr, qSid1cbr, qSid2cbr;
 extern STRING qSid1hbr, qSid2hbr, qSid1wbr, qSid2wbr;
@@ -320,8 +321,8 @@ browse_indi_modes (NODE *pindi1,
 	INDISEQ seq = NULL;
 	char c2;
 
-	addstrings[0] = crtcfm;
-	addstrings[1] = crtsfm;
+	addstrings[0] = _(qScrtcfm);
+	addstrings[1] = _(qScrtsfm);
 	if (!indi) return BROWSE_QUIT;
 	show_reset_scroll();
 	nkeyp = 0;
@@ -432,7 +433,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_CHILDREN:	/* Browse to person's child */
-			node = choose_child(indi, NULL, nocofp,
+			node = choose_child(indi, NULL, _(qSnocofp),
 			    _(qSidcbrs), NOASK1);
 			if (node) indi = node;
 			break;
@@ -459,13 +460,13 @@ reprocess_indi_cmd: /* so one command can forward to another */
 		case CMD_CHILD_DIRECT0+9:
 			node = goto_indi_child(indi, c-CMD_CHILD_DIRECT0);
 			if (node) indi = node;
-			else message(nochil);
+			else message(_(qSnochil));
 			break;
 		case CMD_TANDEM_CHILDREN:	/* browse to tandem children */
-			node = choose_child(indi, NULL, nocofp,
+			node = choose_child(indi, NULL, _(qSnocofp),
 			    _(qSid1cbr), NOASK1);
 			if (node) {
-			  node2 = choose_child(indi, NULL, nocofp,
+			  node2 = choose_child(indi, NULL, _(qSnocofp),
 			    _(qSid2cbr), NOASK1);
 			  if (node2) {
 				*pindi1 = node;
@@ -483,25 +484,25 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			break;
 		case CMD_UPSIB:	/* Browse to older sib */
 			if (!(node = indi_to_prev_sib(indi)))
-				message(noosib);
+				message(_(qSnoosib));
 			else
 				 indi = node;
 			break;
 		case CMD_DOWNSIB:	/* Browse to younger sib */
 			if (!(node = indi_to_next_sib(indi)))
-				message(noysib);
+				message(_(qSnoysib));
 			else 
 				 indi = node;
 			break;
 		case CMD_PARENTS:	/* Browse to parents' family */
-			if ((*pfam1 = choose_family(indi, noprnt,
+			if ((*pfam1 = choose_family(indi, _(qSnoprnt),
 				_(qSidfbrs), FALSE)))
 				return BROWSE_FAM;
 			break;
 		case CMD_TANDEM_PARENTS:	/* tandem browse to two parents families*/
-			if ((*pfam1 = choose_family(indi, noprnt,
+			if ((*pfam1 = choose_family(indi, _(qSnoprnt),
 				_(qSid1fbr), FALSE)))
-			  if ((*pfam2 = choose_family(indi, noprnt,
+			  if ((*pfam2 = choose_family(indi, _(qSnoprnt),
 				_(qSid2fbr), FALSE)))
 				return BROWSE_2FAM;
 			break;
@@ -544,7 +545,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_TANDEM:	/* Switch to tandem browsing */
-			node = ask_for_indi_old(idp2br, NOCONFIRM, NOASK1);
+			node = ask_for_indi_old(_(qSidp2br), NOCONFIRM, NOASK1);
 			if (node) {
 				*pindi1 = indi;
 				*pindi2 = node;
@@ -580,7 +581,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 				i = xref_nexti(nkeyp);
 				if (i)
 					indi = keynum_to_indi(i);
-				else message(nopers);
+				else message(_(qSnopers));
 				break;
 			}
 		case CMD_PREV:	/* Go to prev indi in db */
@@ -588,25 +589,25 @@ reprocess_indi_cmd: /* so one command can forward to another */
 				i = xref_previ(nkeyp);
 				if (i)
 					indi = keynum_to_indi(i);
-				else message(nopers);
+				else message(_(qSnopers));
 				break;
 			}
 		case CMD_SOURCES:	/* Browse to sources */
-			node = choose_source(indi, nosour, idsour);
+			node = choose_source(indi, _(qSnosour), _(qSidsour));
 			if (node) {
 				*pindi1 = node;
 				return BROWSE_AUX;
 			}
 			break;
 		case CMD_NOTES:	/* Browse to notes */
-			node = choose_note(indi, nonote, idnote);
+			node = choose_note(indi, _(qSnonote), _(qSidnote));
 			if (node) {
 				*pindi1 = node;
 				return BROWSE_AUX;
 			}
 			break;
 		case CMD_POINTERS:	/* Browse to references */
-			node = choose_pointer(indi, noptr, idptr);
+			node = choose_pointer(indi, _(qSnoptr), _(qSidptr));
 			if (node) {
 				*pindi1 = node;
 				return BROWSE_UNK;
@@ -716,12 +717,12 @@ reprocess_aux_cmd:
 			if (*pindi1) return BROWSE_UNK;
 			break;
 		case CMD_NOTES:	/* Browse to notes */
-			node = choose_note(aux, nonote, idnote);
+			node = choose_note(aux, _(qSnonote), _(qSidnote));
 			if (node)
 				aux = node;
 			break;
 		case CMD_POINTERS:	/* Browse to references */
-			node = choose_pointer(aux, noptr, idptr);
+			node = choose_pointer(aux, _(qSnoptr), _(qSidptr));
 			if (node) {
 				*pindi1 = node;
 				return BROWSE_UNK;
@@ -732,7 +733,7 @@ reprocess_aux_cmd:
 				i = xref_next(ntype, nkeyp);
 				if (i)
 					aux = keynum_to_node(ntype, i);
-				else message(norec);
+				else message(_(qSnorec));
 				break;
 			}
 		case CMD_PREV:	/* Go to prev in db */
@@ -740,7 +741,7 @@ reprocess_aux_cmd:
 				i = xref_prev(ntype, nkeyp);
 				if (i)
 					aux = keynum_to_node(ntype, i);
-				else message(norec);
+				else message(_(qSnorec));
 				break;
 			}
 		case CMD_QUIT:
@@ -779,7 +780,7 @@ pick_remove_spouse_from_family (NODE fam)
 	}
 	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
 	if (!husb && !wife) {
-		message(hasnei);
+		message(_(qShasnei));
 		return;
 	}
 	i = 0;
@@ -820,12 +821,12 @@ pick_add_spouse_to_family (NODE fam, NODE save)
 	}
 	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
 	join_fam(fam, fref, husb, wife, chil, rest);
-#if 0
-	if (husb && wife) {
-		message(hasbth);
-		return;
+	if (traditional) {
+		if (husb && wife) {
+			message(_(qShasbth));
+			return;
+		}
 	}
-#endif
 	if (save) {
 		if (keyflag)
 			sprintf(scratch, "%s%s (%s)", _(qSissnew),
@@ -938,45 +939,45 @@ reprocess_fam_cmd: /* so one command can forward to another */
 				fam = node;
 			break;
 		case CMD_FATHER:	/* Browse to family's father */
-			*pindi1 = choose_father(NULL, fam, nohusb,
+			*pindi1 = choose_father(NULL, fam, _(qSnohusb),
 			    _(qSidhbrs), NOASK1);
 			if (*pindi1) return BROWSE_INDI;
 			break;
 		case CMD_TANDEM_FATHERS:	/* Tandem Browse to family's fathers */
-			*pindi1 = choose_father(NULL, fam, nohusb,
+			*pindi1 = choose_father(NULL, fam, _(qSnohusb),
 			    _(qSid1hbr), NOASK1);
 			if (*pindi1) {
-			  *pindi2 = choose_father(NULL, fam, nohusb,
+			  *pindi2 = choose_father(NULL, fam, _(qSnohusb),
 			    _(qSid2hbr), NOASK1);
 			  if (*pindi2) 
 				return BROWSE_TAND;
 			}
 			break;
 		case CMD_MOTHER:	/* Browse to family's mother */
-			*pindi1 = choose_mother(NULL, fam, nowife,
+			*pindi1 = choose_mother(NULL, fam, _(qSnowife),
 			    _(qSidwbrs), NOASK1);
 			if (*pindi1) return BROWSE_INDI;
 			break;
 		case CMD_TANDEM_MOTHERS:	/* Tandem Browse to family's mother */
-			*pindi1 = choose_mother(NULL, fam, nowife,
+			*pindi1 = choose_mother(NULL, fam, _(qSnowife),
 			    _(qSid1wbr), NOASK1);
 			if (*pindi1) {
-				*pindi2 = choose_mother(NULL, fam, nowife, 
+				*pindi2 = choose_mother(NULL, fam, _(qSnowife), 
 					_(qSid2wbr), NOASK1);
 				if (*pindi2) 
 					return BROWSE_TAND;
 			}
 			break;
 		case CMD_CHILDREN:	/* Browse to a child */
-			*pindi1 = choose_child(NULL, fam, nocinf,
+			*pindi1 = choose_child(NULL, fam, _(qSnocinf),
 				_(qSidcbrs), NOASK1);
 			if (*pindi1) return BROWSE_INDI;
 			break;
 		case CMD_TANDEM_CHILDREN:	/* browse to tandem children */
-			*pindi1 = choose_child(NULL, fam, nocinf,
+			*pindi1 = choose_child(NULL, fam, _(qSnocinf),
 			    _(qSid1cbr), NOASK1);
 			if (*pindi1) {
-				*pindi2 = choose_child(NULL, fam, nocinf,
+				*pindi2 = choose_child(NULL, fam, _(qSnocinf),
 					_(qSid2cbr), NOASK1);
 				if (*pindi2) 
 					return BROWSE_TAND;
@@ -987,7 +988,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 				message(_(qSronlye));
 				break;
 			}
-			*pindi1 = choose_child(NULL, fam, nocinf,
+			*pindi1 = choose_child(NULL, fam, _(qSnocinf),
 			    _(qSidcrmv), DOASK1);
 			if (*pindi1) choose_and_remove_child(*pindi1, fam, TRUE);
 			break;
@@ -1042,7 +1043,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			if (*pindi1) return BROWSE_UNK;
 			break;
 		case CMD_TANDEM:	/* Enter family tandem mode */
-			node = ask_for_fam(ids2fm, idc2fm);
+			node = ask_for_fam(_(qSids2fm), _(qSidc2fm));
 			if (node) {
 				*pfam1 = fam;
 				*pfam2 = node;
@@ -1069,7 +1070,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 		case CMD_CHILD_DIRECT0+9:
 			*pindi1 = goto_fam_child(fam, c-CMD_CHILD_DIRECT0);
 			if (*pindi1) return BROWSE_INDI;
-			message(nochil);
+			message(_(qSnochil));
 			break;
 		case CMD_NEXT:	/* Go to next fam in db */
 			{
@@ -1077,7 +1078,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 				if (i)
 					fam = keynum_to_fam(i);
 				else
-					message(nofam);
+					message(_(qSnofam));
 				break;
 			}
 		case CMD_PREV:	/* Go to prev fam in db */
@@ -1086,25 +1087,25 @@ reprocess_fam_cmd: /* so one command can forward to another */
 				if (i)
 					fam = keynum_to_fam(i);
 				else
-					message(nofam);
+					message(_(qSnofam));
 				break;
 			}
 		case CMD_SOURCES:	/* Browse to sources */
-			node = choose_source(fam, nosour, idsour);
+			node = choose_source(fam, _(qSnosour), _(qSidsour));
 			if (node) {
 				*pindi1 = node;
 				return BROWSE_AUX;
 			}
 			break;
 		case CMD_NOTES:	/* Browse to notes */
-			node = choose_note(fam, nonote, idnote);
+			node = choose_note(fam, _(qSnonote), _(qSidnote));
 			if (node) {
 				*pindi1 = node;
 				return BROWSE_AUX;
 			}
 			break;
 		case CMD_POINTERS:	/* Browse to references */
-			node = choose_pointer(fam, noptr, idptr);
+			node = choose_pointer(fam, _(qSnoptr), _(qSidptr));
 			if (node) {
 				*pindi1 = node;
 				return BROWSE_UNK;
@@ -1253,10 +1254,10 @@ choose_any_source (void)
 	seq = get_all_sour();
 	if (!seq)
 	{
-		message(nosour);
+		message(_(qSnosour));
 		return 0;
 	}
-	rec = choose_from_indiseq(seq, DOASK1, idsour, idsour);
+	rec = choose_from_indiseq(seq, DOASK1, _(qSidsour), _(qSidsour));
 	remove_indiseq(seq);
 	return rec;
 }
@@ -1271,10 +1272,10 @@ choose_any_event (void)
 	seq = get_all_even();
 	if (!seq)
 	{
-		message(noeven);
+		message(_(qSnoeven));
 		return NULL;
 	}
-	rec = choose_from_indiseq(seq, DOASK1, ideven, ideven);
+	rec = choose_from_indiseq(seq, DOASK1, _(qSideven), _(qSideven));
 	remove_indiseq(seq);
 	return rec;
 }
@@ -1289,10 +1290,10 @@ choose_any_other (void)
 	seq = get_all_othe();
 	if (!seq)
 	{
-		message(noothe);
+		message(_(qSnoothe));
 		return NULL;
 	}
-	rec = choose_from_indiseq(seq, DOASK1, idothe, idothe);
+	rec = choose_from_indiseq(seq, DOASK1, _(qSidothe), _(qSidothe));
 	remove_indiseq(seq);
 	return rec;
 }

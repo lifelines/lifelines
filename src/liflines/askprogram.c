@@ -47,7 +47,7 @@ void remove_trailing_space(STRING s);
 int select_programs(const struct dirent *entry);
 
 /* messages used */
-extern STRING extrpt, whatrpt;
+extern STRING qSextrpt, qSwhatrpt;
 
 /*=========================
  * The supported meta-tags.
@@ -391,7 +391,7 @@ ask_for_program (STRING mode,
       free_program_list(head, NULL, 0);
       goto AskForString;
     }
-  len = make_program_list(head, extrpt, &list);
+  len = make_program_list(head, _(qSextrpt), &list);
   if (!len)
     {
       goto AskForString;
@@ -428,7 +428,7 @@ ask_for_program (STRING mode,
   return fp;
 
 AskForString:
-  fp = ask_for_input_file(LLREADTEXT, whatrpt, pfname, programsdir, ".ll");
+  fp = ask_for_input_file(LLREADTEXT, _(qSwhatrpt), pfname, programsdir, ".ll");
   return fp;
 }
 /*================================================

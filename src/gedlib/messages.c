@@ -36,6 +36,11 @@
 #define SS (STRING)
 #define ZST STRING
 
+/* strings used to clear the screen */
+STRING empstr = SS "                                                ";
+STRING empstr71 = SS "                                                                       ";
+STRING empstr120 = SS "                                                                                                                        ";
+
 /*
  2002.04.24
   Perry is prefixing string constants with qS as he checks them for
@@ -114,55 +119,55 @@ ZST qSnonamky     = N_("There is no one in the database with that name or key.")
 ZST qSnofath      = N_("This person's father is not in the database.");
 ZST qSnomoth      = N_("This person's mother is not in the database.");
 ZST qSnospse      = N_("This person has no spouse in the database.");
-ZST noysib = SS "This person has no younger sibling in the database.";
-ZST noosib = SS "This person has no older sibling in the database.";
-ZST noprnt = SS "This person's parents are not in the database.";
-ZST nohusb = SS "This family has no male spouse/parent in the database.";
-ZST nowife = SS "This family has no female spouse/parent in the database.";
-ZST nocinf = SS "There are no children in the database for this family.";
-ZST nocofp = SS "This person has no children in the database.";
-ZST nochil = SS "No such child.";
-ZST nopers = SS "No such person.";
-ZST norec  = SS "No such record.";
-ZST nofam  = SS "No such family.";
-ZST nosour = SS "No sources present.";
-ZST idsour = SS "Please choose the source to view.";
-ZST noeven = SS "No events present.";
-ZST ideven = SS "Please choose the event to view.";
-ZST noothe = SS "No others present.";
-ZST idothe = SS "Please choose the other to view.";
-ZST nonote = SS "No notes present.";
-ZST idnote = SS "Please choose the note to view.";
-ZST noptr  = SS "No references present.";
-ZST idptr  = SS "Please choose the reference to view.";
-ZST duprfn = SS "Duplicated REFN - please choose.";
+ZST qSnoysib      = N_("This person has no younger sibling in the database.");
+ZST qSnoosib      = N_("This person has no older sibling in the database.");
+ZST qSnoprnt      = N_("This person's parents are not in the database.");
+ZST qSnohusb      = N_("This family has no male spouse/parent in the database.");
+ZST qSnowife      = N_("This family has no female spouse/parent in the database.");
+ZST qSnocinf      = N_("There are no children in the database for this family.");
+ZST qSnocofp      = N_("This person has no children in the database.");
+ZST qSnochil      = N_("No such child.");
+ZST qSnopers      = N_("No such person.");
+ZST qSnorec       = N_("No such record.");
+ZST qSnofam       = N_("No such family.");
+ZST qSnosour      = N_("No sources present.");
+ZST qSidsour      = N_("Please choose the source to view.");
+ZST qSnoeven      = N_("No events present.");
+ZST qSideven      = N_("Please choose the event to view.");
+ZST qSnoothe      = N_("No others present.");
+ZST qSidothe      = N_("Please choose the other to view.");
+ZST qSnonote      = N_("No notes present.");
+ZST qSidnote      = N_("Please choose the note to view.");
+ZST qSnoptr       = N_("No references present.");
+ZST qSidptr       = N_("Please choose the reference to view.");
+ZST qSduprfn      = N_("Duplicated REFN - please choose.");
 
-ZST nosex  = SS "New spouse/parent has unknown sex; can't add to family.";
-ZST notopp = SS "The persons are not of opposite sex; can't make family.";
-ZST ntsinf = SS "This person is not a spouse in the family; can't remove.";
-ZST ntcinf = SS "This person is not a child in the family; can't remove.";
-ZST unksex = SS "This person's sex is not known; can't make family.";
-ZST hashsb = SS "This family already has a husband/male parent.";
-ZST haswif = SS "This family already has a wife/female parent.";
-ZST hasbth = SS "This family has both spouses/parents; can't add another.";
-ZST hasnei = SS "This family has neither spouse/parent; can't remove.";
-ZST haslnk = SS "This family still has links; not removed.";
+ZST qSnosex       = N_("New spouse/parent has unknown sex; can't add to family.");
+ZST qSnotopp      = N_("The persons are not of opposite sex; can't make family.");
+ZST qSntsinf      = N_("This person is not a spouse in the family; can't remove.");
+ZST qSntcinf      = N_("This person is not a child in the family; can't remove.");
+ZST qSunksex      = N_("This person's sex is not known; can't make family.");
+ZST qShashsb      = N_("This family already has a husband/male parent.");
+ZST qShaswif      = N_("This family already has a wife/female parent.");
+ZST qShasbth      = N_("This family has both spouses/parents; can't add another.");
+ZST qShasnei      = N_("This family has neither spouse/parent; can't remove.");
+ZST qShaslnk      = N_("This family still has links; not removed.");
 
-ZST idfbys = SS "Choose a family by selecting a spouse/parent.";
-ZST iredit = SS "Do you want to edit the person again?";
-ZST fredit = SS "Do you want to edit the family again?";
-ZST rredit = SS "Do you want to edit the source again?";
-ZST eredit = SS "Do you want to edit the event again?";
-ZST xredit = SS "Do you want to edit the record again?";
-ZST idpedt = SS "Who do you want to edit?";
-ZST idredt = SS "Which source record do you want to edit?";
-ZST ideedt = SS "Which event record do you want to edit?";
-ZST idxedt = SS "What record do you want to edit?";
+ZST qSidfbys      = N_("Choose a family by selecting a spouse/parent.");
+ZST qSiredit      = N_("Do you want to edit the person again?");
+ZST qSfredit      = N_("Do you want to edit the family again?");
+ZST qSrredit      = N_("Do you want to edit the source again?");
+ZST qSeredit      = N_("Do you want to edit the event again?");
+ZST qSxredit      = N_("Do you want to edit the record again?");
+ZST qSidpedt      = N_("Whom do you want to edit?");
+ZST qSidredt      = N_("Which source record do you want to edit?");
+ZST qSideedt      = N_("Which event record do you want to edit?");
+ZST qSidxedt      = N_("What record do you want to edit?");
 
-ZST cfpadd = SS "Do you really want to add this person to the database?";
-ZST cffadd = SS "Do you really want to add this family to the database?";
-ZST cfcadd = SS "Do you really want to add this child to the family?";
-ZST cfsadd = SS "Do you really want to add this spouse/parent to the family?";
+ZST qScfpadd      = N_("Do you really want to add this person to the database?");
+ZST qScffadd      = N_("Do you really want to add this family to the database?");
+ZST qScfcadd      = N_("Do you really want to add this child to the family?");
+ZST qScfsadd      = N_("Do you really want to add this spouse/parent to the family?");
 ZST qScfradd      = N_("Do you really want to add this source to the database?");
 ZST qScfeadd      = N_("Do you really want to add this event to the database?");
 ZST qScfxadd      = N_("Do you really want to add this record to the database?");
@@ -185,79 +190,77 @@ ZST qSmgconf      = N_("Are you sure you want to merge them?");
 ZST qSbadata      = N_("There is something wrong with the data.");
 ZST qSidchld      = N_("Please identify the child.");
 ZST qSidsbln      = N_("Please identify one of the child's siblings.");
-ZST idsadd = SS "Identify spouse/parent to add to an existing family.";
-ZST idsinf = SS "Identify spouse/parent already in family, if known.";
-ZST kchild = SS "Identify child already in family.";
-ZST iscinf = SS "This person is already a child in a family.";
-ZST idsps1 = SS "Identify a spouse/parent for the new family.";
-ZST idsps2 = SS "Identify the second spouse/parent, if known.";
-ZST twohsb = SS "Both families must have husbands/fathers.";
-ZST twowif = SS "Both families must have wives/mothers.";
+ZST qSidsadd      = N_("Identify spouse/parent to add to an existing family.");
+ZST qSidsinf      = N_("Identify spouse/parent already in family, if known.");
+ZST qSkchild      = N_("Identify child already in family.");
+/* TODO: why isn't iscinf used ? 2002.04.27, Perry */
+ZST qSiscinf      = N_("This person is already a child in a family.");
+ZST qSidsps1      = N_("Identify a spouse/parent for the new family.");
+ZST qSidsps2      = N_("Identify the second spouse/parent, if known.");
+ZST qStwohsb      = N_("Both families must have husbands/fathers.");
+ZST qStwowif      = N_("Both families must have wives/mothers.");
 
-ZST ids2fm = SS "Identify spouse/parent in second family, if known.";
-ZST idc2fm = SS "Identify child in second family.";
-ZST idp2br = SS "Identify second person to browse to.";
+ZST qSids2fm      = N_("Identify spouse/parent in second family, if known.");
+ZST qSidc2fm      = N_("Identify child in second family.");
+ZST qSidp2br      = N_("Identify second person to browse to.");
 
-ZST crtcfm = SS "Create a family with this person as a child.";
-ZST crtsfm = SS "Create a family with this person as a spouse/parent.";
+ZST qScrtcfm      = N_("Create a family with this person as a child.");
+ZST qScrtsfm      = N_("Create a family with this person as a spouse/parent.");
 ZST qSless2c      = N_("This family has less than two children; can't swap.");
 ZST qSless2f      = N_("This person is a spouse/parent in less than two families.");
 ZST qSparadox     = N_("Something impossible happened. Contact tech support.");
 
-ZST okcswp = SS "The two children were swapped.";
-ZST okfswp = SS "The two families were swapped.";
-ZST okcrmv = SS "The child was removed from his/her family.";
-ZST oksrmv = SS "The spouse was removed from his/her family.";
+ZST qSokcswp      = N_("The two children were swapped.");
+ZST qSokfswp      = N_("The two families were swapped.");
+ZST qSokcrmv      = N_("The child was removed from his/her family.");
+ZST qSoksrmv      = N_("The spouse was removed from his/her family.");
 
-ZST nopmrg = SS "A person cannot be merged with him/herself.";
-ZST nofmrg = SS "A family cannot be merged with itself.";
-ZST noqmrg = SS "Two persons with different parents cannot be merged.";
-ZST noxmrg = SS "Two parents of different sexes cannot be merged.";
-ZST dhusb  = SS "The families have different fathers/husbands; cannot merge.";
-ZST dwife  = SS "The families have different wives/mothers; cannot merge.";
-ZST idpdel = SS "Who do you want to remove from the database?";
-ZST mklast = SS "Place the child last in the family.";
-ZST abverr = SS "Error in abbreviations file.";
-ZST uoperr = SS "Error in user options file.";
-ZST cmperr = SS "Error in character mapping file.";
-ZST sepch  = SS "(Separator is %s)";
-ZST aredit = SS "Do you want to re-edit it?";
+ZST qSnopmrg      = N_("A person cannot be merged with him/herself.");
+ZST qSnofmrg      = N_("A family cannot be merged with itself.");
+ZST qSnoqmrg      = N_("Two persons with different parents cannot be merged.");
+ZST qSnoxmrg      = N_("Two parents of different sexes cannot be merged.");
+ZST qSdhusb       = N_("The families have different fathers/husbands; cannot merge.");
+ZST qSdwife       = N_("The families have different wives/mothers; cannot merge.");
+ZST qSidpdel      = N_("Who do you want to remove from the database?");
+ZST qSmklast      = N_("Place the child last in the family.");
+ZST qSabverr      = N_("Error in abbreviations file.");
+ZST qSuoperr      = N_("Error in user options file.");
+ZST qScmperr      = N_("Error in character mapping file.");
+ZST qSsepch       = N_("(Separator is %s)");
+ZST qSaredit      = N_("Do you want to re-edit it?");
 
-ZST gdpadd = SS "%s was added to the database.";
-ZST gdcadd = SS "%s was added as a child.";
-ZST gdsadd = SS "%s was added as a spouse and/or parent.";
-ZST gdfadd = SS "The new family was added to the database.";
-ZST gdpmod = SS "%s was modified in the database.";
-ZST gdfmod = SS "The family was modified in the database.";
-ZST gdrmod = SS "The source was modified in the database.";
-ZST gdemod = SS "The event was modified in the database.";
-ZST gdxmod = SS "The record was modified in the database.";
+ZST qSgdpadd      = N_("%s was added to the database.");
+ZST qSgdcadd      = N_("%s was added as a child.");
+ZST qSgdsadd      = N_("%s was added as a spouse and/or parent.");
+ZST qSgdfadd      = N_("The new family was added to the database.");
+ZST qSgdpmod      = N_("%s was modified in the database.");
+ZST qSgdfmod      = N_("The family was modified in the database.");
+ZST qSgdrmod      = N_("The source was modified in the database.");
+ZST qSgdemod      = N_("The event was modified in the database.");
+ZST qSgdxmod      = N_("The record was modified in the database.");
 
-ZST empstr = SS "                                                ";
-ZST empstr71 = SS "                                                                       ";
-ZST empstr120 = SS "                                                                                                                        ";
 ZST qSnofopn      = N_("Could not open file %s.");
 
-ZST mrkper = SS "Please mark a person first.";
+ZST qSmrkper      = N_("Please mark a person first.");
 
-ZST lstnam = SS "The current list is now named %s.";
-ZST lstnon = SS "The current list is not named.";
-ZST lstwht = SS "What should the name of this list be?";
-ZST lstnad = SS "No persons were added to the current list.";
-ZST lstpad = SS "What persons or list do you want to add to the current list?";
-ZST lstbot = SS "You are at the bottom of the list.";
-ZST lsttop = SS "You are at the top of the list.";
-ZST lstnew = SS "New persons were added to the current list.";
+ZST qSlstnam      = N_("The current list is now named %s.");
+ZST qSlstnon      = N_("The current list is not named.");
+ZST qSlstwht      = N_("What should the name of this list be?");
+ZST qSlstnad      = N_("No persons were added to the current list.");
+ZST qSlstpad      = N_("What persons or list do you want to add to the current list?");
+ZST qSlstbot      = N_("You are at the bottom of the list.");
+ZST qSlsttop      = N_("You are at the top of the list.");
+ZST qSlstnew      = N_("New persons were added to the current list.");
 
 ZST qSbadttnum    = N_("System error: illegal map code");
 ZST qSnosuchtt    = N_("No such translation table in this database");
 
 /* GEDCOM file */
-ZST idgedf = SS "Please enter the name of the GEDCOM file.";
-ZST gdcker = SS "Checking GEDCOM file %s for errors.\n";
-ZST gdnadd = SS "Because of errors the GEDCOM file was not loaded.\n";
-ZST dboldk = SS "No errors; adding records with original keys...";
-ZST dbnewk = SS "No errors; adding records with new keys...";
+ZST qSidgedf      = N_("Please enter the name of the GEDCOM file.");
+ZST qSgdcker      = N_("Checking GEDCOM file %s for errors.\n");
+ZST qSgdnadd      = N_("Because of errors the GEDCOM file was not loaded.\n");
+ZST qSdboldk      = N_("No errors; adding records with original keys...");
+ZST qSdbnewk      = N_("No errors; adding records with new keys...");
 ZST dbodel = SS "Using original keys, %d deleted records will be in the database.";
 ZST cfoldk = SS "Use original keys from GEDCOM file?";
 ZST dbdelk = SS "Adding unused keys as deleted keys...";
@@ -267,12 +270,12 @@ ZST qSoutfin      = N_("Database `%s' has been saved in `%s'.");
 ZST qSmouttt      = N_("Enter name of translation table file to write");
 ZST mintt  = SS "Enter name of translation table file to read";
 
-ZST extrpt      = SS "<Choose outside this list>";
-ZST whatrpt     = SS "What is the name of the program?";
+ZST qSextrpt      = N_("<Choose outside this list>");
+ZST qSwhatrpt     = N_("What is the name of the program?");
 
-ZST whtout      = SS "What is the name of the output file?";
-ZST opt2long    = SS "Malformed configuration file: line too long.";
-ZST unsupuni    = SS "Unsupported Unicode format (only UTF-8 is supported).";
+ZST qSwhtout      = N_("What is the name of the output file?");
+ZST qSopt2long    = N_("Malformed configuration file: line too long.");
+ZST qSunsupuni    = N_("Unsupported Unicode format (only UTF-8 is supported).");
 
 /* misc prompts */
 ZST qSchoostrttl  = N_("Enter string for program");
@@ -305,13 +308,13 @@ ZST dspl_moth   = SS "mother";
 ZST dspl_spouse = SS "spouse";
 ZST dspl_child  = SS "child";
 /* display abbreviations */
-ZST dspa_mar    = SS "m. ";
-ZST dspa_div    = SS "div. ";
-ZST dspa_bir    = SS "b. ";
-ZST dspa_chr    = SS "bap. ";
-ZST dspa_dea    = SS "d. ";
-ZST dspa_bur    = SS "bur. ";
-ZST dspa_chbr   = SS "cb. ";
+ZST qSdspa_mar    = N_("m. ");    /* married */
+ZST qSdspa_div    = N_("div. ");  /* divorced */
+ZST qSdspa_bir    = N_("b. ");    /* born */
+ZST qSdspa_chr    = N_("bap. ");  /* baptised */
+ZST qSdspa_dea    = N_("d. ");    /* died */
+ZST qSdspa_bur    = N_("bur. ");  /* buried */
+ZST qSdspa_chbr   = N_("cb. ");   /* child born */
 /* display longer forms */
 ZST qSdspl_mar    = N_("married: ");
 ZST qSdspl_bir    = N_("born: ");
@@ -320,7 +323,7 @@ ZST qSdspl_dea    = N_("died: ");
 ZST qSdspl_bur    = N_("buri: ");
 
 /* editing errors */
-ZST badind      = SS "You cannot edit the INDI line in a person record.";
+ZST qSbadind      = N_("You cannot edit the INDI line in a person record.");
 ZST badfmc      = SS "You cannot edit the FAMC line in a person record.";
 ZST badfms      = SS "You cannot edit the FAMS lines in a person record.";
 ZST badfam      = SS "You cannot edit the FAM line in a family record.";

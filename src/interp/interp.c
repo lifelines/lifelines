@@ -70,7 +70,7 @@ BOOLEAN rpt_cancelled = FALSE;
 
 extern BOOLEAN progrunning, progparsing;
 extern INT progerror;
-extern STRING whatrpt,idrpt;
+extern STRING qSwhatrpt,idrpt;
 extern STRING nonrecx;
 
 /*********************************************
@@ -186,7 +186,7 @@ interp_program (STRING proc, INT nargs, VPTR *args, INT nifiles
 	} else {
 		STRING programsdir = getoptstr("LLPROGRAMS", ".");
 		ifile = NULL;
-		fp = ask_for_program(LLREADTEXT, whatrpt, &ifile,
+		fp = ask_for_program(LLREADTEXT, _(qSwhatrpt), &ifile,
 			programsdir, ".ll", picklist);
 		if (fp == NULL) {
 			if (ifile != NULL)  {

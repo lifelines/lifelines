@@ -61,8 +61,8 @@ extern INT gd_smax;	/* maximum source key number */
 extern INT gd_emax;	/* maximum event key number */
 extern INT gd_xmax;	/* maximum other key number */
 
-extern STRING idgedf, gdcker, gdnadd, dboldk, dbnewk, dbodel;
-extern STRING cfoldk, dbdelk, qSdbrdon, unsupuni;
+extern STRING qSidgedf, qSgdcker, qSgdnadd, qSdboldk, qSdbnewk, dbodel;
+extern STRING cfoldk, dbdelk, qSdbrdon, qSunsupuni;
 extern TRANTABLE tran_tables[];
 
 /*********************************************
@@ -104,16 +104,16 @@ import_from_file (void)
 
 /* Open and validate GEDCOM file */
 	srcdir = getoptstr("InputPath", ".");
-	fp = ask_for_input_file(LLREADTEXT, idgedf, &fname, srcdir, ".ged");
+	fp = ask_for_input_file(LLREADTEXT, _(qSidgedf), &fname, srcdir, ".ged");
 	if (!fp) return FALSE;
 	if (!check_file_for_unicode(fp)) {
-		msg_error(unsupuni);
+		msg_error(_(qSunsupuni));
 	}
-	llwprintf(gdcker, fname);
+	llwprintf(_(qSgdcker), fname);
 	if (!validate_gedcom(fp)) {
 		fclose(fp);
 		fp=NULL;
-		wfield(9, 0, gdnadd);
+		wfield(9, 0, _(qSgdnadd));
 		wpos(10, 0);
 		return FALSE;
 	}
@@ -139,9 +139,9 @@ import_from_file (void)
 	rewind(fp);
 
 	if(gd_reuse)
-	  wfield(9,  0, dboldk);
+	  wfield(9,  0, _(qSdboldk));
 	else
-	  wfield(9,  0, dbnewk);
+	  wfield(9,  0, _(qSdbnewk));
 
 	/* test for read-only database here */
 
