@@ -1812,9 +1812,9 @@ invoke_cset_display (void)
 	
 	if (is_nls_supported()) {
 		enqueue_list(list, strsave(_("NLS (National Language Support) is compiled in.")));
-		zs_setf(zstr, "LOCALEDIR: %s", LOCALEDIR);
+		zs_setf(zstr, "LocaleDir (default): %s", LOCALEDIR);
 		enqueue_list(list, strsave(zs_str(zstr)));
-		zs_setf(zstr,  "LocaleDir: %s", getoptstr("LocaleDir", ""));
+		zs_setf(zstr,  "LocaleDir (override): %s", getoptstr("LocaleDir", ""));
 		enqueue_list(list, strsave(zs_str(zstr)));
 	} else {
 		enqueue_list(list, strsave(_("NLS (National Language Support) is not compiled in.")));
