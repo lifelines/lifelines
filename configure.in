@@ -78,5 +78,14 @@ dnl AC_TYPE_SIGNAL
 dnl we only use this if we don't have strsignal
 dnl AC_DECL_SYS_SIGLIST
 
-AC_OUTPUT(Makefile btree/Makefile interp/Makefile gedlib/Makefile stdlib/Makefile docs/Makefile tools/Makefile liflines/Makefile hdrs/Makefile reports/Makefile)
+AC_OUTPUT(Makefile \
+        btree/Makefile \
+        interp/Makefile \
+        gedlib/Makefile \
+        stdlib/Makefile \
+        liflines/Makefile \
+        tools/Makefile \
+        hdrs/Makefile \
+        docs/Makefile \
+        reports/Makefile)
 
