@@ -4,6 +4,10 @@
 
 	Starting to simplify string functions.
 
+	* ChangeLog config.guess config.sub missing:
+
+	Updating system recognition autotools scripts.
+
 2002-06-13 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/editvtab.c gedlib/init.c gedlib/names.c
