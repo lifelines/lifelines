@@ -1,9 +1,0 @@
-
-CVS_RSH=ssh
-export CVS_RSH
-
-CVSROOT=aviast@cvs.lifelines.sourceforge.net:/cvsroot/lifelines
-export CVSROOT
-
-
-
