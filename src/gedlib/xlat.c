@@ -240,10 +240,24 @@ xl_get_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 		XLSTEP xstep = create_iconv_step(zs_str(zsrc), zs_str(zdest));
 		enqueue_list(xlat->steps, xstep);
 	} else {
-		DYNTT dyntt = get_conversion_dyntt(zs_str(zsrc), zs_str(zdest));
-		if (dyntt)
+		STRING src = zs_str(zsrc), dest = zs_str(zdest);
+		BOOLEAN foundit = FALSE;
+		DYNTT dyntt = get_conversion_dyntt(src, dest);
+		if (dyntt) {
 			add_dyntt_step(xlat, dyntt);
-		else
+			foundit = TRUE;
+		}
+		else if (!eqstr(src, "UTF-8") && !eqstr(dest, "UTF-8")) {
+			/* try going through UTF-8 as intermediate step */
+			DYNTT dyntt1 = get_conversion_dyntt(src, "UTF-8");
+			DYNTT dyntt2 = get_conversion_dyntt("UTF-8", dest);
+			if (dyntt1 && dyntt2) {
+				add_dyntt_step(xlat, dyntt1);
+				add_dyntt_step(xlat, dyntt2);
+				foundit = TRUE;
+			}
+		}
+		if (!foundit)
 			xlat->valid = FALSE; /* missing main conversion */
 	}
 
