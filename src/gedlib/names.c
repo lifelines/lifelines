@@ -66,7 +66,7 @@ static CNSTRING nextpiece(CNSTRING);
 static STRING parts_to_name(STRING*);
 static BOOLEAN piecematch(STRING, STRING);
 static void remove_namekey(const RKEY * rkeyname, CNSTRING name, const RKEY * rkeyid);
-static void rkey_cpy(const RKEY * src, RKEY * dest);
+/* static void rkey_cpy(const RKEY * src, RKEY * dest);*/
 static BOOLEAN rkey_eq(const RKEY * rkey1, const RKEY * rkey2);
 static void soundex2rkey(char finitial, CNSTRING sdex, RKEY * rkey);
 static void squeeze(CNSTRING, STRING);
@@ -238,6 +238,7 @@ rkey_eq (const RKEY * rkey1, const RKEY * rkey2)
 /*============================================
  * rkey_cpy - copy rkeys from src to dest?
  *==========================================*/
+/* unused 
 static void
 rkey_cpy (const RKEY * src, RKEY * dest)
 {
@@ -247,6 +248,7 @@ rkey_cpy (const RKEY * src, RKEY * dest)
 		dest->r_rkey[i] = src->r_rkey[i];
 	}
 }
+unused */
 /*=======================================
  * name_lo - Lower limit for name records
  *=====================================*/
@@ -378,13 +380,12 @@ add_name (STRING name, STRING key)
 		soundex2rkey(finitial, sdex, &rkeyname);
 		/* rkeyname is where names with this soundex/finitial are stored */
 		/* check if we've already done this entry */
-		rkeystr = strsave(rkey2str(rkeyname));
+		rkeystr = rkey2str(rkeyname);
 		if (dupcheck(donetab, rkeystr)) {
 			strfree(&rkeystr);
 			continue;
 		}
 		add_namekey(&rkeyname, name, &rkeyid);
-		strfree(&rkeystr);
 	}
 	destroy_table(donetab);
 

@@ -1,3 +1,9 @@
+2004-08-28 Stephen Dum
+        * Changelog, reports/eol.ll, src/gedlib/names.c
+	Cleanup of eol.ll.  Comment out an unused routine in names.c
+	and remove an unnecessary strsave call.
+
+
 2004-07-21 Stephen Dum
         * removed ps-circ/ps-circ.ll ps-circ/ps-circ.ps
 	These turned out to be earlier versions of ps-circle.ll (which

@@ -133,7 +133,7 @@ proc ext_step(list,string,start,len,nth) {
 	}
 	set(end, sub(index(string, ",", nth),1))
 	if(lt(end,0)) {set(end,len)}
-	enqueue (list, save(substring(string,start,end)))
+	enqueue (list, substring(string,start,end))
 	if (lt(end,len)) {call ext_step(list,string,add(end,2),len,nth)}
 }
 
@@ -308,7 +308,7 @@ proc set_year (person)
 	if (gt(guess,0)) {set (yr,d(guess))}
     }
     if (not(yr)) { set (yr, "????") }
-    set(pdate, save(yr))		/* values returned */
+    set(pdate, yr)		/* values returned */
     set(pdmin,minyr)
     set(pdmax,maxyr)
 }
@@ -318,5 +318,5 @@ proc set_year_place (person)
     call set_year (person)
     set(pl, place(birth(person)))
     if (not(pl)) {set(pl, place(baptism(person)))}
-    set(pplace, save(pl))
+    set(pplace, pl)
 }
