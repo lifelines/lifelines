@@ -1,3 +1,12 @@
+2001-01-30 Perry Rapp <puddle@users.sourceforge.net>
+
+	* gedlib/gengedc.c gedlib/keytonod.c gedlib/messages.c
+	gedlib/names.c gedlib/node.c gedlib/refns.c hdrs/gedcom.h
+	interp/alloc.c interp/interp.c liflines/browse.c
+	liflines/menuitem.c liflines/pedigree.c:
+	Minor documentation.
+	Moved some messages from node.c into messages.c.
+
 2001-01-28 Perry Rapp <puddle@users.sourceforge.net>
 
 	* hdrs/screen.h liflines/browse.c liflines/llinesi.h
