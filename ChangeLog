@@ -1,3 +1,9 @@
+2002-07-21 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/charmaps.c:
+
+	Cleanup charmaps code.
+
 2002-07-18 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp hdrs/interp.h

@@ -43,7 +43,7 @@
  *********************************************/
 
 
-char *map_keys[NUM_TT_MAPS] = {
+const char *map_keys[NUM_TT_MAPS] = {
 	"MEDIN", "MINED", "MGDIN", "MINGD",
 	"MDSIN", "MINDS", "MINRP", "MSORT",
 	"MCHAR", "MLCAS", "MUCAS", "MPREF"
@@ -123,22 +123,24 @@ clear_char_mappings (void)
 {
 	INT indx=-1;
 
-	for (indx = 0; indx < NUM_TT_MAPS; indx++) {
+	for (indx = 0; indx < NUM_TT_MAPS; ++indx) {
 		TRANMAPPING ttm = &trans_maps[indx];
 		TRANTABLE *ptt = &ttm->dbtrantbl;
-		TRANTABLE ttx = 0;
 		remove_trantable(*ptt);
 		*ptt = 0;
 		strfree(&ttm->iconv_src);
 		strfree(&ttm->iconv_dest);
 		ttm->after = -1;
 		if (ttm->global_trans) {
+			TRANTABLE ttx = 0;
 			FORLIST(ttm->global_trans, tbel)
 				ttx = tbel;
 				ASSERT(ttx);
 				remove_trantable(ttx);
 				ttx = 0;
 			ENDLIST
+			remove_list(ttm->global_trans, 0);
+			ttm->global_trans = 0;
 		}
 	}
 }
@@ -164,6 +166,7 @@ load_global_char_mapping (void)
 	set_zone_conversion("GedcomCodeset", MGDIN, MINGD);
 	set_zone_conversion("ReportCodeset", -1, MINRP);
 
+	/* load any user-specified translation tables */
 	for (indx = 0; indx < NUM_TT_MAPS; indx++) {
 		TRANMAPPING ttm = &trans_maps[indx];
 		if (ttm->after >= 0) {
@@ -188,15 +191,16 @@ load_global_char_mapping (void)
 static void
 check_for_user_charmaps (STRING basename, TRANMAPPING ttm, CNSTRING mapname)
 {
-	char name[120];
 	CNSTRING ttname=0;
 	INT i=1;
 	CNSTRING ttdir = getoptstr("TTDIR", ".");
 	if (!ttdir || !ttdir[0])
 		return;
 	for (i=1; TRUE; ++i) {
+		char name[120];
 		char ttpath[MAXPATHLEN];
-		llstrncpy(name, basename, sizeof(name));
+		name[0]=0;
+		llstrapp(name, sizeof(name), basename);
 		llstrappf(name, sizeof(name), "%d", i);
 		ttname = getoptstr(name, "");
 		if (!ttname || !ttname[0])
@@ -279,11 +283,11 @@ load_custom_db_mappings (void)
 	INT indx=-1;
 	for (indx = 0; indx < NUM_TT_MAPS; indx++) {
 		TRANMAPPING ttm = &trans_maps[indx];
-		TRANTABLE *tt = &ttm->dbtrantbl;
-		remove_trantable(*tt);
-		*tt = 0;
+		TRANTABLE *ptt = &ttm->dbtrantbl;
+		remove_trantable(*ptt);
+		*ptt = 0;
 		if (is_db_open()) {
-			if (!init_map_from_rec(indx, tt)) {
+			if (!init_map_from_rec(indx, ptt)) {
 				msg_error(_("Error initializing %s map.\n"), map_names[indx]);
 			}
 		}
