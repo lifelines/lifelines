@@ -204,10 +204,16 @@ load_gedcom (BOOLEAN picklist)
 
 	srcdir = getoptstr("InputPath", ".");
 	if (!ask_for_gedcom(LLREADTEXT, _(qSwhatgedc), 0, &fullpath, srcdir, ".ged", picklist)
-		|| !(fp = fopen(fullpath, LLREADTEXT))) {
+		|| !(fp = fopen(fullpath, LLREADBINARY))) {
 		strfree(&fullpath);
 		return;
 	}
+
+	/*
+	Note: we read the file in binary mode, so ftell & fseek will work correctly.
+	Microsoft's ftell/fseek do not work correctly if the file has simple unix (\n)
+	line terminations! -- Perry, 2003-02-11
+	*/
 
 	memset(&ifeed, 0, sizeof(ifeed));
 	ifeed.validating_fnc = import_validating;

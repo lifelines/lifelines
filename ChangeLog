@@ -1,4 +1,10 @@
-2003-02-09 Perry Rapp
+2003-02-11 Perry Rapp
+
+	* ChangeLog src/gedlib/nodeio.c src/liflines/loadsave.c:
+
+	Read gedcom files in binary mode, due to bug of MS-Windows.
+
+2003-02-10 Perry Rapp
 
 	* ChangeLog src/hdrs/version.h:
 

@@ -77,6 +77,7 @@ file_to_line (FILE *fp,
 	*pmsg = NULL;
 	while (TRUE) {
 		if (!(p = fgets(in, sizeof(in), fp))) return DONE;
+		/* buffer_to_line will do striptrail */
 		flineno++;
 		if (ttm) {
 			translate_string(ttm, in, out, MAXLINELEN+2);
