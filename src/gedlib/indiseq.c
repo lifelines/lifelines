@@ -346,20 +346,20 @@ INT (*cmp)();	/* compare function */
 {
 	ldata = data;
 	lcmp = cmp;
-	qsort(0, len-1);
+	llqsort(0, len-1);
 }
 /*======================================
- * qsort -- Recursive core of quick sort
+ * llqsort -- Recursive core of quick sort
  *====================================*/
-qsort (left, right)
+llqsort (left, right)
 INT left, right;	/* range to sort */
 {
 	INT pcur = getpivot(left, right);
 	if (pcur != LNULL) {
 		SORTEL pivot = ldata[pcur];
 		INT mid = partition(left, right, pivot);
-		qsort(left, mid-1);
-		qsort(mid, right);
+		llqsort(left, mid-1);
+		llqsort(mid, right);
 	}
 }
 /*====================================

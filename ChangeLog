@@ -1,3 +1,24 @@
+2000-09-21  Marc Nozell <marc@nozell.com>
+
+	* gedlib/indiseq.c, stdlib/mystring.c, win32/hdrs/proto.h
+	
+	  Changed qsort to llqsort to prevent conflict with standard
+	  libraries.  Idea to fix by sreeve
+	
+	* docs/lifelines.sgml
+	  - updated license info
+	  - point to lifelines.sourceforge.net
+	  - change references from lines302 to llines
+	  - make most lines less than 80 characters wide
+	
+	* liflines/main.c 
+	  - Added sleep so you can see the usage message when you ask for
+	  it.
+	
+	* COPYING
+	  - Point to LICENSE
+
+	
 2000-01-10  Marc Nozell  <marc@nozell.com>
 
 	* Added mystring.h to hdrs/Makefile.am

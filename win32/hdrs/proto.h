@@ -644,7 +644,7 @@ PVALUE __wife (PNODE, TABLE, BOOLEAN *);
 PVALUE __xref (PNODE, TABLE, BOOLEAN *);
 PVALUE __year (PNODE, TABLE, BOOLEAN *);
 PVALUE ___alpha (PNODE, TABLE, BOOLEAN *);
-qsort (INT, INT);
+llqsort (INT, INT);
 RECORD getrecord (BTREE, RKEY, INT *);
 remove_browse_list (STRING, INDISEQ);
 remove_fam_cache (STRING);

@@ -495,7 +495,7 @@ int main()
   fprintf (stdout, "size %d %d\n",
            sizeof(test)/sizeof(test[0]), sizeof(test[0]));
 ***/
-  qsort (test, sizeof(test)/sizeof(test[0]), sizeof(test[0]), cmp);
+  llqsort (test, sizeof(test)/sizeof(test[0]), sizeof(test[0]), cmp);
 
   fprintf (stdout, "Sort test.\n");
   for (i=0; i<NN; i++) {
