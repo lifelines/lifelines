@@ -108,6 +108,7 @@ typedef struct  {
 	INT is_prntype; /* for special cases (spouseseq & famseq) */
 	INT is_valtype; /* int, string, pointer */
 	INT is_refcnt; /* for interp */
+	STRING is_locale; /* used by namesort */
 	INDISEQ_VALUE_VTABLE is_valvtbl;
 } *INDISEQ;
 
@@ -118,6 +119,7 @@ typedef struct  {
 #define IPrntype(s)  ((s)->is_prntype)
 #define IValtype(s)  ((s)->is_valtype)
 #define IRefcnt(s)   ((s)->is_refcnt)
+#define ILocale(s)   ((s)->is_locale)
 #define IValvtbl(s)  ((s)->is_valvtbl)
 
 #define KEYSORT   (1<<0)	/* Values of attribute flags */

@@ -159,7 +159,7 @@ main (INT argc, char **argv)
 	BOOLEAN graphical=TRUE;
 
 #ifdef HAVE_SETLOCALE
-	deflocale = setlocale(LC_ALL, "");
+	deflocale = strsave(setlocale(LC_ALL, ""));
 #endif
 
 	/* Parse Command-Line Arguments */
@@ -371,6 +371,7 @@ main (INT argc, char **argv)
 finish:
 	close_lifelines();
 	shutdown_ui(!ok);
+	strfree(&deflocale);
 
 usage:
 	/* Display Command-Line Usage Help */

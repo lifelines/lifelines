@@ -445,4 +445,5 @@ update_useropts (void)
 		else if (eqstr("UTF-8", str)||eqstr("utf-8", str)||eqstr("65001", str))
 			int_codeset=8;
 	}
+	uilocale(); /* in case user changed locale */
 }

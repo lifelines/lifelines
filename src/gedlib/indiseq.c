@@ -31,6 +31,12 @@
 /* modified 2000-01-26 J.F.Chandler */
 /* modified 2000-08-21 J.F.Chandler */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+#ifdef HAVE_LOCALE_H
+#include <locale.h>
+#endif
 #include "sys_inc.h"
 #include "llstdlib.h"
 #include "table.h"
@@ -185,6 +191,8 @@ remove_indiseq (INDISEQ seq)
 		stdfree(*d);
 	}
 	stdfree(IData(seq));
+	if (ILocale(seq))
+		stdfree(ILocale(seq));
 	stdfree(seq);
 }
 /*==============================
@@ -612,13 +620,31 @@ value_str_compare (SORTEL el1, SORTEL el2)
 void
 namesort_indiseq (INDISEQ seq)
 {
-	if (IFlags(seq) & NAMESORT) return;
+	const char * cur_locale=0;
+	if (IFlags(seq) & NAMESORT) {
+#ifdef HAVE_SETLOCALE
+		/* watch out for locale shifts, which usually happen
+		when a sequence was sorted for UI (eg, genindiset) */
+		cur_locale = setlocale(LC_COLLATE, NULL);
+		if (eqstr(cur_locale, ILocale(seq)))
+			return;
+#else
+		return;
+#endif
+	}
 	FORINDISEQ(seq, el, num)
 		spri(el) = atoi(skey(el) + 1);
 	ENDINDISEQ
 	partition_sort(IData(seq), ISize(seq), name_compare);
 	IFlags(seq) &= ~ALLSORTS;
 	IFlags(seq) |= NAMESORT;
+#ifdef HAVE_SETLOCALE
+	if (ILocale(seq))
+		stdfree(ILocale(seq));
+	if (!cur_locale)
+		cur_locale = setlocale(LC_COLLATE, NULL);
+	ILocale(seq) = strdup(cur_locale);
+#endif
 }
 /*========================================
  * keysort_indiseq -- Sort sequence by key
@@ -656,13 +682,23 @@ canonkeysort_indiseq (INDISEQ seq)
  *  of gedlib somehow - Perry, 2001/01/07
  *==========================================*/
 void
-valuesort_indiseq (INDISEQ seq,
-                   BOOLEAN *eflg)
+valuesort_indiseq (INDISEQ seq, BOOLEAN *eflg)
 {
 	PVALUE val;
 	SORTEL *data;
 	int settype;
-	if (IFlags(seq) & VALUESORT) return;
+	const char * cur_locale=0;
+	if (IFlags(seq) & VALUESORT) {
+#ifdef HAVE_SETLOCALE
+		/* watch out for locale shifts, which usually happen
+		when a sequence was sorted for UI (eg, genindiset) */
+		cur_locale = setlocale(LC_COLLATE, NULL);
+		if (eqstr(cur_locale, ILocale(seq)))
+			return;
+#else
+		return;
+#endif
+	}
 	data = IData(seq);
 	val = sval(*data).w;
 	if ((settype = ptype(val)) != PINT && settype != PSTRING ) {
@@ -688,6 +724,13 @@ valuesort_indiseq (INDISEQ seq,
 		partition_sort(IData(seq), ISize(seq), value_str_compare);
 	IFlags(seq) &= ~ALLSORTS;
 	IFlags(seq) |= VALUESORT;
+#ifdef HAVE_SETLOCALE
+	if (ILocale(seq))
+		stdfree(ILocale(seq));
+	if (!cur_locale)
+		cur_locale = setlocale(LC_COLLATE, NULL);
+	ILocale(seq) = strdup(cur_locale);
+#endif
 }
 /*=========================================
  * partition_sort -- Partition (quick) sort

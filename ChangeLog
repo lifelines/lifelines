@@ -10,6 +10,12 @@
 	value invalid).
 	Fix translat.c to include config.h.
 
+	* ChangeLog gedlib/indiseq.c gedlib/init.c hdrs/indiseq.h
+	liflines/main.c liflines/screen.c win32/msvc6/llines/llines.rc:
+
+	Bugfixes for dual locale operation. Fix namesort & valuesort to
+	detect if sorted in wrong locale.
+
 2002-02-08 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog configure.in lifelines.spec docs/llines.1
