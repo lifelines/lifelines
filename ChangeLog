@@ -1,3 +1,9 @@
+2003-11-26 Jens Arvidsson
+
+	* ChangeLog po/sv.po
+
+	Updated Swedish translation for 3.0.37.
+
 2003-11-24 Perry Rapp
 
 	* ChangeLog src/gedlib/keytonod.c src/hdrs/cache.h
