@@ -2,7 +2,7 @@
 
 	* ChangeLog src/stdlib/table.c
 
-	Plus string leak in table_insert_ptr.
+	Fix string leak in table_insert_ptr.
 
 	* ChangeLog NEWS docs/ll-reportmanual.xml
 	reports/st/st_all.ll reports/st/st_list.li
