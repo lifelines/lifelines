@@ -302,6 +302,7 @@ readrec(BTREE btree, BLOCK block, INT i, INT *plen)
 }
 /*===================================
  * getrecord -- Get record from BTREE
+ *  (ignore deleted records)
  *=================================*/
 RECORD
 getrecord (BTREE btree,
@@ -313,6 +314,7 @@ getrecord (BTREE btree,
 	FKEY nfkey;
 	BLOCK block;
 	BOOLEAN found = FALSE;
+	RECORD rec;
 
 #ifdef DEBUG
 	llwprintf("GETRECORD: rkey: %s\n", rkey2str(rkey));
@@ -351,7 +353,12 @@ getrecord (BTREE btree,
 	}
 	if (!found) return NULL;
 
-	return readrec(btree, block, lo, plen);
+	rec = readrec(btree, block, lo, plen);
+	if (rec && !strcmp(rec, "DELE\n")) {
+		free(rec);
+		rec=NULL;
+	}
+	return rec;
 }
 /*=======================================
  * movefiles -- Move first file to second
