@@ -194,6 +194,7 @@ static STRING lineage_tags[] = {
 	, "FAMS"
 	, "WIFE"
 	, "HUSB"
+	, "CHIL"
 };
 /*********************************************
  * local & exported function definitions

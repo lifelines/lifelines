@@ -60,6 +60,10 @@
 
 	Skip over invalid children in FORCHILDRENx without ASSERT.
 
+	* ChangeLog src/tools/dbverify.c
+
+	Add "CHIL" to lineage_tags in dbverify.
+
 2005-02-02 Perry Rapp
 
 	* ChangeLog src/gedlib/gedcomi.h src/gedlib/keytonod.c
