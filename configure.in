@@ -67,6 +67,10 @@ dnl AC_HEADER_TIME
 
 echo Looking for library functions
 AC_CHECK_FUNCS( getopt snprintf heapwalk _heapwalk )
+
+dnl Check for replacement functions
+AC_REPLACE_FUNCS( sleep )
+
 dnl AC_CHECK_FUNCS(strerror perror strsignal psignal getopt getopt_long random)
 dnl investigate using AC_MSG_ERROR for error reporting
 dnl echo Looking for OPTIONAL library functions
@@ -79,6 +83,7 @@ dnl we only use this if we don't have strsignal
 dnl AC_DECL_SYS_SIGLIST
 
 AC_OUTPUT(Makefile \
+        arch/Makefile \
         btree/Makefile \
         interp/Makefile \
         gedlib/Makefile \

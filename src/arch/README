@@ -1,0 +1,14 @@
+LifeLines architecture compatibility library
+============================================
+
+This library contains replacement functions for standard functions
+(POSIX, ANSI C, BSD, etc), to be used on platforms missing these
+functions.
+
+When using these functions, include <arch.h>.
+
+Currently, the following is implemented:
+
+int sleep(int)
+
+  POSIX, implemented for Win32.

@@ -38,6 +38,11 @@ and extend it. :-)
 
     Header files.
 
+  arch
+
+    Library of replacement functions missing on some
+    platforms.  (insulation layer)
+
   btree
 
     btree implementation, with access functions.  Used by the rest of

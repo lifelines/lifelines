@@ -1,5 +1,9 @@
 2000-11-11 Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* Makefile.am README.DEVELOPERS configure.in arch/Makefile.am
+	arch/README arch/sleep.c hdrs/arch.h: New library of replacement
+	functions for standard functions missing on some platforms.
+
 	* liflines/screen.c: Remove useless call to clearw() and
 	wrefresh() in llwprintf(), as these are called in llvwprintf() as
 	well.
