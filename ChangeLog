@@ -60,6 +60,10 @@
 
 	Convert descendent_indiseq to use new generic tables.
 
+	* ChangeLog src/gedlib/names.c
+
+	Convert names.c to use generic tables.
+
 2005-01-22 Perry Rapp
 
 	* ChangeLog src/stdlib/generic.c src/stdlib/table.c
