@@ -1,4 +1,3 @@
-
 /* 
    Copyright (c) 1991-1999 Thomas T. Wetmore IV
 
@@ -38,6 +37,7 @@
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
+#include "version.h"
 
 extern BOOLEAN selftest;
 
@@ -47,9 +47,6 @@ TABLE useropts;		/* table for user options */
 BTREE BTR = NULL;	/* database */
 STRING editstr, editfile;
 STRING llarchives, llreports, llprograms;
-/* MTE: If this needs to be defined, please figure out which system header */
-/*      isn't being included and make the change to std_inc.h */
-/* char *getenv(); */
 
 /*=================================
  * init_lifelines -- Open LifeLines
@@ -83,6 +80,21 @@ init_lifelines (void)
 	llarchives = (STRING) getenv("LLARCHIVES");
 	if (!llarchives || *llarchives == 0) llarchives = (STRING) ".";
 	openxref();
+}
+/*===============================================
+ * get_lifelines_version -- Return version string
+ *  returns static buffer
+ *=============================================*/
+STRING
+get_lifelines_version (INT maxlen)
+{
+	static char version[128];
+	char *ptr=version;
+	INT len=sizeof(version);
+	if (len>maxlen)
+		len=maxlen;
+	llstrcatn(&ptr, LIFELINES_VERSION, &len);
+	return version;
 }
 /*===================================
  * close_lifelines -- Close LifeLines

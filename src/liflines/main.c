@@ -101,7 +101,6 @@ BOOLEAN selftest = FALSE; /* selftest rules (ignore paths) */
 BOOLEAN showusage = FALSE;	/* show usage */
 STRING btreepath;		/* database path given by user */
 STRING readpath;		/* database path used to open */
-STRING version = (STRING) "3.0.6-dev";
 extern int opterr;
 extern BTREE BTR;
 STRING lldatabases;
@@ -336,9 +335,9 @@ static void
 platform_init (void)
 {
 #ifdef WIN32
-	char title[128];
-	sprintf(title, mtitle, version);
-	wtitle(title);
+	char buffer[80];
+	sprintf(buffer, mtitle, get_lifelines_version(sizeof(buffer)-1-strlen(mtitle)));
+	wtitle(buffer);
 #endif
 }
 /*==================================================

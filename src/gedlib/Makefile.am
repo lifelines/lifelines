@@ -37,7 +37,7 @@ gstrings.o: ../hdrs/standard.h ../hdrs/translat.h
 indiseq.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h
 indiseq.o: ../hdrs/indiseq.h ../hdrs/interp.h ../hdrs/standard.h
 init.o: ../hdrs/mystring.h ../hdrs/btree.h ../hdrs/table.h ../hdrs/gedcom.h
-init.o: ../hdrs/standard.h
+init.o: ../hdrs/standard.h ../hdrs/version.h
 intrface.o: ../hdrs/standard.h ../hdrs/mystring.h ../hdrs/btree.h
 keytonod.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h
 keytonod.o: ../hdrs/standard.h ../hdrs/cache.h

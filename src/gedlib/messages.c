@@ -241,6 +241,6 @@ STRING qrpt   = SS "What is the name of the program?";
 STRING norpt =  SS "No report was generated.";
 STRING whtout = SS "What is the name of the output file?";
 
-STRING mtitle = (STRING) "LifeLines %s - Genealogical Database and Programming System";
+STRING mtitle = (STRING) "LifeLines %s - Genealogical DB and Programming System";
 STRING cright = (STRING) "Copyright(c) 1991 to 1996, by T. T. Wetmore IV";
 STRING plschs = (STRING) "Please choose an operation:";

@@ -65,7 +65,6 @@ archive_in_file (void)
 	struct tm *pt;
 	time_t curtime;
 	STRING fname;
-	extern STRING version;
 
 	/* WARNING: use of llarchives seems questionable */
 	fn = ask_for_output_file(LLWRITETEXT, "Enter name of output archive file.",
@@ -79,7 +78,7 @@ archive_in_file (void)
 	sprintf(dat, "%d %s %d", pt->tm_mday, mabbv[pt->tm_mon],
 	    1900 + pt->tm_year);
 	sprintf(tim, "%d:%.2d", pt->tm_hour, pt->tm_min);
-	fprintf(fn, "0 HEAD\n1 SOUR LIFELINES %s\n1 DEST ANY\n", version);
+	fprintf(fn, "0 HEAD\n1 SOUR LIFELINES %s\n1 DEST ANY\n", get_lifelines_version(80));
 	fprintf(fn, "1 DATE %s\n1 TIME %s\n", dat, tim);
 	tran_gedout = tran_tables[MINGD];
 	nindi = nfam = neven = nsour = nothr = 0;

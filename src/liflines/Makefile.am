@@ -78,7 +78,8 @@ pedigree.o: ../hdrs/llstdlib.h ../hdrs/screen.h ../hdrs/mystring.h
 remove.o: ../hdrs/standard.h
 remove.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h
 scan.o: ../hdrs/sys_inc.h ../hdrs/llstdlib.h ../hdrs/table.h ../hdrs/indiseq.h
-scan.o: ../hdrs/interp.h ../hdrs/screen.h ../hdrs/liflines.h llinesi.h
+scan.o: ../hdrs/interp.h ../hdrs/screen.h ../hdrs/liflines.h ../hdrs/fpattern.h
+scan.o: llinesi.h
 screen.o: ../hdrs/standard.h
 screen.o: ../hdrs/mystring.h ../hdrs/screen.h
 screen.o: ../hdrs/table.h ../hdrs/gedcom.h ../hdrs/indiseq.h

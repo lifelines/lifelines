@@ -30,6 +30,7 @@
 #include "interp.h"
 #include "screen.h"
 #include "liflines.h"
+#include "fpattern.h"
 
 #include "llinesi.h"
 
@@ -53,19 +54,7 @@ static INT REFNSCAN=2;
 static BOOLEAN
 pattern_match (SCAN_PATTERN *patt, STRING name)
 {
-	STRING p1,p2;
-	/* match . to any letter, and trailing * to anything */
-	p1=patt->string;
-	p2=name;
-	for (p1=patt->string,p2=name; *p1 || *p2; p1++,p2++) {
-		if (*p1 == '*' && *(p1+1) == 0)
-			return TRUE;
-		if (!(*p1) || !(*p2))
-			return FALSE;
-		if (*p1 != '.' && ll_toupper(*p1) != ll_toupper(*p2))
-			return FALSE;
-	}
-	return TRUE;
+	return (fpattern_matchn(patt->string, name));
 }
 /*===========================================
  * ns_callback -- callback for name traversal
@@ -77,12 +66,6 @@ ns_callback (STRING key, STRING name, BOOLEAN newset, void *param)
 	INT len, ind;
 	STRING piece;
 	SCAN_PATTERN * patt = (SCAN_PATTERN *)param;
-	if (newset) {
-		/* clear dup table */
-	} else {
-		/* if in dup table, report */
-		/* else add to dup table */
-	}
 	if (patt->scantype == NAMESCAN_FULL) {
 		if (pattern_match(patt, name)) {
 			/* if we pass in name, append_indiseq won't check for dups */
@@ -127,12 +110,15 @@ static BOOLEAN
 set_pattern (SCAN_PATTERN * patt, STRING str, INT scantype)
 {
 	INT i;
-	/* for full name & refn scans, accept anything ? */
+	/* spaces don't make sense in a name fragment */
 	if (scantype == NAMESCAN_FRAG) {
 		for (i=0; str[i]; i++)
 			if (str[i] == ' ')
 				return FALSE;
 	}
+
+	if (!fpattern_isvalid(str))
+		return FALSE;
 
 	if (strlen(str) > sizeof(patt->string)-1)
 		return FALSE;
@@ -171,7 +157,7 @@ name_scan (INT scantype)
 	if (length_indiseq(results_seq)) {
 		indi = choose_from_indiseq(results_seq, DOASK1, scanrs, scanrs);
 	}
-	remove_indiseq(results_seq, FALSE); 
+	remove_indiseq(results_seq, FALSE);
 	results_seq=NULL;
 	return indi;
 }
@@ -198,7 +184,7 @@ full_name_scan (void)
  *  looking for pattern matching
  *============================*/
 NOD0
-refn_scan(void)
+refn_scan (void)
 {
 	SCAN_PATTERN patt;
 	NOD0 nod0 = NULL;
@@ -220,7 +206,7 @@ refn_scan(void)
 	if (length_indiseq(results_seq)) {
 		nod0 = choose_from_indiseq(results_seq, DOASK1, scanrs, scanrs);
 	}
-	remove_indiseq(results_seq, FALSE); 
+	remove_indiseq(results_seq, FALSE);
 	results_seq=NULL;
 	return nod0;
 }

@@ -463,14 +463,26 @@ next_fp_to_node (FILE *fp,       /* file that holds GEDCOM record/s */
 NOD0
 string_to_nod0 (STRING str, STRING key)
 {
-	NOD0 nod0 = (NOD0)stdalloc(sizeof(*nod0));
-	nod0->nkey.keynum = atoi(key+1);
-	nod0->nkey.ntype = key[0];
+	NOD0 nod0 = 0;
+	NODE node = 0;
 	if (*str == '0')
-		nod0->top = string_to_node(str);
+		node = string_to_node(str);
 	else {
 		ASSERT(*str == 'Q');
-		ASSERT(0); /* not written yet - metadata processing */
+		/*
+		not implemented
+		read offset to metadata (warehouse)
+		read node
+		must change all external calls from string_to_node
+		to string_to_nod0
+		*/
+		ASSERT(0);
+	}
+	if (node) {
+		nod0 = (NOD0)stdalloc(sizeof(*nod0));
+		nod0->nkey.keynum = atoi(key+1);
+		nod0->nkey.ntype = key[0];
+		nod0->top = node;
 	}
 	return nod0;
 }

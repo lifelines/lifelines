@@ -4,8 +4,8 @@
 
 noinst_LIBRARIES = libstdlib.a
 
-libstdlib_a_SOURCES = assert.c dirs.c double.c memalloc.c path.c \
-	signals.c sequence.c stdstrng.c table.c llstrcmp.c \
+libstdlib_a_SOURCES = assert.c dirs.c double.c fpattern.c memalloc.c \
+	path.c signals.c sequence.c stdstrng.c table.c llstrcmp.c \
 	mystring.c stdlibi.h environ.c
 
 INCLUDES=-I$(srcdir)/.. -I$(srcdir)/../hdrs
@@ -20,6 +20,7 @@ double.o: ../hdrs/standard.h
 double.o: ../hdrs/mystring.h
 dirs.o: ../hdrs/standard.h ../hdrs/llstdlib.h
 environ.o: ../hdrs/sys_inc.h ../hdrs/llstdlib.h
+fpattern.o: ../hdrs/fpattern.h
 llstrcmp.o: ../hdrs/mystring.h
 memalloc.o: ../hdrs/standard.h
 memalloc.o: ../hdrs/mystring.h

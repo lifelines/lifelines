@@ -1010,9 +1010,8 @@ __version (PNODE node,
            TABLE stab,
            BOOLEAN *eflg)
 {
-	extern STRING version;
 	*eflg = FALSE;
-	return create_pvalue(PSTRING, (VPTR)version);
+	return create_pvalue(PSTRING, (VPTR)get_lifelines_version(120));
 }
 /*========================================+
  * __pvalue -- Show a PVALUE -- Debug routine

@@ -62,7 +62,7 @@ static INT list_detail_lines = 0;
 #endif
 
 extern BOOLEAN alldone, progrunning;
-extern STRING version, empstr, empstr71, readpath;
+extern STRING empstr, empstr71, readpath;
 extern STRING abverr, uoperr;
 extern STRING mtitle, cright, plschs;
 BOOLEAN stdout_vis = FALSE;
@@ -204,7 +204,7 @@ paint_main_screen(void)
 	show_horz_line(win, 4, 0, ll_cols);
 	show_horz_line(win, ll_lines-3, 0, ll_cols);
 	wmove(win, 1, 2);
-	wprintw(win, mtitle, version);
+	wprintw(win, mtitle, get_lifelines_version(ll_cols-4));
 	mvwaddstr(win, 2, 4, cright);
 	mvwprintw(win, 3, 4, "Current Database - %s", readpath);
 	if (readonly)
@@ -958,34 +958,42 @@ scan_menu (void)
 {
 	NOD0 nod0;
 	INT code;
-	touchwin(scan_menu_win);
-	wmove(scan_menu_win, 1, 27);
-	wrefresh(scan_menu_win);
-	code = interact(scan_menu_win, "fnrq");
-	touchwin(main_win);
-	wrefresh(main_win);
-	switch (code) {
-	case 'f':
-		nod0 = full_name_scan();
-		if (nod0) browse(nztop(nod0));
-		break;
-	case 'n':
-		nod0 = name_fragment_scan();
-		if (nod0) browse(nztop(nod0));
-		break;
-	case 'r':
-		nod0 = refn_scan();
-		if (nod0) {
-			switch(nztype(nod0)) {
-			case 'I': browse(nztop(nod0)); break;
-			/* TO DO - families */
-			case 'S':  browse_source(nod0); break;
-			case 'E':  browse_event(nod0); break;
-			case 'X':  browse_other(nod0); break;
+	while (1) {
+		touchwin(scan_menu_win);
+		wmove(scan_menu_win, 1, 27);
+		wrefresh(scan_menu_win);
+		code = interact(scan_menu_win, "fnrq");
+		touchwin(main_win);
+		wrefresh(main_win);
+		switch (code) {
+		case 'f':
+			nod0 = full_name_scan();
+			if (nod0) {
+				browse(nztop(nod0));
+				return;
 			}
+			break;
+		case 'n':
+			nod0 = name_fragment_scan();
+			if (nod0) {
+				browse(nztop(nod0));
+				return;
+			}
+			break;
+		case 'r':
+			nod0 = refn_scan();
+			if (nod0) {
+				switch(nztype(nod0)) {
+				case 'I': browse(nztop(nod0)); return;
+				/* TO DO - families */
+				case 'S':  browse_source(nod0); return;
+				case 'E':  browse_event(nod0); return;
+				case 'X':  browse_other(nod0); return;
+				}
+			}
+			break;
+		case 'q': return;
 		}
-		break;
-	case 'q': break;
 	}
 }
 /*============================
