@@ -41,7 +41,7 @@ llwprintf (char *fmt, ...)
 }
 
 /*===========================================================
- * mprintf -- Called as mprintf(fmt, arg, arg, arg, ...)
+ * mprintf_error -- Called as mprintf_error(fmt, arg, ...)
  *===========================================================*/
 /*VARARGS*/
 void
@@ -51,6 +51,14 @@ mprintf_error (char *fmt, ...)
 	va_start(args, fmt);
 	vprintf(fmt, args);
 	va_end(args);
+}
+/*===========================================================
+ * message - Print a simple message to the screen
+ *===========================================================*/
+void
+message(char *s)
+{
+	printf("%s",s);
 }
 /*======================================
  * poutput -- Print argument as a string
