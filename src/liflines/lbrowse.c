@@ -89,6 +89,7 @@ browse_list (NODE *pindi1,
 			indi = key_to_indi(key);
 			if (cur >= top + VIEWABLE) top++;
 			break;
+		case 'd':        /* Move down one page */
 		case CMD_KY_PGDN:
 			if (top + VIEWABLE >= len-1) {
 				message(_(qSlstbot));
@@ -98,6 +99,23 @@ browse_list (NODE *pindi1,
 			if (cur > len-1)
 				cur = len-1;
 			top += VIEWABLE;
+			element_indiseq(seq, cur, &key, &name);
+			indi = key_to_indi(key);
+			break;
+		case 'D':        /* Move down several pages */
+		case CMD_KY_SHPGDN:
+			if (top + VIEWABLE >= len-1) {
+				message(_(qSlstbot));
+				break;
+			}
+			tmp = (len)/10;
+			if (tmp < VIEWABLE*2) tmp = VIEWABLE*2;
+			if (tmp > len - VIEWABLE - top)
+				tmp = len - VIEWABLE - top;
+			top += tmp;
+			cur += tmp;
+			if (cur > len-1)
+				cur = len-1;
 			element_indiseq(seq, cur, &key, &name);
 			indi = key_to_indi(key);
 			break;
@@ -121,6 +139,7 @@ browse_list (NODE *pindi1,
 			indi = key_to_indi(key);
 			if (cur + 1 == top) top--;
 			break;
+		case 'u':        /* Move up one page */
 		case CMD_KY_PGUP:
 			if (top <= 0) {
 				message(_(qSlsttop));
@@ -133,6 +152,7 @@ browse_list (NODE *pindi1,
 			element_indiseq(seq, cur, &key, &name);
 			indi = key_to_indi(key);
 			break;
+		case 'U':        /* Move up several pages */
 		case CMD_KY_SHPGUP:
 			if (top <= 0) {
 				message(_(qSlsttop));
@@ -172,7 +192,7 @@ browse_list (NODE *pindi1,
 		case 'm':        /* Mark current person */
 			mark = (cur == mark) ? -1: cur;
 			break;
-		case 'd':        /* Delete person from list */
+		case 'r':        /* Remove person from list */
 			if (len <= 1) {
 				if (current_seq)
 					remove_indiseq(current_seq);

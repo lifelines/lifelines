@@ -1,3 +1,12 @@
+2002-06-04 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog liflines/lbrowse.c liflines/screen.c:
+
+	Added shift-pagedown command to lists.
+	Changed d=delete item to r=remove item in list browse.
+	Added u=pageup, U=shpageup, d=pagedn, D=shpagedn to lists.
+	Added ^ and $ marks to top & bottom items of lists.
+
 2002-06-03 Perry Rapp <puddle@users.sourceforge.net>
 
 	.linesrc ChangeLog lines.cfg gedlib/messages.c gedlib/node.c

@@ -436,7 +436,7 @@ paint_list_screen (void)
 	mvwaddstr(win, row++, col, "e  Edit this person");
 	mvwaddstr(win, row++, col, "i  Browse this person");
 	mvwaddstr(win, row++, col, "m  Mark this person");
-	mvwaddstr(win, row++, col, "d  Delete from list");
+	mvwaddstr(win, row++, col, "r  Remove from list");
 	mvwaddstr(win, row++, col, "t  Enter tandem mode");
 	mvwaddstr(win, row++, col, "n  Name this list");
 	mvwaddstr(win, row++, col, "b  Browse new persons");
@@ -908,7 +908,7 @@ list_browse (INDISEQ seq,
 	if (cur_screen != LIST_SCREEN) paint_list_screen();
 	show_big_list(seq, top, *cur, mark);
 	display_screen(LIST_SCREEN);
-	return interact(main_win, "jkeimdtbanx$^fbq", -1);
+	return interact(main_win, "jkeimrtbanx$^udUDq", -1);
 }
 /*======================================
  * ask_for_db_filename -- Ask user for lifelines database directory
@@ -1182,12 +1182,26 @@ handle_list_cmds (listdisp * ld, INT code)
 				ld->top = ld->cur + 1 - rows;
 		}
 		return TRUE; /* handled */
+	case 'd':
 	case CMD_KY_PGDN:
 		if (ld->top + rows < ld->listlen) {
+			ld->top += rows;
 			ld->cur += rows;
 			if (ld->cur > ld->listlen - 1)
 				ld->cur = ld->listlen - 1;
-			ld->top += rows;
+		}
+		return TRUE; /* handled */
+	case 'D':
+	case CMD_KY_SHPGDN:
+		if (ld->top + rows < ld->listlen) {
+			tmp = (ld->listlen)/10;
+			if (tmp < rows*2) tmp = rows*2;
+			if (tmp > ld->listlen - rows - ld->top)
+				tmp = ld->listlen - rows - ld->top;
+			ld->top += tmp;
+			ld->cur += tmp;
+			if (ld->cur > ld->listlen - 1)
+				ld->cur = ld->listlen - 1;
 		}
 		return TRUE; /* handled */
 	case '$': /* jump to end of list */
@@ -1205,12 +1219,14 @@ handle_list_cmds (listdisp * ld, INT code)
 				ld->top = ld->cur;
 		}
 		return TRUE; /* handled */
+	case 'u':
 	case CMD_KY_PGUP:
 		tmp = rows;
 		if (tmp > ld->top) tmp = ld->top;
-		ld->cur -= tmp;
 		ld->top -= tmp;
+		ld->cur -= tmp;
 		return TRUE; /* handled */
+	case 'U':
 	case CMD_KY_SHPGUP:
 		tmp = (ld->listlen)/10;
 		if (tmp < rows*2) tmp = rows*2;
@@ -1376,10 +1392,10 @@ choose_one_or_list_from_indiseq (STRING ttl, INDISEQ seq, BOOLEAN multi)
 	/* TO DO: connect this to menuitem system */
 	if (multi) {
 		menu = "Commands:  j Move down   k Move up  d Delete   i Select   q Quit";
-		choices = "jkiq123456789()[]$^";
+		choices = "jkriq123456789()[]$^udUD";
 	} else {
 		menu = "Commands:   j Move down     k Move up    i Select     q Quit";
-		choices = "jkdiq123456789()[]$^";
+		choices = "jkiq123456789()[]$^udUD";
 	}
 
 resize_win: /* we come back here if we resize the window */
@@ -1414,7 +1430,7 @@ resize_win: /* we come back here if we resize the window */
 		}
 		if (ret == 0) { /* not handled yet */
 			switch (code) {
-			case 'd':
+			case 'r':
 				if (!multi)
 					break;
 				delete_indiseq(seq, NULL, NULL, ld.cur);
@@ -2224,6 +2240,10 @@ shw_recordlist_list (INDISEQ seq, listdisp * ld)
 		row = ld->rectList.top + j;
 		clear_hseg(win, row, ld->rectList.left, ld->rectList.right);
 		if (i<ld->listlen) {
+			if (i == 0)
+				mvwaddch(win, row, ld->rectList.left, '^');
+			if (i == ld->listlen-1)
+				mvwaddch(win, row, ld->rectList.left, '$');
 			if (i == ld->cur) mvwaddch(win, row, ld->rectList.left+3, '>');
 			if (ld->listlen < 10) {
 				char numstr[12];
@@ -2273,6 +2293,8 @@ manufacture a listdisp here
 	for (i = top, j = 0; j < viewlines && i < len; i++, j++) {
 		element_indiseq(seq, i, &key, &name);
 		indi = key_to_indi(key);
+		if (i == 0) mvwaddch(win, row, 1, '^');
+		if (i == len-1) mvwaddch(win, row, 1, '$');
 		if (i == mark) mvwaddch(win, row, 2, 'x');
 		if (i == cur) {
 			INT drow=1;
