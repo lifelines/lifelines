@@ -32,15 +32,8 @@
 #ifndef _SEQUENCE_H
 #define _SEQUENCE_H
 
-#ifndef BOOLEAN
-#	define BOOLEAN int
-#endif
-#ifndef TRUE
-#	define TRUE 1
-#endif
-#ifndef FALSE
-#	define FALSE 0
-#endif
+#include "standard.h"
+
 #define ELEMENT int
 
 typedef struct  {

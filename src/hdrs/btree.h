@@ -33,7 +33,6 @@
 #define _BTREE_H
 
 #include "standard.h"
-#include <stdio.h>
 
 #define BUFLEN 4096
 #define NOENTS ((BUFLEN-12)/12)

@@ -31,6 +31,8 @@
 #ifndef _STANDARD_H
 #define _STANDARD_H
 
+#include "sys_inc.h"
+
 #ifdef WIN32
 
 #define LLREADTEXT "rt"
@@ -57,17 +59,6 @@
 #define LLCHRPATHSEPARATOR ':'
 #define LLCHRDIRSEPARATOR '/'
 #endif
-
-#ifndef STDIO_H
-#define STDIO_H
-#include <stdio.h>
-#endif
-
-#include <string.h>
-
-/* WARNING: Borland C++ 5.02 declares wprintf() in stdio.h. Redefine LifeLines
- * wprintf to llwprintf. pbm 07 Jan 2000
- */
 
 #include "mystring.h"
 

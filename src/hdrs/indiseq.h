@@ -31,11 +31,7 @@
 #ifndef _INDISEQ_H
 #define _INDISEQ_H
 
-#ifndef BOOLEAN
-#	define BOOLEAN int
-#	define TRUE 1
-#	define FALSE 0
-#endif
+#include "standard.h"
 
 /*==================================================================
  * SORTEL -- Data type for indiseq elements; keys are always present
