@@ -11,6 +11,8 @@
         Changed WORD to VPTR.
 	Defaulted getproperty to work with non-UNIX platforms.
 
+	* tests/test1.ged: Fix misleading typo in test1.ged.
+
 2001-01-07 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/gengedc.c gedlib/indiseq.c hdrs/gedcom.h hdrs/indiseq.h
