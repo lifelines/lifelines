@@ -147,7 +147,6 @@ STRING
 get_lifelines_version (INT maxlen)
 {
 	static char version[48];
-	char *ptr=version;
 	INT len=sizeof(version);
 	if (len>maxlen)
 		len=maxlen;
