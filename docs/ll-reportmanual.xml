@@ -1977,14 +1977,6 @@ check if list is empty
 
 </para> 
 
-</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>list</function></funcdef><paramdef><parameter>LIST_V</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
-
-<para> 
-
-declare a list 
-
-</para> 
-
 </glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>enqueue</function></funcdef><paramdef><parameter>LIST</parameter><parameter>ANY</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
 
 <para> 
