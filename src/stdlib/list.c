@@ -18,6 +18,7 @@
  * local types
  *********************************************/
 
+
 /* actual list */
 struct tag_list {
 	/* a LIST is an OBJECT */
@@ -27,6 +28,7 @@ struct tag_list {
 	LNODE l_tail;
 	INT l_len;
 	INT l_type;
+	ELEMENT_DESTRUCTOR l_del_element;
 };
 
 /*********************************************
@@ -43,7 +45,9 @@ struct tag_list {
  *********************************************/
 
 /* alphabetical */
+static void free_list_element(VPTR vptr);
 static void list_destructor(VTABLE *obj);
+void make_list_empty_impl(LIST list, ELEMENT_DESTRUCTOR func);
 static LNODE nth_in_list_from_tail(LIST list, INT index1b, BOOLEAN createels
 	, LIST_CREATE_VALUE createfnc);
 static void validate_list(LIST list);
@@ -117,18 +121,9 @@ set_list_type (LIST list, int type)
  *  func: [IN]  function to call on each element first (may be NULL)
  *=========================*/
 void
-remove_list2 (LIST list, void (*func)(VPTR))
+remove_list2 (LIST list, ELEMENT_DESTRUCTOR func)
 {
-	LNODE lnode0, lnode;
-	if (!list) return;
-	lnode0 = lhead(list);
-	while (lnode0) {
-		lnode = lnext(lnode0);
-		ASSERT(!llocks(lnode0));
-		if (func) (*func)(lelement(lnode0));
-		stdfree(lnode0);
-		lnode0 = lnode;
-	}
+	make_list_empty_impl(list, func);
 	stdfree(list);
 }
 /*===========================
@@ -166,27 +161,46 @@ in_list (LIST list, VPTR param, BOOLEAN (*func)(VPTR param, VPTR el))
 	return -1;
 }
 /*===================================
+ * free_list_element -- Simple heap element destructor
+ *=================================*/
+static void
+free_list_element (VPTR vptr)
+{
+	if (vptr) stdfree(vptr);
+}
+/*===================================
+ * make_list_empty_impl -- Make list empty
+ *=================================*/
+void
+make_list_empty_impl (LIST list, ELEMENT_DESTRUCTOR func)
+{
+	LNODE lnode0, lnode;
+
+	if (!list) return;
+	if (!func) {
+		if (ltype(list) == LISTDOFREE)
+			func = &free_list_element;
+	}
+	
+	lnode0 = lhead(list);
+	while (lnode0) {
+		lnode = lnext(lnode0);
+		if (func) (*func)(lelement(lnode0));
+		stdfree(lnode0);
+		lnode0 = lnode;
+	}
+	lhead(list) = ltail(list) = NULL;
+	llen(list) = 0;
+	/* no effect on refcount */
+	validate_list(list);
+}
+/*===================================
  * make_list_empty -- Make list empty
  *=================================*/
 void
 make_list_empty (LIST list)
 {
-	LNODE lnode0, lnode;
-	BOOLEAN free;
-	if (!list) return;
-	free = (ltype(list) == LISTDOFREE);
-	lnode0 = lhead(list);
-	while (lnode0) {
-		lnode = lnext(lnode0);
-		if (free && lelement(lnode0)) stdfree(lelement(lnode0));
-		stdfree(lnode0);
-		lnode0 = lnode;
-	}
-	lhead(list) = ltail(list) = NULL;
-	ltype(list) = LISTNOFREE;
-	llen(list) = 0;
-	/* no effect on refcount */
-	validate_list(list);
+	make_list_empty_impl(list, NULL);
 }
 /*===================================
  * is_empty_list -- Check for empty list
@@ -507,7 +521,7 @@ unlock_list_node (LNODE node)
  *  Call func (unless NULL) on element before deleting
  *================================================*/
 BOOLEAN
-delete_list_element (LIST list, INT index1b, void (*func)(VPTR))
+delete_list_element (LIST list, INT index1b, ELEMENT_DESTRUCTOR func)
 {
 	LNODE node = NULL;
 	BOOLEAN createels = FALSE;

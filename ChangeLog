@@ -39,6 +39,10 @@
 	dbverify: Add code to fix live records marked as deleted.
 	Move some gedcom.h declarations to module areas.
 
+	* ChangeLog src/hdrs/list.h src/stdlib/list.c
+
+	Consolidate list element removal code into make_list_empty_impl.
+
 2005-02-04 Perry Rapp
 
 	* ChangeLog src/gedlib/node.c src/hdrs/gedcom.h

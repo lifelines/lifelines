@@ -31,6 +31,9 @@ typedef struct tag_list *LIST;
 #define LISTNOFREE 0
 #define LISTDOFREE 1
 
+typedef void (*ELEMENT_DESTRUCTOR)(VPTR);
+
+
 /* list iterator */
 struct tag_list_iter {
 	LNODE current;
@@ -81,7 +84,7 @@ BOOLEAN begin_list_rev(LIST list, LIST_ITER listit);
 BOOLEAN change_list_ptr(LIST_ITER listit, VPTR newptr);
 LIST create_list(void);
 LIST create_list2(INT whattofree);
-BOOLEAN delete_list_element(LIST list, INT index1b, void (*func)(VPTR));
+BOOLEAN delete_list_element(LIST list, INT index1b, ELEMENT_DESTRUCTOR func);
 void release_list(LIST list, void (*func)(VPTR));
 VPTR dequeue_list(LIST);
 BOOLEAN is_empty_list(const LIST);
@@ -97,7 +100,7 @@ VPTR pop_list(LIST);
 VPTR pop_list_tail(LIST);
 void push_list(LIST, VPTR);
 void remove_empty_list(LIST *plist);
-void remove_list2(LIST, void (*func)(VPTR));
+void remove_list2(LIST, ELEMENT_DESTRUCTOR func);
 void set_list_element(LIST, INT, VPTR, LIST_CREATE_VALUE);
 void set_list_type(LIST, INT);
 LNODE trav_list_head(LIST list);
