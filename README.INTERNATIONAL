@@ -1,15 +1,19 @@
 Lifelines was gettextized in Feb of 2002.
+lifelines-3.0.12 was submitted to Free Translation Project on May 12, 2002
 
 Included versions are:
   sv: Swedish (Thanks to Jens Arvidsson)
   de: German (Thanks to Carl Becker)
 
-Versions under development or consideration:
+Versions under private development:
   fr: French
 
 If you would like to volunteer to help with a new or existing
-translation, please send email to the long-running lifelines mailing
-list, LINES-L, which is explained at:
+translation, please contact the Free Translation Project
+     http://www.iro.montreal.ca/contrib/po/HTML
+except for the de, fr, sv translations, please send email to
+the long-running lifelines mailing list, LINES-L, which is
+explained at:
      http://www.rootsweb.com/~nozell/lines-l
 
 
