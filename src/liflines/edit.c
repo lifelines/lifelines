@@ -44,8 +44,8 @@ extern STRING ntprnt, gdpmod, gdfmod, ronlye;
 /*=====================================
  * edit_indi -- Edit person in database
  *===================================*/
-NODE edit_indi (indi1)
-NODE indi1;	/* may be NULL */
+NODE
+edit_indi (NODE indi1)  /* may be NULL */
 {
 	NODE indi2, name1, name2, refn1, refn2, sex, body, famc, fams;
 	NODE node, namen, refnn, name1n, refn1n, indi0;
@@ -151,8 +151,8 @@ NODE indi1;	/* may be NULL */
 /*====================================
  * edit_fam -- Edit family in database
  *==================================*/
-NODE edit_family (fam1)
-NODE fam1;	/* may be NULL */
+NODE
+edit_family (NODE fam1) /* may be NULL */
 {
 	NODE fam2, husb, wife, chil, body, refn1, refn2, refnn, refn1n;
 	NODE indi, node, fam0;

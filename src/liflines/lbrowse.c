@@ -46,20 +46,18 @@ extern INDISEQ current_seq;
 LIST browse_lists;
 
 /* in screen.c */
-INT list_browse (INDISEQ seq,
-		 INT top,
-		 INT cur,
-		 INT mark);
+INT list_browse (INDISEQ seq, INT top, INT cur, INT mark);
 
 
 /*=======================================
  * browse_list -- Handle list browse mode
  *=====================================*/
-INT browse_list (NODE *pindi1,
-		 NODE *pindi2,
-		 NODE *pfam1,
-		 NODE *pfam2,
-		 INDISEQ *pseq)
+INT
+browse_list (NODE *pindi1,
+             NODE *pindi2,
+             NODE *pfam1,
+             NODE *pfam2,
+             INDISEQ *pseq)
 {
 	INT top, cur, mark, len, tmp, rc;
 	STRING key, name, newname, lname;

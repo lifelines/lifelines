@@ -53,11 +53,7 @@ INDISEQ ask_for_indiseq();
 #define ALLPARMS &indi1, &indi2, &fam1, &fam2, &seq
 
 /* in lbrowse.c */
-INT browse_list (NODE *pindi1,
-		 NODE *pindi2,
-		 NODE *pfam1,
-		 NODE *pfam2,
-		 INDISEQ *pseq);
+INT browse_list (NODE *, NODE *, NODE *, NODE *, INDISEQ *);
 
 /* in screen.c */
 INT indi_browse (NODE indi);
@@ -66,8 +62,8 @@ INT ped_browse (NODE indi);
 
 /* in swap.c */
 BOOLEAN swap_families (NODE indi);
-BOOLEAN swap_children (NODE prnt,	/* parent - poss NULL */
-		       NODE fam);	/* family - poss NULL */
+BOOLEAN swap_children (NODE, NODE);
+
 /* in advedit.c */
 void advanced_person_edit (NODE root0);
 void advanced_family_edit (NODE root0);
@@ -76,8 +72,8 @@ void advanced_family_edit (NODE root0);
 /*=========================================
  * browse -- Main loop of browse operation.
  *=======================================*/
-void browse (indi1)
-NODE indi1;
+void
+browse (NODE indi1)
 {
 	INT code, len, rc;
 	NODE indi2, fam1, fam2;
@@ -115,9 +111,12 @@ NODE indi1;
 /*================================================
  * browse_indi -- Handle person browse operations.
  *==============================================*/
-INT browse_indi (pindi1, pindi2, pfam1, pfam2, pseq)
-NODE *pindi1, *pindi2, *pfam1, *pfam2;
-INDISEQ *pseq;
+INT
+browse_indi (NODE *pindi1,
+             NODE *pindi2,
+             NODE *pfam1,
+             NODE *pfam2,
+             INDISEQ *pseq)
 {
 	STRING key, name, addstrings[2];
 	INT i, c, rc;
@@ -327,9 +326,12 @@ INDISEQ *pseq;
 /*===============================================
  * browse_fam -- Handle family browse selections.
  *=============================================*/
-INT browse_fam (pindi, pdum, pfam1, pfam2, pseq)
-NODE *pfam1, *pindi, *pdum, *pfam2;
-INDISEQ *pseq;
+INT
+browse_fam (NODE *pindi,
+            NODE *pdum,
+            NODE *pfam1,
+            NODE *pfam2,
+            INDISEQ *pseq)
 {
 	INT i, c, rc;
 	NODE save = NULL, fam = *pfam1, node, husb, wife, chil, rest;
@@ -533,9 +535,12 @@ INDISEQ *pseq;
 /*======================================================
  * browse_pedigree -- Handle pedigree browse selections.
  *====================================================*/
-INT browse_pedigree (pindi, pdum1, pfam, pdum2, pseq)
-NODE *pindi, *pfam, *pdum1, *pdum2;
-INDISEQ *pseq;
+INT
+browse_pedigree (NODE *pindi,
+                 NODE *pdum1,
+                 NODE *pfam,
+                 NODE *pdum2,
+                 INDISEQ *pseq)
 {
 	NODE node, indi = *pindi;
 	INT rc;

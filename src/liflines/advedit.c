@@ -38,8 +38,8 @@ static NODE root;	/* root of record being edited */
 static LIST subs;	/* list of contained records */
 static NODE expd;	/* expanded main record - copy */
 
-void expand_tree (root0)
-NODE root0;
+void
+expand_tree (NODE root0)
 {
 	NODE copy, node, sub;
 	STRING key;
@@ -72,7 +72,11 @@ NODE root0;
 #endif
 }
 
-void advanced_person_edit (NODE root0)
+/*=================================================================
+ * advanced_person_edit --
+ *===============================================================*/
+void
+advanced_person_edit (NODE root0)
 {
 	FILE *fp;
 
@@ -87,7 +91,11 @@ void advanced_person_edit (NODE root0)
 	do_edit();
 }
 
-void advanced_family_edit (NODE root0)
+/*=================================================================
+ * advanced_family_edit --
+ *===============================================================*/
+void
+advanced_family_edit (NODE root0)
 {
 	FILE *fp;
 
@@ -104,8 +112,8 @@ void advanced_family_edit (NODE root0)
 /*=================================================================
  * expand_traverse -- Traverse routine called when expanding record
  *===============================================================*/
-BOOLEAN expand_traverse (node)
-NODE node;
+BOOLEAN
+expand_traverse (NODE node)
 {
 	STRING key = value_to_xref(nval(node));
 	if (!key) return TRUE;

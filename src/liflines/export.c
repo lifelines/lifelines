@@ -54,7 +54,8 @@ char *mabbv[] = {
 	"JUL", "AUG", "SEP", "OCT", "NOV", "DEC",
 };
 static FILE *fn = NULL;
-BOOLEAN archive_in_file ()
+BOOLEAN
+archive_in_file (void)
 {
 	FILE *ask_for_file();
 	char dat[30], tim[20];
@@ -96,9 +97,9 @@ BOOLEAN archive_in_file ()
 /*========================================================
  * archive -- Traverse function called on each btree block
  *======================================================*/
-BOOLEAN archive (btree, block)
-BTREE btree;
-BLOCK block;
+BOOLEAN
+archive (BTREE btree,
+         BLOCK block)
 {
 	INT i, n, l;
 	char scratch[100];
@@ -124,10 +125,12 @@ BLOCK block;
 /*===================================================
  * copy_and_translate -- Copy record with translation
  *=================================================*/
-static void copy_and_translate (fo, len, fn, c, tt)
-FILE *fo, *fn;
-INT len, c;
-TRANTABLE tt;
+static void
+copy_and_translate (FILE *fo,
+                    INT len,
+                    FILE *fn,
+                    INT c,
+                    TRANTABLE tt)
 {
 	char in[BUFLEN];
 	char scratch[10];

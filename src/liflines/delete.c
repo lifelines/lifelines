@@ -46,9 +46,9 @@ static void del_in_dbase(STRING);
  * delete_indi -- Delete person and links; if this leaves families
  *   with no links, remove them
  *==============================================================*/
-void delete_indi (indi, conf)
-NODE indi;	/* person to remove - may be null */
-BOOLEAN conf;	/* have user confirm */
+void
+delete_indi (NODE indi,      /* person to remove - may be null */
+             BOOLEAN conf)   /* have user confirm */
 {
 	STRING key;
 	NODE name, refn, sex, body, famc, fams, this;
@@ -153,8 +153,8 @@ checkfamc:
 /*==========================================
  * delete_fam -- Delete family from database
  *========================================*/
-void delete_fam (fam)
-NODE fam;
+void
+delete_fam (NODE fam)
 {
 	STRING key;
 	NODE node, husb, wife, chil, rest, refn;
@@ -179,8 +179,8 @@ NODE fam;
 /*=================================================
  * del_in_dbase -- Write deleted record to database
  *===============================================*/
-static void del_in_dbase (key)
-STRING key;
+static void
+del_in_dbase (STRING key)
 {
 	if (!key || *key == 0) return;
 	ASSERT(store_record(key, "DELE\n", 5));

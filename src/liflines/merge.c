@@ -57,9 +57,10 @@ static void merge_fam_links (NODE, NODE, NODE, NODE, INT);
  *   indi3 - merged version of the two persons before editing
  *   indi4 - merged version of the two persons after editing
  *==============================================================*/
-NODE merge_two_indis (indi1, indi2, conf)
-NODE indi1, indi2;	/* two persons to merge - can't be null */
-BOOLEAN conf;		/* have user confirm change */
+NODE
+merge_two_indis (NODE indi1,    /* two persons to merge - can't be null */
+                 NODE indi2,
+                 BOOLEAN conf)          /* have user confirm change */
 {
 	NODE indi01, indi02;	/* original arguments */
 	NODE name1, refn1, sex1, body1, famc1, fams1;
@@ -349,8 +350,9 @@ BOOLEAN conf;		/* have user confirm change */
  * merge_two_fams -- Merge first family into second; data from both
  *   are put in file that user edits; first family removed
  *===============================================================*/
-NODE merge_two_fams (fam1, fam2)
-NODE fam1, fam2;
+NODE
+merge_two_fams (NODE fam1,
+                NODE fam2)
 {
 	NODE husb1, wife1, chil1, rest1, husb2, wife2, chil2, rest2;
 	NODE fref1, fref2;
@@ -474,9 +476,12 @@ NODE fam1, fam2;
  *   only on list2.  No changes are made to the references from the
  *   families to the persons.
  *================================================================*/
-void merge_fam_links (fam1, fam2, list1, list2, code)
-NODE fam1, fam2, list1, list2;
-INT code;
+void
+merge_fam_links (NODE fam1,
+                 NODE fam2,
+                 NODE list1,
+                 NODE list2,
+                 INT code)
 {
 	NODE curs1, curs2, prev, this, next, first, keep;
 	NODE indi, name, refn, sex, body, famc, fams;
@@ -548,8 +553,9 @@ INT code;
 /*================================================
  * sort_children -- Return sorted list of children
  *==============================================*/
-NODE sort_children (chil1, chil2)
-NODE chil1, chil2;
+NODE
+sort_children (NODE chil1,
+               NODE chil2)
 {
 	NODE copy1, copy2, chil3, prev, kid1, kid2;
 	STRING year1, year2;
@@ -606,8 +612,9 @@ NODE chil1, chil2;
 /*=================================================
  * remove_dupes -- Return all in list1 not in list2
  *===============================================*/
-NODE remove_dupes (list1, list2)
-NODE list1, list2;
+NODE
+remove_dupes (NODE list1,
+              NODE list2)
 {
 	NODE copy1 = copy_nodes(list1, TRUE, TRUE);
 	NODE prev1, next1, curs1, curs2;

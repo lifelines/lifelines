@@ -1,5 +1,16 @@
 2000-11-08  Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* hdrs/interp.h hdrs/liflines.h hdrs/screen.h liflines/add.c
+	liflines/advedit.c liflines/ask.c liflines/browse.c
+	liflines/delete.c liflines/edit.c liflines/export.c
+	liflines/import.c liflines/lbrowse.c liflines/main.c
+	liflines/merge.c liflines/miscutls.c liflines/newrecs.c
+	liflines/remove.c liflines/screen.c liflines/show.c
+	liflines/swap.c liflines/tandem.c liflines/valgdcom.c: Converted
+	from K&R to ANSI C.  Removed some static functions prototypes from
+	global header files, and added some prototypes to get rid of
+	warnings.
+
 	* btree/Makefile.am: Add new header files to distribution.
 
 	* Makefile.am README.DEVELOPERS: Add first guess on source layout

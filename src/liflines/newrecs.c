@@ -70,7 +70,8 @@ extern BOOLEAN valid_sour_tree(), valid_even_tree(), valid_othr_tree();
 /*================================================
  * add_source -- Add source to database by editing
  *==============================================*/
-BOOLEAN add_source (void)
+BOOLEAN
+add_source (void)
 {
 	STRING str = (STRING) valueof(useropts, "SOURREC");
 	if (!str) str = rstr;
@@ -80,7 +81,8 @@ BOOLEAN add_source (void)
 /*==============================================
  * add_event -- Add event to database by editing
  *============================================*/
-BOOLEAN add_event (void)
+BOOLEAN
+add_event (void)
 {
 	STRING str = (STRING) valueof(useropts, "EVENREC");
 	if (!str) str = estr;
@@ -90,7 +92,8 @@ BOOLEAN add_event (void)
 /*====================================================
  * add_other -- Add user record to database by editing
  *==================================================*/
-BOOLEAN add_other (void)
+BOOLEAN
+add_other (void)
 {
 	STRING str = (STRING) valueof(useropts, "OTHRREC");
 	if (!str) str = xstr;
@@ -100,14 +103,14 @@ BOOLEAN add_other (void)
 /*================================================
  * add_record -- Add record to database by editing
  *==============================================*/
-BOOLEAN add_record (recstr, redt, val, cfrm, getref, todbase, tocache)
-STRING recstr;		/* default record */
-STRING redt;		/* re-edit message */
-BOOLEAN (*val)();	/* tree validate predicate */
-STRING cfrm;		/* confirm message */
-STRING (*getref)();	/* get next internal key */
-void (*todbase)();	/* write record to dbase */
-void (*tocache)();	/* write record to cache */
+BOOLEAN
+add_record (STRING recstr,                        /* default record */
+            STRING redt,                          /* re-edit message */
+            BOOLEAN (*val)(NODE, STRING *, NODE), /* tree validate predicate */
+            STRING cfrm,                          /* confirm message */
+            STRING (*getref)(void),               /* get next internal key */
+            void (*todbase)(NODE),                /* write record to dbase */
+            void (*tocache)(NODE))                /* write record to cache */
 {
 	FILE *fp;
 	NODE node, refn;
@@ -159,7 +162,8 @@ void (*tocache)();	/* write record to cache */
 /*=======================================
  * edit_source -- Edit source in database
  *=====================================*/
-void edit_source (NODE node)
+void
+edit_source (NODE node)
 {
 	edit_record(node, idredt, 'S', rredit, valid_sour_tree,
 	    cfrupt, "SOUR", sour_to_dbase, gdrmod);
@@ -167,7 +171,8 @@ void edit_source (NODE node)
 /*=====================================
  * edit_event -- Edit event in database
  *===================================*/
-void edit_event (NODE node)
+void
+edit_event (NODE node)
 {
 	edit_record(node, ideedt, 'E', eredit, valid_even_tree,
 	     cfeupt, "EVEN", even_to_dbase, gdemod);
@@ -175,7 +180,8 @@ void edit_event (NODE node)
 /*===========================================
  * edit_other -- Edit user record in database
  *=========================================*/
-void edit_other (NODE node)
+void
+edit_other (NODE node)
 {
 	edit_record(node, idxedt, 'X', xredit, valid_othr_tree,
 	     cfxupt, NULL, othr_to_dbase, gdxmod);
@@ -183,16 +189,16 @@ void edit_other (NODE node)
 /*=======================================
  * edit_record -- Edit record in database
  *=====================================*/
-void edit_record (node1, idedt, letr, redt, val, cfrm, tag, todbase, gdmsg)
-NODE node1;		/* record to edit, poss NULL */
-STRING idedt;		/* user id prompt */
-INT letr;		/* record type: E, S or X */
-STRING redt;		/* re-edit message */
-BOOLEAN (*val)();	/* validate routine */
-STRING cfrm;		/* confirm message */
-STRING tag;		/* tag */
-void (*todbase)();	/* write record to dbase */
-STRING gdmsg;		/* success message */
+void
+edit_record (NODE node1,           /* record to edit, poss NULL */
+             STRING idedt,         /* user id prompt */
+             INT letr,             /* record type: E, S or X */
+             STRING redt,          /* re-edit message */
+             BOOLEAN (*val)(NODE, STRING *, NODE), /* validate routine */
+             STRING cfrm,          /* confirm message */
+             STRING tag,           /* tag */
+             void (*todbase)(NODE),/* write record to dbase */
+             STRING gdmsg)         /* success message */
 {
 	TRANTABLE tti = tran_tables[MEDIN], tto = tran_tables[MINED];
 	STRING msg, newr, oldr, key;
@@ -261,9 +267,9 @@ STRING gdmsg;		/* success message */
 /*==============================================
  * ask_for_record -- Ask user to identify record
  *============================================*/
-NODE ask_for_record (idstr, letr)
-STRING idstr;	/* question prompt */
-INT letr;	/* letter to possibly prepend to key */
+NODE
+ask_for_record (STRING idstr,   /* question prompt */
+                INT letr)       /* letter to possibly prepend to key */
 {
 	NODE node;
 	STRING str = ask_for_string(idstr, "enter key or refn: ");

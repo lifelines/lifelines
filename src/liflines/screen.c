@@ -38,6 +38,7 @@
 #include "translat.h"
 #include "gedcom.h"
 #include "indiseq.h"
+#include "interp.h"
 #include "screen.h"
 #include "liflines.h"
 
@@ -61,7 +62,22 @@ STRING cright = (STRING) "Copyright(c) 1991 to 1996, by T. T. Wetmore IV";
 STRING plschs = (STRING) "Please choose an operation:";
 BOOLEAN stdout_vis = FALSE;
 
-INDISEQ indiseq_list_interact();
+static INDISEQ indiseq_list_interact(WINDOW *win, STRING ttl, INDISEQ seq);
+static void add_menu (void);
+static void create_windows (void);
+static void del_menu (void);
+static void extra_menu (void);
+static void init_all_windows (void);
+static void trans_menu (void);
+static void utils_menu (void);
+static void win_list_init (void);
+static void shw_list (WINDOW *win, INDISEQ seq, INT len0, INT top, INT cur);
+static void place_std_msg (void);
+static void clearw (void);
+static void place_cursor (void);
+static INT interact (WINDOW *win, STRING str);
+static INT list_interact(WINDOW *win, STRING ttl, INT len, STRING *strings);
+static INT indiseq_interact (WINDOW *win, STRING ttl, INDISEQ seq);
 
 INT ll_lines = LINESREQ; /* update to be number of lines in screen */
 INT ll_cols = COLSREQ;	 /* number of columns in screen used by LifeLines */
@@ -131,7 +147,8 @@ void edit_other (NODE node);
 /*============================
  * init_screen -- Init screens
  *==========================*/
-void init_screen (void)
+void
+init_screen (void)
 {
     	int extralines;
 	if (COLS < COLSREQ || LINES < LINESREQ) {
@@ -160,7 +177,8 @@ void init_screen (void)
 /*=======================================
  * paint_main_screen -- Paint main screen
  *=====================================*/
-void paint_main_screen(void)
+void
+paint_main_screen(void)
 {
 	WINDOW *win = main_win;
 	INT row;
@@ -200,7 +218,8 @@ void paint_main_screen(void)
 /*================================================
  * paint_one_per_screen -- Paint one person screen
  *==============================================*/
-void paint_one_per_screen (void)
+void
+paint_one_per_screen (void)
 {
 	WINDOW *win = main_win;
 	INT row, col;
@@ -240,7 +259,8 @@ void paint_one_per_screen (void)
 /*================================================
  * paint_one_fam_screen -- Paint one family screen
  *==============================================*/
-void paint_one_fam_screen (void)
+void
+paint_one_fam_screen (void)
 {
 	WINDOW *win = main_win;
 	INT row, col;
@@ -273,7 +293,8 @@ void paint_one_fam_screen (void)
 /*================================================
  * paint_two_per_screen -- Paint two person screen
  *==============================================*/
-void paint_two_per_screen (void)
+void
+paint_two_per_screen (void)
 {
 	WINDOW *win = main_win;
 	INT row, col;
@@ -302,7 +323,8 @@ void paint_two_per_screen (void)
 /*================================================
  * paint_two_fam_screen -- Paint two family screen
  *==============================================*/
-void paint_two_fam_screen (void)
+void
+paint_two_fam_screen (void)
 {
 	WINDOW *win = main_win;
 	INT row, col;
@@ -327,7 +349,8 @@ void paint_two_fam_screen (void)
 /*==========================================
  * paint_ped_screen -- Paint pedigree screen
  *========================================*/
-void paint_ped_screen (void)
+void
+paint_ped_screen (void)
 {
 	WINDOW *win = main_win;
 	INT row, col;
@@ -352,7 +375,8 @@ void paint_ped_screen (void)
 /*==============================================
  * paint_list_screen -- Paint list browse screen
  *============================================*/
-void paint_list_screen (void)
+void
+paint_list_screen (void)
 {
 	WINDOW *win = main_win;
 	INT row, col;
@@ -382,7 +406,8 @@ void paint_list_screen (void)
 /*===========================================
  * paint_aux_screen -- Paint auxillary screen
  *=========================================*/
-void paint_aux_screen (void)
+void
+paint_aux_screen (void)
 {
 	WINDOW *win = main_win;
 	INT row, col;
@@ -407,7 +432,8 @@ void paint_aux_screen (void)
 /*==========================================
  * create_windows -- Create and init windows
  *========================================*/
-void create_windows (void)
+void
+create_windows (void)
 {
 	INT col;
 	stdout_box_win = NEWWIN(LINES-4, COLSREQ-4);
@@ -441,7 +467,8 @@ void create_windows (void)
 /*=====================================
  * init_all_windows -- Init all windows
  *===================================*/
-void init_all_windows (void)
+void
+init_all_windows (void)
 {
 	WINDOW *win = add_menu_win;
 	INT row = 1;
@@ -503,8 +530,8 @@ void init_all_windows (void)
 /*=================================
  * display_screen -- Display screen
  *===============================*/
-void display_screen (new_screen)
-INT new_screen;
+void
+display_screen (INT new_screen)
 {
 	cur_screen = new_screen;
 	if (stdout_vis) {
@@ -525,7 +552,8 @@ INT new_screen;
 /*=====================================
  * main_menu -- Handle main_menu screen
  *===================================*/
-void main_menu (void)
+void
+main_menu (void)
 {
 	INT c;
 	if (cur_screen != MAIN_SCREEN) paint_main_screen();
@@ -548,7 +576,8 @@ void main_menu (void)
 /*=========================================
  * indi_browse -- Handle indi_browse screen
  *=======================================*/
-INT indi_browse (NODE indi)
+INT
+indi_browse (NODE indi)
 {
 	if (cur_screen != ONE_PER_SCREEN) paint_one_per_screen();
 	show_person(indi, 1, PER_LINES);
@@ -558,7 +587,8 @@ INT indi_browse (NODE indi)
 /*=======================================
  * fam_browse -- Handle fam_browse screen
  *=====================================*/
-INT fam_browse (NODE fam)
+INT
+fam_browse (NODE fam)
 {
 	if (cur_screen != ONE_FAM_SCREEN) paint_one_fam_screen();
 	show_long_family(fam, 1, FAM_LINES);
@@ -568,8 +598,9 @@ INT fam_browse (NODE fam)
 /*=============================================
  * tandem_browse -- Handle tandem_browse screen
  *===========================================*/
-INT tandem_browse (indi1, indi2)
-NODE indi1, indi2;
+INT
+tandem_browse (NODE indi1,
+                   NODE indi2)
 {
 	if (cur_screen != TWO_PER_SCREEN) paint_two_per_screen();
 	show_person(indi1, 1, TANDEM_LINES);
@@ -580,8 +611,8 @@ NODE indi1, indi2;
 /*=============================================
  * twofam_browse -- Handle twofam_browse screen
  *===========================================*/
-INT twofam_browse (fam1, fam2)
-NODE fam1, fam2;
+INT
+twofam_browse (NODE fam1, NODE fam2)
 {
 	if (cur_screen != TWO_FAM_SCREEN) paint_two_fam_screen();
 	show_short_family(fam1, 1, TANDEM_LINES);
@@ -592,7 +623,8 @@ NODE fam1, fam2;
 /*=======================================
  * ped_browse -- Handle ped_browse screen
  *=====================================*/
-INT ped_browse (NODE indi)
+INT
+ped_browse (NODE indi)
 {
 	if (cur_screen != PED_SCREEN) paint_ped_screen();
 	show_pedigree(indi);
@@ -602,8 +634,8 @@ INT ped_browse (NODE indi)
 /*=======================================
  * aux_browse -- Handle aux_browse screen
  *=====================================*/
-INT aux_browse (node)
-NODE node;
+INT
+aux_browse (NODE node)
 {
 	if (cur_screen != AUX_SCREEN) paint_aux_screen();
 	show_aux_display(node, 1, 11);
@@ -613,10 +645,11 @@ NODE node;
 /*=========================================
  * list_browse -- Handle list_browse screen
  *=======================================*/
-INT list_browse (INDISEQ seq,
-		 INT top,
-		 INT cur,
-		 INT mark)
+INT
+list_browse (INDISEQ seq,
+             INT top,
+             INT cur,
+             INT mark)
 {
 	if (cur_screen != LIST_SCREEN) paint_list_screen();
 	show_list(seq, top, cur, mark);
@@ -626,8 +659,9 @@ INT list_browse (INDISEQ seq,
 /*======================================
  * ask_for_string -- Ask user for string
  *====================================*/
-STRING ask_for_string (ttl, prmpt)
-STRING ttl, prmpt;
+STRING
+ask_for_string (STRING ttl,
+                STRING prmpt)
 {
 	WINDOW *win = ask_win;
 	STRING rv, p;
@@ -650,8 +684,10 @@ STRING ttl, prmpt;
 /*=======================================
  * ask_for_char -- Ask user for character
  *=====================================*/
-INT ask_for_char (ttl, prmpt, ptrn)
-STRING ttl, prmpt, ptrn;
+INT
+ask_for_char (STRING ttl,
+              STRING prmpt,
+              STRING ptrn)
 {
 	WINDOW *win = ask_win;
 	werase(win);
@@ -664,8 +700,11 @@ STRING ttl, prmpt, ptrn;
 /*===========================================
  * ask_for_char_msg -- Ask user for character
  *=========================================*/
-INT ask_for_char_msg (msg, ttl, prmpt, ptrn)
-STRING msg, ttl, prmpt, ptrn;
+INT
+ask_for_char_msg (STRING msg,
+                  STRING ttl,
+                  STRING prmpt,
+                  STRING ptrn)
 {
 	WINDOW *win = ask_msg_win;
 	INT rv;
@@ -681,10 +720,10 @@ STRING msg, ttl, prmpt, ptrn;
 /*============================================
  * choose_from_list -- Choose from string list
  *==========================================*/
-INT choose_from_list (ttl, no, pstrngs)
-STRING ttl;
-INT no;
-STRING *pstrngs;
+INT
+choose_from_list (STRING ttl,
+                  INT no,
+                  STRING *pstrngs)
 {
 	WINDOW *win = choose_win(no);
 	INT rv;
@@ -699,9 +738,9 @@ STRING *pstrngs;
 /*=============================================================
  * choose_one_from_indiseq -- User chooses person from sequence
  *===========================================================*/
-INT choose_one_from_indiseq (ttl, seq)
-STRING ttl;
-INDISEQ seq;
+INT
+choose_one_from_indiseq (STRING ttl,
+                         INDISEQ seq)
 {
 	WINDOW *win;
 	INT rv, len;
@@ -725,9 +764,9 @@ INDISEQ seq;
  * choose_list_from_indiseq -- User chooses subsequence from
  *   person sequence
  *========================================================*/
-INDISEQ choose_list_from_indiseq (ttl, seq)
-STRING ttl;
-INDISEQ seq;
+INDISEQ
+choose_list_from_indiseq (STRING ttl,
+                          INDISEQ seq)
 {
 	WINDOW *win;
 	INT len;
@@ -745,7 +784,8 @@ INDISEQ seq;
 /*============================
  * add_menu -- Handle add menu
  *==========================*/
-void add_menu (void)
+void
+add_menu (void)
 {
 	NODE node;
 	INT code;
@@ -769,7 +809,8 @@ void add_menu (void)
 /*===============================
  * del_menu -- Handle delete menu
  *=============================*/
-void del_menu (void)
+void
+del_menu (void)
 {
 	INT code;
 	touchwin(del_menu_win);
@@ -788,7 +829,8 @@ void del_menu (void)
 /*======================================
  * trans_menu -- Handle translation menu
  *====================================*/
-void trans_menu (void)
+void
+trans_menu (void)
 {
 	INT code;
 	touchwin(trans_menu_win);
@@ -810,7 +852,8 @@ void trans_menu (void)
 /*====================================
  * utils_menu -- Handle utilities menu
  *==================================*/
-void utils_menu (void)
+void
+utils_menu (void)
 {
 	INT code;
 	touchwin(utils_menu_win);
@@ -834,7 +877,8 @@ void utils_menu (void)
 /*================================
  * extra_menu -- Handle extra menu
  *==============================*/
-void extra_menu (void)
+void
+extra_menu (void)
 {
 	INT code;
 	touchwin(extra_menu_win);
@@ -856,9 +900,9 @@ void extra_menu (void)
 /*===============================
  * interact -- Interact with user
  *=============================*/
-INT interact (win, str)
-WINDOW *win;
-STRING str;
+INT
+interact (WINDOW *win,
+          STRING str)
 {
 	INT c, i, n = strlen(str);
 	while (TRUE) {
@@ -877,9 +921,9 @@ STRING str;
 /*============================================
  * get_answer -- Have user respond with string
  *==========================================*/
-STRING get_answer (win, prmpt)
-WINDOW *win;
-STRING prmpt;
+STRING
+get_answer (WINDOW *win,
+            STRING prmpt)
 {
 	static unsigned char lcl[100];
 
@@ -896,7 +940,8 @@ STRING prmpt;
  * win_list_init -- Create list of windows of increasing size
  *=========================================================*/
 static WINDOW *list_wins[MAXVIEWABLE];
-void win_list_init (void)
+void
+win_list_init (void)
 {
 	INT i;
 	for (i = 0; i < VIEWABLE; i++) {
@@ -906,8 +951,8 @@ void win_list_init (void)
 /*=========================================
  * choose_win -- Choose window to hold list
  *=======================================*/
-WINDOW *choose_win (len)
-INT len;	/* length */
+WINDOW *
+choose_win (INT len)        /* length */
 {
 	WINDOW *win = list_wins[VIEWABLE-1];
 	if (len <= VIEWABLE) win = list_wins[len-1];
@@ -916,10 +961,10 @@ INT len;	/* length */
 /*=====================================================
  * indiseq_interact -- Interact with user over sequence
  *===================================================*/
-INT indiseq_interact (win, ttl, seq)
-WINDOW *win;
-STRING ttl;
-INDISEQ seq;
+INT
+indiseq_interact (WINDOW *win,
+                  STRING ttl,
+                  INDISEQ seq)
 {
 	INT top, cur, len, row;
 	top = cur = 0;
@@ -953,10 +998,14 @@ INDISEQ seq;
 		}
 	}
 }
-INDISEQ indiseq_list_interact (win, ttl, seq)
-WINDOW *win;
-STRING ttl;
-INDISEQ seq;
+
+/*=====================================================
+ * indiseq_list_interact --
+ *===================================================*/
+INDISEQ
+indiseq_list_interact (WINDOW *win,
+                       STRING ttl,
+                       INDISEQ seq)
 {
 	INT top, cur, len, len0, row;
 
@@ -1003,10 +1052,12 @@ INDISEQ seq;
 /*=====================================================
  * shw_list -- Show string list in list interact window
  *===================================================*/
-void shw_list (win, seq, len0, top, cur)
-WINDOW *win;
-INDISEQ seq;
-INT top, cur, len0;
+void
+shw_list (WINDOW *win,
+          INDISEQ seq,
+          INT len0,
+          INT top,
+          INT cur)
 {
 	INT i, j, row = 2, len = length_indiseq(seq);
 	j = len0 > VIEWABLE ? VIEWABLE : len0;
@@ -1022,10 +1073,12 @@ INT top, cur, len0;
 /*================================================================
  * shw_list_of_strings -- Show string list in list interact window
  *==============================================================*/
-void shw_list_of_strings (win, strings, len, top, cur)
-WINDOW *win;
-STRING *strings;
-INT len, top, cur;
+void
+shw_list_of_strings (WINDOW *win,
+                     STRING *strings,
+                     INT len,
+                     INT top,
+                     INT cur)
 {
 	INT i, j, row = len > VIEWABLE ? VIEWABLE + 1 : len + 1;
 	for (i = 2; i <= row; i++)
@@ -1040,11 +1093,11 @@ INT len, top, cur;
 /*==============================================
  * list_interact -- Interact with user over list
  *============================================*/
-INT list_interact(win, ttl, len, strings)
-WINDOW *win;	/* interaction window */
-STRING ttl;	/* title */
-INT len;	/* list length */
-STRING *strings;/* string list */
+INT
+list_interact(WINDOW *win,    /* interaction window */
+              STRING ttl,     /* title */
+              INT len,        /* list length */
+              STRING *strings)/* string list */
 {
 		INT top = 0, cur = 0, row;
 	while (TRUE) {
@@ -1078,7 +1131,8 @@ STRING *strings;/* string list */
 /*===============================================
  * mprintf -- Call as mprintf(fmt, ...)
  *=============================================*/
-void mprintf (STRING fmt, ...)
+void
+mprintf (STRING fmt, ...)
 {
 	va_list args;
 	INT row;
@@ -1124,15 +1178,16 @@ INT arg1, arg2, arg3, arg4, arg5, arg6, arg7;
 /*=======================================
  * message -- Simple interface to mprintf
  *=====================================*/
-void message (s)
-STRING s;
+void
+message (STRING s)
 {
 	mprintf("%s", s);
 }
 /*===================================================
  * message_string -- Return background message string
  *=================================================*/
-STRING message_string ()
+STRING
+message_string (void)
 {
 	switch (cur_screen) {
 	case MAIN_SCREEN:
@@ -1158,7 +1213,8 @@ STRING message_string ()
 /*=================================================
  * place_std_msg - Place standard message on screen
  *===============================================*/
-void place_std_msg (void)
+void
+place_std_msg (void)
 {
 	STRING str = message_string();
 	INT row;
@@ -1216,7 +1272,8 @@ INT arg1, arg2, arg3, arg4, arg5, arg6, arg7;
 /*==============================
  * clearw -- Clear stdout window
  *============================*/
-void clearw (void)
+void
+clearw (void)
 {
 	werase(stdout_win);
 	BOX(stdout_box_win, 0, 0);
@@ -1227,10 +1284,10 @@ void clearw (void)
 /*=======================================
  * wfield -- Write field in stdout window
  *=====================================*/
-void wfield (row, col, str)
-INT row;
-INT col;
-STRING str;
+void
+wfield (INT row,
+        INT col,
+        STRING str)
 {
 	if (!stdout_vis) clearw();
 	mvwaddstr(stdout_win, row, col, str);
@@ -1239,17 +1296,20 @@ STRING str;
 /*===========================================
  * wpos -- Position to place in stdout window
  *=========================================*/
-void wpos (row, col)
-INT row, col;
+void
+wpos (INT row,
+      INT col)
 {
 	wmove(stdout_win, row, col);
 }
 /*=======================================
  * show_horz_line -- Draw horizontal line
  *=====================================*/
-void show_horz_line (win, row, col, len)
-WINDOW *win;
-INT row, col, len;
+void
+show_horz_line (WINDOW *win,
+                INT row,
+                INT col,
+                INT len)
 {
 	INT i;
 	mvwaddch(win, row, col, ACS_LTEE);
@@ -1260,9 +1320,11 @@ INT row, col, len;
 /*=====================================
  * show_vert_line -- Draw vertical line
  *===================================*/
-void show_vert_line (win, row, col, len)
-WINDOW *win;
-INT row, col, len;
+void
+show_vert_line (WINDOW *win,
+                INT row,
+                INT col,
+                INT len)
 {
 #ifndef BSD
 	INT i;
@@ -1275,7 +1337,8 @@ INT row, col, len;
 /*=============================================
  * place_cursor -- Move to idle cursor location
  *===========================================*/
-void place_cursor (void)
+void
+place_cursor (void)
 {
 	INT row, col = 30;
 	switch (cur_screen) {
@@ -1294,7 +1357,8 @@ void place_cursor (void)
 /*=============================================
  * dbprintf -- Debug printf(fmt, arg, arg, ...)
  *===========================================*/
-void dbprintf (STRING fmt, ...)
+void
+dbprintf (STRING fmt, ...)
 {
 	va_list args;
 	touchwin(debug_box_win);
@@ -1309,7 +1373,8 @@ void dbprintf (STRING fmt, ...)
 /*==================================================
  * do_edit -- Shift to user's screen editor and back
  *================================================*/
-void do_edit (void)
+void
+do_edit (void)
 {
 	endwin();
 #ifdef WIN32
@@ -1327,10 +1392,11 @@ void do_edit (void)
  *   character handling
  *================================================================*/
 #ifdef BSD
-bsd_mvwgetstr (win, row, col, str)
-WINDOW *win;
-INT row, col;
-STRING str;
+void
+bsd_mvwgetstr (WINDOW *win,
+               INt row,
+               INT col,
+               STRING str)
 {
 	STRING p = str;
 	INT c, ers = erasechar();

@@ -43,8 +43,9 @@ extern STRING less2c, okcswp, less2f, okfswp, idfswp, ronlye;
 /*=============================================
  * swap_children -- Swap two children in family
  *===========================================*/
-BOOLEAN swap_children (NODE prnt,	/* parent - poss NULL */
-		       NODE fam)	/* family - poss NULL */
+BOOLEAN
+swap_children (NODE prnt,       /* parent - poss NULL */
+               NODE fam)        /* family - poss NULL */
 {
 	NODE chil1, chil2, chil, one, two, tmp;
 	STRING key1, key2, str;
@@ -108,7 +109,8 @@ gotfam:
 /*=============================================
  * swap_families -- Swap two families of person
  *===========================================*/
-BOOLEAN swap_families (NODE indi)
+BOOLEAN
+swap_families (NODE indi)
 {
 	NODE fam1, fam2, fams, one, two, tmp;
 	INT nfam;

@@ -61,8 +61,8 @@ static INT Solen = 0;
 /*===============================================
  * init_display_indi -- Initialize display person
  *=============================================*/
-void init_display_indi (pers)
-NODE pers;
+void
+init_display_indi (NODE pers)
 {
 	INT nsp, nch, num, nm;
 	STRING s,t;
@@ -131,9 +131,10 @@ NODE pers;
 /*==============================
  * show_person -- Display person
  *============================*/
-void show_person (NODE pers,	/* person */
-		  INT row,	/* start row */
-		  INT hgt)	/* avail rows */
+void
+show_person (NODE pers, /* person */
+             INT row,   /* start row */
+             INT hgt)   /* avail rows */
 {
 	INT i;
 	char buf[132];
@@ -163,9 +164,10 @@ void show_person (NODE pers,	/* person */
 /*=============================================
  * add_spouse_line -- Add spouse line to others
  *===========================================*/
-static void add_spouse_line (num, indi, fam)
-INT num;
-NODE indi, fam;
+static void
+add_spouse_line (INT num,
+                 NODE indi,
+                 NODE fam)
 {
 	STRING line;
 	if (Solen >= MAXOTHERS) return;
@@ -176,9 +178,9 @@ NODE indi, fam;
 /*===========================================
  * add_child_line -- Add child line to others
  *=========================================*/
-void add_child_line (num, indi)
-INT num;
-NODE indi;
+void
+add_child_line (INT num,
+                NODE indi)
 {
 	STRING line;
 	if (Solen >= MAXOTHERS) return;
@@ -189,8 +191,8 @@ NODE indi;
 /*==============================================
  * init_display_fam -- Initialize display family
  *============================================*/
-void init_display_fam (fam)
-NODE fam;	/* family */
+void
+init_display_fam (NODE fam)     /* family */
 {
 	NODE husb;
 	NODE wife;
@@ -250,9 +252,10 @@ NODE fam;	/* family */
 /*===================================
  * show_long_family -- Display family
  *=================================*/
-void show_long_family (NODE fam,
-		       INT row,
-		       INT hgt)
+void
+show_long_family (NODE fam,
+                  INT row,
+                  INT hgt)
 {
 	INT i;
 	char buf[132];
@@ -284,9 +287,10 @@ void show_long_family (NODE fam,
 /*====================================
  * show_short_family -- Display family
  *==================================*/
-void show_short_family (NODE fam,
-			INT row,
-			INT hgt)
+void
+show_short_family (NODE fam,
+                   INT row,
+                   INT hgt)
 {
 	INT i;
 	char buf[132];
@@ -337,7 +341,8 @@ void show_short_family (NODE fam,
 /*================================================
  * show_pedigree -- Show person in pedigree format
  *==============================================*/
-void show_pedigree (NODE indi)
+void
+show_pedigree (NODE indi)
 {
 	char s[300];			/* used by mvwprintw replacement */
 	NODE f = indi_to_fath(indi);	/* 2nd generation */
@@ -451,9 +456,9 @@ void show_pedigree (NODE indi)
 /*===============================================================
  * indi_to_ped_fix -- Construct person STRING for pedigree screen
  *=============================================================*/
-STRING indi_to_ped_fix (indi, len)
-NODE indi;
-INT len;
+STRING
+indi_to_ped_fix (NODE indi,
+                 INT len)
 {
 	STRING bevt, devt, name, key;
 	static unsigned char scratch[100];
@@ -481,10 +486,10 @@ INT len;
 /*=============================================
  * person_display -- Create person display line
  *===========================================*/
-STRING person_display (indi, fam, len)
-NODE indi;
-NODE fam;
-INT len;
+STRING
+person_display (NODE indi,
+                NODE fam,
+                INT len)
 {
 	static unsigned char scratch[100];
 	STRING p = scratch, evt = NULL;
@@ -537,10 +542,11 @@ static STRING empstr = (STRING) "                                               
  * show_list - Show name list in list screen
  *========================================*/
 #define VIEWABLE 13
-void show_list (INDISEQ seq,
-		INT top,
-		INT cur,
-		INT mark)
+void
+show_list (INDISEQ seq,
+           INT top,
+           INT cur,
+           INT mark)
 {
 	WINDOW *win = main_win;
 	INT i, j, row, len = length_indiseq(seq);
@@ -573,9 +579,10 @@ void show_list (INDISEQ seq,
 /*========================================================
  * show_aux_display -- Show source, event or other record
  *======================================================*/
-void show_aux_display (NODE node,
-		       INT row,
-		       INT hgt)
+void
+show_aux_display (NODE node,
+                  INT row,
+                  INT hgt)
 {
 	STRING key;
 	INT i;
@@ -599,12 +606,15 @@ void show_aux_display (NODE node,
 	}
 #endif
 }
+#if UNUSED
 /*=========================================
  * show_sour_display -- Show source display
  *=======================================*/
-void show_sour_display (node, row, hgt)
-NODE node;
-INT row, hgt;
+void
+show_sour_display (NODE node,
+                   INT row,
+                   INT hgt)
 {
 	STRING key;
 }
+#endif

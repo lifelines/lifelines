@@ -58,15 +58,8 @@ extern STRING idgedf, gdcker, gdnadd, dboldk, dbnewk, dbodel,
   cfoldk, dbdelk, dbrdon;
 extern TRANTABLE tran_tables[];
 static BOOLEAN translate_values();
-static void restore_record (NODE node,
-			    INT type,
-			    INT num);
-STRING translate_key();
-STRING newixref();
-STRING newfxref();
-STRING newexref();
-STRING newsxref();
-STRING newxxref();
+static void restore_record (NODE node, INT type, INT num);
+static STRING translate_key(STRING );
 
 /* in valgdcom.c */
 BOOLEAN validate_gedcom (FILE *fp);
@@ -76,7 +69,8 @@ void addmissingkeys (INT t);
 /*=================================================
  * import_from_file -- Read GEDCOM file to database
  *===============================================*/
-BOOLEAN import_from_file ()
+BOOLEAN
+import_from_file (void)
 {
 	FILE *fp, *ask_for_file();
 	NODE node, conv;
@@ -177,9 +171,10 @@ BOOLEAN import_from_file ()
 /*=============================================
  * restore_record -- Restore record to database
  *===========================================*/
-static void restore_record (NODE node,
-			    INT type,
-			    INT num)
+static void
+restore_record (NODE node,
+                INT type,
+                INT num)
 {
 	STRING old, new, str, key;
 	char scratch[10];
@@ -215,8 +210,8 @@ static void restore_record (NODE node,
 /*==============================================================
  * translate_key -- Translate key from external to internal form
  *============================================================*/
-STRING translate_key (key)
-STRING key;		/* key does not have surrounding @ chars */
+STRING
+translate_key (STRING key)    /* key does not have surrounding @ chars */
 {
 	ELMNT elm;
 	INT dex = xref_to_index(key);
@@ -243,12 +238,13 @@ STRING key;		/* key does not have surrounding @ chars */
 		FATAL();
 	}
 	/* NOTREACHED */
+        return NULL;
 }
 /*============================================================
  * translate_values -- Traverse function to translate pointers
  *==========================================================*/
-static BOOLEAN translate_values (node)
-NODE node;
+static BOOLEAN
+translate_values (NODE node)
 {
 	STRING new;
 	if (!pointer_value(nval(node))) return TRUE;

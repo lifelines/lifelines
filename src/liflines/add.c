@@ -46,10 +46,13 @@ extern STRING cfpadd, cfsadd, gdpadd, gdcadd, gdsadd, ronlya, ronlye;
 
 extern TRANTABLE tran_tables[];
 
+static NODE add_unlinked_indi (NODE indi);
+
 /*==========================================================
  * add_indi_by_edit -- Add new person to database by editing
  *========================================================*/
-NODE add_indi_by_edit (void)
+NODE
+add_indi_by_edit (void)
 {
 	FILE *fp;
 	NODE indi;
@@ -106,8 +109,8 @@ NODE add_indi_by_edit (void)
 /*==========================================================
  * add_unlinked_indi -- Add person with no links to database
  *========================================================*/
-NODE add_unlinked_indi (indi)
-NODE indi;
+NODE
+add_unlinked_indi (NODE indi)
 {
 	NODE name, refn, sex, body, dumb, node;
 	STRING key;
@@ -131,8 +134,8 @@ NODE indi;
  * add_linked_indi -- Add linked person to database; links assumed
  *   correct
  *==============================================================*/
-BOOLEAN add_linked_indi (indi)
-NODE indi;
+BOOLEAN
+add_linked_indi (NODE indi)
 {
 	NODE node, name, refn, sex, body, famc, fams;
 	STRING str, key;
@@ -153,8 +156,9 @@ NODE indi;
 /*==================================
  * add_child --  Add child to family
  *================================*/
-NODE add_child (child, fam)
-NODE child, fam;
+NODE
+add_child (NODE child,
+           NODE fam)
 {
 	NODE node, new, name, sex, body, famc, fams;
 	NODE husb, wife, chil, rest, refn, fref;
@@ -238,9 +242,10 @@ NODE child, fam;
 /*===================================
  * add_spouse -- Add spouse to family
  *=================================*/
-BOOLEAN add_spouse (spouse, fam, conf)
-NODE spouse, fam;
-BOOLEAN conf;
+BOOLEAN
+add_spouse (NODE spouse,
+            NODE fam,
+            BOOLEAN conf)
 {
 	INT sex;
 	NODE husb, wife, chil, rest, fams, prev, fref, this, new;
@@ -335,8 +340,10 @@ BOOLEAN conf;
 /*=========================================
  * add_family -- Add new family to database
  *=======================================*/
-NODE add_family (spouse1, spouse2, child)
-NODE spouse1, spouse2, child;
+NODE
+add_family (NODE spouse1,
+            NODE spouse2,
+            NODE child)
 {
 	INT sex1 = 0;
 	INT sex2 = 0;

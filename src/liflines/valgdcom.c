@@ -46,6 +46,7 @@
 #include "gedcom.h"
 #include "gedcheck.h"
 #include "liflines.h"
+#include "screen.h"
 
 /* external data set by check_stdkeys() , used by addmissingkeys() */
 
@@ -137,7 +138,8 @@ static void handle_err(STRING, ...);
 /*===================================================
  * validate_gedcom -- Validate GEDCOM records in file
  *=================================================*/
-BOOLEAN validate_gedcom (FILE *fp)
+BOOLEAN
+validate_gedcom (FILE *fp)
 {
 	INT lev, rc, curlev = 0;
 	INT nindi, nfam, nsour, neven, nothr;
@@ -250,10 +252,10 @@ BOOLEAN validate_gedcom (FILE *fp)
  *         -1 if unexplained error or
  *         -2 if explained error
  *=====================================*/
-static INT add_indi_defn (xref, line, pel)
-STRING xref;	/* ref value */
-INT line;	/* line num */
-ELMNT *pel;
+static INT
+add_indi_defn (STRING xref,     /* ref value */
+               INT line,        /* line num */
+               ELMNT *pel)
 {
 	ELMNT el;
 	INT dex;
@@ -297,9 +299,9 @@ ELMNT *pel;
 /*======================================
  * add_fam_defn -- Add family definition
  *====================================*/
-static INT add_fam_defn (xref, line)
-STRING xref;	/* cross ref value */
-INT line;	/* line num */
+static INT
+add_fam_defn (STRING xref,      /* cross ref value */
+              INT line)         /* line num */
 {
 	ELMNT el;
 	INT dex;
@@ -339,9 +341,9 @@ INT line;	/* line num */
 /*=======================================
  * add_sour_defn -- Add source definition
  *=====================================*/
-static INT add_sour_defn (xref, line)
-STRING xref;	/* cross ref value */
-INT line;	/* line num */
+static INT
+add_sour_defn (STRING xref,     /* cross ref value */
+               INT line)        /* line num */
 {
 	ELMNT el;
 	INT dex;
@@ -377,9 +379,9 @@ INT line;	/* line num */
 /*======================================
  * add_even_defn -- Add event definition
  *====================================*/
-static INT add_even_defn (xref, line)
-STRING xref;	/* cross ref value */
-INT line;	/* line num */
+static INT
+add_even_defn (STRING xref,     /* cross ref value */
+               INT line)        /* line num */
 {
 	ELMNT el;
 	INT dex;
@@ -415,9 +417,9 @@ INT line;	/* line num */
 /*==================================================
  * add_othr_defn -- Add other record type definition
  *================================================*/
-static INT add_othr_defn (xref, line)
-STRING xref;	/* cross ref value */
-INT line;	/* line num */
+static INT
+add_othr_defn (STRING xref,     /* cross ref value */
+               INT line)        /* line num */
 {
 	ELMNT el;
 	INT dex;
@@ -453,9 +455,10 @@ INT line;	/* line num */
 /*===========================================================
  * handle_indi_lev1 -- Handle level 1 lines in person records
  *=========================================================*/
-static void handle_indi_lev1 (tag, val, line)
-STRING tag, val;
-INT line;
+static void
+handle_indi_lev1 (STRING tag,
+                  STRING val,
+                  INT line)
 {
 	ELMNT indi, pers;
 	ASSERT(person != -1);
@@ -508,9 +511,10 @@ INT line;
 /*==========================================================
  * handle_fam_lev1 -- Handle level 1 lines in family records
  *========================================================*/
-static void handle_fam_lev1 (tag, val, line)
-STRING tag, val;
-INT line;
+static void
+handle_fam_lev1 (STRING tag,
+                 STRING val,
+                 INT line)
 {
 	ELMNT fam, pers;
 #ifdef DEBUG
@@ -546,10 +550,10 @@ INT line;
 /*=================================================
  * check_akey -- Check for a standard format key
  *===============================================*/
-int check_akey (firstchar, keyp, maxp)
-    int firstchar;
-    STRING keyp;
-    INT *maxp;
+int
+check_akey (int firstchar,
+            STRING keyp,
+            INT *maxp)
 {
     INT val;
     if(keyp && (*keyp == firstchar)) {
@@ -566,7 +570,8 @@ int check_akey (firstchar, keyp, maxp)
 /*=================================================
  * check_stdkeys -- Check for standard format keys
  *===============================================*/
-int check_stdkeys (void)
+int
+check_stdkeys (void)
 {
 	INT i;
 	int retval = TRUE;
@@ -606,7 +611,8 @@ int check_stdkeys (void)
 /*================================================
  * addmissingkeys -- add keys which are not in use
  *==============================================*/
-void addmissingkeys (INT t)		/* type of record: INDI_REC ... */
+void
+addmissingkeys (INT t)          /* type of record: INDI_REC ... */
 {
     	INT tmax, ttot;
 	INT i,j;
@@ -653,7 +659,8 @@ void addmissingkeys (INT t)		/* type of record: INDI_REC ... */
 /*=================================================
  * check_references -- Check for undefined problems
  *===============================================*/
-static void check_references (void)
+static void
+check_references (void)
 {
 	INT i;
 	for (i = 0; i < struct_len; i++) {
@@ -671,8 +678,8 @@ static void check_references (void)
 /*=======================================
  * check_indi_links -- Check person links
  *=====================================*/
-static void check_indi_links (per)
-ELMNT per;
+static void
+check_indi_links (ELMNT per)
 {
 	BOOLEAN jm, jf, bm, bf;
 	if (Male(per) > 1)  handle_warn(mulfth, Line(per), Key(per));
@@ -693,8 +700,8 @@ ELMNT per;
 /*======================================
  * check_fam_links -- Check family links
  *====================================*/
-static void check_fam_links (fam)
-ELMNT fam;
+static void
+check_fam_links (ELMNT fam)
 {
 	if (Line(fam) == 0) handle_err(undfam, Key(fam));
 	if (Male(fam) > 1)  handle_warn(mulhsb, Line(fam), Key(fam));
@@ -703,33 +710,33 @@ ELMNT fam;
 /*======================================
  * check_even_links -- Check event links
  *====================================*/
-static void check_even_links (evn)
-ELMNT evn;
+static void
+check_even_links (ELMNT evn)
 {
 	if (Line(evn) == 0) handle_err(undevn, Key(evn));
 }
 /*=======================================
  * check_sour_links -- Check source links
  *=====================================*/
-static void check_sour_links (src)
-ELMNT src;
+static void
+check_sour_links (ELMNT src)
 {
 	if (Line(src) == 0) handle_err(undsrc, Key(src));
 }
 /*======================================
  * check_othr_links -- Check other links
  *====================================*/
-static void check_othr_links (otr)
-ELMNT otr;
+static void
+check_othr_links (ELMNT otr)
 {
 	if (Line(otr) == 0) handle_err(undrec, Key(otr));
 }
 /*=======================================
  * handle_value -- Handle arbitrary value
  *=====================================*/
-static void handle_value (val, line)
-STRING val;
-INT line;
+static void
+handle_value (STRING val,
+              INT line)
 {
 	ELMNT el;
 	STRING xref;
@@ -748,8 +755,8 @@ INT line;
 /*=========================================
  * pointer_value -- See if value is pointer
  *=======================================*/
-BOOLEAN pointer_value (val)
-STRING val;
+BOOLEAN
+pointer_value (STRING val)
 {
 	if (!val || *val != '@' || strlen(val) < 3) return FALSE;
 	return val[strlen(val)-1] == '@';
@@ -757,7 +764,8 @@ STRING val;
 /*==================================
  * handle_err -- Handle GEDCOM error
  *================================*/
-void handle_err (STRING fmt, ...)
+void
+handle_err (STRING fmt, ...)
 {
 	va_list args;
 	char str[100];
@@ -780,7 +788,8 @@ void handle_err (STRING fmt, ...)
 /*=====================================
  * handle_warn -- Handle GEDCOM warning
  *===================================*/
-void handle_warn (STRING fmt, ...)
+void
+handle_warn (STRING fmt, ...)
 {
 	va_list args;
 	char str[100];
@@ -800,8 +809,8 @@ void handle_warn (STRING fmt, ...)
 /*=========================================
  * xref_to_index - Convert pointer to index
  *=======================================*/
-INT xref_to_index (xref)
-STRING xref;
+INT
+xref_to_index (STRING xref)
 {
 	BOOLEAN there;
 	INT dex = (INT)valueofbool(convtab, xref, &there);
@@ -810,9 +819,9 @@ STRING xref;
 /*=========================================================
  * add_to_structures -- Add new elements to data structures
  *=======================================================*/
-static INT add_to_structures(xref, el)
-STRING xref;
-ELMNT el;
+static INT
+add_to_structures(STRING xref,
+                  ELMNT el)
 {
 	INT i, n;
 
@@ -833,7 +842,8 @@ ELMNT el;
 /*========================================================
  * clear_structures -- Clear GEDCOM import data structures
  *======================================================*/
-static void clear_structures (void)
+static void
+clear_structures (void)
 {
 	INT i;
 

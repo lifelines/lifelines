@@ -43,9 +43,10 @@ extern STRING okcrmv, ntsinf, ntcinf, cfsrmv, oksrmv, ronlye, idcrmf;
 /*=========================================
  * remove_child -- Remove child from family
  *=======================================*/
-BOOLEAN remove_child (indi, fam, nolast)
-NODE indi, fam;
-BOOLEAN nolast;	/* don't remove last in family? */
+BOOLEAN
+remove_child (NODE indi,
+              NODE fam,
+              BOOLEAN nolast)   /* don't remove last in family? */
 {
 	NODE node, last;
 
@@ -100,9 +101,10 @@ BOOLEAN nolast;	/* don't remove last in family? */
 /*===========================================
  * remove_spouse -- Remove spouse from family
  *=========================================*/
-BOOLEAN remove_spouse (indi, fam, nolast)
-NODE indi, fam;
-BOOLEAN nolast;	/* don't remove last member of family? */
+BOOLEAN
+remove_spouse (NODE indi,
+               NODE fam,
+               BOOLEAN nolast)  /* don't remove last member of family? */
 {
 	NODE node, last;
 	INT sex;
@@ -163,8 +165,8 @@ BOOLEAN nolast;	/* don't remove last member of family? */
  * num_fam_xrefs -- Find number of person links in family
  *   LOOSEEND -- How about other links in the future???
  *=====================================================*/
-INT num_fam_xrefs (fam)
-NODE fam;
+INT
+num_fam_xrefs (NODE fam)
 {
 	INT num;
 	NODE fref, husb, wife, chil, rest;

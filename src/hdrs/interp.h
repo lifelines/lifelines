@@ -310,5 +310,6 @@ int yylex(void);
 int yyparse(void);
 
 void poutput(STRING);
+void interp_main(void);
 
 #endif /* _INTERP_H */

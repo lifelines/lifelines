@@ -110,13 +110,14 @@ STRING filepath();
 
 static void exit_it (INT);
 static void show_open_error (void);
+static BOOLEAN trytocreate (STRING path);
 
 /*==================================
  * main -- Main routine of LifeLines
  *================================*/
-int main (argc, argv)
-INT argc;
-char **argv;
+int
+main (INT argc,
+      char **argv)
 {
 	extern char *optarg;
 	extern int optind;
@@ -287,8 +288,8 @@ char **argv;
 /*==========================================
  * trytocreate -- Try to create new database
  *========================================*/
-BOOLEAN trytocreate (path)
-STRING path;
+static BOOLEAN
+trytocreate (STRING path)
 {
 	if (!ask_yes_or_no_msg(nodbse, crdbse)) return FALSE;
 
@@ -302,8 +303,8 @@ STRING path;
 /*====================
  * exit_it -- All done
  *==================*/
-void exit_it (code)
-INT code;
+void
+exit_it (INT code)
 {
 	endwin();
 	sleep(1);
@@ -315,7 +316,8 @@ INT code;
 /*===================================================
  * show_open_error -- Describe database opening error
  *=================================================*/
-void show_open_error (void)
+void
+show_open_error (void)
 {
 	if (bterrno != BTERRWRITER)
 		llwprintf("Database error -- ");
@@ -342,11 +344,13 @@ void show_open_error (void)
 		llwprintf("Undefined database error -- This can't happen.");
 		break;
 	}
+        sleep(5);
 }
 /*===============
  * final_cleanup
  *==============*/
-void final_cleanup (void)
+void
+final_cleanup (void)
 {
 	close_lifelines();
 	endwin();
