@@ -1193,7 +1193,7 @@ parent_indiseq (INDISEQ seq)
 	STRING key=0;
 	UNION uval;
 	if (!seq) return NULL;
-	tab = create_table_new();
+	tab = create_table();
 	par = create_indiseq_impl(IValtype(seq), IValfnctbl(seq));
 	FORINDISEQ(seq, el, num)
 		indi = key_to_indi(skey(el));
@@ -1226,7 +1226,7 @@ child_indiseq (INDISEQ seq)
 	STRING key=0;
 	UNION uval;
 	if (!seq) return NULL;
-	tab = create_table_new();
+	tab = create_table();
 	cseq = create_indiseq_impl(IValtype(seq), IValfnctbl(seq));
 	FORINDISEQ(seq, el, num)
 		indi = key_to_indi(skey(el));
@@ -1444,7 +1444,7 @@ sibling_indiseq (INDISEQ seq, BOOLEAN close)
 	STRING key=0, fkey=0;
 	INT num2=0;
 	/* table lists people already listed (values unused) */
-	TABLE tab = create_table_new();
+	TABLE tab = create_table();
 	fseq = create_indiseq_null(); /* temporary */
 	sseq = create_indiseq_null();
 	FORINDISEQ(seq, el, num)
@@ -1540,9 +1540,9 @@ descendent_indiseq (INDISEQ seq)
 	UNION uval;
 	if (!seq) return NULL;
 		/* itab = people already added, value irrelevant */
-	itab = create_table_new();
+	itab = create_table();
 		/* ftab = families already added (processed), value irrelevant */
-	ftab = create_table_new();
+	ftab = create_table();
 		/*
 		deslist & genlist are paired - 
 		dequeue the person from deslist & the generation

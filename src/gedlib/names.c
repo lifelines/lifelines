@@ -372,7 +372,7 @@ add_name (CNSTRING name, CNSTRING key)
 	RKEY rkeyname;
 	char finitial = getfinitial(name);
 	STRING surname = strsave(getsxsurname(name));
-	TABLE donetab = create_table_new();
+	TABLE donetab = create_table();
 	STRING rkeystr=0;
 
 	for (i=0; i<soundex_count(); ++i) 	{
@@ -458,7 +458,7 @@ remove_name (STRING name, CNSTRING key)
 	RKEY rkeyname;
 	char finitial = getfinitial(name);
 	STRING surname = strsave(getsxsurname(name));
-	TABLE donetab = create_table_new();
+	TABLE donetab = create_table();
 	STRING rkeystr=0;
 
 	for (i=0; i<soundex_count(); ++i) 	{
@@ -635,7 +635,7 @@ find_indis_by_name (CNSTRING name)
 	RECORD rec;
 	uchar finitial = getfinitial(name);
 	STRING surname = strsave(getsxsurname(name));
-	TABLE donetab = create_table_new();
+	TABLE donetab = create_table();
 	LIST list = create_list2(LISTDOFREE);
 
 	/* See if user is asking for person by key instead of name */

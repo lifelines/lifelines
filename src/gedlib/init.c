@@ -303,7 +303,7 @@ init_lifelines_db (void)
 	STRING emsg;
 	TABLE dbopts = create_table_old2(FREEBOTH);
 
-	tagtable = create_table_new(); /* values are same as keys */
+	tagtable = create_table(); /* values are same as keys */
 	placabbvs = create_table_old2(FREEBOTH);
 
 	init_valtab_from_rec("VPLAC", placabbvs, ':', &emsg);

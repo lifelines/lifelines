@@ -154,7 +154,7 @@ load_config_file (STRING file, STRING * pmsg)
 	        free(thisdir);
 		return TRUE; /* no config file, that is ok */
         }
-	f_predef = create_table_new();
+	f_predef = create_table();
 
 	table_insert_string(f_predef, "%thisdir%", thisdir);
 	strfree(&thisdir);
@@ -216,7 +216,7 @@ load_global_options (STRING configfile, STRING * pmsg)
 {
 	*pmsg = NULL;
 	if (!f_global) 
-		f_global= create_table_new();
+		f_global= create_table();
 	if (!load_config_file(configfile, pmsg))
 		return FALSE;
 	return TRUE;

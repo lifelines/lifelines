@@ -225,12 +225,12 @@ create_table_old (void)
 	return create_table_impl(-1);
 }
 /*=============================
- * create_table_new -- Create table
+ * create_table -- Create table
  * Will only use new generic elements (manage their own memory)
  * All keys will be heap-allocated (to be freed by table)
  *===========================*/
 TABLE
-create_table_new (void)
+create_table (void)
 {
 	return create_table_impl(-2);
 }

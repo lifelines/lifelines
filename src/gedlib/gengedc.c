@@ -133,7 +133,7 @@ closure_add_output_node (CLOSURE * closure, NODE node)
 static void
 closure_init (CLOSURE * closure, int gengedcl)
 {
-	closure->tab = create_table_new();
+	closure->tab = create_table();
 	closure->seq = create_indiseq_sval();
 	closure->outseq = create_indiseq_sval();
 	closure->gengedcl = gengedcl;
@@ -435,7 +435,7 @@ gen_gedcom (INDISEQ seq, int gengedcl, BOOLEAN * eflg)
 	/* now go thru all indis and figure out which
 	families to keep */
 
-	famstab = create_table_new();
+	famstab = create_table();
 	FORINDISEQ(seq, el, num)
 		indi = key_to_indi(element_skey(el));
 		famc = indi_to_famc(indi);
