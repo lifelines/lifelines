@@ -34,17 +34,8 @@
 #include "arch.h"
 #include "llstdlib.h"
 
-static char errorfile[MAXPATHLEN]="";
+char errorfile[MAXPATHLEN]="";
 
-/*===============================
- * set_errorfile -- Enable logging of fatal errors
- *  handles null or empty details input
- *=============================*/
-void
-stdlib_set_errorfile (STRING file)
-{
-	llstrncpy(errorfile, file, sizeof(errorfile)/sizeof(errorfile[0]));
-}
 /*===============================
  * __fatal -- Fatal error routine
  *  handles null or empty details input

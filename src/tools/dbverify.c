@@ -37,7 +37,7 @@
 #include "gedcom.h"
 #include "btree.h"
 #include "indiseq.h"
-
+#include "lloptions.h"
 
 /*********************************************
  * external variables (no header)
@@ -57,6 +57,7 @@ BOOLEAN readonly = FALSE;	/* normally defined in liflines/main.c */
 BOOLEAN writeable = FALSE;	/* normally defined in liflines/main.c */
 BOOLEAN immutable = FALSE;  /* normally defined in liflines/main.c */
 int opt_finnish = 0;
+char errorfile[MAXPATHLEN]="";
 
 /*********************************************
  * local types

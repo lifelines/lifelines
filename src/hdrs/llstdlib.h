@@ -38,7 +38,6 @@ They must also implement crashlog, but it may do nothing, or
 it may just print its printf style args to the screen. It 
 should return.
 */
-void stdlib_set_errorfile(STRING file);
 void __fatal(STRING file, int line, STRING details);
 void crashlog(STRING fmt, ...);
 
