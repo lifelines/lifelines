@@ -1,3 +1,16 @@
+2001-01-09 Perry Rapp <puddle@users.sourceforge.net>
+
+	* gedlib/gengedc.c gedlib/indiseq.c gedlib/names.c
+	gedlib/property.c hdrs/indiseq.h hdrs/interp.h hdrs/llstdlib.h
+	hdrs/standard.h hdrs/table.h interp/alloc.c interp/builtin.c
+	interp/date.c interp/eval.c interp/heapused.c interp/interp.c
+	interp/intrpseq.c interp/more.c interp/pvalue.c interp/rassa.c
+	interp/write.c interp/yacc.y liflines/ask.c
+	liflines/valgdcom.c stdlib/double.c stdlib/table.c
+	tools/dbverify.c:
+        Changed WORD to VPTR.
+	Defaulted getproperty to work with non-UNIX platforms.
+
 2001-01-07 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/gengedc.c gedlib/indiseq.c hdrs/gedcom.h hdrs/indiseq.h
@@ -39,7 +52,7 @@
 	hdrs/gedcom.h hdrs/liflines.h interp/more.c liflines/ask.c
 	liflines/browse.c liflines/llinesi.h liflines/newrecs.c
 	liflines/scan.c liflines/screen.c:
-	make choose_from_indiseq return NOD0.
+	Make choose_from_indiseq return NOD0.
 	Implement most of goto from refn_scan.
 	Add placeholder browse_source,browse_event,browse_other.
 
