@@ -24,6 +24,10 @@
 /*=================================================================
  * dbverify.c -- Database check & repair facility for LifeLines
  * Copyright(c) 2000 by Perry Rapp; all rights reserved
+ *
+ * General notes:
+ *  classify_nodes ignores duplicates, so we probably ? shouldn't
+ *   see any duplicates
  *===============================================================*/
 
 #include <stdarg.h>
@@ -61,6 +65,23 @@ struct errinfo {
 	INT fix_count;
 	STRING desc;
 };
+/*==================================
+ * work -- what the user wants to do
+ *================================*/
+struct work {
+	INT find_ghosts;
+	INT fix_ghosts;
+	INT check_indis;
+	INT fix_indis;
+	INT check_fams;
+	INT fix_fams;
+	INT check_sours;
+	INT fix_sours;
+	INT check_evens;
+	INT fix_evens;
+	INT check_othes;
+	INT fix_othes;
+};
 /*=======================================
  * NAMEREFN_REC -- holds one name or refn
  *  key is the target pointed to
@@ -81,11 +102,19 @@ static void report_error(INT err, STRING fmt, ...);
 static void report_progress(STRING fmt, ...);
 static NAMEREFN_REC * alloc_namerefn(STRING namerefn, STRING key, INT err);
 static void free_namerefn(NAMEREFN_REC * rec);
-static void finish_and_delete_nameset(INDISEQ seq);
-static void finish_and_delete_refnset(INDISEQ seq);
+static void check_ghosts(void);
 static BOOLEAN cgn_callback(STRING key, STRING name, BOOLEAN newset, void *param);
 static BOOLEAN cgr_callback(STRING key, STRING refn, BOOLEAN newset, void *param);
-static void check_ghosts(INT fixGhosts);
+static void finish_and_delete_nameset(INDISEQ seq);
+static void finish_and_delete_refnset(INDISEQ seq);
+static void check_nodes(void);
+static BOOLEAN nodes_callback(STRING key, NOD0 nod0, void *param);
+static void check_set(INDISEQ seq, char ctype);
+static BOOLEAN check_indi(STRING key, NOD0 nod0);
+static BOOLEAN check_fam(STRING key, NOD0 nod0);
+static BOOLEAN check_sour(STRING key, NOD0 nod0);
+static BOOLEAN check_even(STRING key, NOD0 nod0);
+static BOOLEAN check_othe(STRING key, NOD0 nod0);
 static void validate_errs(void);
 static void report_results(void);
 
@@ -97,17 +126,34 @@ static void report_results(void);
 #define ERR_GHOSTNAME 1
 #define ERR_DUPNAME 2
 #define ERR_NONINDINAME 3
+#define ERR_DUPINDI 4
+#define ERR_DUPFAM 5
+#define ERR_DUPSOUR 6
+#define ERR_DUPEVEN 7
+#define ERR_DUPOTHE 8
+#define ERR_MISSING 9
+#define ERR_DELETED 10
+#define ERR_BADNAME 11
 
 static struct errinfo errs[] = {
 	{ ERR_ORPHANNAME, 0, 0, "Orphan names" }
 	, { ERR_GHOSTNAME, 0, 0, "Ghost names" }
 	, { ERR_DUPNAME, 0, 0, "Duplicate names" }
 	, { ERR_NONINDINAME, 0, 0, "Non-indi names" }
+	, { ERR_DUPINDI, 0, 0, "Duplicate individuals" }
+	, { ERR_DUPFAM, 0, 0, "Duplicate families" }
+	, { ERR_DUPSOUR, 0, 0, "Duplicate sources" }
+	, { ERR_DUPEVEN, 0, 0, "Duplicate events" }
+	, { ERR_DUPOTHE, 0, 0, "Duplicate others" }
+	, { ERR_MISSING, 0, 0, "Missing records" }
+	, { ERR_DELETED, 0, 0, "Deleted records" }
+	, { ERR_BADNAME, 0, 0, "Bad name" }
 };
-
+static struct work todo;
 static LIST tofix;
 static INDISEQ dupseq;
 static BOOLEAN noisy=FALSE;
+static INDISEQ seq_indis, seq_fams, seq_sours, seq_evens, seq_othes;
 
 /*********************************************
  * local function definitions
@@ -125,6 +171,11 @@ print_usage (void)
 		"flags:\n"
 		"\t-g = Check for ghosts (names/refns)\n"
 		"\t-G = Check for & fix ghosts (names/refns)\n"
+		"\t-i = Check individuals\n"
+		"\t-f = Check families\n"
+		"\t-s = Check sours\n"
+		"\t-e = Check events\n"
+		"\t-x = Check others\n"
 		"\t-n = Noisy (echo every record processed)\n"
 		);
 }
@@ -178,6 +229,127 @@ free_namerefn (NAMEREFN_REC * rec)
 	stdfree(rec->key);
 	stdfree(rec);
 }
+/*==========================================
+ * check_ghosts -- Process all names & refns
+ *  checking (& optionally fixing) ghosts
+ *=========================================*/
+static void
+check_ghosts (void)
+{
+	tofix = create_list();
+	dupseq = create_indiseq_null();
+	/* dupseq is used inside cgn_callback, across calls */
+	traverse_names(cgn_callback, NULL);
+	finish_and_delete_nameset(dupseq);
+	dupseq = NULL;
+
+	if (todo.fix_ghosts) {
+		NAMEREFN_REC * rec;
+		while (!empty_list(tofix)) {
+			rec = (NAMEREFN_REC *) dequeue_list(tofix);
+			remove_name(rec->namerefn, rec->key);
+			errs[rec->err].fix_count++;
+			free_namerefn(rec);
+		}
+	}
+
+	ASSERT(empty_list(tofix) && !dupseq);
+
+	dupseq = create_indiseq_null();
+	/* dupseq is used inside cgr_callback, across calls */
+	traverse_refns(cgr_callback, NULL);
+	finish_and_delete_refnset(dupseq);
+	dupseq = NULL;
+
+	if (todo.fix_ghosts) {
+		NAMEREFN_REC * rec;
+		while (!empty_list(tofix)) {
+			rec = (NAMEREFN_REC *) dequeue_list(tofix);
+			remove_refn(rec->namerefn, rec->key);
+			free_namerefn(rec);
+		}
+	}
+	
+	remove_list(tofix, NULL); 
+	tofix=0;
+}
+/*============================================
+ * cgn_callback -- callback for name traversal
+ *  for checking for ghost names
+ *==========================================*/
+static BOOLEAN
+cgn_callback (STRING key, STRING name, BOOLEAN newset, void *param)
+{
+	/* a name record which points at indi=key */
+	NOD0 indi0 = qkey_to_indi0(key);
+	NODE indi = nztop(indi0);
+
+	/* bail out immediately if not INDI */
+	if (key[0] != 'I') {
+		report_error(ERR_NONINDINAME, "Non-indi name, key=%s, name=%s", key, name);
+		return 1; /* continue traversal */
+	}
+
+	if (newset) {
+		finish_and_delete_nameset(dupseq);
+		dupseq = create_indiseq_null();
+	}
+	append_indiseq_null(dupseq, strsave(key), NULL, TRUE, TRUE);
+
+	if (!indi) {
+		report_error(ERR_ORPHANNAME, "Orphaned name: %s", name);
+		if (todo.fix_evens)
+			enqueue_list(tofix, (VPTR)alloc_namerefn(name, key, ERR_ORPHANNAME));
+	} else {
+		NODE node;
+		BOOLEAN found=FALSE;
+		NODE nam, refn, sex, body, famc, fams;
+		split_indi(indi, &nam, &refn, &sex, &body, &famc, &fams);
+		for (node = nam; node; node = nsibling(node)) {
+			if (!strcmp(nval(node), name))
+				found=TRUE;
+		}
+		join_indi(indi, nam, refn, sex, body, famc, fams);
+		if (!found) {
+			report_error(ERR_GHOSTNAME, "Ghost name: %s -> %s", name, key);
+			if (todo.find_ghosts)
+				enqueue_list(tofix, (VPTR)alloc_namerefn(name, key, ERR_GHOSTNAME));
+		}
+	}
+
+	if (noisy)
+		report_progress("Name: %s", name);
+
+	return 1; /* continue traversal */
+}
+/*============================================
+ * cgr_callback -- callback for refn traversal
+ *  for checking for ghost refns
+ *==========================================*/
+static BOOLEAN
+cgr_callback (STRING key, STRING refn, BOOLEAN newset, void *param)
+{
+	/* a refn record which points at nod0=key */
+	NOD0 nod0 = key_to_typ0(key, TRUE);
+	NODE node = nztop(nod0);
+
+	if (newset) {
+		finish_and_delete_refnset(dupseq);
+		dupseq = create_indiseq_null();
+	}
+	append_indiseq_null(dupseq, strsave(key), NULL, TRUE, TRUE);
+	
+	if (!node) {
+		report_error(ERR_ORPHANNAME, "Orphaned refn: %s", refn);
+		if (todo.find_ghosts)
+			enqueue_list(tofix, (VPTR)alloc_namerefn(refn, key, ERR_ORPHANNAME));
+	} else {
+	}
+	if (noisy)
+		report_progress("Refn: %s", refn);
+
+	return 1; /* continue traversal */
+}
 /*=================================================================
  * finish_and_delete_nameset -- check for dups in a set of one name
  *===============================================================*/
@@ -212,128 +384,175 @@ finish_and_delete_refnset (INDISEQ seq)
 	ENDINDISEQ
 	remove_indiseq(seq, FALSE);
 }
-/*============================================
- * cgn_callback -- callback for name traversal
- *  for checking for ghost names
- *==========================================*/
-static BOOLEAN
-cgn_callback (STRING key, STRING name, BOOLEAN newset, void *param)
-{
-	/* a name record which points at indi=key */
-	INT fixGhosts = (INT)param;
-	NOD0 indi0 = qkey_to_indi0(key);
-	NODE indi = nztop(indi0);
-
-	/* bail out immediately if not INDI */
-	if (key[0] != 'I') {
-		report_error(ERR_NONINDINAME, "Non-indi name, key=%s, name=%s", key, name);
-		return 1; /* continue traversal */
-	}
-
-	if (newset) {
-		finish_and_delete_nameset(dupseq);
-		dupseq = create_indiseq_null();
-	}
-	append_indiseq_null(dupseq, strsave(key), NULL, TRUE, TRUE);
-
-	if (!indi) {
-		report_error(ERR_ORPHANNAME, "Orphaned name: %s", name);
-		if (fixGhosts)
-			enqueue_list(tofix, (VPTR)alloc_namerefn(name, key, ERR_ORPHANNAME));
-	} else {
-		NODE node;
-		BOOLEAN found=FALSE;
-		NODE nam, refn, sex, body, famc, fams;
-		split_indi(indi, &nam, &refn, &sex, &body, &famc, &fams);
-		for (node = nam; node; node = nsibling(node)) {
-			if (!strcmp(nval(node), name))
-				found=TRUE;
-		}
-		join_indi(indi, nam, refn, sex, body, famc, fams);
-		if (!found) {
-			report_error(ERR_GHOSTNAME, "Ghost name: %s -> %s", name, key);
-			if (fixGhosts)
-				enqueue_list(tofix, (VPTR)alloc_namerefn(name, key, ERR_GHOSTNAME));
-		}
-	}
-
-	if (noisy)
-		report_progress("Name: %s", name);
-
-	return 1; /* continue traversal */
-}
-/*============================================
- * cgr_callback -- callback for refn traversal
- *  for checking for ghost refns
- *==========================================*/
-static BOOLEAN
-cgr_callback (STRING key, STRING refn, BOOLEAN newset, void *param)
-{
-	/* a refn record which points at nod0=key */
-	INT fixGhosts = (INT)param;
-	NOD0 nod0 = key_to_typ0(key, TRUE);
-	NODE node = nztop(nod0);
-
-	if (newset) {
-		finish_and_delete_refnset(dupseq);
-		dupseq = create_indiseq_null();
-	}
-	append_indiseq_null(dupseq, strsave(key), NULL, TRUE, TRUE);
-	
-	if (!node) {
-		report_error(ERR_ORPHANNAME, "Orphaned refn: %s", refn);
-		if (fixGhosts)
-			enqueue_list(tofix, (VPTR)alloc_namerefn(refn, key, ERR_ORPHANNAME));
-	} else {
-	}
-	if (noisy)
-		report_progress("Refn: %s", refn);
-
-	return 1; /* continue traversal */
-}
-/*==========================================
- * check_ghosts -- Process all names & refns
- *  checking (& optionally fixing) ghosts
- *=========================================*/
+/*=================================
+ * check_nodes -- Process all nodes
+ *  checking and/or fixing as requested
+ *================================*/
 static void
-check_ghosts (INT fixGhosts)
+check_nodes (void)
 {
-	tofix = create_list();
-	dupseq = create_indiseq_null();
-	/* dupseq is used inside cgn_callback, across calls */
-	traverse_names(cgn_callback, (void *)fixGhosts);
-	finish_and_delete_nameset(dupseq);
-	dupseq = NULL;
-
-	if (fixGhosts) {
-		NAMEREFN_REC * rec;
-		while (!empty_list(tofix)) {
-			rec = (NAMEREFN_REC *) dequeue_list(tofix);
-			remove_name(rec->namerefn, rec->key);
-			errs[rec->err].fix_count++;
-			free_namerefn(rec);
-		}
+	seq_indis = create_indiseq_null();
+	seq_fams = create_indiseq_null();
+	seq_sours = create_indiseq_null();
+	seq_evens = create_indiseq_null();
+	seq_othes = create_indiseq_null();
+	traverse_db_key_nod0s(nodes_callback, NULL);
+	check_set(seq_indis, 'I');
+	/*
+	TO DO: compare these seqs against deletesets
+	*/
+	remove_indiseq(seq_indis, FALSE);
+	remove_indiseq(seq_fams, FALSE);
+	remove_indiseq(seq_sours, FALSE);
+	remove_indiseq(seq_evens, FALSE);
+	remove_indiseq(seq_othes, FALSE);
+}
+/*=============================================
+ * nodes_callback -- callback for node traversal
+ *  for checking indis, fams, sours, evens, othes
+ *===========================================*/
+static BOOLEAN
+nodes_callback (STRING key, NOD0 nod0, void *param)
+{
+	if (noisy)
+		report_progress("Node: %s", key);
+	switch (key[0]) {
+	case 'I': return todo.check_indis ? check_indi(key, nod0) : TRUE;
+	case 'F': return todo.check_fams ? check_fam(key, nod0) : TRUE;
+	case 'S': return todo.check_sours ? check_sour(key, nod0) : TRUE;
+	case 'E': return todo.check_evens ? check_even(key, nod0) : TRUE;
+	case 'X': return todo.check_othes ? check_othe(key, nod0) : TRUE;
 	}
-
-	ASSERT(empty_list(tofix) && !dupseq);
-
-	dupseq = create_indiseq_null();
-	/* dupseq is used inside cgr_callback, across calls */
-	traverse_refns(cgr_callback, (void *)fixGhosts);
-	finish_and_delete_refnset(dupseq);
-	dupseq = NULL;
-
-	if (fixGhosts) {
-		NAMEREFN_REC * rec;
-		while (!empty_list(tofix)) {
-			rec = (NAMEREFN_REC *) dequeue_list(tofix);
-			remove_refn(rec->namerefn, rec->key);
-			free_namerefn(rec);
-		}
+	ASSERT(0); /* traverse_db_key_nod0s is broken */
+	return TRUE;
+}
+/*=====================================
+ * check_indi -- process indi record
+ *  checking and/or fixing as requested
+ *===================================*/
+static BOOLEAN
+check_indi (STRING key, NOD0 nod0)
+{
+	static char prevkey[9];
+	NODE indi1, name1, refn1, sex1, body1, famc1, fams1;
+	NODE node;
+	INT keynum = atoi(&key[1]);
+	if (!strcmp(key, prevkey)) {
+		report_error(ERR_DUPINDI, "Duplicate individual for %s", key);
 	}
-	
-	remove_list(tofix, NULL); 
-	tofix=0;
+	indi1 = nztop(nod0);
+	split_indi(indi1, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
+	for (node = name1; node; node = nsibling(node)) {
+		STRING name=nval(node);
+		if (!valid_name(name)) {
+			report_error(ERR_BADNAME, "Bad name for individual %s: %s", key, name);
+		}
+		/* TO DO: verify that name is in db */
+	}
+	/* TO DO: check lineage links */
+	join_indi(indi1, name1, refn1, sex1, body1, famc1, fams1);
+	/*
+	TO DO: check pointers ?
+	*/
+	append_indiseq_null(seq_indis, strsave(key), NULL, TRUE, TRUE);
+	return TRUE;
+}
+/*=====================================
+ * check_fam -- process fam record
+ *  checking and/or fixing as requested
+ *===================================*/
+static BOOLEAN
+check_fam (STRING key, NOD0 nod0)
+{
+	static char prevkey[9];
+	INT keynum = atoi(&key[1]);
+	if (!strcmp(key, prevkey)) {
+		report_error(ERR_DUPFAM, "Duplicate family for %s", key);
+	}
+	/*
+	split & check lineage links
+	check for empty family
+	check pointers ?
+	*/
+	append_indiseq_null(seq_fams, strsave(key), NULL, TRUE, TRUE);
+	return TRUE;
+}
+/*=====================================
+ * check_sour -- process sour record
+ *  checking and/or fixing as requested
+ *===================================*/
+static BOOLEAN
+check_sour (STRING key, NOD0 nod0)
+{
+	static char prevkey[9];
+	INT keynum = atoi(&key[1]);
+	if (!strcmp(key, prevkey)) {
+		report_error(ERR_DUPSOUR, "Duplicate source for %s", key);
+	}
+	/*
+	check pointers ?
+	*/
+	append_indiseq_null(seq_sours, strsave(key), NULL, TRUE, TRUE);
+	return TRUE;
+}
+/*=====================================
+ * check_even -- process even record
+ *  checking and/or fixing as requested
+ *===================================*/
+static BOOLEAN
+check_even (STRING key, NOD0 nod0)
+{
+	static char prevkey[9];
+	INT keynum = atoi(&key[1]);
+	if (!strcmp(key, prevkey)) {
+		report_error(ERR_DUPEVEN, "Duplicate event for %s", key);
+	}
+	/*
+	check pointers ?
+	*/
+	append_indiseq_null(seq_evens, strsave(key), NULL, TRUE, TRUE);
+	return TRUE;
+}
+/*=====================================
+ * check_othe -- process othe record
+ *  checking and/or fixing as requested
+ *===================================*/
+static BOOLEAN
+check_othe (STRING key, NOD0 nod0)
+{
+	static char prevkey[9];
+	INT keynum = atoi(&key[1]);
+	if (!strcmp(key, prevkey)) {
+		report_error(ERR_DUPOTHE, "Duplicate record for %s", key);
+	}
+	/*
+	check pointers ?
+	*/
+	append_indiseq_null(seq_othes, strsave(key), NULL, TRUE, TRUE);
+	return TRUE;
+}
+/*===================================
+ * check_set -- Validate set of nodes
+ *=================================*/
+static void
+check_set (INDISEQ seq, char ctype)
+{
+	INT i=0;
+	keysort_indiseq(seq); /* spri now valid */
+	i = xref_next(ctype, i);
+	FORINDISEQ(seq, el, num)
+		while (i<spri(el)) {
+			report_error(ERR_MISSING, "Missing undeleted record %c%d", ctype, i);
+			i = xref_next(ctype, i);
+		}
+		if (i == spri(el)) {
+			/* in synch */
+			i = xref_next(ctype, i);
+		} else { /* spri(el) < i */
+			report_error(ERR_DELETED, "Delete set contains valid record %s", skey(el));
+			/* fall thru and only advance seq */
+		}
+	ENDINDISEQ
 }
 /*=========================================
  * validate_errs -- Validate the errs array
@@ -348,6 +567,71 @@ validate_errs (void)
 			FATAL();
 		}
 	}
+}
+/*===========================================
+ * main -- Main procedure of dbverify command
+ *=========================================*/
+int
+main (int argc,
+      char **argv)
+{
+	char *flags, *dbname;
+	char *ptr;
+
+	validate_errs();
+
+#ifdef WIN32
+	/* TO DO - research if this is necessary */
+	_fmode = O_BINARY;	/* default to binary rather than TEXT mode */
+#endif
+
+	if (argc != 3 || argv[1][0] != '-' || argv[1][1] == '\0') {
+		print_usage();
+		return (1);
+	}
+	flags = argv[1];
+	dbname = argv[2];
+	for (ptr=&flags[1]; *ptr; ptr++) {
+		switch(*ptr) {
+		case 'g': todo.find_ghosts=TRUE; break;
+		case 'G': todo.fix_ghosts=TRUE; break;
+		case 'i': todo.check_indis=TRUE; break;
+		case 'f': todo.check_fams=TRUE; break;
+		case 's': todo.check_sours=TRUE; break;
+		case 'e': todo.check_evens=TRUE; break;
+		case 'x': todo.check_othes=TRUE; break;
+		case 'n': noisy=TRUE; break;
+		default: print_usage(); return (1); 
+		}
+	}
+	if (!(BTR = openbtree(dbname, FALSE, TRUE))) {
+		printf("could not open database: %s\n", dbname);
+		return (1);
+	}
+	init_lifelines();
+	printf("Checking %s\n", dbname);
+
+	if (todo.find_ghosts || todo.fix_ghosts)
+		check_ghosts();
+
+	/* simplify successive logic */
+	if (todo.fix_indis) todo.check_indis=TRUE;
+	if (todo.fix_fams) todo.check_fams=TRUE;
+	if (todo.fix_sours) todo.check_sours=TRUE;
+	if (todo.fix_evens) todo.check_evens=TRUE;
+	if (todo.fix_othes) todo.check_othes=TRUE;
+
+	if (todo.check_indis
+		|| todo.check_fams
+		|| todo.check_sours
+		|| todo.check_evens
+		|| todo.check_othes)
+		check_nodes();
+
+	report_results();
+
+	closebtree(BTR);
+	return TRUE;
 }
 /*===============================================
  * report_results -- Print out error & fix counts
@@ -366,60 +650,6 @@ report_results (void)
 	if (!ct) {
 		printf("No errors found\n");
 	}
-}
-/*===========================================
- * main -- Main procedure of dbverify command
- *=========================================*/
-int
-main (int argc,
-      char **argv)
-{
-	char *flags, *dbname;
-	char *ptr;
-	INT findGhosts=FALSE, fixGhosts=FALSE;
-
-	validate_errs();
-
-#ifdef WIN32
-	/* TO DO - research if this is necessary */
-	_fmode = O_BINARY;	/* default to binary rather than TEXT mode */
-#endif
-
-	if (argc != 3 || argv[1][0] != '-' || argv[1][1] == '\0') {
-		print_usage();
-		return (1);
-	}
-	flags = argv[1];
-	dbname = argv[2];
-	for (ptr=&flags[1]; *ptr; ptr++) {
-		switch(*ptr) {
-		case 'g': findGhosts=TRUE; break;
-		case 'G': fixGhosts=TRUE; break;
-		case 'n': noisy=TRUE; break;
-		default: print_usage(); return (1); 
-		}
-	}
-	if (!(BTR = openbtree(dbname, FALSE, TRUE))) {
-		printf("could not open database: %s\n", dbname);
-		return (1);
-	}
-	init_lifelines();
-
-	if (findGhosts || fixGhosts)
-		check_ghosts(fixGhosts);
-
-
-	/*
-	TO DO:
-	bad pointers
-	broken lineage links
-	empty families
-	*/
-
-	report_results();
-
-	closebtree(BTR);
-	return TRUE;
 }
 /*=========================================================
  * __allocate -- Allocate memory - called by stdalloc macro

@@ -36,10 +36,17 @@
 #include "gedcom.h"
 #include "gedcomi.h"
 
+/*********************************************
+ * external variables (no header)
+ *********************************************/
+
 extern BOOLEAN opt_finnish;
 extern BTREE BTR;
 
-static INT old = 0;
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
 static INT codeof(int);
 static BOOLEAN exactmatch(STRING, STRING);
 static STRING parts_to_name(STRING*);
@@ -49,6 +56,12 @@ static STRING upsurname(STRING);
 static void squeeze(STRING, STRING);
 static STRING nextpiece(STRING);
 static void cmpsqueeze(STRING, STRING);
+
+/*********************************************
+ * local variables
+ *********************************************/
+
+static INT old = 0;
 
 /*===================================================================
  * name records -- Name indexing information is kept in the database
@@ -101,6 +114,11 @@ static INT     NRmax = 0;
 static STRING *LMkeys = NULL;
 static INT     LMcount = 0;
 static INT     LMmax = 0;
+
+/*********************************************
+ * local function definitions
+ * body of module
+ *********************************************/
 
 /*====================================================
  * parsenamerec -- Store name rec in file buffers

@@ -34,10 +34,22 @@
 #include "translat.h"
 #include "gedcom.h"
 
+/*********************************************
+ * external variables (no header)
+ *********************************************/
+
+extern BTREE BTR;
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
 static RKEY refn2rkey(STRING);
 static BOOLEAN resolve_traverse(NODE);
 
-extern BTREE BTR;
+/*********************************************
+ * local variables
+ *********************************************/
 
 /*=========================================================================
  * refn records -- User key indexing information is kept in the database in
@@ -88,6 +100,11 @@ static INT     RRmax = 0;
 static STRING *RMkeys = NULL;
 static INT     RMcount = 0;
 static INT     RMmax = 0;
+
+/*********************************************
+ * local function definitions
+ * body of module
+ *********************************************/
 
 /*====================================================
  * parserefnrec -- Store refn rec in file buffers

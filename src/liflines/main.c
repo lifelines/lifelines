@@ -52,6 +52,10 @@
 #endif /* HAVE_GETOPT_H */
 #endif /* HAVE_GETOPT */
 
+/*********************************************
+ * external variables (no header)
+ *********************************************/
+
 extern STRING idldir, nodbse, crdbse, nocrdb, iddbse, usage;
 extern STRING mtitle;
 
@@ -61,6 +65,13 @@ extern INT csz_sour, icsz_sour;
 extern INT csz_even, icsz_even;
 extern INT csz_othr, icsz_othr;
 extern INT winx, winy;
+
+extern int opterr;
+extern BTREE BTR;
+
+/*********************************************
+ * required global variables
+ *********************************************/
 
 /* Finnish language support modifies the soundex codes for names, so
  * a database created with this support is not compatible with other
@@ -101,14 +112,21 @@ BOOLEAN selftest = FALSE; /* selftest rules (ignore paths) */
 BOOLEAN showusage = FALSE;	/* show usage */
 STRING btreepath;		/* database path given by user */
 STRING readpath;		/* database path used to open */
-extern int opterr;
-extern BTREE BTR;
 STRING lldatabases;
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
 
 static void show_open_error(void);
 static BOOLEAN trytocreate(STRING);
 static void platform_init(void);
 static int open_database(void);
+
+/*********************************************
+ * local function definitions
+ * body of module
+ *********************************************/
 
 /*==================================
  * main -- Main routine of LifeLines
@@ -343,7 +361,8 @@ platform_init (void)
 /*==================================================
  * open_database -- open database
  *================================================*/
-static int open_database(void)
+static int
+open_database (void)
 {
 	int c;
 	if (forceopen) {

@@ -757,15 +757,6 @@ handle_value (STRING val,
 	Line(el) = line;
 	add_to_structures(xref, el);
 }
-/*=========================================
- * pointer_value -- See if value is pointer
- *=======================================*/
-BOOLEAN
-pointer_value (STRING val)
-{
-	if (!val || *val != '@' || strlen(val) < 3) return FALSE;
-	return val[strlen(val)-1] == '@';
-}
 /*==================================
  * handle_err -- Handle GEDCOM error
  *================================*/

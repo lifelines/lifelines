@@ -256,3 +256,12 @@ valid_othr_tree (NODE node,     /* source to validate */
 	}
 	return TRUE;
 }
+/*=========================================
+ * pointer_value -- See if value is pointer
+ *=======================================*/
+BOOLEAN
+pointer_value (STRING val)
+{
+	if (!val || *val != '@' || strlen(val) < 3) return FALSE;
+	return val[strlen(val)-1] == '@';
+}

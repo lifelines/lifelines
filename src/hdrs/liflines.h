@@ -31,7 +31,4 @@ NOD0 choose_from_indiseq(INDISEQ, ASK1Q ask1, STRING titl1, STRING titln);
 /* from askprogram.c */
 FILE *ask_for_program(STRING, STRING, STRING*, STRING, STRING, BOOLEAN picklist);
 
-/* from valgdcom.c */
-BOOLEAN pointer_value(STRING);
-
 #endif /* _LIFLINES_H */

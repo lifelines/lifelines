@@ -130,6 +130,8 @@ extern TABLE tagtable;		/* table for GEDCOM tags */
 extern TABLE placabbvs;		/* table for place abbrvs */
 extern TABLE useropts;		/* table for user options */
 
+
+
 /*=====================
  * Function definitions
  *===================*/
@@ -153,7 +155,7 @@ void choose_and_delete_family(void);
 NODE choose_father(NODE, NODE, STRING, STRING, ASK1Q);
 NODE choose_family(NODE, STRING, STRING, BOOLEAN);
 NODE choose_mother(NODE, NODE, STRING, STRING, ASK1Q);
-NODE choose_source(NODE what, STRING msg0, STRING msgn);
+NODE choose_source (NODE what, STRING msg0, STRING msgn);
 NODE choose_spouse(NODE, STRING, STRING);
 void classify_nodes(NODE*, NODE*, NODE*);
 void closexref(void);
@@ -184,7 +186,7 @@ INT file_to_line(FILE*, TRANTABLE, INT*, STRING*, STRING*, STRING*, STRING*);
 NODE find_node(NODE, STRING, STRING, NODE*);
 NODE find_tag(NODE, STRING);
 NODE first_fp_to_node(FILE*, BOOLEAN, TRANTABLE, STRING*, BOOLEAN*);
-void free_name_list(LIST list);
+void free_name_list (LIST list);
 void free_nod0(NOD0);
 void free_node(NODE);
 void free_nodes(NODE);
@@ -275,7 +277,7 @@ void node_to_dbase(NODE, STRING);
 BOOLEAN node_to_file(INT, NODE, STRING, BOOLEAN, TRANTABLE);
 NODE node_to_node(NODE, INT*);
 STRING node_to_string(NODE);
-STRING node_to_tag(NODE node, STRING tag, TRANTABLE tt, INT len);
+STRING node_to_tag (NODE node, STRING tag, TRANTABLE tt, INT len);
 INT num_evens(void);
 INT num_fams(void);
 INT num_indis(void);
@@ -287,6 +289,7 @@ void othr_to_cache(NODE);
 void othr_to_dbase(NODE);
 BOOLEAN piecematch(STRING, STRING);
 BOOLEAN place_to_list(STRING, LIST, INT*);
+BOOLEAN pointer_value(STRING);
 NODE qkey_to_even(STRING);
 NOD0 qkey_to_even0(STRING);
 NODE qkey_to_fam(STRING);
@@ -313,11 +316,11 @@ void resolve_links(NODE);
 BOOLEAN retrieve_file(STRING, STRING);
 STRING retrieve_record(STRING, INT*);
 STRING rmvat(STRING);
-STRING rmvbrackets(STRING str);
+STRING rmvbrackets (STRING str);
 void set_displaykeys(BOOLEAN);
 STRING shorten_date(STRING);
 STRING shorten_plac(STRING);
-void show_node (NODE node);
+void show_node(NODE node);
 void show_node_rec(INT, NODE);
 STRING soundex(STRING);
 void sour_to_cache(NODE);
@@ -330,6 +333,7 @@ BOOLEAN store_record(STRING, STRING, INT);
 NOD0 string_to_nod0(STRING, STRING key);
 NODE string_to_node(STRING);
 BOOLEAN symbolic_link(STRING);
+void traverse_db_key_nod0s (BOOLEAN(*func)(STRING key, NOD0, void *param), void *param);
 void traverse_db_rec_keys(STRING lo, STRING hi, BOOLEAN(*func)(STRING key, STRING, INT, void *param), void * param);
 void traverse_names(BOOLEAN(*func)(STRING key, STRING name, BOOLEAN newset, void *param), void *param);
 BOOLEAN traverse_nodes(NODE, BOOLEAN(*func)(NODE));
@@ -363,6 +367,7 @@ INT xref_lastf(void);
 INT xref_lasti(void);
 INT xref_lasts(void);
 INT xref_lastx(void);
+INT xref_next(char ctype, INT i);
 INT xref_nexte(INT);
 INT xref_nextf(INT);
 INT xref_nexti(INT);

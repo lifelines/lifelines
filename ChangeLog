@@ -16,7 +16,7 @@
 	gedlib/node.c hdrs/gedcom.h interp/more.c liflines/Makefile.am
 	liflines/export.c liflines/main.c liflines/scan.c
 	liflines/screen.c stdlib/Makefile.am
-	NEW hdrs/fpattern.h stdlib/fpattern.c
+	NEW hdrs/fpattern.h stdlib/fpattern.c:
 	Put version number in its own header.
 	Add fpattern pattern-matching for scan.
 	Changed scan to stay in scan until match selected or user quits.

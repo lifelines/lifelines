@@ -60,6 +60,7 @@ traverse_index_blocks (BTREE btree, INDEX index,
 }
 /*====================================================
  * traverse_block -- traverse subtree whilst under key
+ *  either lo or hi can have 0 as its first character
  *==================================================*/
 static BOOLEAN
 traverse_block (BTREE btree, BLOCK block, RKEY lo, RKEY hi,
@@ -70,9 +71,9 @@ traverse_block (BTREE btree, BLOCK block, RKEY lo, RKEY hi,
 	RECORD rec;
 	for (i=0; i<nkeys(block);i++)
 	{
-		if (ll_strncmp(lo.r_rkey, rkeys(block, i).r_rkey, 8) >= 0)
+		if (lo.r_rkey[0] && ll_strncmp(lo.r_rkey, rkeys(block, i).r_rkey, 8) >= 0)
 			continue;
-		if (ll_strncmp(hi.r_rkey, rkeys(block, i).r_rkey, 8) < 0)
+		if (hi.r_rkey[0] && ll_strncmp(hi.r_rkey, rkeys(block, i).r_rkey, 8) < 0)
 			continue;
 		rec = readrec(btree, block, i, &len);
 		p = rec;
@@ -83,6 +84,7 @@ traverse_block (BTREE btree, BLOCK block, RKEY lo, RKEY hi,
 }
 /*====================================================
  * traverse_index -- traverse subtree whilst under key
+ *  either lo or hi can have 0 as its first character
  *==================================================*/
 static BOOLEAN
 traverse_index (BTREE btree, INDEX index, RKEY lo, 
@@ -93,15 +95,18 @@ traverse_index (BTREE btree, INDEX index, RKEY lo,
 	SHORT i, n;
 	FKEY nfkey;
 
+	i=1;
 	n = nkeys(index);
 	/* advance over any below lo */
-	for (i=1; i<=n; i++) {
-		if (ll_strncmp(lo.r_rkey, rkeys(index, i).r_rkey, 8) < 0)
-			break;
+	if (lo.r_rkey[0]) {
+		for (i=1; i<=n; i++) {
+			if (ll_strncmp(lo.r_rkey, rkeys(index, i).r_rkey, 8) < 0)
+				break;
+		}
 	}
 	/* process all until above hi */
 	for ( ; i<=n+1; i++) {
-		if (ll_strncmp(hi.r_rkey, rkeys(index, i-1).r_rkey, 8) < 0)
+		if (hi.r_rkey[0] && ll_strncmp(hi.r_rkey, rkeys(index, i-1).r_rkey, 8) < 0)
 			break;
 		nfkey = fkeys(index, i-1);
 		ASSERT(index1 = getindex(btree, nfkey));
@@ -120,6 +125,7 @@ traverse_index (BTREE btree, INDEX index, RKEY lo,
 /*==============================================
  * traverse_db_rec_rkeys -- traverse a span of records
  *  using rkeys
+ *  either lo or hi can have 0 as its first character
  *============================================*/
 void
 traverse_db_rec_rkeys (BTREE btree, RKEY lo, RKEY hi, 

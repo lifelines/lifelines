@@ -49,6 +49,8 @@ extern BTREE BTR;
 
 /*==================================== 
  * deleteset -- set of deleted records
+ *  NB: storage order is IFESX
+ *  whereas canonical order is IFSEX
  *==================================*/
 struct deleteset_s
 {
@@ -67,7 +69,7 @@ static void addxref(INT key, DELETESET set);
 static void growxrefs(DELETESET set);
 
 /* INDI, FAM, EVEN, SOUR, other sets */
-static struct deleteset_s irecs, frecs, erecs, srecs, xrecs;
+static struct deleteset_s irecs, frecs, srecs, erecs, xrecs;
 
 static FILE *xreffp=0;	/* open xref file pointer */
 
@@ -157,8 +159,8 @@ getxref (DELETESET set)
  *=================================================*/
 STRING getixref (void) { return getxref(&irecs); }
 STRING getfxref (void) { return getxref(&frecs); }
-STRING getexref (void) { return getxref(&erecs); }
 STRING getsxref (void) { return getxref(&srecs); }
+STRING getexref (void) { return getxref(&erecs); }
 STRING getxxref (void) { return getxref(&xrecs); }
 /*======================================
  * sortxref -- Sort xrefs after reading
@@ -199,12 +201,13 @@ sortxrefs (void)
 {
 	sortxref(&irecs);
 	sortxref(&frecs);
-	sortxref(&erecs);
 	sortxref(&srecs);
+	sortxref(&erecs);
 	sortxref(&xrecs);
 }
 /*=============================
  * readxrefs -- Read xrefs file
+ *  storage order: IFESX
  *===========================*/
 static BOOLEAN
 readxrefs (void)
@@ -243,6 +246,7 @@ readrecs (DELETESET set)
 }
 /*================================
  * writexrefs -- Write xrefs file.
+ *  storage order: IFESX
  *==============================*/
 BOOLEAN
 writexrefs (void)
@@ -299,8 +303,8 @@ addxref (INT key, DELETESET set)
  *=================================================*/
 void addixref (INT key) { addxref(key, &irecs); }
 void addfxref (INT key) { addxref(key, &frecs); }
-void addexref (INT key) { addxref(key, &erecs); }
 void addsxref (INT key) { addxref(key, &srecs); }
+void addexref (INT key) { addxref(key, &erecs); }
 void addxxref (INT key) { addxref(key, &xrecs); }
 /*==========================================
  * growxrefs -- Grow memory for xrefs array.
@@ -332,8 +336,8 @@ INT num_set (DELETESET set)
 }
 INT num_indis (void) { return num_set(&irecs); }
 INT num_fams (void) { return num_set(&frecs); }
-INT num_evens (void) { return num_set(&erecs); }
 INT num_sours (void) { return num_set(&srecs); }
+INT num_evens (void) { return num_set(&erecs); }
 INT num_othrs (void) { return num_set(&xrecs); }
 /*================================================
  * newixref -- Return original or next ixref value
@@ -436,15 +440,15 @@ xref_isvalid_impl (DELETESET set, INT keynum)
 	}
 	return TRUE;
 }
-/*====================================================
- * xref_next -- Return next valid of some type after i
+/*=========================================================
+ * xref_next_impl -- Return next valid of some type after i
  *  returns 0 if none found
  *  generic for all 5 types
  *  this could be more efficient (after first one work
  *  thru tree)
- *==================================================*/
+ *=======================================================*/
 static INT
-xref_next (DELETESET set, INT i)
+xref_next_impl (DELETESET set, INT i)
 {
 	if (set->n == set->recs[0]) return 0; /* no valids */
 	while (++i < set->recs[0])
@@ -453,13 +457,13 @@ xref_next (DELETESET set, INT i)
 	}
 	return 0;
 }
-/*=====================================================
- * xref_prev -- Return prev valid of some type before i
+/*==========================================================
+ * xref_prev_impl -- Return prev valid of some type before i
  *  returns 0 if none found
  *  generic for all 5 types
- *===================================================*/
+ *========================================================*/
 static INT
-xref_prev (DELETESET set, INT i)
+xref_prev_impl (DELETESET set, INT i)
 {
 	if (set->n == set->recs[0]) return 0; /* no valids */
 	while (--i)
@@ -473,21 +477,31 @@ xref_prev (DELETESET set, INT i)
  *  returns 0 if none found
  *  5 symmetric versions
  *=============================================*/
-INT xref_nexti (INT i) { return xref_next(&irecs, i); }
-INT xref_nextf (INT i) { return xref_next(&frecs, i); }
-INT xref_nexte (INT i) { return xref_next(&erecs, i); }
-INT xref_nexts (INT i) { return xref_next(&srecs, i); }
-INT xref_nextx (INT i) { return xref_next(&xrecs, i); }
+INT xref_nexti (INT i) { return xref_next_impl(&irecs, i); }
+INT xref_nextf (INT i) { return xref_next_impl(&frecs, i); }
+INT xref_nexts (INT i) { return xref_next_impl(&srecs, i); }
+INT xref_nexte (INT i) { return xref_next_impl(&erecs, i); }
+INT xref_nextx (INT i) { return xref_next_impl(&xrecs, i); }
+INT xref_next (char ctype, INT i)
+{
+	switch(ctype) {
+	case 'I': return xref_nexti(i);
+	case 'F': return xref_nextf(i);
+	case 'S': return xref_nexts(i);
+	case 'E': return xref_nexte(i);
+	default: return xref_nextx(i);
+	}
+}
 /*================================================
  * xref_prev? -- Return prev valid indi/? before i
  *  returns 0 if none found
  *  5 symmetric versions
  *==============================================*/
-INT xref_previ (INT i) { return xref_prev(&irecs, i); }
-INT xref_prevf (INT i) { return xref_prev(&frecs, i); }
-INT xref_preve (INT i) { return xref_prev(&erecs, i); }
-INT xref_prevs (INT i) { return xref_prev(&srecs, i); }
-INT xref_prevx (INT i) { return xref_prev(&xrecs, i); }
+INT xref_previ (INT i) { return xref_prev_impl(&irecs, i); }
+INT xref_prevf (INT i) { return xref_prev_impl(&frecs, i); }
+INT xref_prevs (INT i) { return xref_prev_impl(&srecs, i); }
+INT xref_preve (INT i) { return xref_prev_impl(&erecs, i); }
+INT xref_prevx (INT i) { return xref_prev_impl(&xrecs, i); }
 /*=========================================
  * xref_first? -- Return first valid indi/?
  *  returns 0 if none found
@@ -495,8 +509,8 @@ INT xref_prevx (INT i) { return xref_prev(&xrecs, i); }
  *=======================================*/
 INT xref_firsti (void) { return xref_nexti(0); }
 INT xref_firstf (void) { return xref_nextf(0); }
-INT xref_firste (void) { return xref_nexte(0); }
 INT xref_firsts (void) { return xref_nexts(0); }
+INT xref_firste (void) { return xref_nexte(0); }
 INT xref_firstx (void) { return xref_nextx(0); }
 /*=======================================
  * xref_last? -- Return last valid indi/?
@@ -505,10 +519,10 @@ INT xref_firstx (void) { return xref_nextx(0); }
  *=====================================*/
 INT xref_last (DELETESET set)
 {
-	return xref_prev(set, set->recs[0]);
+	return xref_prev_impl(set, set->recs[0]);
 }
 INT xref_lasti (void) { return xref_last(&irecs); }
 INT xref_lastf (void) { return xref_last(&frecs); }
-INT xref_laste (void) { return xref_last(&erecs); }
 INT xref_lasts (void) { return xref_last(&srecs); }
+INT xref_laste (void) { return xref_last(&erecs); }
 INT xref_lastx (void) { return xref_last(&xrecs); }

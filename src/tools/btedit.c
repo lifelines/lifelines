@@ -35,7 +35,16 @@
 #include "standard.h"
 #include "btree.h"
 
+/*********************************************
+ * required global variables
+ *********************************************/
+
 int opt_finnish = 0;
+
+/*********************************************
+ * local function definitions
+ * body of module
+ *********************************************/
 
 /*=========================================
  * main -- Main procedure of btedit command

@@ -467,8 +467,7 @@ string_to_nod0 (STRING str, STRING key)
 	NODE node = 0;
 	if (*str == '0')
 		node = string_to_node(str);
-	else {
-		ASSERT(*str == 'Q');
+	else if (*str == 'Q') {
 		/*
 		not implemented
 		read offset to metadata (warehouse)
@@ -477,6 +476,12 @@ string_to_nod0 (STRING str, STRING key)
 		to string_to_nod0
 		*/
 		ASSERT(0);
+	} else {
+		if (!strcmp(str, "DELE\n")) {
+			ASSERT(0); /* deleted record */
+		} else {
+			ASSERT(0); /* corrupt record */
+		}
 	}
 	if (node) {
 		nod0 = (NOD0)stdalloc(sizeof(*nod0));
