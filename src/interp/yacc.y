@@ -66,7 +66,7 @@ defn 	:	proc
 	|	func
 	|	IDEN '(' IDEN ')' {
 			if (eqstr("global", (STRING) $1))
-				insert_pvtable(globtab, $3, PANY, NULL);
+				insert_pvtable(globtab, (STRING)$3, PANY, NULL);
 		}/*HERE*/
 	|	IDEN '(' SCONS ')' {
 			if (eqstr("include", (STRING) $1))
@@ -83,7 +83,7 @@ proc	:	PROC IDEN '(' idenso ')' '{' tmplts '}' {
 		}
 
 func	:	FUNC_TOK IDEN '(' idenso ')' '{' tmplts '}' {
-			insert_table(functab, (STRING)$2, (WORD)fdef_node($2, $4, $7));
+			insert_table(functab, (STRING)$2, (WORD)fdef_node((STRING)$2, (PNODE)$4, (PNODE)$7));
 		}
 	;
 idenso	:	/* empty */ {
@@ -115,73 +115,73 @@ tmplt	:	CHILDREN m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		}
 	|	SPOUSES m '(' expr ',' IDEN ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
-			$$ = spouses_node($4, $6, $8, $10, $13);
+			$$ = spouses_node((PNODE)$4, (STRING)$6, (STRING)$8, (STRING)$10, (PNODE)$13);
 			((PNODE)$$)->i_line = $2;
 		}
 	|	FAMILIES m '(' expr ',' IDEN ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
-			$$ = families_node($4, $6, $8, $10, $13);
+			$$ = families_node((PNODE)$4, (STRING)$6, (STRING)$8, (STRING)$10, (PNODE)$13);
 			((PNODE)$$)->i_line = $2;
 		}
 	|	FATHERS m '(' expr ',' IDEN ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
-			$$ = fathers_node($4, $6, $8, $10, $13);
+			$$ = fathers_node((PNODE)$4, (STRING)$6, (STRING)$8, (STRING)$10, (PNODE)$13);
 			((PNODE)$$)->i_line = $2;
 		}
 	|	MOTHERS m '(' expr ',' IDEN ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
-			$$ = mothers_node($4, $6, $8, $10, $13);
+			$$ = mothers_node((PNODE)$4, (STRING)$6, (STRING)$8, (STRING)$10, (PNODE)$13);
 			((PNODE)$$)->i_line = $2;
 		}
 	|	PARENTS m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
-			$$ = parents_node($4, $6, $8, $11);
+			$$ = parents_node((PNODE)$4, (STRING)$6, (STRING)$8, (PNODE)$11);
 			((PNODE)$$)->i_line = $2;
 		}
 	|	FORINDISET m '(' expr ',' IDEN ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
-			$$ = forindiset_node($4, $6, $8, $10, $13);
+			$$ = forindiset_node((PNODE)$4, (STRING)$6, (STRING)$8, (STRING)$10, (PNODE)$13);
 			((PNODE)$$)->i_line = (INT) $2;
 		}
 	|	FORLIST_TOK m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
-			$$ = forlist_node($4, $6, $8, $11);
+			$$ = forlist_node((PNODE)$4, (STRING)$6, (STRING)$8, (PNODE)$11);
 			((PNODE)$$)->i_line = (INT) $2;
 		}
 	|	FORINDI m '(' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
-			$$ = forindi_node($4, $6, $9);
+			$$ = forindi_node((STRING)$4, (STRING)$6, (PNODE)$9);
 			((PNODE)$$)->i_line = (INT) $2;
 		}
  	|       FORNOTES m '(' expr ',' IDEN ')' '{' tmplts '}' {
-                        $$ = fornotes_node($4, $6, $9);
+                        $$ = fornotes_node((PNODE)$4, (STRING)$6, (PNODE)$9);
                         ((PNODE)$$)->i_line = (INT) $2;
                 }
 	|	FORFAM m '(' IDEN ',' IDEN ')' '{' tmplts '}' {
-			$$ = forfam_node($4, $6, $9);
+			$$ = forfam_node((STRING)$4, (STRING)$6, (PNODE)$9);
 			((PNODE)$$)->i_line = (INT) $2;
 		}
 	|	FORSOUR m '(' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
-			$$ = forsour_node($4, $6, $9);
+			$$ = forsour_node((STRING)$4, (STRING)$6, (PNODE)$9);
 			((PNODE)$$)->i_line = (INT) $2;
 		}
 	|	FOREVEN m '(' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
-			$$ = foreven_node($4, $6, $9);
+			$$ = foreven_node((STRING)$4, (STRING)$6, (PNODE)$9);
 			((PNODE)$$)->i_line = (INT) $2;
 		}
 	|	FOROTHR m '(' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
-			$$ = forothr_node($4, $6, $9);
+			$$ = forothr_node((STRING)$4, (STRING)$6, (PNODE)$9);
 			((PNODE)$$)->i_line = (INT) $2;
 		}
 	|	TRAVERSE m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}' {
-			$$ = traverse_node($4, $6, $8, $11);
+			$$ = traverse_node((PNODE)$4, (STRING)$6, (STRING)$8, (PNODE)$11);
 			((PNODE)$$)->i_line = (INT) $2;
 		}
 	|	FORNODES m '(' expr ',' IDEN ')' '{' tmplts '}' {
-			$$ = fornodes_node($4, $6, $9);
+			$$ = fornodes_node((PNODE)$4, (STRING)$6, (PNODE)$9);
 			((PNODE)$$)->i_line = (INT) $2;
 		}
 	|	IF m '(' expr secondo ')' '{' tmplts '}' elsifso elseo {
@@ -202,11 +202,11 @@ tmplt	:	CHILDREN m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		}
 	|	WHILE m '(' expr secondo ')' '{' tmplts '}' {
 			inext(((PNODE)$4)) = (PNODE)$5;
-			$$ = while_node($4, $8);
+			$$ = while_node((PNODE)$4, (PNODE)$8);
 			((PNODE)$$)->i_line = (INT) $2;
 		}
 	|	CALL IDEN m '(' exprso ')' {
-			$$ = call_node($2, $5);
+			$$ = call_node((STRING)$2, (PNODE)$5);
 			((PNODE)$$)->i_line = (INT) $3;
 		}
 	|	BREAK m '(' ')' {
@@ -218,7 +218,7 @@ tmplt	:	CHILDREN m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 			((PNODE)$$)->i_line = (INT) $2;
 		}
 	|	RETURN m '(' exprso ')' {
-			$$ = return_node($4);
+			$$ = return_node((PNODE)$4);
 			((PNODE)$$)->i_line = (INT) $2;
 		}
 	|	expr {
@@ -256,7 +256,7 @@ expr	:	IDEN {
 			iargs(((PNODE)$$)) = NULL;
 		}
 	|	IDEN m '(' exprso ')' {
-			$$ = (INT) func_node($1, $4);
+			$$ = (INT) func_node((STRING)$1, (PNODE)$4);
 			((PNODE)$$)->i_line = $2;
 		}
 	|	SCONS {
@@ -296,7 +296,7 @@ m	:	/* empty */ {
 		}
 %%
 
-join (list, last)
+void join (list, last)
 PNODE list, last;
 {
 	PNODE prev = NULL;
@@ -308,7 +308,7 @@ PNODE list, last;
 	inext(prev) = last;
 }
 
-yyerror (str)
+void yyerror (str)
 STRING str;
 {
 	extern INT Plineno;
