@@ -13,6 +13,10 @@
 
 	Plug holes in error returns from string_to_node.
 
+	* ChangeLog src/liflines/screen.c:
+
+	Free some leaked uiwindows.
+
 2003-02-10 Perry Rapp
 
 	* ChangeLog src/hdrs/version.h:

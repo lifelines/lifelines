@@ -504,9 +504,14 @@ create_uisubwindow (UIWINDOW parent, INT rows, INT cols, INT begy, INT begx)
 static void
 destroy_windows (void)
 {
+	delete_uiwindow(&choose_from_list_win);
+	delete_uiwindow(&ask_msg_win);
+	delete_uiwindow(&ask_win);
+	delete_uiwindow(&tt_menu_win);
+	delete_uiwindow(&main_win);
 	delete_uiwindow(&debug_win);
+	delete_uiwindow(&debug_box_win);
 	delete_uiwindow(&stdout_win);
-	/* TODO finish these */
 }
 /*==========================================
  * create_windows -- Create and init windows
