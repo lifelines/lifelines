@@ -3629,6 +3629,15 @@ __test (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	arg2str = pvalue_to_string(arg2val);
 
+	if (arg1str == 0 ) {
+		prog_var_error(node, stab, arg1, arg1val, nonstrx, "test", "1");
+		goto end_test;
+	}
+	if (arg2str == 0 ) {
+		prog_var_error(node, stab, arg2, arg2val, nonstrx, "test", "2");
+		goto end_test;
+	}
+
 	rc = stat(arg2str, &statdata);
 	if (rc) {
 		val = create_pvalue_from_bool(FALSE);
@@ -3636,15 +3645,15 @@ __test (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 
 	if (eqstr(arg1str,"r")) {
-		if (statdata.st_mode & S_IRUSR)
+	        if (access(arg2str,R_OK))
 			val = create_pvalue_from_bool(TRUE);
 
 	} else if (eqstr(arg1str,"w")) {
-		if (statdata.st_mode & S_IWUSR)
+	        if (access(arg2str,W_OK))
 			val = create_pvalue_from_bool(TRUE);
 
 	} else if (eqstr(arg1str,"x")) {
-		if (statdata.st_mode & S_IXUSR)
+	        if (access(arg2str,X_OK))
 			val = create_pvalue_from_bool(TRUE);
 
 	} else if (eqstr(arg1str,"e")) {
