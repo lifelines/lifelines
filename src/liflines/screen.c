@@ -1866,7 +1866,7 @@ interact (UIWINDOW uiwin, STRING str, INT screen)
 		}
 		if (str) { /* traditional */
 			for (i = 0; i < n; i++) {
-				if (c == str[i]) return c;
+				if (c == (uchar)str[i]) return c;
 			}
 		} else { /* new menus (in menuitem.c) */
 			if (offset < (INT)sizeof(buffer)-1) {
