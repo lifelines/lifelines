@@ -38,5 +38,6 @@ extern const int my_ISO_Latin1_Finnish[];
 		   (const unsigned char *)(s2),(n),MY_SORT_TABLE)
 
 void llstrcatn(char ** pdest, const char * src, int * len);
+char *llstrncpy(char *dest, const char *src, size_t n);
 
 #endif

@@ -676,7 +676,7 @@ if (prog_debug) {
 }
 /*========================================+
  * interp_children -- Interpret child loop
- *  usage: chidren(INDI,INDI_V,INT_V) {...}
+ *  usage: children(INDI,INDI_V,INT_V) {...}
  *=======================================*/
 INTERPTYPE
 interp_children (PNODE node,
@@ -708,18 +708,21 @@ interp_children (PNODE node,
 		switch (irc) {
 		case INTCONTINUE:
 		case INTOKAY:
-			goto a;
+			goto aloop;
 		case INTBREAK:
-			unlock_cache(fcel);
-			return INTOKAY;
+			irc = INTOKAY;
+			goto aleave;
 		default:
-			unlock_cache(fcel);
-			return irc;
+			goto aleave;
 		}
-a:	;
+aloop:	;
 	ENDCHILDREN
+	irc = INTOKAY;
+aleave:
+	delete_pvtable(stab, ichild(node));
+	delete_pvtable(stab, inum(node));
 	unlock_cache(fcel);
-	return INTOKAY;
+	return irc;
 }
 /*==============================================+
  * interp_spouses -- Interpret spouse loop
@@ -759,18 +762,23 @@ interp_spouses (PNODE node,
 		switch (irc) {
 		case INTCONTINUE:
 		case INTOKAY:
-			goto b;
+			goto bloop;
 		case INTBREAK:
-			unlock_cache(icel);
+			irc = INTOKAY;
+			goto bleave;
 			return INTOKAY;
 		default:
-			unlock_cache(icel);
-			return irc;
+			goto bleave;
 		}
-b:	;
+bloop:	;
 	ENDSPOUSES
+	irc = INTOKAY;
+bleave:
+	delete_pvtable(stab, ispouse(node));
+	delete_pvtable(stab, ifamily(node));
+	delete_pvtable(stab, inum(node));
 	unlock_cache(icel);
-	return INTOKAY;
+	return irc;
 }
 /*===============================================+
  * interp_families -- Interpret family loop
@@ -810,16 +818,24 @@ interp_families (PNODE node,
 		switch (irc) {
 		case INTCONTINUE:
 		case INTOKAY:
-			goto c;
-		case INTBREAK:
-			unlock_cache(icel);
-			return INTOKAY;
+			goto cloop;
+			irc = INTOKAY;
+			goto cleave;
 		default:
-			unlock_cache(icel);
-			return irc;
+			goto cleave;
 		}
-c:	;
+cloop:	;
 	ENDFAMSS
+	irc = INTOKAY;
+cleave:
+	delete_pvtable(stab, ifamily(node));
+	delete_pvtable(stab, ispouse(node));
+	delete_pvtable(stab, inum(node));
+	/*
+	TO DO 2001/03/17, Perry
+	Should make these same clean-up symtab changes
+	to all remaining loops
+	*/
 	unlock_cache(icel);
 	return INTOKAY;
 }
@@ -1293,7 +1309,7 @@ interp_indisetloop (PNODE node,
 		llwprintf("\n");
 #endif
 		insert_pvtable(stab, ielement(node), PINDI,
-		(VPTR)key_to_indi_cacheel(skey(el)));
+			(VPTR)key_to_indi_cacheel(skey(el)));
 #ifdef DEBUG
 		llwprintf("loopinterp - %s = ",ivalvar(node));
 		llwprintf("\n");

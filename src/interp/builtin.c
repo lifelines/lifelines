@@ -154,36 +154,10 @@ __getindi (PNODE node,
 	key = ask_for_indi_key(msg, NOCONFIRM, DOASK1);
 	if (!key) return NULL;
 	cel = key_to_indi_cacheel(key);
-	assign_iden(stab, iident(arg), create_pvalue(PINDI, (VPTR)cel));
+	assign_iden(stab, iident(arg), create_pvalue(PINDI, cel));
 	if (val) delete_pvalue(val);
 	return NULL;
 }
-#if 0
-/*===================================================
- * __getindidate -- Have user identify person
- *   usage: getindidate(IDEN, INT [,STRING]) --> VOID
- *=================================================*/
-VPTR
-__getindidate (PNODE node,
-               TABLE stab,
-               BOOLEAN *eflg)
-{
-	PNODE arg = (PNODE) iargs(node);
-	INT year;
-	CACHEEL cel;
-	STRING ttl = "Identify person for report program:";
-	*eflg = TRUE;
-	if (!iistype(arg, IIDENT)) return NULL;
-	*eflg = FALSE;
-	year = (INT) evaluate(arg = inext(arg), stab, eflg);
-	if (*eflg) return NULL;
-	if (inext(arg)) ttl = (STRING) evaluate(inext(arg), stab, eflg);
-	if (*eflg) return NULL;
-	cel = key_to_indi_cacheel(ask_for_indi_key(ttl, NOCONFIRM, DOASK1));
-	assign_iden(stab, iident(arg), (VPTR) cel);
-	return NULL;
-}
-#endif
 /*=====================================+
  * __getfam -- Have user identify family
  *   usage: getfam(IDEN) --> VOID
@@ -205,7 +179,7 @@ __getfam (PNODE node,
 	fam = ask_for_fam("Enter a spouse from family.",
 	    "Enter a sibling from family.");
 	if (fam) cel = fam_to_cacheel(fam);
-	assign_iden(stab, iident(arg), create_pvalue(PFAM, (VPTR)cel));
+	assign_iden(stab, iident(arg), create_pvalue(PFAM, cel));
 	return NULL;
 }
 /*=================================================+
@@ -2274,7 +2248,7 @@ __lookup (PNODE node,
           BOOLEAN *eflg)
 {
 	PNODE arg;
-	PVALUE new, val;
+	PVALUE newv, val;
 	TABLE tab;
 	STRING str;
 
@@ -2297,17 +2271,17 @@ __lookup (PNODE node,
 		return NULL;
 	}
 	str = (STRING) pvalue(val);
-	new = (PVALUE) valueof(tab, str);
+	newv = (PVALUE) valueof(tab, str);
 	delete_pvalue(val);
-	new = (new ? copy_pvalue(new) : create_pvalue(PANY, NULL));
+	newv = (newv ? copy_pvalue(newv) : create_pvalue(PANY, NULL));
 #if 0
 	if (prog_debug) {
 		llwprintf("lookup: new =");
-		show_pvalue(new);
+		show_pvalue(newv);
 		llwprintf("\n");
 	}
 #endif
-	return new;
+	return newv;
 }
 /*====================================+
  * __trim -- Trim string if too long

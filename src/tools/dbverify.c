@@ -196,6 +196,9 @@ print_usage (void)
 		"\t-e = Check events\n"
 		"\t-x = Check others\n"
 		"\t-n = Noisy (echo every record processed)\n"
+#ifdef WIN32
+		"example: dbverify -ifsex \"\\My Documents\\LifeLines\\Databases\\MyFamily\"\n"
+#endif
 		);
 }
 /*========================================

@@ -49,7 +49,7 @@ int listbadkeys = 0;
  * local function prototypes
  *********************************************/
 
-static CACHE create_cache(INT, INT);
+static CACHE create_cache(STRING name, INT dirsize, INT indsize);
 static NODE key_to_node(CACHE cache, STRING key, STRING tag);
 static NOD0 key_to_nod0(CACHE cache, STRING key, STRING tag);
 static NODE qkey_to_node(CACHE cache, STRING key, STRING tag);
@@ -376,22 +376,23 @@ key_to_othr_cacheel (STRING key)
 void
 init_caches (void)
 {
-	indicache = create_cache((INT)csz_indi, (INT)icsz_indi);
-	famcache  = create_cache((INT)csz_fam, (INT)icsz_fam);
-	evencache = create_cache((INT)csz_even, (INT)csz_even);
-	sourcache = create_cache((INT)csz_sour, (INT)icsz_sour);
-	othrcache = create_cache((INT)csz_othr, (INT)icsz_othr);
+	indicache = create_cache("indi", csz_indi, icsz_indi);
+	famcache  = create_cache("fam", csz_fam, icsz_fam);
+	evencache = create_cache("even", (INT)csz_even, (INT)csz_even);
+	sourcache = create_cache("sour", (INT)csz_sour, (INT)icsz_sour);
+	othrcache = create_cache("othr", (INT)csz_othr, (INT)icsz_othr);
 }
 /*=============================
  * create_cache -- Create cache
  *===========================*/
 static CACHE
-create_cache (INT dirsize, INT indsize)
+create_cache (STRING name, INT dirsize, INT indsize)
 {
 	CACHE cache;
 	if (dirsize < 1) dirsize = 1;
 	if (indsize < 1) indsize = 1;
 	cache = (CACHE) stdalloc(sizeof(*cache));
+	llstrncpy(cname(cache), name, sizeof(cname(cache)));
 	cdata(cache) = create_table();
 	cfirstdir(cache) = clastdir(cache) = NULL;
 	cfirstind(cache) = clastind(cache) = NULL;
@@ -447,6 +448,7 @@ first_direct (CACHE cache, CACHEEL cel)
 }
 /*===============================================================
  * first_indirect -- Make unlinked CACHEEL first in indirect list
+ *  Does not check for overflow (caller's responsibility)
  *=============================================================*/
 static void
 first_indirect (CACHE cache, CACHEEL cel)
@@ -488,7 +490,7 @@ direct_to_first (CACHE cache,
 	first_direct(cache, cel);
 }
 /*==================================================================
- * indirect_to_first -- Make indirect CACHEEL first in indirect list
+ * indirect_to_first -- Make indirect CACHEEL first in direct list
  *================================================================*/
 static void
 indirect_to_first (CACHE cache,
@@ -503,17 +505,20 @@ indirect_to_first (CACHE cache,
  * direct_to_indirect -- Make last direct CACHEEL first indirect
  *============================================================*/
 static void
-direct_to_indirect (CACHE che)
+direct_to_indirect (CACHE cache)
 {
-	CACHEEL cel = clastdir(che);
-	for (cel = clastdir(che); cel && cclock(cel); cel = cprev(cel))
+	CACHEEL cel = clastdir(cache);
+	for (cel = clastdir(cache); cel && cclock(cel); cel = cprev(cel))
 		;
-	ASSERT(cel);
-	remove_direct(che, cel);
+	if (!cel) {
+		llwprintf("Cache overflow! (Cache=%s, size=%d)\n", cname(cache), cmaxdir(cache));
+		ASSERT(cel);
+	}
+	remove_direct(cache, cel);
 	free_nod0(cnod0(cel)); /* this frees the nodes */
 	cnod0(cel) = NULL;
 	cnode(cel) = NULL;
-	first_indirect(che, cel);
+	first_indirect(cache, cel);
 }
 /*=====================================================
  * dereference -- Dereference cel by reading its record
@@ -532,15 +537,15 @@ dereference (CACHEEL cel)
 	stdfree(rec);
 }
 /*========================================================
- * add_to_direct -- Add new CACHEL to direct part of cache
+ * add_to_direct -- Add new CACHEEL to direct part of cache
+ * reportmode: if True, then return NULL rather than aborting
+ *   if there is no record. Also return NULL for deleted
+ *   records (of length less than 6???)
  *======================================================*/
 static CACHEEL
 add_to_direct (CACHE cache,
                STRING key,
-               INT reportmode) /* if True, then return NULL rather
-                                  than aborting if there is no
-                                  record. Also return NULL for deleted
-                                  records (of length less than 6???)  */
+               INT reportmode)
 {
 	STRING record;
 	INT len;
@@ -555,11 +560,12 @@ add_to_direct (CACHE cache,
 	nod0 = NULL;
 	if ((record = retrieve_record(key, &len))) 
 		nod0 = string_to_nod0(record, key, len);
-	if(nod0 == NULL)
+	if (!nod0)
 	{
 		if(listbadkeys) {
 			if(strlen(badkeylist) < 80 - strlen(key) - 2) {
-				if(badkeylist[0]) strcat(badkeylist, ",");
+				if (badkeylist[0])
+					strcat(badkeylist, ",");
 				strcat(badkeylist, key);
 			}
 			return(NULL);
@@ -574,6 +580,7 @@ add_to_direct (CACHE cache,
 			llwprintf(" %s", (char *)keybuf[j]);
 		}
 		llwprintf("\n");
+		/* deliberately fall through to let ASSERT(nod0) fail */
 	}
 	ASSERT(nod0);
 	ASSERT(csizedir(cache) < cmaxdir(cache));
@@ -608,6 +615,7 @@ key_to_cacheel (CACHE cache,
 			direct_to_first(cache, cel);
 		else {
 			if (csizedir(cache) >= cmaxdir(cache))
+/* TO DO: do we need to check csizeind(cache) ? Excoffier 2001/03/16 */
 				direct_to_indirect(cache);
 			indirect_to_first(cache, cel);
 		}
@@ -793,12 +801,9 @@ nod0_to_cache (CACHE cache,
 	if (csizedir(cache) >= cmaxdir(cache)) {
 		if (csizeind(cache) >= cmaxind(cache)) {
 			remove_last(cache);
-			direct_to_indirect(cache);
-			add_nod0_to_direct(cache, nod0, key);
-		} else {
-			direct_to_indirect(cache);
-			add_nod0_to_direct(cache, nod0, key);
 		}
+		direct_to_indirect(cache);
+		add_nod0_to_direct(cache, nod0, key);
 	} else {
 		add_nod0_to_direct(cache, nod0, key);
 	}

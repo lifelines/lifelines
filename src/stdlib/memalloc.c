@@ -84,7 +84,7 @@ __allocate (int len,       /* num of bytes to alloc */
 	return (void*)p;
 }
 /*====================================================
- * __deallocate -- Deallocate memory - used by sdtfree
+ * __deallocate -- Deallocate memory - used by stdfree
  *==================================================*/
 void
 __deallocate (void *ptr,      /* memory to return */

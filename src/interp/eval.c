@@ -249,7 +249,7 @@ num_params (PNODE node)
 void
 assign_iden (TABLE stab,
              STRING id,
-             VPTR value)
+             PVALUE value)
 {
 	TABLE tab = stab;
 #ifdef HOGMEMORY
@@ -271,12 +271,13 @@ assign_iden (TABLE stab,
 }
 /*=================================================
  * eval_and_coerce -- Generic evaluator and coercer
+ * INT type:      desired pvalue type
+ * PNODE node:    node to coerce
+ * TABLE stab:    symbol table
+ * BOOLEAN *eflg: error flag
  *===============================================*/
 PVALUE
-eval_and_coerce (INT type,
-                 PNODE node,
-                 TABLE stab,
-                 BOOLEAN *eflg)
+eval_and_coerce (INT type, PNODE node, TABLE stab, BOOLEAN *eflg)
 {
 	PVALUE val;
 	if (*eflg) return NULL;

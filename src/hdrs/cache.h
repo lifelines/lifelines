@@ -57,6 +57,7 @@ struct c_elem {
  * CACHE -- Internal cache type.
  *============================*/
 typedef struct {
+	char c_name[5];
 	TABLE c_data;		/* table of keys */
 	CACHEEL c_firstdir;	/* first direct */
 	CACHEEL c_lastdir;	/* last direct */
@@ -67,6 +68,7 @@ typedef struct {
 	INT c_maxind;		/* max in indirect */
 	INT c_sizeind;		/* cur in indirect */
 } *CACHE;
+#define cname(c)     ((c)->c_name)
 #define cdata(c)     ((c)->c_data)
 #define cfirstdir(c) ((c)->c_firstdir)
 #define clastdir(c)  ((c)->c_lastdir)

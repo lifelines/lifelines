@@ -1,3 +1,16 @@
+2001-03-17 Perry Rapp <puddle@users.sourceforge.net>
+
+	* gedlib/keytonod.c hdrs/cache.h hdrs/interp.h hdrs/mystring.h
+	hdrs/version.h interp/builtin.c interp/eval.c interp/interp.c
+	interp/pvalue.c stdlib/memalloc.c stdlib/mystring.c
+	tools/dbverify.c:
+	Fixed typos & cache overflow bug reported by Denis Excoffier by
+	locking cache elements as long as held by pvalues.
+	Added cache overflow message & names for caches.
+	Removed unused & incorrect getindidate.
+	Clears symbol table entries after loops (children,...).
+	Added usage example to usage in dbverify.
+
 2001-03-04 Perry Rapp <puddle@users.sourceforge.net>
 
 	* .linesrc gedlib/lloptions.c hdrs/lloptions.h liflines/import.c:

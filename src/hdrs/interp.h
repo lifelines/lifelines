@@ -209,9 +209,12 @@ void coerce_pvalue(INT, PVALUE, BOOLEAN*);
 PVALUE copy_pvalue(PVALUE);
 PVALUE create_pvalue(INT, VPTR);
 void delete_pvalue(PVALUE);
+void delete_pvtable(TABLE stab, STRING iden);
 void eq_conform_pvalues(PVALUE, PVALUE, BOOLEAN*);
 BOOLEAN eqv_pvalues(PVALUE, PVALUE);
+void insert_pvtable(TABLE, STRING, INT, VPTR);
 BOOLEAN is_pvalue(PVALUE);
+BOOLEAN is_pvalue_cel(PVALUE value);
 BOOLEAN is_record_pvalue(PVALUE);
 BOOLEAN is_zero(PVALUE);
 void num_conform_pvalues(PVALUE, PVALUE, BOOLEAN*);
@@ -221,7 +224,6 @@ void pvalues_end(void);
 void set_pvalue(PVALUE, INT, VPTR);
 void show_pvalue(PVALUE);
 STRING pvalue_to_string(PVALUE);
-void insert_pvtable(TABLE, STRING, INT, VPTR);
 void remove_pvtable(TABLE);
 #ifndef HOGMEMORY
 void zero_pventry(ENTRY);
@@ -258,7 +260,7 @@ INTERPTYPE interp_call (PNODE, TABLE, PVALUE*);
 INTERPTYPE interp_traverse (PNODE, TABLE, PVALUE*);
 
 /* Prototypes */
-void assign_iden(TABLE, STRING, VPTR);
+void assign_iden(TABLE, STRING, PVALUE);
 INT bool_to_int(BOOLEAN);
 FLOAT bool_to_float(BOOLEAN);
 PNODE break_node(void);

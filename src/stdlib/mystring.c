@@ -558,3 +558,14 @@ llstrcatn (char ** pdest, const char * src, int * len)
 	}
 	*pdest = dest;
 }
+/*==================================
+ * llstrncpy -- strncpy that always zero-terminates
+ * Created: 2001/03/17, Perry Rapp
+ *================================*/
+char *
+llstrncpy (char *dest, const char *src, size_t n)
+{
+	strncpy(dest, src, n);
+	dest[n-1] = 0;
+	return dest;
+}

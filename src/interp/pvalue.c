@@ -204,25 +204,41 @@ free_all_pvalues (void)
  * create_pvalue -- Create a program value
  *======================================*/
 PVALUE
-create_pvalue (INT type,
-               VPTR value)
+create_pvalue (INT type, VPTR value)
 {
 	PVALUE val;
 
 	if (type == PNONE) return NULL;
 	val = alloc_pvalue_memory();
-	switch (type) {
-	case PSTRING:
-		if (value) value = (VPTR) strsave((STRING) value);
-		break;
-	case PANY: case PINT: case PFLOAT: case PLONG: case PGNODE:
-	case PINDI: case PFAM: case PSOUR: case PEVEN: case POTHR:
-	case PLIST: case PTABLE: case PSET:
-		break;
+	if (type == PSTRING) {
+		if (value)
+			value = (VPTR) strsave((STRING) value);
 	}
 	ptype(val) = type;
 	pvalue(val) = value;
+	/* TO DO 2001/03/17, Perry - what about PGNODE ? */
+	if (is_pvalue_cel(val)) {
+		/* lock any cache elements, and unlock in clear_pvalue */
+		CACHEEL cel = pvalue(val);
+		if (cel)
+			lock_cache(cel);
+	}
 	return val;
+}
+/*========================================
+ * is_pvalue_cel -- Does pvalue contain CACHEEL ?
+ * Created: 2001/03/17, Perry Rapp
+ *======================================*/
+BOOLEAN
+is_pvalue_cel (PVALUE value)
+{
+	switch (ptype(value)) {
+	case PGNODE: /* TO DO 2001/03/17 ?? */
+		break;
+	case PINDI: case PFAM: case PSOUR: case PEVEN: case POTHR:
+		return TRUE;
+	}
+	return FALSE;
 }
 /*========================================
  * clear_pvalue -- Empty contents of pvalue
@@ -232,35 +248,31 @@ void
 clear_pvalue (PVALUE val)
 {
 	switch (ptype(val)) {
-	case PSTRING:
-		if (pvalue(val)) stdfree((STRING) pvalue(val));
-		break;
 	/*
 	embedded values have no referenced memory to clear
 	PINT, PFLOAT, PLONG, PBOOLEAN 
 	*/
 	case PANY:
 		{
-			int debug=1;
-		}
-		/*
-		I don't know what PANY is - 2001/01/20, Perry
-		*/
-		break;
-	case PGNODE:
-		{
-			/*
-			We need to call free_nodes for this ?
+			/* ? I don't know what these are
 			2001/01/20, Perry
 			*/
 			int debug=1;
 		}
 		break;
-	/*
-	nodes from caches do not need to be freed
-	(cache will reclaim them on its own)
-	PINDI, PFAM, PSOUR, PEVEN, POTHR
-	*/
+	case PGNODE:
+		{
+			/*
+			I've not figured out how memory for these works
+			2001/01/20, Perry Rapp
+			*/
+			int debug=1;
+		}
+		break;
+	/* nodes from cache handled below switch - PINDI, PFAM, PSOUR, PEVEN, POTHR */
+	case PSTRING:
+		if (pvalue(val)) stdfree((STRING) pvalue(val));
+		return;
 	case PLIST:
 		{
 			LIST list = (LIST) pvalue(val);
@@ -270,7 +282,7 @@ clear_pvalue (PVALUE val)
 				remove_list(list, 0);
 			}
 		}
-		break;
+		return;
 	case PTABLE:
 		{
 			TABLE table = (TABLE)pvalue(val);
@@ -285,7 +297,7 @@ clear_pvalue (PVALUE val)
 				remove_table(table, FREEKEY);
 			}
 		}
-		break;
+		return;
 	case PSET:
 		{
 			INDISEQ seq = (INDISEQ)pvalue(val);
@@ -295,7 +307,16 @@ clear_pvalue (PVALUE val)
 				remove_indiseq(seq, FALSE);
 			}
 		}
-		break;
+		return;
+	}
+	if (is_pvalue_cel(val)) {
+		/*
+		unlock any cache elements
+		don't worry about memory - it is owned by cache
+		*/
+		CACHEEL cel = pvalue(val);
+		if (cel)
+			unlock_cache(cel);
 	}
 }
 /*========================================
@@ -315,7 +336,7 @@ delete_pvalue (PVALUE val)
 	free_pvalue_memory(val);
 }
 /*====================================
- * copy_pvalue -- Copy a program value
+ * copy_pvalue -- Create a new pvalue & copy into it
  *==================================*/
 PVALUE
 copy_pvalue (PVALUE val)
@@ -359,11 +380,7 @@ copy_pvalue (PVALUE val)
 			int debug=1;
 		}
 		break;
-	/*
-	nodes from caches reference cache-managed memory
-	(so it is ok to just copy the pointer)
-	PINDI, PFAM, PSOUR, PEVEN, POTHR
-	*/
+	/* nodes from caches handled below switch (q.v.) */
 	case PLIST:
 		{
 			LIST list = (LIST) pvalue(val);
@@ -382,6 +399,16 @@ copy_pvalue (PVALUE val)
 			IRefcnt(seq)++;
 		}
 		break;
+	}
+	if (is_pvalue_cel(val)) {
+		/*
+		it is ok to just copy cache-managed elements,
+		but do adjust reference count as necessary
+		PINDI, PFAM, PSOUR, PEVEN, POTHR
+		*/
+		CACHEEL cel = pvalue(val);
+		if (cel)
+			lock_cache(cel);
 	}
 
 	newval = pvalue(val);
@@ -1028,17 +1055,30 @@ is_zero (PVALUE val)
 }
 /*======================================================
  * insert_pvtable -- Update symbol table with new PVALUE
+ * TABLE stab:  symbol table
+ * STRING iden: variable in symbol table
+ * INT type:    type of new value to assign to identifier
+ * VPTR value:  new value of identifier
  *====================================================*/
 void
-insert_pvtable (TABLE stab,     /* symbol table */
-                STRING iden,    /* variable in symbol table */
-                INT type,       /* type of new value to assign to
-                                   identifier */
-                VPTR value)     /* new value of identifier */
+insert_pvtable (TABLE stab, STRING iden, INT type, VPTR value)
 {
 	PVALUE val = (PVALUE) valueof(stab, iden);
 	if (val) delete_pvalue(val);
 	insert_table(stab, iden, create_pvalue(type, value));
+}
+/*======================================================
+ * delete_pvtable -- Delete a value from a symbol table
+ * TABLE stab:  symbol table
+ * STRING iden: variable in symbol table
+ * Created: 2001/03/17, Perry Rapp
+ *====================================================*/
+void
+delete_pvtable (TABLE stab, STRING iden)
+{
+	PVALUE val = (PVALUE) valueof(stab, iden);
+	if (val) delete_pvalue(val);
+	delete_table(stab, iden);
 }
 #ifndef HOGMEMORY
 /*=================================================
