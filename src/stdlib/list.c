@@ -460,6 +460,7 @@ create_list_iter (LIST list)
 	LIST_ITER listit = (LIST_ITER)stdalloc(sizeof(*listit));
 	memset(listit, 0, sizeof(*listit));
 	listit->list = list;
+	listit->refcnt = 1;
 	return listit;
 }
 /*=================================================

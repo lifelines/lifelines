@@ -1,3 +1,8 @@
+2005-02-09 Stephen Dum
+        * ChangeLog  src/gedlib/date.c  src/stdlib/list.c
+
+	Fixed 2 memory leaks.
+
 2005-02-09 Perry Rapp
 
 	* ChangeLog src/interp/pvalue.c

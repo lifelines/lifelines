@@ -288,8 +288,8 @@ do_zformat_date (STRING str, INT dfmt, INT mfmt,
 
 	if (sfmt==12) {
 		/* This is what used to be the shrt flag */
+		zs_free(&zstr);
 		return zshorten_date(str);
-		return zstr;
 	}
 	if (sfmt==14) {
 		zs_sets(zstr, str);
