@@ -5,6 +5,11 @@
 
 	Add iteration to rbtree.
 
+	* ChangeLog src/hdrs/table.h src/stdlib/table.c
+
+	Cleanup & fix compilation for gcc (order table.c includes so
+	struct tag_table only declared once).
+
 2005-02-19 Perry Rapp
 
 	* build/msvc6/llines/llinesprj.dsp src/gedlib/date.c

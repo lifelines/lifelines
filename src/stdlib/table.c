@@ -29,11 +29,11 @@
  *==============================================================*/
 
 #include "llstdlib.h"
-#include "lloptions.h"
 #include "vtable.h"
 #include "table.h"
 #include "object.h"
 #include "hashtab.h"
+#include "lloptions.h"
 
 /*********************************************
  * local enums & defines

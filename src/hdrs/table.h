@@ -36,17 +36,7 @@
 
 
 /*
-#define DONTFREE  0
-#define FREEKEY   1
-#define FREEVALUE 2
-#define FREEBOTH  3
-*/
-
-/*
-tables hold key,value pairs, but all values in a specific
-table must be of the same UNION type
-INT, or VPTR, or STRING
-(and ASSERTs in the insert_table_xxx functions enforce this)
+tables are homogenous (a table of integers can only hold integers)
 */
 
 typedef struct tag_table *TABLE;
