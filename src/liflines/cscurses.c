@@ -128,13 +128,14 @@ vccprintf (char *fmt, va_list args)
 	return rtn;
 }
 /*============================
- * wgetccnstr -- wgetnstr with codeset convert from internal to GUI
+ * wgetccnstr -- wgetnstr with codeset convert from GUI to internal
  * Created: 2002/12/03 (Perry Rapp)
  *==========================*/
 int
 wgetccnstr (WINDOW *wp, char *cp, int n)
 {
 	ZSTR zstr=0;
+/* TODO: Need Win32-specific code here to handle Unicode input on NT family */
 	int rtn = wgetnstr(wp, cp, n);
 	zstr = zs_news(cp);
 	disp_to_int(zstr);

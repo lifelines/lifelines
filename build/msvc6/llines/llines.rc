@@ -63,8 +63,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 3,0,27,13110
- PRODUCTVERSION 3,0,27,13110
+ FILEVERSION 3,0,27,13111
+ PRODUCTVERSION 3,0,27,13111
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x29L
@@ -82,14 +82,14 @@ BEGIN
             VALUE "Comments", "http://www.sourceforge.net/projects/lifelines\0"
             VALUE "CompanyName", "LifeLines on SourceForge\0"
             VALUE "FileDescription", "Lines\0"
-            VALUE "FileVersion", "3, 0, 27, 13110\0"
+            VALUE "FileVersion", "3, 0, 27, 13111\0"
             VALUE "InternalName", "Lines\0"
             VALUE "LegalCopyright", "Copyright © 2001\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "Lines.exe\0"
-            VALUE "PrivateBuild", "Beta Release 3.0.27p4, 2003-04-20\0"
+            VALUE "PrivateBuild", "Beta Release 3.0.27p5, 2003-04-21\0"
             VALUE "ProductName", "LifeLines Genealogical DB and Programming System\0"
-            VALUE "ProductVersion", "3, 0, 27, 13110\0"
+            VALUE "ProductVersion", "3, 0, 27, 13111\0"
             VALUE "SpecialBuild", "Win32 version by Perry Rapp\0"
         END
     END

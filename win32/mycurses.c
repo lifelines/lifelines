@@ -29,9 +29,11 @@
 #include <fcntl.h>
 #include <curses.h>
 
+typedef enum { W8BITS, W16BITS } WBITS;
+
 /* fullscreen==1 to use screen buffer size instead of window size */
 static int mycur_init(int fullscreen);
-static int mycur_getc(void);
+static int mycur_getc(WBITS wbits);
 static void adjust_linescols(void);
 static void console_resize_callback(void);
 
@@ -50,8 +52,13 @@ static int redirected_out = 0;
 static int redir_unflushed = 0; /* used to separate output when redirected */
 
 /* Others Windows environment data */
-
 extern int _fmode;		/* O_TEXT or O_BINARY */
+
+/* Windows NT stuff */
+static BOOL WindowsNt = 0; /* set to 1 if NT/2000/XP */
+static HINSTANCE LibKernel32 = 0;
+typedef BOOL (CALLBACK *ApiFncReadConsoleInput)(HANDLE, PINPUT_RECORD, DWORD, LPDWORD);
+static ApiFncReadConsoleInput ApiReadConsoleInput = 0;
 
 /* Debugging */
 
@@ -344,7 +351,7 @@ int doupdate(void)
 		}
 		curscr->_mincy = curscr->_maxy;
 		curscr->_maxcy = -1;
-	}	
+	}
 	return(0);
 }
 
@@ -596,7 +603,7 @@ int wgetch(WINDOW *wp)
 	cCursor.X = wp->_curx + wp->_begx;
 	cCursor.Y = wp->_cury + wp->_begy;
 	SetConsoleCursorPosition(hStdout, cCursor);
-	ch = mycur_getc();
+	ch = mycur_getc(W8BITS);
 	if (echoing && ch>31 && ch<256 && ch!=EOF)
 	{
 		waddch(wp, ch);
@@ -675,6 +682,15 @@ static int mycur_init(int fullscreen)
 
 	if(first)
 	{
+		OSVERSIONINFO verinfo;
+		verinfo.dwOSVersionInfoSize = sizeof(verinfo);
+		if (GetVersionEx(&verinfo) && verinfo.dwPlatformId == VER_PLATFORM_WIN32_NT)
+		{
+			WindowsNt = 1;
+			LibKernel32 = LoadLibrary("Kernel32.dll");
+			ApiReadConsoleInput = (ApiFncReadConsoleInput)GetProcAddress(LibKernel32, "ReadConsoleInputW");
+		}
+
 		/* set up alternate character set values */
 
 		ACS_VLINE = (CHTYPE)179;
@@ -774,8 +790,9 @@ struct keycvt { int win; int curs; };
  In May of 2002 Perry changed from ReadConsole to ReadConsoleInput
  in order to be able to get arrow keys etc
 */
+/* Caller can request either 8-bit input (ReadConsoleInputA) or 16-bit input (ReadConsoleInputW) */
 
-static int mycur_getc(void)
+static int mycur_getc(WBITS wbits)
 {
 	/* table of curses names for special keys */
 	/* NB: These are not single-byte constants, so return value must be int */
@@ -805,8 +822,16 @@ static int mycur_getc(void)
 		INPUT_RECORD inrec;
 		int nrecs=0, i;
 
+		if (WindowsNt && wbits==W16BITS)
+		{
+			(*ApiReadConsoleInput)(hStdin, &inrec, 1, &nrecs);
+		}
+		else
+		{
+			ReadConsoleInput(hStdin, &inrec, 1, &nrecs);
+		}
+
 		/* To get special keys, have to use ReadConsoleInput */
-		ReadConsoleInput(hStdin, &inrec, 1, &nrecs);
 		if (!nrecs)
 			return EOF;
 
@@ -828,8 +853,22 @@ static int mycur_getc(void)
 		{
 			int keystate, keycode;
 			/* return normal keys */
-			if (inrec.Event.KeyEvent.uChar.AsciiChar != '\0')
-				return inrec.Event.KeyEvent.uChar.AsciiChar;
+			if (WindowsNt && wbits==W16BITS)
+			{
+				if (inrec.Event.KeyEvent.uChar.UnicodeChar)
+				{
+					unsigned int ch = (wchar_t)inrec.Event.KeyEvent.uChar.UnicodeChar;
+					return ch;
+				}
+			}
+			else
+			{
+				if (inrec.Event.KeyEvent.uChar.AsciiChar)
+				{
+					unsigned int ch = (unsigned char)inrec.Event.KeyEvent.uChar.AsciiChar;
+					return ch;
+				}
+			}
 			keystate = inrec.Event.KeyEvent.dwControlKeyState;
 			keycode = inrec.Event.KeyEvent.wVirtualKeyCode;
 			/* handle keyboard numeric escapes for non-ASCII characters */

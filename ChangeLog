@@ -1,3 +1,11 @@
+2003-04-21 Perry Rapp
+
+	* ChangeLog build/msvc6/llines/llines.rc src/hdrs/version.h
+	src/liflines/cscurses.c win32/mycurses.c
+
+	Bugfix for sign-extension bug in win32 curses.
+	Change version to 3.0.27p5.
+
 2003-04-20 Perry Rapp
 
 	* ChangeLog win32/mycurses.c
