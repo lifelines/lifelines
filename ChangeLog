@@ -12,6 +12,9 @@
 
 	* btree/record.c: Don't return deleted records from getrecord.
 
+	* tools/btedit.c: Make btedit call environ_figure_editor.
+	Add ifdef so fmode assignment compiles on MSVC/Windows.
+
 2000-12-21    <marc@nozell.com>
 
 	* liflines/browse.c, liflines/pedigree.c, gedlib/choose.c,
