@@ -91,6 +91,7 @@ struct work {
 	INT check_evens;
 	INT check_othes;
 	INT fix_alter_pointers;
+	INT check_orphans;
 	INT pass; /* =1 is checking, =2 is fixing */
 };
 /*=======================================
@@ -123,9 +124,11 @@ static BOOLEAN check_index(BTREE btr, INDEX index, TABLE fkeytab, RKEY * lo, RKE
 static BOOLEAN check_indi(CNSTRING key, RECORD rec);
 static void check_node(CNSTRING key, NODE node, INT level);
 static void check_nodes(void);
+static void check_orphans(void);
 static void check_pointers(CNSTRING key, RECORD rec);
 static void check_set(INDISEQ seq, char ctype);
 static BOOLEAN check_sour(CNSTRING key, RECORD rec);
+static void check_typed_orphans(char ntype);
 static BOOLEAN check_othe(CNSTRING key, RECORD rec);
 static BOOLEAN find_xref(CNSTRING key, NODE node, CNSTRING tag1, CNSTRING tag2);
 static void finish_and_delete_nameset(void);
@@ -159,6 +162,7 @@ enum {
 	, ERR_BADHUSBREF, ERR_BADWIFEREF, ERR_BADCHILDREF
 	, ERR_EXTRAHUSB, ERR_EXTRAWIFE, ERR_EXTRACHILD
 	, ERR_EMPTYFAM, ERR_SOLOFAM, ERR_BADPOINTER
+	, ERR_ORPHAN
 };
 
 static struct errinfo errs[] = {
@@ -187,6 +191,7 @@ static struct errinfo errs[] = {
 	, { ERR_EMPTYFAM, 0, 0, N_("Empty family") }
 	, { ERR_SOLOFAM, 0, 0, N_("Single person family") }
 	, { ERR_BADPOINTER, 0, 0, N_("Bad pointer") }
+	, { ERR_ORPHAN, 0, 0, N_("Orphan record") }
 };
 static struct work todo;
 static LIST tofix=0;
@@ -1176,7 +1181,7 @@ printblock (BLOCK block)
 }
 /*=========================================
  * validate_errs -- Validate the errs array
- * Created: 2001/01/13, Perry Rapp
+ * (fatal assert if finds problem)
  *=======================================*/
 static void
 validate_errs (void)
@@ -1191,9 +1196,40 @@ validate_errs (void)
 		}
 	}
 }
+/*=========================================
+ * check_orphans -- Check all records for orphans
+ *=======================================*/
+static void
+check_orphans (void)
+{
+	check_typed_orphans('I');
+	check_typed_orphans('F');
+	check_typed_orphans('S');
+	check_typed_orphans('E');
+	check_typed_orphans('X');
+}
+/*=========================================
+ * check_typed_orphans -- Check all records 
+ *  of specified type for orphans
+ *=======================================*/
+static void
+check_typed_orphans (char ntype)
+{
+	int keynum=0;
+	while (TRUE) {
+		char key[33];
+		keynum = xref_next(ntype, keynum);
+		if (!keynum) return;
+		sprintf(key, "%c%d", ntype, keynum);
+		if (noisy)
+			report_progress("Orphan checking: %s", key);
+		if (is_orphaned_record(key)) {
+			report_error(ERR_ORPHAN, _("Orphan record (%s)"), key);
+		}
+	}
+}
 /*===========================================
  * main -- Main procedure of dbverify command
- * Created: 2001/01/01, Perry Rapp
  *=========================================*/
 int
 main (int argc,
@@ -1241,6 +1277,7 @@ main (int argc,
 		case 'n': noisy=TRUE; break;
 		case 'a': allchecks=TRUE; break;
 		case 'F': todo.fix_alter_pointers=TRUE; break;
+		case 'o': todo.check_orphans=TRUE; break;
 		default: print_usage(); goto done;
 		}
 	}
@@ -1300,6 +1337,10 @@ main (int argc,
 		|| todo.check_evens
 		|| todo.check_othes) {
 		check_and_fix_records();
+	}
+
+	if (todo.check_orphans) {
+		check_orphans();
 	}
 
 	report_results();

@@ -10,6 +10,10 @@
 
 	dbverify: Change option -L to -l, and add to usage string.
 
+	* ChangeLog src/tools/dbverify.c
+
+	dbverify: Add orphan checking
+
 2005-02-04 Jens Arvidsson
 
 	* ChangeLog po/sv.po
