@@ -97,6 +97,7 @@ static BOOLEAN disp_symtab_cb(STRING key, PVALUE val, VPTR param);
 static void enqueue_parse_error(const char * fmt, ...);
 static BOOLEAN find_program(STRING fname, STRING localdir, STRING *pfull,BOOLEAN include);
 static void init_pactx(PACTX pactx);
+static BOOLEAN interpret_prog(PNODE begin, SYMTAB stab);
 static void parse_file(PACTX pactx, STRING fname, STRING fullpath);
 static void print_report_duration(INT duration, INT uiduration);
 static void progmessage(MSG_LEVEL level, STRING);
@@ -223,7 +224,6 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 {
 	LIST plist=0, donelist=0;
 	SYMTAB stab = NULL;
-	PVALUE dummy;
 	INT i;
 	INT nfiles = length_list(lifiles);
 	PNODE first, parm;
@@ -361,19 +361,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 	progrunning = TRUE;
 	progerror = 0;
 	progmessage(MSG_STATUS, _("is running..."));
-	switch (interpret((PNODE) ibody(first), stab, &dummy)) {
-	case INTOKAY:
-	case INTRETURN:
-		progmessage(MSG_INFO, _("was run successfully.\n"));
-		break;
-	default:
-		if (rpt_cancelled) {
-			ranit = 0;
-			progmessage(MSG_STATUS, _("was cancelled.\n"));
-		} else
-			progmessage(MSG_STATUS, _("was not run because of errors.\n"));
-		break;
-	}
+	ranit = interpret_prog((PNODE) ibody(first), stab);
 
    /* Clean up and return */
 
@@ -410,6 +398,32 @@ interp_program_notfound:
 	destroy_list(donelist);
 	destroy_list(plist);
 	return ranit;
+}
+/*===============================================
+ * interpret_prog -- execute a report program
+ *=============================================*/
+static BOOLEAN
+interpret_prog (PNODE begin, SYMTAB stab)
+{
+	PVALUE dummy=0;
+	INT rtn = interpret(begin, stab, &dummy);
+	INT ranit=0;
+
+	delete_pvalue(dummy);
+	dummy=0;
+
+	switch(rtn) {
+	case INTOKAY:
+	case INTRETURN:
+		progmessage(MSG_INFO, _("was run successfully.\n"));
+		return TRUE;
+	default:
+		if (rpt_cancelled) {
+			progmessage(MSG_STATUS, _("was cancelled.\n"));
+		} else
+			progmessage(MSG_STATUS, _("was not run because of errors.\n"));
+		return FALSE;
+	}
 }
 /*===============================================
  * init_pactx -- initialize global parsing context

@@ -206,7 +206,6 @@ free_all_pnodes (void)
 			for (i=0; i<(INT)BLOCK_NODES; i++) {
 				PNODE node1=&block->nodes[i];
 				if (itype(node1) != IFREED) {
-					/* leaked */
 					delete_pnode(node1);
 				}
 			}
