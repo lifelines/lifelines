@@ -1,5 +1,5 @@
 /*
- * @version        1.12 (2003-03-02)
+ * @version        1.13 (2003-09-09)
  * @author         Perry Rapp
  * @category       self-test
  * @output         none
@@ -150,6 +150,38 @@ proc testLists()
 	call testFreeList(li)
 /* sort & rsort */
 	list(li)
+	push(li, "aardvark")
+	push(li, "coon")
+	push(li, "bear")
+	push(li, "eel")
+	push(li, "dog")
+	/* sort on li */
+	/* so we expect words to come out in order */
+	sort(li)
+	if (or(
+		ne(getel(li, 1), "aardvark")
+		,ne(getel(li, 2), "bear")
+		,ne(getel(li, 3), "coon")
+		,ne(getel(li, 4), "dog")
+		,ne(getel(li, 5), "eel")
+		)) {
+		call reportfail("sort FAILED")
+	} else { incr(testok) }
+	/* rsort on li */
+	/* so we expect words to come out in reverse order */
+	rsort(li)
+	if (or(
+		ne(getel(li, 1), "eel")
+		,ne(getel(li, 2), "dog")
+		,ne(getel(li, 3), "coon")
+		,ne(getel(li, 4), "bear")
+		,ne(getel(li, 5), "aardvark")
+		)) {
+		call reportfail("rsort FAILED")
+	} else { incr(testok) }
+
+	/* test sorting on 2nd argument */
+	list(li)
 	list(li2)
 	push(li, "bush")
 	push(li2, "hsub")
@@ -163,18 +195,10 @@ proc testLists()
 	push(li2, "hsram")
 	push(li, "benz")
 	push(li2, "zneb")
-	sort(li, li2)
-	if (or(
-		ne(getel(li, 1), "benz")
-		,ne(getel(li, 2), "grass")
-		,ne(getel(li, 3), "bush")
-		,ne(getel(li, 4), "marsh")
-		,ne(getel(li, 5), "tree")
-		,ne(getel(li, 6), "shrub")
-		)) {
-		call reportfail("sort FAILED")
-	} else { incr(testok) }
-	rsort(li,li2)
+	/* sort on li2, which is words backwards */
+	/* so we expect words to come out in order of each word backwards */
+	/* eg, shrub is first because it ends with b */
+	sort(li,li2)
 	if (or(
 		ne(getel(li, 1), "shrub")
 		,ne(getel(li, 2), "tree")
@@ -183,7 +207,21 @@ proc testLists()
 		,ne(getel(li, 5), "grass")
 		,ne(getel(li, 6), "benz")
 		)) {
-		call reportfail("sort FAILED")
+		call reportfail("sort on 2 args FAILED")
+	} else { incr(testok) }
+	/* rsort on li2, which is words backwards */
+	/* so we expect words to come out in reverse order of each word backwards */
+	/* eg, benz is first because it ends with z */
+	rsort(li, li2)
+	if (or(
+		ne(getel(li, 1), "benz")
+		,ne(getel(li, 2), "grass")
+		,ne(getel(li, 3), "bush")
+		,ne(getel(li, 4), "marsh")
+		,ne(getel(li, 5), "tree")
+		,ne(getel(li, 6), "shrub")
+		)) {
+		call reportfail("rsort on 2 args FAILED")
 	} else { incr(testok) }
 
 	call reportSubsection("list tests")

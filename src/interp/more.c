@@ -1289,9 +1289,9 @@ sortimpl (PNODE node, SYMTAB stab, BOOLEAN *eflg, BOOLEAN fwd)
 		VPTR ptr=0;
 		i=0;
 		if (fwd)
-			begin_list(list_vals, &listit);
-		else
 			begin_list_rev(list_vals, &listit);
+		else
+			begin_list(list_vals, &listit);
 		while (next_list_ptr(&listit, &ptr)) {
 			change_list_ptr(&listit, index[i]->value);
 			++i;
@@ -1310,9 +1310,9 @@ sortimpl (PNODE node, SYMTAB stab, BOOLEAN *eflg, BOOLEAN fwd)
 		VPTR ptr=0;
 		i=0;
 		if (fwd)
-			begin_list(list_keys, &listit);
-		else
 			begin_list_rev(list_keys, &listit);
+		else
+			begin_list(list_keys, &listit);
 		while (next_list_ptr(&listit, &ptr)) {
 			change_list_ptr(&listit, index[i]->key);
 			++i;
