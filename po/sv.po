@@ -4,9 +4,9 @@
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: lifelines 3.0.32\n"
-"POT-Creation-Date: 2003-09-14 14:11+0200\n"
-"PO-Revision-Date: 2003-09-14 15:54+0200\n"
+"Project-Id-Version: lifelines 3.0.36\n"
+"POT-Creation-Date: 2003-09-28 14:12+0200\n"
+"PO-Revision-Date: 2003-09-28 15:05+0200\n"
 "Last-Translator: Jens Arvidsson <jya@sverige.nu>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -2331,96 +2331,97 @@ msgstr "comp"
 msgid "jour_complementairs"
 msgstr "jour_complementairs"
 
-#: src/gedlib/node.c:686
+#: src/gedlib/node.c:697
 msgid "NO NAME"
 msgstr "INGET NAMN"
 
 #. TRANSLATORS: Character set conversion from external editor to database internal
-#: src/gedlib/translat.c:99
+#: src/gedlib/translat.c:100
 msgid "Editor to Internal"
 msgstr "Redigerare till intern"
 
 #. TRANSLATORS: Character set conversion from database internal to external editor
-#: src/gedlib/translat.c:101
+#: src/gedlib/translat.c:102
 msgid "Internal to Editor"
 msgstr "Intern till redigerare"
 
-#: src/gedlib/translat.c:102
+#: src/gedlib/translat.c:103
 msgid "GEDCOM to Internal"
 msgstr "GEDCOM till intern"
 
-#: src/gedlib/translat.c:103
+#: src/gedlib/translat.c:104
 msgid "Internal to GEDCOM"
 msgstr "Intern till GEDCOM"
 
-#: src/gedlib/translat.c:104
+#: src/gedlib/translat.c:105
 msgid "Display to Internal"
 msgstr "Skärm till intern"
 
-#: src/gedlib/translat.c:105
+#: src/gedlib/translat.c:106
 msgid "Internal to Display"
 msgstr "Intern till skärm"
 
-#: src/gedlib/translat.c:106
+#: src/gedlib/translat.c:107
 msgid "Report to Internal"
 msgstr "Rapport till intern"
 
-#: src/gedlib/translat.c:107
+#: src/gedlib/translat.c:108
 msgid "Internal to Report"
 msgstr "Intern till rapport"
 
 #. TRANSLATORS: key for "Editor to Internal" on translation table menu
 #. Omit everything up to and including final |
-#: src/gedlib/translat.c:118
+#: src/gedlib/translat.c:119
 msgid "menu|trantable|e"
 msgstr "r"
 
 #. TRANSLATORS: key for "Internal to Editor" on translation table menu
 #. Omit everything up to and including final |
-#: src/gedlib/translat.c:121
+#: src/gedlib/translat.c:122
 msgid "menu|trantable|m"
 msgstr "e"
 
 #. TRANSLATORS: key for "GEDCOM to Internal" on translation table menu
 #. Omit everything up to and including final |
-#: src/gedlib/translat.c:124
+#: src/gedlib/translat.c:125
 msgid "menu|trantable|i"
 msgstr "g"
 
 #. TRANSLATORS: key for "Internal to GEDCOM" on translation table menu
 #. Omit everything up to and including final |
-#: src/gedlib/translat.c:127
+#: src/gedlib/translat.c:128
 msgid "menu|trantable|x"
 msgstr "d"
 
 #. TRANSLATORS: key for "Display to Internal" on translation table menu
 #. Omit everything up to and including final |
-#: src/gedlib/translat.c:130
+#: src/gedlib/translat.c:131
 msgid "menu|trantable|g"
 msgstr "s"
 
 #. TRANSLATORS: key for "Internal to Display" on translation table menu
 #. Omit everything up to and including final |
-#: src/gedlib/translat.c:133
+#: src/gedlib/translat.c:134
 msgid "menu|trantable|d"
 msgstr "k"
 
 #. TRANSLATORS: key for "Report to Internal" on translation table menu
 #. Omit everything up to and including final |
-#: src/gedlib/translat.c:136
+#: src/gedlib/translat.c:137
 msgid "menu|trantable|p"
 msgstr "a"
 
 #. TRANSLATORS: key for "Internal to Report" on translation table menu
 #. Omit everything up to and including final |
-#: src/gedlib/translat.c:139
+#: src/gedlib/translat.c:140
 msgid "menu|trantable|r"
 msgstr "p"
 
-#. TRANSLATORS: pre test comment
-#: src/gedlib/translat.c:426
-msgid "testme"
-msgstr "testamig"
+#. TRANSLATORS: db internal translation table note for tt menu
+#: src/gedlib/translat.c:472
+#, c-format
+msgid " (dbint tt: %s)"
+msgstr "(dbint töt: %s)"
 
 #: src/gedlib/valid.c:75
 msgid "This person record does not have a name line."
@@ -2706,47 +2707,47 @@ msgstr "elva"
 msgid "twelve"
 msgstr "tolv"
 
-#: src/interp/builtin.c:2309
+#: src/interp/builtin.c:2313
 msgid "He"
 msgstr "Han"
 
-#: src/interp/builtin.c:2309
+#: src/interp/builtin.c:2313
 msgid "he"
 msgstr "han"
 
-#: src/interp/builtin.c:2309
+#: src/interp/builtin.c:2313
 msgid "His"
 msgstr "Hans"
 
-#: src/interp/builtin.c:2309
+#: src/interp/builtin.c:2313
 msgid "his"
 msgstr "hans"
 
-#: src/interp/builtin.c:2309
+#: src/interp/builtin.c:2313
 msgid "him"
 msgstr "honom"
 
-#: src/interp/builtin.c:2311
+#: src/interp/builtin.c:2315
 msgid "She"
 msgstr "Hon"
 
-#: src/interp/builtin.c:2311
+#: src/interp/builtin.c:2315
 msgid "she"
 msgstr "hon"
 
-#: src/interp/builtin.c:2311
+#: src/interp/builtin.c:2315
 msgid "Her"
 msgstr "Hennes"
 
-#: src/interp/builtin.c:2311
+#: src/interp/builtin.c:2315
 msgid "her"
 msgstr "hennes"
 
-#: src/interp/builtin.c:2311
+#: src/interp/builtin.c:2315
 msgid "her_"
 msgstr "henne"
 
-#: src/interp/builtin.c:2689
+#: src/interp/builtin.c:2693
 msgid "(trimname) person does not have a name"
 msgstr "(trimname) personen har inget namn"
 
@@ -2899,12 +2900,12 @@ msgstr "Avbryter: "
 msgid "Duplicate proc %s (lines %d and %d) in report: %s"
 msgstr "Dubblerad proc %s (raderna %d och %d) i rapport: %s"
 
-#: src/interp/interp.c:2189
+#: src/interp/interp.c:2188
 #, c-format
 msgid "Duplicate func %s (lines %d and %d) in report: %s"
 msgstr "Dubblerad func %s (raderna %d och %d) i rapport: %s"
 
-#: src/interp/interp.c:2251
+#: src/interp/interp.c:2249
 msgid "This report requires a newer program to run\n"
 msgstr "Denna rapport kräver ett nyare program för att köras\n"
 
@@ -3504,19 +3505,19 @@ msgstr "Lade till (%dP, %dF, %dS, %dE, %dX) poster"
 msgid "The database was not saved."
 msgstr "Databasen sparades inte."
 
-#: src/liflines/main.c:345
+#: src/liflines/main.c:344
 msgid "Choose database to open"
 msgstr "Välj databas att öppna"
 
-#: src/liflines/main.c:353
+#: src/liflines/main.c:352
 msgid "No databases found in database path"
 msgstr "Inga databaser hittades i sökvägen för databaser"
 
-#: src/liflines/main.c:380
+#: src/liflines/main.c:379
 msgid "Warning: database codeset unspecified"
 msgstr "Varning: Teckenkodning för databas ospecificerad"
 
-#: src/liflines/main.c:382
+#: src/liflines/main.c:381
 msgid "Warning: not all conversions available"
 msgstr "Varning: alla konverteringar inte tillgängliga"
 
@@ -3594,198 +3595,198 @@ msgstr ""
 msgid "No conversion"
 msgstr "Ingen konvertering."
 
-#: src/liflines/screen.c:1804
+#: src/liflines/screen.c:1802
 msgid "Internal codeset"
 msgstr "Intern teckenkodning"
 
-#: src/liflines/screen.c:1808
+#: src/liflines/screen.c:1806
 msgid "Locales are enabled."
 msgstr "Lokaler är aktiverade."
 
-#: src/liflines/screen.c:1810
+#: src/liflines/screen.c:1808
 msgid "Locales are disabled."
 msgstr "Lokaler är avaktiverade."
 
-#: src/liflines/screen.c:1813
+#: src/liflines/screen.c:1811
 msgid "NLS (National Language Support) is enabled."
 msgstr "NLS (nationellt språkstöd) är aktiverat."
 
-#: src/liflines/screen.c:1819
+#: src/liflines/screen.c:1817
 msgid "NLS (National Language Support) is disabled."
 msgstr "NLS (nationellt språkstöd) är avaktiverat."
 
-#: src/liflines/screen.c:1825
+#: src/liflines/screen.c:1823
 msgid "iconv (codeset conversion) is enabled."
 msgstr "iconv (konvertering av teckenkodning) är aktiverad."
 
-#: src/liflines/screen.c:1827
+#: src/liflines/screen.c:1825
 msgid "iconv (codeset conversion) is disabled."
 msgstr "iconv (konvertering av teckenkodning) är avaktiverad."
 
-#: src/liflines/screen.c:1829
+#: src/liflines/screen.c:1827
 #, c-format
 msgid "Startup collate locale: %s"
 msgstr "Sorteringslokal vid uppstart: %s"
 
-#: src/liflines/screen.c:1832
+#: src/liflines/screen.c:1830
 #, c-format
 msgid "Startup messages locale: %s"
 msgstr "Meddelandelokal vid uppstart: %s"
 
-#: src/liflines/screen.c:1835
+#: src/liflines/screen.c:1833
 #, c-format
 msgid "Current collate locale: %s"
 msgstr "Aktuell sorteringslokal: %s"
 
-#: src/liflines/screen.c:1838
+#: src/liflines/screen.c:1836
 #, c-format
 msgid "Current messages locale: %s"
 msgstr "Aktuell meddelandelokal: %s"
 
-#: src/liflines/screen.c:1841
+#: src/liflines/screen.c:1839
 #, c-format
 msgid "Collation routine: %s"
 msgstr "Sorteringsrutin: %s"
 
-#: src/liflines/screen.c:1845
+#: src/liflines/screen.c:1843
 #, c-format
 msgid "GUI codeset: %s"
 msgstr "Teckenkodning för grafiskt användargränssnitt: %s"
 
-#: src/liflines/screen.c:1848
+#: src/liflines/screen.c:1846
 #, c-format
 msgid "GUI output codeset: %s"
 msgstr "Teckenkodning för utdata till grafiskt användargränssnitt: %s"
 
-#: src/liflines/screen.c:1850
+#: src/liflines/screen.c:1848
 #, c-format
 msgid "GUI input codeset: %s"
 msgstr "Teckenkodning för indata till grafiskt användargränssnitt: %s"
 
-#: src/liflines/screen.c:1855
+#: src/liflines/screen.c:1853
 #, c-format
 msgid "editor codeset: %s"
 msgstr "teckenkodning för redigerare: %s"
 
-#: src/liflines/screen.c:1858
+#: src/liflines/screen.c:1856
 #, c-format
 msgid "editor output codeset: %s"
 msgstr "teckenkodning för utdata från redigerare: %s"
 
-#: src/liflines/screen.c:1860
+#: src/liflines/screen.c:1858
 #, c-format
 msgid "editor input codeset: %s"
 msgstr "teckenkodning för indata till redigerare: %s"
 
-#: src/liflines/screen.c:1865
+#: src/liflines/screen.c:1863
 #, c-format
 msgid "report codeset: %s"
 msgstr "teckenkodning för rapporter: %s"
 
-#: src/liflines/screen.c:1868
+#: src/liflines/screen.c:1866
 #, c-format
 msgid "report output codeset: %s"
 msgstr "teckenkodning för utdata från rapporter: %s"
 
-#: src/liflines/screen.c:1870
+#: src/liflines/screen.c:1868
 #, c-format
 msgid "report input codeset: %s"
 msgstr "teckenkodning för indata till rapporter: %s"
 
-#: src/liflines/screen.c:1875
+#: src/liflines/screen.c:1873
 #, c-format
 msgid "GEDCOM codeset: %s"
 msgstr "Teckenkodning för GEDCOM: %s"
 
-#: src/liflines/screen.c:1878
+#: src/liflines/screen.c:1876
 #, c-format
 msgid "gedcom output codeset: %s"
 msgstr "teckenkodning för utdata till gedcom: %s"
 
-#: src/liflines/screen.c:1880
+#: src/liflines/screen.c:1878
 #, c-format
 msgid "gedcom input codeset: %s"
 msgstr "teckenkodning för indata från gedcom: %s"
 
-#: src/liflines/screen.c:1887
+#: src/liflines/screen.c:1885
 msgid "Codeset information"
 msgstr "Information om teckenkodning"
 
-#: src/liflines/screen.c:1905
+#: src/liflines/screen.c:1903
 #, c-format
 msgid "gettext dll: %s"
 msgstr "dll för gettext: %s"
 
-#: src/liflines/screen.c:1909
+#: src/liflines/screen.c:1907
 #, c-format
 msgid "gettext dll version: %s"
 msgstr "version för gettext-dll: %s"
 
-#: src/liflines/screen.c:1914
+#: src/liflines/screen.c:1912
 msgid "gettext dll had no version"
 msgstr "gettext-dll hade ingen version"
 
-#: src/liflines/screen.c:1919
+#: src/liflines/screen.c:1917
 msgid "no gettext dll found"
 msgstr "ingen gettext-dll hittades"
 
-#: src/liflines/screen.c:1928
+#: src/liflines/screen.c:1926
 #, c-format
 msgid "iconv dll: %s"
 msgstr "dll för iconv: %s"
 
-#: src/liflines/screen.c:1932
+#: src/liflines/screen.c:1930
 #, c-format
 msgid "iconv dll version: %s"
 msgstr "version för iconv-dll: %s"
 
-#: src/liflines/screen.c:1937
+#: src/liflines/screen.c:1935
 msgid "iconv dll had no version"
 msgstr "iconv-dll hade ingen version"
 
-#: src/liflines/screen.c:1942
+#: src/liflines/screen.c:1940
 msgid "no iconv dll found"
 msgstr "ingen iconv-dll hittades"
 
-#: src/liflines/screen.c:2193
+#: src/liflines/screen.c:2191
 msgid "Impermissible to change codeset in a populated database"
 msgstr "Otillåtet att ändra teckenkodning i en befolkad databas"
 
-#: src/liflines/screen.c:2357
+#: src/liflines/screen.c:2355
 msgid "--- CURRENT SELECTION ---"
 msgstr "--- AKTUELL MARKERING ---"
 
-#: src/liflines/screen.c:2360 src/liflines/screen.c:2586
+#: src/liflines/screen.c:2358 src/liflines/screen.c:2588
 msgid "--- LIST ---"
 msgstr "--- LISTA ---"
 
-#: src/liflines/screen.c:2617
+#: src/liflines/screen.c:2619
 msgid "-- CURRENT SELECTION --"
 msgstr "-- AKTUELL MARKERING --"
 
-#: src/liflines/screen.c:2767
+#: src/liflines/screen.c:2769
 msgid "LifeLines -- Main Menu"
 msgstr "LifeLines -- Huvudmeny"
 
-#: src/liflines/screen.c:3467
+#: src/liflines/screen.c:3469
 #, c-format
 msgid "v  Review visit history (%d record)"
 msgid_plural "v  Review visit history (%d records)"
 msgstr[0] "v  Granska besökshistorik (%d post)"
 msgstr[1] "v  Granska besökshistorik (%d poster)"
 
-#: src/liflines/screen.c:3471
+#: src/liflines/screen.c:3473
 msgid "(visit history is empty)"
 msgstr "(besökshistoriken är tom)"
 
-#: src/liflines/screen.c:3477
+#: src/liflines/screen.c:3479
 #, c-format
 msgid "c  Review change history (%d record)"
 msgid_plural "c  Review change history (%d records)"
 msgstr[0] "c  Granska ändringshistorik (%d post)"
 msgstr[1] "c  Granska ändringshistorik (%d poster)"
 
-#: src/liflines/screen.c:3481
+#: src/liflines/screen.c:3483
 msgid "(change history is empty)"
 msgstr "(ändringshistoriken är tom)"
 
@@ -3829,7 +3830,7 @@ msgstr "begr"
 msgid "crem"
 msgstr "krem"
 
-#: src/liflines/show.c:955
+#: src/liflines/show.c:976
 #, c-format
 msgid "Cached: I:%s; F:%s"
 msgstr "Buffrade: I:%s; F:%s"
