@@ -100,7 +100,7 @@ valid_pattern (STRING str)
  * name_scan -- traverse names looking for pattern matching
  *=======================================================*/
 NODE
-name_scan ()
+name_scan (void)
 {
 	NAME_PATTERN patt;
 	NODE indi = NULL;
