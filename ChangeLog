@@ -1,3 +1,10 @@
+2003-03-04 Steve Dum
+
+         * ChangeLog docs/ll-reportmanual.xml  docs/ll-reportmanual.html
+	 docs/ll-reportmanual.pdf docs/ll-reportmanual.txt
+
+	 clean up formatting of report manual
+   
 2003-03-03 Perry Rapp
 
 	* ChangeLog po/fr.po
