@@ -95,11 +95,11 @@ dnl AC_C_CONST
 dnl AC_HEADER_TIME
 
 echo Looking for library functions
-AC_CHECK_FUNCS( snprintf _snprintf heapwalk _heapwalk strcmpi strcasecmp \
+AC_CHECK_FUNCS( _vsnprintf heapwalk _heapwalk strcmpi strcasecmp \
 	getpwuid )
 
 dnl Check for replacement functions
-AC_REPLACE_FUNCS( sleep scandir alphasort getopt _llnull )
+AC_REPLACE_FUNCS( sleep scandir alphasort getopt snprintf _llnull )
 
 dnl AC_CHECK_FUNCS(strerror perror strsignal psignal getopt getopt_long random)
 dnl investigate using AC_MSG_ERROR for error reporting

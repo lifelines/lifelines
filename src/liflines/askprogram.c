@@ -326,20 +326,10 @@ make_program_list(struct program_info *head,
   while (NULL != cur)
     {
       unsigned char buf[MAXLINELEN];
-#ifdef HAVE_SNPRINTF
       snprintf(buf, sizeof(buf), "%s (%s) [%s]",
-#else
-#ifdef HAVE__SNPRINTF
-      _snprintf(buf, sizeof(buf), "%s (%s) [%s]",
-#else
-      /* MTE: 11-17-00 Yes, this is dangerous.  It will have to do */
-      /* until we add an implementation of snprintf() to arch/.    */
-      sprintf(buf, "%s (%s) [%s]",
-#endif /* HAVE__SNPRINTF */
-#endif /* HAVE_SNPRINTF */
-              NULL != cur->progname    ? cur->progname       : cur->filename,
-              NULL != cur->version     ? cur->version       : (STRING)"V?.?",
-              NULL != cur->output      ? cur->output      : (STRING)"[?]");
+               NULL != cur->progname    ? cur->progname       : cur->filename,
+               NULL != cur->version     ? cur->version       : (STRING)"V?.?",
+               NULL != cur->output      ? cur->output      : (STRING)"[?]");
       newlist[i] = strdup(buf);
       i++;
       cur = cur->next;
