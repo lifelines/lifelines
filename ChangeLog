@@ -1,3 +1,9 @@
+2003-08-14 Perry Rapp
+
+	* ChangeLog src/hdrs/gedcom.h
+
+	Revise FORFAMSS, FORFAMCS to skip dangling pointers (and not ASSERT).
+
 2003-08-07 Perry Rapp
 
 	* ChangeLog reports/st/st_aux.ll reports/st/st_collate.ll

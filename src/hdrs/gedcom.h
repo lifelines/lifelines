@@ -648,12 +648,13 @@ Perry, 2002.06.24
 	num = 0;\
 	while (__node) {\
 		fam = key_to_fam(rmvat(nval(__node)));\
-		ASSERT(fam);\
+		if (!fam) { num++; __node = nsibling(__node); continue; } \
 		if (__sex == SEX_MALE)\
 			spouse = fam_to_wife_node(fam);\
 		else if (__sex == SEX_FEMALE)\
 			spouse = fam_to_husb_node(fam);\
-		else    spouse = fam_to_spouse(fam, indi);\
+		else \
+			spouse = fam_to_spouse(fam, indi);\
 		num++;\
 		{
 
@@ -670,7 +671,7 @@ Perry, 2002.06.24
 	num = 0;\
 	while (__node) {\
 		fam = key_to_fam(rmvat(nval(__node)));\
-		ASSERT(fam);\
+		if (!fam) { num++; __node = nsibling(__node); continue; } \
 		fath = fam_to_husb_node(fam);\
 		moth = fam_to_wife_node(fam);\
 		num++;\
