@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.21\n"
-"POT-Creation-Date: 2002-11-06 22:55-0500\n"
+"POT-Creation-Date: 2002-11-11 20:02-0500\n"
 "PO-Revision-Date: 2002-10-19 14:03+0200\n"
 "Last-Translator: Jens Arvidsson <arvid-jens@algonet.se>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3216,7 +3216,7 @@ msgstr "%o  Lägg till övrig"
 msgid "B  Browse new family"
 msgstr "B  Bläddra i ny familj"
 
-#: src/liflines/brwsmenu.c:487
+#: src/liflines/brwsmenu.c:488
 msgid "Missing title"
 msgstr "Titel saknas"
 
@@ -3312,11 +3312,11 @@ msgstr "Lade till (%dP, %dF, %dS, %dE, %dX) poster"
 msgid "The database was not saved."
 msgstr "Databasen var trasig."
 
-#: src/liflines/main.c:347
+#: src/liflines/main.c:351
 msgid "Choose database to open"
 msgstr "Välj databas att öppna"
 
-#: src/liflines/main.c:355
+#: src/liflines/main.c:359
 msgid "No databases found in database path"
 msgstr "Inga databaser hittades i sökvägen för databaser"
 
@@ -3358,135 +3358,140 @@ msgstr "Skriv in internt nyckelvärde för personen."
 msgid "enter key:"
 msgstr "skriv in nyckel: "
 
-#: src/liflines/screen.c:685
+#: src/liflines/screen.c:684
 #, c-format
 msgid "(pg %d/%d)"
 msgstr "(sid %d/%d)"
 
-#: src/liflines/screen.c:1772
+#: src/liflines/screen.c:1771
 msgid "Internal codeset"
 msgstr "Intern teckenkodning"
 
-#: src/liflines/screen.c:1777
+#: src/liflines/screen.c:1776
 msgid "Locales are enabled."
 msgstr "Lokaler är aktiverade."
 
-#: src/liflines/screen.c:1779
+#: src/liflines/screen.c:1778
 msgid "Locales are disabled."
 msgstr "Lokaler är avaktiverade."
 
-#: src/liflines/screen.c:1782
+#: src/liflines/screen.c:1781
 msgid "NLS (National Language Support) is enabled."
 msgstr "NLS (nationellt språkstöd) är aktiverat."
 
-#: src/liflines/screen.c:1788
+#: src/liflines/screen.c:1787
 msgid "NLS (National Language Support) is disabled."
 msgstr "NLS (nationellt språkstöd) är avaktiverat."
 
-#: src/liflines/screen.c:1794
+#: src/liflines/screen.c:1793
 msgid "iconv (codeset conversion) is enabled."
 msgstr "iconv (konvertering av teckenkodning) är aktiverad."
 
-#: src/liflines/screen.c:1796
+#: src/liflines/screen.c:1795
 msgid "iconv (codeset conversion) is disabled."
 msgstr "iconv (konvertering av teckenkodning) är avaktiverad."
 
-#: src/liflines/screen.c:1798
+#: src/liflines/screen.c:1797
 #, c-format
 msgid "Startup collate locale: %s"
 msgstr "Sorteringslokal vid uppstart: %s"
 
-#: src/liflines/screen.c:1802
+#: src/liflines/screen.c:1801
 #, c-format
 msgid "Startup messages locale: %s"
 msgstr "Meddelandelokal vid uppstart: %s"
 
-#: src/liflines/screen.c:1806
+#: src/liflines/screen.c:1805
 #, c-format
 msgid "Current collate locale: %s"
 msgstr "Aktuell sorteringslokal: %s"
 
-#: src/liflines/screen.c:1810
+#: src/liflines/screen.c:1809
 #, c-format
 msgid "Current messages locale: %s"
 msgstr "Aktuell meddelandelokal: %s"
 
-#: src/liflines/screen.c:1814
+#: src/liflines/screen.c:1813
+#, c-format
+msgid "Collation routine: %s"
+msgstr ""
+
+#: src/liflines/screen.c:1817
 #, c-format
 msgid "GUI codeset: %s"
 msgstr "Teckenkodning för grafiskt användargränssnitt: %s"
 
-#: src/liflines/screen.c:1818
+#: src/liflines/screen.c:1821
 #, c-format
 msgid "Editor codeset: %s"
 msgstr "Teckenkodning för editor: %s"
 
-#: src/liflines/screen.c:1822
+#: src/liflines/screen.c:1825
 #, c-format
 msgid "Report codeset: %s"
 msgstr "Teckenkodning för rapporter: %s"
 
-#: src/liflines/screen.c:1826
+#: src/liflines/screen.c:1829
 #, c-format
 msgid "GEDCOM codeset: %s"
 msgstr "Teckenkodning för GEDCOM: %s"
 
-#: src/liflines/screen.c:1842
+#: src/liflines/screen.c:1845
 msgid "Codeset information"
 msgstr "Information om teckenkodning"
 
-#: src/liflines/screen.c:1859
+#: src/liflines/screen.c:1862
 #, c-format
 msgid "gettext dll: %s"
 msgstr "dll för gettext: %s"
 
-#: src/liflines/screen.c:1863
+#: src/liflines/screen.c:1866
 #, c-format
 msgid "gettext dll version: %s"
 msgstr "version för gettext-dll: %s"
 
-#: src/liflines/screen.c:1868
+#: src/liflines/screen.c:1871
 msgid "gettext dll had no version"
 msgstr "gettext-dll hade ingen version"
 
-#: src/liflines/screen.c:1873
+#: src/liflines/screen.c:1876
 msgid "no gettext dll found"
 msgstr "ingen gettext-dll hittades"
 
-#: src/liflines/screen.c:1883
+#: src/liflines/screen.c:1886
 #, c-format
 msgid "iconv dll: %s"
 msgstr "dll för iconv: %s"
 
-#: src/liflines/screen.c:1887
+#: src/liflines/screen.c:1890
 #, c-format
 msgid "iconv dll version: %s"
 msgstr "version för iconv-dll: %s"
 
-#: src/liflines/screen.c:1892
+#: src/liflines/screen.c:1895
 msgid "iconv dll had no version"
 msgstr "iconv-dll hade ingen version"
 
-#: src/liflines/screen.c:1897
+#: src/liflines/screen.c:1900
 msgid "no iconv dll found"
 msgstr "ingen iconv-dll hittades"
 
-#: src/liflines/screen.c:2147
+#: src/liflines/screen.c:2150
 msgid "Impermissible to change codeset in a populated database"
 msgstr "Otillåtet att ändra teckenkodning i en befolkad databas"
 
-#: src/liflines/screen.c:2721
+#: src/liflines/screen.c:2725
 msgid "LifeLines -- Main Menu"
 msgstr ""
 
-#: src/liflines/screen.c:3362
+#: src/liflines/screen.c:3366
 #, fuzzy, c-format
 msgid "v  Review visit history (%d record)"
 msgid_plural "v  Review visit history (%d records)"
 msgstr[0] "v  Granska besökshistorik (%d post)"
 msgstr[1] "v  Granska besökshistorik (%d post)"
 
-#: src/liflines/screen.c:3372
+#: src/liflines/screen.c:3376
 #, fuzzy, c-format
 msgid "c  Review change history (%d record)"
 msgid_plural "c  Review change history (%d records)"

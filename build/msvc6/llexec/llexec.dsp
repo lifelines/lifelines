@@ -602,6 +602,10 @@ SOURCE=..\..\..\src\interp\yacc.h
 
 SOURCE=.\llines.ico
 # End Source File
+# Begin Source File
+
+SOURCE=..\llines.ico
+# End Source File
 # End Group
 # End Target
 # End Project

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Lifelines 3.0.18\n"
-"POT-Creation-Date: 2002-11-06 22:55-0500\n"
+"POT-Creation-Date: 2002-11-11 20:02-0500\n"
 "PO-Revision-Date: 2002-09-25 08:45+0200\n"
 "Last-Translator: Patrick Texier <p.texier@orsennes.com>\n"
 "Language-Team: Not a language team\n"
@@ -3225,7 +3225,7 @@ msgstr "%o Ajouter autre"
 msgid "B  Browse new family"
 msgstr "B  Atteindre famille"
 
-#: src/liflines/brwsmenu.c:487
+#: src/liflines/brwsmenu.c:488
 msgid "Missing title"
 msgstr "Titre manquant"
 
@@ -3321,11 +3321,11 @@ msgstr "Enregistrements ajoutés (%dP, %dF, %dS, %dE, %dX)"
 msgid "The database was not saved."
 msgstr "La base est corrompue."
 
-#: src/liflines/main.c:347
+#: src/liflines/main.c:351
 msgid "Choose database to open"
 msgstr "Sélectionnez la base à ouvrir"
 
-#: src/liflines/main.c:355
+#: src/liflines/main.c:359
 msgid "No databases found in database path"
 msgstr "Pas de base trouvée dans le chemin d'accès"
 
@@ -3367,135 +3367,140 @@ msgstr "Entrez la valeur de clé interne d'une personne."
 msgid "enter key:"
 msgstr "entrez la clé:"
 
-#: src/liflines/screen.c:685
+#: src/liflines/screen.c:684
 #, c-format
 msgid "(pg %d/%d)"
 msgstr ""
 
-#: src/liflines/screen.c:1772
+#: src/liflines/screen.c:1771
 msgid "Internal codeset"
 msgstr "Page de codes interne"
 
-#: src/liflines/screen.c:1777
+#: src/liflines/screen.c:1776
 msgid "Locales are enabled."
 msgstr "Locales disponibles."
 
-#: src/liflines/screen.c:1779
+#: src/liflines/screen.c:1778
 msgid "Locales are disabled."
 msgstr "Locales non disponibles."
 
-#: src/liflines/screen.c:1782
+#: src/liflines/screen.c:1781
 msgid "NLS (National Language Support) is enabled."
 msgstr "NLS (Support de Langage National) disponible."
 
-#: src/liflines/screen.c:1788
+#: src/liflines/screen.c:1787
 msgid "NLS (National Language Support) is disabled."
 msgstr "NLS (Support de Langage National) indisponible."
 
-#: src/liflines/screen.c:1794
+#: src/liflines/screen.c:1793
 msgid "iconv (codeset conversion) is enabled."
 msgstr "iconv (conversion de code de page) disponible."
 
-#: src/liflines/screen.c:1796
+#: src/liflines/screen.c:1795
 msgid "iconv (codeset conversion) is disabled."
 msgstr "iconv (conversion de code de page) indisponible."
 
-#: src/liflines/screen.c:1798
+#: src/liflines/screen.c:1797
 #, c-format
 msgid "Startup collate locale: %s"
 msgstr "Collate locale au démarrage : %s"
 
-#: src/liflines/screen.c:1802
+#: src/liflines/screen.c:1801
 #, c-format
 msgid "Startup messages locale: %s"
 msgstr "Message locale au démarrage : %s"
 
-#: src/liflines/screen.c:1806
+#: src/liflines/screen.c:1805
 #, c-format
 msgid "Current collate locale: %s"
 msgstr "Collate locale courant : %s"
 
-#: src/liflines/screen.c:1810
+#: src/liflines/screen.c:1809
 #, c-format
 msgid "Current messages locale: %s"
 msgstr "Messages locale courant : %s"
 
-#: src/liflines/screen.c:1814
+#: src/liflines/screen.c:1813
+#, c-format
+msgid "Collation routine: %s"
+msgstr ""
+
+#: src/liflines/screen.c:1817
 #, c-format
 msgid "GUI codeset: %s"
 msgstr "jeu de car. GUI : %s"
 
-#: src/liflines/screen.c:1818
+#: src/liflines/screen.c:1821
 #, c-format
 msgid "Editor codeset: %s"
 msgstr "jeu de car. éditeur : %s"
 
-#: src/liflines/screen.c:1822
+#: src/liflines/screen.c:1825
 #, c-format
 msgid "Report codeset: %s"
 msgstr "jeu de car. éditions : %s"
 
-#: src/liflines/screen.c:1826
+#: src/liflines/screen.c:1829
 #, c-format
 msgid "GEDCOM codeset: %s"
 msgstr "jeu de car. GEDCOM : %s"
 
-#: src/liflines/screen.c:1842
+#: src/liflines/screen.c:1845
 msgid "Codeset information"
 msgstr "Information de code de page :"
 
-#: src/liflines/screen.c:1859
+#: src/liflines/screen.c:1862
 #, c-format
 msgid "gettext dll: %s"
 msgstr "dll gettext : %s"
 
-#: src/liflines/screen.c:1863
+#: src/liflines/screen.c:1866
 #, c-format
 msgid "gettext dll version: %s"
 msgstr "version dll gettext : %s "
 
-#: src/liflines/screen.c:1868
+#: src/liflines/screen.c:1871
 msgid "gettext dll had no version"
 msgstr "dll gettext sans version"
 
-#: src/liflines/screen.c:1873
+#: src/liflines/screen.c:1876
 msgid "no gettext dll found"
 msgstr "dll gettext non trouvée"
 
-#: src/liflines/screen.c:1883
+#: src/liflines/screen.c:1886
 #, c-format
 msgid "iconv dll: %s"
 msgstr "dll iconv : %s"
 
-#: src/liflines/screen.c:1887
+#: src/liflines/screen.c:1890
 #, c-format
 msgid "iconv dll version: %s"
 msgstr "version dll iconv : %s"
 
-#: src/liflines/screen.c:1892
+#: src/liflines/screen.c:1895
 msgid "iconv dll had no version"
 msgstr "dll iconv sans version"
 
-#: src/liflines/screen.c:1897
+#: src/liflines/screen.c:1900
 msgid "no iconv dll found"
 msgstr "dll iconv non trouvée"
 
-#: src/liflines/screen.c:2147
+#: src/liflines/screen.c:2150
 msgid "Impermissible to change codeset in a populated database"
 msgstr ""
 
-#: src/liflines/screen.c:2721
+#: src/liflines/screen.c:2725
 msgid "LifeLines -- Main Menu"
 msgstr "LifeLines -- Menu Principal"
 
-#: src/liflines/screen.c:3362
+#: src/liflines/screen.c:3366
 #, fuzzy, c-format
 msgid "v  Review visit history (%d record)"
 msgid_plural "v  Review visit history (%d records)"
 msgstr[0] "v  Voir historique des visites (%d enr.)"
 msgstr[1] "v  Voir historique des visites (%d enr.)"
 
-#: src/liflines/screen.c:3372
+#: src/liflines/screen.c:3376
 #, fuzzy, c-format
 msgid "c  Review change history (%d record)"
 msgid_plural "c  Review change history (%d records)"

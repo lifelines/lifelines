@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /Zi /O2 /I "../../../hdrs" /I "../../../hdrs/win32" /I "../../../intl" /I "." /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "HAVE_CONFIG_H" /YX /FD /c
+# ADD CPP /nologo /W3 /GX /Zi /O2 /I "../../../src/hdrs" /I "../../../src/hdrs/win32" /I "../../../src/intl" /I "." /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "HAVE_CONFIG_H" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -67,7 +67,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "../../../hdrs" /I "../../../hdrs/win32" /I "../../../intl" /I "." /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "HAVE_CONFIG_H" /YX /FD /GZ /c
+# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "../../../src/hdrs" /I "../../../src/hdrs/win32" /I "../../../src/intl" /I "." /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "HAVE_CONFIG_H" /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -88,35 +88,35 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=..\..\..\btree\addkey.c
+SOURCE=..\..\..\src\btree\addkey.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\appendstr.c
+SOURCE=..\..\..\src\stdlib\appendstr.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\bfs.c
+SOURCE=..\..\..\src\stdlib\bfs.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\btree\block.c
+SOURCE=..\..\..\src\btree\block.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\brwslist.c
+SOURCE=..\..\..\src\gedlib\brwslist.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\charmaps.c
+SOURCE=..\..\..\src\gedlib\charmaps.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\date.c
+SOURCE=..\..\..\src\gedlib\date.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\tools\dbverify.c
+SOURCE=..\..\..\src\tools\dbverify.c
 # End Source File
 # Begin Source File
 
@@ -124,39 +124,39 @@ SOURCE=.\dbVerify.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\dirs.c
+SOURCE=..\..\..\src\stdlib\dirs.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\double.c
+SOURCE=..\..\..\src\stdlib\double.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\environ.c
+SOURCE=..\..\..\src\stdlib\environ.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\equaliso.c
+SOURCE=..\..\..\src\gedlib\equaliso.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\btree\file.c
+SOURCE=..\..\..\src\btree\file.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\fpattern.c
+SOURCE=..\..\..\src\stdlib\fpattern.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\gedcom.c
+SOURCE=..\..\..\src\gedlib\gedcom.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\gengedc.c
+SOURCE=..\..\..\src\gedlib\gengedc.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\gstrings.c
+SOURCE=..\..\..\src\gedlib\gstrings.c
 # End Source File
 # Begin Source File
 
@@ -164,19 +164,19 @@ SOURCE=..\..\..\win32\iconvshim.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\icvt.c
+SOURCE=..\..\..\src\stdlib\icvt.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\btree\index.c
+SOURCE=..\..\..\src\btree\index.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\indiseq.c
+SOURCE=..\..\..\src\gedlib\indiseq.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\init.c
+SOURCE=..\..\..\src\gedlib\init.c
 # End Source File
 # Begin Source File
 
@@ -184,171 +184,175 @@ SOURCE=..\..\..\win32\intlshim.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\intrface.c
+SOURCE=..\..\..\src\gedlib\intrface.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\keytonod.c
+SOURCE=..\..\..\src\gedlib\keytonod.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\arch\langinfo.c
+SOURCE=..\..\..\src\arch\langinfo.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\lldate.c
+SOURCE=..\..\..\src\stdlib\listener.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\lloptions.c
+SOURCE=..\..\..\src\stdlib\lldate.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\llstrcmp.c
+SOURCE=..\..\..\src\gedlib\lloptions.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\locales.c
+SOURCE=..\..\..\src\stdlib\llstrcmp.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\memalloc.c
+SOURCE=..\..\..\src\gedlib\locales.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\messages.c
+SOURCE=..\..\..\src\stdlib\memalloc.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\misc.c
+SOURCE=..\..\..\src\gedlib\messages.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\mystring.c
+SOURCE=..\..\..\src\gedlib\misc.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\names.c
+SOURCE=..\..\..\src\stdlib\mystring.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\node.c
+SOURCE=..\..\..\src\gedlib\names.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\nodeutls.c
+SOURCE=..\..\..\src\gedlib\node.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\btree\opnbtree.c
+SOURCE=..\..\..\src\gedlib\nodeutls.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\path.c
+SOURCE=..\..\..\src\btree\opnbtree.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\place.c
+SOURCE=..\..\..\src\stdlib\path.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\property.c
+SOURCE=..\..\..\src\gedlib\place.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\btree\record.c
+SOURCE=..\..\..\src\gedlib\property.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\refns.c
+SOURCE=..\..\..\src\btree\record.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\remove.c
+SOURCE=..\..\..\src\gedlib\refns.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\replace.c
+SOURCE=..\..\..\src\gedlib\remove.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\arch\scandir.c
+SOURCE=..\..\..\src\gedlib\replace.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\sequence.c
+SOURCE=..\..\..\src\arch\scandir.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\spltjoin.c
+SOURCE=..\..\..\src\stdlib\sequence.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\sprintpic.c
+SOURCE=..\..\..\src\gedlib\spltjoin.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\stdstrng.c
+SOURCE=..\..\..\src\stdlib\sprintpic.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\stralloc.c
+SOURCE=..\..\..\src\stdlib\stdstrng.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\strapp.c
+SOURCE=..\..\..\src\stdlib\stralloc.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\strcvt.c
+SOURCE=..\..\..\src\stdlib\strapp.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\strutf8.c
+SOURCE=..\..\..\src\stdlib\strcvt.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\strwhite.c
+SOURCE=..\..\..\src\stdlib\strutf8.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\table.c
+SOURCE=..\..\..\src\stdlib\strwhite.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\translat.c
+SOURCE=..\..\..\src\stdlib\table.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\btree\traverse.c
+SOURCE=..\..\..\src\gedlib\translat.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\btree\utils.c
+SOURCE=..\..\..\src\btree\traverse.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\valid.c
+SOURCE=..\..\..\src\btree\utils.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\valtable.c
+SOURCE=..\..\..\src\gedlib\valid.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\arch\vsnprintf.c
+SOURCE=..\..\..\src\gedlib\valtable.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\warehouse.c
+SOURCE=..\..\..\src\arch\vsnprintf.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\tools\wprintf.c
+SOURCE=..\..\..\src\stdlib\warehouse.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\xreffile.c
+SOURCE=..\..\..\src\tools\wprintf.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\gedlib\xreffile.c
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -369,6 +373,10 @@ SOURCE=..\..\..\gedlib\gedcomi.h
 # Begin Source File
 
 SOURCE=.\resource.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\stdlib\stdlibi.h
 # End Source File
 # Begin Source File
 

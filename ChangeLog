@@ -9,6 +9,16 @@
 
 	Win32: load iconv.dll whenever iconvshim property queried, in case not yet loaded.
 
+	* ChangeLog NEWS configure.in lines.cfg
+	build/msvc6/dbverify/dbVerify.rc
+	build/msvc6/dbverify/dbverifyCmd.dsp
+	build/msvc6/llexec/llexec.dsp build/msvc6/llexec/llexec.rc
+	build/msvc6/llines/llines.rc build/rpm/lifelines.spec po/da.po
+	po/de.po po/el.po po/fr.po po/it.po po/sv.po
+	src/hdrs/version.h:
+
+	Creating release 3.0.22.
+
 2002-11-08 Perry Rapp
 
 	* ChangeLog src/interp/builtin.c src/liflines/brwsmenu.c
