@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.12\n"
-"POT-Creation-Date: 2002-06-25 20:38-0400\n"
+"POT-Creation-Date: 2002-06-25 21:46-0400\n"
 "PO-Revision-Date: 2002-06-03 19:20+0200\n"
 "Last-Translator: Jens Arvidsson <arvid-jens@algonet.se>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -192,8 +192,7 @@ msgstr "Från vilken familj ska makan/maken/föräldern tas bort?"
 
 #: gedlib/messages.c:70
 msgid "Identify family (enter nothing to identify by individual members)."
-msgstr ""
-"Identifiera familj (lämna blank för att identifiera via familjemedlem)."
+msgstr "Identifiera familj (lämna blank för att identifiera via familjemedlem)."
 
 #: gedlib/messages.c:71
 msgid "Identify a spouse of the family, if known."
@@ -505,9 +504,7 @@ msgstr "Denna familj har redan en maka/kvinnlig förälder."
 
 #: gedlib/messages.c:153
 msgid "This family has both spouses/parents; can't add another."
-msgstr ""
-"I denna familj finns båda makarna/föräldrarna; kan inte lägga till "
-"ytterligare en."
+msgstr "I denna familj finns båda makarna/föräldrarna; kan inte lägga till ytterligare en."
 
 #: gedlib/messages.c:154
 msgid "This family has neither spouse/parent; can't remove."
@@ -524,8 +521,7 @@ msgstr "Välj en familj genom att välja en maka/make/förälder."
 #: gedlib/messages.c:158
 msgid ""
 "Do you want to edit the person again? (Otherwise changes will be discarded.)"
-msgstr ""
-"Vill du redigera personen igen? (Om inte, så kommer ändringar att kastas.)"
+msgstr "Vill du redigera personen igen? (Om inte, så kommer ändringar att kastas.)"
 
 #: gedlib/messages.c:159
 msgid "Do you want to edit the person again?"
@@ -534,8 +530,7 @@ msgstr "Vill du redigera personen igen?"
 #: gedlib/messages.c:160
 msgid ""
 "Do you want to edit the family again? (Otherwise changes will be discarded.)"
-msgstr ""
-"Vill du redigera familjen igen? (Om inte, så kommer ändringar att kastas.)"
+msgstr "Vill du redigera familjen igen? (Om inte, så kommer ändringar att kastas.)"
 
 #: gedlib/messages.c:161
 msgid "Do you want to edit the family again?"
@@ -544,8 +539,7 @@ msgstr "Vill du redigera familjen igen?"
 #: gedlib/messages.c:162
 msgid ""
 "Do you want to edit the source again? (Otherwise changes will be discarded.)"
-msgstr ""
-"Vill du redigera källan igen? (Om inte, så kommer ändringar att kastas.)"
+msgstr "Vill du redigera källan igen? (Om inte, så kommer ändringar att kastas.)"
 
 #: gedlib/messages.c:163
 msgid "Do you want to edit the source again?"
@@ -554,8 +548,7 @@ msgstr "Vill du redigera källan igen?"
 #: gedlib/messages.c:164
 msgid ""
 "Do you want to edit the event again? (Otherwise changes will be discarded.)"
-msgstr ""
-"Vill du redigera händelsen igen? (Om inte, så kommer ändringar att kastas.)"
+msgstr "Vill du redigera händelsen igen? (Om inte, så kommer ändringar att kastas.)"
 
 #: gedlib/messages.c:165
 msgid "Do you want to edit the event again?"
@@ -564,8 +557,7 @@ msgstr "Vill du redigera händelsen igen?"
 #: gedlib/messages.c:166
 msgid ""
 "Do you want to edit the record again? (Otherwise changes will be discarded.)"
-msgstr ""
-"Vill du redigera posten igen? (Om inte, så kommer ändringar att kastas.)"
+msgstr "Vill du redigera posten igen? (Om inte, så kommer ändringar att kastas.)"
 
 #: gedlib/messages.c:167
 msgid "Do you want to edit the record again?"
@@ -968,8 +960,7 @@ msgstr "Rad %d: Familjen som definieras här har ingen nyckel."
 #: gedlib/messages.c:277
 #, c-format
 msgid "Lines %d and %d: Person %s is multiply defined: skipped."
-msgstr ""
-"Raderna %d och %d: Personen %s är definierad mer än en gång: hoppas över."
+msgstr "Raderna %d och %d: Personen %s är definierad mer än en gång: hoppas över."
 
 #: gedlib/messages.c:278
 #, c-format
@@ -1411,16 +1402,12 @@ msgstr "Databasposter (%dI, %dF, %dS, %dE, %dX)"
 #, c-format
 msgid ""
 "The requested window size (%d,%d) is too large for your terminal (%d,%d).\n"
-msgstr ""
-"Den efterfrågade fönsterstorleken (%d,%d) är för stor för din terminal (%d,%"
-"d).\n"
+msgstr "Den efterfrågade fönsterstorleken (%d,%d) är för stor för din terminal (%d,%d).\n"
 
 #: gedlib/messages.c:412
 #, c-format
 msgid "The requested window size (%d,%d) is too small for LifeLines (%d,%d).\n"
-msgstr ""
-"Den efterfrågade fönsterstorleken (%d,%d) är för liten för LifeLines (%d,%"
-"d). \n"
+msgstr "Den efterfrågade fönsterstorleken (%d,%d) är för liten för LifeLines (%d,%d). \n"
 
 #: gedlib/messages.c:415
 #, c-format
@@ -1561,9 +1548,7 @@ msgstr "Välj ur historik"
 #: gedlib/messages.c:460
 msgid ""
 "Cannot combine immutable (-i) or read-only (-r) with read-write (-w) access."
-msgstr ""
-"Kan inte kombinera oföränderlig (-i) eller skrivskyddad (-r) med "
-"skrivåtkomst (-w)."
+msgstr "Kan inte kombinera oföränderlig (-i) eller skrivskyddad (-r) med skrivåtkomst (-w)."
 
 #: gedlib/messages.c:461
 msgid "Cannot combine forceopen (-f) and lock (-l) flags."

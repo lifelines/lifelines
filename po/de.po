@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: LifeLines 3.0.10\n"
-"POT-Creation-Date: 2002-06-25 20:38-0400\n"
+"POT-Creation-Date: 2002-06-25 21:46-0400\n"
 "PO-Revision-Date: 2002-04-01 00:00+0100\n"
 "Last-Translator: Carl Becker <carl@becker-wiesbaden.de>\n"
 "Language-Team: Not a Free Translation Project translation\n"
@@ -74,8 +74,7 @@ msgstr "Datenbank ist schreibgeschützt; Ändern von Einträgen nicht möglich."
 #: gedlib/init.c:544
 #, fuzzy
 msgid "The database is locked (no readwrite access)."
-msgstr ""
-"Datenbank ist schreibgeschützt; Hinzufügen von Einträgen nicht möglich."
+msgstr "Datenbank ist schreibgeschützt; Hinzufügen von Einträgen nicht möglich."
 
 #: gedlib/init.c:547
 msgid "keyfile is corrupt."
@@ -98,8 +97,7 @@ msgstr ""
 msgid ""
 "The database is already opened for read access by %d users.\n"
 "  "
-msgstr ""
-"Datenbank ist schreibgeschützt; Hinzufügen von Einträgen nicht möglich."
+msgstr "Datenbank ist schreibgeschützt; Hinzufügen von Einträgen nicht möglich."
 
 #: gedlib/init.c:564
 msgid "Invalid properties set for new database"
@@ -152,8 +150,7 @@ msgstr ""
 
 #: gedlib/messages.c:59
 msgid "The database is read only; you may not add records."
-msgstr ""
-"Datenbank ist schreibgeschützt; Hinzufügen von Einträgen nicht möglich."
+msgstr "Datenbank ist schreibgeschützt; Hinzufügen von Einträgen nicht möglich."
 
 #: gedlib/messages.c:60
 msgid "The database is read only; you may not change records."
@@ -161,8 +158,7 @@ msgstr "Datenbank ist schreibgeschützt; Ändern von Einträgen nicht möglich."
 
 #: gedlib/messages.c:61
 msgid "The database is read only; you may not merge records."
-msgstr ""
-"Datenbank ist schreibgeschützt; Zusammenführen von Einträgen nicht möglich."
+msgstr "Datenbank ist schreibgeschützt; Zusammenführen von Einträgen nicht möglich."
 
 #: gedlib/messages.c:62
 msgid "The database is read only; you may not remove records."
