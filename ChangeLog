@@ -1,3 +1,31 @@
+2002-12-02 Perry Rapp
+
+	* ChangeLog
+	*NEW tt/CP1250_UTF-8.tt
+	*NEW tt/CP1251_UTF-8.tt
+	*NEW tt/CP1252_UTF-8.tt
+	*NEW tt/CP437_UTF-8.tt
+	*NEW tt/CP850_UTF-8.tt
+	*NEW tt/CP852_UTF-8.tt
+	*NEW tt/ISO-8859-15_UTF-8.tt
+	*NEW tt/ISO-8859-1_UTF-8.tt
+	*NEW tt/ISO-8859-2_UTF-8.tt
+	*NEW tt/ISO-8859-3_UTF-8.tt
+	*NEW tt/ISO-8859-4_UTF-8.tt
+	*NEW tt/UTF-8_CP1250.tt
+	*NEW tt/UTF-8_CP1251.tt
+	*NEW tt/UTF-8_CP1252.tt
+	*NEW tt/UTF-8_CP437.tt
+	*NEW tt/UTF-8_CP850.tt
+	*NEW tt/UTF-8_CP852.tt
+	*NEW tt/UTF-8_ISO-8859-1.tt
+	*NEW tt/UTF-8_ISO-8859-15.tt
+	*NEW tt/UTF-8_ISO-8859-2.tt
+	*NEW tt/UTF-8_ISO-8859-3.tt
+	*NEW tt/UTF-8_ISO-8859-4.tt:
+
+	Adding basic translation tables for common codesets.
+
 2002-12-01 Perry Rapp
 
 	* ChangeLog src/gedlib/charmaps.c src/gedlib/editmap.c
