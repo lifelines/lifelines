@@ -47,15 +47,16 @@ extern BTREE BTR;
  * local function prototypes
  *********************************************/
 
-static INT sxcodeof(int);
+static void cmpsqueeze(STRING, STRING);
 static BOOLEAN exactmatch(STRING, STRING);
-static STRING parts_to_name(STRING*);
+static STRING getsurname_impl(STRING name);
 static void name_to_parts(STRING, STRING*);
 static RKEY name2rkey(STRING);
-static STRING upsurname(STRING);
-static void squeeze(STRING, STRING);
 static STRING nextpiece(STRING);
-static void cmpsqueeze(STRING, STRING);
+static STRING parts_to_name(STRING*);
+static void squeeze(STRING, STRING);
+static INT sxcodeof(int);
+static STRING upsurname(STRING);
 
 /*********************************************
  * local variables
@@ -226,16 +227,13 @@ name_hi (void)
  * getsurname_impl -- Implement getsxsurname & getasurname
  *  returns static buffer, cycling through 3 such
  *  name:    [in] full name to search for surname
- *  soundex: [in] flag if doing soundex
- * The soundex flag is because soundex doesn't test
- *  the first letter, it wants surname to do it
  *
  * TODO: convert to Unicode
  *  But may need to disambiguate name index use
  *  b/c that needs an isletter that is locale-independent
  *====================================================*/
 static STRING
-getsurname_impl (STRING name, BOOLEAN soundex)
+getsurname_impl (STRING name)
 {
 	INT c;
 	static char buffer[3][MAXLINELEN+1];
@@ -243,14 +241,16 @@ getsurname_impl (STRING name, BOOLEAN soundex)
 	STRING p, surname;
 	if (++dex > 2) dex = 0;
 	p = surname = buffer[dex];
+	/* find beginning of surname (look for first NAMESEP) */
 	while ((c = (uchar)*name++) && c != NAMESEP)
 		;
-	if (c == 0) return (STRING) "____";
+	if (c == 0) return 0;
+	/* skip leading whitespace in surname */
 	while (iswhite(c = (uchar)*name++))
 		;
-	if (c == 0 || c == NAMESEP) return (STRING) "____";
-	if (soundex && !isletter(c)) return (STRING) "____";
+	if (c == 0 || c == NAMESEP) return 0;
 	*p++ = c;
+	/* find end of surname (next NAMESEP) */
 	while ((c = (uchar)*name++) && c != NAMESEP)
 		*p++ = c;
 	*p = 0;
@@ -265,7 +265,11 @@ getsurname_impl (STRING name, BOOLEAN soundex)
 STRING
 getsxsurname (STRING name)        /* GEDCOM name */
 {
-	return getsurname_impl(name, TRUE);
+	STRING surnm = getsurname_impl(name);
+	if (!surnm || !isletter(surnm[0]))
+		return (STRING) "____";
+	return surnm;
+
 }
 /*=============================
  * getasurname -- Return a surname 
@@ -276,7 +280,10 @@ getsxsurname (STRING name)        /* GEDCOM name */
 STRING
 getasurname (STRING name)   /* GEDCOM name */
 {
-	return getsurname_impl(name, FALSE);
+	STRING surnm = getsurname_impl(name);
+	if (!surnm)
+		return (STRING) "____";
+	return surnm;
 }
 /*============================================
  * getfinitial -- Return first initial of name

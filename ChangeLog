@@ -1,3 +1,10 @@
+2003-04-13 Perry Rapp
+
+	*
+
+	Move string for missing names, and & soundex-specific code, up from
+	getsurname_impl to its callers.
+
 2003-04-11 Stephen Dum
       * ChangeLog docs/ll-reportmanual.xml
       Add text to include description about main procedure usage
