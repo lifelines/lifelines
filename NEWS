@@ -1,6 +1,11 @@
-LifeLines Source Release, Version 3.0.39
+LifeLines Source Release, Version 3.0.40
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
+
+New features added in 3.0.40
+============================
+- Delete any record menu choice
+- length(SET/TABLE/LIST) report function
 
 Bug fixes in 3.0.40
 ============================
