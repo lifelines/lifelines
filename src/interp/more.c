@@ -43,13 +43,13 @@
 #include "mycurses.h"
 #else
 #include "curses.h"
-STRING strncpy();
+#include <string.h>
 #endif
 
 extern STRING notone, ifone, progname;
 extern NODE format_and_choose_indi();
 
-static INT index();
+static INT ll_index(STRING, STRING, INT);
 static compute_pi();
 BOOLEAN prog_debug = FALSE;
 
@@ -250,7 +250,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 PVALUE __index (node, stab, eflg)
 PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	INT num, index();
+	INT num;
 	PNODE arg = (PNODE) iargs(node);
 	STRING sub, str;
 	PVALUE val3, val2, val1 = eval_and_coerce(PSTRING, arg, stab, eflg);
@@ -273,7 +273,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 		return NULL;
 	}
 	num = (INT) pvalue(val3);
-	set_pvalue(val3, PINT, (WORD) index(str, sub, num));
+	set_pvalue(val3, PINT, (WORD) ll_index(str, sub, num));
 	delete_pvalue(val1);
 	delete_pvalue(val2);
 	return val3;
@@ -317,7 +317,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * index -- Find nth occurrence of sub in str (uses KMP)
  *====================================================*/
 static char pi[MAXLINELEN];
-static INT index (str, sub, num)
+static INT ll_index (str, sub, num)
 STRING str, sub;
 INT num;
 {
