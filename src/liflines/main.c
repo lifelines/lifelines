@@ -93,6 +93,7 @@ BOOLEAN alldone   = FALSE;	/* completion flag */
 BOOLEAN progrunning = FALSE;	/* program is running */
 BOOLEAN traceprogram = FALSE;	/* trace program */
 BOOLEAN traditional = TRUE;	/* use traditional family rules */
+BOOLEAN showusage = FALSE;	/* show usage */
 STRING btreepath;		/* database path given by user */
 STRING readpath;		/* database path used to open */
 STRING version = (STRING) "3.0.6-dev";
@@ -126,15 +127,10 @@ main (INT argc,
 	setlocale(LC_ALL, "");
 #endif
 
-	for (c=1; c<argc; c++) {
-		if (strcmp(argv[c], "-u")) {
-			sscanf(argv[c]+2, "%d,%d", &winx, &winy);
-		}
-	}
-	initscr();
-	noecho();
-	init_screen();
+	/* OS Stuff */
 	set_signals();
+
+	/* Parse Command-Line Arguments */
 	opterr = 0;	/* turn off getopt's error message */
 	while ((c = getopt(argc, argv, "akrwfmntc:Fu:")) != -1) {
 		switch (c) {
@@ -195,23 +191,30 @@ main (INT argc,
 			traceprogram = TRUE;
 			break;
 		case 'u':
-			/* read this earlier before initscr */
+			sscanf(optarg, "%d,%d", &winx, &winy);
 			break;
 		case '?':
-			llwprintf(usage);
-			sleep(5);
-			exit_it(1);
+			showusage = TRUE;
+			break;
 		}
 	}
+
+	/* Initialize Curses UI */
+	initscr();
+	noecho();
+	init_screen();
+
+	/* Validate Command-Line Arguments */
 	if (readonly && writeable) {
 		llwprintf("Select at most one of -r and -w options.");
 		exit_it(1);
 	}
 	c = argc - optind;
 	if (c > 1) {
-		llwprintf(usage);
-		exit_it(1);
+		showusage = TRUE;
 	}
+
+	/* Open Database */
 	if (c <= 0) {
 		btreepath = (STRING) ask_for_lldb(idldir, "enter path: ", lldatabases);
 		if (!btreepath || *btreepath == 0) {
@@ -222,8 +225,7 @@ main (INT argc,
 	} else
 		btreepath = (unsigned char *)argv[optind];
 	if (!btreepath || *btreepath == 0) {
-		llwprintf(usage);
-		exit_it(1);
+		showusage = TRUE;
 	}
 	lldatabases = (STRING) getenv("LLDATABASES");
 	if (!lldatabases || *lldatabases == 0) lldatabases = (STRING) ".";
@@ -293,10 +295,21 @@ main (INT argc,
 		close_lifelines();
 		exit_it(1);
 	}
+
+	/* Show Usage */
+	if (showusage) {
+		llwprintf(usage);
+		sleep(5);
+		exit_it(1);
+	}
+
+	/* Start Program */
 	init_lifelines();
 	while (!alldone)
 		main_menu();
 	close_lifelines();
+
+	/* Exit */
 	exit_it(0);
 	return(0); 	/* just to keep compiler happy */
 }
@@ -323,9 +336,6 @@ exit_it (INT code)
 {
 	endwin();
 	sleep(1);
-#ifndef WIN32
-	system("clear");
-#endif
 	exit(code);
 }
 /*===================================================
