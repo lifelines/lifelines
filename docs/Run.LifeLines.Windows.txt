@@ -35,11 +35,7 @@ newer version of the User's Manual at this time -
 of course, if one is available, by all means 
 browse to it!)
 
-http://genealogy.org/~ttw/lines/userguide/qref.html
-
-(You are at the Main Menu section now, but you
-would be well-advised to read the previous
-Introduction to GEDCOM section as well.)
+http://lifelines.sourceforge.net/manual302/index.html
 
 4)
 When adding a new record (eg, a new person to the 
@@ -48,7 +44,7 @@ Enter your information in Notepad -- the following
 page of the online manual discusses entering your
 first person:
 
-http://genealogy.org/~ttw/lines/userguide/first.html
+http://lifelines.sourceforge.net/manual302/userguide/first.html
 
 After you have entered the information into Notepad,
 save the document by choose Save from the File menu,

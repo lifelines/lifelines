@@ -1053,7 +1053,7 @@ SCREEN EDITORS AND ENVIRONMENT VARIABLES
 	gather the data.The default screen editor for
 	<APPLICATION>LifeLines</APPLICATION> is
 	<APPLICATION>vi</APPLICATION>. (The DOS/Windows version defaults
-	instead of notepad.exe.) This can be overridden by the
+	instead to notepad.exe.) This can be overridden by the
 	<ENVAR>ED</ENVAR>, <ENVAR>EDITOR</ENVAR> or
 	<ENVAR>LLEDITOR</ENVAR> environment variables. For example, if
 	you prefer the emacs screen editor, and if you use a bourne-compatible
@@ -1069,13 +1069,14 @@ SCREEN EDITORS AND ENVIRONMENT VARIABLES
 
 <SIMPARA>
 
-	There are four other, <APPLICATION>LifeLines</APPLICATION>
+	There are five other, <APPLICATION>LifeLines</APPLICATION>
 	specific environment variables. They are
 	<ENVAR>LLDATABASES</ENVAR>, <ENVAR>LLARCHIVES</ENVAR>,
-	<ENVAR>LLPROGRAMS</ENVAR> and
-	<ENVAR>LLREPORTS</ENVAR>. <ENVAR>LLDATABASES</ENVAR> and
+	<ENVAR>LLPROGRAMS</ENVAR>, <ENVAR>LLREPORTS</ENVAR>,
+	and <ENVAR>LLNEWDBDIR</ENVAR>. <ENVAR>LLDATABASES</ENVAR> and
 	<ENVAR>LLPROGRAMS</ENVAR> are <ACRONYM>UNIX</ACRONYM> path
-	list variables.
+	list variables. (<ENVAR>LLNEWDBDIR</ENVAR> was added in version
+	3.0.6.)
 
 </SIMPARA>
 
@@ -1093,7 +1094,7 @@ SCREEN EDITORS AND ENVIRONMENT VARIABLES
 
 	<ENVAR>LLDATABASES</ENVAR> can be set to a list of directories
 	that hold <APPLICATION>LifeLines</APPLICATION> databases. When
-	you execute the <APPLICATION>LifeLines</APPLICATION> programs
+	you execute the <APPLICATION>LifeLines</APPLICATION> program,
 	these directories will be searched in turn for the database
 	mentioned on the command line. For example,
 	<USERINPUT><ENVAR>LLDATABASES</ENVAR>=<REPLACEABLE>.:/home/ttw4/LifeLines/Databases</REPLACEABLE></USERINPUT>
@@ -1141,6 +1142,16 @@ SCREEN EDITORS AND ENVIRONMENT VARIABLES
 
 <SIMPARA>
 
+	<ENVAR>LLNEWDBDIR</ENVAR> may be set to specific a single 
+	directory - new databases without paths will be created in this
+	location if given. This is of course a convenience for users 
+	who generally put all their databases under a single common
+	directory.
+
+</SIMPARA>
+
+<SIMPARA>
+
 	You are not required to use these environment variables; when
 	a variable is not defined,
 	<APPLICATION>LifeLines</APPLICATION> uses the current
@@ -1150,6 +1161,14 @@ SCREEN EDITORS AND ENVIRONMENT VARIABLES
 
 </SIMPARA>
 
+<SIMPARA>
+
+	With version 3.0.6 or later, you may use the configuration file in
+	lieu of environment variables. This is especially oriented towards
+	users on MS-Windows systems, on which environment variables are not
+	as common a configuration technique.
+
+</SIMPARA>
 
 
 <SIMPARA>
@@ -1157,7 +1176,7 @@ SCREEN EDITORS AND ENVIRONMENT VARIABLES
 	<APPLICATION>LifeLines</APPLICATION> uses the curses library
 	for terminal independent I/O. This requires you to specify
 	your terminal type with the <ENVAR>TERM</ENVAR> environment
-	variable.
+	variable. (This is not relevant in the DOS/Windows version.)
 
 </SIMPARA>
 
@@ -1193,20 +1212,15 @@ BASICS OF BROWSING
 
 
 <SIMPARA>
-
 	The browsing screens also allow you to add new persons and
 	families to the database, add spouses to families, add
 	children to families, swap the order of spouses and children,
 	merge persons and merge families, and perform other
 	operations. The browsing screens also lets you remove spouses
 	from families and remove children from families.
-
 </SIMPARA>
 
-
-
 <SIMPARA>
-
 	There are six browsing screens. The person and family screens 
 	concentrate on a single person and family, respectively. The
 	list screen allows you to browse through a list of persons. The
@@ -1583,7 +1597,7 @@ The commands perform a wide variety of functions.
 	record. <APPLICATION>LifeLines</APPLICATION> puts the record
 	in a file, and then runs a screen editor so you can edit the
 	record. When you return from the editor,
-	<APPLICATION>LifeLines</APPLICATION> asks you to confirmany
+	<APPLICATION>LifeLines</APPLICATION> asks you to confirm any
 	changes; the person is changed only if you answer yes.
 
 </SIMPARA>
@@ -4280,10 +4294,20 @@ the <TYPE>else</TYPE> clause are executed. There are two forms of <TYPE>conditio
 single <TYPE>expression</TYPE>, it is simply evaluated. If the <TYPE>conditional</TYPE> is a <TYPE>variable</TYPE> followed by an <TYPE>expression</TYPE>, the
 <TYPE>expression</TYPE> is evaluated and its value is assigned to the variable.
 
-
 </SIMPARA>
 
+<SIMPARA>
 
+Note that <TYPE>if</TYPE> treats null strings as false, but empty strings as true. This has the benefit that
+
+<PROGRAMLISTING>
+if(birth(indi))
+</PROGRAMLIST>
+
+will return true if there is a BIRT record, even if it is empty, but will return false if there is no BIRT record
+at all.
+
+</SIMPARA>
 
 <SIMPARA>
 
@@ -6733,22 +6757,27 @@ compare strings for inequality
 
 <SIMPARA>
 
-These functions provide string handling. Many of them use an approach to memory management chosen
-to minimize memory use. A function using this approach constructs its output string in its own string
-buffer, reusing that buffer each time it is called. When a function using this approach returns a string
-value it returns its buffer. In consequence the strings returned by these functions must be either used or
-saved before the function is called again.
-
+These functions provide string handling. Prior to version 3.0.6, many of them used an approach to memory management
+chosen for absolute minimal memory footprint. A function using this approach constructed its output string in its own string
+buffer, reusing that buffer each time it was called. When a function using this approach returned a string
+value it returned its buffer. In consequence the strings returned by these functions were to be either used or
+saved before the function was called again.
 
 </SIMPARA>
 
+<SIMPARA>
+
+By the release of version 3.0.6, all string values are local copies, and the <FUNCTION>save</FUNCTION> and 
+<FUNCTION>strsave</FUNCTION> functions should be entirely unnecessary.
+
+</SIMPARA>
 
 
 <SIMPARA>
 
 <FUNCTION>Lower</FUNCTION> and <FUNCTION>upper</FUNCTION> convert the letters in their arguments to lower or upper case, respectively.
 <FUNCTION>Capitalize</FUNCTION> converts the first character of the argument, if it is a letter, to upper case. <FUNCTION>Lower</FUNCTION> and
-<FUNCTION>upper</FUNCTION> use the buffer return method; <FUNCTION>capitalize</FUNCTION> operates on and returns its argument.
+<FUNCTION>upper</FUNCTION> historically used the buffer return method; <FUNCTION>capitalize</FUNCTION> operates on and returns its argument.
 
 
 </SIMPARA>
@@ -6761,7 +6790,7 @@ saved before the function is called again.
 length or shorter the string is not changed. <FUNCTION>Rjustify</FUNCTION> right justifies a string into another string of the
 length specified by the second parameter. If the original string is shorter than the justified string,
 blanks are inserted to the left of the original string; if the string is longer than the justified string, the
-original string is truncated on the right. <FUNCTION>Trim</FUNCTION> uses the buffer return method; <FUNCTION>rjustify</FUNCTION> creates and returns
+original string is truncated on the right. <FUNCTION>Trim</FUNCTION> historically used the buffer return method; <FUNCTION>rjustify</FUNCTION> creates and returns
 a new string.
 
 
@@ -6774,7 +6803,7 @@ a new string.
 <FUNCTION>Save</FUNCTION> creates a copy of the argument string and returns it. This function is required because built-in
 functions that return strings use the buffer return method; if a string is to be used repeatedly or long after
 it is returned from a function, it should first be saved by using the <FUNCTION>save</FUNCTION> function. <FUNCTION>Strsave</FUNCTION> is the same
-function as <FUNCTION>save</FUNCTION>.
+function as <FUNCTION>save</FUNCTION>. With version 3.0.6 or later, this should be unnecessary.
 
 
 </SIMPARA>
@@ -6804,7 +6833,8 @@ a single, newly allocated string, which is returned.
 <SIMPARA>
 
 <FUNCTION>Substring</FUNCTION> returns a substring of the first argument string. The second and third arguments are the
-indices of the first and last characters in the argument string to use to form the substring. The indexes are relative one. <FUNCTION>Substring</FUNCTION> uses the buffer return method.
+indices of the first and last characters in the argument string to use to form the substring. The indexes are relative one.
+<FUNCTION>Substring</FUNCTION> historically used the buffer return method.
 
 </SIMPARA>
 
@@ -6857,6 +6887,8 @@ in the string.
 <FUNCTION>Strcmp</FUNCTION> compares two strings and returns an integer that is less than zero, equal to zero, or greater than
 zero, if, respectively, the first string is lexicographically less than, equal to, or greater than the second
 string. <FUNCTION>Eqstr</FUNCTION> and <FUNCTION>nestr</FUNCTION> return whether two strings are equal or not equal, respectively.
+<FUNCTION>Strcmp</FUNCTION>, <FUNCTION>Eqstr</FUNCTION>, and <FUNCTION>nestr</FUNCTION> all treat null strings as empty strings,
+which is to say they pretend that a null string is actually "". This means that all null and empty strings compare as equal.
 
 </SIMPARA>
 
