@@ -9,12 +9,7 @@
  * braces style than the rest of LifeLines. Please respect.
  */
 
-#include <ctype.h>
-#include <stdio.h>
-#include <string.h>
-#include <assert.h>
-#include <stdlib.h>
-
+#include "standard.h"
 #include "llstdlib.h"
 #include "table.h"
 #include "gedcom.h"
@@ -314,7 +309,7 @@ make_program_list(PROGRAM_INFO head,
     return 0;
 
   newlist = stdalloc(sizeof(char*)*len);
-  assert(NULL != newlist);
+  ASSERT(NULL != newlist);
   cur = head->next;
   i = 0;
   if (leader)
