@@ -45,6 +45,10 @@
 	Rename delref_record to release_record.
 	Initialize vtable of record objects.
 
+	* ChangeLog src/gedlib/brwslist.c src/liflines/lbrowse.c
+
+	Make blel into an object.
+
 2005-02-02 Perry Rapp
 
 	* ChangeLog src/gedlib/gedcomi.h src/gedlib/keytonod.c

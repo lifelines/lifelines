@@ -32,14 +32,54 @@
 #include "translat.h"
 #include "gedcom.h"
 #include "indiseq.h"
+#include "vtable.h"
 
-LIST browse_lists;
+/*********************************************
+ * global/exported variables
+ *********************************************/
+
 INDISEQ current_seq = NULL;
 
-typedef struct {
+/*********************************************
+ * local types
+ *********************************************/
+
+struct tag_blel {
+	struct tag_vtable *vtable; /* generic object */
+	INT refcnt; /* ref-countable object */
 	STRING bl_name;
 	INDISEQ bl_seq;
-} *BLEL, BLEL_struct;
+};
+typedef struct tag_blel *BLEL;
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+static void blel_destructor(VTABLE *obj);
+static BLEL create_new_blel(void);
+static void destroy_blel(BLEL blel);
+
+/*********************************************
+ * local variables
+ *********************************************/
+
+static struct tag_vtable vtable_for_blel = {
+	VTABLE_MAGIC
+	, "blel"
+	, &blel_destructor
+	, &refcountable_isref
+	, &refcountable_addref
+	, &refcountable_release
+	, 0 /* copy_fnc */
+	, &generic_get_type_name
+};
+static LIST browse_lists=0;
+
+/*********************************************
+ * local & exported function definitions
+ * body of module
+ *********************************************/
 
 /*=====================================================
  *  init_browse_lists -- Initialize named browse lists.
@@ -50,11 +90,22 @@ init_browse_lists (void)
 	browse_lists = create_list();
 }
 /*===========================================
+ *  create_new_blel -- Create browse list entry
+ *=========================================*/
+static BLEL
+create_new_blel (void)
+{
+	BLEL blel = (BLEL) stdalloc(sizeof(*blel));
+	memset(blel, 0, sizeof(*blel));
+	blel->vtable = &vtable_for_blel;
+	blel->refcnt = 1;
+	return blel;
+}
+/*===========================================
  *  add_browse_list -- Add named browse list.
  *=========================================*/
 void
-add_browse_list (STRING name,
-                 INDISEQ seq)
+add_browse_list (STRING name, INDISEQ seq)
 {
 	BLEL blel;
 	BOOLEAN done = FALSE;
@@ -79,7 +130,7 @@ add_browse_list (STRING name,
 			return;
 		}
 	ENDLIST
- 	blel = (BLEL) stdalloc(sizeof(BLEL_struct));
+	blel = create_new_blel();
 	blel->bl_name = name;
 	blel->bl_seq = seq;
 	enqueue_list(browse_lists, blel);
@@ -191,4 +242,26 @@ rename_from_browse_lists (STRING key)
 		seq = blel->bl_seq;
 		rename_indiseq(seq, key);
 	ENDLIST
+}
+/*=================================================
+ * blel_destructor -- destructor for blel (browse list element)
+ *  (destructor entry in vtable)
+ *===============================================*/
+static void
+blel_destructor (VTABLE *obj)
+{
+	BLEL blel = (BLEL)obj;
+	ASSERT(blel->vtable == &vtable_for_blel);
+	stdfree(blel);
+}
+/*=================================================
+ * destroy_blel -- destroy and free blel (browse list element)
+ * All blels are destroyed in this function
+ *===============================================*/
+static void
+destroy_blel (BLEL blel)
+{
+	stdfree(blel->bl_name);
+	remove_indiseq(blel->bl_seq);	
+	stdfree(blel);
 }

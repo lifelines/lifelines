@@ -266,6 +266,7 @@ name_the_list (INDISEQ seq)
 		message(_(qSlstnon));
 		return;
 	}
+	/* TODO: Should just let the browse list addref the indiseq */
 	add_browse_list(strsave(name), copy_indiseq(seq));
 	msg_info(_(qSlstnam), name);
 }
