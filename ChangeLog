@@ -1,3 +1,10 @@
+2005-02-03 Perry Rapp
+
+	* ChangeLog src/interp/alloc.c src/interp/interp.c
+	src/stdlib/table.c
+
+	Change rptinfo->functab from old table to generic table.
+
 2005-02-02 Perry Rapp
 
 	* ChangeLog src/gedlib/gedcomi.h src/gedlib/keytonod.c

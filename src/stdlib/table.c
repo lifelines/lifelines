@@ -402,7 +402,7 @@ table_insert_ptr (TABLE tab, CNSTRING key, const VPTR value)
 		new_table_entry_impl(tab, key, &gen);
 		clear_generic(&gen);
 	} else {
-		/* Only new-style tables should call table_insert_string */
+		/* Only new-style tables should call table_insert_ptr */
 		ASSERT(!is_generic_null(&entry->generic));
 		/* update existing value */
 		set_generic_vptr(&entry->generic, value);
@@ -439,7 +439,7 @@ void
 replace_table_str (TABLE tab, STRING key, STRING str, INT whattofree)
 {
 	UNION uval;
-	ASSERT(tab->whattofree != -2);
+	ASSERT(tab->whattofree != -2); /* not implemented for generic tables */
 	uval.w = str;
 	if (tab->valtype == TB_NULL)
 		tab->valtype = TB_STR;
@@ -888,6 +888,10 @@ void
 destroy_table (TABLE tab)
 {
 	if (!tab) return;
+
+	/* should not be called for a shared table */
+	ASSERT(tab->refcnt==1 || tab->refcnt==0);
+
 	/* to use this (and I'd prefer all code to use this)
 	the whattofree must have been set, so I plan to revise
 	all code to set it at creation time */

@@ -2183,7 +2183,7 @@ pa_handle_func (PACTX pactx, CNSTRING procname, PNODE nd_args, PNODE nd_body)
 			, procname, iline(procnode)+1, iline(nd_body)+1, pactx->fullpath);
 	}
 	procnode = fdef_node(pactx, procname, nd_args, nd_body);
-	insert_table_ptr(rptinfo->functab, strsave(procname), (VPTR)procnode);
+	table_insert_ptr(rptinfo->functab, procname, procnode);
 
 	/* add to global proc table */
 	list = (LIST)valueof_ptr(gfunctab, procname);
