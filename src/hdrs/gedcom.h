@@ -671,7 +671,7 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 	num = 0;\
 	while (__node) {\
 		__key = rmvat(nval(__node));\
-		if (!__key || !(fam = key_to_fam(__key))) {\
+		if (!__key || !(fam = qkey_to_fam(__key))) {\
 			++num;\
 			__node = nsibling(__node);\
 			continue;\

@@ -4,6 +4,10 @@
 
 	Alter occurrences of TTDIR to TTPATH.
 
+        * ChangeLog src/hdrs/gedcom.h
+
+        Make FORSPOUSES graceful with missing keys.
+
 2003-11-03 Matt Emmerton
 
 	* ChangeLog reports/ps-pedigree.ll reports/ps-pedigree.ps
