@@ -1,7 +1,7 @@
 
 LifeLines Documentation
 
-LifeLines Version 3.0.28
+LifeLines Version 3.0.30
 
 Thomas T. Wetmore , IV
      _____________________________________________________________
@@ -446,11 +446,11 @@ Please choose an operation:
    a Add information to the database
    d Delete information from the database
    p Pick a report from list and run
-   r Generate reports from the database
+   r Generate report by entering report name
    t Modify character translation tables
    u Miscellaneous utilities
    x Handle source, event and other records
-   q Quit and return to UNIX
+   q Quit program
 
    Select an operation by striking the proper selection letter.
 
@@ -646,7 +646,7 @@ SCREEN EDITORS AND ENVIRONMENT VARIABLES
    LLDATABASES=.:/home/ttw4/LifeLines/Databases     indicates    that
    databases  should  be searched for in the current directory first,
    and    if    not    found    there,    then   searched   for   in:
-   /usr/ttw4/LifeLines/Databases
+   /home/ttw4/LifeLines/Databases
 
    Each  LifeLines  database  is  implemented  as  a  directory  with
    specific  contents.  The  LLDATABASES  variable should be set to a
@@ -701,10 +701,11 @@ BASICS OF BROWSING
 
    There  are  six  browsing  screens.  The person and family screens
    concentrate  on a single person and family, respectively. The list
-   screen  allows you to browse through a list of persons. The person
-   tandem  screen  shows  two  persons at once, and the family tandem
-   screen  shows  two  families at once. The auxiliary screen is used
-   browsing any other type of records (e.g., events, sources, notes).
+   screen  allows  you  to  browse through a list of persons. The two
+   person browse screen shows two persons at once, and the two family
+   browse  screen shows two families at once. The auxiliary screen is
+   used  browsing  any  other type of records (e.g., events, sources,
+   notes).
 
    Each  browsing  screen  has  multiple  view  modes.  The view mode
    affects  how  the information is displayed on the screen, but does
@@ -722,11 +723,12 @@ BASICS OF BROWSING
    descendant  tree.  The  depth  of  the pedigree trees shown may be
    adjusted via menu commands.
 
-   The tandem person screen has the same modes as the person screen.
+   The  two  person  browse  screen  has the same modes as the person
+   screen.
 
-   The  family screen and tandem family screen alike have normal mode
-   (showing  a  summary  of vitals), GEDCOM mode, and expanded GEDCOM
-   mode.
+   The  two  family browse screen and tandem family screen alike have
+   normal  mode  (showing  a  summary  of  vitals),  GEDCOM mode, and
+   expanded GEDCOM mode.
 
    The  auxiliary  screen  has  only  GEDCOM mode and expanded GEDCOM
    mode. (The list screen has no view modes at present).
@@ -780,8 +782,8 @@ Enter name, key, refn or list:
    match.  There  are three possibilities: no one matches; one person
    matches;  or  more  than  one  person  matches.  In the first case
    LifeLines writes:
-There is
-     no one in the database with that name.
+There is no
+     one in the database with that name or key.
 
    and leaves you in the main menu.
 
@@ -813,7 +815,7 @@ ZIP IDENTIFYING A NEW PERSON
    command.  If  no  one  matches,  LifeLines returns to the previous
    browsing  mode.  If  the  name  matches  persons  in  the database
    LifeLines displays something like:
-Please choose from among these persons.
+Please choose from among these records.
   >Thomas Trask Wetmore, b. 1826, N.B. (42)
    Thomas Trask Wetmore IV, b. 1949, Conn. (1)
    Thomas Trask Wetmore III, b. 1925, Conn. (6)
@@ -831,11 +833,11 @@ Commands: j Move down k Move up i Select q Quit
    command and LifeLines asks whether you want to enter another name.
 
    With  version  3.0.15, lists may also be navigated with the up and
-   down  arrows,  PageUp  and  PageDown  keys,  Home  and  End  keys.
-   Shift-PageUp  and Shift-PageDown move more than one page at a time
-   in  a  given  direction.  The  keyboard equivalents are j=UpArrow,
-   k=DownArrow,  u=PageUp, d=PageDown, ^=Home, $=End, U=Shift-PageUp,
-   D=Shift-PageDown, i=Enter.
+   down  arrows, PageUp and PageDown keys, Home and End keys, and the
+   Enter key. Shift-PageUp and Shift-PageDown move more than one page
+   at  a  time  in  a  given  direction. The keyboard equivalents are
+   j=UpArrow,   k=DownArrow,  u=PageUp,  d=PageDown,  ^=Home,  $=End,
+   U=Shift-PageUp, D=Shift-PageDown, i=Enter.
 
    When  LifeLines creates a list of names for you to select from, it
    tries  to  add extra information to the name; this helps determine
@@ -876,7 +878,7 @@ person: Thomas Trask WETMORE Sr (25)
   spouse: Arleen M KEENEY, m. 1914, Conn. (75)
 _______________________________________________________________________
 Please choose an operation:             (pg 1/3)
-  e  Edit the person       g  Browse to family    p  Show pedigree
+  e  Edit the person       g  Browse to family    p  Pedigree mode
   f  Browse to father      u  Browse to parents   n  Create new person
   m  Browse to mother      b  Browse to persons   a  Create new family
   s  Browse to spouse/s    h  Add as spouse       x  Swap two families
@@ -993,7 +995,7 @@ LifeLines -- Person Browse Screen
           the  other  spouse  in  the  new family. If this is not the
           case, LifeLines asks you to identify the other spouse.
 
-   p Show pedigree.
+   pPedigree mode.
           Change to pedigree browse mode. The person becomes the root
           person in the pedigree display.
 
@@ -1002,7 +1004,7 @@ LifeLines -- Person Browse Screen
           person belongs to as a spouse or parent. LifeLines asks you
           to identify the two families and then swaps them.
 
-   t Enter tandem mode.
+   tt Enter tandem mode.
           Change  to  the  tandem person browse mode. LifeLines first
           asks you to identify the second person.
 
@@ -1065,9 +1067,9 @@ LifeLines -- List Browse Screen
 
           With  version  3.0.15, lists may also be navigated with the
           up  and down arrows, PageUp and PageDown keys, Home and End
-          keys.  Shift-PageUp  and  Shift-PageDown move more than one
-          page   at  a  time  in  a  given  direction.  The  keyboard
-          equivalents    are    j=UpArrow,   k=DownArrow,   u=PageUp,
+          keys,  and  the  Enter key. Shift-PageUp and Shift-PageDown
+          move more than one page at a time in a given direction. The
+          keyboard  equivalents are j=UpArrow, k=DownArrow, u=PageUp,
           d=PageDown,       ^=Home,       $=End,      U=Shift-PageUp,
           D=Shift-PageDown, i=Enter.
 
@@ -1800,7 +1802,7 @@ IMPORT ERRORS
 
    Family %s has an incorrect key.
           Each  FAM record must have an XREF value beginning with the
-          letter F. (The XREF is the letters between "0" and "INDI".)
+          letter F. (The XREF is the letters between "0" and "FAM".)
 
    Person defined here has no name.
           Each  INDI  record  must  have  at  least  one level 1 NAME
@@ -1817,7 +1819,7 @@ IMPORT ERRORS
 
    The family defined here has no key.
           Each  FAM  record must have an XREF value. (The XREF is the
-          letters between "0" and "INDI".)
+          letters between "0" and "FAM".)
 
    The person defined here has no key: skipped.
           Each  INDI record must have an XREF value. (The XREF is the
@@ -2078,9 +2080,9 @@ enter key or refn:
           itself for such records. The 1 REFN line allows you to give
           this  record  a  symbolic name you can use when you want to
           refer  to  it  from other records. See the section on using
-          REFN  values.  You  may  adjust  the other template via the
-          OTHRREC  user option (either at the database level, via the
-          user options, or globally, via the configuration file).
+          REFN values. You may adjust the other template via the OTHR
+          user  option  (either  at  the database level, via the user
+          options, or globally, via the configuration file).
 
           The add other record command in the x menu is equivalent to
           the  %o  command  available  in the person or family browse

@@ -37,7 +37,7 @@ CLASS="subtitle"
 ><TT
 CLASS="application"
 >LifeLines</TT
-> Version 3.0.28</H2
+> Version 3.0.30</H2
 ><H3
 CLASS="author"
 ><A
@@ -2006,11 +2006,11 @@ CLASS="screen"
    a Add information to the database
    d Delete information from the database
    p Pick a report from list and run
-   r Generate reports from the database
+   r Generate report by entering report name
    t Modify character translation tables
    u Miscellaneous utilities
    x Handle source, event and other records
-   q Quit and return to UNIX
+   q Quit program
 </PRE
 ></TD
 ></TR
@@ -2588,7 +2588,7 @@ CLASS="replaceable"
      directory first, and if not found there, then searched for in:
      <TT
 CLASS="filename"
->/usr/ttw4/LifeLines/Databases</TT
+>/home/ttw4/LifeLines/Databases</TT
 >
 
 </P
@@ -2731,10 +2731,10 @@ CLASS="application"
 >&#13;     There are six browsing screens. The person and family screens
      concentrate on a single person and family, respectively. The
      list screen allows you to browse through a list of persons. The
-     person tandem screen shows two persons at once, and the family
-     tandem screen shows two families at once. The auxiliary screen
-     is used browsing any other type of records (e.g., events,
-     sources, notes).
+     two person browse screen shows two persons at once, and the
+     two family browse screen shows two families at once. The
+     auxiliary screen is used browsing any other type of records
+     (e.g., events, sources, notes).
 
 </P
 ><P
@@ -2756,12 +2756,13 @@ CLASS="application"
      adjusted via menu commands.
 </P
 ><P
->&#13;     The tandem person screen has the same modes as the person screen.
+>&#13;     The two person browse screen has the same modes as the person
+     screen.
 </P
 ><P
->&#13;     The family screen and tandem family screen alike have normal mode
-     (showing a summary of vitals), GEDCOM mode, and expanded GEDCOM
-     mode.
+>&#13;     The two family browse screen and tandem family screen alike have
+     normal mode (showing a summary of vitals), GEDCOM mode, and
+     expanded GEDCOM mode.
 </P
 ><P
 >&#13;     The auxiliary screen has only GEDCOM mode and expanded GEDCOM mode.
@@ -2902,13 +2903,13 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="screen"
->There is
-     no one in the database with that name.</PRE
+>There is no
+     one in the database with that name or key.</PRE
 ></TD
 ></TR
 ></TABLE
-> and leaves you
-     in the main menu.
+> and leaves
+     you in the main menu.
 
 </P
 ><P
@@ -2994,7 +2995,7 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="screen"
->&#13;Please choose from among these persons.
+>&#13;Please choose from among these records.
   &#62;Thomas Trask Wetmore, b. 1826, N.B. (42)
    Thomas Trask Wetmore IV, b. 1949, Conn. (1)
    Thomas Trask Wetmore III, b. 1925, Conn. (6)
@@ -3029,9 +3030,9 @@ CLASS="application"
 ><P
 >&#13;
      With version 3.0.15, lists may also be navigated with the up
-     and down arrows, PageUp and PageDown keys, Home and End keys.
-     Shift-PageUp and Shift-PageDown move more than one page at a
-     time in a given direction. The keyboard equivalents are
+     and down arrows, PageUp and PageDown keys, Home and End keys, and
+     the Enter key. Shift-PageUp and Shift-PageDown move more than one
+     page at a time in a given direction. The keyboard equivalents are
      j=UpArrow, k=DownArrow, u=PageUp, d=PageDown, ^=Home, $=End,
      U=Shift-PageUp, D=Shift-PageDown, i=Enter.
 
@@ -3118,7 +3119,7 @@ CLASS="screen"
   spouse: Arleen M KEENEY, m. 1914, Conn. (75)
 _______________________________________________________________________
 Please choose an operation:             (pg 1/3)
-  e  Edit the person       g  Browse to family    p  Show pedigree
+  e  Edit the person       g  Browse to family    p  Pedigree mode
   f  Browse to father      u  Browse to parents   n  Create new person
   m  Browse to mother      b  Browse to persons   a  Create new family
   s  Browse to spouse/s    h  Add as spouse       x  Swap two families
@@ -3567,9 +3568,9 @@ CLASS="application"
 ><B
 CLASS="keycap"
 >p</B
-> <SPAN
+><SPAN
 CLASS="action"
->Show pedigree.</SPAN
+>Pedigree mode.</SPAN
 ></B
 ></DT
 ><DD
@@ -3607,7 +3608,7 @@ CLASS="application"
 ><B
 ><B
 CLASS="keycap"
->t</B
+>tt</B
 > <SPAN
 CLASS="action"
 >Enter tandem mode.</SPAN
@@ -3804,9 +3805,9 @@ CLASS="keycap"
 ><P
 >&#13;
      With version 3.0.15, lists may also be navigated with the up
-     and down arrows, PageUp and PageDown keys, Home and End keys.
-     Shift-PageUp and Shift-PageDown move more than one page at a
-     time in a given direction. The keyboard equivalents are
+     and down arrows, PageUp and PageDown keys, Home and End keys, and
+     the Enter key. Shift-PageUp and Shift-PageDown move more than one
+     page at a time in a given direction. The keyboard equivalents are
      j=UpArrow, k=DownArrow, u=PageUp, d=PageDown, ^=Home, $=End,
      U=Shift-PageUp, D=Shift-PageDown, i=Enter.
 
@@ -6249,7 +6250,7 @@ CLASS="glosslist"
 ><P
 >&#13;
      Each FAM record must have an XREF value beginning with the letter F.
-     (The XREF is the letters between "0" and "INDI".)
+     (The XREF is the letters between "0" and "FAM".)
 
 </P
 ></DD
@@ -6297,7 +6298,7 @@ CLASS="glosslist"
 ><P
 >&#13;
      Each FAM record must have an XREF value.
-     (The XREF is the letters between "0" and "INDI".)
+     (The XREF is the letters between "0" and "FAM".)
 
 </P
 ></DD
@@ -7101,9 +7102,9 @@ CLASS="structfield"
 >REFN</I
 ></TT
 > values. You may adjust the
-     other template via the OTHRREC user option (either at the
-     database level, via the user options, or globally, via the
-     configuration file).
+     other template via the OTHR user option (either at the database
+     level, via the user options, or globally, via the configuration
+     file).
 
 </P
 ><P
