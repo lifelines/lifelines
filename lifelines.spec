@@ -2,6 +2,7 @@
 # lifelines.spec - RPM configuration file for Lifelines
 #
 # To generate RPMs, place the tar.gz in /usr/src/packages/SOURCES/ and
+# (or /usr/src/redhat/SOURCES as appropriate)
 # then "rpm -ba lifelines.spec"
 #
 
