@@ -1,5 +1,7 @@
 # Makefile for the LifeLines report interpreter subsystem
 
+AUTOMAKE_OPTIONS = no-dependencies
+
 noinst_LIBRARIES = libinterp.a
 
 libinterp_a_SOURCES = alloc.c builtin.c date.c eval.c functab.c interp.c \
