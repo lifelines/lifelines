@@ -1,3 +1,9 @@
+2002-06-16 Perry Rapp <puddle@users.sourceforge.net>
+
+	Document Windows shim options in config files.
+	Move Windows shim code out of main init_global function.
+	Handful of i18n's in builtin.c.
+
 2002-06-15 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog configure.in gedlib/indiseq.c gedlib/init.c

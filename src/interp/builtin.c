@@ -84,7 +84,7 @@ __getint (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE arg = iargs(node);
 	PNODE arg2;
 	INT val;
-	STRING msg = (STRING) "Enter integer for program";
+	STRING msg = 0;(STRING) "Enter integer for program";
 	PVALUE mval = NULL;
 	if (!iistype(arg, IIDENT)) {
 		prog_var_error(node, stab, arg, NULL, nonvarx, "getint", "1");
@@ -102,8 +102,9 @@ __getint (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		}
 		msg = pvalue_to_string(mval);
 	}
+	if (!msg)
+		msg = _("Enter integer for program");
 	val = ask_for_int(msg);
-	/* silly cast here to keep INDISEQ out of interp.h */
 	assign_iden(stab, iident(arg), create_pvalue_from_int(val));
 	if (mval) delete_pvalue(mval);
 	return NULL;
@@ -150,7 +151,7 @@ __getindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PNODE arg2;
-	STRING key, msg = (STRING) "Identify person for program:";
+	STRING key, msg = 0;
 	PVALUE val = NULL;
 	if (!iistype(arg, IIDENT)) {
 		prog_var_error(node, stab, arg, NULL, nonvarx, "getindi", "1");
@@ -165,6 +166,8 @@ __getindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		}
 		msg = pvalue_to_string(val);
 	}
+	if (!msg)
+		msg = _("Identify person for program:");
 	assign_iden(stab, iident(arg), create_pvalue_from_indi(NULL));
 	uilocale();
 	key = ask_for_indi_key(msg, NOCONFIRM, DOASK1);
@@ -192,8 +195,8 @@ __getfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	assign_iden(stab, iident(arg), NULL);
 	uilocale();
-	fam = ask_for_fam("Enter a spouse from family.",
-	    "Enter a sibling from family.");
+	fam = ask_for_fam(_("Enter a spouse from family."),
+	    _("Enter a sibling from family."));
 	rptlocale();
 	assign_iden(stab, iident(arg), create_pvalue_from_fam(fam));
 	return NULL;
@@ -210,7 +213,7 @@ __getindiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE arg = (PNODE) iargs(node);
 	PNODE arg2;
 	INDISEQ seq;
-	STRING msg = (STRING) "Identify list of persons for program:";
+	STRING msg = 0;
 	PVALUE val = NULL;
 	if (!iistype(arg, IIDENT)) {
 		prog_var_error(node, stab, arg, NULL, nonvarx, "getindiset", "1");
@@ -225,6 +228,8 @@ __getindiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		}
 		msg = pvalue_to_string(val);
 	}
+	if (!msg)
+		msg = _("Identify list of persons for program:");
 	uilocale();
 	seq = ask_for_indi_list(msg, TRUE);
 	rptlocale();
@@ -424,12 +429,13 @@ __strsoundex (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __givens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE name, indi = eval_indi(iargs(node), stab, eflg, NULL);
+	PNODE arg = (PNODE) iargs(node);
+	NODE name, indi = eval_indi(arg, stab, eflg, NULL);
 	STRING str;
 	static char scratch[MAXGEDNAMELEN+1];
 	TRANMAPPING ttmr = NULL; /* do not translate until output time */
 	if (*eflg) {
-		prog_error(node, _("1st arg to givens must be a person"));
+		prog_var_error(node, stab, arg, NULL, _(nonindx), "givens", "1");
 		return NULL;
 	}
 	if (!indi) return create_pvalue_from_string("");
@@ -850,7 +856,7 @@ __f (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
 	if (*eflg) {
-		prog_error(node, "the arg to f is not a float");
+		prog_error(node, _("the arg to f is not a float"));
 		return NULL;
 	}
 /*HERE*/

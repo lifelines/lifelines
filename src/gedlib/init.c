@@ -70,6 +70,8 @@ extern STRING qSdbrecstats;
 
 static void add_dbs_to_list(LIST dblist, LIST dbdesclist, STRING dir);
 static STRING getdbdesc(STRING path);
+static void init_win32_gettext_shim(void);
+static void init_win32_iconv_shim(void);
 
 /*********************************************
  * local variables
@@ -105,31 +107,10 @@ init_lifelines_global (STRING configfile, STRING * pmsg)
 	if (!init_lifelines_options(configfile, pmsg))
 		return FALSE;
 
-#ifdef WIN32_ICONV_SHIM
-	/* (re)load iconv.dll if path specified */
-	e = getoptstr("iconv.path", "");
-	if (e && *e)
-		iconvshim_set_property("dll_path", e);
-#endif
+	init_win32_gettext_shim();
+	init_win32_iconv_shim();
 
 #if ENABLE_NLS
-
-#ifdef WIN32_INTL_SHIM
-	/* (re)load gettext dll if specified */
-	e = getoptstr("gettext.path", "");
-	if (e && *e)
-	{
-		if (intlshim_set_property("dll_path", e))
-		{
-			bindtextdomain(PACKAGE, LOCALEDIR);
-			textdomain(PACKAGE);
-		}
-		/* tell gettext where to find iconv */
-		e = getoptstr("iconv.path", "");
-		if (e && *e)
-			gt_set_property("iconv_path", e);
-	}
-#endif
 
 	e = getoptstr("GuiOutputCharset", "");
 	if (e && *e)
@@ -181,7 +162,54 @@ init_lifelines_global (STRING configfile, STRING * pmsg)
 	set_usersort(custom_sort);
 	return TRUE;
 }
-
+/*=================================
+ * init_win32_iconv_shim -- 
+ *  Handle user-specified gettext dll path
+ *===============================*/
+static void
+init_win32_iconv_shim (void)
+{
+#ifdef WIN32_ICONV_SHIM
+	STRING e;
+	/* (re)load iconv.dll if path specified */
+	e = getoptstr("iconv.path", "");
+	if (e && *e)
+		iconvshim_set_property("dll_path", e);
+#endif
+}
+/*=================================
+ * init_win32_gettext_shim -- 
+ *  Handle user-specified iconv dll path
+ *===============================*/
+static void
+init_win32_gettext_shim (void)
+{
+#if ENABLE_NLS
+#ifdef WIN32_INTL_SHIM
+	STRING e;
+	/* (re)load gettext dll if specified */
+	e = getoptstr("gettext.path", "");
+	if (e && *e)
+	{
+		if (intlshim_set_property("dll_path", e))
+		{
+			bindtextdomain(PACKAGE, LOCALEDIR);
+			textdomain(PACKAGE);
+		}
+		/* tell gettext where to find iconv */
+		e = getoptstr("iconv.path", "");
+		if (e && *e)
+			gt_set_property("iconv_path", e);
+	}
+	/*
+	We could be more clever, and if our iconv_path is no good, ask gettext
+	if it found iconv, but that would make this logic tortuous due to our having
+	different shim macros (we'd have to save gettext's iconv path before setting it,
+	in case ours is bad & its is good).
+	*/
+#endif
+#endif
+}
 /*=================================
  * init_lifelines_db -- Initialization after db opened
  *===============================*/

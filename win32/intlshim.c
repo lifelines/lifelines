@@ -35,9 +35,10 @@
 #define INTLDECL
 #endif
 
-#define INTLSHIM_VERSION "1.0.0"
+#define INTLSHIM_VERSION "1.0.1"
 
 
+static FARPROC MyGetProcAddress(HMODULE hModule, LPCSTR lpProcName);
 static int ishim_get_dll_name(char * filepath, int pathlen);
 static int ishim_get_file_version(const char * filepath, char * verout, int veroutlen);
 static int ishim_set_dll_name(const char *filepath);
@@ -221,7 +222,27 @@ unload_dll (void)
 {
 	if (!f_hinstDll)
 		return;
+	memset(&f_gettext_fncs, 0, sizeof(f_gettext_fncs));
 	FreeLibrary(f_hinstDll);
+}
+
+static FARPROC
+MyGetProcAddress (HMODULE hModule, LPCSTR lpProcName)
+{
+	/* TODO: Add property for client to set prefix */
+	const char * prefix ="lib";
+	char buffer[256];
+	FARPROC proc = GetProcAddress(hModule, lpProcName);
+	if (proc)
+		return proc;
+	if (lstrlen(lpProcName)+lstrlen(prefix)+1>sizeof(buffer))
+		return 0;
+	lstrcpy(buffer, prefix);
+	lstrcat(buffer, lpProcName);
+	proc = GetProcAddress(hModule, lpProcName);
+	if (proc)
+		return proc;
+	return 0;
 }
 
 static int
@@ -239,18 +260,18 @@ load_dll (void)
 	f_hinstDll = LoadLibrary(f_dllpath);
 	if (!f_hinstDll)
 		return 0;
-	f_gettext_fncs.gettext_x = (gettext_type)GetProcAddress(f_hinstDll, "gettext");
-	f_gettext_fncs.dgettext_x = (dgettext_type)GetProcAddress(f_hinstDll, "dgettext");
-	f_gettext_fncs.dcgettext_x = (dcgettext_type)GetProcAddress(f_hinstDll, "dcgettext");
-	f_gettext_fncs.ngettext_x = (ngettext_type)GetProcAddress(f_hinstDll, "ngettext");
-	f_gettext_fncs.dngettext_x = (dngettext_type)GetProcAddress(f_hinstDll, "dngettext");
-	f_gettext_fncs.dcngettext_x = (dcngettext_type)GetProcAddress(f_hinstDll, "dcngettext");
-	f_gettext_fncs.textdomain_x = (textdomain_type)GetProcAddress(f_hinstDll, "textdomain");
-	f_gettext_fncs.bindtextdomain_x = (bindtextdomain_type)GetProcAddress(f_hinstDll, "bindtextdomain");
-	f_gettext_fncs.bind_textdomain_codeset_x = (bind_textdomain_codeset_type)GetProcAddress(f_hinstDll, "bind_textdomain_codeset");
-	f_gettext_fncs.gt_notify_language_change_x = (gt_notify_language_change_type)GetProcAddress(f_hinstDll, "gt_notify_language_change");
-	f_gettext_fncs.gt_get_property_x = (gt_get_property_type)GetProcAddress(f_hinstDll, "gt_get_property");
-	f_gettext_fncs.gt_set_property_x = (gt_set_property_type)GetProcAddress(f_hinstDll, "gt_set_property");
+	f_gettext_fncs.gettext_x = (gettext_type)MyGetProcAddress(f_hinstDll, "gettext");
+	f_gettext_fncs.dgettext_x = (dgettext_type)MyGetProcAddress(f_hinstDll, "dgettext");
+	f_gettext_fncs.dcgettext_x = (dcgettext_type)MyGetProcAddress(f_hinstDll, "dcgettext");
+	f_gettext_fncs.ngettext_x = (ngettext_type)MyGetProcAddress(f_hinstDll, "ngettext");
+	f_gettext_fncs.dngettext_x = (dngettext_type)MyGetProcAddress(f_hinstDll, "dngettext");
+	f_gettext_fncs.dcngettext_x = (dcngettext_type)MyGetProcAddress(f_hinstDll, "dcngettext");
+	f_gettext_fncs.textdomain_x = (textdomain_type)MyGetProcAddress(f_hinstDll, "textdomain");
+	f_gettext_fncs.bindtextdomain_x = (bindtextdomain_type)MyGetProcAddress(f_hinstDll, "bindtextdomain");
+	f_gettext_fncs.bind_textdomain_codeset_x = (bind_textdomain_codeset_type)MyGetProcAddress(f_hinstDll, "bind_textdomain_codeset");
+	f_gettext_fncs.gt_notify_language_change_x = (gt_notify_language_change_type)MyGetProcAddress(f_hinstDll, "gt_notify_language_change");
+	f_gettext_fncs.gt_get_property_x = (gt_get_property_type)MyGetProcAddress(f_hinstDll, "gt_get_property");
+	f_gettext_fncs.gt_set_property_x = (gt_set_property_type)MyGetProcAddress(f_hinstDll, "gt_set_property");
 	
 	f_failed=0;
 	return 1;

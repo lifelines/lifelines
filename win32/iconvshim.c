@@ -36,8 +36,9 @@
 #define ICONVDECL
 #endif
 
-#define ICONVSHIM_VERSION "1.0.0"
+#define ICONVSHIM_VERSION "1.0.1"
 
+static FARPROC MyGetProcAddress(HMODULE hModule, LPCSTR lpProcName);
 static int ishim_get_dll_name(char * filepath, int pathlen);
 static int ishim_get_file_version(const char * filepath, char * verout, int veroutlen);
 static int ishim_set_dll_name(const char *filepath);
@@ -123,9 +124,29 @@ unload_dll (void)
 {
 	if (!f_hinstDll)
 		return;
+	memset(&f_iconv_fncs, 0, sizeof(f_iconv_fncs));
 	FreeLibrary(f_hinstDll);
 }
 
+static FARPROC
+MyGetProcAddress (HMODULE hModule, LPCSTR lpProcName)
+{
+	/* TODO: Add property for client to set prefix */
+	const char * prefix ="lib";
+	char buffer[256];
+	FARPROC proc = GetProcAddress(hModule, lpProcName);
+	if (proc)
+		return proc;
+	if (lstrlen(lpProcName)+lstrlen(prefix)+1>sizeof(buffer))
+		return 0;
+	lstrcpy(buffer, prefix);
+	lstrcat(buffer, lpProcName);
+	proc = GetProcAddress(hModule, lpProcName);
+	if (proc)
+		return proc;
+	return 0;
+}
+ 
 static int
 load_dll (void)
 {
@@ -141,18 +162,10 @@ load_dll (void)
 	f_hinstDll = LoadLibrary(f_dllpath);
 	if (!f_hinstDll)
 		return 0;
-	f_iconv_fncs.iconv_open_x = (iconv_open_type)GetProcAddress(f_hinstDll, "iconv_open");
-	if (!f_iconv_fncs.iconv_open_x)
-		f_iconv_fncs.iconv_open_x = (iconv_open_type)GetProcAddress(f_hinstDll, "libiconv_open");
-	f_iconv_fncs.iconv_x = (iconv_type)GetProcAddress(f_hinstDll, "iconv");
-	if (!f_iconv_fncs.iconv_x)
-		f_iconv_fncs.iconv_x = (iconv_type)GetProcAddress(f_hinstDll, "libiconv");
-	f_iconv_fncs.iconv_close_x = (iconv_close_type)GetProcAddress(f_hinstDll, "iconv_close");
-	if (!f_iconv_fncs.iconv_close_x)
-		f_iconv_fncs.iconv_close_x = (iconv_close_type)GetProcAddress(f_hinstDll, "libiconv_close");
-	f_iconv_fncs.iconvctl_x = (iconvctl_type)GetProcAddress(f_hinstDll, "iconvctl");
-	if (!f_iconv_fncs.iconvctl_x)
-		f_iconv_fncs.iconvctl_x = (iconvctl_type)GetProcAddress(f_hinstDll, "libiconvctl");
+	f_iconv_fncs.iconv_open_x = (iconv_open_type)MyGetProcAddress(f_hinstDll, "iconv_open");
+	f_iconv_fncs.iconv_x = (iconv_type)MyGetProcAddress(f_hinstDll, "iconv");
+	f_iconv_fncs.iconv_close_x = (iconv_close_type)MyGetProcAddress(f_hinstDll, "iconv_close");
+	f_iconv_fncs.iconvctl_x = (iconvctl_type)MyGetProcAddress(f_hinstDll, "iconvctl");
 
 	f_failed=0;
 	return 1;
