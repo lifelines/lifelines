@@ -1,9 +1,11 @@
 2003-03-25 Perry Rapp
        * ChangeLog reports/anniver.ll reports/cron.ll src/interp/interp.c
+       reports/Makefile.am reports/gen_index
 
        * Add \n to a number of error messages so they don't get clobbered
        by the command line prompt after llexec exits.  Add two
-       reports to the report directory.
+       reports to the report directory. Fix gen_index to strip paths off
+       program names.
 
 2003-03-24 Perry Rapp
 

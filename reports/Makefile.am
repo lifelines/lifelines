@@ -5,10 +5,10 @@ AUTOMAKE_OPTIONS = no-dependencies
 LL_REPORTS = \
 	2ppage.ll 4gen1.ll 6gen1.ll 8gen1.ll \
 	ahnentafel.ll alive.ll alllines.ll alllines.sgml.ll	\
-	ancestors2.ll bias.ll bkdes16-1.ll book-latex.ll \
+	ancestors2.ll anniver.ll bias.ll bkdes16-1.ll book-latex.ll \
 	cid.ll connect2.ll	\
 	count_anc.ll count_desc.ll count_paternal_desc.ll cousins.ll	\
-	coverage.ll dates.ll desc-henry.ll \
+	coverage.ll cron.ll dates.ll desc-henry.ll \
 	fam10c.ll fam16rn1.ll	\
 	familyisfm1.ll famrep1.ll famrep3.ll famrep6.ll famtree1.ll	\
 	fdesc.ll find.ll findmissing.ll fix_nameplac.ll	\
