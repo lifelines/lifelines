@@ -7,10 +7,10 @@ noinst_LIBRARIES = libbtree.a
 libbtree_a_SOURCES = \
 	addkey.c \
 	block.c \
+	btrec.c \
 	file.c \
 	index.c \
 	opnbtree.c \
-	record.c \
 	traverse.c \
 	utils.c \
 	btreei.h
@@ -29,7 +29,7 @@ block.o: ../hdrs/standard.h ../hdrs/mystring.h ../hdrs/btree.h
 file.o: ../hdrs/standard.h ../hdrs/mystring.h ../hdrs/btree.h
 index.o: ../hdrs/standard.h ../hdrs/mystring.h ../hdrs/btree.h
 opnbtree.o: ../hdrs/standard.h ../hdrs/mystring.h ../hdrs/btree.h
-record.o: ../hdrs/standard.h ../hdrs/mystring.h ../hdrs/btree.h
+btrec.o: ../hdrs/standard.h ../hdrs/mystring.h ../hdrs/btree.h
 traverse.o: ../hdrs/standard.h ../hdrs/mystring.h ../hdrs/btree.h
 utils.o: ../hdrs/standard.h ../hdrs/mystring.h ../hdrs/btree.h
 

@@ -2549,12 +2549,12 @@ __rot (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 BOOLEAN
 record_to_node (PVALUE val)
 {
-	RECORD rec = pvalue_to_rec(val); /* may be NULL */
+	RECORD rec = pvalue_to_record(val); /* may be NULL */
 	NODE gnode=0;
 
 	if (!rec) return FALSE;
 
-	/* pvalue_to_rec loads the record into direct cache */
+	/* pvalue_to_record loads the record into direct cache */
 
 	gnode = nztop(rec);
 	set_pvalue_node(val, gnode); 

@@ -10,14 +10,20 @@ BOOLEAN init_map_from_file(CNSTRING file, CNSTRING mapname, TRANTABLE*, ZSTR zer
 void dbnotify_close(void);
 
 /* keytonod.c */
+NODE is_cel_loaded(CACHEEL cel);
 
 /* names.c */
 RECORD id_by_key(CNSTRING name, char ctype);
 
 /* node.c */
-void assign_record(RECORD rec, char ntype, INT keynum);
-RECORD create_record_for_unkeyed_node(NODE node);
+void set_record_key_info(RECORD rec, char ntype, INT keynum);
+
+/* record.c */
 RECORD create_record_for_keyed_node(NODE node, CNSTRING key);
+RECORD create_record_for_unkeyed_node(NODE node);
+NODE is_record_temp(RECORD rec);
+void set_record_cache_info(RECORD rec, CACHEEL cel);
+
 
 /* xreffile.c */
 BOOLEAN xrefs_get_counts_from_unopened_db(CNSTRING path, INT *nindis, INT *nfams

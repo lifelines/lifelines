@@ -151,29 +151,17 @@ set_pvalue (PVALUE val, INT type, VPTR value)
 			value = ptrnew;
 		}
 		break;
-	/* Also RECORD types don't simply assign pointer, handled just below this switch */
-	}
-	if (is_record_pvaltype(type)) {
-		if (value) {
-			RECORD recold = (RECORD)value;
-			RECORD recnew = alloc_new_record();
-			if (recold->rec_top) {
-				/* free record, owns its own nodes  */
-				/* duplicate node tree (copy children, not siblings) */
-				NODE newtree = copy_nodes(recold->rec_top, TRUE, FALSE);
-				recnew->rec_top = newtree;
-			} else {
-				/* bound record, just points into cache */
-				ASSERT(recold->rec_cel);
-				recnew->rec_cel = recold->rec_cel;
-			}
-			nkey_copy(&recold->rec_nkey, &recnew->rec_nkey);
-			value = recnew;
-		}
 	}
 
 	ptype(val) = type;
 	pvalvv(val) = value;
+
+	if (is_record_pvaltype(type)) {
+		RECORD rec = pvalue_to_record(val);
+		if (rec) {
+			addref_record(rec);
+		}
+	}
 
 	/* reference counted types and so forth */
 	switch(type) {
@@ -306,9 +294,8 @@ clear_pvalue (PVALUE val)
 	/* record nodes handled below (PINDI, PFAM, PSOUR, PEVEN, POTHR) */
 	}
 	if (is_record_pvalue(val)) {
-		RECORD rec = pvalue_to_rec(val);
-		if (rec)
-			free_rec(rec);
+		RECORD rec = pvalue_to_record(val);
+		delref_record(rec);
 	}
 }
 /*========================================
@@ -780,8 +767,8 @@ eqv_pvalues (VPTR ptr1, VPTR ptr2)
 		case PINDI: case PFAM: case PSOUR: case PEVEN: case POTHR:
 		{
 		    RECORD rec1,rec2;
-		    rec1 = pvalue_to_rec(val1);
-		    rec2 = pvalue_to_rec(val2);
+		    rec1 = pvalue_to_record(val1);
+		    rec2 = pvalue_to_record(val2);
 		    if (rec1 && rec2) rel = eqstrn(nzkey(rec1),nzkey(rec2),MAXKEYWIDTH+1);
 		    else rel = (rec1  == rec2);
 		    break;
@@ -920,7 +907,7 @@ describe_pvalue (PVALUE val)
 	case PEVEN:
 	case POTHR:
 		{
-			RECORD rec = pvalue_to_rec(val);
+			RECORD rec = pvalue_to_record(val);
 			if (rec)
 				zs_appf(zstr, nzkey(rec));
 			else
@@ -1067,7 +1054,7 @@ pvalue_to_node (PVALUE val)
  * record pvalues (PINDI, PFAM, ...)
  *================================*/
 RECORD
-pvalue_to_rec (PVALUE val)
+pvalue_to_record (PVALUE val)
 {
 	RECORD rec = pvalvv(val); /* may be NULL */
 	ASSERT(is_record_pvalue(val));
@@ -1076,9 +1063,9 @@ pvalue_to_rec (PVALUE val)
 CACHEEL
 pvalue_to_cel (PVALUE val)
 {
-	RECORD rec = pvalue_to_rec(val);
+	RECORD rec = pvalue_to_record(val);
 	NODE root = nztop(rec); /* force record into cache */
-	CACHEEL cel = rec ? rec->rec_cel : 0;
+	CACHEEL cel = nzcel(rec);
 	root = root;	/* NOTUSED */
 	return cel;
 }

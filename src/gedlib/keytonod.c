@@ -64,6 +64,7 @@ struct tag_cacheel {
 #define cnext(e) ((e)->c_next)
 #define ckey(e)  ((e)->c_key)
 #define cclock(e) ((e)->c_lock)
+
 /*==============================
  * CACHE -- Internal cache type.
  *============================*/
@@ -111,7 +112,6 @@ static NODE qkey_to_node(CACHE cache, CNSTRING key, STRING tag);
 static RECORD qkey_typed_to_record(CACHE cache, CNSTRING key, STRING tag);
 /* static CACHEEL qkey_to_typed_cacheel(STRING key); */
 static void remove_from_cache(CACHE, CNSTRING);
-static BOOLEAN is_record_loaded (RECORD rec);
 
 
 INT csz_indi = 200;		/* cache size for indi */
@@ -418,6 +418,7 @@ NODE qkey_to_othr (CNSTRING key)
  * qkey_to_???0 -- Convert key to node type
  *  report mode (returns NULL if failure)
  *  5 symmetric versions
+ * All return addref'd records
  *======================================*/
 RECORD qkey_to_irecord (CNSTRING key)
 {
@@ -665,11 +666,11 @@ add_to_direct (CACHE cache, CNSTRING key, INT reportmode)
 		crashlog("\n");
 		/* deliberately fall through to let ASSERT(rec) fail */
 	}
-	ASSERT(rec && rec->rec_top);
-	cel = node_to_cache(cache, rec->rec_top);
-	/* node_to_cache did a first_direct call */
-	rec->rec_top = 0;
-	rec->rec_cel = cel;
+	ASSERT(rec);
+	/* record was just loaded, nztop should not need to load it */
+	cel = node_to_cache(cache, nztop(rec));
+	/* node_to_cache did a first_direct call, so record in cache */
+	set_record_cache_info(rec, cel);
 	stdfree(rawrec);
 	return cel;
 }
@@ -731,6 +732,7 @@ key_typed_to_record (CACHE cache, CNSTRING key, STRING tag)
 }
 /*===================================
  * create_record_for_cel -- create new record from cacheel
+ * returns addref'd record
  *=================================*/
 RECORD
 create_record_for_cel (CACHEEL cel)
@@ -745,10 +747,10 @@ create_record_for_cel (CACHEEL cel)
 	ASSERT(nxref(node));
 
 	rec = alloc_new_record();
-	rec->rec_cel = cel;
+	set_record_cache_info(rec, cel);
 	key = node_to_key(node);
 
-	assign_record(rec, key[0], atoi(key+1));
+	set_record_key_info(rec, key[0], atoi(key+1));
 	return rec;
 }
 /*===============================================================
@@ -768,6 +770,7 @@ qkey_to_node (CACHE cache, CNSTRING key, STRING tag)
 /*===============================================================
  * qkey_typed_to_record -- Return record from key; add to cache if not there
  * report mode - returns NULL if failure
+ * returns addref'd record
  *=============================================================*/
 static RECORD
 qkey_typed_to_record (CACHE cache, CNSTRING key, STRING tag)
@@ -798,10 +801,12 @@ void
 lock_record_in_cache (RECORD rec)
 {
 	NODE node=0;
+	CACHEEL cel=0;
 	ASSERT(rec);
 	node = nztop(rec); /* force record to be loaded in cache */
-	++cclock(rec->rec_cel);
-	ASSERT(cclock(rec->rec_cel) > 0);
+	cel = nzcel(rec);
+	++cclock(cel);
+	ASSERT(cclock(cel) > 0);
 }
 /*==========================================
  * unlock_cache -- Unlock CACHEEL from direct cache
@@ -819,10 +824,12 @@ unlock_cache (CACHEEL cel)
 void
 unlock_record_from_cache (RECORD rec)
 {
+	CACHEEL cel=0;
 	ASSERT(rec);
-	ASSERT(rec->rec_cel);
-	ASSERT(cclock(rec->rec_cel) > 0);
-	--cclock(rec->rec_cel);
+	cel = nzcel(rec);
+	ASSERT(cel);
+	ASSERT(cclock(cel) > 0);
+	--cclock(cel);
 }
 /*=========================================
  * cache_get_lock_counts -- Fill in lock counts
@@ -874,10 +881,9 @@ void
 add_new_indi_to_cache (RECORD rec)
 {
 	CACHEEL cel=0;
-	ASSERT(rec->rec_top);
-	cel = node_to_cache(indicache, rec->rec_top);
-	rec->rec_cel = cel;
-	rec->rec_top = 0;
+	NODE root = is_record_temp(rec);
+	cel = node_to_cache(indicache, root);
+	set_record_cache_info(rec, cel);
 }
 /*===========================================
  * fam_to_cache -- Add family to family cache
@@ -1123,9 +1129,10 @@ value_to_xref (STRING val)
 CACHEEL
 indi_to_cacheel (RECORD indi)
 {
-	CACHEEL cel;
+	CACHEEL cel=0;
 	if (!indi || !nztop(indi)) return NULL;
-	if (indi->rec_cel) return indi->rec_cel;
+	cel = nzcel(indi);
+	if (cel) return cel;
 	/*
 	This is not efficient, rereading the record
 	But we can't just steal the record given us
@@ -1304,94 +1311,6 @@ qkey_to_typed_cacheel (STRING key)
 }
 unused */
 /*==============================================
- * is_record_loaded -- Check if record has its node tree
- *============================================*/
-static BOOLEAN
-is_record_loaded (RECORD rec)
-{
-	STRING xref=0, temp=0;
-
-		/* does the record have a nodetree ? */
-	if (!rec || !rec->rec_cel || !rec->rec_cel->c_node)
-		return FALSE;
-
-		/* Now, is it the correct nodetree ? */
-
-	temp = rec->rec_nkey.key; /* eg, "I50" */
-
-	xref = nxref(rec->rec_cel->c_node); /* eg, "@I50@" */
-	ASSERT(xref[0] == '@');
-
-	/* now xref="@I50@" and temp="I50" */
-	++xref;
-
-	/* now xref="I50@" and temp="I50" */
-
-	while (1) {
-			/* distinguish I50@ vs I50 from I50@ vs I500 */
-		if (*xref == '@') return (*temp == 0);
-			/* distinguish I50@ vs I50 from I500@ vs I50 */
-		if (*temp == 0) return (*xref == '@');
-		if (*xref != *temp) return FALSE;
-		++xref;
-		++temp;
-	}
-}
-/*==============================================
- * nztop -- Return first NODE of a RECORD
- *  handle NULL input
- *============================================*/
-NODE
-nztop (RECORD rec)
-{
-	if (!rec) return 0;
-	if (rec->rec_top) {
-		/* This is only for records not in the cache */
-		ASSERT(!rec->rec_cel);
-		return rec->rec_top;
-	}
-	if (!is_record_loaded(rec)) {
-		/* Presumably we're out-of-date because our record fell out of cache */
-		/* Anyway, load via cache (actually just point to cache data) */
-		CACHEEL cel = key_to_unknown_cacheel(rec->rec_nkey.key);
-		rec->rec_cel = cel;
-	}
-	return cnode(rec->rec_cel);
-}
-/*==============================================
- * nzkey -- Return key of record
- *  handle NULL input
- * eg, "I85" for a person I85
- *============================================*/
-CNSTRING
-nzkey (RECORD rec)
-{
-	if (!rec) return 0;
-	return rec->rec_nkey.key;
-}
-/*==============================================
- * nzkeynum -- Return record number of record
- *  handle NULL input
- * eg, 85 for a person I85
- *============================================*/
-INT
-nzkeynum (RECORD rec)
-{
-	if (!rec) return 0;
-	return rec->rec_nkey.keynum;
-}
-/*==============================================
- * nztype -- Return type number (char) of record
- *  handle NULL input
- * eg, 'I' for a person I85
- *============================================*/
-char
-nztype (RECORD rec)
-{
-	if (!rec) return 0;
-	return rec->rec_nkey.ntype;
-}
-/*==============================================
  * cacheel_to_key -- Return key of record inside of cache element
  *  handle NULL input
  *============================================*/
@@ -1403,6 +1322,7 @@ cacheel_to_key (CACHEEL cel)
 }
 /*==============================================
  * cacheel_to_node -- Return root node of record inside of cache element
+ *  loads cache element if needed
  *  handle NULL input
  *============================================*/
 NODE
@@ -1414,5 +1334,15 @@ cacheel_to_node (CACHEEL cel)
 		ASSERT(cel2 == cel);
 		ASSERT(cnode(cel));
 	}
+	return cnode(cel);
+}
+/*==============================================
+ * is_cel_loaded -- If cache element is loaded, return root
+ *  handle NULL input
+ *============================================*/
+NODE
+is_cel_loaded (CACHEEL cel)
+{
+	if (!cel) return NULL;
 	return cnode(cel);
 }

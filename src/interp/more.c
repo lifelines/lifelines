@@ -624,7 +624,7 @@ makestring (PVALUE val, STRING str, INT len, BOOLEAN *eflg)
 		case PEVEN:
 		case POTHR:
 			{
-				RECORD rec = pvalue_to_rec(val);
+				RECORD rec = pvalue_to_record(val);
 				NODE node = nztop(rec);
 				STRING txt = generic_to_list_string(node, NULL, len, " ", NULL, TRUE);
 				llstrapps(str, len, uu8, txt);

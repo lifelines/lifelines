@@ -145,6 +145,10 @@ SOURCE=..\..\..\src\liflines\brwsmenu.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\btree\btrec.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\interp\builtin.c
 # End Source File
 # Begin Source File
@@ -477,7 +481,7 @@ SOURCE=..\..\..\src\stdlib\rbtree.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\btree\record.c
+SOURCE=..\..\..\src\gedlib\record.c
 # End Source File
 # Begin Source File
 

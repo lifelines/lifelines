@@ -111,15 +111,12 @@ typedef struct tag_nkey NKEY;
 */
 
 typedef struct tag_record *RECORD;
-struct tag_record { /* RECORD */
-	NODE rec_top;           /* for non-cache records */
-	NKEY rec_nkey;
-	struct tag_cacheel * rec_cel; /* cache wrapper */
-};
+
 NODE nztop(RECORD rec); /* handles NULL, also reloads from cache */
 CNSTRING nzkey(RECORD rec);
 INT nzkeynum(RECORD rec);
 char nztype(RECORD rec);
+CACHEEL nzcel(RECORD rec);
 
 /*=====================================
  * LLDATABASE types -- LifeLines database
@@ -210,6 +207,7 @@ STRING addat(STRING);
 void addixref(INT key);
 void addexref(INT key);
 void addfxref(INT key);
+void addref_record(RECORD rec);
 void addsxref(INT key);
 void addxref(CNSTRING key);
 void addxxref(INT key);
@@ -235,6 +233,7 @@ NODE create_node(STRING, STRING, STRING, NODE);
 NODE create_temp_node(STRING, STRING, STRING, NODE);
 void del_in_dbase(CNSTRING key);
 void delete_metarec(STRING key);
+void delref_record(RECORD rec);
 BOOLEAN edit_mapping(INT);
 BOOLEAN edit_valtab_from_db(STRING, TABLE*, INT sep, STRING, STRING (*validator)(TABLE tab));
 BOOLEAN equal_tree(NODE, NODE);
@@ -260,8 +259,6 @@ NODE file_to_node(STRING, XLAT, STRING*, BOOLEAN*);
 INT file_to_line(FILE*, XLAT, INT*, STRING*, STRING*, STRING*, STRING*);
 NODE find_node(NODE, STRING, STRING, NODE*);
 NODE find_tag(NODE, CNSTRING);
-void free_cached_rec(RECORD rec);
-void free_rec(RECORD);
 void free_node(NODE);
 void free_nodes(NODE);
 void free_temp_node_tree(NODE);
@@ -721,17 +718,19 @@ CNSTRING soundex_get(INT i, CNSTRING name);
  */
 #define FORFAMS(indi,fam,num) \
 	{\
+	RECORD frec=0; \
 	NODE __node = FAMS(indi);\
 	NODE fam=0;\
 	STRING __key=0;\
 	num = 0;\
 	while (__node) {\
 		__key = rmvat(nval(__node));\
-	    if (__key && (fam = qkey_to_fam(__key))) {\
+	    if (__key && (frec=qkey_to_frecord(__key)) && (fam=nztop(frec))) {\
 		++num;\
 		{
 
 #define ENDFAMS \
+		delref_record(frec); \
 		}\
 		}\
 		__node = nsibling(__node);\
@@ -745,6 +744,7 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 #define FORFAMSS(indi,fam,spouse,num) \
 	{\
 	INT first_sp; \
+	RECORD frec=0; \
 	NODE __node = FAMS(indi);\
 	NODE __node1=0, spouse=0, fam=0;\
 	STRING __key=0;\
@@ -752,7 +752,7 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 	while (__node) {\
 	    __key = rmvat(nval(__node));\
 	    __node = nsibling(__node);\
-	    if (__key && (fam = qkey_to_fam(__key))) {\
+	    if (__key && (frec=qkey_to_frecord(__key)) && (fam=nztop(frec))) {\
 		__node1 = nchild(fam);\
 		first_sp = 0;\
 		while (__node1) {\
@@ -772,6 +772,7 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 		{
 
 #define ENDFAMSS \
+		delref_record(frec); \
 		}\
 	    }\
 	}\

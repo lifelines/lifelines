@@ -547,7 +547,7 @@ list_destructor (VTABLE *obj)
 	remove_list(list, 0);
 }
 /*=================================================
- * delref_table -- decrement reference count of list
+ * delref_list -- decrement reference count of list
  *  and free if appropriate (ref count hits zero)
  *===============================================*/
 void

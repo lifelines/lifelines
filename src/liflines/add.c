@@ -116,7 +116,7 @@ add_indi_by_edit (RFMT rfmt)
 				do_edit();
 				continue;
 			}
-			free_rec(indi0);
+			delref_record(indi0);
 			indi0 = NULL;
 			break;
 		}
@@ -135,7 +135,7 @@ add_indi_by_edit (RFMT rfmt)
 		break;
 	}
 	if (!indi0 || !ask_yes_or_no(_(qScfpadd))) {
-		if (indi0) free_rec(indi0);
+		if (indi0) delref_record(indi0);
 		return NULL;
 	}
 	add_new_indi(indi0);

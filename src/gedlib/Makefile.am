@@ -14,7 +14,8 @@ libgedcom_a_SOURCES = brwslist.c charmaps.c charprops.c \
 	indiseq.c init.c intrface.c keytonod.c lloptions.c \
 	lldatabase.c locales.c \
 	messages.c misc.c names.c node.c nodeio.c nodeutls.c place.c \
-	property.c refns.c remove.c replace.c soundex.c spltjoin.c \
+	property.c record.c refns.c remove.c replace.c \
+	soundex.c spltjoin.c \
 	translat.c valid.c valtable.c xlat.c xreffile.c
 
 # $(top_builddir)        for config.h

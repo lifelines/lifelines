@@ -166,7 +166,7 @@ INDEX readindex(BTREE btr, FKEY ikey, BOOLEAN robust);
 
 /* names.c */
 
-/* record.c */
+/* btrec.c */
 BOOLEAN bt_addrecord(BTREE, RKEY, RAWRECORD, INT);
 RAWRECORD bt_getrecord(BTREE, const RKEY *, INT*);
 BOOLEAN isrecord(BTREE, RKEY);
