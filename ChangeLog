@@ -7,6 +7,8 @@
 	Added direct to child navigation via digits, and optional
 	child numeric prefixes.
 
+	* gedlib/gstrings.c: Prevent obscure buffer overflow possibility.
+
 2000-11-29 Marc Nozell <marc@nozell.com>
 
 	* reports/alive.ll: Fix typo.
