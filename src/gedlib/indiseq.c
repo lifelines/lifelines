@@ -545,8 +545,16 @@ INT
 name_compare (SORTEL el1,
               SORTEL el2)
 {
-	INT rel = namecmp(snam(el1), snam(el2));
-	if (rel) return rel;
+	if (!snam(el2)) {
+		if (snam(el1))
+			return -1;
+	} else if (!snam(el1)) {
+		if (snam(el2))
+			return 1;
+	} else {
+		INT rel = namecmp(snam(el1), snam(el2));
+		if (rel) return rel;
+	}
 	return spri(el1) - spri(el2);
 }
 /*================================

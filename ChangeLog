@@ -1,5 +1,14 @@
 2002-02-04 Perry Rapp <puddle@users.sourceforge.net>
 
+	* ChangeLog gedlib/indiseq.c:
+
+	Fix name_sort to handle null names, for when hit lists include
+	non-indis (and in future indis without names). Fixes "crash when
+	cross-referencing from indi to duplicated REFNs in non-indi
+	records" bug.
+
+2002-02-04 Perry Rapp <puddle@users.sourceforge.net>
+
 	* ChangeLog interp/lex.c tools/Makefile.am:
 
 	Allow periods inside variable names. Fix sign-extension in inchar.
