@@ -45,6 +45,7 @@ typedef struct {
 } *TRANTABLE;
 
 TRANTABLE create_trantable(STRING*, STRING*, INT);
+void remove_trantable(TRANTABLE);
 TRANTABLE init_map_from_str(STRING, INT, BOOLEAN*);
 BOOLEAN translate_string(TRANTABLE, STRING, STRING, INT);
 
