@@ -43,19 +43,24 @@
 #include "feedback.h"
 #include "arch.h"
 #include "lloptions.h"
+#include "parse.h"
 
 /*********************************************
  * global/exported variables
  *********************************************/
 
+/*
+ TODO: Move most of these into parseinfo structure
+ Perry 2002.07.14
+ One problem -- finishrassa closes foutfp, so it may need longer lifetime
+ that parseinfo currently has
+*/
 STRING Pfname = NULL;	/* file to read program from */
 static TABLE filetab=0;
 TABLE proctab=0, functab=0;
 SYMTAB globtab; /* assume all zero is null SYMTAB */
 STRING progname = NULL;       /* starting program name */
-FILE *Pinfp  = NULL;          /* file to read program from */
 FILE *Poutfp = NULL;          /* file to write program output to */
-STRING Pinstr = NULL;         /* string to read program from */
 STRING Poutstr = NULL;	      /* string to write program output to */
 INT Plineno = 1;
 INT Perrors = 0;
@@ -301,7 +306,7 @@ interp_program (STRING proc, INT nargs, VPTR *args, INT nifiles
 	progrunning = FALSE;
 	finishinterp(); /* includes 5 sec delay if errors on-screen */
 	if (Poutfp) fclose(Poutfp);
-	Pinfp = Poutfp = NULL;
+	Poutfp = NULL;
 
 interp_program_exit:
 	remove_tables();
@@ -338,18 +343,20 @@ static void
 parse_file (STRING ifile, LIST plist)
 {
 	STRING programsdir = getoptstr("LLPROGRAMS", ".");
+	struct parseinfo pinfo;
+	memset(&pinfo, 0, sizeof(pinfo));
 	Pfname = ifile;
 	if (!ifile || *ifile == 0) return;
 	Plist = plist;
-	Pinfp = fopenpath(ifile, LLREADTEXT, programsdir, ".ll", (STRING *)NULL);
-	if (!Pinfp) {
+	pinfo.Pinfp = fopenpath(ifile, LLREADTEXT, programsdir, ".ll", (STRING *)NULL);
+	if (!pinfo.Pinfp) {
 		llwprintf(_("Error: file <%s> not found.\n"), ifile);
 		Perrors++;
 		return;
 	}
 	Plineno = 1;
-	yyparse();
-	fclose(Pinfp);
+	yyparse((void *)&pinfo);
+	fclose(pinfo.Pinfp);
 }
 /*====================================+
  * interp_main -- Interpreter main proc
@@ -1798,7 +1805,7 @@ set_rptfile_prop (STRING fname, STRING key, STRING value)
 }
 /*=============================================+
  * handle_char_encoding -- report command char_encoding("...")
- * Created: 2002/06/12, Perry Rapp
+ *  parse-time handling of report command
  *=============================================*/
 void
 handle_char_encoding (PNODE node)
@@ -1811,8 +1818,21 @@ handle_char_encoding (PNODE node)
 	set_rptfile_prop(fname, strsave("char_encoding"), strsave(ccs));
 }
 /*=============================================+
+ * string_node_in_internal_codeset -- make string node
+ *  do any needed codeset conversion here
+ *  lexical analysis time (same as parse-time) handling of string constants
+ *=============================================*/
+PNODE
+string_node_in_internal_codeset (STRING str)
+{
+	/*
+	TODO: look up codeset of current report file
+	*/
+	return string_node(str);
+}
+/*=============================================+
  * handle_include -- report command include("...")
- * Created: 2002/06/17, Perry Rapp (pulled out of yacc.y)
+ *  parse-time handling of report command
  *=============================================*/
 void
 handle_include (PNODE node)

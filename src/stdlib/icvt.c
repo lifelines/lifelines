@@ -40,7 +40,6 @@ iconv_trans (CNSTRING src, CNSTRING dest, bfptr bfsIn, CNSTRING illegal, BOOLEAN
 	size_t outleft;
 	size_t cvted;
 	int transliterate=2; 
-	/* testing recursive transliteration in my private iconv, Perry, 2002.07.11 */
 
 	ASSERT(src && dest);
 
@@ -51,7 +50,10 @@ iconv_trans (CNSTRING src, CNSTRING dest, bfptr bfsIn, CNSTRING illegal, BOOLEAN
 			*success = FALSE;
 		return bfsIn;
 	}
+	/* testing recursive transliteration in my private iconv, Perry, 2002.07.11 */
+#ifdef ICONV_SET_TRANSLITERATE
 	iconvctl(ict, ICONV_SET_TRANSLITERATE, &transliterate);
+#endif
 
 	bfReserve(bfsIn, (int)(strlen(src)*1.3+2));
 

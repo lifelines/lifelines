@@ -4,6 +4,7 @@
 # This list may not be complete.
 
 gedlib/charmaps.c
+gedlib/date.c
 gedlib/editmap.c
 gedlib/editvtab.c
 gedlib/gedcom.c
@@ -17,7 +18,6 @@ gedlib/valid.c
 
 interp/alloc.c
 interp/builtin.c
-interp/date.c
 interp/interp.c
 interp/more.c
 interp/rassa.c

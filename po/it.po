@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.10\n"
-"POT-Creation-Date: 2002-06-25 21:46-0400\n"
+"POT-Creation-Date: 2002-07-14 04:07-0400\n"
 "PO-Revision-Date: 2002-06-09 21:32-0400\n"
 "Last-Translator: None yet\n"
 "Language-Team: Not submitted yet\n"
@@ -1540,7 +1540,7 @@ msgid "WARNING: missing keys"
 msgstr ""
 
 #: gedlib/messages.c:465
-msgid "WARNING: invalid pointer"
+msgid "This does not point to another record in the database!"
 msgstr ""
 
 #: gedlib/messages.c:466
@@ -1585,7 +1585,7 @@ msgstr ""
 msgid "%s: line %d (entry %d): %s\n"
 msgstr ""
 
-#: gedlib/messages.c:480 liflines/menuitem.c:86
+#: gedlib/messages.c:480 liflines/menuitem.c:27
 msgid "q  Return to main menu"
 msgstr "q  Ritornare al menu principale"
 
@@ -2314,7 +2314,7 @@ msgstr ""
 msgid "jour_complementairs"
 msgstr ""
 
-#: gedlib/node.c:1267
+#: gedlib/node.c:1268
 msgid "NO NAME"
 msgstr ""
 
@@ -2432,55 +2432,60 @@ msgstr ""
 msgid "%s: the arg #%s had a major error."
 msgstr ""
 
-#: interp/builtin.c:106
+#: interp/builtin.c:108
 msgid "Enter integer for program"
 msgstr ""
 
-#: interp/builtin.c:174
+#: interp/builtin.c:176
 msgid "Identify person for program:"
 msgstr ""
 
-#: interp/builtin.c:202
+#: interp/builtin.c:204
 msgid "Enter a spouse from family."
 msgstr ""
 
-#: interp/builtin.c:203
+#: interp/builtin.c:205
 msgid "Enter a sibling from family."
 msgstr ""
 
-#: interp/builtin.c:236
+#: interp/builtin.c:238
 msgid "Identify list of persons for program:"
 msgstr ""
 
-#: interp/builtin.c:295
+#: interp/builtin.c:297
 msgid "name: person does not have a name"
 msgstr ""
 
-#: interp/builtin.c:348
+#: interp/builtin.c:350
 msgid "fullname: person does not have a name"
 msgstr ""
 
-#: interp/builtin.c:376
+#: interp/builtin.c:378
 msgid "surname: person does not have a name"
 msgstr ""
 
-#: interp/builtin.c:402
+#: interp/builtin.c:404
 msgid "soundex: person does not have a name"
 msgstr ""
 
-#: interp/builtin.c:449
+#: interp/builtin.c:451
+#, c-format
+msgid "Bad UTF character %d in UTF escape string <%s>"
+msgstr ""
+
+#: interp/builtin.c:551
 msgid "(givens) person does not have a name"
 msgstr ""
 
-#: interp/builtin.c:476
+#: interp/builtin.c:578
 msgid "set: error evaluating 2nd arg"
 msgstr ""
 
-#: interp/builtin.c:863
+#: interp/builtin.c:965
 msgid "the arg to f is not a float"
 msgstr ""
 
-#: interp/builtin.c:2385
+#: interp/builtin.c:2487
 msgid "(trimname) person does not have a name"
 msgstr ""
 
@@ -2489,116 +2494,116 @@ msgstr ""
 msgid "Error: file <%s> not found"
 msgstr ""
 
-#: interp/interp.c:245
+#: interp/interp.c:246
 msgid "contains errors."
 msgstr ""
 
-#: interp/interp.c:252
+#: interp/interp.c:253
 msgid "needs a starting procedure."
 msgstr ""
 
-#: interp/interp.c:259
+#: interp/interp.c:260
 #, c-format
 msgid "Error: output file <%s> could not be created.\n"
 msgstr ""
 
-#: interp/interp.c:269
+#: interp/interp.c:270
 #, c-format
 msgid "Proc %s must be called with %d (not %d) parameters."
 msgstr ""
 
-#: interp/interp.c:284
+#: interp/interp.c:285
 msgid "is running..."
 msgstr ""
 
-#: interp/interp.c:288
+#: interp/interp.c:289
 msgid "was run successfully."
 msgstr ""
 
-#: interp/interp.c:292
+#: interp/interp.c:293
 msgid "was cancelled."
 msgstr ""
 
-#: interp/interp.c:294
+#: interp/interp.c:295
 msgid "was not run because of errors."
 msgstr ""
 
-#: interp/interp.c:345
+#: interp/interp.c:346
 #, c-format
 msgid "Error: file <%s> not found.\n"
 msgstr ""
 
-#: interp/interp.c:403
+#: interp/interp.c:404
 #, c-format
 msgid "identifier: %s should be a string\n"
 msgstr ""
 
-#: interp/interp.c:1593
+#: interp/interp.c:1594
 #, c-format
 msgid "Display locals (%d)"
 msgstr ""
 
-#: interp/interp.c:1596
+#: interp/interp.c:1597
 #, c-format
 msgid "Display globals (%d)"
 msgstr ""
 
-#: interp/interp.c:1598
+#: interp/interp.c:1599
 msgid "Pop one level"
 msgstr ""
 
-#: interp/interp.c:1599
+#: interp/interp.c:1600
 msgid "Quit debugger"
 msgstr ""
 
-#: interp/interp.c:1606
+#: interp/interp.c:1607
 msgid "Local variables"
 msgstr ""
 
-#: interp/interp.c:1610
+#: interp/interp.c:1611
 msgid "Global variables"
 msgstr ""
 
-#: interp/interp.c:1701
+#: interp/interp.c:1702
 msgid "Report cancelled"
 msgstr ""
 
-#: interp/interp.c:1709
+#: interp/interp.c:1710
 #, c-format
 msgid ""
 "\n"
 "Parsing Error in <%s>"
 msgstr ""
 
-#: interp/interp.c:1712
+#: interp/interp.c:1713
 #, c-format
 msgid ""
 "\n"
 "Runtime Error in: <%s>"
 msgstr ""
 
-#: interp/interp.c:1718
+#: interp/interp.c:1719
 #, c-format
 msgid "Parsing Error at line %d: "
 msgstr ""
 
-#: interp/interp.c:1721
+#: interp/interp.c:1722
 #, c-format
 msgid "Runtime Error at line %d: "
 msgstr ""
 
-#: interp/interp.c:1723
+#: interp/interp.c:1724
 msgid "Aborting: "
 msgstr ""
 
-#: interp/interp.c:1740
+#: interp/interp.c:1741
 #, c-format
 msgid ""
 "\n"
 "Report Errors: %s"
 msgstr ""
 
-#: interp/interp.c:1882
+#: interp/interp.c:1896
 msgid "This report requires a newer program to run"
 msgstr ""
 
@@ -2699,449 +2704,449 @@ msgstr ""
 msgid "No databases found in database path"
 msgstr ""
 
-#: liflines/menuitem.c:85
+#: liflines/menuitem.c:26
 msgid "?  Other menu choices"
 msgstr ""
 
-#: liflines/menuitem.c:89
+#: liflines/menuitem.c:77
 msgid "e  Edit the person"
 msgstr "e  Edit qq person"
 
-#: liflines/menuitem.c:90
+#: liflines/menuitem.c:78
 msgid "e  Edit the family"
 msgstr ""
 
-#: liflines/menuitem.c:91
+#: liflines/menuitem.c:79
 msgid "e  Edit record"
 msgstr ""
 
-#: liflines/menuitem.c:92
+#: liflines/menuitem.c:80
 msgid "e  Edit top person"
 msgstr ""
 
-#: liflines/menuitem.c:93
+#: liflines/menuitem.c:81
 msgid "f  Browse to father"
 msgstr ""
 
-#: liflines/menuitem.c:94
+#: liflines/menuitem.c:82
 msgid "f  Browse top father"
 msgstr ""
 
-#: liflines/menuitem.c:95
+#: liflines/menuitem.c:83
 msgid "m  Browse to mother"
 msgstr ""
 
-#: liflines/menuitem.c:96
+#: liflines/menuitem.c:84
 msgid "m  Browse top mother"
 msgstr ""
 
-#: liflines/menuitem.c:97
+#: liflines/menuitem.c:85
 msgid "s  Browse to spouse/s"
 msgstr ""
 
-#: liflines/menuitem.c:98
+#: liflines/menuitem.c:86
 msgid "s  Browse top spouse/s"
 msgstr ""
 
-#: liflines/menuitem.c:99
+#: liflines/menuitem.c:87
 msgid "c  Browse to children"
 msgstr ""
 
-#: liflines/menuitem.c:100
+#: liflines/menuitem.c:88
 msgid "c  Browse top children"
 msgstr ""
 
-#: liflines/menuitem.c:101
+#: liflines/menuitem.c:89
 msgid "o  Browse to older sib"
 msgstr ""
 
-#: liflines/menuitem.c:102
+#: liflines/menuitem.c:90
 msgid "y  Browse to younger sib"
 msgstr ""
 
-#: liflines/menuitem.c:103
+#: liflines/menuitem.c:91
 msgid "g  Browse to family"
 msgstr ""
 
-#: liflines/menuitem.c:104
+#: liflines/menuitem.c:92
 msgid "u  Browse to parents"
 msgstr ""
 
-#: liflines/menuitem.c:105
+#: liflines/menuitem.c:93
 msgid "b  Browse to persons"
 msgstr ""
 
-#: liflines/menuitem.c:106
+#: liflines/menuitem.c:94
 msgid "t  Browse to top"
 msgstr ""
 
-#: liflines/menuitem.c:107
+#: liflines/menuitem.c:95
 msgid "b  Browse to bottom"
 msgstr ""
 
-#: liflines/menuitem.c:108
+#: liflines/menuitem.c:96
 msgid "h  Add as spouse"
 msgstr ""
 
-#: liflines/menuitem.c:109
+#: liflines/menuitem.c:97
 msgid "i  Add as child"
 msgstr ""
 
-#: liflines/menuitem.c:110
+#: liflines/menuitem.c:98
 msgid "s  Add spouse to family"
 msgstr ""
 
-#: liflines/menuitem.c:111
+#: liflines/menuitem.c:99
 msgid "a  Add child to family"
 msgstr ""
 
-#: liflines/menuitem.c:112
+#: liflines/menuitem.c:100
 msgid "a  Add family"
 msgstr ""
 
-#: liflines/menuitem.c:113
+#: liflines/menuitem.c:101
 msgid "x  Swap two families"
 msgstr ""
 
-#: liflines/menuitem.c:114
+#: liflines/menuitem.c:102
 msgid "x  Swap two children"
 msgstr ""
 
-#: liflines/menuitem.c:116
+#: liflines/menuitem.c:104
 #, no-c-format
 msgid "%c  Reorder child"
 msgstr ""
 
-#: liflines/menuitem.c:117
+#: liflines/menuitem.c:105
 msgid "x  Switch top/bottom"
 msgstr ""
 
-#: liflines/menuitem.c:118
+#: liflines/menuitem.c:106
 msgid "n  Create new person"
 msgstr ""
 
-#: liflines/menuitem.c:119
+#: liflines/menuitem.c:107
 msgid "a  Create new family"
 msgstr ""
 
-#: liflines/menuitem.c:120
+#: liflines/menuitem.c:108
 msgid "tt Enter tandem mode"
 msgstr ""
 
-#: liflines/menuitem.c:121
+#: liflines/menuitem.c:109
 msgid "tt Enter family tandem"
 msgstr ""
 
-#: liflines/menuitem.c:122
+#: liflines/menuitem.c:110
 msgid "zi Browse to indi"
 msgstr ""
 
-#: liflines/menuitem.c:123
+#: liflines/menuitem.c:111
 msgid "zz Browse to any"
 msgstr ""
 
-#: liflines/menuitem.c:124
+#: liflines/menuitem.c:112
 msgid "r  Remove as spouse"
 msgstr ""
 
-#: liflines/menuitem.c:125
+#: liflines/menuitem.c:113
 msgid "d  Remove as child"
 msgstr ""
 
-#: liflines/menuitem.c:126
+#: liflines/menuitem.c:114
 msgid "r  Remove spouse from"
 msgstr ""
 
-#: liflines/menuitem.c:127
+#: liflines/menuitem.c:115
 msgid "d  Remove child from"
 msgstr ""
 
-#: liflines/menuitem.c:128
+#: liflines/menuitem.c:116
 msgid "(  Scroll up"
 msgstr ""
 
-#: liflines/menuitem.c:129
+#: liflines/menuitem.c:117
 msgid ")  Scroll down"
 msgstr ""
 
-#: liflines/menuitem.c:130
+#: liflines/menuitem.c:118
 msgid "]  Increase tree depth"
 msgstr ""
 
-#: liflines/menuitem.c:131
+#: liflines/menuitem.c:119
 msgid "[  Decrease tree depth"
 msgstr ""
 
-#: liflines/menuitem.c:132
+#: liflines/menuitem.c:120
 msgid "(t Scroll top up"
 msgstr ""
 
-#: liflines/menuitem.c:133
+#: liflines/menuitem.c:121
 msgid ")t Scroll top down"
 msgstr ""
 
-#: liflines/menuitem.c:134
+#: liflines/menuitem.c:122
 msgid "(b Scroll bottom up"
 msgstr ""
 
-#: liflines/menuitem.c:135
+#: liflines/menuitem.c:123
 msgid ")b Scroll bottom down"
 msgstr ""
 
-#: liflines/menuitem.c:136
+#: liflines/menuitem.c:124
 msgid "(( Scroll both up"
 msgstr ""
 
-#: liflines/menuitem.c:137
+#: liflines/menuitem.c:125
 msgid ")) Scroll both down"
 msgstr ""
 
-#: liflines/menuitem.c:138
+#: liflines/menuitem.c:126
 msgid "#  Toggle childnos"
 msgstr ""
 
-#: liflines/menuitem.c:139
+#: liflines/menuitem.c:127
 msgid "!g GEDCOM mode"
 msgstr ""
 
-#: liflines/menuitem.c:140
+#: liflines/menuitem.c:128
 msgid "!x GEDCOMX mode"
 msgstr ""
 
-#: liflines/menuitem.c:141
+#: liflines/menuitem.c:129
 msgid "!t GEDCOMT mode"
 msgstr ""
 
-#: liflines/menuitem.c:142
+#: liflines/menuitem.c:130
 msgid "!a Ancestors mode"
 msgstr ""
 
-#: liflines/menuitem.c:143
+#: liflines/menuitem.c:131
 msgid "!d Descendants mode"
 msgstr ""
 
-#: liflines/menuitem.c:144
+#: liflines/menuitem.c:132
 msgid "!n Normal mode"
 msgstr ""
 
-#: liflines/menuitem.c:145
+#: liflines/menuitem.c:133
 msgid "p  Pedigree mode"
 msgstr ""
 
-#: liflines/menuitem.c:146
+#: liflines/menuitem.c:134
 msgid "!! Cycle mode"
 msgstr ""
 
-#: liflines/menuitem.c:148
+#: liflines/menuitem.c:136
 msgid "(1-9)  Browse to child"
 msgstr ""
 
-#: liflines/menuitem.c:149
+#: liflines/menuitem.c:137
 msgid "y  Turn on sync"
 msgstr ""
 
-#: liflines/menuitem.c:150
+#: liflines/menuitem.c:138
 msgid "A  Advanced view"
 msgstr ""
 
-#: liflines/menuitem.c:151
+#: liflines/menuitem.c:139
 msgid "tc Tandem to children"
 msgstr ""
 
-#: liflines/menuitem.c:152
+#: liflines/menuitem.c:140
 msgid "tf Tandem to father/s"
 msgstr ""
 
-#: liflines/menuitem.c:153
+#: liflines/menuitem.c:141
 msgid "tg Tandem to family/s"
 msgstr ""
 
-#: liflines/menuitem.c:154
+#: liflines/menuitem.c:142
 msgid "f  Browse to fathers"
 msgstr ""
 
-#: liflines/menuitem.c:155
+#: liflines/menuitem.c:143
 msgid "m  Browse to mothers"
 msgstr ""
 
-#: liflines/menuitem.c:156
+#: liflines/menuitem.c:144
 msgid "tm Tandem to mother/s"
 msgstr ""
 
-#: liflines/menuitem.c:157
+#: liflines/menuitem.c:145
 msgid "ts Tandem to spouse/s"
 msgstr ""
 
-#: liflines/menuitem.c:158
+#: liflines/menuitem.c:146
 msgid "tu Tandem to parents"
 msgstr ""
 
-#: liflines/menuitem.c:159
+#: liflines/menuitem.c:147
 msgid "<  Enlarge menu area"
 msgstr ""
 
-#: liflines/menuitem.c:160
+#: liflines/menuitem.c:148
 msgid ">  Shrink menu area"
 msgstr ""
 
-#: liflines/menuitem.c:161
+#: liflines/menuitem.c:149
 msgid "M> More menu cols"
 msgstr ""
 
-#: liflines/menuitem.c:162
+#: liflines/menuitem.c:150
 msgid "M< Less menu cols"
 msgstr ""
 
-#: liflines/menuitem.c:163
+#: liflines/menuitem.c:151
 msgid "+  Next in db"
 msgstr ""
 
-#: liflines/menuitem.c:164
+#: liflines/menuitem.c:152
 msgid "-  Prev in db"
 msgstr ""
 
-#: liflines/menuitem.c:165
+#: liflines/menuitem.c:153
 msgid "d  Copy top to bottom"
 msgstr ""
 
-#: liflines/menuitem.c:166
+#: liflines/menuitem.c:154
 msgid "j  Merge bottom to top"
 msgstr ""
 
-#: liflines/menuitem.c:167
+#: liflines/menuitem.c:155
 msgid "j  Move down list"
 msgstr ""
 
-#: liflines/menuitem.c:168
+#: liflines/menuitem.c:156
 msgid "k  Move up list"
 msgstr ""
 
-#: liflines/menuitem.c:169
+#: liflines/menuitem.c:157
 msgid "e  Edit this person"
 msgstr ""
 
-#: liflines/menuitem.c:170
+#: liflines/menuitem.c:158
 msgid "i  Browse this person"
 msgstr ""
 
-#: liflines/menuitem.c:171
+#: liflines/menuitem.c:159
 msgid "m  Mark this person"
 msgstr ""
 
-#: liflines/menuitem.c:172
+#: liflines/menuitem.c:160
 msgid "d  Delete from list"
 msgstr ""
 
-#: liflines/menuitem.c:173
+#: liflines/menuitem.c:161
 msgid "n  Name this list"
 msgstr ""
 
-#: liflines/menuitem.c:174
+#: liflines/menuitem.c:162
 msgid "b  Browse new persons"
 msgstr ""
 
-#: liflines/menuitem.c:175
+#: liflines/menuitem.c:163
 msgid "a  Add to this list"
 msgstr ""
 
-#: liflines/menuitem.c:176
+#: liflines/menuitem.c:164
 msgid "x  Swap mark/current"
 msgstr ""
 
-#: liflines/menuitem.c:177
+#: liflines/menuitem.c:165
 msgid "$s  List sources"
 msgstr ""
 
-#: liflines/menuitem.c:178
+#: liflines/menuitem.c:166
 msgid "$n  List notes"
 msgstr ""
 
-#: liflines/menuitem.c:179
+#: liflines/menuitem.c:167
 msgid "$$  List references"
 msgstr ""
 
-#: liflines/menuitem.c:180
+#: liflines/menuitem.c:168
 msgid "^b  History/back"
 msgstr ""
 
-#: liflines/menuitem.c:181
+#: liflines/menuitem.c:169
 msgid "^f  History/fwd"
 msgstr ""
 
-#: liflines/menuitem.c:182
+#: liflines/menuitem.c:170
 msgid "^l  History list"
 msgstr ""
 
-#: liflines/menuitem.c:183
+#: liflines/menuitem.c:171
 msgid "^c Clear history"
 msgstr ""
 
-#: liflines/menuitem.c:184
+#: liflines/menuitem.c:172
 msgid "^xb  ChngHist/back"
 msgstr ""
 
-#: liflines/menuitem.c:185
+#: liflines/menuitem.c:173
 msgid "^xf  ChngHist/fwd"
 msgstr ""
 
-#: liflines/menuitem.c:186
+#: liflines/menuitem.c:174
 msgid "^xl  ChngHist list"
 msgstr ""
 
-#: liflines/menuitem.c:187
+#: liflines/menuitem.c:175
 msgid "^xc Clear ChngHist"
 msgstr ""
 
-#: liflines/menuitem.c:189
+#: liflines/menuitem.c:177
 #, no-c-format
 msgid "%s  Add source"
 msgstr ""
 
-#: liflines/menuitem.c:191
+#: liflines/menuitem.c:179
 #, no-c-format
 msgid "%e  Add event"
 msgstr ""
 
-#: liflines/menuitem.c:193
+#: liflines/menuitem.c:181
 #, no-c-format
 msgid "%o  Add other"
 msgstr ""
 
-#: liflines/menuitem.c:196
+#: liflines/menuitem.c:184
 msgid "B  Browse new family"
 msgstr ""
 
-#: liflines/menuitem.c:521
+#: liflines/menuitem.c:509
 #, c-format
 msgid "Menu choice sequence too long: %s"
 msgstr ""
 
-#: liflines/menuitem.c:525
+#: liflines/menuitem.c:513
 #, c-format
 msgid "Menu item lacked choice sequence: %s"
 msgstr ""
 
-#: liflines/menuitem.c:609 liflines/menuitem.c:621
+#: liflines/menuitem.c:597 liflines/menuitem.c:609
 #, c-format
 msgid "In menu: %s"
 msgstr ""
 
-#: liflines/menuitem.c:611
+#: liflines/menuitem.c:599
 #, c-format
 msgid "Duplicate hotkey for item: %s"
 msgstr ""
 
-#: liflines/menuitem.c:614
+#: liflines/menuitem.c:602
 #, c-format
 msgid "Clash with longer hotkey in item: %s"
 msgstr ""
 
-#: liflines/menuitem.c:622
+#: liflines/menuitem.c:610
 #, c-format
 msgid "Clash with shorter hotkey in item: %s"
 msgstr ""
 
-#: liflines/menuitem.c:669
+#: liflines/menuitem.c:659
 msgid "Missing title"
 msgstr ""
 
@@ -3154,115 +3159,115 @@ msgstr ""
 msgid "enter key:"
 msgstr "posizione: "
 
-#: liflines/screen.c:1786
+#: liflines/screen.c:1771
 msgid "Internal codeset"
 msgstr ""
 
-#: liflines/screen.c:1791
+#: liflines/screen.c:1776
 msgid "Locales are enabled."
 msgstr ""
 
-#: liflines/screen.c:1793
+#: liflines/screen.c:1778
 msgid "Locales are disabled."
 msgstr ""
 
-#: liflines/screen.c:1796
+#: liflines/screen.c:1781
 msgid "NLS (National Language Support) is enabled."
 msgstr ""
 
-#: liflines/screen.c:1798
+#: liflines/screen.c:1783
 msgid "NLS (National Language Support) is disabled."
 msgstr ""
 
-#: liflines/screen.c:1803
+#: liflines/screen.c:1788
 msgid "iconv (codeset conversion) is enabled."
 msgstr ""
 
-#: liflines/screen.c:1805
+#: liflines/screen.c:1790
 msgid "iconv (codeset conversion) is disabled."
 msgstr ""
 
-#: liflines/screen.c:1807
+#: liflines/screen.c:1792
 #, c-format
 msgid "Startup collate locale: %s"
 msgstr ""
 
-#: liflines/screen.c:1811
+#: liflines/screen.c:1796
 #, c-format
 msgid "Startup messages locale: %s"
 msgstr ""
 
-#: liflines/screen.c:1815
+#: liflines/screen.c:1800
 #, c-format
 msgid "Current collate locale: %s"
 msgstr ""
 
-#: liflines/screen.c:1819
+#: liflines/screen.c:1804
 #, c-format
 msgid "Current messages locale: %s"
 msgstr ""
 
-#: liflines/screen.c:1823
+#: liflines/screen.c:1808
 #, c-format
 msgid "GUI codeset: %s"
 msgstr ""
 
-#: liflines/screen.c:1827
+#: liflines/screen.c:1812
 #, c-format
 msgid "Editor codeset: %s"
 msgstr ""
 
-#: liflines/screen.c:1831
+#: liflines/screen.c:1816
 #, c-format
 msgid "Report codeset: %s"
 msgstr ""
 
-#: liflines/screen.c:1835
+#: liflines/screen.c:1820
 #, c-format
 msgid "GEDCOM codeset: %s"
 msgstr ""
 
-#: liflines/screen.c:1839
+#: liflines/screen.c:1836
 msgid "Codeset information"
 msgstr ""
 
-#: liflines/screen.c:1856
+#: liflines/screen.c:1853
 #, c-format
 msgid "gettext dll: %s"
 msgstr ""
 
-#: liflines/screen.c:1860
+#: liflines/screen.c:1857
 #, c-format
 msgid "gettext dll version: %s"
 msgstr ""
 
-#: liflines/screen.c:1865
+#: liflines/screen.c:1862
 msgid "gettext dll had no version"
 msgstr ""
 
-#: liflines/screen.c:1870
+#: liflines/screen.c:1867
 msgid "no gettext dll found"
 msgstr ""
 
-#: liflines/screen.c:1880
+#: liflines/screen.c:1877
 #, c-format
 msgid "iconv dll: %s"
 msgstr ""
 
-#: liflines/screen.c:1884
+#: liflines/screen.c:1881
 #, c-format
 msgid "iconv dll version: %s"
 msgstr ""
 
-#: liflines/screen.c:1889
+#: liflines/screen.c:1886
 msgid "iconv dll had no version"
 msgstr ""
 
-#: liflines/screen.c:1894
+#: liflines/screen.c:1891
 msgid "no iconv dll found"
 msgstr ""
 
-#: liflines/screen.c:2141
+#: liflines/screen.c:2140
 msgid "Impermissible to change codeset in a populated database"
 msgstr ""
 

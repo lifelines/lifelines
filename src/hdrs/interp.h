@@ -179,7 +179,6 @@ extern SYMTAB globtab;
 extern TABLE proctab;
 
 extern INT Plineno;
-extern FILE *Pinfp;
 extern FILE *Poutfp;
 extern INT _rows;
 extern INT _cols;
@@ -369,11 +368,10 @@ void show_pnodes(PNODE);
 void shutdown_interpreter(void);
 PNODE spouses_node(PNODE, STRING, STRING, STRING, PNODE);
 PNODE string_node(STRING);
+PNODE string_node_in_internal_codeset(STRING);
 PNODE traverse_node(PNODE, STRING, STRING, PNODE);
 PVALUE valueof_iden(PNODE node, SYMTAB stab, STRING iden, BOOLEAN *eflg);
 PNODE while_node(PNODE, PNODE);
-int yylex(void);
-int yyparse(void);
 
 void poutput(STRING, BOOLEAN *eflg);
 void interp_main(BOOLEAN picklist);

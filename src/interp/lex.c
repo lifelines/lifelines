@@ -44,38 +44,41 @@
 #include "cache.h"
 #include "interp.h"
 #include "yacc.h"
+#include "parse.h"
 
-void initlex (int mode);
+void initlex (struct parseinfo *pinfo, int mode);
 
-extern FILE *Pinfp;	/* file that holds program */
-extern STRING Pinstr;	/* string that holds program */
 extern INT Plineno;	/* program line number */
 
 static INT Lexmode = FILEMODE;
 static STRING Lp;	/* pointer into program string */
 
-static int lowyylex(void);
-static INT inchar(void);
-static void unreadchar(INT);
+
+static INT inchar(FILE *infp);
+static int lowyylex(YYSTYPE * lvalp, void * parm);
 static BOOLEAN reserved(STRING, INT*);
+static void unreadchar(INT c, FILE * infp);
 
 /*============================
  * initlex -- Initialize lexer
+ * TODO: 2002.07.14, Perry: This is not used -- find out intent
  *==========================*/
 void
-initlex (int mode)
+initlex (struct parseinfo *pinfo, int mode)
 {
 	ASSERT(mode == FILEMODE || mode == STRINGMODE);
 	Lexmode = mode;
-	if (Lexmode == STRINGMODE) Lp = Pinstr;
+	if (Lexmode == STRINGMODE) Lp = pinfo->Pinstr;
 }
 /*===================================================
  * yylex -- High level lexer function (for debugging)
+ *  lvalp:    [I/O] pointer to bison's data (primarily return value)
+ *  yaccparm: [IN]  pointer to data passed by interp.c to bison's yyparse 
  *=================================================*/
 int
-yylex(void)
+yylex (YYSTYPE * lvalp, void * parm)
 {
-	INT lex = lowyylex();
+	INT lex = lowyylex(lvalp, parm);
 
 #ifdef DEBUG
 	if (isascii(lex))
@@ -98,28 +101,32 @@ is_iden_char (INT c, INT t)
  * lowyylex -- Lexer function
  *=========================*/
 int
-lowyylex (void)
+lowyylex (YYSTYPE * lvalp, void * parm)
 {
 	INT c=0, t=0, retval, mul;
 	extern INT Yival;
 	extern FLOAT Yfval;
-	extern YYSTYPE yylval;
 	static char tokbuf[200];	/* token buffer */
 	STRING p = tokbuf;
+	struct parseinfo * pinfo = (struct parseinfo *)parm;
+	FILE * infp = pinfo->Pinfp;
+	/* TODO: pass report codeset thru to here, & on to the
+	string_node_in_internal_codeset calls below */
+
 	while (TRUE) {
-		while ((t = chartype(c = inchar())) == WHITE)
+		while ((t = chartype(c = inchar(infp))) == WHITE)
 			;
 		if (c != '/') break;
-		if ((c = inchar()) != '*') {
-			unreadchar(c);
+		if ((c = inchar(infp)) != '*') {
+			unreadchar(c, infp);
 			return '/';
 		}
 		/* inside a comment -- advance til end */
 		while (TRUE) {
-			while ((c = inchar()) != '*' && c != EOF)
+			while ((c = inchar(infp)) != '*' && c != EOF)
 				;
 			if (c == EOF) return 0;
-			while ((c = inchar()) == '*')
+			while ((c = inchar(infp)) == '*')
 				;
 			if (c == '/') break;
 			if (c == EOF) return 0;
@@ -134,15 +141,15 @@ lowyylex (void)
 				/* token overlong -- ignore end of it */
 				/* TODO: How can we force a parse error from here ? */
 			}
-			t = chartype(c = inchar());
+			t = chartype(c = inchar(infp));
 		}
 		*p = 0;
-		unreadchar(c);
+		unreadchar(c, infp);
 #ifdef DEBUG
 		llwprintf("in lex.c -- IDEN is %s\n", tokbuf);
 #endif
 		if (reserved(tokbuf, &retval))  return retval;
-		yylval = (PNODE) strsave(tokbuf);
+		*lvalp = (PNODE) strsave(tokbuf);
 		return IDEN;
 	}
 	if (t == '-' || t == DIGIT || t == '.') {
@@ -151,9 +158,9 @@ lowyylex (void)
 		FLOAT fdiv;
 		mul = 1;
 		if (t == '-') {
-			t = chartype(c = inchar());
+			t = chartype(c = inchar(infp));
 			if (t != '.' && t != DIGIT) {
-				unreadchar(c);
+				unreadchar(c, infp);
 				return '-';
 			}
 			mul = -1;
@@ -162,50 +169,47 @@ lowyylex (void)
 		while (t == DIGIT) {
 			whole = TRUE;
 			Yival = Yival*10 + c - '0';
-			t = chartype(c = inchar());
+			t = chartype(c = inchar(infp));
 		}
 		if (t != '.') {
-			unreadchar(c);
+			unreadchar(c, infp);
 			Yival *= mul;
-			yylval = NULL;
+			*lvalp = NULL;
 			return ICONS;
 		}
-		t = chartype(c = inchar());
+		t = chartype(c = inchar(infp));
 		Yfval = 0.0;
 		fdiv = 1.0;
 		while (t == DIGIT) {
 			frac = TRUE;
 			Yfval = Yfval*10 + c - '0';
 			fdiv *= 10.;
-			t = chartype(c = inchar());
+			t = chartype(c = inchar(infp));
 		}
-#if 0
-		if (frac) unreadchar(c);
-#endif
-		unreadchar(c);	/* REPLACED BY THIS */
+		unreadchar(c, infp);
 		if (!whole && !frac) {
-			unreadchar(c);
+			unreadchar(c, infp);
 			if (mul == -1) {
-				unreadchar('.');
+				unreadchar('.', infp);
 				return '-';
 			} else
 				return '.';
 		}
 		Yfval = mul*(Yival + Yfval/fdiv);
-		yylval = NULL;
+		*lvalp = NULL;
 		return FCONS;
 	}
 	if (c == '"') {
 		p = tokbuf;
 		while (TRUE) {
-			while ((c = inchar()) != EOF && c != '"' && c != '\\')
+			while ((c = inchar(infp)) != EOF && c != '"' && c != '\\')
 				*p++ = c;
 			if (c == 0 || c == '"') {
 				*p = 0;
-				yylval = string_node(tokbuf);
+				*lvalp = string_node_in_internal_codeset(tokbuf);
 				return SCONS;
 			}
-			switch (c = inchar()) {
+			switch (c = inchar(infp)) {
 			case 'n': *p++ = '\n'; break;
 			case 't': *p++ = '\t'; break;
 			case 'v': *p++ = '\v'; break;
@@ -216,7 +220,7 @@ lowyylex (void)
 			case '\\': *p++ = '\\'; break;
 			case EOF:
 				*p = 0;
-				yylval = string_node(tokbuf);
+				*lvalp = string_node_in_internal_codeset(tokbuf);
 				return SCONS;
 			default:
 				*p++ = c; break;
@@ -283,18 +287,18 @@ reserved (STRING word,
  * inchar -- Read char from input file/string; track line number
  *============================================================*/
 INT
-inchar (void)
+inchar (FILE *infp)
 {
 	INT c;
 #ifdef SKIPCTRLZ
 	do {
 #endif
-	   if (Lexmode == FILEMODE)
-		c = getc(Pinfp);
-	   else
-		c = (uchar)*Lp++;
+		if (Lexmode == FILEMODE)
+			c = getc(infp);
+		else
+			c = (uchar)*Lp++;
 #ifdef SKIPCTRLZ
- 	   } while(c == 26);		/* skip CTRL-Z */
+	} while(c == 26);		/* skip CTRL-Z */
 #endif
 	if (c == '\n') Plineno++;
 	return c;
@@ -303,10 +307,10 @@ inchar (void)
  * unreadchar -- Unread char from input file/string; track line number
  *==============================================================*/
 void
-unreadchar (INT c)
+unreadchar (INT c, FILE * infp)
 {
 	if (Lexmode == FILEMODE)
-		ungetc(c, Pinfp);
+		ungetc(c, infp);
 	else
 		Lp--;
 	if (c == '\n') Plineno--;

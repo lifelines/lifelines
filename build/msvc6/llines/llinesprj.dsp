@@ -637,6 +637,10 @@ SOURCE=..\..\..\hdrs\win32\intlshim.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\hdrs\langinfz.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\hdrs\liflines.h
 # End Source File
 # Begin Source File
@@ -670,6 +674,10 @@ SOURCE=..\..\..\hdrs\msvc.h
 # Begin Source File
 
 SOURCE=..\..\..\hdrs\mystring.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\interp\parse.h
 # End Source File
 # Begin Source File
 
@@ -712,9 +720,5 @@ SOURCE=..\..\..\hdrs\warehouse.h
 SOURCE=..\..\..\interp\yacc.h
 # End Source File
 # End Group
-# Begin Source File
-
-SOURCE=..\..\..\hdrs\langinfz.h
-# End Source File
 # End Target
 # End Project

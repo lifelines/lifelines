@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.12\n"
-"POT-Creation-Date: 2002-06-25 21:46-0400\n"
+"POT-Creation-Date: 2002-07-14 04:07-0400\n"
 "PO-Revision-Date: 2002-06-03 19:20+0200\n"
 "Last-Translator: Jens Arvidsson <arvid-jens@algonet.se>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -1567,8 +1567,9 @@ msgid "WARNING: missing keys"
 msgstr "VARNING: nycklar saknas"
 
 #: gedlib/messages.c:465
-msgid "WARNING: invalid pointer"
-msgstr "VARNING: ogiltig visare"
+#, fuzzy
+msgid "This does not point to another record in the database!"
+msgstr "6  Redigera en post av annan typ i databasen"
 
 #: gedlib/messages.c:466
 msgid "enter file name"
@@ -1612,7 +1613,7 @@ msgstr "Felaktigt kontrollsekvensformat."
 msgid "%s: line %d (entry %d): %s\n"
 msgstr "%s: rad %d (notering %d): %s\n"
 
-#: gedlib/messages.c:480 liflines/menuitem.c:86
+#: gedlib/messages.c:480 liflines/menuitem.c:27
 msgid "q  Return to main menu"
 msgstr "q  Återgå till huvudmenyn"
 
@@ -2343,7 +2344,7 @@ msgstr "comp"
 msgid "jour_complementairs"
 msgstr "jour_complementairs"
 
-#: gedlib/node.c:1267
+#: gedlib/node.c:1268
 msgid "NO NAME"
 msgstr ""
 
@@ -2462,62 +2463,67 @@ msgstr ""
 msgid "%s: the arg #%s had a major error."
 msgstr ""
 
-#: interp/builtin.c:106
+#: interp/builtin.c:108
 #, fuzzy
 msgid "Enter integer for program"
 msgstr "Skriv in sträng för program"
 
-#: interp/builtin.c:174
+#: interp/builtin.c:176
 #, fuzzy
 msgid "Identify person for program:"
 msgstr "Skriv in sträng för program"
 
-#: interp/builtin.c:202
+#: interp/builtin.c:204
 #, fuzzy
 msgid "Enter a spouse from family."
 msgstr "s  Lägg t. maka/make i fam."
 
-#: interp/builtin.c:203
+#: interp/builtin.c:205
 #, fuzzy
 msgid "Enter a sibling from family."
 msgstr "Kan inte ta bort den sista personen från en familj."
 
-#: interp/builtin.c:236
+#: interp/builtin.c:238
 #, fuzzy
 msgid "Identify list of persons for program:"
 msgstr "Identifiera den andra personen att bläddra till."
 
-#: interp/builtin.c:295
+#: interp/builtin.c:297
 #, fuzzy
 msgid "name: person does not have a name"
 msgstr "Rad %d: Personen som definieras här saknar namn."
 
-#: interp/builtin.c:348
+#: interp/builtin.c:350
 msgid "fullname: person does not have a name"
 msgstr ""
 
-#: interp/builtin.c:376
+#: interp/builtin.c:378
 msgid "surname: person does not have a name"
 msgstr ""
 
-#: interp/builtin.c:402
+#: interp/builtin.c:404
 msgid "soundex: person does not have a name"
 msgstr ""
 
-#: interp/builtin.c:449
+#: interp/builtin.c:451
+#, c-format
+msgid "Bad UTF character %d in UTF escape string <%s>"
+msgstr ""
+
+#: interp/builtin.c:551
 #, fuzzy
 msgid "(givens) person does not have a name"
 msgstr "Denna persons moder finns inte i databasen."
 
-#: interp/builtin.c:476
+#: interp/builtin.c:578
 msgid "set: error evaluating 2nd arg"
 msgstr ""
 
-#: interp/builtin.c:863
+#: interp/builtin.c:965
 msgid "the arg to f is not a float"
 msgstr ""
 
-#: interp/builtin.c:2385
+#: interp/builtin.c:2487
 msgid "(trimname) person does not have a name"
 msgstr ""
 
@@ -2526,118 +2532,118 @@ msgstr ""
 msgid "Error: file <%s> not found"
 msgstr ""
 
-#: interp/interp.c:245
+#: interp/interp.c:246
 msgid "contains errors."
 msgstr ""
 
-#: interp/interp.c:252
+#: interp/interp.c:253
 msgid "needs a starting procedure."
 msgstr ""
 
-#: interp/interp.c:259
+#: interp/interp.c:260
 #, c-format
 msgid "Error: output file <%s> could not be created.\n"
 msgstr ""
 
-#: interp/interp.c:269
+#: interp/interp.c:270
 #, c-format
 msgid "Proc %s must be called with %d (not %d) parameters."
 msgstr ""
 
-#: interp/interp.c:284
+#: interp/interp.c:285
 msgid "is running..."
 msgstr ""
 
-#: interp/interp.c:288
+#: interp/interp.c:289
 msgid "was run successfully."
 msgstr ""
 
-#: interp/interp.c:292
+#: interp/interp.c:293
 msgid "was cancelled."
 msgstr ""
 
-#: interp/interp.c:294
+#: interp/interp.c:295
 msgid "was not run because of errors."
 msgstr ""
 
-#: interp/interp.c:345
+#: interp/interp.c:346
 #, c-format
 msgid "Error: file <%s> not found.\n"
 msgstr ""
 
-#: interp/interp.c:403
+#: interp/interp.c:404
 #, c-format
 msgid "identifier: %s should be a string\n"
 msgstr ""
 
-#: interp/interp.c:1593
+#: interp/interp.c:1594
 #, fuzzy, c-format
 msgid "Display locals (%d)"
 msgstr "Visa lokal: "
 
-#: interp/interp.c:1596
+#: interp/interp.c:1597
 #, fuzzy, c-format
 msgid "Display globals (%d)"
 msgstr "Visa lokal: "
 
-#: interp/interp.c:1598
+#: interp/interp.c:1599
 msgid "Pop one level"
 msgstr ""
 
-#: interp/interp.c:1599
+#: interp/interp.c:1600
 msgid "Quit debugger"
 msgstr ""
 
-#: interp/interp.c:1606
+#: interp/interp.c:1607
 msgid "Local variables"
 msgstr ""
 
-#: interp/interp.c:1610
+#: interp/interp.c:1611
 msgid "Global variables"
 msgstr ""
 
-#: interp/interp.c:1701
+#: interp/interp.c:1702
 #, fuzzy
 msgid "Report cancelled"
 msgstr "Lokal för rapporter: "
 
-#: interp/interp.c:1709
+#: interp/interp.c:1710
 #, c-format
 msgid ""
 "\n"
 "Parsing Error in <%s>"
 msgstr ""
 
-#: interp/interp.c:1712
+#: interp/interp.c:1713
 #, c-format
 msgid ""
 "\n"
 "Runtime Error in: <%s>"
 msgstr ""
 
-#: interp/interp.c:1718
+#: interp/interp.c:1719
 #, c-format
 msgid "Parsing Error at line %d: "
 msgstr ""
 
-#: interp/interp.c:1721
+#: interp/interp.c:1722
 #, c-format
 msgid "Runtime Error at line %d: "
 msgstr ""
 
-#: interp/interp.c:1723
+#: interp/interp.c:1724
 #, fuzzy
 msgid "Aborting: "
 msgstr "född: "
 
-#: interp/interp.c:1740
+#: interp/interp.c:1741
 #, fuzzy, c-format
 msgid ""
 "\n"
 "Report Errors: %s"
 msgstr "Teckenkodning för rapporter:"
 
-#: interp/interp.c:1882
+#: interp/interp.c:1896
 msgid "This report requires a newer program to run"
 msgstr ""
 
@@ -2744,453 +2750,453 @@ msgstr ""
 msgid "No databases found in database path"
 msgstr ""
 
-#: liflines/menuitem.c:85
+#: liflines/menuitem.c:26
 msgid "?  Other menu choices"
 msgstr "?  Andra menyval"
 
-#: liflines/menuitem.c:89
+#: liflines/menuitem.c:77
 msgid "e  Edit the person"
 msgstr "e  Redigera personen"
 
-#: liflines/menuitem.c:90
+#: liflines/menuitem.c:78
 msgid "e  Edit the family"
 msgstr "e  Redigera familjen"
 
-#: liflines/menuitem.c:91
+#: liflines/menuitem.c:79
 msgid "e  Edit record"
 msgstr "e  Redigera post"
 
-#: liflines/menuitem.c:92
+#: liflines/menuitem.c:80
 msgid "e  Edit top person"
 msgstr "e  Redigera övre pers."
 
-#: liflines/menuitem.c:93
+#: liflines/menuitem.c:81
 msgid "f  Browse to father"
 msgstr "f  Bläddra till fader"
 
-#: liflines/menuitem.c:94
+#: liflines/menuitem.c:82
 msgid "f  Browse top father"
 msgstr "f  Bläddra t. övre fader"
 
-#: liflines/menuitem.c:95
+#: liflines/menuitem.c:83
 msgid "m  Browse to mother"
 msgstr "m  Bläddra till moder"
 
-#: liflines/menuitem.c:96
+#: liflines/menuitem.c:84
 msgid "m  Browse top mother"
 msgstr "m  Bläddra t. övre moder"
 
-#: liflines/menuitem.c:97
+#: liflines/menuitem.c:85
 msgid "s  Browse to spouse/s"
 msgstr "s  Bläddra till make/maka/r"
 
-#: liflines/menuitem.c:98
+#: liflines/menuitem.c:86
 msgid "s  Browse top spouse/s"
 msgstr "s  Bl. t. övre make/maka/r"
 
-#: liflines/menuitem.c:99
+#: liflines/menuitem.c:87
 msgid "c  Browse to children"
 msgstr "c  Bläddra till barn"
 
-#: liflines/menuitem.c:100
+#: liflines/menuitem.c:88
 msgid "c  Browse top children"
 msgstr "c  Bl. t. övre barn"
 
-#: liflines/menuitem.c:101
+#: liflines/menuitem.c:89
 msgid "o  Browse to older sib"
 msgstr "o  Bl. t. äldre syskon"
 
-#: liflines/menuitem.c:102
+#: liflines/menuitem.c:90
 msgid "y  Browse to younger sib"
 msgstr "y  Bl. t. yngre syskon"
 
-#: liflines/menuitem.c:103
+#: liflines/menuitem.c:91
 msgid "g  Browse to family"
 msgstr "g  Bläddra t. familj"
 
-#: liflines/menuitem.c:104
+#: liflines/menuitem.c:92
 msgid "u  Browse to parents"
 msgstr "u  Bläddra t. föräldrar"
 
-#: liflines/menuitem.c:105
+#: liflines/menuitem.c:93
 msgid "b  Browse to persons"
 msgstr "b  Bläddra t. personer"
 
-#: liflines/menuitem.c:106
+#: liflines/menuitem.c:94
 msgid "t  Browse to top"
 msgstr "t  Bläddra till övre"
 
-#: liflines/menuitem.c:107
+#: liflines/menuitem.c:95
 msgid "b  Browse to bottom"
 msgstr "b  Bläddra t. nedre"
 
-#: liflines/menuitem.c:108
+#: liflines/menuitem.c:96
 msgid "h  Add as spouse"
 msgstr "h  Lägg t. som maka/make"
 
-#: liflines/menuitem.c:109
+#: liflines/menuitem.c:97
 msgid "i  Add as child"
 msgstr "i  Lägg till som barn"
 
-#: liflines/menuitem.c:110
+#: liflines/menuitem.c:98
 msgid "s  Add spouse to family"
 msgstr "s  Lägg t. maka/make i fam."
 
-#: liflines/menuitem.c:111
+#: liflines/menuitem.c:99
 msgid "a  Add child to family"
 msgstr "a  Lägg t. barn i fam."
 
-#: liflines/menuitem.c:112
+#: liflines/menuitem.c:100
 msgid "a  Add family"
 msgstr "a  Lägg till familj"
 
-#: liflines/menuitem.c:113
+#: liflines/menuitem.c:101
 msgid "x  Swap two families"
 msgstr "x  Växla två familjer"
 
-#: liflines/menuitem.c:114
+#: liflines/menuitem.c:102
 msgid "x  Swap two children"
 msgstr "x  Växla två barn"
 
-#: liflines/menuitem.c:116
+#: liflines/menuitem.c:104
 #, no-c-format
 msgid "%c  Reorder child"
 msgstr "%c  Ordna om barn"
 
-#: liflines/menuitem.c:117
+#: liflines/menuitem.c:105
 msgid "x  Switch top/bottom"
 msgstr "x  Växla övre/nedre"
 
-#: liflines/menuitem.c:118
+#: liflines/menuitem.c:106
 msgid "n  Create new person"
 msgstr "n  Skapa ny person"
 
-#: liflines/menuitem.c:119
+#: liflines/menuitem.c:107
 msgid "a  Create new family"
 msgstr "a  Skapa ny familj"
 
-#: liflines/menuitem.c:120
+#: liflines/menuitem.c:108
 msgid "tt Enter tandem mode"
 msgstr "tt Växla t. tandemläge"
 
-#: liflines/menuitem.c:121
+#: liflines/menuitem.c:109
 msgid "tt Enter family tandem"
 msgstr "tt Växla t. fam.tandem"
 
-#: liflines/menuitem.c:122
+#: liflines/menuitem.c:110
 msgid "zi Browse to indi"
 msgstr "zi Bläddra t. pers."
 
-#: liflines/menuitem.c:123
+#: liflines/menuitem.c:111
 msgid "zz Browse to any"
 msgstr "zz Bläddra t. alla"
 
-#: liflines/menuitem.c:124
+#: liflines/menuitem.c:112
 msgid "r  Remove as spouse"
 msgstr "r  Ta bort som maka/make"
 
-#: liflines/menuitem.c:125
+#: liflines/menuitem.c:113
 msgid "d  Remove as child"
 msgstr "d  Ta bort som barn"
 
-#: liflines/menuitem.c:126
+#: liflines/menuitem.c:114
 msgid "r  Remove spouse from"
 msgstr "r  Ta bort maka/make från"
 
-#: liflines/menuitem.c:127
+#: liflines/menuitem.c:115
 msgid "d  Remove child from"
 msgstr "d  Ta bort barn från"
 
-#: liflines/menuitem.c:128
+#: liflines/menuitem.c:116
 msgid "(  Scroll up"
 msgstr "(  Rulla uppåt"
 
-#: liflines/menuitem.c:129
+#: liflines/menuitem.c:117
 msgid ")  Scroll down"
 msgstr ")  Rulla nedåt"
 
-#: liflines/menuitem.c:130
+#: liflines/menuitem.c:118
 msgid "]  Increase tree depth"
 msgstr "]  Öka träddjup"
 
-#: liflines/menuitem.c:131
+#: liflines/menuitem.c:119
 msgid "[  Decrease tree depth"
 msgstr "[  Minska träddjup"
 
-#: liflines/menuitem.c:132
+#: liflines/menuitem.c:120
 msgid "(t Scroll top up"
 msgstr "(t Rulla övre upp"
 
-#: liflines/menuitem.c:133
+#: liflines/menuitem.c:121
 msgid ")t Scroll top down"
 msgstr ")t Rulla övre ned"
 
-#: liflines/menuitem.c:134
+#: liflines/menuitem.c:122
 msgid "(b Scroll bottom up"
 msgstr "(b Rulla nedre upp"
 
-#: liflines/menuitem.c:135
+#: liflines/menuitem.c:123
 msgid ")b Scroll bottom down"
 msgstr ")b Rulla nedre ned"
 
-#: liflines/menuitem.c:136
+#: liflines/menuitem.c:124
 msgid "(( Scroll both up"
 msgstr "(( Rulla båda upp"
 
-#: liflines/menuitem.c:137
+#: liflines/menuitem.c:125
 msgid ")) Scroll both down"
 msgstr ")) Rulla båda ned"
 
-#: liflines/menuitem.c:138
+#: liflines/menuitem.c:126
 msgid "#  Toggle childnos"
 msgstr "#  Slå på/av barnnr"
 
-#: liflines/menuitem.c:139
+#: liflines/menuitem.c:127
 msgid "!g GEDCOM mode"
 msgstr "!g GEDCOM-läge"
 
-#: liflines/menuitem.c:140
+#: liflines/menuitem.c:128
 msgid "!x GEDCOMX mode"
 msgstr "!x GEDCOMX-läge"
 
-#: liflines/menuitem.c:141
+#: liflines/menuitem.c:129
 msgid "!t GEDCOMT mode"
 msgstr "!t GEDCOMT-läge"
 
-#: liflines/menuitem.c:142
+#: liflines/menuitem.c:130
 msgid "!a Ancestors mode"
 msgstr "!a Anläge"
 
-#: liflines/menuitem.c:143
+#: liflines/menuitem.c:131
 msgid "!d Descendants mode"
 msgstr "!d Ättlingaläge"
 
-#: liflines/menuitem.c:144
+#: liflines/menuitem.c:132
 msgid "!n Normal mode"
 msgstr "!n Normalt läge"
 
-#: liflines/menuitem.c:145
+#: liflines/menuitem.c:133
 msgid "p  Pedigree mode"
 msgstr "p  Tavelläge"
 
-#: liflines/menuitem.c:146
+#: liflines/menuitem.c:134
 msgid "!! Cycle mode"
 msgstr "!! Cykliskt läge"
 
-#: liflines/menuitem.c:148
+#: liflines/menuitem.c:136
 msgid "(1-9)  Browse to child"
 msgstr "(1-9)  Bläddra t. barn"
 
-#: liflines/menuitem.c:149
+#: liflines/menuitem.c:137
 msgid "y  Turn on sync"
 msgstr "y  Slå på synk"
 
-#: liflines/menuitem.c:150
+#: liflines/menuitem.c:138
 msgid "A  Advanced view"
 msgstr "A  Avancerad vy"
 
-#: liflines/menuitem.c:151
+#: liflines/menuitem.c:139
 msgid "tc Tandem to children"
 msgstr "tc Tandem till barn"
 
-#: liflines/menuitem.c:152
+#: liflines/menuitem.c:140
 msgid "tf Tandem to father/s"
 msgstr "tf Tandem t. fader/fäder"
 
-#: liflines/menuitem.c:153
+#: liflines/menuitem.c:141
 msgid "tg Tandem to family/s"
 msgstr "tg Tandem t. familj/er"
 
-#: liflines/menuitem.c:154
+#: liflines/menuitem.c:142
 msgid "f  Browse to fathers"
 msgstr "f  Bläddra t. fäder"
 
-#: liflines/menuitem.c:155
+#: liflines/menuitem.c:143
 msgid "m  Browse to mothers"
 msgstr "m  Bläddra t. mödrar"
 
-#: liflines/menuitem.c:156
+#: liflines/menuitem.c:144
 msgid "tm Tandem to mother/s"
 msgstr "tm Tandem t. moder/mödrar/"
 
-#: liflines/menuitem.c:157
+#: liflines/menuitem.c:145
 msgid "ts Tandem to spouse/s"
 msgstr "ts Tandem till make/maka/makar"
 
-#: liflines/menuitem.c:158
+#: liflines/menuitem.c:146
 msgid "tu Tandem to parents"
 msgstr "tu Tandem t. föräldrar"
 
-#: liflines/menuitem.c:159
+#: liflines/menuitem.c:147
 msgid "<  Enlarge menu area"
 msgstr "<  Öka menyyta"
 
-#: liflines/menuitem.c:160
+#: liflines/menuitem.c:148
 msgid ">  Shrink menu area"
 msgstr ">  Minska menyyta"
 
-#: liflines/menuitem.c:161
+#: liflines/menuitem.c:149
 msgid "M> More menu cols"
 msgstr "M> Fler menykolumner"
 
-#: liflines/menuitem.c:162
+#: liflines/menuitem.c:150
 msgid "M< Less menu cols"
 msgstr "M< Färre menykolumner"
 
-#: liflines/menuitem.c:163
+#: liflines/menuitem.c:151
 msgid "+  Next in db"
 msgstr "+  Nästa i databasen"
 
-#: liflines/menuitem.c:164
+#: liflines/menuitem.c:152
 msgid "-  Prev in db"
 msgstr "-  Föreg. i databasen"
 
-#: liflines/menuitem.c:165
+#: liflines/menuitem.c:153
 msgid "d  Copy top to bottom"
 msgstr "d  Kopiera öv. t. ned."
 
-#: liflines/menuitem.c:166
+#: liflines/menuitem.c:154
 msgid "j  Merge bottom to top"
 msgstr "j  Sammanl. ned. - öv."
 
-#: liflines/menuitem.c:167
+#: liflines/menuitem.c:155
 msgid "j  Move down list"
 msgstr "j  Gå nedåt i lista"
 
-#: liflines/menuitem.c:168
+#: liflines/menuitem.c:156
 msgid "k  Move up list"
 msgstr "k  Gå uppåt i lista"
 
-#: liflines/menuitem.c:169
+#: liflines/menuitem.c:157
 msgid "e  Edit this person"
 msgstr "e Redigera denna pers."
 
-#: liflines/menuitem.c:170
+#: liflines/menuitem.c:158
 msgid "i  Browse this person"
 msgstr "i  Bläddra till denna pers"
 
-#: liflines/menuitem.c:171
+#: liflines/menuitem.c:159
 msgid "m  Mark this person"
 msgstr "m  Markera denna pers."
 
-#: liflines/menuitem.c:172
+#: liflines/menuitem.c:160
 msgid "d  Delete from list"
 msgstr "d  Ta bort från lista"
 
-#: liflines/menuitem.c:173
+#: liflines/menuitem.c:161
 msgid "n  Name this list"
 msgstr "n  Ge denna lista namn"
 
-#: liflines/menuitem.c:174
+#: liflines/menuitem.c:162
 msgid "b  Browse new persons"
 msgstr "b  Bläddra till nya pers."
 
-#: liflines/menuitem.c:175
+#: liflines/menuitem.c:163
 msgid "a  Add to this list"
 msgstr "a  Lägg t. i denna lista"
 
-#: liflines/menuitem.c:176
+#: liflines/menuitem.c:164
 msgid "x  Swap mark/current"
 msgstr "x  Växla märke/aktuell"
 
-#: liflines/menuitem.c:177
+#: liflines/menuitem.c:165
 msgid "$s  List sources"
 msgstr "$s  Lista källor"
 
-#: liflines/menuitem.c:178
+#: liflines/menuitem.c:166
 msgid "$n  List notes"
 msgstr "$n  Lista notiser"
 
-#: liflines/menuitem.c:179
+#: liflines/menuitem.c:167
 msgid "$$  List references"
 msgstr "$$  Lista referenser"
 
-#: liflines/menuitem.c:180
+#: liflines/menuitem.c:168
 msgid "^b  History/back"
 msgstr "^b  Historik/bakåt"
 
-#: liflines/menuitem.c:181
+#: liflines/menuitem.c:169
 msgid "^f  History/fwd"
 msgstr "^f  Historik/framåt"
 
-#: liflines/menuitem.c:182
+#: liflines/menuitem.c:170
 msgid "^l  History list"
 msgstr "^l  Historiklista"
 
-#: liflines/menuitem.c:183
+#: liflines/menuitem.c:171
 msgid "^c Clear history"
 msgstr "^c  Töm historik"
 
-#: liflines/menuitem.c:184
+#: liflines/menuitem.c:172
 #, fuzzy
 msgid "^xb  ChngHist/back"
 msgstr "^b  Historik/bakåt"
 
-#: liflines/menuitem.c:185
+#: liflines/menuitem.c:173
 #, fuzzy
 msgid "^xf  ChngHist/fwd"
 msgstr "^f  Historik/framåt"
 
-#: liflines/menuitem.c:186
+#: liflines/menuitem.c:174
 #, fuzzy
 msgid "^xl  ChngHist list"
 msgstr "^l  Historiklista"
 
-#: liflines/menuitem.c:187
+#: liflines/menuitem.c:175
 #, fuzzy
 msgid "^xc Clear ChngHist"
 msgstr "^c  Töm historik"
 
-#: liflines/menuitem.c:189
+#: liflines/menuitem.c:177
 #, no-c-format
 msgid "%s  Add source"
 msgstr "%s  Lägg till källa"
 
-#: liflines/menuitem.c:191
+#: liflines/menuitem.c:179
 #, no-c-format
 msgid "%e  Add event"
 msgstr "%e  Lägg till händelse"
 
-#: liflines/menuitem.c:193
+#: liflines/menuitem.c:181
 #, no-c-format
 msgid "%o  Add other"
 msgstr "%o  Lägg till annan"
 
-#: liflines/menuitem.c:196
+#: liflines/menuitem.c:184
 msgid "B  Browse new family"
 msgstr "B  Bläddra i ny familj"
 
-#: liflines/menuitem.c:521
+#: liflines/menuitem.c:509
 #, c-format
 msgid "Menu choice sequence too long: %s"
 msgstr "Menyvalssekvens för lång: %s"
 
-#: liflines/menuitem.c:525
+#: liflines/menuitem.c:513
 #, c-format
 msgid "Menu item lacked choice sequence: %s"
 msgstr "Menyval saknade valsekvens: %s"
 
-#: liflines/menuitem.c:609 liflines/menuitem.c:621
+#: liflines/menuitem.c:597 liflines/menuitem.c:609
 #, c-format
 msgid "In menu: %s"
 msgstr "I meny: %s"
 
-#: liflines/menuitem.c:611
+#: liflines/menuitem.c:599
 #, c-format
 msgid "Duplicate hotkey for item: %s"
 msgstr "Dubblerad snabbnyckel för post: %s"
 
-#: liflines/menuitem.c:614
+#: liflines/menuitem.c:602
 #, c-format
 msgid "Clash with longer hotkey in item: %s"
 msgstr "Krock med längre snabbnyckel i post: %s"
 
-#: liflines/menuitem.c:622
+#: liflines/menuitem.c:610
 #, c-format
 msgid "Clash with shorter hotkey in item: %s"
 msgstr "Krock med kortare snabbnyckel i post: %s"
 
-#: liflines/menuitem.c:669
+#: liflines/menuitem.c:659
 msgid "Missing title"
 msgstr "Titel saknas"
 
@@ -3204,116 +3210,116 @@ msgstr "k  Finn nyckelvärde för en person"
 msgid "enter key:"
 msgstr "skriv in namn: "
 
-#: liflines/screen.c:1786
+#: liflines/screen.c:1771
 #, fuzzy
 msgid "Internal codeset"
 msgstr "Intern koduppsättning: "
 
-#: liflines/screen.c:1791
+#: liflines/screen.c:1776
 msgid "Locales are enabled."
 msgstr ""
 
-#: liflines/screen.c:1793
+#: liflines/screen.c:1778
 msgid "Locales are disabled."
 msgstr ""
 
-#: liflines/screen.c:1796
+#: liflines/screen.c:1781
 msgid "NLS (National Language Support) is enabled."
 msgstr ""
 
-#: liflines/screen.c:1798
+#: liflines/screen.c:1783
 msgid "NLS (National Language Support) is disabled."
 msgstr ""
 
-#: liflines/screen.c:1803
+#: liflines/screen.c:1788
 msgid "iconv (codeset conversion) is enabled."
 msgstr ""
 
-#: liflines/screen.c:1805
+#: liflines/screen.c:1790
 msgid "iconv (codeset conversion) is disabled."
 msgstr ""
 
-#: liflines/screen.c:1807
+#: liflines/screen.c:1792
 #, c-format
 msgid "Startup collate locale: %s"
 msgstr ""
 
-#: liflines/screen.c:1811
+#: liflines/screen.c:1796
 #, c-format
 msgid "Startup messages locale: %s"
 msgstr ""
 
-#: liflines/screen.c:1815
+#: liflines/screen.c:1800
 #, fuzzy, c-format
 msgid "Current collate locale: %s"
 msgstr "Aktuell databas - %s"
 
-#: liflines/screen.c:1819
+#: liflines/screen.c:1804
 #, c-format
 msgid "Current messages locale: %s"
 msgstr ""
 
-#: liflines/screen.c:1823
+#: liflines/screen.c:1808
 #, fuzzy, c-format
 msgid "GUI codeset: %s"
 msgstr "Intern koduppsättning: "
 
-#: liflines/screen.c:1827
+#: liflines/screen.c:1812
 #, fuzzy, c-format
 msgid "Editor codeset: %s"
 msgstr "Teckenkodning för rapporter:"
 
-#: liflines/screen.c:1831
+#: liflines/screen.c:1816
 #, fuzzy, c-format
 msgid "Report codeset: %s"
 msgstr "Teckenkodning för rapporter:"
 
-#: liflines/screen.c:1835
+#: liflines/screen.c:1820
 #, fuzzy, c-format
 msgid "GEDCOM codeset: %s"
 msgstr "!g GEDCOM-läge"
 
-#: liflines/screen.c:1839
+#: liflines/screen.c:1836
 msgid "Codeset information"
 msgstr ""
 
-#: liflines/screen.c:1856
+#: liflines/screen.c:1853
 #, c-format
 msgid "gettext dll: %s"
 msgstr ""
 
-#: liflines/screen.c:1860
+#: liflines/screen.c:1857
 #, c-format
 msgid "gettext dll version: %s"
 msgstr ""
 
-#: liflines/screen.c:1865
+#: liflines/screen.c:1862
 msgid "gettext dll had no version"
 msgstr ""
 
-#: liflines/screen.c:1870
+#: liflines/screen.c:1867
 msgid "no gettext dll found"
 msgstr ""
 
-#: liflines/screen.c:1880
+#: liflines/screen.c:1877
 #, c-format
 msgid "iconv dll: %s"
 msgstr ""
 
-#: liflines/screen.c:1884
+#: liflines/screen.c:1881
 #, c-format
 msgid "iconv dll version: %s"
 msgstr ""
 
-#: liflines/screen.c:1889
+#: liflines/screen.c:1886
 msgid "iconv dll had no version"
 msgstr ""
 
-#: liflines/screen.c:1894
+#: liflines/screen.c:1891
 msgid "no iconv dll found"
 msgstr ""
 
-#: liflines/screen.c:2141
+#: liflines/screen.c:2140
 msgid "Impermissible to change codeset in a populated database"
 msgstr ""
 
@@ -3745,6 +3751,9 @@ msgstr "SYSTEMANROPSFEL"
 #, c-format
 msgid "In file <%s> at line %d"
 msgstr ""
+
+#~ msgid "WARNING: invalid pointer"
+#~ msgstr "VARNING: ogiltig visare"
 
 #~ msgid "There were %d unresolved references."
 #~ msgstr "Det fanns %d olösta referenser."

@@ -43,6 +43,7 @@
 #include "indiseq.h"
 #include "interp.h"
 #include "liflines.h"
+#include "parse.h"
 #include <stdlib.h>
 
 extern TABLE proctab, functab;
@@ -53,9 +54,9 @@ FLOAT Yfval;
 static void join (PNODE list, PNODE last);
 static void yyerror (STRING str);
 
-/* Make sure it can hold any pointer */
-#define YYSTYPE void *
 %}
+%pure_parser
+
 
 %token  PROC FUNC_TOK IDEN SCONS CHILDREN SPOUSES IF ELSE ELSIF
 %token  FAMILIES ICONS WHILE CALL FORINDISET FORINDI FORNOTES
