@@ -40,12 +40,14 @@
  *=============================*/
 typedef struct c_elem *CACHEEL;
 struct c_elem {
+	NOD0 c_nod0;
 	NODE c_node;	/* root node */
 	CACHEEL c_prev;	/* previous el */
 	CACHEEL c_next;	/* next el */
-	STRING c_key;	/* recork key */
+	STRING c_key;	/* record key */
 	BOOLEAN c_lock;	/* locked? */
 };
+#define cnod0(e) ((e)->c_nod0)
 #define cnode(e) ((e)->c_node)
 #define cprev(e) ((e)->c_prev)
 #define cnext(e) ((e)->c_next)
@@ -89,7 +91,6 @@ CACHEEL rkey_to_indi_cacheel(STRING);
 CACHEEL rkey_to_sour_cacheel(STRING);
 CACHEEL rkey_to_othr_cacheel(STRING);
 
-void add_node_to_direct(CACHE, NODE);
 void lock_cache(CACHEEL);
 void node_to_cache(CACHE, NODE);
 void remove_from_cache(CACHE, STRING);

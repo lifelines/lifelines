@@ -54,6 +54,7 @@ static NODE key_to_node (CACHE cache, STRING key, STRING tag);
 static NODE rkey_to_node (CACHE cache, STRING key, STRING tag);
 static CACHEEL key_to_cacheel(CACHE, STRING, STRING, INT);
 static void dereference(CACHEEL);
+static void add_node_to_direct(CACHE cache, NODE node);
 
 static CACHE indicache, famcache, evencache, sourcache, othrcache;
 
@@ -408,7 +409,8 @@ direct_to_indirect (CACHE che)
 		;
 	ASSERT(cel);
 	remove_direct(che, cel);
-	free_nodes(cnode(cel));
+	free_nod0(cnod0(cel)); /* this frees the nodes */
+	cnod0(cel) = NULL;
 	cnode(cel) = NULL;
 	first_indirect(che, cel);
 }
@@ -420,11 +422,12 @@ dereference (CACHEEL cel)
 {
 	STRING rec;
 	INT len;
-	NODE node;
+	NOD0 nod0;
 	ASSERT(cel);
 	ASSERT(rec = retrieve_record(ckey(cel), &len));
-	ASSERT(node = string_to_node(rec));
-	cnode(cel) = node;
+	ASSERT(nod0 = string_to_nod0(rec, ckey(cel)));
+	cnod0(cel) = nod0;
+	cnode(cel) = nod0->top;
 	stdfree(rec);
 }
 /*========================================================
@@ -441,24 +444,17 @@ add_to_direct (CACHE cache,
 	STRING record;
 	INT len;
 	CACHEEL cel;
-	NODE node;
+	NOD0 nod0;
 	int i, j;
 
 #ifdef DEBUG
 	llwprintf("add_to_direct: key == %s\n", key);
 #endif
 	ASSERT(cache && key);
-	node = NULL;
+	nod0 = NULL;
 	if ((record = retrieve_record(key, &len))) 
-	{
-		if(reportmode && (len < 6))
-		{
-			stdfree(record);
-			return(NULL);
-		}
-		node = string_to_node(record);
-	}
-	if(node == NULL)
+		nod0 = string_to_nod0(record, key);
+	if(nod0 == NULL)
 	{
 		if(listbadkeys) {
 			if(strlen(badkeylist) < 80 - strlen(key) - 2) {
@@ -478,11 +474,12 @@ add_to_direct (CACHE cache,
 		}
 		llwprintf("\n");
 	}
-	ASSERT(node);
+	ASSERT(nod0);
 	ASSERT(csizedir(cache) < cmaxdir(cache));
 	cel = (CACHEEL) stdalloc(sizeof(*cel));
 	insert_table(cdata(cache), key = strsave(key), cel);
-	cnode(cel) = node;
+	cnod0(cel) = nod0;
+	cnode(cel) = nod0->top;
 	ckey(cel) = key;
 	cclock(cel) = FALSE;
 	first_direct(cache, cel);
@@ -656,16 +653,22 @@ node_to_cache (CACHE cache,
 /*=======================================================
  * add_node_to_direct -- Add node to direct part of cache
  *=====================================================*/
-void
+static void
 add_node_to_direct(CACHE cache,
                    NODE node)
 {
 	CACHEEL cel;
 	STRING key;
+	NOD0 nod0;
 	ASSERT(cache && node);
 	ASSERT(csizedir(cache) < cmaxdir(cache));
 	cel = (CACHEEL) stdalloc(sizeof(*cel));
 	insert_table(cdata(cache), key = strsave(rmvat(nxref(node))), cel);
+	nod0 = (NOD0)stdalloc(sizeof(*nod0));
+	nod0->keynum = atoi(key+1);
+	nod0->ntype = key[0];
+	nod0->top = node;
+	cnod0(cel) = nod0;
 	cnode(cel) = node;
 	ckey(cel) = key;
 	cclock(cel) = FALSE;

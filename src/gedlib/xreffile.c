@@ -38,6 +38,8 @@
 
 extern BTREE BTR;
 
+static BOOLEAN readxrefs(void);
+
 /*===================================================================
  * First five words in xrefs file are number of INDI, FAM, EVEN, SOUR
  *   and other keys in file; remaining words are keys, in respective
@@ -175,10 +177,41 @@ getxxref (void)
 	sprintf(scratch, "@X%d@", n);
 	return scratch;
 }
+/*======================================
+ * sortxref -- Sort xrefs after reading
+ *====================================*/
+static void
+sortxref (INT nxrefs, INT * xrefs)
+{
+	/* they should normally already be sorted, 
+	so a bubble-sort will be O(n) to verify */
+	INT i,j, temp;
+	for (i=1; i<nxrefs; i++) {
+		for (j=i+1; j<nxrefs; j++) {
+			if (xrefs[i] > xrefs[j]) {
+				temp = xrefs[j];
+				xrefs[j] = xrefs[i];
+				xrefs[i] = temp;
+			}
+		}
+	}
+}
+/*======================================
+ * sortxrefs -- Sort xrefs after reading
+ *====================================*/
+static void
+sortxrefs (void)
+{
+	sortxref(nixrefs, ixrefs);
+	sortxref(nfxrefs, fxrefs);
+	sortxref(nexrefs, exrefs);
+	sortxref(nsxrefs, sxrefs);
+	sortxref(nxxrefs, xxrefs);
+}
 /*=============================
  * readxrefs -- Read xrefs file
  *===========================*/
-BOOLEAN
+static BOOLEAN
 readxrefs (void)
 {
 	ASSERT(xrefopen);
@@ -202,6 +235,7 @@ readxrefs (void)
 	ASSERT((INT)fread(exrefs, sizeof(INT), nexrefs, xreffp) == nexrefs);
 	ASSERT((INT)fread(sxrefs, sizeof(INT), nsxrefs, xreffp) == nsxrefs);
 	ASSERT((INT)fread(xxrefs, sizeof(INT), nxxrefs, xreffp) == nxxrefs);
+	sortxrefs();
 	return TRUE;
 }
 /*================================
@@ -226,15 +260,42 @@ writexrefs (void)
 	return TRUE;
 }
 /*============================================
+ * addxref -- Add deleted key to xrefs.
+ *==========================================*/
+void
+addxref (INT key, INT *nxrefs, INT maxxrefs, INT *xrefs, void (*growfnc)(void))
+{
+	INT lo,hi,md, i;
+	if (key <= 0 || !xrefopen || (*nxrefs) < 1) FATAL();
+	if (*nxrefs >= maxxrefs)
+		(*growfnc)();
+	ASSERT(*nxrefs < maxxrefs);
+	lo=1;
+	hi=(*nxrefs)-1;
+	/* binary search to find where to insert key */
+	while (lo<=hi) {
+		md = (lo + hi)/2;
+		if (key<xrefs[md])
+			hi=--md;
+		else if (key>xrefs[md])
+			lo=++md;
+		else
+			FATAL(); /* deleting a deleted record! */
+	}
+	/* key replaces xrefs[lo] - push lo+ up */
+	for (i=lo; i<*nxrefs; i++)
+		xrefs[i+1] = xrefs[i];
+	xrefs[lo] = key;
+	(*nxrefs)++;
+	ASSERT(writexrefs());
+}
+/*============================================
  * addixref -- Add deleted INDI key to ixrefs.
  *==========================================*/
 void
 addixref (INT key)
 {
-	if (key <= 0 || !xrefopen || nixrefs < 1) FATAL();
-	if (nixrefs >= maxixrefs) growixrefs();
-	ixrefs[nixrefs++] = key;
-	ASSERT(writexrefs());
+	addxref(key, &nixrefs, maxixrefs, ixrefs, &growixrefs);
 }
 /*===========================================
  * addfxref -- Add deleted FAM key to fxrefs.
@@ -242,10 +303,7 @@ addixref (INT key)
 void
 addfxref (INT key)
 {
-	if (key <= 0 || !xrefopen || nfxrefs < 1) FATAL();
-	if (nfxrefs >= maxfxrefs) growfxrefs();
-	fxrefs[nfxrefs++] = key;
-	ASSERT(writexrefs());
+	addxref(key, &nfxrefs, maxfxrefs, fxrefs, &growfxrefs);
 }
 /*============================================
  * addexref -- Add deleted EVEN key to exrefs.
@@ -253,10 +311,7 @@ addfxref (INT key)
 void
 addexref (INT key)
 {
-	if (key <= 0 || !xrefopen || nexrefs < 1) FATAL();
-	if (nexrefs >= maxexrefs) growexrefs();
-	exrefs[nexrefs++] = key;
-	ASSERT(writexrefs());
+	addxref(key, &nexrefs, maxexrefs, exrefs, &growexrefs);
 }
 /*============================================
  * addsxref -- Add deleted SOUR key to sxrefs.
@@ -264,10 +319,7 @@ addexref (INT key)
 void
 addsxref (INT key)
 {
-	if (key <= 0 || !xrefopen || nsxrefs < 1) FATAL();
-	if (nsxrefs >= maxsxrefs) growsxrefs();
-	sxrefs[nsxrefs++] = key;
-	ASSERT(writexrefs());
+	addxref(key, &nsxrefs, maxsxrefs, sxrefs, &growsxrefs);
 }
 /*=============================================
  * addfxref -- Add other deleted key to xxrefs.
@@ -275,10 +327,7 @@ addsxref (INT key)
 void
 addxxref (INT key)
 {
-	if (key <= 0 || !xrefopen || nxxrefs < 1) FATAL();
-	if (nxxrefs >= maxxxrefs) growxxrefs();
-	xxrefs[nxxrefs++] = key;
-	ASSERT(writexrefs());
+	addxref(key, &nxxrefs, maxxxrefs, xxrefs, &growxxrefs);
 }
 /*============================================
  * growixrefs -- Grow memory for ixrefs array.
@@ -523,7 +572,7 @@ xref_isvalid_impl(INT nxrefs, INT * xrefs, INT i)
 /*================================================
  * xref_next -- Return next valid whatever after i (or 0)
  *==============================================*/
-INT
+static INT
 xref_next(INT nxrefs, INT * xrefs, INT i)
 {
 	if (nxrefs == xrefs[0]) return 0; /* no valids */
@@ -536,7 +585,7 @@ xref_next(INT nxrefs, INT * xrefs, INT i)
 /*================================================
  * xref_prev -- Return prev valid whatever before i (or 0)
  *==============================================*/
-INT
+static INT
 xref_prev(INT nxrefs, INT * xrefs, INT i)
 {
 	if (nxrefs == xrefs[0]) return 0; /* no valids */
@@ -572,7 +621,8 @@ INT xref_nextf(INT i)
 /*================================================
  * xref_prevf -- Return prev valid indi before i (or 0)
  *==============================================*/
-INT xref_prevf(INT i)
+INT
+xref_prevf (INT i)
 {
 	return xref_prev(nfxrefs, fxrefs, i);
 }
@@ -580,7 +630,7 @@ INT xref_prevf(INT i)
  * xref_nexts -- Return next valid indi after i (or 0)
  *==============================================*/
 INT
-xref_nexts(INT i)
+xref_nexts (INT i)
 {
 	return xref_next(nsxrefs, sxrefs, i);
 }
@@ -588,7 +638,7 @@ xref_nexts(INT i)
  * xref_nexte -- Return next valid event after i (or 0)
  *==============================================*/
 INT
-xref_nexte(INT i)
+xref_nexte (INT i)
 {
 	return xref_next(nexrefs, exrefs, i);
 }
@@ -596,7 +646,39 @@ xref_nexte(INT i)
  * xref_nextx -- Return next valid other after i (or 0)
  *==============================================*/
 INT
-xref_nextx(INT i)
+xref_nextx (INT i)
 {
 	return xref_next(nxxrefs, xxrefs, i);
+}
+/*==============================================
+ * xref_firsti -- Return first valid indi (or 0)
+ *============================================*/
+INT
+xref_firsti (void)
+{
+	return xref_nexti(0);
+}
+/*==============================================
+ * xref_lasti -- Return last valid indi (or 0)
+ *============================================*/
+INT
+xref_lasti (void)
+{
+	return xref_previ(ixrefs[0]);
+}
+/*==============================================
+ * xref_firstf -- Return first valid indi (or 0)
+ *============================================*/
+INT
+xref_firstf (void)
+{
+	return xref_nextf(0);
+}
+/*==============================================
+ * xref_lastf -- Return last valid indi (or 0)
+ *============================================*/
+INT
+xref_lastf (void)
+{
+	return xref_prevf(fxrefs[0]);
 }

@@ -1146,12 +1146,10 @@ interp_forothr (PNODE node,
 	INT len, count = 0;
 	INT ocount = 0;
 	insert_pvtable(stab, inum(node), PINT, (WORD)count);
-	while (TRUE) {
-		sprintf(key, "X%d", ++count);
-		if (!(record = retrieve_record(key, &len))) {
-		    if(ocount < num_othrs()) continue;
-		    break;
-		}
+	while (++count <= num_othrs()) {
+		sprintf(key, "X%d", count);
+		if (!(record = retrieve_record(key, &len)))
+			continue;
 		if (!(othr = string_to_node(record))) continue;
 		ocount++;
 		insert_pvtable(stab, ielement(node), POTHR,

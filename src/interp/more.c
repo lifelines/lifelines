@@ -594,6 +594,29 @@ __system (PNODE node,
 	delete_pvalue(val);
 	return NULL;
 }
+/*=====================================================
+ * get_indi_pvalue_from_keynum -- Return indi as pvalue
+ *  helper for __firstindi etc
+ *  handles i==0
+ *===================================================*/
+static PVALUE
+get_indi_pvalue_from_keynum (INT i)
+{
+	static char key[10];
+	NODE indi;
+	PVALUE val;
+	STRING record;
+	INT len;
+	if (!i)
+		return create_pvalue(PINDI, (WORD)NULL);
+	sprintf(key, "I%d", i);
+	ASSERT((record = retrieve_record(key, &len)));
+	ASSERT((indi = string_to_node(record)));
+	stdfree(record);
+	val = create_pvalue(PINDI, (WORD)indi_to_cacheel(indi));
+	free_nodes(indi);/*yes*/
+	return val;
+}
 /*============================================+
  * firstindi -- Return first person in database
  *   usage: firstindi() -> INDI
@@ -603,25 +626,8 @@ __firstindi (PNODE node,
              TABLE stab,
              BOOLEAN *eflg)
 {
-	NODE indi;
-	static char key[10];
-	STRING record;
-	PVALUE val;
-	INT len, i = 0;
 	*eflg = FALSE;
-	while (TRUE) {
-		sprintf(key, "I%d", ++i);
-		if (!(record = retrieve_record(key, &len)))
-			return create_pvalue(PINDI, (WORD)NULL);
-		if (!(indi = string_to_node(record))) {
-			stdfree(record);
-			continue;
-		}
-		stdfree(record);
-		val = create_pvalue(PINDI, (WORD)indi_to_cacheel(indi));
-		free_nodes(indi);/*yes*/
-		return val;
-	}
+	return get_indi_pvalue_from_keynum(xref_firsti());
 }
 /*==========================================+
  * nextindi -- Return next person in database
@@ -634,29 +640,17 @@ __nextindi (PNODE node,
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	static char key[10];
-	STRING record;
-	PVALUE val;
-	INT len, i;
+	INT i;
 	if (*eflg) {
 		prog_error(node, "the arg to nextindi is not a person");
 		return NULL;
 	}
-	if (!indi) return create_pvalue(PINDI, (WORD)NULL);
+	if (!indi)
+		return create_pvalue(PINDI, (WORD)NULL);
 	strcpy(key, indi_to_key(indi));
 	i = atoi(&key[1]);
-	while (TRUE) {
-		sprintf(key, "I%d", ++i);
-		if (!(record = retrieve_record(key, &len)))
-			return create_pvalue(PINDI, (WORD)NULL);
-		if (!(indi = string_to_node(record))) {
-			stdfree(record);
-			continue;
-		}
-		stdfree(record);
-		val = create_pvalue(PINDI, (WORD)indi_to_cacheel(indi));
-		free_nodes(indi);/*yes*/
-		return val;
-	}
+	i = xref_nexti(i);
+	return get_indi_pvalue_from_keynum(i);
 }
 /*==============================================+
  * previndi -- Return previous person in database
@@ -669,31 +663,18 @@ __previndi (PNODE node,
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	static char key[10];
-	STRING record;
-	PVALUE val;
-	INT len, i;
+	INT i;
 	if (*eflg) {
 		prog_error(node, "the arg to previndi must be a person");
 		return NULL;
 	}
-	if (!indi) return create_pvalue(PINDI, (WORD)NULL);
+	if (!indi)
+		return create_pvalue(PINDI, (WORD)NULL);
 	strcpy(key, indi_to_key(indi));
 	i = atoi(&key[1]);
-	while (TRUE) {
-		sprintf(key, "I%d", --i);
-		if (!(record = retrieve_record(key, &len)))
-			return create_pvalue(PINDI, (WORD)NULL);
-		if (!(indi = string_to_node(record))) {
-			stdfree(record);
-			continue;
-		}
-		stdfree(record);
-		val = create_pvalue(PINDI, (WORD)indi_to_cacheel(indi));
-		free_nodes(indi);/*yes*/
-		return val;
-	}
+	i = xref_previ(i);
+	return get_indi_pvalue_from_keynum(i);
 }
-#if UNUSED
 /*===========================================
  * lastindi -- Return last person in database
  *   usage: lastindi() -> INDI
@@ -703,9 +684,32 @@ __lastindi (PNODE node,
             TABLE stab,
             BOOLEAN *eflg)
 {
-#  error "Unimplemented function!"
+	*eflg = FALSE;
+	return get_indi_pvalue_from_keynum(xref_lasti());
 }
-#endif
+/*====================================================
+ * get_fam_pvalue_from_keynum -- Return indi as pvalue
+ *  helper for __firstfam etc
+ *  handles i==0
+ *==================================================*/
+static PVALUE
+get_fam_pvalue_from_keynum (INT i)
+{
+	static char key[10];
+	NODE fam;
+	PVALUE val;
+	STRING record;
+	INT len;
+	if (!i)
+		return create_pvalue(PFAM, (WORD)NULL);
+	sprintf(key, "F%d", i);
+	ASSERT((record = retrieve_record(key, &len)));
+	ASSERT((fam = string_to_node(record)));
+	stdfree(record);
+	val = create_pvalue(PFAM, (WORD)fam_to_cacheel(fam));
+	free_nodes(fam);/*yes*/
+	return val;
+}
 /*===========================================+
  * firstfam -- Return first family in database
  *   usage: firstfam() -> FAM
@@ -715,25 +719,8 @@ __firstfam (PNODE node,
             TABLE stab,
             BOOLEAN *eflg)
 {
-	NODE fam;
-	static char key[10];
-	STRING record;
-	PVALUE val;
-	INT len, i = 0;
 	*eflg = FALSE;
-	while (TRUE) {
-		sprintf(key, "F%d", ++i);
-		if (!(record = retrieve_record(key, &len)))
-			return create_pvalue(PFAM, (WORD)NULL);
-		if (!(fam = string_to_node(record))) {
-			stdfree(record);
-			continue;
-		}
-		stdfree(record);
-		val = create_pvalue(PFAM, (WORD)fam_to_cacheel(fam));
-		free_nodes(fam);/*yes*/
-		return val;
-	}
+	return get_fam_pvalue_from_keynum(xref_firstf());
 }
 /*=========================================+
  * nextfam -- Return next family in database
@@ -746,29 +733,17 @@ __nextfam (PNODE node,
 {
 	NODE fam = eval_fam(iargs(node), stab, eflg, NULL);
 	static char key[10];
-	STRING record;
-	PVALUE val;
-	INT len, i;
+	INT i;
 	if (*eflg) {
 		prog_error(node, "the arg to nextfam must be a family");
 		return NULL;
 	}
-	if (!fam) return create_pvalue(PFAM, (WORD)NULL);
+	if (!fam)
+		return create_pvalue(PFAM, (WORD)NULL);
 	strcpy(key, fam_to_key(fam));
 	i = atoi(&key[1]);
-	while (TRUE) {
-		sprintf(key, "F%d", ++i);
-		if (!(record = retrieve_record(key, &len)))
-			return create_pvalue(PFAM, (WORD)NULL);
-		if (!(fam = string_to_node(record))) {
-			stdfree(record);
-			continue;
-		}
-		stdfree(record);
-		val = create_pvalue(PFAM, (WORD)fam_to_cacheel(fam));
-		free_nodes(fam);/*yes*/
-		return val;
-	}
+	i = xref_nextf(i);
+	return get_fam_pvalue_from_keynum(i);
 }
 /*=============================================+
  * prevfam -- Return previous family in database
@@ -781,31 +756,18 @@ __prevfam (PNODE node,
 {
 	NODE fam = eval_fam(iargs(node), stab, eflg, NULL);
 	static char key[10];
-	STRING record;
-	PVALUE val;
-	INT len, i;
+	INT i;
 	if (*eflg) {
 		prog_error(node, "the arg to prevfam must be a family");
 		return NULL;
 	}
-	if (!fam) return create_pvalue(PFAM, (WORD)NULL);
+	if (!fam)
+		return create_pvalue(PFAM, (WORD)NULL);
 	strcpy(key, fam_to_key(fam));
 	i = atoi(&key[1]);
-	while (TRUE) {
-		sprintf(key, "F%d", --i);
-		if (!(record = retrieve_record(key, &len)))
-			return create_pvalue(PFAM, (WORD)NULL);
-		if (!(fam = string_to_node(record))) {
-			stdfree(record);
-			continue;
-		}
-		stdfree(record);
-		val = create_pvalue(PFAM, (WORD)fam_to_cacheel(fam));
-		free_nodes(fam);/*yes*/
-		return val;
-	}
+	i = xref_prevf(i);
+	return get_fam_pvalue_from_keynum(i);
 }
-#if UNUSED
 /*=========================================+
  * lastfam -- Return last family in database
  *   usage: lastfam() -> FAM
@@ -815,9 +777,9 @@ __lastfam (PNODE node,
            TABLE stab,
            BOOLEAN *eflg)
 {
-#  error "Unimplemented function!"
+	*eflg = FALSE;
+	return get_fam_pvalue_from_keynum(xref_lastf());
 }
-#endif
 /*=============================================+
  * getrecord -- Read GEDCOM record from database
  *  usage: getrecord(STRING) -> NODE

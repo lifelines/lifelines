@@ -81,7 +81,7 @@ fixtag (STRING tag)
 typedef struct blck *ALLOC;
 struct blck { ALLOC next; };
 static ALLOC first_blck = (ALLOC) 0;
-NODE
+static NODE
 alloc_node (void)
 {
 	NODE node;
@@ -127,6 +127,15 @@ create_node (STRING xref,
 	nchild(node) = NULL;
 	nsibling(node) = NULL;
 	return node;
+}
+/*===================================
+ * free_nod0 -- Free a nod0 structure
+ *=================================*/
+void
+free_nod0 (NOD0 nod0)
+{
+	free_nodes(nod0->top);
+	stdfree(nod0);
 }
 /*=====================================
  * free_nodes -- Free all NODEs in tree
@@ -426,19 +435,33 @@ next_fp_to_node (FILE *fp,       /* file that holds GEDCOM record/s */
 	return root;
 }
 /*========================================
+ * string_to_nod0 -- Read nod0 from string
+ *======================================*/
+NOD0
+string_to_nod0 (STRING str, STRING key)
+{
+	NOD0 nod0 = (NOD0)stdalloc(sizeof(*nod0));
+	nod0->keynum = atoi(key+1);
+	nod0->ntype = key[0];
+	if (*str == '0')
+		nod0->top = string_to_node(str);
+	else {
+		ASSERT(*str == 'Q');
+		ASSERT(0); /* not written yet - metadata processing */
+	}
+	return nod0;
+}
+/*========================================
  * string_to_node -- Read tree from string
  *======================================*/
 NODE
 string_to_node (STRING str)
 {
-	/* the following variables were made local rather than
-	   use the static variables - pbm 12-jun-96 */
 	INT lev;
 	INT lev0;
 	STRING xref;
 	STRING tag;
 	STRING val;
-	/* end of local version of some static variables pbm 12-jun-96 */
 
 	INT curlev;
 	NODE root, node, curnode;
@@ -1155,6 +1178,17 @@ num_spouses_of_indi (NODE indi)
 	if (!indi) return 0;
 	FORSPOUSES(indi, spouse, fam, nsp) ENDSPOUSES
 	return nsp;
+}
+/*==================================================
+ * num_fams_of_indi -- Returns number of families of person
+ *================================================*/
+INT
+num_fams_of_indi (NODE indi)
+{
+	INT num;
+	if (!indi) return 0;
+	FORFAMSS(indi, fam, spouse, num) ENDFAMSS
+	return num;
 }
 /*===================================================
  * find_node -- Find node with specific tag and value

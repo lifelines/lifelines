@@ -118,6 +118,8 @@ extern PVALUE __intersect(PNODE, TABLE, BOOLEAN *);
 extern PVALUE __key(PNODE, TABLE, BOOLEAN *);
 extern PVALUE __keysort(PNODE, TABLE, BOOLEAN *);
 extern PVALUE __lastchild(PNODE, TABLE, BOOLEAN *);
+extern PVALUE __lastfam(PNODE, TABLE, BOOLEAN *);
+extern PVALUE __lastindi(PNODE, TABLE, BOOLEAN *);
 extern PVALUE __le(PNODE, TABLE, BOOLEAN *);
 extern PVALUE __length(PNODE, TABLE, BOOLEAN *);
 extern PVALUE __lengthset(PNODE, TABLE, BOOLEAN *);
