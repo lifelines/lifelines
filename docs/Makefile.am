@@ -6,10 +6,14 @@
 
 MANUALSSRC = ll-reportmanual.xml ll-userguide.xml
 
-MANUALS =     ll-reportmanual.html ll-reportmanual.pdf \
+MANUALS_en =     ll-reportmanual.html ll-reportmanual.pdf \
 	     ll-reportmanual.txt \
 	     ll-userguide.html ll-userguide.pdf \
 	     ll-userguide.txt 
+
+MANUALS_sv = sv/ll-reportmanual.sv.xml sv/ll-userguide.sv.xml
+
+MANUALS = $(MANUALS_en) $(MANUALS_sv)
 
 MANPAGES =   btedit.1 dbverify.1 llines.1
 

@@ -4,6 +4,12 @@
 
 	Improve docs makefile a bit with some named groups.
 
+	* ChangeLog docs/Makefile.am
+	*NEW docs/sv/ll-reportmanual.sv.xml
+	*NEW docs/sv/ll-userguide.sv.xml
+
+	Add Swedish versions of manuals.
+
 2003-08-14 Perry Rapp
 
 	* ChangeLog src/hdrs/gedcom.h
