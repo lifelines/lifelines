@@ -658,6 +658,30 @@ list_browse (INDISEQ seq,
 	return interact(main_win, "jkeimdtbanxq");
 }
 /*======================================
+ * ask_for_lldb -- Ask user for lifelines database directory
+ *====================================*/
+STRING ask_for_lldb (STRING ttl, STRING prmpt, STRING basedir)
+{
+	/* This could have a list of existing ones like askprogram.c */
+	return ask_for_string(ttl, prmpt);
+}
+/*======================================
+ * ask_for_output_filename -- Ask user for filename to which to write
+ *====================================*/
+STRING
+ask_for_output_filename (STRING ttl, STRING path, STRING prmpt)
+{
+	return ask_for_string(ttl, prmpt);
+}
+/*======================================
+ * ask_for_input_filename -- Ask user for filename from which to read
+ *====================================*/
+STRING
+ask_for_input_filename (STRING ttl, STRING path, STRING prmpt)
+{
+	return ask_for_string(ttl, prmpt);
+}
+/*======================================
  * ask_for_string -- Ask user for string
  *====================================*/
 STRING

@@ -11,8 +11,8 @@ extern "C" {
 #include <stdio.h>
 #include <stdarg.h>
 
-#define MAXLINES 40
-#define MAXCOLS 80
+#define CUR_MAXLINES 40
+#define CUR_MAXCOLS 80
 
 #define CHTYPE char
 #ifdef	CHTYPE
@@ -28,7 +28,7 @@ struct _win_st
 	short		_cury, _curx;	/* current coordinates */
 	short		_maxy, _maxx;	/* max coordinates */
 	short		_begy, _begx;	/* (0,0) screen coordinates */
-	chtype		_y[MAXLINES][MAXCOLS];	
+	chtype		_y[CUR_MAXLINES][CUR_MAXCOLS];	
 	int		_num;		/* window number */
 	int		_scroll;	/* scroll allowed */
 	int		_boxed;		/* a box surrounds the window */

@@ -70,7 +70,7 @@ static STRING translate_key(STRING);
 BOOLEAN
 import_from_file (void)
 {
-	FILE *fp, *ask_for_file();
+	FILE *fp;
 	NODE node, conv;
 	TRANTABLE tt = tran_tables[MGDIN];
 	STRING msg, fname;
@@ -81,7 +81,7 @@ import_from_file (void)
 	char msgbuf[80];
 
 /* Open and validate GEDCOM file */
-	fp = ask_for_file(LLREADTEXT, idgedf, &fname, NULL, ".ged");
+	fp = ask_for_input_file(LLREADTEXT, idgedf, &fname, NULL, ".ged");
 	if (!fp) return FALSE;
 	llwprintf(gdcker, fname);
 	if (!validate_gedcom(fp)) {

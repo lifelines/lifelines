@@ -1,4 +1,15 @@
 2000-11-19 Perry Rapp <puddle@users.sourceforge.net>
+	liflines/ask.c liflines/askprogram.c liflines/main.c
+	liflines/export.c liflines/import.c liflines/screen.c
+	interp/rassa.c
+	hdrs/liflines.h hdrs/screen.h:
+	Semantic breakout of ask_for_file, and new function
+	ask_for_lldb.
+	win32/mycurses.c hdrs/win32/curses.h:
+	renamed MAXCOLS to CUR_MAXCOLS (and same for MAXLINES)
+	to avoid clash with rassa.c's MAXCOLS.
+
+2000-11-19 Perry Rapp <puddle@users.sourceforge.net>
 	interp/date.c: Moved 20+ lines! of commentary
 	out of line of the function declaration, so that
 	the function declaration is legible.

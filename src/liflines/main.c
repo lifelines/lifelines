@@ -43,6 +43,11 @@
 #include "gedcom.h"
 #include "liflines.h"
 
+/* TO DO - needs adding to autoconf */
+#ifdef WIN32
+#include "getopt.h"
+#endif
+
 extern STRING idldir, nodbse, crdbse, nocrdb, iddbse, usage;
 
 extern INT csz_indi, icsz_indi;
@@ -198,7 +203,7 @@ main (INT argc,
 		exit_it(1);
 	}
 	if (c <= 0) {
-		btreepath = (STRING) ask_for_string(idldir, "enter path: ");
+		btreepath = (STRING) ask_for_lldb(idldir, "enter path: ", lldatabases);
 		if (!btreepath || *btreepath == 0) {
 			llwprintf(iddbse);
 			exit_it(1);

@@ -60,7 +60,6 @@ static BOOLEAN archive(BTREE, BLOCK);
 BOOLEAN
 archive_in_file (void)
 {
-	FILE *ask_for_file();
 	char dat[30], tim[20];
 	struct tm *pt;
 	time_t curtime;
@@ -68,7 +67,7 @@ archive_in_file (void)
 	extern STRING version;
 
 	/* WARNING: use of llarchives seems questionable */
-	fn = ask_for_file(LLWRITETEXT, "Enter name of output archive file.",
+	fn = ask_for_output_file(LLWRITETEXT, "Enter name of output archive file.",
 	    &fname, llarchives, ".ged");
 	if (!fn) {
 		mprintf_error("The database was not saved.");

@@ -192,7 +192,7 @@ __outfile (PNODE node,
            BOOLEAN *eflg)
 {
 	if (!Poutfp) {
-		Poutfp = ask_for_file(LLWRITETEXT, whtout, &outfilename, llreports, NULL);
+		Poutfp = ask_for_output_file(LLWRITETEXT, whtout, &outfilename, llreports, NULL);
 		if (!Poutfp)  {
 			*eflg = TRUE;
 			message(noreport);
@@ -315,7 +315,7 @@ __pageout (PNODE node,
 	*eflg = TRUE;
 	if (outputmode != PAGEMODE) return NULL;
 	if (!Poutfp) {
-		Poutfp = ask_for_file(LLWRITETEXT, whtout, &outfilename, llreports, NULL);
+		Poutfp = ask_for_output_file(LLWRITETEXT, whtout, &outfilename, llreports, NULL);
 		if (!Poutfp)  {
 			message(noreport);
 			return NULL;
@@ -348,7 +348,7 @@ poutput (STRING str)
 	INT c, len;
 	if (!str || *str == 0 || (len = strlen(str)) <= 0) return;
 	if (!Poutfp) {
-		Poutfp = ask_for_file(LLWRITETEXT, whtout, &name, llreports, NULL);
+		Poutfp = ask_for_output_file(LLWRITETEXT, whtout, &name, llreports, NULL);
 		if (!Poutfp)  {
 			message(noreport);
 			return;

@@ -116,6 +116,8 @@ INT ped_browse(NODE);
 INT aux_browse(NODE);
 INT list_browse(INDISEQ, INT, INT, INT);
 STRING ask_for_string(STRING, STRING);
+STRING ask_for_input_filename (STRING ttl, STRING path, STRING prmpt);
+STRING ask_for_output_filename (STRING ttl, STRING path, STRING prmpt);
 INT ask_for_char(STRING, STRING, STRING);
 INT ask_for_char_msg(STRING, STRING, STRING, STRING);
 INT choose_from_list(STRING, INT, STRING*);

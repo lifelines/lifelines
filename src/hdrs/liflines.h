@@ -9,7 +9,9 @@
 
 /* from ask.c */
 NODE ask_for_fam(STRING, STRING);
-FILE *ask_for_file(STRING, STRING, STRING*, STRING, STRING);
+FILE *ask_for_input_file (STRING mode, STRING ttl, STRING *pfname, STRING path, STRING ext);
+FILE *ask_for_output_file (STRING mode, STRING ttl, STRING *pfname, STRING path, STRING ext);
+STRING ask_for_lldb (STRING ttl, STRING prmpt, STRING basedir);
 FILE *ask_for_program(STRING, STRING, STRING*, STRING, STRING);
 STRING ask_for_indi_key(STRING, BOOLEAN, BOOLEAN);
 INDISEQ ask_for_indi_list(STRING, BOOLEAN);

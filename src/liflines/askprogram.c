@@ -390,6 +390,6 @@ ask_for_program (STRING mode,
   return fp;
 
 AskForString:
-  fp = ask_for_file(LLREADTEXT, qrpt, &ifile, llprograms, ".ll");
+  fp = ask_for_input_file(LLREADTEXT, qrpt, &ifile, llprograms, ".ll");
   return fp;
 }

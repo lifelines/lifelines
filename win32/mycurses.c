@@ -94,11 +94,11 @@ static chtype myacsmap[256] = {
 	'*', '*', '*', '*', '*', '*', '*', '*'
 	};
 
-int	LINES = 25;
-int     COLS  = MAXCOLS;
-chtype	*acs_map = myacsmap;
-WINDOW  *curscr = NULL;
-WINDOW  *stdscr = NULL;
+int LINES = 25;
+int COLS  = CUR_MAXCOLS;
+chtype *acs_map = myacsmap;
+WINDOW *curscr = NULL;
+WINDOW *stdscr = NULL;
 
 int endwin()
 {
@@ -516,60 +516,60 @@ static void mycur_init()
 	DWORD dwLen;
 
 	if(first)
-	  {
-	  /* set up alternate character set values */
+	{
+		/* set up alternate character set values */
 
-	  ACS_VLINE = (CHTYPE)179;
-	  ACS_HLINE = (CHTYPE)196;
-	  ACS_BTEE = (CHTYPE)193;
-	  ACS_TTEE = (CHTYPE)194;
-	  ACS_RTEE = (CHTYPE)180;
-	  ACS_LTEE = (CHTYPE)195;
-	  ACS_ULCORNER = (CHTYPE)218;
-	  ACS_LRCORNER = (CHTYPE)217;
-	  ACS_URCORNER = (CHTYPE)191;
-	  ACS_LLCORNER = (CHTYPE)192;
+		ACS_VLINE = (CHTYPE)179;
+		ACS_HLINE = (CHTYPE)196;
+		ACS_BTEE = (CHTYPE)193;
+		ACS_TTEE = (CHTYPE)194;
+		ACS_RTEE = (CHTYPE)180;
+		ACS_LTEE = (CHTYPE)195;
+		ACS_ULCORNER = (CHTYPE)218;
+		ACS_LRCORNER = (CHTYPE)217;
+		ACS_URCORNER = (CHTYPE)191;
+		ACS_LLCORNER = (CHTYPE)192;
 
-	  /* set up console I/O */
-	  first = FALSE;
-	  hStdin = GetStdHandle((DWORD)STD_INPUT_HANDLE);
-	  if(hStdin != INVALID_HANDLE_VALUE)
-	    {
-	    GetConsoleMode(hStdin, &dwModeIn);
-	    dwModeIn &= ~(ENABLE_LINE_INPUT
-	    		| ENABLE_ECHO_INPUT
-			| ENABLE_MOUSE_INPUT
-			| ENABLE_WINDOW_INPUT);
-	    dwModeIn |=	ENABLE_PROCESSED_INPUT;
-	    SetConsoleMode(hStdin, dwModeIn);
-	    }
-	  /* else fprintf(errfp, "GetStdHandle() failed.\n"); */
+		/* set up console I/O */
+		first = FALSE;
+		hStdin = GetStdHandle((DWORD)STD_INPUT_HANDLE);
+		if(hStdin != INVALID_HANDLE_VALUE)
+		{
+			GetConsoleMode(hStdin, &dwModeIn);
+			dwModeIn &= ~(ENABLE_LINE_INPUT
+				| ENABLE_ECHO_INPUT
+				| ENABLE_MOUSE_INPUT
+				| ENABLE_WINDOW_INPUT);
+			dwModeIn |=	ENABLE_PROCESSED_INPUT;
+			SetConsoleMode(hStdin, dwModeIn);
+		}
+		/* else fprintf(errfp, "GetStdHandle() failed.\n"); */
 
-	  hStdout = GetStdHandle((DWORD)STD_OUTPUT_HANDLE);
-	  if(hStdout != INVALID_HANDLE_VALUE)
-	    {
-	    GetConsoleMode(hStdout, &dwModeOut);
-	    /* SetConsoleMode(hStdout, dwModeOut); */
-	    GetConsoleScreenBufferInfo(hStdout, &sScreenInfo);
+		hStdout = GetStdHandle((DWORD)STD_OUTPUT_HANDLE);
+		if(hStdout != INVALID_HANDLE_VALUE)
+		{
+			GetConsoleMode(hStdout, &dwModeOut);
+			/* SetConsoleMode(hStdout, dwModeOut); */
+			GetConsoleScreenBufferInfo(hStdout, &sScreenInfo);
 #ifdef DEBUG
-	    fprintf(errfp, "Screen: (%d,%d) max=(%d,%d) pos=(%d,%d)\n",
-	     	sScreenInfo.dwSize.X, sScreenInfo.dwSize.Y,
-	    	sScreenInfo.dwMaximumWindowSize.X,
-	    	sScreenInfo.dwMaximumWindowSize.Y,
-	     	sScreenInfo.dwCursorPosition.X, sScreenInfo.dwCursorPosition.Y);
+			fprintf(errfp, "Screen: (%d,%d) max=(%d,%d) pos=(%d,%d)\n",
+				sScreenInfo.dwSize.X, sScreenInfo.dwSize.Y,
+				sScreenInfo.dwMaximumWindowSize.X,
+				sScreenInfo.dwMaximumWindowSize.Y,
+				sScreenInfo.dwCursorPosition.X, sScreenInfo.dwCursorPosition.Y);
 #endif
-	    cStartPos.X = 0;
-	    cStartPos.Y = 0;
-	    FillConsoleOutputCharacter(hStdout, (TCHAR)' ',
-		 (DWORD)(sScreenInfo.dwSize.X*sScreenInfo.dwSize.Y),
-		 cStartPos, &dwLen);
-	    if(sScreenInfo.dwSize.Y > LINES)
-	         LINES = sScreenInfo.dwSize.Y;
-	    if(sScreenInfo.dwSize.Y > MAXLINES)
-		 LINES = MAXLINES;
-	    }
-	  /* else fprintf(errfp, "GetStdHandle() failed.\n"); */
-	  }
+			cStartPos.X = 0;
+			cStartPos.Y = 0;
+			FillConsoleOutputCharacter(hStdout, (TCHAR)' ',
+			(DWORD)(sScreenInfo.dwSize.X*sScreenInfo.dwSize.Y),
+			cStartPos, &dwLen);
+			if(sScreenInfo.dwSize.Y > LINES)
+				LINES = sScreenInfo.dwSize.Y;
+			if(sScreenInfo.dwSize.Y > CUR_MAXLINES)
+				LINES = CUR_MAXLINES;
+		}
+	/* else fprintf(errfp, "GetStdHandle() failed.\n"); */
+	}
 }
 
 static int mycur_getc()

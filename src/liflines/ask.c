@@ -126,14 +126,17 @@ ask_yes_or_no_msg (STRING msg,
 	return c == 'y' || c == 'Y';
 }
 /*======================================
- * ask_for_file -- Ask for and open file
+ * ask_for_file_worker -- Ask for and open file
+ * pfname - optional output parameter (pass NULL if undesired)
  *====================================*/
-FILE *
-ask_for_file (STRING mode,
-              STRING ttl,
-              STRING *pfname,
-              STRING path,
-              STRING ext)
+typedef enum { INPUT, OUTPUT } DIRECTION;
+static FILE *
+ask_for_file_worker (STRING mode,
+                     STRING ttl,
+                     STRING *pfname,
+                     STRING path,
+                     STRING ext,
+                     DIRECTION direction)
 {
 	FILE *fp, *fopenpath();
 	STRING fname;
@@ -147,7 +150,10 @@ ask_for_file (STRING mode,
 	  strcpy(fnamebuf, "enter file name: ");
 	}
 
-	fname = ask_for_string(ttl, fnamebuf);
+	if (direction==INPUT)
+		fname = ask_for_input_filename(ttl, path, fnamebuf);
+	else
+		fname = ask_for_output_filename(ttl, path, fnamebuf);
 
 	if (pfname) *pfname = fname;
 
@@ -178,6 +184,35 @@ ask_for_file (STRING mode,
 		return NULL;
 	}
 	return fp;
+}
+/*======================================
+ * ask_for_input_file -- Ask for and open file for input
+ * pfname - optional output parameter (pass NULL if undesired)
+ *====================================*/
+FILE *
+ask_for_input_file (STRING mode,
+                    STRING ttl,
+                    STRING *pfname,
+                    STRING path,
+                    STRING ext)
+{
+	return ask_for_file_worker(mode, ttl, pfname, path, ext,
+		INPUT);
+}
+
+/*======================================
+ * ask_for_output_file -- Ask for and open file for output
+ * pfname - optional output parameter (pass NULL if undesired)
+ *====================================*/
+FILE *
+ask_for_output_file (STRING mode,
+                     STRING ttl,
+                     STRING *pfname,
+                     STRING path,
+                     STRING ext)
+{
+	return ask_for_file_worker(mode, ttl, pfname, path, ext,
+		OUTPUT);
 }
 #define RC_DONE     0
 #define RC_NOSELECT 1
