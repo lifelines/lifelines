@@ -38,8 +38,8 @@ environ_figure_tempfile (void)
 	static char win32_tempfile[_MAX_PATH];
 	/* windows has per-user temporary directory, depending on version */
 	e = (STRING)getenv("TEMP");
-	if (!e || *e == 0) e = (STRING)getenv("TMP");
-	if (!e || *e == 0) e = "\\temp"; /* fallback is \temp */
+	if (ISNULL(e)) e = (STRING)getenv("TMP");
+	if (ISNULL(e)) e = "\\temp"; /* fallback is \temp */
 	strcpy(win32_tempfile, e);
 	strcat(win32_tempfile, "\\lltmpXXXXXX");
 	return mktemp(win32_tempfile);
@@ -58,14 +58,14 @@ environ_figure_editor (void)
 	STRING e;
 
 	e = (STRING) getenv("LLEDITOR");
-	if (!e || *e == 0) e = (STRING) getenv("ED");
-	if (!e || *e == 0) e = (STRING) getenv("EDITOR");
+	if (ISNULL(e)) e = (STRING) getenv("ED");
+	if (ISNULL(e)) e = (STRING) getenv("EDITOR");
 #ifdef WIN32
 	/* win32 fallback is notepad */
-	if (!e || *e == 0) e = (STRING) "notepad.exe";
+	if (ISNULL(e)) e = (STRING) "notepad.exe";
 #else
 	/* unix fallback is vi */
-	if (!e || *e == 0) e = (STRING) "vi";
+	if (ISNULL(e)) e = (STRING) "vi";
 #endif
 	return e;
 }
@@ -79,7 +79,7 @@ environ_figure_database (void)
 	STRING e;
 
 	e = (STRING) getenv("LLDATABASES");
-	if (!e || *e == 0) e = (STRING) ".";
+	if (ISNULL(e)) e = (STRING) ".";
 
 	return e;
 }

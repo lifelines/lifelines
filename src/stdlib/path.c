@@ -47,8 +47,8 @@ filepath (STRING name,
 	INT c;
 	int nlen, elen;
 
-	if (!name || *name == 0) return NULL;
-	if (!path || *path == 0) return name;
+	if (ISNULL(name)) return NULL;
+	if (ISNULL(path)) return name;
 	if (*name == LLCHRDIRSEPARATOR || *name == '.') return name;
 #ifdef WIN32
 	if ((*name == '/') || ((name[1] == ':') && isalpha(*name))) return name;
@@ -135,7 +135,7 @@ lastpathname (STRING path)
 	static unsigned char scratch[MAXLINELEN+1];
 	INT len, c;
 	STRING p = scratch, q;
-	if (!path || *path == 0) return NULL;
+	if (ISNULL(path)) return NULL;
 	len = strlen(path);
 	strcpy(p, path);
 	if (p[len-1] == LLCHRDIRSEPARATOR
