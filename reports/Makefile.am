@@ -39,4 +39,4 @@ EXTRA_DIST = \
 	CREDIT README
 PERL = perl
 index.html: $(LL_REPORTS)
-	-$(PERL) gen_index $(LL_REPORTS)
+	-$(PERL) $(top_srcdir)/reports/gen_index $(LL_REPORTS)

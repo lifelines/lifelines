@@ -14,6 +14,10 @@
 
 	Fix some type conversion pvalue leaks.
 
+	* ChangeLog reports/Makefile.am:
+
+	Fix path in reports Makefile.am for perl indexing.
+
 2003-01-23 Steve Dum
   
         * ChangeLog reports/Makefile.am, reports/gen_index, 
