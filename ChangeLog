@@ -22,6 +22,10 @@
 
 	Remove some unneeded includes.
 
+	* ChangeLog src/tools/wprintf.c
+
+	Remove unneeded include.
+
 2005-02-26 Perry Rapp
 
 	* ChangeLog src/stdlib/rbtree.c src/stdlib/rbtree.h
