@@ -1,5 +1,18 @@
 2001-12-28 Perry Rapp <puddle@users.sourceforge.net>
 
+	* ChangeLog gedlib/charmaps.c gedlib/messages.c hdrs/interp.h
+	interp/date.c liflines/screen.c:
+
+	Separated English months & modifiers from GEDCOM ones.
+	Fixed bug in lists where growing details could obscure entire
+	list (also increased max. list height).
+	Fix tt loader to error (not crash) if no original string
+	(before separator) on a line.
+	Fix end_action to handle stdout_vis (in case errors on it --
+	translation table errors weren't being shown any more).
+
+2001-12-28 Perry Rapp <puddle@users.sourceforge.net>
+
 
 	* .linesrc ChangeLog lines.cfg gedlib/messages.c hdrs/interp.h
 	interp/builtin.c interp/date.c interp/functab.c

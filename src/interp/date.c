@@ -79,19 +79,16 @@ static void set_year(struct gdate_s * pdate, INT yr);
  *********************************************/
 
 enum { MONTH_TOK=1, CHAR_TOK, WORD_TOK, ICONS_TOK, CALENDAR_TOK, YEAR_TOK };
+enum { GD_ABT=1, GD_EST, GD_CAL, GD_BEF, GD_AFT, GD_BET, GD_AND, GD_FROM, GD_TO, GD_END1 };
+enum { GD_BC=GD_END1, GD_AD, GD_END2 };
 
 struct dateword_s {
 	char *sl, *su, *ll, *lu;
 };
 
-/*
-TODO: Internationalize -- col#2 is GEDCOM & stays,
-but cols 1-4 all also go to messages.c as English version 
-Also, we could save some data by generating the all-upper ones.
-*/
-
-/* GEDCOM Gregorian/Julian months */
-/* keywordtbl values 1-12 */
+/* English names of Gregorian/Julian months */
+/* We need to internationalize this */
+/* possibly add "jan" & "january" to align with modifiers */
 static struct dateword_s months_gj[] = {
 	{ "Jan", "JAN", "January", "JANUARY" }
 	,{ "Feb", "FEB", "February", "FEBRUARY" }
@@ -107,6 +104,74 @@ static struct dateword_s months_gj[] = {
 	,{ "Dec", "DEC", "December", "DECEMBER" }
 };
 
+struct gedcom_keywords_s {
+	STRING keyword;
+	INT value;
+};
+
+/* GEDCOM keywords (fixed, not language dependent) */
+static struct gedcom_keywords_s gedkeys[] = {
+/* Gregorian/Julian months are values 1 to 12 */
+	{ "JAN", 1 }
+	,{ "FEB", 2 }
+	,{ "MAR", 3 }
+	,{ "APR", 4 }
+	,{ "MAY", 5 }
+	,{ "JUN", 6 }
+	,{ "JUL", 7 }
+	,{ "AUG", 8 }
+	,{ "SEP", 9 }
+	,{ "OCT", 10 }
+	,{ "NOV", 11 }
+	,{ "DEC", 12 }
+/* modifiers are values 1001 to 1000+GD_END2 */
+	,{ "ABT", 1000+GD_ABT }
+	,{ "EST", 1000+GD_EST }
+	,{ "CAL", 1000+GD_CAL }
+	,{ "BEF", 1000+GD_BEF }
+	,{ "AFT", 1000+GD_AFT }
+	,{ "BET", 1000+GD_BET }
+	,{ "AND", 1000+GD_AND }
+	,{ "FROM", 1000+GD_FROM }
+	,{ "TO", 1000+GD_TO }
+/* calendars are values 2001 to 2000+GDV_CALENDARS_IX */
+	,{ "@#DGREGORIAN@", 2000+GDV_GREGORIAN }
+	,{ "@#DJULIAN@", 2000+GDV_JULIAN }
+	,{ "@#DHEBREW@", 2000+GDV_HEBREW }
+	,{ "@#DFRENCH R@", 2000+GDV_FRENCH }
+	,{ "@#DROMAN@", 2000+GDV_ROMAN }
+/* BC */
+	,{ "B.C.", 1000+GD_BC } /* TODO: handle "(B.C.)" ? */
+/* Some liberal (non-GEDCOM) entries */
+	,{ "BC", GD_BC }
+	,{ "B.C.E.", GD_BC }
+	,{ "BCE", GD_BC }
+	,{ "A.D.", GD_AD }
+	,{ "AD", GD_AD }
+	,{ "C.E.", GD_AD }
+	,{ "CE", GD_AD }
+/* Some liberal (non-GEDCOM) but English-biased entries */
+	,{ "JANUARY", 1 }
+	,{ "FEBRUARY", 2 }
+	,{ "MARCH", 3 }
+	,{ "APRIL", 4 }
+	,{ "MAY", 5 }
+	,{ "JUNE", 6 }
+	,{ "JULY", 7 }
+	,{ "AUGUST", 8 }
+	,{ "SEPTEMBER", 9 }
+	,{ "OCTOBER", 10 }
+	,{ "NOVEMBER", 11 }
+	,{ "DECEMBER", 12 }
+	,{ "ABOUT", 1000+GD_ABT }
+	,{ "ESTIMATED", 1000+GD_EST }
+	,{ "CALCULATED", 1000+GD_CAL }
+	,{ "BEFORE", 1000+GD_BEF }
+	,{ "AFTER", 1000+GD_AFT }
+	,{ "BETWEEN", 1000+GD_BET }
+};
+
+
 /* GEDCOM Hebrew months */
 /* keywordtbl values 101-113 */
 static struct dateword_s months_heb[] = {
@@ -115,13 +180,10 @@ static struct dateword_s months_heb[] = {
 	internationalize the gregorian/julian ones */
 };
 
-/* TODO: Internationalize -- col#2 is really all that we use
-and is GEDCOM -- the others can be deleted unless we are going
-to implement them -- then they have to be internationalized */
 
-/* GEDCOM date modifiers */
-/* keywordtbl values 1000+ */
-enum { GD_ABT=1, GD_EST, GD_CAL, GD_BEF, GD_AFT, GD_BET, GD_AND, GD_FROM, GD_TO, GD_END1 };
+/* English representation of GEDCOM date modifiers */
+/* We need to internationalize this */
+#ifdef NOT_USED_CURRENTLY
 static struct dateword_s modifiers[] = {
 	{ "abt", "ABT", "about", "ABOUT" }      /* 1 */
 	,{ "est", "EST", "estimated", "ESTIMATED" }      /* 1 */
@@ -133,40 +195,11 @@ static struct dateword_s modifiers[] = {
 	,{ "from", "FROM", "from", "FROM" }     /* 6 - potential range */
 	,{ "to", "TO", "to", "TO" }             /* 7 */
 };
+#endif
 
 /* TODO: "B.C." is GEDCOM, but the rest are English, so
 figure out what to do about internationalizing this */
 
-/* GEDCOM date modifiers, part II */
-/* keywordtbl values follow other modifiers above */
-enum { GD_BC=GD_END1, GD_AD, GD_END2 };
-static struct {
-	STRING name;
-	INT value;
-} origins[] = {
-	{ "B.C.", GD_BC }
-	,{ "BC", GD_BC }
-	,{ "B.C.E.", GD_BC }
-	,{ "BCE", GD_BC }
-	,{ "A.D.", GD_AD }
-	,{ "AD", GD_AD }
-	,{ "C.E.", GD_AD }
-	,{ "CE", GD_AD }
-};
-
-
-/* GEDCOM calendar escapes */
-/* keywordtbl values 2000+ */
-static struct {
-	STRING name;
-	INT value;
-} calendars[] = {
-	{ "@#DGREGORIAN@", GDV_GREGORIAN }
-	,{ "@#DJULIAN@", GDV_JULIAN }
-	,{ "@#DHEBREW@", GDV_HEBREW }
-	,{ "@#DFRENCH R@", GDV_FRENCH }
-	,{ "@#DROMAN@", GDV_ROMAN }
-};
 
 /* used in parsing dates -- 1st, 2nd, & 3rd numbers found */
 struct nums_s { INT num1; INT num2; INT num3; };
@@ -258,10 +291,10 @@ do_format_date (STRING str, INT dfmt, INT mfmt,
  *                2 - trailing A.D. or B.C.
  *               11 - trailing BC if appropriate
  *               12 - trailng AD or BC
- *               21 - trailing C.E. if appropriate
- *               22 - trailing B.C.E. if appropriate
- *               31 - trailing CE if appropriate
- *               32 - trailing BCE. if appropriate
+ *               21 - trailing B.C.E. if appropriate
+ *               22 - trailing C.E. or B.C.E.
+ *               31 - trailing BCE if appropriate
+ *               32 - trailing CE or BCE
  *  output: [IN]  buffer in which to write
  *  len:    [IN]  size of buffer
  * Created: 2001/12/28 (Perry Rapp)
@@ -595,6 +628,10 @@ format_day (INT da, INT dfmt, STRING output)
  *                 4 - eg, Mar
  *                 5 - eg, MARCH
  *                 6 - eg, March
+ *TODO: Add roman numerals (as seen in Central Europe)
+ * but wait to see what happens with cmplx numbers
+ * because we might add "mar" & "march" here
+ * and it would be nice to keep all spelt ones contiguous
  *  returns static buffer or string constant or 0
  *=========================================*/
 static STRING
@@ -757,6 +794,7 @@ extract_date (STRING str)
 	}
 	/* now analyze what numbers we got */
 	analyze_numbers(gdv, pdate, &nums);
+	gdv->text = strdup(str);
 	return gdv;
 }
 /*===============================================
@@ -1007,6 +1045,7 @@ create_gdateval (void)
 	memset(gdv, 0, sizeof(*gdv));
 	gdv->date1.year = -99999;
 	gdv->date2.year = -99999;
+	gdv->valid = 1;
 	return gdv;
 
 }
@@ -1022,6 +1061,8 @@ free_gdateval (GDATEVAL gdv)
 		stdfree(gdv->date1.yearstr);
 	if (gdv->date2.yearstr)
 		stdfree(gdv->date2.yearstr);
+	if (gdv->text)
+		stdfree(gdv->text);
 	stdfree(gdv);
 }
 /*===============================================
@@ -1134,29 +1175,13 @@ init_keywordtbl (void)
 {
 	INT i, j;
 	keywordtbl = create_table();
-	for (i = 0; i < ARRSIZE(months_gj); ++i) {
-		j = i + 1;
-		/* first month, January, is #0 with value 1 */
-		insert_table_int(keywordtbl, months_gj[i].su, j);
-		insert_table_int(keywordtbl, months_gj[i].lu, j);
+	/* Load GEDCOM keywords & values into keyword table */
+	for (i=0; i<ARRSIZE(gedkeys); ++i) {
+		j = gedkeys[i].value;
+		insert_table_int(keywordtbl, gedkeys[i].keyword, j);
 	}
 	/* TODO: We need to load months of other calendars here */
-	for (i = 0; i < ARRSIZE(modifiers); ++i) {
-		/* first modifier, ABT, is #0 with value 1000+GD_ABT==1001 */
-		j = 1001+i;
-		insert_table_int(keywordtbl, modifiers[i].su, j);
-		insert_table_int(keywordtbl, modifiers[i].lu, j);
-	}
-	for (i = 0; i < ARRSIZE(calendars); ++i) {
-		/* first calendar, GREGORIAN, is #0 with value 2000+GDV_GREGORIAN==2001 */
-		j = 2000 + calendars[i].value;
-		insert_table_int(keywordtbl, calendars[i].name, j);
-	}
-	for (i = 0; i < ARRSIZE(origins); ++i) {
-		/* more modifiers (BC & AD), values in structure */
-		j = 1000 + origins[i].value;
-		insert_table_int(keywordtbl, origins[i].name, j);
-	}
+
 }
 /*=============================
  * get_todays_date -- Get today's date

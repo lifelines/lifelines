@@ -387,6 +387,7 @@ STRING whtfnameext = SS "enter file name (*%s)";
 STRING baddec      = SS "Bad decimal number format.";
 STRING badhex      = SS "Bad hexidecimal number format.";
 STRING norplc      = SS "No replacement string on line.";
+STRING noorig      = SS "No original string on line.";
 STRING badesc      = SS "Bad escape format.";
 
 /* many menus */

@@ -211,6 +211,7 @@ struct gdateval_s {
 	INT type;
 	INT subtype;
 	INT valid; /* -1=bad syntax, 0=freeform, 1=perfect GEDCOM date */
+	STRING text; /* copy of original */
 };
 typedef struct gdateval_s *GDATEVAL;
 enum { GDV_PERIOD=1, GDV_RANGE, GDV_DATE, GDV_APPROX  };

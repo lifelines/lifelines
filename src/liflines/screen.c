@@ -160,10 +160,11 @@ typedef struct listdisp_s
 /* alphabetical */
 static void activate_uiwin(UIWINDOW uiwin);
 static void append_to_msg_list(STRING msg);
-static INT array_interact(UIWINDOW win, STRING ttl, INT len, STRING *strings
+static INT array_interact(STRING ttl, INT len, STRING *strings
 	, BOOLEAN selecting, DETAILFNC detfnc, void *param);
 static void begin_action(void);
 static INT calculate_screen_lines(INT screen);
+static void check_stdout(void);
 static INT choose_one_or_list_from_indiseq(STRING ttl, INDISEQ seq, BOOLEAN multi);
 static INT choose_or_view_array (STRING ttl, INT no, STRING *pstrngs
 	, BOOLEAN selecting, DETAILFNC detfnc, void *param);
@@ -252,7 +253,8 @@ static INT EMPTY_MENU = -1; /* save one horizontal line */
 int TANDEM_LINES = 6;		/* number of lines of tandem info */
 int LIST_LINES = 6;		/* number of lines of person info in list */
 int AUX_LINES = 15;		/* number of lines in aux window */
-int VIEWABLE = 10;		/* can be increased up to MAXVIEWABLE */
+int VIEWABLE = 12;		/* max visible #entries in popup list (without details) */
+	/* can be increased up to MAXVIEWABLE */
 
 int winx=0, winy=0; /* user specified window size */
 
@@ -515,19 +517,31 @@ display_screen (INT new_screen)
 	UIWINDOW uiwin = main_win;
 	WINDOW * win = uiw_win(uiwin);
 	cur_screen = new_screen;
-	if (stdout_vis) {
-		llwprintf("\nStrike any key to continue.\n");
-		crmode();
-		(void) wgetch(uiw_win(stdout_win));
-		nocrmode();
-	}
-	stdout_vis = FALSE;
+	check_stdout();
 	if (!status_showing[0] || status_transitory)
 		place_std_msg();
 	else
 		mvwaddstr(win, ll_lines-2, 2, status_showing);
 	place_cursor();
 	switch_to_uiwin(uiwin);
+}
+/*=====================================
+ * check_stdout -- Pause for stdout/err display
+ *  if it is up
+ * Created: 2001/12/28 (Perry Rapp)
+ *===================================*/
+static void
+check_stdout (void)
+{
+	if (stdout_vis) {
+		llwprintf("\nStrike any key to continue.\n");
+		crmode();
+		(void) wgetch(uiw_win(stdout_win));
+		nocrmode();
+		stdout_vis = FALSE;
+		if (active_uiwin)
+			touch_all();
+	}
 }
 /*=====================================
  * main_menu -- Handle main_menu screen
@@ -1068,14 +1082,8 @@ static INT
 choose_or_view_array (STRING ttl, INT no, STRING *pstrngs, BOOLEAN selecting
 	, DETAILFNC detfnc, void *param)
 {
-	INT hgt=no+6;
-	UIWINDOW uiwin = choose_win(hgt, NULL);
-	WINDOW *win = uiw_win(uiwin);
 	INT rv;
-	werase(win);
-	BOX(win, 0, 0);
-	wrefresh(win);
-	rv = array_interact(uiwin, ttl, no, pstrngs, selecting, detfnc, param);
+	rv = array_interact(ttl, no, pstrngs, selecting, detfnc, param);
 	refresh_main();
 	return rv;
 }
@@ -1125,7 +1133,7 @@ handle_list_cmds (listdisp * ld, INT code)
 			ld->rows -= 4;
 			return -1; /* handled & needs resize */
 		}
-		else if (ld->details < 11) {
+		else if (ld->details < VIEWABLE-4) {
 			ld->details++;
 			ld->rows--;
 			return -1; /* handled & needs resize */
@@ -1616,6 +1624,7 @@ invoke_trans_menu (UIWINDOW wparent)
 		wmove(uiw_win(uiwin), 1, strlen(mn_tt_ttl)+3);
 		code = interact(uiwin, "elsxiq", -1);
 
+		begin_action();
 		switch (code) {
 		case 'e': edit_tt_menu(uiwin); break;
 		case 'l': load_tt_action(uiwin); break;
@@ -1624,6 +1633,7 @@ invoke_trans_menu (UIWINDOW wparent)
 		case 'i': import_tts(); break;
 		case 'q': done=TRUE; break;
 		}
+		end_action(); /* displays any errors that happened */
 	}
 	deactivate_uiwin();
 }
@@ -2126,7 +2136,6 @@ print_list_title (char * buffer, INT len, const listdisp * ld, STRING ttl)
 }
 /*==============================================
  * array_interact -- Interact with user over list
- *  uiwin:      [IN]  interaction window
  *  ttl:        [IN]  title
  *  len:        [IN]  number of choices
  *  strings:    [IN]  array of choices
@@ -2135,7 +2144,7 @@ print_list_title (char * buffer, INT len, const listdisp * ld, STRING ttl)
  *  param:      [IN]  opaque type for callback
  *============================================*/
 INT
-array_interact (UIWINDOW uiwinx, STRING ttl, INT len, STRING *strings
+array_interact (STRING ttl, INT len, STRING *strings
 	, BOOLEAN selectable, DETAILFNC detfnc, void * param)
 {
 	WINDOW *win=0;
@@ -2805,6 +2814,9 @@ void begin_action (void)
 static
 void end_action (void)
 {
+	/* pause for keypress for finish stdout/err if appropriate */
+	check_stdout();
+	/* put up list of errors if appropriate */
 	if (msg_flag) {
 		STRING * strngs = (STRING *)stdalloc(length_list(msg_list)*sizeof(STRING));
 		INT i=0;

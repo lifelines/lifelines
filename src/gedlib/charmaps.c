@@ -53,7 +53,7 @@ char *map_keys[] = {
  * external/imported variables
  *********************************************/
 
-extern STRING baddec, badhex, norplc, badesc;
+extern STRING baddec,badhex,norplc,badesc,noorig;
 
 /*********************************************
  * local enums & defines
@@ -297,6 +297,10 @@ init_map_from_str (STRING str, INT indx, TRANTABLE * ptt)
 				*p++ = c;
 		}
 		*p = 0;
+		if (!scratch[0]) {
+				maperror(indx, entry, line, noorig);
+				goto fail;
+		}
 		lefts[n] = strsave(scratch);
 		p = scratch;
 		while (TRUE) {
