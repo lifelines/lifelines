@@ -74,6 +74,10 @@
 	Move normalize_indi from private browse.c to public spltjoin.c.
 	Fix fam_to_list_string to not crash on bad HUSB.
 
+	* ChangeLog src/tools/dbverify.c
+
+	Cosmetic: fix unused arg warning in fix_bad_pointer.
+
 2005-02-02 Perry Rapp
 
 	* ChangeLog src/gedlib/gedcomi.h src/gedlib/keytonod.c

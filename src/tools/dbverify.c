@@ -923,6 +923,9 @@ check_node (CNSTRING n0key, NODE node, INT level)
 static BOOLEAN
 fix_bad_pointer (CNSTRING key, RECORD rec, NODE node)
 {
+	key=key; /* unused */
+	rec=rec; /* unused */
+
 	if (todo.fix_alter_pointers) {
 		STRING oldtag = ntag(node);
 		stdfree(oldtag);
