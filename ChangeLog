@@ -50,6 +50,10 @@
 
 	Fix some leaks in closexref.
 
+	* ChangeLog src/gedlib/xlat.c
+
+	Fix leak in free_xlat.
+
 2005-01-26, Stephen Dum
         * ChangeLog docs/ll-reportmanual.xml docs/ll-userguide.sv.xml
 	docs/ll-userguide.xml

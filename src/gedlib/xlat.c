@@ -138,6 +138,7 @@ free_xlat (XLAT xlat)
 	ENDLIST
 	make_list_empty(xlat->steps);
 	remove_list(xlat->steps, 0);
+	stdfree(xlat);
 }
 /*==========================================================
  * create_iconv_step -- Create an iconv step of a translation chain
@@ -527,8 +528,8 @@ select_tts (const struct dirent *entry)
 void
 xl_free_adhoc_xlats (void)
 {
-    XLAT xlattemp;
-	LIST newlist;
+    XLAT xlattemp=0;
+	LIST newlist=0;
 	if (!f_xlats)
 		return;
 	/* we don't have a way to delete items from a list,
@@ -553,7 +554,7 @@ xl_free_adhoc_xlats (void)
 void
 xl_free_xlats (void)
 {
-	XLAT xlattemp;
+	XLAT xlattemp=0;
 	if (!f_xlats)
 		return;
 	FORLIST(f_xlats, el)
