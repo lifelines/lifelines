@@ -114,7 +114,7 @@ test_concat_path (void)
 STRING
 concat_path (STRING dir, STRING file)
 {
-	static char buffer[PATH_MAX];
+	static char buffer[MAXPATHLEN];
 	STRING ptr = buffer;
 	INT len=sizeof(buffer);
 	ptr[0]=0;
@@ -159,7 +159,7 @@ filepath (STRING name,
           STRING path,
           STRING  ext)
 {
-	char buf1[PATH_MAX], buf2[PATH_MAX];
+	char buf1[MAXPATHLEN], buf2[MAXPATHLEN];
 	STRING p, q;
 	INT c;
 	INT nlen, elen, dirs;

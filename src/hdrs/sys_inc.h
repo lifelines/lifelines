@@ -15,6 +15,7 @@
 #include <io.h>
 #ifndef _POSIX_
 #define PATH_MAX _MAX_PATH
+#define MAXPATHLEN _MAX_PATH
 #endif
 
 /* WIN32 - BORLAND INCLUDES */
