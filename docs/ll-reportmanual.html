@@ -1,0 +1,9786 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+> 
+
+THE LIFELINES PROGRAMMING SUBSYSTEM AND REPORT GENERATOR 
+
+</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
+"></HEAD
+><BODY
+CLASS="book"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="BOOK"
+><A
+NAME="docbook"><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+><A
+NAME="AEN2">THE <SPAN
+CLASS="application"
+>LIFELINES</SPAN
+> PROGRAMMING SUBSYSTEM AND REPORT GENERATOR</H1
+><H2
+CLASS="subtitle"
+><SPAN
+CLASS="application"
+>LifeLines</SPAN
+> Version 3.0.7</H2
+><H3
+CLASS="author"
+><A
+NAME="AEN6">Thomas T.  Wetmore , IV</H3
+><HR></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+>1. <A
+HREF="#AEN12"
+>Report Programming Manual</A
+></DT
+><DD
+><DL
+><DT
+>1.1. <A
+HREF="#AEN14"
+>INTRODUCTION</A
+></DT
+></DL
+></DD
+><DT
+>2. <A
+HREF="#AEN136"
+><SPAN
+CLASS="application"
+>LIFELINES</SPAN
+> PROGRAMMING REFERENCE</A
+></DT
+><DD
+><DL
+><DT
+>2.1. <A
+HREF="#AEN145"
+>Procedures and Functions</A
+></DT
+><DT
+>2.2. <A
+HREF="#AEN192"
+>Comments</A
+></DT
+><DT
+>2.3. <A
+HREF="#AEN200"
+>Statements</A
+></DT
+><DT
+>2.4. <A
+HREF="#AEN300"
+>Expressions</A
+></DT
+><DT
+>2.5. <A
+HREF="#AEN316"
+>Include Feature</A
+></DT
+><DT
+>2.6. <A
+HREF="#AEN331"
+>Built-in Functions</A
+></DT
+><DT
+>2.7. <A
+HREF="#AEN340"
+>Value Types</A
+></DT
+><DT
+>2.8. <A
+HREF="#AEN426"
+>Arithmetic and Logic Functions</A
+></DT
+><DT
+>2.9. <A
+HREF="#AEN657"
+>Person Functions</A
+></DT
+><DT
+>2.10. <A
+HREF="#AEN1100"
+>Family Functions</A
+></DT
+><DT
+>2.11. <A
+HREF="#AEN1302"
+>List Functions</A
+></DT
+><DT
+>2.12. <A
+HREF="#AEN1455"
+>Table Functions</A
+></DT
+><DT
+>2.13. <A
+HREF="#AEN1498"
+>GEDCOM Node Functions</A
+></DT
+><DT
+>2.14. <A
+HREF="#AEN1614"
+>Event and Date Functions</A
+></DT
+><DT
+>2.15. <A
+HREF="#AEN1855"
+>Value Extraction Functions</A
+></DT
+><DT
+>2.16. <A
+HREF="#AEN1935"
+>User Interaction Functions</A
+></DT
+><DT
+>2.17. <A
+HREF="#AEN2075"
+>String Functions</A
+></DT
+><DT
+>2.18. <A
+HREF="#AEN2388"
+>Output Mode Functions</A
+></DT
+><DT
+>2.19. <A
+HREF="#AEN2555"
+>Person Set Functions and GEDCOM Extraction</A
+></DT
+><DT
+>2.20. <A
+HREF="#AEN2828"
+>Record Update Functions</A
+></DT
+><DT
+>2.21. <A
+HREF="#AEN2876"
+>Record Linking Functions</A
+></DT
+><DT
+>2.22. <A
+HREF="#AEN2914"
+>Miscellaneous Functions</A
+></DT
+></DL
+></DD
+></DL
+></DIV
+><DIV
+CLASS="LOT"
+><DL
+CLASS="LOT"
+><DT
+><B
+>List of Examples</B
+></DT
+><DT
+>1-1. <A
+HREF="#AEN30"
+>Example of ahnentafel report</A
+></DT
+><DT
+>1-2. <A
+HREF="#AEN35"
+>Example of ahnentafel report script</A
+></DT
+></DL
+></DIV
+><DIV
+CLASS="chapter"
+><HR><H1
+><A
+NAME="AEN12">Chapter 1.  
+
+Report Programming Manual 
+
+</H1
+><DIV
+CLASS="sect1"
+><H2
+CLASS="sect1"
+><A
+NAME="AEN14">1.1. INTRODUCTION</H2
+><P
+> 
+
+     The <SPAN
+CLASS="application"
+>LifeLines</SPAN
+> programming subsystem 
+     lets you produce reports in any style or layout. You may 
+     generate files in <SPAN
+CLASS="application"
+>troff</SPAN
+>, 
+     <SPAN
+CLASS="application"
+>Postscript</SPAN
+>, 
+     <SPAN
+CLASS="application"
+>TeX</SPAN
+>, <SPAN
+CLASS="acronym"
+>SGML</SPAN
+> or any 
+     other <SPAN
+CLASS="acronym"
+>ASCII</SPAN
+>-based format, for further text 
+     processing and printing. You access the report generator by 
+     choosing the r command from the main menu. You may also use 
+     the programming subsystem to create query and other processing 
+     programs that write their results directly upon the 
+     screen. For example, there is a 
+     <SPAN
+CLASS="application"
+>LifeLines</SPAN
+> program that computes the 
+     relationship between any two persons in a database. 
+
+</P
+><P
+> 
+
+     Each <SPAN
+CLASS="application"
+>LifeLines</SPAN
+> program is written 
+     in the <SPAN
+CLASS="application"
+>LifeLines</SPAN
+> programming 
+     language, and the programs are stored in normal files. When 
+     you direct <SPAN
+CLASS="application"
+>LifeLines</SPAN
+> to run a 
+     program, it asks you for the name of the program file, asks 
+     you where you want the program's output written, and then runs 
+     the program. 
+
+</P
+><P
+> 
+
+     For example, say you want <SPAN
+CLASS="application"
+>LifeLines</SPAN
+> 
+     to generate an ahnentafel. Such a report might look 
+     like: 
+
+<DIV
+CLASS="example"
+><A
+NAME="AEN30"><P
+><B
+>Example 1-1.  
+Example of ahnentafel report      
+</B
+></P
+><P
+CLASS="literallayout"
+>&nbsp;<br>
+1.&nbsp;Thomas&nbsp;Trask&nbsp;WETMORE&nbsp;IV&nbsp;<br>
+b.&nbsp;18&nbsp;December&nbsp;1949,&nbsp;New&nbsp;London,&nbsp;Connecticut&nbsp;<br>
+2.&nbsp;Thomas&nbsp;Trask&nbsp;WETMORE&nbsp;III&nbsp;<br>
+b.&nbsp;15&nbsp;October&nbsp;1925,&nbsp;New&nbsp;London,&nbsp;Connecticut&nbsp;<br>
+3.&nbsp;Joan&nbsp;Marie&nbsp;HANCOCK&nbsp;<br>
+b.&nbsp;6&nbsp;June&nbsp;1928,&nbsp;New&nbsp;London,&nbsp;Connecticut&nbsp;<br>
+4.&nbsp;Thomas&nbsp;Trask&nbsp;WETMORE&nbsp;Jr&nbsp;<br>
+b.&nbsp;5&nbsp;May&nbsp;1896,&nbsp;New&nbsp;London,&nbsp;Connecticut&nbsp;<br>
+d.&nbsp;8&nbsp;November&nbsp;1970,&nbsp;New&nbsp;London,&nbsp;Connecticut&nbsp;<br>
+5.&nbsp;Vivian&nbsp;Genevieve&nbsp;BROWN&nbsp;<br>
+b.&nbsp;5&nbsp;April&nbsp;1896,&nbsp;Mondovi,&nbsp;Wisconsin&nbsp;<br>
+6.&nbsp;Richard&nbsp;James&nbsp;HANCOCK&nbsp;<br>
+b.&nbsp;18&nbsp;August&nbsp;1904,&nbsp;New&nbsp;London,&nbsp;Connecticut&nbsp;<br>
+d.&nbsp;24&nbsp;December&nbsp;1976,&nbsp;Waterford,&nbsp;Connecticut&nbsp;<br>
+7.&nbsp;Muriel&nbsp;Armstrong&nbsp;SMITH&nbsp;<br>
+b.&nbsp;28&nbsp;October&nbsp;1905,&nbsp;New&nbsp;Haven,&nbsp;Connecticut&nbsp;<br>
+8.&nbsp;Thomas&nbsp;Trask&nbsp;WETMORE&nbsp;Sr&nbsp;<br>
+b.&nbsp;13&nbsp;March&nbsp;1866,&nbsp;St.&nbsp;Mary's&nbsp;Bay,&nbsp;Nova&nbsp;Scotia&nbsp;<br>
+d.&nbsp;17&nbsp;February&nbsp;1947,&nbsp;New&nbsp;London,&nbsp;Connecticut&nbsp;<br>
+9.&nbsp;Margaret&nbsp;Ellen&nbsp;KANEEN&nbsp;<br>
+b.&nbsp;27&nbsp;October&nbsp;1859,&nbsp;Liverpool,&nbsp;England&nbsp;<br>
+d.&nbsp;10&nbsp;May&nbsp;1900,&nbsp;New&nbsp;London,&nbsp;Connecticut&nbsp;<br>
+...&nbsp;lots&nbsp;more</P
+></DIV
+> 
+
+</P
+><P
+> 
+
+     Here is a <SPAN
+CLASS="application"
+>LifeLines</SPAN
+> program that 
+     generates this report: 
+
+<DIV
+CLASS="example"
+><A
+NAME="AEN35"><P
+><B
+>Example 1-2.  
+Example of ahnentafel report script      
+</B
+></P
+><PRE
+CLASS="programlisting"
+> 
+
+proc main () 
+  { 
+    getindi(indi) 
+    list(ilist) 
+    list(alist) 
+    enqueue(ilist, indi) 
+    enqueue(alist, 1) 
+    while(indi, dequeue(ilist)) { 
+      set(ahnen, dequeue(alist)) 
+      d(ahnen) ". " name(indi) nl() 
+      if (e, birth(indi)) { " b. " long(e) nl() } 
+      if (e, death(indi)) { " d. " long(e) nl() } 
+      if (par, father(indi)) { 
+        enqueue(ilist, par) 
+        enqueue(alist, mul(2,ahnen)) 
+      } 
+      if (par,mother(indi)) { 
+        enqueue(ilist, par) 
+        enqueue(alist, add(1,mul(2,ahnen))) 
+      } 
+    } 
+  }</PRE
+></DIV
+> 
+
+</P
+><P
+> 
+
+     Say this program is in the file 
+     <TT
+CLASS="filename"
+>ahnen</TT
+>. When you choose the 
+     <B
+CLASS="keycap"
+>r</B
+> option from the main menu, 
+     <SPAN
+CLASS="application"
+>LifeLines</SPAN
+> asks: 
+
+<PRE
+CLASS="screen"
+> 
+What is the name of the report program? 
+enter string: 
+</PRE
+> 
+
+</P
+><P
+> 
+
+     You enter 
+     <TT
+CLASS="userinput"
+><B
+><TT
+CLASS="literal"
+>ahnen</TT
+></B
+></TT
+>. Since the 
+     program generates a report, 
+     <SPAN
+CLASS="application"
+>LifeLines</SPAN
+> asks where to write that 
+     report: 
+
+<PRE
+CLASS="screen"
+> 
+What is the name of the output file? 
+enter file name: 
+</PRE
+> 
+
+</P
+><P
+> 
+
+     You enter a file name, say 
+     <TT
+CLASS="userinput"
+><B
+><TT
+CLASS="filename"
+>my.ahnen</TT
+></B
+></TT
+>. 
+     <SPAN
+CLASS="application"
+>LifeLines</SPAN
+> reads the program ahnen, 
+     executes the program, and writes the report output to 
+     <TT
+CLASS="filename"
+>my.ahnen</TT
+>. <SPAN
+CLASS="application"
+>LifeLines</SPAN
+> 
+     reports any syntax or run-time errors found while trying to 
+     run the program. 
+
+
+</P
+><P
+> 
+
+     A <SPAN
+CLASS="application"
+>LifeLines</SPAN
+> program is made up of 
+     <SPAN
+CLASS="type"
+>procedures</SPAN
+> and <SPAN
+CLASS="type"
+>functions</SPAN
+>; every 
+     program must contain at least one <SPAN
+CLASS="type"
+>procedure</SPAN
+> named 
+     <TT
+CLASS="literal"
+>main</TT
+>. The <TT
+CLASS="literal"
+>main</TT
+> 
+     <SPAN
+CLASS="type"
+>procedure</SPAN
+> runs first; it may call other 
+     <SPAN
+CLASS="type"
+>procedures</SPAN
+>, <SPAN
+CLASS="type"
+>functions</SPAN
+> and 
+     <SPAN
+CLASS="type"
+>built-in functions</SPAN
+>. In the ahnentafel example 
+     there is only one <SPAN
+CLASS="type"
+>procedure</SPAN
+>. 
+
+</P
+><P
+> 
+
+     A <SPAN
+CLASS="type"
+>procedure</SPAN
+> body is a sequence of 
+     <SPAN
+CLASS="type"
+>statements</SPAN
+>. In the example program the first five 
+     <SPAN
+CLASS="type"
+>statements</SPAN
+> are: 
+
+<PRE
+CLASS="programlisting"
+> 
+getindi(indi) 
+list(ilist) 
+list(alist) 
+enqueue(ilist, indi) 
+enqueue(alist, 1) 
+</PRE
+> 
+</P
+><P
+> 
+
+     The first <SPAN
+CLASS="type"
+>statement</SPAN
+> calls the 
+     <TT
+CLASS="function"
+>getindi</TT
+> (get individual) <SPAN
+CLASS="type"
+>built-in 
+     function</SPAN
+>, which causes 
+     <SPAN
+CLASS="application"
+>LifeLines</SPAN
+> to ask you to identify a 
+     person using the zip browse style of identification: 
+
+<PRE
+CLASS="screen"
+> 
+Identify person for interpreted report 
+enter name: 
+</PRE
+> 
+
+
+</P
+><P
+> 
+
+     After you identify a person, he or she is assigned to the 
+     variable <TT
+CLASS="varname"
+>indi</TT
+>. The next two 
+     <SPAN
+CLASS="type"
+>statements</SPAN
+> declare two <SPAN
+CLASS="type"
+>list 
+     variables</SPAN
+>, <TT
+CLASS="varname"
+>ilist</TT
+> and 
+     <TT
+CLASS="varname"
+>alist</TT
+>. <SPAN
+CLASS="type"
+>Lists</SPAN
+> hold sequences of 
+     things; there are operations for placing things on lists, 
+     taking things off, and iterating through the list elements. In 
+     the example, <TT
+CLASS="varname"
+>ilist</TT
+> holds a list of 
+     ancestors, in ahnentafel order, who have not yet been reported 
+     on, and <TT
+CLASS="varname"
+>alist</TT
+> holds their respective 
+     ahnentafel numbers. 
+
+
+</P
+><P
+> 
+
+     The next two statements call the <TT
+CLASS="function"
+>enqueue</TT
+> 
+     function, adding the first members to both lists. The person 
+     identified by the <TT
+CLASS="function"
+>getindi</TT
+> function is 
+     made the first member of <TT
+CLASS="varname"
+>ilist</TT
+>, and the 
+     number one, this person's ahnentafel number, is made the first 
+     member of <TT
+CLASS="varname"
+>alist</TT
+>. 
+
+</P
+><P
+> 
+
+The rest of the program is: 
+
+<PRE
+CLASS="programlisting"
+> 
+while(indi, dequeue(ilist)) { 
+  set(ahnen, dequeue(alist)) 
+  d(ahnen) ". " name(indi) nl() 
+  if (e, birth(indi)) { " b. " long(e) nl() } 
+  if (e, death(indi)) { " d. " long(e) nl() } 
+  if (par, father(indi)) { 
+    enqueue(ilist, par) 
+    enqueue(alist, mul(2,ahnen)) 
+  } 
+  if (par, mother(indi)) { 
+    enqueue(ilist, par) 
+   enqueue(alist, add(1,mul(2,ahnen))) 
+  } 
+} 
+</PRE
+> 
+
+</P
+><P
+> 
+
+     This is a loop that iteratively removes persons and their 
+     ahnentafel numbers from the two lists, and then prints their 
+     names and birth and death information. If the persons have 
+     parents in the database, their parents and their parents' 
+     ahnentafel numbers are then put at the ends of the lists. The 
+     loop iterates until the list is empty. 
+
+</P
+><P
+> 
+
+     The loop is a <SPAN
+CLASS="type"
+>while</SPAN
+> loop statement. The line: 
+<PRE
+CLASS="programlisting"
+> 
+while(indi, dequeue(ilist)) { 
+</PRE
+> 
+removes (via <TT
+CLASS="function"
+>dequeue</TT
+>) a person from <TT
+CLASS="varname"
+>ilist</TT
+>, and assigns the person to variable <TT
+CLASS="varname"
+>indi</TT
+>. As long as there 
+are persons on <TT
+CLASS="varname"
+>ilist</TT
+>, another iteration of the loop follows. 
+
+</P
+><P
+> 
+
+The statement:<PRE
+CLASS="programlisting"
+> 
+
+set(ahnen, dequeue(alist))</PRE
+>is an <SPAN
+CLASS="type"
+>assignment</SPAN
+> statement. The second argument is evaluated; its value is assigned to the first 
+argument, which must be a variable. Here the next number in <TT
+CLASS="varname"
+>alist</TT
+> is removed and assigned to variable 
+<TT
+CLASS="varname"
+>ahnen</TT
+>. This is the ahnentafel number of the person just removed from <TT
+CLASS="varname"
+>ilist</TT
+>. 
+
+</P
+><P
+> 
+
+The line:<PRE
+CLASS="programlisting"
+> 
+
+d(ahnen) ". " name(indi) nl()</PRE
+>contains four <SPAN
+CLASS="type"
+>expression</SPAN
+> statements; when expressions are used as statements, their values, if any, are 
+treated as strings and written directly to the report output file. The <TT
+CLASS="function"
+>d</TT
+> function converts its integer 
+argument to a numeric string. The ". " is a literal (constant) string value. The <TT
+CLASS="function"
+>name</TT
+> function returns the 
+default form of a person's name. The <TT
+CLASS="function"
+>nl</TT
+> function returns a string containing the newline character. 
+
+</P
+><P
+> 
+
+The next two lines:
+
+<PRE
+CLASS="programlisting"
+> 
+if(e, birth(indi)) { " b. " long(e) nl() } 
+if(e, death(indi)) { " d. " long(e) nl() }
+</PRE
+>
+
+write out basic birth and death information about a person. These
+lines are <SPAN
+CLASS="type"
+>if</SPAN
+> statements. The second argument in the
+conditional is evaluated and assigned to the first argument, which
+must be a variable.  The first <SPAN
+CLASS="type"
+>if</SPAN
+> statement calls the
+birth function, returning the first birth event in a person's
+record. If the event exists it is assigned to variable
+<TT
+CLASS="varname"
+>e</TT
+>, and the <SPAN
+CLASS="type"
+>body</SPAN
+> (the items between the
+curly brackets) of the <SPAN
+CLASS="type"
+>if</SPAN
+> statement is executed. The
+<SPAN
+CLASS="type"
+>body</SPAN
+> consists of three <SPAN
+CLASS="type"
+>expression</SPAN
+>
+statements: a literal, and calls to the <TT
+CLASS="function"
+>long</TT
+> and
+<TT
+CLASS="function"
+>nl</TT
+> functions. <TT
+CLASS="function"
+>Long</TT
+> takes an
+<TT
+CLASS="parameter"
+><I
+>event</I
+></TT
+> and returns the values of
+the first <TT
+CLASS="structfield"
+><I
+>DATE</I
+></TT
+> and
+<TT
+CLASS="structfield"
+><I
+>PLAC</I
+></TT
+> lines in the <SPAN
+CLASS="type"
+>event</SPAN
+>.
+
+</P
+><P
+> 
+
+Finally in the program is:<PRE
+CLASS="programlisting"
+> 
+
+if (par, father(indi)) { 
+enqueue(ilist,par) 
+enqueue(alist,mul(2,ahnen)) 
+} 
+if (par,mother(indi)) { 
+enqueue(ilist,par) 
+enqueue(alist,add(1,mul(2,ahnen))) 
+}</PRE
+> 
+
+</P
+><P
+> 
+
+These lines add the father and mother of the current person, if either or both are in the database, to 
+<TT
+CLASS="varname"
+>ilist</TT
+>. They also compute and add the parents' ahnentafel numbers to <TT
+CLASS="varname"
+>alist</TT
+>. A father's ahnentafel 
+number is twice that of his child. A mother's ahnentafel number is twice that of her child plus one. 
+These values are computed with the <TT
+CLASS="function"
+>mul</TT
+> and <TT
+CLASS="function"
+>add</TT
+> functions. 
+
+</P
+></DIV
+></DIV
+><DIV
+CLASS="chapter"
+><HR><H1
+><A
+NAME="AEN136">Chapter 2.  
+
+<SPAN
+CLASS="application"
+>LIFELINES</SPAN
+> PROGRAMMING REFERENCE 
+
+</H1
+><P
+> 
+
+<SPAN
+CLASS="application"
+>LifeLines</SPAN
+> programs are stored in files you edit with a screen editor. Programs are not edited from within 
+the <SPAN
+CLASS="application"
+>LifeLines</SPAN
+> program; edit them as you would any text file. The programs may be stored in any 
+directories; they do not have to be kept in or associated with <SPAN
+CLASS="application"
+>LifeLines</SPAN
+> databases. You may set the 
+<TT
+CLASS="envar"
+>LLPROGRAMS</TT
+> shell variable to hold a list of directories that <SPAN
+CLASS="application"
+>LifeLines</SPAN
+> will use to automatically 
+search for programs when you request program execution. 
+
+</P
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN145">2.1. Procedures and Functions</H2
+><P
+> 
+
+A <SPAN
+CLASS="application"
+>LifeLines</SPAN
+> program is made up of one or more <SPAN
+CLASS="type"
+>procedures</SPAN
+> and <SPAN
+CLASS="type"
+>functions</SPAN
+>. A <SPAN
+CLASS="type"
+>procedure</SPAN
+> has format:<PRE
+CLASS="synopsis"
+>proc name ( params ) { statements }</PRE
+> 
+
+</P
+><P
+> 
+
+<SPAN
+CLASS="symbol"
+>Name</SPAN
+> is the name of the <SPAN
+CLASS="type"
+>procedure</SPAN
+>, <SPAN
+CLASS="symbol"
+>params</SPAN
+> is an optional list of <SPAN
+CLASS="type"
+>parameters</SPAN
+> separated by commas, 
+and <SPAN
+CLASS="symbol"
+>statements</SPAN
+> is a list of statements that make up the <SPAN
+CLASS="type"
+>procedure</SPAN
+> body. Report generation begins with 
+the first <SPAN
+CLASS="type"
+>statement</SPAN
+> in the <SPAN
+CLASS="type"
+>procedure</SPAN
+> named <TT
+CLASS="literal"
+>main</TT
+>. <SPAN
+CLASS="type"
+>Procedures</SPAN
+> may call other <SPAN
+CLASS="type"
+>procedures</SPAN
+> and <SPAN
+CLASS="type"
+>functions</SPAN
+>. 
+<SPAN
+CLASS="type"
+>Procedures</SPAN
+> are called with the <SPAN
+CLASS="type"
+>call</SPAN
+> statement described below.When a <SPAN
+CLASS="type"
+>procedure</SPAN
+> is called, the 
+<SPAN
+CLASS="type"
+>statements</SPAN
+> making up its <SPAN
+CLASS="type"
+>body</SPAN
+> are executed. 
+
+</P
+><P
+> 
+
+A function has format:<PRE
+CLASS="synopsis"
+>func name ( params ) { statements }</PRE
+> 
+
+</P
+><P
+> 
+
+<SPAN
+CLASS="symbol"
+>Name</SPAN
+>, <SPAN
+CLASS="symbol"
+>params</SPAN
+> and <SPAN
+CLASS="symbol"
+>statements</SPAN
+> are defined as in <SPAN
+CLASS="type"
+>procedures</SPAN
+>. <SPAN
+CLASS="type"
+>Functions</SPAN
+> may call other <SPAN
+CLASS="type"
+>procedures</SPAN
+> and 
+<SPAN
+CLASS="type"
+>functions</SPAN
+>. When a <SPAN
+CLASS="type"
+>function</SPAN
+> is called the <SPAN
+CLASS="type"
+>statements</SPAN
+> that make it up are executed. A <SPAN
+CLASS="type"
+>function</SPAN
+> differs from 
+a <SPAN
+CLASS="type"
+>procedure</SPAN
+> by returning a <SPAN
+CLASS="type"
+>value</SPAN
+> to the <SPAN
+CLASS="type"
+>procedure</SPAN
+> or <SPAN
+CLASS="type"
+>function</SPAN
+> that calls it. Values are returned by the 
+<SPAN
+CLASS="type"
+>return</SPAN
+> statement, described below. <SPAN
+CLASS="type"
+>Recursive functions</SPAN
+> are allowed. A <SPAN
+CLASS="type"
+>function</SPAN
+> is called by invoking it 
+in an <SPAN
+CLASS="type"
+>expression</SPAN
+>. 
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN192">2.2. Comments</H2
+><P
+> 
+
+You may comment your <SPAN
+CLASS="application"
+>LifeLines</SPAN
+> programs using the following notation:<PRE
+CLASS="programlisting"
+> 
+
+/*...comment text including any characters except */... */</PRE
+> 
+
+</P
+><P
+> 
+
+Comments begin with a <TT
+CLASS="literal"
+>/*</TT
+> and end with a <TT
+CLASS="literal"
+>*/</TT
+>. Comments may appear on lines of their own or on lines 
+that have program constructs. Comments may span many lines. Comments may not be nested. 
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN200">2.3. Statements</H2
+><P
+> 
+
+     There are a number of <SPAN
+CLASS="type"
+>statement</SPAN
+> types. The 
+     simplest is an <SPAN
+CLASS="type"
+>expression</SPAN
+> statement, an 
+     expression that is not part of any other 
+     <SPAN
+CLASS="type"
+>statement</SPAN
+> or 
+     <SPAN
+CLASS="type"
+>expression</SPAN
+>. <SPAN
+CLASS="type"
+>Expressions</SPAN
+> are defined 
+     more fully below. An <SPAN
+CLASS="type"
+>expression</SPAN
+> statement is 
+     evaluated, and if its value is 
+     <SPAN
+CLASS="returnvalue"
+>non-null</SPAN
+> (non-zero), it is assumed 
+     to be a <SPAN
+CLASS="type"
+>string</SPAN
+>, and written to the program output 
+     file. If its value is <SPAN
+CLASS="returnvalue"
+>null</SPAN
+>, nothing 
+     is written to the output file. For example, the expression 
+     <PRE
+CLASS="synopsis"
+>name(indi)</PRE
+>, where <SPAN
+CLASS="symbol"
+>indi</SPAN
+> 
+     is a person, returns the person's name and writes it to the 
+     output file. On the other hand, the expression 
+     <PRE
+CLASS="synopsis"
+>set(n, nspouses(indi))</PRE
+> assigns the 
+     variable <TT
+CLASS="varname"
+>n</TT
+> the number of spouses that 
+     person <TT
+CLASS="varname"
+>indi</TT
+> has, but since 
+     <TT
+CLASS="function"
+>set</TT
+> returns 
+     <SPAN
+CLASS="returnvalue"
+>null</SPAN
+>, nothing is written to the 
+     output file. 
+
+</P
+><P
+> 
+
+     The programming language includes <SPAN
+CLASS="type"
+>if</SPAN
+> statements, 
+     <SPAN
+CLASS="type"
+>while</SPAN
+> statements and <SPAN
+CLASS="type"
+>procedure call</SPAN
+> 
+     statements, with the following formats: 
+
+     <PRE
+CLASS="synopsis"
+>if ([varb,] expr) { statements }  
+               [ elsif ([varb], expr) { statements } ]* 
+                    [ else { statements } ] 
+     </PRE
+> 
+
+     <PRE
+CLASS="synopsis"
+>while ([varb,] expr ) { statements }</PRE
+> 
+
+     <PRE
+CLASS="synopsis"
+>call name ( args )</PRE
+> 
+
+</P
+><P
+> 
+
+Square brackets indicate optional parts of the statement syntax. An <SPAN
+CLASS="type"
+>if</SPAN
+> statement is executed by first 
+evaluating the conditional expression in the <SPAN
+CLASS="type"
+>if</SPAN
+> clause. If <SPAN
+CLASS="returnvalue"
+>non-zero</SPAN
+>, the statements in the <SPAN
+CLASS="type"
+>if</SPAN
+> clause are 
+evaluated, and the rest of the <SPAN
+CLASS="type"
+>if</SPAN
+> statement, if any, is ignored. If the value is <SPAN
+CLASS="returnvalue"
+>zero</SPAN
+>, and there is an <SPAN
+CLASS="type"
+>elsif</SPAN
+> 
+clause following, the conditional in the <SPAN
+CLASS="type"
+>elsif</SPAN
+> clause is evaluated, and if <SPAN
+CLASS="returnvalue"
+>non-zero</SPAN
+>, the statements in 
+that clause are executed. <SPAN
+CLASS="type"
+>Conditionals</SPAN
+> are evaluated until one of them is <SPAN
+CLASS="returnvalue"
+>non-zero</SPAN
+>, or until there are no 
+more. If no conditional is <SPAN
+CLASS="returnvalue"
+>non-zero</SPAN
+>, and if the <SPAN
+CLASS="type"
+>if</SPAN
+> statement ends with an <SPAN
+CLASS="type"
+>else</SPAN
+> clause, the statements in 
+the <SPAN
+CLASS="type"
+>else</SPAN
+> clause are executed. There are two forms of <SPAN
+CLASS="type"
+>conditional</SPAN
+> expressions. If the <SPAN
+CLASS="type"
+>conditional</SPAN
+> is a 
+single <SPAN
+CLASS="type"
+>expression</SPAN
+>, it is simply evaluated. If the <SPAN
+CLASS="type"
+>conditional</SPAN
+> is a <SPAN
+CLASS="type"
+>variable</SPAN
+> followed by an <SPAN
+CLASS="type"
+>expression</SPAN
+>, the 
+<SPAN
+CLASS="type"
+>expression</SPAN
+> is evaluated and its value is assigned to the variable. 
+
+</P
+><P
+> 
+
+Note that <SPAN
+CLASS="type"
+>if</SPAN
+> treats null strings as false, but empty strings as true. This has the benefit that 
+
+<PRE
+CLASS="programlisting"
+> 
+if(birth(indi)) 
+</PRE
+> 
+
+will return true if there is a BIRT record, even if it is empty, but will return false if there is no BIRT record 
+at all. 
+
+</P
+><P
+> 
+
+The <SPAN
+CLASS="type"
+>while</SPAN
+> statement provides a looping mechanism. The <SPAN
+CLASS="type"
+>conditional</SPAN
+> is evaluated, and if <SPAN
+CLASS="returnvalue"
+>non-zero</SPAN
+>, the 
+<SPAN
+CLASS="type"
+>body</SPAN
+> of the loop is executed. After each iteration the <SPAN
+CLASS="type"
+>expression</SPAN
+> is reevaluated; as long as it remains 
+<SPAN
+CLASS="returnvalue"
+>non-zero</SPAN
+>, the loop is repeated. 
+
+
+</P
+><P
+> 
+
+The <SPAN
+CLASS="type"
+>call</SPAN
+> statement provides procedure calls. <SPAN
+CLASS="symbol"
+>Name</SPAN
+> must match one of the <SPAN
+CLASS="type"
+>procedures</SPAN
+> defined in the 
+report program. <SPAN
+CLASS="symbol"
+>Args</SPAN
+> is a list of <SPAN
+CLASS="type"
+>argument</SPAN
+> expressions separated by commas. <SPAN
+CLASS="type"
+>Recursion</SPAN
+> is allowed. 
+When a <SPAN
+CLASS="type"
+>call</SPAN
+> is executed, the values of its <SPAN
+CLASS="type"
+>arguments</SPAN
+> are evaluated and used to initialize the 
+procedure's <SPAN
+CLASS="type"
+>parameters</SPAN
+>. The <SPAN
+CLASS="type"
+>procedure</SPAN
+> is then executed. When the <SPAN
+CLASS="type"
+>procedure</SPAN
+> completes, execution 
+resumes with the first item after the call. 
+
+</P
+><P
+> 
+
+The report language also includes the following statement types:<PRE
+CLASS="synopsis"
+>include(string)</PRE
+><PRE
+CLASS="synopsis"
+>global(varb) 
+</PRE
+><PRE
+CLASS="synopsis"
+>set(varb, expr) 
+</PRE
+><PRE
+CLASS="synopsis"
+>continue() 
+</PRE
+><PRE
+CLASS="synopsis"
+>break() 
+</PRE
+><PRE
+CLASS="synopsis"
+>return([expr])</PRE
+> 
+
+</P
+><P
+> 
+
+The <SPAN
+CLASS="type"
+>include</SPAN
+> statement includes the contents of another file into the current file; its <TT
+CLASS="parameter"
+><I
+>string</I
+></TT
+> expression is 
+the name of another <SPAN
+CLASS="application"
+>LifeLines</SPAN
+> program file. It is described in more detail below. The <SPAN
+CLASS="type"
+>global</SPAN
+> statement 
+must be used outside the scope of any <SPAN
+CLASS="type"
+>procedure</SPAN
+> or <SPAN
+CLASS="type"
+>function</SPAN
+>; it declares a <TT
+CLASS="parameter"
+><I
+>variable</I
+></TT
+> to have global scope. 
+The <SPAN
+CLASS="type"
+>set</SPAN
+> statement is the assignment statement; the <TT
+CLASS="parameter"
+><I
+>expression</I
+></TT
+> is evaluated, and its value is assigned 
+to the <TT
+CLASS="parameter"
+><I
+>variable</I
+></TT
+>. The <SPAN
+CLASS="type"
+>continue</SPAN
+> statement jumps to the bottom of the current loop, but does not leave the 
+loop. The <SPAN
+CLASS="type"
+>break</SPAN
+> statement breaks out of the most closely nested loop. The <SPAN
+CLASS="type"
+>return</SPAN
+> statement returns from 
+the current <SPAN
+CLASS="type"
+>procedure</SPAN
+> or <SPAN
+CLASS="type"
+>function</SPAN
+>. <SPAN
+CLASS="type"
+>Procedures</SPAN
+> have return statements without expressions; <SPAN
+CLASS="type"
+>functions</SPAN
+> 
+have return statements with expressions. None of these statements return a value, so none has a direct 
+effect on program output. 
+
+
+</P
+><P
+> 
+
+In addition to these conventional statements, the report generator provides other iterator statements 
+for looping through genealogical and other types of data. For example, the <SPAN
+CLASS="type"
+>children</SPAN
+> statement 
+iterates through the children of a family, the <SPAN
+CLASS="type"
+>spouses</SPAN
+> statement iterates through the spouses of a 
+person, and the <SPAN
+CLASS="type"
+>families</SPAN
+> statement iterates through the families that a person is a spouse or parent in. 
+These iterators and others are described in more detail later under the appropriate data types. 
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN300">2.4. Expressions</H2
+><P
+> 
+
+There are four types of expressions: <SPAN
+CLASS="type"
+>literals</SPAN
+>, <SPAN
+CLASS="type"
+>integers</SPAN
+>, <SPAN
+CLASS="type"
+>variables</SPAN
+> and built-in or user defined function 
+<SPAN
+CLASS="type"
+>calls</SPAN
+>. 
+
+
+</P
+><P
+> 
+
+A <SPAN
+CLASS="type"
+>literal</SPAN
+> is any string enclosed in double quotes; its value is itself. An <SPAN
+CLASS="type"
+>integer</SPAN
+> is any integer constant; 
+its value is itself. A <SPAN
+CLASS="type"
+>variable</SPAN
+> is a named location that can be assigned different values during program 
+execution. The value of a <SPAN
+CLASS="type"
+>variable</SPAN
+> is the last value assigned to it. <SPAN
+CLASS="type"
+>Variables</SPAN
+> do not have fixed type; at 
+different times in a program, the same <SPAN
+CLASS="type"
+>variable</SPAN
+> may be assigned data of completely different types. An 
+identifier followed by comma-separated list of expressions enclosed in parentheses, is either a <SPAN
+CLASS="type"
+>call</SPAN
+> to a 
+built-in function or a <SPAN
+CLASS="type"
+>call</SPAN
+> to a user-defined function. 
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN316">2.5. Include Feature</H2
+><P
+> 
+
+The <SPAN
+CLASS="application"
+>LifeLines</SPAN
+> programming language provides an <SPAN
+CLASS="type"
+>include</SPAN
+> feature. Using this feature one <SPAN
+CLASS="application"
+>LifeLines</SPAN
+> 
+program can refer to other <SPAN
+CLASS="application"
+>LifeLines</SPAN
+> programs. This feature is provided by the include statement:<PRE
+CLASS="synopsis"
+>include(string)</PRE
+>where <SPAN
+CLASS="symbol"
+>string</SPAN
+> is a quoted string that is the name of another <SPAN
+CLASS="application"
+>LifeLines</SPAN
+> program file. When an include 
+statement is encountered, the program that it refers to is read at that point, exactly as if the contents of 
+included file had been in the body of the original file at that point. This allows you to create <SPAN
+CLASS="application"
+>LifeLines</SPAN
+> 
+program library files that can be used by many programs. Included files may in turn contain <SPAN
+CLASS="type"
+>include</SPAN
+> 
+statements, and so on to any depth. <SPAN
+CLASS="application"
+>LifeLines</SPAN
+> will use the <TT
+CLASS="envar"
+>LLPROGRAMS</TT
+> shell variable, if set, to 
+search for the <SPAN
+CLASS="type"
+>include</SPAN
+> files. 
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN331">2.6. Built-in Functions</H2
+><P
+> 
+
+There is a long list of <SPAN
+CLASS="type"
+>built-in functions</SPAN
+>, and this list will continue to grow for some time. The first 
+subsection below describes the value types used in <SPAN
+CLASS="application"
+>LifeLines</SPAN
+> programs; these are the types of <SPAN
+CLASS="type"
+>variables</SPAN
+>, 
+<SPAN
+CLASS="type"
+>function parameters</SPAN
+> and <SPAN
+CLASS="type"
+>function return values</SPAN
+>. In the remaining sections the <SPAN
+CLASS="type"
+>built-in functions</SPAN
+> are 
+separated into logical categories and described. 
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN340">2.7. Value Types</H2
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><SPAN
+CLASS="type"
+>ANY</SPAN
+></B
+></DT
+><DD
+><P
+> 
+
+union of all types 
+
+</P
+></DD
+><DT
+><B
+><SPAN
+CLASS="type"
+>INT</SPAN
+></B
+></DT
+><DD
+><P
+> 
+
+integer (on most systems a 32-bit signed value) 
+
+</P
+></DD
+><DT
+><B
+><SPAN
+CLASS="type"
+>BOOL</SPAN
+></B
+></DT
+><DD
+><P
+> 
+
+boolean (0 represents false; anything else represents true) 
+
+</P
+></DD
+><DT
+><B
+><SPAN
+CLASS="type"
+>STRING</SPAN
+></B
+></DT
+><DD
+><P
+> 
+
+text string 
+
+</P
+></DD
+><DT
+><B
+><SPAN
+CLASS="type"
+>LIST</SPAN
+></B
+></DT
+><DD
+><P
+> 
+
+arbitrary length list of any values 
+
+</P
+></DD
+><DT
+><B
+><SPAN
+CLASS="type"
+>TABLE</SPAN
+></B
+></DT
+><DD
+><P
+> 
+
+keyed look-up table 
+
+</P
+></DD
+><DT
+><B
+><SPAN
+CLASS="type"
+>INDI</SPAN
+></B
+></DT
+><DD
+><P
+> 
+
+person; reference to a <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> INDI record 
+
+</P
+></DD
+><DT
+><B
+><SPAN
+CLASS="type"
+>FAM</SPAN
+></B
+></DT
+><DD
+><P
+> 
+
+family; reference to a <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> FAM record 
+
+</P
+></DD
+><DT
+><B
+><SPAN
+CLASS="type"
+>SET</SPAN
+></B
+></DT
+><DD
+><P
+> 
+
+arbitrary length set of persons 
+
+</P
+></DD
+><DT
+><B
+><SPAN
+CLASS="type"
+>NODE</SPAN
+></B
+></DT
+><DD
+><P
+> 
+
+<SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> node; reference to a line in a <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> tree/record 
+
+</P
+></DD
+><DT
+><B
+><SPAN
+CLASS="type"
+>EVENT</SPAN
+></B
+></DT
+><DD
+><P
+> 
+
+event; reference to substructure of nodes in a <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> record 
+
+</P
+></DD
+><DT
+><B
+><SPAN
+CLASS="type"
+>VOID</SPAN
+></B
+></DT
+><DD
+><P
+> 
+
+type with no values 
+
+</P
+></DD
+></DL
+></DIV
+><P
+> 
+
+In the summaries of <SPAN
+CLASS="type"
+>built-in functions</SPAN
+> below, each function is shown with its <SPAN
+CLASS="type"
+>argument</SPAN
+> types and its 
+<SPAN
+CLASS="type"
+>return</SPAN
+> type. The types are from the preceding list. Sometimes an <SPAN
+CLASS="type"
+>argument</SPAN
+> to a <SPAN
+CLASS="type"
+>built-in function</SPAN
+> must be 
+a <SPAN
+CLASS="type"
+>variable</SPAN
+>; when this is so its type is given as <TT
+CLASS="varname"
+>XXX_V</TT
+>, where <SPAN
+CLASS="symbol"
+>XXX</SPAN
+> is one of the types above. The 
+<SPAN
+CLASS="type"
+>built-ins</SPAN
+> do not check the types of their <SPAN
+CLASS="type"
+>arguments</SPAN
+>. <SPAN
+CLASS="type"
+>Variables</SPAN
+> can hold values of any type, though at 
+any one time they will hold values of only one type. Note that <SPAN
+CLASS="type"
+>EVENT</SPAN
+> is a subtype of <SPAN
+CLASS="type"
+>NODE</SPAN
+>, and 
+<SPAN
+CLASS="type"
+>BOOL</SPAN
+> is a subtype of <SPAN
+CLASS="type"
+>INT</SPAN
+>. Built-ins with type <SPAN
+CLASS="type"
+>VOID</SPAN
+> actually return <SPAN
+CLASS="returnvalue"
+>null</SPAN
+> (zero) values. 
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN426">2.8. Arithmetic and Logic Functions</H2
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+>&#13;	    <DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN431"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INT
+		
+		  add
+		
+	      </CODE
+>(
+		INT
+		INT
+		...
+	      );</CODE
+></P
+><P
+></P
+></DIV
+>
+	  </B
+></DT
+><DD
+><P
+> 
+
+addition - two to 32 arguments 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN443"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INT sub</CODE
+>(INT, INT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+subtraction 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN454"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INT mul</CODE
+>(INT, INT, ...);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+multiplication - two to 32 arguments 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN466"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INT div</CODE
+>(INT, INT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+division 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN477"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INT mod</CODE
+>(INT, INT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+modulus (remainder) 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN488"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INT exp</CODE
+>(INT, INT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+exponentiation 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN499"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INT neg</CODE
+>(INT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+integer negation 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN509"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID incr</CODE
+>(INT_V);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+increment variable by one 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN519"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID decr</CODE
+>(INT_V);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+decrement variable by one 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN529"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>BOOL and</CODE
+>(BOOL, BOOL, ...);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+logical and - two to 32 arguments 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN541"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>BOOL or</CODE
+>(BOOL, BOOL, ...);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+logical or - two to 32 arguments 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN553"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>BOOL not</CODE
+>(BOOL);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+logical not 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN563"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>BOOL eq</CODE
+>(ANY, ANY);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+equality (not strings) 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN574"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>BOOL ne</CODE
+>(ANY, ANY);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+non-equality 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN585"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>BOOL lt</CODE
+>(ANY, ANY);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+less than 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN596"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>BOOL gt</CODE
+>(ANY, ANY);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+greater than 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN607"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>BOOL le</CODE
+>(ANY, ANY);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+less than or equal 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN618"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>BOOL ge</CODE
+>(ANY, ANY);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+greater than or equal 
+
+</P
+></DD
+></DL
+></DIV
+><P
+> 
+
+<TT
+CLASS="function"
+>Add</TT
+>, <TT
+CLASS="function"
+>sub</TT
+>, <TT
+CLASS="function"
+>mul</TT
+> and <TT
+CLASS="function"
+>div</TT
+> do integer arithmetic. Functions <TT
+CLASS="function"
+>add</TT
+> and <TT
+CLASS="function"
+>mul</TT
+> can have two to 32 arguments; 
+the sum or product of the full set of arguments is computed. Functions <TT
+CLASS="function"
+>sub</TT
+> and <TT
+CLASS="function"
+>div</TT
+> have two arguments 
+each; <TT
+CLASS="function"
+>sub</TT
+> subtracts its second argument from its first, and <TT
+CLASS="function"
+>div</TT
+> divides its first argument by its second. 
+The <TT
+CLASS="function"
+>mod</TT
+> function returns the remainder after dividing the first parameter by the second. If the second 
+argument to <TT
+CLASS="function"
+>div</TT
+> or <TT
+CLASS="function"
+>mod</TT
+> is zero, these functions return 0 and generate a run time error. <TT
+CLASS="function"
+>Exp</TT
+> performs 
+integer exponentiation. <TT
+CLASS="function"
+>Neg</TT
+> negates its argument. 
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Incr</TT
+> and <TT
+CLASS="function"
+>decr</TT
+> increment by one and decrement by one, respectively, the value of a variable. The 
+argument to both functions must be a variable. 
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>And</TT
+> and <TT
+CLASS="function"
+>or</TT
+> do logical operations. Both functions take two to 32 arguments. All arguments are and'ed or 
+or'ed together, respectively. The arguments are evaluated from left to right, but only up to the point 
+where the final value of the function becomes known. <TT
+CLASS="function"
+>Not</TT
+> does the logical not operation. 
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Eq</TT
+>, <TT
+CLASS="function"
+>ne</TT
+>, <TT
+CLASS="function"
+>lt</TT
+>, <TT
+CLASS="function"
+>le</TT
+>, <TT
+CLASS="function"
+>gt</TT
+> and <TT
+CLASS="function"
+>ge</TT
+> evaluate the six ordering relationships between two integers. 
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN657">2.9. Person Functions</H2
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+>&#13;	    <DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN662"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING
+
+		  name
+		  
+		</CODE
+>(
+		  INDI
+		  
+		  
+	    <TT
+CLASS="replaceable"
+><I
+>BOOL
+	    </I
+></TT
+>
+	  
+	  );</CODE
+></P
+><P
+></P
+></DIV
+>
+	  </B
+></DT
+><DD
+><P
+> 
+
+default name of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN674"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING fullname</CODE
+>(INDI, BOOL, BOOL, INT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+many name forms of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN687"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING surname</CODE
+>(INDI);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+surname of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN697"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING givens</CODE
+>(INDI);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+given names of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN707"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING trimname</CODE
+>(INDI, INT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+trimmed name of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN718"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>EVENT birth</CODE
+>(INDI);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+first birth event of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN728"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>EVENT death</CODE
+>(INDI);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+first death event of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN738"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>EVENT baptism</CODE
+>(INDI);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+first baptism event of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN748"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>EVENT burial</CODE
+>(INDI);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+first burial event of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN758"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INDI father</CODE
+>(INDI);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+first father of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN768"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INDI mother</CODE
+>(INDI);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+first mother of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN778"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INDI nextsib</CODE
+>(INDI);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+next (younger) sibling of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN788"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INDI prevsib</CODE
+>(INDI);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+previous (older) sibling of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN798"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING sex</CODE
+>(INDI);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+sex of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN808"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>BOOL male</CODE
+>(INDI);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+male predicate 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN818"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>BOOL female</CODE
+>(INDI);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+female predicate 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN828"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING pn</CODE
+>(INDI, INT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+pronoun referring to 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN839"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INT nspouses</CODE
+>(INDI);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+number of spouses of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN849"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INT nfamilies</CODE
+>(INDI);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+number of families (as spouse/parent) of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN859"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>FAM parents</CODE
+>(INDI);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+first parents' family of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN869"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING title</CODE
+>(INDI);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+first title of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN879"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING key</CODE
+>(INDI|FAM, <TT
+CLASS="replaceable"
+><I
+>BOOL</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+internal key of (work for families also) 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN891"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING soundex</CODE
+>(INDI);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+SOUNDEX code of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN901"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>NODE inode</CODE
+>(INDI);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+root GEDCOM node of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN911"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>NODE root</CODE
+>(INDI);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+root GEDCOM node of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN921"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INDI indi</CODE
+>(STRING);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+find person with key value 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN931"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INDI firstindi</CODE
+>(void);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+first person in database in key order 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN940"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INDI lastindi</CODE
+>(void);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+last person in database in key order 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN949"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INDI nextindi</CODE
+>(INDI);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+next person in database in key order 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN959"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INDI previndi</CODE
+>(INDI);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+previous person in database in key order 
+
+</P
+></DD
+><DT
+><B
+><PRE
+CLASS="synopsis"
+><B
+CLASS="command"
+>spouses</B
+> (<TT
+CLASS="replaceable"
+><I
+>INDI</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>INDI</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>FAM</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>INT</I
+></TT
+>) { <TT
+CLASS="replaceable"
+><I
+>commands</I
+></TT
+> }</PRE
+></B
+></DT
+><DD
+><P
+> 
+
+loop through all spouses of 
+
+</P
+></DD
+><DT
+><B
+><PRE
+CLASS="synopsis"
+><B
+CLASS="command"
+>families</B
+> (<TT
+CLASS="replaceable"
+><I
+>INDI</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>FAM</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>INDI</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>INT</I
+></TT
+>) { <TT
+CLASS="replaceable"
+><I
+>commands</I
+></TT
+> }</PRE
+></B
+></DT
+><DD
+><P
+> 
+
+loop through all families (as spouse) of 
+
+</P
+></DD
+><DT
+><B
+><PRE
+CLASS="synopsis"
+><B
+CLASS="command"
+>forindi</B
+> (<TT
+CLASS="replaceable"
+><I
+>INDI</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>INT</I
+></TT
+>) { <TT
+CLASS="replaceable"
+><I
+>commands</I
+></TT
+> }</PRE
+></B
+></DT
+><DD
+><P
+> 
+
+loop through all persons in database 
+
+</P
+></DD
+></DL
+></DIV
+><P
+> 
+
+These functions take a person as a parameter and return information about him or her. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Name</TT
+> returns the default name of a person; this is the name found on the first <TT
+CLASS="structfield"
+><I
+>1 NAME</I
+></TT
+> line in the 
+person's record; the slashes are removed and the surname is made all capitals; <TT
+CLASS="function"
+>name</TT
+> can take an 
+optional second parameter - if it is <SPAN
+CLASS="returnvalue"
+>true</SPAN
+> the function acts as described above; if <SPAN
+CLASS="returnvalue"
+>false</SPAN
+>, the surname is 
+kept exactly as it is in the record. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Fullname</TT
+> returns the name of a person in a variety of formats. If the second parameter is <SPAN
+CLASS="returnvalue"
+>true</SPAN
+> the 
+surname is shown in upper case; otherwise the surname is as in the record. If the third parameter is 
+<SPAN
+CLASS="returnvalue"
+>true</SPAN
+> the parts of the name are shown in the order as found in the record; otherwise the surname is given 
+first, followed by a comma, followed by the other name parts. The fourth parameter specifies the 
+maximum length field that can be used to show the name; various conversions occur if it is necessary to 
+shorten the name to fit this length. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Surname</TT
+> returns the surname of the person, as found in the first <TT
+CLASS="structfield"
+><I
+>1 NAME</I
+></TT
+> line; the slashes are 
+removed. <TT
+CLASS="function"
+>Givens</TT
+> returns the given names of the person in the same order and format as found in the 
+first <TT
+CLASS="structfield"
+><I
+>1 NAME</I
+></TT
+> line of the record. <TT
+CLASS="function"
+>Trimname</TT
+> returns the default name of the person trimmed to the 
+maximum character length given in the second variable. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Birth</TT
+>, <TT
+CLASS="function"
+>death</TT
+>, <TT
+CLASS="function"
+>baptism</TT
+> and <TT
+CLASS="function"
+>burial</TT
+> return the first birth, death, baptism and burial event in the 
+person's record, respectively. An event is a level <TT
+CLASS="structfield"
+><I
+>1 GEDCOM</I
+></TT
+> node. If there is no matching event these 
+functions return <SPAN
+CLASS="returnvalue"
+>null</SPAN
+>. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Father</TT
+>, <TT
+CLASS="function"
+>mother</TT
+>, <TT
+CLASS="function"
+>nextsib</TT
+> and <TT
+CLASS="function"
+>prevsib</TT
+> return the father, mother, next younger sibling and next older 
+sibling of the person, respectively. If the person has more than one father (mother) the <TT
+CLASS="function"
+>father</TT
+> 
+(<TT
+CLASS="function"
+>mother</TT
+>) function returns the first one. These functions return <SPAN
+CLASS="returnvalue"
+>null</SPAN
+> if there is no person in the role. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Sex</TT
+> returns the person's sex as the string <SPAN
+CLASS="returnvalue"
+>M</SPAN
+> if the person is male, <SPAN
+CLASS="returnvalue"
+>F</SPAN
+> if the person is female, or <SPAN
+CLASS="returnvalue"
+>U</SPAN
+> if the 
+sex of the person is not known. <TT
+CLASS="function"
+>Male</TT
+> and <TT
+CLASS="function"
+>female</TT
+> return <SPAN
+CLASS="returnvalue"
+>true</SPAN
+> if the person is male or female, 
+respectively, or <SPAN
+CLASS="returnvalue"
+>false</SPAN
+> if not. 
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Pn</TT
+> generates pronouns, useful when generating English text; the second parameter selects the type of 
+pronoun:<P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+>0</DT
+><DD
+><P
+> 
+
+He/She 
+
+</P
+></DD
+><DT
+>1</DT
+><DD
+><P
+> 
+
+he/she 
+
+</P
+></DD
+><DT
+>2</DT
+><DD
+><P
+> 
+
+His/Her 
+
+</P
+></DD
+><DT
+>3</DT
+><DD
+><P
+> 
+
+his/her 
+
+</P
+></DD
+><DT
+>4</DT
+><DD
+><P
+> 
+
+him/her 
+
+</P
+></DD
+></DL
+></DIV
+> 
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Nspouses</TT
+> returns the number of spouses the person has in the database, and <TT
+CLASS="function"
+>nfamilies</TT
+> returns the 
+number of families the person is a parent/spouse in; these two values are not necessarily the same. 
+<TT
+CLASS="function"
+>Parents</TT
+> returns the first family that the person is a child in. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Title</TT
+> returns the value of the first <TT
+CLASS="structfield"
+><I
+>1 TITL</I
+></TT
+> line in the record. <TT
+CLASS="function"
+>Key</TT
+> returns the key value of a person or 
+family; it there is a second parameter and it is non-null, the leading <TT
+CLASS="literal"
+>I</TT
+> or <TT
+CLASS="literal"
+>F</TT
+> will be stripped. <TT
+CLASS="function"
+>Soundex</TT
+> 
+returns the Soundex code of the person. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Root</TT
+> and <TT
+CLASS="function"
+>Inode</TT
+> return the root node of the person's <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> node tree. Note that an <SPAN
+CLASS="type"
+>INDI</SPAN
+> value is 
+not a <SPAN
+CLASS="type"
+>NODE</SPAN
+> value. If you want to process the nodes within a person node tree, you must first use the 
+<TT
+CLASS="function"
+>root</TT
+> or <TT
+CLASS="function"
+>inode</TT
+> function to get the root of the person node tree. <TT
+CLASS="function"
+>Root</TT
+> and <TT
+CLASS="function"
+>inode</TT
+> are synonyms. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Indi</TT
+> returns the person who's key is passed as an argument; if no person has the key <TT
+CLASS="function"
+>indi</TT
+> returns <SPAN
+CLASS="returnvalue"
+>null</SPAN
+>. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Firstindi</TT
+>, <TT
+CLASS="function"
+>nextindi</TT
+> and <TT
+CLASS="function"
+>previndi</TT
+> allow you to iterate through all persons in the database. <TT
+CLASS="function"
+>Firstindi</TT
+> 
+returns the first person in the database in key order. <TT
+CLASS="function"
+>Nextindi</TT
+> returns the next person after the 
+argument person in key order. <TT
+CLASS="function"
+>Previndi</TT
+> returns the previous person before the argument person in key 
+order. 
+
+
+</P
+><P
+> 
+
+<B
+CLASS="command"
+>Spouses</B
+> is an iterator that loops through each spouse a person has. The first argument is a person. The 
+second argument is a person variable that iterates through the first person's spouses. The third 
+argument is a family variable that iterates through the families the person and each spouse are in. 
+The fourth argument is an integer variable that counts the iterations. 
+
+
+</P
+><P
+> 
+
+<B
+CLASS="command"
+>Families</B
+> is an iterator that loops through the families a person was a spouse/parent in. The first 
+argument is a person. The second argument is a family variable that iterates through the families the 
+first person was a spouse/parent in. The third argument iterates through the spouses from the families; 
+if there is no spouse in a particular family, the variable is set to null for that iteration. The fourth 
+argument is an integer variable that counts the iterations. 
+
+
+</P
+><P
+> 
+
+<B
+CLASS="command"
+>Forindi</B
+> is an iterator that loops through every person in the database in ascending key order. Its first 
+parameter is a variable that iterates through the persons; its second parameter is an integer counter 
+variable that counts the persons starting at one. 
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN1100">2.10. Family Functions</H2
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1105"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>EVENT marriage</CODE
+>(FAM);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+first marriage event of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1115"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INDI husband</CODE
+>(FAM);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+first husband/father of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1125"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INDI wife</CODE
+>(FAM);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+first wife/mother of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1135"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INT nchildren</CODE
+>(FAM);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+number of children in 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1145"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INDI firstchild</CODE
+>(FAM);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+first child of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1155"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INDI lastchild</CODE
+>(FAM);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+last child of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1165"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING key</CODE
+>(FAM|INDI, <TT
+CLASS="replaceable"
+><I
+>BOOL</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+internal key of (works for persons also) 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1177"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>NODE fnode</CODE
+>(FAM);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+root GEDCOM node of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1187"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>NODE root</CODE
+>(FAM);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+root GEDCOM node of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1197"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>FAM fam</CODE
+>(STRING);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+find family from key 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1207"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>FAM firstfam</CODE
+>(void);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+first family in database in key order 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1216"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>FAM lastfam</CODE
+>(void);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+last family in database in key order 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1225"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>FAM nextfam</CODE
+>(FAM);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+next family in database in key order 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1235"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>FAM prevfam</CODE
+>(FAM);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+previous family in database in key order 
+
+</P
+></DD
+><DT
+><B
+><PRE
+CLASS="synopsis"
+><B
+CLASS="command"
+>children</B
+> (<TT
+CLASS="replaceable"
+><I
+>FAM</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>INDI_V</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>INT_V</I
+></TT
+>) { <TT
+CLASS="replaceable"
+><I
+>commands</I
+></TT
+> }</PRE
+></B
+></DT
+><DD
+><P
+> 
+
+loop through children of family 
+
+</P
+></DD
+><DT
+><B
+><PRE
+CLASS="synopsis"
+><B
+CLASS="command"
+>forfam</B
+> (<TT
+CLASS="replaceable"
+><I
+>FAM_V</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>INT_V</I
+></TT
+>) { <TT
+CLASS="replaceable"
+><I
+>commands</I
+></TT
+> }</PRE
+></B
+></DT
+><DD
+><P
+> 
+
+loop through all families in database 
+
+</P
+></DD
+></DL
+></DIV
+><P
+> 
+
+These functions take a family as an argument and return information about it. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Marriage</TT
+> returns the first marriage event found in the family record, if any; it returns <SPAN
+CLASS="returnvalue"
+>null</SPAN
+> if there is 
+no marriage event. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Husband</TT
+> returns the first husband/father of the family, if any; and <TT
+CLASS="function"
+>wife</TT
+> returns the first 
+wife/mother of the family, if any. Each returns <SPAN
+CLASS="returnvalue"
+>null</SPAN
+> if the requested person is not in the family. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Nchildren</TT
+> returns the number of children in the family. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Firstchild</TT
+> and <TT
+CLASS="function"
+>lastchild</TT
+> return the first child and last child in a family, respectively. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Key</TT
+> was described in the section on person functions. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Root</TT
+> and <TT
+CLASS="function"
+>fnode</TT
+> return the root node of a family <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> node tree. Note that a <SPAN
+CLASS="type"
+>FAM</SPAN
+> value is not a 
+<SPAN
+CLASS="type"
+>NODE</SPAN
+> value. If you want to process the nodes within a family node tree, you must first use <TT
+CLASS="function"
+>root</TT
+> or 
+<TT
+CLASS="function"
+>fnode</TT
+> function to get the root of the family node tree. <TT
+CLASS="function"
+>Root</TT
+> and <TT
+CLASS="function"
+>fnode</TT
+> are synonyms. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Fam</TT
+> returns the family who's key is passed as an argument; if no family has the key <TT
+CLASS="function"
+>fam</TT
+> returns <SPAN
+CLASS="returnvalue"
+>null</SPAN
+>. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Firstfam</TT
+>, <TT
+CLASS="function"
+>nextfam</TT
+> and <TT
+CLASS="function"
+>prevfam</TT
+> allow you to iterate through all families in the database. <TT
+CLASS="function"
+>Firstfam</TT
+> 
+returns the first family in the database in key order. <TT
+CLASS="function"
+>Nextfam</TT
+> returns the next family after the 
+argument family in key order. <TT
+CLASS="function"
+>Prevfam</TT
+> returns the previous family before the argument family in key 
+order. 
+
+
+</P
+><P
+> 
+
+<B
+CLASS="command"
+>Children</B
+> is an iterator that loops through the children in a family. Its first parameter is a family 
+expression; its second parameter is a variable that iterates through each child; its third parameter is 
+an integer counter variable that counts the children starting at one. These two variables may be used 
+within the loop body. 
+
+
+</P
+><P
+> 
+
+<B
+CLASS="command"
+>Forfam</B
+> is an iterator that loops through every family in the database in ascending key order. Its first 
+parameter is a variable that iterates through the families; its second parameter is an integer counter 
+variable that counts the families starting at one. 
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN1302">2.11. List Functions</H2
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1307"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID list</CODE
+>(LIST_V);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+declare a list 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1317"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>BOOL empty</CODE
+>(LIST);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+check if list is empty 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1327"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID list</CODE
+>(LIST_V);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+declare a list 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1337"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID enqueue</CODE
+>(LIST, ANY);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+enqueue element on list 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1348"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>ANY dequeue</CODE
+>(LIST);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+dequeue and return element from list 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1358"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID requeue</CODE
+>(LIST, ANY);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+requeue an element on list 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1369"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID push</CODE
+>(LIST, ANY);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+push element on list 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1380"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>ANY pop</CODE
+>(LIST);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+pop and return element from list 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1390"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID setel</CODE
+>(LIST, INT, ANY);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+array element assignment 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1402"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>ANY getel</CODE
+>(LIST, INT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+array element selection 
+
+</P
+></DD
+><DT
+><B
+><PRE
+CLASS="synopsis"
+><B
+CLASS="command"
+>forlist</B
+> (<TT
+CLASS="replaceable"
+><I
+>LIST</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>ANY_V</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>INT_V</I
+></TT
+>) { <TT
+CLASS="replaceable"
+><I
+>commands</I
+></TT
+> }</PRE
+></B
+></DT
+><DD
+><P
+> 
+
+loop through all elements of list 
+
+</P
+></DD
+></DL
+></DIV
+><P
+> 
+
+<SPAN
+CLASS="application"
+>LifeLines</SPAN
+> provides general purpose lists that can be accessed as queues, stacks or arrays. A list must be 
+declared with the <TT
+CLASS="function"
+>list</TT
+> function before it can be used. 
+
+
+</P
+><P
+> 
+
+A list can have any number of elements. <TT
+CLASS="function"
+>Empty</TT
+> returns <SPAN
+CLASS="returnvalue"
+>true</SPAN
+> if the list has no elements and <SPAN
+CLASS="returnvalue"
+>false</SPAN
+> 
+otherwise. <TT
+CLASS="function"
+>Length</TT
+> returns the length of the list. The only parameter to both is a list. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Enqueue</TT
+>, <TT
+CLASS="function"
+>dequeue</TT
+> and <TT
+CLASS="function"
+>requeue</TT
+> provide queue access to a list. <TT
+CLASS="function"
+>Enqueue</TT
+> adds an element to the back of a 
+queue, <TT
+CLASS="function"
+>dequeue</TT
+> removes and returns the element from the front of a queue, and <TT
+CLASS="function"
+>requeue</TT
+> adds an element 
+to the front of a queue. The first parameter to all three is a list, and the second parameter to <TT
+CLASS="function"
+>enqueue</TT
+> 
+and <TT
+CLASS="function"
+>requeue</TT
+> is the value to be added to the queue and can be any value. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Push</TT
+> and <TT
+CLASS="function"
+>pop</TT
+> provide stack access to a list. <TT
+CLASS="function"
+>Push</TT
+> pushes an element on the stack, and <TT
+CLASS="function"
+>pop</TT
+> removes 
+and returns the most recently pushed element from the stack. The first parameter to both is a list, and 
+the second parameter to <TT
+CLASS="function"
+>push</TT
+> is the value to be pushed on the stack and can be of any type. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Setel</TT
+> and <TT
+CLASS="function"
+>getel</TT
+> provide array access to a list. <TT
+CLASS="function"
+>Setel</TT
+> sets a value of an array element, and <TT
+CLASS="function"
+>getel</TT
+> 
+returns the value of an array element. The first parameter to both is a list; the second parameter to both 
+is an integer index into the array; and the third parameter to <TT
+CLASS="function"
+>setel</TT
+> is the value to assign to the array 
+element and can be of any type. Array elements are indexed starting at one. Unassigned elements are 
+assumed to be <SPAN
+CLASS="returnvalue"
+>null</SPAN
+> (<SPAN
+CLASS="returnvalue"
+>0</SPAN
+>). Arrays automatically grow in size to accommodate the largest index value that 
+is used. 
+
+
+</P
+><P
+> 
+
+<B
+CLASS="command"
+>Forlist</B
+> is an iterator that loops through the element in a list. Its first parameter is a <SPAN
+CLASS="type"
+>LIST</SPAN
+> expression; 
+its second parameter is a variable that iterates through the list elements; and its third parameter is an 
+integer counter variable that counts the list elements starting at one. 
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN1455">2.12. Table Functions</H2
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1460"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID table</CODE
+>(TABLE_V);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+declare a table 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1470"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID insert</CODE
+>(TABLE, STRING, ANY);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+insert entry in table 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1482"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>ANY lookup</CODE
+>(TABLE, STRING);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+lookup and return entry from table 
+
+</P
+></DD
+></DL
+></DIV
+><P
+> 
+
+These functions provide general purpose, keyed tables. A table must be declared with the <TT
+CLASS="function"
+>table</TT
+> 
+function before it can be used. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Insert</TT
+> adds an object and its key to a table. Its first parameter is a table; the second parameter is the 
+object's key; and the third parameter is the object itself. The key must be a string and the object can be 
+any value. If there already is an object in the table with that key, the old object is replaced with the 
+new. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Lookup</TT
+> retrieves an object from a table. Its first parameter is a table, and the second parameter is the 
+object's key. The function returns the object with that key from the table; if there is no such object, <SPAN
+CLASS="returnvalue"
+>null</SPAN
+> 
+is returned. 
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN1498">2.13. GEDCOM Node Functions</H2
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1503"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING xref</CODE
+>(NODE);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+cross reference index of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1513"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING tag</CODE
+>(NODE);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+tag of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1523"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING value</CODE
+>(NODE);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+value of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1533"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>NODE parent</CODE
+>(NODE);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+parent node of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1543"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>NODE child</CODE
+>(NODE);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+first child of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1553"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>NODE sibling</CODE
+>(NODE);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+next sibling of 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1563"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>NODE savenode</CODE
+>(NODE);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+copy a node structure 
+
+</P
+></DD
+><DT
+><B
+><PRE
+CLASS="synopsis"
+><B
+CLASS="command"
+>fornodes</B
+> (<TT
+CLASS="replaceable"
+><I
+>NODE</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>NODE_V</I
+></TT
+>) { <TT
+CLASS="replaceable"
+><I
+>commands</I
+></TT
+> }</PRE
+></B
+></DT
+><DD
+><P
+> 
+
+loop through child nodes 
+
+</P
+></DD
+><DT
+><B
+><PRE
+CLASS="synopsis"
+><B
+CLASS="command"
+>traverse</B
+> (<TT
+CLASS="replaceable"
+><I
+>NODE</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>NODE_V</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>INT_V</I
+></TT
+>) { <TT
+CLASS="replaceable"
+><I
+>commands</I
+></TT
+> }</PRE
+></B
+></DT
+><DD
+><P
+> 
+
+loop through all descendent nodes 
+
+</P
+></DD
+></DL
+></DIV
+><P
+> 
+
+These functions provide access to the components of a <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> node. All take a <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> node as their 
+only parameter, and each returns a different value associated with the node. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Xref</TT
+> returns the cross reference index of the node, if any; <TT
+CLASS="function"
+>tag</TT
+> returns the tag of the node; and <TT
+CLASS="function"
+>value</TT
+> 
+returns the value of the node, if any. If there is no cross reference, <TT
+CLASS="function"
+>xref</TT
+> returns <SPAN
+CLASS="returnvalue"
+>null</SPAN
+>; if there is no value, 
+value returns <SPAN
+CLASS="returnvalue"
+>null</SPAN
+>. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Parent</TT
+> returns the parent node of the node, if any; <TT
+CLASS="function"
+>child</TT
+> returns the first child node of the node, if any; 
+and <TT
+CLASS="function"
+>sibling</TT
+> returns the next sibling node of the node, if any. Whenever there is no such related node, 
+these functions return <SPAN
+CLASS="returnvalue"
+>null</SPAN
+>. These three functions allow simple navigation through a <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> node 
+tree. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Savenode</TT
+> makes a copy of the node, and the substructure of nodes below the node, that is passed to it. 
+Beware: the memory used to make the copy is never returned to the system. 
+
+
+</P
+><P
+> 
+
+<B
+CLASS="command"
+>Fornodes</B
+> is an iterator that loops through the child nodes of a <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> node. Its first argument is a 
+node expression, and its second parameter is a variable that iterates through each direct child node of 
+the first node. 
+
+
+</P
+><P
+> 
+
+<B
+CLASS="command"
+>Traverse</B
+> is an iterator providing a general method for traversing <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> trees. Its first parameter is 
+a node expression; its second parameter is a variable that iterates over every node under the first node 
+in a top down, left to right manner; and its third parameter is a variable that is set to the level of the 
+current node in the iteration. 
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN1614">2.14. Event and Date Functions</H2
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1619"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING date</CODE
+>(EVENT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+date of, value of first <TT
+CLASS="structfield"
+><I
+>DATE</I
+></TT
+> line 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1630"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING place</CODE
+>(EVENT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+place of, value of first <TT
+CLASS="structfield"
+><I
+>PLAC</I
+></TT
+> line 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1641"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING year</CODE
+>(EVENT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+year or, 1st string of 3-4 digits in 1st <TT
+CLASS="structfield"
+><I
+>DATE</I
+></TT
+> line 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1652"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING long</CODE
+>(EVENT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+date and place, values of 1st <TT
+CLASS="structfield"
+><I
+>DATE</I
+></TT
+> and <TT
+CLASS="structfield"
+><I
+>PLAC</I
+></TT
+> lines 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1664"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING short</CODE
+>(EVENT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+date and place of, abbreviated from 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1674"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>EVENT gettoday</CODE
+>(void);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+returns the `event' of the current date 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1683"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID dayformat</CODE
+>(INT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+set day format for stddate calls 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1693"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID monthformat</CODE
+>(INT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+set month format for stddate calls 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1703"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID dateformat</CODE
+>(INT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+set date format for stddate calls 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1713"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING stddate</CODE
+>(EVENT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+date of, in current format 
+
+</P
+></DD
+></DL
+></DIV
+><P
+> 
+
+These functions extract information about the dates and places of events. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Date</TT
+> returns the value of the first <TT
+CLASS="structfield"
+><I
+>DATE</I
+></TT
+> line in an event, a node in a <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> record tree. <TT
+CLASS="function"
+>Date</TT
+> 
+finds the first <TT
+CLASS="structfield"
+><I
+>DATE</I
+></TT
+> line one level deeper than the event node. <TT
+CLASS="function"
+>Place</TT
+> returns the value of the first 
+<TT
+CLASS="structfield"
+><I
+>PLAC</I
+></TT
+> line in an event. <TT
+CLASS="function"
+>Year</TT
+> returns the first three or four digit number in the value of the first <TT
+CLASS="structfield"
+><I
+>DATE</I
+></TT
+> 
+line in an event; this number is assumed to be the year of the event. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Long</TT
+> returns the verbatim values of the first <TT
+CLASS="structfield"
+><I
+>DATE</I
+></TT
+> and <TT
+CLASS="structfield"
+><I
+>PLAC</I
+></TT
+> lines in an event, catenated together 
+and separated by a comma. <TT
+CLASS="function"
+>Short</TT
+> abbreviates information from the first <TT
+CLASS="structfield"
+><I
+>DATE</I
+></TT
+> and <TT
+CLASS="structfield"
+><I
+>PLAC</I
+></TT
+> lines, catenates the shortened information together with a comma separator and returns it. An abbreviated 
+date is its year; an abbreviated place is the last component in the value, further abbreviated if the 
+component has an entry in the place abbreviation table. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Gettoday</TT
+> creates an event that has today's date in the <TT
+CLASS="structfield"
+><I
+>DATE</I
+></TT
+> line. 
+
+
+</P
+><P
+> 
+
+The last four functions are used to format dates in a variety of ways. 
+<TT
+CLASS="function"
+>Dayformat</TT
+>, <TT
+CLASS="function"
+>monthformat</TT
+>, and 
+<TT
+CLASS="function"
+>dateformat</TT
+> select style options for formatting the day, 
+month, and overall date structure; <TT
+CLASS="function"
+>stddate</TT
+> 
+returns dates in the selected style. The day format codes passed to 
+<TT
+CLASS="function"
+>dayformat</TT
+> are: 
+
+<P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+>0</DT
+><DD
+><P
+> 
+
+leave space before single digit days 
+
+</P
+></DD
+><DT
+>1</DT
+><DD
+><P
+> 
+
+use leading 0 before single digit days 
+
+</P
+></DD
+><DT
+>2</DT
+><DD
+><P
+> 
+
+no space or leading 0 before single digit days 
+
+</P
+></DD
+></DL
+></DIV
+> 
+
+</P
+><P
+> 
+
+The month format codes passed to <TT
+CLASS="function"
+>monthformat</TT
+> are:<P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+>0</DT
+><DD
+><P
+> 
+
+number with space before single digit months 
+
+</P
+></DD
+><DT
+>1</DT
+><DD
+><P
+> 
+
+number with leading zero before single digit months 
+
+</P
+></DD
+><DT
+>2</DT
+><DD
+><P
+> 
+
+number with no space or zero before single digit months 
+
+</P
+></DD
+><DT
+>3</DT
+><DD
+><P
+> 
+
+upper case abbreviation (eg, JAN, FEB) 
+
+</P
+></DD
+><DT
+>4</DT
+><DD
+><P
+> 
+
+capitalized abbreviation (eg, Jan, Feb) 
+
+</P
+></DD
+><DT
+>5</DT
+><DD
+><P
+> 
+
+upper case full word (eg, JANUARY, FEBRUARY) 
+
+</P
+></DD
+><DT
+>6</DT
+><DD
+><P
+> 
+
+capitalized full word (eg, January, February) 
+
+</P
+></DD
+></DL
+></DIV
+> 
+
+</P
+><P
+> 
+
+The full date formats passed to <TT
+CLASS="function"
+>stddate</TT
+> are: 
+
+<P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+>0</DT
+><DD
+><P
+> 
+
+da mo yr 
+
+</P
+></DD
+><DT
+>1</DT
+><DD
+><P
+> 
+
+mo da, yr 
+
+</P
+></DD
+><DT
+>2</DT
+><DD
+><P
+> 
+
+mo/da/yr 
+
+</P
+></DD
+><DT
+>3</DT
+><DD
+><P
+> 
+
+da/mo/yr 
+
+</P
+></DD
+><DT
+>4</DT
+><DD
+><P
+> 
+
+mo-da-yr 
+
+</P
+></DD
+><DT
+>5</DT
+><DD
+><P
+> 
+
+da-mo-yr 
+
+</P
+></DD
+><DT
+>6</DT
+><DD
+><P
+> 
+
+modayr 
+
+</P
+></DD
+><DT
+>7</DT
+><DD
+><P
+> 
+
+damoyr 
+
+</P
+></DD
+><DT
+>8</DT
+><DD
+><P
+> 
+
+yr mo da 
+
+</P
+></DD
+><DT
+>9</DT
+><DD
+><P
+> 
+
+yr/mo/da 
+
+</P
+></DD
+><DT
+>10</DT
+><DD
+><P
+> 
+
+yr-mo-da 
+
+</P
+></DD
+><DT
+>11</DT
+><DD
+><P
+> 
+
+yrmoda 
+
+</P
+></DD
+><DT
+>12</DT
+><DD
+><P
+> 
+
+yr  (year only, omitting all else) 
+
+</P
+></DD
+><DT
+>13</DT
+><DD
+><P
+> 
+
+da/mo yr 
+
+</P
+></DD
+><DT
+>14</DT
+><DD
+><P
+> 
+
+(As in GEDCOM) 
+
+</P
+></DD
+></DL
+></DIV
+> 
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN1855">2.15. Value Extraction Functions</H2
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1860"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID extractdate</CODE
+>(NODE, INT_V, INT_V, INT_V);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+extract a date 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1873"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID extractnames</CODE
+>(NODE, LIST_V, INT_V, INT_V);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+extract a name 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1886"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID extractplaces</CODE
+>(NODE, LIST_V, INT_V);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+extract a place 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1898"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID extracttokens</CODE
+>(STRING, LIST_V, INT_V, STRING);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+extract tokens 
+
+</P
+></DD
+></DL
+></DIV
+><P
+> 
+
+Value extraction functions read the values of certain lines and return those values in extracted form. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Extractdate</TT
+> extracts date values from either an event node 
+or <TT
+CLASS="structfield"
+><I
+>DATE</I
+></TT
+> node. The first parameter must be 
+a node; if its tag is <TT
+CLASS="structfield"
+><I
+>DATE</I
+></TT
+>, the date is extracted from 
+the value of that node; if its tag is not <TT
+CLASS="structfield"
+><I
+>DATE</I
+></TT
+>, the 
+date is extracted from the first <TT
+CLASS="structfield"
+><I
+>DATE</I
+></TT
+> line one level below the argument node. The remaining three 
+arguments are variables. The first is assigned the integer value of the extracted day; the second is 
+assigned the integer value of the extracted month; and the third is assigned the integer value of the 
+extracted year. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Extractnames</TT
+> extracts name components from a <TT
+CLASS="structfield"
+><I
+>NAME</I
+></TT
+> line. Its first argument is either an <TT
+CLASS="structfield"
+><I
+>INDI</I
+></TT
+> or a 
+<TT
+CLASS="structfield"
+><I
+>NAME</I
+></TT
+> node. If it is a <TT
+CLASS="structfield"
+><I
+>NAME</I
+></TT
+> line, the components are extracted from the value of that node; if it is an 
+<TT
+CLASS="structfield"
+><I
+>INDI</I
+></TT
+> line, the components are extracted from the value of the first <TT
+CLASS="structfield"
+><I
+>NAME</I
+></TT
+> line in the person record. 
+The second argument is a list that will hold the extracted components. The third argument is an integer 
+variable that is set to the number of extracted components. The fourth argument is a variable that is set 
+to the index (starting at one) of the surname component; the <TT
+CLASS="literal"
+>/</TT
+> characters are removed from around the 
+surname component. If there is no surname this argument variable is set to zero. 
+
+
+</P
+><P
+> 
+
+     <TT
+CLASS="function"
+>Extractplaces</TT
+> extracts place components 
+     from a <TT
+CLASS="structfield"
+><I
+>PLAC</I
+></TT
+> node. The first 
+     argument is a node; if its tag is 
+     <TT
+CLASS="structfield"
+><I
+>PLAC</I
+></TT
+>, the places are extracted from 
+     the value of the node; if its tag is not 
+     <TT
+CLASS="structfield"
+><I
+>PLAC</I
+></TT
+>, places are extracted from the 
+     first <TT
+CLASS="structfield"
+><I
+>PLAC</I
+></TT
+> line one level below the 
+     argument node. The second parameter is a list that will hold 
+     the extracted components. The third argument is an integer 
+     variable that is set to the number of extracted 
+     components. Place components are defined by the 
+     comma-separated portions of the 
+     <TT
+CLASS="structfield"
+><I
+>PLAC</I
+></TT
+> value; leading and trailing 
+     white space is removed from the components, while all internal 
+     white space is retained. 
+
+</P
+><P
+> 
+
+     <TT
+CLASS="function"
+>Extracttokens</TT
+> extracts tokens from a 
+     string and places them in a list. The first argument is the 
+     string to extract tokens from. The second argument is the list 
+     to hold the tokens. The third argument is an integer variable 
+     that is set to the number of tokens extracted. The fourth 
+     parameter is the string of deliminater characters that 
+     <TT
+CLASS="function"
+>extracttokens</TT
+> uses to break the input 
+     string into tokens. 
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN1935">2.16. User Interaction Functions</H2
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1940"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID getindi</CODE
+>(INDI_V, <TT
+CLASS="replaceable"
+><I
+>STRING</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+identify person through user interface 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1952"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID getindiset</CODE
+>(SET_V, <TT
+CLASS="replaceable"
+><I
+>STRING</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+identify set of persons through user interface 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1964"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID getfam</CODE
+>(FAM_V);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+identify family through user interface 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1974"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID getint</CODE
+>(INT_V, <TT
+CLASS="replaceable"
+><I
+>STRING</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+get integer through user interface 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1986"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID getstr</CODE
+>(STRING_V, <TT
+CLASS="replaceable"
+><I
+>STRING</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+get string through user interface 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1998"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INDI choosechild</CODE
+>(INDI|FAM);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+select child of person/family thru user interface 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2008"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>FAM choosefam</CODE
+>(INDI);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+select family person is in as spouse 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2018"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INDI chooseindi</CODE
+>(SET);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+select person from set of persons 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2028"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INDI choosespouse</CODE
+>(INDI);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+select spouse of person 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2038"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>SET choosesubset</CODE
+>(SET);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+select a subset of persons from set of persons 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2048"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INT menuchoose</CODE
+>(LIST, <TT
+CLASS="replaceable"
+><I
+>STRING</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+select from a list of options 
+
+</P
+></DD
+></DL
+></DIV
+><P
+> 
+
+These functions interact with the user to get information needed by the program. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Getindi</TT
+> asks the user to identify a person. The first argument is a variable that is set to the person. 
+The second is an optional string to use as a prompt. <TT
+CLASS="function"
+>Getindiset</TT
+> asks the user to identify a set of persons. 
+<TT
+CLASS="function"
+>Getfam</TT
+> asks the user identify a family. <TT
+CLASS="function"
+>Getint</TT
+> and <TT
+CLASS="function"
+>getstr</TT
+> ask the user enter an integer and string, 
+respectively. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Choosechild</TT
+> asks the user select a child of a family or person; its single argument is a person or family; 
+it return the child. <TT
+CLASS="function"
+>Choosefam</TT
+> has the user select a family that a person is in as a spouse; its argument 
+is a person; it returns the family. <TT
+CLASS="function"
+>Chooseindi</TT
+> has the user select one person from a set of persons; its 
+argument in a set of persons; it returns the chosen person. <TT
+CLASS="function"
+>Choosespouse</TT
+> has the user select a spouse of a 
+person; its argument is a person; it returns the chosen spouse. <TT
+CLASS="function"
+>Choosesubset</TT
+> has the user select a subset of 
+persons from a set of persons; its argument is the chosen subset. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Menuchoose</TT
+> allows the user to select from an arbitrary menu. The first argument is a list of strings 
+making up the items in the menu; the second, optional argument is a prompt string for the menu; 
+<TT
+CLASS="function"
+>menuchoose</TT
+> returns the integer index of the item selected by the user; if the user doesn't select an item, 
+<SPAN
+CLASS="returnvalue"
+>zero</SPAN
+> is return. 
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN2075">2.17. String Functions</H2
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2080"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING lower</CODE
+>(STRING);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+convert to lower case 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2090"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING upper</CODE
+>(STRING);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+convert to upper case 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2100"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING capitalize</CODE
+>(STRING);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+capitalize first letter 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2110"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING trim</CODE
+>(STRING, INT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+trim to length 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2121"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING rjustify</CODE
+>(STRING, INT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+right justify in field 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2132"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING save</CODE
+>(STRING);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+save and return copy of string 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2142"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING strsave</CODE
+>(STRING);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+same as save function 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2152"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING concat</CODE
+>(STRING, <TT
+CLASS="replaceable"
+><I
+>STRING</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>...</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+catenate two strings 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2166"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING strconcat</CODE
+>(STRING, <TT
+CLASS="replaceable"
+><I
+>STRING</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>...</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+catenate two strings 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2180"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INT strlen</CODE
+>(STRING);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+number of characters in string 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2190"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING substring(</CODE
+>(STRING, INT, INT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+substring function 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2202"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INT index</CODE
+>(STRING, STRING, INT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+index function 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2214"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING d</CODE
+>(INT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+number as decimal string 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2224"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING card</CODE
+>(INT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+number in cardinal form (<TT
+CLASS="literal"
+>one, two, ...</TT
+>) 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2235"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING ord</CODE
+>(INT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+number in ordinal form (<TT
+CLASS="literal"
+>first, second, ...</TT
+>) 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2246"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING alpha</CODE
+>(INT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+convert number to Latin letter (<TT
+CLASS="literal"
+>a, b, ...</TT
+>) 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2257"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING roman</CODE
+>(INT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+number in Roman numeral form (<TT
+CLASS="literal"
+>i, ii, ...</TT
+>) 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2268"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING strsoundex</CODE
+>(STRING);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+find SOUNDEX value of arbitrary string 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2278"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INT strtoint</CODE
+>(STRING);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+convert numeric string to integer 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2288"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INT atoi</CODE
+>(STRING);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+convert numeric string to integer 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2298"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INT strcmp</CODE
+>(STRING, STRING);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+general string compare 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2309"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>BOOL eqstr</CODE
+>(STRING, STRING);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+compare strings for equality 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2320"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>BOOL nestr</CODE
+>(STRING, STRING);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+compare strings for inequality 
+
+</P
+></DD
+></DL
+></DIV
+><P
+> 
+
+These functions provide string handling. Prior to version 3.0.6, many of them used an approach to memory management 
+chosen for absolute minimal memory footprint. A function using this approach constructed its output string in its own string 
+buffer, reusing that buffer each time it was called. When a function using this approach returned a string 
+value it returned its buffer. In consequence the strings returned by these functions were to be either used or 
+saved before the function was called again. 
+
+</P
+><P
+> 
+
+By the release of version 3.0.6, all string values are local copies, and the <TT
+CLASS="function"
+>save</TT
+> and  
+<TT
+CLASS="function"
+>strsave</TT
+> functions should be entirely unnecessary. 
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Lower</TT
+> and <TT
+CLASS="function"
+>upper</TT
+> convert the letters in their arguments to lower or upper case, respectively. 
+<TT
+CLASS="function"
+>Capitalize</TT
+> converts the first character of the argument, if it is a letter, to upper case. <TT
+CLASS="function"
+>Lower</TT
+> and 
+<TT
+CLASS="function"
+>upper</TT
+> historically used the buffer return method; <TT
+CLASS="function"
+>capitalize</TT
+> operates on and returns its argument. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Trim</TT
+> shortens a string to the length specified by the second parameter. If the string is already of that 
+length or shorter the string is not changed. <TT
+CLASS="function"
+>Rjustify</TT
+> right justifies a string into another string of the 
+length specified by the second parameter. If the original string is shorter than the justified string, 
+blanks are inserted to the left of the original string; if the string is longer than the justified string, the 
+original string is truncated on the right. <TT
+CLASS="function"
+>Trim</TT
+> historically used the buffer return method; <TT
+CLASS="function"
+>rjustify</TT
+> creates and returns 
+a new string. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Save</TT
+> creates a copy of the argument string and returns it. This function is required because built-in 
+functions that return strings use the buffer return method; if a string is to be used repeatedly or long after 
+it is returned from a function, it should first be saved by using the <TT
+CLASS="function"
+>save</TT
+> function. <TT
+CLASS="function"
+>Strsave</TT
+> is the same 
+function as <TT
+CLASS="function"
+>save</TT
+>. With version 3.0.6 or later, this should be unnecessary. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Concat</TT
+> and <TT
+CLASS="function"
+>strconcat</TT
+> catenate strings and return the result. They are identical functions. They may 
+take two to 32 string arguments; null arguments are allowed. The arguments are catenated together into 
+a single, newly allocated string, which is returned. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Strlen</TT
+> returns the length of the string argument. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Substring</TT
+> returns a substring of the first argument string. The second and third arguments are the 
+indices of the first and last characters in the argument string to use to form the substring. The indexes are relative one. 
+<TT
+CLASS="function"
+>Substring</TT
+> historically used the buffer return method. 
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Index</TT
+> returns the character index of the nth occurrence of a substring within a string. The index is the 
+relative one character offset to the beginning of the substring. The first argument is the string; the 
+second argument is the substring; and the third argument is the occurrence number. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>D</TT
+>, <TT
+CLASS="function"
+>card</TT
+>, <TT
+CLASS="function"
+>ord</TT
+>, <TT
+CLASS="function"
+>alpha</TT
+> and <TT
+CLASS="function"
+>roman</TT
+> convert integers to strings. <TT
+CLASS="function"
+>D</TT
+> converts an integer to a numeric string; 
+<TT
+CLASS="function"
+>card</TT
+> converts an integer to a cardinal number string (eg, <TT
+CLASS="literal"
+>one, two, three</TT
+>); <TT
+CLASS="function"
+>ord</TT
+> converts an integer to 
+an ordinal number (eg, <TT
+CLASS="literal"
+>first, second, third</TT
+>); <TT
+CLASS="function"
+>alpha</TT
+> converts an integer to a letter (eg, <TT
+CLASS="literal"
+>a, b, c</TT
+>); and 
+<TT
+CLASS="function"
+>roman</TT
+> converts an integer to a Roman numeral (eg, <TT
+CLASS="literal"
+>i, ii, iii</TT
+>). 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Strsoundex</TT
+> converts an arbitrary string to a SOUNDEX value. Non-ASCII text characters are ignored 
+in the string. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Strtoint</TT
+> converts a numeric string to an integer. <TT
+CLASS="function"
+>Atoi</TT
+> is identical to <TT
+CLASS="function"
+>strtoint</TT
+>. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Strcmp</TT
+> compares two strings and returns an integer that is less than zero, equal to zero, or greater than 
+zero, if, respectively, the first string is lexicographically less than, equal to, or greater than the second 
+string. <TT
+CLASS="function"
+>Eqstr</TT
+> and <TT
+CLASS="function"
+>nestr</TT
+> return whether two strings are equal or not equal, respectively. 
+<TT
+CLASS="function"
+>Strcmp</TT
+>, <TT
+CLASS="function"
+>Eqstr</TT
+>, and <TT
+CLASS="function"
+>nestr</TT
+> all treat null strings as empty strings, 
+which is to say they pretend that a null string is actually "". This means that all null and empty strings compare as equal. 
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN2388">2.18. Output Mode Functions</H2
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2393"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID linemode</CODE
+>(void);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+use line output mode 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2402"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID pagemode</CODE
+>(INT, INT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+use page output mode with given page size 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2413"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID col</CODE
+>(INT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+position to column in output 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2423"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID row</CODE
+>(INT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+position to row in output 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2433"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID pos</CODE
+>(INT, INT);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+position to (row, col) coordinate in output 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2444"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID pageout</CODE
+>(void);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+output page buffer 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2453"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING nl</CODE
+>(void);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+newline character 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2462"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING sp</CODE
+>(void);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+space character 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2471"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING qt</CODE
+>(void);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+double quote character 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2480"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID newfile</CODE
+>(STRING, BOOL);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+send program output to this file 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2491"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING outfile</CODE
+>(void);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+return name of current program output file 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2500"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID copyfile</CODE
+>(STRING);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+copy file contents to program output file 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2510"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID print</CODE
+>(STRING, <TT
+CLASS="replaceable"
+><I
+>STRING</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>...</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+print string to standard output window 
+
+</P
+></DD
+></DL
+></DIV
+><P
+> 
+
+Reports can be generated in two modes, line mode and page mode. <TT
+CLASS="function"
+>Linemode</TT
+> selects line mode and 
+<TT
+CLASS="function"
+>pagemode</TT
+> selects page mode; line mode is the default. The first parameter to <TT
+CLASS="function"
+>pagemode</TT
+> is the number 
+of rows per page; the second parameter is the number of columns per page. When in the line mode report 
+output is written directly to the output file as the program runs, line by line. When in page mode output 
+is buffered into pages which are written to the output file when <TT
+CLASS="function"
+>pageout</TT
+> is called. Page mode is useful 
+for generating charts (eg, pedigree charts or box charts) where it is convenient to compute the two-dimensional 
+location of output. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Col</TT
+> positions output to the given column. If the current column is greater than the argument, col 
+positions output to the given column on the next line. <TT
+CLASS="function"
+>Col</TT
+> works in both modes. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Row</TT
+> positions output to the first character in the given row; <TT
+CLASS="function"
+>row</TT
+> can only be used in page mode. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Pos</TT
+> positions output to a specified row and column coordinate; the first argument specifies the row, and 
+the second specifies the column. <TT
+CLASS="function"
+>Pos</TT
+> can only be used in page mode. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Nl</TT
+> write a new line character to the output file; <TT
+CLASS="function"
+>sp</TT
+> writes a space character to the output file; and <TT
+CLASS="function"
+>qt</TT
+> 
+writes a quote character to the output file. Note that <TT
+CLASS="literal"
+>\n</TT
+> and <TT
+CLASS="literal"
+>\'</TT
+> can be used within string values to 
+represent the newline and double quote characters. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Newfile</TT
+> specifies the name of the report output file. Its first argument is the file's name; its second 
+argument is an append flag - if its value is non-zero the report appends to this file; if its value is zero 
+the report overwrites the contents of the file. <TT
+CLASS="function"
+>Newfile</TT
+> can be called many times; this allows a single report program to generate many report output files during one execution. Programs are not required to 
+use <TT
+CLASS="function"
+>newfile</TT
+>; if it is not used then <SPAN
+CLASS="application"
+>LifeLines</SPAN
+> automatically asks for the name of the report output file. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Outfile</TT
+> returns the name of the current report output file. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Copyfile</TT
+> copies the contents of a file to the report output file; its argument is a string whose value is 
+the name of a file; if the file name is not absolute nor relative, then the <TT
+CLASS="envar"
+>LLPROGRAMS</TT
+> environment 
+variable, if set, will be used to search for the file; the file is opened and its contents copied to the report 
+output file. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Print</TT
+> prints its argument string to the standard output window; <TT
+CLASS="function"
+>print</TT
+> may have one to 32 arguments. 
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN2555">2.19. Person Set Functions and GEDCOM Extraction</H2
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2560"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID indiset</CODE
+>(SET_V);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+declare a set variable 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2570"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>SET addtoset</CODE
+>(SET, INDI, ANY);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+add a person to a set 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2582"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>SET deletefromset</CODE
+>(SET, INDI, BOOL);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+remove a person from a set 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2594"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INT lengthset</CODE
+>(SET);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+size of a set 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2604"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>SET union</CODE
+>(SET, SET);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+union of two sets 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2615"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>SET intersect</CODE
+>(SET, SET);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+intersection of two sets 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2626"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>SET difference</CODE
+>(SET, SET);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+difference of two sets 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2637"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>SET parentset</CODE
+>(SET);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+set of all parents 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2647"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>SET childset</CODE
+>(SET);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+set of all children 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2657"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>SET spouseset</CODE
+>(SET);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+set of all spouses 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2667"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>SET siblingset</CODE
+>(SET);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+set of all siblings 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2677"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>SET ancestorset</CODE
+>(SET);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+set of all ancestors 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2687"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>SET descendentset</CODE
+>(SET);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+set of all descendents 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2697"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>SET descendantset</CODE
+>(SET);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+same as descendentset; spelling 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2707"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>SET uniqueset</CODE
+>(SET);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+remove duplicates from set 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2717"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID namesort</CODE
+>(SET);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+sort indiset by name 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2727"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID keysort</CODE
+>(SET);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+sort indiset by key values 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2737"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID valuesort</CODE
+>(SET);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+sort indiset by auxiliary values 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2747"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID genindiset</CODE
+>(STRING, SET);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+generate indiset from GEDCOM name string 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2758"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID gengedcom</CODE
+>(SET);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+generate GEDCOM file from person set 
+
+</P
+></DD
+><DT
+><B
+><PRE
+CLASS="synopsis"
+><B
+CLASS="command"
+>forindiset</B
+> (<TT
+CLASS="replaceable"
+><I
+>SET</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>INDI_V</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>ANY_V</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>INT_V</I
+></TT
+>) { <TT
+CLASS="replaceable"
+><I
+>commands</I
+></TT
+> }</PRE
+></B
+></DT
+><DD
+><P
+> 
+
+loop through all persons in person set 
+
+</P
+></DD
+></DL
+></DIV
+><P
+> 
+
+These functions allow you to manipulate person sets. A person set is a potentially large set of persons; 
+each person may have an arbitrary value associated with him/her. A person set must be declared with 
+the <TT
+CLASS="function"
+>indiset</TT
+> function before it can be used. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Addtoset</TT
+> adds a person to a set. The first argument is the set; the second argument is the person; and 
+the third argument may be any value. The same person may be added to a set more than once, each time 
+with a different value. <TT
+CLASS="function"
+>Deletefromset</TT
+> removes a person from a set. The first argument is the set; the 
+second argument is the person; if the third parameter is <SPAN
+CLASS="returnvalue"
+>true</SPAN
+> all of the person's entries are removed 
+from the set; if <SPAN
+CLASS="returnvalue"
+>false</SPAN
+> only the first entry is removed. <TT
+CLASS="function"
+>Lengthset</TT
+> returns the number of persons in a 
+person set. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Union</TT
+>, <TT
+CLASS="function"
+>intersect</TT
+> and <TT
+CLASS="function"
+>difference</TT
+> return the set union, set intersection and set difference, respectively, 
+of two person sets. Each functions takes two person sets as arguments and returns a third person set. The 
+functions do not affect the values of their two argument sets. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Parentset</TT
+>, <TT
+CLASS="function"
+>childset</TT
+>, <TT
+CLASS="function"
+>spouseset</TT
+> and <TT
+CLASS="function"
+>siblingset</TT
+> return the set of all parents, set of all children, set of 
+all spouses and set of all siblings, respectively, of the set of persons in their argument. In all cases there 
+is no change to the argument person set. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Ancestorset</TT
+> returns the set all ancestors of all persons in the argument set. <TT
+CLASS="function"
+>Descendentset</TT
+> returns the 
+set of all descendents of all persons in the argument set. <TT
+CLASS="function"
+>Descendantset</TT
+> is the same as <TT
+CLASS="function"
+>descendentset</TT
+>; it allows an alternate spelling. 
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Uniqueset</TT
+> sorts a person set by key value and then removes all entries with duplicate keys; the input 
+set is modified and returned. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Namesort</TT
+>, <TT
+CLASS="function"
+>keysort</TT
+> and <TT
+CLASS="function"
+>valuesort</TT
+> sort a set of persons by name, by key and by associated value, 
+respectively. 
+
+</P
+><P
+> 
+
+Each person in a person set has an associated value. When a person is added to a set with <TT
+CLASS="function"
+>addtoset</TT
+>, the 
+value is explicitly assigned. When new sets are created by other functions, a number of rules are used to 
+associate values with persons as they are added to the new sets. For <TT
+CLASS="function"
+>parentset</TT
+>, <TT
+CLASS="function"
+>childset</TT
+> and 
+<TT
+CLASS="function"
+>spouseset</TT
+> the values are copied from the first input set person that causes the new person to be added 
+to the set. For <TT
+CLASS="function"
+>union</TT
+>, <TT
+CLASS="function"
+>intersect</TT
+> and <TT
+CLASS="function"
+>difference</TT
+>, the values are copied from the values in the first input 
+set, except in the case of <TT
+CLASS="function"
+>union</TT
+>, when persons are taken from the second set alone, in which case the 
+values come from there. For <TT
+CLASS="function"
+>ancestorset</TT
+> and <TT
+CLASS="function"
+>descendantset</TT
+> the value is set to the number of generations 
+the new person is away from the <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>first</I
+></SPAN
+> person in the input set that the new person is related to. If the 
+new person is related to more than one person in the input set, the value is set for the nearest 
+relationship; that is, the value is as low as possible. <TT
+CLASS="function"
+>Valuesort</TT
+> sorts a person set by the values of these 
+auxiliary values. 
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Genindiset</TT
+> generates the set of persons that matche a string whose value is a name in <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> 
+format. <TT
+CLASS="function"
+>Genindiset</TT
+> uses the same algorithm that matches names entered at the browse prompt or by 
+the user interaction <TT
+CLASS="function"
+>getindiset</TT
+> function. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Gengedcom</TT
+> generates <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> format output, to the report output file, of all persons in the argument 
+person set. The output contains a person record for each person in the set, and all the family records that 
+link at least two of the persons in the set together. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Forindiset</TT
+> is an iterator that loops through each person in an indiset. The first parameter is an indiset. 
+The second parameter is a variable that iterates through each person in the set. The third parameter 
+iterates through the values associated with the persons. The fourth parameter is an integer variable 
+that counts the iterations. 
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN2828">2.20. Record Update Functions</H2
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2833"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>NODE createnode</CODE
+>(STRING, STRING);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+create a GEDCOM node 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2844"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID addnode</CODE
+>(NODE, NODE, NODE);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+add a node to a GEDCOM tree 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2856"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID deletenode</CODE
+>(NODE);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+delete a node from a GEDCOM tree 
+
+</P
+></DD
+></DL
+></DIV
+><P
+> 
+
+These functions allow you to modify an internal <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> node tree. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Createnode</TT
+> creates a <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> node; the two arguments are tag and value strings, respectively; the 
+value string can be <SPAN
+CLASS="returnvalue"
+>null</SPAN
+>. <TT
+CLASS="function"
+>Addnode</TT
+> adds a node to a node tree. The first argument is the new node; the 
+second is the node in the tree that becomes the parent of the new node; the third is the node in the tree 
+that becomes the previous sibling of the new node; this argument is <SPAN
+CLASS="returnvalue"
+>null</SPAN
+> if the new node is to become 
+the first child of the parent. <TT
+CLASS="function"
+>Deletenode</TT
+> removes a node from a node tree. 
+
+
+</P
+><P
+> 
+
+These functions change the internal form of a node tree; they <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>do not</I
+></SPAN
+> modify original records in the 
+database. These functions may be changed or extended in the future to allow database changes. Note: 
+<TT
+CLASS="function"
+>deletenode</TT
+> has a memory leak. 
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN2876">2.21. Record Linking Functions</H2
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2881"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>BOOL reference</CODE
+>(STRING);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+determine if string is a cross reference 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2891"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>NODE dereference</CODE
+>(STRING);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+reference cross reference or key to node tree 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2901"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>NODE getrecord</CODE
+>(STRING);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+same as dereference 
+
+</P
+></DD
+></DL
+></DIV
+><P
+> 
+
+These functions allow you to recognize values that are cross references and to read the records they refer 
+to. <TT
+CLASS="function"
+>Reference</TT
+> returns true if its string argument is a cross reference value, that is, the internal key of 
+one of the records in the database. <TT
+CLASS="function"
+>Dereference</TT
+> returns the node tree of the record referred to by its cross 
+reference string argument. <TT
+CLASS="function"
+>Getrecord</TT
+> is a synonym for <TT
+CLASS="function"
+>dereference</TT
+>. 
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN2914">2.22. Miscellaneous Functions</H2
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2919"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID lock</CODE
+>(INDI|FAM);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+lock a person or family in memory 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2929"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID unlock</CODE
+>(INDI|FAM);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+unlock a person or family from memory 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2939"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING database</CODE
+>(void);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+return name of current database 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2948"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING version</CODE
+>(void);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+return version of <SPAN
+CLASS="application"
+>LifeLines</SPAN
+> program 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2958"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID system</CODE
+>(STRING);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+execute string as a UNIX shell command 
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2968"><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING getproperty</CODE
+>(STRING);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+> 
+
+extract system or user property.  Function available after v3.0.5. 
+
+</P
+></DD
+></DL
+></DIV
+><P
+> 
+
+<TT
+CLASS="function"
+>Lock</TT
+> and <TT
+CLASS="function"
+>unlock</TT
+> are used to lock a 
+person or family into <SPAN
+CLASS="acronym"
+>RAM</SPAN
+> memory, and to unlock a person or family 
+from <SPAN
+CLASS="acronym"
+>RAM</SPAN
+> memory, respectively. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>Database</TT
+> returns the name of the current database, useful 
+in titling reports. <TT
+CLASS="function"
+>Version</TT
+> returns the 
+version of the running <SPAN
+CLASS="application"
+>LifeLines</SPAN
+> program, eg, <TT
+CLASS="literal"
+>3.0.7</TT
+>. 
+
+
+</P
+><P
+> 
+
+<TT
+CLASS="function"
+>System</TT
+> executes its string argument as a 
+<SPAN
+CLASS="acronym"
+>UNIX</SPAN
+> (or <SPAN
+CLASS="acronym"
+>MS-Windows</SPAN
+> as appropriate) shell 
+command, by invoking the system shell. This will not occur if the user has 
+chosen to disallow report system calls (via the DenySystemCalls user option). 
+
+</P
+><P
+> 
+
+The <TT
+CLASS="function"
+>getproperty</TT
+> function extracts system or user 
+properties.  Properties are named group.subgroup.property or 
+group.property.  The following keys are available at the moment: 
+</P
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><TT
+CLASS="option"
+>user.fullname</TT
+></B
+></DT
+><DD
+><P
+> 
+         The full name of the current user.  This is fetched from the 
+         system when possible. 
+       </P
+></DD
+><DT
+><B
+><TT
+CLASS="option"
+>user.email</TT
+></B
+></DT
+><DD
+><P
+> 
+         The email address of the current user.  This is fetched 
+         from the system when possible. 
+       </P
+></DD
+><DT
+><B
+><TT
+CLASS="option"
+>user.address</TT
+></B
+></DT
+><DD
+><P
+> 
+         Postal address of the current user. 
+       </P
+></DD
+><DT
+><B
+><TT
+CLASS="option"
+>user.url</TT
+></B
+></DT
+><DD
+><P
+> 
+         URL to the users home page. 
+       </P
+></DD
+></DL
+></DIV
+><P
+> 
+     These values can be changed by adding values to user options. 
+     [Miscellaneous utilities-&#62;Edit the user options file] 
+      </P
+></DIV
+></DIV
+></DIV
+></BODY
+></HTML
+>
