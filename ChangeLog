@@ -25,6 +25,10 @@
 
 	Add MSVC6 build stuff for llexec.
 
+	* ChangeLog src/interp/more.c:
+
+	Fixing more report language type error messages.
+
 2002-10-05 Perry Rapp
 
 	* ChangeLog src/interp/interp.c:

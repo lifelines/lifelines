@@ -695,7 +695,7 @@ __menuchoose (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	val = eval_and_coerce(PLIST, arg, stab, eflg);
 
 	if (*eflg) {
-		prog_error(node, "1st arg to menuchoose must be a list of strings");
+		prog_var_error(node, stab, arg, val, "menuchoose", "1");
 		return NULL;
 	}
 	list = pvalue_to_list(val);
@@ -708,7 +708,7 @@ __menuchoose (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (arg) {
 		val = eval_and_coerce(PSTRING, arg, stab, eflg);
 		if (*eflg) {
-			prog_error(node, "2nd arg to menuchoose must be a string");
+			prog_var_error(node, stab, arg, val, nonstrx, "menuchoose", "2");
 			return NULL;
 		}
 		msg = pvalue_to_string(val);
@@ -723,7 +723,7 @@ __menuchoose (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		strngs[i] = (STRING)stdalloc(nsize);
 		makestring(vel, strngs[i], nsize, eflg);
 		if (*eflg) {
-			prog_error(node, "Illegal type found in list in menuchoose");
+			prog_error(node, _("Illegal type found in list in menuchoose"));
 			return NULL;
 		}
 		++i;
@@ -743,10 +743,10 @@ PVALUE
 __runsystem (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	STRING cmd;
-	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
+	PNODE arg = iargs(node);
+	PVALUE val = eval_and_coerce(PSTRING, arg, stab, eflg);
 	if (*eflg) {
-		/* TODO: need to i18n strings around here -- there is a wrapper for type mismatches */
-		prog_error(node, "the arg to system must be a string");
+		prog_var_error(node, stab, arg, val, nonstr1, "system");
 		return NULL;
 	}
 	cmd = pvalue_to_string(val);
@@ -781,11 +781,12 @@ __firstindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __nextindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
+	PNODE arg = iargs(node);
+	NODE indi = eval_indi(arg, stab, eflg, NULL);
 	static char key[10];
 	INT i;
 	if (*eflg) {
-		prog_error(node, "the arg to nextindi is not a person");
+		prog_var_error(node, stab, arg, indi, nonind1, "nextindi");
 		return NULL;
 	}
 	if (!indi)
@@ -802,11 +803,12 @@ __nextindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __previndi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
+	PNODE arg = iargs(node);
+	NODE indi = eval_indi(arg, stab, eflg, NULL);
 	static char key[10];
 	INT i;
 	if (*eflg) {
-		prog_error(node, "the arg to previndi must be a person");
+		prog_var_error(node, stab, arg, indi, nonind1, "previndi");
 		return NULL;
 	}
 	if (!indi)
@@ -847,11 +849,12 @@ __firstfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __nextfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE fam = eval_fam(iargs(node), stab, eflg, NULL);
+	PNODE arg = iargs(node);
+	NODE fam = eval_fam(arg, stab, eflg, NULL);
 	static char key[10];
 	INT i;
 	if (*eflg) {
-		prog_error(node, "the arg to nextfam must be a family");
+		prog_var_error(node, stab, arg, indi, nonfam1, "nextfam");
 		return NULL;
 	}
 	if (!fam)
@@ -873,7 +876,7 @@ __prevfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	static char key[10];
 	INT i;
 	if (*eflg) {
-		prog_var_error(node, stab, arg, NULL, "the arg to prevfam must be a family");
+		prog_var_error(node, stab, arg, indi, nonfam1, "prevfam");
 		return NULL;
 	}
 	if (!fam)
@@ -961,13 +964,13 @@ __rjustify (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	STRING str;
 	PVALUE val2, val1 = eval_and_coerce(PSTRING, sarg, stab, eflg);
 	if (*eflg) {
-		prog_error(node, "1st arg to rjustify must be a string");
+		prog_var_error(node, stab, sarg, val1, nonstrx, "rjustify", "1");
 		return NULL;
 	}
 	str = pvalue_to_string(val1);
 	val2 = eval_and_coerce(PINT, larg, stab, eflg);
 	if (*eflg) {
-		prog_error(node, "2nd arg to rjustify must be an integer");
+		prog_var_error(node, stab, larg, val2, nonintx, "rjustify", "2");
 		return NULL;
 	}
 	len = pvalue_to_int(val2);
@@ -1005,10 +1008,12 @@ __lock (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INT type;
 	CACHEEL cel;
-	PVALUE val = evaluate(iargs(node), stab, eflg);
+	PNODE arg = iargs(node);
+	PVALUE val = evaluate(arg, stab, eflg);
 	if (*eflg || !val || ((type = ptype(val)) != PINDI && type != PFAM)) {
 		*eflg = TRUE;
-		prog_error(node, "the arg to lock must be a person or family");
+		prog_var_error(node, stab, arg, val
+		  , _("the arg to lock must be a person or family"));
 		return NULL;
 	}
 	cel = get_cel_from_pvalue(val);
@@ -1026,10 +1031,12 @@ __unlock (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INT type;
 	CACHEEL cel;
-	PVALUE val = evaluate(iargs(node), stab, eflg);
+	PNODE arg = iargs(node);
+	PVALUE val = evaluate(arg, stab, eflg);
 	if (*eflg || !val || ((type = ptype(val)) != PINDI && type != PFAM)) {
 		*eflg = TRUE;
-		prog_error(node, "the arg to unlock must be a person or family");
+		prog_var_error(node, stab, arg, val
+		  , _("the arg to unlock must be a person or family"));
 		return NULL;
 	}
 	cel = get_cel_from_pvalue(val);
@@ -1045,9 +1052,10 @@ PVALUE
 __savenode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE line;
-	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
+	PNODE arg = iargs(node);
+	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
 	if (*eflg) {
-		prog_error(node, "the arg to savenode must be a record line");
+		prog_var_error(node, stab, arg, val, nonrec1, "savenode");
 		return NULL;
 	}
 	line = (NODE) pvalue(val);
@@ -1066,6 +1074,7 @@ __genindiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	STRING name;
 	PVALUE val1 = eval_and_coerce(PSTRING, arg, stab, eflg);
 	if (*eflg) {
+/* TODO: 2002-10-06: Fix msgs to prog_var_error as above */
 		prog_error(node, "1st arg to genindiset must be a string");
 		return NULL;
 	}
