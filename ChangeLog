@@ -6,6 +6,13 @@
 	Renamed scroll variables to reduce confusion.
 	Reset scroll every time entering a new person/family.
 
+	* liflines/browse.c liflines/show.c:
+	Fix cache overflow bug in browse_indi, browse_fam.
+	Combined browse_ped into browse_indi.
+
+	* gedlib/keytonod.c: (Mistaken change & backed it out -
+	accidentally checked in cache size reduction to 20 for testing.)
+
 2000-12-12 Perry Rapp <prapp@users.sourceforge.net>
 
 	* gedlib/messages.c liflines/scan.c stdlib/stdstrng.c:
