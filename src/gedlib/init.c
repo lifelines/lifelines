@@ -565,6 +565,9 @@ describe_dberror (INT dberr, STRING buffer, INT buflen)
 	case BTERR_LOCKED:
 		llstrapps(b, n, u8,  _("The database is locked (no readwrite access)."));
 		break;
+	case BTERR_UNLOCKED:
+		llstrapps(b, n, u8,  _("The database is unlocked."));
+		break;
 	case BTERR_ILLEGKF:
 		llstrapps(b, n, u8,  _("keyfile is corrupt."));
 		break;
@@ -704,8 +707,8 @@ add_dbs_to_list (LIST dblist, LIST dbdesclist, STRING dir)
 		concat_path(dirbuf, programs[n]->d_name, uu8, candidate, sizeof(candidate));
 		concat_path(dir, programs[n]->d_name, uu8, userpath, sizeof(userpath));
 		if ((dbstr = getdbdesc(candidate, userpath)) != NULL) {
-			push_list(dblist, strsave(userpath));
-			push_list(dbdesclist, dbstr);
+			back_list(dblist, strsave(userpath));
+			back_list(dbdesclist, dbstr);
 		}
 		stdfree(programs[n]);
 	}

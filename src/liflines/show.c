@@ -40,6 +40,7 @@
 #include "liflines.h"
 #include "lloptions.h"
 #include "date.h"
+#include "zstr.h"
 
 #include "llinesi.h"
 #include "screen.h"
@@ -88,7 +89,7 @@ variable, and checked & resized at init_display_indi time */
 static void add_child_line(INT, RECORD, INT width);
 static void add_spouse_line(INT, NODE, NODE, INT width);
 static BOOLEAN append_event(STRING * pstr, STRING evt, INT * plen, INT minlen);
-static void family_events(STRING outstr, NODE indi, NODE fam, INT len);
+static void disp_person_name(ZSTR * zstr, STRING prefix, RECORD irec, INT width);
 static void indi_events(STRING outstr, NODE indi, INT len);
 static void init_display_indi(RECORD irec, INT width);
 static void init_display_fam(RECORD frec, INT width);
@@ -106,8 +107,10 @@ static STRING sh_indi_to_event_shrt(NODE node, STRING tag
  * local variables
  *********************************************/
 
-static LINESTRING Spers, Sbirt, Sdeat, Sfath, Smoth, Smarr;
-static LINESTRING Shusb, Shbirt, Shdeat, Swife, Swbirt, Swdeat;
+static LINESTRING Sbirt, Sdeat, Sfath, Smoth, Smarr;
+static ZSTR Spers=0;
+static ZSTR Shusb=0, Swife=0;
+static LINESTRING Shbirt, Shdeat, Swbirt, Swdeat;
 static LINESTRING Sothers[MAXOTHERS];
 static INT liwidth;
 static INT Solen = 0;
@@ -128,16 +131,16 @@ init_show_module (void)
 	INT i;
 	liwidth = ll_cols+1;
 
-	Spers = (LINESTRING)stdalloc(liwidth);
+	zs_reserve(&Spers, 60);
 	Sbirt = (LINESTRING)stdalloc(liwidth);
 	Sdeat = (LINESTRING)stdalloc(liwidth);
 	Sfath = (LINESTRING)stdalloc(liwidth);
 	Smoth = (LINESTRING)stdalloc(liwidth);
 	Smarr = (LINESTRING)stdalloc(liwidth);
-	Shusb = (LINESTRING)stdalloc(liwidth);
+	zs_reserve(&Shusb, 60);
 	Shbirt = (LINESTRING)stdalloc(liwidth);
 	Shdeat = (LINESTRING)stdalloc(liwidth);
-	Swife = (LINESTRING)stdalloc(liwidth);
+	zs_reserve(&Swife, 60);
 	Swbirt = (LINESTRING)stdalloc(liwidth);
 	Swdeat = (LINESTRING)stdalloc(liwidth);
 	for (i=0; i<MAXOTHERS; i++)
@@ -151,20 +154,57 @@ void
 term_show_module (void)
 {
 	INT i;
-	stdfree(Spers);
+
+	zs_free(&Spers);
 	stdfree(Sbirt);
 	stdfree(Sdeat);
 	stdfree(Sfath);
 	stdfree(Smoth);
 	stdfree(Smarr);
-	stdfree(Shusb);
+	zs_free(&Shusb);
 	stdfree(Shbirt);
 	stdfree(Shdeat);
-	stdfree(Swife);
+	zs_free(&Swife);
 	stdfree(Swbirt);
 	stdfree(Swdeat);
 	for (i=0; i<MAXOTHERS; i++)
 		stdfree(Sothers[i]);
+}
+/*===============================================
+ * disp_person_name -- Display person's name
+ *  append REFN or key, & include title if room
+ * Created: 2003-01-11 (Perry Rapp)
+ *=============================================*/
+static void
+disp_person_name (ZSTR * zstr, STRING prefix, RECORD irec, INT width)
+{
+	ZSTR zkey = zs_news(key_of_record(nztop(irec)));
+	/* ": " between prefix and name, and " ()" for key */
+	INT avail = width - strlen(prefix)-zs_len(zkey)-5;
+	STRING name = indi_to_name(nztop(irec), avail);
+	zs_clear(zstr);
+	zs_setf(zstr, "%s: %s ", prefix, name);
+	avail = width - zs_len(*zstr)-zs_len(zkey)-2;
+	if (avail > 10) {
+		STRING t = indi_to_title(nztop(irec), avail-3);
+		if (t) zs_appf(zstr, "[%s] ", t);
+	}
+/* TODO: add more names if room */
+/* TODO: first implement new function namelist to get us all names */
+	zs_appf(zstr, "(%s)", zs_str(zkey));
+	zs_free(&zkey);
+}
+/*===============================================
+ * disp_person_birth -- Print birth string
+ *  Try to find date & place info for birth (or approx)
+ * Created: 2003-01-12 (Perry Rapp)
+ *=============================================*/
+static void
+disp_person_birth (ZSTR * zstr, RECORD irec, INT width)
+{
+	/*
+	Try BIRT, CHR, BAPM, BARM, BASM, BLES ?
+	*/
 }
 /*===============================================
  * init_display_indi -- Initialize display person
@@ -176,7 +216,7 @@ init_display_indi (RECORD irec, INT width)
 {
 	NODE pers=nztop(irec);
 	INT nsp, nch, num, nm;
-	STRING s,t;
+	STRING s;
 	NODE fth;
 	NODE mth;
 	CACHEEL icel;
@@ -187,14 +227,10 @@ init_display_indi (RECORD irec, INT width)
 	ASSERT(pers);
 	fth = indi_to_fath(pers);
 	mth = indi_to_moth(pers);
-	s = indi_to_name(pers, width-20);
-	llstrncpyf(Spers, liwidth, uu8, "%s: %s ", _(qSdspl_indi), s);
-	if((num = strlen(s)) < width-30) {
-	    t = indi_to_title(pers, width-20 - num - 3);
-	    if(t) sprintf(Spers+strlen(Spers), "[%s] ", t);
-	}
-	sprintf(Spers+strlen(Spers), "(%s)", key_of_record(pers));
 
+	disp_person_name(&Spers, _(qSdspl_indi), irec, width);
+
+	/* disp_person_birth(&Sbirt, irec, width-3); */
 	s = sh_indi_to_event_long(pers, "BIRT", _(qSdspl_bir), (width-3));
 	if (!s) s = sh_indi_to_event_long(pers,  "CHR", _(qSdspl_chr), (width-3));
 	if (s) sprintf(Sbirt, "  %s", s);
@@ -281,7 +317,7 @@ show_indi_vitals (UIWINDOW uiwin, RECORD irec, LLRECT rect
 	/* we keep putting lines out til we run out or exhaust our alloted
 	height */
 	localrow = row - *scroll;
-	mvccwaddstr(win, row+0, 1, Spers);
+	mvccwaddstr(win, row+0, 1, zs_str(Spers));
 	if (hgt==1) return;
 	mvccwaddstr(win, row+1, 1, Sbirt);
 	if (hgt==2) return;
@@ -349,23 +385,26 @@ static void
 init_display_fam (RECORD frec, INT width)
 {
 	NODE fam=nztop(frec);
-	NODE husb;
-	NODE wife;
-	STRING s, ik, fk;
-	INT len, nch, nm, wtemp;
-	STRING mother = _(qSdspl_moth);
+	NODE husb=0, wife=0;
+	STRING s=0, ik=0;
+	ZSTR famkey = zs_news(key_of_record(fam));
+	INT nch, nm, wtemp;
 	STRING father = _(qSdspl_fath);
-	ASSERT(fam);
-	husb = fam_to_husb_node(fam);
-	wife = fam_to_wife(fam);
-	fk = key_of_record(fam);
-	if (husb) {
-		ik = key_of_record(husb);
-		len = liwidth - (10 + strlen(father) + strlen(ik) + strlen(fk));
-		s = indi_to_name(husb, len);
-		llstrncpyf(Shusb, liwidth, uu8, "%s: %s (%s) (%s)", father, s, ik, fk);
-	} else
-		llstrncpyf(Shusb, liwidth, uu8, "%s: (%s)", father, fk);
+	STRING mother = _(qSdspl_moth);
+	RECORD ihusb = fam_to_husb(frec);
+	RECORD iwife = fam_to_wife(frec);
+
+	husb = nztop(ihusb);
+	wife = nztop(iwife);
+
+	if (ihusb) {
+		INT avail = width - zs_len(famkey) - 3;
+		disp_person_name(&Shusb, father, ihusb, avail);
+	} else {
+		zs_setf(&Shusb, "%s:", father);
+	}
+	zs_appf(&Shusb, " (%s)", zs_str(famkey));
+	zs_free(&famkey);
 
 	s = sh_indi_to_event_long(husb, "BIRT", _(qSdspl_bir), width-3);
 	if (!s) s = sh_indi_to_event_long(husb, "CHR", _(qSdspl_chr), width-3);
@@ -377,13 +416,12 @@ init_display_fam (RECORD frec, INT width)
 	if (s) llstrncpyf(Shdeat, liwidth, uu8, "  %s", s);
 	else llstrncpyf(Shdeat, liwidth, uu8, "  %s", _(qSdspl_dea));
 
-	if (wife) {
-		ik = key_of_record(wife);
-		len = width - (7 + strlen(mother) + strlen(ik));
-		s = indi_to_name(wife, len);
-		llstrncpyf(Swife, liwidth, uu8, "%s: %s (%s)", mother, s, ik);
-	} else
-		llstrncpyf(Swife, liwidth, uu8, "%s:", mother);
+	if (iwife) {
+		INT avail = width;
+		disp_person_name(&Swife, mother, iwife, avail);
+	} else {
+		zs_setf(&Swife, "%s:", mother);
+	}
 
 	s = sh_indi_to_event_long(wife, "BIRT", _(qSdspl_bir), width-3);
 	if (!s) s = sh_indi_to_event_long(wife, "CHR", _(qSdspl_chr), width-3);
@@ -450,13 +488,13 @@ show_fam_vitals (UIWINDOW uiwin, RECORD frec, INT row, INT hgt
 			*scroll = 0;
 	}
 	localrow = row - *scroll;
-	mvccwaddstr(win, row+0, 1, Shusb);
+	mvccwaddstr(win, row+0, 1, zs_str(Shusb));
 	if (hgt==1) return;
 	mvccwaddstr(win, row+1, 1, Shbirt);
 	if (hgt==2) return;
 	mvccwaddstr(win, row+2, 1, Shdeat);
 	if (hgt==3) return;
-	mvccwaddstr(win, row+3, 1, Swife);
+	mvccwaddstr(win, row+3, 1, zs_str(Swife));
 	if (hgt==4) return;
 	mvccwaddstr(win, row+4, 1, Swbirt);
 	if (hgt==5) return;

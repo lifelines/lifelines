@@ -233,7 +233,8 @@ NODE fam_to_husb_node(NODE);
 NODE fam_to_last_chil(NODE);
 STRING fam_to_list_string(NODE fam, INT len, STRING delim);
 NODE fam_to_spouse(NODE, NODE);
-NODE fam_to_wife(NODE);
+RECORD fam_to_wife(RECORD);
+NODE fam_to_wife_node(NODE);
 RECORD file_to_record(STRING fname, XLAT ttm, STRING *pmsg, BOOLEAN *pemp);
 NODE file_to_node(STRING, XLAT, STRING*, BOOLEAN*);
 INT file_to_line(FILE*, XLAT, INT*, STRING*, STRING*, STRING*, STRING*);
@@ -602,7 +603,7 @@ Perry, 2002.06.24
 		fam = key_to_fam(rmvat(nval(__node)));\
 		ASSERT(fam);\
 		if (__sex == SEX_MALE)\
-			spouse = fam_to_wife(fam);\
+			spouse = fam_to_wife_node(fam);\
 		else if (__sex == SEX_FEMALE)\
 			spouse = fam_to_husb_node(fam);\
 		else    spouse = fam_to_spouse(fam, indi);\
@@ -626,7 +627,7 @@ Perry, 2002.06.24
 		fam = key_to_fam(rmvat(nval(__node)));\
 		ASSERT(fam);\
 		if (__sex == SEX_MALE)\
-			spouse = fam_to_wife(fam);\
+			spouse = fam_to_wife_node(fam);\
 		else if (__sex == SEX_FEMALE)\
 			spouse = fam_to_husb_node(fam);\
 		else    spouse = fam_to_spouse(fam, indi);\
@@ -648,7 +649,7 @@ Perry, 2002.06.24
 		fam = key_to_fam(rmvat(nval(__node)));\
 		ASSERT(fam);\
 		fath = fam_to_husb_node(fam);\
-		moth = fam_to_wife(fam);\
+		moth = fam_to_wife_node(fam);\
 		num++;\
 		{
 

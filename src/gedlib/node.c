@@ -1098,7 +1098,7 @@ indi_to_famc (NODE node)
 	return key_to_fam(rmvat(nval(node)));
 }
 /*========================================
- * fam_to_husb -- Return husband of family
+ * fam_to_husb_node -- Return husband of family
  *======================================*/
 NODE
 fam_to_husb_node (NODE node)
@@ -1108,7 +1108,7 @@ fam_to_husb_node (NODE node)
 	return key_to_indi(rmvat(nval(node)));
 }
 /*========================================
- * fam_to_husb_node -- Return husband of family
+ * fam_to_husb -- Return husband of family
  *======================================*/
 RECORD
 fam_to_husb (RECORD frec)
@@ -1119,14 +1119,25 @@ fam_to_husb (RECORD frec)
 	return key_to_irecord(rmvat(nval(husb)));
 }
 /*=====================================
- * fam_to_wife -- Return wife of family
+ * fam_to_wife_node -- Return wife of family
  *===================================*/
 NODE
-fam_to_wife (NODE node)
+fam_to_wife_node (NODE node)
 {
 	if (!node) return NULL;
 	if (!(node = find_tag(nchild(node), "WIFE"))) return NULL;
 	return key_to_indi(rmvat(nval(node)));
+}
+/*========================================
+ * fam_to_wife -- Return husband of family
+ *======================================*/
+RECORD
+fam_to_wife (RECORD frec)
+{
+	NODE fam = nztop(frec), husb;
+	if (!fam) return NULL;
+	if (!(husb = find_tag(nchild(fam), "WIFE"))) return NULL;
+	return key_to_irecord(rmvat(nval(husb)));
 }
 /*===============================================
  * fam_to_spouse -- Return other spouse of family
@@ -1187,7 +1198,7 @@ indi_to_fath (NODE node)
 NODE
 indi_to_moth (NODE node)
 {
-	return fam_to_wife(indi_to_famc(node));
+	return fam_to_wife_node(indi_to_famc(node));
 }
 /*==================================================
  * indi_to_prev_sib -- Return previous sib of person

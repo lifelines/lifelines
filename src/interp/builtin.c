@@ -670,7 +670,7 @@ __wife (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_var_error(node, stab, arg, NULL, nonfam1, "wife");
 		return NULL;
 	}
-	return create_pvalue_from_indi(fam_to_wife(fam));
+	return create_pvalue_from_indi(fam_to_wife_node(fam));
 }
 /*==========================================+
  * __firstchild -- Find first child of family

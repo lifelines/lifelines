@@ -6,9 +6,18 @@
 	only used once in liflines/scan.c, and only as a
 	test for equality).
 
+	* ChangeLog src/gedlib/init.c src/gedlib/node.c
+	src/hdrs/gedcom.h src/interp/builtin.c src/liflines/screen.c
+	src/liflines/show.c:
+
+	Minor revision of person display code & apply to ppl in fam.
+	Fix db selection choosing wrong db.
+	Add missing description for BTERR_UNLOCKED.
+	Begin work on Bug#662765.
+
 2003-01-07 Perry Rapp
 
-	*
+	* build/msvc6/llines.rc
 
 	Mark win32 llines resource for 3.0.24b5 beta.
 
