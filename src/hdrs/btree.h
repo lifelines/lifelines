@@ -31,10 +31,9 @@
 
 #ifndef _BTREE_H
 #define _BTREE_H
-#ifndef STDIO_H
-#define STDIO_H
+
+#include "standard.h"
 #include <stdio.h>
-#endif
 
 #define BUFLEN 4096
 #define NOENTS ((BUFLEN-12)/12)

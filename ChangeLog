@@ -1,3 +1,8 @@
+2000-11-10  Petter Reinholdtsen <pere@td.org.uit.no>
+
+	* hdrs/btree.h btree/index.c: Get the source compiling again by
+	cleaning up include statements.
+
 2000-11-09  Marc Nozell  <marc@nozell.com>
 
 	* reports/least_related.ll: At the request of the author, the
