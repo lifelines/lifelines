@@ -21,6 +21,11 @@
 
 	Remove curses include & unneeded endwin call in editmap.
 
+	* ChangeLog src/stdlib/rbtree.c
+
+	Cosmetic: self-assign to avoid compiler warning for 
+	unused variable in NullFunction.
+
 2005-01-28, Perry Rapp
 
 	* ChangeLog src/interp/alloc.c

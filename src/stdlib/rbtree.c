@@ -880,4 +880,7 @@ static void * SafeMalloc(size_t size)
  *  been defined
  ***********************************************************************/
 
-void NullFunction(void * junk) { ; }
+void NullFunction(void * junk)
+{
+	junk=junk; /* unused */
+}
