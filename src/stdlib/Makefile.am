@@ -21,5 +21,5 @@ libstdlib_a_SOURCES = appendstr.c array.c \
 # $(top_srcdir)/src/hdrs for headers
 INCLUDES=-I$(top_builddir) -I$(top_srcdir)/intl -I$(top_builddir)/intl -I$(top_srcdir)/src/hdrs
 
-EXTRA_DIST = stdlibi.h
+EXTRA_DIST = rbtree.h stack.h stdlibi.h
 

@@ -17,6 +17,10 @@
 
 	Add object vtable to node.
 
+	* ChangeLog src/stdlib/Makefile.am
+
+	Add lacking headers to EXTRA_DIST in src/stdlib/Makefile.am.
+
 2005-01-15 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c src/hdrs/list.h
