@@ -1,3 +1,9 @@
+2003-01-23 Perry Rapp
+
+	* ChangeLog src/liflines/show.c:
+
+	Fix for fatal (zstring) bug in date.c.
+
 2003-01-19 Perry Rapp
 
 	* ChangeLog src/hdrs/interp.h src/interp/alloc.c

@@ -229,7 +229,7 @@ disp_person_birthdeath (ZSTR zstr, RECORD irec, struct tag_prefix * tags
 	struct tag_prefix *tg, *tgdate=NULL, *tgplac=NULL;
 	STRING date=NULL, plac=NULL, td=NULL, tp=NULL;
 	STRING predate=NULL, preplac=NULL;
-	ZSTR zdate=NULL;
+	ZSTR zdate=zs_new();
 	for (tg = tags; tg->tag; ++tg) {
 		record_to_date_place(irec, tg->tag, &td, &tp);
 		if (!date) {
