@@ -42,6 +42,10 @@
 
 	Update NEWS file.
 
+	* ChangeLog configure.in src/hdrs/version.h
+
+	Bump version to 3.0.43d, to differentiate from 3.0.43 release.
+
 2005-02-12 lifelines beta 3.0.43 RELEASE
 
 2005-02-12 Perry Rapp
