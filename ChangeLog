@@ -1,3 +1,9 @@
+2003-02-09 Perry Rapp
+
+	* ChangeLog src/hdrs/version.h:
+
+	Bump version for new 3.0.24b9 beta release.
+
 2003-02-08 Stephen Dum
         * ChangeLog src/interp/interp.c src/stdlib/stdstrng.c
 
