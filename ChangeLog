@@ -1,3 +1,9 @@
+2003-09-08 Perry Rapp
+
+	* ChangeLog src/liflines/ask.c
+
+	Revise file open code to try without then with default extension.
+
 2003-09-06 Perry Rapp
 
 	* ChangeLog build/msvc6/dbverify/dbverifyCmd.dsp

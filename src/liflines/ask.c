@@ -186,39 +186,45 @@ ask_for_file_worker (STRING mode,
 
 	if (!rtn || !fname[0]) return NULL;
 
-
-	if(ext) {
-		elen = strlen(ext);
-		flen = strlen(fname);
-		if (elen<flen && path_match(fname+flen-elen, ext))
-			ext = NULL;	/* the file name has the extension already */
-	}
-
 	if (!expand_special_fname_chars(fname, sizeof(fname), uu8)) {
 		msg_error(_(qSfn2long));
 		return NULL;
 	}
 
+ask_for_file_try:
 
+	/* try name as given */
 	if (ISNULL(path)) {
-		fp = NULL;
-		if(ext) {
-			llstrapps(fname, sizeof(fname), uu8, ext);
+		/* bare filename was given */
+		if ((fp = fopen(fname, mode)) != NULL) {
+			if (pfname)
+				strupdate(pfname, fname);
+			return fp;
 		}
-		fp = fopen(fname, mode);
-		if (fp && pfname) *pfname = strsave(fname);
-		if (fp == NULL) {
-			msg_error(_(qSnofopn), fname);
-			return NULL;
+	} else {
+		/* fully qualified path was given */
+		if ((fp = fopenpath(fname, mode, path, ext, uu8, pfullpath)) != NULL) {
+			return fp;
 		}
-		return fp;
 	}
 
-	if (!(fp = fopenpath(fname, mode, path, ext, uu8, pfullpath))) {
-		msg_error(_(qSnofopn), fname);
-		return NULL;
+	/* try default extension */
+	if (ext) {
+		elen = strlen(ext);
+		flen = strlen(fname);
+		if (elen<flen && path_match(fname+flen-elen, ext)) {
+			ext = NULL;	/* the file name has the extension already */
+		} else {
+			/* add extension and go back and retry */
+			llstrapps(fname, sizeof(fname), uu8, ext);
+			ext = NULL; /* only append extension once! */
+			goto ask_for_file_try;
+		}
 	}
-	return fp;
+
+	/* failed to open it, give up */
+	msg_error(_(qSnofopn), fname);
+	return NULL;
 }
 /*======================================
  * make_fname_prompt -- Create prompt line
