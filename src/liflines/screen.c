@@ -1021,6 +1021,7 @@ ask_for_string2 (STRING ttl1, STRING ttl2, STRING prmpt)
 }
 /*========================================
  * ask_yes_or_no -- Ask yes or no question
+ *  ttl:  [IN]  title to display (localized)
  *======================================*/
 BOOLEAN
 ask_yes_or_no (STRING ttl)

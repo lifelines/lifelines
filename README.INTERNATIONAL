@@ -45,4 +45,20 @@ Issues for translators:
   The names of the French Republic months (eg, Vendemiaire) should
   probably stay in French.
 
+ Unfinished internationalization:
+  The internationalization of the program strings is not complete; it may
+  not even be quite 50% complete. It is an ongoing effort.
+
+ printf-style format specifiers (%s and %d):
+  The order of the printf specifiers must be preserved. The glibc extensions
+  to allow reordering these cannot be used, because this will fail on systems
+  without glibc (and if a %s and a %d are reversed, it will crash). For 
+  example,
+    (%s: %d spouse(s), %d child(ren))
+  All translations must have the %s first, then the %d for spouses, then the
+  one for children.
+  If this is a problem in a particular case, please post a message to the
+  LINES-L list. 
+  If the specifiers are %1 and %2, then they may be moved around in order.
+  (These are ones handled specially to allow reordering.)
 

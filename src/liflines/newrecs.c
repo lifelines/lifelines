@@ -81,8 +81,8 @@ add_source (void)
 		message(_(ronlya));
 		return NULL;
 	}
-	str = getoptstr("SOURREC", defsour);
-	return add_record(str, rredit, 'S', cfradd);
+	str = getoptstr("SOURREC", _(defsour));
+	return add_record(str, rredit, 'S', _(cfradd));
 }
 /*==============================================
  * add_event -- Add event to database by editing
@@ -95,8 +95,8 @@ add_event (void)
 		message(_(ronlya));
 		return NULL;
 	}
-	str = getoptstr("EVENREC", defeven);
-	return add_record(str, eredit, 'E', cfeadd);
+	str = getoptstr("EVENREC", _(defeven));
+	return add_record(str, eredit, 'E', _(cfeadd));
 }
 /*====================================================
  * add_other -- Add user record to database by editing
@@ -109,15 +109,15 @@ add_other (void)
 		message(_(ronlya));
 		return NULL;
 	}
-	str = getoptstr("OTHR", defothr);
-	return add_record(str, xredit, 'X', cfxadd);
+	str = getoptstr("OTHR", _(defothr));
+	return add_record(str, xredit, 'X', _(cfxadd));
 }
 /*================================================
  * add_record -- Add record to database by editing
  *  recstr:  [IN] default record
  *  redt:    [IN] re-edit message
  *  ntype,   [IN] S, E, or X
- *  cfrm:    [IN] confirm message
+ *  cfrm:    [IN] confirm message (localized)
  *==============================================*/
 NODE
 add_record (STRING recstr, STRING redt, char ntype, STRING cfrm)
@@ -197,7 +197,7 @@ void
 edit_source (NODE node)
 {
 	edit_record(node, idredt, 'S', rredit, valid_sour_tree,
-	    cfrupt, "SOUR", sour_to_dbase, gdrmod);
+	    _(cfrupt), "SOUR", sour_to_dbase, gdrmod);
 }
 /*=====================================
  * edit_event -- Edit event in database
@@ -206,7 +206,7 @@ void
 edit_event (NODE node)
 {
 	edit_record(node, ideedt, 'E', eredit, valid_even_tree,
-	     cfeupt, "EVEN", even_to_dbase, gdemod);
+	     _(cfeupt), "EVEN", even_to_dbase, gdemod);
 }
 /*===========================================
  * edit_other -- Edit user record in database
@@ -215,7 +215,7 @@ void
 edit_other (NODE node)
 {
 	edit_record(node, idxedt, 'X', xredit, valid_othr_tree,
-	     cfxupt, NULL, othr_to_dbase, gdxmod);
+	     _(cfxupt), NULL, othr_to_dbase, gdxmod);
 }
 /*========================================================
  * write_node_to_editfile - write all parts of gedcom node
@@ -233,17 +233,19 @@ write_node_to_editfile (NODE node)
 }
 /*=======================================
  * edit_record -- Edit record in database
+ *  node1:   [IN]  record to edit (may be NULL)
+ *  idedt:   [IN]  user id prompt
+ *  letr:    [IN]  record type (E, S, or X)
+ *  val:     [IN]  callback to validate routine
+ *  cfrm:    [IN]  confirmation msg string (localized)
+ *  tag:     [IN]  tag (SOUR, EVEN, or NULL)
+ *  todbase: [IN]  callback to write record to dbase
+ *  gdmsg:   [IN]  success message
  *=====================================*/
 void
-edit_record (NODE node1,           /* record to edit, poss NULL */
-             STRING idedt,         /* user id prompt */
-             INT letr,             /* record type: E, S or X */
-             STRING redt,          /* re-edit message */
-             BOOLEAN (*val)(NODE, STRING *, NODE), /* validate routine */
-             STRING cfrm,          /* confirm message */
-             STRING tag,           /* tag */
-             void (*todbase)(NODE),/* write record to dbase */
-             STRING gdmsg)         /* success message */
+edit_record (NODE node1, STRING idedt, INT letr, STRING redt
+	, BOOLEAN (*val)(NODE, STRING *, NODE)
+	, STRING cfrm, STRING tag, void (*todbase)(NODE), STRING gdmsg)
 {
 	TRANTABLE tti = tran_tables[MEDIN];
 	STRING msg, newr, oldr, key;

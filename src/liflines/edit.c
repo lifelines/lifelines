@@ -118,7 +118,7 @@ edit_indi (NODE indi1)  /* may be NULL */
 /* Editing done; see if database changes */
 
 	if (!indi2) return indi1;
-	if (equal_tree(indi1, indi2) || !ask_yes_or_no(cfpupt)) {
+	if (equal_tree(indi1, indi2) || !ask_yes_or_no(_(cfpupt))) {
 		free_nodes(indi2);
 		return indi1;
 	}
@@ -240,7 +240,7 @@ edit_family (NODE fam1) /* may be NULL */
 /* If error or user backs out return */
 
 	if (!fam2) return fam1;
-	if (equal_tree(fam1, fam2) || !ask_yes_or_no(cffupt)) {
+	if (equal_tree(fam1, fam2) || !ask_yes_or_no(_(cffupt))) {
 		free_nodes(fam2);
 		return fam1;
 	}

@@ -41,7 +41,7 @@
 
 #include "llinesi.h"
 
-extern STRING idpdel, cfpdel, cffdel;
+extern STRING idpdel, cfpdel, cffdel, cffdeld;
 extern STRING idfrmv, idfrsp, idfrch;
 extern STRING idcrmv, ntchld, ntprnt, idsrmv, idsrmf, normls, cfcrmv;
 extern STRING okcrmv, ntsinf, ntcinf, cfsrmv, oksrmv, ronlye, idcrmf;
@@ -57,7 +57,7 @@ choose_and_remove_family (void)
 	INDISEQ spseq, chseq;
 	STRING tag, key;
 	char confirm[512], members[64];
-	STRING cfptr=confirm;
+	STRING cfptr=confirm; /* build & localize string */
 	INT cflen=sizeof(confirm);
 
 	fam = ask_for_fam_by_key(idfrmv, idfrsp, idfrch);
@@ -79,9 +79,8 @@ choose_and_remove_family (void)
 	}
 
 	/* build confirm string */
-	sprintf(members, " (%s: %d spouse(s), %d child(ren))", 
-		fam_to_key(fam), ISize(spseq), ISize(chseq));
-	llstrcatn(&cfptr, cffdel, &cflen);
+	sprintf(members, cffdeld, fam_to_key(fam), ISize(spseq), ISize(chseq));
+	llstrcatn(&cfptr, _(cffdel), &cflen);
 	llstrcatn(&cfptr, members, &cflen);
 
 	if (ask_yes_or_no(confirm)) {
@@ -120,7 +119,7 @@ delete_indi (NODE indi, BOOLEAN conf)
 	if (!indi && !(indi = ask_for_indi_old(idpdel, NOCONFIRM, DOASK1)))
 		return;
 	/* confirm if caller desired */
-	if (conf && !ask_yes_or_no(cfpdel)) return;
+	if (conf && !ask_yes_or_no(_(cfpdel))) return;
 
 	/* alright, we finished the UI, so delegate to the internal workhorse */
 	remove_indi(indi);

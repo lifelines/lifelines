@@ -155,16 +155,17 @@ STRING cfpadd = SS "Do you really want to add this person to the database?";
 STRING cffadd = SS "Do you really want to add this family to the database?";
 STRING cfcadd = SS "Do you really want to add this child to the family?";
 STRING cfsadd = SS "Do you really want to add this spouse/parent to the family?";
-STRING cfradd = SS "Do you really want to add this source to the database?";
-STRING cfeadd = SS "Do you really want to add this event to the database?";
-STRING cfxadd = SS "Do you really want to add this record to the database?";
-STRING cfpupt = SS "Do you really want to update this person?";
-STRING cffupt = SS "Do you really want to update this family?";
-STRING cfrupt = SS "Do you really want to update this source?";
-STRING cfeupt = SS "Do you really want to update this event?";
-STRING cfxupt = SS "Do you really want to update this record?";
-STRING cfpdel = SS "Are you sure you want to remove the person from the database?";
-STRING cffdel = SS "Remove this family record ?";
+STRING cfradd = N_("Do you really want to add this source to the database?");
+STRING cfeadd = N_("Do you really want to add this event to the database?");
+STRING cfxadd = N_("Do you really want to add this record to the database?");
+STRING cfpupt = N_("Do you really want to update this person?");
+STRING cffupt = N_("Do you really want to update this family?");
+STRING cfrupt = N_("Do you really want to update this source?");
+STRING cfeupt = N_("Do you really want to update this event?");
+STRING cfxupt = N_("Do you really want to update this record?");
+STRING cfpdel = N_("Are you sure you want to remove the person from the database?");
+STRING cffdel = N_("Remove this family record ?");
+STRING cffdeld= N_( "(%s: %d spouse(s), %d child(ren))");
 STRING cfpmrg = SS "Do you really want to merge these two persons?";
 STRING cffmrg = SS "Do you really want to merge these two families?";
 STRING cfcrmv = SS "Do you really want to remove this child from his/her family?";
@@ -263,9 +264,9 @@ STRING opt2long    = SS "Malformed configuration file: line too long.";
 STRING unsupuni    = SS "Unsupported Unicode format (only UTF-8 is supported).";
 
 /* new records */
-STRING defsour     = SS "0 SOUR\n1 REFN\n1 TITL Title\n1 AUTH Author";
-STRING defeven     = SS "0 EVEN\n1 REFN\n1 DATE\n1 PLAC\n1 INDI\n  2 NAME\n  2 ROLE\n1 SOUR";
-STRING defothr     = SS "0 XXXX\n1 REFN";
+STRING defsour     = N_("0 SOUR\n1 REFN\n1 TITL Title\n1 AUTH Author");
+STRING defeven     = N_("0 EVEN\n1 REFN\n1 DATE\n1 PLAC\n1 INDI\n  2 NAME\n  2 ROLE\n1 SOUR");
+STRING defothr     = N_("0 XXXX\n1 REFN");
 
 /* node.c errors */
 STRING fileof      = SS "The file is as positioned at EOF.";
