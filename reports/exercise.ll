@@ -1,6 +1,6 @@
 /*
  * @progname       exercise
- * @version        0.82 (2001/04/29)
+ * @version        0.83 (2001/05/28)
  * @author         Perry Rapp
  * @category       test
  * @output         mixed
@@ -294,7 +294,7 @@ proc exerciseStrings()
   if (ne(rjustify("heymon",5), "heymo")) {
     call reportfail("rjustify(heymon,5) FAILED")
   }
-  /* eqstr returns bool, which compared to 0 but no other number */
+  /* eqstr returns bool, which may be compared to 0 but no other number */
   if (ne(eqstr("alpha","beta"),0)) {
     call reportfail("eqstr(alpha,beta) FAILED")
   }
@@ -309,5 +309,41 @@ proc exerciseStrings()
   }
   if (ne(strlen("pitch"),5)) {
     call reportfail("strlen(pitch) FAILED")
+  }
+  set(str14,"the cat in the hat put the sack on the rat and the hat on the bat ")
+  if (ne(index(str14,"at",1),6)) {
+    call reportfail("index(str14,at,1) FAILED")
+  }
+  if (ne(index(str14,"at",2),17)) {
+    call reportfail("index(str14,at,2) FAILED")
+  }
+  if (ne(index(str14,"at",3),41)) {
+    call reportfail("index(str14,at,3) FAILED")
+  }
+  if (ne(index(str14,"at",4),53)) {
+    call reportfail("index(str14,at,4) FAILED")
+  }
+  if (ne(index(str14,"at",5),64)) {
+    call reportfail("index(str14,at,5) FAILED")
+  }
+  if (ne(strlen(str14),66)) {
+    call reportfail("strlen(str14) FAILED")
+  }
+  set(str15,strconcat(str14,str14))
+  if (ne(strlen(str15),132)) {
+    call reportfail("strlen(str15) FAILED")
+  }
+  if (ne(index(str15,"at",10),130)) {
+    call reportfail("index(str15,at,10) FAILED")
+  }
+  set(str16,strconcat(str15,str15))
+  if (ne(strlen(str16),264)) {
+    call reportfail("strlen(str16) FAILED")
+  }
+  if (ne(index(str16,"at",20),262)) {
+    call reportfail("index(str16,at,20) FAILED")
+  }
+  if (ne(substring(str16,260,262)," ba")) {
+    call reportfail("substring(str16,260,262) FAILED")
   }
 }

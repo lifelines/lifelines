@@ -4,6 +4,9 @@
 	Fix buffer overflow in substring. Added detail to out-of-memory
 	FATAL in dbverify's allocate.
 
+	* reports/exercise.ll:
+	Added index tests to exercise.ll.
+
 2001-05-27 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog interp/interp.c interp/pvalue.c:
