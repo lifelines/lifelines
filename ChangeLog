@@ -1,3 +1,8 @@
+2001-09-19 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog tools/dbverify.c:
+	Added -a option for all checks.
+
 2001-09-16 Matt Emmerton <memmerto@users.sourceforge.net>
 
 	* ChangeLog tools/dbverify.c:

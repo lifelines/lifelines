@@ -201,6 +201,7 @@ print_usage (void)
 	printf(
 		"usage: dbverify -(flags) <btree>\n"
 		"flags:\n"
+		"\t-a = Perform all checks (does not include fixes)\n"
 		"\t-g = Check for ghosts (names/refns)\n"
 		"\t-G = Check for & fix ghosts (names/refns)\n"
 		"\t-i = Check individuals\n"
@@ -833,6 +834,7 @@ main (int argc,
 	BOOLEAN cflag=FALSE; /* create new db if not found */
 	INT writ=1; /* request write access to database */
 	BOOLEAN immut=FALSE; /* immutable access to database */
+	BOOLEAN allchecks=FALSE; /* if user requested all checks */
 
 	validate_errs();
 
@@ -857,6 +859,7 @@ main (int argc,
 		case 'e': todo.check_evens=TRUE; break;
 		case 'x': todo.check_othes=TRUE; break;
 		case 'n': noisy=TRUE; break;
+		case 'a': allchecks=TRUE; break;
 		default: print_usage(); return (1); 
 		}
 	}
@@ -882,6 +885,13 @@ main (int argc,
 	if (todo.fix_sours) todo.check_sours=TRUE;
 	if (todo.fix_evens) todo.check_evens=TRUE;
 	if (todo.fix_othes) todo.check_othes=TRUE;
+
+	/* all fixes - if any new ones, have to update this */
+	if (allchecks) {
+		todo.check_indis=todo.check_fams=todo.check_sours=TRUE;
+		todo.check_evens=todo.check_othes=TRUE;
+		todo.find_ghosts=TRUE;
+	}
 
 	if (!(bwrite(BTR))) {
 		todo.fix_indis = todo.fix_fams = todo.fix_sours = FALSE;
