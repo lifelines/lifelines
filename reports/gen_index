@@ -23,10 +23,11 @@ while (defined($_=$ARGV[0]) && /^-/) {
     /-h/ && usage();
 }
 
-open OUT,">index.html" or die "Unable to open index.html for output";
+open OUT,">temp.html" or die "Unable to open temp.html for output";
 print_header();
 read_files();
 print_trailer();
+rename("temp.html","index.html");
 
 
 

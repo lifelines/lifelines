@@ -1,3 +1,9 @@
+2003-01-31 Steve Dum
+       * reports/Makefile.am reports/gen_index
+
+       update makefile to use VPATH to complete arguments to gen_index
+       make gen_index not change index.html unless no errors.
+
 2003-01-30 Perry Rapp
 
 	* ChangeLog src/interp/interp.c:
