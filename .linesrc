@@ -4,7 +4,7 @@
 # As are blank lines
 # So all these lines are commented out...
 #
-# 2002/10/21
+# 2002/11/27
 #
 # All variables here are available to report programs
 # via the report language function getproperty, so, for
@@ -40,7 +40,7 @@
 #LLEDITOR=/usr/local/vi
 
 # Path for global translation tables
-#TTDIR=%llroot%/tt
+#TTPATH=%llroot%/tt
 
 # Path for exported translation tables (from a db)
 #LLTTEXPORT=%llroot%/ttdb

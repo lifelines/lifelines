@@ -52,17 +52,17 @@ static CNSTRING f_tags[] = {
  * select_programs -- choose files with the correct extention
  *==========================================================*/
 static int
-select_programs(const struct dirent *entry)
+select_programs (const struct dirent *entry)
 {
 	CNSTRING goodext = ".ll";
 	/* examine end of entry->d_name */
 	CNSTRING entext = entry->d_name + strlen(entry->d_name) - strlen(goodext);
 
 	/* is it what we want ? use platform correct comparison, from path.c */
-	if (path_match(goodext, entext))
-		return 1;
+	if (!path_match(goodext, entext))
+		return 0;
 
-	return 0;
+	return 1;
 }
 /*==========================================================
  * add_program_props -- set properties for programs (parse program file for metainfo)

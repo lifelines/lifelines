@@ -31,7 +31,7 @@
 /* _() is used for normally translated strings */
 #define _(String) gettext(String)
 
-/* TODO: add keyword argument for _pl:2,3 & start using _pl macro */
+/* _pl() is used for strings varying depending on a number, eg "error" vs "errors" */
 #ifdef HAVE_NGETTEXT
 #define _pl(Singular, Plural, Num) ngettext(Singular, Plural, Num) 
 #else

@@ -557,6 +557,10 @@ SOURCE=..\..\..\src\interp\write.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\gedlib\xlat.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\gedlib\xreffile.c
 # End Source File
 # Begin Source File
@@ -768,5 +772,9 @@ SOURCE=..\..\..\src\interp\yacc.h
 SOURCE=..\..\..\src\hdrs\zstr.h
 # End Source File
 # End Group
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\xlat.h
+# End Source File
 # End Target
 # End Project

@@ -48,6 +48,8 @@ typedef struct trantable_s *TRANTABLE;
 
 /* a translation mapping, which may have a TRANTABLE, and may have iconv info */
 typedef struct xlat_s *XLAT;
+
+/* This will go into translat.c when new system is working */
 struct xlat_s {
 	/* All members either NULL or heap-alloc'd */
 	TRANTABLE dbtrantbl; /* mappings embedded in active db */
@@ -56,14 +58,16 @@ struct xlat_s {
 	LIST global_trans; /* list of global mappings */
 	BOOLEAN after; /* do custom transtable after iconv ? */
 	/* NEW 2002-11-25 */
-	CNSTRING src;
-	CNSTRING dest;
+	STRING src;
+	STRING dest;
 	LIST steps;
+	BOOLEAN adhoc;
 };
 
 
 /* Variables */
 
+extern CNSTRING map_names[];
 
 /* Functions */
 
@@ -82,10 +86,16 @@ BOOLEAN translate_write(XLAT, STRING, INT*, FILE*, BOOLEAN);
 
 
 /*
-New system under development 2002-11-25
+New system under development 2002-11-25+
+translat is the frontend, which knows about the various codesets (internal, GUI, ...)
+ uses codesets & xlat
+ xlat is the translation system
+   uses charmaps
 */
-XLAT get_xlat_to_int(CNSTRING codeset);
-BOOLEAN do_xlat(XLAT xlat, ZSTR * pzstr);
-
+XLAT transl_get_xlat_to_int(CNSTRING codeset);
+void transl_load_all_tts(void);
+void transl_load_xlats(void);
+BOOLEAN transl_xlat(XLAT xlat, ZSTR * pzstr);
+XLAT transl_get_predefined_xlat(INT ttnum);
 
 #endif /* _TRANSLAT_H */

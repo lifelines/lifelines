@@ -143,20 +143,22 @@ typedef struct rfmt_s *RFMT;
 #define MDSIN 4
 	/* MINDS: translate internal characters to display */
 #define MINDS 5
+	/* MRPIN: translate report to internal characters */
+#define MRPIN 6
 	/* MINRP: translate internal characters to report */
-#define MINRP 6
+#define MINRP 7
 	/* MSORT: custom sort table, characters to numeric order */
-#define MSORT 7
+#define MSORT 8
 	/* MCHAR: character table (translation result unused) */
-#define MCHAR 8
+#define MCHAR 9
 	/* MLCAS: translate character to lower-case (UNIMPLEMENTED) */
-#define MLCAS 9
+#define MLCAS 10
 	/* MUCAS: translate character to upper-case (UNIMPLEMENTED) */
-#define MUCAS 10
+#define MUCAS 11
 	/* MPREF: prefix to skip for sorting (UNIMPLEMENTED) */
-#define MPREF 11
+#define MPREF 12
 	/* number of maps listed above */
-#define NUM_TT_MAPS 12
+#define NUM_TT_MAPS 13
 
 /* callback for language change */
 typedef void (*uilang_notify_fnc)(void);

@@ -160,6 +160,10 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 
 #endif /* ENABLE_NLS */
 
+	/* read available translation tables */
+	transl_load_all_tts();
+	/* set up translations (for first time, will do it again after loading database */
+	transl_load_xlats();
 
 	/* check if any directories not specified, and try environment
 	variables, and default to "." */

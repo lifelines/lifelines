@@ -52,7 +52,23 @@ typedef struct ltag {
 		}\
 	}
 
-#define ISNULL(k)	(!k || *k == 0)
+
+/* list.c */
+void back_list(LIST, VPTR);
+LIST create_list(void);
+VPTR dequeue_list(LIST);
+BOOLEAN is_empty_list(const LIST);
+void enqueue_list(LIST, VPTR);
+VPTR get_list_element(LIST, INT);
+INT in_list(LIST, VPTR param, BOOLEAN (*func)(VPTR param, VPTR el));
+INT length_list(LIST);
+void make_list_empty(LIST);
+VPTR pop_list(LIST);
+VPTR pop_list_tail(LIST);
+void push_list(LIST, VPTR);
+void remove_list(LIST, void (*func)(VPTR));
+void set_list_element(LIST, INT, VPTR);
+void set_list_type(LIST, INT);
 
 
 #endif /* list_h_included */

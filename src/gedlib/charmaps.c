@@ -26,10 +26,10 @@
  * global/exported variables
  *********************************************/
 
-
-const char *map_keys[NUM_TT_MAPS] = {
+/* TODO: 2002-11-28, this will go away with new system */
+const char *map_keys[] = {
 	"MEDIN", "MINED", "MGDIN", "MINGD",
-	"MDSIN", "MINDS", "MINRP", "MSORT",
+	"MDSIN", "MINDS", "MRPIN", "MINRP", "MSORT",
 	"MCHAR", "MLCAS", "MUCAS", "MPREF"
 };
 
@@ -95,20 +95,6 @@ static INT translate_match(TRANTABLE tt, CNSTRING in, CNSTRING * out);
 
 /* custom translation tables embedded in the database */
 static struct xlat_s trans_maps[NUM_TT_MAPS]; /* init'd by init_charmaps */
-static CNSTRING map_names[] = {
-	"Editor to Internal"
-	,"Internal to Editor"
-	,"GEDCOM to Internal"
-	,"Internal to GEDCOM"
-	,"Display to Internal"
-	,"Internal to Display"
-	,"Internal to Report"
-	,"Custom Sort"
-	,"Custom Charset"
-	,"Custom Lowercase"
-	,"Custom Uppercase"
-	,"Custom Prefix"
-};
 
 /*********************************************
  * local & exported function definitions
@@ -275,7 +261,6 @@ init_charmaps_if_needed (void)
 {
 	/* Check that all tables have all entries */
 	ASSERT(NUM_TT_MAPS == ARRSIZE(trans_maps));
-	ASSERT(NUM_TT_MAPS == ARRSIZE(map_names));
 	ASSERT(NUM_TT_MAPS == ARRSIZE(map_keys));
 
 	memset(&trans_maps, 0, sizeof(trans_maps));
@@ -353,9 +338,10 @@ load_global_char_mapping (void)
 static void
 check_for_user_charmaps (STRING basename, XLAT ttm, CNSTRING mapname)
 {
+	/* TODO; This will go away when new system works--Perry, 2002-11-27 */
 	CNSTRING ttname=0;
 	INT i=1;
-	CNSTRING ttdir = getoptstr("TTDIR", ".");
+	CNSTRING ttdir = getoptstr("TTPATH", ".");
 	if (!ttdir || !ttdir[0])
 		return;
 	for (i=1; TRUE; ++i) {

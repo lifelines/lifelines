@@ -35,8 +35,8 @@
 #include "standard.h"
 
 
-/* This is not the user's codeset! This is the current internal codeset. */
-extern BOOLEAN uu8;
+/* Current internal codeset (the same as that of the loaded database). */
+extern BOOLEAN uu8;         /* flag set if int_codeset is UTF-8 */
 extern STRING  int_codeset;
 
 /* appendstr.c */
@@ -62,22 +62,6 @@ void crash_setdb(STRING dbname);
 /* dirs.c */
 BOOLEAN mkalldirs(STRING);
 
-/* double.c */
-void back_list(LIST, VPTR);
-LIST create_list(void);
-VPTR dequeue_list(LIST);
-BOOLEAN is_empty_list(const LIST);
-void enqueue_list(LIST, VPTR);
-VPTR get_list_element(LIST, INT);
-INT in_list(LIST, VPTR param, BOOLEAN (*func)(VPTR param, VPTR el));
-INT length_list(LIST);
-void make_list_empty(LIST);
-VPTR pop_list(LIST);
-VPTR pop_list_tail(LIST);
-void push_list(LIST, VPTR);
-void remove_list(LIST, void (*func)(VPTR));
-void set_list_element(LIST, INT, VPTR);
-void set_list_type(LIST, INT);
 
 /* environ.c */
 #define PROGRAM_LIFELINES 1

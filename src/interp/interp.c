@@ -1949,8 +1949,8 @@ make_internal_string_node (PACTX pactx, STRING str)
 	if (str && str[0]) {
 		STRING fname = pactx->fullpath;
 		STRING rptcodeset = get_rptfile_prop(pactx, fname, "char_encoding");
-		XLAT xlat = get_xlat_to_int(rptcodeset);
-		do_xlat(xlat, &zstr);
+		XLAT xlat = transl_get_xlat_to_int(rptcodeset);
+		transl_xlat(xlat, &zstr);
 	}
 	node = string_node(pactx, zs_str(zstr));
 	zs_free(&zstr);

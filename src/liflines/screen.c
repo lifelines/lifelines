@@ -2742,13 +2742,17 @@ void
 llvwprintf (STRING fmt, va_list args)
 {
 	UIWINDOW uiwin = stdout_win;
-	WINDOW *win = uiw_win(uiwin);
-	if (!stdout_vis) {
-		clearw();
-		activate_uiwin(uiwin);
+	if (uiwin) {
+		WINDOW *win = uiw_win(uiwin);
+		if (!stdout_vis) {
+			clearw();
+			activate_uiwin(uiwin);
+		}
+		vwprintw(win, fmt, args);
+		wrefresh(win);
+	} else {
+		vprintf(fmt, args);
 	}
-	vwprintw(win, fmt, args);
-	wrefresh(win);
 	/*
 	TO DO
 	It would be nice to add this to the msg list

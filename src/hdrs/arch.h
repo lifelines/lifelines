@@ -92,7 +92,7 @@ int vsnprintf(char *buffer, size_t count, const char *fmt, va_list args);
 #endif /* HAVE_VSNPRINTF */
 
 /* *****************************************************************
- * WIN32/MSVC hacks
+ * Win32/MSVC oddities in file struct
  * ***************************************************************** */
 #ifdef WIN32
 #ifdef _MSC_VER
@@ -102,5 +102,14 @@ int vsnprintf(char *buffer, size_t count, const char *fmt, va_list args);
 #endif
 #endif
 
+/* *****************************************************************
+ * Win32 codepage functions
+ * ***************************************************************** */
+#if defined(_WIN32) || defined(__CYGWIN__)
+int w_get_codepage(void); /* Windows codepage */
+int w_get_oemin_codepage(void); /* Console codepage */
+int w_get_oemout_codepage(void); /* Console output codepage */
+int w_get_has_console(void); /* does process have console ? */
+#endif
 
 #endif /* ARCH_H */

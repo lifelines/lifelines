@@ -12,24 +12,16 @@
  *=========================================================*/
 
 #include "llstdlib.h"
-#ifdef HAVE_LOCALE_H
-# include <locale.h>
-#endif
-#ifdef HAVE_LANGINFO_CODESET
-# include <langinfo.h>
-#else
-# include "langinfz.h"
-#endif
 #include "translat.h"
+#include "xlat.h"
+#include "codesets.h"
 #include "gedcom.h"
 #include "zstr.h"
 #include "icvt.h"
 #include "lloptions.h"
 #include "gedcomi.h"
+#include "arch.h" 
 
-#ifdef max
-#	undef max
-#endif
 
 /*********************************************
  * global/exported variables
@@ -37,16 +29,47 @@
 
 STRING illegal_char = 0;
 
+/* TODO: need to delete map_names in favor of new system */
+CNSTRING map_names[] = {
+	"Editor to Internal"
+	,"Internal to Editor"
+	,"GEDCOM to Internal"
+	,"Internal to GEDCOM"
+	,"Display to Internal"
+	,"Internal to Display"
+	,"Report to Internal"
+	,"Internal to Report"
+	,"Custom Sort"
+	,"Custom Charset"
+	,"Custom Lowercase"
+	,"Custom Uppercase"
+	,"Custom Prefix"
+};
+
 /*********************************************
  * local types
  *********************************************/
 
-/* step of a translation, either iconv_src or trantble is NULL */
-struct xlat_step_s {
-	CNSTRING iconv_src;
-	CNSTRING iconv_dest;
-	TRANTABLE trantbl;
+/* a predefined conversion, such as editor-to-internal */
+struct conversion_s {
+	INT ttnum;
+	CNSTRING name;
+	INT zon_src;
+	INT zon_dest;
+	STRING * src_codeset;
+	STRING * dest_codeset;
 };
+/* a predefined codeset, such as editor */
+struct zone_s {
+	INT znum;
+	CNSTRING name;
+};
+
+/*********************************************
+ * local enums & defines
+ *********************************************/
+
+enum { ZON_X, ZON_INT, ZON_GUI, ZON_EDI, ZON_RPT, ZON_GED, NUM_ZONES };
 
 /*********************************************
  * local function prototypes
@@ -54,14 +77,42 @@ struct xlat_step_s {
 
 /* alphabetical */
 static void global_translate(ZSTR * pzstr, LIST gtlist);
-static XLAT get_xlat(CNSTRING src, CNSTRING dest);
 static ZSTR iconv_trans_ttm(XLAT ttm, ZSTR zin, CNSTRING illegal);
+static void load_conv_array(void);
+
 
 /*********************************************
  * local variables
  *********************************************/
 
-static LIST f_xlats=0;
+struct zone_s zones[] = {
+	{ ZON_X, "Invalid zone" }
+	, { ZON_INT, "Internal codeset" }
+	, { ZON_GUI, "Display codeset" }
+	, { ZON_EDI, "Editor codeset" }
+	, { ZON_RPT, "Report codeset" }
+	, { ZON_GED, "GEDCOM codeset" }
+};
+
+struct conversion_s conversions[] = {
+	{ MEDIN, "Editor to Internal", ZON_EDI, ZON_INT, &editor_codeset_in, &int_codeset }
+	, { MINED, "Internal to Editor", ZON_INT, ZON_EDI, &int_codeset, &editor_codeset_out }
+	, { MGDIN, "GEDCOM to Internal", ZON_GED, ZON_INT, &gedcom_codeset_in, &int_codeset }
+	, { MINGD, "Internal to GEDCOM", ZON_INT, ZON_GED, &int_codeset, &gedcom_codeset_out }
+	, { MDSIN, "Display to Internal", ZON_GUI, ZON_INT, &gui_codeset_in, &int_codeset }
+	, { MINDS, "Internal to Display", ZON_INT, ZON_GUI, &int_codeset, &gui_codeset_out }
+	, { MRPIN, "Report to Internal ", ZON_RPT, ZON_INT, &report_codeset_in, &int_codeset }
+	, { MINRP, "Internal to Report", ZON_INT, ZON_RPT, &int_codeset, &report_codeset_out }
+	/* These are all special-purpose translation tables, and maybe shouldn't even be here ? */
+	, { MSORT, "Custom Sort", ZON_X, ZON_X, 0, 0 }
+	, { MCHAR, "Custom Charset", ZON_X, ZON_X, 0, 0 }
+	, { MLCAS, "Custom Lowercase", ZON_X, ZON_X, 0, 0 }
+	, { MUCAS, "Custom Uppercase", ZON_X, ZON_X, 0, 0 }
+	, { MPREF, "Custom Prefix", ZON_X, ZON_X, 0, 0 }
+};
+
+static INT conv_array[NUM_TT_MAPS];
+
 
 /*********************************************
  * local & exported function definitions
@@ -99,6 +150,11 @@ translate_catn (XLAT ttm, STRING * pdest, CNSTRING src, INT * len)
 ZSTR
 translate_string_to_zstring (XLAT ttm, CNSTRING in)
 {
+	/*
+	TODO: This must go away with the new system
+	2002-11-28
+	Just call xlat_do_xlat(), no ?
+	*/
 	TRANTABLE ttdb = get_dbtrantable_from_tranmapping(ttm);
 	ZSTR zout = zs_newn((unsigned int)(strlen(in)*1.3+2));
 	zs_sets(&zout, in);
@@ -139,6 +195,10 @@ translate_string_to_zstring (XLAT ttm, CNSTRING in)
 static ZSTR
 iconv_trans_ttm (XLAT ttm, ZSTR zin, CNSTRING illegal)
 {
+	/* 
+	TODO: 2002-11-28
+	Move to xlat for use with new system
+	*/
 	CNSTRING dest=ttm->iconv_dest;
 	CNSTRING src = ttm->iconv_src;
 	ZSTR zout=0;
@@ -168,15 +228,15 @@ global_translate (ZSTR * pzstr, LIST gtlist)
 }
 /*===================================================
  * translate_string -- Translate string via XLAT
- *  ttm:   [IN]  tranmapping
- *  in:    [IN]  in string
- *  out:   [OUT] string
- *  max:   [OUT] max len of out string
+ *  ttm:     [IN]  tranmapping
+ *  in:      [IN]  in string
+ *  out:     [OUT] string
+ *  maxlen:  [OUT] max len of out string
  * Output string is limited to max length via use of
  * add_char & add_string.
  *=================================================*/
 void
-translate_string (XLAT ttm, CNSTRING in, STRING out, INT max)
+translate_string (XLAT ttm, CNSTRING in, STRING out, INT maxlen)
 {
 	ZSTR zstr=0;
 	if (!in || !in[0]) {
@@ -184,7 +244,7 @@ translate_string (XLAT ttm, CNSTRING in, STRING out, INT max)
 		return;
 	}
 	zstr = translate_string_to_zstring(ttm, in);
-	llstrncpy(out, zs_str(zstr), max, uu8);
+	llstrsets(out, maxlen, uu8, zs_str(zstr));
 	zs_free(&zstr);
 }
 /*==========================================================
@@ -244,6 +304,7 @@ translate_write(XLAT ttm, STRING in, INT *lenp
 			return(TRUE);
 		}
 		/* translate & write out current line */
+		/* TODO (2002-11-28): modify to use dynamic string */
 		translate_string(ttm, intmp, out, MAXLINELEN+2);
 		ASSERT(fwrite(out, strlen(out), 1, ofp) == 1);
 	}
@@ -253,108 +314,82 @@ translate_write(XLAT ttm, STRING in, INT *lenp
 /*==========================================================
  * get_xlat_to_int -- Get translation to internal codeset
  *  returns NULL if fails
- * Created: 2002/11/25 (Perry Rapp)
+ * Created: 2002/11/28 (Perry Rapp)
  *========================================================*/
 XLAT
-get_xlat_to_int (CNSTRING codeset)
+transl_get_xlat_to_int (CNSTRING codeset)
 {
-	return get_xlat(codeset, int_codeset);
+	return xl_get_xlat(codeset, int_codeset);
 }
 /*==========================================================
- * create_xlat -- Create a new translation
- * (also adds to cache)
- * Created: 2002/11/25 (Perry Rapp)
+ * transl_load_all_tts -- Load internal list of available translation
+ *  tables (based on *.tt files in TTPATH)
+ * Created: 2002/11/28 (Perry Rapp)
  *========================================================*/
-static XLAT
-create_xlat (CNSTRING src, CNSTRING dest)
+void
+transl_load_all_tts (void)
 {
-	/* create & initialize new xlat */
-	XLAT xlat = (XLAT)malloc(sizeof(*xlat));
-	memset(xlat, 0, sizeof(*xlat));
-	xlat->steps = create_list();
-	xlat->src = strsave(src);
-	xlat->dest = strsave(dest);
-	/* add xlat to cache */
-	if (!f_xlats) {
-		f_xlats = create_list();
-	}
-	enqueue_list(f_xlats, xlat);
-	return xlat;
+	CNSTRING ttpath = getoptstr("TTPATH", ".");
+	xl_load_all_tts(ttpath);
 }
 /*==========================================================
- * get_xlat -- Find translation between specified codesets
- *  returns NULL if fails
- * Created: 2002/11/25 (Perry Rapp)
- *========================================================*/
-static XLAT
-get_xlat (CNSTRING src, CNSTRING dest)
-{
-	XLAT xlat=0;
-	
-	if (!src || !src[0] || !dest || !dest[0])
-		return 0;
-
-	/* first check existing cache */
-	if (f_xlats) {
-		XLAT xlattemp;
-		FORLIST(f_xlats, el)
-			xlattemp = (XLAT)el;
-			if (eqstr(xlattemp->src, src) && eqstr(xlattemp->dest, dest)) {
-				return xlattemp;
-			}
-		ENDLIST
-	}
-	/* check if identity */
-	if (eqstr(src, dest)) {
-		/* new empty xlat will work for identity */
-		return create_xlat(src, dest);
-	}
-	/*
-	TODO: 2002-11-25
-	check table of conversions in ttdir
-	*/
-	if (iconv_can_trans(src, dest)) {
-		struct xlat_step_s * xstep = 0;
-		/* create new xlat & fill it out */
-		xlat = create_xlat(src, dest);
-		/* create a single iconv step & fill it out*/
-		xstep = (struct xlat_step_s * )malloc(sizeof(*xstep));
-		xstep->iconv_dest = strsave(dest);
-		xstep->iconv_src = strsave(src);
-		xstep->trantbl = NULL;
-		/* put single iconv step into xlat */
-		enqueue_list(xlat->steps, xstep);
-		return xlat;
-	}
-	return xlat;
-}
-/*==========================================================
- * do_xlat -- Perform a translation on a string
- * Created: 2002/11/25 (Perry Rapp)
+ * xl_do_xlat -- Perform a translation on a string
+ * Created: 2002/11/28 (Perry Rapp)
  *========================================================*/
 BOOLEAN
-do_xlat (XLAT xlat, ZSTR * pzstr)
+transl_xlat (XLAT xlat, ZSTR * pzstr)
 {
-	BOOLEAN cvtd=FALSE;
-	struct xlat_step_s * xstep=0;
-	if (!xlat) return cvtd;
-	/* simply cycle through & perform each step */
-	FORLIST(xlat->steps, el)
-		xstep = (struct xlat_step_s *)el;
-		if (xstep->iconv_src) {
-			/* an iconv step */
-			ZSTR ztemp=0;
-			if (iconv_trans(xstep->iconv_src, xstep->iconv_dest, zs_str(*pzstr), &ztemp, "?")) {
-				cvtd=TRUE;
-				zs_free(pzstr);
-				*pzstr = ztemp;
-			} else { /* iconv failed, so clear it to avoid trying again later */
-				xstep->iconv_src = 0;
-			}
-		} else if (xstep->trantbl) {
-			/* a custom translation table step */
-			custom_translate(pzstr, xstep->trantbl);
-		}
-	ENDLIST
-	return cvtd;
+	return xl_do_xlat(xlat, pzstr);
+}
+/*==========================================================
+ * transl_load_xlats -- Load translations for all regular codesets
+ *  (internal, GUI, ...)
+ * Created: 2002/11/28 (Perry Rapp)
+ *========================================================*/
+void
+transl_load_xlats (void)
+{
+
+	ASSERT(NUM_TT_MAPS == ARRSIZE(map_names));
+	ASSERT(NUM_TT_MAPS == ARRSIZE(conversions));
+	ASSERT(NUM_ZONES == ARRSIZE(zones));
+	ASSERT(NUM_TT_MAPS == ARRSIZE(conv_array));
+
+	load_conv_array();
+}
+/*==========================================================
+ * load_conv_array -- Load up conv_array
+ *  it is used to map a ttnum to a slot in the conversions array
+ * Created: 2002/11/28 (Perry Rapp)
+ *========================================================*/
+static void
+load_conv_array (void)
+{
+	INT i;
+	for (i=0; i<NUM_TT_MAPS; ++i) {
+		conv_array[i] = -1;
+	}
+	for (i=0; i<NUM_TT_MAPS; ++i) {
+		INT ttnum = conversions[i].ttnum;
+		ASSERT(ttnum>=0 && ttnum<NUM_TT_MAPS);
+		ASSERT(conv_array[ttnum]==-1);
+		conv_array[ttnum]=i;
+	}
+	for (i=0; i<NUM_TT_MAPS; ++i) {
+		ASSERT(conv_array[i] >= 0);
+	}
+}
+/*==========================================================
+ * transl_get_predefined_xlat -- Fetch a predefined translation
+ *  eg, MEDIN (editor-to-internal)
+ * Created: 2002/11/28 (Perry Rapp)
+ *========================================================*/
+XLAT
+transl_get_predefined_xlat (INT ttnum)
+{
+	struct conversion_s * conv;
+	ASSERT(ttnum>=0 && ttnum<NUM_TT_MAPS);
+	conv = &conversions[conv_array[ttnum]];
+	/* we could cache these XLATs */
+	return xl_get_xlat(*conv->src_codeset, *conv->dest_codeset);
 }

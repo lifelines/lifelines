@@ -1,5 +1,5 @@
 /* 
-   Copyright (c) 2000-2001 Perry Rapp
+   Copyright (c) 2002 Perry Rapp
    "The MIT license"
    Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
    The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -14,7 +14,7 @@
 #include "llstdlib.h"
 #include "codesets.h"
 #include "lloptions.h"
-#include "platform.h"
+#include "arch.h"
 
 #ifdef HAVE_LANGINFO_CODESET
 # include <langinfo.h>
@@ -69,6 +69,10 @@ init_codesets (void)
 {
 	STRING e;
 #ifndef WIN32
+	/*
+	The Win32 case is special because we care about both Windows & Console
+	codepages, at least when running in console mode.
+	*/
 	char wincs[32];
 	STRING defval = wincs;
 	int n = w_get_codepage();
@@ -81,10 +85,6 @@ init_codesets (void)
 	An alternative would be to use localcharset.c, but it isn't as easy 
 	to use; you have to configure config.aliases. Anyway, I have no idea
 	if anyone needs this.
-	*/
-	/*
-	The Win32 case is special because we care about the Console codepage
-	as distinct from the general Windows one.
 	*/
 #endif
 
@@ -99,7 +99,7 @@ init_codesets (void)
 	if (!e) {
 #ifdef WIN32
 		char temp[32];
-		int cs = w_get_oemout_codepage();
+		int cs = (w_get_has_console() ? w_get_oemout_codepage() : w_get_codepage());
 		sprintf(temp, "CP%d", cs);
 		e = temp;
 #else
@@ -118,7 +118,7 @@ init_codesets (void)
 	if (!e) {
 #ifdef WIN32
 		char temp[32];
-		int cs = w_get_oemin_codepage();
+		int cs = (w_get_has_console() ? w_get_oemin_codepage() : w_get_codepage());
 		sprintf(temp, "CP%d", cs);
 		e = temp;
 #else

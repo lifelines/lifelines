@@ -1,3 +1,20 @@
+2002-11-28 Perry Rapp
+
+	* .linesrc ChangeLog lines.cfg build/msvc6/llines/llinesprj.dsp
+	src/arch/platform.c src/gedlib/Makefile.am
+	src/gedlib/charmaps.c src/gedlib/codesets.c src/gedlib/init.c
+	src/gedlib/translat.c src/hdrs/Makefile.am src/hdrs/arch.h
+	src/hdrs/gedcom.h src/hdrs/list.h src/hdrs/llnls.h
+	src/hdrs/llstdlib.h src/hdrs/standard.h src/hdrs/translat.h
+	src/interp/interp.c src/interp/write.c
+	src/liflines/askprogram.c src/liflines/screen.c
+	*NEW src/gedlib/xlat.c
+	*NEW src/hdrs/xlat.h
+	*DELETED src/hdrs/platform.h:
+
+	Remove platform.h & put decls in arch.h.
+	Make new layered implementation of codesets: translat, codesets, xlat, charmaps.
+
 2002-11-27 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c src/gedlib/translat.c

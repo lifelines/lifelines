@@ -146,10 +146,10 @@ typedef STRING (*TRANSLFNC)(STRING str, INT len);
 #define DIGIT  '0'
 #define ZERO    0
 
+#define ISNULL(k)	(!k || *k == 0)
+
 #include "list.h"
 
-
-#define ISNULL(k)	(!k || *k == 0)
 
 /*
 	ARRSIZE is to make compiler insert size of
