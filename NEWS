@@ -10,6 +10,7 @@ New features added in 3.0.40
 Bug fixes in 3.0.40
 ============================
 - Fixed bug in src/liflines/Makefile.am failing compilation (finding libintl.h)
+- Fixed merge function, which locked up in infinite loop in 3.0.39
 
 New features added in 3.0.39
 ============================

@@ -12,6 +12,12 @@
 
 	Fix strconcat and concat tests on undef (now return "" not null).
 
+	* ChangeLog INSTALL NEWS configure.in build/rpm/lifelines.spec
+	docs/ll-devguide.xml docs/ll-reportmanual.xml
+	docs/ll-userguide.xml src/hdrs/version.h
+
+	Bump version to 3.0.40.
+
 2005-01-12 Perry Rapp
 
 	* ChangeLog src/gedlib/remove.c
