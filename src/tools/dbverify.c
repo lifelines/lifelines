@@ -868,7 +868,7 @@ main (int argc,
 		if (bterrno == BTERR_WRITER) {
 			printf("Database is locked: %s\n", dbname);
 		} else {
-			printf("Could not open database: %s\n", dbname);
+			printf("Could not open database: %s (%d)\n", dbname, bterrno);
 		}
 		return (1);
 	}

@@ -1,3 +1,8 @@
+2001-09-16 Matt Emmerton <memmerto@users.sourceforge.net>
+
+	* ChangeLog tools/dbverify.c:
+	Print bterrno value when database can't be opened.
+
 2001-09-14 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/keytonod.c hdrs/version.h interp/builtin.c
