@@ -68,6 +68,12 @@ Cygwin is a UNIX environment for MS-Windows.
 The lines around the boxes in the lifelines curses GUI use OEM
 box characters, and so only display correctly with this setting:
     export CYGWIN=codepage:oem
+This of course affects the console code page. If all your data is
+ASCII, this solution may work fine for you. Otherwise, you may
+invoke llines with the -z switch to suppress curses graphics, and
+use primitive ASCII graphics. This is ugly, but usable -- we
+welcome suggestions.
+
 
 
 * gcc 2.7.2.1

@@ -51,6 +51,7 @@
 #include "llinesi.h"
 #include "screen.h" /* calling initscr, noecho, ... */
 
+
 #ifdef HAVE_GETOPT
 #ifdef HAVE_GETOPT_H
 #include <getopt.h>
@@ -154,6 +155,7 @@ main (INT argc, char **argv)
 	BOOLEAN exprog=FALSE;
 	STRING exprog_name="";
 	STRING progout=NULL;
+	BOOLEAN graphical=TRUE;
 
 #ifdef HAVE_SETLOCALE
 	setlocale(LC_ALL, "");
@@ -161,7 +163,7 @@ main (INT argc, char **argv)
 
 	/* Parse Command-Line Arguments */
 	opterr = 0;	/* turn off getopt's error message */
-	while ((c = getopt(argc, argv, "adkrwil:fmntc:Fu:yx:o:")) != -1) {
+	while ((c = getopt(argc, argv, "adkrwil:fmntc:Fu:yx:o:z")) != -1) {
 		switch (c) {
 		case 'c':	/* adjust cache sizes */
 			while(optarg && *optarg) {
@@ -249,6 +251,9 @@ main (INT argc, char **argv)
 		case 'o': /* output directory */
 			progout = optarg;
 			break;
+		case 'z': /* nongraphical box */
+			graphical = FALSE;
+			break;
 		case '?':
 			showusage = TRUE;
 			goto usage;
@@ -268,7 +273,7 @@ main (INT argc, char **argv)
 	noecho();
 	set_displaykeys(keyflag);
 	/* initialize curses interface */
-	if (!init_screen())
+	if (!init_screen(graphical))
 		goto finish;
 	/* initialize options & misc. stuff */
 	if (!init_lifelines_global(&msg)) {

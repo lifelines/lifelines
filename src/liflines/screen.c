@@ -262,6 +262,9 @@ static BOOLEAN viewing_msgs = FALSE; /* user is viewing msgs */
 static BOOLEAN lock_std_msg = FALSE; /* to hold status message */
 static UIWINDOW active_uiwin = 0;
 
+static char gr_btee='+', gr_ltee='+', gr_rtee='+', gr_ttee='+';
+static char gr_hline='-', gr_vline= '|';
+static char gr_llx='*', gr_lrx='*', gr_ulx='*', gr_urx='*';
 
 /*********************************************
  * local & exported function definitions
@@ -273,7 +276,7 @@ static UIWINDOW active_uiwin = 0;
  * Created: c. 2000/11, Perry Rapp
  *==========================*/
 int
-init_screen (void)
+init_screen (BOOLEAN graphical)
 {
 	int extralines;
 	INT cols;
@@ -311,6 +314,21 @@ init_screen (void)
 	create_windows();
 	cols = (ll_cols-5)/22; /* # of menu cols to start with */
 	menuitem_initialize(cols);
+
+	if (graphical) {
+		gr_btee = ACS_BTEE;
+		gr_hline = ACS_HLINE;
+		gr_ltee = ACS_LTEE;
+		gr_rtee = ACS_RTEE;
+		gr_ttee = ACS_TTEE;
+		gr_vline = ACS_VLINE;
+		gr_llx = ACS_LLCORNER;
+		gr_lrx = ACS_LRCORNER;
+		gr_ulx = ACS_ULCORNER;
+		gr_urx = ACS_URCORNER;
+	}
+	
+	
 	return 1; /* succeed */
 }
 /*============================
@@ -324,6 +342,16 @@ term_screen (void)
 	menuitem_terminate();
 }
 /*=======================================
+ * draw_win_box -- wrapper for curses box
+ *  handles the case that user didn't want
+ *  curses graphics
+ *=====================================*/
+static void
+draw_win_box (WINDOW * win)
+{
+	wborder(win, gr_vline, gr_vline, gr_hline, gr_hline, gr_ulx, gr_urx, gr_llx, gr_lrx);
+}
+/*=======================================
  * repaint_main_menu --
  *=====================================*/
 static void
@@ -333,7 +361,7 @@ repaint_main_menu (UIWINDOW uiwin)
 	INT row;
 
 	werase(win);
-	box(win, 0, 0);
+	draw_win_box(win);
 	show_horz_line(uiwin, 4, 0, ll_cols);
 	show_horz_line(uiwin, ll_lines-3, 0, ll_cols);
 	wmove(win, 1, 2);
@@ -372,7 +400,7 @@ repaint_footer_menu (INT screen)
 	INT bottom = LINESTOTAL-3; /* 3 rows below menu */
 	INT width = ll_cols;
 	werase(win);
-	box(win, 0, 0);
+	draw_win_box(win);
 	show_horz_line(uiwin, ll_lines-3,  0, ll_cols);
 	if (!menu_enabled)
 		return;
@@ -388,11 +416,11 @@ paint_list_screen (void)
 	WINDOW *win = uiw_win(uiwin);
 	INT row, col;
 	werase(win);
-	box(win, 0, 0);
+	draw_win_box(win);
 	show_horz_line(uiwin, LIST_LINES+1, 0, ll_cols);
 	show_horz_line(uiwin, ll_lines-3, 0, ll_cols);
 	show_vert_line(uiwin, LIST_LINES+1, 52, 15);
-	mvwaddch(win, LIST_LINES+1, 52, ACS_TTEE);
+	mvwaddch(win, LIST_LINES+1, 52, gr_ttee);
 	mvwaddstr(win, LIST_LINES+2, 54, "Choose an operation:");
 	row = LIST_LINES+3; col = 55;
 	mvwaddstr(win, row++, col, "j  Move down list");
@@ -505,9 +533,9 @@ create_windows (void)
 	/* rpt_cset_menu_win is drawn dynamically */
 	/* trans_menu_win is drawn dynamically */
 	/* tt_menu_win is drawn dynamically */
-	box(uiw_win(ask_win), 0, 0);
-	box(uiw_win(ask_msg_win), 0, 0);
-	box(uiw_win(debug_box_win), 0, 0);
+	draw_win_box(uiw_win(ask_win));
+	draw_win_box(uiw_win(ask_msg_win));
+	draw_win_box(uiw_win(debug_box_win));
 }
 /*=================================
  * display_screen -- 
@@ -935,7 +963,7 @@ ask_for_string (STRING ttl, STRING prmpt)
 	WINDOW *win = uiw_win(uiwin);
 	STRING rv, p;
 	werase(win);
-	box(win, 0, 0);
+	draw_win_box(win);
 	mvwaddstr(win, 1, 1, ttl);
 	mvwaddstr(win, 2, 1, prmpt);
 	activate_uiwin(uiwin);
@@ -964,7 +992,7 @@ ask_for_string2 (STRING ttl1, STRING ttl2, STRING prmpt)
 	WINDOW *win = uiw_win(uiwin);
 	STRING rv, p;
 	werase(win);
-	box(win, 0, 0);
+	draw_win_box(win);
 	mvwaddstr(win, 1, 1, ttl1);
 	mvwaddstr(win, 2, 1, ttl2);
 	mvwaddstr(win, 3, 1, prmpt);
@@ -1015,7 +1043,7 @@ ask_for_char (STRING ttl,
 	UIWINDOW uiwin = ask_win;
 	WINDOW *win = uiw_win(uiwin);
 	werase(win);
-	box(win, 0, 0);
+	draw_win_box(win);
 	mvwaddstr(win, 1, 2, ttl);
 	mvwaddstr(win, 2, 2, prmpt);
 	wrefresh(win);
@@ -1035,7 +1063,7 @@ ask_for_char_msg (STRING msg, STRING ttl, STRING prmpt, STRING ptrn)
 	WINDOW *win = uiw_win(uiwin);
 	INT rv;
 	werase(win);
-	box(win, 0, 0);
+	draw_win_box(win);
 	mvwaddstr(win, 1, 2, msg);
 	mvwaddstr(win, 2, 2, ttl);
 	mvwaddstr(win, 3, 2, prmpt);
@@ -1294,7 +1322,7 @@ resize_win: /* we come back here if we resize the window */
 		first=FALSE;
 	}
 	werase(win);
-	box(win, 0, 0);
+	draw_win_box(win);
 	row = ld.rectMenu.top-1;
 	show_horz_line(ld.uiwin, row++, 0, uiw_cols(ld.uiwin));
 	mvwaddstr(win, row, ld.rectMenu.left, menu);
@@ -1403,7 +1431,7 @@ draw_tt_win (STRING prompt)
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 0;
 	werase(win);
-	box(win, 0, 0);
+	draw_win_box(win);
 	row = 1;
 	mvwaddstr(win, row++, 2, prompt);
 	disp_trans_table_choice(uiwin, row++, 4, mn_tt_edin, MEDIN);
@@ -2320,7 +2348,7 @@ resize_win: /* we come back here if we resize the window */
 	activate_popup_list_uiwin(&ld);
 	win = uiw_win(ld.uiwin);
 	werase(win);
-	box(win, 0, 0);
+	draw_win_box(win);
 	row = ld.rectMenu.top-1;
 	show_horz_line(ld.uiwin, row++, 0, uiw_cols(ld.uiwin));
 	mvwaddstr(win, row, ld.rectMenu.left, promptline);
@@ -2448,7 +2476,7 @@ clearw (void)
 	UIWINDOW uiwin = stdout_win;
 	WINDOW *win = uiw_win(uiwin);
 	werase(win);
-	box(uiw_win(stdout_box_win), 0, 0);
+	draw_win_box(uiw_win(stdout_box_win));
 	wmove(win, 0, 0);
 	stdout_vis = TRUE;
 	wrefresh(uiw_win(stdout_box_win));
@@ -2483,10 +2511,10 @@ show_horz_line (UIWINDOW uiwin, INT row, INT col, INT len)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT i;
-	mvwaddch(win, row, col, ACS_LTEE);
+	mvwaddch(win, row, col, gr_ltee);
 	for (i = 0; i < len-2; i++)
-		waddch(win, ACS_HLINE);
-	waddch(win, ACS_RTEE);
+		waddch(win, gr_hline);
+	waddch(win, gr_rtee);
 }
 /*=====================================
  * show_vert_line -- Draw vertical line
@@ -2496,10 +2524,10 @@ show_vert_line (UIWINDOW uiwin, INT row, INT col, INT len)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT i;
-	mvwaddch(win, row++, col, ACS_TTEE);
+	mvwaddch(win, row++, col, gr_ttee);
 	for (i = 0; i < len-2; i++)
-		mvwaddch(win, row++, col, ACS_VLINE);
-	mvwaddch(win, row, col, ACS_BTEE);
+		mvwaddch(win, row++, col, gr_vline);
+	mvwaddch(win, row, col, gr_btee);
 }
 /*=============================================
  * place_cursor -- Move to idle cursor location
@@ -2989,7 +3017,7 @@ repaint_add_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
-	box(win, 0, 0);
+	draw_win_box(win);
 	mvwaddstr(win, row++, 2, mn_add_ttl);
 	mvwaddstr(win, row++, 4, mn_add_indi);
 	mvwaddstr(win, row++, 4, mn_add_fam);
@@ -3006,7 +3034,7 @@ repaint_delete_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
-	box(win, 0, 0);
+	draw_win_box(win);
 	mvwaddstr(win, row++, 2, mn_del_ttl);
 	mvwaddstr(win, row++, 4, mn_del_chil);
 	mvwaddstr(win, row++, 4, mn_del_spou);
@@ -3023,7 +3051,7 @@ repaint_scan_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
-	box(win, 0, 0);
+	draw_win_box(win);
 	mvwaddstr(win, row++, 2, mn_sca_ttl);
 	mvwaddstr(win, row++, 4, mn_sca_nmfu);
 	mvwaddstr(win, row++, 4, mn_sca_nmfr);
@@ -3040,7 +3068,7 @@ repaint_cset_menu (UIWINDOW uiwin)
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
 	werase(win);
-	box(win, 0, 0);
+	draw_win_box(win);
 	mvwaddstr(win, row++, 2, mn_csttl);
 	disp_codeset(uiwin, row++, 4, mn_csintcs, int_codeset);
 	disp_locale(uiwin, row++, 4, mn_csdsploc);
@@ -3068,7 +3096,7 @@ repaint_rpc_menu (UIWINDOW uiwin)
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
 	werase(win);
-	box(win, 0, 0);
+	draw_win_box(win);
 	mvwaddstr(win, row++, 2, mn_csrpttl);
 	disp_locale(uiwin, row++, 4, mn_csrptloc);
 #ifdef HAVE_SETLOCALE
@@ -3104,7 +3132,7 @@ repaint_trans_menu (UIWINDOW uiwin)
 	/*INT mylen = sizeof(line);*/
 	STRING ptr = line;
 	werase(win);
-	box(win, 0, 0);
+	draw_win_box(win);
 	row = 1;
 	mvwaddstr(win, row++, 2, mn_tt_ttl);
 	mvwaddstr(win, row++, 4, mn_tt_edit);
@@ -3127,7 +3155,7 @@ repaint_utils_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
-	box(win, 0, 0);
+	draw_win_box(win);
 	mvwaddstr(win, row++, 2, mn_uttl);
 	mvwaddstr(win, row++, 4, mn_utsave);
 	mvwaddstr(win, row++, 4, mn_utread);
@@ -3148,7 +3176,7 @@ repaint_extra_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
-	box(win, 0, 0);
+	draw_win_box(win);
 	mvwaddstr(win, row++, 2, mn_xttl);
 	mvwaddstr(win, row++, 4, mn_xxbsour);
 	mvwaddstr(win, row++, 4, mn_xxbeven);

@@ -1,3 +1,14 @@
+2002-01-31 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog INSTALL hdrs/interp.h hdrs/screen.h
+	hdrs/win32/curses.h interp/builtin.c interp/date.c
+	liflines/main.c liflines/screen.c tools/dbverify.c win32/mycurses.c:
+
+	Fix __year & __extractdatestr to return 0 for unknown 0, rather
+	than -99999. Add -z option to not use curses graphics. Fix dbverify.c
+	with workaround for gcc 3.0.3 bug.
+
+
 2002-01-27 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog liflines/screen.c:

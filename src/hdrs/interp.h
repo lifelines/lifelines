@@ -196,6 +196,7 @@ extern INT nobuiltins;
 	}
 
 /* GEDCOM dates */
+enum { BAD_YEAR=-99999 };
 struct gdate_s {
 	INT calendar;
 	INT year;

@@ -451,25 +451,37 @@ int mvwgetnstr(WINDOW *wp, int y, int x, char *cp, int n)
 
 int box(WINDOW *wp, chtype v, chtype h)
 {
+	return wborder(wp, v, v, h, h, 0, 0, 0, 0);
+}
+
+int wborder(WINDOW *wp, chtype ls, chtype rs, chtype ts, chtype bs
+	, chtype tl, chtype tr, chtype bl, chtype br)
+{
 	int i;
 
 	wp->_boxed = TRUE;
-	h = ACS_HLINE;
-	v = ACS_VLINE;
+	if (!ls) ls = ACS_VLINE;
+	if (!rs) rs = ACS_VLINE;
+	if (!ts) ts = ACS_HLINE;
+	if (!bs) bs = ACS_HLINE;
+	if (!tl) tl = ACS_ULCORNER;
+	if (!tr) tr = ACS_URCORNER;
+	if (!bl) bl = ACS_LLCORNER;
+	if (!br) br = ACS_LRCORNER;
 	for(i = 0; i < wp->_maxy; i++)
 	{
-		wp->_y[i][0] = v;
-		wp->_y[i][wp->_maxx-1] = v;
+		wp->_y[i][0] = ls;
+		wp->_y[i][wp->_maxx-1] = rs;
 	}
 	for(i = 0; i < wp->_maxx; i++)
 	{
-		wp->_y[0][i] = h;
-		wp->_y[wp->_maxy-1][i] = h;
+		wp->_y[0][i] = ts;
+		wp->_y[wp->_maxy-1][i] = bs;
 	}
-	wp->_y[0][0] = ACS_ULCORNER;
-	wp->_y[0][wp->_maxx-1] = ACS_URCORNER;
-	wp->_y[wp->_maxy-1][0] = ACS_LLCORNER;
-	wp->_y[wp->_maxy-1][wp->_maxx-1] = ACS_LRCORNER;
+	wp->_y[0][0] = tl;
+	wp->_y[0][wp->_maxx-1] = tr;
+	wp->_y[wp->_maxy-1][0] = bl;
+	wp->_y[wp->_maxy-1][wp->_maxx-1] = br;
 	return(0);
 }
 

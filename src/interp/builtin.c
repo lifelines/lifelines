@@ -55,6 +55,12 @@ extern STRING nonvarx,nonstrx,nonintx,nonindx,nonboox;
 extern STRING badargs;
 
 /*********************************************
+ * local function prototypes
+ *********************************************/
+
+static INT normalize_year(INT yr);
+
+/*********************************************
  * local variables
  *********************************************/
 
@@ -2322,6 +2328,17 @@ __date (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return create_pvalue(PSTRING, (VPTR)event_to_date(line, ttr, FALSE));
 }
 /*=====================================================+
+ * normalize_year -- Modify year before returning to report
+ * historical behavior is that 0 is the return for unknown year
+ *====================================================*/
+static INT
+normalize_year (INT yr)
+{
+	if (yr == BAD_YEAR)
+		yr = 0;
+	return yr;
+}
+/*=====================================================+
  * __extractdate -- Extract date from EVENT or DATE NODE
  *   usage: extractdate(NODE, VARB, VARB, VARB) -> VOID
  *====================================================*/
@@ -2365,7 +2382,7 @@ __extractdate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	mod = gdv->date1.mod;
 	da = gdv->date1.day;
 	mo = gdv->date1.month;
-	yr = gdv->date1.year;
+	yr = normalize_year(gdv->date1.year);
 	assign_iden(stab, iident(dvar), create_pvalue(PINT, (VPTR)da));
 	assign_iden(stab, iident(mvar), create_pvalue(PINT, (VPTR)mo));
 	assign_iden(stab, iident(yvar), create_pvalue(PINT, (VPTR)yr));
@@ -2427,7 +2444,7 @@ __extractdatestr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	mod = gdv->date1.mod;
 	da = gdv->date1.day;
 	mo = gdv->date1.month;
-	yr = gdv->date1.year;
+	yr = normalize_year(gdv->date1.year);
 	yrstr = gdv->date1.yearstr;
 	if (!yrstr) yrstr="";
 	assign_iden(stab, iident(modvar), create_pvalue(PINT, (VPTR)mod));
@@ -2707,7 +2724,7 @@ __year (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	gdv = extract_date(str);
 	if (gdv->date1.yearstr && gdv->date1.yearstr[0]) {
 		str = gdv->date1.yearstr;
-	} else if (gdv->date1.year > -99999) {
+	} else if (gdv->date1.year != BAD_YEAR) {
 		snprintf(buff, sizeof(buff), "%d", gdv->date1.year);
 		str = buff;
 	} else

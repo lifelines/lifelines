@@ -869,7 +869,7 @@ extract_date (STRING str)
 	date (with a full period or range, we may finish the
 	first date partway thru) */
 	INT tok, ival;
-	struct nums_s nums = { -99999, -99999, -99999 };
+	struct nums_s nums = { BAD_YEAR, BAD_YEAR, BAD_YEAR };
 	STRING sval;
 	GDATEVAL gdv = create_gdateval();
 	struct gdate_s * pdate = &gdv->date1;
@@ -882,11 +882,11 @@ extract_date (STRING str)
 		case MONTH_TOK:
 			if (!pdate->month) {
 				pdate->month = ival;
-				if (nums.num1 != -99999) {
+				if (nums.num1 != BAD_YEAR) {
 					/* if number before month, it is a day if legal */
-					if (nums.num2 == -99999 && is_valid_day(pdate, nums.num1)) {
+					if (nums.num2 == BAD_YEAR && is_valid_day(pdate, nums.num1)) {
 						pdate->day = nums.num1;
-						nums.num1 = -99999;
+						nums.num1 = BAD_YEAR;
 					} else {
 						mark_freeform(gdv);
 					}
@@ -902,7 +902,7 @@ extract_date (STRING str)
 				mark_invalid(gdv);
 			continue;
 		case YEAR_TOK:
-			if (pdate->year == -99999) {
+			if (pdate->year == BAD_YEAR) {
 				pdate->year = ival;
 				if (sval) /* alphanum year */
 					pdate->yearstr = strdup(sval);
@@ -919,17 +919,17 @@ extract_date (STRING str)
 			analyze_word(gdv, pdate, &nums, ival, &newdate);
 			if (newdate) {
 				analyze_numbers(gdv, pdate, &nums);
-				nums.num1 = nums.num2 = nums.num3 = -99999;
+				nums.num1 = nums.num2 = nums.num3 = BAD_YEAR;
 				pdate = &gdv->date2;
 			}
 			continue;
 		case ICONS_TOK:
 			/* number */
-			if (nums.num1 == -99999)
+			if (nums.num1 == BAD_YEAR)
 				nums.num1 = ival;
-			else if (nums.num2 == -99999)
+			else if (nums.num2 == BAD_YEAR)
 				nums.num2 = ival;
-			else if (nums.num3 == -99999)
+			else if (nums.num3 == BAD_YEAR)
 				nums.num3 = ival;
 			else
 				mark_freeform(gdv);
@@ -1029,8 +1029,8 @@ analyze_word (GDATEVAL gdv, struct gdate_s * pdate, struct nums_s * nums
 			gdv->subtype = GDVP_FROM;
 			break;
 		case GD_TO:
-			if (pdate->day || pdate->month || pdate->year != -99999
-				|| nums->num1 != -99999) {
+			if (pdate->day || pdate->month || pdate->year != BAD_YEAR
+				|| nums->num1 != BAD_YEAR) {
 				/* if we have a date before TO, switch to 2nd date */
 				/* (This is not legal GEDCOM syntax, however */
 				*newdate = TRUE;
@@ -1074,19 +1074,19 @@ analyze_word (GDATEVAL gdv, struct gdate_s * pdate, struct nums_s * nums
 static void
 analyze_numbers (GDATEVAL gdv, struct gdate_s * pdate, struct nums_s * nums)
 {
-	if (nums->num1 == -99999) {
+	if (nums->num1 == BAD_YEAR) {
 		/* if we have no numbers, we're done */
 		return;
 	}
 	/* we have at least 1 number */
-	if (pdate->day && pdate->month && pdate->year != -99999) {
+	if (pdate->day && pdate->month && pdate->year != BAD_YEAR) {
 		/* if we already have day & month & year, we're done */
 		return;
 	}
 	/* we need something */
-	if (nums->num2 == -99999) {
+	if (nums->num2 == BAD_YEAR) {
 		/* if we only have 1 number */
-		if (pdate->year == -99999) {
+		if (pdate->year == BAD_YEAR) {
 			/* if we need year, it is year */
 			set_year(pdate, nums->num1);
 			return;
@@ -1107,7 +1107,7 @@ analyze_numbers (GDATEVAL gdv, struct gdate_s * pdate, struct nums_s * nums)
 	}
 	/* we've exhausted all the reasonably GEDCOM cases */
 	mark_freeform(gdv);
-	if (pdate->month && pdate->year != -99999) {
+	if (pdate->month && pdate->year != BAD_YEAR) {
 		/* if all we need is day, see if it can be day */
 		if (is_valid_day(pdate, nums->num1)) {
 			pdate->day = nums->num1;
@@ -1128,7 +1128,7 @@ analyze_numbers (GDATEVAL gdv, struct gdate_s * pdate, struct nums_s * nums)
 		return;
 	}
 	/* if we get here, we need month */
-	if (pdate->year != -99999) {
+	if (pdate->year != BAD_YEAR) {
 		/* we have year, but not month, and we have at least 2 numbers */
 		/* can we interpret them unambiguously ? */
 		if (is_valid_month(pdate, nums->num1) 
@@ -1151,7 +1151,7 @@ analyze_numbers (GDATEVAL gdv, struct gdate_s * pdate, struct nums_s * nums)
 		return;
 	}
 	/* if we get here, we need month & year */
-	if (nums->num3 == -99999) {
+	if (nums->num3 == BAD_YEAR) {
 		/* we have no month & only two numbers, so only do year */
 		set_year(pdate, nums->num1);
 		return;
@@ -1206,8 +1206,8 @@ create_gdateval (void)
 {
 	GDATEVAL gdv = (GDATEVAL)stdalloc(sizeof(*gdv));
 	memset(gdv, 0, sizeof(*gdv));
-	gdv->date1.year = -99999;
-	gdv->date2.year = -99999;
+	gdv->date1.year = BAD_YEAR;
+	gdv->date2.year = BAD_YEAR;
 	gdv->valid = 1;
 	return gdv;
 
@@ -1307,7 +1307,7 @@ get_date_tok (INT *pival, STRING *psval)
 		return WORD_TOK;
 	}
 	if (chartype(*sstr) == DIGIT) {
-		INT j=-99999, i=0; /* i is year value, j is slash year value */
+		INT j=BAD_YEAR, i=0; /* i is year value, j is slash year value */
 		*pival = *sstr;
 		while (chartype(c = (uchar)(*p++ = *sstr++)) == DIGIT)
 			i = i*10 + c - '0';
@@ -1329,7 +1329,7 @@ get_date_tok (INT *pival, STRING *psval)
 			if (*sstr=='/' || (j != (i+1) % modnum)) {
 				sstr = saves;
 				p = savep;
-				j = -99999;
+				j = BAD_YEAR;
 			}
 		}
 		*--p = 0;
@@ -1339,7 +1339,7 @@ get_date_tok (INT *pival, STRING *psval)
 			return CHAR_TOK;
 		}
 		*pival = i;
-		if (j != -99999) {
+		if (j != BAD_YEAR) {
 			*psval = scratch;
 			return YEAR_TOK;
 		}

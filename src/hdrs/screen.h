@@ -62,6 +62,14 @@
 #	define ACS_VLINE '|'
 #   undef ACS_HLINE
 #	define ACS_HLINE '-'
+#   undef ACS_LLCORNER
+#   define ACS_LLCORNER '*'
+#   undef ACS_LRCORNER
+#   define ACS_LRCORNER '*'
+#   undef ACS_ULCORNER
+#   define ACS_ULCORNER '*'
+#   undef ACS_URCORNER
+#   define ACS_URCORNER '*'
 #endif
 
 
@@ -110,7 +118,7 @@ INT choose_one_from_indiseq(STRING, INDISEQ);
 void clear_hseg(WINDOW *, INT row, INT x1, INT x2);
 void display_screen(INT);
 void dbprintf(STRING, ...);
-int init_screen(void);
+int init_screen(BOOLEAN graphical);
 void main_menu(void);
 STRING message_string (void);
 void paint_main_screen(void);

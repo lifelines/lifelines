@@ -65,6 +65,8 @@ int scrollok(WINDOW *wp, int okay);
 int touchwin(WINDOW *wp);
 int waddch(WINDOW *wp, chtype ch);
 int waddstr(WINDOW *wp, char *cp);
+int wborder(WINDOW *wp, chtype ls, chtype rs, chtype ts, chtype bs
+	, chtype tl, chtype tr, chtype bl, chtype br);
 int wclrtoeol(WINDOW *wp);
 int werase(WINDOW *wp);
 int wgetch(WINDOW *wp);
