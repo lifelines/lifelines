@@ -97,7 +97,6 @@ extern PVALUE __dayformat(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __deat(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __debug(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __decr(PNODE, SYMTAB, BOOLEAN *);
-extern PVALUE __deleteel(PNODE node, SYMTAB stab, BOOLEAN *eflg);
 extern PVALUE __deletefromset(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __dequeue(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __descendentset(PNODE, SYMTAB, BOOLEAN *);

@@ -83,7 +83,6 @@ BUILTINS builtins[] = {
 	{"death",           1,    1,    __deat},
 	{"debug",           1,    1,    __debug},
 	{"decr",            1,    1,    __decr},
-	{"deleteel",        2,    2,    __deleteel},
 	{"deletefromset",   3,    3,    __deletefromset},
 	{"deletenode",      1,    1,    __detachnode},
 	{"dequeue",         1,    1,    __dequeue},

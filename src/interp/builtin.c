@@ -2030,35 +2030,6 @@ __setel (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	set_list_element(list, ind, val, &create_list_value_pvalue);
 	return NULL;
 }
-/*==================================+
- * __deleteel -- Delete nth value from list
- *   usage: deleteel(LIST, INT) -> VOID
- *=================================*/
-PVALUE
-__deleteel (PNODE node, SYMTAB stab, BOOLEAN *eflg)
-{
-	LIST list;
-	INT ind;
-	PNODE arg = (PNODE) iargs(node);
-	PVALUE val = eval_and_coerce(PLIST, arg, stab, eflg);
-	if (*eflg || !val || ptype(val) != PLIST) {
-		*eflg = TRUE;
-		prog_error(node, nonlstx, "deleteel", "1");
-		return NULL;
-	}
-	list = pvalue_to_list(val);
-	delete_pvalue(val);
-	val = eval_and_coerce(PINT, inext(arg), stab, eflg);
-	if (*eflg || !val || ptype(val) != PINT) {
-		*eflg = TRUE;
-		prog_error(node, nonintx, "deleteel", "2");
-		return NULL;
-	}
-	ind = pvalue_to_int(val);
-	delete_pvalue(val);
-	delete_list_element(list, ind, &delete_vptr_pvalue);
-	return NULL;
-}
 /*===============================+
  * __length -- Find length of list
  *   usage: length(LIST) -> INT

@@ -9,6 +9,11 @@
 	Disable dolock_node_in_cache (as it is causing cache overflow
 	for at least one user).
 
+	* ChangeLog src/interp/builtin.c src/interp/functab.c
+	src/interp/interpi.h
+
+	Remove deleteel function.
+
 2003-03-06 Steve Dum
 
 	* ChangeLog docs/Makefile.am
