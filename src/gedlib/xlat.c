@@ -529,7 +529,7 @@ free_dyntts (void)
 			STRING key;
 			while (next_table_ptr(&tabit, &key, &ptr)) {
 				DYNTT dyntt = (DYNTT)ptr;
-				zero_dyntt((DYNTT)ptr);
+				zero_dyntt(dyntt);
 			}
 		}
 		remove_table(f_dyntts, FREEBOTH);
@@ -606,7 +606,7 @@ xl_set_name (XLAT xlat, CNSTRING name)
 ZSTR
 xlat_get_description (XLAT xlat)
 {
-	INT count=0, iconv_count=0;
+	INT count=0;
 	ZSTR zrtn=0;  /* final string to return */
 	ZSTR zstr=0; /* string with details of iconv conversions */
 	char stepcount[32];

@@ -10,6 +10,10 @@
 
 	Add files for html subcoding (for output html reports).
 
+	* ChangeLog src/gedlib/xlat.c:
+
+	Cleanup warnings.
+
 2002-12-15 Perry Rapp
 
 	* ChangeLog src/gedlib/codesets.c src/gedlib/init.c
