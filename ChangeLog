@@ -24,6 +24,23 @@
 	Implemented use of local translation tables if iconv missing.
 	Created some common translation tables; enough to pass st_convert.
 
+	* ChangeLog
+	*NEW reports/st/st_all.ll
+	*NEW reports/st/st_aux.ll
+	*NEW reports/st/st_collate.ll
+	*NEW reports/st/st_collate_8859-1.ll
+	*NEW reports/st/st_collate_UTF-8.ll
+	*NEW reports/st/st_convert.ll
+	*NEW reports/st/st_date.ll
+	*NEW reports/st/st_db.ll
+	*NEW reports/st/st_number.ll
+	*NEW reports/st/st_string.ll
+	*DELETED reports/exer_8859-1.ll
+	*DELETED reports/exer_UTF-8.ll
+	*DELETED reports/exercise.ll:
+
+	New self-test reports.
+
 2002-11-29 Perry Rapp
 
 	* ChangeLog src/gedlib/codesets.c src/gedlib/init.c

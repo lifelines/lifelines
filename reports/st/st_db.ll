@@ -1,0 +1,294 @@
+/*
+ * @version        1.0
+ * @author         Perry Rapp
+ * @category       self-test
+ * @output         none
+ * @description    exercise some database functions
+ 
+ Dumps some of each type of record, followed by a gengedcomstrong
+*/
+
+char_encoding("ASCII")
+
+require("lifelines-reports.version:1.3")
+option("explicitvars") /* Disallow use of undefined variables */
+include("st_aux")
+
+global(dead)
+global(cutoff_yr)
+
+/* entry point in case not invoked via st_all.ll */
+proc main()
+{
+	call exerciseDb()
+}
+
+proc exerciseDb()
+{
+
+	"database: " database() nl()
+	"version: " version() nl()
+
+	set(cutoff_yr, 1900) /* assume anyone born before this is dead */
+
+	set(N, 5) /* output this many of each type of record */
+
+	set(living,0)
+	set(dead,0)
+
+	/* count up # of living & dead indis, and output first N of each */
+	nl() nl() "*** PERSONS ***" nl() nl()
+	indiset(iset)
+	forindi (person, pnum) 
+	{
+		/* exercise indi stuff with the first person */
+		if (lt(add(living,dead),1)) 
+		{
+			call exerciseIndi(person)
+		}
+		/* output the first N living & first N dead people */
+		if (isLivingPerson(person)) 
+		{
+			set(living,add(living,1))
+			if (lt(living,N)) 
+			{
+				call outputLivingIndi(person)
+				addtoset(iset,person,1)
+			}
+		}
+		else
+		{
+			set(dead,add(dead,1))
+			if (lt(dead,N)) 
+			{
+				call outputRec(person)
+				addtoset(iset,person,0)
+			}
+		}
+	}
+	nl() "Live INDI: " d(living) nl()
+	"Dead INDI: " d(dead) nl()
+
+	set(living,0)
+	set(dead,0)
+	/* count up # of living & dead fams, and output first N of each */
+
+	nl() nl() "*** FAMILIES ***" nl() nl()
+	forfam (fam, fnum)
+	{
+		/* output the first N living & first N dead families */
+		if (isLivingFam(fam)) 
+		{
+			set(living,add(living,1))
+			if (lt(living,N)) 
+			{
+				call outputLivingFam(fam)
+			}
+		}
+		else 
+		{
+			set(dead,add(dead,1))
+			if (lt(dead,N)) 
+			{
+				call outputRec(fam)
+			}
+		}
+	}
+	nl() "Live FAM: " d(living) nl()
+	"Dead FAM: " d(dead) nl()
+
+	nl() nl() "*** SOURCES ***" nl() nl()
+	forsour (sour,snum) 
+	{
+		if (lt(snum,N)) 
+		{
+			call outputRec(sour)
+		}
+	}
+	
+	nl() nl() "*** EVENTS ***" nl() nl()
+	foreven (even,enum) 
+	{
+		if (lt(enum,N)) 
+		{
+			call outputRec(even)
+		}
+	}
+
+	nl() nl() "*** OTHERS ***" nl() nl()
+	forothr (othr,onum) 
+	{
+		if (lt(onum,N)) 
+		{
+			call outputRec(othr)
+		}
+	}
+
+	nl() nl() "*** GENGEDCOMSTRONG *** " nl() nl()
+	gengedcomstrong(iset)
+}
+
+/* Output entire record, except filter out SOUR & NOTE sections */
+proc outputRec(record)
+{
+	traverse (root(record), node, level) 
+	{
+		if (or(eq(level,0),and(ne(tag(node),"SOUR"),ne(tag(node),"NOTE")))) 
+		{
+			d(level) " " xref(node) " " tag(node) " " value(node)
+			nl()
+		}
+	}
+}
+
+proc outputLivingIndi(indi)
+{
+	"0 @" key(indi) "@ INDI" nl()
+	"1 NAME " fullname(indi,0,1,50) nl()
+	fornodes(inode(indi), node) 
+	{
+		if (isFamilyPtr(node)) 
+		{
+			"1 " xref(node) " " tag(node) " " value(node)
+			nl()
+		}
+	}
+}
+
+proc outputLivingFam(fam)
+{
+	"0 @" key(fam) "@ FAM" nl()
+	fornodes(root(fam), node) 
+	{
+		if (isMemberPtr(node)) 
+		{
+			"1 " xref(node) " " tag(node) " " value(node)
+			nl()
+		}
+	}
+}
+
+func isLivingFam(fam)
+{
+	fornodes(root(fam), node) 
+	{
+		if (isMemberPtr(node)) 
+		{
+			if (isLivingPerson(indi(value(node)))) { return (1) }
+		}
+	}
+	return (0)
+}
+
+func isLivingPerson(indi)
+{
+	if (death(indi)) { return (0) }
+	if (birth(indi)) 
+	{
+		extractdate(birth(indi),day,mon,yr)
+		if (and(gt(yr,300),lt(yr,cutoff_yr))) { return (0) }
+	}
+	return (1)
+}
+
+
+func isFamilyPtr (node) 
+{
+	if (eq(tag(node),"FAMC")) { return (1) }
+	if (eq(tag(node),"FAMS")) { return (1) }
+	return (0)
+}
+
+func isMemberPtr (node) 
+{
+	if (eq(tag(node),"HUSB")) { return (1) }
+	if (eq(tag(node),"WIFE")) { return (1) }
+	if (eq(tag(node),"CHIL")) { return (1) }
+	return (0)
+}
+
+/* Uses a lot of function calls */
+proc exerciseIndi(indi)
+{
+	list(lst)
+	set(em, empty(lst))
+	enqueue(lst, indi)
+	push(lst, father(indi))
+	requeue(lst, mother(indi))
+	set(junk,pop(lst))
+	setel(lst, 1, nextsib(indi))
+	forlist(lst, el, count)
+	{
+		name(el) " " d(count) nl()
+	}
+	table(tbl)
+	insert(tbl, "bob", indi)
+	set(thing, lookup(tbl, "bob"))
+	indiset(iset)
+	addtoset(iset,indi,"bob")
+	set(iset,union(iset,parentset(iset)))
+	addtoset(iset,indi,"jerry")
+	addtoset(iset,father(indi), "dad")
+	addtoset(iset,mother(indi), "mom")
+	addtoset(iset,nextsib(indi), "bro")
+	spouses(indi,spouse,fam,num)
+	{
+		addtoset(iset,spouse,fam)
+		"spouse: " fullname(spouse, true, true, 20) nl()
+	}
+	families(indi,fam,spouse,num)
+	{
+		addtoset(iset,spouse,num)
+		"family: " key(fam) nl()
+	}
+	addtoset(iset,nextindi(indi),"next")
+	addtoset(iset,previndi(indi),"prev")
+	set(p,99)
+	"name: " name(indi) nl()
+	"title: " title(indi) nl()
+	"key: " key(indi) nl()
+	parents(indi) nl()
+	"fullname(12): " fullname(indi,true,true,12) nl()
+	"surname: " surname(indi) nl()
+	"givens: " givens(indi) nl()
+	"trimname(8): " trimname(indi,8) nl()
+	lock(indi)
+	call dumpnode("birth", birth(indi))
+	call dumpnodetr("death", death(indi))
+	unlock(indi)
+}
+
+proc dumpnode(desc, node)
+{
+	if (node)
+	{
+		desc ": " xref(node) " " tag(node) " " value(node)
+		fornodes(node, child)
+		{
+			call dumpnode2(child)
+		}
+	}
+}
+
+proc dumpnode2(node)
+{
+	xref(node) " " tag(node) " " value(node)
+	fornodes(node, child)
+	{
+		call dumpnode2(child)
+	}
+}
+
+proc dumpnodetr(desc, node)
+{
+	if (node)
+	{
+		desc ": " xref(node) " " tag(node) " " value(node) nl()
+		traverse(node, child,lvl)
+		{
+			xref(node) " " tag(node) " " value(node) nl()
+		}
+	}
+}
+
+

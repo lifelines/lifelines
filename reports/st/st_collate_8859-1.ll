@@ -1,16 +1,11 @@
 /*
- * @progname       exer_8859-1
- * @version        0.03 (2002/11/16)
+ * @version        1.0
  * @author         Perry Rapp
- 
  * @category       test
-
  * @output         mixed
 
- * @description    8859-1 subset of exercise.ll tests
-
+ * @description    some collation tests written in ISO-8859-1 (Latin-1)
 */
-
 
 char_encoding("ISO-8859-1") 
 

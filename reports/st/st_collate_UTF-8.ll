@@ -1,18 +1,10 @@
 ﻿/*
- * @progname       exer_UTF-8
- * @version        0.3 (2002/11/16)
+ * @version        1.0
  * @author         Perry Rapp
- 
- * @category       test
-
- * @output         mixed
-
- * @description    UTF-8 subset of exercise.ll tests.
-
-
+ * @category       self-test
+ * @output         none
+ * @description    some collation tests written in UTF-8
 */
-
-
 
 char_encoding("UTF-8")
 

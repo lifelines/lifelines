@@ -1,0 +1,254 @@
+/*
+ * @version        1.0
+ * @author         Perry Rapp
+ * @category       self-test
+ * @output         none
+ * @description    validate string functions
+*/
+
+char_encoding("ASCII")
+
+require("lifelines-reports.version:1.3")
+option("explicitvars") /* Disallow use of undefined variables */
+include("st_aux")
+
+global(undef) /* variable with no set value, used in string tests */
+
+/* entry point in case not invoked via st_all.ll */
+proc main()
+{
+	call testStrings()
+}
+
+/*
+ test some string functions against defined & undefined strings
+  */
+proc testStrings()
+{
+	call initSubsection()
+
+	set(str,"hey")
+	set(str2,upper(str))
+	if (ne(str2,"HEY")) {
+		call reportfail("upper FAILED")
+	}
+	else { incr(testok) }
+
+	set(str4,capitalize(str))
+	if (ne(str4,"Hey")) {
+		call reportfail("capitalize FAILED")
+	}
+	else { incr(testok) }
+
+	set(str4,titlecase(str))
+	if (ne(str4,"Hey")) {
+		call reportfail("titlecase FAILED")
+	}
+	else { incr(testok) }
+
+	set(str6,concat(str2,str4))
+	if (ne(str6,"HEYHey")) {
+		call reportfail("concat FAILED")
+	}
+	else { incr(testok) }
+
+	set(str3,upper(undef))
+	set(str5,capitalize(undef))
+	set(str5,titlecase(undef))
+	set(str7,concat(str3,str5))
+	if (ne(str7,undef)) {
+		call reportfail("concat FAILED on undefs")
+	}
+	else { incr(testok) }
+
+	set(str7,strconcat(str3,str5))
+	if (ne(str7,undef)) {
+		call reportfail("strconcat FAILED on undefs")
+	}
+	else { incr(testok) }
+
+	set(str8,lower(str4))
+	if (ne(str8,"hey")) {
+		call reportfail("lower FAILED")
+	}
+	else { incr(testok) }
+
+	set(str9,lower(undef))
+	if (ne(str9,undef)) {
+		call reportfail("lower FAILED on undef")
+	}
+	else { incr(testok) }
+
+	set(str10,alpha(3))
+	if(ne(str10,"c")) {
+		call reportfail("alpha(3) FAILED")
+	}
+	else { incr(testok) }
+
+	set(str10,roman(4))
+	if(ne(str10,"iv")) {
+		call reportfail("roman(4) FAILED")
+	}
+	else { incr(testok) }
+
+	set(str11,d(43))
+	if(ne(str11,"43")) {
+		call reportfail("d(43) FAILED")
+	}
+	else { incr(testok) }
+
+	set(str12,card(4))
+	if(ne(str12,"four")) {
+		call reportfail("card(4) FAILED")
+	}
+	else { incr(testok) }
+
+	set(str13,ord(5))
+	if(ne(str13,"fifth")) {
+		call reportfail("ord(5) FAILED")
+	}
+	else { incr(testok) }
+
+	set(str14,titlecase("big  brown 1mean horse"))
+	if(ne(str14,"Big  Brown 1mean Horse")) {
+		call reportfail("titlecase FAILED")
+	}
+	else { incr(testok) }
+
+	if (ge(strcmp("alpha","beta"),0)) {
+		call reportfail("strcmp(alpha,beta) FAILED")
+	}
+	else { incr(testok) }
+
+	if (le(strcmp("gamma","delta"),0)) {
+		call reportfail("strcmp(gamma,delta) FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(strcmp("zeta","zeta"),0)) {
+		call reportfail("strcmp(zeta,zeta) FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(strcmp(undef,""),0)) {
+		call reportfail("strcmp(undef,) FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(substring("considerable",2,4),"ons")) {
+		call reportfail("substring(considerable,2,4) FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(substring(undef,2,4),0)) {
+		call reportfail("substring(undef,2,4) FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(rjustify("hey",5), "  hey")) {
+		call reportfail("rjustify(hey,5) FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(rjustify("heymon",5), "heymo")) {
+		call reportfail("rjustify(heymon,5) FAILED")
+	}
+	else { incr(testok) }
+
+	/* eqstr returns bool, which may be compared to 0 but no other number */
+	if (ne(eqstr("alpha","beta"),0)) {
+		call reportfail("eqstr(alpha,beta) FAILED")
+	}
+	else { incr(testok) }
+
+	if (not(eqstr("alpha","alpha"))) {
+		call reportfail("eqstr(alpha,alpha) FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(strtoint("4"), 4)) {
+		call reportfail("strtoint(4) FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(strsoundex("pat"),strsoundex("pet"))) {
+		call reportfail("soundex(pat) FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(strlen("pitch"),5)) {
+		call reportfail("strlen(pitch) FAILED")
+	}
+	else { incr(testok) }
+
+	set(str14,"the cat in the hat put the sack on the rat and the hat on the bat ")
+	if (ne(index(str14,"at",1),6)) {
+		call reportfail("index(str14,at,1) FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(index(str14,"at",2),17)) 
+	{
+		call reportfail("index(str14,at,2) FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(index(str14,"at",3),41)) 
+	{
+		call reportfail("index(str14,at,3) FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(index(str14,"at",4),53)) 
+	{
+		call reportfail("index(str14,at,4) FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(index(str14,"at",5),64)) 
+	{
+		call reportfail("index(str14,at,5) FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(strlen(str14),66)) 
+	{
+		call reportfail("strlen(str14) FAILED")
+	}
+	else { incr(testok) }
+
+	set(str15,strconcat(str14,str14))
+	if (ne(strlen(str15),132)) 
+	{
+		call reportfail("strlen(str15) FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(index(str15,"at",10),130)) 
+	{
+		call reportfail("index(str15,at,10) FAILED")
+	}
+	else { incr(testok) }
+
+	set(str16,strconcat(str15,str15))
+	if (ne(strlen(str16),264)) 
+	{
+		call reportfail("strlen(str16) FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(index(str16,"at",20),262)) 
+	{
+		call reportfail("index(str16,at,20) FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(substring(str16,260,262)," ba")) 
+	{
+		call reportfail("substring(str16,260,262) FAILED")
+	}
+	else { incr(testok) }
+
+    call reportSubsection("string tests")
+}
+

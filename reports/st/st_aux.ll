@@ -1,0 +1,69 @@
+/*
+ * @version        1.0
+ * @author         Perry Rapp
+ * @category       self-test
+ * @output         none
+ * @description    auxiliary functions for all self-test modules
+*/
+
+/* This file is all ASCII, so we don't need to choose a codeset */
+char_encoding("ASCII")
+
+require("lifelines-reports.version:1.3")
+option("explicitvars") /* Disallow use of undefined variables */
+
+
+global(testok)
+global(testfail)
+global(testskip)
+global(logout)
+global(section)
+
+/* report failure to screen, & to file if logging */
+proc reportfail(str)
+{
+	if (gt(strlen(section),0)) {
+		print(concat(section, nl()))
+	}
+	print(str)
+	print(nl())
+	if (logout) {
+		if (gt(strlen(section),0)) {
+			section nl()
+		}
+		str nl()
+	}
+	set(section,"")
+	incr(testfail)
+}
+
+/* clear counters at start of subsection */
+proc initSubsection()
+{
+	set(testok, 0)
+	set(testfail, 0)
+	set(testskip, 0)
+}
+
+/* report results of just completed subsectioin (testok...) */
+proc reportSubsection(title)
+{
+	set(res, concat("Passed ", d(testok), "/", d(add(testok,testfail)), " "))
+	if (gt(testskip, 0)) {
+		set(res, concat(res, "(skipped ", d(testskip), ") "))
+	}
+	set(res, concat(res, title, "\n"))
+	print(res)
+	set(testok, 0)
+	set(testfail, 0)
+}
+
+func set_and_check_locale(locstr, locname)
+{
+	set(res, setlocale(locstr))
+	if (nestr(res, "C")) {
+		return(1)
+	}
+	call reportfail(concat("Locale missing: ", locstr, " (", locname, ")"))
+	return (0)
+}

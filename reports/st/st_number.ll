@@ -1,0 +1,178 @@
+/*
+ * @version        1.0
+ * @author         Perry Rapp
+ * @category       self-test
+ * @output         none
+ * @description    validate numeric functions
+*/
+
+char_encoding("ASCII")
+
+require("lifelines-reports.version:1.3")
+option("explicitvars") /* Disallow use of undefined variables */
+include("st_aux")
+
+/* entry point in case not invoked via st_all.ll */
+proc main()
+{
+	call testNums()
+}
+
+/*
+ test some numeric functions 
+ */
+proc testNums()
+{
+	set(testok, 0)
+	set(testfail, 0)
+
+	set(one,1)
+	set(two,add(one,one))
+	if (ne(two,2)) {
+		call reportfail("1+1 FAILED")
+	}
+	else { incr(testok) }
+
+	if (eq(two,one)) {
+		call reportfail("1==2 FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(add(two,two,two,two,two),10)) {
+		call reportfail("2+2+2+2+2 FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(sub(two,one),1)) {
+		call reportfail("2-1 FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(sub(890,30),860)) {
+		call reportfail("890-30 FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(mul(3,4),12)) {
+		call reportfail("3*4 FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(mul(3,-4),-12)) {
+		call reportfail("3*(-4) FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(mul(-3,-4),12)) {
+		call reportfail("(-3)*(-4) FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(mul(.5,.5),.25)) {
+		call reportfail(".5*.5 FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(mul(2,.5),1)) {
+		call reportfail("2*.5 FAILED")
+	}
+	else { incr(testok) }
+
+	if (gt(.5, .7)) {
+		call reportfail(".5>.7 FAILED")
+	}
+	else { incr(testok) }
+
+	if (lt(-.4,-.5)) {
+		call reportfail("-.4<-.5 FAILED")
+	}
+	else { incr(testok) }
+
+	if (ge(15,18)) {
+		call reportfail("15>=18 FAILED")
+	}
+	else { incr(testok) }
+
+	if (le(-.4,-.5)) {
+		call reportfail("-.4<=-.5 FAILED")
+	}
+	else { incr(testok) }
+
+	if (not(le(-.4,-.4))) {
+		call reportfail("-.4<=-.4 FAILED")
+	}
+	else { incr(testok) }
+
+	if (not(le(-1,-.4))) {
+		call reportfail("-1<=-.4 FAILED")
+	}
+	else { incr(testok) }
+
+	if (not(le(-1.1,-1))) {
+		call reportfail("-1.1<=-1 FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(div(20, 4), 5)) {
+		call reportfail("20/4==5 FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(mod(22, 7), 1)) {
+		call reportfail("22 % 7==1 FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(exp(2, 10), 1024)) {
+		call reportfail("2 ^10 ==1024 FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(exp(.5, 2), .25)) {
+		call reportfail(".5 ^2 ==.25 FAILED")
+	}
+	else { incr(testok) }
+
+	set(bubba,34)
+	incr(bubba)
+	if (ne(bubba,35)) {
+		call reportfail("incr(34) == 35 FAILED")
+	}
+	else { incr(testok) }
+
+	set(bubba,45)
+	decr(bubba)
+	if (ne(bubba,44)) {
+		call reportfail("decr(45) == 44 FAILED")
+	}
+	else { incr(testok) }
+
+	set(bubba,45.3)
+	decr(bubba)
+	if (ne(bubba,44.3)) {
+		call reportfail("decr(45.3) == 44.3 FAILED")
+	}
+	else { incr(testok) }
+
+	set(bubba,34.3)
+	incr(bubba)
+	if (ne(bubba,35.3)) {
+		call reportfail("incr(34.3) == 35.3 FAILED")
+	}
+	else { incr(testok) }
+
+	set(bubba,45.6)
+	decr(bubba)
+	if (ne(bubba,44.6)) {
+		call reportfail("decr(45.6) == 44.6 FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(neg(52), -52)) {
+		call reportfail("neg(52) == -52 FAILED")
+	}
+	else { incr(testok) }
+
+    call reportSubsection("number tests")
+}
+

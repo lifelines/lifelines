@@ -1,0 +1,62 @@
+/*
+ * @version        1.0
+ * @author         Perry Rapp
+ * @category       self-test
+ * @output         none
+ * @description    validate collation
+*/
+
+char_encoding("ASCII")
+
+require("lifelines-reports.version:1.3")
+option("explicitvars") /* Disallow use of undefined variables */
+include("st_aux")
+include("st_collate_UTF-8")
+include("st_collate_8859-1")
+
+/* entry point in case not invoked via st_all.ll */
+proc main()
+{
+	call testCollate()
+}
+
+proc testCollate()
+{
+	call initSubsection()
+	call testCollate_UTF_8()
+	call testCollate_8859_1()
+	call reportSubsection("collate tests")
+}
+
+proc check_collate2(str1, str2)
+{
+	if (ge(strcmp(str1,str2),0)) {
+		/* str1 might be of the form string:[name] */
+		set(str1nam, str1)
+		set(i1, index(str1, ":", 1))
+		if (gt(i1,0)) {
+			set(str1nam, substring(str1, add(i1,1), strlen(str1)))
+			set(str1, substring(str1, 1, sub(i1,1)))
+		}
+		/* str2 might be of the form string:[name] */
+		set(str2nam, str2)
+		set(i2, index(str2, ":", 1))
+		if (gt(i2,0)) {
+			set(str2nam, substring(str2, add(i2,1), strlen(str2)))
+			set(str2, substring(str2, 1, sub(i2,1)))
+		}
+		set(fstr, concat("strcmp(", str1nam,",",str2nam,") FAILED"))
+		call reportfail(fstr)
+	} else { incr(testok) }
+}
+proc check_collate3(str1, str2, str3)
+{
+	call check_collate2(str1, str2)
+	call check_collate2(str2, str3)
+}
+
+proc set_section(name)
+{
+	set(section, name)
+}
+
