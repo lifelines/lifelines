@@ -123,5 +123,5 @@ crash_setdb (STRING dbname)
 {
 	if (!dbname)
 		dbname = "";
-	llstrncpy(f_currentdb, dbname, 0, sizeof(f_currentdb));
+	llstrncpy(f_currentdb, dbname, sizeof(f_currentdb), 0);
 }

@@ -429,6 +429,13 @@ getrecord (BTREE btree, RKEY rkey, INT *plen)
 			nfkey = fkeys(index, i);
 		}
 		index = getindex(btree, nfkey);
+		/* should never revisit the master node */
+		if (ixself(index) == ixself(bmaster(btree))) {
+			char msg[400];
+			sprintf(msg, _("Btree lookup looped back to master (%d)!"), ixself(index));
+
+			FATAL2(msg);
+		}
 	}
 
 /* Found block that may hold record - search for key */

@@ -1,3 +1,10 @@
+2003-03-16 Perry Rapp
+
+	* ChangeLog src/btree/record.c src/liflines/error.c
+
+	Fix crash_setdb in error.c.
+	ASSERT if infinite index loop found in getrecord.
+
 2003-03-15 Perry Rapp
 
 
