@@ -68,6 +68,12 @@
 	Alter release_list not to use remove_list2, and delete now unused
 	remove_list2 function.
 
+	* ChangeLog src/hdrs/list.h src/interp/interp.c
+	src/interp/pvalue.c src/stdlib/list.c
+
+	Move destructor spec (used for pvalues) from release_list to
+	new create_list3.
+
 2005-02-05 Perry Rapp
 
 	* ChangeLog NEWS src/gedlib/xreffile.c

@@ -127,6 +127,17 @@ create_list2 (INT whattofree)
 	ltype(list) = whattofree;
 	return list;
 }
+/*===========================
+ * create_list3 -- Create list, with element destructor
+ * returns addref'd list
+ *=========================*/
+LIST
+create_list3 (ELEMENT_DESTRUCTOR func)
+{
+	LIST list = create_list_impl();
+	list->l_del_element = func;
+	return list;
+}
 /*===============================
  * set_list_type -- Set list type
  *  list: [I/O] list to change
@@ -672,11 +683,10 @@ addref_list (LIST list)
  *  and free if appropriate (ref count hits zero)
  *===============================================*/
 void
-release_list (LIST list, void (*func)(VPTR))
+release_list (LIST list)
 {
 	ASSERT(list->vtable == &vtable_for_list);
 	--list->l_refcnt;
-	list->l_del_element = func;
 	if (!list->l_refcnt) {
 		destroy_list(list);
 	}

@@ -270,7 +270,7 @@ clear_pvalue (PVALUE val)
 	case PLIST:
 		{
 			LIST list = pvalue_to_list(val);
-			release_list(list, delete_vptr_pvalue);
+			release_list(list);
 		}
 		return;
 	case PTABLE:
@@ -1196,8 +1196,8 @@ create_new_pvalue_table (void)
 PVALUE
 create_new_pvalue_list (void)
 {
-	LIST list = create_list();
+	LIST list = create_list3(delete_vptr_pvalue);
 	PVALUE val = create_pvalue_from_list(list);
-	release_list(list, delete_vptr_pvalue); /* release our ref to list */
+	release_list(list); /* release our ref to list */
 	return val;
 }

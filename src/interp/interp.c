@@ -2166,7 +2166,7 @@ pa_handle_proc (PACTX pactx, CNSTRING procname, PNODE nd_args, PNODE nd_body)
 	if (!list) {
 		list = create_list2(LISTNOFREE);
 		table_insert_object(gproctab, procname, list);
-		release_list(list, NULL); /* now table owns list */
+		release_list(list); /* now table owns list */
 	}
 	enqueue_list(list, procnode);
 	/* procname belongs to procnode now */
@@ -2196,7 +2196,7 @@ pa_handle_func (PACTX pactx, CNSTRING procname, PNODE nd_args, PNODE nd_body)
 	if (!list) {
 		list = create_list2(LISTNOFREE);
 		table_insert_object(gfunctab, procname, list);
-		release_list(list, NULL); /* now table owns list */
+		release_list(list); /* now table owns list */
 	}
 	enqueue_list(list, procnode);
 	/* procname belongs to procnode now */
