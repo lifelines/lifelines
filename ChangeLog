@@ -1,4 +1,9 @@
 2000-11-18 Perry Rapp <puddle@users.sourceforge.net>
+	hdrs/gedcom.h liflines/add.c:
+	Split up functions in add.c, breaking out non-interactive
+	portions for use by the new GUI code under development.
+
+2000-11-18 Perry Rapp <puddle@users.sourceforge.net>
 	Changed mprintf to mprintf_error, mprintf_info, mprintf_status.
 	gedlib/editmap.c gedlib/keytonod.c hdrs/screen.h
 	interp/interp.c interp/rassa.c liflines/add.c
