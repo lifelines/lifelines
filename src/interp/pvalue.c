@@ -431,7 +431,7 @@ create_pvalue_from_fam_key (STRING key)
 PVALUE
 create_pvalue_from_cel (int type, CACHEEL cel)
 {
-	RECORD rec = cel ? create_record_for_cel(cel) : 0;
+	RECORD rec = cel ? get_record_for_cel(cel) : 0;
 	return create_pvalue(type, rec);
 }
 /*=====================================================

@@ -214,7 +214,7 @@ file_to_record (STRING fname, XLAT ttm, STRING *pmsg, BOOLEAN *pemp)
 		return 0;
 	if (nxref(node)) {
 		CACHEEL cel = node_to_cacheel_old(node);
-		RECORD rec = create_record_for_cel(cel);
+		RECORD rec = get_record_for_cel(cel);
 		return rec;
 	} else {
 		RECORD rec = create_record_for_unkeyed_node(node);
@@ -318,6 +318,7 @@ do_first_fp_to_node (FILE *fp, BOOLEAN list, XLAT ttm,
  *  ttm:  [IN]  character translation table
  *  pmsg: [OUT] possible error message
  *  peof: [OUT] set true if file is at end of file
+ * returns addref'd record
  *============================================================*/
 RECORD
 next_fp_to_record (FILE *fp, BOOLEAN list, XLAT ttm,
@@ -421,6 +422,7 @@ next_fp_to_node (FILE *fp, BOOLEAN list, XLAT ttm,
  *  (modifies string -- inserts 0 between lines)
  *  This is the layout for traditional nodes:
  *   0 INDI    (or 0 FAM or 0 SOUR etc)
+ * returns addref'd record
  *==========================================*/
 RECORD
 string_to_record (STRING str, CNSTRING key, INT len)

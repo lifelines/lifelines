@@ -511,7 +511,7 @@ INT xrefval(char ntype, STRING str);
 
 /* keytonod.c */
 void add_new_indi_to_cache(RECORD rec);
-RECORD create_record_for_cel(CACHEEL cel);
+RECORD get_record_for_cel(CACHEEL cel);
 
 /* gstrings.c */
 STRING generic_to_list_string(NODE node, STRING key, INT len, STRING delim, RFMT rfmt, BOOLEAN appkey);

@@ -58,12 +58,14 @@ struct tag_cacheel {
 	CACHEEL c_next;   /* next el */
 	STRING c_key;     /* record key */
 	INT c_lock;       /* locked? */
+	RECORD c_record;
 };
 #define cnode(e) ((e)->c_node)
 #define cprev(e) ((e)->c_prev)
 #define cnext(e) ((e)->c_next)
 #define ckey(e)  ((e)->c_key)
 #define cclock(e) ((e)->c_lock)
+#define crecord(e) ((e)->c_record)
 
 /*==============================
  * CACHE -- Internal cache type.
@@ -108,6 +110,7 @@ static CACHEEL key_to_othr_cacheel(CNSTRING key);
 static CACHEEL key_to_sour_cacheel(CNSTRING key);
 static CACHEEL node_to_cache(CACHE, NODE);
 static void put_node_in_cache(CACHE cache, CACHEEL cel, NODE node, STRING key);
+static void remove_cel_from_cache(CACHE cache, CACHEEL cel);
 static NODE qkey_to_node(CACHE cache, CNSTRING key, STRING tag);
 static RECORD qkey_typed_to_record(CACHE cache, CNSTRING key, STRING tag);
 /* static CACHEEL qkey_to_typed_cacheel(STRING key); */
@@ -562,17 +565,17 @@ create_cache (STRING name, INT dirsize)
 static void
 delete_cache (CACHE * pcache)
 {
-	INT i;
+	INT num=0;
 	CACHE cache = *pcache;
+	CACHEEL frst=0;
 	if (!cache) return;
-	/* Loop through all cache elements freeing any node trees */
-	for (i=0; i<cacmaxdir(cache); ++i) {
-		CACHEEL cel = &cacarray(cache)[i];
-		if (cnode(cel)) {
-			free_nodes(cnode(cel));
-			cnode(cel) = 0;
-		}
+	/* Loop through all cache elements, freeing each */
+	while ((frst = cacfirstdir(cache)) != 0) {
+		remove_cel_from_cache(cache, frst);
 	}
+	/* TODO: Need to delete cache elements on free list */
+	num = get_table_count(cacdata(cache));
+	ASSERT(num == 0);
 	destroy_table(cacdata(cache));
 	stdfree(cacarray(cache));
 	stdfree(cache);
@@ -627,6 +630,7 @@ direct_to_first (CACHE cache, CACHEEL cel)
  *  cache:      [IN]  which cache to which to add
  *  key:        [IN]  key of record to be added
  *  reportmode: [IN] if non-zero, failures should be silent
+ * Only called if record is not already in cache (caller's responsibility)
  *======================================================*/
 static CACHEEL
 add_to_direct (CACHE cache, CNSTRING key, INT reportmode)
@@ -673,6 +677,8 @@ add_to_direct (CACHE cache, CNSTRING key, INT reportmode)
 	cel = node_to_cache(cache, nztop(rec));
 	/* node_to_cache did a first_direct call, so record in cache */
 	set_record_cache_info(rec, cel);
+	/* our new rec above has one reference, which is held by cel */
+	crecord(cel) = rec;
 	stdfree(rawrec);
 	return cel;
 }
@@ -730,20 +736,25 @@ key_typed_to_record (CACHE cache, CNSTRING key, STRING tag)
 	ASSERT(cache && key);
 	if (!(cel = key_to_cacheel(cache, key, tag, FALSE)))
 		return NULL;
-	return create_record_for_cel(cel);
+	return get_record_for_cel(cel);
 }
 /*===================================
- * create_record_for_cel -- create new record from cacheel
+ * get_record_for_cel -- get or create new record from cacheel
  * returns addref'd record
  *=================================*/
 RECORD
-create_record_for_cel (CACHEEL cel)
+get_record_for_cel (CACHEEL cel)
 {
 	RECORD rec=0;
 	NODE node=0;
 	STRING key=0;
 
 	ASSERT(cel);
+	if (crecord(cel)) {
+		rec = crecord(cel);
+		addref_record(rec);
+		return rec;
+	}
 	ASSERT(cnode(cel));
 	node = cnode(cel);
 	ASSERT(nxref(node));
@@ -783,7 +794,7 @@ qkey_typed_to_record (CACHE cache, CNSTRING key, STRING tag)
 	ASSERT(cache && key);
 	if (!(cel = key_to_cacheel(cache, key, tag, TRUE)))
 		return NULL;
-	rec = create_record_for_cel(cel);
+	rec = get_record_for_cel(cel);
 	return rec;
 }
 /*======================================
@@ -1089,12 +1100,27 @@ remove_from_cache (CACHE cache, CNSTRING key)
 		return;
 	/* If it has a key, it is in the cache */
 	cel = valueof_ptr(cacdata(cache), key);
+	remove_cel_from_cache(cache, cel);
+}
+/*=============================================
+ * remove_from_cache -- Move cache entry to free list
+ *  Requires non-null input
+ *===========================================*/
+static void
+remove_cel_from_cache (CACHE cache, CACHEEL cel)
+{
+	CACHEEL celnext=0;
+	NODE node=0;
+	STRING key = ckey(cel);
+
+	/* caller ensured cache && key are non-null */
 	ASSERT(cel);
+
 	ASSERT(!cclock(cel)); /* not supposed to remove locked elements */
 	ASSERT(cnode(cel));
 	remove_direct(cache, cel);
 
-	/* Must clear node tree info, so later cache cleanup doesn't use it */
+	/* Clear all node tree info */
 	node = cnode(cel);
 	if (node)
 		set_all_nodetree_to_cel(node, 0);
@@ -1106,6 +1132,12 @@ remove_from_cache (CACHE cache, CNSTRING key)
 		cprev(celnext) = cel;
 	cprev(cel) = 0;
 	ckey(cel) = 0; /* does this need to be freed ? */
+	if (crecord(cel)) {
+		/* cel holds the original reference to the record */
+		RECORD rec = crecord(cel);
+		delref_record(rec);
+		crecord(cel) = 0;
+	}
 	cacfree(cache) = cel;
 	delete_table(cacdata(cache), key);
 }
@@ -1347,4 +1379,16 @@ is_cel_loaded (CACHEEL cel)
 {
 	if (!cel) return NULL;
 	return cnode(cel);
+}
+/*==============================================
+ * cel_remove_record -- Our record informing us it is destructing
+ *  Requires non-null inputs
+ *============================================*/
+void
+cel_remove_record (CACHEEL cel, RECORD rec)
+{
+	ASSERT(cel);
+	ASSERT(rec);
+	ASSERT(crecord(cel) == rec);
+	crecord(cel) = 0;
 }

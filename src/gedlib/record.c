@@ -46,7 +46,7 @@ static struct tag_vtable vtable_for_record = {
 	, 0 /* copy_fnc */
 	, &generic_get_type_name
 };
-
+static int f_nrecs=0;
 /*===================================
  * alloc_new_record -- record allocator
  *  perhaps should use special allocator like nodes
@@ -56,6 +56,7 @@ RECORD
 alloc_new_record (void)
 {
 	RECORD rec;
+	++f_nrecs;
 	rec = (RECORD)stdalloc(sizeof(*rec));
 	memset(rec, 0, sizeof(*rec));
 	/* these must be filled in by caller */
@@ -224,6 +225,7 @@ init_new_record (RECORD rec, char ntype, INT keynum)
 /*===================================
  * create_record_for_keyed_node -- 
  *  Given a node just read from disk, wrap it in an uncached record
+ * returns addref'd record
  *=================================*/
 RECORD
 create_record_for_keyed_node (NODE node, CNSTRING key)
@@ -257,8 +259,12 @@ create_record_for_unkeyed_node (NODE node)
 static void
 free_rec (RECORD rec)
 {
+	--f_nrecs;
 	if (rec->rec_cel) {
 		/* cached record */
+		/* cel memory belongs to cache, but we must tell it
+		that we're dying, so it doesn't point to us anymore */
+		cel_remove_record(rec->rec_cel, rec);
 		rec->rec_cel = 0; /* cel memory belongs to cache */
 	} else {
 		/* free record */

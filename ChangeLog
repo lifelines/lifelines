@@ -1,3 +1,15 @@
+2005-01-27, Perry Rapp
+
+	* ChangeLog src/gedlib/gedcomi.h src/gedlib/keytonod.c
+	src/gedlib/nodeio.c src/gedlib/record.c src/hdrs/gedcom.h
+	src/interp/pvalue.c
+
+	Give cacheel pointer to record, so we can reuse records.
+	Rename create_record_for_cel to get_record_for_cel 
+	and reuse record. Fix delete_cache to actually get all
+	active cache elements (not just first in each hash chain).
+
+
 2005-01-26, Stephen Dum
         * ChangeLog docs/ll-reportmanual.xml docs/ll-userguide.sv.xml
 	docs/ll-userguide.xml
