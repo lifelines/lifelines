@@ -6,7 +6,7 @@
 # then "rpm -ba lifelines.spec"
 #
 
-%define lifelines_version       3.0.10
+%define lifelines_version       3.0.11
 
 Name: lifelines
 Summary: lifelines genealogy program
@@ -33,7 +33,6 @@ make
 %install
 mkdir -p /usr/local/share/lifelines/reports
 install -s -m 755 -o 0 -g 0 liflines/llines /usr/local/bin/llines
-install -s -m 755 -o 0 -g 0 docs/llines.1 /usr/local/man/man1/llines.1
 install  -m 755 -o 0 -g 0 reports/CREDIT /usr/local/share/lifelines/reports/CREDIT
 install  -m 755 -o 0 -g 0 reports/2ppage.ll /usr/local/share/lifelines/reports/2ppage.ll
 install  -m 755 -o 0 -g 0 reports/4gen1.ll /usr/local/share/lifelines/reports/4gen1.ll

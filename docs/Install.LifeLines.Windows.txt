@@ -1,5 +1,5 @@
 LifeLines installation for Windows
-  Edited: 2001/12/31 by Perry Rapp
+  Edited: 2002/05/01 by Perry Rapp
 
 1)
 Choose & create your directories, eg:
@@ -15,17 +15,17 @@ Place the LifeLines program (Lines.exe) &
  configuration file (lines.cfg) into the
  program directory (eg, \Program Files\LifeLines)
 
-3)
+3a)
 If you are on MS-Windows, check the web page to see
 if there is an appropriate zip of translation tables
 for your system codepages.
 
-If so, download & install theh *.tt files into
+If so, download & install the *.tt files into
 \My Documents\LifeLines\ttref
 
 Note that if you plan to use a UTF-8 editor (and notepad
 under MS-Windows 2000 will function as a UTF-8 editor),
-you do not need four translation tablese, but only two --
+you do not need four translation tables, but only two --
 just the two for translating display & input (in the
 console mode window).
 
@@ -33,6 +33,14 @@ console mode window).
 but you should come back & do this before you start dealing
 with non-ascii data.)
 
+3b)
+Unzip the translations into subdirectories beneath the directory of
+step (2) (eg, \Program Files\LifeLines), so that you will wind up with,
+eg, \Program Files\LifeLines\sv\LC_MESSAGES\lifelines.mo
+for the Swedish translation message catalog.
+This will be used if (1) you have an environment variable set,
+or (2) you set an option in the configuration file like so:
+UiLocale=sv
 
 4)
 Edit the configuration file (lines.cfg) to reflect your
@@ -41,7 +49,7 @@ Edit the configuration file (lines.cfg) to reflect your
 5)
 In a windows explorer window (eg, right-click on 
  My Computer and choose Explore), browse to your program
- directory of step (2) (eg, \Program Files\Lines),
+ directory of step (2) (eg, \Program Files\LifeLines),
  right-click on the executable (Lines.exe) and choose
  Copy, then move your cursor to a clear area on your
  desktop (the background where My Computer sits), and

@@ -1,3 +1,15 @@
+2002-05-01 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog configure.in lifelines.spec
+	docs/Install.LifeLines.Windows.txt hdrs/version.h
+	win32/msvc6/btedit/btedit.rc win32/msvc6/dbverify/dbVerify.rc
+	win32/msvc6/llines/llines.rc win32/msvc6/llines/llinesprj.dsp:
+
+	Updated MSVC6 llines project to include iconv static library.
+	Updated Windows install summary to mention translations.
+	Removed llines.1 from rpm spec (as it causes it to fail).
+	Released 3.0.11.
+
 2002-04-29 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog po/sv.po:
