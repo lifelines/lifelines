@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * init.c -- Initialize LifeLines data structures
  * Copyright(c) 1991-95 by T.T. Wetmore IV; all rights reserved
@@ -33,6 +34,9 @@
 #include "btree.h"
 #include "table.h"
 #include "gedcom.h"
+#ifdef WIN32
+#include <dir.h>
+#endif
 
 TABLE tagtable;		/* table for tag strings */
 TABLE placabbvs;	/* table for place abbrevs */
@@ -61,8 +65,12 @@ init_lifelines ()
 	if (!e || *e == 0) e = (STRING) getenv("ED");
 	if (!e || *e == 0) e = (STRING) getenv("EDITOR");
 	if (!e || *e == 0) e = (STRING) "vi";
+#ifdef WIN32
+	editfile = strsave(mktemp("\\tmp\\lltmpXXXXXX"));
+#else
 	sprintf(scratch, "/tmp/%dltmp", getpid());
 	editfile = strsave(scratch);
+#endif
 	editstr = (STRING) stdalloc(strlen(e) + strlen(editfile) + 2);
 	sprintf(editstr, "%s %s", e, editfile);
 	llprograms = (STRING) getenv("LLPROGRAMS");
@@ -80,7 +88,11 @@ close_lifelines ()
 {
 	char scratch[40];
 	closexref();
+#ifdef WIN32
+	unlink(editfile);
+#else
 	sprintf(scratch, "rm -f %s\n", editfile);
 	system(scratch);
-	closebtree(BTR);
+#endif
+	if(BTR) closebtree(BTR);
 }

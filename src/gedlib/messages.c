@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * messages.c -- Holds most LifeLines messages
  * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
@@ -54,10 +55,20 @@ STRING id2csw = SS "Identify the second child to swap.";
 STRING id1fsw = SS "Identify the first family/spouse to swap.";
 STRING id2fsw = SS "Identify the second family/spouse to swap.";
 STRING idsbrs = SS "Please choose the spouse/parent to browse to.";
+STRING id1sbr = SS "Please choose the first spouse/parent to browse to.";
+STRING id2sbr = SS "Please choose the second spouse/parent to browse to.";
 STRING idcbrs = SS "Please choose the child to browse to.";
+STRING id1cbr = SS "Please choose the first child to browse to.";
+STRING id2cbr = SS "Please choose the second child to browse to.";
 STRING idfbrs = SS "Please choose the family to browse to.";
+STRING id1fbr = SS "Please choose the first family to browse to.";
+STRING id2fbr = SS "Please choose the second family to browse to.";
 STRING idhbrs = SS "Please choose the father/husband to browse to.";
+STRING id1hbr = SS "Please choose the first father/husband to browse to.";
+STRING id2hbr = SS "Please choose the second father/husband to browse to.";
 STRING idwbrs = SS "Please choose the mother/wife to browse to.";
+STRING id1wbr = SS "Please choose the first mother/wife to browse to.";
+STRING id2wbr = SS "Please choose the second mother/wife to browse to.";
 STRING idcswp = SS "Identify a parent in the family having children swapped.";
 STRING idfswp = SS "Whose families/spouses are to be swapped?";
 STRING idprnt = SS "Identify one of the child's parents, if known.";

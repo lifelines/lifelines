@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=================================================================
  * btedit.c -- Command that allows individual BTREE records to be
  *   edited directly.  Can only be used on records that are in pure
@@ -35,15 +36,22 @@
 #include "standard.h"
 #include "btree.h"
 
+int opt_finnish = 0;
+
 /*=========================================
  * main -- Main procedure of btedit command
  *=======================================*/
 main (argc, argv)
-INT argc;
-STRING *argv;
+int argc;
+char **argv;
 {
 	BTREE btree;
+	char cmdbuf[512];
+	char *editor;
 
+#ifdef WIN32
+	_fmode = O_BINARY;	/* default to binary rather than TEXT mode */
+#endif
 	if (argc != 3) {
 		printf("usage: btedit <btree> <rkey>\n");
 		exit(1);
@@ -52,24 +60,31 @@ STRING *argv;
 		printf("could not open btree: %s\n", argv[1]);
 		exit(1);
 	}
-	if (!getfile(btree, str2rkey(argv[2]), "tmp")) {
+	if (!getfile(btree, str2rkey(argv[2]), "btedit.tmp")) {
 		printf("there is no record with that key\n");
 		closebtree(btree);
 		exit(0);
 	}
-	system("vi tmp");
-	addfile(btree, str2rkey(argv[2]), "tmp");
-	system("rm -f tmp");
+
+	if((editor = getenv("LLEDITOR")) && *editor);
+	else editor = "vi";
+	sprintf(cmdbuf, "%s btedit.tmp", editor);
+#ifdef WIN32
+	w32system(cmdbuf);	/* start program and wait for completion */
+#else
+	system(cmdbuf);
+#endif
+	addfile(btree, str2rkey(argv[2]), "btedit.tmp");
+	unlink("btedit.tmp");
 	closebtree(btree);
 }
 /*=========================================================
  * __allocate -- Allocate memory - called by stdalloc macro
  *========================================================*/
-char *__allocate (len, file, line, str)
+char *__allocate (len, file, line)
 int len;    /* number of bytes to allocate */
-char *file; /* not used */
+STRING file; /* not used */
 int line;   /* not used */
-char *str;  /* not used */
 {
 	char *p;
 	if ((p = malloc(len)) == NULL)  FATAL();
@@ -79,11 +94,10 @@ char *str;  /* not used */
 /*=======================================================
  * __deallocate - Return memory - called by stdfree macro
  *=====================================================*/
-__deallocate (ptr, file, line, str)
+__deallocate (ptr, file, line)
 char *ptr;  /* memory being returned */
-char *file; /* not used */
+STRING file; /* not used */
 int line;   /* not used */
-char *str;  /* not used */
 {
 	free(ptr);
 }

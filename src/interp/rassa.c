@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * rassa.c -- Handle output to the product file
  * Copyright(c) 1991-95 by T.T. Wetmore IV; all rights reserved
@@ -79,7 +80,7 @@ finishrassa ()
 PVALUE __pagemode (node, stab, eflg)
 PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	INT cols, rows = (INT) evaluate(iargs(node), stab, eflg);
+	INT cols, rows;
 	PVALUE val = eval_and_coerce(PINT, iargs(node), stab, eflg);
 	if (*eflg) {
 		prog_error(node, "1st arg to pagemode must be an integer.");
@@ -130,7 +131,7 @@ PVALUE __newfile (node, stab, eflg)
 PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	BOOLEAN aflag;
-	STRING name = (STRING) evaluate(iargs(node), stab, eflg);
+	STRING name;
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
 	if (*eflg) {
 		prog_error(node, "1st arg to newfile must be a string.");
@@ -156,8 +157,9 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 		fclose(Poutfp);
 		Poutfp = NULL;
 	}
-	if (!(Poutfp = fopenpath(name, aflag?"a":"w", llreports))) {
-		mprintf("Could not open file %s", name);
+	if (!(Poutfp = fopenpath(outfilename,
+			 aflag?LLAPPENDTEXT:LLWRITETEXT, llreports))) {
+		mprintf("Could not open file %s", outfilename);
 		return NULL;
 	}
 	return NULL;
@@ -170,11 +172,11 @@ PVALUE __outfile (node, stab, eflg)
 PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	if (!Poutfp) {
-		Poutfp = ask_for_file("w", whtout, &outfilename, llreports);
+		Poutfp = ask_for_file(LLWRITETEXT, whtout, &outfilename, llreports);
 		if (!Poutfp)  {
 			*eflg = TRUE;
 			message(noreport);
-			return;
+			return NULL;
 		}
 		setbuf(Poutfp, NULL);
 	}
@@ -245,7 +247,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 PVALUE __col (node, stab, eflg)
 PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	INT newcol = (INT) evaluate(iargs(node), stab, eflg);
+	INT newcol;
 	PVALUE val = eval_and_coerce(PINT, iargs(node), stab, eflg);
 	if (*eflg) {
 		prog_error(node, "the arg to col must be an integer.");
@@ -268,7 +270,7 @@ PVALUE __getcol (node, stab, eflg)
 PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	*eflg = FALSE;
-	return create_pvalue(PINT, curcol);
+	return create_pvalue(PINT, (WORD)curcol);
 }
 /*======================================================
  * __pageout -- Output current page and clear page buffer
@@ -283,10 +285,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	*eflg = TRUE;
 	if (outputmode != PAGEMODE) return NULL;
 	if (!Poutfp) {
-		Poutfp = ask_for_file("w", whtout, &outfilename, llreports);
+		Poutfp = ask_for_file(LLWRITETEXT, whtout, &outfilename, llreports);
 		if (!Poutfp)  {
 			message(noreport);
-			return;
+			return NULL;
 		}
 		setbuf(Poutfp, NULL);
 	}
@@ -316,7 +318,7 @@ STRING str;
 	INT c, len;
 	if (!str || *str == 0 || (len = strlen(str)) <= 0) return;
 	if (!Poutfp) {
-		Poutfp = ask_for_file("w", whtout, &name, llreports);
+		Poutfp = ask_for_file(LLWRITETEXT, whtout, &name, llreports);
 		if (!Poutfp)  {
 			message(noreport);
 			return;

@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * names.c -- Handle name values and name indexing
  * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
@@ -34,9 +35,11 @@
 #include "gedcom.h"
 #include "translat.h"
 
+extern BOOLEAN opt_finnish;
 extern BTREE BTR;
 
 RKEY name2rkey();
+char *getasurname();
 
 static int old = 0;
 static INT codeof();
@@ -246,6 +249,28 @@ static INT codeof (letter)
 int letter;
 {
 	int new = 0;
+
+    if(opt_finnish) {
+	/* Finnish Language */
+	switch (letter) {
+	case 'B': case 'P': case 'F': case 'V': case 'W':
+		new = '1'; break;
+	case 'C': case 'S': case 'K': case 'G': case '\337':
+	case 'J': case 'Q': case 'X': case 'Z': case '\307':
+		new = '2'; break;
+	case 'D': case 'T': case '\320': case '\336':
+		new = '3'; break;
+	case 'L':
+		new = '4'; break;
+	case 'M': case 'N': case '\321':
+		new = '5'; break;
+	case 'R':
+		new = '6'; break;
+	default:	/* new stays zero */
+		break;
+	}
+    } else {
+	/* English Language (Default) */
 	switch (letter) {
 	case 'B': case 'P': case 'F': case 'V':
 		new = '1'; break;
@@ -263,6 +288,8 @@ int letter;
 	default:	/* new stays zero */
 		break;
 	}
+    }
+  
 	if (new == 0) {
 		old = 0;
 		return 0;
@@ -284,7 +311,7 @@ STRING key;	/* person's INDI key */
 	rkey = str2rkey(key);
 	(void) getnamerec(name);
 	for (i = 0; i < NRcount; i++) {
-		if (!strncmp(rkey.r_rkey, NRkeys[i].r_rkey, 8) &&
+		if (!ll_strncmp(rkey.r_rkey, NRkeys[i].r_rkey, 8) &&
 		    eqstr(name, NRnames[i]))
 			return TRUE;
 	}
@@ -333,7 +360,7 @@ STRING key;	/* person's INDI key */
 	(void) getnamerec(name);
 	found = FALSE;
 	for (i = 0; i < NRcount; i++) {
-		if (!strncmp(rkey.r_rkey, NRkeys[i].r_rkey, 8) &&
+		if (!ll_strncmp(rkey.r_rkey, NRkeys[i].r_rkey, 8) &&
 		    eqstr(name, NRnames[i])) {
 			found = TRUE;
 			break;
@@ -417,9 +444,17 @@ STRING complete;	/* GEDCOM name */
 BOOLEAN piecematch (part, comp)
 STRING part, comp;
 {
-	if (*part++ != *comp++) return FALSE;
+	if(opt_finnish) {
+	  if(my_chrcmp(*part++, *comp++) != 0) return FALSE;
+	} else {
+	  if (*part++ != *comp++) return FALSE;
+	}
 	while (*part && *comp) {
+	  if(opt_finnish) {
+		if (my_chrcmp(*part, *comp++) == 0) part++;
+	  } else {
 		if (*part == *comp++) part++;
+	  }
 	}
 	return *part == 0;
 }
@@ -523,7 +558,11 @@ STRING name1, name2;
 	STRING p1 = sqz1, p2 = sqz2;
 	INT r = nestr(getsurname(name1), getsurname(name2));
 	if (r) return r;
-	r = getfinitial(name1) - getfinitial(name2);
+	if(opt_finnish) {
+	  r = my_chrcmp(getfinitial(name1),  getfinitial(name2));
+	} else {
+	  r = getfinitial(name1) - getfinitial(name2);
+	}
 	if (r) return r;
 	cmpsqueeze(name1, p1);
 	cmpsqueeze(name2, p2);
@@ -621,7 +660,11 @@ INT len;
 		if (*parts[i] == '/') sdex = i;
 	}
 	nparts = i;
-	ASSERT(sdex != -1);
+	/* WARNING: this will cause a program termination if there
+	 * is no surname delimited by "/" 
+	 * ASSERT(sdex != -1);
+	 */
+	if(sdex == -1) sdex = nparts;
 	for (i = sdex-1; i >= 0; --i) {
 		*(parts[i] + 1) = 0;
 		name = parts_to_name(parts);
@@ -718,11 +761,11 @@ STRING name;
 /*==================================================
  * manip_name - Convert GEDCOM name to various forms
  *================================================*/
-STRING manip_name (name, tt, caps, reg, len)
+STRING manip_name (name, tt, caps, regorder, len)
 STRING name;	/* name */
 TRANTABLE tt;	/* translation table */
 BOOLEAN caps;	/* surname in caps? */
-BOOLEAN reg;	/* regular order? (not surname first) */
+BOOLEAN regorder;	/* regular order? (not surname first) */
 INT len;	/* max name length */
 {
 	static unsigned char scratch[MAXNAMELEN+1];
@@ -730,8 +773,8 @@ INT len;	/* max name length */
 	translate_string(tt, name, scratch, MAXNAMELEN+1);
 	name = scratch;
 	if (caps) name = upsurname(name);
-	name = trim_name(name, reg ? len: len-1);
-	if (reg) return trim(name_string(name), len);
+	name = trim_name(name, regorder ? len: len-1);
+	if (regorder) return trim(name_string(name), len);
 	return trim(name_surfirst(name), len);
 }
 /*===============================================
@@ -760,7 +803,7 @@ STRING name;
 	static unsigned char scratch[MAXNAMELEN+1];
 	STRING p = scratch;
 	ASSERT(strlen(name) <= MAXNAMELEN);
-	strcpy(p, getsurname(name));
+	strcpy(p, getasurname(name));
 	p += strlen(p);
 	strcpy(p, ", ");
 	p += strlen(p);

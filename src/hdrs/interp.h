@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * interp.h - Header file for report interpreter
  * Copyright(c) 1991-95 by T.T. Wetmore IV; all rights reserved
@@ -92,7 +93,7 @@ struct itag {
 #define ichild(i)    ((i)->i_word2)	/* var in children loop */
 #define ispouse(i)   ((i)->i_word2)	/* var in families and spouses loop */
 #define ifamily(i)   ((i)->i_word3)	/* var in all families type loops */
-#define iparent(i)   ((i)->i_word2)	/* var in some families type loops */
+#define iiparent(i)   ((i)->i_word2)	/* var in some families type loops */
 #define ivalvar(i)   ((i)->i_word3)	/* var in indiset loop */
 #define iname(i)     ((i)->i_word1)	/* proc, func and builtin names */
 #define ilev(i)      ((i)->i_word3)	/* var traverse loop */
@@ -160,6 +161,7 @@ extern PVALUE evaluate_ufunc();
 extern PVALUE eval_and_coerce();
 extern BOOLEAN evaluate_cond();
 extern PVALUE create_pvalue();
+extern void delete_pvalue();
 extern PVALUE copy_pvalue();
 extern NODE eval_indi();
 extern NODE eval_fam();

@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * editvtab.c -- Handle value tables in LifeLines
  * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
@@ -48,8 +49,12 @@ STRING ermsg;	/* error message */
 	TABLE tmptab = NULL;
 	STRING msg;
 	endwin();
+#ifdef WIN32
+	unlink(editfile);
+#else
 	sprintf(scratch, "rm -f %s", editfile);
 	system(scratch);
+#endif
 	retrieve_file(key, editfile);
 	do_edit();
 	while (TRUE) {

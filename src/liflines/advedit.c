@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * advedit.c -- Advanced edit features
  * Copyright(c) 1994 by T.T. Wetmore IV; all rights reserved
@@ -47,7 +48,7 @@ NODE root0;
 	expd = copy_nodes(root, TRUE, TRUE);
 	subs = create_list();
 	traverse_nodes(expd, expand_traverse);
-/*FORLIST(subs, el) wprintf("in list: %s %s\n", ntag(el), nval(el));
+/*FORLIST(subs, el) llwprintf("in list: %s %s\n", ntag(el), nval(el));
 ENDLIST/*DEBUG*/
 
    /* expand the list of records into the copied record */
@@ -72,10 +73,24 @@ NODE root0;
 {
 	FILE *fp;
 
-/*wprintf("advanced_person_edit: %s %s %s\n", nxref(root0), ntag(root0),
+/*llwprintf("advanced_person_edit: %s %s %s\n", nxref(root0), ntag(root0),
 nval(root0));/*DEBUG*/
 	expand_tree(root0);
-	ASSERT(fp = fopen(editfile, "w"));
+	ASSERT(fp = fopen(editfile, LLWRITETEXT));
+	write_nodes(0, fp, NULL, expd, TRUE, TRUE, TRUE);
+	fclose(fp);
+	do_edit();
+}
+
+advanced_family_edit (root0)
+NODE root0;
+{
+	FILE *fp;
+
+/*llwprintf("advanced_family_edit: %s %s %s\n", nxref(root0), ntag(root0),
+nval(root0));/*DEBUG*/
+	expand_tree(root0);
+	ASSERT(fp = fopen(editfile, LLWRITETEXT));
 	write_nodes(0, fp, NULL, expd, TRUE, TRUE, TRUE);
 	fclose(fp);
 	do_edit();
@@ -90,9 +105,9 @@ NODE node;
 	STRING key = value_to_xref(nval(node));
 	if (!key) return TRUE;
 	key = strsave(key);
-/*wprintf("expand_traverse: %s %s\n", ntag(node), nval(node));/*DEBUG*/
+/*llwprintf("expand_traverse: %s %s\n", ntag(node), nval(node));/*DEBUG*/
 	FORLIST(subs, el)
-/*wprintf("expand_traverse: %s %s\n", key, rmvat(nval((NODE) el)));/*DEBUG*/
+/*llwprintf("expand_traverse: %s %s\n", key, rmvat(nval((NODE) el)));/*DEBUG*/
 		if (eqstr(key, rmvat(nval((NODE) el)))) {
 			stdfree(key);
 			return TRUE;

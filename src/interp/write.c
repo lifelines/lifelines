@@ -21,7 +21,8 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
-/*==========================================================
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
+/*=============================================================
  * write.c -- Handle changes to the database
  * Copyright(c) 1994-95 by T.T. Wetmore IV; all rights reserved
  *   2.3.6 - 01 Jan 94    3.0.0 - 01 Jan 94
@@ -32,6 +33,10 @@
 #include "table.h"
 #include "gedcom.h"
 #include "interp.h"
+
+/* WARNING: this file has not been updated for new evaluate() function
+ * which returns PVALUES.
+ */
 
 /*=====================================
  * createnode -- Create GEDCOM node
@@ -114,11 +119,11 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	ASSERT(rec = retrieve_record(rmvat(nxref(indi2)), &len));
         ASSERT(indi1 = string_to_node(rec));
 	if (replace_indi(indi1, indi2, &msg)) {
-wprintf("Oh, happy days, person written to database okay.\n");/*DEBUG*/
+llwprintf("Oh, happy days, person written to database okay.\n");/*DEBUG*/
 		return NULL;
 	} else {
 		*eflg = TRUE;
-		if (msg) wprintf("Error: writeindi: %s\n", msg);
+		if (msg) llwprintf("Error: writeindi: %s\n", msg);
 	}
 	return NULL;
 }
@@ -137,12 +142,12 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	ASSERT(rec = retrieve_record(rmvat(nxref(fam2)), &len));
         ASSERT(fam1 = string_to_node(rec));
 	if (replace_fam(fam1, fam2, &msg)) {
-wprintf("Oh, happy days, family written to database okay.\n");/*DEBUG*/
+llwprintf("Oh, happy days, family written to database okay.\n");/*DEBUG*/
 		return NULL;
 	} else {
 		*eflg = TRUE;
 		if (msg)
-			wprintf("Error: writefam: %s\n", msg);
+			llwprintf("Error: writefam: %s\n", msg);
 	}
 	return NULL;
 }

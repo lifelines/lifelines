@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*==============================================================
  * eval.c -- Evaulate report program expressions
  * Copyright(c) 1991-95 by T. T. Wetmore IV; all rights reserved
@@ -43,9 +44,9 @@ PVALUE evaluate (node, stab, eflg)
 PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	if (prog_debug) {
-		wprintf("%d: ", iline(node));
+		llwprintf("%d: ", iline(node));
 		show_one_pnode(node);
-		wprintf("\n");
+		llwprintf("\n");
 	}
 	if (iistype(node, IIDENT)) return evaluate_iden(node, stab, eflg);
 	if (iistype(node, IBCALL)) return evaluate_func(node, stab, eflg);
@@ -66,7 +67,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	STRING iden = (STRING) iident(node);
 #if 0
 	if (prog_debug)
-		wprintf("evaluate_iden called: iden = %s\n", iden);
+		llwprintf("evaluate_iden called: iden = %s\n", iden);
 #endif
 	*eflg = FALSE;
 	return valueof_iden(stab, iden);
@@ -79,7 +80,7 @@ TABLE stab;  STRING iden;
 {
 	BOOLEAN there;
 	PVALUE val;
-/*wprintf("valueof_iden: iden, stab, globtab: %s, %d, %d\n",
+/*llwprintf("valueof_iden: iden, stab, globtab: %s, %d, %d\n",
 iden, stab, globtab);/*DEBUG*/
 	val = (PVALUE) valueofbool(stab, iden, &there);
 	if (there) return copy_pvalue(val);
@@ -111,8 +112,8 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 		prog_error(node, "error in conditional expression");
 		return FALSE;
 	}
-/*wprintf("interp_if: cond = ");show_pvalue(val);wprintf("\n");/*DEBUG*/
-	if (var) insert_table(stab, iident(node), copy_pvalue(val));
+/*llwprintf("interp_if: cond = ");show_pvalue(val);wprintf("\n");/*DEBUG*/
+	if (var) assign_iden(stab, iident(node), copy_pvalue(val));
 	coerce_pvalue(PBOOL, val, eflg);
 	rc = (BOOLEAN) pvalue(val);
 	delete_pvalue(val);
@@ -130,7 +131,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	*eflg = FALSE;
 #if 0
 	if (prog_debug)
-		wprintf("evaluate_func called: %d: %s\n",
+		llwprintf("evaluate_func called: %d: %s\n",
 		    iline(node), iname(node));
 #endif
 	if (traceprogram) {
@@ -178,16 +179,17 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	switch (irc) {
 	case INTRETURN:
 	case INTOKAY:
-/*wprintf("Successful ufunc call -- val returned was ");
-show_pvalue(val);wprintf("\n");/*DEBUG*/
+/*llwprintf("Successful ufunc call -- val returned was ");
+show_pvalue(val);llwprintf("\n");/*DEBUG*/
 		*eflg = FALSE;
 		return val;
 	case INTBREAK:
 	case INTCONTINUE:
 	case INTERROR:
-		*eflg = TRUE;
-		return NULL;
+		break;
 	}
+	*eflg = TRUE;
+	return NULL;
 }
 /*=====================================
  * iistype -- Check type of interp node
@@ -218,7 +220,20 @@ assign_iden (stab, id, value)
 TABLE stab; STRING id; WORD value;
 {
 	TABLE tab = stab;
+#ifdef HOGMEMORY
 	if (!in_table(stab, id) && in_table(globtab, id)) tab = globtab;
+#else
+	BOOLEAN there;
+	PVALUE val;
+	val = (PVALUE) valueofbool(tab, id, &there);
+	if (!there) {
+	    val = (PVALUE) valueofbool(globtab, id, &there);
+	    if(there) tab = globtab;
+	}
+	if (there && val) {
+	    delete_pvalue(val);
+	}
+#endif
 	insert_table(tab, id, value);
 	return;
 }

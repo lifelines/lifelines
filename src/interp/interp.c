@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * interp.c -- Interpret program statements
  * Copyright(c) 1991-95 by T.T. Wetmore IV; all rights reserved
@@ -117,7 +118,7 @@ STRING ofile;	/* output file - can be NULL */
 		ifile = (STRING) dequeue_list(plist);
 		if (!in_table(filetab, ifile)) {
 			insert_table(filetab, ifile, 0);
-/*wprintf("About to parse file %s.\n", ifile);/*DEBUG*/
+/*llwprintf("About to parse file %s.\n", ifile);/*DEBUG*/
 			parse_file(ifile, plist);
 		} else
 			stdfree(ifile);
@@ -137,7 +138,7 @@ STRING ofile;	/* output file - can be NULL */
 
    /* Open output file if name is provided */
 
-	if (ofile && !(Poutfp = fopen(ofile, "w"))) {
+	if (ofile && !(Poutfp = fopen(ofile, LLWRITETEXT))) {
 		mprintf("Error: file \"%s\" could not be created.\n", ofile);
 		remove_tables();
 		return;
@@ -202,9 +203,9 @@ LIST plist;
 	Pfname = ifile;
 	if (!ifile || *ifile == 0) return;
 	Plist = plist;
-	Pinfp = fopenpath(ifile, "r", llprograms);
+	Pinfp = fopenpath(ifile, LLREADTEXT, llprograms);
 	if (!Pinfp) {
-		wprintf("Error: file \"%s\" not found.\n", ifile);
+		llwprintf("Error: file \"%s\" not found.\n", ifile);
 		Perrors++;
 		return;
 	}
@@ -237,9 +238,9 @@ PVALUE *pval;	/* possible return value */
 	while (node) {
 		Pnode = node;
 if (prog_debug) {
-	wprintf("i%di: ", iline(node));
+	llwprintf("i%di: ", iline(node));
 	show_one_pnode(node);
-	wprintf("\n");
+	llwprintf("\n");
 }
 		switch (itype(node)) {
 		case ISCONS:
@@ -248,8 +249,8 @@ if (prog_debug) {
 		case IIDENT:
 			val = eval_and_coerce(PSTRING, node, stab, &eflg);
 			if (eflg) {
-				wprintf(ierror, ifname(node), iline(node));
-				wprintf("identifier: %s should be a string\n",
+				llwprintf(ierror, ifname(node), iline(node));
+				llwprintf("identifier: %s should be a string\n",
 				    iident(node));
 				return INTERROR;
 			}
@@ -258,13 +259,13 @@ if (prog_debug) {
 			delete_pvalue(val);
 			break;
 		case IBCALL:
-/*wprintf("BCALL: %s\n", iname(node));/*DEBUG*/
+/*llwprintf("BCALL: %s\n", iname(node));/*DEBUG*/
 			val = evaluate_func(node, stab, &eflg);
 			if (eflg) return INTERROR;
 #if 0
 			if (eflg) {
-				wprintf(ierror, ifname(node), iline(node));
-				wprintf("in function: `%s'\n", iname(node));
+				llwprintf(ierror, ifname(node), iline(node));
+				llwprintf("in function: `%s'\n", iname(node));
 				return INTERROR;
 			}
 #endif
@@ -278,8 +279,8 @@ if (prog_debug) {
 			if (eflg) return INTERROR;
 #if 0
 			if (eflg) {
-				wprintf(ierror, ifname(node), iline(node));
-				wprintf("in function: `%s'\n", iname(node));
+				llwprintf(ierror, ifname(node), iline(node));
+				llwprintf("in function: `%s'\n", iname(node));
 				return INTERROR;
 			}
 #endif
@@ -296,8 +297,8 @@ if (prog_debug) {
 				break;
 			case INTERROR:
 #if 0
-				wprintf(ierror, ifname(node), iline(node));
-				wprintf("in children loop\n");
+				llwprintf(ierror, ifname(node), iline(node));
+				llwprintf("in children loop\n");
 #endif
 				return INTERROR;
 			default:
@@ -310,8 +311,8 @@ if (prog_debug) {
 				break;
 			case INTERROR:
 #if 0
-				wprintf(ierror, ifname(node), iline(node));
-				wprintf("in spouses loop\n");
+				llwprintf(ierror, ifname(node), iline(node));
+				llwprintf("in spouses loop\n");
 #endif
 				return INTERROR;
 			default:
@@ -324,8 +325,8 @@ if (prog_debug) {
 				break;
 			case INTERROR:
 #if 0
-				wprintf(ierror, ifname(node), iline(node));
-				wprintf("in families loop\n");
+				llwprintf(ierror, ifname(node), iline(node));
+				llwprintf("in families loop\n");
 #endif
 				return INTERROR;
 			default:
@@ -338,8 +339,8 @@ if (prog_debug) {
 				break;
 			case INTERROR:
 #if 0
-				wprintf(ierror, ifname(node), iline(node));
-				wprintf("in fathers loop\n");
+				llwprintf(ierror, ifname(node), iline(node));
+				llwprintf("in fathers loop\n");
 #endif
 				return INTERROR;
 			default:
@@ -352,8 +353,8 @@ if (prog_debug) {
 				break;
 			case INTERROR:
 #if 0
-				wprintf(ierror, ifname(node), iline(node));
-				wprintf("in mothers loop\n");
+				llwprintf(ierror, ifname(node), iline(node));
+				llwprintf("in mothers loop\n");
 #endif
 				return INTERROR;
 			default:
@@ -366,8 +367,8 @@ if (prog_debug) {
 				break;
 			case INTERROR:
 #if 0
-				wprintf(ierror, ifname(node), iline(node));
-				wprintf("in parents loop\n");
+				llwprintf(ierror, ifname(node), iline(node));
+				llwprintf("in parents loop\n");
 #endif
 				return INTERROR;
 			default:
@@ -380,8 +381,8 @@ if (prog_debug) {
 				break;
 			case INTERROR:
 #if 0
-				wprintf(ierror, ifname(node), iline(node));
-				wprintf("in indiset loop\n");
+				llwprintf(ierror, ifname(node), iline(node));
+				llwprintf("in indiset loop\n");
 #endif
 				return INTERROR;
 			default:
@@ -394,8 +395,8 @@ if (prog_debug) {
 				break;
 			case INTERROR:
 #if 0
-				wprintf(ierror, ifname(node), iline(node));
-				wprintf("in forindi loop\n");
+				llwprintf(ierror, ifname(node), iline(node));
+				llwprintf("in forindi loop\n");
 #endif
 				return INTERROR;
 			default:
@@ -408,8 +409,8 @@ if (prog_debug) {
 				break;
 			case INTERROR:
 #if 0
-				wprintf(ierror, ifname(node), iline(node));
-				wprintf("in forfam loop\n");
+				llwprintf(ierror, ifname(node), iline(node));
+				llwprintf("in forfam loop\n");
 #endif
 				return INTERROR;
 			default:
@@ -422,8 +423,8 @@ if (prog_debug) {
 				break;
 			case INTERROR:
 #if 0
-				wprintf(ierror, ifname(node), iline(node));
-				wprintf("in forsour loop\n");
+				llwprintf(ierror, ifname(node), iline(node));
+				llwprintf("in forsour loop\n");
 #endif
 				return INTERROR;
 			default:
@@ -436,8 +437,8 @@ if (prog_debug) {
 				break;
 			case INTERROR:
 #if 0
-				wprintf(ierror, ifname(node), iline(node));
-				wprintf("in foreven loop\n");
+				llwprintf(ierror, ifname(node), iline(node));
+				llwprintf("in foreven loop\n");
 #endif
 				return INTERROR;
 			default:
@@ -450,7 +451,7 @@ if (prog_debug) {
 				break;
 			case INTERROR:
 #if 0
-				wprintf(ierror, ifname(node), iline(node));
+				llwprintf(ierror, ifname(node), iline(node));
 				printf("in forothr loop\n");
 #endif
 				return INTERROR;
@@ -464,8 +465,8 @@ if (prog_debug) {
 				break;
 			case INTERROR:
 #if 0
-				wprintf(ierror, ifname(node), iline(node));
-				wprintf("in forlist loop\n");
+				llwprintf(ierror, ifname(node), iline(node));
+				llwprintf("in forlist loop\n");
 #endif
 				return INTERROR;
 			default:
@@ -478,8 +479,8 @@ if (prog_debug) {
                                 break;
                         case INTERROR:
 #if 0
-                                wprintf(ierror, ifname(node), iline(node));
-                                wprintf("in fornotes loop\n");
+                                llwprintf(ierror, ifname(node), iline(node));
+                                llwprintf("in fornotes loop\n");
 #endif
                                 return INTERROR;
                         default:
@@ -492,8 +493,8 @@ if (prog_debug) {
 				break;
 			case INTERROR:
 #if 0
-				wprintf(ierror, ifname(node), iline(node));
-				wprintf("in fornodes loop\n");
+				llwprintf(ierror, ifname(node), iline(node));
+				llwprintf("in fornodes loop\n");
 #endif
 				return INTERROR;
 			default:
@@ -506,8 +507,8 @@ if (prog_debug) {
 				break;
 			case INTERROR:
 #if 0
-				wprintf(ierror, ifname(node), iline(node));
-				wprintf("in traverse loop\n");
+				llwprintf(ierror, ifname(node), iline(node));
+				llwprintf("in traverse loop\n");
 #endif
 				return INTERROR;
 			default:
@@ -520,8 +521,8 @@ if (prog_debug) {
 				break;
 			case INTERROR:
 #if 0
-				wprintf(ierror, ifname(node), iline(node));
-				wprintf("in if statement\n");
+				llwprintf(ierror, ifname(node), iline(node));
+				llwprintf("in if statement\n");
 #endif
 				return INTERROR;
 			default:
@@ -534,8 +535,8 @@ if (prog_debug) {
 				break;
 			case INTERROR:
 #if 0
-				wprintf(ierror, ifname(node), iline(node));
-				wprintf("in while statement\n");
+				llwprintf(ierror, ifname(node), iline(node));
+				llwprintf("in while statement\n");
 #endif
 				return INTERROR;
 			default:
@@ -548,8 +549,8 @@ if (prog_debug) {
 				break;
 			case INTERROR:
 #if 0
-				wprintf(ierror, ifname(node), iline(node));
-				wprintf("in procedure call\n");
+				llwprintf(ierror, ifname(node), iline(node));
+				llwprintf("in procedure call\n");
 #endif
 				return INTERROR;
 			default:
@@ -563,11 +564,11 @@ if (prog_debug) {
 		case IRETURN:
 			if (iargs(node))
 				*pval = evaluate(iargs(node), stab, &eflg);
-/*wprintf("interp return ");show_pvalue(*pval); wprintf("\n");/*DEBUG*/
+/*llwprintf("interp return ");show_pvalue(*pval); wprintf("\n");/*DEBUG*/
 			return INTRETURN;
 		default:
-			wprintf("itype(node) is %d\n", itype(node));
-			wprintf("HUH, HUH, HUH, HUNH!\n");
+			llwprintf("itype(node) is %d\n", itype(node));
+			llwprintf("HUH, HUH, HUH, HUNH!\n");
 			return INTERROR;
 		}
 		node = inext(node);
@@ -745,7 +746,7 @@ PNODE node; TABLE stab; WORD *pval;
 		if (!scel) goto d;
 		insert_pvtable(stab, ifamily(node), PFAM,
 		    (WORD) (fcel = fam_to_cacheel(fam)));
-		insert_pvtable(stab, iparent(node), PINDI, (WORD) scel);
+		insert_pvtable(stab, iiparent(node), PINDI, (WORD) scel);
 		insert_pvtable(stab, inum(node), PINT, (WORD) ncount++);
 		lock_cache(fcel);
 		lock_cache(scel);
@@ -797,7 +798,7 @@ PNODE node; TABLE stab; WORD *pval;
 		if (!scel) goto e;
 		insert_pvtable(stab, ifamily(node), PFAM,
 		    (WORD) (fcel = fam_to_cacheel(fam)));
-		insert_pvtable(stab, iparent(node), PINDI, scel);
+		insert_pvtable(stab, iiparent(node), PINDI, scel);
 		insert_pvtable(stab, inum(node), PINT, (WORD) ncount++);
 		lock_cache(fcel);
 		lock_cache(scel);
@@ -946,11 +947,16 @@ PNODE node; TABLE stab; WORD *pval;
 	STRING record;
 	INTERPTYPE irc;
 	INT len, count = 0;
+	INT icount = 0;
 	insert_pvtable(stab, inum(node), PINT, 0);
 	while (TRUE) {
 		sprintf(key, "I%d", ++count);
-		if (!(record = retrieve_record(key, &len))) break;
+		if (!(record = retrieve_record(key, &len))) {
+		    if (icount < num_indis()) continue;
+		    break;
+		}
 		if (!(indi = string_to_node(record))) continue;
+		icount++;
 		insert_pvtable(stab, ielement(node), PINDI,
 		    indi_to_cacheel(indi));
 		insert_pvtable(stab, inum(node), PINT, count);
@@ -981,11 +987,16 @@ PNODE node; TABLE stab; WORD *pval;
 	STRING record;
 	INTERPTYPE irc;
 	INT len, count = 0;
+	INT scount = 0;
 	insert_pvtable(stab, inum(node), PINT, 0);
 	while (TRUE) {
 		sprintf(key, "S%d", ++count);
-		if (!(record = retrieve_record(key, &len))) break;
+		if (!(record = retrieve_record(key, &len))) {
+		    if(scount < num_sours()) continue;
+		    break;
+		}
 		if (!(sour = string_to_node(record))) continue;
+		scount++;
 		insert_pvtable(stab, ielement(node), PSOUR,
 		    sour_to_cacheel(sour));
 		insert_pvtable(stab, inum(node), PINT, count);
@@ -1016,11 +1027,16 @@ PNODE node; TABLE stab; WORD *pval;
 	STRING record;
 	INTERPTYPE irc;
 	INT len, count = 0;
+	INT ecount = 0;
 	insert_pvtable(stab, inum(node), PINT, count);
 	while (TRUE) {
 		sprintf(key, "E%d", ++count);
-		if (!(record = retrieve_record(key, &len))) break;
+		if (!(record = retrieve_record(key, &len))) {
+		    if(ecount < num_evens()) continue;
+		    break;
+		}
 		if (!(even = string_to_node(record))) continue;
+		ecount++;
 		insert_pvtable(stab, ielement(node), PEVEN,
 		    even_to_cacheel(even));
 		insert_pvtable(stab, inum(node), PINT, count);
@@ -1051,11 +1067,16 @@ PNODE node; TABLE stab; WORD *pval;
 	STRING record;
 	INTERPTYPE irc;
 	INT len, count = 0;
+	INT ocount = 0;
 	insert_pvtable(stab, inum(node), PINT, count);
 	while (TRUE) {
 		sprintf(key, "X%d", ++count);
-		if (!(record = retrieve_record(key, &len))) break;
+		if (!(record = retrieve_record(key, &len))) {
+		    if(ocount < num_othrs()) continue;
+		    break;
+		}
 		if (!(othr = string_to_node(record))) continue;
+		ocount++;
 		insert_pvtable(stab, ielement(node), POTHR,
 		    othr_to_cacheel(othr));
 		insert_pvtable(stab, inum(node), PINT, count);
@@ -1086,11 +1107,16 @@ PNODE node; TABLE stab; WORD *pval;
 	STRING record;
 	INTERPTYPE irc;
 	INT len, count = 0;
+	INT fcount = 0;
 	insert_pvtable(stab, inum(node), PINT, count);
 	while (TRUE) {
 		sprintf(key, "F%d", ++count);
-		if (!(record = retrieve_record(key, &len))) break;
+		if (!(record = retrieve_record(key, &len))) {
+		    if(fcount < num_fams()) continue;
+		    break;
+		}
 		if (!(fam = string_to_node(record))) continue;
+		fcount++;
 		insert_pvtable(stab, ielement(node), PFAM,
 		    (WORD) fam_to_cacheel(fam));
 		insert_pvtable(stab, inum(node), PINT, count);
@@ -1127,11 +1153,13 @@ PNODE node; TABLE stab; WORD *pval;
 	delete_pvalue(val);
 	insert_pvtable(stab, inum(node), PINT, (WORD) 0);
 	FORINDISEQ(seq, el, ncount)
-/*wprintf("loopinterp - %s = ",ielement(node));wprintf("\n");/*DEBUG*/
+/*llwprintf("loopinterp - %s = ",ielement(node));wprintf("\n");/*DEBUG*/
 		insert_pvtable(stab, ielement(node), PINDI,
 		    key_to_indi_cacheel(skey(el)));
-/*wprintf("loopinterp - %s = ",ivalvar(node));wprintf("\n");/*DEBUG*/
-		insert_table(stab, ivalvar(node), (WORD) sval(el));
+/*llwprintf("loopinterp - %s = ",ivalvar(node));wprintf("\n");/*DEBUG*/
+		insert_table(stab, ivalvar(node),
+			 (WORD) (sval(el) ? (WORD)sval(el)
+				: (WORD)create_pvalue(PANY, (WORD)NULL)));
 		insert_pvtable(stab, inum(node), PINT, (WORD) (ncount + 1));
 		switch (irc = interpret((PNODE) ibody(node), stab, pval)) {
 		case INTCONTINUE:
@@ -1230,7 +1258,7 @@ PNODE node; TABLE stab; WORD *pval;
 	INTERPTYPE irc;
 	PNODE arg, parm, proc = (PNODE) valueof(proctab, iname(node));
 	if (!proc) {
-		wprintf("``%s'': undefined procedure\n", iname(node));
+		llwprintf("``%s'': undefined procedure\n", iname(node));
 		return INTERROR;
 	}
 	newtab = create_table();
@@ -1245,12 +1273,16 @@ PNODE node; TABLE stab; WORD *pval;
 		parm = inext(parm);
 	}
 	if (arg || parm) {
-		wprintf("``%s'': mismatched args and params\n", iname(node));
+		llwprintf("``%s'': mismatched args and params\n", iname(node));
 		remove_table(newtab, DONTFREE);
 		return INTERROR;
 	}
 	irc = interpret((PNODE) ibody(proc), newtab, pval);
+#ifdef HOGMEMORY
 	remove_table(newtab, DONTFREE);
+#else
+	remove_pvtable(newtab);
+#endif
 	switch (irc) {
 	case INTRETURN:
 	case INTOKAY:
@@ -1317,7 +1349,7 @@ PNODE node;
 STRING fmt;
 WORD arg1, arg2, arg3;
 {
-	wprintf("\nError in \"%s\" at line %d: ", ifname(node), iline(node));
-	wprintf(fmt, arg1, arg2, arg3);
-	wprintf(".\n");
+	llwprintf("\nError in \"%s\" at line %d: ", ifname(node), iline(node));
+	llwprintf(fmt, arg1, arg2, arg3);
+	llwprintf(".\n");
 }

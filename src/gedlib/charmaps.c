@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*==========================================================
  * charmaps.c -- LifeLines character mapping feature
  * Copyright(c) 1994 by T.T. Wetmore IV; all rights reserved
@@ -70,7 +71,7 @@ init_mapping ()
 	for (indx = 0; indx < NOMAPS; indx++) {
 		tran_tables[indx] = init_map_from_rec(indx, &err);
 		if (err) {
-			wprintf("Error initializing %s map.\n",
+			llwprintf("Error initializing %s map.\n",
 			   map_names[indx]);
 		}
 	}
@@ -106,7 +107,7 @@ BOOLEAN *perr;
 	STRING mem;
 
 	*perr = FALSE;
-	if ((fp = fopen(file, "r")) == NULL) return NULL;
+	if ((fp = fopen(file, LLREADBINARY)) == NULL) return NULL;
 	ASSERT(fstat(fileno(fp), &buf) == 0);
 	if (buf.st_size == 0) {
 		fclose(fp);
@@ -120,13 +121,18 @@ BOOLEAN *perr;
 }
 /*==================================================
  * init_map_from_str -- Init single tranlation table
+ *
+ * Blank lines or lines beginning with "##" are ignored
+ * Translation table entries have the following foramt:
+ *
+ * <original><tab><translation>
  *================================================*/
 TRANTABLE init_map_from_str (str, indx, perr)
 STRING str;
 INT indx;
 BOOLEAN *perr;
 {
-	INT i, n, line = 1, newc;
+	INT i, n, maxn, line = 1, newc;
 	BOOLEAN done;
 	unsigned char c, scratch[50];
 	STRING p, q, *lefts, *rights;
@@ -138,9 +144,19 @@ BOOLEAN *perr;
 	*perr = TRUE;
 	p = str;
 	n = 1;
-	while (c = *p++) {
-		if (c == '\n')
+	while (*p) {
+	    /* skip blank lines and lines beginning with "##" */
+	    if((*p == '\r') || (*p == '\n') || ((*p =='#') && (p[1] == '#'))) {
+		while(*p && (*p != '\n')) p++;
+		if(*p == '\n') p++;
+		continue;
+	    }
+	    while(*p) {
+		if (*p++ == '\n') {
 			n++;
+			break;
+		}
+	    }
 	}
 	lefts = (STRING *) stdalloc(n*sizeof(STRING));
 	rights = (STRING *) stdalloc(n*sizeof(STRING));
@@ -151,9 +167,17 @@ BOOLEAN *perr;
 
 /* Lex the string for patterns and replacements */
 	done = FALSE;
+	maxn = n;	/* don't exceed the entries you have allocated */
 	n = 0;
-	while (!done) {
+	while (!done && (n < maxn)) {
 		if (!*str) break;
+	        /* skip blank lines and lines beginning with "##" */
+	        if((*str == '\r') || (*str == '\n')
+		   || ((*str =='#') && (str[1] == '#'))) {
+		    while(*str && (*str != '\n')) str++;
+		    if(*str == '\n') str++;
+		    continue;
+	        }
 		p = scratch;
 		while (TRUE) {
 			c = *str++;
@@ -175,7 +199,7 @@ BOOLEAN *perr;
 					maperror(indx, line, badhex);
 					return NULL;
 				}
-			} else if (c == '\n') {
+			} else if ((c == '\n') || (c == '\r'))   {
 				maperror(indx, line, norplc);
 				return NULL;
 			} else if (c == 0) {
@@ -183,7 +207,8 @@ BOOLEAN *perr;
 				return NULL;
 			} else if (c == '\\') {
 				c = *str++;
-				if (c == '\t' || c == 0 || c == '\n') {
+				if (c == '\t' || c == 0 || c == '\n'
+				    || c == '\r') {
 					maperror(indx, line, badesc);
 					return NULL;
 				}
@@ -224,15 +249,20 @@ BOOLEAN *perr;
 				break;
 			} else if (c == '\\') {
 				c = *str++;
-				if (c == '\t' || c == 0 || c == '\n') {
+				if (c == '\t' || c == 0 || c == '\n'
+				    || c == '\r') {
 					maperror(indx, line, badesc);
 					return NULL;
 				}
 				*p++ = c;
 			} else if (c == '\t') {
-				maperror(indx, line, notabs);
-				return NULL;
-			} else
+			    	/* treat as beginning of a comment */
+		    		while(*str && (*str != '\n')) str++;
+		    		if(*str == '\n') str++;
+				line++;
+				break;
+			} else if (c == '\r') ;	/* ignore carriage return */
+			  else
 				*p++ = c;
 		}
 		*p = 0;
@@ -291,5 +321,5 @@ maperror(indx, line, errmsg)
 INT indx, line;
 STRING errmsg;
 {
-	wprintf("%s: line %d: %s\n", map_names[indx], line, errmsg);
+	llwprintf("%s: line %d: %s\n", map_names[indx], line, errmsg);
 }

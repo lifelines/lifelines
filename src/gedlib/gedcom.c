@@ -101,7 +101,7 @@ NODE indi;
 		nsibling(prev) = NULL;
 	}
 	if (!name) {
-		wprintf(misnam);
+		llwprintf(misnam);
 		return NULL;
 	}
 	nchild(indi) = node = name;
@@ -148,7 +148,7 @@ NODE fam;
 	}
 	node = NULL;
 	if (!husb && !wife && !chil) {
-		wprintf(noiref);
+		llwprintf(noiref);
 		return NULL;
 	}
 	if (husb) nchild(fam) = node = husb;

@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * valgdcom.c -- Validate GEDCOM file
  * Copyright(c) 1993-96 by T.T. Wetmore IV; all rights reserved
@@ -34,6 +35,19 @@
 #include "gedcom.h"
 #include "gedcheck.h"
 #include "translat.h"
+
+/* external data set by check_stdkeys() , used by addmissingkeys() */
+
+INT gd_itot = 0;        /* total number of individuals */
+INT gd_ftot = 0;        /* total number of families */
+INT gd_stot = 0;        /* total number of sources */
+INT gd_etot = 0;        /* total number of events */
+INT gd_xtot = 0;        /* total number of others */
+INT gd_imax = 0;        /* maximum individual key number */
+INT gd_fmax = 0;        /* maximum family key number */
+INT gd_smax = 0;        /* maximum source key number */
+INT gd_emax = 0;        /* maximum event key number */
+INT gd_xmax = 0;        /* maximum other key number */
 
 static TABLE convtab = NULL;
 static INT rec_type;
@@ -461,9 +475,9 @@ INT line;
 		if ((dex = add_indi_defn(rmvat(val), 0, &pers)) != -1)
 			Sex(pers) |= BE_FEMALE;
 	} else if (eqstr(tag, "SEX")) {
-		if (*val == 'M')
+		if (val && (*val == 'M'))
 			Sex(indi) |= IS_MALE;
-		else if (*val == 'F')
+		else if (val && (*val == 'F'))
 			Sex(indi) |= IS_FEMALE;
 	} else if (eqstr(tag, "NAME")) {
 		named = TRUE;
@@ -483,8 +497,8 @@ INT line;
 {
 	INT dex;
 	ELMNT fam, pers;
-/*wprintf("handle_fam_lev1: %s, %s, %d\n",tag,val,line);/*DEBUG*/
-/*wprintf("handle_fam_lev1: family == %d\n", family);/*DEBUG*/
+/*llwprintf("handle_fam_lev1: %s, %s, %d\n",tag,val,line);/*DEBUG*/
+/*llwprintf("handle_fam_lev1: family == %d\n", family);/*DEBUG*/
 	fam = (family != -1) ? index_data[family] : NULL;
 	if (eqstr(tag, "HUSB")) {
 		if (!pointer_value(val)) {
@@ -510,6 +524,114 @@ INT line;
 		(void) add_indi_defn(rmvat(val), 0, &pers);
 	} else
 		handle_value(val, line);
+}
+/*=================================================
+ * check_akey -- Check for a standard format key
+ *===============================================*/
+int check_akey (firstchar, keyp, maxp)
+    int firstchar;
+    STRING keyp;
+    INT *maxp;
+{
+    INT val;
+    if(keyp && (*keyp == firstchar)) {
+	keyp++;
+	if(*keyp && isdigit(*keyp)) {
+	    val = atoi(keyp);
+	    if(val > *maxp) *maxp = val;
+	    while(*keyp && isdigit(*keyp)) keyp++;
+	    if(*keyp == '\0') return TRUE;
+	}
+    }
+    return FALSE;
+}
+/*=================================================
+ * check_stdkeys -- Check for standard format keys
+ *===============================================*/
+int check_stdkeys ()
+{
+	INT i;
+	int retval = TRUE;
+	gd_imax = 0; gd_itot = 0;
+	gd_fmax = 0; gd_ftot = 0;
+	gd_emax = 0; gd_etot = 0;
+	gd_smax = 0; gd_stot = 0;
+	gd_xmax = 0; gd_xtot = 0;
+	for (i = 0; retval && (i < struct_len); i++) {
+		ELMNT el = index_data[i];
+		switch (Type(el)) {
+		case INDI_REC:
+		    gd_itot++;
+		    retval = check_akey('I', Key(el), &gd_imax);
+		    break;
+		case FAM_REC:
+		    gd_ftot++;
+		    retval = check_akey('F', Key(el), &gd_fmax);
+		    break;
+		case EVEN_REC:
+		    gd_etot++;
+		    retval = check_akey('E', Key(el), &gd_emax);
+		    break;
+		case SOUR_REC:
+		    gd_stot++;
+		    retval = check_akey('S', Key(el), &gd_smax);
+		    break;
+		case OTHR_REC:
+		    gd_xtot++;
+		    retval = check_akey('X', Key(el), &gd_xmax);
+		    break;
+		default: retval = FALSE; break;
+		}
+	}
+	return retval;
+}
+/*================================================
+ * addmissingkeys -- add keys which are not in use
+ *==============================================*/
+addmissingkeys (t)
+    	INT t;		/* type of record: INDI_REC ... */
+{
+    	INT tmax, ttot;
+	INT i,j;
+	INT keystoadd;
+	char *kp;
+
+	switch(t)
+	{
+	case INDI_REC: ttot = gd_itot; tmax = gd_imax; break;
+	case FAM_REC:  ttot = gd_ftot; tmax = gd_fmax; break;
+	case EVEN_REC: ttot = gd_etot; tmax = gd_emax; break;
+	case SOUR_REC: ttot = gd_stot; tmax = gd_smax; break;
+	case OTHR_REC: ttot = gd_xtot; tmax = gd_xmax; break;
+	default: return;
+	}
+
+	if((keystoadd = (tmax - ttot)) > 0) {
+	    ASSERT(kp = (char *)stdalloc(tmax+1));
+	    for(i = 0; i < tmax; i++) kp[i] = 0;
+	    for (i = 0; i < struct_len; i++) {
+		ELMNT el = index_data[i];
+		if(Type(el) == t) {
+		    j = atoi(Key(el)+1);
+		    ASSERT((j>0) && (j <= tmax));
+		    kp[j] = 1;
+		}
+	    }
+	    for(i = 1; (keystoadd > 0) && (i <= tmax); i++) {
+		if(kp[i] == 0) {
+		    switch(t)
+		    {
+		    case INDI_REC: addixref(i); break;
+		    case FAM_REC:  addfxref(i); break;
+		    case EVEN_REC: addexref(i); break;
+		    case SOUR_REC: addsxref(i); break;
+		    case OTHR_REC: addxxref(i); break;
+		    }
+		    keystoadd--;
+		}
+	    }
+	    stdfree(kp);
+	}
 }
 /*=================================================
  * check_references -- Check for undefined problems
@@ -625,8 +747,12 @@ WORD arg1, arg2, arg3, arg4;
 {
 	char str[100];
 	if (!logopen) {
+#ifdef WIN32
+		unlink("err.log");
+#else
 		system("rm -f err.log");
-		ASSERT(flog = fopen("err.log", "w"));
+#endif
+		ASSERT(flog = fopen("err.log", LLWRITETEXT));
 		logopen = TRUE;
 	}
 	fprintf(flog, "Error: ");
@@ -644,8 +770,12 @@ WORD arg1, arg2, arg3, arg4;
 {
 	char str[100];
 	if (!logopen) {
+#ifdef WIN32
+		unlink("err.log");
+#else
 		system("rm -f err.log");
-		ASSERT(flog = fopen("err.log", "w"));
+#endif
+		ASSERT(flog = fopen("err.log", LLWRITETEXT));
 		logopen = TRUE;
 	}
 	fprintf(flog, "Warning: ");
@@ -684,7 +814,7 @@ ELMNT el;
 	}
 	i = struct_len;
 	index_data[i] = el;
-	insert_table(convtab, xref, struct_len++);
+	insert_table(convtab, xref, (WORD) struct_len++);
 	return struct_len - 1;
 }
 /*========================================================

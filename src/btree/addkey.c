@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * addkey.c -- Adds a new key to a BTREE
  * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
@@ -55,7 +56,7 @@ wrintf("fkey = %s\n", fkey2path(fkey));/*DEBUG*/
 	hi = nkeys(index);
 	while (lo <= hi) {
 		SHORT md = (lo + hi)/2;
-		INT rel = strncmp(rkey.r_rkey, rkeys(index, md).r_rkey, 8);
+		INT rel = ll_strncmp(rkey.r_rkey, rkeys(index, md).r_rkey, 8);
 		if (rel < 0)
 			hi = --md;
 		else if (rel > 0)

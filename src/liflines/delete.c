@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * delete.c -- Removes person and family records from database 
  * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
@@ -64,14 +65,26 @@ BOOLEAN conf;	/* have user confirm */
 	for (node = fams; node; node = nsibling(node)) {
 		fam = key_to_fam(rmvat(nval(node)));
 		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
-		if (isex == SEX_MALE) {
-			ASSERT(husb && eqstr(nval(husb), nxref(indi)));
-			free_nodes(husb);
-			husb = NULL;
-		} else {
-			ASSERT(wife && eqstr(nval(wife), nxref(indi)));
-			free_nodes(wife);
-			wife = NULL;
+		prev = NULL;
+		if (isex == SEX_MALE) this = husb;
+		else this = wife;
+		found = FALSE;
+		while (this) {
+			if (eqstr(nxref(indi), nval(this))) {
+				found = TRUE;
+				break;
+			}
+			prev = this;
+			this = nsibling(this);
+		}
+		if(found) {
+			next = nsibling(this);
+			if (prev)
+				nsibling(prev) = next;
+			else if (isex == SEX_MALE) husb = next;
+			else wife = next;
+			nsibling(this) = NULL;
+			free_nodes(this);
 		}
 		join_fam(fam, fref, husb, wife, chil, rest);
 		if (husb || wife || chil)
@@ -97,14 +110,15 @@ checkfamc:
 			prev = this;
 			this = nsibling(this);
 		}
-		ASSERT(found);
-		next = nsibling(this);
-		if (prev)
-			nsibling(prev) = next;
-		else
-			chil = next;
-		nsibling(this) = NULL;
-		free_nodes(this);
+		if(found) {
+			next = nsibling(this);
+			if (prev)
+				nsibling(prev) = next;
+			else
+				chil = next;
+			nsibling(this) = NULL;
+			free_nodes(this);
+		}
 		join_fam(fam, fref, husb, wife, chil, rest);
 		if (husb || wife || chil)
 			fam_to_dbase(fam);
@@ -116,9 +130,16 @@ checkfamc:
 	addixref(keyint);
 	remove_indi_cache(key);
 	for (node = name; node; node = nsibling(node))
+		{
 		remove_name(nval(node), key);
+		}
 	for (node = refn; node; node = nsibling(node))
-		if (nval(node)) remove_refn(nval(node), key);
+		{
+		if (nval(node))
+			{
+			remove_refn(nval(node), key);
+			}
+		}
 	remove_from_browse_lists(key);
 	del_in_dbase(key);
 	join_indi(indi, name, refn, sex, body, famc, fams);

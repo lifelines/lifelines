@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * screen.c -- Curses user interface to LifeLines
  * Copyright(c) 1992-96 by T.T. Wetmore IV; all rights reserved
@@ -34,10 +35,13 @@
 #include "table.h"
 #include "gedcom.h"
 #include "indiseq.h"
+#ifdef WIN32
+#include <stdarg.h>
+#endif
 
 #define LINESREQ 24
 #define COLSREQ  80
-#define VIEWABLE 10
+#define MAXVIEWABLE 30
 #define NEWWIN(r,c)   newwin(r,c,(LINES - (r))/2,(COLS - (c))/2)
 #define SUBWIN(w,r,c) subwin(w,r,c,(LINES - (r))/2,(COLS - (c))/2)
 #ifdef BSD
@@ -71,6 +75,15 @@ WINDOW *extra_menu_win;
 
 INT BAND;
 
+/* the following values are increased if LINES > LINESREQ */
+int TANDEM_LINES = 6;		/* number of lines of tandem info */
+int PER_LINES = 11;		/* number of lines of person info */
+int FAM_LINES = 13;		/* number of lines of family info */
+int PED_LINES = 15;		/* number of lines of pedigree */
+int LIST_LINES = 6;		/* number of lines of person info in list */
+int AUX_LINES = 15;		/* number of lines in aux window */
+int VIEWABLE = 10;		/* can be increased up to MAXVIEWABLE */
+
 static char showing[150];
 static BOOLEAN now_showing = FALSE;
 
@@ -79,12 +92,23 @@ static BOOLEAN now_showing = FALSE;
  *==========================*/
 init_screen ()
 {
+    	int extralines;
 	if (COLS < COLSREQ || LINES < LINESREQ) {
-		wprintf("Your terminal display is too small for LifeLines.");
 		endwin();
+		fprintf(stderr, "Your terminal display is too small for LifeLines.");
 		exit(1);
 	}
-	BAND = 25;
+	extralines = LINES - LINESREQ;
+	if(extralines > 0) {
+	    TANDEM_LINES += (extralines / 2);
+	    PER_LINES += extralines;
+	    FAM_LINES += extralines;
+	    LIST_LINES += extralines;
+	    if(extralines >= 16) PED_LINES += 16; /* one more generation */
+	    VIEWABLE += extralines;
+	    if(VIEWABLE > MAXVIEWABLE) VIEWABLE = MAXVIEWABLE;
+	}
+	BAND = 25;	/* width of columns of menu (3) */
 	create_windows();
 	init_all_windows();
 }
@@ -99,7 +123,7 @@ paint_main_screen()
 	werase(win);
 	BOX(win, 0, 0);
 	show_horz_line(win, 4, 0, COLSREQ);
-	show_horz_line(win, LINESREQ-3, 0, COLSREQ);
+	show_horz_line(win, LINES-3, 0, COLSREQ);
 	wmove(win, 1, 2);
 #ifdef BETA
 	sprintf(buffer, "%s%s", version, betaversion);
@@ -120,7 +144,11 @@ paint_main_screen()
 	mvwaddstr(win, row++, 4, "t  Modify character translation tables");
 	mvwaddstr(win, row++, 4, "u  Miscellaneous utilities");
 	mvwaddstr(win, row++, 4, "x  Handle source, event and other records");
+#ifdef WIN32
+	mvwaddstr(win, row++, 4, "q  Quit [return to command prompt]");
+#else
 	mvwaddstr(win, row++, 4, "q  Quit and return to UNIX");
+#endif
 }
 /*================================================
  * paint_one_per_screen -- Paint one person screen
@@ -131,19 +159,21 @@ paint_one_per_screen ()
 	INT row, col;
 	werase(win);
 	BOX(win, 0, 0);
-	show_horz_line(win, LINESREQ-12, 0, COLSREQ);
-	show_horz_line(win, LINESREQ-3,  0, COLSREQ);
-	row = LINESREQ - 11;
-	mvwaddstr(win, row++, 2, plschs);
+	show_horz_line(win, LINES-12, 0, COLSREQ);
+	show_horz_line(win, LINES-3,  0, COLSREQ);
+	row = LINES - 11;
+	mvwaddstr(win, row, 2, plschs);
+	mvwaddstr(win, row++, 2+strlen(plschs)+3,
+		 "[Advanced View: A, Tandem Browse: C,F,G,M,S,U]");
 	col = 3;
 	mvwaddstr(win, row++, col, "e  Edit the person");
-	mvwaddstr(win, row++, col, "f  Browse to father");
-	mvwaddstr(win, row++, col, "m  Browse to mother");
+	mvwaddstr(win, row++, col, "f  Browse to father(s)");
+	mvwaddstr(win, row++, col, "m  Browse to mother(s)");
 	mvwaddstr(win, row++, col, "s  Browse to spouse/s");
 	mvwaddstr(win, row++, col, "c  Browse to children");
 	mvwaddstr(win, row++, col, "o  Browse to older sib");
 	mvwaddstr(win, row++, col, "y  Browse to younger sib");
-	row = LINESREQ - 10; col = 3 + BAND;
+	row = LINES - 10; col = 3 + BAND;
 	mvwaddstr(win, row++, col, "g  Browse to family");
 	mvwaddstr(win, row++, col, "u  Browse to parents");
 	mvwaddstr(win, row++, col, "b  Browse to persons");
@@ -151,7 +181,7 @@ paint_one_per_screen ()
 	mvwaddstr(win, row++, col, "i  Add as child");
 	mvwaddstr(win, row++, col, "r  Remove as spouse");
 	mvwaddstr(win, row++, col, "d  Remove as child");
-	row = LINESREQ - 10; col = 3 + 2*BAND;
+	row = LINES - 10; col = 3 + 2*BAND;
 	mvwaddstr(win, row++, col, "p  Show pedigree");
 	mvwaddstr(win, row++, col, "n  Create new person");
 	mvwaddstr(win, row++, col, "a  Create new family");
@@ -169,23 +199,25 @@ paint_one_fam_screen ()
 	INT row, col;
 	werase(win);
 	BOX(win, 0, 0);
-	show_horz_line(win, LINESREQ-10, 0, COLSREQ);
-	show_horz_line(win, LINESREQ-3, 0, COLSREQ);
-	row = LINESREQ - 9;
-	mvwaddstr(win, row++, 2, plschs);
+	show_horz_line(win, LINES-10, 0, COLSREQ);
+	show_horz_line(win, LINES-3, 0, COLSREQ);
+	row = LINES - 9;
+	mvwaddstr(win, row, 2, plschs);
+	mvwaddstr(win, row++, 2+strlen(plschs)+6,
+		 "[Advanced View: A, Tandem Browse: C,F,M]");
 	col = 3;
 	mvwaddstr(win, row++, col, "e  Edit the family");
 	mvwaddstr(win, row++, col, "f  Browse to father");
 	mvwaddstr(win, row++, col, "m  Browse to mother");
 	mvwaddstr(win, row++, col, "c  Browse to children");
 	mvwaddstr(win, row++, col, "n  Create new person");
-	row = LINESREQ - 8; col = 3 + BAND;
+	row = LINES - 8; col = 3 + BAND;
 	mvwaddstr(win, row++, col, "s  Add spouse to family");
 	mvwaddstr(win, row++, col, "a  Add child to family");
 	mvwaddstr(win, row++, col, "r  Remove spouse from");
 	mvwaddstr(win, row++, col, "d  Remove child from");
 	mvwaddstr(win, row++, col, "x  Swap two children");
-	row = LINESREQ - 8; col = 3 + 2*BAND;
+	row = LINES - 8; col = 3 + 2*BAND;
 	mvwaddstr(win, row++, col, "t  Enter family tandem");
 	mvwaddstr(win, row++, col, "b  Browse to persons");
 	mvwaddstr(win, row++, col, "z  Browse to person");
@@ -200,21 +232,21 @@ paint_two_per_screen ()
 	INT row, col;
 	werase(win);
 	BOX(win, 0, 0);
-	show_horz_line(win, 7, 0, COLSREQ);
-	show_horz_line(win, 14, 0, COLSREQ);
-	show_horz_line(win, LINESREQ-3, 0, COLSREQ);
-	mvwaddstr(win, 15, 2, plschs);
-	row = 16; col = 3;
+	show_horz_line(win, TANDEM_LINES+1, 0, COLSREQ);
+	show_horz_line(win, 2*TANDEM_LINES+2, 0, COLSREQ);
+	show_horz_line(win, LINES-3, 0, COLSREQ);
+	mvwaddstr(win, 2*TANDEM_LINES+3, 2, plschs);
+	row = 2*TANDEM_LINES+4; col = 3;
 	mvwaddstr(win, row++, col, "e  Edit top person");
 	mvwaddstr(win, row++, col, "t  Browse to top");
 	mvwaddstr(win, row++, col, "f  Browse top father");
 	mvwaddstr(win, row++, col, "m  Browse top mother");
-	row = 16; col = 3 + BAND;
+	row = 2*TANDEM_LINES+4; col = 3 + BAND;
 	mvwaddstr(win, row++, col, "s  Browse top spouse/s");
 	mvwaddstr(win, row++, col, "c  Browse top children");
 	mvwaddstr(win, row++, col, "b  Browse to persons");
 	mvwaddstr(win, row++, col, "d  Copy top to bottom");
-	row = 16; col = 3 + 2*BAND;
+	row = 2*TANDEM_LINES+4; col = 3 + 2*BAND;
 	mvwaddstr(win, row++, col, "a  Add family");
 	mvwaddstr(win, row++, col, "j  Merge bottom to top");
 	mvwaddstr(win, row++, col, "x  Switch top/bottom");
@@ -229,19 +261,19 @@ paint_two_fam_screen ()
 	INT row, col;
 	werase(win);
 	BOX(win, 0, 0);
-	show_horz_line(win, 7, 0, COLSREQ);
-	show_horz_line(win, 14, 0, COLSREQ);
-	show_horz_line(win, LINESREQ-3, 0, COLSREQ);
-	mvwaddstr(win, 15, 2, plschs);
-	row = 16; col = 3;
+	show_horz_line(win, TANDEM_LINES+1, 0, COLSREQ);
+	show_horz_line(win, 2*TANDEM_LINES+2, 0, COLSREQ);
+	show_horz_line(win, LINES-3, 0, COLSREQ);
+	mvwaddstr(win, 2*TANDEM_LINES+3, 2, plschs);
+	row = 2*TANDEM_LINES+4; col = 3;
 	mvwaddstr(win, row++, col, "e  Edit top family");
 	mvwaddstr(win, row++, col, "t  Browse to top");
 	mvwaddstr(win, row++, col, "b  Browse to bottom");
-	row = 16; col = 3 + BAND;
+	row = 2*TANDEM_LINES+4; col = 3 + BAND;
 	mvwaddstr(win, row++, col, "f  Browse to fathers");
 	mvwaddstr(win, row++, col, "m  Browse to mothers");
 	mvwaddstr(win, row++, col, "x  Switch top/bottom");
-	row = 16; col = 3 + 2*BAND;
+	row = 2*TANDEM_LINES+4; col = 3 + 2*BAND;
 	mvwaddstr(win, row++, col, "j  Merge bottom to top");
 	mvwaddstr(win, row++, col, "q  Return to main menu");
 }
@@ -254,18 +286,18 @@ paint_ped_screen ()
 	INT row, col;
 	werase(win);
 	BOX(win, 0, 0);
-	show_horz_line(win, 16, 0, COLSREQ);
-	show_horz_line(win, LINESREQ-3, 0, COLSREQ);
-	mvwaddstr(win, 17, 2, plschs);
-	row = 18; col = 3;
+	show_horz_line(win, PED_LINES+1, 0, COLSREQ);
+	show_horz_line(win, LINES-3, 0, COLSREQ);
+	mvwaddstr(win, PED_LINES+2, 2, plschs);
+	row = PED_LINES+3; col = 3;
 	mvwaddstr(win, row++, col, "e  Edit the person");
 	mvwaddstr(win, row++, col, "i  Browse to person");
 	mvwaddstr(win, row++, col, "f  Browse to father");
-	row = 18; col = 3 + BAND;
+	row = PED_LINES+3; col = 3 + BAND;
 	mvwaddstr(win, row++, col, "m  Browse to mother");
 	mvwaddstr(win, row++, col, "s  Browse to spouse/s");
 	mvwaddstr(win, row++, col, "c  Browse to children");
-	row = 18; col = 3 + 2*BAND;
+	row = PED_LINES+3; col = 3 + 2*BAND;
 	mvwaddstr(win, row++, col, "g  Browse to family");
 	mvwaddstr(win, row++, col, "b  Browse to persons");
 	mvwaddstr(win, row++, col, "q  Return to main menu");
@@ -279,14 +311,14 @@ paint_list_screen ()
 	INT row, col;
 	werase(win);
 	BOX(win, 0, 0);
-	show_horz_line(win, 7, 0, COLSREQ);
-	show_horz_line(win, LINESREQ-3, 0, COLSREQ);
-	show_vert_line(win, 7, 52, 15);
+	show_horz_line(win, LIST_LINES+1, 0, COLSREQ);
+	show_horz_line(win, LINES-3, 0, COLSREQ);
+	show_vert_line(win, LIST_LINES+1, 52, 15);
 #ifndef BSD
-	mvwaddch(win, 7, 52, ACS_TTEE);
+	mvwaddch(win, LIST_LINES+1, 52, ACS_TTEE);
 #endif
-	mvwaddstr(win, 8, 54, "Choose an operation:");
-	row = 9; col = 55;
+	mvwaddstr(win, LIST_LINES+2, 54, "Choose an operation:");
+	row = LIST_LINES+3; col = 55;
 	mvwaddstr(win, row++, col, "j  Move down list");
 	mvwaddstr(win, row++, col, "k  Move up list");
 	mvwaddstr(win, row++, col, "e  Edit this person");
@@ -309,18 +341,18 @@ paint_aux_screen ()
 	INT row, col;
 	werase(win);
 	BOX(win, 0, 0);
-	show_horz_line(win, 16, 0, COLSREQ);
-	show_horz_line(win, LINESREQ-3, 0, COLSREQ);
-	mvwaddstr(win, 17, 2, plschs);
-	row = 18; col = 3;
+	show_horz_line(win, AUX_LINES+1, 0, COLSREQ);
+	show_horz_line(win, LINES-3, 0, COLSREQ);
+	mvwaddstr(win, AUX_LINES+2, 2, plschs);
+	row = AUX_LINES+3; col = 3;
 	mvwaddstr(win, row++, col, "e  Edit the record");
 	mvwaddstr(win, row++, col, "i  Browse to record");
 	mvwaddstr(win, row++, col, "x  Not implemented");
-	row = 18; col = 3 + BAND;
+	row = AUX_LINES+3; col = 3 + BAND;
 	mvwaddstr(win, row++, col, "x  Not implemented");
 	mvwaddstr(win, row++, col, "x  Not implemented");
 	mvwaddstr(win, row++, col, "x  Not implemented");
-	row = 18; col = 3 + 2*BAND;
+	row = AUX_LINES+3; col = 3 + 2*BAND;
 	mvwaddstr(win, row++, col, "x  Not implemented");
 	mvwaddstr(win, row++, col, "x  Not implemented");
 	mvwaddstr(win, row++, col, "q  Return to main menu");
@@ -331,15 +363,15 @@ paint_aux_screen ()
 create_windows ()
 {
 	INT col;
-	stdout_box_win = NEWWIN(LINESREQ-4, COLSREQ-4);
-	stdout_win = SUBWIN(stdout_box_win, LINESREQ-6, COLSREQ-6);
+	stdout_box_win = NEWWIN(LINES-4, COLSREQ-4);
+	stdout_win = SUBWIN(stdout_box_win, LINES-6, COLSREQ-6);
 	scrollok(stdout_win, TRUE);
 	col = COLS/4;
 	debug_box_win = newwin(8, COLSREQ-col-2, 1, col);
 	debug_win = subwin(debug_box_win, 6, COLSREQ-col-4, 2, col+1);
 	scrollok(debug_win, TRUE);
 
- 	main_win = NEWWIN(LINESREQ, COLSREQ);
+ 	main_win = NEWWIN(LINES, COLSREQ);
 	add_menu_win = NEWWIN(8, 66);
 	del_menu_win = NEWWIN(7, 66);
 	trans_menu_win = NEWWIN(10,66);
@@ -429,7 +461,7 @@ INT new_screen;
 {
 	cur_screen = new_screen;
 	if (stdout_vis) {
-		wprintf("\nStrike any key to continue.\n");
+		llwprintf("\nStrike any key to continue.\n");
 		crmode();
 		(void) wgetch(stdout_win);
 		nocrmode();
@@ -438,7 +470,7 @@ INT new_screen;
 	if (!now_showing)
 		place_std_msg();
 	else
-		mvwaddstr(main_win, LINESREQ-2, 2, showing);
+		mvwaddstr(main_win, LINES-2, 2, showing);
 	place_cursor();
 	touchwin(main_win);
 	wrefresh(main_win);
@@ -473,9 +505,9 @@ indi_browse (indi)
 NODE indi;
 {
 	if (cur_screen != ONE_PER_SCREEN) paint_one_per_screen();
-	show_person(indi, 1, 11);
+	show_person(indi, 1, PER_LINES);
 	display_screen(ONE_PER_SCREEN);
-	return interact(main_win, "efmscoygubhirdpnaxtzqA");
+	return interact(main_win, "efmscoygubhirdpnaxtzqACFGMSU");
 }
 /*=======================================
  * fam_browse -- Handle fam_browse screen
@@ -484,9 +516,9 @@ fam_browse (fam)
 NODE fam;
 {
 	if (cur_screen != ONE_FAM_SCREEN) paint_one_fam_screen();
-	show_long_family(fam, 1, 13);
+	show_long_family(fam, 1, FAM_LINES);
 	display_screen(ONE_FAM_SCREEN);
-	return interact(main_win, "efmcnsardxtbzq");
+	return interact(main_win, "efmcnsardxtbzqACFM");
 }
 /*=============================================
  * tandem_browse -- Handle tandem_browse screen
@@ -495,8 +527,8 @@ tandem_browse (indi1, indi2)
 NODE indi1, indi2;
 {
 	if (cur_screen != TWO_PER_SCREEN) paint_two_per_screen();
-	show_person(indi1, 1, 6);
-	show_person(indi2, 8, 6);
+	show_person(indi1, 1, TANDEM_LINES);
+	show_person(indi2, TANDEM_LINES+2, TANDEM_LINES);
 	display_screen(TWO_PER_SCREEN);
 	return interact(main_win, "etfmscbdajxq");
 }
@@ -507,8 +539,8 @@ twofam_browse (fam1, fam2)
 NODE fam1, fam2;
 {
 	if (cur_screen != TWO_FAM_SCREEN) paint_two_fam_screen();
-	show_short_family(fam1, 1, 6);
-	show_short_family(fam2, 8, 6);
+	show_short_family(fam1, 1, TANDEM_LINES);
+	show_short_family(fam2, TANDEM_LINES+2, TANDEM_LINES);
 	display_screen(TWO_FAM_SCREEN);
 	return interact(main_win, "etbfmxjq");
 }
@@ -807,7 +839,8 @@ WINDOW *win;
 STRING prmpt;
 {
 	static unsigned char lcl[100];
-#ifndef BSD
+
+#ifndef USEBSDMVGETSTR
 	echo();
 	mvwgetstr(win, 2, strlen(prmpt) + 2, lcl);
 	noecho();
@@ -819,7 +852,7 @@ STRING prmpt;
 /*===========================================================
  * win_list_init -- Create list of windows of increasing size
  *=========================================================*/
-static WINDOW *list_wins[VIEWABLE];
+static WINDOW *list_wins[MAXVIEWABLE];
 win_list_init ()
 {
 	INT i, row, col = (COLSREQ - 73)/2;
@@ -999,23 +1032,39 @@ STRING *strings;/* string list */
 		}
 	}
 }
-/*=======================================
- * message -- Simple interface to mprintf
- *=====================================*/
-message (s)
-char *s;
-{
-	mprintf("%s", s);
-}
+#ifdef WIN32
 /*===============================================
- * mprintf -- Call as mprintf(fmt, arg, arg, ...)
+ * WIN32: mprintf -- Call as mprintf(fmt, ...)
+ *=============================================*/
+mprintf (STRING fmt, ...)
+{
+	va_list argptr;
+	INT row;
+	wmove(main_win, row = LINES-2, 2);
+	if (cur_screen != LIST_SCREEN) {
+		wclrtoeol(main_win);
+		mvwaddch(main_win, row, COLSREQ-1, ACS_VLINE);
+	} else
+		mvwaddstr(main_win, row, 2, empstr);
+	wmove(main_win, row, 2);
+	va_start(argptr, fmt);
+	vsprintf(showing, fmt, argptr);
+	va_end(argptr);
+	mvwaddstr(main_win, row, 2, showing);
+	now_showing = TRUE;
+	place_cursor();
+	wrefresh(main_win);
+}
+#else
+/*===============================================
+ * Other: mprintf -- Call as mprintf(fmt, arg, arg, ...)
  *=============================================*/
 mprintf (fmt, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
 STRING fmt;
 INT arg1, arg2, arg3, arg4, arg5, arg6, arg7;
 {
 	INT row;
-	wmove(main_win, row = LINESREQ-2, 2);
+	wmove(main_win, row = LINES-2, 2);
 	if (cur_screen != LIST_SCREEN) {
 		wclrtoeol(main_win);
 		mvwaddch(main_win, row, COLSREQ-1, ACS_VLINE);
@@ -1028,6 +1077,15 @@ INT arg1, arg2, arg3, arg4, arg5, arg6, arg7;
 	now_showing = TRUE;
 	place_cursor();
 	wrefresh(main_win);
+}
+#endif
+/*=======================================
+ * message -- Simple interface to mprintf
+ *=====================================*/
+message (s)
+char *s;
+{
+	mprintf("%s", s);
 }
 /*===================================================
  * message_string -- Return background message string
@@ -1062,7 +1120,7 @@ place_std_msg ()
 {
 	STRING str = message_string();
 	INT row;
-	wmove(main_win, row = LINESREQ-2, 2);
+	wmove(main_win, row = LINES-2, 2);
 	if (cur_screen != LIST_SCREEN) {
 		wclrtoeol(main_win);
 		mvwaddch(main_win, row, COLSREQ-1, ACS_VLINE);
@@ -1072,16 +1130,23 @@ place_std_msg ()
 	place_cursor();
 }
 /*=================================================
- * wprintf -- Called as wprintf(fmt, arg, arg, ...)
+ * llwprintf -- Called as wprintf(fmt, arg, arg, ...)
  *===============================================*/
-wprintf (fmt, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
+llwprintf (fmt, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
 STRING fmt;
 INT arg1, arg2, arg3, arg4, arg5, arg6, arg7;
 {
-	if (!stdout_vis) clearw();
-	wprintw(stdout_win, fmt, arg1, arg2, arg3, arg4, arg5,
-	    arg6, arg7);
-	wrefresh(stdout_win);
+#if 0
+        if (!stdout_vis) clearw();
+        wprintw(stdout_win, fmt, arg1, arg2, arg3, arg4, arg5,
+            arg6, arg7);
+#else
+        char s[300];
+        if (!stdout_vis) clearw();
+        sprintf (s, fmt, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+        waddstr (stdout_win, s);
+#endif
+        wrefresh(stdout_win);
 }
 /*==============================
  * clearw -- Clear stdout window
@@ -1148,13 +1213,13 @@ place_cursor ()
 	INT row, col = 30;
 	switch (cur_screen) {
 	case MAIN_SCREEN:    row = 5;        break;
-	case ONE_PER_SCREEN: row = LINESREQ-11; break;
-	case ONE_FAM_SCREEN: row = LINESREQ-9;  break;
-	case PED_SCREEN:     row = 17;       break;
-	case AUX_SCREEN:     row = 17;       break;
-	case TWO_PER_SCREEN: row = 15;       break;
-	case TWO_FAM_SCREEN: row = 15;       break;
-	case LIST_SCREEN:    row = 8; col = 75; break;
+	case ONE_PER_SCREEN: row = LINES-11; break;
+	case ONE_FAM_SCREEN: row = LINES-9;  break;
+	case PED_SCREEN:     row = PED_LINES+2;       break;
+	case AUX_SCREEN:     row = AUX_LINES+2;       break;
+	case TWO_PER_SCREEN: row = 2*TANDEM_LINES+3;       break;
+	case TWO_FAM_SCREEN: row = 2*TANDEM_LINES+3;       break;
+	case LIST_SCREEN:    row = LIST_LINES+2; col = 75; break;
 	default:             row = 1; col = 1; break;
 	}
 	wmove(main_win, row, col);
@@ -1180,7 +1245,11 @@ INT arg1, arg2, arg3, arg4, arg5, arg6, arg7;
 do_edit ()
 {
 	endwin();
+#ifdef WIN32
+	w32system(editstr);
+#else
 	system(editstr);
+#endif
 	touchwin(main_win);
 	clearok(curscr, 1);
 	wrefresh(curscr);

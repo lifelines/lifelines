@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * valtable.c -- Handle value tables in LifeLines
  * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
@@ -64,7 +65,7 @@ STRING *pmsg;	/* error message */
 	struct stat buf;
 	STRING str;
 	BOOLEAN rc;
-	if ((fp = fopen(fname, "r")) == NULL) return TRUE;
+	if ((fp = fopen(fname, LLREADTEXT)) == NULL) return TRUE;
 	ASSERT(fstat(fileno(fp), &buf) == 0);
 	if (buf.st_size == 0) {
 		fclose(fp);
@@ -116,7 +117,7 @@ STRING *pmsg;	/* error message */
 			}
 		}
 		*(q - 1) = 0;
-/*wprintf("val, tag = %s %s\n", val, tag);/*DEBUG*/
+/*llwprintf("val, tag = %s %s\n", val, tag);/*DEBUG*/
 		insert_table(tab, strsave(tag), strsave(val));
 		if (c == 0) break;
 	}

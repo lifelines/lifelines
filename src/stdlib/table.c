@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * table.c -- Hash table operations
  * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
@@ -41,7 +42,10 @@ STRING key;
 	INT hval = 0;
 	while (*key)
 		hval += *key++;
-	return hval %= MAXHASH;
+	hval %= MAXHASH;
+	if(hval < 0) FATAL();
+	if(hval >= MAXHASH) FATAL();
+	return hval;
 }
 /*================================
  * fndentry -- Find entry in table

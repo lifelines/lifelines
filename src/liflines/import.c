@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*==========================================================
  * import.c -- Import GEDCOM file to LifeLines database
  * Copyright(c) 1994 by T.T. Wetmore IV; all rights reserved
@@ -35,11 +36,31 @@
 #include "gedcheck.h"
 #include "translat.h"
 
+/* external data set by check_stdkeys() */
+
+static INT gd_reuse = 1;/* reuse original keys in GEDCOM file if possible */
+
+extern INT gd_itot;	/* total number of individuals */
+extern INT gd_ftot;	/* total number of families */
+extern INT gd_stot;	/* total number of sources */
+extern INT gd_etot;	/* total number of events */
+extern INT gd_xtot;	/* total number of others */
+extern INT gd_imax;	/* maximum individual key number */
+extern INT gd_fmax;	/* maximum family key number */
+extern INT gd_smax;	/* maximum source key number */
+extern INT gd_emax;	/* maximum event key number */
+extern INT gd_xmax;	/* maximum other key number */
+
 extern STRING idgedf, gdcker, gdnadd;
 extern TRANTABLE tran_tables[];
 static BOOLEAN translate_values();
 static restore_record();
 STRING translate_key();
+STRING newixref();
+STRING newfxref();
+STRING newexref();
+STRING newsxref();
+STRING newxxref();
 
 /*=================================================
  * import_from_file -- Read GEDCOM file to database
@@ -53,16 +74,40 @@ BOOLEAN import_from_file ()
 	BOOLEAN emp;
 	INT nindi = 0, nfam = 0, neven = 0;
 	INT nsour = 0, nothr = 0, type, num;
+	INT totkeys, totused;
+	int errs;
+	char msgbuf[80];
 
 /* Open and validate GEDCOM file */
-	fp = ask_for_file("r", idgedf, &fname, NULL);
+	fp = ask_for_file(LLREADTEXT, idgedf, &fname, NULL);
 	if (!fp) return FALSE;
-	wprintf(gdcker, fname);
+	llwprintf(gdcker, fname);
 	if (!validate_gedcom(fp)) {
 		wfield(9, 0, gdnadd);
 		wpos(10, 0);
 		return FALSE;
 	}
+
+	if((num_indis() > 0)
+		|| (num_fams() > 0)
+		|| (num_fams() > 0)
+		|| (num_sours() > 0)
+		|| (num_evens() > 0)
+		|| (num_othrs() > 0)) gd_reuse = FALSE;
+	else if(gd_reuse = check_stdkeys()) {
+		totused = gd_itot + gd_ftot + gd_stot + gd_etot + gd_xtot;
+		totkeys = gd_imax + gd_fmax + gd_smax + gd_emax + gd_xmax;
+		if((totkeys-totused) > 0) {
+		    sprintf(msgbuf,
+	"Using original keys, %d deleted records will be in the database.",
+			    totkeys-totused);
+		}
+		else strcpy(msgbuf, " ");
+		gd_reuse = ask_yes_or_no_msg(
+			msgbuf, "Use original keys from GEDCOM file?");
+	}
+
+	/* start loading the file */
 	rewind(fp);
 
 	wfield(9,  0, "No errors; adding records to database.");
@@ -91,6 +136,14 @@ BOOLEAN import_from_file ()
 		restore_record(conv, type, num);
 		free_nodes(node);
 		node = next_fp_to_node(fp, FALSE, tt, &msg, &emp);
+	}
+	if(gd_reuse && ((totkeys - totused) > 0)) {
+	    wfield(15, 0 , "Adding unused keys as deleted keys...");
+	    addmissingkeys(INDI_REC);
+	    addmissingkeys(FAM_REC);
+	    addmissingkeys(EVEN_REC);
+	    addmissingkeys(SOUR_REC);
+	    addmissingkeys(OTHR_REC);
 	}
 	wpos(15, 0);
 	mprintf("Added (%dP, %dF, %dS, %dE, %dX) records from file `%s'.",
@@ -130,6 +183,7 @@ INT type;
 		add_linked_indi(node);
 		return;
 	}
+	resolve_links(node);
 	ASSERT(str = node_to_string(node));
 	key = rmvat(nxref(node));
 	ASSERT(store_record(key, str, strlen(str)));
@@ -140,7 +194,7 @@ INT type;
  * translate_key -- Translate key from external to internal form
  *============================================================*/
 STRING translate_key (key)
-STRING key;
+STRING key;		/* key does not have surrounding @ chars */
 {
 	ELMNT elm;
 	INT dex = xref_to_index(key);
@@ -149,19 +203,19 @@ STRING key;
 	ASSERT(elm);
 	switch (Type(elm)) {
 	case INDI_REC:
-		if (!New(elm)) New(elm) = strsave(getixref());
+		if (!New(elm)) New(elm) = strsave(newixref(key, gd_reuse));
 		return New(elm);
 	case FAM_REC:
-		if (!New(elm)) New(elm) = strsave(getfxref());
+		if (!New(elm)) New(elm) = strsave(newfxref(key, gd_reuse));
 		return New(elm);
 	case SOUR_REC:
-		if (!New(elm)) New(elm) = strsave(getsxref());
+		if (!New(elm)) New(elm) = strsave(newsxref(key, gd_reuse));
 		return New(elm);
 	case EVEN_REC:
-		if (!New(elm)) New(elm) = strsave(getexref());
+		if (!New(elm)) New(elm) = strsave(newexref(key, gd_reuse));
 		return New(elm);
 	case OTHR_REC:
-		if (!New(elm)) New(elm) = strsave(getxxref());
+		if (!New(elm)) New(elm) = strsave(newxxref(key, gd_reuse));
 		return New(elm);
 	default:
 		FATAL();

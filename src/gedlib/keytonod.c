@@ -21,11 +21,13 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 06 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * keytonod.c -- Convert between keys and node trees
  * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 01 Sep 93
  *   3.0.0 - 08 May 94    3.0.2 - 23 Dec 94
+ *   3.0.3 - 16 Jul 95
  *===========================================================*/
 
 #include "standard.h"
@@ -33,11 +35,28 @@
 #include "gedcom.h"
 #include "cache.h"
 
+INT csz_indi = 200;		/* cache size for indi */
+INT icsz_indi = 3000;		/* indirect cache size for indi */
+INT csz_fam = 200;		/* cache size for fam */
+INT icsz_fam = 2000;		/* indirect cache size for fam */
+INT csz_sour = 200;		/* cache size for sour */
+INT icsz_sour = 2000;		/* indirect cache size for sour */
+INT csz_even = 200;		/* cache size for even */
+INT icsz_even = 2000;		/* indirect cache size for even */
+INT csz_othr = 200;		/* cache size for othr */
+INT icsz_othr = 2000;		/* indirect cache size for othr */
+
 static CACHE create_cache();
 static NODE key_to_node();
 static CACHEEL key_to_cacheel();
 static dereference();
 static CACHE indicache, famcache, evencache, sourcache, othrcache;
+
+static char keybuf[10][32] = { "", "", "", "", "", "", "", "", "", ""};
+static int keyidx = 0;
+
+char badkeylist[100] = "";
+int listbadkeys = 0;
 
 /*=====================================
  * key_to_indi -- Convert key to person
@@ -85,7 +104,7 @@ STRING key;
 CACHEEL key_to_indi_cacheel (key)
 STRING key;
 {
-	return key_to_cacheel(indicache, key, "INDI");
+	return key_to_cacheel(indicache, key, "INDI", FALSE);
 }
 /*====================================================
  * key_to_fam_cacheel -- Convert key to family_cacheel
@@ -93,7 +112,7 @@ STRING key;
 CACHEEL key_to_fam_cacheel (key)
 STRING key;
 {
-	return key_to_cacheel(famcache, key, "FAM");
+	return key_to_cacheel(famcache, key, "FAM", FALSE);
 }
 /*====================================================
  * key_to_even_cacheel -- Convert key to event_cacheel
@@ -101,7 +120,7 @@ STRING key;
 CACHEEL key_to_even_cacheel (key)
 STRING key;
 {
-	return key_to_cacheel(evencache, key, "EVEN");
+	return key_to_cacheel(evencache, key, "EVEN", FALSE);
 }
 /*=====================================================
  * key_to_sour_cacheel -- Convert key to source_cacheel
@@ -109,7 +128,7 @@ STRING key;
 CACHEEL key_to_sour_cacheel (key)
 STRING key;
 {
-	return key_to_cacheel(sourcache, key, "SOUR");
+	return key_to_cacheel(sourcache, key, "SOUR", FALSE);
 }
 /*====================================================
  * key_to_othr_cacheel -- Convert key to other_cacheel
@@ -117,18 +136,18 @@ STRING key;
 CACHEEL key_to_othr_cacheel (key)
 STRING key;
 {
-	return key_to_cacheel(othrcache, key, NULL);
+	return key_to_cacheel(othrcache, key, NULL, FALSE);
 }
 /*======================================
  * init_caches -- Create and init caches
  *====================================*/
 init_caches ()
 {
-	indicache = create_cache((INT)300, (INT)3000);
-	famcache  = create_cache((INT)200, (INT)2000);
-	evencache = create_cache((INT)200, (INT)2000);
-	sourcache = create_cache((INT)200, (INT)2000);
-	othrcache = create_cache((INT)200, (INT)2000);
+	indicache = create_cache((INT)csz_indi, (INT)icsz_indi);
+	famcache  = create_cache((INT)csz_fam, (INT)icsz_fam);
+	evencache = create_cache((INT)csz_even, (INT)csz_even);
+	sourcache = create_cache((INT)csz_sour, (INT)icsz_sour);
+	othrcache = create_cache((INT)csz_othr, (INT)icsz_othr);
 }
 /*=============================
  * create_cache -- Create cache
@@ -258,7 +277,7 @@ static direct_to_indirect (che)
 CACHE che;
 {
 	CACHEEL cel = clastdir(che);
-	for (cel = clastdir(che); cel && clock(cel); cel = cprev(cel))
+	for (cel = clastdir(che); cel && cclock(cel); cel = cprev(cel))
 		;
 	ASSERT(cel);
 	remove_direct(che, cel);
@@ -284,24 +303,58 @@ CACHEEL cel;
 /*========================================================
  * add_to_direct -- Add new CACHEL to direct part of cache
  *======================================================*/
-static CACHEEL add_to_direct (cache, key)
+static CACHEEL add_to_direct (cache, key, reportmode)
 CACHE cache;
 STRING key;
+INT reportmode;	/* if True, then return NULL rather than aborting
+		   if there is no record. Also return NULL
+		   for deleted records (of length less than 6???)
+		 */
 {
 	STRING record;
 	INT len;
 	CACHEEL cel;
 	NODE node;
-/*wprintf("add_to_direct: key == %s\n", key);/*DEBUG*/
+	int i, j;
+
+/*llwprintf("add_to_direct: key == %s\n", key);/*DEBUG*/
 	ASSERT(cache && key);
+	node = NULL;
+	if(record = retrieve_record(key, &len))
+	  {
+	  if(reportmode && (len < 6))
+	      {
+	      stdfree(record);
+	      return(NULL);
+	      }
+	  node = string_to_node(record);
+	  }
+	if(node == NULL)
+	  {
+	  if(listbadkeys) {
+	      if(strlen(badkeylist) < 80 - strlen(key) - 2) {
+		  if(badkeylist[0]) strcat(badkeylist, ",");
+		  strcat(badkeylist, key);
+	      }
+	      return(NULL);
+	  }
+	  llwprintf("key %s is not in database. Use \"btedit <database> <key>\" to fix.\n", (char *) key);
+	  llwprintf("where <key> is probably one of the following:\n");
+	  for(i = 0; i < 10; i++)
+	    {
+	    j = keyidx + i;
+	    if(j >= 10) j -= 10;
+	    llwprintf(" %s", (char *)keybuf[j]);
+	    }
+	  llwprintf("\n");
+	  }
+	ASSERT(node);
 	ASSERT(csizedir(cache) < cmaxdir(cache));
 	cel = (CACHEEL) stdalloc(sizeof(*cel));
 	insert_table(cdata(cache), key = strsave(key), cel);
-	ASSERT(record = retrieve_record(key, &len));
-	ASSERT(node = string_to_node(record));
 	cnode(cel) = node;
 	ckey(cel) = key;
-	clock(cel) = FALSE;
+	cclock(cel) = FALSE;
 	first_direct(cache, cel);
 	stdfree(record);
 	return cel;
@@ -309,12 +362,19 @@ STRING key;
 /*======================================================
  * key_to_cacheel -- Return CACHEEL corresponding to key
  *====================================================*/
-static CACHEEL key_to_cacheel (cache, key, tag)
+static CACHEEL key_to_cacheel (cache, key, tag, reportmode)
 CACHE cache;
 STRING key;
 STRING tag;
+INT reportmode;
 {
 	CACHEEL cel;
+
+	strncpy(keybuf[keyidx], (key ? (char *)key : "NULL"), 31);
+	keybuf[keyidx][31] = '\0';
+	keyidx++;
+	if(keyidx >= 10) keyidx = 0;
+
 	if (cel = (CACHEEL) valueof(cdata(cache), key)) {
 		if (cnode(cel))
 			direct_to_first(cache, cel);
@@ -324,7 +384,7 @@ STRING tag;
 			indirect_to_first(cache, cel);
 		}
 		if (tag) {
-/*wprintf("BEFORE ASSERT: tag, ntag(cnode(cel)) = %s, %s\n", tag,
+/*llwprintf("BEFORE ASSERT: tag, ntag(cnode(cel)) = %s, %s\n", tag,
 ntag(cnode(cel)));/*DEBUG*/
 			ASSERT(eqstr(tag, ntag(cnode(cel))));
 		}
@@ -335,8 +395,8 @@ ntag(cnode(cel)));/*DEBUG*/
 			remove_last(cache);
 		direct_to_indirect(cache);
 	}
-	cel = add_to_direct(cache, key);
-	if (tag) {
+	cel = add_to_direct(cache, key, reportmode);
+	if (cel && tag) {
 		ASSERT(eqstr(tag, ntag(cnode(cel))));
 	}
 	return cel;
@@ -351,7 +411,7 @@ STRING tag;
 {
 	CACHEEL cel;
 	ASSERT(cache && key);
-	if (!(cel = key_to_cacheel(cache, key, tag))) return NULL;
+	if (!(cel = key_to_cacheel(cache, key, tag, FALSE))) return NULL;
 	return cnode(cel);
 }
 /*======================================
@@ -361,7 +421,7 @@ lock_cache (cel)
 CACHEEL cel;
 {
 	ASSERT(cnode(cel));
-	clock(cel)++;
+	cclock(cel)++;
 }
 /*==========================================
  * unlock_cache -- Unlock CACHEEL from cache
@@ -370,7 +430,7 @@ unlock_cache (cel)
 CACHEEL cel;
 {
 	ASSERT(cnode(cel));
-	clock(cel)--;
+	cclock(cel)--;
 }
 /*================================
  * cache_stats -- Show cache stats
@@ -382,7 +442,7 @@ cache_stats ()
 	INT n = 0;
 	CACHEEL cel;
 	for (cel = cfirstdir(c); cel; cel = cnext(cel)) {
-		if (clock(cel)) n++;
+		if (cclock(cel)) n++;
 	}
 	mprintf("Cache contents -- I: %dD  %dI  %dL;  F: %dD  %dI",
 	    csizedir(c), csizeind(c), n, csizedir(f), csizeind(f));
@@ -465,7 +525,7 @@ NODE node;
 	insert_table(cdata(cache), key = strsave(rmvat(nxref(node))), cel);
 	cnode(cel) = node;
 	ckey(cel) = key;
-	clock(cel) = FALSE;
+	cclock(cel) = FALSE;
 	first_direct(cache, cel);
 }
 /*==============================================
@@ -525,7 +585,7 @@ NODE indi;
 {
         CACHEEL cel;
         if (!indi) return NULL;
-/*wprintf("indi_to_cacheel: %s\n", nxref(indi));/*DEBUG*/
+/*llwprintf("indi_to_cacheel: %s\n", nxref(indi));/*DEBUG*/
         cel = key_to_indi_cacheel(rmvat(nxref(indi)));
         ASSERT(cel);
         return cel;
@@ -589,4 +649,44 @@ NODE node;
         refn = REFN(node);
         if (refn && nval(refn)) return nval(refn);
         return rmvat(nxref(node)) + 1;
+}
+/*=====================================================
+ * rkey_to_indi_cacheel -- Convert key to person cacheel (report mode)
+ *===================================================*/
+CACHEEL rkey_to_indi_cacheel (key)
+STRING key;
+{
+	return key_to_cacheel(indicache, key, "INDI", TRUE);
+}
+/*====================================================
+ * key_to_fam_cacheel -- Convert key to family_cacheel (report mode)
+ *==================================================*/
+CACHEEL rkey_to_fam_cacheel (key)
+STRING key;
+{
+	return key_to_cacheel(famcache, key, "FAM", TRUE);
+}
+/*====================================================
+ * key_to_even_cacheel -- Convert key to event_cacheel (report mode)
+ *==================================================*/
+CACHEEL rkey_to_even_cacheel (key)
+STRING key;
+{
+	return key_to_cacheel(evencache, key, "EVEN", TRUE);
+}
+/*=====================================================
+ * key_to_sour_cacheel -- Convert key to source_cacheel (report mode)
+ *===================================================*/
+CACHEEL rkey_to_sour_cacheel (key)
+STRING key;
+{
+	return key_to_cacheel(sourcache, key, "SOUR", TRUE);
+}
+/*====================================================
+ * key_to_othr_cacheel -- Convert key to other_cacheel (report mode)
+ *==================================================*/
+CACHEEL rkey_to_othr_cacheel (key)
+STRING key;
+{
+	return key_to_cacheel(othrcache, key, NULL, TRUE);
 }

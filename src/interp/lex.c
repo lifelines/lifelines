@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * lex.c -- Low level lexer of program interpreter
  * Copyright(c) 1992-95 by T.T. Wetmore IV; all rights reserved
@@ -29,7 +30,7 @@
  *   3.0.3 - 21 Sep 95
  *===========================================================*/
 
-#define YYSTYPE INTERPTYPE
+#define YYSTYPE PNODE
 
 #include "standard.h"
 #include "table.h"
@@ -62,8 +63,8 @@ int yylex()
 
 /* Place token based debugging here */
 
-/*if (isascii(lex)) wprintf("lex<%c> ", lex);
-else wprintf("lex<%d> ", lex);/*DEBUG*/
+/*if (isascii(lex)) llwprintf("lex<%c> ", lex);
+else llwprintf("lex<%d> ", lex);/*DEBUG*/
 
 	return lex;
 }
@@ -103,7 +104,7 @@ int lowyylex ()
 		}
 		*p = 0;
 		unchar(c);
-/*wprintf("in lex.c -- IDEN is %s\n", tokbuf);/*DEBUG*/
+/*llwprintf("in lex.c -- IDEN is %s\n", tokbuf);/*DEBUG*/
 		if (reserved(tokbuf, &retval))  return retval;
 		yylval = (PNODE) strsave(tokbuf);
 		return IDEN;
@@ -130,7 +131,7 @@ int lowyylex ()
 		if (t != '.') {
 			unchar(c);
 			Yival *= mul;
-			/* 			yylval = NULL; nozell */
+			yylval = NULL;
 			return ICONS;
 		}
 		t = chartype(c = inchar());
@@ -155,7 +156,7 @@ int lowyylex ()
 				return '.';
 		}
 		Yfval = mul*(Yival + Yfval/fdiv);
-		/*		yylval = NULL; nozell */
+		yylval = NULL;
 		return FCONS;
 	}
 	if (c == '"') {
@@ -246,10 +247,16 @@ INT *pval;
 inchar ()
 {
 	INT c;
-	if (Lexmode == FILEMODE)
+#ifdef SKIPCTRLZ
+	do {
+#endif
+	   if (Lexmode == FILEMODE)
 		c = getc(Pinfp);
-	else
+	   else
 		c = *Lp++;
+#ifdef SKIPCTRLZ
+ 	   } while(c == 26);		/* skip CTRL-Z */
+#endif
 	if (c == '\n') Plineno++;
 	return c;
 }

@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * newrecs.c -- Handle source, event and other record types
  * Copyright(c) 1992-96 by T.T. Wetmore IV; all rights reserved
@@ -91,7 +92,7 @@ STRING recstr;		/* default record */
 STRING redt;		/* re-edit message */
 BOOLEAN (*val)();	/* tree validate predicate */
 STRING cfrm;		/* confirm message */
-INT (*getref)();	/* get next internal key */
+STRING (*getref)();	/* get next internal key */
 INT (*todbase)();	/* write record to dbase */
 INT (*tocache)();	/* write record to cache */
 {
@@ -102,7 +103,7 @@ INT (*tocache)();	/* write record to cache */
 	TRANTABLE tti = tran_tables[MEDIN];
 
 /* Create template for user to edit */
-	if (!(fp = fopen(editfile, "w"))) return FALSE;
+	if (!(fp = fopen(editfile, LLWRITETEXT))) return FALSE;
 	fprintf(fp, "%s\n", recstr);
 
 /* Have user edit new record */
@@ -132,7 +133,7 @@ INT (*tocache)();	/* write record to cache */
 		if (node) free_nodes(node);
 		return FALSE;
 	}
-	nxref(node) = strsave((*getref)());
+	nxref(node) = strsave((STRING)(*getref)());
 	key = rmvat(nxref(node));
 	for (refn = nchild(node); refn; refn = nsibling(refn)) {
 		if (eqstr("REFN", ntag(refn)) && nval(refn))
@@ -179,6 +180,7 @@ INT letr;		/* record type: E, S or X */
 STRING redt;		/* re-edit message */
 BOOLEAN (*val)();	/* validate routine */
 STRING cfrm;		/* confirm message */
+STRING tag;		/* tag */
 INT (*todbase)();	/* write record to dbase */
 STRING gdmsg;		/* success message */
 {
@@ -199,7 +201,7 @@ STRING gdmsg;		/* success message */
 	oldr = refn ? nval(refn) : NULL;
 
 /* Have user edit record */
-	ASSERT(fp = fopen(editfile, "w"));
+	ASSERT(fp = fopen(editfile, LLWRITETEXT));
 	write_nodes(0, fp, tto, node1,  TRUE, TRUE, TRUE);
 	fclose(fp);
 	do_edit();

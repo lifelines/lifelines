@@ -21,6 +21,11 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* 07 Jan 2000 Modified by Paul B. McBride pmcbride@tiac.net
+ * add "#define YACC_C" so function prototypes could be suppressed.
+ * Casts on function arguments and return values need to be added
+ * if prototypes are to be used, or pointers and integers are of
+ * different sizes. */
 /*=============================================================
  * yacc.y - Grammar of LifeLines programming language
  * Copyright(c) 1991-95 by T.T. Wetmore IV; all rights reserved
@@ -29,6 +34,7 @@
  *   3.0.3 - 08 Aug 95
  *===========================================================*/
 %{
+#define YACC_C
 #include "standard.h"
 #include "table.h"
 #include "gedcom.h"
@@ -304,6 +310,6 @@ STRING str;
 	extern INT Plineno;
 	extern STRING Pfname;
 
-	wprintf("Syntax Error: %s: line %d\n", Pfname, Plineno);
+	llwprintf("Syntax Error: %s: line %d\n", Pfname, Plineno);
 	Perrors++;
 }

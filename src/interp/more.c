@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * Copyright(c) 1991-95 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 26 Sep 93
@@ -35,6 +36,13 @@
 #include "cache.h"
 #include "interp.h"
 #include "indiseq.h"
+
+#ifdef WIN32
+#include "mycurses.h"
+#else
+#include "curses.h"
+STRING strncpy();
+#endif
 
 extern STRING notone, ifone, progname;
 extern NODE format_and_choose_indi();
@@ -97,7 +105,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	temp = create_list();
 	name_to_list(str, temp, &len, &sind);
 	FORLIST(temp, el)
-		push_list(list, create_pvalue(PSTRING, el));
+		push_list(list, create_pvalue(PSTRING, (WORD)el));
 	ENDLIST
 	insert_pvtable(stab, iident(lvar), PINT, len);
 	insert_pvtable(stab, iident(svar), PINT, sind);
@@ -151,7 +159,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	temp = create_list();
 	place_to_list(str, temp, &len);
 	FORLIST(temp, el)
-		push_list(list, create_pvalue(PSTRING, el));
+		push_list(list, create_pvalue(PSTRING, (WORD)el));
 	ENDLIST
 	insert_pvtable(stab, iident(lvar), PINT, len);
 	return NULL;
@@ -190,7 +198,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 		return NULL;
 	}
 	dlm = (STRING) pvalue(val2);
-/*wprintf("dlm = %s\n", dlm);/*DEBUG*/
+/*llwprintf("dlm = %s\n", dlm);/*DEBUG*/
 	*eflg = TRUE;
 	if (!iistype(lvar, IIDENT)) {
 		prog_error(node, "3rd arg to extracttokens must be a variable");
@@ -201,7 +209,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	temp = create_list();
 	value_to_list(str, temp, &len, dlm);
 	FORLIST(temp, el)
-		push_list(list, create_pvalue(PSTRING, el));
+		push_list(list, create_pvalue(PSTRING, (WORD)el));
 	ENDLIST
 	insert_pvtable(stab, iident(lvar), PINT, len);
 	delete_pvalue(val1);
@@ -229,7 +237,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 		delete_pvalue(val);
 	}
 	return create_pvalue(PSTRING,
-	    (full ? readpath : lastpathname(readpath)));
+	    (WORD)(full ? readpath : lastpathname(readpath)));
 }
 /*===========================================+
  * __index -- Find nth occurrence of substring
@@ -261,7 +269,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 		return NULL;
 	}
 	num = (INT) pvalue(val3);
-	set_pvalue(val3, PINT, index(str, sub, num));
+	set_pvalue(val3, PINT, (WORD) index(str, sub, num));
 	delete_pvalue(val1);
 	delete_pvalue(val2);
 	return val3;
@@ -297,7 +305,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 		return NULL;
 	}
 	hi = (INT) pvalue(val2);
-	set_pvalue(val2, PSTRING, substring(str, lo, hi));
+	set_pvalue(val2, PSTRING, (WORD) substring(str, lo, hi));
 	delete_pvalue(val1);
 	return val2;
 }
@@ -349,7 +357,6 @@ STRING s;
 INT i, j;
 {
 	static char scratch[MAXLINELEN+1];
-	STRING strncpy();
 	if (!s || *s == 0 || i <= 0 || i > j || j > strlen(s)) return NULL;
 	strncpy(scratch, &s[i-1], j-i+1);
 	scratch[j-i+1] = 0;
@@ -374,7 +381,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	if (!seq || length_indiseq(seq) < 1) return NULL;
 	indi = format_and_choose_indi(seq, FALSE, FALSE, TRUE, ifone, notone);
 	if (!indi) return NULL;
-	return create_pvalue(PINDI, indi_to_cacheel(indi));
+	return create_pvalue(PINDI, (WORD)indi_to_cacheel(indi));
 }
 /*================================================+
  * choosesubset -- Have user choose subset from set
@@ -397,7 +404,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	format_indiseq(new, FALSE, FALSE);
 	msg = (length_indiseq(new) > 1) ? notone : ifone;
 	new = (INDISEQ) choose_list_from_indiseq(msg, new);
-	return create_pvalue(PSET, new);
+	return create_pvalue(PSET, (WORD)new);
 }
 /*=========================================================+
  * choosechild -- Have user choose child of person or family
@@ -419,28 +426,28 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	}
 	cel = (CACHEEL) pvalue(val);
 	delete_pvalue(val);
-	if (!cel) return create_pvalue(PINDI, NULL);
+	if (!cel) return create_pvalue(PINDI, (WORD)NULL);
 	key = ckey(cel);
 	if (*key == 'I') {
 		indi = key_to_indi(key);
 		seq = indi_to_children(indi);
 		if (!seq || length_indiseq(seq) < 1)
-			return create_pvalue(PINDI, NULL);
+			return create_pvalue(PINDI, (WORD)NULL);
 		indi = format_and_choose_indi(seq, FALSE, FALSE, TRUE,
 		    ifone, notone);
 		remove_indiseq(seq, FALSE);
-		if (!indi) return create_pvalue(PINDI, NULL);
-		return create_pvalue(PINDI, indi_to_cacheel(indi));
+		if (!indi) return create_pvalue(PINDI, (WORD)NULL);
+		return create_pvalue(PINDI, (WORD)indi_to_cacheel(indi));
 	} else if (*key == 'F') {
 		fam = key_to_fam(key);
 		seq = fam_to_children(fam);
 		if (!seq || length_indiseq(seq) < 1)
-			return create_pvalue(PINDI, NULL);
+			return create_pvalue(PINDI, (WORD)NULL);
 		indi = format_and_choose_indi(seq, FALSE, FALSE, TRUE,
 		    ifone, notone);
 		remove_indiseq(seq, FALSE);
-		if (!indi) return create_pvalue(PINDI, NULL);
-		return create_pvalue(PINDI, indi_to_cacheel(indi));
+		if (!indi) return create_pvalue(PINDI, (WORD)NULL);
+		return create_pvalue(PINDI, (WORD)indi_to_cacheel(indi));
 	}
 	*eflg = TRUE;
 	prog_error(node, "major error in choosechild");
@@ -461,11 +468,11 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	}
 	seq = indi_to_spouses(indi);
 	if (!seq || length_indiseq(seq) < 1)
-		return create_pvalue(PINDI, NULL);
+		return create_pvalue(PINDI, (WORD)NULL);
 	indi = format_and_choose_indi(seq, FALSE, TRUE, TRUE, ifone, notone);
 	remove_indiseq(seq, FALSE);
-	if (!indi) return create_pvalue(PINDI, NULL);
-	return create_pvalue(PINDI, indi_to_cacheel(indi));
+	if (!indi) return create_pvalue(PINDI, (WORD)NULL);
+	return create_pvalue(PINDI, (WORD)indi_to_cacheel(indi));
 }
 /*==============================================+
  * choosefam -- Have user choose family of person
@@ -482,11 +489,11 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	}
 	seq = indi_to_families(indi, TRUE);
 	if (!seq || length_indiseq(seq) < 1)
-		return create_pvalue(PFAM, NULL);
+		return create_pvalue(PFAM, (WORD)NULL);
 	fam = format_and_choose_indi(seq, TRUE, TRUE, TRUE, ifone, notone);
 	remove_indiseq(seq, FALSE);
-	if (!fam) return create_pvalue(PFAM, NULL);
-	return create_pvalue(PFAM, fam_to_cacheel(fam));
+	if (!fam) return create_pvalue(PFAM, (WORD)NULL);
+	return create_pvalue(PFAM, (WORD)fam_to_cacheel(fam));
 }
 /*===================================================+
  * menuchoose -- Have user choose from list of options
@@ -510,7 +517,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	delete_pvalue(val);
 	val = NULL;
 	if (!list || length_list(list) < 1)
-		return create_pvalue(PINT, 0);
+		return create_pvalue(PINT, (WORD)0);
 	msg = NULL;
 	arg = (PNODE) inext(arg);
 	if (arg) {
@@ -532,7 +539,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	i = choose_from_list(ttl, len, strngs);
 	stdfree(strngs);
 	delete_pvalue(val);
-	return create_pvalue(PINT, i + 1);
+	return create_pvalue(PINT, (WORD)(i + 1));
 }
 /*================================+
  * system -- Run shell command
@@ -553,8 +560,12 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 		return NULL;
 	}
 	endwin();
+#ifndef WIN32
 	system("clear");
+#endif
 	system(cmd);
+	touchwin(curscr);
+	wrefresh(curscr);
 	delete_pvalue(val);
 	return NULL;
 }
@@ -574,13 +585,13 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	while (TRUE) {
 		sprintf(key, "I%d", ++i);
 		if (!(record = retrieve_record(key, &len)))
-			return create_pvalue(PINDI, NULL);
+			return create_pvalue(PINDI, (WORD)NULL);
 		if (!(indi = string_to_node(record))) {
 			stdfree(record);
 			continue;
 		}
 		stdfree(record);
-		val = create_pvalue(PINDI, indi_to_cacheel(indi));
+		val = create_pvalue(PINDI, (WORD)indi_to_cacheel(indi));
 		free_nodes(indi);/*yes*/
 		return val;
 	}
@@ -601,19 +612,19 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 		prog_error(node, "the arg to nextindi is not a person");
 		return NULL;
 	}
-	if (!indi) return create_pvalue(PINDI, NULL);
+	if (!indi) return create_pvalue(PINDI, (WORD)NULL);
 	strcpy(key, indi_to_key(indi));
 	i = atoi(&key[1]);
 	while (TRUE) {
 		sprintf(key, "I%d", ++i);
 		if (!(record = retrieve_record(key, &len)))
-			return create_pvalue(PINDI, NULL);
+			return create_pvalue(PINDI, (WORD)NULL);
 		if (!(indi = string_to_node(record))) {
 			stdfree(record);
 			continue;
 		}
 		stdfree(record);
-		val = create_pvalue(PINDI, indi_to_cacheel(indi));
+		val = create_pvalue(PINDI, (WORD)indi_to_cacheel(indi));
 		free_nodes(indi);/*yes*/
 		return val;
 	}
@@ -634,19 +645,19 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 		prog_error(node, "the arg to previndi must be a person");
 		return NULL;
 	}
-	if (!indi) return create_pvalue(PINDI, NULL);
+	if (!indi) return create_pvalue(PINDI, (WORD)NULL);
 	strcpy(key, indi_to_key(indi));
 	i = atoi(&key[1]);
 	while (TRUE) {
 		sprintf(key, "I%d", --i);
 		if (!(record = retrieve_record(key, &len)))
-			return create_pvalue(PINDI, NULL);
+			return create_pvalue(PINDI, (WORD)NULL);
 		if (!(indi = string_to_node(record))) {
 			stdfree(record);
 			continue;
 		}
 		stdfree(record);
-		val = create_pvalue(PINDI, indi_to_cacheel(indi));
+		val = create_pvalue(PINDI, (WORD)indi_to_cacheel(indi));
 		free_nodes(indi);/*yes*/
 		return val;
 	}
@@ -675,13 +686,13 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	while (TRUE) {
 		sprintf(key, "F%d", ++i);
 		if (!(record = retrieve_record(key, &len)))
-			return create_pvalue(PFAM, NULL);
+			return create_pvalue(PFAM, (WORD)NULL);
 		if (!(fam = string_to_node(record))) {
 			stdfree(record);
 			continue;
 		}
 		stdfree(record);
-		val = create_pvalue(PFAM, fam_to_cacheel(fam));
+		val = create_pvalue(PFAM, (WORD)fam_to_cacheel(fam));
 		free_nodes(fam);/*yes*/
 		return val;
 	}
@@ -702,19 +713,19 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 		prog_error(node, "the arg to nextfam must be a family");
 		return NULL;
 	}
-	if (!fam) return create_pvalue(PFAM, NULL);
+	if (!fam) return create_pvalue(PFAM, (WORD)NULL);
 	strcpy(key, fam_to_key(fam));
 	i = atoi(&key[1]);
 	while (TRUE) {
 		sprintf(key, "F%d", ++i);
 		if (!(record = retrieve_record(key, &len)))
-			return create_pvalue(PFAM, NULL);
+			return create_pvalue(PFAM, (WORD)NULL);
 		if (!(fam = string_to_node(record))) {
 			stdfree(record);
 			continue;
 		}
 		stdfree(record);
-		val = create_pvalue(PFAM, fam_to_cacheel(fam));
+		val = create_pvalue(PFAM, (WORD)fam_to_cacheel(fam));
 		free_nodes(fam);/*yes*/
 		return val;
 	}
@@ -735,19 +746,19 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 		prog_error(node, "the arg to prevfam must be a family");
 		return NULL;
 	}
-	if (!fam) return create_pvalue(PFAM, NULL);
+	if (!fam) return create_pvalue(PFAM, (WORD)NULL);
 	strcpy(key, fam_to_key(fam));
 	i = atoi(&key[1]);
 	while (TRUE) {
 		sprintf(key, "F%d", --i);
 		if (!(record = retrieve_record(key, &len)))
-			return create_pvalue(PFAM, NULL);
+			return create_pvalue(PFAM, (WORD)NULL);
 		if (!(fam = string_to_node(record))) {
 			stdfree(record);
 			continue;
 		}
 		stdfree(record);
-		val = create_pvalue(PFAM, fam_to_cacheel(fam));
+		val = create_pvalue(PFAM, (WORD)fam_to_cacheel(fam));
 		free_nodes(fam);/*yes*/
 		return val;
 	}
@@ -778,18 +789,18 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	}
 	key = (STRING) pvalue(val);
 	if (*key == '@') key = rmvat(key);
-wprintf("__getrecord: key = %s\n", key);/*DEBUG*/
+/* llwprintf("__getrecord: key = %s\n", key);/*DEBUG*/
 	if (*key == 'I' || *key == 'F' || *key == 'S' ||
 	    *key == 'E' || *key == 'X') {
 		rec = retrieve_record(key, &len);
 		delete_pvalue(val);
-		if (rec == NULL) return create_pvalue(PGNODE, NULL);
-		val = create_pvalue(PGNODE, string_to_node(rec));
+		if (rec == NULL) return create_pvalue(PGNODE, (WORD)NULL);
+		val = create_pvalue(PGNODE, (WORD)string_to_node(rec));
 		stdfree(rec);
 		return val;
 	}
 	delete_pvalue(val);
-	return create_pvalue(PGNODE, NULL);
+	return create_pvalue(PGNODE, (WORD)NULL);
 }
 /*==================================================+
  * freerecord -- Free GEDCOM node tree from getrecord
@@ -814,9 +825,9 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 		return NULL;
 	}
 	key = (STRING) pvalue(val);
-	rc = (*key && (strlen(key)) > 2 && (*key == '@') &&
+	rc = (key && *key && (strlen(key) > 2) && (*key == '@') &&
 	    (key[strlen(key)-1] == '@'));
-	set_pvalue(val, PBOOL, rc);
+	set_pvalue(val, PBOOL, (WORD) rc);
 	return val;
 }
 /*========================================+
@@ -844,7 +855,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	}
 	len = (INT) pvalue(val2);
 	delete_pvalue(val2);
-	set_pvalue(val1, PSTRING, rightjustify(str, len));
+	set_pvalue(val1, PSTRING, (WORD) rightjustify(str, len));
 	return val1;
 }
 /*===========================================
@@ -924,7 +935,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	}
 	line = (NODE) pvalue(val);
 	if (!line) return val;
-	set_pvalue(val, PGNODE, copy_nodes(line, TRUE, TRUE));
+	set_pvalue(val, PGNODE, (WORD) copy_nodes(line, TRUE, TRUE));
 	return val;
 }
 /*===================================================+
@@ -936,22 +947,24 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	PNODE arg = (PNODE) iargs(node);
 	STRING name;
-	PVALUE val2, val1 = eval_and_coerce(PSTRING, arg, stab, eflg);
+	PVALUE val1 = eval_and_coerce(PSTRING, arg, stab, eflg);
 	if (*eflg) {
 		prog_error(node, "1st arg to genindiset must be a string");
 		return NULL;
 	}
 	name = (STRING) pvalue(val1);
+	if(name) name = strsave(name);
+	delete_pvalue(val1);
 	arg = inext(arg);
 	if (!iistype(arg, IIDENT)) {
 		*eflg = TRUE;
 		prog_error(node, "2nd arg to genindiset must be a variable");
 		return NULL;
 	}
-	assign_iden(stab, iident(arg), create_pvalue(PSET, NULL));
+	assign_iden(stab, iident(arg), create_pvalue(PSET, (WORD)NULL));
 	if (!name || *name == 0) return NULL;
 	assign_iden(stab, iident(arg), create_pvalue(PSET,
-	    name_to_indiseq(name)));
+	    (WORD)name_to_indiseq(name)));
 	return NULL;
 }
 /*POINT*/
@@ -964,7 +977,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	extern STRING version;
 	*eflg = FALSE;
-	return create_pvalue(PSTRING, version);
+	return create_pvalue(PSTRING, (WORD)version);
 }
 /*========================================+
  * __pvalue -- Show a PVALUE -- Debug routine
@@ -976,10 +989,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	extern STRING pvalue_to_string();
 	PVALUE val = evaluate(iargs(node), stab, eflg);
 /*show_one_pnode(node);
-wprintf("\npvalue: %d ",val);if(val)wprintf("%d\n",ptype(val));
+llwprintf("\npvalue: %d ",val);if(val)wprintf("%d\n",ptype(val));
 else printf("BLECH\n");
-show_pvalue(val);wprintf("\n");/*DEBUG*/
-	return create_pvalue(PSTRING, pvalue_to_string(val));
+show_pvalue(val);llwprintf("\n");/*DEBUG*/
+	return create_pvalue(PSTRING, (WORD)pvalue_to_string(val));
 }
 /*============================================+
  * __program -- Returns name of current program
@@ -988,7 +1001,7 @@ show_pvalue(val);wprintf("\n");/*DEBUG*/
 PVALUE __program (node, stab, eflg)
 PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	return create_pvalue(PSTRING, progname);
+	return create_pvalue(PSTRING, (WORD)progname);
 }
 /*============================================+
  * __debug -- Turn on/off programming debugging

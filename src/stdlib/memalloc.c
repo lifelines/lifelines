@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * memalloc.c -- Standard memory routines
  * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
@@ -30,7 +31,7 @@
 #include "standard.h"
 
 static BOOLEAN logopen = FALSE;
-static FILE *log = NULL;
+FILE *log = NULL;
 extern BOOLEAN alloclog;
 static char scratch[80];
 
@@ -43,10 +44,18 @@ STRING file;	/* file requesting */
 int line;	/* line num in file */
 {
 	char *p;
+	int i;
 	if (len == 0) return NULL;
-	ASSERT(p = malloc(len));
+	p = malloc(len);
+	if((p == NULL) && alloclog)
+		{
+		sprintf(scratch, "%8d ? %s\t%d\t%d", p, file, line, len);
+		alloc_out(scratch);
+		}
+	ASSERT(p);
+	for(i = 0; i <len; i++) p[i] = '\0';
 	if (alloclog) {
-		sprintf(scratch, "A  %s\t%d\t%d\t%d", file, line, len, p);
+		sprintf(scratch, "%8d A %s\t%d\t%d", p, file, line, len);
 		alloc_out(scratch);
 	}
 	return p;
@@ -60,10 +69,10 @@ STRING file;	/* file returning */
 int line;	/* line num in file */
 {
 	if (alloclog) {
-		sprintf(scratch, "F  %s\t%d\t\t%d", file, line, ptr);
+		sprintf(scratch, "%8d F %s\t%d", ptr, file, line);
 		alloc_out(scratch);
 	}
-	free(ptr);
+	if(ptr) free(ptr);
 }
 /*=======================================
  * alloc_out -- Output allocation message
@@ -73,8 +82,9 @@ STRING str;
 {
 	if (!alloclog) return;
 	if (!logopen) {
-		log = fopen("alloc.log", "w");
+		log = fopen("alloc.log", LLWRITETEXT);
 		logopen = TRUE;
 	}
 	fprintf(log, "%s\n", str);
+	fflush(log);
 }

@@ -21,12 +21,13 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 #include <varargs.h>
 /*===========================================================
- * wprintf -- Called as wprintf(fmt, arg, arg, arg, ...)
+ * llwprintf -- Called as llwprintf(fmt, arg, arg, arg, ...)
  *===========================================================*/
 /*VARARGS*/
-wprintf (va_alist)
+llwprintf (va_alist)
 va_dcl
 {
 	va_list args;

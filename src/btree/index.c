@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * index.c -- Handle BTREE indices
  * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
@@ -62,7 +63,7 @@ FKEY ikey;       /* index file key */
 	INDEX index;
 	char scratch[200];
 	sprintf(scratch, "%s/%s", basedir, fkey2path(ikey));
-	if ((fp = fopen(scratch, "r")) == NULL) {
+	if ((fp = fopen(scratch, LLREADBINARY)) == NULL) {
 		bterrno = BTERRINDEX;
 		return NULL;
 	}
@@ -81,7 +82,7 @@ INDEX index;    /* index block */
 	FILE *fp;
 	char scratch[200];
 	sprintf(scratch, "%s/%s", basedir, fkey2path(iself(index)));
-	if ((fp = fopen(scratch, "w")) == NULL) FATAL();
+	if ((fp = fopen(scratch, LLWRITEBINARY)) == NULL) FATAL();
 	if (fwrite(index, BUFLEN, 1, fp) != 1) FATAL();
 	fclose(fp);
 }

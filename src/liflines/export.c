@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * export.c -- Export GEDCOM file from LifeLines database
  * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
@@ -59,7 +60,7 @@ BOOLEAN archive_in_file ()
 	extern STRING version;
 	BOOLEAN archive();
 
-	fn = ask_for_file("w", "Enter name of output archive file.",
+	fn = ask_for_file(LLWRITETEXT, "Enter name of output archive file.",
 	    &fname, llarchives);
 	if (!fn) {
 		mprintf("The database was not saved.");
@@ -74,7 +75,7 @@ BOOLEAN archive_in_file ()
 	fprintf(fn, "1 DATE %s\n1 TIME %s\n", dat, tim);
 	tran_gedout = tran_tables[MINGD];
 	nindi = nfam = neven = nsour = nothr = 0;
-	wprintf("Saving database in `%s' in file `%s'.", btreepath, fname);
+	llwprintf("Saving database in `%s' in file `%s'.", btreepath, fname);
 	wfield(2, 1, "     0 Persons");
 	wfield(3, 1, "     0 Families");
 	wfield(4, 1, "     0 Events");
@@ -100,7 +101,7 @@ BLOCK block;
 	FILE *fo;
 
 	sprintf(scratch, "%s/%s", bbasedir(btree), fkey2path(iself(block)));
-	ASSERT(fo = fopen(scratch, "r"));
+	ASSERT(fo = fopen(scratch, LLREADBINARY));
 	n = nkeys(block);
 	for (i = 0; i < n; i++) {
 		key = rkey2str(rkeys(block, i));
@@ -125,15 +126,19 @@ TRANTABLE tt;
 {
 	char in[BUFLEN], *p;
 	char scratch[10];
+	char *inp;
+	int remlen;
 	
-	while (len >= BUFLEN) {
-		ASSERT(fread(in, BUFLEN, 1, fo) == 1);
-		ASSERT(fwrite(in, BUFLEN, 1, fn) == 1);
-		len -= BUFLEN;
-	}
-	if (len) {
-		ASSERT(fread((char *)in, len, 1, fo) == 1);
-		ASSERT(fwrite(in, len, 1, fn) == 1);
+	inp = in;		/* location for next read */
+	remlen = BUFLEN;	/* max for next read */
+	while (len > 0) {
+	    	if(len < remlen) remlen = len;
+		ASSERT(fread(inp, remlen, 1, fo) == 1);
+		len -= remlen;
+		remlen = (inp + remlen) - in;	/* amount in current buffer */
+		ASSERT(translate_write(tt, in, &remlen, fn, (len <= 0)));
+		inp = in + remlen;		/* position for next read */
+		remlen = BUFLEN - remlen;	/* max for next read */
 	}
 	switch (c) {
 	case 'I':

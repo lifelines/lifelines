@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * node.c -- Standard GEDCOM NODE operations
  * Copyright(c) 1992-96 by T.T. Wetmore IV; all rights reserved
@@ -149,7 +150,7 @@ STRING *pxref, *ptag, *pval, *pmsg;
 	char *p = in;
 	*pmsg = NULL;
 	while (TRUE) {
-		if (!(p = fgets(p, MAXLINELEN+2, fp))) return DONE;
+		if (!(p = fgets(in, MAXLINELEN+2, fp))) return DONE;
 		lineno++;
 		if (tt) {
 			translate_string(tt, in, out, MAXLINELEN+2);
@@ -281,7 +282,7 @@ BOOLEAN *pemp;	/* set true if file is empty */
 	static unsigned char scratch[100];
 	*pmsg = NULL;
 	*pemp = FALSE;
-	if (!(fp = fopen(fname, "r"))) {
+	if (!(fp = fopen(fname, LLREADTEXT))) {
 		sprintf(scratch, "Could not open file %s",  fname);
 		*pmsg = scratch;
 		return NULL;
@@ -417,7 +418,16 @@ BOOLEAN *peof;	/* set true if file is at end of file */
 NODE string_to_node (str)
 STRING str;
 {
-	INT lev0, curlev;
+	/* the following variables were made local rather than
+	   use the static variables - pbm 12-jun-96 */
+	INT lev;
+	INT lev0;
+	STRING xref;
+	STRING tag;
+	STRING val;
+	/* end of local version of some static variables pbm 12-jun-96 */
+
+	INT curlev;
 	NODE root, node, curnode;
 	STRING msg;
 	lineno = 0;
@@ -437,7 +447,7 @@ STRING str;
 			curlev = lev;
 		} else if (lev < curlev) {
 			if (lev < lev0) {
-				wprintf("Error: line %d: illegal level",
+				llwprintf("Error: line %d: illegal level",
 				    lineno);
 				return NULL;
 			}
@@ -449,7 +459,7 @@ STRING str;
 			nsibling(curnode) = node;
 			curnode = node;
 		} else {
-			wprintf("Error: line %d: illegal level", lineno);
+			llwprintf("Error: line %d: illegal level", lineno);
 			return NULL;
 		}
 	}
@@ -469,8 +479,8 @@ BOOLEAN indent;	/* indent? */
 TRANTABLE tt;	/* char map */
 {
 	FILE *fp;
-	if (!(fp = fopen(fname, "w"))) {
-		wprintf("Could not open file: `%s'\n", fname);
+	if (!(fp = fopen(fname, LLWRITETEXT))) {
+		llwprintf("Could not open file: `%s'\n", fname);
 		return FALSE;
 	}
 	write_nodes(levl, fp, tt, node, indent, TRUE, TRUE);
@@ -489,7 +499,7 @@ NODE node;	/* node */
 BOOLEAN indent;	/* indent? */
 {
 	unsigned char out[MAXLINELEN+1];
-	STRING p = out;
+	STRING p;
 	if (indent) {
 		INT i;
 		for (i = 1;  i < levl;  i++)
@@ -498,11 +508,13 @@ BOOLEAN indent;	/* indent? */
 	fprintf(fp, "%d", levl);
 	if (nxref(node)) fprintf(fp, " %s", nxref(node));
 	fprintf(fp, " %s", ntag(node));
-	if (tt)
+	if(p = nval(node)) {
+	    if (tt) {
 		translate_string(tt, nval(node), out, MAXLINELEN+1);
-	else
-		p = nval(node);
-	if (nval(node)) fprintf(fp, " %s", p);
+		p = out;
+	    }
+	    fprintf(fp, " %s", p);
+	}
 	fprintf(fp, "\n");
 }
 /*==========================================
@@ -698,6 +710,22 @@ NODE node;
 	if (!(node = find_tag(nchild(node), "WIFE"))) return NULL;
 	return key_to_indi(rmvat(nval(node)));
 }
+/*===============================================
+ * fam_to_spouse -- Return other spouse of family
+ *=============================================*/
+NODE fam_to_spouse (fam, indi)
+NODE fam, indi;
+{
+    	INT num;
+	if (!fam) return NULL;
+	FORHUSBS(fam, husb, num)
+	  if(husb != indi) return(husb);
+        ENDHUSBS
+	FORWIFES(fam, wife, num)
+	  if(wife != indi) return(wife);
+	ENDWIFES
+	return NULL;
+}
 /*==================================================
  * fam_to_first_chil -- Return first child of family
  *================================================*/
@@ -791,6 +819,18 @@ INT len;
 	if (!node) return (STRING) "NO NAME";
 	if (!(node = find_tag(nchild(node), "NAME"))) return (STRING) "NO NAME";
 	return manip_name(nval(node), tt, TRUE, TRUE, len);
+}
+/*======================================
+ * indi_to_title -- Return title of person
+ *====================================*/
+STRING indi_to_title (node, tt, len)
+NODE node;
+TRANTABLE tt;
+INT len;
+{
+	if (!node) return NULL;
+	if (!(node = find_tag(nchild(node), "TITL"))) return NULL;
+	return manip_name(nval(node), tt, FALSE, TRUE, len);
 }
 /*==============================================
  * indi_to_event -- Convert event tree to string
@@ -918,7 +958,7 @@ STRING p;
 show_node (node)
 NODE node;
 {
-	if (!node) wprintf("(NIL)");
+	if (!node) llwprintf("(NIL)");
 	show_node_rec(0, node);
 }
 /*================================================
@@ -930,12 +970,12 @@ INT levl;  NODE node;
 	INT i;
 	if (!node) return;
 	for (i = 1;  i < levl;  i++)
-		wprintf("  ");
-	wprintf("%d", levl);
-	if (nxref(node)) wprintf(" %s", nxref(node));
-	wprintf(" %s", ntag(node));
-	if (nval(node)) wprintf(" %s", nval(node));
-	wprintf("\n");
+		llwprintf("  ");
+	llwprintf("%d", levl);
+	if (nxref(node)) llwprintf(" %s", nxref(node));
+	llwprintf(" %s", ntag(node));
+	if (nval(node)) llwprintf(" %s", nval(node));
+	llwprintf("\n");
 	show_node_rec(levl + 1, nchild(node));
 	show_node_rec(levl    , nsibling(node));
 }
@@ -962,7 +1002,10 @@ STRING date;
 	static int dex = 0;
 	STRING p = date, q;
 	INT c, len;
-	if (!date || (INT) strlen(date) < 4) return NULL;
+	/* Allow 3 or 4 digit years. The previous test for strlen(date) < 4
+	 * prevented dates consisting of only 3 digit years from being
+	 * returned. - pbm 12 oct 99 */
+	if (!date || (INT) strlen(date) < 3) return NULL;
 	if (++dex > 2) dex = 0;
 	q = buffer[dex];
 	while (TRUE) {

@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * stdstrng.c -- Standard string routines
  * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
@@ -29,7 +30,15 @@
 
 #include "standard.h"
 
+#ifndef OS_NOCTYPE
+#include <ctype.h>
+#endif
+
+#ifndef WIN32
 STRING strcpy();
+#endif
+
+extern BOOLEAN opt_finnish;
 
 /*===============================
  * strsave -- Save copy of string
@@ -57,17 +66,36 @@ STRING s1, s2;
 	return s3;
 }
 /*==================================
- * chartype -- Return character type 
+ * chartype -- Return character type
  *================================*/
 INT chartype (c)
 INT c;
 {
+#ifndef OS_NOCTYPE
+	if ( isspace(c) )
+		return WHITE;
+	if (opt_finnish) 
+	    {
+	    if( my_isalpha(c) ) return LETTER;
+	    }
+	else if ( isalpha(c) ) return LETTER;
+	if ( isdigit(c) ) return DIGIT;
+	return c;
+#else
 	if (c == ' ' || c == '\t' || c == '\n' || c == '\r')
 		return WHITE;
-	if (c >= 'a' && c <= 'z') return LETTER;
-	if (c >= 'A' && c <= 'Z') return LETTER;
+	if (opt_finnish) 
+	    {
+	    if( my_isalpha(c) ) return LETTER;
+	    }
+	else
+	    {
+	    if (c >= 'a' && c <= 'z') return LETTER;
+	    if (c >= 'A' && c <= 'Z') return LETTER;
+	    }
 	if (c >= '0' && c <= '9') return DIGIT;
 	return c;
+#endif
 }
 /*=================================
  * iswhite -- Check for white space
@@ -75,17 +103,28 @@ INT c;
 BOOLEAN iswhite (c)
 INT c;
 {
+#ifndef OS_NOCTYPE
+	return( isspace(c) );
+#else
 	return c == ' ' || c == '\t' || c == '\n' || c == '\r';
+#endif
 }
+
 /*=============================
  * isletter -- Check for letter
  *===========================*/
 BOOLEAN isletter (c)
 INT c;
 {
+    	if(opt_finnish) return(my_isalpha(c));
+#ifndef OS_NOCTYPE
+	return( isalpha(c) );
+#else
 	if (c >= 'a' && c <= 'z') return TRUE;
 	return c >= 'A' && c <= 'Z';
+#endif
 }
+
 /*=========================================
  * isnumeric -- Check string for all digits
  *=======================================*/
@@ -95,7 +134,11 @@ STRING str;
 	INT c;
 	if (!str) return FALSE;
 	while (c = *str++) {
+#ifndef OS_NOCTYPE
 		if (chartype(c) != DIGIT) return FALSE;
+#else
+		if ( ! isdigit(c) ) return FALSE;
+#endif
 	}
 	return TRUE;
 }
@@ -143,8 +186,14 @@ STRING str;
 INT ll_toupper (c)
 INT c;
 {
+        if(opt_finnish) return(my_toupper(c));
+#ifndef OS_NOCTYPE
+    	if(islower(c)) return( toupper(c) );
+	return c;
+#else
 	if (c < 'a' || c > 'z') return c;
 	return c + 'A' - 'a';
+#endif
 }
 /*==========================================
  * ll_tolower -- Convert letter to lowercase
@@ -152,8 +201,14 @@ INT c;
 INT ll_tolower (c)
 INT c;
 {
+        if(opt_finnish) return(my_toupper(c));
+#ifndef OS_NOCTYPE
+	if(isupper(c)) return( tolower(c) );
+	return(c);
+#else
 	if (c < 'A' || c > 'Z') return c;
 	return c + 'a' - 'A';
+#endif
 }
 /*================================
  * trim -- Trim string if too long

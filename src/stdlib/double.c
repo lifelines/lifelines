@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * double.c -- Doubly-linked list data type
  * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
@@ -66,6 +67,23 @@ int (*func)();
 		lnode0 = lnode;
 	}
 	stdfree(list);
+}
+/*===========================
+ * in_list -- see if in list
+ *=========================*/
+BOOLEAN in_list (list, el, func)
+LIST list;
+WORD el;
+int (*func)();
+{
+	LNODE lnode;
+	if (!list) return;
+	lnode = lfirst(list);
+	while (lnode) {
+		if((*func)(el, lelement(lnode))) return TRUE;
+		lnode = lnext(lnode);
+	}
+	return FALSE;
 }
 /*===================================
  * make_list_empty -- Make list empty

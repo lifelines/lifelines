@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * merge.c -- Merge persons and families
  * Copyright(c) 1992-96 by T.T. Wetmore IV; all rights reserved
@@ -47,15 +48,18 @@ STRING mgconf = (STRING) "Are you sure you want to merge them?";
  *---------------------------------------------------------------
  *   indi1 - person in database -- indi1 is merged into indi2
  *   indi2 - person in database -- indi1 is merged into this person
- *   indi3 - merged version of the two persons
+ *   indi3 - merged version of the two persons before editing
+ *   indi4 - merged version of the two persons after editing
  *==============================================================*/
 NODE merge_two_indis (indi1, indi2, conf)
 NODE indi1, indi2;	/* two persons to merge - can't be null */
 BOOLEAN conf;		/* have user confirm change */
 {
-	NODE indi0, name1, refn1, sex1, body1, famc1, fams1;
+	NODE indi01, indi02;	/* original arguments */
+	NODE name1, refn1, sex1, body1, famc1, fams1;
 	NODE name2, refn2, sex2, body2, famc2, fams2;
 	NODE indi3, name3, refn3, sex3, body3, famc3, fams3;
+	NODE indi4, name4, refn4, sex4, body4, famc4, fams4;
 	NODE fam, husb, wife, chil, rest, fref, keep;
 	NODE this, that, prev, next, node, head;
 	NODE fam12, name12, refn12;
@@ -102,19 +106,29 @@ BOOLEAN conf;		/* have user confirm change */
 
 /* Split orignial persons */
 
-	indi0 = indi1;		/* save original indi1 for later delete */
+	/* If we are successful, the original indi1 will be deleted
+ 	 * and the indi2 will be updated with the new info.
+   	 * However, if we do not merge then we must
+	 * insure that indi1 and indi2 are in their original state.
+	 * It seems safer to do this by only working with copies
+    	 * of the originals.
+	 */
+	indi01 = indi1;	/* keep original indi1 for later delete */
 	indi1 = copy_nodes(indi1, TRUE, TRUE);
+	indi02 = indi2;	/* keep original indi2 for later update and return */
+	indi2 = copy_nodes(indi2, TRUE, TRUE);
+
 	split_indi(indi1, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
 	split_indi(indi2, &name2, &refn2, &sex2, &body2, &famc2, &fams2);
-	indi3 = indi2;
-	indi2 = copy_node(indi2);
+	indi3 = indi2; 
+	indi2 = copy_nodes(indi2, TRUE, TRUE);
 	sx2 = SEX_UNKNOWN;
 	if (fams1) sx2 = val_to_sex(sex1);
 	if (fams2) sx2 = val_to_sex(sex2);
 
 /*CONDITION: 1s, 2s - build first version of merged person */
 
-	ASSERT(fp = fopen(editfile, "w"));
+	ASSERT(fp = fopen(editfile, LLWRITETEXT));
 	name3 = union_nodes(name1, name2, TRUE, TRUE);
 	refn3 = union_nodes(refn1, refn2, TRUE, TRUE);
 	sex3  = union_nodes(sex1,  sex2,  TRUE, TRUE);
@@ -129,13 +143,42 @@ BOOLEAN conf;		/* have user confirm change */
 	write_nodes(1, fp, tto, famc3, TRUE, TRUE, TRUE);
 	write_nodes(1, fp, tto, fams3, TRUE, TRUE, TRUE);
 	fclose(fp);
+	join_indi(indi3, name3, refn3, sex3, body3, famc3, fams3);
+
+/*CONDITION 2 -- 3 (init combined) created and joined*/
+
+/* Have user edit merged person */
+	do_edit();
+	while (TRUE) {
+		indi4 = file_to_node(editfile, tti, &msg, &emp);
+		if (!indi4 && !emp) {
+			if (ask_yes_or_no_msg(msg, iredit)) {
+				do_edit();
+				continue;
+			} 
+			break;
+		}
+		if (!valid_indi(indi4, &msg, indi3)) {
+			if (ask_yes_or_no_msg(msg, iredit)) {
+				do_edit();
+				continue;
+			}
+			free_nodes(indi4);
+			indi4 = NULL;
+			break;
+		}
+		break;
+	}
+	free_nodes(indi3);
 
 /* Have user confirm changes */
-
-	if (conf && !ask_yes_or_no(cfpmrg)) {
-		free_nodes(indi3);
+	if (!indi4 || (conf && !ask_yes_or_no(cfpmrg))) {
+		if (indi4) free_nodes(indi4);
 		join_indi(indi1, name1, refn1, sex1, body1, famc1, fams1);
+		free_nodes(indi1);
 		join_indi(indi2, name2, refn2, sex2, body2, famc2, fams2);
+		free_nodes(indi2);
+		/* originals (indi01 and indi02) have not been modified */
 		return NULL;
 	}
 
@@ -271,23 +314,31 @@ BOOLEAN conf;		/* have user confirm change */
 	classify_nodes(&name1, &name2, &name12);
 	classify_nodes(&refn1, &refn2, &refn12);
 
-	join_indi(indi3, name3, refn3, sex3, body3, famc3, fams3);
-	key = rmvat(nxref(indi3));
+	key = rmvat(nxref(indi4));
 	for (node = name1; node; node = nsibling(node))
 		add_name(nval(node), key);
 	rename_from_browse_lists(key);
 	for (node = refn1; node; node = nsibling(node))
 		if (nval(node)) add_refn(nval(node), key);
-	resolve_links(indi3);
-	indi_to_dbase(indi3);
+	resolve_links(indi4);
+	indi_to_dbase(indi4);
 	join_indi(indi1, name1, refn1, sex1, body1, famc1, fams1);
 	free_nodes(indi1);
 	join_indi(indi2, name2, refn2, sex2, body2, famc2, fams2);
 	free_nodes(indi2);
 	free_nodes(name12);
 	free_nodes(refn12);
-	delete_indi(indi0, FALSE);
-	return indi2;
+
+	/* update indi02 to contain info from new merged record in indi4 */
+
+	split_indi(indi4, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
+	split_indi(indi02, &name2, &refn2, &sex2, &body2, &famc2, &fams2);
+	join_indi(indi4, name2, refn2, sex2, body2, famc2, fams2);
+	join_indi(indi02, name1, refn1, sex1, body1, famc1, fams1);
+	free_nodes(indi4);
+
+	delete_indi(indi01, FALSE);	/* this is the original indi1 */
+	return indi02;			/* this is the updated indi2 */
 }
 /*=================================================================
  * merge_two_fams -- Merge first family into second; data from both
@@ -336,7 +387,7 @@ NODE fam1, fam2;
 #endif
 
 /* Create merged file with both families together */
-	ASSERT(fp = fopen(editfile, "w"));
+	ASSERT(fp = fopen(editfile, LLWRITETEXT));
 	fam3 = copy_nodes(fam2, TRUE, TRUE);
 	fref3 = union_nodes(fref1, fref2, TRUE, TRUE);
 	husb3 = union_nodes(husb1, husb2, TRUE, TRUE);

@@ -21,7 +21,8 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
-/*============================================================
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
+/*=============================================================
  * browse.c -- Implements the browse command
  * Copyright(c) 1992-95 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 25 Aug 93
@@ -41,6 +42,8 @@ extern STRING idfcop, ntprnt, nofath, nomoth, nospse, noysib, noosib;
 extern STRING noprnt, nohusb, nowife, hasbth, hasnei, nocinf, nocofp;
 extern STRING idpnxt, ids2fm, idc2fm, idplst, idp2br, crtcfm, crtsfm;
 extern STRING ronlye, ronlya, idhbrs, idwbrs;
+extern STRING id1sbr, id2sbr, id1fbr, id2fbr, id1cbr, id2cbr;
+extern STRING id1hbr, id2hbr, id1wbr, id2wbr;
 
 NODE family_to_browse_to();
 INDISEQ ask_for_indiseq();
@@ -96,6 +99,7 @@ INDISEQ *pseq;
 	STRING key, name, addstrings[2];
 	INT i, c, len, rc;
 	NODE node, save = NULL, indi = *pindi1;
+	NODE node2;
 	INDISEQ seq = NULL;
 	TRANTABLE ttd = tran_tables[MINDS];
 	char scratch[100];
@@ -114,15 +118,48 @@ INDISEQ *pseq;
 			if (*pfam1 = choose_family(indi, ntprnt, idfbrs, TRUE))
 				return BROWSE_FAM;
 			break;
+		case 'G':
+			if (*pfam1 = choose_family(indi, ntprnt,
+				id1fbr, TRUE))
+			  if (*pfam2 = choose_family(indi, ntprnt,
+				id2fbr, TRUE))
+				return BROWSE_2FAM;
+			break;
 		case 'f': 	/* Browse to person's father */
 			node = choose_father(indi, NULL, nofath,
 			    idhbrs, FALSE);
 			if (node) indi = node;
 			break;
+		case 'F':	/* Tandem Browse to person's fathers */
+			node = choose_father(indi, NULL, nofath,
+			    id1hbr, FALSE);
+			if (node) {
+			  node2 = choose_father(indi, NULL, nofath,
+			    id2hbr, FALSE);
+			  if (node2) {
+				*pindi1 = node;
+				*pindi2 = node2;
+				return BROWSE_TAND;
+			  }
+			}
+			break;
 		case 'm':	/* Browse to person's mother */
 			node = choose_mother(indi, NULL, nomoth,
 			    idwbrs, FALSE);
 			if (node) indi = node;
+			break;
+		case 'M':	/* Tandem Browse to person's mothers */
+			node = choose_mother(indi, NULL, nomoth,
+			    id1wbr, FALSE);
+			if (node) {
+			  node2 = choose_mother(indi, NULL, nomoth,
+			    id2wbr, FALSE);
+			  if (node2) {
+				*pindi1 = node;
+				*pindi2 = node2;
+				return BROWSE_TAND;
+			  }
+			}
 			break;
 		case 'z':	/* Zip browse another person */
 			node = ask_for_indi(idpnxt, FALSE, FALSE);
@@ -132,10 +169,34 @@ INDISEQ *pseq;
 			node = choose_spouse(indi, nospse, idsbrs);
 			if (node) indi = node;
 			break;
+		case 'S':	/* browse to tandem spouses */
+			node = choose_spouse(indi, nospse, id1sbr);
+			if (node) {
+			  node2 = choose_spouse(indi, nospse, id2sbr);
+			  if (node2) {
+				*pindi1 = node;
+				*pindi2 = node2;
+				return BROWSE_TAND;
+			  }
+			}
+			break;
 		case 'c':	/* Browse to person's child */
 			node = choose_child(indi, NULL, nocofp,
 			    idcbrs, FALSE);
 			if (node) indi = node;
+			break;
+		case 'C':	/* browse to tandem children */
+			node = choose_child(indi, NULL, nocofp,
+			    id1cbr, FALSE);
+			if (node) {
+			  node2 = choose_child(indi, NULL, nocofp,
+			    id2cbr, FALSE);
+			  if (node2) {
+				*pindi1 = node;
+				*pindi2 = node2;
+				return BROWSE_TAND;
+			  }
+			}
 			break;
 		case 'p':	/* Switch to pedigree mode */
 			*pindi1 = indi;
@@ -155,6 +216,13 @@ INDISEQ *pseq;
 		case 'u':	/* Browse to parents' family */
 			if (*pfam1 = choose_family(indi, noprnt, idfbrs, FALSE))
 				return BROWSE_FAM;
+			break;
+		case 'U':	/* tandem browse to two parents families*/
+			if (*pfam1 = choose_family(indi, noprnt,
+				id1fbr, FALSE))
+			  if (*pfam2 = choose_family(indi, noprnt,
+				id2fbr, FALSE))
+				return BROWSE_2FAM;
 			break;
 		case 'b': 	/* Browse new list of persons */
 			seq = ask_for_indiseq(idplst, &rc);
@@ -251,6 +319,9 @@ INDISEQ *pseq;
 		c = fam_browse(fam);
 		if (c != 'a' && c != 's') save = NULL;
 		switch (c) {
+		case 'A':	/* Advanced family edit */
+			advanced_family_edit(fam);
+			break;
 		case 'e':	/* Edit family's record */
 			fam = edit_family(fam);
 			break;
@@ -259,15 +330,45 @@ INDISEQ *pseq;
 			    idhbrs, FALSE);
 			if (*pindi) return BROWSE_INDI;
 			break;
+		case 'F':	/* Tandem Browse to family's fathers */
+			*pindi = choose_father(NULL, fam, nohusb,
+			    id1hbr, FALSE);
+			if (*pindi) {
+			  *pdum = choose_father(NULL, fam, nohusb,
+			    id2hbr, FALSE);
+			  if (*pdum) 
+				return BROWSE_TAND;
+			}
+			break;
 		case 'm':	/* Browse to family's mother */
 			*pindi = choose_mother(NULL, fam, nowife,
 			    idwbrs, FALSE);
 			if (*pindi) return BROWSE_INDI;
 			break;
+		case 'M':	/* Tandem Browse to family's mother */
+			*pindi = choose_mother(NULL, fam, nowife,
+			    id1wbr, FALSE);
+			if (*pindi) {
+			  *pdum = choose_mother(NULL, fam, nowife,
+			    id2wbr, FALSE);
+			  if (*pdum) 
+				return BROWSE_TAND;
+			}
+			break;
 		case 'c':	/* Browse to a child */
 			*pindi = choose_child(NULL, fam, nocinf,
 			    idcbrs, FALSE);
 			if (*pindi) return BROWSE_INDI;
+			break;
+		case 'C':	/* browse to tandem children */
+			*pindi = choose_child(NULL, fam, nocinf,
+			    id1cbr, FALSE);
+			if (*pindi) {
+			  *pdum = choose_child(NULL, fam, nocinf,
+			    id2cbr, FALSE);
+			  if (*pdum) 
+				return BROWSE_TAND;
+			}
 			break;
 		case 'd':	/* Remove a child */
 			if (readonly) {

@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * opnbtree.c -- Create and open BTREE database
  * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
@@ -33,6 +34,10 @@
 #include <sys/stat.h>
 #include "standard.h"
 #include "btree.h"
+#ifdef WIN32
+#include <dir.h>
+#include <io.h>
+#endif
 
 /*============================================
  * openbtree -- Alloc and init BTREE structure
@@ -55,7 +60,7 @@ BOOLEAN writ;	/* requesting write access? */
 		bterrno = BTERRLNGDIR;
 		return NULL;
 	}
-	if (stat(dir, &sbuf)) {
+	if (access(dir, 0)) {
 		sprintf(scratch, "%s/", dir);
 		if (!cflag || !mkalldirs(scratch)) {
 			bterrno = BTERRNOBTRE;
@@ -81,7 +86,7 @@ BOOLEAN writ;	/* requesting write access? */
 	}
 
 /* Open and read key file */
-	if (!(fp = fopen(scratch, "r+")) ||
+	if (!(fp = fopen(scratch, LLREADBINARYUPDATE)) ||
 	    fread(&kfile, sizeof(KEYFILE), 1, fp) != 1) {
 		bterrno = BTERRKFILE;
 		return NULL;
@@ -135,14 +140,14 @@ STRING basedir;
 
 /* Open file for writing keyfile */
 	sprintf(scratch, "%s/key", basedir);
-	if ((fk = fopen(scratch, "w")) == NULL) {
+	if ((fk = fopen(scratch, LLWRITEBINARY)) == NULL) {
 		bterrno = BTERRKFILE;
 		return FALSE;
 	}
 
 /* Open file for writing master index */
 	sprintf(scratch, "%s/aa/aa", basedir);
-	if (!mkalldirs(scratch) || (fi = fopen(scratch, "w")) == NULL) {
+	if (!mkalldirs(scratch) || (fi = fopen(scratch, LLWRITEBINARY)) == NULL) {
 		bterrno = BTERRINDEX;
 		fclose(fk);
 		return FALSE;
@@ -150,7 +155,7 @@ STRING basedir;
 
 /* Open file for writing first data block */
 	sprintf(scratch, "%s/ab/aa", basedir);
-	if (!mkalldirs(scratch) || (fd = fopen(scratch, "w")) == NULL) {
+	if (!mkalldirs(scratch) || (fd = fopen(scratch, LLWRITEBINARY)) == NULL) {
 		bterrno = BTERRBLOCK;
 		fclose(fk);
 		fclose(fi);
@@ -206,6 +211,7 @@ int llmkdir (dir)
 STRING dir;	/* dir to create */
 {
 	static status;
+#ifndef WIN32
 	register pid;
 	if (pid = fork())
 		while (wait(&status) != pid);
@@ -215,6 +221,10 @@ STRING dir;	/* dir to create */
 		exit(2);
 	}
 	return status>>8 == 0;
+#else
+	status = mkdir(dir);
+	return status == 0;
+#endif
 }
 /*===================================
  * mkalldirs -- Make all dirs in path
@@ -226,6 +236,7 @@ char  *path;	/* path with dirs to be made */
 {
 	int i, n;
 	char *p = path;
+
 	for (i = 0, n = strlen(path); i < n; i++, p++)  {
 		if (*p != '/') continue;
 		*p = 0;
@@ -233,7 +244,7 @@ char  *path;	/* path with dirs to be made */
 			*p = '/';
 			continue;
 		}
-		wprintf("Can't create directory %s", path);
+		llwprintf("Can't create directory %s", path);
 		return FALSE;
 	}
 	return TRUE;
@@ -244,11 +255,11 @@ char  *path;	/* path with dirs to be made */
 BOOLEAN closebtree (btree)
 BTREE btree;
 {
-	char scratch[200];
-	STRING dir = bbasedir(btree);
-	FILE *fp = bkfp(btree);
-	KEYFILE kfile;
+    FILE *fp;
+    KEYFILE kfile;
 
+    if(btree && ((fp = bkfp(btree)) != NULL))
+        {
 	kfile = btree->b_kfile;
 	if (kfile.k_ostat <= 0)
 		kfile.k_ostat = 0;
@@ -261,5 +272,6 @@ BTREE btree;
 		return FALSE;
 	}
 	fclose(fp);
-	return TRUE;
+        }
+    return TRUE;
 }

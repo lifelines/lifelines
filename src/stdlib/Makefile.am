@@ -5,7 +5,7 @@ AUTOMAKE_OPTIONS = no-dependencies
 noinst_LIBRARIES = libstdlib.a
 
 libstdlib_a_SOURCES = assert.c double.c memalloc.c path.c signals.c sequence.c \
-	stdstrng.c table.c
+	stdstrng.c table.c llstrcmp.c mystring.c
 
 INCLUDES=-I$(srcdir)/.. -I$(srcdir)/../hdrs
 

@@ -21,11 +21,13 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * gstrings.c -- Routines to creates child strings
  * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 25 Aug 93
  *   3.0.0 - 02 May 94    3.0.2 - 24 Nov 94
+ *   3.0.3 - 15 Aug 95
  *===========================================================*/
 
 #include "standard.h"
@@ -83,6 +85,8 @@ INT len;
 	char unsigned scratch[MAXLINELEN];
 	STRING name, evt = NULL, p = scratch;
 	TRANTABLE ttd = tran_tables[MINDS];
+	int hasparents;
+	int hasfamily;
 	if (indi) {
 		ASSERT(name = indi_to_name(indi, ttd, len));
 	} else
@@ -104,6 +108,21 @@ INT len;
 	}
 	if (fam && keyflag) {
 		sprintf(p, " (%s)", key_of_record(fam));
+		p += strlen(p);
+	}
+	if(indi) {
+	    if(FAMC(indi)) hasparents = 1;
+	    else hasparents = 0;
+	    if(FAMS(indi)) hasfamily = 1;
+	    else hasfamily = 0;
+	    if(hasfamily || hasparents) {
+		*p++ = ' ';
+		*p++ = '[';
+		if(hasparents) *p++ = 'P';
+		if(hasfamily) *p++ = 'S';
+		*p++ = ']';
+		*p = '\0';
+	    }
 	}
 	if (strlen(scratch) > len)
 		scratch[len] = 0;

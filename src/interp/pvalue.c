@@ -1,3 +1,27 @@
+/* 
+   Copyright (c) 1991-1999 Thomas T. Wetmore IV
+
+   Permission is hereby granted, free of charge, to any person
+   obtaining a copy of this software and associated documentation
+   files (the "Software"), to deal in the Software without
+   restriction, including without limitation the rights to use, copy,
+   modify, merge, publish, distribute, sublicense, and/or sell copies
+   of the Software, and to permit persons to whom the Software is
+   furnished to do so, subject to the following conditions:
+
+   The above copyright notice and this permission notice shall be
+   included in all copies or substantial portions of the Software.
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   SOFTWARE.
+*/
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * pvalue.c -- Handle prgram typed values
  * Copyright(c) 1991-95 by T.T. Wetmore IV; all rights reserved
@@ -15,8 +39,10 @@ static char *ptypes[] = {
 	"PGNODE", "PINDI", "PFAM", "PSOUR", "PEVEN", "POTHR", "PLIST",
 	"PTABLE", "PSET"};
 
+#ifndef _PROTO_H
 INT bool_to_int();
 FLOAT bool_to_float();
+#endif
 
 /*========================================
  * create_pvalue -- Create a program value
@@ -48,7 +74,7 @@ WORD value;
 void delete_pvalue (val)
 PVALUE val;
 {
-/*wprintf("__delete_pvalue: val == ");show_pvalue(val);wprintf("\n");/*DEBUG*/
+/*llwprintf("__delete_pvalue: val == ");show_pvalue(val);wprintf("\n");/*DEBUG*/
         if (!val) return;
         switch (ptype(val)) {
         case PSTRING:
@@ -68,7 +94,7 @@ PVALUE copy_pvalue (val)
 PVALUE val;
 {
 	if (!val) {
-wprintf("copy_pvalue: copying null pvalue\n");
+llwprintf("copy_pvalue: copying null pvalue\n");
 		return NULL;
 	}
         return create_pvalue(ptype(val), pvalue(val));
@@ -81,8 +107,8 @@ PVALUE val;
 INT type;
 WORD value;
 {
-/*wprintf("\nset_pvalue called: val=");show_pvalue(val);
-wprintf(" new type=%d new value = %d\n", type, value);/*DEBUG*/
+/*llwprintf("\nset_pvalue called: val=");show_pvalue(val);
+llwprintf(" new type=%d new value = %d\n", type, value);/*DEBUG*/
 	if (ptype(val) == PSTRING && pvalue(val)) stdfree(pvalue(val));
 	ptype(val) = type;
 	if (type == PSTRING && value) value = (WORD) strsave((STRING) value);
@@ -163,14 +189,14 @@ BOOLEAN *eflg;
 	BOOLEAN vbool;
 	UNION u;
 
-/*wprintf("coerce_pvalue: coerce ");show_pvalue(val);
-wprintf(" to %s\n", ptypes[type]);/*DEBUG*/
+/*llwprintf("coerce_pvalue: coerce ");show_pvalue(val);
+llwprintf(" to %s\n", ptypes[type]);/*DEBUG*/
 	if (*eflg) return;
 	ASSERT(is_pvalue(val));
 	if (type == ptype(val)) return;
 	u.w = pvalue(val);
 	if (type == PBOOL) {	 /* Handle PBOOL as special case */
-		set_pvalue(val, PBOOL, (u.w != NULL));
+		set_pvalue(val, PBOOL, (WORD)(u.w != NULL));
 		return;
 	}
 	if (type == PANY) {	/* Handle PANY as a special case */
@@ -214,9 +240,9 @@ wprintf(" to %s\n", ptypes[type]);/*DEBUG*/
 		break;
 	case PBOOL:
 		switch (type) {
-		case PINT: u.i = bool_to_int(u.w); break;
-		case PLONG: /*u.l = bool_to_long(u.w);*/ break;
-		case PFLOAT: u.f = bool_to_float(u.w); break;
+		case PINT: u.i = bool_to_int((BOOLEAN)u.w); break;
+		case PLONG: /*u.l = bool_to_long((BOOLEAN)u.w);*/ break;
+		case PFLOAT: u.f = bool_to_float((BOOLEAN)u.w); break;
 		default: goto bad;
 		}
 		break;
@@ -381,6 +407,30 @@ BOOLEAN *eflg;
 	}
 	delete_pvalue(val2);
 }
+/*===================================================================+
+ * eqv_pvalues -- See if two PVALUEs are equal (no change to PVALUEs)
+ *==================================================================*/
+BOOLEAN eqv_pvalues (val1, val2, eflg)
+PVALUE val1, val2;
+BOOLEAN *eflg;
+{
+    STRING v1, v2;
+    BOOLEAN rel = FALSE;
+    if(val1 && val2 && (ptype(val1) == ptype(val2))) {
+	switch (ptype(val1)) {
+	case PSTRING:
+		v1 = pvalue(val1);
+		v2 = pvalue(val2);
+		if(v1 && v2) rel = eqstr(v1, v2);
+		else rel = (v1 == v2);
+		break;
+	default:
+		rel = (pvalue(val1) == pvalue(val2));
+		break;
+	}
+    }
+    return rel;
+}
 /*===========================================
  * eq_pvalues -- See if two PVALUEs are equal
  *=========================================*/
@@ -388,20 +438,24 @@ eq_pvalues (val1, val2, eflg)
 PVALUE val1, val2;
 BOOLEAN *eflg;
 {
-	UNION u1, u2;
 	BOOLEAN rel;
+	STRING v1, v2;
+
 	if (*eflg) return;
 	eq_conform_pvalues(val1, val2, eflg);
 	if (*eflg) return;
 	switch (ptype(val1)) {
 	case PSTRING:
-		rel = eqstr(pvalue(val1), pvalue(val2));
+		v1 = pvalue(val1);
+		v2 = pvalue(val2);
+		if(v1 && v2) rel = eqstr(v1, v2);
+		else rel = (v1 == v2);
 		break;
 	default:
 		rel = (pvalue(val1) == pvalue(val2));
 		break;
 	}
-	set_pvalue(val1, PBOOL, rel);
+	set_pvalue(val1, PBOOL, (WORD)rel);
 	delete_pvalue(val2);
 }
 /*===============================================
@@ -411,23 +465,27 @@ ne_pvalues (val1, val2, eflg)
 PVALUE val1, val2;
 BOOLEAN *eflg;
 {
-	UNION u1, u2;
 	BOOLEAN rel;
+	STRING v1, v2;
+
 	if (*eflg) return;
 	eq_conform_pvalues(val1, val2, eflg);
-/*wprintf("ne_pvalues: val1, val2, rel = ");show_pvalue(val1);wprintf(", ");
-show_pvalue(val2);wprintf(", ");/*DEBUG*/
+/*llwprintf("ne_pvalues: val1, val2, rel = ");show_pvalue(val1);wprintf(", ");
+show_pvalue(val2);llwprintf(", ");/*DEBUG*/
 	if (*eflg) return;
 	switch (ptype(val1)) {
 	case PSTRING:
-		rel = nestr(pvalue(val1), pvalue(val2));
+		v1 = pvalue(val1);
+		v2 = pvalue(val2);
+		if(v1 && v2) rel = nestr(v1, v2);
+		else rel = (v1 != v2);
 		break;
 	default:
 		rel = (pvalue(val1) != pvalue(val2));
 		break;
 	}
-/*wprintf("%d\n", rel);/*DEBUG*/
-	set_pvalue(val1, PBOOL, rel);
+/*llwprintf("%d\n", rel);/*DEBUG*/
+	set_pvalue(val1, PBOOL, (WORD)rel);
 	delete_pvalue(val2);
 }
 /*================================================
@@ -437,7 +495,6 @@ le_pvalues (val1, val2, eflg)
 PVALUE val1, val2;
 BOOLEAN *eflg;
 {
-	UNION u1, u2;
 	BOOLEAN rel;
 	if (*eflg) return;
 	num_conform_pvalues(val1, val2, eflg);
@@ -446,7 +503,7 @@ BOOLEAN *eflg;
 	/*case LONG:*/
 	default: rel = ((INT) pvalue(val1) <= (INT) pvalue(val2));
 	}
-	set_pvalue(val1, PBOOL, rel);
+	set_pvalue(val1, PBOOL, (WORD)rel);
 	delete_pvalue(val2);
 }
 /*================================================
@@ -456,18 +513,17 @@ ge_pvalues (val1, val2, eflg)
 PVALUE val1, val2;
 BOOLEAN *eflg;
 {
-	UNION u1, u2;
 	BOOLEAN rel;
 	if (*eflg) return;
 	num_conform_pvalues(val1, val2, eflg);
 	if (*eflg) return;
-/*wprintf("ge_pvalues: val1, val2 = ");show_pvalue(val1);
-wprintf(", ");show_pvalue(val2);wprintf("\n");/*DEBUG*/
+/*llwprintf("ge_pvalues: val1, val2 = ");show_pvalue(val1);
+llwprintf(", ");show_pvalue(val2);wprintf("\n");/*DEBUG*/
 	switch (ptype(val1)) {
 	/*case LONG:*/
 	default: rel = ((INT) pvalue(val1) >= (INT) pvalue(val2));
 	}
-	set_pvalue(val1, PBOOL, rel);
+	set_pvalue(val1, PBOOL, (WORD)rel);
 	delete_pvalue(val2);
 }
 /*===============================================
@@ -477,35 +533,34 @@ lt_pvalues (val1, val2, eflg)
 PVALUE val1, val2;
 BOOLEAN *eflg;
 {
-	UNION u1, u2;
 	BOOLEAN rel;
 	if (prog_debug) {
-		wprintf("lt_pvalues: val1 = ");
+		llwprintf("lt_pvalues: val1 = ");
 		show_pvalue(val1);
-		wprintf(" val2 = ");
+		llwprintf(" val2 = ");
 		show_pvalue(val2);
-		wprintf(" eflg = %d\n", *eflg);
+		llwprintf(" eflg = %d\n", *eflg);
 	}
 	if (*eflg) return;
 	num_conform_pvalues(val1, val2, eflg);
 	if (prog_debug) {
-		wprintf("lt_pvalues: after conforming: val1 = ");
+		llwprintf("lt_pvalues: after conforming: val1 = ");
 		show_pvalue(val1);
-		wprintf(" val2 = ");
+		llwprintf(" val2 = ");
 		show_pvalue(val2);
-		wprintf(" eflg = %d\n", *eflg);
+		llwprintf(" eflg = %d\n", *eflg);
 	}
 	if (*eflg) return;
 	switch (ptype(val1)) {
 	/*case LONG:*/
 	default: rel = ((INT) pvalue(val1) < (INT) pvalue(val2));
 	}
-	set_pvalue(val1, PBOOL, rel);
+	set_pvalue(val1, PBOOL, (WORD)rel);
 	delete_pvalue(val2);
 	if (prog_debug) {
-		wprintf("lt_pvalues: at end: val1 = ");
+		llwprintf("lt_pvalues: at end: val1 = ");
 		show_pvalue(val1);
-		wprintf("\n");
+		llwprintf("\n");
 	}
 }
 /*===============================================
@@ -515,14 +570,13 @@ gt_pvalues (val1, val2, eflg)
 PVALUE val1, val2;
 BOOLEAN *eflg;
 {
-	UNION u1, u2;
 	BOOLEAN rel;
 if (prog_debug) {
-	wprintf("gt_pvalues: at start: val1 = ");
+	llwprintf("gt_pvalues: at start: val1 = ");
 	show_pvalue(val1);
-	wprintf(" val2 = ");
+	llwprintf(" val2 = ");
 	show_pvalue(val2);
-	wprintf(" eflg = %d\n", *eflg);
+	llwprintf(" eflg = %d\n", *eflg);
 }
 	if (*eflg) return;
 	num_conform_pvalues(val1, val2, eflg);
@@ -530,14 +584,14 @@ if (prog_debug) {
 	switch (ptype(val1)) {
 	/*case LONG:*/
 	default: rel = ((INT) pvalue(val1) > (INT) pvalue(val2));
-if (prog_debug) wprintf("rel is %d\n", rel);
+if (prog_debug) llwprintf("rel is %d\n", rel);
 	}
-	set_pvalue(val1, PBOOL, rel);
+	set_pvalue(val1, PBOOL, (WORD)rel);
 	delete_pvalue(val2);
 if (prog_debug) {
-	wprintf("gt_pvalues: at end: val1 = ");
+	llwprintf("gt_pvalues: at end: val1 = ");
 	show_pvalue(val1);
-	wprintf("\n");
+	llwprintf("\n");
 }
 }
 /*==============================
@@ -572,7 +626,7 @@ BOOLEAN *eflg;
 	/*case PLONG:*/
 	default: u.i = 0;
 	}
-	set_pvalue(val1, ptype(val1), u.w);
+	set_pvalue(val1, ptype(val1), (WORD)u.w);
 	delete_pvalue(val2);
 }
 /*==================================
@@ -655,6 +709,39 @@ WORD value;	/* new value of identifier */
 	if (val) delete_pvalue(val);
 	insert_table(stab, iden, create_pvalue(type, value));
 }
+#ifndef HOGMEMORY
+/*=================================================
+ * zero_pventry -- zero the value of a symbol table 
+ *================================================*/
+zero_pventry (ent)
+ENTRY ent;	/* symbol table entry */
+{
+    PVALUE val;
+    if(ent && (val = ent->evalue)) {
+	ASSERT(is_pvalue(val));
+	delete_pvalue(val);
+	ent->evalue = 0;
+    }
+}
+/*========================================
+ * remove_pvtable -- Remove symbol table 
+ *======================================*/
+FILE *errfp = NULL;
+remove_pvtable (stab)
+TABLE stab;	/* symbol table */
+{
+#ifdef HOGMEMORYERROR
+    if(errfp == NULL) errfp = fopen("pbm.err", "w");
+    if(errfp) { fprintf(errfp, "traverse_table()...\n"); fflush(stderr); }
+    	traverse_table(stab, zero_pventry);
+    if(errfp) { fprintf(errfp, "remove_table(, DONTFREE)...\n"); fflush(stderr); }
+#endif
+	remove_table(stab, DONTFREE);
+#ifdef HOGMEMORYERROR
+    if(errfp) { fprintf(errfp, "remove_pvtable() done.\n"); fflush(stderr); }
+#endif
+}
+#endif
 /*=================================================
  * show_pvalue -- DEBUG routine that shows a PVALUE
  *===============================================*/
@@ -667,33 +754,34 @@ PVALUE val;
 	UNION u;
 
 	if (!is_pvalue(val)) {
-		wprintf("*NOT PVALUE*");
+		if(val) llwprintf("*NOT PVALUE (%d,?)*", ptype(val));
+		else llwprintf("*NOT PVALUE (NULL)*");
 		return;
 	}
 	type = ptype(val);
-	wprintf("<%s,", ptypes[type]);
+	llwprintf("<%s,", ptypes[type]);
 	if (pvalue(val) == NULL) {
-		wprintf("0>");
+		llwprintf("0>");
 		return;
 	}
 	u.w = pvalue(val);
 	switch (type) {
 	case PINT:
-		wprintf("%d>", u.i);
+		llwprintf("%d>", u.i);
 		return;
 	case PFLOAT:
-		wprintf("%f>", u.f);
+		llwprintf("%f>", u.f);
 		break;
-	case PSTRING: wprintf("%s>", (STRING) pvalue(val)); return;
+	case PSTRING: llwprintf("%s>", (STRING) pvalue(val)); return;
 	case PINDI:
 		cel = (CACHEEL) pvalue(val);
 		if (!cnode(cel))
 			cel = key_to_indi_cacheel(ckey(cel));
         	node = cnode(cel);
-		wprintf("%s>", nval(NAME(node)));
+		llwprintf("%s>", nval(NAME(node)));
 		return;
 	default:
-		wprintf("%d>", pvalue(val)); return;
+		llwprintf("%d>", pvalue(val)); return;
 	}
 }
 /*======================================================

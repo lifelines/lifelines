@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * assert.c -- Standard assertion routines
  * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
@@ -36,9 +37,9 @@ __fatal (file, line)
 STRING file;
 int line;
 {
-	wprintf("FATAL: %s: line %d\n", file, line);
+	llwprintf("FATAL: %s: line %d\n", file, line);
 	final_cleanup();
-	abort();
+	ll_abort(-1);
 }
 /*============================
  * __assert -- Check assertion

@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * gedcom.h -- Main header file of LifeLines system
  * Copyright(c) 1992-96 by T.T. Wetmore IV; all rights reserved
@@ -28,6 +29,7 @@
  *   3.0.0 - 23 Sep 94    3.0.2 - 09 Dec 94
  *   3.0.3 - 17 Jan 96
  *===========================================================*/
+
 
 #define MAXNAMELEN 512
 
@@ -116,6 +118,7 @@ STRING event_to_string();
 NODE fam_to_first_chil();
 NODE fam_to_husb();
 NODE fam_to_wife();
+NODE fam_to_spouse();
 NODE file_to_node();
 NODE find_node();
 NODE find_tag();
@@ -218,13 +221,13 @@ STRING value_to_xref();
 	NODE child;\
 	num = 0;\
 	while (__node) {\
-		child = key_to_indi(rmvat(nval(__node)));\
-		ASSERT(child);\
-		num++;\
-		{
+		if(child = key_to_indi(rmvat(nval(__node)))) {\
+		  ASSERT(child);\
+		  num++;\
+		  {
 
 #define ENDCHILDREN \
-		}\
+		  }}\
 		__node = nsibling(__node);\
 		if (__node && nestr(ntag(__node), "CHIL")) __node = NULL;\
 	}}
@@ -241,8 +244,9 @@ STRING value_to_xref();
 		ASSERT(fam);\
 		if (__sex == SEX_MALE)\
 			spouse = fam_to_wife(fam);\
-		else\
+		else if (__sex == SEX_FEMALE)\
 			spouse = fam_to_husb(fam);\
+		else    spouse = fam_to_spouse(fam, indi);\
 		if (spouse != NULL) {\
 			num++;\
 		{
@@ -264,8 +268,9 @@ STRING value_to_xref();
 		ASSERT(fam);\
 		if (__sex == SEX_MALE)\
 			spouse = fam_to_wife(fam);\
-		else\
+		else if (__sex == SEX_FEMALE)\
 			spouse = fam_to_husb(fam);\
+		else    spouse = fam_to_spouse(fam, indi);\
 		num++;\
 		{
 
@@ -333,7 +338,7 @@ STRING value_to_xref();
 	NODE node, __node = nchild(root);\
 	STRING value, __value;\
 	while (__node) {\
-		while (__node && strcmp(tag, ntag(__node)))\
+		while (__node && ll_strcmp(tag, ntag(__node)))\
 			__node = nsibling(__node);\
 		if (__node == NULL) break;\
 		__value = value = full_value(__node);/*OBLIGATION*/\

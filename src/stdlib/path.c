@@ -29,7 +29,9 @@
  *   3.0.3 - 06 Sep 95
  *=====================================================*/
 
+#ifndef WIN32
 #include <unistd.h>
+#endif
 #include "standard.h"
 
 /*===========================================
@@ -44,12 +46,19 @@ STRING name, mode, path;
 
 	if (!name || *name == 0) return NULL;
 	if (!path || *path == 0) return name;
-	if (*name == '/' || *name == '.') return name;
+	if (*name == LLCHRDIRSEPARATOR || *name == '.') return name;
+#ifdef WIN32
+	if ((*name == '/') || ((name[1] == ':') && isalpha(*name))) return name;
+#endif
 	if (strlen(name) + strlen(path) >= MAXLINELEN) return NULL;
 	strcpy(buf1, path);
 	p = buf1;
 	while (c = *p) {
-		if (c == ':') *p = 0;
+		if (c == LLCHRPATHSEPARATOR
+#ifdef WIN32
+	    	    || c == '/'
+#endif
+			) *p = 0;
 		p++;
 	}
 	*(++p) = 0;
@@ -58,19 +67,19 @@ STRING name, mode, path;
 		q = buf2;
 		strcpy(q, p);
 		q += strlen(q);
-		strcpy(q, "/");
+		strcpy(q, LLSTRDIRSEPARATOR);
 		q++;
 		strcpy(q, name);
 		if (access(buf2, 0) == 0) return strsave(buf2);
 		p += strlen(p);
 		p++;
 	}
-	if (eqstr(mode, "r")) return NULL;
+	if (mode[0] == 'r') return NULL;
 	p = buf1;
 	q = buf2;
 	strcpy(q, p);
 	q += strlen(q);
-	strcpy(q, "/");
+	strcpy(q, LLSTRDIRSEPARATOR);
 	q++;
 	strcpy(q, name);
 	return strsave(buf2);
@@ -97,13 +106,21 @@ STRING path;
 	if (!path || *path == 0) return NULL;
 	len = strlen(path);
 	strcpy(p, path);
-	if (p[len-1] == '/') {
+	if (p[len-1] == LLCHRDIRSEPARATOR
+#ifdef WIN32
+	    || p[len-1] == '/'
+#endif
+		) {
 		len--;
 		p[len] = 0;
 	}
 	q = p;
 	while (c = *p++) {
-		if (c == '/') q = p;
+		if (c == LLCHRDIRSEPARATOR
+#ifdef WIN32
+	    	    || c == '/'
+#endif
+			) q = p;
 	}
 	return q;
 }

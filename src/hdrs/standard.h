@@ -21,17 +21,53 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * standard.h -- Define standard macros and types
  * Copyright(c) 1991-95 by T.T. Wetmore IV; all rights reserved
  *   3.0.0 - 05 May 94    3.0.2 - 23 Nov 94
  *   3.0.3 - 25 Jun 95
  *===========================================================*/
+#ifndef _STANDARD_H
+#define _STANDARD_H
+
+#ifdef WIN32
+
+#define LLREADTEXT "rt"
+#define LLREADBINARY "rb"
+#define LLREADBINARYUPDATE "r+b"
+#define LLWRITETEXT "wt"
+#define LLWRITEBINARY "wb"
+#define LLAPPENDTEXT "at"
+
+#define LLSTRPATHSEPARATOR ";"
+#define LLSTRDIRSEPARATOR "\\"
+#define LLCHRPATHSEPARATOR ';'
+#define LLCHRDIRSEPARATOR '\\'
+#else
+#define LLREADTEXT "r"
+#define LLREADBINARY "r"
+#define LLREADBINARYUPDATE "r+"
+#define LLWRITETEXT "w"
+#define LLWRITEBINARY "w"
+#define LLAPPENDTEXT "a"
+
+#define LLSTRPATHSEPARATOR ":"
+#define LLSTRDIRSEPARATOR "/"
+#define LLCHRPATHSEPARATOR ':'
+#define LLCHRDIRSEPARATOR '/'
+#endif
 
 #ifndef STDIO_H
 #define STDIO_H
 #include <stdio.h>
 #endif
+
+/* WARNING: Borland C++ 5.02 declares wprintf() in stdio.h. Redefine LifeLines
+ * wprintf to llwprintf. pbm 07 Jan 2000
+ */
+
+#include "mystring.h"
 
 typedef unsigned char *STRING;
 #ifndef BOOLEAN
@@ -48,7 +84,7 @@ typedef unsigned char *STRING;
 #define LONG long
 #define FLOAT double
 
-typedef char *WORD;
+typedef void *WORD;
 typedef union {
         BOOLEAN b;
         INT     i;
@@ -78,8 +114,8 @@ extern BOOLEAN alloclog;
 #define fatal(s)      __fatal(__FILE__, __LINE__)
 #define FATAL()       __fatal(__FILE__, __LINE__)
 #define ASSERT(b)     if(!(b)) __fatal(__FILE__, __LINE__)
-#define eqstr(s,t)    (!strcmp((s),(t)))
-#define nestr(s,t)    (strcmp((s),(t)))
+#define eqstr(s,t)    (!ll_strcmp((s),(t)))
+#define nestr(s,t)    (ll_strcmp((s),(t)))
 
 #define check_cache()   ___check_cache(__LINE__, __FILE__)
 
@@ -132,3 +168,5 @@ extern WORD dequeue_list();
 			_lnode = _lnode->l_prev;\
 		}\
 	}
+
+#endif

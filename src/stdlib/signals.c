@@ -67,19 +67,27 @@ set_signals ()
 	extern void on_signals();
 	if (signal(SIGINT, SIG_IGN) != SIG_IGN)
 		signal(SIGINT, on_signals);
+#ifdef SIGHUP
 	signal(SIGHUP, on_signals);
+#endif
+#ifdef SIGQUIT
 	signal(SIGQUIT, on_signals);
+#endif
 	signal(SIGILL, on_signals);
 #ifdef SIGEMT
 	signal(SIGEMT, on_signals);
 #endif
 	signal(SIGFPE, on_signals);
+#ifdef SIGBUS
 	signal(SIGBUS, on_signals);
+#endif
 	signal(SIGSEGV, on_signals);
 #ifdef SIGSYS
 	signal(SIGSYS, on_signals);
 #endif
+#ifdef SIGPIPE
 	signal(SIGPIPE, on_signals);
+#endif
 }
 /*======================================
  * on_signals -- Catch and handle signal
@@ -90,15 +98,26 @@ int sig;
 	extern BOOLEAN progrunning;
 	extern PNODE Pnode;
 
-	wprintf("Darn, caught a signal.  ");
+	llwprintf("Darn, caught a signal.  ");
 	if (progrunning) {
-		wprintf("Looks like you were running a program.\n");
-		wprintf("Check file \"%s\" around line %d.\n", ifname(Pnode),
+		llwprintf("Looks like you were running a program.\n");
+		llwprintf("Check file \"%s\" around line %d.\n", ifname(Pnode),
 		    iline(Pnode));
 	} else 
-		wprintf("Email me if you get stuck.  Tom.\n");
-	wprintf("signal %d:%s\n", sig, sig_msgs[sig]);
+		llwprintf("Email me if you get stuck.  Tom.\n");
+	llwprintf("signal %d:%s\n", sig, sig_msgs[sig]);
 	close_lifelines();
 	endwin();
-	abort();
+	ll_abort(sig);
+}
+
+ll_abort(sig)
+{
+	int c;
+	fputs("\nCore Dump? [n/y] ", stdout);
+	fflush(stdout);
+	c = getchar();
+	putchar(c);
+	if((c == 'y') || (c == 'Y')) abort();
+	exit(1);
 }

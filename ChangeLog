@@ -1,0 +1,64 @@
+05 Jan 2000 Paul B. McBride (pmcbride@tiac.net)
+	added stdlib/{llstrcmp.c,mystring.c}
+	modified stdlib/path.c
+		path (':' , ';') and directory ('/','\\') separator characters
+	modified stdlib/signals.c
+		conditionals for undefined signal names
+		add abort message with core dump question.
+		no core dump is produced on Win32.
+	modified stdlib/stdstrng.c
+		Finnish sort order related changes
+	modified liflines/newrecs.c
+		fopen() modes, data declaration corrections
+	modified liflines/merge.c
+		many "improvements"
+	modified liflines/tandem.c
+		change related to merge
+	modified interp/yacc.c
+		add "#define YACC_C" so that prototypes in proto.h
+		can be suppressed. WARNING: pointers and integers must
+		be the same size.
+	modified interp/builtin.c
+		many changes
+	modified interp/date.c
+		add 3.0.3 version back in. only comment changes.
+	modified interp/functab.c
+		added inlist(), and changes for function prototypes in proto.h
+	added interp/heapused.c
+		only for WIN32
+	modified interp/interp.c
+	modified interp/intrpseq.c
+		add valuesort back in
+	modified interp/lex.c
+	modified interp/more.c
+	modified interp/rassa.c
+	modified interp/alloc.c
+		renamed iparent to iiparent
+	modified gedlib/editmap.c
+		use unlink() rather than system("rm -f ...") for WIN32
+		fixed translation bug
+	modified gedlib/indiseq.c
+		lots of changes
+	modified gedlib/keytonod.c
+		runtime cache size option support
+		work on FATAL keytonod error.
+	modified lifelines/main.c
+		Finnish Sort order runtime options
+		runtime cache size options
+	modified btree/opnbtree.c
+		use mkdir() for WIN32
+	modified btree/record.c
+	modified gedlib/node.c
+	modified stdlib/double.c
+		add in_list()
+	modified gedlib/charmaps.c
+		translation tables
+	modified gedlib/editvtab.c
+		use unlink() instead of system("rm ...
+	modified gedlib/gstrings.c
+		add [P] to name if a child in a family
+		add [S] to name if a spouse in a family
+		add [PS] to name if both
+
+
+

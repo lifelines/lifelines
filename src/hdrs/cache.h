@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*================================================================
  * cache.h -- Header file for NODE cache operations.
  * Copyright(c) 1991 by Thomas T. Wetmore IV; all rights reserved.
@@ -43,7 +44,7 @@ struct c_elem {
 #define cprev(e) ((e)->c_prev)
 #define cnext(e) ((e)->c_next)
 #define ckey(e)  ((e)->c_key)
-#define clock(e) ((e)->c_lock)
+#define cclock(e) ((e)->c_lock)
 /*==============================
  * CACHE -- Internal cache type.
  *============================*/

@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * misc.c -- Various useful, miscellaneous routines
  * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
@@ -54,13 +55,21 @@ STRING rmvat (str)
 STRING str;
 {
 	STRING p;
-	static unsigned char buffer[10][20];
+	int len;
+	/* WARNING: GEDCOM 5.5 specifies that the resulting string (XREF) can be
+	 * 1 to 22 characters. Allow a little extra. */
+	static unsigned char buffer[32][32];	/* was [10][20] pbm 11-jun-96*/
 	static INT dex = 0;
+	/* WARNING: should this be a fatal error? or not? - pbm 07 Jan 2000 */
+	if((str == NULL) || (*str == '\0')) return(NULL);
 	ASSERT(str);
-	if (++dex > 9) dex = 0;
+	if (++dex > 31) dex = 0;	/* was 9 pbm 11-jun-96*/
 	p = buffer[dex];
-	strcpy(p, &str[1]);
-	p[strlen(p)-1] = 0;
+	len = strlen(str+1);
+	if(len > 31) len = 31;		/* 31 characters is maximum */
+	else if(len > 0) len--;
+	strncpy(p, &str[1], len);
+	p[len] = 0;	/* overwrite trailing "@" with null */
 	return p;
 }
 /*==============================================
@@ -106,7 +115,7 @@ NODE node;
 		cont = nsibling(cont);
 	}
 	if (len == 0) return NULL;
-/*wprintf("full_value: len = %d\n", len);/*DEBUG*/
+/*llwprintf("full_value: len = %d\n", len);/*DEBUG*/
 	str = p = (STRING) stdalloc(len + 1);
 	if (q = nval(node)) {
 		sprintf(p, "%s\n", q);
@@ -122,6 +131,6 @@ NODE node;
 		cont = nsibling(cont);
 	}
 	*(p - 1) = 0;
-/*wprintf("full_value: str = %s\n", str);/*DEBUG*/
+/*llwprintf("full_value: str = %s\n", str);/*DEBUG*/
 	return str;
 }

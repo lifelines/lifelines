@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * add.c -- Add new person or family to database; add child to
  *   family; add spouse to family
@@ -60,7 +61,7 @@ NODE add_indi_by_edit ()
 
 /* Create person template for user to edit */
 
-	if (!(fp = fopen(editfile, "w"))) return NULL;
+	if (!(fp = fopen(editfile, LLWRITETEXT))) return NULL;
 	if (str = (STRING) valueof(useropts, "INDIREC"))
 		fprintf(fp, "%s\n", str);
 	else {
@@ -140,6 +141,7 @@ NODE indi;
 	for (node = refn; node; node = nsibling(node))
 		if (nval(node)) add_refn(nval(node), key);
 	join_indi(indi, name, refn, sex, body, famc, fams);
+	resolve_links(indi);
 	str = node_to_string(indi);
 	store_record(key, str, strlen(str));
 	stdfree(str);
@@ -394,7 +396,7 @@ editfam:
 
 /* Prepare file for user to edit */
 
-	ASSERT(fp = fopen(editfile, "w"));
+	ASSERT(fp = fopen(editfile, LLWRITETEXT));
 	write_nodes(0, fp, tto, fam1, TRUE, TRUE, TRUE);
 	write_nodes(1, fp, tto, husb, TRUE, TRUE, TRUE);
 	write_nodes(1, fp, tto, wife, TRUE, TRUE, TRUE);

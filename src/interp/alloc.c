@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * alloc.c -- Allocate nodes for report generator
  * Copyright(c) 1991-95 by T.T. Wetmore IV; all rights reserved
@@ -129,7 +130,7 @@ PNODE body;	/* body */
 {
 	PNODE node = create_pnode(IFATHS);
 	iloopexp(node) = (WORD) pexpr;
-	iparent(node) = (WORD) pvar;
+	iiparent(node) = (WORD) pvar;
 	ifamily(node) = (WORD) fvar;
 	inum(node) = (WORD) nvar;
 	ibody(node) = (WORD) body;
@@ -148,7 +149,7 @@ PNODE body;	/* body */
 {
 	PNODE node = create_pnode(IMOTHS);
 	iloopexp(node) = (WORD) pexpr;
-	iparent(node) = (WORD) pvar;
+	iiparent(node) = (WORD) pvar;
 	ifamily(node) = (WORD) fvar;
 	inum(node) = (WORD) nvar;
 	ibody(node) = (WORD) body;
@@ -429,8 +430,8 @@ PNODE elist;	/* param/s */
 	if (found) {
 		if ((n = num_params(elist)) < builtins[md].ft_nparms_min
 		    || n > builtins[md].ft_nparms_max) {
-			wprintf(ierror, Pfname, Plineno);
-			wprintf("%s: must have %d to %d parameters.\n", name,
+			llwprintf(ierror, Pfname, Plineno);
+			llwprintf("%s: must have %d to %d parameters.\n", name,
 		    	builtins[md].ft_nparms_min, builtins[md].ft_nparms_max);
 			Perrors++;
 		}
@@ -551,7 +552,7 @@ PNODE node;
 	while (node) {
 		show_one_pnode(node);
 		node = inext(node);
-		if (node) wprintf(",");
+		if (node) llwprintf(",");
 	}
 }
 /*====================================================
@@ -565,119 +566,119 @@ PNODE node;	/* node to print */
 	switch (itype(node)) {
 
 	case IICONS:
-		wprintf("%d", pvalue(ivalue(node)));
+		llwprintf("%d", pvalue(ivalue(node)));
 		break;
 	case IFCONS:
 		u.w = pvalue(ivalue(node));
-		wprintf("%f", u.f);
+		llwprintf("%f", u.f);
 		break;
 	case ILCONS:
-		wprintf("*ni*");
+		llwprintf("*ni*");
 		break;
 	case ISCONS:
-		wprintf("^^%s^^", pvalue(ivalue(node)));
+		llwprintf("^^%s^^", pvalue(ivalue(node)));
 		break;
 	case IIDENT:
-		wprintf("%s", iident(node));
+		llwprintf("%s", iident(node));
 		break;
 	case IIF:
-		wprintf("if(");
+		llwprintf("if(");
 		show_pnodes(icond(node));
-		wprintf("){");
+		llwprintf("){");
 		show_pnodes(ithen(node));
-		wprintf("}");
+		llwprintf("}");
 		if (ielse(node)) {
-			wprintf("else{");
+			llwprintf("else{");
 			show_pnodes(ielse(node));
-			wprintf("}");
+			llwprintf("}");
 		}
 		break;
 	case IWHILE:
-		wprintf("while(");
+		llwprintf("while(");
 		show_pnodes(icond(node));
-		wprintf("){");
+		llwprintf("){");
 		show_pnodes(ibody(node));
-		wprintf("}");
+		llwprintf("}");
 		break;
 	case IBREAK:
-		wprintf("break ");
+		llwprintf("break ");
 		break;
 	case ICONTINUE:
-		wprintf("continue ");
+		llwprintf("continue ");
 		break;
 	case IRETURN:
-		wprintf("return(");
+		llwprintf("return(");
 		show_pnodes(iargs(node));
-		wprintf(")");
+		llwprintf(")");
 		break;
 	case IPDEFN:
-		wprintf("*PDefn *");
+		llwprintf("*PDefn *");
 		break;
 	case IPCALL:
-		wprintf("%s(", iname(node));
+		llwprintf("%s(", iname(node));
 		show_pnodes(iargs(node));
-		wprintf(")");
+		llwprintf(")");
 		break;
 	case IFDEFN:
-		wprintf("*FDefn *");
+		llwprintf("*FDefn *");
 		break;
 	case IFCALL:
-		wprintf("%s(", iname(node));
+		llwprintf("%s(", iname(node));
 		show_pnodes(iargs(node));
-		wprintf(")");
+		llwprintf(")");
 		break;
 	case IBCALL:
-		wprintf("%s(", iname(node));
+		llwprintf("%s(", iname(node));
 		show_pnodes(iargs(node));
-		wprintf(")");
+		llwprintf(")");
 		break;
 	case ITRAV:
-		wprintf("*Traverse *");
+		llwprintf("*Traverse *");
 		break;
 	case INODES:
-		wprintf("*Fornodes *");
+		llwprintf("*Fornodes *");
 		break;
 	case IFAMILIES:
-		wprintf("*FamiliesLoop *");
+		llwprintf("*FamiliesLoop *");
 		break;
 	case ISPOUSES:
-		wprintf("*SpousesLoop *");
+		llwprintf("*SpousesLoop *");
 		break;
 	case ICHILDREN:
-		wprintf("*ChildrenLoop *");
+		llwprintf("*ChildrenLoop *");
 		break;
 	case IINDI:
-		wprintf("*PersonLoop *");
+		llwprintf("*PersonLoop *");
 		break;
 	case IFAM:
-		wprintf("*FamilyLoop *");
+		llwprintf("*FamilyLoop *");
 		break;
 	case ISOUR:
-		wprintf("*SourceLoop *");
+		llwprintf("*SourceLoop *");
 		break;
 	case IEVEN:
-		wprintf("*EventLoop *");
+		llwprintf("*EventLoop *");
 		break;
 	case IOTHR:
-		wprintf("*OtherLoop *");
+		llwprintf("*OtherLoop *");
 		break;
 	case ILIST:
-		wprintf("*ListLoop *");
+		llwprintf("*ListLoop *");
 		break;
 	case ISET:
-		wprintf("*IndisetLoop *");
+		llwprintf("*IndisetLoop *");
 		break;
 	case IFATHS:
-		wprintf("*FathersLoop *");
+		llwprintf("*FathersLoop *");
 		break;
 	case IMOTHS:
-		wprintf("*MothersLoop *");
+		llwprintf("*MothersLoop *");
 		break;
 	case IFAMCS:
-		wprintf("*ParentsLoop *");
+		llwprintf("*ParentsLoop *");
 		break;
 	case INOTES:
-		wprintf("*NotesLoop *");
+		llwprintf("*NotesLoop *");
 		break;
 	default:
 		break;

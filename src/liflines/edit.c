@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * edit.c -- Edit person or family record
  * Copyright(c) 1992-96 by T.T. Wetmore IV; all rights reserved
@@ -56,7 +57,7 @@ NODE indi1;	/* may be NULL */
 
 /* Prepare file for user to edit */
 
-	ASSERT(fp = fopen(editfile, "w"));
+	ASSERT(fp = fopen(editfile, LLWRITETEXT));
 	split_indi(indi1, &name1, &refn1, &sex, &body, &famc, &fams);
 	write_nodes(0, fp, tto, indi1, TRUE, TRUE, TRUE);
 	write_nodes(1, fp, tto, name1, TRUE, TRUE, TRUE);
@@ -173,7 +174,7 @@ NODE fam1;	/* may be NULL */
 
 /* Prepare file for user to edit */
 
-	ASSERT(fp = fopen(editfile, "w"));
+	ASSERT(fp = fopen(editfile, LLWRITETEXT));
 	split_fam(fam1, &refn1, &husb, &wife, &chil, &body);
 	write_nodes(0, fp, tto, fam1,  TRUE, TRUE, TRUE);
 	write_nodes(1, fp, tto, refn1, TRUE, TRUE, TRUE);

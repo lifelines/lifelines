@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * xreffile.c -- Handle the xref file
  * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
@@ -69,7 +70,7 @@ initxref ()
 	INT i = 1, j;
 	ASSERT(!xrefopen);
 	sprintf(scratch, "%s/xrefs", BTR->b_basedir);
-	ASSERT(xreffp = fopen(scratch, "w"));
+	ASSERT(xreffp = fopen(scratch, LLWRITEBINARY));
 	for (j = 0; j < 10; j++) {
 		ASSERT(fwrite(&i, sizeof(INT), 1, xreffp) == 1);
 	}
@@ -83,7 +84,7 @@ BOOLEAN openxref ()
 	char scratch[100];
 	ASSERT(!xrefopen);
 	sprintf(scratch, "%s/xrefs", BTR->b_basedir);
-	if (!(xreffp = fopen(scratch, "r+"))) return FALSE;
+	if (!(xreffp = fopen(scratch, LLREADBINARYUPDATE))) return FALSE;
 	xrefopen = TRUE;
 	return readxrefs();
 }
@@ -101,7 +102,7 @@ closexref ()
 STRING getixref ()
 {
 	INT n;
-	static unsigned char scratch[10];
+	static unsigned char scratch[12];
 	ASSERT(xrefopen && nixrefs >= 1);
 	n = (nixrefs == 1) ? ixrefs[0]++ : ixrefs[--nixrefs];
 	ASSERT(writexrefs());
@@ -114,7 +115,7 @@ STRING getixref ()
 STRING getfxref ()
 {
 	INT n;
-	static unsigned char scratch[10];
+	static unsigned char scratch[12];
 	ASSERT(xrefopen && nfxrefs >= 1);
 	n = (nfxrefs == 1) ? fxrefs[0]++ : fxrefs[--nfxrefs];
 	ASSERT(writexrefs());
@@ -127,7 +128,7 @@ STRING getfxref ()
 STRING getexref ()
 {
 	INT n;
-	static unsigned char scratch[10];
+	static unsigned char scratch[12];
 	ASSERT(xrefopen && nexrefs >= 1);
 	n = (nexrefs == 1) ? exrefs[0]++ : exrefs[--nexrefs];
 	ASSERT(writexrefs());
@@ -140,7 +141,7 @@ STRING getexref ()
 STRING getsxref ()
 {
 	INT n;
-	static unsigned char scratch[10];
+	static unsigned char scratch[12];
 	ASSERT(xrefopen && nsxrefs >= 1);
 	n = (nsxrefs == 1) ? sxrefs[0]++ : sxrefs[--nsxrefs];
 	ASSERT(writexrefs());
@@ -153,7 +154,7 @@ STRING getsxref ()
 STRING getxxref ()
 {
 	INT n;
-	static unsigned char scratch[10];
+	static unsigned char scratch[12];
 	ASSERT(xrefopen && nxxrefs >= 1);
 	n = (nxxrefs == 1) ? xxrefs[0]++ : xxrefs[--nxxrefs];
 	ASSERT(writexrefs());
@@ -372,4 +373,109 @@ INT num_sours ()
 INT num_othrs ()
 {
 	return xxrefs[0] - nxxrefs;
+}
+/*================================================
+ * newixref -- Return original or next ixref value
+ *==============================================*/
+STRING newixref (xrefp, flag)
+    STRING xrefp;	/* key of the individual */
+    BOOLEAN flag;	/* use the current key */
+{
+    INT n;
+    BOOLEAN changed;
+    static unsigned char scratch[12];
+    if(flag) {
+	n = atoi(xrefp+1);
+	changed = ((nixrefs != 1) || (n >= ixrefs[0]));
+	if(nixrefs != 1) nixrefs = 1;	/* forget about deleted entries */
+	if(n >= ixrefs[0]) ixrefs[0] = n+1;	/* next available */
+	if(changed) ASSERT(writexrefs());
+	sprintf(scratch, "@%s@", xrefp);
+	return(scratch);
+    }
+    return(getixref());
+}
+/*================================================
+ * newfxref -- Return original or next fxref value
+ *==============================================*/
+STRING newfxref (xrefp, flag)
+    STRING xrefp;	/* key of the individual */
+    BOOLEAN flag;	/* use the current key */
+{
+    INT n;
+    BOOLEAN changed;
+    static unsigned char scratch[12];
+    if(flag) {
+	n = atoi(xrefp+1);
+	changed = ((nfxrefs != 1) || (n >= fxrefs[0]));
+	nfxrefs = 1;	/* forget about deleted entries */
+	if(n >= fxrefs[0]) fxrefs[0] = n+1;	/* next available */
+	if(changed) ASSERT(writexrefs());
+	sprintf(scratch, "@%s@", xrefp);
+	return(scratch);
+    }
+    return(getfxref());
+}
+/*================================================
+ * newsxref -- Return original or next sxref value
+ *==============================================*/
+STRING newsxref (xrefp, flag)
+    STRING xrefp;	/* key of the individual */
+    BOOLEAN flag;	/* use the current key */
+{
+    INT n;
+    BOOLEAN changed;
+    static unsigned char scratch[12];
+    if(flag) {
+	n = atoi(xrefp+1);
+	changed = ((nsxrefs != 1) || (n >= sxrefs[0]));
+	nsxrefs = 1;	/* forget about deleted entries */
+	if(n >= sxrefs[0]) sxrefs[0] = n+1;	/* next available */
+	if(changed) ASSERT(writexrefs());
+	sprintf(scratch, "@%s@", xrefp);
+	return(scratch);
+    }
+    return(getsxref());
+}
+/*================================================
+ * newexref -- Return original or next exref value
+ *==============================================*/
+STRING newexref (xrefp, flag)
+    STRING xrefp;	/* key of the individual */
+    BOOLEAN flag;	/* use the current key */
+{
+    INT n;
+    BOOLEAN changed;
+    static unsigned char scratch[12];
+    if(flag) {
+	n = atoi(xrefp+1);
+	changed = ((nexrefs != 1) || (n >= exrefs[0]));
+	nexrefs = 1;	/* forget about deleted entries */
+	if(n >= exrefs[0]) exrefs[0] = n+1;	/* next available */
+	if(changed) ASSERT(writexrefs());
+	sprintf(scratch, "@%s@", xrefp);
+	return(scratch);
+    }
+    return(getexref());
+}
+/*================================================
+ * newxxref -- Return original or next xxref value
+ *==============================================*/
+STRING newxxref (xrefp, flag)
+    STRING xrefp;	/* key of the individual */
+    BOOLEAN flag;	/* use the current key */
+{
+    INT n;
+    BOOLEAN changed;
+    static unsigned char scratch[12];
+    if(flag) {
+	n = atoi(xrefp+1);
+	changed = ((nxxrefs != 1) || (n >= xxrefs[0]));
+	nxxrefs = 1;	/* forget about deleted entries */
+	if(n >= xxrefs[0]) xxrefs[0] = n+1;	/* next available */
+	if(changed) ASSERT(writexrefs());
+	sprintf(scratch, "@%s@", xrefp);
+	return(scratch);
+    }
+    return(getxxref());
 }

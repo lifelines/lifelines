@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * file.c -- File access to btree database
  * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
@@ -46,7 +47,7 @@ STRING file;	/* file with new record */
 	INT len;
 	struct stat buf;
 	ASSERT(bwrite(btree));
-	if ((fp = fopen(file, "r")) == NULL) return FALSE;
+	if ((fp = fopen(file, LLREADBINARY)) == NULL) return FALSE;
 	if (fstat(fileno(fp), &buf) != 0) {
 		fclose(fp);
 		return FALSE;
@@ -60,6 +61,10 @@ STRING file;	/* file with new record */
 		fclose(fp);
 		return FALSE;
 	}
+	/* WARNING: with WIN32 reading in TEXT mode, fewer characters
+	 * will be read than expected because of conversion of
+	 * \r\n to \n
+	 */
 	if (fread(mem, buf.st_size, 1, fp) != 1) {
 		fclose(fp);
 		return FALSE;
@@ -81,10 +86,14 @@ STRING file;	/* file to write to */
 	INT len;
 	RECORD record = getrecord(btree, rkey, &len);
 	if (record == NULL) return FALSE;
-	if ((fp = fopen(file, "w")) == NULL) {
+	if ((fp = fopen(file, LLWRITEBINARY)) == NULL) {
 		stdfree(record);
 		return FALSE;
 	}
+	/* WARNING: with WIN32 writing in TEXT mode, more characters
+	 * will be written than expected because of conversion of
+	 * \n to \r\n
+	 */
 	if (fwrite(record, len, 1, fp) != 1) {
 		stdfree(record);
 		fclose(fp);

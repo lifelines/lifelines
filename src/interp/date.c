@@ -21,11 +21,13 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*==============================================================
  * date.c -- Code to process dates
  * Copyright(c) 1992-94 by T. T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 17 Aug 93
  *   3.0.0 - 20 Jan 94    3.0.2 - 10 Nov 94
+ *   3.0.3 - 17 Jul 95
  *============================================================*/
 
 #include "standard.h"
@@ -45,7 +47,9 @@ static set_date_string();
 static INT get_date_tok();
 static init_monthtbl();
 
+#ifndef WIN32
 STRING strcpy();
+#endif
 
 struct {
 	char *sl, *su, *ll, *lu;
@@ -67,9 +71,9 @@ struct {
 static STRING sstr = NULL;
 static TABLE monthtbl = NULL;
 
-/*=================================================
- * format_date -- Provides general date formatting.
- *===============================================*/
+/*==========================================
+ * format_date -- Do general date formatting
+ *========================================*/
 STRING format_date (str, dfmt, mfmt, yfmt, sfmt)
 STRING str;	/* raw string containing a date */
 INT dfmt;	/* day format:	0 - num, space 
@@ -309,9 +313,9 @@ INT sfmt;	/* date format:	0 - da mo yr
         return scratch;
 
 }
-/*========================================
- * format_day -- Formats day part of date.
- *======================================*/
+/*=======================================
+ * format_day -- Formats day part of date
+ *=====================================*/
 static STRING format_day (da, dfmt)
 INT da;		/* day - 0 for unknown */
 INT dfmt;	/* format code */
@@ -336,16 +340,15 @@ INT dfmt;	/* format code */
 	*p = 0;
 	return scratch;
 }
-/*============================================
- * format_month -- Formats month part of date.
- *==========================================*/
+/*===========================================
+ * format_month -- Formats month part of date
+ *=========================================*/
 static STRING format_month (mo, mfmt)
 INT mo;		/* month - 0 for unknown */
 INT mfmt;	/* format code */
 {
 	static char scratch[3];
 	STRING p;
-
 	if (mo < 0 || mo > 12 || mfmt < 0 || mfmt > 6) return NULL;
 	if (mfmt <= 2)  {
 		if (p = format_day(mo, mfmt)) return strcpy(scratch, p);
@@ -359,9 +362,9 @@ INT mfmt;	/* format code */
 	case 6: return (STRING) monthstrs[mo-1].ll;
 	}
 }
-/*==========================================
- * format_year -- Formats year part of date.
- *========================================*/
+/*=========================================
+ * format_year -- Formats year part of date
+ *=======================================*/
 static STRING format_year (yr, yfmt)
 INT yr;
 INT yfmt;
@@ -371,9 +374,9 @@ INT yfmt;
 	sprintf(scratch, "%d", yr);
 	return scratch;
 }
-/*===============================================================
- * extract_date -- Tries to extract date from free format string.
- *==============================================================*/
+/*=====================================================
+ * extract_date -- Extract date from free format string
+ *===================================================*/
 extract_date (str, pda, pmo, pyr)
 STRING str;
 INT *pda, *pmo, *pyr;
@@ -400,18 +403,18 @@ INT *pda, *pmo, *pyr;
 		}
 	}
 }
-/*======================================================
- * set_date_string -- Initialize date extraction string.
- *====================================================*/
+/*===============================================
+ * set_date_string -- Init date extraction string
+ *=============================================*/
 static set_date_string (str)
 STRING str;
 {
 	sstr = str;
 	if (!monthtbl) init_monthtbl();
 }
-/*===================================================
- * get_date_tok -- Return next date extraction token.
- *=================================================*/
+/*==================================================
+ * get_date_tok -- Return next date extraction token
+ *================================================*/
 static INT get_date_tok (pival, psval)
 INT *pival;
 STRING *psval;
@@ -454,9 +457,9 @@ STRING *psval;
 	*psval = (STRING) "";
 	return CHAR_TOK;
 }
-/*================================================
- * init_monthtbl -- Initialize month string table.
- *==============================================*/
+/*=========================================
+ * init_monthtbl -- Init month string table
+ *=======================================*/
 static init_monthtbl ()
 {
 	INT i, j;
@@ -468,7 +471,7 @@ static init_monthtbl ()
 	}
 }
 /*=============================
- * get_date - Get today's date.
+ * get_date -- Get today's date
  *===========================*/
 STRING get_date ()
 {

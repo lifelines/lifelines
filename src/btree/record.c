@@ -21,11 +21,13 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * record.c -- Routines to handle BTREE records
  * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 01 Jul 93
  *   3.0.0 - 24 Sep 94    3.0.2 - 26 Mar 95
+ *   3.0.3 - 07 May 95
  *===========================================================*/
 
 #include "standard.h"
@@ -49,7 +51,6 @@ INT len;	/* record length */
 	FILE *fo, *fn1, *fn2;
 	char scratch1[200], scratch2[200], *p = record;
 
-/*wprintf("ADD: rkey = %s\n", rkey2str(rkey)); dumpbtree(btree); /*DEBUG*/
 /* search for data block that does/should hold record */
 	ASSERT(bwrite(btree));
 	ASSERT(index = bmaster(btree));
@@ -65,7 +66,7 @@ INT len;	/* record length */
 		n = nkeys(index);
 		nfkey = fkeys(index, 0);
 		for (i = 1; i <= n; i++) {
-			if (strncmp(rkey.r_rkey, rkeys(index, i).r_rkey, 8) < 0)
+			if (ll_strncmp(rkey.r_rkey, rkeys(index, i).r_rkey, 8) < 0)
 				break;
 			nfkey = fkeys(index, i);
 		}
@@ -83,7 +84,7 @@ INT len;	/* record length */
 	found = FALSE;
 	while (lo <= hi) {
 		SHORT md = (lo + hi)/2;
-		INT rel = strncmp(rkey.r_rkey, rkeys(old, md).r_rkey, 8);
+		INT rel = ll_strncmp(rkey.r_rkey, rkeys(old, md).r_rkey, 8);
 		if (rel < 0)
 			hi = --md;
 		else if (rel > 0)
@@ -131,9 +132,9 @@ INT len;	/* record length */
 
 /* must rewrite data block with new record; open original and new */
 	sprintf(scratch1, "%s/%s", bbasedir(btree), fkey2path(iself(old)));
-	ASSERT(fo = fopen(scratch1, "r"));
+	ASSERT(fo = fopen(scratch1, LLREADBINARY));
 	sprintf(scratch1, "%s/tmp1", bbasedir(btree));
-	ASSERT(fn1 = fopen(scratch1, "w"));
+	ASSERT(fn1 = fopen(scratch1, LLWRITEBINARY));
 
 /* see if new record must cause data block split */
 	if (!found && n == NORECS - 1) goto splitting;
@@ -175,7 +176,7 @@ INT len;	/* record length */
 /* data block must be split for new record; open second temp file */
 splitting:
 	sprintf(scratch1, "%s/tmp2", bbasedir(btree));
-	ASSERT(fn2 = fopen(scratch1,"w"));
+	ASSERT(fn2 = fopen(scratch1, LLWRITEBINARY));
 
 /* write header and 1st half of records; don't worry where new record goes */
 	nkeys(new) = n/2;	/* temporary */
@@ -286,7 +287,7 @@ INT *plen;
 	RECORD record;
 	INT len;
 
-/*wprintf("GETRECORD: rkey: %s\n", rkey2str(rkey)); /*DEBUG*/
+/*llwprintf("GETRECORD: rkey: %s\n", rkey2str(rkey)); /*DEBUG*/
 	*plen = 0;
 	ASSERT(index = bmaster(btree));
 
@@ -295,7 +296,7 @@ INT *plen;
 		n = nkeys(index);
 		nfkey = fkeys(index, 0);
 		for (i = 1; i <= n; i++) {
-			if (strncmp(rkey.r_rkey, rkeys(index, i).r_rkey, 8) < 0)
+			if (ll_strncmp(rkey.r_rkey, rkeys(index, i).r_rkey, 8) < 0)
 				break;
 			nfkey = fkeys(index, i);
 		}
@@ -308,7 +309,7 @@ INT *plen;
 	hi = nkeys(block) - 1;
 	while (lo <= hi) {
 		SHORT md = (lo + hi)/2;
-		INT rel = strncmp(rkey.r_rkey, rkeys(block, md).r_rkey, 8);
+		INT rel = ll_strncmp(rkey.r_rkey, rkeys(block, md).r_rkey, 8);
 		if (rel < 0)
 			hi = --md;
 		else if (rel > 0)
@@ -322,7 +323,7 @@ INT *plen;
 	if (!found) return NULL;
 
 	sprintf(scratch, "%s/%s", bbasedir(btree), fkey2path(iself(block)));
-	ASSERT(fr = fopen(scratch, "r"));
+	ASSERT(fr = fopen(scratch, LLREADBINARY));
 	if (fseek(fr, (long)(offs(block, lo) + BUFLEN), 0)) FATAL();
 	if ((len = lens(block, lo)) == 0) {
 		*plen = 0;
@@ -343,8 +344,12 @@ movefiles (from, to)
 STRING from, to;
 {
 	unlink(to);
+#ifdef WIN32
+	rename(from, to);
+#else
 	link(from, to);
 	unlink(from);
+#endif
 }
 /*====================================================
  * isrecord -- See if there is a record with given key
@@ -358,15 +363,13 @@ RKEY rkey;
 	FKEY nfkey;
 	BLOCK block;
 
-/*wprintf("ISRECORD: rkey: %s\n", rkey2str(rkey)); /*DEBUG*/
-	ASSERT(index = bmaster(btree));
-
 /* search for data block that does/should hold record */
+	ASSERT(index = bmaster(btree));
 	while (itype(index) == BTINDEXTYPE) {
 		n = nkeys(index);
 		nfkey = fkeys(index, 0);
 		for (i = 1; i <= n; i++) {
-			if (strncmp(rkey.r_rkey, rkeys(index, i).r_rkey, 8) < 0)
+			if (ll_strncmp(rkey.r_rkey, rkeys(index, i).r_rkey, 8) < 0)
 				break;
 			nfkey = fkeys(index, i);
 		}
@@ -379,7 +382,7 @@ RKEY rkey;
 	hi = nkeys(block) - 1;
 	while (lo <= hi) {
 		SHORT md = (lo + hi)/2;
-		INT rel = strncmp(rkey.r_rkey, rkeys(block, md).r_rkey, 8);
+		INT rel = ll_strncmp(rkey.r_rkey, rkeys(block, md).r_rkey, 8);
 		if (rel < 0)
 			hi = --md;
 		else if (rel > 0)

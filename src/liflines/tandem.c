@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * tandem.c -- LifeLines tandem browsing operations
  * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
@@ -80,8 +81,8 @@ INDISEQ *pseq;
 			    idcbrs, FALSE))
 				indi1 = node;
 			break;
-		case 'j': 	/* berge two persons */
-			if (node = merge_two_indis(indi2, indi1)) {
+		case 'j': 	/* merge two persons */
+			if (node = merge_two_indis(indi2, indi1, TRUE)) {
 				*pindi1 = node;
 				return BROWSE_INDI;
 			}

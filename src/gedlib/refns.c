@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * refns.c -- Handle user reference indexing
  * Copyright(c) 1992-96 by T.T. Wetmore IV; all rights reserved
@@ -165,7 +166,7 @@ STRING key;	/* record's GEDCOM key */
 	rkey = str2rkey(key);
 	(void) getrefnrec(refn);
 	for (i = 0; i < RRcount; i++) {
-		if (!strncmp(rkey.r_rkey, RRkeys[i].r_rkey, 8) &&
+		if (!ll_strncmp(rkey.r_rkey, RRkeys[i].r_rkey, 8) &&
 		    eqstr(refn, RRrefns[i]))
 			return TRUE;
 	}
@@ -214,7 +215,7 @@ STRING key;	/* record's GEDCOM key */
 	(void) getrefnrec(refn);
 	found = FALSE;
 	for (i = 0; i < RRcount; i++) {
-		if (!strncmp(rkey.r_rkey, RRkeys[i].r_rkey, 8) &&
+		if (!ll_strncmp(rkey.r_rkey, RRkeys[i].r_rkey, 8) &&
 		    eqstr(refn, RRrefns[i])) {
 			found = TRUE;
 			break;

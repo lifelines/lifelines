@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * intrpseq.c -- Programming interface to the INDISEQ data type
  * Copyright(c) 1992-95 by T.T. Wetmore IV; all rights reserved
@@ -64,7 +65,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	}
 	*eflg = FALSE;
 	seq = create_indiseq();
-	assign_iden(stab, iident(var), create_pvalue(PSET, seq));
+	assign_iden(stab, iident(var), create_pvalue(PSET, (WORD) seq));
 	push_list(keysets, seq);
 	return NULL;
 }
@@ -122,8 +123,8 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	}
 	seq = (INDISEQ) pvalue(val);
 	delete_pvalue(val);
-	if (!seq) return create_pvalue(PINT, 0);
-	return create_pvalue(PINT, length_indiseq(seq));
+	if (!seq) return create_pvalue(PINT, (WORD) 0);
+	return create_pvalue(PINT, (WORD) length_indiseq(seq));
 }
 /*====================================+
  * inset -- See if person is in INDISEQ
@@ -150,13 +151,13 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 		prog_error(node, "2nd arg to inset must be a person.");
 		return NULL;
 	}
-	if (!indi) return create_pvalue(PBOOL, FALSE);
+	if (!indi) return create_pvalue(PBOOL, (WORD) FALSE);
 	if (!(key = strsave(rmvat(nxref(indi))))) {
 		*eflg = TRUE;
 		prog_error(node, "major error in inset.");
 		return NULL;
 	}
-	return create_pvalue(PBOOL, in_indiseq(seq, key));
+	return create_pvalue(PBOOL, (WORD) in_indiseq(seq, key));
 }
 /*===========================================+
  * deletefromset -- Remove person from INDISEQ
@@ -238,7 +239,6 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	keysort_indiseq(seq);
 	return NULL;
 }
-#if 0
 /*===================================
  * valuesort -- Sort INDISEQ by value
  *   valuesort(SET) -> VOID
@@ -246,12 +246,17 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 WORD __valuesort (node, stab, eflg)
 PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	INDISEQ seq = (INDISEQ) evaluate(iargs(node), stab, eflg);
-	if (*eflg || !seq) return NULL;
+	INDISEQ seq;
+	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
+	if (*eflg) {
+		prog_error(node, "the arg to valuesort must be a set.");
+		return NULL;
+	}
+	ASSERT(seq = (INDISEQ) pvalue(val));
+	delete_pvalue(val);
 	valuesort_indiseq(seq);
 	return NULL;
 }
-#endif
 /*=========================================+
  * uniqueset -- Eliminate dupes from INDISEQ
  *   uniqueset(SET) -> VOID
@@ -398,7 +403,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 		return NULL;
 	}
 	ASSERT(seq = (INDISEQ) pvalue(val));
-	set_pvalue(val, PSET, seq = sibling_indiseq(seq));
+	set_pvalue(val, PSET, seq = sibling_indiseq(seq, FALSE));
 	push_list(keysets, seq);
 	return val;
 }

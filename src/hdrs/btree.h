@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * btree.h -- BTREE database header
  * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
@@ -28,6 +29,8 @@
  *   3.0.0 - 04 Oct 94
  *===========================================================*/
 
+#ifndef _BTREE_H
+#define _BTREE_H
 #ifndef STDIO_H
 #define STDIO_H
 #include <stdio.h>
@@ -43,7 +46,7 @@ typedef struct {
 
 typedef INT FKEY; /*file key*/
 
-typedef WORD RECORD;
+typedef char *RECORD;
 
 typedef struct {
 	FKEY k_mkey;	/*current master key*/
@@ -137,3 +140,4 @@ extern INT bterrno;
 
 #define BTFLGCRT (1<<0)
 
+#endif

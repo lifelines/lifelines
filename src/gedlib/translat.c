@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*===========================================================
  * translat.c -- LifeLines character mapping functions
  * Copyright(c) 1994 by T.T. Wetmore IV; all rights reserved
@@ -205,6 +206,57 @@ INT max;	/* max len of out string */
 	add_char(out, &l, max, 0);
 	return TRUE;
 }
+/*==========================================================
+ * translate_write -- Translate and output lines in a buffer
+ *========================================================*/
+
+BOOLEAN translate_write(tt, in, lenp, ofp, last)
+TRANTABLE tt;	/* tran table */
+STRING in;	/* in string */
+INT *lenp;	/* points to number of characters in buffer (updated) */
+FILE *ofp;	/* output file */
+BOOLEAN last;	/* translate remainder of buffer even if no '\n' */
+{
+	char intmp[MAXLINELEN+2];
+	char out[MAXLINELEN+2];
+	char *tp;
+	char *bp;
+	int i,j;
+
+	if(tt == NULL) {
+	    ASSERT(fwrite(in, *lenp, 1, ofp) == 1);
+	    *lenp = 0;
+	    return TRUE;
+	}
+
+	bp = (char *)in;
+	for(i = 0; i < *lenp; ) {
+	    tp = intmp;
+	    for(j = 0; (j <= MAXLINELEN) && (i < *lenp) && (*bp != '\n'); j++) {
+		i++;
+		*tp++ = *bp++;
+	    }
+	    *tp = '\0';
+	    if(i < *lenp) {
+		if(*bp == '\n') {
+		    *tp++ = *bp++;
+		    *tp = '\0';
+		    i++;
+		}
+	    }
+	    else if(!last) {
+		    /* the last line is not complete, return it in buffer  */
+		    strcpy(in, intmp);
+		    *lenp = strlen(in);
+		    return(TRUE);
+	    }
+	    translate_string(tt, intmp, out, MAXLINELEN+2);
+	    ASSERT(fwrite(out, strlen(out), 1, ofp) == 1);
+	}
+	*lenp = 0;
+	return(TRUE);
+}
+
 /*======================================
  * add_char -- Add char to output string
  *====================================*/
@@ -245,7 +297,7 @@ TRANTABLE tt;
 	INT i;
 	XNODE node;
 	if (tt == NULL) {
-		wprintf("EMPTY TABLE\n");
+		llwprintf("EMPTY TABLE\n");
 		return;
 	}
 	for (i = 0; i < 256; i++) {
@@ -265,7 +317,7 @@ XNODE node;
 	INT i;
 	if (!node) return;
 	for (i = 0; i < indent; i++)
-		wprintf("  ");
+		llwprintf("  ");
 	show_xnode(node);
 	show_xnodes(indent+1, node->child);
 	show_xnodes(indent,   node->sibling);
@@ -276,12 +328,12 @@ XNODE node;
 show_xnode (node)
 XNODE node;
 {
-	wprintf("%d(%c)", node->achar, node->achar);
+	llwprintf("%d(%c)", node->achar, node->achar);
 	if (node->replace) {
 		if (node->count)
-			wprintf(" \"%s\"\n", node->replace);
+			llwprintf(" \"%s\"\n", node->replace);
 		else
-			wprintf(" \"\"\n");
+			llwprintf(" \"\"\n");
 	} else
-		wprintf("\n");
+		llwprintf("\n");
 }
