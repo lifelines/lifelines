@@ -15,6 +15,10 @@
 
 	Move hash table into new hashtab.h (use it from table.c).
 
+	* ChangeLog src/hdrs/Makefile.am src/stdlib/Makefile.am
+
+	Add new hashtab files to automake makefiles.
+
 2005-02-16 Perry Rapp
 
 	* ChangeLog src/gedlib/xlat.c
