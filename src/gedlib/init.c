@@ -39,6 +39,8 @@
 #include "translat.h"
 #include "gedcom.h"
 
+extern BOOLEAN selftest;
+
 TABLE tagtable;		/* table for tag strings */
 TABLE placabbvs;	/* table for place abbrevs */
 TABLE useropts;		/* table for user options */
@@ -69,9 +71,14 @@ init_lifelines (void)
 	editfile = strsave(environ_determine_tempfile());
 	editstr = (STRING) stdalloc(strlen(e) + strlen(editfile) + 2);
 	sprintf(editstr, "%s %s", e, editfile);
-	llprograms = (STRING) getenv("LLPROGRAMS");
+	if (!selftest) {
+		llprograms = (STRING) getenv("LLPROGRAMS");
+		llreports = (STRING) getenv("LLREPORTS");
+	} else {
+		llprograms = NULL;
+		llreports = NULL;
+	}
 	if (!llprograms || *llprograms == 0) llprograms = (STRING) ".";
-	llreports = (STRING) getenv("LLREPORTS");
 	if (!llreports || *llreports == 0) llreports = (STRING) ".";
 	llarchives = (STRING) getenv("LLARCHIVES");
 	if (!llarchives || *llarchives == 0) llarchives = (STRING) ".";

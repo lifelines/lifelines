@@ -165,18 +165,18 @@ ask_for_file_worker (STRING mode,
 	if (ISNULL(fname)) return NULL;
 
 	if(ext) {
-	    elen = strlen(ext);
-	    flen = strlen(fname);
-	    if((elen < flen) && (strcmp(fname+flen-elen, ext) == 0))
-		ext = NULL;	/* the file name has the extension already */
+		elen = strlen(ext);
+		flen = strlen(fname);
+		if((elen < flen) && (strcmp(fname+flen-elen, ext) == 0))
+			ext = NULL;	/* the file name has the extension already */
 	}
 
 	if (ISNULL(path)) {
 		fp = NULL;
 		if(ext) {
-		  sprintf(fnamebuf, "%s%s", fname, ext);
-		  fp = fopen(fnamebuf, mode);
-		  if(fp && pfname) *pfname = strsave(fnamebuf);
+			sprintf(fnamebuf, "%s%s", fname, ext);
+			fp = fopen(fnamebuf, mode);
+			if(fp && pfname) *pfname = strsave(fnamebuf);
 		} else {
 			fp = fopen(fname, mode);
 			if(fp && pfname) *pfname = fname;
@@ -356,8 +356,7 @@ choose_from_indiseq (INDISEQ seq,    /* sequence */
 	listbadkeys=1;
 	if ((WORD)-1 == sval(IData(seq)[i])) /* invalid pointer */
 		badkeylist[0] = 0;
-	else
-	{
+	else {
 		skey = skey(IData(seq)[i]);
 		node = key_to_type(skey, TRUE);
 	}
