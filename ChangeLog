@@ -63,6 +63,11 @@
 
 	Alter notifier lists to use create_list2 instead of remove_list2.
 
+	* ChangeLog src/hdrs/list.h src/stdlib/list.c
+
+	Alter release_list not to use remove_list2, and delete now unused
+	remove_list2 function.
+
 2005-02-05 Perry Rapp
 
 	* ChangeLog NEWS src/gedlib/xreffile.c

@@ -151,19 +151,6 @@ destroy_list (LIST list)
 	destroy_empty_list(list);
 }
 /*===========================
- * destroy_list2 -- Delete all elements & destroy list
- *  list: [IN]  list to completely delete
- *  func: [IN]  function to call on each element first (may be NULL)
- *=========================*/
-void
-destroy_list2 (LIST list, ELEMENT_DESTRUCTOR func)
-{
-	if (!list) return;
-	ASSERT(list->vtable == &vtable_for_list);
-	make_list_empty_impl(list, func);
-	destroy_empty_list(list);
-}
-/*===========================
  * destroy_empty_list -- Destroy a list with no elements
  *  ASSERT check that list is in fact empty
  *=========================*/
@@ -689,7 +676,8 @@ release_list (LIST list, void (*func)(VPTR))
 {
 	ASSERT(list->vtable == &vtable_for_list);
 	--list->l_refcnt;
+	list->l_del_element = func;
 	if (!list->l_refcnt) {
-		destroy_list2(list, func);
+		destroy_list(list);
 	}
 }

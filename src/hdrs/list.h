@@ -76,7 +76,6 @@ LIST create_list2(INT whattofree);
 void release_list(LIST list, void (*func)(VPTR));
 void destroy_empty_list(LIST list);
 void destroy_list(LIST list);
-void destroy_list2(LIST, ELEMENT_DESTRUCTOR func);
 void set_list_type(LIST, INT);
 
 /* working with elements of list */
