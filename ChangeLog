@@ -1,3 +1,9 @@
+2003-09-17 Perry Rapp
+
+	* ChangeLog src/gedlib/names.c
+
+	Fix corruption bug in add_names (was freeing record before done).
+
 2003-09-16 Matt Emmerton
 
 	* ChangeLog src/hdrs/ui.h src/ui/Makefile.am src/ui/ui_cli.c

@@ -410,9 +410,6 @@ add_namekey (const RKEY * rkeyname, CNSTRING name, const RKEY * rkeyid)
 	NRkeys[NRcount] = *rkeyid;
 	NRnames[NRcount] = name;
 
-	/* NRnames[NRcount] doesn't point into record */
-	flush_name_cache();
-
 	NRcount++;
 	p = rec = (STRING) stdalloc(NRsize + sizeof(RKEY) +
 	    sizeof(INT) + strlen(name) + 10);
@@ -439,6 +436,9 @@ add_namekey (const RKEY * rkeyname, CNSTRING name, const RKEY * rkeyid)
 	}
 	addrecord(BTR, NRkey, rec, len);
 	stdfree(rec);
+
+	/* NRnames[NRcount] doesn't point into record */
+	flush_name_cache();
 }
 /*=============================================
  * remove_name -- Remove entry from name record
