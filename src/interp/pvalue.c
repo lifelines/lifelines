@@ -546,7 +546,7 @@ BOOLEAN
 is_numeric_pvalue (PVALUE val)
 {
 	INT type = ptype(val);
-	return type == PINT || type == PFLOAT;
+	return type == PINT || type == PFLOAT || type == PANY;
 }
 /*===========================================================
  * eq_conform_pvalues -- Make the types of two values conform

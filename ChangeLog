@@ -1,3 +1,12 @@
+2003-06-30 Matt Emmerton
+
+	* ChangeLog src/interp/pvalue.c src/interp/pvalmath.c
+
+	Remove Perry's ^M assassination of ChangeLog :)
+	Add missing return statements in mod_pvalues and div_pvalues.
+	Make is_zero() and is_numeric_value() treat PANY as valid.
+	Update num_conform_pvalues to properly handle two PANY args.
+
 2003-06-26 Perry Rapp
 
 	* ChangeLog docs/ll-userguide.xml

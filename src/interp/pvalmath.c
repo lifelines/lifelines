@@ -145,7 +145,7 @@ div_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 	if (*eflg) return;
 	num_conform_pvalues("div", val1, val2, eflg, zerr);
 	if (*eflg) return;
-	if (is_zero(val2)) { illegal_value("div", val2, eflg, zerr); }
+	if (is_zero(val2)) { illegal_value("div", val2, eflg, zerr); return; }
 	switch (ptype(val1)) {
 	case PINT:   *pvalue_to_pint(val1) /= pvalue_to_int(val2); break;
 	case PFLOAT: *pvalue_to_pfloat(val1) /= pvalue_to_float(val2); break;
@@ -162,7 +162,7 @@ mod_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 	if (*eflg) return;
 	num_conform_pvalues("mod", val1, val2, eflg, zerr);
 	if (*eflg) return;
-	if (is_zero(val2)) { illegal_value("mod", val2, eflg, zerr); }
+	if (is_zero(val2)) { illegal_value("mod", val2, eflg, zerr); return; }
 	switch (ptype(val1)) {
 	case PINT:
 		{
@@ -351,6 +351,7 @@ is_zero (PVALUE val)
 	switch (ptype(val)) {
 	case PINT: return pvalue_to_int(val) == 0;
 	case PFLOAT: return pvalue_to_float(val) == 0.;
+	case PANY: return pvalue(val) == NULL;
 	default: return TRUE;
 	}
 }
@@ -366,6 +367,8 @@ num_conform_pvalues (CNSTRING op, PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR 
 		ptype(val1) = ptype(val2);
 	if (ptype(val2) == PANY && pvalue(val2) == NULL)
 		ptype(val2) = ptype(val1);
+	if (ptype(val1) == PANY && ptype(val2) == PANY)
+		ptype(val1) = ptype(val2) = PINT;
 	if (is_numeric_pvalue(val1) && is_numeric_pvalue(val2)) {
 		INT hitype = max(ptype(val1), ptype(val2));
 		if (ptype(val1) != hitype) coerce_pvalue(hitype, val1, eflg);
