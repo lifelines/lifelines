@@ -127,7 +127,7 @@ fopenpath (STRING name,
 	return fopen(str, mode);
 }
 /*=================================================
- * lastpathname -- Return last componenet of a path
+ * lastpathname -- Return last component of a path
  *===============================================*/
 STRING
 lastpathname (STRING path)
