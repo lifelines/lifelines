@@ -19,6 +19,10 @@
 
 	More portability cleanup.
 
+	* ChangeLog src/arch/has_key.c:
+
+	Fix arch/has_key.c.
+
 2003-01-02 Perry Rapp
 
 	* ChangeLog configure.in src/hdrs/version.h:
