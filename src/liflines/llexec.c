@@ -470,7 +470,7 @@ static BOOLEAN
 open_or_create_database (INT alteration, STRING dbrequested, STRING *dbused)
 {
 	/* Open Database */
-	if (open_database(alteration, dbrequested, *dbused)) {
+	if (open_database(alteration, *dbused)) {
 		return TRUE;
 	}
 	/* filter out real errors */
@@ -505,7 +505,7 @@ open_or_create_database (INT alteration, STRING dbrequested, STRING *dbused)
 		return FALSE;
 
 	/* try to make a new db */
-	if (create_database(dbrequested, *dbused))
+	if (create_database(*dbused))
 		return TRUE;
 
 	show_open_error(bterrno);

@@ -1,3 +1,9 @@
+2002-11-03 Perry Rapp
+
+	* ChangeLog src/liflines/llexec.c:
+
+	Fix llexec for yesterday's db api changes.
+
 2002-11-02 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c src/hdrs/btree.h src/hdrs/gedcom.h
