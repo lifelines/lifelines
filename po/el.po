@@ -1,0 +1,1088 @@
+# Perry's pseudo-Greek translation.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Please, if you are Greek, feel free to replace this with a real one!
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: lifelines 3.0.10\n"
+"POT-Creation-Date: 2002-02-23 23:07-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: gedlib/messages.c:38
+msgid "You must identify a database."
+msgstr ""
+
+#: gedlib/messages.c:39
+msgid "What directory holds the LifeLines database?"
+msgstr "»¿I~@I¿I~E Iµá¼°I½IµI1 I~DI¿ database ;"
+
+#: gedlib/messages.c:40
+msgid "enter path: "
+msgstr ""
+
+#: gedlib/messages.c:41
+msgid "There is no LifeLines database in that directory."
+msgstr ""
+
+#: gedlib/messages.c:42
+msgid "Do you want to create a database there?"
+msgstr ""
+
+#: gedlib/messages.c:43
+msgid "Argument to lock (-l) must be y or n."
+msgstr ""
+
+#: gedlib/messages.c:44
+msgid "Cannot remove last person from family."
+msgstr ""
+
+#: gedlib/messages.c:46
+msgid "The database is read only; you may not add records."
+msgstr ""
+
+#: gedlib/messages.c:47
+msgid "The database is read only; you may not change records."
+msgstr ""
+
+#: gedlib/messages.c:48
+msgid "The database is read only; you may not merge records."
+msgstr ""
+
+#: gedlib/messages.c:49
+msgid "The database is read only; you may not remove records."
+msgstr ""
+
+#: gedlib/messages.c:51
+msgid "enter name, key, refn or list:"
+msgstr ""
+
+#: gedlib/messages.c:52
+msgid "Please choose the child to remove from the family."
+msgstr ""
+
+#: gedlib/messages.c:53
+msgid "Please choose the spouse/parent to remove from the family."
+msgstr ""
+
+#. display longer forms
+#: gedlib/messages.c:298
+msgid "married: "
+msgstr ""
+
+#: gedlib/messages.c:299
+msgid "born: "
+msgstr ""
+
+#: gedlib/messages.c:300
+msgid "bapt: "
+msgstr ""
+
+#: gedlib/messages.c:301
+msgid "died: "
+msgstr ""
+
+#: gedlib/messages.c:302
+msgid "buri: "
+msgstr ""
+
+#. many menus
+#: gedlib/messages.c:374
+msgid "q  Return to main menu"
+msgstr ""
+
+#: gedlib/messages.c:375
+msgid "q  Return to previous menu"
+msgstr ""
+
+#. main menu
+#: gedlib/messages.c:378
+msgid "r  Generate report by entering report name"
+msgstr ""
+
+#: gedlib/messages.c:379
+msgid "p  Pick a report from list and run"
+msgstr ""
+
+#: gedlib/messages.c:380
+msgid "c  Character set options"
+msgstr ""
+
+#. utility menu
+#: gedlib/messages.c:382
+msgid "What utility do you want to perform?"
+msgstr ""
+
+#: gedlib/messages.c:383
+msgid "s  Save the database in a GEDCOM file"
+msgstr ""
+
+#: gedlib/messages.c:384
+msgid "r  Read in data from a GEDCOM file"
+msgstr ""
+
+#: gedlib/messages.c:385
+msgid "k  Find a person's key value"
+msgstr ""
+
+#: gedlib/messages.c:386
+msgid "i  Identify a person from key value"
+msgstr ""
+
+#: gedlib/messages.c:387
+msgid "d  Show database statistics"
+msgstr ""
+
+#: gedlib/messages.c:388
+msgid "m  Show memory statistics"
+msgstr ""
+
+#: gedlib/messages.c:389
+msgid "e  Edit the place abbreviation file"
+msgstr ""
+
+#: gedlib/messages.c:390
+msgid "o  Edit the user options file"
+msgstr ""
+
+#. extra menu
+#: gedlib/messages.c:392
+msgid "What activity do you want to perform?"
+msgstr ""
+
+#: gedlib/messages.c:393
+msgid "s  Browse source records"
+msgstr ""
+
+#: gedlib/messages.c:394
+msgid "e  Browse event records"
+msgstr ""
+
+#: gedlib/messages.c:395
+msgid "x  Browse other records"
+msgstr ""
+
+#: gedlib/messages.c:396
+msgid "1  Add a source record to the database"
+msgstr ""
+
+#: gedlib/messages.c:397
+msgid "2  Edit source record from the database"
+msgstr ""
+
+#: gedlib/messages.c:398
+msgid "3  Add an event record to the database"
+msgstr ""
+
+#: gedlib/messages.c:399
+msgid "4  Edit event record from the database"
+msgstr ""
+
+#: gedlib/messages.c:400
+msgid "5  Add an other record to the database"
+msgstr ""
+
+#: gedlib/messages.c:401
+msgid "6  Edit other record from the database"
+msgstr ""
+
+#. add menu
+#: gedlib/messages.c:438
+msgid "What do you want to add?"
+msgstr ""
+
+#: gedlib/messages.c:439
+msgid "p  Person - add new person to the database"
+msgstr ""
+
+#: gedlib/messages.c:440
+msgid "f  Family - create family record from one or two spouses"
+msgstr ""
+
+#: gedlib/messages.c:441
+msgid "c  Child - add a child to an existing family"
+msgstr ""
+
+#: gedlib/messages.c:442
+msgid "s  Spouse - add a spouse to an existing family"
+msgstr ""
+
+#. complex date strings (A=abbrev, B=full)
+#: gedlib/messages.c:459
+#, c-format
+msgid "abt %1"
+msgstr ""
+
+#: gedlib/messages.c:460
+#, c-format
+msgid "about %1"
+msgstr ""
+
+#: gedlib/messages.c:461
+#, c-format
+msgid "est %1"
+msgstr ""
+
+#: gedlib/messages.c:462
+#, c-format
+msgid "estimated %1"
+msgstr ""
+
+#: gedlib/messages.c:463
+#, c-format
+msgid "cal %1"
+msgstr ""
+
+#: gedlib/messages.c:464
+#, c-format
+msgid "calculated %1"
+msgstr ""
+
+#: gedlib/messages.c:465
+#, c-format
+msgid "fr %1"
+msgstr ""
+
+#: gedlib/messages.c:466
+#, c-format
+msgid "from %1"
+msgstr ""
+
+#: gedlib/messages.c:467 gedlib/messages.c:468
+#, c-format
+msgid "to %1"
+msgstr ""
+
+#: gedlib/messages.c:469
+msgid "fr %1 to %2"
+msgstr ""
+
+#: gedlib/messages.c:470
+msgid "from %1 to %2"
+msgstr ""
+
+#: gedlib/messages.c:471
+#, c-format
+msgid "bef %1"
+msgstr ""
+
+#: gedlib/messages.c:472
+#, c-format
+msgid "before %1"
+msgstr ""
+
+#: gedlib/messages.c:473
+#, c-format
+msgid "aft %1"
+msgstr ""
+
+#: gedlib/messages.c:474
+#, c-format
+msgid "after %1"
+msgstr ""
+
+#: gedlib/messages.c:475
+msgid "bet %1 and %2"
+msgstr ""
+
+#: gedlib/messages.c:476
+msgid "between %1 and %2"
+msgstr ""
+
+#. Gregorian/Julian months
+#: gedlib/messages.c:492
+msgid "jan"
+msgstr ""
+
+#: gedlib/messages.c:493
+msgid "january"
+msgstr ""
+
+#: gedlib/messages.c:494
+msgid "feb"
+msgstr ""
+
+#: gedlib/messages.c:495
+msgid "february"
+msgstr ""
+
+#: gedlib/messages.c:496
+msgid "mar"
+msgstr ""
+
+#: gedlib/messages.c:497
+msgid "march"
+msgstr ""
+
+#: gedlib/messages.c:498
+msgid "apr"
+msgstr ""
+
+#: gedlib/messages.c:499
+msgid "april"
+msgstr ""
+
+#: gedlib/messages.c:500 gedlib/messages.c:501
+msgid "may"
+msgstr ""
+
+#: gedlib/messages.c:502
+msgid "jun"
+msgstr ""
+
+#: gedlib/messages.c:503
+msgid "june"
+msgstr ""
+
+#: gedlib/messages.c:504
+msgid "jul"
+msgstr ""
+
+#: gedlib/messages.c:505
+msgid "july"
+msgstr ""
+
+#: gedlib/messages.c:506
+msgid "aug"
+msgstr ""
+
+#: gedlib/messages.c:507
+msgid "august"
+msgstr ""
+
+#: gedlib/messages.c:508
+msgid "sep"
+msgstr ""
+
+#: gedlib/messages.c:509
+msgid "september"
+msgstr ""
+
+#: gedlib/messages.c:510
+msgid "oct"
+msgstr ""
+
+#: gedlib/messages.c:511
+msgid "october"
+msgstr ""
+
+#: gedlib/messages.c:512
+msgid "nov"
+msgstr ""
+
+#: gedlib/messages.c:513
+msgid "november"
+msgstr ""
+
+#: gedlib/messages.c:514
+msgid "dec"
+msgstr ""
+
+#: gedlib/messages.c:515
+msgid "december"
+msgstr ""
+
+#. Hebrew months
+#: gedlib/messages.c:517
+msgid "tsh"
+msgstr ""
+
+#: gedlib/messages.c:518
+msgid "tishri"
+msgstr ""
+
+#: gedlib/messages.c:519
+msgid "csh"
+msgstr ""
+
+#: gedlib/messages.c:520
+msgid "cheshvan"
+msgstr ""
+
+#: gedlib/messages.c:521
+msgid "ksl"
+msgstr ""
+
+#: gedlib/messages.c:522
+msgid "kislev"
+msgstr ""
+
+#: gedlib/messages.c:523
+msgid "tvt"
+msgstr ""
+
+#: gedlib/messages.c:524
+msgid "tevet"
+msgstr ""
+
+#: gedlib/messages.c:525
+msgid "shv"
+msgstr ""
+
+#: gedlib/messages.c:526
+msgid "shevat"
+msgstr ""
+
+#: gedlib/messages.c:527
+msgid "adr"
+msgstr ""
+
+#: gedlib/messages.c:528
+msgid "adar"
+msgstr ""
+
+#: gedlib/messages.c:529
+msgid "ads"
+msgstr ""
+
+#: gedlib/messages.c:530
+msgid "adar sheni"
+msgstr ""
+
+#: gedlib/messages.c:531
+msgid "nsn"
+msgstr ""
+
+#: gedlib/messages.c:532
+msgid "nisan"
+msgstr ""
+
+#: gedlib/messages.c:533
+msgid "iyr"
+msgstr ""
+
+#: gedlib/messages.c:534
+msgid "iyar"
+msgstr ""
+
+#: gedlib/messages.c:535
+msgid "svn"
+msgstr ""
+
+#: gedlib/messages.c:536
+msgid "sivan"
+msgstr ""
+
+#: gedlib/messages.c:537
+msgid "tmz"
+msgstr ""
+
+#: gedlib/messages.c:538
+msgid "tamuz"
+msgstr ""
+
+#: gedlib/messages.c:539
+msgid "aav"
+msgstr ""
+
+#: gedlib/messages.c:540
+msgid "av"
+msgstr ""
+
+#: gedlib/messages.c:541
+msgid "ell"
+msgstr ""
+
+#: gedlib/messages.c:542
+msgid "elul"
+msgstr ""
+
+#. French Republic months
+#: gedlib/messages.c:544
+msgid "vend"
+msgstr ""
+
+#: gedlib/messages.c:545
+msgid "vendemiaire"
+msgstr ""
+
+#: gedlib/messages.c:546
+msgid "brum"
+msgstr ""
+
+#: gedlib/messages.c:547
+msgid "brumaire"
+msgstr ""
+
+#: gedlib/messages.c:548
+msgid "frim"
+msgstr ""
+
+#: gedlib/messages.c:549
+msgid "frimaire"
+msgstr ""
+
+#: gedlib/messages.c:550
+msgid "nivo"
+msgstr ""
+
+#: gedlib/messages.c:551
+msgid "nivose"
+msgstr ""
+
+#: gedlib/messages.c:552
+msgid "pluv"
+msgstr ""
+
+#: gedlib/messages.c:553
+msgid "pluviose"
+msgstr ""
+
+#: gedlib/messages.c:554
+msgid "vent"
+msgstr ""
+
+#: gedlib/messages.c:555
+msgid "ventose"
+msgstr ""
+
+#: gedlib/messages.c:556
+msgid "germ"
+msgstr ""
+
+#: gedlib/messages.c:557
+msgid "germinal"
+msgstr ""
+
+#: gedlib/messages.c:558
+msgid "flor"
+msgstr ""
+
+#: gedlib/messages.c:559
+msgid "floreal"
+msgstr ""
+
+#: gedlib/messages.c:560
+msgid "prai"
+msgstr ""
+
+#: gedlib/messages.c:561
+msgid "prairial"
+msgstr ""
+
+#: gedlib/messages.c:562
+msgid "mess"
+msgstr ""
+
+#: gedlib/messages.c:563
+msgid "messidor"
+msgstr ""
+
+#: gedlib/messages.c:564
+msgid "ther"
+msgstr ""
+
+#: gedlib/messages.c:565
+msgid "thermidor"
+msgstr ""
+
+#: gedlib/messages.c:566
+msgid "fruc"
+msgstr ""
+
+#: gedlib/messages.c:567
+msgid "fructidor"
+msgstr ""
+
+#: gedlib/messages.c:568
+msgid "comp"
+msgstr ""
+
+#: gedlib/messages.c:569
+msgid "jour_complementairs"
+msgstr ""
+
+#. normal menu items
+#: liflines/menuitem.c:86
+msgid "e  Edit the person"
+msgstr ""
+
+#: liflines/menuitem.c:87
+msgid "e  Edit the family"
+msgstr ""
+
+#: liflines/menuitem.c:88
+msgid "e  Edit record"
+msgstr ""
+
+#: liflines/menuitem.c:89
+msgid "e  Edit top person"
+msgstr ""
+
+#: liflines/menuitem.c:90
+msgid "f  Browse to father"
+msgstr ""
+
+#: liflines/menuitem.c:91
+msgid "f  Browse top father"
+msgstr ""
+
+#: liflines/menuitem.c:92
+msgid "m  Browse to mother"
+msgstr ""
+
+#: liflines/menuitem.c:93
+msgid "m  Browse top mother"
+msgstr ""
+
+#: liflines/menuitem.c:94
+msgid "s  Browse to spouse/s"
+msgstr ""
+
+#: liflines/menuitem.c:95
+msgid "s  Browse top spouse/s"
+msgstr ""
+
+#: liflines/menuitem.c:96
+msgid "c  Browse to children"
+msgstr ""
+
+#: liflines/menuitem.c:97
+msgid "c  Browse top children"
+msgstr ""
+
+#: liflines/menuitem.c:98
+msgid "o  Browse to older sib"
+msgstr ""
+
+#: liflines/menuitem.c:99
+msgid "y  Browse to younger sib"
+msgstr ""
+
+#: liflines/menuitem.c:100
+msgid "g  Browse to family"
+msgstr ""
+
+#: liflines/menuitem.c:101
+msgid "u  Browse to parents"
+msgstr ""
+
+#: liflines/menuitem.c:102
+msgid "b  Browse to persons"
+msgstr ""
+
+#: liflines/menuitem.c:103
+msgid "t  Browse to top"
+msgstr ""
+
+#: liflines/menuitem.c:104
+msgid "b  Browse to bottom"
+msgstr ""
+
+#: liflines/menuitem.c:105
+msgid "h  Add as spouse"
+msgstr ""
+
+#: liflines/menuitem.c:106
+msgid "i  Add as child"
+msgstr ""
+
+#: liflines/menuitem.c:107
+msgid "s  Add spouse to family"
+msgstr ""
+
+#: liflines/menuitem.c:108
+msgid "a  Add child to family"
+msgstr ""
+
+#: liflines/menuitem.c:109
+msgid "a  Add family"
+msgstr ""
+
+#: liflines/menuitem.c:110
+msgid "x  Swap two families"
+msgstr ""
+
+#: liflines/menuitem.c:111
+msgid "x  Swap two children"
+msgstr ""
+
+#: liflines/menuitem.c:112
+#, c-format
+msgid "%c  Reorder child"
+msgstr ""
+
+#: liflines/menuitem.c:113
+msgid "x  Switch top/bottom"
+msgstr ""
+
+#: liflines/menuitem.c:114
+msgid "n  Create new person"
+msgstr ""
+
+#: liflines/menuitem.c:115
+msgid "a  Create new family"
+msgstr ""
+
+#: liflines/menuitem.c:116
+msgid "tt Enter tandem mode"
+msgstr ""
+
+#: liflines/menuitem.c:117
+msgid "tt Enter family tandem"
+msgstr ""
+
+#: liflines/menuitem.c:118
+msgid "zi Browse to indi"
+msgstr ""
+
+#: liflines/menuitem.c:119
+msgid "zz Browse to any"
+msgstr ""
+
+#: liflines/menuitem.c:120
+msgid "r  Remove as spouse"
+msgstr ""
+
+#: liflines/menuitem.c:121
+msgid "d  Remove as child"
+msgstr ""
+
+#: liflines/menuitem.c:122
+msgid "r  Remove spouse from"
+msgstr ""
+
+#: liflines/menuitem.c:123
+msgid "d  Remove child from"
+msgstr ""
+
+#: liflines/menuitem.c:124
+msgid "(  Scroll up"
+msgstr ""
+
+#: liflines/menuitem.c:125
+msgid ")  Scroll down"
+msgstr ""
+
+#: liflines/menuitem.c:126
+msgid "]  Increase tree depth"
+msgstr ""
+
+#: liflines/menuitem.c:127
+msgid "[  Decrease tree depth"
+msgstr ""
+
+#: liflines/menuitem.c:128
+msgid "(t Scroll top up"
+msgstr ""
+
+#: liflines/menuitem.c:129
+msgid ")t Scroll top down"
+msgstr ""
+
+#: liflines/menuitem.c:130
+msgid "(b Scroll bottom up"
+msgstr ""
+
+#: liflines/menuitem.c:131
+msgid ")b Scroll bottom down"
+msgstr ""
+
+#: liflines/menuitem.c:132
+msgid "(( Scroll both up"
+msgstr ""
+
+#: liflines/menuitem.c:133
+msgid ")) Scroll both down"
+msgstr ""
+
+#: liflines/menuitem.c:134
+msgid "#  Toggle childnos"
+msgstr ""
+
+#: liflines/menuitem.c:135
+msgid "!g GEDCOM mode"
+msgstr ""
+
+#: liflines/menuitem.c:136
+msgid "!x GEDCOMX mode"
+msgstr ""
+
+#: liflines/menuitem.c:137
+msgid "!t GEDCOMT mode"
+msgstr ""
+
+#: liflines/menuitem.c:138
+msgid "!a Ancestors mode"
+msgstr ""
+
+#: liflines/menuitem.c:139
+msgid "!d Descendants mode"
+msgstr ""
+
+#: liflines/menuitem.c:140
+msgid "!n Normal mode"
+msgstr ""
+
+#: liflines/menuitem.c:141
+msgid "p  Pedigree mode"
+msgstr ""
+
+#: liflines/menuitem.c:142
+msgid "!! Cycle mode"
+msgstr ""
+
+#. Note - CMD_CHILD_DIRECT0 has special handling, & is always wired to 123456789
+#: liflines/menuitem.c:144
+msgid "(1-9)  Browse to child"
+msgstr ""
+
+#: liflines/menuitem.c:145
+msgid "y  Turn on sync"
+msgstr ""
+
+#: liflines/menuitem.c:146
+msgid "A  Advanced view"
+msgstr ""
+
+#: liflines/menuitem.c:147
+msgid "tc Tandem to children"
+msgstr ""
+
+#: liflines/menuitem.c:148
+msgid "tf Tandem to father/s"
+msgstr ""
+
+#: liflines/menuitem.c:149
+msgid "tg Tandem to family/s"
+msgstr ""
+
+#: liflines/menuitem.c:150
+msgid "f  Browse to fathers"
+msgstr ""
+
+#: liflines/menuitem.c:151
+msgid "m  Browse to mothers"
+msgstr ""
+
+#: liflines/menuitem.c:152
+msgid "tm Tandem to mother/s"
+msgstr ""
+
+#: liflines/menuitem.c:153
+msgid "ts Tandem to spouse/s"
+msgstr ""
+
+#: liflines/menuitem.c:154
+msgid "tu Tandem to parents"
+msgstr ""
+
+#: liflines/menuitem.c:155
+msgid "<  Enlarge menu area"
+msgstr ""
+
+#: liflines/menuitem.c:156
+msgid ">  Shrink menu area"
+msgstr ""
+
+#: liflines/menuitem.c:157
+msgid "M> More menu cols"
+msgstr ""
+
+#: liflines/menuitem.c:158
+msgid "M< Less menu cols"
+msgstr ""
+
+#: liflines/menuitem.c:159
+msgid "+  Next in db"
+msgstr ""
+
+#: liflines/menuitem.c:160
+msgid "-  Prev in db"
+msgstr ""
+
+#: liflines/menuitem.c:161
+msgid "d  Copy top to bottom"
+msgstr ""
+
+#: liflines/menuitem.c:162
+msgid "j  Merge bottom to top"
+msgstr ""
+
+#: liflines/menuitem.c:163
+msgid "j  Move down list"
+msgstr ""
+
+#: liflines/menuitem.c:164
+msgid "k  Move up list"
+msgstr ""
+
+#: liflines/menuitem.c:165
+msgid "e  Edit this person"
+msgstr ""
+
+#: liflines/menuitem.c:166
+msgid "i  Browse this person"
+msgstr ""
+
+#: liflines/menuitem.c:167
+msgid "m  Mark this person"
+msgstr ""
+
+#: liflines/menuitem.c:168
+msgid "d  Delete from list"
+msgstr ""
+
+#: liflines/menuitem.c:169
+msgid "n  Name this list"
+msgstr ""
+
+#: liflines/menuitem.c:170
+msgid "b  Browse new persons"
+msgstr ""
+
+#: liflines/menuitem.c:171
+msgid "a  Add to this list"
+msgstr ""
+
+#: liflines/menuitem.c:172
+msgid "x  Swap mark/current"
+msgstr ""
+
+#: liflines/menuitem.c:173
+msgid "$s  List sources"
+msgstr ""
+
+#: liflines/menuitem.c:174
+msgid "$n  List notes"
+msgstr ""
+
+#: liflines/menuitem.c:175
+msgid "$$  List references"
+msgstr ""
+
+#: liflines/menuitem.c:176
+msgid "^b  History/back"
+msgstr ""
+
+#: liflines/menuitem.c:177
+msgid "^f  History/fwd"
+msgstr ""
+
+#: liflines/menuitem.c:178
+msgid "^l  History list"
+msgstr ""
+
+#: liflines/menuitem.c:179
+msgid "^c Clear history"
+msgstr ""
+
+#: liflines/menuitem.c:180
+#, c-format
+msgid "%s  Add source"
+msgstr ""
+
+#: liflines/menuitem.c:181
+#, c-format
+msgid "%e  Add event"
+msgstr ""
+
+#: liflines/menuitem.c:182
+#, c-format
+msgid "%o  Add other"
+msgstr ""
+
+#: liflines/menuitem.c:185
+msgid "B  Browse new family"
+msgstr ""
+
+#: liflines/menuitem.c:505
+#, c-format
+msgid "Menu choice sequence too long: %s"
+msgstr ""
+
+#: liflines/menuitem.c:509
+#, c-format
+msgid "Menu item lacked choice sequence: %s"
+msgstr ""
+
+#: liflines/menuitem.c:589 liflines/menuitem.c:594
+#, c-format
+msgid "Conflicting command string: %s"
+msgstr ""
+
+#: liflines/menuitem.c:640
+msgid "Missing title"
+msgstr ""
+
+#: liflines/menuitem.c:650
+msgid "LifeLines -- Person Browse Screen (* toggles menu)"
+msgstr ""
+
+#: liflines/menuitem.c:659
+msgid "LifeLines -- Family Browse Screen (* toggles menu)"
+msgstr ""
+
+#: liflines/menuitem.c:668
+msgid "LifeLines -- Two Person Browse Screen (* toggles menu)"
+msgstr ""
+
+#: liflines/menuitem.c:677
+msgid "LifeLines -- Two Family Browse Screen (* toggles menu)"
+msgstr ""
+
+#: liflines/menuitem.c:686
+msgid "LifeLines -- Auxiliary Browse Screen (* toggles menu)"
+msgstr ""
+
+#: liflines/menuitem.c:696
+msgid "LifeLines -- List Browse Screen (* toggles menu)"
+msgstr ""
+
+#: liflines/screen.c:288
+#, c-format
+msgid ""
+"The requested window size (%d,%d) is too large for your terminal (%d,%d).\n"
+msgstr ""
+
+#: liflines/screen.c:301
+#, c-format
+msgid "The requested window size (%d,%d) is too small for LifeLines (%d,%d).\n"
+msgstr ""
+
+#: liflines/screen.c:378
+msgid "b  Browse the persons in the database"
+msgstr ""
+
+#: liflines/screen.c:379
+msgid "s  Search database"
+msgstr ""
+
+#: liflines/screen.c:380
+msgid "a  Add information to the database"
+msgstr ""
+
+#: liflines/screen.c:381
+msgid "d  Delete information from the database"
+msgstr ""
+
+#: liflines/screen.c:1439
+msgid "Enter locale name"
+msgstr ""
+
+#: liflines/screen.c:1440
+msgid "Locale: "
+msgstr ""
+
+#: liflines/screen.c:1448
+#, c-format
+msgid "Valid locale: %1"
+msgstr ""
+
+#: liflines/screen.c:1453
+msgid "Invalid locale, try again"
+msgstr ""
+
+#: liflines/screen.c:3125 liflines/screen.c:3153
+msgid "L  Test locale names"
+msgstr ""
+
+#: liflines/screen.c:3155
+msgid "Report locale: "
+msgstr ""
