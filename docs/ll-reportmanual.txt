@@ -454,6 +454,12 @@ Include Feature
    may  in  turn  contain include statements, and so on to any depth.
    LifeLines  will  use  the  LLPROGRAMS  shell  variable, if set, to
    search for the include files.
+
+   The only main procedure actually executed is the one in the report
+   the  user  chose.  main  procedures  in  other  reports  which are
+   included  do  not  get  run.  This  allows a module intended to be
+   included  in  other  programs  to  have  a main procedure for test
+   purposes.
      _____________________________________________________________
 
 Built-in Functions

@@ -1,6 +1,9 @@
 2003-04-14 Stephen Dum
-        * ChangeLog src/hdrs/standard.h
+        * ChangeLog src/hdrs/standard.h docs/ll-reportmanual.text
+	docs/ll-reportmanual.html docs/ll-reportmanual.pdf
+
 	include stdarg.h so compiles under linux
+	update processed report manual
 
 2003-04-14 Perry Rapp
 
