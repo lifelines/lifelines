@@ -24,8 +24,9 @@ get_user_fullname(void)
     retval = (STRING) pwent->pw_gecos; /* XXX Is it safe to pass this on? */
 #elif defined(WIN32)
   /*
-  hack solution is GetUserName
-  real solution is LookupAccountName on NT
+  one solution is GetUserName, for a single account name
+  another solution is LookupAccountName on NT, for
+  an account name and also an authority name
   both require windows.h, which is incompatible
   with type WORD
   */
