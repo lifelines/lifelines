@@ -13,6 +13,11 @@
 
 	Implementation of nl_langinfo for platforms lacking such.
 
+	* ChangeLog liflines/askprogram.c
+	win32/msvc6/libintl/libintlvc6.dsp:
+
+	Fix possible char sign-extension problem in askprogram.c.
+
 2002-06-10 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog hdrs/standard.h:

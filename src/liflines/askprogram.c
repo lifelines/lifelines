@@ -97,7 +97,7 @@ remove_trailing_space(STRING s)
   i = strlen(s)-1;
   while (0 < i)
     {
-      if (!isspace(s[i]))
+      if (!isspace((uchar)s[i]))
         break;
       s[i] = '\0';
       i--;
