@@ -90,6 +90,7 @@ static void format_eratime(struct gdate_s * pdate, CNSTRING ymd, INT efmt
 	, STRING output, INT len);
 static STRING format_year(struct dnum_s yr, INT yfmt);
 static void format_ymd(STRING, STRING, STRING, INT, STRING*, INT *len);
+static void free_gdate(struct gdate_s *);
 static INT get_date_tok(struct dnum_s*);
 static void init_keywordtbl(void);
 static BOOLEAN is_date_delim(char c);
