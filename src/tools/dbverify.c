@@ -194,7 +194,9 @@ main (int argc,
 	char *ptr;
 	INT findGhosts=FALSE, fixGhosts=FALSE;
 
+#ifdef WIN32
 	_fmode = O_BINARY;	/* default to binary rather than TEXT mode */
+#endif
 
 	if (argc != 3 || argv[1][0] != '-' || argv[1][1] == '\0') {
 		print_usage();
