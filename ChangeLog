@@ -28,6 +28,10 @@
 
 	Remove no longer used table type TB_INT.
 
+	* ChangeLog reports/Makefile.am
+
+	Add new st_table.li to Makefile.am.
+
 2005-01-31 lifelines beta 3.0.41 RELEASE
 
 2005-01-31 Perry Rapp

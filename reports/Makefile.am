@@ -64,7 +64,8 @@ OTHER_REPORTS = boc.gif ll.png gen_index bib2html.c bury.c \
 	st/st_collate_8859-1.li st/st_collate_UTF-8.li \
 	st/st_convert.li st/st_date.li st/st_db.li \
 	st/st_list.li st/st_name.li \
-	st/st_number.li st/st_string.li st/st_string_UTF-8.li
+	st/st_number.li st/st_string.li st/st_string_UTF-8.li \
+	st/st_table.li
 
 pkg_REPORTS = $(LL_REPORTS) $(ST_REPORTS) $(OTHER_REPORTS)
 pkg_REPORTS_MISC = index.html CREDIT README tree.tex
