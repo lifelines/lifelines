@@ -1,3 +1,10 @@
+2003-03-05 Perry Rapp
+
+	* ChangeLog docs/Install.LifeLines.Windows.txt
+	docs/Run.LifeLines.Windows.txt
+
+	Minor updates to instructions for use on MS-Windows.
+
 2003-03-04 Steve Dum
 
         * ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf

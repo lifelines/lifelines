@@ -1,55 +1,48 @@
 LifeLines installation for Windows
-  Edited: 2002/11/11 by Perry Rapp
+  Last Edited: 2003-03-05 by Perry Rapp
 
-1)
-Extract the lifelines zip, eg, to c:\
-which should result in all the lifelines programs & files
-appearing under c:\lifelines
+1) Extract the lifelines zip, eg, to c:\ which should result in all
+the lifelines programs & files appearing under c:\lifelines
 
-2)
-If your root lifelines directory is not c:\lifelines, edit lines.cfg
-and adjust the variable %llroot% accordingly.
-Also, make any necessary changes to other directory variables in the
-file, if they are not correct for your setup.
+2) If your root lifelines directory is not c:\lifelines, edit
+lines.cfg and adjust the variable %llroot% accordingly.  Also, make
+any necessary changes to other directory variables in the file, if
+they are not correct for your setup.
 
-3)
-Set your codeset correctly; for U.S. English Windows, set GuiCodeset to be CP437,
-and the EditorCodeset, if you're using notepad.exe (the default), should be
-CP1252.
+3) If your editor does not use the default codeset for your version of
+MS-Windows (which is CP-1252 for US English Windows), then set the
+config variable EditorCodeset. The GUI codeset, and the locales,
+should all be deduced correctly by lifelines at runtime from your
+environment, so you do not need to set them.
 
-4)
-If you want to use UTF-8 internally, enable the UTF-8 setting in your lines.cfg
-(Edit the entry NewDbProps). This is still under development!
+4) If you want to use UTF-8 internally, enable the UTF-8 setting in
+your lines.cfg (edit the entry NewDbProps). This is still under
+development. If you wish to use just an 8-bit codeset internally, set
+it the same way. It is necessary that you specify an internal codeset
+for lifelines to do codeset conversion, and codeset conversion is
+fairly necessary on MS-Windows, because the Console mode window uses a
+different codeset than the rest of MS-Windows.
 
-5)
-In a windows explorer window (eg, right-click on 
- My Computer and choose Explore), browse to your program
- directory of step (2) (eg, \Program Files\LifeLines),
- right-click on the executable (Lines.exe) and choose
- Copy, then move your cursor to a clear area on your
- desktop (the background where My Computer sits), and
- right-click and choose Paste Shortcut. This is your
- desktop shortcut to run the program.
+5) To create a shortcut for Lifelines, open a windows explorer window
+(eg, right-click on "My Computer" and choose Explore), browse to your
+program directory of step (2) (eg, \Program Files\LifeLines),
+right-click on the executable (Lines.exe) and choose Copy, then move
+your cursor to a clear area on your desktop (the background where My
+Computer sits), and right-click and choose Paste Shortcut. This is
+your desktop shortcut to run the program.
 
-6)
-Right-click on the new shortcut icon on your desktop,
-and choose Rename. Adjust the name as you like
-(eg, to LifeLines).
+6) Right-click on the new shortcut icon on your desktop, and choose
+Rename. Adjust the name as you like (eg, to LifeLines).
 
-Now you are ready to run LifeLines. 
-Refer to the Run.LifeLines.Windows.txt document.
+Now you are ready to run LifeLines: refer to the
+Run.LifeLines.Windows.txt document.
 
-
- - Perry Rapp
 
 
 References:
 
 LifeLines on the web:
   http://lifelines.sourceforge.net/
-
-Perry via email:
-  puddle using domain: users.sourceforge.net
 
 Mailing list:
   To subscribe to the list, send email to

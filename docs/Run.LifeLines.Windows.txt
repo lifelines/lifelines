@@ -1,110 +1,92 @@
 Running LifeLines for Windows
-  Edited: 2002/06/18 by Perry Rapp
+  Last Edited: 2003-03-05 by Perry Rapp
 
 (This presumes you have installed it, per the
 Install.LifeLines.Windows.txt document)
 
-1)
-Double-click on the shortcut on your desktop
-for LifeLines.
-A DOS window should open, with the title bar
-giving the LifeLines version, and with a prompt
-in the middle of the screen, asking
-What directory holds the LifeLines database ?
-enter path:
+1) Double-click on the shortcut on your desktop for
+LifeLines.  A Console (or "DOS") window should open, with
+the title bar giving the LifeLines version, and with a
+prompt in the middle of the screen, asking "What directory
+holds the LifeLines database ?  enter path:"
 
-2)
-Enter a name for your first LifeLines database.
-It must be a valid Windows directory name
-(no slashes, no colon, no quotation marks...).
-LifeLines will then create & open this brand new
-empty database for you.
+2) Enter a name for your first LifeLines database.  It must
+be a valid Windows directory name (no slashes, no colon, no
+quotation marks...).  LifeLines will then create & open this
+brand new empty database for you.
 
-This will be a directory underneath your lifelines
-database directory, and you can rename it at any
-time later by simply renaming the directory -- of
-course you should not do this whilst you have 
-that database open in LifeLines.
+This will be a directory underneath your lifelines database
+directory, and you can rename it at any time later by simply
+renaming the directory -- of course you should not do this
+whilst you have that database open in LifeLines.
 
-3)
-At this point, your best course of action is to
-connect to the Internet, browse to the LifeLines
-home page, and begin reading the LifeLines 3.0.7
-User's Manual, which explains how to proceed,
-adding data and so forth. (I do not know of a 
-newer version of the User's Manual at this time - 
-of course, if one is available, by all means 
-browse to it!)
+3) At this point, your best course of action is to begin
+reading the users manual portion of the documentation. This
+is available in the documentation download at the
+sourceforge site, and there are some older versions
+available for browsing directly on the web, from the
+sourceforge home site. This manual explains how to proceed,
+adding data and so forth.
+
+Here is a URL to one version:
 
 http://lifelines.sourceforge.net/manual307/index.html
 
-(You are at the Main Menu section now, but you
-would be well-advised to read the previous
-Introduction to GEDCOM section as well.)
+(You are at the Main Menu section now, but you would be
+well-advised to read the previous Introduction to GEDCOM
+section as well.)
 
-You may also download a copy of the manual -- see
-the documentation links near the upper right-hand
-corner of the home page (http://lifelines.sourceforge.net).
-
-4)
-When adding a new record (eg, a new person to the 
-database), LifeLines will cause Notepad to appear.
-Enter your information in Notepad -- the following
-page of the online manual discusses entering your
-first person:
+4) When adding a new record (eg, a new person to the
+database), LifeLines will cause Notepad to appear.  Enter
+your information in Notepad -- the following page of the
+online manual discusses entering your first person:
 
 http://lifelines.sourceforge.net/manual307/userguide/first.html
 
 
-After you have entered the information into Notepad,
-save the document by choose Save from the File menu,
-and then close Notepad (eg, Alt-F4). Switch back to
-LifeLines if necessary, and click on its titlebar if
-it is not highlighted. It will have a prompt displayed,
-asking whether or not you really wish to add the new
-person. Normally you respond y and add your new
-person.
+After you have entered the information into Notepad, save
+the document by choose Save from the File menu, and then
+close Notepad (eg, Alt-F4). Switch back to LifeLines if
+necessary, and click on its titlebar if it is not
+highlighted. It will have a prompt displayed, asking whether
+or not you really wish to add the new person. Normally you
+respond y and add your new person.
 
-5)
-Note on menu items: LifeLines now has significantly
-more menu choices in many screens than were present in
-LifeLines 3.0.2. Many screens cannot fit all choices
-on screen at one time. If you see the choice
-  ? Other menu choices
-in the lower left, as the second to last choice (quit
-is always the last choice), then this indicates there
-is more than one page of menu choices. You can view
-all pages of menu choices by pressing the ? key 
-repeatedly; this will cycle through the pages of 
-choices one at a time.
+5) Note on menu items: LifeLines now has significantly more
+menu choices in many screens than were present in older
+versions of LifeLines.  Many screens cannot fit all choices
+on screen at one time. If you see the choice "? Other menu
+choices" in the lower left, as the second to last choice ("q
+quit" is always the last choice), then this indicates there
+is more than one page of menu choices. You can view all
+pages of menu choices by pressing the ? key repeatedly; this
+will cycle through the pages of choices one at a time.
 
-There is also an indication at the top of the menu
-such as
-       (pg 1/3)
-to tell you that you are viewing the first page of 
-three pages of menu choices for the current screen.
+There is also an indication at the top of the menu such as
+  (pg 1/3)
+  
+to tell you that you are viewing the first page of three
+pages of menu choices for the current screen.
 
-6) 
-If you wish to change the colors in the console window
-(the "dos" window), here is how. (This is actually not
-part of LifeLines, but is general DOS on Windows trivia).
+6) If you wish to change the colors in the console window
+(the "dos" window), here is how. (This is actually not part
+of LifeLines, but is general DOS on Windows trivia).
+
 Run the program.
-Left-click in the upper-left corner (the system menu,
-which is probably a little red box with LL in it).
-You should get a popup menu, with Move, Size, Minimize,
-Maximize, (a horizontal bar), Close, Edit, Properties.
-Click on Properties.
-You should get a tabbed dialog - click on the color tab.
-Set the upper two radio button choices - foreground
-& background color - and when you hit Ok, it should ask
-you if this is a change for this window only (ie, only
-this time you're running it), or if it is a permanent
+
+Left-click in the upper-left corner (the system menu, which
+is probably a little red box with LL in it).  You should get
+a popup menu, with Move, Size, Minimize, Maximize, (a
+horizontal bar), Close, Edit, Properties.  Click on
+Properties.  You should get a tabbed dialog - click on the
+color tab.  Set the upper two radio button choices -
+foreground & background color - and when you hit Ok, it
+should ask you if this is a change for this window only (ie,
+only this time you're running it), or if it is a permanent
 change for this shortcut (ie, you'll see the new colors
-every time from now on). Choose permanent - you can
-always change them later the same way.
+every time from now on). Choose permanent - you can always
+change them later the same way.
 
-
- - Perry Rapp
 
 
 References:
@@ -112,8 +94,6 @@ References:
 LifeLines on the web:
   http://lifelines.sf.net/
 
-Perry via email:
-  puddle@users.sourceforge.net
 
 Mailing list:
   To subscribe to the list, send email to
