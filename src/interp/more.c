@@ -1216,8 +1216,8 @@ obj_lookup_comparator (OBJECT *pobj1, OBJECT *pobj2, VPTR param)
 	}
 }
 /*========================================
- * __sort -- sort first container [using second container as keys]
- *   usage: sort(LIST [, LIST]) -> VOID
+ * sortimpl -- sort first container [using second container as keys]
+ * This implements __sort and __rsort.
  *======================================*/
 typedef struct tag_sortpair {
 	PVALUE value;
@@ -1228,17 +1228,17 @@ sortpaircmp (SORTEL el1, SORTEL el2, VPTR param)
 {
 	SORTPAIR sp1 = (SORTPAIR)el1;
 	SORTPAIR sp2 = (SORTPAIR)el2;
-	return pvalues_collate(sp1->value, sp2->value);
+	return pvalues_collate(sp1->key, sp2->key);
 }
 static int
 sortpair_bin (const void * el1, const void * el2)
 {
 	SORTPAIR sp1 = *(SORTPAIR *)el1;
 	SORTPAIR sp2 = *(SORTPAIR *)el2;
-	return pvalues_collate(sp1->value, sp2->value);
+	return pvalues_collate(sp1->key, sp2->key);
 }
 PVALUE
-__sort(PNODE node, SYMTAB stab, BOOLEAN *eflg)
+sortimpl(PNODE node, SYMTAB stab, BOOLEAN *eflg, BOOLEAN fwd)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val1 = eval_without_coerce(arg, stab, eflg), val2;
@@ -1264,7 +1264,7 @@ __sort(PNODE node, SYMTAB stab, BOOLEAN *eflg)
 			array[i].value = (PVALUE)get_array_obj(arr_vals, i);
 		}
 	} else {
-		prog_error(node, _("First argument to sort must be list or array"));
+		prog_error(node, _("First argument to (r)sort must be list or array"));
 		*eflg = TRUE;
 		goto exit_sort;
 	}
@@ -1274,7 +1274,7 @@ __sort(PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		if (ptype(val2) == PLIST) {
 			list_keys = pvalue_to_list(val2);
 			if (nsort != length_list(list_keys)) {
-				prog_error(node, _("Arguments to sort must be of same size"));
+				prog_error(node, _("Arguments to (r)sort must be of same size"));
 				*eflg = TRUE;
 				goto exit_sort;
 			}
@@ -1285,7 +1285,7 @@ __sort(PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		} else if (ptype(val2) == PARRAY) {
 			arr_keys = pvalue_to_array(val2);
 			if (nsort != get_array_size(arr_keys)) {
-				prog_error(node, _("Arguments to sort must be of same size"));
+				prog_error(node, _("Arguments to (r)sort must be of same size"));
 				*eflg = TRUE;
 				goto exit_sort;
 			}
@@ -1294,7 +1294,7 @@ __sort(PNODE node, SYMTAB stab, BOOLEAN *eflg)
 				array[i].key = val;
 			}
 		} else {
-			prog_error(node, _("Second argument to sort must be list or array"));
+			prog_error(node, _("Second argument to (r)sort must be list or array"));
 			*eflg = TRUE;
 			return NULL;
 		}
@@ -1322,32 +1322,42 @@ __sort(PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		struct tag_list_iter listit;
 		VPTR ptr=0;
 		i=0;
-		begin_list_rev(list_vals, &listit);
+		if (fwd)
+			begin_list(list_vals, &listit);
+		else
+			begin_list_rev(list_vals, &listit);
 		while (next_list_ptr(&listit, &ptr)) {
 			change_list_ptr(&listit, index[i]->value);
 			++i;
 		}
 	} else {
+		INT j;
 		ASSERT(arr_vals);
 		for (i=0; i<nsort; ++i) {
 			OBJECT obj = (OBJECT)index[i]->value;
-			set_array_obj(arr_vals, i, obj);
+			j = (fwd ? i : nsort-i-1);
+			set_array_obj(arr_vals, j, obj);
 		}
 	}
 	if (list_keys) {
 		struct tag_list_iter listit;
 		VPTR ptr=0;
 		i=0;
-		begin_list_rev(list_keys, &listit);
+		if (fwd)
+			begin_list(list_keys, &listit);
+		else
+			begin_list_rev(list_keys, &listit);
 		while (next_list_ptr(&listit, &ptr)) {
 			change_list_ptr(&listit, index[i]->key);
 			++i;
 		}
 	} else {
+		INT j;
 		ASSERT(arr_keys);
 		for (i=0; i<nsort; ++i) {
 			OBJECT obj = (OBJECT)index[i]->key;
-			set_array_obj(arr_keys, i, obj);
+			j = (fwd ? i : nsort-i-1);
+			set_array_obj(arr_keys, j, obj);
 		}
 	}
 
@@ -1359,4 +1369,22 @@ exit_sort:
 	if (index)
 		stdfree(index);
 	return NULL;
+}
+/*========================================
+ * __sort -- sort first container [using second container as keys]
+ *   usage: sort(LIST [, LIST]) -> VOID
+ *======================================*/
+PVALUE
+__sort(PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+	return sortimpl(node, stab, eflg, TRUE);
+}
+/*========================================
+ * __rsort -- reverse sort first container [using second container as keys]
+ *   usage: rsort(LIST [, LIST]) -> VOID
+ *======================================*/
+PVALUE
+__rsort(PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+	return sortimpl(node, stab, eflg, FALSE);
 }
