@@ -15,6 +15,10 @@
 
 	Improving llexec.c.
 
+	* ChangeLog src/liflines/Makefile.am:
+
+	Add ask.c to llexec.c.
+
 2003-01-01 Perry Rapp
 
 	* ChangeLog src/gedlib/keytonod.c src/hdrs/cache.h
