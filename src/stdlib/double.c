@@ -113,6 +113,7 @@ make_list_empty (LIST list)
 BOOLEAN
 empty_list (LIST list)
 {
+	if (!list) return FALSE;
 	return !lfirst(list);
 }
 /*==================================
@@ -122,7 +123,10 @@ void
 push_list (LIST list,
            WORD el)
 {
-	LNODE node = (LNODE) stdalloc(sizeof(*node));
+	LNODE node = NULL;
+
+	if (!list) return;
+	node = (LNODE) stdalloc(sizeof(*node));
 	lelement(node) = el;
 	if (empty_list(list)) {
 		lprev(node) = lnext(node) = NULL;
@@ -141,7 +145,10 @@ void
 back_list (LIST list,
            WORD el)
 {
-	LNODE node = (LNODE) stdalloc(sizeof(*node));
+	LNODE node = NULL;
+
+	if (!list) return;
+	node = (LNODE) stdalloc(sizeof(*node));
 	lelement(node) = el;
 	if (empty_list(list)) {
 		lprev(node) = lnext(node) = NULL;
@@ -208,7 +215,9 @@ nth_in_list (LIST list,
              INT n)
 {
 	INT i = 1;
-	LNODE node = llast(list);
+	LNODE node = NULL;
+	if (!list) return NULL;
+	node = llast(list);
 	while (i < n && node) {
 		i++;
 		node = lprev(node);
@@ -226,11 +235,10 @@ set_list_element (LIST list,
                   INT ind,
                   WORD val)
 {
-	LNODE node = nth_in_list(list, ind);
-	if (!node) {
-		/* Perry: 2000/11/20 -temporary fix - what should we do ? */
-		return 0;
-	}
+	LNODE node = NULL;
+	if (!list) return;
+	node = nth_in_list(list, ind);
+	if (!node) return;
 	lelement(node) = val;
 }
 /*=======================================================
@@ -240,11 +248,10 @@ WORD
 get_list_element (LIST list,
                   INT ind)
 {
-	LNODE node = nth_in_list(list, ind);
-	if (!node) {
-		/* Perry: 2000/11/20 -temporary fix - what should we do ? */
-		return 0;
-	}
+	LNODE node = NULL;
+	if (!list) return 0;
+	node = nth_in_list(list, ind);
+	if (!node) return 0;
 	return lelement(node);
 }
 /*==================================
