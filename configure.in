@@ -192,6 +192,7 @@ AC_OUTPUT(Makefile \
         src/stdlib/Makefile \
         src/liflines/Makefile \
         src/tools/Makefile \
+	src/ui/Makefile \
         src/hdrs/Makefile \
         src/hdrs/win32/Makefile \
         docs/Makefile \

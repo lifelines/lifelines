@@ -24,6 +24,7 @@ llines_LDADD = ../interp/libinterp.a ../gedlib/libgedcom.a \
 # extra stuff for llexec
 llexec_LDADD = ../interp/libinterp.a ../gedlib/libgedcom.a \
 	../btree/libbtree.a ../stdlib/libstdlib.a ../arch/libarch.a \
+	../ui/libuicli.a \
 	@LIBINTL@ @LIBICONV@
 
 # $(top_srcdir)          for config.h
@@ -55,6 +56,8 @@ EXTRA_DIST = llinesi.h
 ../stdlib/libstdlib.a :
 	$(MAKE) -C ../stdlib libstdlib.a
 
+../ui/libuicli.a :
+	$(MAKE) -C ../ui libuicli.a
 
 # since we're not doing dependencies automagically
 add.o: ../hdrs/standard.h

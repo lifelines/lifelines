@@ -24,7 +24,7 @@
 #include "lloptions.h"
 #include "interp.h"
 #include "feedback.h"
-#include "llexec.h"
+#include "ui.h"
 
 #ifdef HAVE_GETOPT
 #ifdef HAVE_GETOPT_H
@@ -55,7 +55,6 @@ extern int opterr;
  * required global variables
  *********************************************/
 
-
 static STRING usage = "";      /* usage string */
 int opt_finnish  = FALSE;      /* Finnish Language sorting order if TRUE */
 BOOLEAN debugmode = FALSE;     /* no signal handling, so we can get coredump */
@@ -74,34 +73,28 @@ STRING  readpath_file = NULL;  /* last component of readpath */
 STRING  readpath = NULL;       /* database path used to open */
 STRING  ext_codeset = 0;       /* default codeset from locale */
 INT screen_width = 20; /* TODO */
+
 /*********************************************
  * local function prototypes
  *********************************************/
 
 /* alphabetical */
-static INT ask_for_char_msg(STRING msg, STRING ttl, STRING prmpt, STRING ptrn);
-static BOOLEAN ask_for_filename_impl(STRING ttl, STRING path, STRING prmpt, STRING buffer, INT buflen);
-static INT choose_one_or_list_from_indiseq(STRING ttl, INDISEQ seq, BOOLEAN multi);
-static INT choose_or_view_array(STRING ttl, INT no, STRING *pstrngs, BOOLEAN selectable);
 static void init_browse_module(void);
 static void init_show_module(void);
+static void term_browse_module(void);
+static void term_show_module(void);
 static BOOLEAN is_unadorned_directory(STRING path);
 static void load_usage(void);
 static void main_db_notify(STRING db, BOOLEAN opening);
-static BOOLEAN open_or_create_database(INT alteration, STRING dbrequested
-	, STRING *dbused);
+static BOOLEAN open_or_create_database (INT alteration, STRING dbrequested, STRING *dbused);
 static void parse_arg(const char * optarg, char ** optname, char **optval);
 static void platform_init(void);
 static void show_open_error(INT dberr);
-static void term_browse_module(void);
-static void term_show_module(void);
-static BOOLEAN yes_no_value(INT c);
 
 /*********************************************
  * local function definitions
  * body of module
  *********************************************/
-
 
 /*==================================
  * main -- Main routine of LifeLines
@@ -567,338 +560,23 @@ main_db_notify (STRING db, BOOLEAN opening)
 	else
 		crash_setdb("");
 }
-/*===============================================
- * init_show_module -- (Stripped down version)
- *=============================================*/
+
 static void
 init_show_module (void)
 {
-	init_disp_reformat();
 }
-/*===============================================
- * term_show_module -- (Placeholder, we don't need it)
- *=============================================*/
+
 static void
 term_show_module (void)
 {
 }
-/*==================================================
- * init_browse_module -- (Placeholder, we don't need it)
- *================================================*/
+
 static void
 init_browse_module (void)
 {
 }
-/*==================================================
- * term_browse_module -- (Placeholder, we don't need it)
- *================================================*/
+
 static void
 term_browse_module (void)
 {
 }
-/*=============================================================
- * Implement all the required feedback functions as simple
- * prints to sdtout
- * Refer to feedback.h for information about these functions.
- *===========================================================*/
-void
-llwprintf (char *fmt, ...)
-{
-	va_list args;
-	va_start(args, fmt);
-	vprintf(fmt, args);
-	va_end(args);
-}
-void
-rpt_print (STRING str)
-{
-	printf(str);
-}
-void
-llvwprintf (STRING fmt, va_list args)
-{
-	vprintf(fmt, args);
-}
-void
-msg_error (char *fmt, ...)
-{
-	va_list args;
-	va_start(args, fmt);
-	vprintf(fmt, args);
-	va_end(args);
-}
-void
-msg_info (char *fmt, ...)
-{
-	va_list args;
-	va_start(args, fmt);
-	vprintf(fmt, args);
-	va_end(args);
-}
-void
-msg_status (char *fmt, ...)
-{
-	va_list args;
-	va_start(args, fmt);
-	vprintf(fmt, args);
-	va_end(args);
-}
-void
-msg_output (MSG_LEVEL level, STRING fmt, ...)
-{
-	va_list args;
-	level=level;
-	va_start(args, fmt);
-	vprintf(fmt, args);
-	va_end(args);
-}
-/*=====================================
- * msg_width -- get max width of msgs
- *===================================*/
-INT
-msg_width (void)
-{
-	return 999;
-}
-/* some strange report UI stuff */
-void
-refresh_stdout (void)
-{
-	/* We don't need to do anything as we're using stdout */
-}
-void
-call_system_cmd (STRING cmd)
-{
-#ifndef WIN32
-	system("clear");
-#endif
-	system(cmd);
-}
-/* send string to output, & terminate line */
-static void
-outputln (const char * txt)
-{
-	printf(txt);
-	printf("\n");
-}
-BOOLEAN
-ask_for_program (STRING mode,
-                 STRING ttl,
-                 STRING *pfname,
-                 STRING *pfullpath,
-                 STRING path,
-                 STRING ext,
-                 BOOLEAN picklist)
-{
-	/* TODO: We probably want to use the real implementation in askprogram.c */
-	return FALSE;
-}
-BOOLEAN
-ask_for_string (STRING ttl, STRING prmpt, STRING buffer, INT buflen)
-{
-	outputln(ttl);
-	printf(prmpt);
-	fgets(buffer, buflen, stdin);
-	chomp(buffer);
-	return strlen(buffer)>0;
-}
-BOOLEAN
-ask_for_string2 (STRING ttl1, STRING ttl2, STRING prmpt, STRING buffer, INT buflen)
-{
-	outputln(ttl1);
-	return ask_for_string(ttl2, prmpt, buffer, buflen);
-}
-/* send string to output */
-static void
-output (const char * txt)
-{
-	printf(txt);
-}
-static INT
-interact (STRING ptrn)
-{
-	char buffer[8];
-	STRING t;
-	while (1) {
-		fgets(buffer, sizeof(buffer), stdin);
-		if (!ptrn) return buffer[0];
-		for (t=ptrn; *t; ++t) {
-			if (buffer[0]==*t)
-				return buffer[0];
-		}
-		printf("Invalid option: choose one of %s\n", ptrn);
-	}
-}
-INT
-ask_for_char (STRING ttl, STRING prmpt, STRING ptrn)
-{
-	return ask_for_char_msg(NULL, ttl, prmpt, ptrn);
-}
-static INT
-ask_for_char_msg (STRING msg, STRING ttl, STRING prmpt, STRING ptrn)
-{
-	INT rv;
-	if (msg) outputln(msg);
-	if (ttl) outputln(ttl);
-	output(prmpt);
-	rv = interact(ptrn);
-	return rv;
-}
-BOOLEAN
-ask_yes_or_no (STRING ttl)
-{
-	INT c = ask_for_char(ttl, _(qSaskynq), _(qSaskynyn));
-	return yes_no_value(c);
-}
-BOOLEAN
-ask_yes_or_no_msg (STRING msg, STRING ttl)
-{
-	INT c = ask_for_char_msg(msg, ttl, _(qSaskynq), _(qSaskynyn));
-	return yes_no_value(c);
-}
-INT
-choose_from_array (STRING ttl, INT no, STRING *pstrngs)
-{
-	BOOLEAN selectable = TRUE;
-	return choose_or_view_array(ttl, no, pstrngs, selectable);
-}
-void
-view_array (STRING ttl, INT no, STRING *pstrngs)
-{
-	BOOLEAN selectable = FALSE;
-	choose_or_view_array(ttl, no, pstrngs, selectable);
-}
-INT
-choose_from_list (STRING ttl, LIST list)
-{
-	STRING * array=0;
-	STRING choice=0;
-	INT i=0, rtn=-1;
-	INT len = llen(list);
-
-	if (len < 1) return -1;
-	if (!ttl) ttl=_(qSdefttl);
-
-	array = (STRING *) stdalloc(len*sizeof(STRING));
-	i = 0;
-	FORXLIST(list, el)
-		choice = (STRING)el;
-		ASSERT(choice);
-		array[i] = strsave(choice);
-		++i;
-	ENDXLIST
-
-	rtn = choose_from_array(ttl, len, array);
-
-	for (i=0; i<len; ++i)
-		strfree(&array[i]);
-	stdfree(array);
-	return rtn;
-}
-BOOLEAN
-ask_for_db_filename (STRING ttl, STRING prmpt, STRING basedir, STRING buffer, INT buflen)
-{
-	return ask_for_string(ttl, prmpt, buffer, buflen);
-}
-INT
-choose_list_from_indiseq (STRING ttl, INDISEQ seq)
-{
-	return choose_one_or_list_from_indiseq(ttl, seq, TRUE);
-}
-static INT
-choose_one_or_list_from_indiseq (STRING ttl, INDISEQ seq, BOOLEAN multi)
-{
-	calc_indiseq_names(seq); /* we certainly need the names */
-
-	/* TODO: imitate choose_from_list & delegate to array chooser */
-	return 0;
-}
-BOOLEAN
-ask_for_output_filename (STRING ttl, STRING path, STRING prmpt, STRING buffer, INT buflen)
-{
-	/* curses version doesn't differentiate input from output prompts */
-	return ask_for_filename_impl(ttl, path, prmpt, buffer, buflen);
-}
-BOOLEAN
-ask_for_input_filename (STRING ttl, STRING path, STRING prmpt, STRING buffer, INT buflen)
-{
-	/* curses version doesn't differentiate input from output prompts */
-	return ask_for_filename_impl(ttl, path, prmpt, buffer, buflen);
-}
-static BOOLEAN
-ask_for_filename_impl (STRING ttl, STRING path, STRING prmpt, STRING buffer, INT buflen)
-{
-	/* display current path (truncated to fit) */
-	char curpath[120];
-	INT len = sizeof(curpath);
-	if (len > screen_width-2)
-		len = screen_width-2;
-	curpath[0] = 0;
-	llstrapps(curpath, len, uu8, _(qSiddefpath));
-	llstrapps(curpath, len, uu8, compress_path(path, len-strlen(curpath)-1));
-
-	return ask_for_string2(ttl, curpath, prmpt, buffer, buflen);
-}
-static BOOLEAN
-yes_no_value (INT c)
-{
-	STRING ptr;
-	for (ptr = _(qSaskyY); *ptr; ptr++) {
-		if (c == *ptr) return TRUE;
-	}
-	return FALSE;
-}
-INT
-choose_one_from_indiseq (STRING ttl, INDISEQ seq)
-{
-	return choose_one_or_list_from_indiseq(ttl, seq, FALSE);
-}
-INT
-prompt_stdout (STRING prompt)
-{
-	return ask_for_char(NULL, prompt, NULL);
-}
-static INT
-choose_or_view_array (STRING ttl, INT no, STRING *pstrngs, BOOLEAN selectable)
-{
-	/* TODO: The q ought to be localized */
-	STRING promptline = selectable ? _(qSchlistx) : _(qSvwlistx);
-	STRING responses = selectable ? "0123456789udq" : "udq";
-	INT i=0;
-	while (1) {
-		INT j;
-		INT rv;
-		for (j=i; j<i+10 && j<no; ++j) {
-			printf("%d: %s\n", j-i, pstrngs[j]);
-		}
-		printf("%s\n", promptline);
-		rv = interact(responses);
-		switch(rv) {
-		case '0':
-		case '1':
-		case '2':
-		case '3':
-		case '4':
-		case '5':
-		case '6':
-		case '7':
-		case '8':
-		case '9':
-			rv = i+rv-'0';
-			if (selectable && rv < no) {
-				return rv;
-			}
-			break;
-		case 'd':
-			if (i+10 < no)
-				i += 10;
-			break;
-		case 'u':
-			if (i>9)
-				i -= 10;
-			break;
-		case 'q': return -1;
-		}
-	}
-}
-
