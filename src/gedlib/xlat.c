@@ -348,6 +348,7 @@ xl_do_xlat (XLAT xlat, ZSTR zstr)
 				cvtd=TRUE;
 				zs_move(zstr, &ztemp);
 			} else {
+				zs_free(&ztemp);
 				/* iconv failed, anything to do ? */
 			}
 		} else if (xstep->dyntt) {
