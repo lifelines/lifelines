@@ -191,6 +191,9 @@ make_list_empty_impl (LIST list, ELEMENT_DESTRUCTOR func)
 	LNODE lnode0, lnode;
 
 	if (!list) return;
+
+	if (!func)
+		func = list->l_del_element;
 	if (!func) {
 		if (ltype(list) == LISTDOFREE)
 			func = &free_list_element;
