@@ -155,7 +155,7 @@ void edit_other (NODE node);
 /*============================
  * init_screen -- Init screens
  *==========================*/
-void
+int
 init_screen (void)
 {
 	int extralines;
@@ -166,13 +166,13 @@ init_screen (void)
 			endwin();
 			fprintf(stderr, "The requested window size (%d,%d) is too large for your terminal (%d,%d).\n",
 				ll_cols, ll_lines, COLS, LINES);
-			exit(1);
+			return 0; /* fail */
 		}
 		if (ll_cols < COLSREQ || ll_lines < LINESREQ) {
 			endwin();
 			fprintf(stderr, "The requested window size (%d,%d) is too small for LifeLines (%d,%d).\n",
 				ll_cols, ll_lines, COLSREQ, LINESREQ);
-			exit(1);
+			return 0; /* fail */
 		}
 	}
 	else {
@@ -183,7 +183,7 @@ init_screen (void)
 			endwin();
 			fprintf(stderr, "Your terminal display (%d,%d) is too small for LifeLines (%d,%d).\n",
 				COLS, LINES, COLSREQ, LINESREQ);
-			exit(1);
+			return 0; /* fail */
 		}
 	}
 
@@ -200,6 +200,7 @@ init_screen (void)
 	BAND = 25;	/* width of columns of menu (3) */
 	create_windows();
 	init_all_windows();
+	return 1; /* succeed */
 }
 /*=======================================
  * paint_main_screen -- Paint main screen

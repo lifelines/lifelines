@@ -244,7 +244,7 @@ coerce_pvalue (INT type,       /* type to convert to */
 #endif
 	case PFLOAT:
 		switch (type) {
-		case PINT: u.i = u.f; break;
+		case PINT: u.i = (INT)u.f; break;
 		case PLONG: /*u.l = float_to_long(u.w);*/ break;
 		case PFLOAT: return;
 		default: goto bad;

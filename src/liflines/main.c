@@ -45,6 +45,8 @@
 #include "arch.h"
 
 #ifdef HAVE_GETOPT_H
+#include <getopt.h>
+#else
 #include "getopt.h"
 #endif
 
@@ -120,7 +122,7 @@ main (INT argc,
 	setlocale(LC_ALL, "");
 #endif
 
-	/* OS Stuff */
+	/* catch any fault, so we can close database */
 	set_signals();
 
 	/* Parse Command-Line Arguments */
@@ -196,7 +198,8 @@ main (INT argc,
 	/* Initialize Curses UI */
 	initscr();
 	noecho();
-	init_screen();
+	if (!init_screen())
+		goto finish;
 
 	/* Validate Command-Line Arguments */
 	if (readonly && writeable) {
@@ -209,9 +212,11 @@ main (INT argc,
 		goto usage;
 	}
 
+	lldatabases = environ_determine_database();
+	lldatabases = strsave(lldatabases);
 	/* Get Database Name (Prompt or Command-Line) */
 	if (c <= 0) {
-		btreepath = (STRING) ask_for_lldb(idldir, "enter path: ", lldatabases);
+		btreepath = ask_for_lldb(idldir, "enter path: ", lldatabases);
 		if (!btreepath || *btreepath == 0) {
 			llwprintf(iddbse);
 			goto finish;
@@ -219,6 +224,7 @@ main (INT argc,
 		btreepath = strsave(btreepath);
 	} else {
 		btreepath = (unsigned char *)argv[optind];
+		/* Perry: I think this test is unnecessary */
 		if (!btreepath || *btreepath == 0) {
 			showusage = TRUE;
 			goto usage;
@@ -226,9 +232,6 @@ main (INT argc,
 	}
 
 	/* Open Database */
-	lldatabases = environ_figure_database();
-	lldatabases = strsave(lldatabases);
-
 	readpath = filepath(btreepath, "r", lldatabases, NULL);
 	if (!readpath) readpath = btreepath;
 	if (forceopen) {
@@ -298,12 +301,15 @@ main (INT argc,
 
 	/* Start Program */
 	init_lifelines();
+	init_show_module();
 	while (!alldone)
 		main_menu();
 	close_lifelines();
 	code=0;
 
 finish:
+	if (code) /* if error, give user a second to read it */
+		sleep(1);
 	/* Terminate Curses UI */
 	endwin();
 

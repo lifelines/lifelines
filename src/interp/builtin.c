@@ -336,33 +336,6 @@ __fullname (PNODE node,
 	return create_pvalue(PSTRING,
 	    (WORD)manip_name(nval(name), ttr, caps, myreg, len));
 }
-/*=============================
- * getasurname -- Return a surname without conversion to ____ unless
- * there is no surname. This is only used by the report builtin
- * function "surname". The original routine getsurname()
- * is used for soundex purposes.
- *===========================*/
-STRING
-getasurname (STRING name)   /* GEDCOM name */
-{
-	INT c;
-	static unsigned char buffer[3][MAXLINELEN+1];
-	static INT dex = 0;
-	STRING p, surname;
-	if (++dex > 2) dex = 0;
-	p = surname = buffer[dex];
-	while ((c = *name++) && c != '/')
-		;
-	if (c == 0) return (STRING) "____";
-	while (iswhite(c = *name++))
-		;
-	if (c == 0 || c == '/') return (STRING) "____";
-	*p++ = c;
-	while ((c = *name++) && c != '/')
-		*p++ = c;
-	*p = 0;
-	return surname;
-}
 /*==================================+
  * __surname -- Find person's surname using new getasurname() routine.
  *   usage: surname(INDI) -> STRING

@@ -459,7 +459,7 @@ int box(WINDOW *wp, chtype v, chtype h)
 int wgetch(WINDOW *wp)
 {
 	COORD cCursor;
-	int ch;
+	char ch;
 
 	cCursor.X = wp->_curx + wp->_begx;
 	cCursor.Y = wp->_cury + wp->_begy;

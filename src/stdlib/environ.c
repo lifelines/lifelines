@@ -25,12 +25,12 @@
 #include "sys_inc.h"
 #include "llstdlib.h"
 
-/*====================================================
- * environ_figure_tempfile -- calculate temporary file
+/*=======================================================
+ * environ_determine_tempfile -- calculate temporary file
  *  (fully qualified path)
- *==================================================*/
+ *=====================================================*/
 STRING
-environ_figure_tempfile (void)
+environ_determine_tempfile (void)
 {
 #ifdef WIN32
 	STRING e;
@@ -48,12 +48,11 @@ environ_figure_tempfile (void)
 	return mktemp(unix_tempfile);
 #endif
 }
-
-/*=========================================================
- * environ_figure_editor -- calculate editor program to use
- *=======================================================*/
+/*============================================================
+ * environ_determine_editor -- calculate editor program to use
+ *==========================================================*/
 STRING
-environ_figure_editor (void)
+environ_determine_editor (void)
 {
 	STRING e;
 
@@ -69,12 +68,11 @@ environ_figure_editor (void)
 #endif
 	return e;
 }
-
-/*=========================================================
- * environ_figure_database -- determine database location
- *=======================================================*/
+/*==========================================================
+ * environ_determine_database -- determine database location
+ *========================================================*/
 STRING
-environ_figure_database (void)
+environ_determine_database (void)
 {
 	STRING e;
 
@@ -83,4 +81,3 @@ environ_figure_database (void)
 
 	return e;
 }
-

@@ -98,7 +98,7 @@ extern WINDOW *scan_menu_win;
 extern WINDOW *utils_menu_win;
 
 /* Function Prototype */
-void init_screen (void);
+int init_screen (void);
 void paint_main_screen(void);
 void paint_one_per_screen(void);
 void paint_one_fam_screen(void);

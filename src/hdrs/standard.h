@@ -154,6 +154,6 @@ typedef struct ltag {
 		}\
 	}
 
-#define ISNULL(k)	(!k || *k == NULL)
+#define ISNULL(k)	(!k || *k == 0)
 
 #endif

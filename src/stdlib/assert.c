@@ -31,6 +31,7 @@
 #include "standard.h"
 #include "liflines.h"
 #include "screen.h"
+#include "arch.h"
 
 #include "stdlibi.h"
 
@@ -43,6 +44,9 @@ __fatal (STRING file,
 {
 	llwprintf("FATAL: %s: line %d\n", file, line);
 	close_lifelines();
+	/* give user a second to read it */
+	sleep(1);
+	/* Terminate Curses UI */
 	endwin();
 	ll_abort(-1);
 }
