@@ -18,6 +18,10 @@
 
 	New function check_node_leaks.
 
+	* ChangeLog src/gedlib/node.c src/interp/pvalalloc.c
+
+	Add node leak count to leak log, and add time stamps, and append.
+
 2005-02-06 Perry Rapp
 
 	* ChangeLog src/liflines/llexec.c src/liflines/main.c

@@ -261,17 +261,22 @@ free_all_pvalues (void)
 		STRING report_leak_path = getoptstr("ReportLeakLog", NULL);
 		FILE * fp=0;
 		if (report_leak_path)
-			fp = fopen(report_leak_path, "wt");
+			fp = fopen(report_leak_path, "at");
 		if (fp) {
+			LLDATE date;
 			TABLE_ITER tabit = begin_table_iter(leaktab);
 			CNSTRING key=0;
 			INT ival=0;
+			fprintf(fp, _("PVALUE memory leak report:"));
+			get_current_lldate(&date);
+			fprintf(fp, " %s", date.datestr);
+			fprintf(fp, "\n");
 			while (next_table_int(tabit, &key, &ival)) {
-				fprintf(fp, "%s: %d items\n", key, ival);
+				fprintf(fp, "  %s: ", key);
+				fprintf(fp, _pl("%d item leaked", "%d items leaked", ival), ival);
+				fprintf(fp, "\n");
 			}
 			end_table_iter(&tabit);
-		}
-		if (fp) {
 			fclose(fp);
 			fp = 0;
 		}

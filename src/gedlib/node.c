@@ -1150,7 +1150,20 @@ void
 check_node_leaks (void)
 {
 	if (live_count) {
-		char msg[128];
-		sprintf(msg, "Leaked nodes: %d", live_count);
+		STRING report_leak_path = getoptstr("ReportLeakLog", NULL);
+		FILE * fp=0;
+		if (report_leak_path)
+			fp = fopen(report_leak_path, "at");
+		if (fp) {
+			LLDATE date;
+			get_current_lldate(&date);
+			fprintf(fp, _("node memory leaks:"));
+			fprintf(fp, " %s", date.datestr);
+			fprintf(fp, "\n  ");
+			fprintf(fp, _pl("%d item leaked", "%d items leaked", live_count), live_count);
+			fprintf(fp, "\n");
+			fclose(fp);
+			fp = 0;
+		}
 	}
 }
