@@ -2396,11 +2396,13 @@ manufacture a listdisp here
 	INT i, j, row, len = length_indiseq(seq);
 	STRING key, name;
 	NODE indi;
-	char scratch[200], *p;
+	char scratch[200];
 	TRANMAPPING ttmd = get_tranmapping(MINDS);
 	INT mode = 'n';
 	INT viewlines = 13;
 	BOOLEAN scrollable = (viewlines < len);
+
+	calc_indiseq_names(seq); /* we certainly need the names */
 	
 	for (i = LIST_LINES+2; i < LIST_LINES+2+viewlines; i++)
 		mvwaddstr(win, i, 1, empstr49);
@@ -2423,12 +2425,13 @@ manufacture a listdisp here
 			mvwaddch(win, row, 3, '>');
 			show_record(main_win, key, mode, &rectList, &scroll, reuse);
 		}
-		name = manip_name(name, ttmd, TRUE, TRUE, 40);
-		strcpy(scratch, name);
-		p = scratch + strlen(scratch);
-		*p++ = ' ';
-		sprintf(p, "(%s)", key_of_record(indi, ttmd));
-		/*sprintf(p, "(%s)", &key[1]);*/
+		scratch[0] =0;
+		if (name) {
+			name = manip_name(name, ttmd, TRUE, TRUE, 40);
+			llstrapp(scratch, sizeof(scratch), name);
+			llstrapp(scratch, sizeof(scratch), " ");
+		}
+		llstrappf(scratch, sizeof(scratch), "(%s)", key_of_record(indi, ttmd));
 		mvwaddstr(win, row, 4, scratch);
 		row++;
 	}

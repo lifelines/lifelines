@@ -84,6 +84,7 @@ extern BOOLEAN opt_finnish;		/* Finnish language support */
 static void append_all_tags(INDISEQ, NODE, STRING tagname, BOOLEAN recurse, BOOLEAN nonptrs);
 static void append_indiseq_impl(INDISEQ seq, STRING key, 
 	STRING name, UNION val, BOOLEAN sure, BOOLEAN alloc);
+static void calc_indiseq_name_el(INDISEQ seq, INT index);
 static INT canonkey_compare(SORTEL el1, SORTEL el2, VPTR param);
 static INT canonkey_order(char c);
 static void check_indiseq_valtype(INDISEQ seq, INT valtype);
@@ -530,6 +531,7 @@ element_indiseq (INDISEQ seq, INT index, STRING *pkey, STRING *pname)
 {
 	*pkey = *pname = NULL;
 	if (!seq || index < 0 || index > ISize(seq) - 1) return FALSE;
+	calc_indiseq_name_el(seq, index);
 	*pkey =  skey(IData(seq)[index]);
 	*pname = snam(IData(seq)[index]);
 	return TRUE;
@@ -2029,6 +2031,31 @@ calc_indiseq_names (INDISEQ seq)
 		}
 	ENDINDISEQ
 	IFlags(seq) |= WITHNAMES;
+}
+/*=======================================================
+ * calc_indiseq_name_el -- Try to find name of requested element
+ *  if needed & appropriate
+ *=====================================================*/
+static void
+calc_indiseq_name_el (INDISEQ seq, INT index)
+{
+	STRING key, name;
+
+	ASSERT(seq && index>=0 && index<ISize(seq));
+
+	if (IFlags(seq) & WITHNAMES)
+		return;
+
+	if (snam(IData(seq)[index]))
+		return;
+
+	key = skey(IData(seq)[index]);
+	if (key[0] != 'I')
+		return;
+
+	name = qkey_to_name(key);
+	if (name)
+		snam(IData(seq)[index]) = strsave(name);
 }
 /*=======================================================
  * qkey_to_name -- find the name for person with given key

@@ -40,6 +40,10 @@
 
 	Fix undeclared warning.
 
+	* ChangeLog gedlib/indiseq.c liflines/screen.c:
+
+	Bugfix: handle null name from element_indiseq in list browse.
+
 2002-06-26 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog po/Makevars po/de.po po/el.po po/it.po po/sv.po:
