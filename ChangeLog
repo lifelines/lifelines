@@ -4,6 +4,21 @@
 
 	Fix dir separator stuff for cygwin.
 
+	* ChangeLog gedlib/charmaps.c gedlib/editmap.c gedlib/editvtab.c
+	gedlib/gstrings.c gedlib/indiseq.c gedlib/init.c
+	gedlib/keytonod.c gedlib/names.c gedlib/node.c
+	gedlib/translat.c gedlib/valtable.c hdrs/gedcom.h
+	hdrs/translat.h hdrs/version.h interp/builtin.c interp/rassa.c
+	liflines/add.c liflines/browse.c liflines/edit.c
+	liflines/export.c liflines/import.c liflines/merge.c
+	liflines/miscutls.c liflines/newrecs.c liflines/pedigree.c
+	liflines/screen.c liflines/show.c liflines/valgdcom.c po/el.po
+	po/it.po win32/msvc6/llines/config.h
+	win32/msvc6/llines/llines.rc:
+
+	Implement iconv as an optional replacement for translation tables.
+	Wrap each TRANTABLE structure in a TRANMAPPING.
+
 2002-06-09 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog NEWS README.LAYOUT configure.in lifelines.spec

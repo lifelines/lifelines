@@ -281,7 +281,7 @@ add_dnodes (NODE node, INT gen, INT maxgen, INT * count, CANVASDATA canvas)
 	STRING ptr=output;
 	INT leader;
 	LIST list=NULL;
-	TRANTABLE ttd = tran_tables[MINDS];
+	TRANMAPPING ttmd = get_tranmapping(MINDS);
 	INT mylen=sizeof(output), mylenorig;
 	if (mylen>width)
 		mylen = width;
@@ -306,14 +306,14 @@ add_dnodes (NODE node, INT gen, INT maxgen, INT * count, CANVASDATA canvas)
 	}
 
 	/* translate the xref & tag into line */
-	translate_string(ttd, output, line, sizeof(line)-1);
+	translate_string(ttmd, output, line, sizeof(line)-1);
 	ptr = line + strlen(line);
 	mylen = sizeof(line) - strlen(line);
 	/* now output is available as scratch */
 
 	list = text_to_list("", width);
 	if (nval(node)) {
-		translate_string(ttd, nval(node), output, sizeof(output)-1);
+		translate_string(ttmd, nval(node), output, sizeof(output)-1);
 		append_to_text_list(list, output, width, FALSE); 
 	}
 	set_list_type(list, LISTDOFREE);
@@ -332,7 +332,7 @@ add_dnodes (NODE node, INT gen, INT maxgen, INT * count, CANVASDATA canvas)
 			} else {
 				break;
 			}
-			translate_string(ttd, nval(anode), output, sizeof(output)-1);
+			translate_string(ttmd, nval(anode), output, sizeof(output)-1);
 			append_to_text_list(list, output, width, newline); 
 		}
 	}
@@ -519,7 +519,7 @@ node_lineprint (INT width, void * param)
 	INT mylen=sizeof(line);
 	NODE_PRINT_PARAM npp = (NODE_PRINT_PARAM)param;
 	NODE node=npp->node;
-	TRANTABLE ttd = tran_tables[MINDS];
+	TRANMAPPING ttmd = get_tranmapping(MINDS);
 
 	if (mylen>width)
 		mylen=width;
@@ -543,7 +543,7 @@ node_lineprint (INT width, void * param)
 			llstrcatn(&ptr, str, &mylen);
 		}
 	}
-	translate_string(ttd, line, output, sizeof(output)/sizeof(output[0])-1);
+	translate_string(ttmd, line, output, sizeof(output)/sizeof(output[0])-1);
 	return output;
 }
 /*=================================

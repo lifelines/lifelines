@@ -402,10 +402,10 @@ poutput (STRING str, BOOLEAN *eflg)
 	STRING p;
 	static struct Buffer_s bfdata, *bfs = &bfdata; /* static init to all zeros is ok */
 	INT c, len;
-	TRANTABLE ttr = tran_tables[MINRP];
+	TRANMAPPING ttmr = get_tranmapping(MINRP);
 	if (!str || (len = strlen(str)) <= 0) return;
 	bfCpy(bfs, "");
-	translate_string_to_buf(ttr, str, bfs);
+	translate_string_to_buf(ttmr, str, bfs);
 	str = bfStr(bfs);
 	if ((len = strlen(str)) <= 0) return;
 	if (!Poutfp) {

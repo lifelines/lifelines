@@ -36,12 +36,13 @@
 #include "gedcomi.h"
 #include "liflines.h"
 #include "feedback.h"
+#include "lloptions.h"
 
 /*********************************************
  * global/exported variables
  *********************************************/
 
-TRANTABLE tran_tables[NUM_TT_MAPS]; /* init'd by init_mapping */
+struct tranmapping_s tran_maps[NUM_TT_MAPS]; /* init'd by init_mapping */
 
 char *map_keys[NUM_TT_MAPS] = {
 	"MEDIN", "MINED", "MGDIN", "MINGD",
@@ -74,13 +75,18 @@ static void maperror(INT index, INT entry, INT line, STRING errmsg);
  *********************************************/
 
 static char *map_names[] = {
-	"Editor to Internal",
-	"Internal to Editor",
-	"GEDCOM to Internal",
-	"Internal to GEDCOM",
-	"Display to Internal",
-	"Internal to Display",
-	"Internal to Report",
+	"Editor to Internal"
+	,"Internal to Editor"
+	,"GEDCOM to Internal"
+	,"Internal to GEDCOM"
+	,"Display to Internal"
+	,"Internal to Display"
+	,"Internal to Report"
+	,"Custom Sort"
+	,"Custom Charset"
+	,"Custom Lowercase"
+	,"Custom Uppercase"
+	,"Custom Prefix"
 };
 
 /*********************************************
@@ -94,17 +100,68 @@ static char *map_names[] = {
 void
 init_mapping (void)
 {
-	INT indx;
-	/* we assume here that NUM_TT_MAPS is size of tran_table */
-	ASSERT(NUM_TT_MAPS == ARRSIZE(tran_tables));
+	INT indx=-1;
+	char option_name[64];
+	STRING str=0;
+	/* Check that all tables have all entries */
+	ASSERT(NUM_TT_MAPS == ARRSIZE(tran_maps));
+	ASSERT(NUM_TT_MAPS == ARRSIZE(map_names));
+	ASSERT(NUM_TT_MAPS == ARRSIZE(map_keys));
+
+	memset(&tran_maps, 0, sizeof(tran_maps));
 	for (indx = 0; indx < NUM_TT_MAPS; indx++) {
-		TRANTABLE * tt = &tran_tables[indx];
-		memset(tt, 0, sizeof(*tt));
+		TRANMAPPING ttm = &tran_maps[indx];
+		TRANTABLE * tt = &ttm->trantbl;
 		if (!init_map_from_rec(indx, tt)) {
 			msg_error("Error initializing %s map.\n"
 				, map_names[indx]);
 		}
+		snprintf(option_name, sizeof(option_name), "Iconv.%s.src", map_keys[indx]);
+		if ((str = getoptstr(option_name, 0)) != 0) {
+			ttm->iconv_src = strdup(str);
+			snprintf(option_name, sizeof(option_name), "Iconv.%s.dest", map_keys[indx]);
+			if ((str = getoptstr(option_name, 0)) != 0) {
+				ttm->iconv_dest = strdup(str);
+			}
+		}
 	}
+}
+/*========================================
+ * get_trantable -- Access into the custom translation tables
+ *======================================*/
+TRANTABLE
+get_trantable (INT ttnum)
+{
+	return get_tranmapping(ttnum)->trantbl;
+}
+/*========================================
+ * get_trantable_from_tranmapping -- Access into custom
+ *  translation table of a tranmapping
+ *======================================*/
+TRANTABLE
+get_trantable_from_tranmapping (TRANMAPPING ttm)
+{
+	return ttm ? ttm->trantbl : 0;
+}
+/*========================================
+ * get_tranmapping -- Access to a translation mapping
+ *======================================*/
+TRANMAPPING
+get_tranmapping (INT ttnum)
+{
+	ASSERT(ttnum>=0 && ttnum<ARRSIZE(tran_maps));
+	return &tran_maps[ttnum];
+}
+/*========================================
+ * set_trantable -- Assign a new custom translation table
+ *======================================*/
+void
+set_trantable (INT ttnum, TRANTABLE tt)
+{
+	ASSERT(ttnum>=0 && ttnum<ARRSIZE(tran_maps));
+	if (tran_maps[ttnum].trantbl)
+		remove_trantable(tran_maps[ttnum].trantbl);
+	tran_maps[ttnum].trantbl = tt;
 }
 /*===================================================
  * init_map_from_rec -- Init single translation table

@@ -63,7 +63,6 @@ extern INT gd_xmax;	/* maximum other key number */
 
 extern STRING qSgdnadd, qSdboldk, qSdbnewk, qSdbodel;
 extern STRING qScfoldk, qSunsupuni;
-extern TRANTABLE tran_tables[];
 
 /*********************************************
  * local function prototypes
@@ -94,7 +93,7 @@ BOOLEAN
 import_from_gedcom_file (struct import_feedback * ifeed, FILE *fp)
 {
 	NODE node, conv;
-	TRANTABLE tt = tran_tables[MGDIN];
+	TRANMAPPING ttm = get_tranmapping(MGDIN);
 	STRING msg;
 	BOOLEAN emp;
 	INT nindi = 0, nfam = 0, neven = 0;
@@ -159,11 +158,11 @@ TODO: why were these here ?
 
 
 /* Add records to database */
-	node = convert_first_fp_to_node(fp, FALSE, tt, &msg, &emp);
+	node = convert_first_fp_to_node(fp, FALSE, ttm, &msg, &emp);
 	while (node) {
 		if (!(conv = node_to_node(node, &type))) {
 			free_nodes(node);
-			node = next_fp_to_node(fp, FALSE, tt, &msg, &emp);
+			node = next_fp_to_node(fp, FALSE, ttm, &msg, &emp);
 			continue;
 		}
 		switch (type) {
@@ -178,7 +177,7 @@ TODO: why were these here ?
 		if (ifeed && ifeed->added_rec_fnc)
 			ifeed->added_rec_fnc(nxref(conv)[1], ntag(conv), num);
 		free_nodes(node);
-		node = next_fp_to_node(fp, FALSE, tt, &msg, &emp);
+		node = next_fp_to_node(fp, FALSE, ttm, &msg, &emp);
 	}
 	if (msg) {
 		msg_error(msg);

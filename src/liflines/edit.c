@@ -54,18 +54,18 @@ void
 write_indi_to_editfile(NODE indi)
 {
 	FILE *fp;
-	TRANTABLE tto = tran_tables[MINED];
+	TRANMAPPING ttmo = get_tranmapping(MINED);
 	NODE name, refn, sex, body, famc, fams;
 	
 	ASSERT(fp = fopen(editfile, LLWRITETEXT));
 	split_indi_old(indi, &name, &refn, &sex, &body, &famc, &fams);
-	write_nodes(0, fp, tto, indi, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, name, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, refn, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, sex,   TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, body , TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, famc,  TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, fams,  TRUE, TRUE, TRUE);
+	write_nodes(0, fp, ttmo, indi, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, name, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, refn, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, sex,   TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, body , TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, famc,  TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, fams,  TRUE, TRUE, TRUE);
 	fclose(fp);
 	join_indi(indi, name, refn, sex, body, famc, fams);
 }
@@ -80,8 +80,8 @@ edit_indi (NODE indi1)  /* may be NULL */
 	NODE node, namen, refnn, name1n, refn1n, indi0;
 	BOOLEAN emp;
 	STRING msg, key;
-	TRANTABLE tti = tran_tables[MEDIN];
-	TRANTABLE ttd = tran_tables[MINDS];
+	TRANMAPPING ttmi = get_tranmapping(MEDIN);
+	TRANMAPPING ttmd = get_tranmapping(MINDS);
 
 	if (!indi1 && !(indi1 = ask_for_indi_old(_(qSidpedt), NOCONFIRM, NOASK1)))
 		return NULL;
@@ -96,7 +96,7 @@ edit_indi (NODE indi1)  /* may be NULL */
 
 	do_edit();
 	if (readonly) {
-		indi2 = file_to_node(editfile, tti, &msg, &emp);
+		indi2 = file_to_node(editfile, ttmi, &msg, &emp);
 		if (!equal_tree(indi1, indi2))
 			message(_(qSronlye));
 		free_nodes(indi2);
@@ -104,7 +104,7 @@ edit_indi (NODE indi1)  /* may be NULL */
 	}
 	while (TRUE) {
 		INT cnt;
-		indi2 = file_to_node(editfile, tti, &msg, &emp);
+		indi2 = file_to_node(editfile, ttmi, &msg, &emp);
 		if (!indi2) {
 			if (ask_yes_or_no_msg(msg, _(qSiredit))) {
 				do_edit();
@@ -182,7 +182,7 @@ edit_indi (NODE indi1)  /* may be NULL */
 	free_nodes(refn1);
 	free_nodes(refnn);
 	free_nodes(refn1n);
-	msg_status(_(qSgdpmod), indi_to_name(indi1, ttd, 35));
+	msg_status(_(qSgdpmod), indi_to_name(indi1, ttmd, 35));
 	return indi1;
 }
 /*=====================================
@@ -193,17 +193,17 @@ void
 write_fam_to_editfile(NODE fam)
 {
 	FILE *fp;
-	TRANTABLE tto = tran_tables[MINED];
+	TRANMAPPING ttmo = get_tranmapping(MINED);
 	NODE refn, husb, wife, chil, body;
 
 	ASSERT(fp = fopen(editfile, LLWRITETEXT));
 	split_fam(fam, &refn, &husb, &wife, &chil, &body);
-	write_nodes(0, fp, tto, fam,  TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, refn, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, husb,  TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, wife,  TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, body,  TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, chil,  TRUE, TRUE, TRUE);
+	write_nodes(0, fp, ttmo, fam,  TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, refn, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, husb,  TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, wife,  TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, body,  TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, chil,  TRUE, TRUE, TRUE);
 	join_fam(fam, refn, husb, wife, chil, body);
 	fclose(fp);
 }
@@ -216,7 +216,7 @@ edit_family (NODE fam1) /* may be NULL */
 {
 	NODE fam2=0, husb, wife, chil, body, refn1, refn2, refnn, refn1n;
 	NODE indi, node, fam0;
-	TRANTABLE tti = tran_tables[MEDIN];
+	TRANMAPPING ttmi = get_tranmapping(MEDIN);
 	STRING msg, key;
 	BOOLEAN emp;
 /* Identify family if need be */
@@ -240,7 +240,7 @@ edit_family (NODE fam1) /* may be NULL */
 /* Have user edit record */
 	do_edit();
 	if (readonly) {
-		fam2 = file_to_node(editfile, tti, &msg, &emp);
+		fam2 = file_to_node(editfile, ttmi, &msg, &emp);
 		if (!equal_tree(fam1, fam2))
 			message(_(qSronlye));
 		free_nodes(fam2); 
@@ -248,7 +248,7 @@ edit_family (NODE fam1) /* may be NULL */
 	}
 	while (TRUE) {
 		INT cnt;
-		fam2 = file_to_node(editfile, tti, &msg, &emp);
+		fam2 = file_to_node(editfile, ttmi, &msg, &emp);
 		if (!fam2) {
 			if (ask_yes_or_no_msg(msg, _(qSfredit))) {
 				do_edit();

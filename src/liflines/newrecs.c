@@ -128,7 +128,7 @@ edit_add_record (STRING recstr, STRING redt, STRING redtopt, char ntype, STRING 
 	NODE node=0, refn;
 	STRING msg, key;
 	BOOLEAN emp;
-	TRANTABLE tti = tran_tables[MEDIN];
+	TRANMAPPING ttmi = get_tranmapping(MEDIN);
 	STRING (*getreffnc)(void) = NULL; /* get next internal key */
 	void (*todbasefnc)(NODE) = NULL;  /* write record to dbase */
 	void (*tocachefnc)(NODE) = NULL;  /* write record to cache */
@@ -160,7 +160,7 @@ edit_add_record (STRING recstr, STRING redt, STRING redtopt, char ntype, STRING 
 	do_edit();
 	while (TRUE) {
 		INT cnt;
-		node = file_to_node(editfile, tti, &msg, &emp);
+		node = file_to_node(editfile, ttmi, &msg, &emp);
 		if (!node) {
 			if (ask_yes_or_no_msg(msg, redt)) { /* yes, edit again */
 				do_edit();
@@ -243,10 +243,10 @@ void
 write_node_to_editfile (NODE node)
 {
 	FILE *fp;
-	TRANTABLE tto = tran_tables[MINED];
+	TRANMAPPING ttmo = get_tranmapping(MINED);
 
 	ASSERT(fp = fopen(editfile, LLWRITETEXT));
-	write_nodes(0, fp, tto, node,  TRUE, TRUE, TRUE);
+	write_nodes(0, fp, ttmo, node,  TRUE, TRUE, TRUE);
 	fclose(fp);
 }
 /*=======================================
@@ -267,7 +267,7 @@ edit_record (NODE root1, STRING idedt, INT letr, STRING redt, STRING redtopt
 	, BOOLEAN (*val)(NODE, STRING *, NODE)
 	, STRING cfrm, void (*todbase)(NODE), STRING gdmsg)
 {
-	TRANTABLE tti = tran_tables[MEDIN];
+	TRANMAPPING ttmi = get_tranmapping(MEDIN);
 	STRING msg, key;
 	BOOLEAN emp;
 	NODE root0=0, root2=0;
@@ -291,7 +291,7 @@ edit_record (NODE root1, STRING idedt, INT letr, STRING redt, STRING redtopt
 
 	do_edit();
 	if (readonly) {
-		root2 = file_to_node(editfile, tti, &msg, &emp);
+		root2 = file_to_node(editfile, ttmi, &msg, &emp);
 		if (!equal_tree(root1, root2))
 			message(_(qSronlye));
 		free_nodes(root2);
@@ -300,7 +300,7 @@ edit_record (NODE root1, STRING idedt, INT letr, STRING redt, STRING redtopt
 
 	while (TRUE) {
 		INT cnt;
-		root2 = file_to_node(editfile, tti, &msg, &emp);
+		root2 = file_to_node(editfile, ttmi, &msg, &emp);
 		if (!root2) {
 			if (ask_yes_or_no_msg(msg, redt)) {
 				do_edit();

@@ -39,7 +39,7 @@ edit_mapping (INT ttnum)
 
 	unlink(editfile);
 
-	if (tran_tables[ttnum]) {
+	if (get_trantable(ttnum)) {
 		if (!save_tt_to_file(ttnum, editfile)) {
 			msg_error(_(qSdataerr));
 			return FALSE;
@@ -94,9 +94,7 @@ load_new_tt (STRING filepath, INT ttnum)
 		return FALSE;
 	}
 	/* change from old one to new one */
-	if (tran_tables[ttnum])
-		remove_trantable(tran_tables[ttnum]);
-	tran_tables[ttnum] = tt;
+	set_trantable(ttnum, tt);
 	/* store new one in permanent record in database */
 	store_text_file_to_db(map_keys[ttnum], filepath, transfnc);
 	return TRUE;

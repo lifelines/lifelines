@@ -477,8 +477,6 @@ update_useropts (void)
  *  dblist:     [OUT] list of database paths found
  *  dbdesclist: [OUT] list of descriptions of databases found
  *  num:        [OUT] # dbs found (length of returned list)
- * TODO: put #elements into LIST objects, & we don't have
- * to pass this silly count around - Perry, 2002.06.05
  *================================================*/
 INT
 get_dblist (STRING path, LIST * dblist, LIST * dbdesclist)
@@ -502,6 +500,7 @@ get_dblist (STRING path, LIST * dblist, LIST * dbdesclist)
 	FORLIST((*dblist), el)
 		++num;
 	ENDLIST
+	ASSERT(num==llen(*dblist)); /* TODO: use llen directly & dispense with counting loop */
 	return num;
 }
 /*==================================================

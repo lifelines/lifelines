@@ -265,7 +265,7 @@ PVALUE __name (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	NODE name, indi = eval_indi(arg, stab, eflg, NULL);
 	BOOLEAN caps = TRUE;
 	PVALUE val;
-	TRANTABLE ttr = NULL; /* do not translate until output time */
+	TRANMAPPING ttmr = NULL; /* do not translate until output time */
 	if (*eflg) {
 		prog_var_error(node, stab, arg, NULL, nonindx, "name", "1");
 		return NULL;
@@ -289,7 +289,7 @@ PVALUE __name (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return create_pvalue_from_string(0);
 	}
 	return create_pvalue_from_string(
-		manip_name(nval(name), ttr, caps, TRUE, 68));
+		manip_name(nval(name), ttmr, caps, TRUE, 68));
 }
 /*==================================================+
  * __fullname -- Process person's name
@@ -304,7 +304,7 @@ __fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	BOOLEAN caps;
 	BOOLEAN myreg;
 	INT len;
-	TRANTABLE ttr = NULL; /* do not translate until output time */
+	TRANMAPPING ttmr = NULL; /* do not translate until output time */
 
 	indi = eval_indi(arg, stab, eflg, NULL);
 	if (*eflg || !indi) {
@@ -342,7 +342,7 @@ __fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return create_pvalue_from_string(0);
 	}
 	return create_pvalue_from_string(
-	    manip_name(nval(name), ttr, caps, myreg, len));
+	    manip_name(nval(name), ttmr, caps, myreg, len));
 }
 /*==================================+
  * __surname -- Find person's surname using new getasurname() routine.
@@ -355,7 +355,7 @@ __surname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	NODE name, indi = eval_indi(arg, stab, eflg, NULL);
 	STRING str;
 	static char scratch[MAXGEDNAMELEN+1];
-	TRANTABLE ttr = NULL; /* do not translate until output time */
+	TRANMAPPING ttmr = NULL; /* do not translate until output time */
 	if (*eflg) {
 		prog_var_error(node, stab, arg, NULL, nonvar1, "surname");
 		return NULL;
@@ -370,7 +370,7 @@ __surname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return create_pvalue_from_string(0);
 	}
 	str = getasurname(nval(name));
-	translate_string(ttr, str, scratch, ARRSIZE(scratch));
+	translate_string(ttmr, str, scratch, ARRSIZE(scratch));
 	return create_pvalue_from_string(scratch);
 }
 /*========================================+
@@ -427,7 +427,7 @@ __givens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	NODE name, indi = eval_indi(iargs(node), stab, eflg, NULL);
 	STRING str;
 	static char scratch[MAXGEDNAMELEN+1];
-	TRANTABLE ttr = NULL; /* do not translate until output time */
+	TRANMAPPING ttmr = NULL; /* do not translate until output time */
 	if (*eflg) {
 		prog_error(node, _("1st arg to givens must be a person"));
 		return NULL;
@@ -442,7 +442,7 @@ __givens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return create_pvalue_from_string(0);
 	}
 	str = givens(nval(name));
-	translate_string(ttr, str, scratch, ARRSIZE(scratch));
+	translate_string(ttmr, str, scratch, ARRSIZE(scratch));
 	return create_pvalue_from_string(scratch);
 }
 /*===============================+
@@ -700,7 +700,7 @@ __long (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE arg = iargs(node);
 	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
 	NODE even;
-	TRANTABLE ttr = NULL; /* do not translate until output time */
+	TRANMAPPING ttmr = NULL; /* do not translate until output time */
 	STRING str;
 	if (*eflg) {
 		prog_var_error(node, stab, arg, val, nonnod1, "long");
@@ -712,7 +712,7 @@ __long (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	/* if we were cleverer, we wouldn't call this every time */
 	init_rpt_reformat();
 
-	str = event_to_string(even, ttr, &rpt_long_rfmt);
+	str = event_to_string(even, ttmr, &rpt_long_rfmt);
 	return create_pvalue_from_string(str);
 }
 /*=====================================+
@@ -726,7 +726,7 @@ __short (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
 	NODE even;
 	/* RFMT rfmt = NULL; */ /* currently no reformatting for reports */
-	TRANTABLE ttr = NULL; /* do not translate until output time */
+	TRANMAPPING ttmr = NULL; /* do not translate until output time */
 	STRING str;
 	if (*eflg) {
 		prog_var_error(node, stab, arg, val, nonnod1, "short");
@@ -738,7 +738,7 @@ __short (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	/* if we were cleverer, we wouldn't call this every time */
 	init_rpt_reformat();
 
-	str = event_to_string(even, ttr, &rpt_shrt_rfmt);
+	str = event_to_string(even, ttmr, &rpt_shrt_rfmt);
 	return create_pvalue_from_string(str);
 }
 /*===============================+
@@ -2396,14 +2396,14 @@ PVALUE
 __date (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE line;
-	TRANTABLE ttr = NULL; /* do not translate until output time */
+	TRANMAPPING ttmr = NULL; /* do not translate until output time */
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
 	if (*eflg) {
 		prog_error(node, nonnod1, "date");
 		return NULL;
 	}
 	line = (NODE) pvalue(val);
-	return create_pvalue_from_string(event_to_date(line, ttr, FALSE));
+	return create_pvalue_from_string(event_to_date(line, ttmr, FALSE));
 }
 /*=====================================================+
  * normalize_year -- Modify year before returning to report

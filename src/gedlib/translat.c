@@ -31,7 +31,10 @@
 
 #include "llstdlib.h"
 #ifdef HAVE_LOCALE_H
-#include <locale.h>
+# include <locale.h>
+#endif
+#if HAVE_ICONV
+# include <iconv.h>
 #endif
 #include "translat.h"
 #include "liflines.h"
@@ -65,6 +68,7 @@ static struct codeset_name
 static XNODE create_xnode(XNODE, INT, STRING);
 static void customlocale(STRING prefix);
 static STRING get_current_locale(INT category);
+static void iconv_trans(TRANMAPPING ttm, CNSTRING in, bfptr bfs);
 static BOOLEAN llsetenv(STRING name, STRING value);
 static STRING setmsgs(STRING localename);
 static void show_xnode(XNODE node);
@@ -191,11 +195,11 @@ remove_xnodes (XNODE node)
  * len:   address of space left in destination (will be decremented)
  *=================================================*/
 void
-translate_catn (TRANTABLE tt, STRING * pdest, CNSTRING src, INT * len)
+translate_catn (TRANMAPPING ttm, STRING * pdest, CNSTRING src, INT * len)
 {
 	INT added;
 	if (*len > 1)
-		translate_string(tt, src, *pdest, *len);
+		translate_string(ttm, src, *pdest, *len);
 	else
 		(*pdest)[0] = 0; /* to be safe */
 	added = strlen(*pdest);
@@ -260,22 +264,35 @@ translate_match (TRANTABLE tt, CNSTRING in, CNSTRING * out)
 }
 /*===================================================
  * translate_string_to_buf -- Translate string via TRANTABLE
- *  tt:    [in] tran table
- *  in:    [in] in string
+ *  ttm: [IN]  tranmapping to apply
+ *  in:  [IN]  string to translate
  * returns dynamic buffer (bfptr type - see buf.h)
  * Created: 2001/07/19 (Perry Rapp)
  * Copied from translate_string, except this version
  * uses dynamic buffer, so it can expand if necessary
  *=================================================*/
 void
-translate_string_to_buf (TRANTABLE tt, CNSTRING in, bfptr bfs)
+translate_string_to_buf (TRANMAPPING ttm, CNSTRING in, bfptr bfs)
 {
 	CNSTRING p, q;
-	bfReserve(bfs, (int)(strlen(in)*1.3));
+	TRANTABLE tt=0;
+	bfReserve(bfs, (int)(strlen(in)*1.3+2));
 	if (!in) {
 		bfCpy(bfs, NULL);
 		return;
 	}
+	if (!ttm) {
+		bfCpy(bfs, in);
+		return;
+	}
+#if HAVE_ICONV
+	if (ttm->iconv_src && ttm->iconv_dest) {
+		iconv_trans(ttm, in, bfs);
+		/* TODO: need to decide how to integrate simultaneous iconv & custom transl. */
+		return;
+	}
+#endif
+	tt = get_trantable_from_tranmapping(ttm);
 	if (!tt) {
 		bfCpy(bfs, in);
 		return;
@@ -283,6 +300,7 @@ translate_string_to_buf (TRANTABLE tt, CNSTRING in, bfptr bfs)
 	p = q = in;
 	while (*p) {
 		CNSTRING tmp;
+		TRANTABLE tt = get_trantable_from_tranmapping(ttm);
 		INT len = translate_match(tt, p, &tmp);
 		if (len) {
 			p += len;
@@ -295,16 +313,49 @@ translate_string_to_buf (TRANTABLE tt, CNSTRING in, bfptr bfs)
 	return;
 }
 /*===================================================
- * translate_string -- Translate string via TRANTABLE
- *  tt:    [in] tran table
- *  in:    [in] in string
- *  out:   [out] string
- *  max:   [out] max len of out string
+ * iconv_trans -- Translate string via iconv
+ *  ttm:  [IN]   transmapping
+ *  in:   [IN]   string to translate
+ *  bfs:  [I/O]  output buffer
+ * Only called if HAVE_ICONV
+ *=================================================*/
+#if HAVE_ICONV
+static void
+iconv_trans (TRANMAPPING ttm, CNSTRING in, bfptr bfs)
+{
+	/* TODO: Will have to modify this to use with iconv DLL */
+	iconv_t ict = iconv_open(ttm->iconv_src, ttm->iconv_dest);
+	CNSTRING inptr = in;
+	STRING outptr=bfStr(bfs);
+	size_t inleft=strlen(in), outleft=bfs->size-1, cvted=0;
+cvting:
+	cvted = iconv (ict, &inptr, &inleft, &outptr, &outleft);
+	if (cvted == -1) {
+		if (!outleft) {
+			bfReserveExtra(bfs, (int)(inleft * 1.3+2));
+			goto cvting;
+		} else {
+			/* invalid multibyte sequence, but we don't know how long, so advance
+			one byte & retry */
+			++inptr;
+			goto cvting;
+		}
+	}
+	*outptr=0; /* iconv doesn't zero terminate */
+	iconv_close(ict);
+}
+#endif /* HAVE_ICONV */
+/*===================================================
+ * translate_string -- Translate string via TRANMAPPING
+ *  ttm:   [IN]  tranmapping
+ *  in:    [IN]  in string
+ *  out:   [OUT] string
+ *  max:   [OUT] max len of out string
  * Output string is limited to max length via use of
  * add_char & add_string.
  *=================================================*/
 void
-translate_string (TRANTABLE tt, CNSTRING in, STRING out, INT max)
+translate_string (TRANMAPPING ttm, CNSTRING in, STRING out, INT max)
 {
 	bfptr bfs=0;
 	if (!in || !in[0]) {
@@ -312,7 +363,7 @@ translate_string (TRANTABLE tt, CNSTRING in, STRING out, INT max)
 		return;
 	}
 	bfs = bfNew((int)(strlen(in)*1.3));
-	translate_string_to_buf(tt, in, bfs);
+	translate_string_to_buf(ttm, in, bfs);
 	strncpy(out, bfStr(bfs), max-1);
 	out[max-1]=0;
 	bfDelete(bfs);
@@ -331,7 +382,7 @@ translate_string (TRANTABLE tt, CNSTRING in, STRING out, INT max)
  * NB: If no translation table, entire string is always written
  *========================================================*/
 BOOLEAN
-translate_write(TRANTABLE tt, STRING in, INT *lenp
+translate_write(TRANMAPPING ttm, STRING in, INT *lenp
 	, FILE *ofp, BOOLEAN last)
 {
 	char intmp[MAXLINELEN+2];
@@ -340,7 +391,7 @@ translate_write(TRANTABLE tt, STRING in, INT *lenp
 	char *bp;
 	int i,j;
 
-	if(tt == NULL) {
+	if(ttm == NULL) {
 	    ASSERT(fwrite(in, *lenp, 1, ofp) == 1);
 	    *lenp = 0;
 	    return TRUE;
@@ -374,7 +425,7 @@ translate_write(TRANTABLE tt, STRING in, INT *lenp
 			return(TRUE);
 		}
 		/* translate & write out current line */
-		translate_string(tt, intmp, out, MAXLINELEN+2);
+		translate_string(ttm, intmp, out, MAXLINELEN+2);
 		ASSERT(fwrite(out, strlen(out), 1, ofp) == 1);
 	}
 	*lenp = 0;
@@ -473,9 +524,8 @@ show_xnode (XNODE node)
 BOOLEAN
 custom_sort (char *str1, char *str2, INT * rtn)
 {
-	TRANTABLE tts = tran_tables[MSORT];
-	TRANTABLE ttc = tran_tables[MCHAR];
-	/* TRANTABLE ttp = tran_tables[MPREF]; */
+	TRANTABLE tts = get_trantable(MSORT);
+	TRANTABLE ttc = get_trantable(MCHAR);
 	CNSTRING rep1, rep2;
 	STRING ptr1=str1, ptr2=str2;
 	INT len1, len2;

@@ -50,7 +50,6 @@ extern STRING qSidsadd, qSidsinf, qSkchild, qSiscinf, qSnotopp, qSidsps1, qSidsp
 extern STRING qSnosex,  qShashsb, qShaswif, qSidchld, qSgdfadd, qScfcadd, qSiredit;
 extern STRING qScfpadd, qScfsadd, qSgdpadd, qSgdcadd, qSgdsadd, qSronlya, qSronlye;
 
-extern TRANTABLE tran_tables[];
 
 /*==========================================================
  * get_unresolved_ref_error -- get string for unresolved reference(s)
@@ -75,7 +74,7 @@ add_indi_by_edit (void)
 	NODE indi=0;
 	STRING str, msg;
 	BOOLEAN emp;
-	TRANTABLE tti = tran_tables[MEDIN];
+	TRANMAPPING ttmi = get_tranmapping(MEDIN);
 
 	if (readonly) {
 		message(_(qSronlya));
@@ -100,7 +99,7 @@ add_indi_by_edit (void)
 	do_edit();
 	while (TRUE) {
 		INT cnt;
-		indi0 = file_to_record(editfile, tti, &msg, &emp);
+		indi0 = file_to_record(editfile, ttmi, &msg, &emp);
 		if (!indi0) {
 			if (ask_yes_or_no_msg(msg, _(qSiredit))) {
 				do_edit();
@@ -152,7 +151,7 @@ add_new_indi (RECORD indi0)
 	NODE name, refn, sex, body, dumb, node;
 	STRING key;
 	INT keynum;
-	TRANTABLE ttd = tran_tables[MINDS];
+	TRANMAPPING ttmd = get_tranmapping(MINDS);
 	NODE indi = nztop(indi0);
 
 	split_indi_old(indi, &name, &refn, &sex, &body, &dumb, &dumb);
@@ -167,7 +166,7 @@ add_new_indi (RECORD indi0)
 	resolve_refn_links(indi);
 	indi_to_dbase(indi);
 	indi_to_cache(indi0);
-	msg_status(_(qSgdpadd), indi_to_name(indi, ttd, 35));
+	msg_status(_(qSgdpadd), indi_to_name(indi, ttmd, 35));
 	return indi0;
 }
 /*================================================================
@@ -231,7 +230,7 @@ NODE
 prompt_add_child (NODE child, NODE fam)
 {
 	INT i;
-	TRANTABLE ttd = tran_tables[MINDS];
+	TRANMAPPING ttmd = get_tranmapping(MINDS);
 
 	if (readonly) {
 		message(_(qSronlye));
@@ -254,7 +253,7 @@ prompt_add_child (NODE child, NODE fam)
 /* Add FAMC node to child */
 
 	add_child_to_fam(child, fam, i);
-	msg_status(_(qSgdcadd), indi_to_name(child, ttd, 35));
+	msg_status(_(qSgdcadd), indi_to_name(child, ttmd, 35));
 	return fam;
 }
 
@@ -382,7 +381,7 @@ add_spouse_to_fam (NODE spouse, NODE fam, INT sex)
 {
 /* Add HUSB or WIFE node to family */
 	NODE husb, wife, chil, rest, fams, prev, fref, this, new;
-	TRANTABLE ttd = tran_tables[MINDS];
+	TRANMAPPING ttmd = get_tranmapping(MINDS);
 
 	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
 	if (sex == SEX_MALE) {
@@ -430,7 +429,7 @@ add_spouse_to_fam (NODE spouse, NODE fam, INT sex)
 	resolve_refn_links(fam);
 	indi_to_dbase(spouse);
 	fam_to_dbase(fam);
-	msg_status(_(qSgdsadd), indi_to_name(spouse, ttd, 35));
+	msg_status(_(qSgdsadd), indi_to_name(spouse, ttmd, 35));
 }
 /*=========================================
  * add_members_to_family -- Add members to new family
@@ -496,7 +495,8 @@ add_family (NODE spouse1,
 	INT sex2 = 0;
 	NODE fam1, fam2=0, refn, husb, wife, chil, body;
 	NODE node;
-	TRANTABLE tti = tran_tables[MEDIN], tto = tran_tables[MINED];
+	TRANMAPPING ttmi = get_tranmapping(MEDIN);
+	TRANMAPPING ttmo = get_tranmapping(MINED);
 	STRING xref, msg, key, str;
 	BOOLEAN emp;
 	FILE *fp;
@@ -558,15 +558,15 @@ editfam:
 /* Prepare file for user to edit */
 
 	ASSERT(fp = fopen(editfile, LLWRITETEXT));
-	write_nodes(0, fp, tto, fam1, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, husb, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, wife, TRUE, TRUE, TRUE);
+	write_nodes(0, fp, ttmo, fam1, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, husb, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, wife, TRUE, TRUE, TRUE);
 	/* prefer user option in db */
 	if ((str = getoptstr("FAMRECBODY", NULL)))
 		fprintf(fp, "%s\n", str);
 	else /* default */
 		fprintf(fp, "1 MARR\n  2 DATE\n  2 PLAC\n  2 SOUR\n");
-	write_nodes(1, fp, tto, chil, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, chil, TRUE, TRUE, TRUE);
 	fclose(fp);
 	join_fam(fam1, NULL, husb, wife, chil, NULL);
 
@@ -575,7 +575,7 @@ editfam:
 	do_edit();
 	while (TRUE) {
 		INT cnt;
-		fam2 = file_to_node(editfile, tti, &msg, &emp);
+		fam2 = file_to_node(editfile, ttmi, &msg, &emp);
 		if (!fam2) {
 			if (ask_yes_or_no_msg(msg, _(qSfredit))) {
 				do_edit();
@@ -655,7 +655,8 @@ add_family_to_db (NODE spouse1, NODE spouse2, NODE child)
 	INT sex2 = spouse1 ? SEX(spouse2) : SEX_UNKNOWN;
 	NODE fam1, fam2, refn, husb, wife, chil, body;
 	NODE node;
-	TRANTABLE tti = tran_tables[MEDIN], tto = tran_tables[MINED];
+	TRANMAPPING ttmi = get_tranmapping(MEDIN);
+	TRANMAPPING ttmo = get_tranmapping(MINED);
 	STRING xref, msg, key;
 	BOOLEAN emp;
 	FILE *fp;

@@ -274,7 +274,7 @@ pick_create_new_family (NODE indi, NODE save, STRING * addstrings)
 {
 	INT i;
 	NODE node=0;
-	TRANTABLE ttd = tran_tables[MINDS];
+	TRANMAPPING ttmd = get_tranmapping(MINDS);
 	char scratch[100];
 	if (readonly) {
 		message(_(qSronlya));
@@ -286,11 +286,11 @@ pick_create_new_family (NODE indi, NODE save, STRING * addstrings)
 	else if (save) {
 		if (keyflag)
 			sprintf(scratch, "%s%s (%s)", _(qSissnew),
-				    indi_to_name(save, ttd, 55),
+				    indi_to_name(save, ttmd, 55),
 				 rmvat(nxref(save))+1);
 		else
 			sprintf(scratch, "%s%s", _(qSissnew),
-				 indi_to_name(save, ttd, 55));
+				 indi_to_name(save, ttmd, 55));
 		if (ask_yes_or_no(scratch))
 			node = add_family(indi, save, NULL);
 		else
@@ -814,7 +814,7 @@ prompt_add_spouse_check_save (NODE fam, NODE save)
 {
 	NODE fref, husb, wife, chil, rest;
 	char scratch[100];
-	TRANTABLE ttd = tran_tables[MINDS];
+	TRANMAPPING ttmd = get_tranmapping(MINDS);
 	if (readonly) {
 		message(_(qSronlye));
 		return;
@@ -830,11 +830,11 @@ prompt_add_spouse_check_save (NODE fam, NODE save)
 	if (save) {
 		if (keyflag)
 			sprintf(scratch, "%s%s (%s)", _(qSissnew),
-				 indi_to_name(save, ttd, 56),
+				 indi_to_name(save, ttmd, 56),
 				 rmvat(nxref(save))+1);
 		else
 			sprintf(scratch, "%s%s", _(qSissnew),
-				 indi_to_name(save, ttd, 56));
+				 indi_to_name(save, ttmd, 56));
 		if (ask_yes_or_no(scratch)) {
 			prompt_add_spouse(save, fam, FALSE);
 			return;
@@ -853,7 +853,7 @@ static void
 prompt_add_child_check_save (NODE fam, NODE save)
 {
 	char scratch[100];
-	TRANTABLE ttd = tran_tables[MINDS];
+	TRANMAPPING ttmd = get_tranmapping(MINDS);
 	if (readonly) {
 		message(_(qSronlye));
 		return;
@@ -861,11 +861,11 @@ prompt_add_child_check_save (NODE fam, NODE save)
 	if (save) {
 		if (keyflag)
 			sprintf(scratch, "%s%s (%s)", _(qSiscnew),
-				 indi_to_name(save, ttd, 56),
+				 indi_to_name(save, ttmd, 56),
 				 rmvat(nxref(save))+1);
 		else
 			sprintf(scratch, "%s%s", _(qSiscnew),
-				 indi_to_name(save, ttd, 56));
+				 indi_to_name(save, ttmd, 56));
 		if (ask_yes_or_no(scratch)) {
 			prompt_add_child(save, fam);
 			return;

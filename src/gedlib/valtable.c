@@ -62,14 +62,14 @@ init_valtab_from_rec (STRING key, TABLE tab, INT sep, STRING *pmsg)
 }
 /*====================================================
  * init_valtab_from_file -- Init value table from file
- *  fname:   [in] file holding key/values strings
- *  tab:     [in,out] hash table for key/value string pairs
- *  tt:      [in] translation table to use
- *  sep:     [in] separator char between key & value
- *  pmsg:    [out] error message (set if returns FALSE)
+ *  fname:   [IN]  file holding key/values strings
+ *  tab:     [I/O] hash table for key/value string pairs
+ *  ttm:     [IN]  translation table to use
+ *  sep:     [IN]  separator char between key & value
+ *  pmsg:    [OUT] error message (set if returns FALSE)
  *==================================================*/
 BOOLEAN
-init_valtab_from_file (STRING fname, TABLE tab, TRANTABLE tt, INT sep, STRING *pmsg)
+init_valtab_from_file (STRING fname, TABLE tab, TRANMAPPING ttm, INT sep, STRING *pmsg)
 {
 	FILE *fp;
 	struct stat buf;
@@ -91,7 +91,7 @@ init_valtab_from_file (STRING fname, TABLE tab, TRANTABLE tt, INT sep, STRING *p
 	/* may not read full buffer on Windows due to CR/LF translation */
 	ASSERT(siz == buf.st_size || feof(fp));
 	fclose(fp);
-	translate_string_to_buf(tt, str, bfs);
+	translate_string_to_buf(ttm, str, bfs);
 	stdfree(str); /* done with original record - we use translated record */
  	rc = init_valtab_from_string(bfStr(bfs), tab, sep, pmsg);
 	bfDelete(bfs);

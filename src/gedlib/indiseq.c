@@ -1748,9 +1748,9 @@ INDISEQ
 str_to_indiseq (STRING name, char ctype)
 {
 	INDISEQ seq;
-	TRANTABLE ttg = tran_tables[MDSIN];
+	TRANMAPPING ttmg = get_tranmapping(MDSIN);
 	char intname[100];
-	translate_string(ttg, name, intname, sizeof(intname)-1);
+	translate_string(ttmg, name, intname, sizeof(intname)-1);
 	seq = find_named_seq(intname);
 	if (!seq) seq = key_to_indiseq(intname, ctype);
 	if (!seq) seq = refn_to_indiseq(intname, ctype, NAMESORT);

@@ -78,7 +78,7 @@ static NODE alloc_node(void);
 static void assign_record(RECORD rec, char ntype, INT keynum);
 static BOOLEAN buffer_to_line (STRING p, INT *plev, STRING *pxref
 	, STRING *ptag, STRING *pval, STRING *pmsg);
-static NODE do_first_fp_to_node(FILE *fp, BOOLEAN list, TRANTABLE tt,
+static NODE do_first_fp_to_node(FILE *fp, BOOLEAN list, TRANMAPPING tt,
 	STRING *pmsg,  BOOLEAN *peof);
 static STRING fixup (STRING str);
 static STRING fixtag (STRING tag);
@@ -88,7 +88,7 @@ static BOOLEAN string_to_line(STRING *ps, INT *plev, STRING *pxref,
 	STRING *ptag, STRING *pval, STRING *pmsg);
 static STRING swrite_node(INT levl, NODE node, STRING p);
 static STRING swrite_nodes(INT levl, NODE node, STRING p);
-static void write_node(INT levl, FILE *fp, TRANTABLE tt,
+static void write_node(INT levl, FILE *fp, TRANMAPPING ttm,
 	NODE node, BOOLEAN indent);
 
 /*********************************************
@@ -329,7 +329,7 @@ free_nodes (NODE node)
  *========================================*/
 INT
 file_to_line (FILE *fp,
-              TRANTABLE tt,
+              TRANMAPPING ttm,
               INT *plev,
               STRING *pxref,
               STRING *ptag,
@@ -343,8 +343,8 @@ file_to_line (FILE *fp,
 	while (TRUE) {
 		if (!(p = fgets(in, MAXLINELEN+2, fp))) return DONE;
 		flineno++;
-		if (tt) {
-			translate_string(tt, in, out, MAXLINELEN+2);
+		if (ttm) {
+			translate_string(ttm, in, out, MAXLINELEN+2);
 			p = out;
 		}
 		if (!allwhite(p)) break;
@@ -473,15 +473,15 @@ gettag:
 /*=================================================
  * file_to_record -- Convert GEDCOM file to in-memory record
  *
- * STRING fname:  [in] name of file that holds GEDCOM record
- * TRANTABLE tt:  [in] character translation table
- * STRING *pmsg:  [out] possible error message
- * BOOLEAN *pemp: [out] set true if file is empty
+ * fname:[IN]  name of file that holds GEDCOM record
+ * ttm:  [IN]  character translation table
+ * pmsg: [OUT] possible error message
+ * pemp: [OUT] set true if file is empty
  *===============================================*/
 RECORD
-file_to_record (STRING fname, TRANTABLE tt, STRING *pmsg, BOOLEAN *pemp)
+file_to_record (STRING fname, TRANMAPPING ttm, STRING *pmsg, BOOLEAN *pemp)
 {
-	NODE node = file_to_node(fname, tt, pmsg, pemp);
+	NODE node = file_to_node(fname, ttm, pmsg, pemp);
 	RECORD rec = 0;
 	if (node) {
 		rec = create_record(node);
@@ -491,13 +491,13 @@ file_to_record (STRING fname, TRANTABLE tt, STRING *pmsg, BOOLEAN *pemp)
 /*=================================================
  * file_to_node -- Convert GEDCOM file to NODE tree
  *
- * STRING fname:  [in] name of file that holds GEDCOM record
- * TRANTABLE tt:  [in] character translation table
- * STRING *pmsg:  [out] possible error message
- * BOOLEAN *pemp: [out] set true if file is empty
+ * fname: [IN]  name of file that holds GEDCOM record
+ * ttm:   [IN]  character translation table
+ * pmsg:  [OUT] possible error message
+ * pemp:  [OUT] set true if file is empty
  *===============================================*/
 NODE
-file_to_node (STRING fname, TRANTABLE tt, STRING *pmsg, BOOLEAN *pemp)
+file_to_node (STRING fname, TRANMAPPING ttm, STRING *pmsg, BOOLEAN *pemp)
 {
 	FILE *fp;
 	NODE node;
@@ -509,7 +509,7 @@ file_to_node (STRING fname, TRANTABLE tt, STRING *pmsg, BOOLEAN *pemp)
 		*pmsg = scratch;
 		return NULL;
 	}
-	node = convert_first_fp_to_node(fp, TRUE, tt, pmsg, pemp);
+	node = convert_first_fp_to_node(fp, TRUE, ttm, pmsg, pemp);
 	fclose(fp);
 	return node;
 }
@@ -523,21 +523,21 @@ static BOOLEAN ateof = FALSE;
 /*================================================================
  * convert_first_fp_to_node -- Convert first GEDCOM record in file to tree
  *
- * FILE *fp:      [in] file that holds GEDCOM record/s
- * BOOLEAN list:  [in] can be list at level 0?
- * TRANTABLE tt:  [in] character translation table
- * STRING *pmsg:  [out] possible error message
- * BOOLEAN *peof: [out] set true if file is at end of file
+ * fp:   [IN]  file that holds GEDCOM record/s
+ * list: [IN]  can be list at level 0?
+ * ttm:  [IN]  character translation table
+ * pmsg: [OUT] possible error message
+ * peof: [OUT] set true if file is at end of file
  *==============================================================*/
 NODE
-convert_first_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
+convert_first_fp_to_node (FILE *fp, BOOLEAN list, TRANMAPPING ttm,
 	STRING *pmsg,  BOOLEAN *peof)
 {
 	if (!check_file_for_unicode(fp)) {
 		*pmsg = _(qSunsupuni);
 		return NULL;
 	}
-	return do_first_fp_to_node(fp, list, tt, pmsg, peof);
+	return do_first_fp_to_node(fp, list, ttm, pmsg, peof);
 }
 /*================================================================
  * do_first_fp_to_node -- Convert first GEDCOM record in file to tree
@@ -550,7 +550,7 @@ convert_first_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
  * Called after unicode header processed
  *==============================================================*/
 static NODE
-do_first_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
+do_first_fp_to_node (FILE *fp, BOOLEAN list, TRANMAPPING ttm,
 	STRING *pmsg,  BOOLEAN *peof)
 {
 	INT rc;
@@ -558,7 +558,7 @@ do_first_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
 	flineno = 0;
 	*pmsg = NULL;
 	*peof = FALSE;
-	rc = file_to_line(fp, tt, &lev, &xref, &tag, &val, pmsg);
+	rc = file_to_line(fp, ttm, &lev, &xref, &tag, &val, pmsg);
 	if (rc == DONE) {
 		*peof = ateof = TRUE;
 		*pmsg = _(qSfileof);
@@ -567,36 +567,36 @@ do_first_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
 		return NULL;
 	lev0 = lev;
 	lahead = TRUE;
-	return next_fp_to_node(fp, list, tt, pmsg, peof);
+	return next_fp_to_node(fp, list, ttm, pmsg, peof);
 }
 /*==============================================================
  * next_fp_to_record -- Convert next GEDCOM record in file to tree
  *
- * FILE *fp:      [in] file that holds GEDCOM record/s
- * BOOLEAN list:  [in] can be list at level 0?
- * TRANTABLE tt:  [in] character translation table
- * STRING *pmsg:  [out] possible error message
- * BOOLEAN *peof: [out] set true if file is at end of file
+ *  fp:   [IN]  file that holds GEDCOM record/s
+ *  list: [IN]  can be list at level 0?
+ *  ttm:  [IN]  character translation table
+ *  pmsg: [OUT] possible error message
+ *  peof: [OUT] set true if file is at end of file
  *============================================================*/
 RECORD
-next_fp_to_record (FILE *fp, BOOLEAN list, TRANTABLE tt,
+next_fp_to_record (FILE *fp, BOOLEAN list, TRANMAPPING ttm,
 	STRING *pmsg, BOOLEAN *peof)
 {
-	NODE node = next_fp_to_node(fp, list, tt, pmsg, peof);
+	NODE node = next_fp_to_node(fp, list, ttm, pmsg, peof);
 	return create_record(node);
 }
 /*==============================================================
  * next_fp_to_node -- Convert next GEDCOM record in file to tree
  *
- * FILE *fp:      [in] file that holds GEDCOM record/s
- * BOOLEAN list:  [in] can be list at level 0?
- * TRANTABLE tt:  [in] character translation table
- * STRING *pmsg:  [out] possible error message
- * BOOLEAN *peof: [out] set true if file is at end of file
- *  callers should probably be converted to calling next_fp_to_record
+ *  fp:   [IN]  file that holds GEDCOM record/s
+ *  list: [IN]  can be list at level 0?
+ *  ttm:  [IN]  character translation table
+ *  pmsg: [OUT] possible error message
+ *  peof: [OUT] set true if file is at end of file
+ * callers should probably be converted to calling next_fp_to_record
  *============================================================*/
 NODE
-next_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
+next_fp_to_node (FILE *fp, BOOLEAN list, TRANMAPPING ttm,
 	STRING *pmsg, BOOLEAN *peof)
 {
 	INT curlev, bcode, rc;
@@ -610,7 +610,7 @@ next_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
 		return NULL;
 	}
 	if (!lahead) {
-		rc = file_to_line(fp, tt, &lev, &xref, &tag, &val, pmsg);
+		rc = file_to_line(fp, ttm, &lev, &xref, &tag, &val, pmsg);
 		if (rc == DONE) {
 			ateof = *peof = TRUE;
 			return NULL;
@@ -625,7 +625,7 @@ next_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
 	}
 	root = curnode = create_node(xref, tag, val, NULL);
 	bcode = OKAY;
-	rc = file_to_line(fp, tt, &lev, &xref, &tag, &val, pmsg);
+	rc = file_to_line(fp, ttm, &lev, &xref, &tag, &val, pmsg);
 	while (rc == OKAY) {
 		if (lev == curlev) {
 			if (lev == lev0 && !list) {
@@ -664,7 +664,7 @@ next_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
 			bcode = ERROR;
 			break;
 		}
-		rc = file_to_line(fp, tt, &lev, &xref, &tag, &val, pmsg);
+		rc = file_to_line(fp, ttm, &lev, &xref, &tag, &val, pmsg);
 	}
 	if (bcode == DONE) return root;
 	if (bcode == ERROR || rc == ERROR) {
@@ -816,7 +816,7 @@ node_to_file (INT levl,       /* top level */
  * BOOLEAN indent: [in]indent?
  *======================================*/
 static void
-write_node (INT levl, FILE *fp, TRANTABLE tt, NODE node,
+write_node (INT levl, FILE *fp, TRANMAPPING ttm, NODE node,
 	BOOLEAN indent)
 {
 	char out[MAXLINELEN+1];
@@ -830,11 +830,11 @@ write_node (INT levl, FILE *fp, TRANTABLE tt, NODE node,
 	if (nxref(node)) fprintf(fp, " %s", nxref(node));
 	fprintf(fp, " %s", ntag(node));
 	if ((p = nval(node))) {
-	    if (tt) {
-		translate_string(tt, nval(node), out, MAXLINELEN+1);
-		p = out;
-	    }
-	    fprintf(fp, " %s", p);
+		if (ttm) {
+			translate_string(ttm, nval(node), out, MAXLINELEN+1);
+			p = out;
+		}
+		fprintf(fp, " %s", p);
 	}
 	fprintf(fp, "\n");
 }
@@ -844,18 +844,18 @@ write_node (INT levl, FILE *fp, TRANTABLE tt, NODE node,
 void
 write_nodes (INT levl,       /* level */
              FILE *fp,       /* file */
-             TRANTABLE tt,   /* char map */
+             TRANMAPPING ttm,   /* char map */
              NODE node,      /* root */
              BOOLEAN indent, /* indent? */
              BOOLEAN kids,   /* output kids? */
              BOOLEAN sibs)   /* output sibs? */
 {
 	if (!node) return;
-	write_node(levl, fp, tt, node, indent);
+	write_node(levl, fp, ttm, node, indent);
 	if (kids)
-		write_nodes(levl+1, fp, tt, nchild(node), indent, TRUE, TRUE);
+		write_nodes(levl+1, fp, ttm, nchild(node), indent, TRUE, TRUE);
 	if (sibs)
-		write_nodes(levl, fp, tt, nsibling(node), indent, kids, TRUE);
+		write_nodes(levl, fp, ttm, nsibling(node), indent, kids, TRUE);
 }
 /*====================================
  * swrite_node -- Write NODE to string
@@ -1162,31 +1162,29 @@ indi_to_next_sib (NODE indi)
  * indi_to_name -- Return name of person
  *====================================*/
 STRING
-indi_to_name (NODE node, TRANTABLE tt, INT len)
+indi_to_name (NODE node, TRANMAPPING ttm, INT len)
 {
 	if (node)
 		node = find_tag(nchild(node), "NAME");
 	if (!node)
 		return _("NO NAME");
-	return manip_name(nval(node), tt, TRUE, TRUE, len);
+	return manip_name(nval(node), ttm, TRUE, TRUE, len);
 }
 /*======================================
  * indi_to_title -- Return title of person
  *====================================*/
 STRING
-indi_to_title (NODE node,
-               TRANTABLE tt,
-               INT len)
+indi_to_title (NODE node, TRANMAPPING ttm, INT len)
 {
 	if (!node) return NULL;
 	if (!(node = find_tag(nchild(node), "TITL"))) return NULL;
-	return manip_name(nval(node), tt, FALSE, TRUE, len);
+	return manip_name(nval(node), ttm, FALSE, TRUE, len);
 }
 /*======================================
  * node_to_tag -- Return a subtag of a node
  * (presumably top level, but not necessarily)
  *====================================*/
-STRING node_to_tag (NODE node, STRING tag, TRANTABLE tt, INT len)
+STRING node_to_tag (NODE node, STRING tag, TRANMAPPING ttm, INT len)
 {
 	static char scratch[MAXGEDNAMELEN+1];
 	STRING refn;
@@ -1196,22 +1194,31 @@ STRING node_to_tag (NODE node, STRING tag, TRANTABLE tt, INT len)
 	refn = nval(node);
 	if (len > (INT)sizeof(scratch)-1)
 		len = sizeof(scratch)-1;
-	translate_string(tt, refn, scratch, sizeof(scratch));
+	translate_string(ttm, refn, scratch, sizeof(scratch));
 	return scratch;
 }
 /*==============================================
  * indi_to_event -- Convert event tree to string
- *  node: [in] event subtree to search
- *  tt:   [in] translation table to apply to event strings
- *  tag:  [in] desired tag (eg, "BIRT")
- *  head: [in] header to print in output (eg, "born: ")
- *  len:  [in] max length output desired
+ *============================================*/
+STRING
+fam_to_event  (NODE node, TRANMAPPING ttm, STRING tag, STRING head
+	, INT len, RFMT rfmt)
+{
+	return indi_to_event(node, ttm, tag, head, len, rfmt);
+}
+/*==============================================
+ * indi_to_event -- Convert event tree to string
+ *  node: [IN] event subtree to search
+ *  ttm:  [IN] translation table to apply to event strings
+ *  tag:  [IN] desired tag (eg, "BIRT")
+ *  head: [IN] header to print in output (eg, "born: ")
+ *  len:  [IN] max length output desired
  * Searches node substree for desired tag
  *  returns formatted string (event_to_string) if found,
  *  else NULL
  *============================================*/
 STRING
-indi_to_event (NODE node, TRANTABLE tt, STRING tag, STRING head
+indi_to_event (NODE node, TRANMAPPING ttm, STRING tag, STRING head
 	, INT len, RFMT rfmt)
 {
 	static char scratch[200];
@@ -1222,7 +1229,7 @@ indi_to_event (NODE node, TRANTABLE tt, STRING tag, STRING head
 	if (mylen > len+1) mylen = len+1; /* incl. trailing 0 */
 	if (!node) return NULL;
 	if (!(node = find_tag(nchild(node), tag))) return NULL;
-	event = event_to_string(node, tt, rfmt);
+	event = event_to_string(node, ttm, rfmt);
 	if (!event) return NULL;
 	/* need at least room for head + 1 character + "..." or no point */
 	if ((INT)strlen(head)+4>len) return NULL;
@@ -1267,12 +1274,12 @@ event_to_date_place (NODE node, STRING * date, STRING * plac)
  * event_to_string -- Convert event to string
  * Finds DATE & PLACE nodes, and prints a string
  * representation of them.
- *  node:  [in] node tree of event to describe
- *  tt:    [in] translation table to use
- *  rfmt:  [in] reformatting info (may be NULL)
+ *  node:  [IN]  node tree of event to describe
+ *  ttm:   [IN]  translation table to use
+ *  rfmt:  [IN]  reformatting info (may be NULL)
  *=========================================*/
 STRING
-event_to_string (NODE node, TRANTABLE tt, RFMT rfmt)
+event_to_string (NODE node, TRANMAPPING ttm, RFMT rfmt)
 {
 	static char scratch1[MAXLINELEN+1];
 	static char scratch2[MAXLINELEN+1];
@@ -1293,22 +1300,22 @@ event_to_string (NODE node, TRANTABLE tt, RFMT rfmt)
 	} else {
 		return NULL;
 	}
-	translate_string(tt, scratch1, scratch2, MAXLINELEN);
+	translate_string(ttm, scratch1, scratch2, MAXLINELEN);
 	return scratch2;
 }
 /*=======================================
  * event_to_date -- Convert event to date
- *  node: [in] event node
- *  tt:   [in] translation table to apply
- *  shrt: [in] flag - use short form if set
+ *  node: [IN]  event node
+ *  ttm:  [IN]  translation table to apply
+ *  shrt: [IN]  flag - use short form if set
  *=====================================*/
 STRING
-event_to_date (NODE node, TRANTABLE tt, BOOLEAN shrt)
+event_to_date (NODE node, TRANMAPPING ttm, BOOLEAN shrt)
 {
 	static char scratch[MAXLINELEN+1];
 	if (!node) return NULL;
 	if (!(node = DATE(node))) return NULL;
-	translate_string(tt, nval(node), scratch, MAXLINELEN);
+	translate_string(ttm, nval(node), scratch, MAXLINELEN);
 	if (shrt) return shorten_date(scratch);
 	return scratch;
 }

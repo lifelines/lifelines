@@ -35,6 +35,7 @@
 
 /* Types */
 
+/* nodes that make up the tree that is a custom character translation table */
 typedef struct xnode *XNODE;
 struct xnode {
 	XNODE parent;	/* parent node */
@@ -45,18 +46,26 @@ struct xnode {
 	STRING replace;	/* translation string */
 };
 
+/* root of a custom character translation table */
 typedef struct {
 	XNODE start[256];
 	char name[20];
 	INT total;
 } *TRANTABLE;
 
+/* a translation mapping, which may have a TRANTABLE, and may have iconv info */
+typedef struct tranmapping_s {
+	/* All members either NULL or heap-alloc'd */
+	TRANTABLE trantbl;
+	STRING iconv_src;
+	STRING iconv_dest;
+} *TRANMAPPING;
+
 /* forward declaration - real declaration in bfs.h */
 struct Buffer_s;
 
 /* Variables */
 
-extern TRANTABLE tran_tables[]; /* size is NUM_TT_MAPS */
 
 /* Functions */
 
@@ -66,13 +75,17 @@ TRANTABLE create_trantable(STRING *lefts, STRING *rights, INT n, STRING name);
 BOOLEAN custom_sort(char *str1, char *str2, INT * rtn);
 INT get_codeset(INT index);
 LIST get_codesets(void);
+TRANMAPPING get_tranmapping(INT ttnum);
+TRANTABLE get_trantable(INT ttnum);
+TRANTABLE get_trantable_from_tranmapping(TRANMAPPING ttm);
 char * get_codeset_desc(INT codeset, STRING buffer, INT max);
 void remove_trantable(TRANTABLE);
 void remove_xnodes(XNODE);
-void translate_catn(TRANTABLE tt, STRING * pdest, CNSTRING src, INT * len);
-void translate_string(TRANTABLE, CNSTRING in, STRING out, INT max);
-void translate_string_to_buf(TRANTABLE tt, CNSTRING in, struct Buffer_s * bfs);
-BOOLEAN translate_write(TRANTABLE, STRING, INT*, FILE*, BOOLEAN);
+void set_trantable(INT ttnum, TRANTABLE tt);
+void translate_catn(TRANMAPPING ttm, STRING * pdest, CNSTRING src, INT * len);
+void translate_string(TRANMAPPING, CNSTRING in, STRING out, INT max);
+void translate_string_to_buf(TRANMAPPING ttm, CNSTRING in, struct Buffer_s * bfs);
+BOOLEAN translate_write(TRANMAPPING, STRING, INT*, FILE*, BOOLEAN);
 
 
 #endif /* _TRANSLAT_H */

@@ -1050,7 +1050,7 @@ node_to_cacheel (NODE node)
  *  returns static buffer
  *============================================*/
 STRING
-key_of_record (NODE node, TRANTABLE tt)
+key_of_record (NODE node, TRANMAPPING tt)
 {
 	static char buffer[128];
 	NODE refn;

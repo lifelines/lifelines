@@ -76,7 +76,8 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 	NODE this, that, prev, next, node, head;
 	NODE fam12;
 	NODE name24, refn24;
-	TRANTABLE tti = tran_tables[MEDIN], tto = tran_tables[MINED];
+	TRANMAPPING ttmi = get_tranmapping(MEDIN);
+	TRANMAPPING ttmo = get_tranmapping(MINED);
 	FILE *fp;
 	INT sx2;
 	STRING msg, key;
@@ -148,13 +149,13 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 	body3 = union_nodes(body1, body2, TRUE, TRUE);
 	famc3 = union_nodes(famc1, famc2, TRUE, TRUE);
 	fams3 = union_nodes(fams1, fams2, TRUE, TRUE);
-	write_nodes(0, fp, tto, indi3, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, name3, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, refn3, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, sex3,  TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, body3, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, famc3, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, fams3, TRUE, TRUE, TRUE);
+	write_nodes(0, fp, ttmo, indi3, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, name3, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, refn3, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, sex3,  TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, body3, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, famc3, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, fams3, TRUE, TRUE, TRUE);
 	fclose(fp);
 	join_indi(indi3, name3, refn3, sex3, body3, famc3, fams3);
 
@@ -168,7 +169,7 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 /* Have user edit merged person */
 	do_edit();
 	while (TRUE) {
-		indi4 = file_to_node(editfile, tti, &msg, &emp);
+		indi4 = file_to_node(editfile, ttmi, &msg, &emp);
 		if (!indi4 && !emp) {
 			if (ask_yes_or_no_msg(msg, _(qSiredit))) {
 				do_edit();
@@ -408,7 +409,8 @@ merge_two_fams (NODE fam1,
 	NODE fref1, fref2;
 	NODE fam3, husb3, wife3, chil3, rest3, fref3;
 	NODE fam4=0, husb4, wife4, chil4, rest4, fref4;
-	TRANTABLE tti = tran_tables[MEDIN], tto = tran_tables[MINED];
+	TRANMAPPING ttmi = get_tranmapping(MEDIN);
+	TRANMAPPING ttmo = get_tranmapping(MINED);
 	FILE *fp;
 	STRING msg;
 	BOOLEAN emp;
@@ -451,19 +453,19 @@ merge_two_fams (NODE fam1,
 	wife3 = union_nodes(wife1, wife2, TRUE, TRUE);
 	rest3 = union_nodes(rest1, rest2, TRUE, TRUE);
 	chil3 = sort_children(chil1, chil2);
-	write_nodes(0, fp, tto, fam3, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, fref3, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, husb3, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, wife3, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, rest3, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, chil3, TRUE, TRUE, TRUE);
+	write_nodes(0, fp, ttmo, fam3, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, fref3, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, husb3, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, wife3, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, rest3, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, chil3, TRUE, TRUE, TRUE);
 	fclose(fp);
 
 /* Have user edit merged family */
 	join_fam(fam3, fref3, husb3, wife3, rest3, chil3);
 	do_edit();
 	while (TRUE) {
-		fam4 = file_to_node(editfile, tti, &msg, &emp);
+		fam4 = file_to_node(editfile, ttmi, &msg, &emp);
 		if (!fam4 && !emp) {
 			if (ask_yes_or_no_msg(msg, _(qSfredit))) {
 				do_edit();

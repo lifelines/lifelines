@@ -1917,7 +1917,7 @@ msgstr ""
 
 #: gedlib/messages.c:625
 msgid "january"
-msgstr ""
+msgstr "ιανουάριος"
 
 #: gedlib/messages.c:626
 msgid "feb"
@@ -1925,7 +1925,7 @@ msgstr ""
 
 #: gedlib/messages.c:627
 msgid "february"
-msgstr ""
+msgstr "φεβρουάριος"
 
 #: gedlib/messages.c:628
 msgid "mar"
@@ -1933,7 +1933,7 @@ msgstr ""
 
 #: gedlib/messages.c:629
 msgid "march"
-msgstr ""
+msgstr "μάρτιος"
 
 #: gedlib/messages.c:630
 msgid "apr"
@@ -1941,7 +1941,7 @@ msgstr ""
 
 #: gedlib/messages.c:631
 msgid "april"
-msgstr ""
+msgstr "απρίλιος"
 
 #: gedlib/messages.c:633
 msgid "**may"
@@ -1949,7 +1949,7 @@ msgstr ""
 
 #: gedlib/messages.c:634
 msgid "may"
-msgstr ""
+msgstr "μάϊος"
 
 #: gedlib/messages.c:635
 msgid "jun"
@@ -1957,7 +1957,7 @@ msgstr ""
 
 #: gedlib/messages.c:636
 msgid "june"
-msgstr ""
+msgstr "ιούνιος"
 
 #: gedlib/messages.c:637
 msgid "jul"
@@ -1965,7 +1965,7 @@ msgstr ""
 
 #: gedlib/messages.c:638
 msgid "july"
-msgstr ""
+msgstr "ιούλιος"
 
 #: gedlib/messages.c:639
 msgid "aug"
@@ -1973,7 +1973,7 @@ msgstr ""
 
 #: gedlib/messages.c:640
 msgid "august"
-msgstr ""
+msgstr "αύγουστος"
 
 #: gedlib/messages.c:641
 msgid "sep"
@@ -1981,7 +1981,7 @@ msgstr ""
 
 #: gedlib/messages.c:642
 msgid "september"
-msgstr ""
+msgstr "σεπτέμβριος"
 
 #: gedlib/messages.c:643
 msgid "oct"
@@ -1989,7 +1989,7 @@ msgstr ""
 
 #: gedlib/messages.c:644
 msgid "october"
-msgstr ""
+msgstr "οκτώβριος"
 
 #: gedlib/messages.c:645
 msgid "nov"
@@ -1997,7 +1997,7 @@ msgstr ""
 
 #: gedlib/messages.c:646
 msgid "november"
-msgstr ""
+msgstr "νοέμβριος"
 
 #: gedlib/messages.c:647
 msgid "dec"
@@ -2005,7 +2005,7 @@ msgstr ""
 
 #: gedlib/messages.c:648
 msgid "december"
-msgstr ""
+msgstr "δεκέμβριος"
 
 #: gedlib/messages.c:650
 msgid "tsh"

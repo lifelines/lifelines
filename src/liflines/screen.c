@@ -1599,7 +1599,7 @@ disp_codeset (UIWINDOW uiwin, INT row, INT col, STRING menuit, INT codeset)
 static void
 disp_trans_table_choice (UIWINDOW uiwin, INT row, INT col, STRING menuit, INT indx)
 {
-	TRANTABLE tt = tran_tables[indx];
+	TRANMAPPING ttm = get_tranmapping(indx);
 	char line[120], count[20];
 	WINDOW * win = uiw_win(uiwin);
 	INT mylen = sizeof(line);
@@ -1608,17 +1608,25 @@ disp_trans_table_choice (UIWINDOW uiwin, INT row, INT col, STRING menuit, INT in
 	ptr[0] = 0;
 	llstrcatn(&ptr, menuit, &mylen);
 
-	if (tt) {
-		if (tt->name[0]) {
-			llstrcatn(&ptr, "  :  ", &mylen);
-			llstrcatn(&ptr, tt->name, &mylen);
+	if (ttm) {
+		TRANTABLE tt = get_trantable_from_tranmapping(ttm);
+		if (tt) {
+			if (tt->name[0]) {
+				llstrcatn(&ptr, "  :  ", &mylen);
+				llstrcatn(&ptr, tt->name, &mylen);
+			}
+			else {
+				llstrcatn(&ptr, "     (Unnamed table)", &mylen);
+			}
+			sprintf(count, " [%d]", tt->total);
+			if (mylen > (INT)strlen(count))
+				llstrcatn(&ptr, count, &mylen);
+		} else if (ttm->iconv_src && ttm->iconv_dest) {
+			llstrcatn(&ptr, " (iconv)", &mylen);
+			/* TODO: better description here, once these work */
+		} else {
+			llstrcatn(&ptr, "     (None)", &mylen);
 		}
-		else {
-			llstrcatn(&ptr, "     (Unnamed table)", &mylen);
-		}
-		sprintf(count, " [%d]", tt->total);
-		if (mylen > (INT)strlen(count))
-			llstrcatn(&ptr, count, &mylen);
 	}
 	else {
 		llstrcatn(&ptr, "     (None)", &mylen);
@@ -1924,7 +1932,7 @@ save_tt_action (void)
 		msg_error(_(qSbadttnum));
 		return;
 	}
-	if (!tran_tables[ttnum]) {
+	if (!get_trantable(ttnum)) {
 		msg_error(_(qSnosuchtt));
 		return;
 	}
@@ -2304,7 +2312,7 @@ manufacture a listdisp here
 	STRING key, name;
 	NODE indi;
 	char scratch[200], *p;
-	TRANTABLE ttd = tran_tables[MINDS];
+	TRANMAPPING ttmd = get_tranmapping(MINDS);
 	INT mode = 'n';
 	INT viewlines = 13;
 	
@@ -2329,11 +2337,11 @@ manufacture a listdisp here
 			mvwaddch(win, row, 3, '>');
 			show_record(main_win, key, mode, &rectList, &scroll, reuse);
 		}
-		name = manip_name(name, ttd, TRUE, TRUE, 40);
+		name = manip_name(name, ttmd, TRUE, TRUE, 40);
 		strcpy(scratch, name);
 		p = scratch + strlen(scratch);
 		*p++ = ' ';
-		sprintf(p, "(%s)", key_of_record(indi, ttd));
+		sprintf(p, "(%s)", key_of_record(indi, ttmd));
 		/*sprintf(p, "(%s)", &key[1]);*/
 		mvwaddstr(win, row, 4, scratch);
 		row++;

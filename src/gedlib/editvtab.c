@@ -63,7 +63,7 @@ edit_valtab (STRING key, TABLE *ptab, INT sep, STRING ermsg)
 	STRING ptr;
 	char temp[64], chardesc[8];
 	INT mylen;
-	TRANTABLE tti = tran_tables[MEDIN];
+	TRANMAPPING ttmi = get_tranmapping(MEDIN);
 	endwin();
 
 	unlink(editfile);
@@ -75,7 +75,7 @@ edit_valtab (STRING key, TABLE *ptab, INT sep, STRING ermsg)
 	do_edit();
 	while (TRUE) {
 		tmptab = create_table();
-		if (init_valtab_from_file(editfile, tmptab, tti, sep, &msg)) {
+		if (init_valtab_from_file(editfile, tmptab, ttmi, sep, &msg)) {
 			if (*ptab) remove_table(*ptab, DONTFREE);
 			*ptab = tmptab;
 			store_text_file_to_db(key, editfile, trans_edin);
@@ -110,9 +110,9 @@ edit_valtab (STRING key, TABLE *ptab, INT sep, STRING ermsg)
 static STRING
 trans_edin (STRING input, INT len)
 {
-	TRANTABLE tti = tran_tables[MEDIN];
+	TRANMAPPING ttmi = get_tranmapping(MEDIN);
 	bfptr bfs = bfNew((int)(len*1.3));
-	translate_string_to_buf(tti, input, bfs);
+	translate_string_to_buf(ttmi, input, bfs);
 	return bfDetachAndKill(&bfs);
 }
 /*==============================================
@@ -125,8 +125,8 @@ trans_edin (STRING input, INT len)
 static STRING
 trans_ined (STRING input, INT len)
 {
-	TRANTABLE tto = tran_tables[MINED];
+	TRANMAPPING ttmo = get_tranmapping(MINED);
 	bfptr bfs = bfNew((int)(len*1.2));
-	translate_string_to_buf(tto, input, bfs);
+	translate_string_to_buf(ttmo, input, bfs);
 	return bfDetachAndKill(&bfs);
 }

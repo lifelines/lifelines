@@ -47,14 +47,13 @@
 
 extern STRING btreepath;
 extern BTREE BTR;
-extern TRANTABLE tran_tables[];
 extern STRING qSoutarc,qSoutfin;
 
 /*********************************************
  * local variables
  *********************************************/
 
-static TRANTABLE tran_gedout;
+static TRANMAPPING tran_gedout; /* TODO: could do away with this via param to traverse */
 static char *mabbv[] = {
 	"JAN", "FEB", "MAR", "APR", "MAY", "JUN",
 	"JUL", "AUG", "SEP", "OCT", "NOV", "DEC",
@@ -63,7 +62,7 @@ static char *mabbv[] = {
 static INT nindi, nfam, neven, nsour, nothr;
 static FILE *fn = NULL;
 
-static void copy_and_translate (FILE*, INT, FILE*, INT, TRANTABLE);
+static void copy_and_translate (FILE*, INT, FILE*, INT, TRANMAPPING);
 static BOOLEAN archive(BTREE, BLOCK);
 
 /*********************************************
@@ -107,7 +106,7 @@ archive_in_file (void)
 	str = getoptstr("HDR_CHAR", "1 CHAR ASCII");
 	fprintf(fn, "%s\n", str);
 	/* finished header */
-	tran_gedout = tran_tables[MINGD];
+	tran_gedout = get_tranmapping(MINGD);
 	nindi = nfam = neven = nsour = nothr = 0;
 	llwprintf("Saving database in `%s' in file `%s'.", btreepath, fname);
 	wfield(2, 1, "     0 Persons");
@@ -126,8 +125,7 @@ archive_in_file (void)
  * archive -- Traverse function called on each btree block
  *======================================================*/
 static BOOLEAN
-archive (BTREE btree,
-         BLOCK block)
+archive (BTREE btree, BLOCK block)
 {
 	INT i, n, l;
 	char scratch[100];
@@ -158,7 +156,7 @@ copy_and_translate (FILE *fo,
                     INT len,
                     FILE *fn,
                     INT c,
-                    TRANTABLE tt)
+                    TRANMAPPING ttm)
 {
 	char in[BUFLEN];
 	char scratch[10];
@@ -172,7 +170,7 @@ copy_and_translate (FILE *fo,
 		ASSERT(fread(inp, remlen, 1, fo) == 1);
 		len -= remlen;
 		remlen = (inp + remlen) - in;	/* amount in current buffer */
-		ASSERT(translate_write(tt, in, &remlen, fn, (len <= 0)));
+		ASSERT(translate_write(ttm, in, &remlen, fn, (len <= 0)));
 		inp = in + remlen;		/* position for next read */
 		remlen = BUFLEN - remlen;	/* max for next read */
 	}

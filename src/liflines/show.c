@@ -92,19 +92,19 @@ static BOOLEAN append_event(STRING * pstr, STRING evt, INT * plen, INT minlen);
 static STRING disp_long_format_date(STRING date);
 static STRING disp_shrt_format_date(STRING date);
 static STRING disp_shrt_format_plac(STRING plac);
-static void family_events(STRING outstr, TRANTABLE tt, NODE indi, NODE fam, INT len);
-static void indi_events(STRING outstr, TRANTABLE tt, NODE indi, INT len);
+static void family_events(STRING outstr, TRANMAPPING ttm, NODE indi, NODE fam, INT len);
+static void indi_events(STRING outstr, TRANMAPPING ttm, NODE indi, INT len);
 static void init_disp_reformat(void);
 static void init_display_indi(NODE, INT width);
 static void init_display_fam(NODE, INT width);
 static void pedigree_line(CANVASDATA canvas, INT x, INT y, STRING string, INT overflow);
 static STRING person_display(NODE, NODE, INT);
 static void put_out_line(UIWINDOW uiwin, INT x, INT y, STRING string, INT maxcol, INT flag);
-static STRING sh_fam_to_event_shrt(NODE node, TRANTABLE tt, STRING tag, STRING head
+static STRING sh_fam_to_event_shrt(NODE node, TRANMAPPING ttm, STRING tag, STRING head
 	, INT len);
-static STRING sh_indi_to_event_long(NODE node, TRANTABLE tt, STRING tag
+static STRING sh_indi_to_event_long(NODE node, TRANMAPPING ttm, STRING tag
 	, STRING head, INT len);
-static STRING sh_indi_to_event_shrt(NODE node, TRANTABLE tt, STRING tag
+static STRING sh_indi_to_event_shrt(NODE node, TRANMAPPING ttm, STRING tag
 	, STRING head, INT len);
 
 /*********************************************
@@ -183,7 +183,7 @@ init_display_indi (NODE pers, INT width)
 	STRING s,t;
 	NODE fth;
 	NODE mth;
-	TRANTABLE ttd = tran_tables[MINDS];
+	TRANMAPPING ttmd = get_tranmapping(MINDS);
 	CACHEEL icel;
 
 	ASSERT(width < ll_cols+1); /* size of Spers etc */
@@ -192,16 +192,16 @@ init_display_indi (NODE pers, INT width)
 	ASSERT(pers);
 	fth = indi_to_fath(pers);
 	mth = indi_to_moth(pers);
-	s = indi_to_name(pers, ttd, width-20);
+	s = indi_to_name(pers, ttmd, width-20);
 	snprintf(Spers, liwidth, "%s: %s ", _(qSdspl_indi), s);
 	if((num = strlen(s)) < width-30) {
-	    t = indi_to_title(pers, ttd, width-20 - num - 3);
+	    t = indi_to_title(pers, ttmd, width-20 - num - 3);
 	    if(t) sprintf(Spers+strlen(Spers), "[%s] ", t);
 	}
-	sprintf(Spers+strlen(Spers), "(%s)", key_of_record(pers, ttd));
+	sprintf(Spers+strlen(Spers), "(%s)", key_of_record(pers, ttmd));
 
-	s = sh_indi_to_event_long(pers, ttd, "BIRT", _(qSdspl_bir), (width-3));
-	if (!s) s = sh_indi_to_event_long(pers, ttd, "CHR", _(qSdspl_chr), (width-3));
+	s = sh_indi_to_event_long(pers, ttmd, "BIRT", _(qSdspl_bir), (width-3));
+	if (!s) s = sh_indi_to_event_long(pers, ttmd, "CHR", _(qSdspl_chr), (width-3));
 	if (s) sprintf(Sbirt, "  %s", s);
 	else sprintf(Sbirt, "  %s", _(qSdspl_bir));
 
@@ -209,7 +209,7 @@ init_display_indi (NODE pers, INT width)
 	if(strchr(Sbirt, ',') == 0) {
 		num = strlen(Sbirt);
 		if(num < width-30) {
-			s = sh_indi_to_event_long(pers, ttd, "RESI", _(qSdspa_resi)
+			s = sh_indi_to_event_long(pers, ttmd, "RESI", _(qSdspa_resi)
 				, (width-3)-num-5);
 			if(s) {
 				if(num < 8) strcat(Sbirt, s+1);
@@ -221,8 +221,8 @@ init_display_indi (NODE pers, INT width)
 		}
 	}
 
-	s = sh_indi_to_event_long(pers, ttd, "DEAT", _(qSdspl_dea), (width-3));
-	if (!s) s = sh_indi_to_event_long(pers, ttd, "BURI", _(qSdspl_bur), (width-3));
+	s = sh_indi_to_event_long(pers, ttmd, "DEAT", _(qSdspl_dea), (width-3));
+	if (!s) s = sh_indi_to_event_long(pers, ttmd, "BURI", _(qSdspl_bur), (width-3));
 	if (s) sprintf(Sdeat, "  %s", s);
 	else sprintf(Sdeat, "  %s", _(qSdspl_dea));
 
@@ -357,57 +357,57 @@ init_display_fam (NODE fam, INT width)
 	NODE wife;
 	STRING s, ik, fk;
 	INT len, nch, nm, wtemp;
-	TRANTABLE ttd = tran_tables[MINDS];
+	TRANMAPPING ttmd = get_tranmapping(MINDS);
 	STRING mother = _(qSdspl_moth);
 	STRING father = _(qSdspl_fath);
 	ASSERT(fam);
 	husb = fam_to_husb(fam);
 	wife = fam_to_wife(fam);
-	fk = key_of_record(fam, ttd);
+	fk = key_of_record(fam, ttmd);
 	if (husb) {
-		ik = key_of_record(husb, ttd);
+		ik = key_of_record(husb, ttmd);
 		len = liwidth - (10 + strlen(father) + strlen(ik) + strlen(fk));
-		s = indi_to_name(husb, ttd, len);
+		s = indi_to_name(husb, ttmd, len);
 		snprintf(Shusb, liwidth, "%s: %s (%s) (%s)", father, s, ik, fk);
 	} else
 		snprintf(Shusb, liwidth, "%s: (%s)", father, fk);
 
-	s = sh_indi_to_event_long(husb, ttd, "BIRT", _(qSdspl_bir), width-3);
-	if (!s) s = sh_indi_to_event_long(husb, ttd, "CHR", _(qSdspl_chr), width-3);
+	s = sh_indi_to_event_long(husb, ttmd, "BIRT", _(qSdspl_bir), width-3);
+	if (!s) s = sh_indi_to_event_long(husb, ttmd, "CHR", _(qSdspl_chr), width-3);
 	if (s) sprintf(Shbirt, "  %s", s);
 	else sprintf(Shbirt, "  %s", _(qSdspl_bir));
 
-	s = sh_indi_to_event_long(husb, ttd, "DEAT", _(qSdspl_dea), width-3);
-	if (!s) s = sh_indi_to_event_long(husb, ttd, "BURI", _(qSdspl_bur), width-3);
+	s = sh_indi_to_event_long(husb, ttmd, "DEAT", _(qSdspl_dea), width-3);
+	if (!s) s = sh_indi_to_event_long(husb, ttmd, "BURI", _(qSdspl_bur), width-3);
 	if (s) snprintf(Shdeat, liwidth, "  %s", s);
 	else snprintf(Shdeat, liwidth, "  %s", _(qSdspl_dea));
 
 	if (wife) {
-		ik = key_of_record(wife, ttd);
+		ik = key_of_record(wife, ttmd);
 		len = width - (7 + strlen(mother) + strlen(ik));
-		s = indi_to_name(wife, ttd, len);
+		s = indi_to_name(wife, ttmd, len);
 		snprintf(Swife, liwidth, "%s: %s (%s)", mother, s, ik);
 	} else
 		snprintf(Swife, liwidth, "%s:", mother);
 
-	s = sh_indi_to_event_long(wife, ttd, "BIRT", _(qSdspl_bir), width-3);
-	if (!s) s = sh_indi_to_event_long(wife, ttd, "CHR", _(qSdspl_chr), width-3);
+	s = sh_indi_to_event_long(wife, ttmd, "BIRT", _(qSdspl_bir), width-3);
+	if (!s) s = sh_indi_to_event_long(wife, ttmd, "CHR", _(qSdspl_chr), width-3);
 	if (s) snprintf(Swbirt, liwidth, "  %s", s);
 	else snprintf(Swbirt, liwidth, "  %s", _(qSdspl_bir));
 
-	s = sh_indi_to_event_long(wife, ttd, "DEAT", _(qSdspl_dea), width-3);
-	if (!s) s = sh_indi_to_event_long(wife, ttd, "BURI", _(qSdspl_bur), width-3);
+	s = sh_indi_to_event_long(wife, ttmd, "DEAT", _(qSdspl_dea), width-3);
+	if (!s) s = sh_indi_to_event_long(wife, ttmd, "BURI", _(qSdspl_bur), width-3);
 	if (s) snprintf(Swdeat, liwidth, "  %s", s);
 	else snprintf(Swdeat, liwidth, "  %s", _(qSdspl_dea));
 
-	s = sh_indi_to_event_long(fam, ttd, "MARR", _(qSdspl_mar), width-3);
+	s = sh_indi_to_event_long(fam, ttmd, "MARR", _(qSdspl_mar), width-3);
 	if (s) snprintf(Smarr, liwidth, s);
 	else snprintf(Smarr, liwidth, _(qSdspl_mar));
 	/* append divorce to marriage line, if room */
 	/* (Might be nicer to make it a separate, following line */
 	wtemp = width-5 - strlen(Smarr);
 	if (wtemp > 10) {
-		s = sh_indi_to_event_long(fam, ttd, "DIV", _(qSdspa_div), wtemp);
+		s = sh_indi_to_event_long(fam, ttmd, "DIV", _(qSdspa_div), wtemp);
 		if (s)
 			snprintf(Smarr+strlen(Smarr), liwidth-strlen(Smarr), ", %s", s);
 	}
@@ -567,24 +567,24 @@ indi_to_ped_fix (NODE indi, INT len)
 	STRING bevt, devt, name, key;
 	static char scratch[100];
 	char tmp1[100];
-	TRANTABLE ttd = tran_tables[MINDS];
+	TRANMAPPING ttmd = get_tranmapping(MINDS);
 
 /*	return person_display(indi, 0, len); */
 
 	if (!indi) return (STRING) "------------";
-	bevt = event_to_date(BIRT(indi), ttd, TRUE);
-	if (!bevt) bevt = event_to_date(BAPT(indi), ttd, TRUE);
+	bevt = event_to_date(BIRT(indi), ttmd, TRUE);
+	if (!bevt) bevt = event_to_date(BAPT(indi), ttmd, TRUE);
 	if (!bevt) bevt = (STRING) "";
-	devt = event_to_date(DEAT(indi), ttd, TRUE);
-	if (!devt) devt = event_to_date(BURI(indi), ttd, TRUE);
+	devt = event_to_date(DEAT(indi), ttmd, TRUE);
+	if (!devt) devt = event_to_date(BURI(indi), ttmd, TRUE);
 	if (!devt) devt = (STRING) "";
 	if (keyflag) {
-		key = key_of_record(indi, ttd);
+		key = key_of_record(indi, ttmd);
 		sprintf(tmp1, " [%s-%s] (%s)", bevt, devt, key);
 	}
 	else
 		sprintf(tmp1, " (%s-%s)", bevt, devt);
-	name = indi_to_name(indi, ttd, len - strlen(tmp1));
+	name = indi_to_name(indi, ttmd, len - strlen(tmp1));
 	strcpy(scratch, name);
 	strcat(scratch, tmp1);
 	return scratch;
@@ -609,23 +609,23 @@ append_event (STRING * pstr, STRING evt, INT * plen, INT minlen)
 }
 /*=============================================
  * family_events -- Print string of events
- *  outstr: [in,out] printed event string 
- *  ttd:    [in] translation table to use for data
- *  indi:   [in] whom to display
- *  fam:    [in] family record (used when displaying spouses)
- *  len:    [in] max length of output
+ *  outstr: [I/O] printed event string 
+ *  ttmd:   [IN]  translation table to use for data
+ *  indi:   [IN]  whom to display
+ *  fam:    [IN]  family record (used when displaying spouses)
+ *  len:    [IN]  max length of output
  * If none are found, this will write a 0 to first char of outstr
  * If anything written, starts with ", "
  * Created: 2001/07/04 (Perry Rapp)
  *===========================================*/
 static void
-family_events (STRING outstr, TRANTABLE ttd, NODE indi, NODE fam, INT len)
+family_events (STRING outstr, TRANMAPPING ttmd, NODE indi, NODE fam, INT len)
 {
 	STRING evt = NULL;
 	STRING p = outstr;
 	INT mylen = len;
 	p[0] = 0;
-	evt = sh_fam_to_event_shrt(fam, ttd, "MARR", _(qSdspa_mar), mylen);
+	evt = sh_fam_to_event_shrt(fam, ttmd, "MARR", _(qSdspa_mar), mylen);
 	if (evt && !append_event(&p, evt, &mylen, 10))
 		return;
 /*
@@ -637,41 +637,41 @@ family_events (STRING outstr, TRANTABLE ttd, NODE indi, NODE fam, INT len)
 		NODE chld;
 		/* Look for birth or christening of first child */
 		if ((chld = fam_to_first_chil(fam))) {
-			evt = sh_indi_to_event_shrt(chld, ttd, "BIRT", _(qSdspa_chbr), mylen-2);
+			evt = sh_indi_to_event_shrt(chld, ttmd, "BIRT", _(qSdspa_chbr), mylen-2);
 			if (evt && !append_event(&p, evt, &mylen, 10))
 				return;
 			if (!evt) {
-				evt = sh_indi_to_event_shrt(chld, ttd, "CHR", _(qSdspa_chbr), mylen-2);
+				evt = sh_indi_to_event_shrt(chld, ttmd, "CHR", _(qSdspa_chbr), mylen-2);
 				if (evt && !append_event(&p, evt, &mylen, 10))
 					return;
 			}
 		}
 	}
-	evt = sh_indi_to_event_shrt(indi, ttd, "BIRT", _(qSdspa_bir), mylen-2);
+	evt = sh_indi_to_event_shrt(indi, ttmd, "BIRT", _(qSdspa_bir), mylen-2);
 	if (evt && !append_event(&p, evt, &mylen, 10))
 		return;
-	evt = sh_indi_to_event_shrt(indi, ttd, "CHR", _(qSdspa_chr), mylen-2);
+	evt = sh_indi_to_event_shrt(indi, ttmd, "CHR", _(qSdspa_chr), mylen-2);
 	if (evt && !append_event(&p, evt, &mylen, 10))
 		return;
-	evt = sh_indi_to_event_shrt(indi, ttd, "DEAT", _(qSdspa_dea), mylen-2);
+	evt = sh_indi_to_event_shrt(indi, ttmd, "DEAT", _(qSdspa_dea), mylen-2);
 	if (evt && !append_event(&p, evt, &mylen, 10))
 		return;
-	evt = sh_indi_to_event_shrt(indi, ttd, "BURI", _(qSdspa_bur), mylen-2);
+	evt = sh_indi_to_event_shrt(indi, ttmd, "BURI", _(qSdspa_bur), mylen-2);
 	if (evt && !append_event(&p, evt, &mylen, 10))
 		return;
 }
 /*=============================================
  * indi_events -- Print string of events
- *  outstr: [in,out] printed event string 
- *  tt:     [in] translation table to use for data
- *  indi:   [in] whom to display
- *  len:    [in] max length of output
+ *  outstr: [I/O] printed event string 
+ *  ttmd:   [IN]  translation table to use for data
+ *  indi:   [IN]  whom to display
+ *  len:    [IN]  max length of output
  * If none are found, this will write a 0 to first char of outstr
  * If anything written, starts with ", "
  * Created: 2001/07/04 (Perry Rapp)
  *===========================================*/
 static void
-indi_events (STRING outstr, TRANTABLE ttd, NODE indi, INT len)
+indi_events (STRING outstr, TRANMAPPING ttmd, NODE indi, INT len)
 {
 	STRING evt = NULL;
 	INT width = (len-2)/2;
@@ -679,17 +679,17 @@ indi_events (STRING outstr, TRANTABLE ttd, NODE indi, INT len)
 	INT mylen = len;
 	p[0] = 0;
 
-	evt = sh_indi_to_event_shrt(indi, ttd, "BIRT", _(qSdspa_bir), width);
+	evt = sh_indi_to_event_shrt(indi, ttmd, "BIRT", _(qSdspa_bir), width);
 	if (!evt)
-		evt = sh_indi_to_event_shrt(indi, ttd, "CHR", _(qSdspa_chr), width);
+		evt = sh_indi_to_event_shrt(indi, ttmd, "CHR", _(qSdspa_chr), width);
 	if (evt) {
 		llstrcatn(&p, ", ", &mylen);
 		llstrcatn(&p, evt, &mylen);
 	}
 	if (p == outstr)
 		width = len;
-	evt = sh_indi_to_event_shrt(indi, ttd, "DEAT", _(qSdspa_dea), width);
-	if (!evt) evt = sh_indi_to_event_shrt(indi, ttd, "BURI", _(qSdspa_bur), width);
+	evt = sh_indi_to_event_shrt(indi, ttmd, "DEAT", _(qSdspa_dea), width);
+	if (!evt) evt = sh_indi_to_event_shrt(indi, ttmd, "BURI", _(qSdspa_bur), width);
 	if (evt) {
 		llstrcatn(&p, ", ", &mylen);
 		llstrcatn(&p, evt, &mylen);
@@ -727,7 +727,7 @@ person_display (NODE indi, NODE fam, INT len)
 	static char scratch1[120];
 	static char scratch2[100];
 	STRING p;
-	TRANTABLE ttd = tran_tables[MINDS];
+	TRANMAPPING ttmd = get_tranmapping(MINDS);
 	INT keyspace = max_keywidth() + 3; /* parentheses & leading space */
 	INT evlen, namelen, temp;
 	/* don't overflow scratch1, into which we catenate name & events */
@@ -741,7 +741,7 @@ person_display (NODE indi, NODE fam, INT len)
 	if (!indi) return NULL;
 
 	/* test to see if name is short */
-	p = indi_to_name(indi, ttd, 100);
+	p = indi_to_name(indi, ttmd, 100);
 	if ((temp = strlen(p)) < evlen) {
 		/* name is short, give extra to events */
 		evlen += (namelen - temp);
@@ -751,22 +751,22 @@ person_display (NODE indi, NODE fam, INT len)
 	if (evlen > ARRSIZE(scratch2)-1) /* don't overflow name buffer */
 		evlen = ARRSIZE(scratch2)-1;
 	if (fam) {
-		family_events(scratch2, ttd, indi, fam, evlen);
+		family_events(scratch2, ttmd, indi, fam, evlen);
 	} else {
-		indi_events(scratch2, ttd, indi, evlen);
+		indi_events(scratch2, ttmd, indi, evlen);
 	}
 
 	/* give name any unused space events left */
 	if ((INT)strlen(scratch2)<evlen)
 		namelen += evlen-(INT)strlen(scratch2);
 	p = scratch1;
-	strcpy(p, indi_to_name(indi, ttd, namelen));
+	strcpy(p, indi_to_name(indi, ttmd, namelen));
 	p += strlen(p);
 	if (scratch2[0]) {
 		strcpy(p, scratch2);
 		p += strlen(p);
 	}
-	sprintf(p, " (%s)", key_of_record(indi, ttd));
+	sprintf(p, " (%s)", key_of_record(indi, ttmd));
 	return scratch1;
 }
 /*========================================================
@@ -983,28 +983,28 @@ disp_shrt_format_plac (STRING plac)
  *  using long display reformatting
  *==============================================*/
 static STRING
-sh_indi_to_event_long (NODE node, TRANTABLE tt, STRING tag
+sh_indi_to_event_long (NODE node, TRANMAPPING ttm, STRING tag
 	, STRING head, INT len)
 {
-	return indi_to_event(node, tt, tag, head, len, &disp_long_rfmt);
+	return indi_to_event(node, ttm, tag, head, len, &disp_long_rfmt);
 }
 /*================================================
  * sh_indi_to_event_shrt -- Pass-thru to indi_to_event, short display
  *  using short display reformatting
  *==============================================*/
 static STRING
-sh_indi_to_event_shrt (NODE node, TRANTABLE tt, STRING tag
+sh_indi_to_event_shrt (NODE node, TRANMAPPING ttm, STRING tag
 	, STRING head, INT len)
 {
-	return indi_to_event(node, tt, tag, head, len, &disp_shrt_rfmt);
+	return indi_to_event(node, ttm, tag, head, len, &disp_shrt_rfmt);
 }
 /*==================================================
  * sh_fam_to_event_shrt -- Pass-thru to fam_to_event
  *  using display reformatting
  *================================================*/
 static STRING
-sh_fam_to_event_shrt (NODE node, TRANTABLE tt, STRING tag, STRING head
+sh_fam_to_event_shrt (NODE node, TRANMAPPING ttm, STRING tag, STRING head
 	, INT len)
 {
-	return fam_to_event(node, tt, tag, head, len, &disp_shrt_rfmt);
+	return fam_to_event(node, ttm, tag, head, len, &disp_shrt_rfmt);
 }
