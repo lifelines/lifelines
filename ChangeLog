@@ -30,6 +30,10 @@
 
 	Bugfix: list_to_array wasn't addref'ing pvalues.
 
+	* ChangeLog README.MAINTAINERS
+
+	List cvs tag command for versions.
+
 2003-02-26 Perry Rapp
 
 	* ChangeLog po/sv.po

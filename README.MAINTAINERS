@@ -5,7 +5,10 @@ To release a new version, edit the version number in
   src/hdrs/version.h
   build/msvc6/llines/llines.rc
 
-It would probably be good to add an entry to
+Add an entry mentioning the new version in the
   ChangeLog
+
+Tag the cvs source via
+  cvs tag v3_0_25
 
 
