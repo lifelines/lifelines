@@ -2146,9 +2146,11 @@ __lower (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	str = pvalue_to_string(val);
-	if (str)
-		str = lower(str);
-	set_pvalue_string(val, str);
+	if (str) {
+		ZSTR zstr = ll_tolowerz(str, uu8);
+		set_pvalue_string(val, zs_str(zstr));
+		zs_free(&zstr);
+	}
 	return val;
 }
 /*=======================================+
@@ -2161,7 +2163,6 @@ __upper (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE arg = iargs(node);
 	PVALUE val = eval_and_coerce(PSTRING, arg, stab, eflg);
 	STRING str;
-	ZSTR zstr = 0;
 	if (*eflg) {
 		prog_var_error(node, stab, arg, val, nonstr1, "upper");
 		delete_pvalue(val);
@@ -2169,10 +2170,10 @@ __upper (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	str = pvalue_to_string(val);
 	if (str) {
-		zstr = ll_toupperz(str, uu8);
+		ZSTR zstr = ll_toupperz(str, uu8);
+		set_pvalue_string(val, zs_str(zstr));
+		zs_free(&zstr);
 	}
-	set_pvalue_string(val, zs_str(zstr));
-	zs_free(&zstr);
 	return val;
 }
 /*=====================================+
@@ -2191,9 +2192,11 @@ __capitalize (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	str = pvalue_to_string(val);
-	if (str)
-		str = capitalize(str);
-	set_pvalue_string(val, str);
+	if (str) {
+		ZSTR zstr = ll_tocapitalizedz(str, uu8);
+		set_pvalue_string(val, zs_str(zstr));
+		zs_free(&zstr);
+	}
 	return val;
 }
 /*=====================================+
@@ -2213,9 +2216,11 @@ __titlcase (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	str = pvalue_to_string(val);
-	if (str)
-		str = titlecase(str);
-	set_pvalue_string(val, str);
+	if (str) {
+		ZSTR zstr = ll_totitlecasez(str, uu8);
+		set_pvalue_string(val, zs_str(zstr));
+		zs_free(&zstr);
+	}
 	return val;
 }
 /*================================+

@@ -105,60 +105,63 @@ isnumeric (STRING str)
 	return TRUE;
 }
 /*======================================
- * lower -- Convert string to lower case
- *  returns static buffer
+ * wz_makelower -- widechar lowercasing
+ * Input/output holds wchar_t characters
  *====================================*/
-STRING
-lower (STRING str)
+static void
+wz_makelower (ZSTR zstr)
 {
-	static char scratch[MAXLINELEN+1];
-	STRING p = scratch;
-	INT c, i=0;
-#ifdef HAVE_TOWLOWER
-	ZSTR zstr=makewide(str);
-	if (zstr) {
-		ZSTR zout=0;
-		wchar_t * wp;
-		for (wp = (wchar_t *)zs_str(zstr); *wp; ++wp) {
+	wchar_t * wp;
+	for (wp = (wchar_t *)zs_str(zstr); *wp; ++wp) {
+		if (*wp == 0x3A3) {
+			/* Greek capital sigma */
+			if (wp[1] != '-' && !iswalpha(wp[1]))
+				*wp = 0x3C2; /* final lower sigma */
+			else
+				*wp = 0x3C3; /* medial lower sigma */
+		} else {
 			*wp = towlower(*wp);
 		}
-		zout = makeznarrow(zstr);
-		llstrsets(scratch, sizeof(scratch), uu8, zs_str(zout));
-		zs_free(&zstr);
-		zs_free(&zout);
-#else
-	if (0) {
-#endif
-	} else {
-		while ((c = (uchar)*str++) && (++i < MAXLINELEN+1))
-			*p++ = ll_tolower(c);
-		*p = '\0';
 	}
-	return scratch;
 }
-/*==========================================
- * ll_toupperz -- Convert string to uppercase
- *========================================*/
-ZSTR
-ll_toupperz (STRING s, INT utf8)
+/*======================================
+ * wz_makeupper -- widechar uppercasing
+ * Input/output holds wchar_t characters
+ *====================================*/
+static void
+wz_makeupper (ZSTR zstr)
 {
-	/* TODO: preprocess for the German & Greek special cases */
+	/* TODO: preprocess for the German special case */
+	wchar_t * wp;
+	for (wp = (wchar_t *)zs_str(zstr); *wp; ++wp) {
+		*wp = towupper(*wp);
+	}
+}
+/*======================================
+ * wz_makenarrow -- convert widechar to UTF-8
+ * Done inplace
+ *====================================*/
+static void
+wz_makenarrow(ZSTR zstr)
+{
+	ZSTR zout = makeznarrow(zstr);
+	zs_move(zstr, &zout);
+}
+/*======================================
+ * ll_tolowerz -- Return lowercase version of string
+ *====================================*/
+ZSTR
+ll_tolowerz (STRING s, int utf8)
+{
 	ZSTR zstr=0;
-#ifdef HAVE_TOWUPPER
+#ifdef HAVE_TOWLOWER
 	if (utf8) {
 		zstr = makewide(s);
 		if (zstr) {
 			/* Now zstr holds a string of wchar_t characters */
 			/* NB: sizeof(wchar_t) varies with platform */
-			ZSTR zout=0;
-			wchar_t * wp;
-			/* convert to uppercase in place */
-			for (wp = (wchar_t *)zs_str(zstr); *wp; ++wp) {
-				*wp = towupper(*wp);
-			}
-			zout = makeznarrow(zstr);
-			zs_free(&zstr);
-			zstr = zout;
+			wz_makelower(zstr);
+			wz_makenarrow(zstr);
 		}
 	}
 #endif
@@ -166,7 +169,34 @@ ll_toupperz (STRING s, INT utf8)
 	if (!zstr) {
 		zstr = zs_newn(strlen(s));
 		for ( ; *s; ++s) {
-			zs_appc(zstr, (unsigned char)ll_toupper(*s));
+			zs_appc(zstr, (uchar)ll_tolower(*s));
+		}
+	}
+	return zstr;
+}
+/*==========================================
+ * ll_toupperz -- Return uppercase version of string
+ *========================================*/
+ZSTR
+ll_toupperz (STRING s, INT utf8)
+{
+	ZSTR zstr=0;
+#ifdef HAVE_TOWUPPER
+	if (utf8) {
+		zstr = makewide(s);
+		if (zstr) {
+			/* Now zstr holds a string of wchar_t characters */
+			/* NB: sizeof(wchar_t) varies with platform */
+			wz_makeupper(zstr);
+			wz_makenarrow(zstr);
+		}
+	}
+#endif
+
+	if (!zstr) {
+		zstr = zs_newn(strlen(s));
+		for ( ; *s; ++s) {
+			zs_appc(zstr, (uchar)ll_toupper(*s));
 		}
 	}
 	return zstr;
@@ -193,39 +223,90 @@ upperascii_s (STRING str)
 	return scratch;
 }
 /*================================
- * capitalize -- Capitalize string
- *  returns static buffer (borrowed from lower)
- *  TODO: convert to Unicode
+ * ll_tocapitalizedz -- Returned capitalized version of string
  *==============================*/
-STRING
-capitalize (STRING str)
+ZSTR
+ll_tocapitalizedz (STRING s, INT utf8)
 {
-	STRING p = lower(str);
-	*p = ll_toupper((uchar)*p);
-	return p;
+	ZSTR zstr=0;
+#if defined(HAVE_TOWLOWER) && defined(HAVE_TOWUPPER)
+	if (utf8) {
+		zstr = makewide(s);
+		if (zstr) {
+			wchar_t * wp;
+			/* Now zstr holds a string of wchar_t characters */
+			/* NB: sizeof(wchar_t) varies with platform */
+			wz_makelower(zstr);
+			/* capitalize first letter */
+			wp = (wchar_t *)zs_str(zstr);
+			*wp = towupper(*wp);
+			wz_makenarrow(zstr);
+		}
+	}
+#endif
+
+	if (!zstr) {
+		zstr = zs_newn(strlen(s));
+		for ( ; *s; ++s) {
+			if (!zs_len(zstr)) {
+				zs_appc(zstr, (uchar)ll_toupper(*s));
+			} else {
+				zs_appc(zstr, (uchar)ll_tolower(*s));
+			}
+		}
+	}
+	return zstr;
 }
 /*================================
- * titlecase -- Titlecase string
- * Created: 2001/12/30 (Perry Rapp)
- *  returns static buffer (borrowed from lower)
- *  TODO: convert to Unicode
+ * ll_totitlecasez -- Return titlecased version of string
  *==============================*/
-STRING
-titlecase (STRING str)
+ZSTR
+ll_totitlecasez (STRING s, INT utf8)
 {
-	/* % sequences aren't a problem, as % isn't lower */
-	STRING p = lower(str), buf=p;
-	if (!p[0]) return p;
-	while (1) {
-		/* capitalize first letter of word */
-		*p = ll_toupper((uchar)*p);
-		/* skip to end of word */
-		while (*p && !iswhite((uchar)*p))
-			++p;
-		if (!*p) return buf;
-		/* skip to start of next word */
-		while (*p && iswhite((uchar)*p))
-			++p;
-		if (!*p) return buf;
+	ZSTR zstr=0;
+#if defined(HAVE_TOWLOWER) && defined(HAVE_TOWUPPER) && defined(HAVE_ISWSPACE)
+	if (utf8) {
+		zstr = makewide(s);
+		if (zstr) {
+			/* Now zstr holds a string of wchar_t characters */
+			/* NB: sizeof(wchar_t) varies with platform */
+			BOOLEAN inword = FALSE;
+			wchar_t * wp;
+			for (wp = (wchar_t *)zs_str(zstr); *wp; ++wp) {
+				if (iswspace(*wp)) {
+					inword = FALSE;
+				} else {
+					if (!inword) {
+						/* first letter of word */
+						*wp = towupper(*wp);
+						inword = TRUE;
+					} else {
+						*wp = towlower(*wp);
+					}
+				}
+			}
+			wz_makenarrow(zstr);
+		}
 	}
+#endif
+
+	if (!zstr) {
+		BOOLEAN inword = FALSE;
+		zstr = zs_newn(strlen(s));
+		for ( ; *s; ++s) {
+			if (iswhite((uchar)*s)) {
+				inword = FALSE;
+				zs_appc(zstr, (uchar)*s);
+			} else {
+				if (!inword) {
+					/* first letter of word */
+					zs_appc(zstr, (uchar)ll_toupper(*s));
+					inword = TRUE;
+				} else {
+					zs_appc(zstr, (uchar)ll_tolower(*s));
+				}
+			}
+		}
+	}
+	return zstr;
 }

@@ -175,11 +175,11 @@ char *llstrsetf(char * dest, int limit, int utf8, const char * fmt, ...);
 char *llstrsetvf(char * dest, int limit, int utf8, const char * fmt, va_list args);
 
 /* strcvt.c */
-STRING capitalize(STRING);
 BOOLEAN isnumeric(STRING);
+ZSTR ll_tocapitalizedz(STRING s, INT utf8);
+ZSTR ll_tolowerz(STRING s, INT utf8);
+ZSTR ll_totitlecasez(STRING, INT utf8);
 ZSTR ll_toupperz(STRING s, INT utf8);
-STRING lower(STRING);
-STRING titlecase(STRING);
 STRING upperascii_s(STRING str);
 
 

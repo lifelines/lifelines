@@ -99,9 +99,11 @@ static BOOLEAN is_date_delim(char c);
 static BOOLEAN is_valid_day(struct tag_gdate * pdate, struct tag_dnum day);
 static BOOLEAN is_valid_month(struct tag_gdate * pdate, struct tag_dnum month);
 static void load_lang(void);
+static STRING lower_dup(STRING s);
 static void mark_freeform(GDATEVAL gdv);
 static void mark_invalid(GDATEVAL gdv);
 static void set_date_string(STRING);
+static STRING title_dup(STRING s);
 static STRING upper_dup(STRING s);
 static ZSTR zshorten_date(STRING date);
 
@@ -1452,6 +1454,28 @@ upper_dup (STRING s)
 	return str;
 }
 /*=============================
+ * lower_dup -- Get lowercase & strdup it
+ *===========================*/
+static STRING
+lower_dup (STRING s)
+{
+	ZSTR zstr = ll_tolowerz(s, uu8);
+	STRING str = strdup(zs_str(zstr));
+	zs_free(&zstr);
+	return str;
+}
+/*=============================
+ * title_dup -- Get titlecase & strdup it
+ *===========================*/
+static STRING
+title_dup (STRING s)
+{
+	ZSTR zstr = ll_tolowerz(s, uu8);
+	STRING str = strdup(zs_str(zstr));
+	zs_free(&zstr);
+	return str;
+}
+/*=============================
  * load_one_cmplx_pic -- Generate case variations
  *  of one complex picture string.
  * Created: 2001/12/30 (Perry Rapp)
@@ -1465,15 +1489,15 @@ load_one_cmplx_pic (INT ecmplx, STRING abbrev, STRING full)
 	/* 0=ABT (cmplx=3) */
 	cmplx_pics[ecmplx][0] = upper_dup(loc_abbrev);
 	/* 1=Abt (cmplx=4) */
-	cmplx_pics[ecmplx][1] = strsave(titlecase(loc_abbrev));
+	cmplx_pics[ecmplx][1] = title_dup(loc_abbrev);
 	/* 2=ABOUT (cmplx=5) */
-	cmplx_pics[ecmplx][2] = strsave(upperascii_s(loc_full));
+	cmplx_pics[ecmplx][2] = upper_dup(loc_full);
 	/* 3=About (cmplx=6) */
-	cmplx_pics[ecmplx][3] = strsave(titlecase(loc_full));
+	cmplx_pics[ecmplx][3] = title_dup(loc_full);
 	/* 4=abt (cmplx=7) */
-	cmplx_pics[ecmplx][4] = strsave(lower(loc_abbrev));
+	cmplx_pics[ecmplx][4] = lower_dup(loc_abbrev);
 	/* 5=about (cmplx=8) */
-	cmplx_pics[ecmplx][5] = strsave(lower(loc_full));
+	cmplx_pics[ecmplx][5] = lower_dup(loc_full);
 	stdfree(loc_abbrev);
 	stdfree(loc_full);
 
@@ -1497,11 +1521,11 @@ load_one_month (INT monum, MONTH_NAMES * monarr, STRING abbrev, STRING full)
 	if (loc_abbrev[0]=='*' && loc_abbrev[1]=='*')
 		loc_abbrev += 2;
 	monarr[monum][0] = upper_dup(loc_abbrev);
-	monarr[monum][1] = strsave(titlecase(loc_abbrev));
+	monarr[monum][1] = title_dup(loc_abbrev);
 	monarr[monum][2] = upper_dup(loc_full);
-	monarr[monum][3] = strsave(titlecase(loc_full));
-	monarr[monum][4] = strsave(lower(loc_abbrev));
-	monarr[monum][5] = strsave(lower(loc_full));
+	monarr[monum][3] = title_dup(loc_full);
+	monarr[monum][4] = lower_dup(loc_abbrev);
+	monarr[monum][5] = lower_dup(loc_full);
 	stdfree(locx_abbrev);
 	stdfree(loc_full);
 }
