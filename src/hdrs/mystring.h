@@ -6,6 +6,11 @@
 #ifndef MY_STRING_H
 #define MY_STRING_H
 
+#ifndef INCLUDED_STDARG_H
+#include <stdarg.h>
+#define INCLUDED_STDARG_H
+#endif
+
 void appendstr(char ** pdest, int * len, const char * src);
 void appendstrf(char ** pdest, int * len, const char * fmt,...);
 #define llstrcatn(dest, src, len) appendstr(dest, len, src)

@@ -37,7 +37,10 @@
 
 #include <curses.h>
 
+#ifndef INCLUDED_STDARG_H
 #include <stdarg.h>
+#define INCLUDED_STDARG_H
+#endif
 
 #ifndef TRUE
 #       define TRUE ((BOOLEAN)1)

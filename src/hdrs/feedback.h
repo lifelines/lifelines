@@ -29,7 +29,10 @@
 #ifndef _FEEDBACK_H
 #define _FEEDBACK_H
 
+#ifndef INCLUDED_STDARG_H
 #include <stdarg.h>
+#define INCLUDED_STDARG_H
+#endif
 
 /* Ways for engine & code to report to ui */
 	/* report an error */
