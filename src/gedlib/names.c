@@ -267,7 +267,8 @@ STRING
 getsxsurname (STRING name)        /* GEDCOM name */
 {
 	STRING surnm = getsurname_impl(name);
-	if (!surnm || !isletter(surnm[0]))
+	/* screen out missing surnames, or ones beginning with puncutation */
+	if (!surnm || (isascii(surnm[0]) && !isletter(surnm[0])))
 		return (STRING) "____";
 	return surnm;
 
@@ -543,21 +544,24 @@ exactmatch (STRING partial, STRING complete)
  *   complete; case insensitive
  *==============================================================*/
 BOOLEAN
-piecematch (STRING part,
-            STRING comp)
+piecematch (STRING part, STRING comp)
 {
 	/* TODO: This must be fixed for Unicode 2003-04-12, Perry */
-	/* Why is Finnish using case-insensitive, but regular using case-sensitive ? */
+	/* Case insensitive unnecessary, as caller has already upper-cased strings */
 	if (opt_finnish) {
-		if (fi_chrcmp(*part++, *comp++) != 0) return FALSE;
+		if (fi_chrcmp(*part++, *comp++) != 0)
+			return FALSE;
 	} else {
-		if (*part++ != *comp++) return FALSE;
+		if (next_char32(&part, uu8) != next_char32(&comp, uu8))
+			return FALSE;
 	}
 	while (*part && *comp) {
 		if (opt_finnish) {
-			if (fi_chrcmp(*part, *comp++) == 0) part++;
+			if (fi_chrcmp(*part, *comp++) == 0)
+				++part;
 		} else {
-			if (*part == *comp++) part++;
+			if (next_char32(&part, uu8) == next_char32(&comp, uu8))
+				++part;
 		}
 	}
 	return *part == 0;
@@ -573,6 +577,7 @@ piecematch (STRING part,
 static void
 squeeze (STRING in, STRING out)
 {
+	/* TODO: fix for Unicode (switch to string based casing) */
 	INT c;
 	while ((c = (uchar)*in++) && c<128 && chartype(c) != LETTER)
 		;

@@ -180,6 +180,8 @@ STRING upper(STRING);
 /* strutf8.c */
 STRING find_prev_char(STRING ptr, INT * width, STRING limit, int utf8);
 INT utf8len(char ch);
+INT next_char32(STRING * ptr, int utf8);
+
 
 /* strwhite.c */
 BOOLEAN allwhite(STRING);

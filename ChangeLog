@@ -1,3 +1,11 @@
+2003-04-14 Perry Rapp
+
+	* ChangeLog src/gedlib/names.c src/hdrs/llstdlib.h
+	src/stdlib/strutf8.c
+
+	New next_char32 function for UTF-8 use.
+	Fix piecematch for UTF-8.
+
 2003-04-13 Perry Rapp
 
 	* ChangeLog src/btree/record.c src/gedlib/names.c

@@ -21,7 +21,7 @@ utf8len (char ch)
 {
 	/* test short cases first, as probably much more common */
 	if (!(ch & 0x80 && ch & 0x40))
-		return 1;
+		return 1; /* not a multibyte lead byte */
 	if (!(ch & 0x20))
 		return 2;
 	if (!(ch & 0x10))
@@ -72,4 +72,66 @@ find_prev_char (STRING ptr, INT * width, STRING limit, int utf8)
 	if (width)
 		*width = len;
 	return ptr;
+}
+/*=========================================
+ * next_char32 -- return char and advance pointer
+ *  This is trivial unless we're in UTF-8
+ * character returned is in UCS-4, native alignment
+ * Assumes valid UTF-8 input
+ *=======================================*/
+INT
+next_char32 (STRING * ptr, int utf8)
+{
+	STRING str = *ptr; /* simplifies notation below */
+	if (!utf8) {
+		INT ch = (unsigned char)*str;
+		++(*ptr);
+		return ch;
+	}
+	/* test short cases first, as probably much more common */
+	if (!(*str & 0x80 && *str & 0x40)) {
+		/* if a trail byte, comes thru here & need cast */
+		INT ch = (unsigned char)str[0];
+		++(*ptr);
+		return ch;
+	}
+	if (!(*str & 0x20)) {
+		INT ch = (str[0] & 0x1f << 6)
+			+ (str[1] & 0x3F);
+		(*ptr) += 2;
+		return ch;
+	}
+	if (!(*str & 0x10)) {
+		INT ch = (str[0] & 0x0f << 12)
+			+ (str[1] & 0x3F << 6)
+			+ (str[2] & 0x3F);
+		(*ptr) += 3;
+		return ch;
+	}
+	if (!(*str & 0x08)) {
+		INT ch = (str[0] & 0x0F << 18)
+			+ (str[1] & 0x3F << 12)
+			+ (str[2] & 0x3F << 6)
+			+ str[3] & 0x3F;
+		(*ptr) += 4;
+		return ch;
+	}
+	if (!(*str & 0x04)) {
+		INT ch = (str[0] & 0x0F << 24)
+			+ (str[1] & 0x3F << 18)
+			+ (str[2] & 0x3F << 12)
+			+ (str[3] & 0x3F << 6)
+			+ str[4] & 0x3F;
+		(*ptr) += 5;
+		return ch;
+	} else {
+		INT ch = (str[0] & 0x0F << 30)
+			+ (str[1] & 0x3F << 24)
+			+ (str[2] & 0x3F << 18)
+			+ (str[3] & 0x3F << 12)
+			+ (str[4] & 0x3F << 6)
+			+ str[5] & 0x3F;
+		(*ptr) += 6;
+		return ch;
+	}
 }
