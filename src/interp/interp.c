@@ -1393,12 +1393,11 @@ PNODE node; TABLE stab; WORD *pval;
 /*=============================================+
  * prog_error -- Report a run time program error
  *============================================*/
-prog_error (node, fmt, arg1, arg2, arg3)
+void prog_error (node, s)
 PNODE node;
-STRING fmt;
-WORD arg1, arg2, arg3;
+STRING s;
 {
 	llwprintf("\nError in \"%s\" at line %d: ", ifname(node), iline(node));
-	llwprintf(fmt, arg1, arg2, arg3);
+	llwprintf("%s",s);
 	llwprintf(".\n");
 }

@@ -36,6 +36,7 @@
 #include "gedcom.h"
 #include "cache.h"
 #include "interp.h"
+#include "liflines.h"
 
 extern STRING ierror;
 extern STRING Pfname;
@@ -499,7 +500,7 @@ PNODE args;	/* arg/s */
 /*================================
  * break_node -- Create break node
  *==============================*/
-PNODE break_node ()
+PNODE break_node (void)
 {
 	PNODE node = create_pnode(IBREAK);
 	return node;

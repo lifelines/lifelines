@@ -40,8 +40,6 @@
 #include "indiseq.h"
 #include "liflines.h"
 
-int *eqv_pvalues();
-
 STRING nonnum = (STRING) "At least one argument to %s is not numeric";
 
 extern STRING llprograms;
@@ -1065,7 +1063,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 #endif
 
 	delete_pvalue(val1);
-	while (arg = inext(arg)) {
+	while ((arg = inext(arg))) {
 		if (rc) {
 			val2 = eval_and_coerce(PBOOL, arg, stab, eflg);
 			if (*eflg) {
@@ -1098,7 +1096,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	}
 	rc = rc || (BOOLEAN) pvalue(val1);
 	delete_pvalue(val1);
-	while (arg = inext(arg)) {
+	while ((arg = inext(arg))) {
 		if (!rc) {
 			val2 = eval_and_coerce(PBOOL, arg, stab, eflg);
 			if (*eflg) {
@@ -1121,7 +1119,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
 	if (*eflg) return NULL;
-	while (arg = inext(arg)) {
+	while ((arg = inext(arg))) {
 		val2 = evaluate(arg, stab, eflg);
 		if (*eflg) return NULL;
 		add_pvalues(val1, val2, eflg);
@@ -1161,7 +1159,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
 	if (*eflg) return NULL;
-	while (arg = inext(arg)) {
+	while ((arg = inext(arg))) {
 		val2 = evaluate(arg, stab, eflg);
 		if (*eflg) return NULL;
 		mul_pvalues(val1, val2, eflg);
@@ -2595,7 +2593,6 @@ PVALUE __copyfile (node, stab, eflg)
 PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	FILE *cfp, *fopenpath();
-	int c;
 	STRING fname;
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
 	char buffer[1024];

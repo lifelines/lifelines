@@ -36,6 +36,7 @@
 #include "gedcom.h"
 #include "cache.h"
 #include "interp.h"
+#include "liflines.h"
 
 extern BOOLEAN traceprogram;
 
@@ -231,7 +232,7 @@ PNODE node;
 /*============================================
  * assign_iden -- Assign ident value in symtab
  *==========================================*/
-assign_iden (stab, id, value)
+void assign_iden (stab, id, value)
 TABLE stab; STRING id; WORD value;
 {
 	TABLE tab = stab;
