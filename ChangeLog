@@ -1,5 +1,13 @@
 2002-06-24 Matt Emmerton <memmerto@users.sourceforge.net>
 
+	* ChangeLog configure.in 
+
+	NEW: build/rpm/Makefile.am
+
+	Update automake/autoconf to use new directories.
+
+2002-06-24 Matt Emmerton <memmerto@users.sourceforge.net>
+
 	* ChangeLog 
 
 	NEW:     build/rpm/lifelines.spec
