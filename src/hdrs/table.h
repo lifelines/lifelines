@@ -31,6 +31,8 @@
 #ifndef _TABLE_H
 #define _TABLE_H
 
+#include "standard.h"
+
 #define MAXHASH 512
 
 #define DONTFREE  0
