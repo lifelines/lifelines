@@ -4,6 +4,11 @@
 
 	Make indenting consistent.
 
+	* ChangeLog
+	NEW: build/msvc6/Maekfile.am
+
+	Add needed build/msvc6/Makefile.am.
+
 2002-06-24 Matt Emmerton <memmerto@users.sourceforge.net>
 
 	* ChangeLog README.DEVELOPERS autogen.sh
@@ -100,30 +105,30 @@
 
 	* .linesrc ChangeLog lines.cfg gedlib/charmaps.c gedlib/init.c
 	gedlib/translat.c hdrs/translat.h
-	*NEW: build/msvc6/llines.ico
-	*DELETED: win32/msvc6/llines.ico win32/msvc6/btedit/btedit.rc
-	*DELETED: win32/msvc6/btedit/bteditCmd.dsp
-	*DELETED: win32/msvc6/btedit/bteditCmd.dsw win32/msvc6/btedit/resource.h
-	*DELETED: win32/msvc6/dbverify/dbVerify.rc
-	*DELETED: win32/msvc6/dbverify/dbverifyCmd.dsp
-	*DELETED: win32/msvc6/dbverify/dbverifyCmd.dsw
-	*DELETED: win32/msvc6/dbverify/resource.h win32/msvc6/llines/config.h
-	*DELETED: win32/msvc6/llines/llines.rc win32/msvc6/llines/llinesprj.dsp
-	*DELETED: win32/msvc6/llines/llinesprj.dsw win32/msvc6/llines/resource.h
+	NEW: build/msvc6/llines.ico
+	DELETED: win32/msvc6/llines.ico win32/msvc6/btedit/btedit.rc
+	DELETED: win32/msvc6/btedit/bteditCmd.dsp
+	DELETED: win32/msvc6/btedit/bteditCmd.dsw win32/msvc6/btedit/resource.h
+	DELETED: win32/msvc6/dbverify/dbVerify.rc
+	DELETED: win32/msvc6/dbverify/dbverifyCmd.dsp
+	DELETED: win32/msvc6/dbverify/dbverifyCmd.dsw
+	DELETED: win32/msvc6/dbverify/resource.h win32/msvc6/llines/config.h
+	DELETED: win32/msvc6/llines/llines.rc win32/msvc6/llines/llinesprj.dsp
+	DELETED: win32/msvc6/llines/llinesprj.dsw win32/msvc6/llines/resource.h
 
 	Move MSVC build stuff from win32 to build.
 	Implement GuiCodesetOutput option instead of hardcoding //TRANSLIT
 	always for output to display.
 
 	* ChangeLog
-	*NEW: build/msvc6/btedit/btedit.rc build/msvc6/btedit/bteditCmd.dsp
-	*NEW: build/msvc6/btedit/bteditCmd.dsw build/msvc6/btedit/resource.h
-	*NEW: build/msvc6/dbverify/dbVerify.rc
-	*NEW: build/msvc6/dbverify/dbverifyCmd.dsp
-	*NEW: build/msvc6/dbverify/dbverifyCmd.dsw
-	*NEW: build/msvc6/dbverify/resource.h build/msvc6/llines/config.h
-	*NEW: build/msvc6/llines/llines.rc build/msvc6/llines/llinesprj.dsp
-	*NEW: build/msvc6/llines/llinesprj.dsw build/msvc6/llines/resource.h:
+	NEW: build/msvc6/btedit/btedit.rc build/msvc6/btedit/bteditCmd.dsp
+	NEW: build/msvc6/btedit/bteditCmd.dsw build/msvc6/btedit/resource.h
+	NEW: build/msvc6/dbverify/dbVerify.rc
+	NEW: build/msvc6/dbverify/dbverifyCmd.dsp
+	NEW: build/msvc6/dbverify/dbverifyCmd.dsw
+	NEW: build/msvc6/dbverify/resource.h build/msvc6/llines/config.h
+	NEW: build/msvc6/llines/llines.rc build/msvc6/llines/llinesprj.dsp
+	NEW: build/msvc6/llines/llinesprj.dsw build/msvc6/llines/resource.h:
 
 	Add MVC build stuff that didn't get added before.
 
@@ -143,7 +148,7 @@
 	Start replacing snprintf with llstrncpy.
 
 	* ChangeLog
-	*NEW docs/ll-devguide.xml:
+	NEW: docs/ll-devguide.xml:
 
 	Started developer documentation.
 
@@ -329,9 +334,9 @@
 	interp/interp.c liflines/main.c liflines/screen.c
 	stdlib/double.c stdlib/mystring.c win32/msvc6/llines/config.h
 	win32/msvc6/llines/llines.rc win32/msvc6/llines/llinesprj.dsp
-	*NEW hdrs/win32/iconv.h hdrs/win32/iconvshim.h
-	*NEW hdrs/win32/intlshim.h win32/iconvshim.c win32/intlshim.c
-	*DELETED: arch/bind_textdomain_codeset.c arch/ngettext.c:
+	NEW: hdrs/win32/iconv.h hdrs/win32/iconvshim.h
+	NEW: hdrs/win32/intlshim.h win32/iconvshim.c win32/intlshim.c
+	DELETED: arch/bind_textdomain_codeset.c arch/ngettext.c:
 
 	Remove null implementations of ngettext & bind_textdomain_codeset.
 	(Users with old gettext can just use included version.)
@@ -353,7 +358,7 @@
 	* ChangeLog configure.in gedlib/init.c hdrs/Makefile.am
 	hdrs/llstdlib.h hdrs/standard.h stdlib/Makefile.am
 	stdlib/double.c stdlib/memalloc.c
-	*NEW hdrs/llnls.h stdlib/llnls.c:
+	NEW: hdrs/llnls.h stdlib/llnls.c:
 
 	Test for ngettext & bind_textdomain_codeset in configure.in, and provide
 	null implementations in llnls.c if missing & needed.
@@ -365,8 +370,8 @@
 
 	* ChangeLog configure.in arch/Makefile.am reports/exercise.ll
 	stdlib/Makefile.am
-	*NEW arch/bind_textdomain_codeset.c arch/ngettext.c
-	*DELETED stdlib/llnls.c:
+	NEW: arch/bind_textdomain_codeset.c arch/ngettext.c
+	DELETED stdlib/llnls.c:
 
 	Move null nls implementations to arch.
 
@@ -422,7 +427,7 @@
 	Capture user's most likely codeset at startup.
 	Add 'Q' option on main menu to select a new database.
 
-	*NEW arch/langinfo.c hdrs/langinfz.h:
+	* NEW: arch/langinfo.c hdrs/langinfz.h:
 
 	Implementation of nl_langinfo for platforms lacking such.
 
@@ -486,7 +491,7 @@
 	Add more files to POTFILES, and update lifelines.pot.
 	Bump version to 3.0.15 & release.
 
-	*NEW config.rpath:
+	* NEW: config.rpath:
 
 	I guess this came from gettext-0.11.
 
@@ -500,7 +505,7 @@
 	po/sv.po stdlib/double.c win32/msvc6/libintl/config.h
 	win32/msvc6/libintl/libintlvc6.dsp win32/msvc6/llines/config.h
 	win32/msvc6/llines/llines.rc win32/msvc6/llines/llinesprj.dsp
-	*NEW hdrs/impfeed.h liflines/loadsave.c:
+	NEW: hdrs/impfeed.h liflines/loadsave.c:
 
 	Remove curses code from import.c via interface functions.
 	Implement opening database from list at start.
@@ -551,26 +556,26 @@
 2002-06-05 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog Makefile.am configure.in
-	*NEW m4/Makefile.am m4/lib-ld.m4 m4/lib-link.m4 m4/lib-prefix.m4:
+	NEW: m4/Makefile.am m4/lib-ld.m4 m4/lib-link.m4 m4/lib-prefix.m4:
 
 	More changes from gettextize/automake upgrade.
 
 	* ChangeLog
-	*NEW intl/eval-plural.h intl/gmo.h intl/localename.c
-	*NEW intl/os2compat.c intl/os2compat.h intl/osdep.c
-	*NEW intl/plural-exp.c intl/plural-exp.h:
+	NEW: intl/eval-plural.h intl/gmo.h intl/localename.c
+	NEW: intl/os2compat.c intl/os2compat.h intl/osdep.c
+	NEW: intl/plural-exp.c intl/plural-exp.h:
 
 	Check in new intl files from gettextize upgrade.
 
 	* ChangeLog
-	*NEW po/Makevars:
+	NEW: po/Makevars:
 
 	Check in new file from gettextize upgrade.
 
 	* ChangeLog
-	*NEW po/Rules-quot po/boldquot.sed po/en@boldquot.header
-	*NEW po/en@quot.header po/insert-header.sin po/quot.sed
-	*NEW po/remove-potcdate.sin:
+	NEW: po/Rules-quot po/boldquot.sed po/en@boldquot.header
+	NEW: po/en@quot.header po/insert-header.sin po/quot.sed
+	NEW: po/remove-potcdate.sin:
 
 	Check in more new po files from gettextize upgrade.
 
@@ -603,8 +608,8 @@
 	m4/gettext.m4 m4/glibc21.m4 m4/iconv.m4 m4/isc-posix.m4
 	m4/lcmessage.m4 m4/progtest.m4 po/ChangeLog po/Makefile.in.in
 	tools/Makefile.am
-	*NEW autogen.sh
-	*DELETED acconfig.sh:
+	NEW: autogen.sh
+	DELETED: acconfig.sh:
 
 	Ran gettextize to upgrade included gettext from 0.10.40 to 0.11.2.
 	Removed acconfig.h & ALL_LINGUAS in configure.in (as recommended by
@@ -842,8 +847,8 @@
 2002-04-28 Perry Rapp <puddle@users.sourceforge.net>
 
 	* config.h
-	*NEW libintlvc6.dsp libintlvc6.dsw
-	*DELETED msvc6lib.dsp msvc6lib.dsw:
+	NEW: libintlvc6.dsp libintlvc6.dsw
+	DELETED: msvc6lib.dsp msvc6lib.dsw:
 
 	Updated project files for libintl under MSVC, and added use of iconv.
 
@@ -938,7 +943,7 @@
 	gedlib/translat.c hdrs/gedcom.h hdrs/menuitem.h
 	hdrs/translat.h liflines/main.c liflines/menuitem.c po/LINGUAS
 	tools/Makefile.am
-	*NEW po/de.po:
+	NEW: po/de.po:
 
 	Set crashlog file before initializing menus, so menuitem conflicts
 	will be logged. Revised menuitem to continue if menuitem conflict.
@@ -961,8 +966,8 @@
 	stdlib/Makefile.am stdlib/environ.c stdlib/memalloc.c
 	stdlib/mystring.c stdlib/signals.c tools/Makefile.am
 	win32/msvc6/llines/llines.rc win32/msvc6/llines/llinesprj.dsp
-	*NEW m4/README m4/codeset.m4 m4/gettext.m4 m4/glibc21.m4
-	*NEW m4/iconv.m4 m4/isc-posix.m4 m4/lcmessage.m4 m4/progtest.m4:
+	NEW: m4/README m4/codeset.m4 m4/gettext.m4 m4/glibc21.m4
+	NEW: m4/iconv.m4 m4/isc-posix.m4 m4/lcmessage.m4 m4/progtest.m4:
 
 	Add gettext m4 files as new m4 subdirectory.
 	Revise arch.h to not include config.h.
@@ -982,7 +987,7 @@
 2002-02-26 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog po/sv.po
-	*NEW README.INTERNATIONAL:
+	NEW: README.INTERNATIONAL:
 
 	New readme for l10n issues & update to Swedish version.
 
@@ -1004,14 +1009,14 @@
 	liflines/main.c liflines/screen.c po/LINGUAS po/it.po
 	reports/exercise.ll stdlib/stdstrng.c tools/dbverify.c
 	win32/msvc6/llines/config.h win32/msvc6/llines/llines.rc
-	*NEW po/sv.po:
+	NEW: po/sv.po:
 
 	Finish i18n main menu. Split locale options into collate
 	& messages (eg, UiLocaleMessages). Add Swedish msg catalog.
 
 	* ChangeLog gedlib/messages.c liflines/ask.c liflines/scan.c
 	liflines/screen.c
-	*NEW po/el.po:
+	NEW: po/el.po:
 
 	i18n utility, extra, & scan menus.
 
@@ -1027,7 +1032,7 @@
 	liflines/Makefile.am liflines/main.c liflines/menuitem.c
 	liflines/screen.c tools/Makefile.am
 	win32/msvc6/llines/llines.rc win32/msvc6/llines/llinesprj.dsp
-	*NEW intl/* intl/hdr/libintl.h po/* win32/libintl/*:
+	NEW: intl/* intl/hdr/libintl.h po/* win32/libintl/*:
 
 	Implemented gettext-0.10.40 (new intl/ & po/).
 	Added win32/msvc6/libintl project. Added it.po as test
@@ -1038,7 +1043,7 @@
 	liflines/delete.c liflines/edit.c liflines/main.c
 	liflines/merge.c liflines/newrecs.c liflines/screen.c
 	liflines/show.c liflines/swap.c po/POTFILES.in po/it.po
-	*NEW ABOUT_NLS
+	NEW: ABOUT_NLS
 
 	More i18n.
 
@@ -1066,7 +1071,7 @@
 	liflines/Makefile.am liflines/browse.c liflines/main.c
 	liflines/screen.c liflines/show.c stdlib/double.c
 	win32/msvc6/llines/llinesprj.dsp
-	*NEW hdrs/date.h:
+	NEW: hdrs/date.h:
 
 	Moved date function declarations out of interp.h into new
 	date.h. Changed some calls to prog_error to new prog_var_error.
@@ -1244,7 +1249,7 @@
 
 	* ChangeLog Makefile.am configure.in hdrs/Makefile.am
 	hdrs/version.h
-	*NEW hdrs/win32/Makefile.am win32/Makefile.am
+	NEW: hdrs/win32/Makefile.am win32/Makefile.am
 	win32/msvc6/Makefile.am:
 
 	Add files in hdrs/win32 & win32 & win32 subdirs to dist.
@@ -1253,7 +1258,7 @@
 2002-01-25 Perry Rapp <puddle@users.sourceforge.net>
 
 	* .linesrc ChangeLog lines.cfg gedlib/property.c
-	*NEW docs/llines.1:
+	NEW: docs/llines.1:
 
 	Revised my ChangeLog entries for added files to say *NEW (for
 	greppability). Added minimal man page. Made all config variables
@@ -1560,7 +1565,7 @@
 2001-12-30 Perry Rapp <puddle@users.sourceforge.net>
 
 	* tools/dispcode.c
-	*NEW tools/prettytt.c:
+	NEW: tools/prettytt.c:
 
 	Near-trivial program to convert binary translation table to
 	all-ascii one.
@@ -2262,7 +2267,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 	gedlib/messages.c hdrs/btree.h hdrs/gedcom.h hdrs/llstdlib.h
 	hdrs/standard.h liflines/main.c liflines/screen.c
 	stdlib/assert.c tools/btedit.c tools/dbverify.c
-	*NEW hdrs/msvc.h:
+	NEW: hdrs/msvc.h:
 	Added -i for immutable access, and -ly & -ln for
 	locking & unlocking a database.
 
@@ -2331,7 +2336,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 	("##!name: " directive) and displayed it in menu items.
 
 	* ChangeLog stdlib/Makefile.am
-	*NEW hdrs/bfs.h stdlib/bfs.c:
+	NEW: hdrs/bfs.h stdlib/bfs.c:
 	Added new dynamic string code (bfs.*).
 
 	* ChangeLog btree/file.c hdrs/translat.h:
@@ -2989,7 +2994,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 	liflines/import.c liflines/llinesi.h liflines/main.c
 	liflines/screen.c liflines/valgdcom.c stdlib/environ.c
 	stdlib/warehouse.c tools/dbverify.c
-	*NEW gedlib/lloptions.c hdrs/lloptions.h hdrs/metadata.h
+	NEW: gedlib/lloptions.c hdrs/lloptions.h hdrs/metadata.h
 	stdlib/lldate.c:
 	Clarified lineno global names (lineno->flineno,tlineno->travlineno).
 	Changed add_indi_by_edit, add_unlinked_indi to get nod0.
@@ -3060,7 +3065,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 
 	* hdrs/screen.h liflines/browse.c liflines/llinesi.h
 	liflines/screen.c
-	*NEW hdrs/menuitem.h liflines/menuitem.c:
+	NEW: hdrs/menuitem.h liflines/menuitem.c:
 	New paging & resizable menu system.
 
 	liflines/Makefile.am: Added menuitem.c.
@@ -3093,7 +3098,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 	* ChangeLog btree/utils.c gedlib/intrface.c gedlib/keytonod.c
 	gedlib/names.c gedlib/node.c gedlib/valid.c hdrs/gedcom.h
 	hdrs/standard.h liflines/main.c stdlib/path.c stdlib/signals.c
-	*NEW hdrs/warehouse.h stdlib/warehouse.c:
+	NEW: hdrs/warehouse.h stdlib/warehouse.c:
 
 	Directory separator bugfixes.
 	LLNEWDBDIR bugfix (from Ethel bug on creating new db).
@@ -3209,7 +3214,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 	gedlib/node.c hdrs/gedcom.h interp/more.c liflines/Makefile.am
 	liflines/export.c liflines/main.c liflines/scan.c
 	liflines/screen.c stdlib/Makefile.am
-	*NEW hdrs/fpattern.h stdlib/fpattern.c:
+	NEW: hdrs/fpattern.h stdlib/fpattern.c:
 	Put version number in its own header.
 	Add fpattern pattern-matching for scan.
 	Changed scan to stay in scan until match selected or user quits.
@@ -3295,7 +3300,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 	titlebar. Added wtitle to win32 curses for titlebar.
 
 	* gedlib/init.c liflines/ask.c
-	*NEW tests/dotests.sh tests/runtest1.sh tests/test1.ged:
+	NEW: tests/dotests.sh tests/runtest1.sh tests/test1.ged:
 	tests/test1.ll tests/test1.out
 	Suppress llprograms & llreports in selftest. Added tests & test1.
 
@@ -3475,7 +3480,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 	* gedlib/indiseq.c gedlib/keytonod.c hdrs/indiseq.h
 	hdrs/interpi.h hdrs/screen.h hdrs/table.h interp/functab.c
 	interp/intrpseq.c stdlib/table.c
-	*NEW gedlib/gengedc.c hdrs/gengedc.h:
+	NEW: gedlib/gengedc.c hdrs/gengedc.h:
 	gen_gedcom rewrite (gengedcomweak & strong & original)
 	(includes new table functions).
 
@@ -3488,7 +3493,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 	Add refn traversal & refn scan (& refn checking in dbverify).
 	Move del_in_dbase from liflines to gedlib (interface.c).
 	Added <fcntl.h> to sys_inc.h for MSVC/Windows.
-	*NEW tools/dbverify file.
+	NEW: tools/dbverify file.
 
 2000-12-31 Perry Rapp <puddle@users.sourceforge.net>
 
@@ -3666,7 +3671,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 	gedlib/messages.c gedlib/names.c hdrs/btree.h hdrs/gedcom.h
 	hdrs/screen.h interp/interp.c liflines/add.c liflines/export.c
 	liflines/llinesi.h liflines/main.c liflines/screen.c
-	*NEW liflines/scan.c:
+	NEW: liflines/scan.c:
 	Added name scan (search all names in database against
 	a pattern - only exact match against any word of name
 	for now).
