@@ -1139,7 +1139,7 @@ child_indiseq (INDISEQ seq)
 	cseq = create_indiseq_impl(IValtype(seq), IValfnctbl(seq));
 	FORINDISEQ(seq, el, num)
 		indi = key_to_indi(skey(el));
-		FORFAMSS(indi, fam, spouse, num1)
+		FORFAMS(indi, fam, num1)
 			FORCHILDRENx(fam, chil, num2)
 				key = indi_to_key(chil);
 				if (!in_table(tab, key)) {
@@ -1150,7 +1150,7 @@ child_indiseq (INDISEQ seq)
 					insert_table_int(tab, key, 0);
 				}
 			ENDCHILDRENx
-		ENDFAMSS
+		ENDFAMS
 	ENDINDISEQ
 	destroy_table(tab);
 	return cseq;
@@ -1167,13 +1167,13 @@ indi_to_children (NODE indi)
 	STRING key;
 	if (!indi) return NULL;
 	seq = create_indiseq_null();
-	FORFAMSS(indi, fam, spouse, num1)
+	FORFAMS(indi, fam, num1)
 		FORCHILDRENx(fam, chil, num2)
 			len++;
 			key = indi_to_key(chil);
 			append_indiseq_null(seq, key, NULL, FALSE, FALSE);
 		ENDCHILDRENx
-	ENDFAMSS
+	ENDFAMS
 	if (len) return seq;
 	remove_indiseq(seq);
 	return NULL;
@@ -1192,7 +1192,7 @@ indi_to_spouses (NODE indi)
 	if (!indi) return NULL;
 	seq = create_indiseq_ival();
 	IPrntype(seq) = ISPRN_SPOUSESEQ;
-	FORFAMSS(indi, fam, spouse, num)
+	FORFAMS(indi, fam, num)
 		FORHUSBS(fam, husb, num1)
 			if(husb != indi) {
 				len++;
@@ -1209,7 +1209,7 @@ indi_to_spouses (NODE indi)
 				append_indiseq_ival(seq, key, NULL, val, TRUE, FALSE);
 			}
 		ENDWIFES
-	ENDFAMSS
+	ENDFAMS
 	if (!len) {
 		remove_indiseq(seq);
 		seq=NULL;
@@ -1488,7 +1488,7 @@ descendent_indiseq (INDISEQ seq)
 		key = (STRING) dequeue_list(deslist);
 		gen = (INT) dequeue_list(genlist) + 1;
 		indi = key_to_indi(key);
-		FORFAMSS(indi, fam, spouse, num1)
+		FORFAMS(indi, fam, num1)
 				/* skip families already processed */
 			if (in_table(ftab, fkey = fam_to_key(fam)))
 				goto a;
@@ -1509,7 +1509,7 @@ descendent_indiseq (INDISEQ seq)
 				}
 			ENDCHILDRENx
 		a:;
-		ENDFAMSS
+		ENDFAMS
 	}
 	destroy_table(itab);
 	destroy_table(ftab);

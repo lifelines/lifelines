@@ -428,9 +428,9 @@ gen_gedcom (INDISEQ seq, int gengedcl, BOOLEAN * eflg)
 		famc = indi_to_famc(indi);
 		if (famc)
 			table_incr_item(fams, fam_to_key(famc));
-		FORFAMSS(indi, fam, spouse, num1)
+		FORFAMS(indi, fam, num1)
 			table_incr_item(fams, fam_to_key(fam));
-		ENDFAMSS
+		ENDFAMS
 	ENDINDISEQ
 
 	traverse_table_param(fams, &add_refd_fams, &closure);

@@ -675,6 +675,10 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 		if (__node && nestr(ntag(__node), "CHIL")) __node = NULL;\
 	}}
 
+/* FORSPOUSES iterate over all FAMS nodes & all spouses of indi
+ * if there are multiple spouses, user will see same fam with multiple spouses
+ * if there are no spouses for a particular family the family is not returned.
+ */
 #define FORSPOUSES(indi,spouse,fam,num) \
 	{\
 	NODE __node = FAMS(indi);\
@@ -682,70 +686,94 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 	STRING __key=0;\
 	num = 0;\
 	while (__node) {\
-	    if (spouse == 0) {\
-		__key = rmvat(nval(__node));\
-		if (!__key || !(fam = qkey_to_fam(__key))) {\
-			++num;\
-			__node = nsibling(__node);\
-			continue;\
-		}\
+	    __key = rmvat(nval(__node));\
+	    __node = nsibling(__node);\
+	    if (__key && (fam = qkey_to_fam(__key))) {\
 		__node1 = nchild(fam);\
-	    }\
-	    /* inline find_tag here to search for either husb or wife */\
-	    spouse = 0;\
-	    while (__node1) {\
-		if (eqstr("HUSB",ntag(__node1)) || eqstr("WIFE",ntag(__node1))) {\
-		    __key = rmvat(nval(__node1));\
-		    if (__key && (spouse = key_to_indi(__key))) {\
-			if (spouse != indi) {\
-			    break;\
-			} else {\
-			    spouse = 0;\
+		/* inline find_tag here to search for either husb or wife */\
+		while (__node1) {\
+		    spouse = 0;\
+		    if (eqstr("HUSB",ntag(__node1)) || eqstr("WIFE",ntag(__node1))){\
+			__key = rmvat(nval(__node1));\
+			__node1 = nsibling(__node1);\
+			if (!__key || !(spouse = key_to_indi(__key))||spouse==indi){\
+			    continue;\
 			}\
+		    } else {\
+			__node1 = nsibling(__node1);\
+			continue;\
 		    }\
-		}\
-		__node1 = nsibling(__node1);\
-	    }\
-	    if (spouse != NULL) {\
 		    ++num;\
 		    {
 
 #define ENDSPOUSES \
 		    }\
-		    __node1 = nsibling(__node1);\
-	    } else {\
-		    __node = nsibling(__node);\
-		    if (__node && nestr(ntag(__node), "FAMS")) __node = NULL;\
+		}\
 	    }\
+	    if (__node && nestr(ntag(__node), "FAMS")) __node = NULL;\
 	}}
 
-#define FORFAMSS(indi,fam,spouse,num) \
+/* FORFAMS iterate over all FAMS nodes of indi
+ *    this is an optimization of FORFAMSS for cases where spouse is not used
+ *    or computed in other ways.
+ */
+#define FORFAMS(indi,fam,num) \
 	{\
 	NODE __node = FAMS(indi);\
-	INT __sex = SEX(indi);\
-	NODE fam=0, spouse=0;\
+	NODE fam=0;\
 	STRING __key=0;\
 	num = 0;\
 	while (__node) {\
 		__key = rmvat(nval(__node));\
-		if (!__key || !(fam = qkey_to_fam(__key))) {\
-			++num;\
-			__node = nsibling(__node);\
-			continue;\
+	    if (__key && (fam = qkey_to_fam(__key))) {\
+		++num;\
+		{
+
+#define ENDFAMS \
 		}\
-		if (__sex == SEX_MALE)\
-			spouse = fam_to_wife_node(fam);\
-		else if (__sex == SEX_FEMALE)\
-			spouse = fam_to_husb_node(fam);\
-		else \
-			spouse = fam_to_spouse(fam, indi);\
+		}\
+		__node = nsibling(__node);\
+		if (__node && nestr(ntag(__node), "FAMS")) __node = NULL;\
+	}}
+
+/* FORFAMSS iterate over all FAMS nodes & all spouses of indi
+ * if there are multiple spouses, user will see same fam with multiple spouses
+ * if there are no spouses for a particular family NULL is returned for spouse
+ */
+#define FORFAMSS(indi,fam,spouse,num) \
+	{\
+	INT first_sp; \
+	NODE __node = FAMS(indi);\
+	NODE __node1=0, spouse=0, fam=0;\
+	STRING __key=0;\
+	num = 0;\
+	while (__node) {\
+	    __key = rmvat(nval(__node));\
+	    __node = nsibling(__node);\
+	    if (__key && (fam = qkey_to_fam(__key))) {\
+		__node1 = nchild(fam);\
+		first_sp = 0;\
+		while (__node1) {\
+		    spouse=0;\
+		    if (eqstr("HUSB",ntag(__node1)) || eqstr("WIFE",ntag(__node1))){\
+			__key = rmvat(nval(__node1));\
+			__node1 = nsibling(__node1);\
+			if (!__key || !(spouse = key_to_indi(__key))||spouse==indi){\
+			    continue;\
+			}\
+			first_sp = 1;\
+		    } else {\
+			__node1 = nsibling(__node1);\
+			if (__node1 || first_sp) continue;\
+		    }\
 		++num;\
 		{
 
 #define ENDFAMSS \
 		}\
-		__node = nsibling(__node);\
-		if (__node && nestr(ntag(__node), "FAMS")) __node = NULL;\
+	    }\
+	}\
+	if (__node && nestr(ntag(__node), "FAMS")) __node = NULL;\
 	}}
 
 #define FORFAMCS(indi,fam,fath,moth,num) \

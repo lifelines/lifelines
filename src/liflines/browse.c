@@ -243,12 +243,12 @@ goto_indi_child (RECORD irec, int childno)
 	RECORD answer = 0;
 	NODE indi = nztop(irec);
 	if (!irec) return NULL;
-	FORFAMSS(indi, fam, spouse, num1)
+	FORFAMS(indi, fam, num1)
 		FORCHILDREN(fam, chil, num2)
 			i++;
 			if (i == childno) answer = chil;
 		ENDCHILDREN
-	ENDFAMSS
+	ENDFAMS
 	return answer;
 }
 /*================================================

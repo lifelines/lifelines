@@ -1,3 +1,12 @@
+2005-01-10 Stephen Dum
+        * ChangeLog docs/ll-reportmanual.xml src/gedlib/gengedc.c 
+	  src/gedlib/indiseq.c src/hdrs/gedcom.h src/liflines/browse.c 
+	  src/liflines/show.c 
+
+	  Update FORFAMSS to handle non-traditional families
+	  Create FORFAMS to iterate only on families (doesn't compute
+	  spouses).
+
 2005-01-09 Perry Rapp
 
 	* ChangeLog NEWS

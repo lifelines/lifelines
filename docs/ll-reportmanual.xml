@@ -957,7 +957,7 @@ union of all arithmetic types (INT and FLOAT)
 
 <glossentry><glossterm><type>SET</type></glossterm><glossdef>
 <para>
-arbitrary length set of persons (reference)
+a collection of persons each with a value (see person sets below).
 </para>
 </glossdef></glossentry>
 
@@ -2395,6 +2395,16 @@ insert entry in table
 lookup and return entry from table
 </para>
 
+</glossdef></glossentry>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INT <function>length</function></funcdef>
+<paramdef><parameter>TABLE</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+size of the table
+</para>
+
 </glossdef></glossentry></glosslist>
 
 <para>
@@ -2412,6 +2422,7 @@ value. If there already is an object in the table with that key, the old object 
 <function>Lookup</function> retrieves an object from a table. Its first parameter is a table, and the second parameter
 is the object's key. The function returns the object with that key from the table; if there is no such object,
 <returnvalue>null</returnvalue> is returned.
+<function>length</function> returns the number of elements in the table.
 </para>
 
 </sect1>
@@ -4197,7 +4208,7 @@ remove a person from a set
 
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
-<funcdef>INT <function>lengthset</function></funcdef>
+<funcdef>INT <function>length</function></funcdef>
 <paramdef><parameter>SET</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
@@ -4392,8 +4403,8 @@ the <function>indiset</function> function before it can be used.
 the third argument may be any value. The same person may be added to a set more than once, each time
 with a different value. <function>Deletefromset</function> removes a person from a set. The first argument is the set; the
 second argument is the person; if the third parameter is <returnvalue>true</returnvalue> all of the person's entries are removed
-from the set; if <returnvalue>false</returnvalue> only the first entry is removed. <function>Lengthset</function> returns the number of persons in a
-person set.
+from the set; if <returnvalue>false</returnvalue> only the first entry is removed. 
+<function>Length</function> returns the number of persons in a person set.
 </para>
 
 <para>
@@ -4976,6 +4987,26 @@ delete a node from a GEDCOM tree
 </para>
 </glossdef></glossentry>
 </glosslist>
+
+<para>
+In releases after version 3.0.39, the 
+<function>length</function> function accepts an argument of type 
+<type>list</type>, <type>set</type> or <type>table</type>.  the
+<function>lengthset</function> function is no longer needed.
+</para> 
+
+<glosslist>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INT <function>lengthset</function></funcdef>
+<paramdef><parameter>SET</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+size of a set
+</para>
+</glossdef></glossentry>
+</glosslist>
+
 
 </sect1>
 

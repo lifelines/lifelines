@@ -275,25 +275,25 @@
    systems  a  32-bit signed value) LIST arbitrary length list of any
    values  (reference)  NODE  GEDCOM  node;  reference to a line in a
    GEDCOM  tree/record  (reference)  NUMBER  union  of all arithmetic
-   types  (INT  and  FLOAT)  SET  arbitrary  length  set  of  persons
-   (reference)   STRING   text   string  TABLE  keyed  look-up  table
-   (reference)  VOID type with no values In the summaries of built-in
-   functions  below,  each  function is shown with its argument types
-   and  its  return  type.  The  types  are  from the preceding list.
-   Sometimes  an  argument to a built-in function must be a variable;
-   when  this  is  so its type is given as XXX_V, where XXX is one of
-   the  types  above.  The  built-ins do not check the types of their
-   arguments.  Variables  can  hold values of any type, though at any
-   one  time  they will hold values of only one type. Note that EVENT
-   is a subtype of NODE, and BOOL is a subtype of INT. Built-ins with
-   type  VOID  actually  return  null  (zero) values. Reference types
-   (denoted  above in parentheses) obey "pointer semantics", which is
-   to  say  that  assigning  one  to another variable results in both
-   variables  pointing at the same data (no copy is made). Therefore,
-   if  you  pass a string to a function which changes the string, the
-   caller  does  not  see  the  change,  because  a  string  is not a
-   reference  type.  On  the  other  hand,  if  you pass a table to a
-   function  which  alters the table, the caller does see the change,
+   types  (INT  and  FLOAT)  SET  a collection of persons each with a
+   value  (see  person  sets  below).  STRING text string TABLE keyed
+   look-up  table  (reference)  VOID  type  with  no  values  In  the
+   summaries of built-in functions below, each function is shown with
+   its  argument  types  and  its return type. The types are from the
+   preceding  list. Sometimes an argument to a built-in function must
+   be  a  variable; when this is so its type is given as XXX_V, where
+   XXX  is  one  of  the  types above. The built-ins do not check the
+   types  of  their arguments. Variables can hold values of any type,
+   though  at  any  one  time they will hold values of only one type.
+   Note  that  EVENT  is  a subtype of NODE, and BOOL is a subtype of
+   INT.  Built-ins with type VOID actually return null (zero) values.
+   Reference  types  (denoted  above  in  parentheses)  obey "pointer
+   semantics", which is to say that assigning one to another variable
+   results  in  both  variables pointing at the same data (no copy is
+   made). Therefore, if you pass a string to a function which changes
+   the  string,  the caller does not see the change, because a string
+   is not a reference type. On the other hand, if you pass a table to
+   a function which alters the table, the caller does see the change,
    because a table is a reference type. NUMBER add NUMBER, NUMBER ...
    addition   -  two  to  32  arguments  NUMBER  sub  NUMBER,  NUMBER
    subtraction  NUMBER mul NUMBER, NUMBER ... multiplication - two to
@@ -557,48 +557,50 @@
    parameter  is  an  integer  counter  variable that counts the list
    elements  starting at one. VOID table TABLE_V declare a table VOID
    insert  TABLE, STRING, ANY insert entry in table ANY lookup TABLE,
-   STRING  lookup and return entry from table These functions provide
-   general  purpose,  keyed tables. A table must be declared with the
-   table  function  before  it can be used. Insert adds an object and
-   its  key  to  a  table. Its first parameter is a table; the second
-   parameter  is  the  object's  key;  and the third parameter is the
-   object  itself. The key must be a string and the object can be any
-   value.  If  there already is an object in the table with that key,
-   the  old  object  is  replaced  with  the new. Lookup retrieves an
-   object  from  a  table.  Its  first  parameter is a table, and the
-   second  parameter  is  the  object's key. The function returns the
-   object  with  that key from the table; if there is no such object,
-   null is returned. STRING xref NODE cross reference index of STRING
-   tag NODE tag of STRING value NODE value of NODE parent NODE parent
-   node  of  NODE  child  NODE  first child of NODE sibling NODE next
-   sibling of NODE savenode NODE copy a node structure INT level NODE
-   level  of a node fornodes (NODE, NODE_V) { commands } loop through
-   child nodes fornotes (ANY, STRING) { commands } loop through notes
-   on a node traverse (NODE, NODE_V, INT_V) { commands } loop through
-   all  descendent  nodes  These  functions  provide  access  to  the
-   components  of a GEDCOM node. All take a GEDCOM node as their only
-   parameter,  and each returns a different value associated with the
-   node.  Xref returns the cross reference index of the node, if any;
-   tag  returns  the  tag of the node; and value returns the value of
-   the  node,  if  any.  If there is no cross reference, xref returns
-   null; if there is no value, value returns null. Parent returns the
-   parent  node  of  the  node, if any; child returns the first child
-   node  of  the  node,  if any; and sibling returns the next sibling
-   node  of the node, if any. Whenever there is no such related node,
-   these  functions  return  null. These three functions allow simple
-   navigation  through  a  GEDCOM node tree. Savenode makes a copy of
-   the  node,  and  the substructure of nodes below the node, that is
-   passed  to  it.  Beware: the memory used to make the copy is never
-   returned  to  the  system. The level function returns the level of
-   the  node.  Fornodes  is  an iterator that loops through the child
-   nodes  of  a GEDCOM node. Its first argument is a node expression,
-   and  its second parameter is a variable that iterates through each
-   direct  child node of the first node. Fornotes is an iterator that
-   loops  through the NOTE nodes of a GEDCOM node. Its first argument
-   is  a node expression, and its second parameter is a variable that
-   returns  the  value  of the NOTE. The value includes processed sub
-   CONC and CONT records. Traverse is an iterator providing a general
-   method  for traversing GEDCOM trees. Its first parameter is a node
+   STRING lookup and return entry from table INT length TABLE size of
+   the table These functions provide general purpose, keyed tables. A
+   table  must  be  declared with the table function before it can be
+   used.  Insert  adds  an  object  and its key to a table. Its first
+   parameter  is  a  table; the second parameter is the object's key;
+   and  the  third  parameter is the object itself. The key must be a
+   string  and  the  object  can be any value. If there already is an
+   object in the table with that key, the old object is replaced with
+   the  new.  Lookup  retrieves  an  object  from  a table. Its first
+   parameter  is  a  table,  and the second parameter is the object's
+   key. The function returns the object with that key from the table;
+   if  there  is no such object, null is returned. length returns the
+   number  of elements in the table. STRING xref NODE cross reference
+   index  of  STRING  tag NODE tag of STRING value NODE value of NODE
+   parent  NODE  parent  node  of NODE child NODE first child of NODE
+   sibling  NODE  next  sibling  of  NODE  savenode  NODE copy a node
+   structure INT level NODE level of a node fornodes (NODE, NODE_V) {
+   commands  }  loop  through  child  nodes  fornotes (ANY, STRING) {
+   commands  }  loop  through notes on a node traverse (NODE, NODE_V,
+   INT_V)  {  commands  }  loop  through  all  descendent nodes These
+   functions  provide  access to the components of a GEDCOM node. All
+   take  a  GEDCOM  node  as their only parameter, and each returns a
+   different  value  associated with the node. Xref returns the cross
+   reference  index  of  the node, if any; tag returns the tag of the
+   node; and value returns the value of the node, if any. If there is
+   no cross reference, xref returns null; if there is no value, value
+   returns  null. Parent returns the parent node of the node, if any;
+   child  returns  the  first  child  node  of  the node, if any; and
+   sibling  returns  the  next  sibling  node  of  the  node, if any.
+   Whenever  there  is  no  such related node, these functions return
+   null.  These  three  functions  allow  simple navigation through a
+   GEDCOM  node  tree.  Savenode  makes  a  copy of the node, and the
+   substructure  of  nodes  below  the  node,  that  is passed to it.
+   Beware:  the memory used to make the copy is never returned to the
+   system. The level function returns the level of the node. Fornodes
+   is  an  iterator  that  loops  through the child nodes of a GEDCOM
+   node.  Its  first  argument  is  a node expression, and its second
+   parameter  is  a  variable that iterates through each direct child
+   node of the first node. Fornotes is an iterator that loops through
+   the  NOTE  nodes  of  a  GEDCOM node. Its first argument is a node
+   expression,  and  its  second parameter is a variable that returns
+   the  value  of the NOTE. The value includes processed sub CONC and
+   CONT  records.  Traverse is an iterator providing a general method
+   for  traversing  GEDCOM  trees.  Its  first  parameter  is  a node
    expression;  its second parameter is a variable that iterates over
    every  node  under  the  first  node  in a top down, left to right
    manner;  and  its third parameter is a variable that is set to the
@@ -901,126 +903,126 @@
    output  window;  print  may have one to 32 arguments. VOID indiset
    SET_V  declare  a  set  variable SET addtoset SET, INDI, ANY add a
    person  to a set SET deletefromset SET, INDI, BOOL remove a person
-   from  a  set  INT  lengthset  SET size of a set SET union SET, SET
-   union  of two sets SET intersect SET, SET intersection of two sets
-   SET  difference  SET, SET difference of two sets SET parentset SET
-   set  of  all  parents  SET  childset  SET  set of all children SET
-   spouseset  SET  set  of  all spouses SET siblingset SET set of all
-   siblings   SET   ancestorset   SET   set   of  all  ancestors  SET
-   descendentset  SET  set  of  all descendents SET descendantset SET
-   same   as   descendentset;   spelling  SET  uniqueset  SET  remove
-   duplicates  from  set  VOID namesort SET sort indiset by name VOID
-   keysort  SET  sort  indiset  by key values VOID valuesort SET sort
-   indiset  by  auxiliary values VOID genindiset STRING, SET generate
-   indiset  from  GEDCOM name string BOOL inset SET, INDI true if the
-   Individual  is in the set. forindiset( SET, INDI_V, ANY_V, INT_V )
-   {  commands  }  loop  through  all  persons  in  person  set These
-   functions  allow  you to manipulate person sets. A person set is a
-   potentially  large  set  of  persons;  each  person  may  have  an
-   arbitrary  value  associated  with  him/her.  A person set must be
-   declared with the indiset function before it can be used. Addtoset
-   adds  a person to a set. The first argument is the set; the second
-   argument  is  the person; and the third argument may be any value.
-   The  same  person  may be added to a set more than once, each time
-   with a different value. Deletefromset removes a person from a set.
-   The  first argument is the set; the second argument is the person;
-   if  the  third  parameter  is true all of the person's entries are
-   removed  from  the  set; if false only the first entry is removed.
-   Lengthset  returns  the  number of persons in a person set. Union,
-   intersect  and  difference  return the set union, set intersection
-   and  set  difference,  respectively,  of  two  person  sets.  Each
-   functions  takes  two person sets as arguments and returns a third
-   person  set.  The  functions  actually modify their argument sets,
-   both  reordering  them  into  canonical key order and removing any
-   duplicates  (these  operations  are  necessary to easily implement
-   these  types of set functions). Parentset, childset, spouseset and
-   siblingset return the set of all parents, set of all children, set
-   of  all  spouses and set of all siblings, respectively, of the set
-   of  persons  in their argument. In all cases there is no change to
-   the argument person set. Ancestorset returns the set all ancestors
-   of  all persons in the argument set. Descendentset returns the set
-   of   all   descendents   of  all  persons  in  the  argument  set.
-   Descendantset is the same as descendentset; it allows an alternate
-   spelling.  Uniqueset  sorts  a  person  set  by key value and then
-   removes all entries with duplicate keys; the input set is modified
-   and  returned.  Namesort,  keysort  and  valuesort  sort  a set of
-   persons  by  name,  by  key and by associated value, respectively.
-   Each person in a person set has an associated value. When a person
-   is added to a set with addtoset, the value is explicitly assigned.
-   When  new  sets  are created by other functions, a number of rules
-   are used to associate values with persons as they are added to the
-   new  sets.  For  parentset,  childset and spouseset the values are
-   copied  from the first input set person that causes the new person
-   to  be  added to the set. For union, intersect and difference, the
-   values  are  copied from the values in the first input set, except
-   in  the  case of union, when persons are taken from the second set
-   alone,  in  which case the values come from there. For ancestorset
-   and  descendantset  the  value is set to the number of generations
-   the new person is away from the first person in the input set that
-   the new person is related to. If the new person is related to more
-   than one person in the input set, the value is set for the nearest
-   relationship;  that is, the value is as low as possible. Valuesort
-   sorts  a  person  set  by  the  values  of these auxiliary values.
-   Genindiset  generates  the  set  of  persons that matches a string
-   whose  value  is a name in GEDCOM format. Genindiset uses the same
-   algorithm  that  matches  names entered at the browse prompt or by
-   the  user  interaction  getindiset function. Inset returns true if
-   the  the  specified  individual  is  in  the SET. Forindiset is an
-   iterator  that  loops through each person in an indiset. The first
-   parameter  is  an indiset. The second parameter is a variable that
-   iterates  through  each  person  in  the  set. The third parameter
-   iterates  through  the  values  associated  with  the persons. The
-   fourth   parameter   is   an  integer  variable  that  counts  the
-   iterations.  NODE  createnode  STRING, STRING create a GEDCOM node
-   VOID  addnode  NODE,  NODE,  NODE add a node to a GEDCOM tree VOID
-   detachnode  NODE  delete  a node from a GEDCOM tree VOID writeindi
-   INDI write a person back to the database VOID writefam FAM write a
-   family back to the database These functions allow you to modify an
-   internal  GEDCOM  node tree. Createnode creates a GEDCOM node; the
-   two  arguments  are tag and value strings, respectively; the value
-   string  can be null. Addnode adds a node to a node tree. The first
-   argument  is the new node; the second is the node in the tree that
-   becomes  the  parent of the new node; the third is the node in the
-   tree  that  becomes  the  previous  sibling  of the new node; this
-   argument  is  null if the new node is to become the first child of
-   the  parent. Detachnode removes a node from a node tree. writeindi
-   writes  an  individual  record  back to the database, and writefam
-   writes  a  family record back to the database, allowing the report
-   to make permanent changes to the database. The node functions only
-   change  data  in  memory; there is no effect on the database until
-   and unless writeindi or writefam are called. BOOL reference STRING
-   determine  if  string is a cross reference NODE dereference STRING
-   reference  cross  reference  or  key  to  node tree NODE getrecord
-   STRING  same as dereference These functions allow you to recognize
-   values  that  are  cross  references  and to read the records they
-   refer to. Reference returns true if its string argument is a cross
-   reference  value,  that is, the internal key of one of the records
-   in  the  database. Dereference returns the node tree of the record
-   referred to by its cross reference string argument. Getrecord is a
-   synonym  for  dereference.  VOID  lock  INDI|FAM  lock a person or
-   family  in  memory  VOID unlock INDI|FAM unlock a person or family
-   from memory STRING database return name of current database STRING
-   program  return  name  of  current  program  STRING version return
-   version  of LifeLines program VOID system STRING execute string as
-   a  UNIX shell command INT heapused amount of heap used for windows
-   STRING   getproperty  STRING  extract  system  or  user  property.
-   Function  available  after v3.0.5. STRING setlocale STRING set the
-   locale STRING bytecode STRING, STRING encode a string in a codeset
-   STRING  convertcode STRING, STRING, STRING convert string from one
-   codeset  to  another VOID debug BOOLEAN set interperter debug mode
-   STRING  pvalue  ANY  dump information about a pvalue VOID free ANY
-   free  space associated with a variable Lock and unlock are used to
-   lock a person or family into RAM memory, and to unlock a person or
-   family from RAM memory, respectively. Database returns the name of
-   the  current  database, useful in titling reports. program returns
-   the  name  of  the  current  report  program.  Version returns the
-   version  of the running LifeLines program, eg, &llversion;. System
-   executes   its  string  argument  as  a  UNIX  (or  MS-Windows  as
-   appropriate)  shell  command,  by  invoking the system shell. This
-   will  not  occur  if the user has chosen to disallow report system
-   calls (via the DenySystemCalls user option). The heapused function
-   returns the amount of system heap that is in use at the time. This
-   is  implemented only on windows. The getproperty function extracts
+   from  a  set INT length SET size of a set SET union SET, SET union
+   of  two  sets  SET intersect SET, SET intersection of two sets SET
+   difference  SET,  SET difference of two sets SET parentset SET set
+   of  all parents SET childset SET set of all children SET spouseset
+   SET  set of all spouses SET siblingset SET set of all siblings SET
+   ancestorset  SET set of all ancestors SET descendentset SET set of
+   all  descendents  SET  descendantset  SET  same  as descendentset;
+   spelling  SET  uniqueset  SET  remove  duplicates  from  set  VOID
+   namesort SET sort indiset by name VOID keysort SET sort indiset by
+   key  values  VOID  valuesort  SET sort indiset by auxiliary values
+   VOID  genindiset  STRING,  SET  generate  indiset from GEDCOM name
+   string  BOOL inset SET, INDI true if the Individual is in the set.
+   forindiset(  SET, INDI_V, ANY_V, INT_V ) { commands } loop through
+   all  persons in person set These functions allow you to manipulate
+   person  sets.  A person set is a potentially large set of persons;
+   each person may have an arbitrary value associated with him/her. A
+   person  set  must  be declared with the indiset function before it
+   can  be  used. Addtoset adds a person to a set. The first argument
+   is  the  set;  the  second  argument  is the person; and the third
+   argument  may  be any value. The same person may be added to a set
+   more  than  once,  each time with a different value. Deletefromset
+   removes  a  person  from a set. The first argument is the set; the
+   second  argument is the person; if the third parameter is true all
+   of  the  person's  entries are removed from the set; if false only
+   the  first  entry is removed. Length returns the number of persons
+   in  a  person  set. Union, intersect and difference return the set
+   union,  set  intersection and set difference, respectively, of two
+   person sets. Each functions takes two person sets as arguments and
+   returns  a  third  person set. The functions actually modify their
+   argument  sets,  both reordering them into canonical key order and
+   removing  any duplicates (these operations are necessary to easily
+   implement  these  types  of  set  functions). Parentset, childset,
+   spouseset and siblingset return the set of all parents, set of all
+   children,   set   of   all   spouses  and  set  of  all  siblings,
+   respectively,  of  the  set  of  persons in their argument. In all
+   cases  there  is no change to the argument person set. Ancestorset
+   returns  the set all ancestors of all persons in the argument set.
+   Descendentset returns the set of all descendents of all persons in
+   the  argument  set. Descendantset is the same as descendentset; it
+   allows  an alternate spelling. Uniqueset sorts a person set by key
+   value  and then removes all entries with duplicate keys; the input
+   set is modified and returned. Namesort, keysort and valuesort sort
+   a  set  of  persons  by  name,  by  key  and  by associated value,
+   respectively. Each person in a person set has an associated value.
+   When  a  person  is  added  to  a  set with addtoset, the value is
+   explicitly assigned. When new sets are created by other functions,
+   a  number  of  rules  are used to associate values with persons as
+   they  are  added  to  the  new  sets.  For parentset, childset and
+   spouseset  the  values  are copied from the first input set person
+   that  causes  the  new  person  to be added to the set. For union,
+   intersect and difference, the values are copied from the values in
+   the first input set, except in the case of union, when persons are
+   taken  from  the  second  set alone, in which case the values come
+   from  there. For ancestorset and descendantset the value is set to
+   the  number  of  generations the new person is away from the first
+   person  in the input set that the new person is related to. If the
+   new  person  is  related to more than one person in the input set,
+   the  value is set for the nearest relationship; that is, the value
+   is  as low as possible. Valuesort sorts a person set by the values
+   of these auxiliary values. Genindiset generates the set of persons
+   that  matches  a  string  whose  value is a name in GEDCOM format.
+   Genindiset  uses  the same algorithm that matches names entered at
+   the  browse prompt or by the user interaction getindiset function.
+   Inset  returns true if the the specified individual is in the SET.
+   Forindiset  is  an  iterator  that loops through each person in an
+   indiset.  The  first parameter is an indiset. The second parameter
+   is  a  variable  that iterates through each person in the set. The
+   third  parameter  iterates  through the values associated with the
+   persons.  The  fourth parameter is an integer variable that counts
+   the  iterations.  NODE  createnode  STRING, STRING create a GEDCOM
+   node  VOID  addnode  NODE,  NODE, NODE add a node to a GEDCOM tree
+   VOID  detachnode  NODE  delete  a  node  from  a  GEDCOM tree VOID
+   writeindi  INDI  write a person back to the database VOID writefam
+   FAM  write a family back to the database These functions allow you
+   to  modify  an  internal  GEDCOM  node  tree. Createnode creates a
+   GEDCOM  node;  the  two  arguments  are  tag  and  value  strings,
+   respectively; the value string can be null. Addnode adds a node to
+   a node tree. The first argument is the new node; the second is the
+   node  in  the  tree  that  becomes the parent of the new node; the
+   third is the node in the tree that becomes the previous sibling of
+   the  new  node; this argument is null if the new node is to become
+   the  first  child  of the parent. Detachnode removes a node from a
+   node  tree.  writeindi  writes  an  individual  record back to the
+   database,  and  writefam  writes  a  family  record  back  to  the
+   database,  allowing  the  report  to make permanent changes to the
+   database.  The node functions only change data in memory; there is
+   no  effect  on the database until and unless writeindi or writefam
+   are  called.  BOOL reference STRING determine if string is a cross
+   reference NODE dereference STRING reference cross reference or key
+   to  node  tree  NODE  getrecord  STRING  same as dereference These
+   functions  allow you to recognize values that are cross references
+   and  to  read the records they refer to. Reference returns true if
+   its  string  argument  is  a  cross  reference value, that is, the
+   internal  key  of  one of the records in the database. Dereference
+   returns  the  node  tree  of  the  record referred to by its cross
+   reference string argument. Getrecord is a synonym for dereference.
+   VOID  lock  INDI|FAM lock a person or family in memory VOID unlock
+   INDI|FAM  unlock  a  person  or family from memory STRING database
+   return  name  of  current  database  STRING program return name of
+   current program STRING version return version of LifeLines program
+   VOID  system  STRING  execute  string  as a UNIX shell command INT
+   heapused amount of heap used for windows STRING getproperty STRING
+   extract  system or user property. Function available after v3.0.5.
+   STRING  setlocale  STRING  set  the locale STRING bytecode STRING,
+   STRING  encode  a  string  in a codeset STRING convertcode STRING,
+   STRING,  STRING  convert  string  from one codeset to another VOID
+   debug  BOOLEAN  set  interperter debug mode STRING pvalue ANY dump
+   information  about  a  pvalue  VOID free ANY free space associated
+   with  a  variable  Lock  and  unlock  are used to lock a person or
+   family  into RAM memory, and to unlock a person or family from RAM
+   memory,  respectively.  Database  returns  the name of the current
+   database,  useful  in titling reports. program returns the name of
+   the  current  report  program.  Version returns the version of the
+   running  LifeLines  program,  eg, &llversion;. System executes its
+   string  argument  as  a  UNIX (or MS-Windows as appropriate) shell
+   command,  by invoking the system shell. This will not occur if the
+   user   has  chosen  to  disallow  report  system  calls  (via  the
+   DenySystemCalls  user  option).  The heapused function returns the
+   amount  of  system  heap  that  is  in  use  at  the time. This is
+   implemented  only  on  windows.  The getproperty function extracts
    system     or    user    properties.    Properties    are    named
    group.subgroup.property, group.property or even property. The keys
    are available at the moment can be found in the ll-userguide under
@@ -1076,4 +1078,7 @@
    anything).  Strsave  is  the  same  function  as save. STRING save
    STRING  save  and return copy of string STRING strsave STRING same
    as  save  function  Use  detachnode  instead  of  deletenode. VOID
-   deletenode NODE delete a node from a GEDCOM tree
+   deletenode NODE delete a node from a GEDCOM tree In releases after
+   version  3.0.39,  the  length function accepts an argument of type
+   list,  set  or  table. the lengthset function is no longer needed.
+   INT lengthset SET size of a set

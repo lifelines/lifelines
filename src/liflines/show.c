@@ -294,6 +294,7 @@ static void
 init_display_indi (RECORD irec, INT width)
 {
 	NODE pers=nztop(irec);
+	NODE this_fam = 0;
 	INT nsp, nch, num, nm;
 	STRING s;
 	NODE fth;
@@ -327,9 +328,12 @@ init_display_indi (RECORD irec, INT width)
 	lock_cache(icel);
 	FORFAMSS(pers, fam, sp, num)
 		if (sp) add_spouse_line(++nsp, sp, fam, width);
-		FORCHILDREN(fam, chld, nm)
-			if(chld) add_child_line(++nch, chld, width);
-		ENDCHILDREN
+	        if (this_fam != fam) {
+		        this_fam = fam; /* only do each family once */
+			FORCHILDREN(fam, chld, nm)
+				if(chld) add_child_line(++nch, chld, width);
+			ENDCHILDREN
+		}
 	ENDFAMSS
 	unlock_cache(icel);
 }
