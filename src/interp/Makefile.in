@@ -69,10 +69,14 @@ YACC = @YACC@
 
 noinst_LIBRARIES = libinterp.a
 
-libinterp_a_SOURCES = alloc.c builtin.c date.c eval.c functab.c interp.c 	intrpseq.c lex.c more.c rassa.c write.c yacc.y yacc.h
+libinterp_a_SOURCES = alloc.c builtin.c date.c eval.c functab.c interp.c 	intrpseq.c lex.c more.c rassa.c write.c yacc.y
 
 
 INCLUDES = -I$(srcdir)/.. -I$(srcdir)/../hdrs
+
+AM_YFLAGS = -d
+
+EXTRA_DIST = yacc.h
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 CONFIG_CLEAN_FILES = 

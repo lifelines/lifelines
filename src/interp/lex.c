@@ -28,6 +28,8 @@
  *   3.0.0 - 19 Jun 94    3.0.2 - 04 Jan 95
  *===========================================================*/
 
+#define YYSTYPE INTERP
+
 #include "standard.h"
 #include "table.h"
 #include "gedcom.h"
@@ -37,7 +39,6 @@
 extern FILE *Pinfp;	/* file that holds program */
 extern STRING Pinstr;	/* string that holds program */
 extern INT Plineno;	/* program line number */
-extern INTERP yylval;	/* token value shared with parser */
 
 static INT Lexmode = FILEMODE;
 static STRING Lp;	/* pointer into program string */
@@ -97,7 +98,7 @@ int lowyylex ()
 		*p = 0;
 		unchar(c);
 		if (reserved(tokbuf, &retval)) return retval;
-		yylval = (INTERP) strsave(tokbuf);
+		yylval = (YYSTYPE) strsave(tokbuf);
 		return IDEN;
 	}
 	if (t == DIGIT) {
@@ -107,7 +108,7 @@ int lowyylex ()
 			t = chartype(c = inchar());
 		}
 		unchar(c);
-		yylval = (INTERP) ivalue;
+		yylval = (YYSTYPE) ivalue;
 		return ICONS;
 	}
 	if (c == '"') {
@@ -117,7 +118,7 @@ int lowyylex ()
 				*p++ = c;
 			if (c == 0 || c == '"') {
 				*p = 0;
-				yylval = literal_node(tokbuf);
+				yylval = (YYSTYPE) literal_node(tokbuf);
 				return LITERAL;
 			}
 			switch (c = inchar()) {
@@ -131,7 +132,7 @@ int lowyylex ()
 			case '\\': *p++ = '\\'; break;
 			case EOF:
 				*p = 0;
-				yylval = literal_node(tokbuf);
+				yylval = (YYSTYPE) literal_node(tokbuf);
 				return LITERAL;
 			default:
 				*p++ = c; break;
