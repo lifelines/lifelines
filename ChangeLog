@@ -1,3 +1,10 @@
+2002-01-21 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog liflines/screen.c:
+
+	Bugfix for menus not being repainted if user
+	presses illegal key.
+
 2002-01-19 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog configure.in hdrs/version.h interp/interp.c

@@ -1861,8 +1861,10 @@ interact (UIWINDOW uiwin, STRING str, INT screen)
 		if (!progrunning && !lock_std_msg) {
 			/* after they chose off the menu, we wipe any
 			status message still lingering from before they chose */
-			status_showing[0] = 0;
-			place_std_msg();
+			if (status_showing[0]) {
+				status_showing[0] = 0;
+				place_std_msg();
+			}
 		}
 		if (str) { /* traditional */
 			for (i = 0; i < n; i++) {
@@ -2295,13 +2297,20 @@ message_string (void)
 void
 place_std_msg (void)
 {
+	/* msg is placed on main window */
 	UIWINDOW uiwin = main_win;
 	WINDOW *win = uiw_win(uiwin);
 	STRING str = message_string();
 	INT row = ll_lines-2;
 	clear_hseg(win, row, 2, ll_cols-2);
 	mvwaddstr(win, row, 2, str);
-	wrefresh(win); /* ensure message is displayed */
+	/* now we need to repaint main window, but if there are
+	subwindows up, instead we call the touch_all routine,
+	which does them all from ancestor to descendant */
+	if (active_uiwin)
+		touch_all(TRUE);
+	else
+		wrefresh(win); 
 	place_cursor();
 }
 /*=================================================
