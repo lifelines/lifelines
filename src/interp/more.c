@@ -1230,6 +1230,13 @@ sortpaircmp (SORTEL el1, SORTEL el2, VPTR param)
 	SORTPAIR sp2 = (SORTPAIR)el2;
 	return pvalues_collate(sp1->value, sp2->value);
 }
+static int
+sortpair_bin (const void * el1, const void * el2)
+{
+	SORTPAIR sp1 = (SORTPAIR)el1;
+	SORTPAIR sp2 = (SORTPAIR)el2;
+	return pvalues_collate(sp1->value, sp2->value);
+}
 PVALUE
 __sort(PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
@@ -1302,7 +1309,15 @@ __sort(PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	for (i=0; i<nsort; ++i) {
 		index[i] = &array[i];
 	}
-	partition_sort((SORTEL *)index, nsort, sortpaircmp, 0);
+
+	qsort(index, nsort, sizeof(index[0]), sortpair_bin);
+
+/* I tried speeding up the lifelines version by removing recursion and
+	doing median of three pivot, but it is still much slower than qsort
+	on MS-Windows (Perry, 2003-03-01)
+*/
+	/* partition_sort((SORTEL *)index, nsort, sortpaircmp, 0);*/
+
 	if (list_vals) {
 		struct tag_list_iter listit;
 		VPTR ptr=0;

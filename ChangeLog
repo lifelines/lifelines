@@ -9,6 +9,11 @@
 	Also, __sort was completely broken.
 	Changed llqsort to use non-recursive quicksort with median3 pivot.
 
+	* ChangeLog src/hdrs/interp.h src/interp/more.c
+
+	Changed __sort to call library qsort, which is much faster 
+	than the lifelines one I just tried to optimize (on Windows).
+
 2003-02-28 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp
