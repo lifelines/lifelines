@@ -63,9 +63,7 @@ static INT hash(TABLE tab, CNSTRING key);
 static BOOLEAN next_element(TABLE_ITER tabit);
 static void replace_table_impl(TABLE tab, STRING key, UNION uval, INT whattofree);
 static void table_destructor(VTABLE *obj);
-static const char * table_get_type_name(VTABLE *obj);
 static UNION* valueofbool_impl(TABLE tab, STRING key);
-
 
 /*********************************************
  * local variables

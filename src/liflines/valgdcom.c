@@ -963,11 +963,9 @@ set_import_log (STRING logpath)
 BOOLEAN
 scan_header (FILE * fp, TABLE metadatatab, ZSTR * zerr)
 {
-	static char line[512];
 	STRING parents[2] = { 0, 0 };
 	INT linno, head=0, lev=-1, curlev;
 	INT lastoff=0;
-	INT rtn=FALSE;
 	ZSTR zpath = zs_new();
 	*zerr = 0;
 	for (linno=1; 1; ++linno) {

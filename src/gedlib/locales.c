@@ -36,11 +36,17 @@
 /* alphabetical */
 static void customlocale(STRING prefix);
 static STRING get_current_locale(INT category);
+#ifdef ENABLE_NLS
 static BOOLEAN is_msgcategory(int category);
+#if ! ( defined(HAVE_SETLOCALE) && defined(HAVE_LC_MESSAGES) )
 static STRING llsetenv(STRING name, STRING value);
+#endif /* ! (defined(HAVE_SETLOCALE) && defined(HAVE_LC_MESSAGES) ) */
+#endif /* ENABLE_NLS */
 static void notify_gettext_language_changed(void);
 static void send_uilang_callbacks(void);
+#ifdef ENABLE_NLS
 static STRING setmsgs(STRING localename);
+#endif /* ENABLE_NLS */
 static char * win32_setlocale(int category, char * locale);
 
 /*********************************************
@@ -50,7 +56,9 @@ static char * win32_setlocale(int category, char * locale);
 static STRING  deflocale_coll = NULL;
 static STRING  deflocale_msgs = NULL;
 static BOOLEAN customized_loc = FALSE;
+#ifdef ENABLE_NLS
 static BOOLEAN customized_msgs = FALSE;
+#endif /* ENABLE_NLS */
 static STRING  current_coll = NULL; /* most recent */
 static STRING  current_msgs = NULL; /* most recent */
 static STRING  rptlocalestr = NULL; /* if set by report program */
@@ -264,6 +272,7 @@ rpt_setlocale (STRING str)
  * setmsgs -- set locale for LC_MESSAGES
  * Returns non-null string if succeeds
  *========================================*/
+#ifdef ENABLE_NLS
 static STRING
 setmsgs (STRING localename)
 {
@@ -290,6 +299,9 @@ setmsgs (STRING localename)
 	}
 	return str;
 }
+#endif /* ENABLE_NLS */
+#ifdef ENABLE_NLS
+#if ! ( defined(HAVE_SETLOCALE) && defined(HAVE_LC_MESSAGES) )
 /*==========================================
  * llsetenv -- assign a value to an environment variable
  * Workaround for systems without HAVE_SETLOCALE && HAVE_LC_MESSAGES
@@ -320,6 +332,8 @@ llsetenv (STRING name, STRING value)
 #endif /* HAVE_SETENV */
 	return str;
 }
+#endif /* !defined(HAVE_SETLOCALE) && !defined(HAVE_LC_MESSAGES) */
+#endif /* ENABLE_NLS */
 /*==========================================
  * customlocale -- set locale to custom setting
  *  depending on user options
@@ -359,7 +373,7 @@ customlocale (STRING prefix)
 	}
 #endif /* HAVE_SETLOCALE */
 
-#if ENABLE_NLS
+#ifdef ENABLE_NLS
 	/* did user set, eg, UiLocaleMessages option ? */
 	strcpy(option+prefixlen, "Messages");
 	str = getoptstr(option, 0);
@@ -420,6 +434,7 @@ llsetlocale (int category, char * locale)
 /*==========================================
  * is_msgcategory -- check for LC_ALL or LC_MESSAGES
  *========================================*/
+#ifdef ENABLE_NLS
 static BOOLEAN
 is_msgcategory (int category)
 {
@@ -429,6 +444,7 @@ is_msgcategory (int category)
 	return category==LC_ALL;
 #endif
 }
+#endif /* ENABLE_NLS */
 /*==========================================
  * win32_setlocale -- handle MS-Windows goofed up locale names
  *========================================*/
@@ -489,11 +505,13 @@ unregister_uilang_callback (CALLBACK_FNC fncptr, VPTR uparm)
 /*==========================================
  * send_uilang_callbacks -- 
  *========================================*/
+#ifdef ENABLE_NLS
 static void
 send_uilang_callbacks (void)
 {
 	notify_listeners(&f_uilang_callbacks);
 }
+#endif /* ENABLE_NLS */
 /*==========================================
  * register_uicodeset_callback -- 
  *========================================*/

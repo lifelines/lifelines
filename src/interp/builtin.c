@@ -251,7 +251,10 @@ __getindiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __gettext (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	STRING str=0,str2=0,textdomain=0,localepath=0;
+	STRING str=0;
+#ifdef ENABLE_NLS
+	STRING str2=0,textdomain=0,localepath=0;
+#endif /* ENABLE_NLS */
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
 	PVALUE newval=0;
 	if (*eflg) {
@@ -259,7 +262,7 @@ __gettext (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	str = pvalue_to_string(val);
-#if ENABLE_NLS
+#ifdef ENABLE_NLS
 	textdomain = zs_str(irptinfo(node)->textdomain);
 	localepath = zs_str(irptinfo(node)->localepath);
 	bindtextdomain(textdomain, localepath);

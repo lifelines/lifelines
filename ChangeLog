@@ -1,3 +1,12 @@
+2003-09-04 Matt Emmerton
+
+	* ChangeLog src/arch/wcslen.c src/gedlib/init.c src/gedlib/locales.c
+	src/interp/builtin.c src/liflines/valgdcom.c src/liflines/llexec.h
+	src/stdlib/stdlibi.h src/stdlib/table.c src/tools/wprintf.c
+
+	Various changes to eliminate compiler warnings, especially those
+	appearing only with --disable-nls.
+
 2003-09-02 Perry Rapp
 
 	* ChangeLog INSTALL

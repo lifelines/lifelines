@@ -241,11 +241,11 @@ init_win32_gettext_shim (void)
  * set_gettext_codeset -- Tell gettext what codeset we want
  * Created: 2002/11/28 (Perry Rapp)
  *===============================*/
+#if ENABLE_NLS
+#ifdef HAVE_BIND_TEXTDOMAIN_CODESET
 void
 set_gettext_codeset (CNSTRING domain, CNSTRING codeset)
 {
-#if ENABLE_NLS
-#ifdef HAVE_BIND_TEXTDOMAIN_CODESET
 	static STRING prevcodeset = 0;
 	if (eqstr_ex(prevcodeset, codeset))
 		return;
@@ -272,9 +272,9 @@ set_gettext_codeset (CNSTRING domain, CNSTRING codeset)
 	bind_textdomain_codeset(domain, prevcodeset);
 	if (eqstr(domain, PACKAGE))
 		locales_notify_uicodeset_changes();
+}
 #endif /* HAVE_BIND_TEXTDOMAIN_CODESET */
 #endif /* ENABLE_NLS */
-}
 /*=================================
  * init_lifelines_db -- Initialization after db opened
  *===============================*/

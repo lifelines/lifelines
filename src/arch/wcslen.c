@@ -6,6 +6,7 @@
 #include <wchar.h>
 #endif
 #include <stdlib.h>
+#include "arch.h"
 
 size_t wcslen (const wchar_t *s)
 {
