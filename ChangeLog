@@ -1,4 +1,11 @@
-2001-01-10 Perry Rapp <puddle@users.sourceforge.net>
+2001-01-13 Perry Rapp <puddle@users.sourceforge.net>
+
+	* gedlib/gengedc.c gedlib/names.c gedlib/refns.c hdrs/gedcom.h
+	liflines/browse.c liflines/lbrowse.c liflines/scan.c
+	tools/dbverify.c:
+	dbverify: added check dup or non-indi names, dup refns.
+
+2001-01-11 Perry Rapp <puddle@users.sourceforge.net>
 
 	* hdrs/indiseq.h liflines/ask.c liflines/llinesi.h
 	liflines/pedigree.c liflines/screen.c liflines/show.c:
