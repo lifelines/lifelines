@@ -148,6 +148,8 @@ do_import (IMPORT_FEEDBACK ifeed, FILE *fp)
 	STRING gdcodeset=0;
 	INT warnings=0;
 
+/*	rptui_init(); *//* clear ui time counter */
+
 /* Open and validate GEDCOM file */
 	if ((unistr=check_file_for_unicode(fp)) && !eqstr(unistr, "UTF-8")) {
 		msg_error(_(qSunsupuniv), unistr);

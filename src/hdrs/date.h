@@ -57,6 +57,7 @@ enum { GDVA_ABT=1, GDVA_EST, GDVA_CAL }; /* approx subtype */
 enum { GDV_GREGORIAN=1, GDV_JULIAN, GDV_HEBREW, GDV_FRENCH, GDV_ROMAN, GDV_CALENDARS_IX };
 enum { GDV_AD=1, GDV_BC };
 
+ZSTR approx_time(INT seconds);
 GDATEVAL create_gdateval(void);
 STRING do_format_date(STRING, INT, INT, INT, INT, INT, INT);
 void date_update_lang(void);

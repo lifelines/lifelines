@@ -29,13 +29,16 @@
  *==============================================================*/
 
 
+#include <time.h>
 #include "llstdlib.h"
 #include "liflines.h"
 #include "impfeed.h"
 #include "mystring.h"
 #include "lloptions.h"
+#include "date.h"
 #include "llinesi.h"
 #include "screen.h"
+#include "zstr.h"
 
 
 /*********************************************
@@ -48,9 +51,9 @@ static void export_saved_rec(char ctype, INT count);
 static void import_added_rec(char ctype, STRING tag, INT count);
 static void import_adding_unused_keys(void);
 static void import_beginning_import(STRING msg);
-static void import_done(INT nindi, INT nfam, INT nsour, INT neven, INT nothr);
 static void import_error_invalid(STRING reason);
 static void import_readonly(void);
+static void import_report_timing(INT elapsed_sec, INT uitime_sec);
 static void import_validated_rec(char ctype, STRING tag, INT count);
 static void import_validating(void);
 static void import_validation_error(STRING msg);
@@ -170,13 +173,6 @@ import_adding_unused_keys (void)
 	wfield(15, 0, _("Adding unused keys as deleted keys..."));
 }
 static void
-import_done (INT nindi, INT nfam, INT nsour, INT neven, INT nothr)
-{
-	wpos(15, 0);
-	msg_info(_("Added (%dP, %dF, %dS, %dE, %dX) records"),
-		nindi, nfam, nsour, neven, nothr);
-}
-static void
 import_validated_rec (char ctype, STRING tag, INT count)
 {
 	update_rec_count(0, ctype, tag, count);
@@ -201,6 +197,8 @@ load_gedcom (BOOLEAN picklist)
 	struct tag_import_feedback ifeed;
 	STRING srcdir=NULL;
 	STRING fullpath=0;
+	time_t begin = time(NULL);
+	time_t beginui = get_uitime();
 
 	srcdir = getoptstr("InputPath", ".");
 	if (!ask_for_gedcom(LLREADTEXT, _(qSwhatgedc), 0, &fullpath, srcdir, ".ged", picklist)
@@ -222,7 +220,6 @@ load_gedcom (BOOLEAN picklist)
 	ifeed.error_invalid_fnc = import_error_invalid;
 	ifeed.error_readonly_fnc = import_readonly;
 	ifeed.adding_unused_keys_fnc = import_adding_unused_keys;
-	ifeed.import_done_fnc = import_done;
 	ifeed.added_rec_fnc = import_added_rec;
 	ifeed.validation_error_fnc = import_validation_error;
 	ifeed.validation_warning_fnc =  import_validation_warning;
@@ -231,6 +228,24 @@ load_gedcom (BOOLEAN picklist)
 	
 	fclose(fp);
 	strfree(&fullpath);
+
+
+	if (1) {
+		INT duration = time(NULL) - begin;
+		INT uitime = get_uitime() - beginui;
+		ZSTR zt1=approx_time(duration-uitime), zt2=approx_time(uitime);
+		/* TRANSLATORS: how long Import ran, and how much of that was UI delay */
+		ZSTR zout = zs_newf(_("Import time %s (ui %s)\n")
+			, zs_str(zt1), zs_str(zt2));
+		wfield(8,0, zs_str(zout));
+		zs_free(&zt1);
+		zs_free(&zt2);
+		zs_free(&zout);
+	}
+
+	/* position cursor further down stdout so check_stdout 
+	doesn't overwrite our messages from above */
+	wpos(15,0);
 }
 
 /*================================

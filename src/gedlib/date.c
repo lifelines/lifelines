@@ -1873,3 +1873,38 @@ zshorten_date (STRING str)
 	zs_sets(zstr, sht);
 	return zstr;
 }
+/*====================================+
+ * approx_time -- display duration specified in seconds
+ *  eg, approx_time(70000) returns "19h26m"
+ *===================================*/
+ZSTR
+approx_time (INT seconds)
+{
+	INT minutes, hours, days, years;
+	minutes = seconds/60;
+	if (!minutes) {
+		/* TRANSLATORS: seconds time interval */
+		return zs_newf(_("%02ds"), seconds);
+	}
+	seconds = seconds - minutes*60;
+	hours = minutes/60;
+	if (!hours) {
+		/* TRANSLATORS: minutes & seconds time interval */
+		return zs_newf(_("%dm%02ds"), minutes, seconds);
+	}
+	minutes = minutes - hours*60;
+	days = hours/60;
+	if (!days) {
+		/* TRANSLATORS: hours & minutes time interval */
+		return zs_newf(_("%dh%02dm"), hours, minutes);
+	}
+	hours = hours - days*24;
+	years = days/365.2425;
+	if (!years) {
+		/* TRANSLATORS: days & hours time interval */
+		return zs_newf(_("%dd%02dh"), days, hours);
+	}
+	days = days - years*365.2425;
+	/* TRANSLATORS: years & days time interval */
+	return zs_newf( _("%dy%03dd"), years, days);
+}

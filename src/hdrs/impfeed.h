@@ -22,7 +22,6 @@ struct tag_import_feedback {
 	void (*beginning_import_fnc)(STRING msg);
 	void (*error_readonly_fnc)(void);
 	void (*adding_unused_keys_fnc)(void);
-	void (*import_done_fnc)(INT nindi, INT nfam, INT nsour, INT neven, INT nothr);
 	void (*added_rec_fnc)(char ctype, STRING tag, INT count);
 };
 #ifndef IMPORT_FEEDBACK_type_defined

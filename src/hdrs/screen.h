@@ -151,6 +151,7 @@ void display_fam(RECORD fam, INT mode, BOOLEAN reuse);
 void display_indi(RECORD indi, INT mode, BOOLEAN reuse);
 void display_screen(INT);
 void dbprintf(STRING, ...);
+int get_uitime(void);
 int init_screen(BOOLEAN graphical);
 INT interact_2fam(void);
 INT interact_2indi(void);

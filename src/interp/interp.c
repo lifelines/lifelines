@@ -45,6 +45,7 @@
 #include "parse.h"
 #include "zstr.h"
 #include "icvt.h"
+#include "date.h"
 
 #ifndef INCLUDED_STDARG_H
 #include <stdarg.h>
@@ -90,7 +91,6 @@ extern STRING qSunsupuniv;
  * local function prototypes
  *********************************************/
 
-static ZSTR approx_time(INT seconds);
 static STRING check_rpt_requires(PACTX pactx, STRING fname);
 static void disp_symtab(STRING title, SYMTAB stab);
 static BOOLEAN disp_symtab_cb(STRING key, PVALUE val, VPTR param);
@@ -519,35 +519,6 @@ parse_file (PACTX pactx, STRING fname, STRING fullpath)
 	pactx->fullpath = 0;
 	pactx->lineno = 0;
 	pactx->charpos = 0;
-}
-/*====================================+
- * approx_time -- make time in seconds more legible
- *===================================*/
-static ZSTR
-approx_time (INT seconds)
-{
-	ZSTR zti=zs_new();
-	INT minutes, hours, days, years;
-	minutes = seconds/60;
-	seconds = seconds - minutes*60;
-	hours = minutes/60;
-	minutes = minutes - hours*60;
-	days = hours/60;
-	hours = hours - days*24;
-	years = days/365.2425;
-	days = days - years*365.2425;
-	if (years) {
-		zs_setf(zti, _("%dy%03dd"), years, days);
-	} else if (days) {
-		zs_setf(zti, ("%dd%03dh"), days, hours);
-	} else if (hours) {
-		zs_setf(zti, ("%dh%03dm"), hours, minutes);
-	} else if (minutes) {
-		zs_setf(zti, _("%dm%03ds"), minutes, seconds);
-	} else {
-		zs_setf(zti, _("%02ds"), seconds);
-	}
-	return zti;
 }
 /*====================================+
  * report_duration -- print report duration

@@ -15,23 +15,35 @@
 #include "liflines.h"
 #include "rptui.h"
 
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+/* alphabetical */
+static void begin_rptui(void);
+static void end_rptui(void);
+
+/*********************************************
+ * local variables
+ *********************************************/
+
 static time_t uitime=0;
 static time_t begint=0;
 
 /*=================================================
- * begin_ui -- begin a UI call from report interpreter
+ * begin_rptui -- begin a UI call from report interpreter
  *===============================================*/
 static void
-begin_ui (void)
+begin_rptui (void)
 {
 	uilocale();
 	begint = time(NULL);
 }
 /*=================================================
- * end_ui -- finish a UI call & return to report interpreter
+ * end_rptui -- finish a UI call & return to report interpreter
  *===============================================*/
 static void
-end_ui (void)
+end_rptui (void)
 {
 	rptlocale();
 	uitime += time(NULL) - begint;
@@ -60,36 +72,36 @@ RECORD
 rptui_ask_for_fam (STRING s1, STRING s2)
 {
 	RECORD rec;
-	begin_ui();
+	begin_rptui();
 	rec = ask_for_fam(s1, s2);
-	end_ui();
+	end_rptui();
 	return rec;
 }
 INDISEQ
 rptui_ask_for_indi_list (STRING ttl, BOOLEAN reask)
 {
 	INDISEQ seq;
-	begin_ui();
+	begin_rptui();
 	seq = ask_for_indi_list(ttl, reask);
-	end_ui();
+	end_rptui();
 	return seq;
 }
 STRING
 rptui_ask_for_indi_key (STRING ttl, CONFIRMQ confirmq, ASK1Q ask1)
 {
 	STRING s;
-	begin_ui();
+	begin_rptui();
 	s = ask_for_indi_key(ttl, confirmq, ask1);
-	end_ui();
+	end_rptui();
 	return s;
 }
 BOOLEAN
 rptui_ask_for_int (STRING ttl, INT * prtn)
 {
 	BOOLEAN b;
-	begin_ui();
+	begin_rptui();
 	b = ask_for_int(ttl, prtn);
-	end_ui();
+	end_rptui();
 	return b;
 }
 FILE *
@@ -97,9 +109,9 @@ rptui_ask_for_output_file (STRING mode, STRING ttl, STRING *pfname
 	, STRING *pfullpath, STRING path, STRING ext)
 {
 	FILE * fp;
-	begin_ui();
+	begin_rptui();
 	fp = ask_for_output_file(mode, ttl, pfname, pfullpath, path, ext);
-	end_ui();
+	end_rptui();
 	return fp;
 }
 BOOLEAN
@@ -107,33 +119,33 @@ rptui_ask_for_program (STRING mode, STRING ttl, STRING *pfname
 	, STRING *pfullpath, STRING path, STRING ext, BOOLEAN picklist)
 {
 	BOOLEAN b;
-	begin_ui();
+	begin_rptui();
 	b = ask_for_program(mode, ttl, pfname, pfullpath, path, ext, picklist);
-	end_ui();
+	end_rptui();
 	return b;
 }
 INT
 rptui_choose_from_array (STRING ttl, INT no, STRING *pstrngs)
 {
 	INT i;
-	begin_ui();
+	begin_rptui();
 	i = choose_from_array(ttl, no, pstrngs);
-	end_ui();
+	end_rptui();
 	return i;
 }
 INT
 rptui_prompt_stdout (STRING prompt)
 {
 	INT i;
-	begin_ui();
+	begin_rptui();
 	i = prompt_stdout(prompt);
-	end_ui();
+	end_rptui();
 	return i;
 }
 void
 rptui_view_array (STRING ttl, INT no, STRING *pstrngs)
 {
-	begin_ui();
+	begin_rptui();
 	view_array(ttl, no, pstrngs);
-	end_ui();
+	end_rptui();
 }

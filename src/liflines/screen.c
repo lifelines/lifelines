@@ -26,6 +26,7 @@
  * Copyright(c) 1992-96 by T.T. Wetmore IV; all rights reserved
  *===========================================================*/
 
+#include <time.h>
 #include "llstdlib.h"
 #ifdef HAVE_LOCALE_H
 #include <locale.h>
@@ -275,6 +276,8 @@ typedef unsigned long llchtype;
 static llchtype gr_btee='+', gr_ltee='+', gr_rtee='+', gr_ttee='+';
 static llchtype gr_hline='-', gr_vline= '|';
 static llchtype gr_llx='*', gr_lrx='*', gr_ulx='*', gr_urx='*';
+
+static int ui_time_elapsed = 0; /* total time waiting for user input */
 
 /*********************************************
  * local & exported function definitions
@@ -2269,9 +2272,11 @@ interact (UIWINDOW uiwin, STRING str, INT screen)
 	INT cmdnum;
 	INT c, i, n = str ? strlen(str) : 0;
 	while (TRUE) {
+		INT time_start=time(NULL);
 		crmode();
 		keypad(uiw_win(uiwin),1);
 		c = wgetch(uiw_win(uiwin));
+		ui_time_elapsed += time(NULL) - time_start;
 		if (c == EOF) c = 'q';
 		nocrmode();
 		if (!progrunning && !lock_std_msg) {
@@ -3736,3 +3741,13 @@ uicolor (UIWINDOW uiwin, LLRECT rect, char ch)
 		color_hseg(win, i, rect->left, rect->right, ch);
 	}
 }
+/*============================
+ * get_uitime -- return cumulative elapsed time waiting 
+ *  for user input (since start of program)
+ *==========================*/
+int
+get_uitime (void)
+{
+	return ui_time_elapsed;
+}
+

@@ -1,3 +1,12 @@
+2003-10-05 Perry Rapp
+
+	* ChangeLog src/gedlib/date.c src/hdrs/date.h src/hdrs/impfeed.h
+	src/hdrs/screen.h src/interp/interp.c src/interp/rptui.c
+	src/liflines/import.c src/liflines/loadsave.c
+	src/liflines/screen.c
+
+	Report time duration of import.
+
 2003-10-03 Perry Rapp
 
 	* ChangeLog
