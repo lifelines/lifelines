@@ -21,6 +21,7 @@
 #include "arch.h"
 #include "lloptions.h"
 #include "log.h"
+#include "vtable.h"
 
 
 /*********************************************
@@ -38,12 +39,15 @@ struct tag_xlat {
 	INT uparam; /* opaque number used by client */
 };
 /* dynamically loadable translation table, entry in dyntt list */
-typedef struct tag_dyntt {
+struct tag_dyntt {
+	struct tag_vtable *vtable; /* generic object */
+	INT refcnt; /* ref-countable object */
 	STRING name;
 	STRING path;
 	TRANTABLE tt; /* when loaded */
 	BOOLEAN loadfailure;
-} *DYNTT;
+};
+typedef struct tag_dyntt *DYNTT;
 
 /* step of a translation, either iconv_src or trantble is NULL */
 typedef struct xlat_step_s {
@@ -65,6 +69,8 @@ static XLSTEP create_dyntt_step(DYNTT dyntt);
 static XLAT create_null_xlat(BOOLEAN adhoc);
 static XLAT create_xlat(CNSTRING src, CNSTRING dest, BOOLEAN adhoc);
 static DYNTT create_dyntt(TRANTABLE tt, CNSTRING name, CNSTRING path);
+static void destroy_dyntt(DYNTT dyntt);
+static void dyntt_destructor(VTABLE *obj);
 static void free_dyntts(void);
 static void free_xlat(XLAT xlat);
 static DYNTT get_conversion_dyntt(CNSTRING src, CNSTRING dest);
@@ -72,7 +78,6 @@ static DYNTT get_subcoding_dyntt(CNSTRING codeset, CNSTRING subcoding);
 static void load_dyntt_if_needed(DYNTT dyntt);
 static void load_dynttlist_from_dir(STRING dir);
 static int select_tts(const struct dirent *entry);
-static void zero_dyntt(DYNTT dyntt);
 
 /*********************************************
  * local variables
@@ -81,6 +86,17 @@ static void zero_dyntt(DYNTT dyntt);
 static LIST f_xlats=0; /* cache of conversions */
 static TABLE f_dyntts=0; /* cache of dynamic translation tables */
 static char f_ttext[] = ".tt";
+
+static struct tag_vtable vtable_for_dyntt = {
+	VTABLE_MAGIC
+	, "dyntt"
+	, &dyntt_destructor
+	, &refcountable_isref
+	, &refcountable_addref
+	, &refcountable_release
+	, 0 /* copy_fnc */
+	, &generic_get_type_name
+};
 
 /*********************************************
  * local & exported function definitions
@@ -177,6 +193,8 @@ create_dyntt (TRANTABLE tt, CNSTRING name, CNSTRING path)
 {
 	DYNTT dyntt = (DYNTT)stdalloc(sizeof(*dyntt));
 	memset(dyntt, 0, sizeof(*dyntt));
+	dyntt->vtable = &vtable_for_dyntt;
+	dyntt->refcnt = 1;
 	dyntt->tt = tt;
 	dyntt->name = strsave(name);
 	dyntt->path = strsave(path);
@@ -319,7 +337,7 @@ get_conversion_dyntt (CNSTRING src, CNSTRING dest)
 	ZSTR zttname = zs_news(src);
 	zs_appc(zttname, '_');
 	zs_apps(zttname, dest);
-	dyntt = (DYNTT)valueof_ptr(f_dyntts, zs_str(zttname));
+	dyntt = (DYNTT)valueof_obj(f_dyntts, zs_str(zttname));
 	if (getoptint("TTPATH.debug", 0)) {
 		log_outf("ttpath.dbg",
 			_("ttpath trying to convert from <%s> to <%s>: %s"),
@@ -341,7 +359,7 @@ get_subcoding_dyntt (CNSTRING codeset, CNSTRING subcoding)
 	ZSTR zttname = zs_news(codeset);
 	zs_apps(zttname, "__");
 	zs_apps(zttname, subcoding);
-	dyntt = (DYNTT)valueof_ptr(f_dyntts, zs_str(zttname));
+	dyntt = (DYNTT)valueof_obj(f_dyntts, zs_str(zttname));
 	zs_free(&zttname);
 	return dyntt;
 }
@@ -409,7 +427,7 @@ xl_load_all_dyntts (CNSTRING ttpath)
 	}
 	if (!ttpath ||  !ttpath[0])
 		return;
-	f_dyntts = create_table_old2(FREEBOTH);
+	f_dyntts = create_table();
 	dirs = (STRING)stdalloc(strlen(ttpath)+2);
 	/* find directories in dirs & delimit with zeros */
 	chop_path(ttpath, dirs);
@@ -449,12 +467,13 @@ load_dynttlist_from_dir (STRING dir)
 			log_outf("ttpath.dbg", _("ttpath file <%s> typed as %d"), ttfile, ntype);
 		}
 		if (ntype==1 || ntype==2) {
-			if (!valueof_ptr(f_dyntts, zs_str(zfile))) {
+			if (!valueof_obj(f_dyntts, zs_str(zfile))) {
 				TRANTABLE tt=0; /* will be loaded when needed */
 				STRING path = concat_path_alloc(dir, ttfile);
 				DYNTT dyntt = create_dyntt(tt, ttfile, path);
 				strfree(&path);
-				insert_table_ptr(f_dyntts, strsave(zs_str(zfile)), dyntt);
+				table_insert_object(f_dyntts, zs_str(zfile), dyntt);
+				--dyntt->refcnt; /* leave table as sole owner */
 			}
 		}
 		zs_free(&zfile);
@@ -572,18 +591,6 @@ static void
 free_dyntts (void)
 {
 	if (f_dyntts) {
-		TABLE_ITER tabit=0;
-		xl_free_xlats(); /* xlats point into f_dyntts */
-		tabit = begin_table_iter(f_dyntts);
-		if (tabit) {
-			VPTR ptr=0;
-			CNSTRING key=0;
-			while (next_table_ptr(tabit, &key, &ptr)) {
-				DYNTT dyntt = (DYNTT)ptr;
-				zero_dyntt(dyntt);
-			}
-			end_table_iter(&tabit);
-		}
 		destroy_table(f_dyntts);
 		f_dyntts = 0;
 	}
@@ -596,19 +603,19 @@ xlat_shutdown (void)
 {
 	free_dyntts();
 }
-/*==========================================================
- * zero_dyntt -- Empty (free) contents of a dyntt
- *  NB: This does not free the dyntt memory itself
- *  b/c that is handled in the f_dyntts cache table
- * Created: 2002/12/13 (Perry Rapp)
- *========================================================*/
+/*=================================================
+ * destroy_table -- destroy all element & memory for table
+ *===============================================*/
 static void
-zero_dyntt (DYNTT dyntt)
+destroy_dyntt (DYNTT dyntt)
 {
+	if (!dyntt) return;
+	ASSERT(dyntt->vtable == &vtable_for_dyntt);
 	strfree(&dyntt->name);
 	strfree(&dyntt->path);
 	remove_trantable(dyntt->tt);
 	dyntt->tt = 0;
+	stdfree(dyntt);
 }
 /*==========================================================
  * xl_parse_codeset -- Parse out subcode suffixes of a codeset
@@ -734,4 +741,14 @@ xl_get_dest_codeset (XLAT xlat)
 {
 	return xlat->dest;
 }
-
+/*=================================================
+ * dyntt_destructor -- destructor for dyntt
+ *  (destructor entry in vtable)
+ *===============================================*/
+static void
+dyntt_destructor (VTABLE *obj)
+{
+	DYNTT tab = (DYNTT)obj;
+	ASSERT(tab->vtable == &vtable_for_dyntt);
+	destroy_dyntt(tab);
+}
