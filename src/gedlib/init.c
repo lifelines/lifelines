@@ -632,7 +632,7 @@ update_db_options (void)
 INT
 get_dblist (STRING path, LIST * dblist, LIST * dbdesclist)
 {
-	char dirs[MAXPATHLEN+1];
+	STRING dirs=0;
 	INT ndirs=0;
 	STRING p=0;
 	ASSERT(!(*dblist) && !(*dbdesclist));
@@ -640,15 +640,18 @@ get_dblist (STRING path, LIST * dblist, LIST * dbdesclist)
 	*dbdesclist = create_list();
 	set_list_type(*dblist, LISTDOFREE);
 	set_list_type(*dbdesclist, LISTDOFREE);
-	if (!path || !path[0] || strlen(path) > sizeof(dirs)-2)
+	if (!path || !path[0])
 		return 0;
+	dirs = (STRING)stdalloc(strlen(path)+2);
 	/* find directories in dirs & delimit with zeros */
 	ndirs = chop_path(path, dirs);
+	/* now process each directory */
 	for (p=dirs; ndirs>0; --ndirs) {
 		ASSERT(p);
 		add_dbs_to_list(*dblist, *dbdesclist, p);
 		p += strlen(p)+1;
 	}
+	strfree(&dirs);
 	return llen(*dblist);
 }
 /*==================================================

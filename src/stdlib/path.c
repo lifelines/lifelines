@@ -396,8 +396,8 @@ check_file_for_unicode (FILE * fp)
 /*==================================================
  * chop_path -- copy path into buff, & zero-separate all dirs
  *  path:  [IN]  path list to copy
- *  buff:  [OUT] output buffer
- * NB: buff should be one byte larger than path
+ *  dirs:  [OUT] output buffer
+ * NB: dirs should be one byte larger than path
  *================================================*/
 INT
 chop_path (STRING path, STRING dirs)
