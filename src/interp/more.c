@@ -59,7 +59,7 @@ static void compute_pi(STRING);
 static INT ll_index(STRING, STRING, INT);
 static void makestring(PVALUE val, STRING str, INT len, BOOLEAN *eflg);
 static STRING rightjustify (STRING str, INT len);
-static STRING substring (STRING s, INT i, INT j);
+static STRING allocsubstring (STRING s, INT i, INT j);
 
 /*********************************************
  * local variables
@@ -307,7 +307,7 @@ __substring (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INT lo, hi;
 	PNODE arg = (PNODE) iargs(node);
-	STRING str;
+	STRING str, substr;
 	PVALUE val2, val1 = eval_and_coerce(PSTRING, arg, stab, eflg);
 	if (*eflg) {
 		prog_error(node, "1st arg to substring is not a string");
@@ -330,7 +330,9 @@ __substring (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	hi = (INT) pvalue(val2);
 	/* substr can handle str==NULL */
-	set_pvalue(val2, PSTRING, (VPTR) substring(str, lo, hi));
+	substr = allocsubstring(str, lo, hi);
+	set_pvalue(val2, PSTRING, substr);
+	stdfree(substr);
 	delete_pvalue(val1);
 	return val2;
 }
@@ -343,22 +345,22 @@ ll_index (STRING str,
           STRING sub,
           INT num)
 {
-        INT i, n, m, q = 0, found = 0;
+	INT i, n, m, q = 0, found = 0;
 
 	if (!str || !sub || *str == 0 || *sub == 0) return 0;
-        n = strlen(str);
+	n = strlen(str);
 	m = strlen(sub);
-        compute_pi(sub);
-        for (i = 1; i <= n; i++) {
-                while (q > 0 && sub[q] != str[i-1])
-                        q = pi[q];
-                if (sub[q] == str[i-1]) q++;
-                if (q == m) {
-                        if (++found == num) return i - m + 1;
-                        q = pi[q];
-                }
-        }
-        return 0;
+	compute_pi(sub);
+	for (i = 1; i <= n; i++) {
+		while (q > 0 && sub[q] != str[i-1])
+			q = pi[q];
+		if (sub[q] == str[i-1]) q++;
+		if (q == m) {
+			if (++found == num) return i - m + 1;
+			q = pi[q];
+		}
+	}
+	return 0;
 }
 /*========================================
  * compute_pi -- Support routine for index
@@ -366,28 +368,39 @@ ll_index (STRING str,
 static void
 compute_pi (STRING sub)
 {
-        INT m = strlen(sub), k = 0, q;
-        pi[1] = 0;
-        for (q = 2; q <= m; q++) {
-                while (k > 0 && sub[k] != sub[q-1])
-                        k = pi[k];
-                if (sub[k] == sub[q-1]) k++;
-                pi[q] = k;
-        }
+	INT m = strlen(sub), k = 0, q;
+	pi[1] = 0;
+	for (q = 2; q <= m; q++) {
+		while (k > 0 && sub[k] != sub[q-1])
+			k = pi[k];
+		if (sub[k] == sub[q-1]) k++;
+		pi[q] = k;
+	}
 }
 /*==============================
- * substring -- Return substring
+ * allocsubstring -- Return substring
  *  handles NULL input
- *  returns static buffer
+ *  returns alloc'd memory or NULL
+ * i is 1-based start character, j is 1-based end char
  *============================*/
 static STRING
-substring (STRING s, INT i, INT j)
+allocsubstring (STRING s, INT i, INT j)
 {
-	static char scratch[MAXLINELEN+1];
-	if (!s || *s == 0 || i <= 0 || i > j || j > (INT)strlen(s)) return NULL;
-	strncpy(scratch, &s[i-1], j-i+1);
-	scratch[j-i+1] = 0;
-	return (STRING) scratch;
+	STRING substr;
+	INT start=i-1; /* start is 0-based, validated below */
+	INT len=j+1-i; /* len does not include terminating NULL, validated below */
+	/* NULL if NULL or empty string or non-positive length */
+	if (!s || !s[0] || len<1)
+		return NULL;
+	/* validate start & len */
+	if (start<0)
+		start=0;
+	if (len>(INT)strlen(s))
+		len=strlen(s);
+	substr = stdalloc(len+1);
+	strncpy(substr, &s[start], len);
+	substr[len] = 0;
+	return substr;
 }
 /*===============================================
  * chooseindi -- Have user choose person from set

@@ -884,7 +884,12 @@ __allocate (int len,     /* number of bytes to allocate */
             int line)    /* not used */
 {
 	char *p;
-	if ((p = malloc(len)) == NULL)  FATAL();
+	if ((p = malloc(len)) == NULL)
+	{
+		char msg[64];
+		sprintf(msg, "Malloc failure for %d bytes", len);
+		FATAL2(msg);
+	}
 	return p;
 }
 /*=======================================================
