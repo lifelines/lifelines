@@ -308,7 +308,7 @@ make_program_list(struct program_info *head,
 #else
       /* MTE: 11-17-00 Yes, this is dangerous.  It will have to do */
       /* until we add an implementation of snprintf() to arch/.    */
-      sprintf(buf, "%s (%s)",
+      sprintf(buf, "%s (%s) [%s]",
 #endif /* HAVE__SNPRINTF */
 #endif /* HAVE_SNPRINTF */
               NULL != cur->progname    ? cur->progname       : cur->filename,
