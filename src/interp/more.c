@@ -1178,6 +1178,7 @@ typedef struct tag_sortpair {
 	PVALUE key;
 } *SORTPAIR;
 #if UNUSED_CODE
+/* comparison fnc to use with our partition_sort, commented out below */
 static INT
 sortpaircmp (SORTEL el1, SORTEL el2, VPTR param)
 {
@@ -1204,6 +1205,8 @@ sortimpl (PNODE node, SYMTAB stab, BOOLEAN *eflg, BOOLEAN fwd)
 	INT i=0;
 	struct tag_sortpair * array = 0;
 	SORTPAIR * index = 0;
+	/* 1st is values collection */
+	/* it must be a list or array */
 	if (which_pvalue_type(val1) == PLIST) {
 		list_vals = pvalue_to_list(val1);
 		nsort = length_list(list_vals);
@@ -1224,6 +1227,9 @@ sortimpl (PNODE node, SYMTAB stab, BOOLEAN *eflg, BOOLEAN fwd)
 		*eflg = TRUE;
 		goto exit_sort;
 	}
+	/* (optional) 2nd argument is keys collection */
+	/* we use the keys to collate */
+	/* (if keys collection not provided, we collate on values) */
 	arg = inext(arg);
 	if (arg) {
 		val2 = eval_without_coerce(arg, stab, eflg);
@@ -1256,7 +1262,8 @@ sortimpl (PNODE node, SYMTAB stab, BOOLEAN *eflg, BOOLEAN fwd)
 		}
 	}
 	if (!arr_keys && !list_keys) {
-		/* no key container, so use the value container itself */
+		/* no keys collection (1st argument), */
+		/* so sort directly on values collection (2nd argument) */
 		for (i=0; i<nsort; ++i) {
 			array[i].key = array[i].value;
 		}
@@ -1274,6 +1281,9 @@ sortimpl (PNODE node, SYMTAB stab, BOOLEAN *eflg, BOOLEAN fwd)
 */
 	/* partition_sort((SORTEL *)index, nsort, sortpaircmp, 0);*/
 
+	/* Now we reorder both the values (1st) and keys (2nd) collections */
+
+	/* reorder the values collection (1st argument) */
 	if (list_vals) {
 		struct tag_list_iter listit;
 		VPTR ptr=0;
@@ -1307,15 +1317,15 @@ sortimpl (PNODE node, SYMTAB stab, BOOLEAN *eflg, BOOLEAN fwd)
 			change_list_ptr(&listit, index[i]->key);
 			++i;
 		}
-	} else {
+	} else if (arr_keys) {
 		INT j;
-		ASSERT(arr_keys);
 		for (i=0; i<nsort; ++i) {
 			OBJECT obj = (OBJECT)index[i]->key;
 			j = (fwd ? i : nsort-i-1);
 			set_array_obj(arr_keys, j, obj);
 		}
 	}
+	/* else, no keys collection (2nd argument), so no 2nd reorder */
 
 exit_sort:
 	delete_pvalue(val1);

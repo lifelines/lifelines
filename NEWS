@@ -2,6 +2,9 @@ LifeLines Source Release, Version 3.0.30
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
+Bug fixes in 3.0.31
+============================
+- Bugfix for crash if one argument passed to (r)sort.
 
 New features added in 3.0.30
 ============================

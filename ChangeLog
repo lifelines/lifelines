@@ -1,6 +1,6 @@
 2003-09-09 Perry Rapp
 
-	* ChangeLog src/interp/more.c
+	* ChangeLog NEWS src/interp/more.c
 
 	Bugfix for report sort function to not crash on one argument.
 
