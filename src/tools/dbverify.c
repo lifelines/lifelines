@@ -865,11 +865,9 @@ main (int argc,
 		return (1);
 	}
 	if (!(BTR = openbtree(dbname, cflag, writ, immut))) {
-		if (bterrno == BTERR_WRITER) {
-			printf("Database is locked: %s\n", dbname);
-		} else {
-			printf("Could not open database: %s (%d)\n", dbname, bterrno);
-		}
+		char buffer[256];
+		describe_dberror(bterrno, buffer, ARRSIZE(buffer));
+		puts(buffer);
 		return (1);
 	}
 	init_lifelines_db();

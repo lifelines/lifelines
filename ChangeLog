@@ -1,5 +1,12 @@
 2001-09-16 Matt Emmerton <memmerto@users.sourceforge.net>
 
+	* ChangeLog tools/dbverify.c:
+
+	Removed special error-displaying code and use describe_dberror()
+	from gedlib/init.c instead.
+
+2001-09-16 Matt Emmerton <memmerto@users.sourceforge.net>
+
 	* ChangeLog interp/interpi.h interp/more.c interp/functab.c:
 
 	Renamed __system to __runsystem to avoid conflict with gcc
