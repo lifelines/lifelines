@@ -56,6 +56,7 @@
 #include "table.h"
 #include "gedcom.h"
 #include "interp.h"
+#include "interpi.h"
 
 /*===============================================+
  * __heapused -- Return amount of heapspace in use

@@ -36,6 +36,7 @@
 #include "gedcom.h"
 #include "cache.h"
 #include "interp.h"
+#include "interpi.h"
 #include "indiseq.h"
 #include "gengedc.h"
 
@@ -465,7 +466,7 @@ __spouseset (PNODE node,
  * create_value_pvalue -- Callback for creating values
  *  with pvalue indiseqs
  *==================================================*/
-WORD
+static WORD
 create_value_pvalue (INT gen)
 {
 	return create_pvalue(PINT, (WORD)gen);

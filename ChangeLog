@@ -1,3 +1,11 @@
+2001-01-01 Petter Reinholdtsen <pere@td.org.uit.no>
+
+	* interp/more.c interp/intrpseq.c interp/write.c
+	interp/heapused.c: Include "interpi.h" to check if functions match
+	their prototype. (__lastfam) Correct return type to match
+	prototype. (create_value_pvalue) Make function static, as it is
+	only used in one file.
+
 2001-01-02  Marc Nozell  <marc@nozell.com>
 
 	* stdlib/Makefile.am: Added stdlibi.h

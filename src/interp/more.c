@@ -39,6 +39,7 @@
 #include "gedcom.h"
 #include "cache.h"
 #include "interp.h"
+#include "interpi.h"
 #include "indiseq.h"
 #include "liflines.h"
 
@@ -774,7 +775,7 @@ __prevfam (PNODE node,
  * lastfam -- Return last family in database
  *   usage: lastfam() -> FAM
  *========================================*/
-WORD
+PVALUE
 __lastfam (PNODE node,
            TABLE stab,
            BOOLEAN *eflg)

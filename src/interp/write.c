@@ -35,6 +35,7 @@
 #include "gedcom.h"
 #include "cache.h"
 #include "interp.h"
+#include "interpi.h"
 #include "liflines.h"
 #include "screen.h"
 
