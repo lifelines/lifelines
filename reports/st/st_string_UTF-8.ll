@@ -1,5 +1,5 @@
 /*
- * @version        1.0
+ * @version        1.1
  * @author         Perry Rapp
  * @category       self-test
  * @output         none
@@ -25,12 +25,22 @@ proc testStrings_UTF_8()
 {
 	call initSubsection()
 
-	call testBothWays_UTF_8("ä", "Ä", "adia")
-	call testBothWays_UTF_8("ö", "Ö", "odia")
-	call testBothWays_UTF_8("æ", "Æ", "ae")
-	call testBothWays_UTF_8("ǽ", "Ǽ", "ae_acute")
-	call testBothWays_UTF_8("œ", "Œ", "oe")
+	call testBothWays_UTF_8("ä", "Ä", "adia") /* u+00E4, u+00C4 */
+	call testBothWays_UTF_8("ö", "Ö", "odia") /* u+00F6, u+00D6 */
+	call testBothWays_UTF_8("æ", "Æ", "ae") /* u+00E6, u+00C6 */
+	call testBothWays_UTF_8("ǽ", "Ǽ", "ae_acute") /* u+01FD, u+01FC */
+	call testBothWays_UTF_8("ð", "Ð", "eth") /* u+00F0, u+00D0 */
+	call testBothWays_UTF_8("þ", "Þ", "thorn") /* u+00FE, u+00DE */
+	call testBothWays_UTF_8("ø", "Ø", "o_stroke") /* u+00F8, u+00D8 */
+	call testBothWays_UTF_8("œ", "Œ", "oe") /* u+0153, u+0152 */
+	call testBothWays_UTF_8("ł", "Ł", "l_stroke") /* u+0142, u+0141 */
+	call testBothWays_UTF_8("δ", "Δ", "delta") /* u+03B4, u+0394 */
+	call testBothWays_UTF_8("ш", "Ш", "Cyrillic_sha") /* u+0448, u+0428 */
 
+	/* special cases */
+	call testBothWays_UTF_8("σας", "ΣΑΣ", "Greek sas")
+
+	/* TODO: add German special case when implemented */
 
 	call reportSubsection("string UTF-8 tests")
 }

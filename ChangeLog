@@ -5,6 +5,11 @@
 	Fix title_dup copy&paste (it was doing lower), which was causing
 	many failures in st\st_date.ll.
 
+	* ChangeLog reports/st/st_string_UTF-8.ll
+
+	Added a couple more casing tests, including Greek & Cyrillic, and the
+	Greek sigma special case.
+
 2003-04-16 Perry Rapp
 
 	* ChangeLog src/stdlib/strcvt.c
