@@ -1,26 +1,11 @@
 2000-11-05    <marc@nozell.com>
 
-	* liflines/newrecs.c: cleanup
+	* liflines/newrecs.c liflines/show.c liflines/advedit.c
+	liflines/swap.c liflines/screen.c liflines/add.c
+	liflines/valgdcom.c liflines/import.c liflines/lbrowse.c
+	tools/btedit.c: cleanup
 
-	* liflines/show.c: cleanup
-
-	* liflines/advedit.c: cleanup
-
-	* liflines/swap.c: cleanup
-	
-	* liflines/screen.c: cleanup
-	
-	* liflines/add.c: cleanup
-	
-	* liflines/valgdcom.c: cleanup
-
-	* liflines/import.c: cleanup
-
-	* liflines/lbrowse.c: cleanup
-	
 	* liflines/browse.c: Add prototype
-
-	* tools/btedit.c: cleanup
 
 	* btree/index.c: cleanup compiler warnings
 
