@@ -113,7 +113,7 @@ INT browse_tandem (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 		switch (c)
 		{
 		case CMD_EDIT: 	/* edit top person */
-			edit_indi(current1);
+			edit_indi(current1, &disp_long_rfmt);
 			break;
 		case CMD_TOP: 	/* browse top person */
 			*prec1 = current1;
@@ -229,7 +229,7 @@ INT browse_2fam (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 		switch (c)
 		{
 		case CMD_EDIT:	/* edit top fam */
-			edit_family(current1);
+			edit_family(current1, &disp_long_rfmt);
 			break;
 		case CMD_TOP:	/* browse top fam */
 			*prec1 = current1;
@@ -238,10 +238,12 @@ INT browse_2fam (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 			*prec1 = current2;
 			return BROWSE_FAM;
 		case CMD_BOTH_FATHERS:	/* browse to husbs/faths */
-			if ((tmp = fam_to_husb(current1)) != 0) {
-				if ((tmp2 = fam_to_husb(current2)) != 0) {
-					*prec1 = tmp;
-					*prec2 = tmp2;
+			{
+				RECORD fam1=0, fam2=0;
+				if (fam_to_husb(current1, &fam1) == 1
+					&& fam_to_husb(current2, &fam2) == 1) {
+					*prec1 = fam1;
+					*prec2 = fam2;
 					return BROWSE_TAND;
 				}
 			}

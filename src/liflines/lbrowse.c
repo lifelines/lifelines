@@ -157,7 +157,7 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 			top = cur = 0;
 			break;
 		case 'e':        /* Edit current person */
-			edit_any_record(rec);
+			edit_any_record(rec, &disp_long_rfmt);
 			if ((len = length_indiseq(seq)) <= 0) {
 				remove_browse_list(lname, seq);
 				current_seq = NULL;

@@ -444,17 +444,20 @@ init_display_fam (RECORD frec, INT width)
 	INT nch, nm, wtemp;
 	STRING father = _(qSdspl_fath);
 	STRING mother = _(qSdspl_moth);
-	RECORD ihusb = fam_to_husb(frec);
-	RECORD iwife = fam_to_wife(frec);
+	RECORD ihusb=0, iwife=0;
+	INT husbstatus = fam_to_husb(frec, &ihusb);
+	INT wifestatus = fam_to_wife(frec, &iwife);
 
 	husb = nztop(ihusb);
 	wife = nztop(iwife);
 
-	if (ihusb) {
+	if (husbstatus == 1) {
 		INT avail = width - zs_len(famkey) - 3;
 		disp_person_name(Shusb, father, ihusb, avail);
 	} else {
 		zs_setf(Shusb, "%s:", father);
+		if (husbstatus == -1)
+			zs_apps(Shusb, "??");
 	}
 	zs_appf(Shusb, " (%s)", zs_str(famkey));
 	zs_free(&famkey);
@@ -462,11 +465,13 @@ init_display_fam (RECORD frec, INT width)
 	disp_person_birthdeath(Shbirt, ihusb, f_birth_tags, &disp_long_rfmt);
 	disp_person_birthdeath(Shdeat, ihusb, f_death_tags, &disp_long_rfmt);
 
-	if (iwife) {
+	if (wifestatus == 1) {
 		INT avail = width;
 		disp_person_name(Swife, mother, iwife, avail);
 	} else {
 		zs_setf(Swife, "%s:", mother);
+		if (wifestatus == -1)
+			zs_apps(Swife, "??");
 	}
 
 	disp_person_birthdeath(Swbirt, iwife, f_birth_tags, &disp_long_rfmt);

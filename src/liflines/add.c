@@ -67,7 +67,7 @@ get_unresolved_ref_error_string (INT count)
  * (with user interaction)
  *========================================================*/
 RECORD
-add_indi_by_edit (void)
+add_indi_by_edit (RFMT rfmt)
 {
 	FILE *fp;
 	RECORD indi0=0;
@@ -127,7 +127,7 @@ add_indi_by_edit (void)
 			llstrncpyf(msgb, sizeof(msgb), uu8
 				, get_unresolved_ref_error_string(cnt), cnt);
 			if (ask_yes_or_no_msg(msgb, _(qSireditopt))) {
-				write_indi_to_file_for_edit(indi, editfile);
+				write_indi_to_file_for_edit(indi, editfile, rfmt);
 				do_edit();
 				continue;
 			}

@@ -357,7 +357,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 		switch (c)
 		{
 		case CMD_EDIT:	/* Edit this person */
-			edit_indi(current);
+			edit_indi(current, &disp_long_rfmt);
 			break;
 		case CMD_FAMILY: 	/* Browse to person's family */
 			if ((*prec1 = choose_family(current, _(qSntprnt)
@@ -532,7 +532,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_NEWPERSON:	/* Add new person */
-			if (!(tmp = add_indi_by_edit())) break;
+			if (!(tmp = add_indi_by_edit(&disp_long_rfmt))) break;
 			save = current;
 			current = tmp;
 			break;
@@ -703,9 +703,9 @@ reprocess_aux_cmd:
 		{
 		case CMD_EDIT:
 			switch(ntype) {
-			case 'S': edit_source(current); break;
-			case 'E': edit_event(current); break;
-			case 'X': edit_other(current); break;
+			case 'S': edit_source(current, &disp_long_rfmt); break;
+			case 'E': edit_event(current, &disp_long_rfmt); break;
+			case 'X': edit_other(current, &disp_long_rfmt); break;
 			}
 			break;
 		case CMD_ADD_SOUR: /* add source */
@@ -800,13 +800,13 @@ pick_remove_spouse_from_family (RECORD frec)
 	for (node = husb; node; node = nsibling(node)) {
 		root = key_to_indi(rmvat(nval(node)));
 		spstrings[i] = indi_to_list_string(root,
-			 NULL, 66, &disp_shrt_rfmt);
+			 NULL, 66, &disp_shrt_rfmt, TRUE);
 		spnodes[i++] = root;
 	}
 	for (node = wife; node; node = nsibling(node)) {
 		root = key_to_indi(rmvat(nval(node)));
 		spstrings[i] = indi_to_list_string(root,
-			 NULL, 66, &disp_shrt_rfmt);
+			 NULL, 66, &disp_shrt_rfmt, TRUE);
 		spnodes[i++] = root;
 		if (i == MAX_SPOUSES) {
 			message(_(qSspover));
@@ -962,7 +962,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_EDIT:	/* Edit family's record */
-			edit_family(current);
+			edit_family(current, &disp_long_rfmt);
 			break;
 		case CMD_FATHER:	/* Browse to family's father */
 			if ((tmp = choose_father(NULL, current, _(qSnohusb),
@@ -1035,7 +1035,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			pick_remove_spouse_from_family(current);
 			break;
 		case CMD_NEWPERSON:	/* Add person to database */
-			save = add_indi_by_edit();
+			save = add_indi_by_edit(&disp_long_rfmt);
 			break;
 		case CMD_ADD_SOUR: /* add source */
 		case CMD_ADD_EVEN: /* add event */

@@ -88,7 +88,7 @@ get_child_strings (NODE fam, RFMT rfmt, INT *pnum, STRING **pkeys)
 		maxchil = nchil + 5;
 	}
 	FORCHILDRENx(fam,child,i)
-		chstrings[i-1] = indi_to_list_string(child, NULL, 66, rfmt);
+		chstrings[i-1] = indi_to_list_string(child, NULL, 66, rfmt, TRUE);
 		chkeys[i-1] = strsave(rmvat(nxref(child)));
 	ENDCHILDRENx
 	*pnum = nchil;
@@ -98,13 +98,14 @@ get_child_strings (NODE fam, RFMT rfmt, INT *pnum, STRING **pkeys)
 /*================================================
  * indi_to_list_string -- Return menu list string.
  *  returns heap-alloc'd string
- *  indi:  [in] source person
- *  fam:   [in] relevant family (used in spouse lists)
- *  len:   [in] max length desired
- *  rfmt:  [in] reformating functions (may be NULL)
+ *  indi:   [IN]  source person
+ *  fam:    [IN]  relevant family (used in spouse lists)
+ *  len:    [IN]  max length desired
+ *  rfmt:   [IN]  reformating functions (may be NULL)
+ *  appkey: [IN]  allow appending key ?
  *==============================================*/
 STRING
-indi_to_list_string (NODE indi, NODE fam, INT len, RFMT rfmt)
+indi_to_list_string (NODE indi, NODE fam, INT len, RFMT rfmt, BOOLEAN appkey)
 {
 	char scratch[MAXLINELEN];
 	STRING name, evt = NULL, p = scratch;
@@ -127,11 +128,11 @@ indi_to_list_string (NODE indi, NODE fam, INT len, RFMT rfmt)
 		sprintf(p, ", %s", evt);
 		p += strlen(p);
 	}
-	if (indi && displaykeys) {
+	if (appkey && indi && displaykeys) {
 		sprintf(p, " (%s)", key_of_record(indi));
 		p += strlen(p);
 	}
-	if (fam && displaykeys) {
+	if (appkey && fam && displaykeys) {
 		sprintf(p, " (%s)", key_of_record(fam));
 		p += strlen(p);
 	}
@@ -327,14 +328,15 @@ other_to_list_string(NODE node, INT len, STRING delim)
  * Caller must specify either node or key (or both)
  * Used in lists and in extended gedcom view
  * Created: 2001/02/12, Perry Rapp
- *  node:  [in] node tree of indi or fam ... to be described
- *  key:   [in] key of record specified by node
- *  len:   [in] max description desired
- *  delim: [in] separator to use between events
- *  rfmt:  [in] reformatting information
+ *  node:   [IN]  node tree of indi or fam ... to be described
+ *  key:    [IN]  key of record specified by node
+ *  len:    [IN]  max description desired
+ *  delim:  [IN]  separator to use between events
+ *  rfmt:   [IN]  reformatting information
+ *  appkey: [IN]  allow appending key ?
  *=========================================*/
 STRING
-generic_to_list_string (NODE node, STRING key, INT len, STRING delim, RFMT rfmt)
+generic_to_list_string (NODE node, STRING key, INT len, STRING delim, RFMT rfmt, BOOLEAN appkey)
 {
 	STRING str;
 	str=NULL; /* set to appropriate format */
@@ -346,7 +348,7 @@ generic_to_list_string (NODE node, STRING key, INT len, STRING delim, RFMT rfmt)
 		switch (key[0])
 		{
 		case 'I':
-			str = indi_to_list_string(node, NULL, len, rfmt);
+			str = indi_to_list_string(node, NULL, len, rfmt, appkey);
 			break;
 		case 'S':
 			str = sour_to_list_string(node, len, delim);

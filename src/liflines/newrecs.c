@@ -62,7 +62,7 @@ static RECORD edit_add_record(STRING recstr, STRING redt, STRING redtopt
 	, char ntype, STRING cfrm);
 static BOOLEAN edit_record(RECORD rec1, STRING idedt, INT letr, STRING redt
 	, STRING redtopt , BOOLEAN (*val)(NODE, STRING *, NODE), STRING cfrm
-	, void (*todbase)(NODE), STRING gdmsg);
+	, void (*todbase)(NODE), STRING gdmsg, RFMT rfmt);
 
 
 /*********************************************
@@ -210,42 +210,42 @@ edit_add_record (STRING recstr, STRING redt, STRING redtopt, char ntype, STRING 
  * edit_source -- Edit source in database
  *=====================================*/
 BOOLEAN
-edit_source (RECORD rec)
+edit_source (RECORD rec, RFMT rfmt)
 {
 	return edit_record(rec, _(qSidredt), 'S', _(qSrredit), _(qSrreditopt)
-		, valid_sour_tree, _(qScfrupt), sour_to_dbase, _(qSgdrmod));
+		, valid_sour_tree, _(qScfrupt), sour_to_dbase, _(qSgdrmod), rfmt);
 }
 /*=====================================
  * edit_event -- Edit event in database
  *===================================*/
 BOOLEAN
-edit_event (RECORD rec)
+edit_event (RECORD rec, RFMT rfmt)
 {
 	return edit_record(rec, _(qSideedt), 'E', _(qSeredit), _(qSereditopt)
-		, valid_even_tree, _(qScfeupt), even_to_dbase, _(qSgdemod));
+		, valid_even_tree, _(qScfeupt), even_to_dbase, _(qSgdemod), rfmt);
 }
 /*===========================================
  * edit_other -- Edit other record in database (eg, NOTE)
  *=========================================*/
 BOOLEAN
-edit_other (RECORD rec)
+edit_other (RECORD rec, RFMT rfmt)
 {
 	return edit_record(rec, _(qSidxedt), 'X', _(qSxredit), _(qSxreditopt)
-		, valid_othr_tree, _(qScfxupt), othr_to_dbase, _(qSgdxmod));
+		, valid_othr_tree, _(qScfxupt), othr_to_dbase, _(qSgdxmod), rfmt);
 }
 /*=======================================
  * edit_any_record -- Edit record of any type
  *=====================================*/
 BOOLEAN
-edit_any_record (RECORD rec)
+edit_any_record (RECORD rec, RFMT rfmt)
 {
 	ASSERT(rec);
 	switch (nztype(rec)) {
-	case 'I': return edit_indi(rec);
-	case 'F': return edit_family(rec);
-	case 'S': return edit_source(rec);
-	case 'E': return edit_event(rec);
-	case 'X': return edit_other(rec);
+	case 'I': return edit_indi(rec, rfmt);
+	case 'F': return edit_family(rec, rfmt);
+	case 'S': return edit_source(rec, rfmt);
+	case 'E': return edit_event(rec, rfmt);
+	case 'X': return edit_other(rec, rfmt);
 	default: ASSERT(0); return FALSE;
 	}
 }
@@ -275,11 +275,13 @@ write_node_to_editfile (NODE node)
  *  tag:     [IN]  tag (SOUR, EVEN, or NULL)
  *  todbase: [IN]  callback to write record to dbase
  *  gdmsg:   [IN]  success message
+ *  rfmt:    [IN]  display reformatter
  *=====================================*/
 static BOOLEAN
 edit_record (RECORD rec1, STRING idedt, INT letr, STRING redt, STRING redtopt
 	, BOOLEAN (*val)(NODE, STRING *, NODE)
-	, STRING cfrm, void (*todbase)(NODE), STRING gdmsg)
+	, STRING cfrm, void (*todbase)(NODE), STRING gdmsg
+	, RFMT rfmt)
 {
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 	STRING msg, key;
@@ -299,8 +301,7 @@ edit_record (RECORD rec1, STRING idedt, INT letr, STRING redt, STRING redtopt
 	}
 
 /* Have user edit record */
-	if (getoptint("ExpandRefnsDuringEdit", 0) > 0)
-		expand_refn_links(root1);
+	annotate_with_supplemental(root1, rfmt);
 	write_node_to_editfile(root1);
 	resolve_refn_links(root1);
 

@@ -515,7 +515,7 @@ node_lineprint (INT width, void * param)
 	if (npp->gdvw == GDVW_EXPANDED && nval(node)) {
 		STRING key = rmvat(nval(node)), str;
 		if (key) {
-			str = generic_to_list_string(NULL, key, mylen, ",", &disp_long_rfmt);
+			str = generic_to_list_string(NULL, key, mylen, ",", &disp_long_rfmt, TRUE);
 			llstrcatn(&ptr, " : ", &mylen);
 			llstrcatn(&ptr, str, &mylen);
 		}

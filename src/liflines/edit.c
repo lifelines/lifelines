@@ -37,7 +37,6 @@
 #include "indiseq.h"
 #include "liflines.h"
 #include "feedback.h"
-#include "lloptions.h"
 
 #include "llinesi.h"
 
@@ -57,10 +56,9 @@ extern STRING qSparadox;
  * returns TRUE if user makes changes (& saves them)
  *===================================*/
 BOOLEAN
-edit_indi (RECORD irec1)  /* may be NULL */
+edit_indi (RECORD irec1, RFMT rfmt)  /* may be NULL */
 {
 	NODE indi1, indi2=0;
-	BOOLEAN emp;
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 
 /* Identify indi if necessary */
@@ -69,12 +67,13 @@ edit_indi (RECORD irec1)  /* may be NULL */
 	indi1 = nztop(irec1);
 
 /* Prepare file for user to edit */
-	write_indi_to_file_for_edit(indi1, editfile);
+	write_indi_to_file_for_edit(indi1, editfile, rfmt);
 
 /* Have user edit file */
 	do_edit();
 	if (readonly) {
 		STRING msg;
+		BOOLEAN emp;
 		indi2 = file_to_node(editfile, ttmi, &msg, &emp);
 		if (!equal_tree(indi1, indi2))
 			message(_(qSronlye));
@@ -84,6 +83,7 @@ edit_indi (RECORD irec1)  /* may be NULL */
 	while (TRUE) {
 		INT cnt;
 		STRING msg;
+		BOOLEAN emp;
 		indi2 = file_to_node(editfile, ttmi, &msg, &emp);
 		if (!indi2) {
 			if (ask_yes_or_no_msg(msg, _(qSiredit))) {
@@ -111,7 +111,7 @@ edit_indi (RECORD irec1)  /* may be NULL */
 			snprintf(msgb, sizeof(msgb)
 				, get_unresolved_ref_error_string(cnt), cnt);
 			if (ask_yes_or_no_msg(msgb, _(qSireditopt))) {
-				write_indi_to_file_for_edit(indi2, editfile);
+				write_indi_to_file_for_edit(indi2, editfile, rfmt);
 				do_edit();
 				continue;
 			}
@@ -141,13 +141,13 @@ edit_indi (RECORD irec1)  /* may be NULL */
  * (with user interaction)
  *==================================*/
 BOOLEAN
-edit_family (RECORD frec1) /* may be NULL */
+edit_family (RECORD frec1, RFMT rfmt) /* may be NULL */
 {
 	NODE fam1=0, fam2=0;
 	RECORD irec=0;
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 	STRING msg;
-	BOOLEAN emp;
+	BOOLEAN changed = FALSE;
 
 /* Identify family if necessary */
 	if (!frec1) {
@@ -155,7 +155,7 @@ edit_family (RECORD frec1) /* may be NULL */
 		if (!irec) return FALSE;
 		if (!FAMS(nztop(irec))) {
 			message(_(qSntprnt));
-			return FALSE;
+			goto end_edit_fam;
 		} 
 		frec1 = choose_family(irec, _(qSparadox), _(qSidfbys), TRUE);
 		if (!frec1) return FALSE; 
@@ -163,22 +163,22 @@ edit_family (RECORD frec1) /* may be NULL */
 	fam1 = nztop(frec1);
 
 /* Prepare file for user to edit */
-	if (getoptint("ExpandRefnsDuringEdit", 0) > 0)
-		expand_refn_links(fam1);
+	annotate_with_supplemental(fam1, rfmt);
 	write_fam_to_file(fam1, editfile);
 	resolve_refn_links(fam1);
 
 /* Have user edit record */
 	do_edit();
 	if (readonly) {
+		BOOLEAN emp;
 		fam2 = file_to_node(editfile, ttmi, &msg, &emp);
 		if (!equal_tree(fam1, fam2))
 			message(_(qSronlye));
-		free_nodes(fam2); 
-		return FALSE;
+		goto end_edit_fam;
 	}
 	while (TRUE) {
 		INT cnt;
+		BOOLEAN emp;
 		fam2 = file_to_node(editfile, ttmi, &msg, &emp);
 		if (!fam2) {
 			if (ask_yes_or_no_msg(msg, _(qSfredit))) {
@@ -217,14 +217,18 @@ edit_family (RECORD frec1) /* may be NULL */
 /* If error or user backs out return */
 
 	if (!fam2) return FALSE;
-	if (equal_tree(fam1, fam2) || !ask_yes_or_no(_(qScffupt))) {
-		free_nodes(fam2);
-		return FALSE;
-	}
+	if (equal_tree(fam1, fam2) || !ask_yes_or_no(_(qScffupt)))
+		goto end_edit_fam;
 
 /* Move new data (in fam2 children) into existing fam1 tree */
 	replace_fam(fam1, fam2);
+	fam2 = NULL;
 
 	msg_status(_(qSgdfmod));
-	return TRUE;
+	changed = TRUE;
+
+end_edit_fam:
+	if (fam2)
+		free_nodes(fam2); 
+	return changed;
 }

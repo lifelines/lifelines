@@ -1254,7 +1254,7 @@ __nfamilies (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __nspouses (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	INT nspouses;
+	INT nspouses=0, nactual=0;
 	PNODE arg = (PNODE) iargs(node);
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	if (*eflg) {
@@ -1262,8 +1262,10 @@ __nspouses (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	if (!indi) return create_pvalue_from_int(0);
-	FORSPOUSES(indi,spouse,fam,nspouses) ENDSPOUSES
-	return create_pvalue_from_int(nspouses);
+	FORSPOUSES(indi,spouse,fam,nspouses)
+	ENDSPOUSES
+	/* nspouses is number of pointers, nactual is number of valid pointers */
+	return create_pvalue_from_int(nactual);
 }
 /*=============================+
  * __eq -- Equal operation

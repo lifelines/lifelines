@@ -1751,7 +1751,7 @@ invoke_add_menu (void)
 
 	switch (code) {
 	case 'p':
-		rec = add_indi_by_edit();
+		rec = add_indi_by_edit(&disp_long_rfmt);
 		break;
 	case 'f': add_family(NULL, NULL, NULL); break;
 	case 'c': my_prompt_add_child(NULL, NULL); break;
@@ -2165,11 +2165,11 @@ invoke_extra_menu (void)
 		case 'e': return BROWSE_EVEN;
 		case 'x': return BROWSE_AUX;
 		case '1': edit_add_source(); return BROWSE_QUIT;
-		case '2': edit_source(NULL); return BROWSE_QUIT;;
+		case '2': edit_source(NULL, &disp_long_rfmt); return BROWSE_QUIT;;
 		case '3': edit_add_event(); return BROWSE_QUIT;;
-		case '4': edit_event(NULL); return BROWSE_QUIT;;
+		case '4': edit_event(NULL, &disp_long_rfmt); return BROWSE_QUIT;;
 		case '5': edit_add_other(); return BROWSE_QUIT;;
-		case '6': edit_other(NULL); return BROWSE_QUIT;;
+		case '6': edit_other(NULL, &disp_long_rfmt); return BROWSE_QUIT;;
 		case 'q': return BROWSE_QUIT;;
 		}
 	}

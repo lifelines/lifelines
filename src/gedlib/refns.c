@@ -34,6 +34,8 @@
 #include "btree.h"
 #include "translat.h"
 #include "gedcom.h"
+#include "lloptions.h"
+#include "zstr.h"
 
 /*********************************************
  * external/imported variables
@@ -45,10 +47,11 @@ extern BTREE BTR;
  * local function prototypes
  *********************************************/
 
-static BOOLEAN expand_traverse(NODE node, VPTR param);
+static void annotate_node(NODE node, BOOLEAN expand_refns, BOOLEAN annotate_pointers, RFMT rfmt);
+static BOOLEAN is_annotated_xref(CNSTRING val, INT * len);
 static void parserefnrec(RKEY rkey, CNSTRING p);
 static RKEY refn2rkey(STRING);
-static BOOLEAN resolve_traverse(NODE, VPTR param);
+static BOOLEAN resolve_node(NODE node, BOOLEAN annotate_pointers);
 
 /*********************************************
  * local variables
@@ -367,83 +370,143 @@ INT
 resolve_refn_links (NODE node)
 {
 	INT unresolved = 0;
+	struct tag_node_iter nodeit;
+	NODE child=0;
+	BOOLEAN annotate_pointers = (getoptint("AnnotatePointers", 0) > 0);
+
 	if (!node) return 0;
-	traverse_nodes(node, resolve_traverse, &unresolved);
+
+	begin_node_it(node, &nodeit);
+	while ((child = next_node_it_ptr(&nodeit)) != NULL) {
+		if (!resolve_node(child, annotate_pointers))
+			++unresolved;
+	}
 	return unresolved;
 }
 /*=======================================================
- * resolve_traverse -- Traverse routine for resolve_refn_links (q.v.)
+ * resolve_node -- Traverse routine for resolve_refn_links (q.v.)
  *  node:    Current node in traversal
- *  VPTR:    client param (&resolved)
- *  returns TRUE to continue traversal
+ *  returns FALSE if bad refn pointer
  *=====================================================*/
 static BOOLEAN
-resolve_traverse (NODE node, VPTR param)
+resolve_node (NODE node, BOOLEAN annotate_pointers)
 {
-	STRING refn, val = nval(node);
-	INT letr;
-	NODE refr;
-	INT * unresolved = (INT *)param;
+	STRING val = nval(node);
 
 	if (!val) return TRUE;
 	if (symbolic_link(val)) {
-		refn = rmvbrackets(val);
-		letr = record_letter(ntag(node));
-		refr = refn_to_record(refn, letr);
+		STRING refn = rmvbrackets(val);
+		INT letr = record_letter(ntag(node));
+		NODE refr = refn_to_record(refn, letr);
 		if (refr) {
 			stdfree(nval(node));
 			nval(node) = strsave(nxref(refr));
 		} else {
-			++(*unresolved);
+			return FALSE;
 		}
 	}
+	if (annotate_pointers) {
+		INT i=0,len=0;
+		/* TODO: Check if nval(node) is an annotated xref
+		and unannotate it if so */
+		if (is_annotated_xref(nval(node), &len)) {
+			char newval[20];
+			ASSERT(len < sizeof(newval));
+			for (i=0; i<len; ++i) {
+				newval[i] = nval(node)[i];
+			}
+			newval[i] = 0;
+			stdfree(nval(node));
+			nval(node) = strsave(newval);
+		}
+	}
+
 	return TRUE;
 }
 /*==========================================================
- * expand_refn_links -- Expand any references that have REFNs
+ * is_annotated_xref -- Return true if this is an annotated
+ *  xref value (eg, "@I1@ {{ John/SMITH }}")
+ *========================================================*/
+static BOOLEAN
+is_annotated_xref (CNSTRING val, INT * len)
+{
+	CNSTRING ptr=val;
+	INT end=0;
+	if (!val) return FALSE;
+	if (val[0] != '@') return FALSE;
+	if (val[1] != 'I' && val[1] != 'F' && val[1] != 'S' 
+		&& val[1] != 'E' && val[1] != 'X') return FALSE;
+	if (!isdigit((uchar)val[2])) return FALSE;
+	for (ptr = val + 3; isdigit((uchar)*ptr); ++ptr) {
+	}
+	if (ptr > val+9) return FALSE;
+	if (*ptr++ != '@') return FALSE;
+	if (ptr[0] != ' ') return FALSE;
+	if (ptr[1] != '{') return FALSE;
+	if (ptr[2] != '{') return FALSE;
+	end = strlen(ptr);
+	if (end < 3) return FALSE;
+	if (ptr[end-1] != '}') return FALSE;
+	if (ptr[end-2] != '}') return FALSE;
+	*len = ptr-val;
+	return TRUE;
+}
+/*==========================================================
+ * annotate_with_supplemental -- Expand any references that have REFNs
  *  This converts, eg, "@S25@" to "<1850.Census>"
  *========================================================*/
-INT
-expand_refn_links (NODE node)
+void
+annotate_with_supplemental (NODE node, RFMT rfmt)
 {
-	INT expanded = 0;
-	if (!node) return 0;
-	traverse_nodes(node, expand_traverse, &expanded);
-	return expanded;
+	BOOLEAN expand_refns = (getoptint("ExpandRefnsDuringEdit", 0) > 0);
+	BOOLEAN annotate_pointers = (getoptint("AnnotatePointers", 0) > 0);
+	NODE child=0;
+	struct tag_node_iter nodeit;
+	begin_node_it(node, &nodeit);
+	while ((child = next_node_it_ptr(&nodeit)) != NULL) {
+		annotate_node(child, expand_refns, annotate_pointers, rfmt);
+	}
 }
 /*=======================================================
- * expand_traverse -- Traverse routine for expand_refn_links (q.v.)
- *  node:    Current node in traversal
- *  VPTR:    client param (&expanded)
- *  returns TRUE to continue traversal
+ * annotate_node -- Alter a node by
+ *  expanding refns (eg, "@S25@" to "<1850.Census>")
+ *  annotating pointers (eg, "@I1@" to "@I1@ {{ John/SMITH }}")
  *=====================================================*/
-static BOOLEAN
-expand_traverse (NODE node, VPTR param)
+static void
+annotate_node (NODE node, BOOLEAN expand_refns, BOOLEAN annotate_pointers, RFMT rfmt)
 {
 	STRING key=0;
-	INT * expanded = (INT *)param;
 	RECORD rec=0;
-	NODE refn=0;
-	char buffer[60];
 
 	key = value_to_xref(nval(node));
-	if (!key) return TRUE;
+	if (!key) return;
 	
 	rec = key_possible_to_record(key, *key);
-	if (!rec) return TRUE;
+	if (!rec) return;
 	
-	refn = REFN(nztop(rec));
-	if (!refn || !nval(refn) || strlen(nval(refn))>sizeof(buffer)-3) return TRUE;
+	if (expand_refns) {
+		NODE refn = REFN(nztop(rec));
+		char buffer[60];
+		if (refn && nval(refn) && strlen(nval(refn))<=sizeof(buffer)-3) {
+			buffer[0]=0;
+			strcpy(buffer, "<");
+			strcat(buffer, nval(refn));
+			strcat(buffer, ">");
+			stdfree(nval(node));
+			nval(node) = strsave(buffer);
+		}
+	}
 
-	buffer[0]=0;
-	strcpy(buffer, "<");
-	strcat(buffer, nval(refn));
-	strcat(buffer, ">");
-	stdfree(nval(node));
-	nval(node) = strsave(buffer);
-	
-	++(*expanded);
-	return TRUE;
+	if (annotate_pointers) {
+		STRING str = generic_to_list_string(nztop(rec), key, 60, ", ", rfmt, FALSE);
+		ZSTR zstr = zs_news(nval(node));
+		zs_apps(zstr, " {{");
+		zs_apps(zstr, str);
+		zs_apps(zstr, " }}");
+		stdfree(nval(node));
+		nval(node) = strsave(zs_str(zstr));
+		zs_free(&zstr);
+	}
 }
 /*===============================================
  * symbolic_link -- See if value is symbolic link

@@ -18,7 +18,6 @@
 #include "feedback.h"
 #include "warehouse.h"
 #include "metadata.h"
-#include "lloptions.h"
 #include "date.h"
 #include "xlat.h"
 
@@ -733,14 +732,13 @@ write_indi_to_file (NODE indi, CNSTRING file, BOOLEAN bom)
  * (no user interaction)
  *===================================*/
 void
-write_indi_to_file_for_edit (NODE indi, CNSTRING file)
+write_indi_to_file_for_edit (NODE indi, CNSTRING file, RFMT rfmt)
 {
 	BOOLEAN bom = FALSE;
 #ifdef WIN32
 	bom = TRUE;
 #endif
-	if (getoptint("ExpandRefnsDuringEdit", 0) > 0)
-		expand_refn_links(indi);
+	annotate_with_supplemental(indi, rfmt);
 	write_indi_to_file(indi, editfile, bom);
 	resolve_refn_links(indi);
 }

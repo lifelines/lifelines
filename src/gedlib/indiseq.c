@@ -1288,7 +1288,7 @@ indi_to_families (NODE indi,      /* person */
 			append_indiseq_ival(seq, key, NULL, val, TRUE, FALSE);
 		ENDFAMCS
 	}
-	if (num) return seq;
+	if (num && ISize(seq)) return seq;
 	remove_indiseq(seq);
 	return NULL;
 }
@@ -1307,7 +1307,7 @@ fam_to_children (NODE fam)
 		key = indi_to_key(chil);
 		append_indiseq_null(seq, key, NULL, TRUE, FALSE);
 	ENDCHILDRENx
-	if (num) return seq;
+	if (num && ISize(seq)) return seq;
 	remove_indiseq(seq);
 	return NULL;
 }
@@ -1326,7 +1326,7 @@ fam_to_fathers (NODE fam)
 		key = indi_to_key(husb);
 		append_indiseq_null(seq, strsave(key), NULL, TRUE, TRUE);
 	ENDHUSBS
-	if (num) return seq;
+	if (num && ISize(seq)) return seq;
 	remove_indiseq(seq);
 	return NULL;
 }
@@ -1345,7 +1345,7 @@ fam_to_mothers (NODE fam)
 		key = indi_to_key(wife);
 		append_indiseq_null(seq, strsave(key), NULL, TRUE, TRUE);
 	ENDWIFES
-	if (num) return seq;
+	if (num && ISize(seq)) return seq;
 	remove_indiseq(seq);
 	return NULL;
 }
@@ -1594,7 +1594,7 @@ generic_print_el (INDISEQ seq, INT i, INT len, RFMT rfmt)
 {
 	STRING key, name;
 	element_indiseq(seq, i, &key, &name);
-	return generic_to_list_string(NULL, key, len, ", ", rfmt);
+	return generic_to_list_string(NULL, key, len, ", ", rfmt, TRUE);
 }
 /*=============================================
  * spouseseq_print_el -- Format a print line of
@@ -1610,7 +1610,7 @@ spouseseq_print_el (INDISEQ seq, INT i, INT len, RFMT rfmt)
 	element_indiseq_ival(seq, i, &key, &val, &name);
 	indi = key_to_indi(key);
 	fam = keynum_to_fam(val);
-	str = indi_to_list_string(indi, fam, len, rfmt);
+	str = indi_to_list_string(indi, fam, len, rfmt, TRUE);
 	return str;
 }
 /*==========================================
@@ -1627,7 +1627,7 @@ famseq_print_el (INDISEQ seq, INT i, INT len, RFMT rfmt)
 	element_indiseq_ival(seq, i, &key, &val, &name);
 	fam = key_to_fam(key);
 	spouse = ( val ? keynum_to_indi(val) : NULL);
-	str = indi_to_list_string(spouse, fam, len, rfmt);
+	str = indi_to_list_string(spouse, fam, len, rfmt, TRUE);
 	return str;
 }
 /*================================================

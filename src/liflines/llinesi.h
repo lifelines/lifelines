@@ -23,7 +23,7 @@ struct tag_export_feedback;
 
 /* add.c */
 RECORD add_family(RECORD spouse1, RECORD spouse2, RECORD child);
-RECORD add_indi_by_edit(void);
+RECORD add_indi_by_edit(RFMT rfmt);
 BOOLEAN add_indi_no_cache(NODE);
 STRING get_unresolved_ref_error_string(INT count);
 NODE prompt_add_child(NODE child, NODE fam, RFMT rfmt);
@@ -62,8 +62,8 @@ BOOLEAN choose_and_remove_child(RECORD irec, RECORD frec, BOOLEAN nolast);
 BOOLEAN choose_and_remove_spouse(RECORD irec, RECORD frec, BOOLEAN nolast);
 
 /* edit.c */
-BOOLEAN edit_family(RECORD);
-BOOLEAN edit_indi(RECORD);
+BOOLEAN edit_family(RECORD frec1, RFMT rfmt);
+BOOLEAN edit_indi(RECORD irec1, RFMT rfmt);
 
 /* export.c */
 BOOLEAN archive_in_file (struct tag_export_feedback * efeed, FILE *fp);
@@ -88,10 +88,10 @@ void who_is_he_she(void);
 RECORD edit_add_event(void);
 RECORD edit_add_other(void);
 RECORD edit_add_source(void);
-BOOLEAN edit_any_record(RECORD rec);
-BOOLEAN edit_event(RECORD);
-BOOLEAN edit_other(RECORD);
-BOOLEAN edit_source(RECORD);
+BOOLEAN edit_any_record(RECORD rec, RFMT rfmt);
+BOOLEAN edit_event(RECORD rec, RFMT rfmt);
+BOOLEAN edit_other(RECORD rec, RFMT rfmt);
+BOOLEAN edit_source(RECORD rec, RFMT rfmt);
 
 /* pedigree.c */
 	/* gedcom view mode */

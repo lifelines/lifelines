@@ -630,7 +630,7 @@ makestring (PVALUE val, STRING str, INT len, BOOLEAN *eflg)
 			{
 				RECORD rec = pvalue_to_rec(val);
 				NODE node = nztop(rec);
-				STRING txt = generic_to_list_string(node, NULL, len, " ", NULL);
+				STRING txt = generic_to_list_string(node, NULL, len, " ", NULL, TRUE);
 				llstrapps(str, len, uu8, txt);
 			}
 			break;

@@ -1,3 +1,18 @@
+2003-09-20 Perry Rapp
+
+	* .linesrc ChangeLog lines.cfg src/gedlib/gstrings.c
+	src/gedlib/indiseq.c src/gedlib/node.c src/gedlib/nodeio.c
+	src/gedlib/refns.c src/hdrs/gedcom.h src/interp/builtin.c
+	src/interp/more.c src/liflines/add.c src/liflines/browse.c
+	src/liflines/edit.c src/liflines/lbrowse.c
+	src/liflines/llinesi.h src/liflines/newrecs.c
+	src/liflines/pedigree.c src/liflines/screen.c
+	src/liflines/show.c src/liflines/tandem.c
+
+	Add new option AnnotatePointers.
+	Add node iterator to traverse node tree with iterator.
+	Modify various places to handle bad pointers gracefully.
+
 2003-09-18 Stephen Dum
         * ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf
 	docs/ll-reportmanual.txt docs/ll-reportmanual.xml

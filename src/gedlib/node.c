@@ -514,15 +514,21 @@ fam_to_husb_node (NODE node)
 	return key_to_indi(rmvat(nval(node)));
 }
 /*========================================
- * fam_to_husb -- Return husband of family
+ * fam_to_husb -- Get husband of family
+ *  returns 1 if found, 0 if not found, -1 if bad pointer
  *======================================*/
-RECORD
-fam_to_husb (RECORD frec)
+INT
+fam_to_husb (RECORD frec, RECORD * prec)
 {
 	NODE fam = nztop(frec), husb;
-	if (!fam) return NULL;
-	if (!(husb = find_tag(nchild(fam), "HUSB"))) return NULL;
-	return key_to_irecord(rmvat(nval(husb)));
+	CNSTRING key=0;
+	*prec = NULL;
+	if (!fam) return 0;
+	if (!(husb = find_tag(nchild(fam), "HUSB"))) return 0;
+	key = rmvat(nval(husb));
+	if (!key) return -1;
+	*prec = key_to_irecord(key); /* ASSERT if fail */
+	return 1;
 }
 /*=====================================
  * fam_to_wife_node -- Return wife of family
@@ -536,23 +542,28 @@ fam_to_wife_node (NODE node)
 }
 /*========================================
  * fam_to_wife -- Return husband of family
+ *  returns 1 if found, 0 if not found, -1 if bad pointer
  *======================================*/
-RECORD
-fam_to_wife (RECORD frec)
+INT
+fam_to_wife (RECORD frec, RECORD * prec)
 {
 	NODE fam = nztop(frec), husb;
-	if (!fam) return NULL;
-	if (!(husb = find_tag(nchild(fam), "WIFE"))) return NULL;
-	return key_to_irecord(rmvat(nval(husb)));
+	CNSTRING key=0;
+	*prec = NULL;
+	if (!fam) return 0;
+	if (!(husb = find_tag(nchild(fam), "WIFE"))) return 0;
+	key = rmvat(nval(husb));
+	if (!key) return -1;
+	*prec = key_to_irecord(key); /* ASSERT if fail */
+	return 1;
 }
 /*===============================================
  * fam_to_spouse -- Return other spouse of family
  *=============================================*/
 NODE
-fam_to_spouse (NODE fam,
-               NODE indi)
+fam_to_spouse (NODE fam, NODE indi)
 {
-    	INT num;
+	INT num;
 	if (!fam) return NULL;
 	FORHUSBS(fam, husb, num)
 		if(husb != indi) return(husb);
@@ -1034,6 +1045,51 @@ traverse_nodes (NODE node, BOOLEAN (*func)(NODE, VPTR), VPTR param)
 		node = nsibling(node);
 	}
 	return TRUE;
+}
+/*==================================================
+ * begin_node_it -- Being a node iteration
+ *================================================*/
+void
+begin_node_it (NODE node, NODE_ITER nodeit)
+{
+	nodeit->start = node;
+	/* first node to return is node */
+	nodeit->next = node;
+}
+/*==================================================
+ * find_next -- Find next node in an ongoing iteration
+ *================================================*/
+static NODE
+find_next (NODE_ITER nodeit)
+{
+	NODE curr = nodeit->next;
+	/* goto child if there is one */
+	NODE next = nchild(curr);
+	if (next)
+		return next;
+	/* otherwise try for sibling, going up to ancestors until
+	we find one, or we hit the start & give up */
+	while (1) {
+		if (next == nodeit->start)
+			return NULL;
+		if (nsibling(curr))
+			return nsibling(curr);
+		curr = nparent(curr);
+		if (!curr)
+			return NULL;
+	}
+
+}
+/*==================================================
+ * next_node_it_ptr -- Return next node in an ongoing iteration
+ *================================================*/
+NODE
+next_node_it_ptr (NODE_ITER nodeit)
+{
+	NODE current = nodeit->next;
+	if (current)
+		nodeit->next = find_next(nodeit);
+	return current;
 }
 /*==================================================
  * num_spouses_of_indi -- Returns number of spouses of person
