@@ -58,7 +58,7 @@ STRING key;
 	if (!tab || !key) return NULL;
 	entry = tab[hash(key)];
 	while (entry) {
-		if (eqstr(key, (char*)entry->ekey)) return entry;
+		if (eqstr(key, entry->ekey)) return entry;
 		entry = entry->enext;
 	}
 	return NULL;
