@@ -76,6 +76,10 @@ Source Code Directories
 
     Headers used in win32 port (before ./hdrs existed)
 
+./win32/msvc6
+
+    Project files for Miscrosoft Visual C++ 6
+
 
 Non-Source Code Directories
 ---------------------------
