@@ -28,6 +28,11 @@
 	Revised llprograms, etc to be in options.
 	Split init_lifelines into before & after opendb halves.
 
+	* gedlib/Makefile.am interp/Makefile.am liflines/Makefile.am
+	stdlib/Makefile.am:
+	Makefile changes for new files
+	Added dependencies for askprogram.c & property.c
+
 2001-02-03 Perry Rapp <puddle@users.sourceforge.net>
 
 	* hdrs/screen.h liflines/browse.c liflines/menuitem.c

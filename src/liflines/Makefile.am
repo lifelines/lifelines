@@ -43,6 +43,9 @@ advedit.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h
 advedit.o: ../hdrs/translat.h
 ask.o: ../hdrs/standard.h
 ask.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h ../hdrs/indiseq.h
+askprogram.o: ../hdrs/arch.h ../hdrs/gedcom.h ../hdrs/indiseq.h
+askprogram.o: ../hdrs/liflines.h ../hdrs/lloptions.h ../hdrs/standard.h
+askprogram.o: ../hdrs/screen.h ../hdrs/table.h
 browse.o: ../hdrs/standard.h
 browse.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/indiseq.h
 browse.o: ../hdrs/gedcom.h ../hdrs/translat.h
@@ -51,20 +54,18 @@ delete.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h
 edit.o: ../hdrs/standard.h
 edit.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h
 edit.o: ../hdrs/translat.h
-export.o: ../hdrs/standard.h
-export.o: ../hdrs/mystring.h ../hdrs/btree.h ../hdrs/table.h ../hdrs/gedcom.h
+export.o: ../hdrs/btree.h ../hdrs/gedcom.h ../hdrs/lloptions.h
+export.o: ../hdrs/mystring.h ../hdrs/standard.h ../hdrs/table.h
 export.o: ../hdrs/translat.h
-import.o: ../hdrs/standard.h
-import.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h
-import.o: ../hdrs/sequence.h ../hdrs/gedcheck.h ../hdrs/translat.h
-import.o: ../hdrs/screen.h
+import.o: ../hdrs/gedcheck.h ../hdrs/gedcom.h ../hdrs/lloptions.h
+import.o: ../hdrs/mystring.h ../hdrs/screen.h ../hdrs/sequence.h
+import.o: ../hdrs/standard.h ../hdrs/table.h ../hdrs/translat.h
 lbrowse.o: ../hdrs/standard.h
 lbrowse.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h
 lbrowse.o: ../hdrs/indiseq.h
-main.o: ../hdrs/standard.h
-main.o: ../hdrs/mystring.h ../hdrs/screen.h
-main.o: ../hdrs/btree.h ../hdrs/table.h
-main.o: ../hdrs/gedcom.h
+main.o: ../hdrs/btree.h ../hdrs/gedcom.h ../hdrs/lloptions.h
+main.o: ../hdrs/mystring.h ../hdrs/screen.h ../hdrs/standard.h
+main.o: ../hdrs/table.h
 menuitem.o: ../hdrs/standard.h ../hdrs/menuitem.h
 merge.o: ../hdrs/standard.h
 merge.o: ../hdrs/mystring.h ../hdrs/btree.h ../hdrs/table.h ../hdrs/gedcom.h

@@ -5,11 +5,11 @@
 noinst_LIBRARIES = libgedcom.a
 
 libgedcom_a_SOURCES = brwslist.c charmaps.c choose.c editmap.c \
-	editvtab.c equaliso.c gedcom.c gengedc.c gstrings.c \
-	indiseq.c init.c intrface.c keytonod.c messages.c misc.c \
-	names.c node.c nodeutls.c place.c refns.c replace.c \
-	spltjoin.c translat.c valid.c valtable.c xreffile.c \
-	property.c
+	editvtab.c equaliso.c gedcom.c gengedc.c gstrings.c\
+	indiseq.c init.c intrface.c keytonod.c lloptions.c\
+	messages.c misc.c names.c node.c nodeutls.c place.c\
+	property.c refns.c replace.c spltjoin.c translat.c\
+	valid.c valtable.c xreffile.c
 
 INCLUDES=-I$(srcdir)/.. -I$(srcdir)/../hdrs
 EXTRA_DIST = gedcomi.h
@@ -36,11 +36,14 @@ gstrings.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h
 gstrings.o: ../hdrs/standard.h ../hdrs/translat.h
 indiseq.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h
 indiseq.o: ../hdrs/indiseq.h ../hdrs/interp.h ../hdrs/standard.h
-init.o: ../hdrs/mystring.h ../hdrs/btree.h ../hdrs/table.h ../hdrs/gedcom.h
-init.o: ../hdrs/standard.h ../hdrs/version.h
+init.o: ../hdrs/btree.h ../hdrs/gedcom.h ../hdrs/lloptions.h 
+init.o: ../hdrs/mystring.h ../hdrs/standard.h ../hdrs/table.h
+init.o: ../hdrs/version.h
 intrface.o: ../hdrs/standard.h ../hdrs/mystring.h ../hdrs/btree.h
 keytonod.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h
 keytonod.o: ../hdrs/standard.h ../hdrs/cache.h
+lloptions.o: ../hdrs/gedcom.h ../hdrs/liflines.h ../hdrs/lloptions.h
+lloptions.o: ../hdrs/llstdlib.h ../hdrs/screen.h
 messages.o: ../hdrs/standard.h ../hdrs/mystring.h
 misc.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h
 misc.o: ../hdrs/standard.h
@@ -51,6 +54,7 @@ node.o: ../hdrs/standard.h ../hdrs/translat.h
 nodeutls.o: ../hdrs/mystring.h ../hdrs/btree.h ../hdrs/table.h
 nodeutls.o: ../hdrs/standard.h ../hdrs/gedcom.h
 place.o: ../hdrs/standard.h ../hdrs/mystring.h
+property.o: ../hdrs/standard.h ../hdrs/gedcom.h
 refns.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/btree.h ../hdrs/gedcom.h
 refns.o: ../hdrs/standard.h
 replace.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h
