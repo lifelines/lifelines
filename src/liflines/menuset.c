@@ -31,7 +31,7 @@ extern STRING qSttlauxbrw, qSttllstbrw;
  *********************************************/
 
 struct tag_cmditem {
-	char c;
+	uchar c;
 	BOOLEAN direct; /* (T: command value, F: pointer) */
 	UNION value; /* command value, or pointer to CommandArray */
 };
@@ -51,7 +51,7 @@ struct tag_cmdarray {
 static void add_menu_item(CMDARRAY cmds, MenuItem * mitem);
 static CMDARRAY create_cmd_array(INT alloc);
 static void copy_cmditem(CMDITEM dest, CMDITEM src);
-static BOOLEAN find_cmd(CMDARRAY cmds, char c, INT * pos);
+static BOOLEAN find_cmd(CMDARRAY cmds, uchar c, INT * pos);
 static void free_cmds(CMDARRAY cmds);
 static void get_menu_choice(STRING display, STRING choice, INT max);
 static void grow_cmd_array(CMDARRAY cmds);
@@ -115,6 +115,7 @@ add_menu_item (CMDARRAY cmds, MenuItem * mitem)
 {
 	INT i;
 	char display[32];
+
 	/* localize string into current target language */
 	llstrncpy(display, _(mitem->Display), ARRSIZE(display), uu8);
 	if (mitem->LocalizedDisplay)
@@ -205,7 +206,7 @@ copy_cmditem (CMDITEM dest, CMDITEM src)
  * Created: 2001/02/01, Perry Rapp
  *==========================*/
 static BOOLEAN
-find_cmd (CMDARRAY cmds, char c, INT * pos)
+find_cmd (CMDARRAY cmds, uchar c, INT * pos)
 {
 	INT lo=0, hi=cmds->used-1, i;
 	while (lo<=hi) {
@@ -235,7 +236,7 @@ insert_cmd (CMDARRAY cmds, STRING str, INT cmdnum, STRING display)
 {
 	INT len = strlen(str);
 	INT pos;
-	char c = str[0];
+	uchar c = str[0];
 	if (find_cmd(cmds, c, &pos)) {
 		if (len==1) {
 			crashlog(_("In menu: %s"), f_current_title);

@@ -4,6 +4,10 @@
 
 	Change no-break space to space (in [ Minska menu item).
 
+	* ChangeLog src/liflines/menuset.c
+
+	Fix char to uchar for non-ASCII menu keys.
+
 2005-01-13 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp
