@@ -1,10 +1,18 @@
-2001-01-06 Perry Rapp <puddle@users.sourceforge.net>
+2002-01-05 Matt Emmerton <memmerto@users.sourceforge.net>
+
+	* ChangeLog config.guess config.sub configure.in INSTALL
+
+	Added config.guess and config.sub to allow OS/platform detection.
+	configure.in will now detect host OS and add proper flags for cygwin.
+	INSTALL updated as --with-cygwin is no longer needed.
+
+2002-01-06 Perry Rapp <puddle@users.sourceforge.net>
 
 	Very minor fix for spouse lines at exactly maximum length.
 	Improvment to appendstr (don't require caller to init).
 	Give status line at bottom a few more characters on right.
 
-2001-01-05 Perry Rapp <puddle@users.sourceforge.net>
+2002-01-05 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/init.c hdrs/mystring.h hdrs/standard.h
 	hdrs/sys_inc.h hdrs/win32/curses.h liflines/screen.c

@@ -5,18 +5,12 @@ http://lifelines.sourceforge.net
 This is the source distribution of the LifeLines system, a genealogy
 software system.
 
-LifeLines should compile correcting using GNU gcc or any native C compiler.
+LifeLines should compile correctly using GNU gcc or any native C compiler.
 It also will build using the Cygnus tools on Windows.
 
-To build and install LifeLines (NOT using Cygnus tools), do the following:
+To build and install LifeLines, do the following:
 
 	./configure (if that does't work, try 'sh ./configure')
-	make
-	make install
-
-To build and install LifeLines (using Cygnus tools), do the following:
-
-	./configure --with-cygnus
 	make
 	make install
 

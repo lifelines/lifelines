@@ -6,6 +6,7 @@ dnl Process this file with autoconf to produce a configure script.
 AC_INIT(liflines/lbrowse.c)
 AC_PREREQ(2.13)
 AC_REVISION([for lifelines, built with autoconf] AC_ACVERSION)
+AC_CANONICAL_HOST
 
 AM_INIT_AUTOMAKE(lifelines, 3.0.7)
 AM_CONFIG_HEADER(config.h)
@@ -43,18 +44,10 @@ if test "${ac_cv_prog_gcc}" = "yes"; then
   CFLAGS="${CFLAGS} -g"
 fi
 
-# Are we using Cygwin Tools
-AC_ARG_WITH(cygwin,
-    [  --with-cygwin           Using the Cygwin tools on a Windows platform                                      ],
-    [with_cygwin=$withval],
-    [with_cygwin=no]
-)
-
-if test "$with_cygwin" = "yes"
-then
-  dnl Add flags needed to link with curses library
-  CFLAGS="${CFLAGS} -static -DBROKEN_LINKER"
-fi
+# Check for Cygwin Environment
+case $host_os in
+  *cygwin*) CFLAGS="${CFLAGS} -DBROKEN_LINKER"
+esac
 
 # Shall we build the docs?
 AC_ARG_WITH(docs,
