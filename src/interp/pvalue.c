@@ -68,6 +68,7 @@ static BOOLEAN eq_pstrings(PVALUE val1, PVALUE val2);
 static int float_to_int(float f);
 static void free_all_pvalues(void);
 static void free_float_pvalue(PVALUE val);
+static float* get_pvalue_pfloat(PVALUE val);
 static BOOLEAN is_pvalue_or_freed(PVALUE pval);
 static void symtab_cleaner(ENTRY ent);
 static void table_pvcleaner(ENTRY ent);
@@ -865,7 +866,8 @@ coerce_pvalue (INT type, PVALUE val, BOOLEAN *eflg)
 		case PINT: u.i = bool_to_int((BOOLEAN)u.w); break;
 		case PFLOAT:
 			{
-				PVALUE valnew = create_pvalue_from_float(u.i);
+				float fval = bool_to_float((BOOLEAN)u.w);
+				PVALUE valnew = create_pvalue_from_float(fval);
 				ptype(val) = ptype(valnew);
 				pvalue(val) = pvalue(valnew);
 				return;
