@@ -141,6 +141,10 @@ SOURCE=..\..\..\src\gedlib\brwslist.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\liflines\brwsmenu.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\interp\builtin.c
 # End Source File
 # Begin Source File
@@ -170,6 +174,10 @@ SOURCE=..\..\..\src\gedlib\dispfmt.c
 # Begin Source File
 
 SOURCE=..\..\..\src\stdlib\double.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\liflines\dynmenu.c
 # End Source File
 # Begin Source File
 
@@ -329,7 +337,7 @@ SOURCE=..\..\..\src\stdlib\memalloc.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\liflines\menuitem.c
+SOURCE=..\..\..\src\liflines\menuset.c
 # End Source File
 # Begin Source File
 

@@ -163,8 +163,6 @@ typedef struct listdisp_s
 /* alphabetical */
 static void activate_uiwin(UIWINDOW uiwin);
 static void add_shims_info(LIST list);
-static void adjust_menu_cols(MENUSET menu, INT delta);
-static void adjust_menu_height(MENUSET menu, INT delta);
 static void append_to_msg_list(STRING msg);
 static INT array_interact(STRING ttl, INT len, STRING *strings
 	, BOOLEAN selecting, DETAILFNC detfnc, void *param);
@@ -184,7 +182,6 @@ static void clearw(void);
 static void color_hseg(WINDOW *win, INT row, INT x1, INT x2, char ch);
 static UIWINDOW create_uisubwindow(UIWINDOW parent, INT rows, INT cols, INT begy, INT begx);
 static void create_windows(void);
-static void cycle_menu(struct menuset_s * menu);
 static void deactivate_uiwin(void);
 static void deactivate_uiwin_and_touch_all(void);
 static void delete_uiwindow(UIWINDOW * uiw);
@@ -231,7 +228,6 @@ static void shw_popup_list(INDISEQ seq, listdisp * ld);
 static void shw_recordlist_details(INDISEQ seq, listdisp * ld);
 static void shw_recordlist_list(INDISEQ seq, listdisp * ld);
 static void switch_to_uiwin(UIWINDOW uiwin);
-static void toggle_menu(MENUSET menu);
 static void touch_all(BOOLEAN includeCurrent);
 static INT translate_control_key(INT c);
 static INT translate_hdware_key(INT c);
@@ -680,7 +676,6 @@ update_browse_menu (INT screen)
 		show_horz_line(uiwin, ll_lines-3,  0, ll_cols);
 		if (menu_enabled) {
 			/* display title */
-			INT bottom = LINESTOTAL-3; /* 3 rows below menu */
 			INT width = ll_cols;
 			char prompt[128];
 			check_menu(dynmenu);
@@ -2949,7 +2944,6 @@ output_menu (UIWINDOW uiwin, DYNMENU dynmenu)
 	INT icol=0;
 	INT col=3;
 	/* more legible names */
-	INT MenuRows = dynmenu->rows;
 	INT MenuSize = dynmenu->size;
 	INT MenuCols = dynmenu->cols;
 	INT MenuPage = dynmenu->page;

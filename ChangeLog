@@ -1,3 +1,11 @@
+2002-10-31 Perry Rapp
+
+	* ChangeLog build/msvc6/llines/llinesprj.dsp src/hdrs/menuitem.h
+	src/liflines/dynmenu.c src/liflines/menuset.c
+	src/liflines/screen.c:
+
+	Code cleanup.
+
 2002-10-28 Perry Rapp
 
 	* ChangeLog src/hdrs/menuitem.h src/hdrs/screen.h

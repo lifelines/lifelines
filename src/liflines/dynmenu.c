@@ -39,9 +39,6 @@ extern STRING qSttlauxbrw, qSttllstbrw;
  * local variables
  *********************************************/
 
-static BOOLEAN f_initialized=FALSE;
-static BOOLEAN f_reloading=FALSE;
-
 /* menu items added to all menus */
 static MenuItem * f_ExtraItems[] =
 {
@@ -104,8 +101,6 @@ void
 dynmenu_next_page (DYNMENU dynmenu)
 {
 	INT MenuSize = dynmenu->size;
-	INT MenuRows = dynmenu->rows;
-	INT MenuCols = dynmenu->cols;
 	INT pageitems = dynmenu->pageitems;
 	if (dynmenu->pages == 1) return;
 	++dynmenu->page;

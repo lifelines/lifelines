@@ -58,14 +58,11 @@ static void grow_cmd_array(CMDARRAY cmds);
 static void insert_cmd(CMDARRAY cmds, STRING str, INT cmdnum
 	, STRING display);
 static INT menuitem_find_cmd(CMDARRAY cmds, STRING cmd);
-static void on_lang_change(VPTR uparm);
 
 /*********************************************
  * local variables
  *********************************************/
 
-static BOOLEAN f_initialized=FALSE;
-static BOOLEAN f_reloading=FALSE;
 static STRING f_current_title=0;
 
 /*********************************************
@@ -330,18 +327,6 @@ menuitem_find_cmd (CMDARRAY cmds, STRING str)
 			return CMD_PARTIAL;
 		return menuitem_find_cmd(subarr, &str[1]);
 	}
-}
-/*============================
- * on_lang_change -- UI language has changed
- *==========================*/
-static void
-on_lang_change (VPTR uparm)
-{
-	uparm = uparm; /* unused */
-	f_reloading = TRUE;
-	menuitem_terminate();
-	menuitem_initialize(3);
-	f_reloading = FALSE;
 }
 /*============================
  * enuset_get_items -- return array of items

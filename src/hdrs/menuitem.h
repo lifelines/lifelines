@@ -103,7 +103,6 @@ typedef struct dynmenu_s *DYNMENU;
 global array of menu information, produced by menuitem.c
 and used by both screen.c and menuitem.c
 */
-//extern ScreenInfo g_ScreenInfo[]; TODO
 
 /* menuset.c */
 void menuset_init(MENUSET menu, STRING title, MenuItem ** MenuItems, MenuItem ** extraItems);
