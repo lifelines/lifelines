@@ -11,6 +11,7 @@
  *   http://lifelines.sourceforge.net
  *=========================================================*/
 
+#include <errno.h>
 #include "llstdlib.h"
 #include "btree.h"
 #include "translat.h"
