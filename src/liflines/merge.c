@@ -115,7 +115,7 @@ merge_two_indis (NODE indi1,    /* two persons to merge - can't be null */
 		return NULL;
 	}
 
-/* Split orignial persons */
+/* Split original persons */
 
 	/* If we are successful, the original indi1 will be deleted
  	 * and the indi2 will be updated with the new info.
@@ -347,6 +347,15 @@ merge_two_indis (NODE indi1,    /* two persons to merge - can't be null */
 	join_indi(indi4, name2, refn2, sex2, body2, famc2, fams2);
 	join_indi(indi02, name1, refn1, sex1, body1, famc1, fams1);
 	free_nodes(indi4);
+
+/* BUG!
+  Nodes in indi02 that were edited out of indi4 are not deleted.
+  For example, orphaned NAMEs from indi2 are now ghost names
+  pointing at indi4. If indi4 is deleted, the ghost names will
+  remain, and will point at whatever record is later put into
+  the key# of indi4.
+  Perry, 2000/11/16
+*/
 
 	delete_indi(indi01, FALSE);	/* this is the original indi1 */
 	return indi02;			/* this is the updated indi2 */
