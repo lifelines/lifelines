@@ -562,7 +562,7 @@ __birt (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	NODE indi = eval_indi(arg, stab, eflg, NULL);
 	NODE event = NULL;
 	if (*eflg) {
-		prog_var_error(node, stab, arg, NULL, nonind1, "birth");
+		prog_var_error(node, stab, arg, NULL, _(nonind1), "birth");
 		return NULL;
 	} 
 	if (indi)
@@ -580,7 +580,7 @@ __deat (PNODE node, SYMTAB stab, BOOLEAN  *eflg)
 	NODE indi = eval_indi(arg, stab, eflg, NULL);
 	NODE event = NULL;
 	if (*eflg) {
-		prog_var_error(node, stab, arg, NULL, nonind1, "death");
+		prog_var_error(node, stab, arg, NULL, _(nonind1), "death");
 		return NULL;
 	}
 	if (indi)
@@ -598,7 +598,7 @@ __bapt (PNODE node, SYMTAB stab, BOOLEAN  *eflg)
 	NODE indi = eval_indi(arg, stab, eflg, NULL);
 	NODE event = NULL;
 	if (*eflg) {
-		prog_var_error(node, stab, arg, NULL, nonind1, "baptism");
+		prog_var_error(node, stab, arg, NULL, _(nonind1), "baptism");
 		return NULL;
 	}
 	if (indi)
@@ -616,7 +616,7 @@ __buri (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	NODE indi = eval_indi(arg, stab, eflg, NULL);
 	NODE event = NULL;
 	if (*eflg) {
-		prog_var_error(node, stab, arg, NULL, nonind1, "burial");
+		prog_var_error(node, stab, arg, NULL, _(nonind1), "burial");
 		return NULL;
 	}
 	if (indi)
@@ -634,7 +634,7 @@ __titl (PNODE node, SYMTAB stab, BOOLEAN  *eflg)
 	NODE titl, indi = eval_indi(arg, stab, eflg, NULL);
 	STRING titlstr = "";
 	if (*eflg) {
-		prog_var_error(node, stab, arg, NULL, nonind1, "title");
+		prog_var_error(node, stab, arg, NULL, _(nonind1), "title");
 		return NULL;
 	}
 	if (indi) {
@@ -751,7 +751,7 @@ __fath (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	NODE fath = NULL;
 	if (*eflg) {
-		prog_error(node, nonind1, "father");
+		prog_error(node, _(nonind1), "father");
 		return NULL;
 	}
 	if (indi)
@@ -767,7 +767,7 @@ __moth (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	if (*eflg) {
-		prog_error(node, nonind1, "mother");
+		prog_error(node, _(nonind1), "mother");
 		return NULL;
 	}
 	if (!indi) return create_pvalue_from_indi(NULL);
@@ -797,7 +797,7 @@ __nextsib (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	if (*eflg) {
-		prog_error(node, "arg to nextsib must be a person");
+		prog_error(node, _(nonind1), "nextsib");
 		return NULL;
 	}
 	if (!indi) return create_pvalue_from_indi(NULL);
@@ -812,7 +812,7 @@ __prevsib (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	if (*eflg) {
-		prog_error(node, "arg to prevsib must be a person");
+		prog_error(node, _(nonind1), "prevsib");
 		return NULL;
 	}
 	if (!indi) return create_pvalue_from_indi(NULL);
@@ -829,7 +829,7 @@ __d (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val;
 	val = eval_and_coerce(PINT, iargs(node), stab, eflg);
 	if (*eflg) {
-		prog_error(node, "the arg to d is not an integer");
+		prog_error(node, nonint1, "d");
 		return NULL;
 	}
 	sprintf(scratch, "%d", pvalue_to_int(val));
@@ -2173,7 +2173,7 @@ __inode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	if (*eflg || !indi) {
 		*eflg = TRUE;
-		prog_error(node, nonind1, "inode");
+		prog_error(node, _(nonind1), "inode");
 		return NULL;
 	}
 	return create_pvalue(PGNODE, (VPTR)indi);

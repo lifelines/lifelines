@@ -437,8 +437,10 @@ free_contents (ENTRY ent, INT whattofree)
 {
 	if (whattofree==FREEBOTH || whattofree==FREEKEY)
 		stdfree(ent->ekey);
-	if (whattofree==FREEBOTH || whattofree==FREEVALUE)
-		stdfree(ent->uval.w);
+	if (whattofree==FREEBOTH || whattofree==FREEVALUE) {
+		if (ent->uval.w)
+			stdfree(ent->uval.w);
+	}
 }
 /*=================================================
  * traverse_table -- Traverse table doing something

@@ -31,6 +31,7 @@
 
 #include "interp.h"
 
+
 extern PVALUE ___alpha(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __add(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __addnode(PNODE, SYMTAB, BOOLEAN *);

@@ -1,3 +1,18 @@
+2002-06-13 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/editvtab.c gedlib/init.c gedlib/names.c
+	gedlib/translat.c hdrs/gedcom.h hdrs/indiseq.h hdrs/interp.h
+	hdrs/llstdlib.h hdrs/mystring.h hdrs/standard.h
+	hdrs/translat.h interp/alloc.c interp/builtin.c
+	interp/interp.c interp/interpi.h interp/lex.c interp/more.c
+	interp/yacc.h interp/yacc.y liflines/screen.c
+	reports/exercise.ll stdlib/double.c stdlib/mystring.c
+	stdlib/stdstrng.c stdlib/table.c:
+
+	New report language commands: require, char_encoding.
+	Revising string functions for UTF-8.
+	Fix fatal bug in list code.
+
 2002-06-12 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/translat.c:
@@ -7,6 +22,10 @@
 	* ChangeLog configure.in:
 
 	Remove unused header check for libiintl.h (sic).
+
+	* ChangeLog
+
+	Prevent buffer overflow in yylex.
 
 2002-06-11 Perry Rapp <puddle@users.sourceforge.net>
 

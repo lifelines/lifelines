@@ -1,6 +1,6 @@
 /*
  * @progname       exercise
- * @version        0.95 (2002/02/24)
+ * @version        0.96 (2002/06/12)
  * @author         Perry Rapp
  
  * @category       test
@@ -22,6 +22,8 @@ I run this report before checking in code changes.
 */
 
 
+char_encoding("UTF-8") /* TODO: put in non-ascii tests */
+require("lifelines-reports.version:1.3")
 option("explicitvars") /* Disallow use of undefined variables */
 
 global(dead)

@@ -13,7 +13,9 @@
 
 void appendstr(char ** pdest, int * len, const char * src);
 void appendstrf(char ** pdest, int * len, const char * fmt,...);
+/* llstrcatn is a bad name, because its prototype is different from strcatn! */
 #define llstrcatn(dest, src, len) appendstr(dest, len, src)
+char *llstrncat(char *dest, const char *src, size_t n);
 char *llstrncpy(char *dest, const char *src, size_t n);
 int my_chrcmp(const int s1, const int s2);
 int my_isalpha(const int c);

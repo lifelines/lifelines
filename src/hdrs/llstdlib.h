@@ -34,6 +34,11 @@
  */
 #include "standard.h"
 
+
+/* This is not the user's codeset! This is the current internal codeset. */
+extern BOOLEAN int_utf8;
+
+
 /* assert.c */
 /*
 Main program (lifelines, btedit, dbverify,...) must provide
@@ -112,6 +117,7 @@ BOOLEAN allwhite(STRING);
 STRING capitalize(STRING);
 INT chartype(INT);
 void chomp(STRING);
+STRING find_prev_char(STRING ptr, INT * width, STRING limit);
 void free_array_strings(INT n, STRING * arr);
 BOOLEAN isletter(INT);
 BOOLEAN isnumeric(STRING);

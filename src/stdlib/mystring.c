@@ -566,6 +566,7 @@ int main()
 void
 appendstr (char ** pdest, int * len, const char * src)
 {
+	/* TODO: Revised for UTF-8 */
 	int amount;
 	*pdest[0]=0; /* so client doesn't have to initialize */
 	if (*len<=1) { *len=0; return; }
@@ -598,6 +599,7 @@ appendstrf (char ** pdest, int * len, const char * fmt, ...)
 void
 vappendstrf (char ** pdest, int * len, const char * fmt, va_list args)
 {
+	/* TODO: Revise for UTF-8 */
 	int amount;
 	*pdest[0]=0; /* so client doesn't have to initialize */
 	if (*len<1) { *len=0; return; }
@@ -612,13 +614,33 @@ vappendstrf (char ** pdest, int * len, const char * fmt, va_list args)
 }
 /*==================================
  * llstrncpy -- strncpy that always zero-terminates
+ *  and handles UTF-8
  * Created: 2001/03/17, Perry Rapp
  *================================*/
 char *
 llstrncpy (char *dest, const char *src, size_t n)
 {
-	strncpy(dest, src, n-1);
-	dest[n-1] = 0;
+	strncpy(dest, src, n);
+	if (dest[n-1]) {
+		/* overflowed -- back up to last character that fits */
+		INT width=0;
+		STRING prev = find_prev_char(&dest[n-1], &width, dest);
+		prev[width]=0;
+	}
+	return dest;
+}
+/*==================================
+ * llstrncat -- strncat that always zero-terminates
+ *  and handles UTF-8
+ * Created: 2001/03/17, Perry Rapp
+ *================================*/
+char *
+llstrncat (char *dest, const char *src, size_t n)
+{
+	size_t len = strlen(dest);
+	if (len < n) {
+		llstrncpy(dest+len, src, n-len);
+	}
 	return dest;
 }
 /*==========================================================

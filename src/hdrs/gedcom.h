@@ -196,7 +196,6 @@ extern TABLE tagtable;		/* table for GEDCOM tags */
 extern TABLE placabbvs;		/* table for place abbrvs */
 extern TABLE useropts;		/* table for user options */
 extern BOOLEAN add_metadata;
-extern INT int_codeset; /* numeric coding of internal code set, ref get_codset_desc */
 
 
 
@@ -234,7 +233,7 @@ NODE create_node(STRING, STRING, STRING, NODE);
 void del_in_dbase(STRING key);
 void delete_metarec(STRING key);
 BOOLEAN edit_mapping(INT);
-BOOLEAN edit_valtab(STRING, TABLE*, INT, STRING);
+BOOLEAN edit_valtab(STRING, TABLE*, INT, STRING, STRING (*validator)(TABLE tab));
 BOOLEAN equal_tree(NODE, NODE);
 BOOLEAN equal_node(NODE, NODE);
 BOOLEAN equal_nodes(NODE, NODE, BOOLEAN, BOOLEAN);
@@ -274,6 +273,7 @@ INT get_hexidecimal(STRING);
 STRING get_lifelines_version(INT maxlen);
 void get_names(STRING name, INT *pnum, STRING **pkeys, BOOLEAN exact);
 void get_refns(STRING, INT*, STRING**, INT);
+BOOLEAN get_utf8_from_uopts(TABLE opttab);
 STRING getasurname(STRING);
 STRING getexref(void);
 INT getfinitial(STRING);

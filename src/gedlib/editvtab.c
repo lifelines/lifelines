@@ -45,17 +45,19 @@ static STRING trans_ined(STRING input, INT len);
 
 /*==============================================
  * edit_valtab -- Edit value table from database
- *  key:   [IN]  db key where record to edit is stored
- *  ptab:  [I/O] hash table for key/value strings
- *  sep:   [IN]  separator char between key & value on each line
- *  ermsg: [IN]  error message to print in retry prompt if parse fails
+ *  key:       [IN]  db key where record to edit is stored
+ *  ptab:      [I/O] hash table for key/value strings
+ *  sep:       [IN]  separator char between key & value on each line
+ *  ermsg:     [IN]  error message to print in retry prompt if parse fails
+ *  validator: [IN]  caller specified validation
  * Looks up key in db, gets record, puts it in temp file
  * and allows user to interactively edit it.
  * key/value pairs are separated by \n, and their is a
  * single character (the sep arg) between each key & value.
  *============================================*/
 BOOLEAN
-edit_valtab (STRING key, TABLE *ptab, INT sep, STRING ermsg)
+edit_valtab (STRING key, TABLE *ptab, INT sep, STRING ermsg
+	, STRING (*validator)(TABLE tab))
 {
 	TABLE tmptab = NULL;
 	STRING msg;
@@ -76,22 +78,26 @@ edit_valtab (STRING key, TABLE *ptab, INT sep, STRING ermsg)
 	while (TRUE) {
 		tmptab = create_table();
 		if (init_valtab_from_file(editfile, tmptab, ttmi, sep, &msg)) {
-			if (*ptab) remove_table(*ptab, DONTFREE);
-			*ptab = tmptab;
-			store_text_file_to_db(key, editfile, trans_edin);
-			return TRUE;
+			if (!validator || !(ptr = (*validator)(tmptab))) {
+				if (*ptab) remove_table(*ptab, DONTFREE);
+				*ptab = tmptab;
+				store_text_file_to_db(key, editfile, trans_edin);
+				return TRUE;
+			}
+		} else {
+			ptr=fullerr;
+			ptr[0]=0;
+			mylen=sizeof(fullerr)/sizeof(fullerr[0]);
+			llstrcatn(&ptr, ermsg, &mylen);
+			llstrcatn(&ptr, " ", &mylen);
+			llstrcatn(&ptr, msg, &mylen);
+			llstrcatn(&ptr, " ", &mylen);
+			snprintf(chardesc, sizeof(chardesc), "%c", (uchar)sep);
+			snprintf(temp, sizeof(temp), _(qSsepch), chardesc); /* (separator is %s) */
+			llstrcatn(&ptr, temp, &mylen);
+			ptr = fullerr;
 		}
-		ptr=fullerr;
-		ptr[0]=0;
-		mylen=sizeof(fullerr)/sizeof(fullerr[0]);
-		llstrcatn(&ptr, ermsg, &mylen);
-		llstrcatn(&ptr, " ", &mylen);
-		llstrcatn(&ptr, msg, &mylen);
-		llstrcatn(&ptr, " ", &mylen);
-		snprintf(chardesc, sizeof(chardesc), "%c", (uchar)sep);
-		snprintf(temp, sizeof(temp), _(qSsepch), chardesc); /* (separator is %s) */
-		llstrcatn(&ptr, temp, &mylen);
-		if (ask_yes_or_no_msg(fullerr, _(qSaredit)))
+		if (ask_yes_or_no_msg(ptr, _(qSaredit)))
 			do_edit();
 		else {
 			remove_table(tmptab, DONTFREE);

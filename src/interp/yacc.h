@@ -1,8 +1,9 @@
-#ifndef Y_TAB_H
-# define Y_TAB_H
+#ifndef BISON_______INTERP_YACC_H
+# define BISON_______INTERP_YACC_H
 
 # ifndef YYSTYPE
 #  define YYSTYPE int
+#  define YYSTYPE_IS_TRIVIAL 1
 # endif
 # define	PROC	257
 # define	FUNC_TOK	258
@@ -38,4 +39,4 @@
 
 extern YYSTYPE yylval;
 
-#endif /* not Y_TAB_H */
+#endif /* not BISON_______INTERP_YACC_H */

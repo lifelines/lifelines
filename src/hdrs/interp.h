@@ -34,6 +34,9 @@
 #ifndef _INTERP_H
 #define _INTERP_H
 
+#define LIFELINES_REPORTS_VERSION "1.1"
+
+
 #include "cache.h"
 
 typedef struct itag *PNODE;
@@ -336,7 +339,10 @@ PNODE forothr_node(STRING, STRING, PNODE);
 void free_all_pnodes(void);
 void free_pnode_tree(PNODE);
 PNODE func_node(STRING, PNODE);
+void handle_char_encoding(PNODE node);
+void handle_global(STRING iden);
 void handle_option(PVALUE optval);
+void handle_require(PNODE node);
 PNODE icons_node(INT);
 PNODE iden_node(STRING);
 PNODE if_node(PNODE, PNODE, PNODE);
@@ -351,6 +357,7 @@ void prog_error(PNODE, STRING, ...);
 void prog_var_error(PNODE node, SYMTAB stab, PNODE arg, PVALUE val, STRING fmt, ...);
 BOOLEAN record_to_node(PVALUE val);
 PNODE return_node(PNODE);
+void set_rptfile_prop(STRING fname, STRING key, STRING value);
 void show_pnode(PNODE);
 void show_pnodes(PNODE);
 void shutdown_interpreter(void);

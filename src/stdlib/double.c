@@ -32,6 +32,14 @@
 #include "standard.h"
 #include "llstdlib.h"
 
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+/* alphabetical */
+static void validate_list(LIST list);
+
+
 /*===========================
  * create_list -- Create list
  *=========================*/
@@ -44,6 +52,7 @@ create_list (void)
 	lfirst(list) = llast(list) = NULL;
 	llen(list) = 0;
 	lrefcnt(list) = 1;
+	validate_list(list);
 	return list;
 }
 /*===============================
@@ -94,6 +103,7 @@ in_list (LIST list, VPTR el, int (*func)(VPTR, VPTR))
 		if((*func)(el, lelement(lnode))) return index;
 		lnode = lnext(lnode);
 	}
+	validate_list(list);
 	return -1;
 }
 /*===================================
@@ -117,6 +127,7 @@ make_list_empty (LIST list)
 	ltype(list) = LISTNOFREE;
 	llen(list) = 0;
 	/* no effect on refcount */
+	validate_list(list);
 }
 /*===================================
  * is_empty_list -- Check for empty list
@@ -124,6 +135,7 @@ make_list_empty (LIST list)
 BOOLEAN
 is_empty_list (LIST list)
 {
+	validate_list(list);
 	return !list || !llen(list);
 }
 /*==================================
@@ -148,6 +160,7 @@ push_list (LIST list,
 		lfirst(list) = node;
 	}
 	++llen(list);
+	validate_list(list);
 }
 /*=========================================
  * back_list -- Put element on back of list
@@ -171,6 +184,7 @@ back_list (LIST list,
 		llast(list) = node;
 	}
 	++llen(list);
+	validate_list(list);
 }
 /*==================================
  * pop_list -- Pop element from list
@@ -183,14 +197,25 @@ pop_list (LIST list)
 	if (is_empty_list(list)) return NULL;
 	node = lfirst(list);
 	lfirst(list) = lnext(node);
-	if (is_empty_list(list))
+	if (!lfirst(list))
 		llast(list) = NULL;
 	else
 		lprev(lfirst(list)) = NULL;
 	el = lelement(node);
 	stdfree(node);
 	--llen(list);
+	validate_list(list);
 	return el;
+}
+/*========================================
+ * validate_list -- Verify list ends don't disagree
+ *======================================*/
+static void
+validate_list (LIST list)
+{
+#ifdef LIST_ASSERTS
+	ASSERT(!list || (lfirst(list)&&llast(list)) || (!lfirst(list)&&!llast(list)));
+#endif
 }
 /*========================================
  * enqueue_list -- Enqueue element on list
@@ -218,6 +243,7 @@ dequeue_list (LIST list)
 	el = lelement(node);
 	stdfree(node);
 	--llen(list);
+	validate_list(list);
 	return el;
 }
 /*=================================================
@@ -234,9 +260,11 @@ nth_in_list (LIST list, INT n)
 		i++;
 		node = lprev(node);
 	}
+	validate_list(list);
 	if (i == n && node) return node;
 	while (i++ <= n)
 		push_list(list, NULL);
+	validate_list(list);
 	return lfirst(list);
 }
 /*==================================================
@@ -250,6 +278,7 @@ set_list_element (LIST list, INT ind, VPTR val)
 	node = nth_in_list(list, ind);
 	if (!node) return;
 	lelement(node) = val;
+	validate_list(list);
 }
 /*=======================================================
  * get_list_element - Retrieve element using array access

@@ -39,9 +39,6 @@
  * SORTEL -- Data type for indiseq elements; keys are always present
  *   and belong to the structure; names are always present for
  *   persons and belong; values do not belong to the structure
- *
- * I recommend changing s_val to UNION - Perry, 2001/01/10
- *  (because INTs are stored in it as well)
  *================================================================*/
 typedef struct stag {
 	STRING s_key;	/* person or family key */

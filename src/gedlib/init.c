@@ -51,7 +51,6 @@ TABLE useropts=NULL;		/* table for user options */
 BTREE BTR=NULL;	/* database */
 STRING editstr=NULL; /* edit command to run to edit (has editfile inside of it) */
 STRING editfile=NULL; /* file used for editing, name obtained via mktemp */
-INT int_codeset=0; /* internal codeset */
 
 /*********************************************
  * external/imported variables
@@ -461,20 +460,27 @@ describe_dberror (INT dberr, STRING buffer, INT buflen)
 	llstrcatn(&ptr, msg, &mylen);
 }
 /*===================================================
+ * get_utf8_from_uopts -- Is UTF-8 option set in this option table ?
+ * (This may not be the active global options table.)
+ *=================================================*/
+BOOLEAN
+get_utf8_from_uopts (TABLE opttab)
+{
+	STRING str;
+	if (opttab && (str = valueof_str(opttab, "codeset"))!=NULL) {
+		if (eqstr("UTF-8", str)||eqstr("utf-8", str)||eqstr("65001", str))
+			return TRUE;
+	}
+	return FALSE;
+}
+/*===================================================
  * update_useropts -- Set any global variables
  * dependent on user options
  *=================================================*/
 void
 update_useropts (void)
 {
-	STRING str;
-	int_codeset=0;
-	if ((str = valueof_str(useropts, "codeset"))!=NULL) {
-		if (eqstr("1", str))
-			int_codeset=1;
-		else if (eqstr("UTF-8", str)||eqstr("utf-8", str)||eqstr("65001", str))
-			int_codeset=8;
-	}
+	int_utf8 = get_utf8_from_uopts(useropts);
 	uilocale(); /* in case user changed locale */
 }
 /*==================================================

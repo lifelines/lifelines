@@ -87,6 +87,14 @@ yylex(void)
 	return lex;
 }
 /*===========================
+ * is_iden_char -- is still part of ongoing identifier ?
+ *=========================*/
+static BOOLEAN
+is_iden_char (INT c, INT t)
+{
+	return t==LETTER || t==DIGIT || c=='_' || c=='.';
+}
+/*===========================
  * lowyylex -- Lexer function
  *=========================*/
 int
@@ -119,8 +127,13 @@ lowyylex (void)
 	}
 	if (t == LETTER) {
 		p = tokbuf;
-		while (t==LETTER || t==DIGIT || c=='_' || c=='.') {
-			*p++ = c;
+		while (is_iden_char(c, t)) {
+			if (p-tokbuf < sizeof(tokbuf) - 3) {
+				*p++ = c;
+			} else {
+				/* token overlong -- ignore end of it */
+				/* TODO: How can we force a parse error from here ? */
+			}
 			t = chartype(c = inchar());
 		}
 		*p = 0;

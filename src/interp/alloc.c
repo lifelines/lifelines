@@ -60,7 +60,7 @@ STRING nonstrx     = 0;
 STRING nullarg1    = 0;
 STRING nonfname1   = 0;
 STRING nonnodstr1  = 0;
-STRING nonind1     = 0;
+STRING nonind1     = N_("%s: the arg must be a person.");
 STRING nonindx     = 0;
 STRING nonfam1     = 0;
 STRING nonfamx     = 0;
@@ -674,7 +674,6 @@ clear_error_strings (void)
 	strfree(&nullarg1);
 	strfree(&nonfname1);
 	strfree(&nonnodstr1);
-	strfree(&nonind1);
 	strfree(&nonindx);
 	strfree(&nonfam1);
 	strfree(&nonfamx);
@@ -733,7 +732,6 @@ interp_load_lang (void)
 	nullarg1    = strsave(_("%s: null arg not permissible."));
 	nonfname1   = strsave(_("%s: the arg must be a filename."));
 	nonnodstr1  = strsave(_("%s: the arg must be a node or string."));
-	nonind1     = strsave(_("%s: the arg must be a person."));
 	nonindx     = strsave(_("%s: the arg #%s must be a person."));
 	nonfam1     = strsave(_("%s: the arg must be a family."));
 	nonfamx     = strsave(_("%s: the arg #%s must be a family."));

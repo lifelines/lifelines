@@ -52,18 +52,6 @@
 #endif
 
 
-/*********************************************
- * local types
- *********************************************/
-static struct codeset_name
-{
-	STRING name;
-	INT code;
-} codesets[] = 
-{
-	{ "1 byte", 1 }
-	, { "UTF-8", 8 }
-};
 
 /*********************************************
  * local function prototypes
@@ -599,54 +587,6 @@ custom_sort (char *str1, char *str2, INT * rtn)
 			ptr2 += len2 ? len2 : 1;
 		}
 	}
-}
-/*===================================================
- * get_codeset_desc -- Get string describing code set
- * (code set, not charset or codepage)
- * caller supplies buffer (& its size)
- * Created: 2001/08/02 (Perry Rapp)
- *=================================================*/
-char *
-get_codeset_desc (INT codeset, STRING buffer, INT max)
-{
-	char * ptr = buffer;
-	INT mylen = max;
-	INT index=0, i;
-	for (i=0; i<ARRSIZE(codesets); ++i) {
-		if (codeset == codesets[i].code) {
-			index = i;
-			break;
-		}
-	}
-	buffer[0] = 0;
-	llstrcatn(&ptr, codesets[index].name, &mylen);
-	return buffer;
-}
-/*===================================================
- * get_codeset -- Get codeset code from index in list
- *  index is from list returned by get_codesets
- * Created: 2001/08/02 (Perry Rapp)
- *=================================================*/
-#ifdef UNUSED_CODE
-INT
-get_codeset (INT index)
-{
-	return ARRSIZE(codesets);
-}
-#endif
-/*===================================================
- * get_codeset_names -- Get list of codesets
- * returns list of static items (do not free items)
- * Created: 2001/08/02 (Perry Rapp)
- *=================================================*/
-LIST
-get_codesets (void)
-{
-	LIST list = create_list();
-	INT i;
-	for (i=0; i<ARRSIZE(codesets); ++i)
-		push_list(list, codesets[i].name);
-	return list;
 }
 /*==========================================
  * get_current_locale -- return current locale

@@ -766,7 +766,8 @@ trim_name (STRING name, INT len)
 	if (sdex == -1) sdex = nparts; /* can't assume a surname was found */
 	for (i = sdex-1; i >= 0; --i) {
 		/* chop to initial */
-		if (int_codeset == 8) {
+		/* TODO: This doesn't handle composition */
+		if (int_utf8 == 8) {
 			INT wid = utf8len(parts[i][0]);
 			if (wid>1) {
 				INT len = strlen(parts[i]);

@@ -32,6 +32,12 @@
 #include "llstdlib.h"
 #include "mystring.h"
 
+
+/*********************************************
+ * global/exported variables
+ *********************************************/
+BOOLEAN int_utf8=0;        /* This is the internal codeset, not the user's. */
+
 /*********************************************
  * external/imported variables
  *********************************************/
@@ -397,6 +403,40 @@ printpic_arg (STRING *b, INT max, CNSTRING arg, INT arglen)
 	}
 }
 /*=========================================
+ * find_prev_char -- Back up to start of previous character.
+ * Return pointer to start of previous character,
+ *  and optionally its width.
+ * (This is of course trivial if we're not in UTF-8 mode.)
+ * If limit is non-zero, don't back up beyond this.
+ * This will set *width=0 if it gets back to limit without 
+ *  finding valid character.
+ * Created: 2002/06/12, Perry Rapp
+ *=======================================*/
+STRING
+find_prev_char (STRING ptr, INT * width, STRING limit)
+{
+	INT len=1;
+	if (int_utf8) {
+		while (1) {
+			if (ptr == limit) {
+				len = 0;
+				break;
+			}
+			--ptr;
+			if (utf8len(*ptr)<=len)
+				break;
+		}
+	} else {
+		if (ptr == limit) {
+			len = 0;
+		}
+		--ptr;
+	}
+	if (width)
+		*width = len;
+	return ptr;
+}
+/*=========================================
  * sprintpic0 -- Print using a picture string
  *  with no arguments
  * This is just snprintf, but fixed to always
@@ -405,8 +445,13 @@ printpic_arg (STRING *b, INT max, CNSTRING arg, INT arglen)
 void
 sprintpic0 (STRING buffer, INT len, CNSTRING pic)
 {
-	snprintf(buffer, len-1, pic);
-	buffer[len-1] = 0;
+	if (len == snprintf(buffer, len, pic)) {
+		/* overflowed -- back up to last character that fits */
+		INT width=0;
+		STRING prev = find_prev_char(&buffer[len-1], &width, buffer);
+		prev[width]=0;
+	}
+
 }
 /*==============================
  * sprintpic1 -- Print using a picture string

@@ -124,14 +124,15 @@ extern BOOLEAN alloclog;
 #define FATAL2(qq)    __fatal(__FILE__, __LINE__, qq)
 #define ASSERT(b)     if(!(b)) __fatal(__FILE__, __LINE__, NULL)
 /*
-eqstr does exact string compare
-no locale, no custom sort, no Finnish option 
+eqstr does exact byte compare
+no locale, no custom sort, no Finnish option, no UTF-8 aware
 Perry, 2001/07/20
 */
-#define eqstr(s,t)     (!strcmp((s),(t)))
-#define nestr(s,t)     (strcmp((s),(t)))
-#define cmpstr(s,t)    (strcmp((s),(t)))
-#define cmpstrloc(s,t) (ll_strcmploc((s),(t)))
+#define eqstr(s,t)       (!strcmp((s),(t)))
+#define eqstrn(s,t,len)  (!strncmp((s), (t), (len)))
+#define nestr(s,t)       (strcmp((s),(t)))
+#define cmpstr(s,t)      (strcmp((s),(t)))
+#define cmpstrloc(s,t)   (ll_strcmploc((s),(t)))
 
 #define check_cache()   ___check_cache(__LINE__, __FILE__)
 

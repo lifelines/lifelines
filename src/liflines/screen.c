@@ -178,7 +178,6 @@ static void deactivate_uiwin(void);
 static void deactivate_uiwin_and_touch_all(void);
 static void delete_uiwindow(UIWINDOW uiw);
 static void destroy_windows(void);
-static void disp_codeset(UIWINDOW uiwin, INT row, INT col, STRING menuit, INT codeset);
 static void disp_trans_table_choice(UIWINDOW uiwin, INT row, INT col, STRING menuit, INT indx);
 static void display_status(STRING text);
 static void edit_tt_menu(void);
@@ -1596,21 +1595,6 @@ draw_tt_win (STRING prompt)
 	mvwaddstr(win, row++, 4, _(qSmn_ret));
 }
 /*==============================
- * disp_codeset -- Display code set line
- * including description
- * Created: 2001/08/02
- *============================*/
-static void
-disp_codeset (UIWINDOW uiwin, INT row, INT col, STRING menuit, INT codeset)
-{
-	char buff[60];
-	WINDOW * win = uiw_win(uiwin);
-	int menulen = strlen(menuit);
-	int buflen = sizeof(buff)-menulen;
-	mvwaddstr(win, row, col, menuit);
-	mvwaddstr(win, row, col+menulen, get_codeset_desc(codeset, buff, buflen));
-}
-/*==============================
  * disp_trans_table_choice -- Display line in
  * translation table menu, & show current info
  * Created: 2001/07/20
@@ -2042,7 +2026,7 @@ invoke_utils_menu (void)
 	case 'i': who_is_he_she(); break;
 	case 'd': show_database_stats(); break;
 	case 'm': display_cache_stats(); break;
-	case 'e': edit_valtab("VPLAC", &placabbvs, ':', _(qSabverr)); break;
+	case 'e': edit_valtab("VPLAC", &placabbvs, ':', _(qSabverr), 0); break;
 	case 'o': user_options(); break;
 	case 'q': break;
 	}
@@ -2087,13 +2071,27 @@ invoke_extra_menu (void)
 	}
 }
 /*===============================
+ * uopt_validate -- Validator when user edits 'user options table'
+ *  returns descriptive string for failure, 0 for pass
+ * Created: 2002/06/12 (Perry Rapp)
+ *=============================*/
+static STRING
+uopt_validate (TABLE tab)
+{
+	if (int_utf8 != get_utf8_from_uopts(tab)
+		&& num_indis()+num_fams()+num_sours()+num_evens()+num_othrs()) {
+		return _("Impermissible to change codeset to/from UTF-8 in a populated database");
+	}
+	return 0;
+}
+/*===============================
  * user_options -- Edit user options
  * Created: 2001/08/02 (Perry Rapp)
  *=============================*/
 static void
 user_options (void)
 {
-	edit_valtab("VUOPT", &useropts, '=', _(qSuoperr));
+	edit_valtab("VUOPT", &useropts, '=', _(qSuoperr), uopt_validate);
 	update_useropts();
 }
 /*===============================
@@ -3308,7 +3306,10 @@ repaint_cset_menu (UIWINDOW uiwin)
 	uierase(uiwin);
 	draw_win_box(win);
 	mvwaddstr(win, row++, 2, _(qSmn_csttl));
-	disp_codeset(uiwin, row++, 4, _(qSmn_csintcs), int_codeset);
+	if (int_utf8)
+		mvwaddstr(win, row++, 4, _("UTF-8 code set"));
+	else
+		mvwaddstr(win, row++, 4, _("8 bit code set"));
 	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_cstsort), MSORT);
 #ifdef NOTYET
 	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_cspref), MPREF);

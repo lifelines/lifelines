@@ -73,14 +73,17 @@ defn 	:	proc
 	|	func
 	|	IDEN '(' IDEN ')' {
 			if (eqstr("global", (STRING) $1))
-				insert_symtab(globtab, (STRING)$3, create_pvalue_any());
-		}/*HERE*/
+				handle_global((STRING) $3);
+		}
 	|	IDEN '(' SCONS ')' {
 			if (eqstr("include", (STRING) $1))
-				/*enqueue_list(Plist, iliteral(((PNODE) $3)));*/
 				enqueue_list(Plist, pvalue((PVALUE) ivalue((PNODE) $3)));
 			if (eqstr("option", (STRING) $1))
 				handle_option(ivalue((PNODE) $3));
+			if (eqstr("char_encoding", (STRING) $1))
+				handle_char_encoding((PNODE) $3);
+			if (eqstr("require", (STRING) $1))
+				handle_require((PNODE) $3);
 
 		}
 	;
@@ -89,6 +92,7 @@ proc	:	PROC IDEN '(' idenso ')' '{' tmplts '}' {
 			insert_table_ptr(proctab, (STRING)$2, (VPTR)proc_node((STRING)$2, (PNODE)$4, (PNODE)$7));
 		}
 
+	;
 func	:	FUNC_TOK IDEN '(' idenso ')' '{' tmplts '}' {
 			insert_table_ptr(functab, (STRING)$2, (VPTR)fdef_node((STRING)$2, (PNODE)$4, (PNODE)$7));
 		}
@@ -99,6 +103,7 @@ idenso	:	/* empty */ {
 	|	idens {
 			$$ = $1;
 		}
+	;
 idens	:	IDEN {
 			$$ = iden_node((STRING)$1);
 		}
@@ -251,6 +256,7 @@ elsif	:	ELSIF '(' expr secondo ')' '{' tmplts '}' {
 			inext(((PNODE)$3)) = (PNODE)$4;
 			$$ = if_node((PNODE)$3, (PNODE)$7, (PNODE)NULL);
 		}
+	;
 elseo	:	/* empty */ {
 			$$ = 0;
 		}
@@ -301,6 +307,7 @@ secondo	:	/* empty */ {
 m	:	/* empty */ {
 			$$ = (YYSTYPE)Plineno;
 		}
+	;
 %%
 
 void

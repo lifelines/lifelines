@@ -424,8 +424,7 @@ allocsubstring (STRING s, INT i, INT j)
 	/* validate startch */
 	if (startch<0)
 		startch=0;
-	if (int_codeset == 8) {
-		/* utf-8 */
+	if (int_utf8) {
 		INT start=0, num=0; /* byte units */
 		STRING ptr = s;
 		while (startch) {
