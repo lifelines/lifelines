@@ -1,3 +1,11 @@
+2003-10-03 Perry Rapp
+
+	* .cvsignore ChangeLog po/.cvsignore src/interp/.cvsignore
+	*NEW src/.cvsignore
+	*NEW src/ui/.cvsignore
+
+	Updating cvsignore files.
+
 2003-10-02 Perry Rapp
 
 	* ChangeLog src/gedlib/refns.c
