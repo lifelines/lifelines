@@ -1,4 +1,9 @@
 2000-11-20 Perry Rapp <puddle@users.sourceforge.net>
+	interp/lex.c:
+	Renamed unchar to unreadchar, to avoid clash with
+	linux etc headers.
+
+2000-11-20 Perry Rapp <puddle@users.sourceforge.net>
 	liflines/askprogram.c stdlib/double.c: stdlib/signals.c
 	Handle nulls in get_list_element & set.
 	Fix bug in my recent additions to askprogram.c.

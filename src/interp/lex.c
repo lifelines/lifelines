@@ -54,7 +54,7 @@ static STRING Lp;	/* pointer into program string */
 
 static int lowyylex(void);
 static INT inchar(void);
-static void unchar(INT);
+static void unreadchar(INT);
 static BOOLEAN reserved(STRING, INT*);
 
 /*============================
@@ -101,7 +101,7 @@ lowyylex (void)
 			;
 		if (c != '/') break;
 		if ((c = inchar()) != '*') {
-			unchar(c);
+			unreadchar(c);
 			return '/';
 		}
 		while (TRUE) {
@@ -121,7 +121,7 @@ lowyylex (void)
 			t = chartype(c = inchar());
 		}
 		*p = 0;
-		unchar(c);
+		unreadchar(c);
 #ifdef DEBUG
 		llwprintf("in lex.c -- IDEN is %s\n", tokbuf);
 #endif
@@ -137,7 +137,7 @@ lowyylex (void)
 		if (t == '-') {
 			t = chartype(c = inchar());
 			if (t != '.' && t != DIGIT) {
-				unchar(c);
+				unreadchar(c);
 				return '-';
 			}
 			mul = -1;
@@ -149,7 +149,7 @@ lowyylex (void)
 			t = chartype(c = inchar());
 		}
 		if (t != '.') {
-			unchar(c);
+			unreadchar(c);
 			Yival *= mul;
 			yylval = NULL;
 			return ICONS;
@@ -164,13 +164,13 @@ lowyylex (void)
 			t = chartype(c = inchar());
 		}
 #if 0
-		if (frac) unchar(c);
+		if (frac) unreadchar(c);
 #endif
-		unchar(c);	/* REPLACED BY THIS */
+		unreadchar(c);	/* REPLACED BY THIS */
 		if (!whole && !frac) {
-			unchar(c);
+			unreadchar(c);
 			if (mul == -1) {
-				unchar('.');
+				unreadchar('.');
 				return '-';
 			} else
 				return '.';
@@ -284,10 +284,10 @@ inchar (void)
 	return c;
 }
 /*================================================================
- * unchar -- Unread char from input file/string; track line number
+ * unreadchar -- Unread char from input file/string; track line number
  *==============================================================*/
 void
-unchar (INT c)
+unreadchar (INT c)
 {
 	if (Lexmode == FILEMODE)
 		ungetc(c, Pinfp);
