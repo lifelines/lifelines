@@ -1,5 +1,5 @@
 Running LifeLines for Windows
-  Edited: 2001/12/30 by Perry Rapp
+  Edited: 2001/12/31 by Perry Rapp
 
 (This presumes you have installed it, per the
 Install.LifeLines.Windows.txt document)
@@ -29,13 +29,13 @@ that database open in LifeLines.
 3)
 At this point it would be good to load translation
 tables so as to use UTF-8 Unicode internally.
-However, I can only give directions for doing this
-on MS-Windows U.S. English edition. *If* you are on
-a U.S. English edition, and *if* you are using 
-notepad as your editor, then you need to load four
-translation tables. (Otherwise skip this step, and
-solicit help on the mailing list before you use
-any non-ascii data).
+However, we only have a limited set of translation
+tables prepared at the current time (as mentioned in
+the installation notes). If you installed
+an appropriate set, then now you may load them
+manually into your new database. 
+
+For the US English Windows (codepges 437 & 1252):
 
 From the main menu, choose c (character sets), 
 then t (translation tables), then l (load),
@@ -47,6 +47,19 @@ Then choose l (load), then "Internal to Display",
 then enter the filename u-437.tt
 Then choose l (load), then "Display to Internal",
 then enter the filename 437-u.tt
+
+For Central European Latin script Windows (codepages 852 & 1250)
+
+From the main menu, choose c (character sets), 
+then t (translation tables), then l (load),
+then "Editor to Internal", then enter the filename
+1250-u.tt
+Then choose l (load), then "Internal to Editor",
+then enter the filename u-1250.tt
+Then choose l (load), then "Internal to Display",
+then enter the filename u-852.tt
+Then choose l (load), then "Display to Internal",
+then enter the filename 852-u.tt
 
 This use of UTF-8 Unicode for internal data storage
 will not have any affect on your ascii data (UTF-8 

@@ -196,7 +196,6 @@ extern INT nobuiltins;
 
 /* GEDCOM dates */
 struct gdate_s {
-	/* TODO: julian day upper & lower bounds */
 	INT calendar;
 	INT year;
 	INT month;

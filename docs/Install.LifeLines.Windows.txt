@@ -1,5 +1,5 @@
 LifeLines installation for Windows
-  Edited: 2001/12/30 by Perry Rapp
+  Edited: 2001/12/31 by Perry Rapp
 
 1)
 Choose & create your directories, eg:
@@ -16,15 +16,23 @@ Place the LifeLines program (Lines.exe) &
  program directory (eg, \Program Files\LifeLines)
 
 3)
-*If* you are on MS-Windows U.S. English edition,
-and if you plan to use an MS-Windows editor such as notepad,
-then download the translation tables for US English Windows,
-and install the four *.tt files into
+If you are on MS-Windows, check the web page to see
+if there is an appropriate zip of translation tables
+for your system codepages.
+
+If so, download & install theh *.tt files into
 \My Documents\LifeLines\ttref
+
+Note that if you plan to use a UTF-8 editor (and notepad
+under MS-Windows 2000 will function as a UTF-8 editor),
+you do not need four translation tablese, but only two --
+just the two for translating display & input (in the
+console mode window).
 
 (This step may be omitted if you only plan to use ascii data,
 but you should come back & do this before you start dealing
 with non-ascii data.)
+
 
 4)
 Edit the configuration file (lines.cfg) to reflect your

@@ -50,6 +50,7 @@
  *********************************************/
 
 extern STRING nonint1,nonstr1,nullarg1,nonfname1,nonfam1,nonnodstr1;
+extern STRING nonind1,nonvar1;
 extern STRING nonvarx,nonstrx,nonintx,nonindx,nonboox;
 extern STRING badargs;
 
@@ -2080,7 +2081,7 @@ __inode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	if (*eflg || !indi) {
 		*eflg = TRUE;
-		prog_error(node, "the arg to inode is not a person");
+		prog_error(node, nonind1, "inode");
 		return NULL;
 	}
 	return create_pvalue(PGNODE, (VPTR)indi);
@@ -2112,7 +2113,7 @@ __table (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE var = (PNODE) iargs(node);
 	*eflg = TRUE;
 	if (!iistype(var, IIDENT)) {
-		prog_error(node, "the arg to table must be a variable");
+		prog_error(node, nonvar1, "table");
 		return NULL;
 	}
 	*eflg = FALSE;
@@ -2219,7 +2220,7 @@ __lookup (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	delete_pvalue(val);
 	val = eval_and_coerce(PSTRING, inext(arg), stab, eflg);
 	if (*eflg) {
-		prog_error(node, "2nd arg to lookup is not a string");
+		prog_error(node, nonstrx, "lookup", 2);
 		return NULL;
 	}
 	str = (STRING) pvalue(val);
@@ -2248,12 +2249,12 @@ __trim (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	INT len;
         val1 = eval_and_coerce(PSTRING, arg, stab, eflg);
 	if (*eflg) {
-		prog_error(node, "1st arg to trim is not a string");
+		prog_error(node, nonstrx, "trim", 1);
 		return NULL;
 	}
 	val2 = eval_and_coerce(PINT, inext(arg), stab, eflg);
 	if (*eflg) {
-		prog_error(node, "2nd arg to trim is not an integer");
+		prog_error(node, nonintx, "trim", 2);
 		return NULL;
 	}
 	str = (STRING) pvalue(val1);
@@ -2288,7 +2289,7 @@ __trimname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	*eflg = FALSE;
 	val = eval_and_coerce(PINT, inext(arg), stab, eflg);
 	if (*eflg) {
-		prog_error(node, "2nd arg to trimname is not an integer");
+		prog_error(node, nonintx, "trimname", 2);
 		return NULL;
 	}
 	len = (INT) pvalue(val);
@@ -2336,15 +2337,15 @@ __extractdate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	line = (NODE) pvalue(val);
 	*eflg = TRUE;
 	if (!iistype(dvar, IIDENT)) {
-		prog_error(node, "2nd arg to extractdate must be a variable");
+		prog_error(node, nonvarx, "extractdate", 2);
 		return NULL;
 	}
 	if (!iistype(mvar, IIDENT)) {
-		prog_error(node, "3rd arg to extractdate must be a variable");
+		prog_error(node, nonvarx, "extractdate", 3);
 		return NULL;
 	}
 	if (!iistype(yvar, IIDENT)) {
-		prog_error(node, "4th arg to extractdate must be a variable");
+		prog_error(node, nonvarx, "extractdate", 4);
 		return NULL;
 	}
 	if (nestr("DATE", ntag(line)))
@@ -2527,7 +2528,7 @@ __monthformat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	value = (INT) pvalue(val);
 	delete_pvalue(val);
 	if (value < 0) value = 0;
-	if (value > 6) value = 6;
+	if (value > 8) value = 8;
 	monthcode = value;
 	return NULL;
 }
@@ -2627,7 +2628,7 @@ __datepic (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	STRING str;
 	PVALUE val = eval_and_coerce(PSTRING, arg, stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonstrx, "complexpic", 1);
+		prog_error(node, nonstrx, "datepic", 1);
 		return NULL;
 	}
 	str = (STRING) pvalue(val);

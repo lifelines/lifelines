@@ -382,10 +382,10 @@ printpic_arg (STRING *b, INT max, CNSTRING arg, INT arglen)
  * Created: 2001/12/30 (Perry Rapp)
  *============================*/
 BOOLEAN
-sprintpic1 (STRING buffer, INT len, STRING pic, STRING arg1)
+sprintpic1 (STRING buffer, INT len, CNSTRING pic, CNSTRING arg1)
 {
 	STRING b = buffer, bmax = &buffer[len-1];
-	STRING p=pic;
+	CNSTRING p=pic;
 	INT arg1len = strlen(arg1); /* precompute */
 	while (1) {
 		if (p[0]=='%' && p[1]=='1') {
@@ -412,10 +412,10 @@ sprintpic1 (STRING buffer, INT len, STRING pic, STRING arg1)
  * Created: 2001/12/30 (Perry Rapp)
  *============================*/
 BOOLEAN
-sprintpic2 (STRING buffer, INT len, STRING pic, STRING arg1, STRING arg2)
+sprintpic2 (STRING buffer, INT len, CNSTRING pic, CNSTRING arg1, CNSTRING arg2)
 {
 	STRING b = buffer, bmax = &buffer[len-1];
-	STRING p=pic;
+	CNSTRING p=pic;
 	INT arg1len = strlen(arg1); /* precompute */
 	INT arg2len = strlen(arg2);
 	while (1) {
@@ -447,10 +447,11 @@ sprintpic2 (STRING buffer, INT len, STRING pic, STRING arg1, STRING arg2)
  * Created: 2001/12/30 (Perry Rapp)
  *============================*/
 BOOLEAN
-sprintpic3 (STRING buffer, INT len, STRING pic, STRING arg1, STRING arg2, STRING arg3)
+sprintpic3 (STRING buffer, INT len, CNSTRING pic, CNSTRING arg1, CNSTRING arg2
+	, CNSTRING arg3)
 {
 	STRING b = buffer, bmax = &buffer[len-1];
-	STRING p=pic;
+	CNSTRING p=pic;
 	INT arg1len = strlen(arg1); /* precompute */
 	INT arg2len = strlen(arg2);
 	INT arg3len = strlen(arg3);

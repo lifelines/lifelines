@@ -42,12 +42,34 @@
  * external/imported variables
  *********************************************/
 
-extern STRING datea_abt1,datea_abt2,datea_est1,datea_est2,datea_cal1;
-extern STRING datea_cal2,datep_from1,datep_from2,datep_to1,datep_to2;
-extern STRING datep_frto1,datep_frto2,dater_bef1,dater_bef2,dater_aft1;
-extern STRING dater_aft2,dater_bet1,dater_bet2;
-extern STRING datetrl_bc1,datetrl_bc2,datetrl_bc3,datetrl_bc4;
-extern STRING datetrl_ad1,datetrl_ad2,datetrl_ad3,datetrl_ad4;
+extern STRING datea_abtA,datea_abtB,datea_estA,datea_estB,datea_calA;
+extern STRING datea_calB,datep_fromA,datep_fromB,datep_toA,datep_toB;
+extern STRING datep_frtoA,datep_frtoB,dater_befA,dater_befB,dater_aftA;
+extern STRING dater_aftB,dater_betA,dater_betB;
+extern STRING datetrl_bcA,datetrl_bcB,datetrl_bcC,datetrl_bcD;
+extern STRING datetrl_adA,datetrl_adB,datetrl_adC,datetrl_adD;
+extern STRING caljul,calheb,calfr,calrom;
+extern STRING mon_gj1A,mon_gj1B,mon_gj2A,mon_gj2B,mon_gj3A,mon_gj3B;
+extern STRING mon_gj4A,mon_gj4B,mon_gj5A,mon_gj5B,mon_gj6A,mon_gj6B;
+extern STRING mon_gj7A,mon_gj7B,mon_gj8A,mon_gj8B,mon_gj9A,mon_gj9B;
+extern STRING mon_gj10A,mon_gj10B,mon_gj11A,mon_gj11B,mon_gj12A,mon_gj12B;
+extern STRING mon_heb1A,mon_heb1B,mon_heb2A,mon_heb2B,mon_heb3A,mon_heb3B;
+extern STRING mon_heb4A,mon_heb4B,mon_heb5A,mon_heb5B,mon_heb6A,mon_heb6B;
+extern STRING mon_heb7A,mon_heb7B,mon_heb8A,mon_heb8B,mon_heb9A,mon_heb9B;
+extern STRING mon_heb10A,mon_heb10B,mon_heb11A,mon_heb11B;
+extern STRING mon_heb12A,mon_heb12B,mon_heb13A,mon_heb13B;
+extern STRING mon_fr1A,mon_fr1B,mon_fr2A,mon_fr2B,mon_fr3A,mon_fr3B;
+extern STRING mon_fr4A,mon_fr4B,mon_fr5A,mon_fr5B,mon_fr6A,mon_fr6B;
+extern STRING mon_fr7A,mon_fr7B,mon_fr8A,mon_fr8B,mon_fr9A,mon_fr9B;
+extern STRING mon_fr10A,mon_fr10B,mon_fr11A,mon_fr11B;
+extern STRING mon_fr12A,mon_fr12B,mon_fr13A,mon_fr13B;
+
+/*********************************************
+ * local types used in local function prototypes
+ *********************************************/
+
+/* used in parsing dates -- 1st, 2nd, & 3rd numbers found */
+struct nums_s { INT num1; INT num2; INT num3; };
 
 /*********************************************
  * local function prototypes
@@ -57,10 +79,11 @@ extern STRING datetrl_ad1,datetrl_ad2,datetrl_ad3,datetrl_ad4;
 static void analyze_numbers(GDATEVAL, struct gdate_s *, struct nums_s *);
 static void analyze_word(GDATEVAL gdv, struct gdate_s * pdate
 	, struct nums_s * nums, INT ival, BOOLEAN * newdate);
+static void format_cal(INT cal, CNSTRING src, STRING output, INT len);
 static void format_complex(GDATEVAL gdv, STRING output, INT len, INT cmplx
 	, STRING ymd2, STRING ymd3);
 static void format_day(INT da, INT dfmt, STRING output);
-static STRING format_month(INT, INT);
+static STRING format_month(INT cal, INT mo, INT mfmt);
 static void format_origin(struct gdate_s * pdate, CNSTRING ymd, INT ofmt
 	, STRING output, INT len);
 static STRING format_year(INT, INT);
@@ -104,26 +127,17 @@ static STRING cmplx_pics[ECMPLX_END][6];
 /* custom picture string for ymd date format */
 static STRING date_pic;
 
+/* generated month names (for Gregorian/Julian months) */
+static STRING calendar_pics[GDV_CALENDARS_IX];
+
+typedef STRING MONTH_NAMES[6];
+
+static MONTH_NAMES months_gj[12];
+static MONTH_NAMES months_fr[13];
+static MONTH_NAMES months_heb[13];
+
 struct dateword_s {
 	char *sl, *su, *ll, *lu;
-};
-
-/* English names of Gregorian/Julian months */
-/* We need to internationalize this */
-/* possibly add "jan" & "january" to align with modifiers */
-static struct dateword_s months_gj[] = {
-	{ "Jan", "JAN", "January", "JANUARY" }
-	,{ "Feb", "FEB", "February", "FEBRUARY" }
-	,{ "Mar", "MAR", "March", "MARCH" }
-	,{ "Apr", "APR", "April", "APRIL" }
-	,{ "May", "MAY", "May", "MAY" }
-	,{ "Jun", "JUN", "June", "JUNE" }
-	,{ "Jul", "JUL", "July", "JULY" }
-	,{ "Aug", "AUG", "August", "AUGUST" }
-	,{ "Sep", "SEP", "September", "SEPTEMBER" }
-	,{ "Oct", "OCT", "October", "OCTOBER" }
-	,{ "Nov", "NOV", "November", "NOVEMBER" }
-	,{ "Dec", "DEC", "December", "DECEMBER" }
 };
 
 struct gedcom_keywords_s {
@@ -146,6 +160,34 @@ static struct gedcom_keywords_s gedkeys[] = {
 	,{ "OCT", 10 }
 	,{ "NOV", 11 }
 	,{ "DEC", 12 }
+/* Hebew months are values 301 to 313 */
+	,{ "TSH", 301 }
+	,{ "CSH", 302 }
+	,{ "KSL", 303 }
+	,{ "TVT", 304 }
+	,{ "SHV", 305 }
+	,{ "ADR", 306 }
+	,{ "ADS", 307 }
+	,{ "NSN", 308 }
+	,{ "IYR", 309 }
+	,{ "SVN", 310 }
+	,{ "TMZ", 311 }
+	,{ "AAV", 312 }
+	,{ "ELL", 313 }
+/* French Republic months are values 401 to 413 */
+	,{ "VEND", 401 }
+	,{ "BRUM", 402 }
+	,{ "FRIM", 403 }
+	,{ "NIVO", 404 }
+	,{ "PLUV", 405 }
+	,{ "VENT", 406 }
+	,{ "GERM", 407 }
+	,{ "FLOR", 408 }
+	,{ "PRAI", 409 }
+	,{ "MESS", 410 }
+	,{ "THER", 411 }
+	,{ "FRUC", 412 }
+	,{ "COMP", 413 }
 /* modifiers are values 1001 to 1000+GD_END2 */
 	,{ "ABT", 1000+GD_ABT }
 	,{ "EST", 1000+GD_EST }
@@ -163,7 +205,8 @@ static struct gedcom_keywords_s gedkeys[] = {
 	,{ "@#DFRENCH R@", 2000+GDV_FRENCH }
 	,{ "@#DROMAN@", 2000+GDV_ROMAN }
 /* BC */
-	,{ "B.C.", 1000+GD_BC } /* TODO: handle "(B.C.)" ? */
+	/* parentheses are handled by lexical tokenizer */
+	,{ "B.C.", 1000+GD_BC }
 /* Some liberal (non-GEDCOM) entries */
 	,{ "BC", GD_BC }
 	,{ "B.C.E.", GD_BC }
@@ -196,14 +239,12 @@ static struct gedcom_keywords_s gedkeys[] = {
 
 /* GEDCOM Hebrew months */
 /* keywordtbl values 101-113 */
-static struct dateword_s months_heb[] = {
-	{ "Tsh", "TSH", "Tishri", "TISHRI" }
+//static struct dateword_s months_heb[] = {
+//	{ "Tsh", "TSH", "Tishri", "TISHRI" }
 	/* TODO: Finish & implement these, but wait til we
 	internationalize the gregorian/julian ones */
-};
+//};
 
-/* used in parsing dates -- 1st, 2nd, & 3rd numbers found */
-struct nums_s { INT num1; INT num2; INT num3; };
 
 static STRING sstr = NULL;
 static TABLE keywordtbl = NULL;
@@ -225,7 +266,7 @@ do_format_date (STRING str, INT dfmt, INT mfmt,
              INT yfmt, INT sfmt, INT ofmt, INT cmplx)
 {
 	STRING smo, syr;
-	static char daystr[3], ymd[50], ymd2[60], ymd3[60], complete[100];
+	static char daystr[3], ymd[60], ymd2[60], ymd3[60], complete[100];
 	STRING p;
 	INT len;
 	GDATEVAL gdv = 0;
@@ -242,42 +283,57 @@ do_format_date (STRING str, INT dfmt, INT mfmt,
 		/* simple */
 		gdv = extract_date(str);
 		format_day(gdv->date1.day, dfmt, daystr);
-		smo = format_month(gdv->date1.month, mfmt);
+		smo = format_month(gdv->date1.calendar, gdv->date1.month, mfmt);
 		syr = format_year(gdv->date1.year, yfmt);
 		p = ymd;
 		len = sizeof(ymd);
 		*p = 0;
 		format_ymd(syr, smo, daystr, sfmt, &p, &len);
-		format_origin(&gdv->date1, ymd, ofmt, ymd2, sizeof(ymd2));
+		if (gdv->date1.calendar) {
+			format_origin(&gdv->date1, ymd, ofmt, ymd2, sizeof(ymd2));
+			format_cal(gdv->date1.calendar, ymd2, ymd3, sizeof(ymd3));
+		} else {
+			format_origin(&gdv->date1, ymd, ofmt, ymd3, sizeof(ymd3));
+		}
 		free_gdateval(gdv);
-		return ymd2;
+		return ymd3;
 	} else {
 		/* complex (include modifier words) */
 		gdv = extract_date(str);
 		format_day(gdv->date1.day, dfmt, daystr);
-		smo = format_month(gdv->date1.month, mfmt);
+		smo = format_month(gdv->date1.calendar, gdv->date1.month, mfmt);
 		syr = (gdv->date1.yearstr ? gdv->date1.yearstr 
 			: format_year(gdv->date1.year, yfmt));
 		p = ymd;
 		len = sizeof(ymd);
 		*p = 0;
 		format_ymd(syr, smo, daystr, sfmt, &p, &len);
-		format_origin(&gdv->date1, ymd, ofmt, ymd2, sizeof(ymd2));
+		if (gdv->date1.calendar) {
+			format_origin(&gdv->date1, ymd, ofmt, ymd2, sizeof(ymd2));
+			format_cal(gdv->date1.calendar, ymd2, ymd3, sizeof(ymd3));
+		} else {
+			format_origin(&gdv->date1, ymd, ofmt, ymd3, sizeof(ymd3));
+		}
 		if (gdateval_isdual(gdv)) {
-			/* build 2nd date string into ymd3 */
+			/* build 2nd date string into ymd2 */
 			format_day(gdv->date2.day, dfmt, daystr);
-			smo = format_month(gdv->date2.month, mfmt);
+			smo = format_month(gdv->date2.calendar, gdv->date2.month, mfmt);
 			syr = (gdv->date2.yearstr ? gdv->date2.yearstr 
 				: format_year(gdv->date2.year, yfmt));
 			p = ymd;
 			len = sizeof(ymd);
 			*p = 0;
 			format_ymd(syr, smo, daystr, sfmt, &p, &len);
-			format_origin(&gdv->date2, ymd, ofmt, ymd3, sizeof(ymd3));
+			if (gdv->date2.calendar) {
+				format_origin(&gdv->date2, ymd, ofmt, complete, sizeof(complete));
+				format_cal(gdv->date2.calendar, complete, ymd2, sizeof(ymd2));
+			} else {
+				format_origin(&gdv->date2, ymd, ofmt, ymd2, sizeof(ymd2));
+			}
 		} else {
-			ymd3[0] = 0;
+			ymd2[0] = 0;
 		}
-		format_complex(gdv, complete, sizeof(complete), cmplx, ymd2, ymd3);
+		format_complex(gdv, complete, sizeof(complete), cmplx, ymd3, ymd2);
 		free_gdateval(gdv);
 		return complete;
 	}
@@ -312,13 +368,13 @@ format_origin (struct gdate_s * pdate, CNSTRING ymd, INT ofmt, STRING output
 			p[0] = 0;
 			llstrcatn(&p, ymd, &len);
 			switch (ofmt/10) {
-				case 1: tag = datetrl_bc2; break;
-				case 2: tag = datetrl_bc3; break;
-				case 3: tag = datetrl_bc4; break;
+				case 1: tag = datetrl_bcB; break;
+				case 2: tag = datetrl_bcC; break;
+				case 3: tag = datetrl_bcD; break;
 			}
 			/* this way we handle if, eg, datetrl_bc4 is blank */
 			if (!tag || !tag[0])
-				tag = datetrl_bc1;
+				tag = datetrl_bcA;
 			llstrcatn(&p, " ", &len);
 			llstrcatn(&p, tag, &len);
 			return;
@@ -330,13 +386,13 @@ format_origin (struct gdate_s * pdate, CNSTRING ymd, INT ofmt, STRING output
 			p[0] = 0;
 			llstrcatn(&p, ymd, &len);
 			switch (ofmt/10) {
-				case 1: tag = datetrl_ad2; break;
-				case 2: tag = datetrl_ad3; break;
-				case 3: tag = datetrl_ad4; break;
+				case 1: tag = datetrl_adB; break;
+				case 2: tag = datetrl_adC; break;
+				case 3: tag = datetrl_adD; break;
 			}
 			/* this way we handle if, eg, datetrl_ad4 is blank */
 			if (!tag || !tag[0])
-				tag = datetrl_ad1;
+				tag = datetrl_adA;
 			llstrcatn(&p, " ", &len);
 			llstrcatn(&p, tag, &len);
 			return;
@@ -345,6 +401,24 @@ format_origin (struct gdate_s * pdate, CNSTRING ymd, INT ofmt, STRING output
 	/* no trailing tag at all */
 	llstrncpy(output, ymd, len);
 
+}
+/*===================================================
+ * format_cal -- Add calender info to date
+ *  cal:    [IN]  calendar number from date struct
+ *  src:    [IN]  original date w/o calender info
+ *  output: [I/O]  buffer for new version
+ *  len:    [IN]  size of output buffer
+ * Created: 2001/12/31 (Perry Rapp)
+ *=================================================*/
+static void
+format_cal (INT cal, CNSTRING src, STRING output, INT len)
+{
+	ASSERT(cal>=0 && cal<ARRSIZE(calendar_pics));
+	if (calendar_pics[cal]) {
+		sprintpic1(output, len, calendar_pics[cal], src);
+	} else {
+		llstrncpy(output, src, len);
+	}
 }
 /*===================================================
  * get_cmplx_pic -- Get appropriate picture string
@@ -665,6 +739,7 @@ format_day (INT da, INT dfmt, STRING output)
 }
 /*===========================================
  * format_month -- Formats month part of date
+ *  cal:   [IN]  calendar code (for named months)
  *  mo:    [IN]  numeric month (0 for unknown)
  *  mfmt:  [IN]    0 - num, space
  *                 1 - num, lead 0
@@ -673,6 +748,8 @@ format_day (INT da, INT dfmt, STRING output)
  *                 4 - eg, Mar
  *                 5 - eg, MARCH
  *                 6 - eg, March
+ *                 7 - eg, mar
+ *                 8 - eg, march
  *TODO: Add roman numerals (as seen in Central Europe)
  * but wait to see what happens with cmplx numbers
  * because we might add "mar" & "march" here
@@ -680,23 +757,30 @@ format_day (INT da, INT dfmt, STRING output)
  *  returns static buffer or string constant or 0
  *=========================================*/
 static STRING
-format_month (INT mo, INT mfmt)
+format_month (INT cal, INT mo, INT mfmt)
 {
+	INT casing;
+	MONTH_NAMES * parr=0;
 	static char scratch[3];
-	if (mo < 0 || mo > 12 || mfmt < 0 || mfmt > 6) return NULL;
+	if (mo < 0 || mo > 13 || mfmt < 0 || mfmt > 8) return NULL;
 	if (mfmt <= 2)  {
 		format_day(mo, mfmt, scratch);
 		return scratch;
 	}
 	if (mo == 0) return (STRING) "   ";
-	/* TODO: we need to deal with calendars here */
-	switch (mfmt) {
-	case 3: return (STRING) months_gj[mo-1].su;
-	case 4: return (STRING) months_gj[mo-1].sl;
-	case 5: return (STRING) months_gj[mo-1].lu;
-	case 6: return (STRING) months_gj[mo-1].ll;
+	casing = mfmt-3;
+	ASSERT(casing>=0 && casing<ARRSIZE(months_gj[0]));
+	switch (cal) {
+	case GDV_HEBREW: parr = months_heb; break;
+	case GDV_FRENCH: parr = months_fr; break;
+	default: 
+		if (mo>12) return "   ";
+		parr = months_gj; break;
 	}
-	return NULL;
+	if (parr[mo-1][casing])
+		return parr[mo-1][casing];
+	else
+		return "?";
 }
 /*=========================================
  * format_year -- Formats year part of date
@@ -1029,7 +1113,24 @@ analyze_numbers (GDATEVAL gdv, struct gdate_s * pdate, struct nums_s * nums)
 	/* if we get here, we need month */
 	if (pdate->year != -99999) {
 		/* we have year, but not month, and we have at least 2 numbers */
-		/* TODO */
+		/* can we interpret them unambiguously ? */
+		if (is_valid_month(pdate, nums->num1) 
+			&& !is_valid_month(pdate, nums->num2)
+			&& is_valid_day(pdate, nums->num2)) 
+		{
+			pdate->month = nums->num1;
+			pdate->day = nums->num2;
+			return;
+		}
+		if (is_valid_month(pdate, nums->num2) 
+			&& !is_valid_month(pdate, nums->num1)
+			&& is_valid_day(pdate, nums->num1)) 
+		{
+			pdate->month = nums->num2;
+			pdate->day = nums->num1;
+			return;
+		}
+		/* not unambiguous, so don't guess */
 		return;
 	}
 	/* if we get here, we need month & year */
@@ -1141,14 +1242,35 @@ get_date_tok (INT *pival, STRING *psval)
 	while (iswhite((uchar)*sstr++))
 		;
 	sstr--;
-	if (isletter((uchar)*sstr)) {
+	if (sstr[0]=='@' && sstr[1]=='#' && sstr[2]=='D') {
 		INT i;
-		/* collect all letters (to end or whitespace) into scratch */
+		/* collect calendar escape to closing @ (or end of string) */
 		do {
 			*p++ = *sstr++;
-		} while (sstr[0] && !iswhite((uchar)sstr[0]));
+		} while (sstr[0] && sstr[0]!='@');
+		if (*sstr != '@') {
+			return CHAR_TOK;
+		} else {
+			*p++ = *sstr++; /* consume the '@' */
+			*p = 0;
+		}
+		/* look it up in our big table of GEDCOM keywords */
+		i = valueof_int(keywordtbl, upper(scratch), 0);
+		if (i >= 2001 && i < 2000 + GDV_CALENDARS_IX) {
+			*pival = i - 2000;
+			return CALENDAR_TOK;
+		}
+		/* unrecognized word */
+		return CHAR_TOK;
+	}
+	if (isletter((uchar)*sstr)) {
+		INT i;
+		/* collect all letters (to end or whitespace or closeparen) */
+		do {
+			*p++ = *sstr++;
+		} while (sstr[0] && sstr[0]!=')' && !iswhite((uchar)sstr[0]));
 		*p = 0;
-		/* look it up in our big table of words */
+		/* look it up in our big table of GEDCOM keywords */
 		i = valueof_int(keywordtbl, upper(scratch), 0);
 		if (!i) {
 			/* unrecognized word */
@@ -1160,10 +1282,6 @@ get_date_tok (INT *pival, STRING *psval)
 			return MONTH_TOK;
 		}
 		*pival = 0;
-		if (i >= 2001 && i < 2000 + GDV_CALENDARS_IX) {
-			*pival = i - 2000;
-			return CALENDAR_TOK;
-		}
 		if (i >= 1001 && i < 1000 + GD_END2) {
 			*pival = i - 1000;
 			return WORD_TOK;
@@ -1172,7 +1290,7 @@ get_date_tok (INT *pival, STRING *psval)
 		return WORD_TOK;
 	}
 	if (chartype(*sstr) == DIGIT) {
-		INT j=-99999, i=0;
+		INT j=-99999, i=0; /* i is year value, j is slash year value */
 		*pival = *sstr;
 		while (chartype(c = (uchar)*p++ = *sstr++) == DIGIT)
 			i = i*10 + c - '0';
@@ -1181,18 +1299,21 @@ get_date_tok (INT *pival, STRING *psval)
 			return CHAR_TOK;
 		}
 		if (c == '/') {
+			INT modnum=1;
 			STRING saves = sstr, savep = p;
 			j=0;
-			while (chartype(c = (uchar)*p++ = *sstr++) == DIGIT) 
+			while (chartype(c = (uchar)*p++ = *sstr++) == DIGIT) {
+				modnum *= 10;
 				j = j*10 + c - '0';
-			if (j != i+1 && j != i-1) {
-				/* slash years only valid if differ by one year */
+			}
+			/* slash years only valid if differ by one year
+			and there is not another slash after slash year
+			(so we don't parse 8/9/1995 as a slash year */
+			if (*sstr=='/' || (j != (i+1) % modnum)) {
 				sstr = saves;
 				p = savep;
-				j=-99999;
+				j = -99999;
 			}
-			/* One drawback to this scheme is that 
-			   we will parse 08/09/1995 as a slash year 8 */
 		}
 		*--p = 0;
 		sstr--;
@@ -1255,19 +1376,40 @@ load_one_cmplx_pic (INT ecmplx, STRING abbrev, STRING full)
 
 }
 /*=============================
+ * load_one_month -- Generate case variations
+ *  of one month name
+ *  monum:  [IN]  month num (0-based)
+ *  monarr: [I/O] month array
+ *  abbrev: [IN]  eg, "jan"
+ *  full:   [IN]  eg, "january"
+ * Created: 2001/12/31 (Perry Rapp)
+ *===========================*/
+static void
+load_one_month (INT monum, MONTH_NAMES * monarr, STRING abbrev, STRING full)
+{
+	/* 0-5 codes as in load_cmplx_pic(...) above */
+	monarr[monum][0] = strdup(upper(abbrev));
+	monarr[monum][1] = strdup(titlecase(abbrev));
+	monarr[monum][2] = strdup(upper(full));
+	monarr[monum][3] = strdup(titlecase(full));
+	monarr[monum][4] = strdup(lower(abbrev));
+	monarr[monum][5] = strdup(lower(full));
+}
+/*=============================
  * load_lang -- Load generated picture strings
  *  based on current language
- * This has to be really done after i18n.
+ * This must be called if current language changes.
  * Created: 2001/12/30 (Perry Rapp)
  *===========================*/
 static void
 load_lang (void)
 {
 	INT i,j;
+	
 	/* TODO: if we have language-specific cmplx_custom, deal with
 	that here */
 
-	/* clear existing ones */
+	/* clear complex pics */
 	for (i=0; i<ECMPLX_END; ++i) {
 		for (j=0; j<6; ++j) {
 			if (cmplx_pics[i][j]) {
@@ -1276,20 +1418,122 @@ load_lang (void)
 			}
 		}
 	}
-
-	load_one_cmplx_pic(ECMPLX_ABT, datea_abt1, datea_abt2);
-	load_one_cmplx_pic(ECMPLX_EST, datea_est1, datea_est2);
-	load_one_cmplx_pic(ECMPLX_CAL, datea_cal1, datea_cal2);
-	load_one_cmplx_pic(ECMPLX_FROM, datep_from1, datep_from2);
-	load_one_cmplx_pic(ECMPLX_TO, datep_to1, datep_to2);
-	load_one_cmplx_pic(ECMPLX_FROM_TO, datep_frto1, datep_frto2);
-	load_one_cmplx_pic(ECMPLX_BEF, dater_bef1, dater_bef2);
-	load_one_cmplx_pic(ECMPLX_AFT, dater_aft1, dater_aft2);
-	load_one_cmplx_pic(ECMPLX_BET_AND, dater_bet1, dater_bet2);
-	
+	/* load complex pics */
+	load_one_cmplx_pic(ECMPLX_ABT, datea_abtA, datea_abtB);
+	load_one_cmplx_pic(ECMPLX_EST, datea_estA, datea_estB);
+	load_one_cmplx_pic(ECMPLX_CAL, datea_calA, datea_calB);
+	load_one_cmplx_pic(ECMPLX_FROM, datep_fromA, datep_fromB);
+	load_one_cmplx_pic(ECMPLX_TO, datep_toA, datep_toB);
+	load_one_cmplx_pic(ECMPLX_FROM_TO, datep_frtoA, datep_frtoB);
+	load_one_cmplx_pic(ECMPLX_BEF, dater_befA, dater_befB);
+	load_one_cmplx_pic(ECMPLX_AFT, dater_aftA, dater_aftB);
+	load_one_cmplx_pic(ECMPLX_BET_AND, dater_betA, dater_betB);
+	/* test that all were loaded */	
 	for (i=0; i<ECMPLX_END; ++i) {
 		for (j=0; j<6; ++j) {
 			ASSERT(cmplx_pics[i][j]);
+		}
+	}
+
+	/* clear calendar pics */
+	for (i=0; i<ARRSIZE(calendar_pics); ++i) {
+		if (calendar_pics[i]) {
+			stdfree(calendar_pics[i]);
+			calendar_pics[i] = 0;
+		}
+	}
+	calendar_pics[GDV_JULIAN] = strdup(caljul);
+	calendar_pics[GDV_HEBREW] = strdup(calheb);
+	calendar_pics[GDV_FRENCH] = strdup(calfr);
+	calendar_pics[GDV_ROMAN] = strdup(calrom);
+	/* not all slots in calendar_pics are used */
+
+	/* clear Gregorian/Julian month names */
+	for (i=0; i<ARRSIZE(months_gj); ++i) {
+		for (j=0; j<ARRSIZE(months_gj[0]); ++j) {
+			if (months_gj[i][j]) {
+				stdfree(months_gj[i][j]);
+				months_gj[i][j] = 0;
+			}
+		}
+	}
+	/* load Gregorian/Julian month names */
+	load_one_month(0, months_gj, mon_gj1A, mon_gj1B);
+	load_one_month(1, months_gj, mon_gj2A, mon_gj2B);
+	load_one_month(2, months_gj, mon_gj3A, mon_gj3B);
+	load_one_month(3, months_gj, mon_gj4A, mon_gj4B);
+	load_one_month(4, months_gj, mon_gj5A, mon_gj5B);
+	load_one_month(5, months_gj, mon_gj6A, mon_gj6B);
+	load_one_month(6, months_gj, mon_gj7A, mon_gj7B);
+	load_one_month(7, months_gj, mon_gj8A, mon_gj8B);
+	load_one_month(8, months_gj, mon_gj9A, mon_gj9B);
+	load_one_month(9, months_gj, mon_gj10A, mon_gj10B);
+	load_one_month(10, months_gj, mon_gj11A, mon_gj11B);
+	load_one_month(11, months_gj, mon_gj12A, mon_gj12B);
+	/* test that all were loaded */	
+	for (i=0; i<ARRSIZE(months_gj); ++i) {
+		for (j=0; j<ARRSIZE(months_gj[0]); ++j) {
+			ASSERT(months_gj[i][j]);
+		}
+	}
+
+	/* clear Hebrew month names */
+	for (i=0; i<ARRSIZE(months_heb); ++i) {
+		for (j=0; j<ARRSIZE(months_heb[0]); ++j) {
+			if (months_heb[i][j]) {
+				stdfree(months_heb[i][j]);
+				months_heb[i][j] = 0;
+			}
+		}
+	}
+	/* load Hebrew month names */
+	load_one_month(0, months_heb, mon_heb1A, mon_heb1B);
+	load_one_month(1, months_heb, mon_heb2A, mon_heb2B);
+	load_one_month(2, months_heb, mon_heb3A, mon_heb3B);
+	load_one_month(3, months_heb, mon_heb4A, mon_heb4B);
+	load_one_month(4, months_heb, mon_heb5A, mon_heb5B);
+	load_one_month(5, months_heb, mon_heb6A, mon_heb6B);
+	load_one_month(6, months_heb, mon_heb7A, mon_heb7B);
+	load_one_month(7, months_heb, mon_heb8A, mon_heb8B);
+	load_one_month(8, months_heb, mon_heb9A, mon_heb9B);
+	load_one_month(9, months_heb, mon_heb10A, mon_heb10B);
+	load_one_month(10, months_heb, mon_heb11A, mon_heb11B);
+	load_one_month(11, months_heb, mon_heb12A, mon_heb12B);
+	load_one_month(12, months_heb, mon_heb13A, mon_heb13B);
+	/* test that all were loaded */	
+	for (i=0; i<ARRSIZE(months_heb); ++i) {
+		for (j=0; j<ARRSIZE(months_heb[0]); ++j) {
+			ASSERT(months_heb[i][j]);
+		}
+	}
+
+	/* clear French Republic month names */
+	for (i=0; i<ARRSIZE(months_fr); ++i) {
+		for (j=0; j<ARRSIZE(months_fr[0]); ++j) {
+			if (months_fr[i][j]) {
+				stdfree(months_fr[i][j]);
+				months_fr[i][j] = 0;
+			}
+		}
+	}
+	/* load French Republic month names */
+	load_one_month(0, months_fr, mon_fr1A, mon_fr1B);
+	load_one_month(1, months_fr, mon_fr2A, mon_fr2B);
+	load_one_month(2, months_fr, mon_fr3A, mon_fr3B);
+	load_one_month(3, months_fr, mon_fr4A, mon_fr4B);
+	load_one_month(4, months_fr, mon_fr5A, mon_fr5B);
+	load_one_month(5, months_fr, mon_fr6A, mon_fr6B);
+	load_one_month(6, months_fr, mon_fr7A, mon_fr7B);
+	load_one_month(7, months_fr, mon_fr8A, mon_fr8B);
+	load_one_month(8, months_fr, mon_fr9A, mon_fr9B);
+	load_one_month(9, months_fr, mon_fr10A, mon_fr10B);
+	load_one_month(10, months_fr, mon_fr11A, mon_fr11B);
+	load_one_month(11, months_fr, mon_fr12A, mon_fr12B);
+	load_one_month(12, months_fr, mon_fr13A, mon_fr13B);
+	/* test that all were loaded */	
+	for (i=0; i<ARRSIZE(months_fr); ++i) {
+		for (j=0; j<ARRSIZE(months_fr[0]); ++j) {
+			ASSERT(months_fr[i][j]);
 		}
 	}
 }
@@ -1304,7 +1548,7 @@ get_todays_date (void)
 	static unsigned char dat[20];
 	curtime = time(NULL);
 	pt = localtime(&curtime);
-	sprintf(dat, "%d %s %d", pt->tm_mday, months_gj[pt->tm_mon].su,
+	sprintf(dat, "%d %s %d", pt->tm_mday, months_gj[3][pt->tm_mon],
 	    1900 + pt->tm_year);
 	return dat;
 }

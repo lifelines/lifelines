@@ -1,3 +1,23 @@
+2001-12-31 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog docs/Install.LifeLines.Windows.txt
+	docs/Run.LifeLines.Windows.txt gedlib/messages.c hdrs/interp.h
+	hdrs/llstdlib.h interp/builtin.c interp/date.c
+	stdlib/stdstrng.c:
+
+	Moved some more English errors from builtin.c to messages.c.
+	Fix slash-year parsing for any width of slash year, and to
+	not parse 8/9/1995 as slash year.
+	Try harder to parse dates of three numbers, if unambiguous.
+	Allow closing parens to end keywords (for "(B.C.)").
+	Added handling for Hebrew & French Republic dates, per GEDCOM
+	standard.
+	Moved all month names into messages.c.
+	Added calendar picture strings.
+	Updated the MS-Windows documents now that we will distribute
+	multiple sets of translation tables.
+
+
 2001-12-30 Perry Rapp <puddle@users.sourceforge.net>
 
 	* tools/dispcode.c
