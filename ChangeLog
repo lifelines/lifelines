@@ -1,4 +1,12 @@
-2001-12-28 Perry Rapp <puddle@users.sourceforge.net>
+2001-12-30 Perry Rapp <puddle@users.sourceforge.net>
+
+	* tools/dispcode.c
+	(NEW) tools/prettytt.c:
+
+	Near-trivial program to convert binary translation table to
+	all-ascii one.
+
+2001-12-29 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/charmaps.c gedlib/messages.c hdrs/interp.h
 	interp/date.c liflines/screen.c:

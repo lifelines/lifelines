@@ -22,7 +22,12 @@
    SOFTWARE.
 */
 /*=============================================================
- * dispcode.c -- Display character code numbers & representations.
+ * dispcode.c -- 
+ * This is a trivial program, just to show the character code 
+ * numbers & representations on the current console.
+ * Just run it with no args & gaze happily at the display.
+ * Press return when tired of gazing.
+ *
  *   Created: 2001/07/07 by Perry Rapp
  *==============================================================*/
 
