@@ -2,6 +2,11 @@
 
 	Fixes & changes to win32 curses emulation.
 
+	* ChangeLog NEWS configure.in lifelines.spec hdrs/version.h
+	win32/msvc/llines/llines.rc:
+
+	Release 2.0.13.
+
 2002-05-25 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog btree/opnbtree.c hdrs/menuitem.h liflines/lbrowse.c
