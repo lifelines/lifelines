@@ -173,10 +173,15 @@ free_node (NODE node)
 {
 	if (nxref(node)) stdfree(nxref(node));
 	if (nval(node)) stdfree(nval(node));
+/* MTE 2003/02/02
+ * Is this the right thing to do?
+ * Or do tags have to live longer than nodes?
+
 	if (ntag(node)) {
           delete_table(tagtable,ntag(node));
           stdfree(ntag(node));
         }
+*/
 	((NDALLOC) node)->next = first_blck;
 	first_blck = (NDALLOC) node;
 	
