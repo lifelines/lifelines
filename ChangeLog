@@ -8,6 +8,10 @@
 	Call interp_main instead of interp_program_list from main/llexec.
 	(Fix for sf bug#704326: llexec will crash if argument error found.)
 
+	* ChangeLog src/stdlib/stdstrng.c
+
+	Remove unused llstrncat.
+
 2003-03-13 Stephen Dum
 
         * ChangeLog docs/ll-reportmanual.xml docs/ll-userguide.xml

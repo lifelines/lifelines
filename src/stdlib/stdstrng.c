@@ -254,20 +254,6 @@ llstrncpyvf (char *dest, size_t n, int utf8, const char * fmt, va_list args)
 	return dest;
 }
 /*==================================
- * llstrncat -- strncat that always zero-terminates
- * handles UTF-8
- * Created: 2001/03/17, Perry Rapp
- *================================*/
-char *
-llstrncat (char *dest, const char *src, size_t n, int utf8)
-{
-	size_t len = strlen(dest);
-	if (len > n-2) /* must fit trailing zero */
-		return dest;
-	llstrncpy(dest+len, src, n-len, utf8);
-	return dest;
-}
-/*==================================
  * ll_atoi -- Wrapper for atoi which handles NULL input
  * Created: 2002/10/19, Perry Rapp
  *================================*/
