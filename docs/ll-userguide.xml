@@ -1122,31 +1122,32 @@ CODESET
 
 <para>
 
-     Third, you may specify the use of UTF-8. This is a Unicode encoding, and is
-     by far the most powerful option. In fact, this is the only really convenient 
-     way to be able to store, for example, names in English, names in Russian, and
-     names in Greek, all in the same database, in their native scripts (alphabets).
-     In recent versions, lifelines has become more knowledgeable about handling 
-     UTF-8, so that, for example, upper &amp; lower casing only work correctly with
-     versions from 3.0.28 on.
+     Third, you may specify the use of UTF-8. This is a Unicode encoding, and
+     is by far the most powerful option. In fact, this is the only really
+     convenient way to be able to store, for example, names in English, names
+     in Russian, and names in Greek, all in the same database, in their native
+     scripts (alphabets).  In recent versions, lifelines has become more
+     knowledgeable about handling UTF-8, so that, for example, upper &amp;
+     lower casing only work correctly with versions from 3.0.28 on.
 
 </para>
 
 <para>
 
-     To actually specify a codeset, enter it via the u(tility) o(ptions) page (which is
-     documented below). From the main menu, in the English version, press u to reach
-     the utility page, and then o to edit the user options. To set a codeset of, e.g.,
-     ISO-8859-1, enter this string on its own line, without the surrounding quotes:
-     "codeset=ISO-8859-1". Or, to specify the use of UTF-8, "codeset=UTF-8".
+     To actually specify a codeset, enter it via the u(tility) o(ptions) page
+     (which is documented below). From the main menu, in the English version,
+     press u to reach the utility page, and then o to edit the user options. To
+     set a codeset of, e.g., ISO-8859-1, enter this string on its own line,
+     without the surrounding quotes: "codeset=ISO-8859-1". Or, to specify the
+     use of UTF-8, "codeset=UTF-8".
 
 </para>
 
 <para>
 
-     Further information about codeset conversion is found in the later chapter of
-     that name (for example, information about producing reports which make use of
-     HTML entity names for non-ASCII characters).
+     Further information about codeset conversion is found in the later chapter
+     of that name (for example, information about producing reports which make
+     use of HTML entity names for non-ASCII characters).
 
 </para>
 

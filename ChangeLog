@@ -8,6 +8,11 @@
 
 	Remove unused macro lrefcnt.
 
+	* ChangeLog docs/ll-userguide.xml
+
+	Reformat most of codeset explanations to fit 80 char screen
+	(like surrounding sections).
+
 2005-01-29, Perry Rapp
 
 	* ChangeLog src/hdrs/table.h src/stdlib/table.c
