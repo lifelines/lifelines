@@ -17,6 +17,12 @@
 	Pulled write node code out of edit record into new
 	function write_node_to_editfile (for Ethel).
 
+	* gedlib/indiseq.c gedlib/keytonod.c hdrs/indiseq.h
+	hdrs/interpi.h hdrs/screen.h hdrs/table.h interp/functab.c
+	interp/intrpseq.c stdlib/table.c:
+	gen_gedcom rewrite (gengedcomweak & strong & original)
+	(includes new table functions).
+
 2000-12-31 Perry Rapp <puddle@users.sourceforge.net>
 
 	* btree/opnbtree.c gedlib/indiseq.c gedlib/keytonod.c
