@@ -1147,7 +1147,7 @@ free_string_list(LIST list)
  *==================================================*/
 typedef struct
 {
-	BOOLEAN(*func)(STRING key, CNSTRING name, BOOLEAN newset, void *param);
+	BOOLEAN(*func)(CNSTRING key, CNSTRING name, BOOLEAN newset, void *param);
 	void * param;
 } TRAV_NAME_PARAM;
 /* see above */
@@ -1169,7 +1169,7 @@ traverse_name_callback (RKEY rkey, STRING data, INT len, void *param)
 }
 /* see above */
 void
-traverse_names (BOOLEAN(*func)(STRING key, CNSTRING name, BOOLEAN newset, void *param), void *param)
+traverse_names (BOOLEAN(*func)(CNSTRING key, CNSTRING name, BOOLEAN newset, void *param), void *param)
 {
 	TRAV_NAME_PARAM tparam;
 	tparam.param = param;

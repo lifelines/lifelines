@@ -20,6 +20,11 @@
 	Code cleanup: unused parameters and remove obsolete
 	functions (pvalue_to_pint, pvalue_to_pfloat).
 
+	* ChangeLog src/gedlib/names.c src/hdrs/gedcom.h
+
+	Const-correctness: fix callback of traverse_names to use
+	const string key.
+
 2005-01-16 Perry Rapp
 
 	* ChangeLog po/fr.po

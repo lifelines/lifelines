@@ -540,7 +540,7 @@ BOOLEAN name_to_list(CNSTRING, LIST, INT*, INT*);
 STRING name_string(STRING);
 int namecmp(STRING, STRING);
 void remove_name(STRING name, CNSTRING key);
-void traverse_names(BOOLEAN(*func)(STRING key, CNSTRING name, BOOLEAN newset, void *param), void *param);
+void traverse_names(BOOLEAN(*func)(CNSTRING key, CNSTRING name, BOOLEAN newset, void *param), void *param);
 STRING trim_name(STRING, INT);
 
 /* node.c */
