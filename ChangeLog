@@ -4,6 +4,12 @@
 
 	Add lock/unlock functions for records.
 
+	* ChangeLog src/gedlib/gedcomi.h src/gedlib/node.c
+	src/gedlib/nodeio.c
+
+	Fix adding new records (fix file_to_record function to handle
+	node trees with no xref in root yet).
+
 2003-11-23 Perry Rapp
 
 	* ChangeLog src/gedlib/keytonod.c

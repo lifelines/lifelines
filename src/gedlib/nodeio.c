@@ -210,12 +210,16 @@ RECORD
 file_to_record (STRING fname, XLAT ttm, STRING *pmsg, BOOLEAN *pemp)
 {
 	NODE node = file_to_node(fname, ttm, pmsg, pemp);
-	RECORD rec = 0;
-	if (node) {
+	if (!node)
+		return 0;
+	if (nxref(node)) {
 		CACHEEL cel = node_to_cacheel_old(node);
-		rec = create_record_for_cel(cel);
+		RECORD rec = create_record_for_cel(cel);
+		return rec;
+	} else {
+		RECORD rec = create_record_for_unkeyed_node(node);
+		return rec;
 	}
-	return rec;
 }
 /*=================================================
  * file_to_node -- Convert GEDCOM file to NODE tree
@@ -320,7 +324,7 @@ next_fp_to_record (FILE *fp, BOOLEAN list, XLAT ttm,
 	STRING *pmsg, BOOLEAN *peof)
 {
 	NODE node = next_fp_to_node(fp, list, ttm, pmsg, peof);
-	return create_record_from_new_node(node, 0);
+	return create_record_for_keyed_node(node, 0);
 }
 /*==============================================================
  * next_fp_to_node -- Convert next GEDCOM record in file to tree
@@ -439,7 +443,7 @@ string_to_record (STRING str, CNSTRING key, INT len)
 		}
 	}
 	if (node) {
-		rec = create_record_from_new_node(node, key);
+		rec = create_record_for_keyed_node(node, key);
 	}
 	return rec;
 }

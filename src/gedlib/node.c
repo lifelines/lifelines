@@ -268,11 +268,11 @@ init_new_record (RECORD rec, char ntype, INT keynum)
 	assign_record(rec, ntype, keynum);
 }
 /*===================================
- * create_record_from_new_node -- 
+ * create_record_for_keyed_node -- 
  *  Given a node just read from disk, wrap it in an uncached record
  *=================================*/
 RECORD
-create_record_from_new_node (NODE node, CNSTRING key)
+create_record_for_keyed_node (NODE node, CNSTRING key)
 {
 	RECORD rec = alloc_new_record();
 	INT keynum = 0;
@@ -281,6 +281,17 @@ create_record_from_new_node (NODE node, CNSTRING key)
 	keynum = ll_atoi(&key[1], 0);
 	rec->rec_top = node;
 	init_new_record(rec, key[0], keynum);
+	return rec;
+}
+/*===================================
+ * create_record_for_unkeyed_node -- 
+ *  Given a new node tree with no key, wrap it in an uncached record
+ *=================================*/
+RECORD
+create_record_for_unkeyed_node (NODE node)
+{
+	RECORD rec = alloc_new_record();
+	rec->rec_top = node;
 	return rec;
 }
 /*===================================
