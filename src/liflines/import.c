@@ -166,7 +166,7 @@ do_import (IMPORT_FEEDBACK ifeed, FILE *fp)
 		if (!eqstr(str, "LINEAGE-LINKED")) {
 			if (!ask_yes_or_no_msg(
 				_("This is not a lineage linked GEDCOM file.")
-				, _("Proceed anyway ?")
+				, _("Proceed anyway?")
 				))
 				goto end_import;
 		}
@@ -182,7 +182,7 @@ do_import (IMPORT_FEEDBACK ifeed, FILE *fp)
 		/* TODO: ask if user would like to adopt codeset of incoming file, if we found it */
 		if (!ask_yes_or_no_msg(
 			_("No current internal codeset, so no codeset conversion can be done")
-			, _("Proceed without codeset conversion ?")
+			, _("Proceed without codeset conversion?")
 			))
 			goto end_import;
 	}
