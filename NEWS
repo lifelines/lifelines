@@ -5,6 +5,9 @@ http://lifelines.sourceforge.net
 Bug fixes in 3.0.6.1-dev
 ==================
 
+- interp_indisetloop & interp_forlist deleted evaluated value too early.
+   (book-latex.ll would crash from line beginning: forindiset(intersect(...)
+
 - dbverify reported soundex-equivalent names for one indi as duplicate names
 
 - traverse could crash due to index and/or buffer falling out of cache
