@@ -30,6 +30,7 @@
  *============================================================*/
 
 #include "standard.h"
+#include "llstdlib.h"
 #include "sequence.h"
 
 static BOOLEAN fndel (SEQUENCE, ELEMENT, INT *);

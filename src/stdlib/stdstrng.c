@@ -29,6 +29,7 @@
  *===========================================================*/
 
 #include "standard.h"
+#include "llstdlib.h"
 #include "mystring.h"
 
 extern BOOLEAN opt_finnish;

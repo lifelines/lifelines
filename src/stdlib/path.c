@@ -31,6 +31,7 @@
 
 #include "sys_inc.h"
 #include "standard.h"
+#include "llstdlib.h"
 
 /*===========================================
  * filepath -- Find file in sequence of paths

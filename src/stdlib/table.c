@@ -31,6 +31,7 @@
  *===========================================================*/
 
 #include "standard.h"
+#include "llstdlib.h"
 #include "table.h"
 
 static INT hash(STRING);

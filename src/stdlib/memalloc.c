@@ -30,6 +30,7 @@
 
 #include "sys_inc.h"
 #include "standard.h"
+#include "llstdlib.h"
 
 static BOOLEAN logopen = FALSE;
 FILE *log = NULL;
