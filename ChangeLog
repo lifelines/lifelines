@@ -32,6 +32,10 @@
 
 	Add new st_table.li to Makefile.am.
 
+	* ChangeLog configure.in src/hdrs/version.h
+
+	Bump version to 3.0.41d to differentiate from release.
+
 2005-01-31 lifelines beta 3.0.41 RELEASE
 
 2005-01-31 Perry Rapp
