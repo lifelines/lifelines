@@ -128,6 +128,7 @@ initinterp (void)
 	initrassa();
 	Perrors = 0;
 	rpt_cancelled = FALSE;
+	explicitvars = FALSE;
 	/* clear previous information */
 	vprog_prevfile[0] = 0;
 	vprog_prevline=-1;

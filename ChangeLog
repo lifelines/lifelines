@@ -1,3 +1,11 @@
+2004-01-04 Matt Emmerton
+
+	* ChangeLog src/interp/interp.c
+
+	Fix bug with explicitvars, as reported by Jens Arvidsson.
+	(This option was being "sticky" -- it remained set across
+	multiple report executions.)
+
 2003-12-27 Perry Rapp
 
 	* ChangeLog src/gedlib/xreffile.c
