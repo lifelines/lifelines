@@ -63,6 +63,7 @@ static BOOLEAN printpic_arg(STRING *b, INT max, CNSTRING arg, INT arglen);
 STRING
 strsave (CNSTRING str)
 {
+	ASSERT(str);
 	return strcpy(stdalloc(strlen(str) + 1), str);
 }
 /*===============================

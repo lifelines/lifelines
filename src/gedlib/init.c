@@ -592,7 +592,8 @@ update_db_options (void)
 	get_db_options(opttab);
 
 	strfree(&int_codeset);
-	int_codeset = strdup(valueof_str(opttab, "codeset"));
+	if ((str = valueof_str(opttab, "codeset")) != 0)
+		int_codeset = strdup(str);
 	int_utf8 = is_codeset_utf8(int_codeset);
 	
 	remove_table(opttab, FREEBOTH);

@@ -1,3 +1,9 @@
+2002-06-22 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/init.c stdlib/stdstrng.c:
+
+	Bugfix for strdup(0) in update_options.
+
 2002-06-21 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/nodeutls.c liflines/newrecs.c:
