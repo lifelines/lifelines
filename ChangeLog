@@ -10,6 +10,10 @@
 	Bugfix for dbrequested getting lost when creating new db.
 	New option RequireNames to give legacy behavior.
 
+	* ChangeLog interp/builtin.c:
+
+	Bugfix for _dateformat (it wasn't allowing 12,13,14 formats).
+
 2002-02-14 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog hdrs/screen.h liflines/screen.c:

@@ -2613,7 +2613,7 @@ __dateformat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	value = (INT) pvalue(val);
 	delete_pvalue(val);
 	if (value <  0) value = 0;
-	if (value > 11) value = 11;
+	if (value > 14) value = 14;
 	datecode = value;
 	return NULL;
 }
