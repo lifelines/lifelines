@@ -83,12 +83,13 @@ INT valueofbool_int(TABLE tab, CNSTRING key, BOOLEAN *there);
 VPTR valueofbool_obj(TABLE tab, CNSTRING key, BOOLEAN *there);
 VPTR valueofbool_ptr(TABLE tab, CNSTRING key, BOOLEAN *there);
 STRING valueofbool_str(TABLE tab, CNSTRING key, BOOLEAN *there);
+void table_incr_int(TABLE tab, CNSTRING key);
 
 /* table iteration */
 TABLE_ITER begin_table_iter(TABLE tab);
 BOOLEAN change_table_ptr(TABLE_ITER tabit, VPTR newptr);
 void end_table_iter(TABLE_ITER * ptabit);
-BOOLEAN next_table_ptr(TABLE_ITER tabit, STRING *pkey, VPTR *pptr);
+BOOLEAN next_table_ptr(TABLE_ITER tabit, CNSTRING *pkey, VPTR *pptr);
 
 
 #endif /* TABLE_H_INCLUDED */

@@ -110,6 +110,12 @@
 
 	Remove no longer used function create_table_old.
 
+	* ChangeLog src/gedlib/gengedc.c src/gedlib/xlat.c
+	src/hdrs/table.h src/stdlib/table.c
+
+	Move gengedc.c local table_incr_item to table.c table_incr_int.
+	Fix next_table_ptr to use const key.
+
 2005-02-05 Perry Rapp
 
 	* ChangeLog NEWS src/gedlib/xreffile.c

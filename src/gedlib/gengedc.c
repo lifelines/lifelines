@@ -63,7 +63,6 @@ static void process_node_value(CLOSURE * closure, STRING v);
 static void output_any_node(CLOSURE * closure, NODE node, STRING toptag, INT lvl, BOOLEAN *eflg);
 static void output_top_node(CLOSURE * closure, NODE node, BOOLEAN *eflg);
 static void process_any_node(CLOSURE * closure, NODE node);
-static void table_incr_item(TABLE tab, STRING key);
 static int add_refd_fams(CNSTRING key, UNION uval, GENERIC *pgeneric, VPTR param);
 
 
@@ -364,24 +363,6 @@ process_any_node (CLOSURE * closure, NODE node)
 	if (nsibling(node))
 		process_any_node(closure, nsibling(node));
 }
-/*====================================================
- * table_incr_item -- increment value of item in table
- *  (or add with 1 value)
- * (we store int values in table)
- *   (2001/02/04, Perry)
- *==================================================*/
-static void
-table_incr_item (TABLE tab, STRING key)
-{
-	BOOLEAN found=FALSE;
-	INT value = valueofbool_int(tab, key, &found);
-	if (found) {
-		insert_table_int(tab, key, value+1);
-	} else {
-		/* during gengedcom, all tables alloc their own keys */
-		insert_table_int(tab, key, 1);
-	}
-}
 /*===================================================================
  * add_refd_fams -- add all families in table with #refs>1 to closure
  *  this is a callback from traverse_table_param
@@ -440,9 +421,9 @@ gen_gedcom (INDISEQ seq, int gengedcl, BOOLEAN * eflg)
 		indi = key_to_indi(element_skey(el));
 		famc = indi_to_famc(indi);
 		if (famc)
-			table_incr_item(famstab, fam_to_key(famc));
+			table_incr_int(famstab, fam_to_key(famc));
 		FORFAMS(indi, fam, num1)
-			table_incr_item(famstab, fam_to_key(fam));
+			table_incr_int(famstab, fam_to_key(fam));
 		ENDFAMS
 	ENDINDISEQ
 

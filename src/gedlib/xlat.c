@@ -575,7 +575,7 @@ free_dyntts (void)
 		tabit = begin_table_iter(f_dyntts);
 		if (tabit) {
 			VPTR ptr=0;
-			STRING key=0;
+			CNSTRING key=0;
 			while (next_table_ptr(tabit, &key, &ptr)) {
 				DYNTT dyntt = (DYNTT)ptr;
 				zero_dyntt(dyntt);

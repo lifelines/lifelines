@@ -754,12 +754,12 @@ next_element (TABLE_ITER tabit)
 	return FALSE;
 }
 /*=================================================
- * next_table_ptr -- Advance to next pointer or object in table
+ * next_table_ptr -- Advance to next pointer in table
  * skips over any other types of table elements
  * returns FALSE if runs out of table elements
  *===============================================*/
 BOOLEAN
-next_table_ptr (TABLE_ITER tabit, STRING *pkey, VPTR *pptr)
+next_table_ptr (TABLE_ITER tabit, CNSTRING *pkey, VPTR *pptr)
 {
 advance:
 	if (!next_element(tabit)) {
@@ -771,10 +771,6 @@ advance:
 		if (is_generic_vptr(&tabit->enext->generic)) {
 			*pkey = tabit->enext->ekey;
 			*pptr = get_generic_vptr(&tabit->enext->generic);
-			return TRUE;
-		} else if (is_generic_object(&tabit->enext->generic)) {
-			*pkey = tabit->enext->ekey;
-			*pptr = get_generic_object(&tabit->enext->generic);
 			return TRUE;
 		} else {
 			/* wrong type of element, skip it */
@@ -969,5 +965,20 @@ release_table (TABLE tab, void (*tproc)(CNSTRING key, UNION uval))
 	if (!tab->refcnt) {
 		traverse_table(tab, tproc);
 		destroy_table(tab);
+	}
+}
+/*=================================================
+ * table_incr_int -- increment an integer element value
+ * set to 1 if not found
+ *===============================================*/
+void
+table_incr_int (TABLE tab, CNSTRING key)
+{
+	BOOLEAN found=FALSE;
+	INT value = valueofbool_int(tab, key, &found);
+	if (found) {
+		insert_table_int(tab, key, value+1);
+	} else {
+		insert_table_int(tab, key, 1);
 	}
 }
