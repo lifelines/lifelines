@@ -88,7 +88,6 @@ typedef unsigned char uchar;
 #endif
 #define INT int 
 #define SHORT short
-#define LONG long
 #define FLOAT double
 
 typedef void *VPTR;
@@ -97,7 +96,6 @@ typedef union {
         INT     i;
         FLOAT   f;
         VPTR    w;
-        /*LONG   l;*/
 } UNION;
 
 #define MAXLINELEN 512

@@ -198,7 +198,7 @@ le_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 		break;
 	default: invalid_numeric_type("le", val1, eflg, zerr); return;
 	}
-	set_pvalue(val1, PBOOL, (VPTR)rel);
+	set_pvalue_bool(val1, rel);
 	delete_pvalue(val2);
 }
 /*================================================
@@ -222,7 +222,7 @@ ge_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 		break;
 	default: invalid_numeric_type("mod", val1, eflg, zerr); return;
 	}
-	set_pvalue(val1, PBOOL, (VPTR)rel);
+	set_pvalue_bool(val1, rel);
 	delete_pvalue(val2);
 }
 /*===============================================
@@ -245,7 +245,7 @@ lt_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 		break;
 	default: invalid_numeric_type("mod", val1, eflg, zerr); return;
 	}
-	set_pvalue(val1, PBOOL, (VPTR)rel);
+	set_pvalue_bool(val1, rel);
 	delete_pvalue(val2);
 }
 /*===============================================
@@ -268,7 +268,7 @@ gt_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 		break;
 	default: invalid_numeric_type("mod", val1, eflg, zerr); return;
 	}
-	set_pvalue(val1, PBOOL, (VPTR)rel);
+	set_pvalue_bool(val1, rel);
 	delete_pvalue(val2);
 }
 /*==============================

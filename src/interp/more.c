@@ -308,7 +308,7 @@ __index (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	num = pvalue_to_int(val3);
-	set_pvalue(val3, PINT, (VPTR) ll_index(str, sub, num));
+	set_pvalue_int(val3, ll_index(str, sub, num));
 	delete_pvalue(val1);
 	delete_pvalue(val2);
 	return val3;
@@ -346,7 +346,7 @@ __substring (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	hi = pvalue_to_int(val2);
 	/* substr can handle str==NULL */
 	substr = allocsubstring(str, lo, hi);
-	set_pvalue(val2, PSTRING, substr);
+	set_pvalue_string(val2, substr);
 	stdfree(substr);
 	delete_pvalue(val1);
 	return val2;
@@ -931,7 +931,7 @@ __reference (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	key = pvalue_to_string(val);
 	rc = (key && *key && (strlen(key) > 2) && (*key == '@') &&
 	    (key[strlen(key)-1] == '@'));
-	set_pvalue(val, PBOOL, (VPTR) rc);
+	set_pvalue_bool(val, rc);
 	return val;
 }
 /*========================================+
@@ -958,7 +958,7 @@ __rjustify (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	len = pvalue_to_int(val2);
 	delete_pvalue(val2);
-	set_pvalue(val1, PSTRING, (VPTR) rightjustify(str, len));
+	set_pvalue_string(val1, rightjustify(str, len));
 	return val1;
 }
 /*===========================================

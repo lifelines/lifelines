@@ -1,14 +1,26 @@
+2003-06-03 Matt Emmerton
+
+	* ChangeLog src/hdrs/interp.h src/hdrs/standard.h
+	src/interp/builtin.c src/interp/more.c src/interp/pvalmath.c
+
+	Remove definition of LONG, remove LONG from UNION
+	Use type-specific versions of pvalue_create and set_pvalue
+
 2003-06-01 Matt Emmerton
-	* ChangeLog interp/interpi.h interp/functab.c interp/builtin.c
+
+	* ChangeLog src/interp/interpi.h src/interp/functab.c
+	src/interp/builtin.c
 
 	Add float() and int() "casting" routines
 
 2003-05-28 Steve Dum
+
        * ChangeLog docs/ll-devguide.html docs/ll-devguide.xml
 
        Update devguide and flush it out a little
 
 2003-05-26 Steve Dum
+
        * ChangeLog build/rpm/lifelines.spec
 
        add index.html, boc.gif and ll.png to the distribution.

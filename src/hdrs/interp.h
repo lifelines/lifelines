@@ -128,7 +128,7 @@ struct tag_pnode {
 #define PNONE      0  /* needed? - remove later if not */
 #define PANY       1  /* any value -- no type restriction - should be NULL value*/
 #define PINT       2  /* integer */
-#define PLONG      3  /* long integer */
+#define PLONG      3  /* long integer */ /* OBSOLETE */
 #define PFLOAT     4  /* floating point */
 #define PBOOL      5  /* boolean */
 #define PSTRING    6  /* string */

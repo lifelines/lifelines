@@ -1744,7 +1744,7 @@ __nestr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	str2 = pvalue_to_string(val2);
 	if (!str1) str1 = emp;
 	if (!str2) str2 = emp;
-	set_pvalue(val1, PBOOL, (VPTR)(nestr(str1, str2) != 0));
+	set_pvalue_bool(val1,(nestr(str1, str2) != 0));
 	delete_pvalue(val2);
 	return val1;
 }
@@ -1866,7 +1866,7 @@ __inlist (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	list = pvalue_to_list(val);
 	bFound = in_list(list, el, eqv_pvalues) >= 0;
-	set_pvalue(val, PBOOL, (VPTR)bFound);
+	set_pvalue_bool(val, bFound);
 	delete_pvalue(el);
 	return val;
 }
@@ -1979,7 +1979,7 @@ __empty (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	list = pvalue_to_list(val);
 	bEmpty = is_empty_list(list);
-	set_pvalue(val, PBOOL, (VPTR)bEmpty);
+	set_pvalue_bool(val, bEmpty);
 	return val;
 }
 /*===================================
@@ -2089,7 +2089,7 @@ __not (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "the arg to not is not boolean");
 		return NULL;
 	}
-	set_pvalue(val, PBOOL, (VPTR)!pvalue_to_bool(val));
+	set_pvalue_bool(val, !pvalue_to_bool(val));
 	return val;
 }
 /*===============================+
@@ -2350,8 +2350,8 @@ __male (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "the arg to male is not a person");
 		return NULL;
 	}
-	if (!indi) return create_pvalue(PBOOL, FALSE);
-	return create_pvalue(PBOOL, (VPTR)(SEX(indi) == SEX_MALE));
+	if (!indi) return create_pvalue_from_bool(FALSE);
+	return create_pvalue_from_bool((SEX(indi) == SEX_MALE));
 }
 /*=====================================+
  * __female -- Check if person is female
@@ -2365,8 +2365,8 @@ __female (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "the arg to female is not a person");
 		return NULL;
 	}
-	if (!indi) return create_pvalue(PBOOL, FALSE);
-	return create_pvalue(PBOOL, (VPTR)(SEX(indi) == SEX_FEMALE));
+	if (!indi) return create_pvalue_from_bool(FALSE);
+	return create_pvalue_from_bool((SEX(indi) == SEX_FEMALE));
 }
 /*========================================+
  * __key -- Return person or family key
@@ -2609,7 +2609,7 @@ __trim (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	str = pvalue_to_string(val1);
 	len = pvalue_to_int(val2);
-	set_pvalue(val2, PSTRING, (VPTR)trim(str, len));
+	set_pvalue_string(val2, trim(str, len));
 	delete_pvalue(val1);
 	return val2;
 }
@@ -2646,7 +2646,7 @@ __trimname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	len = pvalue_to_int(val);
 	str = name_string(trim_name(nval(indi), len));
-	set_pvalue(val, PSTRING, (VPTR)str);
+	set_pvalue_string(val, str);
 	return val;
 }
 /*==============================+
@@ -2830,7 +2830,7 @@ __stddate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		evnt = pvalue_to_node(val);
 		str = event_to_date(evnt, FALSE);
 	}
-	set_pvalue(val, PSTRING, do_format_date(str,
+	set_pvalue_string(val, do_format_date(str,
 	    daycode, monthcode, yearcode, datecode, eratimecode, FALSE));
 	return val;
 }
@@ -2856,7 +2856,7 @@ __complexdate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		evnt = pvalue_to_node(val);
 		str = event_to_date(evnt, FALSE);
 	}
-	set_pvalue(val, PSTRING, do_format_date(str,
+	set_pvalue_string(val, do_format_date(str,
 	    daycode, monthcode, yearcode, datecode, eratimecode, cmplxcode));
 	return val;
 }
@@ -3077,7 +3077,7 @@ __year (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		str = buff;
 	} else
 		str = 0;
-	set_pvalue(val, PSTRING, str);
+	set_pvalue_string(val, str);
 	free_gdateval(gdv);
 	return val;
 }
@@ -3097,7 +3097,7 @@ __place (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	evnt = pvalue_to_node(val);
-	set_pvalue(val, PSTRING, (VPTR)event_to_plac(evnt, FALSE));
+	set_pvalue_string(val, event_to_plac(evnt, FALSE));
 	return val;
 }
 /*============================+
@@ -3118,7 +3118,7 @@ __tag (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	ged = pvalue_to_node(val);
 	if (ged)
 		str=ntag(ged);
-	set_pvalue(val, PSTRING, (VPTR)str);
+	set_pvalue_string(val, str);
 	return val;
 }
 /*===============================+
@@ -3141,7 +3141,7 @@ __value (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_var_error(node, stab, arg, val, nullarg1, "value");
 		return NULL;
 	}
-	set_pvalue(val, PSTRING, (VPTR)nval(ged));
+	set_pvalue_string(val, nval(ged));
 	return val;
 }
 /*=============================+
@@ -3164,7 +3164,7 @@ __xref (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_var_error(node, stab, arg, val, nullarg1, "xref");
 		return NULL;
 	}
-	set_pvalue(val, PSTRING, (VPTR)nxref(ged));
+	set_pvalue_string(val, nxref(ged));
 	return val;
 }
 /*===============================+
