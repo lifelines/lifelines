@@ -132,13 +132,14 @@ static STRING calendar_pics[GDV_CALENDARS_IX];
 
 typedef STRING MONTH_NAMES[6];
 
+static STRING roman_lower[] = { "i","ii","iii","iv","v","vi","vii","viii"
+	,"ix","x","xi","xii","xiii" };
+static STRING roman_upper[] = { "I","II","III","IV","V","VI","VII","VIII"
+	,"IX","X","XI","XII","XIII" };
+
 static MONTH_NAMES months_gj[12];
 static MONTH_NAMES months_fr[13];
 static MONTH_NAMES months_heb[13];
-
-struct dateword_s {
-	char *sl, *su, *ll, *lu;
-};
 
 struct gedcom_keywords_s {
 	STRING keyword;
@@ -235,15 +236,6 @@ static struct gedcom_keywords_s gedkeys[] = {
 	,{ "AFTER", 1000+GD_AFT }
 	,{ "BETWEEN", 1000+GD_BET }
 };
-
-
-/* GEDCOM Hebrew months */
-/* keywordtbl values 101-113 */
-//static struct dateword_s months_heb[] = {
-//	{ "Tsh", "TSH", "Tishri", "TISHRI" }
-	/* TODO: Finish & implement these, but wait til we
-	internationalize the gregorian/julian ones */
-//};
 
 
 static STRING sstr = NULL;
@@ -737,6 +729,23 @@ format_day (INT da, INT dfmt, STRING output)
 	*p++ = da + '0';
 	*p = 0;
 }
+/*==========================
+ * gedcom_month -- return GEDCOM month keyword
+ * Caller is responsible for cal & mo having legal values
+ * Returns static string
+ *========================*/
+static STRING
+gedcom_month (INT cal, INT mo)
+{
+	switch (cal) {
+	case GDV_HEBREW:
+		return gedkeys[mo+11].keyword;
+	case GDV_FRENCH:
+		return gedkeys[mo+24].keyword;
+	default:
+		return gedkeys[mo-1].keyword;
+	}
+}
 /*===========================================
  * format_month -- Formats month part of date
  *  cal:   [IN]  calendar code (for named months)
@@ -744,16 +753,16 @@ format_day (INT da, INT dfmt, STRING output)
  *  mfmt:  [IN]    0 - num, space
  *                 1 - num, lead 0
  *                 2 - num, as is
- *                 3 - eg, MAR
+ *                 3 - eg, MAR  (3-8 will be localized)
  *                 4 - eg, Mar
  *                 5 - eg, MARCH
  *                 6 - eg, March
  *                 7 - eg, mar
  *                 8 - eg, march
- *TODO: Add roman numerals (as seen in Central Europe)
- * but wait to see what happens with cmplx numbers
- * because we might add "mar" & "march" here
- * and it would be nice to keep all spelt ones contiguous
+ *                 9 - eg, MAR (GEDCOM)
+ *                10 - roman lowercase (eg, v for May)
+ *                11 - roman uppercase (eg, V for May)
+ *  TOD: Do we want space-extended roman ? Before or after ?
  *  returns static buffer or string constant or 0
  *=========================================*/
 static STRING
@@ -762,11 +771,17 @@ format_month (INT cal, INT mo, INT mfmt)
 	INT casing;
 	MONTH_NAMES * parr=0;
 	static char scratch[3];
-	if (mo < 0 || mo > 13 || mfmt < 0 || mfmt > 8) return NULL;
+	if (mo < 0 || mo > 13 || mfmt < 0 || mfmt > 11) return NULL;
 	if (mfmt <= 2)  {
 		format_day(mo, mfmt, scratch);
 		return scratch;
 	}
+	if (mfmt == 9)
+		return gedcom_month(cal, mo);
+	if (mfmt == 10)
+		return roman_lower[mo-1];
+	if (mfmt == 11)
+		return roman_upper[mo-1];
 	if (mo == 0) return (STRING) "   ";
 	casing = mfmt-3;
 	ASSERT(casing>=0 && casing<ARRSIZE(months_gj[0]));

@@ -1,3 +1,9 @@
+2002-01-07 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog interp/builtin.c interp/date.c reports/exercise.ll:
+
+	Added month format 9=gedcom, 10=lower roman, 11=upper roman.
+
 2002-01-05 Matt Emmerton <memmerto@users.sourceforge.net>
 
 	* ChangeLog config.guess config.sub configure.in INSTALL

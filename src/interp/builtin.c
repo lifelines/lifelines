@@ -2531,7 +2531,7 @@ __monthformat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	value = (INT) pvalue(val);
 	delete_pvalue(val);
 	if (value < 0) value = 0;
-	if (value > 8) value = 8;
+	if (value > 11) value = 8;
 	monthcode = value;
 	return NULL;
 }
