@@ -255,9 +255,9 @@ main (INT argc, char **argv)
 				parse_arg(optarg, &optname, &optval);
 				if (optname && optval) {
 					if (!exargs) {
-						exargs = create_table();
+						exargs = create_table_str();
 					}
-					table_insert_string(exargs, optname, optval);
+					insert_table_str(exargs, optname, optval);
 				}
 				strfree(&optname);
 				strfree(&optval);
@@ -397,7 +397,7 @@ prompt_for_db:
 	init_browse_module();
 	if (exargs) {
 		set_cmd_options(exargs);
-		destroy_table(exargs);
+		release_table(exargs);
 		exargs = 0;
 	}
 	if (exprogs) {

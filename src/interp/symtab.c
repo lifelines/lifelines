@@ -90,20 +90,7 @@ LIST live_symtabs=0; /* list of symbol tables, to check for leaks */
 void
 insert_symtab (SYMTAB stab, STRING iden, PVALUE val)
 {
-	PVALUE oldval = (PVALUE) valueof_ptr(stab->tab, iden);
-	if (oldval) {
-		/* we clear the oldval even if the new one is the same,
-		because we have to release our hold on the oldval, and
-		anyway, the new one should have a reference count on its
-		object if appropriate */
-
-		/* table doesn't know how to delete pvalues, so we do it */
-		delete_pvalue(oldval);
-		delete_table_element(stab->tab, iden);
-		table_insert_ptr(stab->tab, iden, val);
-	} else {
-		table_insert_ptr(stab->tab, iden, val);
-	}
+	insert_table_ptr(stab->tab, iden, val);
 }
 /*======================================================
  * delete_symtab_element -- Delete a value from a symbol table
@@ -113,9 +100,6 @@ insert_symtab (SYMTAB stab, STRING iden, PVALUE val)
 void
 delete_symtab_element (SYMTAB stab, STRING iden)
 {
-	/* pvalue is in table as vptr, so table can't free it */
-	PVALUE val = (PVALUE) valueof_ptr(stab->tab, iden);
-	if (val) delete_pvalue(val);
 	delete_table_element(stab->tab, iden);
 }
 /*========================================
@@ -133,19 +117,8 @@ remove_symtab (SYMTAB stab)
 
 	record_dead_symtab(stab);
 
-	tabit = begin_table_iter(stab->tab);
-
-	while (next_table_ptr(tabit, &key, &ptr))
-	{
-		if (ptr) {
-			PVALUE val = ptr;
-			ASSERT(is_pvalue(val));
-			delete_pvalue(val);
-			change_table_ptr(tabit, 0);
-		}
-	}
-	end_table_iter(&tabit);
 	destroy_table(stab->tab);
+
 	stdfree(stab);
 }
 /*======================================================
@@ -158,7 +131,7 @@ create_symtab (void)
 	SYMTAB symtab = (SYMTAB)stdalloc(sizeof(*symtab));
 	memset(symtab, 0, sizeof(*symtab));
 
-	symtab->tab = create_table();
+	symtab->tab = create_table_custom_vptr(delete_vptr_pvalue);
 
 	record_live_symtab(symtab);
 

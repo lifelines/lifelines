@@ -116,7 +116,7 @@ fixtag (STRING tag)
 {
 	STRING str = valueof_str(tagtable, tag);
 	if (!str) {
-		table_insert_string(tagtable, tag, tag);
+		insert_table_str(tagtable, tag, tag);
 		str = valueof_str(tagtable, tag);
 	}
 	return str;

@@ -21,74 +21,44 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
-/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
- * table.c -- Hash table operations
- * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
- * pre-SourceForge version information:
- *   2.3.4 - 24 Jun 93    2.3.5 - 29 Aug 93
- *   3.0.0 - 04 Sep 94    3.0.2 - 22 Dec 94
- *   3.0.3 - 19 Sep 95
- *===========================================================*/
+ * table.c -- Provides a table container object
+ *  This provides type-safe tables
+ *  These tables are reference counted objects
+ *  This uses either hashtbl or rbtree for storage
+ *==============================================================*/
 
-#include "standard.h"
 #include "llstdlib.h"
-#include "table.h"
 #include "vtable.h"
-#include "generic.h"
+#include "table.h"
+#include "object.h"
+#include "hashtab.h"
 
 /*********************************************
  * local enums & defines
  *********************************************/
 
-#define MAXHASH_DEF 512
-
 enum TB_VALTYPE
 	{
-		TB_PTR /* VPTR values */
-		, TB_STR /* STRING values */
-		, TB_NULL /* placeholder for newly created tables */
-		, TB_GENERIC /* new table holding only generics */
+		TB_NULL /* (not used) */
+		, TB_INT /* table of integers */
+		, TB_STR /* table of strings */
+		, TB_HPTR /* table of heap pointers (table frees them) */
+		, TB_VPTR /* table of void pointers (table does not free) */
+		, TB_OBJ /* table of objects */
 	};
 
 /*********************************************
  * local types
  *********************************************/
 
-/*
-2005-01-17
- Perry is in process of converting table to use generics instead of unions
- So right now entry has both generic and union.
- The rule is that if the generic is non-null, it holds the value.
- Otherwise the value is in the union.
- Table types (TB_VALTYPE, a table-level property) are only relevant to
- unions -- generics have their own type info.
- NB: generic object pointers can only be used with objects that correctly
- implement destructors -- I'm not sure if we have any such yet; I've not
- tested them well. That is, I've not tested objects containing other
- objects, because that is not yet possible. Once a table can contain an
- object such as a list, we have object hierarchies and need destructors
- to all work correctly.
-2005-02-01
- All ints are stored in generic tables, so TB_INT is gone.
-*/
-struct tag_entry {
-	STRING ekey;
-	GENERIC generic; /* holds generic null value if uval in use */
-	UNION uval;
-	struct tag_entry *enext;
-};
-typedef struct tag_entry *ENTRY;
-
 /* table object itself */
 struct tag_table {
 	struct tag_vtable *vtable; /* generic object */
 	INT refcnt; /* ref-countable object */
-	ENTRY *entries;
-	INT count; /* #entries */
-	INT valtype; /* TB_VALTYPE enum in table.c */
-	INT maxhash;
-	INT whattofree; /* TODO: set always in constructor */
+	enum TB_VALTYPE valtype;
+	DELFUNC destroyfunc; /* how to destroy elements */
+	HASHTAB hashtab;
 };
 /* typedef struct tag_table *TABLE */ /* in table.h */
 
@@ -96,9 +66,7 @@ struct tag_table {
 struct tag_table_iter {
 	struct tag_vtable *vtable; /* generic object */
 	INT refcnt; /* ref-countable object */
-	INT index;
-	ENTRY enext;
-	TABLE table;
+	HASHTAB_ITER hashtab_iter;
 };
 /* typedef struct tag_table_iter * TABLE_ITER; */ /* in table.h */
 
@@ -107,14 +75,13 @@ struct tag_table_iter {
  *********************************************/
 
 /* alphabetical */
-static TABLE create_table_impl(INT whattofree);
-static ENTRY fndentry(TABLE, CNSTRING);
-static void free_contents(ENTRY ent, INT whattofree);
+static TABLE create_table_impl(enum TB_VALTYPE valtype, DELFUNC delfunc);
+static void table_element_destructor(void * el);
+static void table_element_obj_destructor(void *el);
 static void free_table_iter(TABLE_ITER tabit);
 static void insert_table_impl(TABLE tab, CNSTRING key, UNION uval);
 static INT hash(TABLE tab, CNSTRING key);
 static BOOLEAN next_element(TABLE_ITER tabit);
-static ENTRY new_entry(void);
 static void replace_table_impl(TABLE tab, STRING key, UNION uval, INT whattofree);
 static void tabit_destructor(VTABLE *obj);
 static void table_destructor(VTABLE *obj);
@@ -149,269 +116,201 @@ static struct tag_vtable vtable_for_tabit = {
  * body of module
  *********************************************/
 
-/*======================
- * hash -- Hash function
- *====================*/
-static INT
-hash (TABLE tab, CNSTRING key)
-{
-	INT hval = 0;
-	while (*key)
-		hval += *key++;
-	hval %= tab->maxhash;
-	if (hval < 0) hval += tab->maxhash;
-	if (hval < 0) FATAL();
-	if(hval >= tab->maxhash) FATAL();
-	return hval;
-}
-/*================================
- * fndentry -- Find entry in table
- *==============================*/
-static ENTRY
-fndentry (TABLE tab, CNSTRING key)
-{
-	ENTRY entry;
-	if (!tab || !key) return NULL;
-	entry = tab->entries[hash(tab, key)];
-	while (entry) {
-		if (eqstr(key, entry->ekey)) return entry;
-		entry = entry->enext;
-	}
-	return NULL;
-}
 /*=============================
  * create_table_impl -- Create table
  * All tables are created in this function
  * returns addref'd table
  *===========================*/
 static TABLE
-create_table_impl (INT whattofree)
+create_table_impl (enum TB_VALTYPE valtype, DELFUNC delfunc)
 {
 	TABLE tab = (TABLE) stdalloc(sizeof(*tab));
-	INT i;
 
-	memset(tab, 0, sizeof(*tab));
 	tab->vtable = &vtable_for_table;
 	tab->refcnt = 1;
-	tab->maxhash = MAXHASH_DEF;
-	tab->entries = (ENTRY *)stdalloc(tab->maxhash*sizeof(ENTRY));
-	tab->count = 0;
-	tab->valtype = TB_NULL;
-	if (whattofree == -2)
-		tab->valtype = TB_GENERIC;
-	tab->whattofree = whattofree;
-	for (i = 0; i < tab->maxhash; i++)
-		tab->entries[i] = NULL;
+	tab->valtype = valtype;
+	tab->hashtab = create_hashtab();
+	tab->destroyfunc = delfunc;
 	return tab;
 }
 /*=============================
- * create_table_old2 -- Create table
- * Caller specifies allocation strategy
- * Will be obsoleted by using generics
- * (in which entries themselves control their allocation)
+ * create_table_int -- Create table holding integers
  * returns addref'd table
  *===========================*/
 TABLE
-create_table_old2 (INT whattofree)
+create_table_int (void)
 {
-	return create_table_impl(whattofree);
+	return create_table_impl(TB_INT, table_element_destructor);
 }
 /*=============================
- * create_table -- Create table
- * Will only use new generic elements (manage their own memory)
- * All keys will be heap-allocated (to be freed by table)
+ * create_table_str -- Create table holding heap strings
+ * (table dup & frees strings)
  * returns addref'd table
  *===========================*/
 TABLE
-create_table (void)
+create_table_str (void)
 {
-	return create_table_impl(-2);
+	return create_table_impl(TB_STR, table_element_destructor);
 }
 /*=============================
- * create_table_strings -- Create table to hold heap strings
- * All keys & values will be dup'd by table & freed by table
+ * create_table_hptr -- Create table holding heap pointers
+ * (ie, table will free elements)
  * returns addref'd table
  *===========================*/
 TABLE
-create_table_strings (void)
+create_table_hptr (void)
 {
-	return create_table();
+	return create_table_impl(TB_HPTR, table_element_destructor);
 }
-/*======================================
- * insert_table_impl -- Insert key & value into table
- * Caller is reponsible for both key & value memory
- *====================================*/
-static void
-insert_table_impl (TABLE tab, CNSTRING key, UNION uval)
+/*=============================
+ * create_table_vptr -- Create table holding shared pointers
+ * (ie, table will not free elements)
+ * returns addref'd table
+ *===========================*/
+TABLE
+create_table_vptr (void)
 {
-	ENTRY entry = fndentry(tab, key);
-	if (entry)
-		entry->uval = uval;
-	else {
-		INT hval = hash(tab, key);
-		entry = new_entry();
-		entry->ekey = (STRING)key;
-		entry->uval = uval;
-		entry->enext = tab->entries[hval];
-		tab->entries[hval] = entry;
-		++tab->count;
-	}
+	return create_table_impl(TB_VPTR, NULL);
 }
-/*======================================
- * new_entry -- Make new empty ENTRY for table
- *====================================*/
-static ENTRY
-new_entry (void)
+/*=============================
+ * create_table_custom_vptr -- Create table holding pointers
+ * (table calls custom function to destroy elements)
+ * returns addref'd table
+ *===========================*/
+TABLE
+create_table_custom_vptr (void (*destroyel)(void *ptr))
 {
-	ENTRY entry = (ENTRY) stdalloc(sizeof(*entry));
-	entry->ekey = 0;
-	init_generic_null(&entry->generic);
-	entry->uval.w = 0;
-	entry->enext = 0;
-	return entry;
+	return create_table_impl(TB_VPTR, destroyel);
 }
-/*======================================
- * new_table_entry_impl -- Insert key & value into table
- * Caller must have checked that key is not present
- * Only used for new generic values (as is obvious from signature)
- * key is duplicated here
- *====================================*/
-static void
-new_table_entry_impl (TABLE tab, CNSTRING key, GENERIC * generic)
+/*=============================
+ * create_table_obj -- Create table holding objects
+ * (ie, table will release them using release_object)
+ * returns addref'd table
+ *===========================*/
+TABLE
+create_table_obj (void)
 {
-	INT hval = hash(tab, key);
-	ENTRY entry = new_entry();
-	entry->ekey = strdup(key);
-	copy_generic_value(&entry->generic, generic);
-	entry->uval.i = 0;
-	entry->enext = tab->entries[hval];
-	tab->entries[hval] = entry;
-	++tab->count;
+	return create_table_impl(TB_OBJ, table_element_obj_destructor);
 }
-/*======================================
- * replace_table_impl -- Insert key & value into table
- *  replacing existing key & value if key already present
- * Created: 2001/11/23, Perry Rapp
- *====================================*/
-static void
-replace_table_impl (TABLE tab, STRING key, UNION uval, INT whattofree)
-{
-	ENTRY entry = fndentry(tab, key);
-	if (entry) {
-		free_contents(entry, whattofree);
-		entry->ekey = key;
-		entry->uval = uval;
-	} else {
-		INT hval = hash(tab, key);
-		entry = new_entry();
-		entry->ekey = key;
-		entry->uval = uval;
-		entry->enext = tab->entries[hval];
-		tab->entries[hval] = entry;
-		++tab->count;
-	}
-}
-/*======================================
- * insert_table_ptr -- Insert key & pointer value into table
- * Caller is responsible for both key & ptr memory (no dups here)
- * Created: 2001/06/03 (Perry Rapp)
- *====================================*/
+/*=================================================
+ * destroy_table -- destroy all element & memory for table
+ *===============================================*/
 void
-insert_table_ptr (TABLE tab, CNSTRING key, VPTR ptr)
+destroy_table (TABLE tab)
 {
-	UNION uval;
-	uval.w = ptr;
-	if (tab->valtype == TB_NULL)
-		tab->valtype = TB_PTR;
-	/* table must be homogenous, not mixed-type */
-	ASSERT(tab->valtype == TB_PTR);
-	insert_table_impl(tab, key, uval);
+	if (!tab) return;
+	ASSERT(tab->vtable == &vtable_for_table);
+
+	/* should not be called for a shared table */
+	ASSERT(tab->refcnt==1 || tab->refcnt==0);
+
+	destroy_hashtab(tab->hashtab, tab->destroyfunc);
+	memset(tab, 0, sizeof(*tab));
+	stdfree(tab);
+}
+/*=================================================
+ * table_destructor -- destructor for table
+ *  (destructor entry in vtable)
+ *===============================================*/
+static void
+table_destructor (VTABLE *obj)
+{
+	TABLE tab = (TABLE)obj;
+	destroy_table(tab);
+}
+/*=================================================
+ * table_element_destructor -- element destructor function
+ *  used for all pointer tables except TB_VPTR
+ *===============================================*/
+static void
+table_element_destructor (void * el)
+{
+	stdfree(el);
+}
+/*=================================================
+ * table_element_obj_destructor -- object element destructor function
+ *  used for object tables (TB_OBJ)
+ *===============================================*/
+static void
+table_element_obj_destructor (void *el)
+{
+	if (el) {
+		release_object(el);
+	}
+}
+/*=================================================
+ * addref_table -- increment reference count of table
+ *===============================================*/
+void
+addref_table (TABLE tab)
+{
+	ASSERT(tab->vtable == &vtable_for_table);
+	++tab->refcnt;
+}
+/*=================================================
+ * release_table -- decrement reference count of table
+ *  and free if appropriate (ref count hits zero)
+ *===============================================*/
+void
+release_table (TABLE tab)
+{
+	if (!tab) return;
+	ASSERT(tab->vtable == &vtable_for_table);
+	--tab->refcnt;
+	if (!tab->refcnt) {
+		destroy_table(tab);
+	}
 }
 /*======================================
  * insert_table_int -- Insert key & INT value into table
- * Caller is responsible for key memory (no dups here)
- * Created: 2001/06/03 (Perry Rapp)
  *====================================*/
 void
 insert_table_int (TABLE tab, CNSTRING key, INT ival)
 {
-	ENTRY entry = fndentry(tab, key);
-	if (entry) {
-		/* update existing */
-		set_generic_int(&entry->generic, ival);
-	} else {
-		/* insert new */
-		GENERIC gen;
-		init_generic_int(&gen, ival);
-		new_table_entry_impl(tab, key, &gen);
-		clear_generic(&gen);
+	INT * newval = stdalloc(sizeof(*newval));
+	INT * oldval = 0;
+
+	*newval = ival;
+
+	ASSERT(tab);
+	ASSERT(tab->valtype == TB_INT);
+
+	insert_table_ptr(tab, key, newval);
+}
+/*======================================
+ * insert_table_str -- Insert key & string value into table
+ *====================================*/
+void
+insert_table_str (TABLE tab, CNSTRING key, CNSTRING value)
+{
+	insert_table_ptr(tab, key, strsave(value));
+}
+/*======================================
+ * insert_table_ptr -- Insert key & pointer value into table
+ *====================================*/
+void
+insert_table_ptr (TABLE tab, CNSTRING key, VPTR ptr)
+{
+	INT * oldval = 0;
+
+	ASSERT(tab);
+	ASSERT(tab->vtable == &vtable_for_table);
+
+	oldval = insert_hashtab(tab->hashtab, key, ptr);
+	if (oldval && tab->destroyfunc) {
+		(*tab->destroyfunc)(oldval);
 	}
 }
 /*======================================
- * table_insert_string -- Insert key & STRING value into table
- * Table copies (allocates) both
+ * insert_table_obj -- Insert key & object into table
+ * table addrefs the object
  *====================================*/
 void
-table_insert_string (TABLE tab, CNSTRING key, CNSTRING value)
+insert_table_obj (TABLE tab, CNSTRING key, VPTR obj)
 {
-	ENTRY entry = fndentry(tab, key);
-	ASSERT(tab->whattofree == -2 && tab->valtype == TB_GENERIC);
-	if (!entry) {
-		/* insert new entries as generics */
-		GENERIC gen;
-		init_generic_string(&gen, value);
-		new_table_entry_impl(tab, key, &gen);
-		clear_generic(&gen);
-	} else {
-		/* Only new-style tables should call table_insert_string */
-		ASSERT(!is_generic_null(&entry->generic));
-		/* update existing value */
-		set_generic_string(&entry->generic, value);
-	}
-}
-/*======================================
- * table_insert_ptr -- Insert key & vptr (void ptr) value into table
- * Table copies (allocates) the key
- *====================================*/
-void
-table_insert_ptr (TABLE tab, CNSTRING key, const VPTR value)
-{
-	ENTRY entry = fndentry(tab, key);
-	ASSERT(tab->whattofree == -2 && tab->valtype == TB_GENERIC);
-	if (!entry) {
-		/* insert new entries as generics */
-		GENERIC gen;
-		init_generic_vptr(&gen, value);
-		new_table_entry_impl(tab, key, &gen);
-		clear_generic(&gen);
-	} else {
-		/* Only new-style tables should call table_insert_ptr */
-		ASSERT(!is_generic_null(&entry->generic));
-		/* update existing value */
-		set_generic_vptr(&entry->generic, value);
-	}
-}
-/*======================================
- * table_insert_object -- Insert key & object value into table
- * Table copies (allocates) the key & addrefs the object
- *====================================*/
-void
-table_insert_object (TABLE tab, CNSTRING key, const VPTR value)
-{
-	ENTRY entry = fndentry(tab, key);
-	ASSERT(tab->whattofree == -2 && tab->valtype == TB_GENERIC);
-	if (!entry) {
-		/* insert new entries as generics */
-		GENERIC gen;
-		init_generic_object(&gen, value);
-		new_table_entry_impl(tab, key, &gen);
-		clear_generic(&gen);
-	} else {
-		/* Only new-style tables should call table_insert_string */
-		ASSERT(!is_generic_null(&entry->generic));
-		/* update existing value */
-		set_generic_object(&entry->generic, value);
-	}
+	if (obj)
+		addref_object(obj);
+	insert_table_ptr(tab, key, obj);
 }
 /*======================================
  * replace_table_str -- Insert or replace
@@ -421,12 +320,11 @@ table_insert_object (TABLE tab, CNSTRING key, const VPTR value)
 void
 replace_table_str (TABLE tab, CNSTRING key, CNSTRING str)
 {
-	ASSERT(tab->whattofree == -2);
-	delete_table_element(tab, key);
-	table_insert_string(tab, key, str);
+	/* insert function handles deleting old value */
+	insert_table_str(tab, key, str);
 }
 /*==========================================
- * delete_table_element -- Remove element from table
+ * delete_table_element -- Delete element from table
  *  tab: [I/O]  table from which to remove element
  *  key: [IN]   key to find element to remove
  * Destroys key and value as appropriate
@@ -434,21 +332,15 @@ replace_table_str (TABLE tab, CNSTRING key, CNSTRING str)
 void
 delete_table_element (TABLE tab, CNSTRING key)
 {
-	INT hval = hash(tab, key);
-	ENTRY preve = NULL;
-	ENTRY thise = tab->entries[hval];
-	while (thise && nestr(key, thise->ekey)) {
-		preve = thise;
-		thise = thise->enext;
+	void * oldval=0;
+
+	ASSERT(tab);
+	ASSERT(tab->vtable == &vtable_for_table);
+
+	oldval = remove_hashtab(tab->hashtab, key);
+	if (oldval && tab->destroyfunc) {
+		(*tab->destroyfunc)(oldval);
 	}
-	if (!thise) return;
-	if (preve)
-		preve->enext = thise->enext;
-	else
-		tab->entries[hval] = thise->enext;
-	free_contents(thise, tab->whattofree);
-	stdfree(thise);
-	--tab->count;
 }
 /*======================================
  * in_table() - Check for entry in table
@@ -456,33 +348,27 @@ delete_table_element (TABLE tab, CNSTRING key)
 BOOLEAN
 in_table (TABLE tab, CNSTRING key)
 {
-	return fndentry(tab, key) != NULL;
-}
-/*===============================
- * valueof_obj -- Find object value of entry
- *=============================*/
-VPTR
-valueof_obj (TABLE tab, CNSTRING key)
-{
-	return valueofbool_obj(tab, key, NULL);
-}
-/*===============================
- * valueof_ptr -- Find pointer value of entry
- *=============================*/
-VPTR
-valueof_ptr (TABLE tab, CNSTRING key)
-{
-	return valueofbool_ptr(tab, key, NULL);
+	ASSERT(tab);
+	ASSERT(tab->vtable == &vtable_for_table);
+
+	return in_hashtab(tab->hashtab, key);
 }
 /*===============================
  * valueof_int -- Find int value of entry
- * return defval if missing
+ * return 0 if missing
  * Created: 2001/06/03 (Perry Rapp)
  *=============================*/
 INT
 valueof_int (TABLE tab, CNSTRING key)
 {
-	return valueofbool_int(tab, key, NULL);
+	INT * val=0;
+
+	ASSERT(tab);
+	ASSERT(tab->vtable == &vtable_for_table);
+	ASSERT(tab->valtype == TB_INT);
+
+	val = find_hashtab(tab->hashtab, key, NULL);
+	return (val ? *val : 0);
 }
 /*===============================
  * valueof_str -- Find string value of entry
@@ -490,57 +376,35 @@ valueof_int (TABLE tab, CNSTRING key)
 STRING
 valueof_str (TABLE tab, CNSTRING key)
 {
-	return valueofbool_str(tab, key, NULL);
+	ASSERT(tab);
+	ASSERT(tab->vtable == &vtable_for_table);
+	ASSERT(tab->valtype == TB_STR);
+
+	return (STRING)find_hashtab(tab->hashtab, key, NULL);
 }
-/*===================================
- * valueofbool_obj -- Find object value of entry
- * BOOLEAN *there:   [OUT] FALSE if not found
- *=================================*/
+/*===============================
+ * valueof_ptr -- Find pointer value of entry
+ *=============================*/
 VPTR
-valueofbool_obj (TABLE tab, CNSTRING key, BOOLEAN *there)
+valueof_ptr (TABLE tab, CNSTRING key)
 {
-	ENTRY entry=0;
-	VPTR defval=0;
-	if (!tab->count || !key) {
-		if (there) *there=FALSE;
-		return defval;
-	}
-	entry = fndentry(tab, key);
-	if (!entry) {
-		if (there) *there=FALSE;
-		return defval;
-	}
-	if (there) *there=TRUE;
-	if (!is_generic_object(&entry->generic))
-		return defval;
-	return get_generic_object(&entry->generic);
+	ASSERT(tab);
+	ASSERT(tab->vtable == &vtable_for_table);
+	ASSERT(tab->valtype == TB_HPTR || tab->valtype == TB_VPTR);
+
+	return find_hashtab(tab->hashtab, key, NULL);
 }
-/*===================================
- * valueofbool_ptr -- Find pointer value of entry
- * BOOLEAN *there:   [OUT] FALSE if not found
- *=================================*/
+/*===============================
+ * valueof_obj -- Find object value of entry
+ *=============================*/
 VPTR
-valueofbool_ptr (TABLE tab, CNSTRING key, BOOLEAN *there)
+valueof_obj (TABLE tab, CNSTRING key)
 {
-	ENTRY entry=0;
-	VPTR defval=0;
-	if (!tab->count || !key) {
-		if (there) *there=FALSE;
-		return defval;
-	}
-	entry = fndentry(tab, key);
-	if (!entry) {
-		if (there) *there=FALSE;
-		return defval;
-	}
-	if (there) *there=TRUE;
-	if (!is_generic_null(&entry->generic)) {
-		if (!is_generic_vptr(&entry->generic))
-			return defval;
-		return get_generic_vptr(&entry->generic);
-	}
-	ASSERT(tab->valtype == TB_PTR);
-	return entry->uval.w;
+	ASSERT(tab);
+	ASSERT(tab->vtable == &vtable_for_table);
+	ASSERT(tab->valtype == TB_OBJ);
+
+	return find_hashtab(tab->hashtab, key, NULL);
 }
 /*===================================
  * valueofbool_int -- Find pointer value of entry
@@ -549,21 +413,14 @@ valueofbool_ptr (TABLE tab, CNSTRING key, BOOLEAN *there)
 INT
 valueofbool_int (TABLE tab, CNSTRING key, BOOLEAN *there)
 {
-	ENTRY entry=0;
-	INT defval=0;
-	if (!tab->count || !key) {
-		if (there) *there=FALSE;
-		return defval;
-	}
-	entry = fndentry(tab, key);
-	if (!entry) {
-		if (there) *there=FALSE;
-		return defval;
-	}
-	if (there) *there=TRUE;
-	if (!is_generic_int(&entry->generic))
-		return defval;
-	return get_generic_int(&entry->generic);
+	INT * val=0;
+
+	ASSERT(tab);
+	ASSERT(tab->vtable == &vtable_for_table);
+	ASSERT(tab->valtype == TB_INT);
+
+	val = find_hashtab(tab->hashtab, key, there);
+	return val ? *val : 0;
 }
 /*===================================
  * valueofbool_str -- Find string value of entry
@@ -572,109 +429,38 @@ valueofbool_int (TABLE tab, CNSTRING key, BOOLEAN *there)
 STRING
 valueofbool_str (TABLE tab, CNSTRING key, BOOLEAN *there)
 {
-	ENTRY entry=0;
-	STRING defval=0;
-	if (!tab->count || !key) {
-		if (there) *there=FALSE;
-		return defval;
-	}
-	entry = fndentry(tab, key);
-	if (!entry) {
-		if (there) *there=FALSE;
-		return defval;
-	}
-	if (there) *there=TRUE;
-	if (!is_generic_null(&entry->generic)) {
-		if (!is_generic_string(&entry->generic))
-			return defval;
-		return get_generic_string(&entry->generic);
-	}
+	ASSERT(tab);
+	ASSERT(tab->vtable == &vtable_for_table);
 	ASSERT(tab->valtype == TB_STR);
-	return entry->uval.w;
+
+	return (STRING)find_hashtab(tab->hashtab, key, there);
+
 }
-/*=============================
- * remove_table -- Remove table
- * All tables are destroyed in this function
- * INT whattofree:  FREEKEY, DONTFREE, etc
- *===========================*/
-void
-remove_table (TABLE tab, INT whattofree)
+/*===================================
+ * valueofbool_ptr -- Find pointer value of entry
+ * BOOLEAN *there:   [OUT] FALSE if not found
+ *=================================*/
+VPTR
+valueofbool_ptr (TABLE tab, CNSTRING key, BOOLEAN *there)
 {
-	INT i;
-	ENTRY ent, nxt;
-	if (!tab) return;
-	if (tab->whattofree!=-1) { ASSERT(whattofree==tab->whattofree); }
-	for (i = 0; i < tab->maxhash; i++) {
-		nxt = tab->entries[i];
-		while ((ent = nxt)) {
-			nxt = ent->enext;
-			free_contents(ent, whattofree);
-			stdfree(ent);
-		}
-	}
-	stdfree(tab->entries);
-	stdfree(tab);
+	ASSERT(tab);
+	ASSERT(tab->vtable == &vtable_for_table);
+	ASSERT(tab->valtype == TB_HPTR || tab->valtype == TB_VPTR);
+
+	return find_hashtab(tab->hashtab, key, there);
 }
-/*=================================================
- * free_contents -- Free key and/or value as appropriate
- *===============================================*/
-static void
-free_contents (ENTRY ent, INT whattofree)
+/*===================================
+ * valueofbool_obj -- Find object value of entry
+ * BOOLEAN *there:   [OUT] FALSE if not found
+ *=================================*/
+VPTR
+valueofbool_obj (TABLE tab, CNSTRING key, BOOLEAN *there)
 {
-	if (whattofree==FREEBOTH || whattofree==FREEKEY || whattofree==-2)
-		stdfree(ent->ekey);
-	if (!is_generic_null(&ent->generic)) {
-		clear_generic(&ent->generic);
-	} else {
-		if (whattofree==FREEBOTH || whattofree==FREEVALUE) {
-			if (ent->uval.w)
-				stdfree(ent->uval.w);
-		}
-	}
-}
-/*=================================================
- * traverse_table -- Traverse table doing something
- * tproc: callback for each entry
- * callback is passed a pointer into memory owned by table
- * so callback must not free data received
- *===============================================*/
-static void
-traverse_table (TABLE tab, void (*tproc)(CNSTRING key, UNION uval))
-{
-	INT i;
-	ENTRY ent, nxt;
-	if (!tab || !tproc) return;
-	for (i = 0; i < tab->maxhash; i++) {
-		nxt = tab->entries[i];
-		while ((ent = nxt)) {
-			nxt = ent->enext;
-			(*tproc)(ent->ekey, ent->uval);
-		}
-	}
-}
-/*=================================================
- * traverse_table_param -- Traverse table doing something, with extra callback param
- * also, use return value of proc to allow abort (proc returns 0 for abort)
- * callback is passed a pointer into memory owned by table
- * so callback must not free data received
- * Created: 2001/01/01, Perry Rapp
- *===============================================*/
-void
-traverse_table_param (TABLE tab,
-                INT (*tproc)(CNSTRING key, UNION uval, GENERIC * pgeneric, VPTR param),
-                VPTR param)
-{
-	INT i;
-	ENTRY ent, nxt;
-	if (!tab || !tproc) return;
-	for (i = 0; i < tab->maxhash; i++) {
-		nxt = tab->entries[i];
-		while ((ent = nxt)) {
-			nxt = ent->enext;
-			if (!(*tproc)(ent->ekey, ent->uval, &ent->generic, param))
-				return;
-		}
-	}
+	ASSERT(tab);
+	ASSERT(tab->vtable == &vtable_for_table);
+	ASSERT(tab->valtype == TB_OBJ);
+
+	return find_hashtab(tab->hashtab, key, there);
 }
 /*=================================================
  * begin_table_iter -- Begin iteration of table
@@ -684,38 +470,9 @@ TABLE_ITER
 begin_table_iter (TABLE tab)
 {
 	TABLE_ITER tabit = (TABLE_ITER)stdalloc(sizeof(*tabit));
-	memset(tabit, 0, sizeof(*tabit));
-	tabit->table = tab;
 	++tabit->refcnt;
-	/* table iterator starts at index=0, enext=0 */
-	/* memset above set that up, fortuitously */
+	tabit->hashtab_iter = begin_hashtab(tab->hashtab);
 	return tabit;
-}
-/*=================================================
- * next_element -- Find next element in table (iterating)
- * This doesn't know or need to know about element types or generics
- *===============================================*/
-static BOOLEAN
-next_element (TABLE_ITER tabit)
-{
-	ASSERT(tabit);
-	if (!tabit->table) return FALSE;
-	if (tabit->index == -1 || tabit->table->count == 0)
-		return FALSE;
-	if (tabit->enext) {
-		tabit->enext = tabit->enext->enext;
-		if (tabit->enext)
-			return TRUE;
-		++tabit->index;
-	}
-	for ( ; tabit->index < tabit->table->maxhash; ++tabit->index) {
-			tabit->enext = tabit->table->entries[tabit->index];
-			if (tabit->enext)
-				return TRUE;
-	}
-	tabit->index = -1;
-	tabit->enext = 0;
-	return FALSE;
 }
 /*=================================================
  * next_table_ptr -- Advance to next pointer in table
@@ -725,33 +482,7 @@ next_element (TABLE_ITER tabit)
 BOOLEAN
 next_table_ptr (TABLE_ITER tabit, CNSTRING *pkey, VPTR *pptr)
 {
-advance:
-	if (!next_element(tabit)) {
-		*pkey = 0;
-		*pptr = 0;
-		return FALSE;
-	}
-	if (!is_generic_null(&tabit->enext->generic)) {
-		if (is_generic_vptr(&tabit->enext->generic)) {
-			*pkey = tabit->enext->ekey;
-			*pptr = get_generic_vptr(&tabit->enext->generic);
-			return TRUE;
-		} else {
-			/* wrong type of element, skip it */
-			goto advance;
-		}
-	} else {
-		if (tabit->table->valtype == TB_PTR) {
-			*pkey = tabit->enext->ekey;
-			*pptr = tabit->enext->uval.w;
-			return TRUE;
-		} else {
-			/* wrong type of table, only generic elements might be ok */
-			/* so skip this element */
-			goto advance;
-		}
-	}
-	return TRUE;
+	return next_hashtab(tabit->hashtab_iter, pkey, pptr);
 }
 /*=================================================
  * next_table_int -- Advance to next int in table
@@ -761,43 +492,11 @@ advance:
 BOOLEAN
 next_table_int (TABLE_ITER tabit, CNSTRING *pkey, INT * pival)
 {
-advance:
-	if (!next_element(tabit)) {
-		*pkey = 0;
-		*pival = 0;
+	VPTR val=0;
+	if (!next_hashtab(tabit->hashtab_iter, pkey, &val))
 		return FALSE;
-	}
-	if (!is_generic_null(&tabit->enext->generic)) {
-		if (is_generic_int(&tabit->enext->generic)) {
-			*pkey = tabit->enext->ekey;
-			*pival = get_generic_int(&tabit->enext->generic);
-			return TRUE;
-		} else {
-			/* wrong type of element, skip it */
-			goto advance;
-		}
-	} else {
-		/* TB_INT tables no longer exist */
-		/* so skip this element */
-		goto advance;
-	}
-	return TRUE;
-}
-/*=================================================
- * change_table_ptr -- User changing value in iteration
- * Created: 2002/06/17, Perry Rapp
- *===============================================*/
-BOOLEAN
-change_table_ptr (TABLE_ITER tabit, VPTR newptr)
-{
-	if (!tabit || !tabit->enext)
-		return FALSE;
-	if (!is_generic_null(&tabit->enext->generic)) {
-		ASSERT(is_generic_vptr(&tabit->enext->generic));
-		set_generic_vptr(&tabit->enext->generic, newptr);
-	} else {
-		tabit->enext->uval.w = newptr;
-	}
+
+	*pival = *(INT *)val;
 	return TRUE;
 }
 /*=================================================
@@ -833,101 +532,76 @@ INT
 get_table_count (TABLE tab)
 {
 	if (!tab) return 0;
-	return tab->count;
+
+	ASSERT(tab->vtable == &vtable_for_table);
+
+	return get_hashtab_count(tab->hashtab);
 }
 /*=================================================
  * copy_table -- Copy all elements from src to dest
- * Created: 2002/02/17, Perry Rapp
  *===============================================*/
 void
-copy_table (const TABLE src, TABLE dest, INT whattodup)
+copy_table (const TABLE src, TABLE dest)
 {
-	INT i;
-	ENTRY ent, nxt;
-	BOOLEAN dupkey = whattodup&FREEBOTH || whattodup&FREEKEY;
-	BOOLEAN dupval = whattodup&FREEBOTH || whattodup&FREEVALUE;
+	if (!src || !dest) return;
 
-	if (dest->whattofree == -2)
-		dupkey = FALSE;
+	ASSERT(src->vtable == &vtable_for_table);
+	ASSERT(dest->vtable == &vtable_for_table);
 
-	ASSERT(get_table_count(dest)==0);
-	if (get_table_count(src)==0)
-		return;
-	ASSERT(!dupval || src->valtype==TB_STR || src->valtype==TB_GENERIC); /* can only dup strings */
-
-	dest->valtype = src->valtype;
-	if (src->maxhash == dest->maxhash)
-		dest->count = src->count;
-	
-	for (i = 0; i < src->maxhash; i++) {
-		nxt = src->entries[i];
-		while ((ent = nxt)) {
-			UNION uval = ent->uval;
-			STRING key = ent->ekey;
-			if (dupkey) key = strsave(key);
-			if (dest->whattofree != -2 && is_generic_null(&ent->generic)) {
-				if (dupval) uval.w = strsave(uval.w);
-			}
-			if (src->maxhash == dest->maxhash) {
-				/* copy src item directly into dest (skip hashing) */
-				ENTRY entry = new_entry();
-				if (dest->whattofree == -2)
-					key = strsave(key);
-				entry->ekey = key;
-				copy_generic_value(&entry->generic, &ent->generic);
-				entry->uval = uval;
-				entry->enext = dest->entries[i];
-				dest->entries[i] = entry;
-			} else {
-				/* insert src item into dest */
-				if (is_generic_null(&ent->generic)) {
-					if (dest->whattofree == -2) {
-						/* copying from old-style value to generics table */
-						switch(src->valtype) {
-						case TB_PTR: table_insert_ptr(dest, key, uval.w); break;
-						case TB_STR: table_insert_string(dest, key, uval.s); break;
-						default: new_table_entry_impl(dest, key, &ent->generic); break;
-						}
-					} else {
-						/* old style direct copy */
-						insert_table_impl(dest, key, uval);
-					}
-				} else {
-					new_table_entry_impl(dest, key, &ent->generic);
-				}
-			}
-			nxt = ent->enext;
+	if (src->valtype == TB_INT) {
+		TABLE_ITER tabit = begin_table_iter(src);
+		CNSTRING key=0;
+		INT ival=0;
+		ASSERT(dest->valtype == TB_INT);
+		while (next_table_int(tabit, &key, &ival)) {
+			insert_table_int(dest, key, ival);
 		}
+		end_table_iter(&tabit);
+		return;
 	}
-}
-/*=================================================
- * destroy_table -- destroy all element & memory for table
- *===============================================*/
-void
-destroy_table (TABLE tab)
-{
-	if (!tab) return;
 
-	/* should not be called for a shared table */
-	ASSERT(tab->refcnt==1 || tab->refcnt==0);
+	if (src->valtype == TB_STR) {
+		TABLE_ITER tabit = begin_table_iter(src);
+		CNSTRING key=0;
+		VPTR val=0;
+		ASSERT(dest->valtype == src->valtype);
+		while (next_table_ptr(tabit, &key, &val)) {
+			insert_table_str(dest, key, val);
+		}
+		end_table_iter(&tabit);
+		return;
+	}
 
-	/* to use this (and I'd prefer all code to use this)
-	the whattofree must have been set, so I plan to revise
-	all code to set it at creation time */
-	ASSERT(tab->whattofree != -1);
-	/* tab->whattofree == -2 for new generic tables */
-	remove_table(tab, tab->whattofree);
-}
-/*=================================================
- * table_destructor -- destructor for table
- *  (destructor entry in vtable)
- *===============================================*/
-static void
-table_destructor (VTABLE *obj)
-{
-	TABLE tab = (TABLE)obj;
-	ASSERT(tab->vtable == &vtable_for_table);
-	destroy_table(tab);
+	if (src->valtype == TB_HPTR) {
+		ASSERT(0);
+	}
+
+	if (src->valtype == TB_VPTR) {
+		TABLE_ITER tabit = begin_table_iter(src);
+		CNSTRING key=0;
+		VPTR val=0;
+		ASSERT(dest->valtype == src->valtype);
+		while (next_table_ptr(tabit, &key, &val)) {
+			insert_table_ptr(dest, key, val);
+		}
+		end_table_iter(&tabit);
+		return;
+	}
+
+	if (src->valtype == TB_OBJ) {
+		TABLE_ITER tabit = begin_table_iter(src);
+		CNSTRING key=0;
+		VPTR val=0;
+		ASSERT(dest->valtype == src->valtype);
+		while (next_table_ptr(tabit, &key, &val)) {
+			addref_object(val);
+			insert_table_obj(dest, key, val);
+		}
+		end_table_iter(&tabit);
+		return;
+	}
+
+	ASSERT(0);
 }
 /*=================================================
  * tabit_destructor -- destructor for table iterator
@@ -941,34 +615,11 @@ tabit_destructor (VTABLE *obj)
 	free_table_iter(tabit);
 }
 /*=================================================
- * addref_table -- increment reference count of table
- *===============================================*/
-void
-addref_table (TABLE tab)
-{
-	ASSERT(tab->vtable == &vtable_for_table);
-	++tab->refcnt;
-}
-/*=================================================
- * release_table -- decrement reference count of table
- *  and free if appropriate (ref count hits zero)
- *===============================================*/
-void
-release_table (TABLE tab, void (*tproc)(CNSTRING key, UNION uval))
-{
-	ASSERT(tab->vtable == &vtable_for_table);
-	--tab->refcnt;
-	if (!tab->refcnt) {
-		traverse_table(tab, tproc);
-		destroy_table(tab);
-	}
-}
-/*=================================================
- * table_incr_int -- increment an integer element value
+ * increment_table_int -- increment an integer element value
  * set to 1 if not found
  *===============================================*/
 void
-table_incr_int (TABLE tab, CNSTRING key)
+increment_table_int (TABLE tab, CNSTRING key)
 {
 	BOOLEAN found=FALSE;
 	INT value = valueofbool_int(tab, key, &found);

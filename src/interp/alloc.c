@@ -1187,7 +1187,7 @@ get_rptinfo (CNSTRING fullpath)
 {
 	RPTINFO rptinfo;
 	if (!f_rptinfos)
-		f_rptinfos = create_table();
+		f_rptinfos = create_table_obj();
 	rptinfo = (RPTINFO)valueof_obj(f_rptinfos, fullpath);
 	if (!rptinfo) {
 		STRING filename=0;
@@ -1195,8 +1195,8 @@ get_rptinfo (CNSTRING fullpath)
 
 		rptinfo = create_rptinfo();
 		rptinfo->fullpath = strsave(fullpath);
-		rptinfo->functab = create_table();
-		rptinfo->proctab = create_table();
+		rptinfo->functab = create_table_vptr(); /* PNODES owned elsewhere */
+		rptinfo->proctab = create_table_vptr(); /* PNODES owned elsewhere */
 		rptinfo->codeset = strsave(report_codeset_in);
 
 		/* calculate localpath & localepath for report gettext */
@@ -1208,7 +1208,7 @@ get_rptinfo (CNSTRING fullpath)
 		strfree(&filename);
 		rptinfo->textdomain = zs_news("llreports"); /* for now, fixed textdomain */
 		
-		table_insert_object(f_rptinfos, fullpath, rptinfo);
+		insert_table_obj(f_rptinfos, fullpath, rptinfo);
 		--rptinfo->refcnt; /* release our reference on rptinfo */
 		ASSERT(rptinfo->refcnt>0);
 	}

@@ -550,7 +550,7 @@ create_cache (STRING name, INT dirsize)
 	caches, but right now (2003-10-08), tables do not expose a 
 	method to set their hash size.
 	*/
-	cacdata(cache) = create_table();
+	cacdata(cache) = create_table_vptr(); /* pointers to cache elements, owned by cacarray */
 	cacfirstdir(cache) = caclastdir(cache) = NULL;
 	cacsizedir(cache) = 0;
 	cacmaxdir(cache) = dirsize;
@@ -1074,7 +1074,7 @@ put_node_in_cache (CACHE cache, CACHEEL cel, NODE node, STRING key)
 	ASSERT(cache && node);
 	ASSERT(cacsizedir(cache) < cacmaxdir(cache));
 	init_cel(cel);
-	table_insert_ptr(cacdata(cache), key, cel);
+	insert_table_ptr(cacdata(cache), key, cel);
 	cnode(cel) = node;
 	ckey(cel) = strsave(key);
 	cclock(cel) = FALSE;

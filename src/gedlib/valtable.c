@@ -156,7 +156,7 @@ init_valtab_from_string (CNSTRING str, TABLE tab, INT sep, STRING *pmsg)
 			}
 		}
 		*(q - 1) = 0;
-		table_insert_string(tab, tag, val);
+		insert_table_str(tab, tag, val);
 		if (c == 0) break;
 	}
 

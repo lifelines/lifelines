@@ -282,16 +282,16 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 	/* Parse each file in the list -- don't reparse any file */
 	/* (paths are resolved before files are enqueued, & stored in pathinfo) */
 
-	gproctab = create_table();
+	gproctab = create_table_obj();
 	globtab = create_symtab();
-	gfunctab = create_table();
+	gfunctab = create_table_obj();
 	initinterp();
 
 	while (!is_empty_list(plist)) {
 		cur_pathinfo = (PATHINFO) dequeue_list(plist);
 		if (!in_table(pactx->filetab, cur_pathinfo->fullpath)) {
 			STRING str;
-			table_insert_object(pactx->filetab, cur_pathinfo->fullpath, 0);
+			insert_table_obj(pactx->filetab, cur_pathinfo->fullpath, 0);
 			Plist = plist;
 			parse_file(pactx, cur_pathinfo->fname, cur_pathinfo->fullpath);
 			if ((str = check_rpt_requires(pactx, cur_pathinfo->fullpath)) != 0) {
@@ -431,7 +431,7 @@ static void
 init_pactx (PACTX pactx)
 {
 	memset(pactx, 0, sizeof(*pactx));
-	pactx->filetab = create_table();
+	pactx->filetab = create_table_obj(); /* table of tables */
 }
 /*===============================================
  * wipe_pactx -- destroy global parsing context
@@ -2147,13 +2147,13 @@ pa_handle_require (PACTX pactx, PNODE node)
 
 	tab = (TABLE)valueof_obj(pactx->filetab, pactx->fullpath);
 	if (!tab) {
-		tab = create_table();
-		table_insert_object(pactx->filetab, cur_pathinfo->fullpath, tab);
-		release_table(tab, NULL); /* release our reference, pactx->filetab owns now */
+		tab = create_table_str();
+		insert_table_obj(pactx->filetab, cur_pathinfo->fullpath, tab);
+		release_table(tab); /* release our reference, pactx->filetab owns now */
 	}
 
 	str = pvalue_to_string(pval);
-	table_insert_string(tab, propstr, str);
+	insert_table_str(tab, propstr, str);
 }
 /*=============================================+
  * pa_handle_proc -- proc declaration (parse time)
@@ -2174,13 +2174,13 @@ pa_handle_proc (PACTX pactx, CNSTRING procname, PNODE nd_args, PNODE nd_body)
 	}
 	/* consumes procname */
 	procnode = proc_node(pactx, procname, nd_args, nd_body);
-	table_insert_ptr(rptinfo->proctab, procname, procnode);
+	insert_table_ptr(rptinfo->proctab, procname, procnode);
 
 	/* add to global proc table */
 	list = (LIST)valueof_obj(gproctab, procname);
 	if (!list) {
 		list = create_list2(LISTNOFREE);
-		table_insert_object(gproctab, procname, list);
+		insert_table_obj(gproctab, procname, list);
 		release_list(list); /* now table owns list */
 	}
 	enqueue_list(list, procnode);
@@ -2204,13 +2204,13 @@ pa_handle_func (PACTX pactx, CNSTRING procname, PNODE nd_args, PNODE nd_body)
 	}
 	/* consumes procname */
 	procnode = fdef_node(pactx, procname, nd_args, nd_body);
-	table_insert_ptr(rptinfo->functab, procname, procnode);
+	insert_table_ptr(rptinfo->functab, procname, procnode);
 
 	/* add to global proc table */
 	list = (LIST)valueof_obj(gfunctab, procname);
 	if (!list) {
 		list = create_list2(LISTNOFREE);
-		table_insert_object(gfunctab, procname, list);
+		insert_table_obj(gfunctab, procname, list);
 		release_list(list); /* now table owns list */
 	}
 	enqueue_list(list, procnode);

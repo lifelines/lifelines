@@ -276,7 +276,7 @@ clear_pvalue (PVALUE val)
 	case PTABLE:
 		{
 			TABLE table = pvalue_to_table(val);
-			release_table(table, table_pvcleaner);
+			release_table(table);
 		}
 		return;
 	case PSET:
@@ -1201,9 +1201,9 @@ pvalues_collate (PVALUE val1, PVALUE val2)
 PVALUE
 create_new_pvalue_table (void)
 {
-	TABLE tab = create_table_old2(FREEKEY);
+	TABLE tab = create_table_custom_vptr(delete_vptr_pvalue);
 	PVALUE val = create_pvalue_from_table(tab);
-	release_table(tab, table_pvcleaner); /* release our ref to table */
+	release_table(tab);
 	return val;
 }
 /*=============================================

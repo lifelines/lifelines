@@ -26,8 +26,8 @@ add_prop_dnum (TABLE props, CNSTRING name, CNSTRING value)
 	INT n = ll_atoi(str, 0)+1;
 	char temp[20];
 	sprintf(temp, "d%d", n);
-	table_insert_string(props, temp, name);
-	table_insert_string(props, name, value);
+	insert_table_str(props, temp, name);
+	insert_table_str(props, name, value);
 	sprintf(temp, "%d", n);
 	replace_table_str(props, "dn", temp);
 }
@@ -59,7 +59,7 @@ add_dir_files_to_proplist (CNSTRING dir, SELECT_FNC selectfnc, LIST list)
 	INT n = scandir(dir, &programs, selectfnc, alphasort);
 	INT i;
 	for (i=0; i<n; ++i) {
-		TABLE table = create_table_strings();
+		TABLE table = create_table_str();
 		set_prop_dnum(table, 1, "filename", programs[i]->d_name);
 		set_prop_dnum(table, 2, "dir", dir);
 		stdfree(programs[i]);

@@ -261,6 +261,10 @@ SOURCE=..\..\..\src\gedlib\gstrings.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\stdlib\hashtab.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\interp\heapused.c
 # End Source File
 # Begin Source File
@@ -306,10 +310,6 @@ SOURCE=..\..\..\src\interp\intrpseq.c
 # Begin Source File
 
 SOURCE=..\..\..\src\gedlib\keytonod.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\arch\nl_langinfo.c
 # End Source File
 # Begin Source File
 
@@ -414,6 +414,10 @@ SOURCE=..\..\..\src\gedlib\names.c
 # Begin Source File
 
 SOURCE=..\..\..\src\liflines\newrecs.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\arch\nl_langinfo.c
 # End Source File
 # Begin Source File
 
@@ -915,6 +919,10 @@ SOURCE=..\..\..\src\hdrs\zstr.h
 # Begin Source File
 
 SOURCE=..\..\..\ChangeLog
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\hashtab.h
 # End Source File
 # End Target
 # End Project

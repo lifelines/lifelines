@@ -35,10 +35,12 @@
 #include "standard.h"
 
 
+/*
 #define DONTFREE  0
 #define FREEKEY   1
 #define FREEVALUE 2
 #define FREEBOTH  3
+*/
 
 /*
 tables hold key,value pairs, but all values in a specific
@@ -48,32 +50,39 @@ INT, or VPTR, or STRING
 */
 
 typedef struct tag_table *TABLE;
-
 typedef struct tag_table_iter * TABLE_ITER;
 
-/* creating, deleting, and copying table */
+/* creating and deleting table */
+TABLE create_table_int(void);
+TABLE create_table_str(void);
+TABLE create_table_hptr(void);
+TABLE create_table_vptr(void);
+TABLE create_table_custom_vptr(void (*destroyel)(void *ptr));
+TABLE create_table_obj(void);
+void destroy_table(TABLE tab);
 void addref_table(TABLE tab);
-void copy_table(const TABLE src, TABLE dest, INT whattodup);
-TABLE create_table(void);
-TABLE create_table_strings(void);
-TABLE create_table_old2(INT whattofree);
-void destroy_table(TABLE);
-void release_table(TABLE tab, void (*tproc)(CNSTRING key, UNION uval));
+void release_table(TABLE tab);
+
+/* copying table */
+void copy_table(const TABLE src, TABLE dest);
 
 /* working with entire table */
 INT get_table_count(TABLE);
-void remove_table(TABLE, INT whattofree); /* TODO: remove this */
-void traverse_table_param(TABLE tab, INT (*tproc)(CNSTRING key, UNION uval, GENERIC *pgeneric, VPTR param), VPTR param);
+
+/* inserting elements */
+void insert_table_int(TABLE, CNSTRING key, INT ival);
+void insert_table_str(TABLE tab, CNSTRING key, CNSTRING value);
+void insert_table_ptr(TABLE, CNSTRING key, VPTR ptr);
+void insert_table_obj(TABLE, CNSTRING key, VPTR obj);
+
+/* replacing elements */
+void replace_table_str(TABLE tab, CNSTRING key, CNSTRING str);
+
+/* deleting elements*/
+void delete_table_element(TABLE tab, CNSTRING key);
 
 /* working with elements of table */
-void delete_table_element(TABLE tab, CNSTRING key);
 BOOLEAN in_table(TABLE, CNSTRING);
-void insert_table_ptr(TABLE, CNSTRING key, VPTR);
-void insert_table_int(TABLE, CNSTRING key, INT);
-void replace_table_str(TABLE tab, CNSTRING key, CNSTRING str);
-void table_insert_ptr(TABLE tab, CNSTRING key, const VPTR value);
-void table_insert_string(TABLE tab, CNSTRING key, CNSTRING value);
-void table_insert_object(TABLE tab, CNSTRING key, VPTR value);
 INT valueof_int(TABLE tab, CNSTRING key);
 VPTR valueof_obj(TABLE tab, CNSTRING key);
 VPTR valueof_ptr(TABLE tab, CNSTRING key);
@@ -82,14 +91,15 @@ INT valueofbool_int(TABLE tab, CNSTRING key, BOOLEAN *there);
 VPTR valueofbool_obj(TABLE tab, CNSTRING key, BOOLEAN *there);
 VPTR valueofbool_ptr(TABLE tab, CNSTRING key, BOOLEAN *there);
 STRING valueofbool_str(TABLE tab, CNSTRING key, BOOLEAN *there);
-void table_incr_int(TABLE tab, CNSTRING key);
+
+/* shortcut for incrementing int value */
+void increment_table_int(TABLE tab, CNSTRING key);
 
 /* table iteration */
 TABLE_ITER begin_table_iter(TABLE tab);
-BOOLEAN change_table_ptr(TABLE_ITER tabit, VPTR newptr);
-void end_table_iter(TABLE_ITER * ptabit);
 BOOLEAN next_table_ptr(TABLE_ITER tabit, CNSTRING *pkey, VPTR *pptr);
 BOOLEAN next_table_int(TABLE_ITER tabit, CNSTRING *pkey, INT * pival);
+void end_table_iter(TABLE_ITER * ptabit);
 
 
 #endif /* TABLE_H_INCLUDED */

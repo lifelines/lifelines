@@ -214,7 +214,7 @@ free_all_pvalues (void)
 	PV_BLOCK block;
 	INT found_leaks=0;
 	INT orig_leaks = live_pvalues;
-	TABLE leaktab = create_table();
+	TABLE leaktab = create_table_int(); /* count of leaks by type */
 
 	/* Notes
 	live_pvalues is the count of leaked pvalues
@@ -240,7 +240,7 @@ free_all_pvalues (void)
 					CNSTRING typestr = get_pvalue_type_name(val1->type);
 					ZSTR zstr = describe_pvalue(val1);
 					/* zstr is just for debugging, we don't record it */
-					table_incr_int(leaktab, typestr);
+					increment_table_int(leaktab, typestr);
 					delete_pvalue(val1);
 					++found_leaks;
 					zs_free(&zstr);

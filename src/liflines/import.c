@@ -145,7 +145,7 @@ do_import (IMPORT_FEEDBACK ifeed, FILE *fp)
 	BOOLEAN succeeded=FALSE;
 	STRING str,unistr=0;
 	ZSTR zerr=0;
-	TABLE metadatatab = create_table();
+	TABLE metadatatab = create_table_str();
 	STRING gdcodeset=0;
 	INT warnings=0;
 

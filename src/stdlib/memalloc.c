@@ -58,6 +58,7 @@ static INT live_allocs = 0;
 
 /*=================================================
  * __allocate -- Allocate memory - used by stdalloc
+ * Sets contents of new memory to 0
  *  len:  [in] num of bytes to alloc
  *  file: [in] file requesting
  *  line: [in] line num in file

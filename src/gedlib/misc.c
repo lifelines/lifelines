@@ -132,6 +132,7 @@ NODE
 find_tag (NODE node, CNSTRING str)
 {
 	while (node) {
+		ASSERT(ntag(node));
 		if (eqstr(str, ntag(node))) return node;
 		node = nsibling(node);
 	}

@@ -145,7 +145,7 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 	defline = 0;
 	curlev = 0;
 	clear_structures();
-	convtab = create_table();
+	convtab = create_table_int();
 
 
 	rc = file_to_line(fp, xlat, &lev, &xref, &tag, &val, &msg);
@@ -1024,7 +1024,7 @@ scan_header (FILE * fp, TABLE metadatatab, ZSTR * zerr)
 			for (i=1; i<lev && i<ARRSIZE(parents); ++i)
 				append_path(zpath, '.', parents[i-1]);
 			append_path(zpath, '.', tag);
-			table_insert_string(metadatatab, zs_str(zpath), val);
+			insert_table_str(metadatatab, zs_str(zpath), val);
 		}
 		if (lev>0 && lev-1<ARRSIZE(parents))
 			strupdate(&parents[lev-1], tag);

@@ -2637,7 +2637,6 @@ __table (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __insert (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	BOOLEAN there;
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE old=NULL, val=NULL;
 	PVALUE valtab = eval_and_coerce(PTABLE, arg, stab, eflg);
@@ -2668,10 +2667,13 @@ __insert (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 
+	insert_table_ptr(tab, str, val);
+#if 0
 	old = valueofbool_ptr(tab, str, &there);
 	if (there && old) delete_pvalue(old);
 	insert_table_ptr(tab, str, val);
 	if (there) stdfree(str);	/* key is already in table. free this one */
+#endif
 	delete_pvalue(valtab); /* finished with our copy of table */
 	return NULL;
 }

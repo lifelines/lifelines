@@ -1193,7 +1193,7 @@ parent_indiseq (INDISEQ seq)
 	STRING key=0;
 	UNION uval;
 	if (!seq) return NULL;
-	tab = create_table();
+	tab = create_table_vptr();
 	par = create_indiseq_impl(IValtype(seq), IValfnctbl(seq));
 	FORINDISEQ(seq, el, num)
 		indi = key_to_indi(skey(el));
@@ -1204,7 +1204,7 @@ parent_indiseq (INDISEQ seq)
 					uval = copyval(seq, sval(el));
 					key = strsave(key);
 					append_indiseq_impl(par, key, NULL, uval, TRUE, TRUE);
-					insert_table_int(tab, key, 0);
+					insert_table_ptr(tab, key, 0);
 				}
 			ENDFAMSPOUSES
 		ENDFAMCS
@@ -1226,7 +1226,7 @@ child_indiseq (INDISEQ seq)
 	STRING key=0;
 	UNION uval;
 	if (!seq) return NULL;
-	tab = create_table();
+	tab = create_table_vptr();
 	cseq = create_indiseq_impl(IValtype(seq), IValfnctbl(seq));
 	FORINDISEQ(seq, el, num)
 		indi = key_to_indi(skey(el));
@@ -1238,7 +1238,7 @@ child_indiseq (INDISEQ seq)
 					/* indiseq values must be copied with copyval */
 					uval = copyval(seq, sval(el));
 					append_indiseq_impl(cseq, key, NULL, uval, TRUE, TRUE);
-					insert_table_int(tab, key, 0);
+					insert_table_ptr(tab, key, 0);
 				}
 			ENDCHILDRENx
 		ENDFAMS
@@ -1458,7 +1458,7 @@ sibling_indiseq (INDISEQ seq, BOOLEAN close)
 	STRING key=0, fkey=0;
 	INT num2=0;
 	/* table lists people already listed (values unused) */
-	TABLE tab = create_table();
+	TABLE tab = create_table_vptr();
 	fseq = create_indiseq_null(); /* temporary */
 	sseq = create_indiseq_null();
 	FORINDISEQ(seq, el, num)
@@ -1467,7 +1467,7 @@ sibling_indiseq (INDISEQ seq, BOOLEAN close)
 			fkey = fam_to_key(fam);
 			append_indiseq_null(fseq, fkey, NULL, FALSE, FALSE);
 		}
-		if (!close) insert_table_int(tab, skey(el), 0);
+		if (!close) insert_table_ptr(tab, skey(el), 0);
 	ENDINDISEQ
 	FORINDISEQ(fseq, el, num)
 		fam = key_to_fam(skey(el));
@@ -1476,7 +1476,7 @@ sibling_indiseq (INDISEQ seq, BOOLEAN close)
 			if (!in_table(tab, key)) {
 				key = strsave(key);
 				append_indiseq_null(sseq, key, NULL, TRUE, TRUE);
-				insert_table_int(tab, key, 0);
+				insert_table_ptr(tab, key, 0);
 			}
 		ENDCHILDRENx
 	ENDINDISEQ
@@ -1503,7 +1503,7 @@ ancestor_indiseq (INDISEQ seq)
 	UNION uval;
 	if (!seq) return NULL;
 		/* table of people already added */
-	tab = create_table();
+	tab = create_table_vptr();
 		/* paired processing list - see comments in descendant_indiseq code */
 	anclist = create_list();
 	genlist = create_list();
@@ -1525,7 +1525,7 @@ ancestor_indiseq (INDISEQ seq)
 					append_indiseq_pval(anc, pkey, NULL, uval.w, TRUE);
 					enqueue_list(anclist, (VPTR)strsave(pkey));
 					enqueue_list(genlist, (VPTR)gen);
-					insert_table_int(tab, pkey, 0);
+					insert_table_ptr(tab, pkey, 0);
 				}
 			ENDFAMSPOUSES
 		ENDFAMCS
@@ -1554,9 +1554,9 @@ descendent_indiseq (INDISEQ seq)
 	UNION uval;
 	if (!seq) return NULL;
 		/* itab = people already added, value irrelevant */
-	itab = create_table();
+	itab = create_table_vptr();
 		/* ftab = families already added (processed), value irrelevant */
-	ftab = create_table();
+	ftab = create_table_vptr();
 		/*
 		deslist & genlist are paired - 
 		dequeue the person from deslist & the generation
@@ -1583,7 +1583,7 @@ descendent_indiseq (INDISEQ seq)
 				/* skip families already processed */
 			if (in_table(ftab, fkey = fam_to_key(fam)))
 				goto a;
-			insert_table_int(ftab, fkey, 0);
+			insert_table_ptr(ftab, fkey, 0);
 			FORCHILDRENx(fam, child, num2)
 					/* only do people not processed */
 				if (!in_table(itab,
@@ -1595,7 +1595,7 @@ descendent_indiseq (INDISEQ seq)
 						/* also want descendants, so add person to processing list */
 					enqueue_list(deslist, (VPTR)strsave(dkey));
 					enqueue_list(genlist, (VPTR)gen);
-					insert_table_int(itab, dkey, 0);
+					insert_table_ptr(itab, dkey, 0);
 				}
 			ENDCHILDRENx
 		a:;
@@ -1617,7 +1617,7 @@ spouse_indiseq (INDISEQ seq)
 	NODE indi;
 	INT num1;
 	if (!seq) return NULL;
-	tab = create_table();
+	tab = create_table_vptr();
 	sps = create_indiseq_impl(IValtype(seq), IValfnctbl(seq));
 	FORINDISEQ(seq, el, num)
 		indi = key_to_indi(skey(el));
@@ -1629,7 +1629,7 @@ spouse_indiseq (INDISEQ seq)
 				spkey = strsave(spkey);
 				u = copyval(seq, sval(el));
 				append_indiseq_impl(sps, spkey, NULL, u, TRUE, TRUE);
-				insert_table_int(tab, spkey, 0);
+				insert_table_ptr(tab, spkey, 0);
 			}
 		ENDSPOUSES
 	ENDINDISEQ

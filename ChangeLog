@@ -1,3 +1,20 @@
+2005-02-19 Perry Rapp
+
+	* build/msvc6/llines/llinesprj.dsp src/gedlib/date.c
+	src/gedlib/editvtab.c src/gedlib/gengedc.c src/gedlib/indiseq.c
+	src/gedlib/init.c src/gedlib/keytonod.c src/gedlib/lloptions.c
+	src/gedlib/misc.c src/gedlib/names.c src/gedlib/node.c
+	src/gedlib/valtable.c src/gedlib/xlat.c src/hdrs/table.h
+	src/interp/alloc.c src/interp/builtin.c src/interp/interp.c
+	src/interp/pvalalloc.c src/interp/pvalue.c src/interp/symtab.c
+	src/liflines/import.c src/liflines/llexec.c src/liflines/main.c
+	src/liflines/screen.c src/liflines/valgdcom.c
+	src/stdlib/memalloc.c src/stdlib/proptbls.c src/stdlib/table.c
+	*NEW src/hdrs/hashtab.h
+	*NEW src/stdlib/hashtab.c
+
+	Move hash table into new hashtab.h (use it from table.c).
+
 2005-02-16 Perry Rapp
 
 	* ChangeLog src/gedlib/xlat.c

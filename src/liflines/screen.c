@@ -2216,11 +2216,11 @@ edit_place_table (void)
 static void
 edit_user_options (void)
 {
-	TABLE uopts = create_table();
+	TABLE uopts = create_table_str();
 	get_db_options(uopts);
 	if (edit_valtab_from_db("VUOPT", &uopts, '=', _(qSuoperr), uopt_validate))
 		set_db_options(uopts);
-	destroy_table(uopts);
+	release_table(uopts);
 }
 /*===============================
  * translate_hdware_key -- 

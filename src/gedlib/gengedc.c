@@ -132,7 +132,7 @@ closure_add_output_node (CLOSURE * closure, NODE node)
 static void
 closure_init (CLOSURE * closure, int gengedcl)
 {
-	closure->tab = create_table();
+	closure->tab = create_table_int();
 	closure->seq = create_indiseq_sval();
 	closure->outseq = create_indiseq_sval();
 	closure->gengedcl = gengedcl;
@@ -364,25 +364,6 @@ process_any_node (CLOSURE * closure, NODE node)
 		process_any_node(closure, nsibling(node));
 }
 /*===================================================================
- * add_refd_fams -- add all families in table with #refs>1 to closure
- *  this is a callback from traverse_table_param
- *=================================================================*/
-static int
-add_refd_fams (CNSTRING key, UNION uval, GENERIC *pgeneric, VPTR param)
-{
-	CLOSURE * closure = (CLOSURE *)param;
-	INT count=0;
-	if (!is_generic_null(pgeneric)) {
-		count = get_generic_int(pgeneric);
-	} else {
-		count = uval.i;
-	}
-	if (count > 1) {
-		closure_add_key(closure, key, "FAM");
-	}
-	return 1;
-}
-/*===================================================================
  * gen_gedcom -- Generate GEDCOM file from sequence; only persons in
  *   sequence are in file; families that at least two persons in
  *   sequence refer to are also in file; other persons referred to by
@@ -416,20 +397,31 @@ gen_gedcom (INDISEQ seq, int gengedcl, BOOLEAN * eflg)
 	/* now go thru all indis and figure out which
 	families to keep */
 
-	famstab = create_table();
+	famstab = create_table_int();
 	FORINDISEQ(seq, el, num)
 		indi = key_to_indi(element_skey(el));
 		famc = indi_to_famc(indi);
 		if (famc)
-			table_incr_int(famstab, fam_to_key(famc));
+			increment_table_int(famstab, fam_to_key(famc));
 		FORFAMS(indi, fam, num1)
-			table_incr_int(famstab, fam_to_key(fam));
+			increment_table_int(famstab, fam_to_key(fam));
 		ENDFAMS
 	ENDINDISEQ
 
-	traverse_table_param(famstab, &add_refd_fams, &closure);
-	destroy_table(famstab);
-	famstab=0;
+	/* add all families in table with #refs>1 to closure */
+	if (TRUE) {
+		TABLE_ITER tabit = begin_table_iter(famstab);
+		CNSTRING key=0;
+		INT count=0;
+		while (next_table_int(tabit, &key, &count)) {
+			if (count > 1) {
+				closure_add_key(&closure, key, "FAM");
+			}
+		}
+		end_table_iter(&tabit);
+		destroy_table(famstab);
+		famstab=0;
+	}
 
 	/* now we have to process every node, including new
 	 ones that get added during processing */

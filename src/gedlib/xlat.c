@@ -427,7 +427,7 @@ xl_load_all_dyntts (CNSTRING ttpath)
 	}
 	if (!ttpath ||  !ttpath[0])
 		return;
-	f_dyntts = create_table();
+	f_dyntts = create_table_obj();
 	dirs = (STRING)stdalloc(strlen(ttpath)+2);
 	/* find directories in dirs & delimit with zeros */
 	chop_path(ttpath, dirs);
@@ -472,7 +472,7 @@ load_dynttlist_from_dir (STRING dir)
 				STRING path = concat_path_alloc(dir, ttfile);
 				DYNTT dyntt = create_dyntt(tt, ttfile, path);
 				strfree(&path);
-				table_insert_object(f_dyntts, zs_str(zfile), dyntt);
+				insert_table_obj(f_dyntts, zs_str(zfile), dyntt);
 				--dyntt->refcnt; /* leave table as sole owner */
 			}
 		}

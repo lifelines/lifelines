@@ -154,9 +154,9 @@ load_config_file (STRING file, STRING * pmsg)
 	        free(thisdir);
 		return TRUE; /* no config file, that is ok */
         }
-	f_predef = create_table();
+	f_predef = create_table_str();
 
-	table_insert_string(f_predef, "%thisdir%", thisdir);
+	insert_table_str(f_predef, "%thisdir%", thisdir);
 	strfree(&thisdir);
 	/* read thru config file til done (or error) */
 	while (fgets(buffer, sizeof(buffer), fp)) {
@@ -193,7 +193,7 @@ load_config_file (STRING file, STRING * pmsg)
 		expand_variables(valbuf, sizeof(valbuf));
 		key = buffer; /* key is in beginning of buffer, we zero-terminated it */
 		val = valbuf;
-		table_insert_string(f_global, buffer, val);
+		insert_table_str(f_global, buffer, val);
 	}
 	failed = !feof(fp);
 	fclose(fp);
@@ -216,22 +216,21 @@ load_global_options (STRING configfile, STRING * pmsg)
 {
 	*pmsg = NULL;
 	if (!f_global) 
-		f_global= create_table();
+		f_global= create_table_str();
 	if (!load_config_file(configfile, pmsg))
 		return FALSE;
 	return TRUE;
 }
 /*=================================
  * set_cmd_options -- Store cmdline options from caller
- * Created: 2002/10/07, Perry Rapp
  *===============================*/
 void
 set_cmd_options (TABLE opts)
 {
 	ASSERT(opts);
-	free_optable(&f_cmd);
-	f_cmd = create_table();
-	copy_table(opts, f_cmd, FREEBOTH);
+	release_table(f_cmd);
+	f_cmd = opts;
+	addref_table(f_cmd);
 	send_notifications();
 }
 /*=================================
@@ -242,9 +241,9 @@ void
 set_db_options (TABLE opts)
 {
 	ASSERT(opts);
-	free_optable(&f_db);
-	f_db = create_table();
-	copy_table(opts, f_db, FREEBOTH);
+	release_table(f_db);
+	f_db = opts;
+	addref_table(f_db);
 	send_notifications();
 }
 /*=================================
@@ -255,8 +254,8 @@ void
 get_db_options (TABLE opts)
 {
 	if (!f_db)
-		f_db = create_table();
-	copy_table(f_db, opts, FREEBOTH);
+		f_db = create_table_str();
+	copy_table(f_db, opts);
 }
 /*==========================================
  * free_optable -- free a table if it exists
@@ -361,7 +360,7 @@ void
 setoptstr_fallback (STRING optname, STRING newval)
 {
 	if (!f_fallback)
-		f_fallback = create_table();
+		f_fallback = create_table_str();
 	replace_table_str(f_fallback, optname, newval);
 	send_notifications();
 }
