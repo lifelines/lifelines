@@ -5,6 +5,10 @@
 
 	Implement variables for config file.
 
+	* ChangeLog win32/iconvshim.c win32/intlshim.c:
+
+	Give multiple default filenames to (win32) iconv & intl shims.
+
 2002-10-20 Perry Rapp
 
 	* ChangeLog po/sv.po src/liflines/screen.c:

@@ -1,25 +1,9 @@
 /*
    Copyright (c) 2002 Perry Rapp
-
-   Permission is hereby granted, free of charge, to any person
-   obtaining a copy of this software and associated documentation
-   files (the "Software"), to deal in the Software without
-   restriction, including without limitation the rights to use, copy,
-   modify, merge, publish, distribute, sublicense, and/or sell copies
-   of the Software, and to permit persons to whom the Software is
-   furnished to do so, subject to the following conditions:
-
-   The above copyright notice and this permission notice shall be
-   included in all copies or substantial portions of the Software.
-
-   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-   SOFTWARE.
+   "The MIT license"
+   Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 /*=============================================================
  * intlshim.c -- Shim to connect to gettext dll if available
@@ -35,7 +19,7 @@
 #define INTLDECL
 #endif
 
-#define INTLSHIM_VERSION "1.0.1"
+#define INTLSHIM_VERSION "1.1.0"
 
 
 static FARPROC MyGetProcAddress(HMODULE hModule, LPCSTR lpProcName);
@@ -47,7 +31,8 @@ static void unload_dll(void);
 
 static HINSTANCE f_hinstDll=0;
 static int f_failed=0;
-static char f_dllpath[MAX_PATH]="gettext.dll";
+static char f_dllpath[MAX_PATH]="";
+static char * f_defaults[] = { "gettext.dll", "libintl.dll" };
 
 
 typedef char * (*gettext_type)(const char *m);
@@ -253,13 +238,29 @@ load_dll (void)
 	if (f_failed)
 		return 0;
 	f_failed=1;
-	if (!f_dllpath[0])
-		return 0;
 
 	memset(&f_gettext_fncs, 0, sizeof(f_gettext_fncs));
-	f_hinstDll = LoadLibrary(f_dllpath);
+
+	if (!f_dllpath[0]) 
+	{
+		/* no requested path, try defaults */
+		int i;
+		for (i=0; i<sizeof(f_defaults)/sizeof(f_defaults[0]); ++i) 
+		{
+			if ((f_hinstDll = LoadLibrary(f_defaults[i]))!=NULL)
+			{
+				strncpy(f_dllpath, f_defaults[i], sizeof(f_dllpath));
+				break;
+			}
+		}
+	} 
+	else 
+	{
+		f_hinstDll = LoadLibrary(f_dllpath);
+	}
 	if (!f_hinstDll)
 		return 0;
+
 	f_gettext_fncs.gettext_x = (gettext_type)MyGetProcAddress(f_hinstDll, "gettext");
 	f_gettext_fncs.dgettext_x = (dgettext_type)MyGetProcAddress(f_hinstDll, "dgettext");
 	f_gettext_fncs.dcgettext_x = (dcgettext_type)MyGetProcAddress(f_hinstDll, "dcgettext");
