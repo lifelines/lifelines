@@ -63,6 +63,7 @@ STRING nonnodstr1  = 0;
 STRING nonind1     = 0;
 STRING nonindx     = 0;
 STRING nonfam1     = 0;
+STRING nonfamx     = 0;
 STRING nonrecx     = 0;
 STRING nonnod1     = 0;
 STRING nonnodx     = 0;
@@ -72,6 +73,7 @@ STRING nonboox     = 0;
 STRING nonlst1     = 0;
 STRING nonlstx     = 0;
 STRING badargs     = 0;
+STRING badargx     = 0;
 
 /*********************************************
  * external/imported variables
@@ -101,6 +103,7 @@ typedef struct pn_block *PN_BLOCK;
 
 /* alphabetical */
 static PNODE alloc_pnode_memory(void);
+static void clear_error_strings(void);
 static void clear_pnode(PNODE node);
 static void delete_pnode(PNODE node);
 static void free_pnode_memory(PNODE node);
@@ -658,6 +661,36 @@ init_interpreter (void)
 	verify_builtins();
 }
 /*=============================
+ * clear_error_strings -- Free all error strings
+ *  Used at end, and also if language change needed
+ *===========================*/
+static void
+clear_error_strings (void)
+{
+	strfree(&nonint1);
+	strfree(&nonintx);
+	strfree(&nonstr1);
+	strfree(&nonstrx);
+	strfree(&nullarg1);
+	strfree(&nonfname1);
+	strfree(&nonnodstr1);
+	strfree(&nonind1);
+	strfree(&nonindx);
+	strfree(&nonfam1);
+	strfree(&nonfamx);
+	strfree(&nonrecx);
+	strfree(&nonnod1);
+	strfree(&nonnodx);
+	strfree(&nonvar1);
+	strfree(&nonvarx);
+	strfree(&nonboox);
+	strfree(&nonlst1);
+	strfree(&nonlstx);
+	strfree(&badargs);
+	strfree(&badargx);
+	strfree(&interp_locale);
+}
+/*=============================
  * shutdown_interpreter -- shutdown code for
  *  interpreter at program end
  * Created: 2002/02/16, Perry Rapp
@@ -665,26 +698,7 @@ init_interpreter (void)
 void
 shutdown_interpreter (void)
 {
-	if (nonint1) stdfree(nonint1);
-	if (nonintx) stdfree(nonintx);
-	if (nonstr1) stdfree(nonstr1);
-	if (nonstrx) stdfree(nonstrx);
-	if (nullarg1) stdfree(nullarg1);
-	if (nonfname1) stdfree(nonfname1);
-	if (nonnodstr1) stdfree(nonnodstr1);
-	if (nonind1) stdfree(nonind1);
-	if (nonindx) stdfree(nonindx);
-	if (nonfam1) stdfree(nonfam1);
-	if (nonrecx) stdfree(nonrecx);
-	if (nonnod1) stdfree(nonnod1);
-	if (nonnodx) stdfree(nonnodx);
-	if (nonvar1) stdfree(nonvar1);
-	if (nonvarx) stdfree(nonvarx);
-	if (nonboox) stdfree(nonboox);
-	if (nonlst1) stdfree(nonlst1);
-	if (nonlstx) stdfree(nonlstx);
-	if (badargs) stdfree(badargs);
-	if (interp_locale) stdfree(interp_locale);
+	clear_error_strings();
 }
 /*=============================
  * interp_load_lang -- Load the common
@@ -711,44 +725,28 @@ interp_load_lang (void)
 		return
 	interp_locale = strsave("C");
 #endif
-	if (nonint1) stdfree(nonint1);
+	clear_error_strings();
 	nonint1     = strsave(_("%s: the arg must be an integer."));
-	if (nonintx) stdfree(nonintx);
 	nonintx     = strsave(_("%s: the arg #%s must be an integer."));
-	if (nonstr1) stdfree(nonstr1);
 	nonstr1     = strsave(_("%s: the arg must be a string."));
-	if (nonstrx) stdfree(nonstrx);
 	nonstrx     = strsave(_("%s: the arg #%s must be a string."));
-	if (nullarg1) stdfree(nullarg1);
 	nullarg1    = strsave(_("%s: null arg not permissible."));
-	if (nonfname1) stdfree(nonfname1);
 	nonfname1   = strsave(_("%s: the arg must be a filename."));
-	if (nonnodstr1) stdfree(nonnodstr1);
 	nonnodstr1  = strsave(_("%s: the arg must be a node or string."));
-	if (nonind1) stdfree(nonind1);
 	nonind1     = strsave(_("%s: the arg must be a person."));
-	if (nonindx) stdfree(nonindx);
 	nonindx     = strsave(_("%s: the arg #%s must be a person."));
-	if (nonfam1) stdfree(nonfam1);
 	nonfam1     = strsave(_("%s: the arg must be a family."));
-	if (nonrecx) stdfree(nonrecx);
+	nonfamx     = strsave(_("%s: the arg #%s must be a family."));
 	nonrecx    = strsave(_("%s: the arg #%s must be a record."));
-	if (nonnod1) stdfree(nonnod1);
 	nonnod1     = strsave(_("%s: the arg must be a node."));
-	if (nonnodx) stdfree(nonnodx);
 	nonnodx     = strsave(_("%s: the arg #%s must be a node."));
-	if (nonvar1) stdfree(nonvar1);
 	nonvar1     = strsave(_("%s: the arg must be a variable."));
-	if (nonvarx) stdfree(nonvarx);
 	nonvarx     = strsave(_("%s: the arg #%s must be a variable."));
-	if (nonboox) stdfree(nonboox);
 	nonboox     = strsave(_("%s: the arg #%s must be a boolean."));
-	if (nonlst1) stdfree(nonlst1);
 	nonlst1    = strsave(_("%s: the arg must be a list."));
-	if (nonlstx) stdfree(nonlstx);
 	nonlstx    = strsave(_("%s: the arg #%s must be a list."));
-	if (badargs) stdfree(badargs);
 	badargs     = strsave(_("%s: Bad argument(s)"));
+	badargx     = strsave(_("%s: the arg #%s had a major error."));
 }
 
 /*=============================

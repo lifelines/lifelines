@@ -71,7 +71,11 @@ BOOLEAN rpt_cancelled = FALSE;
 extern BOOLEAN progrunning, progparsing;
 extern INT progerror;
 extern STRING qSwhatrpt,qSidrpt;
-extern STRING nonrecx;
+extern STRING nonint1, nonintx, nonstr1, nonstrx, nullarg1, nonfname1;
+extern STRING nonnodstr1, nonind1, nonindx, nonfam1, nonfamx;
+extern STRING nonrecx, nonnod1;
+extern STRING nonnodx, nonvar1, nonvarx, nonboox, nonlst1, nonlstx;
+extern STRING badargs, badargx, nonrecx;
 
 /*********************************************
  * local function prototypes
@@ -225,21 +229,22 @@ interp_program (STRING proc, INT nargs, VPTR *args, INT nifiles
 	}
 	remove_list(plist, NULL); plist=NULL;
 	if (Perrors) {
-		progmessage(MSG_ERROR, "contains errors.");
+		progmessage(MSG_ERROR, _("contains errors."));
 		goto interp_program_exit;
 	}
 
    /* Find top procedure */
 
 	if (!(first = (PNODE) valueof_ptr(proctab, proc))) {
-		progmessage(MSG_ERROR, "needs a starting procedure.");
+		progmessage(MSG_ERROR, _("needs a starting procedure."));
 		goto interp_program_exit;
 	}
 
    /* Open output file if name is provided */
 
 	if (ofile && !(Poutfp = fopen(ofile, LLWRITETEXT))) {
-		msg_error("Error: file \"%s\" could not be created.\n", ofile);
+		msg_error(_("Error: output file <%s> could not be created.\n")
+			, ofile);
 		goto interp_program_exit;
 	}
 	if (Poutfp) setbuf(Poutfp, NULL);
@@ -248,7 +253,7 @@ interp_program (STRING proc, INT nargs, VPTR *args, INT nifiles
 
 	parm = (PNODE) iargs(first);
 	if (nargs != num_params(parm)) {
-		msg_error("Proc %s must be called with %d (not %d) parameters.",
+		msg_error(_("Proc %s must be called with %d (not %d) parameters."),
 			proc, num_params(parm), nargs);
 		goto interp_program_exit;
 	}
@@ -263,17 +268,17 @@ interp_program (STRING proc, INT nargs, VPTR *args, INT nifiles
 	progparsing = FALSE;
 	progrunning = TRUE;
 	progerror = 0;
-	progmessage(MSG_STATUS, "is running...");
+	progmessage(MSG_STATUS, _("is running..."));
 	switch (interpret((PNODE) ibody(first), stab, &dummy)) {
 	case INTOKAY:
 	case INTRETURN:
-		progmessage(MSG_INFO, "was run successfully.");
+		progmessage(MSG_INFO, _("was run successfully."));
 		break;
 	default:
 		if (rpt_cancelled)
-			progmessage(MSG_STATUS, "was cancelled.");
+			progmessage(MSG_STATUS, _("was cancelled."));
 		else
-			progmessage(MSG_STATUS, "was not run because of errors.");
+			progmessage(MSG_STATUS, _("was not run because of errors."));
 		break;
 	}
 
@@ -322,7 +327,7 @@ parse_file (STRING ifile,
 	Plist = plist;
 	Pinfp = fopenpath(ifile, LLREADTEXT, programsdir, ".ll", (STRING *)NULL);
 	if (!Pinfp) {
-		llwprintf("Error: file \"%s\" not found.\n", ifile);
+		llwprintf(_("Error: file <%s> not found.\n"), ifile);
 		Perrors++;
 		return;
 	}
@@ -366,11 +371,11 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 
 	while (node) {
 		Pnode = node;
-if (prog_debug) {
-	llwprintf("i%di: ", iline(node));
-	debug_show_one_pnode(node);
-	llwprintf("\n");
-}
+		if (prog_debug) {
+			llwprintf("d%d: ", iline(node));
+			debug_show_one_pnode(node);
+			llwprintf("\n");
+		}
 		switch (itype(node)) {
 		case ISCONS:
 			poutput(pvalue(ivalue(node)), &eflg);
@@ -380,7 +385,7 @@ if (prog_debug) {
 		case IIDENT:
 			val = eval_and_coerce(PSTRING, node, stab, &eflg);
 			if (eflg) {
-				prog_error(node, "identifier: %s should be a string\n",
+				prog_error(node, _("identifier: %s should be a string\n"),
 				    iident(node));
 				goto interp_fail;
 			}
@@ -394,9 +399,6 @@ if (prog_debug) {
 			delete_pvalue(val);
 			break;
 		case IBCALL:
-#ifdef DEBUG
-			llwprintf("BCALL: %s\n", iname(node));
-#endif
 			val = evaluate_func(node, stab, &eflg);
 			if (eflg) {
 				goto interp_fail;
@@ -412,8 +414,6 @@ if (prog_debug) {
 		case IFCALL:
 			val = evaluate_ufunc(node, stab, &eflg);
 			if (eflg) {
-				if (getoptint("FullReportCallStack", 0) > 0)
-					prog_error(node, "In user function");
 				goto interp_fail;
 			}
 			if (!val) break;
@@ -431,8 +431,6 @@ if (prog_debug) {
 			case INTOKAY:
 				break;
 			case INTERROR:
-				if (getoptint("FullReportCallStack", 0) > 0)
-					prog_error(node, "In children loop");
 				goto interp_fail;
 			default:
 				return irc;
@@ -443,8 +441,6 @@ if (prog_debug) {
 			case INTOKAY:
 				break;
 			case INTERROR:
-				if (getoptint("FullReportCallStack", 0) > 0)
-					prog_error(node, "In spouses loop");
 				goto interp_fail;
 			default:
 				return irc;
@@ -455,10 +451,6 @@ if (prog_debug) {
 			case INTOKAY:
 				break;
 			case INTERROR:
-#if 0
-				llwprintf(ierror, ifname(node), iline(node));
-				llwprintf("in families loop\n");
-#endif
 				goto interp_fail;
 			default:
 				return irc;
@@ -469,10 +461,6 @@ if (prog_debug) {
 			case INTOKAY:
 				break;
 			case INTERROR:
-#if 0
-				llwprintf(ierror, ifname(node), iline(node));
-				llwprintf("in fathers loop\n");
-#endif
 				goto interp_fail;
 			default:
 				return irc;
@@ -483,10 +471,6 @@ if (prog_debug) {
 			case INTOKAY:
 				break;
 			case INTERROR:
-#if 0
-				llwprintf(ierror, ifname(node), iline(node));
-				llwprintf("in mothers loop\n");
-#endif
 				goto interp_fail;
 			default:
 				return irc;
@@ -497,10 +481,6 @@ if (prog_debug) {
 			case INTOKAY:
 				break;
 			case INTERROR:
-#if 0
-				llwprintf(ierror, ifname(node), iline(node));
-				llwprintf("in parents loop\n");
-#endif
 				goto interp_fail;
 			default:
 				return irc;
@@ -511,10 +491,6 @@ if (prog_debug) {
 			case INTOKAY:
 				break;
 			case INTERROR:
-#if 0
-				llwprintf(ierror, ifname(node), iline(node));
-				llwprintf("in indiset loop\n");
-#endif
 				goto interp_fail;
 			default:
 				return irc;
@@ -525,10 +501,6 @@ if (prog_debug) {
 			case INTOKAY:
 				break;
 			case INTERROR:
-#if 0
-				llwprintf(ierror, ifname(node), iline(node));
-				llwprintf("in forindi loop\n");
-#endif
 				goto interp_fail;
 			default:
 				return irc;
@@ -539,10 +511,6 @@ if (prog_debug) {
 			case INTOKAY:
 				break;
 			case INTERROR:
-#if 0
-				llwprintf(ierror, ifname(node), iline(node));
-				llwprintf("in forfam loop\n");
-#endif
 				goto interp_fail;
 			default:
 				return irc;
@@ -553,10 +521,6 @@ if (prog_debug) {
 			case INTOKAY:
 				break;
 			case INTERROR:
-#if 0
-				llwprintf(ierror, ifname(node), iline(node));
-				llwprintf("in forsour loop\n");
-#endif
 				goto interp_fail;
 			default:
 				return irc;
@@ -567,10 +531,6 @@ if (prog_debug) {
 			case INTOKAY:
 				break;
 			case INTERROR:
-#if 0
-				llwprintf(ierror, ifname(node), iline(node));
-				llwprintf("in foreven loop\n");
-#endif
 				goto interp_fail;
 			default:
 				return irc;
@@ -581,10 +541,6 @@ if (prog_debug) {
 			case INTOKAY:
 				break;
 			case INTERROR:
-#if 0
-				llwprintf(ierror, ifname(node), iline(node));
-				printf("in forothr loop\n");
-#endif
 				goto interp_fail;
 			default:
 				return irc;
@@ -595,10 +551,6 @@ if (prog_debug) {
 			case INTOKAY:
 				break;
 			case INTERROR:
-#if 0
-				llwprintf(ierror, ifname(node), iline(node));
-				llwprintf("in forlist loop\n");
-#endif
 				goto interp_fail;
 			default:
 				return irc;
@@ -609,10 +561,6 @@ if (prog_debug) {
 			case INTOKAY:
 				break;
 			case INTERROR:
-#if 0
-				llwprintf(ierror, ifname(node), iline(node));
-				llwprintf("in fornotes loop\n");
-#endif
 				goto interp_fail;
 			default:
 				return irc;
@@ -623,10 +571,6 @@ if (prog_debug) {
 			case INTOKAY:
 				break;
 			case INTERROR:
-#if 0
-				llwprintf(ierror, ifname(node), iline(node));
-				llwprintf("in fornodes loop\n");
-#endif
 				goto interp_fail;
 			default:
 				return irc;
@@ -637,10 +581,6 @@ if (prog_debug) {
 			case INTOKAY:
 				break;
 			case INTERROR:
-#if 0
-				llwprintf(ierror, ifname(node), iline(node));
-				llwprintf("in traverse loop\n");
-#endif
 				goto interp_fail;
 			default:
 				return irc;
@@ -651,10 +591,6 @@ if (prog_debug) {
 			case INTOKAY:
 				break;
 			case INTERROR:
-#if 0
-				llwprintf(ierror, ifname(node), iline(node));
-				llwprintf("in if statement\n");
-#endif
 				goto interp_fail;
 			default:
 				return irc;
@@ -665,8 +601,6 @@ if (prog_debug) {
 			case INTOKAY:
 				break;
 			case INTERROR:
-				if (getoptint("FullReportCallStack", 0) > 0)
-					prog_error(node, "in while statement");
 				goto interp_fail;
 			default:
 				return irc;
@@ -677,8 +611,6 @@ if (prog_debug) {
 			case INTOKAY:
 				break;
 			case INTERROR:
-				if (getoptint("FullReportCallStack", 0) > 0)
-					prog_error(node, "in procedure call %s()", iname(node));
 				goto interp_fail;
 			default:
 				return irc;
@@ -704,7 +636,11 @@ if (prog_debug) {
 	return TRUE;
 
 interp_fail:
-	/* for breakpointing */
+	if (getoptint("FullReportCallStack", 0) > 0) {
+		llwprintf("e%d: ", iline(node));
+		debug_show_one_pnode(node);
+		llwprintf("\n");
+	}
 	return INTERROR;
 }
 /*========================================+
@@ -721,11 +657,11 @@ interp_children (PNODE node, SYMTAB stab, PVALUE *pval)
 	PVALUE val;
 	NODE fam = (NODE) eval_fam(iloopexp(node), stab, &eflg, &fcel);
 	if (eflg) {
-		prog_error(node, "1st arg to children must be a family");
+		prog_error(node, nonfamx, "children", "1");
 		return INTERROR;
 	}
 	if (fam && nestr(ntag(fam), "FAM")) {
-		prog_error(node, "1st arg to children has a major error");
+		prog_error(node, badargx, "children", "1");
 		return INTERROR;
 	}
 	if (!fam) return INTOKAY;
@@ -772,11 +708,11 @@ interp_spouses (PNODE node, SYMTAB stab, PVALUE *pval)
 	PVALUE sval, fval, nval;
 	NODE indi = (NODE) eval_indi(iloopexp(node), stab, &eflg, &icel);
 	if (eflg) {
-		prog_error(node, "1st arg to spouses must be a person");
+		prog_error(node, nonindx, "spouses", "1");
 		return INTERROR;
 	}
 	if (indi && nestr(ntag(indi), "INDI")) {
-		prog_error(node, "1st arg to spouses has a major error");
+		prog_error(node, badargx, "spouses", "1");
 		return INTERROR;
 	}
 	if (!indi) return TRUE;
@@ -834,11 +770,11 @@ interp_families (PNODE node, SYMTAB stab, PVALUE *pval)
 	PVALUE fval, sval, nval;
 	NODE indi = (NODE) eval_indi(iloopexp(node), stab, &eflg, &icel);
 	if (eflg) {
-		prog_error(node, "1st arg to families must be a person");
+		prog_error(node, nonindx, "families", "1");
 		return INTERROR;
 	}
 	if (indi && nestr(ntag(indi), "INDI")) {
-		prog_error(node, "1st arg to families has a major error");
+		prog_error(node, badargx, "families", "1");
 		return INTERROR;
 	}
 	if (!indi) return INTOKAY;
@@ -893,11 +829,11 @@ interp_fathers (PNODE node, SYMTAB stab, PVALUE *pval)
 	PVALUE sval, fval;
 	NODE indi = (NODE) eval_indi(iloopexp(node), stab, &eflg, &icel);
 	if (eflg) {
-		prog_error(node, "1st arg to fathers must be a person");
+		prog_error(node, nonindx, "fathers", "1");
 		return INTERROR;
 	}
 	if (indi && nestr(ntag(indi), "INDI")) {
-		prog_error(node, "1st arg to fathers has a major error");
+		prog_error(node, badargx, "fathers", "1");
 		return INTERROR;
 	}
 	if (!indi) return TRUE;
@@ -956,11 +892,11 @@ interp_mothers (PNODE node, SYMTAB stab, PVALUE *pval)
 	PVALUE sval, fval;
 	NODE indi = (NODE) eval_indi(iloopexp(node), stab, &eflg, &icel);
 	if (eflg) {
-		prog_error(node, "1st arg to mothers must be a person");
+		prog_error(node, nonindx, "mothers", "1");
 		return INTERROR;
 	}
 	if (indi && nestr(ntag(indi), "INDI")) {
-		prog_error(node, "1st arg to mothers has a major error");
+		prog_error(node, badargx, "mothers", "1");
 		return INTERROR;
 	}
 	if (!indi) return TRUE;
@@ -1016,11 +952,11 @@ interp_parents (PNODE node, SYMTAB stab, PVALUE *pval)
 	PVALUE fval;
 	NODE indi = (NODE) eval_indi(iloopexp(node), stab, &eflg, &icel);
 	if (eflg) {
-		prog_error(node, "1st arg to parents must be a person");
+		prog_error(node, nonindx, "parents", "1");
 		return INTERROR;
 	}
 	if (indi && nestr(ntag(indi), "INDI")) {
-		prog_error(node, "1st arg to parents has a major error");
+		prog_error(node, badargx, "parents", "1");
 		return INTERROR;
 	}
 	if (!indi) return TRUE;
@@ -1063,7 +999,7 @@ interp_fornotes (PNODE node, SYMTAB stab, PVALUE *pval)
 	NODE root;
 	PVALUE val = eval_and_coerce(PGNODE, iloopexp(node), stab, &eflg);
 	if (eflg) {
-		prog_error(node, "1st arg to fornotes must be a record line");
+		prog_error(node, nonrecx, "fornotes", "1");
 		return INTERROR;
 	}
 	root = (NODE) pvalue(val);
@@ -1103,7 +1039,7 @@ interp_fornodes (PNODE node, SYMTAB stab, PVALUE *pval)
 	NODE sub, root=NULL;
 	PVALUE val = eval_and_coerce(PGNODE, iloopexp(node), stab, &eflg);
 	if (eflg) {
-		prog_error(node, "1st arg to fornodes must be a record line");
+		prog_error(node, nonrecx, "fornodes", "1");
 		return INTERROR;
 	}
 	root = (NODE) pvalue(val);

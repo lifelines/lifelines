@@ -5,6 +5,10 @@
 	Document debugger option in code & in config files.
 	More i18n in interpreter.
 
+ 	* ChangeLog interp/alloc.c interp/interp.c:
+
+	More i18n in interpreter.
+
 2002-05-30 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog configure.in arch/Makefile.am:
