@@ -366,7 +366,6 @@ ask_for_program (STRING mode,
   int len, choice;
   struct program_info *head = find_all_programs(path, ext);
   STRING *list = NULL;
-  STRING ifile;
   if (!head || !head->next)
     goto AskForString;
   len = make_program_list(head, extrpt, &list);
@@ -390,6 +389,6 @@ ask_for_program (STRING mode,
   return fp;
 
 AskForString:
-  fp = ask_for_input_file(LLREADTEXT, qrpt, &ifile, llprograms, ".ll");
+  fp = ask_for_input_file(LLREADTEXT, qrpt, pfname, llprograms, ".ll");
   return fp;
 }

@@ -227,6 +227,10 @@ set_list_element (LIST list,
                   WORD val)
 {
 	LNODE node = nth_in_list(list, ind);
+	if (!node) {
+		/* Perry: 2000/11/20 -temporary fix - what should we do ? */
+		return 0;
+	}
 	lelement(node) = val;
 }
 /*=======================================================
@@ -237,6 +241,10 @@ get_list_element (LIST list,
                   INT ind)
 {
 	LNODE node = nth_in_list(list, ind);
+	if (!node) {
+		/* Perry: 2000/11/20 -temporary fix - what should we do ? */
+		return 0;
+	}
 	return lelement(node);
 }
 /*==================================

@@ -1,4 +1,9 @@
 2000-11-20 Perry Rapp <puddle@users.sourceforge.net>
+	liflines/askprogram.c stdlib/double.c stdlib/signals.c:
+	Handle nulls in get_list_element & set.
+	Fix bug in my recent additions to askprogram.c.
+
+2000-11-20 Perry Rapp <puddle@users.sourceforge.net>
 	gedlib/xreffile.c: Set xreffp to zero after closing
 	(minor safety device to help debug any future errors).
 	
