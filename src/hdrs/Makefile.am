@@ -5,7 +5,8 @@
 
 SUBDIRS = win32
 
-EXTRA_DIST = arch.h btree.h date.h fpattern.h cache.h gedcheck.h \
+EXTRA_DIST = arch.h btree.h date.h fpattern.h cache.h codesets.c \
+	gedcheck.h \
 	gedcom.h gengedc.h feedback.h fpattern.h icvt.h impfeed.h indiseq.h \
 	isolangs.h interp.h langinfz.h liflines.h list.h llnls.h lloptions.h \
 	llstdlib.h menuitem.h metadata.h mystring.h proptbls.h screen.h \

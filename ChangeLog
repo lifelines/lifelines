@@ -8,6 +8,10 @@
 
 	Ongoing reimplementation of codesets.
 
+	* ChangeLog src/gedlib/Makefile.am src/hdrs/Makefile.am:
+
+	Add new codesets.* files to Makefiles.
+
 2002-11-26 Perry Rapp
 
 	* ChangeLog src/gedlib/charmaps.c src/gedlib/editvtab.c
