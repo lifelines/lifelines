@@ -368,7 +368,7 @@ prompt_for_db:
 		BOOLEAN timing = FALSE;
 		interp_main(exprogs, progout, picklist, timing);
 		make_list_empty(exprogs);
-		remove_list(exprogs, 0);
+		remove_list2(exprogs, 0);
 	} else {
 		/* TODO: prompt for report filename */
 	}

@@ -1137,7 +1137,7 @@ free_name_list (LIST list)
 void
 free_string_list(LIST list)
 {
-	remove_list(list, free_string_el);
+	remove_list2(list, free_string_el);
 }
 /*====================================================
  * traverse_names -- traverse names in db

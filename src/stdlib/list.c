@@ -64,11 +64,11 @@ static struct tag_vtable vtable_for_list = {
 };
 
 /*===========================
- * create_list -- Create list
+ * create_list_impl -- Create list
  * returns addref'd list
  *=========================*/
-LIST
-create_list (void)
+static LIST
+create_list_impl (void)
 {
 	LIST list = (LIST) stdalloc(sizeof(*list));
 	memset(list, 0, sizeof(*list));
@@ -81,13 +81,22 @@ create_list (void)
 	return list;
 }
 /*===========================
+ * create_list -- Create list (LISTNOFREE)
+ * returns addref'd list
+ *=========================*/
+LIST
+create_list (void)
+{
+	return create_list2(LISTNOFREE);
+}
+/*===========================
  * create_list2 -- Create list, with free type
  * returns addref'd list
  *=========================*/
 LIST
 create_list2 (INT whattofree)
 {
-	LIST list = create_list();
+	LIST list = create_list_impl();
 	ltype(list) = whattofree;
 	return list;
 }
@@ -99,15 +108,16 @@ create_list2 (INT whattofree)
 void
 set_list_type (LIST list, int type)
 {
+	ASSERT(llen(list)==0); /* only valid on empty lists */
 	ltype(list) = type;
 }
 /*===========================
- * remove_list -- Delete all elements & delete list
+ * remove_list2 -- Delete all elements & delete list
  *  list: [IN]  list to completely delete
  *  func: [IN]  function to call on each element first (may be NULL)
  *=========================*/
 void
-remove_list (LIST list, void (*func)(VPTR))
+remove_list2 (LIST list, void (*func)(VPTR))
 {
 	LNODE lnode0, lnode;
 	if (!list) return;
@@ -120,6 +130,18 @@ remove_list (LIST list, void (*func)(VPTR))
 		lnode0 = lnode;
 	}
 	stdfree(list);
+}
+/*===========================
+ * remove_empty_list -- Delete a list with no elements
+ *  ASSERT check that list is in fact empty
+ *=========================*/
+void
+remove_empty_list (LIST *plist)
+{
+	if (!plist || !(*plist)) return;
+	ASSERT(llen(*plist) == 0);
+	stdfree(*plist);
+	*plist = NULL;
 }
 /*===========================
  * in_list -- find first element returning true from check function
@@ -547,7 +569,8 @@ list_destructor (VTABLE *obj)
 {
 	LIST list = (LIST)obj;
 	ASSERT((*obj) == &vtable_for_list);
-	remove_list(list, 0);
+	make_list_empty(list);
+	remove_list2(list, 0);
 }
 /*=================================================
  * addref_list -- increment reference count of list
@@ -568,6 +591,6 @@ release_list (LIST list, void (*func)(VPTR))
 	ASSERT(list->vtable == &vtable_for_list);
 	--list->l_refcnt;
 	if (!list->l_refcnt) {
-		remove_list(list, func);
+		remove_list2(list, func);
 	}
 }

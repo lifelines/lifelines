@@ -18,6 +18,16 @@
 	lacking data from orphaned to missing data records. Remove llines
 	UI for fixing these, and add dbverify M switch to fix them.
 
+	* ChangeLog src/gedlib/indiseq.c src/gedlib/init.c
+	src/gedlib/lldatabase.c src/gedlib/names.c src/gedlib/xlat.c
+	src/hdrs/list.h src/interp/interp.c src/liflines/llexec.c
+	src/liflines/main.c src/liflines/pedigree.c src/liflines/screen.c
+	src/stdlib/list.c src/stdlib/listener.c src/stdlib/proptbls.c
+	src/tools/dbverify.c
+
+	Some internal list cleanup; new function remove_empty_list.
+	Rename remove_list to remove_list2.
+
 2005-02-04 Perry Rapp
 
 	* ChangeLog src/gedlib/node.c src/hdrs/gedcom.h

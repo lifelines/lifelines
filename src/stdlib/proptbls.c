@@ -109,7 +109,7 @@ convert_proplist_to_proparray (LIST list)
 		props[i++] = (TABLE)el;
 	ENDLIST
 	props[i] = NULL; /* null marker at end of array */
-	remove_list(list, NULL);
+	remove_list2(list, NULL);
 	return props;
 }
 /*===================================================

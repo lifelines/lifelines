@@ -1894,7 +1894,7 @@ invoke_cset_display (void)
 
 	display_list(_("Codeset information"), list);
 	make_list_empty(list);
-	remove_list(list, 0);
+	remove_list2(list, 0);
 	zs_free(&zstr);
 }
 /*======================================

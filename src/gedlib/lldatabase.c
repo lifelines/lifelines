@@ -113,9 +113,8 @@ lldb_adderror (LLDATABASE lldb, int errnum, CNSTRING errstr)
 	ERRORINFO errorinfo = 0;
 	ASSERT(lldb);
 	if (!lldb->errorlist) {
-		lldb->errorlist = create_list();
 		/* because object destructors aren't used by containers yet */
-		set_list_type(lldb->errorlist, LISTNOFREE);
+		lldb->errorlist = create_list2(LISTNOFREE);
 	}
 	errorinfo = (ERRORINFO) malloc(sizeof(*errorinfo));
 	memset(errorinfo, 0, sizeof(*errorinfo));
