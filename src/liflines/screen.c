@@ -43,11 +43,11 @@
 #include "table.h"
 #include "liflines.h"
 #include "arch.h"
-#include "screen.h"
 #include "menuitem.h"
 #include "lloptions.h"
 
 #include "llinesi.h"
+#include "screen.h"
 
 #define LINESREQ 24
 #define COLSREQ  80
@@ -168,7 +168,6 @@ static INT choose_or_view_array (STRING ttl, INT no, STRING *pstrngs
 static void choose_sort(STRING optname);
 #endif
 static INT choose_tt(STRING prompt);
-static UIWINDOW choose_win(INT desiredhgt, INT *actualhgt);
 static void clear_msgs(void);
 static void clearw(void);
 static UIWINDOW create_uisubwindow(UIWINDOW parent, INT rows, INT cols, INT begy, INT begx);
@@ -1186,7 +1185,6 @@ static void
 activate_popup_list_uiwin (listdisp * ld)
 {
 	INT asklen, hgt, rows, waste;
-	UIWINDOW uiwin=0;
 	/* 
 	figure out size of window needed, get closest match from choose_win 
 	we want rows for items and for details, +2 lines (above/below) if details
@@ -2117,7 +2115,6 @@ manufacture a listdisp here
 		if (i == mark) mvwaddch(win, row, 2, 'x');
 		if (i == cur) {
 			INT drow=1;
-			INT hgt=LIST_LINES;
 			INT scroll=0;
 			BOOLEAN reuse=FALSE;
 			struct llrect_s rectList;

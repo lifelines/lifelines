@@ -26,13 +26,20 @@
  * Copyright(c) 1996 Hannu Väisänen; all rights reserved.
 */
 
+#include "llstdlib.h"
 #include "sys_inc.h"
 #include <stdarg.h>
 #include "arch.h"
 #include "mystring.h"
 
 
+static int safechar(int c);
+
 extern int opt_finnish;	/* use standard strcmp, strncmp if this is FALSE */
+
+/* developer mode to help find bad sign-extensions */
+static int hardfail = 0;
+
 
 typedef struct {
   unsigned char toup;    /* Corresponding uppercase letter. */
@@ -352,57 +359,66 @@ const int my_ISO_Latin1_Finnish[] = {
 
 
 int
-my_isalpha (const int c)
+my_isalpha (const int c1)
 {
+  int c = safechar(c1);
   return (islat1(c) && (ISO_Latin1[c].isup || ISO_Latin1[c].islow));
 }
 
 int
-my_iscntrl (const int c)
+my_iscntrl (const int c1)
 {
+  int c = safechar(c1);
   return (islat1(c) && ISO_Latin1[c].iscntrl);
 }
 
 int
-my_islower (const int c)
+my_islower (const int c1)
 {
+  int c = safechar(c1);
   return (islat1(c) && ISO_Latin1[c].islow);
 }
 
 int
-my_isprint (const int c)
+my_isprint (const int c1)
 {
+  int c = safechar(c1);
   return (islat1(c) && !ISO_Latin1[c].iscntrl);
 }
 
 int
-my_isupper (const int c)
+my_isupper (const int c1)
 {
+  int c = safechar(c1);
   return (islat1(c) && ISO_Latin1[c].isup);
 }
 
 int
-my_tolower (const int c)
+my_tolower (const int c1)
 {
+  int c = safechar(c1);
   if (islat1(c)) return (ISO_Latin1[c].tolow);
   return c;
 }
 
 int
-my_toupper (const int c)
+my_toupper (const int c1)
 {
   /* BUG: ß is not converted to SS. */
   /* Note that ÿ does not have an   */
   /* uppercase form in ISO Latin 1. */
+  int c = safechar(c1);
   if (islat1(c)) return (ISO_Latin1[c].toup);
   return c;
 }
 
 
 int
-my_chrcmp (const int s1,
-           const int s2)
+my_chrcmp (const int sa1,
+           const int sa2)
 {
+  int s1 = safechar(sa1);
+  int s2 = safechar(sa2);
   if (islat1(s1) && islat1(s2)) {
     return (my_ISO_Latin1_Finnish[s1] - my_ISO_Latin1_Finnish[s2]);
   }
@@ -413,11 +429,10 @@ my_chrcmp (const int s1,
 
 
 int
-my_strcmp (const char *s1,
-           const char *s2,
-           const int cmp_table[])
+my_strcmp (const char *s1, const char *s2, const int cmp_table[])
 {
   int i;
+  /* to make things easier, work with pointers that give uchars */
   const unsigned char *p1 = (const unsigned char *)s1;
   const unsigned char *p2 = (const unsigned char *)s2;
 
@@ -442,6 +457,7 @@ my_strncmp (const char *s1,
             const int cmp_table[])
 {
   int i;
+  /* to make things easier, work with pointers that give uchars */
   const unsigned char *p1 = (const unsigned char *)s1;
   const unsigned char *p2 = (const unsigned char *)s2;
 
@@ -600,4 +616,27 @@ llstrncpy (char *dest, const char *src, size_t n)
 	strncpy(dest, src, n-1);
 	dest[n-1] = 0;
 	return dest;
+}
+/*==========================================================
+ * stdstring_hardfail -- Set programmer debugging mode
+ *  to coredump if any wrong characters passed to character
+ *  classification routines
+ * Created: 2002/01/24 (Perry Rapp)
+ *========================================================*/
+void
+stdstring_hardfail (void)
+{
+	hardfail = 1;
+}
+/*====================================================
+ * safechar -- fix any bad sign-extended characters
+ * Created: 2002/01/24 (Perry Rapp)
+ *==================================================*/
+static int
+safechar (int c)
+{
+	if (hardfail) {
+		ASSERT(c>0);
+	}
+	return (int)(unsigned char)(c);
 }

@@ -40,7 +40,6 @@
 #include <locale.h>
 #endif
 #include "llstdlib.h"
-#include "screen.h" /* calling initscr, noecho, ... */
 #include "btree.h"
 #include "table.h"
 #include "translat.h"
@@ -50,6 +49,7 @@
 #include "lloptions.h"
 
 #include "llinesi.h"
+#include "screen.h" /* calling initscr, noecho, ... */
 
 #ifdef HAVE_GETOPT
 #ifdef HAVE_GETOPT_H
@@ -257,7 +257,9 @@ main (INT argc, char **argv)
 	}
 
 	/* catch any fault, so we can close database */
-	if (!debugmode)
+	if (debugmode)
+		stdstring_hardfail();
+	else
 		set_signals();
 
 	/* Initialize Curses UI */

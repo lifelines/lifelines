@@ -29,7 +29,6 @@
  *   3.0.2 - 31 Dec 94
  *===========================================================*/
 
-#include "standard.h"
 #include "llstdlib.h"
 #include "mystring.h"
 
@@ -264,7 +263,7 @@ ll_toupper (INT c)
 INT
 ll_tolower (INT c)
 {
-	if(opt_finnish) return(my_toupper(c));
+	if(opt_finnish) return(my_tolower(c));
 #ifndef OS_NOCTYPE
 	if(isupper(c)) return( tolower(c) );
 	return(c);
@@ -332,7 +331,7 @@ BOOLEAN
 allwhite (STRING p)
 {
 	while (*p)
-	if (!iswhite(*p++)) return FALSE;
+		if (!iswhite((uchar)*p++)) return FALSE;
 	return TRUE;
 }
 /*==============================

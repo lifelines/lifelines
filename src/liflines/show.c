@@ -32,7 +32,6 @@
  *===========================================================*/
 
 #include "llstdlib.h"
-#include "screen.h"
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
@@ -42,6 +41,7 @@
 #include "lloptions.h"
 
 #include "llinesi.h"
+#include "screen.h"
 
 /*********************************************
  * global/exported variables

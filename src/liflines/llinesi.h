@@ -6,7 +6,7 @@ typedef struct llrect_s {
 	INT bottom;
 	INT left;
 	INT right;
-} * LLRECT;
+} *LLRECT;
 
 /* add.c */
 NODE add_child(NODE, NODE);

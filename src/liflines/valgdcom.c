@@ -40,8 +40,8 @@
 #include "gedcom.h"
 #include "gedcheck.h"
 #include "liflines.h"
-#include "screen.h" /* need to make interface for the wfield calls */
 #include "llinesi.h"
+#include "screen.h" /* need to make interface for the wfield calls */
 
 /* external data set by check_stdkeys() , used by addmissingkeys() */
 

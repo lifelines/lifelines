@@ -100,7 +100,6 @@ extern UIWINDOW del_menu_win;
 extern UIWINDOW scan_menu_win;
 extern UIWINDOW utils_menu_win;
 
-typedef struct llrect_s *LLRECT;
 
 /* Function Prototype */
 /* screen.c */
