@@ -1,3 +1,9 @@
+2003-08-15 Perry Rapp
+
+	* ChangeLog docs/Makefile.am
+
+	Improve docs makefile a bit with some named groups.
+
 2003-08-14 Perry Rapp
 
 	* ChangeLog src/hdrs/gedcom.h

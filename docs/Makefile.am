@@ -4,17 +4,20 @@
 
 # obsolete manuals: quickref.pdf quickref.ps lifelines.sgml
 
+MANUALSSRC = ll-reportmanual.xml ll-userguide.xml
+
 MANUALS =     ll-reportmanual.html ll-reportmanual.pdf \
 	     ll-reportmanual.txt \
 	     ll-userguide.html ll-userguide.pdf \
 	     ll-userguide.txt 
 
-EXTRA_DIST = btedit.1 dbverify.1 llines.1 \
-	      $(MANUALS) ll-reportmanual.xml  ll-userguide.xml 
+MANPAGES =   btedit.1 dbverify.1 llines.1
 
-CONFIG_CLEAN_FILES = lifelines.html lifelines.pdf lifelines.ps lifelines.txt \
-	     ll-reportmanual.html ll-reportmanual.pdf ll-reportmanual.txt \
-	     ll-userguide.html ll-userguide.pdf ll-userguide.txt 
+OLDGENFILES = lifelines.html lifelines.pdf lifelines.ps lifelines.txt
+
+EXTRA_DIST = $(MANUALSSRC) $(MANUALS) $(MANPAGES)
+
+CONFIG_CLEAN_FILES = $(OLDGENFILES) $(MANUALS)
 
 docdir = $(datadir)/doc/lifelines
 doc_DATA = $(EXTRA_DIST)
