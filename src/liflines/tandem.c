@@ -76,7 +76,7 @@ INT browse_tandem (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ
 	if (!indi1 || !indi2) return BROWSE_QUIT;
 	show_reset_scroll();
 	nkey1p = 0; /* force redraw */
-    nkey2p = 0;
+	nkey2p = 0;
 	modep = mode;
 
 	while (TRUE) {

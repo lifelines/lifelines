@@ -102,7 +102,7 @@ static NODE goto_indi_child(NODE indi, int childno);
 static BOOLEAN handle_aux_mode_cmds(INT c, INT * mode);
 static INT handle_history_cmds(INT c, NODE * pindi1);
 static NODE history_back(struct hist * histp);
-static NODE history_list(struct hist * histp);
+static RECORD history_list(struct hist * histp);
 static void history_record(NODE node, struct hist * histp);
 static NODE history_fwd(struct hist * histp);
 static void init_hist(struct hist * histp, INT count);
@@ -135,7 +135,8 @@ struct hist {
 	INT size;
 	NKEY * list;
 };
-static struct hist vhist;
+static struct hist vhist; /* records visited */
+static struct hist chist; /* records changed */
 
 
 /*********************************************
@@ -356,9 +357,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 		switch (c)
 		{
 		case CMD_EDIT:	/* Edit this person */
-			node = edit_indi(indi);
-			if (node)
-				indi = node;
+			indi = edit_indi(indi);
 			break;
 		case CMD_FAMILY: 	/* Browse to person's family */
 			if ((*pfam1 = choose_family(indi, _(qSntprnt), 
@@ -1310,8 +1309,11 @@ load_hist_lists (void)
 	if (count<0 || count > 9999)
 		count = 20;
 	init_hist(&vhist, count);
-	if (getoptint("SaveHistory", 0))
-		load_nkey_list("VHIST", &vhist);
+	init_hist(&chist, count);
+	if (getoptint("SaveHistory", 0)) {
+		load_nkey_list("HISTV", &vhist);
+		load_nkey_list("HISTC", &chist);
+	}
 }
 /*==================================================
  * save_hist_lists -- Save history into database
@@ -1322,7 +1324,8 @@ save_hist_lists (void)
 {
 	if (!getoptint("SaveHistory", 0)) return;
 	if (readonly || immutable) return;
-	save_nkey_list("VHIST", &vhist);
+	save_nkey_list("HISTV", &vhist);
+	save_nkey_list("HISTC", &chist);
 }
 /*==================================================
  * init_hist -- create & initialize a history list
@@ -1456,6 +1459,16 @@ save_nkey_list (STRING key, struct hist * histp)
 	store_text_file_to_db(key, editfile, 0);
 }
 /*==================================================
+ * history_record_change -- add node to change history
+ *  (if different from top of history)
+ * Created: 2002/06/23, Perry Rapp
+ *================================================*/
+void
+history_record_change (NODE node)
+{
+	history_record(node, &chist);
+}
+/*==================================================
  * history_record -- add node to history if different from top of history
  * Created: 2001/03?, Perry Rapp
  *================================================*/
@@ -1543,16 +1556,37 @@ history_fwd (struct hist * histp)
 	return node;
 }
 /*==================================================
+ * disp_vhistory_list -- show user the visited history list
+ *  returns NULL if no history or if user cancels
+ * Created: 2002/06/23, Perry Rapp
+ *================================================*/
+RECORD
+disp_vhistory_list (void)
+{
+	return history_list(&vhist);
+}
+/*==================================================
+ * disp_chistory_list -- show user the changed history list
+ *  returns NULL if no history or if user cancels
+ * Created: 2002/06/23, Perry Rapp
+ *================================================*/
+RECORD
+disp_chistory_list (void)
+{
+	return history_list(&chist);
+}
+/*==================================================
  * history_list -- let user choose from history list
  *  calls message(nohist) if none found
  *  returns NULL if no history or if user cancels
  * Created: 2001/04/12, Perry Rapp
  *================================================*/
-static NODE
+static RECORD
 history_list (struct hist * histp)
 {
-	INDISEQ seq;
-	NODE node;
+	INDISEQ seq=0;
+	NODE node=0;
+	RECORD rec=0;
 	INT next, prev;
 	if (!histp->size || histp->start==-1) {
 		message(_(qSnohist));
@@ -1573,9 +1607,9 @@ history_list (struct hist * histp)
 		if (next == histp->past_end)
 			break; /* finished them all */
 	}
-	node = nztop(choose_from_indiseq(seq, DOASK1, _(qSidhist), _(qSidhist)));
+	rec = choose_from_indiseq(seq, DOASK1, _(qSidhist), _(qSidhist));
 	remove_indiseq(seq);
-	return node;
+	return rec;
 }
 /*==================================================
  * ask_clear_history -- delete vist history
@@ -1608,7 +1642,7 @@ static INT
 handle_history_cmds (INT c, NODE * pindi1)
 {
 	NODE node;
-	if (c == CMD_HISTORY_BACK) {
+	if (c == CMD_VHISTORY_BACK) {
 		node = history_back(&vhist);
 		if (node) {
 			*pindi1 = node;
@@ -1617,7 +1651,16 @@ handle_history_cmds (INT c, NODE * pindi1)
 		message(_(qSnohist));
 		return 1; /* handled, stay here */
 	}
-	if (c == CMD_HISTORY_FWD) {
+	if (c == CMD_CHISTORY_BACK) {
+		node = history_back(&chist);
+		if (node) {
+			*pindi1 = node;
+			return -1; /* handled, change pages */
+		}
+		message(_(qSnohist));
+		return 1; /* handled, stay here */
+	}
+	if (c == CMD_VHISTORY_FWD) {
 		node = history_fwd(&vhist);
 		if (node) {
 			*pindi1 = node;
@@ -1626,16 +1669,37 @@ handle_history_cmds (INT c, NODE * pindi1)
 		message(_(qSnohist));
 		return 1; /* handled, stay here */
 	}
-	if (c == CMD_HISTORY_LIST) {
-		node = history_list(&vhist);
+	if (c == CMD_CHISTORY_FWD) {
+		node = history_fwd(&chist);
+		if (node) {
+			*pindi1 = node;
+			return -1; /* handled, change pages */
+		}
+		message(_(qSnohist));
+		return 1; /* handled, stay here */
+	}
+	if (c == CMD_VHISTORY_LIST) {
+		node = nztop(disp_vhistory_list());
 		if (node) {
 			*pindi1 = node;
 			return -1; /* handled, change pages */
 		}
 		return 1;
 	}
-	if (c == CMD_HISTORY_CLEAR) {
+	if (c == CMD_CHISTORY_LIST) {
+		node = nztop(disp_chistory_list());
+		if (node) {
+			*pindi1 = node;
+			return -1; /* handled, change pages */
+		}
+		return 1;
+	}
+	if (c == CMD_VHISTORY_CLEAR) {
 		ask_clear_history(&vhist);
+		return 1;
+	}
+	if (c == CMD_CHISTORY_CLEAR) {
+		ask_clear_history(&chist);
 		return 1;
 	}
 	return 0; /* unhandled */
@@ -1717,6 +1781,24 @@ autoadd_xref (NODE node, NODE newnode)
 		nsibling(prev) = xref;
 	}
 	unknown_node_to_dbase(node);
+}
+/*==================================================
+ * get_vhist_len -- how many records currently in visit history list ?
+ * Created: 2002/06/23, Perry Rapp
+ *================================================*/
+INT
+get_vhist_len (void)
+{
+	return get_hist_count(&vhist);
+}
+/*==================================================
+ * get_vhist_len -- how many records currently in change history list ?
+ * Created: 2002/06/23, Perry Rapp
+ *================================================*/
+INT
+get_chist_len (void)
+{
+	return get_hist_count(&chist);
 }
 /*==================================================
  * init_browse_module -- Do any initialization

@@ -161,6 +161,9 @@ edit_indi (NODE indi1)  /* may be NULL */
 	join_indi(indi1, name2, refn2, sex, body, famc, fams);
 	free_node(indi2);
 
+/* Note in change history */
+	history_record_change(indi1);
+
 /* Write changed person to database */
 
 	indi_to_dbase(indi1);

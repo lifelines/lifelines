@@ -81,7 +81,7 @@ static UIWINDOW debug_win=NULL, debug_box_win=NULL;
 static UIWINDOW ask_win=NULL, ask_msg_win=NULL;
 static UIWINDOW choose_from_list_win=NULL;
 static UIWINDOW add_menu_win=NULL, del_menu_win=NULL;
-static UIWINDOW scan_menu_win=NULL;
+static UIWINDOW search_menu_win=NULL, fullscan_menu_win=NULL;
 static UIWINDOW utils_menu_win=NULL, tt_menu_win=NULL;
 static UIWINDOW extra_menu_win=NULL;
 
@@ -120,6 +120,8 @@ extern STRING qShitkey;
 extern STRING qSmn_add_ttl,qSmn_add_indi,qSmn_add_fam,qSmn_add_chil,qSmn_add_spou;
 extern STRING qSmn_del_ttl,qSmn_del_chil,qSmn_del_spou,qSmn_del_indi,qSmn_del_fam;
 extern STRING qSmn_sca_ttl,qSmn_sca_nmfu,qSmn_sca_nmfr,qSmn_sca_refn;
+extern STRING qSmn_sea_ttl,qSmn_sea_vhis,qSmn_sea_vhi2,qSmn_sea_vhix;
+extern STRING qSmn_sea_chis,qSmn_sea_chi2,qSmn_sea_chix,qSmn_sea_scan;
 extern STRING qSmn_tt_ttl,qSmn_tt_edit,qSmn_tt_load,qSmn_tt_save,qSmn_tt_exp;
 extern STRING qSmn_tt_imp,qSmn_tt_dir;
 extern STRING qSmn_tt_edin,qSmn_tt_ined,qSmn_tt_gdin,qSmn_tt_ingd;
@@ -194,7 +196,8 @@ static NODE invoke_add_menu(void);
 static void invoke_cset_display(void);
 static void invoke_del_menu(void);
 static INT invoke_extra_menu(void);
-static RECORD invoke_scan_menu(void);
+static RECORD invoke_search_menu(void);
+static RECORD invoke_fullscan_menu(void);
 static void invoke_utils_menu(void);
 static void output_menu(UIWINDOW uiwin, INT screen, INT bottom, INT width);
 void place_cursor(void);
@@ -203,7 +206,8 @@ static void refresh_main(void);
 static void print_list_title(char * buffer, INT len, const listdisp * ld, STRING ttl);
 static void repaint_add_menu(UIWINDOW uiwin);
 static void repaint_delete_menu(UIWINDOW uiwin);
-static void repaint_scan_menu(UIWINDOW uiwin);
+static void repaint_fullscan_menu(UIWINDOW uiwin);
+static void repaint_search_menu(UIWINDOW uiwin);
 /*static void repaint_tt_menu(UIWINDOW uiwin);*/
 static void repaint_utils_menu(UIWINDOW uiwin);
 static void repaint_extra_menu(UIWINDOW uiwin);
@@ -358,13 +362,18 @@ repaint_main_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row;
+	char title[80];
+	INT width=sizeof(title);
+
 
 	uierase(uiwin);
 	draw_win_box(win);
 	show_horz_line(uiwin, 4, 0, ll_cols);
 	show_horz_line(uiwin, ll_lines-3, 0, ll_cols);
-	wmove(win, 1, 2);
-	wprintw(win, _(qSmtitle), get_lifelines_version(ll_cols-4));
+	if (width > ll_cols-4)
+		width = ll_cols-4;
+	llstrncpyf(title, width, _(qSmtitle), get_lifelines_version(ll_cols-4));
+	mvwaddstr(win, 1, 2, title);
 	mvwaddstr(win, 2, 4, _(qScright));
 	mvwprintw(win, 3, 4, _(qSdbname), readpath);
 	if (immutable)
@@ -380,7 +389,6 @@ repaint_main_menu (UIWINDOW uiwin)
 	mvwaddstr(win, row++, 4, _(qSmn_mmdel));
 	mvwaddstr(win, row++, 4, _(qSmn_mmprpt));
 	mvwaddstr(win, row++, 4, _(qSmn_mmrpt));
-	mvwaddstr(win, row++, 4, _(qSmn_mmcset));
 	mvwaddstr(win, row++, 4, _(qSmn_mmtt));
 	mvwaddstr(win, row++, 4, _(qSmn_mmut));
 	mvwaddstr(win, row++, 4, _(qSmn_mmex));
@@ -605,14 +613,14 @@ main_menu (void)
 	WINDOW * win = uiw_win(uiwin);
 	repaint_main_menu(uiwin);
 	display_screen(MAIN_SCREEN);
-	c = interact(uiwin, "bsadprctuxqQ", -1);
+	c = interact(uiwin, "bsadprtuxqQ", -1);
 	place_std_msg();
 	wrefresh(win);
 	switch (c) {
 	case 'b': browse(NULL, BROWSE_INDI); break;
 	case 's':
 		{
-			RECORD rec = invoke_scan_menu();
+			RECORD rec = invoke_search_menu();
 			if (rec)
 				browse(nztop(rec), BROWSE_UNK);
 		}
@@ -640,7 +648,6 @@ main_menu (void)
 		break;
 	case 'p': run_report(TRUE); break;
 	case 'r': run_report(FALSE); break;
-	case 'c': invoke_cset_display(); break;
 	case 't': edit_tt_menu(); break;
 	case 'u': invoke_utils_menu(); break;
 	case 'x': 
@@ -1606,23 +1613,23 @@ disp_trans_table_choice (UIWINDOW uiwin, INT row, INT col, STRING menuit, INT in
 	mvwaddstr(win, row, col, line);
 }
 /*==============================
- * invoke_scan_menu -- Handle scan menu
+ * invoke_fullscan_menu -- Handle fullscan menu
  * Created: c. 2000/12, Perry Rapp
  *============================*/
-RECORD
-invoke_scan_menu (void)
+static RECORD
+invoke_fullscan_menu (void)
 {
 	UIWINDOW uiwin=0;
 	RECORD rec=0;
 	INT code=0;
 	BOOLEAN done=FALSE;
 
-	if (!scan_menu_win) {
-		scan_menu_win = create_newwin2(7,66);
+	if (!fullscan_menu_win) {
+		fullscan_menu_win = create_newwin2(7,66);
 		/* paint it for the first & only time (it's static) */
-		repaint_scan_menu(scan_menu_win);
+		repaint_fullscan_menu(fullscan_menu_win);
 	}
-	uiwin = scan_menu_win;
+	uiwin = fullscan_menu_win;
 
 	while (!done) {
 		activate_uiwin(uiwin);
@@ -1652,6 +1659,54 @@ invoke_scan_menu (void)
 		deactivate_uiwin_and_touch_all();
 		if (!done)
 			msg_status(_(qSsts_sca_non));
+	}
+	return rec;
+}
+/*==============================
+ * invoke_search_menu -- Handle search menu
+ * Created: 2002/06/23, Perry Rapp
+ *============================*/
+static RECORD
+invoke_search_menu (void)
+{
+	UIWINDOW uiwin=0;
+	RECORD rec=0;
+	INT code=0;
+	BOOLEAN done=FALSE;
+
+	if (!search_menu_win) {
+		search_menu_win = create_newwin2(7,66);
+	}
+	/* repaint it every time, as history counts change */
+	repaint_search_menu(search_menu_win);
+	uiwin = search_menu_win;
+
+	while (!done) {
+		activate_uiwin(uiwin);
+		wmove(uiw_win(uiwin), 1, 27);
+		code = interact(uiwin, "vcfq", -1);
+
+		switch (code) {
+		case 'v':
+			rec = disp_vhistory_list();
+			if (rec)
+				done=TRUE;
+			break;
+		case 'c':
+			rec = disp_chistory_list();
+			if (rec)
+				done=TRUE;
+			break;
+		case 'f':
+			rec = invoke_fullscan_menu();
+			if (rec)
+				done=TRUE;
+			break;
+		case 'q': 
+			done=TRUE;
+			break;
+		}
+		deactivate_uiwin_and_touch_all();
 	}
 	return rec;
 }
@@ -1730,7 +1785,7 @@ invoke_cset_display (void)
 	char buffer[80];
 	set_list_type(list, LISTDOFREE);
 
-	snprintf(buffer, sizeof(buffer), "%s: %s", _("Internal codeset")
+	llstrncpyf(buffer, sizeof(buffer), "%s: %s", _("Internal codeset")
 		, int_codeset ? int_codeset : "");
 	push_list(list, strsave(buffer));
 
@@ -1751,35 +1806,35 @@ invoke_cset_display (void)
 	else
 		push_list(list, strsave(_("iconv (codeset conversion) is disabled.")));
 	
-	snprintf(buffer, sizeof(buffer), _("Startup collate locale: %s")
+	llstrncpyf(buffer, sizeof(buffer), _("Startup collate locale: %s")
 		, get_original_locale_collate());
 	push_list(list, strsave(buffer));
 	
-	snprintf(buffer, sizeof(buffer), _("Startup messages locale: %s")
+	llstrncpyf(buffer, sizeof(buffer), _("Startup messages locale: %s")
 		, get_original_locale_msgs());
 	push_list(list, strsave(buffer));
 	
-	snprintf(buffer, sizeof(buffer), _("Current collate locale: %s")
+	llstrncpyf(buffer, sizeof(buffer), _("Current collate locale: %s")
 		, get_current_locale_collate());
 	push_list(list, strsave(buffer));
 	
-	snprintf(buffer, sizeof(buffer), _("Current messages locale: %s")
+	llstrncpyf(buffer, sizeof(buffer), _("Current messages locale: %s")
 		, get_current_locale_msgs());
 	push_list(list, strsave(buffer));
 	
-	snprintf(buffer, sizeof(buffer), _("GUI codeset: %s")
+	llstrncpyf(buffer, sizeof(buffer), _("GUI codeset: %s")
 		, getoptstr("GuiCodeset",""));
 	push_list(list, strsave(buffer));
 
-	snprintf(buffer, sizeof(buffer), _("Editor codeset: %s")
+	llstrncpyf(buffer, sizeof(buffer), _("Editor codeset: %s")
 		, getoptstr("EditorCodeset",""));
 	push_list(list, strsave(buffer));
 
-	snprintf(buffer, sizeof(buffer), _("Report codeset: %s")
+	llstrncpyf(buffer, sizeof(buffer), _("Report codeset: %s")
 		, getoptstr("ReportCodeset",""));
 	push_list(list, strsave(buffer));
 
-	snprintf(buffer, sizeof(buffer), _("GEDCOM codeset: %s")
+	llstrncpyf(buffer, sizeof(buffer), _("GEDCOM codeset: %s")
 		, getoptstr("GedcomCodeset",""));
 	push_list(list, strsave(buffer));
 
@@ -1800,11 +1855,11 @@ add_shims_info (LIST list)
 		char value[MAXPATHLEN];
 		if (intlshim_get_property("dll_path", value, sizeof(value)))
 		{
-			snprintf(buffer, sizeof(buffer), _("gettext dll: %s"), value);
+			llstrncpyf(buffer, sizeof(buffer), _("gettext dll: %s"), value);
 			push_list(list, strsave(buffer));
 			if (intlshim_get_property("dll_version", value, sizeof(value)))
 			{
-				snprintf(buffer, sizeof(buffer), _("gettext dll version: %s"), value);
+				llstrncpyf(buffer, sizeof(buffer), _("gettext dll version: %s"), value);
 				push_list(list, strsave(buffer));
 			}
 			else
@@ -1824,11 +1879,11 @@ add_shims_info (LIST list)
 		char value[MAXPATHLEN];
 		if (iconvshim_get_property("dll_path", value, sizeof(value)))
 		{
-			snprintf(buffer, sizeof(buffer), _("iconv dll: %s"), value);
+			llstrncpyf(buffer, sizeof(buffer), _("iconv dll: %s"), value);
 			push_list(list, strsave(buffer));
 			if (iconvshim_get_property("dll_version", value, sizeof(value)))
 			{
-				snprintf(buffer, sizeof(buffer), _("iconv dll version: %s"), value);
+				llstrncpyf(buffer, sizeof(buffer), _("iconv dll version: %s"), value);
 				push_list(list, strsave(buffer));
 			}
 			else
@@ -2005,7 +2060,7 @@ invoke_utils_menu (void)
 	WINDOW *win=0;
 
 	if (!utils_menu_win) {
-		utils_menu_win = create_newwin2(12, 66);
+		utils_menu_win = create_newwin2(13, 66);
 		/* paint it for the first & only time (it's static) */
 		repaint_utils_menu(utils_menu_win);
 	}
@@ -2014,7 +2069,7 @@ invoke_utils_menu (void)
 	activate_uiwin(uiwin);
 
 	wmove(win, 1, strlen(_(qSmn_uttl))+3);
-	code = interact(uiwin, "srkidmeoq", -1);
+	code = interact(uiwin, "srkidmeocq", -1);
 	deactivate_uiwin_and_touch_all();
 
 	begin_action();
@@ -2027,6 +2082,7 @@ invoke_utils_menu (void)
 	case 'm': display_cache_stats(); break;
 	case 'e': edit_place_table(); break;
 	case 'o': edit_user_options(); break;
+	case 'c': invoke_cset_display(); break;
 		/*
 		we could add edit_global_config pretty easily, but the difficulty is
 		that we don't know what to do about codeset with it :( [2002.06.18, Perry]
@@ -2449,7 +2505,7 @@ shw_array_of_strings (STRING *strings, listdisp * ld, DETAILFNC detfnc
 		/* for short lists, we show leading numbers */
 		if (ld->listlen<10) {
 			char numstr[12]="";
-			snprintf(numstr, sizeof(numstr), "%d: ", i+1);
+			llstrncpyf(numstr, sizeof(numstr), "%d: ", i+1);
 			if (i == ld->cur) mvwaddch(win, row, 3, '>');
 			mvwaddstr(win, row, 4, numstr);
 			nlen = strlen(numstr);
@@ -3138,7 +3194,7 @@ msg_outputv (MSG_LEVEL level, STRING fmt, va_list args)
 			break;
 	}
 	/* now make string to show/put on msg list */
-	vsnprintf(ptr, sizeof(buffer), fmt, args);
+	llstrncpyvf(ptr, sizeof(buffer), fmt, args);
 	/* first handle transitory/status messages */
 	if (level==MSG_STATUS) {
 		if (lock_std_msg)
@@ -3293,11 +3349,11 @@ repaint_delete_menu (UIWINDOW uiwin)
 	mvwaddstr(win, row++, 4, _(qSmn_ret));
 }
 /*=====================================
- * repaint_scan_menu -- 
+ * repaint_fullscan_menu -- 
  * Created: 2001/11/24, Perry Rapp
  *===================================*/
 static void
-repaint_scan_menu (UIWINDOW uiwin)
+repaint_fullscan_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
@@ -3306,6 +3362,37 @@ repaint_scan_menu (UIWINDOW uiwin)
 	mvwaddstr(win, row++, 4, _(qSmn_sca_nmfu));
 	mvwaddstr(win, row++, 4, _(qSmn_sca_nmfr));
 	mvwaddstr(win, row++, 4, _(qSmn_sca_refn));
+	mvwaddstr(win, row++, 4, _(qSmn_ret));
+}
+/*=====================================
+ * repaint_search_menu -- 
+ * Created: 2002/06/23, Perry Rapp
+ *===================================*/
+static void
+repaint_search_menu (UIWINDOW uiwin)
+{
+	WINDOW *win = uiw_win(uiwin);
+	INT row = 1;
+	INT n = 0;
+	char buffer[80];
+	STRING str = 0;
+	draw_win_box(win);
+	mvwaddstr(win, row++, 2, _(qSmn_sea_ttl));
+	n = get_vhist_len();
+	if (n>0) {
+		llstrncpyf(buffer, sizeof(buffer), ngettext(qSmn_sea_vhis, qSmn_sea_vhi2, n), n);
+	} else {
+		llstrncpy(buffer, qSmn_sea_vhix, sizeof(buffer));
+	}
+	mvwaddstr(win, row++, 4, buffer);
+	n = get_chist_len();
+	if (n>0) {
+		llstrncpyf(buffer, sizeof(buffer), ngettext(qSmn_sea_chis, qSmn_sea_chi2, n), n);
+	} else {
+		llstrncpy(buffer, qSmn_sea_chix, sizeof(buffer));
+	}
+	mvwaddstr(win, row++, 4, buffer);
+	mvwaddstr(win, row++, 4, _(qSmn_sea_scan));
 	mvwaddstr(win, row++, 4, _(qSmn_ret));
 }
 /*=====================================
@@ -3370,6 +3457,7 @@ repaint_utils_menu (UIWINDOW uiwin)
 	mvwaddstr(win, row++, 4, _(qSmn_utmemsta));
 	mvwaddstr(win, row++, 4, _(qSmn_utplaces));
 	mvwaddstr(win, row++, 4, _(qSmn_utusropt));
+	mvwaddstr(win, row++, 4, _(qSmn_mmcset));
 	mvwaddstr(win, row++, 4, _(qSmn_quit));
 }
 /*=====================================

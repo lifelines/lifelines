@@ -536,7 +536,7 @@ convert_first_fp_to_node (FILE *fp, BOOLEAN list, TRANMAPPING ttm,
 	STRING unitype = check_file_for_unicode(fp);
 	if (unitype && !eqstr(unitype, "UTF-8")) {
 		char msg[120];
-		snprintf(msg, sizeof(msg), _(qSunsupuniv), unitype);
+		llstrncpyf(msg, sizeof(msg), _(qSunsupuniv), unitype);
 		/* TODO: need to pass msg up to caller somehow */
 		*pmsg = _(qSunsupunix);
 		return NULL;

@@ -553,7 +553,17 @@ ZST qSmn_del_spou = N_("s  Spouse - remove a spouse from a family");
 ZST qSmn_del_indi = N_("i  Individual - remove a person completely");
 ZST qSmn_del_fam  = N_("f  Family - remove a family completely");
 
-/* &&end delete menu, begin scan menu */
+/* &&end delete menu, begin search menu */
+ZST qSmn_sea_ttl  = N_("How would you like to find a record?");
+ZST qSmn_sea_vhis = N_("v  Review visit history (%d record)");
+ZST qSmn_sea_vhi2 = N_("v  Review visit history (%d records)");
+ZST qSmn_sea_vhix = N_("(visit history is empty)");
+ZST qSmn_sea_chis = N_("c  Review change history (%d record)");
+ZST qSmn_sea_chi2 = N_("c  Review change history (%d records)");
+ZST qSmn_sea_chix = N_("(change history is empty)");
+ZST qSmn_sea_scan = N_("f  Full database scan");
+
+/* &&end search menu, begin fullscan menu */
 ZST qSmn_sca_ttl  = N_("What scan type?");
 ZST qSmn_sca_nmfu = N_("f  Full name scan");
 ZST qSmn_sca_nmfr = N_("n  Name fragment (whitespace-delimited) scan");

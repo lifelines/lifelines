@@ -118,7 +118,7 @@ parse_program(STRING directory,
   char str[MAXLINELEN];
   int i;
 
-  snprintf(filepath, sizeof(filepath), "%s/%s", directory, filename);
+  llstrncpyf(filepath, sizeof(filepath), "%s/%s", directory, filename);
 
   if (NULL == (fp = fopen(filepath, "r")))
     return NULL;

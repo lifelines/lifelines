@@ -172,7 +172,7 @@ browse_list (NODE *pindi1,
 			break;
 		case 'e':        /* Edit current person */
 			indi = edit_indi(indi);
-	    		if ((len = length_indiseq(seq)) <= 0) {
+			if ((len = length_indiseq(seq)) <= 0) {
 				remove_browse_list(lname, seq);
 				current_seq = NULL;
 				lname = NULL;

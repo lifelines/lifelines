@@ -115,8 +115,8 @@ edit_valtab_impl (TABLE *ptab, INT sep, STRING ermsg, STRING (*validator)(TABLE 
 			llstrcatn(&ptr, " ", &mylen);
 			llstrcatn(&ptr, msg, &mylen);
 			llstrcatn(&ptr, " ", &mylen);
-			snprintf(chardesc, sizeof(chardesc), "%c", (uchar)sep);
-			snprintf(temp, sizeof(temp), _(qSsepch), chardesc); /* (separator is %s) */
+			llstrncpyf(chardesc, sizeof(chardesc), "%c", (uchar)sep);
+			llstrncpyf(temp, sizeof(temp), _(qSsepch), chardesc); /* (separator is %s) */
 			llstrcatn(&ptr, temp, &mylen);
 			ptr = fullerr;
 		}

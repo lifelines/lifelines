@@ -202,7 +202,7 @@ print_usage (void)
 #else
 	char * fname = _("/home/users/myname/lifelines/databases/myfamily");
 #endif
-	snprintf(verstr, sizeof(verstr), title
+	llstrncpyf(verstr, sizeof(verstr), title
 		, get_lifelines_version(sizeof(verstr)-1-strlen(title)));
 	printf(
 		_("usage: dbverify -(flags) <btree>\n"

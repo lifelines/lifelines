@@ -35,10 +35,15 @@ void browse(NODE, INT code);
 RECORD choose_any_event(void);
 RECORD choose_any_other(void);
 RECORD choose_any_source(void);
+RECORD disp_vhistory_list(void);
+RECORD disp_chistory_list(void);
+INT get_vhist_len(void);
+INT get_chist_len(void);
 BOOLEAN handle_fam_mode_cmds(INT c, INT * mode);
 BOOLEAN handle_indi_mode_cmds(INT c, INT * mode);
 BOOLEAN handle_menu_cmds(INT c, BOOLEAN * reuse);
 BOOLEAN handle_scroll_cmds(INT c, BOOLEAN * reuse);
+void history_record_change(NODE node);
 void init_browse_module(void);
 void term_browse_module(void);
 

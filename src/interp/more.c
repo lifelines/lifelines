@@ -629,9 +629,10 @@ makestring (PVALUE val, STRING str, INT len, BOOLEAN *eflg)
 			break;
 		case PINT:
 		case PFLOAT:
-			snprintf(str, len, "%f", pvalue_to_float(val));
+			llstrncpyf(str, len, "%f", pvalue_to_float(val));
 			break;
 		case PBOOL:
+			/* TODO: Should we localize this ? */
 			llstrncpy(str, u.w ? "True" : "False", len);
 			break;
 		case PSTRING:

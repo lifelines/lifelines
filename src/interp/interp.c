@@ -1654,7 +1654,7 @@ disp_symtab_cb (STRING key, PVALUE val, VPTR param)
 	struct dbgsymtab_s * sdata = (struct dbgsymtab_s *)param;
 	char line[64];
 	ASSERT(sdata->current < sdata->count);
-	snprintf(line, sizeof(line), "%s: %s", key
+	llstrncpyf(line, sizeof(line), "%s: %s", key
 		, debug_pvalue_as_string(val));
 	line[sizeof(line)-1] = 0;
 	sdata->locals[sdata->current++] = strsave(line);
@@ -1705,22 +1705,22 @@ vprog_error (PNODE node, STRING fmt, va_list args)
 		/* only display filename if different (or first error) */
 		if (!prevfile[0] || !eqstr(prevfile, fname)) {
 			if (progparsing)
-				snprintf(msgf, ARRSIZE(msgf)
+				llstrncpyf(msgf, ARRSIZE(msgf)
 					, _("\nParsing Error in <%s>"), fname);
 			else
-				snprintf(msgf, ARRSIZE(msgf)
+				llstrncpyf(msgf, ARRSIZE(msgf)
 					, _("\nRuntime Error in: <%s>"), fname);
 			llstrncpy(prevfile, ifname(node), ARRSIZE(prevfile));
 		}
 		/* But always display the line & error */
 		if (progparsing)
-			snprintf(msglineno, sizeof(msglineno)
+			llstrncpyf(msglineno, sizeof(msglineno)
 				, _("Parsing Error at line %d: "), iline(node));
 		else
-			snprintf(msglineno, sizeof(msglineno)
+			llstrncpyf(msglineno, sizeof(msglineno)
 				, _("Runtime Error at line %d: "), iline(node));
 	} else {
-		snprintf(msglineno, sizeof(msglineno), _("Aborting: "));
+		llstrncpyf(msglineno, sizeof(msglineno), _("Aborting: "));
 	}
 	appendstr(&ptr, &mylen, msglineno);
 	vappendstrf(&ptr, &mylen, fmt, args);

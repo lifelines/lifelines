@@ -439,7 +439,7 @@ platform_init (void)
 #ifdef WIN32
 	char buffer[80];
 	STRING title = _(qSmtitle);
-	sprintf(buffer, title, get_lifelines_version(sizeof(buffer)-1-strlen(title)));
+	snprintf(buffer, sizeof(buffer), title, get_lifelines_version(sizeof(buffer)-1-strlen(title)));
 	wtitle(buffer);
 #endif
 }

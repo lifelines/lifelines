@@ -177,10 +177,14 @@ static MenuItem f_MenuItemSwapMarkCurrent = { N_("x  Swap mark/current"), 0, CMD
 static MenuItem f_MenuItemSources = { N_("$s  List sources"), 0, CMD_SOURCES, 0 };
 static MenuItem f_MenuItemNotes = { N_("$n  List notes"), 0, CMD_NOTES, 0 };
 static MenuItem f_MenuItemPointers = { N_("$$  List references"), 0, CMD_POINTERS, 0 };
-static MenuItem f_MenuItemHistoryBack = { N_("^b  History/back"), 0, CMD_HISTORY_BACK, 0 };
-static MenuItem f_MenuItemHistoryFwd = { N_("^f  History/fwd"), 0, CMD_HISTORY_FWD, 0 };
-static MenuItem f_MenuItemHistoryList = { N_("^l  History list"), 0, CMD_HISTORY_LIST, 0 };
-static MenuItem f_MenuItemHistoryClean = { N_("^c Clear history"), 0, CMD_HISTORY_CLEAR, 0 };
+static MenuItem f_MenuItemHistoryBack = { N_("^b  History/back"), 0, CMD_VHISTORY_BACK, 0 };
+static MenuItem f_MenuItemHistoryFwd = { N_("^f  History/fwd"), 0, CMD_VHISTORY_FWD, 0 };
+static MenuItem f_MenuItemHistoryList = { N_("^l  History list"), 0, CMD_VHISTORY_LIST, 0 };
+static MenuItem f_MenuItemHistoryClean = { N_("^c Clear history"), 0, CMD_VHISTORY_CLEAR, 0 };
+static MenuItem f_MenuItemChHistoryBack = { N_("^xb  ChngHist/back"), 0, CMD_CHISTORY_BACK, 0 };
+static MenuItem f_MenuItemChHistoryFwd = { N_("^xf  ChngHist/fwd"), 0, CMD_CHISTORY_FWD, 0 };
+static MenuItem f_MenuItemChHistoryList = { N_("^xl  ChngHist list"), 0, CMD_CHISTORY_LIST, 0 };
+static MenuItem f_MenuItemChHistoryClean = { N_("^xc Clear ChngHist"), 0, CMD_CHISTORY_CLEAR, 0 };
 /* xgettext:no-c-format */
 static MenuItem f_MenuItemAddSour = { N_("%s  Add source"), 0, CMD_ADD_SOUR, 0 };
 /* xgettext:no-c-format */
@@ -255,6 +259,10 @@ static MenuItem * f_MenuPerson[] =
 	&f_MenuItemHistoryFwd,
 	&f_MenuItemHistoryList,
 	&f_MenuItemHistoryClean,
+	&f_MenuItemChHistoryBack,
+	&f_MenuItemChHistoryFwd,
+	&f_MenuItemChHistoryList,
+	&f_MenuItemChHistoryClean,
 	0
 };
 

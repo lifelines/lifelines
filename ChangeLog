@@ -34,6 +34,21 @@
 
 	Add MVC build stuff that didn't get added before.
 
+	* ChangeLog btree/addkey.c gedlib/editvtab.c gedlib/init.c
+	gedlib/messages.c gedlib/node.c gedlib/property.c
+	hdrs/menuitem.h interp/interp.c interp/more.c interp/pvalue.c
+	liflines/add.c liflines/ask.c liflines/askprogram.c
+	liflines/browse.c liflines/edit.c liflines/lbrowse.c
+	liflines/llinesi.h liflines/main.c liflines/menuitem.c
+	liflines/screen.c liflines/show.c liflines/tandem.c
+	tools/dbverify.c:
+
+	Add change history (analogous to view history).
+	Move codeset stuff to utility menu.
+	Fix overflow bug in title (manifests with Swedish title & small 
+	console).
+	Start replacing snprintf with llstrncpy.
+
 2002-06-22 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/init.c stdlib/stdstrng.c:

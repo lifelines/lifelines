@@ -261,7 +261,7 @@ get_lifelines_version (INT maxlen)
 	INT len=sizeof(version);
 	if (len>maxlen)
 		len=maxlen;
-	snprintf(version, len, LIFELINES_VERSION);
+	llstrncpyf(version, len, LIFELINES_VERSION);
 	return version;
 }
 /*===================================
