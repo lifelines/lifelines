@@ -31,7 +31,7 @@
 /* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /* modified 2000-04-12 J.F.Chandler */
 
-#include <stdlib.h>
+#include "sys_inc.h"
 #include "standard.h"
 #include "table.h"
 #include "translat.h"

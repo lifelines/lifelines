@@ -30,13 +30,11 @@
 /* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /* modified 2000-01-26 J.F.Chandler */
 
-#include <stdlib.h>
-#include <stdio.h>
+#include "sys_inc.h"
 #ifdef WIN32
 #include "mycurses.h"
 #else
-#include "curses.h"
-#include <string.h>
+#include <curses.h>
 #endif
 
 #include "standard.h"

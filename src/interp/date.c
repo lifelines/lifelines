@@ -31,9 +31,8 @@
 /* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /* modified 2000-04-12 J.F.Chandler */
 
-#include <sys/types.h>
+#include "sys_inc.h"
 #include <time.h>
-#include <string.h>
 #include "standard.h"
 #include "table.h"
 #include "interp.h"

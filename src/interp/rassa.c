@@ -30,7 +30,7 @@
  *   3.0.3 - 19 Nov 95
  *===========================================================*/
 
-#include <stdio.h>
+#include "sys_inc.h"
 #include "standard.h"
 #include "table.h"
 #include "translat.h"

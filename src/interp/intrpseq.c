@@ -30,7 +30,6 @@
  *   3.0.2 - 11 Dec 94    3.0.3 - 08 Aug 95
  *===========================================================*/
 
-#include <stdio.h>
 #include "standard.h"
 #include "table.h"
 #include "translat.h"
