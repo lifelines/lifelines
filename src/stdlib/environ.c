@@ -49,7 +49,7 @@ environ_determine_tempfile (void)
 #endif
 }
 /*============================================================
- * environ_determine_editor -- determine editor program to use
+ * environ_determine_editor -- calculate editor program to use
  *==========================================================*/
 STRING
 environ_determine_editor (INT program)
@@ -90,11 +90,11 @@ environ_determine_database (void)
  * environ_determine_newdbs -- determine location for new databases
  *===============================================================*/
 STRING
-environ_determine_newdbs (void)
+environ_determine_newdbdir (void)
 {
 	STRING e;
 
-	e = (STRING) getenv("LLNEWDBS");
+	e = (STRING) getenv("LLNEWDBDIR");
 	if (ISNULL(e)) e = (STRING) ".";
 
 	return e;

@@ -237,7 +237,10 @@ main (INT argc,
 
 	/* Open Database */
 	readpath = filepath(btreepath, "r", lldatabases, NULL);
-	if (!readpath) readpath = btreepath;
+	if (!readpath) {
+		STRING llnewdbdir = environ_determine_newdbdir();
+		readpath = strsave(concat_path(llnewdbdir, btreepath));
+	}
 	if (forceopen) {
 		char scratch[200];
 		FILE *fp;

@@ -57,7 +57,7 @@ void set_list_type(LIST, INT);
 #define PROGRAM_BTEDIT 2
 STRING environ_determine_database(void);
 STRING environ_determine_editor(INT program);
-STRING environ_determine_newdbs(void);
+STRING environ_determine_newdbdir(void);
 STRING environ_determine_tempfile(void);
 
 /* llstrcmp.c */
@@ -69,7 +69,8 @@ void *__allocate(int, STRING, int);
 void __deallocate(void*, STRING, int);
 
 /* path.c */
-STRING filepath(STRING, STRING, STRING, STRING);
+STRING concat_path(STRING dir, STRING file);
+STRING filepath(STRING name, STRING mode, STRING path, STRING ext);
 FILE* fopenpath(STRING, STRING, STRING, STRING, STRING*);
 STRING lastpathname(STRING);
 

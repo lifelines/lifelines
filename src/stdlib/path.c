@@ -34,7 +34,7 @@
 #include "llstdlib.h"
 
 /*================================================
- * IS_PATH_SEP -- Is directory separator character
+ * IS_PATH_SEP -- Is path separator character
  *  handle WIN32 characters
  *==============================================*/
 #ifdef WIN32
@@ -42,6 +42,19 @@
 #else
 #define IS_PATH_SEP(qq) ((qq) == LLCHRPATHSEPARATOR)
 #endif
+/*================================================
+ * is_dir_sep -- Is directory separator character
+ *  handle WIN32 characters
+ *==============================================*/
+BOOLEAN
+is_dir_sep (char c)
+{
+#ifdef WIN32
+	return c==LLCHRDIRSEPARATOR || c=='/';
+#else
+	return c==LLCHRDIRSEPARATOR;
+#endif
+}
 /*===============================================
  * is_absolute_path -- Begins with directory info
  *  handle WIN32 characters
@@ -67,6 +80,66 @@ path_match (STRING path1, STRING path2)
 #else
 	return !strcmp(path1, path2);
 #endif
+}
+#if TEST_CODE
+static void
+test_concat_path (void)
+{
+	STRING readpath;
+	readpath = concat_path("hey", "jude");
+	readpath = concat_path("hey", "/jude");
+	readpath = concat_path("hey/", "jude");
+	readpath = concat_path("hey/", "/jude");
+	readpath = concat_path("hey", "jude");
+	readpath = concat_path("hey", "\\jude");
+	readpath = concat_path("hey/", "jude");
+	readpath = concat_path("hey\\", "\\jude");
+	readpath = concat_path(NULL, "\\jude");
+	readpath = concat_path("hey", NULL);
+}
+#endif
+/*=============================================
+ * concat_path -- add file & directory together
+ *  returns static buffer
+ *  handles NULL in either argument
+ *  returns no trailing / if file is NULL
+ *===========================================*/
+STRING
+concat_path (STRING dir, STRING file)
+{
+	static char buffer[PATH_MAX];
+	STRING ptr = buffer;
+	INT len=sizeof(buffer);
+	ptr[0]=0;
+	if (dir)
+		llstrcatn(&ptr, dir, &len);
+	if (is_dir_sep(buffer[strlen(buffer)-1])) {
+		if (!file) {
+			buffer[strlen(buffer)-1] = 0;
+		} else {
+			/* dir ends in sep */
+			if (is_dir_sep(file[0])) {
+				/* file starts in sep */
+				llstrcatn(&ptr, &file[1], &len);
+			} else {
+				/* file doesn't start in sep */
+				llstrcatn(&ptr, file, &len);
+			}
+		}
+	} else {
+		if (!file) {
+		} else {
+			if (is_dir_sep(file[0])) {
+				/* file starts in sep */
+				llstrcatn(&ptr, file, &len);
+			} else {
+				/* file doesn't start in sep */
+				llstrcatn(&ptr, "/", &len);
+				llstrcatn(&ptr, file, &len);
+			}
+		}
+	}
+	return buffer;
 }
 /*===========================================
  * filepath -- Find file in sequence of paths
