@@ -21,6 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/* modified 17 Aug 2000 by Matt Emmerton (matt@gsicomp.on.ca)  */
 /* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * init.c -- Initialize LifeLines data structures
@@ -52,7 +53,6 @@ char *getenv();
 init_lifelines ()
 {
 	STRING e, emsg;
-	char scratch[100];
 	tagtable = create_table();
 	placabbvs = create_table();
 	useropts = create_table();
@@ -68,8 +68,7 @@ init_lifelines ()
 #ifdef WIN32
 	editfile = strsave(mktemp("\\tmp\\lltmpXXXXXX"));
 #else
-	sprintf(scratch, "/tmp/%dltmp", getpid());
-	editfile = strsave(scratch);
+	editfile = strsave(mktemp("/tmp/lltmpXXXXXX"));
 #endif
 	editstr = (STRING) stdalloc(strlen(e) + strlen(editfile) + 2);
 	sprintf(editstr, "%s %s", e, editfile);
@@ -86,13 +85,7 @@ init_lifelines ()
  *=================================*/
 close_lifelines ()
 {
-	char scratch[40];
 	closexref();
-#ifdef WIN32
 	unlink(editfile);
-#else
-	sprintf(scratch, "rm -f %s\n", editfile);
-	system(scratch);
-#endif
 	if(BTR) closebtree(BTR);
 }
