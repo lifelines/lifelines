@@ -784,23 +784,30 @@ get_combined_valtype (INDISEQ one, INDISEQ two)
 static INDISEQ
 dupseq (INDISEQ seq)
 {
-	if (!seq)
-		return NULL;
-	/* 2001/04/09, Perry - not tested - not even compiled
 	INDISEQ newseq;
 	STRING key;
 	UNION uval;
-	SORTEL *u = IData(one);
-	newseq = create_indiseq_impl(valtype, IValvtbl(seq));
-// loop thru & copy every element
-	for (i=0; i<length_indiseq(seq); i++) {
+	SORTEL *u;
+	INT i,n;
+
+#ifdef NOT_TESTED
+	if (!seq)
+		return NULL;
+
+	/* Create New Sequence */
+	newseq = create_indiseq_impl(IValtype(seq), IValvtbl(seq));
+	u = IData(seq);
+	n = length_indiseq(seq);
+
+	/* Copy Every Element */
+	for (i=0; i<n; i++) {
 			key = strsave(skey(u[i]));
 			uval = copyval(seq, sval(u[i]));
 			append_indiseq_impl(newseq, key, NULL, uval,
 			    TRUE, TRUE);
 	}
 	return newseq;
-	*/
+#endif /* NOT_TESTED */
 	return NULL;
 }
 /*===============================================
