@@ -1,3 +1,9 @@
+2003-05-18 Perry Rapp
+
+	* ChangeLog src/hdrs/version.h
+
+	Make version 3.0.28p1 (includes compile guards needed for OS/X).
+
 2003-05-10 Perry Rapp
 
 	* ChangeLog configure.in build/msvc6/llines/llines.rc
