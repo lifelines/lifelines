@@ -13,6 +13,7 @@
 	* ChangeLog src/gedlib/charprops.c
 
 	Fixed charprops_load to load lowercase properties.
+	Fixes sf bug#857314 "syntax error in report at first cap letter".
 
 2003-12-03 Perry Rapp
 
