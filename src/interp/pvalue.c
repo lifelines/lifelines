@@ -338,6 +338,7 @@ static void
 table_pvcleaner (CNSTRING key, UNION uval)
 {
 	PVALUE val = uval.w;
+	key=key; /* unused */
 	delete_pvalue(val);
 	uval.w = NULL;
 }
@@ -987,12 +988,6 @@ pvalue_to_int (PVALUE val)
 {
 	return (INT)pvalvv(val);
 }
-INT*
-pvalue_to_pint (PVALUE val)
-{
-	/* convenience for math */
-	return (INT *)&pvalvv(val);
-}
 /*==================================
  * PFLOAT: pvalue containing a float
  * ptag's value is not large enough, so we have to store
@@ -1013,13 +1008,6 @@ pvalue_to_float (PVALUE val)
 {
 	/* TODO: change when ptag goes to UNION */
 	return *(float*)pvalvv(val);
-}
-float*
-pvalue_to_pfloat (PVALUE val)
-{
-	/* convenience for math */
-	/* TODO: change when ptag goes to UNION */
-	return (float*)pvalvv(val);
 }
 /*==================================
  * PBOOL: pvalue containing a boolean

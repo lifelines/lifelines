@@ -15,6 +15,11 @@
 
 	Cleanup: Mark unused function argument as unused.
 
+	* ChangeLog src/interp/pvalue.c
+
+	Code cleanup: unused parameters and remove obsolete
+	functions (pvalue_to_pint, pvalue_to_pfloat).
+
 2005-01-16 Perry Rapp
 
 	* ChangeLog po/fr.po
