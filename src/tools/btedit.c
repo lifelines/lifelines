@@ -69,7 +69,7 @@ main (int argc,
 		return (0);
 	}
 
-	editor = environ_figure_editor();
+	editor = environ_determine_editor();
 	sprintf(cmdbuf, "%s btedit.tmp", editor);
 	system(cmdbuf);
 	addfile(btree, str2rkey(argv[2]), "btedit.tmp");

@@ -1,3 +1,8 @@
+2000-12-27 Petter Reinholdtsen <pere@td.org.uit.no>
+
+ 	* tools/btedit.c: Track changes to environ_figure_editor() to
+	environ_determine_editor().
+
 2000-12-24 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/gstrings.c gedlib/init.c gedlib/names.c
