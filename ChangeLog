@@ -8,6 +8,10 @@
 
 	New module dblist.c handles list of available databases.
 
+	* ChangeLog src/gedlib/Makefile.am
+
+	Add new dblist.c to Makefile.am.
+
 2005-02-26 Perry Rapp
 
 	* ChangeLog src/stdlib/rbtree.c src/stdlib/rbtree.h
