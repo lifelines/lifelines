@@ -49,6 +49,7 @@ extern BTREE BTR;
 
 static void annotate_node(NODE node, BOOLEAN expand_refns, BOOLEAN annotate_pointers, RFMT rfmt);
 static BOOLEAN is_annotated_xref(CNSTRING val, INT * len);
+static STRING symbolic_link(CNSTRING);
 static void parserefnrec(RKEY rkey, CNSTRING p);
 static RKEY refn2rkey(STRING);
 static BOOLEAN resolve_node(NODE node, BOOLEAN annotate_pointers);
@@ -392,10 +393,11 @@ static BOOLEAN
 resolve_node (NODE node, BOOLEAN annotate_pointers)
 {
 	STRING val = nval(node);
+	STRING refn=0;
 
 	if (!val) return TRUE;
-	if (symbolic_link(val)) {
-		STRING refn = rmvbrackets(val);
+	refn = symbolic_link(val);
+	if (refn) {
 		INT letr = record_letter(ntag(node));
 		NODE refr = refn_to_record(refn, letr);
 		if (refr) {
@@ -509,11 +511,34 @@ annotate_node (NODE node, BOOLEAN expand_refns, BOOLEAN annotate_pointers, RFMT 
 /*===============================================
  * symbolic_link -- See if value is symbolic link
  *=============================================*/
-BOOLEAN
+static STRING
 symbolic_link (CNSTRING val)
 {
-	if (!val || *val != '<' || strlen(val) < 3) return FALSE;
-	return val[strlen(val)-1] == '>';
+	CNSTRING ptr=val;
+	STRING link=0;
+	INT len=0;
+	if (!val || *val != '<') return NULL;
+	len = strlen(val);
+	if (len < 3) return FALSE;
+	if (val[len-1] == '>') {
+		/* entirely a symbolic link */
+		link = strsave(val+1);
+		link[len-2]=0;
+		return link;
+	}
+	/* test for annotated symbolic link, that is, a line such as
+	<a_ref_name> {{ James /SMITH/ }} */
+	for (ptr=val+1; ptr[0]!='>'; ++ptr) {
+		if (!ptr[0]) return NULL; /* no > at all */
+	}
+	if (ptr == val+1) return NULL; /* "<>" doesn't count */
+	/* found end of symbolic link, see if annotation follows */
+	if (ptr[1]!=' ' || ptr[2]!= '{' || ptr[3]!='{') return FALSE;
+	if (val[len-2]!='}' || val[len-1]!='}') return FALSE;
+	len = ptr-val;
+	link = strsave(val+1);
+	link[len-1]=0;
+	return link;
 }
 /*===============================================
  * record_letter -- Return letter for record type

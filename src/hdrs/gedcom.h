@@ -441,7 +441,6 @@ BOOLEAN store_file_to_db(STRING key, STRING file);
 BOOLEAN store_record(STRING key, STRING rec, INT len);
 BOOLEAN store_text_file_to_db(STRING key, CNSTRING file, TRANSLFNC);
 RECORD string_to_record(STRING str, CNSTRING key, INT len);
-BOOLEAN symbolic_link(CNSTRING);
 void termlocale(void);
 void traverse_db_key_recs(BOOLEAN(*func)(CNSTRING key, RECORD, void *param), void *param);
 void traverse_db_rec_keys(CNSTRING lo, CNSTRING hi, BOOLEAN(*func)(CNSTRING key, STRING data, INT, void *param), void * param);
