@@ -3,11 +3,15 @@
 	* gedlib/indiseq.c gedlib/keytonod.c hdrs/gedcom.h
 	hdrs/indiseq.h interp/intrpseq.c liflines/llinesi.h
 	liflines/screen.c liflines/show.c:
-	Move create_pvalue out of indiseq.c.
-	Move mprintf_info out of keytonod.c.
+	Move create_pvalue out of indiseq.c. (For dbverify.)
+	Move mprintf_info out of keytonod.c. (For dbverify.)
 
 	* btree/opnbtree.c hdrs/arch.h:
 	Temporary hack because S_ISDIR is lacking on MSVC/Windows.
+
+	* gedlib/gstrings.c hdrs/gedcom.h:
+	liflines/ask.c liflines/main.c
+	Changed gstrings.c to not require global showkeys. (For dbverify.)
 
 2000-12-31 Perry Rapp <puddle@users.sourceforge.net>
 
