@@ -61,7 +61,9 @@ ll_strcmploc (char *str1, char *str2)
 	if (usersort && (*usersort)(str1, str2, &rtn))
 		return rtn;
 #ifdef OS_LOCALE
-	return(strcoll(str1, str2));
+	errno = 0;
+	rtn = strcoll(str1, str2); /* sets errno if fails */
+	return !errno ? rtn : strcmp(str1, str2);
 #else
 	return(strcmp(str1, str2));
 #endif

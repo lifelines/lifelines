@@ -146,10 +146,11 @@ write_record_to_textfile (BTREE btree, RKEY rkey, STRING file, TRANSLFNC translf
 }
 /*===================================================
  * write_record_to_file_impl -- Get record from btree and write to file
- *  btree: [in] database btree
- *  rkey:  [in] record key
- *  file:  [in] file name
- *  mode:  [in] fopen mode (for MSDOS text file problem)
+ *  btree:     [in] database btree
+ *  rkey:      [in] record key
+ *  file:      [in] file name
+ *  translfnc: [in] optional text translation function (for caller-specified translation)
+ *  mode:      [in] fopen mode (for MSDOS text file problem)
  * returns RECORD_SUCCESS, RECORD_NOT_FOUND, RECORD_ERROR
  * Originally named write_record_to_file
  *=================================================*/

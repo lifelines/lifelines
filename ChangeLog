@@ -1,3 +1,8 @@
+2007-07-24 Perry Rapp <puddle@users.sourceforge.net>
+
+	* btree/file.c stdlib/llstrcmp.c:
+	Bugfix - handle strcoll errors.
+
 2007-07-22 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog btree/file.c btree/opnbtree.c gedlib/brwslist.c
