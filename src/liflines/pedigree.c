@@ -1,5 +1,5 @@
 /* 
-   Copyright (c) 2000 Perry Rapp
+   Copyright (c) 2000-2001 Perry Rapp
 
    Permission is hereby granted, free of charge, to any person
    obtaining a copy of this software and associated documentation
@@ -23,7 +23,9 @@
 */
 /*=============================================================
  * pedigree.c -- Display the pedigree browse screen
-*/
+ *   Created: 2000/10 by Perry Rapp
+ *==============================================================*/
+
 
 #include "llstdlib.h"
 #include "liflines.h"
@@ -31,6 +33,14 @@
 #include "mystring.h"
 
 #include "llinesi.h"
+
+/*********************************************
+ * external variables (no header)
+ *********************************************/
+
+/*********************************************
+ * local types
+ *********************************************/
 
 struct treenode_s
 {
@@ -40,14 +50,39 @@ struct treenode_s
 };
 typedef struct treenode_s *treenode;
 
+/*********************************************
+ * local enums
+ *********************************************/
+
+#define GENS_MAX 7
+#define GENS_MIN 2
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+static treenode add_children(NODE indi, int gen, int maxgen, int * count);
+static treenode add_parents(NODE indi, int gen, int maxgen, int * count);
+static void print_to_buffer(int keynum, int gen, int * row);
+static void trav_pre_print(treenode tn, int * row, int gen);
+static void trav_bin_in_print(treenode tn, int * row, int gen);
+static void SetScrollMax(int row);
+static void show_descendants(NODE indi);
+static void show_ancestors(NODE indi);
+
+/*********************************************
+ * local variables
+ *********************************************/
+
 static int Gens = 4;
 static int Ancestors_mode = 1;
 static int Scrollp = 0;
 static int ScrollMax = 0;
 
-#define GENS_MAX 7
-#define GENS_MIN 2
-
+/*********************************************
+ * local function definitions
+ * body of module
+ *********************************************/
 
 /*=================================================
  * add_children -- add children to tree recursively

@@ -1,5 +1,5 @@
 /* 
-   Copyright (c) 2000 Perry Rapp
+   Copyright (c) 2000-2001 Perry Rapp
 
    Permission is hereby granted, free of charge, to any person
    obtaining a copy of this software and associated documentation

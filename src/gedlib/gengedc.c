@@ -37,13 +37,21 @@
 #include "interp.h"
 #include "gengedc.h"
 
-/**
- closure holds data used to make output consistent 
- as nodes are output, they are tested, and put on closure list
- if required - at the end, the closure list is processed
- (GENGENDCOM_WEAK does not accumulate closure list, but
-  modifies values being output instead)
-*/
+/*********************************************
+ * external variables (no header)
+ *********************************************/
+
+/*********************************************
+ * local types
+ *********************************************/
+
+/*======================================================
+ * CLOSURE -- holds data used to make output consistent 
+ * as nodes are output, they are tested, and put on closure list
+ * if required - at the end, the closure list is processed
+ * (GENGENDCOM_WEAK does not accumulate closure list, but
+  * modifies values being output instead)
+ *====================================================*/
 typedef struct closure_s
 { 
 	int gengedcl;
@@ -52,6 +60,41 @@ typedef struct closure_s
 	INDISEQ outseq; /* (top-level) nodes to output */
 	/* filter criteria would be added here */
 } CLOSURE;
+
+/*********************************************
+ * local enums
+ *********************************************/
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+static BOOLEAN closure_has_key(CLOSURE * closure, STRING key);
+static void closure_add_key(CLOSURE * closure, STRING key, STRING tag);
+static void closure_add_output_node (CLOSURE * closure, NODE node);
+static void closure_init(CLOSURE * closure, int gengedcl);
+static void closure_free(CLOSURE * closure);
+static void closure_wipe_processlist(CLOSURE * closure);
+static BOOLEAN closure_is_original(CLOSURE * closure);
+static BOOLEAN closure_is_strong(CLOSURE * closure);
+static BOOLEAN closure_is_dump(CLOSURE * closure);
+static void process_node_value(CLOSURE * closure, STRING v);
+static void output_any_node(CLOSURE * closure, NODE node, STRING toptag, INT lvl);
+static void output_top_node(CLOSURE * closure, NODE node);
+static void process_any_node(CLOSURE * closure, NODE node);
+static void table_incr_item(TABLE tab, STRING key);
+static int add_refd_fams(ENTRY ent, VPTR param);
+
+
+/*********************************************
+ * local variables
+ *********************************************/
+
+/*********************************************
+ * local function definitions
+ * body of module
+ *********************************************/
+
 /*======================================================
  * closure_has_key -- does closure have this key ?
  * the table stores all the keys we have

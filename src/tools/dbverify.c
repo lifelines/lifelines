@@ -34,19 +34,64 @@
 #include "btree.h"
 #include "indiseq.h"
 
+
+/*********************************************
+ * external variables (no header)
+ *********************************************/
+
 extern BTREE BTR;
+
+/*********************************************
+ * required global variables
+ *********************************************/
+
 BOOLEAN selftest = FALSE; /* selftest rules (ignore paths) */
-
-
 int opt_finnish = 0;
 
+/*********************************************
+ * local types
+ *********************************************/
 
+/*==========================================
+ * errinfo -- holds stats on a type of error
+ *========================================*/
 struct errinfo {
 	INT err;
 	INT err_count;
 	INT fix_count;
 	STRING desc;
 };
+/*=======================================
+ * NAMEREFN_REC -- holds one name or refn
+ *  key is the target pointed to
+ *=====================================*/
+typedef struct
+{
+	STRING namerefn; 
+	STRING key;
+	INT err;
+} NAMEREFN_REC;
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+static void print_usage(void);
+static void report_error(INT err, STRING fmt, ...);
+static void report_progress(STRING fmt, ...);
+static NAMEREFN_REC * alloc_namerefn(STRING namerefn, STRING key, INT err);
+static void free_namerefn(NAMEREFN_REC * rec);
+static void finish_and_delete_nameset(INDISEQ seq);
+static void finish_and_delete_refnset(INDISEQ seq);
+static BOOLEAN cgn_callback(STRING key, STRING name, BOOLEAN newset, void *param);
+static BOOLEAN cgr_callback(STRING key, STRING refn, BOOLEAN newset, void *param);
+static void check_ghosts(INT fixGhosts);
+static void validate_errs(void);
+static void report_results(void);
+
+/*********************************************
+ * local variables
+ *********************************************/
 
 #define ERR_ORPHANNAME 0
 #define ERR_GHOSTNAME 1
@@ -60,11 +105,14 @@ static struct errinfo errs[] = {
 	, { ERR_NONINDINAME, 0, 0, "Non-indi names" }
 };
 
-
 static LIST tofix;
 static INDISEQ dupseq;
-
 static BOOLEAN noisy=FALSE;
+
+/*********************************************
+ * local function definitions
+ * body of module
+ *********************************************/
 
 /*=================================
  * print_usage -- Explain arguments
@@ -108,16 +156,6 @@ report_progress (STRING fmt, ...)
 	printf("\n");
 	va_end(args);
 }
-/*=======================================
- * NAMEREFN_REC -- holds one name or refn
- *  key is the target pointed to
- *=====================================*/
-typedef struct
-{
-	STRING namerefn; 
-	STRING key;
-	INT err;
-} NAMEREFN_REC;
 /*===============================================
  * alloc_namerefn -- allocates a new NAMEREFN_REC
  *=============================================*/
@@ -143,6 +181,7 @@ free_namerefn (NAMEREFN_REC * rec)
 /*=================================================================
  * finish_and_delete_nameset -- check for dups in a set of one name
  *===============================================================*/
+static void
 finish_and_delete_nameset (INDISEQ seq)
 {
 	char prevkey[8];
@@ -159,6 +198,7 @@ finish_and_delete_nameset (INDISEQ seq)
 /*=================================================================
  * finish_and_delete_refnset -- check for dups in a set of one refn
  *===============================================================*/
+static void
 finish_and_delete_refnset (INDISEQ seq)
 {
 	char prevkey[8];
@@ -292,8 +332,6 @@ check_ghosts (INT fixGhosts)
 		}
 	}
 	
-	
-	
 	remove_list(tofix, NULL); 
 	tofix=0;
 }
@@ -301,7 +339,7 @@ check_ghosts (INT fixGhosts)
  * validate_errs -- Validate the errs array
  *=======================================*/
 static void
-validate_errs ()
+validate_errs (void)
 {
 	INT i;
 	for (i=0; i<sizeof(errs)/sizeof(errs[0]); i++) {
@@ -315,7 +353,7 @@ validate_errs ()
  * report_results -- Print out error & fix counts
  *=============================================*/
 static void
-report_results ()
+report_results (void)
 {
 	INT i, ct=0;
 	for (i=0; i<sizeof(errs)/sizeof(errs[0]); i++) {

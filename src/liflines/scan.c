@@ -1,5 +1,5 @@
 /* 
-   Copyright (c) 2000 Perry Rapp
+   Copyright (c) 2000-2001 Perry Rapp
 
    Permission is hereby granted, free of charge, to any person
    obtaining a copy of this software and associated documentation
@@ -21,6 +21,11 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/*================================================================
+ * scan.c -- Search database with full scan (several types)
+ * Copyright(c) 2000-2001 by Perry Rapp; all rights reserved
+ *   Created: 2000/12
+ *==============================================================*/
 
 #include "sys_inc.h"
 #include <stdarg.h>
@@ -34,7 +39,15 @@
 
 #include "llinesi.h"
 
+/*********************************************
+ * external variables (no header)
+ *********************************************/
+
 extern STRING scanrs, scnnmf, scnfnm, scnrfn, scantt;
+
+/*********************************************
+ * local types
+ *********************************************/
 
 typedef struct
 {
@@ -42,11 +55,34 @@ typedef struct
 	char string[64];
 } SCAN_PATTERN;
 
-static INDISEQ results_seq;
+/*********************************************
+ * local enums
+ *********************************************/
 
 static INT NAMESCAN_FULL=0;
 static INT NAMESCAN_FRAG=1;
 static INT REFNSCAN=2;
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+static BOOLEAN pattern_match(SCAN_PATTERN *patt, STRING name);
+static BOOLEAN ns_callback(STRING key, STRING name, BOOLEAN newset, void *param);
+static BOOLEAN rs_callback(STRING key, STRING refn, BOOLEAN newset, void *param);
+static BOOLEAN set_pattern(SCAN_PATTERN * patt, STRING str, INT scantype);
+static NOD0 name_scan(INT scantype);
+
+/*********************************************
+ * local variables
+ *********************************************/
+
+static INDISEQ results_seq;
+
+/*********************************************
+ * local function definitions
+ * body of module
+ *********************************************/
 
 /*=============================================
  * pattern_match -- Compare a name to a pattern
