@@ -226,8 +226,9 @@ main (INT argc,
 	}
 
 	/* Open Database */
-	lldatabases = (STRING) getenv("LLDATABASES");
-	if (!lldatabases || *lldatabases == 0) lldatabases = (STRING) ".";
+	lldatabases = environ_figure_database();
+	lldatabases = strsave(lldatabases);
+
 	readpath = filepath(btreepath, "r", lldatabases, NULL);
 	if (!readpath) readpath = btreepath;
 	if (forceopen) {
