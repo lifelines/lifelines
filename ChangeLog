@@ -5,6 +5,15 @@
 	tools/dbverify.c:
 	dbverify: added check dup or non-indi names, dup refns.
 
+	* gedlib/Makefile.am gedlib/init.c gedlib/messages.c
+	gedlib/node.c hdrs/gedcom.h interp/more.c liflines/Makefile.am
+	liflines/export.c liflines/main.c liflines/scan.c
+	liflines/screen.c stdlib/Makefile.am
+	NEW hdrs/fpattern.h stdlib/fpattern.c
+	Put version number in its own header.
+	Add fpattern pattern-matching for scan.
+	Changed scan to stay in scan until match selected or user quits.
+
 2001-01-11 Perry Rapp <puddle@users.sourceforge.net>
 
 	* hdrs/indiseq.h liflines/ask.c liflines/llinesi.h
