@@ -34,10 +34,6 @@
 #include <ctype.h>
 #endif
 
-#ifndef WIN32
-STRING strcpy();
-#endif
-
 extern BOOLEAN opt_finnish;
 
 /*===============================
