@@ -911,11 +911,14 @@ int
 RbNext (RBITER rbit, RBKEY * pkey, RBVALUE * pinfo)
 {
 	RBNODE next = rbit->next;
-	if (next == rbit->rbtree->nil) return 0;
+	RBNODE nil = rbit->rbtree->nil;
+	if (next == nil) return 0;
 	rbit->next = RbTreeSuccessor(rbit->rbtree, next);
-	if (0 < TreeCompare(rbit->rbtree, next->key, rbit->high)) { /* next->key > rbit->high */
-		rbit->next = rbit->rbtree->nil;
-		return 0;
+	if (rbit->high) {
+		if (0 < TreeCompare(rbit->rbtree, next->key, rbit->high)) { /* next->key > rbit->high */
+			rbit->next = rbit->rbtree->nil;
+			return 0;
+		}
 	}
 	*pkey = next->key;
 	*pinfo = next->info;

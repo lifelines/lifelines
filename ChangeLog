@@ -4,6 +4,10 @@
 
     Release option tables instead of destroying them.
 
+    * ChangeLog src/stdlib/rbtree.c
+
+    Fix RbNext to handle null rbit->high.
+
 2005-02-22 Perry Rapp
 
     * ChangeLog src/stdlib/table.c
