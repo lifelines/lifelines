@@ -309,7 +309,7 @@ SOURCE=..\..\..\src\gedlib\keytonod.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\arch\langinfo.c
+SOURCE=..\..\..\src\arch\nl_langinfo.c
 # End Source File
 # Begin Source File
 

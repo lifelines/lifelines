@@ -1,4 +1,23 @@
-2005-01-30, Perry Rapp
+2005-01-30 Matt Emmerton
+
+	* ChangeLog configure.in
+	ADD: src/arch/nl_langinfo.c
+	DEL: src/arch/langinfo.c
+
+	Update configure script with proper detection logic for nl_langinfo().
+	Rename files to work properly with configure logic.  Fix bug in our
+	version of nl_langinfo() that was causing the ncurses-5.4 crashes.
+
+	* ChangeLog build/msvc6/llexec/llexec.dsp
+	build/msvc6/llines/llinesprj.dsp build/msvc6/dbverify/dbverifyCmd.dsp
+
+	Update MSVC build files to handle changed filenames.
+
+	* ChangeLog src/liflines/main.c
+
+	Remove the ncurses-5.4 detection logic.
+
+2005-01-30 Perry Rapp
 
 	* ChangeLog build/rpm/lifelines.spec
 
@@ -33,7 +52,7 @@
 	Move SORTEL (indiseq element) structure from indiseq.h to indiseq.c.
 	Related const fixes.
 
-2005-01-29, Perry Rapp
+2005-01-29 Perry Rapp
 
 	* ChangeLog src/hdrs/table.h src/stdlib/table.c
 
@@ -61,7 +80,7 @@
 	Cosmetic: self-assign to avoid compiler warning for 
 	unused variable in NullFunction.
 
-2005-01-28, Perry Rapp
+2005-01-28 Perry Rapp
 
 	* ChangeLog src/interp/alloc.c
 
@@ -98,7 +117,7 @@
 	Revise delete_listener to free list if empty, to fix leak
 	in empty lists.
 
-2005-01-27, Perry Rapp
+2005-01-27 Perry Rapp
 
 	* ChangeLog src/gedlib/gedcomi.h src/gedlib/keytonod.c
 	src/gedlib/nodeio.c src/gedlib/record.c src/hdrs/gedcom.h
@@ -171,13 +190,14 @@
 
 	Fix string leak in init_valtab_from_string.
 
-2005-01-26, Stephen Dum
+2005-01-26 Stephen Dum
+
         * ChangeLog docs/ll-reportmanual.xml docs/ll-userguide.sv.xml
 	docs/ll-userguide.xml
 
         Make docbook versions consistant in xml files and 4.2.
 
-2005-01-25, Perry Rapp
+2005-01-25 Perry Rapp
 
 	* ChangeLog src/gedlib/intrface.c src/gedlib/keytonod.c
 	src/gedlib/names.c src/gedlib/refns.c src/gedlib/remove.c
@@ -909,22 +929,26 @@
 	test function, and some pvalue leaks in test.
 
 2004-12-30 Stephen Dum
+
         *Changelog reports/count_paternal_desc.ll reports/desc_ged.ll
 	Alter scripts to use lengthset rather than copying loop counter
 
 2004-12-27 Stephen Dum
+
         *Changelog reports/count_paternal_desc.ll reports/desc_ged.ll
 
 	fix two scripts that assumed loop counter was valid outside the loop.
 	(see bug id 1090607)
 
 2004-11-03 Stephen Dum
+
         * ChangeLog  src/gedlib/indiseq.c src/gedlib/lloptions.c
 
 	parent_indiseq() was using a static buffer after it was invalidated.
 	Fixed a minor memory leak in options code.
 
 2004-10-27 Stephen Dum
+
         *  ChangeLog docs/ll-reportmanual.xml docs/ll-reportmanual.pdf
 	docs/ll-reportmanual.txt docs/ll-reportmanual.html
 	src/btree/utils.c src/gedlib/nodeio.c src/hdrs/btree.h 

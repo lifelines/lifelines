@@ -620,27 +620,6 @@ main_db_notify (STRING db, BOOLEAN opening)
 		crash_setdb("");
 }
 /*==================================================
- * check_version_compat 
- *  - check if runtime platform has known incompatibility
- *================================================*/
-static BOOLEAN
-check_version_compat (void)
-{
-#ifndef __CYGWIN__
-/* Curses 5.4 problem (not on cygwin) */
-	if (NCURSES_VERSION_MAJOR == 5 && NCURSES_VERSION_MINOR == 4)
-	{
-		printf("Curses 5.4 detected.\n");
-		printf("There are known problems with this version of ncurses\n");
-		printf("that prevents LifeLines from running.  The LL developers\n");
-		printf("are working on a solution. For status updates and/or\n");
-		printf("assistance, please email lifelines-dev@lists.sourceforge.net.\n");
-		return FALSE;
-	}
-#endif
-	return TRUE;
-}
-/*==================================================
  * init_curses_ui -- 
  * Created: 2003/01/03, Perry Rapp
  *================================================*/
@@ -648,10 +627,6 @@ static BOOLEAN
 init_curses_ui (void)
 {
 	WINDOW *win;
-
-	/* check for curses version problem */
-	if (!check_version_compat())
-		return FALSE;
 
 	win = initscr();
 	if (!win) return FALSE;

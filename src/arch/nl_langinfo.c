@@ -29,6 +29,12 @@
  * Latest version:
  *
  *   http://www.cl.cam.ac.uk/~mgk25/ucs/langinfo.c
+ *
+ * LifeLines Modifications:
+ *
+ * 2005/01/30: nl_langinfo() should return an empty string, not NULL
+ *             in the error case.  This is implemented via the NONE
+ *             macro.
  */
 
 #include <stdlib.h>
@@ -38,6 +44,7 @@
 #define C_CODESET "US-ASCII"     /* Return this as the encoding of the
 				  * C/POSIX locale. Could as well one day
 				  * become "UTF-8". */
+#define NONE ""
 
 #define digit(x) ((x) >= '0' && (x) <= '9')
 
@@ -48,7 +55,7 @@ char *nl_langinfo(nl_item item)
   char *l, *p;
   
   if (item != CODESET)
-    return NULL;
+    return NONE;
   
   if (((l = getenv("LC_ALL"))   && *l) ||
       ((l = getenv("LC_CTYPE")) && *l) ||
@@ -110,7 +117,7 @@ char *nl_langinfo(nl_item item)
 /* For a demo, compile with "gcc -W -Wall -o langinfo -D TEST langinfo.c" */
 
 #ifdef TEST
-#include &lt;stdio.h&gt;
+#include <stdio.h>
 int main()
 {
   printf("%s\n", nl_langinfo(CODESET));
