@@ -1,0 +1,19 @@
+# config file for LifeLines
+# .linesrc under UNIX, lines.cfg under Windows
+# Lines beginning with # are ignored (comments)
+# So all these lines are commented out...
+#
+# These can be overridden by useroptions in db
+#
+#EmailAddr=user@mailhost.org
+#AddMetadata=0
+
+#
+# These can not be overridden by useroptions in db
+#
+#ReadFromArchives=1
+#LLARCHIVES=/home/user/LifeLines/Archives
+#LLDATABASES=/home/user/LifeLines/Databases
+#LLNEWDBDIR=/home/user/LifeLines/Databases
+#LLPROGRAMS=/home/user/LifeLines/Reports
+#LLREPORTS=/home/user/Lifelines/Outputs
