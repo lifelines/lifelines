@@ -66,7 +66,7 @@ dnl AC_C_CONST
 dnl AC_HEADER_TIME
 
 echo Looking for library functions
-AC_CHECK_FUNCS( getopt )
+AC_CHECK_FUNCS( getopt snprintf )
 dnl AC_CHECK_FUNCS(strerror perror strsignal psignal getopt getopt_long random)
 dnl investigate using AC_MSG_ERROR for error reporting
 dnl echo Looking for OPTIONAL library functions

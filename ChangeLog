@@ -1,3 +1,9 @@
+2000-11-07  Petter Reinholdtsen <pere@td.org.uit.no>
+
+	* configure.in interp/eval.c: Only use snprintf() when available.
+	We should include a replacement function instead of #ifdef'ing the
+	use.
+
 2000-11-06  Petter Reinholdtsen <pere@td.org.uit.no>
 
 	* hdrs/gedcom.h hdrs/interp.h hdrs/liflines.h: Remove useless

@@ -30,6 +30,10 @@
  *   3.0.3 - 23 Nov 95
  *============================================================*/
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "standard.h"
 #include "table.h"
 #include "translat.h"
@@ -168,7 +172,11 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	*eflg = TRUE;
 	if ((func = (PNODE) valueof(functab, nam)) == NULL) {
 		unsigned char s[1024];
+#ifdef HAVE_SNPRINTF
 		snprintf(s, sizeof(s), "undefined function %s()", nam);
+#else
+		sprintf(s, "undefined function %s()", nam);
+#endif
 		prog_error(node, s);
 		return NULL;
 	}
