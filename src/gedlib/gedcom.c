@@ -170,10 +170,8 @@ fam_to_fam (NODE fam)
 		nsibling(prev) = NULL;
 	}
 	node = NULL;
-	if (!husb && !wife && !chil) {
-		llwprintf(noiref);
-		return NULL;
-	}
+	/* We do not skip over empty families (!husb && !wife && !chil),
+	lest we create dangling pointers from individuals to empty families */
 	if (husb) nchild(fam) = node = husb;
 	if (wife) {
 		if (!node)

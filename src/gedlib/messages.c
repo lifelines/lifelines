@@ -269,6 +269,7 @@ ZST qSdboldk      = N_("No errors; adding records with original keys...");
 ZST qSdbnewk      = N_("No errors; adding records with new keys...");
 ZST qSdbodel      = N_("Using original keys, %d deleted records will be in the database.");
 ZST qScfoldk      = N_("Use original keys from GEDCOM file?");
+ZST qSproceed     = N_("Proceed ?");
 ZST qSoutarc      = N_("Enter name of output archive file.");
 ZST qSoutfin      = N_("Database `%s' has been saved in `%s'.");
 ZST qSmouttt      = N_("Enter name of translation table file to write");
@@ -285,6 +286,7 @@ ZST qSundsrc      = N_("Source %s is referred to but not defined.");
 ZST qSundevn      = N_("Event %s is referred to but not defined.");
 ZST qSbadlev      = N_("Line %d: This line has a level number that is too large.");
 ZST qSnoname      = N_("Line %d: Person defined here has no name.");
+ZST qSnomems      = N_("Line %d: Family has no members.");
 #if 0
 STRING noxref = SS "Line %d: This record has no cross reference value.";
 #endif

@@ -54,7 +54,7 @@ extern STRING qSmisixr, qSmisfxr;
 extern STRING qSmulper, qSmulfam;
 extern STRING qSmatper, qSmatfam;
 extern STRING qSundper, qSundfam, qSundsrc;
-extern STRING qSundevn, qSbadlev, qSnoname;
+extern STRING qSundevn, qSbadlev, qSnoname, qSnomems;
 
 /* external data set by check_stdkeys() , used by addmissingkeys() */
 
@@ -71,7 +71,8 @@ INT gd_xmax = 0;        /* maximum other key number */
 
 static TABLE convtab = NULL;
 static INT rec_type;
-static BOOLEAN named = FALSE;
+static BOOLEAN named = FALSE; /* found a NAME in current INDI ? */
+static INT members = 0; /* number members (HUSB,WIFE,CHIL) in current FAM */
 static INT person = -1;
 static INT family = -1;
 static INT event  = -1;
@@ -171,9 +172,14 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 			continue;
 		}
 		if (lev == 0) {
-			if (rec_type == INDI_REC && !named) {
-				if (getoptint("RequireNames", 0)) {
+			if (rec_type == INDI_REC) {
+				if (!named && getoptint("RequireNames", 0)) {
 					handle_err(ifeed, qSnoname, defline);
+				}
+			}
+			if (rec_type == FAM_REC) {
+				if (!members) {
+					handle_warn(ifeed, qSnomems, defline);
 				}
 			}
 			defline = flineno;
@@ -193,6 +199,7 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 				} else if (eqstr("FAM", tag)) {
 					count = ++nfam;
 					rec_type = FAM_REC;
+					members = 0;
 					family = add_fam_defn(ifeed, xref, flineno);
 				} else if (eqstr("EVEN", tag)) {
 					count = ++neven;
@@ -551,12 +558,9 @@ static void
 handle_fam_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line)
 {
 	ELMNT fam, pers;
-#ifdef DEBUG
-	llwprintf("handle_fam_lev1: %s, %s, %d\n",tag,val,line);
-	llwprintf("handle_fam_lev1: family == %d\n", family);
-#endif
 	fam = (family != -1) ? index_data[family] : NULL;
 	if (eqstr(tag, "HUSB")) {
+		++members;
 		if (!pointer_value(val)) {
 			handle_err(ifeed, qSmisval, line, "HUSB");
 			return;
@@ -565,6 +569,7 @@ handle_fam_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line)
 		if (add_indi_defn(ifeed, rmvat(val), 0, &pers) >= 0)
 			Sex(pers) |= BE_MALE;
 	} else if (eqstr(tag, "WIFE")) {
+		++members;
 		if (!pointer_value(val)) {
 			handle_err(ifeed, qSmisval, line, "WIFE");
 			return;
@@ -573,6 +578,7 @@ handle_fam_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line)
 		if (add_indi_defn(ifeed, rmvat(val), 0, &pers) >= 0)
 			Sex(pers) |= BE_FEMALE;
 	} else if (eqstr(tag, "CHIL")) {
+		++members;
 		if (!pointer_value(val)) {
 			handle_err(ifeed, qSmisval, line, "CHIL");
 			return;
@@ -1034,3 +1040,12 @@ append_path (ZSTR zstr, char delim, CNSTRING str)
 		zs_appc(zstr, delim);
 	zs_apps(zstr, str);
 }
+/*===================================================
+ * validate_get_warning_count -- How many warnings were found ?
+ *=================================================*/
+BOOLEAN
+validate_get_warning_count (void)
+{
+	return num_warns;
+}
+

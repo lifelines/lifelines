@@ -4,6 +4,13 @@
 
 	Revise FORFAMSS, FORFAMCS to skip dangling pointers (and not ASSERT).
 
+	* ChangeLog src/gedlib/gedcom.c src/gedlib/messages.c
+	src/liflines/import.c src/liflines/llinesi.h
+	src/liflines/valgdcom.c
+
+	Do not trim empty families at import; rather warn of them.
+	Add option to bail out of import if warnings found.
+
 2003-08-07 Perry Rapp
 
 	* ChangeLog reports/st/st_aux.ll reports/st/st_collate.ll

@@ -64,7 +64,7 @@ extern INT gd_emax;	/* maximum event key number */
 extern INT gd_xmax;	/* maximum other key number */
 
 extern STRING qSgdnadd, qSdboldk, qSdbnewk, qSdbodel;
-extern STRING qScfoldk, qSunsupuniv;
+extern STRING qScfoldk, qSunsupuniv, qSproceed;
 
 /*********************************************
  * local types
@@ -146,6 +146,7 @@ do_import (IMPORT_FEEDBACK ifeed, FILE *fp)
 	ZSTR zerr=0;
 	TABLE metadatatab = create_table(FREEBOTH);
 	STRING gdcodeset=0;
+	INT warnings=0;
 
 /* Open and validate GEDCOM file */
 	if ((unistr=check_file_for_unicode(fp)) && !eqstr(unistr, "UTF-8")) {
@@ -195,6 +196,15 @@ do_import (IMPORT_FEEDBACK ifeed, FILE *fp)
 			(*ifeed->error_invalid_fnc)(_(qSgdnadd));
 		goto end_import;
 	}
+	warnings = validate_get_warning_count();
+	if (warnings) {
+		ZSTR zstr=zs_new();
+		zs_setf(zstr, _pl("%d warning during import",
+			"%d warnings during import", warnings), warnings);
+		if (!ask_yes_or_no_msg(zs_str(zstr), _(qSproceed))) {
+			goto end_import;
+		}
+	}
 
 	if (gedcom_codeset_in[0] && int_codeset[0]) {
 retry_input_codeset:
@@ -229,7 +239,7 @@ retry_input_codeset:
 		totused = gd_itot + gd_ftot + gd_stot + gd_etot + gd_xtot;
 		totkeys = gd_imax + gd_fmax + gd_smax + gd_emax + gd_xmax;
 		if((totkeys-totused) > 0) {
-		    sprintf(msgbuf, _(qSdbodel), totkeys-totused);
+		    snprintf(msgbuf, sizeof(msgbuf), _(qSdbodel), totkeys-totused);
 		}
 		else strcpy(msgbuf, " ");
 		gd_reuse = ask_yes_or_no_msg(msgbuf, _(qScfoldk));
