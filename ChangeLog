@@ -1,9 +1,11 @@
 2005-02-08 Stephen Dum
-        * ChangeLog  docs/ll-reportmanual.html  docs/ll-reportmanual.pdf 
+	* ChangeLog  docs/ll-reportmanual.html  docs/ll-reportmanual.pdf 
 	  docs/ll-reportmanual.txt  docs/ll-userguide.html 
 	  docs/ll-userguide.pdf docs/ll-userguide.txt
 
-        update docs for 3.0.42
+	update docs for 3.0.42
+
+2005-02-08 lifelines beta 3.0.42 RELEASE
 
 2005-02-08 Perry Rapp
 
@@ -26,6 +28,11 @@
 	docs/ll-reportmanual.xml docs/ll-userguide.xml src/hdrs/version.h
 
 	Bump version for 3.0.42.
+
+	*
+
+	Update pot & message catalogs.
+	
 
 2005-02-07 Perry Rapp
 

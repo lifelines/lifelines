@@ -32,14 +32,15 @@ Update master message catalog template (for i18n):
   $ make lifelines.pot
   $ cd ..
 
+Build distribution tarball:
+  $ make dist
+  $ cd ..
+
 Add an entry mentioning the new version in the
   ChangeLog
 
-Commit changes (new version number):
+Commit changes (new version number, new message catalogs):
   $ cvs -z3 ci
-
-Build distribution tarball:
-  $ ../make dist
 
 Build any other files (eg, other tarball formats,
 MS-Windows binary packages, rpm packages).
