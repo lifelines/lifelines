@@ -761,14 +761,13 @@ display_2indi (NODE indi1, NODE indi2, INT mode)
 	rect.top = 1;
 	rect.bottom = lines1;
 	rect.left = 1;
-	rect.right = 
-	rect.right = MAINWIN_WIDTH-1;
+	rect.right = MAINWIN_WIDTH-2;
 
 	show_indi(main_win, indi1, mode, &rect, &Scroll1, reuse);
 	show_tandem_line(main_win, lines1+1);
 	switch_scrolls();
 	rect.top = lines1+2;
-	rect.bottom = lines;
+	rect.bottom = lines+1;
 	show_indi(main_win, indi2, mode, &rect, &Scroll1, reuse);
 	switch_scrolls();
 
