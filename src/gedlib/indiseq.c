@@ -1440,7 +1440,7 @@ INDISEQ get_all_sour (void)
 {
 	INDISEQ seq=NULL;
 	int i=0;
-	while (i=xref_nexts(i))
+	while ((i=xref_nexts(i)))
 	{
 		static char skey[10];
 		WORD val;
@@ -1461,7 +1461,7 @@ INDISEQ get_all_even (void)
 {
 	INDISEQ seq=NULL;
 	int i=0;
-	while (i=xref_nexte(i))
+	while ((i=xref_nexte(i)))
 	{
 		static char skey[10];
 		WORD val;
@@ -1482,7 +1482,7 @@ INDISEQ get_all_othe (void)
 {
 	INDISEQ seq=NULL;
 	int i=0;
-	while (i=xref_nextx(i))
+	while ((i=xref_nextx(i)))
 	{
 		static char skey[10];
 		WORD val;
