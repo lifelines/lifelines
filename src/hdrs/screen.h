@@ -99,14 +99,6 @@ extern INT ll_cols;  /* number of columns used by LifeLines (usually COLSREQ) */
 extern INT cur_screen;
 extern UIWINDOW stdout_win;
 extern UIWINDOW main_win;
-extern UIWINDOW ask_win;
-extern UIWINDOW ask_msg_win;
-extern UIWINDOW choose_from_list_win;
-extern UIWINDOW start_menu_win;
-extern UIWINDOW add_menu_win;
-extern UIWINDOW del_menu_win;
-extern UIWINDOW scan_menu_win;
-extern UIWINDOW utils_menu_win;
 
 
 /* Function Prototype */

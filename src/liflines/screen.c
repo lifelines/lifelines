@@ -78,14 +78,14 @@ BOOLEAN stdout_vis = FALSE;
 INT cur_screen = 0;
 UIWINDOW main_win = NULL;
 UIWINDOW stdout_win=NULL, stdout_box_win=NULL;
-UIWINDOW debug_win=NULL, debug_box_win=NULL;
-UIWINDOW ask_win=NULL, ask_msg_win=NULL;
-UIWINDOW choose_from_list_win=NULL;
-UIWINDOW add_menu_win=NULL, del_menu_win=NULL;
-UIWINDOW scan_menu_win=NULL, cset_menu_win=NULL, rpt_cset_menu_win=NULL;
-UIWINDOW utils_menu_win=NULL, tt_menu_win=NULL;
-UIWINDOW trans_menu_win=NULL;
-UIWINDOW extra_menu_win=NULL;
+static UIWINDOW debug_win=NULL, debug_box_win=NULL;
+static UIWINDOW ask_win=NULL, ask_msg_win=NULL;
+static UIWINDOW choose_from_list_win=NULL;
+static UIWINDOW add_menu_win=NULL, del_menu_win=NULL;
+static UIWINDOW scan_menu_win=NULL, cset_menu_win=NULL, rpt_cset_menu_win=NULL;
+static UIWINDOW utils_menu_win=NULL, tt_menu_win=NULL;
+static UIWINDOW trans_menu_win=NULL;
+static UIWINDOW extra_menu_win=NULL;
 
 /*********************************************
  * external/imported variables
