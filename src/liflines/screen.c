@@ -606,7 +606,7 @@ indi_browse (NODE indi)
 	show_person(indi, 1, PER_LINES);
 	display_screen(ONE_PER_SCREEN);
 	return interact(main_win,
-		"efmscoygubhirdpnaxtzqACFGMSU$#123456789+-");
+		"efmscoygubhirdpnaxtzqACFGMSU()$#123456789+-");
 }
 /*=======================================
  * fam_browse -- Handle fam_browse screen
@@ -618,7 +618,7 @@ fam_browse (NODE fam)
 	show_long_family(fam, 1, FAM_LINES);
 	display_screen(ONE_FAM_SCREEN);
 	return interact(main_win, 
-		"efmcnsardxtbzqABCFM$#123456789+-");
+		"efmcnsardxtbzqABCFM()$#123456789+-");
 }
 /*=============================================
  * tandem_browse -- Handle tandem_browse screen
@@ -629,7 +629,7 @@ tandem_browse (NODE indi1,
 {
 	if (cur_screen != TWO_PER_SCREEN) paint_two_per_screen();
 	show_person(indi1, 1, TANDEM_LINES);
-	show_person(indi2, TANDEM_LINES+2, TANDEM_LINES);
+	show_person2(indi2, TANDEM_LINES+2, TANDEM_LINES);
 	display_screen(TWO_PER_SCREEN);
 	return interact(main_win, "etfmscbdajxq");
 }
@@ -655,7 +655,7 @@ ped_browse (NODE indi)
 	show_pedigree(indi);
 	display_screen(PED_SCREEN);
 	return interact(main_win,
-		"eifmscgb$+-q");
+		"eifmscoygb&()[]$123456789+-q");
 }
 #ifdef UNUSED
 /*=======================================
@@ -929,27 +929,29 @@ utils_menu (void)
 /*================================
  * extra_menu -- Handle extra menu
  *==============================*/
-void
+static void
 extra_menu (void)
 {
 	INT code;
-	touchwin(extra_menu_win);
-	wmove(extra_menu_win, 1, 39);
-	wrefresh(extra_menu_win);
-	code = interact(extra_menu_win, "sex123456q");
-	touchwin(main_win);
-	wrefresh(main_win);
-	switch (code) {
-	case 's': browse_sources(); break;
-	case 'e': browse_events(); break;
-	case 'x': browse_others(); break;
-	case '1': add_source(); break;
-	case '2': edit_source(NULL); break;
-	case '3': add_event(); break;
-	case '4': edit_event(NULL); break;
-	case '5': add_other(); break;
-	case '6': edit_other(NULL); break;
-	case 'q': break;
+	while (1) {
+		touchwin(extra_menu_win);
+		wmove(extra_menu_win, 1, 39);
+		wrefresh(extra_menu_win);
+		code = interact(extra_menu_win, "sex123456q");
+		touchwin(main_win);
+		wrefresh(main_win);
+		switch (code) {
+		case 's': browse_sources(); break;
+		case 'e': browse_events(); break;
+		case 'x': browse_others(); break;
+		case '1': add_source(); return;
+		case '2': edit_source(NULL); return;
+		case '3': add_event(); return;
+		case '4': edit_event(NULL); return;
+		case '5': add_other(); return;
+		case '6': edit_other(NULL); return;
+		case 'q': return;
+		}
 	}
 }
 /*===============================
@@ -1154,7 +1156,7 @@ list_interact(WINDOW *win,    /* interaction window */
               INT len,        /* list length */
               STRING *strings)/* string list */
 {
-		INT top = 0, cur = 0, row;
+	INT top = 0, cur = 0, row;
 	while (TRUE) {
 		werase(win);
 		BOX(win, 0, 0);

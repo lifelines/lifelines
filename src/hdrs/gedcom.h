@@ -181,6 +181,7 @@ STRING indi_to_list_string(NODE, NODE, INT);
 NODE indi_to_moth(NODE);
 STRING indi_to_name(NODE, TRANTABLE, INT);
 NODE indi_to_next_sib(NODE);
+STRING indi_to_ped_fix(NODE indi, INT len);
 NODE indi_to_prev_sib(NODE);
 STRING indi_to_title(NODE, TRANTABLE, INT);
 void initxref(void);

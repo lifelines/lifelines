@@ -39,13 +39,14 @@
 #include "cache.h"
 #include "liflines.h"
 
+#include "llinesi.h"
+
 extern BOOLEAN opt_nocb;	/* TRUE to suppress display of cb. data */
 extern INT LIST_LINES;		/* person info display lines above list */
 extern INT PED_LINES;		/* pedigree lines */
 extern INT listbadkeys;
 extern char badkeylist[];
 
-static STRING indi_to_ped_fix (NODE, INT);
 static STRING person_display(NODE, NODE, INT);
 static void add_child_line(INT, NODE);
 static void add_spouse_line(INT, NODE, NODE);
@@ -53,14 +54,38 @@ static void init_display_indi(NODE);
 static void init_display_fam(NODE);
 
 #define MAXOTHERS 30
-typedef char LINESTRING[80];
+typedef char *LINESTRING;
 
 static LINESTRING Spers, Sbirt, Sdeat, Sfath, Smoth, Smarr;
 static LINESTRING Shusb, Shbirt, Shdeat, Swife, Swbirt, Swdeat;
 static LINESTRING Sothers[MAXOTHERS];
 static INT Solen = 0;
+static INT Scroll = 0;
+static INT Scroll2 = 0;
 static INT number_child_enable = 0;
 
+/*===============================================
+ * init_show_module -- Initialize display variables
+ *=============================================*/
+void
+init_show_module ()
+{
+	int i;
+	Spers = (LINESTRING)malloc(ll_cols);
+	Sbirt = (LINESTRING)malloc(ll_cols);
+	Sdeat = (LINESTRING)malloc(ll_cols);
+	Sfath = (LINESTRING)malloc(ll_cols);
+	Smoth = (LINESTRING)malloc(ll_cols);
+	Smarr = (LINESTRING)malloc(ll_cols);
+	Shusb = (LINESTRING)malloc(ll_cols);
+	Shbirt = (LINESTRING)malloc(ll_cols);
+	Shdeat = (LINESTRING)malloc(ll_cols);
+	Swife = (LINESTRING)malloc(ll_cols);
+	Swbirt = (LINESTRING)malloc(ll_cols);
+	Swdeat = (LINESTRING)malloc(ll_cols);
+	for (i=0; i<MAXOTHERS; i++)
+		Sothers[i] = (LINESTRING)malloc(ll_cols);
+}
 /*===============================================
  * init_display_indi -- Initialize display person
  *=============================================*/
@@ -140,7 +165,8 @@ show_person (NODE pers, /* person */
              INT hgt)   /* avail rows */
 {
 	INT i;
-	char buf[132];
+	INT localrow;
+	INT overflow;
 	badkeylist[0] = '\0';
 	listbadkeys = 1;
 	init_display_indi(pers);
@@ -151,18 +177,40 @@ show_person (NODE pers, /* person */
 		mvwaddch(main_win, row+i, ll_cols-1, ACS_VLINE);
 #endif
 	}
+	if (Scroll > Solen + 5 - hgt)
+		Scroll = Solen + 5 - hgt;
+	if (Scroll < 0)
+		Scroll = 0;
+	localrow = row - Scroll;
 	mvwaddstr(main_win, row+0, 1, Spers);
 	mvwaddstr(main_win, row+1, 1, Sbirt);
 	mvwaddstr(main_win, row+2, 1, Sdeat);
 	mvwaddstr(main_win, row+3, 1, Sfath);
 	mvwaddstr(main_win, row+4, 1, Smoth);
-	for (i = 0; i < Solen && i < hgt-5; i++)
-		mvwaddstr(main_win, row+5+i, 1, Sothers[i]);
+	for (i = Scroll; i < Solen && i < hgt-5+Scroll; i++)
+	{
+		overflow = ((i+1 == hgt-5+Scroll)&&(i+1 != Solen));
+		if (Scroll && (i == Scroll))
+			overflow = 1;
+		put_out_line(main_win, localrow+5+i, 1, Sothers[i], overflow);
+	}
 	listbadkeys = 0;
 	if(badkeylist[0]) {
+		char buf[132];
 		sprintf(buf, "WARNING: missing keys: %.40s", badkeylist);
 		message(buf);
 	}
+}
+/*==============================
+ * show_person2 -- Display person using 2nd scroll adjustments
+ *============================*/
+void show_person2 (NODE pers, INT row, INT hgt)
+{
+	INT save = Scroll;
+	Scroll = Scroll2;
+	show_person(pers, row, hgt);
+	Scroll2 = Scroll;
+	Scroll = save;
 }
 /*=============================================
  * add_spouse_line -- Add spouse line to others
@@ -264,6 +312,8 @@ show_long_family (NODE fam,
                   INT hgt)
 {
 	INT i;
+	INT localrow;
+	INT overflow;
 	char buf[132];
 	badkeylist[0] = '\0';
 	listbadkeys = 1;
@@ -275,6 +325,11 @@ show_long_family (NODE fam,
 		mvwaddch(main_win, row+i, ll_cols-1, ACS_VLINE);
 #endif
 	}
+	if (Scroll > Solen + 7 - hgt)
+		Scroll = Solen + 7 - hgt;
+	if (Scroll < 0)
+		Scroll = 0;
+	localrow = row - Scroll;
 	mvwaddstr(main_win, row+0, 1, Shusb);
 	mvwaddstr(main_win, row+1, 1, Shbirt);
 	mvwaddstr(main_win, row+2, 1, Shdeat);
@@ -282,8 +337,13 @@ show_long_family (NODE fam,
 	mvwaddstr(main_win, row+4, 1, Swbirt);
 	mvwaddstr(main_win, row+5, 1, Swdeat);
 	mvwaddstr(main_win, row+6, 1, Smarr);
-	for (i = 0; i < Solen && i < hgt-7; i++)
-		mvwaddstr(main_win, row+7+i, 1, Sothers[i]+1);
+	for (i = Scroll; i < Solen && i < hgt-7+Scroll; i++)
+	{
+		overflow = ((i+1 == hgt-7+Scroll)&&(i+1 != Solen));
+		if (Scroll && (i == Scroll))
+			overflow = 1;
+		put_out_line(main_win, localrow+7+i, 1, Sothers[i]+1, overflow);
+	}
 	listbadkeys = 0;
 	if(badkeylist[0]) {
 		sprintf(buf, "WARNING: missing keys: %.40s", badkeylist);
@@ -335,6 +395,26 @@ show_short_family (NODE fam,
 		message(buf);
 	}
 }
+/*================================================
+ * show_pedigree -- Show person in pedigree format
+ * new version by Perry 2000/12/03
+ *==============================================*/
+void
+show_pedigree (NODE indi)
+{
+	WINDOW *w = main_win;
+	int i;
+	for (i = 1; i <= PED_LINES; i++) {
+		wmove(w, i, 1);
+		wclrtoeol(w);
+#ifndef BSD
+		mvwaddch(w, i, ll_cols-1, ACS_VLINE);
+#endif
+	}
+
+	pedigree_show(indi);
+}
+#if 0
 /* Because of a reported problem with 8-bit characters on Dec Alpha
  * the following replacement for mvwprintw is used.
  * It requires inserting the following declaration in the
@@ -343,9 +423,9 @@ show_short_family (NODE fam,
  *   char s[300];
  */
 #define LLMVWPRINTW(w,y,x,f,n) sprintf(s,f,n); mvwaddstr(w,y,x,s);
-
 /*================================================
  * show_pedigree -- Show person in pedigree format
+ * this version obsoleted, 2000/12/03
  *==============================================*/
 void
 show_pedigree (NODE indi)
@@ -459,10 +539,11 @@ show_pedigree (NODE indi)
 	LLMVWPRINTW(w,31, 2, "                        %s", indi_to_ped_fix(mmmm, 53));
 	}
 }
+#endif
 /*===============================================================
  * indi_to_ped_fix -- Construct person STRING for pedigree screen
  *=============================================================*/
-static STRING
+STRING
 indi_to_ped_fix (NODE indi,
                  INT len)
 {
@@ -626,9 +707,58 @@ show_sour_display (NODE node,
 	STRING key;
 }
 #endif
+/*===============================================
+ * individual_scroll - vertically scroll person display
+ *=============================================*/
+void show_scroll (INT delta)
+{
+	Scroll += delta;
+	if (Scroll < 0)
+		Scroll = 0;
+}
+/*===============================================
+ * individual_scroll2 - scroll lower window (in tandem mode)
+ *=============================================*/
+void show_scroll2 (INT delta)
+{
+	Scroll2 += delta;
+	if (Scroll2 < 0)
+		Scroll2 = 0;
+}
+/*===============================================
+ * put_out_line - move string to screen
+ * but also append + at end if requested
+ *=============================================*/
+void
+put_out_line (WINDOW * win, INT x, INT y, STRING string, INT flag)
+{
+	if (!flag)
+	{
+		mvwaddstr(win, x, y, string);
+	}
+	else
+	{
+		INT i, pos;
+		LINESTRING linebuffer = (LINESTRING)malloc(ll_cols);
+		char * ptr = &linebuffer[0];
+		int mylen=ll_cols;
+		ptr[0] = 0;
+		llstrcatn(&ptr, string, &mylen);
+		i = strlen(linebuffer);
+		pos = ll_cols-4;
+		if (i>pos)
+			i = pos;
+		for (; i<pos; i++)
+			linebuffer[i] = ' ';
+		linebuffer[i++] = '+';
+		linebuffer[i++] = '+';
+		linebuffer[i++] = '\0';
+		mvwaddstr(win, x, y, linebuffer);
+		free(linebuffer);
+	}
+}
 /*==================================================================
  * show_childnumbers() - toggle display of numbers for children
- * (Perry) 1999/02
  *================================================================*/
 void show_childnumbers ()
 {

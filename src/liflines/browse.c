@@ -229,6 +229,12 @@ browse_indi (NODE *pindi1,
 			    idcbrs, FALSE);
 			if (node) indi = node;
 			break;
+		case '(':       /* scroll children (& spouses) up */
+			show_scroll(-1);
+			break;
+		case ')':       /* scroll children (& spouses) down */
+			show_scroll(+1);
+			break;
 		case '#':       /* toggle children numbers */
 			show_childnumbers();
 			break;
@@ -586,6 +592,12 @@ browse_fam (NODE *pindi,
 		case 'x':	/* Swap two children */
 			swap_children(NULL, fam);
 			break;
+		case '(':       /* scroll children up */
+			show_scroll(-1);
+			break;
+		case ')':       /* scroll children down */
+			show_scroll(+1);
+			break;
 		case '#':       /* toggle children numbers */
 			show_childnumbers();
 			break;
@@ -646,6 +658,7 @@ browse_pedigree (NODE *pindi,
 	STRING key, name;
 	INDISEQ seq = NULL;
 	if (!indi) return BROWSE_QUIT;
+	pedigree_reset_scroll();
 	while (TRUE) {
 		switch (c=ped_browse(indi)) {
 		case 'e':	/* Edit person */
@@ -689,6 +702,21 @@ browse_pedigree (NODE *pindi,
 			*pseq = seq;
 			return BROWSE_LIST;
 			break;
+		case '&':       /* toggle pedigree mode (ancestors/descendants) */
+			pedigree_toggle_mode();
+			break;
+		case '(':       /* scroll pedigree up */
+			pedigree_scroll(-1);
+			break;
+		case ')':       /* scroll pedigree down */
+			pedigree_scroll(+1);
+			break;
+		case '[':       /* decrease pedigree depth */
+			pedigree_increase_generations(-1);
+			break;
+		case ']':       /* increase pedigree depth */
+			pedigree_increase_generations(+1);
+			break;
 		case '1':	/* Go to children by number */
 		case '2':
 		case '3':
@@ -720,6 +748,18 @@ browse_pedigree (NODE *pindi,
 				else message(nopers);
 				break;
 			}
+		case 'o':	/* Browse to older sib */
+			if (!(node = indi_to_prev_sib(indi)))
+				message(noosib);
+			else
+				indi = node;
+			break;
+		case 'y':	/* Browse to younger sib */
+			if (!(node = indi_to_next_sib(indi)))
+				message(noysib);
+			else 
+				indi = node;
+			break;
 		case 'q':
 		default:
 			return BROWSE_QUIT;
