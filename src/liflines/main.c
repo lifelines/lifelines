@@ -402,8 +402,7 @@ prompt_for_db:
 		BOOLEAN picklist = FALSE;
 		BOOLEAN timing = FALSE;
 		interp_main(exprogs, progout, picklist, timing);
-		make_list_empty(exprogs);
-		remove_list2(exprogs, 0);
+		remove_list(exprogs);
 	} else {
 		alldone = 0;
 		while (!alldone)
