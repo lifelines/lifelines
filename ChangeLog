@@ -7,6 +7,9 @@
 	* reports/exercise.ll:
 	Added index tests to exercise.ll.
 
+	* ChangeLog interp/more.c liflines/main.c:
+	Fix _index() to handle long strings without buffer overflow.
+
 2001-05-27 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog interp/interp.c interp/pvalue.c:

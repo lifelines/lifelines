@@ -23,6 +23,7 @@
 */
 /*=============================================================
  * Copyright(c) 1991-95 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   2.3.4 - 24 Jun 93    2.3.5 - 26 Sep 93
  *   3.0.0 - 28 Jun 94    3.0.2 - 04 Apr 95
  *   3.0.3 - 25 Aug 95
@@ -55,8 +56,9 @@ extern STRING notone, ifone, progname;
  *********************************************/
 
 /* alphabetical */
-static void compute_pi(STRING);
-static INT ll_index(STRING, STRING, INT);
+static void compute_pi(STRING pi, STRING sub);
+static INT ll_index(STRING str, STRING sub, INT num);
+static INT kmp_search(STRING pi, STRING str, STRING sub, INT num);
 static void makestring(PVALUE val, STRING str, INT len, BOOLEAN *eflg);
 static STRING rightjustify (STRING str, INT len);
 static STRING allocsubstring (STRING s, INT i, INT j);
@@ -338,19 +340,37 @@ __substring (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 }
 /*======================================================
  * index -- Find nth occurrence of sub in str (uses KMP)
+ * STRING str:  the text being searched
+ * STRING sub:  the substring being sought
+ * INT num:     which occurrence we want
+ *  return value is 1-based index (or 0 if not found)
  *====================================================*/
-static char pi[MAXLINELEN];
 static INT
-ll_index (STRING str, 
-          STRING sub,
-          INT num)
+ll_index (STRING str, STRING sub, INT num)
+{
+	INT result;
+	STRING pi;
+	if (!str || !sub || *str == 0 || *sub == 0) return 0;
+	pi = stdalloc(strlen(sub)+1);
+	compute_pi(pi, sub);
+	result = kmp_search(pi, str, sub, num);
+	stdfree(pi);
+	return result;
+}
+/*===============================================
+ * kmp_search -- Perform KMP search for substring
+ * STRING pi:   the KMP index to avoid backtracking
+ * STRING str:  the text being searched
+ * STRING sub:  the substring being sought
+ * INT num:     which occurrence we want
+ *  return value is 1-based index (or 0 if not found)
+ *=============================================*/
+static INT
+kmp_search (STRING pi, STRING str, STRING sub, INT num)
 {
 	INT i, n, m, q = 0, found = 0;
-
-	if (!str || !sub || *str == 0 || *sub == 0) return 0;
 	n = strlen(str);
 	m = strlen(sub);
-	compute_pi(sub);
 	for (i = 1; i <= n; i++) {
 		while (q > 0 && sub[q] != str[i-1])
 			q = pi[q];
@@ -366,7 +386,7 @@ ll_index (STRING str,
  * compute_pi -- Support routine for index
  *======================================*/
 static void
-compute_pi (STRING sub)
+compute_pi (STRING pi, STRING sub)
 {
 	INT m = strlen(sub), k = 0, q;
 	pi[1] = 0;

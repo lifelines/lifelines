@@ -25,6 +25,7 @@
 /*=============================================================
  * main.c -- Main program of LifeLines
  * Copyright(c) 1992-95 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   2.3.4 - 24 Jun 93    2.3.5 - 07 Aug 93
  *   2.3.6 - 02 Oct 93    3.0.0 - 11 Oct 94
  *   3.0.1 - 11 Oct 93    3.0.2 - 01 Jan 95
