@@ -14,12 +14,16 @@
 #include "object.h"
 
 
+/*=================================================
+ * delete_obj -- delref or delete object as appropriate
+ * obj may be null
+ *===============================================*/
 void
 delete_obj (OBJECT obj)
 {
 	VTABLE vtable;
 
-	if (!obj || !(*obj)) return;
+	if (!obj) return; /* Like C++ delete, may be called on NULL */
 
 	vtable = (*obj);
 	ASSERT(vtable->vtable_magic == VTABLE_MAGIC);
@@ -31,5 +35,39 @@ delete_obj (OBJECT obj)
 		/* not reference counted */
 		(*vtable->destroy_fnc)(obj);
 	}
+}
+/*=================================================
+ * addref_obj -- addref object
+ * Must be valid object with addref method
+ *===============================================*/
+int
+addref_obj (OBJECT obj)
+{
+	VTABLE vtable;
+
+	ASSERT(obj);
+
+	vtable = (*obj);
+	ASSERT(vtable->vtable_magic == VTABLE_MAGIC);
+
+	ASSERT(vtable->isref_fnc && vtable->addref_fnc);
+	return (*vtable->addref_fnc)(obj);
+}
+/*=================================================
+ * delref_obj -- delref object
+ * Must be valid object with delref method
+ *===============================================*/
+int
+delref_obj (OBJECT obj)
+{
+	VTABLE vtable;
+
+	ASSERT(obj);
+
+	vtable = (*obj);
+	ASSERT(vtable->vtable_magic == VTABLE_MAGIC);
+
+	ASSERT(vtable->isref_fnc && vtable->delref_fnc);
+	return (*vtable->delref_fnc)(obj);
 }
 

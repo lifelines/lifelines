@@ -28,8 +28,6 @@
  *   3.0.0 - 28 Jun 94    3.0.2 - 04 Apr 95
  *   3.0.3 - 25 Aug 95
  *===========================================================*/
-/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
-/* modified 2000-01-26 J.F.Chandler */
 
 #include "sys_inc.h"
 
@@ -46,6 +44,7 @@
 #include "feedback.h" /* call_system_cmd */
 #include "zstr.h"
 #include "array.h"
+#include "object.h"
 
 
 /*********************************************
@@ -1160,10 +1159,17 @@ ARRAY
 list_to_array (LIST list)
 {
 	ARRAY array = create_array_objval(length_list(list));
-	int i=0;
-	FORLIST(list, el)
-		set_array_obj(array, i++, (OBJECT)el);
-	ENDLIST
+	struct tag_list_iter listit;
+	if (begin_list_rev(list, &listit)) {
+		INT i=0;
+		VPTR vptr;
+		while (next_list_ptr(&listit, &vptr)) {
+			OBJECT obj = vptr;
+			if (obj)
+				addref_obj(obj);
+			set_array_obj(array, i++, obj);
+		}
+	}
 	return array;
 }
 /*========================================
@@ -1257,7 +1263,7 @@ __sort(PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		struct tag_list_iter listit;
 		INT i=0;
 		VPTR ptr=0;
-		if (begin_list(list_vals, &listit)) {
+		if (begin_list_rev(list_vals, &listit)) {
 			while (next_list_ptr(&listit, &ptr)) {
 				change_list_ptr(&listit, get_array_obj(arr_vals, i++));
 			}
