@@ -207,7 +207,7 @@ char **argv;
 	}
 	lldatabases = (STRING) getenv("LLDATABASES");
 	if (!lldatabases || *lldatabases == 0) lldatabases = (STRING) ".";
-	readpath = filepath(btreepath, "r", lldatabases);
+	readpath = filepath(btreepath, "r", lldatabases, NULL);
 	if (!readpath) readpath = btreepath;
 	if (forceopen) {
 		char scratch[200];

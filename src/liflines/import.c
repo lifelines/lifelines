@@ -35,6 +35,7 @@
 #include "sequence.h"
 #include "gedcheck.h"
 #include "translat.h"
+#include "screen.h"
 
 /* external data set by check_stdkeys() */
 
@@ -79,7 +80,7 @@ BOOLEAN import_from_file ()
 	char msgbuf[80];
 
 /* Open and validate GEDCOM file */
-	fp = ask_for_file(LLREADTEXT, idgedf, &fname, NULL);
+	fp = ask_for_file(LLREADTEXT, idgedf, &fname, NULL, ".ged");
 	if (!fp) return FALSE;
 	llwprintf(gdcker, fname);
 	if (!validate_gedcom(fp)) {
@@ -105,12 +106,17 @@ BOOLEAN import_from_file ()
 		else strcpy(msgbuf, " ");
 		gd_reuse = ask_yes_or_no_msg(
 			msgbuf, "Use original keys from GEDCOM file?");
+		touchwin(stdout_win);
+		wrefresh(stdout_win);
 	}
 
 	/* start loading the file */
 	rewind(fp);
 
-	wfield(9,  0, "No errors; adding records to database.");
+	if(gd_reuse)
+	  wfield(9,  0, "No errors; adding records with original keys...");
+	else
+	  wfield(9,  0, "No errors; adding records with new keys...");
 	wfield(10, 1, "     0 Persons");
 	wfield(11, 1, "     0 Families");
 	wfield(12, 1, "     0 Events");

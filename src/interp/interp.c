@@ -72,6 +72,32 @@ finishinterp ()
 {
 	finishrassa();
 }
+/*================================================================+
+ * progmessage -- Display a status message about the report program
+ *===============================================================*/
+progmessage(msg)
+    char *msg;
+{
+    char buf[80];
+    int len;
+    char *dotdotdot;
+    if(progname && *progname) {
+	len = strlen(progname);
+	if(len > 40) {
+	  len -= 40;
+	  dotdotdot = "...";
+	}
+	else {
+	  len = 0;
+	  dotdotdot = "";
+	}
+	sprintf(buf, "Program \"%s%s\" %s", dotdotdot, progname+len, msg);
+    }
+    else {
+	sprintf(buf, "The program %s", msg);
+    }
+    message(buf);
+}
 /*=============================================+
  * interp_program -- Interpret LifeLines program
  *============================================*/
@@ -83,6 +109,7 @@ INT nifiles;	/* number of program files - can be zero */
 STRING *ifiles;	/* program files */
 STRING ofile;	/* output file - can be NULL */
 {
+    	FILE *fp;
 	LIST plist = create_list();
 	TABLE stab;
 	WORD dummy;
@@ -98,12 +125,18 @@ STRING ofile;	/* output file - can be NULL */
 			enqueue_list(plist, strsave(ifiles[i]));
 		}
 	} else {
-		ifile = ask_for_string(qrptname, "enter string: ");
-		if (!ifile)  {
-			message(noprogram);
+	    	ifile = NULL;
+	    	fp = ask_for_file(LLREADTEXT, qrptname, &ifile, llprograms, ".ll");
+		/* ifile = ask_for_string(qrptname, "enter string: "); */
+		if ((fp == NULL) || (ifile == NULL))  {
+		    	if(fp) fclose(fp);
+			llwprintf("Error: file \"%s\" not found.\n",
+				  (ifile ? ifile : ""));
 			return;
 		}
+		fclose(fp);
 		progname = strsave(ifile);
+
 		enqueue_list(plist, strsave(ifile));
 	}
 
@@ -124,14 +157,14 @@ STRING ofile;	/* output file - can be NULL */
 			stdfree(ifile);
 	}
 	if (Perrors) {
-		message("The program contains errors.\n");
+		progmessage("contains errors.\n");
 		return;
 	}
 
    /* Find top procedure */
 
 	if (!(first = (PNODE) valueof(proctab, proc))) {
-		message("Report program needs a starting procedure.");
+		progmessage("needs a starting procedure.");
 		remove_tables();
 		return;
 	}
@@ -163,14 +196,14 @@ STRING ofile;	/* output file - can be NULL */
    /* Interpret top procedure */
 
 	progrunning = TRUE;
-	message("The program is running -- please be patient.");
+	progmessage("is running...");
 	switch (interpret((PNODE) ibody(first), stab, &dummy)) {
 	case INTOKAY:
 	case INTRETURN:
-		message("The program was run successfully.");
+		progmessage("was run successfully.");
 		break;
 	default:
-		message("The program was not run because of errors.");
+		progmessage("was not run because of errors.");
 		break;
 	}
 
@@ -203,7 +236,7 @@ LIST plist;
 	Pfname = ifile;
 	if (!ifile || *ifile == 0) return;
 	Plist = plist;
-	Pinfp = fopenpath(ifile, LLREADTEXT, llprograms);
+	Pinfp = fopenpath(ifile, LLREADTEXT, llprograms, ".ll", (STRING *)NULL);
 	if (!Pinfp) {
 		llwprintf("Error: file \"%s\" not found.\n", ifile);
 		Perrors++;

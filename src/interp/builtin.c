@@ -2459,7 +2459,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 		return NULL;
 	}
 	fname = (STRING) pvalue(val);
-	if (!(cfp = fopenpath(fname, LLREADTEXT, llprograms))) {
+	if (!(cfp = fopenpath(fname, LLREADTEXT, llprograms, (STRING)NULL, (STRING *)NULL))) {
 		*eflg = TRUE;
 		prog_error(node, "the arg to copyfile is not a file name");
 		return NULL;

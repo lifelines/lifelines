@@ -80,6 +80,7 @@
  * WINDOWs -- Main screen, menus and popups
  *=======================================*/
 extern INT cur_screen;
+extern WINDOW *stdout_win;
 extern WINDOW *main_win;
 extern WINDOW *ask_win;
 extern WINDOW *ask_msg_win;

@@ -37,12 +37,13 @@
 /*===========================================
  * filepath -- Find file in sequence of paths
  *=========================================*/
-STRING filepath (name, mode, path)
-STRING name, mode, path;
+STRING filepath (name, mode, path, ext)
+STRING name, mode, path, ext;
 {
 	unsigned char buf1[MAXLINELEN], buf2[MAXLINELEN];
 	STRING p, q;
 	INT c;
+	int nlen, elen;
 
 	if (!name || *name == 0) return NULL;
 	if (!path || *path == 0) return name;
@@ -50,7 +51,23 @@ STRING name, mode, path;
 #ifdef WIN32
 	if ((*name == '/') || ((name[1] == ':') && isalpha(*name))) return name;
 #endif
-	if (strlen(name) + strlen(path) >= MAXLINELEN) return NULL;
+	nlen = strlen(name);
+	if(ext && *ext) {
+	    elen = strlen(ext);
+	    if((elen > nlen)
+#ifdef WIN32
+		&& (stricmp(name+nlen-elen, ext) == 0)
+#else
+		&& (strcmp(name+nlen-elen, ext) == 0)
+#endif
+		) {
+		/*  name has an explicit extension the same as this one */
+		ext = NULL;
+		elen = 0;
+	    }
+	}
+	else { ext = NULL; elen = 0; }
+	if (nlen + strlen(path) + elen >= MAXLINELEN) return NULL;
 	strcpy(buf1, path);
 	p = buf1;
 	while (c = *p) {
@@ -70,6 +87,12 @@ STRING name, mode, path;
 		strcpy(q, LLSTRDIRSEPARATOR);
 		q++;
 		strcpy(q, name);
+		if(ext) {
+		    strcat(buf2, ext);
+		    if(access(buf2, 0) == 0) return strsave(buf2);
+		    nlen = strlen(buf2);
+		    buf2[nlen-elen] = '\0'; /* remove extension */
+		}
 		if (access(buf2, 0) == 0) return strsave(buf2);
 		p += strlen(p);
 		p++;
@@ -82,16 +105,20 @@ STRING name, mode, path;
 	strcpy(q, LLSTRDIRSEPARATOR);
 	q++;
 	strcpy(q, name);
+	if(ext) strcat(q, ext);
 	return strsave(buf2);
 }
 /*===========================================
  * fopenpath -- Open file using path variable
  *=========================================*/
-FILE *fopenpath (name, mode, path)
-STRING name, mode, path;
+FILE *fopenpath (name, mode, path, ext, pfname)
+STRING name, mode, path, ext;
+STRING *pfname;
 {
 	STRING str;
-	if (!(str = filepath(name, mode, path))) return NULL;
+	if(pfname) *pfname = NULL;
+	if (!(str = filepath(name, mode, path, ext))) return NULL;
+	if(pfname) *pfname = str;
 	return fopen(str, mode);
 }
 /*=================================================

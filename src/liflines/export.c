@@ -60,8 +60,9 @@ BOOLEAN archive_in_file ()
 	extern STRING version;
 	BOOLEAN archive();
 
+	/* WARNING: use of llarchives seems questionable */
 	fn = ask_for_file(LLWRITETEXT, "Enter name of output archive file.",
-	    &fname, llarchives);
+	    &fname, llarchives, ".ged");
 	if (!fn) {
 		mprintf("The database was not saved.");
 		return FALSE; 

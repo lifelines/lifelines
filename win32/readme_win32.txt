@@ -1,3 +1,15 @@
+readme_win32.txt 12 Jan 2000 by Paul B. McBride (pmcbride@tiac.net)
+
+The following features were added for both Win32 and UNIX versions:
+
+- add .ll and .ged to file names where appropriate, but still
+  allow exact match of entered file names
+- display up to 40 characters of the full report program
+  file name (including path) in the bottom line of the screen
+  when a report program is run.
+- when importing a GEDCOM file, show whether original or new
+  keys are being used.
+
 readme_win32.txt 08 Jan 2000 by Paul B. McBride (pmcbride@tiac.net)
 
 This file contains notes on the Open Source version of LifeLines (3.0.3)

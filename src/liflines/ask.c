@@ -118,24 +118,52 @@ STRING msg, ttl;
 /*======================================
  * ask_for_file -- Ask for and open file
  *====================================*/
-FILE *ask_for_file (mode, ttl, pfname, path)
+FILE *ask_for_file (mode, ttl, pfname, path, ext)
 STRING mode;
 STRING ttl;
 STRING *pfname;
 STRING path;
+STRING ext;
 {
 	FILE *fp, *fopenpath();
-	STRING fname = ask_for_string(ttl, "enter file name: ");
+	STRING fname;
+	char fnamebuf[512];
+	int elen, flen;
+	
+	if(ext && *ext)
+	  sprintf(fnamebuf, "enter file name (*%s)", ext);
+	else {
+	  ext = NULL;	/* a null extension is the same as no extension */
+	  strcpy(fnamebuf, "enter file name: ");
+	}
+
+	fname = ask_for_string(ttl, fnamebuf);
+
 	if (pfname) *pfname = fname;
+
+	if(ext) {
+	    elen = strlen(ext);
+	    flen = strlen(fname);
+	    if((elen < flen) && (strcmp(fname+flen-elen, ext) == 0))
+		ext = NULL;	/* the file name has the extension already */
+	}
+
 	if (!fname || *fname == 0) return NULL;
 	if (!path || *path == 0) {
-		if (!(fp = fopen(fname, mode))) {
+	    	fp = NULL;
+		if(ext) {
+		  sprintf(fnamebuf, "%s%s", fname, ext);
+		  fp = fopen(fnamebuf, mode);
+		  if(pfname) *pfname = strsave(fnamebuf);
+		}
+		if((fp == NULL) && ((fp = fopen(fname, mode)) == NULL)) {
 			mprintf(nofopn, fname);
 			return NULL;
 		}
 		return fp;
 	}
-	if (!(fp = fopenpath(fname, mode, path))) {
+	if (!(fp = fopenpath(fname, mode, path, ext, pfname))) {
+	    	if(pfname && (*pfname == NULL)) *pfname = fname;
 		mprintf(nofopn, fname);
 		return NULL;
 	}

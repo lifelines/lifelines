@@ -158,7 +158,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 		Poutfp = NULL;
 	}
 	if (!(Poutfp = fopenpath(outfilename,
-			 aflag?LLAPPENDTEXT:LLWRITETEXT, llreports))) {
+			 aflag?LLAPPENDTEXT:LLWRITETEXT, llreports, NULL, (STRING *)NULL))) {
 		mprintf("Could not open file %s", outfilename);
 		return NULL;
 	}
@@ -172,7 +172,7 @@ PVALUE __outfile (node, stab, eflg)
 PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	if (!Poutfp) {
-		Poutfp = ask_for_file(LLWRITETEXT, whtout, &outfilename, llreports);
+		Poutfp = ask_for_file(LLWRITETEXT, whtout, &outfilename, llreports, NULL);
 		if (!Poutfp)  {
 			*eflg = TRUE;
 			message(noreport);
@@ -285,7 +285,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	*eflg = TRUE;
 	if (outputmode != PAGEMODE) return NULL;
 	if (!Poutfp) {
-		Poutfp = ask_for_file(LLWRITETEXT, whtout, &outfilename, llreports);
+		Poutfp = ask_for_file(LLWRITETEXT, whtout, &outfilename, llreports, NULL);
 		if (!Poutfp)  {
 			message(noreport);
 			return NULL;
@@ -318,7 +318,7 @@ STRING str;
 	INT c, len;
 	if (!str || *str == 0 || (len = strlen(str)) <= 0) return;
 	if (!Poutfp) {
-		Poutfp = ask_for_file(LLWRITETEXT, whtout, &name, llreports);
+		Poutfp = ask_for_file(LLWRITETEXT, whtout, &name, llreports, NULL);
 		if (!Poutfp)  {
 			message(noreport);
 			return;
