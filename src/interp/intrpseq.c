@@ -131,21 +131,16 @@ __addtoset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 /*======================================+
  * lengthset -- Find length of an INDISEQ
  *   lengthset(SET) -> INT
+ * Implementation Detail:
+ * - implemented using __length(), which
+ *   was changed to accept LISTs, SETs
+ *   and TABLEs
+ * - this function is DEPRECATED
  *=====================================*/
 PVALUE
 __lengthset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	INDISEQ seq;
-	INT len;
-	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
-	if (*eflg) {
-		prog_error(node, "the arg to lengthset must be a set.");
-		return NULL;
-	}
-	seq = pvalue_to_seq(val);
-	len = seq ? length_indiseq(seq) : 0;
-	delete_pvalue(val);
-	return create_pvalue_from_int(len);
+	return __length(node, stab, eflg);
 }
 /*====================================+
  * inset -- See if person is in INDISEQ

@@ -2155,21 +2155,38 @@ __setel (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	set_list_element(list, ind, val, &create_list_value_pvalue);
 	return NULL;
 }
-/*===============================+
- * __length -- Find length of list
- *   usage: length(LIST) -> INT
- *==============================*/
+/*==================================================+
+ * __length -- Find length of list, indiseq or table
+ *   usage: length(LIST/TABLE/SET) -> INT
+ *==================================================*/
 PVALUE
 __length (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	LIST list;
-	PVALUE val = eval_and_coerce(PLIST, iargs(node), stab, eflg);
-	if (*eflg) {
-		prog_error(node, "the arg to length is not a list");
-		return NULL;
+	PVALUE val = eval_without_coerce(iargs(node), stab, eflg);
+	int type = which_pvalue_type(val);
+
+	if (val && (type == PLIST))
+	{
+		LIST list = pvalue_to_list(val);
+		set_pvalue_int(val, length_list(list));
 	}
-	list = pvalue_to_list(val);
-	set_pvalue_int(val, length_list(list));
+	else if (val && (type == PTABLE))
+	{
+		TABLE table = pvalue_to_table(val);
+		set_pvalue_int(val, table->count);
+	}
+	else if (val && (type == PSET))
+	{
+        	INDISEQ seq = pvalue_to_seq(val);
+		set_pvalue_int(val, length_indiseq(seq));
+	}
+	else
+	{
+		prog_error(node, "the arg to length is not a list, table or set");
+		*eflg = TRUE;
+		val = NULL;
+	}
+
 	return val;
 }
 /*==========================+

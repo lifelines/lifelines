@@ -1,3 +1,10 @@
+2005-01-08 Matt Emmerton
+
+	* ChangeLog src/interp/intrpseq.c src/interp/builtin.c
+
+	Extend length() to work on SETs and TABLEs.
+	Change lengthset() to use length() internally.
+
 2005-01-08 Perry Rapp
 
 	* ChangeLog src/gedlib/intrface.c src/gedlib\keytonod.c
