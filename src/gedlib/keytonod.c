@@ -159,12 +159,12 @@ keynum_to_even (int keynum)
 	return key_to_even(keystr);
 }
 /*================================================
- * keynum_to_othe -- Convert a numeric key to an other node
+ * keynum_to_othr -- Convert a numeric key to an other node
  *  assert if failed (ie, no sour with that number)
  * Created: 2001/01/27, Perry Rapp
  *==============================================*/
 NODE
-keynum_to_othe (int keynum)
+keynum_to_othr (int keynum)
 {
 	char keystr[20];
 	sprintf(keystr,"X%d",keynum);
@@ -182,7 +182,7 @@ keynum_to_node (char ntype, int keynum)
 	case 'F': return keynum_to_fam(keynum);
 	case 'S': return keynum_to_sour(keynum);
 	case 'E': return keynum_to_even(keynum);
-	case 'X': return keynum_to_othe(keynum);
+	case 'X': return keynum_to_othr(keynum);
 	}
 	ASSERT(0);
 	return 0;

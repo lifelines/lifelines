@@ -1691,7 +1691,7 @@ str_to_indiseq (STRING name, char ctype)
 {
 	INDISEQ seq;
 	TRANTABLE ttg = tran_tables[MDSIN];
-	uchar intname[100];
+	char intname[100];
 	translate_string(ttg, name, intname, sizeof(intname)-1);
 	seq = find_named_seq(intname);
 	if (!seq) seq = key_to_indiseq(intname, ctype);
@@ -1711,7 +1711,7 @@ append_all_tags(INDISEQ seq, NODE node, STRING tagname
 	if (!tagname || eqstr(ntag(node), tagname))
 	{
 		STRING key;
-		INT val;
+		INT val=0;
 		key = nval(node);
 		if (key)
 		{

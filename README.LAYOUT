@@ -9,43 +9,54 @@ Source Code Directories
 
 ./hdrs/
 
-    Header files
+    Header files.
+    screen.h is curses-specific, and will probably be moved eventually.
 
 ./hdrs/win32/
 
-    Headers for win32 implementation code
+    Headers for win32 implementation code.
 
 ./arch/
 
-    Library of replacement functions missing on some platforms
+    Library of replacement functions missing on some platforms.
 
 ./btree/
 
-    btree implementation, with access functions.  Used by the rest of
-    lifelines to access the binary database
+    btree (database) implementation, with access functions.
+    Used by the rest of lifelines to access the binary database.
 
 ./gedlib/
 
-    Implementation of the INDISEQ type
-    Implementation of NAME & REFN records
+    Implementation of the INDISEQ type.
+    Implementation of NAME & REFN records.
     Node functions (extracting from & sending to db, and some top-level
-     node conversions, eg indi_to_event)
+     node conversions, eg indi_to_event).
     messages (attempt to put together all strings for hopeful localization).
-    miscellaneous other stuff (including initialization code)
+    miscellaneous other stuff (including initialization code).
 
 ./interp/
 
-    Report generator program interpreter
+    Report generator program interpreter.
 
 ./stdlib/
 
-    Common functions used by other LifeLines modules, including:
-    lists (in double.c), tables, sequences, string stuff
+    Common data types & functions used by other LifeLines modules,
+    including:
+      lists (in double.c), tables, sequences, string stuff
+    These are all independent of LifeLines or GEDCOM, except that
+    that lloptions is in here, perhaps temporarily.
 
 ./liflines/
 
-    The frontend logic and GUI code
-    Code to implement import & export, editing, & merging records
+    The frontend logic and GUI code of the LifeLines application.
+    Code to implement import & export, editing, & merging records.
+    The curses interface is somewhat but not entirely separated 
+    from the application.
+    Curses specific:
+      screen.c, show.c
+    Not curses, but tied to the idea of a console interface, and
+    probably will not be used by other interfaces:
+      menuitem.c, pedigree.c
 
 ./tools/
 

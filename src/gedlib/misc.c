@@ -43,7 +43,7 @@ STRING
 addat (STRING str)
 {
 	STRING p;
-	static unsigned char buffer[3][20];
+	static char buffer[3][20];
 	static INT dex = 0;
 	if (++dex > 2) dex = 0;
 	p = buffer[dex];
@@ -62,7 +62,7 @@ rmvat_char (STRING str, char c, char d)
 	int len;
 	/* WARNING: GEDCOM 5.5 specifies that the resulting string (XREF) can be
 	 * 1 to 22 characters. Allow a little extra. */
-	static unsigned char buffer[32][32];	/* was [10][20] pbm 11-jun-96*/
+	static char buffer[32][32];	/* was [10][20] pbm 11-jun-96*/
 	static INT dex = 0;
 	/* Watch out for bad pointers */
 	if((str == NULL) || (*str == '\0')) return(NULL);

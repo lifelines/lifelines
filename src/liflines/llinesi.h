@@ -58,10 +58,6 @@ void key_util(void);
 void show_database_stats(void);
 void who_is_he_she(void);
 
-/* msg.c */
-void begin_action(void);
-void end_action(void);
-
 /* newrecs.c */
 RECORD ask_for_record(STRING, INT);
 void edit_event(NODE);

@@ -46,7 +46,7 @@ get_user_email (void)
 
 #if defined(HAVE_GETPWUID)
   static unsigned char username[256];
-  unsigned char hostname[256];
+  char hostname[256];
   struct passwd *pwent = getpwuid(getuid());
   if (NULL != pwent &&
       (int)sizeof(hostname) > gethostname(hostname, sizeof(hostname)))

@@ -48,8 +48,6 @@ extern STRING opt2long;
 /* alphabetical */
 static void copy_process(STRING dest, STRING src);
 static BOOLEAN load_config_file(STRING file, STRING * pmsg);
-static STRING numtostr(INT num);
-static void read_lloptions_from_config(void);;
 
 /*********************************************
  * local variables
@@ -68,6 +66,7 @@ static TABLE opttab=0;
  *  returns static buffer
  * Created: 2001/02/04, Perry Rapp
  *========================================*/
+#ifdef UNUSED_CODE
 static STRING
 numtostr (INT num)
 {
@@ -75,6 +74,7 @@ numtostr (INT num)
 	snprintf(buffer, sizeof(buffer), "%d", num);
 	return buffer;
 }
+#endif
 /*==========================================
  * copy_process -- copy config value line,
  *  converting any escape characters
@@ -91,7 +91,7 @@ copy_process (STRING dest, STRING src)
 {
 	STRING q=dest,p=src;
 	char c;
-	while (*q++ = c = *p++) {
+	while ((*q++ = c = *p++)) {
 		if (c == '\\') {
 			if (!(c = *p++)) break;
 			if (c == 'n')

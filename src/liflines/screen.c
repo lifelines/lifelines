@@ -70,7 +70,6 @@ This is how many lines can't be used by person (or whatever)
 #define OVERHEAD_MENU 5
 INT LISTWIN_WIDTH=0;
 INT MAINWIN_WIDTH=0;
-static INT cur_list_detail_lines = 0;
 
 /* center windows on real physical screen (LINES x COLS) */
 #define NEWWIN(r,c)   newwin(r,c,(LINES - (r))/2,(COLS - (c))/2)
@@ -183,8 +182,6 @@ static void end_action(void);
 static void export_tts(void);
 static INT handle_list_cmds(listdisp * ld, INT code);
 static void import_tts(void);
-static INT indiseq_interact(UIWINDOW uiwin, STRING ttl, INDISEQ seq);
-static INDISEQ indiseq_list_interact(UIWINDOW uiwin, STRING ttl, INDISEQ seq);
 static INT interact(UIWINDOW uiwin, STRING str, INT screen);
 static NODE invoke_add_menu(void);
 static void invoke_cset_menu(UIWINDOW wparent);
@@ -204,7 +201,7 @@ static void repaint_delete_menu(UIWINDOW uiwin);
 static void repaint_scan_menu(UIWINDOW uiwin);
 static void repaint_cset_menu(UIWINDOW uiwin);
 static void repaint_rpc_menu(UIWINDOW uiwin);
-static void repaint_tt_menu(UIWINDOW uiwin);
+/*static void repaint_tt_menu(UIWINDOW uiwin);*/
 static void repaint_trans_menu(UIWINDOW uiwin);
 static void repaint_utils_menu(UIWINDOW uiwin);
 static void repaint_extra_menu(UIWINDOW uiwin);
@@ -1154,7 +1151,7 @@ resize_win: /* we come back here if we resize the window */
 		INT code=0, ret=0;
 		fulltitle[0] = 0;
 		titlen = LISTWIN_WIDTH-1;
-		if (titlen > sizeof(fulltitle))
+		if (titlen > (INT)sizeof(fulltitle))
 			titlen = sizeof(fulltitle);
 		ptr = fulltitle;
 		llstrcatn(&ptr, ttl, &titlen);
@@ -1734,7 +1731,7 @@ interact (UIWINDOW uiwin, STRING str, INT screen)
 				if (c == str[i]) return c;
 			}
 		} else { /* new menus */
-			if (offset < sizeof(buffer)-1) {
+			if (offset < (INT)sizeof(buffer)-1) {
 				buffer[offset] = c;
 				buffer[offset+1] = 0;
 				offset++;
@@ -1762,7 +1759,7 @@ interact (UIWINDOW uiwin, STRING str, INT screen)
 STRING
 get_answer (UIWINDOW uiwin, STRING prmpt)
 {
-	static uchar lcl[100];
+	static char lcl[100];
 	WINDOW *win = uiw_win(uiwin);
 
 #ifndef USEBSDMVGETSTR
@@ -1885,7 +1882,6 @@ shw_array_of_strings (UIWINDOW uiwin, STRING *strings, INT len, INT top, INT cur
 		/* for short lists, we show leading numbers */
 		if (len<10) {
 			char numstr[12]="";
-			INT offset=0;
 			snprintf(numstr, sizeof(numstr), "%d: ", i+1);
 			if (i == cur) mvwaddch(win, row, 3, '>');
 			mvwaddstr(win, row, 4, numstr);
@@ -2181,7 +2177,7 @@ mvwaddstr_lim (WINDOW *wp, int x, int y, char *cp, INT maxlen)
 	if ((INT)strlen(cp)<=maxlen)
 		mvwaddstr(wp, x, y, cp);
 	else {
-		if (maxlen > sizeof(buffer)-1)
+		if (maxlen > (INT)sizeof(buffer)-1)
 			maxlen = sizeof(buffer)-1;
 		llstrncpy(buffer, cp, maxlen-1);
 		strcat(buffer, "*");
@@ -2664,6 +2660,7 @@ repaint_rpc_menu (UIWINDOW uiwin)
  * repaint_tt_menu -- 
  * Created: 2001/11/24, Perry Rapp
  *===================================*/
+#ifdef UNIMPLEMENTED_CODE
 static void
 repaint_tt_menu (UIWINDOW uiwin)
 {
@@ -2672,6 +2669,7 @@ repaint_tt_menu (UIWINDOW uiwin)
 	mvwaddstr(win, row++, 2, mn_tt_ttl);
 /*TO DO*/
 }
+#endif
 /*=====================================
  * repaint_trans_menu -- 
  * Created: 2001/11/24, Perry Rapp
@@ -2682,7 +2680,7 @@ repaint_trans_menu (UIWINDOW uiwin)
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
 	char line[120];
-	INT mylen = sizeof(line);
+	/*INT mylen = sizeof(line);*/
 	STRING ptr = line;
 	werase(win);
 	BOX(win, 0, 0);
@@ -2791,7 +2789,7 @@ deactivate_uiwin (void)
 static void
 touch_all (void)
 {
-	UIWINDOW uiwin=active_uiwin, *uiwparent=0;
+	UIWINDOW uiwin=active_uiwin;
 	ASSERT(uiwin);
 	/* climb to highest window ancestor */
 	while (uiw_parent(uiwin)) {

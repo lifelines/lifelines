@@ -278,7 +278,7 @@ add_block_var (WAREHOUSE wh, INT blockid, int position, void * data, INT len)
 	/* ptr is correct position of new block in original warehouse */
 	STRING ptr;
 	STRING p1;
-	INT newsize, i, nextoffset;
+	INT newsize, i, nextoffset=0;
 
 	/* ensure sufficient space */
 	newsize = wh->len + ENTSIZE +len;

@@ -1,5 +1,17 @@
 2001-12-11 Perry Rapp <puddle@users.sourceforge.net>
 
+	* ChangeLog NEWS README.DEVELOPERS README.LAYOUT
+	gedlib/gstrings.c gedlib/indiseq.c gedlib/init.c
+	gedlib/intrface.c gedlib/keytonod.c gedlib/misc.c
+	gedlib/names.c gedlib/node.c gedlib/property.c
+	gedlib/translat.c gedlib/xreffile.c hdrs/feedback.h
+	liflines/askprogram.c liflines/browse.c liflines/llinesi.h
+	liflines/screen.c stdlib/lloptions.c stdlib/warehouse.c:
+
+	Cosmetic code cleanup (removing causes of gcc warnings).
+
+2001-12-11 Perry Rapp <puddle@users.sourceforge.net>
+
 	* ChangeLog hdrs/feedback.h liflines/screen.c:
 
 	Changed status bar & msg list, to avoid losing messages.

@@ -94,7 +94,6 @@ static NODE goto_fam_child(NODE fam, int childno);
 static NODE goto_indi_child(NODE indi, int childno);
 static BOOLEAN handle_aux_mode_cmds(INT c, INT * mode);
 static INT handle_history_cmds(INT c, NODE * pindi1);
-static BOOLEAN handle_menu_commands_old(INT c);
 static NODE history_back(void);
 static NODE history_list(void);
 static void history_record(NODE node);

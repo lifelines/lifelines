@@ -76,7 +76,7 @@ static RECORD alloc_new_record(void);
 static RECORD alloc_record_from_key(STRING key);
 static void alloc_record_wh(RECORD rec, INT isnew);
 static NODE alloc_node(void);
-void assign_record(RECORD rec, char ntype, INT keynum);
+static void assign_record(RECORD rec, char ntype, INT keynum);
 static BOOLEAN buffer_to_line (STRING p, INT *plev, STRING *pxref
 	, STRING *ptag, STRING *pval, STRING *pmsg);
 static STRING fixup (STRING str);
@@ -396,7 +396,7 @@ buffer_to_line (STRING p, INT *plev, STRING *pxref
 	, STRING *ptag, STRING *pval, STRING *pmsg)
 {
 	INT lev;
-	static unsigned char scratch[MAXLINELEN+40];
+	static char scratch[MAXLINELEN+40];
 
 	*pmsg = *pxref = *pval = 0;
 	if (!p || *p == 0) {
@@ -500,7 +500,7 @@ file_to_node (STRING fname, TRANTABLE tt, STRING *pmsg, BOOLEAN *pemp)
 {
 	FILE *fp;
 	NODE node;
-	static unsigned char scratch[100];
+	static char scratch[100];
 	*pmsg = NULL;
 	*pemp = FALSE;
 	if (!(fp = fopen(fname, LLREADTEXT))) {
@@ -580,7 +580,7 @@ next_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
 {
 	INT curlev, bcode, rc;
 	NODE root, node, curnode;
-	static unsigned char scratch[100];
+	char scratch[100];
 	*pmsg = NULL;
 	*peof = FALSE;
 	if (ateof) {
@@ -799,7 +799,7 @@ static void
 write_node (INT levl, FILE *fp, TRANTABLE tt, NODE node,
 	BOOLEAN indent)
 {
-	unsigned char out[MAXLINELEN+1];
+	char out[MAXLINELEN+1];
 	STRING p;
 	if (indent) {
 		INT i;
@@ -845,7 +845,7 @@ swrite_node (INT levl,       /* level */
              NODE node,      /* node */
              STRING p)       /* write string */
 {
-	unsigned char scratch[600];
+	char scratch[600];
 	STRING q = scratch;
 	sprintf(q, "%d ", levl);
 	q += strlen(q);
@@ -919,7 +919,7 @@ node_strlen (INT levl,       /* level */
              NODE node)      /* node */
 {
 	INT len;
-	unsigned char scratch[10];
+	char scratch[10];
 	sprintf(scratch, "%d", levl);
 	len = strlen(scratch) + 1;
 	if (nxref(node)) len += strlen(nxref(node)) + 1;
@@ -1166,12 +1166,14 @@ indi_to_title (NODE node,
  *====================================*/
 STRING node_to_tag (NODE node, STRING tag, TRANTABLE tt, INT len)
 {
-	static unsigned char scratch[MAXGEDNAMELEN+1];
+	static char scratch[MAXGEDNAMELEN+1];
 	STRING refn;
 	if (!node) return NULL;
-	if (!(node = find_tag(nchild(node), tag))) return NULL;
+	if (!(node = find_tag(nchild(node), tag)))
+		return NULL;
 	refn = nval(node);
-	if (len > sizeof(scratch)-1) len = sizeof(scratch)-1;
+	if (len > (INT)sizeof(scratch)-1)
+		len = sizeof(scratch)-1;
 	translate_string(tt, refn, scratch, sizeof(scratch));
 	return scratch;
 }
@@ -1190,7 +1192,7 @@ STRING
 indi_to_event (NODE node, TRANTABLE tt, STRING tag, STRING head
 	, INT len, RFMT rfmt)
 {
-	static unsigned char scratch[200];
+	static char scratch[200];
 	STRING p = scratch;
 	INT mylen = sizeof(scratch)/sizeof(scratch[0]);
 	STRING event;
@@ -1232,8 +1234,8 @@ indi_to_event (NODE node, TRANTABLE tt, STRING tag, STRING head
 STRING
 event_to_string (NODE node, TRANTABLE tt, RFMT rfmt)
 {
-	static unsigned char scratch1[MAXLINELEN+1];
-	static unsigned char scratch2[MAXLINELEN+1];
+	static char scratch1[MAXLINELEN+1];
+	static char scratch2[MAXLINELEN+1];
 	STRING p = scratch1;
 	INT mylen = sizeof(scratch1)/sizeof(scratch1[0]);
 	STRING date, plac;
@@ -1246,6 +1248,7 @@ event_to_string (NODE node, TRANTABLE tt, RFMT rfmt)
 		node = nsibling(node);
 	}
 	if (!date && !plac) return NULL;
+	/* Apply optional, caller-specified date & place reformatting */
 	if (rfmt && date && rfmt->rfmt_date)
 		date = (*rfmt->rfmt_date)(date);
 	if (rfmt && plac && rfmt->rfmt_plac)
@@ -1270,7 +1273,7 @@ event_to_string (NODE node, TRANTABLE tt, RFMT rfmt)
 STRING
 event_to_date (NODE node, TRANTABLE tt, BOOLEAN shrt)
 {
-	static unsigned char scratch[MAXLINELEN+1];
+	static char scratch[MAXLINELEN+1];
 	if (!node) return NULL;
 	if (!(node = DATE(node))) return NULL;
 	translate_string(tt, nval(node), scratch, MAXLINELEN);
@@ -1338,7 +1341,7 @@ length_nodes (NODE node)
 STRING
 shorten_date (STRING date)
 {
-	static unsigned char buffer[3][MAXLINELEN+1];
+	static char buffer[3][MAXLINELEN+1];
 	static int dex = 0;
 	STRING p = date, q;
 	INT c, len;
@@ -1349,13 +1352,13 @@ shorten_date (STRING date)
 	if (++dex > 2) dex = 0;
 	q = buffer[dex];
 	while (TRUE) {
-		while ((c = *p++) && chartype(c) != DIGIT)
+		while ((c = (uchar)*p++) && chartype(c) != DIGIT)
 			;
 		if (c == 0) return NULL;
 		q = buffer[dex];
 		*q++ = c;
 		len = 1;
-		while ((c = *p++) && chartype(c) == DIGIT) {
+		while ((c = (uchar)*p++) && chartype(c) == DIGIT) {
 			if (len < 6) {
 				*q++ = c;
 				len++;

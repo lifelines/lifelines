@@ -65,6 +65,7 @@ static XNODE create_xnode(XNODE, INT, STRING);
 static void show_xnode(XNODE node);
 static void show_xnodes(INT indent, XNODE node);
 static XNODE step_xnode(XNODE, INT);
+static INT translate_match(TRANTABLE tt, CNSTRING in, CNSTRING * out);
 
 /*********************************************
  * local & exported function definitions
@@ -194,7 +195,7 @@ translate_catn (TRANTABLE tt, STRING * pdest, CNSTRING src, INT * len)
  * memory, so it is longer-lived than a static buffer
  * Created: 2001/07/21 (Perry Rapp)
  *=================================================*/
-INT
+static INT
 translate_match (TRANTABLE tt, CNSTRING in, CNSTRING * out)
 {
 	XNODE node, chnode;
@@ -549,9 +550,9 @@ char *
 get_codeset_desc (INT codeset, STRING buffer, INT max)
 {
 	char * ptr = buffer;
-	int mylen = max;
-	int index=0, i;
-	for (i=0; i<ARRSIZE(codesets); ++i) {
+	INT mylen = max;
+	INT index=0, i;
+	for (i=0; i<(INT)ARRSIZE(codesets); ++i) {
 		if (codeset == codesets[i].code) {
 			index = i;
 			break;
@@ -581,7 +582,7 @@ get_codesets (void)
 {
 	LIST list = create_list();
 	INT i;
-	for (i=0; i<ARRSIZE(codesets); ++i)
+	for (i=0; i<(INT)ARRSIZE(codesets); ++i)
 		push_list(list, codesets[i].name);
 	return list;
 }

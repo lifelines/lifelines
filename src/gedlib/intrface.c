@@ -75,11 +75,13 @@ retrieve_to_textfile (STRING key, STRING file, TRANSLFNC translfnc)
  *  key:  [in] db key in which to store record
  *  file: [in] file from which to get record
  *===================================*/
+#ifndef UNUSED_CODE
 BOOLEAN
 store_file (STRING key, STRING file)
 {
 	return addfile(BTR, str2rkey(key), file);
 }
+#endif
 /*=====================================
  * store_text_file_to_db -- Store record from text file
  *  key:  [in] db key in which to store record
@@ -107,7 +109,7 @@ static BOOLEAN
 trav_callback (RKEY rkey, STRING data, INT len, void * param)
 {
 	TRAV_PARAM *tparam = (TRAV_PARAM *)param;
-	unsigned char key[9];
+	char key[9];
 	strcpy(key, rkey2str(rkey));
 	return tparam->func(key, data, len, tparam->param);
 }

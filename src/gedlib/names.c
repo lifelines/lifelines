@@ -234,7 +234,7 @@ static STRING
 getsurname_impl (STRING name, BOOLEAN soundex)
 {
 	INT c;
-	static unsigned char buffer[3][MAXLINELEN+1];
+	static char buffer[3][MAXLINELEN+1];
 	static INT dex = 0;
 	STRING p, surname;
 	if (++dex > 2) dex = 0;
@@ -595,7 +595,7 @@ get_names (STRING name, INT *pnum, STRING **pkeys, BOOLEAN exact)
 {
 	INT i, n;
 	RECORD rec;
-	static unsigned char kbuf[MAXGEDNAMELEN];
+	static char kbuf[MAXGEDNAMELEN];
 	static STRING kaddr;
 
 	exact = FALSE;		/* keep compiler happy */
@@ -653,7 +653,7 @@ get_names (STRING name, INT *pnum, STRING **pkeys, BOOLEAN exact)
 int
 namecmp (STRING name1, STRING name2)
 {
-	unsigned char sqz1[MAXGEDNAMELEN], sqz2[MAXGEDNAMELEN];
+	char sqz1[MAXGEDNAMELEN], sqz2[MAXGEDNAMELEN];
 	STRING p1 = sqz1, p2 = sqz2;
 	STRING sur1 = getsxsurname(name1);
 	STRING sur2 = getsxsurname(name2);
@@ -707,7 +707,7 @@ STRING
 givens (STRING name)
 {
 	INT c;
-	static unsigned char scratch[MAXGEDNAMELEN+1];
+	static char scratch[MAXGEDNAMELEN+1];
 	STRING out = scratch;
 	while ((name = nextpiece(name))) {
 		while (TRUE) {
@@ -800,7 +800,7 @@ trim_name (STRING name, INT len)
 static void
 name_to_parts (STRING name, STRING *parts)
 {
-	static unsigned char scratch[MAXGEDNAMELEN+1];
+	static char scratch[MAXGEDNAMELEN+1];
 	STRING p = scratch;
 	INT c, i = 0;
 	ASSERT(strlen(name) <= MAXGEDNAMELEN);
@@ -835,7 +835,7 @@ static STRING
 parts_to_name (STRING *parts)
 {
 	INT i;
-	static unsigned char scratch[MAXGEDNAMELEN+1];
+	static char scratch[MAXGEDNAMELEN+1];
 	STRING p = scratch;
 	for (i = 0; i < MAXPARTS; i++) {
 		if (!parts[i]) continue;
@@ -896,7 +896,7 @@ manip_name (STRING name, TRANTABLE tt, BOOLEAN caps, BOOLEAN regorder, INT len)
 STRING
 name_string (STRING name)
 {
-	static unsigned char scratch[MAXGEDNAMELEN+1];
+	static char scratch[MAXGEDNAMELEN+1];
 	STRING p = scratch;
 	ASSERT(strlen(name) <= MAXGEDNAMELEN);
 	while (*name) {
@@ -913,7 +913,7 @@ name_string (STRING name)
 STRING
 name_surfirst (STRING name)
 {
-	static unsigned char scratch[MAXGEDNAMELEN+1];
+	static char scratch[MAXGEDNAMELEN+1];
 	STRING p = scratch;
 	ASSERT(strlen(name) <= MAXGEDNAMELEN);
 	strcpy(p, getasurname(name));
@@ -933,7 +933,7 @@ RECORD
 id_by_key (STRING name, char ctype)
 {
 	STRING p = name; /* unsigned for chartype */
-	static unsigned char kbuf[MAXGEDNAMELEN];
+	static char kbuf[MAXGEDNAMELEN];
 	INT i = 0, c;
 	while ((c = (uchar)*p++) && chartype(c) == WHITE)
 		;

@@ -106,12 +106,12 @@ get_child_strings (NODE fam, RFMT rfmt, INT *pnum, STRING **pkeys)
 STRING
 indi_to_list_string (NODE indi, NODE fam, INT len, RFMT rfmt)
 {
-	char unsigned scratch[MAXLINELEN];
+	char scratch[MAXLINELEN];
 	STRING name, evt = NULL, p = scratch;
 	TRANTABLE ttd = tran_tables[MINDS];
 	int hasparents;
 	int hasfamily;
-	if (len>sizeof(scratch))
+	if (len>(INT)sizeof(scratch))
 		len = sizeof(scratch);
 	if (indi) {
 		ASSERT(name = indi_to_name(indi, ttd, len));
@@ -165,7 +165,7 @@ sour_to_list_string (NODE sour, INT len, STRING delim)
 	STRING name, p=scratch;
 	INT mylen=len;
 	TRANTABLE ttd = tran_tables[MINDS];
-	if (mylen>sizeof(scratch))
+	if (mylen>(INT)sizeof(scratch))
 		mylen=sizeof(scratch);
 	p[0]=0;
 	llstrcatn(&p, "(S", &mylen);
@@ -203,7 +203,7 @@ fam_to_list_string (NODE fam, INT len, STRING delim)
 	INT templen=0;
 	TRANTABLE ttd = tran_tables[MINDS];
 	NODE refn, husb, wife, chil, rest, node;
-	if (mylen>sizeof(scratch))
+	if (mylen>(INT)sizeof(scratch))
 		mylen=sizeof(scratch);
 	p[0]=0;
 	llstrcatn(&p, "(F", &mylen);
@@ -258,7 +258,7 @@ other_to_list_string(NODE node, INT len, STRING delim)
 	INT mylen=len;
 	TRANTABLE ttd = tran_tables[MINDS];
 	NODE child;
-	if (mylen>sizeof(scratch))
+	if (mylen>(INT)sizeof(scratch))
 		mylen=sizeof(scratch);
 	p[0]=0;
 	llstrcatn(&p, "(X", &mylen);

@@ -122,10 +122,10 @@ struct program_info *
 parse_program(STRING directory,
               STRING filename)
 {
-  unsigned char filepath[MAXLINELEN];
+  char filepath[MAXLINELEN];
   struct program_info *info;
   FILE *fp;
-  unsigned char str[MAXLINELEN];
+  char str[MAXLINELEN];
 
   sprintf(filepath, "%s/%s", directory, filename);
 
@@ -151,7 +151,7 @@ parse_program(STRING directory,
       if (NULL != (p = strstr(str, (tag)))) \
         { \
           STRING s = p + strlen((tag)); \
-          while (isspace(*s)) s++; /* Skip leading space */ \
+          while (isspace((uchar)*s)) s++; /* Skip leading space */ \
           remove_trailing_space(s); \
           (var) = strdup(s); \
          }
@@ -228,7 +228,7 @@ find_all_programs(STRING path,
                   STRING ext)
 {
   struct program_info *head = NULL;
-  unsigned char buf[MAXLINELEN];
+  char buf[MAXLINELEN];
   int bufpos = 0;
   STRING p = path;
 
@@ -320,7 +320,7 @@ make_program_list(struct program_info *head,
     newlist[i++] = strdup(leader);
   while (NULL != cur)
     {
-      unsigned char buf[MAXLINELEN];
+      char buf[MAXLINELEN];
       snprintf(buf, sizeof(buf), "%s (%s) [%s]",
                NULL != cur->progname    ? cur->progname       : cur->filename,
                NULL != cur->version     ? cur->version       : (STRING)"V?.?",
@@ -347,7 +347,7 @@ get_choice(struct program_info *head,
 {
   struct program_info *cur;
   FILE *fp;
-  static unsigned char fname[MAXLINELEN];
+  static char fname[MAXLINELEN];
   cur = head->next;
   while (NULL != cur && choice)
   {

@@ -170,7 +170,7 @@ static STRING
 getxref (DELETESET set)
 {
 	INT keynum = getxrefnum(set);
-	static unsigned char scratch[12];
+	static char scratch[12];
 	sprintf(scratch, "@%c%d@", set->ctype, keynum);
 	return scratch;
 }
@@ -413,7 +413,7 @@ newxref (STRING xrefp, BOOLEAN flag, DELETESET set)
 {
 	INT keynum;
 	BOOLEAN changed;
-	static unsigned char scratch[12];
+	static char scratch[12];
 	if(flag) {
 		keynum = atoi(xrefp+1);
 		changed = ((set->n != 1) || (keynum >= set->recs[0]));
