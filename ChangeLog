@@ -1,4 +1,10 @@
 2000-11-19 Perry Rapp <puddle@users.sourceforge.net>	
+	interp/builtin.c interp/pvalue.c stdlib/memalloc.c:
+	Changed variable "log" to "logfp" in memalloc.c
+	(to resolve clash with a system header).
+	Minor formatting cleanup.
+
+2000-11-19 Perry Rapp <puddle@users.sourceforge.net>	
 	gedlib/messages.c hdrs/gedcom.h interp/rassa.c
 	liflines/export.c liflines/screen.c liflines/show.c:
 	Minor cleanup (typos & added some ifdef UNUSED)
@@ -15,7 +21,7 @@
 	to avoid clash with rassa.c's MAXCOLS.
 
 2000-11-19 Perry Rapp <puddle@users.sourceforge.net>
-	interp/date.c: Moved 20+ lines! of commentary
+	interp/date.c: Moved 20+ lines of commentary
 	out of line of the function declaration, so that
 	the function declaration is legible.
 

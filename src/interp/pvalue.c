@@ -49,22 +49,22 @@ PVALUE
 create_pvalue (INT type,
                WORD value)
 {
-        PVALUE val;
+	PVALUE val;
 
-        if (type == PNONE) return NULL;
-        val = (PVALUE) stdalloc(sizeof(*val));
-        switch (type) {
-        case PSTRING:
+	if (type == PNONE) return NULL;
+	val = (PVALUE) stdalloc(sizeof(*val));
+	switch (type) {
+	case PSTRING:
 		if (value) value = (WORD) strsave((STRING) value);
-                break;
-        case PANY: case PINT: case PFLOAT: case PLONG: case PGNODE:
-        case PINDI: case PFAM: case PSOUR: case PEVEN: case POTHR:
-        case PLIST: case PTABLE: case PSET:
 		break;
-        }
-        ptype(val) = type;
-        pvalue(val) = value;
-        return val;
+	case PANY: case PINT: case PFLOAT: case PLONG: case PGNODE:
+	case PINDI: case PFAM: case PSOUR: case PEVEN: case POTHR:
+	case PLIST: case PTABLE: case PSET:
+		break;
+	}
+	ptype(val) = type;
+	pvalue(val) = value;
+	return val;
 }
 /*========================================
  * delete_pvalue -- Delete a program value
@@ -77,17 +77,17 @@ delete_pvalue (PVALUE val)
 	show_pvalue(val);
 	llwprintf("\n");
 #endif	
-        if (!val) return;
-        switch (ptype(val)) {
-        case PSTRING:
+	if (!val) return;
+	switch (ptype(val)) {
+	case PSTRING:
 		if (pvalue(val)) stdfree((STRING) pvalue(val));
-                break;
-        case PANY: case PINT: case PFLOAT: case PLONG: case PGNODE:
-        case PINDI: case PFAM: case PSOUR: case PEVEN: case POTHR:
-        case PLIST: case PTABLE: case PSET:
-                break;
-        }
-        stdfree(val);
+		break;
+	case PANY: case PINT: case PFLOAT: case PLONG: case PGNODE:
+	case PINDI: case PFAM: case PSOUR: case PEVEN: case POTHR:
+	case PLIST: case PTABLE: case PSET:
+		break;
+	}
+	stdfree(val);
 }
 /*====================================
  * copy_pvalue -- Copy a program value
@@ -96,10 +96,10 @@ PVALUE
 copy_pvalue (PVALUE val)
 {
 	if (!val) {
-llwprintf("copy_pvalue: copying null pvalue\n");
+		llwprintf("copy_pvalue: copying null pvalue\n");
 		return NULL;
 	}
-        return create_pvalue(ptype(val), pvalue(val));
+	return create_pvalue(ptype(val), pvalue(val));
 }
 /*==================================
  * set_pvalue -- Set a program value

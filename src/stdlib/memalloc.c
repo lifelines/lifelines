@@ -33,7 +33,7 @@
 #include "llstdlib.h"
 
 static BOOLEAN logopen = FALSE;
-FILE *log = NULL;
+FILE *logfp = NULL;
 extern BOOLEAN alloclog;
 static char scratch[80];
 static void alloc_out(STRING str);
@@ -85,9 +85,9 @@ alloc_out (STRING str)
 {
 	if (!alloclog) return;
 	if (!logopen) {
-		log = fopen("alloc.log", LLWRITETEXT);
+		logfp = fopen("alloc.log", LLWRITETEXT);
 		logopen = TRUE;
 	}
-	fprintf(log, "%s\n", str);
-	fflush(log);
+	fprintf(logfp, "%s\n", str);
+	fflush(logfp);
 }
