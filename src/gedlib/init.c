@@ -140,7 +140,7 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 	e = getoptstr("LocaleDir", "");
 	if (e && *e) {
 		bindtextdomain(PACKAGE, e);
-		language_change(); /* TODO: is this necessary ? 2002-09-29, Perry */
+		locales_notify_language_change(); /* TODO: is this necessary ? 2002-09-29, Perry */
 	}
 
 #endif /* ENABLE_NLS */
@@ -248,8 +248,7 @@ set_gettext_codeset (CNSTRING codeset)
 		strupdate(&prevcodeset, gui_codeset_out);
 	}
 	bind_textdomain_codeset(PACKAGE, prevcodeset);
-	/* now the menus must be relocalized */
-	brwsmenu_on_codeset_change();
+	locales_notify_uicodeset_changes();
 #endif /* HAVE_BIND_TEXTDOMAIN_CODESET */
 #endif /* ENABLE_NLS */
 }

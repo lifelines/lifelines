@@ -571,8 +571,10 @@ brwsmenu_initialize (INT screenheightx, INT screenwidthx)
 		, MenuTop, MenuLeft, MenuWidth
 		, MenuSize, MenuItems);
 
-	if (!f_reloading)
+	if (!f_reloading) {
 		register_uilang_callback(on_lang_change, 0);
+		register_uicodeset_callback(on_lang_change, 0);
+	}
 }
 /*============================
  * menuitem_terminate_worker -- free menu arrays
@@ -581,8 +583,10 @@ void
 menuitem_terminate (void)
 {
 	INT i;
-	if (!f_reloading)
+	if (!f_reloading) {
 		unregister_uilang_callback(on_lang_change, 0);
+		unregister_uicodeset_callback(on_lang_change, 0);
+	}
 	for (i=1; i<=MAX_SCREEN; i++) {
 		struct BrowseScreenInfo * sinfo=&f_BrowseScreenInfo[i];
 		dynmenu_clear(&sinfo->dynmenu);
@@ -592,6 +596,7 @@ menuitem_terminate (void)
 }
 /*============================
  * on_lang_change -- UI language has changed
+ *  (or codeset has changed, we also use for that callback)
  *==========================*/
 static void
 on_lang_change (VPTR uparm)
@@ -601,16 +606,6 @@ on_lang_change (VPTR uparm)
 	menuitem_terminate();
 	brwsmenu_initialize(0, 0); /* 0 means use stored values */
 	f_reloading = FALSE;
-}
-/*============================
- * brwsmenu_on_codeset_change -- handle codeset change
- * we handle this by simply reloading
- *==========================*/
-void
-brwsmenu_on_codeset_change (void)
-{
-	/* forward to on_lang_change, which reloads */
-	on_lang_change(0);
 }
 /*============================
  * get_screen_menuset -- get menuset of specified browse screen

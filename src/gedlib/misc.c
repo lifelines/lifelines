@@ -157,7 +157,6 @@ STRING
 full_value (NODE node, STRING sep)
 {
 	NODE child;
-	INT len = 0;
 	ZSTR zstr = 0;
 	STRING str = 0;
 	if (!node) return NULL;

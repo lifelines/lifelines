@@ -168,9 +168,6 @@ typedef struct tag_rfmt *RFMT;
 	/* number of maps listed above */
 #define NUM_TT_MAPS 13
 
-/* callback for language change */
-typedef void (*uilang_notify_fnc)(void);
-
 /*========
  * Globals
  *======*/
@@ -354,12 +351,13 @@ RECORD keynum_to_srecord(int keynum);
 NODE keynum_to_sour(int keynum);
 NODE keynum_to_even(int keynum);
 NODE keynum_to_othr(int keynum);
-void language_change(void);
 INT length_nodes(NODE);
 STRING ll_langinfo(void);
+char * llsetlocale(int category, char * locale);
 void load_char_mappings(void);
 BOOLEAN load_new_tt(CNSTRING filepath, INT ttnum);
-char * llsetlocale(int category, char * locale);
+void locales_notify_language_change(void);
+void locales_notify_uicodeset_changes(void);
 STRING manip_name(STRING name, BOOLEAN caps, BOOLEAN regorder, INT len);
 int namecmp(STRING, STRING);
 STRING name_string(STRING);
@@ -422,6 +420,7 @@ INT record_letter(STRING);
 void record_to_date_place(RECORD record, STRING tag, STRING * date, STRING * plac);
 NODE record_to_first_event(RECORD record, CNSTRING tag);
 NODE refn_to_record(STRING, INT);
+void register_uicodeset_callback(CALLBACK_FNC fncptr, VPTR uparm);
 void register_uilang_callback(CALLBACK_FNC fncptr, VPTR uparm);
 void release_dblist(LIST dblist);
 BOOLEAN remove_child(NODE indi, NODE fam);
@@ -477,6 +476,7 @@ NODE union_nodes(NODE, NODE, BOOLEAN, BOOLEAN);
 NODE unique_nodes(NODE, BOOLEAN);
 void unknown_node_to_dbase(NODE node);
 void unregister_uilang_callback(CALLBACK_FNC fncptr, VPTR uparm);
+void unregister_uicodeset_callback(CALLBACK_FNC fncptr, VPTR uparm);
 void update_useropts(VPTR uparm);
 BOOLEAN valid_indi_tree(NODE, STRING*, NODE);
 BOOLEAN valid_fam_tree(NODE, STRING*, NODE);

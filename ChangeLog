@@ -12,6 +12,18 @@
 	ll-reportmanual.xml from 3.0.25 to 3.0.26 (because it 
 	mentions sort functions, which are not in 3.0.25).
 
+	* ChangeLog NEWS configure.in build/msvc6/llines/llines.rc
+	build/rpm/lifelines.spec src/arch/platform.c src/gedlib/init.c
+	src/gedlib/locales.c src/gedlib/misc.c src/hdrs/gedcom.h
+	src/hdrs/menuitem.h src/hdrs/version.h src/liflines/brwsmenu.c
+	src/stdlib/list.c
+
+	Reload menus for codeset change via callback, to fix linking
+	failure with llexec. Add include stdlib to platform.c to
+	fix compile on Darwin. Minor cleanup. Bump version to 3.0.26.
+	Make 3.0.26 distribution. Make distribution of current
+	documentation and label it 3.0.26.
+
 2003-03-04 Steve Dum
 
          * ChangeLog docs/ll-reportmanual.xml  docs/ll-reportmanual.html

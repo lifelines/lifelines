@@ -124,7 +124,6 @@ void dynmenu_next_page(DYNMENU dynmenu);
 void dynmenu_toggle_menu(DYNMENU dynmenu);
 
 /* brwsmenu.c */
-void brwsmenu_on_codeset_change(void);
 MENUSET get_screen_menuset(INT screen);
 DYNMENU get_screen_dynmenu(INT screen);
 STRING get_screen_title(INT screen);

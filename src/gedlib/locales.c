@@ -54,7 +54,9 @@ static BOOLEAN customized_msgs = FALSE;
 static STRING  current_coll = NULL; /* most recent */
 static STRING  current_msgs = NULL; /* most recent */
 static STRING  rptlocalestr = NULL; /* if set by report program */
+static LIST f_uicodeset_callbacks = NULL; /* list of callbacks for UI codeset changes */
 static LIST f_uilang_callbacks = NULL; /* list of callbacks for UI language changes */
+
 
 
 /*********************************************
@@ -493,10 +495,34 @@ send_uilang_callbacks (void)
 	notify_listeners(&f_uilang_callbacks);
 }
 /*==========================================
- * language_change -- notify gettext of change
+ * register_uicodeset_callback -- 
  *========================================*/
 void
-language_change (void)
+register_uicodeset_callback (CALLBACK_FNC fncptr, VPTR uparm)
+{
+	add_listener(&f_uicodeset_callbacks, fncptr, uparm);
+}
+/*==========================================
+ * unregister_uicodeset_callback -- 
+ *========================================*/
+void
+unregister_uicodeset_callback (CALLBACK_FNC fncptr, VPTR uparm)
+{
+	delete_listener(&f_uicodeset_callbacks, fncptr, uparm);
+}
+/*==========================================
+ * locales_notify_uicodeset_changes -- 
+ *========================================*/
+void
+locales_notify_uicodeset_changes (void)
+{
+	notify_listeners(&f_uicodeset_callbacks);
+}
+/*==========================================
+ * locales_notify_language_change -- notify gettext of change
+ *========================================*/
+void
+locales_notify_language_change (void)
 {
 	notify_gettext_language_changed();
 }

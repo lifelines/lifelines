@@ -250,8 +250,6 @@ pop_list_tail (LIST list)
 static LNODE
 nth_in_list_from_tail (LIST list, INT index1b, BOOLEAN createels, LIST_CREATE_VALUE createfnc)
 {
-	INT i = 1;
-	LNODE node = NULL;
 	if (!list) return NULL;
 	validate_list(list);
 	/* handle reverse indices */
