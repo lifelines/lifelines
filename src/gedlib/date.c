@@ -102,6 +102,7 @@ static void load_lang(void);
 static void mark_freeform(GDATEVAL gdv);
 static void mark_invalid(GDATEVAL gdv);
 static void set_date_string(STRING);
+static STRING upper_dup(STRING s);
 static ZSTR zshorten_date(STRING date);
 
 /*********************************************
@@ -1314,7 +1315,7 @@ get_date_tok (struct tag_dnum *pdnum)
 			*p = 0;
 		}
 		/* look it up in our big table of GEDCOM keywords */
-		i = valueof_int(keywordtbl, upper(scratch), 0);
+		i = valueof_int(keywordtbl, upperascii_s(scratch), 0);
 		if (i >= 2001 && i < 2000 + GDV_CALENDARS_IX) {
 			pdnum->val = i - 2000;
 			return CALENDAR_TOK;
@@ -1330,12 +1331,12 @@ get_date_tok (struct tag_dnum *pdnum)
 		} while (sstr[0] && sstr[0]!=')' && !iswhite((uchar)sstr[0]));
 		*p = 0;
 		/* look it up in our big table of GEDCOM keywords */
-		i = valueof_int(keywordtbl, upper(scratch), 0);
+		i = valueof_int(keywordtbl, upperascii_s(scratch), 0);
 		if (!i) {
 			/* unrecognized word */
 			return CHAR_TOK;
 		}
-		if ((i = valueof_int(keywordtbl, upper(scratch), 0)) > 0 && i <= 999) {
+		if ((i = valueof_int(keywordtbl, upperascii_s(scratch), 0)) > 0 && i <= 999) {
 			pdnum->val = i % 100;
 			/* TODO: we need to use the fact that calendar is i/100 */
 			/* That is, now we know what calendar this is in */
@@ -1440,6 +1441,17 @@ init_keywordtbl (void)
 
 }
 /*=============================
+ * upper_dup -- Get uppercase & strdup it
+ *===========================*/
+static STRING
+upper_dup (STRING s)
+{
+	ZSTR zstr = ll_toupperz(s, uu8);
+	STRING str = strdup(zs_str(zstr));
+	zs_free(&zstr);
+	return str;
+}
+/*=============================
  * load_one_cmplx_pic -- Generate case variations
  *  of one complex picture string.
  * Created: 2001/12/30 (Perry Rapp)
@@ -1451,11 +1463,11 @@ load_one_cmplx_pic (INT ecmplx, STRING abbrev, STRING full)
 	STRING loc_full = strsave(full);
 	ASSERT(ecmplx>=0 && ecmplx <ECMPLX_END);
 	/* 0=ABT (cmplx=3) */
-	cmplx_pics[ecmplx][0] = strsave(upper(loc_abbrev));
+	cmplx_pics[ecmplx][0] = upper_dup(loc_abbrev);
 	/* 1=Abt (cmplx=4) */
 	cmplx_pics[ecmplx][1] = strsave(titlecase(loc_abbrev));
 	/* 2=ABOUT (cmplx=5) */
-	cmplx_pics[ecmplx][2] = strsave(upper(loc_full));
+	cmplx_pics[ecmplx][2] = strsave(upperascii_s(loc_full));
 	/* 3=About (cmplx=6) */
 	cmplx_pics[ecmplx][3] = strsave(titlecase(loc_full));
 	/* 4=abt (cmplx=7) */
@@ -1484,9 +1496,9 @@ load_one_month (INT monum, MONTH_NAMES * monarr, STRING abbrev, STRING full)
 	/* special handling for **may, to differentiate from may */
 	if (loc_abbrev[0]=='*' && loc_abbrev[1]=='*')
 		loc_abbrev += 2;
-	monarr[monum][0] = strsave(upper(loc_abbrev));
+	monarr[monum][0] = upper_dup(loc_abbrev);
 	monarr[monum][1] = strsave(titlecase(loc_abbrev));
-	monarr[monum][2] = strsave(upper(loc_full));
+	monarr[monum][2] = upper_dup(loc_full);
 	monarr[monum][3] = strsave(titlecase(loc_full));
 	monarr[monum][4] = strsave(lower(loc_abbrev));
 	monarr[monum][5] = strsave(lower(loc_full));

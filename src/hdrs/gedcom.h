@@ -182,6 +182,11 @@ extern TABLE tagtable;		/* table for GEDCOM tags */
 extern TABLE placabbvs;		/* table for place abbrvs */
 
 
+/*=====================
+ * enums for functions
+ *===================*/
+typedef enum { DOSURCAP, NOSURCAP } SURCAPTYPE;
+typedef enum { SURFIRST, REGORDER } SURORDER;
 
 /*=====================
  * Function definitions
@@ -358,7 +363,7 @@ void load_char_mappings(void);
 BOOLEAN load_new_tt(CNSTRING filepath, INT ttnum);
 void locales_notify_language_change(void);
 void locales_notify_uicodeset_changes(void);
-STRING manip_name(STRING name, BOOLEAN caps, BOOLEAN regorder, INT len);
+STRING manip_name(STRING name, SURCAPTYPE captype, SURORDER surorder, INT len);
 int namecmp(STRING, STRING);
 STRING name_string(STRING);
 STRING name_surfirst(STRING);

@@ -269,7 +269,7 @@ PVALUE __name (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE arg = (PNODE) iargs(node);
 	PNODE arg2;
 	NODE name, indi = eval_indi(arg, stab, eflg, NULL);
-	BOOLEAN caps = TRUE;
+	SURCAPTYPE captype = DOSURCAP;
 	PVALUE val;
 	STRING outname = 0;
 	if (*eflg) {
@@ -284,7 +284,7 @@ PVALUE __name (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 			delete_pvalue(val);
 			return NULL;
 		}
-		caps = pvalue_to_bool(val);
+		captype = pvalue_to_bool(val) ? DOSURCAP : NOSURCAP;
 		delete_pvalue(val);
 	}
 	if (!(name = find_tag(nchild(indi), "NAME"))) {
@@ -295,7 +295,7 @@ PVALUE __name (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		}
 		return create_pvalue_from_string(0);
 	}
-	outname = manip_name(nval(name), caps, TRUE, 68);
+	outname = manip_name(nval(name), captype, REGORDER, 68);
 	return create_pvalue_from_string(outname);
 }
 /*==================================================+
@@ -308,8 +308,8 @@ __fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE arg = (PNODE) iargs(node);
 	NODE name, indi;
 	PVALUE val;
-	BOOLEAN caps;
-	BOOLEAN myreg;
+	SURCAPTYPE caps = DOSURCAP;
+	SURORDER regorder = REGORDER;
 	INT len;
 	STRING outname;
 
@@ -325,7 +325,7 @@ __fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		delete_pvalue(val);
 		return NULL;
 	}
-	caps = pvalue_to_bool(val);
+	caps = pvalue_to_bool(val) ? DOSURCAP : NOSURCAP;
 	delete_pvalue(val);
 	val = eval_and_coerce(PBOOL, arg = inext(arg), stab, eflg);
 	if (*eflg) {
@@ -333,7 +333,7 @@ __fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		delete_pvalue(val);
 		return NULL;
 	}
-	myreg = pvalue_to_bool(val);
+	regorder = pvalue_to_bool(val) ? REGORDER : SURFIRST;
 	delete_pvalue(val);
 	val = eval_and_coerce(PINT, arg = inext(arg), stab, eflg);
 	if (*eflg) {
@@ -351,7 +351,7 @@ __fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		}
 		return create_pvalue_from_string(0);
 	}
-	outname = manip_name(nval(name), caps, myreg, len);
+	outname = manip_name(nval(name), caps, regorder, len);
 	return create_pvalue_from_string(outname);
 }
 /*==================================+
@@ -2161,15 +2161,18 @@ __upper (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE arg = iargs(node);
 	PVALUE val = eval_and_coerce(PSTRING, arg, stab, eflg);
 	STRING str;
+	ZSTR zstr = 0;
 	if (*eflg) {
 		prog_var_error(node, stab, arg, val, nonstr1, "upper");
 		delete_pvalue(val);
 		return NULL;
 	}
 	str = pvalue_to_string(val);
-	if (str)
-		str = upper(str);
-	set_pvalue_string(val, str);
+	if (str) {
+		zstr = ll_toupperz(str, uu8);
+	}
+	set_pvalue_string(val, zs_str(zstr));
+	zs_free(&zstr);
 	return val;
 }
 /*=====================================+

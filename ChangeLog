@@ -10,6 +10,14 @@
 
 	Bugfixes to next_char32.
 
+	* ChangeLog build/msvc6/llines/llines.rc src/gedlib/date.c
+	src/gedlib/names.c src/gedlib/node.c src/hdrs/gedcom.h
+	src/hdrs/llstdlib.h src/interp/builtin.c src/liflines/screen.c
+	src/stdlib/stdstrng.c src/stdlib/strcvt.c
+
+	New upperascii_s cheap & dirty uppercasing function, and ll_upperz 
+	good one. Change args of manip_name to enums.
+
 2003-04-13 Perry Rapp
 
 	* ChangeLog src/btree/record.c src/gedlib/names.c

@@ -173,9 +173,12 @@ char *llstrsetvf(char * dest, int limit, int utf8, const char * fmt, va_list arg
 /* strcvt.c */
 STRING capitalize(STRING);
 BOOLEAN isnumeric(STRING);
+ZSTR ll_toupperz(STRING s, INT utf8);
 STRING lower(STRING);
 STRING titlecase(STRING);
-STRING upper(STRING);
+STRING upperascii_s(STRING str);
+
+
 
 /* strutf8.c */
 STRING find_prev_char(STRING ptr, INT * width, STRING limit, int utf8);

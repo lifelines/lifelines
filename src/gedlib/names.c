@@ -36,6 +36,7 @@
 #include "gedcom.h"
 #include "gedcomi.h"
 #include "mystring.h" /* fi_chrcmp */
+#include "zstr.h"
 
 /*********************************************
  * external/imported variables
@@ -877,13 +878,26 @@ static STRING
 upsurname (STRING name)
 {
 	static char scratch[MAXGEDNAMELEN+1];
-	STRING p = scratch;
+	static char surnam[MAXGEDNAMELEN+1];
+	STRING p = scratch, q=0;
+	ZSTR zstr = 0;
 	INT c;
 	while ((c = *p++ = (uchar)*name++) && c != NAMESEP)
 		;
 	if (c == 0) return scratch;
+	/* copy surname into q */
+	q = surnam;
 	while ((c = (uchar)*name++) && c != NAMESEP)
-		*p++ = ll_toupper(c);
+		*q++ = c;
+	*q++ = 0;
+	/* uppercase surname */
+	zstr = ll_toupperz(surnam, uu8);
+	*p = 0;
+	/* append surnam to our output we're building */
+	strcat(p, zs_str(zstr));
+	p += strlen(p);
+	zs_free(&zstr);
+	/* get that last character that wasn't part of the surname */
 	*p++ = c;
 	if (c == 0) return scratch;
 	while ((c = *p++ = (uchar)*name++))
@@ -900,15 +914,15 @@ upsurname (STRING name)
  * returns static buffer
  *================================================*/
 STRING
-manip_name (STRING name, BOOLEAN caps, BOOLEAN regorder, INT len)
+manip_name (STRING name, SURCAPTYPE captype, SURORDER surorder, INT len)
 {
 	static char scratch[MAXGEDNAMELEN+1];
 	if (!name || *name == 0) return NULL;
 	llstrsets(scratch, sizeof(scratch), uu8, name);
 	name = scratch;
-	if (caps) name = upsurname(name);
-	name = trim_name(name, regorder ? len: len-1);
-	if (regorder) return trim(name_string(name), len);
+	if (captype == DOSURCAP) name = upsurname(name);
+	name = trim_name(name, (surorder == REGORDER) ? len: len-1);
+	if (surorder == REGORDER) return trim(name_string(name), len);
 	return trim(name_surfirst(name), len);
 }
 /*===============================================

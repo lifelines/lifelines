@@ -136,36 +136,60 @@ lower (STRING str)
 	}
 	return scratch;
 }
+/*==========================================
+ * ll_toupperz -- Convert string to uppercase
+ *========================================*/
+ZSTR
+ll_toupperz (STRING s, INT utf8)
+{
+	/* TODO: preprocess for the German & Greek special cases */
+	ZSTR zstr=0;
+#ifdef HAVE_TOWUPPER
+	if (utf8) {
+		zstr = makewide(s);
+		if (zstr) {
+			/* Now zstr holds a string of wchar_t characters */
+			/* NB: sizeof(wchar_t) varies with platform */
+			ZSTR zout=0;
+			wchar_t * wp;
+			/* convert to uppercase in place */
+			for (wp = (wchar_t *)zs_str(zstr); *wp; ++wp) {
+				*wp = towupper(*wp);
+			}
+			zout = makeznarrow(zstr);
+			zs_free(&zstr);
+			zstr = zout;
+		}
+	}
+#endif
+
+	if (!zstr) {
+		zstr = zs_newn(strlen(s));
+		for ( ; *s; ++s) {
+			zs_appc(zstr, (unsigned char)ll_toupper(*s));
+		}
+	}
+	return zstr;
+}
 /*======================================
- * upper -- Convert string to upper case
+ * upperascii_s -- Convert string to uppercase
+ * This only handle ASCII letters
  *  returns static buffer
+ * (It is a fast, cheap solution appropriate
+ *  for GEDCOM keyword parsing.)
  *====================================*/
 STRING
-upper (STRING str)
+upperascii_s (STRING str)
 {
 	static char scratch[MAXLINELEN+1];
 	STRING p = scratch;
 	INT c, i=0;
-#ifdef HAVE_TOWUPPER
-	ZSTR zstr=makewide(str);
-	if (zstr) {
-		ZSTR zout=0;
-		wchar_t * wp;
-		for (wp = (wchar_t *)zs_str(zstr); *wp; ++wp) {
-			*wp = towupper(*wp);
-		}
-		zout = makeznarrow(zstr);
-		llstrsets(scratch, sizeof(scratch), uu8, zs_str(zout));
-		zs_free(&zstr);
-		zs_free(&zout);
-#else
-	if (0) {
-#endif
-	} else {
-		while ((c = (uchar)*str++) && (++i < MAXLINELEN+1))
-			*p++ = ll_toupper(c);
-		*p = '\0';
+	while ((c = (uchar)*str++) && (++i < MAXLINELEN+1)) {
+		if (c>='a' && c<='z')
+			c += 'A' - 'a';
+		*p++ = (unsigned int)c;
 	}
+	*p = '\0';
 	return scratch;
 }
 /*================================

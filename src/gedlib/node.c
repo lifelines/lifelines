@@ -679,11 +679,14 @@ indi_to_next_sib (RECORD irec)
 STRING
 indi_to_name (NODE node, INT len)
 {
+	SURCAPTYPE surcaptype = DOSURCAP;
 	if (node)
 		node = find_tag(nchild(node), "NAME");
 	if (!node)
 		return _("NO NAME");
-	return manip_name(nval(node), TRUE, TRUE, len);
+	if (!getoptint("UppercaseSurnames", 1))
+		surcaptype = NOSURCAP;
+	return manip_name(nval(node), surcaptype, REGORDER, len);
 }
 /*======================================
  * indi_to_title -- Return title of person
@@ -693,7 +696,7 @@ indi_to_title (NODE node, INT len)
 {
 	if (!node) return NULL;
 	if (!(node = find_tag(nchild(node), "TITL"))) return NULL;
-	return manip_name(nval(node), FALSE, TRUE, len);
+	return manip_name(nval(node), NOSURCAP, REGORDER, len);
 }
 /*======================================
  * node_to_tag -- Return a subtag of a node

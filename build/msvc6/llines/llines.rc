@@ -67,9 +67,9 @@ VS_VERSION_INFO VERSIONINFO
  PRODUCTVERSION 3,0,27,13066
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
- FILEFLAGS 0x21L
+ FILEFLAGS 0x29L
 #else
- FILEFLAGS 0x20L
+ FILEFLAGS 0x28L
 #endif
  FILEOS 0x40004L
  FILETYPE 0x1L
@@ -87,7 +87,7 @@ BEGIN
             VALUE "LegalCopyright", "Copyright © 2001\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "Lines.exe\0"
-            VALUE "PrivateBuild", "\0"
+            VALUE "PrivateBuild", "Beta Release 2003-04-14\0"
             VALUE "ProductName", "LifeLines Genealogical DB and Programming System\0"
             VALUE "ProductVersion", "3, 0, 27, 13066\0"
             VALUE "SpecialBuild", "Win32 version by Perry Rapp\0"

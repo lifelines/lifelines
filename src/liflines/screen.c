@@ -2495,7 +2495,7 @@ manufacture a listdisp here
 		}
 		scratch[0] =0;
 		if (name) {
-			name = manip_name(name, TRUE, TRUE, 40);
+			name = manip_name(name, DOSURCAP, REGORDER, 40);
 			llstrapps(scratch, sizeof(scratch), uu8, name);
 			llstrapps(scratch, sizeof(scratch), uu8, " ");
 		}
