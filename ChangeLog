@@ -1,3 +1,10 @@
+2002-10-04 Perry Rapp
+
+	* ChangeLog build/msvc6/llines/llines.rc src/gedlib/indiseq.c
+	src/hdrs/version.h:
+
+	Handle bad collation gracefully in indiseq (do not ASSERT).
+
 2002-10-01 Perry Rapp
 
 	* ChangeLog src/stdlib/fpattern.c:

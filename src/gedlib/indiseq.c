@@ -784,11 +784,11 @@ partition (INT left, INT right, SORTEL pivot)
 		ldata[i] = ldata[j];
 		ldata[j] = tmp;
 		while ((*lcmp)(ldata[i], pivot, lparam) < 0) {
-			ASSERT(i<right); /* or bad compare routine */
+			if (!(i<right)) return right; /* bad compare routine */
 			i++;
 		}
 		while ((*lcmp)(ldata[j], pivot, lparam) >= 0) {
-			ASSERT(j>left); /* or bad compare routine */
+			if (!(j>left)) return left; /* bad compare routine */
 			j--;
 		}
 	} while (i <= j);
