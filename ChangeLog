@@ -1,3 +1,9 @@
+2000-12-31 Marc Nozell <marc@nozell.com>
+
+	* interp/Makefile.am: Return special CFLAGS settings, as -O2 on
+	pvalue.c still triggers a compilter bug in gcc version 2.95.2
+	19991024 (release) which is shipped with at least Linux/SuSE V6.4.
+
 2000-12-31 Petter Reinholdtsen <pere@td.org.uit.no>
 
 	* acinclude.m4 configure.in: Add more warning flags (-pedantic
