@@ -31,11 +31,11 @@
 /* modified 2000-01-26 J.F.Chandler */
 /* modified 2000-08-21 J.F.Chandler */
 
+#include "llstdlib.h" 
+/* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
 #ifdef HAVE_LOCALE_H
 #include <locale.h>
 #endif
-#include "sys_inc.h"
-#include "llstdlib.h"
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"

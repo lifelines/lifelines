@@ -1,3 +1,25 @@
+2002-03-03 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog INSTALL Makefile.am README.DEVELOPERS configure.in
+	arch/scandir.c btree/Makefile.am btree/opnbtree.c
+	btree/record.c gedlib/Makefile.am gedlib/indiseq.c
+	gedlib/translat.c hdrs/arch.h hdrs/llstdlib.h hdrs/standard.h
+	interp/Makefile.am interp/symtab.c interp/yacc.h
+	liflines/Makefile.am liflines/ask.c liflines/error.c
+	liflines/main.c liflines/menuitem.c liflines/screen.c
+	stdlib/Makefile.am stdlib/environ.c stdlib/memalloc.c
+	stdlib/mystring.c stdlib/signals.c tools/Makefile.am
+	win32/msvc6/llines/llines.rc win32/msvc6/llines/llinesprj.dsp
+	*NEW m4/README m4/codeset.m4 m4/gettext.m4 m4/glibc21.m4
+	*NEW m4/iconv.m4 m4/isc-posix.m4 m4/lcmessage.m4 m4/progtest.m4:
+
+	Add gettext m4 files as new m4 subdirectory.
+	Revise arch.h to not include config.h.
+	Add comments to top of llstdlib.h.
+	Revise README.DEVELOPERS to explain procedure for developers
+	without gettext & iconv.
+	Fix gcc uninit warnings for menuitem.c static initializers.
+
 2002-02-27 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog README.INTERNATIONAL gedlib/messages.c

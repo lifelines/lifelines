@@ -29,10 +29,10 @@
  *   3.0.0 - 17 Jun 94    3.0.2 - 11 Nov 94
  *=========================================================*/
 
+#include "llstdlib.h"
 #ifdef HAVE_LOCALE_H
 #include <locale.h>
 #endif
-#include "llstdlib.h"
 #include "translat.h"
 #include "liflines.h"
 #include "feedback.h"
@@ -732,6 +732,12 @@ customlocale (STRING prefix)
 #endif /* HAVE_SETLOCALE */
 
 #if ENABLE_NLS
+/*
+ * TODO: 2002.03.03, Perry
+ * We need to watch for changes here, and 
+ * propagate them to menuitem and to date modules,
+ * which have to reload arrays if the language changes
+ */
 	strcpy(option+prefixlen, "Messages");
 	str = getoptstr(option, 0);
 	if (str) {

@@ -43,7 +43,6 @@
 /* alphabetical */
 static void symtab_cleaner(ENTRY ent);
 static BOOLEAN  symtrav(ENTRY ent, VPTR param);
-static void table_pvcleaner(ENTRY ent);
 
 /*********************************************
  * local variables

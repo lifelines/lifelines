@@ -1,0 +1,7 @@
+gettext m4 files
+This is for developers without gettext
+
+Files added for gettext 0-10.40:
+
+codeset.m4  glibc21.m4  isc-posix.m4  progtest.m4
+gettext.m4  iconv.m4    lcmessage.m4

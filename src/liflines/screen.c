@@ -32,11 +32,10 @@
  *   3.0.2 - 25 Mar 95    3.0.3 - 17 Jan 96
  *===========================================================*/
 
+#include "llstdlib.h"
 #ifdef HAVE_LOCALE_H
 #include <locale.h>
 #endif
-#include "sys_inc.h"
-#include "llstdlib.h"
 #include "table.h"
 #include "liflines.h"
 #include "arch.h"

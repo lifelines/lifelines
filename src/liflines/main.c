@@ -32,11 +32,11 @@
  *   3.0.3 - 02 Jul 96
  *===========================================================*/
 
-#include "sys_inc.h"
+#include "llstdlib.h"
+/* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
 #ifdef HAVE_LOCALE_H
 #include <locale.h>
 #endif
-#include "llstdlib.h"
 #include "btree.h"
 #include "table.h"
 #include "translat.h"

@@ -27,7 +27,6 @@
 */
 
 #include "llstdlib.h"
-#include "sys_inc.h"
 #include <stdarg.h>
 #include "arch.h"
 #include "mystring.h"

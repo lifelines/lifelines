@@ -8,7 +8,8 @@ libinterp_a_SOURCES = alloc.c builtin.c date.c eval.c functab.c heapused.c \
 	interp.c intrpseq.c lex.c more.c pvalue.c pvalmath.c rassa.c \
 	symtab.c write.c  yacc.y
 
-INCLUDES=-I$(srcdir)/.. -I$(srcdir)/../hdrs
+# .. for config.h, hdrs for lots of stuff, ../intl for libgnuintl.h
+INCLUDES=-I$(srcdir)/.. -I$(srcdir)/../hdrs -I$(srcdir)/../intl
 AM_YFLAGS = -d
 
 # pvalue.c with -O2 triggers a gcc error in gcc version 2.95.2 19991024 (release) 

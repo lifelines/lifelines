@@ -3,6 +3,7 @@ dnl Configure script for lifelines software
 dnl
 dnl Process this file with autoconf to produce a configure script.
 
+
 AC_INIT(liflines/lbrowse.c)
 AC_PREREQ(2.13)
 AC_REVISION([for lifelines, built with autoconf] AC_ACVERSION)
@@ -126,6 +127,7 @@ dnl AC_CHECK_LIB(ucb, bzero)
 
 echo Looking for header files
 AC_CHECK_HEADERS( getopt.h alloc.h malloc.h dirent.h pwd.h locale.h )
+AC_CHECK_HEADERS( libiintl.h )
 dnl AC_HEADER_STDC
 dnl AC_CHECK_HEADERS( errno.h dirent.h fcntl.h getopt.h libgen.h pwd.h siginfo.h signal.h statbuf.h stdio.h stdlib.h string.h strings.h sys/stat.h sys/time.h sys/types.h unistd.h )
 

@@ -26,7 +26,13 @@
 #ifndef _LL_STDLIB_H
 #define _LL_STDLIB_H
 
-#include "standard.h"	/* for INT, STRING, LIST, VPTR, BOOLEAN */
+/*
+ * for INT, STRING, LIST, VPTR, BOOLEAN
+ * pulls in config.h
+ * pulls in sys_inc.h (which pulls in a bunch of system includes)
+ * defines macros for gettext if appropriate (eg, _(String))
+ */
+#include "standard.h"
 
 /* assert.c */
 /*

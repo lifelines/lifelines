@@ -31,8 +31,8 @@
  *   3.0.3 - 07 May 95
  *===========================================================*/
 
-#include "sys_inc.h"
 #include "llstdlib.h"
+/* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
 #include "btreei.h"
 
 /*********************************************
@@ -73,10 +73,11 @@ check_offset (BLOCK block, RKEY rkey, INT i)
 
 	if (offlo + lenlo != offhi) {
 		char msg[256];
+		int blocknum = ixself(block);
 		sprintf(msg, "Working on rkey=%s ", rkey2str(rkey));
 		sprintf(msg+strlen(msg)
 			, "Found corrupt block#%x: index(%d) off=%d, len=%d, key(%d) off=%d"
-			, ixself(block), i-1, offlo, lenlo, i, offhi);
+			, blocknum, i-1, offlo, lenlo, i, offhi);
 		FATAL2(msg);
 	}
 }

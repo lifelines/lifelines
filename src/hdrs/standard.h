@@ -211,9 +211,21 @@ typedef enum { RECORD_ERROR, RECORD_NOT_FOUND, RECORD_SUCCESS }
 #include "config.h"
 #endif
 
+/*
+  I can't figure out how to make gettext work without
+  having gettext & libiconv preinstalled
+*/
+#ifndef HAVE_GETTEXT_H
+/*#define ENABLE_NLS 0*/
+#endif
+#ifndef HAVE_ICONV_H
+/*#define ENABLE_NLS 0*/
+#endif
+
 /* NLS (National Language Support) */
 #if ENABLE_NLS
-#include <libintl.h>
+/*#include <libintl.h>*/
+#include "libgnuintl.h"
 /* _() is used for normally translated strings */
 #define _(String) gettext(String)
 /* We can't use _N() for nonstranslated strings (eg "%d") -- TODO */

@@ -33,6 +33,9 @@ To build and install LifeLines, do the following:
 	make
 	make install
 
+If you do not have gettext & iconv installed, you may need to use
+	./configure --disable-nls
+
 This will generate Makefiles suitable for your platform and then build
 and install the LifeLines programs.  You will end up with the following
 executables (installed in various places, depending on your platform):
@@ -90,6 +93,10 @@ use primitive ASCII graphics. This is not particularly attractive,
 but is usable. Suggestions are welcome.
 Note that the -z commandline switch was added after the 3.0.9 
 release.
+
+To compile libiconv on cygwin, I had to compile it statically, eg,
+(in libiconv directory)
+   ./configure --enable-static --disable-shared
 
 
 ***************

@@ -25,7 +25,8 @@ dbverify: $(dbverify_OBJECTS) $(dbverify_DEPENDENCIES)
 	@rm -f dbverify
 	$(LINK) $(dbverify_LDFLAGS) $(dbverify_OBJECTS) $(dbverify_LDADD)
 
-INCLUDES=-I$(srcdir)/../hdrs
+# .. for config.h, hdrs for lots of stuff, ../intl for libgnuintl.h
+INCLUDES=-I$(srcdir)/../hdrs -I$(srcdir)/../intl
 
 # these dependencies are so that building parts ('make btedit' or 'make
 # lines') will work

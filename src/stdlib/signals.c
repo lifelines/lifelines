@@ -30,9 +30,8 @@
  *   3.0.3 - 19 Sep 95
  *===========================================================*/
 
-#include "sys_inc.h"
+#include "llstdlib.h"
 #include <signal.h>
-#include "standard.h"
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
@@ -40,8 +39,8 @@
 #include "interp.h"
 #include "liflines.h"
 #include "feedback.h"
+
 #include "stdlibi.h"
-#include "llstdlib.h"
 
 char *sig_msgs[] = {
 	N_("SIGNAL 0"),

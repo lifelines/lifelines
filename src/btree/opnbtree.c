@@ -33,8 +33,8 @@
 /* modified 2000-01-20 J.F.Chandler */
 
 #include "sys_inc.h"
-#include "arch.h" /* for S_ISDIR - Perry 2001/01/01 */
 #include "llstdlib.h"
+#include "arch.h" /* for S_ISDIR - Perry 2001.01.01 */
 #include "btreei.h"
 
 /*********************************************

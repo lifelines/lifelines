@@ -5,9 +5,10 @@
 #ifndef ARCH_H
 #define ARCH_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
+/*
+ * .c file must have already included config.h if available
+ * Normally this is done by including llstdlib.h first
+ */
 
 /* *****************************************************************
  * sleep()           

@@ -1,5 +1,5 @@
-#ifndef BISON_Y_TAB_H
-# define BISON_Y_TAB_H
+#ifndef Y_TAB_H
+# define Y_TAB_H
 
 # ifndef YYSTYPE
 #  define YYSTYPE int
@@ -38,4 +38,4 @@
 
 extern YYSTYPE yylval;
 
-#endif /* not BISON_Y_TAB_H */
+#endif /* not Y_TAB_H */

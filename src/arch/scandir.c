@@ -34,6 +34,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <sys/types.h>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 #include "arch.h"
 
 #ifdef HAVE_DIRENT_H
