@@ -3408,29 +3408,7 @@ __free (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	    val = symtab_valueofbool(globtab, iident(arg), &there);
 	}
 	if (there && val) {
-		switch(ptype(val)) {
-		case PSTRING:
-			if(pvalue(val)) stdfree((STRING)pvalue(val)); break;
-		case PLIST:
-			if(pvalue(val)) remove_list(pvalue(val), delete_vptr_pvalue);
-			break;
-		case PTABLE: break;
-		case PSET:
-			if(pvalue(val)) {
-				remove_indiseq(pvalue(val));
-				/* removed, 2001/01/20, Perry Rapp
-				len = length_list(keysets);
-				for(i = 1; i <= len; i++) {
-					if(get_list_element(keysets, i) == pvalue(val)) {
-						set_list_element(keysets, i, (VPTR)0);
-						break;
-					}
-				}
-				*/
-			}
-			break;
-		}
-		pvalue(val) = (VPTR)0;
+		set_pvalue(val, PANY, NULL);
 	}
 	return NULL;
 }

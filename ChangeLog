@@ -1,3 +1,10 @@
+2002-12-31 Perry Rapp
+
+	* ChangeLog src/hdrs/interp.h src/interp/builtin.c
+	src/stdlib/list.c:
+
+	Fix report language __free command.
+
 2002-12-29 Perry Rapp
 
 	* ChangeLog reports/st/st_list.ll src/gedlib/indiseq.c
