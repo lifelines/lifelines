@@ -116,6 +116,7 @@ static BOOLEAN check_sour(STRING key, NOD0 nod0);
 static BOOLEAN check_even(STRING key, NOD0 nod0);
 static BOOLEAN check_othe(STRING key, NOD0 nod0);
 static void check_pointers(STRING key, NOD0 nod0);
+static void check_node(STRING key, NODE node, INT level);
 static BOOLEAN find_xref(STRING key, NODE node, STRING tag1, STRING tag2);
 static void validate_errs(void);
 static void report_results(void);
@@ -124,29 +125,16 @@ static void report_results(void);
  * local variables
  *********************************************/
 
-#define ERR_ORPHANNAME 0
-#define ERR_GHOSTNAME 1
-#define ERR_DUPNAME 2
-#define ERR_NONINDINAME 3
-#define ERR_DUPINDI 4
-#define ERR_DUPFAM 5
-#define ERR_DUPSOUR 6
-#define ERR_DUPEVEN 7
-#define ERR_DUPOTHE 8
-#define ERR_MISSING 9
-#define ERR_DELETED 10
-#define ERR_BADNAME 11
-#define ERR_BADFAMREF 12
-#define ERR_MISSINGCHILD 13
-#define ERR_MISSINGSPOUSE 14
-#define ERR_BADHUSBREF 15
-#define ERR_BADWIFEREF 16
-#define ERR_BADCHILDREF 17
-#define ERR_EXTRAHUSB 18
-#define ERR_EXTRAWIFE 19
-#define ERR_EXTRACHILD 20
-#define ERR_EMPTYFAM 21
-#define ERR_SOLOFAM 22
+enum {
+	ERR_ORPHANNAME,  ERR_GHOSTNAME, ERR_DUPNAME
+	, ERR_NONINDINAME, ERR_DUPINDI, ERR_DUPFAM
+	, ERR_DUPSOUR, ERR_DUPEVEN, ERR_DUPOTHE
+	, ERR_MISSING, ERR_DELETED, ERR_BADNAME
+	, ERR_BADFAMREF, ERR_MISSINGCHILD, ERR_MISSINGSPOUSE
+	, ERR_BADHUSBREF, ERR_BADWIFEREF, ERR_BADCHILDREF
+	, ERR_EXTRAHUSB, ERR_EXTRAWIFE, ERR_EXTRACHILD
+	, ERR_EMPTYFAM, ERR_SOLOFAM, ERR_BADPOINTER
+};
 
 static struct errinfo errs[] = {
 	{ ERR_ORPHANNAME, 0, 0, "Orphan names" }
@@ -172,13 +160,19 @@ static struct errinfo errs[] = {
 	, { ERR_EXTRACHILD, 0, 0, "Improper child" }
 	, { ERR_EMPTYFAM, 0, 0, "Empty family" }
 	, { ERR_SOLOFAM, 0, 0, "Single person family" }
+	, { ERR_BADPOINTER, 0, 0, "Bad pointer" }
 };
 static struct work todo;
 static LIST tofix;
 static INDISEQ dupseq;
 static BOOLEAN noisy=FALSE;
 static INDISEQ seq_indis, seq_fams, seq_sours, seq_evens, seq_othes;
-
+static STRING lineage_tags[] = {
+	"FAMC"
+	, "FAMS"
+	, "WIFE"
+	, "HUSB"
+};
 /*********************************************
  * local function definitions
  * body of module
@@ -186,6 +180,7 @@ static INDISEQ seq_indis, seq_fams, seq_sours, seq_evens, seq_othes;
 
 /*=================================
  * print_usage -- Explain arguments
+ * Created: 2001/01/01, Perry Rapp
  *===============================*/
 static void
 print_usage (void)
@@ -205,6 +200,7 @@ print_usage (void)
 }
 /*========================================
  * report_error -- report some error found
+ * Created: 2001/01/01, Perry Rapp
  *======================================*/
 static void
 report_error (INT err, STRING fmt, ...)
@@ -219,6 +215,7 @@ report_error (INT err, STRING fmt, ...)
 }
 /*=========================================
  * report_progress -- report current record
+ * Created: 2001/01/01, Perry Rapp
  *=======================================*/
 static void
 report_progress (STRING fmt, ...)
@@ -233,6 +230,7 @@ report_progress (STRING fmt, ...)
 }
 /*===============================================
  * alloc_namerefn -- allocates a new NAMEREFN_REC
+ * Created: 2001/01/01, Perry Rapp
  *=============================================*/
 static NAMEREFN_REC *
 alloc_namerefn (STRING namerefn, STRING key, INT err)
@@ -245,6 +243,7 @@ alloc_namerefn (STRING namerefn, STRING key, INT err)
 }
 /*==========================================
  * free_namerefn -- frees a new NAMEREFN_REC
+ * Created: 2001/01/01, Perry Rapp
  *========================================*/
 static void
 free_namerefn (NAMEREFN_REC * rec)
@@ -256,6 +255,7 @@ free_namerefn (NAMEREFN_REC * rec)
 /*==========================================
  * check_ghosts -- Process all names & refns
  *  checking (& optionally fixing) ghosts
+ * Created: 2001/01/01, Perry Rapp
  *=========================================*/
 static void
 check_ghosts (void)
@@ -300,6 +300,7 @@ check_ghosts (void)
 /*============================================
  * cgn_callback -- callback for name traversal
  *  for checking for ghost names
+ * Created: 2001/01/01, Perry Rapp
  *==========================================*/
 static BOOLEAN
 cgn_callback (STRING key, STRING name, BOOLEAN newset, void *param)
@@ -350,6 +351,7 @@ cgn_callback (STRING key, STRING name, BOOLEAN newset, void *param)
 /*============================================
  * cgr_callback -- callback for refn traversal
  *  for checking for ghost refns
+ * Created: 2001/01/13, Perry Rapp
  *==========================================*/
 static BOOLEAN
 cgr_callback (STRING key, STRING refn, BOOLEAN newset, void *param)
@@ -377,6 +379,7 @@ cgr_callback (STRING key, STRING refn, BOOLEAN newset, void *param)
 }
 /*=================================================================
  * finish_and_delete_nameset -- check for dups in a set of one name
+ * Created: 2001/01/13, Perry Rapp
  *===============================================================*/
 static void
 finish_and_delete_nameset (INDISEQ seq)
@@ -394,6 +397,7 @@ finish_and_delete_nameset (INDISEQ seq)
 }
 /*=================================================================
  * finish_and_delete_refnset -- check for dups in a set of one refn
+ * Created: 2001/01/13, Perry Rapp
  *===============================================================*/
 static void
 finish_and_delete_refnset (INDISEQ seq)
@@ -412,6 +416,7 @@ finish_and_delete_refnset (INDISEQ seq)
 /*=================================
  * check_nodes -- Process all nodes
  *  checking and/or fixing as requested
+ * Created: 2001/01/14, Perry Rapp
  *================================*/
 static void
 check_nodes (void)
@@ -437,6 +442,7 @@ check_nodes (void)
 /*=============================================
  * nodes_callback -- callback for node traversal
  *  for checking indis, fams, sours, evens, othes
+ * Created: 2001/01/14, Perry Rapp
  *===========================================*/
 static BOOLEAN
 nodes_callback (STRING key, NOD0 nod0, void *param)
@@ -456,6 +462,7 @@ nodes_callback (STRING key, NOD0 nod0, void *param)
 /*=====================================
  * check_indi -- process indi record
  *  checking and/or fixing as requested
+ * Created: 2001/01/14, Perry Rapp
  *===================================*/
 static BOOLEAN
 check_indi (STRING key, NOD0 nod0)
@@ -521,6 +528,7 @@ check_indi (STRING key, NOD0 nod0)
 /*=====================================
  * check_fam -- process fam record
  *  checking and/or fixing as requested
+ * Created: 2001/01/14, Perry Rapp
  *===================================*/
 static BOOLEAN
 check_fam (STRING key, NOD0 nod0)
@@ -600,6 +608,7 @@ check_fam (STRING key, NOD0 nod0)
 /*=====================================
  * check_sour -- process sour record
  *  checking and/or fixing as requested
+ * Created: 2001/01/14, Perry Rapp
  *===================================*/
 static BOOLEAN
 check_sour (STRING key, NOD0 nod0)
@@ -616,6 +625,7 @@ check_sour (STRING key, NOD0 nod0)
 /*=====================================
  * check_even -- process even record
  *  checking and/or fixing as requested
+ * Created: 2001/01/14, Perry Rapp
  *===================================*/
 static BOOLEAN
 check_even (STRING key, NOD0 nod0)
@@ -632,6 +642,7 @@ check_even (STRING key, NOD0 nod0)
 /*=====================================
  * check_othe -- process othe record
  *  checking and/or fixing as requested
+ * Created: 2001/01/14, Perry Rapp
  *===================================*/
 static BOOLEAN
 check_othe (STRING key, NOD0 nod0)
@@ -672,15 +683,55 @@ exit_find:
 	return found;
 }
 /*=====================================
- * check_pointers -- check for bad pointers
+ * check_pointers -- check nod0 for bad pointers
+ *  and bad levels
+ * 2001/01/21, Perry Rapp
  *===================================*/
 static void
 check_pointers (STRING key, NOD0 nod0)
 {
-	/* TO DO - see node_to_sources for a traversal */
+	check_node(key, nztop(nod0), 0);
+}
+/*=====================================
+ * check_node -- check node for bad pointers
+ *  and bad levels, and continue traverse
+ * 2001/02/18, Perry Rapp
+ *===================================*/
+static void
+check_node (STRING n0key, NODE node, INT level)
+{
+	BOOLEAN lineage=FALSE;
+	/* ignore lineage links - they are checked elsewhere */
+	if (level==1) {
+		INT i;
+		for (i=0; i<ARRSIZE(lineage_tags); i++) {
+			if (eqstr(ntag(node), lineage_tags[i])) {
+				lineage=TRUE;
+				break;
+			}
+		}
+	}
+	/*
+	TO DO: How do we tell non-pointers that *ought* to
+	be pointers, eg "1 SOUR <FamilyHistory>" ?
+	*/
+	if (!lineage) {
+		STRING skey = rmvat(nval(node));
+		if (skey) {
+			NODE xnode = qkey_to_type(skey);
+			if (!xnode) {
+				report_error(ERR_BADPOINTER, "Bad pointer (in %s): %s", n0key, nval(node));
+			}
+		}
+	}
+	if (nchild(node))
+		check_node(n0key, nchild(node), level+1);
+	if (nsibling(node))
+		check_node(n0key, nsibling(node), level);
 }
 /*===================================
  * check_set -- Validate set of nodes
+ * Created: 2001/01/14, Perry Rapp
  *=================================*/
 static void
 check_set (INDISEQ seq, char ctype)
@@ -704,6 +755,7 @@ check_set (INDISEQ seq, char ctype)
 }
 /*=========================================
  * validate_errs -- Validate the errs array
+ * Created: 2001/01/13, Perry Rapp
  *=======================================*/
 static void
 validate_errs (void)
@@ -718,6 +770,7 @@ validate_errs (void)
 }
 /*===========================================
  * main -- Main procedure of dbverify command
+ * Created: 2001/01/01, Perry Rapp
  *=========================================*/
 int
 main (int argc,
@@ -763,7 +816,7 @@ main (int argc,
 	if (todo.find_ghosts || todo.fix_ghosts)
 		check_ghosts();
 
-	/* simplify successive logic */
+	/* this simplifies later logic */
 	if (todo.fix_indis) todo.check_indis=TRUE;
 	if (todo.fix_fams) todo.check_fams=TRUE;
 	if (todo.fix_sours) todo.check_sours=TRUE;
@@ -784,6 +837,7 @@ main (int argc,
 }
 /*===============================================
  * report_results -- Print out error & fix counts
+ * Created: 2001/01/13, Perry Rapp
  *=============================================*/
 static void
 report_results (void)
@@ -802,6 +856,7 @@ report_results (void)
 }
 /*=========================================================
  * __allocate -- Allocate memory - called by stdalloc macro
+ * Created: 2001/01/01, Perry Rapp
  *========================================================*/
 void *
 __allocate (int len,     /* number of bytes to allocate */
@@ -814,6 +869,7 @@ __allocate (int len,     /* number of bytes to allocate */
 }
 /*=======================================================
  * __deallocate - Return memory - called by stdfree macro
+ * Created: 2001/01/01, Perry Rapp
  *=====================================================*/
 void
 __deallocate (void *ptr,  /* memory being returned */
@@ -824,6 +880,7 @@ __deallocate (void *ptr,  /* memory being returned */
 }
 /*=============================
  * fatal -- Fatal error routine
+ * Created: 2001/01/01, Perry Rapp
  *===========================*/
 void
 __fatal (STRING file,

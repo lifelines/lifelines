@@ -52,7 +52,6 @@ struct str_option_s { STRING name; STRING * value; STRING defval; INT db; };
  * local enums & defines
  *********************************************/
 
-#define ARRSIZE(qq) (sizeof(qq)/sizeof(qq[0]))
 enum { DBNO, DBYES };
 
 /*********************************************

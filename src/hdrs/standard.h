@@ -164,6 +164,7 @@ typedef struct ltag {
 
 #define ISNULL(k)	(!k || *k == 0)
 
+#define ARRSIZE(qq) (sizeof(qq)/sizeof(qq[0]))
 
 struct WAREHOUSE_S;
 typedef struct WAREHOUSE_S *WAREHOUSE;

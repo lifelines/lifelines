@@ -1,3 +1,8 @@
+2001-02-18 Perry Rapp <puddle@users.sourceforge.net>
+
+	gedlib/lloptions.c hdrs/standard.h tools/dbverify.c: 
+	[dbverify] Implemented bad pointer check.
+
 2001-02-17 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/gstrings.c gedlib/indiseq.c gedlib/messages.c
