@@ -84,6 +84,11 @@ related to LifeLines, GEDCOM, or even genealogy.
 This directory is a collection of routines for GEDCOM and for its use in
 a LifeLines btree database.
 
+  * keytonod.c
+  This module implements the cache of node trees. This cache
+  operates on top of the back-end database, and nztop() uses
+  this cache to access the node tree of a RECORD.
+
   * names
   This module implements indexing names.
   TODO: Explain soundex indexing.
@@ -116,6 +121,26 @@ a LifeLines btree database.
   localization, and not associated with these files). Both custom
   translation tables and delegation to the iconv codeset conversion 
   library are done here.
+
+    * TRANTABLE
+    A TRANTABLE is a single, custom-translation table in memory.
+    It may have been loaded from the tt subdirectory (which holds
+    custom tables for standard conversions, for systems lacking iconv)
+    or it may have been loaded from a resident-in-database legacy
+    table.
+
+    * XLAT
+    An XLAT is a full translation chain, which may use TRANTABLES and
+    iconv steps in series. For example, an XLAT might convert from
+    UTF-8 to ISO-8859-1 but also html'ize the text, using two steps,
+    firstly a TRANTABLE loaded from UTF-8__html.tt, and secondly
+    using iconv.
+
+    * XLSTEP
+    An XLSTEP represents one step in an XLAT chain.
+
+    * DYNTT
+    A DYNTT is a wrapper for a TRANTABLE loaded from the tt subdir.
 
   * indiseq
   The indiseq type is implemented here, a list of records (which no longer

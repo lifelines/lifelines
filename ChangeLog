@@ -21,6 +21,10 @@
 	Altered records to check & its node tree (from cache) in nztop.
 	This is so PVALUES can hold records without holding cache locks.
 
+	* ChangeLog docs/ll-devguide.xml
+
+	Added some explanation of translation tables and cache.
+
 2003-11-17 Perry Rapp
 
 	* ChangeLog src/gedlib/charmaps.c src/gedlib/xlat.c
