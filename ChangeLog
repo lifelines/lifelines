@@ -46,6 +46,10 @@
 
 	Cleanup warnings.
 
+	* ChangeLog src/gedlib/codesets.c:
+
+	Fix for nl_langinfo returning 0.
+
 2002-11-29 Perry Rapp
 
 	* ChangeLog src/gedlib/codesets.c src/gedlib/init.c

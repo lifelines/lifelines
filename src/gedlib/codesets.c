@@ -81,6 +81,9 @@ init_codesets (void)
 	sprintf(wincs, "CP%d", n);
 #else
 	STRING defval = nl_langinfo (CODESET);
+	/* nl_langinfo giving 0 on linux glibc-2.2.4-19.3 (Perry, 2002-12-01) */
+	if (!defval)
+		defval="";
 	/*
 	We are using Markus Kuhn's emulator for systems without nl_langinfo
 	see arch/langinfo.c
