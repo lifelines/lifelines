@@ -5,6 +5,10 @@
 
 	Fix table's insertion into rbtree not to delete first.
 
+	* ChangeLog src/stdlib/table.c
+
+	Fix table leaking rbtree values (wasn't using custom destructor for VPTR).
+
 2005-02-25 Perry Rapp
 
 	* ChangeLog src/stdlib/rbtree.c
