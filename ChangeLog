@@ -9,11 +9,18 @@
 	New version (xsltproc, docbook-1.33) of ll-devguide.
 
 	* ChangeLog src/gedlib/gedcomi.h src/gedlib/keytonod.c
-	src/gedlib/record.c src\hdrs/gedcom.h src\liflines/add.c
+	src/gedlib/record.c src/hdrs/gedcom.h src/liflines/add.c
 
 	New function make_new_record_with_info. 
 	alloc_new_record becomes static. 
 	Change arguments of set_record_key_info.
+
+	* ChangeLog src/gedlib/keytonod.c
+
+	New cel_magic & init_cel, to identify corrupt cel memory.
+	Stop asserting that record is cel's record in cel_remove_record
+	(this is firing, although I don't know why, but records
+	should be able to handle pointing at wrong cel; nztop handles it).
 
 2005-02-12 lifelines beta 3.0.43 RELEASE
 

@@ -53,6 +53,7 @@ int listbadkeys = 0;
  *=============================*/
 /* typedef struct tag_cacheel *CACHEEL; */
 struct tag_cacheel {
+	CNSTRING c_magic; /* points to cel_magic */
 	NODE c_node;      /* root node */
 	CACHEEL c_prev;   /* previous el */
 	CACHEEL c_next;   /* next el */
@@ -101,6 +102,7 @@ static void delete_cache(CACHE * pcache);
 static void ensure_cel_has_record(CACHEEL cel);
 static ZSTR get_cache_stats(CACHE ca);
 static CACHEEL get_free_cacheel(CACHE cache);
+static void init_cel(CACHEEL cel);
 static CACHEEL key_to_cacheel(CACHE cache, CNSTRING key, STRING tag, INT reportmode);
 static CACHEEL key_to_even_cacheel(CNSTRING key);
 static NODE key_typed_to_node(CACHE cache, CNSTRING key, STRING tag);
@@ -128,6 +130,8 @@ INT csz_othr = 200;		/* cache size for othr */
  *********************************************/
 
 static CACHE indicache, famcache, evencache, sourcache, othrcache;
+
+static CNSTRING cel_magic = "CEL_MAGIC"; /* fixed pointer to identify cel */
 
 /* keybuf circular list of last 10 keys we looked up in cache 
  * kept for printing debug messages in crash log
@@ -556,6 +560,7 @@ create_cache (STRING name, INT dirsize)
 	for (i=0; i<cacmaxdir(cache); ++i) {
 		CACHEEL cel = &cacarray(cache)[i];
 		CACHEEL celnext = cacfree(cache);
+		init_cel(cel);
 		if (celnext) {
 			cnext(cel) = celnext;
 			cprev(celnext) = cel;
@@ -585,6 +590,15 @@ delete_cache (CACHE * pcache)
 	stdfree(cacarray(cache));
 	stdfree(cache);
 	*pcache = 0;
+}
+/*=============================
+ * init_cel -- Initialize new cacheel
+ *===========================*/
+static void
+init_cel (CACHEEL cel)
+{
+	memset(cel, 0, sizeof(*cel));
+	cel->c_magic = cel_magic;
 }
 /*=================================================
  * remove_direct -- Unlink CACHEEL from direct list
@@ -1422,7 +1436,9 @@ void
 cel_remove_record (CACHEEL cel, RECORD rec)
 {
 	ASSERT(cel);
+	ASSERT(cel->c_magic == cel_magic);
 	ASSERT(rec);
-	ASSERT(crecord(cel) == rec);
-	crecord(cel) = 0;
+	if (crecord(cel) == rec) {
+		crecord(cel) = 0;
+	}
 }
