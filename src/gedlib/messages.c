@@ -291,3 +291,4 @@ STRING askyny      = SS "yY";
 STRING unksps      = SS "Spouse unknown";
 STRING nohist      = SS "No more history";
 STRING dataerr     = SS "Error accessing data";
+STRING idhist      = SS "Choose from history";

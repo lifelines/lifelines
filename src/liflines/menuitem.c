@@ -176,6 +176,7 @@ static MenuItem f_MenuItemNotes = { "$n  List notes", "$n", CMD_NOTES };
 static MenuItem f_MenuItemPointers = { "$$  List references", "$$", CMD_POINTERS };
 static MenuItem f_MenuItemHistoryBack = { "^b  History/back", "^b", CMD_HISTORY_BACK };
 static MenuItem f_MenuItemHistoryFwd = { "^f  History/fwd", "^f", CMD_HISTORY_FWD };
+static MenuItem f_MenuItemHistoryList = { "^l  History list", "^l", CMD_HISTORY_LIST };
 static MenuItem f_MenuItemAddOther = { "%o  Add other ref", "%o", CMD_ADD_OTHER_REF };
 
 
@@ -234,6 +235,7 @@ static MenuItem * f_MenuPerson[] =
 	&f_MenuItemPrev,
 	&f_MenuItemHistoryBack,
 	&f_MenuItemHistoryFwd,
+	&f_MenuItemHistoryList,
 	0
 };
 
@@ -274,6 +276,7 @@ static MenuItem * f_MenuFamily[] =
 	&f_MenuItemPrev,
 	&f_MenuItemHistoryBack,
 	&f_MenuItemHistoryFwd,
+	&f_MenuItemHistoryList,
 	0
 };
 
@@ -359,6 +362,7 @@ static MenuItem * f_MenuAux[] =
 	&f_MenuItemPrev,
 	&f_MenuItemHistoryBack,
 	&f_MenuItemHistoryFwd,
+	&f_MenuItemHistoryList,
 	0
 };
 

@@ -62,7 +62,7 @@ extern STRING idpnxt, ids2fm, idc2fm, idplst, idp2br, crtcfm, crtsfm;
 extern STRING ronlye, ronlya, idhbrs, idwbrs;
 extern STRING id1sbr, id2sbr, id1fbr, id2fbr, id1cbr, id2cbr;
 extern STRING id1hbr, id2hbr, id1wbr, id2wbr;
-extern STRING spover, idfamk, nohist;
+extern STRING spover, idfamk, nohist, idhist;
 /*
 	The history list is a circular buffer in hist_list.
 	hist_start points at the earliest entry, and 
@@ -104,8 +104,10 @@ static INT display_indi(NODE indi, INT mode);
 static NODE goto_fam_child(NODE fam, int childno);
 static NODE goto_indi_child(NODE indi, int childno);
 static BOOLEAN handle_aux_mode_cmds(INT c, INT * mode);
+static INT handle_history_cmds(INT c, NODE * pindi1);
 static BOOLEAN handle_menu_commands_old(INT c);
 static NODE history_back(void);
+static NODE history_list(void);
 static void history_record(NODE node);
 static NODE history_fwd(void);
 static void pick_add_child_to_fam(NODE fam, NODE save);
@@ -348,10 +350,18 @@ browse_indi_modes (NODE *pindi1,
 		nkeyp = indi_to_keynum(indi);
 		indimodep = indimode;
 		if (c != CMD_NEWFAMILY) save = NULL;
-		if (!handle_menu_cmds(c)
-			&& !handle_scroll_cmds(c)
-			&& !handle_indi_mode_cmds(c, &indimode))
-			switch (c)
+		if (handle_menu_cmds(c))
+			continue;
+		if (handle_scroll_cmds(c))
+			continue;
+		if (handle_indi_mode_cmds(c, &indimode))
+			continue;
+		i = handle_history_cmds(c, pindi1);
+		if (i == 1)
+			continue; /* history cmd handled, stay here */
+		if (i == -1)
+			return BROWSE_UNK; /* history cmd handled, leave page */
+		switch (c)
 		{
 		case CMD_EDIT:	/* Edit this person */
 			node = edit_indi(indi);
@@ -595,22 +605,6 @@ browse_indi_modes (NODE *pindi1,
 				return BROWSE_UNK;
 			}
 			break;
-		case CMD_HISTORY_BACK:
-			node = history_back();
-			if (node) {
-				*pindi1 = node;
-				return BROWSE_UNK;
-			}
-			message(nohist);
-			break;
-		case CMD_HISTORY_FWD:
-			node = history_fwd();
-			if (node) {
-				*pindi1 = node;
-				return BROWSE_UNK;
-			}
-			message(nohist);
-			break;
 		case CMD_QUIT:
 		default:
 			return BROWSE_QUIT;
@@ -663,10 +657,18 @@ browse_aux (NODE *pindi1, NODE *pindi2, NODE *pfam1,
 		/* last keynum & mode, so can tell if changed */
 		nkeyp = node_to_keynum(ntype, node);
 		auxmodep = auxmode;
-		if (!handle_menu_cmds(c)
-			&& !handle_scroll_cmds(c)
-			&& !handle_aux_mode_cmds(c, &auxmode))
-			switch (c)
+		if (handle_menu_cmds(c))
+			continue;
+		if (handle_scroll_cmds(c))
+			continue;
+		if (handle_aux_mode_cmds(c, &auxmode))
+			continue;
+		i = handle_history_cmds(c, pindi1);
+		if (i == 1)
+			continue; /* history cmd handled, stay here */
+		if (i == -1)
+			return BROWSE_UNK; /* history cmd handled, leave page */
+		switch (c)
 		{
 		case CMD_EDIT:
 			switch(ntype) {
@@ -703,22 +705,6 @@ browse_aux (NODE *pindi1, NODE *pindi2, NODE *pfam1,
 				else message(norec);
 				break;
 			}
-		case CMD_HISTORY_BACK:
-			node2 = history_back();
-			if (node2) {
-				*pindi1 = node2;
-				return BROWSE_UNK;
-			}
-			message(nohist);
-			break;
-		case CMD_HISTORY_FWD:
-			node2 = history_fwd();
-			if (node2) {
-				*pindi1 = node2;
-				return BROWSE_UNK;
-			}
-			message(nohist);
-			break;
 		case CMD_QUIT:
 		default:
 			return BROWSE_QUIT;
@@ -911,10 +897,18 @@ browse_fam (NODE *pindi1,
 		fammodep = fammode;
 		if (c != CMD_ADDCHILD && c != CMD_ADDSPOUSE)
 			save = NULL;
-		if (!handle_menu_cmds(c)
-			&& !handle_scroll_cmds(c)
-			&& !handle_fam_mode_cmds(c, &fammode))
-			switch (c) 
+		if (handle_menu_cmds(c))
+			continue;
+		if (handle_scroll_cmds(c))
+			continue;
+		if (handle_fam_mode_cmds(c, &fammode))
+			continue;
+		i = handle_history_cmds(c, pindi1);
+		if (i == 1)
+			continue; /* history cmd handled, stay here */
+		if (i == -1)
+			return BROWSE_UNK; /* history cmd handled, leave page */
+		switch (c) 
 		{
 		case CMD_ADVANCED:	/* Advanced family edit */
 			advanced_family_edit(fam);
@@ -1084,22 +1078,6 @@ browse_fam (NODE *pindi1,
 				*pindi1 = node;
 				return BROWSE_UNK;
 			}
-			break;
-		case CMD_HISTORY_BACK:
-			node = history_back();
-			if (node) {
-				*pindi1 = node;
-				return BROWSE_UNK;
-			}
-			message(nohist);
-			break;
-		case CMD_HISTORY_FWD:
-			node = history_fwd();
-			if (node) {
-				*pindi1 = node;
-				return BROWSE_UNK;
-			}
-			message(nohist);
 			break;
 		case CMD_QUIT:
 		default:
@@ -1341,6 +1319,80 @@ history_fwd (void)
 	next = hist_past_end;
 	nkey_to_node(&hist_list[next], &node);
 	return node;
+}
+/*==================================================
+ * history_list -- let user choose from history list
+ *  calls message(nohist) if none found
+ *  returns NULL if no history or if user cancels
+ * Created: 2001/04/12, Perry Rapp
+ *================================================*/
+static NODE
+history_list (void)
+{
+	INDISEQ seq;
+	NODE node;
+	INT next, prev;
+	if (hist_start==-1) {
+		message(nohist);
+		return NULL;
+	}
+	/* add all items of history to seq */
+	seq = create_indiseq_null();
+	prev = -1;
+	next = hist_start;
+	while (1) {
+		nkey_to_node(&hist_list[next], &node);
+		if (node) {
+			STRING key = node_to_key(node);
+			append_indiseq_null(seq, key, NULL, TRUE, FALSE);
+		}
+		prev = next;
+		next = (next+1) % ARRSIZE(hist_list);
+		if (next == hist_past_end)
+			break; /* finished them all */
+	}
+	node = nztop(choose_from_indiseq(seq, DOASK1, idhist, idhist));
+	remove_indiseq(seq);
+	return node;
+}
+/*==================================================
+ * handle_history_cmds -- handle the history commands
+ *  returns 0 for not a history command
+ *  returns 1 if handled but continue on same page
+ *  returns -1 if handled & set *pindi1 for switching pages
+ * Created: 2001/04/12, Perry Rapp
+ *================================================*/
+static INT
+handle_history_cmds (INT c, NODE * pindi1)
+{
+	NODE node;
+	if (c == CMD_HISTORY_BACK) {
+		node = history_back();
+		if (node) {
+			*pindi1 = node;
+			return -1; /* handled, change pages */
+		}
+		message(nohist);
+		return 1; /* handled, stay here */
+	}
+	if (c == CMD_HISTORY_FWD) {
+		node = history_fwd();
+		if (node) {
+			*pindi1 = node;
+			return -1; /* handled, change pages */
+		}
+		message(nohist);
+		return 1; /* handled, stay here */
+	}
+	if (c == CMD_HISTORY_LIST) {
+		node = history_list();
+		if (node) {
+			*pindi1 = node;
+			return -1; /* handled, change pages */
+		}
+		return 1;
+	}
+	return 0; /* unhandled */
 }
 /*==================================================
  * add_other_ref -- add a new referred other record
