@@ -19,6 +19,10 @@
 
 	Add new hashtab files to automake makefiles.
 
+	* ChangeLog build/msvc6/llexec/llexec.dsp src/liflines/llexec.c
+
+	Fix compilation & MSVC6 linking of llexec.
+
 2005-02-16 Perry Rapp
 
 	* ChangeLog src/gedlib/xlat.c

@@ -204,6 +204,10 @@ SOURCE=..\..\..\src\gedlib\gstrings.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\stdlib\hashtab.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\interp\heapused.c
 # End Source File
 # Begin Source File
@@ -589,6 +593,10 @@ SOURCE=..\..\..\src\hdrs\gengedc.h
 # Begin Source File
 
 SOURCE=..\..\..\src\hdrs\win32\getopt.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\hashtab.h
 # End Source File
 # Begin Source File
 
