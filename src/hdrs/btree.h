@@ -59,7 +59,7 @@ typedef struct {
 	FKEY k_mkey;  /* current master key*/
 	FKEY k_fkey;  /* current file key*/
 	/* ostat: -2=immutable, -1=writer, 0=closed, 1+=reader count */
-	INT k_ostat;  
+	INT k_ostat;
 } KEYFILE1;
 
 /*

@@ -1,5 +1,11 @@
 2001-09-16 Matt Emmerton <memmerto@users.sourceforge.net>
 
+	* ChangeLog hdrs/btree.h hdrs/gedcom.h hdrs/llstdlib.h
+	* hdrs/msvc.h hdrs/standard.h:
+	Removed some MS-DOS newlines.
+	
+2001-09-16 Matt Emmerton <memmerto@users.sourceforge.net>
+
 	* ChangeLog tools/dbverify.c:
 	Print bterrno value when database can't be opened.
 
