@@ -314,6 +314,7 @@ SetScrollMax (INT row, INT menuht)
 /*=========================================================
  * show_descendants -- build descendant tree & print it out
  * Created: 2000/12/07, Perry Rapp
+ *  refer optimization note in show_ancestors
  *=======================================================*/
 static void
 draw_descendants (NODE indi, INT menuht)
@@ -349,6 +350,12 @@ pedigree_draw_gedcom (NODE node, INT hgt)
 /*=====================================================
  * show_ancestors -- build ancestor tree & print it out
  * Created: 2000/12/07, Perry Rapp
+ *  Possible optimization (courtesy Petter Reinholdtsen):
+ *  Call add_parents traversal twice - first time just
+ *  count, then alloc one big block, then traverse again
+ *  filling it in - one malloc instead of N mallocs
+ *  Easiest way is add a flag to add_parents so use same
+ *  traversal code both times
  *===================================================*/
 static void
 draw_ancestors (NODE indi, INT menuht)
