@@ -21,7 +21,6 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
-/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * main.c -- Main program of LifeLines
  * Copyright(c) 1992-95 by T.T. Wetmore IV; all rights reserved
@@ -102,6 +101,7 @@ STRING  readpath = NULL;       /* database path used to open */
  *********************************************/
 
 /* alphabetical */
+static BOOLEAN check_version_compat(void);
 static BOOLEAN init_curses_ui(void);
 static BOOLEAN is_unadorned_directory(STRING path);
 static void load_usage(void);
@@ -615,6 +615,27 @@ main_db_notify (STRING db, BOOLEAN opening)
 		crash_setdb("");
 }
 /*==================================================
+ * check_version_compat 
+ *  - check if runtime platform has known incompatibility
+ *================================================*/
+static BOOLEAN
+check_version_compat (void)
+{
+#ifndef __CYGWIN__
+/* Curses 5.4 problem (not on cygwin) */
+	if (NCURSES_VERSION_MAJOR == 5 && NCURSES_VERSION_MINOR == 4)
+	{
+		printf("Curses 5.4 detected.\n");
+		printf("There are known problems with this version of ncurses\n");
+		printf("that prevents LifeLines from running.  The LL developers\n");
+		printf("are working on a solution. For status updates and/or\n");
+		printf("assistance, please email lifelines-dev@lists.sourceforge.net.\n");
+		return FALSE;
+	}
+#endif
+	return TRUE;
+}
+/*==================================================
  * init_curses_ui -- 
  * Created: 2003/01/03, Perry Rapp
  *================================================*/
@@ -623,15 +644,9 @@ init_curses_ui (void)
 {
         WINDOW *win;
 
-	if (NCURSES_VERSION_MAJOR == 5 && NCURSES_VERSION_MINOR == 4)
-	{
-          printf("Curses 5.4 detected.\n");
-          printf("There are known problems with this version of ncurses\n");
-          printf("that prevents LifeLines from running.  The LL developers\n");
-          printf("are working on a solution. For status updates and/or\n");
-          printf("assistance, please email lifelines-dev@lists.sourceforge.net.\n");
-          return FALSE;
-	} 
+	/* check for curses version problem */
+	if (!check_version_compat())
+		return FALSE;
 
 	win = initscr();
         if (!win) return FALSE;

@@ -1,3 +1,9 @@
+2005-01-06 Perry Rapp
+
+	* ChangeLog src/liflines/main.c
+
+	Move curses check to own function, ifndef out for cygwin.
+
 2005-01-05 Perry Rapp
 
 	* ChangeLog src/liflines/screen.c
