@@ -1,0 +1,53 @@
+.TH gwc 1 "2003 May 4th"
+.SH NAME
+dbverify \- Check a Lifelines database
+.SH SYNOPSIS
+.B dbverify
+[
+.I options
+] 
+.I file
+.br
+.SH DESCRIPTION
+This manual page documents briefly the
+.B dbverify
+command.
+This manual page was written for the Debian GNU/Linux distribution
+because the original program does not have a manual page.
+.PP
+.SH OPTIONS
+.PP
+.TP 8
+.B \-h
+command-line help
+.TP
+.B \-a
+Perform all checks (does not include fixes)
+.TP
+.BI \-g
+Check for ghosts (names/refns)
+.TP
+.BI \-G
+Check for & fix ghosts (names/refns)
+.TP
+.BI \-i
+Check individuals
+.TP
+.BI \-f
+Check families
+.TP
+.BI \-s
+Check sours
+.TP
+.BI \-e
+Check events
+.TP
+.BI \-x
+Check others
+.TP
+.BI \-n
+Noisy (echo every record processed)
+.SH AUTHOR
+This manual page was written by Christian Perrier <bubulle@debian.org>,
+for the Debian GNU/Linux system (but may be used by others).
+

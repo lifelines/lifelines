@@ -836,5 +836,9 @@ SOURCE=..\..\..\src\interp\yacc.h
 SOURCE=..\..\..\src\hdrs\zstr.h
 # End Source File
 # End Group
+# Begin Source File
+
+SOURCE=..\..\..\ChangeLog
+# End Source File
 # End Target
 # End Project

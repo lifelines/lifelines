@@ -2,12 +2,14 @@
 
 # AUTOMAKE_OPTIONS = no-dependencies
 
+# obsolete manuals: quickref.pdf quickref.ps lifelines.sgml
+
 MANUALS =     ll-reportmanual.html ll-reportmanual.pdf \
 	     ll-reportmanual.txt \
 	     ll-userguide.html ll-userguide.pdf \
 	     ll-userguide.txt 
-# EXTRA_DIST = quickref.pdf quickref.ps lifelines.sgml llines.1 
-EXTRA_DIST = llines.1 \
+
+EXTRA_DIST = llines.1 dbverify.1 \
 	      $(MANUALS) ll-reportmanual.xml  ll-userguide.xml 
 
 CONFIG_CLEAN_FILES = lifelines.html lifelines.pdf lifelines.ps lifelines.txt \

@@ -1,3 +1,11 @@
+2003-05-05 Perry Rapp
+
+	* ChangeLog build/msvc6/llines/llinesprj.dsp
+	build/rpm/lifelines.spec docs/Makefile.am
+	*NEW docs/dbverify.1
+
+	Added dbverify.1 man page (supplied by Christian Perrier).
+
 2003-04-21 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llines.rc src/hdrs/version.h

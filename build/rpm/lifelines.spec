@@ -54,6 +54,7 @@ install -m 644 reports/CREDIT reports/*.ll $RPM_BUILD_ROOT/usr/local/share/lifel
 
 install -d -m 755 $RPM_BUILD_ROOT/usr/local/man/man1
 install -m 644 docs/llines.1 $RPM_BUILD_ROOT/usr/local/man/man1/llines.1
+install -m 644 docs/dbverify.1 $RPM_BUILD_ROOT/usr/local/man/man1/dbverify.1
 
 
 %files
@@ -71,6 +72,7 @@ install -m 644 docs/llines.1 $RPM_BUILD_ROOT/usr/local/man/man1/llines.1
 /usr/local/share/locale/sv/LC_MESSAGES/lifelines.mo
 /usr/local/share/lifelines/reports
 /usr/local/man/man1/llines.1
+/usr/local/man/man1/dbverify.1
 
 %changelog
 * Mon Nov 11 2002 Perry Rapp
@@ -82,3 +84,6 @@ install -m 644 docs/llines.1 $RPM_BUILD_ROOT/usr/local/man/man1/llines.1
 - Implement patch by Karl DeBisschop: adds build root, list reports as group instead of individually
 - Add dbverify, de.po, fr.po, sv.po
 - (lifelines-3.0.19-1)
+* Mon May 05 2003 Perry Rapp
+- Add dbverify.1
+
