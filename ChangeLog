@@ -1,3 +1,13 @@
+2000-11-04  Matt Emmerton <matt@gsicomp.on.ca>
+
+	* hdrs/liflines.h, hdrs/indiseq.h, hdrs/cache.h: Added
+	function prototypes
+
+	* gedlib/*.c:  Updated function declarations, fixed -Wall warnings
+
+	* liflines/screen.c:  Converted mprintf() and llwprintf() to
+	varargs-style functions in order for protos to work properly
+
 2000-11-03  Marc Nozell (at home)  <marc@nozell.com>
 
 	* stdlib/stdstrng.c: Removed strcpy declaration. 
