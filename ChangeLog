@@ -21,6 +21,10 @@
 
 	Add new array.*, object.*, vtable.* files to automakefiles.
 
+	* ChangeLog src/stdlib/Makefile.am
+
+	Fix vtable.h should be vtable.c in src/stdlib/Makefile.am.
+
 2003-02-26 Perry Rapp
 
 	* ChangeLog po/sv.po
