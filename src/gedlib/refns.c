@@ -487,7 +487,11 @@ annotate_node (NODE node, BOOLEAN expand_refns, BOOLEAN annotate_pointers, RFMT 
 	if (expand_refns) {
 		NODE refn = REFN(nztop(rec));
 		char buffer[60];
-		if (refn && nval(refn) && strlen(nval(refn))<=sizeof(buffer)-3) {
+		/* if there is a REFN, and it fits in our buffer,
+		and it doesn't have any (confusing) > in it */
+		if (refn && nval(refn) && !strchr(nval(refn), '>')
+			&& strlen(nval(refn))<=sizeof(buffer)-3) {
+			/* then replace, eg, @S25@, with, eg, <1850.Census> */
 			buffer[0]=0;
 			strcpy(buffer, "<");
 			strcat(buffer, nval(refn));
@@ -510,6 +514,8 @@ annotate_node (NODE node, BOOLEAN expand_refns, BOOLEAN annotate_pointers, RFMT 
 }
 /*===============================================
  * symbolic_link -- See if value is symbolic link
+ *  If so, returns heap-allocated copy of the reference
+ *  (without surrounding angle brackets)
  *=============================================*/
 static STRING
 symbolic_link (CNSTRING val)
