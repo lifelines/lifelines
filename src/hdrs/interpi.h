@@ -31,9 +31,6 @@
 
 #include "interp.h"
 
-#ifdef WIN32
-extern PVALUE __heapused(PNODE, TABLE, BOOLEAN *);
-#endif
 extern PVALUE ___alpha(PNODE, TABLE, BOOLEAN *);
 extern PVALUE __add(PNODE, TABLE, BOOLEAN *);
 extern PVALUE __addnode(PNODE, TABLE, BOOLEAN *);
@@ -106,6 +103,7 @@ extern PVALUE __getstr(PNODE, TABLE, BOOLEAN *);
 extern PVALUE __gettoday(PNODE, TABLE, BOOLEAN *);
 extern PVALUE __givens(PNODE, TABLE, BOOLEAN *);
 extern PVALUE __gt(PNODE, TABLE, BOOLEAN *);
+extern PVALUE __heapused(PNODE, TABLE, BOOLEAN *);
 extern PVALUE __husband(PNODE, TABLE, BOOLEAN *);
 extern PVALUE __incr(PNODE, TABLE, BOOLEAN *);
 extern PVALUE __index(PNODE, TABLE, BOOLEAN *);

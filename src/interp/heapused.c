@@ -26,31 +26,36 @@
  * heapused.c -- report how much heap space is in use (WIN32 - ONLY!)
  *===========================================================*/
 
-#ifdef WIN32
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include <stdio.h>
-#include <alloc.h>
 
-#ifndef BOOLEAN
-#	define BOOLEAN int
+#if defined(HAVE_ALLOC_H) && defined(HAVE_HEAPWALK)
+#  include <alloc.h>
+#  define HEAPINFO struct heapinfo
+#  define WALK(ent) heapwalk(&(ent))
+#  define SIZE(ent) ((ent).size)
+#  define PTR(ent)  ((ent).ptr)
+#  define USED(ent) ((ent).in_use)
+#  define WORKING_HEAPUSED
 #endif
-#ifndef TRUE
-#	define TRUE 1
-#endif
-#ifndef FALSE
-#	define FALSE 0
-#endif
-#define INT int 
-typedef char *WORD;
-struct dummy {
-    int dum;
-} dumstruct;
 
-typedef struct dumstruct *PVALUE;
-typedef struct dumstruct *TABLE;
-typedef struct dumstruct *PNODE;
+#if defined(HAVE_MALLOC_H) && defined(HAVE__HEAPWALK)
+#  include <malloc.h>
+#  define HEAPINFO _HEAPINFO
+#  define WALK(ent) _heapwalk(&(ent))
+#  define SIZE(ent) ((ent)._size)
+#  define PTR(ent)  ((ent)._pentry)
+#  define USED(ent) ((ent)._useflag)
+#  define WORKING_HEAPUSED
+#endif
 
-#define PINT    2	/* integer */
+#include "standard.h"
+#include "table.h"
+#include "gedcom.h"
+#include "interp.h"
 
 /*===============================================+
  * __heapused -- Return amount of heapspace in use
@@ -61,6 +66,8 @@ __heapused (PNODE node,
             TABLE stab,
             BOOLEAN *eflg)
 {
+#if defined(WORKING_HEAPUSED)
+	HEAPINFO hi;
 	struct heapinfo hi;
 	long heapused;
 	long heapfree;
@@ -74,21 +81,26 @@ __heapused (PNODE node,
 	heapused = 0;
 	heapfree = 0;
 	heapcnt = 0;
-	hi.ptr = NULL;
+	PTR(hi) = NULL;
 
-	while(heapwalk(&hi) == _HEAPOK) {
+	while(WALK(hi) == _HEAPOK) {
 	  heapcnt++;
 	  if(errfp && (repcnt-- > 0))
-	      fprintf(errfp, "%ld %ld %ld\n", (long)hi.ptr, (long)hi.size,
-		      (long) hi.in_use);
-	  if(hi.in_use) heapused += hi.size;
-	  else heapfree += hi.size;
+	      fprintf(errfp, "%ld %ld %ld\n", (long)PTR(hi), (long)SIZE(hi),
+		      (long)USED(hi));
+	  if(USED(hi)) heapused += SIZE(hi);
+	  else heapfree += SIZE(hi);
 	}
 	*eflg = FALSE;
 	if(errfp)
 	    fprintf(errfp, "%ld free, %ld used, %ld entries\n",
 		    (long)heapused, (long)heapfree, (long)heapcnt);
+	fflush(errfp);
 
 	return create_pvalue(PINT, (WORD)heapfree);
-}
+#else
+	/* Unsupported, what should we do? return error or give bogus value? */
+	*eflg = TRUE;
+	return NULL;
 #endif
+}

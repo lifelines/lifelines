@@ -1,5 +1,9 @@
 2000-11-09  Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* configure.in hdrs/interpi.h interp/functab.c interp/heapused.c:
+	Rewrote heapused() to work on any platform implementing heapwalk()
+	or _heapwalk().
+
 	* interp/interp.c: Give user time to read error messages when
 	program fails.
 	

@@ -116,9 +116,7 @@ BUILTINS builtins[] = {
 	{"gettoday",	0,	0,	__gettoday},
 	{"givens",	1,	1,	__givens},
 	{"gt",		2,	2,	__gt},
-#ifdef WIN32
 	{"heapused",	0,	0,	__heapused},
-#endif
 	{"husband",	1,	1,	__husband},
 	{"incr",		1,	1,	__incr},
 	{"index",	3,	3,	__index},
