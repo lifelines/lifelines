@@ -1,3 +1,9 @@
+2003-07-29 Perry Rapp
+
+	* ChangeLog src/liflines/screen.c
+
+	Place cursor at bottom cursor when dynamic menu hidden.
+
 2003-07-28 Perry Rapp
 
 	* ChangeLog src/liflines/screen.c

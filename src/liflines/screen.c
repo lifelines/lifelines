@@ -2930,8 +2930,16 @@ place_cursor_main (void)
 			menus is controlled by the dynamic menu, because cursor
 			moves up & down with dynamic menu */
 			DYNMENU dynmenu = get_screen_dynmenu(cur_screen);
-			row = dynmenu->cur_y;
-			col = dynmenu->cur_x;
+			if (dynmenu->hidden) {
+				/* when dynamic menu hidden, show cursor 
+				at bottom after title */
+				STRING title = get_screen_title(cur_screen);
+				row = ll_lines-2;
+				col = strlen(title)+3;
+			} else {
+				row = dynmenu->cur_y;
+				col = dynmenu->cur_x;
+			}
 		}
 		break;
 	default:
