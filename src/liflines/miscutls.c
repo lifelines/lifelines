@@ -41,7 +41,7 @@ extern STRING btreepath;
 /*======================================
  * key_util -- Return person's key value
  *====================================*/
-key_util ()
+void key_util (void)
 {
 	TRANTABLE ttd = tran_tables[MINDS];
 	NODE indi = ask_for_indi("Whose key value do you want?", FALSE, FALSE);
@@ -51,7 +51,7 @@ key_util ()
 /*===================================================
  * who_is_he_she -- Find who person is from key value
  *=================================================*/
-who_is_he_she ()
+void who_is_he_she (void)
 {
 	STRING key, str, rec, ask_for_string();
 	NODE indi;
@@ -86,7 +86,7 @@ who_is_he_she ()
 /*===========================================
  * show_database_stats -- Show database stats
  *=========================================*/
-show_database_stats ()
+void show_database_stats (void)
 {
 	mprintf("Database `%s' contains (%dP, %dF, %dS, %dE, %dX) records.",
 	    btreepath, num_indis(), num_fams(), num_sours(),

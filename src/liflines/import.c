@@ -37,6 +37,7 @@
 #include "sequence.h"
 #include "gedcheck.h"
 #include "screen.h"
+#include "liflines.h"
 
 /* external data set by check_stdkeys() */
 

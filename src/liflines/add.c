@@ -64,7 +64,7 @@ NODE add_indi_by_edit (void)
 /* Create person template for user to edit */
 
 	if (!(fp = fopen(editfile, LLWRITETEXT))) return NULL;
-	if (str = (STRING) valueof(useropts, "INDIREC"))
+	if ((str = (STRING) valueof(useropts, "INDIREC")))
 		fprintf(fp, "%s\n", str);
 	else {
 		fprintf(fp, "0 INDI\n1 NAME Fname/Surname\n1 SEX MF\n");

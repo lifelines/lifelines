@@ -78,12 +78,12 @@ INDISEQ *pseq;
 			if (node) indi1 = node;
 			break;
 		case 'c': 	/* browse top person's children */
-			if (node = choose_child(indi1, NULL, nocofp,
-			    idcbrs, FALSE))
+			if ((node = choose_child(indi1, NULL, nocofp,
+			    idcbrs, FALSE)))
 				indi1 = node;
 			break;
 		case 'j': 	/* merge two persons */
-			if (node = merge_two_indis(indi2, indi1, TRUE)) {
+			if ((node = merge_two_indis(indi2, indi1, TRUE))) {
 				*pindi1 = node;
 				return BROWSE_INDI;
 			}
@@ -158,7 +158,7 @@ INDISEQ *pseq;
 			}
 			return BROWSE_TAND;
 		case 'j':	/* merge two fams */
-			if (node = merge_two_fams(fam2, fam1)) {
+			if ((node = merge_two_fams(fam2, fam1))) {
 				*pfam1 = node;
 				return BROWSE_FAM;
 			}

@@ -31,10 +31,16 @@
  *   3.0.3 - 02 Jul 96
  *===========================================================*/
 
+#include <stdlib.h>
+#include <ctype.h>
+#ifndef WIN32
+#include <unistd.h>
+#else
+#include <dos.h>
+#endif
 #ifdef OS_LOCALE
 #include <locale.h>
 #endif
-
 #include <sys/types.h>
 #include <sys/stat.h>
 #include "standard.h"
@@ -43,6 +49,7 @@
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
+#include "liflines.h"
 
 extern STRING idldir, nodbse, crdbse, nocrdb, iddbse, usage;
 
@@ -101,10 +108,13 @@ char *getenv();
 STRING lldatabases;
 STRING filepath();
 
+static void exit_it (INT);
+static void show_open_error (void);
+
 /*==================================
  * main -- Main routine of LifeLines
  *================================*/
-main (argc, argv)
+int main (argc, argv)
 INT argc;
 char **argv;
 {
@@ -272,6 +282,7 @@ char **argv;
 		main_menu();
 	close_lifelines();
 	exit_it(0);
+	return(0); 	/* just to keep compiler happy */
 }
 /*==========================================
  * trytocreate -- Try to create new database
@@ -291,7 +302,7 @@ STRING path;
 /*====================
  * exit_it -- All done
  *==================*/
-exit_it (code)
+void exit_it (code)
 INT code;
 {
 	endwin();
@@ -304,7 +315,7 @@ INT code;
 /*===================================================
  * show_open_error -- Describe database opening error
  *=================================================*/
-show_open_error ()
+void show_open_error (void)
 {
 	if (bterrno != BTERRWRITER)
 		llwprintf("Database error -- ");
@@ -335,7 +346,7 @@ show_open_error ()
 /*===============
  * final_cleanup
  *==============*/
-final_cleanup ()
+void final_cleanup (void)
 {
 	close_lifelines();
 	endwin();

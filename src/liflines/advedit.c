@@ -32,6 +32,7 @@
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
+#include "liflines.h"
 
 static NODE root;	/* root of record being edited */
 static LIST subs;	/* list of contained records */
@@ -56,7 +57,7 @@ NODE root0;
 		llwprintf("in list: %s %s\n", ntag(node), nval(node));
 #endif
 		key = rmvat(nval(node));
-		if (sub = key_to_record(key, *key)) {
+		if ((sub = key_to_record(key, *key))) {
 			copy = copy_nodes(sub, TRUE, FALSE);
 			nxref(node)    = nxref(copy);
 			ntag(node)     = ntag(copy);
@@ -71,7 +72,7 @@ NODE root0;
 #endif
 }
 
-advanced_person_edit (root0)
+void advanced_person_edit (root0)
 NODE root0;
 {
 	FILE *fp;
@@ -87,7 +88,7 @@ NODE root0;
 	do_edit();
 }
 
-advanced_family_edit (root0)
+void advanced_family_edit (root0)
 NODE root0;
 {
 	FILE *fp;

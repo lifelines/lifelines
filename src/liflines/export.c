@@ -35,12 +35,15 @@
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
+#include "liflines.h"
 
 extern STRING btreepath, llarchives;
 extern BTREE BTR;
 extern TRANTABLE tran_tables[];
 TRANTABLE tran_gedout;
 static INT nindi, nfam, neven, nsour, nothr;
+
+static void copy_and_translate (FILE*, INT, FILE*, INT, TRANTABLE);
 
 /*===================================================
  * archive_in_file -- Archive database in GEDCOM file
@@ -120,7 +123,7 @@ BLOCK block;
 /*===================================================
  * copy_and_translate -- Copy record with translation
  *=================================================*/
-copy_and_translate (fo, len, fn, c, tt)
+static void copy_and_translate (fo, len, fn, c, tt)
 FILE *fo, *fn;
 INT len, c;
 TRANTABLE tt;

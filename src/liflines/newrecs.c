@@ -49,8 +49,18 @@ SS rstr = (STRING) "0 SOUR\n1 REFN\n1 TITL Title\n1 AUTH Author";
 SS estr = (STRING) "0 EVEN\n1 REFN\n1 DATE\n1 PLAC\n1 INDI\n  2 NAME\n  2 ROLE\n1 SOUR";
 SS xstr = (STRING) "0 XXXX\n1 REFN";
 
-void edit_record();
-NODE ask_for_record();
+NODE ask_for_record(STRING, INT);
+
+void edit_record(NODE, STRING, INT, STRING, BOOLEAN (*func1)(), STRING, STRING, void (*func2)(), STRING);
+void edit_event(NODE);
+void edit_other(NODE);
+void edit_source(NODE);
+
+BOOLEAN add_record (STRING, STRING, BOOLEAN (*val)(), STRING, STRING (*getref)(), void (*todbase)(), void (*tocache)());
+BOOLEAN add_event(void);
+BOOLEAN add_other(void);
+BOOLEAN add_source(void);
+
 NODE refn_to_record();
 NODE key_to_record();
 
@@ -59,7 +69,7 @@ extern BOOLEAN valid_sour_tree(), valid_even_tree(), valid_othr_tree();
 /*================================================
  * add_source -- Add source to database by editing
  *==============================================*/
-BOOLEAN add_source ()
+BOOLEAN add_source (void)
 {
 	STRING str = (STRING) valueof(useropts, "SOURREC");
 	if (!str) str = rstr;
@@ -69,7 +79,7 @@ BOOLEAN add_source ()
 /*==============================================
  * add_event -- Add event to database by editing
  *============================================*/
-BOOLEAN add_event ()
+BOOLEAN add_event (void)
 {
 	STRING str = (STRING) valueof(useropts, "EVENREC");
 	if (!str) str = estr;
@@ -79,7 +89,7 @@ BOOLEAN add_event ()
 /*====================================================
  * add_other -- Add user record to database by editing
  *==================================================*/
-BOOLEAN add_other ()
+BOOLEAN add_other (void)
 {
 	STRING str = (STRING) valueof(useropts, "OTHRREC");
 	if (!str) str = xstr;
@@ -95,8 +105,8 @@ STRING redt;		/* re-edit message */
 BOOLEAN (*val)();	/* tree validate predicate */
 STRING cfrm;		/* confirm message */
 STRING (*getref)();	/* get next internal key */
-INT (*todbase)();	/* write record to dbase */
-INT (*tocache)();	/* write record to cache */
+void (*todbase)();	/* write record to dbase */
+void (*tocache)();	/* write record to cache */
 {
 	FILE *fp;
 	NODE node, refn;
@@ -183,7 +193,7 @@ STRING redt;		/* re-edit message */
 BOOLEAN (*val)();	/* validate routine */
 STRING cfrm;		/* confirm message */
 STRING tag;		/* tag */
-INT (*todbase)();	/* write record to dbase */
+void (*todbase)();	/* write record to dbase */
 STRING gdmsg;		/* success message */
 {
 	TRANTABLE tti = tran_tables[MEDIN], tto = tran_tables[MINED];

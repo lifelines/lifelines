@@ -54,7 +54,7 @@ INDISEQ ask_for_indiseq();
 /*=========================================
  * browse -- Main loop of browse operation.
  *=======================================*/
-browse (indi1)
+void browse (indi1)
 NODE indi1;
 {
 	INT code, len, rc;
@@ -116,14 +116,15 @@ INDISEQ *pseq;
 			indi = edit_indi(indi);
 			break;
 		case 'g': 	/* Browse to person's family */
-			if (*pfam1 = choose_family(indi, ntprnt, idfbrs, TRUE))
+			if ((*pfam1 = choose_family(indi, ntprnt,
+				idfbrs, TRUE)))
 				return BROWSE_FAM;
 			break;
 		case 'G':
-			if (*pfam1 = choose_family(indi, ntprnt,
-				id1fbr, TRUE))
-			  if (*pfam2 = choose_family(indi, ntprnt,
-				id2fbr, TRUE))
+			if ((*pfam1 = choose_family(indi, ntprnt,
+				id1fbr, TRUE)))
+			  if ((*pfam2 = choose_family(indi, ntprnt,
+				id2fbr, TRUE)))
 				return BROWSE_2FAM;
 			break;
 		case 'f': 	/* Browse to person's father */
@@ -215,14 +216,15 @@ INDISEQ *pseq;
 				indi = node;
 			break;
 		case 'u':	/* Browse to parents' family */
-			if (*pfam1 = choose_family(indi, noprnt, idfbrs, FALSE))
+			if ((*pfam1 = choose_family(indi, noprnt,
+				idfbrs, FALSE)))
 				return BROWSE_FAM;
 			break;
 		case 'U':	/* tandem browse to two parents families*/
-			if (*pfam1 = choose_family(indi, noprnt,
-				id1fbr, FALSE))
-			  if (*pfam2 = choose_family(indi, noprnt,
-				id2fbr, FALSE))
+			if ((*pfam1 = choose_family(indi, noprnt,
+				id1fbr, FALSE)))
+			  if ((*pfam2 = choose_family(indi, noprnt,
+				id2fbr, FALSE)))
 				return BROWSE_2FAM;
 			break;
 		case 'b': 	/* Browse new list of persons */
@@ -327,7 +329,7 @@ INDISEQ *pseq;
 			i = ask_for_int("Enter Family Number to Browse to");
 			if(i > 0) {
 			    sprintf(scratch, "F%d", i);
-			    if(node = key_to_fam(scratch)) {
+			    if((node = key_to_fam(scratch))) {
 				fam = node;
 			    }
 			}
@@ -541,12 +543,12 @@ INDISEQ *pseq;
 			if (node) indi = node;
 			break;
 		case 'c':	/* Browse to children */
-			if (node = choose_child(indi, NULL, nocofp,
-			    idcbrs, FALSE))
+			if ((node = choose_child(indi, NULL, nocofp,
+			    idcbrs, FALSE)))
 				indi = node;
 			break;
 		case 'g':	/* Switch to family mode */
-			if (*pfam = choose_family(indi, ntprnt, idfbrs, TRUE))
+			if ((*pfam = choose_family(indi, ntprnt, idfbrs, TRUE)))
 				return BROWSE_FAM;
 			break;
 		case 'b': 	/* Browse new list of persons */

@@ -31,6 +31,7 @@
  *   3.0.2 - 25 Mar 95    3.0.3 - 17 Jan 96
  *===========================================================*/
 
+#include <stdarg.h>
 #include "standard.h"
 #include "screen.h"
 #include "table.h"
@@ -38,9 +39,6 @@
 #include "gedcom.h"
 #include "indiseq.h"
 #include "liflines.h"
-#ifdef WIN32
-#include <stdarg.h>
-#endif
 
 #define LINESREQ 24
 #define COLSREQ  80

@@ -31,11 +31,21 @@
  *   3.0.3 - 29 Jun 96
  *===========================================================*/
 
+#include <stdlib.h>
+#include <stdarg.h>
+#ifndef WIN32
+#include <unistd.h>
+#else
+#include <dir.h>
+#include <io.h>
+#endif
+#include <ctype.h>
 #include "standard.h"
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
 #include "gedcheck.h"
+#include "liflines.h"
 
 /* external data set by check_stdkeys() , used by addmissingkeys() */
 
@@ -65,7 +75,6 @@ static INT num_warns;
 static INT defline;
 static BOOLEAN logopen;
 static FILE *flog;
-static clear_structures();
 
 ELMNT *index_data = NULL;
 
@@ -106,22 +115,24 @@ STRING impsex = SS "Line %d: Person %s is implied to be both male and female.";
 STRING noxref = SS "Line %d: This record has no cross reference value.";
 #endif
 
-static INT add_even_defn();
-static INT add_fam_defn();
-static INT add_indi_defn();
-static INT add_othr_defn();
-static INT add_sour_defn();
-static INT add_to_structures();
-static check_even_links();
-static check_fam_links();
-static check_indi_links();
-static check_othr_links();
-static check_references();
-static check_sour_links();
-static handle_fam_lev1();
-static handle_indi_lev1();
-static handle_value();
-static ELMNT xref_to_elmnt();
+static INT add_even_defn(STRING, INT);
+static INT add_fam_defn(STRING, INT);
+static INT add_indi_defn(STRING, INT, ELMNT*);
+static INT add_othr_defn(STRING, INT);
+static INT add_sour_defn(STRING, INT);
+static INT add_to_structures(STRING, ELMNT);
+static void check_even_links(ELMNT);
+static void check_fam_links(ELMNT);
+static void check_indi_links(ELMNT);
+static void check_othr_links(ELMNT);
+static void check_references(void);
+static void check_sour_links(ELMNT);
+static void handle_fam_lev1(STRING, STRING, INT);
+static void handle_indi_lev1(STRING, STRING, INT);
+static void handle_value(STRING, INT);
+static void clear_structures(void);
+static void handle_warn(STRING, ...);
+static void handle_err(STRING, ...);
 
 /*===================================================
  * validate_gedcom -- Validate GEDCOM records in file
@@ -443,7 +454,7 @@ INT line;	/* line num */
 /*===========================================================
  * handle_indi_lev1 -- Handle level 1 lines in person records
  *=========================================================*/
-static handle_indi_lev1 (tag, val, line)
+static void handle_indi_lev1 (tag, val, line)
 STRING tag, val;
 INT line;
 {
@@ -498,7 +509,7 @@ INT line;
 /*==========================================================
  * handle_fam_lev1 -- Handle level 1 lines in family records
  *========================================================*/
-static handle_fam_lev1 (tag, val, line)
+static void handle_fam_lev1 (tag, val, line)
 STRING tag, val;
 INT line;
 {
@@ -556,7 +567,7 @@ int check_akey (firstchar, keyp, maxp)
 /*=================================================
  * check_stdkeys -- Check for standard format keys
  *===============================================*/
-int check_stdkeys ()
+int check_stdkeys (void)
 {
 	INT i;
 	int retval = TRUE;
@@ -596,8 +607,8 @@ int check_stdkeys ()
 /*================================================
  * addmissingkeys -- add keys which are not in use
  *==============================================*/
-addmissingkeys (t)
-    	INT t;		/* type of record: INDI_REC ... */
+void addmissingkeys (t)
+INT t;		/* type of record: INDI_REC ... */
 {
     	INT tmax, ttot;
 	INT i,j;
@@ -644,7 +655,7 @@ addmissingkeys (t)
 /*=================================================
  * check_references -- Check for undefined problems
  *===============================================*/
-static check_references ()
+static void check_references (void)
 {
 	INT i;
 	for (i = 0; i < struct_len; i++) {
@@ -662,7 +673,7 @@ static check_references ()
 /*=======================================
  * check_indi_links -- Check person links
  *=====================================*/
-static check_indi_links (per)
+static void check_indi_links (per)
 ELMNT per;
 {
 	BOOLEAN jm, jf, bm, bf;
@@ -684,7 +695,7 @@ ELMNT per;
 /*======================================
  * check_fam_links -- Check family links
  *====================================*/
-static check_fam_links (fam)
+static void check_fam_links (fam)
 ELMNT fam;
 {
 	if (Line(fam) == 0) handle_err(undfam, Key(fam));
@@ -694,7 +705,7 @@ ELMNT fam;
 /*======================================
  * check_even_links -- Check event links
  *====================================*/
-static check_even_links (evn)
+static void check_even_links (evn)
 ELMNT evn;
 {
 	if (Line(evn) == 0) handle_err(undevn, Key(evn));
@@ -702,7 +713,7 @@ ELMNT evn;
 /*=======================================
  * check_sour_links -- Check source links
  *=====================================*/
-static check_sour_links (src)
+static void check_sour_links (src)
 ELMNT src;
 {
 	if (Line(src) == 0) handle_err(undsrc, Key(src));
@@ -710,7 +721,7 @@ ELMNT src;
 /*======================================
  * check_othr_links -- Check other links
  *====================================*/
-static check_othr_links (otr)
+static void check_othr_links (otr)
 ELMNT otr;
 {
 	if (Line(otr) == 0) handle_err(undrec, Key(otr));
@@ -718,7 +729,7 @@ ELMNT otr;
 /*=======================================
  * handle_value -- Handle arbitrary value
  *=====================================*/
-static handle_value (val, line)
+static void handle_value (val, line)
 STRING val;
 INT line;
 {
@@ -748,11 +759,12 @@ STRING val;
 /*==================================
  * handle_err -- Handle GEDCOM error
  *================================*/
-handle_err (fmt, arg1, arg2, arg3, arg4)
-STRING fmt;
-WORD arg1, arg2, arg3, arg4;
+void handle_err (STRING fmt, ...)
 {
+	va_list argptr;
 	char str[100];
+
+	va_start(argptr, fmt);
 	if (!logopen) {
 
 		unlink("err.log");
@@ -761,7 +773,7 @@ WORD arg1, arg2, arg3, arg4;
 		logopen = TRUE;
 	}
 	fprintf(flog, "Error: ");
-	fprintf(flog, fmt, arg1, arg2, arg3, arg4);
+	fprintf(flog, fmt, argptr);
 	fprintf(flog, "\n");
 	sprintf(str, "%6d Errors (see log file `err.log')", ++num_errors);
 	wfield(6, 1, str);
@@ -769,22 +781,18 @@ WORD arg1, arg2, arg3, arg4;
 /*=====================================
  * handle_warn -- Handle GEDCOM warning
  *===================================*/
-handle_warn (fmt, arg1, arg2, arg3, arg4)
-STRING fmt;
-WORD arg1, arg2, arg3, arg4;
+void handle_warn (STRING fmt, ...)
 {
+	va_list argptr;
 	char str[100];
+	va_start(argptr, fmt);
 	if (!logopen) {
-#ifdef WIN32
 		unlink("err.log");
-#else
-		system("rm -f err.log");
-#endif
 		ASSERT(flog = fopen("err.log", LLWRITETEXT));
 		logopen = TRUE;
 	}
 	fprintf(flog, "Warning: ");
-	fprintf(flog, fmt, arg1, arg2, arg3, arg4);
+	fprintf(flog, fmt, argptr);
 	fprintf(flog, "\n");
 	sprintf(str, "%6d Warnings (see log file `err.log')", ++num_warns);
 	wfield(7, 1, str);
@@ -796,7 +804,7 @@ INT xref_to_index (xref)
 STRING xref;
 {
 	BOOLEAN there;
-	INT dex = valueofbool(convtab, xref, &there);
+	INT dex = (INT)valueofbool(convtab, xref, &there);
 	return there ? dex : -1;
 }
 /*=========================================================
@@ -825,7 +833,7 @@ ELMNT el;
 /*========================================================
  * clear_structures -- Clear GEDCOM import data structures
  *======================================================*/
-static clear_structures ()
+static void clear_structures (void)
 {
 	INT i;
 

@@ -30,6 +30,7 @@
  *   3.0.3 - 21 Jan 96
  *===========================================================*/
 
+#include <stdlib.h>
 #include "standard.h"
 #include "btree.h"
 #include "table.h"
@@ -43,6 +44,8 @@ extern STRING iredit, cfpmrg, nopmrg, noqmrg, noxmrg, nofmrg;
 extern STRING dhusb,  dwife,  cffmrg, fredit, badata, ronlym;
 STRING mgsfam = (STRING) "These persons are children in different families.";
 STRING mgconf = (STRING) "Are you sure you want to merge them?";
+
+static void merge_fam_links (NODE, NODE, NODE, NODE, INT);
 
 /*================================================================
  * merge_two_indis -- Merge first person to second; data from both
@@ -470,7 +473,7 @@ NODE fam1, fam2;
  *   only on list2.  No changes are made to the references from the
  *   families to the persons.
  *================================================================*/
-merge_fam_links (fam1, fam2, list1, list2, code)
+void merge_fam_links (fam1, fam2, list1, list2, code)
 NODE fam1, fam2, list1, list2;
 INT code;
 {

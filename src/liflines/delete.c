@@ -30,6 +30,7 @@
  *   3.0.3 - 21 Jan 96
  *===========================================================*/
 
+#include <stdlib.h>
 #include "standard.h"
 #include "table.h"
 #include "translat.h"
@@ -38,7 +39,7 @@
 #include "liflines.h"
 
 extern STRING idpdel, cfpdel, haslnk;
-static del_in_dbase();
+static void del_in_dbase(STRING);
 
 /*================================================================
  * delete_indi -- Delete person and links; if this leaves families
@@ -151,7 +152,7 @@ checkfamc:
 /*==========================================
  * delete_fam -- Delete family from database
  *========================================*/
-delete_fam (fam)
+void delete_fam (fam)
 NODE fam;
 {
 	STRING key;
@@ -177,7 +178,7 @@ NODE fam;
 /*=================================================
  * del_in_dbase -- Write deleted record to database
  *===============================================*/
-static del_in_dbase (key)
+static void del_in_dbase (key)
 STRING key;
 {
 	if (!key || *key == 0) return;
