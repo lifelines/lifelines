@@ -73,7 +73,7 @@ addfile (BTREE btree,   /* btree to add to */
 	return TRUE;
 }
 /*===================================================
- * getfile -- Get record from btree and write to file
+ * write_record_to_file -- Get record from btree and write to file
  * BTREE btree: database btree
  * RKEY rkey:   record key
  * STRING file: file name

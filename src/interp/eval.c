@@ -49,9 +49,7 @@ extern BOOLEAN traceprogram;
  * evaluate -- Generic evaluator
  *============================*/
 PVALUE
-evaluate (PNODE node,
-          TABLE stab,
-          BOOLEAN *eflg)
+evaluate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	if (prog_debug) {
 		llwprintf("%d: ", iline(node));
@@ -72,9 +70,7 @@ evaluate (PNODE node,
  * evaluate_iden -- Evaluate identifier
  *===================================*/
 PVALUE
-evaluate_iden (PNODE node,
-               TABLE stab,
-               BOOLEAN *eflg)
+evaluate_iden (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	STRING iden = (STRING) iident(node);
 #if 0
@@ -88,8 +84,7 @@ evaluate_iden (PNODE node,
  * valueof_iden - Find value of identifier
  *======================================*/
 PVALUE
-valueof_iden (TABLE stab,
-              STRING iden)
+valueof_iden (SYMTAB stab, STRING iden)
 {
 	BOOLEAN there;
 	PVALUE val;
@@ -99,9 +94,9 @@ valueof_iden (TABLE stab,
 	  	  iden, stab, globtab);
 #endif
 
-	val = (PVALUE) valueofbool(stab, iden, &there);
+	val = (PVALUE) symtab_valueofbool(stab, iden, &there);
 	if (there) return copy_pvalue(val);
-	val = (PVALUE) valueofbool(globtab, iden, &there);
+	val = (PVALUE) symtab_valueofbool(globtab, iden, &there);
 	if (there) return copy_pvalue(val);
 	return create_pvalue(PANY, NULL);
 }
@@ -109,9 +104,7 @@ valueof_iden (TABLE stab,
  * evaluate_cond -- Evaluate conditional expression
  *===============================================*/
 BOOLEAN
-evaluate_cond (PNODE node,
-               TABLE stab,
-               BOOLEAN *eflg)
+evaluate_cond (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PVALUE val;
 	BOOLEAN rc;
@@ -146,9 +139,7 @@ evaluate_cond (PNODE node,
  * evaluate_func -- Evaluate builtin function
  *=========================================*/
 PVALUE
-evaluate_func (PNODE node,
-               TABLE stab,
-               BOOLEAN *eflg)
+evaluate_func (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PVALUE val;
 	char trace[20];
@@ -161,7 +152,7 @@ evaluate_func (PNODE node,
 #endif
 	if (traceprogram) {
 		sprintf(trace, "%d: %s\n", iline(node), (char*)iname(node));
-		poutput(trace);
+		poutput(trace, eflg);
 	}
 	val = (*(PFUNC)ifunc(node))(node, stab, eflg);
 	return val;
@@ -170,39 +161,35 @@ evaluate_func (PNODE node,
  * evaluate_ufunc -- Evaluate user defined function
  *===============================================*/
 PVALUE
-evaluate_ufunc (PNODE node,
-                TABLE stab,
-                BOOLEAN *eflg)
+evaluate_ufunc (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	STRING nam = (STRING) iname(node);
 	PNODE func, arg, parm;
-	TABLE newtab;
-	PVALUE val;
+	SYMTAB newstab = null_symtab();
+	PVALUE val=NULL;
 	INTERPTYPE irc;
 
 	*eflg = TRUE;
 	if ((func = (PNODE) valueof(functab, nam)) == NULL) {
 		prog_error(node, "undefined function %s()", nam);
-		return NULL;
+		goto ufunc_leave;
 	}
-	newtab = create_table();
+	create_symtab(&newstab);
 	arg = (PNODE) iargs(node);
 	parm = (PNODE) iargs(func);
 	while (arg && parm) {
-		BOOLEAN eflg;
+		BOOLEAN eflg=TRUE;
 		PVALUE value = evaluate(arg, stab, &eflg);
 		if (eflg) return INTERROR;
-		insert_table(newtab, iident(parm), (VPTR) value);
+		insert_symtab_pvalue(newstab, iident(parm), value);
 		arg = inext(arg);
 		parm = inext(parm);
 	}
 	if (arg || parm) {
 		prog_error(node, "mismatched args and params");
-		remove_table(newtab, DONTFREE);
-		return INTERROR;
+		goto ufunc_leave;
 	}
-	irc = interpret((PNODE) ibody(func), newtab, &val);
-	remove_table(newtab, DONTFREE);
+	irc = interpret((PNODE) ibody(func), newstab, &val);
 	switch (irc) {
 	case INTRETURN:
 	case INTOKAY:
@@ -212,14 +199,19 @@ evaluate_ufunc (PNODE node,
 	llwprintf("\n");
 #endif
 		*eflg = FALSE;
-		return val;
+		goto ufunc_leave;
 	case INTBREAK:
 	case INTCONTINUE:
 	case INTERROR:
 		break;
 	}
 	*eflg = TRUE;
-	return NULL;
+	delete_pvalue(val);
+	val=NULL;
+
+ufunc_leave:
+	remove_symtab(&newstab);
+	return val;
 }
 /*=====================================
  * iistype -- Check type of interp node
@@ -247,43 +239,33 @@ num_params (PNODE node)
  * assign_iden -- Assign ident value in symtab
  *==========================================*/
 void
-assign_iden (TABLE stab,
-             STRING id,
-             PVALUE value)
+assign_iden (SYMTAB stab, STRING id, PVALUE value)
 {
-	TABLE tab = stab;
-#ifdef HOGMEMORY
-	if (!in_table(stab, id) && in_table(globtab, id)) tab = globtab;
-#else
-	BOOLEAN there;
-	PVALUE val;
-	val = (PVALUE) valueofbool(tab, id, &there);
-	if (!there) {
-	    val = (PVALUE) valueofbool(globtab, id, &there);
-	    if(there) tab = globtab;
-	}
-	if (there && val) {
-	    delete_pvalue(val);
-	}
-#endif
-	insert_table(tab, id, value);
+	SYMTAB tab = stab;
+	if (!in_symtab(stab, id) && in_symtab(globtab, id))
+		tab = globtab;
+	insert_symtab_pvalue(tab, id, value);
 	return;
 }
 /*=================================================
  * eval_and_coerce -- Generic evaluator and coercer
  * INT type:      desired pvalue type
  * PNODE node:    node to coerce
- * TABLE stab:    symbol table
+ * SYMTAB stab:   symbol table
  * BOOLEAN *eflg: error flag
  *===============================================*/
 PVALUE
-eval_and_coerce (INT type, PNODE node, TABLE stab, BOOLEAN *eflg)
+eval_and_coerce (INT type, PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PVALUE val;
 	if (*eflg) return NULL;
 	val = evaluate(node, stab, eflg);
 	if (*eflg || !val) {
 		*eflg = TRUE;
+		if (val) {
+			delete_pvalue(val);
+			val=NULL;
+		}
 		return NULL;
 	}
 	coerce_pvalue(type, val, eflg);

@@ -54,7 +54,7 @@ choose_child (NODE indi,
 		return NULL;
 	}
 	node = nztop(choose_from_indiseq(seq, ask1, msgn, msgn));
-	remove_indiseq(seq, FALSE);
+	remove_indiseq(seq);
 	return node;
 }
 /*========================================
@@ -74,7 +74,7 @@ choose_spouse (NODE indi,
 		return NULL;
 	}
 	node = nztop(choose_from_indiseq(seq, NOASK1, NULL, msgn));
-	remove_indiseq(seq, FALSE);
+	remove_indiseq(seq);
 	return node;
 }
 /*========================================
@@ -93,7 +93,7 @@ choose_source (NODE what, STRING msg0, STRING msgn)
 		return NULL;
 	}
 	node = nztop(choose_from_indiseq(seq, DOASK1, msgn, msgn));
-	remove_indiseq(seq, FALSE);
+	remove_indiseq(seq);
 	return node;
 }
 /*========================================
@@ -113,7 +113,7 @@ choose_note (NODE what, STRING msg0, STRING msgn)
 		return NULL;
 	}
 	node = nztop(choose_from_indiseq(seq, DOASK1, msgn, msgn));
-	remove_indiseq(seq, FALSE);
+	remove_indiseq(seq);
 	return node;
 }
 /*========================================
@@ -133,7 +133,7 @@ choose_pointer (NODE what, STRING msg0, STRING msgn)
 		return NULL;
 	}
 	node = nztop(choose_from_indiseq(seq, DOASK1, msgn, msgn));
-	remove_indiseq(seq, FALSE);
+	remove_indiseq(seq);
 	return node;
 }
 /*==========================================================
@@ -154,7 +154,7 @@ choose_family (NODE indi,
 		return NULL;
 	}
 	node = nztop(choose_from_indiseq(seq, NOASK1, NULL, msgn));
-	remove_indiseq(seq, FALSE);
+	remove_indiseq(seq);
 	return node;
 }
 /*===================================================
@@ -176,7 +176,7 @@ choose_father (NODE indi,
 		return NULL;
 	}
 	node = nztop(choose_from_indiseq(seq, ask1, msgn, msgn));
-	remove_indiseq(seq, FALSE);
+	remove_indiseq(seq);
 	return node;
 }
 /*===================================================
@@ -198,6 +198,6 @@ choose_mother (NODE indi,
 		return NULL;
 	}
 	node = nztop(choose_from_indiseq(seq, ask1, msgn, msgn));
-	remove_indiseq(seq, FALSE);
+	remove_indiseq(seq);
 	return node;
 }

@@ -102,8 +102,8 @@ choose_and_delete_family (void)
 		}
 	}
 	
-	remove_indiseq(spseq, FALSE);
-	remove_indiseq(chseq, FALSE);
+	remove_indiseq(spseq);
+	remove_indiseq(chseq);
 }
 /*================================================================
  * delete_indi -- Delete person and links; if this leaves families

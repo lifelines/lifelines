@@ -126,6 +126,7 @@ struct itag {
 #define PTABLE	14	/* table */
 #define PSET	15	/* set */
 #define PFREED 99 /* returned to free list */
+#define PUNINT 100 /* just allocated */
 
 typedef struct ptag *PVALUE;
 struct ptag {
@@ -133,7 +134,11 @@ struct ptag {
 	VPTR value;	/* value */
 };
 
-typedef PVALUE (*PFUNC)(PNODE, TABLE, BOOLEAN *);
+typedef struct symtab_s {
+	TABLE tab;
+} SYMTAB;
+
+typedef PVALUE (*PFUNC)(PNODE, SYMTAB, BOOLEAN *);
 
 #define ptype(p)	((p)->type)	/* type of expression */
 #define pvalue(p)	((p)->value)	/* value of expression */
@@ -141,11 +146,12 @@ typedef PVALUE (*PFUNC)(PNODE, TABLE, BOOLEAN *);
 #define pitype(i)	ptype(ivalue(i))
 #define pivalue(i)	pvalue(ivalue(i))
 
+
 typedef struct {
 	char *ft_name;
 	INT ft_nparms_min;
 	INT ft_nparms_max;
-	PVALUE (*ft_eval)(PNODE, TABLE, BOOLEAN *);
+	PVALUE (*ft_eval)(PNODE, SYMTAB, BOOLEAN *);
 } BUILTINS;
 
 extern BUILTINS builtins[];
@@ -153,7 +159,7 @@ extern INT nobuiltins;
 extern BOOLEAN prog_debug;
 
 extern TABLE functab;
-extern TABLE globtab;
+extern SYMTAB globtab;
 extern TABLE proctab;
 
 extern INT Plineno;
@@ -204,33 +210,40 @@ void le_pvalues(PVALUE, PVALUE, BOOLEAN*);
 void ne_pvalues(PVALUE, PVALUE, BOOLEAN*);
 void eq_pvalues(PVALUE, PVALUE, BOOLEAN*);
 
-/* PVALUE Functions */
+/* PVALUE & SYMTAB Functions */
 void coerce_pvalue(INT, PVALUE, BOOLEAN*);
 PVALUE copy_pvalue(PVALUE);
+void create_symtab(SYMTAB * stab);
 PVALUE create_pvalue(INT, VPTR);
 PVALUE create_pvalue_from_fam(NODE fam);
 PVALUE create_pvalue_from_fam_keynum(INT i);
 PVALUE create_pvalue_from_indi(NODE indi);
 PVALUE create_pvalue_from_indi_key(STRING key);
 PVALUE create_pvalue_from_indi_keynum(INT i);
+PVALUE create_pvalue_from_sour_keynum(INT i);
+PVALUE create_pvalue_from_even_keynum(INT i);
+PVALUE create_pvalue_from_othr_keynum(INT i);
 void delete_pvalue(PVALUE);
-void delete_pvtable(TABLE stab, STRING iden);
+void delete_symtab(SYMTAB stab, STRING iden);
 void eq_conform_pvalues(PVALUE, PVALUE, BOOLEAN*);
 BOOLEAN eqv_pvalues(PVALUE, PVALUE);
 CACHEEL get_cel_from_pvalue(PVALUE val);
-void insert_pvtable(TABLE, STRING, INT, VPTR);
-void insert_pvtable_pvalue(TABLE stab, STRING iden, PVALUE val);
+BOOLEAN in_symtab(SYMTAB stab, STRING key);
+void insert_symtab(SYMTAB, STRING, INT, VPTR);
+void insert_symtab_pvalue(SYMTAB stab, STRING iden, PVALUE val);
 BOOLEAN is_pvalue(PVALUE);
 BOOLEAN is_record_pvalue(PVALUE);
 BOOLEAN is_zero(PVALUE);
+SYMTAB null_symtab(void);
 void num_conform_pvalues(PVALUE, PVALUE, BOOLEAN*);
 BOOLEAN numeric_pvalue(PVALUE);
 void pvalues_begin(void);
 void pvalues_end(void);
+STRING pvalue_to_string(PVALUE);
+void remove_symtab(SYMTAB *);
 void set_pvalue(PVALUE, INT, VPTR);
 void show_pvalue(PVALUE);
-STRING pvalue_to_string(PVALUE);
-void remove_pvtable(TABLE);
+VPTR symtab_valueofbool(SYMTAB, STRING, BOOLEAN*);
 #ifndef HOGMEMORY
 void zero_pventry(ENTRY);
 #endif
@@ -244,29 +257,29 @@ void finishinterp(void);
 void finishrassa(void);
 void progmessage(char*);
 
-INTERPTYPE interpret(PNODE, TABLE, PVALUE*);
-INTERPTYPE interp_children (PNODE, TABLE, PVALUE*);
-INTERPTYPE interp_spouses (PNODE, TABLE, PVALUE*);
-INTERPTYPE interp_families (PNODE, TABLE, PVALUE*);
-INTERPTYPE interp_fathers (PNODE, TABLE, PVALUE*);
-INTERPTYPE interp_mothers (PNODE, TABLE, PVALUE*);
-INTERPTYPE interp_parents (PNODE, TABLE, PVALUE*);
-INTERPTYPE interp_fornotes (PNODE, TABLE, PVALUE*);
-INTERPTYPE interp_fornodes (PNODE, TABLE, PVALUE*);
-INTERPTYPE interp_forindi (PNODE, TABLE, PVALUE*);
-INTERPTYPE interp_forsour (PNODE, TABLE, PVALUE*);
-INTERPTYPE interp_foreven (PNODE, TABLE, PVALUE*);
-INTERPTYPE interp_forothr (PNODE, TABLE, PVALUE*);
-INTERPTYPE interp_forfam (PNODE, TABLE, PVALUE*);
-INTERPTYPE interp_indisetloop (PNODE, TABLE, PVALUE*);
-INTERPTYPE interp_forlist (PNODE, TABLE, PVALUE*);
-INTERPTYPE interp_if (PNODE, TABLE, PVALUE*);
-INTERPTYPE interp_while (PNODE, TABLE, PVALUE*);
-INTERPTYPE interp_call (PNODE, TABLE, PVALUE*);
-INTERPTYPE interp_traverse (PNODE, TABLE, PVALUE*);
+INTERPTYPE interpret(PNODE, SYMTAB, PVALUE*);
+INTERPTYPE interp_children(PNODE, SYMTAB, PVALUE*);
+INTERPTYPE interp_spouses(PNODE, SYMTAB, PVALUE*);
+INTERPTYPE interp_families(PNODE, SYMTAB, PVALUE*);
+INTERPTYPE interp_fathers(PNODE, SYMTAB, PVALUE*);
+INTERPTYPE interp_mothers(PNODE, SYMTAB, PVALUE*);
+INTERPTYPE interp_parents(PNODE, SYMTAB, PVALUE*);
+INTERPTYPE interp_fornotes(PNODE, SYMTAB, PVALUE*);
+INTERPTYPE interp_fornodes(PNODE, SYMTAB, PVALUE*);
+INTERPTYPE interp_forindi(PNODE, SYMTAB, PVALUE*);
+INTERPTYPE interp_forsour(PNODE, SYMTAB, PVALUE*);
+INTERPTYPE interp_foreven(PNODE, SYMTAB, PVALUE*);
+INTERPTYPE interp_forothr(PNODE, SYMTAB, PVALUE*);
+INTERPTYPE interp_forfam(PNODE, SYMTAB, PVALUE*);
+INTERPTYPE interp_indisetloop(PNODE, SYMTAB, PVALUE*);
+INTERPTYPE interp_forlist(PNODE, SYMTAB, PVALUE*);
+INTERPTYPE interp_if(PNODE, SYMTAB, PVALUE*);
+INTERPTYPE interp_while(PNODE, SYMTAB, PVALUE*);
+INTERPTYPE interp_call(PNODE, SYMTAB, PVALUE*);
+INTERPTYPE interp_traverse(PNODE, SYMTAB, PVALUE*);
 
 /* Prototypes */
-void assign_iden(TABLE, STRING, PVALUE);
+void assign_iden(SYMTAB, STRING, PVALUE);
 INT bool_to_int(BOOLEAN);
 FLOAT bool_to_float(BOOLEAN);
 PNODE break_node(void);
@@ -275,14 +288,14 @@ PNODE children_node(PNODE, STRING, STRING, PNODE);
 PNODE children_node(PNODE, STRING, STRING, PNODE);
 PNODE continue_node(void);
 PNODE create_pnode(INT);
-PVALUE evaluate(PNODE, TABLE, BOOLEAN*);
-BOOLEAN evaluate_cond(PNODE, TABLE, BOOLEAN*);
-PVALUE evaluate_func(PNODE, TABLE, BOOLEAN*);
-PVALUE evaluate_iden(PNODE, TABLE, BOOLEAN*);
-PVALUE evaluate_ufunc(PNODE, TABLE, BOOLEAN*);
-PVALUE eval_and_coerce(INT, PNODE, TABLE, BOOLEAN*);
-NODE eval_indi(PNODE, TABLE, BOOLEAN*, CACHEEL*);
-NODE eval_fam(PNODE, TABLE, BOOLEAN*, CACHEEL*);
+PVALUE evaluate(PNODE, SYMTAB, BOOLEAN*);
+BOOLEAN evaluate_cond(PNODE, SYMTAB, BOOLEAN*);
+PVALUE evaluate_func(PNODE, SYMTAB, BOOLEAN*);
+PVALUE evaluate_iden(PNODE, SYMTAB, BOOLEAN*);
+PVALUE evaluate_ufunc(PNODE, SYMTAB, BOOLEAN*);
+PVALUE eval_and_coerce(INT, PNODE, SYMTAB, BOOLEAN*);
+NODE eval_indi(PNODE, SYMTAB, BOOLEAN*, CACHEEL*);
+NODE eval_fam(PNODE, SYMTAB, BOOLEAN*, CACHEEL*);
 void extract_date(STRING, INT*, INT*, INT*, INT*, STRING*);
 PNODE families_node(PNODE, STRING, STRING, STRING, PNODE);
 PNODE fathers_node(PNODE, STRING, STRING, STRING, PNODE);
@@ -318,12 +331,12 @@ void show_pnodes(PNODE);
 PNODE spouses_node(PNODE, STRING, STRING, STRING, PNODE);
 PNODE string_node(STRING);
 PNODE traverse_node(PNODE, STRING, STRING, PNODE);
-PVALUE valueof_iden(TABLE, STRING);
+PVALUE valueof_iden(SYMTAB, STRING);
 PNODE while_node(PNODE, PNODE);
 int yylex(void);
 int yyparse(void);
 
-void poutput(STRING);
+void poutput(STRING, BOOLEAN *eflg);
 void interp_main(BOOLEAN picklist);
 
 #endif /* _INTERP_H */

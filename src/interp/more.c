@@ -58,9 +58,7 @@ BOOLEAN prog_debug = FALSE;
  *   usage: extractnames(NODE, LIST, VARB, VARB) -> VOID
  *============================================================*/
 PVALUE
-__extractnames (PNODE node,
-                TABLE stab,
-                BOOLEAN *eflg)
+__extractnames (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	LIST list, temp;
 	STRING str;
@@ -102,7 +100,7 @@ __extractnames (PNODE node,
 		prog_error(node, "1st arg to extractnames doesn't lead to a NAME line");
 		return NULL;
 	}
-	insert_pvtable(stab, iident(lvar), PINT, (VPTR)0);
+	insert_symtab(stab, iident(lvar), PINT, (VPTR)0);
 	*eflg = FALSE;
 	str = nval(line);
 	if (!str || *str == 0) return NULL;
@@ -111,8 +109,8 @@ __extractnames (PNODE node,
 	FORLIST(temp, el)
 		push_list(list, create_pvalue(PSTRING, (VPTR)el));
 	ENDLIST
-	insert_pvtable(stab, iident(lvar), PINT, (VPTR)len);
-	insert_pvtable(stab, iident(svar), PINT, (VPTR)sind);
+	insert_symtab(stab, iident(lvar), PINT, (VPTR)len);
+	insert_symtab(stab, iident(svar), PINT, (VPTR)sind);
 	return NULL;
 }
 /*==============================================================+
@@ -120,9 +118,7 @@ __extractnames (PNODE node,
  *   usage: extractplaces(NODE, LIST, VARB) -> VOID
  *=============================================================*/
 PVALUE
-__extractplaces (PNODE node,
-                 TABLE stab,
-                 BOOLEAN *eflg)
+__extractplaces (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	LIST list, temp;
 	STRING str;
@@ -156,7 +152,7 @@ __extractplaces (PNODE node,
 		prog_error(node, "3rd arg to extractplaces must be a variable");
 		return NULL;
 	}
-	insert_pvtable(stab, iident(lvar), PINT, (VPTR)0);
+	insert_symtab(stab, iident(lvar), PINT, (VPTR)0);
 	*eflg = FALSE;
 	if (!line) return NULL;
 	if (strcmp("PLAC", ntag(line)) && !(line = PLAC(line))) return NULL;
@@ -167,7 +163,7 @@ __extractplaces (PNODE node,
 	FORLIST(temp, el)
 		push_list(list, create_pvalue(PSTRING, (VPTR)el));
 	ENDLIST
-	insert_pvtable(stab, iident(lvar), PINT, (VPTR)len);
+	insert_symtab(stab, iident(lvar), PINT, (VPTR)len);
 	return NULL;
 }
 /*==========================================================+
@@ -175,9 +171,7 @@ __extractplaces (PNODE node,
  *   usage: extracttokens(STRING, LIST, VARB, STRING) -> VOID
  *=========================================================*/
 PVALUE
-__extracttokens (PNODE node,
-                 TABLE stab,
-                 BOOLEAN *eflg)
+__extracttokens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	LIST list, temp;
 	INT len;
@@ -216,13 +210,13 @@ __extracttokens (PNODE node,
 		return NULL;
 	}
 	*eflg = FALSE;
-	insert_pvtable(stab, iident(lvar), PINT, (VPTR)0);
+	insert_symtab(stab, iident(lvar), PINT, (VPTR)0);
 	temp = create_list();
 	value_to_list(str, temp, &len, dlm);
 	FORLIST(temp, el)
 		push_list(list, create_pvalue(PSTRING, (VPTR)el));
 	ENDLIST
-	insert_pvtable(stab, iident(lvar), PINT, (VPTR)len);
+	insert_symtab(stab, iident(lvar), PINT, (VPTR)len);
 	delete_pvalue(val1);
 	delete_pvalue(val2);
 	return NULL;
@@ -232,9 +226,7 @@ __extracttokens (PNODE node,
  *   usage: database([BOOL]) -> STRING
  *==================================*/
 PVALUE
-__database (PNODE node,
-            TABLE stab,
-            BOOLEAN *eflg)
+__database (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	extern STRING readpath;
 	BOOLEAN full = FALSE;
@@ -257,9 +249,7 @@ __database (PNODE node,
  *   usage: index(STRING, STRING, INT) -> INT
  *==========================================*/
 PVALUE
-__index (PNODE node,
-         TABLE stab,
-         BOOLEAN *eflg)
+__index (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INT num;
 	PNODE arg = (PNODE) iargs(node);
@@ -294,9 +284,7 @@ __index (PNODE node,
  *   usage: substring(STRING, INT, INT) -> STRING
  *=============================================*/
 PVALUE
-__substring (PNODE node,
-             TABLE stab,
-             BOOLEAN *eflg)
+__substring (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INT lo, hi;
 	PNODE arg = (PNODE) iargs(node);
@@ -331,7 +319,7 @@ __substring (PNODE node,
  *====================================================*/
 static char pi[MAXLINELEN];
 static INT
-ll_index (STRING str,
+ll_index (STRING str, 
           STRING sub,
           INT num)
 {
@@ -372,9 +360,7 @@ compute_pi (STRING sub)
  *  returns static buffer
  *============================*/
 static STRING
-substring (STRING s,
-           INT i,
-           INT j)
+substring (STRING s, INT i, INT j)
 {
 	static char scratch[MAXLINELEN+1];
 	if (!s || *s == 0 || i <= 0 || i > j || j > (INT)strlen(s)) return NULL;
@@ -387,9 +373,7 @@ substring (STRING s,
  *   usage: chooseindi(SET) -> INDI
  *=============================================*/
 PVALUE
-__chooseindi (PNODE node,
-              TABLE stab,
-              BOOLEAN * eflg)
+__chooseindi (PNODE node, SYMTAB stab, BOOLEAN * eflg)
 {
 	NODE indi;
 	INDISEQ seq;
@@ -410,9 +394,7 @@ __chooseindi (PNODE node,
  *   usage: choosesubset(SET) -> SET
  *===============================================*/
 PVALUE
-__choosesubset (PNODE node,
-                TABLE stab,
-                BOOLEAN * eflg)
+__choosesubset (PNODE node, SYMTAB stab, BOOLEAN * eflg)
 {
 	STRING msg;
 	INDISEQ newseq, seq;
@@ -434,9 +416,7 @@ __choosesubset (PNODE node,
  *   usage: choosechild(INDI|FAM) -> INDI
  *========================================================*/
 PVALUE
-__choosechild (PNODE node,
-               TABLE stab,
-               BOOLEAN *eflg)
+__choosechild (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INT type;
 	STRING key;
@@ -454,12 +434,12 @@ __choosechild (PNODE node,
 	if (!cel) return create_pvalue_from_indi(NULL);
 	key = ckey(cel);
 	if (*key == 'I') {
-		indi = key_to_indi(key);
+		indi = cnode(cel);
 		seq = indi_to_children(indi);
 		if (!seq || length_indiseq(seq) < 1)
 			return create_pvalue_from_indi(NULL);
 		indi = nztop(choose_from_indiseq(seq, DOASK1, ifone, notone));
-		remove_indiseq(seq, FALSE);
+		remove_indiseq(seq);
 		return create_pvalue_from_indi(indi); /* indi may be NULL */
 	} else if (*key == 'F') {
 		fam = key_to_fam(key);
@@ -467,7 +447,7 @@ __choosechild (PNODE node,
 		if (!seq || length_indiseq(seq) < 1)
 			return create_pvalue_from_indi(NULL);
 		indi = nztop(choose_from_indiseq(seq, DOASK1, ifone, notone));
-		remove_indiseq(seq, FALSE);
+		remove_indiseq(seq);
 		return create_pvalue_from_indi(indi); /* indi may be NULL */
 	}
 	*eflg = TRUE;
@@ -479,9 +459,7 @@ __choosechild (PNODE node,
  *   usage: choosespouse(INDI) -> INDI
  *================================================*/
 PVALUE
-__choosespouse (PNODE node,
-                TABLE stab,
-                BOOLEAN *eflg)
+__choosespouse (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	INDISEQ seq;
@@ -493,7 +471,7 @@ __choosespouse (PNODE node,
 	if (!seq || length_indiseq(seq) < 1)
 		return create_pvalue_from_indi(NULL);
 	indi = nztop(choose_from_indiseq(seq, DOASK1, ifone, notone));
-	remove_indiseq(seq, FALSE);
+	remove_indiseq(seq);
 	return create_pvalue_from_indi(indi); /* indi may be NULL */
 }
 /*==============================================+
@@ -501,9 +479,7 @@ __choosespouse (PNODE node,
  *   usage: choosefam (INDI) -> FAM
  *=============================================*/
 PVALUE
-__choosefam (PNODE node,
-             TABLE stab,
-             BOOLEAN *eflg)
+__choosefam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE fam, indi = eval_indi(iargs(node), stab, eflg, NULL);
 	INDISEQ seq;
@@ -515,7 +491,7 @@ __choosefam (PNODE node,
 	if (!seq || length_indiseq(seq) < 1)
 		return create_pvalue_from_fam(NULL);
 	fam = nztop(choose_from_indiseq(seq, DOASK1, ifone, notone));
-	remove_indiseq(seq, FALSE);
+	remove_indiseq(seq);
 	return create_pvalue_from_fam(fam); /* fam may be NULL */
 }
 /*===================================================+
@@ -523,9 +499,7 @@ __choosefam (PNODE node,
  *   usage: menuchoose (LIST [,STRING]) -> INT
  *==================================================*/
 PVALUE
-__menuchoose (PNODE node,
-              TABLE stab,
-              BOOLEAN *eflg)
+__menuchoose (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INT i, len;
 	STRING msg, *strngs;
@@ -571,9 +545,7 @@ __menuchoose (PNODE node,
  *   usage: system (STRING) -> VOID
  *===============================*/
 PVALUE
-__system (PNODE node,
-          TABLE stab,
-          BOOLEAN *eflg)
+__system (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	STRING cmd;
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
@@ -605,9 +577,7 @@ __system (PNODE node,
  *   usage: firstindi() -> INDI
  *===========================================*/
 PVALUE
-__firstindi (PNODE node,
-             TABLE stab,
-             BOOLEAN *eflg)
+__firstindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	*eflg = FALSE;
 	return create_pvalue_from_indi_keynum(xref_firsti());
@@ -617,9 +587,7 @@ __firstindi (PNODE node,
  *   usage: nextindi(INDI) -> INDI
  *=========================================*/
 PVALUE
-__nextindi (PNODE node,
-            TABLE stab,
-            BOOLEAN *eflg)
+__nextindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	static char key[10];
@@ -640,9 +608,7 @@ __nextindi (PNODE node,
  *   usage: previndi(INDI) -> INDI
  *=============================================*/
 PVALUE
-__previndi (PNODE node,
-            TABLE stab,
-            BOOLEAN *eflg)
+__previndi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	static char key[10];
@@ -663,9 +629,7 @@ __previndi (PNODE node,
  *   usage: lastindi() -> INDI
  *=========================================*/
 PVALUE
-__lastindi (PNODE node,
-            TABLE stab,
-            BOOLEAN *eflg)
+__lastindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	*eflg = FALSE;
 	return create_pvalue_from_indi_keynum(xref_lasti());
@@ -675,9 +639,7 @@ __lastindi (PNODE node,
  *   usage: firstfam() -> FAM
  *==========================================*/
 PVALUE
-__firstfam (PNODE node,
-            TABLE stab,
-            BOOLEAN *eflg)
+__firstfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	*eflg = FALSE;
 	return create_pvalue_from_fam_keynum(xref_firstf());
@@ -687,9 +649,7 @@ __firstfam (PNODE node,
  *   usage: nextfam(FAM) -> FAM
  *========================================*/
 PVALUE
-__nextfam (PNODE node,
-           TABLE stab,
-           BOOLEAN *eflg)
+__nextfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE fam = eval_fam(iargs(node), stab, eflg, NULL);
 	static char key[10];
@@ -710,9 +670,7 @@ __nextfam (PNODE node,
  *   usage: prevfam(FAM) -> FAM
  *============================================*/
 PVALUE
-__prevfam (PNODE node,
-           TABLE stab,
-           BOOLEAN *eflg)
+__prevfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE fam = eval_fam(iargs(node), stab, eflg, NULL);
 	static char key[10];
@@ -733,9 +691,7 @@ __prevfam (PNODE node,
  *   usage: lastfam() -> FAM
  *========================================*/
 PVALUE
-__lastfam (PNODE node,
-           TABLE stab,
-           BOOLEAN *eflg)
+__lastfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	*eflg = FALSE;
 	return create_pvalue_from_fam_keynum(xref_lastf());
@@ -747,9 +703,7 @@ __lastfam (PNODE node,
  *  NOTE: persons and families NOT cached!
  *============================================*/
 PVALUE
-__getrecord (PNODE node,
-             TABLE stab,
-             BOOLEAN *eflg)
+__getrecord (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	STRING key, rec;
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
@@ -781,9 +735,7 @@ __getrecord (PNODE node,
  *  usage: getrecord(STRING) -> NODE
  *=================================================*/
 PVALUE
-__freerecord (PNODE node,
-              TABLE stab,
-              BOOLEAN *eflg)
+__freerecord (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 #  error "Unimplemented function!"
 }
@@ -793,9 +745,7 @@ __freerecord (PNODE node,
  *  usage: reference(STRING) -> BOOLEAN
  *===============================================*/
 PVALUE
-__reference (PNODE node,
-             TABLE stab,
-             BOOLEAN *eflg)
+__reference (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	STRING key;
 	BOOLEAN rc;
@@ -815,9 +765,7 @@ __reference (PNODE node,
  *   usage: rjustify(STRING, INT) -> STRING
  *=======================================*/
 PVALUE
-__rjustify (PNODE node,
-            TABLE stab,
-            BOOLEAN *eflg)
+__rjustify (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE sarg = (PNODE) iargs(node);
 	PNODE larg = inext(sarg);
@@ -843,8 +791,7 @@ __rjustify (PNODE node,
  * rightjustify -- Right justify string value
  *=========================================*/
 static STRING
-rightjustify (STRING str,
-              INT len)
+rightjustify (STRING str, INT len)
 {
 	STRING new;
 	INT lstr, nsp, i, j;
@@ -866,9 +813,7 @@ rightjustify (STRING str,
  *   usage: lock(INDI|FAM) -> VOID
  *========================================*/
 PVALUE
-__lock (PNODE node,
-        TABLE stab,
-        BOOLEAN *eflg)
+__lock (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INT type;
 	CACHEEL cel;
@@ -881,6 +826,7 @@ __lock (PNODE node,
 	cel = get_cel_from_pvalue(val);
 	delete_pvalue(val);
 	if (cel) lock_cache(cel);
+/* TO DO - ought to ensure this gets freed */
 	return NULL;
 }
 /*===============================================+
@@ -888,9 +834,7 @@ __lock (PNODE node,
  *   usage: unlock(INDI|FAM) -> VOID
  *==============================================*/
 PVALUE
-__unlock (PNODE node,
-          TABLE stab,
-          BOOLEAN *eflg)
+__unlock (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INT type;
 	CACHEEL cel;
@@ -910,9 +854,7 @@ __unlock (PNODE node,
  *   usage: savenode(NODE) -> NODE
  *=========================================*/
 PVALUE
-__savenode (PNODE node,
-            TABLE stab,
-            BOOLEAN *eflg)
+__savenode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE line;
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
@@ -930,9 +872,7 @@ __savenode (PNODE node,
  *   usage: genindiset(STRING, SET) -> VOID
  *==================================================*/
 PVALUE
-__genindiset (PNODE node,
-              TABLE stab,
-              BOOLEAN *eflg)
+__genindiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	STRING name;
@@ -962,9 +902,7 @@ __genindiset (PNODE node,
  *   usage: version() -> STRING
  *===============================================*/
 PVALUE
-__version (PNODE node,
-           TABLE stab,
-           BOOLEAN *eflg)
+__version (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	*eflg = FALSE;
 	return create_pvalue(PSTRING, (VPTR)get_lifelines_version(120));
@@ -974,9 +912,7 @@ __version (PNODE node,
  *   usage: pvalue(ANY) -> STRING
  *=======================================*/
 PVALUE
-__pvalue (PNODE node,
-          TABLE stab,
-          BOOLEAN *eflg)
+__pvalue (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PVALUE val = evaluate(iargs(node), stab, eflg);
 #ifdef DEBUG
@@ -996,9 +932,7 @@ __pvalue (PNODE node,
  *   usage: program() -> STRING
  *===========================================*/
 PVALUE
-__program (PNODE node,
-           TABLE stab,
-           BOOLEAN *eflg)
+__program (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	return create_pvalue(PSTRING, (VPTR)progname);
 }
@@ -1007,9 +941,7 @@ __program (PNODE node,
  *   usage: debug(BOOLEAN) -> VOID
  *===========================================*/
 PVALUE
-__debug (PNODE node,
-         TABLE stab,
-         BOOLEAN *eflg)
+__debug (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PVALUE val = eval_and_coerce(PBOOL, iargs(node), stab, eflg);
 	prog_debug = (BOOLEAN) pvalue(val);
@@ -1020,9 +952,7 @@ __debug (PNODE node,
  *   usage: getproperty(STRING) -> STRING
  *======================================*/
 PVALUE
-__getproperty(PNODE node,
-              TABLE stab,
-              BOOLEAN *eflg)
+__getproperty(PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
 	if (*eflg || !val || ptype(val) != PSTRING) {

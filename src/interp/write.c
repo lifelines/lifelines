@@ -48,9 +48,7 @@
  *   createnode(STRING, STRING) -> NODE
  *===================================*/
 PVALUE
-__createnode (PNODE node,
-              TABLE stab,
-              BOOLEAN *eflg)
+__createnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	STRING val, tag = (STRING) evaluate(iargs(node), stab, eflg);
 	if (*eflg) return NULL;
@@ -63,9 +61,7 @@ __createnode (PNODE node,
  *   addnode(NODE, NODE, NODE) -> VOID
  *=====================================*/
 PVALUE
-__addnode (PNODE node,
-           TABLE stab,
-           BOOLEAN *eflg)
+__addnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	NODE next, prnt, prev;
@@ -93,9 +89,7 @@ __addnode (PNODE node,
  *   NOTE: MEMORY LEAK MEMORY LEAK MEMORY LEAK
  *==========================================*/
 PVALUE
-__deletenode (PNODE node,
-              TABLE stab,
-              BOOLEAN *eflg)
+__deletenode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE prnt, prev, curs, next;
 	NODE this = (NODE) evaluate(iargs(node), stab, eflg);
@@ -120,9 +114,7 @@ __deletenode (PNODE node,
  *   writeindi(INDI) -> VOID
  *====================================*/
 PVALUE
-__writeindi (PNODE node,
-             TABLE stab,
-             BOOLEAN *eflg)
+__writeindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE indi1;
 	NODE indi2 = eval_indi(iargs(node), stab, eflg, NULL);
@@ -147,9 +139,7 @@ __writeindi (PNODE node,
  *   writefam(FAM) -> VOID
  *===================================*/
 PVALUE
-__writefam (PNODE node,
-            TABLE stab,
-            BOOLEAN *eflg)
+__writefam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE fam1;
 	NODE fam2 = eval_fam(iargs(node), stab, eflg, NULL);

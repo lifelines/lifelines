@@ -44,6 +44,14 @@
 #include "lloptions.h"
 
 /*********************************************
+ * global/exported variables
+ *********************************************/
+
+STRING Pfname = NULL;	/* file to read program from */
+TABLE filetab=0, proctab=0, functab=0;
+SYMTAB globtab; /* assume all zero is null SYMTAB */
+
+/*********************************************
  * external/imported variables
  *********************************************/
 
@@ -61,7 +69,6 @@ static void printkey(STRING key, char type, INT keynum);
  * local variables
  *********************************************/
 
-STRING Pfname = NULL;	/* file to read program from */
 STRING progname = NULL;	/* starting program name */
 FILE *Pinfp  = NULL;	/* file to read program from */
 FILE *Poutfp = NULL;	/* file to write program output to */
@@ -72,7 +79,6 @@ INT Perrors = 0;
 LIST Plist;		/* list of program files still to read */
 PNODE Pnode = NULL;	/* node being interpreted */
 
-TABLE filetab, proctab, globtab, functab;
 STRING ierror = (STRING) "Error: file \"%s\": line %d: ";
 static STRING qrptname = (STRING) "What is the name of the program?";
 
@@ -145,7 +151,7 @@ interp_program (STRING proc,    /* proc to call */
 {
 	FILE *fp;
 	LIST plist;
-	TABLE stab;
+	SYMTAB stab = null_symtab();
 	PVALUE dummy;
 	INT i;
 	STRING ifile;
@@ -183,7 +189,7 @@ interp_program (STRING proc,    /* proc to call */
 
 	filetab = create_table();
 	proctab = create_table();
-	globtab = create_table();
+	create_symtab(&globtab);
 	functab = create_table();
 	initinterp();
 	while (!empty_list(plist)) {
@@ -207,7 +213,6 @@ interp_program (STRING proc,    /* proc to call */
 
 	if (!(first = (PNODE) valueof(proctab, proc))) {
 		progmessage("needs a starting procedure.");
-		remove_tables();
 		goto interp_program_exit;
 	}
 
@@ -215,7 +220,6 @@ interp_program (STRING proc,    /* proc to call */
 
 	if (ofile && !(Poutfp = fopen(ofile, LLWRITETEXT))) {
 		mprintf_error("Error: file \"%s\" could not be created.\n", ofile);
-		remove_tables();
 		goto interp_program_exit;
 	}
 	if (Poutfp) setbuf(Poutfp, NULL);
@@ -226,12 +230,11 @@ interp_program (STRING proc,    /* proc to call */
 	if (nargs != num_params(parm)) {
 		mprintf_error("Proc %s must be called with %d (not %d) parameters.",
 			proc, num_params(parm), nargs);
-		remove_tables();
 		goto interp_program_exit;
 	}
-	stab = create_table();
+	create_symtab(&stab);
 	for (i = 0; i < nargs; i++) {
-		insert_table(stab, iident(parm), args[0]);
+		insert_symtab_pvalue(stab, iident(parm), args[0]);
 		parm = inext(parm);
 	}
 
@@ -253,13 +256,13 @@ interp_program (STRING proc,    /* proc to call */
    /* Clean up and return */
 
 	progrunning = FALSE;
-	remove_tables();
-	remove_table(stab, DONTFREE);
 	finishinterp();
 	if (Poutfp) fclose(Poutfp);
 	Pinfp = Poutfp = NULL;
 
 interp_program_exit:
+	remove_tables();
+	remove_symtab(&stab);
 	pvalues_end();
 	return;
 }
@@ -270,19 +273,10 @@ static void
 remove_tables (void)
 {
 	remove_table(filetab, FREEKEY);
-	/* node block cleaner will free pnodes in proctab */
+	/* proctab has PNODESs that yacc.y put in there */
 	remove_table(proctab, DONTFREE);
-	/*
-	TO DO:
-	lex strsave'd globals, so they need to be freed! 
-	*/
-	remove_table(globtab, DONTFREE);
-	/*
-	TO DO:
-	I think local variable IDENs are leaking strings
-	They might be in functab ?
-	2001/01/21, Perry Rapp
-	*/
+	remove_symtab(&globtab);
+	/* functab has PNODESs that yacc.y put in there */
 	remove_table(functab, DONTFREE);
 }
 /*======================================+
@@ -319,11 +313,12 @@ interp_main (BOOLEAN picklist)
 }
 /*======================================
  * interpret -- Interpret statement list
+ * PNODE node:   first node to interpret
+ * TABLE stab:   current symbol table
+ * PVALUE *pval: possible return value
  *====================================*/
 INTERPTYPE
-interpret (PNODE node,          /* first node to interpret */
-           TABLE stab,          /* current symbol table */
-           PVALUE *pval)        /* possible return value */
+interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 {
 	STRING str;
 	BOOLEAN eflg = FALSE;
@@ -341,7 +336,9 @@ if (prog_debug) {
 }
 		switch (itype(node)) {
 		case ISCONS:
-			poutput(pvalue(ivalue(node)));
+			poutput(pvalue(ivalue(node)), &eflg);
+			if (eflg)
+				return INTERROR;
 			break;
 		case IIDENT:
 			val = eval_and_coerce(PSTRING, node, stab, &eflg);
@@ -352,7 +349,12 @@ if (prog_debug) {
 				return INTERROR;
 			}
 			str = (STRING) pvalue(val);
-			if (str) poutput(str);
+			if (str) {
+				poutput(str, &eflg);
+				if (eflg) {
+					return INTERROR;
+				}
+			}
 			delete_pvalue(val);
 			break;
 		case IBCALL:
@@ -369,8 +371,11 @@ if (prog_debug) {
 			}
 #endif
 			if (!val) break;
-			if (ptype(val) == PSTRING && pvalue(val))
-				poutput(pvalue(val));
+			if (ptype(val) == PSTRING && pvalue(val)) {
+				poutput(pvalue(val), &eflg);
+				if (eflg)
+					return INTERROR;
+			}
 			delete_pvalue(val);
 			break;
 		case IFCALL:
@@ -384,8 +389,11 @@ if (prog_debug) {
 			}
 #endif
 			if (!val) break;
-			if (ptype(val) == PSTRING && pvalue(val))
-				poutput(pvalue(val));
+			if (ptype(val) == PSTRING && pvalue(val)) {
+				poutput(pvalue(val), &eflg);
+				if (eflg)
+					return INTERROR;
+			}
 			delete_pvalue(val);
 			break;
 		case IPDEFN:
@@ -572,20 +580,20 @@ if (prog_debug) {
 				return irc;
 			}
 			break;
-                case INOTES:
-                        switch (irc = interp_fornotes(node, stab, pval)) {
-                        case INTOKAY:
-                                break;
-                        case INTERROR:
+		case INOTES:
+			switch (irc = interp_fornotes(node, stab, pval)) {
+			case INTOKAY:
+				break;
+			case INTERROR:
 #if 0
-                                llwprintf(ierror, ifname(node), iline(node));
-                                llwprintf("in fornotes loop\n");
+				llwprintf(ierror, ifname(node), iline(node));
+				llwprintf("in fornotes loop\n");
 #endif
-                                return INTERROR;
-                        default:
-                                return irc;
-                        }
-                        break;
+				return INTERROR;
+			default:
+				return irc;
+			}
+			break;
 		case INODES:
 			switch (irc = interp_fornodes(node, stab, pval)) {
 			case INTOKAY:
@@ -683,9 +691,7 @@ if (prog_debug) {
  *  usage: children(INDI,INDI_V,INT_V) {...}
  *=======================================*/
 INTERPTYPE
-interp_children (PNODE node,
-                 TABLE stab,
-                 PVALUE *pval)
+interp_children (PNODE node, SYMTAB stab, PVALUE *pval)
 {
 	BOOLEAN eflg = FALSE;
 	INT nchil;
@@ -705,8 +711,8 @@ interp_children (PNODE node,
 	lock_cache(fcel);
 	FORCHILDREN(fam, chil, nchil)
 		val = create_pvalue_from_indi(chil);
-		insert_pvtable_pvalue(stab, ichild(node), val);
-		insert_pvtable(stab, inum(node), PINT, (VPTR)nchil);
+		insert_symtab_pvalue(stab, ichild(node), val);
+		insert_symtab(stab, inum(node), PINT, (VPTR)nchil);
 		cel = get_cel_from_pvalue(val);
 		lock_cache(cel);
 		irc = interpret((PNODE) ibody(node), stab, pval);
@@ -725,8 +731,8 @@ aloop:	;
 	ENDCHILDREN
 	irc = INTOKAY;
 aleave:
-	delete_pvtable(stab, ichild(node));
-	delete_pvtable(stab, inum(node));
+	delete_symtab(stab, ichild(node));
+	delete_symtab(stab, inum(node));
 	unlock_cache(fcel);
 	return irc;
 }
@@ -735,9 +741,7 @@ aleave:
  *  usage: spouses(INDI,INDI_V,FAM_V,INT_V) {...}
  *=============================================*/
 INTERPTYPE
-interp_spouses (PNODE node,
-                TABLE stab,
-                PVALUE *pval)
+interp_spouses (PNODE node, SYMTAB stab, PVALUE *pval)
 {
 	BOOLEAN eflg = FALSE;
 	INT nspouses;
@@ -757,14 +761,14 @@ interp_spouses (PNODE node,
 	lock_cache(icel);
 	FORSPOUSES(indi, spouse, fam, nspouses)
 		sval = create_pvalue_from_indi(spouse);
-		insert_pvtable_pvalue(stab, ispouse(node), sval);
+		insert_symtab_pvalue(stab, ispouse(node), sval);
 		fval = create_pvalue_from_fam(fam);
-		insert_pvtable_pvalue(stab, ifamily(node), fval);
+		insert_symtab_pvalue(stab, ifamily(node), fval);
 		scel = get_cel_from_pvalue(sval);
 		fcel = get_cel_from_pvalue(fval);
 		lock_cache(scel);
 		lock_cache(fcel);
-		insert_pvtable(stab, inum(node), PINT, (VPTR)nspouses);
+		insert_symtab(stab, inum(node), PINT, (VPTR)nspouses);
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		unlock_cache(scel);
 		unlock_cache(fcel);
@@ -775,7 +779,6 @@ interp_spouses (PNODE node,
 		case INTBREAK:
 			irc = INTOKAY;
 			goto bleave;
-			return INTOKAY;
 		default:
 			goto bleave;
 		}
@@ -783,25 +786,27 @@ bloop:	;
 	ENDSPOUSES
 	irc = INTOKAY;
 bleave:
-	delete_pvtable(stab, ispouse(node));
-	delete_pvtable(stab, ifamily(node));
-	delete_pvtable(stab, inum(node));
+	delete_symtab(stab, ispouse(node));
+	delete_symtab(stab, ifamily(node));
+	delete_symtab(stab, inum(node));
 	unlock_cache(icel);
 	return irc;
 }
 /*===============================================+
  * interp_families -- Interpret family loop
  *  usage: families(INDI,FAM_V,INDI_V,INT_V) {...}
+ * 2001/03/17 Revised by Perry Rapp
+ *  to call insert_symtab_pvalue, get_cel_from_pvalue
+ *  to delete its loop pvalues when finished
  *==============================================*/
 INTERPTYPE
-interp_families (PNODE node,
-                 TABLE stab,
-                 PVALUE *pval)
+interp_families (PNODE node, SYMTAB stab, PVALUE *pval)
 {
 	BOOLEAN eflg = FALSE;
 	INT nfams;
 	CACHEEL icel, fcel, scel;
 	INTERPTYPE irc;
+	PVALUE fval, sval;
 	NODE indi = (NODE) eval_indi(iloopexp(node), stab, &eflg, &icel);
 	if (eflg) {
 		prog_error(node, "1st arg to families must be a person");
@@ -814,11 +819,13 @@ interp_families (PNODE node,
 	if (!indi) return INTOKAY;
 	lock_cache(icel);
 	FORFAMSS(indi, fam, spouse, nfams)
-		insert_pvtable(stab, ifamily(node), PFAM,
-		    (fcel = fam_to_cacheel(fam)));
-		insert_pvtable(stab, ispouse(node), PINDI,
-		     (scel = indi_to_cacheel(spouse)));
-		insert_pvtable(stab, inum(node), PINT, (VPTR)nfams);
+		fval = create_pvalue_from_fam(fam);
+		insert_symtab_pvalue(stab, ifamily(node), fval);
+		sval = create_pvalue_from_indi(spouse);
+		insert_symtab_pvalue(stab, ispouse(node), sval);
+		insert_symtab(stab, inum(node), PINT, (VPTR)nfams);
+		fcel = get_cel_from_pvalue(fval);
+		scel = get_cel_from_pvalue(sval);
 		lock_cache(fcel);
 		if (scel) lock_cache(scel);
 		irc = interpret((PNODE) ibody(node), stab, pval);
@@ -828,8 +835,6 @@ interp_families (PNODE node,
 		case INTCONTINUE:
 		case INTOKAY:
 			goto cloop;
-			irc = INTOKAY;
-			goto cleave;
 		default:
 			goto cleave;
 		}
@@ -837,30 +842,27 @@ cloop:	;
 	ENDFAMSS
 	irc = INTOKAY;
 cleave:
-	delete_pvtable(stab, ifamily(node));
-	delete_pvtable(stab, ispouse(node));
-	delete_pvtable(stab, inum(node));
-	/*
-	TO DO 2001/03/17, Perry
-	Should make these same clean-up symtab changes
-	to all remaining loops
-	*/
+	delete_symtab(stab, ifamily(node));
+	delete_symtab(stab, ispouse(node));
+	delete_symtab(stab, inum(node));
 	unlock_cache(icel);
-	return INTOKAY;
+	return irc;
 }
 /*========================================+
  * interp_fathers -- Interpret fathers loop
+ * 2001/03/17 Revised by Perry Rapp
+ *  to call insert_symtab_pvalue, get_cel_from_pvalue
+ *  to delete its loop pvalues when finished
  *=======================================*/
 INTERPTYPE
-interp_fathers (PNODE node,
-                TABLE stab,
-                PVALUE *pval)
+interp_fathers (PNODE node, SYMTAB stab, PVALUE *pval)
 {
 	BOOLEAN eflg = FALSE;
 	INT nfams;
 	INT ncount = 1;
 	CACHEEL icel, fcel, scel;
 	INTERPTYPE irc;
+	PVALUE sval, fval;
 	NODE indi = (NODE) eval_indi(iloopexp(node), stab, &eflg, &icel);
 	if (eflg) {
 		prog_error(node, "1st arg to fathers must be a person");
@@ -872,14 +874,16 @@ interp_fathers (PNODE node,
 	}
 	if (!indi) return TRUE;
 	lock_cache(icel);
-	insert_pvtable(stab, inum(node), PINT, (VPTR) 0);
+	insert_symtab(stab, inum(node), PINT, (VPTR) 0);
 	FORFAMCS(indi, fam, husb, wife, nfams)
-		scel = indi_to_cacheel(husb);
-		if (!scel) goto d;
-		insert_pvtable(stab, ifamily(node), PFAM,
-		    (VPTR) (fcel = fam_to_cacheel(fam)));
-		insert_pvtable(stab, iiparent(node), PINDI, (VPTR) scel);
-		insert_pvtable(stab, inum(node), PINT, (VPTR) ncount++);
+		sval = create_pvalue_from_indi(husb);
+		scel = get_cel_from_pvalue(sval);
+		if (!scel) goto dloop;
+		fval = create_pvalue_from_fam(fam);
+		fcel = get_cel_from_pvalue(fval);
+		insert_symtab_pvalue(stab, ifamily(node), fval);
+		insert_symtab(stab, iiparent(node), PINDI, (VPTR) scel);
+		insert_symtab(stab, inum(node), PINT, (VPTR) ncount++);
 		lock_cache(fcel);
 		lock_cache(scel);
 		irc = interpret((PNODE) ibody(node), stab, pval);
@@ -888,32 +892,40 @@ interp_fathers (PNODE node,
 		switch (irc) {
 		case INTCONTINUE:
 		case INTOKAY:
-			goto d;
+			irc = INTOKAY;
+			goto dloop;
 		case INTBREAK:
 			unlock_cache(icel);
-			return INTOKAY;
+			irc = INTOKAY;
+			goto dleave;
 		default:
-			unlock_cache(icel);
-			return irc;
+			goto dleave;
 		}
-d:	;
+dloop:	;
 	ENDFAMCS
+	irc = INTOKAY;
+dleave:
+	delete_symtab(stab, ifamily(node));
+	delete_symtab(stab, iiparent(node));
+	delete_symtab(stab, inum(node));
 	unlock_cache(icel);
-	return INTOKAY;
+	return irc;
 }
 /*========================================+
  * interp_mothers -- Interpret mothers loop
+ * 2001/03/18 Revised by Perry Rapp
+ *  to call insert_symtab_pvalue, get_cel_from_pvalue
+ *  to delete its loop pvalues when finished
  *=======================================*/
 INTERPTYPE
-interp_mothers (PNODE node,
-                TABLE stab,
-                PVALUE *pval)
+interp_mothers (PNODE node, SYMTAB stab, PVALUE *pval)
 {
 	BOOLEAN eflg = FALSE;
 	INT nfams;
 	INT ncount = 1;
 	CACHEEL icel, fcel, scel;
 	INTERPTYPE irc;
+	PVALUE sval, fval;
 	NODE indi = (NODE) eval_indi(iloopexp(node), stab, &eflg, &icel);
 	if (eflg) {
 		prog_error(node, "1st arg to mothers must be a person");
@@ -926,14 +938,16 @@ interp_mothers (PNODE node,
 	if (eflg || (indi && nestr(ntag(indi), "INDI"))) return INTERROR;
 	if (!indi) return TRUE;
 	lock_cache(icel);
-	insert_pvtable(stab, inum(node), PINT, (VPTR) 0);
+	insert_symtab(stab, inum(node), PINT, (VPTR) 0);
 	FORFAMCS(indi, fam, husb, wife, nfams)
-		scel = indi_to_cacheel(wife);
-		if (!scel) goto e;
-		insert_pvtable(stab, ifamily(node), PFAM,
-		    (VPTR) (fcel = fam_to_cacheel(fam)));
-		insert_pvtable(stab, iiparent(node), PINDI, scel);
-		insert_pvtable(stab, inum(node), PINT, (VPTR) ncount++);
+		sval = create_pvalue_from_indi(wife);
+		scel = get_cel_from_pvalue(sval);
+		if (!scel) goto eloop;
+		fval = create_pvalue_from_fam(fam);
+		fcel = get_cel_from_pvalue(fval);
+		insert_symtab_pvalue(stab, ifamily(node), fval);
+		insert_symtab(stab, iiparent(node), PINDI, scel);
+		insert_symtab(stab, inum(node), PINT, (VPTR) ncount++);
 		lock_cache(fcel);
 		lock_cache(scel);
 		irc = interpret((PNODE) ibody(node), stab, pval);
@@ -942,31 +956,37 @@ interp_mothers (PNODE node,
 		switch (irc) {
 		case INTCONTINUE:
 		case INTOKAY:
-			goto e;
+			goto eloop;
 		case INTBREAK:
 			unlock_cache(icel);
-			return INTOKAY;
+			irc = INTOKAY;
+			goto eleave;
 		default:
-			unlock_cache(icel);
-			return irc;
+			goto eleave;
 		}
-e:	;
+eloop:	;
 	ENDFAMCS
+eleave:
+	delete_symtab(stab, ifamily(node));
+	delete_symtab(stab, iiparent(node));
+	delete_symtab(stab, inum(node));
 	unlock_cache(icel);
-	return INTOKAY;
+	return irc;
 }
 /*========================================+
  * interp_parents -- Interpret parents loop
+ * 2001/03/18 Revised by Perry Rapp
+ *  to call insert_symtab_pvalue, get_cel_from_pvalue
+ *  to delete its loop pvalues when finished
  *=======================================*/
 INTERPTYPE
-interp_parents (PNODE node,
-                TABLE stab,
-                PVALUE *pval)
+interp_parents (PNODE node, SYMTAB stab, PVALUE *pval)
 {
 	BOOLEAN eflg = FALSE;
 	INT nfams;
 	CACHEEL icel, fcel;
 	INTERPTYPE irc;
+	PVALUE fval;
 	NODE indi = (NODE) eval_indi(iloopexp(node), stab, &eflg, &icel);
 	if (eflg) {
 		prog_error(node, "1st arg to parents must be a person");
@@ -979,25 +999,29 @@ interp_parents (PNODE node,
 	if (!indi) return TRUE;
 	lock_cache(icel);
 	FORFAMCS(indi, fam, husb, wife, nfams)
-		insert_pvtable(stab, ifamily(node), PFAM,
-		    (VPTR) (fcel = fam_to_cacheel(fam)));
-		insert_pvtable(stab, inum(node), PINT, (VPTR) nfams);
+		fval = create_pvalue_from_fam(fam);
+		insert_symtab_pvalue(stab, ifamily(node), fval);
+		insert_symtab(stab, inum(node), PINT, (VPTR) nfams);
+		fcel = get_cel_from_pvalue(fval);
 		lock_cache(fcel);
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		unlock_cache(fcel);
 		switch (irc) {
 		case INTCONTINUE:
 		case INTOKAY:
-			goto f;
+			goto floop;
 		case INTBREAK:
-			unlock_cache(icel);
-			return INTOKAY;
+			irc = INTOKAY;
+			goto fleave;
 		default:
-			unlock_cache(icel);
-			return irc;
+			goto fleave;
 		}
-f:	;
+floop:	;
 	ENDFAMCS
+	irc = INTOKAY;
+fleave:
+	delete_symtab(stab, ifamily(node));
+	delete_symtab(stab, inum(node));
 	unlock_cache(icel);
 	return INTOKAY;
 }
@@ -1005,13 +1029,11 @@ f:	;
  * interp_fornotes -- Interpret NOTE loop
  *=====================================*/
 INTERPTYPE
-interp_fornotes (PNODE node,
-                 TABLE stab,
-                 PVALUE *pval)
+interp_fornotes (PNODE node, SYMTAB stab, PVALUE *pval)
 {
-        BOOLEAN eflg = FALSE;
-        INTERPTYPE irc;
-        NODE root;
+	BOOLEAN eflg = FALSE;
+	INTERPTYPE irc;
+	NODE root;
 	PVALUE val = eval_and_coerce(PGNODE, iloopexp(node), stab, &eflg);
 	if (eflg) {
 		prog_error(node, "1st arg to fornotes must be a record line");
@@ -1021,34 +1043,38 @@ interp_fornotes (PNODE node,
 	delete_pvalue(val);
 	if (!root) return INTOKAY;
 /*HERE*/
-        FORTAGVALUES(root, "NOTE", sub, vstring)
-                insert_pvtable(stab, ielement(node), PSTRING, vstring);
-                irc = interpret((PNODE) ibody(node), stab, pval);
-                switch (irc) {
-                case INTCONTINUE:
-                case INTOKAY:
-                        goto g;
-                case INTBREAK:
-                        return INTOKAY;
-                default:
-                        return irc;
-                }
-g:      ;
-        ENDTAGVALUES
-        return INTOKAY;
+	FORTAGVALUES(root, "NOTE", sub, vstring)
+		insert_symtab(stab, ielement(node), PSTRING, vstring);
+		irc = interpret((PNODE) ibody(node), stab, pval);
+		switch (irc) {
+		case INTCONTINUE:
+		case INTOKAY:
+			goto gloop;
+		case INTBREAK:
+			irc = INTOKAY;
+			goto gleave;
+		default:
+			goto gleave;
+		}
+gloop:      ;
+	ENDTAGVALUES
+	irc = INTOKAY;
+gleave:
+	delete_symtab(stab, ielement(node));
+	return irc;
 }
 /*==========================================+
  * interp_fornodes -- Interpret fornodes loop
  *  usage: fornodes(NODE,NODE_V) {...}
+ * 2001/03/19 Revised by Perry Rapp
+ *  to delete its loop pvalue when finished
  *=========================================*/
 INTERPTYPE
-interp_fornodes (PNODE node,
-                 TABLE stab,
-                 PVALUE *pval)
+interp_fornodes (PNODE node, SYMTAB stab, PVALUE *pval)
 {
 	BOOLEAN eflg = FALSE;
 	INTERPTYPE irc;
-	NODE sub, root = (NODE) evaluate(iloopexp(node), stab, &eflg);
+	NODE sub, root=NULL;
 	PVALUE val = eval_and_coerce(PGNODE, iloopexp(node), stab, &eflg);
 	if (eflg) {
 		prog_error(node, "1st arg to fornodes must be a record line");
@@ -1060,20 +1086,24 @@ interp_fornodes (PNODE node,
 /*HERE*/
 	sub = nchild(root);
 	while (sub) {
-		insert_pvtable(stab, ielement(node), PGNODE, sub);
+		insert_symtab(stab, ielement(node), PGNODE, sub);
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		switch (irc) {
 		case INTCONTINUE:
 		case INTOKAY:
 			sub = nsibling(sub);
-			continue;
+			irc = INTOKAY;
+			break;
 		case INTBREAK:
-			return INTOKAY;
+			irc = INTOKAY;
+			goto hleave;
 		default:
-			return irc;
+			goto hleave;
 		}
 	}
-	return INTOKAY;
+hleave:
+	delete_symtab(stab, ielement(node));
+	return irc;
 }
 /*========================================+
  * printkey -- Make key from keynum
@@ -1088,137 +1118,144 @@ printkey (STRING key, char type, INT keynum)
 /*========================================+
  * interp_forindi -- Interpret forindi loop
  *  usage: forindi(INDI_V,INT_V) {...}
+ * 2001/03/18 Revised by Perry Rapp
+ *  to call create_pvalue_from_indi_keynum, get_cel_from_pvalue
+ *  to delete its loop pvalues when finished
  *=======================================*/
 INTERPTYPE
-interp_forindi (PNODE node,
-                TABLE stab,
-                PVALUE *pval)
+interp_forindi (PNODE node, SYMTAB stab, PVALUE *pval)
 {
-	NODE indi;
-	static char key[MAXKEYWIDTH+1];
-	STRING record;
+	CACHEEL icel=NULL;
 	INTERPTYPE irc;
-	INT len, count = 0;
+	PVALUE ival=NULL;
+	INT count = 0;
 	INT icount = 0;
-	insert_pvtable(stab, inum(node), PINT, 0);
+	insert_symtab(stab, inum(node), PINT, 0);
 	while (TRUE) {
-		printkey(key, 'I', ++count);
-		if (!(record = retrieve_record(key, &len))) {
-		    if (icount < num_indis()) continue;
-		    break;
+		count = xref_nexti(count);
+		if (!count) {
+			irc = INTOKAY;
+			goto ileave;
 		}
-		if (!(indi = string_to_node(record))) continue;
+		ival = create_pvalue_from_indi_keynum(count);
+		icel = get_cel_from_pvalue(ival);
 		icount++;
-		insert_pvtable(stab, ielement(node), PINDI,
-		    indi_to_cacheel(indi));
-		insert_pvtable(stab, inum(node), PINT, (VPTR)count);
+		lock_cache(icel);
+		insert_symtab_pvalue(stab, ielement(node), ival);
+		insert_symtab(stab, inum(node), PINT, (VPTR)count);
 		irc = interpret((PNODE) ibody(node), stab, pval);
-		free_nodes(indi);
-		stdfree(record);
+		unlock_cache(icel);
 		switch (irc) {
 		case INTCONTINUE:
 		case INTOKAY:
 			continue;
 		case INTBREAK:
-			return INTOKAY;
+			irc = INTOKAY;
+			goto ileave;
 		default:
-			return irc;
+			goto ileave;
 		}
 	}
-	return INTOKAY;
+ileave:
+	delete_symtab(stab, ielement(node));
+	delete_symtab(stab, inum(node));
+	return irc;
 }
 /*========================================+
  * interp_forsour -- Interpret forsour loop
  *  usage: forsour(SOUR_V,INT_V) {...}
+ * 2001/03/20 Revised by Perry Rapp
+ *  to call create_pvalue_from_indi_keynum, get_cel_from_pvalue
+ *  to delete its loop pvalues when finished
  *=======================================*/
 INTERPTYPE
-interp_forsour (PNODE node,
-                TABLE stab,
-                PVALUE *pval)
+interp_forsour (PNODE node, SYMTAB stab, PVALUE *pval)
 {
-	NODE sour;
-	static char key[MAXKEYWIDTH+1];
-	STRING record;
+	CACHEEL scel;
 	INTERPTYPE irc;
-	INT len, count = 0;
+	PVALUE sval;
+	INT count = 0;
 	INT scount = 0;
-	insert_pvtable(stab, inum(node), PINT, 0);
+	insert_symtab(stab, inum(node), PINT, 0);
 	while (TRUE) {
-		printkey(key, 'S', ++count);
-		if (!(record = retrieve_record(key, &len))) {
-		    if(scount < num_sours()) continue;
-		    break;
+		sval = create_pvalue_from_sour_keynum(++count);
+		scel = get_cel_from_pvalue(sval);
+		if (!scel) {
+			delete_pvalue(sval);
+	    if(scount < num_sours()) continue;
+			irc = INTOKAY;
+			goto jleave;
 		}
-		if (!(sour = string_to_node(record))) continue;
 		scount++;
-		insert_pvtable(stab, ielement(node), PSOUR,
-		    sour_to_cacheel(sour));
-		insert_pvtable(stab, inum(node), PINT, (VPTR)count);
+		lock_cache(scel);
+		insert_symtab_pvalue(stab, ielement(node), sval);
+		insert_symtab(stab, inum(node), PINT, (VPTR)count);
 		irc = interpret((PNODE) ibody(node), stab, pval);
-		free_nodes(sour);
-		stdfree(record);
+		unlock_cache(scel);
 		switch (irc) {
 		case INTCONTINUE:
 		case INTOKAY:
 			continue;
 		case INTBREAK:
-			return INTOKAY;
+			irc = INTOKAY;
+			goto jleave;
 		default:
-			return irc;
+			goto jleave;
 		}
 	}
-	return INTOKAY;
+jleave:
+	delete_symtab(stab, ielement(node));
+	delete_symtab(stab, inum(node));
+	return irc;
 }
 /*========================================+
  * interp_foreven -- Interpret foreven loop
  *  usage: foreven(EVEN_V,INT_V) {...}
  *=======================================*/
 INTERPTYPE
-interp_foreven (PNODE node,
-                TABLE stab,
-                PVALUE *pval)
+interp_foreven (PNODE node, SYMTAB stab, PVALUE *pval)
 {
-	NODE even;
-	static char key[MAXKEYWIDTH+1];
-	STRING record;
+	CACHEEL ecel;
 	INTERPTYPE irc;
-	INT len, count = 0;
+	PVALUE eval;
+	INT count = 0;
 	INT ecount = 0;
-	insert_pvtable(stab, inum(node), PINT, (VPTR)count);
+	insert_symtab(stab, inum(node), PINT, (VPTR)count);
 	while (TRUE) {
-		printkey(key, 'E', ++count);
-		if (!(record = retrieve_record(key, &len))) {
-		    if(ecount < num_evens()) continue;
-		    break;
+		eval = create_pvalue_from_sour_keynum(++count);
+		ecel = get_cel_from_pvalue(eval);
+		if (!ecel) {
+			delete_pvalue(eval);
+	    if (ecount < num_evens()) continue;
+			irc = INTOKAY;
+			goto kleave;
 		}
-		if (!(even = string_to_node(record))) continue;
 		ecount++;
-		insert_pvtable(stab, ielement(node), PEVEN,
-		    even_to_cacheel(even));
-		insert_pvtable(stab, inum(node), PINT, (VPTR)count);
+		lock_cache(ecel);
+		insert_symtab_pvalue(stab, ielement(node), eval);
+		insert_symtab(stab, inum(node), PINT, (VPTR)count);
 		irc = interpret((PNODE) ibody(node), stab, pval);
-		free_nodes(even);
-		stdfree(record);
+		unlock_cache(ecel);
 		switch (irc) {
 		case INTCONTINUE:
 		case INTOKAY:
 			continue;
 		case INTBREAK:
-			return INTOKAY;
+			irc = INTOKAY;
+			goto kleave;
 		default:
-			return irc;
+			goto kleave;
 		}
 	}
-	return INTOKAY;
+kleave:
+	return irc;
 }
 /*========================================+
  * interp_forothr -- Interpret forothr loop
  *  usage: forothr(OTHR_V,INT_V) {...}
  *=======================================*/
 INTERPTYPE
-interp_forothr (PNODE node,
-                TABLE stab,
-                PVALUE *pval)
+interp_forothr (PNODE node, SYMTAB stab, PVALUE *pval)
 {
 	NODE othr;
 	static char key[MAXKEYWIDTH+1];
@@ -1226,16 +1263,17 @@ interp_forothr (PNODE node,
 	INTERPTYPE irc;
 	INT len, count = 0;
 	INT ocount = 0;
-	insert_pvtable(stab, inum(node), PINT, (VPTR)count);
+	insert_symtab(stab, inum(node), PINT, (VPTR)count);
 	while (++count <= num_othrs()) {
 		printkey(key, 'X', ++count);
 		if (!(record = retrieve_record(key, &len)))
 			continue;
 		if (!(othr = string_to_node(record))) continue;
 		ocount++;
-		insert_pvtable(stab, ielement(node), POTHR,
+// TO DO - fix 2001/03/19
+		insert_symtab(stab, ielement(node), POTHR,
 		    (VPTR)othr_to_cacheel(othr));
-		insert_pvtable(stab, inum(node), PINT, (VPTR)count);
+		insert_symtab(stab, inum(node), PINT, (VPTR)count);
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		free_nodes(othr);
 		stdfree(record);
@@ -1256,53 +1294,55 @@ interp_forothr (PNODE node,
  *  usage: forfam(FAM_V,INT_V) {...}
  *=====================================*/
 INTERPTYPE
-interp_forfam (PNODE node,
-               TABLE stab,
-               PVALUE *pval)
+interp_forfam (PNODE node, SYMTAB stab, PVALUE *pval)
 {
-	NODE fam;
-	static char key[MAXKEYWIDTH+1];
-	STRING record;
+	CACHEEL fcel=NULL;
 	INTERPTYPE irc;
-	INT len, count = 0;
+	PVALUE fval=NULL;
+	INT count = 0;
 	INT fcount = 0;
-	insert_pvtable(stab, inum(node), PINT, (VPTR)count);
+	insert_symtab(stab, inum(node), PINT, 0);
 	while (TRUE) {
-		printkey(key, 'F', ++count);
-		if (!(record = retrieve_record(key, &len))) {
-		    if(fcount < num_fams()) continue;
-		    break;
+		count = xref_nextf(count);
+		if (!count) {
+			irc = INTOKAY;
+			goto mleave;
 		}
-		if (!(fam = string_to_node(record))) continue;
+		fval = create_pvalue_from_fam_keynum(count);
+		fcel = get_cel_from_pvalue(fval);
 		fcount++;
-		insert_pvtable(stab, ielement(node), PFAM,
-		    (VPTR) fam_to_cacheel(fam));
-		insert_pvtable(stab, inum(node), PINT, (VPTR)count);
+		lock_cache(fcel);
+		insert_symtab_pvalue(stab, ielement(node), fval);
+		insert_symtab(stab, inum(node), PINT, (VPTR)count);
 		irc = interpret((PNODE) ibody(node), stab, pval);
-		free_nodes(fam);
-		stdfree(record);
+		unlock_cache(fcel);
 		switch (irc) {
 		case INTCONTINUE:
 		case INTOKAY:
 			continue;
 		case INTBREAK:
-			return INTOKAY;
+			irc = INTOKAY;
+			goto mleave;
 		default:
-			return irc;
+			goto mleave;
 		}
 	}
-	return INTOKAY;
+mleave:
+	delete_symtab(stab, ielement(node));
+	delete_symtab(stab, inum(node));
+	return irc;
 }
 /*============================================+
  * interp_indisetloop -- Interpret indiset loop
+ * 2001/03/21 Revised by Perry Rapp
+ *  to delete its loop pvalues when finished
  *===========================================*/
 INTERPTYPE
-interp_indisetloop (PNODE node,
-                    TABLE stab,
-                    PVALUE *pval)
+interp_indisetloop (PNODE node, SYMTAB stab, PVALUE *pval)
 {
 	BOOLEAN eflg = FALSE;
 	INTERPTYPE irc;
+	PVALUE ival;
 	INDISEQ seq = NULL;
 	PVALUE val = evaluate(iloopexp(node), stab, &eflg);
 	if (eflg || !val || ptype(val) != PSET) {
@@ -1311,42 +1351,48 @@ interp_indisetloop (PNODE node,
 	}
 	seq = (INDISEQ) pvalue(val);
 	delete_pvalue(val);
-	insert_pvtable(stab, inum(node), PINT, (VPTR) 0);
+	insert_symtab(stab, inum(node), PINT, (VPTR) 0);
 	FORINDISEQ(seq, el, ncount)
 #ifdef DEBUG
 		llwprintf("loopinterp - %s = ",ielement(node));
 		llwprintf("\n");
 #endif
-		insert_pvtable(stab, ielement(node), PINDI,
-			(VPTR)key_to_indi_cacheel(skey(el)));
+		ival = create_pvalue_from_indi_key(skey(el));
+		insert_symtab_pvalue(stab, ielement(node), ival);
 #ifdef DEBUG
 		llwprintf("loopinterp - %s = ",ivalvar(node));
 		llwprintf("\n");
 #endif
-		insert_table(stab, ivalvar(node),
-			 (VPTR) (sval(el).w ? (VPTR)sval(el).w
-				: (VPTR)create_pvalue(PANY, (VPTR)NULL)));
-		insert_pvtable(stab, inum(node), PINT, (VPTR) (ncount + 1));
+		insert_symtab_pvalue(stab, ivalvar(node),
+			 (PVALUE) (sval(el).w ? sval(el).w
+				: create_pvalue(PANY, (VPTR)NULL)));
+		insert_symtab(stab, inum(node), PINT, (VPTR) (ncount + 1));
 		switch (irc = interpret((PNODE) ibody(node), stab, pval)) {
 		case INTCONTINUE:
 		case INTOKAY:
-			goto h;
+			goto hloop;
 		case INTBREAK:
-			return INTOKAY;
+			irc = INTOKAY;
+			goto hleave;
 		default:
-			return irc;
+			goto hleave;
 		}
-h:	;
+hloop:	;
 	ENDINDISEQ
-	return INTOKAY;
+	irc = INTOKAY;
+hleave:
+	delete_symtab(stab, ielement(node));
+	delete_symtab(stab, ivalvar(node));
+	delete_symtab(stab, inum(node));
+	return irc;
 }
 /*=====================================+
  * interp_forlist -- Interpret list loop
+ * 2001/03/21 Revised by Perry Rapp
+ *  to delete its loop pvalues when finished
  *====================================*/
 INTERPTYPE
-interp_forlist (PNODE node,
-                TABLE stab,
-                PVALUE *pval)
+interp_forlist (PNODE node, SYMTAB stab, PVALUE *pval)
 {
 	BOOLEAN eflg = FALSE;
 	INTERPTYPE irc;
@@ -1363,30 +1409,33 @@ interp_forlist (PNODE node,
 		prog_error(node, "1st arg to forlist is in error");
 		return INTERROR;
 	}
-	insert_pvtable(stab, inum(node), PINT, (VPTR) 0);
+	insert_symtab(stab, inum(node), PINT, (VPTR) 0);
 	FORLIST(list, el)
-		insert_table(stab, ielement(node), copy_pvalue(el));
-		insert_pvtable(stab, inum(node), PINT, (VPTR) ncount++);
+		insert_symtab_pvalue(stab, ielement(node), copy_pvalue(el));
+		insert_symtab(stab, inum(node), PINT, (VPTR) ncount++);
 		switch (irc = interpret((PNODE) ibody(node), stab, pval)) {
 		case INTCONTINUE:
 		case INTOKAY:
-			goto i;
+			goto iloop;
 		case INTBREAK:
-			return INTOKAY;
+			irc = INTOKAY;
+			goto ileave;
 		default:
-			return irc;
+			goto ileave;
 		}
-i:	;
+iloop:	;
 	ENDLIST
-	return INTOKAY;
+	irc = INTOKAY;
+ileave:
+	delete_symtab(stab, ielement(node));
+	delete_symtab(stab, inum(node));
+	return irc;
 }
 /*===================================+
  * interp_if -- Interpret if structure
  *==================================*/
 INTERPTYPE
-interp_if (PNODE node,
-           TABLE stab,
-           PVALUE *pval)
+interp_if (PNODE node, SYMTAB stab, PVALUE *pval)
 {
 	BOOLEAN eflg = FALSE;
 	BOOLEAN cond = evaluate_cond(icond(node), stab, &eflg);
@@ -1399,9 +1448,7 @@ interp_if (PNODE node,
  * interp_while -- Interpret while structure
  *========================================*/
 INTERPTYPE
-interp_while (PNODE node,
-              TABLE stab,
-              PVALUE *pval)
+interp_while (PNODE node, SYMTAB stab, PVALUE *pval)
 {
 	BOOLEAN eflg = FALSE, cond;
 	INTERPTYPE irc;
@@ -1424,59 +1471,60 @@ interp_while (PNODE node,
  * interp_call -- Interpret call structure
  *======================================*/
 INTERPTYPE
-interp_call (PNODE node,
-             TABLE stab,
-             PVALUE *pval)
+interp_call (PNODE node, SYMTAB stab, PVALUE *pval)
 {
-	TABLE newtab;
-	INTERPTYPE irc;
-	PNODE arg, parm, proc = (PNODE) valueof(proctab, iname(node));
+	SYMTAB newstab=null_symtab();
+	INTERPTYPE irc=INTERROR;
+	PNODE arg=NULL, parm=NULL, proc = (PNODE) valueof(proctab, iname(node));
 	if (!proc) {
 		llwprintf("``%s'': undefined procedure\n", iname(node));
-		return INTERROR;
+		irc = INTERROR;
+		goto call_leave;
 	}
-	newtab = create_table();
+	create_symtab(&newstab);
 	arg = (PNODE) iargs(node);
 	parm = (PNODE) iargs(proc);
 	while (arg && parm) {
 		BOOLEAN eflg = FALSE;
 		PVALUE value = evaluate(arg, stab, &eflg);
-		if (eflg) return INTERROR;
-		insert_table(newtab, iident(parm), (VPTR) value);
+		if (eflg) {
+			irc = INTERROR;
+			goto call_leave;
+		}
+		insert_symtab_pvalue(newstab, iident(parm), value);
 		arg = inext(arg);
 		parm = inext(parm);
 	}
 	if (arg || parm) {
 		llwprintf("``%s'': mismatched args and params\n", iname(node));
-		remove_table(newtab, DONTFREE);
-		return INTERROR;
+		irc = INTERROR;
+		goto call_leave;
 	}
-	irc = interpret((PNODE) ibody(proc), newtab, pval);
-#ifdef HOGMEMORY
-	remove_table(newtab, DONTFREE);
-#else
-	remove_pvtable(newtab);
-#endif
+	irc = interpret((PNODE) ibody(proc), newstab, pval);
 	switch (irc) {
 	case INTRETURN:
 	case INTOKAY:
-		return INTOKAY;
+		irc = INTOKAY;
+		break;
 	case INTBREAK:
 	case INTCONTINUE:
 	case INTERROR:
 	default:
-		return INTERROR;
+		irc = INTERROR;
+		break;
 	}
-	return INTERROR;
+
+call_leave:
+	remove_symtab(&newstab);
+	return irc;
 }
 /*==============================================+
  * interp_traverse -- Interpret traverse iterator
  *  usage: traverse(NODE,NODE_V,INT_V) {...}
+ * TO DO - doesn't clean up its symtab entries (2001/03/24)
  *=============================================*/
 INTERPTYPE
-interp_traverse (PNODE node,
-                 TABLE stab,
-                 PVALUE *pval)
+interp_traverse (PNODE node, SYMTAB stab, PVALUE *pval)
 {
 	NODE snode, stack[100];
 	BOOLEAN eflg = FALSE;
@@ -1486,23 +1534,27 @@ interp_traverse (PNODE node,
 	PVALUE val = eval_and_coerce(PGNODE, iloopexp(node), stab, &eflg);
 	if (eflg) {
 		prog_error(node, "1st arg to traverse must be a record line");
-		return INTERROR;
+		irc = INTERROR;
+		goto traverse_leave;
 	}
 	root = (NODE) pvalue(val);
-	delete_pvalue(val);
-	if (!root) return INTOKAY;
+	if (!root) {
+		irc = INTOKAY;
+		goto traverse_leave;
+	}
 	stack[++lev] = snode = root;
 	while (TRUE) {
-		insert_pvtable(stab, ielement(node), PGNODE, (VPTR)snode);
-		insert_pvtable(stab, ilev(node), PINT, (VPTR)lev);
+		insert_symtab(stab, ielement(node), PGNODE, (VPTR)snode);
+		insert_symtab(stab, ilev(node), PINT, (VPTR)lev);
 		switch (irc = interpret((PNODE) ibody(node), stab, pval)) {
 		case INTCONTINUE:
 		case INTOKAY:
 			break;
 		case INTBREAK:
-			return INTOKAY;
+			irc = INTOKAY;
+			goto traverse_leave;
 		default:
-			return irc;
+			goto traverse_leave;
 		}
 		if (nchild(snode)) {
 			snode = stack[++lev] = nchild(snode);
@@ -1517,7 +1569,13 @@ interp_traverse (PNODE node,
 		if (lev < 0) break;
 		snode = stack[lev] = nsibling(stack[lev]);
 	}
-	return INTOKAY;
+	irc = INTOKAY;
+traverse_leave:
+	delete_symtab(stab, ielement(node));
+	delete_symtab(stab, ilev(node));
+	delete_pvalue(val);
+	val=NULL;
+	return irc;
 }
 /*=============================================+
  * prog_error -- Report a run time program error

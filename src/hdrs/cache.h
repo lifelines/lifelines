@@ -96,6 +96,7 @@ CACHEEL qkey_to_indi_cacheel(STRING);
 CACHEEL qkey_to_sour_cacheel(STRING);
 CACHEEL qkey_to_othr_cacheel(STRING);
 
+void load_cacheel(CACHEEL);
 void lock_cache(CACHEEL);
 void nod0_to_cache(CACHE cache, NOD0 nod0);
 void node_to_cache(CACHE, NODE);

@@ -58,7 +58,7 @@ mprintf (char *fmt, ...)
  * poutput -- Print argument as a string
  *====================================*/
 void
-poutput (char *str)
+poutput (char *str, BOOLEAN *eflg)
 {
 	printf("%s", str);
 }

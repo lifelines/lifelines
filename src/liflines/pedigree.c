@@ -131,7 +131,7 @@ add_children (NODE indi, INT gen, INT maxgen, INT * count)
 				else
 					tn0 = tn->firstchild = tn1;
 			}
-			remove_indiseq(childseq, FALSE);
+			remove_indiseq(childseq);
 		}
 	}
 	return tn;

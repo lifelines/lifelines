@@ -63,9 +63,7 @@
  *   usage: heapused() -> INT
  *==============================================*/
 PVALUE
-__heapused (PNODE node,
-            TABLE stab,
-            BOOLEAN *eflg)
+__heapused (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 #if defined(WORKING_HEAPUSED)
 	HEAPINFO hi;

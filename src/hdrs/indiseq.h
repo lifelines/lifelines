@@ -57,6 +57,46 @@ typedef struct stag {
 #define spri(s) ((s)->s_pri)
 
 /*=================================================
+ * Custom functions for caller-specified handling of values
+ * (These cater to the interpreter, which stores PVALUEs)
+ *===============================================*/
+
+/*====================
+ * indiseq val types
+ *  NULL means it has no typed values yet
+ *==================*/
+#define ISVAL_INT 1
+#define ISVAL_STR 2
+#define ISVAL_PTR 3
+#define ISVAL_NUL 4
+
+/*
+	value vtable functions for INDISEQ
+	change with set_indiseq_value_funcs
+	Default ones (exposed as default_xxx below):
+		copy produces null values except for int type values
+		delete only deletes string type values
+		create_gen creates null values except for int type values
+*/
+/*
+	copy a value
+	(union will use copy from the first operand for keys in both operands)
+*/
+typedef UNION (*SEQ_COPY_VALUE_FNC)(UNION uval, INT valtype);
+/* delete a value (failing uniqueness check in append */
+typedef void (*SEQ_DELETE_VALUE)(UNION uval, INT valtype);
+/* create a value for ancestors or descendants */
+typedef UNION (*SEQ_CREATE_GEN_VALUE)(INT gen, INT valtype);
+/* vtable for handling values in INDISEQ */
+typedef struct indiseq_value_vtable_s
+{
+	SEQ_COPY_VALUE_FNC copy_fnc;
+	SEQ_DELETE_VALUE delete_fnc;
+	SEQ_CREATE_GEN_VALUE create_gen_fnc;
+} * INDISEQ_VALUE_VTABLE;
+
+
+/*=================================================
  * INDISEQ -- Data type for an entire indi sequence
  *===============================================*/
 typedef struct  {
@@ -67,6 +107,7 @@ typedef struct  {
 	INT is_prntype; /* for special cases (spouseseq & famseq) */
 	INT is_valtype; /* int, string, pointer */
 	INT is_refcnt; /* for interp */
+	INDISEQ_VALUE_VTABLE is_valvtbl;
 } *INDISEQ;
 
 #define ISize(s)     ((s)->is_size)
@@ -76,6 +117,7 @@ typedef struct  {
 #define IPrntype(s)  ((s)->is_prntype)
 #define IValtype(s)  ((s)->is_valtype)
 #define IRefcnt(s)   ((s)->is_refcnt)
+#define IValvtbl(s)  ((s)->is_valvtbl)
 
 #define KEYSORT   (1<<0)	/* Values of attribute flags */
 #define NAMESORT  (1<<1)
@@ -91,20 +133,23 @@ typedef struct  {
  *===================*/
 
 void add_browse_list(STRING, INDISEQ);
-INDISEQ ancestor_indiseq(INDISEQ seq, VPTR (*create_value_fnc)(INT gen));
+INDISEQ ancestor_indiseq(INDISEQ seq);
 void append_indiseq_null(INDISEQ, STRING, STRING, BOOLEAN sure, BOOLEAN alloc);
 void append_indiseq_ival(INDISEQ, STRING, STRING, INT val, BOOLEAN sure, BOOLEAN alloc);
 void append_indiseq_pval(INDISEQ, STRING, STRING, VPTR val, BOOLEAN sure, BOOLEAN alloc);
 void append_indiseq_sval(INDISEQ, STRING, STRING, STRING sval, BOOLEAN sure, BOOLEAN alloc);
 void canonkeysort_indiseq(INDISEQ);
 INDISEQ child_indiseq(INDISEQ);
-INDISEQ copy_indiseq(INDISEQ);
+INDISEQ copy_indiseq(INDISEQ seq);
 INDISEQ create_indiseq_ival(void);
 INDISEQ create_indiseq_null(void);
 INDISEQ create_indiseq_pval(void);
 INDISEQ create_indiseq_sval(void);
+UNION default_copy_value(UNION uval, INT valtype);
+void default_delete_value(UNION uval, INT valtype);
+UNION default_create_gen_value(INT gen, INT valtype);
 BOOLEAN delete_indiseq(INDISEQ, STRING, STRING, INT);
-INDISEQ descendent_indiseq(INDISEQ seq, VPTR (*create_value_fnc)(INT gen));
+INDISEQ descendent_indiseq(INDISEQ seq);
 INDISEQ difference_indiseq(INDISEQ, INDISEQ);
 BOOLEAN element_indiseq(INDISEQ, INT, STRING*, STRING*);
 BOOLEAN element_indiseq_ival(INDISEQ, INT, STRING*, INT *, STRING*);
@@ -142,13 +187,14 @@ void preprint_indiseq(INDISEQ, INT len);
 void print_indiseq_element (INDISEQ seq, INT i, STRING buf, INT len);
 INDISEQ refn_to_indiseq(STRING, INT letr, INT sort);
 void remove_browse_list(STRING, INDISEQ);
-void remove_indiseq(INDISEQ,BOOLEAN);
+void remove_indiseq(INDISEQ);
 void rename_indiseq(INDISEQ, STRING);
+void set_indiseq_value_funcs(INDISEQ seq, INDISEQ_VALUE_VTABLE valvtbl);
 INDISEQ sibling_indiseq(INDISEQ, BOOLEAN);
-INDISEQ spouse_indiseq(INDISEQ, VPTR (*copy_value_fnc)(VPTR val));
+INDISEQ spouse_indiseq(INDISEQ);
 INDISEQ str_to_indiseq(STRING);
 void unique_indiseq(INDISEQ);
-INDISEQ union_indiseq(INDISEQ, INDISEQ);
+INDISEQ union_indiseq(INDISEQ one, INDISEQ two);
 void update_browse_list(STRING, INDISEQ);
 void valuesort_indiseq(INDISEQ, BOOLEAN*);
 void write_family(STRING, TABLE);

@@ -62,7 +62,7 @@ add_browse_list (STRING name,
 	FORLIST(browse_lists, e)
 		blel = (BLEL) e;
 		if (blel->bl_name && eqstr(name, blel->bl_name)) {
-			remove_indiseq(blel->bl_seq, FALSE);
+			remove_indiseq(blel->bl_seq);
 			blel->bl_seq = seq;
 			done = TRUE;
 			break;
@@ -90,7 +90,7 @@ remove_browse_list (STRING name,
                     INDISEQ seq)
 {
 	BLEL blel;
-	remove_indiseq(seq, FALSE);
+	remove_indiseq(seq);
 	if (!name) return;
 	FORLIST(browse_lists, e)
 		blel = (BLEL) e;
@@ -101,7 +101,7 @@ remove_browse_list (STRING name,
 	ENDLIST
 }
 /*===========================================
- *  find_named_seq -- Find named browse list.
+ * find_named_seq -- Find named browse list.
  *=========================================*/
 INDISEQ
 find_named_seq (STRING name)
@@ -115,7 +115,7 @@ find_named_seq (STRING name)
 	return NULL;
 }
 /*===================================================
- *  new_name_browse_list -- Rename named browse list.
+ * new_name_browse_list -- Rename named browse list.
  *=================================================*/
 void
 new_name_browse_list (STRING old,
@@ -140,7 +140,7 @@ update_browse_list (STRING name,
 {
 	BLEL blel;
 	if (!name) {	/* remove anonymous lists */
-		remove_indiseq(seq, FALSE);
+		remove_indiseq(seq);
 		return;
 	}
 	FORLIST(browse_lists, e)

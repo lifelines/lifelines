@@ -49,18 +49,19 @@ int listbadkeys = 0;
  * local function prototypes
  *********************************************/
 
-static CACHE create_cache(STRING name, INT dirsize, INT indsize);
-static NODE key_to_node(CACHE cache, STRING key, STRING tag);
-static NOD0 key_to_nod0(CACHE cache, STRING key, STRING tag);
-static NODE qkey_to_node(CACHE cache, STRING key, STRING tag);
-static NOD0 qkey_to_nod0(CACHE cache, STRING key, STRING tag);
-static CACHEEL key_to_cacheel(CACHE, STRING, STRING, INT);
-static void dereference(CACHEEL);
 static void add_node_to_direct(CACHE cache, NODE node, STRING key);
 static void add_nod0_to_direct(CACHE cache, NOD0 nod0, STRING key);
+static CACHE create_cache(STRING name, INT dirsize, INT indsize);
+static void dereference(CACHEEL);
+static CACHEEL key_to_cacheel(CACHE, STRING, STRING, INT);
 static CACHEEL key_to_even_cacheel (STRING key);
-static CACHEEL key_to_sour_cacheel (STRING key);
+static NODE key_to_node(CACHE cache, STRING key, STRING tag);
+static NOD0 key_to_nod0(CACHE cache, STRING key, STRING tag);
 static CACHEEL key_to_othr_cacheel (STRING key);
+static CACHEEL key_to_sour_cacheel (STRING key);
+static void prepare_direct_space(CACHE cache);
+static NODE qkey_to_node(CACHE cache, STRING key, STRING tag);
+static NOD0 qkey_to_nod0(CACHE cache, STRING key, STRING tag);
 
 
 INT csz_indi = 200;		/* cache size for indi */
@@ -503,9 +504,12 @@ indirect_to_first (CACHE cache,
                    CACHEEL cel)
 {
 	ASSERT(cache && cel);
+	semilock_cache(cel);
+	prepare_direct_space(cache);
 	remove_indirect(cache, cel);
 	dereference(cel);
 	first_direct(cache, cel);
+	unsemilock_cache(cel);
 }
 /*==============================================================
  * direct_to_indirect -- Make last direct CACHEEL first indirect
@@ -563,6 +567,7 @@ add_to_direct (CACHE cache,
 	llwprintf("add_to_direct: key == %s\n", key);
 #endif
 	ASSERT(cache && key);
+	prepare_direct_space(cache);
 	nod0 = NULL;
 	if ((record = retrieve_record(key, &len))) 
 		nod0 = string_to_nod0(record, key, len);
@@ -616,16 +621,11 @@ key_to_cacheel (CACHE cache,
 	keybuf[keyidx][31] = '\0';
 	keyidx++;
 	if(keyidx >= 10) keyidx = 0;
-
 	if ((cel = (CACHEEL) valueof(cdata(cache), key))) {
 		if (cnode(cel))
 			direct_to_first(cache, cel);
-		else {
-			if (csizedir(cache) >= cmaxdir(cache))
-/* TO DO: do we need to check csizeind(cache) ? Excoffier 2001/03/16 */
-				direct_to_indirect(cache);
+		else
 			indirect_to_first(cache, cel);
-		}
 		if (tag) {
 #ifdef DEBUG
 			llwprintf("BEFORE ASSERT: tag, ntag(cnode(cel)) = %s, %s\n", tag, ntag(cnode(cel)));
@@ -634,16 +634,25 @@ key_to_cacheel (CACHE cache,
 		}
 		return cel;
 	}
-	if (csizedir(cache) >= cmaxdir(cache)) {
-		if (csizeind(cache) >= cmaxind(cache))
-			remove_last(cache);
-		direct_to_indirect(cache);
-	}
 	cel = add_to_direct(cache, key, reportmode);
 	if (cel && tag) {
 		ASSERT(eqstr(tag, ntag(cnode(cel))));
 	}
 	return cel;
+}
+/*===============================================================
+ * prepare_direct_space -- Make space in direct
+ *  Moves a direct entry to indirect if necessary
+ * Created: 2001/03/19, Perry Rapp
+ *=============================================================*/
+static void
+prepare_direct_space (CACHE cache)
+{
+	if (csizedir(cache) >= cmaxdir(cache)) {
+		if (csizeind(cache) >= cmaxind(cache))
+			remove_last(cache);
+		direct_to_indirect(cache);
+	}
 }
 /*===============================================================
  * key_to_node -- Return tree from key; add to cache if not there
@@ -698,6 +707,26 @@ qkey_to_nod0 (CACHE cache, STRING key, STRING tag)
 	if (!(cel = key_to_cacheel(cache, key, tag, TRUE)))
 		return NULL;
 	return cnod0(cel);
+}
+/*======================================
+ * load_cacheel -- Load CACHEEL into direct cache
+ *  if needed & valid
+ * Created: 2001/03/24, Perry Rapp
+ *====================================*/
+void
+load_cacheel (CACHEEL cel)
+{
+	CACHE cache = NULL;
+	if (!cel || cnode(cel)) return;
+	switch (ckey(cel)[0]) {
+	case 'I': cache = indicache; break;
+	case 'F': cache = famcache; break;
+	case 'S': cache = sourcache; break;
+	case 'E': cache = evencache; break;
+	case 'X': cache = othrcache; break;
+	default: ASSERT(0); break;
+	}
+	indirect_to_first(cache, cel);
 }
 /*======================================
  * lock_cache -- Lock CACHEEL into direct cache
@@ -825,15 +854,8 @@ nod0_to_cache (CACHE cache,
 	ASSERT(cache && nod0 && nztop(nod0));
 	key = node_to_key(nztop(nod0));
 	ASSERT(!valueof(cdata(cache), key));
-	if (csizedir(cache) >= cmaxdir(cache)) {
-		if (csizeind(cache) >= cmaxind(cache)) {
-			remove_last(cache);
-		}
-		direct_to_indirect(cache);
-		add_nod0_to_direct(cache, nod0, key);
-	} else {
-		add_nod0_to_direct(cache, nod0, key);
-	}
+	prepare_direct_space(cache);
+	add_nod0_to_direct(cache, nod0, key);
 }
 /*=======================================================
  * add_node_to_direct -- Add node to direct part of cache

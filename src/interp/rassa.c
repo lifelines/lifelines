@@ -90,9 +90,7 @@ finishrassa (void)
  *   usage: pagemode(INT, INT) -> VOID
  *======================================*/
 PVALUE
-__pagemode (PNODE node,
-            TABLE stab,
-            BOOLEAN *eflg)
+__pagemode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INT cols, rows;
 	PVALUE val = eval_and_coerce(PINT, iargs(node), stab, eflg);
@@ -128,9 +126,7 @@ __pagemode (PNODE node,
  *   usage: linemode() -> VOID
  *=======================================*/
 PVALUE
-__linemode (PNODE node,
-            TABLE stab,
-            BOOLEAN *eflg)
+__linemode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	outputmode = BUFFERED;
 	linebuflen = 0;
@@ -144,9 +140,7 @@ __linemode (PNODE node,
  *   usage: newfile(STRING, BOOL) -> VOID
  *=====================================*/
 PVALUE
-__newfile (PNODE node,
-           TABLE stab,
-           BOOLEAN *eflg)
+__newfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	BOOLEAN aflag;
 	STRING name;
@@ -187,9 +181,7 @@ __newfile (PNODE node,
  *   usage: outfile() -> STRING
  *===================================*/
 PVALUE
-__outfile (PNODE node,
-           TABLE stab,
-           BOOLEAN *eflg)
+__outfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	if (!Poutfp) {
 		Poutfp = ask_for_output_file(LLWRITETEXT, whtout, &outfilename,
@@ -209,9 +201,7 @@ __outfile (PNODE node,
  *   usage: pos(INT, INT) -> VOID
  *==============================================*/
 PVALUE
-__pos (PNODE node,
-       TABLE stab,
-       BOOLEAN *eflg)
+__pos (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INT col, row;
 	PVALUE val = eval_and_coerce(PINT, iargs(node), stab, eflg);
@@ -243,9 +233,7 @@ __pos (PNODE node,
  *   usage: row(INT) -> VOID
  *=======================================*/
 PVALUE
-__row (PNODE node,
-       TABLE stab,
-       BOOLEAN *eflg)
+__row (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INT row;
 	PVALUE val = eval_and_coerce(PINT, iargs(node), stab, eflg);
@@ -270,9 +258,7 @@ __row (PNODE node,
  *   usage: col(INT) -> VOID
  *=================================*/
 PVALUE
-__col (PNODE node,
-       TABLE stab,
-       BOOLEAN *eflg)
+__col (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INT newcol;
 	PVALUE val = eval_and_coerce(PINT, iargs(node), stab, eflg);
@@ -285,8 +271,10 @@ __col (PNODE node,
 	if (newcol < 1) newcol = 1;
 	if (newcol > MAXCOLS) newcol = MAXCOLS;
 	if (newcol == curcol) return NULL;
-	if (newcol < curcol) poutput("\n");
-	while (curcol < newcol) poutput(" ");
+	if (newcol < curcol)
+		poutput("\n", eflg);
+	while (curcol < newcol && !(*eflg))
+		poutput(" ", eflg);
 	return NULL;
 }
 /*=================================+
@@ -294,9 +282,7 @@ __col (PNODE node,
  *   usage: getcol() -> INT
  *================================*/
 PVALUE
-__getcol (PNODE node,
-          TABLE stab,
-          BOOLEAN *eflg)
+__getcol (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	*eflg = FALSE;
 	return create_pvalue(PINT, (VPTR)curcol);
@@ -306,9 +292,7 @@ __getcol (PNODE node,
  *   usage: pageout() -> VOID
  *====================================================*/
 PVALUE
-__pageout (PNODE node,
-           TABLE stab,
-           BOOLEAN *eflg)
+__pageout (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	char scratch[MAXCOLS+2];
 	STRING p;
@@ -319,6 +303,7 @@ __pageout (PNODE node,
 		Poutfp = ask_for_output_file(LLWRITETEXT, whtout, &outfilename,
 			lloptions.llreports, NULL);
 		if (!Poutfp)  {
+			*eflg = TRUE;
 			message(norpt);
 			return NULL;
 		}
@@ -344,7 +329,7 @@ __pageout (PNODE node,
  * poutput -- Output string in current mode
  *=======================================*/
 void
-poutput (STRING str)
+poutput (STRING str, BOOLEAN *eflg)
 {
 	STRING p, name;
 	INT c, len;
@@ -353,6 +338,7 @@ poutput (STRING str)
 		Poutfp = ask_for_output_file(LLWRITETEXT, whtout, &name,
 			lloptions.llreports, NULL);
 		if (!Poutfp)  {
+			*eflg = TRUE;
 			message(norpt);
 			return;
 		}

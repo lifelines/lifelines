@@ -62,7 +62,7 @@ TABLE create_table(void);
 void insert_table(TABLE, STRING, VPTR);
 void delete_table(TABLE, STRING);
 void remove_table(TABLE, INT);
-void traverse_table(TABLE, INT (*proc)(ENTRY));
+void traverse_table(TABLE, void (*proc)(ENTRY));
 void traverse_table_param(TABLE tab, INT (*tproc)(ENTRY, VPTR), VPTR param);
 BOOLEAN in_table(TABLE, STRING);
 VPTR valueof(TABLE, STRING);

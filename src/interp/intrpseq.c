@@ -21,8 +21,6 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
-/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
-/* modified 2000-08-21 J.F.Chandler */
 /*=============================================================
  * intrpseq.c -- Programming interface to the INDISEQ data type
  * Copyright(c) 1992-95 by T.T. Wetmore IV; all rights reserved
@@ -40,7 +38,29 @@
 #include "indiseq.h"
 #include "gengedc.h"
 
-/*LIST keysets;*/
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+static UNION pvseq_copy_value(UNION uval, INT valtype);
+static void pvseq_delete_value(UNION uval, INT valtype);
+static UNION pvseq_create_gen_value(INT gen, INT valtype);
+
+/*********************************************
+ * local variables
+ *********************************************/
+
+static struct indiseq_value_vtable_s pvseq_vtbl =
+{
+	&pvseq_copy_value
+	, &pvseq_delete_value
+	, &pvseq_create_gen_value
+};
+
+/*********************************************
+ * local function definitions
+ * body of module
+ *********************************************/
 
 /*======================================================+
  * initset -- Initialize list that holds created INDISEQs
@@ -58,9 +78,7 @@ initset (void)
  *   indiset(VARB) -> VOID
  *=====================================*/
 PVALUE
-__indiset (PNODE node,
-           TABLE stab,
-           BOOLEAN *eflg)
+__indiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PNODE var = (PNODE) iargs(node);
@@ -71,6 +89,7 @@ __indiset (PNODE node,
 	}
 	*eflg = FALSE;
 	seq = create_indiseq_pval();
+	set_indiseq_value_funcs(seq, &pvseq_vtbl);
 	assign_iden(stab, iident(var), create_pvalue(PSET, (VPTR) seq));
 /*	push_list(keysets, seq);*/
 	return NULL;
@@ -80,9 +99,7 @@ __indiset (PNODE node,
  *   addtoset(SET, INDI, ANY) -> VOID
  *=================================*/
 PVALUE
-__addtoset (PNODE node,
-            TABLE stab,
-            BOOLEAN *eflg)
+__addtoset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE indi;
 	STRING key;
@@ -121,9 +138,7 @@ __addtoset (PNODE node,
  *   lengthset(SET) -> INT
  *=====================================*/
 PVALUE
-__lengthset (PNODE node,
-             TABLE stab,
-             BOOLEAN *eflg)
+__lengthset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
@@ -141,9 +156,7 @@ __lengthset (PNODE node,
  *   inset(SET, INDI) -> BOOL
  *==========================================*/
 PVALUE
-__inset (PNODE node,
-         TABLE stab,
-         BOOLEAN *eflg)
+__inset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE indi;
 	STRING key;
@@ -175,9 +188,7 @@ __inset (PNODE node,
  *   deletefromset(SET, INDI, BOOL) -> VOID
  *==========================================*/
 PVALUE
-__deletefromset (PNODE node,
-                 TABLE stab,
-                 BOOLEAN *eflg)
+__deletefromset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE indi;
 	STRING key;
@@ -221,9 +232,7 @@ __deletefromset (PNODE node,
  *   namesort(SET) -> VOID
  *===============================*/
 PVALUE
-__namesort (PNODE node,
-            TABLE stab,
-            BOOLEAN *eflg)
+__namesort (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
@@ -241,9 +250,7 @@ __namesort (PNODE node,
  *   keysort(SET) -> VOID
  *=============================*/
 PVALUE
-__keysort (PNODE node,
-           TABLE stab,
-           BOOLEAN *eflg)
+__keysort (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
@@ -261,9 +268,7 @@ __keysort (PNODE node,
  *   valuesort(SET) -> VOID
  *=================================*/
 PVALUE
-__valuesort (PNODE node,
-             TABLE stab,
-             BOOLEAN *eflg)
+__valuesort (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
@@ -285,9 +290,7 @@ __valuesort (PNODE node,
  *   uniqueset(SET) -> VOID
  *========================================*/
 PVALUE
-__uniqueset (PNODE node,
-             TABLE stab,
-             BOOLEAN *eflg)
+__uniqueset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
@@ -305,9 +308,7 @@ __uniqueset (PNODE node,
  *   union(SET, SET) -> SET
  *====================================*/
 PVALUE
-__union (PNODE node,
-         TABLE stab,
-         BOOLEAN *eflg)
+__union (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg1 = (PNODE) iargs(node), arg2 = inext(arg1);
 	INDISEQ op2, op1;
@@ -324,8 +325,8 @@ __union (PNODE node,
 		return NULL;
 	}
 	ASSERT(op2 = (INDISEQ) pvalue(val));
-	set_pvalue(val, PSET, op2 = union_indiseq(op1, op2));
-/*	push_list(keysets, op2);*/
+	op2 = union_indiseq(op1, op2);
+	set_pvalue(val, PSET, op2);
 	return val;
 }
 /*================================================+
@@ -333,9 +334,7 @@ __union (PNODE node,
  *   intersect(SET, SET) -> SET
  *===============================================*/
 PVALUE
-__intersect (PNODE node,
-             TABLE stab,
-             BOOLEAN *eflg)
+__intersect (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg1 = (PNODE) iargs(node), arg2 = inext(arg1);
 	INDISEQ op2, op1;
@@ -361,9 +360,7 @@ __intersect (PNODE node,
  *   difference(SET, SET) -> SET
  *==============================================*/
 PVALUE
-__difference (PNODE node,
-              TABLE stab,
-              BOOLEAN *eflg)
+__difference (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg1 = (PNODE) iargs(node), arg2 = inext(arg1);
 	INDISEQ op2, op1;
@@ -389,9 +386,7 @@ __difference (PNODE node,
  *   parentset(SET) -> SET
  *========================================*/
 PVALUE
-__parentset (PNODE node,
-             TABLE stab,
-             BOOLEAN *eflg)
+__parentset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
@@ -400,8 +395,8 @@ __parentset (PNODE node,
 		return NULL;
 	}
 	ASSERT(seq = (INDISEQ) pvalue(val));
-	set_pvalue(val, PSET, seq = parent_indiseq(seq));
-/*	push_list(keysets, seq);*/
+	seq = parent_indiseq(seq);
+	set_pvalue(val, PSET, seq);
 	return val;
 }
 /*==========================================+
@@ -409,9 +404,7 @@ __parentset (PNODE node,
  *   childset(SET) -> SET
  *=========================================*/
 PVALUE
-__childset (PNODE node,
-            TABLE stab,
-            BOOLEAN *eflg)
+__childset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
@@ -423,15 +416,6 @@ __childset (PNODE node,
 	set_pvalue(val, PSET, seq = child_indiseq(seq));
 /*	push_list(keysets, seq);*/
 	return val;
-}
-/*===================================================+
- * create_value_pvalue -- Callback for creating values
- *  in pvalue indiseqs
- *==================================================*/
-static VPTR
-create_value_pvalue (INT gen)
-{
-	return create_pvalue(PINT, (VPTR)gen);
 }
 /*===================================================+
  * copy_value_pvalue -- Callback for copy values
@@ -448,9 +432,7 @@ copy_value_pvalue (VPTR pvalue)
  *   siblingset(SET) -> SET
  *=============================================*/
 PVALUE
-__siblingset (PNODE node,
-              TABLE stab,
-              BOOLEAN *eflg)
+__siblingset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
@@ -468,9 +450,7 @@ __siblingset (PNODE node,
  *   spouseset(SET) -> SET
  *===========================================*/
 PVALUE
-__spouseset (PNODE node,
-             TABLE stab,
-             BOOLEAN *eflg)
+__spouseset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
@@ -479,7 +459,7 @@ __spouseset (PNODE node,
 		return NULL;
 	}
 	ASSERT(seq = (INDISEQ) pvalue(val));
-	set_pvalue(val, PSET, seq = spouse_indiseq(seq, &copy_value_pvalue));
+	set_pvalue(val, PSET, seq = spouse_indiseq(seq));
 /*	push_list(keysets, seq);*/
 	return val;
 }
@@ -488,9 +468,7 @@ __spouseset (PNODE node,
  *   ancestorset(SET) -> SET
  *===============================================*/
 PVALUE
-__ancestorset (PNODE node,
-               TABLE stab,
-               BOOLEAN *eflg)
+__ancestorset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
@@ -499,7 +477,7 @@ __ancestorset (PNODE node,
 		return NULL;
 	}
 	ASSERT(seq = (INDISEQ) pvalue(val));
-	seq = ancestor_indiseq(seq, create_value_pvalue);
+	seq = ancestor_indiseq(seq);
 	set_pvalue(val, PSET, seq);
 /*	push_list(keysets, seq);*/
 	return val;
@@ -509,9 +487,7 @@ __ancestorset (PNODE node,
  *   descendantset(SET) -> SET
  *===================================================*/
 PVALUE
-__descendentset (PNODE node,
-                 TABLE stab,
-                 BOOLEAN *eflg)
+__descendentset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
@@ -520,7 +496,7 @@ __descendentset (PNODE node,
 		return NULL;
 	}
 	ASSERT(seq = (INDISEQ) pvalue(val));
-	seq = descendent_indiseq(seq, create_value_pvalue);
+	seq = descendent_indiseq(seq);
 	set_pvalue(val, PSET, seq);
 /*	push_list(keysets, seq);*/
 	return val;
@@ -530,9 +506,7 @@ __descendentset (PNODE node,
  *   gengedcom(SET) -> VOID
  *==================================================*/
 PVALUE
-__gengedcom (PNODE node,
-             TABLE stab,
-             BOOLEAN *eflg)
+__gengedcom (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
@@ -542,7 +516,7 @@ __gengedcom (PNODE node,
 	}
 	ASSERT(seq = (INDISEQ) pvalue(val));
 	delete_pvalue(val);
-	gen_gedcom(seq, GENGEDCOM_ORIGINAL);
+	gen_gedcom(seq, GENGEDCOM_ORIGINAL, eflg);
 	return NULL;
 }
 
@@ -551,7 +525,7 @@ __gengedcom (PNODE node,
  *   gengedcom(SET) -> VOID
  * Perry 2000/11/03
  *==================================================*/
-PVALUE __gengedcomweak (PNODE node, TABLE stab, BOOLEAN *eflg)
+PVALUE __gengedcomweak (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
@@ -561,7 +535,7 @@ PVALUE __gengedcomweak (PNODE node, TABLE stab, BOOLEAN *eflg)
 	}
 	ASSERT(seq = (INDISEQ) pvalue(val));
 	delete_pvalue(val);
-	gen_gedcom(seq, GENGEDCOM_WEAK_DUMP);
+	gen_gedcom(seq, GENGEDCOM_WEAK_DUMP, eflg);
 	return NULL;
 }
 
@@ -570,7 +544,7 @@ PVALUE __gengedcomweak (PNODE node, TABLE stab, BOOLEAN *eflg)
  *   gengedcom(SET) -> VOID
  * Perry 2000/11/03
  *==================================================*/
-PVALUE __gengedcomstrong (PNODE node, TABLE stab, BOOLEAN *eflg)
+PVALUE __gengedcomstrong (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
@@ -580,6 +554,46 @@ PVALUE __gengedcomstrong (PNODE node, TABLE stab, BOOLEAN *eflg)
 	}
 	ASSERT(seq = (INDISEQ) pvalue(val));
 	delete_pvalue(val);
-	gen_gedcom(seq, GENGEDCOM_STRONG_DUMP);
+	gen_gedcom(seq, GENGEDCOM_STRONG_DUMP, eflg);
 	return NULL;
+}
+/*=====================================+
+ * pvseq_copy_value -- Copy PVALUE in an INDISEQ
+ * Created: 2001/03/25, Perry Rapp
+ *====================================*/
+static UNION
+pvseq_copy_value (UNION uval, INT valtype)
+{
+	UNION retval;
+	PVALUE val = (PVALUE)uval.w;
+	ASSERT(valtype == ISVAL_PTR);
+	ASSERT(is_pvalue(val));
+	retval.w = copy_pvalue(val);
+	return retval;
+}
+/*=====================================+
+ * pvseq_delete_value -- Delete a PVALUE in an INDISEQ
+ * Created: 2001/03/25, Perry Rapp
+ *====================================*/
+static void
+pvseq_delete_value (UNION uval, INT valtype)
+{
+	PVALUE val = (PVALUE)uval.w;
+	ASSERT(valtype == ISVAL_PTR);
+	ASSERT(is_pvalue(val));
+	delete_pvalue(val);
+}
+/*=====================================+
+ * pvseq_create_gen_value -- Create a PVALUE 
+ *  for a specific generation in an ancestor
+ *  or descendant set in an INDISEQ
+ * Created: 2001/03/25, Perry Rapp
+ *====================================*/
+static UNION
+pvseq_create_gen_value (INT gen, INT valtype)
+{
+	UNION uval;
+	ASSERT(valtype == ISVAL_PTR);
+	uval.w = create_pvalue(PINT, (VPTR)gen);
+	return uval;
 }

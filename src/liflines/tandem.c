@@ -144,7 +144,7 @@ INT browse_tandem (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ
 			if (length_indiseq(seq) == 1) {
 				element_indiseq(seq, 0, &key, &name);
 				*pindi1 = key_to_indi(key);
-				remove_indiseq(seq, FALSE);
+				remove_indiseq(seq);
 				return BROWSE_INDI;
 			}
 			*pseq = seq;

@@ -75,8 +75,8 @@ static BOOLEAN closure_is_original(CLOSURE * closure);
 static BOOLEAN closure_is_strong(CLOSURE * closure);
 static BOOLEAN closure_is_dump(CLOSURE * closure);
 static void process_node_value(CLOSURE * closure, STRING v);
-static void output_any_node(CLOSURE * closure, NODE node, STRING toptag, INT lvl);
-static void output_top_node(CLOSURE * closure, NODE node);
+static void output_any_node(CLOSURE * closure, NODE node, STRING toptag, INT lvl, BOOLEAN *eflg);
+static void output_top_node(CLOSURE * closure, NODE node, BOOLEAN *eflg);
 static void process_any_node(CLOSURE * closure, NODE node);
 static void table_incr_item(TABLE tab, STRING key);
 static int add_refd_fams(ENTRY ent, VPTR param);
@@ -126,21 +126,6 @@ closure_add_key (CLOSURE * closure, STRING key, STRING tag)
 	/* during gengedcom, all tables alloc their own keys */
 	insert_table(closure->tab, strsave(key), NULL);
 }
-
-#if 0
-
-Unused code as of 2-Jan-2001
-
-/*======================================================
- * closure_add_node -- add a (top-level) node to the closure
- * a top-level node will, of course, be identified by its xref
- *====================================================*/
-static void
-closure_add_node (CLOSURE * closure, NODE node)
-{
-	closure_add_key(closure, rmvat(nxref(node)), ntag(node));
-}
-#endif
 /*======================================================
  * closure_add_output_node -- add a (top-level) node to the output list
  * the node should come from the processing list originally, and
@@ -173,9 +158,9 @@ static void
 closure_free (CLOSURE * closure)
 {
 	/* during gengedcom, all indiseqs alloc their own keys & vals */
-	remove_indiseq(closure->seq, TRUE);
+	remove_indiseq(closure->seq);
 	closure->seq=NULL;
-	remove_indiseq(closure->outseq, TRUE);
+	remove_indiseq(closure->outseq);
 	closure->outseq=NULL;
 	remove_table(closure->tab, FREEKEY);
 	closure->tab=NULL;
@@ -186,7 +171,7 @@ closure_free (CLOSURE * closure)
 static void
 closure_wipe_processlist (CLOSURE * closure)
 {
-	remove_indiseq(closure->seq, FALSE);
+	remove_indiseq(closure->seq);
 	closure->seq = create_indiseq_sval();
 }
 /*======================================================
@@ -252,7 +237,8 @@ process_node_value (CLOSURE * closure, STRING v)
  * this filters for dumping & trimming options
  *============================================*/
 static void
-output_any_node (CLOSURE * closure, NODE node, STRING toptag, INT lvl)
+output_any_node (CLOSURE * closure, NODE node, STRING toptag
+	, INT lvl, BOOLEAN *eflg)
 {
 	char newval[MAXGEDNAMELEN]; /* for modified values */
 	STRING v,pv;
@@ -348,22 +334,27 @@ output_any_node (CLOSURE * closure, NODE node, STRING toptag, INT lvl)
 			pq += strlen(pq);
 		}
 		sprintf(pq, "\n");
-		poutput(scratch);
+		poutput(scratch, eflg);
+		if (*eflg)
+			return;
 		
-		if (nchild(node))
-			output_any_node(closure, nchild(node), toptag, lvl+1);
+		if (nchild(node)) {
+			output_any_node(closure, nchild(node), toptag, lvl+1, eflg);
+			if (*eflg)
+				return;
+			}
 	}
 
 	if (nsibling(node))
-		output_any_node(closure, nsibling(node), toptag, lvl);
+		output_any_node(closure, nsibling(node), toptag, lvl, eflg);
 }
 /*===================================================
  * output_top_node -- put a node onto the output list
  *=================================================*/
 static void
-output_top_node (CLOSURE * closure, NODE node)
+output_top_node (CLOSURE * closure, NODE node, BOOLEAN *eflg)
 {
-	output_any_node(closure, node, ntag(node), 0);
+	output_any_node(closure, node, ntag(node), 0, eflg);
 }
 /*========================================
  * process_any_node -- filter for pointers
@@ -427,7 +418,7 @@ add_refd_fams (ENTRY ent, VPTR param)
  *  this version handles sources (in strong mode - see gengedcl modes)
  *=================================================================*/
 void
-gen_gedcom (INDISEQ seq, int gengedcl)
+gen_gedcom (INDISEQ seq, int gengedcl, BOOLEAN * eflg)
 {
 	INT num1;
 	NODE indi, famc;
@@ -485,13 +476,15 @@ gen_gedcom (INDISEQ seq, int gengedcl)
 			process_any_node(&closure, node);
 			closure_add_output_node(&closure, node);
 		ENDINDISEQ
-		remove_indiseq(tempseq, TRUE);
+		remove_indiseq(tempseq);
 		tempseq=NULL;
 	}
 	canonkeysort_indiseq(closure.outseq);
 	FORINDISEQ(closure.outseq, el, num)
 		node = key_to_type(skey(el), FALSE);
-		output_top_node(&closure, node);
+		output_top_node(&closure, node, eflg);
+		if (*eflg)
+			return;
 	ENDINDISEQ
 	closure_free(&closure);
 }

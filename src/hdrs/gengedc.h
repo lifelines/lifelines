@@ -47,6 +47,6 @@ enum {
 	GENGEDCOM_STRONG_TRIM
 };
 
-void gen_gedcom (INDISEQ seq, int gengedcl);
+void gen_gedcom (INDISEQ seq, int gengedcl, BOOLEAN *eflg);
 
 #endif /* _GENGEDC_H */

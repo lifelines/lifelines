@@ -53,7 +53,15 @@ typedef struct pv_block *PV_BLOCK;
  * local function prototypes
  *********************************************/
 
+static CACHEEL access_cel_from_pvalue(PVALUE val);
+static void clear_pv_indiseq(INDISEQ seq);
+static PVALUE create_pvalue_from_keynum_impl(INT i, INT ptype);
+static PVALUE create_pvalue_from_key_impl(STRING key, INT ptype);
+static void delete_vptr_pvalue(VPTR ptr);
 static void free_all_pvalues(void);
+static BOOLEAN is_pvalue_or_freed(PVALUE pval);
+static void symtab_cleaner(ENTRY ent);
+static void table_pvcleaner(ENTRY ent);
 
 /*********************************************
  * local variables
@@ -68,6 +76,7 @@ static PVALUE free_list = 0;
 static INT live_pvalues = 0;
 static PV_BLOCK block_list = 0;
 static BOOLEAN reports_time = FALSE;
+static BOOLEAN cleaning_time = FALSE;
 static BOOLEAN alloclog_save = FALSE;
 
 /*********************************************
@@ -75,6 +84,21 @@ static BOOLEAN alloclog_save = FALSE;
  * body of module
  *********************************************/
 
+static void
+debug_check()
+{
+/*PVALUE val;
+for (val=free_list; val; val=val->value)
+{
+	ASSERT(val->type == 99 && val->value != val);
+}
+if ((int)free_list == 0x305504) {
+int debug=999;
+}
+if ((int)free_list == 0x308af0) {
+int debug=999;
+}*/
+}
 /*========================================
  * alloc_pvalue_memory -- return new pvalue memory
  * We use a custom allocator, which lowers our overhead
@@ -112,11 +136,15 @@ alloc_pvalue_memory (void)
 			val1->type = PFREED;
 			val1->value = free_list;
 			free_list = val1;
+debug_check();
 		}
 	}
 	val = free_list;
 	free_list = free_list->value;
+debug_check();
 	live_pvalues++;
+	ptype(val) = PUNINT;
+	pvalue(val) = 0;
 	return val;
 }
 /*========================================
@@ -128,11 +156,21 @@ static void
 free_pvalue_memory (PVALUE val)
 {
 	ASSERT(reports_time);
+	if (ptype(val)==PFREED) {
+		/*
+		this can happen during cleaning - eg, if we find
+		orphaned values in a table before we find the orphaned
+		table
+		*/
+		ASSERT(cleaning_time);
+		return;
+	}
 	/* see alloc_pvalue_memory for discussion of this ASSERT */
 	/* put on free list */
 	val->type = PFREED;
 	val->value = free_list;
 	free_list = val;
+debug_check();
 	live_pvalues--;
 	ASSERT(live_pvalues>=0);
 }
@@ -157,8 +195,11 @@ pvalues_begin (void)
 void
 pvalues_end (void)
 {
+	ASSERT(!cleaning_time);
+	cleaning_time = TRUE;
 	free_all_pvalues();
 	free_all_pnodes();
+	cleaning_time = FALSE;
 	ASSERT(reports_time);
 	reports_time = FALSE;
 #ifdef DEBUG_REPORT_MEMORY
@@ -181,9 +222,14 @@ static void
 free_all_pvalues (void)
 {
 	PV_BLOCK block;
-	/* live_count is how many were leaked */
+	int leaked = live_pvalues;
 	while ((block = block_list)) {
 		PV_BLOCK next = block->next;
+		/*
+		As we free the blocks, all their pvalues go back to CRT heap
+		so we must not touch them again - so keep zeroing out free_list
+		for each block
+		*/
 		free_list = 0;
 		if (live_pvalues) {
 			INT i;
@@ -232,6 +278,11 @@ create_pvalue (INT type, VPTR value)
 void
 clear_pvalue (PVALUE val)
 {
+	if (cleaning_time) {
+		ASSERT(is_pvalue_or_freed(val));
+	} else {
+		ASSERT(is_pvalue(val));
+	}
 	switch (ptype(val)) {
 	/*
 	embedded values have no referenced memory to clear
@@ -263,8 +314,7 @@ clear_pvalue (PVALUE val)
 			LIST list = (LIST) pvalue(val);
 			lrefcnt(list)--;
 			if (!lrefcnt(list)) {
-				/* let the block cleaner get the PVALUEs */
-				remove_list(list, 0);
+				remove_list(list, delete_vptr_pvalue);
 			}
 		}
 		return;
@@ -273,12 +323,7 @@ clear_pvalue (PVALUE val)
 			TABLE table = (TABLE)pvalue(val);
 			table->refcnt--;
 			if (!table->refcnt) {
-				/*
-				__insert, interp.c, and eval.c put pvalues in
-				(which block cleaner will get)
-				but what did yacc.y put in ?
-				2001/01/20, Perry Rapp
-				*/
+				traverse_table(table, table_pvcleaner);
 				remove_table(table, FREEKEY);
 			}
 		}
@@ -288,8 +333,8 @@ clear_pvalue (PVALUE val)
 			INDISEQ seq = (INDISEQ)pvalue(val);
 			IRefcnt(seq)--;
 			if (!IRefcnt(seq)) {
-				/* let the block cleaner get the PVALUEs */
-				remove_indiseq(seq, FALSE);
+				clear_pv_indiseq(seq);
+				remove_indiseq(seq);
 			}
 		}
 		return;
@@ -299,10 +344,50 @@ clear_pvalue (PVALUE val)
 		unlock any cache elements
 		don't worry about memory - it is owned by cache
 		*/
-		CACHEEL cel = get_cel_from_pvalue(val);
+		CACHEEL cel = access_cel_from_pvalue(val);
 		if (cel)
 			unsemilock_cache(cel);
 	}
+}
+/*========================================
+ * clear_pv_indiseq -- Clear PVALUES from indiseq
+ * Created: 2001/03/24, Perry Rapp
+ *======================================*/
+static void
+clear_pv_indiseq (INDISEQ seq)
+{
+	PVALUE val=NULL;
+	ASSERT(IValtype(seq) == ISVAL_PTR);
+	FORINDISEQ(seq, el, ncount)
+		val = (PVALUE) sval(el).w;
+		if (val) {
+			delete_pvalue(val);
+			sval(el).w = NULL;
+		}
+	ENDINDISEQ
+}
+/*========================================
+ * table_pvcleaner -- Clean pvalue entries
+ *  from table
+ * Created: 2001/03/24, Perry Rapp
+ *======================================*/
+static void
+table_pvcleaner (ENTRY ent)
+{
+	PVALUE val = ent->evalue;
+	delete_pvalue(val);
+	ent->evalue = 0;
+}
+/*========================================
+ * delete_vptr_pvalue -- Delete a program value
+ *  (passed in as a VPTR)
+ * Created: 2001/03/24, Perry Rapp
+ *======================================*/
+static void
+delete_vptr_pvalue (VPTR ptr)
+{
+	PVALUE val = (PVALUE)ptr;
+	delete_pvalue(val);
 }
 /*========================================
  * delete_pvalue -- Delete a program value
@@ -387,13 +472,13 @@ copy_pvalue (PVALUE val)
 	}
 	if (is_record_pvalue(val)) {
 		/*
+		2001/03/21
 		it is ok to just copy cache-managed elements,
-		but do adjust reference count as necessary
-		PINDI, PFAM, PSOUR, PEVEN, POTHR
+		the reference count must be adjusted
+		but create_pvalue() does this part
+		(it knows about record pvalues, unlike lists etc)
+		(this oddity will go away when I switch to key values)
 		*/
-		CACHEEL cel = get_cel_from_pvalue(val);
-		if (cel)
-			semilock_cache(cel);
 	}
 
 	newval = pvalue(val);
@@ -402,10 +487,23 @@ copy_pvalue (PVALUE val)
 }
 /*==================================
  * get_cel_from_pvalue -- Extract record from pvalue
+ *  and load into direct
  * Created: 2001/03/17, Perry Rapp
  *================================*/
 CACHEEL
 get_cel_from_pvalue (PVALUE val)
+{
+	CACHEEL cel = access_cel_from_pvalue(val);
+	load_cacheel(cel);
+	return cel;
+}
+/*==================================
+ * access_cel_from_pvalue -- Extract record from pvalue
+ *  doesn't load into direct
+ * Created: 2001/03/17, Perry Rapp
+ *================================*/
+static CACHEEL
+access_cel_from_pvalue (PVALUE val)
 {
 	CACHEEL cel = pvalue(val);
 	ASSERT(is_record_pvalue(val));
@@ -430,20 +528,7 @@ create_pvalue_from_indi (NODE indi)
 PVALUE
 create_pvalue_from_indi_key (STRING key)
 {
-	NODE indi;
-	PVALUE val;
-	STRING record;
-	INT len;
-	if (!key)
-		return create_pvalue_from_indi(NULL);
-	record = retrieve_record(key, &len);
-	if (!record)
-		return create_pvalue_from_indi(NULL);
-	ASSERT((indi = string_to_node(record)));
-	stdfree(record);
-	val = create_pvalue_from_indi(indi);
-	free_nodes(indi);/*yes*/
-	return val;
+	return create_pvalue_from_key_impl(key, PINDI);
 }
 /*=====================================================
  * create_pvalue_from_indi_keynum -- Return indi as pvalue
@@ -454,11 +539,7 @@ create_pvalue_from_indi_key (STRING key)
 PVALUE
 create_pvalue_from_indi_keynum (INT i)
 {
-	static char key[10];
-	if (!i)
-		return create_pvalue_from_indi(NULL);
-	sprintf(key, "I%d", i);
-	return create_pvalue_from_indi_key(key);
+	return create_pvalue_from_keynum_impl(i, PINDI);
 }
 /*=====================================================
  * create_pvalue_from_fam -- Return fam as pvalue
@@ -480,21 +561,69 @@ create_pvalue_from_fam (NODE fam)
 PVALUE
 create_pvalue_from_fam_keynum (INT i)
 {
+	return create_pvalue_from_keynum_impl(i, PFAM);
+}
+/*=====================================================
+ * create_pvalue_from_sour_keynum -- Return new pvalue for source
+ * Created: 2001/03/20, Perry Rapp
+ *===================================================*/
+PVALUE
+create_pvalue_from_sour_keynum (INT i)
+{
+	return create_pvalue_from_keynum_impl(i, PSOUR);
+}
+/*=====================================================
+ * create_pvalue_from_even_keynum -- Return new pvalue for event
+ * Created: 2001/03/23, Perry Rapp
+ *===================================================*/
+PVALUE
+create_pvalue_from_even_keynum (INT i)
+{
+	return create_pvalue_from_keynum_impl(i, PEVEN);
+}
+/*=====================================================
+ * create_pvalue_from_node_impl -- Create pvalue from any node
+ *  handles NULL
+ * Created: 2001/03/20, Perry Rapp
+ *===================================================*/
+PVALUE
+create_pvalue_from_node_impl (NODE node, INT ptype)
+{
+	CACHEEL cel = node ? node_to_cacheel(node) : NULL;
+	return create_pvalue(ptype, cel);
+}
+/*====================================================
+ * create_pvalue_from_keynum_impl -- Create pvalue for any type
+ * Created: 2001/03/20, Perry Rapp
+ *==================================================*/
+static PVALUE
+create_pvalue_from_keynum_impl (INT i, INT ptype)
+{
 	static char key[10];
-	NODE fam;
-	PVALUE val;
-	STRING record;
-	INT len;
+	char cptype = 'Q';
 	if (!i)
-		return create_pvalue_from_fam(NULL);
-	sprintf(key, "F%d", i);
-	record = retrieve_record(key, &len);
-	if (!record)
-		return create_pvalue_from_fam(NULL);
-	ASSERT((fam = string_to_node(record)));
-	stdfree(record);
-	val = create_pvalue_from_fam(fam);
-	free_nodes(fam);/*yes*/
+		return create_pvalue_from_node_impl(NULL, ptype);
+	switch(ptype) {
+	case PINDI: cptype = 'I'; break;
+	case PFAM: cptype = 'F'; break;
+	case PSOUR: cptype = 'S'; break;
+	case PEVEN: cptype = 'E'; break;
+	case POTHR: cptype = 'X'; break;
+	default: ASSERT(0); break;
+	}
+	sprintf(key, "%c%d", cptype, i);
+	return create_pvalue_from_key_impl(key, ptype);
+}
+/*==================================
+ * create_pvalue_from_key_impl -- Create pvalue from any key
+ * Created: 2001/03/20, Perry Rapp
+ *================================*/
+static PVALUE
+create_pvalue_from_key_impl (STRING key, INT ptype)
+{
+	/* report mode, so may return NULL */
+	NODE node = key_to_type(key, TRUE);
+	PVALUE val = create_pvalue_from_node_impl(node, ptype);
 	return val;
 }
 /*==================================
@@ -672,12 +801,23 @@ bad:
 	return;
 }
 /*===========================================================
- * is_pvalue -- Checks PVALUE for validity -- doesn't do much
+ * is_pvalue -- Checks that PVALUE is a valid type
  *=========================================================*/
 BOOLEAN
 is_pvalue (PVALUE pval)
 {
 	if (!pval) return FALSE;
+	return ptype(pval) >= PNONE  && ptype(pval) <= PSET;
+}
+/*===========================================================
+ * is_pvalue_or_freed -- Checks that PVALUE is a valid type
+ *  or freed
+ *=========================================================*/
+static BOOLEAN
+is_pvalue_or_freed (PVALUE pval)
+{
+	if (!pval) return FALSE;
+	if (ptype(pval) == PFREED) return TRUE;
 	return ptype(pval) >= PNONE  && ptype(pval) <= PSET;
 }
 /*========================================
@@ -850,6 +990,7 @@ eqv_pvalues (PVALUE val1,
 }
 /*===========================================
  * eq_pvalues -- See if two PVALUEs are equal
+ *  and delete val2
  *=========================================*/
 void
 eq_pvalues (PVALUE val1,
@@ -866,8 +1007,10 @@ eq_pvalues (PVALUE val1,
 	case PSTRING:
 		v1 = pvalue(val1);
 		v2 = pvalue(val2);
-		if(v1 && v2) rel = eqstr(v1, v2);
-		else rel = (v1 == v2);
+		if(v1 && v2)
+			rel = eqstr(v1, v2);
+		else
+			rel = (v1 == v2);
 		break;
 	default:
 		rel = (pvalue(val1) == pvalue(val2));
@@ -1139,79 +1282,107 @@ is_zero (PVALUE val)
 	}
 }
 /*======================================================
- * insert_pvtable -- Update symbol table with new PVALUE
- * TABLE stab:  symbol table
- * STRING iden: variable in symbol table
- * INT type:    type of new value to assign to identifier
- * VPTR value:  new value of identifier
+ * insert_symtab -- Update symbol table with new PVALUE
+ * SYMTAB stab:  symbol table
+ * STRING iden:  variable in symbol table
+ * INT type:     type of new value to assign to identifier
+ * VPTR value:   new value of identifier
  *====================================================*/
 void
-insert_pvtable (TABLE stab, STRING iden, INT type, VPTR value)
+insert_symtab (SYMTAB stab, STRING iden, INT type, VPTR value)
 {
-	PVALUE val = (PVALUE) valueof(stab, iden);
+	PVALUE val = (PVALUE) valueof(stab.tab, iden);
 	if (val) delete_pvalue(val);
-	insert_table(stab, iden, create_pvalue(type, value));
+	insert_table(stab.tab, iden, create_pvalue(type, value));
 }
 /*======================================================
- * insert_pvtable -- Update symbol table with new PVALUE
- * TABLE stab:  symbol table
- * STRING iden: variable in symbol table
- * INT type:    type of new value to assign to identifier
- * VPTR value:  new value of identifier
+ * insert_symtab_pvalue -- Update symbol table with PVALUE
+ * SYMTAB stab:  symbol table
+ * STRING iden:  variable in symbol table
+ * PVALUE val:   already created PVALUE
  *====================================================*/
 void
-insert_pvtable_pvalue (TABLE stab, STRING iden, PVALUE val)
+insert_symtab_pvalue (SYMTAB stab, STRING iden, PVALUE val)
 {
-	PVALUE oldval = (PVALUE) valueof(stab, iden);
+	PVALUE oldval = (PVALUE) valueof(stab.tab, iden);
 	if (oldval) delete_pvalue(oldval);
-	insert_table(stab, iden, val);
+	insert_table(stab.tab, iden, val);
 }
 /*======================================================
- * delete_pvtable -- Delete a value from a symbol table
- * TABLE stab:  symbol table
+ * delete_symtab -- Delete a value from a symbol table
+ * SYMTAB stab:  symbol table
  * STRING iden: variable in symbol table
  * Created: 2001/03/17, Perry Rapp
  *====================================================*/
 void
-delete_pvtable (TABLE stab, STRING iden)
+delete_symtab (SYMTAB stab, STRING iden)
 {
-	PVALUE val = (PVALUE) valueof(stab, iden);
+	PVALUE val = (PVALUE) valueof(stab.tab, iden);
 	if (val) delete_pvalue(val);
-	delete_table(stab, iden);
+	delete_table(stab.tab, iden);
 }
-#ifndef HOGMEMORY
-/*=================================================
- * zero_pventry -- zero the value of a symbol table 
- *================================================*/
-void
-zero_pventry (ENTRY ent)      /* symbol table entry */
+/*======================================================
+ * symtab_cleaner -- callback for clearing symbol table pvalues
+ * clear out table values (PVALUEs), but don't touch keys
+ * TABLE stab:  symbol table
+ * Created: 2001/03/22, Perry Rapp
+ *====================================================*/
+static void
+symtab_cleaner (ENTRY ent)
 {
-	PVALUE val;
-	if(ent && (val = ent->evalue)) {
+	PVALUE val = ent->evalue;
+	if (val) {
 		ASSERT(is_pvalue(val));
 		delete_pvalue(val);
-		ent->evalue = 0;
+		ent->evalue = NULL;
 	}
 }
 /*========================================
- * remove_pvtable -- Remove symbol table 
+ * null_symtab -- Return null symbol table 
+ * Created: 2001/03/24, Perry Rapp
  *======================================*/
-static FILE *errfp = NULL;
-void
-remove_pvtable (TABLE stab)     /* symbol table */
+SYMTAB
+null_symtab (void)
 {
-#ifdef HOGMEMORYERROR
-	if(errfp == NULL) errfp = fopen("pbm.err", "w");
-	if(errfp) { fprintf(errfp, "traverse_table()...\n"); fflush(stderr); }
-	traverse_table(stab, zero_pventry);
-	if(errfp) { fprintf(errfp, "remove_table(, DONTFREE)...\n"); fflush(stderr); }
-#endif
-	remove_table(stab, DONTFREE);
-#ifdef HOGMEMORYERROR
-	 if(errfp) { fprintf(errfp, "remove_pvtable() done.\n"); fflush(stderr); }
-#endif
+	SYMTAB stab;
+	stab.tab = NULL;
+	return stab;
 }
-#endif
+/*========================================
+ * remove_symtab -- Remove symbol table 
+ * TABLE stab:  symbol table
+ * Created: 2001/03/22, Perry Rapp
+ *======================================*/
+void
+remove_symtab (SYMTAB * stab)
+{
+	if (stab->tab)
+	{
+		traverse_table(stab->tab, symtab_cleaner);
+		remove_table(stab->tab, DONTFREE);
+		stab->tab = 0;
+	}
+	*stab = null_symtab();
+}
+/*======================================================
+ * create_symtab -- Create a symbol table
+ * Created: 2001/03/22, Perry Rapp
+ *====================================================*/
+void
+create_symtab (SYMTAB * stab)
+{
+	remove_symtab(stab);
+	stab->tab = create_table();
+}
+/*======================================================
+ * in_symtab -- Does symbol table have this entry ?
+ * Created: 2001/03/23, Perry Rapp
+ *====================================================*/
+BOOLEAN
+in_symtab (SYMTAB stab, STRING key)
+{
+	return in_table(stab.tab, key);
+}
 /*=================================================
  * show_pvalue -- DEBUG routine that shows a PVALUE
  *===============================================*/
@@ -1302,3 +1473,14 @@ pvalue_to_string (PVALUE val)
 	}
 	return (STRING) scratch;
 }
+/*======================================================
+ * symtab_valueofbool -- Convert pvalue to boolean if present
+ *  returns static buffer
+ * Created: 2001/03/22, Perry Rapp
+ *====================================================*/
+VPTR
+symtab_valueofbool (SYMTAB stab, STRING key, BOOLEAN *there)
+{
+	return valueofbool(stab.tab, key, there);
+}
+

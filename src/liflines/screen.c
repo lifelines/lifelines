@@ -1247,7 +1247,7 @@ indiseq_list_interact (WINDOW *win,
 		case 'd':
 			delete_indiseq(seq, NULL, NULL, cur);
 			if (--len == 0) {
-				remove_indiseq(seq, FALSE);
+				remove_indiseq(seq);
 				return NULL;
 			}
 			if (cur == len) cur--;

@@ -396,7 +396,7 @@ finish_and_delete_nameset (INDISEQ seq)
 		}
 		strcpy(prevkey, skey(el));
 	ENDINDISEQ
-	remove_indiseq(seq, FALSE);
+	remove_indiseq(seq);
 }
 /*=================================================================
  * finish_and_delete_refnset -- check for dups in a set of one refn
@@ -414,7 +414,7 @@ finish_and_delete_refnset (INDISEQ seq)
 		}
 		strcpy(prevkey, skey(el));
 	ENDINDISEQ
-	remove_indiseq(seq, FALSE);
+	remove_indiseq(seq);
 }
 /*=================================
  * check_nodes -- Process all nodes
@@ -436,11 +436,11 @@ check_nodes (void)
 	check_set(seq_sours, 'S');
 	check_set(seq_evens, 'E');
 	check_set(seq_othes, 'X');
-	remove_indiseq(seq_indis, FALSE);
-	remove_indiseq(seq_fams, FALSE);
-	remove_indiseq(seq_sours, FALSE);
-	remove_indiseq(seq_evens, FALSE);
-	remove_indiseq(seq_othes, FALSE);
+	remove_indiseq(seq_indis);
+	remove_indiseq(seq_fams);
+	remove_indiseq(seq_sours);
+	remove_indiseq(seq_evens);
+	remove_indiseq(seq_othes);
 }
 /*=============================================
  * nodes_callback -- callback for node traversal

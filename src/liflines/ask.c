@@ -277,7 +277,7 @@ ask_for_indi_once (STRING ttl,
 	INDISEQ seq = ask_for_indiseq(ttl, prc);
 	if (*prc == RC_DONE || *prc == RC_NOSELECT) return NULL;
 	indi = nztop(choose_from_indiseq(seq, ask1, ifone, notone));
-	remove_indiseq(seq, FALSE);
+	remove_indiseq(seq);
 	*prc = indi ? RC_SELECT : RC_NOSELECT;
 	return indi;
 }

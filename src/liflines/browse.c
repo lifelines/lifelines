@@ -141,7 +141,7 @@ prompt_for_browse (NODE * node, INT * code, INDISEQ * seq)
 		if (len == 1) {
 			element_indiseq(*seq, 0, &key, &name);
 			*node = key_to_indi(key);
-			remove_indiseq(*seq, FALSE);
+			remove_indiseq(*seq);
 			*seq = NULL;
 		} else {
 			*code = BROWSE_LIST;
@@ -504,7 +504,7 @@ browse_indi_modes (NODE *pindi1,
 			if (length_indiseq(seq) == 1) {
 				element_indiseq(seq, 0, &key, &name);
 				indi = key_to_indi(key);
-				remove_indiseq(seq, FALSE);
+				remove_indiseq(seq);
 				seq=NULL;
 				break;
 			}
@@ -1001,7 +1001,7 @@ browse_fam (NODE *pindi1,
 			if (length_indiseq(seq) == 1) {
 				element_indiseq(seq, 0, &key, &name);
 				*pindi1 = key_to_indi(key);
-				remove_indiseq(seq, FALSE);
+				remove_indiseq(seq);
 				seq=NULL;
 				return BROWSE_INDI;
 				break;
@@ -1210,7 +1210,7 @@ choose_any_source (void)
 		return 0;
 	}
 	nod0 = choose_from_indiseq(seq, DOASK1, idsour, idsour);
-	remove_indiseq(seq, FALSE);
+	remove_indiseq(seq);
 	return nod0;
 }
 /*==================================================
@@ -1228,7 +1228,7 @@ choose_any_event (void)
 		return NULL;
 	}
 	nod0 = choose_from_indiseq(seq, DOASK1, ideven, ideven);
-	remove_indiseq(seq, FALSE);
+	remove_indiseq(seq);
 	return nod0;
 }
 /*==================================================
@@ -1246,7 +1246,7 @@ choose_any_other (void)
 		return NULL;
 	}
 	nod0 = choose_from_indiseq(seq, DOASK1, idothe, idothe);
-	remove_indiseq(seq, FALSE);
+	remove_indiseq(seq);
 	return nod0;
 }
 /*==================================================

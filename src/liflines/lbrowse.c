@@ -106,7 +106,7 @@ browse_list (NODE *pindi1,
 		case 'i':	/* Browse current person */
 			*pindi1 = indi;
 			if (current_seq)
-				remove_indiseq(current_seq, FALSE);
+				remove_indiseq(current_seq);
 			current_seq = NULL;
 			return BROWSE_INDI;
 		case 'm':	/* Mark current person */
@@ -115,7 +115,7 @@ browse_list (NODE *pindi1,
 		case 'd':	/* Delete person from list */
 			if (len <= 1) {
 				if (current_seq)
-					remove_indiseq(current_seq, FALSE);
+					remove_indiseq(current_seq);
 				current_seq = NULL;
 				return BROWSE_QUIT;
 			}
@@ -147,7 +147,7 @@ browse_list (NODE *pindi1,
 			indi = key_to_indi(key);
 			if ((len = length_indiseq(seq)) == 1) {
 				*pindi1 = indi;
-				remove_indiseq(newseq, FALSE);
+				remove_indiseq(newseq);
 				current_seq = NULL;
 				return BROWSE_INDI;
 			}
@@ -161,7 +161,7 @@ browse_list (NODE *pindi1,
 				break;
 			}
 			FORINDISEQ(newseq, e, i)
-				append_indiseq_null(seq, skey(e), snam(e), FALSE, FALSE);
+				append_indiseq_null(seq, strsave(skey(e)), snam(e), FALSE, TRUE);
 			ENDINDISEQ
 			namesort_indiseq(seq);
 			cur = top = 0;
@@ -169,7 +169,7 @@ browse_list (NODE *pindi1,
 			len = length_indiseq(seq);
 			element_indiseq(seq, cur, &key, &name);
 			indi = key_to_indi(key);
-			remove_indiseq(newseq, FALSE);
+			remove_indiseq(newseq);
 			message(lstnew);
 			break;
 		case 'n':	/* Name this list */
@@ -178,7 +178,7 @@ browse_list (NODE *pindi1,
 				message(lstnon);
 			else {
 				newname = strsave(newname);
-				add_browse_list (newname, copy_indiseq(seq));
+				add_browse_list(newname, copy_indiseq(seq));
 				mprintf_info(lstnam, newname);
 			}
 			break;

@@ -105,7 +105,7 @@ ns_callback (STRING key, STRING name, BOOLEAN newset, void *param)
 	if (patt->scantype == NAMESCAN_FULL) {
 		if (pattern_match(patt, name)) {
 			/* if we pass in name, append_indiseq won't check for dups */
-			append_indiseq_null(results_seq, key, NULL, FALSE, FALSE);
+			append_indiseq_null(results_seq, strsave(key), NULL, FALSE, TRUE);
 		}
 	} else {
 		/* NAMESCAN_FRAG */
@@ -115,7 +115,7 @@ ns_callback (STRING key, STRING name, BOOLEAN newset, void *param)
 			piece = (STRING)el;
 			if (pattern_match(patt, piece)) {
 				/* if we pass in name, append_indiseq won't check for dups */
-				append_indiseq_null(results_seq, key, NULL, FALSE, FALSE);
+				append_indiseq_null(results_seq, strsave(key), NULL, FALSE, TRUE);
 				break;
 			}
 		ENDLIST
@@ -134,7 +134,7 @@ rs_callback (STRING key, STRING refn, BOOLEAN newset, void *param)
 
 	if (pattern_match(patt, refn)) {
 		/* if we pass in name, append_indiseq won't check for dups */
-		append_indiseq_null(results_seq, key, NULL, FALSE, FALSE);
+		append_indiseq_null(results_seq, strsave(key), NULL, FALSE, TRUE);
 	}
 	return TRUE;
 }
@@ -193,7 +193,7 @@ name_scan (INT scantype)
 	if (length_indiseq(results_seq)) {
 		indi = choose_from_indiseq(results_seq, DOASK1, scanrs, scanrs);
 	}
-	remove_indiseq(results_seq, FALSE);
+	remove_indiseq(results_seq);
 	results_seq=NULL;
 	return indi;
 }
@@ -242,7 +242,7 @@ refn_scan (void)
 	if (length_indiseq(results_seq)) {
 		nod0 = choose_from_indiseq(results_seq, DOASK1, scanrs, scanrs);
 	}
-	remove_indiseq(results_seq, FALSE);
+	remove_indiseq(results_seq);
 	results_seq=NULL;
 	return nod0;
 }

@@ -126,8 +126,7 @@ delete_table (TABLE tab,
  * in_table() - Check for entry in table
  *====================================*/
 BOOLEAN
-in_table (TABLE tab,
-          STRING key)
+in_table (TABLE tab, STRING key)
 {
 	return fndentry(tab, key) != NULL;
 }
@@ -147,11 +146,10 @@ valueof (TABLE tab,
 }
 /*===================================
  * valueofbool -- Find value of entry
+ *  there is output parameter set to FALSE if not found
  *=================================*/
 VPTR
-valueofbool (TABLE tab,
-             STRING key,
-             BOOLEAN *there)
+valueofbool (TABLE tab, STRING key, BOOLEAN *there)
 {
 	ENTRY entry;
 	*there = FALSE;
@@ -211,11 +209,10 @@ remove_table (TABLE tab,
 }
 /*=================================================
  * traverse_table -- Traverse table doing something
- *  return value of callback unused
+ * tproc: callback for each entry
  *===============================================*/
 void
-traverse_table (TABLE tab,
-                INT (*tproc)(ENTRY))
+traverse_table (TABLE tab, void (*tproc)(ENTRY))
 {
 	INT i;
 	ENTRY ent, nxt;
@@ -228,7 +225,6 @@ traverse_table (TABLE tab,
 		}
 	}
 }
-
 /*=================================================
  * traverse_table_param -- Traverse table doing something, with extra callback param
  * also, use return value of proc to allow abort (proc returns 0 for abort)
@@ -237,7 +233,7 @@ traverse_table (TABLE tab,
 void
 traverse_table_param (TABLE tab,
                 INT (*tproc)(ENTRY, VPTR),
-                void * param)
+                VPTR param)
 {
 	INT i;
 	ENTRY ent, nxt;

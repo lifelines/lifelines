@@ -295,7 +295,7 @@ ask_for_record (STRING idstr,   /* question prompt */
 		seq = refn_to_indiseq(str, letr, KEYSORT);
 		if (!seq) return NULL;
 		nod0 = choose_from_indiseq(seq, NOASK1, duprfn, duprfn);
-		remove_indiseq(seq, FALSE);
+		remove_indiseq(seq);
 	}
 	return nod0;
 }

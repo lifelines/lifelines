@@ -61,7 +61,7 @@ enum { DBNO, DBYES };
 static STRING numtostr(INT num);
 static void load_config_file(STRING file);
 static void read_db_options(void);
-static INT update_opt(ENTRY ent);
+static void update_opt(ENTRY ent);
 static void store_to_lloptions(void);
 
 /*********************************************
@@ -219,19 +219,18 @@ read_db_options (void)
  *  used by read_db_options traversal
  * Created: 2001/02/04, Perry Rapp
  *========================================*/
-static INT
+static void
 update_opt (ENTRY ent)
 {
 	STRING key, value;
 	key = ent->ekey;
 	if (valueof(nodbopt, key))
-		return 0; /* unused */
+		return;
 	value = (STRING) valueof(useropts, key);
 	if (value) {
 		free(ent->evalue);
 		ent->evalue = strsave(value);
 	}
-	return 0; /* unused */
 }
 /*===============================================
  * changeoptstr -- Change an option string

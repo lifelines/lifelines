@@ -63,6 +63,10 @@ extern BOOLEAN opt_finnish;		/* Finnish language support */
 
 #define key_to_name(k)  nval(NAME(key_to_indi(k)))
 
+/*********************************************
+ * local enums
+ *********************************************/
+
 /*====================
  * indiseq print types
  *==================*/
@@ -70,27 +74,40 @@ extern BOOLEAN opt_finnish;		/* Finnish language support */
 #define ISPRN_FAMSEQ 1
 #define ISPRN_SPOUSESEQ 2
 
-/*====================
- * indiseq val types
- *  NULL means it has no values yet
- *==================*/
-#define ISVAL_INT 1
-#define ISVAL_STR 2
-#define ISVAL_PTR 3
-#define ISVAL_NUL 4
+/*********************************************
+ * local function prototypes
+ *********************************************/
 
-static STRING get_print_el(INDISEQ, INT i, INT len);
 static void append_all_tags(INDISEQ, NODE, STRING tagname, BOOLEAN recurse, BOOLEAN nonptrs);
-
-static INT name_compare(SORTEL, SORTEL);
-static INT key_compare(SORTEL, SORTEL);
-static INT canonkey_order(char c);
-static INT canonkey_compare(SORTEL el1, SORTEL el2);
-static INT value_str_compare(SORTEL, SORTEL);
-static INDISEQ create_indiseq_impl(INT valtype);
 static void append_indiseq_impl(INDISEQ seq, STRING key, 
 	STRING name, UNION val, BOOLEAN sure, BOOLEAN alloc);
+static INT canonkey_compare(SORTEL el1, SORTEL el2);
+static INT canonkey_order(char c);
 static void check_indiseq_valtype(INDISEQ seq, INT valtype);
+static UNION copyval(INDISEQ seq, UNION uval);
+static INDISEQ create_indiseq_impl(INT valtype);
+static void delete_el(INDISEQ seq, SORTEL el);
+static void deleteval(INDISEQ seq, UNION uval);
+static STRING get_print_el(INDISEQ, INT i, INT len);
+static INT key_compare(SORTEL, SORTEL);
+static INT name_compare(SORTEL, SORTEL);
+static INT value_str_compare(SORTEL, SORTEL);
+
+/*********************************************
+ * local variables
+ *********************************************/
+
+static struct indiseq_value_vtable_s def_valvtbl =
+{
+	&default_copy_value
+	, &default_delete_value
+	, &default_create_gen_value
+};
+
+/*********************************************
+ * local function definitions
+ * body of module
+ *********************************************/
 
 /*===============================================
  * create_indiseq_ival -- Create sequence of INTs
@@ -143,28 +160,52 @@ create_indiseq_impl (INT valtype)
 	IPrntype(seq) = ISPRN_NORMALSEQ;
 	IValtype(seq) = valtype;
 	IRefcnt(seq) = 1;
+	IValvtbl(seq) = &def_valvtbl;
 	return seq;
 }
 /*==================================
  * remove_indiseq -- Remove sequence
  *================================*/
 void
-remove_indiseq (INDISEQ seq,
-                BOOLEAN fval)   /* free values? */
+remove_indiseq (INDISEQ seq)
 {
 	SORTEL *d = IData(seq);
 	INT i, n = ISize(seq);
 	for (i = 0; i < n; i++, d++) {
 		stdfree(skey(*d));
 		if (snam(*d)) stdfree(snam(*d));
-		if (fval) {
-			VPTR p = sval(*d).w;
-			if (p) stdfree(p);
-		}
+		default_delete_value(sval(*d), IValtype(seq));
 		if (sprn(*d)) stdfree(sprn(*d));
 	}
 	stdfree(IData(seq));
 	stdfree(seq);
+}
+/*==============================
+ * copyval -- Copy a value using the value vtable
+ * Created: 2001/03/25, Perry Rapp
+ *============================*/
+static UNION
+copyval (INDISEQ seq, UNION uval)
+{
+	return (*IValvtbl(seq)->copy_fnc)(uval, IValtype(seq));
+}
+/*==============================
+ * deleteval -- Delete a value using the value vtable
+ * Created: 2001/03/25, Perry Rapp
+ *============================*/
+static void
+deleteval (INDISEQ seq, UNION uval)
+{
+	(*IValvtbl(seq)->delete_fnc)(uval, IValtype(seq));
+}
+/*==============================
+ * deleteval -- Delete a value using the value vtable
+ * Created: 2001/03/25, Perry Rapp
+ *============================*/
+static UNION
+creategenval (INDISEQ seq, INT gen)
+{
+	return (*IValvtbl(seq)->create_gen_fnc)(gen, IValtype(seq));
 }
 /*==============================
  * copy_indiseq -- Copy sequence
@@ -173,10 +214,12 @@ INDISEQ
 copy_indiseq (INDISEQ seq)
 {
 	INDISEQ newseq;
+	UNION uval;
 	if (!seq) return NULL;
 	newseq = create_indiseq_impl(IValtype(seq));
 	FORINDISEQ(seq, el, num)
-		append_indiseq_impl(newseq, skey(el), snam(el), sval(el),
+		uval = copyval(seq, sval(el));
+		append_indiseq_impl(newseq, skey(el), snam(el), uval,
 		    TRUE, FALSE);
 	ENDINDISEQ
 	return newseq;
@@ -217,6 +260,12 @@ append_indiseq_ival (INDISEQ seq,    /* sequence */
  * append_indiseq_pval -- Append element to sequence
  *  with pointer value
  * Created: 2001/01/07, Perry Rapp
+ * INDISEQ seq:    sequence
+ * STRING key:     key - not NULL
+ * STRING name:    name - may be NULL
+ * VPTR pval:      extra val
+ * BOOLEAN sure:   no dupe check?
+ * BOOLEAN alloc:  key alloced?
  *================================================*/
 void
 append_indiseq_pval (INDISEQ seq,    /* sequence */
@@ -234,6 +283,8 @@ append_indiseq_pval (INDISEQ seq,    /* sequence */
 /*==================================================
  * append_indiseq_sval -- Append element to sequence
  *  with STRING value
+ * (Should be malloc'd values, unless caller is using
+ *  a custom value vtable)
  * Created: 2001/01/05, Perry Rapp
  *================================================*/
 void
@@ -292,7 +343,13 @@ append_indiseq_impl (INDISEQ seq,    /* sequence */
 		if (dupcheck)
 		{
 			for (i = 0; i < n; i++) {
-				if (eqstr(key, skey(old[i]))) return;
+				if (eqstr(key, skey(old[i]))) {
+					/* failed dupe check - bail */
+					if (alloc)
+						stdfree(key);
+					deleteval(seq, val);
+					return;
+				}
 			}
 		}
 	}
@@ -348,8 +405,7 @@ rename_indiseq (INDISEQ seq,
  * in_indiseq -- See if element is in an INDISEQ
  *=============================================*/
 BOOLEAN
-in_indiseq (INDISEQ seq,    /* sequence */
-            STRING key)     /* key */
+in_indiseq (INDISEQ seq, STRING key)
 {
 	INT i, len;
 	SORTEL *data;
@@ -365,12 +421,13 @@ in_indiseq (INDISEQ seq,    /* sequence */
 /*===============================================================
  * delete_indiseq -- Remove el from sequence; if key not NULL use
  *   it; else use index, rel 0; el must be person
+ * INDISEQ seq: sequence
+ * STRING key:  key - may be NULL
+ * STRING name: name - may be NULL
+ * INT index:   index of el to remove - may be computed
  *==============================================================*/
 BOOLEAN
-delete_indiseq (INDISEQ seq,    /* sequence */
-                STRING key,     /* key - may be NULL */
-                STRING name,    /* name - may be NULL */
-                INT index)      /* index of el to remove - may be computed */
+delete_indiseq (INDISEQ seq, STRING key, STRING name, INT index)
 {
 	INT i, len;
 	SORTEL *data, el;
@@ -392,11 +449,30 @@ delete_indiseq (INDISEQ seq,    /* sequence */
 	for (i = index; i < len; i++)
 		data[i] = data[i+1];
 	ISize(seq)--;
-	stdfree(skey(el));
-	if (snam(el)) stdfree(snam(el));
-	if (sprn(el)) stdfree(sprn(el));
+	delete_el(seq, el);
 	stdfree(el);
 	return TRUE;
+}
+/*===============================================================
+ * delete_el -- Free contents of element of INDISEQ
+ *==============================================================*/
+static void
+delete_el (INDISEQ seq, SORTEL el)
+{
+	stdfree(skey(el));
+	if (snam(el)) {
+		stdfree(snam(el));
+		snam(el)=NULL;
+	}
+	if (sprn(el)) {
+		stdfree(sprn(el));
+		sprn(el)=NULL;
+	}
+	deleteval(seq, sval(el));
+	if (IValtype(seq) == ISVAL_INT)
+		sval(el).i = 0;
+	else
+		sval(el).w = 0;
 }
 /*================================================
  * element_indiseq -- Return element from sequence
@@ -659,7 +735,12 @@ unique_indiseq (INDISEQ seq)
 	if (n == 0 || (IFlags(seq) & UNIQUED)) return;
 	if (!(IFlags(seq) & KEYSORT)) keysort_indiseq(seq);
 	for (j = 0, i = 1; i < n; i++)
-		if (spri(d[i]) != spri(d[j])) d[++j] = d[i];
+		if (spri(d[i]) != spri(d[j])) {
+			d[++j] = d[i];
+		} else {
+			/* TO DO - this is untested - Perry 2001/03/25 */
+			delete_el(seq, d[i]);
+		}
 	ISize(seq) = j + 1;
 	IFlags(seq) |= UNIQUED;
 }
@@ -693,6 +774,7 @@ union_indiseq (INDISEQ one, INDISEQ two)
 	INDISEQ three;
 	SORTEL *u, *v;
 	INT valtype;
+	UNION uval;
 	if (!one || !two) return NULL;
 	if (!(IFlags(one) & KEYSORT)) keysort_indiseq(one);
 	if (!(IFlags(one) & UNIQUED)) unique_indiseq(one);
@@ -702,35 +784,41 @@ union_indiseq (INDISEQ one, INDISEQ two)
 	m = length_indiseq(two);
 	valtype = get_combined_valtype(one, two);
 	three = create_indiseq_impl(valtype);
+	IValvtbl(three) = IValvtbl(one);
 	i = j = 0;
 	u = IData(one);
 	v = IData(two);
 	while (i < n && j < m) {
 		if ((rel = spri(u[i]) - spri(v[j])) < 0) {
 			key = strsave(skey(u[i]));
-			append_indiseq_impl(three, key, NULL, sval(u[i]),
+			uval = copyval(one, sval(u[i]));
+			append_indiseq_impl(three, key, NULL, uval,
 			    TRUE, TRUE);
 			i++;
 		} else if (rel > 0) {
 			key = strsave(skey(v[j]));
-			append_indiseq_impl(three, key, NULL, sval(v[j]),
+			uval = copyval(two, sval(v[j]));
+			append_indiseq_impl(three, key, NULL, uval,
 			    TRUE, TRUE);
 			j++;
 		} else {
 			key = strsave(skey(u[i]));
-			append_indiseq_impl(three, key, NULL, sval(u[i]),
+			uval = copyval(one, sval(u[i]));
+			append_indiseq_impl(three, key, NULL, uval,
 			    TRUE, TRUE);
 			i++, j++;
 		}
 	}
 	while (i < n) {
 		key = strsave(skey(u[i]));
-		append_indiseq_impl(three, key, NULL, sval(u[i]), TRUE, TRUE);
+		uval = copyval(one, sval(u[i]));
+		append_indiseq_impl(three, key, NULL, uval, TRUE, TRUE);
 		i++;
 	}
 	while (j < m) {
 		key = strsave(skey(v[j]));
-		append_indiseq_impl(three, key, NULL, sval(v[j]), TRUE, TRUE);
+		uval = copyval(two, sval(v[j]));
+		append_indiseq_impl(three, key, NULL, uval, TRUE, TRUE);
 		j++;
 	}
 	FORINDISEQ(three, el, num)
@@ -759,6 +847,7 @@ intersect_indiseq (INDISEQ one, INDISEQ two)
 	m = length_indiseq(two);
 	valtype = get_combined_valtype(one, two);
 	three = create_indiseq_impl(valtype);
+	IValvtbl(three) = IValvtbl(one);
 	i = j = 0;
 	u = IData(one);
 	v = IData(two);
@@ -801,6 +890,7 @@ difference_indiseq (INDISEQ one,
 	m = length_indiseq(two);
 	valtype = get_combined_valtype(one, two);
 	three = create_indiseq_impl(valtype);
+	IValvtbl(three) = IValvtbl(one);
 	i = j = 0;
 	u = IData(one);
 	v = IData(two);
@@ -837,21 +927,23 @@ parent_indiseq (INDISEQ seq)
 	INDISEQ par;
 	NODE indi, fath, moth;
 	STRING key;
+	UNION uval;
 	if (!seq) return NULL;
 	tab = create_table();
 	par = create_indiseq_impl(IValtype(seq));
+	IValvtbl(par) = IValvtbl(seq);
 	FORINDISEQ(seq, el, num)
 		indi = key_to_indi(skey(el));
 		fath = indi_to_fath(indi);
 		moth = indi_to_moth(indi);
 		if (fath && !in_table(tab, key = indi_to_key(fath))) {
-			key = strsave(key);
-			append_indiseq_impl(par, key, NULL, sval(el), TRUE, TRUE);
+			uval = copyval(seq, sval(el));
+			append_indiseq_impl(par, strsave(key), NULL, uval, TRUE, TRUE);
 			insert_table(tab, key, NULL);
 		}
 		if (moth && !in_table(tab, key = indi_to_key(moth))) {
-			key = strsave(key);
-			append_indiseq_impl(par, key, NULL, sval(el), TRUE, TRUE);
+			uval = copyval(seq, sval(el));
+			append_indiseq_impl(par, strsave(key), NULL, uval, TRUE, TRUE);
 			insert_table(tab, key, NULL);
 		}
 	ENDINDISEQ
@@ -909,7 +1001,7 @@ indi_to_children (NODE indi)
 		ENDCHILDREN
 	ENDFAMSS
 	if (len) return seq;
-	remove_indiseq(seq, FALSE);
+	remove_indiseq(seq);
 	return NULL;
 }
 /*=======================================================
@@ -927,34 +1019,25 @@ indi_to_spouses (NODE indi)
 	seq = create_indiseq_ival();
 	IPrntype(seq) = ISPRN_SPOUSESEQ;
 	FORFAMSS(indi, fam, spouse, num)
-#if 0
-		if (spouse) {
-			len++;
-			key = indi_to_key(spouse);
-			val = atoi(fam_to_key(fam) + 1);
-			append_indiseq_ival(seq, key, NULL, val, TRUE, FALSE);
-		}
-#else
 		FORHUSBS(fam, husb, num1)
-		    if(husb != indi) {
-			len++;
-			key = indi_to_key(husb);
-			val = atoi(fam_to_key(fam) + 1);
-			append_indiseq_ival(seq, key, NULL, val, TRUE, FALSE);
-		    }
+			if(husb != indi) {
+				len++;
+				key = indi_to_key(husb);
+				val = atoi(fam_to_key(fam) + 1);
+				append_indiseq_ival(seq, key, NULL, val, TRUE, FALSE);
+			}
 		ENDHUSBS
 		FORWIFES(fam, wife, num1)
-		    if(wife != indi) {
-			len++;
-			key = indi_to_key(wife);
-			val = atoi(fam_to_key(fam) + 1);
-			append_indiseq_ival(seq, key, NULL, val, TRUE, FALSE);
-		    }
+			if(wife != indi) {
+				len++;
+				key = indi_to_key(wife);
+				val = atoi(fam_to_key(fam) + 1);
+				append_indiseq_ival(seq, key, NULL, val, TRUE, FALSE);
+			}
 		ENDWIFES
-#endif
 	ENDFAMSS
 	if (!len) {
-		remove_indiseq(seq, FALSE);
+		remove_indiseq(seq);
 		seq=NULL;
 	}
 	return seq;
@@ -978,7 +1061,7 @@ indi_to_fathers (NODE indi)
 		ENDHUSBS
 	ENDFAMCS
 	if (len) return seq;
-	remove_indiseq(seq, FALSE);
+	remove_indiseq(seq);
 	return NULL;
 }
 /*=======================================================
@@ -1000,7 +1083,7 @@ indi_to_mothers (NODE indi)
 		ENDWIFES
 	ENDFAMCS
 	if (len) return seq;
-	remove_indiseq(seq, FALSE);
+	remove_indiseq(seq);
 	return NULL;
 }
 /*=========================================================
@@ -1032,7 +1115,7 @@ indi_to_families (NODE indi,      /* person */
 		ENDFAMCS
 	}
 	if (num) return seq;
-	remove_indiseq(seq, FALSE);
+	remove_indiseq(seq);
 	return NULL;
 }
 /*========================================================
@@ -1051,7 +1134,7 @@ fam_to_children (NODE fam)
 		append_indiseq_null(seq, key, NULL, TRUE, FALSE);
 	ENDCHILDREN
 	if (num) return seq;
-	remove_indiseq(seq, FALSE);
+	remove_indiseq(seq);
 	return NULL;
 }
 /*======================================================
@@ -1067,10 +1150,10 @@ fam_to_fathers (NODE fam)
 	seq = create_indiseq_null();
 	FORHUSBS(fam, husb, num)
 		key = indi_to_key(husb);
-		append_indiseq_null(seq, key, NULL, TRUE, FALSE);
+		append_indiseq_null(seq, strsave(key), NULL, TRUE, TRUE);
 	ENDHUSBS
 	if (num) return seq;
-	remove_indiseq(seq, FALSE);
+	remove_indiseq(seq);
 	return NULL;
 }
 /*======================================================
@@ -1086,10 +1169,10 @@ fam_to_mothers (NODE fam)
 	seq = create_indiseq_null();
 	FORWIFES(fam, wife, num)
 		key = indi_to_key(wife);
-		append_indiseq_null(seq, key, NULL, TRUE, FALSE);
+		append_indiseq_null(seq, strsave(key), NULL, TRUE, TRUE);
 	ENDWIFES
 	if (num) return seq;
-	remove_indiseq(seq, FALSE);
+	remove_indiseq(seq);
 	return NULL;
 }
 /*=========================================================
@@ -1110,7 +1193,7 @@ sibling_indiseq (INDISEQ seq,
 		indi = key_to_indi(skey(el));
 		if ((fam = indi_to_famc(indi))) {
 			fkey = fam_to_key(fam);
-			append_indiseq_null(fseq, fkey, NULL, FALSE, FALSE);
+			append_indiseq_null(fseq, strsave(fkey), NULL, FALSE, TRUE);
 		}
 		if (!close) insert_table(tab, skey(el), NULL);
 	ENDINDISEQ
@@ -1126,16 +1209,16 @@ sibling_indiseq (INDISEQ seq,
 		ENDCHILDREN
 	ENDINDISEQ
 	remove_table(tab, DONTFREE);
-	remove_indiseq(fseq, FALSE);
+	remove_indiseq(fseq);
 	return sseq;
 }
 /*=========================================================
  * ancestor_indiseq -- Create ancestor sequence of sequence
  *  values are created with the generation number
- *  (passed to create_value callback)
+ *  (via value vtable)
  *=======================================================*/
 INDISEQ
-ancestor_indiseq (INDISEQ seq, VPTR (*create_value_fnc)(INT gen))
+ancestor_indiseq (INDISEQ seq)
 {
 	TABLE tab;
 	LIST anclist, genlist;
@@ -1143,6 +1226,7 @@ ancestor_indiseq (INDISEQ seq, VPTR (*create_value_fnc)(INT gen))
 	NODE indi, fath, moth;
 	STRING key, pkey;
 	INT gen;
+	UNION uval;
 	if (!seq) return NULL;
 	tab = create_table();
 	anclist = create_list();
@@ -1160,16 +1244,16 @@ ancestor_indiseq (INDISEQ seq, VPTR (*create_value_fnc)(INT gen))
 		moth = indi_to_moth(indi);
 		if (fath && !in_table(tab, pkey = indi_to_key(fath))) {
 			pkey = strsave(pkey);
-			append_indiseq_pval(anc, pkey, NULL,
-				(*create_value_fnc)(gen), TRUE, TRUE);
+			uval = creategenval(seq, gen);
+			append_indiseq_pval(anc, pkey, NULL, uval.w, TRUE, TRUE);
 			enqueue_list(anclist, (VPTR)pkey);
 			enqueue_list(genlist, (VPTR)gen);
 			insert_table(tab, pkey, NULL);
 		}
 		if (moth && !in_table(tab, pkey = indi_to_key(moth))) {
 			pkey = strsave(pkey);
-			append_indiseq_pval(anc, pkey, NULL,
-				(*create_value_fnc)(gen), TRUE, TRUE);
+			uval = creategenval(seq, gen);
+			append_indiseq_pval(anc, pkey, NULL, uval.w, TRUE, TRUE);
 			enqueue_list(anclist, (VPTR)pkey);
 			enqueue_list(genlist, (VPTR)gen);
 			insert_table(tab, pkey, NULL);
@@ -1186,7 +1270,7 @@ ancestor_indiseq (INDISEQ seq, VPTR (*create_value_fnc)(INT gen))
  *  (passed to create_value callback)
  *===========================================================*/
 INDISEQ
-descendent_indiseq (INDISEQ seq, VPTR (*create_value_fnc)(INT gen))
+descendent_indiseq (INDISEQ seq)
 {
 	INT gen;
 	TABLE itab, ftab;
@@ -1194,6 +1278,7 @@ descendent_indiseq (INDISEQ seq, VPTR (*create_value_fnc)(INT gen))
 	INDISEQ des;
 	NODE indi;
 	STRING key, dkey, fkey;
+	UNION uval;
 	if (!seq) return NULL;
 	itab = create_table();
 	ftab = create_table();
@@ -1216,10 +1301,8 @@ descendent_indiseq (INDISEQ seq, VPTR (*create_value_fnc)(INT gen))
 			FORCHILDREN(fam, child, num2)
 				if (!in_table(itab,
 				    dkey = indi_to_key(child))) {
-					dkey = strsave(dkey);
-					append_indiseq_pval(des, dkey, NULL, 
-					    (*create_value_fnc)(gen),
-					    TRUE, TRUE);
+					uval = creategenval(seq, gen);
+					append_indiseq_pval(des, strsave(dkey), NULL, uval.w, TRUE, TRUE);
 					enqueue_list(deslist, (VPTR)dkey);
 					enqueue_list(genlist, (VPTR)gen);
 					insert_table(itab, dkey, NULL);
@@ -1236,7 +1319,7 @@ descendent_indiseq (INDISEQ seq, VPTR (*create_value_fnc)(INT gen))
  * spouse_indiseq -- Create spouses sequence of a sequence
  *======================================================*/
 INDISEQ
-spouse_indiseq (INDISEQ seq, VPTR (*copy_value_fnc)(VPTR val))
+spouse_indiseq (INDISEQ seq)
 {
 	TABLE tab;
 	INDISEQ sps;
@@ -1253,7 +1336,7 @@ spouse_indiseq (INDISEQ seq, VPTR (*copy_value_fnc)(VPTR val))
 			if (!in_table(tab, spkey)) {
 				UNION u;
 				spkey = strsave(spkey);
-				u.w = (*copy_value_fnc)(sval(el).w);
+				u = copyval(seq, sval(el));
 				append_indiseq_impl(sps, spkey, NULL,
 					u, TRUE, TRUE);
 				insert_table(tab, spkey, NULL);
@@ -1280,7 +1363,7 @@ name_to_indiseq (STRING name)
 		if (num == 0) return NULL;
 		seq = create_indiseq_null();
 		for (i = 0; i < num; i++)
-			append_indiseq_null(seq, keys[i], NULL, FALSE, FALSE);
+			append_indiseq_null(seq, strsave(keys[i]), NULL, FALSE, TRUE);
 		namesort_indiseq(seq);
 		return seq;
 	}
@@ -1297,7 +1380,7 @@ name_to_indiseq (STRING name)
 			made = TRUE;
 		}
 		for (i = 0; i < num; i++) {
-			append_indiseq_null(seq, keys[i], NULL, TRUE, FALSE);
+			append_indiseq_null(seq, strsave(keys[i]), NULL, TRUE, TRUE);
 		}
 	}
 	scratch[0] = '$';
@@ -1308,7 +1391,7 @@ name_to_indiseq (STRING name)
 			made = TRUE;
 		}
 		for (i = 0; i < num; i++) {
-			append_indiseq_null(seq, keys[i], NULL, TRUE, FALSE);
+			append_indiseq_null(seq, strsave(keys[i]), NULL, TRUE, TRUE);
 		}
 	}
 	if (seq) {
@@ -1529,7 +1612,7 @@ node_to_sources (NODE node)
 	append_all_tags(seq, node, "SOUR", TRUE, TRUE);
 	if (!length_indiseq(seq))
 	{
-		remove_indiseq(seq, FALSE);
+		remove_indiseq(seq);
 		seq = NULL;
 	}
 	return seq;
@@ -1548,7 +1631,7 @@ node_to_notes (NODE node)
 	append_all_tags(seq, node, "NOTE", TRUE, TRUE);
 	if (!length_indiseq(seq))
 	{
-		remove_indiseq(seq, FALSE);
+		remove_indiseq(seq);
 		seq = NULL;
 	}
 	return seq;
@@ -1567,7 +1650,7 @@ node_to_pointers (NODE node)
 	append_all_tags(seq, node, NULL, TRUE, FALSE);
 	if (!length_indiseq(seq))
 	{
-		remove_indiseq(seq, FALSE);
+		remove_indiseq(seq);
 		seq = NULL;
 	}
 	return seq;
@@ -1657,4 +1740,57 @@ get_indiseq_ival (INDISEQ seq, INT i)
 	ASSERT(i >= 0 && i < ISize(seq));
 	return sval(IData(seq)[i]).i;
 
+}
+/*=======================================================
+ * set_indiseq_value_funcs -- Set the value vtable for an INDISEQ
+ * Created: 2001/03/25, Perry Rapp
+ *=====================================================*/
+void
+set_indiseq_value_funcs (INDISEQ seq, INDISEQ_VALUE_VTABLE valvtbl)
+{
+	IValvtbl(seq) = valvtbl;
+}
+/*=======================================================
+ * default_copy_value -- copy a value
+ * Created: 2001/03/25, Perry Rapp
+ *=====================================================*/
+UNION
+default_copy_value (UNION uval, INT valtype)
+{
+	UNION retval;
+	/* only copy ints - all other values turn to NULL */
+	if (valtype == ISVAL_INT)
+		retval.i = uval.i;
+	else
+		retval.w = 0;
+	return retval;
+}
+/*=======================================================
+ * default_delete_value -- delete a value
+ * Created: 2001/03/25, Perry Rapp
+ *=====================================================*/
+void
+default_delete_value (UNION uval, INT valtype)
+{
+	if (valtype == ISVAL_STR) {
+		if (uval.w) {
+			STRING str = (STRING)uval.w;
+			free(str);
+			uval.w = NULL;
+		}
+	}
+}
+/*=======================================================
+ * default_delete_value -- delete a value
+ * Created: 2001/03/25, Perry Rapp
+ *=====================================================*/
+UNION
+default_create_gen_value(INT gen, INT valtype)
+{
+	UNION uval;
+	if (valtype == ISVAL_INT)
+		uval.i = gen;
+	else
+		uval.w = NULL;
+	return uval;
 }

@@ -1,3 +1,22 @@
+2001-03-26 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog btree/file.c gedlib/brwslist.c gedlib/choose.c
+	gedlib/gengedc.c gedlib/indiseq.c gedlib/keytonod.c
+	gedlib/lloptions.c hdrs/cache.h hdrs/gengedc.h hdrs/indiseq.h
+	hdrs/interp.h hdrs/table.h interp/builtin.c interp/eval.c
+	interp/heapused.c interp/interp.c interp/interpi.h
+	interp/intrpseq.c interp/more.c interp/pvalue.c interp/rassa.c
+	interp/write.c interp/yacc.y liflines/ask.c liflines/browse.c
+	liflines/delete.c liflines/lbrowse.c liflines/newrecs.c
+	liflines/pedigree.c liflines/scan.c liflines/screen.c
+	liflines/tandem.c stdlib/table.c tools/dbverify.c
+	tools/wprintf.c:
+	Fixed a LOT of pvalue leaks. Cleared symbol tables
+ 	when leaving subs & funcs. Cleared symbol table
+	entries used by loop constructs immediately.
+	Revised PINDI etc to lock their nodes in indirect
+	cache ("semilock").
+
 2001-03-18 Perry Rapp <puddle@users.sourceforge.net>
 
 	* btree/file.c gedlib/editmap.c gedlib/editvtab.c gedlib/init.c
