@@ -555,7 +555,10 @@ begin_table_iter (TABLE tab)
 BOOLEAN
 next_table_ptr (TABLE_ITER tabit, CNSTRING *pkey, VPTR *pptr)
 {
-	return next_hashtab(tabit->hashtab_iter, pkey, pptr);
+	if (tabit->rbit)
+		return RbNext(tabit->rbit, pkey, pptr);
+	else
+		return next_hashtab(tabit->hashtab_iter, pkey, pptr);
 }
 /*=================================================
  * next_table_int -- Advance to next int in table
