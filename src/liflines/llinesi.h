@@ -11,7 +11,7 @@ typedef struct llrect_s {
 struct import_feedback;
 
 /* add.c */
-NODE add_family(NODE, NODE, NODE);
+RECORD add_family(RECORD spouse1, RECORD spouse2, RECORD child);
 RECORD add_indi_by_edit(void);
 BOOLEAN add_indi_no_cache(NODE);
 STRING get_unresolved_ref_error_string(INT count);
@@ -31,7 +31,6 @@ INDISEQ ask_for_indiseq(STRING ttl, char ctype, INT *prc);
 BOOLEAN ask_yes_or_no(STRING);
 
 /* browse.c */
-void browse(NODE, INT code);
 RECORD choose_any_event(void);
 RECORD choose_any_other(void);
 RECORD choose_any_source(void);
@@ -43,19 +42,20 @@ BOOLEAN handle_fam_mode_cmds(INT c, INT * mode);
 BOOLEAN handle_indi_mode_cmds(INT c, INT * mode);
 BOOLEAN handle_menu_cmds(INT c, BOOLEAN * reuse);
 BOOLEAN handle_scroll_cmds(INT c, BOOLEAN * reuse);
-void history_record_change(NODE node);
+void history_record_change(RECORD);
 void init_browse_module(void);
+void main_browse(RECORD, INT code);
 void term_browse_module(void);
 
 /* delete.c */
 void delete_indi(NODE, BOOLEAN);
 void choose_and_delete_family(void);
-BOOLEAN choose_and_remove_child(NODE indi, NODE fam, BOOLEAN nolast);
-BOOLEAN choose_and_remove_spouse(NODE indi, NODE fam, BOOLEAN nolast);
+BOOLEAN choose_and_remove_child(RECORD irec, RECORD frec, BOOLEAN nolast);
+BOOLEAN choose_and_remove_spouse(RECORD irec, RECORD frec, BOOLEAN nolast);
 
 /* edit.c */
-NODE edit_family(NODE);
-NODE edit_indi(NODE);
+BOOLEAN edit_family(RECORD);
+BOOLEAN edit_indi(RECORD);
 
 /* export.c */
 BOOLEAN archive_in_file (void);
@@ -64,14 +64,14 @@ BOOLEAN archive_in_file (void);
 BOOLEAN import_from_gedcom_file(struct import_feedback * ifeed, FILE *fp);
 
 /* lbrowse.c */
-INT browse_list(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
+INT browse_list(RECORD *prec1, RECORD *prec2, INDISEQ *pseq);
 
 /* loadsave.c */
 void load_gedcom(void);
 
 /* merge.c */
-NODE merge_two_indis(NODE, NODE, BOOLEAN);
-NODE merge_two_fams(NODE, NODE);
+RECORD merge_two_indis(NODE, NODE, BOOLEAN);
+RECORD merge_two_fams(NODE, NODE);
 
 /* miscutls.c */
 void key_util(void);
@@ -80,12 +80,13 @@ void who_is_he_she(void);
 
 /* newrecs.c */
 RECORD ask_for_record(STRING, INT);
-NODE edit_add_event(void);
-NODE edit_add_other(void);
-NODE edit_add_source(void);
-void edit_event(NODE);
-void edit_other(NODE);
-void edit_source(NODE);
+RECORD edit_add_event(void);
+RECORD edit_add_other(void);
+RECORD edit_add_source(void);
+BOOLEAN edit_any_record(RECORD rec);
+BOOLEAN edit_event(RECORD);
+BOOLEAN edit_other(RECORD);
+BOOLEAN edit_source(RECORD);
 
 /* pedigree.c */
 	/* gedcom view mode */
@@ -124,7 +125,7 @@ INT interact_2fam(void);
 INT interact_2indi(void);
 INT interact_fam(void);
 INT interact_indi(void);
-INT list_browse(INDISEQ seq, INT top, INT *cur, INT mark, NODE * pindi);
+INT list_browse(INDISEQ seq, INT top, INT *cur, INT mark);
 void lock_status_msg(BOOLEAN lock);
 void toggle_menu(void);
 
@@ -142,13 +143,13 @@ void switch_scrolls(void);
 void term_show_module(void);
 
 /* swap.c */
-BOOLEAN swap_children(NODE prnt, NODE fam);
-BOOLEAN reorder_child(NODE prnt, NODE fam);
-BOOLEAN swap_families(NODE);
+BOOLEAN swap_children(RECORD prnt, RECORD frec);
+BOOLEAN reorder_child(RECORD prnt, RECORD frec);
+BOOLEAN swap_families(RECORD);
 
 /* tandem.c */
-INT browse_tandem(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
-INT browse_2fam(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
+INT browse_tandem(RECORD *prec1, RECORD *prec2, INDISEQ *pseq);
+INT browse_2fam(RECORD *prec1, RECORD *prec2, INDISEQ *pseq);
 
 /* valgdcom.c */
 void addmissingkeys (INT);

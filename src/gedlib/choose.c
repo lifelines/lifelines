@@ -37,66 +37,68 @@
 
 /*=================================================
  * choose_child -- Choose child of person or family
- *  indi: [in] parent (may be null if fam provided)
- *  fam:  [in] family (may be null if indi provided)
- *  msg0: [in] message to display if no children
- *  msgn: [in] title for choosing child from list
- *  ask1: [in] whether to prompt if only one child
+ *  irec: [IN] parent (may be null if fam provided)
+ *  frec:  [IN] family (may be null if indi provided)
+ *  msg0: [IN] message to display if no children
+ *  msgn: [IN] title for choosing child from list
+ *  ask1: [IN] whether to prompt if only one child
  *===============================================*/
-NODE
-choose_child (NODE indi, NODE fam, STRING msg0, STRING msgn, ASK1Q ask1)
+RECORD
+choose_child (RECORD irec, RECORD frec, STRING msg0, STRING msgn, ASK1Q ask1)
 {
-	INDISEQ seq = NULL;
-	NODE node;
-	if (indi) seq = indi_to_children(indi);
-	if (!indi && fam) seq = fam_to_children(fam);
+	RECORD rec=0;
+	INDISEQ seq=0;
+
+	if (irec) seq = indi_to_children(nztop(irec));
+	if (!irec && frec) seq = fam_to_children(nztop(frec));
 	if (!seq) {
 		msg_error(msg0);
 		return NULL;
 	}
-	node = nztop(choose_from_indiseq(seq, ask1, msgn, msgn));
+	rec = choose_from_indiseq(seq, ask1, msgn, msgn);
 	remove_indiseq(seq);
-	return node;
+	return rec;
 }
 /*========================================
  * choose_spouse -- Choose person's spouse
- *  indi: [in] known person (gives up if this is null)
- *  msg0: [in] message to display if no spouses
- *  msgn: [in] title for choosing spouse from list
+ *  irec: [IN]  known person (gives up if this is null)
+ *  msg0: [IN] message to display if no spouses
+ *  msgn: [IN] title for choosing spouse from list
  *  asks if multiple
  *======================================*/
-NODE
-choose_spouse (NODE indi, STRING msg0, STRING msgn)
+RECORD
+choose_spouse (RECORD irec, STRING msg0, STRING msgn)
 {
-	INDISEQ seq;
-	NODE node;
-	if (!indi) return NULL;
-	if (!(seq = indi_to_spouses(indi))) {
+	RECORD rec=0;
+	INDISEQ seq=0;
+
+	if (!irec) return NULL;
+	if (!(seq = indi_to_spouses(nztop(irec)))) {
 		message(msg0);
 		return NULL;
 	}
-	node = nztop(choose_from_indiseq(seq, NOASK1, NULL, msgn));
+	rec = choose_from_indiseq(seq, NOASK1, NULL, msgn);
 	remove_indiseq(seq);
-	return node;
+	return rec;
 }
 /*========================================
  * choose_source -- Choose any referenced source from some,
  *  presumably top level, node
  *  always asks
  *======================================*/
-NODE
-choose_source (NODE what, STRING msg0, STRING msgn)
+RECORD
+choose_source (RECORD current, STRING msg0, STRING msgn)
 {
 	INDISEQ seq;
-	NODE node;
-	if (!what) return NULL;
-	if (!(seq = node_to_sources(what))) {
+	RECORD rec;
+	if (!current) return NULL;
+	if (!(seq = node_to_sources(nztop(current)))) {
 		message(msg0);
 		return NULL;
 	}
-	node = nztop(choose_from_indiseq(seq, DOASK1, msgn, msgn));
+	rec = choose_from_indiseq(seq, DOASK1, msgn, msgn);
 	remove_indiseq(seq);
-	return node;
+	return rec;
 }
 /*========================================
  * choose_note -- Choose any referenced note from some,
@@ -104,19 +106,19 @@ choose_source (NODE what, STRING msg0, STRING msgn)
  *  always asks
  * Created: 2001/02/11, Perry Rapp
  *======================================*/
-NODE
-choose_note (NODE what, STRING msg0, STRING msgn)
+RECORD
+choose_note (RECORD current, STRING msg0, STRING msgn)
 {
 	INDISEQ seq;
-	NODE node;
-	if (!what) return NULL;
-	if (!(seq = node_to_notes(what))) {
+	RECORD rec;
+	if (!current) return NULL;
+	if (!(seq = node_to_notes(nztop(current)))) {
 		message(msg0);
 		return NULL;
 	}
-	node = nztop(choose_from_indiseq(seq, DOASK1, msgn, msgn));
+	rec = choose_from_indiseq(seq, DOASK1, msgn, msgn);
 	remove_indiseq(seq);
-	return node;
+	return rec;
 }
 /*========================================
  * choose_pointer -- Choose any reference (pointer) from some,
@@ -124,85 +126,87 @@ choose_note (NODE what, STRING msg0, STRING msgn)
  *  always asks
  * Created: 2001/02/24, Perry Rapp
  *======================================*/
-NODE
-choose_pointer (NODE what, STRING msg0, STRING msgn)
+RECORD
+choose_pointer (RECORD current, STRING msg0, STRING msgn)
 {
 	INDISEQ seq;
-	NODE node;
-	if (!what) return NULL;
-	if (!(seq = node_to_pointers(what))) {
+	RECORD rec;
+	if (!current) return NULL;
+	if (!(seq = node_to_pointers(nztop(current)))) {
 		message(msg0);
 		return NULL;
 	}
-	node = nztop(choose_from_indiseq(seq, DOASK1, msgn, msgn));
+	rec = choose_from_indiseq(seq, DOASK1, msgn, msgn);
 	remove_indiseq(seq);
-	return node;
+	return rec;
 }
 /*==========================================================
  * choose_family -- Choose family from person's FAMS/C lines
  *  asks if multiple
- * indi: [IN]  person of interest
+ * irec: [IN]  person of interest
  * msg0: [IN]  message to display if no families
  * msgn: [IN]  title if need to choose which family
  * fams: [IN]  want spousal families of indi ? (or families indi is child in)
  *========================================================*/
-NODE
-choose_family (NODE indi, STRING msg0, STRING msgn, BOOLEAN fams)
+RECORD
+choose_family (RECORD irec, STRING msg0, STRING msgn, BOOLEAN fams)
 {
-	NODE node;
-	INDISEQ seq = indi_to_families(indi, fams);
+	RECORD rec=0;
+	INDISEQ seq = indi_to_families(nztop(irec), fams);
 	if (!seq) {
 		if (msg0)
 			msg_error(msg0);
 		return NULL;
 	}
-	node = nztop(choose_from_indiseq(seq, NOASK1, NULL, msgn));
+	rec = choose_from_indiseq(seq, NOASK1, NULL, msgn);
 	remove_indiseq(seq);
-	return node;
+	return rec;
 }
 /*===================================================
  * choose_father -- Choose father of person or family
- * indi: [IN]  person of interest if non-null
- * fam:  [IN]  family of interest if non-null
+ * irec: [IN]  person of interest if non-null
+ * frec: [IN]  family of interest if non-null
  * msg0: [IN]  message to display if no fathers
  * msgn: [IN]  title if need to choose which father
  * ask1: [IN]  whether or not to prompt if only one father found
  *=================================================*/
-NODE
-choose_father (NODE indi, NODE fam, STRING msg0, STRING msgn, ASK1Q ask1)
+RECORD
+choose_father (RECORD irec, RECORD frec, STRING msg0, STRING msgn, ASK1Q ask1)
 {
-	INDISEQ seq = NULL;
-	NODE node;
-	if (indi) seq = indi_to_fathers(indi);
-	if (!indi && fam) seq = fam_to_fathers(fam);
+	RECORD rec=0;
+	INDISEQ seq=0;
+
+	if (irec) seq = indi_to_fathers(nztop(irec));
+	if (!irec && frec) seq = fam_to_fathers(nztop(frec));
 	if (!seq) {
 		msg_error(msg0);
 		return NULL;
 	}
-	node = nztop(choose_from_indiseq(seq, ask1, msgn, msgn));
+	rec = choose_from_indiseq(seq, ask1, msgn, msgn);
 	remove_indiseq(seq);
-	return node;
+	return rec;
 }
 /*===================================================
  * choose_mother -- Choose mother of person or family
- * indi: [IN]  person of interest if non-null
- * fam:  [IN]  family of interest if non-null
+ * irec: [IN]  person of interest if non-null
+ * frec: [IN]  family of interest if non-null
  * msg0: [IN]  message to display if no mothers
  * msgn: [IN]  title if need to choose which mother
  * ask1: [IN]  whether or not to prompt if only one mother found
  *=================================================*/
-NODE
-choose_mother (NODE indi, NODE fam, STRING msg0, STRING msgn, ASK1Q ask1)
+RECORD
+choose_mother (RECORD irec, RECORD frec, STRING msg0, STRING msgn, ASK1Q ask1)
 {
-	INDISEQ seq = NULL;
-	NODE node;
-	if (indi) seq = indi_to_mothers(indi);
-	if (!indi && fam) seq = fam_to_mothers(fam);
+	RECORD rec=0;
+	INDISEQ seq=0;
+
+	if (irec) seq = indi_to_mothers(nztop(irec));
+	if (!irec && frec) seq = fam_to_mothers(nztop(frec));
 	if (!seq) {
 		msg_error(msg0);
 		return NULL;
 	}
-	node = nztop(choose_from_indiseq(seq, ask1, msgn, msgn));
+	rec = choose_from_indiseq(seq, ask1, msgn, msgn);
 	remove_indiseq(seq);
-	return node;
+	return rec;
 }

@@ -238,17 +238,31 @@ node_to_nkey (NODE node, NKEY * nkey)
 }
 /*==================================================
  * nkey_to_node -- get NODE from nkey (if exists)
+ * TODO: delete this when no longer used, Perry, 2002/06/24
  *================================================*/
 BOOLEAN
 nkey_to_node (NKEY * nkey, NODE * node)
 {
+	RECORD rec=0;
+	if (!nkey_to_record(nkey, &rec))
+		return FALSE;
+	*node = nztop(rec);
+	return TRUE;
+}
+/*==================================================
+ * nkey_to_record -- get RECORD from nkey (if exists)
+ *  else return NULL
+ *================================================*/
+BOOLEAN
+nkey_to_record (NKEY * nkey, RECORD * prec)
+{
 	if (!nkey->keynum) {
-		*node = NULL;
+		*prec = NULL;
 		return FALSE;
 	}
 	nkey_load_key(nkey);
-	*node = qkey_to_type(nkey->key);
-	return *node != NULL;
+	*prec = qkey_to_record(nkey->key);
+	return *prec != NULL;
 }
 /*==================================================
  * nkey_load_key -- load key field of NKEY (if not loaded)

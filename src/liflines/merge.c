@@ -64,7 +64,7 @@ static NODE sort_children(NODE, NODE);
  *   indi3 - merged version of the two persons before editing
  *   indi4 - merged version of the two persons after editing
  *==============================================================*/
-NODE
+RECORD
 merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 {
 	NODE indi01, indi02;	/* original arguments */
@@ -395,13 +395,13 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 	free_nodes(indi4);
 
 	remove_indi(indi01);	/* this is the original indi1 */
-	return indi02;			/* this is the updated indi2 */
+	return node_to_record(indi02);   /* this is the updated indi2 */
 }
 /*=================================================================
  * merge_two_fams -- Merge first family into second; data from both
  *   are put in file that user edits; first family removed
  *===============================================================*/
-NODE
+RECORD
 merge_two_fams (NODE fam1,
                 NODE fam2)
 {
@@ -518,7 +518,7 @@ merge_two_fams (NODE fam1,
 	join_fam(fam2, fref4, husb4, wife4, chil4, rest4);
 	resolve_refn_links(fam2);
 	fam_to_dbase(fam2);
-	return fam2;
+	return node_to_record(fam2);
 }
 /*================================================================
  * merge_fam_links -- Shift links of persons in list1 from fam1 to

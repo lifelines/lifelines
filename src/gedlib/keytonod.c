@@ -54,7 +54,8 @@ static CACHE create_cache(STRING name, INT dirsize, INT indsize);
 static void dereference(CACHEEL);
 static CACHEEL key_to_cacheel(CACHE, STRING, STRING, INT);
 static CACHEEL key_to_even_cacheel (STRING key);
-static NODE key_to_node(CACHE cache, STRING key, STRING tag);
+static NODE key_typed_to_node(CACHE cache, STRING key, STRING tag);
+static RECORD key_to_record_impl(STRING key, INT reportmode);
 static RECORD key_typed_to_record(CACHE cache, STRING key, STRING tag);
 static CACHEEL key_to_othr_cacheel (STRING key);
 static CACHEEL key_to_sour_cacheel (STRING key);
@@ -90,6 +91,15 @@ static int keyidx = 0;
  *********************************************/
 
 /*================================================
+ * node_to_record -- Find record from node
+ *==============================================*/
+RECORD
+node_to_record (NODE node)
+{
+	STRING key = rmvat(nxref(node));
+	return key_to_record(key);
+}
+/*================================================
  * keynum_to_indi -- Convert a numeric key to an indi node
  * assert if failed (ie, no indi with that number)
  *==============================================*/
@@ -99,6 +109,13 @@ keynum_to_indi (int keynum)
 	char keystr[20];
 	sprintf(keystr,"I%d",keynum);
 	return key_to_indi(keystr);
+}
+RECORD
+keynum_to_irecord (int keynum)
+{
+	char keystr[20];
+	sprintf(keystr,"I%d",keynum);
+	return key_to_irecord(keystr);
 }
 /*=========================================================
  * qkeynum_to_indi -- Convert a numeric key to an indi node
@@ -123,17 +140,24 @@ keynum_to_fam (int keynum)
 	sprintf(keystr,"F%d",keynum);
 	return key_to_fam(keystr);
 }
-/*======================================================
- * qkeynum_to_fam -- Convert a numeric key to a fam node
- *  report mode - it returns NULL if failed
- *  (ie, no fam with that number)
- *====================================================*/
-NODE
-qkeynum_to_fam (int keynum)
+RECORD
+keynum_to_frecord (int keynum)
 {
 	char keystr[20];
 	sprintf(keystr,"F%d",keynum);
-	return qkey_to_fam(keystr);
+	return key_to_frecord(keystr);
+}
+/*======================================================
+ * qkeynum_to_frecord -- Convert a numeric key to a fam record
+ *  report mode - it returns NULL if failed
+ *  (ie, no fam with that number)
+ *====================================================*/
+RECORD
+qkeynum_to_frecord (int keynum)
+{
+	char keystr[20];
+	sprintf(keystr,"F%d",keynum);
+	return qkey_to_frecord(keystr);
 }
 /*================================================
  * keynum_to_sour -- Convert a numeric key to a sour node
@@ -145,6 +169,13 @@ keynum_to_sour (int keynum)
 	char keystr[20];
 	sprintf(keystr,"S%d",keynum);
 	return key_to_sour(keystr);
+}
+RECORD
+keynum_to_srecord (int keynum)
+{
+	char keystr[20];
+	sprintf(keystr,"S%d",keynum);
+	return key_to_srecord(keystr);
 }
 /*================================================
  * keynum_to_even -- Convert a numeric key to a even node
@@ -158,6 +189,13 @@ keynum_to_even (int keynum)
 	sprintf(keystr,"E%d",keynum);
 	return key_to_even(keystr);
 }
+RECORD
+keynum_to_erecord (int keynum)
+{
+	char keystr[MAXKEYWIDTH+1];
+	sprintf(keystr,"E%d",keynum);
+	return key_to_erecord(keystr);
+}
 /*================================================
  * keynum_to_othr -- Convert a numeric key to an other node
  *  assert if failed (ie, no sour with that number)
@@ -169,6 +207,13 @@ keynum_to_othr (int keynum)
 	char keystr[20];
 	sprintf(keystr,"X%d",keynum);
 	return key_to_othr(keystr);
+}
+RECORD
+keynum_to_orecord (int keynum)
+{
+	char keystr[20];
+	sprintf(keystr,"X%d",keynum);
+	return key_to_orecord(keystr);
 }
 /*=====================================
  * keynum_to_node -- Convert keynum to node
@@ -187,6 +232,19 @@ keynum_to_node (char ntype, int keynum)
 	ASSERT(0);
 	return 0;
 }
+RECORD
+keynum_to_record (char ntype, int keynum)
+{
+	switch(ntype) {
+	case 'I': return keynum_to_irecord(keynum);
+	case 'F': return keynum_to_frecord(keynum);
+	case 'S': return keynum_to_srecord(keynum);
+	case 'E': return keynum_to_erecord(keynum);
+	case 'X': return keynum_to_orecord(keynum);
+	}
+	ASSERT(0);
+	return 0;
+}
 /*=====================================
  * key_to_type -- Convert key to node
  * TO DO - should become obsoleted by key_to_record
@@ -198,14 +256,15 @@ key_to_type (STRING key, INT reportmode)
 	{
 	case 'I': return reportmode ? qkey_to_indi(key) : key_to_indi(key);
 	case 'F': return reportmode ? qkey_to_fam(key) : key_to_fam(key);
-	case 'E': return reportmode ? qkey_to_even(key) : key_to_even(key);
 	case 'S': return reportmode ? qkey_to_sour(key) : key_to_sour(key);
+	case 'E': return reportmode ? qkey_to_even(key) : key_to_even(key);
 	}
 	return reportmode ? qkey_to_othr(key) : key_to_othr(key);
 }
 /*=====================================
  * qkey_to_type -- Convert key to node
- * Created: 2001/02/11, Perry Rapp (for naming consistency)
+ * quiet -- that is, returns NULL if record not in database
+ * Created: 2001/02/11, Perry Rapp
  *===================================*/
 NODE
 qkey_to_type (STRING key)
@@ -213,19 +272,38 @@ qkey_to_type (STRING key)
 	return key_to_type(key, TRUE);
 }
 /*=====================================
- * key_to_record -- Convert key (any type) to RECORD
+ * key_to_record_impl -- Convert key (any type) to RECORD
  *===================================*/
-RECORD
-key_to_record (STRING key, INT reportmode)
+static RECORD
+key_to_record_impl (STRING key, INT reportmode)
 {
 	switch(key[0])
 	{
-	case 'I': return reportmode ? qkey_to_indi0(key) : key_to_indi0(key);
-	case 'F': return reportmode ? qkey_to_fam0(key) : key_to_fam0(key);
-	case 'E': return reportmode ? qkey_to_even0(key) : key_to_even0(key);
-	case 'S': return reportmode ? qkey_to_sour0(key) : key_to_sour0(key);
+	case 'I': return reportmode ? qkey_to_irecord(key) : key_to_irecord(key);
+	case 'F': return reportmode ? qkey_to_frecord(key) : key_to_frecord(key);
+	case 'S': return reportmode ? qkey_to_srecord(key) : key_to_srecord(key);
+	case 'E': return reportmode ? qkey_to_erecord(key) : key_to_erecord(key);
 	}
-	return reportmode ? qkey_to_othr0(key) : key_to_othr0(key);
+	return reportmode ? qkey_to_orecord(key) : key_to_orecord(key);
+}
+/*=====================================
+ * key_to_record -- Convert key (any type) to RECORD
+ * ASSERTS if record not found in database
+ *===================================*/
+RECORD
+key_to_record (STRING key)
+{
+	return key_to_record_impl(key, FALSE);
+}
+/*=====================================
+ * qkey_to_record -- Convert key (any type) to RECORD
+ * quiet -- that is, returns NULL if record not in database
+ * Created: 2002/06/24, Perry Rapp
+ *===================================*/
+RECORD
+qkey_to_record (STRING key)
+{
+	return key_to_record_impl(key, TRUE);
 }
 /*=====================================
  * key_to_??? -- Convert key to person
@@ -236,47 +314,46 @@ key_to_record (STRING key, INT reportmode)
 NODE
 key_to_indi (STRING key)
 {
-	return key_to_node(indicache, key, "INDI");
+	return key_typed_to_node(indicache, key, "INDI");
 }
 NODE key_to_fam (STRING key)
 {
-	return key_to_node(famcache, key, "FAM");
+	return key_typed_to_node(famcache, key, "FAM");
 }
 NODE key_to_even (STRING key)
 {
-	return key_to_node(evencache, key, "EVEN");
+	return key_typed_to_node(evencache, key, "EVEN");
 }
 NODE key_to_sour (STRING key)
 {
-	return key_to_node(sourcache, key, "SOUR");
+	return key_typed_to_node(sourcache, key, "SOUR");
 }
 NODE key_to_othr (STRING key)
 {
-	return key_to_node(othrcache, key, NULL);
+	return key_typed_to_node(othrcache, key, NULL);
 }
 /*=====================================
  * key_to_???0 -- Convert key to person
  *  (asserts if failure)
  *  5 symmetric versions
  *===================================*/
-RECORD
-key_to_indi0 (STRING key)
+RECORD key_to_irecord (STRING key)
 {
 	return key_typed_to_record(indicache, key, "INDI");
 }
-RECORD key_to_fam0 (STRING key)
+RECORD key_to_frecord (STRING key)
 {
 	return key_typed_to_record(famcache, key, "FAM");
 }
-RECORD key_to_even0 (STRING key)
+RECORD key_to_erecord (STRING key)
 {
 	return key_typed_to_record(evencache, key, "EVEN");
 }
-RECORD key_to_sour0 (STRING key)
+RECORD key_to_srecord (STRING key)
 {
 	return key_typed_to_record(sourcache, key, "SOUR");
 }
-RECORD key_to_othr0 (STRING key)
+RECORD key_to_orecord (STRING key)
 {
 	return key_typed_to_record(othrcache, key, NULL);
 }
@@ -311,23 +388,23 @@ NODE qkey_to_othr (STRING key)
  *  report mode (returns NULL if failure)
  *  5 symmetric versions
  *======================================*/
-RECORD qkey_to_indi0 (STRING key)
+RECORD qkey_to_irecord (STRING key)
 {
 	return qkey_typed_to_record(indicache, key, "INDI");
 }
-RECORD qkey_to_fam0 (STRING key)
+RECORD qkey_to_frecord (STRING key)
 {
 	return qkey_typed_to_record(famcache, key, "FAM");
 }
-RECORD qkey_to_even0 (STRING key)
+RECORD qkey_to_erecord (STRING key)
 {
 	return qkey_typed_to_record(evencache, key, "EVEN");
 }
-RECORD qkey_to_sour0 (STRING key)
+RECORD qkey_to_srecord (STRING key)
 {
 	return qkey_typed_to_record(sourcache, key, "SOUR");
 }
-RECORD qkey_to_othr0 (STRING key)
+RECORD qkey_to_orecord (STRING key)
 {
 	return qkey_typed_to_record(othrcache, key, NULL);
 }
@@ -676,7 +753,7 @@ prepare_direct_space (CACHE cache)
  * TO DO - should become obsoleted by key_typed_to_record
  *=============================================================*/
 static NODE
-key_to_node (CACHE cache, STRING key, STRING tag)
+key_typed_to_node (CACHE cache, STRING key, STRING tag)
 {
 	CACHEEL cel;
 	ASSERT(cache && key);

@@ -55,13 +55,13 @@ static void swap_children_impl(NODE fam, NODE one, NODE two);
 
 /*=============================================
  * swap_children -- Swap two children in family
- * NODE prnt:   [in] parent (may be NULL)
- * NODE fam:    [in] family (may be NULL)
+ *  prnt: [IN]  parent (may be NULL)
+ *  fam:  [IN]  family (may be NULL)
  *===========================================*/
 BOOLEAN
-swap_children (NODE prnt, NODE fam)
+swap_children (RECORD prnt, RECORD frec)
 {
-	NODE chil, one, two;
+	NODE fam, chil, one, two;
 	INT nfam, nchil;
 
 	if (readonly) {
@@ -70,10 +70,10 @@ swap_children (NODE prnt, NODE fam)
 	}
 
 /* Identify parent if need be */
-	if (fam) goto gotfam;
-	if (!prnt) prnt = ask_for_indi_old(_(qSidcswp), NOCONFIRM, NOASK1);
+	if (frec) goto gotfam;
+	if (!prnt) prnt = ask_for_indi(_(qSidcswp), NOCONFIRM, NOASK1);
 	if (!prnt) return FALSE;
-	nfam = num_families(prnt);
+	nfam = num_families(nztop(prnt));
 	if (nfam <= 0) {
 		message(_(qSntchld));
 		return FALSE;
@@ -81,12 +81,13 @@ swap_children (NODE prnt, NODE fam)
 
 /* Identify family if need be */
 	if (nfam == 1) {
-		fam = key_to_fam(rmvat(nval(FAMS(prnt))));
+		frec = key_to_frecord(rmvat(nval(FAMS(nztop(prnt)))));
 		goto gotfam;
 	}
-	if (!(fam = choose_family(prnt, _(qSntprnt), _(qSidfbys), TRUE)))
+	if (!(frec = choose_family(prnt, _(qSntprnt), _(qSidfbys), TRUE)))
 		return FALSE;
 gotfam:
+	fam = nztop(frec);
 	nchil = num_children(fam);
 	if (nchil < 2) {
 		message(_(qSless2c));
@@ -98,23 +99,25 @@ gotfam:
 		one = CHIL(fam);
 		two = nsibling(one);
 	} else {
-		NODE chil1, chil2;
+		RECORD chil1, chil2;
 		STRING key1, key2;
 		/* Identify children to swap */
-		chil1 = choose_child(NULL, fam, "e", _(qSid1csw), NOASK1);
+		chil1 = choose_child(NULL, frec, "e", _(qSid1csw), NOASK1);
 		if (!chil1) return FALSE;
-		chil2 = choose_child(NULL, fam, "e", _(qSid2csw), NOASK1);
+		chil2 = choose_child(NULL, frec, "e", _(qSid2csw), NOASK1);
 		if (!chil2) return FALSE;
 		if (chil1 == chil2) return FALSE;
-		key1 = nxref(chil1);
-		key2 = nxref(chil2);
+		key1 = nxref(nztop(chil1));
+		key2 = nxref(nztop(chil2));
 
 		/* loop through children & find the ones chosen */
 		ASSERT(chil = CHIL(fam));
 		one = two = NULL;
 		for (;  chil;  chil = nsibling(chil)) {
-			if (eqstr(key1, nval(chil))) one = chil;
-			if (eqstr(key2, nval(chil))) two = chil;
+			if (eqstr(ntag(chil), "CHIL")) {
+				if (eqstr(key1, nval(chil))) one = chil;
+				if (eqstr(key2, nval(chil))) two = chil;
+			}
 		}
 	}
 
@@ -149,11 +152,11 @@ swap_children_impl (NODE fam, NODE one, NODE two)
  * NODE fam:    [in] family (may be NULL)
  *===========================================*/
 BOOLEAN
-reorder_child (NODE prnt, NODE fam)
+reorder_child (RECORD prnt, RECORD frec)
 {
 	INT nfam, nchil;
 	INT prevorder, i;
-	NODE child;
+	NODE fam, child;
 
 	if (readonly) {
 		message(_(qSronlye));
@@ -161,10 +164,10 @@ reorder_child (NODE prnt, NODE fam)
 	}
 
 /* Identify parent if need be */
-	if (fam) goto gotfam;
-	if (!prnt) prnt = ask_for_indi_old(_(qSidcswp), NOCONFIRM, NOASK1);
+	if (frec) goto gotfam;
+	if (!prnt) prnt = ask_for_indi(_(qSidcswp), NOCONFIRM, NOASK1);
 	if (!prnt) return FALSE;
-	nfam = num_families(prnt);
+	nfam = num_families(nztop(prnt));
 	if (nfam <= 0) {
 		message(_(qSntchld));
 		return FALSE;
@@ -172,12 +175,13 @@ reorder_child (NODE prnt, NODE fam)
 
 /* Identify family if need be */
 	if (nfam == 1) {
-		fam = key_to_fam(rmvat(nval(FAMS(prnt))));
+		frec = key_to_frecord(rmvat(nval(FAMS(nztop(prnt)))));
 		goto gotfam;
 	}
-	if (!(fam = choose_family(prnt, _(qSntprnt), _(qSidfbys), TRUE))) 
+	if (!(frec = choose_family(prnt, _(qSntprnt), _(qSidfbys), TRUE))) 
 		return FALSE;
 gotfam:
+	fam = nztop(frec);
 	nchil = num_children(fam);
 	if (nchil < 2) {
 		message(_(qSless2c));
@@ -194,7 +198,7 @@ gotfam:
 	}
 
 	/* Identify children to swap */
-	child = choose_child(NULL, fam, "e", _(qSidcrdr), NOASK1);
+	child = nztop(choose_child(NULL, frec, "e", _(qSidcrdr), NOASK1));
 	if (!child) return FALSE;
 
 	prevorder = child_index(child, fam);
@@ -244,9 +248,9 @@ child_index (NODE child, NODE fam)
  *  prompt for families if person chosen has >2
  *===========================================*/
 BOOLEAN
-swap_families (NODE indi)
+swap_families (RECORD irec)
 {
-	NODE fams, one, two, tmp;
+	NODE indi, fams, one, two, tmp;
 	INT nfam;
 	STRING str;
 
@@ -256,8 +260,9 @@ swap_families (NODE indi)
 	}
 
 /* Find person and assure has >= 2 families */
-	if (!indi) indi = ask_for_indi_old(_(qSidfswp), NOCONFIRM, NOASK1);
-	if (!indi) return FALSE;
+	if (!irec) irec = ask_for_indi(_(qSidfswp), NOCONFIRM, NOASK1);
+	if (!irec) return FALSE;
+	indi = nztop(irec);
 	if (!(fams = FAMS(indi))) {
 		message(_(qSntprnt));
 		return FALSE;
@@ -278,9 +283,9 @@ swap_families (NODE indi)
 		NODE fam1, fam2;
 		STRING key1, key2;
 		/* prompt for families */
-		fam1 = choose_family(indi, _(qSparadox), _(qSid1fsw), TRUE);
+		fam1 = nztop(choose_family(irec, _(qSparadox), _(qSid1fsw), TRUE));
 		if (!fam1) return FALSE;
-		fam2 = choose_family(indi, _(qSparadox), _(qSid2fsw), TRUE);
+		fam2 = nztop(choose_family(irec, _(qSparadox), _(qSid2fsw), TRUE));
 		if (!fam2) return FALSE;
 		if (fam1 == fam2) return FALSE;
 		key1 = nxref(fam1);

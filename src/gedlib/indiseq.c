@@ -1111,7 +1111,7 @@ child_indiseq (INDISEQ seq)
 	FORINDISEQ(seq, el, num)
 		indi = key_to_indi(skey(el));
 		FORFAMSS(indi, fam, spouse, num1)
-			FORCHILDREN(fam, chil, num2)
+			FORCHILDRENx(fam, chil, num2)
 				key = indi_to_key(chil);
 				if (!in_table(tab, key)) {
 					key = strsave(key);
@@ -1120,7 +1120,7 @@ child_indiseq (INDISEQ seq)
 					append_indiseq_impl(cseq, key, NULL, uval, TRUE, TRUE);
 					insert_table_int(tab, key, 0);
 				}
-			ENDCHILDREN
+			ENDCHILDRENx
 		ENDFAMSS
 	ENDINDISEQ
 	remove_table(tab, DONTFREE);
@@ -1139,11 +1139,11 @@ indi_to_children (NODE indi)
 	if (!indi) return NULL;
 	seq = create_indiseq_null();
 	FORFAMSS(indi, fam, spouse, num1)
-		FORCHILDREN(fam, chil, num2)
+		FORCHILDRENx(fam, chil, num2)
 			len++;
 			key = indi_to_key(chil);
 			append_indiseq_null(seq, key, NULL, FALSE, FALSE);
-		ENDCHILDREN
+		ENDCHILDRENx
 	ENDFAMSS
 	if (len) return seq;
 	remove_indiseq(seq);
@@ -1274,10 +1274,10 @@ fam_to_children (NODE fam)
 	STRING key;
 	if (!fam) return NULL;
 	seq = create_indiseq_null();
-	FORCHILDREN(fam, chil, num)
+	FORCHILDRENx(fam, chil, num)
 		key = indi_to_key(chil);
 		append_indiseq_null(seq, key, NULL, TRUE, FALSE);
-	ENDCHILDREN
+	ENDCHILDRENx
 	if (num) return seq;
 	remove_indiseq(seq);
 	return NULL;
@@ -1345,14 +1345,14 @@ sibling_indiseq (INDISEQ seq,
 	ENDINDISEQ
 	FORINDISEQ(fseq, el, num)
 		fam = key_to_fam(skey(el));
-		FORCHILDREN(fam, chil, num2)
+		FORCHILDRENx(fam, chil, num2)
 			key = indi_to_key(chil);
 			if (!in_table(tab, key)) {
 				key = strsave(key);
 				append_indiseq_null(sseq, key, NULL, TRUE, TRUE);
 				insert_table_int(tab, key, 0);
 			}
-		ENDCHILDREN
+		ENDCHILDRENx
 	ENDINDISEQ
 	remove_table(tab, DONTFREE);
 	remove_indiseq(fseq);
@@ -1464,7 +1464,7 @@ descendent_indiseq (INDISEQ seq)
 			if (in_table(ftab, fkey = fam_to_key(fam)))
 				goto a;
 			insert_table_int(ftab, strsave(fkey), 0);
-			FORCHILDREN(fam, child, num2)
+			FORCHILDRENx(fam, child, num2)
 					/* only do people not processed */
 				if (!in_table(itab,
 				    dkey = indi_to_key(child))) {
@@ -1478,7 +1478,7 @@ descendent_indiseq (INDISEQ seq)
 					enqueue_list(genlist, (VPTR)gen);
 					insert_table_int(itab, dkey, 0);
 				}
-			ENDCHILDREN
+			ENDCHILDRENx
 		a:;
 		ENDFAMSS
 	}

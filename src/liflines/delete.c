@@ -61,7 +61,7 @@ choose_and_remove_family (void)
 	STRING cfptr=confirm; /* build & localize string */
 	INT cflen=sizeof(confirm);
 
-	fam = ask_for_fam_by_key(_(qSidfrmv), _(qSidfrsp), _(qSidfrch));
+	fam = nztop(ask_for_fam_by_key(_(qSidfrmv), _(qSidfrsp), _(qSidfrch)));
 	if (!fam)
 		return;
 
@@ -132,24 +132,27 @@ delete_indi (NODE indi, BOOLEAN conf)
  *  nolast: don't remove last member of family?
  *=========================================*/
 BOOLEAN
-choose_and_remove_spouse (NODE indi, NODE fam, BOOLEAN nolast)
+choose_and_remove_spouse (RECORD irec, RECORD frec, BOOLEAN nolast)
 {
+	NODE fam;
+
 	if (readonly) {
 		message(_(qSronlye));
 		return FALSE;
 	}
 
 /* Identify spouse to remove */
-	if (!indi) indi = ask_for_indi_old(_(qSidsrmv), NOCONFIRM, NOASK1);
-	if (!indi) return FALSE;
-	if (!FAMS(indi)) {
+	if (!irec) irec = ask_for_indi(_(qSidsrmv), NOCONFIRM, NOASK1);
+	if (!irec) return FALSE;
+	if (!FAMS(nztop(irec))) {
 		message(_(qSntprnt));
 		return FALSE;
 	}
 
 /* Identify family to remove spouse from */
-	if (!fam) fam = choose_family(indi, _(qSparadox), _(qSidsrmf), TRUE);
-	if (!fam) return FALSE;
+	if (!frec) frec = choose_family(irec, _(qSparadox), _(qSidsrmf), TRUE);
+	if (!frec) return FALSE;
+	fam = nztop(frec);
 	if (nolast && num_fam_xrefs(fam) < 2) {
 		message(_(qSnormls));
 		return FALSE;
@@ -157,7 +160,7 @@ choose_and_remove_spouse (NODE indi, NODE fam, BOOLEAN nolast)
 	if (!ask_yes_or_no(_(qScfsrmv))) return FALSE;
 
 	/* call internal workhorse remove_spouse() to do the actual removal */
-	if (!remove_spouse(indi, fam)) {
+	if (!remove_spouse(nztop(irec), fam)) {
 		message(_(qSntsinf));
 		return FALSE;
 	}
@@ -171,31 +174,34 @@ choose_and_remove_spouse (NODE indi, NODE fam, BOOLEAN nolast)
  *  nolast: don't remove last member of family?
  *=========================================*/
 BOOLEAN
-choose_and_remove_child (NODE indi, NODE fam, BOOLEAN nolast)
+choose_and_remove_child (RECORD irec, RECORD frec, BOOLEAN nolast)
 {
+	NODE fam;
+
 	if (readonly) {
 		message(_(qSronlye));
 		return FALSE;
 	}
 		
 /* Identify child and check for FAMC nodes */
-	if (!indi) indi = ask_for_indi_old(_(qSidcrmv), NOCONFIRM, NOASK1);
-	if (!indi) return FALSE;
-	if (!FAMC(indi)) {
+	if (!irec) irec = ask_for_indi(_(qSidcrmv), NOCONFIRM, NOASK1);
+	if (!irec) return FALSE;
+	if (!FAMC(nztop(irec))) {
 		message(_(qSntchld));
 		return FALSE;
 	}
 
 /* Identify family to remove child from */
-	if (!fam) fam = choose_family(indi, _(qSparadox), _(qSidcrmf), FALSE);
-	if (!fam) return FALSE;
+	if (!frec) frec = choose_family(irec, _(qSparadox), _(qSidcrmf), FALSE);
+	if (!frec) return FALSE;
+	fam = nztop(frec);
 	if (nolast && num_fam_xrefs(fam) < 2) {
 		message(_(qSnormls));
 		return FALSE;
 	}
 	if (!ask_yes_or_no(_(qScfcrmv))) return TRUE;
 
-	if (!remove_child(indi, fam)) {
+	if (!remove_child(nztop(irec), fam)) {
 		message(_(qSntcinf));
 		return FALSE;
 	}

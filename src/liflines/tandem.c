@@ -48,6 +48,8 @@
 
 extern STRING qSnofath, qSnomoth, qSnospse, qSnocofp;
 extern STRING qStwohsb, qStwowif, qSidsbrs, qSidplst, qSidcbrs;
+extern STRING qSidhbrs, qSidwbrs, qSid1wbr, qSid2wbr;
+extern STRING qSnowife;
 
 /*********************************************
  * local function prototypes
@@ -63,33 +65,42 @@ static BOOLEAN handle_tandem_scroll_cmds(INT c);
 /*=============================================
  * browse_tandem -- Two person browse operation
  *===========================================*/
-INT browse_tandem (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ *pseq)
+INT browse_tandem (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 {
+	RECORD current1, current2;
 	INT nkey1p, nkey2p, modep;
-	NODE node, indi1 = *pindi1, indi2 = *pindi2;
+	RECORD tmp=0, tmp2=0;
 	STRING key, name;
 	INDISEQ seq;
 	INT c, rc, reuse;
 	static INT mode = 'n';
-	pfam2=pfam2; /* unused */
 
-	if (!indi1 || !indi2) return BROWSE_QUIT;
+	ASSERT(prec1 && *prec1 && nztype(*prec1)=='I');
+	ASSERT(prec2 && *prec2 && nztype(*prec2)=='I');
+	ASSERT(!*pseq);
+	current1 = *prec1;
+	current2 = *prec2;
+
+	*prec1 = 0;
+	*prec2 = 0;
+	*pseq = 0;
+
 	show_reset_scroll();
 	nkey1p = 0; /* force redraw */
 	nkey2p = 0;
 	modep = mode;
 
 	while (TRUE) {
-		if (indi_to_keynum(indi1) != nkey1p
-			|| indi_to_keynum(indi2) != nkey2p
+		if (nzkeynum(current1) != nkey1p
+			|| nzkeynum(current2) != nkey2p
 			|| mode != modep) {
 			show_reset_scroll();
 		}
-		display_2indi(indi1, indi2, mode);
+		display_2indi(nztop(current1), nztop(current2), mode);
 		c = interact_2indi();
 		/* last keynum & mode, so can tell if changed */
-		nkey1p = indi_to_keynum(indi1);
-		nkey2p = indi_to_keynum(indi2);
+		nkey1p = nzkeynum(current1);
+		nkey2p = nzkeynum(current2);
 		modep = mode;
 		if (handle_menu_cmds(c, &reuse))
 			continue;
@@ -100,57 +111,58 @@ INT browse_tandem (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ
 		switch (c)
 		{
 		case CMD_EDIT: 	/* edit top person */
-			indi1 = edit_indi(indi1);
+			edit_indi(current1);
 			break;
 		case CMD_TOP: 	/* browse top person */
-			*pindi1 = indi1;
+			*prec1 = current1;
 			return BROWSE_INDI;
 		case CMD_FATHER: 	/* browse top person's father */
-			if (!(node = indi_to_fath(indi1)))
-				msg_error(_(qSnofath));
-			else
-				indi1 = node;
+			if ((tmp = choose_father(current1, NULL, _(qSnofath),
+				_(qSidhbrs), NOASK1)) != 0) {
+				current1 = tmp;
+			}
 			break;
 		case CMD_MOTHER: 	/* browse top person's mother */
-			if (!(node = indi_to_moth(indi1)))
-				msg_error(_(qSnomoth));
-			else
-				indi1 = node;
+			if ((tmp = choose_mother(current1, NULL, _(qSnomoth),
+				_(qSidwbrs), NOASK1)) != 0) {
+				current1 = tmp;
+			}
 			break;
 		case CMD_SPOUSE: 	/* browse top person's spouse/s */
-			node = choose_spouse(indi1, _(qSnospse), _(qSidsbrs));
-			if (node) indi1 = node;
+			if ((tmp = choose_spouse(current1, _(qSnospse), _(qSidsbrs))) != 0)
+				current1 = tmp;
 			break;
 		case CMD_CHILDREN: 	/* browse top person's children */
-			if ((node = choose_child(indi1, NULL, _(qSnocofp),
-			    _(qSidcbrs), NOASK1)))
-				indi1 = node;
+			if ((tmp = choose_child(current1, NULL, _(qSnocofp),
+				_(qSidcbrs), NOASK1)) != 0)
+				current1 = tmp;
 			break;
 		case CMD_MERGE_BOTTOM_TO_TOP: 	/* merge two persons */
-			if ((node = merge_two_indis(indi2, indi1, TRUE))) {
-				*pindi1 = node;
+			if ((tmp = merge_two_indis(nztop(current2), nztop(current1), TRUE))) {
+				*prec1 = tmp;
 				return BROWSE_INDI;
 			}
 			break;
 		case CMD_COPY_TOP_TO_BOTTOM: 	/* copy top person to bottom */
-			indi2 = indi1;
+			current2 = current1;
 			break;
 		case CMD_SWAPTOPBOTTOM: 	/* swap two persons */
-			node = indi1;
-			indi1 = indi2;
-			indi2 = node;
+			tmp = current1;
+			current1 = current2;
+			current2 = tmp;
 			break;
 		case CMD_ADDFAMILY: 	/* make two persons parents in family */
-			node = add_family(indi1, indi2, NULL);
-			if (!node)  break;
-			*pfam1 = node;
-			return BROWSE_FAM;
+			if ((tmp = add_family(current1, current2, NULL)) != 0) {
+				*prec1 = tmp;
+				return BROWSE_FAM;
+			}
+			break;
 		case CMD_BROWSE: 	/* browse to new person list */
 			seq = (INDISEQ) ask_for_indiseq(_(qSidplst), 'I', &rc);
 			if (!seq) break;
 			if (length_indiseq(seq) == 1) {
 				element_indiseq(seq, 0, &key, &name);
-				*pindi1 = key_to_indi(key);
+				*prec1 = key_to_record(key);
 				remove_indiseq(seq);
 				return BROWSE_INDI;
 			}
@@ -172,31 +184,40 @@ INT browse_tandem (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ
 /*==================================================
  * browse_2fam -- Handle two family browse operation
  *================================================*/
-INT browse_2fam (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ *pseq)
+INT browse_2fam (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 {
+	RECORD current1, current2;
 	INT nkey1p, nkey2p, modep;
-	NODE node, fam1 = *pfam1, fam2 = *pfam2;
+	RECORD tmp, tmp2;
 	INT c, reuse;
 	static INT mode = 'n';
-	pseq=pseq; /* unused */
 
-	ASSERT(fam1 && fam2);
+	ASSERT(prec1 && *prec1 && nztype(*prec1)=='F');
+	ASSERT(prec2 && *prec2 && nztype(*prec2)=='F');
+	ASSERT(!*pseq);
+	current1 = *prec1;
+	current2 = *prec2;
+
+	*prec1 = 0;
+	*prec2 = 0;
+	*pseq = 0;
+
 	show_reset_scroll();
 	nkey1p = 0; /* force redraw */
     nkey2p = 0;
 	modep = mode;
 
 	while (TRUE) {
-		if (fam_to_keynum(fam1) != nkey1p
-			|| fam_to_keynum(fam2) != nkey2p
+		if (nzkeynum(current1) != nkey1p
+			|| nzkeynum(current2) != nkey2p
 			|| mode != modep) {
 			show_reset_scroll();
 		}
-		display_2fam(fam1, fam2, mode);
+		display_2fam(nztop(current1), nztop(current2), mode);
 		c = interact_2fam();
 		/* last keynum & mode, so can tell if changed */
-		nkey1p = fam_to_keynum(fam1);
-		nkey2p = fam_to_keynum(fam2);
+		nkey1p = nzkeynum(current1);
+		nkey2p = nzkeynum(current2);
 		modep = mode;
 		if (handle_menu_cmds(c, &reuse))
 			continue;
@@ -207,40 +228,46 @@ INT browse_2fam (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ *
 		switch (c)
 		{
 		case CMD_EDIT:	/* edit top fam */
-			fam1 = edit_family(fam1);
+			edit_family(current1);
 			break;
 		case CMD_TOP:	/* browse top fam */
-			*pfam1 = fam1;
+			*prec1 = current1;
 			return BROWSE_FAM;
 		case CMD_BOTTOM:	/* browse bottom fam */
-			*pfam1 = fam2;
+			*prec2 = current2;
 			return BROWSE_FAM;
 		case CMD_BOTH_FATHERS:	/* browse to husbs/faths */
-			*pindi1 = fam_to_husb(fam1);
-			*pindi2 = fam_to_husb(fam2);
-			if (!*pindi1 || !*pindi2) {
-				message(_(qStwohsb));
-				break;
+			if ((tmp = fam_to_husb(current1)) != 0) {
+				if ((tmp2 = fam_to_husb(current2)) != 0) {
+					*prec1 = tmp;
+					*prec2 = tmp2;
+					return BROWSE_TAND;
+				}
 			}
-			return BROWSE_TAND;
+			message(_(qStwohsb));
+			break;
 		case CMD_BOTH_MOTHERS:	/* browse to wives/moths */
-			*pindi1 = fam_to_wife(fam1);
-			*pindi2 = fam_to_wife(fam2);
-			if (!*pindi1 || !*pindi2) {
-				message(_(qStwowif));
-				break;
+			if ((tmp = choose_mother(NULL, current1, _(qSnowife),
+				_(qSid1wbr), NOASK1)) != 0) {
+				if ((tmp2 = choose_mother(NULL, current2, _(qSnowife), 
+					_(qSid2wbr), NOASK1)) != 0) {
+					*prec1 = tmp;
+					*prec2 = tmp2;
+					return BROWSE_TAND;
+				}
 			}
-			return BROWSE_TAND;
+			message(_(qStwowif));
+			break;
 		case CMD_MERGE_BOTTOM_TO_TOP:	/* merge two fams */
-			if ((node = merge_two_fams(fam2, fam1))) {
-				*pfam1 = node;
+			if ((tmp = merge_two_fams(nztop(current2), nztop(current1))) != 0) {
+				*prec1 = tmp;
 				return BROWSE_FAM;
 			}
 			break;
 		case CMD_SWAPTOPBOTTOM:	/* swap two fams */
-			node = fam1;
-			fam1 = fam2;
-			fam2 = node;
+			tmp = current1;
+			current1 = current2;
+			current2 = tmp;
 			break;
 		case CMD_TOGGLE_CHILDNUMS:       /* toggle children numbers */
 			show_childnumbers();

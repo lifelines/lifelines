@@ -195,8 +195,8 @@ __getfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	assign_iden(stab, iident(arg), NULL);
 	uilocale();
-	fam = ask_for_fam(_("Enter a spouse from family."),
-	    _("Enter a sibling from family."));
+	fam = nztop(ask_for_fam(_("Enter a spouse from family."),
+	    _("Enter a sibling from family.")));
 	rptlocale();
 	assign_iden(stab, iident(arg), create_pvalue_from_fam(fam));
 	return NULL;
@@ -489,7 +489,7 @@ __husband (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_var_error(node, stab, arg, NULL, nonfam1, "husband");
 		return NULL;
 	}
-	return create_pvalue_from_indi(fam_to_husb(fam));
+	return create_pvalue_from_indi(fam_to_husb_node(fam));
 }
 /*===================================+
  * __wife -- Find first wife of family
@@ -807,7 +807,7 @@ __nextsib (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	if (!indi) return create_pvalue_from_indi(NULL);
-	return create_pvalue_from_indi(indi_to_next_sib(indi));
+	return create_pvalue_from_indi(indi_to_next_sib_old(indi));
 }
 /*========================================+
  * __prevsib -- Find person's older sibling
@@ -822,7 +822,7 @@ __prevsib (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	if (!indi) return create_pvalue_from_indi(NULL);
-	return create_pvalue_from_indi(indi_to_prev_sib(indi));
+	return create_pvalue_from_indi(indi_to_prev_sib_old(indi));
 }
 /*========================================+
  * __d -- Return cardinal integer as string

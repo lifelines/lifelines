@@ -86,7 +86,7 @@ variable, and checked & resized at init_display_indi time */
  *********************************************/
 
 /* alphabetical */
-static void add_child_line(INT, NODE, INT width);
+static void add_child_line(INT, RECORD, INT width);
 static void add_spouse_line(INT, NODE, NODE, INT width);
 static BOOLEAN append_event(STRING * pstr, STRING evt, INT * plen, INT minlen);
 static STRING disp_long_format_date(STRING date);
@@ -335,12 +335,12 @@ add_spouse_line (INT num, NODE indi, NODE fam, INT width)
  * add_child_line -- Add child line to others
  *=========================================*/
 static void
-add_child_line (INT num, NODE indi, INT width)
+add_child_line (INT num, RECORD irec, INT width)
 {
 	STRING line;
 	STRING child = _(qSdspl_child);
 	if (Solen >= MAXOTHERS) return;
-	line = person_display(indi, NULL, width-15);
+	line = person_display(nztop(irec), NULL, width-15);
 	if (number_child_enable)
 		llstrncpyf(Sothers[Solen], liwidth, "  %2d%s: %s", num, child, line);
 	else
@@ -361,7 +361,7 @@ init_display_fam (NODE fam, INT width)
 	STRING mother = _(qSdspl_moth);
 	STRING father = _(qSdspl_fath);
 	ASSERT(fam);
-	husb = fam_to_husb(fam);
+	husb = fam_to_husb_node(fam);
 	wife = fam_to_wife(fam);
 	fk = key_of_record(fam, ttmd);
 	if (husb) {

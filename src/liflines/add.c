@@ -244,7 +244,7 @@ prompt_add_child (NODE child, NODE fam)
 
 /* Identify family if caller did not */
 
-	if (!fam) fam = ask_for_fam(_(qSidprnt), _(qSidsbln));
+	if (!fam) fam = nztop(ask_for_fam(_(qSidprnt), _(qSidsbln)));
 	if (!fam) return NULL;
 
 	i = ask_child_order(fam, ALWAYS_PROMPT, &disp_shrt_rfmt);
@@ -346,7 +346,7 @@ prompt_add_spouse (NODE spouse,
 
 /* Identify family to add spouse to */
 
-	if (!fam) fam = ask_for_fam(_(qSidsinf), _(qSkchild));
+	if (!fam) fam = nztop(ask_for_fam(_(qSidsinf), _(qSkchild)));
 	if (!fam) return FALSE;
 
 /* Check that spouse can be added */
@@ -486,13 +486,12 @@ add_members_to_family (STRING xref, NODE spouse1, NODE spouse2, NODE child)
  * add_family -- Add new family to database
  * (with user interaction)
  *=======================================*/
-NODE
-add_family (NODE spouse1,
-            NODE spouse2,
-            NODE child)
+RECORD
+add_family (RECORD sprec1, RECORD sprec2, RECORD chrec)
 {
 	INT sex1 = 0;
 	INT sex2 = 0;
+	NODE spouse1, spouse2, child;
 	NODE fam1, fam2=0, refn, husb, wife, chil, body;
 	NODE node;
 	TRANMAPPING ttmi = get_tranmapping(MEDIN);
@@ -508,34 +507,37 @@ add_family (NODE spouse1,
 
 /* Handle case where child is known */
 
-	if (child)  {
-		spouse1 = spouse2 = NULL;
+	if (chrec)  {
+		sprec1 = sprec2 = NULL;
 		goto editfam;
 	}
 
 /* Identify first spouse */
 
-	if (!spouse1) 
-		spouse1 = ask_for_indi_old(_(qSidsps1), NOCONFIRM, NOASK1);
-	if (!spouse1) 
+	if (!sprec1) 
+		sprec1 = ask_for_indi(_(qSidsps1), NOCONFIRM, NOASK1);
+	if (!sprec1) 
 		return NULL;
-	if ((sex1 = SEX(spouse1)) == SEX_UNKNOWN) {
+	if ((sex1 = SEX(nztop(sprec1))) == SEX_UNKNOWN) {
 		message(_(qSunksex));
 		return NULL;
 	}
 
 /* Identify optional spouse */
 
-	if (!spouse2)
-		spouse2 = ask_for_indi_old(_(qSidsps2), NOCONFIRM, DOASK1);
-	if (spouse2) {
-		if ((sex2 = SEX(spouse2)) == SEX_UNKNOWN || sex1 == sex2) {
+	if (!sprec2)
+		sprec2 = ask_for_indi(_(qSidsps2), NOCONFIRM, DOASK1);
+	if (sprec2) {
+		if ((sex2 = SEX(nztop(sprec2))) == SEX_UNKNOWN || sex1 == sex2) {
 			message(_(qSnotopp));
 			return NULL;
 		}
 	}
 
 /* Create new family */
+	spouse1 = nztop(sprec1);
+	spouse2 = nztop(sprec2);
+	child = nztop(chrec);
 
 editfam:
 	fam1 = create_node(NULL, "FAM", NULL, NULL);
@@ -639,7 +641,7 @@ editfam:
 	if (spouse2) indi_to_dbase(spouse2);
 	if (child) indi_to_dbase(child);
 	message(_(qSgdfadd));
-	return fam2;
+	return key_to_record(key);
 }
 #ifdef ETHEL
 /*=========================================

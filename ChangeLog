@@ -1,3 +1,17 @@
+2002-06-24 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/choose.c gedlib/gedcom.c gedlib/gstrings.c
+	gedlib/indiseq.c gedlib/keytonod.c gedlib/names.c
+	gedlib/node.c gedlib/refns.c gedlib/valid.c hdrs/gedcom.h
+	hdrs/liflines.h interp/builtin.c interp/interp.c
+	liflines/add.c liflines/ask.c liflines/browse.c
+	liflines/delete.c liflines/edit.c liflines/lbrowse.c
+	liflines/llinesi.h liflines/merge.c liflines/newrecs.c
+	liflines/screen.c liflines/show.c liflines/swap.c
+	liflines/tandem.c tools/dbverify.c:
+
+	Pass RECORDs instead of NODEs through top-level browse functions.
+
 2002-06-23 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog

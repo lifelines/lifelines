@@ -982,7 +982,7 @@ id_by_key (STRING name, char ctype)
 		kbuf[i++] = c;
 	if (c != 0) return NULL;
 	kbuf[i] = 0;
-	return key_to_record(kbuf, TRUE);
+	return key_to_record(kbuf);
 }
 /*============================================
  * name_to_list -- Convert name to string list

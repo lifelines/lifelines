@@ -192,7 +192,7 @@ static STRING get_answer(UIWINDOW uiwin, INT row, INT col);
 static INT handle_list_cmds(listdisp * ld, INT code);
 static BOOLEAN handle_popup_list_resize(listdisp * ld, INT code);
 static INT interact(UIWINDOW uiwin, STRING str, INT screen);
-static NODE invoke_add_menu(void);
+static RECORD invoke_add_menu(void);
 static void invoke_cset_display(void);
 static void invoke_del_menu(void);
 static INT invoke_extra_menu(void);
@@ -617,24 +617,24 @@ main_menu (void)
 	place_std_msg();
 	wrefresh(win);
 	switch (c) {
-	case 'b': browse(NULL, BROWSE_INDI); break;
+	case 'b': main_browse(NULL, BROWSE_INDI); break;
 	case 's':
 		{
 			RECORD rec = invoke_search_menu();
 			if (rec)
-				browse(nztop(rec), BROWSE_UNK);
+				main_browse(rec, BROWSE_UNK);
 		}
 		break;
 	case 'a': 
 		{
-			NODE node;
+			RECORD rec = 0;
 			if (readonly) {
 				msg_error(_(qSronlya));
 				break;
 			}
-			node = invoke_add_menu();
-			if (node)
-				browse(node, BROWSE_UNK);
+			rec = invoke_add_menu();
+			if (rec)
+				main_browse(rec, BROWSE_UNK);
 		}
 		break;
 	case 'd':
@@ -653,7 +653,7 @@ main_menu (void)
 	case 'x': 
 		c = invoke_extra_menu();
 		if (c != BROWSE_QUIT)
-			browse(NULL, c);
+			main_browse(NULL, c);
 		break;
 	case 'q': alldone = 1; break;
 	case 'Q': 
@@ -903,18 +903,13 @@ aux_browse (NODE node, INT mode, BOOLEAN reuse)
 }
 /*=========================================
  * list_browse -- Handle list_browse screen
- *  cur & pindi are passed for GUI doing
+ *  cur is passed for GUI doing
  *  direct navigation in list
  *  this curses implementation does not use them
  *=======================================*/
 INT
-list_browse (INDISEQ seq,
-             INT top,
-             INT * cur,
-             INT mark,
-             NODE * pindi)
+list_browse (INDISEQ seq, INT top, INT * cur, INT mark)
 {
-	pindi=pindi; /* unused */
 	if (cur_screen != LIST_SCREEN) paint_list_screen();
 	show_big_list(seq, top, *cur, mark);
 	display_screen(LIST_SCREEN);
@@ -1713,12 +1708,12 @@ invoke_search_menu (void)
 /*============================
  * invoke_add_menu -- Handle add menu
  *==========================*/
-static NODE
+static RECORD
 invoke_add_menu (void)
 {
 	UIWINDOW uiwin=0;
 	WINDOW * win=0;
-	NODE node=NULL;
+	RECORD rec=0;
 	INT code;
 
 	if (!add_menu_win) {
@@ -1736,14 +1731,14 @@ invoke_add_menu (void)
 
 	switch (code) {
 	case 'p':
-		node = nztop(add_indi_by_edit());
+		rec = add_indi_by_edit();
 		break;
 	case 'f': add_family(NULL, NULL, NULL); break;
 	case 'c': prompt_add_child(NULL, NULL); break;
 	case 's': prompt_add_spouse(NULL, NULL, TRUE); break;
 	case 'q': break;
 	}
-	return node;
+	return rec;
 }
 /*===============================
  * invoke_del_menu -- Handle delete menu

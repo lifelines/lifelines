@@ -48,7 +48,7 @@
  * global/exported variables
  *********************************************/
 
-NODE jumpnode; /* used by Ethel for direct navigation */
+RECORD jumpnode; /* used by Ethel for direct navigation */
 
 /*********************************************
  * external/imported variables
@@ -74,7 +74,6 @@ extern STRING qSbadhistcnt,qSbadhistcnt2,qSbadhistlen;
  * local enums & defines
  *********************************************/
 
-#define ALLPARMS &indi1, &indi2, &fam1, &fam2, &seq
 #define MAX_SPOUSES 30
 struct hist;
 
@@ -83,34 +82,31 @@ struct hist;
  *********************************************/
 
 /* alphabetical */
-static NODE add_new_rec_maybe_ref(NODE node, char ntype);
+static RECORD add_new_rec_maybe_ref(RECORD current, char ntype);
 static void ask_clear_history(struct hist * histp);
-static void autoadd_xref(NODE node, NODE newnode);
-static INT browse_aux(NODE *pindi1, NODE *pindi2, NODE *pfam1,
-	NODE *pfam2, INDISEQ *pseq);
-static INT browse_indi(NODE *pindi1, NODE *pindi2, NODE *pfam1,
-	NODE *pfam2, INDISEQ *pseq);
-static INT browse_fam(NODE *pindi1, NODE *pindi2, NODE *pfam1,
-	NODE *pfam2, INDISEQ *pseq);
-static INT browse_indi_modes(NODE *pindi1, NODE *pindi2, NODE *pfam1,
-	NODE *pfam2, INDISEQ *pseq, INT indimode);
-static INT browse_pedigree(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
+static void autoadd_xref(RECORD rec, NODE newnode);
+static INT browse_aux(RECORD *prec1, RECORD *prec2, INDISEQ *pseq);
+static INT browse_indi(RECORD *prec1, RECORD *prec2, INDISEQ *pseq);
+static INT browse_fam(RECORD *prec1, RECORD *prec2, INDISEQ *pseq);
+static INT browse_indi_modes(RECORD *prec1, RECORD *prec2, INDISEQ *pseq
+	, INT indimode);
+static INT browse_pedigree(RECORD *prec1, RECORD *prec2, INDISEQ *pseq);
 static INT display_aux(NODE node, INT mode, BOOLEAN reuse);
 static INT get_hist_count(struct hist * histp);
-static NODE goto_fam_child(NODE fam, int childno);
-static NODE goto_indi_child(NODE indi, int childno);
+static RECORD goto_fam_child(RECORD frec, int childno);
+static RECORD goto_indi_child(RECORD irec, int childno);
 static BOOLEAN handle_aux_mode_cmds(INT c, INT * mode);
-static INT handle_history_cmds(INT c, NODE * pindi1);
-static NODE history_back(struct hist * histp);
+static INT handle_history_cmds(INT c, RECORD *prec1);
+static RECORD history_back(struct hist * histp);
 static RECORD history_list(struct hist * histp);
-static void history_record(NODE node, struct hist * histp);
-static NODE history_fwd(struct hist * histp);
+static void history_record(RECORD rec, struct hist * histp);
+static RECORD history_fwd(struct hist * histp);
 static void init_hist(struct hist * histp, INT count);
 static void load_hist_lists(void);
 static void load_nkey_list(STRING key, struct hist * histp);
 static void prompt_add_spouse_check_save(NODE fam, NODE save);
-static NODE pick_create_new_family(NODE indi, NODE save, STRING * addstrings);
-static void pick_remove_spouse_from_family(NODE fam);
+static RECORD pick_create_new_family(RECORD current, RECORD save, STRING * addstrings);
+static void pick_remove_spouse_from_family(RECORD frec);
 static void save_hist_lists(void);
 static void save_nkey_list(STRING key, struct hist * histp);
 
@@ -147,88 +143,88 @@ static struct hist chist; /* records changed */
 /*=========================================
  * prompt_for_browse -- prompt for browse target
  *  when only type of browse is known
+ *  prec:  [OUT]  current record
+ *  code:  [I/O]  current browse type
+ *  pseq:  [OUT]  current sequence
+ * Sets either *prec or *pseq & sets *code to appropriate browse type
  * Created: 2001/02/25, Perry Rapp
  *=======================================*/
 static void
-prompt_for_browse (NODE * node, INT * code, INDISEQ * seq)
+prompt_for_browse (RECORD * prec, INT * code, INDISEQ * pseq)
 {
-	RECORD rec;
 	INT len, rc;
 	STRING key, name;
 
+	/* verify & clear the output arguments */
+	ASSERT(prec && pseq);
+	*prec = 0;
+	*pseq =0;
+
 	if (*code == BROWSE_INDI) {
-		*seq = ask_for_indiseq(_(qSidplst), 'I', &rc);
-		if (!*seq) return;
-		if ((len = length_indiseq(*seq)) < 1) return;
+		*pseq = ask_for_indiseq(_(qSidplst), 'I', &rc);
+		if (!*pseq) return;
+		if ((len = length_indiseq(*pseq)) < 1) return;
 		if (len == 1) {
-			element_indiseq(*seq, 0, &key, &name);
-			*node = key_to_indi(key);
-			remove_indiseq(*seq);
-			*seq = NULL;
+			element_indiseq(*pseq, 0, &key, &name);
+			*prec = key_to_irecord(key);
+			*pseq = NULL;
 		} else {
 			*code = BROWSE_LIST;
 		}
 		return;
 	}
 	if (*code == BROWSE_EVEN) {
-		rec = choose_any_event();
-		*node = nztop(rec);
+		*prec = choose_any_event();
 		return;
 	}
 	if (*code == BROWSE_SOUR) {
-		rec = choose_any_source();
-		*node = nztop(rec);
+		*prec = choose_any_source();
 		return;
 	}
-	rec = choose_any_other();
-	*node = nztop(rec);
+	*prec = choose_any_other();
 	return;
 }
 /*=========================================
  * browse -- Main loop of browse operation.
- *  node may be NULL (then prompt for indi)
+ *  rec may be NULL (then prompt)
  *=======================================*/
 void
-browse (NODE node, INT code)
+main_browse (RECORD rec1, INT code)
 {
-	NODE indi1, indi2, fam1, fam2;
+	RECORD rec2=0;
 	INDISEQ seq = NULL;
 	STRING key;
 
-	if (!node)
-		prompt_for_browse(&node, &code, &seq);
+	if (!rec1)
+		prompt_for_browse(&rec1, &code, &seq);
 
-	if (!node && !seq) return;
+	if (!rec1 && !seq) return;
 
-
-	/* set up ALLPARMS if not list */
-	if (node) {
-		fam1 = indi1 = node;
-	}
 
 	while (code != BROWSE_QUIT) {
 		switch (code) {
 		case BROWSE_INDI:
-			code = browse_indi(ALLPARMS); break;
+			code = browse_indi(&rec1, &rec2, &seq); break;
 		case BROWSE_FAM:
-			code = browse_fam(ALLPARMS); break;
+			code = browse_fam(&rec1, &rec2, &seq); break;
 		case BROWSE_PED:
-			code = browse_pedigree(ALLPARMS); break;
+			code = browse_pedigree(&rec1, &rec2, &seq); break;
 		case BROWSE_TAND:
-			code = browse_tandem(ALLPARMS); break;
+			code = browse_tandem(&rec1, &rec2, &seq); break;
 		case BROWSE_2FAM:
-			code = browse_2fam(ALLPARMS); break;
+			code = browse_2fam(&rec1, &rec2, &seq); break;
 		case BROWSE_LIST:
-			code = browse_list(ALLPARMS); break;
+			code = browse_list(&rec1, &rec2, &seq); break;
 		case BROWSE_EVEN:
 		case BROWSE_SOUR:
 		case BROWSE_AUX:
-			code = browse_aux(ALLPARMS); break;
+			code = browse_aux(&rec1, &rec2, &seq); break;
 		case BROWSE_UNK:
-			key = rmvat(nxref(indi1));
+			ASSERT(rec1);
+			key = rmvat(nxref(nztop(rec1)));
 			switch(key[0]) {
 			case 'I': code=BROWSE_INDI; break;
-			case 'F': code=BROWSE_FAM; fam1 = indi1; break;
+			case 'F': code=BROWSE_FAM; break;
 			default: code=BROWSE_AUX; break;
 			}
 		}
@@ -237,12 +233,13 @@ browse (NODE node, INT code)
 /*================================================
  * goto_indi_child - jump to child by number
  *==============================================*/
-static NODE
-goto_indi_child (NODE indi, int childno)
+static RECORD
+goto_indi_child (RECORD irec, int childno)
 {
 	INT num1, num2, i = 0;
-	NODE answer = 0;
-	if (!indi) return NULL;
+	RECORD answer = 0;
+	NODE indi = nztop(irec);
+	if (!irec) return NULL;
 	FORFAMSS(indi, fam, spouse, num1)
 		FORCHILDREN(fam, chil, num2)
 			i++;
@@ -254,12 +251,13 @@ goto_indi_child (NODE indi, int childno)
 /*================================================
  * goto_fam_child - jump to child by number
  *==============================================*/
-static NODE
-goto_fam_child(NODE fam, int childno)
+static RECORD
+goto_fam_child(RECORD frec, int childno)
 {
 	INT num, i = 0;
-	NODE answer = 0;
-	if (!fam) return NULL;
+	RECORD answer = 0;
+	NODE fam = nztop(frec);
+	if (!frec) return NULL;
 	FORCHILDREN(fam, chil, num)
 		i++;
 		if (i == childno) answer = chil;
@@ -270,75 +268,78 @@ goto_fam_child(NODE fam, int childno)
  * pick_create_new_family -- 
  *  pulled out of browse_indi, 2001/02/04, Perry Rapp
  *=============================================*/
-static NODE
-pick_create_new_family (NODE indi, NODE save, STRING * addstrings)
+static RECORD
+pick_create_new_family (RECORD current, RECORD save, STRING * addstrings)
 {
 	INT i;
-	NODE node=0;
+	RECORD rec=0;
 	TRANMAPPING ttmd = get_tranmapping(MINDS);
-	char scratch[100];
+
 	if (readonly) {
 		message(_(qSronlya));
 		return NULL;
 	}
 	i = choose_from_array(_(qSidfcop), 2, addstrings);
 	if (i == -1) return NULL;
-	if (i == 0) node = add_family(NULL, NULL, indi);
+	if (i == 0) rec = add_family(NULL, NULL, current);
 	else if (save) {
-		if (keyflag)
-			sprintf(scratch, "%s%s (%s)", _(qSissnew),
-				    indi_to_name(save, ttmd, 55),
-				 rmvat(nxref(save))+1);
-		else
-			sprintf(scratch, "%s%s", _(qSissnew),
-				 indi_to_name(save, ttmd, 55));
+		char scratch[100];
+		STRING name = indi_to_name(nztop(save), ttmd, 55);
+		llstrncpyf(scratch, sizeof(scratch), "%s%s", _(qSissnew), name);
+		if (keyflag) {
+			STRING key = rmvat(nxref(nztop(save)))+1;
+			llstrappf(scratch, sizeof(scratch), " (%s)", key);
+		}
 		if (ask_yes_or_no(scratch))
-			node = add_family(indi, save, NULL);
+			rec = add_family(current, save, NULL);
 		else
-			node = add_family(indi, NULL, NULL);
+			rec = add_family(current, NULL, NULL);
 	} else
-		node = add_family(indi, NULL, NULL);
-	return node;
+		rec = add_family(current, NULL, NULL);
+	return rec;
 }
 /*====================================================
  * browse_indi_modes -- Handle person/pedigree browse.
+ *  prec1 [I/O]  current record (or upper in tandem screens)
+ *  prec2 [I/O]  lower record in tandem screens
+ *  pseq  [I/O]  current sequence in list browse
  *==================================================*/
 static INT
-browse_indi_modes (NODE *pindi1,
-                   NODE *pindi2,
-                   NODE *pfam1,
-                   NODE *pfam2,
-                   INDISEQ *pseq,
-                   INT indimode
-                   )
+browse_indi_modes (RECORD *prec1, RECORD *prec2, INDISEQ *pseq, INT indimode)
 {
+	RECORD current=0;
 	STRING key, name, addstrings[2];
 	INT i, c, rc;
 	BOOLEAN reuse=FALSE; /* flag to reuse same display strings */
 	INT nkeyp, indimodep;
-	NODE node, save = NULL, indi = *pindi1;
-	NODE node2;
+	RECORD save=0, tmp=0, tmp2=0;
 	INDISEQ seq = NULL;
 	char c2;
 
+	ASSERT(prec1 && *prec1 && nztype(*prec1)=='I');
+	ASSERT(!*prec2 && !*pseq);
+	current = *prec1;
+
+	*prec1 = 0;
+	*prec2 = 0;
+
 	addstrings[0] = _(qScrtcfm);
 	addstrings[1] = _(qScrtsfm);
-	if (!indi) return BROWSE_QUIT;
 	show_reset_scroll();
 	nkeyp = 0;
 	indimodep = indimode;
 
 	while (TRUE) {
-		if (indi_to_keynum(indi) != nkeyp 
+		if (nzkeynum(current) != nkeyp 
 			|| indimode != indimodep) {
 			show_reset_scroll();
 		}
-		history_record(indi, &vhist);
+		history_record(current, &vhist);
 			/* display & get input, preserving INDI in cache */
-		display_indi(indi, indimode, reuse);
+		display_indi(nztop(current), indimode, reuse);
 		c = interact_indi();
 		/* last keynum & mode, so can tell if changed */
-		nkeyp = indi_to_keynum(indi);
+		nkeyp = nzkeynum(current);
 		indimodep = indimode;
 reprocess_indi_cmd: /* so one command can forward to another */
 		reuse = FALSE; /* don't reuse display unless specifically set */
@@ -349,7 +350,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			continue;
 		if (handle_indi_mode_cmds(c, &indimode))
 			continue;
-		i = handle_history_cmds(c, pindi1);
+		i = handle_history_cmds(c, prec1);
 		if (i == 1)
 			continue; /* history cmd handled, stay here */
 		if (i == -1)
@@ -357,83 +358,89 @@ reprocess_indi_cmd: /* so one command can forward to another */
 		switch (c)
 		{
 		case CMD_EDIT:	/* Edit this person */
-			indi = edit_indi(indi);
+			edit_indi(current);
 			break;
 		case CMD_FAMILY: 	/* Browse to person's family */
-			if ((*pfam1 = choose_family(indi, _(qSntprnt), 
-				_(qSidfbrs), TRUE)))
+			if ((*prec1 = choose_family(current, _(qSntprnt)
+				,  _(qSidfbrs), TRUE)))
 				return BROWSE_FAM;
 			break;
 		case CMD_TANDEM_FAMILIES:
-			if ((*pfam1 = choose_family(indi, _(qSntprnt),
-				_(qSid1fbr), TRUE)))
-			  if ((*pfam2 = choose_family(indi, _(qSntprnt),
-				_(qSid2fbr), TRUE)))
-				return BROWSE_2FAM;
+			if ((tmp = choose_family(current, _(qSntprnt),
+				_(qSid1fbr), TRUE)) != 0) {
+				if ((tmp2 = choose_family(current, _(qSntprnt),
+					_(qSid2fbr), TRUE)) != 0) {
+					*prec1 = tmp;
+					*prec2 = tmp2;
+					return BROWSE_2FAM;
+				}
+			}
 			break;
 		case CMD_FATHER: 	/* Browse to person's father */
-			node = choose_father(indi, NULL, _(qSnofath),
-			    _(qSidhbrs), NOASK1);
-			if (node) indi = node;
+			if ((tmp = choose_father(current, NULL, _(qSnofath),
+				_(qSidhbrs), NOASK1)) != 0) {
+				current = tmp;
+			}
 			break;
 		case CMD_TANDEM_FATHERS:	/* Tandem Browse to person's fathers */
-			node = choose_father(indi, NULL, _(qSnofath),
-			    _(qSid1hbr), NOASK1);
-			if (node) {
-			  node2 = choose_father(indi, NULL, _(qSnofath),
-			    _(qSid2hbr), NOASK1);
-			  if (node2) {
-				*pindi1 = node;
-				*pindi2 = node2;
-				return BROWSE_TAND;
-			  }
+			if ((tmp = choose_father(current, NULL, _(qSnofath),
+				_(qSid1hbr), NOASK1)) != 0) {
+				if ((tmp2 = choose_father(current, NULL, _(qSnofath),
+					_(qSid2hbr), NOASK1)) != 0) {
+					*prec1 = tmp;
+					*prec2 = tmp2;
+					return BROWSE_TAND;
+				}
 			}
 			break;
 		case CMD_MOTHER:	/* Browse to person's mother */
-			node = choose_mother(indi, NULL, _(qSnomoth),
-			    _(qSidwbrs), NOASK1);
-			if (node) indi = node;
+			if ((tmp = choose_mother(current, NULL, _(qSnomoth),
+				_(qSidwbrs), NOASK1)) != 0) {
+				current = tmp;
+			}
 			break;
 		case CMD_TANDEM_MOTHERS:	/* Tandem Browse to person's mothers */
-			node = choose_mother(indi, NULL, _(qSnomoth),
-			    _(qSid1wbr), NOASK1);
-			if (node) {
-			  node2 = choose_mother(indi, NULL, _(qSnomoth),
-			    _(qSid2wbr), NOASK1);
-			  if (node2) {
-				*pindi1 = node;
-				*pindi2 = node2;
-				return BROWSE_TAND;
-			  }
+			if ((tmp = choose_mother(current, NULL, _(qSnomoth),
+				_(qSid1wbr), NOASK1)) != 0) {
+				if ((tmp2 = choose_mother(current, NULL, _(qSnomoth),
+					_(qSid2wbr), NOASK1)) != 0) {
+					*prec1 = tmp;
+					*prec2 = tmp2;
+					return BROWSE_TAND;
+				}
 			}
 			break;
 		case CMD_BROWSE_ZIP_INDI:	/* Zip browse another person */
-			node = ask_for_indi_old(_(qSidpnxt), NOCONFIRM, NOASK1);
-			if (node) indi = node;
+			if ((tmp = ask_for_indi(_(qSidpnxt), NOCONFIRM, NOASK1)) != 0)
+				current = tmp;
 			break;
 		case CMD_BROWSE_ZIP_ANY:	/* Zip browse any record */
-			*pindi1 = ask_for_any_old(_(qSidnxt), NOCONFIRM, NOASK1);
-			if (*pindi1) return BROWSE_UNK;
+			if ((tmp = ask_for_any(_(qSidnxt), NOCONFIRM, NOASK1)) != 0) {
+				if (nztype(tmp) != 'I') {
+					*prec1 = tmp;
+					return BROWSE_UNK;
+				} else {
+					current = tmp;
+				}
+			}
 			break;
 		case CMD_SPOUSE:	/* Browse to person's spouse */
-			node = choose_spouse(indi, _(qSnospse), _(qSidsbrs));
-			if (node) indi = node;
+			if ((tmp = choose_spouse(current, _(qSnospse), _(qSidsbrs))) != 0)
+				current = tmp;
 			break;
 		case CMD_TANDEM_SPOUSES:	/* browse to tandem spouses */
-			node = choose_spouse(indi, _(qSnospse), _(qSid1sbr));
-			if (node) {
-			  node2 = choose_spouse(indi, _(qSnospse), _(qSid2sbr));
-			  if (node2) {
-				*pindi1 = node;
-				*pindi2 = node2;
-				return BROWSE_TAND;
-			  }
+			if ((tmp = choose_spouse(current, _(qSnospse), _(qSid1sbr))) != 0) {
+				if ((tmp2 = choose_spouse(current, _(qSnospse), _(qSid2sbr))) != 0) {
+					*prec1 = tmp;
+					*prec2 = tmp2;
+					return BROWSE_TAND;
+				}
 			}
 			break;
 		case CMD_CHILDREN:	/* Browse to person's child */
-			node = choose_child(indi, NULL, _(qSnocofp),
-			    _(qSidcbrs), NOASK1);
-			if (node) indi = node;
+			if ((tmp = choose_child(current, NULL, _(qSnocofp),
+				_(qSidcbrs), NOASK1)) != 0)
+				current = tmp;
 			break;
 		case CMD_TOGGLE_PEDTYPE:       /* toggle pedigree mode (ancestors/descendants) */
 			pedigree_toggle_mode();
@@ -456,129 +463,136 @@ reprocess_indi_cmd: /* so one command can forward to another */
 		case CMD_CHILD_DIRECT0+7:
 		case CMD_CHILD_DIRECT0+8:
 		case CMD_CHILD_DIRECT0+9:
-			node = goto_indi_child(indi, c-CMD_CHILD_DIRECT0);
-			if (node) indi = node;
-			else message(_(qSnochil));
+			if ((tmp = goto_indi_child(current, c-CMD_CHILD_DIRECT0)) != 0)
+				current = tmp;
+			else
+				message(_(qSnochil));
 			break;
 		case CMD_TANDEM_CHILDREN:	/* browse to tandem children */
-			node = choose_child(indi, NULL, _(qSnocofp),
-			    _(qSid1cbr), NOASK1);
-			if (node) {
-			  node2 = choose_child(indi, NULL, _(qSnocofp),
-			    _(qSid2cbr), NOASK1);
-			  if (node2) {
-				*pindi1 = node;
-				*pindi2 = node2;
-				return BROWSE_TAND;
-			  }
+			if ((tmp = choose_child(current, NULL, _(qSnocofp),
+				_(qSid1cbr), NOASK1)) != 0) {
+				if ((tmp2 = choose_child(current, NULL, _(qSnocofp),
+					_(qSid2cbr), NOASK1)) != 0) {
+					*prec1 = tmp;
+					*prec2 = tmp2;
+					return BROWSE_TAND;
+				}
 			}
 			break;
 		case CMD_PEDIGREE:	/* Switch to pedigree mode */
-			*pindi1 = indi;
 			if (indimode == 'i')
 				indimode = 'p';
 			else
 				indimode = 'i';
 			break;
 		case CMD_UPSIB:	/* Browse to older sib */
-			if (!(node = indi_to_prev_sib(indi)))
-				message(_(qSnoosib));
+			if ((tmp = indi_to_prev_sib(current)) != 0)
+				current = tmp;
 			else
-				 indi = node;
+				message(_(qSnoosib));
 			break;
 		case CMD_DOWNSIB:	/* Browse to younger sib */
-			if (!(node = indi_to_next_sib(indi)))
+			if ((tmp = indi_to_next_sib(current)) != 0)
+				current = tmp;
+			else
 				message(_(qSnoysib));
-			else 
-				 indi = node;
 			break;
 		case CMD_PARENTS:	/* Browse to parents' family */
-			if ((*pfam1 = choose_family(indi, _(qSnoprnt),
-				_(qSidfbrs), FALSE)))
+			if ((tmp = choose_family(current, _(qSnoprnt),
+				_(qSidfbrs), FALSE)) != 0) {
+				*prec1 = tmp;
 				return BROWSE_FAM;
+			}
 			break;
 		case CMD_TANDEM_PARENTS:	/* tandem browse to two parents families*/
-			if ((*pfam1 = choose_family(indi, _(qSnoprnt),
-				_(qSid1fbr), FALSE)))
-			  if ((*pfam2 = choose_family(indi, _(qSnoprnt),
-				_(qSid2fbr), FALSE)))
-				return BROWSE_2FAM;
+			if ((tmp = choose_family(current, _(qSnoprnt),
+				_(qSid1fbr), FALSE)) != 0) {
+				if ((tmp2 = choose_family(current, _(qSnoprnt),
+					_(qSid2fbr), FALSE)) != 0) {
+					*prec1 = tmp;
+					*prec2 = tmp2;
+					return BROWSE_2FAM;
+				}
+			}
 			break;
 		case CMD_BROWSE: 	/* Browse new list of persons */
 			seq = ask_for_indiseq(_(qSidplst), 'I', &rc);
 			if (!seq) break;
 			if (length_indiseq(seq) == 1) {
 				element_indiseq(seq, 0, &key, &name);
-				indi = key_to_indi(key);
+				current = key_to_record(key);
 				remove_indiseq(seq);
 				seq=NULL;
-				break;
+				if (nztype(current) != 'I') {
+					*prec1 = current;
+					return BROWSE_UNK;
+				}
+			} else {
+				*pseq = seq;
+				return BROWSE_LIST;
 			}
-			*pseq = seq;
-			return BROWSE_LIST;
 			break;
 		case CMD_NEWPERSON:	/* Add new person */
-			if (!(node = nztop(add_indi_by_edit()))) break;
-			save = indi;
-			indi = node;
+			if (!(tmp = add_indi_by_edit())) break;
+			save = current;
+			current = tmp;
 			break;
 		case CMD_NEWFAMILY:	/* Add family for current person */
-			node = pick_create_new_family(indi, save, addstrings);
-			save = NULL;
-			if (!node) break;
-			*pfam1 = node;
-			return BROWSE_FAM;
+			if ((tmp = pick_create_new_family(current, save, addstrings)) != 0) {
+				save = NULL;
+				*prec1 = tmp;
+				return BROWSE_FAM;
+			}
+			break;
 		case CMD_ADD_SOUR: /* add source */
 		case CMD_ADD_EVEN: /* add event */
 		case CMD_ADD_OTHR: /* add other */
 			c2 = (c==CMD_ADD_SOUR ? 'S' : (c==CMD_ADD_EVEN ? 'E' : 'X'));
-			node = add_new_rec_maybe_ref(indi, c2);
-			if (node == indi) {
-				c = CMD_EDIT;
-				goto reprocess_indi_cmd; /* forward to edit */
-			}
-			if (node) {
-				*pindi1 = node;
+			if ((tmp = add_new_rec_maybe_ref(current, c2)) != 0) {
+				if (tmp == current) {
+					c = CMD_EDIT;
+					goto reprocess_indi_cmd; /* forward to edit */
+				}
+				*prec1 = tmp;
 				return BROWSE_UNK;
 			}
 			break;
 		case CMD_TANDEM:	/* Switch to tandem browsing */
-			node = ask_for_indi_old(_(qSidp2br), NOCONFIRM, NOASK1);
-			if (node) {
-				*pindi1 = indi;
-				*pindi2 = node;
+			if ((tmp = ask_for_indi(_(qSidp2br), NOCONFIRM, NOASK1)) != 0) {
+				*prec1 = current;
+				*prec2 = tmp;
 				return BROWSE_TAND;
 			}
 			break;
 		case CMD_SWAPFAMILIES: 	/* Swap families of current person */
-			swap_families(indi);
+			swap_families(current);
 			break;
 		case CMD_ADDASSPOUSE:	/* Add person as spouse */
-			prompt_add_spouse(indi, NULL, TRUE);
+			prompt_add_spouse(nztop(current), NULL, TRUE);
 			break;
 		case CMD_ADDASCHILD:    /* Add person as child */
-			prompt_add_child(indi, NULL);
+			prompt_add_child(nztop(current), NULL);
 			break;
 		case CMD_PERSON:   /* switch to person browse */
 			indimode='i';
 			break;
 		case CMD_REMOVEASSPOUSE:	/* Remove person as spouse */
-			choose_and_remove_spouse(indi, NULL, FALSE);
+			choose_and_remove_spouse(current, NULL, FALSE);
 			break;
 		case CMD_REMOVEASCHILD:	/* Remove person as child */
-			choose_and_remove_child(indi, NULL, FALSE);
+			choose_and_remove_child(current, NULL, FALSE);
 			break;
 		case CMD_ADVANCED:	/* Advanced person edit */
-			advanced_person_edit(indi);
+			advanced_person_edit(nztop(current));
 			break;
 		case CMD_JUMP_HOOK:   /* GUI direct navigation */
-			indi = jumpnode;
+			current = jumpnode;
 			break;
 		case CMD_NEXT:	/* Go to next indi in db */
 			{
 				i = xref_nexti(nkeyp);
 				if (i)
-					indi = keynum_to_indi(i);
+					current = keynum_to_irecord(i);
 				else message(_(qSnopers));
 				break;
 			}
@@ -586,28 +600,25 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			{
 				i = xref_previ(nkeyp);
 				if (i)
-					indi = keynum_to_indi(i);
+					current = keynum_to_irecord(i);
 				else message(_(qSnopers));
 				break;
 			}
 		case CMD_SOURCES:	/* Browse to sources */
-			node = choose_source(indi, _(qSnosour), _(qSidsour));
-			if (node) {
-				*pindi1 = node;
+			if ((tmp = choose_source(current, _(qSnosour), _(qSidsour))) != 0) {
+				*prec1 = tmp;
 				return BROWSE_AUX;
 			}
 			break;
 		case CMD_NOTES:	/* Browse to notes */
-			node = choose_note(indi, _(qSnonote), _(qSidnote));
-			if (node) {
-				*pindi1 = node;
+			if ((tmp = choose_note(current, _(qSnonote), _(qSidnote))) != 0) {
+				*prec1 = tmp;
 				return BROWSE_AUX;
 			}
 			break;
 		case CMD_POINTERS:	/* Browse to references */
-			node = choose_pointer(indi, _(qSnoptr), _(qSidptr));
-			if (node) {
-				*pindi1 = node;
+			if ((tmp = choose_pointer(current, _(qSnoptr), _(qSidptr))) != 0) {
+				*prec1 = tmp;
 				return BROWSE_UNK;
 			}
 			break;
@@ -636,38 +647,40 @@ display_aux (NODE node, INT mode, BOOLEAN reuse)
  * Created: 2001/01/27, Perry Rapp
  *==================================================*/
 static INT
-browse_aux (NODE *pindi1, NODE *pindi2, NODE *pfam1,
-	NODE *pfam2, INDISEQ *pseq)
+browse_aux (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 {
-	NODE aux = *pindi1;
-	STRING key = rmvat(nxref(aux));
-	char ntype = key[0];
+	RECORD current;
 	INT i, c;
 	BOOLEAN reuse=FALSE; /* flag to reuse same display strings */
-	INT nkeyp, auxmode, auxmodep;
-	NODE node;
+	INT nkeyp=0, auxmode=0, auxmodep=0;
+	char ntype=0, ntypep=0;
+	RECORD tmp=0, tmp2=0;
 	char c2;
-	pindi2=pindi2; /* unused */
-	pfam1=pfam1; /* unused */
-	pfam2=pfam2; /* unused */
-	pseq=pseq; /* unused */
+
+	ASSERT(prec1 && *prec1);
+	ASSERT(!*prec2 && !*pseq);
+	current = *prec1;
+
 
 	auxmode = 'x';
 
-	if (!aux) return BROWSE_QUIT;
 	show_reset_scroll();
 	nkeyp = 0;
+	ntypep = 0;
 	auxmodep = auxmode;
 
 	while (TRUE) {
-		if (node_to_keynum(ntype, aux) != nkeyp 
+		if (nzkeynum(current) != nkeyp
+			|| nztype(current) != ntypep
 			|| auxmode != auxmodep) {
 			show_reset_scroll();
 		}
-		history_record(aux, &vhist);
-		c = display_aux(aux, auxmode, reuse);
+		ntype = nztype(current);
+		history_record(current, &vhist);
+		c = display_aux(nztop(current), auxmode, reuse);
 		/* last keynum & mode, so can tell if changed */
-		nkeyp = node_to_keynum(ntype, aux);
+		nkeyp = nzkeynum(current);
+		ntypep = nztype(current);
 		auxmodep = auxmode;
 reprocess_aux_cmd:
 		reuse = FALSE; /* don't reuse display unless specifically set */
@@ -677,7 +690,7 @@ reprocess_aux_cmd:
 			continue;
 		if (handle_aux_mode_cmds(c, &auxmode))
 			continue;
-		i = handle_history_cmds(c, pindi1);
+		i = handle_history_cmds(c, prec1);
 		if (i == 1)
 			continue; /* history cmd handled, stay here */
 		if (i == -1)
@@ -686,42 +699,45 @@ reprocess_aux_cmd:
 		{
 		case CMD_EDIT:
 			switch(ntype) {
-			case 'S': edit_source(aux); break;
-			case 'E': edit_event(aux); break;
-			case 'X': edit_other(aux); break;
+			case 'S': edit_source(current); break;
+			case 'E': edit_event(current); break;
+			case 'X': edit_other(current); break;
 			}
 			break;
 		case CMD_ADD_SOUR: /* add source */
 		case CMD_ADD_EVEN: /* add event */
 		case CMD_ADD_OTHR: /* add other */
 			c2 = (c==CMD_ADD_SOUR ? 'S' : (c==CMD_ADD_EVEN ? 'E' : 'X'));
-			node = add_new_rec_maybe_ref(aux, c2);
-			if (node == aux) {
-				c = CMD_EDIT;
-				goto reprocess_aux_cmd; /* forward to edit */
-			}
-			if (node) {
-				*pindi1 = node;
-				return BROWSE_UNK;
+			if ((tmp = add_new_rec_maybe_ref(current, c2)) != 0) {
+				if (tmp == current) {
+					c = CMD_EDIT;
+					goto reprocess_aux_cmd; /* forward to edit */
+				} else {
+					*prec1 = tmp;
+					return BROWSE_UNK;
+				}
 			}
 			break;
 		case CMD_BROWSE_ZIP_INDI:	/* Zip browse to new person */
-			*pindi1 = ask_for_indi_old(_(qSidpnxt), NOCONFIRM, NOASK1);
-			if (*pindi1) return BROWSE_INDI;
+			if ((tmp = ask_for_indi(_(qSidpnxt), NOCONFIRM, NOASK1)) != 0) {
+				*prec1 = tmp;
+				return BROWSE_UNK;
+			}
 			break;
 		case CMD_BROWSE_ZIP_ANY:	/* Zip browse any record */
-			*pindi1 = ask_for_any_old(_(qSidnxt), NOCONFIRM, NOASK1);
-			if (*pindi1) return BROWSE_UNK;
+			if ((tmp = ask_for_any(_(qSidnxt), NOCONFIRM, NOASK1)) != 0) {
+				*prec1 = tmp;
+				return BROWSE_UNK;
+			}
 			break;
 		case CMD_NOTES:	/* Browse to notes */
-			node = choose_note(aux, _(qSnonote), _(qSidnote));
-			if (node)
-				aux = node;
+			if ((tmp = choose_note(current, _(qSnonote), _(qSidnote))) != 0) {
+				current = tmp;
+			}
 			break;
 		case CMD_POINTERS:	/* Browse to references */
-			node = choose_pointer(aux, _(qSnoptr), _(qSidptr));
-			if (node) {
-				*pindi1 = node;
+			if ((tmp = choose_pointer(current, _(qSnoptr), _(qSidptr))) != 0) {
+				*prec1 = tmp;
 				return BROWSE_UNK;
 			}
 			break;
@@ -729,7 +745,7 @@ reprocess_aux_cmd:
 			{
 				i = xref_next(ntype, nkeyp);
 				if (i)
-					aux = keynum_to_node(ntype, i);
+					current = keynum_to_record(ntype, i);
 				else message(_(qSnorec));
 				break;
 			}
@@ -737,7 +753,7 @@ reprocess_aux_cmd:
 			{
 				i = xref_prev(ntype, nkeyp);
 				if (i)
-					aux = keynum_to_node(ntype, i);
+					current = keynum_to_record(ntype, i);
 				else message(_(qSnorec));
 				break;
 			}
@@ -750,13 +766,9 @@ reprocess_aux_cmd:
  * browse_indi -- Handle person browse operations.
  *==============================================*/
 static INT
-browse_indi (NODE *pindi1,
-             NODE *pindi2,
-             NODE *pfam1,
-             NODE *pfam2,
-             INDISEQ *pseq)
+browse_indi (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 {
-	return browse_indi_modes(pindi1, pindi2, pfam1, pfam2, pseq, 'n');
+	return browse_indi_modes(prec1, prec2, pseq, 'n');
 }
 /*===============================================
  * pick_remove_spouse_from_family -- 
@@ -764,8 +776,9 @@ browse_indi (NODE *pindi1,
  *  construct list of spouses, prompt for choice, & remove
  *=============================================*/
 static void
-pick_remove_spouse_from_family (NODE fam)
+pick_remove_spouse_from_family (RECORD frec)
 {
+	NODE fam = nztop(frec);
 	NODE fref, husb, wife, chil, rest;
 	NODE root, node, spnodes[MAX_SPOUSES];
 	STRING spstrings[MAX_SPOUSES];
@@ -799,7 +812,7 @@ pick_remove_spouse_from_family (NODE fam)
 	join_fam(fam, fref, husb, wife, chil, rest);
 	i = choose_from_array(_(qSidsrmv), i, spstrings);
 	if (i == -1) return;
-	choose_and_remove_spouse(spnodes[i], fam, TRUE);
+	choose_and_remove_spouse(node_to_record(spnodes[i]), frec, TRUE);
 }
 /*===============================================
  * prompt_add_spouse_check_save -- 
@@ -876,33 +889,39 @@ prompt_add_child_check_save (NODE fam, NODE save)
  * browse_fam -- Handle family browse selections.
  *=============================================*/
 static INT
-browse_fam (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2
-	, INDISEQ *pseq)
+browse_fam (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 {
+	RECORD current=0;
 	INT i, c, rc;
 	BOOLEAN reuse=FALSE; /* flag to reuse same display strings */
 	static INT fammode='n';
 	INT nkeyp, fammodep;
-	NODE save = NULL, fam = *pfam1, node;
+	RECORD save=0, tmp=0, tmp2=0;
 	INDISEQ seq;
 	STRING key, name;
 	char c2;
 
-	if (!fam) return BROWSE_QUIT;
+	ASSERT(prec1 && *prec1 && nztype(*prec1)=='F');
+	ASSERT(!*prec2 && !*pseq);
+	current = *prec1;
+
+	*prec1 = 0;
+	*prec2 = 0;
+
 	show_reset_scroll();
 	nkeyp = 0;
 	fammodep = fammode;
 
 	while (TRUE) {
-		if (fam_to_keynum(fam) != nkeyp
+		if (nzkeynum(current) != nkeyp
 			|| fammode != fammodep) {
 			show_reset_scroll();
 		}
-		history_record(fam, &vhist);
-		display_fam(fam, fammode, reuse);
+		history_record(current, &vhist);
+		display_fam(nztop(current), fammode, reuse);
 		c = interact_fam();
 		/* last keynum & mode, so can tell if changed */
-		nkeyp = fam_to_keynum(fam);
+		nkeyp = nzkeynum(current);
 		fammodep = fammode;
 reprocess_fam_cmd: /* so one command can forward to another */
 		reuse = FALSE; /* don't reuse display unless specifically set */
@@ -914,7 +933,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			continue;
 		if (handle_fam_mode_cmds(c, &fammode))
 			continue;
-		i = handle_history_cmds(c, pindi1);
+		i = handle_history_cmds(c, prec1);
 		if (i == 1)
 			continue; /* history cmd handled, stay here */
 		if (i == -1)
@@ -922,66 +941,71 @@ reprocess_fam_cmd: /* so one command can forward to another */
 		switch (c) 
 		{
 		case CMD_ADVANCED:	/* Advanced family edit */
-			advanced_family_edit(fam);
+			advanced_family_edit(nztop(current));
 			break;
 		case CMD_BROWSE_FAM:
 			i = ask_for_int(_(qSidfamk));
 			if(i > 0) {
-				if((node = qkeynum_to_fam(i))) {
-					fam = node;
-				} else {
-					message(_(qSnofam));
-				}
+				if ((tmp = qkeynum_to_frecord(i)))
+					current = tmp;
+				else message(_(qSnofam));
 			}
 			break;
 		case CMD_EDIT:	/* Edit family's record */
-			node = edit_family(fam);
-			if (node)
-				fam = node;
+			edit_family(current);
 			break;
 		case CMD_FATHER:	/* Browse to family's father */
-			*pindi1 = choose_father(NULL, fam, _(qSnohusb),
-			    _(qSidhbrs), NOASK1);
-			if (*pindi1) return BROWSE_INDI;
+			if ((tmp = choose_father(NULL, current, _(qSnohusb),
+				_(qSidhbrs), NOASK1)) != 0) {
+				*prec1 = tmp;
+				return BROWSE_INDI;
+			}
 			break;
 		case CMD_TANDEM_FATHERS:	/* Tandem Browse to family's fathers */
-			*pindi1 = choose_father(NULL, fam, _(qSnohusb),
-			    _(qSid1hbr), NOASK1);
-			if (*pindi1) {
-			  *pindi2 = choose_father(NULL, fam, _(qSnohusb),
-			    _(qSid2hbr), NOASK1);
-			  if (*pindi2) 
-				return BROWSE_TAND;
+			if ((tmp = choose_father(NULL, current, _(qSnohusb),
+				_(qSid1hbr), NOASK1)) != 0) {
+				if ((tmp2 = choose_father(NULL, current, _(qSnohusb),
+					_(qSid2hbr), NOASK1)) != 0) {
+					*prec1 = tmp;
+					*prec2 = tmp2;
+					return BROWSE_TAND;
+				}
 			}
 			break;
 		case CMD_MOTHER:	/* Browse to family's mother */
-			*pindi1 = choose_mother(NULL, fam, _(qSnowife),
-			    _(qSidwbrs), NOASK1);
-			if (*pindi1) return BROWSE_INDI;
+			if ((tmp = choose_mother(NULL, current, _(qSnowife),
+				_(qSidwbrs), NOASK1)) != 0) {
+				*prec1 = tmp;
+				return BROWSE_INDI;
+			}
 			break;
 		case CMD_TANDEM_MOTHERS:	/* Tandem Browse to family's mother */
-			*pindi1 = choose_mother(NULL, fam, _(qSnowife),
-			    _(qSid1wbr), NOASK1);
-			if (*pindi1) {
-				*pindi2 = choose_mother(NULL, fam, _(qSnowife), 
-					_(qSid2wbr), NOASK1);
-				if (*pindi2) 
+			if ((tmp = choose_mother(NULL, current, _(qSnowife),
+				_(qSid1wbr), NOASK1)) != 0) {
+				if ((tmp2 = choose_mother(NULL, current, _(qSnowife), 
+					_(qSid2wbr), NOASK1)) != 0) {
+					*prec1 = tmp;
+					*prec2 = tmp2;
 					return BROWSE_TAND;
+				}
 			}
 			break;
 		case CMD_CHILDREN:	/* Browse to a child */
-			*pindi1 = choose_child(NULL, fam, _(qSnocinf),
-				_(qSidcbrs), NOASK1);
-			if (*pindi1) return BROWSE_INDI;
+			if ((tmp = choose_child(NULL, current, _(qSnocinf),
+				_(qSidcbrs), NOASK1)) != 0) {
+				*prec1 = tmp;
+				return BROWSE_INDI;
+			}
 			break;
 		case CMD_TANDEM_CHILDREN:	/* browse to tandem children */
-			*pindi1 = choose_child(NULL, fam, _(qSnocinf),
-			    _(qSid1cbr), NOASK1);
-			if (*pindi1) {
-				*pindi2 = choose_child(NULL, fam, _(qSnocinf),
-					_(qSid2cbr), NOASK1);
-				if (*pindi2) 
+			if ((tmp = choose_child(NULL, current, _(qSnocinf),
+				_(qSid1cbr), NOASK1)) != 0) {
+				if ((tmp2 = choose_child(NULL, current, _(qSnocinf),
+					_(qSid2cbr), NOASK1)) != 0) {
+					*prec1 = tmp;
+					*prec2 = tmp2;
 					return BROWSE_TAND;
+				}
 			}
 			break;
 		case CMD_REMOVECHILD:	/* Remove a child */
@@ -989,36 +1013,36 @@ reprocess_fam_cmd: /* so one command can forward to another */
 				message(_(qSronlye));
 				break;
 			}
-			*pindi1 = choose_child(NULL, fam, _(qSnocinf),
-			    _(qSidcrmv), DOASK1);
-			if (*pindi1) choose_and_remove_child(*pindi1, fam, TRUE);
+			if ((tmp = choose_child(NULL, current, _(qSnocinf),
+			    _(qSidcrmv), DOASK1)) != 0)
+				choose_and_remove_child(tmp, current, TRUE);
 			break;
 		case CMD_ADDSPOUSE:	/* Add spouse to family */
-			prompt_add_spouse_check_save(fam, save);
+			prompt_add_spouse_check_save(nztop(current), nztop(save));
 			save = NULL;
 			break;
 		case CMD_REMOVESPOUSE:	/* Remove spouse from family */
-			pick_remove_spouse_from_family(fam);
+			pick_remove_spouse_from_family(current);
 			break;
 		case CMD_NEWPERSON:	/* Add person to database */
-			save = nztop(add_indi_by_edit());
+			save = add_indi_by_edit();
 			break;
 		case CMD_ADD_SOUR: /* add source */
 		case CMD_ADD_EVEN: /* add event */
 		case CMD_ADD_OTHR: /* add other */
 			c2 = (c==CMD_ADD_SOUR ? 'S' : (c==CMD_ADD_EVEN ? 'E' : 'X'));
-			node = add_new_rec_maybe_ref(fam, c2);
-			if (node == fam) {
-				c = CMD_EDIT;
-				goto reprocess_fam_cmd; /* forward to edit */
-			}
-			if (node) {
-				*pindi1 = node;
-				return BROWSE_UNK;
+			if ((tmp = add_new_rec_maybe_ref(current, c2)) != 0) {
+				if (tmp == current) {
+					c = CMD_EDIT;
+					goto reprocess_fam_cmd; /* forward to edit */
+				} else {
+					*prec1 = tmp;
+					return BROWSE_UNK;
+				}
 			}
 			break;
 		case CMD_ADDCHILD:	/* Add child to family */
-			prompt_add_child_check_save(fam, save);
+			prompt_add_child_check_save(nztop(current), nztop(save));
 			save = NULL;
 			break;
 		case CMD_BROWSE: 	/* Browse to new list of persons */
@@ -1026,36 +1050,38 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			if (!seq) break;
 			if (length_indiseq(seq) == 1) {
 				element_indiseq(seq, 0, &key, &name);
-				*pindi1 = key_to_indi(key);
+				*prec1 = key_to_irecord(key);
 				remove_indiseq(seq);
 				seq=NULL;
 				return BROWSE_INDI;
-				break;
 			}
 			*pseq = seq;
 			return BROWSE_LIST;
 			break;
 		case CMD_BROWSE_ZIP_INDI:	/* Zip browse to new person */
-			*pindi1 = ask_for_indi_old(_(qSidpnxt), NOCONFIRM, NOASK1);
-			if (*pindi1) return BROWSE_INDI;
+			if ((tmp = ask_for_indi(_(qSidpnxt), NOCONFIRM, NOASK1)) != 0) {
+				*prec1 = tmp;
+				return BROWSE_INDI;
+			}
 			break;
 		case CMD_BROWSE_ZIP_ANY:	/* Zip browse any record */
-			*pindi1 = ask_for_any_old(_(qSidnxt), NOCONFIRM, NOASK1);
-			if (*pindi1) return BROWSE_UNK;
+			if ((tmp = ask_for_any(_(qSidnxt), NOCONFIRM, NOASK1)) != 0) {
+				*prec1 = tmp;
+				return BROWSE_UNK;
+			}
 			break;
 		case CMD_TANDEM:	/* Enter family tandem mode */
-			node = ask_for_fam(_(qSids2fm), _(qSidc2fm));
-			if (node) {
-				*pfam1 = fam;
-				*pfam2 = node;
+			if ((tmp = ask_for_fam(_(qSids2fm), _(qSidc2fm))) != 0) {
+				*prec1 = current;
+				*prec2 = tmp;
 				return BROWSE_2FAM;
 			}
 			break;
 		case CMD_SWAPCHILDREN:	/* Swap two children */
-			swap_children(NULL, fam);
+			swap_children(NULL, current);
 			break;
 		case CMD_REORDERCHILD: /* Move a child in order */
-			reorder_child(NULL, fam);
+			reorder_child(NULL, current);
 			break;
 		case CMD_TOGGLE_CHILDNUMS:       /* toggle children numbers */
 			show_childnumbers();
@@ -1069,46 +1095,43 @@ reprocess_fam_cmd: /* so one command can forward to another */
 		case CMD_CHILD_DIRECT0+7:
 		case CMD_CHILD_DIRECT0+8:
 		case CMD_CHILD_DIRECT0+9:
-			*pindi1 = goto_fam_child(fam, c-CMD_CHILD_DIRECT0);
-			if (*pindi1) return BROWSE_INDI;
+			if ((tmp = goto_fam_child(current, c-CMD_CHILD_DIRECT0)) != 0) {
+				*prec1 = tmp;
+				return BROWSE_INDI;
+			}
 			message(_(qSnochil));
 			break;
 		case CMD_NEXT:	/* Go to next fam in db */
 			{
 				i = xref_nextf(nkeyp);
 				if (i)
-					fam = keynum_to_fam(i);
-				else
-					message(_(qSnofam));
+					current = keynum_to_frecord(i);
+				else message(_(qSnofam));
 				break;
 			}
 		case CMD_PREV:	/* Go to prev fam in db */
 			{
 				i = xref_prevf(nkeyp);
 				if (i)
-					fam = keynum_to_fam(i);
-				else
-					message(_(qSnofam));
+					current = keynum_to_frecord(i);
+				else message(_(qSnofam));
 				break;
 			}
 		case CMD_SOURCES:	/* Browse to sources */
-			node = choose_source(fam, _(qSnosour), _(qSidsour));
-			if (node) {
-				*pindi1 = node;
+			if ((tmp = choose_source(current, _(qSnosour), _(qSidsour))) != 0) {
+				*prec1 = tmp;
 				return BROWSE_AUX;
 			}
 			break;
 		case CMD_NOTES:	/* Browse to notes */
-			node = choose_note(fam, _(qSnonote), _(qSidnote));
-			if (node) {
-				*pindi1 = node;
+			if ((tmp = choose_note(current, _(qSnonote), _(qSidnote))) != 0) {
+				*prec1 = tmp;
 				return BROWSE_AUX;
 			}
 			break;
 		case CMD_POINTERS:	/* Browse to references */
-			node = choose_pointer(fam, _(qSnoptr), _(qSidptr));
-			if (node) {
-				*pindi1 = node;
+			if ((tmp = choose_pointer(current, _(qSnoptr), _(qSidptr))) != 0) {
+				*prec1 = tmp;
 				return BROWSE_UNK;
 			}
 			break;
@@ -1235,13 +1258,9 @@ handle_aux_mode_cmds (INT c, INT * mode)
  * browse_pedigree -- Handle pedigree browse selections.
  *====================================================*/
 static INT
-browse_pedigree (NODE *pindi,
-                 NODE *pdum1,
-                 NODE *pfam,
-                 NODE *pdum2,
-                 INDISEQ *pseq)
+browse_pedigree (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 {
-	return browse_indi_modes(pindi, pdum1, pfam, pdum2, pseq, 'p');
+	return browse_indi_modes(prec1, prec2, pseq, 'p');
 }
 /*==================================================
  * choose_any_source -- choose from list of all sources
@@ -1464,16 +1483,16 @@ save_nkey_list (STRING key, struct hist * histp)
  * Created: 2002/06/23, Perry Rapp
  *================================================*/
 void
-history_record_change (NODE node)
+history_record_change (RECORD rec)
 {
-	history_record(node, &chist);
+	history_record(rec, &chist);
 }
 /*==================================================
  * history_record -- add node to history if different from top of history
  * Created: 2001/03?, Perry Rapp
  *================================================*/
 static void
-history_record (NODE node, struct hist * histp)
+history_record (RECORD rec, struct hist * histp)
 {
 	NKEY nkey = nkey_zero();
 	INT prev, next, i;
@@ -1482,7 +1501,7 @@ history_record (NODE node, struct hist * histp)
 	if (!histp->size) return;
 	if (histp->start==-1) {
 		histp->start = histp->past_end;
-		node_to_nkey(node, &histp->list[histp->start]);
+		node_to_nkey(nztop(rec), &histp->list[histp->start]);
 		histp->past_end = (histp->start+1) % histp->size;
 		return;
 	}
@@ -1490,7 +1509,7 @@ history_record (NODE node, struct hist * histp)
 	copy new node into nkey variable so we can check
 	if this is the same as our most recent (histp->list[last])
 	*/
-	node_to_nkey(node, &nkey);
+	node_to_nkey(nztop(rec), &nkey);
 	if (protect<1 || protect>99)
 		protect=1;
 	if (protect>count)
@@ -1515,14 +1534,14 @@ history_record (NODE node, struct hist * histp)
 	histp->past_end = (histp->past_end+1) % histp->size;
 }
 /*==================================================
- * history_back -- return prev NODE in history, if exists
+ * history_back -- return prev RECORD in history, if exists
  * Created: 2001/03?, Perry Rapp
  *================================================*/
-static NODE
+static RECORD
 history_back (struct hist * histp)
 {
-	INT last;
-	NODE node;
+	INT last=0;
+	RECORD rec=0;
 	if (!histp->size || histp->start==-1)
 		return NULL;
 	/* back up from histp->past_end to current item */
@@ -1532,10 +1551,10 @@ history_back (struct hist * histp)
 		/* loop is to keep going over deleted ones */
 		/* now back up before current item */
 		if (--last < 0) last += histp->size;
-		nkey_to_node(&histp->list[last], &node);
-		if (node) {
+		nkey_to_record(&histp->list[last], &rec);
+		if (rec) {
 			histp->past_end = (last+1) % histp->size;
-			return node;
+			return rec;
 		}
 	}
 	return NULL;
@@ -1544,16 +1563,16 @@ history_back (struct hist * histp)
  * history_fwd -- return later NODE in history, if exists
  * Created: 2001/03?, Perry Rapp
  *================================================*/
-static NODE
+static RECORD
 history_fwd (struct hist * histp)
 {
 	INT next;
-	NODE node;
+	RECORD rec;
 	if (!histp->size || histp->past_end == histp->start)
 		return NULL; /* at end of full history */
 	next = histp->past_end;
-	nkey_to_node(&histp->list[next], &node);
-	return node;
+	nkey_to_record(&histp->list[next], &rec);
+	return rec;
 }
 /*==================================================
  * disp_vhistory_list -- show user the visited history list
@@ -1639,57 +1658,57 @@ ask_clear_history (struct hist * histp)
  * Created: 2001/04/12, Perry Rapp
  *================================================*/
 static INT
-handle_history_cmds (INT c, NODE * pindi1)
+handle_history_cmds (INT c, RECORD * prec1)
 {
-	NODE node;
+	RECORD rec=0;
 	if (c == CMD_VHISTORY_BACK) {
-		node = history_back(&vhist);
-		if (node) {
-			*pindi1 = node;
+		rec = history_back(&vhist);
+		if (rec) {
+			*prec1 = rec;
 			return -1; /* handled, change pages */
 		}
 		message(_(qSnohist));
 		return 1; /* handled, stay here */
 	}
 	if (c == CMD_CHISTORY_BACK) {
-		node = history_back(&chist);
-		if (node) {
-			*pindi1 = node;
+		rec = history_back(&chist);
+		if (rec) {
+			*prec1 = rec;
 			return -1; /* handled, change pages */
 		}
 		message(_(qSnohist));
 		return 1; /* handled, stay here */
 	}
 	if (c == CMD_VHISTORY_FWD) {
-		node = history_fwd(&vhist);
-		if (node) {
-			*pindi1 = node;
+		rec = history_fwd(&vhist);
+		if (rec) {
+			*prec1 = rec;
 			return -1; /* handled, change pages */
 		}
 		message(_(qSnohist));
 		return 1; /* handled, stay here */
 	}
 	if (c == CMD_CHISTORY_FWD) {
-		node = history_fwd(&chist);
-		if (node) {
-			*pindi1 = node;
+		rec = history_fwd(&chist);
+		if (rec) {
+			*prec1 = rec;
 			return -1; /* handled, change pages */
 		}
 		message(_(qSnohist));
 		return 1; /* handled, stay here */
 	}
 	if (c == CMD_VHISTORY_LIST) {
-		node = nztop(disp_vhistory_list());
-		if (node) {
-			*pindi1 = node;
+		rec = disp_vhistory_list();
+		if (rec) {
+			*prec1 = rec;
 			return -1; /* handled, change pages */
 		}
 		return 1;
 	}
 	if (c == CMD_CHISTORY_LIST) {
-		node = nztop(disp_chistory_list());
-		if (node) {
-			*pindi1 = node;
+		rec = disp_chistory_list();
+		if (rec) {
+			*prec1 = rec;
 			return -1; /* handled, change pages */
 		}
 		return 1;
@@ -1713,28 +1732,30 @@ handle_history_cmds (INT c, NODE * pindi1)
  *       NULL to just stay where we are
  * Created: 2001/04/06, Perry Rapp
  *================================================*/
-static NODE
-add_new_rec_maybe_ref (NODE node, char ntype)
+static RECORD
+add_new_rec_maybe_ref (RECORD current, char ntype)
 {
-	NODE newnode=NULL;
+	RECORD newrec=0;
+	NODE newnode;
 	STRING choices[4];
 	char title[60];
 	INT rtn;
 
 	/* create new node of requested type */
 	if (ntype=='E') 
-		newnode=edit_add_event();
+		newrec=edit_add_event();
 	else if (ntype=='S')
-		newnode=edit_add_source();
+		newrec=edit_add_source();
 	else
-		newnode=edit_add_other();
+		newrec=edit_add_other();
 	/* bail if user cancelled creation */
-	if (!newnode)
+	if (!newrec)
 		return NULL;
+	newnode = nztop(newrec);
 	/* sanity check for long tags in others */
 	if (strlen(ntag(newnode))>40) {
 		msg_info(_(qStag2lng2cnc));
-		return newnode;
+		return newrec;
 	}
 	/* now ask the user how to connect the new node */
 	sprintf(title, _(qSnewrecis), nxref(newnode));
@@ -1749,14 +1770,14 @@ add_new_rec_maybe_ref (NODE node, char ntype)
 	lock_status_msg(FALSE);
 	switch(rtn) {
 	case 0: 
-		autoadd_xref(node, newnode);
-		return NULL;
+		autoadd_xref(current, newnode);
+		return 0;
 	case 1:
-		return node; /* convention - return current node for edit */
+		return current; /* convention - return current node for edit */
 	case 2:
-		return newnode;
+		return newrec;
 	default:
-		return NULL;
+		return 0;
 	}
 }
 /*==================================================
@@ -1765,10 +1786,11 @@ add_new_rec_maybe_ref (NODE node, char ntype)
  * Created: 2001/11/11, Perry Rapp
  *================================================*/
 static void
-autoadd_xref (NODE node, NODE newnode)
+autoadd_xref (RECORD rec, NODE newnode)
 {
 	NODE xref; /* new xref added to end of node */
 	NODE find, prev; /* used finding last child of node */
+	NODE node = nztop(rec);
 	xref = create_node(NULL, ntag(newnode), nxref(newnode), node);
 	if (!(find = nchild(node))) {
 		nchild(node) = xref;

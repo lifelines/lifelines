@@ -698,7 +698,7 @@ interp_children (PNODE node, SYMTAB stab, PVALUE *pval)
 	}
 	if (!fam) return INTOKAY;
 	lock_cache(fcel);
-	FORCHILDREN(fam, chil, nchil)
+	FORCHILDRENx(fam, chil, nchil)
 		val = create_pvalue_from_indi(chil);
 		insert_symtab(stab, ichild(node), val);
 		insert_symtab(stab, inum(node), create_pvalue_from_int(nchil));
@@ -715,7 +715,7 @@ interp_children (PNODE node, SYMTAB stab, PVALUE *pval)
 			goto aleave;
 		}
 aloop:	;
-	ENDCHILDREN
+	ENDCHILDRENx
 	irc = INTOKAY;
 aleave:
 	delete_symtab(stab, ichild(node));

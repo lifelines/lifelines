@@ -78,10 +78,15 @@ static NODE alloc_node(void);
 static void assign_record(RECORD rec, char ntype, INT keynum);
 static BOOLEAN buffer_to_line (STRING p, INT *plev, STRING *pxref
 	, STRING *ptag, STRING *pval, STRING *pmsg);
-static NODE do_first_fp_to_node(FILE *fp, BOOLEAN list, TRANMAPPING tt,
-	STRING *pmsg,  BOOLEAN *peof);
+static RECORD convert_first_fp_to_record(FILE *fp, BOOLEAN list, TRANMAPPING ttm
+	, STRING *pmsg,  BOOLEAN *peof);
+static NODE do_first_fp_to_node(FILE *fp, BOOLEAN list, TRANMAPPING tt
+	, STRING *pmsg,  BOOLEAN *peof);
+static RECORD do_first_fp_to_record(FILE *fp, BOOLEAN list, TRANMAPPING tt
+	, STRING *pmsg,  BOOLEAN *peof);
 static STRING fixup (STRING str);
 static STRING fixtag (STRING tag);
+static RECORD indi_to_prev_sib_impl(NODE indi);
 static void load_record_wh(RECORD rec, char * whptr, INT whlen);
 static INT node_strlen(INT levl, NODE node);
 static BOOLEAN string_to_line(STRING *ps, INT *plev, STRING *pxref, 
@@ -495,6 +500,7 @@ file_to_record (STRING fname, TRANMAPPING ttm, STRING *pmsg, BOOLEAN *pemp)
  * ttm:   [IN]  character translation table
  * pmsg:  [OUT] possible error message
  * pemp:  [OUT] set true if file is empty
+ * TODO: When can we delete this ?
  *===============================================*/
 NODE
 file_to_node (STRING fname, TRANMAPPING ttm, STRING *pmsg, BOOLEAN *pemp)
@@ -520,6 +526,7 @@ static STRING tag;
 static STRING val;
 static BOOLEAN lahead = FALSE;
 static BOOLEAN ateof = FALSE;
+
 /*================================================================
  * convert_first_fp_to_node -- Convert first GEDCOM record in file to tree
  *
@@ -528,6 +535,7 @@ static BOOLEAN ateof = FALSE;
  * ttm:  [IN]  character translation table
  * pmsg: [OUT] possible error message
  * peof: [OUT] set true if file is at end of file
+ * TODO: revise import (restore_record) so can delete this
  *==============================================================*/
 NODE
 convert_first_fp_to_node (FILE *fp, BOOLEAN list, TRANMAPPING ttm,
@@ -544,6 +552,29 @@ convert_first_fp_to_node (FILE *fp, BOOLEAN list, TRANMAPPING ttm,
 	return do_first_fp_to_node(fp, list, ttm, pmsg, peof);
 }
 /*================================================================
+ * convert_first_fp_to_record -- Convert first GEDCOM record in file to tree
+ *
+ * fp:   [IN]  file that holds GEDCOM record/s
+ * list: [IN]  can be list at level 0?
+ * ttm:  [IN]  character translation table
+ * pmsg: [OUT] possible error message
+ * peof: [OUT] set true if file is at end of file
+ *==============================================================*/
+static RECORD
+convert_first_fp_to_record (FILE *fp, BOOLEAN list, TRANMAPPING ttm,
+	STRING *pmsg,  BOOLEAN *peof)
+{
+	STRING unitype = check_file_for_unicode(fp);
+	if (unitype && !eqstr(unitype, "UTF-8")) {
+		char msg[120];
+		llstrncpyf(msg, sizeof(msg), _(qSunsupuniv), unitype);
+		/* TODO: need to pass msg up to caller somehow */
+		*pmsg = _(qSunsupunix);
+		return NULL;
+	}
+	return do_first_fp_to_record(fp, list, ttm, pmsg, peof);
+}
+/*================================================================
  * do_first_fp_to_node -- Convert first GEDCOM record in file to tree
  *
  *  fp:    [IN]  file that holds GEDCOM record/s
@@ -552,6 +583,7 @@ convert_first_fp_to_node (FILE *fp, BOOLEAN list, TRANMAPPING ttm,
  *  *pmsg: [OUT] possible error message
  *  *peof: [OUT] set true if file is at end of file
  * Called after unicode header processed
+ * TODO: revise import (restore_record) so can delete this
  *==============================================================*/
 static NODE
 do_first_fp_to_node (FILE *fp, BOOLEAN list, TRANMAPPING ttm,
@@ -572,6 +604,36 @@ do_first_fp_to_node (FILE *fp, BOOLEAN list, TRANMAPPING ttm,
 	lev0 = lev;
 	lahead = TRUE;
 	return next_fp_to_node(fp, list, ttm, pmsg, peof);
+}
+/*================================================================
+ * do_first_fp_to_record -- Convert first GEDCOM record in file to tree
+ *
+ *  fp:    [IN]  file that holds GEDCOM record/s
+ *  list:  [IN]  can be list at level 0?
+ *  tt:    [IN]  character translation table
+ *  *pmsg: [OUT] possible error message
+ *  *peof: [OUT] set true if file is at end of file
+ * Called after unicode header processed
+ *==============================================================*/
+static RECORD
+do_first_fp_to_record (FILE *fp, BOOLEAN list, TRANMAPPING ttm,
+	STRING *pmsg,  BOOLEAN *peof)
+{
+	INT rc;
+	ateof = FALSE;
+	flineno = 0;
+	*pmsg = NULL;
+	*peof = FALSE;
+	rc = file_to_line(fp, ttm, &lev, &xref, &tag, &val, pmsg);
+	if (rc == DONE) {
+		*peof = ateof = TRUE;
+		*pmsg = _(qSfileof);
+		return NULL;
+	} else if (rc == ERROR)
+		return NULL;
+	lev0 = lev;
+	lahead = TRUE;
+	return next_fp_to_record(fp, list, ttm, pmsg, peof);
 }
 /*==============================================================
  * next_fp_to_record -- Convert next GEDCOM record in file to tree
@@ -1038,11 +1100,22 @@ indi_to_famc (NODE node)
  * fam_to_husb -- Return husband of family
  *======================================*/
 NODE
-fam_to_husb (NODE node)
+fam_to_husb_node (NODE node)
 {
 	if (!node) return NULL;
 	if (!(node = find_tag(nchild(node), "HUSB"))) return NULL;
 	return key_to_indi(rmvat(nval(node)));
+}
+/*========================================
+ * fam_to_husb_node -- Return husband of family
+ *======================================*/
+RECORD
+fam_to_husb (RECORD frec)
+{
+	NODE fam = nztop(frec), husb;
+	if (!fam) return NULL;
+	if (!(husb = find_tag(nchild(fam), "HUSB"))) return NULL;
+	return key_to_irecord(rmvat(nval(husb)));
 }
 /*=====================================
  * fam_to_wife -- Return wife of family
@@ -1105,7 +1178,7 @@ fam_to_last_chil (NODE node)
 NODE
 indi_to_fath (NODE node)
 {
-	return fam_to_husb(indi_to_famc(node));
+	return fam_to_husb_node(indi_to_famc(node));
 }
 /*========================================
  * indi_to_moth -- Return mother of person
@@ -1118,8 +1191,8 @@ indi_to_moth (NODE node)
 /*==================================================
  * indi_to_prev_sib -- Return previous sib of person
  *================================================*/
-NODE
-indi_to_prev_sib (NODE indi)
+static RECORD
+indi_to_prev_sib_impl (NODE indi)
 {
 	NODE fam, prev, node;
 	if (!indi) return NULL;
@@ -1130,7 +1203,7 @@ indi_to_prev_sib (NODE indi)
 	while (node) {
 		if (eqstr(nxref(indi), nval(node))) {
 			if (!prev) return NULL;
-			return key_to_indi(rmvat(nval(prev)));
+			return key_to_record(rmvat(nval(prev)));
 		}
 		if (eqstr(ntag(node),"CHIL"))
 			prev = node;
@@ -1138,11 +1211,21 @@ indi_to_prev_sib (NODE indi)
 	}
 	return NULL;
 }
+NODE
+indi_to_prev_sib_old (NODE indi)
+{
+	return nztop(indi_to_prev_sib_impl(indi));
+}
+RECORD
+indi_to_prev_sib (RECORD irec)
+{
+	return indi_to_prev_sib_impl(nztop(irec));
+}
 /*==============================================
  * indi_to_next_sib -- Return next sib of person
  *============================================*/
-NODE
-indi_to_next_sib (NODE indi)
+static RECORD
+indi_to_next_sib_impl (NODE indi)
 {
 	NODE fam, node;
 	BOOLEAN found;
@@ -1156,11 +1239,21 @@ indi_to_next_sib (NODE indi)
 				found = TRUE;
 		} else {
 			if (eqstr(ntag(node),"CHIL"))
-				return key_to_indi(rmvat(nval(node)));
+				return key_to_record(rmvat(nval(node)));
 		}
 		node = nsibling(node);
 	}
 	return NULL;
+}
+NODE
+indi_to_next_sib_old (NODE indi)
+{
+	return nztop(indi_to_next_sib_impl(indi));
+}
+RECORD
+indi_to_next_sib (RECORD irec)
+{
+	return indi_to_next_sib_impl(nztop(irec));
 }
 /*======================================
  * indi_to_name -- Return name of person

@@ -70,33 +70,36 @@ static RECORD ask_for_any_once(STRING ttl, char ctype, ASK1Q ask1, INT *prc);
  *  pttl: [IN]  title for prompt to identify spouse
  *  sttl: [IN]  title for prompt to identify sibling
  *========================================================*/
-NODE
+RECORD
 ask_for_fam_by_key (STRING fttl, STRING pttl, STRING sttl)
 {
 	RECORD fam = ask_for_record(fttl, 'F');
-	return fam ? nztop(fam) : ask_for_fam(pttl, sttl);
+	return fam ? fam : ask_for_fam(pttl, sttl);
 }
 /*===========================================
  * ask_for_fam -- Ask user to identify family by spouses
  *  pttl: [IN]  title for prompt to identify spouse
  *  sttl: [IN]  title for prompt to identify sibling
  *=========================================*/
-NODE
+RECORD
 ask_for_fam (STRING pttl, STRING sttl)
 {
-	NODE sib, fam, prn;
-	prn = ask_for_indi_old(pttl, NOCONFIRM, DOASK1);
+	RECORD sib=0, prn=0;
+	prn = ask_for_indi(pttl, NOCONFIRM, DOASK1);
 	if (!prn)  {
-		sib = ask_for_indi_old(sttl, NOCONFIRM, DOASK1);
+		NODE fam=0;
+		RECORD frec=0;
+		sib = ask_for_indi(sttl, NOCONFIRM, DOASK1);
 		if (!sib) return NULL;
-		if (!(fam = FAMC(sib))) {
+		fam = FAMC(nztop(sib));
+		if (!fam) {
 			message(_(qSntchld));
 			return NULL;
 		}
-		fam = key_to_fam(rmvat(nval(fam)));
-		return fam;
+		frec = key_to_frecord(rmvat(nval(fam)));
+		return frec;
 	}
-	if (!FAMS(prn)) {
+	if (!FAMS(nztop(prn))) {
 		message(_(qSntprnt));
 		return NULL;
 	}
@@ -475,7 +478,7 @@ choose_from_indiseq (INDISEQ seq, ASK1Q ask1, STRING titl1, STRING titln)
 		badkeylist[0] = 0;
 	else {
 		skey = skey(IData(seq)[i]);
-		rec = key_to_record(skey, TRUE);
+		rec = key_to_record(skey);
 	}
 	listbadkeys = 0;
 	if(!rec) {

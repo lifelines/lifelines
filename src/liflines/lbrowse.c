@@ -51,18 +51,12 @@ extern INDISEQ current_seq;
  * browse_list -- Handle list browse mode
  *=====================================*/
 INT
-browse_list (NODE *pindi1,
-             NODE *pindi2,
-             NODE *pfam1,
-             NODE *pfam2,
-             INDISEQ *pseq)
+browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 {
 	INT c, top, cur, mark, len, tmp, rc;
 	STRING key, name, newname, lname="";
-	NODE indi;
+	RECORD rec=0;
 	INDISEQ seq, newseq;
-	pfam1=pfam1; /* unused */
-	pfam2=pfam2; /* unused */
 
 	current_seq = NULL;
 	if (!pseq || !(seq = *pseq) || (len = length_indiseq(seq)) <= 0)
@@ -70,12 +64,12 @@ browse_list (NODE *pindi1,
 	top = cur = 0;
 	mark =  -1;
 	calc_indiseq_names(seq); /* ensure we have names */
-	element_indiseq(seq, cur, &key, &name);
-	indi = key_to_indi(key);
 	current_seq = seq;
 
 	while (TRUE) {
-		switch (c = list_browse(seq, top, &cur, mark, &indi)) {
+		element_indiseq(seq, cur, &key, &name);
+		rec = key_to_record(key);
+		switch (c = list_browse(seq, top, &cur, mark)) {
 		case 'j':        /* Move down line */
 		case CMD_KY_DN:
 			if (cur >= len - 1) {
@@ -83,8 +77,6 @@ browse_list (NODE *pindi1,
 				break;
 			}
 			cur++;
-			element_indiseq(seq, cur, &key, &name);
-			indi = key_to_indi(key);
 			if (cur >= top + VIEWABLE) top++;
 			break;
 		case 'd':        /* Move down one page */
@@ -97,8 +89,6 @@ browse_list (NODE *pindi1,
 			if (cur > len-1)
 				cur = len-1;
 			top += VIEWABLE;
-			element_indiseq(seq, cur, &key, &name);
-			indi = key_to_indi(key);
 			break;
 		case 'D':        /* Move down several pages */
 		case CMD_KY_SHPGDN:
@@ -114,8 +104,6 @@ browse_list (NODE *pindi1,
 			cur += tmp;
 			if (cur > len-1)
 				cur = len-1;
-			element_indiseq(seq, cur, &key, &name);
-			indi = key_to_indi(key);
 			break;
 		case '$':        /* jump to end of list */
 		case CMD_KY_END:
@@ -123,8 +111,6 @@ browse_list (NODE *pindi1,
 			if (top < 0)
 				top = 0;
 			cur = len-1;
-			element_indiseq(seq, cur, &key, &name);
-			indi = key_to_indi(key);
 			break;
 		case 'k':        /* Move up line */
 		case CMD_KY_UP:
@@ -133,8 +119,6 @@ browse_list (NODE *pindi1,
 				break;
 			}
 			cur--;
-			element_indiseq(seq, cur, &key, &name);
-			indi = key_to_indi(key);
 			if (cur + 1 == top) top--;
 			break;
 		case 'u':        /* Move up one page */
@@ -147,8 +131,6 @@ browse_list (NODE *pindi1,
 			if (tmp > top) tmp = top;
 			cur -= tmp;
 			top -= tmp;
-			element_indiseq(seq, cur, &key, &name);
-			indi = key_to_indi(key);
 			break;
 		case 'U':        /* Move up several pages */
 		case CMD_KY_SHPGUP:
@@ -161,17 +143,13 @@ browse_list (NODE *pindi1,
 			if (tmp > top) tmp = top;
 			cur -= tmp;
 			top -= tmp;
-			element_indiseq(seq, cur, &key, &name);
-			indi = key_to_indi(key);
 			break;
 		case '^':        /* jump to top of list */
 		case CMD_KY_HOME:
 			top = cur = 0;
-			element_indiseq(seq, cur, &key, &name);
-			indi = key_to_indi(key);
 			break;
 		case 'e':        /* Edit current person */
-			indi = edit_indi(indi);
+			edit_any_record(rec);
 			if ((len = length_indiseq(seq)) <= 0) {
 				remove_browse_list(lname, seq);
 				current_seq = NULL;
@@ -182,7 +160,7 @@ browse_list (NODE *pindi1,
 			break;
 		case 'i':        /* Browse current person */
 		case CMD_KY_ENTER:
-			*pindi1 = indi;
+			*prec1 = rec;
 			if (current_seq)
 				remove_indiseq(current_seq);
 			current_seq = NULL;
@@ -203,8 +181,6 @@ browse_list (NODE *pindi1,
 			if (mark > cur) mark--;
 			if (cur == len)
 				cur--;
-				element_indiseq(seq, cur, &key, &name);
-				indi = key_to_indi(key);
 			if (cur < top) top = cur;
 			break;
 		case 't':        /* Enter tandem mode */
@@ -212,19 +188,19 @@ browse_list (NODE *pindi1,
 				message(_(qSmrkper));
 				break;
 			}
-			*pindi2 = indi;
+			*prec2 = rec;
 			element_indiseq(seq, mark, &key, &name);
-			*pindi1 = key_to_indi(key);
+			*prec1 = key_to_irecord(key);
 			current_seq = NULL;
 			return BROWSE_TAND;
 		case 'b':        /* Browse new persons */
 			newseq = (INDISEQ) ask_for_indiseq(_(qSidplst), 'I', &rc);
 			if (!newseq) break;
+			/* TODO: should we free *pseq & repoint it to newseq ? */
 			current_seq = seq = newseq;
 			element_indiseq(seq, 0, &key, &name);
-			indi = key_to_indi(key);
 			if ((len = length_indiseq(seq)) == 1) {
-				*pindi1 = indi;
+				*prec1 = key_to_irecord(key);
 				remove_indiseq(newseq);
 				current_seq = NULL;
 				return BROWSE_INDI;
@@ -245,8 +221,6 @@ browse_list (NODE *pindi1,
 			cur = top = 0;
 			mark = -1;
 			len = length_indiseq(seq);
-			element_indiseq(seq, cur, &key, &name);
-			indi = key_to_indi(key);
 			remove_indiseq(newseq);
 			message(_(qSlstnew));
 			break;
@@ -265,8 +239,6 @@ browse_list (NODE *pindi1,
 			tmp = mark;
 			mark = cur;
 			cur = tmp;
-			element_indiseq(seq, cur, &key, &name);
-			indi = key_to_indi(key);
 			if (cur < top) top = cur;
 			if (cur > top + VIEWABLE - 1) top = cur;
 			break;

@@ -72,19 +72,21 @@ write_indi_to_editfile(NODE indi)
 /*=====================================
  * edit_indi -- Edit person in database
  * (with user interaction)
+ * returns TRUE if user makes changes (& saves them)
  *===================================*/
-NODE
-edit_indi (NODE indi1)  /* may be NULL */
+BOOLEAN
+edit_indi (RECORD irec1)  /* may be NULL */
 {
-	NODE indi2=0, name1, name2, refn1, refn2, sex, body, famc, fams;
+	NODE indi1, indi2=0, name1, name2, refn1, refn2, sex, body, famc, fams;
 	NODE node, namen, refnn, name1n, refn1n, indi0;
 	BOOLEAN emp;
 	STRING msg, key;
 	TRANMAPPING ttmi = get_tranmapping(MEDIN);
 	TRANMAPPING ttmd = get_tranmapping(MINDS);
 
-	if (!indi1 && !(indi1 = ask_for_indi_old(_(qSidpedt), NOCONFIRM, NOASK1)))
-		return NULL;
+	if (!irec1 && !(irec1 = ask_for_indi(_(qSidpedt), NOCONFIRM, NOASK1)))
+		return FALSE;
+	indi1 = nztop(irec1);
 
 /* Prepare file for user to edit */
 	if (getoptint("ExpandRefnsDuringEdit", 0) > 0)
@@ -100,7 +102,7 @@ edit_indi (NODE indi1)  /* may be NULL */
 		if (!equal_tree(indi1, indi2))
 			message(_(qSronlye));
 		free_nodes(indi2);
-		return indi1;
+		return FALSE;
 	}
 	while (TRUE) {
 		INT cnt;
@@ -141,10 +143,10 @@ edit_indi (NODE indi1)  /* may be NULL */
 
 /* Editing done; see if database changes */
 
-	if (!indi2) return indi1;
+	if (!indi2) return FALSE;
 	if (equal_tree(indi1, indi2) || !ask_yes_or_no(_(qScfpupt))) {
 		free_nodes(indi2);
-		return indi1;
+		return FALSE;
 	}
 
 /* Prepare to change database */
@@ -162,7 +164,7 @@ edit_indi (NODE indi1)  /* may be NULL */
 	free_node(indi2);
 
 /* Note in change history */
-	history_record_change(indi1);
+	history_record_change(irec1);
 
 /* Write changed person to database */
 
@@ -186,7 +188,7 @@ edit_indi (NODE indi1)  /* may be NULL */
 	free_nodes(refnn);
 	free_nodes(refn1n);
 	msg_status(_(qSgdpmod), indi_to_name(indi1, ttmd, 35));
-	return indi1;
+	return TRUE;
 }
 /*=====================================
  * write fam gedcom node to editfile
@@ -214,25 +216,30 @@ write_fam_to_editfile(NODE fam)
  * edit_fam -- Edit family in database
  * (with user interaction)
  *==================================*/
-NODE
-edit_family (NODE fam1) /* may be NULL */
+BOOLEAN
+edit_family (RECORD frec1) /* may be NULL */
 {
-	NODE fam2=0, husb, wife, chil, body, refn1, refn2, refnn, refn1n;
-	NODE indi, node, fam0;
+	NODE fam1=0, fam2=0, husb, wife, chil, body, refn1, refn2, refnn, refn1n;
+	RECORD irec=0;
+	NODE node, fam0;
 	TRANMAPPING ttmi = get_tranmapping(MEDIN);
 	STRING msg, key;
 	BOOLEAN emp;
+
 /* Identify family if need be */
-	if (!fam1) {
-		indi = ask_for_indi_old(_(qSidspse), NOCONFIRM, NOASK1);
-		if (!indi) return NULL;
-		if (!FAMS(indi)) {
+	
+
+	if (!frec1) {
+		irec = ask_for_indi(_(qSidspse), NOCONFIRM, NOASK1);
+		if (!irec) return FALSE;
+		if (!FAMS(nztop(irec))) {
 			message(_(qSntprnt));
-			return NULL;
+			return FALSE;
 		} 
-		fam1 = choose_family(indi, _(qSparadox), _(qSidfbys), TRUE);
-		if (!fam1) return FALSE; 
+		frec1 = choose_family(irec, _(qSparadox), _(qSidfbys), TRUE);
+		if (!frec1) return FALSE; 
 	}
+	fam1 = nztop(frec1);
 
 /* Prepare file for user to edit */
 	if (getoptint("ExpandRefnsDuringEdit", 0) > 0)
@@ -247,7 +254,7 @@ edit_family (NODE fam1) /* may be NULL */
 		if (!equal_tree(fam1, fam2))
 			message(_(qSronlye));
 		free_nodes(fam2); 
-		return fam1;
+		return FALSE;
 	}
 	while (TRUE) {
 		INT cnt;
@@ -288,10 +295,10 @@ edit_family (NODE fam1) /* may be NULL */
 
 /* If error or user backs out return */
 
-	if (!fam2) return fam1;
+	if (!fam2) return FALSE;
 	if (equal_tree(fam1, fam2) || !ask_yes_or_no(_(qScffupt))) {
 		free_nodes(fam2);
-		return fam1;
+		return FALSE;
 	}
 
 /* Prepare to change database */
@@ -321,5 +328,5 @@ edit_family (NODE fam1) /* may be NULL */
 	free_nodes(refnn);
 	free_nodes(refn1n);
 	msg_status(_(qSgdfmod));
-	return fam1;
+	return TRUE;
 }

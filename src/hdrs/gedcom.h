@@ -211,15 +211,15 @@ void addxxref(INT);
 BOOLEAN add_name(STRING, STRING);
 BOOLEAN add_refn(STRING, STRING);
 BOOLEAN are_locales_supported(void);
-NODE choose_child(NODE, NODE, STRING, STRING, ASK1Q);
+RECORD choose_child(RECORD irec, RECORD frec, STRING msg0, STRING msgn, ASK1Q ask1);
 void choose_and_remove_family(void);
-NODE choose_father(NODE, NODE, STRING, STRING, ASK1Q);
-NODE choose_family(NODE, STRING, STRING, BOOLEAN);
-NODE choose_mother(NODE, NODE, STRING, STRING, ASK1Q);
-NODE choose_note(NODE what, STRING msg0, STRING msgn);
-NODE choose_pointer(NODE what, STRING msg0, STRING msgn);
-NODE choose_source(NODE what, STRING msg0, STRING msgn);
-NODE choose_spouse(NODE, STRING, STRING);
+RECORD choose_father(RECORD irec, RECORD frec, STRING msg0, STRING msgn, ASK1Q ask1);
+RECORD choose_family(RECORD irec, STRING msg0, STRING msgn, BOOLEAN fams);
+RECORD choose_mother(RECORD indi, RECORD fam, STRING msg0, STRING msgn, ASK1Q ask1);
+RECORD choose_note(RECORD current, STRING msg0, STRING msgn);
+RECORD choose_pointer(RECORD current, STRING msg0, STRING msgn);
+RECORD choose_source(RECORD current, STRING msg0, STRING msgn);
+RECORD choose_spouse(RECORD irec, STRING msg0, STRING msgn);
 void classify_nodes(NODE*, NODE*, NODE*);
 void closexref(void);
 void close_lifelines(void);
@@ -246,7 +246,8 @@ void fam_to_cache(NODE);
 void fam_to_dbase(NODE);
 STRING fam_to_event(NODE, TRANMAPPING, STRING tag, STRING head, INT len, RFMT);
 NODE fam_to_first_chil(NODE);
-NODE fam_to_husb(NODE);
+RECORD fam_to_husb(RECORD);
+NODE fam_to_husb_node(NODE);
 NODE fam_to_last_chil(NODE);
 STRING fam_to_list_string(NODE fam, INT len, STRING delim);
 NODE fam_to_spouse(NODE, NODE);
@@ -305,9 +306,11 @@ NODE indi_to_fath(NODE);
 STRING indi_to_list_string(NODE, NODE, INT, RFMT);
 NODE indi_to_moth(NODE);
 STRING indi_to_name(NODE, TRANMAPPING, INT);
-NODE indi_to_next_sib(NODE);
+RECORD indi_to_next_sib(RECORD);
+NODE indi_to_next_sib_old(NODE);
 STRING indi_to_ped_fix(NODE indi, INT len);
-NODE indi_to_prev_sib(NODE);
+RECORD indi_to_prev_sib(RECORD);
+NODE indi_to_prev_sib_old(NODE);
 STRING indi_to_title(NODE, TRANMAPPING, INT);
 void initxref(void);
 void init_browse_lists(void);
@@ -331,20 +334,23 @@ void join_othr(NODE root, NODE refn, NODE rest);
 STRING key_of_record(NODE, TRANMAPPING tt);
 RECORD key_possible_to_record(STRING, INT let);
 NODE key_to_even(STRING);
-RECORD key_to_even0(STRING);
+RECORD key_to_erecord(STRING);
 NODE key_to_fam(STRING);
-RECORD key_to_fam0(STRING);
+RECORD key_to_frecord(STRING);
 NODE key_to_indi(STRING);
-RECORD key_to_indi0(STRING);
+RECORD key_to_irecord(STRING);
+RECORD key_to_orecord(STRING);
 NODE key_to_othr(STRING);
-RECORD key_to_othr0(STRING);
-RECORD key_to_record(STRING key, INT reportmode);
+RECORD key_to_record(STRING key);
 NODE key_to_sour(STRING);
-RECORD key_to_sour0(STRING);
+RECORD key_to_srecord(STRING);
 NODE key_to_type(STRING key, INT reportmode);
 NODE keynum_to_fam(int keynum);
+RECORD keynum_to_frecord(int keynum);
 NODE keynum_to_indi(int keynum);
+RECORD keynum_to_irecord(int keynum);
 NODE keynum_to_node(char ntype, int keynum);
+RECORD keynum_to_record(char ntype, int keynum);
 NODE keynum_to_sour(int keynum);
 NODE keynum_to_even(int keynum);
 NODE keynum_to_othr(int keynum);
@@ -370,12 +376,14 @@ BOOLEAN nkey_eq(NKEY * nkey1, NKEY * nkey2);
 void nkey_clear(NKEY * nkey);
 void nkey_load_key(NKEY * nkey);
 BOOLEAN nkey_to_node(NKEY * nkey, NODE * node);
+BOOLEAN nkey_to_record(NKEY * nkey, RECORD * prec);
 NKEY nkey_zero(void);
 void node_to_dbase(NODE, STRING);
 BOOLEAN node_to_file(INT, NODE, STRING, BOOLEAN, TRANTABLE);
 INT node_to_keynum(char ntype, NODE nod);
 BOOLEAN node_to_nkey(NODE node, NKEY * nkey);
 NODE node_to_node(NODE, INT*);
+RECORD node_to_record(NODE node);
 STRING node_to_string(NODE);
 STRING node_to_tag(NODE node, STRING tag, TRANMAPPING tt, INT len);
 INT num_evens(void);
@@ -393,17 +401,18 @@ BOOLEAN piecematch(STRING, STRING);
 BOOLEAN place_to_list(STRING, LIST, INT*);
 BOOLEAN pointer_value(STRING);
 NODE qkey_to_even(STRING);
-RECORD qkey_to_even0(STRING);
+RECORD qkey_to_erecord(STRING);
 NODE qkey_to_fam(STRING);
-RECORD qkey_to_fam0(STRING);
+RECORD qkey_to_frecord(STRING);
 NODE qkey_to_indi(STRING);
-RECORD qkey_to_indi0(STRING);
+RECORD qkey_to_irecord(STRING);
+RECORD qkey_to_orecord(STRING);
 NODE qkey_to_othr(STRING);
-RECORD qkey_to_othr0(STRING);
+RECORD qkey_to_record(STRING key);
 NODE qkey_to_sour(STRING);
-RECORD qkey_to_sour0(STRING);
+RECORD qkey_to_srecord(STRING);
 NODE qkey_to_type(STRING key);
-NODE qkeynum_to_fam(int keynum);
+RECORD qkeynum_to_frecord(int keynum);
 NODE qkeynum_to_indi(int keynum);
 INT record_letter(STRING);
 NODE refn_to_record(STRING, INT);
@@ -552,13 +561,35 @@ INT xrefval(char ntype, STRING str);
  *===========================================*/
 #define num_children(fam)  (length_nodes(CHIL(fam)))
 
-#define FORCHILDREN(fam,child,num) \
+/*
+TODO: Change all FORCHILDRENx to FORCHILDREN loops
+This means changing use of NODE to RECORD
+Perry, 2002.06.24
+*/
+#define FORCHILDRENx(fam,child,num) \
 	{\
 	NODE __node = find_tag(nchild(fam), "CHIL");\
 	NODE child;\
 	num = 0;\
 	while (__node) {\
 		if((child = key_to_indi(rmvat(nval(__node))))) {\
+		  ASSERT(child);\
+		  num++;\
+		  {
+
+#define ENDCHILDRENx \
+		  }}\
+		__node = nsibling(__node);\
+		if (__node && nestr(ntag(__node), "CHIL")) __node = NULL;\
+	}}
+
+#define FORCHILDREN(fam,child,num) \
+	{\
+	NODE __node = find_tag(nchild(fam), "CHIL");\
+	RECORD child;\
+	num = 0;\
+	while (__node) {\
+		if((child = key_to_irecord(rmvat(nval(__node))))) {\
 		  ASSERT(child);\
 		  num++;\
 		  {
@@ -582,7 +613,7 @@ INT xrefval(char ntype, STRING str);
 		if (__sex == SEX_MALE)\
 			spouse = fam_to_wife(fam);\
 		else if (__sex == SEX_FEMALE)\
-			spouse = fam_to_husb(fam);\
+			spouse = fam_to_husb_node(fam);\
 		else    spouse = fam_to_spouse(fam, indi);\
 		if (spouse != NULL) {\
 			num++;\
@@ -606,7 +637,7 @@ INT xrefval(char ntype, STRING str);
 		if (__sex == SEX_MALE)\
 			spouse = fam_to_wife(fam);\
 		else if (__sex == SEX_FEMALE)\
-			spouse = fam_to_husb(fam);\
+			spouse = fam_to_husb_node(fam);\
 		else    spouse = fam_to_spouse(fam, indi);\
 		num++;\
 		{
@@ -625,7 +656,7 @@ INT xrefval(char ntype, STRING str);
 	while (__node) {\
 		fam = key_to_fam(rmvat(nval(__node)));\
 		ASSERT(fam);\
-		fath = fam_to_husb(fam);\
+		fath = fam_to_husb_node(fam);\
 		moth = fam_to_wife(fam);\
 		num++;\
 		{

@@ -326,7 +326,7 @@ static BOOLEAN
 cgn_callback (STRING key, STRING name, BOOLEAN newset, void *param)
 {
 	/* a name record which points at indi=key */
-	RECORD indi0 = qkey_to_indi0(key);
+	RECORD indi0 = qkey_to_irecord(key);
 	NODE indi = nztop(indi0);
 	param=param; /* unused */
 
@@ -381,7 +381,7 @@ static BOOLEAN
 cgr_callback (STRING key, STRING refn, BOOLEAN newset, void *param)
 {
 	/* a refn record which points at record=key */
-	RECORD rec = key_to_record(key, TRUE);
+	RECORD rec = key_to_record(key);
 	NODE node = nztop(rec);
 	param = param; /* unused */
 

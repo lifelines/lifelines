@@ -87,10 +87,10 @@ get_child_strings (NODE fam, RFMT rfmt, INT *pnum, STRING **pkeys)
 		chkeys = (STRING *) stdalloc((nchil+5)*sizeof(STRING));
 		maxchil = nchil + 5;
 	}
-	FORCHILDREN(fam,child,i)
+	FORCHILDRENx(fam,child,i)
 		chstrings[i-1] = indi_to_list_string(child, NULL, 66, rfmt);
 		chkeys[i-1] = strsave(rmvat(nxref(child)));
-	ENDCHILDREN
+	ENDCHILDRENx
 	*pnum = nchil;
 	*pkeys = chkeys;
 	return chstrings;

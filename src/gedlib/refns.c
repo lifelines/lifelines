@@ -494,11 +494,11 @@ RECORD key_possible_to_record (STRING str, /* string that may be a key */
 	kbuf[i] = 0;
 	if (!isrecord(BTR, str2rkey(kbuf))) return NULL;
 	switch (let) {
-	case 'I': return key_to_indi0(kbuf);
-	case 'F': return key_to_fam0(kbuf);
-	case 'S': return key_to_sour0(kbuf);
-	case 'E': return key_to_even0(kbuf);
-	case 'X': return key_to_othr0(kbuf);
+	case 'I': return key_to_irecord(kbuf);
+	case 'F': return key_to_frecord(kbuf);
+	case 'S': return key_to_srecord(kbuf);
+	case 'E': return key_to_erecord(kbuf);
+	case 'X': return key_to_orecord(kbuf);
 	default:  FATAL();
 	}
 	FATAL();
