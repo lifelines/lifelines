@@ -1,0 +1,42 @@
+LifeLines Source Release, Version 3.0.6
+http://lifelines.sourceforge.net
+-------------------------------------------------------------------------
+
+New Features Added in 3.0.6
+===========================
+
+- New report functions: 'lastindi' and 'lastfam'
+
+- New name scan option, with primitive wildcards (. and trailing *)
+  (new s option on main menu)
+
+- Scrolling children (& spouses) in INDI & FAM browse
+  ('++' marker at end of lines to indicate more info off-screen)
+  (hotkeys '(' and ')' to scroll)
+
+- Direct to child navigation (hotkeys '1','2,','3',...)
+  in INDI & FAM browse screens
+- Optional numbers in front of children in INDI & FAM screens
+  (hotkey '#' toggles)
+
+- New report option lists available reports with summary info
+
+- Navigate in db order in INDI & FAM browse 
+  (hotkeys '+' and '-')
+
+- New browse sources, events, and others lists
+  (from extra menu)
+
+- Cross-reference sources from INDI or FAM browse
+  (hotkey '$')
+
+- New commandline argument to specify terminal size
+  (eg, lines -u120,30)
+
+
+New Features in 3.0.4
+=====================
+
+- LifeLines Version 3.0.4, December 15, 1999, is now released under
+  an MIT-style license.  See the file LICENSE in included with this
+  kit for the full license.

@@ -1,27 +1,22 @@
-LifeLines Source Release, Version 3.0.5-2, 22 July 2000
+LifeLines Source Release, Version 3.0.6
+http://lifelines.sourceforge.net
+-------------------------------------------------------------------------
 
 This is the source distribution of the LifeLines system, a genealogy
-software system.  To build and install LifeLines, execute these
-commands:
+software system.  To build and install LifeLines, please refer to
+the installation instructions located in the INSTALL file.
 
-	./configure
-	make
-        make install
-
-which will generate Makefiles suitable for your platform and then build
-and install the LifeLines programs.  You will end up with two 
-executables (installed in various places, depending on your platform):
-
-llines  -- main LifeLines system program
-btedit -- general purpose btree edit program
-
-Don't use btedit unless you know exactly what it does.  It is a superuser
-administration tool for unmangling mangled databases -- powerful, but
-deadly.  It is rarely, if ever, needed.
+Versions of LifeLines for DOS/Windows (text-mode), Windows (GUI) and
+UNIX (GNOME) are under development.  Visit the LifeLines home page
+(see end of file for URL) for details on how to obtain pre-compiled
+or beta (test) copies of these versions.
 
 The original author of LifeLines is Thomas T. Wetmore IV, who released
 it to the open source community under a MIT-style licence (see LICENCE).
 
-LifeLines is now maintained by the open source community.  Please visit
-http://lifelines.sourceforge.net to check for updates, report bugs, or
-if you want to help.
+LifeLines is now maintained by the open source community, and is the
+result of much effort by many people.  For a list of contributors, see
+AUTHORS.
+
+Please visit http://lifelines.sourceforge.net to check for updates,
+report bugs, or to contribute to LifeLines.

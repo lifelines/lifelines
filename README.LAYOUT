@@ -1,0 +1,72 @@
+LifeLines Source Release, Version 3.0.6
+http://lifelines.sourceforge.net
+-------------------------------------------------------------------------
+
+This is a brief description of the directory layout.
+
+Source Code Directories
+-----------------------
+
+./hdrs/
+
+    Header files
+
+./hdrs/win32/
+
+    Headers for win32 implementation code
+
+./arch/
+
+    Library of replacement functions missing on some platforms
+
+./btree/
+
+    btree implementation, with access functions.  Used by the rest of
+    lifelines to access the binary database
+
+./gedlib/
+
+    Implementation of the INDISEQ type
+    Implementation of NAME & REFN records
+    Node functions (extracting from & sending to db, and some top-level
+     node conversions, eg indi_to_event)
+    messages (attempt to put together all strings for hopeful localization).
+    miscellaneous other stuff (including initialization code)
+
+./interp/
+
+    Report generator program interpreter
+
+./stdlib/
+
+    Common functions used by other LifeLines modules
+
+./liflines/
+
+    The frontend logic and GUI code
+    Code to implement import & export, editing, & merging records
+
+./tools/
+
+    Extra tool to edit the binary files.
+
+./ui/ (UNDER DEVELOPMENT)
+
+    Will contain UI-specific code for obtaining input and displaying
+    output
+
+./win32/ (ALMOST OBSOLETE)
+
+    Code from the win32 port, used only when creating win32 target
+
+
+Non-Source Code Directories
+---------------------------
+
+./docs/
+
+    Versions of the quick reference guide
+
+./reports/
+
+    Lifelines language reports (*.ll)

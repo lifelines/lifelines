@@ -1,6 +1,12 @@
+LifeLines Source Release, Version 3.0.6
+http://lifelines.sourceforge.net
+-------------------------------------------------------------------------
+
 Tom Wetmore (ttw@shore.net) - original author
 
 Matt Emmerton (matt@gsicomp.on.ca) - bug fixes & code cleaning
 Rob Fugina (robf@geekthing.com) - added autoconfig support
-Paul B. McBride (pmcbride@tiac.net) - added win32 related bug fixes and features
+Paul B. McBride (pbmcbride@rcn.com) - added win32 related bug fixes and features
 Marc Nozell (marc@nozell.com) - misc, project coordination
+Perry Rapp (prapp@erols.com) - win32 development, bug fixes and features
+Petter Reinholdtsen (pere@hungry.com) - code cleaning, insulation layer
