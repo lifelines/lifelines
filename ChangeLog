@@ -1,7 +1,15 @@
+2004-09-02 Robert Simms
+	* ChangeLog, reports/book-latex.ll
+	Enhanced book-latex.ll to filter text to render harmless those
+	characters meaningful to the LaTeX system.  Also added an option
+	to supress e-mail addresses of source authors when they're specified
+	as EMAI subnodes of AUTH nodes.  Also indented all of the code with
+	spaces (instead of tabs/spaces mix) to make the code easier to follow.
+
 2004-08-28 Stephen Dum
-        * Changelog, reports/eol.ll, src/gedlib/names.c
+        * ChangeLog, reports/eol.ll, src/gedlib/names.c
 	Cleanup of eol.ll.  Comment out an unused routine in names.c
-	and remove an unnecessary strsave call.
+	and remove an unnecessary strsave call.
 
 
 2004-07-21 Stephen Dum
@@ -5798,13 +5806,13 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 
 2001-12-09 Perry Rapp <puddle@users.sourceforge.net>
 
-	* Changelog liflines/screen.c
+	* ChangeLog liflines/screen.c
 
 	Bugfix for BSD section.
 
 2001-12-06 Matt Emmerton <memmerto@users.sourceforge.net>
 
-	* Changelog hdrs/feedback.h
+	* ChangeLog hdrs/feedback.h
 
 	Included stdarg.h in feedback.h to avoid compilation errors.
 
