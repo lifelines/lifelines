@@ -46,7 +46,7 @@ proc main () {
 set(head,"Family History")
 /* set(foot,"your name and address or whatever") */
 set(foot,concat("Created ",stddate(gettoday())," by ",
-                 getproperty("user.name"), " ",getproperty("user.email")))
+                 getproperty("user.fullname"), " ",getproperty("user.email")))
 set(ll,"8.5i")  /* line length for headers */
 set(dtform,0)   /* date format: 0=dmy, 8=ymd, etc. */
 set(footn,1)    /* if 1, then do footnote-style sources */

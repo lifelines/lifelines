@@ -35,9 +35,9 @@
  *   The data in "compiler" table in main() is initialized with property's
  *   obtained from the lifelines config file (~/.linesrc on unix else 
  *   lines.cfg) with values from
- *   user.name
+ *   user.fullname
  *   user.email 
- *   user.addr 
+ *   user.address
  *   user.phone 
  */
 
@@ -58,8 +58,8 @@ proc main ()
     list(sourcelist)
 
     table(compiler)
-    insert(compiler, "name", getproperty("user.name"))
-    insert(compiler, "addr", getproperty("user.addr"))
+    insert(compiler, "name", getproperty("user.fullname"))
+    insert(compiler, "addr", getproperty("user.address"))
     insert(compiler, "phone", getproperty("user.phone"))
     insert(compiler, "email", getproperty("user.email"))
 

@@ -343,7 +343,7 @@ proc print_kids(k1, g1, a, k2, g2, k3, g3, k4, level) {
 func print_ref(title) {
     set(l,div(sub(80,strlen(title)),2))
     col(l) title  nl()
-    set(name, concat(" (Compiled by ",getproperty("user.name")," ",
+    set(name, concat(" (Compiled by ",getproperty("user.fullname")," ",
             stddate(gettoday()),")",nl()))
     set(l, add(26,strlen(name)))
     set(l,div(sub(80,strlen(name)),2))

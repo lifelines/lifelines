@@ -29,7 +29,7 @@ seconds.
 Before using, there are a few properties that need to be customized for your
 own environment so add them to your .linesrc ( or for windows lines.cfg) file.
 The properties that are looked up are:
-   user.name -- name of the database owner
+   user.fullname -- name of the database owner
    user.email -- email address of the db owner
 
 By default, program tries to write data files in the directory 
@@ -61,7 +61,7 @@ proc set_static_html_globals() {
     set(base_filename, concat("./html/",database(),"/"))  
 
     /* other globals*/
-    set(db_owner, getproperty("user.name"))
+    set(db_owner, getproperty("user.fullname"))
     set(owner_email, concat("mailto:",getproperty("user.email")))
     list(month_name)
     enqueue(month_name,"January")

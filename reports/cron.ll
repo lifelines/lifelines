@@ -49,7 +49,7 @@ proc set_static_html_globals() {
     set(base_filename, concat("./html/",database(),"/"))  
 
     /* other globals*/
-    set(db_owner, getproperty("user.name"))
+    set(db_owner, getproperty("user.fullname"))
     set(owner_email, concat("mailto:",getproperty("user.email")))
     list(month_name)
     enqueue(month_name,"January")

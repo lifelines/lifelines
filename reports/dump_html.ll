@@ -17,7 +17,7 @@ by Scott McGee
    windows lines.cfg) file.  This report is does not need to be modified.
 
    The properties that are looked up are:
-   user.name -- Name of the database owner
+   user.fullname -- Name of the database owner
    user.email -- Email address of db owner
    genweb.image -- define with path to image if you have one to use 
    genweb.page -- define with path to page if you have one
@@ -65,7 +65,7 @@ proc main () {
 
 proc set_static_html_globals(){
 /* customize these globals to customize the output to your site */
-  set(db_owner, getproperty("user.name"))
+  set(db_owner, getproperty("user.fullname"))
   set(owner_addr, getproperty("user.email"))
   set(genweb_image, getproperty("genweb.image"))
   set(genweb_page, getproperty("genweb.page"))
