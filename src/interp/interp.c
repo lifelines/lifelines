@@ -305,7 +305,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 		}
 		cur_pathinfo = 0;
 	}
-	destroy_list2(plist, NULL);
+	destroy_list(plist);
 	plist=NULL;
 
 
@@ -406,8 +406,8 @@ interp_program_notfound:
 		delete_pathinfo(&pathinfo);
 	}
 	strfree(&rootfilepath);
-	destroy_list2(donelist, NULL);
-	destroy_list2(plist, NULL);
+	destroy_list(donelist);
+	destroy_list(plist);
 	return ranit;
 }
 /*===============================================

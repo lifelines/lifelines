@@ -32,6 +32,10 @@
 
 	Make list iterators heap objects like table iterators.
 
+	* ChangeLog src/interp/interp.c
+
+	Convert "destroy_list2(list, NULL)" calls to "destroy_list(list)".
+
 2005-02-05 Perry Rapp
 
 	* ChangeLog NEWS src/gedlib/xreffile.c
