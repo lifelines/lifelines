@@ -4,7 +4,7 @@
 # As are blank lines
 # So all these lines are commented out...
 #
-# 2001/12/28
+# 2002/01/13
 
 # Email address available to report programs
 #EmailAddr=user@mailhost.org
@@ -62,9 +62,17 @@
 # Omit this entirely to see dates as given in GEDCOM
 #LongDisplayDate=1,1,0,9,1,1
 
+# To use a combining format not already supported, such as the period format
+# This overrides the dateformat (but not dayformat,monthformat...) above
+#LongDisplayDatePic="%y.%m.%d"
+
 # As above, except that omitting this defaults to combining mode 12 (year only)
 #  (the traditional short form)
 #ShortDisplayDate=1,1,0,10,1,0
+
+# To use a combining format not already supported, such as the period format
+# This overrides the dateformat (but not dayformat,monthformat...) above
+#ShortDisplayDatePic="%y.%m.%d"
 
 # Trailing string to append when truncating events in short display
 #  (eg, to see "b. 1995-5-3, Miss..." instead of "b. 1995-5-3, Missour")
