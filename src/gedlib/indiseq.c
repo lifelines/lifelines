@@ -784,13 +784,13 @@ get_combined_valtype (INDISEQ one, INDISEQ two)
 static INDISEQ
 dupseq (INDISEQ seq)
 {
+#ifdef NOT_TESTED
 	INDISEQ newseq;
 	STRING key;
 	UNION uval;
 	SORTEL *u;
 	INT i,n;
 
-#ifdef NOT_TESTED
 	if (!seq)
 		return NULL;
 

@@ -1,3 +1,14 @@
+2001-04-12 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/indiseq.c liflines/browse.c:
+	Added history list, and pulled history handling into one function.
+
+2001-04-11 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/indiseq.c liflines/browse.c:
+	Bugfixes to note/pointer cross-reference browsing, and add handling to
+	family browse menu.
+
 2001-04-11 Marc Nozell <marc@nozell.com>
 
 	* docs/Makefile.am: postscript and pdf output of documentation is

@@ -207,7 +207,7 @@ browse (NODE node, INT code)
 			key = rmvat(nxref(indi1));
 			switch(key[0]) {
 			case 'I': code=BROWSE_INDI; break;
-			case 'F': code=BROWSE_FAM; break;
+			case 'F': code=BROWSE_FAM; fam1 = indi1; break;
 			default: code=BROWSE_AUX; break;
 			}
 		}
@@ -682,8 +682,10 @@ browse_aux (NODE *pindi1, NODE *pindi2, NODE *pfam1,
 			break;
 		case CMD_POINTERS:	/* Browse to references */
 			node2 = choose_pointer(node, noptr, idptr);
-			if (node2)
-				node = node2;
+			if (node2) {
+				*pindi1 = node2;
+				return BROWSE_UNK;
+			}
 			break;
 		case CMD_NEXT:	/* Go to next in db */
 			{
@@ -702,17 +704,17 @@ browse_aux (NODE *pindi1, NODE *pindi2, NODE *pfam1,
 				break;
 			}
 		case CMD_HISTORY_BACK:
-			node = history_back();
-			if (node) {
-				*pindi1 = node;
+			node2 = history_back();
+			if (node2) {
+				*pindi1 = node2;
 				return BROWSE_UNK;
 			}
 			message(nohist);
 			break;
 		case CMD_HISTORY_FWD:
-			node = history_fwd();
-			if (node) {
-				*pindi1 = node;
+			node2 = history_fwd();
+			if (node2) {
+				*pindi1 = node2;
 				return BROWSE_UNK;
 			}
 			message(nohist);
@@ -1067,6 +1069,20 @@ browse_fam (NODE *pindi1,
 			if (node) {
 				*pindi1 = node;
 				return BROWSE_AUX;
+			}
+			break;
+		case CMD_NOTES:	/* Browse to notes */
+			node = choose_note(fam, nonote, idnote);
+			if (node) {
+				*pindi1 = node;
+				return BROWSE_AUX;
+			}
+			break;
+		case CMD_POINTERS:	/* Browse to references */
+			node = choose_pointer(fam, noptr, idptr);
+			if (node) {
+				*pindi1 = node;
+				return BROWSE_UNK;
 			}
 			break;
 		case CMD_HISTORY_BACK:
