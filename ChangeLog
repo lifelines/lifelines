@@ -1,3 +1,13 @@
+2002-01-04 Matt Emmerton <memmerto@users.sourceforge.net>
+
+	* ChangeLog configure.in
+
+	Added --with-cygwin option to configure which enables compilation
+    options required for clean compilation on cygwin.
+
+	Changed description of --with-docs option, and made the default
+    for this option to be "no".
+
 2002-01-04 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/init.c gedlib/names.c gedlib/node.c
