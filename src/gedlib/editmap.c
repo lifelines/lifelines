@@ -17,7 +17,7 @@
 
 
 extern STRING map_keys[];
-extern STRING qScmperr,qSaredit,qSronlye,dataerr,qSbadttnum;
+extern STRING qScmperr,qSaredit,qSronlye,qSdataerr,qSbadttnum;
 extern STRING qSsepch;
 
 /*==============================================
@@ -41,7 +41,7 @@ edit_mapping (INT ttnum)
 
 	if (tran_tables[ttnum]) {
 		if (!save_tt_to_file(ttnum, editfile)) {
-			msg_error(dataerr);
+			msg_error(_(qSdataerr));
 			return FALSE;
 		}
 	}

@@ -38,9 +38,9 @@
 #include "lloptions.h"
 
 
-extern STRING qSbadind,badfmc,badfms,badfam,badhsb,badwif,badchl;
-extern STRING bademp,badin0,badfm0,badsr0,badev0,badothr0;
-extern STRING badmul,badenm,badpsx,badirf;
+extern STRING qSbadind,qSbadfmc,qSbadfms,qSbadfam,qSbadhsb,qSbadwif,qSbadchl;
+extern STRING qSbademp,qSbadin0,qSbadfm0,qSbadsr0,qSbadev0,qSbadothr0;
+extern STRING qSbadmul,qSbadenm,qSbadparsex,qSbadirefn;
 
 /*===================================
  * valid_indi_old -- Validate person tree
@@ -59,15 +59,15 @@ valid_indi_old (NODE indi1, STRING *pmsg, NODE orig)
 	STRING *keys, ukey;
 
 	if (!indi1) {
-		*pmsg = bademp;
+		*pmsg = _(qSbademp);
   		return FALSE;
 	}
 	if (nestr("INDI", ntag(indi1))) {
-		*pmsg = badin0;
+		*pmsg = _(qSbadin0);
 		return FALSE;
 	}
 	if (nsibling(indi1)) {
-		*pmsg = badmul;
+		*pmsg = _(qSbadmul);
 		return FALSE;
 	}
 	split_indi_old(indi1, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
@@ -77,7 +77,7 @@ valid_indi_old (NODE indi1, STRING *pmsg, NODE orig)
 	}
 	for (node = name1; node; node = nsibling(node)) {
 		if (!valid_name(nval(node))) {
-			*pmsg = badenm;
+			*pmsg = _(qSbadenm);
 			goto bad2;
 		}
 	}
@@ -90,24 +90,24 @@ valid_indi_old (NODE indi1, STRING *pmsg, NODE orig)
 		goto bad1;
 	}
 	if (!iso_nodes(famc1, famc0, FALSE, TRUE)) {
-		*pmsg = badfmc;
+		*pmsg = _(qSbadfmc);
 		goto bad1;
 	}
 	if (!iso_nodes(fams1, fams0, FALSE, TRUE)) {
-		*pmsg = badfms; 
+		*pmsg = _(qSbadfms); 
 		goto bad1;
 	}
 	isex = val_to_sex(sex0);
 	if (!fams0) isex = SEX_UNKNOWN;
 	if (isex != SEX_UNKNOWN && isex != val_to_sex(sex1)) {
-		*pmsg = badpsx;
+		*pmsg = _(qSbadparsex);
 		goto bad1;
 	}
 	ukey = (refn1 ? nval(refn1) : NULL);
 	get_refns(ukey, &num, &keys, 'I');
 	if (num > 1 || (num == 1 && (!orig ||
 	    nestr(keys[0], rmvat(nxref(indi1)))))) {
-		*pmsg = badirf;
+		*pmsg = _(qSbadirefn);
 		goto bad1;
 	}
 	if (orig)
@@ -135,15 +135,15 @@ valid_fam_old (NODE fam1, STRING *pmsg, NODE fam0)
 	NODE refn1, husb1, wife1, chil1, body1;
 
 	if (!fam1) {
-		*pmsg = bademp;
+		*pmsg = _(qSbademp);
   		return FALSE;
 	}
 	if (nestr("FAM", ntag(fam1))) {
-		*pmsg = badfm0;
+		*pmsg = _(qSbadfm0);
 		return FALSE;
 	}
 	if (nsibling(fam1)) {
-		*pmsg = badmul;
+		*pmsg = _(qSbadmul);
 		return FALSE;
 	}
 
@@ -153,19 +153,19 @@ valid_fam_old (NODE fam1, STRING *pmsg, NODE fam0)
 	split_fam(fam1, &refn1, &husb1, &wife1, &chil1, &body1);
 	
 	if (fam0 && !iso_nodes(fam1, fam0, FALSE, TRUE)) {
-		*pmsg = badfam; 
+		*pmsg = _(qSbadfam); 
 		goto bad3;
 	}
 	if (!iso_nodes(husb1, husb0, FALSE, TRUE)) {
-		*pmsg = badhsb;
+		*pmsg = _(qSbadhsb);
 		goto bad3;
 	}
 	if (!iso_nodes(wife1, wife0, FALSE, TRUE)) {
-		*pmsg = badwif;
+		*pmsg = _(qSbadwif);
 		goto bad3;
 	}
 	if (!iso_nodes(chil1, chil0, FALSE, TRUE)) {
-		*pmsg = badchl;
+		*pmsg = _(qSbadchl);
 		goto bad3;
 	}
 	if (fam0)
@@ -222,11 +222,11 @@ valid_sour_tree (NODE node, STRING *pmsg, NODE orig)
 	orig = NULL;         /* keep compiler happy */
 	*pmsg = NULL;
 	if (!node) {
-		*pmsg = bademp;
+		*pmsg = _(qSbademp);
   		return FALSE;
 	}
 	if (nestr("SOUR", ntag(node))) {
-		*pmsg = badsr0;
+		*pmsg = _(qSbadsr0);
 		return FALSE;
 	}
 	return TRUE;
@@ -243,11 +243,11 @@ valid_even_tree (NODE node, STRING *pmsg, NODE orig)
 	orig = NULL;         /* keep compiler happy */
 	*pmsg = NULL;
 	if (!node) {
-		*pmsg = bademp;
+		*pmsg = _(qSbademp);
   		return FALSE;
 	}
 	if (nestr("EVEN", ntag(node))) {
-		*pmsg = badsr0;
+		*pmsg = _(qSbadev0);
 		return FALSE;
 	}
 	return TRUE;
@@ -264,12 +264,12 @@ valid_othr_tree (NODE node, STRING *pmsg, NODE orig)
 	orig = NULL;         /* keep compiler happy */
 	*pmsg = NULL;
 	if (!node) {
-		*pmsg = bademp;
+		*pmsg = _(qSbademp);
   		return FALSE;
 	}
 	if (eqstr("INDI", ntag(node)) || eqstr("FAM", ntag(node))
-		|| eqstr("EVEN", ntag(node)) || eqstr("SOUR", ntag(node))) {
-		*pmsg = badothr0;
+		|| eqstr("SOUR", ntag(node)) || eqstr("EVEN", ntag(node))) {
+		*pmsg = _(qSbadothr0);
 		return FALSE;
 	}
 	return TRUE;

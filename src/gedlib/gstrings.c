@@ -40,7 +40,7 @@
  *********************************************/
 
 extern STRING qSdspa_mar,qSdspa_bir,qSdspa_chr,qSdspa_dea,qSdspa_bur;
-extern STRING unksps;
+extern STRING qSunksps;
 
 /*********************************************
  * local variables
@@ -116,7 +116,7 @@ indi_to_list_string (NODE indi, NODE fam, INT len, RFMT rfmt)
 	if (indi) {
 		ASSERT(name = indi_to_name(indi, ttd, len));
 	} else
-		name = unksps;
+		name = _(qSunksps);
 	sprintf(p, "%s", name);
 	p += strlen(p);
 	if (fam)  evt = fam_to_event(fam, ttd, "MARR", _(qSdspa_mar), len, rfmt);

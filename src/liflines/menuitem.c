@@ -37,6 +37,9 @@
  * external/imported variables
  *********************************************/
 
+extern STRING qSttlindibrw, qSttlfambrw, qSttl2perbrw, qSttl2fambrw;
+extern STRING qSttlauxbrw, qSttllstbrw;
+
 /*********************************************
  * local types
  *********************************************/
@@ -79,8 +82,8 @@ ScreenInfo g_ScreenInfo[MAX_SCREEN+1];
 
 /* These are not listed as part of the menus below, because these are
 added on-the-fly to every menu page displayed */
-MenuItem g_MenuItemOther = { "?  Other menu choices", 0, CMD_MENU_MORE, 0 };
-MenuItem g_MenuItemQuit = { "q  Return to main menu", 0, CMD_QUIT, 0 };
+MenuItem g_MenuItemOther = { N_("?  Other menu choices"), 0, CMD_MENU_MORE, 0 };
+MenuItem g_MenuItemQuit = { N_("q  Return to main menu"), 0, CMD_QUIT, 0 };
 
 /* normal menu items */
 static MenuItem f_MenuItemEditIndi = { N_("e  Edit the person"), 0, CMD_EDIT, 0 };
@@ -660,8 +663,7 @@ menuitem_initialize (INT cols)
 
 	scr = ONE_PER_SCREEN;
 	sinfo = &g_ScreenInfo[scr];
-	llstrncpy(title, _("LifeLines -- Person Browse Screen (* toggles menu)")
-		, ARRSIZE(title));
+	llstrncpy(title, _(qSttlindibrw), ARRSIZE(title));
 	MenuRows = 8;
 	MenuSize = sizeof(f_MenuPerson)/ItemSize-1;
 	Menu = f_MenuPerson;
@@ -669,8 +671,7 @@ menuitem_initialize (INT cols)
 
 	scr = ONE_FAM_SCREEN;
 	sinfo = &g_ScreenInfo[scr];
-	llstrncpy(title, _("LifeLines -- Family Browse Screen (* toggles menu)")
-		, ARRSIZE(title));
+	llstrncpy(title, _(qSttlfambrw), ARRSIZE(title));
 	MenuRows = 6;
 	MenuSize = sizeof(f_MenuFamily)/ItemSize-1;
 	Menu = f_MenuFamily;
@@ -678,8 +679,7 @@ menuitem_initialize (INT cols)
 
 	scr = TWO_PER_SCREEN;
 	sinfo = &g_ScreenInfo[scr];
-	llstrncpy(title, _("LifeLines -- Two Person Browse Screen (* toggles menu)")
-		, ARRSIZE(title));
+	llstrncpy(title, _(qSttl2perbrw), ARRSIZE(title));
 	MenuRows = 5;
 	MenuSize = sizeof(f_Menu2Person)/ItemSize-1;
 	Menu = f_Menu2Person;
@@ -687,8 +687,7 @@ menuitem_initialize (INT cols)
 
 	scr = TWO_FAM_SCREEN;
 	sinfo = &g_ScreenInfo[scr];
-	llstrncpy(title, _("LifeLines -- Two Family Browse Screen (* toggles menu)")
-		, ARRSIZE(title));
+	llstrncpy(title, _(qSttl2fambrw), ARRSIZE(title));
 	MenuRows = 5;
 	MenuSize = sizeof(f_Menu2Family)/ItemSize-1;
 	Menu = f_Menu2Family;
@@ -696,8 +695,7 @@ menuitem_initialize (INT cols)
 
 	scr = AUX_SCREEN;
 	sinfo = &g_ScreenInfo[scr];
-	llstrncpy(title, _("LifeLines -- Auxiliary Browse Screen (* toggles menu)")
-		, ARRSIZE(title));
+	llstrncpy(title, _(qSttlauxbrw), ARRSIZE(title));
 	MenuRows = 4;
 	MenuSize = sizeof(f_MenuAux)/ItemSize-1;
 	Menu = f_MenuAux;
@@ -706,8 +704,7 @@ menuitem_initialize (INT cols)
 	/* TO DO: this is not used right now */
 	scr = LIST_SCREEN;
 	sinfo = &g_ScreenInfo[scr];
-	llstrncpy(title, _("LifeLines -- List Browse Screen (* toggles menu)")
-		, ARRSIZE(title));
+	llstrncpy(title, _(qSttllstbrw), ARRSIZE(title));
 	MenuRows = 13;
 	MenuCols = 1;
 	MenuSize = sizeof(f_MenuListPersons)/ItemSize-1;

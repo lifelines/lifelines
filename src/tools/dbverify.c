@@ -45,7 +45,7 @@
  *********************************************/
 
 extern BTREE BTR;
-extern STRING mtitle;
+extern STRING qSmtitle;
 
 /*********************************************
  * required global variables
@@ -196,13 +196,14 @@ static void
 print_usage (void)
 {
 	char verstr[80];
+	STRING title = _(qSmtitle);
 #ifdef WIN32
 	char * fname = "\\My Documents\\LifeLines\\Databases\\MyFamily";
 #else
 	char * fname = "/home/users/myname/lifelines/databases/myfamily";
 #endif
-	snprintf(verstr, sizeof(verstr), mtitle
-		, get_lifelines_version(sizeof(verstr)-1-strlen(mtitle)));
+	snprintf(verstr, sizeof(verstr), title
+		, get_lifelines_version(sizeof(verstr)-1-strlen(title)));
 	printf(
 		"usage: dbverify -(flags) <btree>\n"
 		"flags:\n"

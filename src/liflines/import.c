@@ -61,8 +61,8 @@ extern INT gd_smax;	/* maximum source key number */
 extern INT gd_emax;	/* maximum event key number */
 extern INT gd_xmax;	/* maximum other key number */
 
-extern STRING qSidgedf, qSgdcker, qSgdnadd, qSdboldk, qSdbnewk, dbodel;
-extern STRING cfoldk, dbdelk, qSdbrdon, qSunsupuni;
+extern STRING qSidgedf, qSgdcker, qSgdnadd, qSdboldk, qSdbnewk, qSdbodel;
+extern STRING qScfoldk, qSdbdelk, qSdbrdon, qSunsupuni;
 extern TRANTABLE tran_tables[];
 
 /*********************************************
@@ -127,10 +127,10 @@ import_from_file (void)
 		totused = gd_itot + gd_ftot + gd_stot + gd_etot + gd_xtot;
 		totkeys = gd_imax + gd_fmax + gd_smax + gd_emax + gd_xmax;
 		if((totkeys-totused) > 0) {
-		    sprintf(msgbuf, dbodel, totkeys-totused);
+		    sprintf(msgbuf, _(qSdbodel), totkeys-totused);
 		}
 		else strcpy(msgbuf, " ");
-		gd_reuse = ask_yes_or_no_msg(msgbuf, cfoldk);
+		gd_reuse = ask_yes_or_no_msg(msgbuf, _(qScfoldk));
 		touchwin(uiw_win(stdout_win));
 		wrefresh(uiw_win(stdout_win));
 	}
@@ -180,7 +180,7 @@ import_from_file (void)
 		node = next_fp_to_node(fp, FALSE, tt, &msg, &emp);
 	}
 	if(gd_reuse && ((totkeys - totused) > 0)) {
-	    wfield(15, 0, dbdelk);
+	    wfield(15, 0, _(qSdbdelk));
 	    addmissingkeys(INDI_REC);
 	    addmissingkeys(FAM_REC);
 	    addmissingkeys(EVEN_REC);

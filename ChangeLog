@@ -15,6 +15,15 @@
 
 	Propagating new i18n'd strings into de & sv translations.
 
+	* ChangeLog gedlib/charmaps.c gedlib/editmap.c gedlib/editvtab.c
+	gedlib/gstrings.c gedlib/messages.c gedlib/node.c
+	gedlib/valid.c interp/interp.c liflines/browse.c
+	liflines/import.c liflines/main.c liflines/menuitem.c
+	liflines/miscutls.c liflines/screen.c liflines/show.c
+	stdlib/signals.c tools/dbverify.c:
+
+	More i18n.
+
 2002-04-25 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog interp/interp.c:

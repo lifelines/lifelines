@@ -88,25 +88,27 @@ static UIWINDOW extra_menu_win=NULL;
  *********************************************/
 
 extern BOOLEAN alldone, progrunning;
-extern STRING empstr,empstr71,empstr120,readpath,qSronlye,dataerr;
-extern STRING qSabverr,qSuoperr,qSbadttnum,qSnosuchtt,qSmouttt,mintt;
-extern STRING mtitle,cright,qSplschs;
+extern STRING qSwin2big,qSwin2small;
+extern STRING empstr,empstr71,empstr120,readpath,qSronlye,qSdataerr;
+extern STRING qSabverr,qSuoperr,qSbadttnum,qSnosuchtt,qSmouttt,qSmintt;
+extern STRING qSmtitle,qScright,qSdbname,qSdbimmut,qSdbrdonly,qSplschs;
 extern STRING qSmn_unkcmd,qSronlya,qSronlyr;
 extern STRING qSaskynq,qSaskynyn,qSaskyY;
 extern STRING qSmn_quit,qSmn_ret, qSmn_exit;
 extern STRING qSmn_mmbrws,qSmn_mmsear,qSmn_mmadd,qSmn_mmdel;
 extern STRING qSmn_mmprpt,qSmn_mmrpt,qSmn_mmcset;
 extern STRING qSmn_mmtt,qSmn_mmut,qSmn_mmex;
-extern STRING mn_csttl,mn_cstt,mn_csintcs,mn_csrptcs;
-extern STRING mn_cstsort,mn_cspref,mn_cschar,mn_cslcas,mn_csucas,mn_csrpt;
-extern STRING mn_csdsploc,mn_csrpttl;
+extern STRING qSmn_csttl,qSmn_cstt,qSmn_csintcs,qSmn_csrptcs;
+extern STRING qSmn_cstsort,qSmn_cspref,qSmn_cschar,qSmn_cslcas,qSmn_csucas;
+extern STRING qSmn_csrpt;
+extern STRING qSmn_csdsploc,qSmn_csrpttl;
 extern STRING idsortttl,idloc;
 extern STRING qSmn_edttttl,qSmn_svttttl;
 extern STRING qSmn_utsave,qSmn_utread,qSmn_utkey,qSmn_utkpers,qSmn_utdbstat,qSmn_utmemsta;
 extern STRING qSmn_utplaces,qSmn_utusropt;
 extern STRING qSmn_xxbsour, qSmn_xxbeven, qSmn_xxbothr, qSmn_xxasour, qSmn_xxesour;
 extern STRING qSmn_xxaeven, qSmn_xxeeven, qSmn_xxaothr, qSmn_xxeothr;
-extern STRING chlist,vwlist,qSerrlist,defttl,iddefpath;
+extern STRING qSchlist,qSvwlist,qSerrlist,qSdefttl,qSiddefpath;
 
 extern STRING qSmn_uttl;
 extern STRING qSmn_xttl;
@@ -286,8 +288,7 @@ init_screen (BOOLEAN graphical)
 		ll_cols = winx;
 		if (ll_cols > COLS || ll_lines > LINES) {
 			endwin();
-			fprintf(stderr, _("The requested window size (%d,%d) is too large for your terminal (%d,%d).\n"),
-				ll_cols, ll_lines, COLS, LINES);
+			fprintf(stderr, _(qSwin2big), ll_cols, ll_lines, COLS, LINES);
 			return 0; /* fail */
 		}
 	}
@@ -299,8 +300,7 @@ init_screen (BOOLEAN graphical)
 	/* check that terminal meet minimum requirements */
 	if (ll_cols < COLSREQ || ll_lines < LINESREQ) {
 		endwin();
-		fprintf(stderr, _("The requested window size (%d,%d) is too small for LifeLines (%d,%d).\n"),
-			ll_cols, ll_lines, COLSREQ, LINESREQ);
+		fprintf(stderr, _(qSwin2small), ll_cols, ll_lines, COLSREQ, LINESREQ);
 		return 0; /* fail */
 	}
 
@@ -366,13 +366,13 @@ repaint_main_menu (UIWINDOW uiwin)
 	show_horz_line(uiwin, 4, 0, ll_cols);
 	show_horz_line(uiwin, ll_lines-3, 0, ll_cols);
 	wmove(win, 1, 2);
-	wprintw(win, mtitle, get_lifelines_version(ll_cols-4));
-	mvwaddstr(win, 2, 4, cright);
-	mvwprintw(win, 3, 4, "Current Database - %s", readpath);
+	wprintw(win, _(qSmtitle), get_lifelines_version(ll_cols-4));
+	mvwaddstr(win, 2, 4, _(qScright));
+	mvwprintw(win, 3, 4, _(qSdbname), readpath);
 	if (immutable)
-		wprintw(win, " (immutable)");
+		wprintw(win, _(qSdbimmut));
 	else if (readonly)
-		wprintw(win, " (read only)");
+		wprintw(win, _(qSdbrdonly));
 	row = 5;
 	/* i18n problem: the letters are not being read from the menu strings */
 	mvwaddstr(win, row++, 2, _(qSplschs));
@@ -932,7 +932,7 @@ ask_for_output_filename (STRING ttl, STRING path, STRING prmpt)
 	if (mylen > uiw_cols(ask_msg_win)-2)
 		mylen = uiw_cols(ask_msg_win)-2;
 	ptr[0]=0;
-	llstrcatn(&ptr, iddefpath, &mylen);
+	llstrcatn(&ptr, _(qSiddefpath), &mylen);
 	llstrcatn(&ptr, compress_path(path, mylen-1), &mylen);
 
 	return ask_for_string2(ttl, curpath, prmpt);
@@ -953,7 +953,7 @@ ask_for_input_filename (STRING ttl, STRING path, STRING prmpt)
 	if (mylen > uiw_cols(ask_msg_win)-2)
 		mylen = uiw_cols(ask_msg_win)-2;
 	ptr[0]=0;
-	llstrcatn(&ptr, iddefpath, &mylen);
+	llstrcatn(&ptr, _(qSiddefpath), &mylen);
 	llstrcatn(&ptr, compress_path(path, mylen-1), &mylen);
 
 	return ask_for_string2(ttl, curpath, prmpt);
@@ -1105,7 +1105,7 @@ INT
 choose_from_array (STRING ttl, INT no, STRING *pstrngs)
 {
 	BOOLEAN selecting = TRUE;
-	if (!ttl) ttl=defttl;
+	if (!ttl) ttl=_(qSdefttl);
 	return choose_or_view_array(ttl, no, pstrngs, selecting, 0, 0);
 }
 /*============================================
@@ -1121,7 +1121,7 @@ choose_from_array_x (STRING ttl, INT no, STRING *pstrngs, DETAILFNC detfnc
 	, void *param)
 {
 	BOOLEAN selecting = TRUE;
-	if (!ttl) ttl=defttl;
+	if (!ttl) ttl=_(qSdefttl);
 	return choose_or_view_array(ttl, no, pstrngs, selecting, detfnc, param);
 }
 /*============================================
@@ -1686,7 +1686,7 @@ invoke_cset_menu (void)
 		repaint_cset_menu(uiwin);
 		wrefresh(win);
 
-		wmove(win, 1, strlen(mn_csttl)+3);
+		wmove(win, 1, strlen(_(qSmn_csttl))+3);
 #ifdef NOTYET
 		code = interact(uiwin, "Lscluprtq", -1);
 #endif
@@ -1731,7 +1731,7 @@ rpt_cset_menu (void)
 		touchwin(win);
 		repaint_rpc_menu(uiwin);
 		wrefresh(win);
-		wmove(win, 1, strlen(mn_csttl)+3);
+		wmove(win, 1, strlen(_(qSmn_csttl))+3);
 		code = interact(uiwin, "Lrq", -1);
 
 		switch (code) {
@@ -1817,12 +1817,12 @@ load_tt_action (void)
 
 	/* Ask whence to load it */
 	ttimportdir = getoptstr("LLTTREF", ".");
-	fp = ask_for_input_file(LLREADTEXT, mintt, &fname, ttimportdir, ".tt");
+	fp = ask_for_input_file(LLREADTEXT, _(qSmintt), &fname, ttimportdir, ".tt");
 	if (fp) {
 		fclose(fp);
 		/* Load it */
 		if (!load_new_tt(fname, ttnum))
-			msg_error(dataerr);
+			msg_error(_(qSdataerr));
 	}
 	if (fname)
 		stdfree(fname);
@@ -1857,7 +1857,7 @@ save_tt_action (void)
 		fclose(fp);
 		/* Save it */
 		if (!save_tt_to_file(ttnum, fname)) {
-			msg_error(dataerr);
+			msg_error(_(qSdataerr));
 			return;
 		}
 	}
@@ -2378,7 +2378,7 @@ array_interact (STRING ttl, INT len, STRING *strings
 	INT row, done;
 	char fulltitle[128];
 	STRING responses = len<10 ? "jkiq123456789[]()" : "jkiq[]()";
-	STRING promptline = selectable ? chlist : vwlist;
+	STRING promptline = selectable ? _(qSchlist ): _(qSvwlist);
 	listdisp ld; /* structure used in resizable list displays */
 
 	memset(&ld, 0, sizeof(ld));
@@ -3133,21 +3133,21 @@ repaint_cset_menu (UIWINDOW uiwin)
 	STRING csndloc = _("L  Test locale names");
 	werase(win);
 	draw_win_box(win);
-	mvwaddstr(win, row++, 2, mn_csttl);
-	disp_codeset(uiwin, row++, 4, mn_csintcs, int_codeset);
-	disp_locale(uiwin, row++, 4, mn_csdsploc, "UiLocale");
-	disp_trans_table_choice(uiwin, row++, 4, mn_cstsort, MSORT);
+	mvwaddstr(win, row++, 2, _(qSmn_csttl));
+	disp_codeset(uiwin, row++, 4, _(qSmn_csintcs), int_codeset);
+	disp_locale(uiwin, row++, 4, _(qSmn_csdsploc), "UiLocale");
+	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_cstsort), MSORT);
 #ifdef NOTYET
-	disp_trans_table_choice(uiwin, row++, 4, mn_cspref, MPREF);
-	disp_trans_table_choice(uiwin, row++, 4, mn_cschar, MCHAR);
-	disp_trans_table_choice(uiwin, row++, 4, mn_cslcas, MLCAS);
-	disp_trans_table_choice(uiwin, row++, 4, mn_csucas, MUCAS);
+	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_cspref), MPREF);
+	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_cschar), MCHAR);
+	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_cslcas), MLCAS);
+	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_csucas), MUCAS);
 #endif
 #ifdef HAVE_SETLOCALE
 	mvwaddstr(win, row++, 4, csndloc);
 #endif
-	mvwaddstr(win, row++, 4, mn_csrpt);
-	mvwaddstr(win, row++, 4, mn_cstt);
+	mvwaddstr(win, row++, 4, _(qSmn_csrpt));
+	mvwaddstr(win, row++, 4, _(qSmn_cstt));
 	mvwaddstr(win, row++, 4, _(qSmn_ret));
 }
 /*=====================================
@@ -3163,7 +3163,7 @@ repaint_rpc_menu (UIWINDOW uiwin)
 	STRING csrptloc = _("Report locale: ");
 	werase(win);
 	draw_win_box(win);
-	mvwaddstr(win, row++, 2, mn_csrpttl);
+	mvwaddstr(win, row++, 2, _(qSmn_csrpttl));
 	disp_locale(uiwin, row++, 4, csrptloc, "RptLocale");
 #ifdef HAVE_SETLOCALE
 	mvwaddstr(win, row++, 4, csnrloc);

@@ -55,6 +55,10 @@ ZST qScrdbse      = N_("Do you want to create a database there?");
 ZST qSbdlkar      = N_("Argument to lock (-l) must be y or n.");
 ZST qSnormls      = N_("Cannot remove last person from family.");
 
+ZST qSusgFinnOpt  = N_("lines [-adkrwifmntcuFyxo] [database]   # Use -F for Finnish database");
+ZST qSusgFinnAlw  = N_("lines [-adkrwifmntcuyxo] [database]   # Finnish database");
+ZST qSusgNorm     = N_("lines [-adkrwifmntcuyxo] [database]");
+
 ZST qSronlya      = N_("The database is read only; you may not add records.");
 ZST qSronlye      = N_("The database is read only; you may not change records.");
 ZST qSronlym      = N_("The database is read only; you may not merge records.");
@@ -261,14 +265,14 @@ ZST qSgdcker      = N_("Checking GEDCOM file %s for errors.\n");
 ZST qSgdnadd      = N_("Because of errors the GEDCOM file was not loaded.\n");
 ZST qSdboldk      = N_("No errors; adding records with original keys...");
 ZST qSdbnewk      = N_("No errors; adding records with new keys...");
-ZST dbodel = SS "Using original keys, %d deleted records will be in the database.";
-ZST cfoldk = SS "Use original keys from GEDCOM file?";
-ZST dbdelk = SS "Adding unused keys as deleted keys...";
+ZST qSdbodel      = N_("Using original keys, %d deleted records will be in the database.");
+ZST qScfoldk      = N_("Use original keys from GEDCOM file?");
+ZST qSdbdelk      = N_("Adding unused keys as deleted keys...");
 ZST qSdbrdon      = N_("The database is read-only; loading has been canceled.");
 ZST qSoutarc      = N_("Enter name of output archive file.");
 ZST qSoutfin      = N_("Database `%s' has been saved in `%s'.");
 ZST qSmouttt      = N_("Enter name of translation table file to write");
-ZST mintt  = SS "Enter name of translation table file to read";
+ZST qSmintt       = N_("Enter name of translation table file to read");
 
 ZST qSextrpt      = N_("<Choose outside this list>");
 ZST qSwhatrpt     = N_("What is the name of the program?");
@@ -289,24 +293,51 @@ ZST qSdefeven     = N_("0 EVEN\n1 REFN\n1 DATE\n1 PLAC\n1 INDI\n  2 NAME\n  2 RO
 ZST qSdefothr     = N_("0 XXXX\n1 REFN");
 
 /* node.c errors */
-ZST fileof      = SS "The file is as positioned at EOF.";
-ZST reremp      = SS "Line %d: This line is empty; EOF?";
-ZST rerlng      = SS "Line %d: This line is too long.";
-ZST rernlv      = SS "Line %d: This line has no level number.";
-ZST rerinc      = SS "Line %d: This line is incomplete.";
-ZST rerbln      = SS "Line %d: This line has a bad link.";
-ZST rernwt      = SS "Line %d: This line needs white space before tag.";
-ZST rerilv      = SS "Line %d: This line has an illegal level.";
-ZST rerwlv      = SS "The record begins at wrong level.";
+ZST qSfileof      = N_("The file is as positioned at EOF.");
+ZST qSreremp      = N_("Line %d: This line is empty; EOF?");
+ZST qSrerlng      = N_("Line %d: This line is too long.");
+ZST qSrernlv      = N_("Line %d: This line has no level number.");
+ZST qSrerinc      = N_("Line %d: This line is incomplete.");
+ZST qSrerbln      = N_("Line %d: This line has a bad link.");
+ZST qSrernwt      = N_("Line %d: This line needs white space before tag.");
+ZST qSrerilv      = N_("Line %d: This line has an illegal level.");
+ZST qSrerwlv      = N_("The record begins at wrong level.");
+
+/* signals */
+ZST qScoredump    = N_("\nAborting now. Core dump? [y/n]");
+ZST qSprogsig     = N_("Looks like a program was running.\nCheck file %1 around line %2.\n");
+ZST qSsignal      = N_("signal %1: %2");
+ZST qSsig00       = N_("SIGNAL 0");
+ZST qSsig01       = N_("HANGUP");
+ZST qSsig02       = N_("INTERRUPT");
+ZST qSsig03       = N_("QUIT");
+ZST qSsig04       = N_("ILLEGAL INSTRUCTION");
+ZST qSsig05       = N_("TRACE TRAP");
+ZST qSsig06       = N_("ABORT");
+ZST qSsig07       = N_("EMT INST");
+ZST qSsig08       = N_("FLOATING POINT EXCEPTION");
+ZST qSsig09       = N_("KILL");
+ZST qSsig10       = N_("BUS ERROR");
+ZST qSsig11       = N_("SEGMENTATION ERROR");
+ZST qSsig12       = N_("SYSTEM CALL ERROR");
+ZST qSsig13       = N_("PIPE WRITE");
+ZST qSsig14       = N_("ALARM CLOCK");
+ZST qSsig15       = N_("TEMINATE FROM KILL");
+ZST qSsig16       = N_("USER SIGNAL 1");
+ZST qSsig17       = N_("USER SIGNAL 2");
+ZST qSsig18       = N_("DEATH OF CHILD");
+ZST qSsig19       = N_("POWER-FAIL RESTART");
+ZST qSsig20       = N_("WINDOW CHANGE");
+ZST qSsigunk      = N_("Unknown signal");
 
 
 /* browse display stuff */
-ZST dspl_indi   = SS "person";
-ZST dspa_resi   = SS ", of ";
-ZST dspl_fath   = SS "father";
-ZST dspl_moth   = SS "mother";
-ZST dspl_spouse = SS "spouse";
-ZST dspl_child  = SS "child";
+ZST qSdspl_indi   = N_("person");
+ZST qSdspa_resi   = N_(", of ");
+ZST qSdspl_fath   = N_("father");
+ZST qSdspl_moth   = N_("mother");
+ZST qSdspl_spouse = N_("spouse");
+ZST qSdspl_child  = N_("child");
 /* display abbreviations */
 ZST qSdspa_mar    = N_("m. ");    /* married */
 ZST qSdspa_div    = N_("div. ");  /* divorced */
@@ -324,62 +355,77 @@ ZST qSdspl_bur    = N_("buri: ");
 
 /* editing errors */
 ZST qSbadind      = N_("You cannot edit the INDI line in a person record.");
-ZST badfmc      = SS "You cannot edit the FAMC line in a person record.";
-ZST badfms      = SS "You cannot edit the FAMS lines in a person record.";
-ZST badfam      = SS "You cannot edit the FAM line in a family record.";
-ZST badhsb      = SS "You cannot edit the HUSB line in a family record.";
-ZST badwif      = SS "You cannot edit the WIFE line in a family record.";
-ZST badchl      = SS "You cannot edit the CHIL lines in a family record.";
-ZST bademp      = SS "The record is empty.";
-ZST badin0      = SS "The record does not begin with an INDI line.";
-ZST badfm0      = SS "The record does not begin with a FAM line.";
-ZST badsr0      = SS "The record does not begin with a SOUR line.";
-ZST badev0      = SS "The record does not begin with an EVEN line.";
-ZST badothr0    = SS "INDI, FAM, SOUR, EVEN records may not be other records.";
-ZST badmul      = SS "The record contains multiple level 0 lines.";
-ZST badenm      = SS "This person record has bad GEDCOM name syntax.";
-ZST badpsx      = SS "You cannot change the sex of a parent.";
-ZST badirf      = SS "REFN key is already in use.";
-ZST tag2long2cnc= SS "Tag is too long to connect automatically.";
-ZST dbrecstats  = SS "Database records: ";
+ZST qSbadfmc      = N_("You cannot edit the FAMC line in a person record.");
+ZST qSbadfms      = N_("You cannot edit the FAMS lines in a person record.");
+ZST qSbadfam      = N_("You cannot edit the FAM line in a family record.");
+ZST qSbadhsb      = N_("You cannot edit the HUSB line in a family record.");
+ZST qSbadwif      = N_("You cannot edit the WIFE line in a family record.");
+ZST qSbadchl      = N_("You cannot edit the CHIL lines in a family record.");
+ZST qSbademp      = N_("The record is empty.");
+ZST qSbadin0      = N_("The record does not begin with an INDI line.");
+ZST qSbadfm0      = N_("The record does not begin with a FAM line.");
+ZST qSbadsr0      = N_("The record does not begin with a SOUR line.");
+ZST qSbadev0      = N_("The record does not begin with an EVEN line.");
+ZST qSbadothr0    = N_("INDI, FAM, SOUR, EVEN records may not be other records.");
+ZST qSbadmul      = N_("The record contains multiple level 0 lines.");
+ZST qSbadenm      = N_("This person record has bad GEDCOM name syntax.");
+ZST qSbadparsex   = N_("You cannot change the sex of a parent.");
+ZST qSbadirefn    = N_("REFN key is already in use.");
+ZST qStag2lng2cnc = N_("Tag is too long to connect automatically.");
+ZST qSdbrecstats  = N_("Database records (%dP, %dF, %dS, %dE, %dX)");
+
+/* initialization */
+ZST qSwin2big     = N_("The requested window size (%d,%d) is too large for your terminal (%d,%d).\n");
+ZST qSwin2small   = N_("The requested window size (%d,%d) is too small for LifeLines (%d,%d).\n");
 
 /* menus */
-ZST mtitle      = SS "LifeLines %s - Genealogical DB and Programming System";
-ZST cright      = SS "Copyright(c) 1991 to 1996, by T. T. Wetmore IV";
+ZST qSmtitle      = N_("LifeLines %s - Genealogical DB and Programming System");
+ZST qScright      = N_("Copyright(c) 1991 to 1996, by T. T. Wetmore IV");
+ZST qSdbname      = N_("Current Database - %s");
+ZST qSdbimmut     = N_(" (immutable)");
+ZST qSdbrdonly    = N_(" (read only)");
 ZST qSplschs      = N_("Please choose an operation:");
 ZST qSmn_unkcmd   = N_("Not valid command");
 
 /* prompt, full list, yes list */
 ZST qSaskynq      = N_("enter y (yes) or n (no): ");
-ZST qSaskynyn     = N_("yYnN");
-ZST qSaskyY       = N_("yY");
+ZST qSaskynyn     = N_("yYnN"); /* valid chars for yes/no answer */
+ZST qSaskyY       = N_("yY"); /* chars meaning yes answer */
+
+/* browse menu titles */
+ZST qSttlindibrw  = N_("LifeLines -- Person Browse Screen (* toggles menu)");
+ZST qSttlfambrw   = N_("LifeLines -- Family Browse Screen (* toggles menu)");
+ZST qSttl2perbrw  = N_("LifeLines -- Two Person Browse Screen (* toggles menu)");
+ZST qSttl2fambrw  = N_("LifeLines -- Two Family Browse Screen (* toggles menu)");
+ZST qSttlauxbrw   = N_("LifeLines -- Auxiliary Browse Screen (* toggles menu)");
+ZST qSttllstbrw   = N_("LifeLines -- List Browse Screen (* toggles menu)");
 
 /* list menu */
-ZST chlist      = SS "Commands:   j Move down     k Move up    i Select     q Quit";
-ZST vwlist      = SS "Commands:   j Move down     k Move up    q Quit";
+ZST qSchlist      = N_("Commands:   j Move down     k Move up    i Select     q Quit");
+ZST qSvwlist      = N_("Commands:   j Move down     k Move up    q Quit");
 ZST qSerrlist     = N_("Messages:");
 
 /* adding new xref */
-ZST defttl      = SS "Please choose from the following options:";
-ZST newrecis    = SS "New record is %s";
-ZST autoxref    = SS "Insert xref automatically at bottom of current record.";
-ZST editcur     = SS "Edit current record now to add xref manually.";
-ZST gotonew     = SS "Browse new record (without adding xref).";
-ZST staycur     = SS "Return to current record (without adding xref).";
+ZST qSdefttl      = N_("Please choose from the following options:");
+ZST qSnewrecis    = N_("New record is %s");
+ZST qSautoxref    = N_("Insert xref automatically at bottom of current record.");
+ZST qSeditcur     = N_("Edit current record now to add xref manually.");
+ZST qSgotonew     = N_("Browse new record (without adding xref).");
+ZST qSstaycur     = N_("Return to current record (without adding xref).");
 
 /* misc */
-ZST unksps      = SS "Spouse unknown";
-ZST nohist      = SS "No more history";
-ZST badhistcnt  = SS "Bad history count";
-ZST badhistcnt2 = SS "Bad backup history count";
-ZST badhistlen  = SS "Bad history length";
-ZST histclr     = SS "Delete history (%d entries) ?";
-ZST dataerr     = SS "Error accessing data";
-ZST idhist      = SS "Choose from history";
-ZST norwandro   = SS "Cannot combine immutable (-i) or read-only (-r) with read-write (-w) access.";
-ZST nofandl     = SS "Cannot combine forceopen (-f) and lock (-l) flags.";
-ZST idrpt       = SS "Program";
-ZST iddefpath   = SS "Default path: ";
+ZST qSunksps      = N_("Spouse unknown");
+ZST qSnohist      = N_("No more history");
+ZST qSbadhistcnt  = N_("Bad history count");
+ZST qSbadhistcnt2 = N_("Bad backup history count");
+ZST qSbadhistlen  = N_("Bad history length");
+ZST qShistclr     = N_("Delete history (%d entries) ?");
+ZST qSdataerr     = N_("Error accessing data");
+ZST qSidhist      = N_("Choose from history");
+ZST qSnorwandro   = N_("Cannot combine immutable (-i) or read-only (-r) with read-write (-w) access.");
+ZST qSnofandl     = N_("Cannot combine forceopen (-f) and lock (-l) flags.");
+ZST qSidrpt       = N_("Program");
+ZST qSiddefpath   = N_("Default path: ");
 ZST qSmisskeys    = N_("WARNING: missing keys");
 ZST qSbadkeyptr   = N_("WARNING: invalid pointer");
 ZST qSwhtfname    = N_("enter file name");
@@ -387,11 +433,12 @@ ZST qSwhtfnameext = N_("enter file name (*%s)");
 ZST qSnosuchrec   = N_("There is no record with that key or reference.");
 
 /* translation table errors */
-ZST baddec      = SS "Bad decimal number format.";
-ZST badhex      = SS "Bad hexidecimal number format.";
-ZST norplc      = SS "No replacement string on line.";
-ZST noorig      = SS "No original string on line.";
-ZST badesc      = SS "Bad escape format.";
+ZST qSbaddec      = N_("Bad decimal number format.");
+ZST qSbadhex      = N_("Bad hexidecimal number format.");
+ZST qSnorplc      = N_("No replacement string on line.");
+ZST qSnoorig      = N_("No original string on line.");
+ZST qSbadesc      = N_("Bad escape format.");
+ZST qSmaperr      = N_("%s: line %d (entry %d): %s\n");
 
 /* many menus */
 ZST qSmn_quit     = N_("q  Return to main menu");
@@ -434,20 +481,20 @@ ZST qSmn_xxaothr  = N_("5  Add an other record to the database");
 ZST qSmn_xxeothr  = N_("6  Edit other record from the database");
 
 /* end extra menu, begin character set menu */
-ZST mn_csttl    = SS "Character set menu";
-ZST mn_cstt     = SS "t  Edit translation tables";
-ZST mn_csrpt    = SS "r  Report character set setup";
-ZST mn_csintcs  = SS "Internal code set: ";
-ZST mn_csdsploc = SS "Display locale: ";
+ZST qSmn_csttl    = N_("Character set menu");
+ZST qSmn_cstt     = N_("t  Edit translation tables");
+ZST qSmn_csrpt    = N_("r  Report character set setup");
+ZST qSmn_csintcs  = N_("Internal code set: ");
+ZST qSmn_csdsploc = N_("Display locale: ");
  /* The following 5 choices look best if padded to same length (70 chars after spaces) */
-ZST mn_cstsort  = SS "s  Edit custom sort table        ";
-ZST mn_cspref   = SS "p  Edit custom sort prefix table ";
-ZST mn_cschar   = SS "c  Edit custom codepage mapping  ";
-ZST mn_cslcas   = SS "l  Edit custom lower case mapping";
-ZST mn_csucas   = SS "u  Edit custom upper case mapping";
+ZST qSmn_cstsort  = N_("s  Edit custom sort table        ");
+ZST qSmn_cspref   = N_("p  Edit custom sort prefix table ");
+ZST qSmn_cschar   = N_("c  Edit custom codepage mapping  ");
+ZST qSmn_cslcas   = N_("l  Edit custom lower case mapping");
+ZST qSmn_csucas   = N_("u  Edit custom upper case mapping");
 /* menu for report character set issues */
-ZST mn_csrpttl  = SS "Report character set menu";
-ZST mn_csrptcs  = SS "Report code set: ";
+ZST qSmn_csrpttl  = N_("Report character set menu");
+ZST qSmn_csrptcs  = N_("Report code set: ");
 
 /* &&begin translation table menu */
 ZST qSmn_tt_ttl   = N_("Translation Tables");

@@ -51,8 +51,8 @@ BOOLEAN add_metadata = FALSE;
  * external/imported variables
  *********************************************/
 
-extern STRING fileof, reremp, rerlng, rernlv, rerinc;
-extern STRING rerbln, rernwt, rerilv, rerwlv, qSunsupuni;
+extern STRING qSfileof, qSreremp, qSrerlng, qSrernlv, qSrerinc;
+extern STRING qSrerbln, qSrernwt, qSrerilv, qSrerwlv, qSunsupuni;
 
 /*********************************************
  * local types
@@ -400,13 +400,13 @@ buffer_to_line (STRING p, INT *plev, STRING *pxref
 
 	*pmsg = *pxref = *pval = 0;
 	if (!p || *p == 0) {
-		sprintf(scratch, reremp, flineno);
+		sprintf(scratch, _(qSreremp), flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
 	striptrail(p);
 	if (strlen(p) > MAXLINELEN) {
-		sprintf(scratch, rerlng, flineno);
+		sprintf(scratch, _(qSrerlng), flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
@@ -414,7 +414,7 @@ buffer_to_line (STRING p, INT *plev, STRING *pxref
 /* Get level number */
 	while (iswhite((uchar)*p)) p++;
 	if (chartype((uchar)*p) != DIGIT) {
-		sprintf(scratch, rernlv, flineno);
+		sprintf(scratch, _(qSrernlv), flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
@@ -426,26 +426,26 @@ buffer_to_line (STRING p, INT *plev, STRING *pxref
 /* Get cross reference, if there */
 	while (iswhite((uchar)*p)) p++;
 	if (*p == 0) {
-		sprintf(scratch, rerinc, flineno);
+		sprintf(scratch, _(qSrerinc), flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
 	if (*p != '@') goto gettag;
 	*pxref = p++;
 	if (*p == '@') {
-		sprintf(scratch, rerbln, flineno);
+		sprintf(scratch, _(qSrerbln), flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
 	while (*p != '@') p++;
 	p++;
 	if (*p == 0) {
-		sprintf(scratch, rerinc, flineno);
+		sprintf(scratch, _(qSrerinc), flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
 	if (!iswhite((uchar)*p)) {
-		sprintf(scratch, rernwt, flineno);
+		sprintf(scratch, _(qSrernwt), flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
@@ -455,7 +455,7 @@ buffer_to_line (STRING p, INT *plev, STRING *pxref
 gettag:
 	while (iswhite((uchar)*p)) p++;
 	if (*p == 0) {
-		sprintf(scratch, rerinc, flineno);
+		sprintf(scratch, _(qSrerinc), flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
@@ -544,7 +544,7 @@ first_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
 	rc = file_to_line(fp, tt, &lev, &xref, &tag, &val, pmsg);
 	if (rc == DONE) {
 		*peof = ateof = TRUE;
-		*pmsg = fileof;
+		*pmsg = _(qSfileof);
 		return NULL;
 	} else if (rc == ERROR)
 		return NULL;
@@ -589,7 +589,7 @@ next_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
 	*peof = FALSE;
 	if (ateof) {
 		ateof = *peof = TRUE;
-		*pmsg = fileof;
+		*pmsg = _(qSfileof);
 		lahead = FALSE;
 		return NULL;
 	}
@@ -597,7 +597,7 @@ next_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
 		rc = file_to_line(fp, tt, &lev, &xref, &tag, &val, pmsg);
 		if (rc == DONE) {
 			ateof = *peof = TRUE;
-			*pmsg = fileof;
+			*pmsg = _(qSfileof);
 			return NULL;
 		} else if (rc == ERROR)
 			return NULL;
@@ -605,7 +605,7 @@ next_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
 	}
 	curlev = lev;
 	if (curlev != lev0)  {
-		*pmsg = rerwlv;
+		*pmsg = _(qSrerwlv);
 		return NULL;
 	}
 	root = curnode = create_node(xref, tag, val, NULL);
@@ -627,7 +627,7 @@ next_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
 			curlev = lev;
 		} else if (lev < curlev) {
 			if (lev < lev0) {
-				sprintf(scratch, rerilv, flineno);
+				sprintf(scratch, _(qSrerilv), flineno);
 				*pmsg = scratch;
 				bcode = ERROR;
 				break;
@@ -644,7 +644,7 @@ next_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
 			nsibling(curnode) = node;
 			curnode = node;
 		} else {
-			sprintf(scratch, rerilv, flineno);
+			sprintf(scratch, _(qSrerilv), flineno);
 			*pmsg = scratch;
 			bcode = ERROR;
 			break;

@@ -66,9 +66,9 @@ extern STRING qSids2fm, qSidc2fm, qSidplst, qSidp2br, qScrtcfm, qScrtsfm;
 extern STRING qSronlye, qSronlya, qSidhbrs, qSidwbrs;
 extern STRING qSid1sbr, qSid2sbr, qSid1fbr, qSid2fbr, qSid1cbr, qSid2cbr;
 extern STRING qSid1hbr, qSid2hbr, qSid1wbr, qSid2wbr;
-extern STRING qSspover, qSidfamk, nohist, idhist, histclr;
-extern STRING tag2long2cnc,newrecis,autoxref,editcur,gotonew,staycur;
-extern STRING badhistcnt,badhistcnt2,badhistlen;
+extern STRING qSspover, qSidfamk, qSnohist, qSidhist, qShistclr;
+extern STRING qStag2lng2cnc,qSnewrecis,qSautoxref,qSeditcur,qSgotonew,qSstaycur;
+extern STRING qSbadhistcnt,qSbadhistcnt2,qSbadhistlen;
 
 /*********************************************
  * local enums & defines
@@ -928,8 +928,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 				if((node = qkeynum_to_fam(i))) {
 					fam = node;
 				} else {
-					STRING unknfam = _("No such family.");
-					message(unknfam);
+					message(_(qSnofam));
 				}
 			}
 			break;
@@ -1361,17 +1360,17 @@ load_nkey_list (STRING key, struct hist * histp)
 	temp = *ptr++;
 	if (temp<1 || temp > 9999) {
 		/* #records failed sanity check */
-		msg_error(badhistcnt);
+		msg_error(_(qSbadhistcnt));
 		goto end;
 	}
 	if (temp != *ptr++) {
 		/* 2nd copy of #records failed to match */
-		msg_error(badhistcnt2);
+		msg_error(_(qSbadhistcnt2));
 		goto end;
 	}
 	if (len != (temp+1)*8) {
 		/* length should be 8 bytes per record + 8 byte header */
-		msg_error(badhistlen);
+		msg_error(_(qSbadhistlen));
 	}
 	count = temp;
 	if (count > histp->size) count = histp->size;
@@ -1553,7 +1552,7 @@ history_list (struct hist * histp)
 	NODE node;
 	INT next, prev;
 	if (!histp->size || histp->start==-1) {
-		message(nohist);
+		message(_(qSnohist));
 		return NULL;
 	}
 	/* add all items of history to seq */
@@ -1571,7 +1570,7 @@ history_list (struct hist * histp)
 		if (next == histp->past_end)
 			break; /* finished them all */
 	}
-	node = nztop(choose_from_indiseq(seq, DOASK1, idhist, idhist));
+	node = nztop(choose_from_indiseq(seq, DOASK1, _(qSidhist), _(qSidhist)));
 	remove_indiseq(seq);
 	return node;
 }
@@ -1587,11 +1586,11 @@ ask_clear_history (struct hist * histp)
 	INT count;
 
 	if (!histp->size || histp->start==-1) {
-		message(nohist);
+		message(_(qSnohist));
 		return;
 	}
 	count = get_hist_count(histp);
-	sprintf(buffer, histclr, count);
+	sprintf(buffer, _(qShistclr), count);
 	if (ask_yes_or_no(buffer))
 		histp->start = -1;
 }
@@ -1612,7 +1611,7 @@ handle_history_cmds (INT c, NODE * pindi1)
 			*pindi1 = node;
 			return -1; /* handled, change pages */
 		}
-		message(nohist);
+		message(_(qSnohist));
 		return 1; /* handled, stay here */
 	}
 	if (c == CMD_HISTORY_FWD) {
@@ -1621,7 +1620,7 @@ handle_history_cmds (INT c, NODE * pindi1)
 			*pindi1 = node;
 			return -1; /* handled, change pages */
 		}
-		message(nohist);
+		message(_(qSnohist));
 		return 1; /* handled, stay here */
 	}
 	if (c == CMD_HISTORY_LIST) {
@@ -1667,18 +1666,18 @@ add_new_rec_maybe_ref (NODE node, char ntype)
 		return NULL;
 	/* sanity check for long tags in others */
 	if (strlen(ntag(newnode))>40) {
-		msg_info(tag2long2cnc);
+		msg_info(_(qStag2lng2cnc));
 		return newnode;
 	}
 	/* now ask the user how to connect the new node */
-	sprintf(title, newrecis, nxref(newnode));
+	sprintf(title, _(qSnewrecis), nxref(newnode));
 	msg_info(title);
 	/* keep new node # in status so it will be visible during edit */
 	lock_status_msg(TRUE);
-	choices[0] = autoxref;
-	choices[1] = editcur;
-	choices[2] = gotonew;
-	choices[3] = staycur;
+	choices[0] = _(qSautoxref);
+	choices[1] = _(qSeditcur);
+	choices[2] = _(qSgotonew);
+	choices[3] = _(qSstaycur);
 	rtn = choose_from_array(NULL, 4, choices);
 	lock_status_msg(FALSE);
 	switch(rtn) {

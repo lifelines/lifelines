@@ -61,7 +61,8 @@
  *********************************************/
 
 extern STRING qSidldir,qSidldrp,qSnodbse,qScrdbse,qSiddbse;
-extern STRING mtitle,norwandro,nofandl,qSbdlkar;
+extern STRING qSmtitle,qSnorwandro,qSnofandl,qSbdlkar;
+extern STRING qSusgFinnOpt,qSusgFinnAlw,qSusgNorm;
 
 extern INT csz_indi, icsz_indi;
 extern INT csz_fam, icsz_fam;
@@ -77,30 +78,9 @@ extern BTREE BTR;
  * required global variables
  *********************************************/
 
-/* Finnish language support modifies the soundex codes for names, so
- * a database created with this support is not compatible with other
- * databases. 
- *
- * define FINNISH for Finnish Language support
- *
- * define FINNISHOPTION to have a runtime option -F which will enable
- * 	  	Finnish language support, but you risk corrupting your
- * 	  	database if you make modifications while in the wrong mode.
- */
 
-#ifdef FINNISH
-# ifdef FINNISHOPTION
-int opt_finnish  = FALSE;/* Finnish Language sorting order if TRUE */
-static STRING usage = (STRING) "lines [-adkrwifmntcuFyxo] [database]   # Use -F for Finnish database";
-# else
-int opt_finnish  = TRUE;/* Finnish Language sorting order if TRUE */
-static STRING usage = (STRING) "lines [-adkrwifmntcuyxo] [database]   # Finnish database";
-# endif
-#else
-int opt_finnish  = FALSE;/* Finnish Language sorting order id disabled*/
-static STRING usage = (STRING) "lines [-adkrwifmntcuyxo] [database]";
-#endif
-
+static STRING usage = "";      /* usage string */
+int opt_finnish  = FALSE;      /* Finnish Language sorting order if TRUE */
 BOOLEAN debugmode = FALSE;     /* no signal handling, so we can get coredump */
 BOOLEAN opt_nocb  = FALSE;     /* no cb. data is displayed if TRUE */
 BOOLEAN keyflag   = TRUE;      /* show key values */
@@ -123,7 +103,9 @@ STRING  readpath = NULL;       /* database path used to open */
  * local function prototypes
  *********************************************/
 
+/* alphabetical */
 static BOOLEAN is_unadorned_directory(STRING path);
+static void load_usage(void);
 static BOOLEAN open_or_create_database(INT alteration, STRING dbrequested
 	, STRING *dbused);
 static void platform_init(void);
@@ -157,6 +139,7 @@ main (INT argc, char **argv)
 	BOOLEAN graphical=TRUE;
 
 	initlocale();
+	load_usage();
 
 #if ENABLE_NLS
 	bindtextdomain(PACKAGE, LOCALEDIR);
@@ -295,11 +278,11 @@ main (INT argc, char **argv)
 
 	/* Validate Command-Line Arguments */
 	if ((readonly || immutable) && writeable) {
-		llwprintf(norwandro);
+		llwprintf(_(qSnorwandro));
 		goto finish;
 	}
 	if (forceopen && lockchange) {
-		llwprintf(nofandl);
+		llwprintf(_(qSnofandl));
 		goto finish;
 	}
 	if (lockchange && lockarg != 'y' && lockarg != 'n') {
@@ -422,7 +405,8 @@ platform_init (void)
 {
 #ifdef WIN32
 	char buffer[80];
-	sprintf(buffer, mtitle, get_lifelines_version(sizeof(buffer)-1-strlen(mtitle)));
+	STRING title = _(qSmtitle);
+	sprintf(buffer, title, get_lifelines_version(sizeof(buffer)-1-strlen(title)));
 	wtitle(buffer);
 #endif
 }
@@ -490,4 +474,32 @@ open_or_create_database (INT alteration, STRING dbrequested, STRING *dbused)
 
 	show_open_error(bterrno);
 	return FALSE;
+}
+
+/* Finnish language support modifies the soundex codes for names, so
+ * a database created with this support is not compatible with other
+ * databases. 
+ *
+ * define FINNISH for Finnish Language support
+ *
+ * define FINNISHOPTION to have a runtime option -F which will enable
+ * 	  	Finnish language support, but the name indices will all be
+ *      wrong if you make modifications whilst in the wrong mode.
+ */
+
+static void
+load_usage (void)
+{
+#ifdef FINNISH
+# ifdef FINNISHOPTION
+	opt_finnish  = FALSE;/* Finnish Language sorting order if TRUE */
+	usage = _(qSusgFinnOpt);
+# else
+	opt_finnish  = TRUE;/* Finnish Language sorting order if TRUE */
+	usage = _(qSusgFinnAlw);
+# endif
+#else
+	opt_finnish  = FALSE;/* Finnish Language sorting order id disabled*/
+	usage = _(qSusgNorm);
+#endif
 }

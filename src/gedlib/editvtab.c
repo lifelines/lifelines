@@ -38,7 +38,7 @@
 #include "feedback.h"
 #include "bfs.h"
 
-extern STRING qSaredit,dataerr,qSsepch;
+extern STRING qSaredit,qSdataerr,qSsepch;
 
 static STRING trans_edin(STRING input, INT len);
 static STRING trans_ined(STRING input, INT len);
@@ -69,7 +69,7 @@ edit_valtab (STRING key, TABLE *ptab, INT sep, STRING ermsg)
 	unlink(editfile);
 
 	if (retrieve_to_textfile(key, editfile, trans_ined) == RECORD_ERROR) {
-		msg_error(dataerr);
+		msg_error(_(qSdataerr));
 		return FALSE;
 	}
 	do_edit();

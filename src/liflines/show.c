@@ -62,8 +62,8 @@ extern INT MAINWIN_WIDTH;
 extern INT listbadkeys;
 extern char badkeylist[];
 extern STRING qSmisskeys;
-extern STRING dspl_indi,dspl_fath,dspl_moth,dspl_spouse,dspl_child;
-extern STRING dspa_resi,qSdspa_div;
+extern STRING qSdspl_indi,qSdspl_fath,qSdspl_moth,qSdspl_spouse,qSdspl_child;
+extern STRING qSdspa_resi,qSdspa_div;
 extern STRING qSdspa_mar,qSdspa_bir,qSdspa_chr,qSdspa_dea,qSdspa_bur,qSdspa_chbr;
 extern STRING qSdspl_mar,qSdspl_bir,qSdspl_chr,qSdspl_dea,qSdspl_bur;
 
@@ -194,7 +194,7 @@ init_display_indi (NODE pers, INT width)
 	fth = indi_to_fath(pers);
 	mth = indi_to_moth(pers);
 	s = indi_to_name(pers, ttd, width-20);
-	snprintf(Spers, liwidth, "%s: %s ", dspl_indi, s);
+	snprintf(Spers, liwidth, "%s: %s ", _(qSdspl_indi), s);
 	if((num = strlen(s)) < width-30) {
 	    t = indi_to_title(pers, ttd, width-20 - num - 3);
 	    if(t) sprintf(Spers+strlen(Spers), "[%s] ", t);
@@ -210,7 +210,8 @@ init_display_indi (NODE pers, INT width)
 	if(strchr(Sbirt, ',') == 0) {
 		num = strlen(Sbirt);
 		if(num < width-30) {
-			s = sh_indi_to_event_long(pers, ttd, "RESI", dspa_resi, (width-3)-num-5);
+			s = sh_indi_to_event_long(pers, ttd, "RESI", _(qSdspa_resi)
+				, (width-3)-num-5);
 			if(s) {
 				if(num < 8) strcat(Sbirt, s+1);
 				else {
@@ -227,12 +228,12 @@ init_display_indi (NODE pers, INT width)
 	else sprintf(Sdeat, "  %s", _(qSdspl_dea));
 
 	s = person_display(fth, NULL, width-13);
-	if (s) snprintf(Sfath, liwidth, "  %s: %s", dspl_fath, s);
-	else snprintf(Sfath, liwidth, "  %s:", dspl_fath);
+	if (s) snprintf(Sfath, liwidth, "  %s: %s", _(qSdspl_fath), s);
+	else snprintf(Sfath, liwidth, "  %s:", _(qSdspl_fath));
 
 	s = person_display(mth, NULL, width-13);
-	if (s) snprintf(Smoth, liwidth, "  %s: %s", dspl_moth, s);
-	else snprintf(Smoth, liwidth, "  %s:", dspl_moth);
+	if (s) snprintf(Smoth, liwidth, "  %s: %s", _(qSdspl_moth), s);
+	else snprintf(Smoth, liwidth, "  %s:", _(qSdspl_moth));
 
 	Solen = 0;
 	nsp = nch = 0;
@@ -327,7 +328,7 @@ add_spouse_line (INT num, NODE indi, NODE fam, INT width)
 	if (Solen >= MAXOTHERS) return;
 	if (mylen>width) mylen=width;
 	llstrcatn(&ptr, " ", &mylen);
-	llstrcatn(&ptr, dspl_spouse, &mylen);
+	llstrcatn(&ptr, _(qSdspl_spouse), &mylen);
 	llstrcatn(&ptr, ": ", &mylen);
 	line = person_display(indi, fam, mylen-1);
 	llstrcatn(&ptr, line, &mylen);
@@ -340,12 +341,13 @@ static void
 add_child_line (INT num, NODE indi, INT width)
 {
 	STRING line;
+	STRING child = _(qSdspl_child);
 	if (Solen >= MAXOTHERS) return;
 	line = person_display(indi, NULL, width-15);
 	if (number_child_enable)
-		snprintf(Sothers[Solen], liwidth, "  %2d%s: %s", num, dspl_child, line);
+		snprintf(Sothers[Solen], liwidth, "  %2d%s: %s", num, child, line);
 	else
-		snprintf(Sothers[Solen], liwidth, "    %s: %s", dspl_child, line);
+		snprintf(Sothers[Solen], liwidth, "    %s: %s", child, line);
 	Sothers[Solen++][width-2] = 0;
 }
 /*==============================================
@@ -359,17 +361,19 @@ init_display_fam (NODE fam, INT width)
 	STRING s, ik, fk;
 	INT len, nch, nm, wtemp;
 	TRANTABLE ttd = tran_tables[MINDS];
+	STRING mother = _(qSdspl_moth);
+	STRING father = _(qSdspl_fath);
 	ASSERT(fam);
 	husb = fam_to_husb(fam);
 	wife = fam_to_wife(fam);
 	fk = key_of_record(fam, ttd);
 	if (husb) {
 		ik = key_of_record(husb, ttd);
-		len = liwidth - (10 + strlen(dspl_fath) + strlen(ik) + strlen(fk));
+		len = liwidth - (10 + strlen(father) + strlen(ik) + strlen(fk));
 		s = indi_to_name(husb, ttd, len);
-		snprintf(Shusb, liwidth, "%s: %s (%s) (%s)", dspl_fath, s, ik, fk);
+		snprintf(Shusb, liwidth, "%s: %s (%s) (%s)", father, s, ik, fk);
 	} else
-		snprintf(Shusb, liwidth, "%s: (%s)", dspl_fath, fk);
+		snprintf(Shusb, liwidth, "%s: (%s)", father, fk);
 
 	s = sh_indi_to_event_long(husb, ttd, "BIRT", _(qSdspl_bir), width-3);
 	if (!s) s = sh_indi_to_event_long(husb, ttd, "CHR", _(qSdspl_chr), width-3);
@@ -383,11 +387,11 @@ init_display_fam (NODE fam, INT width)
 
 	if (wife) {
 		ik = key_of_record(wife, ttd);
-		len = width - (7 + strlen(dspl_moth) + strlen(ik));
+		len = width - (7 + strlen(mother) + strlen(ik));
 		s = indi_to_name(wife, ttd, len);
-		snprintf(Swife, liwidth, "%s: %s (%s)", dspl_moth, s, ik);
+		snprintf(Swife, liwidth, "%s: %s (%s)", mother, s, ik);
 	} else
-		snprintf(Swife, liwidth, "%s:", dspl_moth);
+		snprintf(Swife, liwidth, "%s:", mother);
 
 	s = sh_indi_to_event_long(wife, ttd, "BIRT", _(qSdspl_bir), width-3);
 	if (!s) s = sh_indi_to_event_long(wife, ttd, "CHR", _(qSdspl_chr), width-3);

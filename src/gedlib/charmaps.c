@@ -54,7 +54,7 @@ char *map_keys[] = {
  * external/imported variables
  *********************************************/
 
-extern STRING baddec,badhex,norplc,badesc,noorig;
+extern STRING qSbaddec,qSbadhex,qSnorplc,qSbadesc,qSnoorig,qSmaperr;
 
 /*********************************************
  * local enums & defines
@@ -268,7 +268,7 @@ init_map_from_str (STRING str, INT indx, TRANTABLE * ptt)
 					*p++ = newc;
 					str += 3;
 				} else {
-					maperror(indx, entry, line, baddec);
+					maperror(indx, entry, line, _(qSbaddec));
 					goto fail;
 				}
 			} else if (c == '$') {
@@ -277,20 +277,20 @@ init_map_from_str (STRING str, INT indx, TRANTABLE * ptt)
 					*p++ = newc;
 					str += 2;
 				} else {
-					maperror(indx, entry, line, badhex);
+					maperror(indx, entry, line, _(qSbadhex));
 					goto fail;
 				}
 			} else if ((c == '\n') || (c == '\r'))   {
-				maperror(indx, entry, line, norplc);
+				maperror(indx, entry, line, _(qSnorplc));
 				goto fail;
 			} else if (c == 0) {
-				maperror(indx, entry, line, norplc);
+				maperror(indx, entry, line, _(qSnorplc));
 				goto fail;
 			} else if (c == '\\') {
 				c = *str++;
 				if (c == '\t' || c == 0 || c == '\n'
 				    || c == '\r') {
-					maperror(indx, entry, line, badesc);
+					maperror(indx, entry, line, _(qSbadesc));
 					goto fail;
 				}
 				*p++ = c;
@@ -301,7 +301,7 @@ init_map_from_str (STRING str, INT indx, TRANTABLE * ptt)
 		}
 		*p = 0;
 		if (!scratch[0]) {
-				maperror(indx, entry, line, noorig);
+				maperror(indx, entry, line, _(qSnoorig));
 				goto fail;
 		}
 		lefts[n] = strsave(scratch);
@@ -314,7 +314,7 @@ init_map_from_str (STRING str, INT indx, TRANTABLE * ptt)
 					*p++ = newc;
 					str += 3;
 				} else {
-					maperror(indx, entry, line, baddec);
+					maperror(indx, entry, line, _(qSbaddec));
 					goto fail;
 				}
 			} else if (c == '$') {
@@ -323,7 +323,7 @@ init_map_from_str (STRING str, INT indx, TRANTABLE * ptt)
 					*p++ = newc;
 					str += 2;
 				} else {
-					maperror(indx, entry, line, badhex);
+					maperror(indx, entry, line, _(qSbadhex));
 					goto fail;
 				}
 			} else if (c == '\n') {
@@ -337,7 +337,7 @@ init_map_from_str (STRING str, INT indx, TRANTABLE * ptt)
 				c = *str++;
 				if (c == '\t' || c == 0 || c == '\n'
 				    || c == '\r') {
-					maperror(indx, entry, line, badesc);
+					maperror(indx, entry, line, _(qSbadesc));
 					goto fail;
 				}
 				if (c == 't') c='\t'; /* "\t" -> tab */
@@ -425,5 +425,5 @@ hexvalue (INT c)
 void
 maperror (INT indx, INT entry, INT line, STRING errmsg)
 {
-	llwprintf("%s: line %d (entry %d): %s\n", map_names[indx], line, entry, errmsg);
+	llwprintf(_(qSmaperr), map_names[indx], line, entry, errmsg);
 }

@@ -70,7 +70,7 @@ BOOLEAN rpt_cancelled = FALSE;
 
 extern BOOLEAN progrunning, progparsing;
 extern INT progerror;
-extern STRING qSwhatrpt,idrpt;
+extern STRING qSwhatrpt,qSidrpt;
 extern STRING nonrecx;
 
 /*********************************************
@@ -134,20 +134,21 @@ progmessage (MSG_LEVEL level, STRING msg)
 	INT mylen=sizeof(buf);
 	INT maxwidth = msg_width();
 	INT msglen = strlen(msg);
+	STRING program = _(qSidrpt);
 	if (maxwidth >= 0 && maxwidth < mylen)
 		mylen = maxwidth;
 	if(progname && *progname && msglen+20 < maxwidth) {
 		INT len = 99999;
 		if (msg_width() >= 0) {
-			len = sizeof(buf)-strlen(idrpt)-1-1-msglen;
+			len = sizeof(buf)-strlen(program)-1-1-msglen;
 		}
-		llstrcatn(&ptr, idrpt, &mylen);
+		llstrcatn(&ptr, program, &mylen);
 		llstrcatn(&ptr, " ", &mylen);
 		llstrcatn(&ptr, compress_path(progname, len), &mylen);
 		llstrcatn(&ptr, " ", &mylen);
 		llstrcatn(&ptr, msg, &mylen);
 	} else {
-		llstrcatn(&ptr, idrpt, &mylen);
+		llstrcatn(&ptr, program, &mylen);
 		llstrcatn(&ptr, msg, &mylen);
 	}
 	msg_output(level, buf);

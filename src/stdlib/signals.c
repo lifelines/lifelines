@@ -42,32 +42,66 @@
 
 #include "stdlibi.h"
 
-char *sig_msgs[] = {
-	N_("SIGNAL 0"),
-	N_("HANGUP"),
-	N_("INTERRUPT"),
-	N_("QUIT"),
-	N_("ILLEGAL INSTRUCTION"),
-	N_("TRACE TRAP"),
-	N_("ABORT"),
-	N_("EMT INST"),
-	N_("FLOATING POINT EXCEPTION"),
-	N_("KILL"),
-	N_("BUS ERROR"),
-	N_("SEGMENTATION ERROR"),
-	N_("SYSTEM CALL ERROR"),
-	N_("PIPE WRITE"),
-	N_("ALARM CLOCK"),
-	N_("TEMINATE FROM KILL"),
-	N_("USER SIGNAL 1"),
-	N_("USER SIGNAL 2"),
-	N_("DEATH OF CHILD"),
-	N_("POWER-FAIL RESTART"),
-	N_("WINDOW CHANGE"),
-};
 
+/*********************************************
+ * external/imported variables
+ *********************************************/
+extern STRING qScoredump, qSprogsig, qSsignal,qSsigunk;
+extern STRING qSsig00, qSsig01, qSsig02, qSsig03, qSsig04;
+extern STRING qSsig05, qSsig06, qSsig07, qSsig08, qSsig09;
+extern STRING qSsig10, qSsig11, qSsig12, qSsig13, qSsig14;
+extern STRING qSsig15, qSsig16, qSsig17, qSsig18, qSsig19;
+extern STRING qSsig20;
+extern STRING qSaskyY;
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+/* alphabetical */
+static BOOLEAN is_yes(INT ch);
+static void load_signames(void);
 static void on_signals(int);
 
+/*********************************************
+ * local variables
+ *********************************************/
+
+static char *sig_msgs[20];
+
+/*********************************************
+ * local & exported function definitions
+ * body of module
+ *********************************************/
+
+/*======================================
+ * load_signames -- Load descriptive signal names
+ *====================================*/
+static void
+load_signames (void)
+{
+	sig_msgs[ 0] = _(qSsig00);
+	sig_msgs[ 1] = _(qSsig01);
+	sig_msgs[ 2] = _(qSsig02);
+	sig_msgs[ 3] = _(qSsig03);
+	sig_msgs[ 4] = _(qSsig04);
+	sig_msgs[ 5] = _(qSsig05);
+	sig_msgs[ 6] = _(qSsig06);
+	sig_msgs[ 7] = _(qSsig07);
+	sig_msgs[ 8] = _(qSsig08);
+	sig_msgs[ 9] = _(qSsig09);
+	sig_msgs[10] = _(qSsig10);
+	sig_msgs[11] = _(qSsig11);
+	sig_msgs[12] = _(qSsig12);
+	sig_msgs[13] = _(qSsig13);
+	sig_msgs[14] = _(qSsig14);
+	sig_msgs[15] = _(qSsig15);
+	sig_msgs[16] = _(qSsig16);
+	sig_msgs[17] = _(qSsig17);
+	sig_msgs[18] = _(qSsig18);
+	sig_msgs[19] = _(qSsig19);
+	sig_msgs[20] = _(qSsig20);
+};
 /*======================================
  * set_signals -- Install signal handler
  *====================================*/
@@ -109,15 +143,16 @@ on_signals (int sig)
 	char msg[100], signum[20];
 	STRING signame;
 
+	/* Ok, we'll want the descriptive name of the signal */
+	load_signames();
+
 	/* We don't know whether curses is up or not right now */
 	/* so we build the report msg, then close curses, then print it */
 
 	if (progrunning) {
 		char line[20];
 		snprintf(line, sizeof(line), "%d", iline(Pnode));
-		sprintpic2(msg, sizeof(msg)
-			, _("Looks like a program was running.\nCheck file %1 around line %2.\n")
-			, ifname(Pnode), line);
+		sprintpic2(msg, sizeof(msg), _(qSprogsig), ifname(Pnode), line);
 	}
 
 	close_lifelines();
@@ -131,9 +166,8 @@ on_signals (int sig)
 	if (sig>=0 && sig<=ARRSIZE(sig_msgs))
 		signame = sig_msgs[sig];
 	else
-		signame = N_("Unknown signal");
-	sprintpic2(msg, sizeof(msg), _("signal %1: %2"), signum
-		, _(signame)); 
+		signame = _(qSsigunk);
+	sprintpic2(msg, sizeof(msg), qSsignal, signum, signame); 
 	ll_abort(msg);
 }
 /*================================
@@ -143,15 +177,31 @@ on_signals (int sig)
 void
 ll_abort (STRING sigdesc)
 {
-	int c;
+	INT ch;
 	if (sigdesc)
 		printf(sigdesc);
-	printf(_("\nAborting now. Core dump? [y/n]"));
+	printf(_(qScoredump));
 	fflush(stdout);
-	c = getchar();
-	putchar(c);
+
 	/* TODO: how do we i18n this ? This getchar assumes that 
 	the answer is one byte */
-	if((c == 'y') || (c == 'Y')) abort();
-	exit(1);
+
+	ch = getchar();
+	putchar(ch);
+	if (is_yes(ch))
+		abort();
+	else
+		exit(1);
+}
+/*==================================================
+ * is_yes -- is this an abbreviated yes answer ?
+ *=================================================*/
+static BOOLEAN
+is_yes (INT ch)
+{
+	STRING ptr;
+	for (ptr = _(qSaskyY); *ptr; ptr++) {
+		if (ch == *ptr) return TRUE;
+	}
+	return FALSE;
 }
