@@ -47,16 +47,13 @@ edit_mapping (INT ttnum)
 	}
 	do_edit();
 	while (TRUE) {
-		char buffer[128], temp[64];
+		char buffer[128];
 		STRING ptr=buffer;
 		INT mylen = sizeof(buffer);
 		if (load_new_tt(editfile, ttnum))
 			return TRUE;
-		ptr[0] = 0;
-		llstrcatn(&ptr, cmperr, &mylen);
-		llstrcatn(&ptr, " ", &mylen);
-		snprintf(temp, sizeof(temp), sepch, "<tab>"); /* (separator is %s) */
-		llstrcatn(&ptr, temp, &mylen);
+		appendstrf(&ptr, &mylen, "%s ", cmperr);
+		appendstrf(&ptr, &mylen, sepch, "<tab>"); /* (separator is %s) */
 		if (ask_yes_or_no_msg(buffer, aredit))
 			do_edit();
 		else {
