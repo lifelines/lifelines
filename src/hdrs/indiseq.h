@@ -96,7 +96,6 @@ INDISEQ fam_to_children(NODE);
 INDISEQ fam_to_fathers(NODE);
 INDISEQ fam_to_mothers(NODE);
 INDISEQ find_named_seq(STRING);
-void gen_gedcom(INDISEQ, INT gegedcl); // Perry
 INDISEQ get_all_even(void);
 INDISEQ get_all_othe(void);
 INDISEQ get_all_sour(void);
