@@ -30,6 +30,7 @@
  *===========================================================*/
 
 #include "standard.h"
+#include "llstdlib.h"
 
 /*===========================
  * create_list -- Create list
@@ -75,7 +76,7 @@ remove_list (LIST list,
 BOOLEAN
 in_list (LIST list,
          WORD el,
-         int (*func)(WORD, WORD))
+         int (*func)(PVALUE, PVALUE))
 {
 	LNODE lnode;
 	if (!list) return FALSE;

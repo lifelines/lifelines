@@ -29,11 +29,6 @@
  *===========================================================*/
 
 #include "standard.h"
-
-#ifndef OS_NOCTYPE
-#include <ctype.h>
-#endif
-
 #include "mystring.h"
 
 extern BOOLEAN opt_finnish;

@@ -452,8 +452,7 @@ my_strncmp (const unsigned char *s1,
 /* Change this to 1 if you want to test mystring and */
 /* compile the progam, e.g. 'cc -I../hdrs mystring.c -o m'.  */
 #if 0
-#include <stdio.h>
-#include <stdlib.h>
+#include "sys_inc.h"
 
 int
 cmp (const void *s,

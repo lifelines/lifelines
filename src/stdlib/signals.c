@@ -39,7 +39,7 @@
 #include "interp.h"
 #include "liflines.h"
 #include "screen.h"
-#include "signals.h"
+#include "stdlibi.h"
 
 char *sig_msgs[] = {
 	"SIGNAL 0",
