@@ -101,8 +101,13 @@ typedef union {
 
 /*typedef WORD (*FUNC)();*/
 
+#ifndef max
 #define max(x,y) ((x)>(y)?(x):(y))
+#endif
+
+#ifndef min
 #define min(x,y) ((x)>(y)?(y):(x))
+#endif
 
 #ifndef NULL
 #	define NULL 0
