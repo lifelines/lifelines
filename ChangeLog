@@ -1,4 +1,6 @@
-2005-02-01 Perry Rapp
+2005-01-31 lifelines beta 3.0.41 RELEASE
+
+2005-01-31 Perry Rapp
 
 	* ChangeLog build/msvc6/btedit/bteditCmd.dsp
 	build/msvc6/dbverify/dbverifyCmd.dsp
