@@ -99,13 +99,19 @@ typedef INT ASK1Q;
 #define SEX_FEMALE  2
 #define SEX_UNKNOWN 3
 
-#define BROWSE_INDI 1
-#define BROWSE_FAM  2
-#define BROWSE_PED  3
-#define BROWSE_TAND 4
-#define BROWSE_QUIT 5
-#define BROWSE_2FAM 6
-#define BROWSE_LIST 7
+enum {
+	BROWSE_INDI
+	, BROWSE_FAM
+	, BROWSE_PED
+	, BROWSE_TAND
+	, BROWSE_QUIT
+	, BROWSE_2FAM
+	, BROWSE_LIST
+	, BROWSE_AUX
+	, BROWSE_EVEN
+	, BROWSE_SOUR
+	, BROWSE_UNK
+};
 
 #define MEDIN 0
 #define MINED 1
@@ -154,6 +160,7 @@ NODE choose_father(NODE, NODE, STRING, STRING, ASK1Q);
 NODE choose_family(NODE, STRING, STRING, BOOLEAN);
 NODE choose_mother(NODE, NODE, STRING, STRING, ASK1Q);
 NODE choose_note(NODE what, STRING msg0, STRING msgn);
+NODE choose_pointer(NODE what, STRING msg0, STRING msgn);
 NODE choose_source(NODE what, STRING msg0, STRING msgn);
 NODE choose_spouse(NODE, STRING, STRING);
 void classify_nodes(NODE*, NODE*, NODE*);

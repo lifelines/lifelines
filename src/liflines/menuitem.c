@@ -173,6 +173,7 @@ static MenuItem f_MenuItemAddToList = { "a  Add to this list", "a", CMD_NONE };
 static MenuItem f_MenuItemSwapMarkCurrent = { "x  Swap mark/current", "x", CMD_NONE };
 static MenuItem f_MenuItemSources = { "$s  List sources", "$s", CMD_SOURCES };
 static MenuItem f_MenuItemNotes = { "$n  List notes", "$n", CMD_NOTES };
+static MenuItem f_MenuItemPointers = { "$$  List references", "$$", CMD_POINTERS };
 /*
 static MenuItemOption f_MenuItemOptionSources =
 	{ "$s  show sources", "$s  hide sources", "$S", CMD_SHOWSOURCES };
@@ -226,6 +227,7 @@ static MenuItem * f_MenuPerson[] =
 	&f_MenuItemShrinkMenu,
 	&f_MenuItemSources,
 	&f_MenuItemNotes,
+	&f_MenuItemPointers,
 	&f_MenuItemNext,
 	&f_MenuItemPrev,
 	0
@@ -268,6 +270,8 @@ static MenuItem * f_MenuFamily[] =
 	&f_MenuItemEnlargeMenu,
 	&f_MenuItemShrinkMenu,
 	&f_MenuItemSources,
+	&f_MenuItemNotes,
+	&f_MenuItemPointers,
 	&f_MenuItemNext,
 	&f_MenuItemPrev,
 	0
@@ -349,6 +353,8 @@ static MenuItem * f_MenuAux[] =
 	&f_MenuItemShrinkMenu,
 	&f_MenuItemModeGedcom,
 	&f_MenuItemModeGedcomX,
+	&f_MenuItemNotes,
+	&f_MenuItemPointers,
 	&f_MenuItemNext,
 	&f_MenuItemPrev,
 	0

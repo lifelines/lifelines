@@ -121,6 +121,8 @@ STRING noothe = SS "No others present.";
 STRING idothe = SS "Please choose the other to view.";
 STRING nonote = SS "No notes present.";
 STRING idnote = SS "Please choose the note to view.";
+STRING noptr  = SS "No references present.";
+STRING idptr  = SS "Please choose the reference to view.";
 STRING duprfn = SS "Duplicated REFN - please choose.";
 
 STRING nosex  = SS "New spouse/parent has unknown sex; can't add to family.";

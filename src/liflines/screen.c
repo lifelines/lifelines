@@ -99,26 +99,26 @@ extern STRING askynq, askynyn, askyny;
  *********************************************/
 
 static INDISEQ indiseq_list_interact(WINDOW *win, STRING ttl, INDISEQ seq);
-static void add_menu (void);
-static void create_windows (void);
-static void del_menu (void);
-static void extra_menu (void);
-static void init_all_windows (void);
+static NODE add_menu(void);
+static void create_windows(void);
+static void del_menu(void);
+static INT extra_menu(void);
+static void init_all_windows(void);
 static INT update_menu(INT screen);
 static void show_indi_mode(NODE indi, INT mode, INT row, INT hgt);
 static void show_fam_mode(NODE fam, INT mode, INT row, INT hgt, INT width);
-static void scan_menu (void);
-static void trans_menu (void);
-static void utils_menu (void);
-static void win_list_init (void);
+static NOD0 scan_menu(void);
+static void trans_menu(void);
+static void utils_menu(void);
+static void win_list_init(void);
 static void shw_list(WINDOW *win, INDISEQ seq, INT len0, INT top, INT cur, INT *scroll);
-static void place_std_msg (void);
-static void clearw (void);
-static void place_cursor (void);
+static void place_std_msg(void);
+static void clearw(void);
+static void place_cursor(void);
 static INT interact(WINDOW *win, STRING str, INT screen);
 static INT list_interact(WINDOW *win, STRING ttl, INT len, STRING *strings);
-static void vmprintf (STRING fmt, va_list args);
-static INT indiseq_interact (WINDOW *win, STRING ttl, INDISEQ seq);
+static void vmprintf(STRING fmt, va_list args);
+static INT indiseq_interact(WINDOW *win, STRING ttl, INDISEQ seq);
 static WINDOW *choose_win(INT desiredlen, INT *actuallen);
 static void output_menu(WINDOW *win, INT screen);
 static INT calculate_screen_lines(INT screen);
@@ -465,15 +465,31 @@ main_menu (void)
 	place_std_msg();
 	wrefresh(main_win);
 	switch (c) {
-	case 'b': browse(NULL); break;
-	case 's': scan_menu(); break;
-	case 'a': add_menu(); break;
+	case 'b': browse(NULL, BROWSE_INDI); break;
+	case 's':
+		{
+		NOD0 nod0 = scan_menu();
+		if (nod0)
+			browse(nztop(nod0), BROWSE_UNK);
+		}
+		break;
+	case 'a': 
+		{
+		NODE node = add_menu();
+		if (node)
+			browse(node, BROWSE_UNK);
+		}
+		break;
 	case 'd': del_menu(); break;
 	case 'p': interp_main(TRUE); break;
 	case 'r': interp_main(FALSE); break;
 	case 't': trans_menu(); break;
 	case 'u': utils_menu(); break;
-	case 'x': extra_menu(); break;
+	case 'x': 
+		c = extra_menu();
+		if (c != BROWSE_QUIT)
+			browse(NULL, c);
+		break;
 	case 'q': alldone = TRUE; break;
 	}
 }
@@ -905,7 +921,7 @@ choose_list_from_indiseq (STRING ttl,
  * scan_menu -- Handle scan menu
  * Created: c. 2000/12, Perry Rapp
  *============================*/
-void
+NOD0
 scan_menu (void)
 {
 	NOD0 nod0;
@@ -920,41 +936,30 @@ scan_menu (void)
 		switch (code) {
 		case 'f':
 			nod0 = full_name_scan();
-			if (nod0) {
-				browse(nztop(nod0));
-				return;
-			}
+			if (nod0)
+				return nod0;
 			break;
 		case 'n':
 			nod0 = name_fragment_scan();
-			if (nod0) {
-				browse(nztop(nod0));
-				return;
-			}
+			if (nod0)
+				return nod0;
 			break;
 		case 'r':
 			nod0 = refn_scan();
-			if (nod0) {
-				switch(nztype(nod0)) {
-				case 'I': browse(nztop(nod0)); return;
-				/* TO DO - families */
-				case 'S':  browse_source(nod0); return;
-				case 'E':  browse_event(nod0); return;
-				case 'X':  browse_other(nod0); return;
-				}
-			}
+			if (nod0)
+				return nod0;
 			break;
-		case 'q': return;
+		case 'q': return NULL;
 		}
 	}
 }
 /*============================
  * add_menu -- Handle add menu
  *==========================*/
-void
+NODE
 add_menu (void)
 {
-	NODE node;
+	NODE node=NULL;
 	INT code;
 	touchwin(add_menu_win);
 	wmove(add_menu_win, 1, 27);
@@ -965,13 +970,13 @@ add_menu (void)
 	switch (code) {
 	case 'p':
 		node = nztop(add_indi_by_edit());
-		if (node) browse(node);
 		break;
 	case 'f': add_family(NULL, NULL, NULL); break;
 	case 'c': add_child(NULL, NULL); break;
 	case 's': add_spouse(NULL, NULL, TRUE); break;
 	case 'q': break;
 	}
+	return node;
 }
 /*===============================
  * del_menu -- Handle delete menu
@@ -1045,7 +1050,7 @@ utils_menu (void)
 /*================================
  * extra_menu -- Handle extra menu
  *==============================*/
-static void
+static INT
 extra_menu (void)
 {
 	INT code;
@@ -1057,16 +1062,16 @@ extra_menu (void)
 		touchwin(main_win);
 		wrefresh(main_win);
 		switch (code) {
-		case 's': browse_sources(); break;
-		case 'e': browse_events(); break;
-		case 'x': browse_others(); break;
-		case '1': add_source(); return;
-		case '2': edit_source(NULL); return;
-		case '3': add_event(); return;
-		case '4': edit_event(NULL); return;
-		case '5': add_other(); return;
-		case '6': edit_other(NULL); return;
-		case 'q': return;
+		case 's': return BROWSE_SOUR;
+		case 'e': return BROWSE_EVEN;
+		case 'x': return BROWSE_AUX;
+		case '1': add_source(); return BROWSE_QUIT;
+		case '2': edit_source(NULL); return BROWSE_QUIT;;
+		case '3': add_event(); return BROWSE_QUIT;;
+		case '4': edit_event(NULL); return BROWSE_QUIT;;
+		case '5': add_other(); return BROWSE_QUIT;;
+		case '6': edit_other(NULL); return BROWSE_QUIT;;
+		case 'q': return BROWSE_QUIT;;
 		}
 	}
 }

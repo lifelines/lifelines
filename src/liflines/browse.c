@@ -54,7 +54,7 @@ NODE jumpnode; /* used by Ethel for direct navigation */
 
 extern STRING nochil, nopers, nofam, nosour, idsour, norec;
 extern STRING nosour, idsour, noeven, ideven, noothe, idothe;
-extern STRING nonote, idnote;
+extern STRING nonote, idnote, noptr, idptr;
 extern STRING idsbrs, idsrmv, idfbrs, idcbrs, idcrmv, iscnew, issnew;
 extern STRING idfcop, ntprnt, nofath, nomoth, nospse, noysib, noosib;
 extern STRING noprnt, nohusb, nowife, hasbth, hasnei, nocinf, nocofp;
@@ -76,10 +76,12 @@ extern STRING spover, idfamk;
  *********************************************/
 
 /* alphabetical */
-static INT browse_aux(NODE node);
+static INT browse_aux(NODE *pindi1, NODE *pindi2, NODE *pfam1,
+	NODE *pfam2, INDISEQ *pseq);
 static INT browse_indi(NODE *pindi1, NODE *pindi2, NODE *pfam1,
 	NODE *pfam2, INDISEQ *pseq);
-static INT browse_fam(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
+static INT browse_fam(NODE *pindi1, NODE *pindi2, NODE *pfam1,
+	NODE *pfam2, INDISEQ *pseq);
 static INT browse_indi_modes(NODE *pindi1, NODE *pindi2, NODE *pfam1,
 	NODE *pfam2, INDISEQ *pseq, INT indimode);
 static INT browse_pedigree(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
@@ -106,27 +108,78 @@ static void pick_remove_spouse_from_family(NODE fam);
  *********************************************/
 
 /*=========================================
+ * prompt_for_browse -- prompt for browse target
+ *  when only type of browse is known
+ * Created: 2001/02/25, Perry Rapp
+ *=======================================*/
+static void
+prompt_for_browse (NODE * node, INT * code, INDISEQ * seq)
+{
+	NOD0 nod0;
+	INT len, rc;
+	STRING key, name;
+
+	if (*code == BROWSE_INDI) {
+		*seq = ask_for_indiseq(idplst, &rc);
+		if (!*seq) return;
+		if ((len = length_indiseq(*seq)) < 1) return;
+		if (len == 1) {
+			element_indiseq(*seq, 0, &key, &name);
+			*node = key_to_indi(key);
+			remove_indiseq(*seq, FALSE);
+			*seq = NULL;
+		} else {
+			*code = BROWSE_LIST;
+		}
+		return;
+	}
+	if (*code == BROWSE_EVEN) {
+		nod0 = choose_any_event();
+		*node = nztop(nod0);
+		return;
+	}
+	if (*code == BROWSE_SOUR) {
+		nod0 = choose_any_source();
+		*node = nztop(nod0);
+		return;
+	}
+	nod0 = choose_any_other();
+	*node = nztop(nod0);
+	return;
+}
+/*=========================================
  * browse -- Main loop of browse operation.
+ *  node may be NULL (then prompt for indi)
  *=======================================*/
 void
-browse (NODE indi1)
+browse (NODE node, INT code)
 {
-	INT code, len, rc;
-	NODE indi2, fam1, fam2;
-	STRING key, name;
+	NODE indi1, indi2, fam1, fam2;
 	INDISEQ seq = NULL;
 
-	if (!indi1 && (seq = ask_for_indiseq(idplst, &rc))) {
-		if ((len = length_indiseq(seq)) < 1) return;
-		if (len == 1) {
-			element_indiseq(seq, 0, &key, &name);
-			indi1 = key_to_indi(key);
-			remove_indiseq(seq, FALSE);
-			seq = NULL;
+	if (!node)
+		prompt_for_browse(&node, &code, &seq);
+
+	if (!node && !seq) return;
+
+
+	/* set up ALLPARMS if not list */
+	if (node) {
+		STRING key = rmvat(nxref(node));
+		if (key[0] == 'F') {
+			fam1 = node;
+		} else {
+			indi1 = node;
+		}
+		if (code==BROWSE_UNK) {
+			switch(key[0]) {
+			case 'I': code=BROWSE_INDI; break;
+			case 'F': code=BROWSE_FAM; break;
+			default: code=BROWSE_AUX; break;
+			}
 		}
 	}
-	if (!indi1 && !seq) return;
-	code = indi1 ? BROWSE_INDI : BROWSE_LIST;
+
 	while (code != BROWSE_QUIT) {
 		switch (code) {
 		case BROWSE_INDI:
@@ -141,6 +194,10 @@ browse (NODE indi1)
 			code = browse_2fam(ALLPARMS); break;
 		case BROWSE_LIST:
 			code = browse_list(ALLPARMS); break;
+		case BROWSE_EVEN:
+		case BROWSE_SOUR:
+		case BROWSE_AUX:
+			code = browse_aux(ALLPARMS); break;
 		}
 	}
 }
@@ -503,70 +560,30 @@ browse_indi_modes (NODE *pindi1,
 			}
 		case CMD_SOURCES:	/* Browse to sources */
 			node = choose_source(indi, nosour, idsour);
-			if (node)
-				browse_source_node(node);
+			if (node) {
+				*pindi1 = node;
+				return BROWSE_AUX;
+			}
 			break;
 		case CMD_NOTES:	/* Browse to notes */
 			node = choose_note(indi, nonote, idnote);
-			if (node)
-				browse_other_node(node);
+			if (node) {
+				*pindi1 = node;
+				return BROWSE_AUX;
+			}
+			break;
+		case CMD_POINTERS:	/* Browse to references */
+			node = choose_pointer(indi, noptr, idptr);
+			if (node) {
+				*pindi1 = node;
+				return BROWSE_UNK;
+			}
 			break;
 		case CMD_QUIT:
 		default:
 			return BROWSE_QUIT;
 		}
 	}
-}
-/*================================================
- * browse_source_node -- Browse a source
- * TO DO - should become obsoleted by browse_source
- * Created: 2001/01/06, Perry Rapp
- * Implemented: 2001/01/27, Perry Rapp
- *==============================================*/
-void
-browse_source_node (NODE sour)
-{
-	browse_aux(sour);
-}
-/*=================================
- * browse_source -- Browse a source
- * Created: 2001/01/06, Perry Rapp
- * Implemented: 2001/01/27, Perry Rapp
- *===============================*/
-void
-browse_source (NOD0 sour)
-{
-	browse_source_node(nztop(sour));
-}
-/*=================================
- * browse_event -- Browse an event
- * Created: 2001/01/06, Perry Rapp
- * Implemented: 2001/01/27, Perry Rapp
- *===============================*/
-void
-browse_event (NOD0 even)
-{
-	browse_aux(nztop(even));
-}
-/*================================================
- * browse_other_node -- Browse an other
- * TO DO - should become obsoleted by browse_other
- * Created: 2001/02/11, Perry Rapp
- *==============================================*/
-void
-browse_other_node (NODE othr)
-{
-	browse_aux(othr);
-}
-/*=================================
- * browse_other -- Browse an other
- * Created: 2001/01/06, Perry Rapp
- * Implemented: 2001/01/27, Perry Rapp
- *===============================*/
-void
-browse_other (NOD0 othr)
-{
-	browse_aux(nztop(othr));
 }
 /*==========================================
  * display_aux -- Show aux node in current mode
@@ -588,12 +605,15 @@ display_aux (NODE node, INT mode)
  * Created: 2001/01/27, Perry Rapp
  *==================================================*/
 static INT
-browse_aux (NODE node)
+browse_aux (NODE *pindi1, NODE *pindi2, NODE *pfam1,
+	NODE *pfam2, INDISEQ *pseq)
 {
+	NODE node = *pindi1;
 	STRING key = rmvat(nxref(node));
 	char ntype = key[0];
 	INT i, c;
 	INT nkeyp, auxmode, auxmodep;
+	NODE node2;
 	auxmode = 'x';
 
 	if (!node) return BROWSE_QUIT;
@@ -621,6 +641,16 @@ browse_aux (NODE node)
 			case 'E': edit_event(node); break;
 			case 'X': edit_other(node); break;
 			}
+			break;
+		case CMD_NOTES:	/* Browse to notes */
+			node2 = choose_note(node, nonote, idnote);
+			if (node2)
+				node = node2;
+			break;
+		case CMD_POINTERS:	/* Browse to references */
+			node2 = choose_pointer(node, noptr, idptr);
+			if (node)
+				node = node2;
 			break;
 		case CMD_NEXT:	/* Go to next in db */
 			{
@@ -982,8 +1012,10 @@ browse_fam (NODE *pindi,
 			}
 		case CMD_SOURCES:	/* Browse to sources */
 			node = choose_source(fam, nosour, idsour);
-			if (node)
-				browse_source_node(node);
+			if (node) {
+				*pindi = node;
+				return BROWSE_AUX;
+			}
 			break;
 		case CMD_QUIT:
 		default:
@@ -1118,48 +1150,38 @@ choose_any_source (void)
 	return nod0;
 }
 /*==================================================
- * browse_sources -- browse list of all sources
+ * choose_any_event -- choose from list of all events
  *================================================*/
-void
-browse_sources (void)
+NOD0
+choose_any_event (void)
 {
-	NOD0 nod0 = choose_any_source();
-	if (nod0)
-		browse_source(nod0);
-}
-/*==================================================
- * browse_events -- browse list of all events
- *================================================*/
-void
-browse_events (void)
-{
-	INDISEQ seq = get_all_even();
+	INDISEQ seq;
 	NOD0 nod0;
+	seq = get_all_even();
 	if (!seq)
 	{
 		message(noeven);
-		return;
+		return NULL;
 	}
 	nod0 = choose_from_indiseq(seq, DOASK1, ideven, ideven);
 	remove_indiseq(seq, FALSE);
-	if (nod0)
-		browse_event(nod0);
+	return nod0;
 }
 /*==================================================
- * browse_others -- browse list of all sources
+ * choose_any_other -- choose from list of all others
  *================================================*/
-void
-browse_others (void)
+NOD0
+choose_any_other (void)
 {
-	INDISEQ seq = get_all_othe();
+	INDISEQ seq;
 	NOD0 nod0;
+	seq = get_all_othe();
 	if (!seq)
 	{
 		message(noothe);
-		return;
+		return NULL;
 	}
 	nod0 = choose_from_indiseq(seq, DOASK1, idothe, idothe);
 	remove_indiseq(seq, FALSE);
-	if (nod0)
-		browse_other(nod0);
+	return nod0;
 }

@@ -18,15 +18,9 @@ INDISEQ ask_for_indiseq(STRING, INT*);
 BOOLEAN ask_yes_or_no(STRING);
 
 /* browse.c */
-void browse(NODE);
-void browse_source_node(NODE sour);
-void browse_source(NOD0 sour);
-void browse_event(NOD0 even);
-void browse_other_node(NODE othr);
-void browse_other(NOD0 othr);
-void browse_sources(void);
-void browse_events(void);
-void browse_others(void);
+void browse(NODE, INT code);
+NOD0 choose_any_event(void);
+NOD0 choose_any_other(void);
 NOD0 choose_any_source(void);
 INT display_2fam(NODE fam1, NODE fam2, INT mode);
 INT display_2indi(NODE indi1, NODE indi2, INT mode);

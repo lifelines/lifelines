@@ -80,7 +80,7 @@ extern BOOLEAN opt_finnish;		/* Finnish language support */
 #define ISVAL_NUL 4
 
 static STRING get_print_el(INDISEQ, INT i, INT len);
-static void append_all_tags(INDISEQ, NODE, STRING, BOOLEAN);
+static void append_all_tags(INDISEQ, NODE, STRING tagname, BOOLEAN recurse, BOOLEAN nonptrs);
 
 static INT name_compare(SORTEL, SORTEL);
 static INT key_compare(SORTEL, SORTEL);
@@ -1481,9 +1481,10 @@ str_to_indiseq (STRING name)
  * Created: 2000/11/29, Perry Rapp
  *=====================================================*/
 static void
-append_all_tags(INDISEQ seq, NODE node, STRING tagname, BOOLEAN recurse)
+append_all_tags(INDISEQ seq, NODE node, STRING tagname
+	, BOOLEAN recurse, BOOLEAN nonptrs)
 {
-	if (eqstr(ntag(node), tagname))
+	if (!tagname || eqstr(ntag(node), tagname))
 	{
 		STRING key;
 		INT val;
@@ -1491,21 +1492,27 @@ append_all_tags(INDISEQ seq, NODE node, STRING tagname, BOOLEAN recurse)
 		if (key)
 		{
 			STRING skey = rmvat(key);
+			BOOLEAN include=TRUE;
 			if (skey)
 				val = atoi(skey+1);
 			else
 			{
-				/* list invalid sources, but mark invalid with val==-1 */
-				skey = key;
-				val = -1;
+				if (nonptrs) {
+					/* include non-pointers, but mark invalid with val==-1 */
+					skey = key;
+					val = -1;
+				} else {
+					include=FALSE;
+				}
 			}
-			append_indiseq_ival(seq, skey, NULL, val, FALSE, FALSE);
+			if (include)
+				append_indiseq_ival(seq, skey, NULL, val, FALSE, FALSE);
 		}
 	}
 	if (nchild(node) && recurse )
-		append_all_tags(seq, nchild(node), tagname, recurse);
+		append_all_tags(seq, nchild(node), tagname, recurse, nonptrs);
 	if (nsibling(node))
-		append_all_tags(seq, nsibling(node), tagname, recurse);
+		append_all_tags(seq, nsibling(node), tagname, recurse, nonptrs);
 
 }
 /*=======================================================
@@ -1519,7 +1526,7 @@ node_to_sources (NODE node)
 	INDISEQ seq;
 	if (!node) return NULL;
 	seq = create_indiseq_ival();
-	append_all_tags(seq, node, "SOUR", TRUE);
+	append_all_tags(seq, node, "SOUR", TRUE, TRUE);
 	if (!length_indiseq(seq))
 	{
 		remove_indiseq(seq, FALSE);
@@ -1538,7 +1545,26 @@ node_to_notes (NODE node)
 	INDISEQ seq;
 	if (!node) return NULL;
 	seq = create_indiseq_ival();
-	append_all_tags(seq, node, "NOTE", TRUE);
+	append_all_tags(seq, node, "NOTE", TRUE, TRUE);
+	if (!length_indiseq(seq))
+	{
+		remove_indiseq(seq, FALSE);
+		seq = NULL;
+	}
+	return seq;
+}
+/*=======================================================
+ * node_to_pointers -- Create sequence of all pointers
+ *  inside a node record (at any level)
+ * 2001/02/24, Perry Rapp
+ *=====================================================*/
+INDISEQ
+node_to_pointers (NODE node)
+{
+	INDISEQ seq;
+	if (!node) return NULL;
+	seq = create_indiseq_ival();
+	append_all_tags(seq, node, NULL, TRUE, FALSE);
 	if (!length_indiseq(seq))
 	{
 		remove_indiseq(seq, FALSE);

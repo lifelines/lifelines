@@ -133,6 +133,7 @@ INDISEQ name_to_indiseq(STRING);
 void namesort_indiseq(INDISEQ);
 void new_write_node(INT, NODE, BOOLEAN);
 INDISEQ node_to_notes(NODE);
+INDISEQ node_to_pointers(NODE node);
 INDISEQ node_to_sources(NODE);
 INDISEQ parent_indiseq(INDISEQ);
 INT partition(INT, INT, SORTEL);

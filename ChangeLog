@@ -1,3 +1,11 @@
+2001-02-25 Perry Rapp <puddle@users.sourceforge.net>
+
+	* gedlib/choose.c gedlib/indiseq.c gedlib/messages.c
+	hdrs/gedcom.h hdrs/indiseq.h hdrs/menuitem.h liflines/browse.c
+	liflines/llinesi.h liflines/menuitem.c liflines/screen.c:
+	Integrated browse_aux into browse(...).
+	This fixes some bugs from leaving nodes on the stack.
+
 2001-02-24 Perry Rapp <puddle@users.sourceforge.net>
 
 	gedlib/indiseq.c: Filter out duplicates in indi_to_children.
