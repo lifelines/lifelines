@@ -33,6 +33,10 @@
 
 	Fix interp_call to avoid ASSERT trying to delete empty symtab.
 
+	* ChangeLog po/fr.po
+
+	Updated French message catalog from Patrick Texier (42 changes).
+
 2005-01-13 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp
