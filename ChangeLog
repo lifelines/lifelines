@@ -4,6 +4,12 @@
 	Fix ancestor/descendant tree leaks found by Petter Reinholdtsen.
 	Added comment note on possible optimization to show_ancestors.
 
+	* gedlib/messages.c hdrs/menuitem.h hdrs/screen.h
+	liflines/browse.c liflines/llinesi.h liflines/main.c
+	liflines/menuitem.c liflines/pedigree.c liflines/screen.c
+	liflines/show.c stdlib/signals.c:
+	New interact which works from menuitems and handles multicharacter.
+
 2001-01-31 Perry Rapp <puddle@users.sourceforge.net>
 
 	* liflines/browse.c liflines/llinesi.h liflines/menuitem.c
