@@ -17,6 +17,11 @@
 
 	Add new dblist.c to llines MSVC6 project and llexec MSVC6 project.
 
+	* ChangeLog src/arch/alphasort.c src/stdlib/appendstr.c
+	src/tools/btedit.c
+
+	Remove some unneeded includes.
+
 2005-02-26 Perry Rapp
 
 	* ChangeLog src/stdlib/rbtree.c src/stdlib/rbtree.h

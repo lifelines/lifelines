@@ -36,9 +36,9 @@
 #include <dirent.h>
 #endif
 
-#include "standard.h"
-#include "arch.h"
 #include "llstdlib.h"
+/* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
+#include "arch.h"
 
 int
 alphasort(const struct dirent **a, const struct dirent **b)

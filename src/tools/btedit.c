@@ -31,7 +31,7 @@
  *===============================================================*/
 
 #include "llstdlib.h"
-#include "standard.h"
+/* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
 #include "btree.h"
 
 /*********************************************
