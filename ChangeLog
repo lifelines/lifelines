@@ -4,6 +4,11 @@
 
 	Read gedcom files in binary mode, due to bug of MS-Windows.
 
+	* ChangeLog src/gedlib/init.c src/gedlib/locales.c
+	src/gedlib/node.c src/liflines/main.c:
+
+	Plug some minor, one time per db, leaks.
+
 2003-02-10 Perry Rapp
 
 	* ChangeLog src/hdrs/version.h:

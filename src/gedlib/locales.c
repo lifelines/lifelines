@@ -218,7 +218,9 @@ termlocale (void)
 {
 	/* free & zero out globals */
 	strfree(&deflocale_coll);
+	strfree(&current_coll);
 	strfree(&deflocale_msgs);
+	strfree(&current_msgs);
 }
 /*==========================================
  * uilocale -- set locale to GUI locale

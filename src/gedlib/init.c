@@ -316,9 +316,9 @@ close_lifelines (void)
 void
 close_lldb ()
 {
-	/* TODO: reverse the rest of init_lifelines_db -- Perry, 2002.06.05
-	remove_table(tagtable, FREE_KEY); values are same as keys
+	remove_table(tagtable, FREEKEY); /* values are same as keys */
 	tagtable = 0;
+	/* TODO: reverse the rest of init_lifelines_db -- Perry, 2002.06.05
 	remove_table(placabbvs, ??)
 	placabbvs = 0;
 	*/
@@ -331,6 +331,8 @@ close_lldb ()
 	if (f_dbnotify)
 		(*f_dbnotify)(readpath, FALSE);
 	transl_free_predefined_xlats(); /* clear any active legacy translation tables */
+	strfree(&readpath_file);
+	strfree(&readpath);
 }
 /*==================================================
  * alterdb -- force open, lock, or unlock a database
@@ -462,10 +464,10 @@ open_database (INT alteration, STRING dbpath)
 	char fpath[MAXPATHLEN];
 
 	/* tentatively copy paths into gedlib module versions */
-	readpath_file=strsave(lastpathname(dbpath));
+	strupdate(&readpath_file, lastpathname(dbpath));
 	llstrncpy(fpath, dbpath, sizeof(fpath), 0);
 	expand_special_fname_chars(fpath, sizeof(fpath), uu8);
-	readpath=strsave(fpath);
+	strupdate(&readpath, fpath);
 
 	if (f_dbnotify)
 		(*f_dbnotify)(readpath, TRUE);
@@ -476,8 +478,6 @@ open_database (INT alteration, STRING dbpath)
 		int myerr = bterrno;
 		close_lldb();
 		bterrno = myerr;
-		strfree(&readpath_file);
-		strfree(&readpath);
 	}
 	return rtn;
 }
@@ -510,8 +510,6 @@ create_database (STRING dbpath)
 		int myerr = bterrno;
 		close_lldb();
 		bterrno = myerr;
-		strfree(&readpath_file);
-		strfree(&readpath);
 		return FALSE;
 	}
 	initxref();
