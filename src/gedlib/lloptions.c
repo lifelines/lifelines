@@ -31,6 +31,7 @@
 #include "screen.h"
 #include "gedcom.h"
 #include "liflines.h"
+#include "arch.h"
 #include "lloptions.h"
 
 
@@ -229,10 +230,20 @@ update_opt (ENTRY ent)
 void
 changeoptstr (STRING * str, STRING newval)
 {
+	INT i;
+	VPTR *oldval;
 	stdfree(*str);
 	if (!newval)
 		newval = strsave("");
 	*str = newval;
+	/* update value in table */
+	for (i=0; i<ARRSIZE(str_options); i++) {
+		if (str_options[i].value == str) {
+			oldval = access_value(opttab, str_options[i].name);
+			free(*oldval);
+			*oldval = strsave(newval);
+		}
+	}
 }
 /*==========================================
  * store_to_lloptions -- Update lloptions from
