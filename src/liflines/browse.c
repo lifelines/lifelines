@@ -42,10 +42,15 @@
 #include "llinesi.h"
 
 /*********************************************
- * external variables (no header)
+ * global/exported variables
  *********************************************/
 
 NODE jumpnode; /* used by Ethel for direct navigation */
+
+/*********************************************
+ * external/imported variables
+ *********************************************/
+
 extern STRING nochil, nopers, nofam, nosour, idsour, norec;
 extern STRING nosour, idsour, noeven, ideven, noothe, idothe;
 extern STRING idsbrs, idsrmv, idfbrs, idcbrs, idcrmv, iscnew, issnew;

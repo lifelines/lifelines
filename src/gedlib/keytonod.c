@@ -56,7 +56,7 @@ static NODE qkey_to_node(CACHE cache, STRING key, STRING tag);
 static NOD0 qkey_to_nod0(CACHE cache, STRING key, STRING tag);
 static CACHEEL key_to_cacheel(CACHE, STRING, STRING, INT);
 static void dereference(CACHEEL);
-static void add_node_to_direct(CACHE cache, NODE node);
+static void add_node_to_direct(CACHE cache, NODE node, STRING key);
 static CACHEEL key_to_even_cacheel (STRING key);
 static CACHEEL key_to_sour_cacheel (STRING key);
 static CACHEEL key_to_othr_cacheel (STRING key);
@@ -377,8 +377,7 @@ init_caches (void)
  * create_cache -- Create cache
  *===========================*/
 static CACHE
-create_cache (INT dirsize,
-              INT indsize)
+create_cache (INT dirsize, INT indsize)
 {
 	CACHE cache;
 	if (dirsize < 1) dirsize = 1;
@@ -396,8 +395,7 @@ create_cache (INT dirsize,
  * remove_direct -- Unlink CACHEEL from direct list
  *===============================================*/
 static void
-remove_direct (CACHE cache,
-               CACHEEL cel)
+remove_direct (CACHE cache, CACHEEL cel)
 {
 	CACHEEL prev = cprev(cel);
 	CACHEEL next = cnext(cel);
@@ -412,8 +410,7 @@ remove_direct (CACHE cache,
  * remove_indirect -- Unlink CACHEEL from indirect list
  *===================================================*/
 static void
-remove_indirect (CACHE cache,
-                 CACHEEL cel)
+remove_indirect (CACHE cache, CACHEEL cel)
 {
 	CACHEEL prev = cprev(cel);
 	CACHEEL next = cnext(cel);
@@ -428,8 +425,7 @@ remove_indirect (CACHE cache,
  * first_direct -- Make unlinked CACHEEL first in direct list
  *=========================================================*/
 static void
-first_direct (CACHE cache,
-              CACHEEL cel)
+first_direct (CACHE cache, CACHEEL cel)
 {
 	CACHEEL frst = cfirstdir(cache);
 	ASSERT(cache && cel);
@@ -444,8 +440,7 @@ first_direct (CACHE cache,
  * first_indirect -- Make unlinked CACHEEL first in indirect list
  *=============================================================*/
 static void
-first_indirect (CACHE cache,
-                CACHEEL cel)
+first_indirect (CACHE cache, CACHEEL cel)
 {
 	CACHEEL frst = cfirstind(cache);
 	ASSERT(cache && cel);
@@ -764,43 +759,42 @@ void
 node_to_cache (CACHE cache,
                NODE node)
 {
-	STRING key = rmvat(nxref(node));
+	STRING key = node_to_key(node);
 	ASSERT(cache && node);
 	ASSERT(!valueof(cdata(cache), key));
 	if (csizedir(cache) >= cmaxdir(cache)) {
 		if (csizeind(cache) >= cmaxind(cache)) {
 			remove_last(cache);
 			direct_to_indirect(cache);
-			add_node_to_direct(cache, node);
+			add_node_to_direct(cache, node, key);
 		} else {
 			direct_to_indirect(cache);
-			add_node_to_direct(cache, node);
+			add_node_to_direct(cache, node, key);
 		}
 	} else {
-		add_node_to_direct(cache, node);
+		add_node_to_direct(cache, node, key);
 	}
 }
 /*=======================================================
  * add_node_to_direct -- Add node to direct part of cache
  *=====================================================*/
 static void
-add_node_to_direct (CACHE cache,
-                   NODE node)
+add_node_to_direct (CACHE cache, NODE node, STRING key)
 {
 	CACHEEL cel;
-	STRING key;
+	STRING keynew;
 	NOD0 nod0;
 	ASSERT(cache && node);
 	ASSERT(csizedir(cache) < cmaxdir(cache));
 	cel = (CACHEEL) stdalloc(sizeof(*cel));
-	insert_table(cdata(cache), key = strsave(rmvat(nxref(node))), cel);
+	insert_table(cdata(cache), keynew=strsave(key), cel);
 	nod0 = (NOD0)stdalloc(sizeof(*nod0));
 	nod0->nkey.keynum = atoi(key+1);
 	nod0->nkey.ntype = key[0];
 	nod0->top = node;
 	cnod0(cel) = nod0;
 	cnode(cel) = node;
-	ckey(cel) = key;
+	ckey(cel) = keynew;
 	cclock(cel) = FALSE;
 	first_direct(cache, cel);
 }

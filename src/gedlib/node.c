@@ -38,45 +38,36 @@
 #include "screen.h"
 #include "warehouse.h"
 
+/*********************************************
+ * global/exported variables
+ *********************************************/
+
 INT lineno = 0;
+
+/*********************************************
+ * external/imported variables
+ *********************************************/
+
+extern STRING fileof, reremp, rerlng, rernlv, rerinc;
+extern STRING rerbln, rernwt, rerilv, rerwlv;
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
 
 static BOOLEAN buffer_to_line(STRING, INT*, STRING*, STRING*, STRING*, STRING*);
 #ifdef UNUSED_CODE
 static BOOLEAN all_digits (STRING);
 #endif
-
-STRING fileof = (STRING) "The file is as positioned at EOF.";
-STRING reremp = (STRING) "Line %d: This line is empty; EOF?";
-STRING rerlng = (STRING) "Line %d: This line is too long.";
-STRING rernlv = (STRING) "Line %d: This line has no level number.";
-STRING rerinc = (STRING) "Line %d: This line is incomplete.";
-STRING rerbln = (STRING) "Line %d: This line has a bad link.";
-STRING rernwt = (STRING) "Line %d: This line needs white space before tag.";
-STRING rerilv = (STRING) "Line %d: This line has an illegal level.";
-STRING rerwlv = (STRING) "The record begins at wrong level.";
-
 static STRING fixup (STRING str);
 static STRING fixtag (STRING tag);
-static BOOLEAN string_to_line (STRING *ps,     /* string ptr - modified */
-			       INT *plev,      /* level ptr */
-			       STRING *pxref,  /* cross-ref ptr */
-			       STRING *ptag,   /* tag ptr */
-			       STRING *pval,   /* value ptr */
-			       STRING *pmsg);   /* error msg ptr */
-static void write_node (INT levl,       /* level */
-			FILE *fp,       /* file */
-			TRANTABLE tt,   /* char map */
-			NODE node,      /* node */
-			BOOLEAN indent); /* indent? */
-
-static STRING swrite_node (INT levl,	/* level */
-			   NODE node,	/* node */
-			   STRING p);	/* write string */
-static INT node_strlen (INT levl,       /* level */
-			NODE node);	/* node */
-static STRING swrite_nodes (INT levl,	/* level */
-			    NODE node,	/* root */
-			    STRING p);	/* write string */
+static BOOLEAN string_to_line(STRING *ps, INT *plev, STRING *pxref, 
+	STRING *ptag, STRING *pval, STRING *pmsg);
+static void write_node(INT levl, FILE *fp, TRANTABLE tt,
+	NODE node, BOOLEAN indent);
+static STRING swrite_node(INT levl, NODE node, STRING p);
+static INT node_strlen(INT levl, NODE node);
+static STRING swrite_nodes(INT levl, NODE node, STRING p);
 
 /*==============================
  * fixup -- Save non-tag strings
@@ -154,6 +145,8 @@ create_node (STRING xref,
 }
 /*===================================
  * alloc_nod0 -- nod0 allocator
+ *  perhaps should use special allocator like nodes
+ * Created: 2001/01/25, Perry Rapp
  *=================================*/
 NOD0
 alloc_nod0 (STRING key)
@@ -168,7 +161,19 @@ alloc_nod0 (STRING key)
 	return nod0;
 }
 /*===================================
+ * create_nod0 -- create nod0 to wrap top node
+ * Created: 2001/01/29, Perry Rapp
+ *=================================*/
+NOD0
+create_nod0 (NODE node)
+{
+	NOD0 nod0 = alloc_nod0(node_to_key(node));
+	nod0->top = node;
+	return nod0;
+}
+/*===================================
  * free_nod0 -- nod0 deallocator
+ * Created: 2000/12/30, Perry Rapp
  *=================================*/
 void
 free_nod0 (NOD0 nod0)
@@ -258,7 +263,6 @@ buffer_to_line (STRING p,
                 STRING *pmsg)
 {
 	INT lev;
-	extern INT lineno;
 	static unsigned char scratch[MAXLINELEN+40];
 
 	*pmsg = *pxref = *pval = 0;
@@ -333,13 +337,33 @@ gettag:
 	return OKAY;
 }
 /*=================================================
+ * file_to_nod0 -- Convert GEDCOM file to NODE tree
+ *
+ * STRING fname: name of file that holds GEDCOM record
+ * TRANTABLE tt:  character translation table
+ * STRING *pmsg: possible error message
+ * BOOLEAN *pemp: set true if file is empty
+ *===============================================*/
+NOD0
+file_to_nod0 (STRING fname, TRANTABLE tt, STRING *pmsg, BOOLEAN *pemp)
+{
+	NODE node = file_to_node(fname, tt, pmsg, pemp);
+	NOD0 nod0 = 0;
+	if (node) {
+		nod0 = create_nod0(node);
+	}
+	return nod0;
+}
+/*=================================================
  * file_to_node -- Convert GEDCOM file to NODE tree
+ *
+ * STRING fname: name of file that holds GEDCOM record
+ * TRANTABLE tt:  character translation table
+ * STRING *pmsg: possible error message
+ * BOOLEAN *pemp: set true if file is empty
  *===============================================*/
 NODE
-file_to_node (STRING fname,     /* name of file that holds GEDCOM record */
-              TRANTABLE tt,     /* character translation table */
-              STRING *pmsg,     /* possible error message */
-              BOOLEAN *pemp)    /* set true if file is empty */
+file_to_node (STRING fname, TRANTABLE tt, STRING *pmsg, BOOLEAN *pemp)
 {
 	FILE *fp;
 	NODE node;

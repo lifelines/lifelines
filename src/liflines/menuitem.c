@@ -90,6 +90,8 @@ static MenuItem f_MenuItemScrollDownBottom = { ")  Scroll bottom down", ")" };
 static MenuItem f_MenuItemScrollUpBoth = { "{  Scroll both up", "{" };
 static MenuItem f_MenuItemScrollDownBoth = { "}  Scroll both down", "}" };
 static MenuItem f_MenuItemToggleChildNos = { "#  Toggle childnos", "#" };
+static MenuItem f_MenuItemToggleGedcomView = { "!  Toggle GEDCOM view", "!" };
+static MenuItem f_MenuItemTogglePedigreeType = { "&  Toggle pedigree type", "&" };
 static MenuItem f_MenuItemDigits = { "(1-9)  Browse to child", "123456789" };
 MenuItem f_MenuItemSyncMoves = { "y  Turn on sync", "y" };
 static MenuItem f_MenuItemAdvanced = { "A  Advanced view", "A" };
@@ -148,6 +150,7 @@ static MenuItem * f_MenuPerson[] =
 	&f_MenuItemScrollDown,
 	&f_MenuItemToggleChildNos,
 	&f_MenuItemDigits,
+	&f_MenuItemToggleGedcomView,
 	&f_MenuItemAdvanced,
 	&f_MenuItemTandemChildren,
 	&f_MenuItemTandemFathers,
@@ -209,6 +212,7 @@ static MenuItem * f_MenuPedigree[] =
 	&f_MenuItemBrowse,
 	&f_MenuItemEnlargePedigree,
 	&f_MenuItemShrinkPedigree,
+	&f_MenuItemTogglePedigreeType,
 	&f_MenuItemEnlargeMenu,
 	&f_MenuItemShrinkMenu,
 	0

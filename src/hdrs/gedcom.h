@@ -183,6 +183,7 @@ NODE fam_to_last_chil(NODE);
 NODE fam_to_husb(NODE);
 NODE fam_to_wife(NODE);
 NODE fam_to_spouse(NODE, NODE);
+NOD0 file_to_nod0(STRING fname, TRANTABLE tt, STRING *pmsg, BOOLEAN *pemp);
 NODE file_to_node(STRING, TRANTABLE, STRING*, BOOLEAN*);
 INT file_to_line(FILE*, TRANTABLE, INT*, STRING*, STRING*, STRING*, STRING*);
 NODE find_node(NODE, STRING, STRING, NODE*);
@@ -411,6 +412,7 @@ INT xrefval(char ntype, STRING str);
  *===========================================*/
 #define indi_to_key(indi)  (rmvat(nxref(indi)))
 #define fam_to_key(fam)    (rmvat(nxref(fam)))
+#define node_to_key(node)  (rmvat(nxref(node)))
 
 /*=============================================
  * indi_to_keynum, fam_to_keynum, etc - 

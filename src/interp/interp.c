@@ -43,7 +43,7 @@
 #include "arch.h"
 
 /*********************************************
- * external variables (no header)
+ * external/imported variables
  *********************************************/
 
 extern STRING llprograms;

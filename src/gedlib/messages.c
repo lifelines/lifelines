@@ -245,3 +245,14 @@ STRING whtout = SS "What is the name of the output file?";
 STRING mtitle = (STRING) "LifeLines %s - Genealogical DB and Programming System";
 STRING cright = (STRING) "Copyright(c) 1991 to 1996, by T. T. Wetmore IV";
 STRING plschs = (STRING) "Please choose an operation:";
+
+/* node.c errors */
+STRING fileof = (STRING) "The file is as positioned at EOF.";
+STRING reremp = (STRING) "Line %d: This line is empty; EOF?";
+STRING rerlng = (STRING) "Line %d: This line is too long.";
+STRING rernlv = (STRING) "Line %d: This line has no level number.";
+STRING rerinc = (STRING) "Line %d: This line is incomplete.";
+STRING rerbln = (STRING) "Line %d: This line has a bad link.";
+STRING rernwt = (STRING) "Line %d: This line needs white space before tag.";
+STRING rerilv = (STRING) "Line %d: This line has an illegal level.";
+STRING rerwlv = (STRING) "The record begins at wrong level.";

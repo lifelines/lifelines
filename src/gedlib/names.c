@@ -37,7 +37,7 @@
 #include "gedcomi.h"
 
 /*********************************************
- * external variables (no header)
+ * external/imported variables
  *********************************************/
 
 extern BOOLEAN opt_finnish;

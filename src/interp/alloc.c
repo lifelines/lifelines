@@ -41,7 +41,7 @@
 #include "screen.h"
 
 /*********************************************
- * external variables (no header)
+ * external/imported variables
  *********************************************/
 
 extern STRING ierror;
@@ -565,7 +565,11 @@ func_node (STRING name,    /* function name */
 		return node;
 	}
 
-/* See if the function is builtin */
+/*
+	See if the function is builtin
+	Assumes that builtins[] is in alphabetic order
+*/
+	
 	lo = 0;
 	hi = nobuiltins - 1;
 	while (lo <= hi) {
