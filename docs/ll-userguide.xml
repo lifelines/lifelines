@@ -1118,7 +1118,7 @@ CODESET
      way to be able to store, for example, names in English, names in Russian, and
      names in Greek, all in the same database, in their native scripts (alphabets).
      In recent versions, lifelines has become more knowledgeable about handling 
-     UTF-8, so that, for example, upper & lower casing only work correctly with
+     UTF-8, so that, for example, upper &amp; lower casing only work correctly with
      versions from 3.0.28 on.
 
 </para>
