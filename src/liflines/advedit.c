@@ -87,8 +87,7 @@ void advanced_person_edit (NODE root0)
 	do_edit();
 }
 
-void advanced_family_edit (root0)
-NODE root0;
+void advanced_family_edit (NODE root0)
 {
 	FILE *fp;
 
