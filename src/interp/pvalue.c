@@ -118,7 +118,7 @@ debug_check (void)
  *  not doing any live/dead analysis; we depend entirely
  *  on carnal knowledge of the program.
  * We also mark freed ones, so we can scan the blocks
- *  to find leaked ones (which seems to be nearly
+ *  to find leaked ones (which used to be nearly
  *  all of them)
  * Created: 2001/01/19, Perry Rapp
  *======================================*/

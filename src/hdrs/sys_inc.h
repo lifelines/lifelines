@@ -17,6 +17,9 @@
 #define PATH_MAX _MAX_PATH
 #define MAXPATHLEN _MAX_PATH
 #endif
+/* WIN32 implementation - where should this go ? Perry 2001/04/06 */
+extern int w32system(const char *cp);
+
 
 /* WIN32 - BORLAND INCLUDES */
 #ifdef __BORLANDC__

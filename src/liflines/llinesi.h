@@ -61,9 +61,9 @@ NOD0 ask_for_record(STRING, INT);
 void edit_event(NODE);
 void edit_other(NODE);
 void edit_source(NODE);
-BOOLEAN add_event(void);
-BOOLEAN add_other(void);
-BOOLEAN add_source(void);
+NODE add_event(void);
+NODE add_other(void);
+NODE add_source(void);
 
 /* pedigree.c */
 enum { GDVW_NORMAL, GDVW_EXPANDED };

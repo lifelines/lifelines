@@ -201,6 +201,24 @@ valid_name (STRING name)
 	return n <= 2;
 }
 /*======================================
+ * valid_node_type -- Validate top-level node tree
+ * NODE node:     node to validate
+ * char ntype:    I/F/S/E/X
+ * STRING *pmsg,  error message, if any
+ * NODE node0:    node node to match (may be null)
+ *====================================*/
+BOOLEAN
+valid_node_type (NODE node, char ntype, STRING *pmsg, NODE node0)
+{
+	switch(ntype) {
+	case 'I': return valid_indi(node, pmsg, node0);
+	case 'F': return valid_fam(node, pmsg, node0);
+	case 'S': return valid_sour_tree(node, pmsg, node0);
+	case 'E': return valid_even_tree(node, pmsg, node0);
+	default: return valid_othr_tree(node, pmsg, node0);
+	}
+}
+/*======================================
  * valid_sour_tree -- Validate SOUR tree
  *====================================*/
 BOOLEAN

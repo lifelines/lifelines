@@ -88,6 +88,7 @@ static NKEY hist_list[20];
  *********************************************/
 
 /* alphabetical */
+static void add_other_ref(NODE node);
 static INT browse_aux(NODE *pindi1, NODE *pindi2, NODE *pfam1,
 	NODE *pfam2, INDISEQ *pseq);
 static INT browse_indi(NODE *pindi1, NODE *pindi2, NODE *pfam1,
@@ -522,6 +523,9 @@ browse_indi_modes (NODE *pindi1,
 			if (!node) break;
 			*pfam1 = node;
 			return BROWSE_FAM;
+		case CMD_ADD_OTHER_REF: /* add other reference */
+			add_other_ref(indi);
+			break;
 		case CMD_TANDEM:	/* Switch to tandem browsing */
 			node = ask_for_indi(idp2br, NOCONFIRM, NOASK1);
 			if (node) {
@@ -1251,6 +1255,7 @@ choose_any_other (void)
 }
 /*==================================================
  * history_record -- add node to history if different from top of history
+ * Created: 2001/03?, Perry Rapp
  *================================================*/
 static void
 history_record (NODE node)
@@ -1283,6 +1288,7 @@ history_record (NODE node)
 }
 /*==================================================
  * history_back -- return prev NODE in history, if exists
+ * Created: 2001/03?, Perry Rapp
  *================================================*/
 static NODE
 history_back (void)
@@ -1307,6 +1313,7 @@ history_back (void)
 }
 /*==================================================
  * history_fwd -- return later NODE in history, if exists
+ * Created: 2001/03?, Perry Rapp
  *================================================*/
 static NODE
 history_fwd (void)
@@ -1318,4 +1325,33 @@ history_fwd (void)
 	next = hist_past_end;
 	nkey_to_node(&hist_list[next], &node);
 	return node;
+}
+/*==================================================
+ * add_other_ref -- add a new referred other record
+ * Created: 2001/04/06, Perry Rapp
+ *================================================*/
+static void
+add_other_ref (NODE node)
+{
+	NODE newnode = add_other();
+	NODE find, prev; /* used finding last child of node */
+	NODE xref; /* new xref added to end of node */
+	if (!newnode)
+		return;
+	if (strlen(ntag(newnode))>40) {
+		/* TO DO - message saying tag too long - add ref yourself */
+		return;
+	}
+	xref = create_node(NULL, ntag(newnode), nxref(newnode), node);
+	if (!(find = nchild(node))) {
+		nchild(node) = xref;
+	} else {
+		/* find last child of node */
+		while(find) {
+			prev = find;
+			find = nsibling(find);
+		}
+		nsibling(prev) = xref;
+	}
+	unknown_node_to_dbase(node);
 }

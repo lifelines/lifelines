@@ -27,7 +27,7 @@
 #include <process.h>
 #include <stdio.h>
 
-int w32system(char *cp)
+int w32system(const char *cp)
 {
   char argbuf[256];
   char *argv[32];

@@ -58,7 +58,6 @@ main (int argc,
 	char *editor;
 	char *dbname, *key;
 	RECORD_STATUS rtn;
-
 #ifdef WIN32
 	/* TO DO - research if this is necessary */
 	_fmode = O_BINARY;	/* default to binary rather than TEXT mode */
@@ -86,7 +85,12 @@ main (int argc,
 
 	editor = environ_determine_editor(PROGRAM_BTEDIT);
 	sprintf(cmdbuf, "%s btedit.tmp", editor);
-	system(cmdbuf);
+#ifdef WIN32
+	/* use w32system, because it will wait for the editor to finish */
+	w32system(editstr);
+#else
+	system(editstr);
+#endif
 	addfile(btree, str2rkey(key), "btedit.tmp");
 	unlink("btedit.tmp");
 	closebtree(btree);

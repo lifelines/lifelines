@@ -1,3 +1,13 @@
+2001-04-06 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/node.c gedlib/valid.c hdrs/gedcom.h
+	hdrs/menuitem.h hdrs/sys_inc.h interp/pvalue.c
+	liflines/browse.c liflines/llinesi.h liflines/menuitem.c
+	liflines/newrecs.c tools/btedit.c win32/w32systm.c:
+	Added decl of w32system to sys_inc.h (not sure where to put it).
+	Modified add_sour etc to return NODE (instead of BOOLEAN).
+	Added menuitem to add other from browse_indi screen.
+
 2001-04-01 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog docs/Run.LifeLines.Windows.txt gedlib/indiseq.c

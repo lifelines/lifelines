@@ -52,72 +52,75 @@ SS rstr = (STRING) "0 SOUR\n1 REFN\n1 TITL Title\n1 AUTH Author";
 SS estr = (STRING) "0 EVEN\n1 REFN\n1 DATE\n1 PLAC\n1 INDI\n  2 NAME\n  2 ROLE\n1 SOUR";
 SS xstr = (STRING) "0 XXXX\n1 REFN";
 
-static void edit_record (NODE node1, STRING idedt, INT letr, STRING redt,
+static void edit_record(NODE node1, STRING idedt, INT letr, STRING redt,
                          BOOLEAN (*val)(NODE, STRING *, NODE), STRING cfrm,
                          STRING tag, void (*todbase)(NODE), STRING gdmsg);
-static BOOLEAN add_record (STRING recstr, STRING redt,
-                           BOOLEAN (*val)(NODE, STRING *, NODE), STRING cfrm,
-                           STRING (*getref)(void), void (*todbase)(NODE),
-                           void (*tocache)(NODE));
+static NODE add_record(STRING recstr, STRING redt, char ntype, STRING cfrm);
 
-void edit_event(NODE);
-void edit_other(NODE);
-void edit_source(NODE);
-
-BOOLEAN add_event(void);
-BOOLEAN add_other(void);
-BOOLEAN add_source(void);
 
 /*================================================
  * add_source -- Add source to database by editing
  *==============================================*/
-BOOLEAN
+NODE
 add_source (void)
 {
 	STRING str = (STRING) valueof(useropts, "SOURREC");
 	if (!str) str = rstr;
-	return add_record(str, rredit, valid_sour_tree, cfradd,
-	    getsxref, sour_to_dbase, sour_to_cache);
+	return add_record(str, rredit, 'S', cfradd);
 }
 /*==============================================
  * add_event -- Add event to database by editing
  *============================================*/
-BOOLEAN
+NODE
 add_event (void)
 {
 	STRING str = (STRING) valueof(useropts, "EVENREC");
 	if (!str) str = estr;
-	return add_record(str, eredit, valid_even_tree, cfeadd,
-	    getexref, even_to_dbase, even_to_cache);
+	return add_record(str, eredit, 'E', cfeadd);
 }
 /*====================================================
  * add_other -- Add user record to database by editing
  *==================================================*/
-BOOLEAN
+NODE
 add_other (void)
 {
 	STRING str = (STRING) valueof(useropts, "OTHRREC");
 	if (!str) str = xstr;
-	return add_record(str, xredit, valid_othr_tree, cfxadd,
-	    getxxref, othr_to_dbase, othr_to_cache);
+	return add_record(str, xredit, 'X', cfxadd);
+
 }
 /*================================================
  * add_record -- Add record to database by editing
  *==============================================*/
-BOOLEAN
-add_record (STRING recstr,                        /* default record */
-            STRING redt,                          /* re-edit message */
-            BOOLEAN (*val)(NODE, STRING *, NODE), /* tree validate predicate */
-            STRING cfrm,                          /* confirm message */
-            STRING (*getref)(void),               /* get next internal key */
-            void (*todbase)(NODE),                /* write record to dbase */
-            void (*tocache)(NODE))                /* write record to cache */
+NODE
+add_record (STRING recstr,  /* default record */
+            STRING redt,    /* re-edit message */
+            char ntype,     /* S, E, or X */
+            STRING cfrm)    /* confirm message */
 {
 	FILE *fp;
 	NODE node=0, refn;
 	STRING msg, key;
 	BOOLEAN emp;
 	TRANTABLE tti = tran_tables[MEDIN];
+	STRING (*getreffnc)(void) = NULL; /* get next internal key */
+	void (*todbasefnc)(NODE) = NULL;  /* write record to dbase */
+	void (*tocachefnc)(NODE) = NULL;  /* write record to cache */
+	
+	/* set up functions according to type */
+	if (ntype == 'S') {
+		getreffnc = getsxref;
+		todbasefnc = sour_to_dbase;
+		tocachefnc = sour_to_cache;
+	} else if (ntype == 'E') {
+		getreffnc = getexref;
+		todbasefnc = even_to_dbase;
+		tocachefnc = even_to_cache;
+	} else { /* X */
+		getreffnc = getxxref;
+		todbasefnc = othr_to_dbase;
+		tocachefnc = othr_to_cache;
+	}
 
 /* Create template for user to edit */
 	if (!(fp = fopen(editfile, LLWRITETEXT))) return FALSE;
@@ -135,7 +138,7 @@ add_record (STRING recstr,                        /* default record */
 			} 
 			break;
 		}
-		if (!(*val)(node, &msg, NULL)) {
+		if (!valid_node_type(node, ntype, &msg, NULL)) {
 			if (ask_yes_or_no_msg(msg, redt)) {
 				do_edit();
 				continue;
@@ -148,17 +151,17 @@ add_record (STRING recstr,                        /* default record */
 	}
 	if (!node || !ask_yes_or_no(cfrm)) {
 		if (node) free_nodes(node);
-		return FALSE;
+		return NULL;
 	}
-	nxref(node) = strsave((STRING)(*getref)());
+	nxref(node) = strsave((STRING)(*getreffnc)());
 	key = rmvat(nxref(node));
 	for (refn = nchild(node); refn; refn = nsibling(refn)) {
 		if (eqstr("REFN", ntag(refn)) && nval(refn))
 			add_refn(nval(refn), key);
 	}
-	(*todbase)(node);
-	(*tocache)(node);
-	return TRUE;
+	(*todbasefnc)(node);
+	(*tocachefnc)(node);
+	return node;
 }
 /*=======================================
  * edit_source -- Edit source in database
@@ -269,8 +272,8 @@ edit_record (NODE node1,           /* record to edit, poss NULL */
 	if (newr && oldr && eqstr(newr, oldr))
                 newr = oldr = NULL;
 	key = rmvat(nxref(node1));
-        if (oldr) remove_refn(oldr, key);
-        if (newr) add_refn(newr, key);
+	if (oldr) remove_refn(oldr, key);
+	if (newr) add_refn(newr, key);
 	temp = nchild(node1);
 	nchild(node1) = nchild(node2);
 	nchild(node2) = temp;

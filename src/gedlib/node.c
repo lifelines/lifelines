@@ -924,6 +924,17 @@ node_strlen (INT levl,       /* level */
 	return len + 1;
 }
 /*==========================================
+ * unknown_node_to_dbase -- Store node of unknown type
+ *  in database
+ * Created: 2001/04/06, Perry Rapp
+ *========================================*/
+void
+unknown_node_to_dbase (NODE node)
+{
+	/* skip tag validation */
+	node_to_dbase(node, NULL);
+}
+/*==========================================
  * indi_to_dbase -- Store person in database
  *========================================*/
 void

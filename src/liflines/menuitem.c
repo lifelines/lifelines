@@ -1,7 +1,7 @@
 /* 
    Copyright (c) 1999-2001 Perry Rapp
    Created: 1999/03 for private build of LifeLines
-	Brought into repository: 2001/01/28
+   Brought into repository: 2001/01/28
 
    Permission is hereby granted, free of charge, to any person
    obtaining a copy of this software and associated documentation
@@ -176,11 +176,9 @@ static MenuItem f_MenuItemNotes = { "$n  List notes", "$n", CMD_NOTES };
 static MenuItem f_MenuItemPointers = { "$$  List references", "$$", CMD_POINTERS };
 static MenuItem f_MenuItemHistoryBack = { "^b  History/back", "^b", CMD_HISTORY_BACK };
 static MenuItem f_MenuItemHistoryFwd = { "^f  History/fwd", "^f", CMD_HISTORY_FWD };
+static MenuItem f_MenuItemAddOther = { "%o  Add other ref", "%o", CMD_ADD_OTHER_REF };
 
-/*
-static MenuItemOption f_MenuItemOptionSources =
-	{ "$s  show sources", "$s  hide sources", "$S", CMD_SHOWSOURCES };
-*/
+
 static MenuItem f_MenuItemBrowseFamily = { "B  Browse new family", "B", CMD_BROWSE_FAM };
 
 
@@ -203,6 +201,7 @@ static MenuItem * f_MenuPerson[] =
 	&f_MenuItemRemoveAsChild,
 	&f_MenuItemNewPerson,
 	&f_MenuItemNewFamily,
+	&f_MenuItemAddOther,
 	&f_MenuItemSwapFamilies,
 	&f_MenuItemTandem,
 	&f_MenuItemZipBrowse,
@@ -237,13 +236,7 @@ static MenuItem * f_MenuPerson[] =
 	&f_MenuItemHistoryFwd,
 	0
 };
-/*
-static MenuItemOption * f_MenuPersonOptions[] =
-{
-	&f_MenuItemOptionSources,
-	0
-};
-*/
+
 static MenuItem * f_MenuFamily[] =
 {
 	&f_MenuItemEditFamily,
