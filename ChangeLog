@@ -1,3 +1,7 @@
+2003-04-14 Stephen Dum
+        * ChangeLog src/hdrs/standard.h
+	include stdarg.h so compiles under linux
+
 2003-04-14 Perry Rapp
 
 	* ChangeLog src/gedlib/names.c src/hdrs/llstdlib.h

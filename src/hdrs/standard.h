@@ -64,6 +64,10 @@
 #define LLCHRDIRSEPARATOR '/'
 #endif
 
+#ifndef INCLUDED_STDARG_H
+#include <stdarg.h>
+#define INCLUDED_STDARG_H
+#endif
 
 /* Having 'char *' instead of 'unsigned char *' removes about */
 /* 1800 compiler warnings.  We still need to investigate *every* */
