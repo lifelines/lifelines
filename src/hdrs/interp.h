@@ -203,3 +203,5 @@ extern INT nobuiltins;
 	}
 
 #endif /* _INTERP_H */
+
+void r_poutput(STRING);

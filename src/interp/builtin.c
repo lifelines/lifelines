@@ -2611,7 +2611,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	}
 	delete_pvalue(val);
 	while (fgets(buffer, 1024, cfp))
-		poutput(buffer);
+		r_poutput(buffer);
 	fclose(cfp);
 	return NULL;
 }
