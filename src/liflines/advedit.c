@@ -51,7 +51,6 @@ static void
 expand_tree (NODE root0)
 {
 	NODE copy, node, sub;
-	NOD0 sub0;
 	STRING key;
 
 	root = root0;
@@ -66,8 +65,7 @@ expand_tree (NODE root0)
 		llwprintf("in list: %s %s\n", ntag(node), nval(node));
 #endif
 		key = rmvat(nval(node));
-		if ((sub0 = key_to_record(key, *key))) {
-			sub = nztop(sub0);
+		if ((sub = nztop(key_to_record(key, *key)))) {
 			copy = copy_nodes(sub, TRUE, FALSE);
 			nxref(node)    = nxref(copy);
 			ntag(node)     = ntag(copy);

@@ -70,7 +70,7 @@ struct ntag0 {
 	NKEY nkey;
 	/* metadata will be here */
 };
-#define nztop(n)    ((n)->top)
+NODE nztop(NOD0); /* handles NULL */
 #define nznkey(n)   ((n)->nkey)
 #define nzkeynum(n) ((n)->nkey.keynum)
 #define nztype(n)   ((n)->nkey.ntype)

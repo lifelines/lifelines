@@ -420,8 +420,8 @@ static BOOLEAN
 xref_isvalid_impl (DELETESET set, INT keynum)
 {
 	INT lo,hi,md;
-	if (set->n == set->recs[0]) return TRUE; /* no valids */
-	if (set->n == 1) return FALSE; /* all valid */
+	if (set->n == set->recs[0]) return FALSE; /* no valids */
+	if (set->n == 1) return TRUE; /* all valid */
 	/* binary search deleteds */
 	lo=1;
 	hi=(set->n)-1;

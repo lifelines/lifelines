@@ -442,14 +442,11 @@ refn_to_record (STRING ukey,    /* user refn key */
 {
 	STRING *keys;
 	INT num;
-	NOD0 nod0;
 
 	if (!ukey || *ukey == 0) return NULL;
 	get_refns(ukey, &num, &keys, letr);
 	if (!num) return NULL;
-	nod0 = key_to_record(keys[0], *keys[0]);
-	if (!nod0) return NULL;
-	return nztop(nod0);
+	return nztop(key_to_record(keys[0], *keys[0]));
 }
 /*===============================================
  * index_by_refn - Index node tree by REFN values

@@ -894,3 +894,12 @@ CACHEEL qkey_to_othr_cacheel (STRING key)
 {
 	return key_to_cacheel(othrcache, key, NULL, TRUE);
 }
+/*==============================================
+ * nztop -- Return first NODE of a NOD0
+ *  handle NULL input
+ *============================================*/
+NODE
+nztop (NOD0 nod0)
+{
+	return nod0 ? nod0->top : 0;
+}

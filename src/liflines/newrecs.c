@@ -222,8 +222,7 @@ edit_record (NODE node1,           /* record to edit, poss NULL */
 
 /* Identify record if need be */
 	if (!node1) {
-		NOD0 nod0 = ask_for_record(idedt, letr);
-		if (nod0) node1 = nztop(nod0);
+		node1 = nztop(ask_for_record(idedt, letr));
 	}
 	if (!node1) {
 		message("There is no record with that key or reference.");
