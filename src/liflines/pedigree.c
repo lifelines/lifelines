@@ -127,7 +127,7 @@ static DISPNODE Root = 0;
 static DISPNODE
 alloc_displaynode (void)
 {
-	DISPNODE tn = (DISPNODE)malloc(sizeof(*tn));
+	DISPNODE tn = (DISPNODE)stdalloc(sizeof(*tn));
 	tn->firstchild = NULL;
 	tn->nextsib = NULL;
 	tn->keynum = 0;
@@ -146,10 +146,10 @@ free_displaynode (DISPNODE tn)
 	tn->nextsib = NULL;
 	tn->keynum = -1;
 	if (tn->str) {
-		free(tn->str);
+		stdfree(tn->str);
 		tn->str = NULL;
 	}
-	free(tn);
+	stdfree(tn);
 }
 /*=================================================
  * add_children -- add children to tree recursively
@@ -229,7 +229,7 @@ append_to_text_list (LIST list, STRING text, INT width, BOOLEAN newline)
 			temp = NULL;
 		}
 	}
-	current=malloc((width+1)*sizeof(char));
+	current=stdalloc((width+1)*sizeof(char));
 	current[0] = 0;
 	curptr = current;
 	curlen = width;
@@ -243,7 +243,7 @@ append_to_text_list (LIST list, STRING text, INT width, BOOLEAN newline)
 			if (current[0]) {
 				enqueue_list(list, strdup(current));
 			}
-			free(current);
+			stdfree(current);
 			return;
 		}
 		if (len > curlen)

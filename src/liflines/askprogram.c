@@ -213,9 +213,9 @@ load_programs(STRING directory,
           info->prev = head;
           head->next = info;
         }
-      free(programs[n]);
+      stdfree(programs[n]);
     }
-  free(programs);
+  stdfree(programs);
 
   return head;
 }
@@ -267,22 +267,17 @@ free_program_list(struct program_info *head,
       info = head;
       head = head->next;
 
-      if (info->filename)
-        free(info->filename);
-      if (info->version)
-        free(info->version);
-      if (info->author)
-        free(info->author);
-      if (info->progname)
-        free(info->progname);
-      if (info->description)
-        free(info->description);
-      free(info);
+      stdfree(info->filename);
+      stdfree(info->version);
+      stdfree(info->author);
+      stdfree(info->progname);
+      stdfree(info->description);
+      stdfree(info);
     }
   if (list) {
     while (len--)
-      free(list[len]);
-    free(list);
+      stdfree(list[len]);
+    stdfree(list);
   }
 }
 
@@ -317,7 +312,7 @@ make_program_list(struct program_info *head,
   if (!len)
     return 0;
 
-  newlist = malloc(sizeof(char*)*len);
+  newlist = stdalloc(sizeof(char*)*len);
   assert(NULL != newlist);
   cur = head->next;
   i = 0;

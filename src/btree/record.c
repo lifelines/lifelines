@@ -355,7 +355,7 @@ getrecord (BTREE btree,
 
 	rec = readrec(btree, block, lo, plen);
 	if (rec && !strcmp(rec, "DELE\n")) {
-		free(rec);
+		stdfree(rec);
 		rec=NULL;
 	}
 	return rec;

@@ -436,10 +436,10 @@ setup_menu (INT screen, STRING Title, INT MenuRows, INT MenuCols
 static CMDARRAY
 create_cmd_array (INT alloc)
 {
-	CMDARRAY cmds = (CMDARRAY)malloc(sizeof(*cmds));
+	CMDARRAY cmds = (CMDARRAY)stdalloc(sizeof(*cmds));
 	cmds->alloc = alloc;
 	cmds->used = 0;
-	cmds->array = (CMDITEM)malloc(alloc * sizeof(cmds->array[0]));
+	cmds->array = (CMDITEM)stdalloc(alloc * sizeof(cmds->array[0]));
 	return cmds;
 }
 /*============================
@@ -453,10 +453,10 @@ grow_cmd_array (CMDARRAY cmds)
 	CMDITEM old = cmds->array;
 	INT i;
 	cmds->alloc = alloc;
-	cmds->array = (CMDITEM)malloc(alloc * sizeof(cmds->array[0]));
+	cmds->array = (CMDITEM)stdalloc(alloc * sizeof(cmds->array[0]));
 	for (i=0; i<cmds->used; i++)
 		copy_cmditem(&cmds->array[i], &old[i]);
-	free(old);
+	stdfree(old);
 }
 /*============================
  * copy_cmditem -- copy a CmdItem_s struct
@@ -649,8 +649,8 @@ free_cmds (CMDARRAY cmds)
 			free_cmds(subarr);
 		}
 	}
-	free(cmds->array);
-	free(cmds);
+	stdfree(cmds->array);
+	stdfree(cmds);
 }
 /*============================
  * menuitem_check_cmd -- check input string & return cmd

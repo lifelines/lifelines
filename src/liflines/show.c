@@ -100,20 +100,20 @@ void
 init_show_module ()
 {
 	int i;
-	Spers = (LINESTRING)malloc(ll_cols);
-	Sbirt = (LINESTRING)malloc(ll_cols);
-	Sdeat = (LINESTRING)malloc(ll_cols);
-	Sfath = (LINESTRING)malloc(ll_cols);
-	Smoth = (LINESTRING)malloc(ll_cols);
-	Smarr = (LINESTRING)malloc(ll_cols);
-	Shusb = (LINESTRING)malloc(ll_cols);
-	Shbirt = (LINESTRING)malloc(ll_cols);
-	Shdeat = (LINESTRING)malloc(ll_cols);
-	Swife = (LINESTRING)malloc(ll_cols);
-	Swbirt = (LINESTRING)malloc(ll_cols);
-	Swdeat = (LINESTRING)malloc(ll_cols);
+	Spers = (LINESTRING)stdalloc(ll_cols);
+	Sbirt = (LINESTRING)stdalloc(ll_cols);
+	Sdeat = (LINESTRING)stdalloc(ll_cols);
+	Sfath = (LINESTRING)stdalloc(ll_cols);
+	Smoth = (LINESTRING)stdalloc(ll_cols);
+	Smarr = (LINESTRING)stdalloc(ll_cols);
+	Shusb = (LINESTRING)stdalloc(ll_cols);
+	Shbirt = (LINESTRING)stdalloc(ll_cols);
+	Shdeat = (LINESTRING)stdalloc(ll_cols);
+	Swife = (LINESTRING)stdalloc(ll_cols);
+	Swbirt = (LINESTRING)stdalloc(ll_cols);
+	Swdeat = (LINESTRING)stdalloc(ll_cols);
 	for (i=0; i<MAXOTHERS; i++)
-		Sothers[i] = (LINESTRING)malloc(ll_cols);
+		Sothers[i] = (LINESTRING)stdalloc(ll_cols);
 }
 /*===============================================
  * init_display_indi -- Initialize display person
@@ -702,7 +702,7 @@ put_out_line (WINDOW * win, INT x, INT y, STRING string, INT width, INT flag)
 	else
 	{
 		INT i, pos;
-		LINESTRING linebuffer = (LINESTRING)malloc(width);
+		LINESTRING linebuffer = (LINESTRING)stdalloc(width);
 		char * ptr = &linebuffer[0];
 		int mylen=width;
 		ptr[0] = 0;
@@ -717,7 +717,7 @@ put_out_line (WINDOW * win, INT x, INT y, STRING string, INT width, INT flag)
 		linebuffer[i++] = '+';
 		linebuffer[i++] = '\0';
 		mvwaddstr(win, x, y, linebuffer);
-		free(linebuffer);
+		stdfree(linebuffer);
 	}
 }
 /*==================================================================
