@@ -9,6 +9,10 @@
 	Bugfix for (r)sort being reversed. Add single arg (r)sort
 	tests to st_list.ll.
 
+	* ChangeLog src/gedlib/valtable.c
+
+	Fix user option editor to skip UTF-8 BOM.
+
 2003-09-08 Matt Emmerton
 
 	* ChangeLog src/gedlib/init.c

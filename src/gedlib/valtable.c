@@ -71,7 +71,7 @@ init_valtab_from_file (STRING fname, TABLE tab, XLAT ttm, INT sep, STRING *pmsg)
 {
 	FILE *fp;
 	struct stat buf;
-	STRING str;
+	STRING str, str1;
 	BOOLEAN rc;
 	INT siz;
 	ZSTR zstr=0;
@@ -84,13 +84,17 @@ init_valtab_from_file (STRING fname, TABLE tab, XLAT ttm, INT sep, STRING *pmsg)
 		return TRUE;
 	}
 	str = (STRING) stdalloc(buf.st_size+1);
+	str1 = str; /* remember it for deallocating */
 	str[buf.st_size] = 0;
 	siz = fread(str, 1, buf.st_size, fp);
 	/* may not read full buffer on Windows due to CR/LF translation */
 	ASSERT(siz == buf.st_size || feof(fp));
 	fclose(fp);
+	/* skip over UTF-8 BOM (byte order mark) if present */
+	if ((uchar)str[0] == 0xEF && (uchar)str[1] == 0xBB && (uchar)str[2] == 0xBF)
+		str += 3;
 	zstr = translate_string_to_zstring(ttm, str);
-	stdfree(str); /* done with original record - we use translated record */
+	stdfree(str1); /* done with original record - we use translated record */
  	rc = init_valtab_from_string(zs_str(zstr), tab, sep, pmsg);
 	zs_free(&zstr);
 	return rc;
