@@ -164,13 +164,13 @@ init_screen (void)
 		ll_cols = winx;
 		if (ll_cols > COLS || ll_lines > LINES) {
 			endwin();
-			fprintf(stderr, "The requested window size (%d,%d) is too large for your terminal (%d,%d).",
+			fprintf(stderr, "The requested window size (%d,%d) is too large for your terminal (%d,%d).\n",
 				ll_cols, ll_lines, COLS, LINES);
 			exit(1);
 		}
 		if (ll_cols < COLSREQ || ll_lines < LINESREQ) {
 			endwin();
-			fprintf(stderr, "The requested window size (%d,%d) is too small for LifeLines (%d,%d).",
+			fprintf(stderr, "The requested window size (%d,%d) is too small for LifeLines (%d,%d).\n",
 				ll_cols, ll_lines, COLSREQ, LINESREQ);
 			exit(1);
 		}
@@ -181,7 +181,7 @@ init_screen (void)
 
 		if (COLS < COLSREQ || LINES < LINESREQ) {
 			endwin();
-			fprintf(stderr, "Your terminal display (%d,%d) is too small for LifeLines (%d,%d).",
+			fprintf(stderr, "Your terminal display (%d,%d) is too small for LifeLines (%d,%d).\n",
 				COLS, LINES, COLSREQ, LINESREQ);
 			exit(1);
 		}
