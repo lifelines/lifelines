@@ -35,8 +35,6 @@
 
 #include "gedcom.h"
 
-typedef struct tag_cacheel *CACHEEL;
-
 CACHEEL even_to_cacheel(NODE);
 CACHEEL fam_to_cacheel(RECORD frec);
 CACHEEL fam_to_cacheel_old(NODE);

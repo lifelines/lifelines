@@ -19,6 +19,11 @@
 	but can never be a bad memory pointer.
 	Also removed indirect caches entirely.
 
+	* ChangeLog src/hdrs/cache.h
+
+	Avoid typedef'ing CACHEEL twice by removing the one in cache.h
+	(which anyway includes gedcom.h, which has the typedef).
+
 2003-11-21 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp src/gedlib/xlat.c
