@@ -349,7 +349,7 @@ void addxxref (INT key) { add_xref_to_set(key, &xrecs); }
 /*===================================================
  * addxref -- Mark key free (accepts string key, any type)
  *=================================================*/
-void addxref (STRING key)
+void addxref (CNSTRING key)
 {
 	INT keyint = atoi(key + 1);
 	switch(key[0]) {

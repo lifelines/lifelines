@@ -68,7 +68,7 @@ void copy_table(const TABLE src, TABLE dest, INT whattodup);
 TABLE create_table_old2(INT whattofree);
 TABLE create_table_new(void);
 TABLE create_table_old(void);
-void delete_table(TABLE, STRING);
+void delete_table(TABLE tab, CNSTRING key);
 void delref_table(TABLE tab, void (*tproc)(CNSTRING key, UNION uval));
 void destroy_table(TABLE);
 INT get_table_count(TABLE);

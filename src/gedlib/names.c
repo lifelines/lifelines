@@ -365,7 +365,7 @@ getfinitial (CNSTRING name)
  *  key:   [in] person's INDI key
  *=======================================*/
 void
-add_name (STRING name, STRING key)
+add_name (CNSTRING name, CNSTRING key)
 {
 	INT i;
 	RKEY rkeyid = str2rkey(key);

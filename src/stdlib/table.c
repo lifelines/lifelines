@@ -415,7 +415,7 @@ replace_table_str (TABLE tab, STRING key, STRING str, INT whattofree)
  *  key: [IN]   key to find element to remove
  *========================================*/
 void
-delete_table (TABLE tab, STRING key)
+delete_table (TABLE tab, CNSTRING key)
 {
 	INT hval = hash(tab, key);
 	ENTRY preve = NULL;

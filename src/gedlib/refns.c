@@ -213,10 +213,11 @@ refn_hi (void)
 }
 /*=========================================
  * add_refn -- Add new entry to refn record
+ *  refn: [IN]  record's user refn key
+ *  key:  [IN]  record's GEDCOM key
  *=======================================*/
 BOOLEAN
-add_refn (STRING refn,  /* record's user refn key */
-          STRING key)   /* record's GEDCOM key */
+add_refn (CNSTRING refn, CNSTRING key)
 {
 	STRING rec, p;
 	INT i, len, off;

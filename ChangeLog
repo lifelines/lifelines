@@ -1,3 +1,13 @@
+2005-01-25, Perry Rapp
+
+	* ChangeLog src/gedlib/intrface.c src/gedlib/keytonod.c
+	src/gedlib/names.c src/gedlib/refns.c src/gedlib/remove.c
+	src/gedlib/xreffile.c src/hdrs/gedcom.h src/hdrs/table.h
+	src/liflines/add.c src/stdlib/table.c
+
+	Convert record macros nzkey, nzkeynum, nztype to functions,
+	and const correctness fixes.
+
 2005-01-24 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c src/gedlib/node.c

@@ -260,7 +260,7 @@ BOOLEAN
 remove_any_record (RECORD record)
 {
 	NODE root=0;
-	STRING key = nzkey(record);
+	CNSTRING key = nzkey(record);
 	NODE rest, refn;
 
 	ASSERT(record);

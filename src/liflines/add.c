@@ -151,18 +151,21 @@ void
 add_new_indi (RECORD indi0)
 {
 	NODE name, refn, sex, body, dumb, node;
-	STRING key;
-	INT keynum;
+	CNSTRING key=0;
+	INT keynum=0;
 	NODE indi = nztop(indi0);
 
 	split_indi_old(indi, &name, &refn, &sex, &body, &dumb, &dumb);
 	keynum = getixrefnum();
 	init_new_record(indi0, 'I', keynum);
 	key = nzkey(indi0);
-	for (node = name; node; node = nsibling(node))
+	for (node = name; node; node = nsibling(node)) {
 		add_name(nval(node), key);
-	for (node = refn; node; node = nsibling(node))
-		if (nval(node)) add_refn(nval(node), key);
+	}
+	for (node = refn; node; node = nsibling(node)) {
+		if (nval(node))
+			add_refn(nval(node), key);
+	}
 	join_indi(indi, name, refn, sex, body, NULL, NULL);
 	resolve_refn_links(indi);
 	indi_to_dbase(indi);

@@ -110,7 +110,7 @@ static void put_node_in_cache(CACHE cache, CACHEEL cel, NODE node, STRING key);
 static NODE qkey_to_node(CACHE cache, CNSTRING key, STRING tag);
 static RECORD qkey_typed_to_record(CACHE cache, CNSTRING key, STRING tag);
 /* static CACHEEL qkey_to_typed_cacheel(STRING key); */
-static void remove_from_cache(CACHE, STRING);
+static void remove_from_cache(CACHE, CNSTRING);
 static BOOLEAN is_record_loaded (RECORD rec);
 
 
@@ -1057,7 +1057,7 @@ remove_fam_cache (STRING key)
  * remove_from_cache_by_key -- Remove record from cache
  *===========================================*/
 void
-remove_from_cache_by_key (STRING key)
+remove_from_cache_by_key (CNSTRING key)
 {
 	switch(key[0]) {
 	case 'I': remove_from_cache(indicache, key); break;
@@ -1072,7 +1072,7 @@ remove_from_cache_by_key (STRING key)
  * remove_from_cache -- Move cache entry to free list
  *===========================================*/
 static void
-remove_from_cache (CACHE cache, STRING key)
+remove_from_cache (CACHE cache, CNSTRING key)
 {
 	CACHEEL cel=0, celnext=0;
 	NODE node=0;
@@ -1357,6 +1357,39 @@ nztop (RECORD rec)
 		rec->rec_cel = cel;
 	}
 	return cnode(rec->rec_cel);
+}
+/*==============================================
+ * nzkey -- Return key of record
+ *  handle NULL input
+ * eg, "I85" for a person I85
+ *============================================*/
+CNSTRING
+nzkey (RECORD rec)
+{
+	if (!rec) return 0;
+	return rec->rec_nkey.key;
+}
+/*==============================================
+ * nzkeynum -- Return record number of record
+ *  handle NULL input
+ * eg, 85 for a person I85
+ *============================================*/
+INT
+nzkeynum (RECORD rec)
+{
+	if (!rec) return 0;
+	return rec->rec_nkey.keynum;
+}
+/*==============================================
+ * nztype -- Return type number (char) of record
+ *  handle NULL input
+ * eg, 'I' for a person I85
+ *============================================*/
+char
+nztype (RECORD rec)
+{
+	if (!rec) return 0;
+	return rec->rec_nkey.ntype;
 }
 /*==============================================
  * cacheel_to_key -- Return key of record inside of cache element

@@ -116,10 +116,10 @@ struct tag_record { /* RECORD */
 	NKEY rec_nkey;
 	struct tag_cacheel * rec_cel; /* cache wrapper */
 };
-NODE nztop(RECORD); /* handles NULL, also reloads from cache */
-#define nzkey(n)    ((n)->rec_nkey.key)
-#define nzkeynum(n) ((n)->rec_nkey.keynum)
-#define nztype(n)   ((n)->rec_nkey.ntype)
+NODE nztop(RECORD rec); /* handles NULL, also reloads from cache */
+CNSTRING nzkey(RECORD rec);
+INT nzkeynum(RECORD rec);
+char nztype(RECORD rec);
 
 /*=====================================
  * LLDATABASE types -- LifeLines database
@@ -211,9 +211,9 @@ void addixref(INT key);
 void addexref(INT key);
 void addfxref(INT key);
 void addsxref(INT key);
-void addxref(STRING key);
+void addxref(CNSTRING key);
 void addxxref(INT key);
-BOOLEAN add_refn(STRING, STRING);
+BOOLEAN add_refn(CNSTRING refn, CNSTRING key);
 BOOLEAN are_locales_supported(void);
 RECORD choose_child(RECORD irec, RECORD frec, STRING msg0, STRING msgn, ASK1Q ask1);
 void choose_and_remove_family(void);
@@ -233,7 +233,7 @@ NODE copy_nodes(NODE, BOOLEAN, BOOLEAN);
 BOOLEAN create_database(STRING dbused);
 NODE create_node(STRING, STRING, STRING, NODE);
 NODE create_temp_node(STRING, STRING, STRING, NODE);
-void del_in_dbase(STRING key);
+void del_in_dbase(CNSTRING key);
 void delete_metarec(STRING key);
 BOOLEAN edit_mapping(INT);
 BOOLEAN edit_valtab_from_db(STRING, TABLE*, INT sep, STRING, STRING (*validator)(TABLE tab));
@@ -422,7 +422,7 @@ BOOLEAN remove_any_record(RECORD record);
 void remove_indi_by_root(NODE);
 void remove_indi_cache(STRING key);
 void remove_fam_cache(STRING key);
-void remove_from_cache_by_key(STRING key);
+void remove_from_cache_by_key(CNSTRING key);
 BOOLEAN remove_fam_record(RECORD frec);
 void remove_from_browse_lists(STRING);
 BOOLEAN remove_refn(CNSTRING refn, CNSTRING key);
@@ -453,7 +453,7 @@ void split_fam(NODE, NODE*, NODE*, NODE*, NODE*, NODE*);
 void split_indi_old(NODE, NODE*, NODE*, NODE*, NODE*, NODE*, NODE*);
 void split_othr(NODE node, NODE *prefn, NODE *prest);
 BOOLEAN store_file_to_db(STRING key, STRING file);
-BOOLEAN store_record(STRING key, STRING rec, INT len);
+BOOLEAN store_record(CNSTRING key, STRING rec, INT len);
 BOOLEAN store_text_file_to_db(STRING key, CNSTRING file, TRANSLFNC);
 RECORD string_to_record(STRING str, CNSTRING key, INT len);
 void termlocale(void);
@@ -528,7 +528,7 @@ void lldb_close(LLDATABASE lldb);
 void lldb_set_btree(LLDATABASE lldb, void * btree);
 
 /* names.c */
-void add_name(STRING, STRING);
+void add_name(CNSTRING name, CNSTRING key);
 void free_name_list(LIST list);
 void free_string_list(LIST list);
 LIST find_indis_by_name(CNSTRING name);

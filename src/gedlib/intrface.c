@@ -52,7 +52,7 @@ retrieve_raw_record (CNSTRING key, INT *plen)
  *  len:  [in] length of data to store
  *=======================================*/
 BOOLEAN
-store_record (STRING key, STRING rec, INT len)
+store_record (CNSTRING key, STRING rec, INT len)
 {
 	return bt_addrecord (BTR, str2rkey(key), rec, len);
 }
@@ -175,7 +175,7 @@ traverse_db_key_recs (BOOLEAN(*func)(CNSTRING key, RECORD, void *param), void *p
  *  Also update xreffile (module of free keys)
  *===============================================*/
 void
-del_in_dbase (STRING key)
+del_in_dbase (CNSTRING key)
 {
 	if (!key || *key == 0) return;
 
