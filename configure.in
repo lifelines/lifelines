@@ -25,6 +25,9 @@ AC_PROG_YACC
 AC_PROG_RANLIB
 AC_PROG_INSTALL
 
+dnl codeset conversion library
+dnl Do we need AM_ICONV ? (Perry, 2002.06.14)
+
 dnl Internationalization (gettext)
 AM_GNU_GETTEXT
 
