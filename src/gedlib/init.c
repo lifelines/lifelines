@@ -95,7 +95,7 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 {
 	STRING e;
 	STRING dirvars[] = { "LLPROGRAMS", "LLREPORTS", "LLARCHIVES"
-		, "LLDATABASES", "LLNEWDBDIR" };
+		, "LLDATABASES", };
 	INT i;
 
 	/* request notification when options change */

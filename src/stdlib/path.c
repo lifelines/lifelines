@@ -12,6 +12,11 @@
 
 #include "llstdlib.h"
 
+/*********************************************
+ * local function prototypes
+ *********************************************/
+static INT zero_separate_path(STRING path);
+
 /*===========================================
  * is_path_sep -- Is path separator character
  *  handle WIN32 characters
@@ -187,8 +192,7 @@ filepath (CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING  ext, INT utf8)
 {
 	char buf1[MAXPATHLEN], buf2[MAXPATHLEN];
 	STRING p, q;
-	INT c;
-	INT nlen, elen, dirs;
+	INT nlen, elen;
 
 	if (ISNULL(name)) return NULL;
 	if (ISNULL(path)) return strsave(name);
@@ -205,16 +209,7 @@ filepath (CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING  ext, INT utf8)
 	else { ext = NULL; elen = 0; }
 	if (nlen + strlen(path) + elen >= MAXLINELEN) return NULL;
 	strcpy(buf1, path);
-	p = buf1;
-	dirs = 1; /* count dirs in path */
-	while ((c = *p)) {
-		if (is_path_sep((unsigned char)c)) {
-			*p = 0;
-			dirs++;
-		}
-		p++;
-	}
-	*(++p) = 0;
+	zero_separate_path(buf1);
 	p = buf1;
 	while (*p) {
 		q = buf2;
@@ -247,6 +242,48 @@ filepath (CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING  ext, INT utf8)
 	strcpy(q, name);
 	if(ext) strcat(q, ext);
 	return strsave(buf2);
+}
+/*===========================================
+ * zero_separate_path -- Zero separate dirs in path
+ * (Also appends extra zero at end)
+ * Assumes there are no empty directory entries.
+ * Returns count of directories.
+ *=========================================*/
+static INT
+zero_separate_path (STRING path)
+{
+	INT c=0, dirs=0;
+	if (!path[0]) {
+		path[1] = 0;
+		return 0;
+	}
+	++dirs;
+	while ((c = (uchar)*path)) {
+		if (is_path_sep((uchar)c)) {
+			*path = 0;
+			++dirs;
+		}
+		++path;
+	}
+	path[1] = 0;
+	return dirs;
+}
+/*===========================================
+ * get_first_path_entry -- Return first directory
+ *  on specified path
+ *  returns static buffer
+ *=========================================*/
+CNSTRING
+get_first_path_entry (CNSTRING path)
+{
+	static char buf1[MAXPATHLEN];
+
+	if (!path) return NULL;
+	if (!path[0]) return path;
+	if (strlen(path)+2>sizeof(buf1)) return "";
+	strcpy(buf1, path);
+	zero_separate_path(buf1);
+	return buf1;
 }
 /*===========================================
  * fopenpath -- Open file using path variable

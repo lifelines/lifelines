@@ -541,13 +541,16 @@ open_or_create_database (INT alteration, STRING *dbused)
 	If no database directory specified, add prefix llnewdbdir
 	*/
 	if (is_unadorned_directory(*dbused)) {
-		STRING newdbdir = getoptstr("LLNEWDBDIR", 0);
+		STRING dbpath = getoptstr("LLDATABASES", ".");
+		CNSTRING newdbdir = get_first_path_entry(dbpath);
 		STRING temp = *dbused;
 		if (newdbdir) {
 			char tempth[MAXPATHLEN];
+			newdbdir = strdup(newdbdir);
 			concat_path(newdbdir, *dbused, uu8, tempth, sizeof(tempth));
 			*dbused = strsave(tempth);
 			stdfree(temp);
+			stdfree((STRING)newdbdir);
 		}
 	}
 

@@ -112,6 +112,7 @@ STRING concat_path_alloc(CNSTRING dir, CNSTRING file);
 BOOLEAN expand_special_fname_chars(STRING buffer, INT buflen, INT uu8);
 STRING filepath(CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING ext, INT utf8);
 FILE* fopenpath(STRING, STRING, STRING, STRING, INT utf8, STRING*);
+CNSTRING get_first_path_entry(CNSTRING path);
 BOOLEAN is_absolute_path(CNSTRING dir);
 BOOLEAN is_dir_sep(char c);
 BOOLEAN is_path_sep(char c);

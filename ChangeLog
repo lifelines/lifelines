@@ -1,3 +1,10 @@
+2003-09-11 Perry Rapp
+
+	* ChangeLog src/gedlib/init.c src/hdrs/llstdlib.h
+	src/liflines/llexec.c src/liflines/main.c src/stdlib/path.c
+
+	Remove LLNEWDBDIR and instead use first component of path (LLDATABASES).
+
 2003-09-10 Perry Rapp
 
 	* ChangeLog src/btree/file.c src/gedlib/charmaps.c
