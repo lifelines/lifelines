@@ -274,6 +274,6 @@ PVALUE
 create_new_pvalue (void)
 {
 	PVALUE val = alloc_pvalue_memory();
-	ptype(val) = PNONE;
+	ptype(val) = PNULL;
 	return val;
 }

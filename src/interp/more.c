@@ -593,9 +593,6 @@ makestring (PVALUE val, STRING str, INT len, BOOLEAN *eflg)
 	str[0]=0;
 
 	switch(which_pvalue_type(val)) {
-		case PNONE: 
-			llstrapps(str, len, uu8, "<NONE>");
-			break;
 		case PNULL:
 			llstrapps(str, len, uu8, "<NULL>");
 			break;

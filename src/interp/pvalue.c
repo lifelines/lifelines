@@ -66,8 +66,10 @@ static void table_pvcleaner(CNSTRING key, UNION uval);
  * local variables
  *********************************************/
 
+/* These names are offset by the number of their type */
+/* PFLOAT == 4, so "PFLOAT" must be at array offset 4 */
 static char *ptypes[] = {
-	"PNONE", "PNULL", "PINT", "PLONG", "PFLOAT", "PBOOL", "PSTRING",
+	"?", "PNULL", "PINT", "PLONG", "PFLOAT", "PBOOL", "PSTRING",
 	"PGNODE", "PINDI", "PFAM", "PSOUR", "PEVEN", "POTHR", "PLIST",
 	"PTABLE", "PSET", "PARRAY"
 };
@@ -119,7 +121,6 @@ set_pvalue (PVALUE val, INT type, VPTR value)
 
 	/* sanity check */
 	switch(type) {
-	case PNONE: 
 	case PNULL:
 		ASSERT(!value);
 		break;

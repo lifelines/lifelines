@@ -62,7 +62,6 @@ struct tag_pvalue {
 
 /* PVALUE types */
 
-#define PNONE      0  /* transitory: type set by create_new_pvalue (caller changes) */
 #define PNULL      1  /* (freed pvalue) any value -- no type restriction - always NULL value */
 #define PINT       2  /* integer */
 /* PLONG==3 is obsolete */

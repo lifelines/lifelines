@@ -32,6 +32,12 @@
 
 	Fix const typing in db traversal.
 
+	* ChangeLog src/hdrs/pvalue.h src/hdrs/pvalue.h
+	src/interp/more.c src/interp/pvalalloc.c
+	src/interp/pvalue.c
+
+	Remove PNONE (use PNULL instead).
+
 2005-01-15 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c src/hdrs/list.h
@@ -231,7 +237,7 @@
 
 2005-01-08 Perry Rapp
 
-	* ChangeLog src/gedlib/intrface.c src/gedlib\keytonod.c
+	* ChangeLog src/gedlib/intrface.c src/gedlib/keytonod.c
 	src/gedlib/messages.c src/gedlib/names.c src/gedlib/refns.c
 	src/gedlib/remove.c src/gedlib/xreffile.c src/hdrs/gedcom.h
 	src/hdrs/uiprompts.h src/interp/more.c src/liflines/ask.c
@@ -2214,7 +2220,7 @@ Released 3.0.33 beta.
 	* ChangeLog src/gedlib/date.c
 
 	Fix title_dup copy&paste (it was doing lower), which was causing
-	many failures in st\st_date.ll.
+	many failures in st/st_date.ll.
 
 	* ChangeLog reports/st/st_string_UTF-8.ll
 
@@ -6035,7 +6041,7 @@ Released 3.0.33 beta.
 
 2002-01-02 Perry Rapp <puddle@users.sourceforge.net>
 
-	* ChangeLog stdlib\lloptions.c:
+	* ChangeLog stdlib/lloptions.c:
 
 	Modify lloptions to handle \n\r (can happen on cygwin).
 
@@ -10829,7 +10835,7 @@ Released 3.0.33 beta.
 	* ChangeLog src/gedlib/date.c
 
 	Fix title_dup copy&paste (it was doing lower), which was causing
-	many failures in st\st_date.ll.
+	many failures in st/st_date.ll.
 
 	* ChangeLog reports/st/st_string_UTF-8.ll
 
@@ -14650,7 +14656,7 @@ Released 3.0.33 beta.
 
 2002-01-02 Perry Rapp <puddle@users.sourceforge.net>
 
-	* ChangeLog stdlib\lloptions.c:
+	* ChangeLog stdlib/lloptions.c:
 
 	Modify lloptions to handle \n\r (can happen on cygwin).
 
