@@ -41,7 +41,7 @@
  * external/imported variables
  *********************************************/
 
-extern STRING nonvar1;
+extern STRING nonindx,nonvar1,nonsetx;
 
 /*********************************************
  * local function prototypes
@@ -106,13 +106,13 @@ __addtoset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	PVALUE val2=0;
 	if (*eflg) {
-		prog_error(node, "1st arg to addtoset is not a set.");
+		prog_var_error(node, stab, arg1, val1, nonsetx, "addtoset", "1");
 		return NULL;
 	}
 	ASSERT(seq = pvalue_to_seq(val1));
 	indi = eval_indi(arg2, stab, eflg, NULL);
 	if (*eflg) {
-		prog_error(node, "2nd arg to addtoset must be a person.");
+		prog_var_error(node, stab, arg2, NULL, nonindx, "addtoset", "2");
 		return NULL;
 	}
 	if (!indi) return NULL;

@@ -20,6 +20,10 @@
 
 	Fix __indiset to use prog_var_error (& therefore report debugger).
 
+	* ChangeLog src/interp/alloc.c src/interp/intrpseq.c
+
+	Fix __addtoset to use prog_var_error (& therefore report debugger).
+
 2005-01-22 Perry Rapp
 
 	* ChangeLog src/stdlib/generic.c src/stdlib/table.c
