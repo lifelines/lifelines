@@ -1,0 +1,55 @@
+.\" Placeholder man page for LifeLines
+.TH LLINES 1 "Jan 2002" "LifeLines 3.0.7"
+.SH NAME
+llines
+.SH SYNOPSIS
+.B llines
+[\fIOPTION\fR]... 
+.br
+.B llines
+[\fIOPTION\fR]... \fIDatabase\fR
+.SH DESCRIPTION
+.PP
+Invokes the LifeLines genealogy program.
+.PP
+For up to date documentation, please see the LifeLines reference
+manual, or visit the project site online at:
+http://lifelines.sourceforge.net
+.PP
+LifeLines is a program to manipulate genealogical information in
+GEDCOM format. It has a curses interface, and a built-in interpreter
+for its own genealogical report language.
+.SH OPTIONS
+.TP
+.BI \-F
+Finnish option (only available if compiled with Finnish flag)
+.TP
+.BI \-d
+developmental/debug mode (signals are not caught)
+.TP
+.BI \-f
+force open a database (only for use if reader/writer count is wrong)
+.TP
+.BI \-i
+open database with immutable access (no protection against other access --
+for use on read-only media)
+.TP
+.BI \-k
+always show key values (normally key is not shown if a REFN is shown)
+.TP
+.BI \-r
+open database with read-only access (protect against other writer access)
+.TP
+.BI \-u \fICOLS\fP,\fIROWS
+specify window size (eg, -u120,34 specifies 120 columns by 34 rows)
+.TP
+.BI \-w
+open database with writeable access (protecte against other reader
+or writer access)
+.TP
+.BI \-?
+display options summary
+.SH DOCUMENTATION
+The LifeLines documentation is generated as part of the installation,
+and may also be viewed at the project site:
+http://lifelines.sourceforge.net.
