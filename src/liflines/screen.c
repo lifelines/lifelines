@@ -135,7 +135,7 @@ static void del_menu(void);
 static void disp_codeset(WINDOW * win, INT row, INT col, STRING menuit, INT codeset);
 static void disp_locale(WINDOW * win, INT row, INT col, STRING menuit);
 static void disp_trans_table_choice(WINDOW * win, INT row, INT col, STRING menuit, INT indx);
-static void draw_cset_win();
+static void draw_cset_win(void);
 static void edit_tt_menu(WINDOW *wparent);
 static void export_tts(void);
 static INT extra_menu(void);
