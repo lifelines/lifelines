@@ -82,7 +82,7 @@ closure_add_key (CLOSURE * closure, STRING key, STRING tag)
 
 	/* we'll store the tag as the value 
 	 during gengedcom, all append_indiseqs alloc their own keys & vals (tags) */
-	append_indiseq(closure->seq, strsave(key), NULL, strsave(tag),
+	append_indiseq_sval(closure->seq, strsave(key), NULL, strsave(tag),
 	    TRUE, TRUE);
 	/* during gengedcom, all tables alloc their own keys */
 	insert_table(closure->tab, strsave(key), NULL);
@@ -113,7 +113,7 @@ closure_add_output_node (CLOSURE * closure, NODE node)
 	STRING key=rmvat(nxref(node));
 	STRING tag=ntag(node);
 	/* during gengedcom, all append_indiseqs alloc their own keys & vals (tags) */
-	append_indiseq(closure->outseq, strsave(key), NULL, strsave(tag),
+	append_indiseq_sval(closure->outseq, strsave(key), NULL, strsave(tag),
 	    TRUE, TRUE);
 }
 /*======================================================
@@ -425,7 +425,7 @@ gen_gedcom (INDISEQ seq, int gengedcl)
 		processing will add stuff to the to-process list */
 		FORINDISEQ(closure.seq, el, num)
 			/* during gengedcom, all append_indiseqs alloc their own keys & vals (tags) */
-			append_indiseq(tempseq, strsave(skey(el)), NULL, strsave(sval(el)),
+			append_indiseq_sval(tempseq, strsave(skey(el)), NULL, strsave(sval(el)),
 				 TRUE, TRUE);
 		ENDINDISEQ
 		/* clear to-process list */

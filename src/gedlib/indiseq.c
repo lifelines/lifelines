@@ -48,6 +48,12 @@
  * if the value associated with an individual in a set is attempted
  * to be used in a report program - pbm 17-Feb-97
  */
+/*
+Perry is beginning a revision of indiseq
+to differentiate INT, WORD, and STRING value style
+indiseqs
+Perry, 2001/01/05
+*/
 
 extern BOOLEAN opt_finnish;		/* Finnish language support */
 
@@ -107,24 +113,60 @@ remove_indiseq (INDISEQ seq,
 INDISEQ
 copy_indiseq (INDISEQ seq)
 {
-	INDISEQ new;
+	INDISEQ newseq;
 	if (!seq) return NULL;
-	new = create_indiseq();
+	newseq = create_indiseq();
 	FORINDISEQ(seq, el, num)
-		append_indiseq(new, skey(el), snam(el), (WORD)sval(el),
+		append_indiseq(newseq, skey(el), snam(el), sval(el),
 		    TRUE, FALSE);
 	ENDINDISEQ
-	return new;
+	return newseq;
+}
+/*==================================================
+ * append_indiseq_ival -- Append element to sequence
+ *  with INT value
+ *================================================*/
+void
+append_indiseq_ival (INDISEQ seq,    /* sequence */
+                     STRING key,     /* key - not NULL */
+                     STRING name,    /* name - may be NULL */
+                     INT val,       /* extra val */
+                     BOOLEAN sure,   /* no dupe check? */
+                     BOOLEAN alloc)  /* key alloced? */
+{
+	WORD wval=(WORD)val;
+	/*
+	to do - verify that this is an ival indiseq
+	*/
+	append_indiseq(seq, key, name, wval, sure, alloc);
+}
+/*==================================================
+ * append_indiseq_sval -- Append element to sequence
+ *  with STRING value
+ *================================================*/
+void
+append_indiseq_sval (INDISEQ seq,    /* sequence */
+                     STRING key,     /* key - not NULL */
+                     STRING name,    /* name - may be NULL */
+                     STRING sval,       /* extra val */
+                     BOOLEAN sure,   /* no dupe check? */
+                     BOOLEAN alloc)  /* key alloced? */
+{
+	WORD wval=(WORD)sval;
+	/*
+	to do - verify that this is a sval indiseq
+	*/
+	append_indiseq(seq, key, name, wval, sure, alloc);
 }
 /*=============================================
  * append_indiseq -- Append element to sequence
+ *  with pvalue
  *===========================================*/
 void
 append_indiseq (INDISEQ seq,    /* sequence */
                 STRING key,     /* key - not NULL */
                 STRING name,    /* name - may be NULL */
-                WORD val,       /* extra val - may be NULL (otherwise
-                                   must be a PVALUE) */
+                WORD val,       /* extra val is pointer */
                 BOOLEAN sure,   /* no dupe check? */
                 BOOLEAN alloc)  /* key alloced? */
 {
@@ -493,29 +535,29 @@ union_indiseq (INDISEQ one,
 	while (i < n && j < m) {
 		if ((rel = spri(u[i]) - spri(v[j])) < 0) {
 			key = strsave(skey(u[i]));
-			append_indiseq(three, key, NULL, (WORD)sval(u[i]),
+			append_indiseq(three, key, NULL, sval(u[i]),
 			    TRUE, TRUE);
 			i++;
 		} else if (rel > 0) {
 			key = strsave(skey(v[j]));
-			append_indiseq(three, key, NULL, (WORD)sval(v[j]),
+			append_indiseq(three, key, NULL, sval(v[j]),
 			    TRUE, TRUE);
 			j++;
 		} else {
 			key = strsave(skey(u[i]));
-			append_indiseq(three, key, NULL, (WORD)sval(u[i]),
+			append_indiseq(three, key, NULL, sval(u[i]),
 			    TRUE, TRUE);
 			i++, j++;
 		}
 	}
 	while (i < n) {
 		key = strsave(skey(u[i]));
-		append_indiseq(three, key, NULL, (WORD)sval(u[i]), TRUE, TRUE);
+		append_indiseq(three, key, NULL, sval(u[i]), TRUE, TRUE);
 		i++;
 	}
 	while (j < m) {
 		key = strsave(skey(v[j]));
-		append_indiseq(three, key, NULL, (WORD)sval(v[j]), TRUE, TRUE);
+		append_indiseq(three, key, NULL, sval(v[j]), TRUE, TRUE);
 		j++;
 	}
 	FORINDISEQ(three, el, num)
@@ -553,7 +595,7 @@ intersect_indiseq (INDISEQ one,
 			j++;
 		} else {
 			key = strsave(skey(u[i]));
-			append_indiseq(three, key, NULL, (WORD)sval(u[i]),
+			append_indiseq(three, key, NULL, sval(u[i]),
 			    TRUE, TRUE);
 			i++, j++;
 		}
@@ -589,7 +631,7 @@ difference_indiseq (INDISEQ one,
 	while (i < n && j < m) {
 		if ((rel = spri(u[i]) - spri(v[j])) < 0) {
 			key = strsave(skey(u[i]));
-			append_indiseq(three, key, NULL, (WORD)sval(u[i]),
+			append_indiseq(three, key, NULL, sval(u[i]),
 			    TRUE, TRUE);
 			i++;
 		} else if (rel > 0) {
@@ -600,7 +642,7 @@ difference_indiseq (INDISEQ one,
 	}
 	while (i < n) {
 		key = strsave(skey(u[i]));
-		append_indiseq(three, key, NULL, (WORD)sval(u[i]), TRUE, TRUE);
+		append_indiseq(three, key, NULL, sval(u[i]), TRUE, TRUE);
 		i++;
 	}
 	FORINDISEQ(three, el, num)
@@ -628,12 +670,12 @@ parent_indiseq (INDISEQ seq)
 		moth = indi_to_moth(indi);
 		if (fath && !in_table(tab, key = indi_to_key(fath))) {
 			key = strsave(key);
-			append_indiseq(par, key, NULL, (WORD)sval(el), TRUE, TRUE);
+			append_indiseq(par, key, NULL, sval(el), TRUE, TRUE);
 			insert_table(tab, key, NULL);
 		}
 		if (moth && !in_table(tab, key = indi_to_key(moth))) {
 			key = strsave(key);
-			append_indiseq(par, key, NULL, (WORD)sval(el), TRUE, TRUE);
+			append_indiseq(par, key, NULL, sval(el), TRUE, TRUE);
 			insert_table(tab, key, NULL);
 		}
 	ENDINDISEQ
@@ -662,7 +704,7 @@ child_indiseq (INDISEQ seq)
 				if (!in_table(tab, key)) {
 					key = strsave(key);
 					append_indiseq(cseq, key, NULL,
-					    (WORD)sval(el), TRUE, TRUE);
+					    sval(el), TRUE, TRUE);
 					insert_table(tab, key, NULL);
 				}
 			ENDCHILDREN
@@ -686,7 +728,7 @@ indi_to_children (NODE indi)
 		FORCHILDREN(fam, chil, num2)
 			len++;
 			key = indi_to_key(chil);
-			append_indiseq(seq, key, NULL, (WORD)NULL, TRUE, FALSE);
+			append_indiseq(seq, key, NULL, NULL, TRUE, FALSE);
 		ENDCHILDREN
 	ENDFAMSS
 	if (len) return seq;
@@ -713,7 +755,7 @@ indi_to_spouses (NODE indi)
 			len++;
 			key = indi_to_key(spouse);
 			val = atoi(fam_to_key(fam) + 1); /* PVALUE NEEDED */
-			append_indiseq(seq, key, NULL, (WORD)val, TRUE, FALSE);
+			append_indiseq(seq, key, NULL, val, TRUE, FALSE);
 		}
 #else
 		FORHUSBS(fam, husb, num1)
@@ -721,7 +763,7 @@ indi_to_spouses (NODE indi)
 			len++;
 			key = indi_to_key(husb);
 			val = atoi(fam_to_key(fam) + 1); /* PVALUE NEEDED */
-			append_indiseq(seq, key, NULL, (WORD)val, TRUE, FALSE);
+			append_indiseq_ival(seq, key, NULL, val, TRUE, FALSE);
 		    }
 		ENDHUSBS
 		FORWIFES(fam, wife, num1)
@@ -729,7 +771,7 @@ indi_to_spouses (NODE indi)
 			len++;
 			key = indi_to_key(wife);
 			val = atoi(fam_to_key(fam) + 1);
-			append_indiseq(seq, key, NULL, (WORD)val, TRUE, FALSE);
+			append_indiseq_ival(seq, key, NULL, val, TRUE, FALSE);
 		    }
 		ENDWIFES
 #endif
@@ -755,7 +797,7 @@ indi_to_fathers (NODE indi)
 		FORHUSBS(fam, husb, num2)
 			len++;
 			key = indi_to_key(husb);
-			append_indiseq(seq, key, NULL, (WORD)NULL, TRUE, FALSE);
+			append_indiseq(seq, key, NULL, NULL, TRUE, FALSE);
 		ENDHUSBS
 	ENDFAMCS
 	if (len) return seq;
@@ -777,7 +819,7 @@ indi_to_mothers (NODE indi)
 		FORWIFES(fam, wife, num2)
 			len++;
 			key = indi_to_key(wife);
-			append_indiseq(seq, key, NULL, (WORD)NULL, TRUE, FALSE);
+			append_indiseq(seq, key, NULL, NULL, TRUE, FALSE);
 		ENDWIFES
 	ENDFAMCS
 	if (len) return seq;
@@ -803,15 +845,13 @@ indi_to_families (NODE indi,      /* person */
 		FORFAMSS(indi, fam, spouse, num)
 			key = fam_to_key(fam);
 			val = spouse ? atoi(indi_to_key(spouse) + 1) : 0;
-			/* PVALUE NEEDED */
-			append_indiseq(seq, key, NULL, (WORD)val, TRUE, FALSE);
+			append_indiseq_ival(seq, key, NULL, val, TRUE, FALSE);
 		ENDFAMSS
 	} else {
 		FORFAMCS(indi, fam, fath, moth, num)
 			key = fam_to_key(fam);
 			val = fath ? atoi(indi_to_key(fath) + 1) : 0;
-			/* PVALUE NEEDED */
-			append_indiseq(seq, key, NULL, (WORD)val, TRUE, FALSE);
+			append_indiseq_ival(seq, key, NULL, val, TRUE, FALSE);
 		ENDFAMCS
 	}
 	if (num) return seq;
@@ -831,7 +871,7 @@ fam_to_children (NODE fam)
 	seq = create_indiseq();
 	FORCHILDREN(fam, chil, num)
 		key = indi_to_key(chil);
-		append_indiseq(seq, key, NULL, (WORD)NULL, TRUE, FALSE);
+		append_indiseq(seq, key, NULL, NULL, TRUE, FALSE);
 	ENDCHILDREN
 	if (num) return seq;
 	remove_indiseq(seq, FALSE);
@@ -850,7 +890,7 @@ fam_to_fathers (NODE fam)
 	seq = create_indiseq();
 	FORHUSBS(fam, husb, num)
 		key = indi_to_key(husb);
-		append_indiseq(seq, key, NULL, (WORD)NULL, TRUE, FALSE);
+		append_indiseq(seq, key, NULL, NULL, TRUE, FALSE);
 	ENDHUSBS
 	if (num) return seq;
 	remove_indiseq(seq, FALSE);
@@ -1304,7 +1344,7 @@ append_all_tags(INDISEQ seq, NODE node, STRING tagname, BOOLEAN recurse)
 	if (eqstr(ntag(node), tagname))
 	{
 		STRING key;
-		int val;
+		INT val;
 		key = nval(node);
 		if (key)
 		{
@@ -1316,7 +1356,7 @@ append_all_tags(INDISEQ seq, NODE node, STRING tagname, BOOLEAN recurse)
 				skey = key; /* leave invalid sources alone, but mark invalid with val==-1 */
 				val = -1;
 			}
-			append_indiseq(seq, skey, NULL, (WORD)val, FALSE, FALSE);
+			append_indiseq_ival(seq, skey, NULL, val, FALSE, FALSE);
 		}
 	}
 	if (nchild(node) && recurse )
@@ -1352,14 +1392,12 @@ INDISEQ get_all_sour (void)
 	while ((i=xref_nexts(i)))
 	{
 		static char skey[10];
-		WORD val;
 		if (!seq)
 		{
 			seq = create_indiseq();
 		}
 		sprintf(skey, "S%d", i);
-		val = (WORD)i;
-		append_indiseq(seq, skey, NULL, val, TRUE, FALSE);
+		append_indiseq_ival(seq, skey, NULL, i, TRUE, FALSE);
 	}
 	return seq;
 }		
@@ -1369,18 +1407,16 @@ INDISEQ get_all_sour (void)
 INDISEQ get_all_even (void)
 {
 	INDISEQ seq=NULL;
-	int i=0;
+	INT i=0;
 	while ((i=xref_nexte(i)))
 	{
 		static char skey[10];
-		WORD val;
 		if (!seq)
 		{
 			seq = create_indiseq();
 		}
 		sprintf(skey, "E%d", i);
-		val = (WORD)i;
-		append_indiseq(seq, skey, NULL, val, TRUE, FALSE);
+		append_indiseq_ival(seq, skey, NULL, i, TRUE, FALSE);
 	}
 	return seq;
 }		
@@ -1390,18 +1426,16 @@ INDISEQ get_all_even (void)
 INDISEQ get_all_othe (void)
 {
 	INDISEQ seq=NULL;
-	int i=0;
+	INT i=0;
 	while ((i=xref_nextx(i)))
 	{
 		static char skey[10];
-		WORD val;
 		if (!seq)
 		{
 			seq = create_indiseq();
 		}
 		sprintf(skey, "X%d", i);
-		val = (WORD)i;
-		append_indiseq(seq, skey, NULL, val, TRUE, FALSE);
+		append_indiseq_ival(seq, skey, NULL, i, TRUE, FALSE);
 	}
 	return seq;
 }		

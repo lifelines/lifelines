@@ -408,7 +408,7 @@ func_node (STRING name,    /* function name */
            PNODE elist)    /* param/s */
 {
 	PNODE node;
-	INT lo, hi, md, n, r;
+	INT lo, hi, md=0, n, r;
 	BOOLEAN found = FALSE;
 
 /* See if the function is user defined */

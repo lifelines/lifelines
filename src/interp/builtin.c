@@ -2102,7 +2102,7 @@ __rot (PNODE node,
 	STRING key;
  	PVALUE val = evaluate(iargs(node), stab, eflg);
  	CACHEEL cel;
-	NODE gnode;
+	NODE gnode=0;
 	if (*eflg || !val || !is_record_pvalue(val)) {
 		*eflg = TRUE;
 		prog_error(node, "the arg to root is not a record");

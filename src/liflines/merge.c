@@ -71,7 +71,7 @@ merge_two_indis (NODE indi1,    /* two persons to merge - can't be null */
 	NODE name1, refn1, sex1, body1, famc1, fams1;
 	NODE name2, refn2, sex2, body2, famc2, fams2;
 	NODE indi3, name3, refn3, sex3, body3, famc3, fams3;
-	NODE indi4;
+	NODE indi4=0;
 	NODE fam, husb, wife, chil, rest, fref, keep=NULL;
 	NODE this, that, prev, next, node, head;
 	NODE fam12;
@@ -407,7 +407,7 @@ merge_two_fams (NODE fam1,
 	NODE husb1, wife1, chil1, rest1, husb2, wife2, chil2, rest2;
 	NODE fref1, fref2;
 	NODE fam3, husb3, wife3, chil3, rest3, fref3;
-	NODE fam4, husb4, wife4, chil4, rest4, fref4;
+	NODE fam4=0, husb4, wife4, chil4, rest4, fref4;
 	TRANTABLE tti = tran_tables[MEDIN], tto = tran_tables[MINED];
 	FILE *fp;
 	STRING msg;

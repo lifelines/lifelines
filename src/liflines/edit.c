@@ -71,7 +71,7 @@ write_indi_to_editfile(NODE indi)
 NODE
 edit_indi (NODE indi1)  /* may be NULL */
 {
-	NODE indi2, name1, name2, refn1, refn2, sex, body, famc, fams;
+	NODE indi2=0, name1, name2, refn1, refn2, sex, body, famc, fams;
 	NODE node, namen, refnn, name1n, refn1n, indi0;
 	BOOLEAN emp;
 	STRING msg, key;
@@ -187,7 +187,7 @@ write_fam_to_editfile(NODE fam)
 NODE
 edit_family (NODE fam1) /* may be NULL */
 {
-	NODE fam2, husb, wife, chil, body, refn1, refn2, refnn, refn1n;
+	NODE fam2=0, husb, wife, chil, body, refn1, refn2, refnn, refn1n;
 	NODE indi, node, fam0;
 	TRANTABLE tti = tran_tables[MEDIN];
 	STRING msg, key;

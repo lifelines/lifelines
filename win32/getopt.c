@@ -22,10 +22,7 @@ char *optarg;
 #define OPTION_CHAR '-'
 #endif
 
-int getopt(argc, argv, opts)
-int argc;
-char **argv;
-char *opts;
+int getopt(int argc, char **argv, char *opts)
 {
 #ifdef SWITCHAR
 	union REGS regs;

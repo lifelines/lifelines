@@ -92,7 +92,7 @@ yylex(void)
 int
 lowyylex (void)
 {
-	INT c, t, retval, mul;
+	INT c=0, t=0, retval, mul;
 	extern INT Yival;
 	extern FLOAT Yfval;
 	extern YYSTYPE yylval;
