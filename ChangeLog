@@ -128,6 +128,10 @@
 	Add leak statistics and new option ReportLeakLog.
 	New function next_table_int.
 
+	* ChangeLog src/gedlib/xreffile.c
+
+	Add prototypes for add?xref_impl.
+
 2005-02-05 Perry Rapp
 
 	* ChangeLog NEWS src/gedlib/xreffile.c

@@ -89,6 +89,11 @@ static INT num_set(DELETESET set);
 static void readrecs(DELETESET set);
 static BOOLEAN readxrefs(void);
 static INT xref_last(DELETESET set);
+static BOOLEAN addixref_impl(INT key, DUPS dups);
+static BOOLEAN addfxref_impl(INT key, DUPS dups);
+static BOOLEAN addsxref_impl(INT key, DUPS dups);
+static BOOLEAN addexref_impl(INT key, DUPS dups);
+static BOOLEAN addxxref_impl(INT key, DUPS dups);
 
 /*********************************************
  * local variables
@@ -399,11 +404,11 @@ add_xref_to_set (INT key, DELETESET set)
  * add?xref_impl -- Wrappers for each type to add_xref_to_set (qv)
  *  5 symmetric versions
  *=================================================*/
-BOOLEAN addixref_impl (INT key, DUPS dups) { return add_xref_to_set_impl(key, &irecs, dups); }
-BOOLEAN addfxref_impl (INT key, DUPS dups) { return add_xref_to_set_impl(key, &frecs, dups); }
-BOOLEAN addsxref_impl (INT key, DUPS dups) { return add_xref_to_set_impl(key, &srecs, dups); }
-BOOLEAN addexref_impl (INT key, DUPS dups) { return add_xref_to_set_impl(key, &erecs, dups); }
-BOOLEAN addxxref_impl (INT key, DUPS dups) { return add_xref_to_set_impl(key, &xrecs, dups); }
+static BOOLEAN addixref_impl (INT key, DUPS dups) { return add_xref_to_set_impl(key, &irecs, dups); }
+static BOOLEAN addfxref_impl (INT key, DUPS dups) { return add_xref_to_set_impl(key, &frecs, dups); }
+static BOOLEAN addsxref_impl (INT key, DUPS dups) { return add_xref_to_set_impl(key, &srecs, dups); }
+static BOOLEAN addexref_impl (INT key, DUPS dups) { return add_xref_to_set_impl(key, &erecs, dups); }
+static BOOLEAN addxxref_impl (INT key, DUPS dups) { return add_xref_to_set_impl(key, &xrecs, dups); }
 /*===================================================
  * add?xref -- Wrappers for each type to add_xref_to_set (qv)
  *  5 symmetric versions
