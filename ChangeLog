@@ -33,6 +33,13 @@
 
 	Remove win32/hdrs/* (obsolete headers created before hdrs existed).
 
+	* ChangeLog
+	*DELETED win32/msvc6/libintl/config.h
+	win32/msvc6/libintl/libintlvc6.dsp
+	win32/msvc6/libintl/libintlvc6.dsw:
+
+	Remove msvc6 project for static libintl (now that DLL is used).
+
 2002-06-17 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog README.LAYOUT gedlib/Makefile.am gedlib/init.c
