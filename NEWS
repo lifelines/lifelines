@@ -1,6 +1,10 @@
-LifeLines Source Release, Version 3.0.33
+LifeLines Source Release, Version 3.0.34
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
+
+Bug fixes in 3.0.34
+============================
+- Fix internal translation tables.
 
 Bug fixes in 3.0.33
 ============================

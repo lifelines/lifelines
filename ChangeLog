@@ -11,6 +11,13 @@
 
 	Fix legacy (db internal) translation tables (had to disable xlat cache).
 
+	* ChangeLog NEWS README.MAINTAINERS configure.in
+	build/msvc6/llines/llines.rc build/rpm/lifelines.spec
+	docs/ll-devguide.xml docs/ll-reportmanual.xml
+	docs/ll-userguide.xml src/hdrs/version.h
+
+	Bump version numbers to 3.0.34.
+
 2003-09-15 Perry Rapp
 
 	* ChangeLog README.MAINTAINERS
