@@ -330,12 +330,12 @@ iconv_trans (TRANMAPPING ttm, CNSTRING in, bfptr bfs)
 {
 	/* TODO: Will have to modify this to use with iconv DLL */
 	iconv_t ict = iconv_open(ttm->iconv_dest, ttm->iconv_src);
-	CNSTRING inptr = in;
-	STRING outptr=bfStr(bfs);
+	const char * inptr = in;
+	char * outptr=bfStr(bfs);
 	size_t inleft=strlen(in), outleft=bfs->size-1, cvted=0;
 cvting:
 	cvted = iconv (ict, &inptr, &inleft, &outptr, &outleft);
-	if (cvted == -1) {
+	if (cvted == (size_t)-1) {
 		if (!outleft) {
 			bfReserveExtra(bfs, (int)(inleft * 1.3+2));
 			goto cvting;
@@ -667,16 +667,19 @@ get_current_locale (INT category)
 void
 save_original_locales (void)
 {
+	/* get collation locale, if available */
 #ifdef HAVE_SETLOCALE
 	deflocale_coll = strsave(get_current_locale(LC_COLLATE));
 #endif /* HAVE_SETLOCALE */
 
+	/* get messages locale (via locale or via environ.) */
 #ifdef HAVE_SETLOCALE
-#ifdef HAVE_LC_MESSAGES
-	deflocale_msgs = strsave(get_current_locale(LC_MESSAGES));
-#endif /* HAVE_LC_MESSAGES */
+	if (LC_MESSAGES >= 0 && LC_MESSAGES != 1729) {
+		/* 1729 is the gettext code when there wasn't any LC_MESSAGES */
+		deflocale_msgs = strsave(get_current_locale(LC_MESSAGES));
+	}
 #endif /* HAVE_SETLOCALE */
-	/* if we're not using LC_MESSAGES locale, we use it in the environment (see setmsgs) */
+	/* fallback to the environment (see setmsgs) */
 	if (!deflocale_msgs)
 		deflocale_msgs = getenv("LC_MESSAGES");
 
@@ -695,6 +698,9 @@ ll_langinfo (void)
 	/* TODO: In any case tho, Markus' nice replacement nl_langinfo gives the
 	wrong default codepages for MS-Windows I think -- eg, should be 1252 for 
 	generic default instead of 8859-1 */
+
+	/* TODO: Check out libcharset (in the libiconv distribution)
+	It probably has the Win32 code in it */
 
 	return str ? str : ""; /* I don't know if nl_langinfo ever returns NULL */
 }
