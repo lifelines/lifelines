@@ -560,7 +560,7 @@ get_names (STRING name,
            BOOLEAN exact)       /* unused! */
 {
 	INT i, n;
-	STRING *strs, *id_by_key();
+	STRING *strs;
 
 	exact = FALSE;		/* keep compiler happy */
 

@@ -45,10 +45,9 @@ TABLE useropts;		/* table for user options */
 BTREE BTR = NULL;	/* database */
 STRING editstr, editfile;
 STRING llarchives, llreports, llprograms;
-char *getenv();
-
-
-
+/* MTE: If this needs to be defined, please figure out which system header */
+/*      isn't being included and make the change to std_inc.h */
+/* char *getenv(); */
 
 /*=================================
  * init_lifelines -- Open LifeLines

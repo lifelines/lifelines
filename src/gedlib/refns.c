@@ -34,7 +34,7 @@
 #include "translat.h"
 #include "gedcom.h"
 
-static RKEY refn2rkey();
+static RKEY refn2rkey(STRING);
 static BOOLEAN resolve_traverse(NODE);
 
 extern BTREE BTR;
