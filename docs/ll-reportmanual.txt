@@ -472,9 +472,8 @@ Include Feature
    included  do  not  get  run.  This  allows a module intended to be
    included  in  other  programs  to  have  a main procedure for test
    purposes.  If  multiple functions or procedures with the same name
-   are  included,  the last one read in is the one that will be used.
-   Currently  no  errors  or  warnings  are  generated  for duplicate
-   function or procedure names.
+   are  included  (other  than  the  name  main)  a  runtime error is
+   generated and the program is not run.
      _____________________________________________________________
 
 Built-in Functions
