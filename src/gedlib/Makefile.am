@@ -11,7 +11,7 @@ libgedcom_a_SOURCES = brwslist.c charmaps.c choose.c codesets.c \
 	date.c dispfmt.c editmap.c \
 	editvtab.c equaliso.c gedcom.c gengedc.c gstrings.c\
 	indiseq.c init.c intrface.c keytonod.c locales.c lloptions.c\
-	messages.c misc.c names.c node.c nodeutls.c place.c\
+	messages.c misc.c names.c node.c nodeio.c nodeutls.c place.c\
 	property.c refns.c remove.c replace.c spltjoin.c translat.c\
 	valid.c valtable.c xlat.c xreffile.c
 

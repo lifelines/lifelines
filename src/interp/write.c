@@ -213,7 +213,7 @@ end_writeindi:
 }
 /*=====================================
  * writefam -- Write family to database
- *   writefam(FAM) -> VOID
+ *   writefam(FAM) -> BOOLEAN
  *===================================*/
 PVALUE
 __writefam (PNODE node, SYMTAB stab, BOOLEAN *eflg)

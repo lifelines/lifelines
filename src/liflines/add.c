@@ -127,7 +127,7 @@ add_indi_by_edit (void)
 			llstrncpyf(msgb, sizeof(msgb), uu8
 				, get_unresolved_ref_error_string(cnt), cnt);
 			if (ask_yes_or_no_msg(msgb, _(qSireditopt))) {
-				write_indi_to_editfile(indi);
+				write_indi_to_file(indi, editfile);
 				do_edit();
 				continue;
 			}
@@ -138,14 +138,16 @@ add_indi_by_edit (void)
 		if (indi0) free_rec(indi0);
 		return NULL;
 	}
-	return add_new_indi(indi0);
+	add_new_indi(indi0);
+	msg_status(_(qSgdpadd), indi_to_name(nztop(indi0), 35));
+	return indi0;
 }
 /*==========================================================
  * add_new_indi -- Add newly created person to database
  * (no user interaction)
  * creates record & adds to cache
  *========================================================*/
-RECORD
+void
 add_new_indi (RECORD indi0)
 {
 	NODE name, refn, sex, body, dumb, node;
@@ -165,8 +167,6 @@ add_new_indi (RECORD indi0)
 	resolve_refn_links(indi);
 	indi_to_dbase(indi);
 	indi_to_cache(indi0);
-	msg_status(_(qSgdpadd), indi_to_name(indi, 35));
-	return indi0;
 }
 /*================================================================
  * add_indi_no_cache -- Add new person to database
@@ -370,6 +370,7 @@ prompt_add_spouse (RECORD sprec, RECORD frec, BOOLEAN conf)
 		return FALSE;
 
 	add_spouse_to_fam(spouse, fam, sex);
+	msg_status(_(qSgdsadd), indi_to_name(spouse, 35));
 	return TRUE;
 }
 /*===================================
@@ -429,7 +430,6 @@ add_spouse_to_fam (NODE spouse, NODE fam, INT sex)
 	resolve_refn_links(fam);
 	indi_to_dbase(spouse);
 	fam_to_dbase(fam);
-	msg_status(_(qSgdsadd), indi_to_name(spouse, 35));
 }
 /*=========================================
  * add_members_to_family -- Add members to new family
@@ -604,7 +604,7 @@ editfam:
 			llstrncpyf(msgb, sizeof(msgb), uu8
 				, get_unresolved_ref_error_string(cnt), cnt);
 			if (ask_yes_or_no_msg(msgb, _(qSfreditopt))) {
-				write_fam_to_editfile(fam2);
+				write_fam_to_file(fam2, editfile);
 				do_edit();
 				continue;
 			}

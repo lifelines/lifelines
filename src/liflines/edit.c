@@ -47,17 +47,17 @@ extern STRING qSntprnt, qSgdpmod, qSgdfmod, qSronlye;
 extern STRING qSparadox;
 
 /*=====================================
- * write_indi_to_editfile - write indi gedcom node to editfile
+ * write_indi_to_file - write node tree into GEDCOM
  * (no user interaction)
  *===================================*/
 void
-write_indi_to_editfile (NODE indi)
+write_indi_to_file (NODE indi, CNSTRING file)
 {
 	FILE *fp;
 	XLAT ttmo = transl_get_predefined_xlat(MINED);
 	NODE name, refn, sex, body, famc, fams;
 	
-	ASSERT(fp = fopen(editfile, LLWRITETEXT));
+	ASSERT(fp = fopen(file, LLWRITETEXT));
 	split_indi_old(indi, &name, &refn, &sex, &body, &famc, &fams);
 	write_nodes(0, fp, ttmo, indi, TRUE, TRUE, TRUE);
 	write_nodes(1, fp, ttmo, name, TRUE, TRUE, TRUE);
@@ -81,6 +81,7 @@ edit_indi (RECORD irec1)  /* may be NULL */
 	BOOLEAN emp;
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 
+/* Identify indi if necessary */
 	if (!irec1 && !(irec1 = ask_for_indi(_(qSidpedt), NOCONFIRM, NOASK1)))
 		return FALSE;
 	indi1 = nztop(irec1);
@@ -88,11 +89,10 @@ edit_indi (RECORD irec1)  /* may be NULL */
 /* Prepare file for user to edit */
 	if (getoptint("ExpandRefnsDuringEdit", 0) > 0)
 		expand_refn_links(indi1);
-	write_indi_to_editfile(indi1);
+	write_indi_to_file(indi1, editfile);
 	resolve_refn_links(indi1);
 
 /* Have user edit file */
-
 	do_edit();
 	if (readonly) {
 		STRING msg;
@@ -132,7 +132,7 @@ edit_indi (RECORD irec1)  /* may be NULL */
 			snprintf(msgb, sizeof(msgb)
 				, get_unresolved_ref_error_string(cnt), cnt);
 			if (ask_yes_or_no_msg(msgb, _(qSireditopt))) {
-				write_indi_to_editfile(indi2);
+				write_indi_to_file(indi2, editfile);
 				do_edit();
 				continue;
 			}
@@ -149,7 +149,6 @@ edit_indi (RECORD irec1)  /* may be NULL */
 	}
 
 /* Move new data (in indi2 children) into existing indi1 tree */
-
 	replace_indi(indi1, indi2);
 
 /* Note in change history */
@@ -159,17 +158,17 @@ edit_indi (RECORD irec1)  /* may be NULL */
 	return TRUE;
 }
 /*=====================================
- * write fam gedcom node to editfile
+ * write_fam_to_file -- write node tree into GEDCOM
  * (no user interaction)
  *===================================*/
 void
-write_fam_to_editfile(NODE fam)
+write_fam_to_file (NODE fam, CNSTRING file)
 {
 	FILE *fp;
 	XLAT ttmo = transl_get_predefined_xlat(MINED);
 	NODE refn, husb, wife, chil, body;
 
-	ASSERT(fp = fopen(editfile, LLWRITETEXT));
+	ASSERT(fp = fopen(file, LLWRITETEXT));
 	split_fam(fam, &refn, &husb, &wife, &chil, &body);
 	write_nodes(0, fp, ttmo, fam,  TRUE, TRUE, TRUE);
 	write_nodes(1, fp, ttmo, refn, TRUE, TRUE, TRUE);
@@ -187,16 +186,13 @@ write_fam_to_editfile(NODE fam)
 BOOLEAN
 edit_family (RECORD frec1) /* may be NULL */
 {
-	NODE fam1=0, fam2=0, husb, wife, chil, body, refn1, refn2, refnn, refn1n;
+	NODE fam1=0, fam2=0;
 	RECORD irec=0;
-	NODE node, fam0;
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
-	STRING msg, key;
+	STRING msg;
 	BOOLEAN emp;
 
-/* Identify family if need be */
-	
-
+/* Identify family if necessary */
 	if (!frec1) {
 		irec = ask_for_indi(_(qSidspse), NOCONFIRM, NOASK1);
 		if (!irec) return FALSE;
@@ -212,7 +208,7 @@ edit_family (RECORD frec1) /* may be NULL */
 /* Prepare file for user to edit */
 	if (getoptint("ExpandRefnsDuringEdit", 0) > 0)
 		expand_refn_links(fam1);
-	write_fam_to_editfile(fam1);
+	write_fam_to_file(fam1, editfile);
 	resolve_refn_links(fam1);
 
 /* Have user edit record */
@@ -253,7 +249,7 @@ edit_family (RECORD frec1) /* may be NULL */
 			snprintf(msgb, sizeof(msgb)
 				, get_unresolved_ref_error_string(cnt), cnt);
 			if (ask_yes_or_no_msg(msgb, _(qSfreditopt))) {
-				write_fam_to_editfile(fam2);
+				write_fam_to_file(fam2, editfile);
 				do_edit();
 				continue;
 			}
@@ -269,32 +265,9 @@ edit_family (RECORD frec1) /* may be NULL */
 		return FALSE;
 	}
 
-/* Prepare to change database */
+/* Move new data (in fam2 children) into existing fam1 tree */
+	replace_fam(fam1, fam2);
 
-	/* Move fam1 data into fam0 & delete it (saving refns) */
-	split_fam(fam1, &refn1, &husb, &wife, &chil, &body);
-	fam0 = copy_node(fam1);
-	join_fam(fam0, NULL, husb, wife, chil, body);
-	free_nodes(fam0);
-	/* Move fam2 data into fam1, also copy out list of refns */
-	split_fam(fam2, &refn2, &husb, &wife, &chil, &body);
-	refnn = copy_nodes(refn2, TRUE, TRUE);
-	join_fam(fam1, refn2, husb, wife, chil, body);
-	free_node(fam2);
-
-/* Change the database */
-
-	fam_to_dbase(fam1);
-	key = rmvat(nxref(fam1));
-	/* remove deleted refns & add new ones */
-	classify_nodes(&refn1, &refnn, &refn1n);
-	for (node = refn1; node; node = nsibling(node))
-		if (nval(node)) remove_refn(nval(node), key);
-	for (node = refnn; node; node = nsibling(node))
-		if (nval(node)) add_refn(nval(node), key);
-	free_nodes(refn1);
-	free_nodes(refnn);
-	free_nodes(refn1n);
 	msg_status(_(qSgdfmod));
 	return TRUE;
 }

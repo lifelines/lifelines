@@ -22,6 +22,14 @@
 
 	Fix __writeindi and __writefam (integrating replace.c with edit.c).
 
+	* ChangeLog build/msvc6/llines/llinesprj.dsp
+	src/gedlib/Makefile.am src/gedlib/gedcomi.h src/gedlib/node.c
+	src/hdrs/gedcom.h src/hdrs/liflines.h src/interp/write.c
+	src/liflines/add.c src/liflines/edit.c
+	*NEW src/gedlib/nodeio.c:
+
+	Factored out GEDCOM I/O code from node.c into nodeio.c.
+
 2003-02-03 Matt Emmerton
 
 	* ChangeLog src/interp/write.c

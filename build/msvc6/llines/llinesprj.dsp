@@ -385,6 +385,10 @@ SOURCE=..\..\..\src\gedlib\node.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\gedlib\nodeio.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\gedlib\nodeutls.c
 # End Source File
 # Begin Source File

@@ -183,7 +183,6 @@ extern STRING editstr;
 extern STRING editfile;
 extern TABLE tagtable;		/* table for GEDCOM tags */
 extern TABLE placabbvs;		/* table for place abbrvs */
-extern BOOLEAN add_metadata;
 
 
 
@@ -490,8 +489,8 @@ INT val_to_sex(NODE);
 BOOLEAN value_to_list(STRING, LIST, INT*, STRING);
 STRING value_to_xref(STRING);
 BOOLEAN writexrefs(void);
-void write_indi_to_editfile(NODE indi);
-void write_fam_to_editfile(NODE fam);
+void write_indi_to_file(NODE indi, CNSTRING file);
+void write_fam_to_file(NODE fam, CNSTRING file);
 void write_node_to_editfile(NODE); /* used by Ethel */
 void write_nodes(INT, FILE*, XLAT, NODE, BOOLEAN, BOOLEAN, BOOLEAN);
 INT xref_firste(void);
