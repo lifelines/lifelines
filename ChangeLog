@@ -28,6 +28,10 @@
 
 	Releasing version 3.0.21.
 
+	* ChangeLog build/msvc6/llexec/llexec.rc
+
+	Update version of llexec.
+
 2002-10-06 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp
