@@ -6,7 +6,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: lifelines 3.0.10\n"
+"Project-Id-Version: lifelines 3.0.19\n"
 "POT-Creation-Date: 2002-09-29 05:23-0400\n"
 "PO-Revision-Date: 2002-06-09 21:32-0400\n"
 "Last-Translator: None yet\n"
@@ -3413,11 +3413,19 @@ msgstr ""
 msgid "Impermissible to change codeset in a populated database"
 msgstr ""
 
+<<<<<<< it.po
+#: src/liflines/screen.c:2957
+#, c-format
+msgid "(pg %d/%d)"
+msgstr ""
+
+=======
 #: src/liflines/screen.c:2962
 #, c-format
 msgid "(pg %d/%d)"
 msgstr ""
 
+>>>>>>> 1.21
 #: src/liflines/valgdcom.c:83
 #, c-format
 msgid "Line %d: This %s line is missing a value field."

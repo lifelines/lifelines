@@ -5,7 +5,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Lifelines 3.0.18\n"
+"Project-Id-Version: Lifelines 3.0.19\n"
 "POT-Creation-Date: 2002-09-29 05:23-0400\n"
 "PO-Revision-Date: 2002-09-23 19:30+0200\n"
 "Last-Translator: Patrick Texier <p.texier@orsennes.com>\n"
@@ -15,6 +15,99 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+<<<<<<< fr.po
+#: src/gedlib/charmaps.c:288
+#, c-format
+msgid "Error initializing %s map.\n"
+msgstr "Erreur d'initialisation de la table %s.\n"
+
+#: src/gedlib/gedcom.c:112
+msgid "Missing NAME line in INDI record; record ignored.\n"
+msgstr "Ligne NAME manquante dans enr. INDI ; enr. ignoré.\n"
+
+#: src/gedlib/init.c:512
+msgid "Database error: -- "
+msgstr "Erreur base : -- "
+
+#: src/gedlib/init.c:516
+msgid "requested database does not exist."
+msgstr "base demandée inexistante."
+
+#: src/gedlib/init.c:519
+msgid "db directory is file, not directory."
+msgstr "répertoire de base est un fichier, pas un répertoire."
+
+#: src/gedlib/init.c:522
+msgid "creation of new database failed."
+msgstr "échec de la création d'une nouvelle base"
+
+#: src/gedlib/init.c:525
+msgid "error accessing database directory."
+msgstr "erreur d'accès au répertoire de la base"
+
+#: src/gedlib/init.c:528
+msgid "no keyfile (directory does not appear to be a database)."
+msgstr "pas de fichier clé (le répertoire ne semble pas être une base)."
+
+#: src/gedlib/init.c:531
+msgid "could not open, read or write an index file."
+msgstr "impossible d'ouvrir, lire ou écrire un fichier d'index."
+
+#: src/gedlib/init.c:534
+msgid "could not open, read or write the key file."
+msgstr "impossible d'ouvrir, lire ou écrire un fichier de clés."
+
+#: src/gedlib/init.c:537
+msgid "could not open, read or write a block file."
+msgstr "impossible d'ouvrir, lire ou écrire un fichier 'bloc'."
+
+#: src/gedlib/init.c:540
+msgid "name of database is too long."
+msgstr "nom de base trop long."
+
+#: src/gedlib/init.c:543
+msgid "The database is already open for writing."
+msgstr "La base est déja ouverte en écriture."
+
+#: src/gedlib/init.c:546
+msgid "The database is locked (no readwrite access)."
+msgstr "La base est bloquée (pas d'accès en lecture/écriture)."
+
+#: src/gedlib/init.c:549
+msgid "keyfile is corrupt."
+msgstr "le fichier de clés est corrompu."
+
+#: src/gedlib/init.c:552
+msgid "keyfile is wrong alignment."
+msgstr "le fichier de clés a un mauvais alignement."
+
+#: src/gedlib/init.c:555
+msgid "keyfile is wrong version."
+msgstr "le fichier de clés n'a pas la bonne version."
+
+#: src/gedlib/init.c:558
+msgid "Existing database found."
+msgstr "Base existante trouvée."
+
+#: src/gedlib/init.c:562
+#, c-format
+msgid ""
+"The database is already opened for read access by %d users.\n"
+"  "
+msgstr ""
+"La base est déja ouverte en lecture par %d utilisateurs.\n"
+"  "
+
+#: src/gedlib/init.c:566
+msgid "Invalid properties set for new database"
+msgstr "Ensemble de propriétés invalide pour la nouvelle base"
+
+#: src/gedlib/init.c:569
+msgid "Undefined database error -- fix program."
+msgstr "Erreur de base indéfinie -- verifiez le programme."
+
+#: src/gedlib/messages.c:45
+=======
 #: src/gedlib/charmaps.c:288
 #, c-format
 msgid "Error initializing %s map.\n"
@@ -106,6 +199,7 @@ msgid "Undefined database error -- fix program."
 msgstr "Erreur de base indéfinie -- verifiez le programme."
 
 #: src/gedlib/messages.c:45
+>>>>>>> 1.5
 msgid "You must identify a database."
 msgstr "Vous devez sélectionner une base"
 
@@ -3379,108 +3473,201 @@ msgstr "Locales non disponibles."
 msgid "NLS (National Language Support) is enabled."
 msgstr "NLS (Support de Langage National) disponible."
 
+<<<<<<< fr.po
+#: src/liflines/screen.c:1783
+=======
 #: src/liflines/screen.c:1787
+>>>>>>> 1.5
 msgid "NLS (National Language Support) is disabled."
 msgstr "NLS (Support de Langage National) indisponible."
 
+<<<<<<< fr.po
+#: src/liflines/screen.c:1788
+=======
 #: src/liflines/screen.c:1793
+>>>>>>> 1.5
 msgid "iconv (codeset conversion) is enabled."
 msgstr "iconv (conversion de code de page) disponible."
 
+<<<<<<< fr.po
+#: src/liflines/screen.c:1790
+=======
 #: src/liflines/screen.c:1795
+>>>>>>> 1.5
 msgid "iconv (codeset conversion) is disabled."
 msgstr "iconv (conversion de code de page) indisponible."
 
+<<<<<<< fr.po
+#: src/liflines/screen.c:1792
+=======
 #: src/liflines/screen.c:1797
+>>>>>>> 1.5
 #, c-format
 msgid "Startup collate locale: %s"
 msgstr "Collate locale au démarrage : %s"
 
+<<<<<<< fr.po
+#: src/liflines/screen.c:1796
+=======
 #: src/liflines/screen.c:1801
+>>>>>>> 1.5
 #, c-format
 msgid "Startup messages locale: %s"
 msgstr "Message locale au démarrage : %s"
 
+<<<<<<< fr.po
+#: src/liflines/screen.c:1800
+=======
 #: src/liflines/screen.c:1805
+>>>>>>> 1.5
 #, c-format
 msgid "Current collate locale: %s"
 msgstr "Collate locale courant : %s"
 
+<<<<<<< fr.po
+#: src/liflines/screen.c:1804
+=======
 #: src/liflines/screen.c:1809
+>>>>>>> 1.5
 #, c-format
 msgid "Current messages locale: %s"
 msgstr "Messages locale courant : %s"
 
+<<<<<<< fr.po
+#: src/liflines/screen.c:1808
+=======
 #: src/liflines/screen.c:1813
+>>>>>>> 1.5
 #, c-format
 msgid "GUI codeset: %s"
 msgstr "jeu de car. GUI : %s"
 
+<<<<<<< fr.po
+#: src/liflines/screen.c:1812
+=======
 #: src/liflines/screen.c:1817
+>>>>>>> 1.5
 #, c-format
 msgid "Editor codeset: %s"
 msgstr "jeu de car. éditeur : %s"
 
+<<<<<<< fr.po
+#: src/liflines/screen.c:1816
+=======
 #: src/liflines/screen.c:1821
+>>>>>>> 1.5
 #, c-format
 msgid "Report codeset: %s"
 msgstr "jeu de car. éditions : %s"
 
+<<<<<<< fr.po
+#: src/liflines/screen.c:1820
+=======
 #: src/liflines/screen.c:1825
+>>>>>>> 1.5
 #, c-format
 msgid "GEDCOM codeset: %s"
 msgstr "jeu de car. GEDCOM : %s"
 
+<<<<<<< fr.po
+#: src/liflines/screen.c:1836
+=======
 #: src/liflines/screen.c:1841
+>>>>>>> 1.5
 msgid "Codeset information"
 msgstr "Information de code de page :"
 
+<<<<<<< fr.po
+#: src/liflines/screen.c:1853
+=======
 #: src/liflines/screen.c:1858
+>>>>>>> 1.5
 #, c-format
 msgid "gettext dll: %s"
 msgstr "dll gettext : %s"
 
+<<<<<<< fr.po
+#: src/liflines/screen.c:1857
+=======
 #: src/liflines/screen.c:1862
+>>>>>>> 1.5
 #, c-format
 msgid "gettext dll version: %s"
 msgstr "version dll gettext : %s "
 
+<<<<<<< fr.po
+#: src/liflines/screen.c:1862
+=======
 #: src/liflines/screen.c:1867
+>>>>>>> 1.5
 msgid "gettext dll had no version"
 msgstr "dll gettext sans version"
 
+<<<<<<< fr.po
+#: src/liflines/screen.c:1867
+=======
 #: src/liflines/screen.c:1872
+>>>>>>> 1.5
 msgid "no gettext dll found"
 msgstr "dll gettext non trouvée"
 
+<<<<<<< fr.po
+#: src/liflines/screen.c:1877
+=======
 #: src/liflines/screen.c:1882
+>>>>>>> 1.5
 #, c-format
 msgid "iconv dll: %s"
 msgstr "dll iconv : %s"
 
+<<<<<<< fr.po
+#: src/liflines/screen.c:1881
+=======
 #: src/liflines/screen.c:1886
+>>>>>>> 1.5
 #, c-format
 msgid "iconv dll version: %s"
 msgstr "version dll iconv : %s"
 
+<<<<<<< fr.po
+#: src/liflines/screen.c:1886
+=======
 #: src/liflines/screen.c:1891
+>>>>>>> 1.5
 msgid "iconv dll had no version"
 msgstr "dll iconv sans version"
 
+<<<<<<< fr.po
+#: src/liflines/screen.c:1891
+=======
 #: src/liflines/screen.c:1896
+>>>>>>> 1.5
 msgid "no iconv dll found"
 msgstr "dll iconv non trouvée"
 
+<<<<<<< fr.po
+#: src/liflines/screen.c:2140
+=======
 #: src/liflines/screen.c:2145
+>>>>>>> 1.5
 msgid "Impermissible to change codeset in a populated database"
 msgstr ""
 
+<<<<<<< fr.po
+#: src/liflines/screen.c:2957
+#, c-format
+msgid "(pg %d/%d)"
+msgstr ""
+
+#: src/liflines/valgdcom.c:83
+=======
 #: src/liflines/screen.c:2962
 #, c-format
 msgid "(pg %d/%d)"
 msgstr ""
 
 #: src/liflines/valgdcom.c:83
+>>>>>>> 1.5
 #, c-format
 msgid "Line %d: This %s line is missing a value field."
 msgstr "Ligne %d : Cette %s ligne n'a pas de champ valeur."
