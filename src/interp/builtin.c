@@ -2598,7 +2598,7 @@ __insert (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 
 	arg = inext(arg);
 	val = eval_and_coerce(PSTRING, arg, stab, eflg);
-	if (*eflg || !val) {
+	if (*eflg || !val || !pvalue_to_string(val)) {
 		*eflg = TRUE;
 		prog_var_error(node, stab, arg, val, nonstrx, "insert", "2");
 		return NULL;

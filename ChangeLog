@@ -1,3 +1,9 @@
+2004-05-15 Stephen Dum
+        * ChangeLog src/gedlib/lldatabase.c src/interp/builtin.c
+	  Fixes for bug id's 954704 'table inert() ASSET's if value
+	  inserted is null; and id 950712 a redundent include in 
+	  lldatabase.c
+
 2004-05-08 Perry Rapp
 
 	* ChangeLog LINGUAS
