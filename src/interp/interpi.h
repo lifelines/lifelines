@@ -150,7 +150,11 @@ struct tag_pnode {
 /* pnode flags */
 enum {
 	PN_IVALUEX_PVALUE = 0x1 /* ivaluex is a pvalue */
-	, PN_INAME_HSTR = 0x2 /* iname is a string */
+	, PN_INAME_HSTR = 0x2 /* iname is a heap string */
+	, PN_ICHILD_HPTR = 0x4 /* ichild is a heap string */
+	, PN_INUM_HPTR = 0x8 /* inum is a heap string */
+	, PN_ISPOUSE_HPTR = 0x10 /* ispouse is a heap string */
+	, PN_IFAMILY_HPTR = 0x20 /* ifamily is a heap string */
 };
 
 #define itype(i)     ((i)->i_type)  /* node type - all nodes */

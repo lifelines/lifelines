@@ -133,11 +133,13 @@ tmplt	:	CHILDREN m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		}
 	|	SPOUSES m '(' expr ',' IDEN ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
+			/* consumes $6 and $8 and $10 */
 			$$ = spouses_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (STRING)$10, (PNODE)$13);
 			((PNODE)$$)->i_line = (INT)$2;
 		}
 	|	FAMILIES m '(' expr ',' IDEN ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
+			/* consumes $6 and $8 and $10 */
 			$$ = families_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (STRING)$10, (PNODE)$13);
 			((PNODE)$$)->i_line = (INT)$2;
 		}

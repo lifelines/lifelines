@@ -13,6 +13,11 @@
 
 	Fix some IDEN leaks.
 
+	* ChangeLog src/interp/alloc.c src/interp/interpi.h
+	src/interp/yacc.y
+
+	Fix IDEN leaks in children_node, spouses_node, families_node.
+
 2005-02-13 Stephen Dum
         * ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf 
 	docs/ll-userguide.html docs/ll-userguide.pdf reports/Makefile.am 

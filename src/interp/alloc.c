@@ -241,20 +241,47 @@ static void
 clear_pnode (PNODE node)
 {
 	if (node->i_flags & PN_IVALUEX_PVALUE) {
-		if (ivaluex(node)) {
-			PVALUE val = ivaluex(node);
+		PVALUE val = ivaluex(node);
+		if (val) {
 			delete_pvalue(val);
-			ivaluex(node)=0;
+			ivaluex(node) = 0;
 		}
 	}
 	if (node->i_flags & PN_INAME_HSTR) {
-		if (iname(node)) {
-			STRING str = iname(node);
+		STRING str = iname(node);
+		if (str) {
 			stdfree(str);
 			iname(node) = 0;
 		}
 	}
-	/* most of the strings are inside the record */
+	if (node->i_flags & PN_ICHILD_HPTR) {
+		STRING str = ichild(node);
+		if (str) {
+			stdfree(str);
+			ichild(node) = 0;
+		}
+	}
+	if (node->i_flags & PN_INUM_HPTR) {
+		STRING str = inum(node);
+		if (str) {
+			stdfree(str);
+			inum(node) = 0;
+		}
+	}
+	if (node->i_flags & PN_ISPOUSE_HPTR) {
+		STRING str = ispouse(node);
+		if (str) {
+			stdfree(str);
+			ispouse(node) = 0;
+		}
+	}
+	if (node->i_flags & PN_IFAMILY_HPTR) {
+		STRING str = ifamily(node);
+		if (str) {
+			stdfree(str);
+			ifamily(node) = 0;
+		}
+	}
 }
 /*==================================
  * delete_pnode -- Create PNODE node
@@ -296,6 +323,7 @@ children_node (PACTX pactx, PNODE fexpr, STRING cvar, STRING nvar, PNODE body)
 	ichild(node) = (VPTR) cvar;
 	inum(node) = (VPTR) nvar;
 	ibody(node) = (VPTR) body;
+	node->i_flags = PN_ICHILD_HPTR + PN_INUM_HPTR;
 	set_parents(body, node);
 	return node;
 }
@@ -317,6 +345,7 @@ spouses_node (PACTX pactx, PNODE pexpr, STRING svar, STRING fvar, STRING nvar, P
 	ifamily(node) = (VPTR) fvar;
 	inum(node) = (VPTR) nvar;
 	ibody(node) = (VPTR) body;
+	node->i_flags = PN_ISPOUSE_HPTR + PN_IFAMILY_HPTR + PN_INUM_HPTR;
 	set_parents(body, node);
 	return node;
 }
@@ -338,6 +367,7 @@ families_node (PACTX pactx, PNODE pexpr, STRING fvar, STRING svar, STRING nvar, 
 	ispouse(node) = (VPTR) svar;
 	inum(node) = (VPTR) nvar;
 	ibody(node) = (VPTR) body;
+	node->i_flags = PN_IFAMILY_HPTR + PN_ISPOUSE_HPTR + PN_INUM_HPTR;
 	set_parents(body, node);
 	return node;
 }
