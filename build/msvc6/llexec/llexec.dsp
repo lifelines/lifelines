@@ -148,6 +148,10 @@ SOURCE=..\..\..\src\gedlib\date.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\gedlib\dblist.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\stdlib\dirs.c
 # End Source File
 # Begin Source File

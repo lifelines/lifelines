@@ -181,6 +181,10 @@ SOURCE=..\..\..\src\gedlib\dbfuncs.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\gedlib\dblist.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\liflines\delete.c
 # End Source File
 # Begin Source File

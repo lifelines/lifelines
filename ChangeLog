@@ -12,6 +12,11 @@
 
 	Add new dblist.c to Makefile.am.
 
+	* ChangeLog build/msvc6/llexec/llexec.dsp
+	build/msvc6/llines/llinesprj.dsp
+
+	Add new dblist.c to llines MSVC6 project and llexec MSVC6 project.
+
 2005-02-26 Perry Rapp
 
 	* ChangeLog src/stdlib/rbtree.c src/stdlib/rbtree.h
