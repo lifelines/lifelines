@@ -262,9 +262,12 @@ static BOOLEAN viewing_msgs = FALSE; /* user is viewing msgs */
 static BOOLEAN lock_std_msg = FALSE; /* to hold status message */
 static UIWINDOW active_uiwin = 0;
 
-static char gr_btee='+', gr_ltee='+', gr_rtee='+', gr_ttee='+';
-static char gr_hline='-', gr_vline= '|';
-static char gr_llx='*', gr_lrx='*', gr_ulx='*', gr_urx='*';
+/* we ought to use chtype, but only if it is typedef'd, but there is no
+test to see if a type is typedef'd */
+typedef unsigned long llchtype;
+static llchtype gr_btee='+', gr_ltee='+', gr_rtee='+', gr_ttee='+';
+static llchtype gr_hline='-', gr_vline= '|';
+static llchtype gr_llx='*', gr_lrx='*', gr_ulx='*', gr_urx='*';
 
 /*********************************************
  * local & exported function definitions
