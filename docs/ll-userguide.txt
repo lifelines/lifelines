@@ -1035,82 +1035,123 @@
    do  you  want  to edit? e Editor to Internal mapping m Internal to
    Editor  mapping  i GEDCOM to Internal mapping x Internal to GEDCOM
    mapping d Internal to Display mapping r Internal to Report mapping
-   q  Return  to main menu LifeLines has little built-in knowledge of
-   character  codes.  If  you use 7-bit ASCII characters you will not
-   encounter  problems.  However,  many  European and other languages
-   require  additional characters, and there are many 8-bit and other
-   schemes  for encoding those characters. LifeLines knows about none
-   of  them.  However,  LifeLines  provides  a  number  of  character
-   translation  features you can use to manage character translation.
-   LifeLines  provides  facilities  for  mapping  between  characters
-   whenever  a  data  record  changes  form.  LifeLines supports four
-   forms:  internal  for  records  in the database editor for records
-   being  edited  display  for  records  being  displayed  report for
-   records  written to output file When converting text from one form
-   to  another  LifeLines normally does not convert characters codes.
-   You  may,  however,  override  this  default  behavior by creating
-   translation tables that LifeLines will use when converting between
-   forms.  There  are  six  translation  tables  you  may define. The
-   following  table  shows the six tables and describes when they are
-   applied:   internal  to  editor  when  converting  from  internal,
-   database  form  to  editor form editor to internal when converting
-   from  editor  form  back  to  internal,  database  form  GEDCOM to
-   internal  when  reading  GEDCOM  input records and writing them to
-   database internal to GEDCOM when writing internal database records
-   to  external  GEDCOM  file  internal  to display when displaying a
-   record  in  a browsing mode display screen internal to report when
-   writing  internal  database  records to external report file After
-   you  select  a  translation  table you are placed in the editor to
-   edit  the table. Translation tables are made up of lines that look
-   like:  pattern  pattern  where  a tab separates the patterns. Each
-   pattern  is an arbitrary sequence of verbatim ASCII characters and
-   escape  sequences.  Translation  occurs by finding all occurrences
-   that match left patterns and replacing them with the corresponding
-   right patterns. There are five escape mechanisms used in patterns:
-   #nnn  nnn  is  a  decimal  character value $hh hh is a hexadecimal
-   character value \ # represents the # character \$ represents the $
-   character  \\ represents the \ character The character translation
-   feature  is  not  fully  tested,  and  not  all  translations  are
-   currently  implemented.  If you choose the miscellaneous utilities
-   operation,  LifeLines displays the utilities menu: What utility do
-   you  want  to perform? s Save the database in a GEDCOM file r Read
-   in  data from a GEDCOM file k Find a person's key value i Identify
-   a  person  from key value d Show database statistics m Show memory
-   statistics  e  Edit  the  place  abbreviation file o Edit the user
-   options  file  q  Return to the main menu s Save the database in a
-   GEDCOM file. This command saves the complete LifeLines database in
-   a  GEDCOM file. All person, family, event, source and user-defined
-   records  are stored. This command may be used to periodically back
-   up  your  database.  When you use this command, LifeLines asks you
-   for  the name of the file. If you have defined the LLARCHIVE shell
-   variable,  LifeLines will store the file in the directory named in
-   the  variable.  r  Read  in  data from a GEDCOM file. This command
-   allows  you  restore  a complete database from a GEDCOM file. When
-   you  select  this  command, LifeLines asks you for the name of the
-   GEDCOM  file.  This command can also be used to import data from a
-   GEDCOM  file to an existing database. When LifeLines performs this
-   command,  it  first reads the entire GEDCOM file and checks it for
-   validity.  If  there are problems in the file, LifeLines describes
-   them,  writing  them  to  the  file  err.log, and does not add any
-   records  to the database. If there are no problems, LifeLines adds
-   all the records found in the file to the database (only header and
-   trailer records are not stored in the database). k Find a person's
-   key  value. This command finds the internal key value of a person.
-   i  Identify  a  person from key value. This command identifies the
-   person  that  has a particular internal key value. d Show database
-   statistics.  This  command  summarizes the contents of the current
-   database.  It displays the number of person, family, source, event
-   and  other records in the database. m Show memory statistics. This
-   command  is  used  by  the  author for debugging. e Edit the place
-   abbreviation  file.  This  command  allows  you  to edit the place
-   abbreviations  file.  This file defines the abbreviations that are
-   used  by  LifeLines  when  it  creates lists of persons for you to
-   select from. Each line in the file has the format:word: abbr where
-   word  is  a  word to be abbreviated, and abbr is its abbreviation.
-   The  word  and  its  abbreviation  are  separated  by a colon. For
-   example:  Connecticut:Conn.  Massachusetts:Mass.  Nova Scotia:N.S.
-   When LifeLines constructs lists of persons for you to select from,
-   it looks up the last component of certain PLAC lines in this file,
+   q  Return  to  main  menu  LifeLines  can do codeset conversion in
+   changing  text  from  one  form to another, and lifelines supports
+   five  different forms. internal for records in the database editor
+   for  records  being  edited  display  for  records being displayed
+   report  for records written to output file GEDCOM for records read
+   in  from  or  written  out to GEDCOM When converting text from one
+   form  to  another  LifeLines  normally  uses iconv conversion, and
+   codesets   specified  in  configuration  variables.  This  may  be
+   augmented  by  codeset  translation  or  extension  using the text
+   conversion (*.tt) files in the tt subdirectory. For example, there
+   is  a  file  "UTF-8__html.tt"  which  provides  conversion to HTML
+   (i.e.,  escaping  HTML  special codes, such as less than). If your
+   system  lacks  iconv, or you need more specialized conversion than
+   provided  with  iconv, you may either write a text conversion file
+   (a  tt  file),  or you may edit one of the in-database translation
+   tables. There in-database translation tables convert between forms
+   (as  listed above). Every translation table converts either to the
+   internal  form,  or  from the internal form. That is, the internal
+   form  is used as an intermediate step in all operations. There are
+   six  supported  translation  tables. The following table shows the
+   six tables and describes when they are applied: internal to editor
+   when converting from internal, database form to editor form editor
+   to  internal  when  converting  from editor form back to internal,
+   database form GEDCOM to internal when reading GEDCOM input records
+   and  writing  them  to  database  internal  to GEDCOM when writing
+   internal  database  records  to  external  GEDCOM file internal to
+   display when displaying a record in a browsing mode display screen
+   internal  to  report  when  writing  internal  database records to
+   external  report file After you select a translation table you are
+   placed  in  the  editor  to edit the table. Translation tables are
+   made  up  of  lines  that  look  like: pattern pattern where a tab
+   separates  the  patterns. Each pattern is an arbitrary sequence of
+   verbatim ASCII characters and escape sequences. Translation occurs
+   by  finding all occurrences that match left patterns and replacing
+   them  with the corresponding right patterns. There are five escape
+   mechanisms used in patterns: #nnn nnn is a decimal character value
+   $hh  hh  is  a  hexadecimal  character  value \ # represents the #
+   character  \$  represents  the  $  character  \\  represents the \
+   character  It  is possible, and desirable, to provide a short name
+   for  the  translation  table,  using  the  "##!name: " command. An
+   example  would  be  ##!name: UTF-8 to latex Naming the translation
+   table  is desirable because these names are displayed, at least in
+   part  and  if  they  fit,  on  the  translation  table menu. It is
+   possible  to  format  the file using a character other than tab as
+   the  separator between source and destination code. To do requires
+   using  the "##!sep" command. Those exact six characters must begin
+   the line, and then the next character is the new separator for all
+   following  lines.  For  clarity,  this should only occur once, and
+   near  the top of the file before any actual translation lines, and
+   a  fairly  clear  separator  should  be used (e.g., the equal sign
+   "="). Any line which is blank, or which begins with two hash marks
+   (##),  is  ignored. Therefore, comments begin with two hash marks.
+   For  advanced  users,  it  is  possible  to mix different types of
+   conversion,  for  example  iconv  conversion  and also translation
+   table  conversion,  in  the  same  form  step.  For example, it is
+   possible  to  convert internal database text (internal form) first
+   via  the  "internal  to GEDCOM" in-database translation table, and
+   then  via the iconv conversion from configured internal codeset to
+   configured  GEDCOM  codeset.  In-database  translation  tables are
+   always  applied in the internal codeset, so when converting to the
+   internal form, they are applied after iconv and/or tt conversions,
+   and when converting from internal form, they are applied first. An
+   example  of  adding a mixin in-database translation table might be
+   to  escape  certain  characters which are control characters to an
+   output  computer  language,  e.g.,  latex.  One  could  create  an
+   "Internal  to  Report"  mapping  in  UTF-8  (if  the  database  is
+   internally UTF-8) to escape any characters that may occur in place
+   names  or  textual  descriptions  and inadvertently cause grief in
+   latex processing. However, in this case, one could also write a tt
+   file  to achieve the same results, and be shared across databases,
+   by  naming  it,  eg, UTF-8__latex.tt. The double underscore ("__")
+   signifies that this is a conversion to be applied to text which is
+   in  UTF-8, and to trigger lifelinesn to use this, one must specify
+   a  report  codeset  such  as  "UTF-8//latex"  (if  UTF-8 output is
+   desired,   but  with  the  latex  conversion  first  applied),  or
+   "ISO-8859-1//latex" (if ISO-8859-1 output is desired, but with the
+   latex  conversion  first applied). If you choose the miscellaneous
+   utilities  operation,  LifeLines displays the utilities menu: What
+   utility  do  you  want to perform? s Save the database in a GEDCOM
+   file r Read in data from a GEDCOM file k Find a person's key value
+   i  Identify  a  person from key value d Show database statistics m
+   Show  memory  statistics e Edit the place abbreviation file o Edit
+   the  user  options  file  q  Return  to  the  main menu s Save the
+   database  in  a  GEDCOM  file.  This  command  saves  the complete
+   LifeLines  database  in  a GEDCOM file. All person, family, event,
+   source  and  user-defined  records are stored. This command may be
+   used  to  periodically  back  up  your database. When you use this
+   command,  LifeLines asks you for the name of the file. If you have
+   defined  the  LLARCHIVE  shell  variable, LifeLines will store the
+   file in the directory named in the variable. r Read in data from a
+   GEDCOM  file.  This command allows you restore a complete database
+   from  a  GEDCOM file. When you select this command, LifeLines asks
+   you for the name of the GEDCOM file. This command can also be used
+   to  import  data  from a GEDCOM file to an existing database. When
+   LifeLines  performs this command, it first reads the entire GEDCOM
+   file  and  checks  it  for  validity. If there are problems in the
+   file,  LifeLines describes them, writing them to the file err.log,
+   and  does  not  add  any  records to the database. If there are no
+   problems,  LifeLines adds all the records found in the file to the
+   database  (only  header  and trailer records are not stored in the
+   database).  k  Find  a  person's key value. This command finds the
+   internal  key  value  of  a  person.  i Identify a person from key
+   value.  This  command  identifies the person that has a particular
+   internal  key  value.  d  Show  database  statistics. This command
+   summarizes  the  contents of the current database. It displays the
+   number  of  person, family, source, event and other records in the
+   database.  m  Show  memory statistics. This command is used by the
+   author  for  debugging.  e  Edit the place abbreviation file. This
+   command allows you to edit the place abbreviations file. This file
+   defines  the  abbreviations  that  are  used  by LifeLines when it
+   creates  lists of persons for you to select from. Each line in the
+   file  has  the  format:word:  abbr  where  word  is  a  word to be
+   abbreviated,  and  abbr  is  its  abbreviation.  The  word and its
+   abbreviation    are   separated   by   a   colon.   For   example:
+   Connecticut:Conn.   Massachusetts:Mass.   Nova   Scotia:N.S.  When
+   LifeLines  constructs  lists of persons for you to select from, it
+   looks  up  the  last component of certain PLAC lines in this file,
    and if it finds that component, replaces it with its abbreviation.
    o  Edit the user options file. This command allows you to edit the
    user  options  file. The user options file is a record kept in the

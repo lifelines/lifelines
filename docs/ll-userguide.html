@@ -37,7 +37,7 @@ CLASS="subtitle"
 ><TT
 CLASS="application"
 >LifeLines</TT
-> Version 3.0.40</H2
+> Version 3.0.42</H2
 ><H3
 CLASS="author"
 ><A
@@ -186,32 +186,32 @@ HREF="#AEN1211"
 ></DT
 ><DT
 ><A
-HREF="#AEN1306"
+HREF="#AEN1312"
 >MISCELLANEOUS UTILITIES</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1404"
+HREF="#AEN1410"
 >IMPORT ERRORS</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1440"
+HREF="#AEN1446"
 >HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1605"
+HREF="#AEN1611"
 >FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1614"
+HREF="#AEN1620"
 >LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1663"
+HREF="#AEN1669"
 >System and User Properties</A
 ></DT
 ></DL
@@ -2139,29 +2139,30 @@ NAME="AEN352"
 </P
 ><P
 >&#13;
-     Third, you may specify the use of UTF-8. This is a Unicode encoding, and is
-     by far the most powerful option. In fact, this is the only really convenient 
-     way to be able to store, for example, names in English, names in Russian, and
-     names in Greek, all in the same database, in their native scripts (alphabets).
-     In recent versions, lifelines has become more knowledgeable about handling 
-     UTF-8, so that, for example, upper &#38; lower casing only work correctly with
-     versions from 3.0.28 on.
+     Third, you may specify the use of UTF-8. This is a Unicode encoding, and
+     is by far the most powerful option. In fact, this is the only really
+     convenient way to be able to store, for example, names in English, names
+     in Russian, and names in Greek, all in the same database, in their native
+     scripts (alphabets).  In recent versions, lifelines has become more
+     knowledgeable about handling UTF-8, so that, for example, upper &#38;
+     lower casing only work correctly with versions from 3.0.28 on.
 
 </P
 ><P
 >&#13;
-     To actually specify a codeset, enter it via the u(tility) o(ptions) page (which is
-     documented below). From the main menu, in the English version, press u to reach
-     the utility page, and then o to edit the user options. To set a codeset of, e.g.,
-     ISO-8859-1, enter this string on its own line, without the surrounding quotes:
-     "codeset=ISO-8859-1". Or, to specify the use of UTF-8, "codeset=UTF-8".
+     To actually specify a codeset, enter it via the u(tility) o(ptions) page
+     (which is documented below). From the main menu, in the English version,
+     press u to reach the utility page, and then o to edit the user options. To
+     set a codeset of, e.g., ISO-8859-1, enter this string on its own line,
+     without the surrounding quotes: "codeset=ISO-8859-1". Or, to specify the
+     use of UTF-8, "codeset=UTF-8".
 
 </P
 ><P
 >&#13;
-     Further information about codeset conversion is found in the later chapter of
-     that name (for example, information about producing reports which make use of
-     HTML entity names for non-ASCII characters).
+     Further information about codeset conversion is found in the later chapter
+     of that name (for example, information about producing reports which make
+     use of HTML entity names for non-ASCII characters).
 
 </P
 ></DIV
@@ -5820,25 +5821,25 @@ NAME="AEN1211"
 </P
 ><P
 >&#13;
-     There are two ways to amend codeset conversion. The first method is by changing
-     configuration variables. For example, if you wish to generate an HTML report
-     of all your data, which includes names in Russian (in Cyrillic letters), for your
-     cousin, and you know that your cousin's computer has no font for Cyrillic letters,
-     you might wish to temporarily adjust your report output codeset so that you will
-     get interpolated ASCII letters for the Russian letters. You could do this by
-     temporarily altering the configuration variable ReportCodesetOut to be "ASCII" 
-     (actually, if any of your data has characters in it that are reserved in HTML, 
-     such as the less than sign, or the ampersand, you would probaby want "ASCII//HTML").
+     There are two ways to amend codeset conversion. The first method is by
+     changing configuration variables. For example, if you wish to generate an
+     HTML report of all your data, which includes names in Russian (in Cyrillic
+     letters), for your cousin, and you know that your cousin's computer has no
+     font for Cyrillic letters, you might wish to temporarily adjust your
+     report output codeset so that you will get interpolated ASCII letters for
+     the Russian letters. You could do this by temporarily altering the
+     configuration variable ReportCodesetOut to be "ASCII" (actually, if any of
+     your data has characters in it that are reserved in HTML, such as the less
+     than sign, or the ampersand, you would probaby want "ASCII//HTML").
 
 </P
 ><P
 >&#13;
-     The second way to change codeset conversion, and the only way in lifelines 3.0.6,
-     is to edit the embedded character translation tables, in which you actually specify
-     the letters you want converted, letter by letter, and how you want them converted.
-     This method, unlike the first, even works in databases with no specified internal
-     codeset.
-</P
+     The second way to change codeset conversion, and the only way in lifelines
+     3.0.6, is to edit the embedded character translation tables, in which you
+     actually specify the letters you want converted, letter by letter, and how
+     you want them converted.  This method, unlike the first, even works in
+     databases with no specified internal codeset.  </P
 ><P
 >&#13;
 If you choose the modify character translation tables operation from the main menu, <TT
@@ -5872,39 +5873,16 @@ CLASS="screen"
 </P
 ><P
 >&#13;
-<TT
+     <TT
 CLASS="application"
 >LifeLines</TT
-> has little built-in knowledge of 
-character codes. If you use 7-bit <SPAN
-CLASS="acronym"
->ASCII</SPAN
-> characters you 
-will not encounter problems. However, many European and other languages 
-require additional characters, and
-there are many 8-bit and other schemes for encoding those characters. 
-<TT
-CLASS="application"
->LifeLines</TT
-> knows about none of
-them. However, <TT
-CLASS="application"
->LifeLines</TT
-> provides a number of 
-character translation features you can use to manage
-character translation.
+> can do codeset conversion in changing
+     text from one form to another, and lifelines supports five different
+     forms.
 
 </P
 ><P
 >&#13;
-<TT
-CLASS="application"
->LifeLines</TT
-> provides facilities for mapping between characters whenever a data record changes form.
-<TT
-CLASS="application"
->LifeLines</TT
-> supports four forms:
 </P
 ><DIV
 CLASS="glosslist"
@@ -5947,20 +5925,43 @@ for records in the database
 >&#13;for records written to output file
 </P
 ></DD
+><DT
+><B
+>GEDCOM</B
+></DT
+><DD
+><P
+>&#13;for records read in from or written out to GEDCOM
+</P
+></DD
 ></DL
 ></DIV
 ><P
 >&#13;
-When converting text from one form to another <TT
+     When converting text from one form to another
+     <TT
 CLASS="application"
 >LifeLines</TT
-> normally does not convert characters codes.
-You may, however, override this default behavior by creating translation tables that <TT
-CLASS="application"
->LifeLines</TT
-> will
-use when converting between forms. There are six translation tables you may define. The following
-table shows the six tables and describes when they are applied:
+> normally uses iconv conversion, and
+     codesets specified in configuration variables. This may be augmented by
+     codeset translation or extension using the text conversion (*.tt) files in
+     the tt subdirectory. For example, there is a file "UTF-8__html.tt" which
+     provides conversion to HTML (i.e., escaping HTML special codes, such as
+     less than).  If your system lacks iconv, or you need more specialized
+     conversion than provided with iconv, you may either write a text
+     conversion file (a tt file), or you may edit one of the in-database
+     translation tables.
+ 
+</P
+><P
+>&#13;
+     There in-database translation tables convert between forms (as listed
+     above). Every translation table converts either to the internal form, or
+     from the internal form. That is, the internal form is used as an
+     intermediate step in all operations. There are six supported translation
+     tables.  The following table shows the six tables and describes when they
+     are applied:
+     
 </P
 ><DIV
 CLASS="glosslist"
@@ -6124,8 +6125,85 @@ CLASS="glosslist"
 ></DIV
 ><P
 >&#13;
-The character translation feature is not fully tested, and not all translations are currently
-implemented.
+     It is possible, and desirable, to provide a short name for
+     the translation table, using the "##!name: " command. An 
+     example would be
+
+</P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;##!name: UTF-8 to latex
+</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;
+     Naming the translation table is desirable because these 
+     names are displayed, at least in part and if they fit, on
+     the translation table menu.
+
+</P
+><P
+>&#13;
+     It is possible to format the file using a character other than
+     tab as the separator between source and destination code. To do
+     requires using the "##!sep" command. Those exact six characters
+     must begin the line, and then the next character is the new
+     separator for all following lines. For clarity, this should only
+     occur once, and near the top of the file before any actual
+     translation lines, and a fairly clear separator should be used
+     (e.g., the equal sign "=").
+
+</P
+><P
+>&#13;
+     Any line which is blank, or which begins with two hash marks (##), is
+     ignored. Therefore, comments begin with two hash marks.
+
+</P
+><P
+>&#13;
+     For advanced users, it is possible to mix different types of 
+     conversion, for example iconv conversion and also translation
+     table conversion, in the same form step. For example, it is possible
+     to convert internal database text (internal form) first via the
+     "internal to GEDCOM" in-database translation table, and then via
+     the iconv conversion from configured internal codeset to configured
+     GEDCOM codeset. In-database translation tables are always applied
+     in the internal codeset, so when converting to the internal form,
+     they are applied after iconv and/or tt conversions, and when
+     converting from internal form, they are applied first.
+
+</P
+><P
+>&#13;
+     An example of adding a mixin in-database translation table might
+     be to escape certain characters which are control characters
+     to an output computer language, e.g., latex. One could create an
+     "Internal to Report" mapping in UTF-8 (if the database is internally
+     UTF-8) to escape any characters that may occur in place names or
+     textual descriptions and inadvertently cause grief in latex
+     processing.
+
+</P
+><P
+>&#13;
+     However, in this case, one could also write a tt file to achieve
+     the same results, and be shared across databases, by naming it, eg,
+     UTF-8__latex.tt. The double underscore ("__") signifies that this
+     is a conversion to be applied to text which is in UTF-8, and to 
+     trigger lifelinesn to use this, one must specify a report codeset
+     such as "UTF-8//latex" (if UTF-8 output is desired, but with the
+     latex conversion first applied), or "ISO-8859-1//latex" (if 
+     ISO-8859-1 output is desired, but with the latex conversion first
+     applied).
 
 </P
 ></DIV
@@ -6134,7 +6212,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1306"
+NAME="AEN1312"
 ></A
 >MISCELLANEOUS UTILITIES</H2
 ><P
@@ -6375,7 +6453,7 @@ CLASS="replaceable"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1371"
+NAME="AEN1377"
 ></A
 ><P
 ><B
@@ -6475,7 +6553,7 @@ record template with the following:
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1388"
+NAME="AEN1394"
 ></A
 ><P
 ><B
@@ -6503,7 +6581,7 @@ CLASS="programlisting"
 you would edit the user option file to contain:<DIV
 CLASS="example"
 ><A
-NAME="AEN1391"
+NAME="AEN1397"
 ></A
 ><P
 ><B
@@ -6522,7 +6600,7 @@ CLASS="literallayout"
 or, using the \n escape so as to keep the entry on one line:<DIV
 CLASS="example"
 ><A
-NAME="AEN1394"
+NAME="AEN1400"
 ></A
 ><P
 ><B
@@ -6563,7 +6641,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1404"
+NAME="AEN1410"
 ></A
 >IMPORT ERRORS</H2
 ><P
@@ -6674,7 +6752,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1440"
+NAME="AEN1446"
 ></A
 >HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</H2
 ><P
@@ -6933,7 +7011,7 @@ CLASS="structfield"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1485"
+NAME="AEN1491"
 ></A
 ><P
 ><B
@@ -7654,7 +7732,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1605"
+NAME="AEN1611"
 ></A
 >FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</H2
 ><P
@@ -7728,7 +7806,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1614"
+NAME="AEN1620"
 ></A
 >LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</H2
 ><P
@@ -7815,7 +7893,7 @@ CLASS="application"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1629"
+NAME="AEN1635"
 ></A
 ><P
 ><B
@@ -7938,7 +8016,7 @@ CLASS="structfield"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1647"
+NAME="AEN1653"
 ></A
 ><P
 ><B
@@ -8049,7 +8127,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1663"
+NAME="AEN1669"
 ></A
 >System and User Properties</H2
 ><P
@@ -8164,7 +8242,10 @@ values found when reading in the configuration files.
 >&#13;Finally, <TT
 CLASS="application"
 >LifeLines</TT
-> looks in the environment table.  Only a handful of propertiesmay be set from the environment, namely LLARCHIVES, LLCONFIGFILE, LLDATABASES, LLEDITOR, LLNEWDBDIR, LLPROGRAMS, and LLREPORTS.
+> looks in the environment table.  Only a handful of properties
+may be set from the environment, namely 
+LLARCHIVES, LLCONFIGFILE, LLDATABASES, LLEDITOR, 
+LLNEWDBDIR, LLPROGRAMS, and LLREPORTS.
 </P
 ></DD
 ></DL

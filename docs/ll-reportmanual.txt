@@ -558,37 +558,37 @@
    elements  starting at one. VOID table TABLE_V declare a table VOID
    insert  TABLE, STRING, ANY insert entry in table ANY lookup TABLE,
    STRING lookup and return entry from table INT length TABLE size of
-   the table These functions provide general purpose, keyed tables. A
-   table  must  be  declared with the table function before it can be
-   used.  Insert  adds  an  object  and its key to a table. Its first
-   parameter  is  a  table; the second parameter is the object's key;
-   and  the  third  parameter is the object itself. The key must be a
-   string  and  the  object  can be any value. If there already is an
-   object in the table with that key, the old object is replaced with
-   the  new.  Lookup  retrieves  an  object  from  a table. Its first
-   parameter  is  a  table,  and the second parameter is the object's
-   key. The function returns the object with that key from the table;
-   if  there  is no such object, null is returned. length returns the
-   number  of elements in the table. STRING xref NODE cross reference
-   index  of  STRING  tag NODE tag of STRING value NODE value of NODE
-   parent  NODE  parent  node  of NODE child NODE first child of NODE
-   sibling  NODE  next  sibling  of  NODE  savenode  NODE copy a node
-   structure INT level NODE level of a node fornodes (NODE, NODE_V) {
-   commands  }  loop  through  child  nodes  fornotes (ANY, STRING) {
-   commands  }  loop  through notes on a node traverse (NODE, NODE_V,
-   INT_V)  {  commands  }  loop  through  all  descendent nodes These
-   functions  provide  access to the components of a GEDCOM node. All
-   take  a  GEDCOM  node  as their only parameter, and each returns a
-   different  value  associated with the node. Xref returns the cross
-   reference  index  of  the node, if any; tag returns the tag of the
-   node; and value returns the value of the node, if any. If there is
-   no cross reference, xref returns null; if there is no value, value
-   returns  null. Parent returns the parent node of the node, if any;
-   child  returns  the  first  child  node  of  the node, if any; and
-   sibling  returns  the  next  sibling  node  of  the  node, if any.
-   Whenever  there  is  no  such related node, these functions return
-   null.  These  three  functions  allow  simple navigation through a
-   GEDCOM  node  tree.  Savenode  makes  a  copy of the node, and the
+   the table BOOL empty TABLE check if table is empty These functions
+   provide  general  purpose,  keyed tables. A table must be declared
+   with  the  table  function  before  it can be used. Insert adds an
+   object and its key to a table. Its first parameter is a table; the
+   second  parameter  is the object's key; and the third parameter is
+   the  object itself. The key must be a string and the object can be
+   any  value.  If  there already is an object in the table with that
+   key,  the old object is replaced with the new. Lookup retrieves an
+   object  from  a  table.  Its  first  parameter is a table, and the
+   second  parameter  is  the  object's key. The function returns the
+   object  with  that key from the table; if there is no such object,
+   null  is  returned.  length  returns the number of elements in the
+   table.  STRING  xref NODE cross reference index of STRING tag NODE
+   tag  of STRING value NODE value of NODE parent NODE parent node of
+   NODE  child  NODE first child of NODE sibling NODE next sibling of
+   NODE savenode NODE copy a node structure INT level NODE level of a
+   node fornodes (NODE, NODE_V) { commands } loop through child nodes
+   fornotes  (NODE, STRING) { commands } loop through notes on a node
+   traverse  (NODE,  NODE_V,  INT_V)  {  commands  } loop through all
+   descendent  nodes These functions provide access to the components
+   of  a GEDCOM node. All take a GEDCOM node as their only parameter,
+   and  each returns a different value associated with the node. Xref
+   returns the cross reference index of the node, if any; tag returns
+   the  tag  of the node; and value returns the value of the node, if
+   any.  If  there is no cross reference, xref returns null; if there
+   is no value, value returns null. Parent returns the parent node of
+   the  node, if any; child returns the first child node of the node,
+   if  any; and sibling returns the next sibling node of the node, if
+   any.  Whenever  there  is  no  such  related node, these functions
+   return null. These three functions allow simple navigation through
+   a  GEDCOM  node  tree.  Savenode makes a copy of the node, and the
    substructure  of  nodes  below  the  node,  that  is passed to it.
    Beware:  the memory used to make the copy is never returned to the
    system. The level function returns the level of the node. Fornodes
@@ -901,8 +901,8 @@
    TRUE  or  FALSE,  depending  on whether the file had the specified
    property  or not. Print prints its argument string to the standard
    output  window;  print  may have one to 32 arguments. VOID indiset
-   SET_V  declare  a  set  variable SET addtoset SET, INDI, ANY add a
-   person  to a set SET deletefromset SET, INDI, BOOL remove a person
+   SET_V  declare  a  set variable VOID addtoset SET, INDI, ANY add a
+   person to a set VOID deletefromset SET, INDI, BOOL remove a person
    from  a  set INT length SET size of a set SET union SET, SET union
    of  two  sets  SET intersect SET, SET intersection of two sets SET
    difference  SET,  SET difference of two sets SET parentset SET set
