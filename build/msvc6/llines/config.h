@@ -16,6 +16,7 @@
 #define HAVE_TOWLOWER 1
 #define HAVE_TOWUPPER 1
 #define HAVE_ISWSPACE 1
+#define HAVE_ISWALPHA 1
 #define IN_LIBINTL 1
 #define WIN32_INTL_SHIM 1
 #define WIN32_ICONV_SHIM 1

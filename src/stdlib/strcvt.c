@@ -105,6 +105,21 @@ isnumeric (STRING str)
 	return TRUE;
 }
 /*======================================
+ * iswletter -- is widechar a letter ?
+ *====================================*/
+BOOLEAN
+iswletter (wchar_t wch)
+{
+#ifdef HAVE_ISWALPHA
+	return iswalpha(wch);
+#else
+	unsigned int n = wch;
+	return (n>='a' && n<='z') || (n>='A' && n<='Z');
+#endif
+}
+static void
+wz_makelower (ZSTR zstr)
+/*======================================
  * wz_makelower -- widechar lowercasing
  * Input/output holds wchar_t characters
  *====================================*/
@@ -115,7 +130,7 @@ wz_makelower (ZSTR zstr)
 	for (wp = (wchar_t *)zs_str(zstr); *wp; ++wp) {
 		if (*wp == 0x3A3) {
 			/* Greek capital sigma */
-			if (!iswalpha(wp[1]))
+			if (!iswletter(wp[1]))
 				*wp = 0x3C2; /* final lower sigma */
 			else
 				*wp = 0x3C3; /* medial lower sigma */

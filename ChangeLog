@@ -7,11 +7,19 @@
 
 	* ChangeLog README.MAINTAINERS docs/ll-devguide.xml
 
-	Add manuals to list of files (README.MAINTAINERS) to have version bumped.
+	Listed xml manuals in README.MAINTAINERS to have version bumped.
 
 	* ChangeLog build/rpm/lifelines.spec
 
 	Fix rpm spec changelog format bugs.
+
+	Released 3.0.28.
+
+	* ChangeLog configure.in build/msvc6/dbverify/config.h
+	build/msvc6/llexec/config.h build/msvc6/llines/config.h
+	src/stdlib/strcvt.c
+
+	Added config test for iswalpha. Sync'd msvc6 versions of config.h.
 
 2003-05-09 Perry Rapp
 
