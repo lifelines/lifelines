@@ -1,3 +1,8 @@
+2001-07-02 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog btree/opnbtree.c gedlib/translat.c:
+	Sign extension bugfix for translat.c (reported by Stefan Siegel).
+
 2001-07-01 Perry Rapp <puddle@users.sourceforge.net>
 
 	* .linesrc ChangeLog btree/opnbtree.c gedlib/init.c
@@ -34,11 +39,6 @@
 
 	* ChangeLog btree/opnbtree.c
 	Backed out my changes as they raised concerns by other developers.
-
-2001-07-01 Perry Rapp <puddle@users.sourceforge.net>
-
-	NB: Below changes by Matt to opnbtree.c broke reader/writer
-	protection logic.
 
 2001-06-30 Matt Emmerton <memmerto@users.sourceforge.net>
 

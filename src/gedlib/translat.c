@@ -186,7 +186,7 @@ translate_string (TRANTABLE tt, /* tran table */
 	n = strlen(in);
 	l = 0;
 	while (n > 0) {
-		node = tt->start[(int)*p];
+		node = tt->start[(unsigned char)*p];
 		if (!node) {	/* this char starts no patterns */
 			add_char(out, &l, max, *p++);
 			--n;
