@@ -1,3 +1,9 @@
+2003-09-09 Perry Rapp
+
+	* ChangeLog src/interp/more.c
+
+	Bugfix for report sort function to not crash on one argument.
+
 2003-09-08 Matt Emmerton
 
 	* ChangeLog src/gedlib/init.c
