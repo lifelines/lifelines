@@ -1,5 +1,5 @@
 /*
- * @version        1.01 (2002-12-17-0600)
+ * @version        1.02 (2002-12-19)
  * @author         Perry Rapp
  * @category       self-test
  * @output         none
@@ -102,6 +102,29 @@ proc testLists()
 	}
 	else { incr(testok) }
 	setel(li, 4, 4)
+/* forlist & length */
+	set(te2,0)
+	set(te3,0)
+	set(te4,0)
+/*
+2002-12-19, this gives a runtime error b/c el#3 is NULL
+and therefore fails an is_pvalue test
+TODO: Decide how to fix this
+*/
+	forlist(li, te, n) {
+		set(te1, te2)
+ 		set(te2, te3)
+		set(te3, te4)
+		set(te4, te)
+		set(max, n)
+	}
+	if(ne(max,length(li))) {call reportfail("length FAILED")}
+	else {incr(testok)}
+	if(ne(te1,1)) {call reportfail("forlist#1 FAILED")} else {incr(testok)}
+	if(ne(te2,2)) {call reportfail("forlist#2 FAILED")} else {incr(testok)}
+	if(ne(te3,0)) {call reportfail("forlist#3 FAILED")} else {incr(testok)}
+	if(ne(te4,4)) {call reportfail("forlist#4 FAILED")} else {incr(testok)}
+/* continue getel & setel */
 	set(te, dequeue(li))
 	if (ne(te, 1)) {
 		call reportfail("dequeue(1) from setel FAILED")

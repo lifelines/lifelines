@@ -1,3 +1,9 @@
+2002-12-19 Perry Rapp
+
+	* ChangeLog reports/st/st_list.ll src/interp/pvalue.c:
+
+	More list tests (c/o John Chandler).
+
 2002-12-18 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llines.rc:

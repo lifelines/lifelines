@@ -1184,7 +1184,9 @@ debug_pvalue_as_string (PVALUE val)
 	INT len = sizeof(scratch);
 	char *p;
 
-	if (!is_pvalue(val)) return (STRING) "*NOT PVALUE*";
+	if (!is_pvalue(val)) {
+		return "*NOT PVALUE*";
+	}
 	type = ptype(val);
 	llstrncpyf(scratch, len, uu8, "<%s,", ptypes[type]);
 	p = scratch + strlen(scratch);
