@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LifeLines 3.0.10post\n"
 "POT-Creation-Date: 2002-02-25 11:29+0100\n"
-"PO-Revision-Date: 2002-02-25 12:09+0100\n"
+"PO-Revision-Date: 2002-02-26 23:09+0100\n"
 "Last-Translator: Jens Arvidsson <arvid-jens@algonet.se>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -19,11 +19,11 @@ msgstr "Du måste identifiera en databas."
 
 #: gedlib/messages.c:39
 msgid "What directory holds the LifeLines database?"
-msgstr "I vilken katalog återfinns lifelines-databasen?"
+msgstr "I vilken katalog finns lifelinesdatabasen?"
 
 #: gedlib/messages.c:40
 msgid "enter path: "
-msgstr "skriv in sökväg: "
+msgstr "ange sökväg: "
 
 #: gedlib/messages.c:41
 msgid "There is no LifeLines database in that directory."
@@ -51,7 +51,7 @@ msgstr "Databasen är skrivskyddad; du får inte göra ändringar i poster."
 
 #: gedlib/messages.c:48
 msgid "The database is read only; you may not merge records."
-msgstr "Databasen är skrivskyddad; du får inte lägga samman poster."
+msgstr "Databasen är skrivskyddad; du får inte slå samman poster."
 
 #: gedlib/messages.c:49
 msgid "The database is read only; you may not remove records."
@@ -59,31 +59,31 @@ msgstr "Databasen är skrivskyddad; du får inte ta bort poster."
 
 #: gedlib/messages.c:51
 msgid "enter name, key, refn or list:"
-msgstr "skriv in namn, nyckel, refn eller lista:"
+msgstr "ange namn, nyckel, refn eller lista:"
 
 #: gedlib/messages.c:52
 msgid "Please choose the child to remove from the family."
-msgstr "Välj barn att ta bort från familjen:"
+msgstr "Välj barn att ta bort från familjen."
 
 #: gedlib/messages.c:53
 msgid "Please choose the spouse/parent to remove from the family."
-msgstr "Välj maka(e)/förälder att ta bort från familjen"
+msgstr "Välj maka(e)/förälder att ta bort från familjen."
 
 #: gedlib/messages.c:85
 msgid "Enter pattern to match against single surname or given name."
-msgstr "Skriv in mönster att matcha mot ensamt efter- eller förnamn"
+msgstr "Ange mönster för att matcha ensamt efter- eller förnamn."
 
 #: gedlib/messages.c:86
 msgid "Enter pattern to match against full name."
-msgstr "Skriv in mönster att matcha mot hela namnet."
+msgstr "Ange mönster för att matcha fullständigt namn."
 
 #: gedlib/messages.c:87
 msgid "Enter pattern to match against refn."
-msgstr "Skriv in sökfras att matcha mot refn."
+msgstr "Ange mönster för att matcha refn."
 
 #: gedlib/messages.c:88
 msgid "pattern: "
-msgstr "sökfras"
+msgstr "mönster: "
 
 #. display longer forms
 #: gedlib/messages.c:298
@@ -122,7 +122,7 @@ msgstr "q  Avsluta programmet"
 #. main menu
 #: gedlib/messages.c:379
 msgid "b  Browse the persons in the database"
-msgstr "b  Bläddra mellan personer i databasen"
+msgstr "b  Bläddra bland personer i databasen"
 
 #: gedlib/messages.c:380
 msgid "s  Search database"
@@ -150,11 +150,11 @@ msgstr "c  Inställningar för teckenuppsättning"
 
 #: gedlib/messages.c:386
 msgid "t  Modify character translation tables"
-msgstr "Modifiera teckenöversättningstabeller"
+msgstr "t  Modifiera teckenöversättningstabeller"
 
 #: gedlib/messages.c:387
 msgid "u  Miscellaneous utilities"
-msgstr "Diverse verktyg"
+msgstr "u  Diverse verktyg"
 
 #: gedlib/messages.c:388
 msgid "x  Handle source, event and other records"
@@ -175,7 +175,7 @@ msgstr "r  Läs in data från en GEDCOM-fil"
 
 #: gedlib/messages.c:394
 msgid "k  Find a person's key value"
-msgstr "k  Finn nyckelvärdet för en person"
+msgstr "k  Finn nyckelvärde för en person"
 
 #: gedlib/messages.c:395
 msgid "i  Identify a person from key value"
@@ -208,7 +208,7 @@ msgstr "s  Bläddra i källposter"
 
 #: gedlib/messages.c:403
 msgid "e  Browse event records"
-msgstr "Bläddra i händelseposter"
+msgstr "e  Bläddra i händelseposter"
 
 #: gedlib/messages.c:404
 msgid "x  Browse other records"
@@ -257,20 +257,20 @@ msgstr "c  Barn - lägg till ett barn i en befintlig familj"
 
 #: gedlib/messages.c:451
 msgid "s  Spouse - add a spouse to an existing family"
-msgstr "s  Maka(e) - lägg till en maka/e i en befintlig familj"
+msgstr "s  Maka(e) - lägg till en maka(e) i en befintlig familj"
 
 #. delete menu
 #: gedlib/messages.c:453
 msgid "What do you want to remove?"
-msgstr "Vad vill du lägga till?"
+msgstr "Vad vill du ta bort?"
 
 #: gedlib/messages.c:454
 msgid "c  Child - remove a child from his/her family"
-msgstr "c  Barn - lägg till ett barn i en befintlig familj"
+msgstr "c  Barn - ta bort ett barn från sin familj"
 
 #: gedlib/messages.c:455
 msgid "s  Spouse - remove a spouse from a family"
-msgstr "s  Maka(e) - lägg till en maka/e i en befintlig familj"
+msgstr "s  Maka(e) - ta bort en maka(e) från en familj"
 
 #: gedlib/messages.c:456
 msgid "i  Individual - remove a person completely"
@@ -278,7 +278,7 @@ msgstr "i  Person - ta bort en person fullständigt"
 
 #: gedlib/messages.c:457
 msgid "f  Family - remove a family completely"
-msgstr "f  Familj - skapa familjepost med en eller två makar"
+msgstr "f  Familj - ta bort en familj fullständigt"
 
 #. scan menu
 #: gedlib/messages.c:459
@@ -295,11 +295,11 @@ msgstr "n  Sök på namnfragment (avdelade med blanksteg)"
 
 #: gedlib/messages.c:462
 msgid "r  Refn scan"
-msgstr "r Refn-sökning"
+msgstr "r  Refn-sökning"
 
 #: gedlib/messages.c:463
 msgid "Performing full name scan"
-msgstr "Utför sökning på hela namnet"
+msgstr "Utför sökning på fullständigt namn"
 
 #: gedlib/messages.c:464
 msgid "Performing name fragment scan"
@@ -311,7 +311,7 @@ msgstr "Utför sökning på refn"
 
 #: gedlib/messages.c:466
 msgid "No records found in scan"
-msgstr "Inga poster återfanns vid sökning"
+msgstr "Inga poster återfanns i sökning"
 
 #. complex date strings (A=abbrev, B=full)
 #: gedlib/messages.c:468
@@ -773,11 +773,11 @@ msgstr "t  Bläddra till övre"
 
 #: liflines/menuitem.c:104
 msgid "b  Browse to bottom"
-msgstr "b  bläddra t. nedre"
+msgstr "b  Bläddra t. nedre"
 
 #: liflines/menuitem.c:105
 msgid "h  Add as spouse"
-msgstr "h  lägg t. som maka(e)"
+msgstr "h  Lägg t. som maka(e)"
 
 #: liflines/menuitem.c:106
 msgid "i  Add as child"
@@ -963,7 +963,7 @@ msgstr "m  Bläddra t. mödrar"
 
 #: liflines/menuitem.c:152
 msgid "tm Tandem to mother/s"
-msgstr "tm Tandem t. moder/r/"
+msgstr "tm Tandem t. moder/r"
 
 #: liflines/menuitem.c:153
 msgid "ts Tandem to spouse/s"
@@ -975,11 +975,11 @@ msgstr "tu Tandem t. föräldr."
 
 #: liflines/menuitem.c:155
 msgid "<  Enlarge menu area"
-msgstr "<  Öka meny-yta"
+msgstr "<  Öka menyyta"
 
 #: liflines/menuitem.c:156
 msgid ">  Shrink menu area"
-msgstr ">  Minska meny-yta"
+msgstr ">  Minska menyyta"
 
 #: liflines/menuitem.c:157
 msgid "M> More menu cols"
@@ -1113,27 +1113,27 @@ msgstr "Titel saknas"
 
 #: liflines/menuitem.c:650
 msgid "LifeLines -- Person Browse Screen (* toggles menu)"
-msgstr "LifeLines -- Visningsfönster för personer (* visar/döljer meny)"
+msgstr "LifeLines -- Personfönster (* visar/döljer meny)"
 
 #: liflines/menuitem.c:659
 msgid "LifeLines -- Family Browse Screen (* toggles menu)"
-msgstr "LifeLines -- Visningsfönster för familjer (* visar/döljer meny)"
+msgstr "LifeLines -- Familjefönster (* visar/döljer meny)"
 
 #: liflines/menuitem.c:668
 msgid "LifeLines -- Two Person Browse Screen (* toggles menu)"
-msgstr "LifeLines -- Visningsfönster för två personer (* visar/döljer meny)"
+msgstr "LifeLines -- Tvåpersonsfönster (* visar/döljer meny)"
 
 #: liflines/menuitem.c:677
 msgid "LifeLines -- Two Family Browse Screen (* toggles menu)"
-msgstr "LifeLines -- Visningsfönster för två familjer (* visar/döljer meny)"
+msgstr "LifeLines -- Tvåfamiljsfönster (* visar/döljer meny)"
 
 #: liflines/menuitem.c:686
 msgid "LifeLines -- Auxiliary Browse Screen (* toggles menu)"
-msgstr "LifeLines -- Assisterande visningsfönster (* visar/döljer meny)"
+msgstr "LifeLines -- Assistentfönster (* visar/döljer meny)"
 
 #: liflines/menuitem.c:696
 msgid "LifeLines -- List Browse Screen (* toggles menu)"
-msgstr "LifeLines -- Visningsfönster för listor (* visar/döljer meny)"
+msgstr "LifeLines -- Listfönster (* visar/döljer meny)"
 
 #: liflines/screen.c:289
 #, c-format
@@ -1152,7 +1152,7 @@ msgstr ""
 
 #: liflines/screen.c:1429
 msgid "Enter locale name"
-msgstr "Skriv in namn på lokal"
+msgstr "Ange namn på lokal"
 
 #: liflines/screen.c:1430
 msgid "Locale: "
