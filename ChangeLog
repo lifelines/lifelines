@@ -1,4 +1,11 @@
-2002-02-04 Perry Rapp <puddle@users.sourceforge.net>
+2002-02-08 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog configure.in lifelines.spec docs/llines.1
+	hdrs/version.h:
+
+	Set version 3.0.10 for making dist. Add llines.1 to rpm spec.
+
+2002-02-07 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/indiseq.c:
 
