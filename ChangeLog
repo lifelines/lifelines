@@ -10,6 +10,12 @@
 	Fix cache overflow detection to detect overflow, not full
 	(bug from my changes yesterday).
 
+	* ChangeLog src/gedlib/keytonod.c
+
+	Fix init_cache to not skip element#0.
+	Add get_free_cacheel to make room in cache (I lost this
+	functionality when I removed indirect cache yesterday.)
+
 2003-11-22 Perry Rapp
 
 	* ChangeLog src/gedlib/gedcomi.h src/gedlib/keytonod.c

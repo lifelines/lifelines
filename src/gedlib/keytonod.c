@@ -97,6 +97,7 @@ static CACHE create_cache(STRING name, INT dirsize);
 static void delete_cache(CACHE * pcache);
 static void dereference(CACHEEL);
 static ZSTR get_cache_stats(CACHE ca);
+static CACHEEL get_free_cacheel(CACHE cache);
 static CACHEEL key_to_cacheel(CACHE cache, CNSTRING key, STRING tag, INT reportmode);
 static CACHEEL key_to_even_cacheel(CNSTRING key);
 static NODE key_typed_to_node(CACHE cache, CNSTRING key, STRING tag);
@@ -105,7 +106,7 @@ static RECORD key_typed_to_record(CACHE cache, CNSTRING key, STRING tag);
 static CACHEEL key_to_othr_cacheel(CNSTRING key);
 static CACHEEL key_to_sour_cacheel(CNSTRING key);
 static CACHEEL node_to_cache(CACHE, NODE);
-static CACHEEL put_node_in_cache(CACHE cache, NODE node, STRING key);
+static void put_node_in_cache(CACHE cache, CACHEEL cel, NODE node, STRING key);
 static NODE qkey_to_node(CACHE cache, CNSTRING key, STRING tag);
 static RECORD qkey_typed_to_record(CACHE cache, CNSTRING key, STRING tag);
 static CACHEEL qkey_to_typed_cacheel(STRING key);
@@ -537,7 +538,7 @@ create_cache (STRING name, INT dirsize)
 	/* Allocate all the cache elements in a big block */
 	cacarray(cache) = (CACHEEL) stdalloc(cacmaxdir(cache) * sizeof(cacarray(cache)[0]));
 	/* Link all the elements together on the free list */
-	for (i=1; i<cacmaxdir(cache); ++i) {
+	for (i=0; i<cacmaxdir(cache); ++i) {
 		CACHEEL cel = &cacarray(cache)[i];
 		CACHEEL celnext = cacfree(cache);
 		if (celnext) {
@@ -894,7 +895,8 @@ othr_to_cache (NODE node)
 static CACHEEL
 node_to_cache (CACHE cache, NODE top)
 {
-	STRING key;
+	STRING key=0;
+	CACHEEL cel=0;
 	ASSERT(cache);
 	ASSERT(top);
 	ASSERT(!nparent(top) && !nsibling(top)); /* should be a root */
@@ -908,28 +910,55 @@ node_to_cache (CACHE cache, NODE top)
 	key = node_to_key(top);
 	ASSERT(key);
 	ASSERT(!valueof_ptr(cacdata(cache), key));
-	if (!cacfree(cache)) {
-		llwprintf("Cache overflow! (Cache=%s, size=%d)\n", cacname(cache), cacmaxdir(cache));
-		ASSERT(0);
-	}
-	return put_node_in_cache(cache, top, key);
+	cel = get_free_cacheel(cache);
+	put_node_in_cache(cache, cel, top, key);
+	return cel;
 }
 /*=======================================================
- * put_node_in_cache -- Low-level work of creating new cacheel (& putting in cache)
+ * get_free_cacheel -- Remove and return entry from free list
  *=====================================================*/
 static CACHEEL
-put_node_in_cache (CACHE cache, NODE node, STRING key)
+get_free_cacheel (CACHE cache)
 {
-	CACHEEL cel;
+	CACHEEL cel=0, celnext=0;
+
+	/* If free list is empty, move least recently used entry to free list */
+	if (!cacfree(cache)) {
+		/* find least recently used by unlocked entry */
+		for (cel = caclastdir(cache); cel && cclock(cel); cel = cnext(cel)) {
+		}
+		if (!cel) {
+			llwprintf("Cache overflow! (Cache=%s, size=%d)\n", cacname(cache), cacmaxdir(cache));
+			ASSERT(0);
+		}
+		remove_from_cache(cache, ckey(cel));
+	}
+
+	cel = cacfree(cache);
+	ASSERT(cel);
+
+	/* remove entry from free list */
+	celnext = cnext(cel);
+	cacfree(cache) = celnext;
+	if (celnext)
+		cprev(celnext) = 0;
+	/* clear entry */
+	cnext(cel) = 0;
+	cprev(cel) = 0;
+	ckey(cel) = 0;
+
+	return cel;
+}
+/*=======================================================
+ * put_node_in_cache -- Low-level work of loading node into cacheel supplied
+ *=====================================================*/
+static void
+put_node_in_cache (CACHE cache, CACHEEL cel, NODE node, STRING key)
+{
 	STRING keynew;
 	BOOLEAN travdone = FALSE;
 	ASSERT(cache && node);
 	ASSERT(cacsizedir(cache) < cacmaxdir(cache));
-	cel = cacfree(cache);
-	ASSERT(cel); /* Otherwise we overflowed cache */
-	cacfree(cache) = cnext(cel);
-	if (cnext(cel))
-		cprev(cnext(cel)) = 0;
 	memset(cel, 0, sizeof(*cel));
 	insert_table_ptr(cacdata(cache), keynew=strsave(key), cel);
 	cnode(cel) = node;
@@ -954,7 +983,6 @@ put_node_in_cache (CACHE cache, NODE node, STRING key)
 		}
 		node = nsibling(node);
 	}
-	return cel;
 }
 /*==============================================
  * remove_indi_cache -- Remove person from cache
@@ -973,7 +1001,7 @@ remove_fam_cache (STRING key)
 	remove_from_cache(famcache, key);
 }
 /*=============================================
- * remove_from_cache -- Remove entry from cache
+ * remove_from_cache -- Move cache entry to free list
  *===========================================*/
 static void
 remove_from_cache (CACHE cache, STRING key)
@@ -981,14 +1009,18 @@ remove_from_cache (CACHE cache, STRING key)
 	CACHEEL cel=0, celnext=0;
 	if (!key || *key == 0 || !cache)
 		return;
-	if (!(cel = (CACHEEL) valueof_ptr(cacdata(cache), key)))
-		return;
-	ASSERT(!cclock(cel));
+	/* If it has a key, it is in the cache */
+	cel = valueof_ptr(cacdata(cache), key);
+	ASSERT(cel);
+	ASSERT(!cclock(cel)); /* not supposed to remove locked elements */
 	ASSERT(cnode(cel));
 	remove_direct(cache, cel);
 	celnext = cacfree(cache);
 	cnext(cel) = celnext;
-	cprev(celnext) = cel;
+	if (celnext)
+		cprev(celnext) = cel;
+	cprev(cel) = 0;
+	ckey(cel) = 0; /* does this need to be freed ? */
 	cacfree(cache) = cel;
 	delete_table(cacdata(cache), key);
 }
