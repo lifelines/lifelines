@@ -20,7 +20,7 @@ LL_REPORTS = \
 	nonpatronymics.ll pafcompat.ll partition.ll pdesc1.ll	\
 	pdesc2.r.ll pdesc3.ll pdesc4.ll pedigreel.ll places.ll	\
 	ps-anc2.ll ps-anc5.ll ps-anc6.ll ps-anc7.ll ps-anc8.ll	\
-	register-tex.ll register1.ll regvital.ll regvital1.ll	\
+	register-tex.ll register1.ll register1-dot.ll regvital.ll regvital1.ll	\
 	relate.ll related_spouses.ll relation.ll rllgen.ll rslgen.ll	\
 	showlines1.ll simpleged.ll soundex-isfm.ll	\
 	soundex1.ll sources.ll stats.ll surname1.ll timeline1.ll	\

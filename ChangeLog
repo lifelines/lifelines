@@ -1,3 +1,8 @@
+2004-06-18  Marc Nozell
+
+	* reports/register1-dot.ll: New report based on register1.ll that
+	generates input to the graphviz tool chain
+
 2004-05-15 Stephen Dum
         * ChangeLog src/gedlib/lldatabase.c src/interp/builtin.c
 	  Fixes for bug id's 954704 'table inert() ASSET's if value
