@@ -33,7 +33,6 @@ struct tag_list {
  * local enums & defines
  *********************************************/
 
-#define lrefcnt(l) ((l)->l_refcnt)
 #define ltype(l)   ((l)->l_type)
 #define lhead(l)   ((l)->l_head)
 #define ltail(l)   ((l)->l_tail)
