@@ -38,13 +38,14 @@
 extern BOOLEAN opt_finnish;
 extern BTREE BTR;
 
-RKEY name2rkey();
 char *getasurname();
 
-static int old = 0;
+static INT old = 0;
 static INT codeof(int);
+
 static STRING parts_to_name(STRING*);
 static void name_to_parts(STRING, STRING*);
+static RKEY name2rkey();
 static void squeeze(STRING, STRING);
 static STRING nextpiece(STRING);
 static void cmpsqueeze(STRING, STRING);
