@@ -239,8 +239,6 @@ static INT update_browse_menu(INT screen);
  * local variables
  *********************************************/
 
-static INT menu_enabled = 1;
-
 /* what is showing now in status bar */
 static char status_showing[150];
 /* flag if it is not important to keep */
@@ -662,6 +660,7 @@ run_report (BOOLEAN picklist)
  * update_browse_menu -- redraw menu if needed
  *  This is browse menu using dynamic menu 
  *  in rectangle at bottom of screen 
+ * Returns number lines used by menu
  *=======================================*/
 static INT
 update_browse_menu (INT screen)
@@ -674,7 +673,7 @@ update_browse_menu (INT screen)
 		uierase(uiwin);
 		draw_win_box(win);
 		show_horz_line(uiwin, ll_lines-3,  0, ll_cols);
-		if (menu_enabled) {
+		if (!dynmenu->hidden) {
 			/* display title */
 			INT width = ll_cols;
 			char prompt[128];
@@ -2280,6 +2279,7 @@ interact (UIWINDOW uiwin, STRING str, INT screen)
  *  col:     [IN]  prompt location (horiz)
  *  buffer:  [OUT] response
  *  buflen:  [IN]  max size of response
+ *  Has not been codeset-converted to internal yet
  *==========================================*/
 BOOLEAN
 get_answer (UIWINDOW uiwin, INT row, INT col, STRING buffer, INT buflen)
@@ -3035,7 +3035,7 @@ static INT
 get_brwsmenu_size (INT screen)
 {
 	DYNMENU dynmenu = get_screen_dynmenu(screen);
-	return dynmenu->hidden ? EMPTY_MENU : dynmenu->rows;
+	return dynmenu->hidden ? EMPTY_MENU : dynmenu->rows+1;
 }
 /*=====================
  * clear_stdout_hseg -- clear a horizontal line segment on stdout win

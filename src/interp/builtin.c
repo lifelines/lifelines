@@ -143,7 +143,7 @@ __getstr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		msg = pvalue_to_string(mval);
 	}
 	if (!ask_for_string(msg, _(qSaskstr), buffer, sizeof(buffer))) {
-		/* TODO: exit handling ? */
+		/* Cancel yields empty string */
 		buffer[0]=0;
 	}
 	ansval = create_pvalue_from_string(buffer);

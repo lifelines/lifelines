@@ -1,3 +1,10 @@
+2002-11-08 Perry Rapp
+
+	* ChangeLog src/interp/builtin.c src/liflines/brwsmenu.c
+	src/liflines/screen.c:
+
+	Fix bug in dynamic menu code.
+
 2002-11-07 Perry Rapp
 
 	* ChangeLog po/POTFILES.in po/de.po po/el.po po/fr.po po/it.po

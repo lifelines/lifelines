@@ -467,13 +467,14 @@ brwsmenu_initialize (INT screenheightx, INT screenwidthx)
 	INT MaxCols=7;
 	INT MenuTop=0;
 	INT MenuLeft=3;
-	INT MenuWidth=f_screenwidth-6;
+	INT MenuWidth=0;
 	if (screenheightx > 0)
 		f_screenheight = screenheightx;
 	if (screenwidthx > 0) {
 		f_screenwidth = screenwidthx;
 		f_cols = (f_screenwidth-5)/22; /* # of menu cols to start with */
 	}
+	MenuWidth = f_screenwidth-6;
 	MenuCols = f_cols;
 
 	if (!f_initialized) {
