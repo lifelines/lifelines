@@ -4,6 +4,13 @@
 
 	Fix llnls.h for systems which include libintl.h indirectly.
 
+	* ChangeLog Makefile.am configure.in
+	build/msvc6/llines/llines.rc src/hdrs/version.h
+	*NEW tt/Makefile.am
+	*NEW tt/README:
+
+	Added translation tables to distribution. Bumped version to 3.0.24b6.
+
 2003-01-14 Perry Rapp
 
 	* ChangeLog src/liflines/show.c:

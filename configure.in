@@ -195,8 +195,9 @@ AC_OUTPUT(Makefile \
         src/hdrs/Makefile \
         src/hdrs/win32/Makefile \
         docs/Makefile \
-        reports/Makefile
+        reports/Makefile \
+        tt/Makefile \
         win32/Makefile \
         build/Makefile \
-        intl/Makefile
+        intl/Makefile \
         po/Makefile.in)
