@@ -72,6 +72,10 @@ extern STRING qSdspl_mar,qSdspl_bir,qSdspl_chr,qSdspl_dea,qSdspl_bur;
  *********************************************/
 
 typedef char *LINESTRING;
+struct tag_prefix {
+	STRING tag;
+	STRING prefix;
+};
 
 /*********************************************
  * local enums & defines
@@ -89,7 +93,7 @@ variable, and checked & resized at init_display_indi time */
 static void add_child_line(INT, RECORD, INT width);
 static void add_spouse_line(INT, NODE, NODE, INT width);
 static BOOLEAN append_event(STRING * pstr, STRING evt, INT * plen, INT minlen);
-static void disp_person_birth(ZSTR * zstr, RECORD irec, RFMT rfmt);
+static void disp_person_birthdeath(ZSTR * zstr, RECORD irec, struct tag_prefix * tags, RFMT rfmt);
 static void disp_person_name(ZSTR * zstr, STRING prefix, RECORD irec, INT width);
 static void indi_events(STRING outstr, NODE indi, INT len);
 static void init_display_indi(RECORD irec, INT width);
@@ -108,15 +112,32 @@ static STRING sh_indi_to_event_shrt(NODE node, STRING tag
  * local variables
  *********************************************/
 
-static LINESTRING Sdeat, Sfath, Smoth, Smarr;
-static ZSTR Spers=0, Sbirt=0;
+static LINESTRING Sfath, Smoth, Smarr;
+static ZSTR Spers=0, Sbirt=0, Sdeat=0;
 static ZSTR Shusb=0, Swife=0;
-static LINESTRING Shbirt, Shdeat, Swbirt, Swdeat;
+static ZSTR Shbirt=0, Shdeat=0, Swbirt=0, Swdeat=0;
 static LINESTRING Sothers[MAXOTHERS];
 static INT liwidth;
 static INT Solen = 0;
 static INT Scroll2 = 0;
 static INT number_child_enable = 0;
+static struct tag_prefix f_birth_tags[] = {
+	{ "BIRT", N_("born") }
+	,{ "CHR", N_("bapt") }
+	,{ "BAPM", N_("bapt") }
+	,{ "BARM", N_("bapt") }
+	,{ "BASM", N_("bapt") }
+	,{ "BLES", N_("bles") }
+	,{ "ADOP", N_("adop") }
+	,{ "RESI", N_("resi") }
+	,{ NULL, NULL }
+};
+static struct tag_prefix f_death_tags[] = {
+	{ "DEAT", N_("died") }
+	,{ "BURI", N_("buri") }
+	,{ "CREM", N_("crem") }
+	,{ NULL, NULL }
+};
 
 /*********************************************
  * local function definitions
@@ -134,16 +155,16 @@ init_show_module (void)
 
 	zs_reserve(&Spers, 60);
 	zs_reserve(&Sbirt, 60);
-	Sdeat = (LINESTRING)stdalloc(liwidth);
+	zs_reserve(&Sdeat, 60);
 	Sfath = (LINESTRING)stdalloc(liwidth);
 	Smoth = (LINESTRING)stdalloc(liwidth);
 	Smarr = (LINESTRING)stdalloc(liwidth);
 	zs_reserve(&Shusb, 60);
-	Shbirt = (LINESTRING)stdalloc(liwidth);
-	Shdeat = (LINESTRING)stdalloc(liwidth);
+	zs_reserve(&Shbirt, 60);
+	zs_reserve(&Shdeat, 60);
 	zs_reserve(&Swife, 60);
-	Swbirt = (LINESTRING)stdalloc(liwidth);
-	Swdeat = (LINESTRING)stdalloc(liwidth);
+	zs_reserve(&Swbirt, 60);
+	zs_reserve(&Swdeat, 60);
 	for (i=0; i<MAXOTHERS; i++)
 		Sothers[i] = (LINESTRING)stdalloc(liwidth);
 	init_disp_reformat();
@@ -158,16 +179,16 @@ term_show_module (void)
 
 	zs_free(&Spers);
 	zs_free(&Sbirt);
-	stdfree(Sdeat);
+	zs_free(&Sdeat);
 	stdfree(Sfath);
 	stdfree(Smoth);
 	stdfree(Smarr);
 	zs_free(&Shusb);
-	stdfree(Shbirt);
-	stdfree(Shdeat);
+	zs_free(&Shbirt);
+	zs_free(&Shdeat);
 	zs_free(&Swife);
-	stdfree(Swbirt);
-	stdfree(Swdeat);
+	zs_free(&Swbirt);
+	zs_free(&Swdeat);
 	for (i=0; i<MAXOTHERS; i++)
 		stdfree(Sothers[i]);
 }
@@ -196,32 +217,20 @@ disp_person_name (ZSTR * zstr, STRING prefix, RECORD irec, INT width)
 	zs_appf(zstr, "(%s)", zs_str(zkey));
 	zs_free(&zkey);
 }
-static struct tag_prefix {
-	STRING tag;
-	STRING prefix;
-} f_birth_tags[] = {
-	{ "BIRT", N_("born") }
-	,{ "CHR", N_("bapt") }
-	,{ "BAPM", N_("bapt") }
-	,{ "BARM", N_("bapt") }
-	,{ "BASM", N_("bapt") }
-	,{ "BLES", N_("bles") }
-	,{ "RESI", N_("resi") }
-	,{ NULL, NULL }
-};
 /*===============================================
- * disp_person_birth -- Print birth string
+ * disp_person_birthdeath -- Print birth string
  *  Try to find date & place info for birth (or approx)
  * Created: 2003-01-12 (Perry Rapp)
  *=============================================*/
 static void
-disp_person_birth (ZSTR * zstr, RECORD irec, RFMT rfmt)
+disp_person_birthdeath (ZSTR * zstr, RECORD irec, struct tag_prefix * tags
+	, RFMT rfmt)
 {
 	struct tag_prefix *tg, *tgdate=NULL, *tgplac=NULL;
 	STRING date=NULL, plac=NULL, td=NULL, tp=NULL;
 	STRING predate=NULL, preplac=NULL;
 	ZSTR zdate=NULL;
-	for (tg = &f_birth_tags[0]; tg->tag; ++tg) {
+	for (tg = tags; tg->tag; ++tg) {
 		record_to_date_place(irec, tg->tag, &td, &tp);
 		if (!date) {
 			date=td;
@@ -263,6 +272,10 @@ disp_person_birth (ZSTR * zstr, RECORD irec, RFMT rfmt)
 	} else {
 		zs_sets(zstr, zs_str(zdate));
 	}
+	if (zs_len(*zstr)<3) {
+		zs_apps(zstr, _(tags[0].prefix));
+		zs_apps(zstr, ": ");
+	}
 	zs_free(&zdate);
 }
 /*===============================================
@@ -289,12 +302,9 @@ init_display_indi (RECORD irec, INT width)
 
 	disp_person_name(&Spers, _(qSdspl_indi), irec, width);
 
-	disp_person_birth(&Sbirt, irec, &disp_long_rfmt);
+	disp_person_birthdeath(&Sbirt, irec, f_birth_tags, &disp_long_rfmt);
 
-	s = sh_indi_to_event_long(pers, "DEAT", _(qSdspl_dea), (width-3));
-	if (!s) s = sh_indi_to_event_long(pers, "BURI", _(qSdspl_bur), (width-3));
-	if (s) sprintf(Sdeat, "  %s", s);
-	else sprintf(Sdeat, "  %s", _(qSdspl_dea));
+	disp_person_birthdeath(&Sdeat, irec, f_death_tags, &disp_long_rfmt);
 
 	s = person_display(fth, NULL, width-13);
 	if (s) llstrncpyf(Sfath, liwidth, uu8, "  %s: %s", _(qSdspl_fath), s);
@@ -356,16 +366,16 @@ show_indi_vitals (UIWINDOW uiwin, RECORD irec, LLRECT rect
 	/* we keep putting lines out til we run out or exhaust our alloted
 	height */
 	localrow = row - *scroll;
-	/* TODO: Pass length limit, so they may be limited in output charset */
-	mvccwaddstr(win, row+0, 1, zs_str(Spers));
+
+	mvccwaddnstr(win, row+0, 1, zs_str(Spers), width-1);
 	if (hgt==1) return;
-	mvccwaddstr(win, row+1, 1, zs_str(Sbirt));
+	mvccwaddnstr(win, row+1, 1, zs_str(Sbirt), width-1);
 	if (hgt==2) return;
-	mvccwaddstr(win, row+2, 1, Sdeat);
+	mvccwaddnstr(win, row+2, 1, zs_str(Sdeat), width-1);
 	if (hgt==3) return;
-	mvccwaddstr(win, row+3, 1, Sfath);
+	mvccwaddnstr(win, row+3, 1, Sfath, width-1);
 	if (hgt==4) return;
-	mvccwaddstr(win, row+4, 1, Smoth);
+	mvccwaddnstr(win, row+4, 1, Smoth, width-1);
 	if (hgt==5) return;
 	for (i = *scroll; i < Solen && i < hgt-5+ *scroll; i++)
 	{
@@ -446,15 +456,8 @@ init_display_fam (RECORD frec, INT width)
 	zs_appf(&Shusb, " (%s)", zs_str(famkey));
 	zs_free(&famkey);
 
-	s = sh_indi_to_event_long(husb, "BIRT", _(qSdspl_bir), width-3);
-	if (!s) s = sh_indi_to_event_long(husb, "CHR", _(qSdspl_chr), width-3);
-	if (s) sprintf(Shbirt, "  %s", s);
-	else sprintf(Shbirt, "  %s", _(qSdspl_bir));
-
-	s = sh_indi_to_event_long(husb, "DEAT", _(qSdspl_dea), width-3);
-	if (!s) s = sh_indi_to_event_long(husb, "BURI", _(qSdspl_bur), width-3);
-	if (s) llstrncpyf(Shdeat, liwidth, uu8, "  %s", s);
-	else llstrncpyf(Shdeat, liwidth, uu8, "  %s", _(qSdspl_dea));
+	disp_person_birthdeath(&Shbirt, ihusb, f_birth_tags, &disp_long_rfmt);
+	disp_person_birthdeath(&Shdeat, ihusb, f_death_tags, &disp_long_rfmt);
 
 	if (iwife) {
 		INT avail = width;
@@ -463,15 +466,8 @@ init_display_fam (RECORD frec, INT width)
 		zs_setf(&Swife, "%s:", mother);
 	}
 
-	s = sh_indi_to_event_long(wife, "BIRT", _(qSdspl_bir), width-3);
-	if (!s) s = sh_indi_to_event_long(wife, "CHR", _(qSdspl_chr), width-3);
-	if (s) llstrncpyf(Swbirt, liwidth, uu8, "  %s", s);
-	else llstrncpyf(Swbirt, liwidth, uu8, "  %s", _(qSdspl_bir));
-
-	s = sh_indi_to_event_long(wife, "DEAT", _(qSdspl_dea), width-3);
-	if (!s) s = sh_indi_to_event_long(wife, "BURI", _(qSdspl_bur), width-3);
-	if (s) llstrncpyf(Swdeat, liwidth, uu8, "  %s", s);
-	else llstrncpyf(Swdeat, liwidth, uu8, "  %s", _(qSdspl_dea));
+	disp_person_birthdeath(&Swbirt, iwife, f_birth_tags, &disp_long_rfmt);
+	disp_person_birthdeath(&Swdeat, iwife, f_death_tags, &disp_long_rfmt);
 
 	s = sh_indi_to_event_long(fam, "MARR", _(qSdspl_mar), width-3);
 	if (s) llstrncpyf(Smarr, liwidth, uu8, s);
@@ -528,19 +524,19 @@ show_fam_vitals (UIWINDOW uiwin, RECORD frec, INT row, INT hgt
 			*scroll = 0;
 	}
 	localrow = row - *scroll;
-	mvccwaddstr(win, row+0, 1, zs_str(Shusb));
+	mvccwaddnstr(win, row+0, 1, zs_str(Shusb), width-2);
 	if (hgt==1) return;
-	mvccwaddstr(win, row+1, 1, Shbirt);
+	mvccwaddnstr(win, row+1, 1, zs_str(Shbirt), width-2);
 	if (hgt==2) return;
-	mvccwaddstr(win, row+2, 1, Shdeat);
+	mvccwaddnstr(win, row+2, 1, zs_str(Shdeat), width-2);
 	if (hgt==3) return;
-	mvccwaddstr(win, row+3, 1, zs_str(Swife));
+	mvccwaddnstr(win, row+3, 1, zs_str(Swife), width-2);
 	if (hgt==4) return;
-	mvccwaddstr(win, row+4, 1, Swbirt);
+	mvccwaddnstr(win, row+4, 1, zs_str(Swbirt), width-2);
 	if (hgt==5) return;
-	mvccwaddstr(win, row+5, 1, Swdeat);
+	mvccwaddnstr(win, row+5, 1, zs_str(Swdeat), width-2);
 	if (hgt==6) return;
-	mvccwaddstr(win, row+6, 1, Smarr);
+	mvccwaddnstr(win, row+6, 1, Smarr, width-2);
 	for (i = *scroll; i < Solen && i < hgt-7+*scroll; i++)
 	{
 		overflow = ((i+1 == hgt-7+*scroll)&&(i+1 != Solen));
