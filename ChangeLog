@@ -1,5 +1,8 @@
 2000-11-03  Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* Makefile.am: Move docs last to be able to compile even if some
+	documentation files are missing.
+
 	* hdrs/cache.h hdrs/gedcheck.h hdrs/gedcom.h hdrs/indiseq.h
 	hdrs/interp.h hdrs/screen.h hdrs/sequence.h hdrs/table.h
 	hdrs/translat.h: Make it possible to include the header files more
