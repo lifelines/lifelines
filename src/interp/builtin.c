@@ -103,6 +103,7 @@ __getint (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		msg = pvalue_to_string(mval);
 	}
 	val = ask_for_int(msg);
+	/* silly cast here to keep INDISEQ out of interp.h */
 	assign_iden(stab, iident(arg), create_pvalue_from_int(val));
 	if (mval) delete_pvalue(mval);
 	return NULL;

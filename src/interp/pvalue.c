@@ -704,8 +704,9 @@ create_pvalue_from_node (NODE node)
 	return create_pvalue(PGNODE, node);
 }
 PVALUE
-create_pvalue_from_set (INDISEQ seq)
-{
+create_pvalue_from_set (VPTR ptr)
+{ /* passes as VPTR to keep INDISEQ out of interp.h */
+	INDISEQ seq = ptr;
 	return create_pvalue(PSET, seq);
 }
 PVALUE
@@ -1032,8 +1033,9 @@ float_to_int (float f)
  * eqv_pvalues -- See if two PVALUEs are equal (no change to PVALUEs)
  *==================================================================*/
 BOOLEAN
-eqv_pvalues (PVALUE val1, PVALUE val2)
+eqv_pvalues (VPTR ptr1, VPTR ptr2)
 {
+	PVALUE val1=ptr1, val2=ptr2;
 	STRING v1, v2;
 	BOOLEAN rel = FALSE;
 	if(val1 && val2 && (ptype(val1) == ptype(val2))) {

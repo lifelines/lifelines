@@ -541,7 +541,7 @@ get_sort_desc (STRING buffer, INT max, STRING locVarName)
 {
 #ifdef HAVE_SETLOCALE
 	const char *optval, *str;
-	if (optval = getoptstr(locVarName, NULL)) {
+	if ((optval = getoptstr(locVarName, NULL)) != NULL) {
 		str = setlocale(LC_COLLATE, optval);
 		if (str) {
 			sprintpic0(buffer, max, str);

@@ -44,6 +44,7 @@
 
 static UNION pvseq_copy_value(UNION uval, INT valtype);
 static void pvseq_delete_value(UNION uval, INT valtype);
+static INT pvseq_compare_values(UNION uval1, UNION uval2, INT valtype);
 static UNION pvseq_create_gen_value(INT gen, INT * valtype);
 
 /*********************************************
@@ -55,6 +56,7 @@ static struct indiseq_value_vtable_s pvseq_vtbl =
 	&pvseq_copy_value
 	, &pvseq_delete_value
 	, &pvseq_create_gen_value
+	, &pvseq_compare_values
 };
 
 /*********************************************
@@ -593,4 +595,18 @@ pvseq_create_gen_value (INT gen, INT * valtype)
 	*valtype = ISVAL_PTR;
 	uval.w = create_pvalue_from_int(gen);
 	return uval;
+}
+/*=============================================
+ * pvseq_compare_values -- Compare two pvalues
+ * for sorting (collation)
+ *============================================*/
+static INT
+pvseq_compare_values (UNION uval1, UNION uval2, INT valtype)
+{
+	PVALUE val1 = uval1.w, val2 = uval2.w;
+	ASSERT(valtype == ISVAL_PTR || valtype == ISVAL_NUL);
+	if (valtype == ISVAL_NUL)
+		return 0;
+/* TODO: compare pvalues */
+	return 0;
 }

@@ -110,6 +110,7 @@ static struct indiseq_value_vtable_s def_valvtbl =
 	&default_copy_value
 	, &default_delete_value
 	, &default_create_gen_value
+	, &default_compare_values
 };
 
 /*********************************************
@@ -621,6 +622,10 @@ value_str_compare (SORTEL el1, SORTEL el2)
 	PVALUE val1, val2;
 	val1 = sval(el1).w;
 	val2 = sval(el2).w;
+/* TODO: This must be changed to a call thru the vtable
+we need an indiseq that doesn't know about pvalues
+(for dbverify to use, and for modularity)
+*/
 	return cmpstrloc(pvalue_to_string(val1), pvalue_to_string(val2));
 }
 /*==========================================
@@ -2001,6 +2006,29 @@ default_create_gen_value (INT gen, INT * valtype)
 	else
 		uval.w = NULL;
 	return uval;
+}
+/*===========================================================
+ * default_compare_values -- compare values of two elements
+ * Created: 2002/02/19, Perry Rapp
+ *=========================================================*/
+INT
+default_compare_values (UNION uval1, UNION uval2, INT valtype)
+{
+	if (valtype == ISVAL_INT) {
+		INT i1=uval1.i, i2=uval2.i;
+		if (i1 != i2)
+			return i1 - i2;
+		else
+			return 0;
+	} else if (valtype == ISVAL_STR) {
+		STRING s1=uval1.w, s2=uval2.w;
+		if (!s1 && !s2) return 0;
+		if (s1 && !s2) return -1;
+		if (s2 && !s1) return 1;
+		return strcoll(s1, s2);
+	}
+	/* We don't know how to deal with ptrs here */
+	return (char *)uval1.w - (char *)uval2.w;
 }
 /*=======================================================
  * calc_indiseq_names -- fill in element names

@@ -174,8 +174,6 @@ static void clearw(void);
 static UIWINDOW create_uisubwindow(UIWINDOW parent, INT rows, INT cols, INT begy, INT begx);
 static UIWINDOW create_uisubwindow2(UIWINDOW parent, INT rows, INT cols);
 static void create_windows(void);
-static UIWINDOW create_uisubwindow (UIWINDOW parent, INT rows, INT cols, INT begy, INT begx);
-static UIWINDOW create_uisubwindow2 (UIWINDOW uiparent, INT rows, INT cols);
 static void deactivate_uiwin(void);
 static void delete_uiwindow(UIWINDOW uiw);
 static void disp_codeset(UIWINDOW uiwin, INT row, INT col, STRING menuit, INT codeset);

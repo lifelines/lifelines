@@ -88,12 +88,15 @@ typedef UNION (*SEQ_COPY_VALUE_FNC)(UNION uval, INT valtype);
 typedef void (*SEQ_DELETE_VALUE)(UNION uval, INT valtype);
 /* create a value for ancestors or descendants (may change value type from NUL) */
 typedef UNION (*SEQ_CREATE_GEN_VALUE)(INT gen, INT * valtype);
+/* compare two values */
+typedef INT (*SEQ_COMPARE_VALUES)(UNION uval1, UNION uval2, INT valtype);
 /* vtable for handling values in INDISEQ */
 typedef struct indiseq_value_vtable_s
 {
 	SEQ_COPY_VALUE_FNC copy_fnc;
 	SEQ_DELETE_VALUE delete_fnc;
 	SEQ_CREATE_GEN_VALUE create_gen_fnc;
+	SEQ_COMPARE_VALUES compare_val_fnc;
 } * INDISEQ_VALUE_VTABLE;
 
 
@@ -153,6 +156,7 @@ INDISEQ create_indiseq_sval(void);
 UNION default_copy_value(UNION uval, INT valtype);
 void default_delete_value(UNION uval, INT valtype);
 UNION default_create_gen_value(INT gen, INT * valtype);
+int default_compare_values(UNION uval1, UNION uval2, INT valtype);
 BOOLEAN delete_indiseq(INDISEQ, STRING, STRING, INT);
 INDISEQ descendent_indiseq(INDISEQ seq);
 INDISEQ difference_indiseq(INDISEQ, INDISEQ);
