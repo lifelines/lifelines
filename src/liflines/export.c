@@ -1,0 +1,160 @@
+/* 
+   Copyright (c) 1991-1999 Thomas T. Wetmore IV
+
+   Permission is hereby granted, free of charge, to any person
+   obtaining a copy of this software and associated documentation
+   files (the "Software"), to deal in the Software without
+   restriction, including without limitation the rights to use, copy,
+   modify, merge, publish, distribute, sublicense, and/or sell copies
+   of the Software, and to permit persons to whom the Software is
+   furnished to do so, subject to the following conditions:
+
+   The above copyright notice and this permission notice shall be
+   included in all copies or substantial portions of the Software.
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   SOFTWARE.
+*/
+/*=============================================================
+ * export.c -- Export GEDCOM file from LifeLines database
+ * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
+ *   3.0.0 - 29 May 94    3.0.2 - 09 Nov 94
+ *===========================================================*/
+
+#include "standard.h"
+#include "btree.h"
+#include "table.h"
+#include "gedcom.h"
+#include <sys/types.h>
+#include <time.h>
+#include "translat.h"
+
+extern STRING btreepath, llarchives;
+extern BTREE BTR;
+extern TRANTABLE tran_tables[];
+TRANTABLE tran_gedout;
+static INT nindi, nfam, neven, nsour, nothr;
+
+/*===================================================
+ * archive_in_file -- Archive database in GEDCOM file
+ *=================================================*/
+char *mabbv[] = {
+	"JAN", "FEB", "MAR", "APR", "MAY", "JUN",
+	"JUL", "AUG", "SEP", "OCT", "NOV", "DEC",
+};
+static FILE *fn = NULL;
+BOOLEAN archive_in_file ()
+{
+	FILE *ask_for_file();
+	char dat[30], tim[20];
+	struct tm *pt;
+	time_t curtime;
+	STRING fname;
+	extern STRING version;
+	BOOLEAN archive();
+
+	fn = ask_for_file("w", "Enter name of output archive file.",
+	    &fname, llarchives);
+	if (!fn) {
+		mprintf("The database was not saved.");
+		return FALSE; 
+	}
+	curtime = time(NULL);
+	pt = localtime(&curtime);
+	sprintf(dat, "%d %s %d", pt->tm_mday, mabbv[pt->tm_mon],
+	    1900 + pt->tm_year);
+	sprintf(tim, "%d:%.2d", pt->tm_hour, pt->tm_min);
+	fprintf(fn, "0 HEAD\n1 SOUR LIFELINES %s\n1 DEST ANY\n", version);
+	fprintf(fn, "1 DATE %s\n1 TIME %s\n", dat, tim);
+	tran_gedout = tran_tables[MINGD];
+	nindi = nfam = neven = nsour = nothr = 0;
+	wprintf("Saving database in `%s' in file `%s'.", btreepath, fname);
+	wfield(2, 1, "     0 Persons");
+	wfield(3, 1, "     0 Families");
+	wfield(4, 1, "     0 Events");
+	wfield(5, 1, "     0 Sources");
+	wfield(6, 1, "     0 Others");
+	traverse(BTR, bmaster(BTR), NULL, archive);
+	fprintf(fn, "0 TRLR\n");
+	fclose(fn);
+	wpos(7,0);
+	mprintf("Database `%s' has been saved in `%s'.", btreepath, fname);
+	return TRUE;
+}
+/*========================================================
+ * archive -- Traverse function called on each btree block
+ *======================================================*/
+BOOLEAN archive (btree, block)
+BTREE btree;
+BLOCK block;
+{
+	INT i, n, l;
+	char scratch[100];
+	STRING key;
+	FILE *fo;
+
+	sprintf(scratch, "%s/%s", bbasedir(btree), fkey2path(iself(block)));
+	ASSERT(fo = fopen(scratch, "r"));
+	n = nkeys(block);
+	for (i = 0; i < n; i++) {
+		key = rkey2str(rkeys(block, i));
+		if (*key != 'I' && *key != 'F' && *key != 'E' &&
+		    *key != 'S' && *key != 'X')
+			continue;
+		if (fseek(fo, (long)(offs(block, i) + BUFLEN), 0))
+			FATAL();
+		if ((l = lens(block, i)) > 6)	/* filter deleted records */
+			copy_and_translate(fo, l, fn, *key, tran_gedout);
+	}
+	fclose(fo);
+	return TRUE;
+}
+/*===================================================
+ * copy_and_translate -- Copy record with translation
+ *=================================================*/
+copy_and_translate (fo, len, fn, c, tt)
+FILE *fo, *fn;
+INT len, c;
+TRANTABLE tt;
+{
+	char in[BUFLEN], *p;
+	char scratch[10];
+	
+	while (len >= BUFLEN) {
+		ASSERT(fread(in, BUFLEN, 1, fo) == 1);
+		ASSERT(fwrite(in, BUFLEN, 1, fn) == 1);
+		len -= BUFLEN;
+	}
+	if (len) {
+		ASSERT(fread((char *)in, len, 1, fo) == 1);
+		ASSERT(fwrite(in, len, 1, fn) == 1);
+	}
+	switch (c) {
+	case 'I':
+		sprintf(scratch, "%6d", ++nindi);
+		wfield(2, 1, scratch);
+		break;
+	case 'F':
+		sprintf(scratch, "%6d", ++nfam);
+		wfield(3, 1, scratch);
+		break;
+	case 'E':
+		sprintf(scratch, "%6d", ++neven);
+		wfield(4, 1, scratch);
+		break;
+	case 'S':
+		sprintf(scratch, "%6d", ++nsour);
+		wfield(5, 1, scratch);
+		break;
+	case 'X':
+		sprintf(scratch, "%6d", ++nothr);
+		wfield(6, 1, scratch);
+		break;
+	}
+}

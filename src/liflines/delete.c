@@ -1,0 +1,151 @@
+/* 
+   Copyright (c) 1991-1999 Thomas T. Wetmore IV
+
+   Permission is hereby granted, free of charge, to any person
+   obtaining a copy of this software and associated documentation
+   files (the "Software"), to deal in the Software without
+   restriction, including without limitation the rights to use, copy,
+   modify, merge, publish, distribute, sublicense, and/or sell copies
+   of the Software, and to permit persons to whom the Software is
+   furnished to do so, subject to the following conditions:
+
+   The above copyright notice and this permission notice shall be
+   included in all copies or substantial portions of the Software.
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   SOFTWARE.
+*/
+/*=============================================================
+ * delete.c -- Removes person and family records from database 
+ * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
+ *   2.3.4 - 24 Jun 93    2.3.5 - 15 Aug 93
+ *   3.0.0 - 30 Jun 94    3.0.2 - 10 Dec 94
+ *===========================================================*/
+
+#include "standard.h"
+#include "table.h"
+#include "gedcom.h"
+
+extern STRING idpdel, cfpdel, haslnk;
+
+static del_in_dbase();
+
+/*================================================================
+ * delete_indi -- Delete person and links; if this leaves families
+ *   with no links remove them
+ *==============================================================*/
+delete_indi (indi, conf)
+NODE indi;	/* person to remove */
+BOOLEAN conf;	/* have user confirm */
+{
+	STRING key;
+	NODE name, refn, sex, body, famc, fams, this;
+	NODE node, husb, wife, chil, rest, fam, prev, next, fref;
+	INT isex, keyint;
+	BOOLEAN found;
+	if (!indi && !(indi = ask_for_indi(idpdel, FALSE, TRUE)))
+		return;
+	if (conf && !ask_yes_or_no(cfpdel)) return;
+	split_indi(indi, &name, &refn, &sex, &body, &famc, &fams);
+	if (!fams) goto checkfamc;
+	isex = val_to_sex(sex);
+	ASSERT(isex != SEX_UNKNOWN);
+	for (node = fams; node; node = nsibling(node)) {
+		fam = key_to_fam(rmvat(nval(node)));
+		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
+		ASSERT(husb || wife || chil);
+		if (isex == SEX_MALE) {
+			ASSERT(husb && eqstr(nval(husb), nxref(indi)));
+			free_nodes(husb);
+			husb = NULL;
+		} else {
+			ASSERT(wife && eqstr(nval(wife), nxref(indi)));
+			free_nodes(wife);
+			wife = NULL;
+		}
+		join_fam(fam, fref, husb, wife, chil, rest);
+		if (!husb && !wife && !chil)
+			delete_fam(fam);
+		else
+			fam_to_dbase(fam);
+	}
+checkfamc:
+	for (node = famc; node; node = nsibling(node)) { 
+		fam = key_to_fam(rmvat(nval(node)));
+		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
+		ASSERT(husb || wife || chil);
+		found = FALSE;
+		prev = NULL;
+		this = chil;
+		while (this) {
+			if (eqstr(nxref(indi), nval(this))) {
+				found = TRUE;
+				break;
+			}
+			prev = this;
+			this = nsibling(this);
+		}
+		ASSERT(found);
+		next = nsibling(this);
+		if (!prev)
+			chil = next;
+		else
+			nsibling(prev) = next;
+		nsibling(this) = NULL;
+		free_nodes(this);
+		join_fam(fam, fref, husb, wife, chil, rest);
+		if (!husb && !wife && !chil)
+			delete_fam(fam);
+		else
+			fam_to_dbase(fam);
+	}
+	key = rmvat(nxref(indi));
+	keyint = atoi(key + 1);
+	addixref(keyint);
+	remove_indi_cache(key);
+	for (node = name; node; node = nsibling(node))
+		remove_name(nval(node), key);
+	remove_from_browse_lists(key);
+	del_in_dbase(key);
+	join_indi(indi, name, refn, sex, body, famc, fams);
+	free_nodes(indi);
+}
+/*==========================================
+ * delete_fam -- Delete family from database
+ *========================================*/
+delete_fam (fam)
+NODE fam;
+{
+	STRING key;
+	NODE husb, wife, chil, rest, fref;
+	INT keyint;
+	if (!fam) return;
+	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
+	if (husb || wife || chil) {
+		message(haslnk);
+		join_fam(fam, fref, husb, wife, chil, rest);
+		return;
+	}
+	key = rmvat(nxref(fam));
+	keyint = atoi(key + 1);
+	addfxref(keyint);
+	remove_fam_cache(key);
+	del_in_dbase(key);
+	join_fam(fam, fref, husb, wife, chil, rest);
+	free_nodes(fam);
+}
+/*=================================================
+ * del_in_dbase -- Write deleted record to database
+ *===============================================*/
+static del_in_dbase (key)
+STRING key;
+{
+	if (!key || *key == 0) return;
+	ASSERT(store_record(key, "DELE\n", 5));
+}

@@ -1,0 +1,16 @@
+echo rm -rf dist
+rm -rf dist
+echo mkdir dist
+mkdir dist dist/bin
+cd hdrs; make distribute; cd ..
+cd liflines; make distribute; cd ..
+#cd gengine; make distribute; cd ..
+cd btree; make distribute; cd ..
+cd gedlib; make distribute; cd ..
+cd interp; make distribute; cd ..
+cd tools; make distribute; cd ..
+cd stdlib; make distribute; cd ..
+cp readme build distribute dist
+mkdir dist/docs
+cp docs/* dist/docs
+cd dist; find . -print | cpio -ocv >../dist.cp

@@ -1,0 +1,124 @@
+/* 
+   Copyright (c) 1991-1999 Thomas T. Wetmore IV
+
+   Permission is hereby granted, free of charge, to any person
+   obtaining a copy of this software and associated documentation
+   files (the "Software"), to deal in the Software without
+   restriction, including without limitation the rights to use, copy,
+   modify, merge, publish, distribute, sublicense, and/or sell copies
+   of the Software, and to permit persons to whom the Software is
+   furnished to do so, subject to the following conditions:
+
+   The above copyright notice and this permission notice shall be
+   included in all copies or substantial portions of the Software.
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   SOFTWARE.
+*/
+/*=============================================================
+ * standard.h -- Define standard macros and types
+ * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
+ *   3.0.0 - 05 May 94    3.0.2 - 23 Nov 94
+ *===========================================================*/
+
+#ifndef STDIO_H
+#define STDIO_H
+#include <stdio.h>
+#endif
+
+typedef unsigned char *STRING;
+#ifndef BOOLEAN
+#	define BOOLEAN int
+#endif
+#ifndef TRUE
+#	define TRUE 1
+#endif
+#ifndef FALSE
+#	define FALSE 0
+#endif
+#define INT int 
+#define SHORT short
+#define LONG long
+
+#define MAXLINELEN 512
+
+typedef char *WORD;
+#define WORDSIZE sizeof(WORD)
+
+typedef WORD (*FUNC)();
+
+#define max(x,y) ((x)>(y)?(x):(y))
+#define min(x,y) ((x)>(y)?(y):(x))
+
+#ifndef NULL
+#	define NULL 0
+#endif
+
+STRING strsave(), strconcat();
+
+extern BOOLEAN alloclog;
+#define stdalloc(l)   __allocate(l, __FILE__, __LINE__)
+#define stdfree(p)    __deallocate(p, __FILE__, __LINE__)
+#define fatal(s)      __fatal(__FILE__, __LINE__)
+#define FATAL()       __fatal(__FILE__, __LINE__)
+#define ASSERT(b)     if(!(b)) __fatal(__FILE__, __LINE__)
+#define eqstr(s,t)    (!strcmp((s),(t)))
+#define nestr(s,t)    (strcmp((s),(t)))
+
+#define check_cache()   ___check_cache(__LINE__, __FILE__)
+
+extern char *malloc();
+extern char *__allocate();
+extern __deallocate();
+
+#define WHITE  ' '
+#define LETTER 'a'
+#define DIGIT  '0'
+#define ZERO    0
+
+typedef struct lntag *LNODE;
+struct lntag {
+	WORD l_element;
+	LNODE l_prev;
+	LNODE l_next;
+};
+#define lelement(n) ((n)->l_element)
+#define lprev(n) ((n)->l_prev)
+#define lnext(n) ((n)->l_next)
+
+typedef struct ltag {
+	INT l_type;
+	LNODE l_first;
+	LNODE l_last;
+} *LIST;
+#define ltype(l) ((l)->l_type)
+#define lfirst(l) ((l)->l_first)
+#define llast(l) ((l)->l_last)
+
+#define LISTNOFREE 0
+#define LISTDOFREE 1
+
+extern LIST create_list();
+extern BOOLEAN empty_list();
+extern push_list();
+extern WORD pop_list(), get_list_element();
+extern INT length_list();
+extern enqueue_list();
+extern WORD dequeue_list();
+
+#define FORLIST(l,e)\
+	{\
+		LNODE _lnode = l->l_last;\
+		WORD e;\
+		while (_lnode) {\
+			e = _lnode->l_element;
+#define ENDLIST\
+			_lnode = _lnode->l_prev;\
+		}\
+	}

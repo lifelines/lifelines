@@ -1,0 +1,199 @@
+/* 
+   Copyright (c) 1991-1999 Thomas T. Wetmore IV
+
+   Permission is hereby granted, free of charge, to any person
+   obtaining a copy of this software and associated documentation
+   files (the "Software"), to deal in the Software without
+   restriction, including without limitation the rights to use, copy,
+   modify, merge, publish, distribute, sublicense, and/or sell copies
+   of the Software, and to permit persons to whom the Software is
+   furnished to do so, subject to the following conditions:
+
+   The above copyright notice and this permission notice shall be
+   included in all copies or substantial portions of the Software.
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   SOFTWARE.
+*/
+/*=============================================================
+ * spltjoin.c -- Splits and joins persons and families
+ * Copyright(c) 1993-94 by T.T. Wetmore IV; all rights reserved
+ *   3.0.0 - 16 May 94    3.0.2 - 21 Nov 94
+ *===========================================================*/
+
+#include "standard.h"
+#include "table.h"
+#include "gedcom.h"
+
+/*======================================
+ * split_indi -- Split person into parts
+ *====================================*/
+split_indi (indi, pname, prefn, psex, pbody, pfamc, pfams)
+NODE indi, *pname, *prefn, *psex, *pbody, *pfamc, *pfams;
+{
+	NODE name, lnam, refn, sex, body, famc, fams, last;
+	NODE lfmc, lfms, prev, node;
+	ASSERT(eqstr("INDI", ntag(indi)));
+	name = sex = body = famc = fams = last = lfms = lfmc = lnam = NULL;
+	refn = NULL;
+	node = nchild(indi);
+	nchild(indi) = NULL;
+	while (node) {
+		STRING tag = ntag(node);
+		if (eqstr("NAME", tag)) {
+			if (!name)
+				name = lnam = node;
+			else
+				lnam = nsibling(lnam) = node;
+		} else if (!sex && eqstr("SEX", tag)) {
+			sex = node;
+		} else if (eqstr("FAMC", tag)) {
+			if (!famc)
+				famc = lfmc = node;
+			else
+				lfmc = nsibling(lfmc) = node;
+ 		} else if (eqstr("FAMS", tag)) {
+			if (!fams)
+				fams = lfms = node;
+			else
+				lfms = nsibling(lfms) = node;
+		} else if (!refn && eqstr("REFN", tag)) {
+			refn = node;
+		} else {
+			if (!body)
+				body = last = node;
+			else
+				last = nsibling(last) = node;
+		}
+		prev = node;
+		node = nsibling(node);
+		nsibling(prev) = NULL;
+	}
+	*pname = name;
+	*prefn = refn;
+	*psex = sex;
+	*pbody = body;
+	*pfamc = famc;
+	*pfams = fams;
+}
+/*====================================
+ * join_indi -- Join person from parts
+ *==================================*/
+join_indi (indi, name, refn, sex, body, famc, fams)
+NODE indi, name, refn, sex, body, famc, fams;
+{
+	NODE node;
+	ASSERT(indi && eqstr("INDI", ntag(indi)));
+	ASSERT(name && eqstr("NAME", ntag(name)));
+	nchild(indi) = node = name;
+	while (nsibling(node))
+		node = nsibling(node);
+	if (refn) node = nsibling(node) = refn;
+	if (sex) node = nsibling(node) = sex;
+	if (body) {
+		node = nsibling(node) = body;
+		while (nsibling(node))
+			node = nsibling(node);
+	}
+	if (famc) {
+		node = nsibling(node) = famc;
+		while (nsibling(node))
+			node = nsibling(node);
+	}
+	if (fams) nsibling(node) = fams;
+}
+/*=======================================
+ * split_fam -- Split a family into parts
+ *=====================================*/
+split_fam (fam, prefn, phusb, pwife, pchil, prest)
+NODE fam, *prefn, *phusb, *pwife, *pchil, *prest;
+{
+	NODE node, rest, last, husb, lhsb, wife, lwfe, chil, lchl;
+	NODE prev, refn;
+	STRING tag;
+
+	rest = last = husb = wife = chil = lchl = lhsb = lwfe = NULL;
+	prev = refn = NULL;
+	node = nchild(fam);
+	nchild(fam) = NULL;
+	while (node) {
+		tag = ntag(node);
+		if (eqstr("HUSB", tag)) {
+			if (husb)
+				lhsb = nsibling(lhsb) = node;
+			else
+				husb = lhsb = node;
+		} else if (eqstr("WIFE", tag)) {
+			if (wife)
+				lwfe = nsibling(lwfe) = node;
+			else
+				wife = lwfe = node;
+		} else if (eqstr("CHIL", tag)) {
+			if (chil)
+				lchl = nsibling(lchl) = node;
+			else
+				chil = lchl = node;
+		} else if (!refn && eqstr("REFN", tag)) {
+			refn = node;
+		} else if (rest)
+			last = nsibling(last) = node;
+		else
+			last = rest = node;
+		prev = node;
+		node = nsibling(node);
+		nsibling(prev) = NULL;
+	}
+	*prefn = refn;
+	*phusb = husb;
+	*pwife = wife;
+	*pchil = chil;
+	*prest = rest;
+}
+/*===================================
+ * join_fam -- Join family from parts
+ *=================================*/
+join_fam (fam, refn, husb, wife, chil, rest)
+NODE fam, refn, husb, wife, chil, rest;
+{
+	NODE node = NULL;
+	nchild(fam) = NULL;
+	if (refn) {
+		nchild(fam) = node = refn;
+	}
+	if (husb) {
+		if (node)
+			node = nsibling(node) = husb;
+		else
+			nchild(fam) = node = husb;
+		while (nsibling(node))
+			node = nsibling(node);
+	}
+	if (wife) {
+		if (node)
+			node = nsibling(node) = wife;
+		else
+			nchild(fam) = node = wife;
+		while (nsibling(node))
+			node = nsibling(node);
+	}
+	if (rest) {
+		if (node)
+			node = nsibling(node) = rest;
+		else
+			nchild(fam) = node = rest;
+		while (nsibling(node))
+			node = nsibling(node);
+	}
+	if (chil) {
+		if (node)
+			nsibling(node) = chil;
+		else
+			nchild(fam) = chil;
+	}
+}

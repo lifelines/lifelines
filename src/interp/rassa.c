@@ -1,0 +1,316 @@
+/* 
+   Copyright (c) 1991-1999 Thomas T. Wetmore IV
+
+   Permission is hereby granted, free of charge, to any person
+   obtaining a copy of this software and associated documentation
+   files (the "Software"), to deal in the Software without
+   restriction, including without limitation the rights to use, copy,
+   modify, merge, publish, distribute, sublicense, and/or sell copies
+   of the Software, and to permit persons to whom the Software is
+   furnished to do so, subject to the following conditions:
+
+   The above copyright notice and this permission notice shall be
+   included in all copies or substantial portions of the Software.
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   SOFTWARE.
+*/
+/*=============================================================
+ * rassa.c -- Handle output to the product file
+ * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
+ *   2.3.4 - 24 Jun 93    2.3.5 - 01 Sep 93
+ *   3.0.0 - 17 Dec 93    3.0.2 - 15 Dec 94
+ *===========================================================*/
+
+#include <stdio.h>
+#include "standard.h"
+#include "table.h"
+#include "gedcom.h"
+#include "interp.h"
+
+#define MAXPAGESIZE 65536
+#define MAXROWS 512
+#define MAXCOLS 512
+INT __cols = 0, __rows = 0;
+INT curcol = 1, currow = 1;
+INT outputmode = BUFFERED;
+static STRING pagebuffer = NULL;
+static unsigned char linebuffer[1024];
+static INT linebuflen = 0;
+static STRING bufptr = linebuffer;
+STRING outfilename;
+
+STRING noreport = (STRING) "No report was generated.";
+STRING whtout = (STRING) "What is the name of the output file?";
+
+/*=======================================
+ * initrassa -- Initialize program output
+ *=====================================*/
+initrassa ()
+{
+	outputmode = BUFFERED;
+	linebuflen = 0;
+	bufptr = linebuffer;
+	curcol = 1;
+}
+/*=======================================
+ * finishrassa -- Finalize program output
+ *=====================================*/
+finishrassa ()
+{
+	if (outputmode == BUFFERED && linebuflen > 0 && Poutfp) {
+		fwrite(linebuffer, linebuflen, 1, Poutfp);
+		linebuflen = 0;
+		bufptr = linebuffer;
+		curcol = 1;
+	}
+}
+/*========================================
+ * __pagemode -- Switch output to page mode
+ *   usage: pagemode(INT, INT) -> VOID
+ *======================================*/
+WORD __pagemode (node, stab, eflg)
+INTERP node; TABLE stab; BOOLEAN *eflg;
+{
+	INT cols, rows = (INT) evaluate(ielist(node), stab, eflg);
+	if (*eflg) return NULL;
+	cols = (INT) evaluate(inext((INTERP)ielist(node)), stab, eflg);
+	if (*eflg) return NULL;
+	*eflg = TRUE;
+	if (cols < 1 || cols > MAXCOLS || rows < 1 || rows > MAXROWS)
+		return NULL;
+	*eflg = FALSE;
+	outputmode = PAGEMODE;
+	__rows = rows;
+	__cols = cols;
+	if (pagebuffer) stdfree(pagebuffer);
+	pagebuffer = (STRING) stdalloc(__rows*__cols);
+	memset(pagebuffer, ' ', __rows*__cols);
+	return NULL;
+}
+/*========================================
+ * __linemode -- Switch output to line mode
+ *   usage: linemode() -> VOID
+ *======================================*/
+WORD __linemode (node, stab, eflg)
+INTERP node; TABLE stab; BOOLEAN *eflg;
+{
+	outputmode = BUFFERED;
+	linebuflen = 0;
+	bufptr = linebuffer;
+	curcol = 1;
+	*eflg = FALSE;
+	return NULL;
+}
+/*=======================================
+ * __newfile -- Switch output to new file
+ *   usage: newfile(STRING, BOOL) -> VOID
+ *=====================================*/
+WORD __newfile (node, stab, eflg)
+INTERP node; TABLE stab; BOOLEAN *eflg;
+{
+	STRING name = (STRING) evaluate(ielist(node), stab, eflg);
+	BOOLEAN aflag;
+	if (*eflg || !name || *name == 0) return NULL;
+	aflag = (BOOLEAN) evaluate(inext((INTERP) ielist(node)), stab, eflg);
+	if (Poutfp) {
+		finishrassa();
+		fclose(Poutfp);
+		Poutfp = NULL;
+	}
+	outfilename = strsave(name);
+	if (!(Poutfp = fopenpath(name, aflag?"a":"w", llreports))) {
+		mprintf("Could not open file %s", name);
+		return NULL;
+	}
+	return NULL;
+}
+/*====================================
+ * __outfile -- Return output file name
+ *   usage: outfile() -> STRING
+ *==================================*/
+WORD __outfile (node, stab, eflg)
+INTERP node; TABLE stab; BOOLEAN *eflg;
+{
+	if (!Poutfp) {
+		Poutfp = ask_for_file("w", whtout, &outfilename, llreports);
+		if (!Poutfp)  {
+			message(noreport);
+			return;
+		}
+		setbuf(Poutfp, NULL);
+	}
+	*eflg = FALSE;
+	return (WORD) outfilename;
+}
+/*================================================
+ * __pos -- Position page output to row and column
+ *   usage: pos(INT, INT) -> VOID
+ *==============================================*/
+WORD __pos (node, stab, eflg)
+INTERP node; TABLE stab; BOOLEAN *eflg;
+{
+	INT col, row = (INT) evaluate(ielist(node), stab, eflg);
+	if (*eflg) return NULL;
+	col = (INT) evaluate(inext((INTERP) ielist(node)), stab, eflg);
+	if (*eflg) return NULL;
+	*eflg = TRUE;
+	if (outputmode != PAGEMODE || row < 1 || row > __rows ||
+	    col < 1 || col > __cols) return NULL;
+	*eflg = FALSE;
+	currow = row;
+	curcol = col;
+	return NULL;
+}
+/*========================================
+ * __row -- Position output to start of row
+ *   usage: row(INT) -> VOID
+ *======================================*/
+WORD __row (node, stab, eflg)
+INTERP node; TABLE stab; BOOLEAN *eflg;
+{
+	INT row = (INT) evaluate(ielist(node), stab, eflg);
+	if (*eflg) return NULL;
+	*eflg = TRUE;
+	if (outputmode != PAGEMODE || row < 1 || row > __rows) return NULL;
+	*eflg = FALSE;
+	currow = row;
+	curcol = 1;
+	return NULL;
+}
+/*==================================
+ * __col -- Position output to column
+ *   usage: col(INT) -> VOID
+ *================================*/
+WORD __col (node, stab, eflg)
+INTERP node; TABLE stab; BOOLEAN *eflg;
+{
+	INT newcol = (INT) evaluate(ielist(node), stab, eflg);
+	if (*eflg) return NULL;
+	if (newcol < 1) newcol = 1;
+	if (newcol > 100) newcol = 100;
+	if (newcol == curcol) return NULL;
+	if (newcol < curcol) poutput("\n");
+	while (curcol < newcol) poutput(" ");
+	return NULL;
+}
+/*======================================================
+ * __pageout -- Output current page and clear page buffer
+ *   usage: pageout() -> VOID
+ *====================================================*/
+WORD __pageout (node, stab, eflg)
+INTERP node; TABLE stab; BOOLEAN *eflg;
+{
+	char scratch[MAXCOLS+2];
+	STRING p;
+	INT row, i;
+	*eflg = TRUE;
+	if (outputmode != PAGEMODE) return NULL;
+	if (!Poutfp) {
+		Poutfp = ask_for_file("w", whtout, &outfilename, llreports);
+		if (!Poutfp)  {
+			message(noreport);
+			return;
+		}
+		setbuf(Poutfp, NULL);
+	}
+	*eflg = FALSE;
+	scratch[__cols] = '\n';
+	scratch[__cols+1] = 0;
+	p = pagebuffer;
+	for (row = 1; row <= __rows; row++) {
+		memcpy(scratch, p, __cols);
+		for (i = __cols - 1; i > 0 && scratch[i] == ' '; i--)
+			;
+		scratch[i+1] = '\n';
+		scratch[i+2] = 0;
+		fputs(scratch, Poutfp);
+		p += __cols;
+	}
+	memset(pagebuffer, ' ', __rows*__cols);
+	return NULL;
+}
+/*=========================================
+ * poutput -- Output string in current mode
+ *=======================================*/
+poutput (str)
+STRING str;
+{
+	STRING p, name;
+	INT c, len;
+	if (!str || *str == 0 || (len = strlen(str)) <= 0) return;
+	if (!Poutfp) {
+		Poutfp = ask_for_file("w", whtout, &name, llreports);
+		if (!Poutfp)  {
+			message(noreport);
+			return;
+		}
+		setbuf(Poutfp, NULL);
+		outfilename = strsave(name);
+	}
+	switch (outputmode) {
+	case UNBUFFERED:
+		fwrite(str, len, 1, Poutfp);
+		adjust_cols(str);
+		return;
+	case BUFFERED:
+		if (len > 1024) {
+			fwrite(linebuffer, linebuflen, 1, Poutfp);
+			fwrite(str, len, 1, Poutfp);
+			linebuflen = 0;
+			bufptr = linebuffer;
+			adjust_cols(str);
+			return;
+		}
+		if (len + linebuflen > 1024) {
+			fwrite(linebuffer, linebuflen, 1, Poutfp);
+			linebuflen = 0;
+			bufptr = linebuffer;
+		}
+		linebuflen += len;
+		while (c = *bufptr++ = *str++) {
+			if (c == '\n')
+				curcol = 1;
+			else
+				curcol++;
+		}
+		--bufptr;
+		return;
+	case PAGEMODE:
+		p = pagebuffer + (currow - 1)*__cols + curcol - 1;
+		while (c = *str++) {
+			if (c == '\n') {
+				curcol = 1;
+				currow++;
+				p = pagebuffer + (currow - 1)*__cols;
+			} else {
+				if (curcol <= __cols && currow <= __rows)
+					*p++ = c;
+				curcol++;
+			}
+		}
+		return;
+	default:
+		FATAL();
+	}
+}
+/*===================================================
+ * adjust_cols -- Adjust column after printing string
+ *=================================================*/
+adjust_cols (str)
+STRING str;
+{
+	INT c;
+	while (c = *str++) {
+		if (c == '\n')
+			curcol = 1;
+		else
+			curcol++;
+	}
+}

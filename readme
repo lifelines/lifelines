@@ -1,0 +1,32 @@
+LifeLines Source Release, Version 3.0.4, 15 December 1999
+
+This is the source distribution of the LifeLines system, a genealogy
+software system.  Execute either:
+
+	sh build SYSV
+or
+	sh build BSD
+
+depending on your UNIX version (SYSV for AT&T, BSD for Berkeley).  You will
+end up with two executables in the ./bin subdirectory:
+
+lines302  -- main LifeLines system program
+btedit302 -- general purpose btree edit program
+
+Don't use btedit unless you know exactly what it does.  It is a superuser
+administration tool for unmangling mangled databases -- powerful, but
+deadly.  It is rarely, if ever, needed.
+
+I am the author of all LifeLines code, and hereby release it under the
+MIT-style license located in the file LICENSE provided with this
+source kit.
+
+There is a reference guide in ./docs/quickref.ps.Z.uu.  Run uudecode and
+uncompress on that file to retrieve the postscript file of the manual.
+
+Questions?  You can write me or e-mail me:
+
+Thomas T. Wetmore IV
+2 Barton Street
+Newburyport, MA 01950 USA
+ttw@shore.net
