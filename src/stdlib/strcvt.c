@@ -215,9 +215,9 @@ ll_toupperz (STRING s, INT utf8)
 		for ( ; *s; ++s) {
 			/* avoid 8-bit uppercasing UTF-8 multibyte codes */
 			if (utf8 && ((uchar)*s) > 0x7f)
-				zs_appc(zstr, (uchar)ll_toupper(*s));
+				zs_appc(zstr, (uchar)*s);
 			else
-				zs_appc(zstr, (uchar)ll_toupper(*s));
+				zs_appc(zstr, (uchar)ll_toupper((uchar)*s));
 		}
 	}
 	return zstr;
