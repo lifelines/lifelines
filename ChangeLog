@@ -1,3 +1,12 @@
+2002-01-25 Perry Rapp <puddle@users.sourceforge.net>
+
+	* .linesrc ChangeLog lines.cfg gedlib/property.c
+	*NEW docs/llines.1:
+
+	Revised my ChangeLog entries for added files to say *NEW (for
+	greppability). Added minimal man page. Made all config variables
+	available from the report language getproperty command.
+
 2002-01-24 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/messages.c hdrs/menuitem.h hdrs/screen.h
@@ -299,7 +308,7 @@
 2001-12-30 Perry Rapp <puddle@users.sourceforge.net>
 
 	* tools/dispcode.c
-	(NEW) tools/prettytt.c:
+	*NEW tools/prettytt.c:
 
 	Near-trivial program to convert binary translation table to
 	all-ascii one.
@@ -1001,7 +1010,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 	gedlib/messages.c hdrs/btree.h hdrs/gedcom.h hdrs/llstdlib.h
 	hdrs/standard.h liflines/main.c liflines/screen.c
 	stdlib/assert.c tools/btedit.c tools/dbverify.c
-	NEW hdrs/msvc.h:
+	*NEW hdrs/msvc.h:
 	Added -i for immutable access, and -ly & -ln for
 	locking & unlocking a database.
 
@@ -1070,7 +1079,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 	("##!name: " directive) and displayed it in menu items.
 
 	* ChangeLog stdlib/Makefile.am
-	NEW hdrs/bfs.h stdlib/bfs.c:
+	*NEW hdrs/bfs.h stdlib/bfs.c:
 	Added new dynamic string code (bfs.*).
 
 	* ChangeLog btree/file.c hdrs/translat.h:
@@ -1728,7 +1737,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 	liflines/import.c liflines/llinesi.h liflines/main.c
 	liflines/screen.c liflines/valgdcom.c stdlib/environ.c
 	stdlib/warehouse.c tools/dbverify.c
-	NEW gedlib/lloptions.c hdrs/lloptions.h hdrs/metadata.h
+	*NEW gedlib/lloptions.c hdrs/lloptions.h hdrs/metadata.h
 	stdlib/lldate.c:
 	Clarified lineno global names (lineno->flineno,tlineno->travlineno).
 	Changed add_indi_by_edit, add_unlinked_indi to get nod0.
@@ -1799,7 +1808,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 
 	* hdrs/screen.h liflines/browse.c liflines/llinesi.h
 	liflines/screen.c
-	NEW hdrs/menuitem.h liflines/menuitem.c:
+	*NEW hdrs/menuitem.h liflines/menuitem.c:
 	New paging & resizable menu system.
 
 	liflines/Makefile.am: Added menuitem.c.
@@ -1824,6 +1833,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 	gedlib/xreffile.c hdrs/gedcom.h liflines/browse.c
 	liflines/llinesi.h liflines/pedigree.c liflines/screen.c
 	liflines/show.c:
+
 	Implemented browse sources, etc.
 
 2001-01-24 Perry Rapp <puddle@users.sourceforge.net>
@@ -1831,7 +1841,8 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 	* ChangeLog btree/utils.c gedlib/intrface.c gedlib/keytonod.c
 	gedlib/names.c gedlib/node.c gedlib/valid.c hdrs/gedcom.h
 	hdrs/standard.h liflines/main.c stdlib/path.c stdlib/signals.c
-	NEW hdrs/warehouse.h stdlib/warehouse.c:
+	*NEW hdrs/warehouse.h stdlib/warehouse.c:
+
 	Directory separator bugfixes.
 	LLNEWDBDIR bugfix (from Ethel bug on creating new db).
 	New NAMESEP macro (to differentiate it from directory sep).
@@ -1839,6 +1850,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 	Back out accidentally checked-in code disabling signals.
 
 	* stdlib/dirs.c: 
+
 	Propagate bugfix from btree/utils.c/mkalldirs
 	to stdlib/dirs.c/mkalldirs.
 
@@ -1945,7 +1957,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 	gedlib/node.c hdrs/gedcom.h interp/more.c liflines/Makefile.am
 	liflines/export.c liflines/main.c liflines/scan.c
 	liflines/screen.c stdlib/Makefile.am
-	NEW hdrs/fpattern.h stdlib/fpattern.c:
+	*NEW hdrs/fpattern.h stdlib/fpattern.c:
 	Put version number in its own header.
 	Add fpattern pattern-matching for scan.
 	Changed scan to stay in scan until match selected or user quits.
@@ -2031,7 +2043,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 	titlebar. Added wtitle to win32 curses for titlebar.
 
 	* gedlib/init.c liflines/ask.c
-	NEW tests/dotests.sh tests/runtest1.sh tests/test1.ged:
+	*NEW tests/dotests.sh tests/runtest1.sh tests/test1.ged:
 	tests/test1.ll tests/test1.out
 	Suppress llprograms & llreports in selftest. Added tests & test1.
 
@@ -2211,7 +2223,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 	* gedlib/indiseq.c gedlib/keytonod.c hdrs/indiseq.h
 	hdrs/interpi.h hdrs/screen.h hdrs/table.h interp/functab.c
 	interp/intrpseq.c stdlib/table.c
-	NEW gedlib/gengedc.c hdrs/gengedc.h:
+	*NEW gedlib/gengedc.c hdrs/gengedc.h:
 	gen_gedcom rewrite (gengedcomweak & strong & original)
 	(includes new table functions).
 
@@ -2224,7 +2236,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 	Add refn traversal & refn scan (& refn checking in dbverify).
 	Move del_in_dbase from liflines to gedlib (interface.c).
 	Added <fcntl.h> to sys_inc.h for MSVC/Windows.
-	Added new tools/dbverify file.
+	*NEW tools/dbverify file.
 
 2000-12-31 Perry Rapp <puddle@users.sourceforge.net>
 
@@ -2402,7 +2414,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 	gedlib/messages.c gedlib/names.c hdrs/btree.h hdrs/gedcom.h
 	hdrs/screen.h interp/interp.c liflines/add.c liflines/export.c
 	liflines/llinesi.h liflines/main.c liflines/screen.c
-	(NEW) liflines/scan.c:
+	*NEW liflines/scan.c:
 	Added name scan (search all names in database against
 	a pattern - only exact match against any word of name
 	for now).

@@ -9,6 +9,7 @@
 
 #include "standard.h"
 #include "gedcom.h"
+#include "lloptions.h"
 
 #if HAVE_PWD_H
 #include <pwd.h>
@@ -64,7 +65,9 @@ get_user_email (void)
 }
 
 /*===============================================================
- * get_property -- Get value from useropts table, environment or system
+ * get_property -- 
+ * Try getoptstr, which tries user options table & config file
+ * Then handle builtins
  *=============================================================*/
 STRING
 get_property (STRING opt)
@@ -74,7 +77,7 @@ get_property (STRING opt)
   if (NULL == opt)
     return NULL;
 
-  val = valueof_str(useropts, opt);
+  val = getoptstr(opt, NULL);
   if (NULL == val)
     {
       if (0 == strcmp(opt, "user.fullname"))

@@ -4,10 +4,15 @@
 # As are blank lines
 # So all these lines are commented out...
 #
-# 2002/01/13
-
-# Email address available to report programs
-#EmailAddr=user@mailhost.org
+# 2002/01/25
+#
+# All variables here are available to report programs
+# via the report language function getproperty, so, for
+# example, the built-in user email property may be
+# overridden here like so:
+#user.email=user@mailhost.org
+# Similarly the built-in user name property:
+#user.name=myself
 
 # Root path for utility/read command
 #InputPath=/home/user/LifeLines
