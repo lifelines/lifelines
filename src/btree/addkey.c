@@ -43,8 +43,11 @@ FKEY fkey;    /*file key of new entry*/
 	INDEX index;
 	SHORT lo, hi;
 
-/*wrintf("ADDKEY: ikey, rkey = %s, %s; ", fkey2path(ikey), rkey2str(rkey));
-wrintf("fkey = %s\n", fkey2path(fkey));/*DEBUG*/
+#ifdef DEBUG
+	llwprintf("ADDKEY: ikey, rkey = %s, %s;", fkey2path(ikey), rkey2str(rkey));
+	llwprintf("fkey = %s\n", fkey2path(fkey));
+#endif
+
    /* Validate the operation */
 	if (!bwrite(btree)) return;
 	if ((index = getindex(btree, ikey)) == NULL)

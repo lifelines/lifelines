@@ -120,6 +120,7 @@ INDEX index; /* INDEX or BLOCK */
 			indices[j] = indices[j - 1];
 		indices[0] = index;
 	}
+	return TRUE;
 }
 /*================================
  * getindex - Get index from btree

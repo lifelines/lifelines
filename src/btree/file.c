@@ -44,7 +44,6 @@ STRING file;	/* file with new record */
 {
 	FILE *fp;
 	STRING mem;
-	INT len;
 	struct stat buf;
 	ASSERT(bwrite(btree));
 	if ((fp = fopen(file, LLREADBINARY)) == NULL) return FALSE;
@@ -52,7 +51,8 @@ STRING file;	/* file with new record */
 		fclose(fp);
 		return FALSE;
 	}
-	if ((len = buf.st_size) == 0) {
+	if (buf.st_size == 0) {
+		/* why do we add a record here, esp. when filesize=0? */
 		addrecord(btree, rkey, mem, 0);
 		fclose(fp);
 		return TRUE;
