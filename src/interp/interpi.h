@@ -31,6 +31,17 @@
 
 #include "interp.h"
 
+/* parse global context */
+struct pactx_s {
+	FILE *Pinfp;     /* file to read program from */
+	STRING Pinstr;   /* string to read program from */
+	TABLE filetab;   /* table of files called by current report (incl. itself) */
+	STRING ifile;    /* user's requested program path (current report) */
+	STRING fullpath; /* actual path of current program */
+	INT lineno;      /* current line number (0-based) */
+	INT charpos;     /* current offset on line (0-based) */
+};
+
 
 extern PVALUE ___alpha(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __add(PNODE, SYMTAB, BOOLEAN *);

@@ -41,7 +41,7 @@
 #include "gedcom.h"
 #include "cache.h"
 #include "indiseq.h"
-#include "interp.h"
+#include "interpi.h"
 #include "liflines.h"
 #include "parse.h"
 #include <stdlib.h>
@@ -308,7 +308,7 @@ secondo	:	/* empty */ {
 		}
 	;
 m	:	/* empty */ {
-			$$ = (YYSTYPE)get_lineno(pactx);
+			$$ = (YYSTYPE)((PACTX)pactx)->lineno;
 		}
 	;
 %%

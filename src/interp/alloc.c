@@ -44,7 +44,7 @@
 #include "translat.h"
 #include "gedcom.h"
 #include "cache.h"
-#include "interp.h"
+#include "interpi.h"
 #include "liflines.h"
 #include "feedback.h"
 
@@ -79,9 +79,6 @@ STRING badargx     = 0;
  * external/imported variables
  *********************************************/
 
-extern STRING Pfname;
-
-
 
 
 /*********************************************
@@ -104,7 +101,7 @@ typedef struct pn_block *PN_BLOCK;
 static PNODE alloc_pnode_memory(void);
 static void clear_error_strings(void);
 static void clear_pnode(PNODE node);
-static PNODE create_pnode(void *pactx, INT type);
+static PNODE create_pnode(PACTX pactx, INT type);
 static void delete_pnode(PNODE node);
 static void free_pnode_memory(PNODE node);
 static void set_parents(PNODE body, PNODE node);
@@ -209,15 +206,16 @@ free_all_pnodes (void)
  * 2001/01/21 changed to block allocator
  *================================*/
 static PNODE
-create_pnode (void *pactx, INT type)
+create_pnode (PACTX pactx, INT type)
 {
 	PNODE node = alloc_pnode_memory();
 	STRING ifile, fullpath;
-	get_infp_info(pactx, &ifile, &fullpath);
+	ifile = pactx->ifile;
+	fullpath = pactx->fullpath;
 	itype(node) = type;
 	iprnt(node) = NULL;
 	inext(node) = NULL;
-	iline(node) = get_lineno(pactx);
+	iline(node) = pactx->lineno;
 	ifname(node) = fullpath;
 	node->i_word1 = node->i_word2 = node->i_word3 = NULL;
 	node->i_word4 = node->i_word5 = NULL;
@@ -253,7 +251,7 @@ delete_pnode (PNODE node)
  *  a static buffer
  *================================*/
 PNODE
-string_node (void *pactx, STRING str)
+string_node (PACTX pactx, STRING str)
 {
 	PNODE node = create_pnode(pactx, ISCONS);
 	ASSERT(str); /* we're not converting NULL to "" because nobody passes us NULL */
@@ -269,7 +267,7 @@ string_node (void *pactx, STRING str)
  *  body:  [IN]  loop body statements
  *======================================*/
 PNODE
-children_node (void *pactx, PNODE fexpr, STRING cvar, STRING nvar, PNODE body)
+children_node (PACTX pactx, PNODE fexpr, STRING cvar, STRING nvar, PNODE body)
 {
 	PNODE node = create_pnode(pactx, ICHILDREN);
 	iloopexp(node) = (VPTR) fexpr;
@@ -289,7 +287,7 @@ children_node (void *pactx, PNODE fexpr, STRING cvar, STRING nvar, PNODE body)
  *  body:  [IN]  loop body statements
  *======================================*/
 PNODE
-spouses_node (void *pactx, PNODE pexpr, STRING svar, STRING fvar, STRING nvar, PNODE body)
+spouses_node (PACTX pactx, PNODE pexpr, STRING svar, STRING fvar, STRING nvar, PNODE body)
 {
 	PNODE node = create_pnode(pactx, ISPOUSES);
 	iloopexp(node) = (VPTR) pexpr;
@@ -310,7 +308,7 @@ spouses_node (void *pactx, PNODE pexpr, STRING svar, STRING fvar, STRING nvar, P
  *  body:  [IN]  loop body statements
  *=======================================*/
 PNODE
-families_node (void *pactx, PNODE pexpr, STRING fvar, STRING svar, STRING nvar, PNODE body)
+families_node (PACTX pactx, PNODE pexpr, STRING fvar, STRING svar, STRING nvar, PNODE body)
 {
 	PNODE node = create_pnode(pactx, IFAMILIES);
 	iloopexp(node) = (VPTR) pexpr;
@@ -331,7 +329,7 @@ families_node (void *pactx, PNODE pexpr, STRING fvar, STRING svar, STRING nvar, 
  *  body:  [IN]  loop body statements
  *=======================================*/
 PNODE
-fathers_node (void *pactx, PNODE pexpr, STRING pvar, STRING fvar, STRING nvar, PNODE body)
+fathers_node (PACTX pactx, PNODE pexpr, STRING pvar, STRING fvar, STRING nvar, PNODE body)
 {
 	PNODE node = create_pnode(pactx, IFATHS);
 	iloopexp(node) = (VPTR) pexpr;
@@ -352,7 +350,7 @@ fathers_node (void *pactx, PNODE pexpr, STRING pvar, STRING fvar, STRING nvar, P
  *  body:  [IN]  loop body statements
  *=======================================*/
 PNODE
-mothers_node (void *pactx, PNODE pexpr, STRING pvar, STRING fvar, STRING nvar, PNODE body)
+mothers_node (PACTX pactx, PNODE pexpr, STRING pvar, STRING fvar, STRING nvar, PNODE body)
 {
 	PNODE node = create_pnode(pactx, IMOTHS);
 	iloopexp(node) = (VPTR) pexpr;
@@ -372,7 +370,7 @@ mothers_node (void *pactx, PNODE pexpr, STRING pvar, STRING fvar, STRING nvar, P
  *  body:  [IN]  loop body statements
  *=======================================*/
 PNODE
-parents_node (void *pactx, PNODE pexpr, STRING fvar, STRING nvar, PNODE body)
+parents_node (PACTX pactx, PNODE pexpr, STRING fvar, STRING nvar, PNODE body)
 {
 	PNODE node = create_pnode(pactx, IFAMCS);
 	iloopexp(node) = (VPTR) pexpr;
@@ -392,7 +390,7 @@ parents_node (void *pactx, PNODE pexpr, STRING fvar, STRING nvar, PNODE body)
  *  body:  [IN]  loop body statements
  *======================================*/
 PNODE
-forindiset_node (void *pactx, PNODE iexpr, STRING ivar, STRING vvar, STRING nvar, PNODE body)
+forindiset_node (PACTX pactx, PNODE iexpr, STRING ivar, STRING vvar, STRING nvar, PNODE body)
 {
 	PNODE node = create_pnode(pactx, ISET);
 	iloopexp(node) = (VPTR) iexpr;
@@ -412,7 +410,7 @@ forindiset_node (void *pactx, PNODE iexpr, STRING ivar, STRING vvar, STRING nvar
  *  body:  [IN]  loop body statements
  *====================================*/
 PNODE
-forlist_node (void *pactx, PNODE iexpr, STRING evar, STRING nvar, PNODE body)
+forlist_node (PACTX pactx, PNODE iexpr, STRING evar, STRING nvar, PNODE body)
 {
 	PNODE node = create_pnode(pactx, ILIST);
 	iloopexp(node) = (VPTR) iexpr;
@@ -430,7 +428,7 @@ forlist_node (void *pactx, PNODE iexpr, STRING evar, STRING nvar, PNODE body)
  *  body:  [IN]  loop body statements
  *=======================================*/
 PNODE
-forindi_node (void *pactx, STRING ivar, STRING nvar, PNODE body)
+forindi_node (PACTX pactx, STRING ivar, STRING nvar, PNODE body)
 {
 	PNODE node = create_pnode(pactx, IINDI);
 	ielement(node) = (VPTR) ivar;
@@ -447,7 +445,7 @@ forindi_node (void *pactx, STRING ivar, STRING nvar, PNODE body)
  *  body:  [IN]  loop body statements
  *=======================================*/
 PNODE
-forsour_node (void *pactx, STRING svar, STRING nvar, PNODE body)
+forsour_node (PACTX pactx, STRING svar, STRING nvar, PNODE body)
 {
 	PNODE node = create_pnode(pactx, ISOUR);
 	ielement(node) = (VPTR) svar;
@@ -464,7 +462,7 @@ forsour_node (void *pactx, STRING svar, STRING nvar, PNODE body)
  *  body:  [IN]  loop body statements
  *=======================================*/
 PNODE
-foreven_node (void *pactx, STRING evar, STRING nvar, PNODE body)
+foreven_node (PACTX pactx, STRING evar, STRING nvar, PNODE body)
 {
 	PNODE node = create_pnode(pactx, IEVEN);
 	ielement(node) = (VPTR) evar;
@@ -481,7 +479,7 @@ foreven_node (void *pactx, STRING evar, STRING nvar, PNODE body)
  *  body:  [IN]  loop body statements
  *=======================================*/
 PNODE
-forothr_node (void *pactx, STRING ovar, STRING nvar, PNODE body)
+forothr_node (PACTX pactx, STRING ovar, STRING nvar, PNODE body)
 {
 	PNODE node = create_pnode(pactx, IOTHR);
 	ielement(node) = (VPTR) ovar;
@@ -498,7 +496,7 @@ forothr_node (void *pactx, STRING ovar, STRING nvar, PNODE body)
  *  body:  [IN]  loop body statements
  *=====================================*/
 PNODE
-forfam_node (void *pactx, STRING fvar, STRING nvar, PNODE body)
+forfam_node (PACTX pactx, STRING fvar, STRING nvar, PNODE body)
 {
 	PNODE node = create_pnode(pactx, IFAM);
 	ielement(node) = (VPTR) fvar;
@@ -515,7 +513,7 @@ forfam_node (void *pactx, STRING fvar, STRING nvar, PNODE body)
  *  body:  [IN]  loop body statements
  *=========================================*/
 PNODE
-fornotes_node (void *pactx, PNODE nexpr, STRING vvar, PNODE body)
+fornotes_node (PACTX pactx, PNODE nexpr, STRING vvar, PNODE body)
 {
 	PNODE node = create_pnode(pactx, INOTES);
 	iloopexp(node) = (VPTR) nexpr;
@@ -532,7 +530,7 @@ fornotes_node (void *pactx, PNODE nexpr, STRING vvar, PNODE body)
  *  body:  [IN]  loop body statements
  *=========================================*/
 PNODE
-fornodes_node (void *pactx, PNODE nexpr, STRING nvar, PNODE body)
+fornodes_node (PACTX pactx, PNODE nexpr, STRING nvar, PNODE body)
 {
 	PNODE node = create_pnode(pactx, INODES);
 	iloopexp(node) = (VPTR) nexpr;
@@ -550,7 +548,7 @@ fornodes_node (void *pactx, PNODE nexpr, STRING nvar, PNODE body)
  *  body:  [IN]  loop body statements
  *=========================================*/
 PNODE
-traverse_node (void *pactx, PNODE nexpr, STRING snode, STRING levv, PNODE body)
+traverse_node (PACTX pactx, PNODE nexpr, STRING snode, STRING levv, PNODE body)
 {
 	PNODE node = create_pnode(pactx, ITRAV);
 	iloopexp(node) = (VPTR) nexpr;
@@ -564,7 +562,7 @@ traverse_node (void *pactx, PNODE nexpr, STRING snode, STRING levv, PNODE body)
  * iden_node -- Create identifier node
  *==================================*/
 PNODE
-iden_node (void *pactx, STRING iden)
+iden_node (PACTX pactx, STRING iden)
 {
 	PNODE node = create_pnode(pactx, IIDENT);
 	iident(node) = (VPTR) iden;
@@ -574,7 +572,7 @@ iden_node (void *pactx, STRING iden)
  * icons_node -- Create integer node
  *================================*/
 PNODE
-icons_node (void *pactx, INT ival)
+icons_node (PACTX pactx, INT ival)
 {
 	PNODE node = create_pnode(pactx, IICONS);
 	ivaluex(node) = create_pvalue_from_int(ival);
@@ -584,7 +582,7 @@ icons_node (void *pactx, INT ival)
  * fcons_node -- Create floating node
  *=================================*/
 PNODE
-fcons_node (void *pactx, FLOAT fval)
+fcons_node (PACTX pactx, FLOAT fval)
 {
 	PNODE node = create_pnode(pactx, IFCONS);
 	ivaluex(node) = create_pvalue_from_float(fval);
@@ -598,7 +596,7 @@ fcons_node (void *pactx, FLOAT fval)
  *  body:  [IN]  body
  *=================================*/
 PNODE
-proc_node (void *pactx, STRING name, PNODE parms, PNODE body)
+proc_node (PACTX pactx, STRING name, PNODE parms, PNODE body)
 {
 	PNODE node = create_pnode(pactx, IPDEFN);
 	iname(node) = (VPTR) name;
@@ -615,7 +613,7 @@ proc_node (void *pactx, STRING name, PNODE parms, PNODE body)
  *  body:  [IN]  body
  *================================================*/
 PNODE
-fdef_node (void *pactx, STRING name, PNODE parms, PNODE body)
+fdef_node (PACTX pactx, STRING name, PNODE parms, PNODE body)
 {
 	PNODE node = create_pnode(pactx, IFDEFN);
 	iname(node) = (VPTR) name;
@@ -631,7 +629,7 @@ fdef_node (void *pactx, STRING name, PNODE parms, PNODE body)
  *  elist: [IN]  param(s)
  *=====================================================*/
 PNODE
-func_node (void *pactx, STRING name, PNODE elist)
+func_node (PACTX pactx, STRING name, PNODE elist)
 {
 	PNODE node;
 	INT lo, hi, md=0, n, r;
@@ -666,12 +664,9 @@ func_node (void *pactx, STRING name, PNODE elist)
 		}
 	}
 	if (found) {
-		INT lineno = get_lineno(pactx);
-		STRING ifile, fullpath;
-		get_infp_info(pactx, &ifile, &fullpath); 
 		if ((n = num_params(elist)) < builtins[md].ft_nparms_min
 		    || n > builtins[md].ft_nparms_max) {
-			llwprintf(_("Error: file \"%s\": line %d: "), ifile, lineno);
+			llwprintf(_("Error: file \"%s\": line %d: "), pactx->ifile, pactx->lineno);
 			llwprintf("%s: must have %d to %d parameters (found with %d).\n"
 				, name, builtins[md].ft_nparms_min, builtins[md].ft_nparms_max
 				, n);
@@ -821,7 +816,7 @@ verify_builtins (void)
  *  enode: [IN]  else statements
  *===========================*/
 PNODE
-if_node (void *pactx, PNODE cond, PNODE tnode, PNODE enode)
+if_node (PACTX pactx, PNODE cond, PNODE tnode, PNODE enode)
 {
 	PNODE node = create_pnode(pactx, IIF);
 	icond(node) = (VPTR) cond;
@@ -838,7 +833,7 @@ if_node (void *pactx, PNODE cond, PNODE tnode, PNODE enode)
  *  body:  [IN]  body statements of while loop
  *==============================*/
 PNODE
-while_node (void *pactx, PNODE cond, PNODE body)
+while_node (PACTX pactx, PNODE cond, PNODE body)
 {
 	PNODE node = create_pnode(pactx, IWHILE);
 	icond(node) = (VPTR) cond;
@@ -853,7 +848,7 @@ while_node (void *pactx, PNODE cond, PNODE body)
  *  args:  [IN]  argument(s)
  *=================================*/
 PNODE
-call_node (void *pactx, STRING name, PNODE args)
+call_node (PACTX pactx, STRING name, PNODE args)
 {
 	PNODE node = create_pnode(pactx, IPCALL);
 	iname(node) = (VPTR) name;
@@ -863,7 +858,7 @@ call_node (void *pactx, STRING name, PNODE args)
 /*================================
  * break_node -- Create break node
  *==============================*/
-PNODE break_node (void *pactx)
+PNODE break_node (PACTX pactx)
 {
 	PNODE node = create_pnode(pactx, IBREAK);
 	return node;
@@ -871,7 +866,7 @@ PNODE break_node (void *pactx)
 /*======================================
  * continue_node -- Create continue node
  *====================================*/
-PNODE continue_node (void *pactx)
+PNODE continue_node (PACTX pactx)
 {
 	PNODE node = create_pnode(pactx, ICONTINUE);
 	return node;
@@ -880,7 +875,7 @@ PNODE continue_node (void *pactx)
  * return_node -- Create return node
  *================================*/
 PNODE
-return_node (void *pactx, PNODE args)
+return_node (PACTX pactx, PNODE args)
 {
 	PNODE node = create_pnode(pactx, IRETURN);
 	iargs(node) = (VPTR) args;

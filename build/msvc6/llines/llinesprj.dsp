@@ -369,10 +369,6 @@ SOURCE=..\..\..\btree\opnbtree.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\interp\parse.c
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\stdlib\path.c
 # End Source File
 # Begin Source File

@@ -369,11 +369,7 @@ prompt_for_db:
 	init_show_module();
 	init_browse_module();
 	if (exprog) {
-		if (progout) {
-			BOOLEAN append=FALSE;
-			set_output_file(progout, append);
-		}
-		interp_program("main", 0, NULL, 1, &exprog_name, NULL, FALSE);
+		interp_program("main", 0, NULL, 1, &exprog_name, progout, FALSE);
 	} else {
 		alldone = 0;
 		while (!alldone)

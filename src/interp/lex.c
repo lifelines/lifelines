@@ -42,7 +42,7 @@
 #include "translat.h"
 #include "gedcom.h"
 #include "cache.h"
-#include "interp.h"
+#include "interpi.h"
 #include "parse.h"
 #include "yacc.h"
 
@@ -50,11 +50,11 @@ static INT Lexmode = FILEMODE;
 static STRING Lp;	/* pointer into program string */
 
 
-static INT inchar(void *pactx);
-static int lowyylex(void *pactx, YYLTYPE *llocp, YYSTYPE * lvalp);
+static INT inchar(PACTX pactx);
+static int lowyylex(PACTX pactx, YYLTYPE *llocp, YYSTYPE * lvalp);
 static BOOLEAN reserved(STRING, INT*);
-static void unreadchar(void *pactx, INT c);
-static int lextok(void *pactx, YYSTYPE * lvalp, INT c, INT t);
+static void unreadchar(PACTX pactx, INT c);
+static int lextok(PACTX pactx, YYSTYPE * lvalp, INT c, INT t);
 
 /*============================
  * initlex -- Initialize lexer
@@ -100,7 +100,7 @@ is_iden_char (INT c, INT t)
  * lowyylex -- Lexer function
  *=========================*/
 static int
-lowyylex (void *pactx, YYLTYPE *llocp, YYSTYPE * lvalp)
+lowyylex (PACTX pactx, YYLTYPE *llocp, YYSTYPE * lvalp)
 {
 	INT c=0, t=0;
 	/* TODO: set location in lvalp */
@@ -125,19 +125,19 @@ lowyylex (void *pactx, YYLTYPE *llocp, YYSTYPE * lvalp)
 			if (c == EOF) return 0;
 		}
 	}
-	llocp->first_line = get_lineno(pactx);
-	llocp->first_column = get_charpos(pactx);
+	llocp->first_line = pactx->lineno;
+	llocp->first_column = pactx->charpos;
 	/* now read token */
 	c = lextok(pactx, lvalp, c, t);
-	llocp->last_line = get_lineno(pactx);
-	llocp->last_column = get_charpos(pactx);
+	llocp->last_line = pactx->lineno;
+	llocp->last_column = pactx->charpos;
 	return c;
 }
 /*===========================
  * lextok -- lex the next token
  *=========================*/
 static int
-lextok (void *pactx, YYSTYPE * lvalp, INT c, INT t)
+lextok (PACTX pactx, YYSTYPE * lvalp, INT c, INT t)
 {
 	INT retval, mul;
 	extern INT Yival;
@@ -300,25 +300,24 @@ reserved (STRING word,
  * inchar -- Read char from input file/string; track line number
  *============================================================*/
 static INT
-inchar (void *pactx)
+inchar (PACTX pactx)
 {
 	INT c;
-	FILE *infp = get_infp(pactx);
 #ifdef SKIPCTRLZ
 	do {
 #endif
 		if (Lexmode == FILEMODE)
-			c = getc(infp);
+			c = getc(pactx->Pinfp);
 		else
 			c = (uchar)*Lp++;
 #ifdef SKIPCTRLZ
 	} while(c == 26);		/* skip CTRL-Z */
 #endif
 	if (c == '\n') {
-		adj_lineno(pactx, +1);
-		set_charpos(pactx, 0);
+		++pactx->lineno;
+		pactx->charpos = 0;
 	} else {
-		adj_charpos(pactx, +1);
+		++pactx->charpos;
 	}
 	return c;
 }
@@ -326,18 +325,17 @@ inchar (void *pactx)
  * unreadchar -- Unread char from input file/string; track line number
  *==============================================================*/
 static void
-unreadchar (void *pactx, INT c)
+unreadchar (PACTX pactx, INT c)
 {
 	if (Lexmode == FILEMODE) {
-		FILE *infp = get_infp(pactx);
-		ungetc(c, infp);
+		ungetc(c, pactx->Pinfp);
 	} else {
 		Lp--;
 	}
 	if (c == '\n') {
-		adj_lineno(pactx, -1);
-		set_charpos(pactx, 0);
+		--pactx->lineno;
+		pactx->charpos = 0;
 	} else {
-		adj_charpos(pactx, -1);
+		--pactx->charpos;
 	}
 }

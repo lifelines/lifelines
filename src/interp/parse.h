@@ -40,7 +40,7 @@ int yylex(YYSTYPE * lvalp, YYLTYPE *llocp, void * parm);
 int yyparse(void * YYPARSE_PARM);
 
 /* function to report parse errors */
-void parse_error(void * pactx, YYLTYPE *ploc, STRING str);
+void parse_error(PACTX pactx, YYLTYPE *ploc, STRING str);
 
 
 #endif /* parse_h_included */

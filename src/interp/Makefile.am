@@ -5,7 +5,7 @@
 noinst_LIBRARIES = libinterp.a
 
 libinterp_a_SOURCES = alloc.c builtin.c eval.c functab.c heapused.c \
-	interp.c intrpseq.c lex.c more.c parse.c pvalue.c \
+	interp.c intrpseq.c lex.c more.c pvalue.c \
 	pvalmath.c rassa.c symtab.c write.c yacc.y
 
 # .. for config.h, hdrs for lots of stuff, ../intl for libgnuintl.h

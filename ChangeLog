@@ -1,3 +1,13 @@
+2002-07-18 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog build/msvc6/llines/llinesprj.dsp hdrs/interp.h
+	interp/Makefile.am interp/alloc.c interp/interp.c
+	interp/interpi.h interp/lex.c interp/parse.h interp/yacc.y
+	liflines/main.c
+	DELETED: interp/parse.c
+
+	Simply parse state (context) by exposing it.
+
 2002-07-14 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog configure.in build/msvc6/llines/llinesprj.dsp

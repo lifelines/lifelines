@@ -205,6 +205,7 @@ extern INT nobuiltins;
 		return NULL;\
 	}
 
+typedef struct pactx_s *PACTX;
 
 /* PVALUE Arithmetic Functions */
 void add_pvalues(PVALUE, PVALUE, BOOLEAN*);
@@ -310,10 +311,10 @@ INTERPTYPE interp_traverse(PNODE, SYMTAB, PVALUE*);
 
 /* Prototypes */
 void assign_iden(SYMTAB, STRING, PVALUE);
-PNODE break_node(void *pactx);
-PNODE call_node(void *pactx, STRING, PNODE);
-PNODE children_node(void *pactx, PNODE, STRING, STRING, PNODE);
-PNODE continue_node(void *pactx);
+PNODE break_node(PACTX pactx);
+PNODE call_node(PACTX pactx, STRING, PNODE);
+PNODE children_node(PACTX pactx, PNODE, STRING, STRING, PNODE);
+PNODE continue_node(PACTX pactx);
 void debug_show_one_pnode(PNODE);
 PVALUE evaluate(PNODE, SYMTAB, BOOLEAN*);
 BOOLEAN evaluate_cond(PNODE, SYMTAB, BOOLEAN*);
@@ -324,69 +325,54 @@ PVALUE eval_and_coerce(INT, PNODE, SYMTAB, BOOLEAN*);
 NODE eval_indi(PNODE, SYMTAB, BOOLEAN*, CACHEEL*);
 NODE eval_fam(PNODE, SYMTAB, BOOLEAN*, CACHEEL*);
 PVALUE eval_without_coerce(PNODE node, SYMTAB stab, BOOLEAN *eflg);
-PNODE families_node(void *pactx, PNODE, STRING, STRING, STRING, PNODE);
-PNODE fathers_node(void *pactx, PNODE, STRING, STRING, STRING, PNODE);
-PNODE fcons_node(void *pactx, FLOAT);
-PNODE fdef_node(void *pactx, STRING, PNODE, PNODE);
-PNODE foreven_node(void *pactx, STRING, STRING, PNODE);
-PNODE forfam_node(void *pactx, STRING, STRING, PNODE);
-PNODE forindi_node(void *pactx, STRING, STRING, PNODE);
-PNODE forindiset_node(void *pactx, PNODE, STRING, STRING, STRING, PNODE);
-PNODE forlist_node(void *pactx, PNODE, STRING, STRING, PNODE);
-PNODE fornodes_node(void *pactx, PNODE, STRING, PNODE);
-PNODE fornotes_node(void *pactx, PNODE, STRING, PNODE);
-PNODE forothr_node(void *pactx, STRING, STRING, PNODE);
-PNODE forsour_node(void *pactx, STRING, STRING, PNODE);
+PNODE families_node(PACTX pactx, PNODE, STRING, STRING, STRING, PNODE);
+PNODE fathers_node(PACTX pactx, PNODE, STRING, STRING, STRING, PNODE);
+PNODE fcons_node(PACTX pactx, FLOAT);
+PNODE fdef_node(PACTX pactx, STRING, PNODE, PNODE);
+PNODE foreven_node(PACTX pactx, STRING, STRING, PNODE);
+PNODE forfam_node(PACTX pactx, STRING, STRING, PNODE);
+PNODE forindi_node(PACTX pactx, STRING, STRING, PNODE);
+PNODE forindiset_node(PACTX pactx, PNODE, STRING, STRING, STRING, PNODE);
+PNODE forlist_node(PACTX pactx, PNODE, STRING, STRING, PNODE);
+PNODE fornodes_node(PACTX pactx, PNODE, STRING, PNODE);
+PNODE fornotes_node(PACTX pactx, PNODE, STRING, PNODE);
+PNODE forothr_node(PACTX pactx, STRING, STRING, PNODE);
+PNODE forsour_node(PACTX pactx, STRING, STRING, PNODE);
 void free_all_pnodes(void);
 void free_pnode_tree(PNODE);
-PNODE func_node(void *pactx, STRING, PNODE);
-PNODE icons_node(void *pactx, INT ival);
-PNODE iden_node(void *pactx, STRING);
-PNODE if_node(void *pactx, PNODE, PNODE, PNODE);
+PNODE func_node(PACTX pactx, STRING, PNODE);
+PNODE icons_node(PACTX pactx, INT ival);
+PNODE iden_node(PACTX pactx, STRING);
+PNODE if_node(PACTX pactx, PNODE, PNODE, PNODE);
 BOOLEAN iistype(PNODE, INT);
 void init_interpreter(void);
 void interp_load_lang(void);
-PNODE make_internal_string_node(void *pactx, STRING);
-PNODE mothers_node(void *pactx, PNODE, STRING, STRING, STRING, PNODE);
+PNODE make_internal_string_node(PACTX pactx, STRING);
+PNODE mothers_node(PACTX pactx, PNODE, STRING, STRING, STRING, PNODE);
 INT num_params(PNODE);
-void pa_handle_char_encoding(void *pactx, PNODE node);
+void pa_handle_char_encoding(PACTX pactx, PNODE node);
 void pa_handle_include(PNODE node);
 void pa_handle_global(STRING iden);
 void pa_handle_option(PVALUE optval);
-void pa_handle_require(void *pactx, PNODE node);
-PNODE parents_node(void *pactx, PNODE, STRING, STRING, PNODE);
-PNODE proc_node(void *pactx, STRING, PNODE, PNODE);
+void pa_handle_require(PACTX pactx, PNODE node);
+PNODE parents_node(PACTX pactx, PNODE, STRING, STRING, PNODE);
+PNODE proc_node(PACTX pactx, STRING, PNODE, PNODE);
 void prog_error(PNODE, STRING, ...);
 void prog_var_error(PNODE node, SYMTAB stab, PNODE arg, PVALUE val, STRING fmt, ...);
 BOOLEAN record_to_node(PVALUE val);
-PNODE return_node(void *pactx, PNODE);
-void set_rptfile_prop(void *pactx, STRING fname, STRING key, STRING value);
+PNODE return_node(PACTX pactx, PNODE);
+void set_rptfile_prop(PACTX pactx, STRING fname, STRING key, STRING value);
 void show_pnode(PNODE);
 void show_pnodes(PNODE);
 void shutdown_interpreter(void);
-PNODE spouses_node(void *pactx, PNODE, STRING, STRING, STRING, PNODE);
-PNODE string_node(void *pactx, STRING);
-PNODE traverse_node(void *pactx, PNODE, STRING, STRING, PNODE);
+PNODE spouses_node(PACTX pactx, PNODE, STRING, STRING, STRING, PNODE);
+PNODE string_node(PACTX pactx, STRING);
+PNODE traverse_node(PACTX pactx, PNODE, STRING, STRING, PNODE);
 PVALUE valueof_iden(PNODE node, SYMTAB stab, STRING iden, BOOLEAN *eflg);
-PNODE while_node(void *pactx, PNODE, PNODE);
+PNODE while_node(PACTX pactx, PNODE, PNODE);
 
 void poutput(STRING, BOOLEAN *eflg);
 void interp_main(BOOLEAN picklist);
 
-
-/* parse.c */
-void adj_charpos(void *pactx, int delta);
-void adj_lineno(void *pactx, int delta);
-void close_infp(void *pactx);
-void * create_pactx(void);
-void delete_pactx(void *pactx);
-INT get_charpos(void *pactx);
-TABLE get_filetab(void *pactx);
-FILE * get_infp(void *pactx);
-void get_infp_info(void *pactx, STRING *pifile, STRING *pfullpath);
-INT get_lineno(void *pactx);
-void set_charpos(void *pactx, int val);
-void set_infp(void *pactx, FILE *fp, STRING file, STRING fullpath);
-void set_lineno(void *pactx, int val);
 
 #endif /* _INTERP_H */
