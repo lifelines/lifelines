@@ -66,9 +66,7 @@ charprops_load_utf8 (void)
 	if (loaded_utf8) return TRUE;
 	
 	loaded_utf8 = -1;
-	strcpy(filepath, ttpath);
-	strcat(filepath, LLSTRDIRSEPARATOR);
-	strcat(filepath, "UnicodeDataExcerpt.txt");
+	concat_path(ttpath, "UnicodeDataExcerpt.txt", uu8, filepath, sizeof(filepath));
 	fp = fopen(filepath, "r");
 	if (!fp)
 		return FALSE;

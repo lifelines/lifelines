@@ -1,3 +1,10 @@
+2003-11-30 Perry Rapp
+
+	* ChangeLog src/gedlib/charprops.c
+
+	Fixed charprops_load_utf8 to combine ttpath & filename
+	carefully. (sf#851732)
+
 2003-11-26 Perry Rapp
 
 	* ChangeLog NEWS src/hdrs/pvalue.h src/interp/builtin.c
