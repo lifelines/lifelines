@@ -5,6 +5,10 @@
 
 	Fix requires command (in report language).
 
+	* ChangeLog docs/ll-devguide.xml
+
+	Add brief explanation of require handling to developer docs.
+
 2003-03-18 Stephen Dum
         * ChangeLog docs/ll-devguide.html docs/ll-devguide.xml
 	docs/ll-reportmanual.html docs/ll-reportmanual.pdf

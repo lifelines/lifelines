@@ -8,7 +8,7 @@
 Outline for developer's guide to lifelines code.
 This is only an outline, not a parseable XML file.
 
-2003-03-05, Perry Rapp
+2003-03-24, Perry Rapp
 
 
 * stdlib module
@@ -129,6 +129,24 @@ a LifeLines btree database.
 The lifelines reporting language parser and interpreter are stored here.
 A custom lexical analyzer is in lex.c, and a yacc parser generator is
 in yacc.y. 
+
+The main interpreter is called with a list of files to parse, and some
+options. In actuality, I don't think more than one file is ever passed
+to the main entry point. If no file is passed, the routine will prompt
+(and here is where the user may choose a report from a list). But a
+report may be passed in, if one was specified with commandline argument
+to llines or llexec.
+
+The report file is parsed, and as it is parsed, any included reports 
+are added to the list to be parsed (unless already on the list,
+so circular references are not a problem).
+
+require statements are handled at parse time. The handler puts the
+requested version into the file property table (stored inside the
+pointer in the filetab entry for the file; filetab entries are
+indexed by full path of report). Later, just after parse completes
+for that file (in the main parsing loop in the main interpreter 
+function), require conditions are tested in check_rpt_requires(...).
 
   * pvalues
   All variable values in report language interpretation are stored in a
