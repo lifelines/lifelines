@@ -1,4 +1,11 @@
-2003-10-02 Perry Rapp
+2003-10-03 Perry Rapp
+
+	* ChangeLog
+	*NEW tt/.cvsignore
+
+	Add cvsignore for tt Makefiles.
+
+2003-10-02 Stephen Dum
 	* ChangeLog  docs/ll-reportmanual.html docs/ll-reportmanual.pdf 
 	docs/ll-reportmanual.txt docs/ll-userguide.html docs/ll-userguide.pdf
 	docs/ll-userguide.txt
