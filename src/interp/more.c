@@ -716,11 +716,11 @@ __menuchoose (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return create_pvalue(PINT, (VPTR)(i + 1));
 }
 /*================================+
- * system -- Run shell command
- *   usage: system (STRING) -> VOID
+ * runsystem -- Run shell command
+ *   usage: runsystem (STRING) -> VOID
  *===============================*/
 PVALUE
-__system (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+__runsystem (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	STRING cmd;
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);

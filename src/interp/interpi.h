@@ -200,7 +200,7 @@ extern PVALUE __strtoint(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __sub(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __substring(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __surname(PNODE, SYMTAB, BOOLEAN *);
-extern PVALUE __system(PNODE, SYMTAB, BOOLEAN *);
+extern PVALUE __runsystem(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __table(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __tag(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __titl(PNODE, SYMTAB, BOOLEAN *);

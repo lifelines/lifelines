@@ -218,7 +218,7 @@ BUILTINS builtins[] = {
 	{"sub",		2,	2,	__sub},
 	{"substring",	3,	3,	__substring},
 	{"surname",	1,	1,	__surname},
-	{"system",	1,	1,	__system},
+	{"system",	1,	1,	__runsystem},
 	{"table",	1,	1,	__table},
 	{"tag",		1,	1,	__tag},
 	{"title",	1,	1,	__titl},

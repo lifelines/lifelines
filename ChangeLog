@@ -1,4 +1,11 @@
-2001-09-06 matt Emmerton <memmerto@users.sourceforge.net>
+2001-09-16 Matt Emmerton <memmerto@users.sourceforge.net>
+
+	* ChangeLog interp/interpi.h interp/more.c interp/functab.c:
+
+	Renamed __system to __runsystem to avoid conflict with gcc
+	internals (or something) when compiling with '-pg'.
+
+2001-09-16 Matt Emmerton <memmerto@users.sourceforge.net>
 
 	* ChangeLog stdlib/assert.c btree/index.c btree/opnbtree.c
 	* btree/record.c gedlib/init.c gedlib/keytonod.c gedlib/messages.c
