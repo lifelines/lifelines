@@ -51,7 +51,7 @@ struct lloptions_s {
 	STRING llarchives;
 	STRING lldatabases;
 	STRING llnewdbdir;
-	BOOLEAN read_from_archives;
+	STRING inputpath;
 };
 
 extern struct lloptions_s lloptions;

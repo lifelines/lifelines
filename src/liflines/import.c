@@ -83,8 +83,7 @@ import_from_file (void)
 	STRING srcdir=NULL;
 
 /* Open and validate GEDCOM file */
-	if (lloptions.read_from_archives)
-		srcdir = lloptions.llarchives;
+	srcdir = lloptions.inputpath;
 	fp = ask_for_input_file(LLREADTEXT, idgedf, &fname, srcdir, ".ged");
 	if (!fp) return FALSE;
 	llwprintf(gdcker, fname);

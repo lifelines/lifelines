@@ -70,8 +70,7 @@ static void store_to_lloptions(void);
 
 static struct int_option_s int_options[] = {
 	{ "ListDetailLines", &lloptions.list_detail_lines, 0, DBYES },
-	{ "AddMetadata", &lloptions.add_metadata, FALSE, DBYES },
-	{ "ReadFromArchives", &lloptions.read_from_archives, FALSE, DBNO },
+	{ "AddMetadata", &lloptions.add_metadata, FALSE, DBYES }
 };
 static struct str_option_s str_options[] = {
 	{ "EmailAddr", &lloptions.email_addr, "", DBYES },
@@ -80,7 +79,8 @@ static struct str_option_s str_options[] = {
 	{ "LLREPORTS", &lloptions.llreports, "", DBNO },
 	{ "LLARCHIVES", &lloptions.llarchives, "", DBNO },
 	{ "LLDATABASES", &lloptions.lldatabases, "", DBNO },
-	{ "LLNEWDBDIR", &lloptions.llnewdbdir, "", DBNO }
+	{ "LLNEWDBDIR", &lloptions.llnewdbdir, "", DBNO },
+	{ "InputPath", &lloptions.inputpath, "", DBNO },
 };
 
 static TABLE opttab=0;

@@ -1,3 +1,8 @@
+2001-03-04 Perry Rapp <puddle@users.sourceforge.net>
+
+	* .linesrc gedlib/lloptions.c hdrs/lloptions.h liflines/import.c:
+	Removed ReadFromArchives option, and added InputPath option.
+
 2001-02-25  Marc Nozell  <marc@nozell.com>
 	
 	* configure.in, docs/Makefile.am: Added building of documentation if

@@ -1,19 +1,36 @@
 # config file for LifeLines
 # .linesrc under UNIX, lines.cfg under Windows
 # Lines beginning with # are ignored (comments)
+# As are blank lines
 # So all these lines are commented out...
 #
 # These can be overridden by useroptions in db
 #
+
+# Email address available to report programs
 #EmailAddr=user@mailhost.org
+
+# Use new metadata code (not ready for production!)
 #AddMetadata=0
 
 #
 # These can not be overridden by useroptions in db
 #
-#ReadFromArchives=1
+
+# Root path for utility/read command
+#InputPath=/home/user/LifeLines
+
+# Place to store output of utility/save
 #LLARCHIVES=/home/user/LifeLines/Archives
+
+# Path(s) to search for databases
 #LLDATABASES=/home/user/LifeLines/Databases
+
+# Path for new databases
 #LLNEWDBDIR=/home/user/LifeLines/Databases
+
+# Path for report programs
 #LLPROGRAMS=/home/user/LifeLines/Reports
+
+# Path for report output
 #LLREPORTS=/home/user/Lifelines/Outputs
