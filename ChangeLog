@@ -5,6 +5,11 @@
 	Added selftest (-y) mode. Added platform_init in main.c for
 	titlebar. Added wtitle to win32 curses for titlebar.
 
+	* gedlib/init.c liflines/ask.c
+	NEW tests/dotests.sh tests/runtest1.sh tests/test1.ged:
+	tests/test1.ll tests/test1.out
+	Suppress llprograms & llreports in selftest. Added tests & test1.
+
 2001-01-05 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/init.c hdrs/llstdlib.h stdlib/environ.c tools/btedit.c:
