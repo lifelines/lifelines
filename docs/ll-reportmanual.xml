@@ -2531,7 +2531,7 @@ loop through child nodes
 </para>
 </glossdef></glossentry>
 
-<glossentry><glossterm><synopsis><command>fornotes</command> (<replaceable>ANY</replaceable>, <replaceable>STRING</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
+<glossentry><glossterm><synopsis><command>fornotes</command> (<replaceable>NODE</replaceable>, <replaceable>STRING</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
 loop through notes on a node
