@@ -7566,7 +7566,12 @@ group.property.  The following keys are available at the moment:
 
        Postal address of the current user.
 
+  user.url
+
+       URL to the users home page.
+
 These values can be changed by adding values to user options.
+[Miscellaneous utilities->Edit the user options file]
 
 </SIMPARA>
 
