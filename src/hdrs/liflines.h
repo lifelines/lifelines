@@ -10,6 +10,7 @@
 /* from ask.c */
 NODE ask_for_fam(STRING, STRING);
 FILE *ask_for_file(STRING, STRING, STRING*, STRING, STRING);
+FILE *ask_for_program(STRING, STRING, STRING*, STRING, STRING);
 STRING ask_for_indi_key(STRING, BOOLEAN, BOOLEAN);
 INDISEQ ask_for_indi_list(STRING, BOOLEAN);
 INT ask_for_int(STRING);

@@ -8,7 +8,7 @@ bin_PROGRAMS = llines
 llines_SOURCES = add.c advedit.c ask.c browse.c delete.c edit.c \
 	export.c import.c lbrowse.c main.c merge.c miscutls.c \
 	newrecs.c remove.c show.c screen.c swap.c tandem.c valgdcom.c \
-	llinesi.h
+	llinesi.h askprogram.c
 
 # extra stuff for lines
 llines_LDADD = ../interp/libinterp.a ../gedlib/libgedcom.a \

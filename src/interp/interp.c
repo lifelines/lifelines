@@ -134,8 +134,8 @@ interp_program (STRING proc,    /* proc to call */
 		}
 	} else {
 	    	ifile = NULL;
-	    	fp = ask_for_file(LLREADTEXT, qrptname, &ifile, llprograms, ".ll");
-		/* ifile = ask_for_string(qrptname, "enter string: "); */
+	    	fp = ask_for_program(LLREADTEXT, qrptname, &ifile,
+				     llprograms, ".ll");
 		if ((fp == NULL) || (ifile == NULL))  {
 		    	if(fp) fclose(fp);
 			llwprintf("Error: file \"%s\" not found.\n",

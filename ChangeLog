@@ -18,6 +18,10 @@
 
 2000-11-11 Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* hdrs/liflines.h interp/interp.c liflines/askprogram.c
+	liflines/Makefile.am: Implement report script menu (list all
+	available scripts).
+
 	* hdrs/Makefile.am liflines/Makefile.am stdlib/Makefile.am: Add
 	llstdlib.h, llinesi.h and stdlibi.h to distribution.
 	
