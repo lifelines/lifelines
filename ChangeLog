@@ -10,6 +10,10 @@
 	Implement list of global user translation tables.
 	Implement iconv transliteration in INDS direction.
 
+	* .linesrc ChangeLog lines.cfg:
+
+	Document new options for global translation tables.
+
 2002-06-18 Matt Emmerton <memmerto@users.sourceforge.net>
 
 	* ChangeLog build build/gnu build/msvc6 build/rpm

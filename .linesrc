@@ -4,7 +4,7 @@
 # As are blank lines
 # So all these lines are commented out...
 #
-# 2002/06/18
+# 2002/06/19
 #
 # All variables here are available to report programs
 # via the report language function getproperty, so, for
@@ -35,8 +35,8 @@
 # Editor
 #LLEDITOR=/usr/local/vi
 
-# Path for reference translation tables
-#LLTTREF=/home/user/LifeLines/ttref
+# Path for global translation tables
+#TTDIR=/home/user/LifeLines/tt
 
 # Path for exported translation tables (from a db)
 #LLTTEXPORT=/home/user/LifeLines/ttdb
@@ -198,3 +198,14 @@
 # Where to find a gettext dll (only for MS-Windows)
 #gettext.path:=C:\Program Files\Common Files\gnu\libintl.dll
 # Not needed if it is named gettext.dll & is on the path.
+
+# Global translation tables
+# Syntax is TT.which.ics.n
+# Where TT is always TT
+# which is the codename (MEDIN=Editor to Internal)
+# ics is the internal codeset (eg, UTF-8)
+# and n starts at 1
+#TT.MEDIN.UTF-8.1=UTF-8.Greek.Input.tt
+#TT.MINED.UTF-8.1=UTF-8.Greek.Output.tt
+# Default is none
+
