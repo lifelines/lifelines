@@ -312,6 +312,9 @@ PVALUE
 __surname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE name, indi = eval_indi(iargs(node), stab, eflg, NULL);
+	STRING str;
+	static uchar scratch[MAXGEDNAMELEN+1];
+	TRANTABLE ttr = tran_tables[MINRP];
 	if (*eflg) {
 		prog_error(node, "the arg to surname must be a person");
 		return NULL;
@@ -322,7 +325,9 @@ __surname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "person does not have a name");
 		return NULL;
 	}
-	return create_pvalue(PSTRING, (VPTR)getasurname(nval(name)));
+	str = getasurname(nval(name));
+	translate_string(ttr, str, scratch, sizeof(scratch)/sizeof(scratch[0]));
+	return create_pvalue(PSTRING, (VPTR)scratch);
 }
 /*========================================+
  * __soundex -- SOUNDEX function on persons
@@ -372,6 +377,8 @@ __givens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE name, indi = eval_indi(iargs(node), stab, eflg, NULL);
 	STRING str;
+	static uchar scratch[MAXGEDNAMELEN+1];
+	TRANTABLE ttr = tran_tables[MINRP];
 	if (*eflg) {
 		prog_error(node, "1st arg to givens must be a person");
 		return NULL;
@@ -383,7 +390,8 @@ __givens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	str = givens(nval(name)); /* static buffer, but create_pvalue will copy */
-	return create_pvalue(PSTRING, (VPTR)str);
+	translate_string(ttr, str, scratch, sizeof(scratch)/sizeof(scratch[0]));
+	return create_pvalue(PSTRING, (VPTR)scratch);
 }
 /*===============================+
  * __set -- Assignment operation
@@ -2176,6 +2184,9 @@ __trimname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	INT len;
 	PVALUE val;
 	NODE indi = eval_indi(arg, stab, eflg, (CACHEEL *) NULL);
+	STRING str;
+	static uchar scratch[MAXGEDNAMELEN+1];
+	TRANTABLE ttr = tran_tables[MINRP];
 	if (*eflg) {
 		prog_error(node, "1st arg to trimname is not a person");
 		return NULL;
@@ -2193,7 +2204,9 @@ __trimname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	len = (INT) pvalue(val);
-	set_pvalue(val, PSTRING, (VPTR)name_string(trim_name(nval(indi), len)));
+	str = name_string(trim_name(nval(indi), len));
+	translate_string(ttr, str, scratch, sizeof(scratch)/sizeof(scratch[0]));
+	set_pvalue(val, PSTRING, (VPTR)str);
 	return val;
 }
 /*==============================+

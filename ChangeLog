@@ -3,6 +3,9 @@
 	* ChangeLog gedlib/charmaps.c gedlib/translat.c:
 	Bugfix in translation table code.
 
+	* ChangeLog gedlib/charmaps.c interp/builtin.c:
+	Apply internal-to-report trans for surname, givens, and trimname.
+
 2007-07-12 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/charmaps.c gedlib/gstrings.c gedlib/indiseq.c

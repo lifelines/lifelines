@@ -129,7 +129,8 @@ init_map_from_file (STRING file, INT indx, BOOLEAN *perr)
  * Blank lines or lines beginning with "##" are ignored
  * Translation table entries have the following foramt:
  *
- * <original><tab><translation>
+ * <original>{sep}<translation>
+ * sep is separator character, by default tab
  *  str:  [in] input string to translate
  *  indx: [in] which translation table (see defn of map_keys)
  *  perr: [out] error flag set TRUE by function if error
@@ -139,6 +140,7 @@ TRANTABLE
 init_map_from_str (STRING str, INT indx, BOOLEAN *perr)
 {
 	INT i, n, maxn, line = 1, newc;
+	INT sep = (uchar)'\t'; /* default separator */
 	BOOLEAN done;
 	unsigned char c, scratch[50];
 	STRING p, *lefts, *rights;
@@ -182,10 +184,19 @@ init_map_from_str (STRING str, INT indx, BOOLEAN *perr)
 	maxn = n;	/* don't exceed the entries you have allocated */
 	n = 0;
 	while (!done && (n < maxn)) {
+		BOOLEAN skip=FALSE;
 		if (!*str) break;
 		/* skip blank lines and lines beginning with "##" */
-		if((*str == '\r') || (*str == '\n')
-			|| ((*str =='#') && (str[1] == '#'))) {
+		if (*str == '\r' || *str == '\n') skip=TRUE;
+		if (*str =='#' && str[1] == '#') {
+			skip=TRUE;
+			if (!strncmp(str, "##sep", 5)) {
+				/* new separator character if legal */
+				if (str[5]=='=')
+					sep='=';
+			}
+		}
+		if (skip) {
 			while(*str && (*str != '\n'))
 				str++;
 			if (*str == '\n')
@@ -227,7 +238,7 @@ init_map_from_str (STRING str, INT indx, BOOLEAN *perr)
 					goto fail;
 				}
 				*p++ = c;
-			} else if (c == '\t')
+			} else if (c == sep)
 				break;
 			else
 				*p++ = c;
@@ -268,17 +279,18 @@ init_map_from_str (STRING str, INT indx, BOOLEAN *perr)
 					maperror(indx, line, badesc);
 					goto fail;
 				}
+				if (c == 't') c='\t'; /* "\t" -> tab */
 				*p++ = c;
-			} else if (c == '\t') {
-			    	/* treat as beginning of a comment */
-		    		while(*str && (*str != '\n'))
+			} else if (c == '\t' || c == sep) {
+				/* treat as beginning of a comment */
+				while(*str && (*str != '\n'))
 					str++;
-		    		if(*str == '\n')
+				if(*str == '\n')
 					str++;
 				line++;
 				break;
 			} else if (c == '\r') {
-				/* ignore carriage return */
+				/* ignore (MSDOS has this before \n) */
 			} else {
 				/* not special, just copy replacement char */
 				*p++ = c;
