@@ -1,8 +1,12 @@
 2002-05-30 Perry Rapp <puddle@users.sourceforge.net>
 
-	* ChangeLog configure.in arch/Makefile.am
+	* ChangeLog configure.in arch/Makefile.am:
 
 	arch/Makefile.am was missing include ../intl
+
+	* ChangeLog win32/msvc/llines/llines.rc:
+
+	Increase win32 version info to 3.0.14.
 
 2002-05-28 Perry Rapp <puddle@users.sourceforge.net>
 
