@@ -68,6 +68,7 @@ STRING nonnodx     = 0;
 STRING nonvar1     = 0;
 STRING nonvarx     = 0;
 STRING nontabx     = 0;
+STRING nonset1     = 0;
 STRING nonsetx     = 0;
 STRING nonboox     = 0;
 STRING nonlst1     = 0;
@@ -731,6 +732,8 @@ clear_error_strings (void)
 	strfree(&nonlst1);
 	strfree(&nonlstx);
 	strfree(&nontabx);
+	strfree(&nonset1);
+	strfree(&nonsetx);
 	strfree(&badargs);
 	strfree(&badarg1);
 	strfree(&badargx);
@@ -793,6 +796,7 @@ interp_load_lang (void)
 	nonlst1     = strsave(_("%s: the arg must be a list."));
 	nonlstx     = strsave(_("%s: the arg #%s must be a list."));
 	nontabx     = strsave(_("%s: the arg #%s must be a table."));
+	nonset1     = strsave(_("%s: the arg must be a set."));
 	nonsetx     = strsave(_("%s: the arg #%s must be a set."));
 	badargs     = strsave(_("%s: Bad arguments"));
 	badarg1     = strsave(_("%s: the arg had a major error."));

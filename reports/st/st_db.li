@@ -1,6 +1,6 @@
 /*
  * @progname       st_db.li
- * @version        1.2 [of 2005-01-23]
+ * @version        1.22 [of 2005-01-23]
  * @author         Perry Rapp
  * @category       self-test
  * @output         none
@@ -258,6 +258,9 @@ proc exerciseIndi(indi)
 		addtoset(jset, indi, "second")
 	}
 	deletefromset(jset, indi, 0)
+	namesort(iancestors)
+	valuesort(iancestors)
+	keysort(iancestors)
 	set(p,99)
 	"name: " name(indi) nl()
 	"title: " title(indi) nl()

@@ -23,6 +23,7 @@
 	* ChangeLog src/interp/alloc.c src/interp/intrpseq.c
 
 	Fix __addtoset to use prog_var_error (& therefore report debugger).
+	New error message nonsetx.
 
 	* ChangeLog docs/ll-reportmanual.xml reports/st/st_db.li
 	src/interp/intrpseq.c
@@ -31,6 +32,12 @@
 	Add inset and deletefromset calls to st_db.li.
 	Fix __inset to use prog_var_error (& therefore report debugger).
 	Fix __deletefromset to use prog_var_error (& therefore report debugger).
+
+	* ChangeLog reports/st/st_db.li src/interp/alloc.c
+	src/interp/intrpseq.c
+
+	Fix __namesort, __keysort, __valuesort to use prog_var_error.
+	New error message nonset1. Add dt_db.li calls to set sort functions.
 
 2005-01-22 Perry Rapp
 
