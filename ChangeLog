@@ -1,8 +1,10 @@
 2005-01-13 Perry Rapp
 
-	* ChangeLog build/msvc6/llines/llinesprj.dsp src/gedlib/gengedc.c
-	src/hdrs/llstdlib.h src/hdrs/table.h src/interp/builtin.c
-	src/interp/interp.c src/interp/pvalue.c src/liflines/error.c
+	* ChangeLog build/msvc6/llines/llinesprj.dsp
+	src/gedlib/gengedc.c src/hdrs/llstdlib.h
+	src/hdrs/table.h src/interp/builtin.c
+	src/interp/interp.c src/interp/pvalue.c
+	src/liflines/error.c
 	src/liflines/main.c src/stdlib/table.c
 	*NEW src/stdlib/rbtree.c
 	*NEW src/stdlib/rbtree.h
@@ -12,6 +14,12 @@
 
 	Move table data declarations inside table.c.
 	Add red/black (rbtree.*) and stack (stack.*) modules.
+
+	* ChangeLog src/stdlib/Makefile.am src/tools/btedit.c
+	src/tools/dbverify.c
+
+	Add new files to Makefile.am. Fix __fatal implementations
+	for const-correctness.
 
 2005-01-12 Stephen Dum
 	* ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf 

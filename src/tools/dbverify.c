@@ -1132,7 +1132,7 @@ report_results (void)
  *  handles null or empty details input
  *===========================*/
 void
-__fatal (STRING file, int line, STRING details)
+__fatal (STRING file, int line, CNSTRING details)
 {
 	printf(_("FATAL ERROR: "));
 	if (details && details[0]) {

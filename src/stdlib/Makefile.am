@@ -9,8 +9,9 @@ libstdlib_a_SOURCES = appendstr.c array.c \
 	dirs.c environ.c fpattern.c icvt.c list.c \
 	listener.c lldate.c llstrcmp.c log.c memalloc.c \
 	mychar_funcs.c mychar_tables.c mystring.c object.c \
-	path.c proptbls.c sequence.c \
-	signals.c sprintpic.c stdlibi.h stdstrng.c \
+	path.c proptbls.c rbtree.c sequence.c \
+	signals.c sprintpic.c stack.c \
+	stdlib.c stdlibi.h stdstrng.c \
 	stralloc.c strapp.c strcvt.c strset.c strutf8.c strwhite.c \
 	table.c vtable.c zstr.c
 

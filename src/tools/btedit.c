@@ -114,7 +114,7 @@ main (int argc,
  *  handles null or empty details input
  *===========================*/
 void
-__fatal (STRING file, int line, STRING details)
+__fatal (STRING file, int line, CNSTRING details)
 {
 	printf("FATAL ERROR: ");
 	if (details && details[0]) {
