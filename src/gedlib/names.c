@@ -34,15 +34,19 @@
 #include "btree.h"
 #include "translat.h"
 #include "gedcom.h"
+#include "indiseq.h"
+#include "gedcomi.h"
 
 extern BOOLEAN opt_finnish;
 extern BTREE BTR;
 
 static INT old = 0;
 static INT codeof(int);
+static BOOLEAN exactmatch(STRING, STRING);
 static STRING parts_to_name(STRING*);
 static void name_to_parts(STRING, STRING*);
-static RKEY name2rkey();
+static RKEY name2rkey(STRING);
+static STRING upsurname(STRING);
 static void squeeze(STRING, STRING);
 static STRING nextpiece(STRING);
 static void cmpsqueeze(STRING, STRING);
@@ -467,7 +471,7 @@ replace_name (STRING old,       /* person's old name */
 /*=========================================================
  * exactmatch -- Check if first name is contained in second
  *=======================================================*/
-BOOLEAN
+static BOOLEAN
 exactmatch (STRING partial,             /* name from user */
             STRING complete)    /* GEDCOM name */
 {
@@ -797,7 +801,7 @@ parts_to_name (STRING *parts)
 /*=======================================================
  * upsurname -- Convert GEDCOM surname name to upper case
  *=====================================================*/
-STRING
+static STRING
 upsurname (STRING name)
 {
 	static unsigned char scratch[MAXNAMELEN+1];
