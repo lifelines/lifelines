@@ -149,7 +149,6 @@ __newfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	BOOLEAN aflag;
 	STRING name;
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
-	STRING rptdir=NULL;
 	if (*eflg) {
 		prog_error(node, "1st arg to newfile must be a string.");
 		return NULL;
@@ -169,18 +168,26 @@ __newfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	aflag = (BOOLEAN) pvalue(val);
 	delete_pvalue(val);
+	set_output_file(outfilename, aflag);
+	return NULL;
+}
+BOOLEAN
+set_output_file (STRING outfilename, BOOLEAN append)
+{
+	STRING modestr = append ? LLAPPENDTEXT:LLWRITETEXT;
+	STRING rptdir;
 	if (Poutfp) {
 		finishrassa();
 		fclose(Poutfp);
 		Poutfp = NULL;
 	}
 	rptdir = getoptstr("LLREPORTS", ".");
-	if (!(Poutfp = fopenpath(outfilename,
-			 aflag?LLAPPENDTEXT:LLWRITETEXT, rptdir, NULL, (STRING *)NULL))) {
+	Poutfp = fopenpath(outfilename, modestr, rptdir, NULL, NULL);
+	if (!Poutfp) {
 		msg_error("Could not open file %s", outfilename);
-		return NULL;
+		return FALSE;
 	}
-	return NULL;
+	return TRUE;
 }
 /*====================================+
  * __outfile -- Return output file name

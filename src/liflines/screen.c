@@ -199,7 +199,7 @@ static INT invoke_extra_menu(void);
 static RECORD invoke_scan_menu(void);
 static void invoke_trans_menu(void);
 static void invoke_utils_menu(void);
-static void load_tt_action(UIWINDOW wparent);
+static void load_tt_action(void);
 static void output_menu(UIWINDOW uiwin, INT screen, INT bottom, INT width);
 void place_cursor(void);
 static void place_std_msg(void);
@@ -1647,7 +1647,7 @@ invoke_trans_menu (void)
 		begin_action();
 		switch (code) {
 		case 'e': edit_tt_menu(); break;
-		case 'l': load_tt_action(uiwin); break;
+		case 'l': load_tt_action(); break;
 		case 's': save_tt_action(); break;
 		case 'x': export_tts(); break;
 		case 'i': import_tts(); break;
@@ -1673,7 +1673,7 @@ edit_tt_menu (void)
  * load_tt_action -- menu for "Load translation table"
  *====================================*/
 static void
-load_tt_action (UIWINDOW wparent)
+load_tt_action (void)
 {
 	FILE * fp;
 	STRING fname=0;

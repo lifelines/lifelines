@@ -553,6 +553,7 @@ static STRING
 tn_lineprint (INT width, void * param)
 {
 	NODE_TEXT_PRINT_PARAM ntpp = (NODE_TEXT_PRINT_PARAM)param;
+	width=width; /* unused */
 
 	return ntpp->tn->str;
 }

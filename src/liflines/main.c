@@ -92,14 +92,14 @@ extern BTREE BTR;
 #ifdef FINNISH
 # ifdef FINNISHOPTION
 int opt_finnish  = FALSE;/* Finnish Language sorting order if TRUE */
-static STRING usage = (STRING) "lines [-adkrwifmntcuFy] [database]   # Use -F for Finnish database";
+static STRING usage = (STRING) "lines [-adkrwifmntcuFyxo] [database]   # Use -F for Finnish database";
 # else
 int opt_finnish  = TRUE;/* Finnish Language sorting order if TRUE */
-static STRING usage = (STRING) "lines [-adkrwifmntcuy] [database]   # Finnish database";
+static STRING usage = (STRING) "lines [-adkrwifmntcuyxo] [database]   # Finnish database";
 # endif
 #else
 int opt_finnish  = FALSE;/* Finnish Language sorting order id disabled*/
-static STRING usage = (STRING) "lines [-adkrwifmntcuy] [database]";
+static STRING usage = (STRING) "lines [-adkrwifmntcuyxo] [database]";
 #endif
 
 BOOLEAN debugmode = FALSE;     /* no signal handling, so we can get coredump */
@@ -151,6 +151,9 @@ main (INT argc, char **argv)
 	char lockarg = 0; /* option passed for database lock */
 	INT alteration=0;
 	STRING dbdir = 0;
+	BOOLEAN exprog=FALSE;
+	STRING exprog_name="";
+	STRING progout=NULL;
 
 #ifdef HAVE_SETLOCALE
 	setlocale(LC_ALL, "");
@@ -158,7 +161,7 @@ main (INT argc, char **argv)
 
 	/* Parse Command-Line Arguments */
 	opterr = 0;	/* turn off getopt's error message */
-	while ((c = getopt(argc, argv, "adkrwil:fmntc:Fu:y")) != -1) {
+	while ((c = getopt(argc, argv, "adkrwil:fmntc:Fu:yx:o:")) != -1) {
 		switch (c) {
 		case 'c':	/* adjust cache sizes */
 			while(optarg && *optarg) {
@@ -238,6 +241,13 @@ main (INT argc, char **argv)
 			break;
 		case 'y': /* only look in current path for databases */
 			selftest = TRUE;
+			break;
+		case 'x': /* execute program */
+			exprog = TRUE;
+			exprog_name = optarg;
+			break;
+		case 'o': /* output directory */
+			progout = optarg;
 			break;
 		case '?':
 			showusage = TRUE;
@@ -331,8 +341,16 @@ main (INT argc, char **argv)
 	init_lifelines_db();
 	init_show_module();
 	init_browse_module();
-	while (!alldone)
-		main_menu();
+	if (exprog) {
+		if (progout) {
+			BOOLEAN append=FALSE;
+			set_output_file(progout, append);
+		}
+		interp_program("main", 0, NULL, 1, &exprog_name, NULL, FALSE);
+	} else {
+		while (!alldone)
+			main_menu();
+	}
 	term_show_module();
 	term_browse_module();
 	ok=TRUE;

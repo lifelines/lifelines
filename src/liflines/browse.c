@@ -317,7 +317,6 @@ browse_indi_modes (NODE *pindi1,
 	NODE node, save = NULL, indi = *pindi1;
 	NODE node2;
 	INDISEQ seq = NULL;
-	TRANTABLE ttd = tran_tables[MINDS];
 	char c2;
 
 	addstrings[0] = crtcfm;
@@ -649,6 +648,10 @@ browse_aux (NODE *pindi1, NODE *pindi2, NODE *pfam1,
 	INT nkeyp, auxmode, auxmodep;
 	NODE node;
 	char c2;
+	pindi2=pindi2; /* unused */
+	pfam1=pfam1; /* unused */
+	pfam2=pfam2; /* unused */
+	pseq=pseq; /* unused */
 
 	auxmode = 'x';
 
@@ -880,7 +883,6 @@ browse_fam (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2
 	INDISEQ seq;
 	STRING key, name;
 	char scratch[100];
-	TRANTABLE ttd = tran_tables[MINDS];
 	char c2;
 
 	if (!fam) return BROWSE_QUIT;

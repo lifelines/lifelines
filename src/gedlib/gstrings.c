@@ -199,6 +199,7 @@ even_to_list_string (NODE even, INT len, STRING delim)
 	STRING name, p=scratch;
 	INT mylen=len;
 	TRANTABLE ttd = tran_tables[MINDS];
+	delim=delim; /* unused */
 	if (mylen>(INT)sizeof(scratch))
 		mylen=sizeof(scratch);
 	p[0]=0;
@@ -286,6 +287,7 @@ other_to_list_string(NODE node, INT len, STRING delim)
 	INT mylen=len;
 	TRANTABLE ttd = tran_tables[MINDS];
 	NODE child;
+	delim=delim; /* unused */
 	if (mylen>(INT)sizeof(scratch))
 		mylen=sizeof(scratch);
 	p[0]=0;
@@ -354,16 +356,16 @@ generic_to_list_string (NODE node, STRING key, INT len, STRING delim, RFMT rfmt)
 			str = indi_to_list_string(node, NULL, len, rfmt);
 			break;
 		case 'S':
-			str = sour_to_list_string(node, len, ", ");
+			str = sour_to_list_string(node, len, delim);
 			break;
 		case 'F':
-			str = fam_to_list_string(node, len, ", ");
+			str = fam_to_list_string(node, len, delim);
 			break;
 		case 'E':
-			str = even_to_list_string(node, len, ", ");
+			str = even_to_list_string(node, len, delim);
 			break;
 		case 'X':
-			str = other_to_list_string(node, len, ", ");
+			str = other_to_list_string(node, len, delim);
 			break;
 		}
 	}

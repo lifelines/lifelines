@@ -21,6 +21,13 @@
 	Added chomp function to use after fgets.
 	Fix extractdate to handle NULL input.
 
+	* ChangeLog gedlib/gstrings.c hdrs/interp.h interp/rassa.c
+	liflines/browse.c liflines/main.c liflines/pedigree.c
+	liflines/screen.c:
+
+	Added requested flags to make LifeLines just run a report
+	(-x and -o). (Bit more cleanup)
+
 2002-01-3 Matt Emmerton <memmerto@users.sourceforge.net>
 
 	* ChangeLog gedlib/property.c interp/alloc.c interp/date.c
