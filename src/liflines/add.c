@@ -528,7 +528,8 @@ add_family (RECORD sprec1, RECORD sprec2, RECORD chrec)
 	if (!sprec2)
 		sprec2 = ask_for_indi(_(qSidsps2), NOCONFIRM, DOASK1);
 	if (sprec2) {
-		if ((sex2 = SEX(nztop(sprec2))) == SEX_UNKNOWN || sex1 == sex2) {
+		if ((sex2 = SEX(nztop(sprec2))) == SEX_UNKNOWN || 
+			(traditional && sex1 == sex2)) {
 			message(_(qSnotopp));
 			return NULL;
 		}
@@ -542,17 +543,23 @@ editfam:
 
 	fam1 = create_node(NULL, "FAM", NULL, NULL);
 	husb = wife = chil = NULL;
-	if (spouse1) {
-		if (sex1 == SEX_MALE)
-			husb = create_node(NULL, "HUSB", nxref(spouse1), fam1);
-		else
-			wife = create_node(NULL, "WIFE", nxref(spouse1), fam1);
+	/* support non-traditional families if traditional is false
+	 * to do this we make slightly fib about the use of the
+	 * terms husb and wife in setting up spouse nodes
+	 */
+	if (sex1 == sex2 && sex2 == SEX_FEMALE) {
+	    husb = create_node(NULL, "WIFE", nxref(spouse1), fam1);
+	} else if (sex1 == SEX_MALE ) {
+	    husb = create_node(NULL, "HUSB", nxref(spouse1), fam1);
+	} else if (sex2 == SEX_MALE && sex1 != SEX_MALE) {
+	    husb = create_node(NULL, "HUSB", nxref(spouse2), fam1);
 	}
-	if (spouse2) {
-		if (sex2 == SEX_MALE)
-			husb = create_node(NULL, "HUSB", nxref(spouse2), fam1);
-		else
-			wife = create_node(NULL, "WIFE", nxref(spouse2), fam1);
+	if (sex1 == SEX_FEMALE && sex2 != SEX_FEMALE) {
+	    wife = create_node(NULL, "WIFE", nxref(spouse1), fam1);
+	} else if (sex2 == SEX_FEMALE) {
+	    wife = create_node(NULL, "WIFE", nxref(spouse2), fam1);
+	} else if (sex1 == sex2 && sex2 == SEX_MALE) {
+	    wife = create_node(NULL, "HUSB", nxref(spouse2), fam1);
 	}
 	if (child)
 		chil = create_node(NULL, "CHIL", nxref(child), fam1);
