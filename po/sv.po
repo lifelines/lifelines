@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: lifelines 3.0.40\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-01-14 19:00+0100\n"
-"PO-Revision-Date: 2005-01-14 19:08+0100\n"
+"PO-Revision-Date: 2005-01-14 20:46+0100\n"
 "Last-Translator: Jens Arvidsson <jya@sverige.nu>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1920,7 +1920,7 @@ msgstr "f  Familj - ta bort en familj fullständigt"
 
 #: src/gedlib/messages.c:560
 msgid "o  Other - remove other record completely"
-msgstr "o  Post - ta bort en övrig post fullständigt"
+msgstr "o  Övrig - ta bort en övrig post fullständigt"
 
 #: src/gedlib/messages.c:563
 msgid "How would you like to find a record?"
