@@ -94,6 +94,7 @@ STRING lastpathname(STRING);
 
 /* signals.c */
 void set_signals(void);
+void ll_abort(int);
 
 /* stdstrng.c */
 BOOLEAN allwhite(STRING);
