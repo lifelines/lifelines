@@ -5,6 +5,9 @@
 	(Crashed if you choose "p" then "q" from main menu, after
 	having run a report before.)
 
+	* ChangeLog tools/dbverify.c:
+	Added lifelines version string to dbverify help output.
+
 2001-05-26 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog btree/record.c btree/traverse.c btree/utils.c

@@ -44,6 +44,7 @@
  *********************************************/
 
 extern BTREE BTR;
+extern STRING mtitle;
 
 /*********************************************
  * required global variables
@@ -190,6 +191,8 @@ static STRING lineage_tags[] = {
 static void
 print_usage (void)
 {
+	char verstr[80];
+	sprintf(verstr, mtitle, get_lifelines_version(sizeof(verstr)-1-strlen(mtitle)));
 	printf(
 		"usage: dbverify -(flags) <btree>\n"
 		"flags:\n"
@@ -205,6 +208,7 @@ print_usage (void)
 		"example: dbverify -ifsex \"\\My Documents\\LifeLines\\Databases\\MyFamily\"\n"
 #endif
 		);
+		printf("%s\n", verstr);
 }
 /*========================================
  * report_error -- report some error found
