@@ -120,8 +120,8 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __linemode -- Switch output to line mode
  *   usage: linemode() -> VOID
  *=======================================*/
-PVALUE __linemode (eflg)
-BOOLEAN *eflg;
+PVALUE __linemode (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	outputmode = BUFFERED;
 	linebuflen = 0;
@@ -175,8 +175,8 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __outfile -- Return output file name
  *   usage: outfile() -> STRING
  *===================================*/
-PVALUE __outfile (eflg)
-BOOLEAN *eflg;
+PVALUE __outfile (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	if (!Poutfp) {
 		Poutfp = ask_for_file(LLWRITETEXT, whtout, &outfilename, llreports, NULL);
@@ -273,8 +273,8 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __getcol -- Return current column
  *   usage: getcol() -> INT
  *================================*/
-PVALUE __getcol (eflg)
-BOOLEAN *eflg;
+PVALUE __getcol (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	*eflg = FALSE;
 	return create_pvalue(PINT, (WORD)curcol);
@@ -283,8 +283,8 @@ BOOLEAN *eflg;
  * __pageout -- Output current page and clear page buffer
  *   usage: pageout() -> VOID
  *====================================================*/
-PVALUE __pageout (eflg)
-BOOLEAN *eflg;
+PVALUE __pageout (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	char scratch[MAXCOLS+2];
 	STRING p;
