@@ -2657,11 +2657,15 @@ __extractdate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE yvar = inext(mvar);
 	GDATEVAL gdv = 0;
 	if (*eflg) {
-		prog_error(node, nonnodx, "extractdate", "1");
+		prog_var_error(node, stab, arg, val, nonnodx, "extractdate", "1");
 		return NULL;
 	}
 	line = pvalue_to_node(val);
-	*eflg = TRUE;
+	*eflg = TRUE; /* error if we don't make it all the way through */
+	if (!line) {
+		prog_var_error(node, stab, arg, val, nonnodx, "extractdate", "1");
+		return NULL;
+	}
 	if (!iistype(dvar, IIDENT)) {
 		prog_error(node, nonvarx, "extractdate", "2");
 		return NULL;

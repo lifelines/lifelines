@@ -1,3 +1,9 @@
+2003-02-17 Perry Rapp
+
+	* ChangeLog src/interp/builtin.c:
+
+	Fix crash if null first arg to extractdate.
+
 2003-02-12 Perry Rapp
 
 	* ChangeLog po/fr.po src/btree/record.c src/hdrs/version.h
