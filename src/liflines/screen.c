@@ -169,6 +169,7 @@ static void test_locale_name(void);
 #endif
 static INT choose_tt(STRING prompt);
 static void clear_msgs(void);
+static void clear_status(void);
 static void clearw(void);
 static UIWINDOW create_uisubwindow(UIWINDOW parent, INT rows, INT cols, INT begy, INT begx);
 static UIWINDOW create_uisubwindow2(UIWINDOW parent, INT rows, INT cols);
@@ -577,6 +578,8 @@ check_stdout (void)
 		(void) wgetch(uiw_win(stdout_win));
 		nocrmode();
 		stdout_vis = FALSE;
+		/* ok the status string was available until they struck a key */
+		clear_status();
 	}
 }
 /*=====================================
@@ -650,7 +653,7 @@ run_report (BOOLEAN picklist)
 	*/
 /*	begin_action();*/
 	interp_main(picklist);
-	if (length_list(msg_list) < 8)
+	if (!status_showing[0] && length_list(msg_list)<8)
 		clear_msgs();
 /*	end_action();*/
 }
@@ -3004,6 +3007,8 @@ void end_action (void)
 }
 /*=========================================
  * clear_msgs -- delete msg list
+ *  The msg list holds messages when several
+ *  occurred during the last operation
  * Created: 2001/11/11, Perry Rapp
  *=======================================*/
 static void
@@ -3015,6 +3020,17 @@ clear_msgs (void)
 	}
 	msg_flag = FALSE;
 	/* also clear status bar */
+	clear_status();
+}
+/*=========================================
+ * clear_status -- clear status string
+ *  The status string is the last message displayed
+ *  and is shown at the very bottom of the main screen
+ * Created: 2002/02/16, Perry Rapp
+ *=======================================*/
+static void
+clear_status (void)
+{
 	if (!lock_std_msg)
 		status_showing[0]=0;
 }

@@ -46,7 +46,7 @@
 #	undef max
 #endif
 
-extern STRING deflocale;
+extern STRING deflocale_coll;
 
 /*********************************************
  * local types
@@ -546,12 +546,12 @@ get_sort_desc (STRING buffer, INT max, STRING locVarName)
 		if (str) {
 			sprintpic0(buffer, max, str);
 		} else {
-			str = deflocale;
+			str = deflocale_coll;
 			sprintpic2(buffer, max, _("(Invalid: %1) default: %2")
 				, optval, str);
 		}
 	} else {
-		str = deflocale;
+		str = deflocale_coll;
 		sprintpic1(buffer, max, _("default: %1"), str);
 	}
 #else
@@ -621,7 +621,7 @@ uilocale (void)
 		str = setlocale(LC_COLLATE, str);
 	/* if unspecified or illegal user value, use default */
 	if (!str)
-		setlocale(LC_COLLATE, deflocale);
+		setlocale(LC_COLLATE, deflocale_coll);
 #endif
 }
 /*==========================================
@@ -638,6 +638,6 @@ rptlocale (void)
 		str = setlocale(LC_COLLATE, str);
 	/* if unspecified or illegal user value, use default */
 	if (!str)
-		setlocale(LC_COLLATE, deflocale);
+		setlocale(LC_COLLATE, deflocale_coll);
 #endif
 }

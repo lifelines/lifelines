@@ -332,6 +332,10 @@ parse_file (STRING ifile,
 void
 interp_main (BOOLEAN picklist)
 {
+	/* whilst still in uilocale, check if we need to reload report strings
+	(in case first time or uilocale changed) */
+	interp_load_lang();
+
 	rptlocale();
 	interp_program("main", 0, NULL, 0, NULL, NULL, picklist);
 	uilocale();

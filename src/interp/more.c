@@ -50,6 +50,7 @@
  *********************************************/
 
 extern STRING notone, ifone, progname;
+extern STRING nonlstx,nonvarx,nonnodx;
 
 /*********************************************
  * local function prototypes
@@ -93,14 +94,14 @@ __extractnames (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val = eval_and_coerce(PGNODE, nexp, stab, eflg);
 
 	if (*eflg) {
-		prog_error(node, "1st arg to extractnames is not a record line");
+		prog_error(node, nonnodx, "extractnames", "1");
 		return NULL;
 	}
 	line = (NODE) pvalue(val);
 	delete_pvalue(val);
 	val = eval_and_coerce(PLIST, lexp, stab, eflg);
 	if (*eflg) {
-		prog_error(node, "2nd arg to extractnames is not a list");
+		prog_error(node, nonlstx, "extractnames", "2");
 		return NULL;
 	}
 	list = (LIST) pvalue(val);
@@ -111,26 +112,30 @@ __extractnames (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		list = create_list();
 	*eflg = TRUE;
 	if (!iistype(lvar, IIDENT)) {
-		prog_error(node, "3rd arg to extractnames must be a variable");
+		prog_error(node, nonvarx, "extractnames", "3");
 		return NULL;
 	}
 	if (!iistype(svar, IIDENT)) {
-		prog_error(node, "4th arg to extractnames must be a variable");
+		prog_error(node, nonvarx, "extractnames", "4");
 		return NULL;
 	}
-	if (strcmp("NAME", ntag(line)) && !(line = NAME(line))) {
-		prog_error(node, "1st arg to extractnames doesn't lead to a NAME line");
-		return NULL;
-	}
-	insert_symtab(stab, iident(lvar), PINT, (VPTR)0);
+	/* if it isn't a NAME line, look under it for a NAME line */
+	if (!eqstr("NAME", ntag(line)))
+		line = NAME(line);
+	/* now create all the values, whether or not we found a NAME line */
 	*eflg = FALSE;
-	str = nval(line);
-	if (!str || *str == 0) return NULL;
+	str = (line ? nval(line) : 0);
 	temp = create_list();
-	name_to_list(str, temp, &len, &sind);
-	FORLIST(temp, el)
-		push_list(list, create_pvalue(PSTRING, (VPTR)el));
-	ENDLIST
+	if (str && str[0]) {
+		name_to_list(str, temp, &len, &sind);
+		FORLIST(temp, el)
+			push_list(list, create_pvalue(PSTRING, (VPTR)el));
+		ENDLIST
+	} else {
+		/* no NAME line or empty NAME line */
+		len = 0;
+		sind = 0;
+	}
 	insert_symtab(stab, iident(lvar), PINT, (VPTR)len);
 	insert_symtab(stab, iident(svar), PINT, (VPTR)sind);
 	return NULL;

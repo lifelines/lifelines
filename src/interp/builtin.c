@@ -299,26 +299,26 @@ __fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	indi = eval_indi(arg, stab, eflg, NULL);
 	if (*eflg || !indi) {
 		*eflg = TRUE;
-		prog_error(node, nonindx, "fullname", 1);
+		prog_error(node, nonindx, "fullname", "1");
 		return NULL;
 	}
 	val = eval_and_coerce(PBOOL, arg = inext(arg), stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonboox, "fullname", 2);
+		prog_error(node, nonboox, "fullname", "2");
 		return NULL;
 	}
 	caps = (BOOLEAN) pvalue(val);
 	delete_pvalue(val);
 	val = eval_and_coerce(PBOOL, arg = inext(arg), stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonboox, "fullname", 3);
+		prog_error(node, nonboox, "fullname", "3");
 		return NULL;
 	}
 	myreg = (BOOLEAN) pvalue(val);
 	delete_pvalue(val);
 	val = eval_and_coerce(PINT, arg = inext(arg), stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonintx, "fullname", 4);
+		prog_error(node, nonintx, "fullname", "4");
 		return NULL;
 	}
 	len = (INT) pvalue(val);
@@ -444,7 +444,7 @@ __set (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val;
 	if (!iistype(var, IIDENT)) {
 		*eflg = TRUE;
-		prog_error(node, nonvarx, "set", 1);
+		prog_error(node, nonvarx, "set", "1");
 		return NULL;
 	}
 	val = evaluate(expr, stab, eflg);
@@ -2063,13 +2063,10 @@ __key (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __rot (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	STRING key;
  	PVALUE val = evaluate(iargs(node), stab, eflg);
- 	CACHEEL cel;
-	NODE gnode=0;
-	if (*eflg || !val || !is_record_pvalue(val)) {
+	if (*eflg || !val) {
 		*eflg = TRUE;
-		prog_error(node, "the arg to root is not a record");
+		prog_error(node, "error in the arg to root");
 		return NULL;
 	}
 	if (!is_record_pvalue(val)) {
@@ -2077,16 +2074,33 @@ __rot (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "the arg to root must be a record");
 		return NULL;
 	}
-	cel = get_cel_from_pvalue(val); /* may be NULL */
-	if (!cel) {
+	if (!record_to_node(val)) {
 		*eflg = TRUE;
-		prog_error(node, "the arg to root must be a record");
+		prog_error(node, "record passed to root missing from database");
 		return NULL;
 	}
+	return val;
+}
+/*==============================================+
+ * record_to_node -- Extract root node from record
+ *  used by root & for implicit conversion
+ * Created: 2002/02/16, Perry Rapp (pulled out of root)
+ *=============================================*/
+BOOLEAN
+record_to_node (PVALUE val)
+{
+ 	CACHEEL cel = get_cel_from_pvalue(val); /* may be NULL */
+	STRING key;
+	NODE gnode=0;
+
+	if (!cel) return FALSE;
+	
+	/* is it loaded into cache ? */
 	if (cnode(cel)) {
 		set_pvalue(val, PGNODE, (VPTR)cnode(cel));
-		return val;
+		return TRUE;
 	}
+	/* no, okay, load it into cache */
 	key = ckey(cel);
 	switch (*key) {
 	case 'I': gnode = key_to_indi(key); break;
@@ -2097,7 +2111,7 @@ __rot (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	default:  FATAL();
 	}
 	set_pvalue(val, PGNODE, (VPTR)gnode); 
-	return val;
+	return TRUE;
 }
 /*================================+
  * __inode -- Return root of person
@@ -2248,7 +2262,7 @@ __lookup (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	delete_pvalue(val);
 	val = eval_and_coerce(PSTRING, inext(arg), stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonstrx, "lookup", 2);
+		prog_error(node, nonstrx, "lookup", "2");
 		return NULL;
 	}
 	str = (STRING) pvalue(val);
@@ -2277,12 +2291,12 @@ __trim (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	INT len;
         val1 = eval_and_coerce(PSTRING, arg, stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonstrx, "trim", 1);
+		prog_error(node, nonstrx, "trim", "1");
 		return NULL;
 	}
 	val2 = eval_and_coerce(PINT, inext(arg), stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonintx, "trim", 2);
+		prog_error(node, nonintx, "trim", "2");
 		return NULL;
 	}
 	str = (STRING) pvalue(val1);
@@ -2320,7 +2334,7 @@ __trimname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	*eflg = FALSE;
 	val = eval_and_coerce(PINT, inext(arg), stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonintx, "trimname", 2);
+		prog_error(node, nonintx, "trimname", "2");
 		return NULL;
 	}
 	len = (INT) pvalue(val);
@@ -2380,15 +2394,15 @@ __extractdate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	line = (NODE) pvalue(val);
 	*eflg = TRUE;
 	if (!iistype(dvar, IIDENT)) {
-		prog_error(node, nonvarx, "extractdate", 2);
+		prog_error(node, nonvarx, "extractdate", "2");
 		return NULL;
 	}
 	if (!iistype(mvar, IIDENT)) {
-		prog_error(node, nonvarx, "extractdate", 3);
+		prog_error(node, nonvarx, "extractdate", "3");
 		return NULL;
 	}
 	if (!iistype(yvar, IIDENT)) {
-		prog_error(node, nonvarx, "extractdate", 4);
+		prog_error(node, nonvarx, "extractdate", "4");
 		return NULL;
 	}
 	if (nestr("DATE", ntag(line)))
@@ -2428,23 +2442,23 @@ __extractdatestr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	GDATEVAL gdv = 0;
 	*eflg = TRUE;
 	if (!iistype(modvar, IIDENT)) {
-		prog_error(node, nonvarx, "extractdatestr", 1);
+		prog_error(node, nonvarx, "extractdatestr", "1");
 		return NULL;
 	}
 	if (!iistype(dvar, IIDENT)) {
-		prog_error(node, nonvarx, "extractdatestr", 2);
+		prog_error(node, nonvarx, "extractdatestr", "2");
 		return NULL;
 	}
 	if (!iistype(mvar, IIDENT)) {
-		prog_error(node, nonvarx, "extractdatestr", 3);
+		prog_error(node, nonvarx, "extractdatestr", "3");
 		return NULL;
 	}
 	if (!iistype(yvar, IIDENT)) {
-		prog_error(node, nonvarx, "extractdatestr", 4);
+		prog_error(node, nonvarx, "extractdatestr", "4");
 		return NULL;
 	}
 	if (!iistype(ystvar, IIDENT)) {
-		prog_error(node, nonvarx, "extractdatestr", 5);
+		prog_error(node, nonvarx, "extractdatestr", "5");
 		return NULL;
 	}
 	if ((date = inext(ystvar))) {
@@ -2452,7 +2466,7 @@ __extractdatestr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		if (*eflg) return NULL;
 		if (ptype(val) != PSTRING) {
 			*eflg = TRUE;
-			prog_error(node, nonstrx, "extractdatestr", 6);
+			prog_error(node, nonstrx, "extractdatestr", "6");
 			delete_pvalue(val);
 			return NULL;
 		}
@@ -2671,7 +2685,7 @@ __datepic (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	STRING str;
 	PVALUE val = eval_and_coerce(PSTRING, arg, stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonstrx, "datepic", 1);
+		prog_error(node, nonstrx, "datepic", "1");
 		return NULL;
 	}
 	str = (STRING) pvalue(val);
@@ -2696,14 +2710,14 @@ __complexpic (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	BOOLEAN ok;
 	PVALUE val = eval_and_coerce(PINT, arg, stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonintx, "complexpic", 1);
+		prog_error(node, nonintx, "complexpic", "1");
 		return NULL;
 	}
 	ecmplx = (INT) pvalue(val);
 	delete_pvalue(val);
 	val = eval_and_coerce(PSTRING, arg = inext(arg), stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonstrx, "complexpic", 2);
+		prog_error(node, nonstrx, "complexpic", "2");
 		return NULL;
 	}
 	str = (STRING) pvalue(val);

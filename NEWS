@@ -2,6 +2,13 @@ LifeLines Source Release, Version 3.0.7
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
+New Features Added in 3.0.11
+============================
+
+- INDIs without NAMEs are now allowed.
+
+- Records (INDI etc) implicitly convertible to NODEs in reports.
+
 New Features Added in 3.0.7
 ===========================
 
@@ -38,7 +45,7 @@ New Features Added in 3.0.7
 
 - Detail area in popup lists (accessible via [ and ] keys).
 
-- New report date commands: titlecase, yearformat, originformat, datepic
+- New report date commands: titlecase, yearformat, eraformat, datepic
   complexpic
 
 - New report command to help debug reports: global(explicitvars)

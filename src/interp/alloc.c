@@ -32,6 +32,13 @@
  *   3.0.3 - 10 Aug 95
  *===========================================================*/
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+#include "sys_inc.h"
+#ifdef HAVE_LOCALE_H
+#include <locale.h>
+#endif
 #include "llstdlib.h"
 #include "table.h"
 #include "translat.h"
@@ -42,11 +49,36 @@
 #include "feedback.h"
 
 /*********************************************
+ * global/exported variables
+ *********************************************/
+
+/* reused report language error strings */
+STRING nonint1     = 0;
+STRING nonstr1     = 0;
+STRING nullarg1    = 0;
+STRING nonfname1   = 0;
+STRING nonfam1     = 0;
+STRING nonnodstr1  = 0;
+STRING nonind1     = 0;
+STRING nonvar1     = 0;
+STRING nonvarx     = 0;
+STRING nonstrx     = 0;
+STRING nonintx     = 0;
+STRING nonboox     = 0;
+STRING nonlstx     = 0;
+STRING nonindx     = 0;
+STRING nonnodx     = 0;
+STRING badargs     = 0;
+
+/*********************************************
  * external/imported variables
  *********************************************/
 
 extern STRING ierror;
 extern STRING Pfname;
+
+
+
 
 /*********************************************
  * local types
@@ -76,9 +108,10 @@ static void verify_builtins(void);
  * local variables
  *********************************************/
 
-static PNODE free_list = 0;
-static INT live_pnodes = 0;
 static PN_BLOCK block_list = 0;
+static PNODE free_list = 0;
+static STRING interp_locale = 0;
+static INT live_pnodes = 0;
 
 /*********************************************
  * local & exported function definitions
@@ -621,6 +654,88 @@ init_interpreter (void)
 {
 	verify_builtins();
 }
+/*=============================
+ * shutdown_interpreter -- shutdown code for
+ *  interpreter at program end
+ * Created: 2002/02/16, Perry Rapp
+ *===========================*/
+void
+shutdown_interpreter (void)
+{
+	if (nonint1) stdfree(nonint1);
+	if (nonstr1) stdfree(nonstr1);
+	if (nullarg1) stdfree(nullarg1);
+	if (nonfname1) stdfree(nonfname1);
+	if (nonfam1) stdfree(nonfam1);
+	if (nonnodstr1) stdfree(nonnodstr1);
+	if (nonind1) stdfree(nonind1);
+	if (nonvar1) stdfree(nonvar1);
+	if (nonvarx) stdfree(nonvarx);
+	if (nonstrx) stdfree(nonstrx);
+	if (nonintx) stdfree(nonintx);
+	if (nonboox) stdfree(nonboox);
+	if (nonlstx) stdfree(nonlstx);
+	if (nonindx) stdfree(nonindx);
+	if (nonnodx) stdfree(nonnodx);
+	if (badargs) stdfree(badargs);
+	if (interp_locale) stdfree(interp_locale);
+}
+/*=============================
+ * interp_load_lang -- Load the common
+ *  error msgs for current locale
+ * Created: 2002/02/16, Perry Rapp
+ *===========================*/
+void
+interp_load_lang (void)
+{
+#ifdef HAVE_SETLOCALE
+	STRING cur_locale = setlocale(LC_COLLATE, NULL);
+	if (interp_locale) {
+		/* using LC_COLLATE because Win32 lacks LC_MESSAGES */
+		if (eqstr(interp_locale, cur_locale))
+			return;
+		stdfree(interp_locale);
+	}
+	interp_locale = strsave(cur_locale);
+#else
+	if (interp_locale)
+		return
+	interp_locale = strsave("C");
+#endif
+	if (nonint1) stdfree(nonint1);
+	nonint1     = strsave(_("%s: the arg must be an integer."));
+	if (nonstr1) stdfree(nonstr1);
+	nonstr1     = strsave(_("%s: the arg must be a string."));
+	if (nullarg1) stdfree(nullarg1);
+	nullarg1    = strsave(_("%s: null arg not permissible."));
+	if (nonfname1) stdfree(nonfname1);
+	nonfname1   = strsave(_("%s: the arg must be a filename."));
+	if (nonfam1) stdfree(nonfam1);
+	nonfam1     = strsave(_("%s: the arg must be a family."));
+	if (nonnodstr1) stdfree(nonnodstr1);
+	nonnodstr1  = strsave(_("%s: the arg must be a node or string."));
+	if (nonind1) stdfree(nonind1);
+	nonind1     = strsave(_("%s: the arg must be a person."));
+	if (nonvar1) stdfree(nonvar1);
+	nonvar1     = strsave(_("%s: the arg must be a variable."));
+	if (nonvarx) stdfree(nonvarx);
+	nonvarx     = strsave(_("%s: the arg #%s must be a variable."));
+	if (nonstrx) stdfree(nonstrx);
+	nonstrx     = strsave(_("%s: the arg #%s must be a string."));
+	if (nonintx) stdfree(nonintx);
+	nonintx     = strsave(_("%s: the arg #%s must be an integer."));
+	if (nonboox) stdfree(nonboox);
+	nonboox     = strsave(_("%s: the arg #%s must be a boolean."));
+	if (nonlstx) stdfree(nonlstx);
+	nonlstx    = strsave(_("%s: the arg #%s must be a list."));
+	if (nonindx) stdfree(nonindx);
+	nonindx     = strsave(_("%s: the arg #%s must be a person."));
+	if (nonnodx) stdfree(nonnodx);
+	nonnodx     = strsave(_("%s: the arg #%s must be a node."));
+	if (badargs) stdfree(badargs);
+	badargs     = strsave(_("%s: Bad argument(s)"));
+}
+
 /*=============================
  * verify_builtins -- check that builtins are in order
  * Created: 2001/06/10, Perry Rapp

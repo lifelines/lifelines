@@ -120,14 +120,15 @@ BOOLEAN selftest = FALSE;      /* selftest rules (ignore paths) */
 BOOLEAN showusage = FALSE;     /* show usage */
 STRING  btreepath = NULL;      /* database path given by user */
 STRING  readpath = NULL;       /* database path used to open */
-STRING  deflocale = "C";       /* fallback for invalid user options */
+STRING  deflocale_coll = NULL; /* fallback for invalid user options */
 
 /*********************************************
  * local function prototypes
  *********************************************/
 
 static BOOLEAN is_unadorned_directory(STRING path);
-static BOOLEAN open_or_create_database(INT alteration, STRING dbrequested, STRING dbused);
+static BOOLEAN open_or_create_database(INT alteration, STRING dbrequested
+	, STRING *dbused);
 static void platform_init(void);
 static void show_open_error(INT dberr);
 
@@ -159,7 +160,7 @@ main (INT argc, char **argv)
 	BOOLEAN graphical=TRUE;
 
 #ifdef HAVE_SETLOCALE
-	deflocale = strsave(setlocale(LC_ALL, ""));
+	deflocale_coll = strsave(setlocale(LC_COLLATE, NULL));
 #endif
 
 	/* Parse Command-Line Arguments */
@@ -324,12 +325,14 @@ main (INT argc, char **argv)
 		/* ask_for_db_filename returns static buffer, we save it below */
 		dbrequested = ask_for_db_filename(idldir, "enter path: ", dbdir);
 		if (ISNULL(dbrequested)) {
+			dbrequested = NULL;
 			llwprintf(iddbse);
 			goto finish;
 		}
 	} else {
 		dbrequested = argv[optind];
 		if (ISNULL(dbrequested)) {
+			dbrequested = NULL;
 			showusage = TRUE;
 			goto usage;
 		}
@@ -343,7 +346,7 @@ main (INT argc, char **argv)
 	if (!dbused) dbused = dbrequested;
 	dbused = strsave(dbused);
 
-	if (!open_or_create_database(alteration, dbrequested, dbused))
+	if (!open_or_create_database(alteration, dbrequested, &dbused))
 		goto finish;
 
 	/* Start Program */
@@ -364,17 +367,16 @@ main (INT argc, char **argv)
 	term_browse_module();
 	ok=TRUE;
 
-/*
- * MTE:  Here's were we would free() or deallocate() the dup'd strings
- * returned by strsave() and assigned to lldatabases and btreepath
- */
-
 finish:
-	stdfree(dbused);
-	stdfree(dbrequested);
+	/* we free this not because we care so much about these tiny amounts
+	of memory, but to ensure we have the memory management right */
+	if (dbused) strfree(&dbused);
+	if (dbrequested) strfree(&dbrequested);
+	if (btreepath) strfree(&btreepath);
+	shutdown_interpreter();
 	close_lifelines();
 	shutdown_ui(!ok);
-	strfree(&deflocale);
+	strfree(&deflocale_coll);
 
 usage:
 	/* Display Command-Line Usage Help */
@@ -441,15 +443,17 @@ is_unadorned_directory (STRING path)
  *  creating new one if it doesn't exist
  * if fails, displays error (show_open_error) and returns 
  *  FALSE
- * dbrequested database specified by user
- * dbused: actual database path (may be relative also, if not found yet)
+ *  alteration:   [IN]  flags for locking, forcing open...
+ *  dbrequested:  [IN]  database specified by user (usually relative)
+ *  dbused:       [I/O] actual database path (may be relative)
+ * If this routine creates new database, it will alter dbused
  * Created: 2001/04/29, Perry Rapp
  *================================================*/
 static BOOLEAN
-open_or_create_database (INT alteration, STRING dbrequested, STRING dbused)
+open_or_create_database (INT alteration, STRING dbrequested, STRING *dbused)
 {
 	/* Open Database */
-	if (open_database(alteration, dbrequested, dbused))
+	if (open_database(alteration, dbrequested, *dbused))
 		return TRUE;
 	/* filter out real errors */
 	if (bterrno != BTERR_NODB && bterrno != BTERR_NOKEY)
@@ -467,10 +471,10 @@ open_or_create_database (INT alteration, STRING dbrequested, STRING dbused)
 	making a new one 
 	If no database directory specified, add prefix llnewdbdir
 	*/
-	if (!selftest && is_unadorned_directory(dbused)) {
+	if (!selftest && is_unadorned_directory(*dbused)) {
 		STRING newdbdir = getoptstr("LLNEWDBDIR", ".");
-		STRING temp = dbused;
-		dbused = strsave(concat_path(newdbdir, dbused));
+		STRING temp = *dbused;
+		*dbused = strsave(concat_path(newdbdir, *dbused));
 		stdfree(temp);
 	}
 
@@ -479,7 +483,7 @@ open_or_create_database (INT alteration, STRING dbrequested, STRING dbused)
 		return FALSE;
 
 	/* try to make a new db */
-	if (create_database(dbrequested, dbused))
+	if (create_database(dbrequested, *dbused))
 		return TRUE;
 
 	show_open_error(bterrno);

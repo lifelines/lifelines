@@ -1,3 +1,19 @@
+2002-02-16 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog NEWS gedlib/messages.c gedlib/translat.c
+	hdrs/interp.h interp/alloc.c interp/builtin.c interp/interp.c
+	interp/more.c interp/pvalue.c liflines/main.c
+	liflines/screen.c tools/dbverify.c:
+
+	Fix extractnames to handle missing name (& to set all
+	variables if empty name). Modify value conversion to 
+	convert implicitly from record to (root) node. Improved
+	comments in coerce_pvalue.
+	Add interpreter locale reload for common error functions.
+	Bugfix for dbused crash if user didn't specify database
+	(in main.c).
+	Bugfix for status msg getting lost when report finished.
+
 2002-02-15 Perry Rapp <puddle@users.sourceforge.net>
 
 	.linesrc ChangeLog lines.cfg gedlib/gedcom.c gedlib/indiseq.c

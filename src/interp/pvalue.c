@@ -819,75 +819,91 @@ coerce_pvalue (INT type, PVALUE val, BOOLEAN *eflg)
 #endif
 	if (*eflg) return;
 	ASSERT(is_pvalue(val));
+
 	if (type == ptype(val)) return;
 	u.w = pvalue(val);
-	if (type == PBOOL) {	 /* Handle PBOOL as special case */
+
+	/* Anything is convertible to PBOOL */
+	if (type == PBOOL) {
 		set_pvalue(val, PBOOL, (VPTR)(u.w != NULL));
 		return;
 	}
-	if (type == PANY) {	/* Handle PANY as a special case */
+	/* Anything is convertible to PANY */
+	/* Perry, 2002.02.16: This looks suspicious to me, but I 
+	don't know how it is used -- it might be used in some
+	eq_conform_pvalues call(s) ? */
+	if (type == PANY) {
 		ptype(val) = PANY;
 		return;
 	}
-/* NEW - 7/31/95 */
-	/* PANY or PINT with NULL (0) value is convertible to any scalar */
+
+	/* PANY or PINT with NULL (0) value is convertible to any scalar (1995.07.31) */
 	if ((ptype(val) == PANY || ptype(val) == PINT) && pvalue(val) == NULL) {
 		if (type == PSET || type == PTABLE || type == PLIST) goto bad;
 		ptype(val) = type;
 		return;
 	}
-/* END */
+
+	/* Any record is convertible to PGNODE (2002.02.16) */
+	if (type == PGNODE) {
+		if (is_record_pvalue(val) && record_to_node(val)) {
+			return;
+		} else {
+			/* nothing else is convertible to PGNODE */
+			goto bad;
+		}
+	}
 
 	switch (ptype(val)) { /* switch on what we have */
 
 	case PINT:
-		switch (type) { /* what we desire */
-		case PINT: return;
-		case PFLOAT:
-			{
-				/* this is ugly -- make one & copy it bitwise */
-				PVALUE valnew = create_pvalue_from_float(u.i);
-				ptype(val) = ptype(valnew);
-				pvalue(val) = pvalue(valnew);
-				ptype(valnew)=PNONE; /* clear this so it doesn't get cleaned */
-				return;
-			}
-		default: goto bad;
+		if (type == PFLOAT) {
+			/* PINT is convertible to PFLOAT */
+			/* this is ugly -- make one & copy it bitwise */
+			PVALUE valnew = create_pvalue_from_float(u.i);
+			ptype(val) = ptype(valnew);
+			pvalue(val) = pvalue(valnew);
+			ptype(valnew)=PNONE; /* clear this so it doesn't get cleaned */
+			return;
+		} else {
+			/* PINT isn't convertible to anything else */
+			goto bad;
 		}
 		break;
 	case PFLOAT:
-		switch (type) {
-		case PINT: u.i = float_to_int(get_pvalue_float(val)); break;
-		case PFLOAT: return;
-		default: goto bad;
+		if (type == PINT) {
+			/* PFLOAT is convertible to PINT */
+			u.i = float_to_int(get_pvalue_float(val));
+		} else {
+			/* PFLOAT isn't convertible to anything else */
+			goto bad;
 		}
 		break;
 	case PBOOL:
-		switch (type) {
-		case PINT: u.i = bool_to_int((BOOLEAN)u.w); break;
-		case PFLOAT:
-			{
-				float fval = bool_to_float((BOOLEAN)u.w);
-				PVALUE valnew = create_pvalue_from_float(fval);
-				ptype(val) = ptype(valnew);
-				pvalue(val) = pvalue(valnew);
-				return;
-			}
-		default: goto bad;
+		if (type == PINT) {
+			/* PBOOL is convertible to PINT */
+			u.i = bool_to_int((BOOLEAN)u.w);
+		} else if (type == PFLOAT) {
+			/* PBOOL is convertible to PFLOAT */
+			float fval = bool_to_float((BOOLEAN)u.w);
+			PVALUE valnew = create_pvalue_from_float(fval);
+			ptype(val) = ptype(valnew);
+			pvalue(val) = pvalue(valnew);
+			return;
+		} else {
+			/* PBOOL isn't convertible to anything else */
+			goto bad;
 		}
 		break;
-	case PINDI:
-		goto bad;
-	case PANY:
-		goto bad;
-	case PGNODE:
-		goto bad;
+	/* Nothing else is convertible to anything else */
+	/* record types (PINDI...), PANY, PGNODE */
 	default:
 		goto bad;
 	}
 	ptype(val) = type;
 	pvalue(val) = u.w;
 	return;
+
 bad:
 	*eflg = TRUE;
 	return;

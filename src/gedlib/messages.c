@@ -278,21 +278,6 @@ STRING rernwt      = SS "Line %d: This line needs white space before tag.";
 STRING rerilv      = SS "Line %d: This line has an illegal level.";
 STRING rerwlv      = SS "The record begins at wrong level.";
 
-/* report language errors */
-STRING nonint1     = SS "In %s the arg must be an integer.";
-STRING nonstr1     = SS "In %s the arg must be a string.";
-STRING nullarg1    = SS "The arg to %s is null (not permissible).";
-STRING nonfname1   = SS "In %s the arg must be a filename.";
-STRING nonfam1     = SS "In %s the arg must be a family.";
-STRING nonnodstr1  = SS "In %s the arg must be a node or string.";
-STRING nonind1     = SS "In %s the arg must be a person.";
-STRING nonvar1     = SS "In %s the arg must be a variable.";
-STRING nonvarx     = SS "In %s the arg #%d must be a variable.";
-STRING nonstrx     = SS "In %s the arg #%d must be a string.";
-STRING nonintx     = SS "In %s the arg #%d must be an integer.";
-STRING nonboox     = SS "In %s the arg #%d must be a boolean.";
-STRING nonindx     = SS "In %s the arg #%d must be a person.";
-STRING badargs     = SS "Bad argument(s) to %s";
 
 /* browse display stuff */
 STRING dspl_indi   = SS "person";
