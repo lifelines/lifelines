@@ -33,7 +33,7 @@
 
 #include "sys_inc.h"
 #include <stdarg.h>
-#include "standard.h"
+#include "llstdlib.h"
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
@@ -41,6 +41,8 @@
 #include "interp.h"
 #include "screen.h"
 #include "liflines.h"
+
+#include "llinesi.h"
 
 #define LINESREQ 24
 #define COLSREQ  80
@@ -1246,32 +1248,15 @@ void
 llwprintf (STRING fmt, ...)
 {
 	va_list args;
+
+        if (!stdout_vis) clearw();
+
 	va_start(args, fmt);
 	llvwprintf(fmt, args);
 	va_end(args);
-}
 
-#ifdef OBSOLETE
-/*=================================================
- * llwprintf -- Called as wprintf(fmt, arg, arg, ...)
- *===============================================*/
-llwprintf (fmt, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
-STRING fmt;
-INT arg1, arg2, arg3, arg4, arg5, arg6, arg7;
-{
-#if 0
-        if (!stdout_vis) clearw();
-        wprintw(stdout_win, fmt, arg1, arg2, arg3, arg4, arg5,
-            arg6, arg7);
-#else
-        char s[300];
-        if (!stdout_vis) clearw();
-        sprintf (s, fmt, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
-        waddstr (stdout_win, s);
-#endif
-        wrefresh(stdout_win);
+	wrefresh(stdout_win);
 }
-#endif
 /*==============================
  * clearw -- Clear stdout window
  *============================*/

@@ -31,19 +31,11 @@
  *   3.0.3 - 02 Jul 96
  *===========================================================*/
 
-#include <stdlib.h>
-#include <ctype.h>
-#ifndef WIN32
-#include <unistd.h>
-#else
-#include <dos.h>
-#endif
+#include "sys_inc.h"
 #ifdef OS_LOCALE
 #include <locale.h>
 #endif
-#include <sys/types.h>
-#include <sys/stat.h>
-#include "standard.h"
+#include "llstdlib.h"
 #include "screen.h"
 #include "btree.h"
 #include "table.h"
@@ -108,9 +100,9 @@ char *getenv();
 STRING lldatabases;
 STRING filepath();
 
-static void exit_it (INT);
-static void show_open_error (void);
-static BOOLEAN trytocreate (STRING path);
+static void exit_it(INT);
+static void show_open_error(void);
+static BOOLEAN trytocreate(STRING);
 
 /*==================================
  * main -- Main routine of LifeLines
@@ -303,7 +295,7 @@ trytocreate (STRING path)
 /*====================
  * exit_it -- All done
  *==================*/
-void
+static void
 exit_it (INT code)
 {
 	endwin();
@@ -316,7 +308,7 @@ exit_it (INT code)
 /*===================================================
  * show_open_error -- Describe database opening error
  *=================================================*/
-void
+static void
 show_open_error (void)
 {
 	if (bterrno != BTERRWRITER)

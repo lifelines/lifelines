@@ -29,7 +29,7 @@
  *   3.0.3 - 15 Aug 95
  *===========================================================*/
 
-#include "standard.h"
+#include "llstdlib.h"
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
@@ -37,8 +37,12 @@
 #include "liflines.h"
 #include "screen.h"
 
+#include "llinesi.h"
+
 extern STRING idcrmv, ntchld, ntprnt, idsrmv, idsrmf, normls, cfcrmv;
 extern STRING okcrmv, ntsinf, ntcinf, cfsrmv, oksrmv, ronlye, idcrmf;
+
+static INT num_fam_xrefs(NODE);
 
 /*=========================================
  * remove_child -- Remove child from family
@@ -165,7 +169,7 @@ remove_spouse (NODE indi,
  * num_fam_xrefs -- Find number of person links in family
  *   LOOSEEND -- How about other links in the future???
  *=====================================================*/
-INT
+static INT
 num_fam_xrefs (NODE fam)
 {
 	INT num;

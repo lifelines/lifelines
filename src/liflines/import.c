@@ -30,7 +30,7 @@
  *   3.0.3 - 14 Jan 96
  *========================================================*/
 
-#include "standard.h"
+#include "llstdlib.h"
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
@@ -38,6 +38,8 @@
 #include "gedcheck.h"
 #include "screen.h"
 #include "liflines.h"
+
+#include "llinesi.h"
 
 /* external data set by check_stdkeys() */
 
@@ -57,14 +59,10 @@ extern INT gd_xmax;	/* maximum other key number */
 extern STRING idgedf, gdcker, gdnadd, dboldk, dbnewk, dbodel,
   cfoldk, dbdelk, dbrdon;
 extern TRANTABLE tran_tables[];
-static BOOLEAN translate_values();
-static void restore_record (NODE node, INT type, INT num);
-static STRING translate_key(STRING );
 
-/* in valgdcom.c */
-BOOLEAN validate_gedcom (FILE *fp);
-int check_stdkeys (void);
-void addmissingkeys (INT t);
+static BOOLEAN translate_values();
+static void restore_record(NODE node, INT type, INT num);
+static STRING translate_key(STRING);
 
 /*=================================================
  * import_from_file -- Read GEDCOM file to database
@@ -97,7 +95,7 @@ import_from_file (void)
 		|| (num_sours() > 0)
 		|| (num_evens() > 0)
 		|| (num_othrs() > 0)) gd_reuse = FALSE;
-	else if(gd_reuse = check_stdkeys()) {
+	else if((gd_reuse = check_stdkeys())) {
 		totused = gd_itot + gd_ftot + gd_stot + gd_etot + gd_xtot;
 		totkeys = gd_imax + gd_fmax + gd_smax + gd_emax + gd_xmax;
 		if((totkeys-totused) > 0) {

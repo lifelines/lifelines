@@ -28,22 +28,27 @@
  *   3.0.2 - 11 Dec 94
  *===========================================================*/
 
-#include "standard.h"
+#include "llstdlib.h"
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
 #include "liflines.h"
+#include "screen.h"
+
+#include "llinesi.h"
 
 static NODE root;	/* root of record being edited */
 static LIST subs;	/* list of contained records */
 static NODE expd;	/* expanded main record - copy */
 
-void
+static void expand_tree(NODE);
+static BOOLEAN expand_traverse(NODE);
+
+static void
 expand_tree (NODE root0)
 {
 	NODE copy, node, sub;
 	STRING key;
-	INT expand_traverse();
 
 	root = root0;
 	expd = copy_nodes(root, TRUE, TRUE);
@@ -112,7 +117,7 @@ advanced_family_edit (NODE root0)
 /*=================================================================
  * expand_traverse -- Traverse routine called when expanding record
  *===============================================================*/
-BOOLEAN
+static BOOLEAN
 expand_traverse (NODE node)
 {
 	STRING key = value_to_xref(nval(node));

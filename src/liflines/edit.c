@@ -30,13 +30,15 @@
  *   3.0.3 - 15 Feb 96
  *===========================================================*/
 
-#include "standard.h"
+#include "llstdlib.h"
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
 #include "indiseq.h"
 #include "liflines.h"
 #include "screen.h"
+
+#include "llinesi.h"
 
 extern STRING iredit, fredit, cfpupt, cffupt, idpedt, idspse, idfbys;
 extern STRING ntprnt, gdpmod, gdfmod, ronlye;

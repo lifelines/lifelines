@@ -31,7 +31,7 @@
 /* modified 2000-01-26 J.F.Chandler */
 /* modified 2000-04-25 J.F.Chandler */
 
-#include "standard.h"
+#include "llstdlib.h"
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
@@ -39,8 +39,13 @@
 #include "liflines.h"
 #include "screen.h"
 
+#include "llinesi.h"
+
 extern STRING ntchld, ntprnt, idfbrs, entnam, unknam, notone, ifone;
 extern STRING nofopn;
+
+static INDISEQ ask_for_indi_list_once(STRING, INT*);
+static NODE ask_for_indi_once(STRING, BOOLEAN, INT*);
 
 /*===========================================
  * ask_for_fam -- Ask user to identify family
@@ -201,7 +206,7 @@ ask_for_indiseq (STRING ttl,
  * ask_for_indi_once -- Have user identify sequence and select
  *   person
  *==========================================================*/
-NODE
+static NODE
 ask_for_indi_once (STRING ttl,
                    BOOLEAN ask1,
                    INT *prc)
@@ -234,7 +239,7 @@ ask_for_indi (STRING ttl,
  * ask_for_indi_list_once -- Ask user to identify person sequence
  *   and then select sub-sequence of them
  *=============================================================*/
-INDISEQ
+static INDISEQ
 ask_for_indi_list_once (STRING ttl,
                         INT *prc)
 {

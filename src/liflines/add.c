@@ -31,13 +31,15 @@
  *   3.0.2 - 12 Dec 94    3.0.3 - 20 Jan 96
  *===========================================================*/
 
-#include "standard.h"
+#include "llstdlib.h"
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
 #include "indiseq.h"
 #include "liflines.h"
 #include "screen.h"
+
+#include "llinesi.h"
 
 extern STRING idcfam, fredit, cffadd, idprnt, unksex, idsbln, mklast;
 extern STRING idsadd, idsinf, kchild, iscinf, notopp, idsps1, idsps2;
@@ -109,7 +111,7 @@ add_indi_by_edit (void)
 /*==========================================================
  * add_unlinked_indi -- Add person with no links to database
  *========================================================*/
-NODE
+static NODE
 add_unlinked_indi (NODE indi)
 {
 	NODE name, refn, sex, body, dumb, node;

@@ -28,9 +28,9 @@
  *   3.0.0 - 29 May 94    3.0.2 - 09 Nov 94
  *===========================================================*/
 
-#include <sys/types.h>
+#include "sys_inc.h"
 #include <time.h>
-#include "standard.h"
+#include "llstdlib.h"
 #include "btree.h"
 #include "table.h"
 #include "translat.h"
@@ -41,19 +41,22 @@
 extern STRING btreepath, llarchives;
 extern BTREE BTR;
 extern TRANTABLE tran_tables[];
+
 TRANTABLE tran_gedout;
-static INT nindi, nfam, neven, nsour, nothr;
-
-static void copy_and_translate (FILE*, INT, FILE*, INT, TRANTABLE);
-
-/*===================================================
- * archive_in_file -- Archive database in GEDCOM file
- *=================================================*/
 char *mabbv[] = {
 	"JAN", "FEB", "MAR", "APR", "MAY", "JUN",
 	"JUL", "AUG", "SEP", "OCT", "NOV", "DEC",
 };
+
+static INT nindi, nfam, neven, nsour, nothr;
 static FILE *fn = NULL;
+
+static void copy_and_translate (FILE*, INT, FILE*, INT, TRANTABLE);
+static BOOLEAN archive(BTREE, BLOCK);
+
+/*===================================================
+ * archive_in_file -- Archive database in GEDCOM file
+ *=================================================*/
 BOOLEAN
 archive_in_file (void)
 {
@@ -63,7 +66,6 @@ archive_in_file (void)
 	time_t curtime;
 	STRING fname;
 	extern STRING version;
-	BOOLEAN archive();
 
 	/* WARNING: use of llarchives seems questionable */
 	fn = ask_for_file(LLWRITETEXT, "Enter name of output archive file.",
@@ -97,7 +99,7 @@ archive_in_file (void)
 /*========================================================
  * archive -- Traverse function called on each btree block
  *======================================================*/
-BOOLEAN
+static BOOLEAN
 archive (BTREE btree,
          BLOCK block)
 {

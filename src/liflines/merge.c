@@ -30,8 +30,8 @@
  *   3.0.3 - 21 Jan 96
  *===========================================================*/
 
-#include <stdlib.h>
-#include "standard.h"
+#include "sys_inc.h"
+#include "llstdlib.h"
 #include "btree.h"
 #include "table.h"
 #include "translat.h"
@@ -40,13 +40,18 @@
 #include "liflines.h"
 #include "screen.h"
 
+#include "llinesi.h"
+
 extern BOOLEAN traditional;
 extern STRING iredit, cfpmrg, nopmrg, noqmrg, noxmrg, nofmrg;
 extern STRING dhusb,  dwife,  cffmrg, fredit, badata, ronlym;
+
 STRING mgsfam = (STRING) "These persons are children in different families.";
 STRING mgconf = (STRING) "Are you sure you want to merge them?";
 
-static void merge_fam_links (NODE, NODE, NODE, NODE, INT);
+static void merge_fam_links(NODE, NODE, NODE, NODE, INT);
+static NODE remove_dupes(NODE, NODE);
+static NODE sort_children(NODE, NODE);
 
 /*================================================================
  * merge_two_indis -- Merge first person to second; data from both
@@ -67,7 +72,7 @@ merge_two_indis (NODE indi1,    /* two persons to merge - can't be null */
 	NODE name2, refn2, sex2, body2, famc2, fams2;
 	NODE indi3, name3, refn3, sex3, body3, famc3, fams3;
 	NODE indi4;
-	NODE fam, husb, wife, chil, rest, fref, keep;
+	NODE fam, husb, wife, chil, rest, fref, keep=NULL;
 	NODE this, that, prev, next, node, head;
 	NODE fam12, name12, refn12;
 	TRANTABLE tti = tran_tables[MEDIN], tto = tran_tables[MINED];
@@ -483,7 +488,7 @@ merge_fam_links (NODE fam1,
                  NODE list2,
                  INT code)
 {
-	NODE curs1, curs2, prev, this, next, first, keep;
+	NODE curs1, curs2, prev, this, next, first, keep=NULL;
 	NODE indi, name, refn, sex, body, famc, fams;
 
 	curs1 = list1;
@@ -553,7 +558,7 @@ merge_fam_links (NODE fam1,
 /*================================================
  * sort_children -- Return sorted list of children
  *==============================================*/
-NODE
+static NODE
 sort_children (NODE chil1,
                NODE chil2)
 {
@@ -612,7 +617,7 @@ sort_children (NODE chil1,
 /*=================================================
  * remove_dupes -- Return all in list1 not in list2
  *===============================================*/
-NODE
+static NODE
 remove_dupes (NODE list1,
               NODE list2)
 {

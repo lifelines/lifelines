@@ -30,13 +30,15 @@
  *   3.0.2 - 29 Dec 94
  *===========================================================*/
 
-#include "standard.h"
+#include "llstdlib.h"
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
 #include "indiseq.h"
 #include "liflines.h"
 #include "screen.h"
+
+#include "llinesi.h"
 
 extern STRING nofath, nomoth, nospse, nocofp;
 extern STRING twohsb, twowif, idsbrs, idplst, idcbrs;
@@ -106,7 +108,7 @@ browse_tandem (NODE *pindi1,
 			*pfam1 = node;
 			return BROWSE_FAM;
 		case 'b': 	/* browse to new person list */
-			seq = (INDISEQ) ask_for_indiseq(idplst, &rc);
+			seq = ask_for_indiseq(idplst, &rc);
 			if (!seq) break;
 			if (length_indiseq(seq) == 1) {
 				element_indiseq(seq, 0, &key, &name);

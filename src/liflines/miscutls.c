@@ -29,13 +29,15 @@
  *   3.0.2 - 08 Nov 94
  *===========================================================*/
 
-#include "standard.h"
+#include "llstdlib.h"
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
 #include "indiseq.h"
 #include "liflines.h"
 #include "screen.h"
+
+#include "llinesi.h"
 
 extern STRING btreepath;
 

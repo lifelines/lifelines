@@ -31,13 +31,15 @@
  *   3.0.3 - 04 May 95
  *===========================================================*/
 
-#include "standard.h"
+#include "llstdlib.h"
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
 #include "indiseq.h"
 #include "liflines.h"
 #include "screen.h"
+
+#include "llinesi.h"
 
 extern STRING idsbrs, idsrmv, idfbrs, idcbrs, idcrmv, iscnew, issnew;
 extern STRING idfcop, ntprnt, nofath, nomoth, nospse, noysib, noosib;
@@ -47,27 +49,11 @@ extern STRING ronlye, ronlya, idhbrs, idwbrs;
 extern STRING id1sbr, id2sbr, id1fbr, id2fbr, id1cbr, id2cbr;
 extern STRING id1hbr, id2hbr, id1wbr, id2wbr;
 
-NODE family_to_browse_to();
-INDISEQ ask_for_indiseq();
+static INT browse_indi(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
+static INT browse_fam(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
+static INT browse_pedigree(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
 
 #define ALLPARMS &indi1, &indi2, &fam1, &fam2, &seq
-
-/* in lbrowse.c */
-INT browse_list (NODE *, NODE *, NODE *, NODE *, INDISEQ *);
-
-/* in screen.c */
-INT indi_browse (NODE indi);
-INT fam_browse (NODE fam);
-INT ped_browse (NODE indi);
-
-/* in swap.c */
-BOOLEAN swap_families (NODE indi);
-BOOLEAN swap_children (NODE, NODE);
-
-/* in advedit.c */
-void advanced_person_edit (NODE root0);
-void advanced_family_edit (NODE root0);
-
 
 /*=========================================
  * browse -- Main loop of browse operation.
@@ -111,7 +97,7 @@ browse (NODE indi1)
 /*================================================
  * browse_indi -- Handle person browse operations.
  *==============================================*/
-INT
+static INT
 browse_indi (NODE *pindi1,
              NODE *pindi2,
              NODE *pfam1,
@@ -326,7 +312,7 @@ browse_indi (NODE *pindi1,
 /*===============================================
  * browse_fam -- Handle family browse selections.
  *=============================================*/
-INT
+static INT
 browse_fam (NODE *pindi,
             NODE *pdum,
             NODE *pfam1,
@@ -535,7 +521,7 @@ browse_fam (NODE *pindi,
 /*======================================================
  * browse_pedigree -- Handle pedigree browse selections.
  *====================================================*/
-INT
+static INT
 browse_pedigree (NODE *pindi,
                  NODE *pdum1,
                  NODE *pfam,

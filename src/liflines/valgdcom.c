@@ -31,16 +31,9 @@
  *   3.0.3 - 29 Jun 96
  *===========================================================*/
 
-#include <stdlib.h>
+#include "sys_inc.h"
 #include <stdarg.h>
-#ifndef WIN32
-#include <unistd.h>
-#else
-#include <dir.h>
-#include <io.h>
-#endif
-#include <ctype.h>
-#include "standard.h"
+#include "llstdlib.h"
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
@@ -764,7 +757,7 @@ pointer_value (STRING val)
 /*==================================
  * handle_err -- Handle GEDCOM error
  *================================*/
-void
+static void
 handle_err (STRING fmt, ...)
 {
 	va_list args;
@@ -788,7 +781,7 @@ handle_err (STRING fmt, ...)
 /*=====================================
  * handle_warn -- Handle GEDCOM warning
  *===================================*/
-void
+static void
 handle_warn (STRING fmt, ...)
 {
 	va_list args;

@@ -29,7 +29,7 @@
  *   3.0.3 - 17 Feb 96
  *===========================================================*/
 
-#include "standard.h"
+#include "llstdlib.h"
 #include "btree.h"
 #include "table.h"
 #include "translat.h"
@@ -37,6 +37,8 @@
 #include "indiseq.h"
 #include "liflines.h"
 #include "screen.h"
+
+#include "llinesi.h"
 
 extern BTREE BTR;
 
@@ -50,22 +52,17 @@ SS rstr = (STRING) "0 SOUR\n1 REFN\n1 TITL Title\n1 AUTH Author";
 SS estr = (STRING) "0 EVEN\n1 REFN\n1 DATE\n1 PLAC\n1 INDI\n  2 NAME\n  2 ROLE\n1 SOUR";
 SS xstr = (STRING) "0 XXXX\n1 REFN";
 
-NODE ask_for_record(STRING, INT);
+static NODE ask_for_record(STRING, INT);
+static void edit_record(NODE, STRING, INT, STRING, BOOLEAN (*func1)(), STRING, STRING, void (*func2)(), STRING);
+static BOOLEAN add_record (STRING, STRING, BOOLEAN (*val)(), STRING, STRING (*getref)(), void (*todbase)(), void (*tocache)());
 
-void edit_record(NODE, STRING, INT, STRING, BOOLEAN (*func1)(), STRING, STRING, void (*func2)(), STRING);
 void edit_event(NODE);
 void edit_other(NODE);
 void edit_source(NODE);
 
-BOOLEAN add_record (STRING, STRING, BOOLEAN (*val)(), STRING, STRING (*getref)(), void (*todbase)(), void (*tocache)());
 BOOLEAN add_event(void);
 BOOLEAN add_other(void);
 BOOLEAN add_source(void);
-
-NODE refn_to_record();
-NODE key_to_record();
-
-extern BOOLEAN valid_sour_tree(), valid_even_tree(), valid_othr_tree();
 
 /*================================================
  * add_source -- Add source to database by editing
@@ -267,7 +264,7 @@ edit_record (NODE node1,           /* record to edit, poss NULL */
 /*==============================================
  * ask_for_record -- Ask user to identify record
  *============================================*/
-NODE
+static NODE
 ask_for_record (STRING idstr,   /* question prompt */
                 INT letr)       /* letter to possibly prepend to key */
 {

@@ -30,7 +30,7 @@
  *   3.0.3 - 03 May 95
  *===========================================================*/
 
-#include "standard.h"
+#include "llstdlib.h"
 #include "screen.h"
 #include "table.h"
 #include "translat.h"
@@ -45,10 +45,12 @@ extern INT PED_LINES;		/* pedigree lines */
 extern INT listbadkeys;
 extern char badkeylist[];
 
-STRING indi_to_title();
-STRING person_display();
+static STRING indi_to_ped_fix (NODE, INT);
+static STRING person_display(NODE, NODE, INT);
 static void add_child_line(INT, NODE);
-static void add_spouse_line (INT, NODE, NODE);
+static void add_spouse_line(INT, NODE, NODE);
+static void init_display_indi(NODE);
+static void init_display_fam(NODE);
 
 #define MAXOTHERS 30
 typedef char LINESTRING[80];
@@ -61,7 +63,7 @@ static INT Solen = 0;
 /*===============================================
  * init_display_indi -- Initialize display person
  *=============================================*/
-void
+static void
 init_display_indi (NODE pers)
 {
 	INT nsp, nch, num, nm;
@@ -178,7 +180,7 @@ add_spouse_line (INT num,
 /*===========================================
  * add_child_line -- Add child line to others
  *=========================================*/
-void
+static void
 add_child_line (INT num,
                 NODE indi)
 {
@@ -191,7 +193,7 @@ add_child_line (INT num,
 /*==============================================
  * init_display_fam -- Initialize display family
  *============================================*/
-void
+static void
 init_display_fam (NODE fam)     /* family */
 {
 	NODE husb;
@@ -456,7 +458,7 @@ show_pedigree (NODE indi)
 /*===============================================================
  * indi_to_ped_fix -- Construct person STRING for pedigree screen
  *=============================================================*/
-STRING
+static STRING
 indi_to_ped_fix (NODE indi,
                  INT len)
 {
@@ -486,7 +488,7 @@ indi_to_ped_fix (NODE indi,
 /*=============================================
  * person_display -- Create person display line
  *===========================================*/
-STRING
+static STRING
 person_display (NODE indi,
                 NODE fam,
                 INT len)

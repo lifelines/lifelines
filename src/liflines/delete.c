@@ -30,8 +30,8 @@
  *   3.0.3 - 21 Jan 96
  *===========================================================*/
 
-#include <stdlib.h>
-#include "standard.h"
+#include "sys_inc.h"
+#include "llstdlib.h"
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
@@ -39,7 +39,10 @@
 #include "liflines.h"
 #include "screen.h"
 
+#include "llinesi.h"
+
 extern STRING idpdel, cfpdel, haslnk;
+
 static void del_in_dbase(STRING);
 
 /*================================================================

@@ -29,13 +29,15 @@
  *   3.0.2 - 02 Dec 94
  *===============================================================*/
 
-#include "standard.h"
+#include "llstdlib.h"
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
 #include "indiseq.h"
 #include "liflines.h"
 #include "screen.h"
+
+#include "llinesi.h"
 
 extern STRING idcswp, id1csw, id2csw, id1fsw, id2fsw, idfbys, ntprnt;
 extern STRING less2c, okcswp, less2f, okfswp, idfswp, ronlye;

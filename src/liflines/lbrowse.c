@@ -29,7 +29,7 @@
  *   3.0.3 - 20 Jan 96
  *============================================================*/
 
-#include "standard.h"
+#include "llstdlib.h"
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
@@ -37,17 +37,15 @@
 #include "liflines.h"
 #include "screen.h"
 
+#include "llinesi.h"
+
 #define VIEWABLE 13
 
 extern STRING lstnam, lstnon, lstwht, lstnad, lstpad, lstbot, lsttop;
 extern STRING idplst, lstnew, mrkper;
-
 extern INDISEQ current_seq;
+
 LIST browse_lists;
-
-/* in screen.c */
-INT list_browse (INDISEQ seq, INT top, INT cur, INT mark);
-
 
 /*=======================================
  * browse_list -- Handle list browse mode
@@ -60,7 +58,7 @@ browse_list (NODE *pindi1,
              INDISEQ *pseq)
 {
 	INT top, cur, mark, len, tmp, rc;
-	STRING key, name, newname, lname;
+	STRING key, name, newname, lname="";
 	NODE indi;
 	INDISEQ seq, newseq;
 
