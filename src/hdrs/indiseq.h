@@ -114,6 +114,12 @@ void write_nonlink_indi(NODE);
 void write_family(STRING, TABLE);
 void new_write_node(INT, NODE, BOOLEAN);
 
+void namesort_indiseq(INDISEQ);
+void keysort_indiseq(INDISEQ);
+void valuesort_indiseq(INDISEQ, BOOLEAN*);
+void unique_indiseq(INDISEQ);
+void gen_gedcom(INDISEQ);
+
 void add_browse_list(STRING, INDISEQ);
 INDISEQ find_named_seq(STRING);
 void remove_browse_list(STRING, INDISEQ);
