@@ -141,7 +141,7 @@ main (INT argc, char **argv)
 
 #if HAVE_SETLOCALE
 	/* initialize locales */
-	setlocale(LC_CTYPE, "");
+	setlocale(LC_ALL, "");
 #endif /* HAVE_SETLOCALE */
 	
 	/* capture user's default codeset */
