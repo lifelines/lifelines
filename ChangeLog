@@ -1,5 +1,11 @@
 2000-11-08  Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* hdrs/interp.h interp/alloc.c interp/builtin.c interp/date.c
+	interp/eval.c interp/heapused.c interp/interp.c interp/intrpseq.c
+	interp/lex.c interp/more.c interp/pvalue.c interp/rassa.c
+	interp/write.c: Convert from K&R to ANSI C.  Remove file local
+	(static) functions from header.
+
 	* interp/yacc.y: Quiet down compiler.  Convert from K&R to ANSI C.
 	Store pointers in 'void*', not 'int'.
 

@@ -50,8 +50,10 @@ extern STRING llprograms;
  * __getint -- Have user provide integer
  *   usage: getint(IDEN [,STRING]) --> VOID
  *=======================================*/
-WORD __getint (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__getint (PNODE node,
+          TABLE stab,
+          BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	INT val;
@@ -82,8 +84,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __getstr -- Have user provide string
  *   usage: getstr(IDEN [,STRING]) --> VOID
  *=======================================*/
-WORD __getstr (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__getstr (PNODE node,
+          TABLE stab,
+          BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	STRING val;
@@ -114,8 +118,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __getindi -- Have user identify person
  *   usage: getindi(IDEN [,STRING]) --> VOID
  *========================================*/
-PVALUE __getindi (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__getindi (PNODE node,
+           TABLE stab,
+           BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	CACHEEL cel;
@@ -147,8 +153,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __getindidate -- Have user identify person
  *   usage: getindidate(IDEN, INT [,STRING]) --> VOID
  *=================================================*/
-WORD __getindidate (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+WORD
+__getindidate (PNODE node,
+               TABLE stab,
+               BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	INT year;
@@ -170,8 +178,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __getfam -- Have user identify family
  *   usage: getfam(IDEN) --> VOID
  *====================================*/
-PVALUE __getfam (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__getfam (PNODE node,
+          TABLE stab,
+          BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	CACHEEL cel = NULL;
@@ -192,8 +202,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __getindiset -- Have user identify set of persons
  *   usage: getindiset(IDEN [,STRING]) --> VOID
  *================================================*/
-PVALUE __getindiset (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__getindiset (PNODE node,
+              TABLE stab,
+              BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	INDISEQ seq;
@@ -221,8 +233,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __gettoday -- Create today's event
  *   usage: gettoday() --> EVENT
  *=================================*/
-PVALUE __gettoday (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__gettoday (PNODE node,
+            TABLE stab,
+            BOOLEAN *eflg)
 {
 	NODE prnt = create_node(NULL, "EVEN", NULL, NULL);
 	NODE chil = create_node(NULL, "DATE", get_date(), prnt);
@@ -238,8 +252,9 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __name -- Find person's name
  *   usage: name(INDI[,BOOL]) -> STRING
  *===================================*/
-PVALUE __name (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE __name (PNODE node,
+               TABLE stab,
+               BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	NODE name, indi = eval_indi(arg, stab, eflg, NULL);
@@ -272,8 +287,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __fullname -- Process person's name
  *   usage: fullname(INDI, BOOL, BOOL, INT) -> STRING
  *=================================================*/
-PVALUE __fullname (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__fullname (PNODE node,
+            TABLE stab,
+            BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	NODE name, indi;
@@ -325,8 +342,8 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * function "surname". The original routine getsurname()
  * is used for soundex purposes.
  *===========================*/
-STRING getasurname (name)
-STRING name;	/* GEDCOM name */
+STRING
+getasurname (STRING name)   /* GEDCOM name */
 {
 	INT c;
 	static unsigned char buffer[3][MAXLINELEN+1];
@@ -350,8 +367,10 @@ STRING name;	/* GEDCOM name */
  * __surname -- Find person's surname using new getasurname() routine.
  *   usage: surname(INDI) -> STRING
  *=================================*/
-PVALUE __surname (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__surname (PNODE node,
+           TABLE stab,
+           BOOLEAN *eflg)
 {
 	NODE name, indi = eval_indi(iargs(node), stab, eflg, NULL);
 	if (*eflg) {
@@ -370,8 +389,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __soundex -- SOUNDEX function on persons
  *   usage: soundex(INDI) -> STRING
  *=======================================*/
-PVALUE __soundex (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__soundex (PNODE node,
+           TABLE stab,
+           BOOLEAN *eflg)
 {
 	NODE name, indi = eval_indi(iargs(node), stab, eflg, NULL);
 	if (*eflg || !indi) {
@@ -390,8 +411,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __strsoundex -- SOUNDEX function on strings
  *   usage: strsoundex(STRING) -> STRING
  *==========================================*/
-PVALUE __strsoundex (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__strsoundex (PNODE node,
+              TABLE stab,
+              BOOLEAN *eflg)
 {
 	PVALUE new, val = evaluate(iargs(node), stab, eflg);
 	if (*eflg || !val || ptype(val) != PSTRING) {
@@ -407,8 +430,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __givens -- Find given names
  *   usage: givens(INDI) -> STRING
  *==============================*/
-PVALUE __givens (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__givens (PNODE node,
+          TABLE stab,
+          BOOLEAN *eflg)
 {
 	NODE name, indi = eval_indi(iargs(node), stab, eflg, NULL);
 	if (*eflg) {
@@ -427,8 +452,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __set -- Assignment operation
  *   usage: set(IDEN, ANY) -> VOID
  *==============================*/
-PVALUE __set (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__set (PNODE node,
+       TABLE stab,
+       BOOLEAN *eflg)
 {
 	PNODE var = (PNODE) iargs(node);
 	PNODE expr = inext(var);
@@ -451,8 +478,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __husband -- Find first husband of family
  *   usage: husband(FAM) -> INDI
  *========================================*/
-PVALUE __husband (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__husband (PNODE node,
+           TABLE stab,
+           BOOLEAN *eflg)
 {
 	NODE fam = eval_fam(iargs(node), stab, eflg, NULL);
 	if (*eflg || !fam) {
@@ -466,8 +495,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __wife -- Find first wife of family
  *   usage: wife(FAM) -> INDI
  *==================================*/
-PVALUE __wife (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__wife (PNODE node,
+        TABLE stab,
+        BOOLEAN *eflg)
 {
 	NODE fam = eval_fam(iargs(node), stab, eflg, NULL);
 	if (*eflg || !fam) {
@@ -481,8 +512,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __firstchild -- Find first child of family
  *   usage: firstchild(FAM) -> INDI
  *=========================================*/
-PVALUE __firstchild (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__firstchild (PNODE node,
+              TABLE stab,
+              BOOLEAN *eflg)
 {
 	NODE fam = eval_fam(iargs(node), stab, eflg, NULL);
 	if (*eflg || !fam) {
@@ -496,8 +529,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __lastchild -- Find last child of family
  *   usage: lastchild(FAM) -> INDI
  *=======================================*/
-PVALUE __lastchild (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__lastchild (PNODE node,
+             TABLE stab,
+             BOOLEAN *eflg)
 {
 	NODE fam = eval_fam(iargs(node), stab, eflg, NULL);
 	if (*eflg || !fam) {
@@ -511,8 +546,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __marr -- Find marriage of family
  *   usage: marriage(FAM) -> EVENT
  *================================*/
-PVALUE __marr (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__marr (PNODE node,
+        TABLE stab,
+        BOOLEAN *eflg)
 {
 	NODE fam = eval_fam(iargs(node), stab, eflg, NULL);
 	if (*eflg) {
@@ -526,8 +563,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __birt -- Find first birth event of person
  *   usage: birth(INDI) -> EVENT
  *=========================================*/
-PVALUE __birt (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__birt (PNODE node,
+        TABLE stab,
+        BOOLEAN *eflg)
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	if (*eflg) {
@@ -541,8 +580,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __deat -- Find first death event of person
  *   usage: death(INDI) -> EVENT
  *=========================================*/
-PVALUE __deat (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__deat (PNODE node,
+        TABLE stab,
+        BOOLEAN  *eflg)
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	if (*eflg) {
@@ -556,8 +597,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __bapt -- Find first baptism event of person
  *   usage: baptism(INDI) -> EVENT
  *===========================================*/
-PVALUE __bapt (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__bapt (PNODE node,
+        TABLE stab,
+        BOOLEAN  *eflg)
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	if (*eflg) {
@@ -571,8 +614,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __buri -- Find first burial event of person
  *   usage: burial(INDI) -> EVENT
  *==========================================*/
-PVALUE __buri (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__buri (PNODE node,
+        TABLE stab,
+        BOOLEAN *eflg)
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	if (*eflg) {
@@ -586,8 +631,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __titl -- Find first title of person
  *   usage: title(INDI) -> STRING
  *===================================*/
-PVALUE __titl (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__titl (PNODE node,
+        TABLE stab,
+        BOOLEAN  *eflg)
 {
 	NODE titl, indi = eval_indi(iargs(node), stab, eflg, NULL);
 	if (*eflg) {
@@ -602,8 +649,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __long -- Return long form of event
  *   usage: long(EVENT) -> STRING
  *==================================*/
-PVALUE __long (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__long (PNODE node,
+        TABLE stab,
+        BOOLEAN *eflg)
 {
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
 	NODE even;
@@ -620,8 +669,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __short -- Return short form of event
  *   usage: short(EVENT) -> STRING
  *====================================*/
-PVALUE __short (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__short (PNODE node,
+         TABLE stab,
+         BOOLEAN *eflg)
 {
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
 	NODE even;
@@ -638,8 +689,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __fath -- Find father of person
  *   usage: father(INDI) -> INDI
  *==============================*/
-PVALUE __fath (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__fath (PNODE node,
+        TABLE stab,
+        BOOLEAN *eflg)
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	if (*eflg) {
@@ -653,8 +706,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __moth -- Find mother of person
  *   usage: mother(INDI) -> INDI
  *==============================*/
-PVALUE __moth (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__moth (PNODE node,
+        TABLE stab,
+        BOOLEAN *eflg)
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	if (*eflg) {
@@ -668,8 +723,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __parents -- Find parents' family of person
  *   usage: parents(INDI) -> FAM
  *==========================================*/
-PVALUE __parents (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__parents (PNODE node,
+           TABLE stab,
+           BOOLEAN *eflg)
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	if (*eflg) {
@@ -683,8 +740,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __nextsib -- Find person's younger sibling
  *   usage: nextsib(INDI) -> INDI
  *=========================================*/
-PVALUE __nextsib (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__nextsib (PNODE node,
+           TABLE stab,
+           BOOLEAN *eflg)
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	if (*eflg) {
@@ -698,8 +757,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __prevsib -- Find person's older sibling
  *   usage: prevsib(INDI) -> INDI
  *=======================================*/
-PVALUE __prevsib (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__prevsib (PNODE node,
+           TABLE stab,
+           BOOLEAN *eflg)
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	if (*eflg) {
@@ -713,8 +774,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __d -- Return cardinal integer as string
  *   usage: d(INT) -> STRING
  *=======================================*/
-PVALUE __d (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__d (PNODE node,
+     TABLE stab,
+     BOOLEAN *eflg)
 {
 	static char scratch[20];
 	PVALUE val;
@@ -731,8 +794,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __f -- Return floating point number as string
  *   usage: f(FLOAT[,INT]) -> STRING
  *============================================*/
-PVALUE __f (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__f (PNODE node,
+     TABLE stab,
+     BOOLEAN *eflg)
 {
 	char scratch[20];
 	char format[10];
@@ -770,8 +835,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * ___alpha -- Convert small integer to letter
  *   usage: alpha(INT) -> STRING
  *=========================================*/
-PVALUE ___alpha (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+___alpha (PNODE node,
+          TABLE stab,
+          BOOLEAN *eflg)
 {
 	static char scratch[2];
 	INT i;
@@ -795,8 +862,10 @@ static char *ordinals[] = {
 	"sixth", "seventh", "eighth", "ninth", "tenth",
 	"eleventh", "twelfth"
 };
-PVALUE __ord (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__ord (PNODE node,
+       TABLE stab,
+       BOOLEAN *eflg)
 {
 	static char scratch[12];
 	PVALUE val = evaluate(iargs(node), stab, eflg);
@@ -820,8 +889,10 @@ static char *cardinals[] = {
 	"six", "seven", "eight", "nine", "ten",
 	"eleven", "twelve"
 };
-PVALUE __card (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__card (PNODE node,
+        TABLE stab,
+        BOOLEAN *eflg)
 {
 	static char scratch[8];
 	PVALUE val = evaluate(iargs(node), stab, eflg);
@@ -846,8 +917,10 @@ static char *rodigits[] = {
 static char *rotens[] = {
 	"", "x", "xx", "xxx", "xl", "l", "lx", "lxx", "lxxx", "xc"
 };
-PVALUE __roman (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__roman (PNODE node,
+         TABLE stab,
+         BOOLEAN *eflg)
 {
 	static char scratch[10];
 	PVALUE val = evaluate(iargs(node), stab, eflg);
@@ -866,8 +939,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __nchildren -- Find number of children in family
  *   usage: nchildren(FAM) -> INT
  *===============================================*/
-PVALUE __nchildren (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__nchildren (PNODE node,
+             TABLE stab,
+             BOOLEAN *eflg)
 {
 	NODE fam = eval_fam(iargs(node), stab, eflg, NULL);
 	if (*eflg) {
@@ -881,8 +956,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __nfamilies -- Find number of families person is in
  *   usage: nfamilies(INDI) -> INT
  *==================================================*/
-PVALUE __nfamilies (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__nfamilies (PNODE node,
+             TABLE stab,
+             BOOLEAN *eflg)
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	if (*eflg) {
@@ -896,8 +973,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __nspouses -- Find number of spouses person has
  *   usage: nspouses(INDI) -> INT
  *==============================================*/
-PVALUE __nspouses (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__nspouses (PNODE node,
+            TABLE stab,
+            BOOLEAN *eflg)
 {
 	INT nspouses;
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
@@ -913,8 +992,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __eq -- Equal operation
  *   usage: eq(ANY, ANY) -> BOOL
  *============================*/
-PVALUE __eq (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__eq (PNODE node,
+      TABLE stab,
+      BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
@@ -932,8 +1013,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __ne -- Not equal operation
  *   usage: ne(ANY, ANY) -> BOOL
  *============================*/
-PVALUE __ne (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__ne (PNODE node,
+      TABLE stab,
+      BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
@@ -957,8 +1040,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __le -- Less or equal operation
  *   usage: le(ANY, ANY) -> BOOL
  *==============================*/
-PVALUE __le (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__le (PNODE node,
+      TABLE stab,
+      BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
@@ -976,8 +1061,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __ge -- Greater or equal operation
  *   usage: ge(ANY, ANY) -> BOOL
  *=================================*/
-PVALUE __ge (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__ge (PNODE node,
+      TABLE stab,
+      BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
@@ -995,8 +1082,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __lt -- Less than operation
  *   usage: lt(ANY,ANY) -> BOOL
  *===========================*/
-PVALUE __lt (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__lt (PNODE node,
+      TABLE stab,
+      BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
@@ -1019,8 +1108,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __gt -- Greater than operation
  *   usage: gt(ANY, ANY) -> BOOL
  *=============================*/
-PVALUE __gt (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__gt (PNODE node,
+      TABLE stab,
+      BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
@@ -1043,8 +1134,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __and -- And operation
  *   usage: and(ANY [,ANY]+) -> BOOL
  *================================*/
-PVALUE __and (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__and (PNODE node,
+       TABLE stab,
+       BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = eval_and_coerce(PBOOL, arg, stab, eflg);
@@ -1085,8 +1178,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __or -- Or operation
  *   usage: or(ANY [,ANY]+) -> BOOL
  *===============================*/
-PVALUE __or (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__or (PNODE node,
+      TABLE stab,
+      BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	BOOLEAN rc = FALSE;
@@ -1114,8 +1209,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __add -- Add operation
  *   usage: add(INT [,INT]+) -> INT
  *===============================*/
-PVALUE __add (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__add (PNODE node,
+       TABLE stab,
+       BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
@@ -1135,8 +1232,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __sub -- Subtract operation
  *   usage: sub(INT, INT) -> INT
  *============================*/
-PVALUE __sub (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__sub (PNODE node,
+       TABLE stab,
+       BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
@@ -1154,8 +1253,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __mul -- Multiply operation
  *   usage: mul(INT [,INT]+) -> INT
  *===============================*/
-PVALUE __mul (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__mul (PNODE node,
+       TABLE stab,
+       BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
@@ -1175,8 +1276,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __div -- Divide operation
  *   usage: div(INT, INT) -> INT
  *============================*/
-PVALUE __div (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__div (PNODE node,
+       TABLE stab,
+       BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
@@ -1194,8 +1297,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __mod -- Modulus operation
  *   usage: mod(INT, INT) -> INT
  *============================*/
-PVALUE __mod (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__mod (PNODE node,
+       TABLE stab,
+       BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
@@ -1213,8 +1318,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __exp -- Exponentiation operation
  *   usage: exp(INT, INT) -> INT
  *================================*/
-PVALUE __exp (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__exp (PNODE node,
+       TABLE stab,
+       BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
@@ -1232,8 +1339,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __neg -- Negation operation
  *   usage: neg(INT) -> INT
  *==========================*/
-PVALUE __neg (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__neg (PNODE node,
+       TABLE stab,
+       BOOLEAN *eflg)
 {
 	PVALUE val = evaluate(iargs(node), stab, eflg);
 	if (*eflg) return NULL;
@@ -1244,8 +1353,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __incr -- Increment variable
  *   usage: incr(VARB) -> VOID
  *==========================*/
-WORD __incr (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__incr (PNODE node,
+        TABLE stab,
+        BOOLEAN *eflg)
 {
 	PNODE var = (PNODE) iargs(node);
 	PVALUE val;
@@ -1274,8 +1385,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __decr -- Decrement variable
  *   usage: decr(VARB) -> VOID
  *===========================*/
-WORD __decr (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__decr (PNODE node,
+        TABLE stab,
+        BOOLEAN *eflg)
 {
 	PNODE var = (PNODE) iargs(node);
 	PVALUE val;
@@ -1304,8 +1417,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __strcmp -- Compare two strings
  *   usage: strcmp(STRING, STRING) -> INT
  *=====================================*/
-PVALUE __strcmp (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__strcmp (PNODE node,
+          TABLE stab,
+          BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	STRING str1, str2, emp = (STRING) "";
@@ -1340,8 +1455,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __nestr -- Compare two strings
  *   usage: nestr(STRING, STRING) -> BOOLEAN
  *========================================*/
-PVALUE __nestr (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__nestr (PNODE node,
+         TABLE stab,
+         BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	STRING str1, str2, emp = (STRING) "";
@@ -1367,8 +1484,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __eqstr -- Compare two strings
  *   usage: eqstr(STRING, STRING) -> BOOLEAN
  *========================================*/
-PVALUE __eqstr (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__eqstr (PNODE node,
+         TABLE stab,
+         BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	STRING str1, str2, emp = (STRING) "";
@@ -1394,8 +1513,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __strtoint -- Convert string to integer
  *  usage: strtoint(STRING) -> INT
  *======================================*/
-PVALUE __strtoint (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__strtoint (PNODE node,
+            TABLE  stab,
+            BOOLEAN *eflg)
 {
 	PVALUE val;
 	val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
@@ -1414,8 +1535,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __list -- Create list
  *   usage: list(IDENT) -> VOID
  *===========================*/
-PVALUE __list (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__list (PNODE node,
+        TABLE stab,
+        BOOLEAN *eflg)
 {
 	LIST list;
 	PNODE var = (PNODE) iargs(node);
@@ -1433,8 +1556,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __push -- Push element on front of list
  *   usage: push(LIST, ANY) -> VOID
  *======================================*/
-PVALUE __push (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__push (PNODE node,
+        TABLE stab,
+        BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	LIST list;
@@ -1460,8 +1585,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __inlist -- see if element is in list
  *   usage: inlist(LIST, STRING) -> BOOL
  *=====================================*/
-PVALUE __inlist (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__inlist (PNODE node,
+          TABLE stab,
+          BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	LIST list;
@@ -1487,8 +1614,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __enqueue -- Enqueue element on list
  *   usage: enqueue(LIST, ANY) -> VOID
  *===================================*/
-PVALUE __enqueue (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__enqueue (PNODE node,
+           TABLE stab,
+           BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	LIST list;
@@ -1514,8 +1643,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __requeue -- Add element to back of list
  *   usage: requeue(LIST, ANY) -> VOID
  *=======================================*/
-PVALUE __requeue (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__requeue (PNODE node,
+           TABLE stab,
+           BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	LIST list;
@@ -1541,8 +1672,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __pop -- Pop element from front of list
  *   usage: pop(LIST) -> ANY
  *======================================*/
-PVALUE __pop (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__pop (PNODE node,
+       TABLE stab,
+       BOOLEAN  *eflg)
 {
 	LIST list;
 	PVALUE val = eval_and_coerce(PLIST, iargs(node), stab, eflg);
@@ -1559,8 +1692,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __dequeue -- Remove element from back of list
  *   usage dequeue(LIST) -> ANY
  *============================================*/
-PVALUE __dequeue (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__dequeue (PNODE node,
+           TABLE stab,
+           BOOLEAN *eflg)
 {
 	LIST list;
 	PVALUE val = eval_and_coerce(PLIST, iargs(node), stab, eflg);
@@ -1579,8 +1714,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __empty -- Check if list is empty
  *   usage: empty(LIST) -> BOOL
  *================================*/
-PVALUE __empty (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__empty (PNODE node,
+         TABLE stab,
+         BOOLEAN *eflg)
 {
 	LIST list;
 	PVALUE val = eval_and_coerce(PLIST, iargs(node), stab, eflg);
@@ -1597,8 +1734,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __getel -- Get nth value from list
  *   usage: getel(LIST, INT) -> ANY
  *=================================*/
-PVALUE __getel (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__getel (PNODE node,
+         TABLE stab,
+         BOOLEAN *eflg)
 {
 	LIST list;
 	INT ind;
@@ -1627,8 +1766,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __setel -- Set nth value in list
  *   usage: setel(LIST, INT, ANY) -> VOID
  *======================================*/
-PVALUE __setel (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__setel (PNODE node,
+         TABLE stab,
+         BOOLEAN *eflg)
 {
 	LIST list;
 	INT ind;
@@ -1663,8 +1804,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __length -- Find length of list
  *   usage: length(LIST) -> INT
  *==============================*/
-PVALUE __length (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__length (PNODE node,
+          TABLE stab,
+          BOOLEAN *eflg)
 {
 	LIST list;
 	PVALUE val = eval_and_coerce(PLIST, iargs(node), stab, eflg);
@@ -1680,8 +1823,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __not -- Not operation
  *   usage: not(BOOL) -> BOOL
  *=========================*/
-PVALUE __not (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__not (PNODE node,
+       TABLE stab,
+       BOOLEAN *eflg)
 {
 	PVALUE val = eval_and_coerce(PBOOL, iargs(node), stab, eflg);
 	if (*eflg) {
@@ -1695,8 +1840,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __save -- Copy string
  *   usage: save(STRING) -> STRING
  *==============================*/
-PVALUE __save (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__save (PNODE node,
+        TABLE stab,
+        BOOLEAN *eflg)
 {
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
 	if (*eflg) {
@@ -1709,8 +1856,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __strlen -- Find length of string
  *   usage: strlen(STRING) -> INT
  *================================*/
-PVALUE __strlen (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__strlen (PNODE node,
+          TABLE stab,
+          BOOLEAN *eflg)
 {
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
 	if (*eflg) {
@@ -1727,8 +1876,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __concat -- Catenate strings
  *   usage: concat(STRING [, STRING]+) -> STRING
  *============================================*/
-PVALUE __concat (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__concat (PNODE node,
+          TABLE stab,
+          BOOLEAN *eflg)
 {
         PNODE arg = (PNODE) iargs(node);
         INT len = 0, i, nstrs = 0;
@@ -1772,8 +1923,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __lower -- Convert string to lower case
  *   usage: lower(STRING) -> STRING
  *======================================*/
-PVALUE __lower (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__lower (PNODE node,
+         TABLE stab,
+         BOOLEAN *eflg)
 {
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
 	if (*eflg) {
@@ -1787,8 +1940,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __upper -- Convert string to upper case
  *   usage: upper(STRING) -> STRING
  *======================================*/
-PVALUE __upper (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__upper (PNODE node,
+         TABLE stab,
+         BOOLEAN *eflg)
 {
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
 	if (*eflg) {
@@ -1802,8 +1957,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __capitalize -- Capitalize string
  *   usage: capitalize(STRING) -> STRING
  *====================================*/
-PVALUE __capitalize (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__capitalize (PNODE node,
+              TABLE stab,
+              BOOLEAN *eflg)
 {
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
 	if (*eflg) {
@@ -1819,8 +1976,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  *===============================*/
 static char *mpns[] = {  "He",  "he", "His", "his", "him" };
 static char *fpns[] = { "She", "she", "Her", "her", "her" };
-PVALUE __pn (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__pn (PNODE node,
+      TABLE stab,
+      BOOLEAN *eflg)
 {
 	INT typ;
 	PVALUE val;
@@ -1848,8 +2007,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __print -- Print to stdout window
  *   usage: print([STRING]+,) -> VOID
  *=================================*/
-PVALUE __print (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__print (PNODE node,
+         TABLE stab,
+         BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val;
@@ -1870,8 +2031,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __sex -- Find sex, as string M, F or U, of person
  *   usage: sex(INDI) -> STRING
  *================================================*/
-PVALUE __sex (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__sex (PNODE node,
+       TABLE stab,
+       BOOLEAN *eflg)
 {
 	STRING str = (STRING) "U";
 	INT sex;
@@ -1889,8 +2052,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __male -- Check if person is male
  *   usage: male(INDI) -> BOOL
  *================================*/
-PVALUE __male (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__male (PNODE node,
+        TABLE stab,
+        BOOLEAN *eflg)
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	if (*eflg) {
@@ -1904,8 +2069,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __female -- Check if person is female
  *   usage: female(INDI) -> BOOL
  *====================================*/
-PVALUE __female (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__female (PNODE node,
+          TABLE stab,
+          BOOLEAN *eflg)
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	if (*eflg) {
@@ -1919,8 +2086,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __key -- Return person or family key
  *   usage: key(INDI|FAM [,BOOL]) -> STRING
  *=======================================*/
-PVALUE __key (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__key (PNODE node,
+       TABLE stab,
+       BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val = evaluate(arg, stab, eflg);
@@ -1951,8 +2120,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __root -- Return root of cached record
  *   usage: root(INDI|FAM|EVEN|SOUR|OTHR) -> NODE
  *=============================================*/
-PVALUE __rot (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__rot (PNODE node,
+       TABLE stab,
+       BOOLEAN *eflg)
 {
 	STRING key;
  	PVALUE val = evaluate(iargs(node), stab, eflg);
@@ -1984,8 +2155,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __inode -- Return root of person
  *   usage: inode(INDI) -> NODE
  *==============================*/
-PVALUE __inode (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__inode (PNODE node,
+         TABLE stab,
+         BOOLEAN *eflg)
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	if (*eflg || !indi) {
@@ -1999,8 +2172,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __fnode -- Return root of family
  *   usage: fnode(FAM) -> NODE
  *===============================*/
-PVALUE __fnode (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__fnode (PNODE node,
+         TABLE stab,
+         BOOLEAN *eflg)
 {
 	NODE fam = eval_fam(iargs(node), stab, eflg, NULL);
 	if (*eflg) {
@@ -2014,8 +2189,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __table -- Create table
  *   usage: table(IDENT) -> VOID
  *============================*/
-PVALUE __table (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__table (PNODE node,
+         TABLE stab,
+         BOOLEAN *eflg)
 {
 	TABLE tab;
 	PVALUE val;
@@ -2040,8 +2217,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __insert -- Add element to table
  *   usage: insert(TAB, STRING, ANY) -> VOID
  *========================================*/
-PVALUE __insert (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__insert (PNODE node,
+          TABLE stab,
+          BOOLEAN *eflg)
 {
     	BOOLEAN there;
 	PNODE arg = (PNODE) iargs(node);
@@ -2103,8 +2282,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __lookup -- Look up element in table
  *   usage: lookup(TAB, STRING) -> ANY
  *===================================*/
-PVALUE __lookup (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__lookup (PNODE node,
+          TABLE stab,
+          BOOLEAN *eflg)
 {
 	PNODE arg;
 	PVALUE new, val;
@@ -2146,8 +2327,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __trim -- Trim string if too long
  *   usage: trim(STRING, INT) -> STRING
  *===================================*/
-PVALUE __trim (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__trim (PNODE node,
+        TABLE stab,
+        BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	STRING str;
@@ -2172,8 +2355,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __trimname -- Trim name if too long
  *   usage: trimname(INDI, INT) -> STRING
  *=====================================*/
-PVALUE __trimname (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__trimname (PNODE node,
+            TABLE stab,
+            BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	INT len;
@@ -2203,8 +2388,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __date -- Return date of event
  *   usage: date(EVENT) -> STRING
  *=============================*/
-PVALUE __date (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__date (PNODE node,
+        TABLE stab,
+        BOOLEAN *eflg)
 {
 	NODE line;
 	TRANTABLE ttr = tran_tables[MINRP];
@@ -2220,8 +2407,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __extractdate -- Extract date from EVENT or DATE NODE
  *   usage: extractdate(NODE, VARB, VARB, VARB) -> VOID
  *====================================================*/
-PVALUE __extractdate (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__extractdate (PNODE node,
+               TABLE stab,
+               BOOLEAN *eflg)
 {
 	STRING str, syr;
 	NODE line;
@@ -2264,8 +2453,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __extractdatestr -- Extract date from STRING
  *   usage: extractdatestr(VARB, VARB, VARB, VARB, VARB[, STRING]) -> VOID
  *==================================================================*/
-PVALUE __extractdatestr (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__extractdatestr (PNODE node,
+                  TABLE stab,
+                  BOOLEAN *eflg)
 {
 	STRING str = NULL, yrstr;
 	INT mod, da, mo, yr;
@@ -2324,8 +2515,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 static INT daycode = 0;
 static INT monthcode = 3;
 static INT datecode = 0;
-PVALUE __stddate (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__stddate (PNODE node,
+           TABLE stab,
+           BOOLEAN *eflg)
 {
 	extern STRING format_date();
 	NODE evnt;
@@ -2343,8 +2536,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __complexdate -- Return standard date format of event, including modifiers
  *   usage: complexdate(EVENT) -> STRING
  *=======================================================================*/
-PVALUE __complexdate (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__complexdate (PNODE node,
+               TABLE stab,
+               BOOLEAN *eflg)
 {
 	extern STRING format_date();
 	NODE evnt;
@@ -2362,8 +2557,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __dayformat -- Set day format for standard date
  *   usage: dayformat(INT) -> NULL
  *==============================================*/
-PVALUE __dayformat (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__dayformat (PNODE node,
+             TABLE stab,
+             BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	INT value;
@@ -2383,8 +2580,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __monthformat -- Set month format standard date
  *   usage: monthformat(INT) -> NULL
  *==============================================*/
-PVALUE __monthformat (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__monthformat (PNODE node,
+               TABLE stab,
+               BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	INT value;
@@ -2404,8 +2603,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __dateformat -- Set date format for standard date
  *   usage: dateformat(INT) -> NULL
  *================================================*/
-PVALUE __dateformat (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__dateformat (PNODE node,
+              TABLE stab,
+              BOOLEAN *eflg)
 {
         PNODE arg = (PNODE) iargs(node);
         INT value;
@@ -2425,8 +2626,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __year -- Return year of event
  *   usage: year(EVENT) -> STRING
  *=============================*/
-PVALUE __year (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__year (PNODE node,
+        TABLE stab,
+        BOOLEAN *eflg)
 {
 	NODE evnt;
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
@@ -2442,8 +2645,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __place -- Return place of event
  *   usage: place(EVENT) -> STRING
  *===============================*/
-PVALUE __place (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__place (PNODE node,
+         TABLE stab,
+         BOOLEAN *eflg)
 {
 	NODE evnt;
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
@@ -2466,8 +2671,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __tag -- Return tag of node
  *   usage: tag(NODE) -> STRING
  *===========================*/
-PVALUE __tag (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__tag (PNODE node,
+       TABLE stab,
+       BOOLEAN *eflg)
 {
 	NODE ged;
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
@@ -2483,8 +2690,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __value -- Return value of node
  *   usage: value(NODE) -> STRING
  *==============================*/
-PVALUE __value (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__value (PNODE node,
+         TABLE stab,
+         BOOLEAN *eflg)
 {
 	NODE ged;
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
@@ -2500,8 +2709,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __xref -- Return xref of node
  *   usage: xref(NODE) -> STRING
  *============================*/
-PVALUE __xref (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__xref (PNODE node,
+        TABLE stab,
+        BOOLEAN *eflg)
 {
 	NODE ged;
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
@@ -2517,8 +2728,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __child -- Return child of node
  *   usage: child(NODE) -> NODE
  *==============================*/
-PVALUE __child (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__child (PNODE node,
+         TABLE stab,
+         BOOLEAN *eflg)
 {
 	NODE ged;
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
@@ -2534,8 +2747,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __parent -- Return parent of node
  *   usage: parent(NODE) -> NODE
  *================================*/
-PVALUE __parent (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__parent (PNODE node,
+          TABLE stab,
+          BOOLEAN *eflg)
 {
 	NODE ged;
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
@@ -2551,8 +2766,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __sibling -- Return next sibling of node
  *   usage: sibling(NODE) -> NODE
  *=======================================*/
-PVALUE __sibling (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__sibling (PNODE node,
+           TABLE stab,
+           BOOLEAN *eflg)
 {
 	NODE ged;
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
@@ -2568,8 +2785,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __level -- Return level of node
  *   usage: level(NODE) -> INT
  *==============================*/
-PVALUE __level (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__level (PNODE node,
+         TABLE stab,
+         BOOLEAN *eflg)
 {
 	NODE ged;
 	INT lev = -1;
@@ -2590,8 +2809,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __copyfile -- Copy file to output
  *   usage: copyfile(STRING) -> VOID
  *================================*/
-PVALUE __copyfile (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__copyfile (PNODE node,
+            TABLE stab,
+            BOOLEAN *eflg)
 {
 	FILE *cfp, *fopenpath();
 	STRING fname;
@@ -2617,8 +2838,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __nl -- Newline function
  *   usage: nl() -> STRING
  *=======================*/
-PVALUE __nl (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__nl (PNODE node,
+      TABLE stab,
+      BOOLEAN *eflg)
 {
 	*eflg = FALSE;
 	return create_pvalue(PSTRING, (WORD)"\n");
@@ -2627,8 +2850,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __space -- Space function
  *   usage: sp() -> STRING
  *========================*/
-PVALUE __space (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__space (PNODE node,
+         TABLE stab,
+         BOOLEAN *eflg)
 {
 	*eflg = FALSE;
 	return create_pvalue(PSTRING, (WORD)" ");
@@ -2637,8 +2862,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __qt -- Double quote function
  *   usage: qt() -> STRING
  *============================*/
-PVALUE __qt (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__qt (PNODE node,
+      TABLE stab,
+      BOOLEAN *eflg)
 {
 	*eflg = FALSE;
 	return create_pvalue(PSTRING, (WORD)"\"");
@@ -2647,8 +2874,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __indi -- Convert key to INDI
  *   usage: indi(STRING) -> INDI
  *============================*/
-PVALUE __indi (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__indi (PNODE node,
+        TABLE stab,
+        BOOLEAN *eflg)
 {
 	STRING str;
 	unsigned char scratch[200], *p, *q = scratch;
@@ -2687,8 +2916,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __fam -- Convert key to FAM
  *   usage: fam(STRING) -> FAM
  *==========================*/
-PVALUE __fam (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__fam (PNODE node,
+       TABLE stab,
+       BOOLEAN *eflg)
 {
 	STRING str, rec;
 	unsigned char scratch[200], *p, *q = scratch;
@@ -2723,8 +2954,11 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 /*=======================================+
  * eval_indi -- Evaluate person expression
  *======================================*/
-NODE eval_indi (expr, stab, eflg, pcel)
-PNODE expr; TABLE stab; BOOLEAN *eflg; CACHEEL *pcel;
+NODE
+eval_indi (PNODE expr,
+           TABLE stab,
+           BOOLEAN *eflg,
+           CACHEEL *pcel)
 {
 	NODE indi;
 	CACHEEL cel;
@@ -2752,8 +2986,11 @@ PNODE expr; TABLE stab; BOOLEAN *eflg; CACHEEL *pcel;
 /*======================================+
  * eval_fam -- Evaluate family expression
  *=====================================*/
-NODE eval_fam (expr, stab, eflg, pcel)
-PNODE expr; TABLE stab; BOOLEAN *eflg; CACHEEL *pcel;
+NODE
+eval_fam (PNODE expr,
+          TABLE stab,
+          BOOLEAN *eflg,
+          CACHEEL *pcel)
 {
 	NODE fam;
 	CACHEEL cel;
@@ -2775,8 +3012,10 @@ PNODE expr; TABLE stab; BOOLEAN *eflg; CACHEEL *pcel;
  * __free -- free up data associated with a variable 
  *   usage: free(IDEN]) --> VOID
  *=======================================*/
-WORD __free (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__free (PNODE node,
+        TABLE stab,
+        BOOLEAN *eflg)
 {
     	extern LIST keysets;
 	PNODE arg = (PNODE) iargs(node);

@@ -58,10 +58,14 @@ TABLE filetab, proctab, globtab, functab;
 STRING ierror = (STRING) "Error: file \"%s\": line %d: ";
 static STRING qrptname = (STRING) "What is the name of the program?";
 
+static void remove_tables (void);
+static void parse_file (STRING ifile, LIST plist);
+
 /*====================================+
  * initinterp -- Initialize interpreter
  *===================================*/
-void initinterp (void)
+void
+initinterp (void)
 {
 	initrassa();
 	initset();
@@ -70,15 +74,16 @@ void initinterp (void)
 /*==================================+
  * finishinterp -- Finish interpreter
  *=================================*/
-void finishinterp (void)
+void
+finishinterp (void)
 {
 	finishrassa();
 }
 /*================================================================+
  * progmessage -- Display a status message about the report program
  *===============================================================*/
-void progmessage(msg)
-    char *msg;
+void
+progmessage(char *msg)
 {
     char buf[80];
     int len;
@@ -103,13 +108,13 @@ void progmessage(msg)
 /*=============================================+
  * interp_program -- Interpret LifeLines program
  *============================================*/
-void interp_program (proc, nargs, args, nifiles, ifiles, ofile)
-STRING proc;	/* proc to call */
-INT nargs;	/* number of arguments */
-WORD *args;	/* arguments */
-INT nifiles;	/* number of program files - can be zero */
-STRING *ifiles;	/* program files */
-STRING ofile;	/* output file - can be NULL */
+void
+interp_program (STRING proc,    /* proc to call */
+                INT nargs,      /* number of arguments */
+                WORD *args,     /* arguments */
+                INT nifiles,    /* number of program files - can be zero*/
+                STRING *ifiles, /* program files */
+                STRING ofile)   /* output file - can be NULL */
 {
     	FILE *fp;
 	LIST plist = create_list();
@@ -223,7 +228,8 @@ STRING ofile;	/* output file - can be NULL */
 /*===========================================+
  * remove_tables - Remove interpreter's tables
  *==========================================*/
-void remove_tables (void)
+void
+remove_tables (void)
 {
 	remove_table(filetab, FREEKEY);
 	remove_table(proctab, DONTFREE);
@@ -233,9 +239,9 @@ void remove_tables (void)
 /*======================================+
  * parse_file - Parse single program file
  *=====================================*/
-void parse_file (ifile, plist)
-STRING ifile;
-LIST plist;
+void
+parse_file (STRING ifile,
+            LIST plist)
 {
 	Pfname = ifile;
 	if (!ifile || *ifile == 0) return;
@@ -253,17 +259,18 @@ LIST plist;
 /*====================================+
  * interp_main -- Interpreter main proc
  *===================================*/
-void interp_main (void)
+void
+interp_main (void)
 {
 	interp_program("main", 0, NULL, 0, NULL, NULL);
 }
 /*======================================
  * interpret -- Interpret statement list
  *====================================*/
-INTERPTYPE interpret (node, stab, pval)
-PNODE node;	/* first node to interpret */
-TABLE stab;	/* current symbol table */
-PVALUE *pval;	/* possible return value */
+INTERPTYPE
+interpret (PNODE node,          /* first node to interpret */
+           TABLE stab,          /* current symbol table */
+           PVALUE *pval)        /* possible return value */
 {
 	STRING str;
 	BOOLEAN eflg = FALSE;
@@ -622,8 +629,10 @@ if (prog_debug) {
  * interp_children -- Interpret child loop
  *  usage: chidren(INDI,INDI_V,INT_V) {...}
  *=======================================*/
-INTERPTYPE interp_children (node, stab, pval)
-PNODE node; TABLE stab; PVALUE *pval;
+INTERPTYPE
+interp_children (PNODE node,
+                 TABLE stab,
+                 PVALUE *pval)
 {
 	BOOLEAN eflg = FALSE;
 	INT nchil;
@@ -667,8 +676,10 @@ a:	;
  * interp_spouses -- Interpret spouse loop
  *  usage: spouses(INDI,INDI_V,FAM_V,INT_V) {...}
  *=============================================*/
-INTERPTYPE interp_spouses (node, stab, pval)
-PNODE node; TABLE stab; PVALUE *pval;
+INTERPTYPE
+interp_spouses (PNODE node,
+                TABLE stab,
+                PVALUE *pval)
 {
 	BOOLEAN eflg = FALSE;
 	INT nspouses;
@@ -716,8 +727,10 @@ b:	;
  * interp_families -- Interpret family loop
  *  usage: families(INDI,FAM_V,INDI_V,INT_V) {...}
  *==============================================*/
-INTERPTYPE interp_families (node, stab, pval)
-PNODE node; TABLE stab; PVALUE *pval;
+INTERPTYPE
+interp_families (PNODE node,
+                 TABLE stab,
+                 PVALUE *pval)
 {
 	BOOLEAN eflg = FALSE;
 	INT nfams;
@@ -764,8 +777,10 @@ c:	;
 /*========================================+
  * interp_fathers -- Interpret fathers loop
  *=======================================*/
-INTERPTYPE interp_fathers (node, stab, pval)
-PNODE node; TABLE stab; PVALUE *pval;
+INTERPTYPE
+interp_fathers (PNODE node,
+                TABLE stab,
+                PVALUE *pval)
 {
 	BOOLEAN eflg = FALSE;
 	INT nfams;
@@ -815,8 +830,10 @@ d:	;
 /*========================================+
  * interp_mothers -- Interpret mothers loop
  *=======================================*/
-INTERPTYPE interp_mothers (node, stab, pval)
-PNODE node; TABLE stab; PVALUE *pval;
+INTERPTYPE
+interp_mothers (PNODE node,
+                TABLE stab,
+                PVALUE *pval)
 {
 	BOOLEAN eflg = FALSE;
 	INT nfams;
@@ -867,8 +884,10 @@ e:	;
 /*========================================+
  * interp_parents -- Interpret parents loop
  *=======================================*/
-INTERPTYPE interp_parents (node, stab, pval)
-PNODE node; TABLE stab; PVALUE *pval;
+INTERPTYPE
+interp_parents (PNODE node,
+                TABLE stab,
+                PVALUE *pval)
 {
 	BOOLEAN eflg = FALSE;
 	INT nfams;
@@ -911,8 +930,10 @@ f:	;
 /*=======================================
  * interp_fornotes -- Interpret NOTE loop
  *=====================================*/
-INTERPTYPE interp_fornotes (node, stab, pval)
-PNODE node; TABLE stab; PVALUE *pval;
+INTERPTYPE
+interp_fornotes (PNODE node,
+                 TABLE stab,
+                 PVALUE *pval)
 {
         BOOLEAN eflg = FALSE;
         INTERPTYPE irc;
@@ -946,8 +967,10 @@ g:      ;
  * interp_fornodes -- Interpret fornodes loop
  *  usage: fornodes(NODE,NODE_V) {...}
  *=========================================*/
-INTERPTYPE interp_fornodes (node, stab, pval)
-PNODE node; TABLE stab; PVALUE *pval;
+INTERPTYPE
+interp_fornodes (PNODE node,
+                 TABLE stab,
+                 PVALUE *pval)
 {
 	BOOLEAN eflg = FALSE;
 	INTERPTYPE irc;
@@ -982,8 +1005,10 @@ PNODE node; TABLE stab; PVALUE *pval;
  * interp_forindi -- Interpret forindi loop
  *  usage: forindi(INDI_V,INT_V) {...}
  *=======================================*/
-INTERPTYPE interp_forindi (node, stab, pval)
-PNODE node; TABLE stab; PVALUE *pval;
+INTERPTYPE
+interp_forindi (PNODE node,
+                TABLE stab,
+                PVALUE *pval)
 {
 	NODE indi;
 	static char key[10];
@@ -1022,8 +1047,10 @@ PNODE node; TABLE stab; PVALUE *pval;
  * interp_forsour -- Interpret forsour loop
  *  usage: forsour(SOUR_V,INT_V) {...}
  *=======================================*/
-INTERPTYPE interp_forsour (node, stab, pval)
-PNODE node; TABLE stab; PVALUE *pval;
+INTERPTYPE
+interp_forsour (PNODE node,
+                TABLE stab,
+                PVALUE *pval)
 {
 	NODE sour;
 	static char key[10];
@@ -1062,8 +1089,10 @@ PNODE node; TABLE stab; PVALUE *pval;
  * interp_foreven -- Interpret foreven loop
  *  usage: foreven(EVEN_V,INT_V) {...}
  *=======================================*/
-INTERPTYPE interp_foreven (node, stab, pval)
-PNODE node; TABLE stab; PVALUE *pval;
+INTERPTYPE
+interp_foreven (PNODE node,
+                TABLE stab,
+                PVALUE *pval)
 {
 	NODE even;
 	static char key[10];
@@ -1102,8 +1131,10 @@ PNODE node; TABLE stab; PVALUE *pval;
  * interp_forothr -- Interpret forothr loop
  *  usage: forothr(OTHR_V,INT_V) {...}
  *=======================================*/
-INTERPTYPE interp_forothr (node, stab, pval)
-PNODE node; TABLE stab; PVALUE *pval;
+INTERPTYPE
+interp_forothr (PNODE node,
+                TABLE stab,
+                PVALUE *pval)
 {
 	NODE othr;
 	static char key[10];
@@ -1142,8 +1173,10 @@ PNODE node; TABLE stab; PVALUE *pval;
  * interp_forfam -- Interpret forfam loop
  *  usage: forfam(FAM_V,INT_V) {...}
  *=====================================*/
-INTERPTYPE interp_forfam (node, stab, pval)
-PNODE node; TABLE stab; PVALUE *pval;
+INTERPTYPE
+interp_forfam (PNODE node,
+               TABLE stab,
+               PVALUE *pval)
 {
 	NODE fam;
 	static char key[10];
@@ -1181,8 +1214,10 @@ PNODE node; TABLE stab; PVALUE *pval;
 /*============================================+
  * interp_indisetloop -- Interpret indiset loop
  *===========================================*/
-INTERPTYPE interp_indisetloop (node, stab, pval)
-PNODE node; TABLE stab; PVALUE *pval;
+INTERPTYPE
+interp_indisetloop (PNODE node,
+                    TABLE stab,
+                    PVALUE *pval)
 {
 	BOOLEAN eflg = FALSE;
 	INTERPTYPE irc;
@@ -1226,8 +1261,10 @@ h:	;
 /*=====================================+
  * interp_forlist -- Interpret list loop
  *====================================*/
-INTERPTYPE interp_forlist (node, stab, pval)
-PNODE node; TABLE stab; PVALUE *pval;
+INTERPTYPE
+interp_forlist (PNODE node,
+                TABLE stab,
+                PVALUE *pval)
 {
 	BOOLEAN eflg = FALSE;
 	INTERPTYPE irc;
@@ -1264,8 +1301,10 @@ i:	;
 /*===================================+
  * interp_if -- Interpret if structure
  *==================================*/
-INTERPTYPE interp_if (node, stab, pval)
-PNODE node; TABLE stab; PVALUE *pval;
+INTERPTYPE
+interp_if (PNODE node,
+           TABLE stab,
+           PVALUE *pval)
 {
 	BOOLEAN eflg = FALSE;
 	BOOLEAN cond = evaluate_cond(icond(node), stab, &eflg);
@@ -1277,8 +1316,10 @@ PNODE node; TABLE stab; PVALUE *pval;
 /*=========================================+
  * interp_while -- Interpret while structure
  *========================================*/
-INTERPTYPE interp_while (node, stab, pval)
-PNODE node; TABLE stab; PVALUE *pval;
+INTERPTYPE
+interp_while (PNODE node,
+              TABLE stab,
+              PVALUE *pval)
 {
 	BOOLEAN eflg = FALSE, cond;
 	INTERPTYPE irc;
@@ -1300,8 +1341,10 @@ PNODE node; TABLE stab; PVALUE *pval;
 /*=======================================+
  * interp_call -- Interpret call structure
  *======================================*/
-INTERPTYPE interp_call (node, stab, pval)
-PNODE node; TABLE stab; PVALUE *pval;
+INTERPTYPE
+interp_call (PNODE node,
+             TABLE stab,
+             PVALUE *pval)
 {
 	TABLE newtab;
 	INTERPTYPE irc;
@@ -1348,8 +1391,10 @@ PNODE node; TABLE stab; PVALUE *pval;
  * interp_traverse -- Interpret traverse iterator
  *  usage: traverse(NODE,NODE_V,INT_V) {...}
  *=============================================*/
-INTERPTYPE interp_traverse (node, stab, pval)
-PNODE node; TABLE stab; PVALUE *pval;
+INTERPTYPE
+interp_traverse (PNODE node,
+                 TABLE stab,
+                 PVALUE *pval)
 {
 	NODE snode, stack[100];
 	BOOLEAN eflg = FALSE;

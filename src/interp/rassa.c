@@ -59,10 +59,13 @@ STRING outfilename;
 STRING noreport = (STRING) "No report was generated.";
 STRING whtout = (STRING) "What is the name of the output file?";
 
+static void adjust_cols (STRING str);
+
 /*======================================+
  * initrassa -- Initialize program output
  *=====================================*/
-void initrassa (void)
+void
+initrassa (void)
 {
 	outputmode = BUFFERED;
 	linebuflen = 0;
@@ -72,7 +75,8 @@ void initrassa (void)
 /*======================================+
  * finishrassa -- Finalize program output
  *=====================================*/
-void finishrassa (void)
+void
+finishrassa (void)
 {
 	if (outputmode == BUFFERED && linebuflen > 0 && Poutfp) {
 		fwrite(linebuffer, linebuflen, 1, Poutfp);
@@ -85,8 +89,10 @@ void finishrassa (void)
  * __pagemode -- Switch output to page mode
  *   usage: pagemode(INT, INT) -> VOID
  *======================================*/
-PVALUE __pagemode (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__pagemode (PNODE node,
+            TABLE stab,
+            BOOLEAN *eflg)
 {
 	INT cols, rows;
 	PVALUE val = eval_and_coerce(PINT, iargs(node), stab, eflg);
@@ -121,8 +127,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __linemode -- Switch output to line mode
  *   usage: linemode() -> VOID
  *=======================================*/
-PVALUE __linemode (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__linemode (PNODE node,
+            TABLE stab,
+            BOOLEAN *eflg)
 {
 	outputmode = BUFFERED;
 	linebuflen = 0;
@@ -135,8 +143,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __newfile -- Switch output to new file
  *   usage: newfile(STRING, BOOL) -> VOID
  *=====================================*/
-PVALUE __newfile (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__newfile (PNODE node,
+           TABLE stab,
+           BOOLEAN *eflg)
 {
 	BOOLEAN aflag;
 	STRING name;
@@ -176,8 +186,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __outfile -- Return output file name
  *   usage: outfile() -> STRING
  *===================================*/
-PVALUE __outfile (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__outfile (PNODE node,
+           TABLE stab,
+           BOOLEAN *eflg)
 {
 	if (!Poutfp) {
 		Poutfp = ask_for_file(LLWRITETEXT, whtout, &outfilename, llreports, NULL);
@@ -195,8 +207,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __pos -- Position page output to row and column
  *   usage: pos(INT, INT) -> VOID
  *==============================================*/
-PVALUE __pos (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__pos (PNODE node,
+       TABLE stab,
+       BOOLEAN *eflg)
 {
 	INT col, row;
 	PVALUE val = eval_and_coerce(PINT, iargs(node), stab, eflg);
@@ -227,8 +241,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __row -- Position output to start of row
  *   usage: row(INT) -> VOID
  *=======================================*/
-PVALUE __row (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__row (PNODE node,
+       TABLE stab,
+       BOOLEAN *eflg)
 {
 	INT row;
 	PVALUE val = eval_and_coerce(PINT, iargs(node), stab, eflg);
@@ -252,8 +268,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __col -- Position output to column
  *   usage: col(INT) -> VOID
  *=================================*/
-PVALUE __col (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__col (PNODE node,
+       TABLE stab,
+       BOOLEAN *eflg)
 {
 	INT newcol;
 	PVALUE val = eval_and_coerce(PINT, iargs(node), stab, eflg);
@@ -274,8 +292,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __getcol -- Return current column
  *   usage: getcol() -> INT
  *================================*/
-PVALUE __getcol (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__getcol (PNODE node,
+          TABLE stab,
+          BOOLEAN *eflg)
 {
 	*eflg = FALSE;
 	return create_pvalue(PINT, (WORD)curcol);
@@ -284,8 +304,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __pageout -- Output current page and clear page buffer
  *   usage: pageout() -> VOID
  *====================================================*/
-PVALUE __pageout (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__pageout (PNODE node,
+           TABLE stab,
+           BOOLEAN *eflg)
 {
 	char scratch[MAXCOLS+2];
 	STRING p;
@@ -319,8 +341,8 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 /*========================================+
  * poutput -- Output string in current mode
  *=======================================*/
-void poutput (str)
-STRING str;
+void
+poutput (STRING str)
 {
 	STRING p, name;
 	INT c, len;
@@ -383,8 +405,8 @@ STRING str;
 /*==================================================+
  * adjust_cols -- Adjust column after printing string
  *=================================================*/
-static void adjust_cols (str)
-STRING str;
+static void
+adjust_cols (STRING str)
 {
 	INT c;
 	while ((c = *str++)) {

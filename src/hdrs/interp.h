@@ -231,8 +231,6 @@ void interp_program(STRING, INT, WORD*, INT, STRING*, STRING);
 void finishinterp(void);
 void finishrassa(void);
 void progmessage(char*);
-void remove_tables(void);
-void parse_file(STRING, LIST);
 
 INTERPTYPE interpret(PNODE, TABLE, PVALUE*);
 INTERPTYPE interp_children (PNODE, TABLE, PVALUE*);
@@ -300,7 +298,6 @@ PNODE parents_node(PNODE, STRING, STRING, PNODE);
 PNODE proc_node(STRING, PNODE, PNODE);
 void prog_error(PNODE, STRING, ...);
 PNODE return_node(PNODE);
-void set_parents(PNODE, PNODE);
 void show_one_pnode(PNODE);
 void show_pnode(PNODE);
 void show_pnodes(PNODE);

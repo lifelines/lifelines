@@ -55,8 +55,8 @@ static BOOLEAN reserved(STRING, INT*);
 /*============================
  * initlex -- Initialize lexer
  *==========================*/
-void initlex (mode)
-INT mode;
+void
+initlex (int mode)
 {
 	ASSERT(mode == FILEMODE || mode == STRINGMODE);
 	Lexmode = mode;
@@ -65,7 +65,8 @@ INT mode;
 /*===================================================
  * yylex -- High level lexer function (for debugging)
  *=================================================*/
-int yylex(void)
+int
+yylex(void)
 {
 	INT lex = lowyylex();
 
@@ -81,7 +82,8 @@ int yylex(void)
 /*===========================
  * lowyylex -- Lexer function
  *=========================*/
-int lowyylex (void)
+int
+lowyylex (void)
 {
 	INT c, t, retval, mul;
 	extern INT Yival;
@@ -243,9 +245,9 @@ INT nrwords = ARRAYSIZE(rwordtable);
 /*======================================
  * reserved -- See if string is reserved
  *====================================*/
-BOOLEAN reserved (word, pval)
-STRING word;
-INT *pval;
+BOOLEAN
+reserved (STRING word,
+          INT *pval)
 {
 	INT i;
 	for (i = 0; i < nrwords; i++) {
@@ -259,7 +261,8 @@ INT *pval;
 /*==============================================================
  * inchar -- Read char from input file/string; track line number
  *============================================================*/
-INT inchar (void)
+INT
+inchar (void)
 {
 	INT c;
 #ifdef SKIPCTRLZ
@@ -278,8 +281,8 @@ INT inchar (void)
 /*================================================================
  * unchar -- Unread char from input file/string; track line number
  *==============================================================*/
-void unchar (c)
-INT c;
+void
+unchar (INT c)
 {
 	if (Lexmode == FILEMODE)
 		ungetc(c, Pinfp);

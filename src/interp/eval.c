@@ -48,8 +48,10 @@ extern BOOLEAN traceprogram;
 /*=============================+
  * evaluate -- Generic evaluator
  *============================*/
-PVALUE evaluate (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+evaluate (PNODE node,
+          TABLE stab,
+          BOOLEAN *eflg)
 {
 	if (prog_debug) {
 		llwprintf("%d: ", iline(node));
@@ -69,8 +71,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 /*====================================+
  * evaluate_iden -- Evaluate identifier
  *===================================*/
-PVALUE evaluate_iden (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+evaluate_iden (PNODE node,
+               TABLE stab,
+               BOOLEAN *eflg)
 {
 	STRING iden = (STRING) iident(node);
 #if 0
@@ -83,8 +87,9 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 /*=======================================+
  * valueof_iden - Find value of identifier
  *======================================*/
-PVALUE valueof_iden (stab, iden)
-TABLE stab;  STRING iden;
+PVALUE
+valueof_iden (TABLE stab,
+              STRING iden)
 {
 	BOOLEAN there;
 	PVALUE val;
@@ -103,8 +108,10 @@ TABLE stab;  STRING iden;
 /*================================================+
  * evaluate_cond -- Evaluate conditional expression
  *===============================================*/
-BOOLEAN evaluate_cond (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+BOOLEAN
+evaluate_cond (PNODE node,
+               TABLE stab,
+               BOOLEAN *eflg)
 {
 	PVALUE val;
 	BOOLEAN rc;
@@ -138,8 +145,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 /*==========================================+
  * evaluate_func -- Evaluate builtin function
  *=========================================*/
-PVALUE evaluate_func (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+evaluate_func (PNODE node,
+               TABLE stab,
+               BOOLEAN *eflg)
 {
 	PVALUE val;
 	char trace[20];
@@ -160,8 +169,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 /*================================================+
  * evaluate_ufunc -- Evaluate user defined function
  *===============================================*/
-PVALUE evaluate_ufunc (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+evaluate_ufunc (PNODE node,
+                TABLE stab,
+                BOOLEAN *eflg)
 {
 	STRING nam = (STRING) iname(node);
 	PNODE func, arg, parm;
@@ -219,17 +230,17 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 /*=====================================
  * iistype -- Check type of interp node
  *===================================*/
-BOOLEAN iistype (node, type)
-PNODE node;
-INT type;
+BOOLEAN
+iistype (PNODE node,
+         INT type)
 {
 	return itype(node) == type;
 }
 /*==============================================
  * num_params -- Return number of params in list
  *============================================*/
-INT num_params (node)
-PNODE node;
+INT
+num_params (PNODE node)
 {
 	INT np = 0;
 	while (node) {
@@ -241,8 +252,10 @@ PNODE node;
 /*============================================
  * assign_iden -- Assign ident value in symtab
  *==========================================*/
-void assign_iden (stab, id, value)
-TABLE stab; STRING id; WORD value;
+void
+assign_iden (TABLE stab,
+             STRING id,
+             WORD value)
 {
 	TABLE tab = stab;
 #ifdef HOGMEMORY
@@ -265,8 +278,11 @@ TABLE stab; STRING id; WORD value;
 /*=================================================
  * eval_and_coerce -- Generic evaluator and coercer
  *===============================================*/
-PVALUE eval_and_coerce (type, node, stab, eflg)
-INT type; PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+eval_and_coerce (INT type,
+                 PNODE node,
+                 TABLE stab,
+                 BOOLEAN *eflg)
 {
 	PVALUE val;
 	if (*eflg) return NULL;

@@ -56,8 +56,10 @@ typedef struct dumstruct *PNODE;
  * __heapused -- Return amount of heapspace in use
  *   usage: heapused() -> INT
  *==============================================*/
-PVALUE __heapused (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__heapused (PNODE node,
+            TABLE stab,
+            BOOLEAN *eflg)
 {
 	struct heapinfo hi;
 	long heapused;

@@ -45,9 +45,9 @@ static char *ptypes[] = {
 /*========================================
  * create_pvalue -- Create a program value
  *======================================*/
-PVALUE create_pvalue (type, value)
-INT type;
-WORD value;
+PVALUE
+create_pvalue (INT type,
+               WORD value)
 {
         PVALUE val;
 
@@ -69,8 +69,8 @@ WORD value;
 /*========================================
  * delete_pvalue -- Delete a program value
  *======================================*/
-void delete_pvalue (val)
-PVALUE val;
+void
+delete_pvalue (PVALUE val)
 {
 #ifdef DEBUG
 	llwprintf("__delete_pvalue: val == ");
@@ -92,8 +92,8 @@ PVALUE val;
 /*====================================
  * copy_pvalue -- Copy a program value
  *==================================*/
-PVALUE copy_pvalue (val)
-PVALUE val;
+PVALUE
+copy_pvalue (PVALUE val)
 {
 	if (!val) {
 llwprintf("copy_pvalue: copying null pvalue\n");
@@ -104,10 +104,10 @@ llwprintf("copy_pvalue: copying null pvalue\n");
 /*==================================
  * set_pvalue -- Set a program value
  *================================*/
-void set_pvalue (val, type, value)
-PVALUE val;
-INT type;
-WORD value;
+void
+set_pvalue (PVALUE val,
+            INT type,
+            WORD value)
 {
 #ifdef DEBUG
 	llwprintf("\nset_pvalue called: val=");
@@ -122,8 +122,8 @@ WORD value;
 /*==================================================
  * numeric_pvalue -- See if program value is numeric
  *================================================*/
-BOOLEAN numeric_pvalue (val)
-PVALUE val;
+BOOLEAN
+numeric_pvalue (PVALUE val)
 {
 	INT type = ptype(val);
 	return type == PINT || type == PLONG || type == PFLOAT;
@@ -131,9 +131,10 @@ PVALUE val;
 /*============================================================
  * num_conform_pvalues -- Make the types of two values conform
  *==========================================================*/
-void num_conform_pvalues (val1, val2, eflg)
-PVALUE val1, val2;
-BOOLEAN *eflg;
+void
+num_conform_pvalues (PVALUE val1,
+                     PVALUE val2,
+                     BOOLEAN *eflg)
 {
 	INT hitype;
 
@@ -153,9 +154,10 @@ BOOLEAN *eflg;
 /*===========================================================
  * eq_conform_pvalues -- Make the types of two values conform
  *=========================================================*/
-void eq_conform_pvalues (val1, val2, eflg)
-PVALUE val1, val2;
-BOOLEAN *eflg;
+void
+eq_conform_pvalues (PVALUE val1,
+                    PVALUE val2,
+                    BOOLEAN *eflg)
 {
 	INT hitype;
 
@@ -182,10 +184,10 @@ BOOLEAN *eflg;
 /*=========================================================
  * coerce_pvalue -- Convert PVALUE from one type to another
  *=======================================================*/
-void coerce_pvalue (type, val, eflg)
-INT type;	/* type to convert to */
-PVALUE val;	/* old and new value */
-BOOLEAN *eflg;
+void
+coerce_pvalue (INT type,       /* type to convert to */
+               PVALUE val,     /* old and new value */
+               BOOLEAN *eflg)
 {
 #ifdef UNUSED_CODE
 	PVALUE new;
@@ -276,8 +278,8 @@ bad:
 /*===========================================================
  * is_pvalue -- Checks PVALUE for validity -- doesn't do much
  *=========================================================*/
-BOOLEAN is_pvalue (pval)
-PVALUE pval;
+BOOLEAN
+is_pvalue (PVALUE pval)
 {
 	if (!pval) return FALSE;
 	return ptype(pval) >= PNONE  && ptype(pval) <= PSET;
@@ -285,29 +287,30 @@ PVALUE pval;
 /*=================================================
  * is_record_pvalue -- Checks PVALUE for recordness
  *===============================================*/
-BOOLEAN is_record_pvalue (val)
-PVALUE val;
+BOOLEAN
+is_record_pvalue (PVALUE val)
 {
 	INT type = ptype(val);
 	return type >= PINDI && type <= POTHR;
 }
 
-INT bool_to_int (b)
-BOOLEAN b;
+INT
+bool_to_int (BOOLEAN b)
 {
 	return b ? 1 : 0;
 }
-FLOAT bool_to_float (b)
-BOOLEAN b;
+FLOAT
+bool_to_float (BOOLEAN b)
 {
 	return b ? 1. : 0.;
 }
 /*===============================
  * add_pvalues -- Add two PVALUEs
  *=============================*/
-void add_pvalues (val1, val2, eflg)
-PVALUE val1, val2;
-BOOLEAN *eflg;
+void
+add_pvalues (PVALUE val1,
+             PVALUE val2,
+             BOOLEAN *eflg)
 {
 	UNION u1, u2;
 
@@ -327,9 +330,10 @@ BOOLEAN *eflg;
 /*====================================
  * sub_pvalues -- Subtract two PVALUEs
  *==================================*/
-void sub_pvalues (val1, val2, eflg)
-PVALUE val1, val2;
-BOOLEAN *eflg;
+void
+sub_pvalues (PVALUE val1,
+             PVALUE val2,
+             BOOLEAN *eflg)
 {
 	UNION u1, u2;
 	if (*eflg) return;
@@ -348,9 +352,10 @@ BOOLEAN *eflg;
 /*====================================
  * mul_pvalues -- Multiply two PVALUEs
  *==================================*/
-void mul_pvalues (val1, val2, eflg)
-PVALUE val1, val2;
-BOOLEAN *eflg;
+void
+mul_pvalues (PVALUE val1,
+             PVALUE val2,
+             BOOLEAN *eflg)
 {
 	UNION u1, u2;
 
@@ -370,9 +375,10 @@ BOOLEAN *eflg;
 /*==================================
  * div_pvalues -- Divide two PVALUEs
  *================================*/
-void div_pvalues (val1, val2, eflg)
-PVALUE val1, val2;
-BOOLEAN *eflg;
+void
+div_pvalues (PVALUE val1,
+             PVALUE val2,
+             BOOLEAN *eflg)
 {
 	UNION u1, u2;
 
@@ -396,9 +402,10 @@ BOOLEAN *eflg;
 /*===================================
  * mod_pvalues -- Modulus two PVALUEs
  *=================================*/
-void mod_pvalues (val1, val2, eflg)
-PVALUE val1, val2;
-BOOLEAN *eflg;
+void
+mod_pvalues (PVALUE val1,
+             PVALUE val2,
+             BOOLEAN *eflg)
 {
 	UNION u1, u2;
 	if (*eflg) return;
@@ -420,8 +427,9 @@ BOOLEAN *eflg;
 /*===================================================================+
  * eqv_pvalues -- See if two PVALUEs are equal (no change to PVALUEs)
  *==================================================================*/
-BOOLEAN eqv_pvalues (val1, val2)
-PVALUE val1, val2;
+BOOLEAN
+eqv_pvalues (PVALUE val1,
+             PVALUE val2)
 {
     STRING v1, v2;
     BOOLEAN rel = FALSE;
@@ -443,9 +451,10 @@ PVALUE val1, val2;
 /*===========================================
  * eq_pvalues -- See if two PVALUEs are equal
  *=========================================*/
-void eq_pvalues (val1, val2, eflg)
-PVALUE val1, val2;
-BOOLEAN *eflg;
+void
+eq_pvalues (PVALUE val1,
+            PVALUE val2,
+            BOOLEAN *eflg)
 {
 	BOOLEAN rel;
 	STRING v1, v2;
@@ -470,9 +479,10 @@ BOOLEAN *eflg;
 /*===============================================
  * ne_pvalues -- See if two PVALUEs are not equal
  *=============================================*/
-void ne_pvalues (val1, val2, eflg)
-PVALUE val1, val2;
-BOOLEAN *eflg;
+void
+ne_pvalues (PVALUE val1,
+            PVALUE val2,
+            BOOLEAN *eflg)
 {
 	BOOLEAN rel;
 	STRING v1, v2;
@@ -511,9 +521,10 @@ BOOLEAN *eflg;
 /*================================================
  * le_pvalues -- Check <= relation between PVALUEs
  *==============================================*/
-void le_pvalues (val1, val2, eflg)
-PVALUE val1, val2;
-BOOLEAN *eflg;
+void
+le_pvalues (PVALUE val1,
+            PVALUE val2,
+            BOOLEAN *eflg)
 {
 	BOOLEAN rel;
 	if (*eflg) return;
@@ -529,9 +540,10 @@ BOOLEAN *eflg;
 /*================================================
  * ge_pvalues -- Check >= relation between PVALUEs
  *==============================================*/
-void ge_pvalues (val1, val2, eflg)
-PVALUE val1, val2;
-BOOLEAN *eflg;
+void
+ge_pvalues (PVALUE val1,
+            PVALUE val2,
+            BOOLEAN *eflg)
 {
 	BOOLEAN rel;
 	if (*eflg) return;
@@ -556,9 +568,10 @@ BOOLEAN *eflg;
 /*===============================================
  * lt_pvalues -- Check < relation between PVALUEs
  *=============================================*/
-void lt_pvalues (val1, val2, eflg)
-PVALUE val1, val2;
-BOOLEAN *eflg;
+void
+lt_pvalues (PVALUE val1,
+            PVALUE val2,
+            BOOLEAN *eflg)
 {
 	BOOLEAN rel;
 	if (prog_debug) {
@@ -593,9 +606,10 @@ BOOLEAN *eflg;
 /*===============================================
  * gt_pvalues -- Check > relation between PVALUEs
  *=============================================*/
-void gt_pvalues (val1, val2, eflg)
-PVALUE val1, val2;
-BOOLEAN *eflg;
+void
+gt_pvalues (PVALUE val1,
+            PVALUE val2,
+            BOOLEAN *eflg)
 {
 	BOOLEAN rel;
 if (prog_debug) {
@@ -624,9 +638,10 @@ if (prog_debug) {
 /*==============================
  * exp_pvalues -- Exponentiation
  *============================*/
-void exp_pvalues (val1, val2, eflg)
-PVALUE val1, val2;
-BOOLEAN *eflg;
+void
+exp_pvalues (PVALUE val1,
+             PVALUE val2,
+             BOOLEAN *eflg)
 {
 	UNION u;
 	INT xi, i, n;
@@ -659,9 +674,9 @@ BOOLEAN *eflg;
 /*==================================
  * incr_pvalue -- Increment a PVALUE
  *================================*/
-void incr_pvalue (val, eflg)
-PVALUE val;
-BOOLEAN *eflg;
+void
+incr_pvalue (PVALUE val,
+             BOOLEAN *eflg)
 {
 	UNION u;
 	if (*eflg) return;
@@ -677,9 +692,9 @@ BOOLEAN *eflg;
 /*==================================
  * decr_pvalue -- Decrement a PVALUE
  *================================*/
-void decr_pvalue (val, eflg)
-PVALUE val;
-BOOLEAN *eflg;
+void
+decr_pvalue (PVALUE val,
+             BOOLEAN *eflg)
 {
 	UNION u;
 	if (*eflg) return;
@@ -694,9 +709,9 @@ BOOLEAN *eflg;
 /*============================
  * neg_pvalue -- Negate PVALUE
  *==========================*/
-void neg_pvalue (val, eflg)
-PVALUE val;
-BOOLEAN *eflg;
+void
+neg_pvalue (PVALUE val,
+            BOOLEAN *eflg)
 {
 	UNION u;
 	if (*eflg) return;
@@ -712,8 +727,8 @@ BOOLEAN *eflg;
 /*=================================
  * is_zero -- See if PVALUE is zero
  *===============================*/
-BOOLEAN is_zero (val)
-PVALUE val;
+BOOLEAN
+is_zero (PVALUE val)
 {
 	UNION u;
 	u.w = pvalue(val);
@@ -726,11 +741,12 @@ PVALUE val;
 /*======================================================
  * insert_pvtable -- Update symbol table with new PVALUE
  *====================================================*/
-void insert_pvtable (stab, iden, type, value)
-TABLE stab;	/* symbol table */
-STRING iden;	/* variable in symbol table */
-INT type;	/* type of new value to assign to identifier */
-WORD value;	/* new value of identifier */
+void
+insert_pvtable (TABLE stab,     /* symbol table */
+                STRING iden,    /* variable in symbol table */
+                INT type,       /* type of new value to assign to
+                                   identifier */
+                WORD value)     /* new value of identifier */
 {
 	PVALUE val = (PVALUE) valueof(stab, iden);
 	if (val) delete_pvalue(val);
@@ -740,8 +756,8 @@ WORD value;	/* new value of identifier */
 /*=================================================
  * zero_pventry -- zero the value of a symbol table 
  *================================================*/
-void zero_pventry (ent)
-ENTRY ent;	/* symbol table entry */
+void
+zero_pventry (ENTRY ent)      /* symbol table entry */
 {
     PVALUE val;
     if(ent && (val = ent->evalue)) {
@@ -754,8 +770,8 @@ ENTRY ent;	/* symbol table entry */
  * remove_pvtable -- Remove symbol table 
  *======================================*/
 FILE *errfp = NULL;
-void remove_pvtable (stab)
-TABLE stab;	/* symbol table */
+void
+remove_pvtable (TABLE stab)     /* symbol table */
 {
 #ifdef HOGMEMORYERROR
     if(errfp == NULL) errfp = fopen("pbm.err", "w");
@@ -772,8 +788,8 @@ TABLE stab;	/* symbol table */
 /*=================================================
  * show_pvalue -- DEBUG routine that shows a PVALUE
  *===============================================*/
-void show_pvalue (val)
-PVALUE val;
+void
+show_pvalue (PVALUE val)
 {
 	NODE node;
 	CACHEEL cel;
@@ -814,8 +830,8 @@ PVALUE val;
 /*======================================================
  * pvalue_to_string -- DEBUG routine that shows a PVALUE
  *====================================================*/
-STRING pvalue_to_string (val)
-PVALUE val;
+STRING
+pvalue_to_string (PVALUE val)
 {
 	NODE node;
 	CACHEEL cel;

@@ -47,7 +47,8 @@ INDISEQ sibling_indiseq();
 /*======================================================+
  * initset -- Initialize list that holds created INDISEQs
  *=====================================================*/
-void initset (void)
+void
+initset (void)
 {
 	keysets = create_list();
 }
@@ -55,8 +56,10 @@ void initset (void)
  * indiset -- Declare an INDISEQ variable
  *   indiset(VARB) -> VOID
  *=====================================*/
-PVALUE __indiset (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__indiset (PNODE node,
+           TABLE stab,
+           BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PNODE var = (PNODE) iargs(node);
@@ -75,8 +78,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * addtoset -- Add person to INDISEQ
  *   addtoset(SET, INDI, ANY) -> VOID
  *=================================*/
-WORD __addtoset (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__addtoset (PNODE node,
+            TABLE stab,
+            BOOLEAN *eflg)
 {
 	NODE indi;
 	STRING key;
@@ -114,8 +119,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * lengthset -- Find length of an INDISEQ
  *   lengthset(SET) -> INT
  *=====================================*/
-PVALUE __lengthset (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__lengthset (PNODE node,
+             TABLE stab,
+             BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
@@ -132,8 +139,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * inset -- See if person is in INDISEQ
  *   inset(SET, INDI) -> BOOL
  *==========================================*/
-PVALUE __inset (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__inset (PNODE node,
+         TABLE stab,
+         BOOLEAN *eflg)
 {
 	NODE indi;
 	STRING key;
@@ -164,8 +173,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * deletefromset -- Remove person from INDISEQ
  *   deletefromset(SET, INDI, BOOL) -> VOID
  *==========================================*/
-PVALUE __deletefromset (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__deletefromset (PNODE node,
+                 TABLE stab,
+                 BOOLEAN *eflg)
 {
 	NODE indi;
 	STRING key;
@@ -208,8 +219,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * namesort -- Sort INDISEQ by name
  *   namesort(SET) -> VOID
  *===============================*/
-PVALUE __namesort (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__namesort (PNODE node,
+            TABLE stab,
+            BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
@@ -226,8 +239,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * keysort -- Sort INDISEQ by key
  *   keysort(SET) -> VOID
  *=============================*/
-PVALUE __keysort (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__keysort (PNODE node,
+           TABLE stab,
+           BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
@@ -244,8 +259,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * valuesort -- Sort INDISEQ by value
  *   valuesort(SET) -> VOID
  *=================================*/
-WORD __valuesort (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__valuesort (PNODE node,
+             TABLE stab,
+             BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
@@ -266,8 +283,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * uniqueset -- Eliminate dupes from INDISEQ
  *   uniqueset(SET) -> VOID
  *========================================*/
-PVALUE __uniqueset (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__uniqueset (PNODE node,
+             TABLE stab,
+             BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
@@ -284,8 +303,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * union -- Create union of two INDISEQs
  *   union(SET, SET) -> SET
  *====================================*/
-PVALUE __union (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__union (PNODE node,
+         TABLE stab,
+         BOOLEAN *eflg)
 {
 	PNODE arg1 = (PNODE) iargs(node), arg2 = inext(arg1);
 	INDISEQ op2, op1;
@@ -310,8 +331,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * intersect -- Create intersection of two INDISEQs
  *   intersect(SET, SET) -> SET
  *===============================================*/
-PVALUE __intersect (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__intersect (PNODE node,
+             TABLE stab,
+             BOOLEAN *eflg)
 {
 	PNODE arg1 = (PNODE) iargs(node), arg2 = inext(arg1);
 	INDISEQ op2, op1;
@@ -336,8 +359,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * difference -- Create difference of two INDISEQs
  *   difference(SET, SET) -> SET
  *==============================================*/
-PVALUE __difference (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__difference (PNODE node,
+              TABLE stab,
+              BOOLEAN *eflg)
 {
 	PNODE arg1 = (PNODE) iargs(node), arg2 = inext(arg1);
 	INDISEQ op2, op1;
@@ -362,8 +387,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * parentset -- Create parent set of INDISEQ
  *   parentset(SET) -> SET
  *========================================*/
-PVALUE __parentset (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__parentset (PNODE node,
+             TABLE stab,
+             BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
@@ -380,8 +407,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * childset -- Create child set of an INDISEQ
  *   childset(SET) -> SET
  *=========================================*/
-PVALUE __childset (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__childset (PNODE node,
+            TABLE stab,
+            BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
@@ -398,8 +427,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * siblingset -- Create sibling set of an INDISEQ
  *   siblingset(SET) -> SET
  *=============================================*/
-PVALUE __siblingset (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__siblingset (PNODE node,
+              TABLE stab,
+              BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
@@ -416,8 +447,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * spouseset -- Create spouse set of an INDISEQ
  *   spouseset(SET) -> SET
  *===========================================*/
-PVALUE __spouseset (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__spouseset (PNODE node,
+             TABLE stab,
+             BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
@@ -434,8 +467,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * ancestorset -- Create ancestor set of an INDISEQ
  *   ancestorset(SET) -> SET
  *===============================================*/
-PVALUE __ancestorset (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__ancestorset (PNODE node,
+               TABLE stab,
+               BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
@@ -453,8 +488,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  *   descendentset(SET) -> SET
  *   descendantset(SET) -> SET
  *===================================================*/
-PVALUE __descendentset (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__descendentset (PNODE node,
+                 TABLE stab,
+                 BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
@@ -471,8 +508,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * gengedcom -- Generate GEDCOM output from an INDISEQ
  *   gengedcom(SET) -> VOID
  *==================================================*/
-PVALUE __gengedcom (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__gengedcom (PNODE node,
+             TABLE stab,
+             BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);

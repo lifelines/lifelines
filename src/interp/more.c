@@ -47,7 +47,6 @@
 #include "liflines.h"
 
 extern STRING notone, ifone, progname;
-extern NODE format_and_choose_indi();
 
 static INT ll_index(STRING, STRING, INT);
 static void compute_pi(STRING);
@@ -57,8 +56,10 @@ BOOLEAN prog_debug = FALSE;
  * __extractnames -- Extract name parts from person or NAME node
  *   usage: extractnames(NODE, LIST, VARB, VARB) -> VOID
  *============================================================*/
-PVALUE __extractnames (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__extractnames (PNODE node,
+                TABLE stab,
+                BOOLEAN *eflg)
 {
 	LIST list, temp;
 	STRING str;
@@ -117,8 +118,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __extractplaces -- Extract place parts from event or PLAC NODE
  *   usage: extractplaces(NODE, LIST, VARB) -> VOID
  *=============================================================*/
-PVALUE __extractplaces (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__extractplaces (PNODE node,
+                 TABLE stab,
+                 BOOLEAN *eflg)
 {
 	LIST list, temp;
 	STRING str;
@@ -170,8 +173,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __extracttokens -- Extract tokens from a STRING value
  *   usage: extracttokens(STRING, LIST, VARB, STRING) -> VOID
  *=========================================================*/
-PVALUE __extracttokens (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__extracttokens (PNODE node,
+                 TABLE stab,
+                 BOOLEAN *eflg)
 {
 	LIST list, temp;
 	INT len;
@@ -224,8 +229,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __database -- Return database name
  *   usage: database([BOOL]) -> STRING
  *==================================*/
-PVALUE __database (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__database (PNODE node,
+            TABLE stab,
+            BOOLEAN *eflg)
 {
 	extern STRING readpath, lastpathname();
 	BOOLEAN full = FALSE;
@@ -247,8 +254,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __index -- Find nth occurrence of substring
  *   usage: index(STRING, STRING, INT) -> INT
  *==========================================*/
-PVALUE __index (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__index (PNODE node,
+         TABLE stab,
+         BOOLEAN *eflg)
 {
 	INT num;
 	PNODE arg = (PNODE) iargs(node);
@@ -282,8 +291,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __substring -- Find substring of string.
  *   usage: substring(STRING, INT, INT) -> STRING
  *=============================================*/
-PVALUE __substring (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__substring (PNODE node,
+             TABLE stab,
+             BOOLEAN *eflg)
 {
 	INT lo, hi;
 	PNODE arg = (PNODE) iargs(node);
@@ -317,9 +328,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * index -- Find nth occurrence of sub in str (uses KMP)
  *====================================================*/
 static char pi[MAXLINELEN];
-static INT ll_index (str, sub, num)
-STRING str, sub;
-INT num;
+static INT
+ll_index (STRING str,
+          STRING sub,
+          INT num)
 {
         INT i, n, m, q = 0, found = 0;
 
@@ -341,8 +353,8 @@ INT num;
 /*========================================
  * compute_pi -- Support routine for index
  *======================================*/
-static void compute_pi (sub)
-STRING sub;
+static void
+compute_pi (STRING sub)
 {
         INT m = strlen(sub), k = 0, q;
         pi[1] = 0;
@@ -356,9 +368,10 @@ STRING sub;
 /*==============================
  * substring -- Return substring
  *============================*/
-STRING substring (s, i, j)
-STRING s;
-INT i, j;
+STRING
+substring (STRING s,
+           INT i,
+           INT j)
 {
 	static char scratch[MAXLINELEN+1];
 	if (!s || *s == 0 || i <= 0 || i > j || j > (INT)strlen(s)) return NULL;
@@ -370,8 +383,10 @@ INT i, j;
  * chooseindi -- Have user choose person from set
  *   usage: chooseindi(SET) -> INDI
  *=============================================*/
-PVALUE __chooseindi (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__chooseindi (PNODE node,
+              TABLE stab,
+              BOOLEAN * eflg)
 {
 	NODE indi;
 	INDISEQ seq;
@@ -391,8 +406,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * choosesubset -- Have user choose subset from set
  *   usage: choosesubset(SET) -> SET
  *===============================================*/
-PVALUE __choosesubset (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__choosesubset (PNODE node,
+                TABLE stab,
+                BOOLEAN * eflg)
 {
 	STRING msg;
 	INDISEQ new, seq;
@@ -414,8 +431,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * choosechild -- Have user choose child of person or family
  *   usage: choosechild(INDI|FAM) -> INDI
  *========================================================*/
-PVALUE __choosechild (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__choosechild (PNODE node,
+               TABLE stab,
+               BOOLEAN *eflg)
 {
 	INT type;
 	STRING key;
@@ -461,8 +480,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * choosespouse -- Have user choose spouse of person
  *   usage: choosespouse(INDI) -> INDI
  *================================================*/
-PVALUE __choosespouse (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__choosespouse (PNODE node,
+                TABLE stab,
+                BOOLEAN *eflg)
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	INDISEQ seq;
@@ -482,8 +503,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * choosefam -- Have user choose family of person
  *   usage: choosefam (INDI) -> FAM
  *=============================================*/
-PVALUE __choosefam (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__choosefam (PNODE node,
+             TABLE stab,
+             BOOLEAN *eflg)
 {
 	NODE fam, indi = eval_indi(iargs(node), stab, eflg, NULL);
 	INDISEQ seq;
@@ -503,8 +526,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * menuchoose -- Have user choose from list of options
  *   usage: menuchoose (LIST [,STRING]) -> INT
  *==================================================*/
-PVALUE __menuchoose (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__menuchoose (PNODE node,
+              TABLE stab,
+              BOOLEAN *eflg)
 {
 	INT i, len;
 	STRING msg, *strngs;
@@ -549,8 +574,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * system -- Run shell command
  *   usage: system (STRING) -> VOID
  *===============================*/
-PVALUE __system (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__system (PNODE node,
+          TABLE stab,
+          BOOLEAN *eflg)
 {
 	STRING cmd;
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
@@ -577,8 +604,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * firstindi -- Return first person in database
  *   usage: firstindi() -> INDI
  *===========================================*/
-PVALUE __firstindi (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__firstindi (PNODE node,
+             TABLE stab,
+             BOOLEAN *eflg)
 {
 	NODE indi;
 	static char key[10];
@@ -604,8 +633,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * nextindi -- Return next person in database
  *   usage: nextindi(INDI) -> INDI
  *=========================================*/
-PVALUE __nextindi (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__nextindi (PNODE node,
+            TABLE stab,
+            BOOLEAN *eflg)
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	static char key[10];
@@ -637,8 +668,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * previndi -- Return previous person in database
  *   usage: previndi(INDI) -> INDI
  *=============================================*/
-PVALUE __previndi (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__previndi (PNODE node,
+            TABLE stab,
+            BOOLEAN *eflg)
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	static char key[10];
@@ -666,20 +699,27 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 		return val;
 	}
 }
+#if UNUSED
 /*===========================================
  * lastindi -- Return last person in database
  *   usage: lastindi() -> INDI
  *=========================================*/
-PVALUE __lastindi (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__lastindi (PNODE node,
+            TABLE stab,
+            BOOLEAN *eflg)
 {
+#  error "Unimplemented function!"
 }
+#endif
 /*===========================================+
  * firstfam -- Return first family in database
  *   usage: firstfam() -> FAM
  *==========================================*/
-PVALUE __firstfam (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__firstfam (PNODE node,
+            TABLE stab,
+            BOOLEAN *eflg)
 {
 	NODE fam;
 	static char key[10];
@@ -705,8 +745,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * nextfam -- Return next family in database
  *   usage: nextfam(FAM) -> FAM
  *========================================*/
-PVALUE __nextfam (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__nextfam (PNODE node,
+           TABLE stab,
+           BOOLEAN *eflg)
 {
 	NODE fam = eval_fam(iargs(node), stab, eflg, NULL);
 	static char key[10];
@@ -738,8 +780,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * prevfam -- Return previous family in database
  *   usage: prevfam(FAM) -> FAM
  *============================================*/
-PVALUE __prevfam (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__prevfam (PNODE node,
+           TABLE stab,
+           BOOLEAN *eflg)
 {
 	NODE fam = eval_fam(iargs(node), stab, eflg, NULL);
 	static char key[10];
@@ -767,22 +811,29 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 		return val;
 	}
 }
+#if UNUSED
 /*=========================================+
  * lastfam -- Return last family in database
  *   usage: lastfam() -> FAM
  *========================================*/
-WORD __lastfam (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+WORD
+__lastfam (PNODE node,
+           TABLE stab,
+           BOOLEAN *eflg)
 {
+#  error "Unimplemented function!"
 }
+#endif
 /*=============================================+
  * getrecord -- Read GEDCOM record from database
  *  usage: getrecord(STRING) -> NODE
  *  usage: dereference(STRING) -> NODE
  *  NOTE: persons and families NOT cached!
  *============================================*/
-PVALUE __getrecord (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__getrecord (PNODE node,
+             TABLE stab,
+             BOOLEAN *eflg)
 {
 	STRING key, rec;
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
@@ -808,20 +859,27 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	delete_pvalue(val);
 	return create_pvalue(PGNODE, (WORD)NULL);
 }
+#if UNUSED
 /*==================================================+
  * freerecord -- Free GEDCOM node tree from getrecord
  *  usage: getrecord(STRING) -> NODE
  *=================================================*/
-PVALUE __freerecord (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__freerecord (PNODE node,
+              TABLE stab,
+              BOOLEAN *eflg)
 {
+#  error "Unimplemented function!"
 }
+#endif
 /*================================================+
  * reference -- Check if STRING is record reference
  *  usage: reference(STRING) -> BOOLEAN
  *===============================================*/
-PVALUE __reference (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__reference (PNODE node,
+             TABLE stab,
+             BOOLEAN *eflg)
 {
 	STRING key;
 	BOOLEAN rc;
@@ -840,8 +898,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * rjustify -- Right justify string value
  *   usage: rjustify(STRING, INT) -> STRING
  *=======================================*/
-PVALUE __rjustify (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__rjustify (PNODE node,
+            TABLE stab,
+            BOOLEAN *eflg)
 {
 	PNODE sarg = (PNODE) iargs(node);
 	PNODE larg = inext(sarg);
@@ -867,9 +927,9 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 /*===========================================
  * rightjustify -- Right justify string value
  *=========================================*/
-STRING rightjustify (str, len)
-STRING str;
-INT len;
+STRING
+rightjustify (STRING str,
+              INT len)
 {
 	STRING new;
 	INT lstr, nsp, i, j;
@@ -890,8 +950,10 @@ INT len;
  * __lock -- Lock person or family in memory
  *   usage: lock(INDI|FAM) -> VOID
  *========================================*/
-WORD __lock (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__lock (PNODE node,
+        TABLE stab,
+        BOOLEAN *eflg)
 {
 	INT type;
 	CACHEEL cel;
@@ -910,8 +972,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __unlock -- Unlock person or family from memory
  *   usage: unlock(INDI|FAM) -> VOID
  *==============================================*/
-PVALUE __unlock (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__unlock (PNODE node,
+          TABLE stab,
+          BOOLEAN *eflg)
 {
 	INT type;
 	CACHEEL cel;
@@ -930,8 +994,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __savenode -- Save GEDCOM tree permanently
  *   usage: savenode(NODE) -> NODE
  *=========================================*/
-PVALUE __savenode (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__savenode (PNODE node,
+            TABLE stab,
+            BOOLEAN *eflg)
 {
 	NODE line;
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
@@ -948,8 +1014,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __genindiset -- Generate set of persons from a name
  *   usage: genindiset(STRING, SET) -> VOID
  *==================================================*/
-WORD __genindiset (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__genindiset (PNODE node,
+              TABLE stab,
+              BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	STRING name;
@@ -978,8 +1046,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __version -- Return the LifeLines version string
  *   usage: version() -> STRING
  *===============================================*/
-PVALUE __version (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__version (PNODE node,
+           TABLE stab,
+           BOOLEAN *eflg)
 {
 	extern STRING version;
 	*eflg = FALSE;
@@ -989,8 +1059,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __pvalue -- Show a PVALUE -- Debug routine
  *   usage: pvalue(ANY) -> STRING
  *=======================================*/
-PVALUE __pvalue (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__pvalue (PNODE node,
+          TABLE stab,
+          BOOLEAN *eflg)
 {
 	extern STRING pvalue_to_string();
 	PVALUE val = evaluate(iargs(node), stab, eflg);
@@ -1010,8 +1082,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __program -- Returns name of current program
  *   usage: program() -> STRING
  *===========================================*/
-PVALUE __program (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__program (PNODE node,
+           TABLE stab,
+           BOOLEAN *eflg)
 {
 	return create_pvalue(PSTRING, (WORD)progname);
 }
@@ -1019,8 +1093,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __debug -- Turn on/off programming debugging
  *   usage: debug(BOOLEAN) -> VOID
  *===========================================*/
-PVALUE __debug (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__debug (PNODE node,
+         TABLE stab,
+         BOOLEAN *eflg)
 {
 	PVALUE val = eval_and_coerce(PBOOL, iargs(node), stab, eflg);
 	prog_debug = (BOOLEAN) pvalue(val);

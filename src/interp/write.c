@@ -46,8 +46,10 @@
  * createnode -- Create GEDCOM node
  *   createnode(STRING, STRING) -> NODE
  *===================================*/
-WORD __createnode (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__createnode (PNODE node,
+              TABLE stab,
+              BOOLEAN *eflg)
 {
 	STRING val, tag = (STRING) evaluate(iargs(node), stab, eflg);
 	if (*eflg) return NULL;
@@ -59,8 +61,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * addnode -- Add a node to a GEDCOM tree
  *   addnode(NODE, NODE, NODE) -> VOID
  *=====================================*/
-WORD __addnode (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__addnode (PNODE node,
+           TABLE stab,
+           BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	NODE next, prnt, prev;
@@ -87,8 +91,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  *   deletenode(NODE) -> VOID
  *   NOTE: MEMORY LEAK MEMORY LEAK MEMORY LEAK
  *==========================================*/
-WORD __deletenode (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__deletenode (PNODE node,
+              TABLE stab,
+              BOOLEAN *eflg)
 {
 	NODE prnt, prev, curs, next;
 	NODE this = (NODE) evaluate(iargs(node), stab, eflg);
@@ -112,8 +118,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * writeindi -- Write person to database
  *   writeindi(INDI) -> VOID
  *====================================*/
-WORD __writeindi (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__writeindi (PNODE node,
+             TABLE stab,
+             BOOLEAN *eflg)
 {
 	NODE indi1;
 	NODE indi2 = eval_indi(iargs(node), stab, eflg, NULL);
@@ -137,8 +145,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * writefam -- Write family to database
  *   writefam(FAM) -> VOID
  *===================================*/
-WORD __writefam (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE
+__writefam (PNODE node,
+            TABLE stab,
+            BOOLEAN *eflg)
 {
 	NODE fam1;
 	NODE fam2 = eval_fam(iargs(node), stab, eflg, NULL);

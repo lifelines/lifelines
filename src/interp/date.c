@@ -84,33 +84,33 @@ static TABLE monthtbl = NULL;
 /*==========================================
  * format_date -- Do general date formatting
  *========================================*/
-STRING format_date (str, dfmt, mfmt, yfmt, sfmt, cmplx)
-STRING str;	/* raw string containing a date */
-INT dfmt;	/* day format:	0 - num, space 
-				1 - num, lead 0
-				2 - num, as is */
-INT mfmt;	/* month format:0 - num, space
-				1 - num, lead 0
-				2 - num, as is
-				3 - eg, MAR
-				4 - eg, Mar
-				5 - eg, MARCH
-				6 - eg, March */
-INT yfmt;	/* year format: none yet */
-INT sfmt;	/* date format:	0 - da mo yr
-				1 - mo da, yr
-				2 - mo/da/yr
-				3 - da/mo/yr
-				4 - mo-da-yr
-				5 - da-mo-yr
-				6 - modayr
-				7 - damoyr
-        			8 - yr mo da
-        			9 - yr/mo/da
-        			10- yr-mo-da
-        			11- yrmoda */
-BOOLEAN cmplx;      /* if TRUE, then treat string as complex, including
-                       date modifiers, ranges, and/or double-dating */
+STRING
+format_date (STRING str,    /* raw string containing a date */
+             INT dfmt,      /* day format:  0 - num, space
+                                            1 - num, lead 0
+                                            2 - num, as is */
+             INT mfmt,      /* month format:0 - num, space
+                                            1 - num, lead 0
+                                            2 - num, as is
+                                            3 - eg, MAR
+                                            4 - eg, Mar
+                                            5 - eg, MARCH
+                                            6 - eg, March */
+             INT yfmt,      /* year format: none yet */
+             INT sfmt,      /* date format: 0 - da mo yr
+                                            1 - mo da, yr
+                                            2 - mo/da/yr
+                                            3 - da/mo/yr
+                                            4 - mo-da-yr
+                                            5 - da-mo-yr
+                                            6 - modayr
+                                            7 - damoyr
+                                            8 - yr mo da
+                                            9 - yr/mo/da
+                                            10- yr-mo-da
+                                            11- yrmoda */
+             BOOLEAN cmplx) /* if TRUE, then treat string as complex, including
+                               date modifiers, ranges, and/or double-dating */
 {
 	INT mod, da, mo, yr;
 	STRING sda, smo, syr;
@@ -137,10 +137,13 @@ BOOLEAN cmplx;      /* if TRUE, then treat string as complex, including
 /*===================================================
  * format_ymd -- Assembles date according to dateformat
  *=================================================*/
-static void format_ymd (syr, smo, sda, sfmt, mod, output)
-STRING syr, smo, sda, *output;
-INT mod;
-INT sfmt;	/* format code */
+static void
+format_ymd (STRING syr,
+            STRING smo,
+            STRING sda,
+            INT sfmt,           /* format code */
+            INT mod,
+            STRING *output)
 {
 	STRING p = *output;
 
@@ -356,9 +359,9 @@ INT sfmt;	/* format code */
 /*=====================================
  * format_mod -- Format date modifier
  *===================================*/
-static void format_mod (mod, pp)
-INT mod;
-STRING *pp;
+static void
+format_mod (INT mod,
+            STRING *pp)
 {
 	if (mod < 1 || mod > 7) return;
 	strcpy(*pp, monthstrs[mod+12-1].ll);
@@ -370,9 +373,9 @@ STRING *pp;
 /*=======================================
  * format_day -- Formats day part of date
  *=====================================*/
-static STRING format_day (da, dfmt)
-INT da;		/* day - 0 for unknown */
-INT dfmt;	/* format code */
+static STRING
+format_day (INT da,         /* day - 0 for unknown */
+            INT dfmt)       /* format code */
 {
 	static unsigned char scratch[3];
 	STRING p;
@@ -397,9 +400,9 @@ INT dfmt;	/* format code */
 /*===========================================
  * format_month -- Formats month part of date
  *=========================================*/
-static STRING format_month (mo, mfmt)
-INT mo;		/* month - 0 for unknown */
-INT mfmt;	/* format code */
+static STRING
+format_month (INT mo,         /* month - 0 for unknown */
+              INT mfmt)       /* format code */
 {
 	static char scratch[3];
 	STRING p;
@@ -420,9 +423,9 @@ INT mfmt;	/* format code */
 /*=========================================
  * format_year -- Formats year part of date
  *=======================================*/
-static STRING format_year (yr, yfmt)
-INT yr;
-INT yfmt;
+static STRING
+format_year (INT yr,
+             INT yfmt)
 {
 	static unsigned char scratch[50];
 	if (yr <= 0)  return NULL;
@@ -434,9 +437,13 @@ INT yfmt;
 /*=====================================================
  * extract_date -- Extract date from free format string
  *===================================================*/
-void extract_date (str, pmod, pda, pmo, pyr, pyrstr)
-STRING str, *pyrstr;
-INT *pmod, *pda, *pmo, *pyr;
+void
+extract_date (STRING str,
+              INT *pmod,
+              INT *pda,
+              INT *pmo,
+              INT *pyr,
+              STRING *pyrstr)
 {
 	INT tok, ival, era = 0;
 	STRING sval;
@@ -480,8 +487,8 @@ INT *pmod, *pda, *pmo, *pyr;
 /*===============================================
  * set_date_string -- Init date extraction string
  *=============================================*/
-static void set_date_string (str)
-STRING str;
+static void
+set_date_string (STRING str)
 {
 	sstr = str;
 	if (!monthtbl) init_monthtbl();
@@ -489,9 +496,9 @@ STRING str;
 /*==================================================
  * get_date_tok -- Return next date extraction token
  *================================================*/
-static INT get_date_tok (pival, psval)
-INT *pival;
-STRING *psval;
+static INT
+get_date_tok (INT *pival,
+              STRING *psval)
 {
 	static unsigned char scratch[30];
 	STRING p = scratch;
@@ -539,7 +546,8 @@ STRING *psval;
 /*=========================================
  * init_monthtbl -- Init month string table
  *=======================================*/
-static void init_monthtbl (void)
+static void
+init_monthtbl (void)
 {
 	INT i, j;
 	monthtbl = create_table();
@@ -554,7 +562,8 @@ static void init_monthtbl (void)
 /*=============================
  * get_date -- Get today's date
  *===========================*/
-STRING get_date (void)
+STRING
+get_date (void)
 {
 	struct tm *pt;
 	time_t curtime;
