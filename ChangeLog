@@ -13,6 +13,11 @@
 
 	Record recent bug fixes and feature in NEWS file.
 
+	* ChangeLog src/liflines/valgdcom.c
+
+	Check key length when importing GEDCOM file.
+	(rf. sf.net bug#1094568: Import doesn't check incoming key length)
+
 2005-01-01 Perry Rapp
 
 	* ChangeLog src/hdrs/arch.h src/interp/builtin.c

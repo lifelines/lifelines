@@ -45,6 +45,7 @@
 #include "lloptions.h"
 #include "zstr.h"
 #include "codesets.h"
+#include "btree.h"
 
 #ifndef INCLUDED_STDARG_H
 #include <stdarg.h>
@@ -625,26 +626,32 @@ check_stdkeys (void)
 	gd_xmax = 0; gd_xtot = 0;
 	for (i = 0; retval && (i < struct_len); i++) {
 		ELMNT el = index_data[i];
+		STRING skey = Key(el);
+		/* check that key is not too long */
+		if (strlen(skey)>RKEYLEN) {
+			retval = FALSE;
+			break;
+		}
 		switch (Type(el)) {
 		case INDI_REC:
 		    gd_itot++;
-		    retval = check_akey('I', Key(el), &gd_imax);
+		    retval = check_akey('I', skey, &gd_imax);
 		    break;
 		case FAM_REC:
 		    gd_ftot++;
-		    retval = check_akey('F', Key(el), &gd_fmax);
+		    retval = check_akey('F', skey, &gd_fmax);
 		    break;
 		case EVEN_REC:
 		    gd_etot++;
-		    retval = check_akey('E', Key(el), &gd_emax);
+		    retval = check_akey('E', skey, &gd_emax);
 		    break;
 		case SOUR_REC:
 		    gd_stot++;
-		    retval = check_akey('S', Key(el), &gd_smax);
+		    retval = check_akey('S', skey, &gd_smax);
 		    break;
 		case OTHR_REC:
 		    gd_xtot++;
-		    retval = check_akey('X', Key(el), &gd_xmax);
+		    retval = check_akey('X', skey, &gd_xmax);
 		    break;
 		default: retval = FALSE; break;
 		}
