@@ -367,7 +367,7 @@ compute_pi (STRING sub)
 /*==============================
  * substring -- Return substring
  *============================*/
-STRING
+static STRING
 substring (STRING s,
            INT i,
            INT j)
@@ -884,7 +884,7 @@ __rjustify (PNODE node,
 /*===========================================
  * rightjustify -- Right justify string value
  *=========================================*/
-STRING
+static STRING
 rightjustify (STRING str,
               INT len)
 {
