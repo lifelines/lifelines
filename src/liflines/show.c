@@ -253,24 +253,27 @@ disp_person_birthdeath (ZSTR zstr, RECORD irec, struct tag_prefix * tags
 	if (plac) {
 		ZSTR zplac=zs_new();
 		preplac = _(tgplac->prefix);
-		if (eqstr(preplac, predate)) preplac=NULL;
+		if (predate && eqstr(preplac, predate)) preplac=NULL;
 		if (rfmt && rfmt->rfmt_plac)
 			plac = (*rfmt->rfmt_plac)(plac);
 		if (preplac)
 			zs_setf(zplac, "%s: %s", preplac, plac);
 		else
 			zs_sets(zplac, plac);
-		if (zdate) {
+		if (zs_len(zdate)) {
+			/* have both date & place, so combine them */
 			static char scratch1[MAXLINELEN+1];
 			sprintpic2(scratch1, sizeof(scratch1), uu8, rfmt->combopic
 				, zs_str(zdate), zs_str(zplac));
 			zs_apps(zstr, scratch1);
 		} else {
+			/* have only place, so just append it */
 			zs_appz(zstr, zplac);
 		}
 		zs_free(&zplac);
 	} else {
-		zs_sets(zstr, zs_str(zdate));
+		/* have only date, so just append it */
+		zs_apps(zstr, zs_str(zdate));
 	}
 	if (zs_len(zstr)<3) {
 		zs_apps(zstr, _(tags[0].prefix));
