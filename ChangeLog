@@ -4,6 +4,12 @@
 
 	List recently added features in NEWS file.
 
+	* ChangeLog src/interp/interp.c
+
+	Avoid ASSERT running report with no main proc.
+	Fixes sf bug#1099208
+	 (FATAL error if no main() function in report).
+
 2005-01-08 Matt Emmerton
 
 	* ChangeLog src/interp/intrpseq.c src/interp/builtin.c

@@ -385,8 +385,10 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 interp_program_exit:
 
 	remove_tables(pactx);
-	remove_symtab(stab);
-	stab = NULL;
+	if (stab) {
+		remove_symtab(stab);
+		stab = NULL;
+	}
 
 interp_program_notfound:
 
