@@ -189,7 +189,7 @@ ask_for_file_worker (STRING mode,
 	}
 
 	if (!(fp = fopenpath(fname, mode, path, ext, pfname))) {
-	    	if(pfname && (*pfname == NULL)) *pfname = fname;
+		if(pfname && (*pfname == NULL)) *pfname = fname;
 		mprintf_error(nofopn, fname);
 		return NULL;
 	}

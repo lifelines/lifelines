@@ -38,6 +38,8 @@
 static INT nchil = 0, maxchil = 0;
 static STRING *chstrings = NULL, *chkeys = NULL;
 
+static BOOLEAN displaykeys=TRUE;
+
 /*===================================================================
  * get_child_strings -- Return children strings; each string has name
  *   and event info, if avail  
@@ -105,11 +107,11 @@ indi_to_list_string (NODE indi,
 		sprintf(p, ", %s", evt);
 		p += strlen(p);
 	}
-	if (indi && keyflag) {
+	if (indi && displaykeys) {
 		sprintf(p, " (%s)", key_of_record(indi));
 		p += strlen(p);
 	}
-	if (fam && keyflag) {
+	if (fam && displaykeys) {
 		sprintf(p, " (%s)", key_of_record(fam));
 		p += strlen(p);
 	}
@@ -186,4 +188,12 @@ generic_to_list_string(NODE node, INT len, STRING delim)
 	if (name)
 		llstrcatn(&p, name, &mylen);
 	return strsave(scratch);
+}
+/*=======================================================
+ * set_displaykeys -- Enable/disable keys in list strings
+ *=====================================================*/
+void
+set_displaykeys (BOOLEAN keyflag)
+{
+	displaykeys = keyflag;
 }

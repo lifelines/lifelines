@@ -198,6 +198,7 @@ main (INT argc,
 	/* Initialize Curses UI */
 	initscr();
 	noecho();
+	set_displaykeys(keyflag);
 	if (!init_screen())
 		goto finish;
 
