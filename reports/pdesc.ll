@@ -67,9 +67,14 @@ proc pout(gen, indi) {
 		col(add(skip, 1))
 		set(x, skip)
 		"sp-"
-		set(x, add(x, 4))
-		set(skip, x)
-		call outp(sp, skip, x)
+                /* Don't try to show a spouse name if none known */
+                if (sp) {
+                        set(x, add(x, 4))
+                        set(skip, x)
+                        call outp(sp, skip, x)
+                } else {
+                        "Unknown" nl()
+                }
 		if (lt(next,max_depth)) {
 			children(fam, child, no) {
 				call pout(next, child)

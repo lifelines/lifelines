@@ -1,3 +1,7 @@
+2004-10-13 Stephen Dum
+        * ChangeLog reports/pdesc.ll
+	apply patch for null indi reference discussed on llines mailing list
+
 2004-10-10 Stephen Dum
         * ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf
 	  docs/ll-reportmanual.txt
