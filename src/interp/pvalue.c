@@ -831,6 +831,7 @@ show_pvalue (PVALUE val)
 }
 /*======================================================
  * pvalue_to_string -- DEBUG routine that shows a PVALUE
+ *  returns static buffer
  *====================================================*/
 STRING
 pvalue_to_string (PVALUE val)

@@ -367,6 +367,7 @@ compute_pi (STRING sub)
 }
 /*==============================
  * substring -- Return substring
+ *  returns static buffer
  *============================*/
 static STRING
 substring (STRING s,

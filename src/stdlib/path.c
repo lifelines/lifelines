@@ -103,6 +103,7 @@ test_concat_path (void)
  *  returns static buffer
  *  handles NULL in either argument
  *  returns no trailing / if file is NULL
+ *  returns static buffer
  *===========================================*/
 STRING
 concat_path (STRING dir, STRING file)

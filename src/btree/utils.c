@@ -39,6 +39,7 @@ static int llmkdir (STRING dir);
 
 /*=========================================
  * rkey2str -- Convert record key to STRING
+ *  returns static buffer
  *=======================================*/
 STRING
 rkey2str (RKEY rkey)
@@ -82,6 +83,7 @@ path2fkey (STRING path)
 }
 /*======================================
  * fkey2path -- Convert file key to path
+ *  returns static buffer
  *====================================*/
 STRING
 fkey2path (FKEY fkey)

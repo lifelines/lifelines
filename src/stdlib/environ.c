@@ -28,6 +28,7 @@
 /*=======================================================
  * environ_determine_tempfile -- calculate temporary file
  *  (fully qualified path)
+ *  returns static buffer
  *=====================================================*/
 STRING
 environ_determine_tempfile (void)

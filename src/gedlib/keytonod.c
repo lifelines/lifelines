@@ -542,7 +542,7 @@ unlock_cache (CACHEEL cel)
 }
 /*=========================================
  * get_cache_stats -- Calculate cache stats
- *  returns in static buffer
+ *  returns static buffer
  *=======================================*/
 STRING
 get_cache_stats (void)

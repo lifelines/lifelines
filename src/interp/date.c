@@ -401,6 +401,7 @@ format_day (INT da,         /* day - 0 for unknown */
 }
 /*===========================================
  * format_month -- Formats month part of date
+ *  returns static buffer
  *=========================================*/
 static STRING
 format_month (INT mo,         /* month - 0 for unknown */
