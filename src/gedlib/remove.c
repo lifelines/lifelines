@@ -245,7 +245,7 @@ remove_spouse (NODE indi, NODE fam)
 BOOLEAN
 remove_fam_record (RECORD frec)
 {
-	frec=frec; /* UNUSED */
+	frec=frec; /* unused */
 	message(_("Families may not yet be removed in this fashion."));
 	return FALSE;
 }

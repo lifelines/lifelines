@@ -439,6 +439,7 @@ static void
 freelistentry (CNSTRING key, UNION uval)
 {
 	LIST list = (LIST)uval.w;
+	key=key; /* unused */
 	make_list_empty(list);
 }
 /*===========================================+

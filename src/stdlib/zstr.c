@@ -417,7 +417,7 @@ zstr_copy (OBJECT obj, int deep)
 {
 	ZSTR zstr = (ZSTR)obj, znew=0;
 	ASSERT((*obj)->vtable_class == vtable_for_zstr.vtable_class);
-	deep=deep; /* UNUSED */
+	deep=deep; /* unused */
 	ASSERT((*obj)->vtable_class == vtable_for_zstr.vtable_class);
 	znew = zs_newz(zstr);
 	return (OBJECT)znew;

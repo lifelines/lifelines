@@ -10,6 +10,11 @@
 	remove_fam_record; remove declaration of nonexistent
 	function count_xrefs_in_list.
 
+	* ChangeLog src/gedlib/remove.c src/interp/interp.c
+	src/stdlib/zstr.c
+
+	Cleanup: Mark unused function argument as unused.
+
 2005-01-16 Perry Rapp
 
 	* ChangeLog po/fr.po
