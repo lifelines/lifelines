@@ -8,6 +8,10 @@
 
 	More i18n.
 
+	* ChangeLog po/de.po po/sv.po:
+
+	Update po files for new i18n.
+
 2002-04-20 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog po/sv.po:
