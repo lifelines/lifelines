@@ -158,46 +158,60 @@ HREF="#AEN1078"
 ><DT
 ><A
 HREF="#AEN1141"
+>SEARCH MENU</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="#AEN1153"
+>Search Patterns</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="#AEN1193"
 >ADD OPERATION</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1148"
+HREF="#AEN1200"
 >DELETE OPERATION</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1158"
+HREF="#AEN1210"
 >CODESET CONVERSION</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1253"
+HREF="#AEN1305"
 >MISCELLANEOUS UTILITIES</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1351"
+HREF="#AEN1403"
 >IMPORT ERRORS</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1387"
+HREF="#AEN1439"
 >HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1552"
+HREF="#AEN1604"
 >FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1561"
+HREF="#AEN1613"
 >LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1610"
+HREF="#AEN1662"
 >System and User Properties</A
 ></DT
 ></DL
@@ -5335,6 +5349,331 @@ CLASS="sect1"
 ><A
 NAME="AEN1141"
 ></A
+>SEARCH MENU</H2
+><P
+>&#13;If you choose Search database from the main menu, <TT
+CLASS="application"
+>LifeLines</TT
+> displays the search menu:
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;How would you like to find a record?
+  v Review visit history (12 records)
+  c Review change history (3 records)
+  f Full database scan
+  q Return to previous menu
+</PRE
+></TD
+></TR
+></TABLE
+>
+The first two items will depend on your previous activity.  If you have
+browsed to individuals or family records in the database,
+the first item will appear similar to what's shown above,
+if you haven't it will just contain a note that the visit history is empty.
+The second item will appear similar to what's shown above if you
+have changed individual records in this session 
+with <TT
+CLASS="application"
+>LifeLines</TT
+>, otherwise it will contain
+a note that the change history is empty.
+</P
+><P
+>&#13;Selecting a non-empty visit history or change history will bring up a list
+of individuals (or families) that are in the history, allowing you to
+browse to that individual or family. 
+</P
+><P
+>&#13;If you choose Full database scan off the search menu, 
+<TT
+CLASS="application"
+>LifeLines</TT
+> displays the fullscan menu.
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;What scan type?
+  f  Full name scan
+  n  Name fragment (whitespace-delimited) scan
+  r  Refn scan
+  q  Return to previous menu
+</PRE
+></TD
+></TR
+></TABLE
+>
+The first two items on this menu allow you to search all the NAME
+records in the current database.
+If you choose Full name scan you are prompted for a 
+search pattern and then <TT
+CLASS="application"
+>LifeLines</TT
+> searches for all 
+the individual NAME records whose value matches the pattern supplied.
+If you choose the Name fragment scan, you will be prompted for a 
+search pattern and then <TT
+CLASS="application"
+>LifeLines</TT
+> will search for
+whitespace delimited words within individual NAME records that match the
+pattern supplied.
+</P
+><DIV
+CLASS="sect2"
+><HR><H3
+CLASS="sect2"
+><A
+NAME="AEN1153"
+></A
+>Search Patterns</H3
+><P
+>&#13;The pattern supplied to the search commands is used to match against
+the names in the database.  The following characters have special meaning
+when used in a pattern:
+<DIV
+CLASS="informaltable"
+><A
+NAME="AEN1156"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLSPACING="0"
+CELLPADDING="4"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>?</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Matches any single character</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>*</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;Matches zero or more occurrences of any character
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>SUB</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;a control Z (^Z) is similar to '*', this matches zero
+or more occurences of any characters other than '.'.
+(of course you probably can't type this on unix)
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>[ab]</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;A set of characters enclosed in square brackets
+matches the single characters listed between the
+brackets.  If the dash '-' character is to be included,
+it must immediately follow the opening bracket '['.
+If the closing bracket ']' character is to be included,
+it must be preceded by a quote '`'.
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>[a-z]</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;Matches a single character in the range 'a' to 'z'.
+Ranges and sets may be combined within the same set of
+brackets.
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>!R</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;Matches a single character not in the range 'R'.
+If range 'R' includes the dash '-' character, the dash
+must immediately follow the '!'.
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>!</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;Makes the following pattern match
+any string except those what it would normally match.
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>QUOTE</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;(On DOS this is `, on UNIX it is \)
+Makes the next character a regular (nonspecial)
+character.
+Note that to match the quote character itself, it must
+be quoted.
+Note that this character must be escaped if used within
+string constants ("\\").
+</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+>
+</P
+><P
+>&#13;Upper and lower case alphabetic characters are considered identical,
+i.e., 'a' and 'A' match each other.
+(What constitutes a lowercase letter depends on the current locale
+settings.)
+</P
+><P
+>&#13;Spaces and control characters (other than control z) are treated as normal 
+characters,
+</P
+><P
+>&#13;As an example, consider the following NAME record:
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;1 NAME <TT
+CLASS="userinput"
+><B
+>John /Smith/</B
+></TT
+>
+</PRE
+></TD
+></TR
+></TABLE
+>
+When doing a full name search, the value searched is the complete gedcom name 
+value including the slashes used to delimit the surname.
+in order to have a match, the search pattern
+must match the slashes.  Thus
+
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;*smith
+</PRE
+></TD
+></TR
+></TABLE
+>
+will not match this name, whereas
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;*smith/
+</PRE
+></TD
+></TR
+></TABLE
+>
+will match.
+</P
+><P
+>&#13;When doing a name fragment search, the slashes are removed from the surname
+before trying to match the name, thus
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;smith
+smi*
+joh*
+*hn
+</PRE
+></TD
+></TR
+></TABLE
+>
+will all match this NAME record.
+</P
+></DIV
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN1193"
+></A
 >ADD OPERATION</H2
 ><P
 >&#13;
@@ -5380,7 +5719,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1148"
+NAME="AEN1200"
 ></A
 >DELETE OPERATION</H2
 ><P
@@ -5444,7 +5783,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1158"
+NAME="AEN1210"
 ></A
 >CODESET CONVERSION</H2
 ><P
@@ -5786,7 +6125,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1253"
+NAME="AEN1305"
 ></A
 >MISCELLANEOUS UTILITIES</H2
 ><P
@@ -6027,7 +6366,7 @@ CLASS="replaceable"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1318"
+NAME="AEN1370"
 ></A
 ><P
 ><B
@@ -6127,7 +6466,7 @@ record template with the following:
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1335"
+NAME="AEN1387"
 ></A
 ><P
 ><B
@@ -6155,7 +6494,7 @@ CLASS="programlisting"
 you would edit the user option file to contain:<DIV
 CLASS="example"
 ><A
-NAME="AEN1338"
+NAME="AEN1390"
 ></A
 ><P
 ><B
@@ -6174,7 +6513,7 @@ CLASS="literallayout"
 or, using the \n escape so as to keep the entry on one line:<DIV
 CLASS="example"
 ><A
-NAME="AEN1341"
+NAME="AEN1393"
 ></A
 ><P
 ><B
@@ -6215,7 +6554,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1351"
+NAME="AEN1403"
 ></A
 >IMPORT ERRORS</H2
 ><P
@@ -6326,7 +6665,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1387"
+NAME="AEN1439"
 ></A
 >HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</H2
 ><P
@@ -6585,7 +6924,7 @@ CLASS="structfield"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1432"
+NAME="AEN1484"
 ></A
 ><P
 ><B
@@ -7306,7 +7645,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1552"
+NAME="AEN1604"
 ></A
 >FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</H2
 ><P
@@ -7380,7 +7719,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1561"
+NAME="AEN1613"
 ></A
 >LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</H2
 ><P
@@ -7467,7 +7806,7 @@ CLASS="application"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1576"
+NAME="AEN1628"
 ></A
 ><P
 ><B
@@ -7590,7 +7929,7 @@ CLASS="structfield"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1594"
+NAME="AEN1646"
 ></A
 ><P
 ><B
@@ -7701,7 +8040,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1610"
+NAME="AEN1662"
 ></A
 >System and User Properties</H2
 ><P
@@ -8425,7 +8764,11 @@ use stdout curses window.
 ></DT
 ><DD
 ><P
->&#13;file to write crash log into for llexec.
+>&#13;file to write crash log into for llexec.  If not set, log is written to
+the file <TT
+CLASS="filename"
+>CrashLog_llexec.log</TT
+>.
 </P
 ></DD
 ><DT
@@ -8434,7 +8777,11 @@ use stdout curses window.
 ></DT
 ><DD
 ><P
->&#13;file to write crash log into for llines.
+>&#13;file to write crash log into for llines. If not set, log is written to
+the file <TT
+CLASS="filename"
+>CrashLog_llines.log</TT
+>.
 </P
 ></DD
 ><DT

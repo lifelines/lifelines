@@ -2123,8 +2123,6 @@ Record Update Functions
 
    The  node functions only change data in memory; there is no effect
    on the database until and unless writeindi or writefam are called.
-   These  functions may be changed or extended in the future to allow
-   database changes.
      _____________________________________________________________
 
 Record Linking Functions

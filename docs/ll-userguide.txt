@@ -27,6 +27,10 @@ Thomas T. Wetmore , IV
         TANDEM PERSON BROWSE MODE
         TANDEM FAMILY BROWSE MODE
         PEDIGREE BROWSE MODE
+        SEARCH MENU
+
+              Search Patterns
+
         ADD OPERATION
         DELETE OPERATION
         CODESET CONVERSION
@@ -1486,6 +1490,106 @@ LifeLines - Pedigree Browse Mode
           menu.
      _____________________________________________________________
 
+SEARCH MENU
+
+   If  you  choose  Search  database  from  the  main menu, LifeLines
+   displays the search menu:
+How would you like to find a record?
+  v Review visit history (12 records)
+  c Review change history (3 records)
+  f Full database scan
+  q Return to previous menu
+
+   The  first two items will depend on your previous activity. If you
+   have browsed to individuals or family records in the database, the
+   first  item  will  appear  similar  to  what's shown above, if you
+   haven't  it  will  just  contain  a note that the visit history is
+   empty.  The  second item will appear similar to what's shown above
+   if  you  have  changed  individual  records  in  this session with
+   LifeLines,  otherwise  it  will  contain  a  note  that the change
+   history is empty.
+
+   Selecting  a  non-empty visit history or change history will bring
+   up  a  list  of individuals (or families) that are in the history,
+   allowing you to browse to that individual or family.
+
+   If  you  choose  Full database scan off the search menu, LifeLines
+   displays the fullscan menu.
+What scan type?
+  f  Full name scan
+  n  Name fragment (whitespace-delimited) scan
+  r  Refn scan
+  q  Return to previous menu
+
+   The  first two items on this menu allow you to search all the NAME
+   records  in the current database. If you choose Full name scan you
+   are  prompted for a search pattern and then LifeLines searches for
+   all  the  individual  NAME records whose value matches the pattern
+   supplied.  If  you  choose  the  Name  fragment  scan, you will be
+   prompted  for  a search pattern and then LifeLines will search for
+   whitespace  delimited  words  within  individual NAME records that
+   match the pattern supplied.
+     _____________________________________________________________
+
+Search Patterns
+
+   The  pattern  supplied  to  the  search  commands is used to match
+   against  the  names in the database. The following characters have
+   special meaning when used in a pattern:
+
+   ? Matches any single character
+   * Matches zero or more occurrences of any character
+   SUB a control Z (^Z) is similar to '*', this matches zero or more
+   occurences of any characters other than '.'. (of course you
+   probably can't type this on unix)
+   [ab]  A  set of characters enclosed in square brackets matches the
+   single  characters  listed  between  the brackets. If the dash '-'
+   character  is  to  be  included,  it  must  immediately follow the
+   opening bracket '['. If the closing bracket ']' character is to be
+   included, it must be preceded by a quote '`'.
+   [a-z]  Matches  a single character in the range 'a' to 'z'. Ranges
+   and sets may be combined within the same set of brackets.
+   !R  Matches  a single character not in the range 'R'. If range 'R'
+   includes  the dash '-' character, the dash must immediately follow
+   the '!'.
+   !  Makes  the following pattern match any string except those what
+   it would normally match.
+   QUOTE (On DOS this is `, on UNIX it is \) Makes the next character
+   a  regular  (nonspecial)  character.  Note that to match the quote
+   character itself, it must be quoted. Note that this character must
+   be escaped if used within string constants ("\\").
+
+   Upper   and   lower  case  alphabetic  characters  are  considered
+   identical, i.e., 'a' and 'A' match each other. (What constitutes a
+   lowercase letter depends on the current locale settings.)
+
+   Spaces  and  control characters (other than control z) are treated
+   as normal characters,
+
+   As an example, consider the following NAME record:
+   1 NAME John /Smith/
+
+   When  doing a full name search, the value searched is the complete
+   gedcom  name  value  including  the  slashes  used  to delimit the
+   surname.  in  order to have a match, the search pattern must match
+   the slashes. Thus
+   *smith
+
+   will not match this name, whereas
+   *smith/
+
+   will match.
+
+   When  doing  a  name fragment search, the slashes are removed from
+   the surname before trying to match the name, thus
+smith
+smi*
+joh*
+*hn
+
+   will all match this NAME record.
+     _____________________________________________________________
+
 ADD OPERATION
 
    If  you  choose  the  add  operation from the main menu, LifeLines
@@ -2542,10 +2646,12 @@ System and User Properties
           specified use stdout curses window.
 
    CrashLog_llexec
-          file to write crash log into for llexec.
+          file to write crash log into for llexec. If not set, log is
+          written to the file CrashLog_llexec.log.
 
    CrashLog_llines
-          file to write crash log into for llines.
+          file to write crash log into for llines. If not set, log is
+          written to the file CrashLog_llines.log.
 
    LLTTEXPORT
           directory  to  write  translation tables to. Default is the
