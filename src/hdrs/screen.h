@@ -130,6 +130,7 @@ void term_screen(void);
 INT twofam_browse(NODE, NODE, INT mode);
 INT twoindi_browse(NODE, NODE, INT mode);
 void wfield(INT, INT, STRING);
+void wipe_window_rect(UIWINDOW uiwin, LLRECT rect);
 void wpos (INT, INT);
 
 /* show.c (curses specific) */

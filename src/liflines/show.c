@@ -106,7 +106,6 @@ static STRING sh_indi_to_event_long(NODE node, TRANTABLE tt, STRING tag
 	, STRING head, INT len);
 static STRING sh_indi_to_event_shrt(NODE node, TRANTABLE tt, STRING tag
 	, STRING head, INT len);
-static void wipe_window(UIWINDOW uiwin, LLRECT rect);
 
 /*********************************************
  * local variables
@@ -277,9 +276,7 @@ show_indi_vitals (UIWINDOW uiwin, NODE pers, LLRECT rect
 	if (hgt<=0) return;
 	if (!reuse)
 		init_display_indi(pers, width);
-	for (i = 0; i < hgt; i++) {
-		clear_hseg(win, row+i, rect->left, rect->right);
-	}
+	wipe_window_rect(uiwin, rect);
 	if (*scroll) {
 		if (*scroll > Solen + 5 - hgt)
 			*scroll = Solen + 5 - hgt;
@@ -439,14 +436,18 @@ show_fam_vitals (UIWINDOW uiwin, NODE fam, INT row, INT hgt
 	char buf[132];
 	INT maxcol = width-1;
 	WINDOW * win = uiw_win(uiwin);
+	struct llrect_s rect;
+
+	rect.bottom = row+hgt-1;
+	rect.top = row;
+	rect.left = 1;
+	rect.right = width-2;
 
 	badkeylist[0] = '\0';
 	listbadkeys = 1;
 	if (!reuse)
 		init_display_fam(fam, width);
-	for (i = 0; i < hgt; i++) {
-		clear_hseg(win, row+i, 1, width-2);
-	}
+	wipe_window_rect(uiwin, &rect);
 	if (*scroll) {
 		if (*scroll > Solen + 7 - hgt)
 			*scroll = Solen + 7 - hgt;
@@ -496,7 +497,7 @@ show_ancestors (UIWINDOW uiwin, NODE indi, LLRECT rect
 	canvas.param = (void *)uiwin;
 	canvas.line = pedigree_line;
 		/* clear & draw pedigree */
-	wipe_window(main_win, rect);
+	wipe_window_rect(main_win, rect);
 	pedigree_draw_ancestors(indi, &canvas, reuse);
 	*scroll = canvas.scroll;
 }
@@ -515,22 +516,9 @@ show_descendants (UIWINDOW uiwin, NODE indi, LLRECT rect
 	canvas.param = (void *)uiwin;
 	canvas.line = pedigree_line;
 		/* clear & draw pedigree */
-	wipe_window(main_win, rect);
+	wipe_window_rect(main_win, rect);
 	pedigree_draw_descendants(indi, &canvas, reuse);
 	*scroll = canvas.scroll;
-}
-/*================================================
- * wipe_window -- Clear window
- * Created: 2001/02/04, Perry Rapp
- *==============================================*/
-static void
-wipe_window (UIWINDOW uiwin, LLRECT rect)
-{
-	INT i;
-	WINDOW * win = uiw_win(uiwin);
-	for (i = rect->top; i <= rect->bottom; i++) {
-		clear_hseg(win, i, rect->left, rect->right);
-	}
 }
 /*================================================
  * show_gedcom -- Display record in raw gedcom format
@@ -547,7 +535,7 @@ show_gedcom (UIWINDOW uiwin, NODE node, INT gdvw, LLRECT rect
 	canvas.param = (void *)uiwin;
 	canvas.line = pedigree_line;
 		/* clear & draw pedigree */
-	wipe_window(uiwin, rect);
+	wipe_window_rect(uiwin, rect);
 	pedigree_draw_gedcom(node, gdvw, &canvas, reuse);
 	*scroll = canvas.scroll;
 }

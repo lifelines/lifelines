@@ -232,7 +232,7 @@ static void test_locale_name(void);
 static void touch_all(BOOLEAN includeCurrent);
 static INT translate_control_key(INT c);
 static INT translate_hdware_key(INT c);
-static void uicolor(UIWINDOW, char ch);
+static void uicolor(UIWINDOW, LLRECT rect, char ch);
 static void uierase(UIWINDOW uiwin);
 static INT update_menu(INT screen);
 static void user_options(void);
@@ -3474,27 +3474,54 @@ refresh_stdout (void)
 static void
 uierase (UIWINDOW uiwin)
 {
+	LLRECT rect = 0;
+	wipe_window_rect(uiwin, rect);
+}
+/*================================================
+ * wipe_window_rect -- Clear a rectangle in a window
+ *  handle curses space bug
+ * Created: 2001/02/04, Perry Rapp
+ *==============================================*/
+void
+wipe_window_rect (UIWINDOW uiwin, LLRECT rect)
+{
+	WINDOW * win = uiw_win(uiwin);
 	/* workaround for curses bug with spacs */
 	if (getoptint("ForceScreenErase", 0) > 0) {
 		/* fill virtual output with dots */
-		uicolor(uiwin, '.');
-		wnoutrefresh(uiw_win(uiwin));
+		uicolor(uiwin, rect, '.');
+		wnoutrefresh(win);
 		/* now fill it back with spaces */
-		uicolor(uiwin, ' ');
-		wrefresh(uiw_win(uiwin));
+		uicolor(uiwin, rect, ' ');
+		wrefresh(win);
 	} else {
-		werase(uiw_win(uiwin));
+		/* fill it back with spaces */
+		if (rect)
+			uicolor(uiwin, rect, ' ');
+		else
+			werase(win); /* let curses do it */
 	}
 }
 /*============================
  * uicolor -- fill window with character 
+ *  if rect is nonzero, fill that rectangular area
+ *  if rect is zero, fill entire window
  *==========================*/
 static void
-uicolor (UIWINDOW uiwin, char ch)
+uicolor (UIWINDOW uiwin, LLRECT rect, char ch)
 {
 	INT i;
 	WINDOW *win = uiw_win(uiwin);
-	for (i=0; i<uiw_rows(uiwin)+9; ++i) {
-		color_hseg(win, i, 0, uiw_cols(uiwin)-1, ch);
+	struct llrect_s rects;
+
+	if (!rect) {
+		rects.top = 0;
+		rects.bottom = uiw_rows(uiwin)-1;
+		rects.left = 0;
+		rects.right = uiw_cols(uiwin)-1;
+		rect = &rects;
+	}
+	for (i=rect->top; i <= rect->bottom; ++i) {
+		color_hseg(win, i, rect->left, rect->right, ch);
 	}
 }
