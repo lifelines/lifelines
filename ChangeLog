@@ -13,6 +13,8 @@
 	Change browse_indi & fam to lock cache during display.
 	Increment PED_LINES for larger screens (just like PER_LINES, etc).
 
+	* liflines/pedigree.c: Fixed a fencepost error.
+
 2000-12-23 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/init.c liflines/browse.c liflines/pedigree.c

@@ -119,10 +119,10 @@ print_to_buffer (int keynum, int gen, int * row)
 	WINDOW *w = main_win;
 	if (mylen > ll_cols-5)
 		mylen = ll_cols-5;
-	if (*row>Scrollp && *row-Scrollp<=ll_lines-10) {
+	if (*row>Scrollp && *row-Scrollp<=ll_lines-9) {
 		if (*row==Scrollp+1 && Scrollp>0)
 			overflow=1;
-		if (*row-Scrollp==ll_lines-10 && Scrollp<ScrollMax)
+		if (*row-Scrollp==ll_lines-9 && Scrollp<ScrollMax)
 			overflow=1;
 		strcpy(ptr, "");
 		for (i=0; i<gen*6; i++)
@@ -166,7 +166,7 @@ trav_bin_in_print (treenode tn, int * row, int gen)
 static void
 SetScrollMax (int row)
 {
-	ScrollMax = row-(ll_lines-10);
+	ScrollMax = row-(ll_lines-9);
 	if (ScrollMax<0)
 		ScrollMax=0;
 }
@@ -198,7 +198,7 @@ show_ancestors (NODE indi)
 	root = add_parents(indi, 1, Gens, &count);
 	SetScrollMax(count);
 	/* inorder traversal */
-	row=0;
+	row=1;
 	gen=0;
 	trav_bin_in_print(root, &row, gen);
 }
