@@ -39,7 +39,7 @@ extern BTREE BTR;
 
 static BOOLEAN readxrefs(void);
 static STRING getxref (char ctype, INT *nxrefs, INT *xrefs);
-static void addxref (INT key, INT *nxrefs, INT maxxrefs, INT *xrefs, void (*growfnc)(void));
+static void addxref (INT key, INT *nxrefs, INT *maxxrefs, INT **xrefs, void (*growfnc)(void));
 
 /*===================================================================
  * First five words in xrefs file are number of INDI, FAM, EVEN, SOUR
@@ -50,6 +50,22 @@ static void addxref (INT key, INT *nxrefs, INT maxxrefs, INT *xrefs, void (*grow
  * nixrefs==2 means there is one deleted INDI key (ixrefs[1])
  *=================================================================*/
 
+/*============================== 
+ * deleteset -- set of deleted records
+ *  not yet implemented
+ *============================*/
+struct deleteset_s
+{
+	INT n;
+	INT * recs;
+	INT max;
+};
+typedef struct deleteset_s *DELETESET;
+
+/* INDI, FAM, EVEN, SOUR, other sets */
+static struct deleteset_s irecs, frecs, erecs, srecs, xrecs;
+
+/* current implementation */
 static INT nixrefs;	/* num of INDI keys */
 static INT nfxrefs;	/* num of FAM keys */
 static INT nexrefs;	/* num of EVEN keys */
@@ -236,29 +252,29 @@ writexrefs (void)
  *  generic for all types
  *===================================*/
 static void
-addxref (INT key, INT *nxrefs, INT maxxrefs, INT *xrefs, void (*growfnc)(void))
+addxref (INT key, INT *nxrefs, INT *maxxrefs, INT **xrefs, void (*growfnc)(void))
 {
 	INT lo,hi,md, i;
 	if (key <= 0 || !xrefopen || (*nxrefs) < 1) FATAL();
-	if (*nxrefs >= maxxrefs)
+	if (*nxrefs >= *maxxrefs)
 		(*growfnc)();
-	ASSERT(*nxrefs < maxxrefs);
+	ASSERT(*nxrefs < *maxxrefs);
 	lo=1;
 	hi=(*nxrefs)-1;
 	/* binary search to find where to insert key */
 	while (lo<=hi) {
 		md = (lo + hi)/2;
-		if (key<xrefs[md])
+		if (key<(*xrefs)[md])
 			hi=--md;
-		else if (key>xrefs[md])
+		else if (key>(*xrefs)[md])
 			lo=++md;
 		else
 			FATAL(); /* deleting a deleted record! */
 	}
 	/* key replaces xrefs[lo] - push lo+ up */
 	for (i=lo; i<*nxrefs; i++)
-		xrefs[i+1] = xrefs[i];
-	xrefs[lo] = key;
+		(*xrefs)[i+1] = (*xrefs)[i];
+	(*xrefs)[lo] = key;
 	(*nxrefs)++;
 	ASSERT(writexrefs());
 }
@@ -268,23 +284,23 @@ addxref (INT key, INT *nxrefs, INT maxxrefs, INT *xrefs, void (*growfnc)(void))
  *=================================================*/
 void addixref (INT key)
 {
-	addxref(key, &nixrefs, maxixrefs, ixrefs, &growixrefs);
+	addxref(key, &nixrefs, &maxixrefs, &ixrefs, &growixrefs);
 }
 void addfxref (INT key)
 {
-	addxref(key, &nfxrefs, maxfxrefs, fxrefs, &growfxrefs);
+	addxref(key, &nfxrefs, &maxfxrefs, &fxrefs, &growfxrefs);
 }
 void addexref (INT key)
 {
-	addxref(key, &nexrefs, maxexrefs, exrefs, &growexrefs);
+	addxref(key, &nexrefs, &maxexrefs, &exrefs, &growexrefs);
 }
 void addsxref (INT key)
 {
-	addxref(key, &nsxrefs, maxsxrefs, sxrefs, &growsxrefs);
+	addxref(key, &nsxrefs, &maxsxrefs, &sxrefs, &growsxrefs);
 }
 void addxxref (INT key)
 {
-	addxref(key, &nxxrefs, maxxxrefs, xxrefs, &growxxrefs);
+	addxref(key, &nxxrefs, &maxxxrefs, &xxrefs, &growxxrefs);
 }
 /*==========================================
  * growxrefs -- Grow memory for xrefs array.
@@ -294,7 +310,7 @@ static void
 growxrefs (INT nxrefs, INT *maxxrefs, INT **xrefs)
 {
 	INT i, m = *maxxrefs, *newp;
-	*maxxrefs = nixrefs + 10;
+	*maxxrefs = nxrefs + 10;
 	newp = (INT *) stdalloc((*maxxrefs)*sizeof(INT));
 	if (m) {
 		for (i = 0; i < nxrefs; i++)
