@@ -497,4 +497,12 @@ send_uilang_callbacks (void)
 {
 	notify_listeners(&f_uilang_callbacks);
 }
+/*==========================================
+ * language_change -- notify gettext of change
+ *========================================*/
+void
+language_change (void)
+{
+	notify_gettext_language_changed();
+}
 

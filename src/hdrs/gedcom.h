@@ -361,6 +361,7 @@ RECORD keynum_to_srecord(int keynum);
 NODE keynum_to_sour(int keynum);
 NODE keynum_to_even(int keynum);
 NODE keynum_to_othr(int keynum);
+void language_change(void);
 INT length_nodes(NODE);
 STRING ll_langinfo(void);
 void load_char_mappings(void);

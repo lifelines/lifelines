@@ -1,6 +1,13 @@
-LifeLines Source Release, Version 3.0.18
+LifeLines Source Release, Version 3.0.19
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
+
+New features added in 3.0.19
+============================
+
+- binary rpm includes message files
+- More complete French translation
+- Fix for menu item translation in browse screens
 
 New features added in 3.0.18
 ============================

@@ -137,12 +137,6 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 		STRING f=e;
 		bind_textdomain_codeset(PACKAGE, f);
 	}
-#endif /* HAVE_BIND_TEXTDOMAIN_CODESET */
-
-	e = getoptstr("LocaleDir", "");
-	if (e && *e)
-		bindtextdomain(PACKAGE, e);
-
 	/*
 	otherwise let gettext try to figure it out
 	gettext has a lot of nice code for this stuff, but it doesn't
@@ -150,6 +144,16 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 	codepage, which is not very close :(
 	TODO: So revise this to use the codeset we determine at startup
 	*/
+#endif /* HAVE_BIND_TEXTDOMAIN_CODESET */
+
+	/* allow run-time specification of locale directory */
+	/* (LOCALEDIR is compile-time) */
+	e = getoptstr("LocaleDir", "");
+	if (e && *e) {
+		bindtextdomain(PACKAGE, e);
+		language_change(); /* TODO: is this necessary ? 2002-09-29, Perry */
+	}
+
 #endif /* ENABLE_NLS */
 
 

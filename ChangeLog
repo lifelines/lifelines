@@ -1,3 +1,14 @@
+2002-09-29 Perry Rapp
+
+	* ChangeLog NEWS configure.in build/msvc6/llines/llines.rc
+	build/rpm/lifelines.spec po/de.po po/el.po po/fr.po po/it.po
+	po/sv.po src/gedlib/init.c src/gedlib/locales.c
+	src/hdrs/gedcom.h src/hdrs/version.h src/liflines/screen.c:
+
+	Implement rpm spec patch by Karl DeBisschop, and add msg catalogs.
+	Added LOCALEDIR & LocaleDir to u/c menu display.
+	Change version to 3.0.19.
+
 2002-09-26 Matt Emmerton
 
 	* ChangeLog Makefile.am autogen.sh configure.in build/Makefile.am

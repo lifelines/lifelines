@@ -1777,10 +1777,15 @@ invoke_cset_display (void)
 	else
 		push_list(list, strsave(_("Locales are disabled.")));
 	
-	if (is_nls_supported())
+	if (is_nls_supported()) {
 		push_list(list, strsave(_("NLS (National Language Support) is enabled.")));
-	else
+		llstrncpyf(buffer, sizeof(buffer), uu8, "LOCALEDIR: %s", LOCALEDIR);
+		push_list(list, strsave(buffer));
+		llstrncpyf(buffer, sizeof(buffer), uu8, "LocaleDir: %s", getoptstr("LocaleDir", ""));
+		push_list(list, strsave(buffer));
+	} else {
 		push_list(list, strsave(_("NLS (National Language Support) is disabled.")));
+	}
 
 	add_shims_info(list);
 
