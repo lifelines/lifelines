@@ -150,11 +150,17 @@ init_map_from_str (STRING str, INT indx, BOOLEAN *perr)
 	*perr = TRUE;
 	p = str;
 	n = 1;
+	/* first pass through, count # of entries */
 	while (*p) {
+		BOOLEAN skip=FALSE;
 		/* skip blank lines and lines beginning with "##" */
-		if((*p == '\r') || (*p == '\n') || ((*p =='#') && (p[1] == '#'))) {
-		while(*p && (*p != '\n')) p++;
-		if(*p == '\n') p++;
+		if (*p == '\r' || *p == '\n') skip=TRUE;
+		if (*p =='#' && p[1] == '#') skip=TRUE;
+		if (skip) {
+			while(*p && (*p != '\n'))
+				p++;
+			if(*p == '\n')
+				p++;
 			continue;
 		}
 		while(*p) {
@@ -180,8 +186,10 @@ init_map_from_str (STRING str, INT indx, BOOLEAN *perr)
 		/* skip blank lines and lines beginning with "##" */
 		if((*str == '\r') || (*str == '\n')
 			|| ((*str =='#') && (str[1] == '#'))) {
-			while(*str && (*str != '\n')) str++;
-			if(*str == '\n') str++;
+			while(*str && (*str != '\n'))
+				str++;
+			if (*str == '\n')
+				str++;
 			continue;
 		}
 		p = scratch;
@@ -263,13 +271,18 @@ init_map_from_str (STRING str, INT indx, BOOLEAN *perr)
 				*p++ = c;
 			} else if (c == '\t') {
 			    	/* treat as beginning of a comment */
-		    		while(*str && (*str != '\n')) str++;
-		    		if(*str == '\n') str++;
+		    		while(*str && (*str != '\n'))
+					str++;
+		    		if(*str == '\n')
+					str++;
 				line++;
 				break;
-			} else if (c == '\r') ;	/* ignore carriage return */
-			  else
+			} else if (c == '\r') {
+				/* ignore carriage return */
+			} else {
+				/* not special, just copy replacement char */
 				*p++ = c;
+			}
 		}
 		*p = 0;
 		rights[n++] = strsave(scratch);

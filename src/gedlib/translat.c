@@ -199,7 +199,7 @@ translate_string (TRANTABLE tt, CNSTRING in, STRING out, INT max)
 			depth = 1;
 /* Match as far as possible */
 			while (n > 1 && node->child) {
-				nxtch = *(q + 1);
+				nxtch = (uchar)*(q + 1);
 				chnode = node->child;
 				while (chnode && chnode->achar != nxtch)
 					chnode = chnode->sibling;

@@ -1,3 +1,8 @@
+2007-07-13 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/charmaps.c gedlib/translat.c:
+	Bugfix in translation table code.
+
 2007-07-12 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/charmaps.c gedlib/gstrings.c gedlib/indiseq.c
