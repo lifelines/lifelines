@@ -66,6 +66,7 @@ BUILTINS builtins[] = {
 	{"chooseindi",      1,    1,    __chooseindi},
 	{"choosespouse",    1,    1,    __choosespouse},
 	{"choosesubset",    1,    1,    __choosesubset},
+	{"clear",           1,    1,    __clear},
 	{"col",             1,    1,    __col},
 	{"complexdate",     1,    1,    __complexdate},
 	{"complexformat",   1,    1,    __complexformat},

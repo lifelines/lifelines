@@ -2121,6 +2121,15 @@ declare a list
 
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>VOID <function>clear</function></funcdef>
+<paramdef><parameter>LIST</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+clear a list
+</para>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>BOOL <function>empty</function></funcdef>
 <paramdef><parameter>LIST</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>

@@ -1869,6 +1869,25 @@ __strtoint (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return val;
 }
 /*============================+
+ * __clear -- Clear a list, set, indiseq
+ *   usage: list(IDENT) -> VOID
+ *===========================*/
+PVALUE
+__clear (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+      LIST list;
+      PNODE arg = (PNODE) iargs(node);
+      PVALUE val = eval_and_coerce(PLIST, arg, stab, eflg);
+      if (*eflg) {
+              prog_var_error(node, stab, arg, val, nonlst1, "1");
+              delete_pvalue(val);
+              return NULL;
+      }
+      list = pvalue_to_list(val);
+      make_list_empty(list);
+      return NULL;
+}
+/*============================+
  * __list -- Create list
  *   usage: list(IDENT) -> VOID
  *===========================*/
