@@ -2,6 +2,10 @@ LifeLines Source Release, Version 3.0.38
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
+Bug fixes in 3.0.39
+============================
+- Cache bug causes people to be confused intermittently (sf#1015745)
+
 New features added in 3.0.38
 ============================
 - Two-stage tt conversion via UTF-8
