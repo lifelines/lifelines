@@ -2,7 +2,8 @@
 #define PACKAGE "lifelines"
 #define LOCALEDIR "."
 #define ENABLE_NLS 1
-#define HAVE_WINDOWS_H
+#define HAVE_BIND_TEXTDOMAIN_CODESET 1
+#define HAVE_WINDOWS_H 1
 #define HAVE__VSNPRINTF 1
 #define HAVE_SETLOCALE 1
 #define HAVE_STRCOLL 1

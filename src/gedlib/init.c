@@ -129,10 +129,10 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 
 #ifdef HAVE_BIND_TEXTDOMAIN_CODESET
 	e = getoptstr("GuiCodeset", "");
-	if (e && *e) {
+	if (e && e[0]) {
 		/* This doesn't work with gettext before 0.11.3pre2
 		STRING suffix = getoptstr("GuiCodesetOutput", "");
-		STRING f = strconcat(e, suffix);
+		STRING f = strconcat(int_codeset, suffix);
 		*/
 		STRING f=e;
 		bind_textdomain_codeset(PACKAGE, f);
@@ -609,9 +609,12 @@ update_db_options (void)
 	get_db_options(opttab);
 
 	strfree(&int_codeset);
-	if ((str = valueof_str(opttab, "codeset")) != 0)
-		int_codeset = strsave(str);
-	uu8 = is_codeset_utf8(int_codeset);
+	if ((str = valueof_str(opttab, "codeset")) != 0) {
+		if (!eqstr_ex(int_codeset, str)) {
+			int_codeset = strsave(str);
+			uu8 = is_codeset_utf8(int_codeset);
+		}
+	}
 	
 	remove_table(opttab, FREEBOTH);
 }
