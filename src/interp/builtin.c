@@ -2610,19 +2610,19 @@ __dateformat (PNODE node,
               TABLE stab,
               BOOLEAN *eflg)
 {
-        PNODE arg = (PNODE) iargs(node);
-        INT value;
-        PVALUE val =  eval_and_coerce(PINT, arg, stab, eflg);
+	PNODE arg = (PNODE) iargs(node);
+	INT value;
+	PVALUE val =  eval_and_coerce(PINT, arg, stab, eflg);
 	if (*eflg) {
 		prog_error(node, "the arg to dateformat is not an integer");
 		return NULL;
 	}
 	value = (INT) pvalue(val);
 	delete_pvalue(val);
-        if (value <  0) value = 0;
-        if (value > 11) value = 11;
-        datecode = value;
-        return NULL;
+	if (value <  0) value = 0;
+	if (value > 11) value = 11;
+	datecode = value;
+	return NULL;
 }
 /*==============================+
  * __year -- Return year of event
@@ -3019,7 +3019,7 @@ __free (PNODE node,
         TABLE stab,
         BOOLEAN *eflg)
 {
-    	extern LIST keysets;
+	extern LIST keysets;
 	PNODE arg = (PNODE) iargs(node);
 	BOOLEAN there;
 	PVALUE val;
@@ -3034,27 +3034,27 @@ __free (PNODE node,
 	    val = (PVALUE) valueofbool(globtab, iident(arg), &there);
 	}
 	if (there && val) {
-	    switch(ptype(val)) {
-	    case PSTRING:
-		if(pvalue(val)) stdfree((STRING)pvalue(val)); break;
-	    case PLIST:
-		if(pvalue(val)) remove_list(pvalue(val), delete_pvalue);
-		break;
-	    case PTABLE: break;
-	    case PSET:
-		if(pvalue(val)) {
-		    remove_indiseq(pvalue(val), FALSE);
-		    len = length_list(keysets);
-		    for(i = 1; i <= len; i++) {
-			if(get_list_element(keysets, i) == pvalue(val)) {
-			    set_list_element(keysets, i, (WORD)0);
-			    break;
+		switch(ptype(val)) {
+		case PSTRING:
+			if(pvalue(val)) stdfree((STRING)pvalue(val)); break;
+		case PLIST:
+			if(pvalue(val)) remove_list(pvalue(val), delete_pvalue);
+			break;
+		case PTABLE: break;
+		case PSET:
+			if(pvalue(val)) {
+				remove_indiseq(pvalue(val), FALSE);
+				len = length_list(keysets);
+				for(i = 1; i <= len; i++) {
+					if(get_list_element(keysets, i) == pvalue(val)) {
+						set_list_element(keysets, i, (WORD)0);
+						break;
+					}
+				}
 			}
-		    }
+			break;
 		}
-		break;
-	    }
-	    pvalue(val) = (WORD)0;
+		pvalue(val) = (WORD)0;
 	}
 	return NULL;
 }
