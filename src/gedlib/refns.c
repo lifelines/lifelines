@@ -257,7 +257,7 @@ STRING key;	/* record's GEDCOM key */
 /*====================================================
  * get_refns -- Find all records who match refn or key
  *==================================================*/
-get_refns (refn, pnum, pkeys, letr)
+void get_refns (refn, pnum, pkeys, letr)
 STRING refn;
 INT *pnum;
 STRING **pkeys;

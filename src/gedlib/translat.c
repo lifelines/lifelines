@@ -117,7 +117,7 @@ INT achar;
 /*=============================================
  * remove_trantable -- Remove translation table
  *===========================================*/
-remove_trantable (tt)
+void remove_trantable (tt)
 TRANTABLE tt;
 {
 	INT i;

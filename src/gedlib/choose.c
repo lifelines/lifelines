@@ -44,7 +44,6 @@ BOOLEAN ask1;
 {
 	INDISEQ seq = NULL;
 	NODE node;
-	INT i = 0;
 	if (indi) seq = indi_to_children(indi);
 	if (!indi && fam) seq = fam_to_children(fam);
 	if (!seq) {
@@ -64,7 +63,6 @@ STRING msg0, msgn;
 {
 	INDISEQ seq;
 	NODE node;
-	INT i = 0, len;
 	if (!indi) return NULL;
 	if (!(seq = indi_to_spouses(indi))) {
 		message(msg0);
@@ -82,9 +80,7 @@ NODE indi;
 STRING msg0, msgn;
 BOOLEAN fams;
 {
-	NODE node, fam, spouse;
-	INT i = 0, len;
-	char scratch[12];
+	NODE node;
 	INDISEQ seq = indi_to_families(indi, fams);
 	if (!seq) {
 		message(msg0);
@@ -104,7 +100,6 @@ BOOLEAN ask1;
 {
 	INDISEQ seq = NULL;
 	NODE node;
-	INT i = 0;
 	if (indi) seq = indi_to_fathers(indi);
 	if (!indi && fam) seq = fam_to_fathers(fam);
 	if (!seq) {
@@ -125,7 +120,6 @@ BOOLEAN ask1;
 {
 	INDISEQ seq = NULL;
 	NODE node;
-	INT i = 0;
 	if (indi) seq = indi_to_mothers(indi);
 	if (!indi && fam) seq = fam_to_mothers(fam);
 	if (!seq) {

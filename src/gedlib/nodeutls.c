@@ -200,7 +200,7 @@ NODE *pnode1, *pnode2, *pnode3;
 			continue;
 		}
 		prev2 = curs2;
-		if (curs2 = nsibling(curs2)) continue;
+		if ((curs2 = nsibling(curs2))) continue;
 		prev1 = curs1;
 		curs1 = nsibling(curs1);
 		prev2 = NULL;

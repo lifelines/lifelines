@@ -31,14 +31,15 @@
  *   3.0.3 - 21 Sep 95
  *===========================================================*/
 
+#include <unistd.h>
+#ifdef WIN32
+#include <dir.h>
+#endif
 #include "standard.h"
 #include "btree.h"
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
-#ifdef WIN32
-#include <dir.h>
-#endif
 
 TABLE tagtable;		/* table for tag strings */
 TABLE placabbvs;	/* table for place abbrevs */
@@ -51,11 +52,14 @@ char *getenv();
 /*=================================
  * init_lifelines -- Open LifeLines
  *===============================*/
-init_lifelines ()
+void init_lifelines (void)
 {
 	STRING e, emsg;
-	char unix_tempfile[] = "/tmp/lltmpXXXXXX";
-	char win32_tempfile[] = "\\temp\\lltmpXXXXXX";
+#ifdef WIN32
+	char tempfile[] = "\\temp\\lltmpXXXXXX";
+#else
+	char tempfile[] = "/tmp/lltmpXXXXXX";
+#endif
 
 	tagtable = create_table();
 	placabbvs = create_table();
@@ -69,11 +73,7 @@ init_lifelines ()
 	if (!e || *e == 0) e = (STRING) getenv("ED");
 	if (!e || *e == 0) e = (STRING) getenv("EDITOR");
 	if (!e || *e == 0) e = (STRING) "vi";
-#ifdef WIN32
-	editfile = strsave(mktemp(win32_tempfile));
-#else
-	editfile = strsave(mktemp(unix_tempfile));
-#endif
+	editfile = strsave(mktemp(tempfile));
 	editstr = (STRING) stdalloc(strlen(e) + strlen(editfile) + 2);
 	sprintf(editstr, "%s %s", e, editfile);
 	llprograms = (STRING) getenv("LLPROGRAMS");
@@ -87,7 +87,7 @@ init_lifelines ()
 /*===================================
  * close_lifelines -- Close LifeLines
  *=================================*/
-close_lifelines ()
+void close_lifelines (void)
 {
 	closexref();
 	unlink(editfile);

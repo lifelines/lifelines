@@ -106,10 +106,10 @@ NODE node;
 	INT len = 0;
 	STRING p, q, str;
 	if (!node) return NULL;
-	if (p = nval(node)) len += strlen(p) + 1;
+	if ((p = nval(node))) len += strlen(p) + 1;
 	cont = nchild(node);
 	while (cont && eqstr("CONT", ntag(cont))) {
-		if (p = nval(cont))
+		if ((p = nval(cont)))
 			len += strlen(p) + 1;
 		else
 			len++;
@@ -120,13 +120,13 @@ NODE node;
 	llwprintf("full_value: len = %d\n", len);
 #endif
 	str = p = (STRING) stdalloc(len + 1);
-	if (q = nval(node)) {
+	if ((q = nval(node))) {
 		sprintf(p, "%s\n", q);
 		p += strlen(p);
 	}
 	cont = nchild(node);
 	while (cont && eqstr("CONT", ntag(cont))) {
-		if (q = nval(cont))
+		if ((q = nval(cont)))
 			sprintf(p, "%s\n", q);
 		else
 			sprintf(p, "\n");

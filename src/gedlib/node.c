@@ -34,6 +34,7 @@
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
+#include "liflines.h"
 
 INT lineno = 0;
 
@@ -65,7 +66,7 @@ STRING fixtag (tag)
 STRING tag;
 {
 	STRING str;
-	if (str = (STRING) valueof(tagtable, tag)) return str;
+	if ((str = (STRING) valueof(tagtable, tag))) return str;
 	str = strsave(tag);
 	insert_table(tagtable, str, str);
 	return str;
@@ -98,7 +99,7 @@ NODE alloc_node ()
 /*======================================
  * free_node -- Special node deallocator
  *====================================*/
-free_node (node)
+void free_node (node)
 NODE node;
 {
 	((ALLOC) node)->next = first_blck;
@@ -123,7 +124,7 @@ NODE prnt;
 /*=====================================
  * free_nodes -- Free all NODEs in tree
  *===================================*/
-free_nodes (node)
+void free_nodes (node)
 NODE node;
 {
 	NODE sib;
@@ -194,7 +195,6 @@ STRING *pxref, *ptag, *pval, *pmsg;
 {
 	INT lev;
 	extern INT lineno;
-	STRING p0 = p;
 	static unsigned char scratch[MAXLINELEN+40];
 
 	*pmsg = *pxref = *pval = 0;
@@ -491,7 +491,7 @@ TRANTABLE tt;	/* char map */
 /*========================================
  * write_node -- Write NODE to GEDCOM file
  *======================================*/
-write_node (levl, fp, tt, node, indent)
+void write_node (levl, fp, tt, node, indent)
 INT levl;	/* level */
 FILE *fp;	/* file */
 TRANTABLE tt;	/* char map */
@@ -508,7 +508,7 @@ BOOLEAN indent;	/* indent? */
 	fprintf(fp, "%d", levl);
 	if (nxref(node)) fprintf(fp, " %s", nxref(node));
 	fprintf(fp, " %s", ntag(node));
-	if(p = nval(node)) {
+	if ((p = nval(node))) {
 	    if (tt) {
 		translate_string(tt, nval(node), out, MAXLINELEN+1);
 		p = out;
@@ -520,7 +520,7 @@ BOOLEAN indent;	/* indent? */
 /*==========================================
  * write_nodes -- Write NODEs to GEDCOM file
  *========================================*/
-write_nodes (levl, fp, tt, node, indent, kids, sibs)
+void write_nodes (levl, fp, tt, node, indent, kids, sibs)
 INT levl;	/* level */
 FILE *fp;	/* file */
 TRANTABLE tt;	/* char map */
@@ -935,7 +935,7 @@ BOOLEAN shrt;
 /*=========================================
  * striptrail -- Strip trailing white space
  *=======================================*/
-striptrail (p)
+void striptrail (p)
 STRING p;
 {
 	unsigned char *q = p + strlen(p) - 1;
@@ -955,7 +955,7 @@ STRING p;
 /*================================
  * show_node -- Show tree -- DEBUG
  *==============================*/
-show_node (node)
+void show_node (node)
 NODE node;
 {
 	if (!node) llwprintf("(NIL)");
@@ -964,7 +964,7 @@ NODE node;
 /*================================================
  * show_node_rec -- Recursive version of show_node
  *==============================================*/
-show_node_rec (levl, node)
+void show_node_rec (levl, node)
 INT levl;  NODE node;
 {
 	INT i;
@@ -1041,7 +1041,7 @@ STRING plac;
 		;
 	plac--;
 	if (*plac == 0) return plac0;
-	if (val = (STRING) valueof(placabbvs, plac)) return val;
+	if ((val = (STRING) valueof(placabbvs, plac))) return val;
 	return plac;
 }
 /*============================================
@@ -1051,7 +1051,7 @@ static BOOLEAN all_digits (s)
 STRING s;
 {
 	INT c;
-	while (c = *s++) {
+	while ((c = *s++)) {
 		if (c < '0' || c > '9') return FALSE;
 	}
 	return TRUE;

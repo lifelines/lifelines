@@ -35,6 +35,7 @@
 #include "translat.h"
 #include "gedcom.h"
 #include "cache.h"
+#include "liflines.h"
 
 INT csz_indi = 200;		/* cache size for indi */
 INT icsz_indi = 3000;		/* indirect cache size for indi */
@@ -47,12 +48,12 @@ INT icsz_even = 2000;		/* indirect cache size for even */
 INT csz_othr = 200;		/* cache size for othr */
 INT icsz_othr = 2000;		/* indirect cache size for othr */
 
-static CACHE create_cache();
-static NODE key_to_node();
-static CACHEEL key_to_cacheel();
-static dereference();
-static CACHE indicache, famcache, evencache, sourcache, othrcache;
+static CACHE create_cache(INT, INT);
+static NODE key_to_node(CACHE, STRING, STRING);
+static CACHEEL key_to_cacheel(CACHE, STRING, STRING, INT);
+static void dereference(CACHEEL);
 
+static CACHE indicache, famcache, evencache, sourcache, othrcache;
 static char keybuf[10][32] = { "", "", "", "", "", "", "", "", "", ""};
 static int keyidx = 0;
 
@@ -142,7 +143,7 @@ STRING key;
 /*======================================
  * init_caches -- Create and init caches
  *====================================*/
-init_caches ()
+void init_caches (void)
 {
 	indicache = create_cache((INT)csz_indi, (INT)icsz_indi);
 	famcache  = create_cache((INT)csz_fam, (INT)icsz_fam);
@@ -171,7 +172,7 @@ INT dirsize, indsize;
 /*=================================================
  * remove_direct -- Unlink CACHEEL from direct list
  *===============================================*/
-static remove_direct (cache, cel)
+static void remove_direct (cache, cel)
 CACHE cache;
 CACHEEL cel;
 {
@@ -187,7 +188,7 @@ CACHEEL cel;
 /*=====================================================
  * remove_indirect -- Unlink CACHEEL from indirect list
  *===================================================*/
-static remove_indirect (cache, cel)
+static void remove_indirect (cache, cel)
 CACHE cache;
 CACHEEL cel;
 {
@@ -203,7 +204,7 @@ CACHEEL cel;
 /*===========================================================
  * first_direct -- Make unlinked CACHEEL first in direct list
  *=========================================================*/
-static first_direct (cache, cel)
+static void first_direct (cache, cel)
 CACHE cache;
 CACHEEL cel;
 {
@@ -219,7 +220,7 @@ CACHEEL cel;
 /*===============================================================
  * first_indirect -- Make unlinked CACHEEL first in indirect list
  *=============================================================*/
-static first_indirect (cache, cel)
+static void first_indirect (cache, cel)
 CACHE cache;
 CACHEEL cel;
 {
@@ -235,7 +236,7 @@ CACHEEL cel;
 /*=======================================================
  * remove_last -- Remove last indirect element from cache
  *=====================================================*/
-static remove_last (cache)
+static void remove_last (cache)
 CACHE cache;
 {
 	CACHEEL cel = clastind(cache);
@@ -250,7 +251,7 @@ CACHE cache;
 /*============================================================
  * direct_to_first -- Make direct CACHEEL first in direct list
  *==========================================================*/
-static direct_to_first (cache, cel)
+static void direct_to_first (cache, cel)
 CACHE cache;
 CACHEEL cel;
 {
@@ -262,7 +263,7 @@ CACHEEL cel;
 /*==================================================================
  * indirect_to_first -- Make indirect CACHEEL first in indirect list
  *================================================================*/
-static indirect_to_first (cache, cel)
+static void indirect_to_first (cache, cel)
 CACHE cache;
 CACHEEL cel;
 {
@@ -274,7 +275,7 @@ CACHEEL cel;
 /*==============================================================
  * direct_to_indirect -- Make last direct CACHEEL first indirect
  *============================================================*/
-static direct_to_indirect (che)
+static void direct_to_indirect (che)
 CACHE che;
 {
 	CACHEEL cel = clastdir(che);
@@ -289,7 +290,7 @@ CACHE che;
 /*=====================================================
  * dereference -- Dereference cel by reading its record
  *===================================================*/
-static dereference (cel)
+static void dereference (cel)
 CACHEEL cel;
 {
 	STRING rec;
@@ -323,7 +324,7 @@ INT reportmode;	/* if True, then return NULL rather than aborting
 #endif
 	ASSERT(cache && key);
 	node = NULL;
-	if(record = retrieve_record(key, &len))
+	if ((record = retrieve_record(key, &len)))
 	  {
 	  if(reportmode && (len < 6))
 	      {
@@ -378,7 +379,7 @@ INT reportmode;
 	keyidx++;
 	if(keyidx >= 10) keyidx = 0;
 
-	if (cel = (CACHEEL) valueof(cdata(cache), key)) {
+	if ((cel = (CACHEEL) valueof(cdata(cache), key))) {
 		if (cnode(cel))
 			direct_to_first(cache, cel);
 		else {
@@ -421,7 +422,7 @@ STRING tag;
 /*======================================
  * lock_cache -- Lock CACHEEL into cache
  *====================================*/
-lock_cache (cel)
+void lock_cache (cel)
 CACHEEL cel;
 {
 	ASSERT(cnode(cel));
@@ -430,7 +431,7 @@ CACHEEL cel;
 /*==========================================
  * unlock_cache -- Unlock CACHEEL from cache
  *========================================*/
-unlock_cache (cel)
+void unlock_cache (cel)
 CACHEEL cel;
 {
 	ASSERT(cnode(cel));
@@ -517,7 +518,7 @@ NODE node;
 /*=======================================================
  * add_node_to_direct -- Add node to direct part of cache
  *=====================================================*/
-add_node_to_direct(cache, node)
+void add_node_to_direct(cache, node)
 CACHE cache;
 NODE node;
 {
@@ -535,7 +536,7 @@ NODE node;
 /*==============================================
  * remove_indi_cache -- Remove person from cache
  *============================================*/
-remove_indi_cache (key)
+void remove_indi_cache (key)
 STRING key;
 {
 	remove_from_cache(indicache, key);
@@ -543,7 +544,7 @@ STRING key;
 /*=============================================
  * remove_fam_cache -- Remove family from cache
  *===========================================*/
-remove_fam_cache (key)
+void remove_fam_cache (key)
 STRING key;
 {
 	remove_from_cache(famcache, key);
@@ -551,7 +552,7 @@ STRING key;
 /*=============================================
  * remove_from_cache -- Remove entry from cache
  *===========================================*/
-remove_from_cache (cache, key)
+void remove_from_cache (cache, key)
 CACHE cache;
 STRING key;
 {

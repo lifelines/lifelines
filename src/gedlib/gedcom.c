@@ -34,6 +34,8 @@
 #include "gedcom.h"
 #include "sequence.h"
 #include "gedcheck.h"
+#include "indiseq.h"
+#include "liflines.h"
 
 static NODE indi_to_indi();
 static NODE fam_to_fam();
@@ -67,6 +69,7 @@ INT *ptype;
 	case OTHR_REC: return othr_to_othr(node);
 	default: FATAL();
 	}
+	/* NOTREACHED */
 }
 /*=======================================================
  * indi_to_indi - Convert person record to LifeLines form

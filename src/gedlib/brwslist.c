@@ -44,14 +44,14 @@ typedef struct {
 /*=====================================================
  *  init_browse_lists -- Initialize named browse lists.
  *===================================================*/
-init_browse_lists ()
+void init_browse_lists (void)
 {
 	browse_lists = create_list();
 }
 /*===========================================
  *  add_browse_list -- Add named browse list.
  *=========================================*/
-add_browse_list (name, seq)
+void add_browse_list (name, seq)
 STRING name;
 INDISEQ seq;
 {
@@ -84,7 +84,7 @@ INDISEQ seq;
 /*=================================================
  *  remove_browse_list -- Remove named browse list.
  *===============================================*/
-remove_browse_list (name, seq)
+void remove_browse_list (name, seq)
 STRING name;
 INDISEQ seq;
 {
@@ -116,7 +116,7 @@ STRING name;
 /*===================================================
  *  new_name_browse_list -- Rename named browse list.
  *=================================================*/
-new_name_browse_list (old, new)
+void new_name_browse_list (old, new)
 STRING old, new;
 {
 	BLEL blel;
@@ -132,7 +132,7 @@ STRING old, new;
 /*===================================================
  *  update_browse_list -- Assign name to browse list.
  *=================================================*/
-update_browse_list (name, seq)
+void update_browse_list (name, seq)
 STRING name;
 INDISEQ seq;
 {
@@ -150,7 +150,7 @@ INDISEQ seq;
 /*==============================================================
  * remove_from_browse_lists -- Remove stale elements from lists.
  *============================================================*/
-remove_from_browse_lists (key)
+void remove_from_browse_lists (key)
 STRING key;
 {
 	BLEL blel;
@@ -171,7 +171,7 @@ STRING key;
  * rename_from_browse_lists -- Re-figures name of possible element
  *   in browse lists.
  *==============================================================*/
-rename_from_browse_lists (key)
+void rename_from_browse_lists (key)
 STRING key;
 {
 	INDISEQ seq;

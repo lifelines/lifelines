@@ -36,7 +36,7 @@
 /*======================================
  * split_indi -- Split person into parts
  *====================================*/
-split_indi (indi, pname, prefn, psex, pbody, pfamc, pfams)
+void split_indi (indi, pname, prefn, psex, pbody, pfamc, pfams)
 NODE indi, *pname, *prefn, *psex, *pbody, *pfamc, *pfams;
 {
 	NODE name, lnam, refn, sex, body, famc, fams, last;
@@ -90,7 +90,7 @@ NODE indi, *pname, *prefn, *psex, *pbody, *pfamc, *pfams;
 /*====================================
  * join_indi -- Join person from parts
  *==================================*/
-join_indi (indi, name, refn, sex, body, famc, fams)
+void join_indi (indi, name, refn, sex, body, famc, fams)
 NODE indi, name, refn, sex, body, famc, fams;
 {
 	NODE node = NULL;
@@ -142,7 +142,7 @@ NODE indi, name, refn, sex, body, famc, fams;
 /*=======================================
  * split_fam -- Split a family into parts
  *=====================================*/
-split_fam (fam, prefn, phusb, pwife, pchil, prest)
+void split_fam (fam, prefn, phusb, pwife, pchil, prest)
 NODE fam, *prefn, *phusb, *pwife, *pchil, *prest;
 {
 	NODE node, rest, last, husb, lhsb, wife, lwfe, chil, lchl;
@@ -192,7 +192,7 @@ NODE fam, *prefn, *phusb, *pwife, *pchil, *prest;
 /*===================================
  * join_fam -- Join family from parts
  *=================================*/
-join_fam (fam, refn, husb, wife, chil, rest)
+void join_fam (fam, refn, husb, wife, chil, rest)
 NODE fam, refn, husb, wife, chil, rest;
 {
 	NODE node = NULL;

@@ -110,7 +110,7 @@ STRING *pmsg;	/* error message */
 		*(q - 1) = 0;
 		striptrail(tag);
 		q = val = p;
-		while (*q++ = c = *p++) {
+		while ((*q++ = c = *p++)) {
 			if (c == '\n') break;
 			if (c == '\\') {
 				if ((c = *p++) == EOF) break;

@@ -42,11 +42,12 @@ RKEY name2rkey();
 char *getasurname();
 
 static int old = 0;
-static INT codeof();
-static STRING parts_to_name();
-static name_to_parts();
-static squeeze();
-static STRING nextpiece();
+static INT codeof(int);
+static STRING parts_to_name(STRING*);
+static void name_to_parts(STRING, STRING*);
+static void squeeze(STRING, STRING);
+static STRING nextpiece(STRING);
+static void cmpsqueeze(STRING, STRING);
 
 /*===================================================================
  * name records -- Name indexing information is kept in the database
@@ -224,7 +225,7 @@ STRING name;	/* surname */
 		return (STRING) "Z999";
 	p = name;
 	q = scratch;
-	while (c = *p++)
+	while ((c = *p++))
 		*q++ = ll_toupper(c);
 	*q = 0;
 	p = q = &scratch[1];
@@ -463,12 +464,11 @@ STRING part, comp;
  *   0-terminated words, ending with another 0; non-letters not
  *   copied; eg., `Anna /Van Cott/' maps to `ANNA\0VANCOTT\0\0'.
  *=============================================================*/
-static squeeze (in, out)
+static void squeeze (in, out)
 STRING in;	/* string of words */
 STRING out;	/* superstring of words */
 {
 	INT c;
-	STRING out0 = out;
 	while ((c = *in++) && chartype(c) != LETTER)
 		;
 	if (c == 0) {
@@ -507,7 +507,7 @@ BOOLEAN exact;	/* unused! */
 	STRING *strs, *id_by_key();
 
    /* See if user is asking for person by key instead of name */
-	if (strs = id_by_key(name, pkeys)) {
+	if ((strs = id_by_key(name, pkeys))) {
 		*pnum = 1;
 		return strs;
 	}
@@ -579,11 +579,11 @@ STRING name1, name2;
 /*===========================================================
  * cmpsqueeze -- Squeeze GEDCOM name to superstring of givens
  *=========================================================*/
-cmpsqueeze (in, out)
+void cmpsqueeze (in, out)
 STRING in, out;
 {
 	INT c;
-	while (in = nextpiece(in)) {
+	while ((in = nextpiece(in))) {
 		while (TRUE) {
 			c = *in++;
 			if (iswhite(c) || c == '/' || c == 0) {
@@ -605,7 +605,7 @@ STRING name;
 	INT c;
 	static unsigned char scratch[MAXNAMELEN+1];
 	STRING out = scratch;
-	while (name = nextpiece(name)) {
+	while ((name = nextpiece(name))) {
 		while (TRUE) {
 			if ((c = *name++) == 0) {
 				if (*(out-1) == ' ') --out;
@@ -685,7 +685,7 @@ INT len;
 /*============================================================
  * name_to_parts -- Convert GEDCOM name to parts; keep slashes
  *==========================================================*/
-static name_to_parts (name, parts)
+static void name_to_parts (name, parts)
 STRING name;	/* GEDCOM name */
 STRING *parts;
 {
@@ -754,7 +754,7 @@ STRING name;
 		*p++ = ll_toupper(c);
 	*p++ = c;
 	if (c == 0) return scratch;
-	while (c = *p++ = *name++)
+	while ((c = *p++ = *name++))
 		;
 	return scratch;
 }

@@ -30,10 +30,13 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <unistd.h>
+#include <curses.h>
 #include "standard.h"
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
+#include "liflines.h"
 
 extern STRING aredit;
 
@@ -46,7 +49,6 @@ TABLE *ptab;	/* hash table for values */
 INT sep;	/* separator char */
 STRING ermsg;	/* error message */
 {
-	char scratch[50];
 	TABLE tmptab = NULL;
 	STRING msg;
 	endwin();

@@ -29,6 +29,7 @@
  *   3.0.0 - 02 May 94    3.0.2 - 10 Nov 94
  *===========================================================*/
 
+#include <stdlib.h>
 #include "standard.h"
 #include "btree.h"
 #include "table.h"
@@ -65,7 +66,7 @@ static BOOLEAN xrefopen = FALSE;
 /*============================== 
  * initxref -- Create xrefs file
  *============================*/
-initxref ()
+void initxref (void)
 {
 	char scratch[100];
 	INT i = 1, j;
@@ -80,7 +81,7 @@ initxref ()
 /*============================
  * openxref -- Open xrefs file
  *==========================*/
-BOOLEAN openxref ()
+BOOLEAN openxref (void)
 {
 	char scratch[100];
 	ASSERT(!xrefopen);
@@ -92,7 +93,7 @@ BOOLEAN openxref ()
 /*==============================
  * closexref -- Close xrefs file
  *============================*/
-closexref ()
+void closexref (void)
 {
 	if (xreffp) fclose(xreffp);
 	xrefopen = FALSE;
@@ -165,7 +166,7 @@ STRING getxxref ()
 /*=============================
  * readxrefs -- Read xrefs file
  *===========================*/
-BOOLEAN readxrefs ()
+BOOLEAN readxrefs (void)
 {
 	ASSERT(xrefopen);
 	ASSERT(fread(&nixrefs, sizeof(INT), 1, xreffp) == 1);
@@ -193,7 +194,7 @@ BOOLEAN readxrefs ()
 /*================================
  * writexrefs -- Write xrefs file.
  *==============================*/
-writexrefs ()
+BOOLEAN writexrefs (void)
 {
 	ASSERT(xrefopen);
 	rewind(xreffp);
@@ -213,7 +214,7 @@ writexrefs ()
 /*============================================
  * addixref -- Add deleted INDI key to ixrefs.
  *==========================================*/
-addixref (key)
+void addixref (key)
 INT key;
 {
 	if (key <= 0 || !xrefopen || nixrefs < 1) FATAL();
@@ -224,7 +225,7 @@ INT key;
 /*===========================================
  * addfxref -- Add deleted FAM key to fxrefs.
  *=========================================*/
-addfxref (key)
+void addfxref (key)
 INT key;
 {
 	if (key <= 0 || !xrefopen || nfxrefs < 1) FATAL();
@@ -235,7 +236,7 @@ INT key;
 /*============================================
  * addexref -- Add deleted EVEN key to exrefs.
  *==========================================*/
-addexref (key)
+void addexref (key)
 INT key;
 {
 	if (key <= 0 || !xrefopen || nexrefs < 1) FATAL();
@@ -246,7 +247,7 @@ INT key;
 /*============================================
  * addsxref -- Add deleted SOUR key to sxrefs.
  *==========================================*/
-addsxref (key)
+void addsxref (key)
 INT key;
 {
 	if (key <= 0 || !xrefopen || nsxrefs < 1) FATAL();
@@ -257,7 +258,7 @@ INT key;
 /*=============================================
  * addfxref -- Add other deleted key to xxrefs.
  *===========================================*/
-addxxref (key)
+void addxxref (key)
 INT key;
 {
 	if (key <= 0 || !xrefopen || nxxrefs < 1) FATAL();
@@ -268,7 +269,7 @@ INT key;
 /*============================================
  * growixrefs -- Grow memory for ixrefs array.
  *==========================================*/
-growixrefs ()
+void growixrefs (void)
 {
 	INT i, m = maxixrefs, *newp;
 	maxixrefs = nixrefs + 10;
@@ -283,7 +284,7 @@ growixrefs ()
 /*============================================
  * growfxrefs -- Grow memory for fxrefs array.
  *==========================================*/
-growfxrefs ()
+void growfxrefs (void)
 {
 	INT i, m = maxfxrefs, *newp;
 	maxfxrefs = nfxrefs + 10;
@@ -298,7 +299,7 @@ growfxrefs ()
 /*============================================
  * growexrefs -- Grow memory for exrefs array.
  *==========================================*/
-growexrefs ()
+void growexrefs (void)
 {
 	INT i, m = maxexrefs, *newp;
 	maxexrefs = nexrefs + 10;
@@ -313,7 +314,7 @@ growexrefs ()
 /*============================================
  * growsxrefs -- Grow memory for sxrefs array.
  *==========================================*/
-growsxrefs ()
+void growsxrefs (void)
 {
 	INT i, m = maxsxrefs, *newp;
 	maxsxrefs = nsxrefs + 10;
@@ -328,7 +329,7 @@ growsxrefs ()
 /*============================================
  * growxxrefs -- Grow memory for xxrefs array.
  *==========================================*/
-growxxrefs ()
+void growxxrefs (void)
 {
 	INT i, m = maxxxrefs, *newp;
 	maxxxrefs = nxxrefs + 10;
@@ -343,35 +344,35 @@ growxxrefs ()
 /*===================================================
  * num_indis -- Return number of persons in database.
  *=================================================*/
-INT num_indis ()
+INT num_indis (void)
 {
 	return ixrefs[0] - nixrefs;
 }
 /*===================================================
  * num_fams -- Return number of families in database.
  *=================================================*/
-INT num_fams ()
+INT num_fams (void)
 {
 	return fxrefs[0] - nfxrefs;
 }
 /*==================================================
  * num_evens -- Return number of events in database.
  *================================================*/
-INT num_evens ()
+INT num_evens (void)
 {
 	return exrefs[0] - nexrefs;
 }
 /*===================================================
  * num_sours -- Return number of sources in database.
  *=================================================*/
-INT num_sours ()
+INT num_sours (void)
 {
 	return sxrefs[0] - nsxrefs;
 }
 /*=========================================================
  * num_othrs -- Return number of other records in database.
  *=======================================================*/
-INT num_othrs ()
+INT num_othrs (void)
 {
 	return xxrefs[0] - nxxrefs;
 }

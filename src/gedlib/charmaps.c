@@ -34,6 +34,7 @@
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
+#include "liflines.h"
 
 TRANTABLE tran_tables[] = {
 	NULL, NULL, NULL, NULL, NULL, NULL,
@@ -59,12 +60,12 @@ static STRING baddec = (STRING) "Bad decimal number format.";
 static STRING badhex = (STRING) "Bad hexidecimal number format.";
 static STRING norplc = (STRING) "No replacement string on line.";
 static STRING badesc = (STRING) "Bad escape format.";
-static STRING notabs = (STRING) "Tabs not allowed in replacement string.";
+/* static STRING notabs = (STRING) "Tabs not allowed in replacement string."; */
 
 /*========================================
  * init_mapping -- Init translation tables
  *======================================*/
-init_mapping ()
+void init_mapping (void)
 {
 	INT indx;
 	BOOLEAN err;
@@ -317,7 +318,7 @@ INT c;
 /*====================================================
  * maperror -- Print error message from reading string
  *==================================================*/
-maperror(indx, line, errmsg)
+void maperror(indx, line, errmsg)
 INT indx, line;
 STRING errmsg;
 {

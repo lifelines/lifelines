@@ -6,10 +6,13 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <unistd.h>
 #include "standard.h"
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
+#include "liflines.h"
+#include <curses.h>
 
 #define NOMAPS 6
 
@@ -23,7 +26,6 @@ extern TRANTABLE init_map_from_file();
 BOOLEAN edit_mapping (code)
 INT code;	/* map code */
 {
-	char scratch[50];
 	TRANTABLE tt;
 	BOOLEAN err;
 

@@ -33,6 +33,7 @@
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
+#include "liflines.h"
 
 #define SS (STRING)
 
@@ -194,7 +195,7 @@ STRING name;
 	INT c, n = 0;
 	if (!name) return FALSE;
 	if (pointer_value(name)) return FALSE;
-	while (c = *name++) {
+	while ((c = *name++)) {
 		if (c == '/') n++;
 	}
 	return n <= 2;
