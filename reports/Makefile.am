@@ -19,7 +19,8 @@ LL_REPORTS = \
 	familycheck.ll familyisfm1.ll famrep.ll famtree1.ll fileindex.ll \
 	fdesc.ll find.ll findmissing.ll fix_nameplac.ll			\
 	formatted_gedcom.ll gedall.ll gedlist.ll gedlod.ll gedn.ll	\
-	gedtags.ll ged_write.li genancc.ll gender_order.ll gendex.ll	\
+	gedtags.ll ged_write.li genancc1.ll genancc2.ll gender_order.ll \
+	gendex.ll	\
 	genetics.ll genetics2.ll getbaptism.li givens_gender.ll		\
 	givens_gender_finder.ll hasnotes1.ll hp-anc.ll htmlahnen.ll	\
 	html.dn.ll htmlfam.ll html.ll igi-filter.ll igi-import.ll	\

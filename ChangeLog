@@ -1,4 +1,49 @@
 2004-07-18 Stephen Dum
+	More reports directory updates - Merging Vincent Broman's Changes
+	to reports. The following were added to the reports directory:
+	af-import.ll afn_match.ll ahnenliste.ll all_anc_lines.ll allfam10c.ll
+	altern.ll anc2_ged.ll bday_cover.ll bib2html.c browser.ll
+	burial_index.ll bury.c BW_descendants.ll cgi_html.li common.ll
+	cons.ll cont.ll count_dup.ll db_summary.ll desc_ged.ll descged.ll
+	desc_html.ll desc-tree.ll divorce.li drep2.ll d-rtf.ll dump-ances.ll
+	dump_html.ll dump_html_sd.ll eol.ll est_life_span.ll extract_gedcom.ll
+	extract_html.ll extract_set.li fam_ged.ll famgroup.ll familycheck.ll
+	fileindex.ll gedall.ll gedlist.ll gedlod.ll gedn.ll gedtags.ll
+	ged_write.li genancc2.ll gendex.ll genetics2.ll getbaptism.li
+	givens_gender.ll hp-anc.ll htmlahnen.ll html.dn.ll htmlfam.ll
+	html.ll igi-filter.ll igi-import.ll igi-search.ll index_html.ll
+	interestset.li ldsgedcom.li line.ll listsour.ll ll2html4.ll
+	ll2visio.ll maritalinfo.ll name2html.ll net-ped.ll outsources.li
+	paf-export.ll paf-import.ll pedigree_html.ll pedigreelhs.ll
+	pedigree.ll ped.ll pointers.ll prompt.li ps-circle.ll reg_html.ll
+	register-rtf.ll relink.ll rfc.ll rootset.ll rtflib.li sealing_line.ll
+	sgsgen.ll shorten.li sour2.li sources_bib.ll sour.li src.ll src-rtf.ll
+	ssdi_aid.ll ssdi-import.ll ssdi-search-list.ll tools.li
+	tree_density.ll ttable.ll upl2.li wife.ll xml-dtd.ll xmlize.ll
+	zombies.ll
+	And the following files were udated:
+	2ppage.ll 4gen1.ll 6gen1.ll 8gen1.ll ahnentafel.ll alive.ll
+	alllines.ll alllines.sgml.ll ancestors2.ll anniver.ll bias.ll
+	bkdes16-1.ll book-latex.ll cid.ll connect2.ll count_anc.ll
+	count_desc.ll count_paternal_desc.ll cousins.ll coverage.ll
+	cron.ll dates.ll desc-henry.ll fam10c.ll fam16rn1.ll fami-grps.ll
+	familyisfm1.ll famtree1.ll fdesc.ll find.ll findmissing.ll
+	fix_nameplac.ll formatted_gedcom.ll genancc1.ll gender_order.ll
+	genetics.ll gen_index givens_gender_finder.ll hasnotes1.ll
+	igi-merge.ll index1.ll index_mm.ll indiv.ll infant_mortality.ll
+	lldb.ll longlines.ll Makefile.am marriages1.ll menu.ll
+	namesformat1.ll names_freq.ll nonpatronymics.ll pafcompat.ll
+	partition.ll pedigreel.ll places.ll ps-pedigree.ll register1.ll
+	register-tex.ll regvital1.ll regvital.ll related_spouses.ll relate.ll
+	relation.ll rllgen.ll rslgen.ll showlines1.ll simpleged.ll
+	soundex1.ll soundex-isfm.ll sources.ll stats.ll st/st_all.ll
+	st/st_aux.li st/st_collate_8859-1.li st/st_collate.li
+	st/st_collate_UTF-8.li st/st_convert.li st/st_date.li st/st_db.li
+	st/st_list.li st/st_name.li st/st_number.li st/st_string.li
+	st/st_string_UTF-8.li surname1.ll timeline1.ll timeline2.ll
+	tinytafel1.ll verify.ll
+
+2004-07-18 Stephen Dum
 	Makefile.am src/interp/interp.c 
 	in reports directory
 	remove: ps-anc2.ll   ps-anc5.ll   ps-anc6.ll   ps-anc7.ll   ps-anc8.ll
