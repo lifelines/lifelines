@@ -7,7 +7,7 @@ AC_INIT(liflines/lbrowse.c)
 AC_PREREQ(2.13)
 AC_REVISION([for lifelines, built with autoconf] AC_ACVERSION)
 
-AM_INIT_AUTOMAKE(lifelines, 3.0.5)
+AM_INIT_AUTOMAKE(lifelines, 3.0.6-dev)
 AM_CONFIG_HEADER(config.h)
 
 AC_PREFIX_DEFAULT($HOME)

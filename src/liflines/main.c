@@ -96,7 +96,7 @@ BOOLEAN traceprogram = FALSE;	/* trace program */
 BOOLEAN traditional = TRUE;	/* use traditional family rules */
 STRING btreepath;		/* database path given by user */
 STRING readpath;		/* database path used to open */
-STRING version = (STRING) "3.0.5";
+STRING version = (STRING) "3.0.6-dev";
 #ifdef WIN32
 STRING betaversion = (STRING) "-0.4";
 #else
