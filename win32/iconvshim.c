@@ -176,6 +176,7 @@ ICONVDECL int
 iconvshim_get_property (const char *name, char * value, int valuelen)
 {
 	static char file_version[] = "file_version:";
+	load_dll();
 	if (!lstrcmp(name, "dll_path"))
 		return ishim_get_dll_name(value, valuelen);
 	if (!lstrcmp(name, "dll_version"))

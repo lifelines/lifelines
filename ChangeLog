@@ -5,6 +5,10 @@
 
 	Added Danish translation (da.po).
 
+	* ChangeLog win32/iconvshim.c:
+
+	Win32: load iconv.dll whenever iconvshim property queried, in case not yet loaded.
+
 2002-11-08 Perry Rapp
 
 	* ChangeLog src/interp/builtin.c src/liflines/brwsmenu.c
