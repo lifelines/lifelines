@@ -1,4 +1,11 @@
-To release a new version, edit the version number in
+These instructions are for building a new lifelines 
+release, in your cvs working directory, and actually
+releasing it.
+
+Fetch latest cvs if desired, eg 
+  $ cvs -z3 up -a
+
+Edit the version number, setting it to the new release:
   NEWS
   INSTALL
   configure.in
@@ -11,6 +18,45 @@ To release a new version, edit the version number in
 
 Add an entry mentioning the new version in the
   ChangeLog
+
+Commit changes (new version number):
+  $ cvs -z3 ci
+
+Run autotools:
+  $ sh autogen.sh
+
+Build local copy in ./bld subdirectory:
+  $ rm -rf bld
+  $ mkdir bld
+  $ cd bld
+  $ ../configure
+  $ ../make
+
+Update master message catalog template (for i18n):
+  $ mv ../po/lifelines.pot ../po/lifelines.old.pot
+  $ cd po
+  $ make lifelines.pot
+  $ cd ..
+
+Build distribution tarball:
+  $ ../make dist
+
+Build any other files (eg, other tarball formats,
+MS-Windows binary packages, rpm packages).
+For rpm packages, see ./build/rpm/lifelines.spec.
+
+Go to lifelines admin page, and create a new
+beta release. Paste in top part of ./NEWS file
+for ChangeLog entry, and copy & paste release
+notes from previous beta release, updating md5
+signatures to those of new release files.
+
+Upload the release files (tarball etc.) to
+uploads.sourceforge.net. From the release page
+(above, opened from project admin), refresh
+and attach the release files, and set properties
+appropriately (can look at previous releases to
+see how to set them).
 
 Tag the cvs source via (for example, for version 3.0.25)
   cvs tag v3_0_25

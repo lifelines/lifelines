@@ -1,8 +1,15 @@
+2005-01-14 Perry Rapp
+
+	* ChangeLog README.MAINTAINERS
+
+	More instructions for building release, including updating
+	the message catalog template (lifelines.pot) first.
+
 2005-01-14 Jens Arvidsson
 
 	* ChangeLog po/sv.po
 
-	Update Swedish translation.
+	Update Swedish translation (1.44->1.46, 9 changes).
 	
 2005-01-14 Perry Rapp
 
