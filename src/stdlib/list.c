@@ -250,19 +250,37 @@ nth_in_list_from_tail (LIST list, INT index1b, LIST_CREATE_VALUE createfnc)
 	INT i = 1;
 	LNODE node = NULL;
 	if (!list) return NULL;
-	node = ltail(list);
-	while (i < index1b && node) {
-		i++;
-		node = lprev(node);
-	}
 	validate_list(list);
-	if (i == index1b && node) return node;
-	while (i++ <= index1b) {
-		VPTR newv = createfnc ? (*createfnc)(list) : NULL;
-		enqueue_list(list, newv);
+	/* handle reverse indices */
+	if (index1b < 1) index1b += llen(list);
+	/* null if out of bounds */
+	if (index1b < 1) return NULL;
+	if (index1b < llen(list)/2) {
+		/* want element in back half, so count back from tail */
+		LNODE node = ltail(list);
+		INT i = index1b;
+		while (--i) {
+			node = lprev(node);
+		}
+		return node;
+	} else if (index1b <= llen(list)) {
+		/* want element in front half, so count forward from head */
+		LNODE node = lhead(list);
+		INT i = llen(list) + 1 - index1b;
+		while (--i) {
+			node = lnext(node);
+		}
+		return node;
+	} else {
+		/* want element beyond end, so add as required */
+		INT i = index1b + 1 - llen(list);
+		while (--i) {
+			VPTR newv = createfnc ? (*createfnc)(list) : NULL;
+			enqueue_list(list, newv);
+		}
+		validate_list(list);
+		return lhead(list);
 	}
-	validate_list(list);
-	return lhead(list);
 }
 /*==================================================
  * set_list_element - Set element using array access

@@ -10,6 +10,11 @@
 	Code cleanup. Expose __rsort to report language.
 	Add sort & rsort tests to list self-test.
 
+	* ChangeLog src/stdlib/list.c
+
+	Improve random access to lists. Implement negative offsets
+	(to access elements from other end).
+
 2003-03-01 Perry Rapp
 
 	* ChangeLog src/gedlib/indiseq.c src/hdrs/array.h
