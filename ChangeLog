@@ -34,7 +34,8 @@
 	Sorted indiseq.h functions & removed dups.
 	Changed add_to_record to extern.
 
-	* gedlib/indiseq.c gedlib/messages.c hdrs/indiseq.h liflines/newrecs.c:
+	* gedlib/indiseq.c gedlib/messages.c hdrs/indiseq.h
+	liflines/newrecs.c:
 	Make ask_for_record handle dup REFNs.
 
 	* gedlib/choose.c gedlib/indiseq.c gedlib/xreffile.c
@@ -42,7 +43,8 @@
 	liflines/ask.c liflines/browse.c liflines/newrecs.c
 	liflines/scan.c liflines/screen.c:
 	Coded print subtypes into indiseq (new is_prntype).
-	Reworked print format lines of indiseq to be dynamic for long indiseqs.
+	Reworked print format lines of indiseq to be dynamic for
+	long indiseqs.
 	Renamed format_and_choose_???? to choose_from_indiseq.
 	More combining code in xreffile.c.
 
