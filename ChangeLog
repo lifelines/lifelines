@@ -16,6 +16,10 @@
 	Change all strdup calls to strsave (which has ASSERT).
 	Allow exit from choose all databases prompt.
 
+	* ChangeLog gedlib/charmaps.c:
+
+	Cosmetic.
+
 2002-06-21 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/nodeutls.c liflines/newrecs.c:

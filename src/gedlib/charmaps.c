@@ -81,7 +81,6 @@ static void set_zone_conversion(STRING optname, INT toint, INT fromint);
 
 /* custom translation tables embedded in the database */
 static struct tranmapping_s trans_maps[NUM_TT_MAPS]; /* init'd by init_charmaps */
-static INT charmaps_inited=0;
 static CNSTRING map_names[] = {
 	"Editor to Internal"
 	,"Internal to Editor"
@@ -651,3 +650,4 @@ get_map_name (INT ttnum)
 	ASSERT(ttnum>=0 && ttnum<NUM_TT_MAPS);
 	return map_names[ttnum];
 }
+
