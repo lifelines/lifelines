@@ -358,7 +358,7 @@ check_ghosts (void)
 		}
 	}
 	
-	remove_list2(tofix, NULL); 
+	remove_list(tofix);
 	tofix=0;
 }
 /*============================================
@@ -559,7 +559,7 @@ check_and_fix_records (void)
 	check_nodes();
 	todo.pass = 2;
 	fix_nodes();
-	remove_empty_list(tofix);
+	destroy_empty_list(tofix);
 }
 /*=================================
  * fix_nodes -- Fix all nodes on fix list

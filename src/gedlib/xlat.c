@@ -136,7 +136,7 @@ free_xlat (XLAT xlat)
 		strfree(&xstep->iconv_dest);
 		xstep->dyntt = 0; /* f_dyntts owns dyntt memory */
 	ENDLIST
-	remove_list(xlat->steps);
+	destroy_list(xlat->steps);
 	stdfree(xlat);
 }
 /*==========================================================
@@ -542,7 +542,7 @@ xl_free_adhoc_xlats (void)
 			back_list(newlist, xlattemp);
 		}
 	ENDLIST
-	remove_list(f_xlats);
+	destroy_list(f_xlats);
 	f_xlats = newlist;
 }
 /*==========================================================
@@ -559,7 +559,7 @@ xl_free_xlats (void)
 		xlattemp = (XLAT)el;
 		free_xlat(xlattemp);
 	ENDLIST
-	remove_list(f_xlats);
+	destroy_list(f_xlats);
 	f_xlats = 0;
 }
 /*==========================================================

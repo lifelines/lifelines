@@ -1893,7 +1893,7 @@ invoke_cset_display (void)
 	enqueue_list(list, strsave(zs_str(zstr)));
 
 	display_list(_("Codeset information"), list);
-	remove_list(list);
+	destroy_list(list);
 	zs_free(&zstr);
 }
 /*======================================

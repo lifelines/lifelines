@@ -305,7 +305,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 		}
 		cur_pathinfo = 0;
 	}
-	remove_list2(plist, NULL);
+	destroy_list2(plist, NULL);
 	plist=NULL;
 
 
@@ -316,7 +316,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 			prog_error(NULL, str);
 			++Perrors;
 		ENDLIST
-		remove_list(outstanding_parse_errors);
+		destroy_list(outstanding_parse_errors);
 		outstanding_parse_errors=0;
 	}
 
@@ -406,8 +406,8 @@ interp_program_notfound:
 		delete_pathinfo(&pathinfo);
 	}
 	strfree(&rootfilepath);
-	remove_list2(donelist, NULL);
-	remove_list2(plist, NULL);
+	destroy_list2(donelist, NULL);
+	destroy_list2(plist, NULL);
 	return ranit;
 }
 /*===============================================

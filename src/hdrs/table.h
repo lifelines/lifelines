@@ -54,11 +54,11 @@ typedef struct tag_table_iter * TABLE_ITER;
 /* creating, deleting, and copying table */
 void addref_table(TABLE tab);
 void copy_table(const TABLE src, TABLE dest, INT whattodup);
-TABLE create_table_old2(INT whattofree);
 TABLE create_table(void);
 TABLE create_table_old(void);
-void release_table(TABLE tab, void (*tproc)(CNSTRING key, UNION uval));
+TABLE create_table_old2(INT whattofree);
 void destroy_table(TABLE);
+void release_table(TABLE tab, void (*tproc)(CNSTRING key, UNION uval));
 
 /* working with entire table */
 INT get_table_count(TABLE);

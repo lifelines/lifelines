@@ -62,7 +62,7 @@ void
 remove_listeners (LIST * notifiees)
 {
 	if (*notifiees) {
-		remove_list2(*notifiees, remove_callback_info);
+		destroy_list2(*notifiees, remove_callback_info);
 		*notifiees = 0;
 	}
 }
@@ -90,7 +90,7 @@ delete_listener (LIST * notifiees, CALLBACK_FNC fncptr, VPTR uparm)
 			enqueue_list(*notifiees, (VPTR)info);
 		}
 	}
-	remove_empty_list(lold);
+	destroy_empty_list(lold);
 	if (is_empty_list(*notifiees)) {
 		remove_listeners(notifiees);
 	}

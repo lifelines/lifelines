@@ -116,36 +116,36 @@ set_list_type (LIST list, int type)
 	ltype(list) = type;
 }
 /*===========================
- * remove_list -- Delete all elements & delete list
+ * destroy_list -- Delete all elements & destroy list
  *  list: [IN]  list to completely delete
  *=========================*/
 void
-remove_list (LIST list)
+destroy_list (LIST list)
 {
 	if (!list) return;
 	ASSERT(list->vtable == &vtable_for_list);
 	make_list_empty_impl(list, NULL);
-	remove_empty_list(list);
+	destroy_empty_list(list);
 }
 /*===========================
- * remove_list2 -- Delete all elements & delete list
+ * destroy_list2 -- Delete all elements & destroy list
  *  list: [IN]  list to completely delete
  *  func: [IN]  function to call on each element first (may be NULL)
  *=========================*/
 void
-remove_list2 (LIST list, ELEMENT_DESTRUCTOR func)
+destroy_list2 (LIST list, ELEMENT_DESTRUCTOR func)
 {
 	if (!list) return;
 	ASSERT(list->vtable == &vtable_for_list);
 	make_list_empty_impl(list, func);
-	remove_empty_list(list);
+	destroy_empty_list(list);
 }
 /*===========================
- * remove_empty_list -- Delete a list with no elements
+ * destroy_empty_list -- Destroy a list with no elements
  *  ASSERT check that list is in fact empty
  *=========================*/
 void
-remove_empty_list (LIST list)
+destroy_empty_list (LIST list)
 {
 	if (!list) return;
 	ASSERT(list->vtable == &vtable_for_list);
@@ -600,7 +600,7 @@ list_destructor (VTABLE *obj)
 {
 	LIST list = (LIST)obj;
 	ASSERT((*obj) == &vtable_for_list);
-	remove_list(list);
+	destroy_list(list);
 }
 /*=================================================
  * addref_list -- increment reference count of list
@@ -621,6 +621,6 @@ release_list (LIST list, void (*func)(VPTR))
 	ASSERT(list->vtable == &vtable_for_list);
 	--list->l_refcnt;
 	if (!list->l_refcnt) {
-		remove_list2(list, func);
+		destroy_list2(list, func);
 	}
 }

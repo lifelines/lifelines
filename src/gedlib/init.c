@@ -791,6 +791,6 @@ void
 release_dblist (LIST dblist)
 {
 	if (dblist) {
-		remove_list(dblist);
+		destroy_list(dblist);
 	}
 }

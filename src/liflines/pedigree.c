@@ -360,7 +360,8 @@ add_dnodes (NODE node, INT gen, INT maxgen, INT * count, CANVASDATA canvas)
 		tn0 = tn1;
 		(*count)++;
 	}
-	remove_list(list);
+	destroy_list(list);
+	list=0;
 
 	if (gen < maxgen) {
 		/* our children hang off of tn2, which is last node of our

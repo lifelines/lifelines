@@ -75,39 +75,46 @@ typedef VPTR (*LIST_CREATE_VALUE)(LIST);
 		}\
 	}
 
-
-/* list.c */
+/* creating and deleting list */
 void addref_list(LIST list);
-void back_list(LIST, VPTR);
-BOOLEAN begin_list(LIST list, LIST_ITER listit);
-BOOLEAN begin_list_rev(LIST list, LIST_ITER listit);
-BOOLEAN change_list_ptr(LIST_ITER listit, VPTR newptr);
 LIST create_list(void);
 LIST create_list2(INT whattofree);
-BOOLEAN delete_list_element(LIST list, INT index1b, ELEMENT_DESTRUCTOR func);
 void release_list(LIST list, void (*func)(VPTR));
+void destroy_empty_list(LIST list);
+void destroy_list(LIST list);
+void destroy_list2(LIST, ELEMENT_DESTRUCTOR func);
+void set_list_type(LIST, INT);
+
+/* working with elements of list */
+void back_list(LIST, VPTR);
+BOOLEAN delete_list_element(LIST list, INT index1b, ELEMENT_DESTRUCTOR func);
 VPTR dequeue_list(LIST);
-BOOLEAN is_empty_list(const LIST);
 void enqueue_list(LIST, VPTR);
 VPTR get_list_element(LIST, INT, LIST_CREATE_VALUE);
 INT in_list(LIST, VPTR param, BOOLEAN (*func)(VPTR param, VPTR el));
-INT length_list(LIST);
-void lock_list_node(LNODE node);
-void make_list_empty(LIST);
-BOOLEAN next_list_ptr(LIST_ITER listit, VPTR *pptr);
 VPTR peek_list_head(LIST);
 VPTR pop_list(LIST);
 VPTR pop_list_tail(LIST);
 void push_list(LIST, VPTR);
-void remove_empty_list(LIST list);
-void remove_list(LIST list);
-void remove_list2(LIST, ELEMENT_DESTRUCTOR func);
 void set_list_element(LIST, INT, VPTR, LIST_CREATE_VALUE);
-void set_list_type(LIST, INT);
+
+/* working with entire list */
+BOOLEAN is_empty_list(const LIST);
+INT length_list(LIST);
+void make_list_empty(LIST);
+
+/* list iteration */
+BOOLEAN begin_list(LIST list, LIST_ITER listit);
+BOOLEAN begin_list_rev(LIST list, LIST_ITER listit);
+BOOLEAN change_list_ptr(LIST_ITER listit, VPTR newptr);
+BOOLEAN next_list_ptr(LIST_ITER listit, VPTR *pptr);
+
+/* list macro support functions */
+void lock_list_node(LNODE node);
 LNODE trav_list_head(LIST list);
 LNODE trav_list_tail(LIST list);
-
 void unlock_list_node(LNODE node);
+
 
 
 #endif /* list_h_included */
