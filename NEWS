@@ -14,7 +14,7 @@ New Features Added in 3.0.6
 - New report functions: 'lastindi' and 'lastfam'
 
 - New name scan option, with wildcards (refer fpattern)
-  (new s option on main menu)
+  (new 's' option on main menu)
 
 - Scrolling children (& spouses) in INDI & FAM browse
   ('++' marker at end of lines to indicate more info off-screen)
@@ -26,11 +26,12 @@ New Features Added in 3.0.6
   (hotkey '#' toggles)
 
 - New report option lists available reports with summary info
+  (new 'p' option on main menu)
 
 - Navigate in db order in INDI & FAM browse (& source & event & other browse)
   (hotkeys '+' and '-')
 
-- New browse sources, events, and others lists
+- New browse sources, events, and others lists & gedcom mode view
   (from extra menu)
 
 - Cross-reference sources from INDI or FAM browse
@@ -49,10 +50,11 @@ New Features Added in 3.0.6
   (hotkeys '[' and ']' to adjust generation depth)
   (hotkeys '(' and ')' to scroll)
 
-- New browse source/event/nodes in gedcom mode
-  (from extra menu, or from '$' cross-reference to sources)
-
 - New tool dbverify to check a database for many types of corruption
+
+- New paging & resizable & toggleable menus
+
+- New config file
 
 
 Bug fixes in 3.0.6
@@ -63,6 +65,8 @@ Bug fixes in 3.0.6
 - Ctrl-C from open database prompt would fail
 
 - Using menuchoose() during a report would corrupt screen display
+
+- array & stack overflow if delete a spouse from a family with 3+ spouses
 
 New Features in 3.0.4
 =====================

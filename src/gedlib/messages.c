@@ -266,6 +266,9 @@ STRING mn_titindi  = (STRING) "LifeLines -- Person Browse Screen (* toggles menu
 STRING mn_titfam   = (STRING) "LifeLines -- Family Browse Screen (* toggles menu)";
 STRING mn_titaux   = (STRING) "LifeLines -- Auxiliary Browse Screen (* toggles menu)";
 STRING mn_unkcmd   = (STRING) "Not valid command";
+STRING mn_titmain  = (STRING) "LifeLines -- Main Menu";
+STRING mn_tit2indi = (STRING) "LifeLines -- Two Person Browse Screen (* toggles menu)";
+STRING mn_tit2fam  = (STRING) "LifeLines -- Two Family Browse Screen";
 
 /* prompt, full list, yes list */
 STRING askynq      = (STRING) "enter y (yes) or n (no): ";

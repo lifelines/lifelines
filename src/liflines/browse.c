@@ -80,11 +80,10 @@ static void pick_add_spouse_to_family(NODE fam, NODE save);
 static void pick_add_child_to_fam(NODE fam, NODE save);
 static INT browse_fam(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
 static INT browse_pedigree(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
-static BOOLEAN handle_menu_commands(INT c);
-static BOOLEAN handle_scroll_commands(INT c);
 static BOOLEAN handle_menu_commands_old(INT c);
 static NODE goto_indi_child(NODE indi, int childno);
 static NODE goto_fam_child(NODE fam, int childno);
+static NODE pick_create_new_family(NODE indi, NODE save, STRING * addstrings);
 static INT display_indi(NODE indi, INT mode);
 static INT browse_indi_modes(NODE *pindi1, NODE *pindi2, NODE *pfam1,
 	NODE *pfam2, INDISEQ *pseq, INT indimode);
@@ -97,8 +96,6 @@ static INT display_fam(NODE fam, INT fammode);
 /*********************************************
  * local variables
  *********************************************/
-
-static BOOLEAN gedcom_mode = FALSE;
 
 
 /*********************************************
@@ -162,7 +159,6 @@ goto_indi_child (NODE indi, int childno)
 	ENDFAMSS
 	return answer;
 }
-
 /*================================================
  * goto_fam_child - jump to child by number
  *==============================================*/
@@ -178,21 +174,69 @@ goto_fam_child(NODE fam, int childno)
 	ENDCHILDREN
 	return answer;
 }
+/*===============================================
+ * pick_create_new_family -- 
+ *  pulled out of browse_indi, 2001/02/04, Perry Rapp
+ *=============================================*/
+static NODE
+pick_create_new_family (NODE indi, NODE save, STRING * addstrings)
+{
+	INT i;
+	NODE node=0;
+	TRANTABLE ttd = tran_tables[MINDS];
+	char scratch[100];
+	if (readonly) {
+		message(ronlya);
+		return NULL;
+	}
+	i = choose_from_list(idfcop, 2, addstrings);
+	if (i == -1) return NULL;
+	if (i == 0) node = add_family(NULL, NULL, indi);
+	else if (save) {
+		if (keyflag)
+			sprintf(scratch, "%s%s (%s)", issnew,
+				    indi_to_name(save, ttd, 55),
+				 rmvat(nxref(save))+1);
+		else
+			sprintf(scratch, "%s%s", issnew,
+				 indi_to_name(save, ttd, 55));
+		if (ask_yes_or_no(scratch))
+			node = add_family(indi, save, NULL);
+		else
+			node = add_family(indi, NULL, NULL);
+	} else
+		node = add_family(indi, NULL, NULL);
+	return node;
+}
 /*==========================================
  * display_indi -- Show indi in current mode
  *========================================*/
 static INT
-display_indi (NODE indi, INT indimode)
+display_indi (NODE indi, INT mode)
 {
 	CACHEEL icel;
 	INT c;
-	INT mode;
 	icel = indi_to_cacheel(indi);
 	lock_cache(icel);
-	/* combine indimode & gedcom_mode */
-	mode = (indimode=='i')?(gedcom_mode?'g':'i'):'p';
 	c = indi_browse(indi, mode);
 	unlock_cache(icel);
+	return c;
+}
+/*==========================================
+ * display_2indi -- Show two indi in current mode
+ *========================================*/
+INT
+display_2indi (NODE indi1, NODE indi2, INT mode)
+{
+	CACHEEL icel1, icel2;
+	INT c;
+	icel1 = indi_to_cacheel(indi1);
+	icel2 = indi_to_cacheel(indi2);
+	lock_cache(icel1);
+	lock_cache(icel2);
+	c = twoindi_browse(indi1, indi2, mode);
+	unlock_cache(icel1);
+	unlock_cache(icel2);
 	return c;
 }
 /*====================================================
@@ -214,7 +258,6 @@ browse_indi_modes (NODE *pindi1,
 	NODE node2;
 	INDISEQ seq = NULL;
 	TRANTABLE ttd = tran_tables[MINDS];
-	char scratch[100];
 
 	addstrings[0] = crtcfm;
 	addstrings[1] = crtsfm;
@@ -233,8 +276,9 @@ browse_indi_modes (NODE *pindi1,
 		nkeyp = indi_to_keynum(indi);
 		indimodep = indimode;
 		if (c != CMD_NEWFAMILY) save = NULL;
-		if (!handle_menu_commands(c)
-			&& !handle_scroll_commands(c))
+		if (!handle_menu_cmds(c)
+			&& !handle_scroll_cmds(c)
+			&& !handle_indi_mode_cmds(c, &indimode))
 			switch (c)
 		{
 		case CMD_EDIT:	/* Edit this person */
@@ -359,10 +403,6 @@ browse_indi_modes (NODE *pindi1,
 			else
 				indimode = 'i';
 			break;
-		case CMD_GEDCOM_MODE: /* Switch to gedcom mode */
-			gedcom_mode = !gedcom_mode;
-			indimodep = 0; /* force redraw */
-			break;
 		case CMD_UPSIB:	/* Browse to older sib */
 			if (!(node = indi_to_prev_sib(indi)))
 				message(noosib);
@@ -406,27 +446,7 @@ browse_indi_modes (NODE *pindi1,
 			indi = node;
 			break;
 		case CMD_NEWFAMILY:	/* Add family for current person */
-			if (readonly) {
-				message(ronlya);
-				break;
-			}
-			i = choose_from_list(idfcop, 2, addstrings);
-			if (i == -1) break;
-			if (i == 0) node = add_family(NULL, NULL, indi);
-			else if (save) {
-				if (keyflag)
-					sprintf(scratch, "%s%s (%s)", issnew,
-				    	    indi_to_name(save, ttd, 55),
-					    rmvat(nxref(save))+1);
-				else
-					sprintf(scratch, "%s%s", issnew,
-					    indi_to_name(save, ttd, 55));
-				if (ask_yes_or_no(scratch))
-					node = add_family(indi, save, NULL);
-				else
-					node = add_family(indi, NULL, NULL);
-			} else
-				node = add_family(indi, NULL, NULL);
+			node = pick_create_new_family(indi, save, addstrings);
 			save = NULL;
 			if (!node) break;
 			*pfam1 = node;
@@ -577,8 +597,8 @@ browse_aux (NODE node)
 		/* last keynum & mode, so can tell if changed */
 		nkeyp = node_to_keynum(ntype, node);
 		auxmodep = auxmode;
-		if (!handle_menu_commands(c)
-			&& !handle_scroll_commands(c))
+		if (!handle_menu_cmds(c)
+			&& !handle_scroll_cmds(c))
 			switch (c)
 		{
 		case CMD_TEST88:
@@ -626,7 +646,7 @@ browse_indi (NODE *pindi1,
              NODE *pfam2,
              INDISEQ *pseq)
 {
-	return browse_indi_modes(pindi1, pindi2, pfam1, pfam2, pseq, 'i');
+	return browse_indi_modes(pindi1, pindi2, pfam1, pfam2, pseq, 'n');
 }
 /*===============================================
  * pick_remove_spouse_from_family -- 
@@ -739,16 +759,12 @@ pick_add_child_to_fam (NODE fam, NODE save)
  * display_fam -- Show family in current mode
  *=========================================*/
 static INT
-display_fam (NODE fam, INT fammode)
+display_fam (NODE fam, INT mode)
 {
 	CACHEEL icel;
 	INT c=0;
-	INT mode;
 	icel = fam_to_cacheel(fam);
 	lock_cache(icel);
-	/* combine fammode & gedcom_mode */
-	/* no fammode supported but 'f' */
-	mode=gedcom_mode?'g':'f';
 	c = fam_browse(fam, mode);
 	unlock_cache(icel);
 	return c;
@@ -764,7 +780,7 @@ browse_fam (NODE *pindi,
             INDISEQ *pseq)
 {
 	INT i, c, rc;
-	INT fammode='f';
+	static INT fammode='n';
 	INT nkeyp, fammodep;
 	NODE save = NULL, fam = *pfam1, node;
 	INDISEQ seq;
@@ -788,8 +804,9 @@ browse_fam (NODE *pindi,
 		fammodep = fammode;
 		if (c != CMD_ADDCHILD && c != CMD_ADDSPOUSE)
 			save = NULL;
-		if (!handle_menu_commands(c)
-			&& !handle_scroll_commands(c))
+		if (!handle_menu_cmds(c)
+			&& !handle_scroll_cmds(c)
+			&& !handle_fam_mode_cmds(c, &fammode))
 			switch (c) 
 		{
 		case CMD_ADVANCED:	/* Advanced family edit */
@@ -943,10 +960,6 @@ browse_fam (NODE *pindi,
 			if (node)
 				browse_source_node(node);
 			break;
-		case CMD_GEDCOM_MODE: /* Switch to gedcom mode */
-			gedcom_mode = !gedcom_mode;
-			fammodep = 0; /* force redraw */
-			break;
 		case CMD_QUIT:
 		default:
 			return BROWSE_QUIT;
@@ -954,11 +967,11 @@ browse_fam (NODE *pindi,
 	}
 }
 /*======================================================
- * handle_menu_commands -- Handle menuing commands
+ * handle_menu_cmds -- Handle menuing commands
  * Created: 2001/01/31, Perry Rapp
  *====================================================*/
-static BOOLEAN
-handle_menu_commands (INT c)
+BOOLEAN
+handle_menu_cmds (INT c)
 {
 	switch(c) {
 		case CMD_MENU_GROW: adjust_menu_height(+1); return TRUE;
@@ -969,11 +982,11 @@ handle_menu_commands (INT c)
 	return FALSE;
 }
 /*======================================================
- * handle_scroll_commands -- Handle detail scrolling
+ * handle_scroll_cmds -- Handle detail scrolling
  * Created: 2001/02/01, Perry Rapp
  *====================================================*/
-static BOOLEAN
-handle_scroll_commands (INT c)
+BOOLEAN
+handle_scroll_cmds (INT c)
 {
 	switch(c) {
 		case CMD_SCROLL_UP: show_scroll(-1); return TRUE;
@@ -982,11 +995,56 @@ handle_scroll_commands (INT c)
 	return FALSE;
 }
 /*======================================================
+ * handle_indi_mode_cmds -- Handle indi modes
+ * Created: 2001/02/04, Perry Rapp
+ *====================================================*/
+BOOLEAN
+handle_indi_mode_cmds (INT c, INT * mode)
+{
+	switch(c) {
+		case CMD_MODE_GEDCOM: *mode = 'g'; return TRUE;
+		case CMD_MODE_PEDIGREE:
+			*mode = (*mode=='a')?'d':'a';
+			return TRUE;
+		case CMD_MODE_ANCESTORS: *mode = 'a'; return TRUE;
+		case CMD_MODE_DESCENDANTS: *mode = 'd'; return TRUE;
+		case CMD_MODE_NORMAL: *mode = 'n'; return TRUE;
+		case CMD_MODE_CYCLE: 
+			switch(*mode) {
+			case 'n': *mode = 'a'; break;
+			case 'a': *mode = 'd'; break;
+			case 'd': *mode = 'g'; break;
+			case 'g': *mode = 'n'; break;
+			}
+			return TRUE;
+	}
+	return FALSE;
+}
+/*======================================================
+ * handle_fam_mode_cmds -- Handle indi modes
+ * Created: 2001/02/04, Perry Rapp
+ *====================================================*/
+BOOLEAN
+handle_fam_mode_cmds (INT c, INT * mode)
+{
+	switch(c) {
+		case CMD_MODE_GEDCOM: *mode = 'g'; return TRUE;
+		case CMD_MODE_NORMAL: *mode = 'n'; return TRUE;
+		case CMD_MODE_CYCLE: 
+			switch(*mode) {
+			case 'n': *mode = 'g'; break;
+			case 'g': *mode = 'n'; break;
+			}
+			return TRUE;
+	}
+	return FALSE;
+}
+/*======================================================
  * handle_menu_commands_old -- Handle menuing commands
  * Created: 2001/01/31, Perry Rapp
  *====================================================*/
 static BOOLEAN
-handle_menu_commands_old (INT c)
+handle_menu_cmds_old (INT c)
 {
 	switch(c) {
 		case '<': adjust_menu_height(+1); return TRUE;
@@ -1029,7 +1087,8 @@ choose_any_source (void)
 /*==================================================
  * browse_sources -- browse list of all sources
  *================================================*/
-void browse_sources (void)
+void
+browse_sources (void)
 {
 	NOD0 nod0 = choose_any_source();
 	if (nod0)
@@ -1038,7 +1097,8 @@ void browse_sources (void)
 /*==================================================
  * browse_events -- browse list of all events
  *================================================*/
-void browse_events (void)
+void
+browse_events (void)
 {
 	INDISEQ seq = get_all_even();
 	NOD0 nod0;
@@ -1055,7 +1115,8 @@ void browse_events (void)
 /*==================================================
  * browse_others -- browse list of all sources
  *================================================*/
-void browse_others (void)
+void
+browse_others (void)
 {
 	INDISEQ seq = get_all_othe();
 	NOD0 nod0;

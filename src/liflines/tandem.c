@@ -37,73 +37,108 @@
 #include "indiseq.h"
 #include "liflines.h"
 #include "screen.h"
+#include "menuitem.h"
 
 #include "llinesi.h"
 
+/*********************************************
+ * external/imported variables
+ *********************************************/
+
 extern STRING nofath, nomoth, nospse, nocofp;
 extern STRING twohsb, twowif, idsbrs, idplst, idcbrs;
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+static BOOLEAN handle_tandem_scroll_cmds(INT c);
+
+/*********************************************
+ * local function definitions
+ * body of module
+ *********************************************/
 
 /*=============================================
  * browse_tandem -- Two person browse operation
  *===========================================*/
 INT browse_tandem (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ *pseq)
 {
+	INT nkey1p, nkey2p, indimodep;
 	NODE node, indi1 = *pindi1, indi2 = *pindi2;
 	STRING key, name;
 	INDISEQ seq;
-	INT rc;
+	INT c, rc;
+	static INT indimode = 'n';
 
 	if (!indi1 || !indi2) return BROWSE_QUIT;
 	show_reset_scroll();
+	nkey1p = 0;
+	indimodep = indimode;
+
 	while (TRUE) {
-		switch (tandem_browse(indi1, indi2)) {
-		case 'e': 	/* edit top person */
+		if (indi_to_keynum(indi1) != nkey1p
+			|| indi_to_keynum(indi2) != nkey2p
+			|| indimode != indimodep) {
+			show_reset_scroll();
+		}
+		c = display_2indi(indi1, indi2, indimode);
+		/* last keynum & mode, so can tell if changed */
+		nkey1p = indi_to_keynum(indi1);
+		nkey2p = indi_to_keynum(indi2);
+		indimodep = indimode;
+		if (!handle_menu_cmds(c)
+			&& !handle_indi_mode_cmds(c, &indimode)
+			&& !handle_tandem_scroll_cmds(c))
+			switch (c)
+		{
+		case CMD_EDIT: 	/* edit top person */
 			indi1 = edit_indi(indi1);
 			break;
-		case 't': 	/* browse top person */
+		case CMD_TOP: 	/* browse top person */
 			*pindi1 = indi1;
 			return BROWSE_INDI;
-		case 'f': 	/* browse top person's father */
+		case CMD_FATHER: 	/* browse top person's father */
 			if (!(node = indi_to_fath(indi1)))
 				message(nofath);
 			else
 				indi1 = node;
 			break;
-		case 'm': 	/* browse top person's mother */
+		case CMD_MOTHER: 	/* browse top person's mother */
 			if (!(node = indi_to_moth(indi1)))
 				message(nomoth);
 			else
 				indi1 = node;
 			break;
-		case 's': 	/* browse top person's spouse/s */
+		case CMD_SPOUSE: 	/* browse top person's spouse/s */
 			node = choose_spouse(indi1, nospse, idsbrs);
 			if (node) indi1 = node;
 			break;
-		case 'c': 	/* browse top person's children */
+		case CMD_CHILDREN: 	/* browse top person's children */
 			if ((node = choose_child(indi1, NULL, nocofp,
 			    idcbrs, NOASK1)))
 				indi1 = node;
 			break;
-		case 'j': 	/* merge two persons */
+		case CMD_MERGE_BOTTOM_TO_TOP: 	/* merge two persons */
 			if ((node = merge_two_indis(indi2, indi1, TRUE))) {
 				*pindi1 = node;
 				return BROWSE_INDI;
 			}
 			break;
-		case 'd': 	/* copy top person to bottom */
+		case CMD_COPY_TOP_TO_BOTTOM: 	/* copy top person to bottom */
 			indi2 = indi1;
 			break;
-		case 'x': 	/* swap two persons */
+		case CMD_SWAPTOPBOTTOM: 	/* swap two persons */
 			node = indi1;
 			indi1 = indi2;
 			indi2 = node;
 			break;
-		case 'a': 	/* make two persons parents in family */
+		case CMD_ADDFAMILY: 	/* make two persons parents in family */
 			node = add_family(indi1, indi2, NULL);
 			if (!node)  break;
 			*pfam1 = node;
 			return BROWSE_FAM;
-		case 'b': 	/* browse to new person list */
+		case CMD_BROWSE: 	/* browse to new person list */
 			seq = (INDISEQ) ask_for_indiseq(idplst, &rc);
 			if (!seq) break;
 			if (length_indiseq(seq) == 1) {
@@ -115,7 +150,7 @@ INT browse_tandem (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ
 			*pseq = seq;
 			return BROWSE_LIST;
 			break;
-		case 'q':
+		case CMD_QUIT:
 		default:
 			return BROWSE_QUIT;
 		}
@@ -174,4 +209,21 @@ INT browse_2fam (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ *
 			return BROWSE_QUIT;
 		}
 	}
+}
+/*======================================================
+ * handle_tandem_scroll_cmds -- Handle tandem scrolling
+ * Created: 2001/02/04, Perry Rapp
+ *====================================================*/
+static BOOLEAN
+handle_tandem_scroll_cmds (INT c)
+{
+	switch(c) {
+	case CMD_SCROLL_TOP_UP: show_scroll(-1); return TRUE;
+	case CMD_SCROLL_TOP_DOWN: show_scroll(+1); return TRUE;
+	case CMD_SCROLL_BOTTOM_UP: show_scroll2(-1); return TRUE;
+	case CMD_SCROLL_BOTTOM_DOWN: show_scroll2(+1); return TRUE;
+	case CMD_SCROLL_BOTH_UP: show_scroll(-1); show_scroll2(-1); return TRUE;
+	case CMD_SCROLL_BOTH_DOWN: show_scroll(+1); show_scroll2(+1); return TRUE;
+	}
+	return FALSE;
 }

@@ -105,6 +105,7 @@ static void del_menu (void);
 static void extra_menu (void);
 static void init_all_windows (void);
 static INT update_menu(INT screen);
+static void show_indi_mode(NODE indi, INT mode, INT row, INT hgt);
 static void scan_menu (void);
 static void trans_menu (void);
 static void utils_menu (void);
@@ -135,8 +136,6 @@ static INT EMPTY_MENU = -1; /* save one horizontal line */
 static INT EMPTY_LINES;
 /* the following values are increased if ll_lines > LINESREQ */
 int TANDEM_LINES = 6;		/* number of lines of tandem info */
-int PER_LINES = 11;		/* number of lines of person info */
-int FAM_LINES = 13;		/* number of lines of family info */
 int LIST_LINES = 6;		/* number of lines of person info in list */
 int AUX_LINES = 15;		/* number of lines in aux window */
 int VIEWABLE = 10;		/* can be increased up to MAXVIEWABLE */
@@ -188,8 +187,6 @@ init_screen (void)
 	EMPTY_LINES = LINESTOTAL - OVERHEAD_MENU - EMPTY_MENU;
 	if(extralines > 0) {
 	    TANDEM_LINES += (extralines / 2);
-	    PER_LINES += extralines;
-	    FAM_LINES += extralines;
 		 AUX_LINES += extralines;
 	    LIST_LINES += extralines;
 	    VIEWABLE += extralines;
@@ -257,36 +254,6 @@ paint_screen (INT screen)
 	if (!menu_enabled)
 		return;
 	output_menu(win, screen);
-}
-/*================================================
- * paint_two_per_screen -- Paint two person screen
- *==============================================*/
-void
-paint_two_per_screen (void)
-{
-	WINDOW *win = main_win;
-	INT row, col;
-	werase(win);
-	BOX(win, 0, 0);
-	show_horz_line(win, TANDEM_LINES+1, 0, ll_cols);
-	show_horz_line(win, 2*TANDEM_LINES+2, 0, ll_cols);
-	show_horz_line(win, ll_lines-3, 0, ll_cols);
-	mvwaddstr(win, 2*TANDEM_LINES+3, 2, plschs);
-	row = 2*TANDEM_LINES+4; col = 3;
-	mvwaddstr(win, row++, col, "e  Edit top person");
-	mvwaddstr(win, row++, col, "t  Browse to top");
-	mvwaddstr(win, row++, col, "f  Browse top father");
-	mvwaddstr(win, row++, col, "m  Browse top mother");
-	row = 2*TANDEM_LINES+4; col = 3 + BAND;
-	mvwaddstr(win, row++, col, "s  Browse top spouse/s");
-	mvwaddstr(win, row++, col, "c  Browse top children");
-	mvwaddstr(win, row++, col, "b  Browse to persons");
-	mvwaddstr(win, row++, col, "d  Copy top to bottom");
-	row = 2*TANDEM_LINES+4; col = 3 + 2*BAND;
-	mvwaddstr(win, row++, col, "a  Add family");
-	mvwaddstr(win, row++, col, "j  Merge bottom to top");
-	mvwaddstr(win, row++, col, "x  Switch top/bottom");
-	mvwaddstr(win, row++, col, "q  Return to main menu");
 }
 /*================================================
  * paint_two_fam_screen -- Paint two family screen
@@ -522,6 +489,21 @@ update_menu (INT screen)
 	return lines;
 }
 /*=========================================
+ * show_indi_mode -- Show indi according to mode
+ *=======================================*/
+static void
+show_indi_mode (NODE indi, INT mode, INT row, INT hgt)
+{
+	if (mode=='g')
+		show_gedcom_main(indi, row, hgt);
+	else if (mode=='a')
+		show_ancestors(indi, row, hgt);
+	else if (mode=='d')
+		show_descendants(indi, row, hgt);
+	else
+		show_person_main(indi, row, hgt);
+}
+/*=========================================
  * indi_browse -- Handle indi_browse screen
  *=======================================*/
 INT
@@ -529,12 +511,7 @@ indi_browse (NODE indi, INT mode)
 {
 	INT screen = ONE_PER_SCREEN;
 	INT lines = update_menu(screen);
-	if (mode=='g')
-		show_gedcom(indi, lines);
-	else if (mode=='p')
-		show_pedigree(indi, lines);
-	else
-		show_person_main1(indi, 1, lines);
+	show_indi_mode(indi, mode, 1, lines);
 	display_screen(screen);
 	return interact(main_win, NULL, screen);
 }
@@ -547,23 +524,43 @@ fam_browse (NODE fam, INT mode)
 	INT screen = ONE_FAM_SCREEN;
 	INT lines = update_menu(screen);
 	if (mode=='g')
-		show_gedcom(fam, lines);
+		show_gedcom_main(fam, 1, lines);
 	else
 		show_long_family(fam, 1, lines, MAINWIN_WIDTH);
 	display_screen(screen);
 	return interact(main_win, NULL, screen);
 }
+/*====================================
+ * show_tandem_line -- Display horizontal line between top & bottom
+ * PR 1999/03
+ *==================================*/
+static void
+show_tandem_line (WINDOW * win, INT row)
+{
+	show_horz_line(win, row, 0, ll_cols);
+}
 /*=============================================
- * tandem_browse -- Handle tandem_browse screen
+ * twoindi_browse -- Handle tandem_browse screen
  *===========================================*/
 INT
-tandem_browse (NODE indi1, NODE indi2)
+twoindi_browse (NODE indi1, NODE indi2, INT mode)
 {
-	if (cur_screen != TWO_PER_SCREEN) paint_two_per_screen();
-	show_person_main1(indi1, 1, TANDEM_LINES);
-	show_person_main2(indi2, TANDEM_LINES+2, TANDEM_LINES);
-	display_screen(TWO_PER_SCREEN);
-	return interact(main_win, "etfmscbdajxq", -1);
+	INT screen = TWO_PER_SCREEN;
+	INT lines = update_menu(screen);
+	INT lines1,lines2;
+	lines--; /* for tandem line */
+	lines2 = lines/2;
+	lines1 = lines - lines2;
+
+	show_indi_mode(indi1, mode, 1, lines1);
+	show_tandem_line(main_win, lines1+1);
+	switch_scrolls();
+	show_indi_mode(indi2, mode, lines1+2, lines2);
+	switch_scrolls();
+
+	display_screen(screen);
+	return interact(main_win, NULL, screen);
+/*	return interact(main_win, "etfmscbdajxq", -1);*/
 }
 /*=============================================
  * twofam_browse -- Handle twofam_browse screen

@@ -23,6 +23,16 @@ void browse_source_node(NODE sour);
 void browse_source(NOD0 sour);
 void browse_event(NOD0 even);
 void browse_other(NOD0 othr);
+void browse_sources(void);
+void browse_events(void);
+void browse_others(void);
+NOD0 choose_any_source(void);
+INT display_2indi(NODE indi1, NODE indi2, INT indimode);
+BOOLEAN handle_fam_mode_cmds(INT c, INT * mode);
+BOOLEAN handle_indi_mode_cmds(INT c, INT * mode);
+BOOLEAN handle_menu_cmds(INT c);
+BOOLEAN handle_scroll_cmds(INT c);
+
 
 /* delete.c */
 void delete_indi(NODE, BOOLEAN);
@@ -60,8 +70,9 @@ BOOLEAN add_other(void);
 BOOLEAN add_source(void);
 
 /* pedigree.c */
-void pedigree_draw_person(NODE indi, INT menuht);
-void pedigree_draw_gedcom(NODE node, INT hgt);
+void pedigree_draw_ancestors(NODE indi, INT row, INT menuht);
+void pedigree_draw_descendants(NODE indi, INT row, INT menuht);
+void pedigree_draw_gedcom(NODE node, INT row, INT hgt);
 void pedigree_increase_generations(INT delta);
 void pedigree_reset_scroll(void);
 void pedigree_scroll(INT delta);
@@ -87,19 +98,21 @@ void toggle_menu(void);
 void display_cache_stats(void);
 void put_out_line(WINDOW * win, INT x, INT y, STRING string, INT width, INT flag);
 void show_aux_display(NODE, INT hgt);
+void show_ancestors(NODE indi, INT row, INT hgt);
 void show_childnumbers(void);
-void show_gedcom(NODE node, INT hgt);
+void show_descendants(NODE indi, INT row, INT hgt);
+void show_gedcom_main(NODE node, INT row, INT hgt);
+void show_gedcom_main2(NODE node, INT row, INT hgt);
 void show_list(INDISEQ, INT, INT, INT);
 void show_long_family(NODE, INT row, INT hgt, INT width);
-void show_pedigree(NODE indi, INT hgt);
 void show_person(WINDOW *, NODE, INT row, INT hgt, INT width, INT *scroll);
-void show_person_main1(NODE, INT, INT hgt);
-void show_person_main2(NODE, INT, INT hgt);
+void show_person_main(NODE, INT row, INT hgt);
 void show_reset_scroll(void);
 void show_short_family(NODE, INT row, INT hgt, INT width);
 void show_sour_display(NODE, INT, INT);
 void show_scroll(INT delta);
 void show_scroll2(INT delta);
+void switch_scrolls(void);
 
 /* swap.c */
 BOOLEAN swap_children(NODE, NODE);

@@ -38,7 +38,8 @@
  *********************************************/
 
 extern STRING mn_ambig;
-extern STRING mn_titindi,mn_titfam,mn_titaux;
+extern STRING mn_titindi,mn_titfam,mn_titaux,mn_titmain;
+extern STRING mn_tit2indi, mn_tit2fam;
 
 /*********************************************
  * local types
@@ -107,7 +108,6 @@ static MenuItem f_MenuItemAddAsChild = { "i  Add as child", "i", CMD_ADDASCHILD 
 static MenuItem f_MenuItemAddSpouse = { "s  Add spouse to family", "s", CMD_ADDSPOUSE };
 static MenuItem f_MenuItemAddChild = { "a  Add child to family", "a", CMD_ADDCHILD };
 static MenuItem f_MenuItemAddFamily = { "a  Add family", "a", CMD_ADDFAMILY };
-static MenuItem f_MenuItemPedigree = { "p  Toggle pedigree", "p", CMD_PEDIGREE };
 static MenuItem f_MenuItemSwapFamilies = { "x  Swap two families", "x", CMD_SWAPFAMILIES };
 static MenuItem f_MenuItemSwapChildren = { "x  Swap two children", "x", CMD_SWAPCHILDREN };
 static MenuItem f_MenuItemSwitchTopBottom = { "x  Switch top/bottom", "x", CMD_SWAPTOPBOTTOM };
@@ -124,15 +124,19 @@ static MenuItem f_MenuItemScrollUp = { "(  Scroll up", "(", CMD_SCROLL_UP };
 static MenuItem f_MenuItemScrollDown = { ")  Scroll down", ")", CMD_SCROLL_DOWN };
 static MenuItem f_MenuItemDepthDown = { "[  Decrease tree depth", "[", CMD_DEPTH_DOWN };
 static MenuItem f_MenuItemDepthUp = { "]  Increase tree depth", "]", CMD_DEPTH_UP };
-static MenuItem f_MenuItemScrollUpTop = { "[  Scroll top up", "[" };
-static MenuItem f_MenuItemScrollDownTop = { "]  Scroll top down", "]" };
-static MenuItem f_MenuItemScrollUpBottom = { "(  Scroll bottom up", "(" };
-static MenuItem f_MenuItemScrollDownBottom = { ")  Scroll bottom down", ")" };
-static MenuItem f_MenuItemScrollUpBoth = { "{  Scroll both up", "{" };
-static MenuItem f_MenuItemScrollDownBoth = { "}  Scroll both down", "}" };
+static MenuItem f_MenuItemScrollUpTop = { "[  Scroll top up", "[", CMD_SCROLL_TOP_UP };
+static MenuItem f_MenuItemScrollDownTop = { "]  Scroll top down", "]", CMD_SCROLL_TOP_DOWN };
+static MenuItem f_MenuItemScrollUpBottom = { "(  Scroll bottom up", "(", CMD_SCROLL_BOTTOM_UP };
+static MenuItem f_MenuItemScrollDownBottom = { ")  Scroll bottom down", ")", CMD_SCROLL_BOTTOM_DOWN };
+static MenuItem f_MenuItemScrollUpBoth = { "{  Scroll both up", "{", CMD_SCROLL_BOTH_UP };
+static MenuItem f_MenuItemScrollDownBoth = { "}  Scroll both down", "}", CMD_SCROLL_BOTH_DOWN };
 static MenuItem f_MenuItemToggleChildNos = { "#  Toggle childnos", "#", CMD_TOGGLE_CHILDNUMS };
-static MenuItem f_MenuItemToggleGedcomView = { "!  Toggle GEDCOM view", "!", CMD_GEDCOM_MODE };
-static MenuItem f_MenuItemTogglePedigreeType = { "&  Toggle pedigree type", "&", CMD_TOGGLE_PEDTYPE };
+static MenuItem f_MenuItemModeGedcom = { "!g GEDCOM mode", "!g", CMD_MODE_GEDCOM };
+static MenuItem f_MenuItemModeAncestors = { "!a Ancestors mode", "!a", CMD_MODE_ANCESTORS };
+static MenuItem f_MenuItemModeDescendants = { "!d Descendants mode", "!d", CMD_MODE_DESCENDANTS };
+static MenuItem f_MenuItemModeNormal = { "!n Normal mode", "!n", CMD_MODE_NORMAL };
+static MenuItem f_MenuItemModePedigree = { "p  Pedigree mode", "p", CMD_MODE_PEDIGREE };
+static MenuItem f_MenuItemModeCycle = { "!! Cycle mode", "!!", CMD_MODE_CYCLE };
 static MenuItem f_MenuItemDigits = { "(1-9)  Browse to child", "123456789", CMD_CHILD_DIRECT0 };
 MenuItem f_MenuItemSyncMoves = { "y  Turn on sync", "y" };
 static MenuItem f_MenuItemAdvanced = { "A  Advanced view", "A", CMD_ADVANCED };
@@ -148,8 +152,8 @@ static MenuItem f_MenuItemEnlargeMenu = { "<  Enlarge menu area", "<", CMD_MENU_
 static MenuItem f_MenuItemShrinkMenu = { ">  Shrink menu area", ">", CMD_MENU_SHRINK };
 static MenuItem f_MenuItemNext = { "+  Next in db", "+", CMD_NEXT };
 static MenuItem f_MenuItemPrev = { "-  Prev in db", "-", CMD_PREV };
-static MenuItem f_MenuItemCopyTopToBottom = { "d  Copy top to bottom", "d" };
-static MenuItem f_MenuItemMergeBottomToTop = { "j  Merge bottom to top", "j" };
+static MenuItem f_MenuItemCopyTopToBottom = { "d  Copy top to bottom", "d", CMD_COPY_TOP_TO_BOTTOM };
+static MenuItem f_MenuItemMergeBottomToTop = { "j  Merge bottom to top", "j", CMD_MERGE_BOTTOM_TO_TOP};
 static MenuItem f_MenuItemMoveDownList = { "j  Move down list", "j" };
 static MenuItem f_MenuItemMoveUpList = { "k  Move up list", "k" };
 static MenuItem f_MenuItemEditThis = { "e  Edit this person", "e" };
@@ -185,8 +189,6 @@ static MenuItem * f_MenuPerson[] =
 	&f_MenuItemAddAsChild,
 	&f_MenuItemRemoveAsSpouse,
 	&f_MenuItemRemoveAsChild,
-	&f_MenuItemPedigree,
-	&f_MenuItemTogglePedigreeType,
 	&f_MenuItemNewPerson,
 	&f_MenuItemNewFamily,
 	&f_MenuItemSwapFamilies,
@@ -196,7 +198,12 @@ static MenuItem * f_MenuPerson[] =
 	&f_MenuItemScrollDown,
 	&f_MenuItemToggleChildNos,
 	&f_MenuItemDigits,
-	&f_MenuItemToggleGedcomView,
+	&f_MenuItemModeGedcom,
+	&f_MenuItemModeNormal,
+	&f_MenuItemModePedigree,
+	&f_MenuItemModeAncestors,
+	&f_MenuItemModeDescendants,
+	&f_MenuItemModeCycle,
 	&f_MenuItemAdvanced,
 	&f_MenuItemTandemChildren,
 	&f_MenuItemTandemFathers,
@@ -236,7 +243,9 @@ static MenuItem * f_MenuFamily[] =
 	&f_MenuItemScrollDown,
 	&f_MenuItemToggleChildNos,
 	&f_MenuItemDigits,
-	&f_MenuItemToggleGedcomView,
+	&f_MenuItemModeGedcom,
+	&f_MenuItemModeNormal,
+	&f_MenuItemModeCycle,
 	&f_MenuItemAdvanced,
 	&f_MenuItemTandemChildren,
 	&f_MenuItemTandemFathers,
@@ -257,24 +266,32 @@ static MenuItem * f_Menu2Person[] =
 	&f_MenuItemMotherTop,
 	&f_MenuItemSpouseTop,
 	&f_MenuItemChildrenTop,
+/*
 	&f_MenuItemParentsBoth,
 	&f_MenuItemFamiliesBoth,
 	&f_MenuItemBrowse,
+	&f_MenuItemToggleChildNos,
+	&f_MenuItemDigits,
+	&f_MenuItemSyncMoves,
+	*/
+	&f_MenuItemCopyTopToBottom,
+	&f_MenuItemAddFamily,
+	&f_MenuItemMergeBottomToTop,
+	&f_MenuItemSwitchTopBottom,
+	&f_MenuItemModeGedcom,
+	&f_MenuItemModeNormal,
+	&f_MenuItemModePedigree,
+	&f_MenuItemModeAncestors,
+	&f_MenuItemModeDescendants,
 	&f_MenuItemScrollUpTop,
 	&f_MenuItemScrollDownTop,
 	&f_MenuItemScrollUpBottom,
 	&f_MenuItemScrollDownBottom,
 	&f_MenuItemScrollUpBoth,
 	&f_MenuItemScrollDownBoth,
-	&f_MenuItemToggleChildNos,
-	&f_MenuItemDigits,
-	&f_MenuItemSyncMoves,
-	&f_MenuItemCopyTopToBottom,
-	&f_MenuItemAddFamily,
-	&f_MenuItemMergeBottomToTop,
-	&f_MenuItemSwitchTopBottom,
 	&f_MenuItemEnlargeMenu,
 	&f_MenuItemShrinkMenu,
+	&f_MenuItemBrowse,
 	0
 };
 
@@ -505,7 +522,7 @@ menuitem_initialize (void)
 	}
 
 	scr = MAIN_SCREEN;
-	f_ScreenInfo[scr].Title = (STRING)"LifeLines -- Main Menu";
+	f_ScreenInfo[scr].Title = mn_titmain;
 
 	scr = ONE_PER_SCREEN;
 	Title = mn_titindi;
@@ -523,11 +540,11 @@ menuitem_initialize (void)
 	MenuRows = 6;
 	MenuCols = 3;
 	MenuSize = sizeof(f_MenuFamily)/ItemSize-1;
-        Menu = f_MenuFamily;
+	Menu = f_MenuFamily;
 	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu, MenuOpts);
 
 	scr = TWO_PER_SCREEN;
-	Title = (STRING)"LifeLines -- Tandem Browse Screen";
+	Title = mn_tit2indi;
 	MenuRows = 5;
 	MenuCols = 3;
 	MenuSize = sizeof(f_Menu2Person)/ItemSize-1;
@@ -535,7 +552,7 @@ menuitem_initialize (void)
 	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu, MenuOpts);
 
 	scr = TWO_FAM_SCREEN;
-	Title = (STRING)"LifeLines -- Two Family Browse Screen";
+	Title = mn_tit2fam;
 	MenuRows = 5;
 	MenuCols = 3;
 	MenuSize = sizeof(f_Menu2Family)/ItemSize-1;

@@ -77,14 +77,12 @@ typedef struct node_print_param_s
 static treenode add_children(NODE indi, INT gen, INT maxgen, INT * count);
 static void count_nodes(NODE node, INT gen, INT maxgen, INT * count);
 static treenode add_parents(NODE indi, INT gen, INT maxgen, INT * count);
-static void print_to_screen(INT gen, INT * row, LINEPRINT_FNC, void *param, INT hgt);
+static void print_to_screen(INT gen, INT * row, LINEPRINT_FNC, void *param, INT minrow, INT maxrow);
 static STRING indi_lineprint(INT width, void * param);
-static void trav_pre_print_tn(treenode tn, INT * row, INT gen, INT hgt);
-static void trav_bin_in_print_tn(treenode tn, INT * row, INT gen, INT hgt);
-static void draw_descendants(NODE indi, INT hgt);
+static void trav_pre_print_tn(treenode tn, INT * row, INT gen, INT minrow, INT maxrow);
+static void trav_pre_print_nd(NODE node, INT * row, INT gen, INT minrow, INT maxrow);
+static void trav_bin_in_print_tn(treenode tn, INT * row, INT gen, INT minrow, INT maxrow);
 static void SetScrollMax(INT row, INT hgt);
-static void show_descendants(NODE indi);
-static void show_ancestors(NODE indi);
 static void free_tree (treenode root);
 
 /*********************************************
@@ -183,7 +181,8 @@ add_parents (NODE indi, INT gen, INT maxgen, INT * count)
  * Created: 2000/12/07, Perry Rapp
  *===================================*/
 static void
-print_to_screen (INT gen, INT * row, LINEPRINT_FNC fnc, void * param, INT hgt)
+print_to_screen (INT gen, INT * row, LINEPRINT_FNC fnc,
+	void * param, INT minrow, INT maxrow)
 {
 	char buffer[140], *ptr=buffer;
 	STRING line;
@@ -194,10 +193,10 @@ print_to_screen (INT gen, INT * row, LINEPRINT_FNC fnc, void * param, INT hgt)
 	WINDOW *w = main_win;
 	if (mylen > width-5)
 		mylen = width-5;
-	if (*row>Scrollp && *row-Scrollp<=hgt) {
-		if (*row==Scrollp+1 && Scrollp>0)
+	if (*row-Scrollp>=minrow && *row-Scrollp<=maxrow) {
+		if (*row-Scrollp==minrow && Scrollp>0)
 			overflow=1;
-		if (*row-Scrollp==hgt && Scrollp<ScrollMax)
+		if (*row-Scrollp==maxrow && Scrollp<ScrollMax)
 			overflow=1;
 		strcpy(ptr, "");
 		for (i=0; i<gen*6; i++)
@@ -259,14 +258,15 @@ node_lineprint (INT width, void * param)
  * Created: 2000/12/07, Perry Rapp
  *===============================*/
 static void
-trav_pre_print_tn (treenode tn, INT * row, INT gen, INT hgt)
+trav_pre_print_tn (treenode tn, INT * row, INT gen, 
+	INT minrow, INT maxrow)
 {
 	treenode n0;
 	struct indi_print_param_s ipp;
 	ipp.keynum = tn->keynum;
-	print_to_screen(gen, row, &indi_lineprint, &ipp, hgt);
+	print_to_screen(gen, row, &indi_lineprint, &ipp, minrow, maxrow);
 	for (n0=tn->firstchild; n0; n0=n0->nextsib)
-		trav_pre_print_tn(n0, row, gen+1, hgt);
+		trav_pre_print_tn(n0, row, gen+1, minrow, maxrow);
 }
 /*=================================
  * trav_pre_print_nd -- traverse node tree,
@@ -274,14 +274,15 @@ trav_pre_print_tn (treenode tn, INT * row, INT gen, INT hgt)
  * Created: 2001/01/27, Perry Rapp
  *===============================*/
 static void
-trav_pre_print_nd (NODE node, INT * row, INT gen, INT hgt)
+trav_pre_print_nd (NODE node, INT * row, INT gen, 
+	INT minrow, INT maxrow)
 {
 	NODE child;
 	struct node_print_param_s npp;
 	npp.node = node;
-	print_to_screen(gen, row, &node_lineprint, &npp, hgt);
+	print_to_screen(gen, row, &node_lineprint, &npp, minrow, maxrow);
 	for (child=nchild(node); child; child=nsibling(child))
-		trav_pre_print_nd(child, row, gen+1, hgt);
+		trav_pre_print_nd(child, row, gen+1, minrow, maxrow);
 }
 /*===========================================
  * trav_bin_in_print_tn -- traverse binary tree,
@@ -289,15 +290,18 @@ trav_pre_print_nd (NODE node, INT * row, INT gen, INT hgt)
  * Created: 2000/12/07, Perry Rapp
  *=========================================*/
 static void
-trav_bin_in_print_tn (treenode tn, INT * row, INT gen, INT hgt)
+trav_bin_in_print_tn (treenode tn, INT * row, INT gen,
+	INT minrow, INT maxrow)
 {
 	struct indi_print_param_s ipp;
 	ipp.keynum = tn->keynum;
 	if (tn->firstchild)
-		trav_bin_in_print_tn(tn->firstchild, row, gen+1, hgt);
-	print_to_screen(gen, row, &indi_lineprint, &ipp, hgt);
+		trav_bin_in_print_tn(tn->firstchild, row, gen+1,
+			minrow, maxrow);
+	print_to_screen(gen, row, &indi_lineprint, &ipp, minrow, maxrow);
 	if (tn->firstchild && tn->firstchild->nextsib)
-		trav_bin_in_print_tn(tn->firstchild->nextsib, row, gen+1, hgt);
+		trav_bin_in_print_tn(tn->firstchild->nextsib, row, gen+1,
+			minrow, maxrow);
 }
 /*======================================================
  * SetScrollMax -- compute max allowable scroll based on
@@ -312,22 +316,21 @@ SetScrollMax (INT row, INT hgt)
 		ScrollMax=0;
 }
 /*=========================================================
- * show_descendants -- build descendant tree & print it out
+ * draw_descendants -- build descendant tree & print it out
  * Created: 2000/12/07, Perry Rapp
  *  refer optimization note in show_ancestors
  *=======================================================*/
-static void
-draw_descendants (NODE indi, INT hgt)
+void
+pedigree_draw_descendants (NODE indi, INT row, INT hgt)
 {
 	treenode root;
-	int count, row, gen;
+	int count, gen;
 	count=0;
 	root = add_children(indi, 1, Gens, &count);
 	SetScrollMax(count, hgt);
 	/* inorder traversal */
-	row=1;
 	gen=0;
-	trav_pre_print_tn(root, &row, gen, hgt);
+	trav_pre_print_tn(root, &row, gen, row, row+hgt-1);
 	free_tree(root);
 }
 /*=========================================================
@@ -335,16 +338,15 @@ draw_descendants (NODE indi, INT hgt)
  * Created: 2001/01/27, Perry Rapp
  *=======================================================*/
 void
-pedigree_draw_gedcom (NODE node, INT hgt)
+pedigree_draw_gedcom (NODE node, INT row, INT hgt)
 {
-	INT count, row, gen;
+	INT count, gen;
 	count=0;
 	count_nodes(node, 1, Gens, &count);
 	SetScrollMax(count, hgt);
 	/* inorder traversal */
-	row=1;
 	gen=0;
-	trav_pre_print_nd(node, &row, gen, hgt);
+	trav_pre_print_nd(node, &row, gen, row, row+hgt-1);
 }
 /*=====================================================
  * show_ancestors -- build ancestor tree & print it out
@@ -358,32 +360,18 @@ pedigree_draw_gedcom (NODE node, INT hgt)
  * Another optimization would be to use a custom allocator
  *  (like PVALUES, NODES, etc)
  *===================================================*/
-static void
-draw_ancestors (NODE indi, INT hgt)
+void
+pedigree_draw_ancestors (NODE indi, INT row, INT hgt)
 {
 	treenode root;
-	int count, row, gen;
+	int count, gen;
 	count=0;
 	root = add_parents(indi, 1, Gens, &count);
 	SetScrollMax(count, hgt);
 	/* inorder traversal */
-	row=1;
 	gen=0;
-	trav_bin_in_print_tn(root, &row, gen, hgt);
+	trav_bin_in_print_tn(root, &row, gen, row, row+hgt-1);
 	free_tree(root);
-}
-/*=============================================
- * pedigree_draw_person -- display ancestors or
- *  descendants tree, depending on current mode
- * Created: 2000/12/07, Perry Rapp
- *===========================================*/
-void
-pedigree_draw_person (NODE indi, INT hgt)
-{
-	if (Ancestors_mode)
-		draw_ancestors(indi, hgt);
-	else
-		draw_descendants(indi, hgt);
 }
 /*===========================================
  * pedigree_toggle_mode -- toggle between 

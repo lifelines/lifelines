@@ -72,6 +72,8 @@ static void add_child_line(INT, NODE, INT width);
 static void add_spouse_line(INT, NODE, NODE, INT width);
 static void init_display_indi(NODE, INT width);
 static void init_display_fam(NODE, INT width);
+static void show_gedcom(WINDOW *w, NODE node, INT row, INT hgt);
+static void wipe_window(WINDOW * w, INT row, INT hgt);
 
 /*********************************************
  * local variables
@@ -238,25 +240,16 @@ show_person (WINDOW * win,
 	}
 }
 /*====================================
- * show_person_main1 -- Display person
+ * show_person_main -- Display person
+ *
+ * NODE pers: [in] person
+ * INT row:   [in] start row
+ * INT hgt:   [in] avail rows
  *==================================*/
 void
-show_person_main1 (NODE pers, /* person */
-                   INT row,   /* start row */
-                   INT hgt)   /* avail rows */
+show_person_main (NODE pers, INT row, INT hgt)
 {
 	show_person(main_win, pers, row, hgt, MAINWIN_WIDTH, &Scroll1);
-}
-/*=================================================================
- * show_person_main2 -- Display person using 2nd scroll adjustments
- *===============================================================*/
-void show_person_main2 (NODE pers, INT row, INT hgt)
-{
-	INT save = Scroll1;
-	Scroll1 = Scroll2;
-	show_person_main1(pers, row, hgt);
-	Scroll2 = Scroll1;
-	Scroll1 = save;
 }
 /*=============================================
  * add_spouse_line -- Add spouse line to others
@@ -437,43 +430,70 @@ show_short_family (NODE fam, INT row, INT hgt, INT width)
 	}
 }
 /*================================================
- * show_pedigree -- Show person in pedigree format
- * Complete rewrite: 2000/12/03, Perry Rapp
+ * show_ancestors -- Show pedigree/ancestors
+ * Created: 2001/02/04, Perry Rapp
  *==============================================*/
 void
-show_pedigree (NODE indi, INT hgt)
+show_ancestors (NODE indi, INT row, INT hgt)
 {
-	WINDOW *w = main_win;
-	int i;
-	for (i = 1; i <= hgt; i++) {
+	wipe_window(main_win, row, hgt);
+	pedigree_draw_ancestors(indi, row, hgt);
+}
+/*================================================
+ * show_descendants -- Show pedigree/descendants
+ * Created: 2001/02/04, Perry Rapp
+ *==============================================*/
+void
+show_descendants (NODE indi, INT row, INT hgt)
+{
+	wipe_window(main_win, row, hgt);
+	pedigree_draw_descendants(indi, row, hgt);
+}
+/*================================================
+ * wipe_window -- Clear window
+ * Created: 2001/02/04, Perry Rapp
+ *==============================================*/
+static void
+wipe_window (WINDOW * w, INT row, INT hgt)
+{
+	INT i;
+	for (i = row; i <= row+hgt-1; i++) {
 		wmove(w, i, 1);
 		wclrtoeol(w);
 #ifndef BSD
 		mvwaddch(w, i, ll_cols-1, ACS_VLINE);
 #endif
 	}
-
-	pedigree_draw_person(indi, hgt);
 }
 /*================================================
  * show_gedcom -- Show node in gedcom format
  * Created: 2001/01/27, Perry Rapp
  *==============================================*/
-void
-show_gedcom (NODE node, INT hgt)
+static void
+show_gedcom (WINDOW *w, NODE node, INT row, INT hgt)
 {
-	WINDOW *w = main_win;
-	int i;
-
-	for (i = 1; i <= hgt; i++) {
-		wmove(w, i, 1);
-		wclrtoeol(w);
-#ifndef BSD
-		mvwaddch(w, i, ll_cols-1, ACS_VLINE);
-#endif
-	}
-
-	pedigree_draw_gedcom(node, hgt);
+	wipe_window(w, row, hgt);
+	pedigree_draw_gedcom(node, row, hgt);
+}
+/*================================================
+ * show_gedcom_main -- Show node in gedcom format
+ * Created: 2001/02/04, Perry Rapp
+ *==============================================*/
+void
+show_gedcom_main (NODE node, INT row, INT hgt)
+{
+	show_gedcom(main_win, node, row, hgt);
+}
+/*================================================
+ * switch_scrolls -- Interchange scroll1 & scroll2
+ * Created: 2001/02/04, Perry Rapp
+ *==============================================*/
+void
+switch_scrolls (void)
+{
+	INT save = Scroll1;
+	Scroll1 = Scroll2;
+	Scroll2 = save;
 }
 /*===============================================================
  * indi_to_ped_fix -- Construct person STRING for pedigree screen
@@ -587,7 +607,7 @@ show_list (INDISEQ seq,
 		if (i == mark) mvwaddch(win, row, 2, 'x');
 		if (i == cur) {
 			mvwaddch(win, row, 3, '>');
-			show_person_main1(indi, 1, LIST_LINES);
+			show_person_main(indi, 1, LIST_LINES);
 		}
 		name = manip_name(name, ttd, TRUE, TRUE, 40);
 		strcpy(scratch, name);
@@ -605,7 +625,7 @@ show_list (INDISEQ seq,
 void
 show_aux_display (NODE node, INT hgt)
 {
-	show_gedcom(node, hgt);
+	show_gedcom_main(node, 1, hgt);
 }
 /*===============================================
  * show_scroll - vertically scroll person display
