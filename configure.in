@@ -14,7 +14,15 @@ AM_CONFIG_HEADER(config.h)
 
 dnl Checks for programs.
 AC_PROG_CC
+dnl MTE: 01/11/04: Force the use of GNU Bison only.  AC_PROG_YACCj
+dnl will find any YACC, but only Bison works for us.
 AC_PROG_YACC
+if test "$YACC" != "bison -y";
+then
+  echo "LifeLines requires GNU Bison to compile."
+  echo "Please install GNU Bison."
+  exit 1
+fi
 AC_PROG_RANLIB
 AC_PROG_INSTALL
 

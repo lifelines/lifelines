@@ -1,3 +1,9 @@
+2005-01-12 Matt Emmerton
+
+	* ChangeLog configure.in
+
+	Force the use of GNU Bison.
+
 2005-01-12 Perry Rapp
 
 	* ChangeLog configure.in src/hdrs/version.h
