@@ -12,6 +12,33 @@
 
 2002-06-24 Matt Emmerton <memmerto@users.sourceforge.net>
 
+	* ChangeLog configure.in Makefile.am
+
+	Update to find autotools glue in build/autotools and to
+    include it in distributions.
+
+	DELETED:	build/gnu
+	NEW:		build/autotools
+
+	Rename gnu -> autotools to make more sense.
+
+	NEW:		build/autotools/config.sub build/autotools/config.guess
+	NEW:		build/autotools/missing build/autotools/mkinstalldirs
+	NEW:		build/autotools/install-sh build/autotools/depcomp
+	NEW:		build/autotools/config.rpath README
+
+	DELETED:	config.sub config.guess config.rpath missing
+	DELETED:	mkinstalldirs install-sh depcomp
+
+	Import autotools glue for autoconf 2.53, automake 1.5
+
+	NEW:		build/autotools/acinclude.m4
+	DELETED:	acinclude.m4
+
+	Our extensions to the autotools glue
+
+2002-06-24 Matt Emmerton <memmerto@users.sourceforge.net>
+
 	* ChangeLog configure.in 
 
 	NEW: build/rpm/Makefile.am

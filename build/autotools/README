@@ -1,0 +1,19 @@
+This directory holds a bunch of GNU autotools related files.
+
+This file is intended to show where they came from, and what the versions
+of the files are.
+
+File			Parent Program		Version
+---------------------------------------------------
+config.sub		autoconf
+config.guess	autoconf
+missing			autoconf
+mkinstalldirs	autoconf
+installs-h		autoconf
+
+depcomp			automake
+
+config.rpath	??					??
+
+acinclude.m4	LifeLines			n/a
+
