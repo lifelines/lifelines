@@ -145,10 +145,9 @@ static BOOLEAN
 load_config_file (STRING file, STRING * pmsg)
 {
 	FILE * fp = 0;
-	STRING ptr, val;
-	STRING oldval=NULL;
+	STRING ptr, val, key;
 	STRING thisdir = dir_from_file(file);
-	BOOLEAN there, failed, noesc;
+	BOOLEAN failed, noesc;
 	char buffer[MAXLINELEN],valbuf[MAXLINELEN];
 	fp = fopen(file, LLREADTEXT);
 	if (!fp) {
@@ -179,12 +178,7 @@ load_config_file (STRING file, STRING * pmsg)
 			noesc = TRUE; /* := means don't do backslash escapes */
 			ptr[-1] = 0;
 		}
-		/* overwrite any previous value */
-		oldval = valueofbool_str(f_global, buffer, &there);
-		if (there) {
-			ASSERT(oldval); /* no nulls in f_global*/
-			stdfree(oldval);
-		}
+		/* ignore any previous value, it will be overwritten */
 		/* advance over separator to value */
 		ptr++;
 		/*
@@ -197,8 +191,9 @@ load_config_file (STRING file, STRING * pmsg)
 		else
 			copy_process(valbuf, ptr);
 		expand_variables(valbuf, sizeof(valbuf));
+		key = buffer; /* key is in beginning of buffer, we zero-terminated it */
 		val = valbuf;
-		insert_table_str(f_global, strsave(buffer), strsave(val));
+		table_insert_string(f_global, buffer, val);
 	}
 	failed = !feof(fp);
 	fclose(fp);
@@ -221,7 +216,7 @@ load_global_options (STRING configfile, STRING * pmsg)
 {
 	*pmsg = NULL;
 	if (!f_global) 
-		f_global= create_table_old2(FREEBOTH);
+		f_global= create_table_new();
 	if (!load_config_file(configfile, pmsg))
 		return FALSE;
 	return TRUE;
@@ -263,30 +258,6 @@ get_db_options (TABLE opts)
 		f_db = create_table_old2(FREEBOTH);
 	copy_table(f_db, opts, FREEBOTH);
 }
-/*=================================
- * set_global_options -- Store db options from caller
- * Created: 2002/06/18, Perry Rapp
- *===============================*/
-void
-set_global_options (TABLE opts)
-{
-	ASSERT(opts);
-	free_optable(&f_global);
-	f_global = create_table_old2(FREEBOTH);
-	copy_table(opts, f_global, FREEBOTH);
-	send_notifications();
-}
-/*=================================
- * get_global_options -- Copy db options to caller's table
- * Created: 2002/06/18, Perry Rapp
- *===============================*/
-void
-get_global_options (TABLE opts)
-{
-	if (!f_global)
-		f_global = create_table_old2(FREEBOTH);
-	copy_table(f_global, opts, FREEBOTH);
-}
 /*==========================================
  * free_optable -- free a table if it exists
  *========================================*/
@@ -318,7 +289,7 @@ term_lloptions (void)
  * getoptstr -- get an option (from db or from global)
  * Example: 
  *  str = getoptstr("HDR_SUBM", "1 SUBM");
- * Created: 2001/11/22, Perry Rapp
+ * returns string belonging to table
  *=============================================*/
 STRING
 getoptstr (CNSTRING optname, STRING defval)

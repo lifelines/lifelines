@@ -36,6 +36,11 @@
 
 	Bump version to 3.0.41d to differentiate from release.
 
+	* ChangeLog src/gedlib/lloptions.c src/hdrs/lloptions.h
+
+	Remove unused functions set_global_options, get_global_options.
+	Change f_global to be generic table.
+
 2005-01-31 lifelines beta 3.0.41 RELEASE
 
 2005-01-31 Perry Rapp

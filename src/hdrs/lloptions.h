@@ -26,12 +26,10 @@ typedef struct tag_table *TABLE;
 /* initialization & termination */
 void free_optable(TABLE * ptab);
 void get_db_options(TABLE opts); /* free with FREEBOTH */
-void get_global_options(TABLE opts); /* free with FREEBOTH */
 BOOLEAN load_global_options(STRING configfile, STRING * pmsg);
 void register_notify(CALLBACK_FNC fncptr);
 void set_cmd_options(TABLE opts);
 void set_db_options(TABLE opts);
-void set_global_options(TABLE opts);
 void setoptstr_fallback(STRING optname, STRING newval);
 void term_lloptions(void);
 void unregister_notify(CALLBACK_FNC fncptr);
