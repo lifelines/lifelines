@@ -4,9 +4,9 @@
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: lifelines 3.0.29\n"
-"POT-Creation-Date: 2003-08-15 15:42+0200\n"
-"PO-Revision-Date: 2003-08-24 10:46+0200\n"
+"Project-Id-Version: lifelines 3.0.31\n"
+"POT-Creation-Date: 2003-09-09 21:19+0200\n"
+"PO-Revision-Date: 2003-09-10 18:31+0200\n"
 "Last-Translator: Jens Arvidsson <jya@sverige.nu>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -56,7 +56,9 @@ msgstr "kunde inte öppna, läsa eller skriva till nyckelfilen."
 
 #: src/gedlib/init.c:590
 msgid "could not open, read or write the key file (to alter database)."
-msgstr "kunde inte öppna, läsa eller skriva till nyckelfilen (för att ändra databasen)."
+msgstr ""
+"kunde inte öppna, läsa eller skriva till nyckelfilen (för att ändra "
+"databasen)."
 
 #: src/gedlib/init.c:593
 msgid "could not open, read or write a block file."
@@ -117,7 +119,8 @@ msgstr "Du måste identifiera en databas."
 
 #: src/gedlib/messages.c:46
 msgid "What directory holds (or will hold) the LifeLines database? (? to list)"
-msgstr "Vilken katalog inrymmer (ska inrymma) LifeLinesdatabasen? (? för lista)"
+msgstr ""
+"Vilken katalog inrymmer (ska inrymma) LifeLinesdatabasen? (? för lista)"
 
 #: src/gedlib/messages.c:47
 msgid "enter path: "
@@ -197,7 +200,8 @@ msgstr "Från vilken familj ska makan/maken/föräldern tas bort?"
 
 #: src/gedlib/messages.c:71
 msgid "Identify family (enter nothing to identify by individual members)."
-msgstr "Identifiera familj (lämna blank för att identifiera via familjemedlem)."
+msgstr ""
+"Identifiera familj (lämna blank för att identifiera via familjemedlem)."
 
 #: src/gedlib/messages.c:72
 msgid "Identify a spouse of the family, if known."
@@ -509,7 +513,9 @@ msgstr "Denna familj har redan en maka/kvinnlig förälder."
 
 #: src/gedlib/messages.c:154
 msgid "This family has both spouses/parents; can't add another."
-msgstr "I denna familj finns båda makarna/föräldrarna; kan inte lägga till ytterligare en."
+msgstr ""
+"I denna familj finns båda makarna/föräldrarna; kan inte lägga till "
+"ytterligare en."
 
 #: src/gedlib/messages.c:155
 msgid "This family has neither spouse/parent; can't remove."
@@ -642,7 +648,7 @@ msgid "Are you sure you want to remove the person from the database?"
 msgstr "Är du säker på att du vill ta bort den här personen från databasen?"
 
 #: src/gedlib/messages.c:187
-msgid "Remove this family record ?"
+msgid "Remove this family record?"
 msgstr "Ta bort den här familjeposten?"
 
 #: src/gedlib/messages.c:188
@@ -932,14 +938,16 @@ msgstr "Inga fel; lägger till poster med nya nycklar..."
 #: src/gedlib/messages.c:270
 #, c-format
 msgid "Using original keys, %d deleted records will be in the database."
-msgstr "Med ursprungliga nycklar kommer det att finnas %d borttagna poster i databasen."
+msgstr ""
+"Med ursprungliga nycklar kommer det att finnas %d borttagna poster i "
+"databasen."
 
 #: src/gedlib/messages.c:271
 msgid "Use original keys from GEDCOM file?"
 msgstr "Vill du använda ursprungliga nycklar från GEDCOM-filen?"
 
 #: src/gedlib/messages.c:272
-msgid "Proceed ?"
+msgid "Proceed?"
 msgstr "Vill du fortsätta?"
 
 #: src/gedlib/messages.c:273
@@ -972,7 +980,8 @@ msgstr "Rad %d: Familjen som definieras här har ingen nyckel."
 #: src/gedlib/messages.c:279
 #, c-format
 msgid "Lines %d and %d: Person %s is multiply defined: skipped."
-msgstr "Raderna %d och %d: Personen %s är definierad mer än en gång: hoppas över."
+msgstr ""
+"Raderna %d och %d: Personen %s är definierad mer än en gång: hoppas över."
 
 #: src/gedlib/messages.c:280
 #, c-format
@@ -1422,12 +1431,15 @@ msgstr "%dI, %dF, %dS, %dE, %dX"
 msgid ""
 "The requested window size (%d,%d) is too large for your terminal (%d,%d).\n"
 msgstr ""
-"Den efterfrågade fönsterstorleken (%d,%d) är för stor för din terminal (%d,%d).\n"
+"Den efterfrågade fönsterstorleken (%d,%d) är för stor för din terminal (%d,%"
+"d).\n"
 
 #: src/gedlib/messages.c:416
 #, c-format
 msgid "The requested window size (%d,%d) is too small for LifeLines (%d,%d).\n"
-msgstr "Den efterfrågade fönsterstorleken (%d,%d) är för liten för LifeLines (%d,%d).\n"
+msgstr ""
+"Den efterfrågade fönsterstorleken (%d,%d) är för liten för LifeLines (%d,%"
+"d).\n"
 
 #: src/gedlib/messages.c:419
 #, c-format
@@ -1505,7 +1517,8 @@ msgstr "Kommandon:   j Flytta ned     k Flytta upp    q Avsluta"
 
 #: src/gedlib/messages.c:445
 msgid "Commands:   Select by number, u Page Up, d Page Down, i Select, q Quit"
-msgstr "Kommandon:   Välj efter nummer, u Sida upp, d Sida ned, i Välj, q Avsluta"
+msgstr ""
+"Kommandon:   Välj efter nummer, u Sida upp, d Sida ned, i Välj, q Avsluta"
 
 #: src/gedlib/messages.c:446
 msgid "Commands:   u Page Up, d Page Down, q Quit"
@@ -1562,7 +1575,7 @@ msgstr "Ogiltig historiklängd"
 
 #: src/gedlib/messages.c:463
 #, c-format
-msgid "Delete history (%d entries) ?"
+msgid "Delete history (%d entries)?"
 msgstr "Ta bort historik (%d stycken)?"
 
 #: src/gedlib/messages.c:464
@@ -1577,7 +1590,8 @@ msgstr "Välj ur historik"
 msgid ""
 "Cannot combine immutable (-i) or read-only (-r) with read-write (-w) access."
 msgstr ""
-"Kan inte kombinera oföränderlig (-i) eller skrivskyddad (-r) med skrivåtkomst (-w)."
+"Kan inte kombinera oföränderlig (-i) eller skrivskyddad (-r) med "
+"skrivåtkomst (-w)."
 
 #: src/gedlib/messages.c:467
 msgid "Cannot combine forceopen (-f) and lock (-l) flags."
@@ -2498,182 +2512,182 @@ msgstr "Lägg till ett syskon från familj."
 msgid "Identify list of persons for program:"
 msgstr "Identifiera lista över personer för programmet:"
 
-#: src/interp/builtin.c:323
+#: src/interp/builtin.c:326
 msgid "name: person does not have a name"
 msgstr "name: personen har inget namn."
 
-#: src/interp/builtin.c:379
+#: src/interp/builtin.c:382
 msgid "fullname: person does not have a name"
 msgstr "fullname: personen har inget namn"
 
-#: src/interp/builtin.c:406
+#: src/interp/builtin.c:409
 msgid "surname: person does not have a name"
 msgstr "surname: personen har inget namn"
 
-#: src/interp/builtin.c:431
+#: src/interp/builtin.c:434
 msgid "soundex: person does not have a name"
 msgstr "soundex: personen har inget namn"
 
-#: src/interp/builtin.c:494
+#: src/interp/builtin.c:497
 #, c-format
 msgid "Bad escape code at offset %d in bytecode string <%s>"
 msgstr "Ogiltig kontrollsekvenskod vid position %d i bytekodssträng <%s>"
 
-#: src/interp/builtin.c:637
+#: src/interp/builtin.c:640
 msgid "(givens) person does not have a name"
 msgstr "(givens) personen har inget namn"
 
-#: src/interp/builtin.c:664
+#: src/interp/builtin.c:667
 #, c-format
 msgid "set(%s, <Null>) is invalid"
 msgstr "set(%s, <Null>) är ogiltigt"
 
-#: src/interp/builtin.c:1104
+#: src/interp/builtin.c:1107
 msgid "first"
 msgstr "första"
 
-#: src/interp/builtin.c:1104
+#: src/interp/builtin.c:1107
 msgid "second"
 msgstr "andra"
 
-#: src/interp/builtin.c:1104
+#: src/interp/builtin.c:1107
 msgid "third"
 msgstr "tredje"
 
-#: src/interp/builtin.c:1104
+#: src/interp/builtin.c:1107
 msgid "fourth"
 msgstr "fjärde"
 
-#: src/interp/builtin.c:1104
+#: src/interp/builtin.c:1107
 msgid "fifth"
 msgstr "femte"
 
-#: src/interp/builtin.c:1105
+#: src/interp/builtin.c:1108
 msgid "sixth"
 msgstr "sjätte"
 
-#: src/interp/builtin.c:1105
+#: src/interp/builtin.c:1108
 msgid "seventh"
 msgstr "sjunde"
 
-#: src/interp/builtin.c:1105
+#: src/interp/builtin.c:1108
 msgid "eighth"
 msgstr "åttonde"
 
-#: src/interp/builtin.c:1105
+#: src/interp/builtin.c:1108
 msgid "ninth"
 msgstr "nionde"
 
-#: src/interp/builtin.c:1105
+#: src/interp/builtin.c:1108
 msgid "tenth"
 msgstr "tionde"
 
-#: src/interp/builtin.c:1106
+#: src/interp/builtin.c:1109
 msgid "eleventh"
 msgstr "elfte"
 
-#: src/interp/builtin.c:1106
+#: src/interp/builtin.c:1109
 msgid "twelfth"
 msgstr "tolfte"
 
-#: src/interp/builtin.c:1123
+#: src/interp/builtin.c:1126
 #, c-format
 msgid "%dth"
 msgstr "%d:e"
 
-#: src/interp/builtin.c:1133
+#: src/interp/builtin.c:1136
 msgid "zero"
 msgstr "noll"
 
-#: src/interp/builtin.c:1133
+#: src/interp/builtin.c:1136
 msgid "one"
 msgstr "en"
 
-#: src/interp/builtin.c:1133
+#: src/interp/builtin.c:1136
 msgid "two"
 msgstr "två"
 
-#: src/interp/builtin.c:1133
+#: src/interp/builtin.c:1136
 msgid "three"
 msgstr "tre"
 
-#: src/interp/builtin.c:1133
+#: src/interp/builtin.c:1136
 msgid "four"
 msgstr "fyra"
 
-#: src/interp/builtin.c:1133
+#: src/interp/builtin.c:1136
 msgid "five"
 msgstr "fem"
 
-#: src/interp/builtin.c:1134
+#: src/interp/builtin.c:1137
 msgid "six"
 msgstr "sex"
 
-#: src/interp/builtin.c:1134
+#: src/interp/builtin.c:1137
 msgid "seven"
 msgstr "sju"
 
-#: src/interp/builtin.c:1134
+#: src/interp/builtin.c:1137
 msgid "eight"
 msgstr "åtta"
 
-#: src/interp/builtin.c:1134
+#: src/interp/builtin.c:1137
 msgid "nine"
 msgstr "nio"
 
-#: src/interp/builtin.c:1134
+#: src/interp/builtin.c:1137
 msgid "ten"
 msgstr "tio"
 
-#: src/interp/builtin.c:1135
+#: src/interp/builtin.c:1138
 msgid "eleven"
 msgstr "elva"
 
-#: src/interp/builtin.c:1135
+#: src/interp/builtin.c:1138
 msgid "twelve"
 msgstr "tolv"
 
-#: src/interp/builtin.c:2276
+#: src/interp/builtin.c:2279
 msgid "He"
 msgstr "Han"
 
-#: src/interp/builtin.c:2276
+#: src/interp/builtin.c:2279
 msgid "he"
 msgstr "han"
 
-#: src/interp/builtin.c:2276
+#: src/interp/builtin.c:2279
 msgid "His"
 msgstr "Hans"
 
-#: src/interp/builtin.c:2276
+#: src/interp/builtin.c:2279
 msgid "his"
 msgstr "hans"
 
-#: src/interp/builtin.c:2276
+#: src/interp/builtin.c:2279
 msgid "him"
 msgstr "honom"
 
-#: src/interp/builtin.c:2278
+#: src/interp/builtin.c:2281
 msgid "She"
 msgstr "Hon"
 
-#: src/interp/builtin.c:2278
+#: src/interp/builtin.c:2281
 msgid "she"
 msgstr "hon"
 
-#: src/interp/builtin.c:2278
+#: src/interp/builtin.c:2281
 msgid "Her"
 msgstr "Hennes"
 
-#: src/interp/builtin.c:2278
+#: src/interp/builtin.c:2281
 msgid "her"
 msgstr "hennes"
 
-#: src/interp/builtin.c:2278
+#: src/interp/builtin.c:2281
 msgid "her_"
 msgstr "henne"
 
-#: src/interp/builtin.c:2656
+#: src/interp/builtin.c:2659
 msgid "(trimname) person does not have a name"
 msgstr "(trimname) personen har inget namn"
 
@@ -2746,7 +2760,9 @@ msgstr "%02ds"
 msgid ""
 "\n"
 "Report duration %s (ui duration %s)\n"
-msgstr "\nRapportens varaktighet %s (användargränsnittets varaktighet %s)\n"
+msgstr ""
+"\n"
+"Rapportens varaktighet %s (användargränsnittets varaktighet %s)\n"
 
 #: src/interp/interp.c:631
 #, c-format
@@ -2906,398 +2922,402 @@ msgid "e  Edit top person"
 msgstr "e  Redigera övre pers."
 
 #: src/liflines/brwsmenu.c:72
+msgid "e  Edit top family"
+msgstr "e  Redigera övre fam."
+
+#: src/liflines/brwsmenu.c:73
 msgid "f  Browse to father"
 msgstr "f  Bläddra till fader"
 
-#: src/liflines/brwsmenu.c:73
+#: src/liflines/brwsmenu.c:74
 msgid "f  Browse top father"
 msgstr "f  Bläddra t. övre fader"
 
-#: src/liflines/brwsmenu.c:74
+#: src/liflines/brwsmenu.c:75
 msgid "m  Browse to mother"
 msgstr "m  Bläddra till moder"
 
-#: src/liflines/brwsmenu.c:75
+#: src/liflines/brwsmenu.c:76
 msgid "m  Browse top mother"
 msgstr "m  Bläddra t. övre moder"
 
-#: src/liflines/brwsmenu.c:76
+#: src/liflines/brwsmenu.c:77
 msgid "s  Browse to spouse/s"
 msgstr "s  Bläddra till make/maka/r"
 
-#: src/liflines/brwsmenu.c:77
+#: src/liflines/brwsmenu.c:78
 msgid "s  Browse top spouse/s"
 msgstr "s  Bl. t. övre make/maka/r"
 
-#: src/liflines/brwsmenu.c:78
+#: src/liflines/brwsmenu.c:79
 msgid "c  Browse to children"
 msgstr "c  Bläddra till barn"
 
-#: src/liflines/brwsmenu.c:79
+#: src/liflines/brwsmenu.c:80
 msgid "c  Browse top children"
 msgstr "c  Bl. t. övre barn"
 
-#: src/liflines/brwsmenu.c:80
+#: src/liflines/brwsmenu.c:81
 msgid "o  Browse to older sib"
 msgstr "o  Bl. t. äldre syskon"
 
-#: src/liflines/brwsmenu.c:81
+#: src/liflines/brwsmenu.c:82
 msgid "y  Browse to younger sib"
 msgstr "y  Bl. t. yngre syskon"
 
-#: src/liflines/brwsmenu.c:82
+#: src/liflines/brwsmenu.c:83
 msgid "g  Browse to family"
 msgstr "g  Bläddra t. familj"
 
-#: src/liflines/brwsmenu.c:83
+#: src/liflines/brwsmenu.c:84
 msgid "u  Browse to parents"
 msgstr "u  Bläddra t. föräldrar"
 
-#: src/liflines/brwsmenu.c:84
+#: src/liflines/brwsmenu.c:85
 msgid "b  Browse to persons"
 msgstr "b  Bläddra t. personer"
 
-#: src/liflines/brwsmenu.c:85
+#: src/liflines/brwsmenu.c:86
 msgid "t  Browse to top"
 msgstr "t  Bläddra till övre"
 
-#: src/liflines/brwsmenu.c:86
+#: src/liflines/brwsmenu.c:87
 msgid "b  Browse to bottom"
 msgstr "b  Bläddra t. nedre"
 
-#: src/liflines/brwsmenu.c:87
+#: src/liflines/brwsmenu.c:88
 msgid "h  Add as spouse"
 msgstr "h  Lägg t. som maka/make"
 
-#: src/liflines/brwsmenu.c:88
+#: src/liflines/brwsmenu.c:89
 msgid "i  Add as child"
 msgstr "i  Lägg till som barn"
 
-#: src/liflines/brwsmenu.c:89
+#: src/liflines/brwsmenu.c:90
 msgid "s  Add spouse to family"
 msgstr "s  Lägg t. maka/make i fam."
 
-#: src/liflines/brwsmenu.c:90
+#: src/liflines/brwsmenu.c:91
 msgid "a  Add child to family"
 msgstr "a  Lägg t. barn i fam."
 
-#: src/liflines/brwsmenu.c:91
+#: src/liflines/brwsmenu.c:92
 msgid "a  Add family"
 msgstr "a  Lägg till familj"
 
-#: src/liflines/brwsmenu.c:92
+#: src/liflines/brwsmenu.c:93
 msgid "x  Swap two families"
 msgstr "x  Växla två familjer"
 
-#: src/liflines/brwsmenu.c:93
+#: src/liflines/brwsmenu.c:94
 msgid "x  Swap two children"
 msgstr "x  Växla två barn"
 
-#: src/liflines/brwsmenu.c:95
+#: src/liflines/brwsmenu.c:96
 #, no-c-format
 msgid "%c  Reorder child"
 msgstr "%c  Ordna om barn"
 
-#: src/liflines/brwsmenu.c:96
+#: src/liflines/brwsmenu.c:97
 msgid "x  Switch top/bottom"
 msgstr "x  Växla övre/nedre"
 
-#: src/liflines/brwsmenu.c:97
+#: src/liflines/brwsmenu.c:98
 msgid "n  Create new person"
 msgstr "n  Skapa ny person"
 
-#: src/liflines/brwsmenu.c:98
+#: src/liflines/brwsmenu.c:99
 msgid "a  Create new family"
 msgstr "a  Skapa ny familj"
 
-#: src/liflines/brwsmenu.c:99
+#: src/liflines/brwsmenu.c:100
 msgid "tt Enter tandem mode"
 msgstr "tt Växla t. tandemläge"
 
-#: src/liflines/brwsmenu.c:100
+#: src/liflines/brwsmenu.c:101
 msgid "tt Enter family tandem"
 msgstr "tt Växla t. fam.tandem"
 
-#: src/liflines/brwsmenu.c:101
+#: src/liflines/brwsmenu.c:102
 msgid "zi Browse to indi"
 msgstr "zi Bläddra t. pers."
 
-#: src/liflines/brwsmenu.c:102
+#: src/liflines/brwsmenu.c:103
 msgid "zz Browse to any"
 msgstr "zz Bläddra t. alla"
 
-#: src/liflines/brwsmenu.c:103
+#: src/liflines/brwsmenu.c:104
 msgid "r  Remove as spouse"
 msgstr "r  Ta bort som maka/make"
 
-#: src/liflines/brwsmenu.c:104
+#: src/liflines/brwsmenu.c:105
 msgid "d  Remove as child"
 msgstr "d  Ta bort som barn"
 
-#: src/liflines/brwsmenu.c:105
+#: src/liflines/brwsmenu.c:106
 msgid "r  Remove spouse from"
 msgstr "r  Ta bort maka/make från"
 
-#: src/liflines/brwsmenu.c:106
+#: src/liflines/brwsmenu.c:107
 msgid "d  Remove child from"
 msgstr "d  Ta bort barn från"
 
-#: src/liflines/brwsmenu.c:107
+#: src/liflines/brwsmenu.c:108
 msgid "(  Scroll up"
 msgstr "(  Rulla uppåt"
 
-#: src/liflines/brwsmenu.c:108
+#: src/liflines/brwsmenu.c:109
 msgid ")  Scroll down"
 msgstr ")  Rulla nedåt"
 
-#: src/liflines/brwsmenu.c:109
+#: src/liflines/brwsmenu.c:110
 msgid "]  Increase tree depth"
 msgstr "]  Öka träddjup"
 
-#: src/liflines/brwsmenu.c:110
+#: src/liflines/brwsmenu.c:111
 msgid "[  Decrease tree depth"
 msgstr "[  Minska träddjup"
 
-#: src/liflines/brwsmenu.c:111
+#: src/liflines/brwsmenu.c:112
 msgid "(t Scroll top up"
 msgstr "(t Rulla övre upp"
 
-#: src/liflines/brwsmenu.c:112
+#: src/liflines/brwsmenu.c:113
 msgid ")t Scroll top down"
 msgstr ")t Rulla övre ned"
 
-#: src/liflines/brwsmenu.c:113
+#: src/liflines/brwsmenu.c:114
 msgid "(b Scroll bottom up"
 msgstr "(b Rulla nedre upp"
 
-#: src/liflines/brwsmenu.c:114
+#: src/liflines/brwsmenu.c:115
 msgid ")b Scroll bottom down"
 msgstr ")b Rulla nedre ned"
 
-#: src/liflines/brwsmenu.c:115
+#: src/liflines/brwsmenu.c:116
 msgid "(( Scroll both up"
 msgstr "(( Rulla båda upp"
 
-#: src/liflines/brwsmenu.c:116
+#: src/liflines/brwsmenu.c:117
 msgid ")) Scroll both down"
 msgstr ")) Rulla båda ned"
 
-#: src/liflines/brwsmenu.c:117
+#: src/liflines/brwsmenu.c:118
 msgid "#  Toggle childnos"
 msgstr "#  Slå på/av barnnr"
 
-#: src/liflines/brwsmenu.c:118
+#: src/liflines/brwsmenu.c:119
 msgid "!g GEDCOM mode"
 msgstr "!g GEDCOM-läge"
 
-#: src/liflines/brwsmenu.c:119
+#: src/liflines/brwsmenu.c:120
 msgid "!x GEDCOMX mode"
 msgstr "!x GEDCOMX-läge"
 
-#: src/liflines/brwsmenu.c:120
+#: src/liflines/brwsmenu.c:121
 msgid "!t GEDCOMT mode"
 msgstr "!t GEDCOMT-läge"
 
-#: src/liflines/brwsmenu.c:121
+#: src/liflines/brwsmenu.c:122
 msgid "!a Ancestors mode"
 msgstr "!a Anläge"
 
-#: src/liflines/brwsmenu.c:122
+#: src/liflines/brwsmenu.c:123
 msgid "!d Descendants mode"
 msgstr "!d Ättlingaläge"
 
-#: src/liflines/brwsmenu.c:123
+#: src/liflines/brwsmenu.c:124
 msgid "!n Normal mode"
 msgstr "!n Normalt läge"
 
-#: src/liflines/brwsmenu.c:124
+#: src/liflines/brwsmenu.c:125
 msgid "p  Pedigree mode"
 msgstr "p  Tavelläge"
 
-#: src/liflines/brwsmenu.c:125
+#: src/liflines/brwsmenu.c:126
 msgid "!! Cycle mode"
 msgstr "!! Cykliskt läge"
 
-#: src/liflines/brwsmenu.c:127
+#: src/liflines/brwsmenu.c:128
 msgid "(1-9)  Browse to child"
 msgstr "(1-9)  Bläddra t. barn"
 
-#: src/liflines/brwsmenu.c:128
+#: src/liflines/brwsmenu.c:129
 msgid "y  Turn on sync"
 msgstr "y  Slå på synk"
 
-#: src/liflines/brwsmenu.c:129
+#: src/liflines/brwsmenu.c:130
 msgid "A  Advanced view"
 msgstr "A  Avancerad vy"
 
-#: src/liflines/brwsmenu.c:130
+#: src/liflines/brwsmenu.c:131
 msgid "tc Tandem to children"
 msgstr "tc Tandem till barn"
 
-#: src/liflines/brwsmenu.c:131
+#: src/liflines/brwsmenu.c:132
 msgid "tf Tandem to father/s"
 msgstr "tf Tandem t. fader/fäder"
 
-#: src/liflines/brwsmenu.c:132
+#: src/liflines/brwsmenu.c:133
 msgid "tg Tandem to family/s"
 msgstr "tg Tandem t. familj/er"
 
-#: src/liflines/brwsmenu.c:133
+#: src/liflines/brwsmenu.c:134
 msgid "f  Browse to fathers"
 msgstr "f  Bläddra t. fäder"
 
-#: src/liflines/brwsmenu.c:134
+#: src/liflines/brwsmenu.c:135
 msgid "m  Browse to mothers"
 msgstr "m  Bläddra t. mödrar"
 
-#: src/liflines/brwsmenu.c:135
+#: src/liflines/brwsmenu.c:136
 msgid "tm Tandem to mother/s"
 msgstr "tm Tandem t. moder/mödrar/"
 
-#: src/liflines/brwsmenu.c:136
+#: src/liflines/brwsmenu.c:137
 msgid "ts Tandem to spouse/s"
 msgstr "ts Tandem till make/maka/makar"
 
-#: src/liflines/brwsmenu.c:137
+#: src/liflines/brwsmenu.c:138
 msgid "tu Tandem to parents"
 msgstr "tu Tandem t. föräldrar"
 
-#: src/liflines/brwsmenu.c:138
+#: src/liflines/brwsmenu.c:139
 msgid "<  Enlarge menu area"
 msgstr "<  Öka menyyta"
 
-#: src/liflines/brwsmenu.c:139
+#: src/liflines/brwsmenu.c:140
 msgid ">  Shrink menu area"
 msgstr ">  Minska menyyta"
 
-#: src/liflines/brwsmenu.c:140
+#: src/liflines/brwsmenu.c:141
 msgid "M> More menu cols"
 msgstr "M> Fler menykolumner"
 
-#: src/liflines/brwsmenu.c:141
+#: src/liflines/brwsmenu.c:142
 msgid "M< Less menu cols"
 msgstr "M< Färre menykolumner"
 
-#: src/liflines/brwsmenu.c:142
+#: src/liflines/brwsmenu.c:143
 msgid "+  Next in db"
 msgstr "+  Nästa i databasen"
 
-#: src/liflines/brwsmenu.c:143
+#: src/liflines/brwsmenu.c:144
 msgid "-  Prev in db"
 msgstr "-  Föreg. i databasen"
 
-#: src/liflines/brwsmenu.c:144
+#: src/liflines/brwsmenu.c:145
 msgid "d  Copy top to bottom"
 msgstr "d  Kopiera öv. t. ned."
 
-#: src/liflines/brwsmenu.c:145
+#: src/liflines/brwsmenu.c:146
 msgid "j  Merge bottom to top"
 msgstr "j  Sammanl. ned. - öv."
 
-#: src/liflines/brwsmenu.c:146 src/liflines/screen.c:417
+#: src/liflines/brwsmenu.c:147 src/liflines/screen.c:417
 msgid "j  Move down list"
 msgstr "j  Gå nedåt i lista"
 
-#: src/liflines/brwsmenu.c:147 src/liflines/screen.c:418
+#: src/liflines/brwsmenu.c:148 src/liflines/screen.c:418
 msgid "k  Move up list"
 msgstr "k  Gå uppåt i lista"
 
-#: src/liflines/brwsmenu.c:148 src/liflines/screen.c:419
+#: src/liflines/brwsmenu.c:149 src/liflines/screen.c:419
 msgid "e  Edit this person"
 msgstr "e  Redigera denna person"
 
-#: src/liflines/brwsmenu.c:149 src/liflines/screen.c:420
+#: src/liflines/brwsmenu.c:150 src/liflines/screen.c:420
 msgid "i  Browse this person"
 msgstr "i  Bl. till denna person"
 
-#: src/liflines/brwsmenu.c:150 src/liflines/screen.c:421
+#: src/liflines/brwsmenu.c:151 src/liflines/screen.c:421
 msgid "m  Mark this person"
 msgstr "m  Markera denna pers."
 
-#: src/liflines/brwsmenu.c:151
+#: src/liflines/brwsmenu.c:152
 msgid "d  Delete from list"
 msgstr "d  Ta bort från lista"
 
-#: src/liflines/brwsmenu.c:152 src/liflines/screen.c:424
+#: src/liflines/brwsmenu.c:153 src/liflines/screen.c:424
 msgid "n  Name this list"
 msgstr "n  Ge denna lista namn"
 
-#: src/liflines/brwsmenu.c:153 src/liflines/screen.c:425
+#: src/liflines/brwsmenu.c:154 src/liflines/screen.c:425
 msgid "b  Browse new persons"
 msgstr "b  Bläddra till nya pers."
 
-#: src/liflines/brwsmenu.c:154 src/liflines/screen.c:426
+#: src/liflines/brwsmenu.c:155 src/liflines/screen.c:426
 msgid "a  Add to this list"
 msgstr "a  Lägg t. i denna lista"
 
-#: src/liflines/brwsmenu.c:155 src/liflines/screen.c:427
+#: src/liflines/brwsmenu.c:156 src/liflines/screen.c:427
 msgid "x  Swap mark/current"
 msgstr "x  Växla märke/aktuell"
 
-#: src/liflines/brwsmenu.c:156
+#: src/liflines/brwsmenu.c:157
 msgid "$s  List sources"
 msgstr "$s  Lista källor"
 
-#: src/liflines/brwsmenu.c:157
+#: src/liflines/brwsmenu.c:158
 msgid "$n  List notes"
 msgstr "$n  Lista notiser"
 
-#: src/liflines/brwsmenu.c:158
+#: src/liflines/brwsmenu.c:159
 msgid "$$  List references"
 msgstr "$$  Lista referenser"
 
-#: src/liflines/brwsmenu.c:159
+#: src/liflines/brwsmenu.c:160
 msgid "^b  History/back"
 msgstr "^b  Historik/bakåt"
 
-#: src/liflines/brwsmenu.c:160
+#: src/liflines/brwsmenu.c:161
 msgid "^f  History/fwd"
 msgstr "^f  Historik/framåt"
 
-#: src/liflines/brwsmenu.c:161
+#: src/liflines/brwsmenu.c:162
 msgid "^l  History list"
 msgstr "^l  Historiklista"
 
-#: src/liflines/brwsmenu.c:162
+#: src/liflines/brwsmenu.c:163
 msgid "^c Clear history"
 msgstr "^c  Töm historik"
 
-#: src/liflines/brwsmenu.c:163
+#: src/liflines/brwsmenu.c:164
 msgid "^xb  ChngHist/back"
 msgstr "^xb  Ändrhist/bakåt"
 
-#: src/liflines/brwsmenu.c:164
+#: src/liflines/brwsmenu.c:165
 msgid "^xf  ChngHist/fwd"
 msgstr "^xf  Ändrhist/framåt"
 
-#: src/liflines/brwsmenu.c:165
+#: src/liflines/brwsmenu.c:166
 msgid "^xl  ChngHist list"
 msgstr "^xl  Ändrhistlista"
 
-#: src/liflines/brwsmenu.c:166
+#: src/liflines/brwsmenu.c:167
 msgid "^xc Clear ChngHist"
 msgstr "^xc  Töm Ändrhist"
 
-#: src/liflines/brwsmenu.c:168
+#: src/liflines/brwsmenu.c:169
 #, no-c-format
 msgid "%s  Add source"
 msgstr "%s  Lägg till källa"
 
-#: src/liflines/brwsmenu.c:170
+#: src/liflines/brwsmenu.c:171
 #, no-c-format
 msgid "%e  Add event"
 msgstr "%e  Lägg till händelse"
 
-#: src/liflines/brwsmenu.c:172
+#: src/liflines/brwsmenu.c:173
 #, no-c-format
 msgid "%o  Add other"
 msgstr "%o  Lägg till övrig"
 
-#: src/liflines/brwsmenu.c:175
+#: src/liflines/brwsmenu.c:176
 msgid "B  Browse new family"
 msgstr "B  Bläddra i ny familj"
 
-#: src/liflines/brwsmenu.c:488
+#: src/liflines/brwsmenu.c:489
 msgid "Missing title"
 msgstr "Titel saknas"
 
@@ -3346,15 +3366,16 @@ msgid "This is not a lineage linked GEDCOM file."
 msgstr "Detta är inte en anlänkad GEDCOM-fil."
 
 #: src/liflines/import.c:169
-msgid "Proceed anyway ?"
+msgid "Proceed anyway?"
 msgstr "Vill du fortsätta ändå?"
 
 #: src/liflines/import.c:184
 msgid "No current internal codeset, so no codeset conversion can be done"
-msgstr "Ingen aktuell intern teckenkodning, så ingen kodkonvertering kan utföras"
+msgstr ""
+"Ingen aktuell intern teckenkodning, så ingen kodkonvertering kan utföras"
 
 #: src/liflines/import.c:185
-msgid "Proceed without codeset conversion ?"
+msgid "Proceed without codeset conversion?"
 msgstr "Vill du fortsätta utan konvertering av teckenkodning?"
 
 #: src/liflines/import.c:202
@@ -3507,7 +3528,8 @@ msgstr "(sid %d/%d)"
 
 #: src/liflines/screen.c:1481
 msgid "Commands:  j Move down   k Move up  d Delete   i Select   q Quit"
-msgstr "Kommandon:  j Flytta ned   k Flytta upp  d Ta bort   i Välj   q Avsluta"
+msgstr ""
+"Kommandon:  j Flytta ned   k Flytta upp  d Ta bort   i Välj   q Avsluta"
 
 #: src/liflines/screen.c:1616
 msgid "No conversion"
@@ -3877,141 +3899,141 @@ msgid_plural "%6d Warnings"
 msgstr[0] "%6d varning"
 msgstr[1] "%6d varningar"
 
-#: src/liflines/valgdcom.c:980
+#: src/liflines/valgdcom.c:978
 #, c-format
 msgid "Processed %d lines without finding end of HEAD"
 msgstr "Behandlade %d rader utan att hitta slutet av HEAD"
 
-#: src/liflines/valgdcom.c:985
+#: src/liflines/valgdcom.c:983
 #, c-format
 msgid "End of file at line %d"
 msgstr "Filslut vid rad %d"
 
-#: src/liflines/valgdcom.c:989
+#: src/liflines/valgdcom.c:987
 #, c-format
 msgid "Error at line %d: %s"
 msgstr "Fel vid rad %d: %s"
 
-#: src/liflines/valgdcom.c:993
+#: src/liflines/valgdcom.c:991
 #, c-format
 msgid "Bad level at line %d"
 msgstr "Ogiltig nivå vid rad %d"
 
-#: src/liflines/valgdcom.c:999
+#: src/liflines/valgdcom.c:997
 #, c-format
 msgid "Duplicate HEAD line at line %d"
 msgstr "Dubblerad HEAD-rad vid rad %d"
 
-#: src/liflines/valgdcom.c:1005
+#: src/liflines/valgdcom.c:1003
 #, c-format
 msgid "Missing HEAD line at line %d"
 msgstr "HEAD-rad saknas vid rad %d"
 
-#: src/tools/dbverify.c:153
+#: src/tools/dbverify.c:159
 msgid "Orphan names"
 msgstr "Föräldralösa namn"
 
-#: src/tools/dbverify.c:154
+#: src/tools/dbverify.c:160
 msgid "Ghost names"
 msgstr "Spöknamn"
 
-#: src/tools/dbverify.c:155 src/tools/dbverify.c:156
+#: src/tools/dbverify.c:161 src/tools/dbverify.c:162
 msgid "Duplicate names"
 msgstr "Dubblerade namn"
 
-#: src/tools/dbverify.c:157
+#: src/tools/dbverify.c:163
 msgid "Non-indi names"
 msgstr "Icke-individnamn"
 
-#: src/tools/dbverify.c:158
+#: src/tools/dbverify.c:164
 msgid "Duplicate individuals"
 msgstr "Dubblerade individer"
 
-#: src/tools/dbverify.c:159
+#: src/tools/dbverify.c:165
 msgid "Duplicate families"
 msgstr "Dubblerade familjer"
 
-#: src/tools/dbverify.c:160
+#: src/tools/dbverify.c:166
 msgid "Duplicate sources"
 msgstr "Dubblerade källor"
 
-#: src/tools/dbverify.c:161
+#: src/tools/dbverify.c:167
 msgid "Duplicate events"
 msgstr "Dubblerade händelser"
 
-#: src/tools/dbverify.c:162
+#: src/tools/dbverify.c:168
 msgid "Duplicate others"
 msgstr "Dubblerade övriga"
 
-#: src/tools/dbverify.c:163
+#: src/tools/dbverify.c:169
 msgid "Missing records"
 msgstr "Saknade poster"
 
-#: src/tools/dbverify.c:164
+#: src/tools/dbverify.c:170
 msgid "Deleted records"
 msgstr "Borttagna poster"
 
-#: src/tools/dbverify.c:165
+#: src/tools/dbverify.c:171
 msgid "Bad name"
 msgstr "Ogiltigt namn"
 
-#: src/tools/dbverify.c:166
+#: src/tools/dbverify.c:172
 msgid "Bad family reference"
 msgstr "Ogiltig familjereferens"
 
-#: src/tools/dbverify.c:167
+#: src/tools/dbverify.c:173
 msgid "Missing child"
 msgstr "Saknat barn"
 
-#: src/tools/dbverify.c:168
+#: src/tools/dbverify.c:174
 msgid "Missing spouse"
 msgstr "Saknad maka/make"
 
-#: src/tools/dbverify.c:169
+#: src/tools/dbverify.c:175
 msgid "Bad HUSB reference"
 msgstr "Ogiltig HUSB-referens"
 
-#: src/tools/dbverify.c:170
+#: src/tools/dbverify.c:176
 msgid "Bad WIFE reference"
 msgstr "Ogiltig WIFE-referens"
 
-#: src/tools/dbverify.c:171
+#: src/tools/dbverify.c:177
 msgid "Bad CHIL reference"
 msgstr "Ogiltig CHIL-referens"
 
-#: src/tools/dbverify.c:172
+#: src/tools/dbverify.c:178
 msgid "Improper HUSB"
 msgstr "Felaktig HUSB"
 
-#: src/tools/dbverify.c:173
+#: src/tools/dbverify.c:179
 msgid "Improper WIFE"
 msgstr "Felaktig WIFE"
 
-#: src/tools/dbverify.c:174
+#: src/tools/dbverify.c:180
 msgid "Improper child"
 msgstr "Felaktigt barn"
 
-#: src/tools/dbverify.c:175
+#: src/tools/dbverify.c:181
 msgid "Empty family"
 msgstr "Tom familj"
 
-#: src/tools/dbverify.c:176
+#: src/tools/dbverify.c:182
 msgid "Single person family"
 msgstr "Familj med ensam person"
 
-#: src/tools/dbverify.c:177
+#: src/tools/dbverify.c:183
 msgid "Bad pointer"
 msgstr "Ogiltig pekare"
 
-#: src/tools/dbverify.c:206
+#: src/tools/dbverify.c:212
 msgid "\\My Documents\\LifeLines\\Databases\\MyFamily"
 msgstr "\\Mina Dokument\\LifeLines\\Databaser\\MinFamilj"
 
-#: src/tools/dbverify.c:208
+#: src/tools/dbverify.c:214
 msgid "/home/users/myname/lifelines/databases/myfamily"
 msgstr "/home/users/mittnamn/lifelines/databaser/minfamilj"
 
-#: src/tools/dbverify.c:213
+#: src/tools/dbverify.c:219
 msgid ""
 "usage: dbverify -(flags) <btree>\n"
 "flags:\n"
@@ -4037,169 +4059,201 @@ msgstr ""
 "\t-x = Kontrollera övriga\n"
 "\t-n = Bullrigt (eka alla behandlade poster)\n"
 
-#: src/tools/dbverify.c:225
+#: src/tools/dbverify.c:231
 #, c-format
 msgid "example: dbverify -ifsex \"%s\"\n"
 msgstr "exempel: dbverify -ifsex \"%s\"\n"
 
-#: src/tools/dbverify.c:341
+#: src/tools/dbverify.c:347
 #, c-format
 msgid "Non-indi name, key=%s, name=%s"
 msgstr "Icke-individnamn, nyckel=%s, namn=%s"
 
-#: src/tools/dbverify.c:355
+#: src/tools/dbverify.c:361
 #, c-format
 msgid "Orphaned name: %s"
 msgstr "Föräldralöst namn: %s"
 
-#: src/tools/dbverify.c:369
+#: src/tools/dbverify.c:375
 #, c-format
 msgid "Ghost name: %s -> %s"
 msgstr "Spöknamn: %s -> %s"
 
-#: src/tools/dbverify.c:401
+#: src/tools/dbverify.c:407
 #, c-format
 msgid "Orphaned refn: %s"
 msgstr "Föräldralöst refn: %s"
 
-#: src/tools/dbverify.c:439
+#: src/tools/dbverify.c:445
 #, c-format
 msgid "Duplicate name for %s (%s)"
 msgstr "Dubblerat namn för %s: (%s)"
 
-#: src/tools/dbverify.c:472
+#: src/tools/dbverify.c:478
 #, c-format
 msgid "Duplicate refn for %s (%s)"
 msgstr "Dubblerad refn för %s: (%s)"
 
-#: src/tools/dbverify.c:543
+#: src/tools/dbverify.c:549
 #, c-format
 msgid "Duplicate individual for %s"
 msgstr "Dubblerad individ för %s"
 
-#: src/tools/dbverify.c:553
+#: src/tools/dbverify.c:559
 #, c-format
 msgid "Bad name for individual %s: %s"
 msgstr "Ogiltigt namn för individ %s: %s"
 
-#: src/tools/dbverify.c:568 src/tools/dbverify.c:581
+#: src/tools/dbverify.c:574 src/tools/dbverify.c:587
 #, c-format
 msgid "Bad family reference (%s) individual %s"
 msgstr "Ogiltig familjereferens (%s) individ %s"
 
-#: src/tools/dbverify.c:572
+#: src/tools/dbverify.c:578
 #, c-format
 msgid "Missing child (%s) in family (%s)"
 msgstr "Saknat barn (%s) i familj (%s)"
 
-#: src/tools/dbverify.c:585
+#: src/tools/dbverify.c:591
 #, c-format
 msgid "Missing spouse (%s) in family (%s)"
 msgstr "Saknad maka/make (%s) i familj (%s)"
 
-#: src/tools/dbverify.c:609
+#: src/tools/dbverify.c:615
 #, c-format
 msgid "Duplicate family for %s"
 msgstr "Dubblerad familj för %s"
 
-#: src/tools/dbverify.c:627
+#: src/tools/dbverify.c:633
 #, c-format
 msgid "Bad HUSB reference (%s) in family %s"
 msgstr "Ogiltig HUSB-referens (%s) i familj %s"
 
-#: src/tools/dbverify.c:633
+#: src/tools/dbverify.c:639
 #, c-format
 msgid "Improper HUSB (%s) in family (%s)"
 msgstr "Felaktig HUSB (%s) i familj (%s)"
 
-#: src/tools/dbverify.c:645
+#: src/tools/dbverify.c:651
 #, c-format
 msgid "Bad wife reference (%s) in family %s"
 msgstr "Ogiltig referens till maka (%s) i familj %s"
 
-#: src/tools/dbverify.c:651
+#: src/tools/dbverify.c:657
 #, c-format
 msgid "Improper wife (%s) in family (%s)"
 msgstr "Felaktig maka (%s) i familj (%s)"
 
-#: src/tools/dbverify.c:663
+#: src/tools/dbverify.c:669
 #, c-format
 msgid "Bad child reference (%s) in family %s"
 msgstr "Ogiltig referens till barn (%s) i familj %s"
 
-#: src/tools/dbverify.c:669
+#: src/tools/dbverify.c:675
 #, c-format
 msgid "Improper child (%s) in family (%s)"
 msgstr "Felaktigt barn (%s) i familj (%s)"
 
-#: src/tools/dbverify.c:677
+#: src/tools/dbverify.c:683
 #, c-format
 msgid "Empty family (%s)"
 msgstr "Tom familj (%s)"
 
-#: src/tools/dbverify.c:679
+#: src/tools/dbverify.c:685
 #, c-format
 msgid "Single person family (%s)"
 msgstr "Familj med ensam person (%s)"
 
-#: src/tools/dbverify.c:696
+#: src/tools/dbverify.c:702
 #, c-format
 msgid "Duplicate source for %s"
 msgstr "Dubblerad källa för %s"
 
-#: src/tools/dbverify.c:712
+#: src/tools/dbverify.c:718
 #, c-format
 msgid "Duplicate event for %s"
 msgstr "Dubblerad händelse för %s"
 
-#: src/tools/dbverify.c:728
+#: src/tools/dbverify.c:734
 #, c-format
 msgid "Duplicate record for %s"
 msgstr "Dubblerad post för %s"
 
-#: src/tools/dbverify.c:799
+#: src/tools/dbverify.c:805
 #, c-format
 msgid "Bad pointer (in %s): %s"
 msgstr "Felaktig pekare (i %s): %s"
 
-#: src/tools/dbverify.c:822
+#: src/tools/dbverify.c:828
 #, c-format
 msgid "Missing undeleted record %c%d"
 msgstr "Saknad återskapad post %c%d"
 
-#: src/tools/dbverify.c:831
+#: src/tools/dbverify.c:837
 #, c-format
 msgid "Delete set contains valid record %s"
 msgstr "Uppsättning för borttagning innehåller giltig post %s"
 
-#: src/tools/dbverify.c:848
+#: src/tools/dbverify.c:856
+#, c-format
+msgid "Master fkey misaligned (%d != %d)\n"
+msgstr "Huvud-fkey felpositionerad (%d != %d)\n"
+
+#: src/tools/dbverify.c:878
+#, c-format
+msgid "Error loading index at key %d\n"
+msgstr "Fel vid inläsning av position vid nyckel %d\n"
+
+#: src/tools/dbverify.c:923
+msgid "First key in block below parent's limit\n"
+msgstr "Första nyckel i block under förälders gräns\n"
+
+#: src/tools/dbverify.c:931
+msgid "Last key in block above parent's limit\n"
+msgstr "Sista nyckel i block under förälders gräns\n"
+
+#: src/tools/dbverify.c:939
+#, c-format
+msgid "Key %d not below next key\n"
+msgstr "Nyckel %d inte under nästa nyckel\n"
+
+#: src/tools/dbverify.c:955 src/tools/dbverify.c:957
+msgid "data block"
+msgstr "datablock"
+
+#: src/tools/dbverify.c:958
+#, c-format
+msgid "%s fkey=%d, file=%s"
+msgstr "%s fkey=%d, fil=%s"
+
+#: src/tools/dbverify.c:971
 #, c-format
 msgid "Invalid errs array[%d] in dbverify - fix program\n"
 msgstr "Ogiltig felvektor[%d] i dbverify - laga programmet\n"
 
-#: src/tools/dbverify.c:979
+#: src/tools/dbverify.c:1115
 #, c-format
 msgid "%d error"
 msgid_plural "%d errors"
 msgstr[0] "%d fel"
 msgstr[1] "%d fel"
 
-#: src/tools/dbverify.c:983
+#: src/tools/dbverify.c:1119
 #, c-format
 msgid "%d fixed"
 msgid_plural "%d fixed"
 msgstr[0] "%d lagad"
 msgstr[1] "%d lagade"
 
-#: src/tools/dbverify.c:990
+#: src/tools/dbverify.c:1126
 msgid "No errors found"
 msgstr "Inga fel hittades"
 
-#: src/tools/dbverify.c:1001
+#: src/tools/dbverify.c:1137
 msgid "FATAL ERROR: "
 msgstr "ÖDESDIGERT FEL"
 
-#: src/tools/dbverify.c:1006
+#: src/tools/dbverify.c:1142
 #, c-format
 msgid "In file <%s> at line %d"
 msgstr "I filen <%s> vid rad %d"
