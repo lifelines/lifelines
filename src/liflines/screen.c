@@ -1882,7 +1882,7 @@ invoke_cset_display (void)
 		enqueue_list(list, strsave(zs_str(zstr)));
 	}
 
-	zs_setf(zstr, "TTDIR: %s", getoptstr("TTDIR", ""));
+	zs_setf(zstr, "TTPATH: %s", getoptstr("TTPATH", ""));
 	enqueue_list(list, strsave(zs_str(zstr)));
 
 	display_list(_("Codeset information"), list);
@@ -2022,7 +2022,7 @@ load_tt_action (void)
 	}
 
 	/* Ask whence to load it */
-	ttimportdir = getoptstr("TTDIR", ".");
+	ttimportdir = getoptstr("TTPATH", ".");
 	fp = ask_for_input_file(LLREADTEXT, _(qSmintt), &fname, ttimportdir, ".tt");
 	if (fp) {
 		fclose(fp);
