@@ -1743,8 +1743,10 @@ interp_call (PNODE node, SYMTAB stab, PVALUE *pval)
 	}
 
 call_leave:
-	remove_symtab(newstab);
-	newstab = NULL;
+	if (newstab) {
+		remove_symtab(newstab);
+		newstab = NULL;
+	}
 	return irc;
 }
 /*==============================================+

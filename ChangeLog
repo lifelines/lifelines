@@ -29,6 +29,9 @@
 	Fix ancestor_indiseq to handle extra parents.
 	Fixes sf bug#1102138 (ancestorset doesn't include extra parents)
 
+	* ChangeLog src/interp/interp.c
+
+	Fix interp_call to avoid ASSERT trying to delete empty symtab.
 
 2005-01-13 Perry Rapp
 
