@@ -115,6 +115,7 @@ PVALUE create_pvalue_from_cel(INT type, CACHEEL cel);
 PVALUE create_pvalue_from_float(float fval);
 PVALUE create_pvalue_from_even_keynum(INT i);
 PVALUE create_pvalue_from_fam(NODE fam);
+PVALUE create_pvalue_from_fam_key(STRING key);
 PVALUE create_pvalue_from_fam_keynum(INT i);
 PVALUE create_pvalue_from_indi(NODE indi);
 PVALUE create_pvalue_from_indi_key(STRING key);

@@ -424,6 +424,15 @@ create_pvalue_from_indi_key (STRING key)
 	return create_pvalue_from_key_impl(key, PINDI);
 }
 /*=====================================================
+ * create_pvalue_from_fam_key
+ *  handles NULL
+ *===================================================*/
+PVALUE
+create_pvalue_from_fam_key (STRING key)
+{
+	return create_pvalue_from_key_impl(key, PFAM);
+}
+/*=====================================================
  * create_pvalue_from_cel
  * Created: 2002/02/17, Perry Rapp
  *===================================================*/

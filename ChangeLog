@@ -1,3 +1,11 @@
+2003-12-03 Perry Rapp
+
+	* ChangeLog src/hdrs/pvalue.h src/interp/builtin.c
+	src/interp/pvalue.c
+
+	Fix __fam to go through cache, rather than direct data access.
+	This fixes sf bug#852986 "partition missing all families!".
+
 2003-11-30 Perry Rapp
 
 	* ChangeLog src/gedlib/charprops.c

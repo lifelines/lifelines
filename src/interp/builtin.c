@@ -3439,16 +3439,8 @@ __indi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	*q = 0;
 	delete_pvalue(val);
 	if (strlen(scratch) == 1) return NULL;
-/*
- *	rawrec = (STRING) retrieve_raw_record(scratch, &len);
- *	if (rawrec && len > 6)
- *		val = create_pvalue(PINDI, (VPTR)key_to_indi_cacheel(scratch));
- *	else
- *		val = create_pvalue(PINDI, NULL);
- *	if (rawrec) stdfree(rawrec);
- */
+
 	val = create_pvalue_from_indi_key(scratch);
-/* 	val = create_pvalue(PINDI, (VPTR)qkey_to_indi_cacheel(scratch)); */
 	return val;
 }
 /*===========================+
@@ -3458,9 +3450,9 @@ __indi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __fam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	STRING str, rawrec;
+	STRING str;
 	char scratch[200], *p, *q = scratch;
-	INT c, len;
+	INT c;
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
 	if (*eflg) {
 		prog_error(node, nonstr1, "fam");
@@ -3480,13 +3472,8 @@ __fam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	*q = 0;
 	delete_pvalue(val);
 	if (strlen(scratch) == 1) return NULL;
-	/* TODO - use gedlib layer code as in __indi above */
-	rawrec = retrieve_raw_record(scratch, &len);
-	if (rawrec && len > 6)
-		val = create_pvalue(PFAM, key_to_fam_cacheel(scratch));
-	else
-		val = create_pvalue(PFAM, NULL);
-	if (rawrec) stdfree(rawrec);
+
+	val = create_pvalue_from_fam_key(scratch);
 	return val;
 }
 /*=======================================+
