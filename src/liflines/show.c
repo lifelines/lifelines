@@ -463,8 +463,10 @@ init_display_fam (RECORD frec, INT width)
 	if (fam) {
 	    fnode = nchild(fam);
 	    husbstatus = next_spouse(&fnode,&ihusb);
-	    fnode = nsibling(fnode);
-	    wifestatus = next_spouse(&fnode,&iwife);
+		if (fnode) {
+		    fnode = nsibling(fnode);
+		    wifestatus = next_spouse(&fnode,&iwife);
+		}
 
 	    husb = nztop(ihusb);
 	    wife = nztop(iwife);

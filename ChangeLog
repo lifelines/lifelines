@@ -16,6 +16,11 @@
 	Fix remove_spouse for removing spouse of unknown gender.
 	Fixes sf bug#1097608 (Deleting spouse of unknown sex in family)
 
+	* ChangeLog src/liflines/show.c
+
+	Handle zero parent families gracefully.
+	Fixes sf bug#1097631 (Crash in zero parent family)
+
 2005-01-06 Perry Rapp
 
 	* ChangeLog src/liflines/main.c
