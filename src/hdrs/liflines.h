@@ -15,15 +15,11 @@ typedef INT CONFIRMQ;
 NODE ask_for_fam(STRING, STRING);
 FILE *ask_for_input_file (STRING mode, STRING ttl, STRING *pfname, STRING path, STRING ext);
 FILE *ask_for_output_file (STRING mode, STRING ttl, STRING *pfname, STRING path, STRING ext);
-STRING ask_for_lldb (STRING ttl, STRING prmpt, STRING basedir);
-FILE *ask_for_program(STRING, STRING, STRING*, STRING, STRING);
 STRING ask_for_indi_key(STRING, CONFIRMQ, BOOLEAN);
 INDISEQ ask_for_indi_list(STRING, BOOLEAN);
 INT ask_for_int(STRING);
 BOOLEAN ask_yes_or_no_msg(STRING, STRING);
-INT ask_for_char(STRING, STRING, STRING);
-INT ask_for_char_msg(STRING, STRING, STRING, STRING);
-STRING ask_for_string(STRING, STRING);
+
 INT choose_from_list(STRING, INT, STRING*);
 INDISEQ choose_list_from_indiseq(STRING, INDISEQ);
 INT choose_one_from_indiseq(STRING, INDISEQ);
@@ -31,6 +27,9 @@ NODE format_and_choose_indi(INDISEQ, BOOLEAN, STRING, STRING);
 NODE format_and_choose_spouse(INDISEQ, BOOLEAN, STRING, STRING);
 NODE format_and_choose_fam(INDISEQ, BOOLEAN, STRING, STRING);
 NODE format_and_choose_generic(INDISEQ, BOOLEAN, STRING, STRING);
+
+/* from askprogram.c */
+FILE *ask_for_program(STRING, STRING, STRING*, STRING, STRING);
 
 /* from valgdcom.c */
 BOOLEAN pointer_value(STRING);
