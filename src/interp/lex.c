@@ -76,6 +76,7 @@ int lowyylex ()
 	INT c, t, retval, mul;
 	extern INT Yival;
 	extern FLOAT Yfval;
+	extern YYSTYPE yylval;
 	static unsigned char tokbuf[200];	/* token buffer */
 	STRING p = tokbuf;
 	while (TRUE) {
