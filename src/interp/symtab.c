@@ -109,10 +109,6 @@ delete_symtab_element (SYMTAB stab, STRING iden)
 void
 remove_symtab (SYMTAB stab)
 {
-	CNSTRING key=0;
-	VPTR ptr=0;
-	TABLE_ITER tabit=0;
-
 	ASSERT(stab);
 
 	record_dead_symtab(stab);

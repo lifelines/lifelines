@@ -26,6 +26,10 @@
 
 	Remove unneeded include.
 
+	* ChangeLog src/interp/symtab.c
+
+	Remove unused locals in remove_symtab.
+
 2005-02-26 Perry Rapp
 
 	* ChangeLog src/stdlib/rbtree.c src/stdlib/rbtree.h
