@@ -652,12 +652,12 @@ custom_translate (ZSTR zstr, TRANTABLE tt)
  * Created: 2001/07/21 (Perry Rapp)
  *=================================================*/
 BOOLEAN
-custom_sort (char *str1, char *str2, INT * rtn)
+custom_sort (const char *str1, const char *str2, INT * rtn)
 {
 	TRANTABLE tts = transl_get_legacy_tt(MSORT);
 	TRANTABLE ttc = transl_get_legacy_tt(MCHAR);
 	CNSTRING rep1, rep2;
-	STRING ptr1=str1, ptr2=str2;
+	CNSTRING ptr1=str1, ptr2=str2;
 	INT len1, len2;
 	if (!tts) return FALSE;
 /* This was an attempt at handling skip-over prefixes (eg, Mc) */

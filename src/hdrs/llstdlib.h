@@ -88,10 +88,10 @@ void remove_listeners(LIST * notifiees);
 void get_current_lldate(LLDATE * creation);
 
 /* llstrcmp.c */
-int ll_strcmploc(char*, char*);
+int ll_strcmploc(const char*, const char*);
 CNSTRING ll_what_collation(void);
-int ll_strncmp(char*, char*, int);
-typedef BOOLEAN (*usersortfnc)(char *str1, char *str2, INT * rtn);
+int ll_strncmp(const char*, const char*, int);
+typedef BOOLEAN (*usersortfnc)(const char *str1, const char *str2, INT * rtn);
 void set_usersort(usersortfnc fnc);
 
 /* memalloc.c */

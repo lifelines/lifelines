@@ -6,6 +6,19 @@
 
 	Cleanup some corrupted line feeds.	
 
+	* ChangeLog build/msvc6/llines/llinesprj.dsp src/btree/file.c
+	src/btree/record.c src/gedlib/charmaps.c src/gedlib/indiseq.c
+	src/gedlib/intrface.c src/gedlib/names.c src/gedlib/refns.c
+	src/gedlib/replace.c src/hdrs/btree.h src/hdrs/gedcom.h
+	src/hdrs/icvt.h src/hdrs/llstdlib.h src/hdrs/pvalue.h
+	src/hdrs/table.h src/hdrs/translat.h src/interp/alloc.c
+	src/interp/builtin.c src/interp/pvalue.c src/liflines/scan.c
+	src/stdlib/environ.c src/stdlib/icvt.c src/stdlib/llstrcmp.c
+	win32/intlshim.c
+
+	Split soundex code into soundex.c (& rename trad_soundex).
+	Some const fixes. Pass rkey pointers instead of values.
+
 2003-09-14 Jens Arvidsson
 
 	* ChangeLog po/sv.po

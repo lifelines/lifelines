@@ -1068,9 +1068,9 @@ pvalue_to_seq (PVALUE val)
  * PSTRING: pvalue containing a string
  *================================*/
 PVALUE
-create_pvalue_from_string (STRING str)
+create_pvalue_from_string (CNSTRING str)
 {
-	return create_pvalue(PSTRING, str);
+	return create_pvalue(PSTRING, (VPTR)str);
 }
 void
 set_pvalue_string (PVALUE val, CNSTRING str)

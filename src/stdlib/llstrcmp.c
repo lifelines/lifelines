@@ -34,7 +34,7 @@ extern int opt_finnish;
 static usersortfnc usersort = 0;
 
 
-static BOOLEAN widecmp(char *str1, char *str2, INT *rtn);
+static BOOLEAN widecmp(CNSTRING str1, CNSTRING str2, INT *rtn);
 
 /*===================================================
  * ll_strcmp -- Compare two strings
@@ -62,7 +62,7 @@ ll_strcmp (char *str1, char *str2)
  * Created: 2001/07/21 (Perry Rapp)
  *=================================================*/
 int
-ll_strcmploc (char *str1, char *str2)
+ll_strcmploc (const char *str1, const char *str2)
 {
 	INT rtn;
 
@@ -123,7 +123,7 @@ ll_what_collation (void)
  * TO DO - review this for localization
  *=================================================*/
 int
-ll_strncmp (char *str1, char *str2, int len)
+ll_strncmp (const char *str1, const char *str2, int len)
 {
 	if(opt_finnish) return(MY_STRNCMP(str1, str2, len));
 	/* TO DO - scan thru letters with custom sort order */
@@ -142,7 +142,7 @@ set_usersort (usersortfnc fnc)
  * widecmp -- Perform unicode string comparison, if available
  *=================================================*/
 static BOOLEAN
-widecmp (char *str1, char *str2, INT *rtn)
+widecmp (CNSTRING str1, CNSTRING str2, INT *rtn)
 {
 	ZSTR zws1=0, zws2=0;
 	BOOLEAN success = FALSE;

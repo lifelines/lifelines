@@ -66,6 +66,9 @@ replace_indi (NODE indi1, NODE indi2)
 	indi_to_dbase(indi1);
 	key = rmvat(nxref(indi1));
 	/* update name & refn info */
+	/* classify does a diff on its first two arguments, repopulating all three
+	arguments -- first is left-only, second is right-only, third is shared */
+	/* Note: classify eliminates duplicates */
 	classify_nodes(&name1, &namen, &name1n);
 	classify_nodes(&refn1, &refnn, &refn1n);
 	for (node = name1; node; node = nsibling(node))

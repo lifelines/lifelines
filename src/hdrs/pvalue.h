@@ -124,7 +124,7 @@ PVALUE create_pvalue_from_node(NODE node);
 PVALUE create_pvalue_from_othr_keynum(INT i);
 PVALUE create_pvalue_from_set(INDISEQ seq);
 PVALUE create_pvalue_from_sour_keynum(INT i);
-PVALUE create_pvalue_from_string(STRING str);
+PVALUE create_pvalue_from_string(CNSTRING str);
 ZSTR describe_pvalue(PVALUE);
 void delete_vptr_pvalue(VPTR ptr);
 void delete_pvalue(PVALUE);

@@ -66,8 +66,8 @@ static INT REFNSCAN=2;
  * local function prototypes
  *********************************************/
 
-static BOOLEAN pattern_match(SCAN_PATTERN *patt, STRING name);
-static BOOLEAN ns_callback(STRING key, STRING name, BOOLEAN newset, void *param);
+static BOOLEAN pattern_match(SCAN_PATTERN *patt, CNSTRING name);
+static BOOLEAN ns_callback(CNSTRING key, CNSTRING name, BOOLEAN newset, void *param);
 static BOOLEAN rs_callback(STRING key, STRING refn, BOOLEAN newset, void *param);
 static BOOLEAN set_pattern(SCAN_PATTERN * patt, STRING str, INT scantype);
 static RECORD name_scan(INT scantype, STRING sts);
@@ -87,7 +87,7 @@ static INDISEQ results_seq;
  * pattern_match -- Compare a name to a pattern
  *===========================================*/
 static BOOLEAN
-pattern_match (SCAN_PATTERN *patt, STRING name)
+pattern_match (SCAN_PATTERN *patt, CNSTRING name)
 {
 	return (fpattern_matchn(patt->string, name));
 }
@@ -95,7 +95,7 @@ pattern_match (SCAN_PATTERN *patt, STRING name)
  * ns_callback -- callback for name traversal
  *=========================================*/
 static BOOLEAN
-ns_callback (STRING key, STRING name, BOOLEAN newset, void *param)
+ns_callback (CNSTRING key, CNSTRING name, BOOLEAN newset, void *param)
 {
 	LIST list;
 	INT len, ind;

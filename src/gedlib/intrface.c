@@ -42,7 +42,8 @@ extern BTREE BTR;
 STRING
 retrieve_raw_record (CNSTRING key, INT *plen)
 {
-	return getrecord(BTR, str2rkey(key), plen);
+	RKEY rkey = str2rkey(key);
+	return getrecord(BTR, &rkey, plen);
 }
 /*=========================================
  * store_record -- Store record in database

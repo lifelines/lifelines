@@ -1560,7 +1560,7 @@ name_to_indiseq (STRING name)
 	char scratch[MAXLINELEN+1];
 	if (!name || *name == 0) return NULL;
 	if (*name != '*') {
-		get_names(name, &num, &keys, TRUE);
+		get_names(name, &num, &keys);
 		if (num == 0) return NULL;
 		seq = create_indiseq_null();
 		for (i = 0; i < num; i++)
@@ -1575,7 +1575,7 @@ name_to_indiseq (STRING name)
 	for (c = 'a'-1; c <= lastchar; c++) {
 		if(opt_finnish && !lat1_islower(c)) continue;
 		scratch[0] = c;
-		get_names(scratch, &num, &keys, TRUE);
+		get_names(scratch, &num, &keys);
 		if (num == 0) continue;
 		if (!made) {
 			seq = create_indiseq_null();
@@ -1586,7 +1586,7 @@ name_to_indiseq (STRING name)
 		}
 	}
 	scratch[0] = '$';
-	get_names(scratch, &num, &keys, TRUE);
+	get_names(scratch, &num, &keys);
 	if (num) {
 		if (!made) {
 			seq = create_indiseq_null();

@@ -151,7 +151,7 @@ getrefnrec (STRING refn)
 /* Convert refn to key and read refn record */
 	RRkey = refn2rkey(refn);
 	if (RRrec) stdfree(RRrec);
-	p = RRrec = getrecord(BTR, RRkey, &RRsize);
+	p = RRrec = getrecord(BTR, &RRkey, &RRsize);
 	if (!RRrec) {
 		RRcount = 0;
 		if (RRmax == 0) {

@@ -396,7 +396,7 @@ __surname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	NODE name, indi = eval_indi(arg, stab, eflg, NULL);
-	STRING str;
+	CNSTRING str;
 
 	if (*eflg) {
 		prog_var_error(node, stab, arg, NULL, nonvar1, "surname");
@@ -436,7 +436,7 @@ __soundex (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		}
 		return create_pvalue_from_string(0);
 	}
-	return create_pvalue_from_string(soundex(getsxsurname(nval(name))));
+	return create_pvalue_from_string(trad_soundex(getsxsurname(nval(name))));
 }
 /*===========================================+
  * __strsoundex -- SOUNDEX function on strings
@@ -447,14 +447,14 @@ __strsoundex (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE newval, val = NULL;
-	STRING str;
+	CNSTRING str;
 	val = eval_and_coerce(PSTRING, arg, stab, eflg);
 	if (*eflg) {
 		prog_var_error(node, stab, arg, val, nonstr1, "strsoundex");
 		delete_pvalue(val);
 		return NULL;
 	}
-	str = soundex(pvalue_to_string(val));
+	str = trad_soundex(pvalue_to_string(val));
 	newval = create_pvalue_from_string(str);
 	delete_pvalue(val);
 	return newval;
@@ -628,7 +628,7 @@ __givens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	NODE name, indi = eval_indi(arg, stab, eflg, NULL);
-	STRING str;
+	CNSTRING str;
 	if (*eflg) {
 		prog_var_error(node, stab, arg, NULL, _(nonindx), "givens", "1");
 		return NULL;

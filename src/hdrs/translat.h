@@ -56,7 +56,7 @@ typedef struct tag_xlat *XLAT;
 CNSTRING transl_get_map_name(INT trnum);
 TRANTABLE create_trantable(STRING *lefts, STRING *rights, INT n, STRING name);
 BOOLEAN init_map_from_rec(CNSTRING key, INT trnum, TRANTABLE*);
-BOOLEAN custom_sort(char *str1, char *str2, INT * rtn);
+BOOLEAN custom_sort(const char *str1, const char *str2, INT * rtn);
 ZSTR get_trantable_desc(TRANTABLE tt);
 void remove_trantable(TRANTABLE);
 void translate_catn(XLAT ttm, STRING * pdest, CNSTRING src, INT * len);

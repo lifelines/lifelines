@@ -49,22 +49,29 @@ extern BTREE BTR;
  * local function prototypes
  *********************************************/
 
-static void cmpsqueeze(STRING, STRING);
-static BOOLEAN exactmatch(STRING, STRING);
-static STRING getsurname_impl(STRING name);
-static void name_to_parts(STRING, STRING*);
-static RKEY name2rkey(STRING);
-static STRING nextpiece(STRING);
+static void add_namekey(const RKEY * rkeyname, CNSTRING name, const RKEY * rkeyid);
+static void cmpsqueeze(CNSTRING, STRING);
+static BOOLEAN exactmatch(CNSTRING, CNSTRING);
+static void flush_name_cache();
+static INT getfinitial(CNSTRING);
+static void getnamerec(const RKEY * rkey);
+static CNSTRING getsurname_impl(CNSTRING name);
+static STRING name_surfirst(STRING);
+static void name_to_parts(CNSTRING, STRING*);
+static void name2rkey(CNSTRING, RKEY *);
+static CNSTRING nextpiece(CNSTRING);
 static STRING parts_to_name(STRING*);
-static void squeeze(STRING, STRING);
-static INT sxcodeof(int);
+static BOOLEAN piecematch(STRING, STRING);
+static void remove_namekey(const RKEY * rkeyname, CNSTRING name, const RKEY * rkeyid);
+static void rkey_cpy(const RKEY * src, RKEY * dest);
+static BOOLEAN rkey_eq(const RKEY * rkey1, const RKEY * rkey2);
+static void soundex2rkey(char finitial, CNSTRING sdex, RKEY * rkey);
+static void squeeze(CNSTRING, STRING);
 static STRING upsurname(STRING);
 
 /*********************************************
  * local variables
  *********************************************/
-
-static INT oldsx = 0;
 
 /*===================================================================
  * name records -- Name indexing information is kept in the database
@@ -92,7 +99,7 @@ static INT oldsx = 0;
  *   INT    *NRoffs  - char offsets to names in current name
  *			  record
  *   RKEY   *NRkeys  - RKEYs of the INDI records with the names
- *   STRING *NRnames - name values from INDI records that the
+ *   CNSTRING *NRnames - name values from INDI records that the
  *			  index is based upon
  *   INT     NRmax   - max allocation size of internal arrays
  *-------------------------------------------------------------------
@@ -111,7 +118,7 @@ static INT     NRsize;
 static INT     NRcount;
 static INT    *NRoffs;
 static RKEY   *NRkeys;
-static STRING *NRnames;
+static CNSTRING *NRnames;
 static INT     NRmax = 0;
 
 static STRING *LMkeys = NULL;
@@ -127,10 +134,10 @@ static INT     LMmax = 0;
  * parsenamerec -- Store name rec in file buffers
  *==================================================*/
 static void
-parsenamerec (RKEY rkey, STRING p)
+parsenamerec (const RKEY * rkey, CNSTRING p)
 {
 	INT i;
-	NRkey = rkey;
+	rkey_cpy(rkey, &NRkey);
 /* Store name record in data structures */
 	memcpy (&NRcount, p, sizeof(INT));
 	ASSERT(NRcount < 1000000); /* 1000000 names in a given slot ? */
@@ -139,7 +146,7 @@ parsenamerec (RKEY rkey, STRING p)
 		if (NRmax != 0) {
 			stdfree(NRkeys);
 			stdfree(NRoffs);
-			stdfree(NRnames);
+			stdfree((STRING)NRnames);
 		}
 		NRmax = NRcount + 10;
 		NRkeys = (RKEY *) stdalloc((NRmax)*sizeof(RKEY));
@@ -160,44 +167,86 @@ parsenamerec (RKEY rkey, STRING p)
 /*====================================================
  * getnamerec -- Read name record and store in file buffers
  *==================================================*/
-static BOOLEAN
-getnamerec (STRING name)
+static void
+getnamerec (const RKEY * rkey)
 {
 	STRING p;
-/* Convert name to key and read name record */
-	NRkey = name2rkey(name);
-	if (NRrec) stdfree(NRrec);
-	p = NRrec = getrecord(BTR, NRkey, &NRsize);
+/* TODO: enable this cache (but must add code to flush it
+across database reloads
+
+	if (NRrec && eqrkey(rkey, &NRKEY))
+		return NRcount>0;
+*/
+	rkey_cpy(rkey, &NRkey);
+	strfree(&NRrec);
+	p = NRrec = getrecord(BTR, rkey, &NRsize);
 	if (!NRrec) {
 		NRcount = 0;
 		if (NRmax == 0) {
+			
 			NRmax = 10;
 			NRkeys = (RKEY *) stdalloc(10*sizeof(RKEY));
 			NRoffs = (INT *) stdalloc(10*sizeof(INT));
 			NRnames = (STRING *) stdalloc(10*sizeof(STRING));
 		}
-		return FALSE;
 	}
-	parsenamerec(NRkey, p);
-	return TRUE;
+	parsenamerec(rkey, p);
 }
 /*============================================
  * name2rkey - Convert name to name record key
  *==========================================*/
-static RKEY
-name2rkey (STRING name)
+static void
+name2rkey (CNSTRING name, RKEY * rkey)
 {
-	RKEY rkey;
-	STRING sdex = soundex(getsxsurname(name));
+	CNSTRING sdex = trad_soundex(getsxsurname(name));
 	char finitial = getfinitial(name);
-	rkey.r_rkey[0] = rkey.r_rkey[1] = ' ';
-	rkey.r_rkey[2] = 'N';
-	rkey.r_rkey[3] = finitial;
-	rkey.r_rkey[4] = *sdex++;
-	rkey.r_rkey[5] = *sdex++;
-	rkey.r_rkey[6] = *sdex++;
-	rkey.r_rkey[7] = *sdex;
-	return rkey;
+	rkey->r_rkey[0] = rkey->r_rkey[1] = ' ';
+	rkey->r_rkey[2] = 'N';
+	rkey->r_rkey[3] = finitial;
+	rkey->r_rkey[4] = *sdex++;
+	rkey->r_rkey[5] = *sdex++;
+	rkey->r_rkey[6] = *sdex++;
+	rkey->r_rkey[7] = *sdex;
+}
+/*============================================
+ * soundex2rkey - Convert soundex coded name to name record key
+ *==========================================*/
+static void
+soundex2rkey (char finitial, CNSTRING sdex, RKEY * rkey)
+{
+	rkey->r_rkey[0] = rkey->r_rkey[1] = ' ';
+	rkey->r_rkey[2] = 'N';
+	rkey->r_rkey[3] = finitial;
+	rkey->r_rkey[4] = *sdex++;
+	rkey->r_rkey[5] = *sdex++;
+	rkey->r_rkey[6] = *sdex++;
+	rkey->r_rkey[7] = *sdex;
+}
+/*============================================
+ * eqrkey - Are two rkeys the same ?
+ *==========================================*/
+static BOOLEAN
+rkey_eq (const RKEY * rkey1, const RKEY * rkey2)
+{
+	INT i;
+	for (i=0; i<7; ++i)
+	{
+		if (rkey1->r_rkey[i] != rkey2->r_rkey[i])
+			return FALSE;
+	}
+	return TRUE;
+}
+/*============================================
+ * eqrkey - Are two rkeys the same ?
+ *==========================================*/
+static void
+rkey_cpy (const RKEY * src, RKEY * dest)
+{
+	INT i;
+	for (i=0; i<sizeof(src->r_rkey); ++i)
+	{
+		dest->r_rkey[i] = src->r_rkey[i];
+	}
 }
 /*=======================================
  * name_lo - Lower limit for name records
@@ -234,8 +283,8 @@ name_hi (void)
  *  But may need to disambiguate name index use
  *  b/c that needs an isletter that is locale-independent
  *====================================================*/
-static STRING
-getsurname_impl (STRING name)
+static CNSTRING
+getsurname_impl (CNSTRING name)
 {
 	INT c;
 	static char buffer[3][MAXLINELEN+1];
@@ -264,10 +313,10 @@ getsurname_impl (STRING name)
  * This funtion returns ____ if first non-white character
  * surname is not a letter.
  *===========================*/
-STRING
-getsxsurname (STRING name)        /* GEDCOM name */
+CNSTRING
+getsxsurname (CNSTRING name)        /* GEDCOM name */
 {
-	STRING surnm = getsurname_impl(name);
+	CNSTRING surnm = getsurname_impl(name);
 	/* screen out missing surnames, or ones beginning with puncutation */
 	if (!surnm || (isascii(surnm[0]) && !isletter(surnm[0])))
 		return (STRING) "____";
@@ -280,10 +329,10 @@ getsxsurname (STRING name)        /* GEDCOM name */
  * The alternative is getsxsurname above.
  *  returns static buffer
  *===========================*/
-STRING
-getasurname (STRING name)   /* GEDCOM name */
+CNSTRING
+getasurname (CNSTRING name)   /* GEDCOM name */
 {
-	STRING surnm = getsurname_impl(name);
+	CNSTRING surnm = getsurname_impl(name);
 	if (!surnm)
 		return (STRING) "____";
 	return surnm;
@@ -293,8 +342,8 @@ getasurname (STRING name)   /* GEDCOM name */
  *  name:  [in] GEDCOM name
  *  TODO: convert to Unicode
  *==========================================*/
-INT
-getfinitial (STRING name)
+static INT
+getfinitial (CNSTRING name)
 {
 	INT c;
 	while (TRUE) {
@@ -303,121 +352,71 @@ getfinitial (STRING name)
 		if (isletter(c)) return ll_toupper(c);
 		if (c == 0) return '$';
 		if (c != NAMESEP) return '$';
+		/* hit surname before finding finitial, so skip over surname */
 		while ((c = (uchar)*name++) && c != NAMESEP)
 			;
 		if (c == 0) return '$';
 	}
-}
-/*========================================
- * soundex -- Return name's SOUNDEX code.
- *  returns static buffer
- *======================================*/
-STRING
-soundex (STRING name)   /* surname */
-{
-	static char scratch[6];
-	STRING p = name, q = scratch;
-	INT c, i, j;
-	if (!name || !name[0] || eqstr(name, "____"))
-		return (STRING) "Z999";
-	/* always copy first letter directly */
-	*q++ = ll_toupper((uchar)*p++);
-	i = 1;
-	oldsx = 0;
-	while (*p && (c = ll_toupper((uchar)*p++)) && i < 4) {
-		if ((j = sxcodeof(c)) == 0) continue;
-		*q++ = j;
-		i++;
-	}
-	while (i < 4) {
-		*q++ = '0';
-		i++;
-	}
-	*q = 0;
-	return scratch;
-}
-/*========================================
- * sxcodeof -- Return letter's SOUNDEX code.
- *  letter:  should be capitalized letter
- * returns soundex code, or 0 if not coded
- * Also returns 0 if same as last call (uses static oldsx variable).
- * Note that Finnish version uses a different SOUNDEX
- * scheme here, making databases (name indices)
- * not portable between Finnish & normal LifeLines.
- *======================================*/
-static INT
-sxcodeof (int letter)
-{
-	int newsx = 0;
-
-	if(opt_finnish) {
-	/* Finnish Language */
-		switch (letter) {
-		case 'B': case 'P': case 'F': case 'V': case 'W':
-			newsx = '1'; break;
-		case 'C': case 'S': case 'K': case 'G': case '\337':
-		case 'J': case 'Q': case 'X': case 'Z': case '\307':
-			newsx = '2'; break;
-		case 'D': case 'T': case '\320': case '\336':
-			newsx = '3'; break;
-		case 'L':
-			newsx = '4'; break;
-		case 'M': case 'N': case '\321':
-			newsx = '5'; break;
-		case 'R':
-			newsx = '6'; break;
-		default:	/* new stays zero */
-			break;
-		}
-	} else {
-		/* English Language (Default) */
-		switch (letter) {
-		case 'B': case 'P': case 'F': case 'V':
-			newsx = '1'; break;
-		case 'C': case 'S': case 'K': case 'G':
-		case 'J': case 'Q': case 'X': case 'Z':
-			newsx = '2'; break;
-		case 'D': case 'T':
-			newsx = '3'; break;
-		case 'L':
-			newsx = '4'; break;
-		case 'M': case 'N':
-			newsx = '5'; break;
-		case 'R':
-			newsx = '6'; break;
-		default:	/* new stays zero */
-			break;
-		}
-	}
-  
-	if (newsx == 0) {
-		oldsx = 0;
-		return 0;
-	}
-	if (newsx == oldsx) return 0;
-	oldsx = newsx;
-	return newsx;
 }
 /*=========================================
  * add_name -- Add new entry to name record
  *  name:  [in] person's name
  *  key:   [in] person's INDI key
  *=======================================*/
-BOOLEAN
+void
 add_name (STRING name, STRING key)
 {
-	STRING rec, p;
-	INT i, len, off;
-	RKEY rkey;
-	rkey = str2rkey(key);
-	(void) getnamerec(name);
-	for (i = 0; i < NRcount; i++) {
-		if (!ll_strncmp(rkey.r_rkey, NRkeys[i].r_rkey, 8) &&
-		    eqstr(name, NRnames[i]))
-			return TRUE;
+	INT i;
+	RKEY rkeyid = str2rkey(key);
+	RKEY rkeyname;
+	char finitial = getfinitial(name);
+	STRING surname = strsave(getsxsurname(name));
+	TABLE tab = create_table(FREEKEY);
+	STRING rkeystr=0;
+
+	for (i=0; i<soundex_count(); ++i) 	{
+		CNSTRING sdex = soundex_get(i, surname);
+		soundex2rkey(finitial, sdex, &rkeyname);
+		/* check if we've already done this entry */
+		rkeystr = strsave(rkey2str(rkeyname));
+		if (valueof_str(tab, rkeystr)) {
+			strfree(&rkeystr);
+			continue;
+		}
+		insert_table_str(tab, rkeystr, "");
+		add_namekey(&rkeyname, name, &rkeyid);
 	}
-	NRkeys[NRcount] = rkey;
+	destroy_table(tab);
+
+	strfree(&surname);
+}
+/*=========================================
+ * add_namekey -- Add new entry to name record (for one soundex code)
+ *  rkeyname: [IN]  soundex coded rkey for this name
+ *  name:     [IN]  person's name
+ *  key:      [IN]  person's INDI key
+ *=======================================*/
+static void
+add_namekey (const RKEY * rkeyname, CNSTRING name, const RKEY * rkeyid)
+{
+	INT i=0, len=0, off=0;
+	STRING p=0, rec=0;
+
+	/* load up local name record buffers */
+	getnamerec(rkeyname);
+
+	/* check if name already present in name record */
+	for (i = 0; i < NRcount; i++) {
+		if (rkey_eq(rkeyid, &NRkeys[i]) &&
+		    eqstr(name, NRnames[i]))
+			return;
+	}
+	NRkeys[NRcount] = *rkeyid;
 	NRnames[NRcount] = name;
+
+	/* NRnames[NRcount] doesn't point into record */
+	flush_name_cache();
+
 	NRcount++;
 	p = rec = (STRING) stdalloc(NRsize + sizeof(RKEY) +
 	    sizeof(INT) + strlen(name) + 10);
@@ -444,31 +443,66 @@ add_name (STRING name, STRING key)
 	}
 	addrecord(BTR, NRkey, rec, len);
 	stdfree(rec);
-	return TRUE;
 }
 /*=============================================
  * remove_name -- Remove entry from name record
  *  name: [in] person's name
  *  key:  [in] person's INDI key
  *===========================================*/
-BOOLEAN
+void
 remove_name (STRING name, STRING key)
 {
-	STRING rec, p;
-	INT i, len, off;
+	INT i;
+	RKEY rkeyid = str2rkey(key);
+	RKEY rkeyname;
+	char finitial = getfinitial(name);
+	STRING surname = strsave(getsxsurname(name));
+	TABLE tab = create_table(FREEKEY);
+	STRING rkeystr=0;
+
+
+	for (i=0; i<soundex_count(); ++i) 	{
+		CNSTRING sdex = soundex_get(i, surname);
+		soundex2rkey(finitial, sdex, &rkeyname);
+		/* check if we've already done this entry */
+		rkeystr = strsave(rkey2str(rkeyname));
+		if (valueof_str(tab, rkeystr)) {
+			strfree(&rkeystr);
+			continue;
+		}
+		insert_table_str(tab, rkeystr, "");
+		remove_namekey(&rkeyname, name, &rkeyid);
+	}
+	destroy_table(tab);
+
+	strfree(&surname);
+}
+/*=========================================
+ * remove_namekey -- Remove one soundex name entry
+ *  rkeyname: [IN]  soundex coded rkey for this name
+ *  name:     [IN]  person's name
+ *  key:      [IN]  person's INDI key
+ *=======================================*/
+static void
+remove_namekey (const RKEY * rkeyname, CNSTRING name, const RKEY * rkeyid)
+{
+	INT i=0, len=0, off=0;
+	STRING p=0, rec=0;
 	BOOLEAN found;
-	RKEY rkey;
-	rkey = str2rkey(key);
-	(void) getnamerec(name);
+
+	/* load up local name record buffers */
+	getnamerec(rkeyname);
+
 	found = FALSE;
 	for (i = 0; i < NRcount; i++) {
-		if (!ll_strncmp(rkey.r_rkey, NRkeys[i].r_rkey, 8) &&
+		if (rkey_eq(rkeyid, &NRkeys[i]) &&
 			eqstr(name, NRnames[i])) {
 			found = TRUE;
 			break;
 		}
 	}
-	if (!found) return FALSE;
+	if (!found) return;
+
 	NRcount--;
 	for ( ; i < NRcount; i++) {
 		NRkeys[i] = NRkeys[i+1];
@@ -498,29 +532,14 @@ remove_name (STRING name, STRING key)
 	}
 	addrecord(BTR, NRkey, rec, len);
 	stdfree(rec);
-	return TRUE;
 }
-#if 0
-/*===============================================
- * replace_name -- Replace entry in name records.
- *=============================================*/
-BOOLEAN
-replace_name (STRING old,       /* person's old name */
-              STRING new,       /* person's new name */
-              STRING key)       /* person's INDI key */
-{
-	remove_name(old, key);
-	add_name(new, key);
-	return TRUE;
-}
-#endif
 /*=========================================================
  * exactmatch -- Check if first name is contained in second
  *  partial:  [in] name from user
  *  complete: [in] GEDCOM name
  *=======================================================*/
 static BOOLEAN
-exactmatch (STRING partial, STRING complete)
+exactmatch (CNSTRING partial, CNSTRING complete)
 {
 	char part[MAXGEDNAMELEN+2], comp[MAXGEDNAMELEN+2], *p, *q;
 	BOOLEAN okay;
@@ -544,7 +563,7 @@ exactmatch (STRING partial, STRING complete)
  *   same letter; letters in partial must be in same order as in
  *   complete; case insensitive
  *==============================================================*/
-BOOLEAN
+static BOOLEAN
 piecematch (STRING part, STRING comp)
 {
 	/* Case insensitive unnecessary, as caller has already upper-cased strings */
@@ -576,7 +595,7 @@ piecematch (STRING part, STRING comp)
  *  out:  [out] superstring of words
  *=============================================================*/
 static void
-squeeze (STRING in, STRING out)
+squeeze (CNSTRING in, STRING out)
 {
 	/* TODO: fix for Unicode (switch to string based casing) */
 	INT c;
@@ -609,17 +628,15 @@ squeeze (STRING in, STRING out)
  *  name:  [in] name of person desired
  *  pnum:  [out] number of matches
  *  pkeys: [out] keys matched (0...*pnum-1)
- *  exact: [in] unused!
  *==================================================*/
 void
-get_names (STRING name, INT *pnum, STRING **pkeys, BOOLEAN exact)
+get_names (STRING name, INT *pnum, STRING **pkeys)
 {
 	INT i, n;
 	RECORD rec;
 	static char kbuf[MAXGEDNAMELEN];
 	static STRING kaddr;
-
-	exact = FALSE;		/* keep compiler happy */
+	RKEY rkeyname;
 
    /* See if user is asking for person by key instead of name */
 	if ((rec = id_by_key(name, 'I'))) {
@@ -637,9 +654,14 @@ get_names (STRING name, INT *pnum, STRING **pkeys, BOOLEAN exact)
 			stdfree(LMkeys[i]);
 	}
 
+
    /* Load up static name buffers; return if no match */
 	LMcount = 0;
-	if (!getnamerec(name)) {
+
+	/* Convert name to key and read name record */
+	name2rkey(name, &rkeyname);
+	getnamerec(&rkeyname);
+	if (!NRcount) {
 		*pnum = 0;
 		return;
 	}
@@ -676,8 +698,8 @@ namecmp (STRING name1, STRING name2)
 {
 	char sqz1[MAXGEDNAMELEN], sqz2[MAXGEDNAMELEN];
 	STRING p1 = sqz1, p2 = sqz2;
-	STRING sur1 = getsxsurname(name1);
-	STRING sur2 = getsxsurname(name2);
+	CNSTRING sur1 = getsxsurname(name1);
+	CNSTRING sur2 = getsxsurname(name2);
 	INT r = cmpstrloc(sur1, sur2);
 	if (r) return r;
 	if(opt_finnish) {
@@ -703,8 +725,8 @@ namecmp (STRING name1, STRING name2)
  *  in:  [in] input string
  *  out: [out] output string
  *=========================================================*/
-void
-cmpsqueeze (STRING in, STRING out)
+static void
+cmpsqueeze (CNSTRING in, STRING out)
 {
 	INT c;
 	while ((in = nextpiece(in))) {
@@ -724,8 +746,8 @@ cmpsqueeze (STRING in, STRING out)
  * givens -- Return given names of name
  *  returns static buffer
  *===================================*/
-STRING
-givens (STRING name)
+CNSTRING
+givens (CNSTRING name)
 {
 	INT c;
 	static char scratch[MAXGEDNAMELEN+1];
@@ -753,8 +775,8 @@ givens (STRING name)
  * nextpiece -- Return next givenname in string
  *  skip over surname (enclosed in NAMESEP)
  *======================================*/
-static STRING
-nextpiece (STRING in)
+static CNSTRING
+nextpiece (CNSTRING in)
 {
 	int c;
 	while (TRUE) {
@@ -821,7 +843,7 @@ trim_name (STRING name, INT len)
  *              & stored in local static buffer
  *==========================================================*/
 static void
-name_to_parts (STRING name, STRING *parts)
+name_to_parts (CNSTRING name, STRING *parts)
 {
 	static char scratch[MAXGEDNAMELEN+1];
 	STRING p = scratch;
@@ -946,7 +968,7 @@ name_string (STRING name)
 /*==========================================================
  * name_surfirst - Convert GEDCOM name to surname first form
  *========================================================*/
-STRING
+static STRING
 name_surfirst (STRING name)
 {
 	static char scratch[MAXGEDNAMELEN+1];
@@ -1028,7 +1050,7 @@ id_by_key (STRING name, char ctype)
  * Returns a list whose elements are strings
  *==========================================*/
 BOOLEAN
-name_to_list (STRING name, LIST list, INT *plen, INT *psind)
+name_to_list (CNSTRING name, LIST list, INT *plen, INT *psind)
 {
 	INT i;
 	STRING str;
@@ -1086,18 +1108,18 @@ free_string_list(LIST list)
  *==================================================*/
 typedef struct
 {
-	BOOLEAN(*func)(STRING key, STRING name, BOOLEAN newset, void *param);
+	BOOLEAN(*func)(STRING key, CNSTRING name, BOOLEAN newset, void *param);
 	void * param;
 } TRAV_NAME_PARAM;
 /* see above */
 static BOOLEAN
-traverse_name_callback (RKEY rkey, STRING data, INT len, void *param)
+traverse_name_callback (RKEY rkey, CNSTRING data, INT len, void *param)
 {
 	TRAV_NAME_PARAM *tparam = (TRAV_NAME_PARAM *)param;
 	INT i;
 	len=len; /* unused */
 
-	parsenamerec(rkey, data);
+	parsenamerec(&rkey, data);
 
 	for (i=0; i<NRcount; i++)
 	{
@@ -1108,10 +1130,20 @@ traverse_name_callback (RKEY rkey, STRING data, INT len, void *param)
 }
 /* see above */
 void
-traverse_names (BOOLEAN(*func)(STRING key, STRING name, BOOLEAN newset, void *param), void *param)
+traverse_names (BOOLEAN(*func)(STRING key, CNSTRING name, BOOLEAN newset, void *param), void *param)
 {
 	TRAV_NAME_PARAM tparam;
 	tparam.param = param;
 	tparam.func = func;
 	traverse_db_rec_rkeys(BTR, name_lo(), name_hi(), &traverse_name_callback, &tparam);
+}
+/*====================================================
+ * flush_name_cache -- Clear any cached name records
+ *==================================================*/
+static
+void flush_name_cache ()
+{
+	if (NRrec) {
+		strfree(&NRrec);
+	}
 }

@@ -404,7 +404,7 @@ readrec(BTREE btree, BLOCK block, INT i, INT *plen)
  *  plen:  [out] length of returned data
  *=================================*/
 RAWRECORD
-getrecord (BTREE btree, RKEY rkey, INT *plen)
+getrecord (BTREE btree, const RKEY * rkey, INT *plen)
 {
 	INDEX index;
 	SHORT i, n, lo, hi;
@@ -414,7 +414,7 @@ getrecord (BTREE btree, RKEY rkey, INT *plen)
 	RAWRECORD rawrec;
 
 #ifdef DEBUG
-	llwprintf("GETRECORD: rkey: %s\n", rkey2str(rkey));
+	llwprintf("GETRECORD: rkey: %s\n", rkey2str(*rkey));
 #endif
 	*plen = 0;
 	ASSERT(index = bmaster(btree));
@@ -424,7 +424,7 @@ getrecord (BTREE btree, RKEY rkey, INT *plen)
 		n = nkeys(index);
 		nfkey = fkeys(index, 0);
 		for (i = 1; i <= n; i++) {
-			if (cmpkeys(btree, &rkey, &rkeys(index, i)) < 0)
+			if (cmpkeys(btree, rkey, &rkeys(index, i)) < 0)
 				break;
 			nfkey = fkeys(index, i);
 		}
@@ -444,7 +444,7 @@ getrecord (BTREE btree, RKEY rkey, INT *plen)
 	hi = nkeys(block) - 1;
 	while (lo <= hi) {
 		SHORT md = (lo + hi)/2;
-		INT rel = cmpkeys(btree, &rkey, &rkeys(block, md));
+		INT rel = cmpkeys(btree, rkey, &rkeys(block, md));
 		if (rel < 0)
 			hi = --md;
 		else if (rel > 0)
@@ -519,7 +519,7 @@ isrecord (BTREE btree,
  * cmpkeys -- Compare two keys of btree
  *==================================================*/
 INT
-cmpkeys (BTREE btree, RKEY * rk1, RKEY * rk2)
+cmpkeys (BTREE btree, const RKEY * rk1, const RKEY * rk2)
 {
 	INT rel = ll_strncmp(rk1->r_rkey, rk2->r_rkey, 8);
 	return rel;

@@ -168,10 +168,10 @@ INDEX readindex(STRING basedir, FKEY ikey, BOOLEAN robust);
 
 /* record.c */
 BOOLEAN addrecord(BTREE, RKEY, RAWRECORD, INT);
-RAWRECORD getrecord(BTREE, RKEY, INT*);
+RAWRECORD getrecord(BTREE, const RKEY *, INT*);
 BOOLEAN isrecord(BTREE, RKEY);
 RAWRECORD readrec(BTREE btree, BLOCK block, INT i, INT *plen);
-INT cmpkeys(BTREE btree, RKEY * rk1, RKEY * rk2);
+INT cmpkeys(BTREE btree, const RKEY * rk1, const RKEY * rk2);
 
 /* traverse.c */
 BOOLEAN traverse_index_blocks(BTREE, INDEX, void *, BOOLEAN (*ifunc)(BTREE, INDEX, void *), BOOLEAN (*dfunc)(BTREE, BLOCK, void *));
