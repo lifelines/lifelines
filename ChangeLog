@@ -1,3 +1,7 @@
+2000-12-07  David A. Bright <dabright@users.sourceforge.net>
+
+        * reports/tree.tex: Added file (support file for book-latex.ll
+
 2000-12-07  Marc Nozell  <marc@nozell.com>
 
 	* liflines/main.c: Call init_show_module to init some string
