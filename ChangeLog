@@ -1,3 +1,9 @@
+2003-06-26 Perry Rapp
+
+	* ChangeLog docs/ll-userguide.xml
+
+	Add new section describing GEDCOM import errors.
+
 2003-06-19 Matt Emmerton
 
 	* ChangeLog src/hdrs/table.h src/stdlib/table.c
