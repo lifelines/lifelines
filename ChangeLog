@@ -1,3 +1,9 @@
+2003-06-10 Steve Dum
+       * ChangeLog docs/ll-reportmanual.html
+	   docs/ll-reportmanual.txt docs/ll-reportmanual.xml
+
+       Add documentation for float() and int().
+
 2003-06-08 Steve Dum
 
        * ChangeLog src/interp/pvalue.c

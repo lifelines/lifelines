@@ -119,82 +119,82 @@ HREF="#AEN448"
 ></DT
 ><DT
 ><A
-HREF="#AEN679"
+HREF="#AEN701"
 >Person Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1158"
+HREF="#AEN1180"
 >Family Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1360"
+HREF="#AEN1382"
 >Other types of records</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1394"
+HREF="#AEN1416"
 >List Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1588"
+HREF="#AEN1610"
 >Table Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1631"
+HREF="#AEN1653"
 >GEDCOM Node Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1771"
+HREF="#AEN1793"
 >Event and Date Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN2212"
+HREF="#AEN2234"
 >Value Extraction Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN2310"
+HREF="#AEN2332"
 >User Interaction Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN2450"
+HREF="#AEN2472"
 >String Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN2759"
+HREF="#AEN2781"
 >Output Mode Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN2936"
+HREF="#AEN2958"
 >Person Set Functions and GEDCOM Extraction</A
 ></DT
 ><DT
 ><A
-HREF="#AEN3211"
+HREF="#AEN3233"
 >Record Update Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN3281"
+HREF="#AEN3303"
 >Record Linking Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN3320"
+HREF="#AEN3342"
 >Miscellaneous Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN3495"
+HREF="#AEN3517"
 >Deprecated Functions</A
 ></DT
 ></DL
@@ -2546,6 +2546,78 @@ NAME="AEN531"
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
+>FLOAT <TT
+CLASS="function"
+>float</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>INT</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;
+convert int to float
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN541"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INT <TT
+CLASS="function"
+>int</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>FLOAT</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;
+convert float to int
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN551"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
 >VOID <TT
 CLASS="function"
 >incr</TT
@@ -2574,7 +2646,7 @@ increment variable by one
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN541"
+NAME="AEN561"
 ></A
 ><P
 ></P
@@ -2610,7 +2682,7 @@ decrement variable by one
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN551"
+NAME="AEN571"
 ></A
 ><P
 ></P
@@ -2658,7 +2730,7 @@ logical and - two to 32 arguments
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN563"
+NAME="AEN583"
 ></A
 ><P
 ></P
@@ -2706,7 +2778,7 @@ logical or - two to 32 arguments
 > <DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN575"
+NAME="AEN595"
 ></A
 ><P
 ></P
@@ -2742,7 +2814,7 @@ logical not
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN585"
+NAME="AEN605"
 ></A
 ><P
 ></P
@@ -2784,7 +2856,7 @@ equality (not strings)
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN596"
+NAME="AEN616"
 ></A
 ><P
 ></P
@@ -2826,7 +2898,7 @@ non-equality
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN607"
+NAME="AEN627"
 ></A
 ><P
 ></P
@@ -2868,7 +2940,7 @@ less than
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN618"
+NAME="AEN638"
 ></A
 ><P
 ></P
@@ -2911,7 +2983,7 @@ greater than
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN629"
+NAME="AEN649"
 ></A
 ><P
 ></P
@@ -2953,7 +3025,7 @@ less than or equal
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN640"
+NAME="AEN660"
 ></A
 ><P
 ></P
@@ -3053,6 +3125,16 @@ CLASS="function"
 CLASS="function"
 >Neg</TT
 > negates its argument.
+The functions 
+<TT
+CLASS="function"
+>float</TT
+> and
+<TT
+CLASS="function"
+>int</TT
+>
+can be used to explicitly convert a value to float or int where needed.
 </P
 ><P
 >&#13;<TT
@@ -3105,7 +3187,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN679"
+NAME="AEN701"
 ></A
 >Person Functions</H2
 ><DIV
@@ -3116,7 +3198,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN684"
+NAME="AEN706"
 ></A
 ><P
 ></P
@@ -3162,7 +3244,7 @@ CLASS="replaceable"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN696"
+NAME="AEN718"
 ></A
 ><P
 ></P
@@ -3214,7 +3296,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN709"
+NAME="AEN731"
 ></A
 ><P
 ></P
@@ -3248,7 +3330,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN719"
+NAME="AEN741"
 ></A
 ><P
 ></P
@@ -3282,7 +3364,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN729"
+NAME="AEN751"
 ></A
 ><P
 ></P
@@ -3322,7 +3404,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN740"
+NAME="AEN762"
 ></A
 ><P
 ></P
@@ -3356,7 +3438,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN750"
+NAME="AEN772"
 ></A
 ><P
 ></P
@@ -3390,7 +3472,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN760"
+NAME="AEN782"
 ></A
 ><P
 ></P
@@ -3424,7 +3506,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN770"
+NAME="AEN792"
 ></A
 ><P
 ></P
@@ -3458,7 +3540,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN780"
+NAME="AEN802"
 ></A
 ><P
 ></P
@@ -3492,7 +3574,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN790"
+NAME="AEN812"
 ></A
 ><P
 ></P
@@ -3526,7 +3608,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN800"
+NAME="AEN822"
 ></A
 ><P
 ></P
@@ -3560,7 +3642,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN810"
+NAME="AEN832"
 ></A
 ><P
 ></P
@@ -3594,7 +3676,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN820"
+NAME="AEN842"
 ></A
 ><P
 ></P
@@ -3628,7 +3710,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN830"
+NAME="AEN852"
 ></A
 ><P
 ></P
@@ -3662,7 +3744,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN840"
+NAME="AEN862"
 ></A
 ><P
 ></P
@@ -3696,7 +3778,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN850"
+NAME="AEN872"
 ></A
 ><P
 ></P
@@ -3736,7 +3818,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN861"
+NAME="AEN883"
 ></A
 ><P
 ></P
@@ -3770,7 +3852,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN871"
+NAME="AEN893"
 ></A
 ><P
 ></P
@@ -3804,7 +3886,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN881"
+NAME="AEN903"
 ></A
 ><P
 ></P
@@ -3838,7 +3920,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN891"
+NAME="AEN913"
 ></A
 ><P
 ></P
@@ -3872,7 +3954,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN901"
+NAME="AEN923"
 ></A
 ><P
 ></P
@@ -3917,7 +3999,7 @@ CLASS="replaceable"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN913"
+NAME="AEN935"
 ></A
 ><P
 ></P
@@ -3951,7 +4033,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN923"
+NAME="AEN945"
 ></A
 ><P
 ></P
@@ -3985,7 +4067,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN933"
+NAME="AEN955"
 ></A
 ><P
 ></P
@@ -4019,7 +4101,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN943"
+NAME="AEN965"
 ></A
 ><P
 ></P
@@ -4053,7 +4135,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN953"
+NAME="AEN975"
 ></A
 ><P
 ></P
@@ -4082,7 +4164,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN962"
+NAME="AEN984"
 ></A
 ><P
 ></P
@@ -4111,7 +4193,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN971"
+NAME="AEN993"
 ></A
 ><P
 ></P
@@ -4145,7 +4227,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN981"
+NAME="AEN1003"
 ></A
 ><P
 ></P
@@ -4614,7 +4696,7 @@ the second parameter selects the type of pronoun:
 ><DIV
 CLASS="informaltable"
 ><A
-NAME="AEN1095"
+NAME="AEN1117"
 ></A
 ><P
 ></P
@@ -4863,7 +4945,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1158"
+NAME="AEN1180"
 ></A
 >Family Functions</H2
 ><DIV
@@ -4874,7 +4956,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1163"
+NAME="AEN1185"
 ></A
 ><P
 ></P
@@ -4908,7 +4990,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1173"
+NAME="AEN1195"
 ></A
 ><P
 ></P
@@ -4942,7 +5024,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1183"
+NAME="AEN1205"
 ></A
 ><P
 ></P
@@ -4976,7 +5058,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1193"
+NAME="AEN1215"
 ></A
 ><P
 ></P
@@ -5010,7 +5092,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1203"
+NAME="AEN1225"
 ></A
 ><P
 ></P
@@ -5044,7 +5126,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1213"
+NAME="AEN1235"
 ></A
 ><P
 ></P
@@ -5078,7 +5160,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1223"
+NAME="AEN1245"
 ></A
 ><P
 ></P
@@ -5123,7 +5205,7 @@ CLASS="replaceable"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1235"
+NAME="AEN1257"
 ></A
 ><P
 ></P
@@ -5157,7 +5239,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1245"
+NAME="AEN1267"
 ></A
 ><P
 ></P
@@ -5191,7 +5273,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1255"
+NAME="AEN1277"
 ></A
 ><P
 ></P
@@ -5225,7 +5307,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1265"
+NAME="AEN1287"
 ></A
 ><P
 ></P
@@ -5254,7 +5336,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1274"
+NAME="AEN1296"
 ></A
 ><P
 ></P
@@ -5283,7 +5365,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1283"
+NAME="AEN1305"
 ></A
 ><P
 ></P
@@ -5317,7 +5399,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1293"
+NAME="AEN1315"
 ></A
 ><P
 ></P
@@ -5569,7 +5651,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1360"
+NAME="AEN1382"
 ></A
 >Other types of records</H2
 ><DIV
@@ -5723,7 +5805,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1394"
+NAME="AEN1416"
 ></A
 >List Functions</H2
 ><DIV
@@ -5734,7 +5816,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1399"
+NAME="AEN1421"
 ></A
 ><P
 ></P
@@ -5768,7 +5850,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1409"
+NAME="AEN1431"
 ></A
 ><P
 ></P
@@ -5802,7 +5884,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1419"
+NAME="AEN1441"
 ></A
 ><P
 ></P
@@ -5836,7 +5918,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1429"
+NAME="AEN1451"
 ></A
 ><P
 ></P
@@ -5876,7 +5958,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1440"
+NAME="AEN1462"
 ></A
 ><P
 ></P
@@ -5910,7 +5992,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1450"
+NAME="AEN1472"
 ></A
 ><P
 ></P
@@ -5950,7 +6032,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1461"
+NAME="AEN1483"
 ></A
 ><P
 ></P
@@ -5990,7 +6072,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1472"
+NAME="AEN1494"
 ></A
 ><P
 ></P
@@ -6024,7 +6106,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1482"
+NAME="AEN1504"
 ></A
 ><P
 ></P
@@ -6070,7 +6152,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1494"
+NAME="AEN1516"
 ></A
 ><P
 ></P
@@ -6110,7 +6192,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1505"
+NAME="AEN1527"
 ></A
 ><P
 ></P
@@ -6150,7 +6232,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1516"
+NAME="AEN1538"
 ></A
 ><P
 ></P
@@ -6190,7 +6272,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1527"
+NAME="AEN1549"
 ></A
 ><P
 ></P
@@ -6426,7 +6508,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1588"
+NAME="AEN1610"
 ></A
 >Table Functions</H2
 ><DIV
@@ -6437,7 +6519,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1593"
+NAME="AEN1615"
 ></A
 ><P
 ></P
@@ -6471,7 +6553,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1603"
+NAME="AEN1625"
 ></A
 ><P
 ></P
@@ -6517,7 +6599,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1615"
+NAME="AEN1637"
 ></A
 ><P
 ></P
@@ -6586,7 +6668,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1631"
+NAME="AEN1653"
 ></A
 >GEDCOM Node Functions</H2
 ><DIV
@@ -6597,7 +6679,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1636"
+NAME="AEN1658"
 ></A
 ><P
 ></P
@@ -6631,7 +6713,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1646"
+NAME="AEN1668"
 ></A
 ><P
 ></P
@@ -6665,7 +6747,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1656"
+NAME="AEN1678"
 ></A
 ><P
 ></P
@@ -6699,7 +6781,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1666"
+NAME="AEN1688"
 ></A
 ><P
 ></P
@@ -6733,7 +6815,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1676"
+NAME="AEN1698"
 ></A
 ><P
 ></P
@@ -6767,7 +6849,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1686"
+NAME="AEN1708"
 ></A
 ><P
 ></P
@@ -6801,7 +6883,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1696"
+NAME="AEN1718"
 ></A
 ><P
 ></P
@@ -6835,7 +6917,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1706"
+NAME="AEN1728"
 ></A
 ><P
 ></P
@@ -7098,7 +7180,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1771"
+NAME="AEN1793"
 ></A
 >Event and Date Functions</H2
 ><DIV
@@ -7109,7 +7191,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1776"
+NAME="AEN1798"
 ></A
 ><P
 ></P
@@ -7148,7 +7230,7 @@ CLASS="structfield"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1787"
+NAME="AEN1809"
 ></A
 ><P
 ></P
@@ -7187,7 +7269,7 @@ CLASS="structfield"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1798"
+NAME="AEN1820"
 ></A
 ><P
 ></P
@@ -7226,7 +7308,7 @@ CLASS="structfield"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1809"
+NAME="AEN1831"
 ></A
 ><P
 ></P
@@ -7270,7 +7352,7 @@ CLASS="structfield"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1821"
+NAME="AEN1843"
 ></A
 ><P
 ></P
@@ -7304,7 +7386,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1831"
+NAME="AEN1853"
 ></A
 ><P
 ></P
@@ -7333,7 +7415,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1840"
+NAME="AEN1862"
 ></A
 ><P
 ></P
@@ -7367,7 +7449,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1850"
+NAME="AEN1872"
 ></A
 ><P
 ></P
@@ -7401,7 +7483,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1860"
+NAME="AEN1882"
 ></A
 ><P
 ></P
@@ -7435,7 +7517,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1870"
+NAME="AEN1892"
 ></A
 ><P
 ></P
@@ -7469,7 +7551,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1880"
+NAME="AEN1902"
 ></A
 ><P
 ></P
@@ -7503,7 +7585,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1890"
+NAME="AEN1912"
 ></A
 ><P
 ></P
@@ -7537,7 +7619,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1900"
+NAME="AEN1922"
 ></A
 ><P
 ></P
@@ -7571,7 +7653,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1910"
+NAME="AEN1932"
 ></A
 ><P
 ></P
@@ -7605,7 +7687,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1920"
+NAME="AEN1942"
 ></A
 ><P
 ></P
@@ -7645,7 +7727,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1931"
+NAME="AEN1953"
 ></A
 ><P
 ></P
@@ -7840,7 +7922,7 @@ CLASS="function"
 ><DIV
 CLASS="informaltable"
 ><A
-NAME="AEN1977"
+NAME="AEN1999"
 ></A
 ><P
 ></P
@@ -7901,7 +7983,7 @@ CLASS="function"
 ><DIV
 CLASS="informaltable"
 ><A
-NAME="AEN1992"
+NAME="AEN2014"
 ></A
 ><P
 ></P
@@ -8070,7 +8152,7 @@ CLASS="function"
 ><DIV
 CLASS="informaltable"
 ><A
-NAME="AEN2034"
+NAME="AEN2056"
 ></A
 ><P
 ></P
@@ -8131,7 +8213,7 @@ CLASS="function"
 ><DIV
 CLASS="informaltable"
 ><A
-NAME="AEN2049"
+NAME="AEN2071"
 ></A
 ><P
 ></P
@@ -8264,7 +8346,7 @@ CLASS="function"
 ><DIV
 CLASS="informaltable"
 ><A
-NAME="AEN2082"
+NAME="AEN2104"
 ></A
 ><P
 ></P
@@ -8473,7 +8555,7 @@ CLASS="function"
 ><DIV
 CLASS="informaltable"
 ><A
-NAME="AEN2134"
+NAME="AEN2156"
 ></A
 ><P
 ></P
@@ -8618,7 +8700,7 @@ CLASS="function"
 ><DIV
 CLASS="informaltable"
 ><A
-NAME="AEN2168"
+NAME="AEN2190"
 ></A
 ><P
 ></P
@@ -8810,7 +8892,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN2212"
+NAME="AEN2234"
 ></A
 >Value Extraction Functions</H2
 ><DIV
@@ -8821,7 +8903,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2217"
+NAME="AEN2239"
 ></A
 ><P
 ></P
@@ -8873,7 +8955,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2230"
+NAME="AEN2252"
 ></A
 ><P
 ></P
@@ -8925,7 +9007,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2243"
+NAME="AEN2265"
 ></A
 ><P
 ></P
@@ -8971,7 +9053,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2255"
+NAME="AEN2277"
 ></A
 ><P
 ></P
@@ -9023,7 +9105,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2268"
+NAME="AEN2290"
 ></A
 ><P
 ></P
@@ -9250,7 +9332,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN2310"
+NAME="AEN2332"
 ></A
 >User Interaction Functions</H2
 ><DIV
@@ -9261,7 +9343,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2315"
+NAME="AEN2337"
 ></A
 ><P
 ></P
@@ -9306,7 +9388,7 @@ CLASS="replaceable"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2327"
+NAME="AEN2349"
 ></A
 ><P
 ></P
@@ -9351,7 +9433,7 @@ CLASS="replaceable"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2339"
+NAME="AEN2361"
 ></A
 ><P
 ></P
@@ -9385,7 +9467,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2349"
+NAME="AEN2371"
 ></A
 ><P
 ></P
@@ -9430,7 +9512,7 @@ CLASS="replaceable"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2361"
+NAME="AEN2383"
 ></A
 ><P
 ></P
@@ -9475,7 +9557,7 @@ CLASS="replaceable"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2373"
+NAME="AEN2395"
 ></A
 ><P
 ></P
@@ -9509,7 +9591,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2383"
+NAME="AEN2405"
 ></A
 ><P
 ></P
@@ -9543,7 +9625,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2393"
+NAME="AEN2415"
 ></A
 ><P
 ></P
@@ -9577,7 +9659,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2403"
+NAME="AEN2425"
 ></A
 ><P
 ></P
@@ -9611,7 +9693,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2413"
+NAME="AEN2435"
 ></A
 ><P
 ></P
@@ -9645,7 +9727,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2423"
+NAME="AEN2445"
 ></A
 ><P
 ></P
@@ -9755,7 +9837,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN2450"
+NAME="AEN2472"
 ></A
 >String Functions</H2
 ><DIV
@@ -9766,7 +9848,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2455"
+NAME="AEN2477"
 ></A
 ><P
 ></P
@@ -9800,7 +9882,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2465"
+NAME="AEN2487"
 ></A
 ><P
 ></P
@@ -9834,7 +9916,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2475"
+NAME="AEN2497"
 ></A
 ><P
 ></P
@@ -9868,7 +9950,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2485"
+NAME="AEN2507"
 ></A
 ><P
 ></P
@@ -9902,7 +9984,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2495"
+NAME="AEN2517"
 ></A
 ><P
 ></P
@@ -9942,7 +10024,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2506"
+NAME="AEN2528"
 ></A
 ><P
 ></P
@@ -9982,7 +10064,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2517"
+NAME="AEN2539"
 ></A
 ><P
 ></P
@@ -10038,7 +10120,7 @@ CLASS="replaceable"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2531"
+NAME="AEN2553"
 ></A
 ><P
 ></P
@@ -10094,7 +10176,7 @@ CLASS="replaceable"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2545"
+NAME="AEN2567"
 ></A
 ><P
 ></P
@@ -10128,7 +10210,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2555"
+NAME="AEN2577"
 ></A
 ><P
 ></P
@@ -10174,7 +10256,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2567"
+NAME="AEN2589"
 ></A
 ><P
 ></P
@@ -10220,7 +10302,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2579"
+NAME="AEN2601"
 ></A
 ><P
 ></P
@@ -10254,7 +10336,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2589"
+NAME="AEN2611"
 ></A
 ><P
 ></P
@@ -10294,7 +10376,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2600"
+NAME="AEN2622"
 ></A
 ><P
 ></P
@@ -10331,7 +10413,7 @@ CLASS="literal"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2611"
+NAME="AEN2633"
 ></A
 ><P
 ></P
@@ -10368,7 +10450,7 @@ CLASS="literal"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2622"
+NAME="AEN2644"
 ></A
 ><P
 ></P
@@ -10405,7 +10487,7 @@ CLASS="literal"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2633"
+NAME="AEN2655"
 ></A
 ><P
 ></P
@@ -10442,7 +10524,7 @@ CLASS="literal"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2644"
+NAME="AEN2666"
 ></A
 ><P
 ></P
@@ -10476,7 +10558,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2654"
+NAME="AEN2676"
 ></A
 ><P
 ></P
@@ -10510,7 +10592,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2664"
+NAME="AEN2686"
 ></A
 ><P
 ></P
@@ -10544,7 +10626,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2674"
+NAME="AEN2696"
 ></A
 ><P
 ></P
@@ -10584,7 +10666,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2685"
+NAME="AEN2707"
 ></A
 ><P
 ></P
@@ -10624,7 +10706,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2696"
+NAME="AEN2718"
 ></A
 ><P
 ></P
@@ -10866,7 +10948,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN2759"
+NAME="AEN2781"
 ></A
 >Output Mode Functions</H2
 ><DIV
@@ -10877,7 +10959,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2764"
+NAME="AEN2786"
 ></A
 ><P
 ></P
@@ -10906,7 +10988,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2773"
+NAME="AEN2795"
 ></A
 ><P
 ></P
@@ -10946,7 +11028,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2784"
+NAME="AEN2806"
 ></A
 ><P
 ></P
@@ -10980,7 +11062,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2794"
+NAME="AEN2816"
 ></A
 ><P
 ></P
@@ -11009,7 +11091,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2803"
+NAME="AEN2825"
 ></A
 ><P
 ></P
@@ -11043,7 +11125,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2813"
+NAME="AEN2835"
 ></A
 ><P
 ></P
@@ -11083,7 +11165,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2824"
+NAME="AEN2846"
 ></A
 ><P
 ></P
@@ -11112,7 +11194,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2833"
+NAME="AEN2855"
 ></A
 ><P
 ></P
@@ -11141,7 +11223,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2842"
+NAME="AEN2864"
 ></A
 ><P
 ></P
@@ -11170,7 +11252,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2851"
+NAME="AEN2873"
 ></A
 ><P
 ></P
@@ -11199,7 +11281,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2860"
+NAME="AEN2882"
 ></A
 ><P
 ></P
@@ -11239,7 +11321,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2871"
+NAME="AEN2893"
 ></A
 ><P
 ></P
@@ -11268,7 +11350,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2880"
+NAME="AEN2902"
 ></A
 ><P
 ></P
@@ -11302,7 +11384,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2890"
+NAME="AEN2912"
 ></A
 ><P
 ></P
@@ -11482,7 +11564,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN2936"
+NAME="AEN2958"
 ></A
 >Person Set Functions and GEDCOM Extraction</H2
 ><DIV
@@ -11493,7 +11575,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2941"
+NAME="AEN2963"
 ></A
 ><P
 ></P
@@ -11527,7 +11609,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2951"
+NAME="AEN2973"
 ></A
 ><P
 ></P
@@ -11573,7 +11655,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2963"
+NAME="AEN2985"
 ></A
 ><P
 ></P
@@ -11619,7 +11701,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2975"
+NAME="AEN2997"
 ></A
 ><P
 ></P
@@ -11653,7 +11735,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2985"
+NAME="AEN3007"
 ></A
 ><P
 ></P
@@ -11693,7 +11775,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2996"
+NAME="AEN3018"
 ></A
 ><P
 ></P
@@ -11733,7 +11815,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3007"
+NAME="AEN3029"
 ></A
 ><P
 ></P
@@ -11773,7 +11855,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3018"
+NAME="AEN3040"
 ></A
 ><P
 ></P
@@ -11807,7 +11889,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3028"
+NAME="AEN3050"
 ></A
 ><P
 ></P
@@ -11841,7 +11923,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3038"
+NAME="AEN3060"
 ></A
 ><P
 ></P
@@ -11875,7 +11957,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3048"
+NAME="AEN3070"
 ></A
 ><P
 ></P
@@ -11909,7 +11991,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3058"
+NAME="AEN3080"
 ></A
 ><P
 ></P
@@ -11943,7 +12025,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3068"
+NAME="AEN3090"
 ></A
 ><P
 ></P
@@ -11977,7 +12059,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3078"
+NAME="AEN3100"
 ></A
 ><P
 ></P
@@ -12011,7 +12093,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3088"
+NAME="AEN3110"
 ></A
 ><P
 ></P
@@ -12045,7 +12127,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3098"
+NAME="AEN3120"
 ></A
 ><P
 ></P
@@ -12079,7 +12161,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3108"
+NAME="AEN3130"
 ></A
 ><P
 ></P
@@ -12113,7 +12195,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3118"
+NAME="AEN3140"
 ></A
 ><P
 ></P
@@ -12147,7 +12229,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3128"
+NAME="AEN3150"
 ></A
 ><P
 ></P
@@ -12187,7 +12269,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3139"
+NAME="AEN3161"
 ></A
 ><P
 ></P
@@ -12468,7 +12550,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN3211"
+NAME="AEN3233"
 ></A
 >Record Update Functions</H2
 ><DIV
@@ -12479,7 +12561,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3216"
+NAME="AEN3238"
 ></A
 ><P
 ></P
@@ -12519,7 +12601,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3227"
+NAME="AEN3249"
 ></A
 ><P
 ></P
@@ -12565,7 +12647,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3239"
+NAME="AEN3261"
 ></A
 ><P
 ></P
@@ -12599,7 +12681,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3249"
+NAME="AEN3271"
 ></A
 ><P
 ></P
@@ -12633,7 +12715,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3259"
+NAME="AEN3281"
 ></A
 ><P
 ></P
@@ -12721,7 +12803,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN3281"
+NAME="AEN3303"
 ></A
 >Record Linking Functions</H2
 ><DIV
@@ -12732,7 +12814,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3286"
+NAME="AEN3308"
 ></A
 ><P
 ></P
@@ -12766,7 +12848,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3296"
+NAME="AEN3318"
 ></A
 ><P
 ></P
@@ -12800,7 +12882,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3306"
+NAME="AEN3328"
 ></A
 ><P
 ></P
@@ -12858,7 +12940,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN3320"
+NAME="AEN3342"
 ></A
 >Miscellaneous Functions</H2
 ><DIV
@@ -12869,7 +12951,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3325"
+NAME="AEN3347"
 ></A
 ><P
 ></P
@@ -12903,7 +12985,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3335"
+NAME="AEN3357"
 ></A
 ><P
 ></P
@@ -12937,7 +13019,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3345"
+NAME="AEN3367"
 ></A
 ><P
 ></P
@@ -12966,7 +13048,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3354"
+NAME="AEN3376"
 ></A
 ><P
 ></P
@@ -12995,7 +13077,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3363"
+NAME="AEN3385"
 ></A
 ><P
 ></P
@@ -13027,7 +13109,7 @@ CLASS="application"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3373"
+NAME="AEN3395"
 ></A
 ><P
 ></P
@@ -13061,7 +13143,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3383"
+NAME="AEN3405"
 ></A
 ><P
 ></P
@@ -13090,7 +13172,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3392"
+NAME="AEN3414"
 ></A
 ><P
 ></P
@@ -13124,7 +13206,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3402"
+NAME="AEN3424"
 ></A
 ><P
 ></P
@@ -13158,7 +13240,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3412"
+NAME="AEN3434"
 ></A
 ><P
 ></P
@@ -13198,7 +13280,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3423"
+NAME="AEN3445"
 ></A
 ><P
 ></P
@@ -13244,7 +13326,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3435"
+NAME="AEN3457"
 ></A
 ><P
 ></P
@@ -13278,7 +13360,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3445"
+NAME="AEN3467"
 ></A
 ><P
 ></P
@@ -13312,7 +13394,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3455"
+NAME="AEN3477"
 ></A
 ><P
 ></P
@@ -13475,7 +13557,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN3495"
+NAME="AEN3517"
 ></A
 >Deprecated Functions</H2
 ><P
@@ -13519,7 +13601,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3508"
+NAME="AEN3530"
 ></A
 ><P
 ></P
@@ -13564,7 +13646,7 @@ CLASS="replaceable"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3520"
+NAME="AEN3542"
 ></A
 ><P
 ></P
@@ -13609,7 +13691,7 @@ CLASS="replaceable"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3532"
+NAME="AEN3554"
 ></A
 ><P
 ></P
@@ -13695,7 +13777,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3552"
+NAME="AEN3574"
 ></A
 ><P
 ></P
@@ -13729,7 +13811,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3562"
+NAME="AEN3584"
 ></A
 ><P
 ></P
@@ -13763,7 +13845,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3572"
+NAME="AEN3594"
 ></A
 ><P
 ></P
@@ -13824,7 +13906,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3589"
+NAME="AEN3611"
 ></A
 ><P
 ></P
@@ -13858,7 +13940,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3599"
+NAME="AEN3621"
 ></A
 ><P
 ></P
@@ -13907,7 +13989,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3613"
+NAME="AEN3635"
 ></A
 ><P
 ></P

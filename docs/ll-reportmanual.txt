@@ -570,6 +570,14 @@ Arithmetic and Logic Functions
 
           negation
 
+   FLOAT float(INT);
+
+          convert int to float
+
+   INT int(FLOAT);
+
+          convert float to int
+
    VOID incr(NUMBER);
 
           increment variable by one
@@ -623,7 +631,9 @@ Arithmetic and Logic Functions
    function  returns the remainder after dividing the first parameter
    by the second. If the second argument to div or mod is zero, these
    functions  return  0  and  generate a run time error. Exp performs
-   integer exponentiation. Neg negates its argument.
+   integer  exponentiation.  Neg  negates its argument. The functions
+   function>float  and function>int can be used to explicitly convert
+   a value to float or int where needed.
 
    Incr and decr increment by one and decrement by one, respectively,
    the  value of a variable. The argument to both functions must be a

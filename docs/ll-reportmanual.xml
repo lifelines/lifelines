@@ -1087,6 +1087,30 @@ negation
 </glossdef></glossentry>
 
 <glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>FLOAT <function>float</function></funcdef>
+<paramdef><parameter>INT</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+convert int to float
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INT <function>int</function></funcdef>
+<paramdef><parameter>FLOAT</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+convert float to int
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>incr</function></funcdef>
 <paramdef><parameter>NUMBER</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
@@ -1246,6 +1270,10 @@ first parameter by the second. If the second argument to
 these functions return 0 and generate a run time error.
 <function>Exp</function> performs integer exponentiation.
 <function>Neg</function> negates its argument.
+The functions 
+<function>float</function> and
+<function>int</function>
+can be used to explicitly convert a value to float or int where needed.
 </para>
 
 
