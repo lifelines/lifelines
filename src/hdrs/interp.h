@@ -333,6 +333,7 @@ PNODE spouses_node(PNODE, STRING, STRING, STRING, PNODE);
 PNODE string_node(STRING);
 PNODE traverse_node(PNODE, STRING, STRING, PNODE);
 PVALUE valueof_iden(SYMTAB, STRING);
+void init_interpreter(void);
 PNODE while_node(PNODE, PNODE);
 int yylex(void);
 int yyparse(void);

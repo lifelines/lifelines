@@ -63,10 +63,12 @@ typedef struct pn_block *PN_BLOCK;
  * local function prototypes
  *********************************************/
 
+/* alphabetical */
 static PNODE alloc_pnode_memory(void);
-static void free_pnode_memory(PNODE node);
 static void delete_pnode(PNODE node);
+static void free_pnode_memory(PNODE node);
 static void set_parents(PNODE body, PNODE node);
+static void verify_builtins(void);
 
 /*********************************************
  * local variables
@@ -77,7 +79,7 @@ static INT live_pnodes = 0;
 static PN_BLOCK block_list = 0;
 
 /*********************************************
- * local function definitions
+ * local & exported function definitions
  * body of module
  *********************************************/
 
@@ -550,10 +552,11 @@ fdef_node (STRING name,    /* proc name */
 }
 /*=======================================================
  * func_node -- Create builtin or user function call node
+ * STRING name:  [in] function name
+ * PNODE elist:  [in] param(s)
  *=====================================================*/
 PNODE
-func_node (STRING name,    /* function name */
-           PNODE elist)    /* param/s */
+func_node (STRING name, PNODE elist)
 {
 	PNODE node;
 	INT lo, hi, md=0, n, r;
@@ -570,7 +573,8 @@ func_node (STRING name,    /* function name */
 
 /*
 	See if the function is builtin
-	Assumes that builtins[] is in alphabetic order
+	Assume that builtins[] is in alphabetic order
+	and do binary search on it
 */
 	
 	lo = 0;
@@ -590,8 +594,9 @@ func_node (STRING name,    /* function name */
 		if ((n = num_params(elist)) < builtins[md].ft_nparms_min
 		    || n > builtins[md].ft_nparms_max) {
 			llwprintf(ierror, Pfname, Plineno);
-			llwprintf("%s: must have %d to %d parameters.\n", name,
-		    	builtins[md].ft_nparms_min, builtins[md].ft_nparms_max);
+			llwprintf("%s: must have %d to %d parameters (found with %d).\n"
+				, name, builtins[md].ft_nparms_min, builtins[md].ft_nparms_max
+				, n);
 			Perrors++;
 		}
 		node = create_pnode(IBCALL);
@@ -610,12 +615,47 @@ func_node (STRING name,    /* function name */
 	return node;
 }
 /*=============================
+ * init_interpreter -- any initialization needed by
+ *  interpreter at program startup
+ * Created: 2001/06/10, Perry Rapp
+ *===========================*/
+void
+init_interpreter (void)
+{
+	verify_builtins();
+}
+/*=============================
+ * verify_builtins -- check that builtins are in order
+ * Created: 2001/06/10, Perry Rapp
+ *===========================*/
+static void
+verify_builtins (void)
+{
+	int i;
+	for (i=0; i<nobuiltins-1; ++i) {
+		if (strcmp(builtins[i].ft_name, builtins[i+1].ft_name)>0) {
+			char msg[64];
+			sprintf(msg, "builtins array out of order ! (entries %d,%d)"
+				, i, i+1);
+			FATAL2(msg);
+		}
+		if (builtins[i].ft_nparms_min > builtins[i].ft_nparms_max) {
+			char msg[64];
+			sprintf(msg, "builtins array bad min,max (%d,%d, entry %d)"
+				, builtins[i].ft_nparms_min, builtins[i].ft_nparms_max
+				, i);
+			FATAL2(msg);
+		}
+	}
+}
+/*=============================
  * if_node -- Create an if node
+ * PNODE cond:   [in] cond expr
+ * PNODE tnode:  [in] then
+ * PNODE enode:  [in] else
  *===========================*/
 PNODE
-if_node (PNODE cond,     /* cond expr */
-         PNODE tnode,    /* then */
-         PNODE enode)    /* else */
+if_node (PNODE cond, PNODE tnode, PNODE enode)
 {
 	PNODE node = create_pnode(IIF);
 	icond(node) = (VPTR) cond;

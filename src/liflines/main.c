@@ -244,6 +244,7 @@ main (INT argc,
 		llwprintf("%s", msg);
 		goto finish;
 	}
+	init_interpreter(); /* give interpreter its turn at initialization */
 
 	/* Validate Command-Line Arguments */
 	if (readonly && writeable) {

@@ -1,3 +1,8 @@
+2001-06-10 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog hdrs/interp.h interp/alloc.c liflines/main.c:
+	Added init code to check builtins array (& FATAL2 if not correct).
+
 2001-06-03 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/gengedc.c gedlib/indiseq.c gedlib/init.c
