@@ -1106,13 +1106,15 @@ parent_indiseq (INDISEQ seq)
 		if (fath && !in_table(tab, key = indi_to_key(fath))) {
 			/* indiseq values must be copied with copyval */
 			uval = copyval(seq, sval(el));
-			append_indiseq_impl(par, strsave(key), NULL, uval, TRUE, TRUE);
+			key = strsave(key);
+			append_indiseq_impl(par, key, NULL, uval, TRUE, TRUE);
 			insert_table_int(tab, key, 0);
 		}
 		if (moth && !in_table(tab, key = indi_to_key(moth))) {
 			/* indiseq values must be copied with copyval */
 			uval = copyval(seq, sval(el));
-			append_indiseq_impl(par, strsave(key), NULL, uval, TRUE, TRUE);
+			key = strsave(key);
+			append_indiseq_impl(par, key, NULL, uval, TRUE, TRUE);
 			insert_table_int(tab, key, 0);
 		}
 	ENDINDISEQ
@@ -1322,7 +1324,7 @@ fam_to_fathers (NODE fam)
 	seq = create_indiseq_null();
 	FORHUSBS(fam, husb, num)
 		key = indi_to_key(husb);
-		append_indiseq_null(seq, strsave(key), NULL, TRUE, TRUE);
+		append_indiseq_null(seq, key, NULL, TRUE, FALSE);
 	ENDHUSBS
 	if (num && ISize(seq)) return seq;
 	remove_indiseq(seq);
@@ -1341,7 +1343,7 @@ fam_to_mothers (NODE fam)
 	seq = create_indiseq_null();
 	FORWIFES(fam, wife, num)
 		key = indi_to_key(wife);
-		append_indiseq_null(seq, strsave(key), NULL, TRUE, TRUE);
+		append_indiseq_null(seq, key, NULL, TRUE, FALSE);
 	ENDWIFES
 	if (num && ISize(seq)) return seq;
 	remove_indiseq(seq);
@@ -1366,7 +1368,7 @@ sibling_indiseq (INDISEQ seq,
 		indi = key_to_indi(skey(el));
 		if ((fam = indi_to_famc(indi))) {
 			fkey = fam_to_key(fam);
-			append_indiseq_null(fseq, strsave(fkey), NULL, FALSE, TRUE);
+			append_indiseq_null(fseq, fkey, NULL, FALSE, FALSE);
 		}
 		if (!close) insert_table_int(tab, skey(el), 0);
 	ENDINDISEQ
@@ -1536,8 +1538,7 @@ spouse_indiseq (INDISEQ seq)
 					/* key copy for seq & list - owned by seq */
 				spkey = strsave(spkey);
 				u = copyval(seq, sval(el));
-				append_indiseq_impl(sps, spkey, NULL,
-					u, TRUE, TRUE);
+				append_indiseq_impl(sps, spkey, NULL, u, TRUE, TRUE);
 				insert_table_int(tab, spkey, 0);
 			}
 		ENDSPOUSES

@@ -151,9 +151,10 @@ load_config_file (STRING file, STRING * pmsg)
 	BOOLEAN there, failed, noesc;
 	char buffer[MAXLINELEN],valbuf[MAXLINELEN];
 	fp = fopen(file, LLREADTEXT);
-	if (!fp)
+	if (!fp) {
+	        free(thisdir);
 		return TRUE; /* no config file, that is ok */
-
+        }
 	f_predef = create_table(FREEBOTH);
 
 	insert_table_str(f_predef, strsave("%thisdir%"), thisdir);
