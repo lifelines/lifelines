@@ -625,46 +625,33 @@ update_menu (INT screen)
 	return lines;
 }
 /*=========================================
- * show_indi_main -- Shortcut to show_indi for
- *  using on main (full width) screen
- * See show_indi.
- *=======================================*/
-void
-show_indi_main (NODE indi, INT mode, INT row, INT hgt, BOOLEAN reuse)
-{
-	INT width = MAINWIN_WIDTH-2; /* box characters at start & end */
-	show_indi(main_win, indi, mode, row, hgt, width, &Scroll1, reuse);
-}
-/*=========================================
  * show_indi -- Show indi according to mode
  *  uiwin:  [IN]  where to display
  *  indi:   [IN]  whom to display
  *  mode:   [IN]  how to display (eg, traditional, gedcom, ...)
- *  row:    [IN]  starting row to use
- *  hgt:    [IN]  how many rows allowed
- *  width:  [IN]  how many cols allowed
+ *  rect:   [IN]  rectangular area in which to display
  *  scroll: [I/O] how far down display is scrolled
  *  reuse:  [IN]  flag to save recalculating display strings
  *=======================================*/
 void
-show_indi (UIWINDOW uiwin, NODE indi, INT mode, INT row, INT hgt
-	, INT width, INT * scroll, BOOLEAN reuse)
+show_indi (UIWINDOW uiwin, NODE indi, INT mode, LLRECT rect
+	, INT * scroll, BOOLEAN reuse)
 {
 	CACHEEL icel;
 	icel = indi_to_cacheel_old(indi);
 	lock_cache(icel);
 	if (mode=='g')
-		show_gedcom(uiwin, indi, GDVW_NORMAL, row, hgt, width, scroll, reuse);
+		show_gedcom(uiwin, indi, GDVW_NORMAL, rect, scroll, reuse);
 	else if (mode=='x')
-		show_gedcom(uiwin, indi, GDVW_EXPANDED, row, hgt, width, scroll, reuse);
+		show_gedcom(uiwin, indi, GDVW_EXPANDED, rect, scroll, reuse);
 	else if (mode=='t')
-		show_gedcom(uiwin, indi, GDVW_TEXT, row, hgt, width, scroll, reuse);
+		show_gedcom(uiwin, indi, GDVW_TEXT, rect, scroll, reuse);
 	else if (mode=='a')
-		show_ancestors(uiwin, indi, row, hgt, width, scroll, reuse);
+		show_ancestors(uiwin, indi, rect, scroll, reuse);
 	else if (mode=='d')
-		show_descendants(uiwin, indi, row, hgt, width, scroll, reuse);
+		show_descendants(uiwin, indi, rect, scroll, reuse);
 	else
-		show_indi_vitals(uiwin, indi, row, hgt, width, scroll, reuse);
+		show_indi_vitals(uiwin, indi, rect, scroll, reuse);
 	unlock_cache(icel);
 }
 /*=========================================
@@ -680,13 +667,18 @@ static void
 show_fam (UIWINDOW uiwin, NODE fam, INT mode, INT row, INT hgt
 	, INT width, INT * scroll, BOOLEAN reuse)
 {
+	struct llrect_s rect;
 	CACHEEL fcel;
 	fcel = fam_to_cacheel(fam);
 	lock_cache(fcel);
+	rect.top = row;
+	rect.bottom = row+hgt-1;
+	rect.left = 1;
+	rect.right = width-1;
 	if (mode=='g')
-		show_gedcom(uiwin, fam, GDVW_NORMAL, row, hgt, width, scroll, reuse);
+		show_gedcom(uiwin, fam, GDVW_NORMAL, &rect, scroll, reuse);
 	else if (mode=='x')
-		show_gedcom(uiwin, fam, GDVW_EXPANDED, row, hgt, width, scroll, reuse);
+		show_gedcom(uiwin, fam, GDVW_EXPANDED, &rect, scroll, reuse);
 	else
 		show_fam_vitals(uiwin, fam, row, hgt, width, scroll, reuse);
 	unlock_cache(fcel);
@@ -699,7 +691,13 @@ display_indi (NODE indi, INT mode, BOOLEAN reuse)
 {
 	INT screen = ONE_PER_SCREEN;
 	INT lines = update_menu(screen);
-	show_indi_main(indi, mode, 1, lines, reuse);
+	struct llrect_s rect;
+	/* leave room for box all around */
+	rect.top = 1;
+	rect.bottom = lines;
+	rect.left = 1;
+	rect.right = MAINWIN_WIDTH-2;
+	show_indi(main_win, indi, mode, &rect, &Scroll1, reuse);
 	display_screen(screen);
 }
 /*=========================================
@@ -742,14 +740,23 @@ display_2indi (NODE indi1, NODE indi2, INT mode)
 	INT lines = update_menu(screen);
 	INT lines1,lines2;
 	BOOLEAN reuse = FALSE; /* can't reuse display strings in tandem */
+	struct llrect_s rect;
 	lines--; /* for tandem line */
 	lines2 = lines/2;
 	lines1 = lines - lines2;
 
-	show_indi_main(indi1, mode, 1, lines1, reuse);
+	rect.top = 1;
+	rect.bottom = lines1;
+	rect.left = 1;
+	rect.right = 
+	rect.right = MAINWIN_WIDTH-1;
+
+	show_indi(main_win, indi1, mode, &rect, &Scroll1, reuse);
 	show_tandem_line(main_win, lines1+1);
 	switch_scrolls();
-	show_indi_main(indi2, mode, lines1+2, lines2, reuse);
+	rect.top = lines1+2;
+	rect.bottom = lines;
+	show_indi(main_win, indi2, mode, &rect, &Scroll1, reuse);
 	switch_scrolls();
 
 	display_screen(screen);
@@ -814,11 +821,14 @@ INT
 aux_browse (NODE node, INT mode, BOOLEAN reuse)
 {
 	UIWINDOW uiwin = main_win;
-	INT width=MAINWIN_WIDTH;
 	INT screen = AUX_SCREEN;
 	INT lines = update_menu(screen);
-	INT row=1;
-	show_aux(uiwin, node, mode, row, lines, width,  &Scroll1, reuse);
+	struct llrect_s rect;
+	rect.top = 1;
+	rect.bottom = lines;
+	rect.left = 1;
+	rect.right = MAINWIN_WIDTH-1;
+	show_aux(uiwin, node, mode, &rect,  &Scroll1, reuse);
 	display_screen(screen);
 	return interact(uiwin, NULL, screen);
 }
@@ -2065,10 +2075,15 @@ static void
 show_record (UIWINDOW uiwin, STRING key, INT mode, INT row, INT hgt, INT width
 	, INT * scroll, BOOLEAN reuse)
 {
+	struct llrect_s rect;
+	rect.top = row;
+	rect.bottom = hgt+row-1;
+	rect.left = 1;
+	rect.right = width+1;
 	if (key[0]=='I') {
 		NODE indi = key_to_indi(key);
 		if (indi)
-			show_indi(uiwin, indi, mode, row, hgt, width, scroll, reuse);
+			show_indi(uiwin, indi, mode, &rect, scroll, reuse);
 	} else if (key[0]=='F') {
 		NODE fam = key_to_fam(key);
 		if (fam)
@@ -2077,7 +2092,7 @@ show_record (UIWINDOW uiwin, STRING key, INT mode, INT row, INT hgt, INT width
 		/* could be S,E,X -- show_aux handles all of these */
 		NODE aux = qkey_to_type(key);
 		if (aux)
-			show_aux(uiwin, aux, mode, row, hgt, width, scroll, reuse);
+			show_aux(uiwin, aux, mode, &rect, scroll, reuse);
 	}
 }
 /*================================================================

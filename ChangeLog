@@ -1,5 +1,14 @@
 2002-01-21 Perry Rapp <puddle@users.sourceforge.net>
 
+	* ChangeLog hdrs/screen.h liflines/export.c liflines/llinesi.h
+	liflines/pedigree.c liflines/screen.c liflines/show.c:
+
+	Introduced LLRECT type into screen etc (to reduce #args).
+	Removed assumption that display starts on col==1 from some of
+	indi displays.
+
+2002-01-21 Perry Rapp <puddle@users.sourceforge.net>
+
 	* ChangeLog liflines/screen.c:
 
 	Bugfix for menus not being repainted if user

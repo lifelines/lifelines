@@ -107,6 +107,8 @@ extern UIWINDOW del_menu_win;
 extern UIWINDOW scan_menu_win;
 extern UIWINDOW utils_menu_win;
 
+typedef struct llrect_s *LLRECT;
+
 /* Function Prototype */
 /* screen.c */
 INT ask_for_char(STRING, STRING, STRING);
@@ -123,10 +125,9 @@ void paint_main_screen(void);
 void paint_two_fam_screen(void);
 void paint_list_screen(void);
 void show_horz_line(UIWINDOW, INT, INT, INT);
-void show_indi(UIWINDOW uiwin, NODE indi, INT mode, INT row, INT hgt
-	, int width, INT * scroll, BOOLEAN reuse);
-void show_indi_main(NODE indi, INT mode, INT row, INT hgt, BOOLEAN reuse);
-void show_indi_vitals(UIWINDOW uiwin, NODE, INT row, INT hgt, INT width, INT *scroll, BOOLEAN reuse);
+void show_indi(UIWINDOW uiwin, NODE indi, INT mode, LLRECT
+	, INT * scroll, BOOLEAN reuse);
+void show_indi_vitals(UIWINDOW uiwin, NODE, LLRECT, INT *scroll, BOOLEAN reuse);
 void show_vert_line(UIWINDOW, INT, INT, INT);
 void term_screen(void);
 INT twofam_browse(NODE, NODE, INT mode);
@@ -135,16 +136,16 @@ void wfield(INT, INT, STRING);
 void wpos (INT, INT);
 
 /* show.c (curses specific) */
-void show_ancestors (UIWINDOW uiwin, NODE indi, INT row, INT hgt
-	, INT width, INT * scroll, BOOLEAN reuse);
-void show_aux(UIWINDOW uiwin, NODE, INT mode, INT row, INT hgt
-	, INT width, INT * scroll, BOOLEAN reuse);
-void show_descendants(UIWINDOW uiwin, NODE indi, INT row, INT hgt
-	, INT width, INT * scroll, BOOLEAN reuse);
+void show_ancestors (UIWINDOW uiwin, NODE indi, LLRECT
+	, INT * scroll, BOOLEAN reuse);
+void show_aux(UIWINDOW uiwin, NODE, INT mode, LLRECT
+	, INT * scroll, BOOLEAN reuse);
+void show_descendants(UIWINDOW uiwin, NODE indi, LLRECT
+	, INT * scroll, BOOLEAN reuse);
 void show_fam_vitals (UIWINDOW uiwin, NODE fam, INT row, INT hgt
 	, INT width, INT *scroll, BOOLEAN reuse);
-void show_gedcom (UIWINDOW uiwin, NODE node, INT gdvw, INT row, INT hgt
-	, INT width, INT * scroll, BOOLEAN reuse);
+void show_gedcom (UIWINDOW uiwin, NODE node, INT gdvw, LLRECT
+	, INT * scroll, BOOLEAN reuse);
 extern INT Scroll1;
 
 

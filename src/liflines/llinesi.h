@@ -1,6 +1,13 @@
 #ifndef _LIFLINES_PRIV_H
 #define _LIFLINES_PRIV_H
 
+typedef struct llrect_s {
+	INT top;
+	INT bottom;
+	INT left;
+	INT right;
+} * LLRECT;
+
 /* add.c */
 NODE add_child(NODE, NODE);
 NODE add_family(NODE, NODE, NODE);
@@ -79,8 +86,8 @@ enum { GDVW_NORMAL, GDVW_EXPANDED, GDVW_TEXT };
 	typedef void (*PEDLINE)(struct canvasdata_s * canvas, INT x, INT y
 		, STRING string, INT overflow);
 		/* collection of data needed by pedigree */
-	typedef struct canvasdata_s { INT minrow; INT maxrow; INT maxcol;
-		INT scroll; void * param; PEDLINE line; } *CANVASDATA;
+	typedef struct canvasdata_s { LLRECT rect; INT scroll; void * param;
+		PEDLINE line; } *CANVASDATA;
 	/* functions */
 void pedigree_draw_ancestors(NODE indi, CANVASDATA canvasdata, BOOLEAN reuse);
 void pedigree_draw_descendants(NODE indi, CANVASDATA canvasdata, BOOLEAN reuse);

@@ -23,6 +23,8 @@
 */
 /*=============================================================
  * pedigree.c -- Display the pedigree browse screen
+ *  Several related drawing routines to draw information trees
+ *  Ancestor tree, descendant tree, GEDCOM tree
  *   Created: 2000/10 by Perry Rapp
  *==============================================================*/
 
@@ -274,7 +276,7 @@ add_dnodes (NODE node, INT gen, INT maxgen, INT * count, CANVASDATA canvas)
 	DISPNODE tn;
 	DISPNODE tn0, tn1, tn2;
 	NODE child, anode;
-	INT width = canvas->maxcol-2 - gen*6;
+	INT width = (canvas->rect->right - canvas->rect->left) - 2 - gen*6;
 	static char line[MAXLINELEN], output[MAXLINELEN]; /* must be same size */
 	STRING ptr=output;
 	INT leader;
@@ -461,18 +463,18 @@ print_to_screen (INT gen, INT * row, LINEPRINT_FNC fnc
 	char buffer[140], *ptr=buffer;
 	STRING line;
 	int mylen = sizeof(buffer);
-	INT width = canvas->maxcol;
+	INT width = canvas->rect->right - canvas->rect->left;
 	/* NODE indi = 0; */
 	INT drow = *row - canvas->scroll; /* effective display row */
 	int i, overflow=0;
 	if (mylen > width-2)
 		mylen = width-2;
-	if (drow >= canvas->minrow && drow <= canvas->maxrow) {
+	if (drow >= canvas->rect->top && drow <= canvas->rect->bottom) {
 		/* in range to display */
 		/* check if it is a top or bottom row & there is more beyond */
-		if (drow == canvas->minrow && canvas->scroll>0)
+		if (drow == canvas->rect->top && canvas->scroll>0)
 			overflow=1;
-		if (drow == canvas->maxrow && canvas->scroll<ScrollMax)
+		if (drow == canvas->rect->bottom && canvas->scroll<ScrollMax)
 			overflow=1;
 		strcpy(ptr, "");
 		for (i=0; i<gen*6; i++)
@@ -481,7 +483,7 @@ print_to_screen (INT gen, INT * row, LINEPRINT_FNC fnc
 		line = (*fnc)(mylen, lpf_param);
 		llstrcatn(&ptr, line, &mylen);
 		/* tell canvas to put line out */
-		(*canvas->line)(canvas, drow, 1, buffer, overflow);
+		(*canvas->line)(canvas, drow, canvas->rect->left, buffer, overflow);
 	}
 	(*row)++;
 }
@@ -638,7 +640,7 @@ trav_bin_in_print_tn (DISPNODE tn, INT * row, INT gen, CANVASDATA canvas)
 static void
 set_scroll_max (CANVASDATA canvas, INT count)
 {
-	INT hgt = canvas->maxrow - canvas->minrow + 1;
+	INT hgt = canvas->rect->bottom - canvas->rect->top + 1;
 	ScrollMax = count - hgt;
 	if (ScrollMax<0) ScrollMax=0;
 }
@@ -662,7 +664,7 @@ void
 pedigree_draw_descendants (NODE indi, CANVASDATA canvas, BOOLEAN reuse)
 {
 	INT gen=0;
-	INT row = canvas->minrow;
+	INT row = canvas->rect->top;
 	/* build displaynode tree */
 	if (!reuse) {
 		INT count=0;
@@ -681,7 +683,7 @@ pedigree_draw_descendants (NODE indi, CANVASDATA canvas, BOOLEAN reuse)
 void
 pedigree_draw_gedcom (NODE node, INT gdvw, CANVASDATA canvas, BOOLEAN reuse)
 {
-	INT count=0, gen=0, row=canvas->minrow;
+	INT count=0, gen=0, row=canvas->rect->top;
 	if (gdvw == GDVW_TEXT) {
 		draw_gedcom_text(node, canvas, reuse);
 		return;
@@ -702,7 +704,7 @@ static void
 draw_gedcom_text (NODE node, CANVASDATA canvas, BOOLEAN reuse)
 {
 	int gen=0;
-	INT row = canvas->minrow;
+	INT row = canvas->rect->top;
 	DISPNODE tn;
 	if (!reuse) {
 		INT count=0;
@@ -728,7 +730,7 @@ void
 pedigree_draw_ancestors (NODE indi, CANVASDATA canvas, BOOLEAN reuse)
 {
 	int gen=0;
-	INT row = canvas->minrow;
+	INT row = canvas->rect->top;
 	/* build displaynode tree */
 	if (!reuse) {
 		INT count=0;
