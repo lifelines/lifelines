@@ -1,3 +1,7 @@
+2000-11-16  Marc Nozell  <marc@nozell.com>
+
+	* gedlib/init.c: fix syntax error
+
 2000-11-15	Perry Rapp <puddle@users.sourceforge.net>
 	* btree/traverse.c gedlib/editvtab.c hdrs/btree.h hdrs/gedcom.h
 	hdrs/llstdlib.h hdrs/screen.h interp/more.c interp/yacc.y

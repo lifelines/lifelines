@@ -52,9 +52,13 @@ char *getenv();
 static STRING
 figure_tempfile()
 {
-	STRING e;
+
 	char unix_tempfile[] = "/tmp/lltmpXXXXXX";
+
+#ifdef WIN32
+	STRING e;
 	char win32_tempfile[1024]; /* TO DO - this should be MAX_PATH if stdlib or whatever was included */
+#endif
 
 #ifdef WIN32
 	/* windows has per-user temporary directory, depending on version */
@@ -65,7 +69,7 @@ figure_tempfile()
 	strcat(win32_tempfile, "\\lltmpXXXXXX");
 	return mktemp(win32_tempfile);
 #else
-	return mktemp(unix_tempfile));;
+	return mktemp(unix_tempfile);
 #endif
 }
 
