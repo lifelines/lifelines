@@ -2,7 +2,7 @@
 
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd"
-[<!ENTITY llversion '3.0.32>]>
+[<!ENTITY llversion '3.0.36>]>
 
   <book id="docbook" lang="sv">
 
@@ -10,6 +10,7 @@
 
 	
 <!--
+
     this is lifelines.xml
 
     To use this file with SGML software, replace the text above
@@ -18,7 +19,7 @@
 _________________________________________________________
 
 <!DOCTYPE BOOK PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
-	<!entity llversion	"3.0.28">
+	<!entity llversion	"3.0.36">
 ]>	
 	
 <book id="docbook" lang="sv">
@@ -1471,7 +1472,7 @@ GRUNDLÄGGANDE OM BLÄDDRING
 	<acronym>GEDCOM</acronym>-informationen, men förstärker den
 	med information för de rader som har en korsreferens
 	(<acronym>GEDCOM</acronym> xref). Det finns två typer av
-	tavle- eller trädfönster, ett för antavlor och ett för
+	tavel- eller trädfönster, ett för antavlor och ett för
 	stamtavlor. Djupet för träd som visas kan justeras via
 	menykommandon.
 
