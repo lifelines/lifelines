@@ -760,6 +760,11 @@ browse_pedigree (NODE *pindi,
 			else 
 				indi = node;
 			break;
+		case '$':	/* Browse to sources */
+			node = choose_source(indi, nosour, idsour);
+			if (node)
+				edit_source(node);
+			break;
 		case 'q':
 		default:
 			return BROWSE_QUIT;

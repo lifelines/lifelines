@@ -189,6 +189,7 @@ void init_browse_lists(void);
 void init_caches(void);
 void init_lifelines(void);
 void init_mapping(void);
+void init_show_module(void);
 BOOLEAN init_valtab_from_file(STRING, TABLE, INT, STRING*);
 BOOLEAN init_valtab_from_rec(STRING, TABLE, INT, STRING*);
 BOOLEAN init_valtab_from_string(STRING, TABLE, INT, STRING*);
