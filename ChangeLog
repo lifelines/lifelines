@@ -1,3 +1,10 @@
+2000-11-04  Marc Nozell (at home)  <marc@nozell.com>
+
+	* interp/alloc.c: cleanup  
+
+	* interp/Makefile.am: turn off -O2, pvalue.c will force a gcc
+	2.95.2 compiler bug
+
 2000-11-04  Matt Emmerton <matt@gsicomp.on.ca>
 
 	* hdrs/liflines.h, hdrs/indiseq.h, hdrs/cache.h: Added

@@ -40,6 +40,9 @@
 extern STRING ierror;
 extern STRING Pfname;
 
+void set_parents (PNODE body,
+		  PNODE node);
+
 /*==================================
  * create_pnode -- Create PNODE node
  *================================*/
@@ -522,7 +525,7 @@ PNODE args;
 /*==============================================
  * set_parents -- Link body nodes to parent node
  *============================================*/
-set_parents (body, node)
+void set_parents (body, node)
 PNODE body;
 PNODE node;
 {
