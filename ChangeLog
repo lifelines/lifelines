@@ -116,6 +116,11 @@
 	Move gengedc.c local table_incr_item to table.c table_incr_int.
 	Fix next_table_ptr to use const key.
 
+	* ChangeLog src/interp/interp.c src/interp/interpi.h
+	src/interp/symtab.c
+
+	Add code to check for leaked symbol tables.
+
 2005-02-05 Perry Rapp
 
 	* ChangeLog NEWS src/gedlib/xreffile.c

@@ -84,6 +84,7 @@ void delete_symtab_element(SYMTAB stab, STRING iden);
 BOOLEAN in_symtab(SYMTAB stab, STRING key);
 void insert_symtab(SYMTAB stab, STRING iden, PVALUE val);
 void remove_symtab(SYMTAB stab);
+void symbol_tables_end(void);
 PVALUE symtab_valueofbool(SYMTAB, STRING, BOOLEAN*);
 
 

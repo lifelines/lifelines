@@ -392,6 +392,7 @@ interp_program_exit:
 
 interp_program_notfound:
 
+	symbol_tables_end();
 	pvalues_end();
 	wipe_pactx(pactx);
 

@@ -55,6 +55,8 @@ struct tag_symtab_iter {
 
 /* alphabetical */
 static void free_symtable_iter(SYMTAB_ITER symtabit);
+static void record_dead_symtab(SYMTAB symtab);
+static void record_live_symtab(SYMTAB symtab);
 static void symtabit_destructor(VTABLE *obj);
 
 /*********************************************
@@ -72,6 +74,7 @@ static struct tag_vtable vtable_for_symtabit = {
 	, &generic_get_type_name
 };
 
+LIST live_symtabs=0; /* list of symbol tables, to check for leaks */
 
 /*********************************************
  * local function definitions
@@ -115,11 +118,13 @@ delete_symtab_element (SYMTAB stab, STRING iden)
 void
 remove_symtab (SYMTAB stab)
 {
-	STRING key=0;
+	CNSTRING key=0;
 	VPTR ptr=0;
 	TABLE_ITER tabit=0;
 
 	ASSERT(stab);
+
+	record_dead_symtab(stab);
 
 	tabit = begin_table_iter(stab->tab);
 
@@ -148,7 +153,45 @@ create_symtab (void)
 
 	symtab->tab = create_table();
 
+	record_live_symtab(symtab);
+
 	return symtab;
+}
+/*======================================================
+ * record_live_symtab -- Add symbol table to live list
+ *====================================================*/
+static void
+record_live_symtab (SYMTAB symtab)
+{
+	if (!live_symtabs)
+		live_symtabs = create_list2(LISTNOFREE);
+	enqueue_list(live_symtabs, symtab);
+}
+/*======================================================
+ * record_dead_symtab -- Remove symbol table from live list
+ *====================================================*/
+static void
+record_dead_symtab (SYMTAB symtab)
+{
+	LIST newlist = create_list2(LISTNOFREE);
+	ASSERT(live_symtabs && length_list(live_symtabs)>0);
+	/* hard to delete an element, so create a new shorter list */
+	FORLIST(live_symtabs, e)
+		if (e != symtab)
+			enqueue_list(newlist, e);
+	ENDLIST
+	destroy_list(live_symtabs);
+	live_symtabs = newlist;
+}
+/*=================================================
+ * symbol_tables_end -- interpreter just finished running report
+ *===============================================*/
+void
+symbol_tables_end (void)
+{
+	/* for debugging check that no symbol tables leaked */
+	INT leaked_symtabs = length_list(live_symtabs);
+	/* 2005-02-06, 2200Z, Perry: No leaks here */
 }
 /*======================================================
  * in_symtab -- Does symbol table have this entry ?
