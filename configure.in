@@ -86,7 +86,7 @@ dnl AC_CHECK_LIB(bsd, revoke)
 dnl AC_CHECK_LIB(ucb, bzero)
 
 echo Looking for header files
-AC_CHECK_HEADERS( getopt.h alloc.h malloc.h dirent.h )
+AC_CHECK_HEADERS( getopt.h alloc.h malloc.h dirent.h pwd.h )
 dnl AC_HEADER_STDC
 dnl AC_CHECK_HEADERS( errno.h dirent.h fcntl.h getopt.h libgen.h pwd.h siginfo.h signal.h statbuf.h stdio.h stdlib.h string.h strings.h sys/stat.h sys/time.h sys/types.h unistd.h )
 
