@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.32\n"
 "POT-Creation-Date: 2003-09-14 14:11+0200\n"
-"PO-Revision-Date: 2003-09-14 14:16+0200\n"
+"PO-Revision-Date: 2003-09-14 15:54+0200\n"
 "Last-Translator: Jens Arvidsson <jya@sverige.nu>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -2373,49 +2373,49 @@ msgstr "Intern till rapport"
 #. Omit everything up to and including final |
 #: src/gedlib/translat.c:118
 msgid "menu|trantable|e"
-msgstr "menu|trantable|r"
+msgstr "r"
 
 #. TRANSLATORS: key for "Internal to Editor" on translation table menu
 #. Omit everything up to and including final |
 #: src/gedlib/translat.c:121
 msgid "menu|trantable|m"
-msgstr "menu|trantable|m"
+msgstr "e"
 
 #. TRANSLATORS: key for "GEDCOM to Internal" on translation table menu
 #. Omit everything up to and including final |
 #: src/gedlib/translat.c:124
 msgid "menu|trantable|i"
-msgstr "menu|trantable|i"
+msgstr "g"
 
 #. TRANSLATORS: key for "Internal to GEDCOM" on translation table menu
 #. Omit everything up to and including final |
 #: src/gedlib/translat.c:127
 msgid "menu|trantable|x"
-msgstr "menu|trantable|g"
+msgstr "d"
 
 #. TRANSLATORS: key for "Display to Internal" on translation table menu
 #. Omit everything up to and including final |
 #: src/gedlib/translat.c:130
 msgid "menu|trantable|g"
-msgstr "menu|trantable|k"
+msgstr "s"
 
 #. TRANSLATORS: key for "Internal to Display" on translation table menu
 #. Omit everything up to and including final |
 #: src/gedlib/translat.c:133
 msgid "menu|trantable|d"
-msgstr "menu|trantable|s"
+msgstr "k"
 
 #. TRANSLATORS: key for "Report to Internal" on translation table menu
 #. Omit everything up to and including final |
 #: src/gedlib/translat.c:136
 msgid "menu|trantable|p"
-msgstr "menu|trantable|p"
+msgstr "a"
 
 #. TRANSLATORS: key for "Internal to Report" on translation table menu
 #. Omit everything up to and including final |
 #: src/gedlib/translat.c:139
 msgid "menu|trantable|r"
-msgstr "menu|trantable|r"
+msgstr "p"
 
 #. TRANSLATORS: pre test comment
 #: src/gedlib/translat.c:426
