@@ -1,3 +1,7 @@
+2000-11-29 Marc Nozell <marc@nozell.com>
+
+	* reports/alive.ll: Fix typo.
+
 2000-11-29 Perry Rapp <prapp@users.sourceforge.net>
 
 	* gedlib/choose.c gedlib/gstrings.c gedlib/indiseq.c

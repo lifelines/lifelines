@@ -5,7 +5,7 @@
  * @category       
  * @output         Text
  * @description    Finding people alive in a given year
- */
+
 alive - a LifeLines report program for finding live people
 
 This finds who in the database, or among ancestors or descendants of
@@ -22,6 +22,9 @@ Version 5, 17 March 1995, J.F.Chandler, modified to prune place list
 ** SourceForge Versions:
 **
 ** $Log$
+** Revision 1.4  2000/11/29 12:17:11  nozell
+** Fix typo.
+**
 ** Revision 1.3  2000/11/28 21:39:45  nozell
 ** Add keyword tags to all reports
 ** Extend the report script menu to display script output format
