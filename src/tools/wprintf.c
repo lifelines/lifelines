@@ -23,11 +23,13 @@
 */
 /* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 #include <varargs.h>
+#include <stdio.h>
+
 /*===========================================================
  * llwprintf -- Called as llwprintf(fmt, arg, arg, arg, ...)
  *===========================================================*/
 /*VARARGS*/
-llwprintf (va_alist)
+void llwprintf (va_alist)
 va_dcl
 {
 	va_list args;
@@ -40,7 +42,7 @@ va_dcl
  * mprintf -- Called as mprintf(fmt, arg, arg, arg, ...)
  *===========================================================*/
 /*VARARGS*/
-mprintf (va_alist)
+void mprintf (va_alist)
 va_dcl
 {
 	va_list args;
@@ -52,7 +54,7 @@ va_dcl
 /*======================================
  * poutput -- Print argument as a string
  *====================================*/
-poutput (str)
+void poutput (str)
 char *str;
 {
 	printf("%s", str);

@@ -34,6 +34,7 @@
 #include <sys/stat.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 #include "standard.h"
 #include "btree.h"
 
@@ -42,7 +43,7 @@ int opt_finnish = 0;
 /*=========================================
  * main -- Main procedure of btedit command
  *=======================================*/
-main (argc, argv)
+int main (argc, argv)
 int argc;
 char **argv;
 {
@@ -79,10 +80,11 @@ char **argv;
 	unlink("btedit.tmp");
 	closebtree(btree);
 }
+
 /*=========================================================
  * __allocate -- Allocate memory - called by stdalloc macro
  *========================================================*/
-char *__allocate (len, file, line)
+void *__allocate (len, file, line)
 int len;    /* number of bytes to allocate */
 STRING file; /* not used */
 int line;   /* not used */
@@ -95,8 +97,8 @@ int line;   /* not used */
 /*=======================================================
  * __deallocate - Return memory - called by stdfree macro
  *=====================================================*/
-__deallocate (ptr, file, line)
-char *ptr;  /* memory being returned */
+void __deallocate (ptr, file, line)
+void *ptr;  /* memory being returned */
 STRING file; /* not used */
 int line;   /* not used */
 {
@@ -105,7 +107,7 @@ int line;   /* not used */
 /*=============================
  * fatal -- Fatal error routine
  *===========================*/
-__fatal (file, line)
+void __fatal (file, line)
 STRING file;
 int line;
 {
