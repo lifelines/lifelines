@@ -54,6 +54,10 @@
 
 	Fix leak in free_xlat.
 
+	* ChangeLog src/btree/opnbtree.c
+
+	Fix block & index leak in initbtree.
+
 2005-01-26, Stephen Dum
         * ChangeLog docs/ll-reportmanual.xml docs/ll-userguide.sv.xml
 	docs/ll-userguide.xml

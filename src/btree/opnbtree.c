@@ -269,11 +269,12 @@ initbtree (STRING basedir)
 {
 	KEYFILE1 kfile1;
 	KEYFILE2 kfile2;
-	INDEX master;
-	BLOCK block;
+	INDEX master=0;
+	BLOCK block=0;
 	FILE *fk=NULL, *fi=NULL, *fd=NULL;
 	char scratch[200];
 	BOOLEAN result=FALSE; /* only set to good at end */
+	INT rtn=0;
 
 /* Open file for writing keyfile */
 	sprintf(scratch, "%s/key", basedir);
@@ -314,7 +315,10 @@ initbtree (STRING basedir)
 	ixparent(master) = 0;
 	master->ix_nkeys = 0;
 	master->ix_fkeys[0] = path2fkey("ab/aa");
-	if (fwrite(master, BUFLEN, 1, fi) != 1) {
+	rtn = fwrite(master, BUFLEN, 1, fi);
+	stdfree(master);
+	master = 0;
+	if (rtn != 1) {
 		bterrno = BTERR_INDEX;
 		goto initbtree_exit;
 	}
@@ -327,7 +331,10 @@ initbtree (STRING basedir)
 	ixself(block) = path2fkey("ab/aa");
 	ixparent(block) = 0;
 	block->ix_nkeys = 0;
-	if (fwrite(block, BUFLEN, 1, fd) != 1) {
+	rtn = fwrite(block, BUFLEN, 1, fd);
+	stdfree(block);
+	block = 0;
+	if (rtn != 1) {
 		bterrno = BTERR_BLOCK;
 		goto initbtree_exit;
 	}
