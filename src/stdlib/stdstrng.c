@@ -57,7 +57,7 @@ strconcat (STRING s1,
 	p = s3 = (STRING) stdalloc(len+1);
 	while ((c = *s1++)) *p++ = c;
 	while ((c = *s2++)) *p++ = c;
-	*p = NULL;
+	*p = '\0';
 	return s3;
 }
 /*==================================
@@ -148,7 +148,7 @@ lower (STRING str)
 	INT c;
 	while ((c = *str++))
 		*p++ = ll_tolower(c);
-	*p = NULL;
+	*p = '\0';
 	return scratch;
 }
 /*======================================
@@ -162,7 +162,7 @@ upper (STRING str)
 	INT c;
 	while ((c = *str++))
 		*p++ = ll_toupper(c);
-	*p = NULL;
+	*p = '\0';
 	return scratch;
 }
 /*================================
@@ -216,7 +216,7 @@ trim (STRING str, INT len)
 	if (len < 0) len = 0;
 	if (len > MAXLINELEN) len = MAXLINELEN;
 	strcpy(scratch, str);
-	scratch[len] = NULL;
+	scratch[len] = '\0';
 	return scratch;
 }
 /*=========================================
@@ -227,7 +227,7 @@ striptrail (STRING p)
 {
         unsigned char *q = p + strlen(p) - 1;
         while (iswhite(*q) && q >= p)
-                *q-- = NULL;
+                *q-- = '\0';
 }
 /*=======================================
  * striplead -- Strip leading white space
@@ -244,7 +244,7 @@ striplead (STRING p)
 
         while (b <= e)
             *b++ = *q++;
-	*b++ = NULL;
+	*b++ = '\0';
 }
 /*=========================================
  * allwhite -- Check if string is all white
