@@ -14,11 +14,18 @@
 /* Function Prototypes */
 
 STRING ask_for_indi_key(STRING, BOOLEAN, BOOLEAN);
+INT ask_for_int(STRING);
 NODE ask_for_fam(STRING, STRING);
 FILE *ask_for_file(STRING, STRING, STRING*, STRING, STRING);
 NODE ask_for_indi(STRING, BOOLEAN, BOOLEAN);
+INDISEQ ask_for_indiseq(STRING, INT*);
+STRING ask_for_indi_key(STRING, BOOLEAN, BOOLEAN);
+INDISEQ ask_for_indi_list(STRING, BOOLEAN);
+INDISEQ ask_for_indi_list_once(STRING, INT*);
 NODE ask_for_indi_once(STRING, BOOLEAN, INT*);
 STRING ask_for_string(STRING, STRING);
+BOOLEAN ask_yes_or_no(STRING);
+BOOLEAN ask_yes_or_no_msg(STRING, STRING);
 
 NODE add_family(NODE, NODE, NODE);
 NODE add_unlinked_indi(NODE);
@@ -39,7 +46,5 @@ void message(STRING);
 void llwprintf(STRING, ...);
 void mprintf(STRING, ...);
 void do_edit(void);
-BOOLEAN ask_yes_or_no(STRING);
-BOOLEAN ask_yes_or_no_msg(STRING, STRING);
 
 BOOLEAN pointer_value(STRING);

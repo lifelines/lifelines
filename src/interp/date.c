@@ -31,10 +31,10 @@
 /* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /* modified 2000-04-12 J.F.Chandler */
 
-#include "standard.h"
-#include "table.h"
 #include <sys/types.h>
 #include <time.h>
+#include "standard.h"
+#include "table.h"
 
 #define MONTH_TOK 1
 #define CHAR_TOK  2
@@ -431,7 +431,7 @@ INT yfmt;
 /*=====================================================
  * extract_date -- Extract date from free format string
  *===================================================*/
-extract_date (str, pmod, pda, pmo, pyr, pyrstr)
+void extract_date (str, pmod, pda, pmo, pyr, pyrstr)
 STRING str, *pyrstr;
 INT *pmod, *pda, *pmo, *pyr;
 {

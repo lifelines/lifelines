@@ -31,6 +31,7 @@
 /* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /* modified 2000-04-12 J.F.Chandler */
 
+#include <stdlib.h>
 #include "standard.h"
 #include "table.h"
 #include "translat.h"
@@ -174,7 +175,6 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	PNODE arg = (PNODE) iargs(node);
 	CACHEEL cel = NULL;
 	NODE fam;
-	STRING msg = (STRING) "Identify family for program:";
 	if (!iistype(arg, IIDENT)) {
 		prog_error(node, "1st arg to getfam must be a variable");
 		*eflg = TRUE;
@@ -220,8 +220,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __gettoday -- Create today's event
  *   usage: gettoday() --> EVENT
  *=================================*/
-PVALUE __gettoday (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE __gettoday (void)
 {
 	NODE prnt = create_node(NULL, "EVEN", NULL, NULL);
 	NODE chil = create_node(NULL, "DATE", get_date(), prnt);
@@ -1741,7 +1740,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 			prog_error(node, "an arg to concat is not a string");
 			return NULL;
 		}
-		if (str = (STRING) pvalue(val)) {
+		if ((str = (STRING) pvalue(val))) {
                         len += strlen(str);
 
 #ifdef DEBUG
@@ -2296,7 +2295,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 		prog_error(node, "5th arg to extractdatestr must be a variable");
 		return NULL;
 	}
-	if (date = inext(ystvar)) {
+	if ((date = inext(ystvar))) {
 		val = evaluate(date, stab, eflg);
 		if (*eflg) return NULL;
 		if (ptype(val) != PSTRING) {
@@ -2616,8 +2615,8 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __nl -- Newline function
  *   usage: nl() -> STRING
  *=======================*/
-PVALUE __nl (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE __nl (eflg)
+BOOLEAN *eflg;
 {
 	*eflg = FALSE;
 	return create_pvalue(PSTRING, (WORD)"\n");
@@ -2626,8 +2625,8 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __space -- Space function
  *   usage: sp() -> STRING
  *========================*/
-PVALUE __space (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE __space (eflg)
+BOOLEAN *eflg;
 {
 	*eflg = FALSE;
 	return create_pvalue(PSTRING, (WORD)" ");
@@ -2636,8 +2635,8 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __qt -- Double quote function
  *   usage: qt() -> STRING
  *============================*/
-PVALUE __qt (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE __qt (eflg)
+BOOLEAN *eflg;
 {
 	*eflg = FALSE;
 	return create_pvalue(PSTRING, (WORD)"\"");
@@ -2649,9 +2648,9 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 PVALUE __indi (node, stab, eflg)
 PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	STRING str, rec;
+	STRING str;
 	unsigned char scratch[200], *p, *q = scratch;
-	INT c, len;
+	INT c;
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
 	if (*eflg) {
 		prog_error(node, "the arg to indi is not a string");
