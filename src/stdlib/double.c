@@ -38,7 +38,7 @@
 
 /* alphabetical */
 static void validate_list(LIST list);
-static void free_heapstring_el(VPTR w);
+static void free_heap_el(VPTR w);
 
 
 /*===========================
@@ -94,14 +94,14 @@ remove_list (LIST list, void (*func)(VPTR))
  * Returns index of element found, or -1 if none pass check
  *=========================*/
 INT
-in_list (LIST list, VPTR el, int (*func)(VPTR, VPTR))
+in_list (LIST list, VPTR param, BOOLEAN (*func)(VPTR param, VPTR el))
 {
 	LNODE lnode;
 	INT index=0;
 	if (!list) return FALSE;
 	lnode = lfirst(list);
 	while (lnode) {
-		if((*func)(el, lelement(lnode))) return index;
+		if((*func)(param, lelement(lnode))) return index;
 		lnode = lnext(lnode);
 	}
 	validate_list(list);
@@ -132,19 +132,21 @@ make_list_empty (LIST list)
 }
 /*===================================
  * is_empty_list -- Check for empty list
+ *  list:  [IN]  list
  *=================================*/
 BOOLEAN
-is_empty_list (LIST list)
+is_empty_list (const LIST list)
 {
 	validate_list(list);
 	return !list || !llen(list);
 }
 /*==================================
  * push_list -- Push element on list
+ *  list:  [I/O]  list
+ *  el:    [IN]   new element
  *================================*/
 void
-push_list (LIST list,
-           VPTR el)
+push_list (LIST list, VPTR el)
 {
 	LNODE node = NULL;
 
@@ -165,10 +167,11 @@ push_list (LIST list,
 }
 /*=========================================
  * back_list -- Put element on back of list
+ *  list:  [I/O]  list
+ *  el:    [IN]   new element
  *=======================================*/
 void
-back_list (LIST list,
-           VPTR el)
+back_list (LIST list, VPTR el)
 {
 	LNODE node = NULL;
 
@@ -189,6 +192,7 @@ back_list (LIST list,
 }
 /*==================================
  * pop_list -- Pop element from list
+ *  list:  [I/O]  list
  *================================*/
 VPTR
 pop_list (LIST list)
@@ -253,19 +257,19 @@ dequeue_list (LIST list)
  * nth_in_list -- Find nth node in list, relative 1
  *===============================================*/
 static LNODE
-nth_in_list (LIST list, INT n)
+nth_in_list (LIST list, INT index1b)
 {
 	INT i = 1;
 	LNODE node = NULL;
 	if (!list) return NULL;
 	node = llast(list);
-	while (i < n && node) {
+	while (i < index1b && node) {
 		i++;
 		node = lprev(node);
 	}
 	validate_list(list);
-	if (i == n && node) return node;
-	while (i++ <= n)
+	if (i == index1b && node) return node;
+	while (i++ <= index1b)
 		push_list(list, NULL);
 	validate_list(list);
 	return lfirst(list);
@@ -274,11 +278,11 @@ nth_in_list (LIST list, INT n)
  * set_list_element - Set element using array access
  *================================================*/
 void
-set_list_element (LIST list, INT ind, VPTR val)
+set_list_element (LIST list, INT index1b, VPTR val)
 {
 	LNODE node = NULL;
 	if (!list) return;
-	node = nth_in_list(list, ind);
+	node = nth_in_list(list, index1b);
 	if (!node) return;
 	lelement(node) = val;
 	validate_list(list);
@@ -287,11 +291,11 @@ set_list_element (LIST list, INT ind, VPTR val)
  * get_list_element - Retrieve element using array access
  *=====================================================*/
 VPTR
-get_list_element (LIST list, INT ind)
+get_list_element (LIST list, INT index1b)
 {
 	LNODE node = NULL;
 	if (!list) return 0;
-	node = nth_in_list(list, ind);
+	node = nth_in_list(list, index1b);
 	if (!node) return 0;
 	return lelement(node);
 }
@@ -304,20 +308,20 @@ length_list (LIST list)
 	return !list ? 0 : llen(list);
 }
 /*====================================================
- * free_heapstring_el -- free alloc'd string element of list
+ * free_heap_el -- free stdalloc'd element of list
  *==================================================*/
 static void
-free_heapstring_el (VPTR w)
+free_heap_el (VPTR w)
 {
-	stdfree((STRING)w);
+	stdfree(w);
 }
 /*====================================================
  * remove_heapstring_list -- free a dblist (caller is done with it)
  *==================================================*/
 void
-remove_heapstring_list (LIST list)
+remove_heapel_list (LIST list)
 {
 	if (list) {
-		remove_list(list, free_heapstring_el);
+		remove_list(list, free_heap_el);
 	}
 }

@@ -149,6 +149,10 @@ struct ptag {
 typedef struct symtab_s {
 	TABLE tab;
 } SYMTAB;
+typedef struct symtab_iter_s {
+	struct table_iter_s tabiters;
+} *SYMTAB_ITER;
+
 
 typedef PVALUE (*PFUNC)(PNODE, SYMTAB, BOOLEAN *);
 
@@ -222,6 +226,7 @@ void ne_pvalues(PVALUE, PVALUE, BOOLEAN*);
 void eq_pvalues(PVALUE, PVALUE, BOOLEAN*);
 
 /* PVALUE & SYMTAB Functions */
+BOOLEAN begin_symtab(SYMTAB stab, SYMTAB_ITER stabit);
 void coerce_pvalue(INT, PVALUE, BOOLEAN*);
 PVALUE copy_pvalue(PVALUE);
 void create_symtab(SYMTAB * stab);
@@ -255,6 +260,7 @@ BOOLEAN is_numeric_pvalue(PVALUE);
 BOOLEAN is_pvalue(PVALUE);
 BOOLEAN is_record_pvalue(PVALUE);
 BOOLEAN is_zero(PVALUE);
+BOOLEAN next_symtab_entry(SYMTAB_ITER tabit, STRING *pkey, PVALUE *ppval);
 SYMTAB null_symtab(void);
 void num_conform_pvalues(PVALUE, PVALUE, BOOLEAN*);
 void pvalues_begin(void);
@@ -270,7 +276,6 @@ void remove_symtab(SYMTAB *);
 void set_pvalue(PVALUE, INT, VPTR);
 void show_pvalue(PVALUE);
 PVALUE symtab_valueofbool(SYMTAB, STRING, BOOLEAN*);
-void traverse_symtab(SYMTAB stab, VPTR param, BOOLEAN (*fnc)(STRING, PVALUE, VPTR));
 #ifndef HOGMEMORY
 void zero_pventry(ENTRY);
 #endif

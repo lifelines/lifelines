@@ -1604,6 +1604,7 @@ dbgloop:
 static void
 disp_symtab (SYMTAB stab)
 {
+	struct symtab_iter_s symtabits;
 	INT n = (stab.tab ? get_table_count(stab.tab) : 0);
 	struct dbgsymtab_s sdata;
 	INT bytes = n * sizeof(STRING);
@@ -1613,7 +1614,13 @@ disp_symtab (SYMTAB stab)
 	sdata.locals = (STRING *)malloc(bytes);
 	memset(sdata.locals, 0, bytes);
 	/* Now traverse & print the actual entries via disp_symtab_cb() */
-	traverse_symtab(stab, &sdata.locals, disp_symtab_cb);
+	if (begin_symtab(stab, &symtabits)) {
+		STRING key=0;
+		PVALUE pval=0;
+		while (next_symtab_entry(&symtabits, &key, &pval)) {
+			disp_symtab_cb(key, pval, &sdata.locals);
+		}
+	}
 	/* Title of report debugger's list of local symbols */
 	view_array(_("Local variables"), n, sdata.locals);
 	free_array_strings(n, sdata.locals);

@@ -35,6 +35,6 @@ get_current_lldate (LLDATE * creation)
 	curtime = time(NULL);
 	pt = gmtime(&curtime);
 	sprintf(creation->datestr, "%04d%02d%02d%02d%02d%02d", 
-		pt->tm_year+1900, pt->tm_mon, pt->tm_mday,
+		pt->tm_year+1900, pt->tm_mon+1, pt->tm_mday,
 		pt->tm_hour, pt->tm_min, pt->tm_sec);
 }

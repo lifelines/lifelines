@@ -50,7 +50,6 @@
 
 TABLE tagtable=NULL;		/* table for tag strings */
 TABLE placabbvs=NULL;	/* table for place abbrevs */
-TABLE useropts=NULL;		/* table for user options */
 BTREE BTR=NULL;	/* database */
 STRING editstr=NULL; /* edit command to run to edit (has editfile inside of it) */
 STRING editfile=NULL; /* file used for editing, name obtained via mktemp */
@@ -97,6 +96,9 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 		, "LLDATABASES", "LLNEWDBDIR" };
 	INT i;
 
+	/* request notification when options change */
+	register_notify(update_useropts);
+
 	f_dbnotify = notify;
 
 	if (!configfile)
@@ -107,7 +109,7 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 	if (!configfile || !configfile[0])
 		configfile = environ_determine_config_file();
 	
-	if (!init_lifelines_options(configfile, pmsg))
+	if (!load_global_options(configfile, pmsg))
 		return FALSE;
 
 	init_win32_gettext_shim();
@@ -135,24 +137,20 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 	/* check if any directories not specified, and try environment
 	variables, and default to "." */
 	for (i=0; i<ARRSIZE(dirvars); ++i) {
-		if (!getoptstr(dirvars[i], NULL)) {
-			STRING str = getenv(dirvars[i]);
-			if (str)
-				changeoptstr(dirvars[i], strsave(str));
-			else
-				changeoptstr(dirvars[i], strsave("."));
-		}
+		STRING str = getenv(dirvars[i]);
+		if (!str)
+			str = ".";
+		setoptstr_fallback(dirvars[i], strsave(str));
 	}
 	/* also check environment variable for editor */
-	if (!getoptstr("LLEDITOR", NULL)) {
+	{
 		STRING str = getenv("LLEDITOR");
-		if (str)
-			changeoptstr("LLEDITOR", strsave(str));
+		if (!str)
+			str = environ_determine_editor(PROGRAM_LIFELINES);
+		setoptstr_fallback("LLEDITOR", strsave(str));
 	}
 	/* editor falls back to platform-specific default */
 	e = getoptstr("LLEDITOR", NULL);
-	if (!e || !e[0])
-		e = environ_determine_editor(PROGRAM_LIFELINES);
 	/* configure tempfile & edit command */
 	editfile = environ_determine_tempfile();
 	if (!editfile) {
@@ -220,13 +218,14 @@ BOOLEAN
 init_lifelines_db (void)
 {
 	STRING emsg;
+	TABLE dbopts = create_table();
 
 	tagtable = create_table();
 	placabbvs = create_table();
-	useropts = create_table();
+
 	init_valtab_from_rec("VPLAC", placabbvs, ':', &emsg);
-	init_valtab_from_rec("VUOPT", useropts, '=', &emsg);
-	update_useropts();
+	init_valtab_from_rec("VUOPT", dbopts, '=', &emsg);
+	set_db_options(dbopts);
 	init_caches();
 	init_browse_lists();
 	init_mapping();
@@ -275,7 +274,10 @@ close_lifelines (void)
 void
 close_lldb (void)
 {
-	/* TODO: reverse the rest of init_lifelines_db -- Perry, 2002.06.05 */
+	/* TODO: reverse the rest of init_lifelines_db -- Perry, 2002.06.05
+	remove_table(tagtable, FREE_KEY); values are same as keys
+	remove_table(placabbvs, ??)
+	*/
 	closexref();
 	if (BTR) {
 		closebtree(BTR);
@@ -538,11 +540,9 @@ describe_dberror (INT dberr, STRING buffer, INT buflen)
 BOOLEAN
 get_utf8_from_uopts (TABLE opttab)
 {
-	STRING str;
-	if (opttab && (str = valueof_str(opttab, "codeset"))!=NULL) {
-		if (eqstr("UTF-8", str)||eqstr("utf-8", str)||eqstr("65001", str))
-			return TRUE;
-	}
+	STRING str = getoptstr_dbonly("codeset", NULL);
+	if (str && (eqstr("UTF-8", str)||eqstr("utf-8", str)||eqstr("65001", str)))
+		return TRUE;
 	return FALSE;
 }
 /*===================================================
@@ -552,7 +552,10 @@ get_utf8_from_uopts (TABLE opttab)
 void
 update_useropts (void)
 {
-	int_utf8 = get_utf8_from_uopts(useropts);
+	TABLE opttab = create_table();
+	get_db_options(opttab);
+	int_utf8 = get_utf8_from_uopts(opttab);
+	remove_table(opttab, FREEBOTH);
 	uilocale(); /* in case user changed locale */
 }
 /*==================================================
@@ -570,6 +573,8 @@ get_dblist (STRING path, LIST * dblist, LIST * dbdesclist)
 	ASSERT(!(*dblist) && !(*dbdesclist));
 	*dblist = create_list();
 	*dbdesclist = create_list();
+	set_list_type(*dblist, LISTDOFREE);
+	set_list_type(*dbdesclist, LISTDOFREE);
 	if (!path || !path[0] || strlen(path) > sizeof(dirs)-2)
 		return 0;
 	/* find directories in dirs & delimit with zeros */
@@ -650,6 +655,7 @@ void
 release_dblist (LIST dblist)
 {
 	if (dblist) {
-		remove_heapstring_list(dblist);
+		make_list_empty(dblist);
+		remove_list(dblist, 0);
 	}
 }

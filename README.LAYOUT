@@ -23,7 +23,7 @@ Source Code Directories
     Node functions (extracting from & sending to db, and some top-level
      node conversions, eg indi_to_event).
     messages (attempt to put together all strings for hopeful localization).
-    miscellaneous other stuff (including initialization code).
+    miscellaneous other stuff (including initialization code & options).
 
 ./hdrs/
 
@@ -69,8 +69,7 @@ Source Code Directories
     Common data types & functions used by other LifeLines modules,
     including:
       lists (in double.c), tables, sequences, string stuff
-    These are all independent of LifeLines or GEDCOM, except that
-    that lloptions is in here, perhaps temporarily.
+    These are all independent of LifeLines or GEDCOM.
 
 ./tools/
 

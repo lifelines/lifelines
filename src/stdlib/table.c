@@ -39,6 +39,8 @@
  * local enums & defines
  *********************************************/
 
+#define MAXHASH_DEF 512
+
 enum TB_VALTYPE
 	{
 		TB_PTR /* VPTR values */
@@ -55,7 +57,8 @@ static UNION* access_value_impl (TABLE tab, STRING key);
 static ENTRY fndentry(TABLE, STRING);
 static void free_contents(ENTRY ent, INT whattofree);
 static void insert_table_impl(TABLE tab, STRING key, UNION uval);
-static INT hash(STRING);
+static INT hash(TABLE tab, STRING key);
+static BOOLEAN next_element(TABLE_ITER tabit);
 static void replace_table_impl(TABLE tab, STRING key, UNION uval, INT whattofree);
 static UNION* valueofbool_impl(TABLE tab, STRING key);
 
@@ -68,15 +71,15 @@ static UNION* valueofbool_impl(TABLE tab, STRING key);
  * hash -- Hash function
  *====================*/
 static INT
-hash (STRING key)
+hash (TABLE tab, STRING key)
 {
 	INT hval = 0;
 	while (*key)
 		hval += *key++;
-	hval %= MAXHASH;
-	if (hval < 0) hval += MAXHASH;
+	hval %= tab->maxhash;
+	if (hval < 0) hval += tab->maxhash;
 	if (hval < 0) FATAL();
-	if(hval >= MAXHASH) FATAL();
+	if(hval >= tab->maxhash) FATAL();
 	return hval;
 }
 /*================================
@@ -88,7 +91,7 @@ fndentry (TABLE tab,
 {
 	ENTRY entry;
 	if (!tab || !key) return NULL;
-	entry = tab->entries[hash(key)];
+	entry = tab->entries[hash(tab, key)];
 	while (entry) {
 		if (eqstr(key, entry->ekey)) return entry;
 		entry = entry->enext;
@@ -103,11 +106,13 @@ create_table (void)
 {
 	TABLE tab = (TABLE) stdalloc(sizeof(*tab));
 	INT i;
-	tab->entries = (ENTRY *)stdalloc(MAXHASH*sizeof(ENTRY));
+	memset(tab, 0, sizeof(*tab));
+	tab->maxhash = MAXHASH_DEF;
+	tab->entries = (ENTRY *)stdalloc(tab->maxhash*sizeof(ENTRY));
 	tab->count = 0;
 	tab->refcnt = 1;
 	tab->valtype = TB_NULL;
-	for (i = 0; i < MAXHASH; i++)
+	for (i = 0; i < tab->maxhash; i++)
 		tab->entries[i] = NULL;
 	return tab;
 }
@@ -121,7 +126,7 @@ insert_table_impl (TABLE tab, STRING key, UNION uval)
 	if (entry)
 		entry->uval = uval;
 	else {
-		INT hval = hash(key);
+		INT hval = hash(tab, key);
 		entry = (ENTRY) stdalloc(sizeof(*entry));
 		entry->ekey = key;
 		entry->uval = uval;
@@ -144,7 +149,7 @@ replace_table_impl (TABLE tab, STRING key, UNION uval, INT whattofree)
 		entry->ekey = key;
 		entry->uval = uval;
 	} else {
-		INT hval = hash(key);
+		INT hval = hash(tab, key);
 		entry = (ENTRY) stdalloc(sizeof(*entry));
 		entry->ekey = key;
 		entry->uval = uval;
@@ -216,12 +221,13 @@ replace_table_str (TABLE tab, STRING key, STRING str, INT whattofree)
 }
 /*==========================================
  * delete_table -- Remove element from table
+ *  tab: [I/O]  table from which to remove element
+ *  key: [IN]   key to find element to remove
  *========================================*/
 void
-delete_table (TABLE tab,
-              STRING key)
+delete_table (TABLE tab, STRING key)
 {
-	INT hval = hash(key);
+	INT hval = hash(tab, key);
 	ENTRY preve = NULL;
 	ENTRY thise = tab->entries[hval];
 	while (thise && nestr(key, thise->ekey)) {
@@ -418,7 +424,7 @@ remove_table (TABLE tab, INT whattofree)
 		/* can't free INTs */
 		ASSERT(whattofree != FREEBOTH && whattofree != FREEVALUE);
 	}
-	for (i = 0; i < MAXHASH; i++) {
+	for (i = 0; i < tab->maxhash; i++) {
 		nxt = tab->entries[i];
 		while ((ent = nxt)) {
 			nxt = ent->enext;
@@ -452,7 +458,7 @@ traverse_table (TABLE tab, void (*tproc)(ENTRY))
 	INT i;
 	ENTRY ent, nxt;
 	if (!tab || !tproc) return;
-	for (i = 0; i < MAXHASH; i++) {
+	for (i = 0; i < tab->maxhash; i++) {
 		nxt = tab->entries[i];
 		while ((ent = nxt)) {
 			nxt = ent->enext;
@@ -473,7 +479,7 @@ traverse_table_param (TABLE tab,
 	INT i;
 	ENTRY ent, nxt;
 	if (!tab || !tproc) return;
-	for (i = 0; i < MAXHASH; i++) {
+	for (i = 0; i < tab->maxhash; i++) {
 		nxt = tab->entries[i];
 		while ((ent = nxt)) {
 			nxt = ent->enext;
@@ -481,6 +487,89 @@ traverse_table_param (TABLE tab,
 				return;
 		}
 	}
+}
+/*=================================================
+ * begin_table -- Begin iteration of table
+ * Created: 2002/06/16, Perry Rapp
+ *===============================================*/
+BOOLEAN
+begin_table (TABLE tab, TABLE_ITER tabit)
+{
+	memset(tabit, 0, sizeof(*tabit));
+	tabit->table = tab;
+	tabit->enext = 0;
+	tabit->index = 0;
+	return tabit->table->count>0;
+}
+/*=================================================
+ * next_element -- Find next element in table (iterating)
+ * Created: 2002/06/16, Perry Rapp
+ *===============================================*/
+static BOOLEAN
+next_element (TABLE_ITER tabit)
+{
+	if (tabit->index == -1 || tabit->table->count == 0)
+		return FALSE;
+	if (tabit->enext) {
+		tabit->enext = tabit->enext->enext;
+		if (tabit->enext)
+			return TRUE;
+		++tabit->index;
+	}
+	for ( ; tabit->index < tabit->table->maxhash; ++tabit->index) {
+			tabit->enext = tabit->table->entries[tabit->index];
+			if (tabit->enext)
+				return TRUE;
+	}
+	tabit->index = -1;
+	tabit->enext = 0;
+	return FALSE;
+}
+/*=================================================
+ * next_table_str -- Iterating table with strings
+ * Created: 2002/06/16, Perry Rapp
+ *===============================================*/
+BOOLEAN
+next_table_str (TABLE_ITER tabit, STRING *pkey, STRING *pstr)
+{
+	ASSERT(tabit->table->valtype == TB_STR || tabit->table->valtype == TB_NULL);
+	if (!next_element(tabit)) {
+		*pkey = 0;
+		*pstr = 0;
+		return FALSE;
+	}
+	*pkey = tabit->enext->ekey;
+	*pstr = tabit->enext->uval.w;
+	return TRUE;
+}
+/*=================================================
+ * next_table_ptr -- Iterating table with pointers
+ * Created: 2002/06/16, Perry Rapp
+ *===============================================*/
+BOOLEAN
+next_table_ptr (TABLE_ITER tabit, STRING *pkey, VPTR *pptr)
+{
+	ASSERT(tabit->table->valtype == TB_PTR || tabit->table->valtype == TB_NULL);
+	if (!next_element(tabit)) {
+		*pkey = 0;
+		*pptr = 0;
+		return FALSE;
+	}
+	*pkey = tabit->enext->ekey;
+	*pptr = tabit->enext->uval.w;
+	return TRUE;
+}
+/*=================================================
+ * change_table_ptr -- User changing value in iteration
+ * Created: 2002/06/17, Perry Rapp
+ *===============================================*/
+BOOLEAN
+change_table_ptr (TABLE_ITER tabit, VPTR newptr)
+{
+	if (!tabit || !tabit->enext)
+		return FALSE;
+	tabit->enext->uval.w = newptr;
+	return TRUE;
 }
 /*=================================================
  * get_table_count -- Return #elements
@@ -491,4 +580,47 @@ get_table_count (TABLE tab)
 {
 	if (!tab) return 0;
 	return tab->count;
+}
+/*=================================================
+ * copy_table -- Copy all elements from src to dest
+ * Created: 2002/02/17, Perry Rapp
+ *===============================================*/
+void
+copy_table (const TABLE src, TABLE dest, INT whattodup)
+{
+	INT i;
+	ENTRY ent, nxt;
+	BOOLEAN dupkey = whattodup&FREEBOTH || whattodup&FREEKEY;
+	BOOLEAN dupval = whattodup&FREEBOTH || whattodup&FREEVALUE;
+
+	ASSERT(get_table_count(dest)==0);
+	if (get_table_count(src)==0)
+		return;
+	ASSERT(!dupval || src->valtype==TB_STR); /* can only dup strings */
+
+	dest->valtype = src->valtype;
+	if (src->maxhash == dest->maxhash)
+		dest->count = src->count;
+	
+	for (i = 0; i < src->maxhash; i++) {
+		nxt = src->entries[i];
+		while ((ent = nxt)) {
+			UNION uval = ent->uval;
+			STRING key = ent->ekey;
+			if (dupkey) key = strsave(key);
+			if (dupval) uval.w = strsave(uval.w);
+			if (src->maxhash == dest->maxhash) {
+				/* copy src item directly into dest (skip hashing) */
+				ENTRY entry = (ENTRY) stdalloc(sizeof(*entry));
+				entry->ekey = key;
+				entry->uval = uval;
+				entry->enext = dest->entries[i];
+				dest->entries[i] = entry;
+			} else {
+				/* insert src item into dest */
+				insert_table_impl(dest, key, uval);
+			}
+			nxt = ent->enext;
+		}
+	}
 }

@@ -1,3 +1,16 @@
+2002-06-17 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog README.LAYOUT gedlib/Makefile.am gedlib/init.c
+	gedlib/messages.c gedlib/property.c hdrs/gedcom.h
+	hdrs/interp.h hdrs/lloptions.h hdrs/llstdlib.h hdrs/table.h
+	interp/interp.c interp/symtab.c liflines/main.c
+	liflines/screen.c stdlib/Makefile.am stdlib/double.c
+	stdlib/lldate.c stdlib/table.c
+	win32/msvc6/llines/llinesprj.dsp:
+
+	New table iterators. New copy_table.
+	Move lloptions to gedlib, and user options inside it.
+
 2002-06-16 Perry Rapp <puddle@users.sourceforge.net>
 
 	*? .linesrc ChangeLog lines.cfg gedlib/init.c interp/builtin.c:
@@ -14,7 +27,6 @@
 
 	Make config option ImportLog for location of import log.
 	Standardize string functions (llstrcpy & llstrapp families).
-
 
  	* ChangeLog hdrs/liflines.h liflines/main.c liflines/newrecs.c 
  	liflines/screen.c liflines/valgdcom.c tools/dbverify.c:
@@ -34,7 +46,7 @@
 	*DELETED: arch/bind_textdomain_codeset.c arch/ngettext.c:
 
 	Remove null implementations of ngettext & bind_textdomain_codeset.
-	(Users with old gettext can just included version.)
+	(Users with old gettext can just use included version.)
 	Remove charset & report charset menus, & replace with codeset
 	information display list.
 	Add commandline option -C <file> to specify config file.

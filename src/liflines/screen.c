@@ -1728,6 +1728,7 @@ invoke_cset_display (void)
 {
 	LIST list = create_list();
 	char buffer[80];
+	set_list_type(list, LISTDOFREE);
 	if (int_utf8)
 		push_list(list, strsave(_("Internal codeset: UTF-8")));
 	else
@@ -1767,7 +1768,8 @@ invoke_cset_display (void)
 	push_list(list, strsave(buffer));
 	
 	display_list(_("Codeset information"), list);
-	remove_heapstring_list(list);
+	make_list_empty(list);
+	remove_list(list, 0);
 }
 /*======================================
  * add_shims_info -- Add information about gettext and iconv dlls
@@ -2072,8 +2074,11 @@ uopt_validate (TABLE tab)
 static void
 user_options (void)
 {
-	edit_valtab("VUOPT", &useropts, '=', _(qSuoperr), uopt_validate);
-	update_useropts();
+	TABLE uopts = create_table();
+	get_db_options(uopts);
+	if (edit_valtab("VUOPT", &uopts, '=', _(qSuoperr), uopt_validate))
+		set_db_options(uopts);
+	remove_table(uopts, FREEBOTH);
 }
 /*===============================
  * translate_hdware_key -- 

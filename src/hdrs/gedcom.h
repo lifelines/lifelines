@@ -194,7 +194,6 @@ extern STRING editstr;
 extern STRING editfile;
 extern TABLE tagtable;		/* table for GEDCOM tags */
 extern TABLE placabbvs;		/* table for place abbrvs */
-extern TABLE useropts;		/* table for user options */
 extern BOOLEAN add_metadata;
 
 

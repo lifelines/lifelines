@@ -95,7 +95,6 @@ BOOLEAN progparsing = FALSE;   /* program is being parsed */
 INT     progerror = 0;         /* error count during report program */
 BOOLEAN traceprogram = FALSE;  /* trace program */
 BOOLEAN traditional = TRUE;    /* use traditional family rules */
-BOOLEAN selftest = FALSE;      /* selftest rules (ignore paths) */
 BOOLEAN showusage = FALSE;     /* show usage */
 STRING  btreepath = NULL;      /* database path given by user */
 STRING  readpath = NULL;       /* database path used to open */
@@ -163,7 +162,7 @@ main (INT argc, char **argv)
 
 	/* Parse Command-Line Arguments */
 	opterr = 0;	/* turn off getopt's error message */
-	while ((c = getopt(argc, argv, "adkrwil:fmntc:Fu:yx:o:zC:")) != -1) {
+	while ((c = getopt(argc, argv, "adkrwil:fmntc:Fu:x:o:zC:")) != -1) {
 		switch (c) {
 		case 'c':	/* adjust cache sizes */
 			while(optarg && *optarg) {
@@ -241,9 +240,6 @@ main (INT argc, char **argv)
 		case 'u': /* specify screen dimensions */
 			sscanf(optarg, "%d,%d", &winx, &winy);
 			break;
-		case 'y': /* only look in current path for databases */
-			selftest = TRUE;
-			break;
 		case 'x': /* execute program */
 			exprog = TRUE;
 			exprog_name = optarg;
@@ -288,13 +284,6 @@ prompt_for_db:
 	/* initialize curses interface */
 	if (!init_screen(graphical))
 		goto finish;
-	if (selftest) {
-		/* need to always find test stuff locally */
-		changeoptstr("LLPROGRAMS", strsave("."));
-		changeoptstr("LLREPORTS", strsave("."));
-		changeoptstr("LLDATABASES", strsave("."));
-		changeoptstr("LLNEWDBDIR", strsave("."));
-	}
 	init_interpreter(); /* give interpreter its turn at initialization */
 
 	/* Validate Command-Line Arguments */
@@ -502,11 +491,13 @@ open_or_create_database (INT alteration, STRING dbrequested, STRING *dbused)
 	making a new one 
 	If no database directory specified, add prefix llnewdbdir
 	*/
-	if (!selftest && is_unadorned_directory(*dbused)) {
-		STRING newdbdir = getoptstr("LLNEWDBDIR", ".");
+	if (is_unadorned_directory(*dbused)) {
+		STRING newdbdir = getoptstr("LLNEWDBDIR", 0);
 		STRING temp = *dbused;
-		*dbused = strsave(concat_path(newdbdir, *dbused));
-		stdfree(temp);
+		if (newdbdir) {
+			*dbused = strsave(concat_path(newdbdir, *dbused));
+			stdfree(temp);
+		}
 	}
 
 	/* Is user willing to make a new db ? */

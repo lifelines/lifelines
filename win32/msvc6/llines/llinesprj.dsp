@@ -285,7 +285,7 @@ SOURCE=.\llines.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\lloptions.c
+SOURCE=..\..\..\gedlib\lloptions.c
 # End Source File
 # Begin Source File
 
@@ -577,6 +577,10 @@ SOURCE=..\..\..\hdrs\win32\iconvshim.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\hdrs\impfeed.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\hdrs\indiseq.h
 # End Source File
 # Begin Source File
@@ -645,10 +649,6 @@ SOURCE=..\..\..\hdrs\standard.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\stdlibi.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\hdrs\sys_inc.h
 # End Source File
 # Begin Source File
@@ -672,10 +672,6 @@ SOURCE=..\..\..\hdrs\warehouse.h
 SOURCE=..\..\..\interp\yacc.h
 # End Source File
 # End Group
-# Begin Source File
-
-SOURCE=..\..\..\hdrs\impfeed.h
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\..\hdrs\langinfz.h

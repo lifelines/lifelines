@@ -34,7 +34,6 @@
 
 #include "standard.h"
 
-#define MAXHASH 512
 
 #define DONTFREE  0
 #define FREEKEY   1
@@ -47,6 +46,8 @@ table must be of the same UNION type
 INT, or VPTR, or STRING
 (and ASSERTs in the insert_table_xxx functions enforce this)
 */
+
+/* entry in a table */
 typedef struct etag *ENTRY;
 struct etag {
 	STRING ekey;
@@ -54,38 +55,50 @@ struct etag {
 	ENTRY enext;
 };
 
-/*
-	table_s created 2001/01/20 by Perry Rapp
-	for reference counting when used in pvalues
-	(they were being leaked)
-*/
+/* table object itself */
 struct table_s {
 	ENTRY *entries;
 	INT count; /* #entries */
 	INT refcnt; /* used by pvalues which share table pointers */
 	INT valtype; /* TB_VALTYPE enum in table.c */
+	INT maxhash;
 };
 typedef struct table_s *TABLE;
 
+/* table iterator */
+struct table_iter_s {
+	INT index;
+	ENTRY enext;
+	TABLE table;
+};
+typedef struct table_iter_s * TABLE_ITER;
+
+
+
+INT * access_value_int(TABLE tab, STRING key);
+VPTR * access_value_ptr(TABLE tab, STRING key);
+BOOLEAN begin_table(TABLE tab, TABLE_ITER tabit);
+BOOLEAN change_table_ptr(TABLE_ITER tabit, VPTR newptr);
+void copy_table(const TABLE src, TABLE dest, INT whattodup);
 TABLE create_table(void);
+void delete_table(TABLE, STRING);
 INT get_table_count(TABLE);
+BOOLEAN in_table(TABLE, STRING);
 void insert_table_ptr(TABLE, STRING key, VPTR);
 void insert_table_int(TABLE, STRING key, INT);
 void insert_table_str(TABLE, STRING key, STRING);
-void replace_table_str(TABLE tab, STRING key, STRING str, INT whattofree);
-void delete_table(TABLE, STRING);
+BOOLEAN next_table_ptr(TABLE_ITER tabit, STRING *pkey, VPTR *pptr);
+BOOLEAN next_table_str(TABLE_ITER tabit, STRING *pkey, STRING *pstr);
 void remove_table(TABLE, INT whattofree);
+void replace_table_str(TABLE tab, STRING key, STRING str, INT whattofree);
 void traverse_table(TABLE, void (*proc)(ENTRY));
 void traverse_table_param(TABLE tab, INT (*tproc)(ENTRY, VPTR), VPTR param);
-BOOLEAN in_table(TABLE, STRING);
-VPTR valueof_ptr(TABLE, STRING);
 INT valueof_int(TABLE, STRING, INT defval);
-STRING valueof_str(TABLE, STRING);
-VPTR valueofbool_ptr(TABLE, STRING, BOOLEAN*);
-INT valueofbool_int(TABLE, STRING, BOOLEAN*);
-STRING valueofbool_str(TABLE, STRING, BOOLEAN*);
-VPTR * access_value_ptr(TABLE tab, STRING key);
-INT * access_value_int(TABLE tab, STRING key);
+VPTR valueof_ptr(TABLE, STRING);
+STRING valueof_str(TABLE tab, STRING key);
+INT valueofbool_int(TABLE tab, STRING key, BOOLEAN *there);
+VPTR valueofbool_ptr(TABLE tab, STRING key, BOOLEAN *there);
+STRING valueofbool_str(TABLE tab, STRING key, BOOLEAN *there);
 /*
 access_value_str can't be done because of type limitation in implementation
 (UNION doesn't have STRING inside it

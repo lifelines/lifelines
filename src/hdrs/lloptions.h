@@ -30,25 +30,33 @@
   Added to repository during 3.0.6 development
 
   Options are fetched on-the-fly when requested
-   first from useroptions table
-   then from cache from config file
-   both getoptint & getoptstr have defval in case not found
-   changeoptstr changes the cache from the config file
-    (but the config file itself is unchanged)
+   first from report properties (if getoptstr_rpt or getoptint_rpt)
+   then from db properties
+   then from global properties
+   then from fallback properties
 */
 
 #ifndef _OPTIONS_H
 #define _OPTIONS_H
 
+typedef struct table_s *TABLE;
+typedef void (*options_notify_fnc)(void);
 
 /* initialization & termination */
-BOOLEAN init_lifelines_options(STRING configfile, STRING * pmsg);
+BOOLEAN load_global_options(STRING configfile, STRING * pmsg);
+void register_notify(options_notify_fnc fncptr);
+void unregister_notify(options_notify_fnc fncptr);
 void term_lloptions(void);
+void get_db_options(TABLE dbopts); /* free with FREEBOTH */
+void set_db_options(TABLE dbopts);
+void setoptstr_fallback(STRING optname, STRING newval);
+
 
 /* use */
-void changeoptstr(STRING optname, STRING newval);
 STRING getoptstr(STRING optname, STRING defval);
 INT getoptint(STRING optname, INT defval);
+STRING getoptstr_dbonly(STRING optname, STRING defval);
+STRING getoptstr_rpt(STRING optname, STRING defval);
 
 
 

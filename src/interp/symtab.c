@@ -41,7 +41,6 @@
  *********************************************/
 
 /* alphabetical */
-static void symtab_cleaner(ENTRY ent);
 static BOOLEAN  symtrav(ENTRY ent, VPTR param);
 
 /*********************************************
@@ -80,22 +79,6 @@ delete_symtab (SYMTAB stab, STRING iden)
 	if (val) delete_pvalue(val);
 	delete_table(stab.tab, iden);
 }
-/*======================================================
- * symtab_cleaner -- callback for clearing symbol table pvalues
- * clear out table values (PVALUEs), but don't touch keys
- * TABLE stab:  symbol table
- * Created: 2001/03/22, Perry Rapp
- *====================================================*/
-static void
-symtab_cleaner (ENTRY ent)
-{
-	PVALUE val = ent->uval.w;
-	if (val) {
-		ASSERT(is_pvalue(val));
-		delete_pvalue(val);
-		ent->uval.w = NULL;
-	}
-}
 /*========================================
  * null_symtab -- Return null symbol table 
  * Created: 2001/03/24, Perry Rapp
@@ -117,7 +100,19 @@ remove_symtab (SYMTAB * stab)
 {
 	if (stab->tab)
 	{
-		traverse_table(stab->tab, symtab_cleaner);
+		STRING key=0;
+		VPTR ptr=0;
+		struct table_iter_s tabits;
+		TABLE_ITER tabit = &tabits;
+		begin_table(stab->tab, tabit);
+		while (next_table_ptr(tabit, &key, &ptr)) {
+			if (ptr) {
+				PVALUE val = ptr;
+				ASSERT(is_pvalue(val));
+				delete_pvalue(val);
+				change_table_ptr(tabit, 0);
+			}
+		}
 		remove_table(stab->tab, DONTFREE);
 		stab->tab = 0; /* same as *stab=null_symtab(); */
 	}
@@ -155,33 +150,27 @@ symtab_valueofbool (SYMTAB stab, STRING key, BOOLEAN *there)
 	return (PVALUE)valueofbool_ptr(stab.tab, key, there);
 }
 /*======================================================
- * traverse_symtab -- Visit all entries of symbol table
- *  stab:   [IN]  symbol table
- *  param:  [IN]  user-specified parameter
- *  fnc:    [IN]  callback which will be called for each entry
- * TODO: This look nicer if reimplemented as an iterator
- * Created: 2002/02/17, Perry Rapp
+ * begin_symtab -- Begin iterating a symbol table
+ * Created: 2002/06/17, Perry Rapp
  *====================================================*/
-struct symtrav_s
+BOOLEAN
+begin_symtab (SYMTAB stab, SYMTAB_ITER stabit)
 {
-	VPTR param;
-	BOOLEAN (*fnc)(STRING key, PVALUE val, VPTR);
-};
-void
-traverse_symtab (SYMTAB stab, VPTR param
-	, BOOLEAN (*fnc)(STRING pkey, PVALUE pval, VPTR))
-{
-	struct symtrav_s sdata;
-	if (!stab.tab) return;
-	memset(&sdata, 0, sizeof(sdata));
-	sdata.fnc = fnc;
-	sdata.param = param;
-	traverse_table_param(stab.tab, symtrav, &sdata);
+	memset(stabit, 0, sizeof(*stabit));
+	return begin_table(stab.tab, &stabit->tabiters);
 }
-static BOOLEAN 
-symtrav (ENTRY ent, VPTR param)
+/*======================================================
+ * next_symtab_entry -- Continue iterating a symbol table
+ * Created: 2002/06/17, Perry Rapp
+ *====================================================*/
+BOOLEAN
+next_symtab_entry (SYMTAB_ITER tabit, STRING *pkey, PVALUE *ppval)
 {
-	struct symtrav_s * sdata = (struct symtrav_s *)param;
-	PVALUE val = (PVALUE)ent->uval.w;
-	return (*sdata->fnc)(ent->ekey, val, sdata->param);
+	VPTR vptr=0;
+	*pkey=0;
+	*ppval=0;
+	if (!next_table_ptr(&tabit->tabiters, pkey, &vptr))
+		return FALSE;
+	*ppval = vptr;
+	return TRUE;
 }
