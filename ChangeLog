@@ -1,3 +1,9 @@
+2001-02-21 Matt Emmerton <memmerto@users.sourceforge.net>
+
+	btree/utils.c;
+	Removed llmkdir() function and exists() macro since they
+	were moved to stdlib/dirs.c some time ago.
+
 2001-02-18 Perry Rapp <puddle@users.sourceforge.net>
 
 	gedlib/lloptions.c hdrs/standard.h tools/dbverify.c: 
