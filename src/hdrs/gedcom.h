@@ -304,6 +304,7 @@ STRING indi_to_title(NODE, INT);
 void initxref(void);
 void init_browse_lists(void);
 void init_caches(void);
+void free_caches(void);
 void init_disp_reformat(void);
 BOOLEAN init_lifelines_db(void);
 BOOLEAN init_lifelines_global(STRING configfile, STRING * pmsg, void (*notify)(STRING db, BOOLEAN opening));

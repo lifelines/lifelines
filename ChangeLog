@@ -13,6 +13,11 @@
 	Cleanup leak in lloptions listeners.
 	Cleanup leak of dboptions in init_lifelines_db.
 
+	* ChangeLog src/gedlib/init.c src/gedlib/keytonod.c
+	src/hdrs/gedcom.h:
+
+	Cleanup cache memory when closing db.
+
 2003-02-01 Perry Rapp
 
 	* ChangeLog src/gedlib/node.c src/interp/interp.c

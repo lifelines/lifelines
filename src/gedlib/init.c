@@ -311,17 +311,18 @@ close_lifelines (void)
 /*===================================
  * close_lldb -- Close current database
  *  Safe to call even if not opened
+ * fullclose is FALSE when building dblist
  *=================================*/
 void
-close_lldb (void)
+close_lldb ()
 {
 	/* TODO: reverse the rest of init_lifelines_db -- Perry, 2002.06.05
 	remove_table(tagtable, FREE_KEY); values are same as keys
 	tagtable = 0;
 	remove_table(placabbvs, ??)
 	placabbvs = 0;
-	free_caches ??
 	*/
+	free_caches();
 	closexref();
 	if (BTR) {
 		closebtree(BTR);

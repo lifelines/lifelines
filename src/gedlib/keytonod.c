@@ -51,6 +51,7 @@ int listbadkeys = 0;
 
 static void add_record_to_direct(CACHE cache, RECORD rec, STRING key);
 static CACHE create_cache(STRING name, INT dirsize, INT indsize);
+static void delete_cache(CACHE * pcache);
 static void dereference(CACHEEL);
 static CACHEEL key_to_cacheel(CACHE cache, CNSTRING key, STRING tag, INT reportmode);
 static CACHEEL key_to_even_cacheel(CNSTRING key);
@@ -63,6 +64,7 @@ static void prepare_direct_space(CACHE cache);
 static NODE qkey_to_node(CACHE cache, CNSTRING key, STRING tag);
 static RECORD qkey_typed_to_record(CACHE cache, CNSTRING key, STRING tag);
 static void record_to_cache(CACHE cache, RECORD rec);
+static void release_all_in_cache(CACHE cache);
 
 
 INT csz_indi = 200;		/* cache size for indi */
@@ -458,6 +460,19 @@ init_caches (void)
 	sourcache = create_cache("SOUR", (INT)csz_sour, (INT)icsz_sour);
 	othrcache = create_cache("OTHR", (INT)csz_othr, (INT)icsz_othr);
 }
+/*======================================
+ * free_caches -- Release cache memory
+ * Created: 2003-02-02 (Perry Rapp)
+ *====================================*/
+void
+free_caches (void)
+{
+	delete_cache(&indicache);
+	delete_cache(&famcache);
+	delete_cache(&evencache);
+	delete_cache(&sourcache);
+	delete_cache(&othrcache);
+}
 /*=============================
  * create_cache -- Create cache
  *===========================*/
@@ -476,6 +491,19 @@ create_cache (STRING name, INT dirsize, INT indsize)
 	cmaxdir(cache) = dirsize;
 	cmaxind(cache) = indsize;
 	return cache;
+}
+/*=============================
+ * delete_cache -- Delete cache entirely
+ *===========================*/
+static void
+delete_cache (CACHE * pcache)
+{
+	CACHE cache = *pcache;
+	if (!cache) return;
+	release_all_in_cache(cache);
+	remove_table(cdata(cache), FREEKEY);
+	stdfree(cache);
+	*pcache = 0;
 }
 /*=================================================
  * remove_direct -- Unlink CACHEEL from direct list
@@ -715,6 +743,23 @@ key_to_cacheel (CACHE cache, CNSTRING key, STRING tag, INT reportmode)
 		ASSERT(eqstr(tag, ntag(cnode(cel))));
 	}
 	return cel;
+}
+/*===============================================================
+ * release_all_in_cache -- Release all entries in a cache
+ * Created: 2003-02-02 (Perry Rapp)
+ *=============================================================*/
+static void
+release_all_in_cache (CACHE cache)
+{
+	while (csizedir(cache)) {
+		CACHEEL cel = cfirstdir(cache);
+		remove_direct(cache, cel);
+		free_rec(crecord(cel)); /* this frees the nodes */
+	}
+	while (csizeind(cache)) {
+		CACHEEL cel = cfirstind(cache);
+		remove_indirect(cache, cel);
+	}
 }
 /*===============================================================
  * prepare_direct_space -- Make space in direct
