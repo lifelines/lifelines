@@ -40,7 +40,7 @@
 #include "indiseq.h"
 #include "liflines.h"
 #include "screen.h"
-#incldue "interpi.h"
+#include "interpi.h"
 
 #define MAXPAGESIZE 65536
 #define MAXROWS 512
