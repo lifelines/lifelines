@@ -1,3 +1,8 @@
+echo "This script is obsolete"
+echo "Instead do this:"
+echo "	for a tar file:   make dist"
+echo "	for Linux binary and source RPM files:   rpm -ba lifelines.spec"
+exit 1
 echo rm -rf dist
 rm -rf dist
 echo mkdir dist
