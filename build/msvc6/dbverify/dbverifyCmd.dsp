@@ -112,6 +112,10 @@ SOURCE=..\..\..\src\gedlib\charmaps.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\gedlib\charprops.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\gedlib\codesets.c
 # End Source File
 # Begin Source File
@@ -204,6 +208,10 @@ SOURCE=..\..\..\src\stdlib\listener.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\gedlib\lldatabase.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\stdlib\lldate.c
 # End Source File
 # Begin Source File
@@ -220,6 +228,10 @@ SOURCE=..\..\..\src\gedlib\locales.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\stdlib\log.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\stdlib\memalloc.c
 # End Source File
 # Begin Source File
@@ -229,6 +241,14 @@ SOURCE=..\..\..\src\gedlib\messages.c
 # Begin Source File
 
 SOURCE=..\..\..\src\gedlib\misc.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\stdlib\mychar_funcs.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\stdlib\mychar_tables.c
 # End Source File
 # Begin Source File
 
@@ -368,10 +388,6 @@ SOURCE=..\..\..\src\stdlib\vtable.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\stdlib\warehouse.c
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\src\tools\wprintf.c
 # End Source File
 # Begin Source File
@@ -424,6 +440,10 @@ SOURCE=..\..\..\src\hdrs\feedback.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\hdrs\fpattern.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\hdrs\gedcheck.h
 # End Source File
 # Begin Source File
@@ -472,6 +492,30 @@ SOURCE=..\..\..\src\hdrs\langinfz.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\hdrs\liflines.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\llnls.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\lloptions.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\llstdlib.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\log.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\menuitem.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\resource.h
 # End Source File
 # Begin Source File
@@ -509,10 +553,6 @@ SOURCE=..\..\..\src\hdrs\uiprompts.h
 # Begin Source File
 
 SOURCE=..\..\..\src\hdrs\vtable.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\hdrs\warehouse.h
 # End Source File
 # Begin Source File
 
