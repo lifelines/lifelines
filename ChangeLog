@@ -62,6 +62,11 @@
 
 	Fix zstr leak in init_map_from_rec.
 
+	* ChangeLog src/gedlib/init.c src/gedlib/lldatabase.c
+	src/hdrs/gedcom.h
+
+	Fix lldb leaks.
+
 2005-01-26, Stephen Dum
         * ChangeLog docs/ll-reportmanual.xml docs/ll-userguide.sv.xml
 	docs/ll-userguide.xml

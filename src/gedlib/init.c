@@ -342,7 +342,7 @@ get_lifelines_version (INT maxlen)
 void
 close_lifelines (void)
 {
-	lldb_close(def_lldb); /* make sure database closed */
+	lldb_close(&def_lldb); /* make sure database closed */
 	if (editfile) {
 		unlink(editfile);
 		stdfree(editfile);
@@ -509,7 +509,7 @@ open_database (INT alteration, STRING dbpath)
 	if (!rtn) {
 		/* open failed so clean up, preserve bterrno */
 		int myerr = bterrno;
-		lldb_close(lldb);
+		lldb_close(&lldb);
 		bterrno = myerr;
 	}
 	def_lldb = lldb;
@@ -545,7 +545,7 @@ create_database (STRING dbpath)
 	if (!(btree = bt_openbtree(dbpath, TRUE, 2, immutable))) {
 		/* open failed so clean up, preserve bterrno */
 		int myerr = bterrno;
-		lldb_close(lldb);
+		lldb_close(&lldb);
 		bterrno = myerr;
 		return FALSE;
 	}

@@ -154,8 +154,12 @@ lldb_set_btree (LLDATABASE lldb, void *btree)
  *  Free LLDATABASE structure.
  *  Safe to call even if not opened
  *======================================*/
-void lldb_close (LLDATABASE lldb)
+void lldb_close (LLDATABASE *plldb)
 {
+	LLDATABASE lldb=0;
+	ASSERT(plldb);
+	lldb = *plldb;
+
 	if (!lldb) return;
 
 	if (tagtable)
@@ -181,4 +185,6 @@ void lldb_close (LLDATABASE lldb)
 	transl_free_predefined_xlats(); /* clear any active legacy translation tables */
 	strfree(&readpath_file);
 	strfree(&readpath);
+	stdfree(lldb);
+	*plldb = 0;
 }
