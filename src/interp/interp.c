@@ -477,6 +477,9 @@ interp_main (BOOLEAN picklist)
 	(in case first time or uilocale changed) */
 	interp_load_lang();
 
+	/* Note: various prompts including the one to choose report program wind up in
+	report locale now -- TODO */
+
 	rptlocale();
 	interp_program_list("main", 0, NULL, NULL, NULL, picklist);
 	uilocale();

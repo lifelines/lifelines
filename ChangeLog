@@ -11,6 +11,10 @@
 
 	Fix screen.c for crash. Pluralize some entries (_pl needs string literals).
 
+	* ChangeLog build/msvc6/llines/llinesprj.dsp src/interp/interp.c
+
+	Cosmetic.
+
 2002-10-19 Perry Rapp
 
 	* ChangeLog NEWS build/msvc6/llexec/llexec.rc

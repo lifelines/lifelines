@@ -697,6 +697,10 @@ SOURCE=..\..\..\src\interp\parse.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\hdrs\proptbls.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\resource.h
 # End Source File
 # Begin Source File
@@ -740,9 +744,5 @@ SOURCE=..\..\..\src\hdrs\warehouse.h
 SOURCE=..\..\..\src\interp\yacc.h
 # End Source File
 # End Group
-# Begin Source File
-
-SOURCE=..\..\..\src\hdrs\proptbls.h
-# End Source File
 # End Target
 # End Project
