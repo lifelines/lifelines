@@ -1,5 +1,9 @@
 2000-11-21 Marc Nozell <marc@nozell.com>
 
+	* Fix a misleading typos in ChangeLog in 2000-11-09 entry.
+
+2000-11-21 Marc Nozell <marc@nozell.com>
+
 	* gedlib/init.c: move unix_tempfile and win32_tempfile declaration
 	out of figure_tempfile into global.  Function was referencing
 	variables already popped off the stack.
@@ -186,7 +190,7 @@
 2000-11-09  Marc Nozell  <marc@nozell.com>
 
 	* reports/least_related.ll: At the request of the author, the
-	script least_releated.ll.  Doesn't work as advertised.
+	script least_related.ll was removed.  Doesn't work as advertised.
 
 2000-11-09  Petter Reinholdtsen <pere@td.org.uit.no>
 
