@@ -209,8 +209,10 @@ remove_child (NODE indi, NODE fam)
 
 /* Remove FAMC line from child */
 	node = find_node(indi, "FAMC", nxref(fam), &last);
-	ASSERT(node && last);
-	nsibling(last) = nsibling(node);
+	if (last)
+		nsibling(last) = nsibling(node);
+	else
+		nchild(indi) = nsibling(node);
 	free_node(node);
 
 /* Update database with changed records */

@@ -1,3 +1,11 @@
+2005-01-08 Perry Rapp
+
+	* ChangeLog src/gedlib/remove.c
+
+	Fix child removal code for empty person.
+	Fixes sf bug#1097629 
+	 (Deleting an empty person who is a child will lead to an ASSERT)
+
 2005-01-07 Matt Emmerton
 
 	* ChangeLog build/autotools/acinclude.m4
@@ -21,6 +29,7 @@
 	Cosmetic: add more comments to remove code.
 
 2005-01-06 Stephen Dum
+
         * ChangeLog INSTALL configure.in build/msvc6/llines/llines.rc 
 	  build/rpm/lifelines.spec docs/ll-devguide.xml docs/ll-reportmanual.html 
 	  docs/ll-reportmanual.pdf docs/ll-reportmanual.txt docs/ll-reportmanual.xml 
