@@ -37,7 +37,6 @@
 #include "cache.h"
 #include "interp.h"
 
-#define NUM_SIGNALS 21
 char *sig_msgs[] = {
 	"SIGNAL 0",
 	"HANGUP",
@@ -61,6 +60,8 @@ char *sig_msgs[] = {
 	"POWER-FAIL RESTART",
 	"WINDOW CHANGE",
 };
+#define NUM_SIGNALS (sizeof(sig_msgs)/sizeof(sig_msgs[0]))
+
 /*======================================
  * set_signals -- Install signal handler
  *====================================*/

@@ -1,3 +1,8 @@
+2000-11-05  Petter Reinholdtsen <pere@td.org.uit.no>
+
+	* stdlib/signals.c: Let the compiler calculate the size of array
+	sig_msgs[].
+
 2000-11-04  Marc Nozell (at home)  <marc@nozell.com>
 
 	* btree/addkey.c: pretty up function definitions
