@@ -97,28 +97,6 @@ browse (NODE indi1)
 	}
 }
 /*================================================
- * rkeynum_to_indi -- Convert a numeric key to an indi node
- *  report mode - it returns NULL if failed (eg, no other indi)
- *==============================================*/
-static NODE
-rkeynum_to_indi(int keynum)
-{
-	char keystr[100];
-	sprintf(keystr,"I%d",keynum);
-	return rkey_to_indi(keystr);
-}
-/*================================================
- * rkeynum_to_fam -- Convert a numeric key to a fam node
- *  report mode - it returns NULL if failed (eg, no other fam)
- *==============================================*/
-static NODE
-rkeynum_to_fam(int keynum)
-{
-	char keystr[100];
-	sprintf(keystr,"F%d",keynum);
-	return rkey_to_fam(keystr);
-}
-/*================================================
  * browse_indi -- Handle person browse operations.
  *==============================================*/
 static INT

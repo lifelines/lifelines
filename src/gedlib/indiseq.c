@@ -676,20 +676,20 @@ indi_to_spouses (NODE indi)
 		}
 #else
 		FORHUSBS(fam, husb, num1)
-		    if(husb != indi) {
-			len++;
-			key = indi_to_key(husb);
-			val = atoi(fam_to_key(fam) + 1); /* PVALUE NEEDED */
-			append_indiseq(seq, key, NULL, (WORD)val, TRUE, FALSE);
-		    }
+			if(husb != indi) {
+				len++;
+				key = indi_to_key(husb);
+				val = atoi(fam_to_key(fam) + 1); /* PVALUE NEEDED */
+				append_indiseq(seq, key, NULL, (WORD)val, TRUE, FALSE);
+			}
 		ENDHUSBS
 		FORWIFES(fam, wife, num1)
-		    if(wife != indi) {
-			len++;
-			key = indi_to_key(wife);
-			val = atoi(fam_to_key(fam) + 1);
-			append_indiseq(seq, key, NULL, (WORD)val, TRUE, FALSE);
-		    }
+			if(wife != indi) {
+				len++;
+				key = indi_to_key(wife);
+				val = atoi(fam_to_key(fam) + 1);
+				append_indiseq(seq, key, NULL, (WORD)val, TRUE, FALSE);
+			}
 		ENDWIFES
 #endif
 	ENDFAMSS

@@ -63,10 +63,66 @@ static int keyidx = 0;
 char badkeylist[100] = "";
 int listbadkeys = 0;
 
+/*================================================
+ * keynum_to_indi -- Convert a numeric key to an indi node
+ * assert if failed (ie, no indi with that number)
+ *==============================================*/
+NODE
+keynum_to_indi(int keynum)
+{
+	char keystr[20];
+	sprintf(keystr,"I%d",keynum);
+	return key_to_indi(keystr);
+}
+/*================================================
+ * rkeynum_to_indi -- Convert a numeric key to an indi node
+ *  report mode - it returns NULL if failed (ie, no indi with that number)
+ *==============================================*/
+NODE
+rkeynum_to_indi(int keynum)
+{
+	char keystr[20];
+	sprintf(keystr,"I%d",keynum);
+	return rkey_to_indi(keystr);
+}
+/*================================================
+ * keynum_to_fam -- Convert a numeric key to a fam node
+ *  assert if failed (ie, no fam with that number)
+ *==============================================*/
+NODE
+keynum_to_fam(int keynum)
+{
+	char keystr[20];
+	sprintf(keystr,"F%d",keynum);
+	return key_to_fam(keystr);
+}
+/*================================================
+ * rkeynum_to_fam -- Convert a numeric key to a fam node
+ *  report mode - it returns NULL if failed (ie, no fam with that number)
+ *==============================================*/
+NODE
+rkeynum_to_fam(int keynum)
+{
+	char keystr[20];
+	sprintf(keystr,"F%d",keynum);
+	return rkey_to_fam(keystr);
+}
+/*================================================
+ * keynum_to_sour -- Convert a numeric key to a sour node
+ *  assert if failed (ie, no sour with that number)
+ *==============================================*/
+NODE
+keynum_to_sour(int keynum)
+{
+	char keystr[20];
+	sprintf(keystr,"S%d",keynum);
+	return key_to_sour(keystr);
+}
 /*=====================================
  * key_to_type -- Convert key to specified type
  *===================================*/
-NODE key_to_type (STRING key, STRING type, INT reportmode)
+NODE
+key_to_type (STRING key, STRING type, INT reportmode)
 {
 	if (eqstr(type, "INDI"))
 		return reportmode ? rkey_to_indi(key) : key_to_indi(key);
@@ -78,7 +134,6 @@ NODE key_to_type (STRING key, STRING type, INT reportmode)
 		return reportmode ? rkey_to_sour(key) : key_to_sour(key);
 	return reportmode ? rkey_to_othr(key) : key_to_othr(key);
 }
-
 /*=====================================
  * key_to_indi -- Convert key to person
  * (asserts if failure)

@@ -1,3 +1,13 @@
+2000-11-28 Perry Rapp (puddle@users.sourceforge.net)
+
+	* Reformatted all my ChangeLog entries to match others.
+
+	* gedlib/indiseq.c gedlib/keytonod.c gedlib/misc.c
+	hdrs/gedcom.h liflines/browse.c:
+	Moved rkeynum functions out of browse & into keytonod, and
+	made extern. Added keynum versions (non reportmode).
+	Added xrefval to misc.c to implement indi_to_keynum etc.
+
 2000-11-22  Marc Nozell  <marc@nozell.com>
 
 	* Update all Makefile.am files to automatically generate
@@ -15,34 +25,40 @@
 	variables already popped off the stack.
  
 2000-11-20 Perry Rapp <puddle@users.sourceforge.net>
-	interp/lex.c:
+
+	* interp/lex.c:
 	Renamed unchar to unreadchar, to avoid clash with
 	linux etc headers.
 
 2000-11-20 Perry Rapp <puddle@users.sourceforge.net>
-	liflines/askprogram.c stdlib/double.c: stdlib/signals.c
+
+	* liflines/askprogram.c stdlib/double.c: stdlib/signals.c
 	Handle nulls in get_list_element & set.
 	Fix bug in my recent additions to askprogram.c.
 	(Accidentally checked in signals.c with signals
 	disabled, and backed it back out.)
 
 2000-11-20 Perry Rapp <puddle@users.sourceforge.net>
-	gedlib/xreffile.c: Set xreffp to zero after closing
+
+	* gedlib/xreffile.c: Set xreffp to zero after closing
 	(minor safety device to help debug any future errors).
 	
 2000-11-19 Perry Rapp <puddle@users.sourceforge.net>	
-	interp/builtin.c interp/pvalue.c stdlib/memalloc.c:
+
+	* interp/builtin.c interp/pvalue.c stdlib/memalloc.c:
 	Changed variable "log" to "logfp" in memalloc.c
 	(to resolve clash with a system header).
 	Minor formatting cleanup.
 
 2000-11-19 Perry Rapp <puddle@users.sourceforge.net>	
-	gedlib/messages.c hdrs/gedcom.h interp/rassa.c
+
+	* gedlib/messages.c hdrs/gedcom.h interp/rassa.c
 	liflines/export.c liflines/screen.c liflines/show.c:
 	Minor cleanup (typos & added some ifdef UNUSED)
 
 2000-11-19 Perry Rapp <puddle@users.sourceforge.net>
-	liflines/ask.c liflines/askprogram.c liflines/main.c
+
+	* liflines/ask.c liflines/askprogram.c liflines/main.c
 	liflines/export.c liflines/import.c liflines/screen.c
 	interp/rassa.c
 	hdrs/liflines.h hdrs/screen.h:
@@ -53,25 +69,30 @@
 	to avoid clash with rassa.c's MAXCOLS.
 
 2000-11-19 Perry Rapp <puddle@users.sourceforge.net>
-	interp/date.c: Moved 20+ lines of commentary
+
+	* interp/date.c: Moved 20+ lines of commentary
 	out of line of the function declaration, so that
 	the function declaration is legible.
 
 2000-11-19 Perry Rapp <puddle@users.sourceforge.net>
-	gedlib/messages.c liflines/askprogram.c:
+
+	* gedlib/messages.c liflines/askprogram.c:
 	Added choice to type in program.
 	Fixed to prompt for program if no files found.
 
 2000-11-19 Perry Rapp <puddle@users.sourceforge.net>
-	interp/interp.c liflines/askprogram.c:
+
+	* interp/interp.c liflines/askprogram.c:
 	Fixed bug in askprogram. It was saying File "" not found
 	if the user pressed Q to cancel the report menu.
 
 2000-11-18 Perry Rapp <puddle@users.sourceforge.net>
-	Added win32/hdrs/README
+
+	* Added win32/hdrs/README
 
 2000-11-18 Perry Rapp <puddle@users.sourceforge.net>
-	gedlib/keytonod.c gedlib/messages.c gedlib/xreffile.c
+
+	* gedlib/keytonod.c gedlib/messages.c gedlib/xreffile.c
 	hdrs/gedcom.h
 	liflines/browse.c liflines/screen.c:
 	Added some next & prev functions for keys & is_valid (xreffile.c)
@@ -81,12 +102,14 @@
 	rkeynum_to_indi (browse.c), rkey_to_indi etc (keytonod.c).
 
 2000-11-18 Perry Rapp <puddle@users.sourceforge.net>
-	hdrs/gedcom.h liflines/add.c:
+
+	* hdrs/gedcom.h liflines/add.c:
 	Split up functions in add.c, breaking out non-interactive
 	portions for use by the new GUI code under development.
 
 2000-11-18 Perry Rapp <puddle@users.sourceforge.net>
-	Changed mprintf to mprintf_error, mprintf_info, mprintf_status.
+
+	* Changed mprintf to mprintf_error, mprintf_info, mprintf_status.
 	gedlib/editmap.c gedlib/keytonod.c hdrs/screen.h
 	interp/interp.c interp/rassa.c liflines/add.c
 	liflines/ask.c liflines/edit.c liflines/export.c
@@ -94,7 +117,8 @@
 	liflines/miscutils.c liflines/newrecs.c liflines/screen.c
 
 2000-11-16 Perry Rapp <puddle@users.sourceforge.net>
-	Fixed a couple typos, and annotated the ghost names bug
+
+	* Fixed a couple typos, and annotated the ghost names bug
 	(in liflines/merge.c). 
 
 2000-11-16  Marc Nozell  <marc@nozell.com>
@@ -102,6 +126,7 @@
 	* gedlib/init.c: fix syntax error
 
 2000-11-15  Perry Rapp <puddle@users.sourceforge.net>
+
 	* btree/traverse.c gedlib/editvtab.c hdrs/btree.h hdrs/gedcom.h
 	hdrs/llstdlib.h hdrs/screen.h interp/more.c interp/yacc.y
 	liflines/import.c stdlib/double.c win32/mycurses.c: Stricter

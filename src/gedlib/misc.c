@@ -61,17 +61,46 @@ rmvat (STRING str)
 	 * 1 to 22 characters. Allow a little extra. */
 	static unsigned char buffer[32][32];	/* was [10][20] pbm 11-jun-96*/
 	static INT dex = 0;
-	/* WARNING: should this be a fatal error? or not? - pbm 07 Jan 2000 */
+	/* Watch out for bad pointers */
 	if((str == NULL) || (*str == '\0')) return(NULL);
-	ASSERT(str);
+	if (str[0] != '@') return NULL;
 	if (++dex > 31) dex = 0;	/* was 9 pbm 11-jun-96*/
 	p = buffer[dex];
 	len = strlen(str+1);
+	if (str[len] != '@') return NULL;
 	if(len > 31) len = 31;		/* 31 characters is maximum */
 	else if(len > 0) len--;
 	strncpy(p, &str[1], len);
 	p[len] = 0;	/* overwrite trailing "@" with null */
 	return p;
+}
+/*=============================================
+ * nod0_to_keynum -- key # of a 0 level node
+ * returns 0 for failure
+ *===========================================*/
+INT
+nod0_to_keynum(NODE nod, char ntype)
+{
+	if (!nod) return 0;
+	return xrefval(nxref(nod), ntype);
+}
+/*=============================================
+ * xrefval -- numeric value after removing @'s at both ends
+ *===========================================*/
+INT
+xrefval (STRING str)
+{
+	INT val, i;
+	if ((str == NULL) || (*str == '\0')) return 0;
+	if (str[0] != '@') return 0;
+	i=1;
+	val=0;
+	while (str[i]) {
+		if (chartype(str[i]) != DIGIT) return 0;
+		if (i>31) return 0;
+		val = val*10 + (str[i]-'0');
+	}
+	return val;
 }
 /*==============================================
  * find_tag -- Search node list for specific tag

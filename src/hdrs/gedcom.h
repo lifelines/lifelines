@@ -197,6 +197,10 @@ NODE key_to_indi(STRING);
 NODE key_to_othr(STRING);
 NODE key_to_record(STRING,INT);
 NODE key_to_sour(STRING);
+NODE key_to_type (STRING key, STRING type, INT reportmode);
+NODE keynum_to_fam(int keynum);
+NODE keynum_to_indi(int keynum);
+NODE keynum_to_sour(int keynum);
 INT length_nodes(NODE);
 STRING manip_name(STRING, TRANTABLE, BOOLEAN, BOOLEAN, INT);
 void maperror(INT, INT, STRING);
@@ -211,6 +215,7 @@ STRING newsxref(STRING, BOOLEAN);
 STRING newxxref(STRING, BOOLEAN);
 void new_name_browse_list(STRING, STRING);
 NODE next_fp_to_node(FILE*, BOOLEAN, TRANTABLE, STRING*, BOOLEAN*);
+INT nod0_to_keynum(NODE nod);
 INT node_strlen(INT, NODE);
 void node_to_dbase(NODE, STRING);
 BOOLEAN node_to_file(INT, NODE, STRING, BOOLEAN, TRANTABLE);
@@ -247,6 +252,8 @@ NODE rkey_to_fam(STRING);
 NODE rkey_to_indi(STRING);
 NODE rkey_to_othr(STRING);
 NODE rkey_to_sour(STRING);
+NODE rkeynum_to_fam(int keynum);
+NODE rkeynum_to_indi(int keynum);
 STRING rmvat(STRING);
 STRING shorten_date(STRING);
 STRING shorten_plac(STRING);
@@ -285,6 +292,7 @@ INT xref_prevf(INT);
 INT xref_nexts(INT);
 INT xref_nexte(INT);
 INT xref_nextx(INT);
+INT xrefval(STRING str);
 
 #define fam_to_event indi_to_event
 
@@ -308,6 +316,9 @@ INT xref_nextx(INT);
 
 #define indi_to_key(indi)  (rmvat(nxref(indi)))
 #define fam_to_key(fam)    (rmvat(nxref(fam)))
+#define indi_to_keynum(indi) (nod0_to_keynum(indi, 'I'))
+#define fam_to_keynum(fam)  (nod0_to_keynum(fam, 'F'))
+#define sour_to_keynum(sour) (nod0_to_keynum(sour, 'S'))
 #define num_families(indi) (length_nodes(FAMS(indi)))
 #define num_children(fam)  (length_nodes(CHIL(fam)))
 
