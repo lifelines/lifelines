@@ -144,6 +144,7 @@ extern INT travlineno;
 extern BOOLEAN inited;
 extern BOOLEAN keyflag;
 extern BOOLEAN readonly;
+extern BOOLEAN immutable;
 extern BOOLEAN cursesio;
 extern STRING editstr;
 extern STRING editfile;

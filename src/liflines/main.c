@@ -59,7 +59,7 @@
  *********************************************/
 
 extern STRING idldir, nodbse, crdbse, nocrdb, iddbse, usage;
-extern STRING mtitle;
+extern STRING mtitle, norwandro, nofandl, bdlkar;
 
 extern INT csz_indi, icsz_indi;
 extern INT csz_fam, icsz_fam;
@@ -105,6 +105,7 @@ BOOLEAN alloclog  = FALSE;	/* alloc/free debugging */
 BOOLEAN keyflag   = TRUE;	/* show key values */
 BOOLEAN readonly  = FALSE;	/* database is read only */
 BOOLEAN writeable = FALSE;	/* database must be writeable */
+BOOLEAN immutable = FALSE;  /* make no changes at all to database, for access to truly read-only medium */
 BOOLEAN cursesio  = TRUE;	/* use curses i/o */
 BOOLEAN alldone   = FALSE;	/* completion flag */
 BOOLEAN progrunning = FALSE;	/* program is running */
@@ -122,7 +123,7 @@ STRING  readpath = NULL;		/* database path used to open */
  *********************************************/
 
 static BOOLEAN is_unadorned_directory(STRING path);
-static BOOLEAN open_or_create_database(BOOLEAN forceopen, STRING dbrequested, STRING dbused);
+static BOOLEAN open_or_create_database(INT alteration, STRING dbrequested, STRING dbused);
 static void platform_init(void);
 static void show_open_error(INT dberr);
 
@@ -143,7 +144,9 @@ main (INT argc, char **argv)
 	int c,code=1;
 	STRING dbrequested=NULL; /* database (path) requested */
 	STRING dbused=NULL; /* database (path) found */
-	BOOLEAN forceopen = FALSE;	/* force database status to 0 */
+	BOOLEAN forceopen=FALSE, lockchange=FALSE;
+	char lockarg = 0; /* option passed for database lock */
+	INT alteration=0;
 
 #ifdef OS_LOCALE
 	setlocale(LC_ALL, "");
@@ -151,7 +154,7 @@ main (INT argc, char **argv)
 
 	/* Parse Command-Line Arguments */
 	opterr = 0;	/* turn off getopt's error message */
-	while ((c = getopt(argc, argv, "adkrwfmntc:Fu:y")) != -1) {
+	while ((c = getopt(argc, argv, "adkrwil:fmntc:Fu:y")) != -1) {
 		switch (c) {
 		case 'c':	/* adjust cache sizes */
 			while(optarg && *optarg) {
@@ -206,6 +209,14 @@ main (INT argc, char **argv)
 		case 'w':	/* request for write access */
 			writeable = TRUE;
 			break;
+		case 'i': /* immutable access */
+			immutable = TRUE;
+			readonly = TRUE;
+			break;
+		case 'l': /* locking switch */
+			lockchange = TRUE;
+			lockarg = *optarg;
+			break;
 		case 'm':
 			cursesio = FALSE;
 			break;
@@ -251,9 +262,25 @@ main (INT argc, char **argv)
 	init_interpreter(); /* give interpreter its turn at initialization */
 
 	/* Validate Command-Line Arguments */
-	if (readonly && writeable) {
-		llwprintf("Select at most one of -r and -w options.");
+	if ((readonly || immutable) && writeable) {
+		llwprintf(norwandro);
 		goto finish;
+	}
+	if (forceopen && lockchange) {
+		llwprintf(nofandl);
+		goto finish;
+	}
+	if (lockchange && lockarg != 'y' && lockarg != 'n') {
+		llwprintf(bdlkar);
+		goto finish;
+	}
+	if (forceopen)
+		alteration = 3;
+	else if (lockchange) {
+		if (lockarg == 'y')
+			alteration = 2;
+		else
+			alteration = 1;
 	}
 	c = argc - optind;
 	if (c > 1) {
@@ -285,7 +312,7 @@ main (INT argc, char **argv)
 	dbused = filepath(dbrequested, "r", lloptions.lldatabases, NULL);
 	if (!dbused) dbused = dbrequested;
 
-	if (!open_or_create_database(forceopen, dbrequested, dbused))
+	if (!open_or_create_database(alteration, dbrequested, dbused))
 		goto finish;
 
 	/* Start Program */
@@ -362,15 +389,20 @@ is_unadorned_directory (STRING path)
  * Created: 2001/04/29, Perry Rapp
  *================================================*/
 static BOOLEAN
-open_or_create_database (BOOLEAN forceopen, STRING dbrequested, STRING dbused)
+open_or_create_database (INT alteration, STRING dbrequested, STRING dbused)
 {
 	/* Open Database */
-	if (open_database(forceopen, dbrequested, dbused))
+	if (open_database(alteration, dbrequested, dbused))
 		return TRUE;
 	/* filter out real errors */
 	if (bterrno != BTERR_NODB && bterrno != BTERR_NOKEY)
 	{
 		show_open_error(bterrno);
+		return FALSE;
+	}
+	if (readonly || immutable || alteration)
+	{
+		llwprintf("Cannot create new database with -r, -i, -l, or -f flags.");
 		return FALSE;
 	}
 	/*

@@ -87,7 +87,7 @@ addrecord (BTREE btree, RKEY rkey, RAWRECORD rec, INT len)
 				break;
 			nfkey = fkeys(index, i);
 		}
-		ASSERT(index = getindex(btree, nfkey));
+		index = getindex(btree, nfkey);
 	}
 /* have block that may hold older version of record */
 	ixparent(index) = last;
@@ -385,7 +385,7 @@ getrecord (BTREE btree, RKEY rkey, INT *plen)
 				break;
 			nfkey = fkeys(index, i);
 		}
-		ASSERT(index = getindex(btree, nfkey));
+		index = getindex(btree, nfkey);
 	}
 
 /* Found block that may hold record - search for key */
@@ -446,7 +446,7 @@ isrecord (BTREE btree,
 				break;
 			nfkey = fkeys(index, i);
 		}
-		ASSERT(index = getindex(btree, nfkey));
+		index = getindex(btree, nfkey);
 	}
 
 /* Found block that may hold record - search for key */

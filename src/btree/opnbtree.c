@@ -105,48 +105,50 @@ validate_keyfile2 (KEYFILE2 * kfile2)
  *  If it fails, it returns NULL and sets the global bterrno
  *  dir:   [in] btree base dir
  *  cflag: [in] create btree if no exist?
- *  writ:  [in] requesting write access?
+ *  writ:  [in] requesting write access? 1=yes, 2=requiring 
+ *  immut: [in,out] user can/will not change anything including keyfile
  *==========================================*/
 BTREE
-openbtree (STRING dir, BOOLEAN cflag, BOOLEAN writ)
+openbtree (STRING dir, BOOLEAN cflag, INT writ, BOOLEAN immut)
 {
 	BTREE btree;
 	char scratch[200];
-	FILE *fp;
+	FILE *fp=NULL;
 	struct stat sbuf;
 	KEYFILE1 kfile1;
 	KEYFILE2 kfile2;
 	BOOLEAN keyed2 = FALSE;
 	INDEX master;
+	STRING dbmode;
 
 	/* we only allow 150 characters in base directory name */
 	bterrno = 0;
 	if (strlen(dir) > 150) {
 		bterrno = BTERR_LNGDIR;
-		return NULL;
+		goto failopenbtree;
 	}
 	/* See if base directory exists */
 	if (stat(dir, &sbuf)) {
 		/* db directory not found */
-		if (!cflag) {
+		if (!cflag || !write || immut) {
 			bterrno = BTERR_NODB;
-			return NULL;
+			goto failopenbtree;
 		}
 		/* create flag set, so try to create it & stat again */
 		sprintf(scratch, "%s/", dir);
 		if (!mkalldirs(scratch) || stat(dir, &sbuf)) {
 			bterrno = BTERR_DBCREATEFAILED;
-			return NULL;
+			goto failopenbtree;
 		}
 	} else if (!S_ISDIR(sbuf.st_mode)) {
 		/* found but not directory */
 		bterrno = BTERR_DBBLOCKEDBYFILE;
-		return NULL;
+		goto failopenbtree;
 	}
 	/* db dir was found, or created & then found */
 	if (access(dir, 0)) {
 		bterrno = BTERR_DBACCESS;
-		return NULL;
+		goto failopenbtree;
 	}
 
 /* See if key file exists */
@@ -155,81 +157,94 @@ openbtree (STRING dir, BOOLEAN cflag, BOOLEAN writ)
 		/* no keyfile */
 		if (!cflag) {
 			bterrno = BTERR_NOKEY;
-			return NULL;
+			goto failopenbtree;
 		}
 		/* create flag set, so try to create it & stat again */
 		if (!initbtree(dir) || stat(scratch, &sbuf)) {
 			/* initbtree actually set bterrno, but we ignore it */
 			bterrno = BTERR_DBCREATEFAILED;
-			return NULL;
+			goto failopenbtree;
 		}
 	} else {
 		if (cflag) {
 			/* keyfile found - don't create on top of it */
 			bterrno = BTERR_EXISTS;
-			return NULL;
+			goto failopenbtree;
 		}
 	}
 	if (!S_ISREG(sbuf.st_mode)) {
 		/* keyfile is a directory! */
 		bterrno = BTERR_KFILE;
-		return NULL;
+		goto failopenbtree;
 	}
 
 /* Open and read key file (KEYFILE1) */
-	if (!(fp = fopen(scratch, LLREADBINARYUPDATE)) ||
+	dbmode = immut ? LLREADBINARY : LLREADBINARYUPDATE;
+	if (!(fp = fopen(scratch, dbmode)) ||
 	    fread(&kfile1, sizeof(kfile1), 1, fp) != 1) {
 		bterrno = BTERR_KFILE;
-		return NULL;
+		goto failopenbtree; /* validate set bterrno */
 	}
 /* Read & validate KEYFILE2 - if not present, we'll add it below */
 	if (fread(&kfile2, sizeof(kfile2), 1, fp) == 1) {
 		if (!validate_keyfile2(&kfile2))
-			return NULL; /* validate set bterrno */
+			goto failopenbtree; /* validate set bterrno */
 		keyed2=TRUE;
 	}
-	if (kfile1.k_ostat < 0) {
-		bterrno = BTERR_WRITER;
-		fclose(fp);
-		return NULL;
-	}
-
-/* Update key file for this new opening */
-	if (writ && (kfile1.k_ostat == 0))
-		kfile1.k_ostat = -1;
-	else
-		kfile1.k_ostat++;
-	rewind(fp);
-	if (fwrite(&kfile1, sizeof(kfile1), 1, fp) != 1) {
-		bterrno = BTERR_KFILE;
-		fclose(fp);
-		return NULL;
-	}
-	if (!keyed2) {
-		/* add KEYFILE2 structure */
-		init_keyfile2(&kfile2);
-		if (fwrite(&kfile2, sizeof(kfile2), 1, fp) != 1) {
-		bterrno = BTERR_KFILE;
-		fclose(fp);
+	if (writ < 2 && kfile1.k_ostat == -2)
+		immut = TRUE;
+	/* if not immutable, handle reader/writer protection update */
+	if (!immut) {
+		if (kfile1.k_ostat == -1) {
+			bterrno = BTERR_WRITER;
+			goto failopenbtree;
 		}
+		if (kfile1.k_ostat == -2) {
+			bterrno = BTERR_LOCKED;
+			goto failopenbtree;
+		}
+
+	/* Update key file for this new opening */
+		if (writ>0 && (kfile1.k_ostat == 0))
+			kfile1.k_ostat = -1;
+		else
+			kfile1.k_ostat++;
+		rewind(fp);
+		if (fwrite(&kfile1, sizeof(kfile1), 1, fp) != 1) {
+			bterrno = BTERR_KFILE;
+			goto failopenbtree;
+		}
+		if (!keyed2) {
+			/* add KEYFILE2 structure */
+			init_keyfile2(&kfile2);
+			if (fwrite(&kfile2, sizeof(kfile2), 1, fp) != 1) {
+				bterrno = BTERR_KFILE;
+				goto failopenbtree;
+			}
+		}
+		fflush(fp);
 	}
-	fflush(fp);
 
 /* Get master index */
-	if (!(master = readindex(dir, kfile1.k_mkey)))
-		return NULL;	/* bterrno set by getindex */
+	if (!(master = readindex(dir, kfile1.k_mkey, TRUE)))
+		goto failopenbtree; /* bterrno set by readindex */
 
 /* Create new BTREE */
 	btree = (BTREE) stdalloc(sizeof *btree);
 	bbasedir(btree) = dir;
 	bmaster(btree) = master;
-	bwrite(btree) = (kfile1.k_ostat == -1);
+	bwrite(btree) = !immut && writ && (kfile1.k_ostat == -1);
+	bimmut(btree) = immut; /* includes case that ostat is -2 */
 	bkfp(btree) = fp;
 	btree->b_kfile.k_mkey = kfile1.k_mkey;
 	btree->b_kfile.k_fkey = kfile1.k_fkey;
 	btree->b_kfile.k_ostat = kfile1.k_ostat;
 	initcache(btree, 20);
 	return btree;
+
+failopenbtree:
+	if (fp) fclose(fp);
+	return NULL;
 }
 /*==================================
  * initbtree -- Initialize new BTREE
@@ -334,7 +349,7 @@ closebtree (BTREE btree)
 				goto exit_closebtree;
 			}
 			if (kfile1.k_ostat <= 0) {
-				/* probably someone has forcible opened it for write,
+				/* probably someone has forcibly opened it for write,
 				making this -1, and may also have since closed it, leaving
 				it at 0 */
 				result=TRUE;

@@ -209,17 +209,18 @@ void
 close_lldb (void)
 {
 	closexref();
-	if(BTR) {
+	if (BTR && !immutable) {
 		closebtree(BTR);
 		BTR=NULL;
 	}
 }
 /*==================================================
- * force_open_db -- open a writer-locked database
+ * alterdb -- force open, lock, or unlock a database
+ *  alteration: [in] 1=unlock, 2=lock, 3=force open
  *  returns FALSE & sets bterrno if error (eg, keyfile corrupt)
  *================================================*/
 static BOOLEAN
-force_open_db ()
+alterdb (INT alteration)
 {
 	/*
 	Forcefully alter reader/writer count to 0.
@@ -248,7 +249,39 @@ force_open_db ()
 			goto force_open_db_exit;
 		}
 	}
-	kfile1.k_ostat = 0;
+	if (alteration == 1) {
+		/* unlock db */
+		if (kfile1.k_ostat != -2) {
+			/* can't unlock a db unless it is locked */
+			bterrno = BTERR_UNLOCKED;
+			goto force_open_db_exit;
+		}
+		kfile1.k_ostat = 0;
+	} else if (alteration == 2) {
+		/* lock db */
+		if (kfile1.k_ostat == -2) {
+			/* can't lock a db that is already locked */
+			bterrno = BTERR_LOCKED;
+			goto force_open_db_exit;
+		}
+		if (kfile1.k_ostat != 0) {
+			/* can't lock a db unless it is unused currently*/
+			bterrno = kfile1.k_ostat < 0 ? BTERR_WRITER : BTERR_READERS;
+			goto force_open_db_exit;
+		}
+		kfile1.k_ostat = -2;
+	} else if (alteration == 3) {
+		/* force open db */
+		if (kfile1.k_ostat == -2) {
+			/* cannot force open a locked database */
+			bterrno = BTERR_LOCKED;
+			goto force_open_db_exit;
+		}
+		kfile1.k_ostat = 0;
+	} else {
+		/* bad argument */
+		FATAL();
+	}
 	rewind(fp);
 	if (fwrite(&kfile1, sizeof(kfile1), 1, fp) != 1) {
 		bterrno = BTERR_KFILE;
@@ -263,29 +296,28 @@ force_open_db_exit:
 }
 /*==================================================
  * open_database_impl -- open database
- * forceopen: user requesting override of write-locked db
+ *  alteration:  [in] flag for forceopen (3), lock (2), & unlock (1)
  *  uses globals btreepath & readpath
  *  btreepath: database to report
  *  readpath: actual database path (may be relative also)
  * Upon failure, sets bterrno and returns false
  *================================================*/
 static BOOLEAN
-open_database_impl (BOOLEAN forceopen)
+open_database_impl (INT alteration)
 {
 	int c;
+	INT writ = !readonly + writeable;
 
-	if (forceopen) {
-		if (!force_open_db()) {
-			return FALSE;
-		}
+	/* handle db adjustments (which only affect keyfile) first */
+	if (alteration > 0 && !alterdb(alteration)) return FALSE;
 
-		/* okay, cleared reader/writer count
-		now fall through to normal opening code */
-	}
 	/* call btree module to do actual open of BTR */
-	if (!(BTR = openbtree(readpath, FALSE, !readonly)))
+	if (!(BTR = openbtree(readpath, FALSE, writ, immutable)))
 		return FALSE;
+	/* we have to set the global variable readonly correctly, because
+	it is used widely */
 	readonly = !bwrite(BTR);
+	immutable = bimmut(BTR);
 	if (readonly && writeable) {
 		int myerr=0;
 		c = bkfile(BTR).k_ostat;
@@ -304,12 +336,12 @@ open_database_impl (BOOLEAN forceopen)
 }
 /*==================================================
  * open_database -- open database
- *  forceopen:    [in] flag to override reader/writer lock
+ *  forceopen:    [in] flag to override reader/writer protection
  *  dbrequested:  [in] database to report
  *  dbused:       [in] actual database path (may be relative also)
  *================================================*/
 BOOLEAN
-open_database (BOOLEAN forceopen, STRING dbrequested, STRING dbused)
+open_database (BOOLEAN alteration, STRING dbrequested, STRING dbused)
 {
 	BOOLEAN rtn;
 
@@ -317,7 +349,7 @@ open_database (BOOLEAN forceopen, STRING dbrequested, STRING dbused)
 	btreepath=strsave(dbrequested);
 	readpath=strsave(dbused);
 
-	rtn = open_database_impl(forceopen);
+	rtn = open_database_impl(alteration);
 	if (!rtn) {
 		/* open failed so clean up, preserve bterrno */
 		int myerr = bterrno;
@@ -339,7 +371,7 @@ create_database (STRING dbrequested, STRING dbused)
 	btreepath=strsave(dbrequested);
 	readpath=strsave(dbused);
 
-	if (!(BTR = openbtree(dbused, TRUE, !readonly))) {
+	if (!(BTR = openbtree(dbused, TRUE, 2, immutable))) {
 		/* open failed so clean up, preserve bterrno */
 		int myerr = bterrno;
 		close_lldb();
@@ -399,6 +431,9 @@ describe_dberror (INT dberr, STRING buffer, INT buflen)
 	case BTERR_WRITER:
 		msg = "The database is already open for writing.";
 		break;
+	case BTERR_LOCKED:
+		msg = "The database is locked (no readwrite access).";
+		break;
 	case BTERR_ILLEGKF:
 		msg = "keyfile is corrupt.";
 		break;
@@ -416,6 +451,7 @@ describe_dberror (INT dberr, STRING buffer, INT buflen)
 			, "The database is already opened for read access by %d users.\n  "
 			, rdr_count);
 		msg = localbuff;
+		break;
 	default:
 		msg = "Undefined database error -- This can't happen.";
 		break;

@@ -56,9 +56,10 @@ typedef INT FKEY; /*file key*/
 typedef char *RAWRECORD;
 
 typedef struct {
-	FKEY k_mkey;	/*current master key*/
-	FKEY k_fkey;	/*current file key*/
-	INT k_ostat;	/*current open status*/
+	FKEY k_mkey;  /* current master key*/
+	FKEY k_fkey;  /* current file key*/
+	/* ostat: -2=immutable, -1=writer, 0=closed, 1+=reader count */
+	INT k_ostat;  
 } KEYFILE1;
 
 /*
@@ -96,23 +97,25 @@ typedef struct {
  * BTREE -- Internal BTREE data structure
  *=====================================*/
 typedef struct {
-	STRING  b_basedir;	/*btree base directory*/
-	INDEX   b_master;	/*master index block*/
-	FKEY    b_nkey;		/*next index key*/
-	FILE   *b_kfp;		/*keyfile file pointer*/
-	KEYFILE1 b_kfile;	/*keyfile contents*/
-	INT     b_ncache;	/*number of indices in cache*/
-	INDEX  *b_cache;	/*index cache*/
-	BOOLEAN b_write;	/*database writeable?*/
+	STRING  b_basedir;   /* btree base directory */
+	INDEX   b_master;    /* master index block */
+	FKEY    b_nkey;      /* next index key */
+	FILE   *b_kfp;       /* keyfile file pointer */
+	KEYFILE1 b_kfile;    /* keyfile contents */
+	INT     b_ncache;    /* number of indices in cache */
+	INDEX  *b_cache;     /* index cache */
+	BOOLEAN b_write;     /* database writeable? */
+	BOOLEAN b_immut;     /* database immutable? */
 } *BTREE, BTREESTRUCT;
 #define bbasedir(b) ((b)->b_basedir)
 #define bmaster(b)  ((b)->b_master)
-#define bnkey(b)    ((b)->b_nkey)
+/* #define bnkey(b)    ((b)->b_nkey) */ /* UNUSED */
 #define bkfp(b)     ((b)->b_kfp)
 #define bkfile(b)   ((b)->b_kfile)
 #define bncache(b)  ((b)->b_ncache)
 #define bcache(b)   ((b)->b_cache)
 #define bwrite(b)   ((b)->b_write)
+#define bimmut(b)   ((b)->b_immut)
 
 /*======================================================
  * BLOCK -- Data structure for BTREE record file headers
@@ -156,8 +159,8 @@ RECORD_STATUS write_record_to_textfile(BTREE btree, RKEY rkey, STRING file, TRAN
 BOOLEAN closebtree(BTREE);
 BOOLEAN create_database(STRING dbrequested, STRING dbused);
 void describe_dberror(INT dberr, STRING buffer, INT buflen);
-int open_database(BOOLEAN forceopen, STRING dbpath, STRING dbactual);
-BTREE openbtree(STRING, BOOLEAN, BOOLEAN);
+int open_database(BOOLEAN forcingopen, STRING dbpath, STRING dbactual);
+BTREE openbtree(STRING dir, BOOLEAN cflag, INT writ, BOOLEAN immut);
 BOOLEAN validate_keyfile2(KEYFILE2 *);
 
 /* names.c */
@@ -189,7 +192,9 @@ enum {
 , BTERR_INDEX             /*problem with an index file*/
 , BTERR_BLOCK             /*problem with a data block file*/
 , BTERR_LNGDIR            /*base directory name too long*/
-, BTERR_WRITER            /*can't open database because writer has it*/
+, BTERR_WRITER            /*can't open database because writer has it & -w was specified*/
+, BTERR_LOCKED            /* error because db was locked */
+, BTERR_UNLOCKED          /* error because db was unlocked */
 , BTERR_ILLEGKF           /* illegal keyfile */
 , BTERR_ALIGNKF           /* wrong alignment key file */
 , BTERR_VERKF             /* wrong version key file */

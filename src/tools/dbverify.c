@@ -829,6 +829,9 @@ main (int argc,
 	char *flags, *dbname;
 	char *ptr;
 	char * msg;
+	BOOLEAN cflag=FALSE; /* create new db if not found */
+	INT writ=1; /* request write access to database */
+	BOOLEAN immut=FALSE; /* immutable access to database */
 
 	validate_errs();
 
@@ -860,7 +863,7 @@ main (int argc,
 		printf("%s\n", msg);
 		return (1);
 	}
-	if (!(BTR = openbtree(dbname, FALSE, TRUE))) {
+	if (!(BTR = openbtree(dbname, cflag, writ, immut))) {
 		if (bterrno == BTERR_WRITER) {
 			printf("Database is locked: %s\n", dbname);
 		} else {
@@ -880,6 +883,12 @@ main (int argc,
 	if (todo.fix_sours) todo.check_sours=TRUE;
 	if (todo.fix_evens) todo.check_evens=TRUE;
 	if (todo.fix_othes) todo.check_othes=TRUE;
+
+	if (!(bwrite(BTR)) {
+		todo.fix_indis = todo.fix_fams = todo.fix_sours = FALSE;
+		todo.fix_evens = todo.fix_othes = FALSE;
+	}
+
 
 	if (todo.check_indis
 		|| todo.check_fams

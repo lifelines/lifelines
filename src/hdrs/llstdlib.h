@@ -34,8 +34,13 @@
 Main program (lifelines, btedit, dbverify,...) must provide
 an implementation of __fatal and fatalmsg, and it must not
 return (eg, these all call exit()).
+They must also implement crashlog, but it may do nothing, or
+it may just print its printf style args to the screen. It 
+should return.
 */
 void __fatal(STRING file, int line, STRING details);
+void crashlog(STRING fmt, ...);
+
 
 /* dirs.c */
 BOOLEAN mkalldirs(STRING);

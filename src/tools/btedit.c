@@ -59,6 +59,9 @@ main (int argc,
 	char *editor;
 	char *dbname, *key;
 	RECORD_STATUS rtn;
+	BOOLEAN cflag=FALSE; /* create new db if not found */
+	BOOLEAN writ=1; /* request write access to database */
+	BOOLEAN immut=FALSE; /* immutable access to database */
 #ifdef WIN32
 	/* TO DO - research if this is necessary */
 	_fmode = O_BINARY;	/* default to binary rather than TEXT mode */
@@ -70,7 +73,7 @@ main (int argc,
 	}
 	dbname = argv[1];
 	key = argv[2];
-	if (!(btree = openbtree(dbname, FALSE, TRUE))) {
+	if (!(btree = openbtree(dbname, cflag, writ, immut))) {
 		printf("could not open btree: %s\n", dbname);
 		return (1);
 	}
@@ -92,8 +95,10 @@ main (int argc,
 #else
 	system(cmdbuf);
 #endif
-	addfile(btree, str2rkey(key), "btedit.tmp");
-	unlink("btedit.tmp");
+	if (bwrite(btree)) {
+		addfile(btree, str2rkey(key), "btedit.tmp");
+		unlink("btedit.tmp");
+	}
 	closebtree(btree);
 	return TRUE;
 }

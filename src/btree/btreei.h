@@ -16,7 +16,7 @@ INDEX getindex(BTREE, FKEY);
 void initcache(BTREE, INT);
 void putheader(BTREE, BLOCK);
 void putindex(BTREE, INDEX);
-INDEX readindex(STRING, FKEY);
+INDEX readindex(STRING basedir, FKEY ikey, BOOLEAN robust);
 void writeindex(STRING, INDEX);
 
 /* utils.c */

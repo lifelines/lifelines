@@ -50,7 +50,7 @@ BLOCK
 crtblock (BTREE btree)  /*btree handle*/
 {
 	BLOCK block;
-	ASSERT(bwrite(btree));
+	ASSERT(bwrite(btree) == 1);
 	block = allocblock();
 	ixself(block) = btree->b_kfile.k_fkey;
 	nextfkey(btree);

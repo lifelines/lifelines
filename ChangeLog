@@ -1,3 +1,15 @@
+2001-09-02 Perry Rapp <puddle@users.sourceforge.net>
+
+	* .linesrc ChangeLog lines.cfg btree/addkey.c btree/block.c
+	btree/btreei.h btree/file.c btree/index.c btree/opnbtree.c
+	btree/record.c btree/traverse.c gedlib/init.c
+	gedlib/messages.c hdrs/btree.h hdrs/gedcom.h hdrs/llstdlib.h
+	hdrs/standard.h liflines/main.c liflines/screen.c
+	stdlib/assert.c tools/btedit.c tools/dbverify.c
+	NEW hdrs/msvc.h:
+	Added -i for immutable access, and -ly & -ln for
+	locking & unlocking a database.
+
 2001-08-12  Marc Nozell  <marc@thelahunginjeet.nozell.com>
 
 	* reports/book-latex.ll: Dennis Nicklaus provided an updated

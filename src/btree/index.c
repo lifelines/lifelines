@@ -42,7 +42,7 @@ INDEX
 crtindex (BTREE btree)
 {
 	INDEX index;
-	ASSERT(bwrite(btree));
+	ASSERT(bwrite(btree) == 1);
 	index = (INDEX) stdalloc(BUFLEN);
 	nkeys(index) = 0;
 	ixparent(index) = 0;
@@ -50,8 +50,11 @@ crtindex (BTREE btree)
 	ixself(index) = btree->b_kfile.k_fkey;
 	nextfkey(btree);
 	rewind(bkfp(btree));
-	if (fwrite(&bkfile(btree), sizeof(bkfile(btree)), 1, bkfp(btree)) != 1)
-		FATAL();
+	if (fwrite(&bkfile(btree), sizeof(bkfile(btree)), 1, bkfp(btree)) != 1) {
+		char scratch[200];
+		sprintf(scratch, "Error updating keyfile for new index");
+		FATAL2(scratch);
+	}
 	writeindex(bbasedir(btree), index);
 	return index;
 }
@@ -59,41 +62,56 @@ crtindex (BTREE btree)
  * readindex - Read index from file
  *  basedir: [in] base directory for files making up btree
  *  ikey:    [in] index file key (number which indicates a file)
+ *  robust:  [in] flag to tell this function to return (not abort) on errors
  * this is below the level of the index cache
  *===============================*/
 INDEX
-readindex (STRING basedir, FKEY ikey)
+readindex (STRING basedir, FKEY ikey, BOOLEAN robust)
 {
 	FILE *fp;
 	INDEX index;
 	char scratch[200];
 	sprintf(scratch, "%s/%s", basedir, fkey2path(ikey));
 	if ((fp = fopen(scratch, LLREADBINARY)) == NULL) {
-		bterrno = BTERR_INDEX;
-		return NULL;
+		if (robust) {
+			bterrno = BTERR_INDEX;
+			return NULL;
+		}
+		sprintf(scratch, "Missing index file: %s", fkey2path(ikey));
+		FATAL2(scratch);
 	}
 	index = (INDEX) stdalloc(BUFLEN);
-	if (fread(index, BUFLEN, 1, fp) != 1) FATAL();
+	if (fread(index, BUFLEN, 1, fp) != 1) {
+		if (robust) {
+			bterrno = BTERR_INDEX;
+			return NULL;
+		}
+		sprintf(scratch, "Undersized (<%d) index file: %s", BUFLEN, fkey2path(ikey));
+		FATAL2(scratch);
+	}
 	fclose(fp);
 	return index;
 }
 /*=================================
  * writeindex - Write index to file
+ *  basedir:  [in]  base directory of btree
+ *  index:    [in]  index block
  *===============================*/
 void
-writeindex (STRING basedir, /* base directory of btree */
-            INDEX index)    /* index block */
+writeindex (STRING basedir, INDEX index)
 {
 	FILE *fp;
 	char scratch[200];
 	sprintf(scratch, "%s/%s", basedir, fkey2path(ixself(index)));
 	if ((fp = fopen(scratch, LLWRITEBINARY)) == NULL) {
 		/* Needs to be revisited with double-buffering */
-		FATAL();
+		sprintf(scratch, "Error opening index file: %s", fkey2path(ixself(index)));
+		FATAL2(scratch);
 	}
 	if (fwrite(index, BUFLEN, 1, fp) != 1) {
 		/* Needs to be revisited with double-buffering */
-		FATAL();
+		sprintf(scratch, "Error writng index file: %s", fkey2path(ixself(index)));
+		FATAL2(scratch);
 	}
 	fclose(fp);
 }
@@ -137,6 +155,7 @@ cacheindex (BTREE btree, /* btree handle */
  * getindex - Get index from btree
  *  checks cache first to avoid disk read if possible
  *  also loads cache if read from disk
+ *  does not return if error
  *==============================*/
 INDEX
 getindex (BTREE btree, FKEY fkey)
@@ -145,8 +164,8 @@ getindex (BTREE btree, FKEY fkey)
 	INDEX index;
 	if (fkey == ixself(bmaster(btree))) return bmaster(btree);
 	if ((j = incache(btree, fkey)) == -1) {	/* not in cache */
-		if ((index = readindex(bbasedir(btree), fkey)) == NULL)
-			return NULL;
+		BOOLEAN robust = FALSE; /* abort on error */
+		index = readindex(bbasedir(btree), fkey, robust);
 		cacheindex(btree, index);
 		return index;
 	}

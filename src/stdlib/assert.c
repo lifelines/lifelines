@@ -59,6 +59,23 @@ __fatal (STRING file, int line, STRING details)
 	endwin();
 	ll_abort(-1);
 }
+/*===============================
+ * __crashlog -- Details preceding a fatal error
+ * Created: 2001/09/02, Perry Rapp
+ *=============================*/
+void
+crashlog (STRING fmt, ...)
+{
+	/*
+	TO DO - there ought to be a configuration option
+	to log this to a file
+	*/
+
+	va_list args;
+	va_start(args, fmt);
+	llvwprintf(fmt, args);
+	va_end(args);
+}
 /*============================
  * __assert -- Check assertion
  *==========================*/

@@ -50,9 +50,8 @@ addkey (BTREE btree,  /*btree handle*/
 #endif
 
    /* Validate the operation */
-	if (!bwrite(btree)) return;
-	if ((index = getindex(btree, ikey)) == NULL)
-		FATAL();
+	if (bwrite(btree) != 1) return;
+	index = getindex(btree, ikey);
 	if (nkeys(index) >= NOENTS - 1) FATAL();
 
    /* Search for record key in index -- shouldn't be there */

@@ -264,7 +264,9 @@ paint_main_screen(void)
 	wprintw(win, mtitle, get_lifelines_version(ll_cols-4));
 	mvwaddstr(win, 2, 4, cright);
 	mvwprintw(win, 3, 4, "Current Database - %s", readpath);
-	if (readonly)
+	if (immutable)
+		wprintw(win, " (immutable)");
+	else if (readonly)
 		wprintw(win, " (read only)");
 	row = 5;
 	mvwaddstr(win, row++, 2, plschs);

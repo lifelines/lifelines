@@ -40,6 +40,7 @@ STRING idldir = SS "What directory holds the LifeLines database?";
 STRING nodbse = SS "There is no LifeLines database in that directory.";
 STRING crdbse = SS "Do you want to create a database there?";
 STRING nocrdb = SS "Could not create the LifeLines database `%s'.";
+STRING bdlkar = SS "Argument to lock (-l) must be y or n.";
 STRING normls = SS "Cannot remove last person from family.";
 
 STRING ronlya = SS "The database is read only; you may not add records.";
@@ -295,6 +296,8 @@ STRING unksps      = SS "Spouse unknown";
 STRING nohist      = SS "No more history";
 STRING dataerr     = SS "Error accessing data";
 STRING idhist      = SS "Choose from history";
+STRING norwandro   = SS "Cannot combine immutable (-i) or read-only (-r) with read-write (-w) access.";
+STRING nofandl     = SS "Cannot combine forceopen (-f) and lock (-l) flags.";
 
 /* translation table errors */
 STRING baddec      = SS "Bad decimal number format.";

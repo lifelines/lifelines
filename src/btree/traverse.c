@@ -65,8 +65,8 @@ traverse_index_blocks (BTREE btree, INDEX index,
 			return FALSE;
 		n = nkeys(index);
 		for (i = 0; i <= n; i++) {
-			BOOLEAN rc;
-			newdex = readindex(bdir, fkeys(index, i));
+			BOOLEAN rc, robust=FALSE;
+			newdex = readindex(bdir, fkeys(index, i), robust);
 			rc = traverse_index_blocks(btree, newdex, ifunc, dfunc);
 			stdfree(newdex);
 			if (!rc) return FALSE;
@@ -98,7 +98,6 @@ traverse_block (BTREE btree, BLOCK block, RKEY lo, RKEY hi,
 		if (i) {
 			/* reload block (lest callback purged it from cache) */
 			INDEX index1 = getindex(btree, nfkeyme);
-			ASSERT(index1);
 			ASSERT(ixtype(index1)==BTBLOCKTYPE);
 			block=(BLOCK)index1;
 		}
@@ -146,13 +145,12 @@ traverse_index (BTREE btree, INDEX index, RKEY lo, RKEY hi,
 		if (i!=ilo) {
 			/* reload index (lest callback purged it from cache) */
 			index = getindex(btree, nfkeyme);
-			ASSERT(index);
 			ASSERT(ixtype(index)==BTINDEXTYPE);
 		}
 		if (hi.r_rkey[0] && ll_strncmp(hi.r_rkey, rkeys(index, i-1).r_rkey, 8) < 0)
 			break;
 		nfkey = fkeys(index, i-1);
-		ASSERT(index1 = getindex(btree, nfkey));
+		index1 = getindex(btree, nfkey);
 		if (ixtype(index1) == BTINDEXTYPE) {
 			if (!traverse_index(btree, index1, lo, hi, func, param))
 				return FALSE;

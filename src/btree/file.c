@@ -88,7 +88,7 @@ addfile_impl (BTREE btree, RKEY rkey, STRING file, STRING mode, TRANSLFNC transl
 	INT siz;
 	struct stat buf;
 	BOOLEAN result=FALSE;
-	ASSERT(bwrite(btree));
+	ASSERT(bwrite(btree) == 1);
 	if ((fp = fopen(file, mode)) == NULL) goto end;
 	if (fstat(fileno(fp), &buf) != 0) goto end;
 	if (buf.st_size == 0) {

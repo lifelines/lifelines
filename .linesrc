@@ -6,7 +6,7 @@
 #
 # These can be overridden by useroptions in db
 #
-# 2001/08/02
+# 2001/09/02
 
 # Email address available to report programs
 #EmailAddr=user@mailhost.org
@@ -35,6 +35,9 @@
 
 # Path for report output
 #LLREPORTS=/home/user/LifeLines/Outputs
+
+# Editor
+#LLEDITOR=/usr/local/vi
 
 # Path for reference translation tables
 LLTTREF=/home/user/LifeLines/ttref
