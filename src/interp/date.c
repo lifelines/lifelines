@@ -21,7 +21,6 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
-/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*==============================================================
  * date.c -- Code to process dates
  * Copyright(c) 1992-94 by T. T. Wetmore IV; all rights reserved
@@ -29,6 +28,8 @@
  *   3.0.0 - 20 Jan 94    3.0.2 - 10 Nov 94
  *   3.0.3 - 17 Jul 95
  *============================================================*/
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
+/* modified 2000-04-12 J.F.Chandler */
 
 #include "standard.h"
 #include "table.h"
@@ -53,7 +54,7 @@ STRING strcpy();
 
 struct {
 	char *sl, *su, *ll, *lu;
-} monthstrs[12] = {
+} monthstrs[19] = {
 	"Jan", "JAN", "January", "JANUARY",
 	"Feb", "FEB", "February", "FEBRUARY",
 	"Mar", "MAR", "March", "MARCH",
@@ -66,6 +67,16 @@ struct {
 	"Oct", "OCT", "October", "OCTOBER",
 	"Nov", "NOV", "November", "NOVEMBER",
 	"Dec", "DEC", "December", "DECEMBER",
+
+	/* date modifiers appended to the month table */
+
+	"abt", "ABT", "about", "ABOUT",     /*  1 */
+	"bef", "BEF", "before", "BEFORE",   /*  2 */
+	"aft", "AFT", "after", "AFTER",     /*  3 */
+	"bet", "BET", "between", "BETWEEN", /*  4 - range */
+	"and", "AND", "and", "AND",         /*  5 */
+	"from", "FROM", "from", "FROM",     /*  6 - range */
+	"to", "TO", "to", "TO",             /*  7 */
 };
 
 static STRING sstr = NULL;
@@ -74,7 +85,7 @@ static TABLE monthtbl = NULL;
 /*==========================================
  * format_date -- Do general date formatting
  *========================================*/
-STRING format_date (str, dfmt, mfmt, yfmt, sfmt)
+STRING format_date (str, dfmt, mfmt, yfmt, sfmt, cmplx)
 STRING str;	/* raw string containing a date */
 INT dfmt;	/* day format:	0 - num, space 
 				1 - num, lead 0
@@ -99,16 +110,40 @@ INT sfmt;	/* date format:	0 - da mo yr
         			9 - yr/mo/da
         			10- yr-mo-da
         			11- yrmoda */
+BOOLEAN cmplx;      /* if TRUE, then treat string as complex, including
+                       date modifiers, ranges, and/or double-dating */
 {
-	INT da, mo, yr;
+	INT mod, da, mo, yr;
 	STRING sda, smo, syr;
-	static unsigned char scratch[20], daystr[4];
+	static unsigned char scratch[50], daystr[4];
 	STRING p = scratch;
 	if (!str) return NULL;
-	extract_date(str, &da, &mo, &yr);
+	extract_date(str, &mod, &da, &mo, &yr, &syr);
 	if (sda = format_day(da, dfmt)) sda = strcpy(daystr, sda);
 	smo = format_month(mo, mfmt);
-	syr = format_year(yr, yfmt);
+	if (!cmplx) syr = format_year(yr, yfmt);
+	else format_mod(mod%100, &p);
+	format_ymd(syr, smo, sda, sfmt, mod, &p);
+	if (cmplx && (mod%100 == 4 || mod%100 == 6)) {
+		*p++ = ' ';
+		format_mod(mod%100 + 1, &p);
+		extract_date(NULL, &mod, &da, &mo, &yr, &syr);
+		if (sda = format_day(da, dfmt)) sda = strcpy(daystr, sda);
+		smo = format_month(mo, mfmt);
+		format_ymd(syr, smo, sda, sfmt, mod, &p);
+	}
+        return scratch;
+
+}
+/*===================================================
+ * format_ymd -- Assembles date according to dateformat
+ *=================================================*/
+format_ymd (syr, smo, sda, sfmt, mod, output)
+STRING syr, smo, sda, *output;
+INT sfmt;	/* format code */
+{
+	STRING p = *output;
+
 	switch (sfmt) {
 	case 0:		/* da mo yr */
 		if (sda) {
@@ -310,8 +345,27 @@ INT sfmt;	/* date format:	0 - da mo yr
                 *p = 0;
                 break;
         }
-        return scratch;
+	if (mod >= 100) {
+		strcpy(p, " BC");
+		p += 3;
+	}
+	*output = p;
+        return;
 
+}
+/*=====================================
+ * format_mod -- Format date modifier
+ *===================================*/
+format_mod (mod, pp)
+INT mod;
+STRING *pp;
+{
+	if (mod < 1 || mod > 7) return;
+	strcpy(*pp, monthstrs[mod+12-1].ll);
+	*pp += strlen(*pp);
+	**pp = ' ';
+	*pp += 1;
+	return;
 }
 /*=======================================
  * format_day -- Formats day part of date
@@ -377,14 +431,16 @@ INT yfmt;
 /*=====================================================
  * extract_date -- Extract date from free format string
  *===================================================*/
-extract_date (str, pda, pmo, pyr)
-STRING str;
-INT *pda, *pmo, *pyr;
+extract_date (str, pmod, pda, pmo, pyr, pyrstr)
+STRING str, *pyrstr;
+INT *pmod, *pda, *pmo, *pyr;
 {
-	INT tok, ival;
+	INT tok, ival, era = 0;
 	STRING sval;
-	*pda = *pmo = *pyr = 0;
-	set_date_string(str);
+	static unsigned char yrstr[10];
+	*pyrstr = "";
+	*pmod = *pda = *pmo = *pyr = 0;
+	if (str) set_date_string(str);
 	while (tok = get_date_tok(&ival, &sval)) {
 		switch (tok) {
 		case MONTH_TOK:
@@ -393,15 +449,30 @@ INT *pda, *pmo, *pyr;
 		case CHAR_TOK:
 			continue;
 		case WORD_TOK:
+			if (*pyr == 0 && *pda == 0 && ival < 0) ival = -ival;
+			if (ival > 0 && ival < 20 && *pmod == 0) *pmod = ival;
+			if (ival == -99) era = 100;
+			if ((*pmod == 4 && ival == 5) ||
+			    (*pmod == 6 && ival == 7)) goto combine;
 			continue;
 		case ICONS_TOK:
-			if (ival <= 31 && *pda == 0) *pda = ival;
-			if (ival >= 100 && *pyr == 0) *pyr = ival;
+/* years 1-99 are denoted by at least two leading zeroes */
+			if (ival >= 100 ||
+			    (ival > 0 && sval[0] == '0' && sval[1] == '0')) {
+				if (eqstr(*pyrstr,"")) {
+					strcpy(yrstr,sval);
+					*pyrstr = yrstr;
+					*pyr = ival;
+				}
+			}
+			else if (ival <= 31 && *pda == 0) *pda = ival;
 			continue;
 		default:
 			FATAL();
 		}
 	}
+	combine:
+	*pmod += era;
 }
 /*===============================================
  * set_date_string -- Init date extraction string
@@ -432,17 +503,22 @@ STRING *psval;
 		*--p = 0;
 		sstr--;
 		*psval = scratch;
-		if ((i = valueof(monthtbl, upper(scratch))) > 0) {
+		if ((i = valueof(monthtbl, upper(scratch))) > 0 && i <= 12) {
 			*pival = i;
 			return MONTH_TOK;
 		}
 		*pival = 0;
+		if (i > 12) *pival = i - 12;
+		if (i < 0) *pival = i;
 		return WORD_TOK;
 	}
 	if (chartype(*sstr) == DIGIT) {
 		i = 0;
 		while (chartype(c = *p++ = *sstr++) == DIGIT)
 			i = i*10 + c - '0';
+		if (c == '/') {
+			while (chartype(*p++ = *sstr++) == DIGIT) ;
+		}
 		*--p = 0;
 		sstr--;
 		*psval = scratch;
@@ -464,11 +540,13 @@ static init_monthtbl ()
 {
 	INT i, j;
 	monthtbl = create_table();
-	for (i = 0; i < 12; i++) {
+	for (i = 0; i < 19; i++) {
 		j = i + 1;
 		insert_table(monthtbl, monthstrs[i].su, j);
 		insert_table(monthtbl, monthstrs[i].lu, j);
 	}
+	insert_table(monthtbl, "EST", -1);  /* ignored after date, else "ABT"*/
+	insert_table(monthtbl, "BC", -99);
 }
 /*=============================
  * get_date -- Get today's date

@@ -21,13 +21,14 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
-/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * Copyright(c) 1991-95 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 26 Sep 93
  *   3.0.0 - 28 Jun 94    3.0.2 - 04 Apr 95
  *   3.0.3 - 25 Aug 95
  *===========================================================*/
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
+/* modified 2000-01-26 J.F.Chandler */
 
 #include <stdio.h>
 #include "standard.h"
@@ -964,7 +965,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	assign_iden(stab, iident(arg), create_pvalue(PSET, (WORD)NULL));
 	if (!name || *name == 0) return NULL;
 	assign_iden(stab, iident(arg), create_pvalue(PSET,
-	    (WORD)name_to_indiseq(name)));
+	    (WORD)str_to_indiseq(name)));
 	return NULL;
 }
 /*POINT*/

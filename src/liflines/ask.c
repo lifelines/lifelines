@@ -28,6 +28,7 @@
  *   2.3.6 - 30 Oct 93    3.0.0 - 19 Aug 94
  *   3.0.2 - 02 Dec 94
  *===========================================================*/
+/* modified 2000-01-26 J.F.Chandler */
 
 #include "standard.h"
 #include "table.h"
@@ -36,7 +37,7 @@
 
 extern STRING ntchld, ntprnt, idfbrs, entnam, unknam, notone, ifone;
 extern STRING nofopn;
-extern INDISEQ find_named_seq();
+extern INDISEQ str_to_indiseq();
 extern INDISEQ choose_list_from_indiseq();
 
 /*===========================================
@@ -185,9 +186,7 @@ INT *prc;
 	*prc = RC_DONE;
 	if (!name || *name == 0) return NULL;
 	*prc = RC_NOSELECT;
-	seq = find_named_seq(name);
-	if (!seq) seq = name_to_indiseq(name);
-	if (!seq) seq = refn_to_indiseq(name);
+	seq = str_to_indiseq(name);
 	if (!seq) {
 		message(unknam);
 		return NULL;

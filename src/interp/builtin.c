@@ -21,7 +21,6 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
-/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * builtin.c -- Many interpreter builtin functions
  * Copyright(c) 1992-95 by T.T. Wetmore IV; all rights reserved
@@ -29,6 +28,8 @@
  *   3.0.0 - 07 May 94    3.0.2 - 03 Jan 95
  *   3.0.3 - 02 Jul 96
  *===========================================================*/
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
+/* modified 2000-04-12 J.F.Chandler */
 
 #include "standard.h"
 #include "table.h"
@@ -2161,9 +2162,9 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 PVALUE __extractdate (node, stab, eflg)
 PNODE node; TABLE stab; BOOLEAN *eflg;
 {
-	STRING str;
+	STRING str, syr;
 	NODE line;
-	INT da = 0, mo = 0, yr = 0;
+	INT mod, da = 0, mo = 0, yr = 0;
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
 	PNODE dvar = inext(arg);
@@ -2191,10 +2192,67 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 		str = event_to_date(line, NULL, FALSE);
 	else
 		str = nval(line);
-	extract_date(str, &da, &mo, &yr);
+	extract_date(str, &mod, &da, &mo, &yr, &syr);
 	assign_iden(stab, iident(dvar), create_pvalue(PINT, (WORD)da));
 	assign_iden(stab, iident(mvar), create_pvalue(PINT, (WORD)mo));
 	assign_iden(stab, iident(yvar), create_pvalue(PINT, (WORD)yr));
+	*eflg = FALSE;
+	return NULL;
+}
+/*==================================================================+
+ * __extractdatestr -- Extract date from STRING
+ *   usage: extractdatestr(VARB, VARB, VARB, VARB, VARB[, STRING]) -> VOID
+ *==================================================================*/
+PVALUE __extractdatestr (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
+{
+	STRING str = NULL, yrstr;
+	INT mod, da, mo, yr;
+	PVALUE val;
+	PNODE date;
+	PNODE modvar = (PNODE) iargs(node);
+	PNODE dvar = inext(modvar);
+	PNODE mvar = inext(dvar);
+	PNODE yvar = inext(mvar);
+	PNODE ystvar = inext(yvar);
+	*eflg = TRUE;
+	if (!iistype(modvar, IIDENT)) {
+		prog_error(node, "1st arg to extractdatestr must be a variable");
+		return NULL;
+	}
+	if (!iistype(dvar, IIDENT)) {
+		prog_error(node, "2nd arg to extractdatestr must be a variable");
+		return NULL;
+	}
+	if (!iistype(mvar, IIDENT)) {
+		prog_error(node, "3rd arg to extractdatestr must be a variable");
+		return NULL;
+	}
+	if (!iistype(yvar, IIDENT)) {
+		prog_error(node, "4th arg to extractdatestr must be a variable");
+		return NULL;
+	}
+	if (!iistype(ystvar, IIDENT)) {
+		prog_error(node, "5th arg to extractdatestr must be a variable");
+		return NULL;
+	}
+	if (date = inext(ystvar)) {
+		val = evaluate(date, stab, eflg);
+		if (*eflg) return NULL;
+		if (ptype(val) != PSTRING) {
+			*eflg = TRUE;
+			prog_error(node, "6th arg to extractdatestr must be a string");
+			delete_pvalue(val);
+			return NULL;
+		}
+		str = (STRING) pvalue(val);
+	}
+	extract_date(str, &mod, &da, &mo, &yr, &yrstr);
+	assign_iden(stab, iident(modvar), create_pvalue(PINT, (WORD)mod));
+	assign_iden(stab, iident(dvar), create_pvalue(PINT, (WORD)da));
+	assign_iden(stab, iident(mvar), create_pvalue(PINT, (WORD)mo));
+	assign_iden(stab, iident(yvar), create_pvalue(PINT, (WORD)yr));
+	assign_iden(stab, iident(ystvar), create_pvalue(PSTRING, (WORD)yrstr));
 	*eflg = FALSE;
 	return NULL;
 }
@@ -2217,7 +2275,26 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	}
 	evnt = (NODE) pvalue(val);
 	set_pvalue(val, PSTRING, (WORD)format_date(event_to_date(evnt, NULL, FALSE),
-	    daycode, monthcode, 1, datecode));
+	    daycode, monthcode, 1, datecode, FALSE));
+	return val;
+}
+/*========================================================================+
+ * __complexdate -- Return standard date format of event, including modifiers
+ *   usage: complexdate(EVENT) -> STRING
+ *=======================================================================*/
+PVALUE __complexdate (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
+{
+	extern STRING format_date();
+	NODE evnt;
+	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
+	if (*eflg) {
+		prog_error(node, "the arg to complexdate is not a record line");
+		return NULL;
+	}
+	evnt = (NODE) pvalue(val);
+	set_pvalue(val, PSTRING, (WORD)format_date(event_to_date(evnt, NULL, FALSE),
+	    daycode, monthcode, 1, datecode, TRUE));
 	return val;
 }
 /*===============================================+

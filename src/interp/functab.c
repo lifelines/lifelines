@@ -21,7 +21,6 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
-/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * functab.c -- Table of builtin functions
  * Copyright(c) 1993-96 by T.T. Wetmore IV; all rights reserved
@@ -29,6 +28,8 @@
  *   2.3.6 - 01 Jan 94    3.0.0 - 11 Oct 94
  *   3.0.3 - 02 Jul 96
  *===========================================================*/
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
+/* modified 2000-01-28 J.F.Chandler */
 
 #include "standard.h"
 #include "table.h"
@@ -60,6 +61,7 @@ extern WORD __chooseindi();
 extern WORD __choosespouse();
 extern WORD __choosesubset();
 extern WORD __col();
+extern WORD __complexdate();
 extern WORD __concat();
 extern WORD __copyfile();
 extern WORD __createnode();
@@ -83,6 +85,7 @@ extern WORD __eq();
 extern WORD __eqstr();
 extern WORD __exp();
 extern WORD __extractdate();
+extern WORD __extractdatestr();
 extern WORD __extractnames();
 extern WORD __extractplaces();
 extern WORD __extracttokens();
@@ -241,6 +244,7 @@ BUILTINS builtins[] = {
 	{"choosespouse",	1,	1,	__choosespouse},
 	{"choosesubset",	1,	1,	__choosesubset},
 	{"col",		1,	1,	__col},
+	{"complexdate",	1,	1,	__complexdate},
 	{"concat",	1,	32,	__concat},
 	{"copyfile",	1,	1,	__copyfile},
 	{"createnode",	2,	2,	__createnode},
@@ -266,6 +270,7 @@ BUILTINS builtins[] = {
 	{"eqstr",	2,	2,	__eqstr},
 	{"exp",		2,	2,	__exp},
 	{"extractdate",	4,	4,	__extractdate},
+	{"extractdatestr",	5,	6,	__extractdatestr},
 	{"extractnames",	4,	4,	__extractnames},
 	{"extractplaces",3,	3,	__extractplaces},
 	{"extracttokens",4,	4,	__extracttokens},
@@ -411,7 +416,7 @@ BUILTINS builtins[] = {
 	{"year",		1,	1,	__year},
 };
 #ifdef WIN32
-INT nobuiltins = 186;
+INT nobuiltins = 188;
 #else
-INT nobuiltins = 185;
+INT nobuiltins = 187;
 #endif

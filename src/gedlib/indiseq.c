@@ -21,13 +21,14 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
-/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * indiseq.c -- Person sequence operations
  * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 25 Aug 93
  *   3.0.0 - 09 May 94    3.0.2 - 23 Dec 94
  *===========================================================*/
+/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
+/* modified 2000-01-26 J.F.Chandler */
 
 #include "standard.h"
 #include "table.h"
@@ -43,6 +44,8 @@
  * to be used in a report program - pbm 17-Feb-97
  */
 
+extern INDISEQ find_named_seq();
+extern STRING *id_by_key();
 extern BOOLEAN opt_finnish;		/* Finnish language support */
 
 #define key_to_name(k)  nval(NAME(key_to_indi(k)))
@@ -1227,5 +1230,37 @@ STRING ukey;
 		return NULL;
 	}
 	namesort_indiseq(seq);
+	return seq;
+}
+/*=============================================================
+ * key_to_indiseq -- Return person sequence of the matching key
+ *=============================================================*/
+INDISEQ key_to_indiseq (name)
+STRING name;
+{
+	STRING *keys;
+	INDISEQ seq = NULL;
+	if (!name) return NULL;
+	if (!(id_by_key(name, &keys))) return NULL;
+	seq = create_indiseq();
+	append_indiseq(seq, keys[0], NULL, NULL, FALSE, FALSE);
+	return seq;
+}
+/*===========================================================
+ * str_to_indiseq -- Return person sequence matching a string
+ * The rules of search precedence are implemented here:
+ *  1. named indiset
+ *  2. key, with or without the leading "I"
+ *  3. REFN
+ *  4. name
+ *===========================================================*/
+INDISEQ str_to_indiseq (name)
+STRING name;
+{
+	INDISEQ seq;
+	seq = find_named_seq(name);
+	if (!seq) seq = key_to_indiseq(name);
+	if (!seq) seq = refn_to_indiseq(name);
+	if (!seq) seq = name_to_indiseq(name);
 	return seq;
 }
