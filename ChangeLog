@@ -1,3 +1,19 @@
+2000-12-06 Perry Rapp <prapp@users.sourceforge.net>
+
+	* btree/opnbtree.c gedlib/init.c hdrs/btree.h
+	liflines/main.c liflines/pedigree.c liflines/show.c
+	stdlib/mystring.c:
+
+	added magic string, alignment, & version number to key file
+
+	moved static tempfile buffers into only function using them
+
+	moved init call into init_lifelines
+
+	some fixes to pedigree
+
+	Fixed minor bug in llstrcat and added function comment
+
 2000-12-07  David A. Bright <dabright@users.sourceforge.net>
 
         * reports/tree.tex: Added file (support file for book-latex.ll
