@@ -101,7 +101,7 @@ add_indi_by_edit (void)
 				continue;
 			}
 			free_nod0(indi0);
-			indi = NULL;
+			indi0 = NULL;
 			break;
 		}
 		break;

@@ -158,7 +158,7 @@ lower (STRING str)
 	static unsigned char scratch[MAXLINELEN+1];
 	STRING p = scratch;
 	INT c, i=0;
-	while ((c = *str++) && (++i < MAXLINELEN+1))
+	while ((c = (uchar)*str++) && (++i < MAXLINELEN+1))
 		*p++ = ll_tolower(c);
 	*p = '\0';
 	return scratch;
@@ -185,7 +185,7 @@ STRING
 capitalize (STRING str)
 {
 	STRING p = lower(str);
-	*p = ll_toupper((unsigned char)*p);
+	*p = ll_toupper((uchar)*p);
 	return p;
 }
 /*==========================================

@@ -288,6 +288,10 @@ getfinitial (STRING name)
 		if (c == 0) return '$';
 	}
 }
+/*========================================
+ * soundex -- Return name's SOUNDEX code.
+ *  returns static buffer
+ *======================================*/
 STRING
 soundex (STRING name)   /* surname */
 {

@@ -1,3 +1,11 @@
+2007-07-18 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/charmaps.c gedlib/names.c liflines/add.c
+	stdlib/llstrcmp.c stdlib/stdstrng.c:
+	Bugfix for crash due to adding person with blank name.
+	Little more documentation & uchar fixes (cast chars to
+	unsigned before assiging to INT to avoid sign extension).
+
 2007-07-15 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/charmaps.c gedlib/editvtab.c gedlib/indiseq.c

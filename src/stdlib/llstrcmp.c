@@ -36,6 +36,7 @@ int
 ll_strcmp (char *str1, char *str2)
 {
 	if(opt_finnish) return(MY_STRCMP(str1, str2));
+	/* TO DO - scan thru letters with custom sort order */
 	return(strcmp(str1, str2));
 }
 /*===================================================
@@ -48,5 +49,6 @@ int
 ll_strncmp (char *str1, char *str2, int len)
 {
 	if(opt_finnish) return(MY_STRNCMP(str1, str2, len));
+	/* TO DO - scan thru letters with custom sort order */
 	return(strncmp(str1, str2, len));
 }

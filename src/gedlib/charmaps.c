@@ -218,9 +218,15 @@ init_map_from_str (STRING str, INT indx, BOOLEAN *perr)
 		if (*str == '\r' || *str == '\n') skip=TRUE;
 		if (*str =='#' && str[1] == '#') {
 			skip=TRUE;
-			if (!strncmp(str, "##sep", 5) || !strncmp(str, "##!sep", 6)) {
+			if (!strncmp(str, "##sep", 5)) {
+			/* to be deleted soon */
 				/* new separator character if legal */
 				if (str[5]=='=')
+					sep='=';
+			}
+			if (!strncmp(str, "##!sep", 6)) {
+				/* new separator character if legal */
+				if (str[6]=='=')
 					sep='=';
 			}
 		}
