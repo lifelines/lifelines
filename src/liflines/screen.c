@@ -674,15 +674,19 @@ aux_browse (NODE node)
 #endif
 /*=========================================
  * list_browse -- Handle list_browse screen
+ *  cur & pindi are passed for GUI doing
+ *  direct navigation in list
+ *  this curses implementation does not use them
  *=======================================*/
 INT
 list_browse (INDISEQ seq,
              INT top,
-             INT cur,
-             INT mark)
+             INT * cur,
+             INT mark,
+             NODE * pindi)
 {
 	if (cur_screen != LIST_SCREEN) paint_list_screen();
-	show_list(seq, top, cur, mark);
+	show_list(seq, top, *cur, mark);
 	display_screen(LIST_SCREEN);
 	return interact(main_win, "jkeimdtbanxq");
 }
@@ -734,6 +738,26 @@ ask_for_string (STRING ttl,
 	touchwin(win);
 	wrefresh(win);
 	return p;
+}
+/*========================================
+ * ask_yes_or_no -- Ask yes or no question
+ *======================================*/
+BOOLEAN
+ask_yes_or_no (STRING ttl)
+{
+	INT c = ask_for_char(ttl, 
+		"enter y (yes) or n (no): ", "yYnN");
+	return c == 'y' || c == 'Y';
+}
+/*=========================================================
+ * ask_yes_or_no_msg -- Ask yes or no question with message
+ *=======================================================*/
+BOOLEAN
+ask_yes_or_no_msg (STRING msg, STRING ttl)
+{
+	INT c = ask_for_char_msg(msg, ttl,
+		"enter y (yes) or n (no): ", "yYnN");
+	return c == 'y' || c == 'Y';
 }
 /*=======================================
  * ask_for_char -- Ask user for character

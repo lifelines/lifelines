@@ -57,7 +57,7 @@ browse_list (NODE *pindi1,
              NODE *pfam2,
              INDISEQ *pseq)
 {
-	INT top, cur, mark, len, tmp, rc;
+	INT c, top, cur, mark, len, tmp, rc;
 	STRING key, name, newname, lname="";
 	NODE indi;
 	INDISEQ seq, newseq;
@@ -72,7 +72,7 @@ browse_list (NODE *pindi1,
 	current_seq = seq;
 
 	while (TRUE) {
-		switch (list_browse(seq, top, cur, mark)) {
+		switch (c = list_browse(seq, top, &cur, mark, &indi)) {
 		case 'j':	/* Move down line */
 			if (cur >= len - 1) {
 				message(lstbot);

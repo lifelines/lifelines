@@ -114,7 +114,7 @@ INT tandem_browse(NODE, NODE);
 INT twofam_browse(NODE, NODE);
 INT ped_browse(NODE);
 INT aux_browse(NODE);
-INT list_browse(INDISEQ, INT, INT, INT);
+INT list_browse (INDISEQ seq, INT top, INT *cur, INT mark, NODE * pindi);
 STRING ask_for_string(STRING, STRING);
 STRING ask_for_input_filename (STRING ttl, STRING path, STRING prmpt);
 STRING ask_for_output_filename (STRING ttl, STRING path, STRING prmpt);

@@ -120,26 +120,28 @@ ask_for_int (STRING ttl)
 		p = ask_for_string(ttl, "enter integer:");
 	}
 }
-/*========================================
- * ask_yes_or_no -- Ask yes or no question
- *======================================*/
-BOOLEAN
-ask_yes_or_no (STRING ttl)
+/*============================================
+ * expand_special_chars -- Replace ~ with home
+ *==========================================*/
+static int
+expand_special_chars (STRING fname, STRING buffer, INT buflen)
 {
-	INT c = ask_for_char(ttl, "enter y (yes) or n (no): ",
-	    "yYnN");
-	return c == 'y' || c == 'Y';
-}
-/*=========================================================
- * ask_yes_or_no_msg -- Ask yes or no question with message
- *=======================================================*/
-BOOLEAN
-ask_yes_or_no_msg (STRING msg,
-                   STRING ttl)
-{
-	INT c = ask_for_char_msg(msg, ttl, "enter y (yes) or n (no): ",
-	    "yYnN");
-	return c == 'y' || c == 'Y';
+#ifdef WIN32
+// getenv needs <stdlib.h>, but "standard.h" clashes with it over min,max
+char *getenv( const char *varname );
+
+	if (fname[0] == '~')	{
+		/* replace ~ with user's home directory, if present */
+		char * home = (STRING)getenv("USERPROFILE");
+		if (home && home[0]
+			&& (INT)(strlen(home)+strlen(fname)+1) < buflen) {
+			strncpy(buffer, home, sizeof(buffer));
+			strcat(buffer, fname+1);
+			return 1;
+		}
+	}
+	return 0;
+#endif
 }
 /*======================================
  * ask_for_file_worker -- Ask for and open file
