@@ -23,6 +23,7 @@ typedef INT (*OBJCMPFNC)(OBJECT obj1, OBJECT obj2, VPTR param);
 
 void add_array_obj(ARRAY array, OBJECT obj);
 ARRAY create_array_objval(INT size);
+BOOLEAN delete_array_obj(ARRAY, INT i);
 void destroy_array(ARRAY array);
 void enlarge_array(ARRAY array, INT space);
 OBJECT get_array_obj(ARRAY array, INT i);

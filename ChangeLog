@@ -37,6 +37,10 @@
 
 	Added delete_list_element and __deleteel, and list node locking.
 
+	* ChangeLog src/hdrs/array.h src/stdlib/array.c
+
+	Added delete method for arrays.
+
 2003-03-01 Perry Rapp
 
 	* ChangeLog src/gedlib/indiseq.c src/hdrs/array.h

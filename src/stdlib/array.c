@@ -113,6 +113,21 @@ get_array_obj (ARRAY array, INT i)
 	if (i<0 || i>ASize(array)) return 0;
 	return (OBJECT)AData(array)[i];
 }
+/*==================================================
+ * delete_array_obj - Delete element from array
+ * This of course is somewhat expensive, as the array must be shifted down
+ *================================================*/
+BOOLEAN
+delete_array_obj (ARRAY array, INT i)
+{
+	if (i<0 || i>ASize(array)) return FALSE;
+	while (i<ASize(array)) {
+		AData(array)[i] = AData(array)[i+1];
+		++i;
+	}
+	--ASize(array);
+	return TRUE;
+}
 /*=========================================================
  * get_array_size -- Return size of array (# of elements)
  *=======================================================*/
