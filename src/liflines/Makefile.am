@@ -20,7 +20,7 @@ llines_LDADD = ../interp/libinterp.a ../gedlib/libgedcom.a \
 
 # Have to explicitly include .. after we put DEFS line in below for gettext
 # .. for config.h, hdrs for lots of stuff, ../intl for libgnuintl.h
-INCLUDES=-I.. -I$(srcdir)/../hdrs -I$(srcdir)/../intl
+INCLUDES=-I$(srcdir)/.. -I$(srcdir)/../hdrs -I$(srcdir)/../intl
 
 # Stuff for gettext (copied from gnu hello-1.3.35)
 localedir = $(datadir)/locale
