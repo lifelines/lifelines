@@ -233,6 +233,7 @@ void remove_from_browse_lists(STRING);
 BOOLEAN remove_name(STRING, STRING);
 BOOLEAN remove_refn(STRING, STRING);
 void rename_from_browse_lists(STRING);
+BOOLEAN replace_fam(NODE, NODE, STRING*);
 BOOLEAN replace_indi(NODE, NODE, STRING*);
 void resolve_links(NODE);
 BOOLEAN resolve_traverse(NODE);
