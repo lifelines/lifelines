@@ -1,6 +1,6 @@
 /*
  * @progname       exercise
- * @version        0.8 (2001/04/21)
+ * @version        0.82 (2001/04/29)
  * @author         Perry Rapp
  * @category       test
  * @output         mixed
@@ -211,6 +211,7 @@ proc dumpnodetr(desc, node)
 proc reportfail(str)
 {
   print(str)
+  print("\n")
   str nl()
 }
 
@@ -223,19 +224,23 @@ proc exerciseStrings()
   if (ne(str2,"HEY")) {
     call reportfail("upper FAILED")
   }
-  set(str3,upper(undef))
   set(str4,capitalize(str))
   if (ne(str4,"Hey")) {
     call reportfail("capitalize FAILED")
   }
-  set(str5,capitalize(undef))
   set(str6,concat(str2,str4))
   if (ne(str6,"HEYHey")) {
     call reportfail("concat FAILED")
   }
+  set(str3,upper(undef))
+  set(str5,capitalize(undef))
   set(str7,concat(str3,str5))
   if (ne(str7,undef)) {
     call reportfail("concat FAILED on undefs")
+  }
+  set(str7,strconcat(str3,str5))
+  if (ne(str7,undef)) {
+    call reportfail("strconcat FAILED on undefs")
   }
   set(str8,lower(str4))
   if (ne(str8,"hey")) {
@@ -276,5 +281,33 @@ proc exerciseStrings()
   }
   if (ne(strcmp(undef,""),0)) {
     call reportfail("strcmp(undef,) FAILED")
+  }
+  if (ne(substring("considerable",2,4),"ons")) {
+    call reportfail("substring(considerable,2,4) FAILED")
+  }
+  if (ne(substring(undef,2,4),0)) {
+    call reportfail("substring(undef,2,4) FAILED")
+  }
+  if (ne(rjustify("hey",5), "  hey")) {
+    call reportfail("rjustify(hey,5) FAILED")
+  }
+  if (ne(rjustify("heymon",5), "heymo")) {
+    call reportfail("rjustify(heymon,5) FAILED")
+  }
+  /* eqstr returns bool, which compared to 0 but no other number */
+  if (ne(eqstr("alpha","beta"),0)) {
+    call reportfail("eqstr(alpha,beta) FAILED")
+  }
+  if (not(eqstr("alpha","alpha"))) {
+    call reportfail("eqstr(alpha,alpha) FAILED")
+  }
+  if (ne(strtoint("4"), 4)) {
+    call reportfail("strtoint(4) FAILED")
+  }
+  if (ne(strsoundex("pat"),strsoundex("pet"))) {
+    call reportfail("soundex(pat) FAILED")
+  }
+  if (ne(strlen("pitch"),5)) {
+    call reportfail("strlen(pitch) FAILED")
   }
 }
