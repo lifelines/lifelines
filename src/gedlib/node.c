@@ -1329,7 +1329,7 @@ record_to_date_place (RECORD record, STRING tag, STRING * date, STRING * plac)
 	NODE node;
 	for (node = record_to_first_event(record, tag)
 		; node
-		; node_to_next_event(node, tag)) {
+		; node = node_to_next_event(node, tag)) {
 		event_to_date_place(node, date, plac);
 		if (date && *date && plac && *plac)
 			return;

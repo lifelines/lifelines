@@ -89,6 +89,7 @@ variable, and checked & resized at init_display_indi time */
 static void add_child_line(INT, RECORD, INT width);
 static void add_spouse_line(INT, NODE, NODE, INT width);
 static BOOLEAN append_event(STRING * pstr, STRING evt, INT * plen, INT minlen);
+static void disp_person_birth(ZSTR * zstr, RECORD irec, INT width, RFMT rfmt);
 static void disp_person_name(ZSTR * zstr, STRING prefix, RECORD irec, INT width);
 static void indi_events(STRING outstr, NODE indi, INT len);
 static void init_display_indi(RECORD irec, INT width);
@@ -107,8 +108,8 @@ static STRING sh_indi_to_event_shrt(NODE node, STRING tag
  * local variables
  *********************************************/
 
-static LINESTRING Sbirt, Sdeat, Sfath, Smoth, Smarr;
-static ZSTR Spers=0;
+static LINESTRING Sdeat, Sfath, Smoth, Smarr;
+static ZSTR Spers=0, Sbirt=0;
 static ZSTR Shusb=0, Swife=0;
 static LINESTRING Shbirt, Shdeat, Swbirt, Swdeat;
 static LINESTRING Sothers[MAXOTHERS];
@@ -132,7 +133,7 @@ init_show_module (void)
 	liwidth = ll_cols+1;
 
 	zs_reserve(&Spers, 60);
-	Sbirt = (LINESTRING)stdalloc(liwidth);
+	zs_reserve(&Sbirt, 60);
 	Sdeat = (LINESTRING)stdalloc(liwidth);
 	Sfath = (LINESTRING)stdalloc(liwidth);
 	Smoth = (LINESTRING)stdalloc(liwidth);
@@ -156,7 +157,7 @@ term_show_module (void)
 	INT i;
 
 	zs_free(&Spers);
-	stdfree(Sbirt);
+	zs_free(&Sbirt);
 	stdfree(Sdeat);
 	stdfree(Sfath);
 	stdfree(Smoth);
@@ -194,38 +195,77 @@ disp_person_name (ZSTR * zstr, STRING prefix, RECORD irec, INT width)
 	zs_appf(zstr, "(%s)", zs_str(zkey));
 	zs_free(&zkey);
 }
+static struct tag_prefix {
+	STRING tag;
+	STRING prefix;
+} f_birth_tags[] = {
+	{ "BIRT", N_("born") }
+	,{ "CHR", N_("bapt") }
+	,{ "BAPM", N_("bapt") }
+	,{ "BARM", N_("bapt") }
+	,{ "BASM", N_("bapt") }
+	,{ "BLES", N_("bles") }
+	,{ "RESI", N_("resi") }
+	,{ NULL, NULL }
+};
 /*===============================================
  * disp_person_birth -- Print birth string
  *  Try to find date & place info for birth (or approx)
  * Created: 2003-01-12 (Perry Rapp)
  *=============================================*/
 static void
-disp_person_birth (ZSTR * zstr, RECORD irec, INT width)
+disp_person_birth (ZSTR * zstr, RECORD irec, INT width, RFMT rfmt)
 {
-	STRING tags[] = { "BIRT", "CHR", "BAPM", "BARM", "BASM", "BLES", "RESI", 0 };
-	STRING tag;
-	STRING date=NULL, plac=NULL, tgdate=NULL, tgplac=NULL, td=NULL, tp=NULL;
-	for (tag = tags[0]; *tag; ++tag) {
-		record_to_date_place(irec, tag, &td, &tp);
-		if (!date) { 
+	struct tag_prefix *tg, *tgdate=NULL, *tgplac=NULL;
+	STRING date=NULL, plac=NULL, td=NULL, tp=NULL;
+	STRING predate=NULL, preplac=NULL;
+	ZSTR zdate=NULL;
+	for (tg = &f_birth_tags[0]; tg->tag; ++tg) {
+		record_to_date_place(irec, tg->tag, &td, &tp);
+		if (!date) {
 			date=td;
-			tgdate=tag;
+			tgdate=tg;
 		}
 		if (!plac) {
 			plac=tp;
-			tgplac = tag;
+			tgplac=tg;
 		}
 		if (date && plac) break;
 	}
-	/*
-TODO:
-	Figure birth prefix, eg, BIRT -> _(qSdspl_bir)
-	Print birth string (rfmt)
-	Figure place prefix
-	Print place string (rfmt), including prefix if different from birth
-	Combine these two (rfmt)
-	Assign to zstr
-	*/
+	zs_sets(zstr, "  ");
+	/* prefix display labels */
+	if (date) {
+		predate = _(tgdate->prefix);
+		if (rfmt && rfmt->rfmt_date)
+			date = (*rfmt->rfmt_date)(date);
+/* TODO: need to limit length, see indi_to_event */
+		zs_appf(&zdate, "%s: %s", predate, date);
+	}
+	if (plac) {
+		ZSTR zplac=0;
+		preplac = _(tgplac->prefix);
+		if (eqstr(preplac, predate)) preplac=NULL;
+		if (rfmt && rfmt->rfmt_plac)
+			plac = (*rfmt->rfmt_plac)(plac);
+/* TODO: need to limit length, see indi_to_event */
+		if (preplac)
+			zs_setf(&zplac, "%s: %s", preplac, plac);
+		else
+			zs_sets(&zplac, plac);
+		if (zdate) {
+			static char scratch1[MAXLINELEN+1];
+			sprintpic2(scratch1, sizeof(scratch1), uu8, rfmt->combopic
+				, zs_str(zdate), zs_str(zplac));
+			zs_apps(zstr, scratch1);
+		} else {
+			zs_appz(zstr, zplac);
+		}
+		zs_free(&zplac);
+/* TODO: combine place into zstr */
+	} else {
+		zs_sets(zstr, zs_str(zdate));
+	}
+	zs_free(&zdate);
 }
 /*===============================================
  * init_display_indi -- Initialize display person
@@ -241,6 +281,7 @@ init_display_indi (RECORD irec, INT width)
 	NODE fth;
 	NODE mth;
 	CACHEEL icel;
+	ZSTR ztemp=0;
 
 	ASSERT(width < ll_cols+1); /* size of Spers etc */
 
@@ -251,27 +292,7 @@ init_display_indi (RECORD irec, INT width)
 
 	disp_person_name(&Spers, _(qSdspl_indi), irec, width);
 
-	/* disp_person_birth(&Sbirt, irec, width-3); */
-	s = sh_indi_to_event_long(pers, "BIRT", _(qSdspl_bir), (width-3));
-	if (!s) s = sh_indi_to_event_long(pers,  "CHR", _(qSdspl_chr), (width-3));
-	if (s) sprintf(Sbirt, "  %s", s);
-	else sprintf(Sbirt, "  %s", _(qSdspl_bir));
-
-	/* add a RESIdence if none was in the birth event */
-	if(strchr(Sbirt, ',') == 0) {
-		num = strlen(Sbirt);
-		if(num < width-30) {
-			s = sh_indi_to_event_long(pers, "RESI", _(qSdspa_resi)
-				, (width-3)-num-5);
-			if(s) {
-				if(num < 8) strcat(Sbirt, s+1);
-				else {
-					/* overwrite the trailing "." on the birth info */
-					strcpy(Sbirt + strlen(Sbirt)-1, s);
-				}
-			}
-		}
-	}
+	disp_person_birth(&Sbirt, irec, width-3, &disp_long_rfmt);
 
 	s = sh_indi_to_event_long(pers, "DEAT", _(qSdspl_dea), (width-3));
 	if (!s) s = sh_indi_to_event_long(pers, "BURI", _(qSdspl_bur), (width-3));
@@ -340,7 +361,7 @@ show_indi_vitals (UIWINDOW uiwin, RECORD irec, LLRECT rect
 	localrow = row - *scroll;
 	mvccwaddstr(win, row+0, 1, zs_str(Spers));
 	if (hgt==1) return;
-	mvccwaddstr(win, row+1, 1, Sbirt);
+	mvccwaddstr(win, row+1, 1, zs_str(Sbirt));
 	if (hgt==2) return;
 	mvccwaddstr(win, row+2, 1, Sdeat);
 	if (hgt==3) return;
