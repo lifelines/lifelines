@@ -157,6 +157,7 @@ extern PVALUE __not(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __nspouses(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __or(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __ord(PNODE, SYMTAB, BOOLEAN *);
+extern PVALUE __originformat(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __outfile(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __pagemode(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __pageout(PNODE, SYMTAB, BOOLEAN *);

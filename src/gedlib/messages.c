@@ -479,3 +479,22 @@ STRING sts_sca_ful = SS "Performing full name scan";
 STRING sts_sca_fra = SS "Performing name fragment scan";
 STRING sts_sca_ref = SS "Performing refn scan";
 STRING sts_sca_non = SS "No records found in scan";
+/* date strings */
+STRING datep_from  = SS "from %s";
+STRING datep_to    = SS "to %s";
+STRING datep_frto  = SS "from %s to %s";
+STRING dater_bef   = SS "before %s";
+STRING dater_aft   = SS "after %s";
+STRING dater_betan = SS "between %s and %s";
+STRING datea_abt   = SS "about %s";
+STRING datea_est   = SS "estimated %s";
+STRING datea_cal   = SS "calculated %s";
+	/* use empty strings for nonexistent ones in language */
+STRING datetrl_bc1 = SS "B.C.";
+STRING datetrl_bc2 = SS "BC";
+STRING datetrl_bc3 = SS "B.C.E.";
+STRING datetrl_bc4 = SS "BCE";
+STRING datetrl_ad1 = SS "A.D.";
+STRING datetrl_ad2 = SS "AD";
+STRING datetrl_ad3 = SS "C.E.";
+STRING datetrl_ad4 = SS "CE";

@@ -1,8 +1,34 @@
+2001-12-28 Perry Rapp <puddle@users.sourceforge.net>
+
+
+	* .linesrc ChangeLog lines.cfg gedlib/messages.c hdrs/interp.h
+	interp/builtin.c interp/date.c interp/functab.c
+	interp/interpi.h liflines/show.c reports/exercise.ll:
+
+	Renamed get_date to get_todays_date (for clarity).
+	Rewrite of date parsing to conform more to GEDCOM, and recognize
+	early years. Also fixed various char extensions to INT.
+	Began internationalizing date.c.
+	Added originformat (for AD/BC formats).
+	Modified __complexdate to accept string input.
+	Added suite of date tests in exercise.ll.
+
 2001-12-27 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog liflines/pedigree.c:
 
 	Fixed !t (extended text mode) to use translation table.
+
+	* .linesrc ChangeLog lines.cfg gedlib/messages.c hdrs/interp.h
+interp/builtin.c interp/date.c interp/functab.c
+interp/interpi.h liflines/show.c reports/exercise.ll:
+
+	Renamed get_date to get_todays_date (for clarity).
+	Rewrite of date parsing to conform more to GEDCOM, and recognize
+	early years. Also fixed various char extensions to INT.
+	Began internationalizing date.c.
+	Added originformat (for AD/BC formats).
+	Modified __complexdate to accept string input.
 
 2001-12-26 Perry Rapp <puddle@users.sourceforge.net>
 

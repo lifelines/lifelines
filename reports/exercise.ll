@@ -1,6 +1,6 @@
 /*
  * @progname       exercise
- * @version        0.85 (2001/12/24)
+ * @version        0.86 (2001/12/28)
  * @author         Perry Rapp
  * @category       test
  * @output         mixed
@@ -25,13 +25,14 @@ global(cutoff_yr)
 global(true)
 global(undef) /* variable with no set value, used in string tests */
 global(dbuse)
+global(dategood)
+global(datebad)
 
 proc main()
 {
 	getint(dbuse, "Exercise db functions ? (0=no)")
 	set(true,1)
 	set(cutoff_yr, 1900) /* assume anyone born before this is dead */
-	set(N, 5) /* output this many of each type of record */
 
 
 	call testStrings()
@@ -47,6 +48,7 @@ proc exerciseDb()
 	"database: " database() nl()
 	"version: " version() nl()
 
+	set(N, 5) /* output this many of each type of record */
 
 	set(living,0)
 	set(dead,0)
@@ -421,53 +423,142 @@ proc testStrings()
 	}
 }
 
-/* test some date functions with various GEDCOM dates */
-proc testDates()
-{
-	call testDateFormat("1 JAN 1953", 0, 0, 0, 0, " 1  1 1953")
-	call testDateFormat("1 JAN 1953", 1, 0, 0, 0, "01  1 1953")
-	call testDateFormat("1 JAN 1953", 1, 1, 0, 0, "01 01 1953")
-	call testDateFormat("1 JAN 1953", 1, 2, 0, 0, "01 1 1953")
-	call testDateFormat("1 JAN 1953", 2, 3, 0, 0, "1 JAN 1953")
-	call testDateFormat("1 JAN 1953", 2, 4, 0, 0, "1 Jan 1953")
-	call testDateFormat("1 JAN 1953", 2, 5, 0, 0, "1 JANUARY 1953")
-	call testDateFormat("1 JAN 1953", 2, 6, 0, 0, "1 January 1953")
-
-	call testDateFormat("11 MAY 1312", 0, 0, 0, 0, "11  5 1312")
-	call testDateFormat("11 MAY 1312", 0, 1, 0, 0, "11 05 1312")
-	call testDateFormat("11 MAY 1312", 0, 2, 0, 0, "11 5 1312")
-	call testDateFormat("11 MAY 1312", 0, 3, 0, 0, "11 MAY 1312")
-	call testDateFormat("11 MAY 1312", 0, 4, 0, 0, "11 May 1312")
-	call testDateFormat("11 MAY 1312", 0, 5, 0, 0, "11 MAY 1312")
-	call testDateFormat("11 MAY 1312", 0, 6, 0, 0, "11 May 1312")
-	call testDateFormat("11 MAY 1312", 1, 6, 0, 0, "11 May 1312")
-	call testDateFormat("11 MAY 1312", 2, 6, 0, 0, "11 May 1312")
-
-	/* tests of old years (as of 2001/12, we fail most of these) */
-	/* TODO: Add more year tests when we have more year formats
-	eg, leading space or 0s, trailing B.C. */
-
-	call testDateFormat("4 DEC 852", 0, 0, 0, 0, " 4 12 852")
-	call testDateFormat("4 DEC 12", 0, 0, 0, 0, " 4 12 12")
-	call testDateFormat("15 MAR 30 B.C.", 0, 0, 1, 0, "15  3 -30")
-
-	/* Calendar tests (as of 2001/12, we fail most of these) */
-	call testDateFormat("@#DGREGORIAN@ 1 JAN 1953", 2, 6, 0, 0, "1 January 1953")
-	call testDateFormat("@#DJULIAN@ 1 JAN 1953", 2, 6, 0, 0, "1 January 1953")
-	call testDateFormat("@#DFRENCH R@ 1 VEND 11", 2, 6, 0, 0, "1 Vendemiare 11")
-	call testDateFormat("@#DHEBREW R@ 1 TSH 11", 2, 6, 0, 0, "1 Tishri 11")
-	/* ROMAN would presumably be in AUC, and days counted before K,N,I */
-}
-
-/* Using specified formats, take stddate(src) and compare to dest */
-proc testDateFormat(src, dayfmt, monfmt, yrfmt, sfmt, dest)
+/* 
+  Using specified formats, check stddate(src) against dests
+  and complexdate(src) against destc
+  tdfb = test date format both (simple & complex)
+  */
+proc tdfb(src, dayfmt, monfmt, yrfmt, sfmt, ofmt, dests, destc)
 {
 	dayformat(dayfmt)
 	monthformat(monfmt)
 	yearformat(yrfmt)
 	dateformat(sfmt)
+	originformat(ofmt)
 	set(result, stddate(src))
-	if (ne(result, dest)) {
-		call reportfail(concat("Date failure: '", dest, "'<>'", result, "'", " from ", src))
+	if (ne(result, dests)) {
+		set(orig, concat(src,", ", d(dayfmt), ", ", d(monfmt)))
+		set(orig, concat(orig, ", ", d(yrfmt), ", ",d(sfmt)))
+		set(orig, concat(orig, ", ", d(ofmt)))
+		call reportfail(concat("stddate failure: '", dests, "'<>'", result, "'", " from ", orig))
+		incr(datebad)
+	} else {
+		incr(dategood)
+	}
+	set(result, complexdate(src))
+	if (ne(result, destc)) {
+		set(orig, concat(src,", ", d(dayfmt), ", ", d(monfmt)))
+		set(orig, concat(orig, ", ", d(yrfmt), ", ",d(sfmt)))
+		set(orig, concat(orig, ", ", d(ofmt)))
+		call reportfail(concat("complexdate failure: '", destc, "'<>'", result, "'", " from ", orig))
+		incr(datebad)
+	} else {
+		incr(dategood)
 	}
 }
+
+/* test some date functions with various GEDCOM dates */
+/* These assume English output */
+proc testDates()
+{
+	set(dategood, 0)
+	set(datebad, 0)
+
+/* NB: We do not test all possible combinations, as there are quite a lot
+  (3 day formats, 3 month formats, 3 year formats, 14 combining formats,
+  9 origin formats -- multiply out to 3402 combinations */
+
+/* test simple 4 digit years dates */
+	call tdfb("2 JAN 1953", 0, 0, 0, 0, 0, " 2  1 1953", " 2  1 1953")
+	call tdfb("2 JAN 1953", 1, 0, 0, 0, 0, "02  1 1953", "02  1 1953")
+	call tdfb("2 JAN 1953", 2, 0, 0, 0, 0, "2  1 1953", "2  1 1953")
+	call tdfb("2 JAN 1953", 2, 1, 0, 0, 0, "2 01 1953", "2 01 1953")
+	call tdfb("2 JAN 1953", 2, 2, 0, 0, 0, "2 1 1953", "2 1 1953")
+	call tdfb("2 JAN 1953", 2, 3, 0, 0, 0, "2 JAN 1953", "2 JAN 1953")
+	call tdfb("2 JAN 1953", 2, 4, 0, 0, 0, "2 Jan 1953", "2 Jan 1953")
+	call tdfb("2 JAN 1953", 2, 5, 0, 0, 0, "2 JANUARY 1953", "2 JANUARY 1953")
+	call tdfb("2 JAN 1953", 2, 6, 0, 0, 0, "2 January 1953", "2 January 1953")
+	call tdfb("2 JAN 1953", 2, 6, 0, 0, 2, "2 January 1953 A.D.", "2 January 1953 A.D.")
+	call tdfb("2 JAN 1953", 2, 6, 0, 0, 12, "2 January 1953 AD", "2 January 1953 AD")
+	call tdfb("2 JAN 1953", 2, 6, 0, 0, 22, "2 January 1953 C.E.", "2 January 1953 C.E.")
+	call tdfb("2 JAN 1953", 2, 6, 0, 0, 32, "2 January 1953 CE", "2 January 1953 CE")
+	call tdfb("2 JAN 1953", 2, 2, 0, 1, 32, "1 2, 1953 CE", "1 2, 1953 CE")
+	call tdfb("2 JAN 1953", 2, 2, 0, 2, 32, "1/2/1953 CE", "1/2/1953 CE")
+	call tdfb("2 JAN 1953", 2, 2, 0, 3, 32, "2/1/1953 CE", "2/1/1953 CE")
+	call tdfb("2 JAN 1953", 2, 2, 0, 4, 32, "1-2-1953 CE", "1-2-1953 CE")
+	call tdfb("2 JAN 1953", 2, 2, 0, 5, 32, "2-1-1953 CE", "2-1-1953 CE")
+	call tdfb("2 JAN 1953", 2, 2, 0, 6, 32, "121953 CE", "121953 CE")
+	call tdfb("2 JAN 1953", 2, 2, 0, 7, 32, "211953 CE", "211953 CE")
+	call tdfb("2 JAN 1953", 2, 2, 0, 8, 32, "1953 1 2 CE", "1953 1 2 CE")
+	call tdfb("2 JAN 1953", 2, 2, 0, 9, 32, "1953/1/2 CE", "1953/1/2 CE")
+	call tdfb("2 JAN 1953", 2, 2, 0, 10, 32, "1953-1-2 CE", "1953-1-2 CE")
+
+/* test simple 3 digit years dates */
+	call tdfb("11 MAY 812", 0, 0, 0, 0, 0, "11  5  812", "11  5  812")
+	call tdfb("11 MAY 812", 0, 1, 0, 0, 0, "11 05  812", "11 05  812")
+	call tdfb("11 MAY 812", 0, 2, 0, 0, 0, "11 5  812", "11 5  812")
+	call tdfb("11 MAY 812", 0, 3, 0, 0, 0, "11 MAY  812", "11 MAY  812")
+	call tdfb("11 MAY 812", 0, 4, 0, 0, 0, "11 May  812", "11 May  812")
+	call tdfb("11 MAY 812", 0, 5, 0, 0, 0, "11 MAY  812", "11 MAY  812" )
+	call tdfb("11 MAY 812", 0, 6, 0, 0, 0, "11 May  812", "11 May  812")
+	call tdfb("11 MAY 812", 1, 6, 0, 0, 0, "11 May  812", "11 May  812")
+	call tdfb("11 MAY 812", 2, 6, 0, 0, 0, "11 May  812", "11 May  812")
+
+/* test simple 2 digit years dates */
+	call tdfb("2 JAN 53", 0, 0, 0, 0, 0, " 2  1   53", " 2  1   53")
+	call tdfb("2 JAN 53", 1, 0, 0, 0, 0, "02  1   53", "02  1   53")
+	call tdfb("2 JAN 53", 2, 0, 0, 0, 0, "2  1   53", "2  1   53")
+	call tdfb("2 JAN 53", 2, 1, 0, 0, 0, "2 01   53", "2 01   53")
+	call tdfb("2 JAN 53", 2, 1, 1, 0, 0, "2 01 0053", "2 01 0053")
+	call tdfb("2 JAN 53", 2, 1, 2, 0, 0, "2 01 53", "2 01 53")
+
+/* test simple 1 digit years dates */
+	call tdfb("2 JAN 3", 0, 0, 0, 0, 0, " 2  1    3", " 2  1    3")
+	call tdfb("2 JAN 3", 1, 0, 0, 0, 0, "02  1    3", "02  1    3")
+	call tdfb("2 JAN 3", 2, 0, 0, 0, 0, "2  1    3", "2  1    3")
+	call tdfb("2 JAN 3", 2, 1, 0, 0, 0, "2 01    3", "2 01    3")
+	call tdfb("2 JAN 3", 2, 1, 1, 0, 0, "2 01 0003", "2 01 0003")
+	call tdfb("2 JAN 3", 2, 1, 2, 0, 0, "2 01 3", "2 01 3")
+
+/* test simple BC dates */
+	call tdfb("15 MAR 30 B.C.", 0, 0, 0, 0, 0, "15  3   30", "15  3   30")
+	call tdfb("15 MAR 30 B.C.", 0, 0, 0, 0, 1, "15  3   30 B.C.", "15  3   30 B.C.")
+	call tdfb("15 MAR 30 B.C.", 0, 0, 1, 0, 1, "15  3 0030 B.C.", "15  3 0030 B.C.")
+	call tdfb("15 MAR 30 B.C.", 0, 0, 2, 0, 1, "15  3 30 B.C.", "15  3 30 B.C.")
+	call tdfb("15 MAR 30 B.C.", 0, 0, 2, 0, 2, "15  3 30 B.C.", "15  3 30 B.C.")
+	call tdfb("15 MAR 30 B.C.", 0, 0, 2, 0, 11, "15  3 30 BC", "15  3 30 BC")
+	call tdfb("15 MAR 30 B.C.", 0, 0, 2, 0, 21, "15  3 30 B.C.E.", "15  3 30 B.C.E.")
+	call tdfb("15 MAR 30 B.C.", 0, 0, 2, 0, 31, "15  3 30 BCE", "15  3 30 BCE")
+
+/* test simple dates in non-GEDCOM format */
+	call tdfb("1930/11/24", 0, 0, 0, 0, 0, "24 11 1930", "24 11 1930")
+	call tdfb("11/24/1930", 0, 0, 0, 0, 0, "24 11 1930", "24 11 1930")
+	call tdfb("24/11/1930", 0, 0, 0, 0, 0, "24 11 1930", "24 11 1930")
+
+/* Complex tests */
+	call tdfb("AFT 3 SEP 1630", 0, 0, 0, 0, 0, " 3  9 1630", "after  3  9 1630")
+	call tdfb("BEF 3 SEP 1630", 0, 0, 0, 0, 0, " 3  9 1630", "before  3  9 1630")
+	call tdfb("BET 3 SEP 1630 AND OCT 1900", 0, 0, 0, 0, 0, " 3  9 1630", "between  3  9 1630 and    10 1900")
+	call tdfb("FROM 3 SEP 1630", 0, 0, 0, 0, 0, " 3  9 1630", "from  3  9 1630")
+	call tdfb("TO 3 SEP 1630", 0, 0, 0, 0, 0, " 3  9 1630", "to  3  9 1630")
+	call tdfb("FROM 3 SEP 1630 TO 1700", 0, 0, 0, 0, 0, " 3  9 1630", "from  3  9 1630 to       1700")
+	call tdfb("ABT 3 SEP 890", 0, 0, 0, 0, 0, " 3  9  890", "about  3  9  890")
+	call tdfb("EST 3 SEP 890", 0, 0, 0, 0, 0, " 3  9  890", "estimated  3  9  890")
+	call tdfb("CAL 3 SEP 890", 0, 0, 0, 0, 0, " 3  9  890", "calculated  3  9  890")
+
+/* Complex tests with bad input */
+	call tdfb("24 SEP 811 TO 29 SEP 811", 0, 0, 0, 0, 0, "24  9  811", "from 24  9  811 to 29  9  811")
+
+
+/* Calendar tests (as of 2001/12, we fail most of these) */
+	call tdfb("@#DGREGORIAN@ 1 JAN 1953", 2, 6, 0, 0, 0, "1 January 1953", "1 January 1953")
+	call tdfb("@#DJULIAN@ 1 JAN 1953", 2, 6, 0, 0, 0, "1 January 1953", "1 January 1953")
+	call tdfb("@#DFRENCH R@ 1 VEND 11", 2, 6, 0, 0, 0, "1 Vendemiare 11", "1 Vendemiare 11")
+	call tdfb("@#DHEBREW R@ 1 TSH 11", 2, 6, 0, 0, 0, "1 Tishri 11", "1 Tishri 11")
+	/* ROMAN would presumably be in AUC, and days counted before K,N,I */
+
+	if (gt(datebad, 0)) {
+		print(concat("Failed ", d(datebad), "/", d(add(dategood,datebad)), " date tests"))
+	}
+}
+

@@ -949,7 +949,7 @@ init_disp_reformat (void)
 static STRING
 disp_long_format_date (STRING date)
 {
-	INT dfmt=0,mfmt=0,yfmt=0,sfmt=0, cmplx;
+	INT dfmt=0,mfmt=0,yfmt=0,sfmt=0,ofmt=0, cmplx;
 	INT n;
 	STRING fmts;
 
@@ -960,11 +960,11 @@ disp_long_format_date (STRING date)
 		return date;
 	
 	/* try to use user-specified format */
-	n = sscanf(fmts, "%d,%d,%d,%d,%d"
-		, &dfmt, &mfmt, &yfmt, &sfmt, &cmplx);
-	if (n != 5) return date;
+	n = sscanf(fmts, "%d,%d,%d,%d,%d,%d"
+		, &dfmt, &mfmt, &yfmt, &sfmt, &ofmt, &cmplx);
+	if (n != 6) return date;
 	
-	return do_format_date(date, dfmt, mfmt, yfmt, sfmt, cmplx);
+	return do_format_date(date, dfmt, mfmt, yfmt, sfmt, ofmt, cmplx);
 }
 /*===============================================================
  * disp_shrt_format_date -- short form of date for display
@@ -975,7 +975,7 @@ disp_long_format_date (STRING date)
 static STRING
 disp_shrt_format_date (STRING date)
 {
-	INT dfmt=0,mfmt=0,yfmt=0,sfmt=0, cmplx;
+	INT dfmt=0,mfmt=0,yfmt=0,sfmt=0,ofmt=0, cmplx;
 	INT n;
 	STRING fmts;
 
@@ -985,15 +985,15 @@ disp_shrt_format_date (STRING date)
 	fmts = getoptstr("ShortDisplayDate", NULL);
 	if (fmts) {
 		/* try to use user-specified format */
-		n = sscanf(fmts, "%d,%d,%d,%d,%d"
-			, &dfmt, &mfmt, &yfmt, &sfmt, &cmplx);
+		n = sscanf(fmts, "%d,%d,%d,%d,%d,%d"
+			, &dfmt, &mfmt, &yfmt, &sfmt, &ofmt, &cmplx);
 	}
-	if (n != 5) {
+	if (n != 6) {
 		dfmt=mfmt=yfmt=sfmt=cmplx=0;
 		sfmt=12; /* old style short form -- year only */
 	}
 
-	return do_format_date(date, dfmt, mfmt, yfmt, sfmt, cmplx);
+	return do_format_date(date, dfmt, mfmt, yfmt, sfmt, ofmt, cmplx);
 }
 /*================================================================
  * disp_shrt_format_plac -- short form of place for display

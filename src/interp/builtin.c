@@ -225,7 +225,7 @@ PVALUE
 __gettoday (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE prnt = create_node(NULL, "EVEN", NULL, NULL);
-	NODE chil = create_node(NULL, "DATE", get_date(), prnt);
+	NODE chil = create_node(NULL, "DATE", get_todays_date(), prnt);
 
 #ifdef DEBUG
 	llwprintf("__gettoday: called\n");
@@ -2299,7 +2299,7 @@ __date (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __extractdate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	STRING str, syr;
+	STRING str;
 	NODE line;
 	INT mod, da = 0, mo = 0, yr = 0;
 	PNODE arg = (PNODE) iargs(node);
@@ -2307,6 +2307,7 @@ __extractdate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE dvar = inext(arg);
 	PNODE mvar = inext(dvar);
 	PNODE yvar = inext(mvar);
+	GDATEVAL gdv = 0;
 	if (*eflg) {
 		prog_error(node, "1st arg to extractdate is not a record line");
 		return NULL;
@@ -2330,10 +2331,16 @@ __extractdate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	else
 		str = nval(line);
 	delete_pvalue(val);
-	extract_date(str, &mod, &da, &mo, &yr, &syr);
+	gdv = extract_date(str);
+	/* TODO: deal with date information */
+	mod = gdv->date1.mod;
+	da = gdv->date1.day;
+	mo = gdv->date1.month;
+	yr = gdv->date1.year;
 	assign_iden(stab, iident(dvar), create_pvalue(PINT, (VPTR)da));
 	assign_iden(stab, iident(mvar), create_pvalue(PINT, (VPTR)mo));
 	assign_iden(stab, iident(yvar), create_pvalue(PINT, (VPTR)yr));
+	free_gdateval(gdv);
 	*eflg = FALSE;
 	return NULL;
 }
@@ -2353,6 +2360,7 @@ __extractdatestr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE mvar = inext(dvar);
 	PNODE yvar = inext(mvar);
 	PNODE ystvar = inext(yvar);
+	GDATEVAL gdv = 0;
 	*eflg = TRUE;
 	if (!iistype(modvar, IIDENT)) {
 		prog_error(node, nonvarx, "extractdatestr", 1);
@@ -2385,12 +2393,20 @@ __extractdatestr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		}
 		str = (STRING) pvalue(val);
 	}
-	extract_date(str, &mod, &da, &mo, &yr, &yrstr);
+	gdv = extract_date(str);
+	/* TODO: deal with date information */
+	mod = gdv->date1.mod;
+	da = gdv->date1.day;
+	mo = gdv->date1.month;
+	yr = gdv->date1.year;
+	yrstr = gdv->date1.yearstr;
+	if (!yrstr) yrstr="";
 	assign_iden(stab, iident(modvar), create_pvalue(PINT, (VPTR)mod));
 	assign_iden(stab, iident(dvar), create_pvalue(PINT, (VPTR)da));
 	assign_iden(stab, iident(mvar), create_pvalue(PINT, (VPTR)mo));
 	assign_iden(stab, iident(yvar), create_pvalue(PINT, (VPTR)yr));
 	assign_iden(stab, iident(ystvar), create_pvalue(PSTRING, (VPTR)yrstr));
+	free_gdateval(gdv);
 	*eflg = FALSE;
 	return NULL;
 }
@@ -2403,6 +2419,7 @@ static INT daycode = 0;
 static INT monthcode = 3;
 static INT yearcode = 0;
 static INT datecode = 0;
+static INT origincode = 0;
 PVALUE
 __stddate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
@@ -2421,25 +2438,33 @@ __stddate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		str = event_to_date(evnt, NULL, FALSE);
 	}
 	set_pvalue(val, PSTRING, do_format_date(str,
-	    daycode, monthcode, yearcode, datecode, FALSE));
+	    daycode, monthcode, yearcode, datecode, origincode, FALSE));
 	return val;
 }
 /*========================================================================+
  * __complexdate -- Return standard date format of event, including modifiers
  *   usage: complexdate(EVENT) -> STRING
+ *      or  complexdate(STRING) -> STRING
  *=======================================================================*/
 PVALUE
 __complexdate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE evnt;
-	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
-	if (*eflg) {
-		prog_error(node, "the arg to complexdate is not a record line");
-		return NULL;
+	STRING str=0;
+	PVALUE val = eval_without_coerce(iargs(node), stab, eflg);
+	if (ptype(val) == PSTRING) {
+		str = (STRING) pvalue(val);
+	} else {
+		NODE evnt;
+		coerce_pvalue(PGNODE, val, eflg);
+		if (*eflg) {
+			prog_error(node, nonnodstr1, "complexdate");
+			return NULL;
+		}
+		evnt = (NODE) pvalue(val);
+		str = event_to_date(evnt, NULL, FALSE);
 	}
-	evnt = (NODE) pvalue(val);
-	set_pvalue(val, PSTRING, do_format_date(event_to_date(evnt, NULL, FALSE),
-	    daycode, monthcode, yearcode, datecode, TRUE));
+	set_pvalue(val, PSTRING, do_format_date(str,
+	    daycode, monthcode, yearcode, datecode, origincode, TRUE));
 	return val;
 }
 /*===============================================+
@@ -2524,6 +2549,27 @@ __dateformat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (value <  0) value = 0;
 	if (value > 11) value = 11;
 	datecode = value;
+	return NULL;
+}
+/*===============================================+
+ * __originformat -- Set format for AD/BC trailer for standard date
+ *   usage: originformat(INT) -> NULL
+ * Created: 2001/12/28, Perry Rapp
+ *==============================================*/
+PVALUE
+__originformat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+	PNODE arg = (PNODE) iargs(node);
+	INT value;
+	PVALUE val = eval_and_coerce(PINT, arg, stab, eflg);
+	if (*eflg) {
+		prog_error(node, nonint1, "originformat");
+		return NULL;
+	}
+	value = (INT) pvalue(val);
+	delete_pvalue(val);
+	if (value < 0) value = 0;
+	origincode = value;
 	return NULL;
 }
 /*==============================+

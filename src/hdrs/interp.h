@@ -194,6 +194,33 @@ extern INT nobuiltins;
 		return NULL;\
 	}
 
+/* GEDCOM dates */
+struct gdate_s {
+	/* TODO: julian day upper & lower bounds */
+	INT calendar;
+	INT year;
+	INT month;
+	INT day;
+	INT mod;
+	INT origin; /* eg, AD, BC */
+	STRING yearstr;
+};
+struct gdateval_s {
+	struct gdate_s date1;
+	struct gdate_s date2; /* used by period/from_to & range/bet_and */
+	INT type;
+	INT subtype;
+	INT valid; /* -1=bad syntax, 0=freeform, 1=perfect GEDCOM date */
+};
+typedef struct gdateval_s *GDATEVAL;
+enum { GDV_PERIOD=1, GDV_RANGE, GDV_DATE, GDV_APPROX  };
+enum { GDVP_FROM=1, GDVP_TO, GDVP_FROM_TO }; /* period subtype */
+enum { GDVR_BEF=1, GDVR_AFT, GDVR_BET, GDVR_BET_AND }; /* range subtype */
+enum { GDVA_ABT=1, GDVA_EST, GDVA_CAL }; /* approx subtype */
+enum { GDV_GREGORIAN=1, GDV_JULIAN, GDV_HEBREW, GDV_FRENCH, GDV_ROMAN, GDV_CALENDARS_IX };
+enum { GDV_AD=1, GDV_BC };
+
+
 /* PVALUE Arithmetic Functions */
 void add_pvalues(PVALUE, PVALUE, BOOLEAN*);
 void sub_pvalues(PVALUE, PVALUE, BOOLEAN*);
@@ -288,8 +315,9 @@ PNODE call_node(STRING, PNODE);
 PNODE children_node(PNODE, STRING, STRING, PNODE);
 PNODE children_node(PNODE, STRING, STRING, PNODE);
 PNODE continue_node(void);
+GDATEVAL create_gdateval(void);
 PNODE create_pnode(INT);
-STRING do_format_date(STRING, INT, INT, INT, INT, INT);
+STRING do_format_date(STRING, INT, INT, INT, INT, INT, INT);
 PVALUE evaluate(PNODE, SYMTAB, BOOLEAN*);
 BOOLEAN evaluate_cond(PNODE, SYMTAB, BOOLEAN*);
 PVALUE evaluate_func(PNODE, SYMTAB, BOOLEAN*);
@@ -299,7 +327,7 @@ PVALUE eval_and_coerce(INT, PNODE, SYMTAB, BOOLEAN*);
 NODE eval_indi(PNODE, SYMTAB, BOOLEAN*, CACHEEL*);
 NODE eval_fam(PNODE, SYMTAB, BOOLEAN*, CACHEEL*);
 PVALUE eval_without_coerce(PNODE node, SYMTAB stab, BOOLEAN *eflg);
-void extract_date(STRING, INT*, INT*, INT*, INT*, STRING*);
+GDATEVAL extract_date(STRING);
 PNODE families_node(PNODE, STRING, STRING, STRING, PNODE);
 PNODE fathers_node(PNODE, STRING, STRING, STRING, PNODE);
 PNODE fcons_node(FLOAT);
@@ -314,9 +342,11 @@ PNODE fornodes_node(PNODE, STRING, PNODE);
 PNODE fornotes_node(PNODE, STRING, PNODE);
 PNODE forothr_node(STRING, STRING, PNODE);
 void free_all_pnodes(void);
+void free_gdateval(GDATEVAL gdv);
 void free_pnode_tree(PNODE);
 PNODE func_node(STRING, PNODE);
-STRING get_date(void);
+BOOLEAN gdateval_isdual(GDATEVAL);
+STRING get_todays_date(void);
 void handle_option(PVALUE optval);
 PNODE icons_node(INT);
 PNODE iden_node(STRING);
