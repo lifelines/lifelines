@@ -4,6 +4,10 @@
 
 	Watch for iconv_open failing.
 
+	* ChangeLog configure.in:
+
+	Remove unused header check for libiintl.h (sic).
+
 2002-06-11 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog configure.in gedlib/init.c gedlib/messages.c
