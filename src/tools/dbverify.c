@@ -38,6 +38,7 @@
 #include "indiseq.h"
 #include "lloptions.h"
 #include "cache.h"
+#include "arch.h"
 
 
 /*********************************************
@@ -1000,4 +1001,15 @@ __fatal (STRING file, int line, STRING details)
 	printf(_("In file <%s> at line %d"), file, line);
 	printf("\n");
 	exit(1);
+}
+/*===============================
+ * __crashlog -- Details preceding a fatal error
+ *=============================*/
+void
+crashlog (STRING fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	vprintf(fmt, args);
+	va_end(args);
 }

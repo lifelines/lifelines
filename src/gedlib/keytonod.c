@@ -669,15 +669,15 @@ add_to_direct (CACHE cache, STRING key, INT reportmode)
 			return(NULL);
 		}
 		if (reportmode) return(NULL);
-		llwprintf("key %s is not in database. Use \"btedit <database> <key>\" to fix.\n", (char *) key);
-		llwprintf("where <key> is probably one of the following:\n");
+		crashlog("key %s is not in database. Use \"btedit <database> <key>\" to fix.\n", (char *) key);
+		crashlog("where <key> is probably one of the following:\n");
 		for(i = 0; i < 10; i++)
 		{
 			j = keyidx + i;
 			if(j >= 10) j -= 10;
-			llwprintf(" %s", (char *)keybuf[j]);
+			crashlog(" %s", (char *)keybuf[j]);
 		}
-		llwprintf("\n");
+		crashlog("\n");
 		/* deliberately fall through to let ASSERT(rec) fail */
 	}
 	ASSERT(rec);

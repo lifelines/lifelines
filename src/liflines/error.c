@@ -79,7 +79,6 @@ __fatal (STRING file, int line, STRING details)
 }
 /*===============================
  * __crashlog -- Details preceding a fatal error
- * Created: 2001/09/02, Perry Rapp
  *=============================*/
 void
 crashlog (STRING fmt, ...)
@@ -103,14 +102,13 @@ crashlog (STRING fmt, ...)
 }
 /*===============================
  * crash_setcrashlog -- specify where to log alloc messages
- * Created: 2001/10/28, Perry Rapp
  *=============================*/
 void
 crash_setcrashlog (STRING crashlog)
 {
 	if (!crashlog)
 		crashlog = "";
-	llstrncpy(f_crashfile, crashlog, 0, sizeof(f_crashfile));
+	llstrncpy(f_crashfile, crashlog, sizeof(f_crashfile), uu8);
 }
 /*===============================
  * crash_setdb -- record current database in case of a crash

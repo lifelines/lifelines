@@ -9,6 +9,10 @@
 
 	Support bind_textdomain_codeset in Win/MSVC version.
 
+	* ChangeLog gedlib/keytonod.c liflines/error.c tools/dbverify.c:
+
+	Add missing key info messages to crash log.
+
 2002-07-27 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog interp/interp.c interp/parse.h interp/yacc.h
