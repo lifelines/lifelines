@@ -121,6 +121,9 @@ main (INT argc, char **argv)
 	STRING configfile=0;
 	STRING crashlog=0;
 
+	/* initialize all the low-level library code */
+	init_stdlib();
+
 #if HAVE_SETLOCALE
 	/* initialize locales */
 	setlocale(LC_ALL, "");

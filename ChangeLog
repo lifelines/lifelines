@@ -1,18 +1,25 @@
 2005-02-24 Perry Rapp
 
-    * ChangeLog src/gedlib/lloptions.c
+	* ChangeLog src/gedlib/lloptions.c
 
-    Release option tables instead of destroying them.
+	Release option tables instead of destroying them.
 
-    * ChangeLog src/stdlib/rbtree.c
+	* ChangeLog src/stdlib/rbtree.c
 
-    Fix RbNext to handle null rbit->high.
+	Fix RbNext to handle null rbit->high.
+
+	* ChangeLog build/msvc6/dbverify/dbverifyCmd.dsp
+	src/liflines/llexec.c src/tools/dbverify.c
+
+	Call init_stdlib from llexec & dbverify.
+	Fix dbverify to do setlocale.
+	Add rbtree & stack to MSVC6 project for dbverify.
 
 2005-02-22 Perry Rapp
 
-    * ChangeLog src/stdlib/table.c
+	* ChangeLog src/stdlib/table.c
 
-    Fix next_table_ptr to handle rbtree iterator.
+	Fix next_table_ptr to handle rbtree iterator.
 
 2005-02-20 Perry Rapp
 

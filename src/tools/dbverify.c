@@ -32,6 +32,9 @@
 
 #include "llstdlib.h"
 /* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
+#ifdef HAVE_LOCALE_H
+#include <locale.h>
+#endif
 #include "gedcom.h"
 #include "btree.h"
 #include "indiseq.h"
@@ -1295,14 +1298,22 @@ main (int argc,
 	BOOLEAN allchecks=FALSE; /* if user requested all checks */
 	INT returnvalue=1;
 
+	/* initialize all the low-level library code */
+	init_stdlib();
+
 	validate_errs();
 
-	save_original_locales();
+#if HAVE_SETLOCALE
+	/* initialize locales */
+	setlocale(LC_ALL, "");
+#endif /* HAVE_SETLOCALE */
 
 #if ENABLE_NLS
 	bindtextdomain(PACKAGE, LOCALEDIR);
 	textdomain(PACKAGE);
 #endif
+
+	save_original_locales();
 
 #ifdef WIN32
 	/* TO DO - research if this is necessary */
