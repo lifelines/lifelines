@@ -555,6 +555,40 @@ standard.h).
 </sect2>
 </sect1>
 
+<sect1>
+<title>List Module</title>
+
+<para>
+list.c and list.h implement a simple, doubly-linked list type, which
+takes void pointers (VPTR) as elements. The list manages its own nodes
+and memory (struct tag_list and struct tag_lnode), but the for the
+elements, it only frees them if the caller so instructs it (using
+list type LISTDOFREE), and of course this only works if they are
+stdalloc/stdfree heap blocks.
+</para>
+
+</sect1>
+
+<sect1>
+<title>Table Module</title>
+
+<para>
+table.c and table.h implement a fixed size hash tree (with linear buckets).
+As of 2005-01, Perry has been changing the implementation of the table
+type, so it is currently in flux.
+</para>
+
+<sect1>
+<title>Balanced Binary Tree (rbtree) Module</title>
+
+<para>
+rbtree.c and rbtree.h implement a generic red/black balanced binary tree.
+These are not currently used by lifelines, but are planned as a replacement
+for the current fixed-size hash table in table.c.
+</para>
+
+</sect1>
+
 </chapter>
 
 <chapter>

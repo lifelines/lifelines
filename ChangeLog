@@ -27,6 +27,10 @@
 
 	Record memory leak fixes in NEWS.
 
+	* ChangeLog docs/ll-devguide.xml
+
+	Additions to devguide, in the stdlib section.
+
 2005-02-10 Perry Rapp
 
 	* ChangeLog src/gedlib/keytonod.c src/gedlib/node.c
