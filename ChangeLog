@@ -1,3 +1,10 @@
+2003-11-03 Matt Emmerton
+
+	* ChangeLog reports/ps-pedigree.ll reports/ps-pedigree.ps
+	reports/fami-grps.ll
+
+	Add ps-pedigree and fami-grps reports from Stephen Woodbridge
+
 2003-10-28 Stephen Dum
         * ChangeLog src/gedlib/names.c docs/ll-userguide.xml
 	Fix bug in storing name records in database.  rkey_eq()

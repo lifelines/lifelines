@@ -1,0 +1,293 @@
+%!PS-Adobe-1.0
+%%Creater: ps-pedigree
+%%Title: Ancestry Charts
+%%Pages: (atend)
+%%DocumentFonts: Helvetica Courier Courier-Bold
+%%EndComments
+ 
+/#findfont /findfont load def
+/findfont {
+dup #findfont dup /Encoding get 8#340 get /.notdef eq {
+        12 dict begin
+        /newcodesandnames [
+        8#200   /aacute         8#335   /acircumflex    8#336   /adieresis
+        8#337   /agrave         8#202   /atilde         8#201   /aring
+        8#340   /ccedilla       8#342   /eacute         8#344   /ecircumflex
+        8#345   /edieresis      8#346   /egrave         8#203   /iacute
+        8#347   /icircumflex    8#354   /idieresis      8#204   /igrave
+        8#205   /ntilde         8#206   /oacute         8#355   /ocircumflex
+        8#356   /odieresis      8#207   /ograve         8#210   /otilde
+        8#211   /scaron         8#212   /uacute         8#357   /ucircumflex
+        8#360   /udieresis      8#362   /ugrave         8#213   /ydieresis
+        8#214   /zcaron
+        8#215   /Aacute         8#300   /Acircumflex    8#311   /Adieresis
+        8#314   /Agrave         8#217   /Atilde         8#216   /Aring
+        8#321   /Ccedilla       8#322   /Eacute         8#323   /Ecircumflex
+        8#324   /Edieresis      8#325   /Egrave         8#220   /Iacute
+        8#326   /Icircumflex    8#327   /Idieresis      8#221   /Igrave
+        8#222   /Ntilde         8#223   /Oacute         8#330   /Ocircumflex
+        8#331   /Odieresis      8#224   /Ograve         8#225   /Otilde
+        8#226   /Scaron         8#227   /Uacute         8#332   /Ucircumflex
+        8#333   /Udieresis      8#334   /Ugrave         8#230   /Ydieresis
+        8#231   /Zcaron
+        ] def
+        /basefontdict exch def
+        /newfontname exch def
+        /newfont basefontdict maxlength dict def
+        basefontdict {
+                exch dup /FID ne {
+                        dup /Encoding eq { exch 256 array copy } { exch } ifelse
+                        newfont 3 1 roll put
+                } { pop pop } ifelse
+        } forall
+        newfont /FontName newfontname put
+        newcodesandnames aload pop
+        newcodesandnames length 2 idiv { newfont /Encoding get 3 1 roll put }
+        repeat newfontname newfont definefont
+        end
+} { exch pop } ifelse
+} def
+ 
+/headerpointsize 10 def
+/font /Courier def
+/pointsize 10 def
+/Linespace {/Linespace pointsize 1.1 mul neg dup 3 1 roll def } def
+/margin 10 def
+/xoffset .35 def
+/yoffset -0.30 def
+/def_yoffset yoffset def
+/def_xoffset xoffset def
+/def_pointsize pointsize def
+/roundpage true def
+/useclippath true def
+/pagebbox [0 0 612 792] def
+ 
+/inch {72 mul} bind def
+/mm {2.8453 mul} bind def
+/point {72 div} bind def
+/min {2 copy gt {exch} if pop} bind def
+/max {2 copy lt {exch} if pop} bind def
+/rectpath {4 2 roll moveto dup 0 exch rlineto exch 0 rlineto neg 0 exch rlineto
+ closepath } def
+ 
+/a-size {8.5 inch 11 inch} bind def
+/a4-size {210 mm 297 mm} bind def
+/b4-size {10.125 inch 14.2 inch} bind def
+/paper {/paper-x exch def /paper-y exch def} bind def
+ 
+a-size paper
+ 
+/mfont          % w h mfont
+{/fh exch def
+/fw exch def
+/Helvetica findfont
+[fw 0 0 fh 0 0] makefont setfont
+c-bs-1 c-bs-2 } def
+ 
+/c-bs-1         % calculate box size from current fh fw
+{[fh 1 add fw nc-1 mul] cvx
+/box-size-1 exch def} def
+ 
+/c-bs-2         % calculate box size from current fh fw
+{[fh 2 mul 1 add fw nc-2 mul] cvx
+/box-size-2 exch def} def
+ 
+/box-it         % x y h w box-it
+{2 copy 6 2 roll
+box-org box} def
+ 
+/center-up      % x y string center-up
+{ dup stringwidth pop   % x y string w
+3 -1 roll 1 add         % x string w y
+exch 2 div              % x string y (w/2)
+4 -1 roll exch sub      % string y (x-w/2)
+exch moveto show } def
+ 
+/center-dn      % x y string center-dn
+{ dup stringwidth pop   % x y string w
+3 -1 roll fh sub        % x string w (y-fsize)
+1 add
+exch 2 div              % x string (y-fsize) (w/2)
+4 -1 roll exch sub      % string (y-fsize) (x-w/2)
+exch moveto show } def
+ 
+/bbox           % h w x y box   % where x y is lower left corner
+{newpath moveto % h w
+dup 0 rlineto   % h w
+exch 0 exch rlineto     % w
+neg 0 rlineto
+closepath 0.3 setlinewidth stroke} def
+ 
+/box            % h w x y box   % where x y is lower left corner
+{newpath moveto % h w
+dup 0 rlineto   % h w
+exch 0 exch rlineto     % w
+neg 0 rlineto
+closepath 0.1 setlinewidth stroke} def
+ 
+/rbox           % [x1 y1 x2 y2 x3 y3 x4 y4] r w rbox
+{/w exch def /r exch def /a exch def
+a 0 2 da1 r add newpath moveto
+a 2 4 da a 4 4 da a 6 2 da1 a 0 2 da a 0 4 da
+closepath w setlinewidth stroke} def
+ 
+/mbox           % h w x y mbox => [x1 y1 x2 y2 x3 y3 x4 y4]
+{2 copy                 % h w x y x y
+5 index add 2 copy      % h w x1 y1 x2 y2 x2 y2
+exch 6 index add exch   % h w x1 y1 x2 y2 x3 y3
+2 copy 9 index sub      % h w x1 y1 x2 y2 x3 y3 x4 y4
+8 array astore
+3 1 roll pop pop} def
+ 
+/box-org        % x y h w box-org
+{2 div          % x y h (w/2)
+exch 2 div exch         % x y (h/2) (w/2)
+4 -1 roll exch sub      % y (h/2) (x-w/2)
+3 1 roll sub            % (x-w/2) (y-h/2)
+} def
+ 
+/t2             % text1 text2 x y
+{ 2 copy                % text1 text2 x y x y
+box-size-2 box-it       % text1 text2 x y
+2 copy 6 -1 roll        % text2 x y x y text1
+center-up               % text2 x y
+3 -1 roll               % x y text2
+center-dn } def
+ 
+/t1             % text x y
+{ 2 copy                % text x y x y
+box-size-1 box-it       % text x y
+box-size-1 box-org
+exch fw add exch 1 add  % text (xorg+fw) yorg
+moveto show } def
+ 
+/ct1            % text x y
+{ 2 copy
+box-size-1 box-it       % text x y
+3 -1 roll               % x y text
+dup stringwidth pop     % x y text w
+2 div                   % x y text (w/2)
+4 -1 roll exch sub      % y text (x-w/2)
+3 -1 roll fh 1 sub 2 div sub    % text (x-w/2) (y-(fh+1)/2)
+moveto show } def
+ 
+/da2 { r arcto 4 {pop} repeat} def
+/da1 {getinterval aload pop} def
+/da {da1 da2} def
+/gr {/r exch def} def
+/pto {2 copy 6 2 roll da2} def
+ 
+/np {newpath} def
+/mto {moveto} def
+/rmto {rmoveto} def
+/lto {lineto} def
+/rlto {rlineto} def
+/drw {0.1 setlinewidth stroke} def
+ 
+/plotpagesetup
+{ newpagesetup restore /newpagesetup save def
+90 rotate 12 12 translate
+margin-l paper-y neg margin-b add translate
+paper-x margin-l margin-r 36 add add sub width-needed div
+paper-y margin-t margin-b 18 add add sub height-needed div
+scale
+text-wdt text-hgt mfont
+} def
+ 
+/setup
+{
+    /linespace pointsize pointsize .10 mul add neg def
+    /headerspace headerpointsize headerpointsize .10 mul add 2
+                linespace mul sub neg def
+ 
+    font findfont pointsize scalefont setfont
+ 
+    pagedimensions
+ 
+    /standard_height 80 def_pointsize def_pointsize .10 mul add mul
+                yoffset inch sub margin 2 div add def
+ 
+    /rel_height height def
+    /rel_width 7.5 inch def
+ 
+    rel_height standard_height lt
+            { /yoffset yoffset def_yoffset sub margin point 2 div add def }if
+    width rel_width lt
+            { /xoffset xoffset def_xoffset sub margin point 2 div sub def }if
+} def
+ 
+/indexpagesetup
+{
+    newpagesetup restore /newpagesetup save def
+    xcenter ycenter translate
+    width 2 div neg height 2 div translate
+    xoffset inch yoffset inch translate
+    margin 2 div dup neg translate
+ 
+    0 headerspace translate
+} def
+ 
+/pagedimensions {
+    useclippath userdict /gotpagebbox known not and {
+        /pagebbox [clippath pathbbox newpath] def
+        roundpage currentdict /roundpagebbox known and {roundpagebbox} if
+    } if
+    pagebbox aload pop .5 sub
+ 
+    4 -1 roll exch 4 1 roll 4 copy
+    sub /width exch def
+    sub /height exch def
+    add 2 div /xcenter exch def
+    add 2 div /ycenter exch def
+    userdict /gotpagebbox true put
+} def
+ 
+ 
+/page_num_len {  % count number of digits of the current page number
+    /digits 1 def
+    /tens 10 def
+    {   page tens lt
+        { exit }
+        { /digits digits 1 add def
+          /tens tens 10 mul def } ifelse
+    } loop
+} def
+ 
+/page_num { % convert page to a string
+    page_num_len page digits string cvs
+} def
+ 
+/printpage { % stk:int (right justified from this "int" value)
+    page_num stringwidth pop    % get length of string
+    sub                                 % calculate white space
+    0 rmoveto page_num          % move over to the right that much
+    0 setgray show
+} def
+ 
+ 
+/show_simpleheader {
+    currentdict /headerfont known
+        {headerfont findfont headerpointsize scalefont setfont}
+        {/Courier-Bold findfont headerpointsize scalefont setfont} ifelse
+         currentdict /date known
+            { 0 0 moveto date 0 setgray show } if
+        currentdict /filename known
+            { 0 0 moveto
+            filename stringwidth pop 2 div width xoffset inch
+            .5 inch add sub 2 div exch sub
+            0 rmoveto filename 0 setgray show } if
+        0 0 moveto width xoffset inch .75 inch add sub printpage
+} def
+ 
+/pagesetup {
+    /page exch def
+    gsave
+    0 headerpointsize .10 mul 2 linespace mul sub translate
+    show_simpleheader
+    grestore
+    0 0 moveto 0
+} bind def
+ 
+/l {show Linespace add dup 0 exch moveto} bind def
+ 
+%%EndProlog
