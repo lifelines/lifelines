@@ -1,3 +1,9 @@
+2005-01-05 Perry Rapp
+
+	* ChangeLog src/liflines/screen.c
+
+	Fix list browse to respect config option UppercaseSurname
+
 2005-01-04 Stephen Dum
         * ChangeLog docs/Makefile.am
 	remove gnu-ism from docs makefile

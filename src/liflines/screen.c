@@ -2513,7 +2513,10 @@ manufacture a listdisp here
 		}
 		scratch[0] =0;
 		if (name) {
-			name = manip_name(name, DOSURCAP, REGORDER, 40);
+			SURCAPTYPE surcaptype = DOSURCAP;
+			if (!getoptint("UppercaseSurnames", 1))
+				surcaptype = NOSURCAP;
+			name = manip_name(name, surcaptype, REGORDER, 40);
 			llstrapps(scratch, sizeof(scratch), uu8, name);
 			llstrapps(scratch, sizeof(scratch), uu8, " ");
 		}
