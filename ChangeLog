@@ -1,3 +1,8 @@
+2004-07-19 Stephen Dum
+	lines.cfg reports/bday_cover.ll reports/cron.ll reports/regvital.ll
+
+	Some more minor updates to reports
+
 2004-07-18 Stephen Dum
         src/btree/opnbtree.c src/gedlib/keytonod.c src/gedlib/names.c
 

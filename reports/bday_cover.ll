@@ -147,3 +147,65 @@ JAN 18                 3
 JAN 29                 3
 ........
 */
+
+/*
+Below is a simple C program hack to check if your values
+are similar to those generated randomly by the program.
+Extract the program from these comment to compile and execute.
+Change the RSEED to do different tests; change the ITERATIONS
+to vary accuracy. Can also change the NUM_DAYS_REQUIRED
+to the value obtained for your database and check if the people
+required is similar.
+
+#define RSEED 1576
+#define NUM_DAYS 365
+#define NUM_DAYS_REQUIRED NUM_DAYS
+#define ITERATIONS 2000
+
+#define FALSE 0
+#define TRUE 1
+
+static int days[NUM_DAYS];
+static int num_got;
+static int running_total;
+
+
+int get_day() {
+  return rand() % NUM_DAYS;
+}
+
+do_it() {
+  int i;
+  int j;
+  int r;
+
+  for (i = 0; i < NUM_DAYS; i++) {
+    days[i] = FALSE;
+  }
+  num_got = 0;
+  i = 0;
+
+  while (num_got < NUM_DAYS_REQUIRED) {
+    i++;
+    r = get_day();
+    if (!days[r]) {
+      days[r] = TRUE;
+      num_got++;
+    }
+  }
+  printf("Required %d people to cover %d days.\n",i, NUM_DAYS_REQUIRED);
+  running_total = running_total + i;
+}
+
+main() {
+  int i;
+
+  running_total = 0;
+  srand(RSEED);
+  for (i = 0; i < ITERATIONS; i++) {
+    do_it();
+  }
+  printf("Average was %d.\n",(int)(running_total/ITERATIONS));
+}
+
+*/
