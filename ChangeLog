@@ -3,6 +3,9 @@
 	* gedlib/keytonod.c hdrs/cache.h tools/dbverify.c:
 	Check lineage links in dbverify.
 
+	* hdrs/arch.h liflines/askprogram.c stdlib/memalloc.c:
+	#define snprintf to _snprintf for Win32/MSVC.
+
 2001-01-21 Petter Reinholdtsen <pere@td.org.uit.no>
 
 	* configure.in arch/snprintf.c gedlib/property.c
