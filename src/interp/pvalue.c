@@ -752,6 +752,11 @@ create_pvalue_from_string (STRING str)
 {
 	return create_pvalue(PSTRING, str);
 }
+void
+set_pvalue_string (PVALUE val, CNSTRING str)
+{
+	set_pvalue(val, PSTRING, (VPTR)str); /* makes new copy of string */
+}
 BOOLEAN
 pvalue_to_bool (PVALUE val)
 {
@@ -838,6 +843,7 @@ set_pvalue (PVALUE val, INT type, VPTR value)
 	clear_pvalue(val);
 	ptype(val) = type;
 	if (type == PSTRING) {
+		/* always copies string so caller doesn't have to */
 		if (value)
 			value = (VPTR) strsave((STRING) value);
 	}

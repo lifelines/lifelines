@@ -576,11 +576,11 @@ PVALUE
 __setlocale (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
-	PVALUE newval, val = evaluate(arg, stab, eflg);
+	PVALUE newval, val = eval_and_coerce(PSTRING, arg, stab, eflg);
 	STRING str;
-	if (*eflg || !val || ptype(val) != PSTRING) {
-		*eflg = TRUE;
-		prog_var_error(node, stab, arg, NULL, nonstr1, "setlocale");
+	if (*eflg) {
+		prog_var_error(node, stab, arg, val, nonstr1, "setlocale");
+		delete_pvalue(val);
 		return NULL;
 	}
 	str = rpt_setlocale(pvalue(val));
@@ -1001,7 +1001,7 @@ __d (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	sprintf(scratch, "%d", pvalue_to_int(val));
-	set_pvalue(val, PSTRING, (VPTR)scratch);
+	set_pvalue_string(val, scratch);
 	return val;
 }
 /*=============================================+
@@ -1036,7 +1036,7 @@ __f (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	sprintf(format, "%%.%df", prec);
 
 	sprintf(scratch, format, u.f);
-	set_pvalue(val, PSTRING, (VPTR)scratch);
+	set_pvalue_string(val, scratch);
 	return val;
 }
 /*==========================================+
@@ -2068,9 +2068,11 @@ __not (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __save (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
+	PNODE arg = iargs(node);
+	PVALUE val = eval_and_coerce(PSTRING, arg, stab, eflg);
 	if (*eflg) {
-		prog_error(node, "the arg to save is not a string");
+		prog_var_error(node, stab, arg, val, nonstr1, "save");
+		delete_pvalue(val);
 		return NULL;
 	}
 	return val;
@@ -2082,14 +2084,17 @@ __save (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __strlen (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
+	PNODE arg = iargs(node);
+	PVALUE val = eval_and_coerce(PSTRING, arg, stab, eflg);
 	INT len=0;
+	STRING str;
 	if (*eflg) {
-		prog_error(node, "the arg to strlen must be a string");
+		prog_var_error(node, stab, arg, val, nonstr1, "save");
+		delete_pvalue(val);
 		return NULL;
 	}
-	if (pvalue(val))
-		len = strlen(pvalue(val));
+	str = pvalue_to_string(val);
+	len = str ? strlen(str) : 0;
 	set_pvalue_int(val, len);
 	return val;
 }
@@ -2237,6 +2242,7 @@ __pn (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val;
 	PNODE arg = (PNODE) iargs(node);
 	NODE indi = eval_indi(arg, stab, eflg, NULL);
+	STRING str;
 	if (*eflg || !indi) {
 		*eflg = TRUE;
 		prog_error(node, "1st arg to pn must be a person");
@@ -2253,10 +2259,10 @@ __pn (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		STRING str = _(fpns[typ]);
 		if (eqstr(str, "her_"))
 			str = "her";
-		set_pvalue(val, PSTRING, (VPTR)str);
 	} else {
-		set_pvalue(val, PSTRING, (VPTR)_(mpns[typ]));
+		str = _(mpns[typ]);
 	}
+	set_pvalue_string(val, str);
 	return val;
 }
 /*==================================+

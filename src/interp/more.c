@@ -1057,8 +1057,8 @@ __genindiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	STRING name;
 	PVALUE val1 = eval_and_coerce(PSTRING, arg, stab, eflg);
 	if (*eflg) {
-/* TODO: 2002-10-06: Fix msgs to prog_var_error as above */
-		prog_error(node, "1st arg to genindiset must be a string");
+		prog_var_error(node, stab, arg, val1, nonstrx, "genindiset" , "1");
+		delete_pvalue(val1);
 		return NULL;
 	}
 	name = pvalue_to_string(val1);
@@ -1142,15 +1142,16 @@ __debug (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __getproperty(PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
-	if (*eflg || !val || ptype(val) != PSTRING) {
-		*eflg = TRUE;
-		prog_error(node, nonstr1, "getproperty");
+	PNODE arg = iargs(node);
+	PVALUE val = eval_and_coerce(PSTRING, arg, stab, eflg);
+	STRING str;
+	if (*eflg) {
+		prog_var_error(node, stab, arg, val, nonstr1, "getproperty");
+		delete_pvalue(val);
 		return NULL;
 	}
-	if (!pvalue(val))
-		return NULL;
-	else
-		set_pvalue(val, PSTRING, (STRING)get_property(pvalue(val)));
+	str = pvalue_to_string(val);
+	str = str ? get_property(str) : 0;
+	set_pvalue_string(val, str);
 	return val;
 }

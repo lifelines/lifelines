@@ -285,6 +285,7 @@ void remove_symtab(SYMTAB *);
 void set_pvalue(PVALUE, INT, VPTR);
 void set_pvalue_bool(PVALUE val, BOOLEAN bv);
 void set_pvalue_int(PVALUE val, INT iv);
+void set_pvalue_string(PVALUE val, CNSTRING str);
 void show_pvalue(PVALUE);
 PVALUE symtab_valueofbool(SYMTAB, STRING, BOOLEAN*);
 #ifndef HOGMEMORY

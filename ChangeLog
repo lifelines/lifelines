@@ -22,6 +22,11 @@
 
 	Standardize more argument handling in interpreter.
 
+	* ChangeLog src/hdrs/interp.h src/interp/builtin.c
+	src/interp/more.c src/interp/pvalue.c:
+
+	More standardizing argument handling in interpreter.
+
 2003-02-01 Perry Rapp
 
 	* ChangeLog src/gedlib/node.c src/interp/interp.c
