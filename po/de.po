@@ -3,6 +3,7 @@
 # Carl Becker <carl@becker-wiesbaden.de>, 2002.
 # 
 # Changes to fix the conflicts, Carl Becker, 2002-04-28
+# Fix pronouns, Perry Rapp, 2003-05-09
 #
 msgid ""
 msgstr ""
@@ -2700,47 +2701,43 @@ msgstr "Tevet"
 
 #: src/interp/builtin.c:2145
 msgid "He"
-msgstr ""
+msgstr "Er"
 
 #: src/interp/builtin.c:2145
-#, fuzzy
 msgid "he"
-msgstr "Ther"
+msgstr "er"
 
 #: src/interp/builtin.c:2145
 msgid "His"
-msgstr ""
+msgstr "Sein"
 
 #: src/interp/builtin.c:2145
 msgid "his"
-msgstr ""
+msgstr "sein"
 
 #: src/interp/builtin.c:2145
 msgid "him"
-msgstr ""
+msgstr "ihn"
 
 #: src/interp/builtin.c:2147
 msgid "She"
-msgstr ""
+msgstr "Sie"
 
 #: src/interp/builtin.c:2147
-#, fuzzy
 msgid "she"
-msgstr "Shevat"
+msgstr "sie"
 
 #: src/interp/builtin.c:2147
 msgid "Her"
-msgstr ""
+msgstr "Ihr"
 
 #: src/interp/builtin.c:2147
-#, fuzzy
 msgid "her"
-msgstr "Ther"
+msgstr "ihr"
 
 #: src/interp/builtin.c:2147
-#, fuzzy
 msgid "her_"
-msgstr "Ther"
+msgstr "sie"
 
 #: src/interp/builtin.c:2555
 msgid "(trimname) person does not have a name"
