@@ -1,5 +1,6 @@
-Tom Wetmore ttw@shore.net - original author
+Tom Wetmore (ttw@shore.net) - original author
 
-Rob Fugina robf@geeks.com - added autoconfig support
-Paul B. McBride pmcbride@tiac.net - added win32 related bug fixes and features
-Marc Nozell marc@nozell.com - misc, project coordination
+Matt Emmerton (matt@gsicomp.on.ca) - bug fixes & code cleaning
+Rob Fugina (robf@geeks.com) - added autoconfig support
+Paul B. McBride (pmcbride@tiac.net) - added win32 related bug fixes and features
+Marc Nozell (marc@nozell.com) - misc, project coordination
