@@ -200,6 +200,7 @@ static void load_tt_menu(UIWINDOW wparent);
 static void output_menu(UIWINDOW uiwin, INT screen, INT bottom, INT width);
 void place_cursor(void);
 static void place_std_msg(void);
+static void reactivate_uiwin(UIWINDOW);
 static void refresh_main(void);
 static void print_list_title(char * buffer, INT len, const listdisp * ld, STRING ttl);
 static void repaint_add_menu(UIWINDOW uiwin);
@@ -1552,14 +1553,12 @@ invoke_trans_menu (UIWINDOW wparent)
 		trans_menu_win = create_newwin2(10,66);
 	}
 	uiwin = trans_menu_win;
-	win = uiw_win(uiwin);
-	activate_uiwin(uiwin);
 
 	while (!done) {
 		stdout_vis=FALSE;
 		repaint_trans_menu(uiwin);
-		activate_uiwin(uiwin);
-		wmove(win, 1, strlen(mn_tt_ttl)+3);
+		reactivate_uiwin(uiwin);
+		wmove(uiw_win(uiwin), 1, strlen(mn_tt_ttl)+3);
 		code = interact(uiwin, "elsxiq", -1);
 
 		switch (code) {
@@ -2932,6 +2931,23 @@ activate_uiwin (UIWINDOW uiwin)
 	active_uiwin = uiwin;
 	touchwin(win);
 	wrefresh(win);
+}
+/*============================
+ * reactivate_uiwin --
+ *  push new window on top, if not already on top
+ *  and refresh it in any case
+ * Created: 2001/12/22 (Perry Rapp)
+ *==========================*/
+static void
+reactivate_uiwin (UIWINDOW uiwin)
+{
+	if (active_uiwin != uiwin)
+		activate_uiwin(uiwin);
+	else {
+		WINDOW * win = uiw_win(uiwin);
+		touchwin(win);
+		wrefresh(win);
+	}
 }
 /*============================
  * deactivate_uiwin -- Remove currently active

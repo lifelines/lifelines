@@ -1,3 +1,10 @@
+2001-12-22 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog liflines/screen.c:
+
+	Bugfix invoke_trans_menu was calling activate_uiwin twice,
+	leading to ASSERT failure.
+
 2001-12-19 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog arch/alphasort.c arch/scandir.c hdrs/llstdlib.h
