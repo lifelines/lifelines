@@ -4,6 +4,8 @@
 
 # Pull in m4 (macro) files from m4 subdirectory
 # (gettext m4 files are there)
+# I've not included the gettext m4 files,
+# and this still compiles on cygwin ? (Perry, 2002.02.24)
 #ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS = arch btree gedlib interp stdlib intl po liflines hdrs tools reports win32 @docs_dirs@
