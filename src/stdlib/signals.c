@@ -98,14 +98,13 @@ int sig;
 	extern BOOLEAN progrunning;
 	extern PNODE Pnode;
 
-	llwprintf("Darn, caught a signal.  ");
 	if (progrunning) {
 		llwprintf("Looks like you were running a program.\n");
 		llwprintf("Check file \"%s\" around line %d.\n", ifname(Pnode),
 		    iline(Pnode));
-	} else 
-		llwprintf("Email me if you get stuck.  Tom.\n");
-	llwprintf("signal %d:%s\n", sig, sig_msgs[sig]);
+	}
+
+	llwprintf("Exiting on signal %d:%s\n", sig, sig_msgs[sig]);
 	close_lifelines();
 	endwin();
 	ll_abort(sig);
