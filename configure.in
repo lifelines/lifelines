@@ -25,20 +25,16 @@ AC_PROG_INSTALL
 
 echo Looking for libraries
 
-echo Looking for ncurses
-AC_CHECK_LIB(ncurses, tparm)
-
-if test "$ac_cv_lib_ncurses_tparm" = "yes"; then
-   echo Using ncurses
+AC_CHECK_LIB(ncurses, main)
+if test "$ac_cv_lib_curses_main" = "yes"; then
+  echo Using ncurses
 else
-   echo Looking for curses
-   AC_CHECK_LIB(curses, main)
-
-   if test "$ac_cv_lib_curses_main" = "yes"; then
-      echo Using curses
-   else
-      echo "Didn't find ncurses or curses -- may have link problems!"
-   fi
+  AC_CHECK_LIB(curses, main)
+  if test "$ac_cv_lib_curses_main" = "yes"; then
+    echo Using curses
+  else
+    echo "Didn't find ncurses or curses -- may have link problems!"
+  fi
 fi
 
 dnl AC_CHECK_LIB(gdbm, gdbm_open)
