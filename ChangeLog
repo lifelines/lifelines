@@ -10,6 +10,8 @@
 	* gedlib/init.c hdrs/llstdlib.h stdlib/Makefile.am:
 	Moved figure_editor & figure_tempfile into stdlib for btedit.
 
+	* btree/record.c: Don't return deleted records from getrecord.
+
 2000-12-21    <marc@nozell.com>
 
 	* liflines/browse.c, liflines/pedigree.c, gedlib/choose.c,
