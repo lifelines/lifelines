@@ -4305,7 +4305,7 @@ Note that <TYPE>if</TYPE> treats null strings as false, but empty strings as tru
 
 <PROGRAMLISTING>
 if(birth(indi))
-</PROGRAMLIST>
+</PROGRAMLISTING>
 
 will return true if there is a BIRT record, even if it is empty, but will return false if there is no BIRT record
 at all.

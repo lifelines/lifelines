@@ -1,3 +1,7 @@
+2001-07-28  Marc Nozell  <marc@nozell.com>
+
+	* docs/lifelines.sgml: Missed a typo.
+
 2001-07-26  Marc Nozell  <marc@nozell.com>
 
 	* docs/lifelines.sgml: Allow newer docbook tool chains to process
