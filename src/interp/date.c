@@ -83,34 +83,36 @@ static TABLE monthtbl = NULL;
 
 /*==========================================
  * format_date -- Do general date formatting
+ * str - raw string containing a date
+ * dfmt - day format:  0 - num, space
+ *                     1 - num, lead 0
+ *                     2 - num, as is
+ * mfmt -  month format:0 - num, space
+ *                      1 - num, lead 0
+ *                      2 - num, as is
+ *                      3 - eg, MAR
+ *                      4 - eg, Mar
+ *                      5 - eg, MARCH
+ *                      6 - eg, March
+ * yfmt - year format: none yet
+ * sfmt - date format: 0 - da mo yr
+ *                     1 - mo da, yr
+ *                     2 - mo/da/yr
+ *                     3 - da/mo/yr
+ *                     4 - mo-da-yr
+ *                     5 - da-mo-yr
+ *                     6 - modayr
+ *                     7 - damoyr
+ *                     8 - yr mo da
+ *                     9 - yr/mo/da
+ *                     10- yr-mo-da
+ *                     11- yrmoda
+ * cmplx - if TRUE, then treat string as complex, including
+ *         date modifiers, ranges, and/or double-dating
  *========================================*/
 STRING
-format_date (STRING str,    /* raw string containing a date */
-             INT dfmt,      /* day format:  0 - num, space
-                                            1 - num, lead 0
-                                            2 - num, as is */
-             INT mfmt,      /* month format:0 - num, space
-                                            1 - num, lead 0
-                                            2 - num, as is
-                                            3 - eg, MAR
-                                            4 - eg, Mar
-                                            5 - eg, MARCH
-                                            6 - eg, March */
-             INT yfmt,      /* year format: none yet */
-             INT sfmt,      /* date format: 0 - da mo yr
-                                            1 - mo da, yr
-                                            2 - mo/da/yr
-                                            3 - da/mo/yr
-                                            4 - mo-da-yr
-                                            5 - da-mo-yr
-                                            6 - modayr
-                                            7 - damoyr
-                                            8 - yr mo da
-                                            9 - yr/mo/da
-                                            10- yr-mo-da
-                                            11- yrmoda */
-             BOOLEAN cmplx) /* if TRUE, then treat string as complex, including
-                               date modifiers, ranges, and/or double-dating */
+format_date (STRING str, INT dfmt, INT mfmt,
+             INT yfmt, INT sfmt, BOOLEAN cmplx)
 {
 	INT mod, da, mo, yr;
 	STRING sda, smo, syr;
