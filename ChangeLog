@@ -1,3 +1,11 @@
+2001-02-05 Perry Rapp <puddle@users.sourceforge.net>
+
+	* NEWS README gedlib/messages.c hdrs/gedcom.h hdrs/menuitem.h
+	hdrs/screen.h liflines/browse.c liflines/llinesi.h
+	liflines/menuitem.c liflines/pedigree.c liflines/screen.c
+	liflines/show.c liflines/tandem.c:
+	Integrate twoindi browse (tandem) to new menu system.
+
 2001-02-04 Perry Rapp <puddle@users.sourceforge.net>
 
         * ChangeLog gedlib/messages.c hdrs/menuitem.h hdrs/screen.h
