@@ -17,6 +17,12 @@
 
 	Include translat.c in list for xgettext.
 
+	* ChangeLog src/gedlib/messages.c src/gedlib/translat.c
+	src/liflines/show.c
+
+	Add translator instructions for localizing translation table menu keys.
+	Remove some code obsoleted by earlier changes today.
+
 2003-09-10 Jens Arvidsson
 
 	* ChangeLog po/sv.po

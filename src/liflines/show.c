@@ -122,11 +122,11 @@ static INT Solen = 0;
 static INT Scroll2 = 0;
 static INT number_child_enable = 0;
 static struct tag_prefix f_birth_tags[] = {
-	{ "BIRT", N_("born") }
-	,{ "CHR", N_("bapt") }
-	,{ "BAPM", N_("bapt") }
-	,{ "BARM", N_("bapt") }
-	,{ "BASM", N_("bapt") }
+	{ "BIRT", N_("born") } /* GEDCOM BIRT tag, label to precede date on display */
+	,{ "CHR", N_("bapt") } /* GEDCOM CHR tag, label to precede date on display */
+	,{ "BAPM", N_("bapt") } /* GEDCOM BAPM tag, label to precede date on display */
+	,{ "BARM", N_("barm") } /* GEDCOM BARM tag, label to precede date on display */
+	,{ "BASM", N_("basm") } /* GEDCOM BASM tag, label to precede date on display */
 	,{ "BLES", N_("bles") }
 	,{ "ADOP", N_("adop") }
 	,{ "RESI", N_("resi") }

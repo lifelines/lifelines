@@ -30,24 +30,6 @@
 
 STRING illegal_char = 0;
 
-/* TODO: need to delete map_names in favor of new system */
-/*CNSTRING map_names[] = {
-	"Editor to Internal"
-	,"Internal to Editor"
-	,"GEDCOM to Internal"
-	,"Internal to GEDCOM"
-	,"Display to Internal"
-	,"Internal to Display"
-	,"Report to Internal"
-	,"Internal to Report"
-	,"Custom Sort"
-	,"Custom Charset"
-	,"Custom Lowercase"
-	,"Custom Uppercase"
-	,"Custom Prefix"
-};
-*/
-
 /*********************************************
  * external/imported variables
  *********************************************/
@@ -113,7 +95,9 @@ struct zone_s zones[] = {
 
 /* These must be in enumeration order up to NUM_TT_MAPS */
 static struct conversion_s conversions[] = {
+	/* TRANSLATORS: Character set conversion from external editor to database internal */
 	{ MEDIN, "MEDIN", N_("Editor to Internal"), ZON_EDI, ZON_INT, &editor_codeset_in, &int_codeset, 0 }
+	/* TRANSLATORS: Character set conversion from database internal to external editor */
 	, { MINED, "MINED", N_("Internal to Editor"), ZON_INT, ZON_EDI, &int_codeset, &editor_codeset_out, 0 }
 	, { MGDIN, "MGDIN", N_("GEDCOM to Internal"), ZON_GED, ZON_INT, &gedcom_codeset_in, &int_codeset, 0 }
 	, { MINGD, "MINGD", N_("Internal to GEDCOM"), ZON_INT, ZON_GED, &int_codeset, &gedcom_codeset_out, 0 }
@@ -129,14 +113,30 @@ static struct conversion_s conversions[] = {
 	, { MPREF, "MPREF", "Custom Prefix", ZON_X, ZON_X, 0, 0, 0 }
 };
 static CNSTRING conversions_keys[] = {
-	N_("e")   /* key for "Editor to Internal" on translation table menu */
-	, N_("m") /* key for "Internal to Editor" on translation table menu */
-	, N_("i") /* key for "GEDCOM to Internal" on translation table menu */
-	, N_("x") /* key for "Internal to GEDCOM" on translation table menu */
-	, N_("g") /* key for "Display to Internal" on translation table menu */
-	, N_("d") /* key for "Internal to Display" on translation table menu */
-	, N_("p") /* key for "Report to Internal" on translation table menu */
-	, N_("r") /* key for "Internal to Report" on translation table menu */
+	/* TRANSLATORS: key for "Editor to Internal" on translation table menu 
+	Omit everything up to and including final | */
+	N_("menu|trantable|e")
+	/* TRANSLATORS: key for "Internal to Editor" on translation table menu
+	Omit everything up to and including final | */
+	, N_("menu|trantable|m")
+	/* TRANSLATORS: key for "GEDCOM to Internal" on translation table menu
+	Omit everything up to and including final | */
+	, N_("menu|trantable|i")
+	/* TRANSLATORS: key for "Internal to GEDCOM" on translation table menu
+	Omit everything up to and including final | */
+	, N_("menu|trantable|x")
+	/* TRANSLATORS: key for "Display to Internal" on translation table menu
+	Omit everything up to and including final | */
+	, N_("menu|trantable|g")
+	/* TRANSLATORS: key for "Internal to Display" on translation table menu
+	Omit everything up to and including final | */
+	, N_("menu|trantable|d")
+	/* TRANSLATORS: key for "Report to Internal" on translation table menu
+	Omit everything up to and including final | */
+	, N_("menu|trantable|p")
+	/* TRANSLATORS: key for "Internal to Report" on translation table menu
+	Omit everything up to and including final | */
+	, N_("menu|trantable|r")
 };
 /* currently loaded legacy (embedded) translation tables */
 static struct legacytt_s legacytts[NUM_TT_MAPS]; /* initialized once by transl_init() */
@@ -422,7 +422,21 @@ transl_get_predefined_xlat (INT trnum)
 ZSTR
 transl_get_predefined_name (INT trnum)
 {
+	/* TRANSLATORS: pre test comment */
+	STRING t = _("testme"); /* post test comment */
 	return zs_news(_(getconvert(trnum)->name));
+}
+/*==========================================================
+ * sgettext -- Version of gettext that strips out menu leaders
+ * (menu leaders are everything up to last |)
+ *========================================================*/
+static const char *
+sgettext (const char *msgid)
+{
+	char *msgval = _(msgid);
+	if (msgval == msgid)
+		msgval = strrchr (msgid, '|') + 1;
+	return msgval;
 }
 /*==========================================================
  * transl_get_predefined_menukey -- Menu key for predefined translation
@@ -432,7 +446,7 @@ ZSTR
 transl_get_predefined_menukey (INT trnum)
 {
 	ASSERT(trnum>=0 && trnum<ARRSIZE(conversions_keys));
-	return zs_news(_(conversions_keys[trnum]));
+	return zs_news(sgettext(conversions_keys[trnum]));
 }
 /*==========================================================
  * transl_get_description -- Fetch description of a translation
