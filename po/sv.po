@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: LifeLines 3.0.10post\n"
-"POT-Creation-Date: 2002-02-27 07:57-0500\n"
-"PO-Revision-Date: 2002-02-26 23:09+0100\n"
+"POT-Creation-Date: 2002-02-24 14:44+0100\n"
+"PO-Revision-Date: 2002-03-04 23:35+0100\n"
 "Last-Translator: Jens Arvidsson <arvid-jens@algonet.se>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -19,15 +19,15 @@ msgstr "Du måste identifiera en databas."
 
 #: gedlib/messages.c:39
 msgid "What directory holds the LifeLines database?"
-msgstr "I vilken katalog finns lifelinesdatabasen?"
+msgstr "I vilken katalog finns LifeLinesdatabasen?"
 
 #: gedlib/messages.c:40
 msgid "enter path: "
-msgstr "ange sökväg: "
+msgstr "skriv in sökväg: "
 
 #: gedlib/messages.c:41
 msgid "There is no LifeLines database in that directory."
-msgstr "Det finns ingen lifelinesdatabas i den katalogen."
+msgstr "Det finns ingen LifeLinesdatabas i den katalogen."
 
 #: gedlib/messages.c:42
 msgid "Do you want to create a database there?"
@@ -59,15 +59,15 @@ msgstr "Databasen är skrivskyddad; du får inte ta bort poster."
 
 #: gedlib/messages.c:51
 msgid "enter name, key, refn or list:"
-msgstr "ange namn, nyckel, refn eller lista:"
+msgstr "skriv in namn, nyckel, refn eller lista:"
 
 #: gedlib/messages.c:52
 msgid "Please choose the child to remove from the family."
-msgstr "Välj barn att ta bort från familjen."
+msgstr "Välj barn att ta bort från familjen:"
 
 #: gedlib/messages.c:53
 msgid "Please choose the spouse/parent to remove from the family."
-msgstr "Välj maka(e)/förälder att ta bort från familjen."
+msgstr "Välj maka(e)/förälder att ta bort från familjen"
 
 #: gedlib/messages.c:85
 msgid "Enter pattern to match against single surname or given name."
@@ -86,57 +86,49 @@ msgid "pattern: "
 msgstr "mönster: "
 
 #: gedlib/messages.c:158
-#, fuzzy
 msgid "Do you really want to add this source to the database?"
-msgstr "Vill du skapa en databas där?"
+msgstr "Vill du verkligen lägga till den här händelsen i databasen?"
 
 #: gedlib/messages.c:159
-#, fuzzy
 msgid "Do you really want to add this event to the database?"
-msgstr "Vill du skapa en databas där?"
+msgstr "Vill du verkligen lägga till den här händelsen i databasen?"
 
 #: gedlib/messages.c:160
-#, fuzzy
 msgid "Do you really want to add this record to the database?"
-msgstr "5  Lägg till en post av annan typ i databasen"
+msgstr "Vill du verkligen lägga till den här posten i databasen?"
 
 #: gedlib/messages.c:161
-#, fuzzy
 msgid "Do you really want to update this person?"
-msgstr "Vill du skapa en databas där?"
+msgstr "Vill du verkligen uppdatera den här personen?"
 
 #: gedlib/messages.c:162
 msgid "Do you really want to update this family?"
-msgstr ""
+msgstr "Vill du verkligen uppdatera den här familjen?"
 
 #: gedlib/messages.c:163
-#, fuzzy
 msgid "Do you really want to update this source?"
-msgstr "Vill du skapa en databas där?"
+msgstr "Vill du verkligen uppdatera den här källan?"
 
 #: gedlib/messages.c:164
-#, fuzzy
 msgid "Do you really want to update this event?"
-msgstr "Vill du skapa en databas där?"
+msgstr "Vill du verkligen uppdatera den här händelsen?"
 
 #: gedlib/messages.c:165
-#, fuzzy
 msgid "Do you really want to update this record?"
-msgstr "Vill du skapa en databas där?"
+msgstr "Vill du verkligen uppdatera den här posten?"
 
 #: gedlib/messages.c:166
-#, fuzzy
 msgid "Are you sure you want to remove the person from the database?"
-msgstr "b  Bläddra bland personer i databasen"
+msgstr "Är du säker på att du vill ta bort den här personen från databasen?"
 
 #: gedlib/messages.c:167
 msgid "Remove this family record ?"
-msgstr ""
+msgstr "Ta bort den här familjeposten?"
 
 #: gedlib/messages.c:168
 #, c-format
 msgid "(%s: %d spouse(s), %d child(ren))"
-msgstr ""
+msgstr "(%s: %d maka(r), %d barn)"
 
 #. new records
 #: gedlib/messages.c:267
@@ -146,6 +138,10 @@ msgid ""
 "1 TITL Title\n"
 "1 AUTH Author"
 msgstr ""
+"0 SOUR\n"
+"1 REFN\n"
+"1 TITL Titel\n"
+"1 AUTH Författare"
 
 #: gedlib/messages.c:268
 msgid ""
@@ -158,12 +154,22 @@ msgid ""
 "  2 ROLE\n"
 "1 SOUR"
 msgstr ""
+"0 EVEN\n"
+"1 REFN\n"
+"1 DATE\n"
+"1 PLAC\n"
+"1 INDI\n"
+"  2 NAME\n"
+"  2 ROLE\n"
+"1 SOUR"
 
 #: gedlib/messages.c:269
 msgid ""
 "0 XXXX\n"
 "1 REFN"
 msgstr ""
+"0 XXXX\n"
+"1 REFN"
 
 #. display longer forms
 #: gedlib/messages.c:299
@@ -202,7 +208,7 @@ msgstr "q  Avsluta programmet"
 #. &&begin main menu (70 chars after spaces)
 #: gedlib/messages.c:380
 msgid "b  Browse the persons in the database"
-msgstr "b  Bläddra bland personer i databasen"
+msgstr "b  Bläddra mellan personer i databasen"
 
 #: gedlib/messages.c:381
 msgid "s  Search database"
@@ -222,7 +228,7 @@ msgstr "r  Skapa rapport genom att ange rapportens namn"
 
 #: gedlib/messages.c:385
 msgid "p  Pick a report from list and run"
-msgstr "p  Välj en rapport från lista att köra"
+msgstr "p  Välj en rapport från lista och kör"
 
 #: gedlib/messages.c:386
 msgid "c  Character set options"
@@ -230,11 +236,11 @@ msgstr "c  Inställningar för teckenuppsättning"
 
 #: gedlib/messages.c:387
 msgid "t  Modify character translation tables"
-msgstr "t  Modifiera teckenöversättningstabeller"
+msgstr "Modifiera teckenöversättningstabeller"
 
 #: gedlib/messages.c:388
 msgid "u  Miscellaneous utilities"
-msgstr "u  Diverse verktyg"
+msgstr "Diverse verktyg"
 
 #: gedlib/messages.c:389
 msgid "x  Handle source, event and other records"
@@ -321,71 +327,69 @@ msgstr "6  Redigera en post av annan typ i databasen"
 #. &&begin translation table menu
 #: gedlib/messages.c:431
 msgid "Translation Tables"
-msgstr ""
+msgstr "Teckenöversättningstabeller"
 
 #: gedlib/messages.c:432
 msgid "e  edit individual tables (in db)"
-msgstr ""
+msgstr "e  redigera enskilda tabeller (i db)"
 
 #: gedlib/messages.c:433
 msgid "l  load a table from a file (into db)"
-msgstr ""
+msgstr "l  ladda en tabell från en fil (till db)"
 
 #: gedlib/messages.c:434
 msgid "s  save a table to a file (from db)"
-msgstr ""
+msgstr "s  spara en tabell till en fil (från db)"
 
 #: gedlib/messages.c:435
 msgid "x  export all tables (from db to files)"
-msgstr ""
+msgstr "x  exportera alla tabeller (från db till filer)"
 
 #: gedlib/messages.c:436
 msgid "i  import all tables (from files into db)"
-msgstr ""
+msgstr "i  importera alla tabeller (från filer till db)"
 
 #: gedlib/messages.c:437
 msgid "export/import directory:"
-msgstr ""
+msgstr "exportera/importera katalog:"
 
 #. menus for translation tables
 #: gedlib/messages.c:440
-#, fuzzy
 msgid "Which character mapping do you want to edit?"
-msgstr "Vad vill du lägga till?"
+msgstr "Vilken teckenmappning vill du redigera?"
 
 #: gedlib/messages.c:441
-#, fuzzy
 msgid "Which character mapping do you want to save?"
-msgstr "Vad vill du ta bort?"
+msgstr "Vilken teckenmappning vill du spara?"
 
 #. strings for choosing translation table (these looks best if choices padded to same length)
 #: gedlib/messages.c:443
 msgid "e  Editor to Internal mapping "
-msgstr ""
+msgstr "e  Mappning från editor till intern "
 
 #: gedlib/messages.c:444
 msgid "m  Internal to Editor mapping "
-msgstr ""
+msgstr "m  Mappning från intern till editor "
 
 #: gedlib/messages.c:445
 msgid "i  GEDCOM to Internal mapping "
-msgstr ""
+msgstr "i  Mappning från GEDCOM till intern "
 
 #: gedlib/messages.c:446
 msgid "x  Internal to GEDCOM mapping "
-msgstr ""
+msgstr "x  Mappning från intern till GEDCOM "
 
 #: gedlib/messages.c:447
 msgid "g  Display to Internal mapping"
-msgstr ""
+msgstr "g  Mappning från skärm till intern  "
 
 #: gedlib/messages.c:448
 msgid "d  Internal to Display mapping"
-msgstr ""
+msgstr "d  Mappning från intern till skärm  "
 
 #: gedlib/messages.c:449
 msgid "r  Internal to Report mapping "
-msgstr ""
+msgstr "r  Mappning från intern till rapport"
 
 #. &&begin add menu
 #: gedlib/messages.c:454
@@ -415,11 +419,11 @@ msgstr "Vad vill du ta bort?"
 
 #: gedlib/messages.c:462
 msgid "c  Child - remove a child from his/her family"
-msgstr "c  Barn - ta bort ett barn från sin familj"
+msgstr "c  Barn - ta bort ett barn från dess familj"
 
 #: gedlib/messages.c:463
 msgid "s  Spouse - remove a spouse from a family"
-msgstr "s  Maka(e) - ta bort en maka(e) från en familj"
+msgstr "s  Maka(e) - ta bort en maka(e) från en befintlig familj"
 
 #: gedlib/messages.c:464
 msgid "i  Individual - remove a person completely"
@@ -448,7 +452,7 @@ msgstr "r  Refn-sökning"
 
 #: gedlib/messages.c:472
 msgid "Performing full name scan"
-msgstr "Utför sökning på fullständigt namn"
+msgstr "Utför sökning på hela namnet"
 
 #: gedlib/messages.c:473
 msgid "Performing name fragment scan"
@@ -579,7 +583,6 @@ msgstr "april"
 
 #. Put short form for may (don't use **)
 #: gedlib/messages.c:520
-#, fuzzy
 msgid "**may"
 msgstr "maj"
 
@@ -1077,7 +1080,7 @@ msgstr "!n Normalt läge"
 
 #: liflines/menuitem.c:141
 msgid "p  Pedigree mode"
-msgstr "p  Anläge"
+msgstr "p  Tavelläge"
 
 #: liflines/menuitem.c:142
 msgid "!! Cycle mode"
@@ -1118,7 +1121,7 @@ msgstr "m  Bläddra t. mödrar"
 
 #: liflines/menuitem.c:152
 msgid "tm Tandem to mother/s"
-msgstr "tm Tandem t. moder/r"
+msgstr "tm Tandem t. moder/r/"
 
 #: liflines/menuitem.c:153
 msgid "ts Tandem to spouse/s"
@@ -1290,38 +1293,38 @@ msgstr "LifeLines -- Assistentfönster (* visar/döljer meny)"
 msgid "LifeLines -- List Browse Screen (* toggles menu)"
 msgstr "LifeLines -- Listfönster (* visar/döljer meny)"
 
-#: liflines/screen.c:289
+#: liflines/screen.c:288
 #, c-format
 msgid ""
 "The requested window size (%d,%d) is too large for your terminal (%d,%d).\n"
-msgstr "Den efterfrågade fönsterstorleken (%d,%d) är för stor för din terminal (%d,%d). \n"
+msgstr "Den efterfrågade fönsterstorleken (%d,%d) är för stor för din terminal (%d,%d).\n"
 
-#: liflines/screen.c:302
+#: liflines/screen.c:301
 #, c-format
 msgid "The requested window size (%d,%d) is too small for LifeLines (%d,%d).\n"
 msgstr "Den efterfrågade fönsterstorleken (%d,%d) är för liten för LifeLines (%d,%d). \n"
 
-#: liflines/screen.c:1430
+#: liflines/screen.c:1429
 msgid "Enter locale name"
-msgstr "Ange namn på lokal"
+msgstr "Skriv in namn på lokal"
 
-#: liflines/screen.c:1431
+#: liflines/screen.c:1430
 msgid "Locale: "
 msgstr "Lokal: "
 
-#: liflines/screen.c:1439
+#: liflines/screen.c:1438
 #, c-format
 msgid "Valid locale: %1"
 msgstr "Giltig lokal: %1"
 
-#: liflines/screen.c:1444
+#: liflines/screen.c:1443
 msgid "Invalid locale, try again"
 msgstr "Ogiltig lokal, försök igen"
 
-#: liflines/screen.c:3116 liflines/screen.c:3144
+#: liflines/screen.c:3115 liflines/screen.c:3143
 msgid "L  Test locale names"
 msgstr "L  Prova namn på lokal"
 
-#: liflines/screen.c:3146
+#: liflines/screen.c:3145
 msgid "Report locale: "
 msgstr "Lokal för rapporter: "
