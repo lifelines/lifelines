@@ -190,6 +190,9 @@ remove_indiseq (INDISEQ seq)
 /*==============================
  * copyval -- Copy a value using the value vtable
  * Created: 2001/03/25, Perry Rapp
+ * This takes care of the problem that report indiseqs
+ * must use report-allocated values (pvalues) - and these
+ * cannot be copied directly, a copy must be allocated
  *============================*/
 static UNION
 copyval (INDISEQ seq, UNION uval)
@@ -784,6 +787,7 @@ get_combined_valtype (INDISEQ one, INDISEQ two)
 /*===============================================
  * dupseq -- Return a duplicate of input sequence
  * Created:  2001/04/09, Perry Rapp
+ * copies values from input seq using copyval
  *=============================================*/
 static INDISEQ
 dupseq (INDISEQ seq)
@@ -805,6 +809,7 @@ dupseq (INDISEQ seq)
 	/* Copy Every Element */
 	for (i=0; i<n; i++) {
 			key = strsave(skey(u[i]));
+			/* indiseq values must be copied with copyval */
 			uval = copyval(seq, sval(u[i]));
 			append_indiseq_impl(newseq, key, NULL, uval,
 			    TRUE, TRUE);
@@ -813,6 +818,8 @@ dupseq (INDISEQ seq)
 }
 /*===============================================
  * union_indiseq -- Create union of two sequences
+ * copies values from appropriate input (taking
+ *  from "one" if in both) using copyval
  *=============================================*/
 INDISEQ
 union_indiseq (INDISEQ one, INDISEQ two)
@@ -842,18 +849,21 @@ union_indiseq (INDISEQ one, INDISEQ two)
 	while (i < n && j < m) {
 		if ((rel = spri(u[i]) - spri(v[j])) < 0) {
 			key = strsave(skey(u[i]));
+			/* indiseq values must be copied with copyval */
 			uval = copyval(one, sval(u[i]));
 			append_indiseq_impl(three, key, NULL, uval,
 			    TRUE, TRUE);
 			i++;
 		} else if (rel > 0) {
 			key = strsave(skey(v[j]));
+			/* indiseq values must be copied with copyval */
 			uval = copyval(two, sval(v[j]));
 			append_indiseq_impl(three, key, NULL, uval,
 			    TRUE, TRUE);
 			j++;
-		} else {
+		} else { /* in both, copy value from one */
 			key = strsave(skey(u[i]));
+			/* indiseq values must be copied with copyval */
 			uval = copyval(one, sval(u[i]));
 			append_indiseq_impl(three, key, NULL, uval,
 			    TRUE, TRUE);
@@ -862,12 +872,14 @@ union_indiseq (INDISEQ one, INDISEQ two)
 	}
 	while (i < n) {
 		key = strsave(skey(u[i]));
+		/* indiseq values must be copied with copyval */
 		uval = copyval(one, sval(u[i]));
 		append_indiseq_impl(three, key, NULL, uval, TRUE, TRUE);
 		i++;
 	}
 	while (j < m) {
 		key = strsave(skey(v[j]));
+		/* indiseq values must be copied with copyval */
 		uval = copyval(two, sval(v[j]));
 		append_indiseq_impl(three, key, NULL, uval, TRUE, TRUE);
 		j++;
@@ -880,6 +892,7 @@ union_indiseq (INDISEQ one, INDISEQ two)
 }
 /*==========================================================
  * intersect_indiseq -- Create intersection of two sequences
+ * copies values from input "one" using copyval
  *========================================================*/
 INDISEQ
 intersect_indiseq (INDISEQ one, INDISEQ two)
@@ -889,6 +902,7 @@ intersect_indiseq (INDISEQ one, INDISEQ two)
 	INDISEQ three;
 	SORTEL *u, *v;
 	INT valtype;
+	UNION uval;
 	if (!one || !two) return NULL;
 	if (!(IFlags(one) & KEYSORT)) keysort_indiseq(one);
 	if (!(IFlags(one) & UNIQUED)) unique_indiseq(one);
@@ -908,8 +922,9 @@ intersect_indiseq (INDISEQ one, INDISEQ two)
 			j++;
 		} else {
 			key = strsave(skey(u[i]));
-			append_indiseq_impl(three, key, NULL, sval(u[i]),
-			    TRUE, TRUE);
+			/* indiseq values must be copied with copyval */
+			uval = copyval(one, sval(u[i]));
+			append_indiseq_impl(three, key, NULL, uval,TRUE, TRUE);
 			i++, j++;
 		}
 	}
@@ -921,6 +936,7 @@ intersect_indiseq (INDISEQ one, INDISEQ two)
 }
 /*=========================================================
  * difference_indiseq -- Create difference of two sequences
+ * copies values from original seq using copyval
  *=======================================================*/
 INDISEQ
 difference_indiseq (INDISEQ one,
@@ -931,6 +947,7 @@ difference_indiseq (INDISEQ one,
 	INDISEQ three;
 	SORTEL *u, *v;
 	INT valtype;
+	UNION uval;
 	if (!one)
 		return NULL;
 	if (!two)
@@ -949,8 +966,9 @@ difference_indiseq (INDISEQ one,
 	while (i < n && j < m) {
 		if ((rel = spri(u[i]) - spri(v[j])) < 0) {
 			key = strsave(skey(u[i]));
-			append_indiseq_impl(three, key, NULL, sval(u[i]),
-			    TRUE, TRUE);
+			/* indiseq values must be copied with copyval */
+			uval = copyval(one, sval(u[i]));
+			append_indiseq_impl(three, key, NULL, uval, TRUE, TRUE);
 			i++;
 		} else if (rel > 0) {
 			j++;
@@ -960,7 +978,9 @@ difference_indiseq (INDISEQ one,
 	}
 	while (i < n) {
 		key = strsave(skey(u[i]));
-		append_indiseq_impl(three, key, NULL, sval(u[i]), TRUE, TRUE);
+		/* indiseq values must be copied with copyval */
+		uval = copyval(one, sval(u[i]));
+		append_indiseq_impl(three, key, NULL, uval, TRUE, TRUE);
 		i++;
 	}
 	FORINDISEQ(three, el, num)
@@ -971,6 +991,7 @@ difference_indiseq (INDISEQ one,
 }
 /*=====================================================
  * parent_indiseq -- Create parent sequence of sequence
+ * copies values from original seq using copyval
  *===================================================*/
 INDISEQ
 parent_indiseq (INDISEQ seq)
@@ -988,11 +1009,13 @@ parent_indiseq (INDISEQ seq)
 		fath = indi_to_fath(indi);
 		moth = indi_to_moth(indi);
 		if (fath && !in_table(tab, key = indi_to_key(fath))) {
+			/* indiseq values must be copied with copyval */
 			uval = copyval(seq, sval(el));
 			append_indiseq_impl(par, strsave(key), NULL, uval, TRUE, TRUE);
 			insert_table(tab, key, NULL);
 		}
 		if (moth && !in_table(tab, key = indi_to_key(moth))) {
+			/* indiseq values must be copied with copyval */
 			uval = copyval(seq, sval(el));
 			append_indiseq_impl(par, strsave(key), NULL, uval, TRUE, TRUE);
 			insert_table(tab, key, NULL);
@@ -1003,6 +1026,7 @@ parent_indiseq (INDISEQ seq)
 }
 /*======================================================
  * child_indiseq -- Create children sequence of sequence
+ * copies values from original seq using copyval
  *====================================================*/
 INDISEQ
 child_indiseq (INDISEQ seq)
@@ -1012,6 +1036,7 @@ child_indiseq (INDISEQ seq)
 	INDISEQ cseq;
 	NODE indi;
 	STRING key;
+	UNION uval;
 	if (!seq) return NULL;
 	tab = create_table();
 	cseq = create_indiseq_impl(IValtype(seq), IValvtbl(seq));
@@ -1022,8 +1047,9 @@ child_indiseq (INDISEQ seq)
 				key = indi_to_key(chil);
 				if (!in_table(tab, key)) {
 					key = strsave(key);
-					append_indiseq_impl(cseq, key, NULL,
-					    sval(el), TRUE, TRUE);
+					/* indiseq values must be copied with copyval */
+					uval = copyval(seq, sval(el));
+					append_indiseq_impl(cseq, key, NULL, uval, TRUE, TRUE);
 					insert_table(tab, key, NULL);
 				}
 			ENDCHILDREN

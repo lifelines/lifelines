@@ -141,15 +141,16 @@ PVALUE
 __lengthset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq;
+	INT len;
 	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
 	if (*eflg) {
 		prog_error(node, "the arg to lengthset must be a set.");
 		return NULL;
 	}
 	seq = (INDISEQ) pvalue(val);
+	len = seq ? length_indiseq(seq) : 0;
 	delete_pvalue(val);
-	if (!seq) return create_pvalue(PINT, (VPTR) 0);
-	return create_pvalue(PINT, (VPTR) length_indiseq(seq));
+	return create_pvalue(PINT, (VPTR)len);
 }
 /*====================================+
  * inset -- See if person is in INDISEQ

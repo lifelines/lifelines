@@ -56,13 +56,19 @@ evaluate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		show_one_pnode(node);
 		llwprintf("\n");
 	}
-	if (iistype(node, IIDENT)) return evaluate_iden(node, stab, eflg);
-	if (iistype(node, IBCALL)) return evaluate_func(node, stab, eflg);
-	if (iistype(node, IFCALL)) return evaluate_ufunc(node, stab, eflg);
+	if (iistype(node, IIDENT))
+		return evaluate_iden(node, stab, eflg);
+	if (iistype(node, IBCALL))
+		return evaluate_func(node, stab, eflg);
+	if (iistype(node, IFCALL))
+		return evaluate_ufunc(node, stab, eflg);
 	*eflg = FALSE;
-	if (iistype(node, IICONS)) return copy_pvalue(ivalue(node));
-	if (iistype(node, ISCONS)) return copy_pvalue(ivalue(node));
-	if (iistype(node, IFCONS)) return copy_pvalue(ivalue(node));
+	if (iistype(node, IICONS))
+		return copy_pvalue(ivalue(node));
+	if (iistype(node, ISCONS))
+		return copy_pvalue(ivalue(node));
+	if (iistype(node, IFCONS))
+		return copy_pvalue(ivalue(node));
 	*eflg = TRUE;
 	return NULL;
 }

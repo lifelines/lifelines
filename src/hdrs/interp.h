@@ -110,7 +110,7 @@ struct itag {
 #define inum(i)      ((i)->i_word4)	/* counter used by many loops */
 
 #define PNONE	    0 /* needed? - remove later if not */
-#define PANY      1 /* any value -- no type restriction */
+#define PANY      1 /* any value -- no type restriction - should be NULL value*/
 #define PINT      2 /* integer */
 #define PLONG     3 /* long integer */
 #define PFLOAT    4 /* floating point */

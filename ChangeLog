@@ -10,6 +10,14 @@
 	* ChangeLog interp/more.c liflines/main.c:
 	Fix _index() to handle long strings without buffer overflow.
 
+	* ChangeLog gedlib/indiseq.c hdrs/interp.h interp/eval.c
+	interp/intrpseq.c:
+	Fix critical bugs in several indiseq functions incl child_indiseq,
+	difference_indiseq. Values were being copied directly, which was
+	fatal with pvalue indiseqs (must use copyval, which uses vtable).
+	Fix fatal bug in __length (it was deleting the seq before getting
+	its length).
+
 2001-05-27 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog interp/interp.c interp/pvalue.c:
