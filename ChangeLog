@@ -9,6 +9,10 @@
 	Misc. cleanup to get rid of compiler warnings.
 	Revised init_screen to return instead of exiting.
 
+	* liflines/browse.c liflines/screen.c:
+	Change browse_indi & fam to lock cache during display.
+	Increment PED_LINES for larger screens (just like PER_LINES, etc).
+
 2000-12-23 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/init.c liflines/browse.c liflines/pedigree.c

@@ -192,6 +192,7 @@ init_screen (void)
 	    TANDEM_LINES += (extralines / 2);
 	    PER_LINES += extralines;
 	    FAM_LINES += extralines;
+		 PED_LINES += extralines;
 	    LIST_LINES += extralines;
 	    if(extralines >= 16) PED_LINES += 16; /* one more generation */
 	    VIEWABLE += extralines;

@@ -129,6 +129,23 @@ goto_fam_child(NODE fam, int childno)
 	ENDCHILDREN
 	return answer;
 }
+/*==========================================
+ * display_indi -- Show indi in current mode
+ *========================================*/
+static INT
+display_indi(NODE indi, INT mode)
+{
+	CACHEEL icel;
+	INT c;
+	icel = indi_to_cacheel(indi);
+	lock_cache(icel);
+	if (mode == 'i')
+		c = indi_browse(indi);
+	else
+		c = ped_browse(indi);
+	unlock_cache(icel);
+	return c;
+}
 /*====================================================
  * browse_indi_modes -- Handle person/pedigree browse.
  *==================================================*/
@@ -142,7 +159,7 @@ browse_indi_modes (NODE *pindi1,
                    )
 {
 	STRING key, name, addstrings[2];
-	INT i, c, rc, nkey;
+	INT i, c, rc;
 	INT nkeyp, modep;
 	NODE node, save = NULL, indi = *pindi1;
 	NODE node2;
@@ -154,34 +171,25 @@ browse_indi_modes (NODE *pindi1,
 	addstrings[1] = crtsfm;
 	if (!indi) return BROWSE_QUIT;
 	show_reset_scroll();
-	nkey = indi_to_keynum(indi);
-	nkeyp = nkey;
+	nkeyp = 0;
 	modep = mode;
-/*
-	nkey is current person, nkeyp is previous person 
-	indi is NODE for nkey, but must be refetched lest cache overflow
-	mode is current mode, modep is previous mode
-*/
+
 	while (TRUE) {
-		if (nkey != nkeyp || mode != modep)
+		if (indi_to_keynum(indi) != nkeyp || mode != modep)
 			show_reset_scroll();
-		indi = keynum_to_indi(nkey);
-		if (mode == 'i')
-			c = indi_browse(indi);
-		else
-			c = ped_browse(indi);
-		/* pedigree display may have displaced indi from cache */
-		nkeyp = nkey;
+		c = display_indi(indi, mode);
+		/* last keynum & mode, so can tell if changed */
+		nkeyp = indi_to_keynum(indi);
 		modep = mode;
-		indi = keynum_to_indi(nkey);
 		if (c != 'a') save = NULL;
 		switch (c) {
 		case 'e':	/* Edit this person */
-			indi = edit_indi(indi);
-			nkey = indi_to_keynum(indi);
+			node = edit_indi(indi);
+			if (node)
+				indi = node;
 			break;
 		case 'g': 	/* Browse to person's family */
-			if ((*pfam1 = choose_family(indi, ntprnt,
+			if ((*pfam1 = choose_family(indi, ntprnt, 
 				idfbrs, TRUE)))
 				return BROWSE_FAM;
 			break;
@@ -195,7 +203,7 @@ browse_indi_modes (NODE *pindi1,
 		case 'f': 	/* Browse to person's father */
 			node = choose_father(indi, NULL, nofath,
 			    idhbrs, FALSE);
-			if (node) nkey = indi_to_keynum(node);
+			if (node) indi = node;
 			break;
 		case 'F':	/* Tandem Browse to person's fathers */
 			node = choose_father(indi, NULL, nofath,
@@ -213,7 +221,7 @@ browse_indi_modes (NODE *pindi1,
 		case 'm':	/* Browse to person's mother */
 			node = choose_mother(indi, NULL, nomoth,
 			    idwbrs, FALSE);
-			if (node) nkey = indi_to_keynum(node);
+			if (node) indi = node;
 			break;
 		case 'M':	/* Tandem Browse to person's mothers */
 			node = choose_mother(indi, NULL, nomoth,
@@ -230,11 +238,11 @@ browse_indi_modes (NODE *pindi1,
 			break;
 		case 'z':	/* Zip browse another person */
 			node = ask_for_indi(idpnxt, NOCONFIRM, FALSE);
-			if (node) nkey = indi_to_keynum(node);
+			if (node) indi = node;
 			break;
 		case 's':	/* Browse to person's spouse */
 			node = choose_spouse(indi, nospse, idsbrs);
-			if (node) nkey = indi_to_keynum(node);;
+			if (node) indi = node;
 			break;
 		case 'S':	/* browse to tandem spouses */
 			node = choose_spouse(indi, nospse, id1sbr);
@@ -250,7 +258,7 @@ browse_indi_modes (NODE *pindi1,
 		case 'c':	/* Browse to person's child */
 			node = choose_child(indi, NULL, nocofp,
 			    idcbrs, FALSE);
-			if (node) nkey = indi_to_keynum(node);
+			if (node) indi = node;
 			break;
 		case '(':       /* scroll details/pedigree up */
 			show_scroll(-1);
@@ -280,7 +288,7 @@ browse_indi_modes (NODE *pindi1,
 		case '8':
 		case '9':
 			node = goto_indi_child(indi, c-'0');
-			if (node) nkey = indi_to_keynum(node);
+			if (node) indi = node;
 			else message(nochil);
 			break;
 		case 'C':	/* browse to tandem children */
@@ -303,13 +311,13 @@ browse_indi_modes (NODE *pindi1,
 			if (!(node = indi_to_prev_sib(indi)))
 				message(noosib);
 			else
-				nkey = indi_to_keynum(node);
+				 indi = node;
 			break;
 		case 'y':	/* Browse to younger sib */
 			if (!(node = indi_to_next_sib(indi)))
 				message(noysib);
 			else 
-				nkey = indi_to_keynum(node);
+				 indi = node;
 			break;
 		case 'u':	/* Browse to parents' family */
 			if ((*pfam1 = choose_family(indi, noprnt,
@@ -329,7 +337,6 @@ browse_indi_modes (NODE *pindi1,
 			if (length_indiseq(seq) == 1) {
 				element_indiseq(seq, 0, &key, &name);
 				indi = key_to_indi(key);
-				nkey = indi_to_keynum(indi);
 				remove_indiseq(seq, FALSE);
 				break;
 			}
@@ -339,7 +346,7 @@ browse_indi_modes (NODE *pindi1,
 		case 'n':	/* Add new person */
 			if (!(node = add_indi_by_edit())) break;
 			save = indi;
-			nkey = indi_to_keynum(node);
+			indi = node;
 			break;
 		case 'a':	/* Add family for current person */
 			if (readonly) {
@@ -370,7 +377,7 @@ browse_indi_modes (NODE *pindi1,
 		case 't':	/* Switch to tandem browsing */
 			node = ask_for_indi(idp2br, NOCONFIRM, FALSE);
 			if (node) {
-				*pindi1 = keynum_to_indi(nkey);
+				*pindi1 = indi;
 				*pindi2 = node;
 				return BROWSE_TAND;
 			}
@@ -401,17 +408,17 @@ browse_indi_modes (NODE *pindi1,
 			break;
 		case '+':	/* Go to next indi in db */
 			{
-				i = xref_nexti(nkey);
+				i = xref_nexti(nkeyp);
 				if (i)
-					nkey = i;
+					indi = keynum_to_indi(i);
 				else message(nopers);
 				break;
 			}
 		case '-':	/* Go to prev indi in db */
 			{
-				i = xref_previ(nkey);
+				i = xref_previ(nkeyp);
 				if (i)
-					nkey = i;
+					indi = keynum_to_indi(i);
 				else message(nopers);
 				break;
 			}
@@ -438,6 +445,21 @@ browse_indi (NODE *pindi1,
 {
 	return browse_indi_modes(pindi1, pindi2, pfam1, pfam2, pseq, 'i');
 }
+/*===========================================
+ * display_fam -- Show family in current mode
+ *=========================================*/
+static INT
+display_fam(NODE fam, INT mode)
+{
+	CACHEEL icel;
+	INT c;
+	icel = fam_to_cacheel(fam);
+	lock_cache(icel);
+	if (mode == 0)
+		c = fam_browse(fam);
+	unlock_cache(icel);
+	return c;
+}
 /*===============================================
  * browse_fam -- Handle family browse selections.
  *=============================================*/
@@ -448,7 +470,9 @@ browse_fam (NODE *pindi,
             NODE *pfam2,
             INDISEQ *pseq)
 {
-	INT i, c, rc, nkey;
+	INT i, c, rc;
+	INT mode=0;
+	INT nkeyp, modep;
 	NODE save = NULL, fam = *pfam1, node, husb, wife, chil, rest;
 	NODE root, fref, spnodes[30];
 	INDISEQ seq;
@@ -458,16 +482,16 @@ browse_fam (NODE *pindi,
 
 	if (!fam) return BROWSE_QUIT;
 	show_reset_scroll();
-	nkey = fam_to_keynum(fam);
-/*
-	nkey is current family, fam is last family
-	we remember nkey across the switch, lest the cache overflow
-	& displace fam
-*/
+	nkeyp = 0;
+	modep = mode;
+
 	while (TRUE) {
-		fam = keynum_to_fam(nkey);
-		c = fam_browse(fam);
-		fam = keynum_to_fam(nkey);
+		if (fam_to_keynum(fam) != nkeyp || mode != modep)
+			show_reset_scroll();
+		c = display_fam(fam, mode);
+		/* last keynum & mode, so can tell if changed */
+		nkeyp = fam_to_keynum(fam);
+		modep = mode;
 		if (c != 'a' && c != 's') save = NULL;
 		switch (c) {
 		case 'A':	/* Advanced family edit */
@@ -478,13 +502,14 @@ browse_fam (NODE *pindi,
 			if(i > 0) {
 				sprintf(scratch, "F%d", i);
 				if((node = key_to_fam(scratch))) {
-					nkey = fam_to_keynum(node);
+					fam = node;
 				}
 			}
 			break;
 		case 'e':	/* Edit family's record */
-			fam = edit_family(fam);
-			nkey = fam_to_keynum(fam);
+			node = edit_family(fam);
+			if (node)
+				fam = node;
 			break;
 		case 'f':	/* Browse to family's father */
 			*pindi = choose_father(NULL, fam, nohusb,
@@ -510,25 +535,25 @@ browse_fam (NODE *pindi,
 			*pindi = choose_mother(NULL, fam, nowife,
 			    id1wbr, FALSE);
 			if (*pindi) {
-			  *pdum = choose_mother(NULL, fam, nowife,
-			    id2wbr, FALSE);
-			  if (*pdum) 
-				return BROWSE_TAND;
+				*pdum = choose_mother(NULL, fam, nowife, 
+					id2wbr, FALSE);
+				if (*pdum) 
+					return BROWSE_TAND;
 			}
 			break;
 		case 'c':	/* Browse to a child */
 			*pindi = choose_child(NULL, fam, nocinf,
-			    idcbrs, FALSE);
+				idcbrs, FALSE);
 			if (*pindi) return BROWSE_INDI;
 			break;
 		case 'C':	/* browse to tandem children */
 			*pindi = choose_child(NULL, fam, nocinf,
 			    id1cbr, FALSE);
 			if (*pindi) {
-			  *pdum = choose_child(NULL, fam, nocinf,
-			    id2cbr, FALSE);
-			  if (*pdum) 
-				return BROWSE_TAND;
+				*pdum = choose_child(NULL, fam, nocinf,
+					id2cbr, FALSE);
+				if (*pdum) 
+					return BROWSE_TAND;
 			}
 			break;
 		case 'd':	/* Remove a child */
@@ -643,7 +668,7 @@ browse_fam (NODE *pindi,
 		case 't':	/* Enter family tandem mode */
 			node = ask_for_fam(ids2fm, idc2fm);
 			if (node) {
-				*pfam1 = keynum_to_fam(nkey);
+				*pfam1 = fam;
 				*pfam2 = node;
 				return BROWSE_2FAM;
 			}
@@ -675,17 +700,17 @@ browse_fam (NODE *pindi,
 			break;
 		case '+':	/* Go to next fam in db */
 			{
-				i = xref_nextf(nkey);
+				i = xref_nextf(nkeyp);
 				if (i)
-					nkey = i;
+					fam = keynum_to_fam(i);
 				else message(nofam);
 				break;
 			}
 		case '-':	/* Go to prev indi in db */
 			{
-				i = xref_prevf(nkey);
+				i = xref_prevf(nkeyp);
 				if (i)
-					nkey = i;
+					fam = keynum_to_fam(i);
 				else message(nofam);
 				break;
 			}
