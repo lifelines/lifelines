@@ -537,13 +537,14 @@ ZST qSmn_tt_dir   = N_("export/import directory:");
 ZST qSmn_edttttl  = N_("Which character mapping do you want to edit?");
 ZST qSmn_svttttl  = N_("Which character mapping do you want to save?");
 /* strings for choosing translation table (these looks best if choices padded to same length)*/
-ZST qSmn_tt_edin  = N_("e  Editor to Internal mapping ");
-ZST qSmn_tt_ined  = N_("m  Internal to Editor mapping ");
-ZST qSmn_tt_gdin  = N_("i  GEDCOM to Internal mapping ");
-ZST qSmn_tt_ingd  = N_("x  Internal to GEDCOM mapping ");
-ZST qSmn_tt_dsin  = N_("g  Display to Internal mapping");
-ZST qSmn_tt_inds  = N_("d  Internal to Display mapping");
-ZST qSmn_tt_inrp  = N_("r  Internal to Report mapping ");
+/*ZST qSmn_tt_edin  = N_("e  Editor to Internal ");
+ZST qSmn_tt_ined  = N_("m  Internal to Editor ");
+ZST qSmn_tt_gdin  = N_("i  GEDCOM to Internal ");
+ZST qSmn_tt_ingd  = N_("x  Internal to GEDCOM ");
+ZST qSmn_tt_dsin  = N_("g  Display to Internal");
+ZST qSmn_tt_inds  = N_("d  Internal to Display");
+ZST qSmn_tt_inrp  = N_("r  Internal to Report ");
+*/
 /* not yet implemented choices */
 ZST qSmn_notimpl  = N_("Not implemented yet");
 

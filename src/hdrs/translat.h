@@ -51,12 +51,9 @@ typedef struct tag_xlat *XLAT;
 
 
 
-/* Variables */
-
-extern CNSTRING map_names[];
-
 /* Functions */
 
+CNSTRING transl_get_map_name(INT trnum);
 TRANTABLE create_trantable(STRING *lefts, STRING *rights, INT n, STRING name);
 BOOLEAN init_map_from_rec(CNSTRING key, INT trnum, TRANTABLE*);
 BOOLEAN custom_sort(char *str1, char *str2, INT * rtn);
@@ -79,6 +76,7 @@ translat is the frontend, which knows about the various codesets (internal, GUI,
 BOOLEAN transl_are_all_conversions_ok(void);
 void transl_free_predefined_xlats(void);
 XLAT transl_get_predefined_xlat(INT trnum);
+ZSTR transl_get_predefined_menukey(INT trnum);
 ZSTR transl_get_predefined_name(INT trnum);
 ZSTR transl_get_description(XLAT xlat);
 XLAT transl_get_xlat(CNSTRING src, CNSTRING dest);

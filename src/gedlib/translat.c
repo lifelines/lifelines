@@ -31,7 +31,7 @@
 STRING illegal_char = 0;
 
 /* TODO: need to delete map_names in favor of new system */
-CNSTRING map_names[] = {
+/*CNSTRING map_names[] = {
 	"Editor to Internal"
 	,"Internal to Editor"
 	,"GEDCOM to Internal"
@@ -46,6 +46,7 @@ CNSTRING map_names[] = {
 	,"Custom Uppercase"
 	,"Custom Prefix"
 };
+*/
 
 /*********************************************
  * external/imported variables
@@ -126,6 +127,16 @@ static struct conversion_s conversions[] = {
 	, { MLCAS, "MLCAS", "Custom Lowercase", ZON_X, ZON_X, 0, 0, 0 }
 	, { MUCAS, "MUCAS", "Custom Uppercase", ZON_X, ZON_X, 0, 0, 0 }
 	, { MPREF, "MPREF", "Custom Prefix", ZON_X, ZON_X, 0, 0, 0 }
+};
+static CNSTRING conversions_keys[] = {
+	N_("e")   /* key for "Editor to Internal" on translation table menu */
+	, N_("m") /* key for "Internal to Editor" on translation table menu */
+	, N_("i") /* key for "GEDCOM to Internal" on translation table menu */
+	, N_("x") /* key for "Internal to GEDCOM" on translation table menu */
+	, N_("g") /* key for "Display to Internal" on translation table menu */
+	, N_("d") /* key for "Internal to Display" on translation table menu */
+	, N_("p") /* key for "Report to Internal" on translation table menu */
+	, N_("r") /* key for "Internal to Report" on translation table menu */
 };
 /* currently loaded legacy (embedded) translation tables */
 static struct legacytt_s legacytts[NUM_TT_MAPS]; /* initialized once by transl_init() */
@@ -318,7 +329,6 @@ local_init (void)
 {
 	INT i;
 
-	ASSERT(NUM_TT_MAPS == ARRSIZE(map_names));
 	ASSERT(NUM_TT_MAPS == ARRSIZE(conversions));
 	ASSERT(NUM_ZONES == ARRSIZE(zones));
 
@@ -413,6 +423,16 @@ ZSTR
 transl_get_predefined_name (INT trnum)
 {
 	return zs_news(_(getconvert(trnum)->name));
+}
+/*==========================================================
+ * transl_get_predefined_menukey -- Menu key for predefined translation
+ * (localized)
+ *========================================================*/
+ZSTR
+transl_get_predefined_menukey (INT trnum)
+{
+	ASSERT(trnum>=0 && trnum<ARRSIZE(conversions_keys));
+	return zs_news(_(conversions_keys[trnum]));
 }
 /*==========================================================
  * transl_get_description -- Fetch description of a translation
@@ -521,6 +541,17 @@ BOOLEAN
 transl_is_xlat_valid (XLAT xlat)
 {
 	return xl_is_xlat_valid(xlat);
+}
+/*==========================================================
+ * transl_get_map_name -- get name of translation
+ * eg, "Editor to Internal"
+ * (localized)
+ *========================================================*/
+CNSTRING
+transl_get_map_name (INT trnum)
+{
+	ASSERT(trnum>=0 && trnum<NUM_TT_MAPS);
+	return _(getconvert(trnum)->name);
 }
 /*==========================================================
  * transl_release_xlat -- Client finished with this

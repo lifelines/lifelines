@@ -269,7 +269,6 @@ INT get_dblist(STRING path, LIST * dblist, LIST * dbdesclist);
 INT get_decimal(STRING);
 INT get_hexidecimal(STRING);
 STRING get_lifelines_version(INT maxlen);
-CNSTRING get_map_name(INT ttnum);
 STRING get_original_locale_collate(void);
 STRING get_original_locale_msgs(void);
 void get_names(STRING name, INT *pnum, STRING **pkeys, BOOLEAN exact);

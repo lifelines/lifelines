@@ -84,7 +84,7 @@ static BOOLEAN
 addfile_impl (BTREE btree, RKEY rkey, CNSTRING file, STRING mode, TRANSLFNC translfnc)
 {
 	FILE *fp = NULL;
-	STRING mem = 0;
+	STRING mem = 0, mem1 = 0;
 	INT siz;
 	struct stat buf;
 	BOOLEAN result=FALSE;
@@ -103,18 +103,23 @@ addfile_impl (BTREE btree, RKEY rkey, CNSTRING file, STRING mode, TRANSLFNC tran
 	 * \r\n to \n
 	 */
 	siz = fread(mem, 1, buf.st_size, fp);
+	mem1 = mem;
 	if (ferror(fp)) goto end;
 	mem[siz]=0;
+	/* skip BOM (byte order marker) at top of unicode text file */
+	if (eqstr(mode, LLREADTEXT))
+		skip_BOM(&mem);
 	if (translfnc) {
 		STRING mem2 = (*translfnc)(mem, siz);
-		stdfree(mem);
+		stdfree(mem1);
 		mem = mem2;
+		mem1 = mem2;
 		siz = strlen(mem);
 	}
 	addrecord(btree, rkey, mem, siz);
 	result = TRUE;
 end:
-	if (mem) stdfree(mem);
+	if (mem) stdfree(mem1);
 	if (fp) fclose(fp);
 	return result;
 }

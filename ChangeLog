@@ -1,3 +1,14 @@
+2003-09-10 Perry Rapp
+
+	* ChangeLog src/btree/file.c src/gedlib/charmaps.c
+	src/gedlib/editmap.c src/gedlib/messages.c
+	src/gedlib/translat.c src/hdrs/gedcom.h src/hdrs/translat.h
+	src/liflines/screen.c
+
+	Fix addtextfile to skip leading BOM.
+	Remove extra sets of map names.
+	Fix tt menu to show menu keys.
+
 2003-09-10 Jens Arvidsson
 
 	* ChangeLog po/sv.po

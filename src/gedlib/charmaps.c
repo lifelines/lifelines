@@ -257,11 +257,12 @@ init_map_from_rec (CNSTRING key, INT trnum, TRANTABLE * ptt)
 	INT len;
 	BOOLEAN ok;
 	ZSTR zerr=zs_new();
+	CNSTRING mapname = transl_get_map_name(trnum);
 
 	*ptt = 0;
 	if (!(rawrec = retrieve_raw_record(key, &len)))
 		return TRUE;
-	ok = init_map_from_str(rawrec, map_names[trnum], ptt, zerr);
+	ok = init_map_from_str(rawrec, mapname, ptt, zerr);
 	stdfree(rawrec);
 	if (!ok)
 		maperror(zs_str(zerr));
@@ -568,12 +569,6 @@ static void
 maperror (CNSTRING errmsg)
 {
 	llwprintf((STRING)errmsg);
-}
-CNSTRING
-get_map_name (INT ttnum)
-{
-	ASSERT(ttnum>=0 && ttnum<NUM_TT_MAPS);
-	return map_names[ttnum];
 }
 #ifdef DEBUG
 /*=======================================================

@@ -98,7 +98,7 @@ load_new_tt (CNSTRING filepath, INT trnum)
 {
 	TRANSLFNC transfnc = NULL; /* don't translate translation tables ! */
 	TRANTABLE tt=0;
-	CNSTRING mapname = get_map_name(trnum);
+	CNSTRING mapname = transl_get_map_name(trnum);
 	ZSTR zerr=zs_new();
 	if (!init_map_from_file(filepath, mapname, &tt, zerr)) {
 		llwprintf(zs_str(zerr));

@@ -187,7 +187,7 @@ static void deactivate_uiwin(void);
 static void deactivate_uiwin_and_touch_all(void);
 static void delete_uiwindow(UIWINDOW * uiw);
 static void destroy_windows(void);
-static void disp_trans_table_choice(UIWINDOW uiwin, INT row, INT col, STRING menuit, INT indx);
+static void disp_trans_table_choice(UIWINDOW uiwin, INT row, INT col, INT indx);
 static void display_status(STRING text);
 static void display_string(UIWINDOW uiwin, LLRECT rect, STRING text);
 static void edit_tt_menu(void);
@@ -538,7 +538,7 @@ create_windows (void)
 	MAINWIN_WIDTH = ll_cols;
 	LISTWIN_WIDTH = ll_cols-7;
  	main_win = create_newwin2("main", ll_lines, MAINWIN_WIDTH);
-	tt_menu_win = create_newwin2("tt_menu", 12,66);
+	tt_menu_win = create_newwin2("tt_menu", 12,73);
 	ask_win = create_newwin2("ask", 4, 73);
 	ask_msg_win = create_newwin2("ask_msg", 5, 73);
 	choose_from_list_win = create_newwin2("choose_from_list", 15, 73);
@@ -1585,14 +1585,14 @@ draw_tt_win (STRING prompt)
 	draw_win_box(win);
 	row = 1;
 	mvccwaddstr(win, row++, 2, prompt);
-	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_tt_edin), MEDIN);
-	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_tt_ined), MINED);
-	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_tt_gdin), MGDIN);
-	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_tt_ingd), MINGD);
-	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_tt_dsin), MDSIN);
-	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_tt_inds), MINDS);
-	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_tt_inrp), MINRP);
-	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_tt_inrp), MRPIN);
+	disp_trans_table_choice(uiwin, row++, 4, MEDIN);
+	disp_trans_table_choice(uiwin, row++, 4, MINED);
+	disp_trans_table_choice(uiwin, row++, 4, MGDIN);
+	disp_trans_table_choice(uiwin, row++, 4, MINGD);
+	disp_trans_table_choice(uiwin, row++, 4, MDSIN);
+	disp_trans_table_choice(uiwin, row++, 4, MINDS);
+	disp_trans_table_choice(uiwin, row++, 4, MRPIN);
+	disp_trans_table_choice(uiwin, row++, 4, MINRP);
 	mvccwaddstr(win, row++, 4, _(qSmn_ret));
 }
 /*==============================
@@ -1601,14 +1601,16 @@ draw_tt_win (STRING prompt)
  * Created: 2001/07/20
  *============================*/
 static void
-disp_trans_table_choice (UIWINDOW uiwin, INT row, INT col, STRING menuit, INT trnum)
+disp_trans_table_choice (UIWINDOW uiwin, INT row, INT col, INT trnum)
 {
 	XLAT xlat;
-	ZSTR zstr;
+	ZSTR zstr, z1;
 
-	menuit=menuit; /* unused */
 	xlat = transl_get_predefined_xlat(trnum);
-	zstr = transl_get_predefined_name(trnum);
+	zstr = transl_get_predefined_menukey(trnum);
+	z1 = transl_get_predefined_name(trnum);
+	zs_apps(zstr, " ");
+	zs_appz(zstr, z1);
 	zs_apps(zstr, " : ");
 	if (xlat) {
 		zs_appz(zstr, transl_get_description(xlat));
