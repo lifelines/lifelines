@@ -43,6 +43,7 @@
 #include "gedcom.h"
 #include "liflines.h"
 #include "arch.h"
+#include "lloptions.h"
 
 #include "llinesi.h"
 
@@ -113,7 +114,6 @@ BOOLEAN selftest = FALSE; /* selftest rules (ignore paths) */
 BOOLEAN showusage = FALSE;	/* show usage */
 STRING btreepath;		/* database path given by user */
 STRING readpath;		/* database path used to open */
-STRING lldatabases;
 
 /*********************************************
  * local function prototypes
@@ -227,6 +227,7 @@ main (INT argc,
 	set_displaykeys(keyflag);
 	if (!init_screen())
 		goto finish;
+	init_lifelines_global();
 
 	/* Validate Command-Line Arguments */
 	if (readonly && writeable) {
@@ -239,13 +240,9 @@ main (INT argc,
 		goto usage;
 	}
 
-	if (selftest == FALSE) {
-		lldatabases = environ_determine_database();
-		lldatabases = strsave(lldatabases);
-	}
 	/* Get Database Name (Prompt or Command-Line) */
 	if (c <= 0) {
-		btreepath = ask_for_lldb(idldir, "enter path: ", lldatabases);
+		btreepath = ask_for_lldb(idldir, "enter path: ", lloptions.lldatabases);
 		if (ISNULL(btreepath)) {
 			llwprintf(iddbse);
 			goto finish;
@@ -260,12 +257,12 @@ main (INT argc,
 	}
 
 	/* Open Database */
-	readpath = filepath(btreepath, "r", lldatabases, NULL);
+	readpath = filepath(btreepath, "r", lloptions.lldatabases, NULL);
 	if (!readpath) readpath = btreepath;
 	if (!open_database()) goto finish;
 
 	/* Start Program */
-	init_lifelines();
+	init_lifelines_db();
 	init_show_module();
 	while (!alldone)
 		main_menu();
@@ -430,8 +427,7 @@ open_database (void)
 		case BTERRNOBTRE:
 		case BTERRKFILE:	{/*NEW*/
 				if (!selftest && is_unadorned_directory(btreepath)) {
-					STRING llnewdbdir = environ_determine_newdbdir();
-					readpath = strsave(concat_path(llnewdbdir, btreepath));
+					readpath = strsave(concat_path(lloptions.llnewdbdir, btreepath));
 				}
 				if(!trytocreate(readpath)) {
 					show_open_error();

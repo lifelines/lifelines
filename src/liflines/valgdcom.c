@@ -140,7 +140,6 @@ validate_gedcom (FILE *fp)
 {
 	INT lev, rc, curlev = 0;
 	INT nindi, nfam, nsour, neven, nothr;
-	extern INT lineno;
 	ELMNT el;
 	TRANTABLE tt = tran_tables[MGDIN];
 	STRING xref, tag, val, msg;
@@ -148,7 +147,7 @@ validate_gedcom (FILE *fp)
 	nindi = nfam = nsour = neven = nothr = 0;
 	num_errors = num_warns = 0;
 	logopen = FALSE;
-	lineno = 0;
+	flineno = 0;
 	defline = 0;
 	curlev = 0;
 	clear_structures();
@@ -170,8 +169,8 @@ validate_gedcom (FILE *fp)
 			if (rc == ERROR)
 				handle_err(msg);
 			else
-				handle_err(badlev, lineno);
-			handle_value(val, lineno);
+				handle_err(badlev, flineno);
+			handle_value(val, flineno);
 			curlev = lev;
 			rc = file_to_line(fp, tt, &lev, &xref, &tag, &val,
 			    &msg);
@@ -179,7 +178,7 @@ validate_gedcom (FILE *fp)
 			continue;
 		}
 		if (lev > 1) {
-			handle_value(val, lineno);
+			handle_value(val, flineno);
 			curlev = lev;
 			rc = file_to_line(fp, tt, &lev, &xref, &tag, &val,
 			    &msg);
@@ -190,7 +189,7 @@ validate_gedcom (FILE *fp)
 			char str[10];
 			if (rec_type == INDI_REC && !named)
 				handle_err(noname, defline);
-			defline = lineno;
+			defline = flineno;
 			if (eqstr("HEAD", tag) || eqstr("TRLR", tag))
 				rec_type = IGNR_REC;
 			else if (eqstr("INDI", tag)) {
@@ -198,37 +197,37 @@ validate_gedcom (FILE *fp)
 				wfield(1, 1, str);
 				rec_type = INDI_REC;
 				named = FALSE;
-				person = add_indi_defn(xref, lineno, &el);
+				person = add_indi_defn(xref, flineno, &el);
 				/* pretend a NAME if the record is skipped */
 				if (person == -2) named = TRUE;
 			} else if (eqstr("FAM", tag)) {
 				sprintf(str, "%6d", ++nfam);
 				wfield(2, 1, str);
 				rec_type = FAM_REC;
-				family = add_fam_defn(xref, lineno);
+				family = add_fam_defn(xref, flineno);
 			} else if (eqstr("EVEN", tag)) {
 				sprintf(str, "%6d", ++neven);
 				wfield(3, 1, str);
 				rec_type = EVEN_REC;
-				event = add_even_defn(xref, lineno);
+				event = add_even_defn(xref, flineno);
 			} else if (eqstr("SOUR", tag)) {
 				sprintf(str, "%6d", ++nsour);
 				wfield(4, 1, str);
 				rec_type = SOUR_REC;
-				source = add_sour_defn(xref, lineno);
+				source = add_sour_defn(xref, flineno);
 			} else {
 				sprintf(str, "%6d", ++nothr);
 				wfield(5, 1, str);
 				rec_type = OTHR_REC;
-				other = add_othr_defn(xref, lineno);
+				other = add_othr_defn(xref, flineno);
 			}
 		} else {
 			if (rec_type == INDI_REC)
-				handle_indi_lev1(tag, val, lineno);
+				handle_indi_lev1(tag, val, flineno);
 			else if (rec_type == FAM_REC)
-				handle_fam_lev1(tag, val, lineno);
+				handle_fam_lev1(tag, val, flineno);
 			else
-				handle_value(val, lineno);
+				handle_value(val, flineno);
 		}
 		curlev = lev;
 		rc = file_to_line(fp, tt, &lev, &xref, &tag, &val, &msg);

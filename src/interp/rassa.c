@@ -40,6 +40,8 @@
 #include "indiseq.h"
 #include "liflines.h"
 #include "screen.h"
+#include "lloptions.h"
+
 #include "interpi.h"
 
 #define MAXPAGESIZE 65536
@@ -174,7 +176,7 @@ __newfile (PNODE node,
 		Poutfp = NULL;
 	}
 	if (!(Poutfp = fopenpath(outfilename,
-			 aflag?LLAPPENDTEXT:LLWRITETEXT, llreports, NULL, (STRING *)NULL))) {
+			 aflag?LLAPPENDTEXT:LLWRITETEXT, lloptions.llreports, NULL, (STRING *)NULL))) {
 		mprintf_error("Could not open file %s", outfilename);
 		return NULL;
 	}
@@ -190,7 +192,8 @@ __outfile (PNODE node,
            BOOLEAN *eflg)
 {
 	if (!Poutfp) {
-		Poutfp = ask_for_output_file(LLWRITETEXT, whtout, &outfilename, llreports, NULL);
+		Poutfp = ask_for_output_file(LLWRITETEXT, whtout, &outfilename,
+			lloptions.llreports, NULL);
 		if (!Poutfp)  {
 			*eflg = TRUE;
 			message(norpt);
@@ -313,7 +316,8 @@ __pageout (PNODE node,
 	*eflg = TRUE;
 	if (outputmode != PAGEMODE) return NULL;
 	if (!Poutfp) {
-		Poutfp = ask_for_output_file(LLWRITETEXT, whtout, &outfilename, llreports, NULL);
+		Poutfp = ask_for_output_file(LLWRITETEXT, whtout, &outfilename,
+			lloptions.llreports, NULL);
 		if (!Poutfp)  {
 			message(norpt);
 			return NULL;
@@ -346,7 +350,8 @@ poutput (STRING str)
 	INT c, len;
 	if (!str || *str == 0 || (len = strlen(str)) <= 0) return;
 	if (!Poutfp) {
-		Poutfp = ask_for_output_file(LLWRITETEXT, whtout, &name, llreports, NULL);
+		Poutfp = ask_for_output_file(LLWRITETEXT, whtout, &name,
+			lloptions.llreports, NULL);
 		if (!Poutfp)  {
 			message(norpt);
 			return;

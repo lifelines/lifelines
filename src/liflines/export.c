@@ -37,9 +37,11 @@
 #include "gedcom.h"
 #include "liflines.h"
 #include "screen.h"
+#include "lloptions.h"
+
 #include "llinesi.h"
 
-extern STRING btreepath, llarchives;
+extern STRING btreepath;
 extern BTREE BTR;
 extern TRANTABLE tran_tables[];
 
@@ -68,7 +70,7 @@ archive_in_file (void)
 
 	/* WARNING: use of llarchives seems questionable */
 	fn = ask_for_output_file(LLWRITETEXT, "Enter name of output archive file.",
-	    &fname, llarchives, ".ged");
+	    &fname, lloptions.llarchives, ".ged");
 	if (!fn) {
 		mprintf_error("The database was not saved.");
 		return FALSE; 

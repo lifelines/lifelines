@@ -82,31 +82,17 @@ environ_determine_editor (INT program)
 #endif
 	return e;
 }
-/*==========================================================
- * environ_determine_database -- determine database location
- * Created: 2000/12/24, Perry Rapp
- *========================================================*/
+/*============================================================
+ * environ_determine_config_file -- return name of config file
+ * Created: 2001/02/04, Perry Rapp
+ *==========================================================*/
 STRING
-environ_determine_database (void)
+environ_determine_config_file (void)
 {
-	STRING e;
-
-	e = (STRING) getenv("LLDATABASES");
-	if (ISNULL(e)) e = (STRING) ".";
-
-	return e;
+#ifdef WIN32
+	return "lines.cfg";
+#else
+	return ".linesrc";
+#endif
 }
-/*=================================================================
- * environ_determine_newdbs -- determine location for new databases
- * Created: 2001/01/05, Perry Rapp
- *===============================================================*/
-STRING
-environ_determine_newdbdir (void)
-{
-	STRING e;
 
-	e = (STRING) getenv("LLNEWDBDIR");
-	if (ISNULL(e)) e = (STRING) ".";
-
-	return e;
-}

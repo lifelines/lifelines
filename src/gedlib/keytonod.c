@@ -57,6 +57,7 @@ static NOD0 qkey_to_nod0(CACHE cache, STRING key, STRING tag);
 static CACHEEL key_to_cacheel(CACHE, STRING, STRING, INT);
 static void dereference(CACHEEL);
 static void add_node_to_direct(CACHE cache, NODE node, STRING key);
+static void add_nod0_to_direct(CACHE cache, NOD0 nod0, STRING key);
 static CACHEEL key_to_even_cacheel (STRING key);
 static CACHEEL key_to_sour_cacheel (STRING key);
 static CACHEEL key_to_othr_cacheel (STRING key);
@@ -713,6 +714,14 @@ get_cache_stats (void)
 	return buffer;
 }
 /*============================================
+ * indi0_to_cache -- Add person to person cache
+ *==========================================*/
+void
+indi0_to_cache (NOD0 nod0)
+{
+	nod0_to_cache(indicache, nod0);
+}
+/*============================================
  * indi_to_cache -- Add person to person cache
  *==========================================*/
 void
@@ -759,20 +768,31 @@ void
 node_to_cache (CACHE cache,
                NODE node)
 {
-	STRING key = node_to_key(node);
-	ASSERT(cache && node);
+	NOD0 nod0 = create_nod0(node);
+	nod0_to_cache(cache, nod0);
+}
+/*========================================
+ * nod0_to_cache -- Add node tree to cache
+ *======================================*/
+void
+nod0_to_cache (CACHE cache,
+               NOD0 nod0)
+{
+	STRING key;
+	ASSERT(cache && nod0 && nztop(nod0));
+	key = node_to_key(nztop(nod0));
 	ASSERT(!valueof(cdata(cache), key));
 	if (csizedir(cache) >= cmaxdir(cache)) {
 		if (csizeind(cache) >= cmaxind(cache)) {
 			remove_last(cache);
 			direct_to_indirect(cache);
-			add_node_to_direct(cache, node, key);
+			add_nod0_to_direct(cache, nod0, key);
 		} else {
 			direct_to_indirect(cache);
-			add_node_to_direct(cache, node, key);
+			add_nod0_to_direct(cache, nod0, key);
 		}
 	} else {
-		add_node_to_direct(cache, node, key);
+		add_nod0_to_direct(cache, nod0, key);
 	}
 }
 /*=======================================================
@@ -781,17 +801,22 @@ node_to_cache (CACHE cache,
 static void
 add_node_to_direct (CACHE cache, NODE node, STRING key)
 {
+	NOD0 nod0 = create_nod0(node);
+	add_nod0_to_direct(cache, nod0, key);
+}
+/*=======================================================
+ * add_nod0_to_direct -- Add node to direct part of cache
+ *=====================================================*/
+static void
+add_nod0_to_direct (CACHE cache, NOD0 nod0, STRING key)
+{
 	CACHEEL cel;
 	STRING keynew;
-	NOD0 nod0;
+	NODE node = nztop(nod0);
 	ASSERT(cache && node);
 	ASSERT(csizedir(cache) < cmaxdir(cache));
 	cel = (CACHEEL) stdalloc(sizeof(*cel));
 	insert_table(cdata(cache), keynew=strsave(key), cel);
-	nod0 = (NOD0)stdalloc(sizeof(*nod0));
-	nod0->nkey.keynum = atoi(key+1);
-	nod0->nkey.ntype = key[0];
-	nod0->top = node;
 	cnod0(cel) = nod0;
 	cnode(cel) = node;
 	ckey(cel) = keynew;

@@ -93,6 +93,7 @@ CACHEEL qkey_to_sour_cacheel(STRING);
 CACHEEL qkey_to_othr_cacheel(STRING);
 
 void lock_cache(CACHEEL);
+void nod0_to_cache(CACHE cache, NOD0 nod0);
 void node_to_cache(CACHE, NODE);
 void remove_from_cache(CACHE, STRING);
 void unlock_cache(CACHEEL);

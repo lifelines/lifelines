@@ -137,7 +137,24 @@ closexref (void)
 	}
 }
 /*=========================================
- * getxref -- Return new keynum for type
+ * getxrefnum -- Return new keynum for type
+ *  from deleted list if available, or else
+ *  a new highnumber
+ *  generic for all 5 types
+ * Created: 2001/02/04, Perry Rapp
+ *=======================================*/
+static INT
+getxrefnum (DELETESET set)
+{
+	INT keynum;
+	static unsigned char scratch[12];
+	ASSERT(xreffp && set->n >= 1);
+	keynum = (set->n == 1) ? set->recs[0]++ : set->recs[--(set->n)];
+	ASSERT(writexrefs());
+	return keynum;
+}
+/*=========================================
+ * getxref -- Return new key pointer for type
  *  from deleted list if available, or else
  *  a new highnumber
  *  generic for all 5 types
@@ -145,23 +162,24 @@ closexref (void)
 static STRING
 getxref (DELETESET set)
 {
-	INT keynum;
+	INT keynum = getxrefnum(set);
 	static unsigned char scratch[12];
-	ASSERT(xreffp && set->n >= 1);
-	keynum = (set->n == 1) ? set->recs[0]++ : set->recs[--(set->n)];
-	ASSERT(writexrefs());
 	sprintf(scratch, "@%c%d@", set->ctype, keynum);
 	return scratch;
 }
 /*===================================================
  * get?xref -- Wrappers for each type to getxref (qv)
- *  5 symmetric versions
+ *  symmetric versions
  *=================================================*/
-STRING getixref (void) { return getxref(&irecs); }
 STRING getfxref (void) { return getxref(&frecs); }
 STRING getsxref (void) { return getxref(&srecs); }
 STRING getexref (void) { return getxref(&erecs); }
 STRING getxxref (void) { return getxref(&xrecs); }
+/*===================================================
+ * get?xrefnum -- Wrappers for each type to getxrefnum (qv)
+ * Created: 2001/02/04, Perry Rapp
+ *=================================================*/
+INT getixrefnum (void) { return getxrefnum(&irecs); }
 /*======================================
  * sortxref -- Sort xrefs after reading
  *====================================*/

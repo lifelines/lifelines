@@ -64,6 +64,7 @@ struct WAREHOUSE_S
 
 void wh_verify(WAREHOUSE wh);
 void wh_allocate(WAREHOUSE wh);
+void wh_free(WAREHOUSE wh);
 void * wh_find_block_var(WAREHOUSE wh, INT blockid, INT * len);
 BOOLEAN wh_find_block_int(WAREHOUSE wh, INT blockid, INT * val);
 void wh_replace_block_var(WAREHOUSE wh, INT blockid, void * data, INT len);

@@ -10,7 +10,7 @@
 void add_child_to_fam(NODE child, NODE fam, INT i);
 NODE add_family_to_db(NODE spouse1, NODE spouse2, NODE child);
 void add_spouse_to_fam(NODE spouse, NODE fam, INT sex);
-NODE add_unlinked_indi(NODE indi);
+NOD0 add_unlinked_indi(NOD0 indi0);
 INT ask_child_order(NODE fam, PROMPTQ promptq);
 
 /* from ask.c */

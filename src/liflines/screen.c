@@ -938,7 +938,7 @@ add_menu (void)
 	wrefresh(main_win);
 	switch (code) {
 	case 'p':
-		node = add_indi_by_edit();
+		node = nztop(add_indi_by_edit());
 		if (node) browse(node);
 		break;
 	case 'f': add_family(NULL, NULL, NULL); break;

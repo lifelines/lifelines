@@ -6,7 +6,7 @@ NODE add_child(NODE, NODE);
 NODE add_family(NODE, NODE, NODE);
 BOOLEAN add_linked_indi(NODE);
 BOOLEAN add_spouse(NODE, NODE, BOOLEAN);
-NODE add_indi_by_edit(void);
+NOD0 add_indi_by_edit(void);
 
 /* advedit.c */
 void advanced_person_edit(NODE);

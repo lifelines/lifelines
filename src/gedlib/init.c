@@ -38,23 +38,88 @@
 #include "translat.h"
 #include "gedcom.h"
 #include "version.h"
+#include "lloptions.h"
 
-extern BOOLEAN selftest;
+/*********************************************
+ * global/exported variables
+ *********************************************/
 
 TABLE tagtable;		/* table for tag strings */
 TABLE placabbvs;	/* table for place abbrevs */
 TABLE useropts;		/* table for user options */
 BTREE BTR = NULL;	/* database */
 STRING editstr, editfile;
-STRING llarchives, llreports, llprograms;
+
+/*********************************************
+ * external/imported variables
+ *********************************************/
+
+extern BOOLEAN selftest;
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+static STRING getsaveenv(STRING key);
+
+/*********************************************
+ * local function definitions
+ * body of module
+ *********************************************/
 
 /*=================================
- * init_lifelines -- Open LifeLines
+ * init_lifelines_global -- Initialize LifeLines
+ *  before db opened
  *===============================*/
 void
-init_lifelines (void)
+init_lifelines_global (void)
 {
-	STRING e, emsg;
+	STRING e;
+	read_lloptions_from_config();
+	if (lloptions.lleditor[0])
+		e = lloptions.lleditor;
+	else
+		e = environ_determine_editor(PROGRAM_LIFELINES);
+	editfile = strsave(environ_determine_tempfile());
+	editstr = (STRING) stdalloc(strlen(e) + strlen(editfile) + 2);
+	sprintf(editstr, "%s %s", e, editfile);
+	/* read dirs from env if lacking */
+	if (!lloptions.llprograms[0])
+		changeoptstr(&lloptions.llprograms, getsaveenv("LLPROGRAMS"));
+	if (!lloptions.llreports[0])
+		changeoptstr(&lloptions.llreports, getsaveenv("LLREPORTS"));
+	if (!lloptions.llarchives[0])
+		changeoptstr(&lloptions.llarchives, getsaveenv("LLARCHIVES"));
+	if (!lloptions.lldatabases[0])
+		changeoptstr(&lloptions.lldatabases, getsaveenv("LLDATABASES"));
+	if (!lloptions.llnewdbdir[0])
+		changeoptstr(&lloptions.llnewdbdir, getsaveenv("LLNEWDBDIR"));
+	if (selftest) {
+		/* need to always find test stuff locally */
+		changeoptstr(&lloptions.llprograms, NULL);
+		changeoptstr(&lloptions.llreports, NULL);
+		changeoptstr(&lloptions.lldatabases, NULL);
+		changeoptstr(&lloptions.llnewdbdir, NULL);
+	}
+	/* fallback for dirs is . */
+	if (!lloptions.llprograms[0])
+		changeoptstr(&lloptions.llprograms, strsave("."));
+	if (!lloptions.llreports[0])
+		changeoptstr(&lloptions.llreports, strsave("."));
+	if (!lloptions.llarchives[0])
+		changeoptstr(&lloptions.llarchives, strsave("."));
+	if (!lloptions.lldatabases[0])
+		changeoptstr(&lloptions.lldatabases, strsave("."));
+	if (!lloptions.llnewdbdir[0])
+		changeoptstr(&lloptions.llnewdbdir, strsave("."));
+}
+/*=================================
+ * init_lifelines_db -- Initialization after db opened
+ *===============================*/
+void
+init_lifelines_db (void)
+{
+	STRING emsg;
 
 	tagtable = create_table();
 	placabbvs = create_table();
@@ -64,22 +129,21 @@ init_lifelines (void)
 	init_caches();
 	init_browse_lists();
 	init_mapping();
-	e = environ_determine_editor(PROGRAM_LIFELINES);
-	editfile = strsave(environ_determine_tempfile());
-	editstr = (STRING) stdalloc(strlen(e) + strlen(editfile) + 2);
-	sprintf(editstr, "%s %s", e, editfile);
-	if (!selftest) {
-		llprograms = (STRING) getenv("LLPROGRAMS");
-		llreports = (STRING) getenv("LLREPORTS");
-	} else {
-		llprograms = NULL;
-		llreports = NULL;
-	}
-	if (!llprograms || *llprograms == 0) llprograms = (STRING) ".";
-	if (!llreports || *llreports == 0) llreports = (STRING) ".";
-	llarchives = (STRING) getenv("LLARCHIVES");
-	if (!llarchives || *llarchives == 0) llarchives = (STRING) ".";
+	read_lloptions_from_db();
 	openxref();
+}
+/*===============================================
+ * getsaveenv -- Return strsave'd env value
+ *  returns saved("") if getenv was NULL
+ * Created: 2001/02/04, Perry Rapp
+ *=============================================*/
+static STRING
+getsaveenv (STRING key)
+{
+	STRING val = getenv(key);
+	if (!val)
+		val = "";
+	return strsave(val);
 }
 /*===============================================
  * get_lifelines_version -- Return version string

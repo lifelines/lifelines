@@ -41,11 +41,20 @@
 #include "indiseq.h"
 #include "liflines.h"
 #include "screen.h"
+#include "lloptions.h"
+
 #include "interpi.h"
 
-STRING nonnum = (STRING) "At least one argument to %s is not numeric";
+/*********************************************
+ * external/imported variables
+ *********************************************/
 
-extern STRING llprograms;
+extern STRING nonnum;
+
+/*********************************************
+ * local function definitions
+ * body of module
+ *********************************************/
 
 /*========================================+
  * __getint -- Have user provide integer
@@ -2799,7 +2808,7 @@ __copyfile (PNODE node,
 		return NULL;
 	}
 	fname = (STRING) pvalue(val);
-	if (!(cfp = fopenpath(fname, LLREADTEXT, llprograms, (STRING)NULL, (STRING *)NULL))) {
+	if (!(cfp = fopenpath(fname, LLREADTEXT, lloptions.llprograms, (STRING)NULL, (STRING *)NULL))) {
 		*eflg = TRUE;
 		prog_error(node, "the arg to copyfile is not a file name");
 		return NULL;

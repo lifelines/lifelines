@@ -383,7 +383,6 @@ add_block_int (WAREHOUSE wh, INT blockid, int position, INT val)
 }
 /*============================================
  * wh_allocate - Create a new warehouse
- *  The data allocated is owned by client
  * Created: 2000/12, Perry Rapp
  *==========================================*/
 void
@@ -400,6 +399,35 @@ wh_allocate (WAREHOUSE wh)
 	hdr->version = WH_VERSION;
 	hdr->count = 0;
 	hdr->list = len;
+}
+/*===============================================
+ * wh_assign_from_blob - Load warehouse from blob
+ *  of data (eg, read from a file)
+ * Created: 2000/12, Perry Rapp
+ *=============================================*/
+void
+wh_assign_from_blob (WAREHOUSE wh, void * data, INT len)
+{
+	ASSERT(!wh->data);
+	wh->data = data;
+	wh->len = len;
+	wh->alloc = len;
+	wh->last = -1;
+	wh->lastid = -1;
+	wh_verify(wh);
+}
+/*============================================
+ * wh_free - Free data inside warehouse
+ * Created: 2001/02/04, Perry Rapp
+ *==========================================*/
+void
+wh_free (WAREHOUSE wh)
+{
+	ASSERT(wh);
+	if (wh->data) {
+		stdfree(wh->data);
+		wh->data = 0;
+	}
 }
 /*====================================================
  * wh_replace_block_var - Replace variable-sized block
@@ -535,19 +563,4 @@ wh_get_blocktype (WAREHOUSE wh, INT blockid)
 		return wbent[i].blocktype;
 	else
 		return BT_MISSING;
-}
-/*===============================================
- * wh_assign_from_blob - Load warehouse from blob
- *  of data (eg, read from a file)
- * Created: 2000/12, Perry Rapp
- *=============================================*/
-void
-wh_assign_from_blob (WAREHOUSE wh, void * data, INT len)
-{
-	wh->data = data;
-	wh->len = len;
-	wh->alloc = len;
-	wh->last = -1;
-	wh->lastid = -1;
-	wh_verify(wh);
 }

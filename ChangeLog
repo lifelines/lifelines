@@ -11,6 +11,23 @@
         Moved prototypes of extern miscutls.c functions into llinesi.h.
         Fix some mistranslated tandem commands.
 
+	* gedlib/gengedc.c gedlib/init.c gedlib/keytonod.c
+	gedlib/messages.c gedlib/node.c gedlib/refns.c
+	gedlib/xreffile.c hdrs/cache.h hdrs/gedcom.h hdrs/liflines.h
+	hdrs/llstdlib.h hdrs/standard.h hdrs/warehouse.h
+	interp/builtin.c interp/interp.c interp/rassa.c liflines/add.c
+	liflines/askprogram.c liflines/browse.c liflines/export.c
+	liflines/import.c liflines/llinesi.h liflines/main.c
+	liflines/screen.c liflines/valgdcom.c stdlib/environ.c
+	stdlib/warehouse.c tools/dbverify.c
+	NEW gedlib/lloptions.c hdrs/lloptions.h hdrs/metadata.h
+	stdlib/lldate.c:
+	Clarified lineno global names (lineno->flineno,tlineno->travlineno).
+	Changed add_indi_by_edit, add_unlinked_indi to get nod0.
+	Added options (lloptions.*).
+	Revised llprograms, etc to be in options.
+	Split init_lifelines into before & after opendb halves.
+
 2001-02-03 Perry Rapp <puddle@users.sourceforge.net>
 
 	* hdrs/screen.h liflines/browse.c liflines/menuitem.c

@@ -41,12 +41,12 @@
 #include "liflines.h"
 #include "screen.h"
 #include "arch.h"
+#include "lloptions.h"
 
 /*********************************************
  * external/imported variables
  *********************************************/
 
-extern STRING llprograms;
 extern BOOLEAN progrunning, progparsing;
 
 /*********************************************
@@ -155,7 +155,7 @@ interp_program (STRING proc,    /* proc to call */
 	} else {
 		ifile = NULL;
 		fp = ask_for_program(LLREADTEXT, qrptname, &ifile,
-			llprograms, ".ll", picklist);
+			lloptions.llprograms, ".ll", picklist);
 		if (fp == NULL) {
 			if (ifile != NULL)  {
 				/* tried & failed to open file */
@@ -287,7 +287,7 @@ parse_file (STRING ifile,
 	Pfname = ifile;
 	if (!ifile || *ifile == 0) return;
 	Plist = plist;
-	Pinfp = fopenpath(ifile, LLREADTEXT, llprograms, ".ll", (STRING *)NULL);
+	Pinfp = fopenpath(ifile, LLREADTEXT, lloptions.llprograms, ".ll", (STRING *)NULL);
 	if (!Pinfp) {
 		llwprintf("Error: file \"%s\" not found.\n", ifile);
 		Perrors++;

@@ -55,10 +55,12 @@ void set_list_type(LIST, INT);
 /* environ.c */
 #define PROGRAM_LIFELINES 1
 #define PROGRAM_BTEDIT 2
-STRING environ_determine_database(void);
+STRING environ_determine_config_file(void);
 STRING environ_determine_editor(INT program);
-STRING environ_determine_newdbdir(void);
 STRING environ_determine_tempfile(void);
+
+/* lldate.c */
+void get_current_lldate(LLDATE * creation);
 
 /* llstrcmp.c */
 int ll_strcmp(char*, char*);
@@ -74,6 +76,7 @@ void report_alloc_live_count(STRING str);
 STRING concat_path(STRING dir, STRING file);
 STRING filepath(STRING name, STRING mode, STRING path, STRING ext);
 FILE* fopenpath(STRING, STRING, STRING, STRING, STRING*);
+BOOLEAN is_dir_sep(char c);
 STRING lastpathname(STRING);
 
 /* signals.c */

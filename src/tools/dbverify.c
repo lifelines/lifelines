@@ -752,11 +752,12 @@ main (int argc,
 		default: print_usage(); return (1); 
 		}
 	}
+	init_lifelines_global();
 	if (!(BTR = openbtree(dbname, FALSE, TRUE))) {
 		printf("could not open database: %s\n", dbname);
 		return (1);
 	}
-	init_lifelines();
+	init_lifelines_db();
 	printf("Checking %s\n", dbname);
 
 	if (todo.find_ghosts || todo.fix_ghosts)

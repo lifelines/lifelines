@@ -167,7 +167,13 @@ typedef struct ltag {
 struct WAREHOUSE_S;
 typedef struct WAREHOUSE_S *WAREHOUSE;
 
-/* path.c */
-BOOLEAN is_dir_sep(char c);
+/*
+ 15 bytes 0-terminated YYYYMMDDHHMMSS, GMT
+   0 filled DD,HH, and MM
+   because ansi hasn't solved the date problem
+*/
+typedef struct lldate_s {
+	char datestr[15];
+} LLDATE;
 
 #endif

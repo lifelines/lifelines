@@ -258,6 +258,7 @@ STRING rerbln = (STRING) "Line %d: This line has a bad link.";
 STRING rernwt = (STRING) "Line %d: This line needs white space before tag.";
 STRING rerilv = (STRING) "Line %d: This line has an illegal level.";
 STRING rerwlv = (STRING) "The record begins at wrong level.";
+STRING nonnum = (STRING) "At least one argument to %s is not numeric";
 
 /* menuitem.c */
 STRING mn_ambig    = (STRING) "Conflicting command string: %s";

@@ -62,7 +62,7 @@ struct ntag {
 #define nchild(n)   ((n)->n_child)
 #define nsibling(n) ((n)->n_sibling)
 
-struct nkeytag { char ntype; INT keynum; };
+struct nkeytag { char ntype; INT keynum; STRING key; };
 typedef struct nkeytag NKEY;
 
 typedef struct ntag0 *NOD0;
@@ -72,7 +72,7 @@ struct ntag0 {
 	WAREHOUSE mdwh; /* metadata */
 };
 NODE nztop(NOD0); /* function so it can handle NULL input */
-#define nznkey(n)   ((n)->nkey)
+#define nzkey(n)    ((n)->nkey.key)
 #define nzkeynum(n) ((n)->nkey.keynum)
 #define nztype(n)   ((n)->nkey.ntype)
 
@@ -118,18 +118,18 @@ typedef INT ASK1Q;
  * Globals
  *======*/
 
-extern INT lineno;
-extern INT tlineno;
+extern INT flineno;
+extern INT travlineno;
 extern BOOLEAN inited;
 extern BOOLEAN keyflag;
 extern BOOLEAN readonly;
 extern BOOLEAN cursesio;
 extern STRING editstr;
 extern STRING editfile;
-extern STRING llreports;
 extern TABLE tagtable;		/* table for GEDCOM tags */
 extern TABLE placabbvs;		/* table for place abbrvs */
 extern TABLE useropts;		/* table for user options */
+extern BOOLEAN add_metadata;
 
 
 
@@ -143,6 +143,7 @@ void addexref(INT);
 void addfxref(INT);
 void addsxref(INT);
 void addxxref(INT);
+void assign_nod0(NOD0 nod0, char ntype, INT keynum);
 void browse_sources(void);
 void browse_events(void);
 void browse_others(void);
@@ -163,6 +164,7 @@ void closexref(void);
 void close_lifelines(void);
 NODE copy_node(NODE);
 NODE copy_nodes(NODE, BOOLEAN, BOOLEAN);
+NOD0 create_nod0(NODE node);
 NODE create_node(STRING, STRING, STRING, NODE);
 void del_in_dbase (STRING key);
 void delete_metarec(STRING key);
@@ -205,7 +207,7 @@ STRING getasurname(STRING);
 STRING getexref(void);
 INT getfinitial(STRING);
 STRING getfxref(void);
-STRING getixref(void);
+INT getixrefnum(void);
 STRING getsurname(STRING);
 STRING getsxref(void);
 STRING getxxref(void);
@@ -218,6 +220,7 @@ void growsxrefs(void);
 void growxxrefs(void);
 INT hexvalue(INT);
 void index_by_refn(NODE, STRING);
+void indi0_to_cache(NOD0 nod0);
 void indi_to_cache(NODE);
 void indi_to_dbase(NODE);
 STRING indi_to_event(NODE, TRANTABLE, STRING, STRING, INT, BOOLEAN);
@@ -233,8 +236,10 @@ STRING indi_to_title(NODE, TRANTABLE, INT);
 void initxref(void);
 void init_browse_lists(void);
 void init_caches(void);
-void init_lifelines(void);
+void init_lifelines_db(void);
+void init_lifelines_global(void);
 void init_mapping(void);
+void init_new_nod0(NOD0 nod0, char ntype, INT keynum);
 void init_show_module(void);
 BOOLEAN init_valtab_from_file(STRING, TABLE, INT, STRING*);
 BOOLEAN init_valtab_from_rec(STRING, TABLE, INT, STRING*);
@@ -275,6 +280,7 @@ STRING newixref(STRING, BOOLEAN);
 STRING newsxref(STRING, BOOLEAN);
 STRING newxxref(STRING, BOOLEAN);
 void new_name_browse_list(STRING, STRING);
+NOD0 next_fp_to_nod0(FILE*, BOOLEAN, TRANTABLE, STRING*, BOOLEAN*);
 NODE next_fp_to_node(FILE*, BOOLEAN, TRANTABLE, STRING*, BOOLEAN*);
 INT node_to_keynum(char ntype, NODE nod);
 void node_to_dbase(NODE, STRING);

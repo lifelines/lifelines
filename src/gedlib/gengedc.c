@@ -389,6 +389,10 @@ process_any_node (CLOSURE * closure, NODE node)
 /*====================================================
  * table_incr_item -- increment value of item in table
  *  (or add with 1 value)
+ *  TO DO: This should be revised to use pointers
+ *   instead of assuming pointers & INTs are same size
+ *   (coordinate with add_refd_fams)
+ *   (2001/02/04, Perry)
  *==================================================*/
 static void
 table_incr_item (TABLE tab, STRING key)

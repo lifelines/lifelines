@@ -37,12 +37,15 @@
 #include "liflines.h"
 #include "screen.h"
 #include "warehouse.h"
+#include "metadata.h"
 
 /*********************************************
  * global/exported variables
  *********************************************/
 
-INT lineno = 0;
+INT flineno = 0;
+INT travlineno;
+BOOLEAN add_metadata = FALSE;
 
 /*********************************************
  * external/imported variables
@@ -52,22 +55,63 @@ extern STRING fileof, reremp, rerlng, rernlv, rerinc;
 extern STRING rerbln, rernwt, rerilv, rerwlv;
 
 /*********************************************
- * local function prototypes
+ * local types
  *********************************************/
 
-static BOOLEAN buffer_to_line(STRING, INT*, STRING*, STRING*, STRING*, STRING*);
-#ifdef UNUSED_CODE
-static BOOLEAN all_digits (STRING);
-#endif
+/* node allocator's freelist */
+typedef struct blck *NDALLOC;
+struct blck { NDALLOC next; };
+
+/*********************************************
+ * local enums & defines
+ *********************************************/
+
+enum { NEW_NOD0, EXISTING_LACKING_WH_NOD0 };
+
+/*********************************************
+ * local function prototypes, alphabetical
+ *********************************************/
+
+static NOD0 alloc_new_nod0(void);
+static NOD0 alloc_nod0_from_key(STRING key);
+static void alloc_nod0_wh(NOD0 nod0, INT isnew);
+static NODE alloc_node(void);
+static BOOLEAN buffer_to_line (STRING p, INT *plev, STRING *pxref
+	, STRING *ptag, STRING *pval, STRING *pmsg);
 static STRING fixup (STRING str);
 static STRING fixtag (STRING tag);
+static void load_nod0_wh(NOD0 nod0, char * whptr, INT whlen);
+static INT node_strlen(INT levl, NODE node);
 static BOOLEAN string_to_line(STRING *ps, INT *plev, STRING *pxref, 
 	STRING *ptag, STRING *pval, STRING *pmsg);
+static STRING swrite_node(INT levl, NODE node, STRING p);
+static STRING swrite_nodes(INT levl, NODE node, STRING p);
 static void write_node(INT levl, FILE *fp, TRANTABLE tt,
 	NODE node, BOOLEAN indent);
-static STRING swrite_node(INT levl, NODE node, STRING p);
-static INT node_strlen(INT levl, NODE node);
-static STRING swrite_nodes(INT levl, NODE node, STRING p);
+
+/*********************************************
+ * unused local function prototypes
+ *********************************************/
+
+#ifdef UNUSED_CODE
+static BOOLEAN all_digits (STRING);
+NODE children_nodes(NODE faml);
+NODE father_nodes(NODE faml);
+NODE mother_nodes(NODE faml);
+NODE parents_nodes(NODE faml);
+#endif
+
+/*********************************************
+ * local variables
+ *********************************************/
+
+/* node allocator's free list */
+static NDALLOC first_blck = (NDALLOC) 0;
+
+/*********************************************
+ * local function definitions
+ * body of module
+ *********************************************/
 
 /*==============================
  * fixup -- Save non-tag strings
@@ -93,24 +137,21 @@ fixtag (STRING tag)
 /*=====================================
  * alloc_node -- Special node allocator
  *===================================*/
-typedef struct blck *ALLOC;
-struct blck { ALLOC next; };
-static ALLOC first_blck = (ALLOC) 0;
 static NODE
 alloc_node (void)
 {
 	NODE node;
-	ALLOC blck;
+	NDALLOC blck;
 	int i;
-	if (first_blck == (ALLOC) 0) {
+	if (first_blck == (NDALLOC) 0) {
 		node = (NODE) stdalloc(100*sizeof(*node));
-		first_blck = (ALLOC) node;
+		first_blck = (NDALLOC) node;
 		for (i = 1; i <= 99; i++) {
-			blck = (ALLOC) node;
-			blck->next = (ALLOC) (node + 1);
+			blck = (NDALLOC) node;
+			blck->next = (NDALLOC) (node + 1);
 			node++;
 		}
-		((ALLOC) node)->next = (ALLOC) 0;
+		((NDALLOC) node)->next = (NDALLOC) 0;
 	}
 	node = (NODE) first_blck;
 	first_blck = first_blck->next;
@@ -122,17 +163,19 @@ alloc_node (void)
 void
 free_node (NODE node)
 {
-	((ALLOC) node)->next = first_blck;
-	first_blck = (ALLOC) node;
+	((NDALLOC) node)->next = first_blck;
+	first_blck = (NDALLOC) node;
 }
 /*===========================
  * create_node -- Create NODE
+ *
+ * STRING xref  [in] xref
+ * STRING tag   [in] tag
+ * STRING val:  [in] value
+ * NODE prnt:   [in] parent
  *=========================*/
 NODE
-create_node (STRING xref,
-             STRING tag,
-             STRING val,
-             NODE prnt)
+create_node (STRING xref, STRING tag, STRING val, NODE prnt)
 {
 	NODE node = alloc_node();
 	nxref(node) = fixup(xref);
@@ -144,21 +187,90 @@ create_node (STRING xref,
 	return node;
 }
 /*===================================
- * alloc_nod0 -- nod0 allocator
+ * alloc_new_nod0 -- nod0 allocator
  *  perhaps should use special allocator like nodes
  * Created: 2001/01/25, Perry Rapp
  *=================================*/
-NOD0
-alloc_nod0 (STRING key)
+static NOD0
+alloc_new_nod0 (void)
 {
 	NOD0 nod0;
 	nod0 = (NOD0)stdalloc(sizeof(*nod0));
-	nod0->nkey.keynum = atoi(key+1);
-	nod0->nkey.ntype = key[0];
 	/* these must be filled in by caller */
+	nod0->nkey.key = "";
+	nod0->nkey.keynum = 0;
+	nod0->nkey.ntype = 0;
 	nod0->top = 0;
 	nod0->mdwh = 0;
 	return nod0;
+}
+/*===================================
+ * alloc_nod0_from_key -- allocate nod0 with key
+ * Created: 2001/01/25, Perry Rapp
+ *=================================*/
+static NOD0
+alloc_nod0_from_key (STRING key)
+{
+	NOD0 nod0 = alloc_new_nod0();
+	assign_nod0(nod0, key[0], atoi(key+1));
+	return nod0;
+}
+/*===================================
+ * assign_nod0 -- put key info into nod0
+ * Created: 2001/02/04, Perry Rapp
+ *=================================*/
+void
+assign_nod0 (NOD0 nod0, char ntype, INT keynum)
+{
+	char xref[12];
+	char key[9];
+	sprintf(key, "%c%d", ntype, keynum);
+	sprintf(xref, "@%s@", key);
+	nxref(nztop(nod0)) = strsave(xref);
+	nod0->nkey.key = strsave(key);
+	nod0->nkey.keynum = keynum;
+	nod0->nkey.ntype = ntype;
+}
+/*===================================
+ * init_new_nod0 -- put key info into nod0
+ *  of brand new record
+ * Created: 2001/02/04, Perry Rapp
+ *=================================*/
+void
+init_new_nod0 (NOD0 nod0, char ntype, INT keynum)
+{
+	assign_nod0(nod0, ntype, keynum);
+	alloc_nod0_wh(nod0, NEW_NOD0);
+}
+/*===================================
+ * alloc_nod0_wh -- allocate warehouse for
+ *  a nod0 without one (new or existing)
+ * Created: 2001/02/04, Perry Rapp
+ *=================================*/
+static void
+alloc_nod0_wh (NOD0 nod0, INT isnew)
+{
+	LLDATE creation;
+	ASSERT(!nod0->mdwh);
+	if (!add_metadata)
+		return;
+	nod0->mdwh = (WAREHOUSE)malloc(sizeof(*(nod0->mdwh)));
+	wh_allocate(nod0->mdwh);
+	get_current_lldate(&creation);
+	wh_add_block_var(nod0->mdwh, MD_CREATE_DATE, &creation, sizeof(creation));
+	if (isnew == EXISTING_LACKING_WH_NOD0)
+		wh_add_block_int(nod0->mdwh, MD_CONVERTED_BOOL, 1);
+}
+/*===================================
+ * load_nod0_wh -- load existing warehouse
+ *  for a nod0
+ * Created: 2001/02/04, Perry Rapp
+ *=================================*/
+static void
+load_nod0_wh (NOD0 nod0, char * whptr, INT whlen)
+{
+	nod0->mdwh = (WAREHOUSE)malloc(sizeof(*(nod0->mdwh)));
+	wh_assign_from_blob(nod0->mdwh, whptr, whlen);
 }
 /*===================================
  * create_nod0 -- create nod0 to wrap top node
@@ -167,7 +279,11 @@ alloc_nod0 (STRING key)
 NOD0
 create_nod0 (NODE node)
 {
-	NOD0 nod0 = alloc_nod0(node_to_key(node));
+	NOD0 nod0 = 0;
+	if (nxref(node))
+		nod0 = alloc_nod0_from_key(node_to_key(node));
+	else
+		nod0 = alloc_new_nod0();
 	nod0->top = node;
 	return nod0;
 }
@@ -180,8 +296,11 @@ free_nod0 (NOD0 nod0)
 {
 	if (nod0->top)
 		free_nodes(nod0->top);
-	if (nod0->mdwh)
+	if (nod0->mdwh) {
 		stdfree(nod0->mdwh);
+	}
+	if (nod0->nkey.key[0])
+		stdfree(nod0->nkey.key);
 	stdfree(nod0);
 }
 /*=====================================
@@ -218,7 +337,7 @@ file_to_line (FILE *fp,
 	*pmsg = NULL;
 	while (TRUE) {
 		if (!(p = fgets(in, MAXLINELEN+2, fp))) return DONE;
-		lineno++;
+		flineno++;
 		if (tt) {
 			translate_string(tt, in, out, MAXLINELEN+2);
 			p = out;
@@ -229,6 +348,13 @@ file_to_line (FILE *fp,
 }
 /*==============================================
  * string_to_line -- Get GEDCOM line from string
+ *
+ * STRING *ps:    [in,out] string ptr - advanced to next
+ * INT *plev:     [out] level ptr
+ * STRING *pxref: [out] cross-ref ptr
+ * STRING *ptag:  [out] tag ptr
+ * STRING *pval:  [out] value ptr
+ * STRING *pmsg:  [out] error msg ptr
  *============================================*/
 static BOOLEAN
 string_to_line (STRING *ps,     /* string ptr - modified */
@@ -253,27 +379,30 @@ string_to_line (STRING *ps,     /* string ptr - modified */
 }
 /*================================================================
  * buffer_to_line -- Get GEDCOM line from buffer with <= 1 newline
+ *
+ * STRING p:      [in]  buffer
+ * INT *plev:     [out] level number
+ * STRING *pxref: [out] xref
+ * STRING *ptag:  [out] tag
+ * STRING *pval:  [out] value
+ * STRING *pmsg:  [out] error msg (in static buffer)
  *==============================================================*/
 static BOOLEAN
-buffer_to_line (STRING p,
-                INT *plev,
-                STRING *pxref,
-                STRING *ptag,
-                STRING *pval,
-                STRING *pmsg)
+buffer_to_line (STRING p, INT *plev, STRING *pxref
+	, STRING *ptag, STRING *pval, STRING *pmsg)
 {
 	INT lev;
 	static unsigned char scratch[MAXLINELEN+40];
 
 	*pmsg = *pxref = *pval = 0;
 	if (!p || *p == 0) {
-		sprintf(scratch, reremp, lineno);
+		sprintf(scratch, reremp, flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
 	striptrail(p);
 	if (strlen(p) > MAXLINELEN) {
-		sprintf(scratch, rerlng, lineno);
+		sprintf(scratch, rerlng, flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
@@ -281,7 +410,7 @@ buffer_to_line (STRING p,
 /* Get level number */
 	while (iswhite(*p)) p++;
 	if (chartype(*p) != DIGIT) {
-		sprintf(scratch, rernlv, lineno);
+		sprintf(scratch, rernlv, flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
@@ -293,26 +422,26 @@ buffer_to_line (STRING p,
 /* Get cross reference, if there */
 	while (iswhite(*p)) p++;
 	if (*p == 0) {
-		sprintf(scratch, rerinc, lineno);
+		sprintf(scratch, rerinc, flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
 	if (*p != '@') goto gettag;
 	*pxref = p++;
 	if (*p == '@') {
-		sprintf(scratch, rerbln, lineno);
+		sprintf(scratch, rerbln, flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
 	while (*p != '@') p++;
 	p++;
 	if (*p == 0) {
-		sprintf(scratch, rerinc, lineno);
+		sprintf(scratch, rerinc, flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
 	if (!iswhite(*p)) {
-		sprintf(scratch, rernwt, lineno);
+		sprintf(scratch, rernwt, flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
@@ -322,7 +451,7 @@ buffer_to_line (STRING p,
 gettag:
 	while (iswhite(*p)) p++;
 	if ((INT) *p == 0) {
-		sprintf(scratch, rerinc, lineno);
+		sprintf(scratch, rerinc, flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
@@ -339,10 +468,10 @@ gettag:
 /*=================================================
  * file_to_nod0 -- Convert GEDCOM file to NODE tree
  *
- * STRING fname: name of file that holds GEDCOM record
- * TRANTABLE tt:  character translation table
- * STRING *pmsg: possible error message
- * BOOLEAN *pemp: set true if file is empty
+ * STRING fname:  [in] name of file that holds GEDCOM record
+ * TRANTABLE tt:  [in] character translation table
+ * STRING *pmsg:  [out] possible error message
+ * BOOLEAN *pemp: [out] set true if file is empty
  *===============================================*/
 NOD0
 file_to_nod0 (STRING fname, TRANTABLE tt, STRING *pmsg, BOOLEAN *pemp)
@@ -357,10 +486,10 @@ file_to_nod0 (STRING fname, TRANTABLE tt, STRING *pmsg, BOOLEAN *pemp)
 /*=================================================
  * file_to_node -- Convert GEDCOM file to NODE tree
  *
- * STRING fname: name of file that holds GEDCOM record
- * TRANTABLE tt:  character translation table
- * STRING *pmsg: possible error message
- * BOOLEAN *pemp: set true if file is empty
+ * STRING fname:  [in] name of file that holds GEDCOM record
+ * TRANTABLE tt:  [in] character translation table
+ * STRING *pmsg:  [out] possible error message
+ * BOOLEAN *pemp: [out] set true if file is empty
  *===============================================*/
 NODE
 file_to_node (STRING fname, TRANTABLE tt, STRING *pmsg, BOOLEAN *pemp)
@@ -388,17 +517,20 @@ static BOOLEAN lahead = FALSE;
 static BOOLEAN ateof = FALSE;
 /*================================================================
  * first_fp_to_node -- Convert first GEDCOM record in file to tree
+ *
+ * FILE *fp:      [in] file that holds GEDCOM record/s
+ * BOOLEAN list:  [in] can be list at level 0?
+ * TRANTABLE tt:  [in] character translation table
+ * STRING *pmsg:  [out] possible error message
+ * BOOLEAN *peof: [out] set true if file is at end of file
  *==============================================================*/
 NODE
-first_fp_to_node (FILE *fp,     /* file that holds GEDCOM record/s */
-                  BOOLEAN list, /* can be list at level 0? */
-                  TRANTABLE tt, /* character translation table */
-                  STRING *pmsg, /* possible error message */
-                  BOOLEAN *peof)/* set true if file is at end of file */
+first_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
+	STRING *pmsg,  BOOLEAN *peof)
 {
 	INT rc;
 	ateof = FALSE;
-	lineno = 0;
+	flineno = 0;
 	*pmsg = NULL;
 	*peof = FALSE;
 	rc = file_to_line(fp, tt, &lev, &xref, &tag, &val, pmsg);
@@ -413,14 +545,33 @@ first_fp_to_node (FILE *fp,     /* file that holds GEDCOM record/s */
 	return next_fp_to_node(fp, list, tt, pmsg, peof);
 }
 /*==============================================================
+ * next_fp_to_nod0 -- Convert next GEDCOM record in file to tree
+ *
+ * FILE *fp:      [in] file that holds GEDCOM record/s
+ * BOOLEAN list:  [in] can be list at level 0?
+ * TRANTABLE tt:  [in] character translation table
+ * STRING *pmsg:  [out] possible error message
+ * BOOLEAN *peof: [out] set true if file is at end of file
+ *============================================================*/
+NOD0
+next_fp_to_nod0 (FILE *fp, BOOLEAN list, TRANTABLE tt,
+	STRING *pmsg, BOOLEAN *peof)
+{
+	NODE node = next_fp_to_node(fp, list, tt, pmsg, peof);
+	return create_nod0(node);
+}
+/*==============================================================
  * next_fp_to_node -- Convert next GEDCOM record in file to tree
+ *
+ * FILE *fp:      [in] file that holds GEDCOM record/s
+ * BOOLEAN list:  [in] can be list at level 0?
+ * TRANTABLE tt:  [in] character translation table
+ * STRING *pmsg:  [out] possible error message
+ * BOOLEAN *peof: [out] set true if file is at end of file
  *============================================================*/
 NODE
-next_fp_to_node (FILE *fp,       /* file that holds GEDCOM record/s */
-                 BOOLEAN list,   /* can be list at level 0? */
-                 TRANTABLE tt,   /* character translation table */
-                 STRING *pmsg,   /* possible error message */
-                 BOOLEAN *peof)  /* set true if file is at end of file */
+next_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
+	STRING *pmsg, BOOLEAN *peof)
 {
 	INT curlev, bcode, rc;
 	NODE root, node, curnode;
@@ -467,7 +618,7 @@ next_fp_to_node (FILE *fp,       /* file that holds GEDCOM record/s */
 			curlev = lev;
 		} else if (lev < curlev) {
 			if (lev < lev0) {
-				sprintf(scratch, rerilv, lineno);
+				sprintf(scratch, rerilv, flineno);
 				*pmsg = scratch;
 				bcode = ERROR;
 				break;
@@ -484,7 +635,7 @@ next_fp_to_node (FILE *fp,       /* file that holds GEDCOM record/s */
 			nsibling(curnode) = node;
 			curnode = node;
 		} else {
-			sprintf(scratch, rerilv, lineno);
+			sprintf(scratch, rerilv, flineno);
 			*pmsg = scratch;
 			bcode = ERROR;
 			break;
@@ -518,7 +669,7 @@ string_to_nod0 (STRING str, STRING key, INT len)
 	NODE node = 0;
 
 	/* create it now, & release it at bottom if we fail */
-	nod0 = alloc_nod0(key);
+	nod0 = alloc_new_nod0();
 	/* we must fill in the top & mdwh fields */
 
 	if (*str == '0') /* traditional node, no metadata */
@@ -536,8 +687,7 @@ string_to_nod0 (STRING str, STRING key, INT len)
 		char * node_ptr = str + node_offset;
 		INT whlen = node_offset - 8;
 		ASSERT(0); /* not yet being written */
-		nod0->mdwh = (WAREHOUSE)malloc(sizeof(*(nod0->mdwh)));
-		wh_assign_from_blob(nod0->mdwh, whptr, whlen);
+		load_nod0_wh(nod0, whptr, whlen);
 		node = string_to_node(node_ptr);
 	} else {
 		if (!strcmp(str, "DELE\n")) {
@@ -549,10 +699,9 @@ string_to_nod0 (STRING str, STRING key, INT len)
 	}
 	if (node) {
 		nod0->top = node;
-		if (!nod0->mdwh) {
-			nod0->mdwh = (WAREHOUSE)malloc(sizeof(*(nod0->mdwh)));
-			wh_allocate(nod0->mdwh);
-		}
+		assign_nod0(nod0, key[0], atoi(key+1));
+		if (!nod0->mdwh)
+			alloc_nod0_wh(nod0, EXISTING_LACKING_WH_NOD0);
 	} else { /* node==0, we failed, clean up */
 		free_nod0(nod0);
 		nod0 = 0;
@@ -574,7 +723,7 @@ string_to_node (STRING str)
 	INT curlev;
 	NODE root, node, curnode;
 	STRING msg;
-	lineno = 0;
+	flineno = 0;
 	if (!string_to_line(&str, &lev, &xref, &tag, &val, &msg))
 		return NULL;
 	lev0 = curlev = lev;
@@ -592,7 +741,7 @@ string_to_node (STRING str)
 		} else if (lev < curlev) {
 			if (lev < lev0) {
 				llwprintf("Error: line %d: illegal level",
-				    lineno);
+				    flineno);
 				return NULL;
 			}
 			while (lev < curlev) {
@@ -603,7 +752,7 @@ string_to_node (STRING str)
 			nsibling(curnode) = node;
 			curnode = node;
 		} else {
-			llwprintf("Error: line %d: illegal level", lineno);
+			llwprintf("Error: line %d: illegal level", flineno);
 			return NULL;
 		}
 	}
@@ -634,13 +783,16 @@ node_to_file (INT levl,       /* top level */
 #endif
 /*========================================
  * write_node -- Write NODE to GEDCOM file
+ *
+ * INT levl:       [in] level
+ * FILE *fp:       [in] file
+ * TRANTABLE tt    [in] char map
+ * NODE node:      [in] node
+ * BOOLEAN indent: [in]indent?
  *======================================*/
 static void
-write_node (INT levl,       /* level */
-            FILE *fp,       /* file */
-            TRANTABLE tt,   /* char map */
-            NODE node,      /* node */
-            BOOLEAN indent) /* indent? */
+write_node (INT levl, FILE *fp, TRANTABLE tt, NODE node,
+	BOOLEAN indent)
 {
 	unsigned char out[MAXLINELEN+1];
 	STRING p;
@@ -1209,7 +1361,6 @@ all_digits (STRING s)
 	return TRUE;
 }
 #endif
-
 /*=======================
  * copy_node -- Copy node
  *=====================*/
@@ -1248,13 +1399,12 @@ copy_nodes (NODE node,
 /*===============================================================
  * traverse_nodes -- Traverse nodes in tree while doing something
  *=============================================================*/
-INT tlineno;
 BOOLEAN
 traverse_nodes (NODE node,              /* root of tree to traverse */
                 BOOLEAN (*func)(NODE))  /* function to call at each node */
 {
 	while (node) {
-		tlineno++;
+		travlineno++;
 		if (!(*func)(node)) return FALSE;
 		if (nchild(node)) {
 			if (!traverse_nodes(nchild(node), func))
@@ -1277,12 +1427,14 @@ num_spouses_of_indi (NODE indi)
 }
 /*===================================================
  * find_node -- Find node with specific tag and value
+ *
+ * NODE prnt:   [in] parent node
+ * STRING tag:  [in] tag, may be NULL
+ * STRING val:  [in] value, may be NULL
+ * NODE *plast: [out] previous node, may be NULL
  *=================================================*/
 NODE
-find_node (NODE prnt,      /* parent node */
-           STRING tag,     /* tag, may be NULL */
-           STRING val,     /* value, may be NULL */
-           NODE *plast)    /* previous node, may be NULL */
+find_node (NODE prnt, STRING tag, STRING val, NODE *plast)
 {
 	NODE last, node;
 

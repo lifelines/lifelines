@@ -19,6 +19,7 @@
 #include "liflines.h"
 #include "screen.h"
 #include "arch.h"
+#include "lloptions.h"
 
 #include "llinesi.h"
 
@@ -49,7 +50,6 @@ FILE *ask_for_program (STRING mode,
 		       BOOLEAN picklist);
 
 #define PATHSEPARATOR ':'
-extern STRING llprograms;
 
 /* messages used */
 extern STRING extrpt, qrpt;
@@ -426,6 +426,6 @@ ask_for_program (STRING mode,
   return fp;
 
 AskForString:
-  fp = ask_for_input_file(LLREADTEXT, qrpt, pfname, llprograms, ".ll");
+  fp = ask_for_input_file(LLREADTEXT, qrpt, pfname, lloptions.llprograms, ".ll");
   return fp;
 }

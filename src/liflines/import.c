@@ -38,6 +38,7 @@
 #include "gedcheck.h"
 #include "screen.h"
 #include "liflines.h"
+#include "lloptions.h"
 
 #include "llinesi.h"
 
@@ -79,9 +80,12 @@ import_from_file (void)
 	INT nsour = 0, nothr = 0, type, num = 0;
 	INT totkeys = 0, totused = 0;
 	char msgbuf[80];
+	STRING srcdir=NULL;
 
 /* Open and validate GEDCOM file */
-	fp = ask_for_input_file(LLREADTEXT, idgedf, &fname, NULL, ".ged");
+	if (lloptions.read_from_archives)
+		srcdir = lloptions.llarchives;
+	fp = ask_for_input_file(LLREADTEXT, idgedf, &fname, srcdir, ".ged");
 	if (!fp) return FALSE;
 	llwprintf(gdcker, fname);
 	if (!validate_gedcom(fp)) {
@@ -111,9 +115,9 @@ import_from_file (void)
 	rewind(fp);
 
 	if(gd_reuse)
-		wfield(9,  0, dboldk);
+	  wfield(9,  0, dboldk);
 	else
-		wfield(9,  0, dbnewk);
+	  wfield(9,  0, dbnewk);
 
 	/* test for read-only database here */
 

@@ -363,7 +363,7 @@ static BOOLEAN unresolved;
 void
 resolve_links (NODE node)
 {
-	tlineno = 0;
+	travlineno = 0;
 	unresolved = FALSE;
 	if (!node) return;
 	traverse_nodes(node, resolve_traverse);

@@ -401,7 +401,7 @@ browse_indi_modes (NODE *pindi1,
 			return BROWSE_LIST;
 			break;
 		case CMD_NEWPERSON:	/* Add new person */
-			if (!(node = add_indi_by_edit())) break;
+			if (!(node = nztop(add_indi_by_edit()))) break;
 			save = indi;
 			indi = node;
 			break;
@@ -871,7 +871,7 @@ browse_fam (NODE *pindi,
 			pick_remove_spouse_from_family(fam);
 			break;
 		case CMD_NEWPERSON:	/* Add person to database */
-			save = add_indi_by_edit();
+			save = nztop(add_indi_by_edit());
 			break;
 		case CMD_ADDCHILD:	/* Add child to family */
 			pick_add_child_to_fam(fam, save);

@@ -53,10 +53,11 @@ extern TRANTABLE tran_tables[];
  * add_indi_by_edit -- Add new person to database by editing
  * (with user interaction)
  *========================================================*/
-NODE
+NOD0
 add_indi_by_edit (void)
 {
 	FILE *fp;
+	NOD0 indi0=0;
 	NODE indi=0;
 	STRING str, msg;
 	BOOLEAN emp;
@@ -83,45 +84,50 @@ add_indi_by_edit (void)
 	fclose(fp);
 	do_edit();
 	while (TRUE) {
-		indi = file_to_node(editfile, tti, &msg, &emp);
-		if (!indi) {
+		indi0 = file_to_nod0(editfile, tti, &msg, &emp);
+		if (!indi0) {
 			if (ask_yes_or_no_msg(msg, iredit)) {
 				do_edit();
 				continue;
 			} 
 			break;
 		}
+		indi = nztop(indi0);
 		if (!valid_indi(indi, &msg, NULL)) {
 			if (ask_yes_or_no_msg(msg, iredit)) {
 				do_edit();
 				continue;
 			}
-			free_nodes(indi);
+			free_nod0(indi0);
 			indi = NULL;
 			break;
 		}
 		break;
 	}
-	if (!indi || !ask_yes_or_no(cfpadd)) {
-		if (indi) free_nodes(indi);
+	if (!indi0 || !ask_yes_or_no(cfpadd)) {
+		if (indi0) free_nod0(indi0);
 		return NULL;
 	}
-	return add_unlinked_indi(indi);
+	return add_unlinked_indi(indi0);
 }
 /*==========================================================
  * add_unlinked_indi -- Add person with no links to database
  * (no user interaction)
+ * creates nod0 & adds to cache
  *========================================================*/
-NODE
-add_unlinked_indi (NODE indi)
+NOD0
+add_unlinked_indi (NOD0 indi0)
 {
 	NODE name, refn, sex, body, dumb, node;
 	STRING key;
+	INT keynum;
 	TRANTABLE ttd = tran_tables[MINDS];
+	NODE indi = nztop(indi0);
 
 	split_indi(indi, &name, &refn, &sex, &body, &dumb, &dumb);
-	nxref(indi) = strsave(getixref());
-	key = rmvat(nxref(indi));
+	keynum = getixrefnum();
+	init_new_nod0(indi0, 'I', keynum);
+	key = nzkey(indi0);
 	for (node = name; node; node = nsibling(node))
 		add_name(nval(node), key);
 	for (node = refn; node; node = nsibling(node))
@@ -129,9 +135,9 @@ add_unlinked_indi (NODE indi)
 	join_indi(indi, name, refn, sex, body, NULL, NULL);
 	resolve_links(indi);
 	indi_to_dbase(indi);
-	indi_to_cache(indi);
+	indi0_to_cache(indi0);
 	mprintf_status(gdpadd, indi_to_name(indi, ttd, 35));
-	return indi;
+	return indi0;
 }
 /*================================================================
  * add_linked_indi -- Add linked person to database; links assumed
