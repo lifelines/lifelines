@@ -66,7 +66,11 @@ struct ntag0 {
 	NODE top;
 	char ntype;
 	INT keynum;
+	/* metadata will be here */
 };
+#define nztop(n)    ((n)->top)
+#define nzkeynum(n) ((n)->keynum)
+#define nztype(n)   ((n)->ntype)
 
 /*==============================================
  * Option type enumerations (but we use defines)
@@ -133,7 +137,7 @@ NODE add_unlinked_indi(NODE indi);
 INT ask_child_order(NODE fam, PROMPTQ promptq);
 STRING get_cache_stats(void);
 STRING get_property(STRING opt);
-NODE choose_any_source(void);
+NOD0 choose_any_source(void);
 NODE choose_child(NODE, NODE, STRING, STRING, BOOLEAN);
 NODE choose_father(NODE, NODE, STRING, STRING, BOOLEAN);
 NODE choose_family(NODE, STRING, STRING, BOOLEAN);
@@ -225,12 +229,18 @@ void join_fam(NODE, NODE, NODE, NODE, NODE, NODE);
 void join_indi(NODE, NODE, NODE, NODE, NODE, NODE, NODE);
 STRING key_of_record(NODE);
 NODE key_to_even(STRING);
+NOD0 key_to_even0(STRING);
 NODE key_to_fam(STRING);
+NOD0 key_to_fam0(STRING);
 NODE key_to_indi(STRING);
+NOD0 key_to_indi0(STRING);
 NODE key_to_othr(STRING);
+NOD0 key_to_othr0(STRING);
 NODE key_to_record(STRING,INT);
 NODE key_to_sour(STRING);
+NOD0 key_to_sour0(STRING);
 NODE key_to_type(STRING key, INT reportmode);
+NOD0 key_to_typ0(STRING key, INT reportmode);
 NODE keynum_to_fam(int keynum);
 NODE keynum_to_indi(int keynum);
 NODE keynum_to_sour(int keynum);
@@ -279,10 +289,15 @@ void resolve_links(NODE);
 BOOLEAN retrieve_file(STRING, STRING);
 STRING retrieve_record(STRING, INT*);
 NODE qkey_to_even(STRING);
+NOD0 qkey_to_even0(STRING);
 NODE qkey_to_fam(STRING);
+NOD0 qkey_to_fam0(STRING);
 NODE qkey_to_indi(STRING);
+NOD0 qkey_to_indi0(STRING);
 NODE qkey_to_othr(STRING);
+NOD0 qkey_to_othr0(STRING);
 NODE qkey_to_sour(STRING);
+NOD0 qkey_to_sour0(STRING);
 NODE qkeynum_to_fam(int keynum);
 NODE qkeynum_to_indi(int keynum);
 STRING rmvat(STRING);

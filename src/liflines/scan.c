@@ -139,11 +139,11 @@ set_pattern (SCAN_PATTERN * patt, STRING str, INT scantype)
  * name_scan -- traverse names
  *  looking for pattern matching
  *============================*/
-static NODE
+static NOD0
 name_scan (INT scantype)
 {
 	SCAN_PATTERN patt;
-	NODE indi = NULL;
+	NOD0 indi = NULL;
 	STRING str;
 
 	patt.scantype = scantype;
@@ -172,7 +172,7 @@ name_scan (INT scantype)
  * name_fragment_scan -- traverse name fragments
  *  looking for pattern matching
  *============================================*/
-NODE
+NOD0
 name_fragment_scan (void)
 {
 	return name_scan(NAMESCAN_FRAG);
@@ -181,7 +181,7 @@ name_fragment_scan (void)
  * full_name_scan -- traverse full names
  *  looking for pattern matching
  *====================================*/
-NODE
+NOD0
 full_name_scan (void)
 {
 	return name_scan(NAMESCAN_FULL);
@@ -190,11 +190,11 @@ full_name_scan (void)
  * refn_scan -- traverse refns
  *  looking for pattern matching
  *============================*/
-NODE
+NOD0
 refn_scan(void)
 {
 	SCAN_PATTERN patt;
-	NODE node = NULL;
+	NOD0 nod0 = NULL;
 	STRING str;
 	INT scantype = REFNSCAN;
 
@@ -211,8 +211,8 @@ refn_scan(void)
 	traverse_refns(rs_callback, &patt);
 
 	if (length_indiseq(seq)) {
-		node = choose_from_indiseq(seq, TRUE, scanrs, scanrs);
+		nod0 = choose_from_indiseq(seq, TRUE, scanrs, scanrs);
 	}
 	remove_indiseq(seq, FALSE);
-	return node;
+	return nod0;
 }

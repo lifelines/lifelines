@@ -50,8 +50,10 @@ INT csz_othr = 200;		/* cache size for othr */
 INT icsz_othr = 2000;		/* indirect cache size for othr */
 
 static CACHE create_cache(INT, INT);
-static NODE key_to_node (CACHE cache, STRING key, STRING tag);
-static NODE qkey_to_node (CACHE cache, STRING key, STRING tag);
+static NODE key_to_node(CACHE cache, STRING key, STRING tag);
+static NOD0 key_to_nod0(CACHE cache, STRING key, STRING tag);
+static NODE qkey_to_node(CACHE cache, STRING key, STRING tag);
+static NOD0 qkey_to_nod0(CACHE cache, STRING key, STRING tag);
 static CACHEEL key_to_cacheel(CACHE, STRING, STRING, INT);
 static void dereference(CACHEEL);
 static void add_node_to_direct(CACHE cache, NODE node);
@@ -127,6 +129,7 @@ keynum_to_sour(int keynum)
 }
 /*=====================================
  * key_to_type -- Convert key to node
+ * TO DO - should become obsoleted by key_to_typ0
  *===================================*/
 NODE
 key_to_type (STRING key, INT reportmode)
@@ -141,9 +144,25 @@ key_to_type (STRING key, INT reportmode)
 	return reportmode ? qkey_to_othr(key) : key_to_othr(key);
 }
 /*=====================================
+ * key_to_typ0 -- Convert key to nod0
+ *===================================*/
+NOD0
+key_to_typ0 (STRING key, INT reportmode)
+{
+	switch(key[0])
+	{
+	case 'I': return reportmode ? qkey_to_indi0(key) : key_to_indi0(key);
+	case 'F': return reportmode ? qkey_to_fam0(key) : key_to_fam0(key);
+	case 'E': return reportmode ? qkey_to_even0(key) : key_to_even0(key);
+	case 'S': return reportmode ? qkey_to_sour0(key) : key_to_sour0(key);
+	}
+	return reportmode ? qkey_to_othr0(key) : key_to_othr0(key);
+}
+/*=====================================
  * key_to_??? -- Convert key to person
  *  (asserts if failure)
  *  5 symmetric versions
+ * TO DO - should become obsoleted by key_to_???0
  *===================================*/
 NODE
 key_to_indi (STRING key)
@@ -166,10 +185,37 @@ NODE key_to_othr (STRING key)
 {
 	return key_to_node(othrcache, key, NULL);
 }
+/*=====================================
+ * key_to_???0 -- Convert key to person
+ *  (asserts if failure)
+ *  5 symmetric versions
+ *===================================*/
+NOD0
+key_to_indi0 (STRING key)
+{
+	return key_to_nod0(indicache, key, "INDI");
+}
+NOD0 key_to_fam0 (STRING key)
+{
+	return key_to_nod0(famcache, key, "FAM");
+}
+NOD0 key_to_even0 (STRING key)
+{
+	return key_to_nod0(evencache, key, "EVEN");
+}
+NOD0 key_to_sour0 (STRING key)
+{
+	return key_to_nod0(sourcache, key, "SOUR");
+}
+NOD0 key_to_othr0 (STRING key)
+{
+	return key_to_nod0(othrcache, key, NULL);
+}
 /*========================================
  * qkey_to_??? -- Convert key to node type
  *  report mode (returns NULL if failure)
  *  5 symmetric versions
+ * TO DO - should become obsoleted by key_to_???0
  *======================================*/
 NODE qkey_to_indi (STRING key)
 {
@@ -190,6 +236,31 @@ NODE qkey_to_sour (STRING key)
 NODE qkey_to_othr (STRING key)
 {
 	return qkey_to_node(othrcache, key, NULL);
+}
+/*========================================
+ * qkey_to_???0 -- Convert key to node type
+ *  report mode (returns NULL if failure)
+ *  5 symmetric versions
+ *======================================*/
+NOD0 qkey_to_indi0 (STRING key)
+{
+	return qkey_to_nod0(indicache, key, "INDI");
+}
+NOD0 qkey_to_fam0 (STRING key)
+{
+	return qkey_to_nod0(famcache, key, "FAM");
+}
+NOD0 qkey_to_even0 (STRING key)
+{
+	return qkey_to_nod0(evencache, key, "EVEN");
+}
+NOD0 qkey_to_sour0 (STRING key)
+{
+	return qkey_to_nod0(sourcache, key, "SOUR");
+}
+NOD0 qkey_to_othr0 (STRING key)
+{
+	return qkey_to_nod0(othrcache, key, NULL);
 }
 /*=====================================================
  * key_to_indi_cacheel -- Convert key to person cacheel
@@ -499,6 +570,7 @@ key_to_cacheel (CACHE cache,
 /*===============================================================
  * key_to_node -- Return tree from key; add to cache if not there
  * asserts if failure
+ * TO DO - should become obsoleted by key_to_nod0
  *=============================================================*/
 static NODE
 key_to_node (CACHE cache, STRING key, STRING tag)
@@ -510,8 +582,22 @@ key_to_node (CACHE cache, STRING key, STRING tag)
 	return cnode(cel);
 }
 /*===============================================================
+ * key_to_nod0 -- Return tree from key; add to cache if not there
+ * asserts if failure
+ *=============================================================*/
+static NOD0
+key_to_nod0 (CACHE cache, STRING key, STRING tag)
+{
+	CACHEEL cel;
+	ASSERT(cache && key);
+	if (!(cel = key_to_cacheel(cache, key, tag, FALSE)))
+		return NULL;
+	return cnod0(cel);
+}
+/*===============================================================
  * qkey_to_node -- Return tree from key; add to cache if not there
  * report mode - returns NULL if failure
+ * TO DO - should become obsoleted by qkey_to_nod0
  *=============================================================*/
 static NODE
 qkey_to_node (CACHE cache, STRING key, STRING tag)
@@ -521,6 +607,19 @@ qkey_to_node (CACHE cache, STRING key, STRING tag)
 	if (!(cel = key_to_cacheel(cache, key, tag, TRUE)))
 		return NULL;
 	return cnode(cel);
+}
+/*===============================================================
+ * qkey_to_nod0 -- Return tree from key; add to cache if not there
+ * report mode - returns NULL if failure
+ *=============================================================*/
+static NOD0
+qkey_to_nod0 (CACHE cache, STRING key, STRING tag)
+{
+	CACHEEL cel;
+	ASSERT(cache && key);
+	if (!(cel = key_to_cacheel(cache, key, tag, TRUE)))
+		return NULL;
+	return cnod0(cel);
 }
 /*======================================
  * lock_cache -- Lock CACHEEL into cache

@@ -259,7 +259,7 @@ ask_for_indi_once (STRING ttl,
 	NODE indi;
 	INDISEQ seq = ask_for_indiseq(ttl, prc);
 	if (*prc == RC_DONE || *prc == RC_NOSELECT) return NULL;
-	indi = choose_from_indiseq(seq, ask1, ifone, notone);
+	indi = nztop(choose_from_indiseq(seq, ask1, ifone, notone));
 	remove_indiseq(seq, FALSE);
 	*prc = indi ? RC_SELECT : RC_NOSELECT;
 	return indi;
@@ -336,20 +336,21 @@ choose_one_from_indiseq_if_needed (INDISEQ seq,
 		return choose_one_from_indiseq(titl1, seq);
 	return 0;
 }
-/*============================================================
- * choose_from_indiseq -- Format sequence and have user choose
- *   from it (any type)
+/*======================================================
+ * choose_from_indiseq -- Format sequence and have user
+ *  choose from it (any type)
  * This handles bad pointers, which can get into the data
  *  several ways.
- *==========================================================*/
-NODE
-choose_from_indiseq (INDISEQ seq,    /* sequence */
-                     BOOLEAN ask1,   /* choose if len one? */
-                     STRING titl1,   /* title if len = one */
-                     STRING titln)   /* title if len > one */
+ *=====================================================*/
+NOD0
+choose_from_indiseq (
+	INDISEQ seq,    /* sequence */
+	BOOLEAN ask1,   /* choose if len one? */
+	STRING titl1,   /* title if len = one */
+	STRING titln)   /* title if len > one */
 {
 	INT i = 0;
-	NODE node=0;
+	NOD0 nod0=0;
 	STRING skey;
 	i = choose_one_from_indiseq_if_needed(seq, ask1, titl1, titln);
 	if (i == -1) return NULL;
@@ -358,10 +359,10 @@ choose_from_indiseq (INDISEQ seq,    /* sequence */
 		badkeylist[0] = 0;
 	else {
 		skey = skey(IData(seq)[i]);
-		node = key_to_type(skey, TRUE);
+		nod0 = key_to_typ0(skey, TRUE);
 	}
 	listbadkeys = 0;
-	if(!node) {
+	if(!nod0) {
 		char buf[132];
 		if (badkeylist[0])
 			sprintf(buf, "WARNING: missing keys: %.40s", badkeylist);
@@ -369,5 +370,5 @@ choose_from_indiseq (INDISEQ seq,    /* sequence */
 			sprintf(buf, "WARNING: invalid pointer");
 		message(buf);
 	}
-	return node;
+	return nod0;
 }

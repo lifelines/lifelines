@@ -428,13 +428,50 @@ browse_indi_modes (NODE *pindi1,
 		case '$':	/* Browse to sources */
 			node = choose_source(indi, nosour, idsour);
 			if (node)
-				edit_source(node);
+				browse_source_node(node);
 			break;
 		case 'q':
 		default:
 			return BROWSE_QUIT;
 		}
 	}
+}
+/*================================================
+ * browse_source_node -- Browse a source
+ *  not really implemented yet
+ * TO DO - should become obsoleted by browse_source
+ *==============================================*/
+void
+browse_source_node (NODE sour)
+{
+	edit_source(sour);
+}
+/*=================================
+ * browse_source -- Browse a source
+ *  not really implemented yet
+ *===============================*/
+void
+browse_source (NOD0 sour)
+{
+	edit_source(nztop(sour));
+}
+/*=================================
+ * browse_event -- Browse an event
+ *  not really implemented yet
+ *===============================*/
+void
+browse_event (NOD0 even)
+{
+	edit_source(nztop(even));
+}
+/*=================================
+ * browse_other -- Browse an other
+ *  not really implemented yet
+ *===============================*/
+void
+browse_other (NOD0 othr)
+{
+	edit_other(nztop(othr));
 }
 /*================================================
  * browse_indi -- Handle person browse operations.
@@ -723,7 +760,7 @@ browse_fam (NODE *pindi,
 		case '$':	/* Browse to sources */
 			node = choose_source(fam, nosour, idsour);
 			if (node)
-				edit_source(node);
+				browse_source_node(node);
 			break;
 		case 'q':
 		default:
@@ -866,7 +903,7 @@ browse_pedigree1 (NODE *pindi,
 		case '$':	/* Browse to sources */
 			node = choose_source(indi, nosour, idsour);
 			if (node)
-				edit_source(node);
+				browse_source_node(node);
 			break;
 		case 'q':
 		default:
@@ -876,32 +913,32 @@ browse_pedigree1 (NODE *pindi,
 }
 #endif
 
-
 /*==================================================
  * choose_any_source -- choose from list of all sources
  *================================================*/
-NODE choose_any_source (void)
+NOD0
+choose_any_source (void)
 {
 	INDISEQ seq;
-	NODE node;
+	NOD0 nod0;
 	seq = get_all_sour();
 	if (!seq)
 	{
 		message(nosour);
 		return 0;
 	}
-	node = choose_from_indiseq(seq, TRUE, idsour, idsour);
+	nod0 = choose_from_indiseq(seq, TRUE, idsour, idsour);
 	remove_indiseq(seq, FALSE);
-	return node;
+	return nod0;
 }
 /*==================================================
  * browse_sources -- browse list of all sources
  *================================================*/
 void browse_sources (void)
 {
-	NODE node = choose_any_source();
-	if (node)
-		edit_source(node);
+	NOD0 nod0 = choose_any_source();
+	if (nod0)
+		browse_source(nod0);
 }
 /*==================================================
  * browse_events -- browse list of all events
@@ -909,16 +946,16 @@ void browse_sources (void)
 void browse_events (void)
 {
 	INDISEQ seq = get_all_even();
-	NODE node;
+	NOD0 nod0;
 	if (!seq)
 	{
 		message(noeven);
 		return;
 	}
-	node = choose_from_indiseq(seq, TRUE, ideven, ideven);
+	nod0 = choose_from_indiseq(seq, TRUE, ideven, ideven);
 	remove_indiseq(seq, FALSE);
-	if (node)
-		edit_event(node);
+	if (nod0)
+		browse_event(nod0);
 }
 /*==================================================
  * browse_others -- browse list of all sources
@@ -926,14 +963,14 @@ void browse_events (void)
 void browse_others (void)
 {
 	INDISEQ seq = get_all_othe();
-	NODE node;
+	NOD0 nod0;
 	if (!seq)
 	{
 		message(noothe);
 		return;
 	}
-	node = choose_from_indiseq(seq, TRUE, idothe, idothe);
+	nod0 = choose_from_indiseq(seq, TRUE, idothe, idothe);
 	remove_indiseq(seq, FALSE);
-	if (node)
-		edit_other(node);
+	if (nod0)
+		browse_other(nod0);
 }

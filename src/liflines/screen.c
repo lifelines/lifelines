@@ -848,7 +848,7 @@ choose_list_from_indiseq (STRING ttl,
 void
 scan_menu (void)
 {
-	NODE node;
+	NOD0 nod0;
 	INT code;
 	touchwin(scan_menu_win);
 	wmove(scan_menu_win, 1, 27);
@@ -858,18 +858,24 @@ scan_menu (void)
 	wrefresh(main_win);
 	switch (code) {
 	case 'f':
-		node = full_name_scan();
-		if (node) browse(node);
+		nod0 = full_name_scan();
+		if (nod0) browse(nztop(nod0));
 		break;
 	case 'n':
-		node = name_fragment_scan();
-		if (node) browse(node);
+		nod0 = name_fragment_scan();
+		if (nod0) browse(nztop(nod0));
 		break;
 	case 'r':
-		node = refn_scan();
-/*		if (node) browse(node);
-		have to switch on type
-	*/
+		nod0 = refn_scan();
+		if (nod0) {
+			switch(nztype(nod0)) {
+			case 'I': browse(nztop(nod0)); break;
+			/* TO DO - families */
+			case 'S':  browse_source(nod0); break;
+			case 'E':  browse_event(nod0); break;
+			case 'X':  browse_other(nod0); break;
+			}
+		}
 		break;
 	case 'q': break;
 	}

@@ -23,7 +23,7 @@ BOOLEAN ask_yes_or_no_msg(STRING, STRING);
 INT choose_from_list(STRING, INT, STRING*);
 INDISEQ choose_list_from_indiseq(STRING, INDISEQ);
 INT choose_one_from_indiseq(STRING, INDISEQ);
-NODE choose_from_indiseq(INDISEQ, BOOLEAN, STRING, STRING);
+NOD0 choose_from_indiseq(INDISEQ, BOOLEAN ask1, STRING titl1, STRING titln);
 
 /* from askprogram.c */
 FILE *ask_for_program(STRING, STRING, STRING*, STRING, STRING, BOOLEAN picklist);

@@ -19,6 +19,10 @@ BOOLEAN ask_yes_or_no(STRING);
 
 /* browse.c */
 void browse(NODE);
+void browse_source_node(NODE sour);
+void browse_source(NOD0 sour);
+void browse_event(NOD0 even);
+void browse_other(NOD0 othr);
 
 /* delete.c */
 void delete_indi(NODE, BOOLEAN);
@@ -62,9 +66,9 @@ BOOLEAN remove_child(NODE, NODE, BOOLEAN);
 BOOLEAN remove_spouse(NODE, NODE, BOOLEAN);
 
 /* scan.c */
-NODE full_name_scan(void);
-NODE name_fragment_scan(void);
-NODE refn_scan(void);
+NOD0 full_name_scan(void);
+NOD0 name_fragment_scan(void);
+NOD0 refn_scan(void);
 
 /* show.c */
 void display_cache_stats(void);

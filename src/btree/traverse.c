@@ -101,7 +101,7 @@ traverse_index (BTREE btree, INDEX index, RKEY lo,
 	}
 	/* process all until above hi */
 	for ( ; i<=n+1; i++) {
-		if (i<n+1 && ll_strncmp(hi.r_rkey, rkeys(index, i).r_rkey, 8) < 0)
+		if (ll_strncmp(hi.r_rkey, rkeys(index, i-1).r_rkey, 8) < 0)
 			break;
 		nfkey = fkeys(index, i-1);
 		ASSERT(index1 = getindex(btree, nfkey));

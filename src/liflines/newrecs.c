@@ -292,7 +292,7 @@ ask_for_record (STRING idstr,   /* question prompt */
 		INDISEQ seq;
 		seq = refn_to_indiseq(str, letr, KEYSORT);
 		if (!seq) return NULL;
-		node = choose_from_indiseq(seq, FALSE, duprfn, duprfn);
+		node = nztop(choose_from_indiseq(seq, FALSE, duprfn, duprfn));
 		remove_indiseq(seq, FALSE);
 	}
 	return node;
