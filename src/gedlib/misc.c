@@ -82,7 +82,7 @@ INT
 nod0_to_keynum(NODE nod, char ntype)
 {
 	if (!nod) return 0;
-	return xrefval(nxref(nod), ntype);
+	return xrefval(nxref(nod));
 }
 /*=============================================
  * xrefval -- numeric value after removing @'s at both ends

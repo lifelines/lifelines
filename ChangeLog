@@ -1,3 +1,9 @@
+2000-11-28  Marc Nozell  <marc@nozell.com>
+
+	* gedlib/misc.c: Fixed call to xrefval (wrong number of args)
+
+	* hdrs/gedcom.h: Fixed nod0_to_keynum prototype
+
 2000-11-28 Perry Rapp (puddle@users.sourceforge.net)
 
 	* Reformatted all my ChangeLog entries to match others.
