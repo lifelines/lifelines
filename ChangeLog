@@ -1,4 +1,5 @@
 2003-09-12 Stephen Dum
+
         * docs/Makefile.am docs/ll-reportmanual.html docs/ll-reportmanual.pdf
 	docs/ll-reportmanual.txt docs/ll-reportmanual.xml
 	docs/ll-userguide.html docs/ll-userguide.pdf docs/ll-userguide.txt
@@ -9,6 +10,7 @@
 	documentation to reportmanual for the dup function.  And rebuild docs.
 
 2003-09-12 Perry Rapp
+
         * ChangeLog docs/ll-reportmanual.sv.xml docs/ll-userguide.sv.xml
 	docs/ll-reportmanual.sv.html docs/ll-userguide.sv.html 
 	docs/ll-reportmanual.html docs/ll-reportmanual.pdf 
@@ -75,6 +77,7 @@
 	Updated Swedish translation for 3.0.31.
 
 2003-09-09 Stephen Dum
+
         * ChangeLog fam10c.ll docs/ll-reportmanual.html
 	docs/ll-reportmanual.pdf docs/ll-reportmanual.txt
 	docs/ll-reportmanual.xml docs/ll-userguide.html
@@ -89,6 +92,8 @@
 	src/interp/interpi.h
 
 	Added the dup() function, which does a "deep" copy of a list.
+
+** CVS TAG v3_0_31
 
 2003-09-09 Perry Rapp
 
@@ -147,6 +152,8 @@
 	Fix format mistake & remove some unused variables in dbverify.
 	Minor editing of developer docs xml.
 	Bump version to 3.0.30 for beta.
+
+** CVS TAG v3_0_30
 
 	* ChangeLog src/gedlib/nodeio.c
 
@@ -222,6 +229,8 @@
 	*NEW docs/sv/ll-userguide.sv.xml
 
 	Add Swedish versions of manuals.
+
+** CVS TAG v3_0_29
 
 2003-08-14 Perry Rapp
 
@@ -332,10 +341,13 @@
 	Updated French message catalog from Patrick Texier.
 
 2003-07-07 Steve Dum
+
        * ChangeLog reports/gen_index
 
        recognize sub directories when generating index.html and retain
        that information on file names.
+
+** CVS TAG v3_0_28p2
 
 2003-07-08 Perry Rapp
 
@@ -512,6 +524,8 @@
 	Fix gettext (intl) shim to recognize intl.dll (the name used
 	by gettext-0.12).
 
+** CVS TAG v3_0_28p1
+
 2003-05-18 Perry Rapp
 
 	* ChangeLog src/hdrs/version.h
@@ -532,6 +546,8 @@
 	* ChangeLog build/rpm/lifelines.spec
 
 	Fix rpm spec changelog format bugs.
+
+** CVS TAG v3_0_28
 
 	Released 3.0.28.
 
@@ -622,6 +638,8 @@
 
 	Bugfix for illegal character handling in iconv wrapper for Win32.
 
+** CVS TAG v3_0_27p4
+
 2003-04-20 Perry Rapp
 
 	* ChangeLog win32/mycurses.c
@@ -635,6 +653,8 @@
 	* ChangeLog build/msvc6/llines/llines.rc src/hdrs/version.h
 
 	Update for version 3.0.27p4. Release beta 3.0.27p4.
+
+** CVS TAG v3_0_27p3
 
 2003-04-19 Perry Rapp
 
