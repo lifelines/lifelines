@@ -342,6 +342,7 @@ browse_indi_modes (NODE *pindi1,
 				element_indiseq(seq, 0, &key, &name);
 				indi = key_to_indi(key);
 				remove_indiseq(seq, FALSE);
+				seq=NULL;
 				break;
 			}
 			*pseq = seq;
@@ -702,6 +703,7 @@ browse_fam (NODE *pindi,
 				element_indiseq(seq, 0, &key, &name);
 				*pindi = key_to_indi(key);
 				remove_indiseq(seq, FALSE);
+				seq=NULL;
 				return BROWSE_INDI;
 				break;
 			}
@@ -841,6 +843,7 @@ browse_pedigree1 (NODE *pindi,
 				element_indiseq(seq, 0, &key, &name);
 				indi = key_to_indi(key);
 				remove_indiseq(seq, FALSE);
+				seq=NULL;
 				break;
 			}
 			*pseq = seq;

@@ -32,6 +32,7 @@
 #include "llstdlib.h"
 #include "gedcom.h"
 #include "btree.h"
+#include "indiseq.h"
 
 extern BTREE BTR;
 BOOLEAN selftest = FALSE; /* selftest rules (ignore paths) */
@@ -39,12 +40,29 @@ BOOLEAN selftest = FALSE; /* selftest rules (ignore paths) */
 
 int opt_finnish = 0;
 
+
+struct errinfo {
+	INT err;
+	INT err_count;
+	INT fix_count;
+	STRING desc;
+};
+
 #define ERR_ORPHANNAME 0
 #define ERR_GHOSTNAME 1
-#define ERR_NUM 2
+#define ERR_DUPNAME 2
+#define ERR_NONINDINAME 3
 
-static INT err_count[ERR_NUM];
+static struct errinfo errs[] = {
+	{ ERR_ORPHANNAME, 0, 0, "Orphan names" }
+	, { ERR_GHOSTNAME, 0, 0, "Ghost names" }
+	, { ERR_DUPNAME, 0, 0, "Duplicate names" }
+	, { ERR_NONINDINAME, 0, 0, "Non-indi names" }
+};
+
+
 static LIST tofix;
+static INDISEQ dupseq;
 
 static BOOLEAN noisy=FALSE;
 
@@ -69,7 +87,7 @@ static void
 report_error (INT err, STRING fmt, ...)
 {
 	va_list args;
-	err_count[err]++;
+	errs[err].err_count++;
 	va_start(args, fmt);
 	printf("! ");
 	vprintf(fmt, args);
@@ -98,16 +116,18 @@ typedef struct
 {
 	STRING namerefn; 
 	STRING key;
+	INT err;
 } NAMEREFN_REC;
 /*===============================================
  * alloc_namerefn -- allocates a new NAMEREFN_REC
  *=============================================*/
 static NAMEREFN_REC *
-alloc_namerefn (STRING namerefn, STRING key)
+alloc_namerefn (STRING namerefn, STRING key, INT err)
 {
 	NAMEREFN_REC * rec = (NAMEREFN_REC *)stdalloc(sizeof(*rec));
 	rec->namerefn = strsave(namerefn);
 	rec->key = strsave(key);
+	rec->err = err;
 	return rec;
 }
 /*==========================================
@@ -120,20 +140,66 @@ free_namerefn (NAMEREFN_REC * rec)
 	stdfree(rec->key);
 	stdfree(rec);
 }
+/*=================================================================
+ * finish_and_delete_nameset -- check for dups in a set of one name
+ *===============================================================*/
+finish_and_delete_nameset (INDISEQ seq)
+{
+	char prevkey[8];
+	prevkey[0]=0;
+	keysort_indiseq(seq);
+	FORINDISEQ(seq, el, num)
+		if (!strcmp(skey(el), prevkey)) {
+			report_error(ERR_DUPNAME, "Duplicate name for %s (%s)", prevkey, snam(el));
+		}
+		strcpy(prevkey, skey(el));
+	ENDINDISEQ
+	remove_indiseq(seq, FALSE);
+}
+/*=================================================================
+ * finish_and_delete_refnset -- check for dups in a set of one refn
+ *===============================================================*/
+finish_and_delete_refnset (INDISEQ seq)
+{
+	char prevkey[8];
+	prevkey[0]=0;
+	canonkeysort_indiseq(seq);
+	FORINDISEQ(seq, el, num)
+		if (!strcmp(skey(el), prevkey)) {
+			report_error(ERR_DUPNAME, "Duplicate refn for %s (%s)", prevkey, snam(el));
+		}
+		strcpy(prevkey, skey(el));
+	ENDINDISEQ
+	remove_indiseq(seq, FALSE);
+}
 /*============================================
  * cgn_callback -- callback for name traversal
  *  for checking for ghost names
  *==========================================*/
 static BOOLEAN
-cgn_callback (STRING key, STRING name, void *param)
+cgn_callback (STRING key, STRING name, BOOLEAN newset, void *param)
 {
 	/* a name record which points at indi=key */
 	INT fixGhosts = (INT)param;
-	NODE indi = qkey_to_indi(key);
+	NOD0 indi0 = qkey_to_indi0(key);
+	NODE indi = nztop(indi0);
+
+	/* bail out immediately if not INDI */
+	if (key[0] != 'I') {
+		report_error(ERR_NONINDINAME, "Non-indi name, key=%s, name=%s", key, name);
+		return 1; /* continue traversal */
+	}
+
+	if (newset) {
+		finish_and_delete_nameset(dupseq);
+		dupseq = create_indiseq_null();
+	}
+	append_indiseq_null(dupseq, strsave(key), NULL, TRUE, TRUE);
+
 	if (!indi) {
 		report_error(ERR_ORPHANNAME, "Orphaned name: %s", name);
 		if (fixGhosts)
-			enqueue_list(tofix, (VPTR)alloc_namerefn(name, key));
+			enqueue_list(tofix, (VPTR)alloc_namerefn(name, key, ERR_ORPHANNAME));
 	} else {
 		NODE node;
 		BOOLEAN found=FALSE;
@@ -145,14 +211,43 @@ cgn_callback (STRING key, STRING name, void *param)
 		}
 		join_indi(indi, nam, refn, sex, body, famc, fams);
 		if (!found) {
-			report_error(ERR_GHOSTNAME, "Ghost name: %s", name);
+			report_error(ERR_GHOSTNAME, "Ghost name: %s -> %s", name, key);
 			if (fixGhosts)
-				enqueue_list(tofix, (VPTR)alloc_namerefn(name, key));
+				enqueue_list(tofix, (VPTR)alloc_namerefn(name, key, ERR_GHOSTNAME));
 		}
 	}
 
 	if (noisy)
 		report_progress("Name: %s", name);
+
+	return 1; /* continue traversal */
+}
+/*============================================
+ * cgr_callback -- callback for refn traversal
+ *  for checking for ghost refns
+ *==========================================*/
+static BOOLEAN
+cgr_callback (STRING key, STRING refn, BOOLEAN newset, void *param)
+{
+	/* a refn record which points at nod0=key */
+	INT fixGhosts = (INT)param;
+	NOD0 nod0 = key_to_typ0(key, TRUE);
+	NODE node = nztop(nod0);
+
+	if (newset) {
+		finish_and_delete_refnset(dupseq);
+		dupseq = create_indiseq_null();
+	}
+	append_indiseq_null(dupseq, strsave(key), NULL, TRUE, TRUE);
+	
+	if (!node) {
+		report_error(ERR_ORPHANNAME, "Orphaned refn: %s", refn);
+		if (fixGhosts)
+			enqueue_list(tofix, (VPTR)alloc_namerefn(refn, key, ERR_ORPHANNAME));
+	} else {
+	}
+	if (noisy)
+		report_progress("Refn: %s", refn);
 
 	return 1; /* continue traversal */
 }
@@ -164,26 +259,75 @@ static void
 check_ghosts (INT fixGhosts)
 {
 	tofix = create_list();
-
+	dupseq = create_indiseq_null();
+	/* dupseq is used inside cgn_callback, across calls */
 	traverse_names(cgn_callback, (void *)fixGhosts);
-	/*
-	call traverse_refns here, except that 
-	cgr_callback needs writing, and is a bit trickier
-	as refns point to any type of record
-	*/
+	finish_and_delete_nameset(dupseq);
+	dupseq = NULL;
 
 	if (fixGhosts) {
 		NAMEREFN_REC * rec;
 		while (!empty_list(tofix)) {
 			rec = (NAMEREFN_REC *) dequeue_list(tofix);
 			remove_name(rec->namerefn, rec->key);
+			errs[rec->err].fix_count++;
+			free_namerefn(rec);
+		}
+	}
+
+	ASSERT(empty_list(tofix) && !dupseq);
+
+	dupseq = create_indiseq_null();
+	/* dupseq is used inside cgr_callback, across calls */
+	traverse_refns(cgr_callback, (void *)fixGhosts);
+	finish_and_delete_refnset(dupseq);
+	dupseq = NULL;
+
+	if (fixGhosts) {
+		NAMEREFN_REC * rec;
+		while (!empty_list(tofix)) {
+			rec = (NAMEREFN_REC *) dequeue_list(tofix);
+			remove_refn(rec->namerefn, rec->key);
 			free_namerefn(rec);
 		}
 	}
 	
-	ASSERT(empty_list(tofix));
+	
+	
 	remove_list(tofix, NULL); 
 	tofix=0;
+}
+/*=========================================
+ * validate_errs -- Validate the errs array
+ *=======================================*/
+static void
+validate_errs ()
+{
+	INT i;
+	for (i=0; i<sizeof(errs)/sizeof(errs[0]); i++) {
+		if (errs[i].err != i) {
+			fprintf(stderr, "Invalid errs array[%d] in dbverify - fix program\n", i);
+			FATAL();
+		}
+	}
+}
+/*===============================================
+ * report_results -- Print out error & fix counts
+ *=============================================*/
+static void
+report_results ()
+{
+	INT i, ct=0;
+	for (i=0; i<sizeof(errs)/sizeof(errs[0]); i++) {
+		if (errs[i].err_count || errs[i].fix_count) {
+			ct++;
+			printf("%s: %d errors, %d fixed\n", 
+				errs[i].desc, errs[i].err_count, errs[i].fix_count);
+		}
+	}
+	if (!ct) {
+		printf("No errors found\n");
+	}
 }
 /*===========================================
  * main -- Main procedure of dbverify command
@@ -195,6 +339,8 @@ main (int argc,
 	char *flags, *dbname;
 	char *ptr;
 	INT findGhosts=FALSE, fixGhosts=FALSE;
+
+	validate_errs();
 
 #ifdef WIN32
 	/* TO DO - research if this is necessary */
@@ -231,6 +377,9 @@ main (int argc,
 	broken lineage links
 	empty families
 	*/
+
+	report_results();
+
 	closebtree(BTR);
 	return TRUE;
 }

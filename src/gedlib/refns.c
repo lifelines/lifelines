@@ -469,7 +469,7 @@ index_by_refn (NODE node,
  *==================================================*/
 typedef struct
 {
-	BOOLEAN(*func)(STRING key, STRING refn, void *param);
+	BOOLEAN(*func)(STRING key, STRING refn, BOOLEAN newset, void *param);
 	void * param;
 } TRAV_REFN_PARAM;
 /* see above */
@@ -483,14 +483,14 @@ traverse_refn_callback (RKEY rkey, STRING data, INT len, void *param)
 
 	for (i=0; i<RRcount; i++)
 	{
-		if (!tparam->func(rkey2str(RRkeys[i]), RRrefns[i], tparam->param))
+		if (!tparam->func(rkey2str(RRkeys[i]), RRrefns[i], !i, tparam->param))
 			return FALSE;
 	}
 	return TRUE;
 }
 /* see above */
 void
-traverse_refns (BOOLEAN(*func)(STRING key, STRING refn, void *param), void *param)
+traverse_refns (BOOLEAN(*func)(STRING key, STRING refn, BOOLEAN newset, void *param), void *param)
 {
 	TRAV_REFN_PARAM tparam;
 	tparam.param = param;

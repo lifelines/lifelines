@@ -135,8 +135,11 @@ closure_free (CLOSURE * closure)
 {
 	/* during gengedcom, all indiseqs alloc their own keys & vals */
 	remove_indiseq(closure->seq, TRUE);
+	closure->seq=NULL;
 	remove_indiseq(closure->outseq, TRUE);
+	closure->outseq=NULL;
 	remove_table(closure->tab, FREEKEY);
+	closure->tab=NULL;
 }
 /*======================================================
  * closure_wipe_processlist -- empty the "to-process" list
@@ -438,6 +441,7 @@ gen_gedcom (INDISEQ seq, int gengedcl)
 			closure_add_output_node(&closure, node);
 		ENDINDISEQ
 		remove_indiseq(tempseq, TRUE);
+		tempseq=NULL;
 	}
 	canonkeysort_indiseq(closure.outseq);
 	FORINDISEQ(closure.outseq, el, num)

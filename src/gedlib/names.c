@@ -964,10 +964,11 @@ free_name_list (LIST list)
  *  delegates to traverse_db_rec_rkeys
  *   passing callback function: traverse_name_callback
  *   and using local data in a TRAV_NAME_PARAM
+ *   (newset is true every time it is a callback for a new name)
  *==================================================*/
 typedef struct
 {
-	BOOLEAN(*func)(STRING key, STRING name, void *param);
+	BOOLEAN(*func)(STRING key, STRING name, BOOLEAN newset, void *param);
 	void * param;
 } TRAV_NAME_PARAM;
 /* see above */
@@ -981,14 +982,14 @@ traverse_name_callback (RKEY rkey, STRING data, INT len, void *param)
 
 	for (i=0; i<NRcount; i++)
 	{
-		if (!tparam->func(rkey2str(NRkeys[i]), NRnames[i], tparam->param))
+		if (!tparam->func(rkey2str(NRkeys[i]), NRnames[i], !i, tparam->param))
 			return FALSE;
 	}
 	return TRUE;
 }
 /* see above */
 void
-traverse_names (BOOLEAN(*func)(STRING key, STRING name, void *param), void *param)
+traverse_names (BOOLEAN(*func)(STRING key, STRING name, BOOLEAN newset, void *param), void *param)
 {
 	TRAV_NAME_PARAM tparam;
 	tparam.param = param;

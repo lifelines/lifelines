@@ -71,12 +71,18 @@ pattern_match (SCAN_PATTERN *patt, STRING name)
  * ns_callback -- callback for name traversal
  *=========================================*/
 static BOOLEAN
-ns_callback (STRING key, STRING name, void *param)
+ns_callback (STRING key, STRING name, BOOLEAN newset, void *param)
 {
 	LIST list;
 	INT len, ind;
 	STRING piece;
 	SCAN_PATTERN * patt = (SCAN_PATTERN *)param;
+	if (newset) {
+		/* clear dup table */
+	} else {
+		/* if in dup table, report */
+		/* else add to dup table */
+	}
 	if (patt->scantype == NAMESCAN_FULL) {
 		if (pattern_match(patt, name)) {
 			/* if we pass in name, append_indiseq won't check for dups */
@@ -102,7 +108,7 @@ ns_callback (STRING key, STRING name, void *param)
  * rs_callback -- callback for refn traversal
  *=========================================*/
 static BOOLEAN
-rs_callback (STRING key, STRING refn, void *param)
+rs_callback (STRING key, STRING refn, BOOLEAN newset, void *param)
 {
 	SCAN_PATTERN * patt = (SCAN_PATTERN *)param;
 	ASSERT(patt->scantype == REFNSCAN);
@@ -165,7 +171,8 @@ name_scan (INT scantype)
 	if (length_indiseq(results_seq)) {
 		indi = choose_from_indiseq(results_seq, DOASK1, scanrs, scanrs);
 	}
-	remove_indiseq(results_seq, FALSE);
+	remove_indiseq(results_seq, FALSE); 
+	results_seq=NULL;
 	return indi;
 }
 /*==============================================
@@ -213,6 +220,7 @@ refn_scan(void)
 	if (length_indiseq(results_seq)) {
 		nod0 = choose_from_indiseq(results_seq, DOASK1, scanrs, scanrs);
 	}
-	remove_indiseq(results_seq, FALSE);
+	remove_indiseq(results_seq, FALSE); 
+	results_seq=NULL;
 	return nod0;
 }
