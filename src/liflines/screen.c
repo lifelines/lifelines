@@ -2121,7 +2121,7 @@ manufacture a listdisp here
 			rectList.top = drow;
 			rectList.bottom = drow + LIST_LINES-1;
 			rectList.left = 1;
-			rectList.right = MAINWIN_WIDTH-1;
+			rectList.right = MAINWIN_WIDTH-2;
 			mvwaddch(win, row, 3, '>');
 			show_record(main_win, key, mode, &rectList, &scroll, reuse);
 		}

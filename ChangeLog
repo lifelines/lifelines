@@ -1,3 +1,9 @@
+2002-01-27 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog liflines/screen.c:
+
+	Fix list browse overwriting right-hand box line.
+
 2002-01-25 Perry Rapp <puddle@users.sourceforge.net>
 
 	* .linesrc ChangeLog lines.cfg gedlib/property.c
