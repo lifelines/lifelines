@@ -83,7 +83,7 @@ extern STRING badargs, badargx, nonrecx;
  *********************************************/
 
 static STRING check_rpt_requires(STRING fname);
-static void disp_symtab(SYMTAB stab);
+static void disp_symtab(STRING title, SYMTAB stab);
 static BOOLEAN disp_symtab_cb(STRING key, PVALUE val, VPTR param);
 static void parse_file(STRING ifile, LIST plist);
 static void progmessage(MSG_LEVEL level, STRING);
@@ -1562,7 +1562,7 @@ struct dbgsymtab_s
 void
 prog_var_error (PNODE node, SYMTAB stab, PNODE arg, PVALUE val, STRING fmt, ...)
 {
-	STRING choices[3];
+	STRING choices[4];
 	STRING titl;
 	INT rtn;
 	va_list args;
@@ -1579,19 +1579,27 @@ prog_var_error (PNODE node, SYMTAB stab, PNODE arg, PVALUE val, STRING fmt, ...)
 
 	if (dbg_mode != -99) {
 		char buf[64];
-		INT n = (stab.tab ? get_table_count(stab.tab) : 0);
+		INT n=0,i=0;
 		/* report debugger: Option to display list of local symbols */
-		snprintf(buf, sizeof(buf), _("Display locals (%d)"), n);
-		buf[sizeof(buf)-1] = 0;
-		choices[0] = strsave(buf);
-		choices[1] = strsave(_("Pop one level"));
-		choices[2] = strsave(_("Quit debugger"));
+		n = (stab.tab ? get_table_count(stab.tab) : 0);
+		llstrncpyf(buf, sizeof(buf), _("Display locals (%d)"), n);
+		choices[i++] = strsave(buf);
+		n = (globtab.tab ? get_table_count(globtab.tab) : 0);
+		llstrncpyf(buf, sizeof(buf), _("Display globals (%d)"), n);
+		choices[i++] = strsave(buf);
+		choices[i++] = strsave(_("Pop one level"));
+		choices[i++] = strsave(_("Quit debugger"));
+		ASSERT(i==ARRSIZE(choices));
 dbgloop:
 		rtn = choose_from_array(titl, ARRSIZE(choices), choices);
-		if (rtn == 2 || rtn == -1)
+		if (rtn == 3 || rtn == -1)
 			dbg_mode = -99;
 		else if (rtn == 0) {
-			disp_symtab(stab);
+			disp_symtab(_("Local variables"), stab);
+			goto dbgloop;
+		}
+		else if (rtn == 1) {
+			disp_symtab(_("Global variables"), globtab);
 			goto dbgloop;
 		}
 		free_array_strings(ARRSIZE(choices), choices);
@@ -1602,7 +1610,7 @@ dbgloop:
  *  This is part of the report language debugger
  *==================================================*/
 static void
-disp_symtab (SYMTAB stab)
+disp_symtab (STRING title, SYMTAB stab)
 {
 	struct symtab_iter_s symtabits;
 	INT n = (stab.tab ? get_table_count(stab.tab) : 0);
@@ -1622,7 +1630,7 @@ disp_symtab (SYMTAB stab)
 		}
 	}
 	/* Title of report debugger's list of local symbols */
-	view_array(_("Local variables"), n, sdata.locals);
+	view_array(title, n, sdata.locals);
 	free_array_strings(n, sdata.locals);
 }
 /*====================================================

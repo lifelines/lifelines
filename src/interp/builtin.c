@@ -2828,16 +2828,11 @@ PVALUE
 __place (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE evnt;
-	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
-
-#ifdef DEBUG
-	llwprintf("__place: val = ");
-	show_pvalue(val);
-	llwprintf("\n");
-#endif
+	PNODE arg = iargs(node);
+	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
 
 	if (*eflg) {
-		prog_error(node, nonnod1, "place");
+		prog_var_error(node, stab, arg, val, nonnod1, "place");
 		return NULL;
 	}
 	evnt = (NODE) pvalue(val);
@@ -2852,10 +2847,11 @@ PVALUE
 __tag (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE ged;
-	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
+	PNODE arg = iargs(node);
+	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
 	STRING str=NULL;
 	if (*eflg) {
-		prog_error(node, nonnod1, "tag");
+		prog_var_error(node, stab, arg, val, nonnod1, "tag");
 		return NULL;
 	}
 	ged = (NODE) pvalue(val);
@@ -2872,15 +2868,16 @@ PVALUE
 __value (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE ged;
-	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
+	PNODE arg = iargs(node);
+	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonnod1, "value");
+		prog_var_error(node, stab, arg, val, nonnod1, "value");
 		return NULL;
 	}
 	ged = (NODE) pvalue(val);
 	if (!ged) {
 		*eflg = TRUE;
-		prog_error(node, nullarg1, "value");
+		prog_var_error(node, stab, arg, val, nullarg1, "value");
 		return NULL;
 	}
 	set_pvalue(val, PSTRING, (VPTR)nval(ged));
@@ -2894,15 +2891,16 @@ PVALUE
 __xref (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE ged;
-	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
+	PNODE arg = iargs(node);
+	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonnod1, "xref");
+		prog_var_error(node, stab, arg, val, nonnod1, "xref");
 		return NULL;
 	}
 	ged = (NODE) pvalue(val);
 	if (!ged) {
 		*eflg = TRUE;
-		prog_error(node, nullarg1, "xref");
+		prog_var_error(node, stab, arg, val, nullarg1, "xref");
 		return NULL;
 	}
 	set_pvalue(val, PSTRING, (VPTR)nxref(ged));
@@ -2916,15 +2914,16 @@ PVALUE
 __child (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE ged;
-	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
+	PNODE arg = iargs(node);
+	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonnod1, "child");
+		prog_var_error(node, stab, arg, val, nonnod1, "child");
 		return NULL;
 	}
 	ged = (NODE) pvalue(val);
 	if (!ged) {
 		*eflg = TRUE;
-		prog_error(node, nullarg1, "child");
+		prog_var_error(node, stab, arg, val, nullarg1, "child");
 		return NULL;
 	}
 	set_pvalue(val, PGNODE, (VPTR)nchild(ged));
@@ -2938,15 +2937,16 @@ PVALUE
 __parent (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE ged;
-	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
+	PNODE arg = iargs(node);
+	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonnod1, "parent");
+		prog_var_error(node, stab, arg, val, nonnod1, "parent");
 		return NULL;
 	}
 	ged = (NODE) pvalue(val);
 	if (!ged) {
 		*eflg = TRUE;
-		prog_error(node, nullarg1, "parent");
+		prog_var_error(node, stab, arg, val, nullarg1, "parent");
 		return NULL;
 	}
 	set_pvalue(val, PGNODE, (VPTR)nparent(ged));
@@ -2960,15 +2960,16 @@ PVALUE
 __sibling (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE ged;
-	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
+	PNODE arg = iargs(node);
+	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonnod1, "sibling");
+		prog_var_error(node, stab, arg, val, nonnod1, "sibling");
 		return NULL;
 	}
 	ged = (NODE) pvalue(val);
 	if (!ged) {
 		*eflg = TRUE;
-		prog_error(node, nullarg1, "sibling");
+		prog_var_error(node, stab, arg, val, nullarg1, "sibling");
 		return NULL;
 	}
 	set_pvalue(val, PGNODE, (VPTR)nsibling(ged));
@@ -2983,9 +2984,10 @@ __level (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE ged;
 	INT lev = -1;
-	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
+	PNODE arg = iargs(node);
+	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonnod1, "level");
+		prog_var_error(node, stab, arg, val, nonnod1, "level");
 		return NULL;
 	}
 	ged = (NODE) pvalue(val);
@@ -3005,7 +3007,8 @@ __copyfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	FILE *cfp;
 	STRING fname;
-	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
+	PNODE arg = iargs(node);
+	PVALUE val = eval_and_coerce(PSTRING, arg, stab, eflg);
 	char buffer[1024];
 	STRING programsdir = getoptstr("LLPROGRAMS", ".");
 	if (*eflg)  {
@@ -3016,7 +3019,7 @@ __copyfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (!(cfp = fopenpath(fname, LLREADTEXT, programsdir
 		, (STRING)NULL, (STRING *)NULL))) {
 		*eflg = TRUE;
-		prog_error(node, nonfname1, "copyfile");
+		prog_var_error(node, stab, arg, val, nonfname1, "copyfile");
 		return NULL;
 	}
 	delete_pvalue(val);

@@ -11,6 +11,12 @@
 	New table iterators. New copy_table.
 	Move lloptions to gedlib, and user options inside it.
 
+	* ChangeLog interp/builtin.c interp/interp.c:
+
+	Add option to show globals to report debugger.
+	Change copyfile & nearby routines to call the right routine to
+	get report debugging.
+
 2002-06-16 Perry Rapp <puddle@users.sourceforge.net>
 
 	*? .linesrc ChangeLog lines.cfg gedlib/init.c interp/builtin.c:
