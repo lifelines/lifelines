@@ -263,6 +263,8 @@ NODE keynum_to_fam(int keynum);
 NODE keynum_to_indi(int keynum);
 NODE keynum_to_node(char ntype, int keynum);
 NODE keynum_to_sour(int keynum);
+NODE keynum_to_even(int keynum);
+NODE keynum_to_othr(int keynum);
 INT length_nodes(NODE);
 STRING manip_name(STRING, TRANTABLE, BOOLEAN, BOOLEAN, INT);
 void maperror(INT, INT, STRING);
