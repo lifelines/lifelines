@@ -7,6 +7,11 @@
 	error in output file, and not do traceback. Allow trailing
 	slash in LLDATABASES paths.
 
+	* ChangeLog interp/pvalue.c:
+
+	Fix bug in pvalue.c (attempted check for self-assignment
+	was too broad).
+
 2002-01-16 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/valtable.c interp/lex.c liflines/screen.c:

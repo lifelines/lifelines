@@ -715,18 +715,19 @@ create_pvalue_from_key_impl (STRING key, INT ptype)
 }
 /*==================================
  * set_pvalue -- Set a program value
+ *  val:   [I/O] pvalue getting new info
+ *  type:  [IN]  new type for pvalue
+ *  value: [IN]  new value for pvalue
  *================================*/
 void
-set_pvalue (PVALUE val,
-            INT type,
-            VPTR value)
+set_pvalue (PVALUE val, INT type, VPTR value)
 {
 #ifdef DEBUG
 	llwprintf("\nset_pvalue called: val=");
 	show_pvalue(val);
 	llwprintf(" new type=%d new value = %d\n", type, value);
 #endif
-	if (value == pvalue(val)) {
+	if (type == ptype(val) && value == pvalue(val)) {
 		/* self-assignment */
 		return;
 	}
