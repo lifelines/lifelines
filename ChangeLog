@@ -1,3 +1,15 @@
+2000-11-15	Perry Rapp <puddle@users.sourceforge.net>
+	* btree/traverse.c gedlib/editvtab.c hdrs/btree.h hdrs/gedcom.h
+	hdrs/llstdlib.h hdrs/screen.h interp/more.c interp/yacc.y
+	liflines/import.c stdlib/double.c win32/mycurses.c: Stricter
+	type consistency.
+
+	* arch/alphasort.c liflines/askprogram.c: Fixed WIN32 compile
+	problems.
+
+	* gedlib/init.c: Split out calculation of temp directory & editor
+	into separate functions, & fixed WIN32 versions.
+
 2000-11-11 Petter Reinholdtsen <pere@td.org.uit.no>
 
 	* reports/alive.ll: Get this report working.  Fixed type problems
