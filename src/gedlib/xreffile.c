@@ -93,7 +93,7 @@ BOOLEAN openxref ()
  *============================*/
 closexref ()
 {
-	fclose(xreffp);
+	if (xreffp) fclose(xreffp);
 	xrefopen = FALSE;
 }
 /*====================================
