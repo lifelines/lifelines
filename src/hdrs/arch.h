@@ -9,16 +9,25 @@
 #include "config.h"
 #endif
 
+/* *****************************************************************
+ * sleep()           
+ * ***************************************************************** */
+
 /* 
  * We need to use the external definiton of sleep in arch/sleep.c if:
  * - we're on Windows
  * - there is no sleep() function available
  */
+
 #if defined(HAVE_WINDOWS_H) || !defined(HAVE_SLEEP)
 extern int sleep(int seconds);
 #else
 #include <unistd.h>
-#endif
+#endif /* HAVE_WINDOWS_H or not HAVE_SLEEP */
+
+/* *****************************************************************
+ * scandir()           
+ * ***************************************************************** */
 
 #ifdef HAVE_DIRENT_H
 #include <dirent.h>
@@ -27,18 +36,26 @@ struct dirent /* Simple replacement for the less fortunate platforms */
 {
 	char d_name[256];
 };
-#endif
+#endif /* HAVE_DIRENT_H */
 
 #ifndef HAVE_SCANDIR
 extern int scandir(const char *dir, struct dirent ***namelist,
                    int (*select)(const struct dirent *),
                    int (*compar)(const struct dirent **,
                                  const struct dirent **));
-#endif
+#endif /* HAVE_SCANDIR */
+
+/* *****************************************************************
+ * alphasort()           
+ * ***************************************************************** */
 
 #ifndef HAVE_ALPHASORT
 extern int alphasort(const struct dirent **a, const struct dirent **b);
-#endif
+#endif /* HAVE_ALPHASORT */
+
+/* *****************************************************************
+ * strcmpi()           
+ * ***************************************************************** */
 
 #ifndef HAVE_STRCMPI
 #ifdef HAVE_STRCASECMP
@@ -46,5 +63,23 @@ extern int alphasort(const struct dirent **a, const struct dirent **b);
 #endif /* HAVE_STRCASECMP */
 #endif /* HAVE_STRCMPI */
 
+/* *****************************************************************
+ * getopt()           
+ * ***************************************************************** */
 
-#endif
+#ifndef HAVE_GETOPT
+#ifndef HAVE_GETOPT_H
+
+/* Don't use prototypes in case getopt() is defined in some header 
+ * that we're not checking during configure, and would cause conficts
+ * here. */
+
+extern int getopt();
+extern char *optarg;
+extern int optind;
+extern int opterr;
+
+#endif /* HAVE_GETOPT */
+#endif /* HAVE_GETOPT_H */
+
+#endif /* ARCH_H */
