@@ -55,6 +55,10 @@ static NODE qkey_to_node (CACHE cache, STRING key, STRING tag);
 static CACHEEL key_to_cacheel(CACHE, STRING, STRING, INT);
 static void dereference(CACHEEL);
 static void add_node_to_direct(CACHE cache, NODE node);
+static CACHEEL key_to_even_cacheel (STRING key);
+static CACHEEL key_to_sour_cacheel (STRING key);
+static CACHEEL key_to_othr_cacheel (STRING key);
+
 
 static CACHE indicache, famcache, evencache, sourcache, othrcache;
 
@@ -206,7 +210,7 @@ key_to_fam_cacheel (STRING key)
 /*====================================================
  * key_to_even_cacheel -- Convert key to event_cacheel
  *==================================================*/
-CACHEEL
+static CACHEEL
 key_to_even_cacheel (STRING key)
 {
 	return key_to_cacheel(evencache, key, "EVEN", FALSE);
@@ -214,7 +218,7 @@ key_to_even_cacheel (STRING key)
 /*=====================================================
  * key_to_sour_cacheel -- Convert key to source_cacheel
  *===================================================*/
-CACHEEL
+static CACHEEL
 key_to_sour_cacheel (STRING key)
 {
 	return key_to_cacheel(sourcache, key, "SOUR", FALSE);
@@ -222,7 +226,7 @@ key_to_sour_cacheel (STRING key)
 /*====================================================
  * key_to_othr_cacheel -- Convert key to other_cacheel
  *==================================================*/
-CACHEEL
+static CACHEEL
 key_to_othr_cacheel (STRING key)
 {
 	return key_to_cacheel(othrcache, key, NULL, FALSE);

@@ -40,6 +40,7 @@
 #include "gedcheck.h"
 #include "liflines.h"
 #include "screen.h"
+#include "llinesi.h"
 
 /* external data set by check_stdkeys() , used by addmissingkeys() */
 
@@ -127,6 +128,9 @@ static void handle_value(STRING, INT);
 static void clear_structures(void);
 static void handle_warn(STRING, ...);
 static void handle_err(STRING, ...);
+static int check_akey (int firstchar,
+		       STRING keyp,
+		       INT *maxp);
 
 /*===================================================
  * validate_gedcom -- Validate GEDCOM records in file
@@ -543,7 +547,7 @@ handle_fam_lev1 (STRING tag,
 /*=================================================
  * check_akey -- Check for a standard format key
  *===============================================*/
-int
+static int
 check_akey (int firstchar,
             STRING keyp,
             INT *maxp)

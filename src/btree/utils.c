@@ -43,7 +43,7 @@ static int llmkdir (STRING dir);
 STRING
 rkey2str (RKEY rkey)
 {
-	static unsigned char rbuf[9];
+	static char rbuf[9];
 	SHORT i;
 	for (i = 0; i < 8; i++)
 		rbuf[i] = rkey.r_rkey[i];
@@ -86,7 +86,7 @@ path2fkey (STRING path)
 STRING
 fkey2path (FKEY fkey)
 {
-	static unsigned char path[6];
+	static char path[6];
 	SHORT hi = (fkey & 0xffff0000) >> 16;
 	SHORT lo = fkey & 0xffff;
 	path[0] = hi/26 + 'a';

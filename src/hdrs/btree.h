@@ -114,7 +114,7 @@ typedef struct {
  * Macros for selecting INDEX and BLOCK fields
  *==========================================*/
 #define iself(p)    ((p)->i_self)
-#define itype(p)    ((p)->i_type)
+/* #define itype(p)    ((p)->i_type)  -- Also defined the same in interp.h, should this be renamed? -marc */
 #define iparent(p)  ((p)->i_parent)
 #define nkeys(p)   ((p)->i_nkeys)
 #define rkeys(p,i) ((p)->i_rkeys[i])

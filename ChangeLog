@@ -1,3 +1,19 @@
+2001-01-02  Marc Nozell  <marc@nozell.com>
+
+	* liflines/valgdcom.c: Add another prototype, include llinesi.h.
+	
+	* liflines/miscutls.c: Add more prototypes.
+	
+	* gedlib/keytonod.c: Add function prototypes for
+	key_to_*_cacheel.
+	
+	* gedlib/gengedc.c (closure_add_node): no longer used.
+	
+	* btree/utils.c: Changed 'static unsigned char' to 'static char'
+	in fkey2path and rkey2str. 
+
+	* hdrs/btree.h: Cleanup itype duplicate define.  
+
 2001-01-01 Petter Reinholdtsen <pere@td.org.uit.no>
 
 	* hdrs/interpi.h interp/interpi.h: Move private header file into

@@ -40,6 +40,10 @@
 #include "llinesi.h"
 
 extern STRING btreepath;
+void key_util (void);
+void who_is_he_she (void);
+void show_database_stats (void);
+
 
 /*======================================
  * key_util -- Return person's key value

@@ -88,6 +88,10 @@ closure_add_key (CLOSURE * closure, STRING key, STRING tag)
 	insert_table(closure->tab, strsave(key), NULL);
 }
 
+#if 0
+
+Unused code as of 2-Jan-2001
+
 /*======================================================
  * closure_add_node -- add a (top-level) node to the closure
  * a top-level node will, of course, be identified by its xref
@@ -97,6 +101,7 @@ closure_add_node (CLOSURE * closure, NODE node)
 {
 	closure_add_key(closure, rmvat(nxref(node)), ntag(node));
 }
+#endif
 /*======================================================
  * closure_add_output_node -- add a (top-level) node to the output list
  * the node should come from the processing list originally, and
