@@ -185,12 +185,12 @@ del_in_dbase (CNSTRING key)
 	ASSERT(store_record(key, "DELE\n", 5));
 }
 /*=================================================
- * delete_orphaned_record -- Delete a record which
+ * delete_record_missing_data_entry -- Delete a record which
  *  was orphaned in database (is in btree index
  *  but has no actual record)
  *===============================================*/
 void
-delete_orphaned_record (CNSTRING key)
+delete_record_missing_data_entry (CNSTRING key)
 {
 	del_in_dbase(key);
 }

@@ -614,11 +614,11 @@ RECORD key_possible_to_record (STRING str, /* string that may be a key */
 	return NULL;
 }
 /*================================================
- * is_orphaned_record - Check if record is orphaned
- *  in database (is in btree index, but lacks data)
+ * is_record_missing_data_entry - Check if record is 
+ * orphaned in index (is in index, but lacks data)
  *==============================================*/
 BOOLEAN
-is_orphaned_record (CNSTRING key)
+is_record_missing_data_entry (CNSTRING key)
 {
 	RECORD rec=0;
 	if (!isrecord(BTR, str2rkey(key)))

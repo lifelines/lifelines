@@ -91,7 +91,8 @@ struct work {
 	INT check_evens;
 	INT check_othes;
 	INT fix_alter_pointers;
-	INT check_orphans;
+	INT check_missing_data_records; /* record in index, but no data */
+	INT fix_missing_data_records;
 	INT pass; /* =1 is checking, =2 is fixing */
 };
 /*=======================================
@@ -124,11 +125,11 @@ static BOOLEAN check_index(BTREE btr, INDEX index, TABLE fkeytab, RKEY * lo, RKE
 static BOOLEAN check_indi(CNSTRING key, RECORD rec);
 static void check_node(CNSTRING key, NODE node, INT level);
 static void check_nodes(void);
-static void check_orphans(void);
+static void check_missing_data_records(void);
 static void check_pointers(CNSTRING key, RECORD rec);
 static void check_set(INDISEQ seq, char ctype);
 static BOOLEAN check_sour(CNSTRING key, RECORD rec);
-static void check_typed_orphans(char ntype);
+static void check_typed_missing_data_records(char ntype);
 static BOOLEAN check_othe(CNSTRING key, RECORD rec);
 static BOOLEAN find_xref(CNSTRING key, NODE node, CNSTRING tag1, CNSTRING tag2);
 static void finish_and_delete_nameset(void);
@@ -157,12 +158,12 @@ enum {
 	ERR_ORPHANNAME,  ERR_GHOSTNAME, ERR_DUPNAME, ERR_DUPREFN
 	, ERR_NONINDINAME, ERR_DUPINDI, ERR_DUPFAM
 	, ERR_DUPSOUR, ERR_DUPEVEN, ERR_DUPOTHE
-	, ERR_MISSING, ERR_DELETED, ERR_BADNAME
+	, ERR_UNDELETED, ERR_DELETED, ERR_BADNAME
 	, ERR_BADFAMREF, ERR_MISSINGCHILD, ERR_MISSINGSPOUSE
 	, ERR_BADHUSBREF, ERR_BADWIFEREF, ERR_BADCHILDREF
 	, ERR_EXTRAHUSB, ERR_EXTRAWIFE, ERR_EXTRACHILD
 	, ERR_EMPTYFAM, ERR_SOLOFAM, ERR_BADPOINTER
-	, ERR_ORPHAN
+	, ERR_MISSINGREC
 };
 
 static struct errinfo errs[] = {
@@ -176,7 +177,7 @@ static struct errinfo errs[] = {
 	, { ERR_DUPSOUR, 0, 0, N_("Duplicate sources") }
 	, { ERR_DUPEVEN, 0, 0, N_("Duplicate events") }
 	, { ERR_DUPOTHE, 0, 0, N_("Duplicate others") }
-	, { ERR_MISSING, 0, 0, N_("Missing records") }
+	, { ERR_UNDELETED, 0, 0, N_("Missing records (from deleteset)") }
 	, { ERR_DELETED, 0, 0, N_("Deleted records") }
 	, { ERR_BADNAME, 0, 0, N_("Bad name") }
 	, { ERR_BADFAMREF, 0, 0, N_("Bad family reference") }
@@ -191,7 +192,7 @@ static struct errinfo errs[] = {
 	, { ERR_EMPTYFAM, 0, 0, N_("Empty family") }
 	, { ERR_SOLOFAM, 0, 0, N_("Single person family") }
 	, { ERR_BADPOINTER, 0, 0, N_("Bad pointer") }
-	, { ERR_ORPHAN, 0, 0, N_("Orphan record") }
+	, { ERR_MISSINGREC, 0, 0, N_("Missing data records") }
 };
 static struct work todo;
 static LIST tofix=0;
@@ -227,21 +228,21 @@ print_usage (void)
 #endif
 	llstrncpyf(verstr, sizeof(verstr), uu8, title
 		, get_lifelines_version(sizeof(verstr)-1-strlen(title)));
-	printf(
-		_("usage: dbverify -(flags) <btree>\n"
-		"flags:\n"
-		"\t-a = Perform all checks (does not include fixes)\n"
-		"\t-g = Check for ghosts (names/refns)\n"
-		"\t-G = Check for & fix ghosts (names/refns)\n"
-		"\t-i = Check individuals\n"
-		"\t-f = Check families\n"
-		"\t-F = Alter any bad family lineage pointers (to _badptr)\n"
-		"\t-s = Check sours\n"
-		"\t-e = Check events\n"
-		"\t-x = Check others\n"
-		"\t-l = Check database structure\n"
-		"\t-n = Noisy (echo every record processed)\n")
-		);
+	printf(_("usage: dbverify -(flags) <btree>\n"));
+	printf(_("flags:\n"));
+	printf(_("\t-a = Perform all checks (does not include fixes)\n"));
+	printf(_("\t-g = Check for ghosts (names/refns)\n"));
+	printf(_("\t-G = Check for & fix ghosts (names/refns)\n"));
+	printf(_("\t-i = Check individuals\n"));
+	printf(_("\t-f = Check families\n"));
+	printf(_("\t-F = Alter any bad family lineage pointers (to _badptr)\n"));
+	printf(_("\t-s = Check sours\n"));
+	printf(_("\t-e = Check events\n"));
+	printf(_("\t-x = Check others\n"));
+	printf(_("\t-l = Check database structure\n"));
+	printf(_("\t-m = Check for records missing data entries\n"));
+	printf(_("\t-M = Fix records missing data entries\n"));
+	printf(_("\t-n = Noisy (echo every record processed)\n"));
 	printf(_("example: dbverify -ifsex \"%s\"\n"), fname);
 	printf("%s\n", verstr);
 }
@@ -1047,7 +1048,7 @@ check_set (INDISEQ seq, char ctype)
 	i = xref_next(ctype, i);
 	FORINDISEQ(seq, el, num)
 		while (i<element_ikey(el)) {
-			report_error(ERR_MISSING
+			report_error(ERR_UNDELETED
 				, _("Missing undeleted record %c%d")
 				, ctype, i);
 			i = xref_next(ctype, i);
@@ -1197,23 +1198,24 @@ validate_errs (void)
 	}
 }
 /*=========================================
- * check_orphans -- Check all records for orphans
+ * check_missing_data_records -- Check for records
+ *  present in index but not in data
  *=======================================*/
 static void
-check_orphans (void)
+check_missing_data_records (void)
 {
-	check_typed_orphans('I');
-	check_typed_orphans('F');
-	check_typed_orphans('S');
-	check_typed_orphans('E');
-	check_typed_orphans('X');
+	check_typed_missing_data_records('I');
+	check_typed_missing_data_records('F');
+	check_typed_missing_data_records('S');
+	check_typed_missing_data_records('E');
+	check_typed_missing_data_records('X');
 }
 /*=========================================
- * check_typed_orphans -- Check all records 
+ * check_typed_missing_data_records -- Check all records 
  *  of specified type for orphans
  *=======================================*/
 static void
-check_typed_orphans (char ntype)
+check_typed_missing_data_records (char ntype)
 {
 	int keynum=0;
 	while (TRUE) {
@@ -1222,9 +1224,16 @@ check_typed_orphans (char ntype)
 		if (!keynum) return;
 		sprintf(key, "%c%d", ntype, keynum);
 		if (noisy)
-			report_progress("Orphan checking: %s", key);
-		if (is_orphaned_record(key)) {
-			report_error(ERR_ORPHAN, _("Orphan record (%s)"), key);
+			report_progress("Check data record presence: %s", key);
+		if (is_record_missing_data_entry(key)) {
+			if (todo.pass == 1) {
+				report_error(ERR_MISSINGREC, _("Missing data record (%s)"), key);
+			} else {
+				if (todo.fix_missing_data_records) {
+					delete_record_missing_data_entry(key);
+					report_fix(ERR_MISSINGREC, _("Fixed missing data record (%s)"), key);
+				}
+			}
 		}
 	}
 }
@@ -1277,7 +1286,8 @@ main (int argc,
 		case 'n': noisy=TRUE; break;
 		case 'a': allchecks=TRUE; break;
 		case 'F': todo.fix_alter_pointers=TRUE; break;
-		case 'o': todo.check_orphans=TRUE; break;
+		case 'm': todo.check_missing_data_records=TRUE; break;
+		case 'M': todo.fix_missing_data_records=TRUE; break;
 		default: print_usage(); goto done;
 		}
 	}
@@ -1285,6 +1295,10 @@ main (int argc,
 	/* Turn off Memory Debugging */
 	/* This is unnecessary -- it is off anyway, Perry, 2001/10/28 */
 	alloclog  = FALSE;
+
+	/* Enable any checks needed for fixes selected */
+	if (todo.fix_missing_data_records)
+		todo.check_missing_data_records = 1;
 
 	/* initialize options & misc. stuff */
 	if (!init_lifelines_global(0, &msg, 0)) {
@@ -1339,8 +1353,8 @@ main (int argc,
 		check_and_fix_records();
 	}
 
-	if (todo.check_orphans) {
-		check_orphans();
+	if (todo.check_missing_data_records) {
+		check_missing_data_records();
 	}
 
 	report_results();

@@ -10,6 +10,14 @@
 
 	Avoid ASSERTs for missing records in forindi, forfam, etc loops.
 
+	* ChangeLog src/gedlib/intrface.c src/gedlib/messages.c
+	src/gedlib/refns.c src/hdrs/gedcom.h src/liflines/delete.c
+	src/liflines/llinesi.h src/liflines/screen.c src/tools/dbverify.c
+
+	llines & dbverify: Change terminology for records in index but
+	lacking data from orphaned to missing data records. Remove llines
+	UI for fixing these, and add dbverify M switch to fix them.
+
 2005-02-04 Perry Rapp
 
 	* ChangeLog src/gedlib/node.c src/hdrs/gedcom.h
