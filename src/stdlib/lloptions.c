@@ -104,6 +104,7 @@ static struct str_option_s str_options[] = {
 	,{ "ErrorLog", &lloptions.errorlog, "", DBNO }
 	,{ "LongDisplayDate", &lloptions.disp_long_date_fmts, "", DBNO }
 	,{ "ShortDisplayDate", &lloptions.disp_shrt_date_fmts, "", DBNO }
+	,{ "ShortOmitString", &lloptions.shrt_omit, "", DBNO }
 	,{ "INDIREC", &lloptions.indirec, "", DBNO }
 	,{ "FAMRECBODY", &lloptions.famrecbody, "" , DBNO }
 	,{ "SOURREC", &lloptions.sourrec, "", DBNO }
@@ -441,4 +442,22 @@ getsaveenv (STRING key)
 	if (!val)
 		val = "";
 	return strsave(val);
+}
+/*===============================================
+ * getoptstr -- get an option
+ *  First tries user option table (looks up optname)
+ *  Then tries lloptions struct (lloptptr)
+ *  Finally defaults to defval
+ * Created: 2001/11/20, Perry Rapp
+ *=============================================*/
+STRING
+getoptstr (STRING optname, STRING lloptval, STRING defval)
+{
+	STRING str;
+	str = valueof_str(useropts, optname);
+	if (!str || !str[0])
+		str = lloptval;
+	if (!str || !str[0])
+		str = defval;
+	return str;
 }

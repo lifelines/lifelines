@@ -98,25 +98,14 @@ archive_in_file (void)
 	/* header date & time */
 	fprintf(fn, "1 DATE %s\n2 TIME %s\n", dat, tim);
 	/* header submitter entry */
-	str = valueof_str(useropts, "HDR_SUBM");
-	if (!str || !str[0])
-		str = lloptions.hdr_subm;
-	if (!str || !str[0])
-		str = "1 SUBM";
+	str = getoptstr("HDR_SUBM", lloptions.hdr_subm, "1 SUBM");
 	fprintf(fn, "%s\n", str);
 	/* header gedcom version info */
-	str = valueof_str(useropts, "HDR_GEDC");
-	if (!str || !str[0])
-		str = lloptions.hdr_gedc;
-	if (!str || !str[0])
-		str = "1 GEDC\n2 VERS 5.5\n2 FORM LINEAGE-LINKED";
+	str = getoptstr("HDR_GEDC", lloptions.hdr_gedc
+		, "1 GEDC\n2 VERS 5.5\n2 FORM LINEAGE-LINKED");
 	fprintf(fn, "%s\n", str);
 	/* header character set info */
-	str = valueof_str(useropts, "HDR_CHAR");
-	if (!str || !str[0])
-		str = lloptions.hdr_char;
-	if (!str || !str[0])
-		str = "1 CHAR ASCII";
+	str = getoptstr("HDR_CHAR", lloptions.hdr_char, "1 CHAR ASCII");
 	fprintf(fn, "%s\n", str);
 	/* finished header */
 	tran_gedout = tran_tables[MINGD];

@@ -3426,12 +3426,31 @@ HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS
 
 <PARA>
 
-<APPLICATION>LifeLines</APPLICATION> supports source, event and other,
-user-defined record types. You access these features through
-the x operation from the main menu. When you select this operation
-<APPLICATION>LifeLines</APPLICATION> displays the following menu:
+	<APPLICATION>LifeLines</APPLICATION> supports source, event
+	and other, user-defined record types.  You can access these
+	features in two ways: either through the x operation from the
+	main menu, or via commands in the individual and family browse
+	screens.  The first approach might be most convenient when you
+	are solely working with these record types.  The second makes
+	it easier to work with source, event and user-defined records
+	in parallel with your person and family records; this can be
+	useful for instance when you want to create references from
+	your person and family record to your source, event and user
+	defined records as you create them, and to view and edit
+	records that you have referenced from within a person or
+	family record.
+
+</PARA>
+
+<PARA>
+
+	Using the first of these two possibilities
+	<APPLICATION>LifeLines</APPLICATION> displays the following
+	menu:
+
 <SCREEN>
 What activity do you want to perform?
+
   s  Browse source records
   e  Browse event records
   x  Browse other records
@@ -3441,9 +3460,26 @@ What activity do you want to perform?
   4  Edit event record from the database
   5  Add an other record to the database
   6  Edit other record from the database
-  q  Return to the main menu
+  q  Return to main menu
 </SCREEN>
 
+	Using the second variant (from the person and family browse
+	screens), the following six commands are available. The first
+	three are described alongside with their counterparts in the x
+	menu (they do mostly, but not entirely, the same things); the
+	last three are described separately:
+
+<SCREEN>
+  %s  Add source
+  %e  Add event 
+  %o  Add other
+</SCREEN>
+ 
+<SCREEN>
+  $s  List sources
+  $n  List notes
+  $$  List references
+</SCREEN>
 
 </PARA>
 
@@ -3451,10 +3487,10 @@ What activity do you want to perform?
 
 <PARA>
 
-The handling of source, event and user-defined records in
-<APPLICATION>LifeLines</APPLICATION> is still in development. 
-For example, sources cannot yet be searched by REFN or be
-deleted.
+	The handling of source, event and user-defined records in
+	<APPLICATION>LifeLines</APPLICATION> is still in
+	development. For example, sources cannot yet be searched by
+	REFN or be deleted.
 
 </PARA>
 
@@ -3467,7 +3503,7 @@ REFN, title, and author for each. A record may be selected
 from this list to edit.
 </PARA>
 
-<GLOSSLIST><GLOSSENTRY><GLOSSTERM><KEYCAP>e</KEYCAP>
+</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM><KEYCAP>e</KEYCAP>
 <ACTION>Browse event records.</ACTION></GLOSSTERM><GLOSSDEF>
 
 <PARA>
@@ -3477,8 +3513,8 @@ yet this does not display any information about each event.
 A record may be selected from this list to edit.
 </PARA>
 
-<GLOSSLIST><GLOSSENTRY><GLOSSTERM><KEYCAP>x</KEYCAP>
-<ACTION>Browse source records.</ACTION></GLOSSTERM><GLOSSDEF>
+</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM><KEYCAP>x</KEYCAP>
+<ACTION>Browse other records.</ACTION></GLOSSTERM><GLOSSDEF>
 
 <PARA>
 This will bring up a list of all other records by number,
@@ -3486,14 +3522,18 @@ showing the 0 level line as summary. A record may be selected
 from this list to edit.
 </PARA>
 
-<GLOSSLIST><GLOSSENTRY><GLOSSTERM><KEYCAP>1</KEYCAP>
-<ACTION>Add a source record to the database.</ACTION></GLOSSTERM><GLOSSDEF>
-
+	</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM><KEYCAP>1</KEYCAP>
+	<ACTION>Add a source record to the
+	database.</ACTION></GLOSSTERM><GLOSSDEF>
+	
 <PARA>
 
-This operation is used to add a new source record to the
-database. <APPLICATION>LifeLines</APPLICATION> creates a template source and puts you in the screen editor to edit the template.
-The default template is:
+	This operation (or alternatively <KEYCAP>%s</KEYCAP> from the
+	person, family or auxiliary browse screens) is used to add a
+	new source record to the database.
+	<APPLICATION>LifeLines</APPLICATION> creates a template source
+	and puts you in the screen editor to edit the template. The
+	default template is:
 
 <PROGRAMLISTING>
 
@@ -3517,8 +3557,10 @@ The default template is:
 	other records to refer to the source record. See the section
 	on using <STRUCTFIELD>REFN</STRUCTFIELD> values. Because many
 	sources have a title and an author, the default template has
-	these lines. Here is how I recorded one of the sources in my
-	database:
+	these lines. You may adjust the source template via the
+	SOURREC user option (either at the database level, via the
+	user options, or globally, via the configuration file). Here
+	is how I recorded one of the sources in my database:
 
 <EXAMPLE>
 
@@ -3541,8 +3583,68 @@ Example of a source record
 
 </PARA>
 
-</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM><KEYCAP>2</KEYCAP>
-<ACTION>Edit source record from the database.</ACTION></GLOSSTERM><GLOSSDEF>
+	<PARA>
+
+	The add source command in the x menu is equivalent to the
+	<KEYCAP>%s</KEYCAP> command available in the person or family
+	browse screen, in terms of entering the source record; after
+	saving the source record though, there is one significant
+	difference, in that that you then are presented with the
+	following prompt (also, the key value of the new record is
+	displayed in the status bar at this point):
+
+<SCREEN>
+Please choose from the following options:
+  1: Insert xref automatically at bottom of current record.
+  2: Edit current record now to add xref manually.
+  3: Browse new record (without adding xref).
+  4: Return to current record (without adding xref).
+
+ Commands:   j Move down     k Move up    i Select     q Quit 
+</SCREEN>
+
+	<PARA>
+
+	The four options perform the following actions:
+
+	</PARA>
+
+	<PARA>
+
+	1: LifeLines adds a reference to the new source record at the
+	bottom of the person or family record that was visible in the
+	display screen when you prompted LifeLines to create the new
+	source record.
+
+	</PARA>
+
+	<PARA>
+
+	2: LifeLines will open the person or family record that was
+	visible in the display screen when you prompted LifeLines to
+	create the new source record, so that you can manually enter a
+	reference to the newly created source record (perhaps as a
+	source reference to an event that you are planning to add).
+
+	</PARA>
+
+	<PARA>
+
+	3: LifeLines lets you browse (and optionally reopen for
+	editing) your newly added source record.
+
+	</PARA>
+
+	<PARA>
+
+	4: You are returned to the person or family record that was
+	visible in the display screen when you prompted LifeLines to
+	create the new source record. No reference is added to the new
+	record.
+
+	</PARA>
+
+</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM><KEYCAP>2</KEYCAP> <ACTION>Edit source record from the database.</ACTION></GLOSSTERM><GLOSSDEF>
 
 <PARA>
 
@@ -3566,15 +3668,15 @@ value. <APPLICATION>LifeLines</APPLICATION> retrieves the record and puts you in
 
 </PARA>
 
-</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM><KEYCAP>3</KEYCAP>
-<ACTION>Add an event record to the database.</ACTION></GLOSSTERM><GLOSSDEF>
+</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM><KEYCAP>3</KEYCAP> <ACTION>Add an event record to the database.</ACTION></GLOSSTERM><GLOSSDEF>
 
 <PARA>
 
-This operation adds a new event record to the database.
-<APPLICATION>LifeLines</APPLICATION> automatically creates a template
-event and invokes the screen editor to edit the template. The default
-template is:<PROGRAMLISTING>
+This operation (or alternatively <KEYCAP>%e</KEYCAP> from the person,
+family or auxiliary browse screens) adds a new event record to the
+database.  <APPLICATION>LifeLines</APPLICATION> creates a template
+event and puts you in the screen editor to edit the template. The
+default template is:<PROGRAMLISTING>
 
 0 EVEN
   1 REFN
@@ -3597,28 +3699,89 @@ template is:<PROGRAMLISTING>
 
 <PARA>
 
-	Do not change the 0 EVEN line. Otherwise you may edit this
-	record any way you like. The <STRUCTFIELD>1 REFN</STRUCTFIELD>
-	line allows you to give this event a symbolic name you can use
-	when you want to refer to this event from other records. See
-	the section on using <STRUCTFIELD>REFN</STRUCTFIELD>
-	values. The default template suggests that an event has a
-	date, a place, and refers to persons in roles with respect to
-	the event. There is far less experience with event-based
-	<ACRONYM>GEDCOM</ACRONYM> than there is with simple person and
-	family <ACRONYM>GEDCOM</ACRONYM>. You may even be wondering
-	why you would need event records when you can simply tuck
-	events away in person and family records. This is a topic that may
-	get covered in an appendix.
+	Do not change the <STRUCTFIELD>0 EVEN</STRUCTFIELD>
+	line. Otherwise you may edit this record any way you like. The
+	<STRUCTFIELD>1 REFN</STRUCTFIELD> line allows you to give this
+	event a symbolic name you can use when you want to refer to
+	this event from other records. See the section on using
+	<STRUCTFIELD>REFN</STRUCTFIELD> values. The default template
+	suggests that an event has a date, a place, and refers to
+	persons in roles with respect to the event. There is far less
+	experience with event-based <ACRONYM>GEDCOM</ACRONYM> than
+	there is with simple person and family
+	<ACRONYM>GEDCOM</ACRONYM>. You may even be wondering why you
+	would need event records when you can simply tuck events away
+	in person and family records. This is a topic that may get
+	covered in an appendix.
 
 </PARA>
+
+	<PARA>
+
+	The add event command in the x menu is equivalent to the
+	<KEYCAP>%e</KEYCAP> command available in the person or family
+	browse screen, in terms of entering the event record; after
+	saving the event record though, there is one significant
+	difference, in that that you then are presented with the
+	following prompt (also, the key value of the new record is
+	displayed in the status bar at this point):
+
+<SCREEN>
+Please choose from the following options:
+  1: Insert xref automatically at bottom of current record.
+  2: Edit current record now to add xref manually.
+  3: Browse new record (without adding xref).
+  4: Return to current record (without adding xref).
+
+ Commands:   j Move down     k Move up    i Select     q Quit 
+</SCREEN>
+
+	<PARA>
+
+	The four options perform the following actions:
+
+	</PARA>
+
+	<PARA>
+
+	1: LifeLines adds a reference to the new event record at the
+	bottom of the person or family record that was visible in the
+	display screen when you prompted LifeLines to create the new
+	event record.
+
+	</PARA>
+
+	<PARA>
+
+	2: LifeLines will open the person or family record that was
+	visible in the display screen when you prompted LifeLines to
+	create the new event record, so that you can manually enter a
+	reference to the newly created event record.
+
+	</PARA>
+
+	<PARA>
+
+	3: LifeLines lets you browse (and optionally reopen for
+	editing) your newly added event record.
+
+	</PARA>
+
+	<PARA>
+
+	4: You are returned to the person or family record that was
+	visible in the display screen when you prompted LifeLines to
+	create the new event record. No reference is added to the new
+	record.
+
+	</PARA>
 
 </GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM><KEYCAP>4</KEYCAP> <ACTION>Edit event record from the database.</ACTION></GLOSSTERM><GLOSSDEF>
 
 <PARA>
 
 	Use this operation to edit an existing event record from the
-	database. When you select this operation
+	database . When you select this operation
 	<APPLICATION>LifeLines</APPLICATION> asks you to identify an
 	event:
 	
@@ -3646,10 +3809,12 @@ enter key or refn:
 
 <PARA>
 
-	This operation adds a new user-defined record to the database.
+	This operation (or alternatively <KEYCAP>%o</KEYCAP> from the
+	person, family or auxiliary browse screens) adds a new
+	user-defined record to the database.
 	<APPLICATION>LifeLines</APPLICATION> creates a template and
 	puts you in the screen editor to edit the template. The
-	default template is:
+	default template is
 
 <PROGRAMLISTING>
 0 XXXX
@@ -3674,9 +3839,73 @@ enter key or refn:
 	records. The <STRUCTFIELD>1 REFN</STRUCTFIELD> line allows you
 	to give this record a symbolic name you can use when you want
 	to refer to it from other records. See the section on using
-	<STRUCTFIELD>REFN</STRUCTFIELD> values.
+	<STRUCTFIELD>REFN</STRUCTFIELD> values. You may adjust the
+	other template via the OTHRREC user option (either at the
+	database level, via the user options, or globally, via the
+	configuration file).
 
 </PARA>
+
+	<PARA>
+
+	The add other record command in the x menu is equivalent to the
+	<KEYCAP>%o</KEYCAP> command available in the person or family
+	browse screen, in terms of entering the other record; after
+	saving the record though, there is one significant difference,
+	in that that you then are presented with the following prompt
+	(also, the key value of the new record is displayed in the
+	status bar at this point):
+
+<SCREEN>
+Please choose from the following options:
+  1: Insert xref automatically at bottom of current record.
+  2: Edit current record now to add xref manually.
+  3: Browse new record (without adding xref).
+  4: Return to current record (without adding xref).
+
+ Commands:   j Move down     k Move up    i Select     q Quit 
+</SCREEN>
+
+	<PARA>
+
+	The four options perform the following actions:
+
+	</PARA>
+
+	<PARA>
+
+	1: LifeLines adds a reference to the new other record at the
+	bottom of the person or family record that was visible in the
+	display screen when you prompted LifeLines to create the new
+	other record.
+
+	</PARA>
+
+	<PARA>
+
+	2: LifeLines will open the person or family record that was
+	visible in the display screen when you prompted LifeLines to
+	create the new other record, so that you can manually enter a
+	reference to the newly created other record (perhaps as a
+	note reference to an event that you are planning to add).
+
+	</PARA>
+
+	<PARA>
+
+	3: LifeLines lets you browse (and optionally reopen for
+	editing) your newly added other record.
+
+	</PARA>
+
+	<PARA>
+
+	4: You are returned to the person or family record that was
+	visible in the display screen when you prompted LifeLines to
+	create the new other record. No reference is added to the new
+	record.
+
+	</PARA>
 
 </GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM><KEYCAP>6</KEYCAP> <ACTION>Edit other record from the database.</ACTION></GLOSSTERM><GLOSSDEF>
 
@@ -3704,6 +3933,52 @@ enter key or refn:
 	record and places you in the screen editor with the record.
 
 </PARA>
+
+</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM><KEYCAP>$s</KEYCAP>
+<ACTION>List sources</ACTION></GLOSSTERM><GLOSSDEF>
+
+	<PARA>
+
+	This command is available in the person and family browse
+	screens. It will bring up a list of all source records that
+	are referenced within the currently displayed person or family
+	record, by the order they appear in the person/family record,
+	showing REFN, title, and author for each. A record may be
+	selected from this list to view in the auxiliary browse screen
+	(and optionally be edited from there).
+
+	</PARA>
+
+
+</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM><KEYCAP>$n</KEYCAP>
+<ACTION>List notes</ACTION></GLOSSTERM><GLOSSDEF>
+
+	<PARA>
+
+	This command is available in the person and family browse
+	screens. It will bring up a list of all note records that are
+	referenced within the currently displayed person or family
+	record, by the order they appear in the person/family record,
+	showing REFN, title, and author for each. A record may be
+	selected from this list to view in the auxiliary browse screen
+	(and optionally be edited from there).
+
+	</PARA>
+
+</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM><KEYCAP>$$</KEYCAP>
+<ACTION>List all references</ACTION></GLOSSTERM><GLOSSDEF>
+
+	<PARA>
+
+	This command is available in the person and family browse
+	screens. It will bring up a list of all records that are
+	referenced within the currently displayed person or family
+	record, by the order they appear in the person/family record,
+	showing REFN, title, and author for each. A record may be
+	selected from this list to view in the auxiliary browse screen
+	(and optionally be edited from there).
+
+	</PARA>
 
 </GLOSSDEF></GLOSSENTRY></GLOSSLIST>
 

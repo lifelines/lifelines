@@ -1194,16 +1194,29 @@ indi_to_event (NODE node, TRANTABLE tt, STRING tag, STRING head
 	STRING p = scratch;
 	INT mylen = sizeof(scratch)/sizeof(scratch[0]);
 	STRING event;
-	INT n;
+	STRING omit;
+	if (mylen > len+1) mylen = len+1; /* incl. trailing 0 */
 	if (!node) return NULL;
 	if (!(node = find_tag(nchild(node), tag))) return NULL;
 	event = event_to_string(node, tt, rfmt);
 	if (!event) return NULL;
+	/* need at least room for head + 1 character + "..." or no point */
+	if (strlen(head)+4>len) return NULL;
 	p[0] = 0;
 	llstrcatn(&p, head, &mylen);
-	llstrcatn(&p, event, &mylen);
-	n = strlen(scratch);
-	if (scratch[n-1] != '.') {
+	if (mylen<strlen(event)+1) {
+		omit = getoptstr("ShortOmitString", lloptions.shrt_omit, NULL);
+		if (omit) {
+			mylen -= strlen(omit)+1; /* plus trailing 0 */
+			llstrcatn(&p, event, &mylen);
+			mylen += strlen(omit)+1;
+			llstrcatn(&p, omit, &mylen);
+		} else {
+			llstrcatn(&p, event, &mylen);
+		}
+	} else {
+		llstrcatn(&p, event, &mylen);
+		if (mylen && p[-1]!='.')
 		llstrcatn(&p, ".", &mylen);
 	}
 	return scratch;

@@ -4,7 +4,7 @@
 # As are blank lines
 # So all these lines are commented out...
 #
-# 2001/11/19
+# 2001/11/20
 
 # Email address available to report programs
 #EmailAddr=user@mailhost.org
@@ -68,6 +68,10 @@
 # As above, except that omitting this defaults to combining mode 12 (year only)
 #  (the traditional short form)
 #ShortDisplayDate=1,1,0,10,1
+
+# Trailing string to append when truncating events in short display
+#  (eg, to see "b. 1995-5-3, Miss..." instead of "b. 1995-5-3, Missour")
+#ShortOmitString=...
 
 # Set the default data for new persons
 #INDIREC=0 INDI\n1 NAME Fname/Surname\n1 SEX MF\n1 BIRT\n  2 DATE\n  2 PLAC\n1 DEAT\n  2 DATE\n  2 PLAC\n1 SOUR

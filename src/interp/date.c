@@ -247,46 +247,46 @@ format_ymd (STRING syr, STRING smo, STRING sda, INT sfmt, INT mod
 		if (syr)
 			llstrcatn(&p, syr, len);
 		break;
-        case 8:         /* yr mo da */
-                if (syr)
+	case 8:         /* yr mo da */
+		if (syr)
 			llstrcatn(&p, syr, len);
-                if (smo) {
+		if (smo) {
 			llstrcatn(&p, " ", len);
 			llstrcatn(&p, smo, len);
 		}
-                if (sda) {
+		if (sda) {
 			llstrcatn(&p, " ", len);
 			llstrcatn(&p, sda, len);
 		}
-                break;
-        case 9:         /* yr/mo/da */
-                if (syr)
+		break;
+	case 9:         /* yr/mo/da */
+		if (syr)
 			llstrcatn(&p, syr, len);
 		llstrcatn(&p, "/", len);
-                if (smo)
+		if (smo)
 			llstrcatn(&p, smo, len);
 		llstrcatn(&p, "/", len);
-                if (sda)
+		if (sda)
 			llstrcatn(&p, sda, len);
-                break;
-        case 10:        /* yr-mo-da */
-                if (syr)
+		break;
+	case 10:        /* yr-mo-da */
+		if (syr)
 			llstrcatn(&p, syr, len);
 		llstrcatn(&p, "-", len);
-                if (smo)
+		if (smo)
 			llstrcatn(&p, smo, len);
 		llstrcatn(&p, "-", len);
-                if (sda)
+		if (sda)
 			llstrcatn(&p, sda, len);
-                break;
-        case 11:        /* yrmoda */
-                if (syr)
-                        llstrcatn(&p, syr, len);
-                if (smo)
+		break;
+	case 11:        /* yrmoda */
+		if (syr)
+			llstrcatn(&p, syr, len);
+		if (smo)
 			llstrcatn(&p, smo, len);
-                if (sda)
+		if (sda)
 			llstrcatn(&p, sda, len);
-                break;
+		break;
 	/* 12 (year only) was handled directly in do_format_date */
 	case 13:      /* mo/da yr */
 		if (sda)

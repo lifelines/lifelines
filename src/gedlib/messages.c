@@ -275,6 +275,12 @@ STRING dspa_chr    = SS "bap. ";
 STRING dspa_dea    = SS "d. ";
 STRING dspa_bur    = SS "bur. ";
 STRING dspa_chbr   = SS "cb. ";
+/* display longer forms */
+STRING dspl_mar    = SS "married: ";
+STRING dspl_bir    = SS "born: ";
+STRING dspl_chr    = SS "bapt: ";
+STRING dspl_dea    = SS "died: ";
+STRING dspl_bur    = SS "buri: ";
 
 /* editing errors */
 STRING badind      = SS "You cannot edit the INDI line in a person record.";

@@ -1,3 +1,17 @@
+2001-11-20 Perry Rapp <puddle@users.sourceforge.net>
+
+	* .linesrc ChangeLog lines.cfg docs/lifelines.sgml
+	gedlib/messages.c gedlib/node.c hdrs/cache.h hdrs/lloptions.h
+	interp/date.c liflines/export.c liflines/show.c
+	stdlib/lloptions.c tools/dbverify.c:
+
+	(Internat.) Moved some indi strings ("born"...) into messages.c.
+	Added getoptstr function (encapsulate getting option string).
+	Added ShortOmitString option & add support in indi_event.
+	Fix bug in family_events which could print two cb. events.
+	Fixed namelen bug in person_display.
+	Include Jens' addition for docs.
+
 2001-11-19 Perry Rapp <puddle@users.sourceforge.net>
 
 	* .linesrc ChangeLog lines.cfg docs/lifelines.sgml

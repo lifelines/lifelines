@@ -65,6 +65,7 @@ struct lloptions_s {
 	INT report_error_callstack; /* full call stack for report errors */
 	STRING disp_long_date_fmts; /* customized long date display format */
 	STRING disp_shrt_date_fmts; /* customized short date display format */
+	STRING shrt_omit; /* eg, "..." or "&tc", for truncated short events */
 	STRING uilocale; /* locale used for GUI */
 	STRING rptlocale; /* locale used in reports */
 	STRING indirec; /* template for new indi */
@@ -86,5 +87,7 @@ void read_lloptions_from_db(void);
 void term_lloptions(void);
 
 BOOLEAN init_lifelines_global(STRING * pmsg);
+
+STRING getoptstr(STRING optname, STRING lloptstr, STRING defval);
 
 #endif /* _OPTIONS_H */
