@@ -1,5 +1,7 @@
 2000-01-09  Marc Nozell  <marc@nozell.com>
 
+	* In configure.in, bumped version to 3.0.5 
+
 	* fixed tools/Makefile.am to include stdlib/libstdlib.a when
 	linking btree
 
