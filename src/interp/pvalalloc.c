@@ -186,8 +186,8 @@ pvalues_end (void)
 {
 	ASSERT(!cleaning_time);
 	cleaning_time = TRUE;
+	free_all_pnodes(); /* some nodes hold pvalues */
 	free_all_pvalues();
-	free_all_pnodes();
 	cleaning_time = FALSE;
 	ASSERT(reports_time);
 	reports_time = FALSE;

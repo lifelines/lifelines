@@ -198,7 +198,6 @@ void
 free_all_pnodes (void)
 {
 	PN_BLOCK block;
-	/* live_count is how many were leaked */
 	while ((block = block_list)) {
 		PN_BLOCK next = block->next;
 		free_list = 0;
@@ -242,11 +241,16 @@ create_pnode (PACTX pactx, INT type)
 static void
 clear_pnode (PNODE node)
 {
-	node=node; /* unused */
-	/*
-	just points to string inside record, which is
-	in the cache, so nothing to free here.
-	*/
+	if (itype(node)==ISCONS 
+		|| itype(node)==IICONS 
+		|| itype(node)==IFCONS) {
+		if (ivaluex(node)) {
+			PVALUE val = ivaluex(node);
+			delete_pvalue(val);
+			ivaluex(node)=0;
+		}
+	}
+	/* most of the strings are inside the record */
 }
 /*==================================
  * delete_pnode -- Create PNODE node

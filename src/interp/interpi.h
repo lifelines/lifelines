@@ -104,6 +104,7 @@ struct tag_pnode {
 	PNODE    i_prnt;       /* parent of this node */
 	INT      i_line;       /* line where text of this node begins */
 	RPTINFO  i_rptinfo;    /* information about this report file */
+	INT      i_flags;
 	PNODE    i_next;       /* next node */
 	VPTR     i_word1;      /* variable data associated with node type */
 	VPTR     i_word2;      /* ... */

@@ -4,6 +4,10 @@
 
 	Fix leak of pvalues of existing variables in insert_symtab.
 
+	* ChangeLog src/interp/alloc.c src/interp/interpi.h
+	src/interp/pvalalloc.c
+
+	Fix leak of pvalues in ivaluex in pnodes.
 
 2005-02-06 Perry Rapp
 
