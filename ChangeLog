@@ -18,6 +18,9 @@
 
 2000-11-11 Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* interp/functab.c: Add comment on the need to keep the list
+	sorted alphabetically.  Fixes bug #121686.
+
 	* configure.in arch/README arch/alphasort.c arch/scandir.c
 	hdrs/arch.h: Add replacement functions used by the report script
 	menu to make this work on Win32 as well.

@@ -38,6 +38,10 @@
 #include "cache.h"
 #include "interpi.h"
 
+/*
+ * The entries of builtins MUST be in alphabetic order (because an
+ * alphabetic binary sort is performed directly on this list).
+ */
 BUILTINS builtins[] = {
 	{"add",		2,	32,	__add},
 	{"addnode",	3,	3,	__addnode},
