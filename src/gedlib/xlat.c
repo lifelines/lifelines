@@ -32,6 +32,7 @@ struct xlat_s {
 	STRING dest;
 	LIST steps;
 	BOOLEAN adhoc;
+	BOOLEAN valid;
 };
 /* dynamically loadable translation table, entry in dyntt list */
 typedef struct dyntt_s {
@@ -94,6 +95,7 @@ create_null_xlat (void)
 	XLAT xlat = (XLAT)malloc(sizeof(*xlat));
 	memset(xlat, 0, sizeof(*xlat));
 	xlat->steps = create_list();
+	xlat->valid = TRUE;
 	set_list_type(xlat->steps, LISTDOFREE);
 	if (!f_xlats) {
 		f_xlats = create_list();
@@ -225,13 +227,17 @@ xl_get_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 	}
 
 	/* do main codeset conversion, prefering iconv if available */
-	if (iconv_can_trans(zs_str(zsrc), zs_str(zdest))) {
+	if (eqstr(zs_str(zsrc), zs_str(zdest))) {
+		/* main conversion is identity */
+	} else if (iconv_can_trans(zs_str(zsrc), zs_str(zdest))) {
 		XLSTEP xstep = create_iconv_step(src, dest);
 		enqueue_list(xlat->steps, xstep);
 	} else {
 		DYNTT dyntt = get_conversion_dyntt(zs_str(zsrc), zs_str(zdest));
 		if (dyntt)
 			add_dyntt_step(xlat, dyntt);
+		else
+			xlat->valid = FALSE; /* missing main conversion */
 	}
 
 	/* in destination codeset, do subcodings requested by source */
@@ -324,7 +330,7 @@ xl_do_xlat (XLAT xlat, ZSTR * pzstr)
 {
 	BOOLEAN cvtd=FALSE;
 	XLSTEP xstep=0;
-	if (!xlat || !xlat->steps) return cvtd;
+	if (!xlat || !xlat->valid) return cvtd;
 	/* simply cycle through & perform each step */
 	FORLIST(xlat->steps, el)
 		xstep = (XLSTEP)el;
@@ -631,4 +637,28 @@ xlat_get_description (XLAT xlat)
 	zs_appz(&zrtn, zstr);
 	zs_free(&zstr);
 	return zrtn;
+}
+/*==========================================================
+ * xl_is_xlat_valid -- Does it do the job ?
+ * Created: 2002/12/15 (Perry Rapp)
+ *========================================================*/
+BOOLEAN
+xl_is_xlat_valid (XLAT xlat)
+{
+	return xlat->valid;
+}
+/*==========================================================
+ * xl_release_xlat -- Client finished with this
+ * Created: 2002/12/15 (Perry Rapp)
+ *========================================================*/
+void
+xl_release_xlat (XLAT xlat)
+{
+	xlat=xlat; /* unused */
+	/*
+	TODO: If it is an adhoc xlat, free it
+	Have to remove it from cache list, which is slightly annoying
+	(we have no way to remove an item from a list, so we have
+	to recopy the list)
+	*/
 }

@@ -1742,8 +1742,7 @@ invoke_cset_display (void)
 
 	set_list_type(list, LISTDOFREE);
 
-	zs_setf(&zstr, "%s: %s", _("Internal codeset")
-		, int_codeset ? int_codeset : "");
+	zs_setf(&zstr, "%s: %s", _("Internal codeset"), int_codeset);
 	enqueue_list(list, strsave(zs_str(zstr)));
 
 	if (are_locales_supported())

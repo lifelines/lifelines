@@ -513,3 +513,22 @@ transl_free_predefined_xlats (void)
 {
 	clear_predefined_list();
 }
+/*==========================================================
+ * transl_is_xlat_valid -- Does it do the job ?
+ * Created: 2002/12/15 (Perry Rapp)
+ *========================================================*/
+BOOLEAN
+transl_is_xlat_valid (XLAT xlat)
+{
+	return xl_is_xlat_valid(xlat);
+}
+/*==========================================================
+ * transl_release_xlat -- Client finished with this
+ * Created: 2002/12/15 (Perry Rapp)
+ *========================================================*/
+void
+transl_release_xlat (XLAT xlat)
+{
+	xl_release_xlat(xlat);
+}
+

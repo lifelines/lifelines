@@ -44,6 +44,7 @@
 #include "impfeed.h"
 #include "lloptions.h"
 #include "zstr.h"
+#include "codesets.h"
 
 extern STRING qSmisixr, qSmisfxr;
 extern STRING qSmulper, qSmulfam;
@@ -108,6 +109,8 @@ static void check_sour_links(struct import_feedback * ifeed, ELMNT src);
 static void clear_structures(void);
 static void handle_fam_lev1(struct import_feedback * ifeed, STRING tag, STRING val, INT line);
 static void handle_indi_lev1(struct import_feedback * ifeed, STRING, STRING, INT);
+static void handle_head_lev1(struct import_feedback * ifeed, STRING, STRING, INT);
+static void handle_trlr_lev1(struct import_feedback * ifeed, STRING, STRING, INT);
 static void handle_value(STRING, INT);
 static BOOLEAN openlog(void);
 static void handle_warn(struct import_feedback * ifeed, STRING, ...);
@@ -121,12 +124,12 @@ BOOLEAN
 validate_gedcom (struct import_feedback * ifeed, FILE *fp)
 {
 	INT lev, rc, curlev = 0;
-	INT nindi, nfam, nsour, neven, nothr;
+	INT nhead, ntrlr, nindi, nfam, nsour, neven, nothr;
 	ELMNT el;
 	XLAT xlat = transl_get_predefined_xlat(MGDIN);
 	STRING xref, tag, val, msg;
 
-	nindi = nfam = nsour = neven = nothr = 0;
+	nhead = ntrlr = nindi = nfam = nsour = neven = nothr = 0;
 	num_errors = num_warns = 0;
 	f_logopen = FALSE;
 	f_flog = 0;
@@ -169,9 +172,11 @@ validate_gedcom (struct import_feedback * ifeed, FILE *fp)
 				}
 			}
 			defline = flineno;
-			if (eqstr("HEAD", tag) || eqstr("TRLR", tag))
-				rec_type = IGNR_REC;
-			else {
+			if (eqstr("HEAD", tag))  {
+				rec_type = (nhead==0 ? HEAD_REC : IGNR_REC);
+			} else if (eqstr("TRLR", tag)) {
+				rec_type = (ntrlr==0 ? TRLR_REC : IGNR_REC);
+			} else {
 				INT count=0;
 				if (eqstr("INDI", tag)) {
 					count = ++nindi;
@@ -201,7 +206,11 @@ validate_gedcom (struct import_feedback * ifeed, FILE *fp)
 					ifeed->validated_rec_fnc(tag[0], tag, count);
 			}
 		} else {
-			if (rec_type == INDI_REC)
+			if (rec_type == HEAD_REC)
+				handle_head_lev1(ifeed, tag, val, flineno);
+			else if (rec_type == TRLR_REC)
+				handle_trlr_lev1(ifeed, tag, val, flineno);
+			else if (rec_type == INDI_REC)
 				handle_indi_lev1(ifeed, tag, val, flineno);
 			else if (rec_type == FAM_REC)
 				handle_fam_lev1(ifeed, tag, val, flineno);
@@ -450,6 +459,25 @@ add_othr_defn (struct import_feedback * ifeed, STRING xref, INT line)
 	Type(el) = OTHR_REC;
 	Line(el) = line;
 	return dex;
+}
+/*===========================================================
+ * handle_head_lev1 -- Handle level 1 lines in HEAD record
+ * Created: 2002-12-15 (Perry Rapp)
+ *=========================================================*/
+static void
+handle_head_lev1 (struct import_feedback * ifeed, STRING tag, STRING val, INT line)
+{
+	if (eqstr(tag, "CHAR")) {
+		strupdate(&gedcom_codeset_in, (val ? val : ""));
+	}
+}
+/*===========================================================
+ * handle_trlr_lev1 -- Handle level 1 lines in TRLR record
+ * Created: 2002-12-15 (Perry Rapp)
+ *=========================================================*/
+static void
+handle_trlr_lev1 (struct import_feedback * ifeed, STRING tag, STRING val, INT line)
+{
 }
 /*===========================================================
  * handle_indi_lev1 -- Handle level 1 lines in person records
@@ -763,8 +791,7 @@ check_othr_links (struct import_feedback * ifeed, ELMNT otr)
  * handle_value -- Handle arbitrary value
  *=====================================*/
 static void
-handle_value (STRING val,
-              INT line)
+handle_value (STRING val, INT line)
 {
 	ELMNT el;
 	STRING xref;

@@ -221,8 +221,8 @@ load_gedcom (BOOLEAN picklist)
 	ifeed.validation_error_fnc = import_validation_error;
 	ifeed.validation_warning_fnc =  import_validation_warning;
 
-	
 	import_from_gedcom_file(&ifeed, fp);
+	
 	fclose(fp);
 	strfree(&fullpath);
 }

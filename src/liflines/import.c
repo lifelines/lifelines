@@ -41,6 +41,8 @@
 #include "llinesi.h"
 #include "feedback.h"
 #include "impfeed.h"
+#include "codesets.h"
+#include "zstr.h"
 
 
 
@@ -69,6 +71,7 @@ extern STRING qScfoldk, qSunsupuniv;
  *********************************************/
 
 /* alphabetical */
+static BOOLEAN do_import(struct import_feedback * ifeed, FILE *fp);
 static void restore_record(NODE node, INT type, INT num);
 static STRING translate_key(STRING);
 static BOOLEAN translate_values(NODE, VPTR);
@@ -92,8 +95,28 @@ static INT gd_reuse = 1;/* reuse original keys in GEDCOM file if possible */
 BOOLEAN
 import_from_gedcom_file (struct import_feedback * ifeed, FILE *fp)
 {
+	STRING geddef=0;
+	BOOLEAN rtn;
+
+	/* save & restore default gedcom codeset in */
+	strupdate(&geddef, gedcom_codeset_in); 
+	
+	rtn = do_import(ifeed, fp);
+
+	strupdate(&gedcom_codeset_in, geddef);
+
+	return rtn;
+}
+/*=================================================
+ * do_import -- Read GEDCOM file to database
+ *  ifeed: [IN]  output methods
+ *  fp:    [I/O] GEDCOM file whence to load data
+ *===============================================*/
+static BOOLEAN
+do_import (struct import_feedback * ifeed, FILE *fp)
+{
 	NODE node, conv;
-	XLAT ttm = transl_get_predefined_xlat(MGDIN);
+	XLAT ttm = 0;
 	STRING msg;
 	BOOLEAN emp;
 	INT nindi = 0, nfam = 0, neven = 0;
@@ -108,6 +131,17 @@ import_from_gedcom_file (struct import_feedback * ifeed, FILE *fp)
 		msg_error(_(qSunsupuniv), unistr);
 		goto end_import;
 	}
+	if (eqstr_ex(unistr, "UTF-8")) {
+		strupdate(&gedcom_codeset_in, "UTF-8");
+	}
+	if (!int_codeset[0]) {
+		if (!ask_yes_or_no_msg(
+			_("No current internal codeset, so no codeset conversion can be done")
+			, _("Proceed without codeset conversion ?")
+			))
+			goto end_import;
+	}
+
 	/* validate */
 	if (ifeed && ifeed->validating_fnc)
 		(*ifeed->validating_fnc)();
@@ -118,6 +152,28 @@ import_from_gedcom_file (struct import_feedback * ifeed, FILE *fp)
 		goto end_import;
 	}
 
+	if (gedcom_codeset_in[0] && int_codeset[0]) {
+retry_input_codeset:
+		ttm = transl_get_xlat(gedcom_codeset_in, int_codeset);
+		if (!transl_is_xlat_valid(ttm)) {
+			ZSTR zstr=0;
+			char csname[64];
+			transl_release_xlat(ttm);
+			ttm = 0;
+			zs_setf(&zstr, _("Cannot convert codeset (from <%s> to <%s>)")
+				, gedcom_codeset_in, int_codeset);
+			if (!ask_for_string(zs_str(zstr)
+				, _("Enter codeset to assume (* for none)")
+				, csname, sizeof(csname)) || !csname[0]) {
+				goto end_import;
+			}
+			if (!eqstr(csname, "*")) {
+				strupdate(&gedcom_codeset_in, csname);
+				goto retry_input_codeset;
+			}
+		}
+	}
+	
 	if((num_indis() > 0)
 		|| (num_fams() > 0)
 		|| (num_sours() > 0)

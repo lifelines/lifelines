@@ -217,7 +217,8 @@ ask_for_gedcom (STRING mode,
 		STRING fname = valueof_str(props, "filename");
 		STRING dir = valueof_str(props, "dir");
 		STRING filepath = concat_path_alloc(dir, fname);
-		*pfname = strsave(fname);
+		if (pfname)
+			*pfname = strsave(fname);
 		*pfullpath = filepath;
 	}
 	free_proparray(&fileprops);

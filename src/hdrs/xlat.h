@@ -18,12 +18,14 @@
 BOOLEAN xl_do_xlat(XLAT xlat, ZSTR * pzstr);
 void xl_free_adhoc_xlats(void);
 void xl_free_xlats(void);
+ZSTR xlat_get_description(XLAT xlat);
 TRANTABLE xl_get_legacy_tt(XLAT xlat);
 XLAT xl_get_null_xlat(void);
 XLAT xl_get_xlat(CNSTRING src, CNSTRING dest, BOOLEAN adhoc);
+BOOLEAN xl_is_xlat_valid(XLAT xlat);
 void xl_load_all_dyntts(CNSTRING ttpath);
 void xl_set_name(XLAT xlat, CNSTRING name);
 void xl_parse_codeset(CNSTRING codeset, ZSTR * zcsname, LIST * subcodes);
-ZSTR xlat_get_description(XLAT xlat);
+void xl_release_xlat(XLAT xlat);
 
 #endif /* xlat_h_included */

@@ -33,7 +33,7 @@
 
 #include "standard.h"
 
-enum { INDI_REC, FAM_REC, SOUR_REC, EVEN_REC, OTHR_REC, UNKN_REC, IGNR_REC };
+enum { HEAD_REC, TRLR_REC, INDI_REC, FAM_REC, SOUR_REC, EVEN_REC, OTHR_REC, UNKN_REC, IGNR_REC };
 
 #define IS_MALE   1
 #define IS_FEMALE 2

@@ -234,6 +234,12 @@ set_gettext_codeset (CNSTRING codeset)
 			bind_textdomain_codeset(PACKAGE, zs_str(zcsname));
 		}
 		zs_free(&zcsname);
+	} else {
+		/* 
+		We need to set some codeset, in case it was set to 
+		UTF-8 in last db 
+		*/
+		bind_textdomain_codeset(PACKAGE, gui_codeset_out);
 	}
 #endif /* HAVE_BIND_TEXTDOMAIN_CODESET */
 #endif /* ENABLE_NLS */
@@ -607,7 +613,8 @@ update_useropts (VPTR uparm)
 		return;
 	/* deal with db-specific options */
 	/* includes setting int_codeset */
-	update_db_options();
+	if (BTR)
+		update_db_options();
 	/* in case user changed any codesets */
 	init_codesets();
 	/* in case user changed locale (need int_codeset already set) */
@@ -628,16 +635,17 @@ update_db_options (void)
 	STRING str=0;
 	get_db_options(opttab);
 
-	if ((str = valueof_str(opttab, "codeset")) != 0) {
-		if (!eqstr_ex(int_codeset, str)) {
-			strfree(&int_codeset);
-			int_codeset = strsave(str);
-			uu8 = is_codeset_utf8(int_codeset);
-			/* always translate to internal codeset */
-			set_gettext_codeset(int_codeset);
-			/* need to reload all predefined codeset conversions */
-			transl_load_xlats();
-		}
+	str = valueof_str(opttab, "codeset");
+	if (!str) str="";
+	if (!int_codeset)
+		strupdate(&int_codeset, "");
+	if (!eqstr_ex(int_codeset, str)) {
+		strupdate(&int_codeset, str);
+		uu8 = is_codeset_utf8(int_codeset);
+		/* always translate to internal codeset */
+		set_gettext_codeset(int_codeset);
+		/* need to reload all predefined codeset conversions */
+		transl_load_xlats();
 	}
 
 	remove_table(opttab, FREEBOTH);

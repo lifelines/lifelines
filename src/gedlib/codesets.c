@@ -154,8 +154,7 @@ set_codeset_pair (CNSTRING base, CNSTRING defval, STRING *pcsout, STRING *pcsin)
 		e = getoptstr(base, "");
 	if (!e[0])
 		e = defval;
-	strfree(pcsout);
-	*pcsout = strsave(e);
+	strupdate(pcsout, e);
 
 	zs_sets(&zstr, base);
 	zs_apps(&zstr, "In");
@@ -164,8 +163,7 @@ set_codeset_pair (CNSTRING base, CNSTRING defval, STRING *pcsout, STRING *pcsin)
 		e = getoptstr(base, "");
 	if (!e[0])
 		e = defval;
-	strfree(pcsin);
-	*pcsin = strsave(e);
+	strupdate(pcsin, e);
 }
 /*=================================================
  * term_codesets -- free all codeset variables

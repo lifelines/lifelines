@@ -1,3 +1,15 @@
+2002-12-15 Perry Rapp
+
+	* ChangeLog src/gedlib/codesets.c src/gedlib/init.c
+	src/gedlib/translat.c src/gedlib/xlat.c src/hdrs/gedcheck.h
+	src/hdrs/translat.h src/hdrs/xlat.h src/liflines/askgedc.c
+	src/liflines/import.c src/liflines/loadsave.c
+	src/liflines/main.c src/liflines/screen.c
+	src/liflines/valgdcom.c:
+
+	Implement codeset detection & conversion when loading GEDCOM
+	files.
+
 2002-12-14 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c:

@@ -377,7 +377,7 @@ prompt_for_db:
 		llwprintf(_(qSbaddb));
 		goto finish;
 	}
-	if (!int_codeset || !int_codeset[0]) {
+	if (!int_codeset[0]) {
 		msg_info(_("Warning: database codeset unspecified"));
 	} else if (!transl_are_all_conversions_ok()) {
 		msg_info(_("Warning: not all conversions available"));
