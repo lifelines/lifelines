@@ -234,7 +234,7 @@ INT browse_2fam (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 			*prec1 = current1;
 			return BROWSE_FAM;
 		case CMD_BOTTOM:	/* browse bottom fam */
-			*prec2 = current2;
+			*prec1 = current2;
 			return BROWSE_FAM;
 		case CMD_BOTH_FATHERS:	/* browse to husbs/faths */
 			if ((tmp = fam_to_husb(current1)) != 0) {

@@ -9,6 +9,10 @@
 	Remove extra sets of map names.
 	Fix tt menu to show menu keys.
 
+	* ChangeLog src/liflines/tandem.c
+
+	Peter Fales' bugfix for browsing to lower family from tandem.
+
 2003-09-10 Jens Arvidsson
 
 	* ChangeLog po/sv.po
