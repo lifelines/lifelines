@@ -13,6 +13,10 @@
 	liflines/ask.c liflines/main.c
 	Changed gstrings.c to not require global showkeys. (For dbverify.)
 
+	* hdrs/gedcom.h liflines/newrecs.c:
+	Pulled write node code out of edit record into new
+	function write_node_to_editfile (for Ethel).
+
 2000-12-31 Perry Rapp <puddle@users.sourceforge.net>
 
 	* btree/opnbtree.c gedlib/indiseq.c gedlib/keytonod.c
