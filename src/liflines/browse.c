@@ -285,10 +285,10 @@ pick_create_new_family (RECORD current, RECORD save, STRING * addstrings)
 	else if (save) {
 		char scratch[100];
 		STRING name = indi_to_name(nztop(save), ttmd, 55);
-		llstrncpyf(scratch, sizeof(scratch), "%s%s", _(qSissnew), name);
+		llstrncpyf(scratch, sizeof(scratch), uu8, "%s%s", _(qSissnew), name);
 		if (keyflag) {
 			STRING key = rmvat(nxref(nztop(save)))+1;
-			llstrappf(scratch, sizeof(scratch), " (%s)", key);
+			llstrappf(scratch, sizeof(scratch), uu8, " (%s)", key);
 		}
 		if (ask_yes_or_no(scratch))
 			rec = add_family(current, save, NULL);

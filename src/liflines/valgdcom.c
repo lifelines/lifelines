@@ -797,13 +797,13 @@ handle_err (struct import_feedback * ifeed, STRING fmt, ...)
 	}
 
 	++num_errors;
-	llstrncpyf(msg, sizeof(msg)
+	llstrncpyf(msg, sizeof(msg), uu8
 		, _pl("%6d Error", "%6d Errors", num_errors)
 		, num_errors);
 	if (f_logopen)
-		llstrappf(msg, sizeof(msg), _(" (see log file <%s>)"), f_logpath);
+		llstrappf(msg, sizeof(msg), uu8, _(" (see log file <%s>)"), f_logpath);
 	else
-		llstrapp(msg, sizeof(msg), _(" (no log file)"));
+		llstrapp(msg, sizeof(msg), uu8, _(" (no log file)"));
 
 	if (ifeed && ifeed->validation_error_fnc)
 		(*ifeed->validation_error_fnc)(msg);
@@ -842,13 +842,13 @@ handle_warn (struct import_feedback * ifeed, STRING fmt, ...)
 	}
 	
 	++num_warns;
-	llstrncpyf(msg, sizeof(msg)
+	llstrncpyf(msg, sizeof(msg), uu8
 		, _pl("%6d Warning", "%6d Warnings", num_warns)
 		, num_warns);
 	if (f_logopen)
-		llstrappf(msg, sizeof(msg), _(" (see log file <%s>)"), f_logpath);
+		llstrappf(msg, sizeof(msg), uu8, _(" (see log file <%s>)"), f_logpath);
 	else
-		llstrapp(msg, sizeof(msg), _(" (no log file)"));
+		llstrapp(msg, sizeof(msg), uu8, _(" (no log file)"));
 	if (ifeed && ifeed->validation_warning_fnc)
 		(*ifeed->validation_warning_fnc)(msg);
 }
@@ -909,6 +909,6 @@ set_import_log (STRING logpath)
 {
 	if (!logpath)
 		logpath = "";
-	llstrncpy(f_logpath, logpath, sizeof(f_logpath));
+	llstrncpy(f_logpath, logpath, sizeof(f_logpath), uu8);
 }
 

@@ -117,7 +117,7 @@ widecmp (char *str1, char *str2, INT *rtn)
 	bfptr bfs1=0, bfs2=0;
 	BOOLEAN success = FALSE;
 #ifdef HAVE_WCSCOLL
-	if (int_utf8) {
+	if (uu8) {
 		/* convert to wchar_t & use wide compare (wcscoll) */
 #ifdef _WIN32
 		/* MS-Windows really only handles UCS-2 */

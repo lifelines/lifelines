@@ -173,11 +173,8 @@ load_global_char_mapping (void)
 			char name[80];
 			CNSTRING keyname = map_keys[indx];
 			/* eg, TT.MDSIN.UTF-8 */
-			llstrncpy(name, "TT.", sizeof(name));
-			llstrapp(name, sizeof(name), keyname);
-			llstrapp(name, sizeof(name), ".");
-			llstrapp(name, sizeof(name), int_codeset);
-			llstrapp(name, sizeof(name), ".");
+			llstrncpyf(name, sizeof(name), uu8
+				, "TT.%s.%s.", keyname, int_codeset);
 			check_for_user_charmaps(name, ttm, map_names[indx]);
 		}
 	}
@@ -200,8 +197,8 @@ check_for_user_charmaps (STRING basename, TRANMAPPING ttm, CNSTRING mapname)
 		char name[120];
 		char ttpath[MAXPATHLEN];
 		name[0]=0;
-		llstrapp(name, sizeof(name), basename);
-		llstrappf(name, sizeof(name), "%d", i);
+		llstrapp(name, sizeof(name), uu8, basename);
+		llstrappf(name, sizeof(name), uu8, "%d", i);
 		ttname = getoptstr(name, "");
 		if (!ttname || !ttname[0])
 			break;

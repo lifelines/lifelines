@@ -1622,10 +1622,10 @@ prog_var_error (PNODE node, SYMTAB stab, PNODE arg, PVALUE val, STRING fmt, ...)
 		INT n=0,i=0;
 		/* report debugger: Option to display list of local symbols */
 		n = (stab.tab ? get_table_count(stab.tab) : 0);
-		llstrncpyf(buf, sizeof(buf), _("Display locals (%d)"), n);
+		llstrncpyf(buf, sizeof(buf), uu8, _("Display locals (%d)"), n);
 		choices[i++] = strsave(buf);
 		n = (globtab.tab ? get_table_count(globtab.tab) : 0);
-		llstrncpyf(buf, sizeof(buf), _("Display globals (%d)"), n);
+		llstrncpyf(buf, sizeof(buf), uu8, _("Display globals (%d)"), n);
 		choices[i++] = strsave(buf);
 		choices[i++] = strsave(_("Pop one level"));
 		choices[i++] = strsave(_("Quit debugger"));
@@ -1686,7 +1686,7 @@ disp_symtab_cb (STRING key, PVALUE val, VPTR param)
 	struct dbgsymtab_s * sdata = (struct dbgsymtab_s *)param;
 	char line[64];
 	ASSERT(sdata->current < sdata->count);
-	llstrncpyf(line, sizeof(line), "%s: %s", key
+	llstrncpyf(line, sizeof(line), uu8, "%s: %s", key
 		, debug_pvalue_as_string(val));
 	line[sizeof(line)-1] = 0;
 	sdata->locals[sdata->current++] = strsave(line);
@@ -1737,25 +1737,25 @@ vprog_error (PNODE node, STRING fmt, va_list args)
 		/* only display filename if different (or first error) */
 		if (!prevfile[0] || !eqstr(prevfile, fname)) {
 			if (progparsing)
-				llstrncpyf(msgf, ARRSIZE(msgf)
+				llstrncpyf(msgf, ARRSIZE(msgf), uu8
 					, _("\nParsing Error in <%s>"), fname);
 			else
-				llstrncpyf(msgf, ARRSIZE(msgf)
+				llstrncpyf(msgf, ARRSIZE(msgf), uu8
 					, _("\nRuntime Error in: <%s>"), fname);
-			llstrncpy(prevfile, ifname(node), ARRSIZE(prevfile));
+			llstrncpy(prevfile, ifname(node), ARRSIZE(prevfile), uu8);
 		}
 		/* But always display the line & error */
 		if (progparsing)
-			llstrncpyf(msglineno, sizeof(msglineno)
+			llstrncpyf(msglineno, sizeof(msglineno), uu8
 				, _("Parsing Error at line %d: "), iline(node));
 		else
-			llstrncpyf(msglineno, sizeof(msglineno)
+			llstrncpyf(msglineno, sizeof(msglineno), uu8
 				, _("Runtime Error at line %d: "), iline(node));
 	} else {
-		llstrncpyf(msglineno, sizeof(msglineno), _("Aborting: "));
+		llstrncpyf(msglineno, sizeof(msglineno), uu8, _("Aborting: "));
 	}
-	appendstr(&ptr, &mylen, msglineno);
-	appendstrvf(&ptr, &mylen, fmt, args);
+	appendstr(&ptr, &mylen, uu8, msglineno);
+	appendstrvf(&ptr, &mylen, uu8, fmt, args);
 	if (msgf[0])
 		llwprintf(msgf);
 	llwprintf("\n");
@@ -1889,8 +1889,8 @@ pa_handle_require (PACTX pactx, PNODE node)
 	STRING str;
 	ASSERT(ptype(pval)==PSTRING);
 	str = pvalue(pval);
-	llstrncpy(propname, "requires_", sizeof(propname));
-	llstrapp(propname, sizeof(propname), str);
+	llstrncpy(propname, "requires_", sizeof(propname), uu8);
+	llstrapp(propname, sizeof(propname), uu8, str);
 	set_rptfile_prop(pactx, fname, strsave(propname), strsave(str));
 }
 /*=============================================+

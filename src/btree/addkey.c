@@ -56,7 +56,8 @@ addkey (BTREE btree, FKEY ikey, RKEY rkey, FKEY fkey)
 	index = getindex(btree, ikey);
 	if (nkeys(index) >= NOENTS - 1) {
 		char msg[72];
-		llstrncpyf(msg, sizeof(msg), "Index %d found overfull (%d entries > %d max)"
+		llstrncpyf(msg, sizeof(msg), uu8
+			, "Index %d found overfull (%d entries > %d max)"
 			, ikey, nkeys(index), NOENTS-2);
 		FATAL2(msg);
 	}
@@ -73,7 +74,7 @@ addkey (BTREE btree, FKEY ikey, RKEY rkey, FKEY fkey)
 			lo = ++md;
 		else {
 			char msg[64];
-			llstrncpyf(msg, sizeof(msg), "addkey called with"
+			llstrncpyf(msg, sizeof(msg), uu8, "addkey called with"
 				" entry '%s' already present", rkey.r_rkey);
 			FATAL2(msg);
 		}

@@ -89,10 +89,8 @@ edit_valtab_impl (TABLE *ptab, INT sep, STRING ermsg, STRING (*validator)(TABLE 
 {
 	TABLE tmptab = NULL;
 	STRING msg;
-	char fullerr[78];
+	static char fullerr[78]; /* TODO -- fix static usage */
 	STRING ptr;
-	char temp[64], chardesc[8];
-	INT mylen;
 	TRANMAPPING ttmi = get_tranmapping(MEDIN);
 	endwin();
 
@@ -106,17 +104,14 @@ edit_valtab_impl (TABLE *ptab, INT sep, STRING ermsg, STRING (*validator)(TABLE 
 				return TRUE;
 			}
 		} else {
-			ptr=fullerr;
-			ptr[0]=0;
-			mylen=sizeof(fullerr)/sizeof(fullerr[0]);
-			llstrcatn(&ptr, ermsg, &mylen);
-			llstrcatn(&ptr, " ", &mylen);
-			llstrcatn(&ptr, msg, &mylen);
-			llstrcatn(&ptr, " ", &mylen);
-			llstrncpyf(chardesc, sizeof(chardesc), "%c", (uchar)sep);
-			llstrncpyf(temp, sizeof(temp), _(qSsepch), chardesc); /* (separator is %s) */
-			llstrcatn(&ptr, temp, &mylen);
-			ptr = fullerr;
+			INT max = sizeof(fullerr);
+			char temp[64], chardesc[8];
+
+			llstrncpyf(fullerr, max, uu8, "%s %s ", ermsg, msg);
+			llstrncpyf(chardesc, sizeof(chardesc), uu8, "%c", (uchar)sep);
+			llstrncpyf(temp, sizeof(temp), uu8, _(qSsepch), (uchar)sep);  /* (separator is %s) */
+			llstrapp(fullerr, max, uu8, temp);
+			ptr = fullerr; /* static buffer */
 		}
 		if (ask_yes_or_no_msg(ptr, _(qSaredit)))
 			do_edit();

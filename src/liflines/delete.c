@@ -81,8 +81,8 @@ choose_and_remove_family (void)
 
 	/* build confirm string */
 	sprintf(members, _(qScffdeld), fam_to_key(fam), ISize(spseq), ISize(chseq));
-	llstrcatn(&cfptr, _(qScffdel), &cflen);
-	llstrcatn(&cfptr, members, &cflen);
+	appendstr(&cfptr, &cflen, uu8, _(qScffdel));
+	appendstr(&cfptr, &cflen, uu8, members);
 
 	if (ask_yes_or_no(confirm)) {
 

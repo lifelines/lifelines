@@ -39,28 +39,35 @@ utf8len (char ch)
  * (This is of course trivial if we're not in UTF-8 mode.)
  * If limit is non-zero, don't back up beyond this.
  * This will set *width=0 if it gets back to limit without 
- *  finding valid character.
+ *  finding valid character, or backs up more than 6 characters
  * Created: 2002/06/12, Perry Rapp
  *=======================================*/
 STRING
-find_prev_char (STRING ptr, INT * width, STRING limit)
+find_prev_char (STRING ptr, INT * width, STRING limit, int utf8)
 {
-	INT len=1;
-	if (int_utf8) {
+	STRING init = ptr;
+	INT len=0;
+	if (utf8) {
 		while (1) {
-			if (ptr == limit) {
-				len = 0;
+			INT tmp;
+			if (ptr == limit)
+				break;
+			--ptr;
+			if (init - ptr == 7)
+				break;
+			if (*ptr & 0x80)
+				continue;
+			tmp = utf8len(*ptr);
+			if (tmp <= init-ptr) {
+				len = tmp;
 				break;
 			}
-			--ptr;
-			if (utf8len(*ptr)<=len)
-				break;
 		}
 	} else {
-		if (ptr == limit) {
-			len = 0;
+		if (ptr != limit) {
+			len = 1;
+			--ptr;
 		}
-		--ptr;
 	}
 	if (width)
 		*width = len;

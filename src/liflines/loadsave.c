@@ -99,14 +99,8 @@ update_rec_count (INT pass, char ctype, STRING tag, INT count)
 		break;
 	}
 	snprintf(msg, sizeof(msg), "%6d %s", count, numstr);
-	if (row == 5 && tag && tag[0]) {
-		INT len = strlen(msg);
-		STRING ptr = msg + len;
-		len = sizeof(msg)-len;
-		appendstr(&ptr, &len, " (");
-		appendstr(&ptr, &len, tag);
-		appendstr(&ptr, &len, ")");
-	}
+	if (row == 5 && tag && tag[0])
+		llstrappf(msg, sizeof(msg), uu8, " (%s)", tag);
 	row += offset;
 	clear_stdout_hseg(row, 1, 70); /* TODO: how wide should this be ? */
 	wfield(row, 1, msg);

@@ -1185,33 +1185,33 @@ debug_pvalue_as_string (PVALUE val)
 
 	if (!is_pvalue(val)) return (STRING) "*NOT PVALUE*";
 	type = ptype(val);
-	llstrncpyf(scratch, len, "<%s,", ptypes[type]);
+	llstrncpyf(scratch, len, uu8, "<%s,", ptypes[type]);
 	p = scratch + strlen(scratch);
 	len -= strlen(scratch);
 	if (pvalue(val) == NULL) {
-		llstrncpyf(p, len, "NULL>");
+		llstrncpyf(p, len, uu8, "NULL>");
 		return (STRING) scratch;
 	}
 	u.w = pvalue(val);
 	switch (type) {
 	case PINT:
-		llstrncpyf(p, len, "%d>", u.i);
+		llstrncpyf(p, len, uu8, "%d>", u.i);
 		break;
 	case PFLOAT:
-		llstrncpyf(p, len, "%f>", pvalue_to_float(val));
+		llstrncpyf(p, len, uu8, "%f>", pvalue_to_float(val));
 		break;
 	case PSTRING:
-		llstrncpyf(p, len, "\"%s\">", pvalue_to_string(val));
+		llstrncpyf(p, len, uu8, "\"%s\">", pvalue_to_string(val));
 		break;
 	case PINDI:
 		cel = (CACHEEL) pvalue(val);
 		if (!cnode(cel))
 			cel = key_to_indi_cacheel(ckey(cel));
         	node = cnode(cel);
-		llstrncpyf(p, len, "%s>", nval(NAME(node)));
+		llstrncpyf(p, len, uu8, "%s>", nval(NAME(node)));
 		break;
 	default:
-		llstrncpyf(p, len, "%p>", pvalue(val));
+		llstrncpyf(p, len, uu8, "%p>", pvalue(val));
 		break;
 	}
 	return (STRING) scratch;

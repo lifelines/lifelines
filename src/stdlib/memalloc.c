@@ -103,7 +103,6 @@ __deallocate (void *ptr, STRING file, int line)
  *  ptr:  [in] memory to return
  *  file: [in] file releasing memory
  *  line: [in] line num in file releasing memory
- * Created: 2001/07/19 (Perry Rapp)
  *==================================================*/
 void *
 __reallocate (void *ptr, INT size, STRING file, int line)

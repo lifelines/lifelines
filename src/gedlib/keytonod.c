@@ -479,7 +479,7 @@ create_cache (STRING name, INT dirsize, INT indsize)
 	if (dirsize < 1) dirsize = 1;
 	if (indsize < 1) indsize = 1;
 	cache = (CACHE) stdalloc(sizeof(*cache));
-	llstrncpy(cname(cache), name, sizeof(cname(cache)));
+	llstrncpy(cname(cache), name, sizeof(cname(cache)), uu8);
 	cdata(cache) = create_table();
 	cfirstdir(cache) = clastdir(cache) = NULL;
 	cfirstind(cache) = clastind(cache) = NULL;

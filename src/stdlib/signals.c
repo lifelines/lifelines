@@ -152,7 +152,7 @@ on_signals (int sig)
 	if (progrunning) {
 		char line[20];
 		snprintf(line, sizeof(line), "%d", iline(Pnode));
-		sprintpic2(msg, sizeof(msg), _(qSprogsig), ifname(Pnode), line);
+		sprintpic2(msg, sizeof(msg), uu8, _(qSprogsig), ifname(Pnode), line);
 	}
 
 	close_lifelines();
@@ -167,7 +167,7 @@ on_signals (int sig)
 		signame = sig_msgs[sig];
 	else
 		signame = _(qSsigunk);
-	sprintpic2(msg, sizeof(msg), _(qSsignal), signum, signame); 
+	sprintpic2(msg, sizeof(msg), uu8, _(qSsignal), signum, signame); 
 	ll_abort(msg);
 }
 /*================================

@@ -603,7 +603,7 @@ get_names (STRING name, INT *pnum, STRING **pkeys, BOOLEAN exact)
    /* See if user is asking for person by key instead of name */
 	if ((rec = id_by_key(name, 'I'))) {
 		STRING key = rmvat(nxref(nztop(rec)));
-		llstrncpy(kbuf, key, sizeof(kbuf));
+		llstrncpy(kbuf, key, sizeof(kbuf), uu8);
 		kaddr = kbuf;
 		*pkeys = &kaddr;
 		*pnum = 1;
@@ -767,7 +767,7 @@ trim_name (STRING name, INT len)
 	for (i = sdex-1; i >= 0; --i) {
 		/* chop to initial */
 		/* TODO: This doesn't handle composition */
-		if (int_utf8) {
+		if (uu8) {
 			INT wid = utf8len(parts[i][0]);
 			if (wid>1) {
 				INT len = strlen(parts[i]);

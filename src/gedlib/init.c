@@ -114,7 +114,7 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 	if (!configfile || !configfile[0])
 		configfile = environ_determine_config_file();
 
-	llstrncpy(svconfigfile, configfile, sizeof(svconfigfile));
+	llstrncpy(svconfigfile, configfile, sizeof(svconfigfile), uu8);
 
 	if (!load_global_options(svconfigfile, pmsg)) {
 		suppress_reload = FALSE;
@@ -264,7 +264,7 @@ get_lifelines_version (INT maxlen)
 	INT len=sizeof(version);
 	if (len>maxlen)
 		len=maxlen;
-	llstrncpyf(version, len, LIFELINES_VERSION);
+	llstrncpyf(version, len, 0, LIFELINES_VERSION);
 	return version;
 }
 /*===================================
@@ -440,7 +440,7 @@ open_database (BOOLEAN alteration, STRING dbrequested, STRING dbused)
 
 	/* tentatively copy paths into gedlib module versions */
 	btreepath=strsave(dbrequested);
-	llstrncpy(fpath, dbused, sizeof(fpath));
+	llstrncpy(fpath, dbused, sizeof(fpath), 0);
 	expand_special_fname_chars(fpath, sizeof(fpath));
 	readpath=strsave(fpath);
 
@@ -505,66 +505,68 @@ create_database (STRING dbrequested, STRING dbused)
 void
 describe_dberror (INT dberr, STRING buffer, INT buflen)
 {
+	STRING b=buffer;
+	INT n=buflen, u8=uu8;
 	buffer[0]=0;
 	if (dberr != BTERR_WRITER)
-		llstrncpy(buffer, _("Database error: -- "), buflen);
+		llstrncpy(buffer, _("Database error: -- "), buflen, 0);
 
 	switch (dberr) {
 	case BTERR_NODB:
-		llstrapp(buffer, buflen, _("requested database does not exist."));
+		llstrapp(b, n, u8, _("requested database does not exist."));
 		break;
 	case BTERR_DBBLOCKEDBYFILE:
-		llstrapp(buffer, buflen, _("db directory is file, not directory."));
+		llstrapp(b, n, u8, _("db directory is file, not directory."));
 		break;
 	case BTERR_DBCREATEFAILED:
-		llstrapp(buffer, buflen, _("creation of new database failed."));
+		llstrapp(b, n, u8, _("creation of new database failed."));
 		break;
 	case BTERR_DBACCESS:
-		llstrapp(buffer, buflen, _("error accessing database directory."));
+		llstrapp(b, n, u8, _("error accessing database directory."));
 		break;
 	case BTERR_NOKEY:
-		llstrapp(buffer, buflen, _("no keyfile (directory does not appear to be a database)."));
+		llstrapp(b, n, u8, _("no keyfile (directory does not appear to be a database)."));
 		break;
 	case BTERR_INDEX:
-		llstrapp(buffer, buflen,  _("could not open, read or write an index file."));
+		llstrapp(b, n, u8,  _("could not open, read or write an index file."));
 		break;
 	case BTERR_KFILE:
-		llstrapp(buffer, buflen,  _("could not open, read or write the key file."));
+		llstrapp(b, n, u8,  _("could not open, read or write the key file."));
 		break;
 	case BTERR_BLOCK:
-		llstrapp(buffer, buflen,  _("could not open, read or write a block file."));
+		llstrapp(b, n, u8,  _("could not open, read or write a block file."));
 		break;
 	case BTERR_LNGDIR:
-		llstrapp(buffer, buflen,  _("name of database is too long."));
+		llstrapp(b, n, u8,  _("name of database is too long."));
 		break;
 	case BTERR_WRITER:
-		llstrapp(buffer, buflen,  _("The database is already open for writing."));
+		llstrapp(b, n, u8,  _("The database is already open for writing."));
 		break;
 	case BTERR_LOCKED:
-		llstrapp(buffer, buflen,  _("The database is locked (no readwrite access)."));
+		llstrapp(b, n, u8,  _("The database is locked (no readwrite access)."));
 		break;
 	case BTERR_ILLEGKF:
-		llstrapp(buffer, buflen,  _("keyfile is corrupt."));
+		llstrapp(b, n, u8,  _("keyfile is corrupt."));
 		break;
 	case BTERR_ALIGNKF:
-		llstrapp(buffer, buflen,  _("keyfile is wrong alignment."));
+		llstrapp(b, n, u8,  _("keyfile is wrong alignment."));
 		break;
 	case BTERR_VERKF:
-		llstrapp(buffer, buflen,  _("keyfile is wrong version."));
+		llstrapp(b, n, u8,  _("keyfile is wrong version."));
 		break;
 	case BTERR_EXISTS:
-		llstrapp(buffer, buflen,  _("Existing database found."));
+		llstrapp(b, n, u8,  _("Existing database found."));
 		break;
 	case BTERR_READERS:
-		llstrappf(buffer, buflen
+		llstrappf(b, n, u8
 			, _("The database is already opened for read access by %d users.\n  ")
 			, rdr_count);
 		break;
 	case BTERR_BADPROPS:
-		llstrapp(buffer, buflen,  _("Invalid properties set for new database"));
+		llstrapp(b, n, u8,  _("Invalid properties set for new database"));
 		break;
 	default:
-		llstrapp(buffer, buflen,  _("Undefined database error -- fix program."));
+		llstrapp(b, n, u8,  _("Undefined database error -- fix program."));
 		break;
 	}
 }
@@ -609,7 +611,7 @@ update_db_options (void)
 	strfree(&int_codeset);
 	if ((str = valueof_str(opttab, "codeset")) != 0)
 		int_codeset = strsave(str);
-	int_utf8 = is_codeset_utf8(int_codeset);
+	uu8 = is_codeset_utf8(int_codeset);
 	
 	remove_table(opttab, FREEBOTH);
 }
@@ -656,7 +658,7 @@ add_dbs_to_list (LIST dblist, LIST dbdesclist, STRING dir)
 	STRING dbstr=0;
 	char dirbuf[MAXPATHLEN];
 
-	llstrncpy(dirbuf, dir, sizeof(dirbuf));
+	llstrncpy(dirbuf, dir, sizeof(dirbuf), 0);
 	if (!expand_special_fname_chars(dirbuf, sizeof(dirbuf)))
 		return;
 
@@ -698,11 +700,11 @@ getdbdesc (STRING path, STRING userpath)
 		readonly = TRUE; /* openxrefs depends on this global */
 		if (init_lifelines_db()) {
 			desc[0]=0;
-			llstrapp(desc, sizeof(desc), userpath);
-			llstrapp(desc, sizeof(desc), " <");
-			llstrappf(desc, sizeof(desc), _(qSdbrecstats)
+			llstrapp(desc, sizeof(desc), uu8, userpath);
+			llstrapp(desc, sizeof(desc), uu8, " <");
+			llstrappf(desc, sizeof(desc), uu8, _(qSdbrecstats)
 				, num_indis(), num_fams(), num_sours(), num_evens(), num_othrs());
-			llstrappf(desc, sizeof(desc), ">");
+			llstrappf(desc, sizeof(desc), uu8, ">");
 		}
 	}
 	close_lldb();

@@ -1,3 +1,23 @@
+2002-07-22 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog btree/addkey.c gedlib/charmaps.c gedlib/date.c
+	gedlib/editmap.c gedlib/editvtab.c gedlib/init.c
+	gedlib/keytonod.c gedlib/lloptions.c gedlib/locales.c
+	gedlib/names.c gedlib/node.c gedlib/property.c
+	gedlib/translat.c hdrs/gedcom.h hdrs/llstdlib.h
+	hdrs/standard.h interp/interp.c interp/more.c interp/pvalue.c
+	liflines/add.c liflines/ask.c liflines/askprogram.c
+	liflines/browse.c liflines/delete.c liflines/error.c
+	liflines/loadsave.c liflines/menuitem.c liflines/screen.c
+	liflines/show.c liflines/valgdcom.c stdlib/appendstr.c
+	stdlib/llstrcmp.c stdlib/memalloc.c stdlib/path.c
+	stdlib/signals.c stdlib/sprintpic.c stdlib/stdstrng.c
+	stdlib/stralloc.c stdlib/strapp.c stdlib/strcvt.c
+	stdlib/strutf8.c:
+
+	Replaced string modules' use of global with argument (utf8).
+	Fixed some utf8 string bugs. Renamed int_utf8 to uu8.
+
 2002-07-21 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/charmaps.c:

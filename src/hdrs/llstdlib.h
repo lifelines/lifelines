@@ -36,15 +36,15 @@
 
 
 /* This is not the user's codeset! This is the current internal codeset. */
-extern BOOLEAN int_utf8;
+extern BOOLEAN uu8;
 extern STRING  int_codeset;
 
 /* appendstr.c */
-void appendstr(char ** pdest, int * len, const char * src);
-void appendstrf(char ** pdest, int * len, const char * fmt,...);
-void appendstrvf(char ** pdest, int * len, const char * fmt, va_list args);
+void appendstr(char ** pdest, int * len, int utf8, const char * src);
+void appendstrf(char ** pdest, int * len, int utf8, const char * fmt,...);
+void appendstrvf(char ** pdest, int * len, int utf8, const char * fmt, va_list args);
 	/* llstrcatn is a bad name, because its prototype is different from strcatn! */
-#define llstrcatn(dest, src, len) appendstr(dest, len, src)
+#define llstrcatn(dest, src, len) appendstr(dest, len, uu8, src)
 
 /* assert.c */
 /*
@@ -126,11 +126,11 @@ void set_signals(void);
 void ll_abort(STRING);
 
 /* sprintpic.c */
-void sprintpic0(STRING buffer, INT len, CNSTRING pic);
-BOOLEAN sprintpic1(STRING buffer, INT len, CNSTRING pic, CNSTRING arg1);
-BOOLEAN sprintpic2(STRING buffer, INT len, CNSTRING pic, CNSTRING arg1
+void sprintpic0(STRING buffer, INT len, INT utf8, CNSTRING pic);
+BOOLEAN sprintpic1(STRING buffer, INT len, INT utf8, CNSTRING pic, CNSTRING arg1);
+BOOLEAN sprintpic2(STRING buffer, INT len, INT utf8, CNSTRING pic, CNSTRING arg1
 	, CNSTRING arg2);
-BOOLEAN sprintpic3(STRING buffer, INT len, CNSTRING pic, CNSTRING arg1
+BOOLEAN sprintpic3(STRING buffer, INT len, INT utf8, CNSTRING pic, CNSTRING arg1
 	, CNSTRING arg2, CNSTRING arg3);
 
 /* stdstrng.c */
@@ -141,10 +141,12 @@ BOOLEAN islinebreak(INT c);
 BOOLEAN iswhite(INT);
 INT ll_toupper(INT);
 INT ll_tolower(INT);
-char *llstrncat(char *dest, const char *src, size_t n);
-char *llstrncpy(char *dest, const char *src, size_t n);
-char *llstrncpyf(char *dest, size_t n, const char * fmt, ...);
-char *llstrncpyvf(char *dest, size_t n, const char * fmt, va_list args);
+char *llstrncat(char *dest, const char *src, size_t n, int utf8);
+char *llstrncpy(char *dest, const char *src, size_t n, int utf8);
+char *llstrncpyf(char *dest, size_t n, int utf8, const char * fmt, ...);
+char *llstrncpyvf(char *dest, size_t n, int utf8, const char * fmt, va_list args);
+char *llstrncpyvf(char *dest, size_t n, int utf8, const char * fmt, va_list args);
+
 
 /* stralloc.c */
 void free_array_strings(INT n, STRING * arr);
@@ -154,10 +156,10 @@ STRING strsave(CNSTRING);
 void strupdate(STRING * str, CNSTRING value);
 
 /* strapp.c */
-char *llstrapp(char *dest, size_t limit, const char *src);
+char *llstrapp(char *dest, size_t limit, int utf8, const char *src);
 char *llstrappc(char *dest, size_t limit, char ch);
-char *llstrappf(char *dest, int limit, const char *fmt, ...);
-char *llstrappvf(char *dest, int limit, const char *fmt, va_list args);
+char *llstrappf(char *dest, int limit, int utf8, const char *fmt, ...);
+char *llstrappvf(char *dest, int limit, int utf8, const char *fmt, va_list args);
 
 /* strcvt.c */
 STRING capitalize(STRING);
@@ -167,7 +169,7 @@ STRING titlecase(STRING);
 STRING upper(STRING);
 
 /* strutf8.c */
-STRING find_prev_char(STRING ptr, INT * width, STRING limit);
+STRING find_prev_char(STRING ptr, INT * width, STRING limit, int utf8);
 INT utf8len(char ch);
 
 /* strwhite.c */

@@ -293,11 +293,9 @@ llsetenv (STRING name, STRING value)
 {
 	char buffer[128];
 	STRING str = 0;
-	INT len = ARRSIZE(buffer);
-	
-	llstrncpy(buffer, name, len);
-	llstrapp(buffer, len, "=");
-	llstrapp(buffer, len, value);
+
+	buffer[0] = 0;
+	llstrappf(buffer, sizeof(buffer), uu8, "%s=%s", name, value);
 
 #ifdef HAVE_SETENV
 	if (setenv(name, value, 1) != -1)
@@ -445,7 +443,7 @@ win32_setlocale (int category, char * locale)
 		int i;
 		for (i=0; langs[i]; i += 2) {
 			if (eqstrn(locale, langs[i], 2)) {
-				llstrapp(w32loc, sizeof(w32loc), langs[i+1]);
+				llstrapp(w32loc, sizeof(w32loc), uu8, langs[i+1]);
 				break;
 			}
 		}
@@ -456,7 +454,7 @@ win32_setlocale (int category, char * locale)
 			llstrappc(w32loc, sizeof(w32loc), ptr[0]);
 			for (i=0; countries[i]; i += 2) {
 				if (eqstrn(ptr+1, countries[i], 2)) {
-					llstrapp(w32loc, sizeof(w32loc), countries[i+1]);
+					llstrapp(w32loc, sizeof(w32loc), uu8, countries[i+1]);
 					break;
 				}
 			}

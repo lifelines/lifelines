@@ -136,7 +136,7 @@ load_config_file (STRING file, STRING * pmsg)
 		the output (valbuf) is no longer than the input (ptr)
 		*/
 		if (noesc)
-			llstrncpy(valbuf, ptr, sizeof(valbuf));
+			llstrncpy(valbuf, ptr, sizeof(valbuf), uu8);
 		else
 			copy_process(valbuf, ptr);
 		val = valbuf;

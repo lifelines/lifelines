@@ -30,13 +30,14 @@
  *===========================================================*/
 
 #include "llstdlib.h"
+#include "arch.h" /* vsnprintf */
 #include "mystring.h"
 
 
 /*********************************************
  * global/exported variables
  *********************************************/
-BOOLEAN int_utf8=0;         /* This is the internal codeset, not the user's. */
+BOOLEAN uu8=0;         /* This is the internal codeset, not the user's. */
 STRING  int_codeset=0;      /* This is the internal codeset, not the user's. */
 
 /*********************************************
@@ -182,10 +183,9 @@ eqstr_ex (STRING s1, STRING s2)
 /*==================================
  * llstrncpy -- strncpy that always zero-terminates
  * handles UTF-8
- * Created: 2001/03/17, Perry Rapp
  *================================*/
 char *
-llstrncpy (char *dest, const char *src, size_t n)
+llstrncpy (char *dest, const char *src, size_t n, int utf8)
 {
 	/* must have valid strings, and copying at least one byte */
 	if (!dest || !src || !src[0] || n<2) return dest;
@@ -193,10 +193,29 @@ llstrncpy (char *dest, const char *src, size_t n)
 	if (dest[n-1]) {
 		/* overflowed -- back up to last character that fits */
 		INT width=0;
-		STRING prev = find_prev_char(&dest[n-1], &width, dest);
+		STRING prev = find_prev_char(&dest[n-1], &width, dest, utf8);
 		prev[width]=0;
 	}
 	return dest;
+}
+/*==================================
+ * llvsnprintf -- vsnprintf which backs up to last whole character
+ * handles UTF-8
+ *================================*/
+static INT
+llvsnprintf (char *dest, size_t len, int utf8, const char * fmt, va_list args)
+{
+	INT rtn;
+	rtn = vsnprintf(dest, len, fmt, args);
+	if (rtn == (int)(len-1) || rtn == -1 || dest[len-1]) {
+		/* overflowed -- back up to last character that fits */
+		INT width=0;
+		STRING prev;
+		dest[len-1] = 0; /* ensure zero-termination */
+		prev = find_prev_char(&dest[len-1], &width, dest, utf8);
+		prev[width]=0;
+	}
+	return rtn;
 }
 /*==================================
  * llstrncpyf -- snprintf replacement
@@ -204,11 +223,11 @@ llstrncpy (char *dest, const char *src, size_t n)
  * Created: 2002/06/16, Perry Rapp
  *================================*/
 char *
-llstrncpyf (char *dest, size_t n, const char * fmt, ...)
+llstrncpyf (char *dest, size_t n, int utf8, const char * fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	llstrncpyvf(dest, n, fmt, args);
+	llstrncpyvf(dest, n, utf8, fmt, args);
 	va_end(args);
 	return dest;
 }
@@ -218,11 +237,13 @@ llstrncpyf (char *dest, size_t n, const char * fmt, ...)
  * Created: 2002/06/16, Perry Rapp
  *================================*/
 char *
-llstrncpyvf (char *dest, size_t n, const char * fmt, va_list args)
+llstrncpyvf (char *dest, size_t n, int utf8, const char * fmt, va_list args)
 {
 	if (n<1) return dest;
 	dest[0] = 0;
-	return llstrappvf(dest, n, fmt, args);
+	if (n<2) return dest;
+	llvsnprintf(dest, n, utf8, fmt, args);
+	return dest;
 }
 /*==================================
  * llstrncat -- strncat that always zero-terminates
@@ -230,11 +251,11 @@ llstrncpyvf (char *dest, size_t n, const char * fmt, va_list args)
  * Created: 2001/03/17, Perry Rapp
  *================================*/
 char *
-llstrncat (char *dest, const char *src, size_t n)
+llstrncat (char *dest, const char *src, size_t n, int utf8)
 {
 	size_t len = strlen(dest);
 	if (len > n-2) /* must fit trailing zero */
 		return dest;
-	llstrncpy(dest+len, src, n);
+	llstrncpy(dest+len, src, n, utf8);
 	return dest;
 }

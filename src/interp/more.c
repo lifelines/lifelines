@@ -424,7 +424,7 @@ allocsubstring (STRING s, INT i, INT j)
 	/* validate startch */
 	if (startch<0)
 		startch=0;
-	if (int_utf8) {
+	if (uu8) {
 		INT start=0, num=0; /* byte units */
 		STRING ptr = s;
 		while (startch) {
@@ -609,6 +609,8 @@ makestring (PVALUE val, STRING str, INT len, BOOLEAN *eflg)
 	UNION u;
 	CACHEEL cel;
 	STRING txt;
+
+	str[0]=0;
 	/*
 	Here we treat pvalue(val) as thought it were a UNION
 	but it is really a VPTR. This is only safe if sizeof(void *)
@@ -622,32 +624,31 @@ makestring (PVALUE val, STRING str, INT len, BOOLEAN *eflg)
 	u.w = pvalue(val);
 	switch(ptype(val)) {
 		case PNONE: 
-			llstrncpy(str, "<NONE>", len);
+			llstrapp(str, len, uu8, "<NONE>");
 			break;
 		case PANY:
-			llstrncpy(str, "<NULL>", len);
+			llstrapp(str, len, uu8, "<NULL>");
 			break;
 		case PINT:
 		case PFLOAT:
-			llstrncpyf(str, len, "%f", pvalue_to_float(val));
+			llstrappf(str, len, uu8, "%f", pvalue_to_float(val));
 			break;
 		case PBOOL:
 			/* TODO: Should we localize this ? */
-			llstrncpy(str, u.w ? "True" : "False", len);
+			llstrappf(str, len, uu8, u.w ? "True" : "False");
 			break;
 		case PSTRING:
-			llstrncpy(str, (STRING)pvalue(val), len);
+			llstrapp(str, len, uu8, (STRING)pvalue(val));
 			break;
 		case PGNODE:
 			{
+				/* TODO: report codeset conversion */
 				NODE node = (NODE)pvalue(val);
-				str[0] = 0;
 				if (ntag(node)) {
-					llstrcatn(&str, ntag(node), &len);
-					llstrcatn(&str, ": ", &len);
+					llstrappf(str, len, uu8, "%s: ", ntag(node));
 				}
 				if (nval(node))
-					llstrcatn(&str, nval(node), &len);
+					llstrapp(str, len, uu8, nval(node));
 			}
 			break;
 		case PINDI:
@@ -660,17 +661,17 @@ makestring (PVALUE val, STRING str, INT len, BOOLEAN *eflg)
 				cel = get_cel_from_pvalue(val);
 				node = cnode(cel);
 				txt = generic_to_list_string(node, NULL, len, " ", NULL);
-				llstrncpy(str, txt, len);
+				llstrapp(str, len, uu8, txt);
 			}
 			break;
 		case PLIST:
-			llstrncpy(str, "<LIST>", len);
+			llstrapp(str, len, uu8, "<LIST>");
 			break;
 		case PTABLE:
-			llstrncpy(str, "<TABLE>", len);
+			llstrapp(str, len, uu8, "<TABLE>");
 			break;
 		case PSET:
-			llstrncpy(str, "<SET>", len);
+			llstrapp(str, len, uu8, "<SET>");
 			break;
 		default:
 			*eflg = TRUE;

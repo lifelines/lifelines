@@ -373,7 +373,7 @@ repaint_main_menu (UIWINDOW uiwin)
 	show_horz_line(uiwin, ll_lines-3, 0, ll_cols);
 	if (width > ll_cols-4)
 		width = ll_cols-4;
-	llstrncpyf(title, width, _(qSmtitle), get_lifelines_version(ll_cols-4));
+	llstrncpyf(title, width, uu8, _(qSmtitle), get_lifelines_version(ll_cols-4));
 	mvwaddstr(win, 1, 2, title);
 	mvwaddstr(win, 2, 4, _(qScright));
 	str = getoptint("FullDbPath", 1) ? readpath : btreepath;
@@ -965,8 +965,8 @@ ask_for_filename_impl (STRING ttl, STRING path, STRING prmpt, STRING buffer, INT
 	if (len > uiw_cols(ask_msg_win)-2)
 		len = uiw_cols(ask_msg_win)-2;
 	curpath[0] = 0;
-	llstrapp(curpath, len, _(qSiddefpath));
-	llstrapp(curpath, len, compress_path(path, len-strlen(curpath)-1));
+	llstrapp(curpath, len, uu8, _(qSiddefpath));
+	llstrapp(curpath, len, uu8, compress_path(path, len-strlen(curpath)-1));
 
 	return ask_for_string2(ttl, curpath, prmpt, buffer, buflen);
 }
@@ -1768,7 +1768,7 @@ invoke_cset_display (void)
 
 	set_list_type(list, LISTDOFREE);
 
-	llstrncpyf(buffer, sizeof(buffer), "%s: %s", _("Internal codeset")
+	llstrncpyf(buffer, sizeof(buffer), uu8, "%s: %s", _("Internal codeset")
 		, int_codeset ? int_codeset : "");
 	push_list(list, strsave(buffer));
 
@@ -1789,46 +1789,46 @@ invoke_cset_display (void)
 	else
 		push_list(list, strsave(_("iconv (codeset conversion) is disabled.")));
 	
-	llstrncpyf(buffer, sizeof(buffer), _("Startup collate locale: %s")
+	llstrncpyf(buffer, sizeof(buffer), uu8, _("Startup collate locale: %s")
 		, get_original_locale_collate());
 	push_list(list, strsave(buffer));
 	
-	llstrncpyf(buffer, sizeof(buffer), _("Startup messages locale: %s")
+	llstrncpyf(buffer, sizeof(buffer), uu8, _("Startup messages locale: %s")
 		, get_original_locale_msgs());
 	push_list(list, strsave(buffer));
 	
-	llstrncpyf(buffer, sizeof(buffer), _("Current collate locale: %s")
+	llstrncpyf(buffer, sizeof(buffer), uu8, _("Current collate locale: %s")
 		, get_current_locale_collate());
 	push_list(list, strsave(buffer));
 	
-	llstrncpyf(buffer, sizeof(buffer), _("Current messages locale: %s")
+	llstrncpyf(buffer, sizeof(buffer), uu8, _("Current messages locale: %s")
 		, get_current_locale_msgs());
 	push_list(list, strsave(buffer));
 	
-	llstrncpyf(buffer, sizeof(buffer), _("GUI codeset: %s")
+	llstrncpyf(buffer, sizeof(buffer), uu8, _("GUI codeset: %s")
 		, getoptstr("GuiCodeset",""));
 	push_list(list, strsave(buffer));
 
-	llstrncpyf(buffer, sizeof(buffer), _("Editor codeset: %s")
+	llstrncpyf(buffer, sizeof(buffer), uu8, _("Editor codeset: %s")
 		, getoptstr("EditorCodeset",""));
 	push_list(list, strsave(buffer));
 
-	llstrncpyf(buffer, sizeof(buffer), _("Report codeset: %s")
+	llstrncpyf(buffer, sizeof(buffer), uu8, _("Report codeset: %s")
 		, getoptstr("ReportCodeset",""));
 	push_list(list, strsave(buffer));
 
-	llstrncpyf(buffer, sizeof(buffer), _("GEDCOM codeset: %s")
+	llstrncpyf(buffer, sizeof(buffer), uu8, _("GEDCOM codeset: %s")
 		, getoptstr("GedcomCodeset",""));
 	push_list(list, strsave(buffer));
 
-	llstrncpyf(buffer, sizeof(buffer), "TTDIR: %s", getoptstr("TTDIR", ""));
+	llstrncpyf(buffer, sizeof(buffer), uu8, "TTDIR: %s", getoptstr("TTDIR", ""));
 	push_list(list, strsave(buffer));
 
 	for (i=0; i<NUM_TT_MAPS; ++i) {
 		TRANMAPPING ttm = get_tranmapping(i);
 		if (!ttm->global_trans)
 			continue;
-		llstrncpyf(buffer, sizeof(buffer), "%s: %d global tts"
+		llstrncpyf(buffer, sizeof(buffer), uu8, "%s: %d global tts"
 			, get_map_name(i), length_list(ttm->global_trans));
 		push_list(list, strsave(buffer));
 	}
@@ -1850,11 +1850,11 @@ add_shims_info (LIST list)
 		char value[MAXPATHLEN];
 		if (intlshim_get_property("dll_path", value, sizeof(value)))
 		{
-			llstrncpyf(buffer, sizeof(buffer), _("gettext dll: %s"), value);
+			llstrncpyf(buffer, sizeof(buffer), uu8, _("gettext dll: %s"), value);
 			push_list(list, strsave(buffer));
 			if (intlshim_get_property("dll_version", value, sizeof(value)))
 			{
-				llstrncpyf(buffer, sizeof(buffer), _("gettext dll version: %s"), value);
+				llstrncpyf(buffer, sizeof(buffer), uu8, _("gettext dll version: %s"), value);
 				push_list(list, strsave(buffer));
 			}
 			else
@@ -1874,11 +1874,11 @@ add_shims_info (LIST list)
 		char value[MAXPATHLEN];
 		if (iconvshim_get_property("dll_path", value, sizeof(value)))
 		{
-			llstrncpyf(buffer, sizeof(buffer), _("iconv dll: %s"), value);
+			llstrncpyf(buffer, sizeof(buffer), uu8, _("iconv dll: %s"), value);
 			push_list(list, strsave(buffer));
 			if (iconvshim_get_property("dll_version", value, sizeof(value)))
 			{
-				llstrncpyf(buffer, sizeof(buffer), _("iconv dll version: %s"), value);
+				llstrncpyf(buffer, sizeof(buffer), uu8, _("iconv dll version: %s"), value);
 				push_list(list, strsave(buffer));
 			}
 			else
@@ -2457,10 +2457,10 @@ manufacture a listdisp here
 		scratch[0] =0;
 		if (name) {
 			name = manip_name(name, ttmd, TRUE, TRUE, 40);
-			llstrapp(scratch, sizeof(scratch), name);
-			llstrapp(scratch, sizeof(scratch), " ");
+			llstrapp(scratch, sizeof(scratch), uu8, name);
+			llstrapp(scratch, sizeof(scratch), uu8, " ");
 		}
-		llstrappf(scratch, sizeof(scratch), "(%s)", key_of_record(indi, ttmd));
+		llstrappf(scratch, sizeof(scratch), uu8, "(%s)", key_of_record(indi, ttmd));
 		mvwaddstr(win, row, 4, scratch);
 		row++;
 	}
@@ -2523,7 +2523,7 @@ shw_array_of_strings (STRING *strings, listdisp * ld, DETAILFNC detfnc
 	lines = rows + (ld->details ? ld->details+2 : 0);
 	for (i = 0; i<lines; ++i) {
 		row = i+2;
-		llstrncpy(buffer, empstr120, width-1);
+		llstrncpy(buffer, empstr120, width-1, uu8);
 		mvwaddstr(win, row, 1, buffer);
 	}
 	row = 2;
@@ -2539,7 +2539,7 @@ shw_array_of_strings (STRING *strings, listdisp * ld, DETAILFNC detfnc
 		/* for short lists, we show leading numbers */
 		if (ld->listlen<10) {
 			char numstr[12]="";
-			llstrncpyf(numstr, sizeof(numstr), "%d: ", i+1);
+			llstrncpyf(numstr, sizeof(numstr), uu8, "%d: ", i+1);
 			if (i == ld->cur) mvwaddch(win, row, 3, '>');
 			mvwaddstr(win, row, 4, numstr);
 			nlen = strlen(numstr);
@@ -2547,7 +2547,7 @@ shw_array_of_strings (STRING *strings, listdisp * ld, DETAILFNC detfnc
 			if (i == ld->cur) mvwaddch(win, row, 3, '>');
 		}
 		temp = width-6-nlen;
-		llstrncpy(buffer, strings[i], temp);
+		llstrncpy(buffer, strings[i], temp, uu8);
 		if ((INT)strlen(buffer) > temp-2) {
 			if (i==ld->cur)
 				overflag=TRUE;
@@ -2564,7 +2564,7 @@ shw_array_of_strings (STRING *strings, listdisp * ld, DETAILFNC detfnc
 		for (i=0; i<ld->details; ++i) {
 			/* TODO: scroll */
 			if (!ptr[0]) break;
-			llstrncpy(buffer, ptr, width-5);
+			llstrncpy(buffer, ptr, width-5, uu8);
 			mvwaddstr(win, row++, 4, buffer);
 			ptr += strlen(buffer);
 		}
@@ -2903,7 +2903,7 @@ mvwaddstr_lim (WINDOW *wp, int x, int y, char *cp, INT maxlen)
 	else {
 		if (maxlen > (INT)sizeof(buffer)-1)
 			maxlen = sizeof(buffer)-1;
-		llstrncpy(buffer, cp, maxlen-1);
+		llstrncpy(buffer, cp, maxlen-1, uu8);
 		strcat(buffer, "*");
 		mvwaddstr(wp, x, y, buffer);
 	}
@@ -3109,7 +3109,7 @@ display_status (STRING text)
 	WINDOW *win = uiw_win(uiwin);
 	INT row;
 	/* first store it */
-	llstrncpy(status_showing, text, sizeof(status_showing));
+	llstrncpy(status_showing, text, sizeof(status_showing), uu8);
 	if ((INT)strlen(text)>ll_cols-6) {
 		status_showing[ll_cols-8] = 0;
 		strcat(status_showing, "...");
@@ -3207,7 +3207,7 @@ msg_outputv (MSG_LEVEL level, STRING fmt, va_list args)
 			break;
 	}
 	/* now make string to show/put on msg list */
-	llstrncpyvf(ptr, sizeof(buffer), fmt, args);
+	llstrncpyvf(ptr, sizeof(buffer), uu8, fmt, args);
 	/* first handle transitory/status messages */
 	if (level==MSG_STATUS) {
 		if (lock_std_msg)
@@ -3382,18 +3382,18 @@ repaint_search_menu (UIWINDOW uiwin)
 	mvwaddstr(win, row++, 2, _(qSmn_sea_ttl));
 	n = get_vhist_len();
 	if (n>0) {
-		llstrncpyf(buffer, sizeof(buffer)
+		llstrncpyf(buffer, sizeof(buffer), uu8
 			, _pl(qSmn_sea_vhis, qSmn_sea_vhi2, n), n);
 	} else {
-		llstrncpy(buffer, qSmn_sea_vhix, sizeof(buffer));
+		llstrncpy(buffer, qSmn_sea_vhix, sizeof(buffer), uu8);
 	}
 	mvwaddstr(win, row++, 4, buffer);
 	n = get_chist_len();
 	if (n>0) {
-		llstrncpyf(buffer, sizeof(buffer)
+		llstrncpyf(buffer, sizeof(buffer), uu8
 			, _pl(qSmn_sea_chis, qSmn_sea_chi2, n), n);
 	} else {
-		llstrncpy(buffer, qSmn_sea_chix, sizeof(buffer));
+		llstrncpy(buffer, qSmn_sea_chix, sizeof(buffer), uu8);
 	}
 	mvwaddstr(win, row++, 4, buffer);
 	mvwaddstr(win, row++, 4, _(qSmn_sea_scan));

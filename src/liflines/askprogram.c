@@ -118,7 +118,7 @@ parse_program(STRING directory,
   char str[MAXLINELEN];
   int i;
 
-  llstrncpyf(filepath, sizeof(filepath), "%s/%s", directory, filename);
+  llstrncpyf(filepath, sizeof(filepath), uu8, "%s/%s", directory, filename);
 
   if (NULL == (fp = fopen(filepath, "r")))
     return NULL;
@@ -416,6 +416,7 @@ ask_for_program (STRING mode,
         {
           fp = fopen(cur->filename, mode);
           /* give path to caller, whether or not we succeeded */
+		  /* TODO: fix for UTF-8 */
           strncpy(fname, cur->filename,sizeof(fname)-1);
           fname[sizeof(fname)-1] = '\0';
           *pfname = strsave(fname);
@@ -456,9 +457,9 @@ progdetails (ARRAY_DETAILS arrdets, void * param)
     {
       STRING ptr = arrdets->lines[row];
       INT mylen = len;
-      llstrcatn(&ptr, f_tags[i], &mylen);
-      llstrcatn(&ptr, ": ", &mylen);
-      llstrcatn(&ptr, cur->tags[i], &mylen);
+      appendstr(&ptr, &mylen, uu8, f_tags[i]);
+      appendstr(&ptr, &mylen, uu8, ": ");
+      appendstr(&ptr, &mylen, uu8, cur->tags[i]);
       ++row;
       if (row==count)
         return;

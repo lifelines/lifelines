@@ -48,7 +48,7 @@ get_user_email (void)
   if (NULL != pwent &&
       (int)sizeof(hostname) > gethostname(hostname, sizeof(hostname)))
     {
-      llstrncpyf(username, sizeof(username), "%s@%s",
+      llstrncpyf(username, sizeof(username), uu8, "%s@%s",
 	       pwent->pw_name, hostname);
       username[sizeof(username)-1] = '\0';
       retval = (STRING) username;
@@ -76,10 +76,10 @@ get_property (STRING opt)
   val = getoptstr_rpt(opt, NULL);
   if (NULL == val)
     {
-      if (0 == strcmp(opt, "user.fullname"))
+      if (eqstr(opt, "user.fullname"))
         val = get_user_fullname();
 
-      if (0 == strcmp(opt, "user.email"))
+      if (eqstr(opt, "user.email"))
         val = get_user_email();
     }
   return val;

@@ -277,7 +277,7 @@ do_format_date (STRING str, INT dfmt, INT mfmt,
 		return shorten_date(str);
 	}
 	if (sfmt==14) {
-		llstrncpy(complete, str, sizeof(complete));
+		llstrncpy(complete, str, sizeof(complete), uu8);
 		return complete;
 	}
 	if (!cmplx) {
@@ -367,7 +367,7 @@ format_eratime (struct gdate_s * pdate, CNSTRING ymd, INT efmt, STRING output
 			STRING p = output;
 			STRING tag = 0;
 			p[0] = 0;
-			llstrcatn(&p, ymd, &len);
+			appendstr(&p, &len, uu8, ymd);
 			switch (efmt/10) {
 				case 1: tag = _(qSdatetrl_bcB); break;
 				case 2: tag = _(qSdatetrl_bcC); break;
@@ -376,8 +376,8 @@ format_eratime (struct gdate_s * pdate, CNSTRING ymd, INT efmt, STRING output
 			/* this way we handle if one is blank */
 			if (!tag || !tag[0])
 				tag = _(qSdatetrl_bcA);
-			llstrcatn(&p, " ", &len);
-			llstrcatn(&p, tag, &len);
+			appendstr(&p, &len, uu8, " ");
+			appendstr(&p, &len, uu8, tag);
 			return;
 		}
 	} else {
@@ -385,7 +385,7 @@ format_eratime (struct gdate_s * pdate, CNSTRING ymd, INT efmt, STRING output
 			STRING p = output;
 			STRING tag = 0;
 			p[0] = 0;
-			llstrcatn(&p, ymd, &len);
+			appendstr(&p, &len, uu8, ymd);
 			switch (efmt/10) {
 				case 1: tag = _(qSdatetrl_adB); break;
 				case 2: tag = _(qSdatetrl_adC); break;
@@ -394,13 +394,13 @@ format_eratime (struct gdate_s * pdate, CNSTRING ymd, INT efmt, STRING output
 			/* this way we handle if one is blank */
 			if (!tag || !tag[0])
 				tag = _(qSdatetrl_adA);
-			llstrcatn(&p, " ", &len);
-			llstrcatn(&p, tag, &len);
+			appendstr(&p, &len, uu8, " ");
+			appendstr(&p, &len, uu8, tag);
 			return;
 		}
 	}
 	/* no trailing tag at all */
-	llstrncpy(output, ymd, len);
+	llstrncpy(output, ymd, len, uu8);
 
 }
 /*===================================================
@@ -416,9 +416,9 @@ format_cal (INT cal, CNSTRING src, STRING output, INT len)
 {
 	ASSERT(cal>=0 && cal<ARRSIZE(calendar_pics));
 	if (calendar_pics[cal]) {
-		sprintpic1(output, len, calendar_pics[cal], src);
+		sprintpic1(output, len, uu8, calendar_pics[cal], src);
 	} else {
-		llstrncpy(output, src, len);
+		llstrncpy(output, src, len, uu8);
 	}
 }
 /*===================================================
@@ -469,15 +469,15 @@ format_complex (GDATEVAL gdv, STRING output, INT len, INT cmplx
 		switch (gdv->subtype) {
 		case GDVP_FROM:
 			pic = get_cmplx_pic(ECMPLX_FROM, cmplxnum);
-			sprintpic1(output, len, pic, ymd2);
+			sprintpic1(output, len, uu8, pic, ymd2);
 			break;
 		case GDVP_TO:
 			pic = get_cmplx_pic(ECMPLX_TO, cmplxnum);
-			sprintpic1(output, len, pic, ymd2);
+			sprintpic1(output, len, uu8, pic, ymd2);
 			break;
 		case GDVP_FROM_TO:
 			pic = get_cmplx_pic(ECMPLX_FROM_TO, cmplxnum);
-			sprintpic2(output, len, pic, ymd2, ymd3);
+			sprintpic2(output, len, uu8, pic, ymd2, ymd3);
 			break;
 		default:
 			FATAL(); /* invalid period subtype */
@@ -488,16 +488,16 @@ format_complex (GDATEVAL gdv, STRING output, INT len, INT cmplx
 		switch (gdv->subtype) {
 		case GDVR_BEF:
 			pic = get_cmplx_pic(ECMPLX_BEF, cmplxnum);
-			sprintpic1(output, len, pic, ymd2);
+			sprintpic1(output, len, uu8, pic, ymd2);
 			break;
 		case GDVR_AFT:
 		case GDVR_BET: /* BET with no AND is treated as AFT */
 			pic = get_cmplx_pic(ECMPLX_AFT, cmplxnum);
-			sprintpic1(output, len, pic, ymd2);
+			sprintpic1(output, len, uu8, pic, ymd2);
 			break;
 		case GDVR_BET_AND:
 			pic = get_cmplx_pic(ECMPLX_BET_AND, cmplxnum);
-			sprintpic2(output, len, pic, ymd2, ymd3);
+			sprintpic2(output, len, uu8, pic, ymd2, ymd3);
 			break;
 		default:
 			FATAL(); /* invalid period subtype */
@@ -508,15 +508,15 @@ format_complex (GDATEVAL gdv, STRING output, INT len, INT cmplx
 		switch (gdv->subtype) {
 		case GDVA_ABT:
 			pic = get_cmplx_pic(ECMPLX_ABT, cmplxnum);
-			sprintpic1(output, len, pic, ymd2);
+			sprintpic1(output, len, uu8, pic, ymd2);
 			break;
 		case GDVA_EST:
 			pic = get_cmplx_pic(ECMPLX_EST, cmplxnum);
-			sprintpic1(output, len, pic, ymd2);
+			sprintpic1(output, len, uu8, pic, ymd2);
 			break;
 		case GDVA_CAL:
 			pic = get_cmplx_pic(ECMPLX_CAL, cmplxnum);
-			sprintpic1(output, len, pic, ymd2);
+			sprintpic1(output, len, uu8, pic, ymd2);
 			break;
 		}
 		break;
@@ -559,142 +559,142 @@ format_ymd (STRING syr, STRING smo, STRING sda, INT sfmt
 	STRING p = *output;
 
 	if (date_pic) {
-		sprintpic3(*output, *len, date_pic, syr, smo, sda);
+		sprintpic3(*output, *len, uu8, date_pic, syr, smo, sda);
 		*len -= strlen(*output);
 		return;
 	}
 	switch (sfmt) {
 	case 0:		/* da mo yr */
 		if (sda) {
-			llstrcatn(&p, sda, len);
-			llstrcatn(&p, " ", len);
+			appendstr(&p, len, uu8, sda);
+			appendstr(&p, len, uu8, " ");
 		}
 		if (smo) {
-			llstrcatn(&p, smo, len);
-			llstrcatn(&p, " ", len);
+			appendstr(&p, len, uu8, smo);
+			appendstr(&p, len, uu8, " ");
 		}
 		if (syr) {
-			llstrcatn(&p, syr, len);
+			appendstr(&p, len, uu8, syr);
 		}
 		break;
 	case 1:		/* mo da, yr */
 		if (smo) {
-			llstrcatn(&p, smo, len);
-			llstrcatn(&p, " ", len);
+			appendstr(&p, len, uu8, smo);
+			appendstr(&p, len, uu8, " ");
 		}
 		if (sda) {
-			llstrcatn(&p, sda, len);
-			llstrcatn(&p, ", ", len);
+			appendstr(&p, len, uu8, sda);
+			appendstr(&p, len, uu8, ", ");
 		}
 		if (syr)
-			llstrcatn(&p, syr, len);
+			appendstr(&p, len, uu8, syr);
 		break;
 	case 2:		/* mo/da/yr */
 		if (smo)
-			llstrcatn(&p, smo, len);
-		llstrcatn(&p, "/", len);
+			appendstr(&p, len, uu8, smo);
+		appendstr(&p, len, uu8, "/");
 		if (sda)
-			llstrcatn(&p, sda, len);
-		llstrcatn(&p, "/", len);
+			appendstr(&p, len, uu8, sda);
+		appendstr(&p, len, uu8, "/");
 		if (syr)
-			llstrcatn(&p, syr, len);
+			appendstr(&p, len, uu8, syr);
 		break;
 	case 3:		/* da/mo/yr */
 		if (sda)
-			llstrcatn(&p, sda, len);
-		llstrcatn(&p, "/", len);
+			appendstr(&p, len, uu8, sda);
+		appendstr(&p, len, uu8, "/");
 		if (smo)
-			llstrcatn(&p, smo, len);
-		llstrcatn(&p, "/", len);
+			appendstr(&p, len, uu8, smo);
+		appendstr(&p, len, uu8, "/");
 		if (syr)
-			llstrcatn(&p, syr, len);
+			appendstr(&p, len, uu8, syr);
 		break;
 	case 4:		/* mo-da-yr */
 		if (smo)
-			llstrcatn(&p, smo, len);
-		llstrcatn(&p, "-", len);
+			appendstr(&p, len, uu8, smo);
+		appendstr(&p, len, uu8, "-");
 		if (sda)
-			llstrcatn(&p, sda, len);
-		llstrcatn(&p, "-", len);
+			appendstr(&p, len, uu8, sda);
+		appendstr(&p, len, uu8, "-");
 		if (syr)
-			llstrcatn(&p, syr, len);
+			appendstr(&p, len, uu8, syr);
 		break;
 	case 5:		/* da-mo-yr */
 		if (sda)
-			llstrcatn(&p, sda, len);
-		llstrcatn(&p, "-", len);
+			appendstr(&p, len, uu8, sda);
+		appendstr(&p, len, uu8, "-");
 		if (smo)
-			llstrcatn(&p, smo, len);
-		llstrcatn(&p, "-", len);
+			appendstr(&p, len, uu8, smo);
+		appendstr(&p, len, uu8, "-");
 		if (syr)
-			llstrcatn(&p, syr, len);
+			appendstr(&p, len, uu8, syr);
 		break;
 	case 6:		/* modayr */
 		if (smo)
-			llstrcatn(&p, smo, len);
+			appendstr(&p, len, uu8, smo);
 		if (sda)
-			llstrcatn(&p, sda, len);
+			appendstr(&p, len, uu8, sda);
 		if (syr)
-			llstrcatn(&p, syr, len);
+			appendstr(&p, len, uu8, syr);
 		break;
 	case 7:		/* damoyr */
 		if (sda)
-			llstrcatn(&p, sda, len);
+			appendstr(&p, len, uu8, sda);
 		if (smo)
-			llstrcatn(&p, smo, len);
+			appendstr(&p, len, uu8, smo);
 		if (syr)
-			llstrcatn(&p, syr, len);
+			appendstr(&p, len, uu8, syr);
 		break;
 	case 8:         /* yr mo da */
 		if (syr)
-			llstrcatn(&p, syr, len);
+			appendstr(&p, len, uu8, syr);
 		if (smo) {
-			llstrcatn(&p, " ", len);
-			llstrcatn(&p, smo, len);
+			appendstr(&p, len, uu8, " ");
+			appendstr(&p, len, uu8, smo);
 		}
 		if (sda) {
-			llstrcatn(&p, " ", len);
-			llstrcatn(&p, sda, len);
+			appendstr(&p, len, uu8, " ");
+			appendstr(&p, len, uu8, sda);
 		}
 		break;
 	case 9:         /* yr/mo/da */
 		if (syr)
-			llstrcatn(&p, syr, len);
-		llstrcatn(&p, "/", len);
+			appendstr(&p, len, uu8, syr);
+		appendstr(&p, len, uu8, "/");
 		if (smo)
-			llstrcatn(&p, smo, len);
-		llstrcatn(&p, "/", len);
+			appendstr(&p, len, uu8, smo);
+		appendstr(&p, len, uu8, "/");
 		if (sda)
-			llstrcatn(&p, sda, len);
+			appendstr(&p, len, uu8, sda);
 		break;
 	case 10:        /* yr-mo-da */
 		if (syr)
-			llstrcatn(&p, syr, len);
-		llstrcatn(&p, "-", len);
+			appendstr(&p, len, uu8, syr);
+		appendstr(&p, len, uu8, "-");
 		if (smo)
-			llstrcatn(&p, smo, len);
-		llstrcatn(&p, "-", len);
+			appendstr(&p, len, uu8, smo);
+		appendstr(&p, len, uu8, "-");
 		if (sda)
-			llstrcatn(&p, sda, len);
+			appendstr(&p, len, uu8, sda);
 		break;
 	case 11:        /* yrmoda */
 		if (syr)
-			llstrcatn(&p, syr, len);
+			appendstr(&p, len, uu8, syr);
 		if (smo)
-			llstrcatn(&p, smo, len);
+			appendstr(&p, len, uu8, smo);
 		if (sda)
-			llstrcatn(&p, sda, len);
+			appendstr(&p, len, uu8, sda);
 		break;
 	/* 12 (year only) was handled directly in do_format_date */
 	case 13:      /* da/mo yr */
 		if (sda)
-			llstrcatn(&p, sda, len);
-		llstrcatn(&p, "/", len);
+			appendstr(&p, len, uu8, sda);
+		appendstr(&p, len, uu8, "/");
 		if (smo)
-			llstrcatn(&p, smo, len);
-		llstrcatn(&p, " ", len);
+			appendstr(&p, len, uu8, smo);
+		appendstr(&p, len, uu8, " ");
 		if (syr)
-			llstrcatn(&p, syr, len);
+			appendstr(&p, len, uu8, syr);
 		break;
 	/* 14 (as GEDCOM) was handled directly in do_format_date */
         }
@@ -844,9 +844,9 @@ format_year (struct dnum_s yr, INT yfmt)
 	if (yrval < 10)
 		strcpy(scratch, p);
 	else if (yrval < 100)
-		llstrncpy(scratch, p, 2+1);
+		llstrncpy(scratch, p, 2+1, uu8);
 	else
-		llstrncpy(scratch, p, 1+1);
+		llstrncpy(scratch, p, 1+1, uu8);
 	sprintf(scratch+strlen(scratch), "%d", yrval);
 	return scratch;
 }

@@ -192,7 +192,7 @@ ask_for_file_worker (STRING mode,
 	if (ISNULL(path)) {
 		fp = NULL;
 		if(ext) {
-			llstrapp(fname, sizeof(fname), ext);
+			llstrapp(fname, sizeof(fname), uu8, ext);
 		}
 		fp = fopen(fname, mode);
 		if (fp && pfname) *pfname = strsave(fname);
@@ -220,10 +220,10 @@ make_fname_prompt (STRING fnamebuf, INT len, STRING ext)
 {
 	if (ISNULL(ext)) {
 		ext = NULL;	/* a null extension is the same as no extension */
-		llstrncpyf(fnamebuf, len, "%s: ", _(qSwhtfname));
+		llstrncpyf(fnamebuf, len, uu8, "%s: ", _(qSwhtfname));
 	}
 	else {
-		llstrncpyf(fnamebuf, len, _(qSwhtfnameext), ext);
+		llstrncpyf(fnamebuf, len, uu8, _(qSwhtfnameext), ext);
 	}
 }
 /*======================================
@@ -464,9 +464,9 @@ choose_from_indiseq (INDISEQ seq, ASK1Q ask1, STRING titl1, STRING titln)
 	if(!rec) {
 		char buf[132];
 		if (badkeylist[0])
-			llstrncpyf(buf, sizeof(buf), "%s: %.40s", _(qSmisskeys), badkeylist);
+			llstrncpyf(buf, sizeof(buf), uu8, "%s: %.40s", _(qSmisskeys), badkeylist);
 		else
-			llstrncpyf(buf, sizeof(buf), _(qSbadkeyptr));
+			llstrncpyf(buf, sizeof(buf), uu8, _(qSbadkeyptr));
 		message(buf);
 	}
 	return rec;

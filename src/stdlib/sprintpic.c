@@ -1,25 +1,9 @@
 /* 
    Copyright (c) 2001-2002 Perry Rapp
-
-   Permission is hereby granted, free of charge, to any person
-   obtaining a copy of this software and associated documentation
-   files (the "Software"), to deal in the Software without
-   restriction, including without limitation the rights to use, copy,
-   modify, merge, publish, distribute, sublicense, and/or sell copies
-   of the Software, and to permit persons to whom the Software is
-   furnished to do so, subject to the following conditions:
-
-   The above copyright notice and this permission notice shall be
-   included in all copies or substantial portions of the Software.
-
-   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-   SOFTWARE.
+   "The MIT license"
+   Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 /*=============================================================
  * sprintpic.c -- snprintf versions which handle reordered arguments
@@ -33,7 +17,7 @@
  *********************************************/
 
 /* alphabetical */
-static BOOLEAN printpic_arg(STRING *b, INT max, CNSTRING arg, INT arglen);
+static BOOLEAN printpic_arg(STRING *b, INT max, INT utf8, CNSTRING arg, INT arglen);
 
 /*********************************************
  * local & exported function definitions
@@ -49,15 +33,14 @@ static BOOLEAN printpic_arg(STRING *b, INT max, CNSTRING arg, INT arglen);
  *  arg:    [IN]  arg to insert
  *  arglen: [IN]  (precomputed) length of arg
  * returns FALSE if can't fit entire arg.
- * Created: 2001/12/30 (Perry Rapp)
  *============================*/
 static BOOLEAN
-printpic_arg (STRING *b, INT max, CNSTRING arg, INT arglen)
+printpic_arg (STRING *b, INT max, INT utf8, CNSTRING arg, INT arglen)
 {
 	if (!arglen) return TRUE;
 	if (arglen > max) {
 		/* can't fit it all */
-		llstrncpy(*b, arg, max+1); 
+		llstrncpy(*b, arg, max+1, utf8); 
 		b[max] = 0;
 		return FALSE;
 	} else {
@@ -74,12 +57,12 @@ printpic_arg (STRING *b, INT max, CNSTRING arg, INT arglen)
  * zero-terminate.
  *=======================================*/
 void
-sprintpic0 (STRING buffer, INT len, CNSTRING pic)
+sprintpic0 (STRING buffer, INT len, INT utf8, CNSTRING pic)
 {
 	if (len == snprintf(buffer, len, pic)) {
 		/* overflowed -- back up to last character that fits */
 		INT width=0;
-		STRING prev = find_prev_char(&buffer[len-1], &width, buffer);
+		STRING prev = find_prev_char(&buffer[len-1], &width, buffer, uu8);
 		prev[width]=0;
 	}
 
@@ -93,17 +76,16 @@ sprintpic0 (STRING buffer, INT len, CNSTRING pic)
  *  arg1:    [IN]  argument (for %1)
  * (Multiple occurrences of %1 are allowed.)
  * returns FALSE if it couldn't fit whole thing.
- * Created: 2001/12/30 (Perry Rapp)
  *============================*/
 BOOLEAN
-sprintpic1 (STRING buffer, INT len, CNSTRING pic, CNSTRING arg1)
+sprintpic1 (STRING buffer, INT len, INT utf8, CNSTRING pic, CNSTRING arg1)
 {
 	STRING b = buffer, bmax = &buffer[len-1];
 	CNSTRING p=pic;
 	INT arg1len = arg1 ? strlen(arg1) : 0; /* precompute */
 	while (1) {
 		if (p[0]=='%' && p[1]=='1') {
-			if (!printpic_arg(&b, bmax-b, arg1, arg1len))
+			if (!printpic_arg(&b, bmax-b, utf8, arg1, arg1len))
 				return FALSE;
 			p += 2;
 		} else {
@@ -123,10 +105,9 @@ sprintpic1 (STRING buffer, INT len, CNSTRING pic, CNSTRING arg1)
  * sprintpic2 -- Print using a picture string
  *  with two arguments, eg "From %1 To %s"
  * See sprintpic1 for argument explanation.
- * Created: 2001/12/30 (Perry Rapp)
  *============================*/
 BOOLEAN
-sprintpic2 (STRING buffer, INT len, CNSTRING pic, CNSTRING arg1, CNSTRING arg2)
+sprintpic2 (STRING buffer, INT len, INT utf8, CNSTRING pic, CNSTRING arg1, CNSTRING arg2)
 {
 	STRING b = buffer, bmax = &buffer[len-1];
 	CNSTRING p=pic;
@@ -134,11 +115,11 @@ sprintpic2 (STRING buffer, INT len, CNSTRING pic, CNSTRING arg1, CNSTRING arg2)
 	INT arg2len = arg2 ? strlen(arg2) : 0;
 	while (1) {
 		if (p[0]=='%' && p[1]=='1') {
-			if (!printpic_arg(&b, bmax-b, arg1, arg1len))
+			if (!printpic_arg(&b, bmax-b, utf8, arg1, arg1len))
 				return FALSE;
 			p += 2;
 		} else if (p[0]=='%' && p[1]=='2') {
-			if (!printpic_arg(&b, bmax-b, arg2, arg2len))
+			if (!printpic_arg(&b, bmax-b, utf8, arg2, arg2len))
 				return FALSE;
 			p += 2;
 		} else {
@@ -158,10 +139,9 @@ sprintpic2 (STRING buffer, INT len, CNSTRING pic, CNSTRING arg1, CNSTRING arg2)
  * sprintpic3 -- Print using a picture string
  *  with three arguments, eg "%1/%2/%3"
  * See sprintpic1 for argument explanation.
- * Created: 2001/12/30 (Perry Rapp)
  *============================*/
 BOOLEAN
-sprintpic3 (STRING buffer, INT len, CNSTRING pic, CNSTRING arg1, CNSTRING arg2
+sprintpic3 (STRING buffer, INT len, INT utf8, CNSTRING pic, CNSTRING arg1, CNSTRING arg2
 	, CNSTRING arg3)
 {
 	STRING b = buffer, bmax = &buffer[len-1];
@@ -171,15 +151,15 @@ sprintpic3 (STRING buffer, INT len, CNSTRING pic, CNSTRING arg1, CNSTRING arg2
 	INT arg3len = arg3 ? strlen(arg3) : 0;
 	while (1) {
 		if (p[0]=='%' && p[1]=='1') {
-			if (!printpic_arg(&b, bmax-b, arg1, arg1len))
+			if (!printpic_arg(&b, bmax-b, utf8, arg1, arg1len))
 				return FALSE;
 			p += 2;
 		} else if (p[0]=='%' && p[1]=='2') {
-			if (!printpic_arg(&b, bmax-b, arg2, arg2len))
+			if (!printpic_arg(&b, bmax-b, utf8, arg2, arg2len))
 				return FALSE;
 			p += 2;
 		} else if (p[0]=='%' && p[1]=='3') {
-			if (!printpic_arg(&b, bmax-b, arg3, arg3len))
+			if (!printpic_arg(&b, bmax-b, utf8, arg3, arg3len))
 				return FALSE;
 			p += 2;
 		} else {

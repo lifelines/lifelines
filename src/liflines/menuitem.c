@@ -471,7 +471,7 @@ add_menu_item (STRING Title, CMDARRAY cmds, MenuItem * mitem)
 	char display[32];
 	/* now we translate the display string, because it was initialized in static
 	array at top of this file */
-	llstrncpy(display, _(mitem->Display), ARRSIZE(display));
+	llstrncpy(display, _(mitem->Display), ARRSIZE(display), uu8);
 	if (mitem->LocalizedDisplay)
 		strfree(&mitem->LocalizedDisplay);
 	mitem->LocalizedDisplay = strsave(display);
@@ -668,7 +668,7 @@ menuitem_initialize (INT cols)
 
 	scr = ONE_PER_SCREEN;
 	sinfo = &g_ScreenInfo[scr];
-	llstrncpy(title, _(qSttlindibrw), ARRSIZE(title));
+	llstrncpy(title, _(qSttlindibrw), ARRSIZE(title), uu8);
 	MenuRows = 8;
 	MenuSize = sizeof(f_MenuPerson)/ItemSize-1;
 	Menu = f_MenuPerson;
@@ -676,7 +676,7 @@ menuitem_initialize (INT cols)
 
 	scr = ONE_FAM_SCREEN;
 	sinfo = &g_ScreenInfo[scr];
-	llstrncpy(title, _(qSttlfambrw), ARRSIZE(title));
+	llstrncpy(title, _(qSttlfambrw), ARRSIZE(title), uu8);
 	MenuRows = 6;
 	MenuSize = sizeof(f_MenuFamily)/ItemSize-1;
 	Menu = f_MenuFamily;
@@ -684,7 +684,7 @@ menuitem_initialize (INT cols)
 
 	scr = TWO_PER_SCREEN;
 	sinfo = &g_ScreenInfo[scr];
-	llstrncpy(title, _(qSttl2perbrw), ARRSIZE(title));
+	llstrncpy(title, _(qSttl2perbrw), ARRSIZE(title), uu8);
 	MenuRows = 5;
 	MenuSize = sizeof(f_Menu2Person)/ItemSize-1;
 	Menu = f_Menu2Person;
@@ -692,7 +692,7 @@ menuitem_initialize (INT cols)
 
 	scr = TWO_FAM_SCREEN;
 	sinfo = &g_ScreenInfo[scr];
-	llstrncpy(title, _(qSttl2fambrw), ARRSIZE(title));
+	llstrncpy(title, _(qSttl2fambrw), ARRSIZE(title), uu8);
 	MenuRows = 5;
 	MenuSize = sizeof(f_Menu2Family)/ItemSize-1;
 	Menu = f_Menu2Family;
@@ -700,7 +700,7 @@ menuitem_initialize (INT cols)
 
 	scr = AUX_SCREEN;
 	sinfo = &g_ScreenInfo[scr];
-	llstrncpy(title, _(qSttlauxbrw), ARRSIZE(title));
+	llstrncpy(title, _(qSttlauxbrw), ARRSIZE(title), uu8);
 	MenuRows = 4;
 	MenuSize = sizeof(f_MenuAux)/ItemSize-1;
 	Menu = f_MenuAux;
@@ -709,7 +709,7 @@ menuitem_initialize (INT cols)
 	/* TO DO: this is not used right now */
 	scr = LIST_SCREEN;
 	sinfo = &g_ScreenInfo[scr];
-	llstrncpy(title, _(qSttllstbrw), ARRSIZE(title));
+	llstrncpy(title, _(qSttllstbrw), ARRSIZE(title), uu8);
 	MenuRows = 13;
 	MenuCols = 1;
 	MenuSize = sizeof(f_MenuListPersons)/ItemSize-1;

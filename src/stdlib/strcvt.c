@@ -44,7 +44,7 @@ makewide (const char *str)
 {
 	bfptr bfs=0;
 #ifdef HAVE_WCSCOLL
-	if (int_utf8) {
+	if (uu8) {
 #ifdef _WIN32
 		/* MS-Windows can't handle UCS-4; could we use UTF-16 ? */
 		CNSTRING dest = "UCS-2-INTERNAL";

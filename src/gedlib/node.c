@@ -545,7 +545,7 @@ convert_first_fp_to_node (FILE *fp, BOOLEAN list, TRANMAPPING ttm,
 	STRING unitype = check_file_for_unicode(fp);
 	if (unitype && !eqstr(unitype, "UTF-8")) {
 		char msg[120];
-		llstrncpyf(msg, sizeof(msg), _(qSunsupuniv), unitype);
+		llstrncpyf(msg, sizeof(msg), uu8, _(qSunsupuniv), unitype);
 		/* TODO: need to pass msg up to caller somehow */
 		*pmsg = _(qSunsupunix);
 		return NULL;
@@ -568,7 +568,7 @@ convert_first_fp_to_record (FILE *fp, BOOLEAN list, TRANMAPPING ttm,
 	STRING unitype = check_file_for_unicode(fp);
 	if (unitype && !eqstr(unitype, "UTF-8")) {
 		char msg[120];
-		llstrncpyf(msg, sizeof(msg), _(qSunsupuniv), unitype);
+		llstrncpyf(msg, sizeof(msg), uu8, _(qSunsupuniv), unitype);
 		/* TODO: need to pass msg up to caller somehow */
 		*pmsg = _(qSunsupunix);
 		return NULL;
@@ -1390,11 +1390,11 @@ event_to_string (NODE node, TRANMAPPING ttm, RFMT rfmt)
 	if (rfmt && plac && rfmt->rfmt_plac)
 		plac = (*rfmt->rfmt_plac)(plac);
 	if (date && date[0] && plac && plac[0]) {
-		sprintpic2(scratch1, sizeof(scratch1), rfmt->combopic, date, plac);
+		sprintpic2(scratch1, sizeof(scratch1), uu8, rfmt->combopic, date, plac);
 	} else if (date && date[0]) {
-		llstrncpy(scratch1, date, sizeof(scratch1));
+		llstrncpy(scratch1, date, sizeof(scratch1), uu8);
 	} else if (plac && plac[0]) {
-		llstrncpy(scratch1, plac, sizeof(scratch1));
+		llstrncpy(scratch1, plac, sizeof(scratch1), uu8);
 	} else {
 		return NULL;
 	}

@@ -110,7 +110,7 @@ crash_setcrashlog (STRING crashlog)
 {
 	if (!crashlog)
 		crashlog = "";
-	llstrncpy(f_crashfile, crashlog, sizeof(f_crashfile));
+	llstrncpy(f_crashfile, crashlog, 0, sizeof(f_crashfile));
 }
 /*===============================
  * crash_setdb -- record current database in case of a crash
@@ -121,5 +121,5 @@ crash_setdb (STRING dbname)
 {
 	if (!dbname)
 		dbname = "";
-	llstrncpy(f_currentdb, dbname, sizeof(f_currentdb));
+	llstrncpy(f_currentdb, dbname, 0, sizeof(f_currentdb));
 }

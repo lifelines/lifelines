@@ -193,7 +193,7 @@ init_display_indi (NODE pers, INT width)
 	fth = indi_to_fath(pers);
 	mth = indi_to_moth(pers);
 	s = indi_to_name(pers, ttmd, width-20);
-	llstrncpyf(Spers, liwidth, "%s: %s ", _(qSdspl_indi), s);
+	llstrncpyf(Spers, liwidth, uu8, "%s: %s ", _(qSdspl_indi), s);
 	if((num = strlen(s)) < width-30) {
 	    t = indi_to_title(pers, ttmd, width-20 - num - 3);
 	    if(t) sprintf(Spers+strlen(Spers), "[%s] ", t);
@@ -227,12 +227,12 @@ init_display_indi (NODE pers, INT width)
 	else sprintf(Sdeat, "  %s", _(qSdspl_dea));
 
 	s = person_display(fth, NULL, width-13);
-	if (s) llstrncpyf(Sfath, liwidth, "  %s: %s", _(qSdspl_fath), s);
-	else llstrncpyf(Sfath, liwidth, "  %s:", _(qSdspl_fath));
+	if (s) llstrncpyf(Sfath, liwidth, uu8, "  %s: %s", _(qSdspl_fath), s);
+	else llstrncpyf(Sfath, liwidth, uu8, "  %s:", _(qSdspl_fath));
 
 	s = person_display(mth, NULL, width-13);
-	if (s) llstrncpyf(Smoth, liwidth, "  %s: %s", _(qSdspl_moth), s);
-	else llstrncpyf(Smoth, liwidth, "  %s:", _(qSdspl_moth));
+	if (s) llstrncpyf(Smoth, liwidth, uu8, "  %s: %s", _(qSdspl_moth), s);
+	else llstrncpyf(Smoth, liwidth, uu8, "  %s:", _(qSdspl_moth));
 
 	Solen = 0;
 	nsp = nch = 0;
@@ -309,7 +309,7 @@ show_indi_vitals (UIWINDOW uiwin, NODE pers, LLRECT rect
 	listbadkeys = 0;
 	if(badkeylist[0]) {
 		char buf[132];
-		llstrncpyf(buf, sizeof(buf), "%s: %.40s", _(qSmisskeys), badkeylist);
+		llstrncpyf(buf, sizeof(buf), uu8, "%s: %.40s", _(qSmisskeys), badkeylist);
 		message(buf);
 	}
 }
@@ -342,9 +342,9 @@ add_child_line (INT num, RECORD irec, INT width)
 	if (Solen >= MAXOTHERS) return;
 	line = person_display(nztop(irec), NULL, width-15);
 	if (number_child_enable)
-		llstrncpyf(Sothers[Solen], liwidth, "  %2d%s: %s", num, child, line);
+		llstrncpyf(Sothers[Solen], liwidth, uu8, "  %2d%s: %s", num, child, line);
 	else
-		llstrncpyf(Sothers[Solen], liwidth, "    %s: %s", child, line);
+		llstrncpyf(Sothers[Solen], liwidth, uu8, "    %s: %s", child, line);
 	Sothers[Solen++][width-2] = 0;
 }
 /*==============================================
@@ -368,9 +368,9 @@ init_display_fam (NODE fam, INT width)
 		ik = key_of_record(husb, ttmd);
 		len = liwidth - (10 + strlen(father) + strlen(ik) + strlen(fk));
 		s = indi_to_name(husb, ttmd, len);
-		llstrncpyf(Shusb, liwidth, "%s: %s (%s) (%s)", father, s, ik, fk);
+		llstrncpyf(Shusb, liwidth, uu8, "%s: %s (%s) (%s)", father, s, ik, fk);
 	} else
-		llstrncpyf(Shusb, liwidth, "%s: (%s)", father, fk);
+		llstrncpyf(Shusb, liwidth, uu8, "%s: (%s)", father, fk);
 
 	s = sh_indi_to_event_long(husb, ttmd, "BIRT", _(qSdspl_bir), width-3);
 	if (!s) s = sh_indi_to_event_long(husb, ttmd, "CHR", _(qSdspl_chr), width-3);
@@ -379,37 +379,37 @@ init_display_fam (NODE fam, INT width)
 
 	s = sh_indi_to_event_long(husb, ttmd, "DEAT", _(qSdspl_dea), width-3);
 	if (!s) s = sh_indi_to_event_long(husb, ttmd, "BURI", _(qSdspl_bur), width-3);
-	if (s) llstrncpyf(Shdeat, liwidth, "  %s", s);
-	else llstrncpyf(Shdeat, liwidth, "  %s", _(qSdspl_dea));
+	if (s) llstrncpyf(Shdeat, liwidth, uu8, "  %s", s);
+	else llstrncpyf(Shdeat, liwidth, uu8, "  %s", _(qSdspl_dea));
 
 	if (wife) {
 		ik = key_of_record(wife, ttmd);
 		len = width - (7 + strlen(mother) + strlen(ik));
 		s = indi_to_name(wife, ttmd, len);
-		llstrncpyf(Swife, liwidth, "%s: %s (%s)", mother, s, ik);
+		llstrncpyf(Swife, liwidth, uu8, "%s: %s (%s)", mother, s, ik);
 	} else
-		llstrncpyf(Swife, liwidth, "%s:", mother);
+		llstrncpyf(Swife, liwidth, uu8, "%s:", mother);
 
 	s = sh_indi_to_event_long(wife, ttmd, "BIRT", _(qSdspl_bir), width-3);
 	if (!s) s = sh_indi_to_event_long(wife, ttmd, "CHR", _(qSdspl_chr), width-3);
-	if (s) llstrncpyf(Swbirt, liwidth, "  %s", s);
-	else llstrncpyf(Swbirt, liwidth, "  %s", _(qSdspl_bir));
+	if (s) llstrncpyf(Swbirt, liwidth, uu8, "  %s", s);
+	else llstrncpyf(Swbirt, liwidth, uu8, "  %s", _(qSdspl_bir));
 
 	s = sh_indi_to_event_long(wife, ttmd, "DEAT", _(qSdspl_dea), width-3);
 	if (!s) s = sh_indi_to_event_long(wife, ttmd, "BURI", _(qSdspl_bur), width-3);
-	if (s) llstrncpyf(Swdeat, liwidth, "  %s", s);
-	else llstrncpyf(Swdeat, liwidth, "  %s", _(qSdspl_dea));
+	if (s) llstrncpyf(Swdeat, liwidth, uu8, "  %s", s);
+	else llstrncpyf(Swdeat, liwidth, uu8, "  %s", _(qSdspl_dea));
 
 	s = sh_indi_to_event_long(fam, ttmd, "MARR", _(qSdspl_mar), width-3);
-	if (s) llstrncpyf(Smarr, liwidth, s);
-	else llstrncpyf(Smarr, liwidth, _(qSdspl_mar));
+	if (s) llstrncpyf(Smarr, liwidth, uu8, s);
+	else llstrncpyf(Smarr, liwidth, uu8, _(qSdspl_mar));
 	/* append divorce to marriage line, if room */
 	/* (Might be nicer to make it a separate, following line */
 	wtemp = width-5 - strlen(Smarr);
 	if (wtemp > 10) {
 		s = sh_indi_to_event_long(fam, ttmd, "DIV", _(qSdspa_div), wtemp);
 		if (s)
-			llstrncpyf(Smarr+strlen(Smarr), liwidth-strlen(Smarr), ", %s", s);
+			llstrncpyf(Smarr+strlen(Smarr), liwidth-strlen(Smarr), uu8, ", %s", s);
 	}
 
 	Solen = 0;
@@ -851,7 +851,7 @@ put_out_line (UIWINDOW uiwin, INT y, INT x, STRING string, INT maxcol, INT flag)
 		buffer = (LINESTRING)stdalloc(buflen);
 	}
 	/* copy into local buffer (here we enforce maxcol) */
-	llstrncpy(buffer, string, buflen);
+	llstrncpy(buffer, string, buflen, uu8);
 	if (flag) {
 		/* put ++ against right, padding if needed */
 		INT i = strlen(buffer);

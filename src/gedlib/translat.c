@@ -92,7 +92,7 @@ create_trantable (STRING *lefts, STRING *rights, INT n, STRING name)
 	XNODE node;
 	tt->name[0] = 0;
 	tt->total = n;
-	llstrncpy(tt->name, name, sizeof(tt->name));
+	llstrncpy(tt->name, name, sizeof(tt->name), uu8);
 	for (i = 0; i < 256; i++)
 		tt->start[i] = NULL;
 	/* if empty, n==0, this is valid */
@@ -370,7 +370,7 @@ translate_string (TRANMAPPING ttm, CNSTRING in, STRING out, INT max)
 		return;
 	}
 	bfs = translate_string_to_buf(ttm, in);
-	llstrncpy(out, bfStr(bfs), max);
+	llstrncpy(out, bfStr(bfs), max, uu8);
 	bfDelete(bfs);
 }
 /*==========================================================

@@ -1,25 +1,9 @@
 /* 
    Copyright (c) 2001-2002 Perry Rapp
-
-   Permission is hereby granted, free of charge, to any person
-   obtaining a copy of this software and associated documentation
-   files (the "Software"), to deal in the Software without
-   restriction, including without limitation the rights to use, copy,
-   modify, merge, publish, distribute, sublicense, and/or sell copies
-   of the Software, and to permit persons to whom the Software is
-   furnished to do so, subject to the following conditions:
-
-   The above copyright notice and this permission notice shall be
-   included in all copies or substantial portions of the Software.
-
-   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-   SOFTWARE.
+   "The MIT license"
+   Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 /*=============================================================
  * strapp.c -- string catenation functions that use original size of buffer
@@ -39,7 +23,7 @@
  * handles UTF-8
  *================================*/
 char *
-llstrapp (char *dest, size_t limit, const char *src)
+llstrapp (char *dest, size_t limit, int utf8, const char *src)
 {
 	size_t len;
 	int n;
@@ -50,7 +34,7 @@ llstrapp (char *dest, size_t limit, const char *src)
 	if (n < 2) /* must fit trailing zero */
 		return dest;
 
-	llstrncpy(dest+len, src, n);
+	llstrncpy(dest+len, src, n, utf8);
 	return dest;
 }
 /*==================================
@@ -59,10 +43,11 @@ llstrapp (char *dest, size_t limit, const char *src)
 char *
 llstrappc (char *dest, size_t limit, char ch)
 {
+	int utf8 = 0;
 	char src[2];
 	src[0] = ch;
 	src[1] = 0;
-	return llstrapp(dest, limit, src);
+	return llstrapp(dest, limit, utf8, src);
 }
 /*==================================
  * llstrappf -- snprintf style append to string,
@@ -70,11 +55,11 @@ llstrappc (char *dest, size_t limit, char ch)
  * handles UTF-8
  *================================*/
 char *
-llstrappf (char * dest, int limit, const char * fmt, ...)
+llstrappf (char * dest, int limit, int utf8, const char * fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	llstrappvf(dest, limit, fmt, args);
+	llstrappvf(dest, limit, utf8, fmt, args);
 	va_end(args);
 	return dest;
 }
@@ -84,25 +69,15 @@ llstrappf (char * dest, int limit, const char * fmt, ...)
  * handles UTF-8
  *================================*/
 char *
-llstrappvf (char * dest, int limit, const char * fmt, va_list args)
+llstrappvf (char * dest, int limit, int utf8, const char * fmt, va_list args)
 {
 	/* TODO: Revise for UTF-8 */
 	size_t len = strlen(dest);
 	size_t n = limit-len;
-	int rtn;
 	if (n < 2) /* must fit trailing zero */
 		return dest;
 
-	rtn = vsnprintf(dest+len, n, fmt, args);
-	if (rtn == (int)(len-1) || rtn == -1) {
-		/* overflowed -- back up to last character that fits */
-		INT width=0;
-		STRING prev;
-		dest[len-1] = 0; /* make sure we're zero-terminated! */
-		prev = find_prev_char(&dest[n-1], &width, dest);
-		prev[width]=0;
-	}
-	return dest;
+	return llstrncpyvf(dest+len, n, utf8, fmt, args);
 }
 
 
