@@ -104,6 +104,10 @@ SOURCE=..\..\..\src\stdlib\appendstr.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\stdlib\array.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\liflines\ask.c
 # End Source File
 # Begin Source File
@@ -308,6 +312,10 @@ SOURCE=..\..\..\src\gedlib\nodeutls.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\stdlib\object.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\btree\opnbtree.c
 # End Source File
 # Begin Source File
@@ -448,6 +456,10 @@ SOURCE=..\..\..\src\arch\vsnprintf.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\stdlib\vtable.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\stdlib\warehouse.c
 # End Source File
 # Begin Source File
@@ -477,6 +489,10 @@ SOURCE=..\..\..\src\stdlib\zstr.c
 # Begin Source File
 
 SOURCE=..\..\..\src\hdrs\arch.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\array.h
 # End Source File
 # Begin Source File
 
@@ -592,6 +608,10 @@ SOURCE=..\..\..\src\hdrs\mystring.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\hdrs\object.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\interp\parse.h
 # End Source File
 # Begin Source File
@@ -617,6 +637,10 @@ SOURCE=..\..\..\src\hdrs\table.h
 # Begin Source File
 
 SOURCE=..\..\..\src\hdrs\translat.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\vtable.h
 # End Source File
 # Begin Source File
 

@@ -22,6 +22,10 @@
 
 	Update rpm spec file for new documentation files.
 
+	* ChangeLog build/msvc6/llexec/llexec.dsp
+
+	Add new files to msvc makefile for llexec.
+
 2003-03-06 Steve Dum
 
 	* ChangeLog docs/Makefile.am
