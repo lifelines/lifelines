@@ -91,6 +91,11 @@ struct tag_sortel {
 	INT s_pri;	/* key as integer (exc valuesort_indiseq puts values here) */
 };
 /* typedef struct tag_sortel *SORTEL; */ /* in indiseq.h */
+#define skey(s) ((s)->s_key)
+#define snam(s) ((s)->s_nam)
+#define sval(s) ((s)->s_val)
+#define sprn(s) ((s)->s_prn)
+#define spri(s) ((s)->s_pri)
 
 /*********************************************
  * local function prototypes
@@ -616,6 +621,16 @@ element_sval (SORTEL el)
 {
 	ASSERT(el);
 	return el->s_val.w;
+}
+/*================================================
+ * element_ikey -- Return integer key value from indiseq element
+ *  Requires valid input
+ *==============================================*/
+INT
+element_ikey (SORTEL el)
+{
+	ASSERT(el);
+	return el->s_pri;
 }
 /*================================================
  * element_pval -- Return pointer value from indiseq element

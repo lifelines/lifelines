@@ -425,7 +425,8 @@ static void
 finish_and_delete_nameset (void)
 {
 	char prevkey[8];
-	STRING name="";
+	CNSTRING name="";
+	CNSTRING skey="";
 	TABLE table = create_table_old2(DONTFREE);
 	prevkey[0]=0;
 	calc_indiseq_names(soundexseq);
@@ -436,19 +437,20 @@ finish_and_delete_nameset (void)
 	duplicates
 	*/
 	FORINDISEQ(soundexseq, el, num)
-		name = sval(el).w;
-		if (!eqstr(skey(el), prevkey)) {
+		name = element_sval(el);
+		skey = element_skey(el);
+		if (!eqstr(skey, prevkey)) {
 			/* new person, start over */
 			destroy_table(table);
 			table = create_table_old2(DONTFREE);
 		}
 		if (in_table(table, name)) {
 			report_error(ERR_DUPNAME, _("Duplicate name for %s (%s)")
-				, skey(el), name);
+				, skey, name);
 		} else {
 			insert_table_int(table, name, 1);
 		}
-		strcpy(prevkey, skey(el));
+		strcpy(prevkey, skey);
 	ENDINDISEQ
 	remove_indiseq(soundexseq);
 	soundexseq = NULL;
@@ -464,24 +466,26 @@ static void
 finish_and_delete_refnset (void)
 {
 	char prevkey[8];
-	STRING refn="";
+	CNSTRING refn="";
+	CNSTRING skey="";
 	TABLE table = create_table_old2(DONTFREE);
 	prevkey[0]=0;
 	canonkeysort_indiseq(soundexseq);
 	FORINDISEQ(soundexseq, el, num)
-		refn = sval(el).w;
-		if (!eqstr(skey(el), prevkey)) {
+		refn = element_sval(el);
+		skey = element_skey(el);
+		if (!eqstr(skey, prevkey)) {
 			/* new person, start over */
 			destroy_table(table);
 			table = create_table_old2(DONTFREE);
 		}
 		if (in_table(table, refn)) {
 			report_error(ERR_DUPREFN, _("Duplicate refn for %s (%s)")
-				, skey(el), refn);
+				, skey, refn);
 		} else {
 			insert_table_int(table, refn, 1);
 		}
-		strcpy(prevkey, skey(el));
+		strcpy(prevkey, skey);
 	ENDINDISEQ
 	remove_indiseq(soundexseq);
 	soundexseq = NULL;
@@ -824,19 +828,19 @@ check_set (INDISEQ seq, char ctype)
 	keysort_indiseq(seq); /* spri now valid */
 	i = xref_next(ctype, i);
 	FORINDISEQ(seq, el, num)
-		while (i<spri(el)) {
+		while (i<element_ikey(el)) {
 			report_error(ERR_MISSING
 				, _("Missing undeleted record %c%d")
 				, ctype, i);
 			i = xref_next(ctype, i);
 		}
-		if (i == spri(el)) {
+		if (i == element_ikey(el)) {
 			/* in synch */
 			i = xref_next(ctype, i);
 		} else { /* spri(el) < i */
 			report_error(ERR_DELETED
 				, _("Delete set contains valid record %s")
-				, skey(el));
+				, element_skey(el));
 			/* fall thru and only advance seq */
 		}
 	ENDINDISEQ

@@ -108,6 +108,10 @@ SOURCE=..\..\..\src\gedlib\brwslist.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\btree\btrec.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\gedlib\charmaps.c
 # End Source File
 # Begin Source File
@@ -200,10 +204,6 @@ SOURCE=..\..\..\src\gedlib\keytonod.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\arch\nl_langinfo.c
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\src\stdlib\list.c
 # End Source File
 # Begin Source File
@@ -264,6 +264,10 @@ SOURCE=..\..\..\src\gedlib\names.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\arch\nl_langinfo.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\gedlib\node.c
 # End Source File
 # Begin Source File
@@ -300,7 +304,7 @@ SOURCE=..\..\..\src\gedlib\property.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\btree\record.c
+SOURCE=..\..\..\src\gedlib\record.c
 # End Source File
 # Begin Source File
 

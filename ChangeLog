@@ -1,3 +1,13 @@
+2005-02-01 Perry Rapp
+
+	* ChangeLog build/msvc6/btedit/bteditCmd.dsp
+	build/msvc6/dbverify/dbverifyCmd.dsp
+	src/gedlib/indiseq.c src/hdrs/indiseq.h
+	src/tools/dbverify.c
+
+	Fix compilation of dbverify, and tools MSVC6 projects
+	(which I broke back on 2005-01-25).
+
 2005-01-30 Matt Emmerton
 
 	* ChangeLog src/interp/interp.c

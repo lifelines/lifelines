@@ -37,11 +37,6 @@
 
 typedef struct tag_sortel *SORTEL;
 
-#define skey(s) ((s)->s_key)
-#define snam(s) ((s)->s_nam)
-#define sval(s) ((s)->s_val)
-#define sprn(s) ((s)->s_prn)
-#define spri(s) ((s)->s_pri)
 
 typedef INT (*ELCMPFNC)(SORTEL el1, SORTEL el2, VPTR param);
 
@@ -152,6 +147,7 @@ int default_compare_values(VPTR ptr1, VPTR ptr2, INT valtype);
 BOOLEAN delete_indiseq(INDISEQ, STRING, STRING, INT);
 INDISEQ descendent_indiseq(INDISEQ seq);
 INDISEQ difference_indiseq(INDISEQ, INDISEQ);
+INT element_ikey(SORTEL el);
 BOOLEAN element_indiseq(INDISEQ, INT, STRING*, STRING*);
 BOOLEAN element_indiseq_ival(INDISEQ seq, INT index, STRING*, INT *, STRING*);
 CNSTRING element_key_indiseq(INDISEQ seq, INT index);

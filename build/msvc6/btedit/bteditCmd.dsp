@@ -103,6 +103,10 @@ SOURCE=.\btedit.rc
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\btree\btrec.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\stdlib\dirs.c
 # End Source File
 # Begin Source File
@@ -144,10 +148,6 @@ SOURCE=..\..\..\src\btree\opnbtree.c
 # Begin Source File
 
 SOURCE=..\..\..\src\stdlib\path.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\btree\record.c
 # End Source File
 # Begin Source File
 
