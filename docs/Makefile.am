@@ -31,47 +31,13 @@ dist_pkgdata_DATA = $(MANUALS)
 # sensible values: empty, simple, fancy
 all: @DOCS_TARGET@
 
-text: lifelines.txt 
-
-pdb: lifelines.pdb
-
-html: lifelines.html
-
-simple: text html
-
-ps: lifelines.ps
-
-pdf: lifelines.pdf
-
-fancy: ps pdf # pdb
-
-# Simple Formats
-
-lifelines.txt: lifelines.sgml
-	sgmltools --backend=txt $^
-
-lifelines.html: lifelines.sgml
-	sgmltools --backend=onehtml $^
-
-lifelines.pdb: lifelines.html
-	rm -f $@
-	isilo386 -Is156 -Ic -Id -d0 $^
-
-# Fancy Formats
-
-lifelines.ps: lifelines.sgml
-	sgmltools --backend=ps $^
-
-lifelines.pdf: lifelines.ps
-	ps2pdf $^ $@
-
-%.pdf: %.xml
+.xml.pdf:
 	-jw -f docbook -b pdf $^
 
-%.html: %.xml
+.xml.html:
 	-jw -f docbook -b html -V nochunks $^
 
-%.txt: %.html
+.xml.txt:
 	if [ -f /usr/bin/lynx ] ; then \
 	/usr/bin/lynx -force_html -dump -nolist -width=76 $^ > $@ ;\
 	fi
