@@ -94,13 +94,9 @@ illegal_value (CNSTRING op, PVALUE val, BOOLEAN *eflg, ZSTR * zerr)
 void
 add_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 {
-	UNION u1, u2;
-
 	if (*eflg) return;
 	num_conform_pvalues("add", val1, val2, eflg, zerr);
 	if (*eflg) return;
-	u1.w = pvalue(val1);
-	u2.w = pvalue(val2);
 	switch (ptype(val1)) {
 	case PINT:   *pvalue_to_pint(val1) += pvalue_to_int(val2); break;
 	case PFLOAT: *pvalue_to_pfloat(val1) += pvalue_to_float(val2); break;

@@ -1775,7 +1775,7 @@ interp_traverse (PNODE node, SYMTAB stab, PVALUE *pval)
 		irc = INTERROR;
 		goto traverse_leave;
 	}
-	root = (NODE) pvalue(val);
+	root = pvalue_to_node(val);
 	if (!root) {
 		irc = INTOKAY;
 		goto traverse_leave;
@@ -2038,7 +2038,7 @@ pa_handle_option (PVALUE optval)
 {
 	STRING optstr;
 	ASSERT(ptype(optval)==PSTRING); /* grammar only allows strings */
-	optstr = pvalue(optval);
+	optstr = pvalue_to_string(optval);
 	if (eqstr(optstr,"explicitvars")) {
 		explicitvars = 1;
 	} else {
@@ -2059,7 +2059,7 @@ pa_handle_char_encoding (PACTX pactx, PNODE node)
 	STRING codeset;
 	ASSERT(ptype(pval)==PSTRING); /* grammar only allows strings */
 	pactx=pactx; /* unused */
-	codeset = pvalue(pval);
+	codeset = pvalue_to_string(pval);
 	strupdate(&irptinfo(node)->codeset, codeset);
 }
 /*=============================================+
@@ -2098,7 +2098,7 @@ pa_handle_include (PACTX pactx, PNODE node)
 	pactx=pactx; /* unused */
 
 	ASSERT(ptype(pval)==PSTRING); /* grammar only allows strings */
-	newfname = pvalue(pval);
+	newfname = pvalue_to_string(pval);
 	
 	/* if it is relative, get local path to give to find_program */
 	if (!is_absolute_path(newfname)) {
@@ -2136,7 +2136,7 @@ pa_handle_require (PACTX pactx, PNODE node)
 		insert_table_ptr(pactx->filetab, strsave(cur_pathinfo->fullpath), tab);
 	}
 
-	str = pvalue(pval);
+	str = pvalue_to_string(pval);
 	insert_table_str(tab, propstr, strsave(str));
 }
 /*=============================================+

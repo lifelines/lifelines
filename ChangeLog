@@ -1,3 +1,10 @@
+2003-06-17 Matt Emmerton
+
+	* ChangeLog src/interp/interp.c src/interp/pvalmath.c
+	src/interp/pvalue.c
+
+	Use pvalue_to_xxx() functions instead of casting pvalue(val).
+
 2003-06-14 Perry Rapp
 
 	* ChangeLog src/gedlib/names.c

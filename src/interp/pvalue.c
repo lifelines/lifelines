@@ -258,8 +258,9 @@ clear_pvalue (PVALUE val)
 		return;
 	case PSTRING:
 		{
-			if (pvalue(val)) {
-				stdfree((STRING) pvalue(val));
+			STRING str = pvalue_to_string(val);
+			if (str) {
+				stdfree(str);
 			}
 		}
 		return;
