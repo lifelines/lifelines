@@ -2714,7 +2714,7 @@ message_string (void)
 {
 	if (!cur_screen) return "";
 	if (cur_screen == MAIN_SCREEN)
-		return "LifeLines -- Main Menu";
+		return _("LifeLines -- Main Menu");
 	ASSERT(cur_screen >= 1 && cur_screen <= MAX_SCREEN);
 	return g_ScreenInfo[cur_screen].Title;
 }
@@ -3386,17 +3386,21 @@ repaint_search_menu (UIWINDOW uiwin)
 	n = get_vhist_len();
 	if (n>0) {
 		llstrncpyf(buffer, sizeof(buffer), uu8
-			, _pl(qSmn_sea_vhis, qSmn_sea_vhi2, n), n);
+			, _pl("v  Review visit history (%d record)"
+			, "v  Review visit history (%d records)"
+			, n), n);
 	} else {
-		llstrncpy(buffer, qSmn_sea_vhix, sizeof(buffer), uu8);
+		llstrncpy(buffer, "(visit history is empty)", sizeof(buffer), uu8);
 	}
 	mvwaddstr(win, row++, 4, buffer);
 	n = get_chist_len();
 	if (n>0) {
 		llstrncpyf(buffer, sizeof(buffer), uu8
-			, _pl(qSmn_sea_chis, qSmn_sea_chi2, n), n);
+			, _pl("c  Review change history (%d record)"
+			, "c  Review change history (%d records)"
+			, n), n);
 	} else {
-		llstrncpy(buffer, qSmn_sea_chix, sizeof(buffer), uu8);
+		llstrncpy(buffer, "(change history is empty)", sizeof(buffer), uu8);
 	}
 	mvwaddstr(win, row++, 4, buffer);
 	mvwaddstr(win, row++, 4, _(qSmn_sea_scan));
@@ -3494,11 +3498,13 @@ deactivate_uiwin (void)
 {
 	UIWINDOW uiw = active_uiwin;
 	active_uiwin = uiw_parent(active_uiwin);
+	if (active_uiwin) {
+		ASSERT(uiw_child(active_uiwin)==uiw);
+	}
 	uiw_parent(uiw)=0;
 	if (uiw_dynamic(uiw))
 		delete_uiwindow(&uiw);
 	if (active_uiwin && uiw_child(active_uiwin)) {
-		ASSERT(uiw_child(active_uiwin)==uiw);
 		uiw_child(active_uiwin)=0;
 	}
 }

@@ -58,6 +58,8 @@ choose_and_remove_family (void)
 	INDISEQ spseq, chseq;
 	STRING tag, key;
 	char confirm[512], members[64];
+	char spouses[32], children[32];
+	INT n;
 	STRING cfptr=confirm; /* build & localize string */
 	INT cflen=sizeof(confirm);
 
@@ -80,7 +82,14 @@ choose_and_remove_family (void)
 	}
 
 	/* build confirm string */
-	sprintf(members, _(qScffdeld), fam_to_key(fam), ISize(spseq), ISize(chseq));
+	n = ISize(spseq);
+	llstrncpyf(spouses, sizeof(spouses), uu8
+		, _pl("%d spouse", "%d spouses", n), n);
+	n = ISize(chseq);
+	llstrncpyf(children, sizeof(children), uu8
+		, _pl("%d child", "%d children", n), n);
+	llstrncpyf(members, sizeof(members), uu8
+		, _(qScffdeld), fam_to_key(fam), spouses, children);
 	appendstr(&cfptr, &cflen, uu8, _(qScffdel));
 	appendstr(&cfptr, &cflen, uu8, members);
 

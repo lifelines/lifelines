@@ -184,7 +184,7 @@ ZST qScfeupt      = N_("Do you really want to update this event?");
 ZST qScfxupt      = N_("Do you really want to update this record?");
 ZST qScfpdel      = N_("Are you sure you want to remove the person from the database?");
 ZST qScffdel      = N_("Remove this family record ?");
-ZST qScffdeld     = N_( "(%s: %d spouse(s), %d child(ren))");
+ZST qScffdeld     = N_("(Family %s (%s, %s)");
 ZST qScfpmrg      = N_("Do you really want to merge these two persons?");
 ZST qScffmrg      = N_("Do you really want to merge these two families?");
 ZST qScfcrmv      = N_("Do you really want to remove this child from his/her family?");
@@ -558,12 +558,6 @@ ZST qSmn_del_fam  = N_("f  Family - remove a family completely");
 
 /* &&end delete menu, begin search menu */
 ZST qSmn_sea_ttl  = N_("How would you like to find a record?");
-ZST qSmn_sea_vhis = N_("v  Review visit history (%d record)");
-ZST qSmn_sea_vhi2 = N_("v  Review visit history (%d records)");
-ZST qSmn_sea_vhix = N_("(visit history is empty)");
-ZST qSmn_sea_chis = N_("c  Review change history (%d record)");
-ZST qSmn_sea_chi2 = N_("c  Review change history (%d records)");
-ZST qSmn_sea_chix = N_("(change history is empty)");
 ZST qSmn_sea_scan = N_("f  Full database scan");
 
 /* &&end search menu, begin fullscan menu */

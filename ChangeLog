@@ -5,6 +5,12 @@
 	Update to Swedish translation (sv.po).
 	Fix for ? & q browse menu items not being translated.
 
+	* ChangeLog build/msvc6/llines/config.h src/gedlib/messages.c
+	src/interp/alloc.c src/interp/builtin.c src/liflines/delete.c
+	src/liflines/screen.c:
+
+	Fix screen.c for crash. Pluralize some entries (_pl needs string literals).
+
 2002-10-19 Perry Rapp
 
 	* ChangeLog NEWS build/msvc6/llexec/llexec.rc

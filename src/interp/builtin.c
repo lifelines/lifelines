@@ -2090,7 +2090,8 @@ __titlcase (PNODE node, SYMTAB stab, BOOLEAN *eflg)
  *   usage: pn(INDI, INT) -> STRING
  *===============================*/
 static char *mpns[] = {  N_("He"),  N_("he"), N_("His"), N_("his"), N_("him") };
-static char *fpns[] = { N_("She"), N_("she"), N_("Her"), N_("her"), N_("her") };
+/* "her_" = object form (Doug hit her) (do not include underscore in translation) */
+static char *fpns[] = { N_("She"), N_("she"), N_("Her"), N_("her"), N_("her_") };
 PVALUE
 __pn (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
@@ -2110,10 +2111,14 @@ __pn (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "2nd arg to pn must be between 0 and 4");
 		return NULL;
 	}
-	if (SEX(indi) == SEX_FEMALE) 
-		set_pvalue(val, PSTRING, (VPTR)_(fpns[typ]));
-	else
+	if (SEX(indi) == SEX_FEMALE) {
+		STRING str = _(fpns[typ]);
+		if (eqstr(str, "her_"))
+			str = "her";
+		set_pvalue(val, PSTRING, (VPTR)str);
+	} else {
 		set_pvalue(val, PSTRING, (VPTR)_(mpns[typ]));
+	}
 	return val;
 }
 /*==================================+

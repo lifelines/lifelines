@@ -777,7 +777,7 @@ interp_load_lang (void)
 	nonboox     = strsave(_("%s: the arg #%s must be a boolean."));
 	nonlst1    = strsave(_("%s: the arg must be a list."));
 	nonlstx    = strsave(_("%s: the arg #%s must be a list."));
-	badargs     = strsave(_("%s: Bad argument(s)"));
+	badargs     = strsave(_("%s: Bad arguments"));
 	badargx     = strsave(_("%s: the arg #%s had a major error."));
 }
 
