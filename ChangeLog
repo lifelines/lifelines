@@ -1,3 +1,9 @@
+2003-04-20 Perry Rapp
+
+	* ChangeLog win32/mycurses.c
+
+	Document alt-0xxx bug in relevant code.
+
 2003-04-19 Perry Rapp
 
 	* ChangeLog src/gedlib/date.c

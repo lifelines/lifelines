@@ -840,6 +840,10 @@ static int mycur_getc(void)
 				{
 					if (keycode == VK_NUMPAD0)
 					{
+						/* TODO: 0-prefixed alt-codes are not octal codes in the console
+						codeset at all, but rather decimal codes but in the Windows codeset !
+						2003-04-20, Perry
+						*/
 						numpadbase = 8;
 						numpadval = -1;
 					}
