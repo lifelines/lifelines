@@ -12,6 +12,15 @@
 	Added win32/msvc6/libintl project. Added it.po as test
 	file (not real data).
 
+	* ChangeLog README.DEVELOPERS gedlib/editmap.c gedlib/messages.c
+	interp/date.c liflines/add.c liflines/ask.c liflines/browse.c
+	liflines/delete.c liflines/edit.c liflines/main.c
+	liflines/merge.c liflines/newrecs.c liflines/screen.c
+	liflines/show.c liflines/swap.c po/POTFILES.in po/it.po
+	*NEW: ABOUT_NLS
+
+	More i18n.
+
 2002-02-21 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/indiseq.c hdrs/interp.h interp/interp.c

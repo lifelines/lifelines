@@ -1465,19 +1465,23 @@ init_keywordtbl (void)
 static void
 load_one_cmplx_pic (INT ecmplx, STRING abbrev, STRING full)
 {
+	STRING loc_abbrev = strdup(_(abbrev));
+	STRING loc_full = strdup(_(full));
 	ASSERT(ecmplx>=0 && ecmplx <ECMPLX_END);
 	/* 0=ABT (cmplx=3) */
-	cmplx_pics[ecmplx][0] = strdup(upper(abbrev));
+	cmplx_pics[ecmplx][0] = strdup(upper(loc_abbrev));
 	/* 1=Abt (cmplx=4) */
-	cmplx_pics[ecmplx][1] = strdup(titlecase(abbrev));
+	cmplx_pics[ecmplx][1] = strdup(titlecase(loc_abbrev));
 	/* 2=ABOUT (cmplx=5) */
-	cmplx_pics[ecmplx][2] = strdup(upper(full));
+	cmplx_pics[ecmplx][2] = strdup(upper(loc_full));
 	/* 3=About (cmplx=6) */
-	cmplx_pics[ecmplx][3] = strdup(titlecase(full));
+	cmplx_pics[ecmplx][3] = strdup(titlecase(loc_full));
 	/* 4=abt (cmplx=7) */
-	cmplx_pics[ecmplx][4] = strdup(lower(abbrev));
+	cmplx_pics[ecmplx][4] = strdup(lower(loc_abbrev));
 	/* 5=about (cmplx=8) */
-	cmplx_pics[ecmplx][5] = strdup(lower(full));
+	cmplx_pics[ecmplx][5] = strdup(lower(loc_full));
+	stdfree(loc_abbrev);
+	stdfree(loc_full);
 
 }
 /*=============================
@@ -1493,12 +1497,16 @@ static void
 load_one_month (INT monum, MONTH_NAMES * monarr, STRING abbrev, STRING full)
 {
 	/* 0-5 codes as in load_cmplx_pic(...) above */
-	monarr[monum][0] = strdup(upper(abbrev));
-	monarr[monum][1] = strdup(titlecase(abbrev));
-	monarr[monum][2] = strdup(upper(full));
-	monarr[monum][3] = strdup(titlecase(full));
-	monarr[monum][4] = strdup(lower(abbrev));
-	monarr[monum][5] = strdup(lower(full));
+	STRING loc_abbrev = strdup(_(abbrev));
+	STRING loc_full = strdup(_(full));
+	monarr[monum][0] = strdup(upper(loc_abbrev));
+	monarr[monum][1] = strdup(titlecase(loc_abbrev));
+	monarr[monum][2] = strdup(upper(loc_full));
+	monarr[monum][3] = strdup(titlecase(loc_full));
+	monarr[monum][4] = strdup(lower(loc_abbrev));
+	monarr[monum][5] = strdup(lower(loc_full));
+	stdfree(loc_abbrev);
+	stdfree(loc_full);
 }
 /*=============================
  * load_lang -- Load generated picture strings

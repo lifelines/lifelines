@@ -32,7 +32,7 @@ edit_mapping (INT ttnum)
 		return FALSE;
 	}
 	if (readonly) {
-		msg_error(ronlye);
+		msg_error(_(ronlye));
 		return FALSE;
 	}
 	endwin();

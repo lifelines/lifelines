@@ -65,7 +65,7 @@ swap_children (NODE prnt, NODE fam)
 	INT nfam, nchil;
 
 	if (readonly) {
-		message(ronlye);
+		message(_(ronlye));
 		return FALSE;
 	}
 
@@ -155,7 +155,7 @@ reorder_child (NODE prnt, NODE fam)
 	NODE child;
 
 	if (readonly) {
-		message(ronlye);
+		message(_(ronlye));
 		return FALSE;
 	}
 
@@ -249,7 +249,7 @@ swap_families (NODE indi)
 	STRING str;
 
 	if (readonly) {
-		message(ronlye);
+		message(_(ronlye));
 		return FALSE;
 	}
 

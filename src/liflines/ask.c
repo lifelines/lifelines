@@ -282,7 +282,7 @@ INDISEQ
 ask_for_indiseq (STRING ttl, char ctype, INT *prc)
 {
 	INDISEQ seq;
-	STRING name = ask_for_string(ttl, idbrws);
+	STRING name = ask_for_string(ttl, N_(idbrws));
 	*prc = RC_DONE;
 	if (!name || *name == 0) return NULL;
 	*prc = RC_NOSELECT;

@@ -78,7 +78,7 @@ add_source (void)
 {
 	STRING str;
 	if (readonly) {
-		message(ronlya);
+		message(_(ronlya));
 		return NULL;
 	}
 	str = getoptstr("SOURREC", defsour);
@@ -92,7 +92,7 @@ add_event (void)
 {
 	STRING str;
 	if (readonly) {
-		message(ronlya);
+		message(_(ronlya));
 		return NULL;
 	}
 	str = getoptstr("EVENREC", defeven);
@@ -106,7 +106,7 @@ add_other (void)
 {
 	STRING str;
 	if (readonly) {
-		message(ronlya);
+		message(_(ronlya));
 		return NULL;
 	}
 	str = getoptstr("OTHR", defothr);
@@ -269,7 +269,7 @@ edit_record (NODE node1,           /* record to edit, poss NULL */
 	if (readonly) {
 		node2 = file_to_node(editfile, tti, &msg, &emp);
 		if (!equal_tree(node1, node2))
-			message(ronlye);
+			message(_(ronlye));
 		free_nodes(node2);
 		return;
 	}

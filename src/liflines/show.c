@@ -201,10 +201,10 @@ init_display_indi (NODE pers, INT width)
 	}
 	sprintf(Spers+strlen(Spers), "(%s)", key_of_record(pers, ttd));
 
-	s = sh_indi_to_event_long(pers, ttd, "BIRT", dspl_bir, (width-3));
-	if (!s) s = sh_indi_to_event_long(pers, ttd, "CHR", dspl_chr, (width-3));
+	s = sh_indi_to_event_long(pers, ttd, "BIRT", _(dspl_bir), (width-3));
+	if (!s) s = sh_indi_to_event_long(pers, ttd, "CHR", _(dspl_chr), (width-3));
 	if (s) sprintf(Sbirt, "  %s", s);
-	else sprintf(Sbirt, "  %s", dspl_bir);
+	else sprintf(Sbirt, "  %s", _(dspl_bir));
 
 	/* add a RESIdence if none was in the birth event */
 	if(strchr(Sbirt, ',') == 0) {
@@ -221,10 +221,10 @@ init_display_indi (NODE pers, INT width)
 		}
 	}
 
-	s = sh_indi_to_event_long(pers, ttd, "DEAT", dspl_dea, (width-3));
-	if (!s) s = sh_indi_to_event_long(pers, ttd, "BURI", dspl_bur, (width-3));
+	s = sh_indi_to_event_long(pers, ttd, "DEAT", _(dspl_dea), (width-3));
+	if (!s) s = sh_indi_to_event_long(pers, ttd, "BURI", _(dspl_bur), (width-3));
 	if (s) sprintf(Sdeat, "  %s", s);
-	else sprintf(Sdeat, "  %s", dspl_dea);
+	else sprintf(Sdeat, "  %s", _(dspl_dea));
 
 	s = person_display(fth, NULL, width-13);
 	if (s) snprintf(Sfath, liwidth, "  %s: %s", dspl_fath, s);
@@ -371,15 +371,15 @@ init_display_fam (NODE fam, INT width)
 	} else
 		snprintf(Shusb, liwidth, "%s: (%s)", dspl_fath, fk);
 
-	s = sh_indi_to_event_long(husb, ttd, "BIRT", dspl_bir, width-3);
-	if (!s) s = sh_indi_to_event_long(husb, ttd, "CHR", dspl_chr, width-3);
+	s = sh_indi_to_event_long(husb, ttd, "BIRT", _(dspl_bir), width-3);
+	if (!s) s = sh_indi_to_event_long(husb, ttd, "CHR", _(dspl_chr), width-3);
 	if (s) sprintf(Shbirt, "  %s", s);
-	else sprintf(Shbirt, "  %s", dspl_bir);
+	else sprintf(Shbirt, "  %s", _(dspl_bir));
 
-	s = sh_indi_to_event_long(husb, ttd, "DEAT", dspl_dea, width-3);
-	if (!s) s = sh_indi_to_event_long(husb, ttd, "BURI", dspl_bur, width-3);
+	s = sh_indi_to_event_long(husb, ttd, "DEAT", _(dspl_dea), width-3);
+	if (!s) s = sh_indi_to_event_long(husb, ttd, "BURI", _(dspl_bur), width-3);
 	if (s) snprintf(Shdeat, liwidth, "  %s", s);
-	else snprintf(Shdeat, liwidth, "  %s", dspl_dea);
+	else snprintf(Shdeat, liwidth, "  %s", _(dspl_dea));
 
 	if (wife) {
 		ik = key_of_record(wife, ttd);
@@ -389,19 +389,19 @@ init_display_fam (NODE fam, INT width)
 	} else
 		snprintf(Swife, liwidth, "%s:", dspl_moth);
 
-	s = sh_indi_to_event_long(wife, ttd, "BIRT", dspl_bir, width-3);
-	if (!s) s = sh_indi_to_event_long(wife, ttd, "CHR", dspl_chr, width-3);
+	s = sh_indi_to_event_long(wife, ttd, "BIRT", _(dspl_bir), width-3);
+	if (!s) s = sh_indi_to_event_long(wife, ttd, "CHR", _(dspl_chr), width-3);
 	if (s) snprintf(Swbirt, liwidth, "  %s", s);
-	else snprintf(Swbirt, liwidth, "  %s", dspl_bir);
+	else snprintf(Swbirt, liwidth, "  %s", _(dspl_bir));
 
-	s = sh_indi_to_event_long(wife, ttd, "DEAT", dspl_dea, width-3);
-	if (!s) s = sh_indi_to_event_long(wife, ttd, "BURI", dspl_bur, width-3);
+	s = sh_indi_to_event_long(wife, ttd, "DEAT", _(dspl_dea), width-3);
+	if (!s) s = sh_indi_to_event_long(wife, ttd, "BURI", _(dspl_bur), width-3);
 	if (s) snprintf(Swdeat, liwidth, "  %s", s);
-	else snprintf(Swdeat, liwidth, "  %s", dspl_dea);
+	else snprintf(Swdeat, liwidth, "  %s", _(dspl_dea));
 
-	s = sh_indi_to_event_long(fam, ttd, "MARR", dspl_mar, width-3);
+	s = sh_indi_to_event_long(fam, ttd, "MARR", _(dspl_mar), width-3);
 	if (s) snprintf(Smarr, liwidth, s);
-	else snprintf(Smarr, liwidth, dspl_mar);
+	else snprintf(Smarr, liwidth, _(dspl_mar));
 	/* append divorce to marriage line, if room */
 	/* (Might be nicer to make it a separate, following line */
 	wtemp = width-5 - strlen(Smarr);

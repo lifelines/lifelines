@@ -2,6 +2,8 @@
 # This list is (obviously) NOT complete.
 # - Perry 2002.02.22
 
+gedlib/messages.c
+
 liflines/menuitem.c
 liflines/screen.c
 liflines/show.c

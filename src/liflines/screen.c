@@ -379,9 +379,9 @@ repaint_main_menu (UIWINDOW uiwin)
 	mvwaddstr(win, row++, 4, _("s  Search database"));
 	mvwaddstr(win, row++, 4, _("a  Add information to the database"));
 	mvwaddstr(win, row++, 4, _("d  Delete information from the database"));
-	mvwaddstr(win, row++, 4, mn_mmprpt);
-	mvwaddstr(win, row++, 4, mn_mmrpt);
-	mvwaddstr(win, row++, 4, mn_mmcset);
+	mvwaddstr(win, row++, 4, _(mn_mmprpt));
+	mvwaddstr(win, row++, 4, _(mn_mmrpt));
+	mvwaddstr(win, row++, 4, _(mn_mmcset));
 	mvwaddstr(win, row++, 4, "t  Modify character translation tables");
 	mvwaddstr(win, row++, 4, "u  Miscellaneous utilities");
 	mvwaddstr(win, row++, 4, "x  Handle source, event and other records");
@@ -434,7 +434,7 @@ paint_list_screen (void)
 	mvwaddstr(win, row++, col, "b  Browse new persons");
 	mvwaddstr(win, row++, col, "a  Add to this list");
 	mvwaddstr(win, row++, col, "x  Swap mark/current");
-	mvwaddstr(win, row++, col, mn_quit);
+	mvwaddstr(win, row++, col, _(mn_quit));
 }
 /*==========================================
  * create_uiwindow_impl -- Create our WINDOW wrapper
@@ -626,7 +626,7 @@ main_menu (void)
 		{
 			NODE node;
 			if (readonly) {
-				msg_error(ronlya);
+				msg_error(_(ronlya));
 				break;
 			}
 			node = invoke_add_menu();
@@ -637,7 +637,7 @@ main_menu (void)
 	case 'd':
 		{
 			if (readonly) {
-				msg_error(ronlyr);
+				msg_error(_(ronlyr));
 				break;
 			}
 			invoke_del_menu();
@@ -1477,7 +1477,7 @@ draw_tt_win (STRING prompt)
 	disp_trans_table_choice(uiwin, row++, 4, mn_tt_dsin, MDSIN);
 	disp_trans_table_choice(uiwin, row++, 4, mn_tt_inds, MINDS);
 	disp_trans_table_choice(uiwin, row++, 4, mn_tt_inrp, MINRP);
-	mvwaddstr(win, row++, 4, mn_ret);
+	mvwaddstr(win, row++, 4, _(mn_ret));
 }
 /*==============================
  * disp_codeset -- Display code set line
@@ -1801,7 +1801,7 @@ load_tt_action (void)
 	STRING ttimportdir;
 
 	if (readonly) {
-		msg_error(ronlye);
+		msg_error(_(ronlye));
 		return;
 	}
 
@@ -1923,7 +1923,7 @@ invoke_utils_menu (void)
 	win = uiw_win(uiwin);
 	activate_uiwin(uiwin);
 
-	wmove(win, 1, strlen(mn_uttl)+3);
+	wmove(win, 1, strlen(_(mn_uttl))+3);
 	code = interact(uiwin, "srkidmeoq", -1);
 	deactivate_uiwin();
 
@@ -3073,12 +3073,12 @@ repaint_add_menu (UIWINDOW uiwin)
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
 	draw_win_box(win);
-	mvwaddstr(win, row++, 2, mn_add_ttl);
-	mvwaddstr(win, row++, 4, mn_add_indi);
-	mvwaddstr(win, row++, 4, mn_add_fam);
-	mvwaddstr(win, row++, 4, mn_add_chil);
-	mvwaddstr(win, row++, 4, mn_add_spou);
-	mvwaddstr(win, row++, 4, mn_ret);
+	mvwaddstr(win, row++, 2, _(mn_add_ttl));
+	mvwaddstr(win, row++, 4, _(mn_add_indi));
+	mvwaddstr(win, row++, 4, _(mn_add_fam));
+	mvwaddstr(win, row++, 4, _(mn_add_chil));
+	mvwaddstr(win, row++, 4, _(mn_add_spou));
+	mvwaddstr(win, row++, 4, _(mn_ret));
 }
 /*=====================================
  * repaint_delete_menu -- 
@@ -3095,7 +3095,7 @@ repaint_delete_menu (UIWINDOW uiwin)
 	mvwaddstr(win, row++, 4, mn_del_spou);
 	mvwaddstr(win, row++, 4, mn_del_indi);
 	mvwaddstr(win, row++, 4, mn_del_fam);
-	mvwaddstr(win, row++, 4, mn_ret);
+	mvwaddstr(win, row++, 4, _(mn_ret));
 }
 /*=====================================
  * repaint_scan_menu -- 
@@ -3111,7 +3111,7 @@ repaint_scan_menu (UIWINDOW uiwin)
 	mvwaddstr(win, row++, 4, mn_sca_nmfu);
 	mvwaddstr(win, row++, 4, mn_sca_nmfr);
 	mvwaddstr(win, row++, 4, mn_sca_refn);
-	mvwaddstr(win, row++, 4, mn_ret);
+	mvwaddstr(win, row++, 4, _(mn_ret));
 }
 /*=====================================
  * repaint_cset_menu -- 
@@ -3140,7 +3140,7 @@ repaint_cset_menu (UIWINDOW uiwin)
 #endif
 	mvwaddstr(win, row++, 4, mn_csrpt);
 	mvwaddstr(win, row++, 4, mn_cstt);
-	mvwaddstr(win, row++, 4, mn_ret);
+	mvwaddstr(win, row++, 4, _(mn_ret));
 }
 /*=====================================
  * repaint_rpc_menu -- 
@@ -3161,7 +3161,7 @@ repaint_rpc_menu (UIWINDOW uiwin)
 	mvwaddstr(win, row++, 4, csnrloc);
 #endif
 	disp_trans_table_choice(uiwin, row++, 4, mn_tt_inrp, MINRP);
-	mvwaddstr(win, row++, 4, mn_ret);
+	mvwaddstr(win, row++, 4, _(mn_ret));
 }
 /*=====================================
  * repaint_tt_menu -- 
@@ -3202,7 +3202,7 @@ repaint_trans_menu (UIWINDOW uiwin)
 /*	llstrcatn(&ptr, mn_tt_dir, &mylen); */
 /*	llstrcatn(&ptr, lloptions.llttexport, &mylen); */
 	mvwaddstr(win, row++, 4, line);
-	mvwaddstr(win, row++, 4, mn_ret);
+	mvwaddstr(win, row++, 4, _(mn_ret));
 }
 /*=====================================
  * repaint_utils_menu -- 
@@ -3214,16 +3214,16 @@ repaint_utils_menu (UIWINDOW uiwin)
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
 	draw_win_box(win);
-	mvwaddstr(win, row++, 2, mn_uttl);
-	mvwaddstr(win, row++, 4, mn_utsave);
-	mvwaddstr(win, row++, 4, mn_utread);
-	mvwaddstr(win, row++, 4, mn_utkey);
-	mvwaddstr(win, row++, 4, mn_utkpers);
-	mvwaddstr(win, row++, 4, mn_utdbstat);
-	mvwaddstr(win, row++, 4, mn_utmemsta);
-	mvwaddstr(win, row++, 4, mn_utplaces);
-	mvwaddstr(win, row++, 4, mn_utusropt);
-	mvwaddstr(win, row++, 4, mn_quit);
+	mvwaddstr(win, row++, 2, _(mn_uttl));
+	mvwaddstr(win, row++, 4, _(mn_utsave));
+	mvwaddstr(win, row++, 4, _(mn_utread));
+	mvwaddstr(win, row++, 4, _(mn_utkey));
+	mvwaddstr(win, row++, 4, _(mn_utkpers));
+	mvwaddstr(win, row++, 4, _(mn_utdbstat));
+	mvwaddstr(win, row++, 4, _(mn_utmemsta));
+	mvwaddstr(win, row++, 4, _(mn_utplaces));
+	mvwaddstr(win, row++, 4, _(mn_utusropt));
+	mvwaddstr(win, row++, 4, _(mn_quit));
 }
 /*=====================================
  * repaint_extra_menu -- 
@@ -3235,17 +3235,17 @@ repaint_extra_menu (UIWINDOW uiwin)
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
 	draw_win_box(win);
-	mvwaddstr(win, row++, 2, mn_xttl);
-	mvwaddstr(win, row++, 4, mn_xxbsour);
-	mvwaddstr(win, row++, 4, mn_xxbeven);
-	mvwaddstr(win, row++, 4, mn_xxbothr);
-	mvwaddstr(win, row++, 4, mn_xxasour);
-	mvwaddstr(win, row++, 4, mn_xxesour);
-	mvwaddstr(win, row++, 4, mn_xxaeven);
-	mvwaddstr(win, row++, 4, mn_xxeeven);
-	mvwaddstr(win, row++, 4, mn_xxaothr);
-	mvwaddstr(win, row++, 4, mn_xxeothr);
-	mvwaddstr(win, row++, 4, mn_quit);
+	mvwaddstr(win, row++, 2, _(mn_xttl));
+	mvwaddstr(win, row++, 4, _(mn_xxbsour));
+	mvwaddstr(win, row++, 4, _(mn_xxbeven));
+	mvwaddstr(win, row++, 4, _(mn_xxbothr));
+	mvwaddstr(win, row++, 4, _(mn_xxasour));
+	mvwaddstr(win, row++, 4, _(mn_xxesour));
+	mvwaddstr(win, row++, 4, _(mn_xxaeven));
+	mvwaddstr(win, row++, 4, _(mn_xxeeven));
+	mvwaddstr(win, row++, 4, _(mn_xxaothr));
+	mvwaddstr(win, row++, 4, _(mn_xxeothr));
+	mvwaddstr(win, row++, 4, _(mn_quit));
 }
 /*============================
  * activate_uiwin -- 

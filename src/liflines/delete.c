@@ -135,12 +135,12 @@ BOOLEAN
 choose_and_remove_spouse (NODE indi, NODE fam, BOOLEAN nolast)
 {
 	if (readonly) {
-		message(ronlye);
+		message(_(ronlye));
 		return FALSE;
 	}
 
 /* Identify spouse to remove */
-	if (!indi) indi = ask_for_indi_old(idsrmv, NOCONFIRM, NOASK1);
+	if (!indi) indi = ask_for_indi_old(_(idsrmv), NOCONFIRM, NOASK1);
 	if (!indi) return FALSE;
 	if (!FAMS(indi)) {
 		message(ntprnt);
@@ -151,7 +151,7 @@ choose_and_remove_spouse (NODE indi, NODE fam, BOOLEAN nolast)
 	if (!fam) fam = choose_family(indi, "e", idsrmf, TRUE);
 	if (!fam) return FALSE;
 	if (nolast && num_fam_xrefs(fam) < 2) {
-		message(normls);
+		message(_(normls));
 		return FALSE;
 	}
 	if (!ask_yes_or_no(cfsrmv)) return FALSE;
@@ -174,12 +174,12 @@ BOOLEAN
 choose_and_remove_child (NODE indi, NODE fam, BOOLEAN nolast)
 {
 	if (readonly) {
-		message(ronlye);
+		message(_(ronlye));
 		return FALSE;
 	}
 		
 /* Identify child and check for FAMC nodes */
-	if (!indi) indi = ask_for_indi_old(idcrmv, NOCONFIRM, NOASK1);
+	if (!indi) indi = ask_for_indi_old(_(idcrmv), NOCONFIRM, NOASK1);
 	if (!indi) return FALSE;
 	if (!FAMC(indi)) {
 		message(ntchld);
@@ -190,7 +190,7 @@ choose_and_remove_child (NODE indi, NODE fam, BOOLEAN nolast)
 	if (!fam) fam = choose_family(indi, "e", idcrmf, FALSE);
 	if (!fam) return FALSE;
 	if (nolast && num_fam_xrefs(fam) < 2) {
-		message(normls);
+		message(_(normls));
 		return FALSE;
 	}
 	if (!ask_yes_or_no(cfcrmv)) return TRUE;

@@ -90,7 +90,7 @@ edit_indi (NODE indi1)  /* may be NULL */
 	if (readonly) {
 		indi2 = file_to_node(editfile, tti, &msg, &emp);
 		if (!equal_tree(indi1, indi2))
-			message(ronlye);
+			message(_(ronlye));
 		free_nodes(indi2);
 		return indi1;
 	}
@@ -212,7 +212,7 @@ edit_family (NODE fam1) /* may be NULL */
 	if (readonly) {
 		fam2 = file_to_node(editfile, tti, &msg, &emp);
 		if (!equal_tree(fam1, fam2))
-			message(ronlye);
+			message(_(ronlye));
 		free_nodes(fam2); 
 		return fam1;
 	}

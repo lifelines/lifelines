@@ -66,7 +66,7 @@ add_indi_by_edit (void)
 	TRANTABLE tti = tran_tables[MEDIN];
 
 	if (readonly) {
-		message(ronlya);
+		message(_(ronlya));
 		return NULL;
 	}
 
@@ -205,7 +205,7 @@ add_child (NODE child, NODE fam)
 	TRANTABLE ttd = tran_tables[MINDS];
 
 	if (readonly) {
-		message(ronlye);
+		message(_(ronlye));
 		return NULL;
 	}
 
@@ -304,7 +304,7 @@ add_spouse (NODE spouse,
 	NODE husb, wife, chil, rest, fref;
 
 	if (readonly) {
-		message(ronlye);
+		message(_(ronlye));
 		return FALSE;
 	}
 
@@ -471,7 +471,7 @@ add_family (NODE spouse1,
 	FILE *fp;
 
 	if (readonly) {
-		message(ronlya);
+		message(_(ronlya));
 		return NULL;
 	}
 

@@ -88,7 +88,7 @@ merge_two_indis (NODE indi1,    /* two persons to merge - can't be null */
 	ASSERT(eqstr("INDI", ntag(indi1)));
 	ASSERT(eqstr("INDI", ntag(indi2)));
 	if (readonly) {
-		message(ronlym);
+		message(_(ronlym));
 		return NULL;
 	}
 	if (indi1 == indi2) {
@@ -414,7 +414,7 @@ merge_two_fams (NODE fam1,
 	BOOLEAN emp;
 
 	if (readonly) {
-		message(ronlym);
+		message(_(ronlym));
 		return NULL;
 	}
 	ASSERT(fam1 && fam2);

@@ -277,7 +277,7 @@ pick_create_new_family (NODE indi, NODE save, STRING * addstrings)
 	TRANTABLE ttd = tran_tables[MINDS];
 	char scratch[100];
 	if (readonly) {
-		message(ronlya);
+		message(_(ronlya));
 		return NULL;
 	}
 	i = choose_from_array(idfcop, 2, addstrings);
@@ -774,7 +774,7 @@ pick_remove_spouse_from_family (NODE fam)
 	STRING spstrings[MAX_SPOUSES];
 	INT i;
 	if (readonly) {
-		message(ronlye);
+		message(_(ronlye));
 		return;
 	}
 	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
@@ -800,7 +800,7 @@ pick_remove_spouse_from_family (NODE fam)
 		}
 	}
 	join_fam(fam, fref, husb, wife, chil, rest);
-	i = choose_from_array(idsrmv, i, spstrings);
+	i = choose_from_array(_(idsrmv), i, spstrings);
 	if (i == -1) return;
 	choose_and_remove_spouse(spnodes[i], fam, TRUE);
 }
@@ -815,7 +815,7 @@ pick_add_spouse_to_family (NODE fam, NODE save)
 	char scratch[100];
 	TRANTABLE ttd = tran_tables[MINDS];
 	if (readonly) {
-		message(ronlye);
+		message(_(ronlye));
 		return;
 	}
 	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
@@ -851,7 +851,7 @@ pick_add_child_to_fam (NODE fam, NODE save)
 	char scratch[100];
 	TRANTABLE ttd = tran_tables[MINDS];
 	if (readonly) {
-		message(ronlye);
+		message(_(ronlye));
 		return;
 	}
 	if (save) {
@@ -984,11 +984,11 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			break;
 		case CMD_REMOVECHILD:	/* Remove a child */
 			if (readonly) {
-				message(ronlye);
+				message(_(ronlye));
 				break;
 			}
 			*pindi1 = choose_child(NULL, fam, nocinf,
-			    idcrmv, DOASK1);
+			    _(idcrmv), DOASK1);
 			if (*pindi1) choose_and_remove_child(*pindi1, fam, TRUE);
 			break;
 		case CMD_ADDSPOUSE:	/* Add spouse to family */

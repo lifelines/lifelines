@@ -1,6 +1,7 @@
 Table of Contents
 
-1) automake notes
+1) automake/autoconf notes
+2) which does what
 
 ***************************
 
@@ -33,4 +34,19 @@ Rob Fugina
 robf@geekthing.com
 
 
+
+***************************
+
+2) Which does what:
+
+At development (or package creation) time:
+
+aclocal: This generates aclocal.m4 from acinclude.m4 and the m4 subdirectory.
+autoheader: This generates acconfig.h.
+automake: This generates Makefile.in files from Makefile.am files.
+autoconf: This generates configure from configure.in (or configure.ac).
+
+On remote machine compiling a source distribution package:
+
+configure will generate config.h and Makefile files from Makefile.in files.
 
