@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.10\n"
-"POT-Creation-Date: 2002-06-09 05:57-0400\n"
+"POT-Creation-Date: 2002-06-11 01:05-0400\n"
 "PO-Revision-Date: 2002-06-09 21:32-0400\n"
 "Last-Translator: None yet\n"
 "Language-Team: Not submitted yet\n"
@@ -923,7 +923,7 @@ msgid "Malformed configuration file: line too long."
 msgstr ""
 
 #: gedlib/messages.c:297
-msgid "Unsupported Unicode format (only UTF-8 is supported)."
+msgid "Unsupported file encoding (no multibyte encodings except UTF-8)."
 msgstr ""
 
 #: gedlib/messages.c:300
@@ -1264,954 +1264,963 @@ msgid "Tag is too long to connect automatically."
 msgstr ""
 
 #: gedlib/messages.c:405
+msgid "Database records"
+msgstr ""
+
+#: gedlib/messages.c:406
 #, c-format
-msgid "Database records (%dI, %dF, %dS, %dE, %dX)"
+msgid "%dI, %dF, %dS, %dE, %dX"
 msgstr ""
 
 # c-format
-#: gedlib/messages.c:408
+#: gedlib/messages.c:409
 #, c-format
 msgid ""
 "The requested window size (%d,%d) is too large for your terminal (%d,%d).\n"
 msgstr ""
 
-#: gedlib/messages.c:409
+#: gedlib/messages.c:410
 #, c-format
 msgid "The requested window size (%d,%d) is too small for LifeLines (%d,%d).\n"
 msgstr ""
 
-#: gedlib/messages.c:412
+#: gedlib/messages.c:413
 #, c-format
 msgid "LifeLines %s - Genealogical DB and Programming System"
 msgstr ""
 
-#: gedlib/messages.c:413
+#: gedlib/messages.c:414
 msgid "Copyright(c) 1991 to 1996, by T. T. Wetmore IV"
 msgstr ""
 
-#: gedlib/messages.c:414
+#: gedlib/messages.c:415
 #, c-format
 msgid "Current Database - %s"
 msgstr ""
 
-#: gedlib/messages.c:416
+#: gedlib/messages.c:417
 msgid " (immutable)"
 msgstr ""
 
-#: gedlib/messages.c:418
+#: gedlib/messages.c:419
 msgid " (read only)"
 msgstr ""
 
-#: gedlib/messages.c:419
+#: gedlib/messages.c:420
 msgid "Please choose an operation:"
 msgstr ""
 
-#: gedlib/messages.c:420
+#: gedlib/messages.c:421
 msgid "Not valid command"
 msgstr ""
 
-#: gedlib/messages.c:423
+#: gedlib/messages.c:424
 msgid "enter y (yes) or n (no): "
 msgstr ""
 
-#: gedlib/messages.c:424
+#: gedlib/messages.c:425
 msgid "yYnN"
 msgstr ""
 
-#: gedlib/messages.c:425
+#: gedlib/messages.c:426
 msgid "yY"
 msgstr ""
 
-#: gedlib/messages.c:428
+#: gedlib/messages.c:429
 msgid "LifeLines -- Person Browse Screen (* toggles menu)"
 msgstr ""
 
-#: gedlib/messages.c:429
+#: gedlib/messages.c:430
 msgid "LifeLines -- Family Browse Screen (* toggles menu)"
 msgstr ""
 
-#: gedlib/messages.c:430
+#: gedlib/messages.c:431
 msgid "LifeLines -- Two Person Browse Screen (* toggles menu)"
 msgstr ""
 
-#: gedlib/messages.c:431
+#: gedlib/messages.c:432
 msgid "LifeLines -- Two Family Browse Screen (* toggles menu)"
 msgstr ""
 
-#: gedlib/messages.c:432
+#: gedlib/messages.c:433
 msgid "LifeLines -- Auxiliary Browse Screen (* toggles menu)"
 msgstr ""
 
-#: gedlib/messages.c:433
+#: gedlib/messages.c:434
 msgid "LifeLines -- List Browse Screen (* toggles menu)"
 msgstr ""
 
-#: gedlib/messages.c:436
+#: gedlib/messages.c:437
 msgid "Commands:   j Move down     k Move up    i Select     q Quit"
 msgstr ""
 
-#: gedlib/messages.c:437
+#: gedlib/messages.c:438
 msgid "Commands:   j Move down     k Move up    q Quit"
 msgstr ""
 
-#: gedlib/messages.c:438
+#: gedlib/messages.c:439
 msgid "Messages:"
 msgstr ""
 
-#: gedlib/messages.c:441
+#: gedlib/messages.c:442
 msgid "Please choose from the following options:"
 msgstr ""
 
-#: gedlib/messages.c:442
+#: gedlib/messages.c:443
 #, c-format
 msgid "New record is %s"
 msgstr ""
 
-#: gedlib/messages.c:443
+#: gedlib/messages.c:444
 msgid "Insert xref automatically at bottom of current record."
 msgstr ""
 
-#: gedlib/messages.c:444
+#: gedlib/messages.c:445
 msgid "Edit current record now to add xref manually."
 msgstr ""
 
-#: gedlib/messages.c:445
+#: gedlib/messages.c:446
 msgid "Browse new record (without adding xref)."
 msgstr ""
 
-#: gedlib/messages.c:446
+#: gedlib/messages.c:447
 msgid "Return to current record (without adding xref)."
 msgstr ""
 
-#: gedlib/messages.c:449
+#: gedlib/messages.c:450
 msgid "Spouse unknown"
 msgstr ""
 
-#: gedlib/messages.c:450
+#: gedlib/messages.c:451
 msgid "No more history"
 msgstr ""
 
-#: gedlib/messages.c:451
+#: gedlib/messages.c:452
 msgid "Bad history count"
 msgstr ""
 
-#: gedlib/messages.c:452
+#: gedlib/messages.c:453
 msgid "Bad backup history count"
 msgstr ""
 
-#: gedlib/messages.c:453
+#: gedlib/messages.c:454
 msgid "Bad history length"
 msgstr ""
 
-#: gedlib/messages.c:454
+#: gedlib/messages.c:455
 #, c-format
 msgid "Delete history (%d entries) ?"
 msgstr ""
 
-#: gedlib/messages.c:455
+#: gedlib/messages.c:456
 msgid "Error accessing data"
 msgstr ""
 
-#: gedlib/messages.c:456
+#: gedlib/messages.c:457
 msgid "Choose from history"
 msgstr ""
 
-#: gedlib/messages.c:457
+#: gedlib/messages.c:458
 msgid ""
 "Cannot combine immutable (-i) or read-only (-r) with read-write (-w) access."
 msgstr ""
 
-#: gedlib/messages.c:458
+#: gedlib/messages.c:459
 msgid "Cannot combine forceopen (-f) and lock (-l) flags."
 msgstr ""
 
-#: gedlib/messages.c:459
+#: gedlib/messages.c:460
 msgid "Program"
 msgstr ""
 
-#: gedlib/messages.c:460
+#: gedlib/messages.c:461
 msgid "Default path: "
 msgstr ""
 
-#: gedlib/messages.c:461
+#: gedlib/messages.c:462
 msgid "WARNING: missing keys"
 msgstr ""
 
-#: gedlib/messages.c:462
+#: gedlib/messages.c:463
 msgid "WARNING: invalid pointer"
 msgstr ""
 
-#: gedlib/messages.c:463
+#: gedlib/messages.c:464
 msgid "enter file name"
 msgstr ""
 
-#: gedlib/messages.c:464
+#: gedlib/messages.c:465
 #, c-format
 msgid "enter file name (*%s)"
 msgstr ""
 
-#: gedlib/messages.c:465
+#: gedlib/messages.c:466
 msgid "There is no record with that key or reference."
 msgstr ""
 
-#: gedlib/messages.c:466
+#: gedlib/messages.c:467
 msgid "Database was corrupt."
 msgstr ""
 
-#: gedlib/messages.c:469
+#: gedlib/messages.c:470
 msgid "Bad decimal number format."
 msgstr ""
 
-#: gedlib/messages.c:470
+#: gedlib/messages.c:471
 msgid "Bad hexidecimal number format."
 msgstr ""
 
-#: gedlib/messages.c:471
+#: gedlib/messages.c:472
 msgid "No replacement string on line."
 msgstr ""
 
-#: gedlib/messages.c:472
+#: gedlib/messages.c:473
 msgid "No original string on line."
 msgstr ""
 
-#: gedlib/messages.c:473
+#: gedlib/messages.c:474
 msgid "Bad escape format."
 msgstr ""
 
-#: gedlib/messages.c:474
+#: gedlib/messages.c:475
 #, c-format
 msgid "%s: line %d (entry %d): %s\n"
 msgstr ""
 
-#: gedlib/messages.c:477 liflines/menuitem.c:86
+#: gedlib/messages.c:478 liflines/menuitem.c:86
 msgid "q  Return to main menu"
 msgstr "q  Ritornare al menu principale"
 
-#: gedlib/messages.c:478
+#: gedlib/messages.c:479
 msgid "q  Return to previous menu"
 msgstr "q  Ritornare al menu precedente"
 
-#: gedlib/messages.c:479
+#: gedlib/messages.c:480
 msgid "q  Quit program"
 msgstr ""
 
-#: gedlib/messages.c:482
+#: gedlib/messages.c:481
+#, fuzzy
+msgid "Q  Quit current database"
+msgstr "Scegliere la base di dati"
+
+#: gedlib/messages.c:484
 msgid "b  Browse the persons in the database"
 msgstr ""
 
-#: gedlib/messages.c:483
+#: gedlib/messages.c:485
 msgid "s  Search database"
 msgstr ""
 
-#: gedlib/messages.c:484
+#: gedlib/messages.c:486
 msgid "a  Add information to the database"
 msgstr ""
 
-#: gedlib/messages.c:485
+#: gedlib/messages.c:487
 msgid "d  Delete information from the database"
 msgstr ""
 
-#: gedlib/messages.c:486
+#: gedlib/messages.c:488
 msgid "r  Generate report by entering report name"
 msgstr ""
 
-#: gedlib/messages.c:487
+#: gedlib/messages.c:489
 msgid "p  Pick a report from list and run"
 msgstr ""
 
-#: gedlib/messages.c:488
+#: gedlib/messages.c:490
 msgid "c  Character set options"
 msgstr ""
 
-#: gedlib/messages.c:489
+#: gedlib/messages.c:491
 msgid "t  Modify character translation tables"
 msgstr ""
 
-#: gedlib/messages.c:490
+#: gedlib/messages.c:492
 msgid "u  Miscellaneous utilities"
 msgstr ""
 
-#: gedlib/messages.c:491
+#: gedlib/messages.c:493
 msgid "x  Handle source, event and other records"
 msgstr ""
 
-#: gedlib/messages.c:494
+#: gedlib/messages.c:496
 msgid "What utility do you want to perform?"
 msgstr ""
 
-#: gedlib/messages.c:495
+#: gedlib/messages.c:497
 msgid "s  Save the database in a GEDCOM file"
 msgstr ""
 
-#: gedlib/messages.c:496
+#: gedlib/messages.c:498
 msgid "r  Read in data from a GEDCOM file"
 msgstr ""
 
-#: gedlib/messages.c:497
+#: gedlib/messages.c:499
 msgid "k  Find a person's key value"
 msgstr ""
 
-#: gedlib/messages.c:498
+#: gedlib/messages.c:500
 msgid "i  Identify a person from key value"
 msgstr ""
 
-#: gedlib/messages.c:499
+#: gedlib/messages.c:501
 msgid "d  Show database statistics"
 msgstr ""
 
-#: gedlib/messages.c:500
+#: gedlib/messages.c:502
 msgid "m  Show memory statistics"
 msgstr ""
 
-#: gedlib/messages.c:501
+#: gedlib/messages.c:503
 msgid "e  Edit the place abbreviation file"
 msgstr ""
 
-#: gedlib/messages.c:502
+#: gedlib/messages.c:504
 msgid "o  Edit the user options file"
 msgstr ""
 
-#: gedlib/messages.c:505
+#: gedlib/messages.c:507
 msgid "What activity do you want to perform?"
 msgstr ""
 
-#: gedlib/messages.c:506
+#: gedlib/messages.c:508
 msgid "s  Browse source records"
 msgstr ""
 
-#: gedlib/messages.c:507
+#: gedlib/messages.c:509
 msgid "e  Browse event records"
 msgstr ""
 
-#: gedlib/messages.c:508
+#: gedlib/messages.c:510
 msgid "x  Browse other records"
 msgstr ""
 
-#: gedlib/messages.c:509
+#: gedlib/messages.c:511
 msgid "1  Add a source record to the database"
 msgstr ""
 
-#: gedlib/messages.c:510
+#: gedlib/messages.c:512
 msgid "2  Edit source record from the database"
 msgstr ""
 
-#: gedlib/messages.c:511
+#: gedlib/messages.c:513
 msgid "3  Add an event record to the database"
 msgstr ""
 
-#: gedlib/messages.c:512
+#: gedlib/messages.c:514
 msgid "4  Edit event record from the database"
 msgstr ""
 
-#: gedlib/messages.c:513
+#: gedlib/messages.c:515
 msgid "5  Add an other record to the database"
 msgstr ""
 
-#: gedlib/messages.c:514
+#: gedlib/messages.c:516
 msgid "6  Edit other record from the database"
 msgstr ""
 
-#: gedlib/messages.c:517
+#: gedlib/messages.c:519
 msgid "Character set menu"
 msgstr ""
 
-#: gedlib/messages.c:518
+#: gedlib/messages.c:520
 msgid "t  Edit translation tables"
 msgstr ""
 
-#: gedlib/messages.c:519
+#: gedlib/messages.c:521
 msgid "r  Report character set setup"
 msgstr ""
 
-#: gedlib/messages.c:520
+#: gedlib/messages.c:522
 msgid "Internal code set: "
 msgstr ""
 
-#: gedlib/messages.c:522
+#: gedlib/messages.c:524
 msgid "s  Edit custom sort table        "
 msgstr ""
 
-#: gedlib/messages.c:523
+#: gedlib/messages.c:525
 msgid "p  Edit custom sort prefix table "
 msgstr ""
 
-#: gedlib/messages.c:524
+#: gedlib/messages.c:526
 msgid "c  Edit custom codepage mapping  "
 msgstr ""
 
-#: gedlib/messages.c:525
+#: gedlib/messages.c:527
 msgid "l  Edit custom lower case mapping"
 msgstr ""
 
-#: gedlib/messages.c:526
+#: gedlib/messages.c:528
 msgid "u  Edit custom upper case mapping"
 msgstr ""
 
-#: gedlib/messages.c:528
+#: gedlib/messages.c:530
 msgid "Report character set menu"
 msgstr ""
 
-#: gedlib/messages.c:529
+#: gedlib/messages.c:531
 msgid "Report code set: "
 msgstr ""
 
-#: gedlib/messages.c:532
+#: gedlib/messages.c:534
 msgid "Translation Tables"
 msgstr ""
 
-#: gedlib/messages.c:533
+#: gedlib/messages.c:535
 msgid "e  edit individual tables (in db)"
 msgstr ""
 
-#: gedlib/messages.c:534
+#: gedlib/messages.c:536
 msgid "l  load a table from a file (into db)"
 msgstr ""
 
-#: gedlib/messages.c:535
+#: gedlib/messages.c:537
 msgid "s  save a table to a file (from db)"
 msgstr ""
 
-#: gedlib/messages.c:536
+#: gedlib/messages.c:538
 msgid "x  export all tables (from db to files)"
 msgstr ""
 
-#: gedlib/messages.c:537
+#: gedlib/messages.c:539
 msgid "i  import all tables (from files into db)"
 msgstr ""
 
-#: gedlib/messages.c:538
+#: gedlib/messages.c:540
 msgid "export/import directory:"
 msgstr ""
 
-#: gedlib/messages.c:541
+#: gedlib/messages.c:543
 msgid "Which character mapping do you want to edit?"
 msgstr ""
 
-#: gedlib/messages.c:542
+#: gedlib/messages.c:544
 msgid "Which character mapping do you want to save?"
 msgstr ""
 
-#: gedlib/messages.c:544
+#: gedlib/messages.c:546
 msgid "e  Editor to Internal mapping "
 msgstr ""
 
-#: gedlib/messages.c:545
+#: gedlib/messages.c:547
 msgid "m  Internal to Editor mapping "
 msgstr ""
 
-#: gedlib/messages.c:546
+#: gedlib/messages.c:548
 msgid "i  GEDCOM to Internal mapping "
 msgstr ""
 
-#: gedlib/messages.c:547
+#: gedlib/messages.c:549
 msgid "x  Internal to GEDCOM mapping "
 msgstr ""
 
-#: gedlib/messages.c:548
+#: gedlib/messages.c:550
 msgid "g  Display to Internal mapping"
 msgstr ""
 
-#: gedlib/messages.c:549
+#: gedlib/messages.c:551
 msgid "d  Internal to Display mapping"
 msgstr ""
 
-#: gedlib/messages.c:550
+#: gedlib/messages.c:552
 msgid "r  Internal to Report mapping "
 msgstr ""
 
-#: gedlib/messages.c:552
+#: gedlib/messages.c:554
 msgid "Not implemented yet"
 msgstr ""
 
-#: gedlib/messages.c:555
+#: gedlib/messages.c:557
 msgid "What do you want to add?"
 msgstr ""
 
-#: gedlib/messages.c:556
+#: gedlib/messages.c:558
 msgid "p  Person - add new person to the database"
 msgstr ""
 
-#: gedlib/messages.c:557
+#: gedlib/messages.c:559
 msgid "f  Family - create family record from one or two spouses"
 msgstr ""
 
-#: gedlib/messages.c:558
+#: gedlib/messages.c:560
 msgid "c  Child - add a child to an existing family"
 msgstr ""
 
-#: gedlib/messages.c:559
+#: gedlib/messages.c:561
 msgid "s  Spouse - add a spouse to an existing family"
 msgstr ""
 
-#: gedlib/messages.c:562
+#: gedlib/messages.c:564
 msgid "What do you want to remove?"
 msgstr ""
 
-#: gedlib/messages.c:563
+#: gedlib/messages.c:565
 msgid "c  Child - remove a child from his/her family"
 msgstr ""
 
-#: gedlib/messages.c:564
+#: gedlib/messages.c:566
 msgid "s  Spouse - remove a spouse from a family"
 msgstr ""
 
-#: gedlib/messages.c:565
+#: gedlib/messages.c:567
 msgid "i  Individual - remove a person completely"
 msgstr ""
 
-#: gedlib/messages.c:566
+#: gedlib/messages.c:568
 msgid "f  Family - remove a family completely"
 msgstr ""
 
-#: gedlib/messages.c:569
+#: gedlib/messages.c:571
 msgid "What scan type?"
 msgstr ""
 
-#: gedlib/messages.c:570
+#: gedlib/messages.c:572
 msgid "f  Full name scan"
 msgstr ""
 
-#: gedlib/messages.c:571
+#: gedlib/messages.c:573
 msgid "n  Name fragment (whitespace-delimited) scan"
 msgstr ""
 
-#: gedlib/messages.c:572
+#: gedlib/messages.c:574
 msgid "r  Refn scan"
 msgstr ""
 
-#: gedlib/messages.c:573
+#: gedlib/messages.c:575
 msgid "Performing full name scan"
 msgstr ""
 
-#: gedlib/messages.c:574
+#: gedlib/messages.c:576
 msgid "Performing name fragment scan"
 msgstr ""
 
-#: gedlib/messages.c:575
+#: gedlib/messages.c:577
 msgid "Performing refn scan"
 msgstr ""
 
-#: gedlib/messages.c:576
+#: gedlib/messages.c:578
 msgid "No records found in scan"
 msgstr ""
 
-#: gedlib/messages.c:579
+#: gedlib/messages.c:581
 msgid "abt %1"
 msgstr ""
 
-#: gedlib/messages.c:580
+#: gedlib/messages.c:582
 msgid "about %1"
 msgstr ""
 
-#: gedlib/messages.c:581
+#: gedlib/messages.c:583
 msgid "est %1"
 msgstr ""
 
-#: gedlib/messages.c:582
+#: gedlib/messages.c:584
 msgid "estimated %1"
 msgstr ""
 
-#: gedlib/messages.c:583
+#: gedlib/messages.c:585
 msgid "cal %1"
 msgstr ""
 
-#: gedlib/messages.c:584
+#: gedlib/messages.c:586
 msgid "calculated %1"
 msgstr ""
 
-#: gedlib/messages.c:585
+#: gedlib/messages.c:587
 msgid "fr %1"
 msgstr ""
 
-#: gedlib/messages.c:586
+#: gedlib/messages.c:588
 msgid "from %1"
 msgstr ""
 
-#: gedlib/messages.c:587 gedlib/messages.c:588
+#: gedlib/messages.c:589 gedlib/messages.c:590
 msgid "to %1"
 msgstr ""
 
-#: gedlib/messages.c:589
+#: gedlib/messages.c:591
 msgid "fr %1 to %2"
 msgstr ""
 
-#: gedlib/messages.c:590
+#: gedlib/messages.c:592
 msgid "from %1 to %2"
 msgstr ""
 
-#: gedlib/messages.c:591
+#: gedlib/messages.c:593
 msgid "bef %1"
 msgstr ""
 
-#: gedlib/messages.c:592
+#: gedlib/messages.c:594
 msgid "before %1"
 msgstr ""
 
-#: gedlib/messages.c:593
+#: gedlib/messages.c:595
 msgid "aft %1"
 msgstr ""
 
-#: gedlib/messages.c:594
+#: gedlib/messages.c:596
 msgid "after %1"
 msgstr ""
 
-#: gedlib/messages.c:595
+#: gedlib/messages.c:597
 msgid "bet %1 and %2"
 msgstr ""
 
-#: gedlib/messages.c:596
+#: gedlib/messages.c:598
 msgid "between %1 and %2"
 msgstr ""
 
-#: gedlib/messages.c:599
+#: gedlib/messages.c:601
 msgid "B.C."
 msgstr ""
 
-#: gedlib/messages.c:601
+#: gedlib/messages.c:603
 msgid "BC"
 msgstr ""
 
-#: gedlib/messages.c:603
+#: gedlib/messages.c:605
 msgid "B.C.E."
 msgstr ""
 
-#: gedlib/messages.c:605
+#: gedlib/messages.c:607
 msgid "BCE"
 msgstr ""
 
-#: gedlib/messages.c:607
+#: gedlib/messages.c:609
 msgid "A.D."
 msgstr ""
 
-#: gedlib/messages.c:609
+#: gedlib/messages.c:611
 msgid "AD"
 msgstr ""
 
-#: gedlib/messages.c:611
+#: gedlib/messages.c:613
 msgid "C.E."
 msgstr ""
 
-#: gedlib/messages.c:613
+#: gedlib/messages.c:615
 msgid "CE"
 msgstr ""
 
-#: gedlib/messages.c:616
+#: gedlib/messages.c:618
 msgid "%1J"
 msgstr ""
 
-#: gedlib/messages.c:618
+#: gedlib/messages.c:620
 msgid "%1 HEB"
 msgstr ""
 
-#: gedlib/messages.c:620
+#: gedlib/messages.c:622
 msgid "%1 FR"
 msgstr ""
 
-#: gedlib/messages.c:622
+#: gedlib/messages.c:624
 msgid "%1 AUC"
 msgstr ""
 
-#: gedlib/messages.c:624
+#: gedlib/messages.c:626
 msgid "jan"
 msgstr "gen"
 
-#: gedlib/messages.c:625
+#: gedlib/messages.c:627
 msgid "january"
 msgstr "gennaio"
 
-#: gedlib/messages.c:626
+#: gedlib/messages.c:628
 msgid "feb"
 msgstr "feb"
 
-#: gedlib/messages.c:627
+#: gedlib/messages.c:629
 msgid "february"
 msgstr "febbraio"
 
-#: gedlib/messages.c:628
+#: gedlib/messages.c:630
 msgid "mar"
 msgstr "mar"
 
-#: gedlib/messages.c:629
+#: gedlib/messages.c:631
 msgid "march"
 msgstr "marzo"
 
-#: gedlib/messages.c:630
+#: gedlib/messages.c:632
 msgid "apr"
 msgstr "apr"
 
-#: gedlib/messages.c:631
+#: gedlib/messages.c:633
 msgid "april"
 msgstr "aprile"
 
-#: gedlib/messages.c:633
+#: gedlib/messages.c:635
 msgid "**may"
 msgstr "mag"
 
-#: gedlib/messages.c:634
+#: gedlib/messages.c:636
 msgid "may"
 msgstr "maggio"
 
-#: gedlib/messages.c:635
+#: gedlib/messages.c:637
 msgid "jun"
 msgstr "giu"
 
-#: gedlib/messages.c:636
+#: gedlib/messages.c:638
 msgid "june"
 msgstr "giugno"
 
-#: gedlib/messages.c:637
+#: gedlib/messages.c:639
 msgid "jul"
 msgstr "lug"
 
-#: gedlib/messages.c:638
+#: gedlib/messages.c:640
 msgid "july"
 msgstr "luglio"
 
-#: gedlib/messages.c:639
+#: gedlib/messages.c:641
 msgid "aug"
 msgstr "aug"
 
-#: gedlib/messages.c:640
+#: gedlib/messages.c:642
 msgid "august"
 msgstr "agosto"
 
-#: gedlib/messages.c:641
+#: gedlib/messages.c:643
 msgid "sep"
 msgstr "set"
 
-#: gedlib/messages.c:642
+#: gedlib/messages.c:644
 msgid "september"
 msgstr "settembre"
 
-#: gedlib/messages.c:643
+#: gedlib/messages.c:645
 msgid "oct"
 msgstr "ott"
 
-#: gedlib/messages.c:644
+#: gedlib/messages.c:646
 msgid "october"
 msgstr "ottobre"
 
-#: gedlib/messages.c:645
+#: gedlib/messages.c:647
 msgid "nov"
 msgstr "nov"
 
-#: gedlib/messages.c:646
+#: gedlib/messages.c:648
 msgid "november"
 msgstr "novembre"
 
-#: gedlib/messages.c:647
+#: gedlib/messages.c:649
 msgid "dec"
 msgstr "dic"
 
-#: gedlib/messages.c:648
+#: gedlib/messages.c:650
 msgid "december"
 msgstr "dicembre"
 
-#: gedlib/messages.c:650
+#: gedlib/messages.c:652
 msgid "tsh"
 msgstr ""
 
-#: gedlib/messages.c:651
+#: gedlib/messages.c:653
 msgid "tishri"
 msgstr ""
 
-#: gedlib/messages.c:652
+#: gedlib/messages.c:654
 msgid "csh"
 msgstr ""
 
-#: gedlib/messages.c:653
+#: gedlib/messages.c:655
 msgid "cheshvan"
 msgstr ""
 
-#: gedlib/messages.c:654
+#: gedlib/messages.c:656
 msgid "ksl"
 msgstr ""
 
-#: gedlib/messages.c:655
+#: gedlib/messages.c:657
 msgid "kislev"
 msgstr ""
 
-#: gedlib/messages.c:656
+#: gedlib/messages.c:658
 msgid "tvt"
 msgstr ""
 
-#: gedlib/messages.c:657
+#: gedlib/messages.c:659
 msgid "tevet"
 msgstr ""
 
-#: gedlib/messages.c:658
+#: gedlib/messages.c:660
 msgid "shv"
 msgstr ""
 
-#: gedlib/messages.c:659
+#: gedlib/messages.c:661
 msgid "shevat"
 msgstr ""
 
-#: gedlib/messages.c:660
+#: gedlib/messages.c:662
 msgid "adr"
 msgstr ""
 
-#: gedlib/messages.c:661
+#: gedlib/messages.c:663
 msgid "adar"
 msgstr ""
 
-#: gedlib/messages.c:662
+#: gedlib/messages.c:664
 msgid "ads"
 msgstr ""
 
-#: gedlib/messages.c:663
+#: gedlib/messages.c:665
 msgid "adar sheni"
 msgstr ""
 
-#: gedlib/messages.c:664
+#: gedlib/messages.c:666
 msgid "nsn"
 msgstr ""
 
-#: gedlib/messages.c:665
+#: gedlib/messages.c:667
 msgid "nisan"
 msgstr ""
 
-#: gedlib/messages.c:666
+#: gedlib/messages.c:668
 msgid "iyr"
 msgstr ""
 
-#: gedlib/messages.c:667
+#: gedlib/messages.c:669
 msgid "iyar"
 msgstr ""
 
-#: gedlib/messages.c:668
+#: gedlib/messages.c:670
 msgid "svn"
 msgstr ""
 
-#: gedlib/messages.c:669
+#: gedlib/messages.c:671
 msgid "sivan"
 msgstr ""
 
-#: gedlib/messages.c:670
+#: gedlib/messages.c:672
 msgid "tmz"
 msgstr ""
 
-#: gedlib/messages.c:671
+#: gedlib/messages.c:673
 msgid "tamuz"
 msgstr ""
 
-#: gedlib/messages.c:672
+#: gedlib/messages.c:674
 msgid "aav"
 msgstr ""
 
-#: gedlib/messages.c:673
+#: gedlib/messages.c:675
 msgid "av"
 msgstr ""
 
-#: gedlib/messages.c:674
+#: gedlib/messages.c:676
 msgid "ell"
 msgstr ""
 
-#: gedlib/messages.c:675
+#: gedlib/messages.c:677
 msgid "elul"
 msgstr ""
 
-#: gedlib/messages.c:677
+#: gedlib/messages.c:679
 msgid "vend"
 msgstr ""
 
-#: gedlib/messages.c:678
+#: gedlib/messages.c:680
 msgid "vendemiaire"
 msgstr ""
 
-#: gedlib/messages.c:679
+#: gedlib/messages.c:681
 msgid "brum"
 msgstr ""
 
-#: gedlib/messages.c:680
+#: gedlib/messages.c:682
 msgid "brumaire"
 msgstr ""
 
-#: gedlib/messages.c:681
+#: gedlib/messages.c:683
 msgid "frim"
 msgstr ""
 
-#: gedlib/messages.c:682
+#: gedlib/messages.c:684
 msgid "frimaire"
 msgstr ""
 
-#: gedlib/messages.c:683
+#: gedlib/messages.c:685
 msgid "nivo"
 msgstr ""
 
-#: gedlib/messages.c:684
+#: gedlib/messages.c:686
 msgid "nivose"
 msgstr ""
 
-#: gedlib/messages.c:685
+#: gedlib/messages.c:687
 msgid "pluv"
 msgstr ""
 
-#: gedlib/messages.c:686
+#: gedlib/messages.c:688
 msgid "pluviose"
 msgstr ""
 
-#: gedlib/messages.c:687
+#: gedlib/messages.c:689
 msgid "vent"
 msgstr ""
 
-#: gedlib/messages.c:688
+#: gedlib/messages.c:690
 msgid "ventose"
 msgstr ""
 
-#: gedlib/messages.c:689
+#: gedlib/messages.c:691
 msgid "germ"
 msgstr ""
 
-#: gedlib/messages.c:690
+#: gedlib/messages.c:692
 msgid "germinal"
 msgstr ""
 
-#: gedlib/messages.c:691
+#: gedlib/messages.c:693
 msgid "flor"
 msgstr ""
 
-#: gedlib/messages.c:692
+#: gedlib/messages.c:694
 msgid "floreal"
 msgstr ""
 
-#: gedlib/messages.c:693
+#: gedlib/messages.c:695
 msgid "prai"
 msgstr ""
 
-#: gedlib/messages.c:694
+#: gedlib/messages.c:696
 msgid "prairial"
 msgstr ""
 
-#: gedlib/messages.c:695
+#: gedlib/messages.c:697
 msgid "mess"
 msgstr ""
 
-#: gedlib/messages.c:696
+#: gedlib/messages.c:698
 msgid "messidor"
 msgstr ""
 
-#: gedlib/messages.c:697
+#: gedlib/messages.c:699
 msgid "ther"
 msgstr ""
 
-#: gedlib/messages.c:698
+#: gedlib/messages.c:700
 msgid "thermidor"
 msgstr ""
 
-#: gedlib/messages.c:699
+#: gedlib/messages.c:701
 msgid "fruc"
 msgstr ""
 
-#: gedlib/messages.c:700
+#: gedlib/messages.c:702
 msgid "fructidor"
 msgstr ""
 
-#: gedlib/messages.c:701
+#: gedlib/messages.c:703
 msgid "comp"
 msgstr ""
 
-#: gedlib/messages.c:702
+#: gedlib/messages.c:704
 msgid "jour_complementairs"
 msgstr ""
 
@@ -2465,7 +2474,7 @@ msgstr ""
 msgid "Please choose from the following list."
 msgstr ""
 
-#: liflines/add.c:63
+#: liflines/add.c:62
 #, c-format
 msgid "There was %d unresolved reference."
 msgid_plural "There were %d unresolved references."
@@ -2527,11 +2536,11 @@ msgstr ""
 msgid "Please enter the name of the GEDCOM file."
 msgstr ""
 
-#: liflines/main.c:327
+#: liflines/main.c:340
 msgid "Choose database to open"
 msgstr ""
 
-#: liflines/main.c:335
+#: liflines/main.c:348
 msgid "No databases found in database path"
 msgstr ""
 
@@ -2965,23 +2974,23 @@ msgstr ""
 msgid "Missing title"
 msgstr ""
 
-#: liflines/screen.c:1536
+#: liflines/screen.c:1555
 msgid "Enter locale name"
 msgstr ""
 
-#: liflines/screen.c:1537
+#: liflines/screen.c:1556
 msgid "Locale: "
 msgstr ""
 
-#: liflines/screen.c:1545
+#: liflines/screen.c:1564
 msgid "Valid locale: %1"
 msgstr ""
 
-#: liflines/screen.c:1550
+#: liflines/screen.c:1569
 msgid "Invalid locale, try again"
 msgstr ""
 
-#: liflines/screen.c:3280 liflines/screen.c:3307
+#: liflines/screen.c:3307 liflines/screen.c:3334
 msgid "L  Test locale names"
 msgstr ""
 
