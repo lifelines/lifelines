@@ -181,9 +181,9 @@ capitalize (STRING str)
 INT
 ll_toupper (INT c)
 {
-        if(opt_finnish) return(my_toupper(c));
+	if(opt_finnish) return(my_toupper(c));
 #ifndef OS_NOCTYPE
-    	if(islower(c)) return( toupper(c) );
+	if(islower(c)) return( toupper(c) );
 	return c;
 #else
 	if (c < 'a' || c > 'z') return c;

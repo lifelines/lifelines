@@ -30,7 +30,7 @@
 #include "interp.h"
 #include "screen.h"
 #include "liflines.h"
-#include "arch.h"
+
 #include "llinesi.h"
 
 extern STRING scanrs, scannm, scantt;
@@ -48,10 +48,17 @@ static INDISEQ seq;
 static BOOLEAN
 pattern_match (NAME_PATTERN *patt, STRING name)
 {
-	/* for now, just a straight comparison */
-	if (!strcmpi(patt->string, name))
-		return TRUE;
-	return FALSE;
+	STRING p1,p2;
+	/* match . to any letter, and trailing * to anything */
+	p1=patt->string;
+	p2=name;
+	for (p1=patt->string,p2=name; *p1 || *p2; p1++,p2++) {
+		if (*p1 == '*' && *(p1+1) == 0)
+			return TRUE;
+		if (*p1 != '.' && ll_toupper(*p1) != (*p2))
+			return FALSE;
+	}
+	return TRUE;
 }
 /*===========================================
  * ns_callback -- callback for name traversal
