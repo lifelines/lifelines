@@ -1,5 +1,10 @@
 /*
- *    fami-grps
+ * @progname    fami-grps.ll
+ * @version     1993-01-12
+ * @author      Stephen Woodbridge (woodbri@swoodbridge.com)
+ * @category
+ * @output      Text, 80 cols
+ * @description
  *
  *    Program walks thru one's families and dumps information
  *    about each family. It prunes the tree so an individual is
@@ -19,8 +24,7 @@
  *      o does not output baptism or burial records
  *      o does not list other spouses of HUSBAND or WIFE
  *
- *   Code by Stephen Woodbridge, woodbri@swoodbridge.com
- *   Copyright 1993 by Stephen Woodbridge
+ *    Copyright 1993 Stephen Woodbridge
  */
 global(UNKNOWN)
 global(DONE)

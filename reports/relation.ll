@@ -1,5 +1,5 @@
 /*
- * @progname       relation
+ * @progname       relation.ll
  * @version        5.0
  * @author         Eggert
  * @category       

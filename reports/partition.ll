@@ -1,6 +1,6 @@
 /*
- * @progname       partition
- * @version        8.0
+ * @progname       partition.ll
+ * @version        8
  * @author         Eggert
  * @category       
  * @output         GEDCOM

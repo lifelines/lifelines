@@ -1,5 +1,5 @@
 /*
- * @progname       surname1
+ * @progname       surname1.ll
  * @version        1.0
  * @author         Manis, Wetmore
  * @category       

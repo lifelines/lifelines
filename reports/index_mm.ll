@@ -1,5 +1,5 @@
 /*
- * @progname       index_mm
+ * @progname       index_mm.ll
  * @version        4.0
  * @author         Eggert
  * @category       

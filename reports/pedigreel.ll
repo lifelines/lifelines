@@ -1,5 +1,5 @@
 /*
- * @progname       pedigreel
+ * @progname       pedigreel.ll
  * @version        1.0
  * @author         Wetmore, Manis
  * @category       

@@ -1,5 +1,10 @@
 /*
- *   ps-pedigree
+ * @progname    ps-pedigree.ll
+ * @version     1.1.0
+ * @author      Stephen Woodbridge,  woodbri@swoodbridge.com
+ * @category
+ * @output      PostScript
+ * @description
  *
  *   This report generates Multiple linked Pedigree Charts
  *   Each chart is 7 or 8 generations and as a line moves off

@@ -1,5 +1,5 @@
 /* 
- * @progname       showlines1
+ * @progname       showlines1.ll
  * @version        1.0
  * @author         Wetmore
  * @category       

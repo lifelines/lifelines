@@ -1,5 +1,5 @@
 /*
-** @progname       book-latex
+** @progname       book-latex.ll
 ** @author         Nicklaus
 ** @version        3
 ** @category       
@@ -15,6 +15,9 @@
 ** SourceForge Versions:
 **
 ** $Log$
+** Revision 1.10  2004/07/19 05:54:54  dr_doom
+** Merge Vincent Broman Changes to reports
+**
 ** Revision 1.9  2003/01/19 02:50:23  dr_doom
 ** move 1 paragraph description to immediately before @description  for index.html
 **

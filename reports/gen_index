@@ -81,12 +81,12 @@ A:hover 	{
 </table>
 <P>
 This is an overview of the report programs distributed with Lifelines.
-If you want more information about a program, often their are comments
-at the beginning of the program that talk about functionality, algorithms,
-have sample output, and examples of post processing commands required to
+If you want more information about a program, often there are comments
+at the beginning of the program that talk about functionality and algorithms,
+that have sample output and examples of post processing commands required to
 properly view the results.
-Some programs require slight customization before use, for example they might
-have text identifing the person who generated the report.
+Some programs require customization before use, for example, they might
+have text identifying the person who generated the report.
 <dl>
 EOF
 }

@@ -1,5 +1,5 @@
 /*
- * @progname       regvital
+ * @progname       regvital.ll
  * @version        3.0
  * @author         Wetmore, Manis, Chandler
  * @category       

@@ -1,5 +1,5 @@
 /*
- * @progname       genetics
+ * @progname       genetics.ll
  * @version        2.0.1
  * @author         Eggert
  * @category       

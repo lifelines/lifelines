@@ -1,5 +1,5 @@
 /*
- * @progname       nonpatronymics
+ * @progname       nonpatronymics.ll
  * @version        1.0
  * @author         Eggert
  * @category       

@@ -1,11 +1,14 @@
 /*
+ * @progname       st_collate_8859-1.li
  * @version        1.0
  * @author         Perry Rapp
  * @category       test
  * @output         mixed
-
- * @description    some collation tests written in ISO-8859-1 (Latin-1)
-*/
+ * @description
+ *
+ * some collation tests written in ISO-8859-1 (Latin-1)
+ *
+ */
 
 char_encoding("ISO-8859-1") 
 

@@ -1,6 +1,6 @@
 /*
- * @progname       description
- * @version        8.0
+ * @progname       desc-henry.ll
+ * @version        8
  * @author         Eggert
  * @category       
  * @output         Text

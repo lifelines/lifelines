@@ -1,6 +1,6 @@
 /*
- * @progname       infant_mortality
- * @version        1.0
+ * @progname       infant_mortality.ll
+ * @version        1
  * @author         Eggert
  * @category       
  * @output         Text

@@ -1,5 +1,5 @@
 /*
- * @progname       bias
+ * @progname       bias.ll
  * @version        1.4
  * @author         Chandler
  * @category       

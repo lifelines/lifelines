@@ -1,16 +1,15 @@
 /*
- * @progname       alive
- * @version        5.0
- * @author         Eggert
+ * @progname       alive.ll
+ * @version        6
+ * @author         Jim Eggert
  * @category       
  * @output         Text
- * @description    Finding people alive in a given year
+ * @description
 
+This report program is for finding people living in a given year.
 This finds who in the database, or among ancestors or descendants of
 an individual, was likely alive in a certain year.  Good for looking at
 population snapshots like censuses, tax rolls, etc.
-
-alive - a LifeLines report program for finding live people
 
 Version 1, 13 July 1994, by Jim Eggert, eggertj@ll.mit.edu
 Version 2, 14 July 1994, by Jim Eggert, fixed bug in estimate_byear
@@ -18,12 +17,13 @@ Version 3, 22 July 1994, by Jim Eggert, fixed another bug in estimate_byear,
 					minor format improvement
 Version 4, 15 March 1995, by Frank Flaesland, added support for listing places
 Version 5, 17 March 1995, J.F.Chandler, modified to prune place list
+Version 6, 27 Aug   1997, by Jim Eggert, fixed bug in print_header()
 
 ** SourceForge Versions:
 **
 ** $Log$
-** Revision 1.5  2003/01/19 02:50:23  dr_doom
-** move 1 paragraph description to immediately before @description  for index.html
+** Revision 1.6  2004/07/19 05:54:54  dr_doom
+** Merge Vincent Broman Changes to reports
 **
 ** Revision 1.4  2000/11/29 12:17:11  nozell
 ** Fix typo.
@@ -112,10 +112,6 @@ proc print_places(person) {
     traverse (inode(person), node, level) {
 	if (eq(strcmp(tag(node), "PLAC"), 0)) {
 	    set(p, value(node))
-
-	    /* Skip empty places */
-	    if(eq(0, strlen(p))) { continue() }
-
 	    if(lookup(places_seen,p)) { continue() }
 	    insert(places_seen, p, 1)
 	    extractplaces(node, place_names, num_places)

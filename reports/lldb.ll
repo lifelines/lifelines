@@ -1,9 +1,9 @@
 /*
- * @progname lldb
+ * @progname lldb.ll
  * @version  1.02
- * @author   Nozell 
+ * @author   Marc Nozell <marc@nozell.com>
  * @category palmpilot
- * @output   CSV for palmpilot
+ * @output   pdb import files
  * @description
  *
  *   This program produces a report of all INDI's in the database, with
@@ -55,6 +55,9 @@
  *   Updated URLs
  * 
  *  $Log$
+ *  Revision 1.7  2004/07/19 05:54:55  dr_doom
+ *  Merge Vincent Broman Changes to reports
+ *
  *  Revision 1.6  2003/01/19 02:50:23  dr_doom
  *  move 1 paragraph description to immediately before @description  for index.html
  *

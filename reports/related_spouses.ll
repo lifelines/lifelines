@@ -1,5 +1,5 @@
 /*
- * @progname       related_spouses
+ * @progname       related_spouses.ll
  * @version        2.0
  * @author         Eggert
  * @category       

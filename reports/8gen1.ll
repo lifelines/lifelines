@@ -1,7 +1,7 @@
 /*
- * @progname       8gen1
+ * @progname       8gen1.ll
  * @version        1.0
- * @author         Wetmore
+ * @author         Wetmore, Manis
  * @category       
  * @output         Text, 132 cols
  * @description    

@@ -1,5 +1,5 @@
 /*
- * @progname       soundex-isfm
+ * @progname       soundex-isfm.ll
  * @version        1.0
  * @author         Wetmore, Manis, Eggert
  * @category       

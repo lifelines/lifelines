@@ -1,10 +1,14 @@
 ﻿/*
+ * @progname       st_collate_UTF-8.li
  * @version        1.0
  * @author         Perry Rapp
  * @category       self-test
  * @output         none
- * @description    some collation tests written in UTF-8
-*/
+ * @description
+ *
+ * some collation tests written in UTF-8
+ *
+ */
 
 char_encoding("UTF-8")
 

@@ -1,11 +1,10 @@
 /*
- * @progname       igi-merge
+ * @progname       igi-merge.ll
  * @version        4.0
  * @author         Eggert
  * @category       
  * @output         GEDCOM
  * @description    
-
 
 This program helps you merge IGI data.  IGI data consists of "families"
 which are actually events.  A real family may be documented by several
@@ -90,8 +89,8 @@ anyway.  Because it only writes a GEDCOM file, this program can't
 corrupt your database, so don't worry.
 
 The user interface depends on the size of the LifeLines screen,
-I have marked the sensitive lines with a /*#*/
-
+I have marked the sensitive lines with a commented #
+ */
 
 global(famged)
 global(gedsex)

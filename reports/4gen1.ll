@@ -1,7 +1,7 @@
 /*
- * @progname       4gen1
+ * @progname       4gen1.ll
  * @version        1.0
- * @author         Wetmore
+ * @author         Wetmore, Manis
  * @category       
  * @output         Text, 80 cols
  * @description    

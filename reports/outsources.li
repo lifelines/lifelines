@@ -1,0 +1,63 @@
+/*
+ * @progname       outsources.li
+ * @version        1.3
+ * @author         Scott McGee (smcgee@microware.com)
+ * @category       
+ * @output         GEDCOM
+ * @description    
+
+This is a library of functions and proc to output GEDCOM. It is most useful
+to output source records and potentially some info from custom tags.
+The proc outsources() will take an indi set and output all the source
+structures that are referenced.
+
+@(#)gedcom.li	1.3 10/13/95
+*/
+
+
+proc outsources (s){
+  table(t)
+  list(q)
+  forindiset (s, i, a, n) {
+    traverse(root(i), m, l) {
+      if (nestr("SOUR", tag(m))) {
+        continue()
+      }
+      if (not(reference(value(m)))) {
+        continue()
+      }
+      if (eq(1, lookup(t, value(m)))) {
+        continue()
+      }
+      set(v, save(value(m)))
+      insert(t, v, 1)
+      enqueue(q, v)
+    }
+  }
+  if(q){
+    forlist(q, k, n) {
+      set(r, dereference(k))
+      call outrecord(r)
+    }
+  }
+}
+
+proc outrecord(r){
+/* good general purpose procedure that outputs
+   any LifeLines record in its pure GEDCOM form */
+
+  traverse(r, s, l) {
+    d(l)
+    if (xref(s)) {
+      " "
+      xref(s)
+    }
+    " "
+    tag(s)
+    if (value(s)) {
+      " "
+      value(s)
+    }
+    "\n"
+  }
+}

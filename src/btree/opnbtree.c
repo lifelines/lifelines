@@ -72,6 +72,7 @@ init_keyfile1 (KEYFILE1 * kfile1)
 static void
 init_keyfile2 (KEYFILE2 * kfile2)
 {
+        memset(kfile2, 0, sizeof(*kfile2));
 	strncpy(kfile2->name, KF2_NAME, sizeof(kfile2->name));
 	kfile2->magic = KF2_MAGIC;
 	kfile2->version = KF2_VER;

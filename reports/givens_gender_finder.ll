@@ -1,6 +1,6 @@
 /*
- * @progname       givens_gender_finder
- * @version        1.0
+ * @progname       givens_gender_finder.ll
+ * @version        1
  * @author         Eggert
  * @category       
  * @output         Text

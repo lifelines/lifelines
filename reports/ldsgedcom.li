@@ -1,0 +1,121 @@
+/*
+ * @progname    ldsgedcom.li
+ * @version     1.2 of 2004-07-03
+ * @author      Vincent Broman (vpbroman@mstar2.net)
+ * @category
+ * @output      gedcom event and string function values
+ * @description
+ *
+ *  Utility functions supporting LDS aspects of GeDCom data
+ *  ldstemple( event) -> string,
+ *  ldsspousesealing( fam) -> event,
+ *  ldsbaptism( indi) -> event,
+ *  ldsendowment( indi) -> event,
+ *  ldschildsealing( indi) -> event
+ *
+ * I put equivalent functions in my C source, but this can be used everywhere.
+ */
+
+func ldstemple( ev) {
+    fornodes( ev, childnode) {
+	if( eqstr( tag( childnode), "TEMP")) {
+	    return( save( value( childnode)))
+	}
+    }
+    return( 0)
+}
+
+func ldsspousesealing( fam) {
+    fornodes( root( fam), childnode) {
+	if( eqstr( tag( childnode), "SLGS")) {
+	    return( childnode)
+	}
+    }
+    return( 0)
+}
+
+func ldsbaptism( indi) {
+    fornodes( root( indi), childnode) {
+	if( eqstr( tag( childnode), "BAPL")) {
+	    return( childnode)
+	}
+    }
+    return( 0)
+}
+
+func ldsendowment( indi) {
+    fornodes( root( indi), childnode) {
+	if( eqstr( tag( childnode), "ENDL")) {
+	    return( childnode)
+	}
+    }
+    return( 0)
+}
+
+/*
+ * ldschildsealing(i) returns a SLGC sealing of child EVENT for the INDI indi
+ * or if no such event is found zero is returned.
+ * if the person is a child sealed in more than one family,
+ * only the first find is returned.
+ * This searches first the INDI-SLGC or INDI-FAMC-SLGC syntax, then the old FAM-CHIL-SLGC one.
+ */
+
+func ldschildsealing( indi) {
+    fornodes( root( indi), childnode) {
+	if( eqstr( tag( childnode), "FAMC")) {
+	    fornodes( childnode, sealnode) {
+		if( eqstr( tag( sealnode), "SLGC")) {
+		    return( sealnode)
+		}
+	    }
+	} else if( eqstr( tag( childnode), "SLGC")) {
+		return( childnode)
+	}
+    }
+    set( k, save( concat( "@", key( indi), "@")))
+    if( p, parents( indi)) {
+	/* children( p, ch, i) */
+	fornodes( root( p), childnode) {
+	    if( and( eqstr( tag( childnode), "CHIL"),
+		     eqstr( value( childnode), k))) {
+		fornodes( childnode, sealnode) {
+		    if( eqstr( tag( sealnode), "SLGC")) {
+			return( sealnode)
+		    }
+		}
+	    }
+	}
+    }
+    return( 0)
+}
+
+/* for testing
+proc printordinance( ord) {
+    if( ord) {
+	tag( ord) ": "
+	if( val, value( ord)) {
+	    val
+	} else {
+	    set( ordd, save( date( ord)))
+	    ordd
+	    if( ordt, ldstemple( ord)) {
+		if( ordd) { ", " }
+		ordt
+	    }
+	}
+	nl()
+    }
+}
+
+proc main() {
+    "All individual ordinances" nl() nl()
+    forindi( i, c) {
+	"#" d( c) ": " name( i)
+	if( b, birth( i)) { "  b. " long( b) }
+	nl()
+	call printordinance( ldsbaptism( i))
+	call printordinance( ldsendowment( i))
+	call printordinance( ldschildsealing( i))
+    }
+}
+ */

@@ -1,6 +1,6 @@
 /*
- * @progname       ancestors2
- * @version        1.0
+ * @progname       ancestors2.ll
+ * @version        2.0
  * @author         Wetmore, Cliff Manis
  * @category       
  * @output         Text

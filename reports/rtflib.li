@@ -1,0 +1,696 @@
+/*
+ * @progname       rtflib.li
+ * @version        1.1
+ * @author         Doug McCallum
+ * @category       
+ * @output         RTF
+ * @description    
+ *
+ * RTF functions for implementing RTF output
+ *     this allows generating Word or other
+ *     documents directly.
+ *
+ */
+global(rtf_termstring)
+global(rtf_tcols)
+global(rtf_row_width)
+global(rtf_row_left)
+global(rtf_set_cols)
+global(rtf_col_sizes)
+global(rtf_pointsize)
+global(rtf_pstate)
+global(rtf_curr_indent)
+global(rtf_tstate)
+global(rtf_cstate)
+global(rtf_ccol)
+global(twips)          /* 20 points per inch */
+global(rtf_bspace)
+global(rtf_aspace)
+global(rtf_ftn_last_tag)       /* last footnote tag */
+global(rtf_ftn_state)
+
+/*
+ * Initialize the RTF state machine and variables
+ */
+
+/*
+ * rtf_init(font)
+ *     initialize the RTF state.
+ *     set font as the default font to use (not working yet)
+ */
+proc rtf_init(font)
+{
+       set(twips, 1440)
+       list(rtf_pointsize)
+       setel(rtf_pointsize, 1, 24)     /* style 1 at 12pt */
+       setel(rtf_pointsize, 2, 18)     /* style 2 at 9pt */
+       setel(rtf_pointsize, 3, 20)     /* style 3 at 10pt */
+       set(rtf_curr_indent, 0)         /* no paragraph indent */
+
+       /* some table state */
+       set(rtf_ccol, 0)
+       set(rtf_pstate, 0)
+       set(rtf_cstate, 0)
+       list(rtf_col_sizes)
+       set(rtf_set_cols, 0)
+
+       /* all RTF files need this */
+       "{\\rtf1\\ansi\\deff2{\\fonttbl{\\f10\\fnil "
+       font
+       ";}}\n"
+       "{\\stylesheet{\\fs20\\basedon222\\snext0\\f10 Normal;}\n"
+       "{\\s1\\fs24\\basedon0\\snext3\\f10\\b\\sb240\\sa60 Heading;}\n"
+       "{\\s2\\basedon1\\fs20\\f10\\up Footnote;}\n"
+       "{\\s3\\basedon222\\snext3\\f10\\fs20\\sb120\\sa10 Text;}\n"
+       /* you can add new styles here */
+       "}\n"
+       set(rtf_termstring, "\n\\par}\n")
+       monthformat(4)
+       dayformat(0)
+       dateformat(5)   /* nn-MON-yyyy */
+}
+
+/*
+ * rtf_open(file)
+ *     just do some setup.  If "file" defined, open it.
+ */
+proc rtf_open(file)
+{
+       if (file) {
+               newfile(file, 0)
+       }
+       call rtf_init("Palatino")
+}
+
+/*
+ * rtf_close()
+ *     closes open tables and paragraphs then
+ *     adds the closing bracket for the document
+ */
+proc rtf_close()
+{
+       call rtf_tend()
+       call rtf_pend()
+       rtf_termstring
+}
+
+/*
+ * rtf_set_page_size(height, width, left, right, top, bot)
+ *     set the page size if non-standard size is desired.
+ *     height and width are paper size
+ *     left, right, top and bot are the margin sizes
+ *     sizes in twips (20pts/inch :: 1440 == 1inch)
+ */
+proc rtf_set_page_size(height, width, left, right, top, bot)
+{
+       "\\paperw" d(width)
+       "\\paperh" d(height)
+       "\\margl"  d(left)
+       "\\margr"  d(right)
+       "\\margt"  d(top)
+       "\\margb"  d(bottom) nl()
+}
+
+/*
+ * rtf_newpage()
+ *     insert a forced pagebreak at this point
+ */
+proc rtf_newpage()
+{
+       "\\page "
+}
+
+/*
+ * paragraph functions
+ *     there are a number of options here
+ */
+
+/*
+ * rtf_pstart(type)
+ *     start a new paragraph with the style selected
+ */
+proc rtf_pstart(type)
+{
+       /* if in a paragraph, end it */
+       if (eq(rtf_pstate, 1)) {
+               call rtf_pend()
+       }
+       set(rtf_pstate, 1)
+       "\\pard {\\s" d(type)
+       if (ps, getel(rtf_pointsize, type)) {
+               "\\fs" d(ps) " "
+       }
+
+       call rtf_para_space(rtf_bspace, rtf_aspace)
+
+       if (gt(rtf_curr_indent, 0)) {
+               /* "next" paragraph */
+               call rtf_para_indent(0, rtf_curr_indent)
+       }
+}
+
+/*
+ * rtf_pend()
+ *     end the current paragraph
+ *     this is for completeness but a new pstart will do it
+ *     so it is optional
+ */
+proc rtf_pend()
+{
+       if (eq(1, rtf_pstate)) {
+               "\\par}\n"
+               set(rtf_pstate, 0)
+       }
+}
+
+/*
+ * rtf_para_indent(first, all)
+ *     tagged/indented paragraphs
+ *     should be called right after a rtf_pstart()
+ *     to select the indent of the first and remaining lines
+ *     Note that the first line is also indented the same as
+ *     all but can have more or less indent applied
+ *     typical is to have first be the neg of the all
+ *     a tab will make a hanging indent in that case
+ */
+proc rtf_para_indent(first, all)
+{
+       if (or(gt(first, 0), gt(all, 0))) {
+               "\\li" d(all) "\\fi"
+               d(first)
+               "\\tx" d(all) " "
+       }
+       set(rtf_curr_indent, all)
+}
+
+/*
+ * rtf_para_space(before, after)
+ *     amount of white space before and after a paragraph
+ */
+proc rtf_para_space(before, after)
+{
+    if (rtf_pstate) {
+       if (ne(before, 0)) {
+               "\\sb" d(before)
+       } else {
+               "\\sb" d(mul(getel(rtf_pointsize, 3), 5))
+       }
+       if (ne(after, 0)) {
+               "\\sa" d(after)
+       }
+    }
+    set(rtf_bspace, before)
+    set(rtf_aspace, after)
+}
+
+/*
+ * rtf_para_keepnext()
+ *     causes current paragraph to be kept on same page as
+ *     the next paragraph
+ */
+proc rtf_para_keepnext()
+{
+       "\\keepn "
+}
+
+/*
+ * rtf_para_centered()
+ *     make the current paragraph text be centered
+ */
+proc rtf_para_centered()
+{
+       "\\qc "
+}
+
+/*
+ * rtf_para_leftjust()
+ *     make the current paragraph text left justified
+ */
+proc rtf_para_leftjust()
+{
+       "\\ql "
+}
+
+/*
+ * rtf_para_rightjust()
+ *     make the current paragraph text right justified
+ */
+proc rtf_para_rightjust()
+{
+       "\\qr "
+}
+
+/*
+ * rtf_para_keepintact()
+ *     don't try to break this paragraph across pages
+ */
+proc rtf_para_keepintact()
+{
+       "\\keep "
+}
+
+/*
+ * rtf_set_info(title, subject, author, operator, created)
+ *     set the file's info section to have the values specified
+ */
+proc rtf_set_info(title, subject, author, operator, created)
+{
+       "{\\info\n"
+       if (title) {
+               "{\\title " title "}\n"
+       }
+       if (subject) {
+               "{\\subject " subject " }\n"
+       }
+       if (author) {
+               "{\\author " author "}\n"
+       }
+       if (operator) {
+               "{\\operator " operator "}\n"
+       }
+       if (created) {
+
+               set(yr, save(substring(created, 1, 4)))
+               set(mo, save(substring(created, 6, 7)))
+               set(dy, save(substring(created, 9, 10)))
+               "{\\creatim\\yr" yr
+                            "\\mo" mo
+                            "\\dy" dy "}\n"
+       }
+       "{\\doccomm Document generated from LifeLines "
+               version()
+               " database "
+               database() "by register-rtf 1.1.}\n"
+       "}\n"
+}
+
+/*
+ * table functions
+ *     there are a number related to rows and cells
+ */
+
+/*
+ * rtf_set_row_width(cols, wid)
+ *     set the table row width and number of columns to expect
+ */
+proc rtf_set_row_width(cols, wid)
+{
+       set(rtf_tcols, cols)
+       set(rtf_row_width, sub(wid, mul(sub(rtf_tcols, 1), 108)))
+       set(rtf_row_left, rtf_row_width)
+}
+
+/*
+ * rtf_set_col_width(wid)
+ *     set the current column width
+ *     called once for each column defined
+ */
+proc rtf_set_col_width(wid)
+{
+    if (lt(rtf_set_cols, rtf_tcols)) {
+       setel(rtf_col_sizes, one(rtf_set_cols), wid)
+       incr(rtf_set_cols)
+       set(rtf_row_left, sub(rtf_row_left, wid))
+       set(i, rtf_set_cols)
+       while (lt(i, rtf_tcols)) {
+               setel(rtf_col_sizes, one(i),
+                       div(rtf_row_left, sub(rtf_tcols, rtf_set_cols)))
+               incr(i)
+       }
+    }
+}
+
+/*
+ * rtf_tstart(cells)
+ *     start table with cells per row
+ */
+proc rtf_tstart(cells)
+{
+       if (eq(rtf_tstate, 1)) {
+               call rtf_tend()
+       }
+       call rtf_pend()
+       "\\trowd "
+       set(rtf_tstate, 1)
+       "\\trgaph" d(108)
+       "\\trleft" d(neg(108))
+       set(i, 0)
+       set(cumwid, 0)
+       while (lt(i, cells)) {
+               if (gt(i, 0)) {
+                       set(gap, 108)
+               } else {
+                       set(gap, 0)
+               }
+               set(gap, add(gap, getel(rtf_col_sizes, one(i))))
+               set(cumwid, add(cumwid, gap))
+               "\\cellx" d(cumwid) "\n"
+               set(i, add(i, 1))
+       }
+       set(rtf_tcols, cells)
+       "\\pard\\plain\\s3\\intbl "
+}
+
+/*
+ * rtf_tend()
+ *     end table
+ */
+proc rtf_tend()
+{
+       if (rtf_tstate) {
+               while (lt(rtf_ccol, rtf_tcols)) {
+                       rtf_cend()
+               }
+               "\\intbl\\row\\pard\\s3 "
+               set(rtf_tstate, 0)
+       }
+}
+
+/*
+ * rtf_cstart()
+ *     start a cell in a table
+ */
+proc rtf_cstart()
+{
+       if (rtf_cstate) {
+               call rtf_cend()
+       }
+       call rtf_pend()
+       "\\fs" d(getel(rtf_pointsize, 3))
+       set(rtf_cstate, 1)
+}
+
+/*
+ * rtf_cend()
+ *     end a cell
+ */
+proc rtf_cend()
+{
+       if (or(rtf_cstate, rtf_tstate)) {
+               set(rtf_cstate, 0)
+               "\n\\cell "
+               set(rtf_ccol, add(rtf_ccol, 1))
+       }
+}
+
+/*
+ * rtf_cpar()
+ *     insert a paragraph break inside a cell
+ */
+proc rtf_cpar()
+{
+       "\\par "
+}
+
+/*
+ * rtf_endrow()
+ *     end a table row and get ready for next one
+ */
+proc rtf_endrow()
+{
+       if (rtf_tstate) {
+               while (lt(rtf_ccol, rtf_tcols)) {
+                       call rtf_cend()
+               }
+               "\\pard\\s3\\inttbl\\row "
+               set(rtf_tstate, 0)
+               call rtf_tstart(rtf_tcols)
+               set(rtf_ccol, 0)
+       }
+}
+
+/* heading handling */
+
+/*
+ * rtf_hstart()
+ *     start a heading
+ */
+proc rtf_hstart()
+{
+       "\\sb" d(mul(getel(rtf_pointsize, 1), 12))
+       "\\sa" d(mul(getel(rtf_pointsize, 1), 6)) " "
+       "{\\tc\\s1\\b "
+}
+
+/*
+ * rtf_hend()
+ *     end a heading
+ */
+proc rtf_hend()
+{
+       "\\b0}\n"
+}
+
+/*
+ * rtf_index(key, subkey, type)
+ *     create an index entry
+ *     if subkey is defined, a two level index is
+ *     created.  e.g.
+ *     McCallum
+ *             Charles         1
+ *     the type is plain = 0, bold = 1 and italic = 2
+ */
+func rtf_index(key, subkey, type)
+{
+       if (eq(type, 0)) {
+               set(var, "}}\n")
+       } elsif (eq(type, 1)) {
+               set(var, "\\bxe}}\n")
+       } elsif (eq(type, 2)) {
+               set(var, "\\ixe}}\n")
+       }
+       set(ind, concat("{\\xe{\\v ", key))
+       if (subkey) {
+               set(inds, concat("\\:", subkey))
+       } else {
+               set(inds, "")
+       }
+       set(indy, concat(ind, inds, var))
+       return (indy)
+}
+
+/*
+ * rtf_header(type, page)
+ *     create a header entry (as in header/footer)
+ *     type is all pages = 0, left = 1 and right = 2
+ *     page is where to place the page number
+ *     no page number = 0, left side = 1, center = 2 and right = 3
+ */
+proc rtf_header(type, page)
+{
+       if (eq(page, 0)) {
+               set(pstr, "")
+               set(pastr, "")
+       } elsif (eq(page, 1)) {
+               set(pastr, "\\ql")
+               set(pstr, "\\chpgn")
+       } elsif (eq(page, 2)) {
+               set(pastr, "\\qc")
+               set(pstr, "\\chpgn")
+       } elsif (eq(page, 3)) {
+               set(pastr, "\\qr")
+               set(pstr, "\\chpgn")
+       }
+       if (eq(type, 0)) {
+               set(hstr, "\\header")
+       } elsif (eq(type, 1)) {
+               set(hstr, "\\headerl")
+       } elsif (eq(type, 2)) {
+               set(hstr, "\\headerr")
+       }
+       "{" hstr "\\pard\\plain\\s3" pastr "{\\plain " pstr "}\\par}\n"
+}
+/*
+ * rtf_footer(type, page)
+ *     creates a footer.
+ *     see rtf_header for details
+ */
+proc rtf_footer(type, page)
+{
+       if (eq(page, 0)) {
+               set(pstr, "")
+               set(pastr, "")
+       } elsif (eq(page, 1)) {
+               set(pastr, "\\ql")
+               set(pstr, "\\chpgn")
+       } elsif (eq(page, 2)) {
+               set(pastr, "\\qc")
+               set(pstr, "\\chpgn")
+       } elsif (eq(page, 3)) {
+               set(pastr, "\\qr")
+               set(pstr, "\\chpgn")
+       }
+       if (eq(type, 0)) {
+               set(hstr, "\\footer")
+       } elsif (eq(type, 1)) {
+               set(hstr, "\\footerl")
+       } elsif (eq(type, 2)) {
+               set(hstr, "\\footerr")
+       }
+       "{" hstr "\\pard\\plain\\s3" pastr "{\\plain " pstr "}\\par}\n"
+}
+
+/*
+ * rtf_ftn_type(type, postype)
+ *     define the type(s) of footnotes/endnotes to use
+ */
+proc rtf_ftn_type(type, postype)
+{
+       "\\fet" d(type)
+       if (eq(type, 1)) {
+               if (eq(postype, 0)) {
+                       "\\enddoc\\aenddoc"
+               } elsif (eq(postype, 1)) {
+                       "\\endnotes\\aendnotes"
+               }
+       } elsif (eq(type, 2)) {
+               if (eq(postype, 0)) {
+                       "\\aenddoc"
+               } elsif (eq(postype, 1)) {
+                       "\\aendnotes"
+               }
+       }
+       "\n"
+}
+
+/*
+ * rtf_ftn_tag(tag)
+ *     if tag is not null, it is a user defined tag
+ *     if null, do an automatic generation of the tag
+ *     In all cases, output it superscripted
+ */
+proc rtf_ftn_tag(tag)
+{
+       if (tag) {
+               set(rtf_ftn_last_tag, tag)
+       } else {
+               set(rtf_ftn_last_tag, "\\chftn")
+       }
+       "{\\up6 " rtf_ftn_last_tag "}"
+}
+
+/*
+ * rtf_ftn_start(tag)
+ *     start a possibly tagged footnote
+ *     must be closed with rtf_ftn_end()
+ */
+proc rtf_ftn_start(tag)
+{
+       if (rtf_ftn_state) {
+               call rtf_ftn_end()
+       }
+       call rtf_ftn_tag(tag)
+       "{\*\footnote\\pard\\plain\\s3\\fs"
+       d(getel(rtf_pointsize, 3))
+       "\\li-540\\fi540\\tx540 "
+       rtf_ftn_last_tag
+       "\tab "
+       set(rtf_ftn_state, 1)
+}
+/*
+ * rtf_ftn_end()
+ *     close an open footnote.
+ */
+proc rtf_ftn_end()
+{
+       if (rtf_ftn_state) {
+               "}\n"
+               set(rtf_ftn_state, 0)
+       }
+}
+
+/*
+ * rtf_tab(type)
+ *     issue a tab of appropriate type
+ */
+proc rtf_tab(type)
+{
+       if (eq(type, 0)) {
+               "\\tab "
+       } elsif (eq(type, 1)) {
+               "\\tqr "
+       } elsif (eq(type, 2)) {
+               "\\tqc "
+       }
+}
+
+/*
+ * rtf_bold(on)
+ *     turn bold on/off
+ */
+proc rtf_bold(on)
+{
+       if (on) {
+               "\\b "
+       } else {
+               "\\b0 "
+       }
+}
+
+/*
+ * rtf_italic(on)
+ *     turn italic on/off
+ */
+proc rtf_italic(on)
+{
+       if (on) {
+               "\\i "
+       } else {
+               "\\i0 "
+       }
+}
+
+/*
+ * rtf_underline(type)
+ *     turn underline on/off
+ *     if type == 0 off
+ *     1 == continuous, 2 == double, 3 == word, 4 == dotted
+ */
+proc rtf_underline(type)
+{
+       if (type) {
+               if (eq(type, 1)) { "\\ul " }
+               elsif (eq(type, 2)) { "\\uldb " }
+               elsif (eq(type, 3)) { "\\ulw " }
+               elsif (eq(type, 4)) { "\\uld " }
+       } else {
+               "\\ul0 "
+       }
+}
+
+/*
+ * rtf_super(on)
+ *     turn superscript on/off
+ */
+proc rtf_super(on)
+{
+       if (on) {
+               "{\\up6"
+               if (ps, getel(rtf_pointsize, 3)) {
+                       set(ps, sub(ps, 3))
+                       "\\fs" d(ps)
+               }
+               " "
+       } else {
+               "}"
+       }
+}
+
+/*
+ * rtf_toc_entry(level, text)
+ *     enter text as a Table of Contents entry at level
+ */
+proc rtf_toc_entry(level, text)
+{
+       "{\\tc\\tcl" d(level)
+       "{\\v " text "}}"
+}
+
+/*
+ * one(val)
+ *     similar to incr() but returns the new value
+ */
+func one(val)
+{
+       return (add(val, 1))
+}

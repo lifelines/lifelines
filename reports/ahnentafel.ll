@@ -1,6 +1,6 @@
 /* 
- * @progname       ahnentafel
- * @version        1.0
+ * @progname       ahnentafel.ll
+ * @version        1
  * @author         Wetmore
  * @category       
  * @output         Text

@@ -1,5 +1,5 @@
 /*
- * @progname       longlines
+ * @progname       longlines.ll
  * @version        2.0
  * @author         Chandler
  * @category       

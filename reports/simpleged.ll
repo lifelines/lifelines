@@ -1,5 +1,5 @@
 /*
- * @progname       simpleged
+ * @progname       simpleged.ll
  * @version        1.0
  * @author         Wetmore
  * @category       

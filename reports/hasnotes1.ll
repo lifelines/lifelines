@@ -1,6 +1,6 @@
 /*
- * @progname       hasnotes1
- * @version        1.0
+ * @progname       hasnotes1.ll
+ * @version        1.1
  * @author         Wetmore, Manis
  * @category       
  * @output         Text

@@ -1,10 +1,14 @@
 /*
+ * @progname       st_aux.li
  * @version        1.0
  * @author         Perry Rapp
  * @category       self-test
  * @output         none
- * @description    auxiliary functions for all self-test modules
-*/
+ * @description
+ *
+ * auxiliary functions for all self-test modules
+ *
+ */
 
 /* This file is all ASCII, so we don't need to choose a codeset */
 char_encoding("ASCII")

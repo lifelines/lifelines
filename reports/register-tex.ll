@@ -1,18 +1,17 @@
 /*
- * @progname       register-tex
- * @version        2.1
- * @author         Wetmore, Olsen, Simms
+ * @progname       register-tex.ll
+ * @version        2.1 of 2004-06-18
+ * @author         Wetmore, David Olsen (dko@cs.wisc.edu), Simms
  * @category       
  * @output         LaTeX
  * @description    
-**
-** This report prints, in book format, information about all descendants of a
-** person and all of their spouses.  It tries to understand as many different
-** GEDCOM tags as possible.  All source iformation (SOUR lines) is in the
-** footnotes.
-** The output is in LaTeX format.  
-**
-** register-tex
+ *
+ * This report prints, in book format, information about all descendants of a
+ * person and all of their spouses.  It tries to understand as many different
+ * GEDCOM tags as possible.  All source iformation (SOUR lines) is in the
+ * footnotes.
+ * The output is in LaTeX format.  
+ *
 **
 ** Version 2.1 18 Jun 2004 (Robert Simms)
 ** Version 2  24 Feb 1993

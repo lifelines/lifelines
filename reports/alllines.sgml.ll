@@ -1,7 +1,6 @@
 /*
- * 
- * @progname       allines.sgml
- * @version        1.0
+ * @progname       allines.sgml.ll
+ * @version        1.1
  * @author         Wetmore, Nozell
  * @category       
  * @output         SGML, NROFF

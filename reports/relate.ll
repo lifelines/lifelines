@@ -1,11 +1,11 @@
 /*
- * @progname       relate
+ * @progname       relate.ll
  * @version        1.0
  * @author         Wetmore
  * @category       
  * @output         Text
  * @description    
-
+ *
  *  Finds a shortest path between two persons in a LifeLines database.
  *  Inspiration from Jim Eggert's relation program.
 

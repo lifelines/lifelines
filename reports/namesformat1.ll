@@ -1,5 +1,5 @@
 /*
- * @progname       namesformat1
+ * @progname       namesformat1.ll
  * @version        1.0
  * @author         Manis
  * @category       

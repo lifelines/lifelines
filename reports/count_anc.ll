@@ -1,5 +1,5 @@
 /*
- * @progname       count_anc
+ * @progname       count_anc.ll
  * @version        2.0
  * @author         Eggert
  * @category       

@@ -1,5 +1,5 @@
 /*
- * @progname       rllgen
+ * @progname       rllgen.ll
  * @version        1.0
  * @author         Eggert
  * @category       

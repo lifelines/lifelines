@@ -1,6 +1,6 @@
 /*
- * @progname       dates
- * @version        4.0
+ * @progname       dates.ll
+ * @version        4
  * @author         Eggert
  * @category       
  * @output         Text

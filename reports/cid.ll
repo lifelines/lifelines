@@ -1,5 +1,5 @@
 /* 
- * @progname       cid
+ * @progname       cid.ll
  * @version        1.0
  * @author         Wetmore, Chandler
  * @category       

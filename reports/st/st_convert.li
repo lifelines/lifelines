@@ -1,10 +1,14 @@
 /*
+ * @progname       st_convert.li
  * @version        1.01 (2002-12-14)
  * @author         Perry Rapp
  * @category       self-test
  * @output         none
- * @description    validate codeset conversion
-*/
+ * @description
+ *
+ * validate codeset conversion
+ *
+ */
 
 char_encoding("ASCII")
 

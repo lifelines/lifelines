@@ -1,0 +1,174 @@
+/* 
+ * @progname       cgi_html.li
+ * @version        1.4
+ * @author         Scott McGee (smcgee@microware.com)
+ * @category       
+ * @output         HTML
+ * @description    
+
+This is a library of CGI based functions and data used by a variety of
+CGI GenWeb programs. It also provides all needed customizing data in one
+file to allow easy customization of the genweb CGI system to a new site.
+
+The proc set_cgi_globals() should be called early in programs using this
+library, before any other calls to its code are made. This proc sets the
+customization globals.
+
+The do_head() proc will output the header info for the html files. The 
+input parameters are the individual for whom the file is generated, and the
+title string which would usually be Pedigree, Descendant, or Individual to
+indicate the type of file produced.
+
+The do_tail() proc is similar but writes the trailer info or the html file.
+It too requires you to pass the indi for whom the file is generated.
+
+The href() function will return a string containing an anchor linking to
+the indi specified as an input parameter and (via CGI) returning the type
+of report specified in the second (type) parameter. This type must be one
+of Pedigree, Descendant, or Lookup (for individual page).
+
+@(#)cgi_html.li	1.4 10/13/95
+*/
+
+/* customization globals */
+global(db_owner)       /* name of database owner */
+global(owner_addr)     /* URL of database owner (mailto or homepage) */
+global(use_image)      /* flag to indicate whether to use GenWeb image */
+global(genweb_image)   /* name of GenWeb image to place on each page */
+global(use_page)       /* flag to add link to GenWeb page or homepage */
+global(genweb_page)    /* URL of base GenWeb (or homepage) web page */
+global(page_name)      /* name of base GenWeb (or homepage) web page */
+global(cgi_script)     /* URL of base CGI script */
+global(index_url)      /* base URL of database index files */
+global(localhost)      /* base URL for locally hosted files */
+
+/* other globals */
+global(is_indi_html)   /* signals if report generates an indi HTML file */
+
+
+/***************************************************************************
+ * This function is used to initialize all the site specific customization *
+ * globals. This should be the only part of the entire GenWeb CGI system   *
+ * that needed editing to install on a new site.                           *
+ **************************************************************************/
+proc set_cgi_html_globals(){
+/* customize these globals to customize the output to your site */
+  set(db_owner, "Scott McGee")
+  set(owner_addr, "mailto:smcgee@microware.com")
+  set(use_image, 1)                /* 1 to use image, 0 to not use image */
+  set(genweb_image, "http://www.emcee.com/~smcgee/pics/genweb.gif")
+  set(use_page, 1)                 /* 1 to use link to page, 0 if not */
+  set(genweb_page, "http://www.emcee.com/~smcgee/genweb/genweb.html")
+  set(page_name, "GenWeb page")    /* might change to "my homepage" */
+  set(cgi_script, "http://www.emcee.com/~smcgee/cgi-bin/genweb.cgi")
+  set(index_url,  concat("http://www.emcee.com/~smcgee/genweb/",
+                         save(database()), "_idx.html"))
+  set(localhost, "http://www.emcee.com/")
+
+  set(is_indi_html, 0)    /* default to non-indi HTML report */
+}
+
+
+/**************************************************************************
+ * do_chart_head() - this function writes the common header portion of an *
+ * HTML file. It specifies the chart type in both the <TITLE> and in a    *
+ * header (<H3>) line along with the name of the individual.              *
+ *************************************************************************/
+proc do_chart_head(indi, title){
+  "<HTML><HEAD>\n"
+  "<TITLE>"
+  name(indi,0) 
+  " : "
+  title
+  " Chart"
+  "</TITLE>\n"
+  "</HEAD><BODY>\n"
+  if(use_image){
+    "<IMG SRC=\""
+    genweb_image
+    "\" ALT = \"\"><BR><BR>\n"
+  }
+  "<H1>" 
+  givens(indi)
+  " " 
+  surname(indi)
+  " - "
+  title
+  " Chart</H1>\n"
+}
+
+
+/***************************************************************************
+ * do_tail() - this function writes the common trailer portion of the HTML *
+ * file.                                                                   *
+ **************************************************************************/
+proc do_tail(indi){
+  "<HR>\n"
+  "<BR>\n"
+  if(eq(is_indi_html, 0)){   /* do this stuff only for non-indi HTML reports */
+    "[<A HREF=\""
+    cgi_script
+    "/DB="
+    database()
+    "/INDEX=" 
+    key(indi) 
+    "/?LookupInternal\">" 
+    "Back to Individual Page</A>]<BR>"
+  }
+  "[<A HREF=\""
+  index_url
+  "\">"
+  "Index to database</A>]<BR>\n"
+  if(use_page){
+    "[<A HREF=\""
+    genweb_page
+    "\">"
+    "Return to GenWeb page</A>]<BR> \n"
+  }
+  "<BR><HR><BR>\n"
+  "HTML files created on demand by \n"
+  "<A HREF=\"http://www.emcee.com/~smcgee/lifelines.html\">\n"
+  "LifeLines</A>, a genealogical database program by \n"
+  "<A HREF=\"mailto:Thomas.Wetmore@ATT.COM\">\n"
+  "Thomas Wetmore</A>!\n"
+  "<BR><ADDRESS>\n"
+  "Database maintained by \n"
+  "<A HREF=\""
+  owner_addr
+  "\">\n"
+  db_owner
+  "</A>"
+  "<BR>\n"
+  "Report generated "
+  date(gettoday())
+  "</ADDRESS>\n"
+  "</BODY></HTML>\n"
+}
+
+
+/***********************************************************************
+ * href() - this function will return a string with an anchor of the   *
+ * specified type. Currenly supported types are "Lookup", "Pedigree",  *
+ * and "Descendant".                                                   *
+ **********************************************************************/
+func href(indi, type){
+    "<A HREF=\""
+    cgi_script
+    "/DB="
+    database()
+    "/INDEX=" 
+    key(indi) 
+    "/?"
+    type
+    "Internal\">"
+    if(is_indi_html){
+      if(t, title(indi)){
+        t
+        " "
+      }
+      fullname(indi,0,1,50)
+    }else{
+      fullname(indi,1,1,30)
+    }
+    "</a>"
+}

@@ -1,5 +1,5 @@
 /*
- * @progname       verify
+ * @progname       verify.ll
  * @version        9.0
  * @author         Eggert
  * @category       

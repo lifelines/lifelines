@@ -1,5 +1,5 @@
 /*
- * @progname       soundex1
+ * @progname       soundex1.ll
  * @version        1.0
  * @author         Jones
  * @category       

@@ -1,6 +1,6 @@
 /*
- * @progname       fix_nameplac
- * @version        1.0
+ * @progname       fix_nameplac.ll
+ * @version        1
  * @author         Eggert
  * @category       
  * @output         GEDCOM

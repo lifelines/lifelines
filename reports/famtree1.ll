@@ -1,17 +1,23 @@
 /*
- * @progname       famtree1
- * @version        1.0
- * @author         Jones
- * @category       
+ * @progname       famtree1.ll
+ * @version        2
+ * @author         James P. Jones, jjones@nas.nasa.gov
+ * @category
  * @output         PostScript
- * @description    
+ * @description
  *
- *   This report builds a postscript ancestory chart, a "tree", containing
+ *   This report builds a postscript ancestry chart, a "tree", containing
  *   data on five generations. It prompts for the individual to begin with
  *   and draws the tree including this person. The further from this person
- *   the less data is printed.
- *
- *   famtree1
+ *   the less data is printed. Maximum data include:
+ *      o date and place of birth
+ *      o date and place of marriage
+ *      o date and place of death
+ *      o last place of residence
+ *      o spouses of person #1 (up to five)
+ *    as well as:
+ *      o name, address, phone number and e-mail address of compiler
+ *      o date of chart
  *
  *   version one:  9 May 1993
  *
@@ -26,22 +32,6 @@
  *
  *
  *   This report works only with the LifeLines Genealogy program
- *
- *   This report builds a postscript ancestory chart, a "tree", containing
- *   data on five generations. It prompts for the individual to begin with
- *   and draws the tree including this person. The further from this person
- *   the less data is printed. Maximum data include:
- *
- *      o date and place of birth
- *      o date and place of marriage
- *      o date and place of death
- *      o last place of residence
- *      o spouses of person #1 (up to five)
- *
- *      as well as:
- *
- *      o name, address, phone number and e-mail address of compiler
- *      o date of chart
  *
  *   Note:
  *
@@ -58,6 +48,11 @@
  *        program will parse the street address from the city/state/zip for
  *        the report.
  */
+
+/*
+*	Updated the filename to famtree2 after fixing problems with list vs
+*	table variables. 22 September 2002. Paul Buckley.
+*/
 
 global(chart)
 global(id)
@@ -109,9 +104,12 @@ proc buildlist(in, ah, indi)
                         call buildlist(add(1,in), mul(2,ah), par)
                 }
         }
-        setel(chart, ah, indi)
+/*        setel(par, ah, indi)*/
+/*        setel(chart, ah, indi)*/
+        insert(chart, d(ah), indi)
 
-        if (par, mother(indi)) {
+
+	if (par, mother(indi)) {
                 if (lt(ah, 16)) {
                         call buildlist(add(1,in), add(1,mul(2,ah)), par)
                 }
@@ -500,7 +498,8 @@ proc doheader()
 proc dochart()
 {
      set(id, 1)
-     set(person, getel(chart, id))
+/*     set(person, getel(chart, id))*/
+     set(person, lookup(chart, d(id)))
 
     "/Helvetica-Bold findfont  14 scalefont  setfont" nl()
     "30 500 moveto  (Ancestry Chart of: "
@@ -567,7 +566,7 @@ proc dochart()
     call dates1(person) nl()
 
     set(id, add(id, 1))
-    set(person, getel(chart, id))
+    set(person, lookup(chart, d(id)))
     "% parents" nl()
     "20 393  2 bold 9 9 ("
     name(person) ") box" nl()
@@ -575,7 +574,7 @@ proc dochart()
     call dates1(person) nl()
 
     set(id, add(id, 1))
-    set(person, getel(chart, id))
+    set(person, lookup(chart, d(id)))
     "20 121  3 bold 9 9 ("
     name(person) ") box" nl()
     "20 121" nl()
@@ -583,7 +582,7 @@ proc dochart()
     "20 393 136 0 tie" nl() nl()
 
     set(id, add(id, 1))
-    set(person, getel(chart, id))
+    set(person, lookup(chart, d(id)))
     "% grandparents" nl()
     "210 461  4 bold 9 9 ("
     name(person) ") box" nl()
@@ -591,14 +590,14 @@ proc dochart()
     call dates1(person) nl()
 
     set(id, add(id, 1))
-    set(person, getel(chart, id))
+    set(person, lookup(chart, d(id)))
     "210 325  5 bold 9 9 ("
     name(person) ") box" nl()
     "210 325" nl()
     call dates2(person) nl()
 
     set(id, add(id, 1))
-    set(person, getel(chart, id))
+    set(person, lookup(chart, d(id)))
     "210 189  6" nl()
     "bold 9 9 ("
     name(person) ") box" nl()
@@ -606,7 +605,7 @@ proc dochart()
     call dates1(person) nl()
 
     set(id, add(id, 1))
-    set(person, getel(chart, id))
+    set(person, lookup(chart, d(id)))
     "210 189  6" nl()
     "210  53 7 bold 9 9 ("
     name(person) ") box" nl()
@@ -615,7 +614,7 @@ proc dochart()
     "210 461  68 1 tie  210 189  68 1 tie" nl() nl()
 
     set(id, add(id, 1))
-    set(person, getel(chart, id))
+    set(person, lookup(chart, d(id)))
     "% great-grandparents" nl()
     "400 495  8 bold 9 9 ("
     name(person) ") box" nl()
@@ -624,49 +623,49 @@ proc dochart()
     call dates3(person) nl()
 
     set(id, add(id, 1))
-    set(person, getel(chart, id))
+    set(person, lookup(chart, d(id)))
     "400 427  9 bold 9 9 ("
     name(person) ") box" nl()
     "400 427" nl()
     call dates4(person) nl()
 
     set(id, add(id, 1))
-    set(person, getel(chart, id))
+    set(person, lookup(chart, d(id)))
     "400 359 10 bold 9 9 ("
     name(person) ") box" nl()
     "400 359" nl()
     call dates3(person) nl()
 
     set(id, add(id, 1))
-    set(person, getel(chart, id))
+    set(person, lookup(chart, d(id)))
     "400 291 11 bold 9 9 ("
     name(person) ") box" nl()
     "400 291" nl()
     call dates4(person) nl()
 
     set(id, add(id, 1))
-    set(person, getel(chart, id))
+    set(person, lookup(chart, d(id)))
     "400 223 12 bold 9 9 ("
     name(person) ") box" nl()
     "400 223" nl()
     call dates3(person) nl()
 
     set(id, add(id, 1))
-    set(person, getel(chart, id))
+    set(person, lookup(chart, d(id)))
     "400 155 13 bold 9 9 ("
     name(person) ") box" nl()
     "400 155" nl()
     call dates4(person) nl()
 
     set(id, add(id, 1))
-    set(person, getel(chart, id))
+    set(person, lookup(chart, d(id)))
     "400  87 14 bold 9 9 ("
     name(person) ") box" nl()
     "400  87" nl()
     call dates3(person) nl()
 
     set(id, add(id, 1))
-    set(person, getel(chart, id))
+    set(person, lookup(chart, d(id)))
     "400  19 15 bold 9 9 ("
     name(person) ") box" nl()
     "400  19" nl()
@@ -675,7 +674,7 @@ proc dochart()
     "400 223  34 1 tie  400  87  34 1 tie" nl() nl()
 
     set(id, add(id, 1))
-    set(person, getel(chart, id))
+    set(person, lookup(chart, d(id)))
     "% great-great-grandparents" nl()
     "590 512 16 bold 9 9 ("
     name(person) ") box" nl()
@@ -683,105 +682,105 @@ proc dochart()
     call dates5(person) nl()
 
     set(id, add(id, 1))
-    set(person, getel(chart, id))
+    set(person, lookup(chart, d(id)))
     "590 478 17 bold 9 9 ("
     name(person) ") box" nl()
     "590 478" nl()
     call dates6(person) nl()
 
     set(id, add(id, 1))
-    set(person, getel(chart, id))
+    set(person, lookup(chart, d(id)))
     "590 444 18 bold 9 9 ("
     name(person) ") box" nl()
     "590 444" nl()
     call dates5(person) nl()
 
     set(id, add(id, 1))
-    set(person, getel(chart, id))
+    set(person, lookup(chart, d(id)))
     "590 410 19 bold 9 9 ("
     name(person) ") box" nl()
     "590 410" nl()
     call dates6(person) nl()
 
     set(id, add(id, 1))
-    set(person, getel(chart, id))
+    set(person, lookup(chart, d(id)))
     "590 376 20 bold 9 9 ("
     name(person) ") box" nl()
     "590 376" nl()
     call dates5(person) nl()
 
     set(id, add(id, 1))
-    set(person, getel(chart, id))
+    set(person, lookup(chart, d(id)))
     "590 342 21 bold 9 9 ("
     name(person) ") box" nl()
     "590 342" nl()
     call dates6(person) nl()
 
     set(id, add(id, 1))
-    set(person, getel(chart, id))
+    set(person, lookup(chart, d(id)))
     "590 308 22 bold 9 9 ("
     name(person) ") box" nl()
     "590 308" nl()
     call dates5(person) nl()
 
     set(id, add(id, 1))
-    set(person, getel(chart, id))
+    set(person, lookup(chart, d(id)))
     "590 274 23 bold 9 9 ("
     name(person) ") box" nl()
     "590 274" nl()
     call dates6(person) nl()
 
     set(id, add(id, 1))
-    set(person, getel(chart, id))
+    set(person, lookup(chart, d(id)))
     "590 240 24 bold 9 9 ("
     name(person) ") box" nl()
     "590 240" nl()
     call dates5(person) nl()
 
     set(id, add(id, 1))
-    set(person, getel(chart, id))
+    set(person, lookup(chart, d(id)))
     "590 206 25 bold 9 9 ("
     name(person) ") box" nl()
     "590 206" nl()
     call dates6(person) nl()
 
     set(id, add(id, 1))
-    set(person, getel(chart, id))
+    set(person, lookup(chart, d(id)))
     "590 172 26 bold 9 9 ("
     name(person) ") box" nl()
     "590 172" nl()
     call dates5(person) nl()
 
     set(id, add(id, 1))
-    set(person, getel(chart, id))
+    set(person, lookup(chart, d(id)))
     "590 138 27 bold 9 9 ("
     name(person) ") box" nl()
     "590 138" nl()
     call dates6(person) nl()
 
     set(id, add(id, 1))
-    set(person, getel(chart, id))
+    set(person, lookup(chart, d(id)))
     "590 104 28 bold 9 9 ("
     name(person) ") box" nl()
     "590 104" nl()
     call dates5(person) nl()
 
     set(id, add(id, 1))
-    set(person, getel(chart, id))
+    set(person, lookup(chart, d(id)))
     "590  70 29 bold 9 9 ("
     name(person) ") box" nl()
     "590  70" nl()
     call dates6(person) nl()
 
     set(id, add(id, 1))
-    set(person, getel(chart, id))
+    set(person, lookup(chart, d(id)))
     "590  36 30 bold 9 9 ("
     name(person) ") box" nl()
     "590  36" nl()
     call dates5(person) nl()
 
     set(id, add(id, 1))
-    set(person, getel(chart, id))
+    set(person, lookup(chart, d(id)))
     "590   2 31 bold 9 9 ("
     name(person) ") box" nl()
     "590   2" nl()
@@ -809,8 +808,10 @@ proc dates1(person)
          set(curfam, savfam)
      }
      else {
-         if (eq(mod(d(id), 2), 0)) {
-             set(curfam, parents(getel(chart, div(id, 2))))
+ /*        if (eq(mod(d(id), 2), 0)) {*/
+         if (eq(mod(id, 2), 0)) {
+/*             set(curfam, parents(getel(chart, div(id, 2))))*/
+             set(curfam, parents(lookup(chart, d(div(id, 2)))))
          }
      }
     "bold 10 9 (" stddate(marriage(curfam)) ")" nl()
@@ -860,8 +861,10 @@ proc dates3(person)
     "bold 10 7.6 (" short(birth(person)) ")" nl()
 
      set(curfam, 0)
-     if (eq(mod(d(id), 2), 0)) {
-         set(curfam, parents(getel(chart, div(id, 2))))
+/*     if (eq(mod(d(id), 2), 0)) {*/
+     if (eq(mod(id, 2), 0)) {
+/*         set(curfam, parents(getel(chart, div(id, 2))))*/
+         set(curfam, parents(lookup(chart, d(div(id, 2)))))
      }
     "bold 10 7.6 (" short(marriage(curfam)) ")" nl()
     "bold 10 7.6 "
@@ -905,8 +908,10 @@ proc dates5(person)
 
     "bold 10 5 (" short(birth(person)) ")" nl()
      set(curfam, 0)
-     if (eq(mod(d(id), 2), 0)) {
-         set(curfam, parents(getel(chart, div(id, 2))))
+ /*    if (eq(mod(d(id), 2), 0)) {*/
+     if (eq(mod(id, 2), 0)) {
+/*         set(curfam, parents(getel(chart, div(id, 2))))*/
+         set(curfam, parents(lookup(chart, d(div(id, 2)))))
      }
     "bold 10 5 (" short(marriage(curfam)) ")" nl()
 

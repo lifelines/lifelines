@@ -1,0 +1,51 @@
+/*
+ * @progname    interestset.li
+ * @version     1.0
+ * @author      Vincent Broman
+ * @category
+ * @output      indiset function value
+ * @description Extracts subset of the database which are close to direct ancestors
+ */
+
+
+/*
+ * Return the set of people who are wide-sense ancestors
+ * of the given individual, plus the children of these wide-sense ancestors,
+ * where a wide-sense ancestor is either the given individual himself/herself,
+ * or a parent or step-parent of a wide-sense ancestor.
+ */
+func interestingforebearsof( indi) {
+    indiset( res)
+    addtoset( res, indi, key( indi))
+
+    set( pf, parents( indi))
+    if( not( pf)) { return( res) }
+
+    if( h, husband( pf)) {
+	set( res, union( res, interestingforebearsof( h)))
+	families( h, f, sp, ctf) {
+	    if( sp) {
+		set( res, union( res, interestingforebearsof( sp)))
+	    }
+	    children( f, ch, ctc) {
+		addtoset( res, ch, key( ch))
+	    }
+	}
+	set( hk, key( h))
+    } else {
+	set( hk, "")
+    }
+    if( w, wife( pf)) {
+	families( w, f, sp, cth) {
+	    /* add only husbands not the father */
+	    if( and( sp, nestr( hk, key( sp)))) {
+		set( res, union( res, interestingforebearsof( sp)))
+	    } else {
+		children( f, ch, ctcc) {
+		    addtoset( res, ch, key( ch))
+		}
+	    }
+	}
+    }
+    return( res)
+}

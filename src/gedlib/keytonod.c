@@ -125,6 +125,9 @@ INT csz_othr = 200;		/* cache size for othr */
 
 static CACHE indicache, famcache, evencache, sourcache, othrcache;
 
+/* keybuf circular list of last 10 keys we looked up in cache 
+ * kept for printing debug messages in crash log
+ */
 static char keybuf[10][32] = { "", "", "", "", "", "", "", "", "", ""};
 static int keyidx = 0;
 

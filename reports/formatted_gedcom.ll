@@ -1,6 +1,6 @@
 /*
- * @progname       formatted_gedcom
- * @version        1.0
+ * @progname       formatted_gedcom.ll
+ * @version        1
  * @author         Eggert
  * @category       
  * @output         GEDCOM

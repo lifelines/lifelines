@@ -1,5 +1,5 @@
 /* 
- * @progname       fam16rn1
+ * @progname       fam16rn1.ll
  * @version        1.0
  * @author         Wetmore, Manis
  * @category       

@@ -1,0 +1,379 @@
+/*
+ * @progname       sour2.li
+ * @version        4.1
+ * @author         Paul B. McBride (pbm%cybvax0@uunet.uu.net)
+ * @category       
+ * @output         Text
+ * @description
+
+report program subroutine library for handling SOURces.
+
+add the following lines to your source program to use this library of
+routines:
+
+        include("quicksort.ll")
+        include("compare.ll")   [define your own compare if necessary]
+        include("sour.li")
+        include("html.ll")
+
+27-feb-96 v4.1 - Indent PUBL info properly. Set source to LDS-AF if AFN seen.
+14-feb-96 v4   - Use quicksort() to sort sources by REFN value
+08-feb-96 v3   - Support REPO records
+24-jan-96 v1.2 - GEDCOM 5.5 support and compatibility notes
+                 Correct processing of Sources without REFN tags
+03-oct-95 v1.1 - sour_addset() now adds sources for families of individuals
+
+Requirements:
+        LifeLines 3.0.2 or later (I hope)
+
+Future modifications:
+        - Add routines to report sources as references to footnotes, and
+          list sources in foot notes. Also report source citation detail
+          (PAGE, NOTE).
+        - Add support for repository records (REPO) to replace non standard
+          location (LOCA) records.
+
+See Examples of using the library routines below.
+
+Tags within SOUR definitions which are processed by sour_ref():
+
+GEDCOM  Non Standard
+  5.5
+
+REFN                            see below
+TITL                            title
+AUTH                            author
+PUBL                            publisher information
+        DATE                    publication date
+        EDIT                    which edition, revision, etc
+        VOLU                    number of volumnes (e.g. 3 vols)
+        PAGE                    page numbers
+        PLAC                    place of publication
+REPO    LOCA                    where you saw this source (repository)
+NOTE                            notes
+TEXT                            text quoted from document
+
+The GEDCOM 5.5 standard combines all of the publication related info
+into the PUBL tag line with continuations (CONT). It introduces
+a repository structure which includes the NAME and address (ADDR structure)
+of the location where the source can be viewed.
+
+The following describes how I use the REFN tag. This is not particularly
+relevant, but here goes.
+
+There are some standard abbreviations that are often used:
+        MD              Mayflower Descendant
+        NEHGR           New England Historic Genealogical Society Register
+        TAG             The Americant Genealogist
+        RFC             Royalty for Commoners
+        AR7             Ancestral Roots... 7th edition
+I use other REFN's which are a combination of the subject, or author
+and a suffix:
+        WentworthG      Wentworth Genealogy
+        HayesFH         a Hayes family history
+        ScituateVR      Scituate, MA Vital Records
+        HamptonTH       Hampton, NH Town History
+
+When I am entering a source field I would then enter it as:
+
+        2 SOUR <WentworthG>
+
+and it will get converted to
+
+        2 @Sxxx@ SOUR
+
+Examples:
+
+  1) Report references used in a set of individuals
+
+     include("sour.li")
+     ...
+     call sour_init()   / * initialize the current source list and table * /
+     ...                / * create a set of individuals * /
+     call sour_addset(a_set) / * add all sources referenced by set * /
+     "References: " nl() nl()
+     call sour_ref(10)  / * report details of all sources * /
+
+  2) List references for groups of individuals, and then a master
+     list of all sources referenced:
+
+     include("sour.li")
+     ...
+     table(my_table)
+     list(my_list)
+     ...for each group of individuals
+       { call sour_init() / * initialize the current source list and table * /
+         ...for each individual...
+            { call sour_addind(an_indi)
+              if(sour_exists()) {
+                "References: "
+                call sour_see(",", 70, 10) / * report REFN of each source * /
+                call sour_save(my_table, my_list) / * add to master list * /
+              }
+            }
+       }
+     / * make master list the current list of sources * /
+     call sour_restore(my_table, my_list)
+     if(sour_exists()) {
+       "Key to References:" nl() nl()
+       call sour_ref(10)        / * report details for all sources * /
+     }
+
+  3) Output all sources for a set of individuals in GEDCOM format:
+
+     include("sour.li")
+     ...
+     call sour_init()   / * initialize the current source list and table * /
+     ...                / * create a set of individuals * /
+     call sour_addset(a_set) / * add all sources referenced by set * /
+     call sour_ged()            / * output sources in GEDCOM format * /
+
+08-sep-95 Paul B. McBride (pbm%cybvax0@uunet.uu.net)
+*/
+
+global(sour_list)
+global(sour_table)
+
+proc sour_init()
+{
+        table(sour_table)
+        list(sour_list)
+}
+
+proc sour_save(t, l)
+{
+        forlist(sour_list, v, n) {
+                if (eq(0, lookup(t, v))) {
+                  insert(t, v, 1)
+                  enqueue(l, v)
+                }
+        }
+}
+
+proc sour_restore(t, l)
+{
+        set(sour_table, t)
+        set(sour_list, l)
+}
+
+/* sour_add() adds the sources referenced for this individual. This
+   will also work for families
+ */
+
+proc sour_addind(i)
+{
+         traverse(root(i), m, l) {
+                set(v, 0)
+                if (eqstr("AFN", tag(m))) {
+                  set(v, "LDS-AF")
+                }
+                elsif (eqstr("SOUR", tag(m))) {
+                  set(v, value(m))
+                  if(not(reference(v))) { set(v, 0) }
+                }
+                if(v) {
+                  if (ne(0, lookup(sour_table, v))) { continue() }
+                  set(v, save(v))
+                  insert(sour_table, v, 1)
+                  enqueue(sour_list, v)
+                }
+         }
+}
+
+proc sour_addset(s)
+{
+        forindiset (s, i, a, n) {
+                call sour_addind(i)
+                families(i, f, sp, m) {
+                  call sour_addind(f)
+                }
+        }
+}
+
+proc sour_see(sep, maxlen, indent)
+{
+        set(first, 1)
+        set(curlen, indent)
+        set(seplen, strlen(sep))
+        forlist(sour_list, k, n) {
+                if(first) { set(first, 0) }
+                else {
+                        sep
+                        set(curlen, add(curlen, seplen))
+                }
+                if(eqstr(k, "LDS-AF")) { set(myrefn, k) }
+                else {
+                  set(myrefn, sour_getfield(dereference(k), "REFN"))
+                  if(eq(myrefn, 0)) { set(myrefn, k) }
+                }
+                set(mylen, add(add(strlen(myrefn), seplen),2))
+                if(and(gt(maxlen, 0), gt(add(curlen, mylen), maxlen))) {
+                        col(indent)
+                        set(curlen, indent)
+                }
+                call html_lt() /* < */
+                if(eq(html_ext, 0)) { set(html_ext, ".html") }
+                call html_ahref("ref", html_ext, myrefn)
+                myrefn
+                call html_tag("/A", 0)
+                call html_gt() /* > */
+                set(curlen, add(curlen, mylen))
+        }
+
+        if(and(HTML, eq(first,0))) {
+                call html_tag("P", 1)
+        }
+}
+
+proc sour_ref(colnum)
+{
+        list(alist)
+        list(ilist)
+
+        /* build list of reference keys */
+        forlist(sour_list, k, n) {
+                if(eqstr(k, "LDS-AF")) { set(refn, k) }
+                else {
+                  set(anode, dereference(k))
+                  set(refn, sour_getfield(anode, "REFN"))
+                  if(eq(refn, 0)) { set(refn, k) }
+                }
+                enqueue(alist, save(refn))
+        }
+
+        /* sort the list */
+        call quicksort(alist, ilist)
+
+        /* report */
+        call html_tag("UL", 0)
+        while(n, dequeue(ilist)) {
+                set(ldsaf, 0)
+                set(k, getel(sour_list, n))
+                call html_tag("LI", 0)
+                call html_tag("PRE", 1)
+                if(eqstr(k, "LDS-AF")) { set(refn, k)  set(ldsaf, 1) }
+                else {
+                  set(anode, dereference(k))
+                  set(refn, sour_getfield(anode, "REFN"))
+                  if(eq(refn, 0)) { set(refn, k) }
+                }
+                call html_lt() /* <  */
+                refn
+                call html_gt() /* > */
+                col(colnum)
+                qt()
+                if(ldsaf) { "LDS Ancestral File" }
+                else {sour_repfield(anode, "TITL", colnum) }
+                qt()
+                if(HTML) {
+                  call html_aname(refn)
+                }
+                if(ldsaf) { "." nl() }
+                else {
+                  if(sour_getfield(anode, "AUTH")) {
+                    "," nl()
+                    col(colnum)
+                    sour_repfield(anode, "AUTH", colnum)
+                  }
+                  set(d, sour_getfield(anode, "DATE"))
+                  if(d) { ", " d }
+                  set(d, sour_getfield(anode, "EDIT"))
+                  if(d) { ", " d }
+                  set(d, sour_getfield(anode, "VOLU"))
+                  if(d) { ", " d }
+                  set(d, sour_getfield(anode, "PAGE"))
+                  if(d) { ", " d }
+                  set(d, sour_getfield(anode, "PUBL"))
+                  if(d) { ", " nl() col(colnum) d }
+                  set(d, sour_getfield(anode, "PLAC"))
+                  if(d) { ", " d }
+                  "." nl()
+                  if(html_urls(anode, colnum)) { nl() }
+                  if(sour_getfield(anode, "NOTE")) {
+                    col(colnum)
+                    sour_repfield(anode, "NOTE", colnum)
+                    nl()
+                  }
+                  if(sour_getfield(anode, "TEXT")) {
+                    col(colnum)
+                    sour_repfield(anode, "TEXT", colnum)
+                    nl()
+                  }
+                }
+                call html_tag("/PRE", 0)
+                call html_tag("/LI", 0)
+        }
+        call html_tag("/UL", 0)
+}
+
+func sour_exists()
+{
+        return(ne(length(sour_list), 0))
+}
+
+func sour_getfield(r, t)
+{
+        traverse(r, s, l) {
+                if (eq(0, strcmp(t, tag(s)))) { return(value(s)) }
+        }
+        return(0)
+}
+
+func sour_repfield(r, t, colnum)
+{
+        set(found, 0)
+        fornodes(r, node) {
+                if (eq(0,strcmp(t, tag(node)))) {
+                        set(found, 1)
+                        value(node)
+                        fornodes(node, subnode) {
+                                if (eq(0,strcmp("CONT", tag(subnode)))) {
+                                        nl()
+                                        if(gt(colnum, 0)) { col(colnum) }
+                                        value(subnode)
+                                }
+                        }
+                        break()
+                }
+        }
+        return(found)
+}
+
+/* sour_ged() outputs the current source list in GEDCOM format */
+
+proc sour_ged()
+{
+        table(other_table)
+        list(other_list)
+
+        forlist(sour_list, k, n) {
+                if(reference(k)) {
+                  set(r, dereference(k))
+                  traverse(r, s, l) {
+                        d(l)
+                        if (xref(s)) { " " xref(s) }
+                        " " tag(s)
+                        if (v, value(s)) {
+                          " " v
+                          if(reference(v)) {
+                            if (ne(0, lookup(other_table, v))) { continue() }
+                            set(v, save(v))
+                            insert(other_table, v, 1)
+                            enqueue(other_list, v)
+                          }
+                        }
+                        "\n"
+                  }
+                }
+        }
+        forlist(other_list, k, n) {
+                set(r, dereference(k))
+                traverse(r, s, l) {
+                        d(l)
+                        if (xref(s)) { " " xref(s) }
+                        " " tag(s)
+                        if (v, value(s)) { " " v }
+                        "\n"
+                }
+        }
+}

@@ -1,5 +1,5 @@
 /* 
- * @progname       menu
+ * @progname       menu.ll
  * @version        1.0
  * @author         ?
  * @category       

@@ -1,0 +1,252 @@
+/*
+ * @progname       sour.li
+ * @version        1995-09-08
+ * @author         Paul B. McBride (pbm%cybvax0@uunet.uu.net)
+ * @category       
+ * @output         Text
+ * @description
+
+                   functions for handling SOURces.
+
+Requirements:
+        LifeLines 3.0.2 or later (I hope)
+
+See Examples of using the library routines below.
+
+Tags within SOUR definitions which are processed by sour_ref():
+
+        REFN                    see below
+        TITL                    title
+        AUTH                    author
+        DATE                    publication date
+        EDIT                    which edition, revision, etc
+        VOLU                    number of volumnes (e.g. 3 vols)
+        PAGE                    page numbers
+        PUBL                    publisher
+        PLAC                    place of publication
+        LOCA                    where did you saw this source
+
+The following describes how I use the REFN tag. This is not particularly
+relevant, but here goes.
+
+There are some standard abbreviations that are often used:
+        MD              Mayflower Descendant
+        NEHGR           New England Historic Genealogical Society Register
+        TAG             The Americant Genealogist
+        RFC             Royalty for Commoners
+        AR7             Ancestral Roots... 7th edition
+I use other REFN's which are a combination of the subject, or author
+and a suffix:
+        WentworthG      Wentworth Genealogy
+        HayesFH         a Hayes family history
+        ScituateVR      Scituate, MA Vital Records
+        HamptonTH       Hampton, NH Town History
+
+When I am entering a source field I would then enter it as:
+
+        2 SOUR <WentworthG>
+
+and it will get converted to
+
+        2 @Sxxx@ SOUR
+
+Examples:
+
+  1) Report references used in a set of individuals
+
+     include("sour.ll")
+     ...
+     sour_init()        / * initialize the current source list and table * /
+     ...                / * create a set of individuals * /
+     sour_addset(a_set) / * add all sources referenced by set * /
+     "References: "
+     sour_ref(13)       / * output sources in GEDCOM format * /
+
+  2) List references for groups of individuals, and then a master
+     list of all sources referenced:
+
+     include("sour.ll")
+     ...
+     table(my_table)
+     list(my_list)
+     ...for each group of individuals
+       { sour_init()    / * initialize the current source list and table * /
+         ...for each individual...
+            { sour_addind(an_indi)
+              if(sour_exists()) {
+                "References: "
+                sour_see(",", 70, 10)   / * report REFN of each source * /
+                sour_save(my_table, my_list) / * add to master list * /
+              }
+            }
+       }
+     sour_restore(my_table, my_list) / * make master list the current one * /
+     if(sour_exists()) {
+       "Key to References:" nl() nl()
+       sour_ref(10)     / * report details for all sources * /
+     }
+
+  3) Output all sources for a set of individuals in GEDCOM format:
+
+     include("sour.ll")
+     ...
+     sour_init()        / * initialize the current source list and table * /
+     ...                / * create a set of individuals * /
+     sour_addset(a_set) / * add all sources referenced by set * /
+     sour_ged()         / * output sources in GEDCOM format * /
+
+08-sep-95 Paul B. McBride (pbm%cybvax0@uunet.uu.net)
+*/
+
+global(sour_list)
+global(sour_table)
+
+proc sour_init()
+{
+        table(sour_table)
+        list(sour_list)
+}
+
+proc sour_save(t, l)
+{
+        forlist(sour_list, v, n) {
+                if (eq(0, lookup(t, v))) {
+                  insert(t, v, 1)
+                  enqueue(l, v)
+                }
+        }
+}
+
+proc sour_restore(t, l)
+{
+        set(sour_table, t)
+        set(sour_list, l)
+}
+
+/* sour_add() adds the sources referenced for this individual */
+
+proc sour_addind(i)
+{
+         traverse(root(i), m, l) {
+                if (nestr("SOUR", tag(m))) { continue() }
+                set(v, value(m))
+                if(reference(v)) {
+                          if (ne(0, lookup(sour_table, v))) { continue() }
+                          set(v, save(v))
+                          insert(sour_table, v, 1)
+                          enqueue(sour_list, v)
+                }
+         }
+}
+
+proc sour_addset(s)
+{
+        forindiset (s, i, a, n) {
+                call sour_addind(i)
+        }
+}
+
+proc sour_see(sep, maxlen, indent)
+{
+        set(first, 1)
+        set(curlen, indent)
+        set(seplen, strlen(sep))
+        forlist(sour_list, k, n) {
+                if(first) { set(first, 0) }
+                else {
+                        sep
+                        set(curlen, add(curlen, seplen))
+                }
+                set(myrefn, sour_getfield(dereference(k), "REFN"))
+                set(mylen, add(add(strlen(myrefn), seplen),2))
+                if(and(gt(maxlen, 0), gt(add(curlen, mylen), maxlen))) {
+                        col(indent)
+                        set(curlen, indent)
+                }
+                "<" myrefn ">"
+                set(curlen, add(curlen, mylen))
+        }
+}
+
+proc sour_ref(colnum)
+{
+        forlist(sour_list, k, n) {
+                set(n, dereference(k))
+                "<" sour_getfield(n, "REFN") ">" col(colnum)
+                qt()
+                sour_repfield(n, "TITL", colnum)
+                qt()
+                if(sour_getfield(n, "AUTH")) {
+                  "," nl()
+                  col(colnum)
+                  sour_repfield(n, "AUTH", colnum)
+                }
+                set(d, sour_getfield(n, "DATE"))
+                if(d) { ", " d }
+                set(d, sour_getfield(n, "EDIT"))
+                if(d) { ", " d }
+                set(d, sour_getfield(n, "VOLU"))
+                if(d) { ", " d }
+                set(d, sour_getfield(n, "PAGE"))
+                if(d) { ", " d }
+                set(d, sour_getfield(n, "PUBL"))
+                if(d) { ", " nl() d }
+                set(d, sour_getfield(n, "PLAC"))
+                if(d) { ", " d }
+                "." nl()
+                if(sour_getfield(n, "NOTE")) {
+                  col(colnum)
+                  sour_repfield(n, "NOTE", colnum)
+                  nl()
+                }
+        }
+}
+
+func sour_exists()
+{
+        return(ne(length(sour_list), 0))
+}
+
+func sour_getfield(r, t)
+{
+        traverse(r, s, l) {
+                if (eq(0, strcmp(t, tag(s)))) { return(value(s)) }
+        }
+        return(0)
+}
+
+func sour_repfield(r, t, colnum)
+{
+        set(found, 0)
+        fornodes(r, node) {
+                if (eq(0,strcmp(t, tag(node)))) {
+                        set(found, 1)
+                        value(node)
+                        fornodes(node, subnode) {
+                                if (eq(0,strcmp("CONT", tag(subnode)))) {
+                                        nl()
+                                        if(gt(colnum, 0)) { col(colnum) }
+                                        value(subnode)
+                                }
+                        }
+                        break()
+                }
+        }
+        return(found)
+}
+
+/* sour_ged() outputs the current source list in GEDCOM format */
+
+proc sour_ged()
+{
+        forlist(sour_list, k, n) {
+                set(r, dereference(k))
+                traverse(r, s, l) {
+                        d(l)
+                        if (xref(s)) { " " xref(s) }
+                        " " tag(s)
+                        if (value(s)) { " " value(s) }
+                        "\n"
+                }
+        }
+}

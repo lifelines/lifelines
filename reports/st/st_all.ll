@@ -1,10 +1,12 @@
 /*
+ * @progname       st_all.ll
  * @version        1.13 (2003-06-19)
  * @author         Perry Rapp
  * @category       self-test
  * @output         mixed
- * @description    calls all self-test modules
+ * @description
 
+calls all self-test modules,
 Validates report language functions,
 and optionally dumps various data to a file
 (to exercise db functions).
@@ -23,15 +25,15 @@ char_encoding("ASCII")
 
 require("lifelines-reports.version:1.3")
 option("explicitvars") /* Disallow use of undefined variables */
-include("st_string")
-include("st_string_UTF-8")
-include("st_collate")
-include("st_date")
-include("st_name")
-include("st_number")
-include("st_convert")
-include("st_list")
-include("st_db")
+include("st_string.li")
+include("st_string_UTF-8.li")
+include("st_collate.li")
+include("st_date.li")
+include("st_name.li")
+include("st_number.li")
+include("st_convert.li")
+include("st_list.li")
+include("st_db.li")
 
 global(true)
 global(dbuse)

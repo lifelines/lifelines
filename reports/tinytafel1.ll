@@ -1,5 +1,5 @@
 /*
- * @progname       tinytafel1
+ * @progname       tinytafel1.ll
  * @version        3.1
  * @author         Wetmore, Eggert, Chandler
  * @category       

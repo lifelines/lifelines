@@ -1,0 +1,255 @@
+/*
+ * @progname       ged_write.li
+ * @version        3
+ * @author         Paul B. McBride (pbmcbride@rcn.com)
+ * @category       
+ * @output         GEDCOM
+ * @description
+
+  LifeLines GEDCOM file generating subroutine library.
+  This file defines a procedure ged_write() which extends the gengedcom()
+  builtin function of LifeLines by adding header and trailer records,
+  and outputting other level 0 record types which are referenced
+  within the individual and family records that would be output by
+  gengedcom(). If these records are not output to the GEDCOM file then
+  LifeLines would report links to undefined records, and not load the file
+  into the database. This is particularly useful for SOURce records
+  but also handles REPO, NOTE, EVENt, SUBMitter, other references
+  to INDIvidual and FAMily records, etc.
+
+  The gengedcom() function of LifeLines outputs a GEDCOM file for
+  the specified set of INDIviduals. It handles standard links for
+  FAMilies, and from FAMilies back to INDIviduals. It does not generate
+  the "0 HEAD" records, or the "0 TRLR" record. Also if there are
+  other links ("@xx@") to records of other types, or links to INDIviduals
+  in other structure elements, the records they point to are not output.
+Requirements:
+  LifeLines 3.0.5 or later or 3.0.3-*win32*
+Notes:
+  To use this with 3.0.2 to 3.0.4:
+    1) remove lines with "free(...)"
+    2) add an inlist(...)" function. (see example at end)
+Files:
+  Two other files are also required, samples of which are at the end
+  of this file:
+  	header.ged, submit.ged
+Bugs:
+  Links to FAMilies with tags other than "FAMC" and "FAMS"
+  may cause duplicate FAMily records in some cases.
+
+08 Sep 1995 v1	add SOUR records to GEDCOM file
+08 Feb 1996 v2	add REPO records and other records linked within SOUR records
+17 Feb 2000 v3	resolve all other links to records (if possible)
+*/
+
+global(ged_other_list)
+global(ged_other_set)
+global(ged_other_setlist)
+
+proc ged_write(gset)
+{
+	copyfile("header.ged")	/* header file (references @SM1@) */
+
+	"1 DATE " stddate(gettoday()) nl()
+
+	copyfile("submit.ged")	/* submitter file (defines @SM1@) */
+
+	/* find other records and people referenced by the set */
+
+	set(slen, lengthset(gset))
+	print("Writing GEDCOM file for ", d(slen), " people...")
+	call ged_other_init()
+	call ged_other_addset(gset)
+	if(ne(lengthset(gset), slen)) {
+	  print(" ", d(sub(lengthset(gset),slen)), " added...")
+	}
+
+ 	gengedcom(gset)	/* output set as GEDCOM file (INDI and FAM records) */
+
+	/* add other types of records (including SOURces) */
+
+	call ged_other_write()
+
+	"0 TRLR" nl()		/* trailer */
+
+	print(nl())
+}
+
+proc ged_other_init()
+{
+	/* for earlier versions of LifeLines remove lines with free() */
+	if(ged_other_list) { free(ged_other_list) }
+	if(ged_other_set) { free(ged_other_set) }
+	if(ged_other_setlist) { free(ged_other_setlist) }
+	/* end of lines to be removed for earlier versions of LifeLines */
+
+	list(ged_other_list)
+	indiset(ged_other_set)
+	list(ged_other_setlist)
+}
+
+proc ged_other_addset(s)
+{
+	/* make a list of each person and family in the set. These 
+	 * are the INDI and FAM records that gengedcom() will output.
+	 */
+        forindiset (s, i, a, n) {
+		set(v, save(concat("@", key(i), "@")))
+		enqueue(ged_other_setlist, v)
+		families(i, f, sp, m) {
+		  set(v, save(concat("@", key(f), "@")))
+		  enqueue(ged_other_setlist, v)
+		  call ged_other_add(root(f))
+		}
+	}
+	/* process each INDI and FAM record to see if it contains references
+	 * to other records. We need to add any other record that is referenced
+	 * to the GEDCOM file.
+	 */
+        forindiset (s, i, a, n) {
+		call ged_other_add(root(i))
+		families(i, f, sp, m) {
+		  call ged_other_add(root(f))
+		}
+	}
+	/* add any new people into the original set */
+        forindiset (ged_other_set, i, a, n) {
+		addtoset(s, i, 1)
+	}
+}
+
+/* ged_other_add() adds the other records referenced */
+
+proc ged_other_add(n)
+{
+         traverse(n, m, l) {
+	   if(gt(l, 0)) {
+	     	if(eq(l, 1)) {
+                  if (eqstr("FAMC", tag(m))) { continue() }
+                  if (eqstr("FAMS", tag(m))) { continue() }
+                  if (eqstr("HUSB", tag(m))) { continue() }
+                  if (eqstr("CHIL", tag(m))) { continue() }
+                  if (eqstr("WIFE", tag(m))) { continue() }
+	     	}
+		set(v, value(m))
+		if(reference(v)) {
+		  if(eqstr(substring(v,2,2),"I")) {
+		    /* process other references to individuals */
+		    if(inlist(ged_other_setlist, v)) { continue() }
+                    set(v, save(v))
+                    enqueue(ged_other_setlist, v)
+		    addtoset(ged_other_set, indi(v), 1)
+		    call ged_other_add(dereference(v))
+		    /* this persons families will also be included */
+		    families(indi(v), f, sp, m) {
+		  	set(fv, save(concat("@", key(f), "@")))
+		  	enqueue(ged_other_setlist, fv)
+		  	call ged_other_add(root(f))
+		    }
+		    continue()
+		  }
+		  if(eqstr(substring(v,2,2),"F")) {
+		    /* process other references to families */
+		    /* force a family to be included by adding in one
+		     * of the parents.
+		     */
+		    if(inlist(ged_other_setlist, v)) { continue() }
+                    set(v, save(v))
+                    enqueue(ged_other_setlist, v)
+		    call ged_other_add(dereference(v))
+		    set(spseen, 0)
+		    set(fs, 0)
+		    fornodes(dereference(v), fn) {
+		      if(or(eqstr(tag(fn), "HUSB"),eqstr(tag(fn), "WIFE"))) {
+		        set(fv, value(fn))
+			if(reference(fv)) {
+			  set(fs, save(fv))
+		          if(inlist(ged_other_setlist, fs)) {
+			    /* this individual is already in the set, so
+			     * this family will be output
+			     */
+			    set(spseen, 1)
+			    break()
+			  }
+		        }
+		      }
+		    }
+		    if(spseen) { continue() }
+		    if(fs) {
+		      /* force this family to be included by adding a parent
+		       * to the set
+		       */
+                      enqueue(ged_other_setlist, fs)
+		      addtoset(ged_other_set, indi(fs), 1)
+		      call ged_other_add(dereference(fs))
+		      /* this persons families will also be included */
+		      families(indi(fs), f, sp, m) {
+		  	  set(fv, save(concat("@", key(f), "@")))
+		  	  enqueue(ged_other_setlist, fv)
+		  	  call ged_other_add(root(f))
+		      }
+		      continue()
+		    }
+		    /* family had no parents. add it to the list of others */
+		  }
+                  if (inlist(ged_other_list, v)) { continue() }
+                  set(v, save(v))
+                  enqueue(ged_other_list, v)
+		}
+	   }
+	 }
+}
+
+/* ged_other_write() outputs the current list of other records in GEDCOM format */
+
+proc ged_other_write()
+{
+        forlist(ged_other_list, k, n) {
+		if(reference(k)) {
+                  set(r, dereference(k))
+        	  traverse(r, s, l) {
+                	d(l)
+                	if (xref(s)) { " " xref(s) }
+                	" " tag(s)
+                	if (v, value(s)) {
+			  " " v
+			}
+                	"\n"
+		  }
+		}
+        }
+}
+
+/* sample inlist() function for other versions of LifeLines
+
+func inlist(alist, str)
+{
+  forlist(alist, any, n) {
+    if(eqstr(any, str)) { return(1) }
+  }
+  return(0)
+} 
+* end of sample inlist() function */
+
+/* sample header.ged 
+0 HEAD 
+1 SOUR LIFELINES
+2 VERS 3.0.5
+2 NAME LifeLines
+2 CORP T. T. Wetmore
+3 ADDR ttw@shore.net
+1 SUBM @SM1@
+1 GEDC 
+2 VERS 5.5
+2 FORM Lineage-Linked
+1 CHAR ASCII
+* end of sample header.ged */
+
+/* sample submit.ged
+0 @SM1@ SUBM
+1 NAME Your Name Here
+1 ADDR Your Street Address
+2 CONT Your City, State and Zip Code
+2 CONT E-mail: your@email.address
+* end of sample submit.ged */
+

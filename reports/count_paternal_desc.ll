@@ -1,5 +1,5 @@
 /*
- * @progname       count_paternal_desc
+ * @progname       count_paternal_desc.ll
  * @version        2.0
  * @author         Eggert
  * @category       

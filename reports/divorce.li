@@ -1,0 +1,23 @@
+/*
+ * @progname    divorce.li
+ * @version     1.0 of 2004-07-03
+ * @author      Vincent Broman (vpbroman@mstar2.net)
+ * @category
+ * @output      gedcom event function values
+ * @description
+ *
+ *  Utility function supporting divorce/DIVO events in GeDCom data
+ *  divorce( fam) -> event,
+ *
+ * I put an equivalent function in my C source, but this can be used everywhere.
+ */
+
+func divorce( fam) {
+    fornodes( root( fam), childnode) {
+	if( eqstr( tag( childnode), "DIVO")) {
+	    return( childnode)
+	}
+    }
+    return( 0)
+}
+

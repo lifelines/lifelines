@@ -1,25 +1,19 @@
 /* 
- * @progname       connect2
- * @version        1.0
+ * @progname       connect2.ll
+ * @version        2.1
  * @author         Simms
  * @category       
  * @output         Text
- * @description    
+ * @description
+ *                 Describes the family line connecting an ancestor/descendant
 
+   Written by: Robert Simms, 19 Sep 1997
+               rsimms@math.clemson.edu, http://www.math.clemson.edu/~rsimms
 
    Asks for a descendant and an ancestor then produces, for the line
    connecting the two persons,
    an indented report on an individual and all families associated
    with that individual.  Details on individuals include NOTE lines.
-   This is handy for explaining to someone how you're connected to their
-   ancestor. (I find closure by filling in details on everyone's family
-   groups, rather than just having a string of sibling-less individuals that
-   connect me with distant cousins. This report helps me do the same for
-   others.)
-
-   Written by: Robert Simms, 19 Sep 1997
-               rsimms@math.clemson.edu, http://www.math.clemson.edu/~rsimms
-
    Linewrapping is done with indenting maintained.
 
    This program does not check to make sure that the descendant given is really
@@ -28,9 +22,13 @@
    At the beginning of main() is provided the means to easily change page width,
    tab size, left margin, and whether or not to include notes in output.
 
-   Revisions:  2. Robert Simms, 17 Feb 2000, made line-wrapping code more
+   Revisions:  2: Robert Simms, 17 Feb 2000, made line-wrapping code more
                   consistent in its use of the parameters page_width,
                   and left_margin.
+             2.1: Robert Simms, 30 May 2001, fixed the concatenation of
+                  multiple notes so that two spaces are inserted before
+                  every note after the first note.
+                  Thanks to M.W. Poirier for pointing this out.
                   
 */
 
@@ -51,7 +49,7 @@ proc main() {
    getindi(indi1, "Descendant")
    getindi(indi2, "Ancestor")
    set(connects, 0)
-   if (connect(indi1, indi2)) {
+   if(connect(indi1, indi2)) {
 
       forlist(plist, person, pnum) {
          if(ne(pnum, 1)) {
@@ -69,22 +67,22 @@ proc main() {
 
 func connect(person, target) {
    set(connects, 0)
-   if (eq(person, target)) {
+   if(eq(person, target)) {
       set(connects, 1)
    } else {
-      if (dad, father(person)) {
-         if (connect(dad, target)) {
+      if(dad, father(person)) {
+         if(connect(dad, target)) {
             set(connects, 1)
          } else {
-            if (mom, mother(person)) {
-               if (connect(mom, target)) {
+            if(mom, mother(person)) {
+               if(connect(mom, target)) {
                   set(connects, 1)
                }
             }
          }
       }
    }
-   if (connects) {
+   if(connects) {
       enqueue(plist, person)
    }
    return(connects)
@@ -93,18 +91,18 @@ func connect(person, target) {
 
 func outfam(indi, skip, x) {
    set(x, outpers(indi, skip, x))
-   if (gt(nfamilies(indi),0)) {
+   if(gt(nfamilies(indi), 0)) {
       set(skip, add(skip, tab_size))
       families(indi, fam, sp, num) {
          set(x, 0)
          set(x, outline(concat("Family #", d(num)), skip, x))
-         if (date(marriage(fam))) {
+         if(date(marriage(fam))) {
             set(x, outline(concat(", ", date(marriage(fam))), skip, x))
          }
          set(x, 0)
          set(skip, add(skip, tab_size))
          set(x, outpers(sp, skip, x))
-         if (gt(nchildren(fam), 0)) {
+         if(gt(nchildren(fam), 0)) {
             set(x, outline("Children", skip, x))
             set(x, 0)
             set(skip, add(skip, tab_size))
@@ -120,27 +118,29 @@ func outfam(indi, skip, x) {
 }
 
 func outpers(indi, skip, x) {
-   if (indi) {
+   if(indi) {
       print(name(indi), nl())
       set(x, 0)
       set(x, outline(name(indi), skip, x))
       set(skip, add(skip, tab_size))
       set(s, "")
-      if (birth(indi)) {
+      if(birth(indi)) {
          set(s, concat(", b. ", long(birth(indi))))
       }
-      if (death(indi)) {
+      if(death(indi)) {
          set(s, concat(s, ", d. ", long(death(indi))))
       }
-      if (burial(indi)) {
+      if(burial(indi)) {
          set(s, concat(s, ", buried at ", place(burial(indi))))
       }
       set(s, concat(s, ". "))
       set(x, outline(s, skip, x))
-      if (note_flag) {
+      if(note_flag) {
          set(s, "")
+         set(note_separator, "")
          fornotes(inode(indi), note) {
-            set(s, concat(s, note))
+            set(s, concat(s, note_separator, note))
+            set(note_separator, "  ")
          }
          set(x, outtxt(s, skip, x))
          set(skip, sub(skip, tab_size))
@@ -163,22 +163,22 @@ func outtxt(txt, skip, x) {
       set(txt, substring(txt, add(cr, 1), strlen(txt)))
       set(cr, index(txt, nl(), 1))
    }
-   if (gt(strlen(txt),0)) {
+   if(gt(strlen(txt), 0)) {
       set(x, outline(txt, skip, x))
    }
    return(x)
 }
 
 func outline(text, skip, x) {
-   if (eq(x, 0)) {
+   if(eq(x, 0)) {
       col(add(skip, 1))
       set(x, skip)
    }
    set(max, sub(page_width, x))
-   if (gt(strlen(text), max)) {
+   if(gt(strlen(text), max)) {
       set(space, breakpoint(text, max))
-      if (eq(space, 0)) {
-         if (eq(x, skip)) {
+      if(eq(space, 0)) {
+         if(eq(x, skip)) {
             set(text, strsave(text))
             substring(text, 1, sub(max, 1)) "-"
             set(x, 0)

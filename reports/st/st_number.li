@@ -1,10 +1,14 @@
 /*
+ * @progname       st_number.li
  * @version        1.0
  * @author         Perry Rapp
  * @category       self-test
  * @output         none
- * @description    validate numeric functions
-*/
+ * @description
+ *
+ * validate numeric functions
+ *
+ */
 
 char_encoding("ASCII")
 

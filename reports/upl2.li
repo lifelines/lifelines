@@ -1,0 +1,104 @@
+/*
+ * @progname       upl2.li
+ * @version        1999-04-02
+ * @author         McBride, Prinke
+ * @category       
+ * @output         procedure effects
+ * @description
+ *
+ *                 Do upl functions
+ */
+/* upl.ll - Paul B. McBride 01-apr-99 */
+/* upl2.ll - modified Rafal T. Prinke  02-apr-99 */
+
+proc upl_build()
+{
+    call upl_init()
+    call upl_add("NAME", "", "", 1, 1)
+    call upl_add("BIRT", ", *", "", 1, 2)   /* event */
+    call upl_add("RESI", ", ", "", 1, 1)   /* event */
+    call upl_add("DEAT", ", +", "", 1, 2)   /* event */
+    call upl_add("BURI", ", bur. ", "", 1, 2)   /* event */
+    call upl_add("OCCU", ", ", "", 1, 0)   /* value */
+    call upl_add("NOTE", "; ", "", 1, 0)
+    call upl_add("CONT", " ", "", 2, 0)
+    /* add more tags here */
+}
+
+proc upl_report(ind)
+{
+    traverse(root(ind), node, lev) {
+        forlist(upl_tag_list, atag, n) {
+          if(and(eq(getel(upl_level_list, n), lev),
+                 eqstr(tag(node), atag))) {
+              set(before, getel(upl_before_list, n))
+              if(before) { call upl_out(before) }
+              call upl_process(ind, node, getel(upl_process_list, n))
+              set(after, getel(upl_after_list, n))
+              if(after) { call upl_out(after) }
+          }
+        }
+    }
+}
+
+proc upl_process(ind, node, process)
+{
+    if(eq(process, 0)) {
+        set(v, value(node))
+        if(v) { call upl_out(v) }
+    }
+    elsif(eq(process, 1)) {
+        call upl_out(name(ind,0))
+    }
+    elsif(eq(process, 2)) {
+       list(datum)
+       extracttokens(date(node),datum,n," ")
+       set(v, "")
+       forlist(datum,q,n) {
+            if (lookup(mens,upper(q))) {
+                   set(v, concat(v,lookup(mens,q))) }
+            else { set(v, concat(v,q)) }
+       }
+       if(place(node)) {
+            set(v, concat(v," (", place(node), ")"))
+       }
+       if(gt(strlen(v),1)) { call upl_out(v) }
+}
+
+    /* add more processing types here */
+}
+
+proc upl_init()
+{
+   list(upl_tag_list)
+   list(upl_before_list)
+   list(upl_after_list)
+   list(upl_level_list)
+   list(upl_process_list)
+}
+
+proc upl_add(tag, before, after, level, process)
+{
+    set(len, add(length(upl_tag_list), 1))
+    setel(upl_tag_list, len, tag)
+    setel(upl_before_list, len, before)
+    setel(upl_after_list, len, after)
+    setel(upl_level_list, len, level)
+    setel(upl_process_list, len, process)
+}
+
+proc upl_dump()
+{
+    set(len, length(upl_tag_list))
+    set(i, 1)
+    while(le(i, len)) {
+      print(getel(upl_tag_list, i), "\n")
+      set(i, add(i, 1))
+    }
+}
+
+proc upl_out(str)
+{
+   if(or(eq(upl_out_type, 0), eq(upl_out_type, 1))) { print(str) }
+   if(or(eq(upl_out_type, 0), eq(upl_out_type, 2))) { str }
+}

@@ -1,0 +1,83 @@
+/*
+ * @progname       tools.li
+ * @version        none
+ * @author         anon
+ * @category       
+ * @output         string and event function values
+ * @description    
+ *
+ * a library providing lifelines database tools, bapt() and get_picture().
+
+NODE func bapt(INDI) - scans for both BAPL and BAPM (unlike baptism() builtin)
+STRING func get_picture(INDI) - finds an image file name
+
+*/
+
+
+func bapt (indi) {
+  fornodes(inode(indi), node) {
+    if (eq(0, strcmp(tag(node), "BAPL"))) {
+      return(node)
+    }
+    if (eq(0, strcmp(tag(node), "BAPM"))) {
+      return(node)
+    }
+  }
+  return(0)
+}
+
+func get_picture (indi) {
+/* Note: this code assumes a tag structure I use to represent
+   external files. It looks like:
+
+1 EXTL
+  2 FILE pics/scott.gif
+  2 FORM GIF
+  2 DATE Jul 1989
+1 EXTL
+  2 URL http://www.intele.net/~toddm/toddpic.gif
+  2 FORM GIF
+
+   where the first defines an external file stored on the same file
+   system and gives the path in the FILE record and the type in the
+   FORM record. The second defines an external file stored on another
+   site and provides a URL for referencing it. I have proposed this as
+   an extension to GEDCOM, but nobody said very much.
+*/
+
+  set(found, 0)
+  set(path, "")
+  fornodes(inode(indi), node) {
+    if (not(strcmp("EXTL", tag(node)))) {
+      set(m, child(node))
+      if (not(strcmp("FILE", tag(m)))) {    /* files on local system */
+        set(path, value(m))
+        set(o, sibling(m))
+        if (not(strcmp("FORM", tag(o)))) {
+          if (not(strcmp("GIF", value(o)))) {
+            set(found, 1)
+          }
+          elsif (not (strcmp("JPEG", value(o)))) {
+            set(found, 1)
+          }
+        }
+      }
+      else{
+       if(not(strcmp("URL", tag(m)))) {     /* files on remote system */
+          set(path, value(m))
+          set(o, sibling(m))
+          if (not(strcmp("FORM", tag(o)))) {
+            if (not(strcmp("GIF", value(o)))) {
+              set(found, 1)
+            }
+            elsif (not (strcmp("JPEG", value(o)))) {
+              set(found, 1)
+            }
+          }
+        }
+      }
+    }
+  }
+  return(path)
+}
+

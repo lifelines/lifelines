@@ -1,10 +1,14 @@
 /*
+ * @progname       st_collate.li
  * @version        1.0
  * @author         Perry Rapp
  * @category       self-test
  * @output         none
- * @description    validate collation
-*/
+ * @description
+ *
+ * validate collation
+ *
+ */
 
 char_encoding("ASCII")
 

@@ -1,5 +1,5 @@
 /*
- * @progname       pafcompat
+ * @progname       pafcompat.ll
  * @version        2.0
  * @author         Eggert
  * @category       

@@ -1,9 +1,9 @@
 /*
- * @progname       anniver
+ * @progname       anniver.ll
  * @version        1.0
  * @author         Stephen Dum
  * @category       
- * @output         html
+ * @output         HTML
  * @description    
 
 Generate calendar of birth, death, marriage events arranged by the month 
@@ -26,17 +26,18 @@ using getel or setel functions on the dates and events lists as random access
 to very large lists is very slow.  With these changes run time dropped to 10
 seconds. 
 
-Before using, there are a few variables that need to be customized for your
-own environment.  The changes need to be made in set_static_html_globals() 
-below. Note: name and email address are obtained with getproperty() so add
-them to your .linesrc ( or for windows lines.cfg) file.
+Before using, there are a few properties that need to be customized for your
+own environment so add them to your .linesrc ( or for windows lines.cfg) file.
+The properties that are looked up are:
+   user.name -- name of the database owner
+   user.email -- email address of the db owner
 
 By default, program tries to write data files in the directory 
 ./html/<name of database> -- you must create this directory before running
 the program.
 */
 
-/* customization globals - modify values in set_static_html_globals below */
+/* customization globals */
 char_encoding("ASCII")
 options(explicitvars)
 

@@ -1,7 +1,7 @@
 /*
- * @progname       gender_order
- * @version        3.0
- * @author         Eggert
+ * @progname       gender_order.ll
+ * @version        4
+ * @author         Jim Eggert
  * @category       
  * @output         Text
  * @description    
@@ -17,15 +17,6 @@ patterns are . (no children), M, MF, MFF, and MFFM.  The frequency of
 these initial patterns can be used to answer questions such as how
 many families with a boy then two girls go on to have another boy.
 
-gender_order - a LifeLines gender order statistics program
-        by Jim Eggert (eggertj@ll.mit.edu)
-        Version 1,  5 August 1993
-                listsort code by John Chandler (JCHBN@CUVMB.CC.COLUMBIA.EDU)
-        Version 2, 10 August 1993
-                added family examples, modified output format slightly
-        Version 3, 26 March 1995
-                changed listsort to quicksort
-
 For example, suppose you want to know what fraction of families with a
 child gender pattern P (e.g., P=MFFM) have no more children, have a
 boy next (PM), have a girl next (PF), and have a child of unknown (to
@@ -40,6 +31,17 @@ number of childless families in the database.
 You can use either of two compare functions to sort the results
 differently.  Rename the one you want to use as compare, the other one
 something else (like compare1).
+
+gender_order - a LifeLines gender order statistics program
+    by Jim Eggert (EggertJ@crosswinds.net)
+        Version 1,  5 August 1993
+                listsort code by John Chandler (JCHBN@CUVMB.CC.COLUMBIA.EDU)
+        Version 2, 10 August 1993
+                added family examples, modified output format slightly
+        Version 3, 26 March 1995
+                changed listsort to quicksort
+    Version 4, 15 Jan 2000
+        quicksort bug fix
 
 */
 
@@ -72,7 +74,7 @@ proc quicksort(alist,ilist) {
         setel(ilist,index,index)
         decr(index)
     }
-    call qsort(alist,ilist,1,len)
+  if (ge(len,2)) { call qsort(alist,ilist,1,len) }
 }
 
 /* recursive core of quicksort */

@@ -1,0 +1,1637 @@
+/*
+ * @progname       hp-anc.ll
+ * @version        1 of 1995-12-01
+ * @author         Dennis Nicklaus (nicklaus@wishep.physics.wisc.edu)
+ * @category       
+ * @output         HPGL
+ * @description
+ *
+ *  This LifeLines report program generates autoscaling HPGL ancestral and
+ *  descendant charts.  The ancestral charts can include the siblings
+ *  of all direct ancestors (aunts, uncles, great-aunts, great-uncles, etc.)
+ *  The chart format is based on the program GedChart, by Tom Blumer.
+ *  
+**  hp-anc was developed by modifying the output portion (print_person
+**  function) of ps-anc3 (from ps-anc2).  Thus most features of ps-anc3 are
+**  still supported, except for the multi-page output option.
+**  
+**  CAVEATS/FEATURES: 
+**  1. You might find it useful to be familiar with ps-anc3 first.
+**  2. The HPGL text scaling here is very inadequate.
+**     I just picked a couple of scale factors which work for the
+**     paper size (usu 24x36 inches (E))  and chart depths (15-18 gen)
+**     which I needed it for and typically use. The scale factors I 
+**     picked make the text still readable (if you use a 0.25 plotter pen)
+**     but let you stuff a lot of information onto one chart.
+**     Gedchart does a better job, but I don't know how.
+**     And sometimes Gedchart scales the text down too far so it is
+**     too small to read.  These fixed scales avoid that,
+**     but there is no guarantee that text lines won't run together
+**     vertically or exceed it's "generation width".
+**  
+**  3. All the scaling & placement is done exactly as in ps-anc3, as
+**     if we were generating postscript output.  Then at the end,
+**     that scale is just adjusted to an HPGL autoscale.  This may
+**     give you less than perfect results. I certainly haven't
+**     tried all cases.
+**  
+**  4. Like Gedchart does, hp-anc includes a line of text on the
+**     chart if you have a note which begins with the keyword tag GEDCHART.
+**     For instance:
+**     		GEDCHART Fought in the Rev. War
+**     will result in a line of text "Fought in the Rev. War"
+**     on the chart for that person.
+**
+**  5. ps-anc3 didn't have that note capability, and so the extra
+**     line of text that requires is NOT built into the placement
+**     algorithm for ancestor charts (but it does work for desc. charts).
+**     Thus, you might end up with a note line which
+**     comes out overwriting the next person down on the chart.
+**     This will generally only be a problem with tightly packed siblings
+**     or with people with no ancestors in an ancestor plot.
+**  
+**  6. I recommend you use a previewer for the output before
+**     you waste a nice sheet of vellum and 30 min. on the plotter.
+**     I run my HPGL output through hpgl2ps-v2 by Dan McCormick,
+**     then view the postscript using pageview (Sun postscript
+**     previewer) or ghostscript.  hpgl2ps does not do the text scaling 
+**     conversion perfectly.  So even though it looks like a line of text
+**     is too long under the postscript viewer, it may be fine
+**     when plotted out.  You'll have to use some trial and error.
+**  
+**  7. A have added a couple extra date/place style options beyond
+**     what ps-anc2 had.  My favorite is the date+2places(#5)
+**     which will turn Madison,DaneCo,WI into Madison,WI
+**     or "Sitter,bei Ankum,Lower Saxony,Germany" into "Sitter,Germany"
+**     You still may want to look at and edit the HPGL output before
+**     you print it out to make sure everything is what you want.
+**
+**  8. Has some rudimentary "print birth & death on same line" option.
+**
+**  9. Jumped through a lot of hoops to save a little space when 
+**     moving from one generation to the next in do_des.
+**
+** WISH LIST
+** 1. Use multiple colors? (but it already takes a long time to plot.
+**    it'd be even longer if it has to switch pens)
+** 2. Take note line into account for placement of anc. charts.
+** 3. Better text scaling
+** 4. Figure out how to make characters like a-umlaut, o-umlaut,... in HPGL
+**    (I currently do these with e<backspace>" but it isn't great.
+** 5. Change dates like "Aft    1990" to "Aft 1990" (remove extra spaces).
+**    (I currently do this by hand with a text editor)
+**
+**  After you use this program a few times, you might wish to edit the
+**  function interrogate_user().  This is the first function after
+**  these comments and the global variable declarations.  This
+**  function is set up to make it easy for you to configure what
+**  questions this program should ask you each time and what default
+**  values it should use for questions not asked.
+**  
+**  Please contact me if you like this program, find any bugs, have
+**  any bug fixes, or want to suggest improvements.  I am also always
+**  on the lookout for better ancestral/descendant chart generating
+**  programs.  If you know of a program that generates charts which
+**  you like better than those generated by this program, please drop
+**  me a line.
+**  
+**  This report program works with the LifeLines Genealogical database
+**  program only.  (see ftp://ftp.cac.psu.edu/pub/genealogy/lines/*)
+**  
+**  hp-anc, 1 December 1995, by Dennis Nicklaus (nicklaus@wishep.physics.wisc.edu)
+**  heavily based on ps-anc3, which is a derivative of :
+**  ps-anc2, 16 August 1994, by Fred Wheeler (wheeler@ipl.rpi.edu)
+**  
+**  CHANGE LOG
+**  
+**  This is version 1
+**
+**  CREDITS 
+**    Many thanks to Fred Wheeler developer of ps-anc2
+**
+**  ABOUT GEDCHART (a different program)
+**
+**  I got some of the HPGL plotter setup commands from HPGL output
+**  of the GEDCHART program written by Tom Blumner
+**  (blumer@ptltd.com).  It is used here without his permission. 
+**  The report is very much like that generated by GedChart using the 
+**  -Sa or -Sd option.  GEDCHART has some features this program does not.
+**
+**  GedChart is DOS program that generates ancestral and descendant
+**  charts like this report program, and also fan charts.  GedChart
+**  works directly from a GEDCOM file and is completely independent of
+**  LifeLines.  It is currently up to version 1.6, which is a beta
+**  version that may lead to a commercial product.  You can find
+**  GedChart at ftp:oak.oakland.edu/pub/msdos/genealgy/gedcht16.zip
+**
+*/
+
+global (high_pos_gen)     /* array, highest so far in each generation */
+global (high_pos_all)     /* highest position so far for any generation */
+global (last_child_pos)   /* place where last child was enqueued on desc. chart */
+
+global (name_height)      /* height of name text on chart */
+global (generation_height) /* space from parent to child on desc. chart */
+global (date_height)      /* height of birth/death/marriage date text */
+
+global (no_parent_extra)  /* constant, extra vert. line when no parent */
+
+/* variables prompted from or configured by the user */
+
+global (chart_type)       /* int, 0: ancestral, 1: descendant */
+global (all_same_line)    /* int, 0: separate name, b,d lines,
+                                  1: name,b.d. all same line,name 
+				  2: name sep.,b.d. on same line 
+					is NOT supported in HP format */
+
+global (root_person)      /* indi, person for whom to generate the chart */
+global (font_name)        /* string, name of font */
+global (max_depth)        /* int, maximum number of generations */
+global (chart_label)      /* string, label for corner of chart */
+global (color_chart)      /* boolean, is chart in color */
+global (multi_page)       /* boolean, is chart many page poster type */
+global (x_pages)          /* int, number of horizontal pages */
+global (y_pages)          /* int, number of vertical pages */
+global (name_letters)     /* int, maximum number of letters in a name */
+global (title_method)     /* int, code for how to insert titles */
+global (depth_siblings)   /* int, number of generations to show siblings */
+global (dateplace_birth)  /* int, date style for birth/death/marriage */
+global (dateplace_death)
+global (dateplace_marriage)
+global (dennis)
+
+/* variables to return values from procedures to make them functions */
+global (do_anc_stack)     /* stack, function do_anc is recursive */
+global (person_height_return)
+global (is_prefix_title_return)
+global (dateplace_return)
+
+/* these three constants define how close branches of the tree can get */
+global (branch_dist_prev)  /* minimum distance from previous generation */
+global (branch_dist_same)  /* minimum distance from same generation */
+global (branch_dist_next)  /* minimum distance from next generation */
+
+/* stacks for storing the information for each person on the chart */
+/* see proc's enqueue_person and dequeue_all_persons */
+
+global (plist_person)  /* the person (to extract name, birth, death) */
+global (plist_depth)   /* generation depth */
+global (plist_pos)     /* vertical position */
+global (plist_line)    /* 0,1 boolean, is direct ancestor? */
+global (plist_mdate)   /* marriage date */
+global (plist_note)   /* marriage date */
+
+/* stacks for storing the information for each vertical line on the chart */
+/* see proc's enqueue_vertical and dequeue_all_verticals */
+
+global (llist_depth)   /* generation depth */
+global (llist_low)     /* starting point */
+global (llist_high)    /* finishing point */
+
+global (shortname_scale)
+global (longname_scale)
+
+global (shortdate_scale)
+global (longdate_scale)
+global (longname_cutoff)
+global (longdate_cutoff)
+/*
+**  procedure: interrogate_user
+**
+**  This procedure is designed to be modified by the user.  It asks
+**  many questions about how to configure the charts.  If your answer
+**  to one of the questions is always the same, you can easily
+**  hardwire your answer here so that you are never asked again.
+**
+**  An 'if' statement is wrapped around each question.  The 'if (1)'
+**  can be changed to an 'if (0)' to make the program use the default
+**  value defined in the 'else' clause instead of asking every time.
+**
+*/
+
+proc interrogate_user ()
+{
+
+/*
+**  QUESTION: What type of chart?
+**
+**  This should always be asked, unless you never use one of the two
+**  types of charts.
+**
+*/
+
+  if (1)  {
+    getintmsg (chart_type,
+               "Enter 0 for ancestral, 1 for descendant chart")
+  }  else  {
+    set (chart_type, 1)
+  }
+
+/*
+**  QUESTION: Who is the root person?
+**
+**  This question should always be asked, unless you always use the same
+**  person, which is not likely.  If you do set a default, it is a string
+**  representation of that persons number.
+**
+*/
+
+  if (1)  {
+    set (root_person, 0)
+    while ( not (root_person) )  {
+      getindimsg (root_person, "Identify root person for chart")
+    }
+  }  else  {
+    set (root_person, indi ("1"))
+  }
+
+/*
+**  QUESTION: How many generations should be shown?
+**
+**  This should always be explicitly asked.
+**
+*/
+
+  if (1)  {
+    getintmsg (max_depth, "Maximum number of generations")
+  }  else  {
+    set (max_depth, 6)
+  }
+  if (gt (max_depth,15)) {
+    set (shortname_scale,";SR0.166,0.266;")
+    set (longname_scale,";SR0.136,0.216;")
+    set (shortdate_scale,";SR0.136,0.216;LB")
+  }  else  {
+    set (shortname_scale,";SR0.201,0.322;")
+    set (longname_scale,";SR0.166,0.266;")
+    set (shortdate_scale,";SR0.151,0.241;LB")
+  }
+  set (longdate_scale,";SR0.100,0.161;LB")
+  if (lt (max_depth,8)) {
+    set (longname_cutoff,40)
+    set (longdate_cutoff,60)
+  }
+  else {
+    set (longname_cutoff,20)
+    set (longdate_cutoff,36)
+  }
+      
+/*
+**  QUESTION: How many lines per person.
+*/
+  if (1)  {
+    getintmsg (all_same_line,
+               "birth & death lines: 0=Sep.;1= with name.")
+  }  else  {
+    set (all_same_line, 0)
+  }
+
+/*
+**  QUESTION: How many generations should show siblings?
+**
+**  If you want to show siblings in all generations, set this default to 999.
+**  This question is only asked for ancestral charts.
+**
+*/
+
+  if (eq (chart_type, 0))  {
+
+    if (1)  {
+      getintmsg (depth_siblings, "How many generations to show siblings")
+    }  else  {
+      set (depth_siblings, 1)
+    }
+
+  }
+
+/*
+**  QUESTION: What message should be shown in the corner of the chart?
+**
+**  I suggest not asking this question, and setting a default credit with
+**  your name.  The advantage of this is that you can have the date
+**  automatically inserted.
+**
+*/
+
+  if (1)  {
+    getstrmsg (chart_label, "Label for corner of chart (your name, date)")
+    set (chart_label, save (chart_label))
+  }  else  {
+    dayformat (2)
+    monthformat (6)
+    dateformat (0)
+    set (chart_label,
+      concat ("by Dennis J. Nicklaus, ", save (stddate (gettoday ()))))
+  }
+
+/*
+**  QUESTION: What font should be used?
+**
+**  Because it is such a pain to enter a font name, and a spelling mistake
+**  will get you an ugly default font, this should be set to a default.  I
+**  suggest one of: Times-Roman, NewCenturySchlbk-Roman, or ZapfChancery.
+**  Search the Postscript code at bottom of this file for a longer list.
+**
+*/
+
+  if (0)  {
+    getstrmsg (font_name,
+      "Font (Times-Roman, NewCenturySchlbk-Roman, ZapfChancery, etc.")
+    set (font_name, save (font_name))
+  }  else  {
+    set (font_name, "Times-Roman")
+  }
+
+/*
+**  QUESTION: Should color be used?
+**
+**  If you don't have access to a color printer, you should probably turn
+**  off this question.
+**
+*/
+
+  if (0)  {
+    getintmsg (color_chart, "Enter 0 for black/white, 1 for color")
+  }  else  {
+    set (color_chart, 0)
+  }
+
+/*
+**  QUESTION: Do you want multi-page poster output?
+**
+**  So that I am not hassled with this question everytime I run this
+**  program, I turn this question off, but change the default on the
+**  special occasion that I want a poster chart.
+**
+*/
+
+  if (0)  {
+    getintmsg (multi_page, "Enter 0 for single page, 1 for multipage")
+  }  else  {
+    set (multi_page, 0)
+  }
+
+/*
+**  QUESTION: How many pages make up the poster?
+**
+**  You will probably want to always ask this question.  This question is
+**  asked if a poster chart is requested.
+**
+*/
+
+  if (multi_page)  {
+
+    if (1)  {
+      getintmsg (x_pages, "Number of horizontal pages")
+      getintmsg (y_pages, "Number of vertical pages")
+    }  else  {
+      set (x_pages, 3)
+      set (y_pages, 3)
+    }
+
+  }  else  {
+    set (x_pages, 1)
+    set (y_pages, 1)
+  }
+
+/*
+**  QUESTION: How should titles be used?
+**
+**  I would leave this default set to 'guess' (3), or 'none' (0), if you
+**  don't want the titles.  If find a title that is guessed incorrectly,
+**  please send an e-mail to wheeler@ipl.rpi.edu.
+**
+*/
+
+  if (0)  {
+    getintmsg (title_method,
+               "Title method (0:none,1:prefix,2:suffix,3:guess)")
+  }  else  {
+    set (title_method, 3)
+  }
+
+/*
+**  QUESTION: What is the maximum length for names?
+**
+**  It is best to just set a default maximum name length.  If you want
+**  to always show the complete name, just set the default to 999.
+**
+*/
+
+  if (0)  {
+    getintmsg (name_letters, "Maximum name length")
+  }  else  {
+    set (name_letters, 40)
+  }
+
+/*
+**  QUESTION: How should dates/places of birth/death/marriage be shown?
+**
+**  This is actually three questions, or the same question for birth
+**  death and marriage dates.  The codes cause the dates to be printed
+**  as follows.
+**
+**      0: do not show date
+**      1: full date only
+**         [ LifeLines date() function ]
+**      2: date and place, just year and State/Country
+**         [ LifeLines short() function ]
+**      3: full date and full place, can get very long and thus smushed
+**         [ LifeLines long() function ]
+**	4: full date and 1st place field
+**	5: full date and 1st and last place fields (useful for picking
+**	   up the city, country or city,state without the county).
+**
+*/
+
+  if (1)  {
+    set (dateplace_birth, 99)
+    while (or (lt (dateplace_birth, 0), ge (dateplace_birth, 6)))  {
+      getintmsg (dateplace_birth,
+                 "Birth date style (0:no,1:date,2:short,3:long,4:date+1st place,5:+2pl)")
+    }
+    set (dateplace_death, 99)
+    while (or (lt (dateplace_death, 0), ge (dateplace_death, 6)))  {
+      getintmsg (dateplace_death,
+                 "Death date style (0:no,1:date,2:short,3:long,4:date+1st place,5:+2pl)")
+    }
+    set (dateplace_marriage, 99)
+    while (or (lt (dateplace_marriage, 0),
+               ge (dateplace_marriage, 6)))  {
+      getintmsg (dateplace_marriage,
+                 "Marriage date style (0:no,1:date,2:short,3:long,4:date+1st place,5:+2pl)")
+    }
+  }  else  {
+    set (dateplace_birth, 5)
+    set (dateplace_death, 5)
+    set (dateplace_marriage, 5)
+  }
+
+/*
+**  END OF QUESTIONS
+**
+*/
+
+}
+
+/*
+**  procedure: main
+**
+**  The main procedure.
+**
+*/
+
+proc main ()
+{
+
+  /* set constants */
+
+  set (name_height, 1300)        /* height to allow for name text */
+  set (date_height, 750)         /* height to allow for date text */
+  set (generation_height, 1300)   /* space from parent to child in des. chart */
+
+  set (branch_dist_prev, 1200)   /* previous generation */
+  set (branch_dist_same, 1500)   /* same generation */
+  set (branch_dist_next, 1200)   /* next generation */
+
+  set (no_parent_extra, 600)     /* a little extra line when no parent */
+
+  /* initialize other global variables and declare global stacks */
+
+  set (high_pos_all, 0)
+
+  list (high_pos_gen)
+  list (do_anc_stack)
+
+  list (plist_person)
+  list (plist_depth)
+  list (plist_pos)
+  list (plist_line)
+  list (plist_mdate)
+  list (plist_note)
+
+  list (llist_depth)
+  list (llist_low)
+  list (llist_high)
+
+  call interrogate_user ()
+
+  /* covert the numerical response for color to "true" or "false" */
+
+  if (eq (color_chart, 0))  {
+    set (color_true_false, "false")
+  }  else  {
+    set (color_true_false, "true")
+  }
+
+  /* start iteration that creates the chart */
+
+  if (eq (chart_type, 0))  {
+    call do_anc (root_person, 1, 0, 0)
+  }  else  {
+    call do_des (root_person, 1)
+  }
+
+  /* put the pieces together to make the output file */
+
+  set (xi, 1)
+  while ( le (xi, x_pages))  {
+    set (yi, 1)
+    while ( le (yi, y_pages))  {
+
+      call print_header (font_name, max_depth, high_pos_all,
+                         color_true_false, chart_label,
+                         xi, x_pages, yi, y_pages)
+      call dequeue_all_persons ()
+      call dequeue_all_verticals ()
+      call print_tailer()
+      set (yi, add (yi, 1))
+    }
+    set (xi, add (xi, 1))
+  }
+
+}
+
+/*
+**  procedure: do_anc
+**
+**  A recursive function to position persons on an ancestral chart.
+**  First, a recursive call is made to put the father on the chart.
+**  Where he is put on the chart determines the minimum position for
+**  the mother.  Once the father and mother are put on the chart, the
+**  siblings are put on the chart.
+**
+**  The position of the person is returned via the global stack
+**  do_anc_stack.  A stack is necessary since this procedure is
+**  reentrant.
+**
+*/
+
+proc do_anc (person, depth, min_pos_arg, marriage_date)
+{
+  /* don't want to modify procedure argument variable, so copy it */
+
+  set (min_pos, min_pos_arg)
+
+  /* figure out number of siblings and total sibling height */
+  /* done differently, depending on whether the parents family exists */
+
+  set (fam, parents (person))
+  if ( and ( fam, le (depth, depth_siblings) ) )  {
+
+    set (sibling_height, 0)
+    children (fam, child, unused_number)  {
+      call person_height (child)
+      set (sibling_height, add (sibling_height, person_height_return))
+    }
+    set (num_siblings, nchildren (fam))
+
+  }  else  {
+
+    call person_height (child)
+    set (sibling_height, person_height_return)
+    set (num_siblings, 1)
+
+  }
+
+  /* add extra width for marriage date of male ancestor, if it is known */
+
+  if (marriage_date)  {
+    set (sibling_height, add (sibling_height, date_height))
+  }
+
+  /* make sure minimum position is greater than zero */
+
+  if (lt (min_pos, 0))  {
+    set (min_pos, 0)
+  }
+
+  /* do not overlap another branch at the younger generation */
+
+  if (gt (depth, 1))  {
+    if (high, getel (high_pos_gen, sub (depth, 1)))  {
+      if (lt (min_pos, add (high, branch_dist_prev)))  {
+        set (min_pos, add (high, branch_dist_prev))
+      }
+    }
+  }
+
+  /* do not overlap another branch at the same generation */
+
+  if (high, getel (high_pos_gen, depth))  {
+    if (lt (min_pos, add (high, branch_dist_same)))  {
+      set (min_pos, add (high, branch_dist_same))
+    }
+  }
+
+  /* do not overlap another branch at the older generation */
+
+  if (lt (depth, max_depth))  {
+    if (high, getel (high_pos_gen, add (depth, 1)))  {
+      if (lt (min_pos, add (high, branch_dist_next)))  {
+        set (min_pos, add (high, branch_dist_next))
+      }
+    }
+  }
+
+  /* do father if he exists and is not too deep */
+
+  set (dad_min_pos, sub (min_pos, name_height))
+  set (dad_pos, dad_min_pos)
+  set (did_dad, 0)                  /* boolean, is dad on the chart */
+
+  if (lt (depth, max_depth))  {
+    if (par, father (person))  {
+      call dateplace (marriage (parents (person)), dateplace_marriage)
+      if (dateplace_return)  {
+        call do_anc (par, add (depth, 1), dad_min_pos, dateplace_return)
+      }  else  {
+        call do_anc (par, add (depth, 1), dad_min_pos, 0)
+      }
+      set (dad_pos, pop (do_anc_stack))
+      set (did_dad, 1)
+    }
+  }
+
+  if (lt (min_pos, add (dad_pos, name_height)))  {
+    set (min_pos, add (dad_pos, name_height))
+  }
+
+  /* do mother if she exists and is not too deep */
+
+  set (mom_min_pos, add (add (dad_pos, name_height), sibling_height))
+  set (mom_pos, mom_min_pos)
+  set (did_mom, 0)                  /* boolean, is mom on the chart */
+
+  if (lt (depth, max_depth))  {
+    if (par, mother (person))  {
+      call do_anc (par, add (depth, 1), mom_min_pos, 0)
+      set (mom_pos, pop (do_anc_stack))
+      set (did_mom, 1)
+    }
+  }
+
+  /* find the spacer needed to line up siblings between parents */
+
+  set (delta, sub (mom_pos, add (dad_pos, name_height)))
+  set (extra, sub (delta, sibling_height))
+  set (spacer, div (extra, add (num_siblings, 1)))
+
+  set (pos, add (dad_pos, name_height))
+  set (pos, add (pos, spacer))
+
+  /* position siblings, differently depending on whether parents exist */
+
+  if (fam, parents (person))  {
+
+    if ( le (depth, depth_siblings))  {
+
+      children (fam, child, number)  {
+
+        /* if this is the ancestor, return the position and use marriage */
+
+        if (eq (child, person))  {
+          call enqueue_person (child, depth, pos, 1, marriage_date)
+          push (do_anc_stack, pos)
+        }  else  {
+          call enqueue_person (child, depth, pos, 0, 0)
+        }
+
+        /* store the positions of the first and last children */
+
+        if (eq (number, 1))  {
+          set (first_pos, pos)
+        }
+        if (eq (number, nchildren (fam)))  {
+          set (last_pos, pos)
+        }
+
+        /* increment position by height of person plus the spacer */
+
+        call person_height (child)
+        set (pos, add (pos, person_height_return))
+        if (and (eq (child, person), marriage_date))  {
+          set (pos, add (pos, date_height))
+        }
+        set (pos, add (pos, spacer))
+      }
+
+    }  else  {
+
+      call enqueue_person (person, depth, pos, 1, marriage_date)
+      push (do_anc_stack, pos)
+
+      /* this may cause a line of zero length to be drawn */
+      set (first_pos, pos)
+      set (last_pos, pos)
+
+      /* increment position by height of person plus the spacer */
+
+      call person_height (person)
+      set (pos, add (pos, person_height_return))
+      if (marriage_date)  {
+        set (pos, add (pos, date_height))
+      }
+      set (pos, add (pos, spacer))
+    }
+
+    /* if father is on the chart, he determines the vertical line start */
+    /* otherwise, the oldest sibling does */
+
+    if (eq (did_dad, 1))  {
+      set (line_start, dad_pos)
+    }  else  {
+      set (line_start, sub (first_pos, no_parent_extra))
+    }
+
+    /* note: line_start may be < 0, that is OK */
+
+    /* if mother is on the chart, she determines the vertical line end */
+    /* otherwise, the youngest sibling does */
+
+    if (eq (did_mom, 1))  {
+      set (line_end, mom_pos)
+    }  else  {
+      set (line_end, add (last_pos, no_parent_extra))
+    }
+
+    /* print vert. line if parent or any siblings are on the chart */
+
+    if (or (or (did_mom, did_dad), gt (nchildren (fam), 1)))  {
+      call enqueue_vertical (depth, line_start, line_end)
+      /* update highest overall position */
+      if (lt (high_pos_all, add (line_end, name_height)))  {
+        set (high_pos_all, add (line_end, name_height))
+      }
+    }
+
+  }  else  {
+
+    /* else, if the person has no visible siblings */
+
+    call enqueue_person (person, depth, pos, 1, marriage_date)
+    push (do_anc_stack, pos)
+
+    /* increment position by height of person plus the spacer */
+
+    call person_height (person)
+    set (pos, add (pos, person_height_return))
+    if (marriage_date)  {
+      set (pos, add (pos, date_height))
+    }
+    set (pos, add (pos, spacer))
+  }
+
+  /* update the highest position array, or set it for the first time */
+
+  if (high, getel (high_pos_gen, depth))  {
+    if (lt (high, pos))  {
+      setel (high_pos_gen, depth, pos)
+    }
+  }  else  {
+    setel (high_pos_gen, depth, pos)
+  }
+
+  /* update the overall highest position */
+
+  if (lt (high_pos_all, pos))  {
+    set (high_pos_all, pos)
+  }
+}
+
+/*
+**  procedure: do_des
+**
+**  A recursive function to position persons on a descendant chart.
+**
+*/
+
+proc do_des (person, depth)
+{
+  /* don't want to modify procedure argument variable, so copy it */
+
+  set (min_pos, min_pos_arg)
+
+  set (make_line, 0)
+  set (this_persons_fams,nfamilies(person))
+  set (spouse_number,0)
+
+  if (female (person))  {
+    families (person, fam, spouse, num)  {
+      set (make_line, 1)
+      if (eq (num, 1))  {
+        set (line_top, high_pos_all)
+      }
+      call dateplace (marriage (fam), dateplace_marriage)
+      set (mdate, dateplace_return)
+      if (spouse)  {
+        set (spouse_number,add(1,spouse_number))
+        call enqueue_person (spouse, depth, high_pos_all, 0, mdate)
+        call person_height (spouse)
+	set (high_pos_all, add (high_pos_all, generation_height))   
+        set (saw_female_family,0)
+        set (extra_height, sub (person_height_return,generation_height))
+        if (mdate)  {
+          set (extra_height, add (extra_height, date_height))
+        }
+      }  else  {
+        set (high_pos_all, add (high_pos_all, generation_height))
+      }
+      if (lt (depth, max_depth))  {
+        children (fam, child, cn)  {
+	  set (saw_female_family,1)
+          call do_des (child, add (depth, 1))
+        }
+      }
+      /* if it is not the last spouse, then if there were no kids,
+	 make sure we leave sufficient space below him */
+      if (ne(spouse_number,this_persons_fams)){
+ 	 if (eq(0,saw_female_family)){
+      	    set (high_pos_all, add (high_pos_all, extra_height))   
+            set(extra_height,0)
+	}
+      }
+    }/* end families loop */
+    if (eq(0,saw_female_family)){
+      set (high_pos_all, add (high_pos_all, extra_height))   
+      set(saw_female_family,2)
+    }
+
+    if (eq(1,saw_female_family)){
+      set(high_pos_all,add(last_child_pos,generation_height))
+    }
+    set(last_child_pos,high_pos_all)
+    call enqueue_person (person, depth, high_pos_all, 1, 0)
+    set (line_bot, high_pos_all)
+    call person_height (person)
+    set (high_pos_all, add (high_pos_all, person_height_return))
+
+  }  else  {
+    set(last_child_pos,high_pos_all)
+    call enqueue_person (person, depth, high_pos_all, 1, 0)
+    set (line_top, high_pos_all)
+    call person_height (person)
+    set (high_pos_all, add (high_pos_all, generation_height))   
+    set (extra_height, sub (person_height_return,generation_height))
+
+    families (person, fam, spouse, num)  {
+      set (saw_male_family,0)
+      set (make_line, 1)
+      if (lt (depth, max_depth))  {
+        children (fam, child, cn)  {
+	  set(saw_male_family,1)
+          call do_des (child, add (depth, 1))
+        }
+      }
+      if (eq(0,saw_male_family)){
+	set (high_pos_all, add (high_pos_all, extra_height))   
+        set(saw_male_family,2)
+      }
+      call dateplace (marriage (fam), dateplace_marriage)
+      set (mdate, dateplace_return)
+      set (line_bot, high_pos_all)
+      if (spouse)  {
+	if (eq(1,saw_male_family)){
+	  set(high_pos_all,add(last_child_pos,generation_height))
+	  set (line_bot, high_pos_all)
+	  set(extra_height,0)
+	}
+	set(last_child_pos,high_pos_all)
+        call enqueue_person (spouse, depth, high_pos_all, 0, mdate)
+        call person_height (spouse)
+        set (high_pos_all, add (high_pos_all, person_height_return))
+        if (mdate)  {
+          set (high_pos_all, add (high_pos_all, date_height))
+        }
+      }  else  {
+        set (high_pos_all, add (high_pos_all, name_height))
+      }
+    }
+    /* add in the rest of this male's height if he has no family (no kids) */
+    if (eq(0,saw_male_family)){
+      set (high_pos_all, add (high_pos_all, extra_height))   
+      set(saw_male_family,1)
+    }
+
+  }
+
+  if (make_line)  {
+    call enqueue_vertical (depth, line_top, line_bot)
+  }
+}
+/*
+**  procedure: do_des_oldone
+**
+**  older version of do_des
+**
+*/
+proc do_des_oldone (person, depth)
+{
+  /* don't want to modify procedure argument variable, so copy it */
+
+  set (min_pos, min_pos_arg)
+
+  set (make_line, 0)
+
+  if (female (person))  {
+
+    families (person, fam, spouse, num)  {
+      set (make_line, 1)
+      if (eq (num, 1))  {
+        set (line_top, high_pos_all)
+      }
+      call dateplace (marriage (fam), dateplace_marriage)
+      set (mdate, dateplace_return)
+
+
+      if (spouse)  {
+        call enqueue_person (spouse, depth, high_pos_all, 0, mdate)
+        call person_height (spouse)
+        set (high_pos_all, add (high_pos_all, person_height_return))
+        if (mdate)  {
+          set (high_pos_all, add (high_pos_all, date_height))
+        }
+      }  else  {
+        set (high_pos_all, add (high_pos_all, name_height))
+      }
+      if (lt (depth, max_depth))  {
+        children (fam, child, cn)  {
+          call do_des (child, add (depth, 1))
+        }
+      }
+    }
+    call enqueue_person (person, depth, high_pos_all, 1, 0)
+    set (line_bot, high_pos_all)
+    call person_height (person)
+    set (high_pos_all, add (high_pos_all, person_height_return))
+
+  }  else  {
+
+    call enqueue_person (person, depth, high_pos_all, 1, 0)
+    set (line_top, high_pos_all)
+    call person_height (person)
+    set (high_pos_all, add (high_pos_all, person_height_return))
+    families (person, fam, spouse, num)  {
+      set (make_line, 1)
+      if (lt (depth, max_depth))  {
+        children (fam, child, cn)  {
+          call do_des (child, add (depth, 1))
+        }
+      }
+      call dateplace (marriage (fam), dateplace_marriage)
+      set (mdate, dateplace_return)
+      set (line_bot, high_pos_all)
+      if (spouse)  {
+        call enqueue_person (spouse, depth, high_pos_all, 0, mdate)
+        call person_height (spouse)
+        set (high_pos_all, add (high_pos_all, person_height_return))
+        if (mdate)  {
+          set (high_pos_all, add (high_pos_all, date_height))
+        }
+      }  else  {
+        set (high_pos_all, add (high_pos_all, name_height))
+      }
+    }
+  }
+
+  if (make_line)  {
+    call enqueue_vertical (depth, line_top, line_bot)
+  }
+}
+
+/*
+**  procedure: dateplace
+**
+**  Get the date of an event in the appropriate style (which may include
+**  the place.  Return via global variable.
+**
+*/
+
+proc dateplace (ev, style)
+{
+	list(placeList)
+  if (eq (style, 0))  {
+    set (dateplace_return, 0)
+  }
+  if (eq (style, 1))  {
+    set (dateplace_return, save (date (ev)))
+  }
+  if (eq (style, 2))  {
+    set (dateplace_return, save (short (ev)))
+  }
+  if (eq( style, 3))  {
+    set (dateplace_return, save (long (ev)))
+  }
+  if (eq (style, 4))  { /* date + first place field */
+    extractplaces(ev,placeList,nPlaces)
+    /* we want to find the first non-empty place.
+       We have to use this placeEq thing here to let
+       us skip past leading commas, effectively.
+       We look at the first place field initially,
+       but if it is blank, then we incr placeEq so
+       that we check the next place field for a value */
+    set (placeEq,1)
+    forlist (placeList, theplace, placeN) {
+      if (eq(strlen(theplace),0)){
+	incr(placeEq)
+      }
+      if (eq(placeN,placeEq)){
+	set (dennis,save(theplace))
+      }
+    }
+    /* if there was no place info, just return the date.
+       But if there was some place info, concatenate it 
+       onto the date, with a space in between. */
+    if (eq (nPlaces,0)){
+      set (dateplace_return, save (date (ev)))
+    }
+    else {
+      set (dateplace_return, save (concat (date (ev),concat(" ",dennis))))
+    }
+  }
+  if (eq (style, 5))  { /* date + first + last place fields */
+    extractplaces(ev,placeList,nPlaces)
+    /* we want to find the first non-empty place.
+       We have to use this placeEq thing here to let
+       us skip past leading commas, effectively.
+       We look at the first place field initially,
+       but if it is blank, then we incr placeEq so
+       that we check the next place field for a value */
+    set (placeincr_once_already,0)
+    set (dennislast,"")
+    set (placeEq,1)
+    forlist (placeList, theplace, placeN) {
+      if (eq(strlen(theplace),0)){
+	incr(placeEq)
+      }
+      else{
+        if (eq(placeN,placeEq)){
+	  if (eq(placeincr_once_already,0)){
+  	     set (dennis,save(theplace))
+	     set (placeincr_once_already,1)
+          }
+	  else {
+	     set (dennislast,save(theplace))
+	  }
+	  incr(placeEq)
+	} /* end if eq */
+      } /* end else non-null */
+    } /* end forlist */
+    if (ge (strlen(dennislast),0)){
+	set (dennisfirst,save(dennis))
+	set (dennis,save(concat(concat(dennisfirst,","),dennislast)))
+    }
+    /* if there was no place info, just return the date.
+       But if there was some place info, concatenate it 
+       onto the date, with a space in between. */
+    if (eq (nPlaces,0)){
+      set (dateplace_return, save (date (ev)))
+    }
+    else {
+      set (dateplace_return, save (concat (date (ev),concat(" ",dennis))))
+    }
+  }
+  if (ge (style, 6))  {
+    print ("error: invalid date style code")
+  }
+}
+
+/*
+**  procedure: person_height
+**
+**  Return the height of a single persons entry.  Only the name, and
+**  birth and death dates are considered.  The name is assumed to be in
+**  the database, the dates are checked for.  The marriage date is not
+**  checked for here.  It is more tricky since it is only put below the
+**  father's name and you have to make sure you have the date from the
+**  right marriage.
+**
+**  The height of the person is returned via the global variable
+**  person_height_return.  This global variable is used since LifeLines
+**  does not yet provide user-defined functions.
+**
+*/
+
+proc person_height (person)
+{
+  set (person_height_return, name_height)
+
+  call dateplace (birth (person), dateplace_birth)
+  if (eq(0,all_same_line)){ /* count b. & d. both */
+    if (dateplace_return)  {
+      set (person_height_return, add (person_height_return, date_height))
+    }
+
+    call dateplace (death (person), dateplace_death)
+    if (dateplace_return)  {
+      set (person_height_return, add (person_height_return, date_height))
+    }
+  }
+  if (eq(2,all_same_line)){ /* only count b. or death, not both */
+    if (dateplace_return)  {
+      set (person_height_return, add (person_height_return, date_height))
+    }
+    else{
+       call dateplace (death (person), dateplace_death)
+       if (dateplace_return)  {
+         set (person_height_return, add (person_height_return, date_height))
+        }
+    }
+  }
+  /* The gedchart note location doesn't work for anc. chart. I don't know why.
+      I guess it runs out of space or something?
+	I guess it is OK since they don't usually matter for space
+	in anc. charts (unless siblings are included or at end generations)*/
+  if (eq(chart_type,1)){
+    set(hadgednote,0)
+    fornotes(inode(person),note){
+	  set (i, index(note,"GEDCHART",1))
+  	  if (gt(i,0)){
+	    set(hadgednote,1)
+	  }
+    }
+    if (eq(hadgednote,1)){
+      set (person_height_return, add (person_height_return, date_height))
+    }
+  }
+
+}
+
+/*
+**  procedure: is_prefix_title
+**
+**  Decide if the given title is a prefix type title.  Returns boolean
+**  response in global variable is_prefix_title_return.
+**
+*/
+
+proc is_prefix_title (t)
+{
+  set (is_prefix_title_return, 0)
+
+  if (index (t, "Mr", 1))      { set (is_prefix_title_return, 1) }
+  if (index (t, "Mrs", 1))     { set (is_prefix_title_return, 1) }
+  if (index (t, "Ms", 1))      { set (is_prefix_title_return, 1) }
+  if (index (t, "Miss", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Dr", 1))      { set (is_prefix_title_return, 1) }
+  if (index (t, "Prof", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Hon", 1))     { set (is_prefix_title_return, 1) }
+  if (index (t, "Judge", 1))   { set (is_prefix_title_return, 1) }
+  if (index (t, "Brot", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Sis", 1))     { set (is_prefix_title_return, 1) }
+  if (index (t, "Deacon", 1))  { set (is_prefix_title_return, 1) }
+  if (index (t, "Fr", 1))      { set (is_prefix_title_return, 1) }
+  if (index (t, "Father", 1))  { set (is_prefix_title_return, 1) }
+  if (index (t, "Rev", 1))     { set (is_prefix_title_return, 1) }
+  if (index (t, "Mons", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Msgr", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Arch", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Bish", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Card", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Pope", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Lord", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Baron", 1))   { set (is_prefix_title_return, 1) }
+  if (index (t, "Duke", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Princ", 1))   { set (is_prefix_title_return, 1) }
+  if (index (t, "Lady", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Queen", 1))   { set (is_prefix_title_return, 1) }
+  if (index (t, "King", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Pres", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Sen", 1))     { set (is_prefix_title_return, 1) }
+  if (index (t, "Cong", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Rep", 1))     { set (is_prefix_title_return, 1) }
+}
+
+/*
+**  procedure: enqueue_person
+**
+**  Store the data for a person in the global lists.  It will be
+**  printed later.
+**
+*/
+global(chartnote)
+proc enqueue_person (person, depth, pos, line, mdate)
+{
+  enqueue (plist_person, person)
+  enqueue (plist_depth,  depth)
+  enqueue (plist_pos,    pos)
+  enqueue (plist_line,   line)
+  enqueue (plist_mdate,  mdate)
+
+  /*  Inserted by D. Nicklaus. Find the GEDCHART NOTE and enqueue it, too */
+  set(chartnote,"")
+  fornotes(inode(person),note){
+	set (i, index(note,"GEDCHART",1))
+	if (gt(i,0)){
+	   set(chartnote,save(substring(note,add(9,i),strlen(note))))
+	}
+
+
+  }
+  enqueue (plist_note, chartnote)
+	
+
+
+}
+
+/*
+**  procedure: dequeue_all_persons
+**
+**  Dequeue and print all persons stored in the global lists.  The
+**  lines are stored in a second queue as they are printed and then
+**  placed back in the original, global, queue.
+**
+*/
+
+proc dequeue_all_persons ()
+{
+  list (tlist_person)
+  list (tlist_depth)
+  list (tlist_pos)
+  list (tlist_line)
+  list (tlist_mdate)
+  list (tlist_note)
+
+  while (person, dequeue (plist_person))  {
+    set (depth,  dequeue (plist_depth))
+    set (pos,    dequeue (plist_pos))
+    set (line,   dequeue (plist_line))
+    set (mdate,  dequeue (plist_mdate))
+    set (noteprint,  dequeue (plist_note))
+
+    call print_person (person, depth, pos, line, mdate,noteprint)
+
+    enqueue (tlist_person, person)
+    enqueue (tlist_depth,  depth)
+    enqueue (tlist_pos,    pos)
+    enqueue (tlist_line,   line)
+    enqueue (tlist_mdate,  mdate)
+    enqueue (tlist_note,  noteprint)
+  }
+
+  while (person, dequeue (tlist_person))  {
+    set (depth,  dequeue (tlist_depth))
+    set (pos,    dequeue (tlist_pos))
+    set (line,   dequeue (tlist_line))
+    set (mdate,  dequeue (tlist_mdate))
+    set (noteprint,  dequeue (tlist_note))
+
+    enqueue (plist_person, person)
+    enqueue (plist_depth,  depth)
+    enqueue (plist_pos,    pos)
+    enqueue (plist_line,   line)
+    enqueue (plist_mdate,  mdate)
+    enqueue (plist_note,  noteprint)
+  }
+}
+
+/*
+**  procedure: print_person
+**
+**  Print a line of data for a person in postscript format.  Each line
+**  printed is essentially a call to a postscript function defined in the
+**  header.
+**
+*/
+
+proc print_person (person, depth, pos, line, mdate,noteprint)
+{
+  /* since there is no floating point, multiply everything by another
+	1000/1000 to not lose too much precision*/
+  set(normpos,div(mul(high_pos_all,1000),9950)) 
+  /* I really want to divide by 10020 there, but I need extra room for
+	the birth and death lines of the lowest person */
+  set(pos, sub(high_pos_all,pos))
+  set(pos, div(mul(pos,1000),normpos))
+
+  /* extra offset for b. & d. lines of lowest person */
+  set(pos, add(pos,70)) 
+
+  if (eq (title_method, 0))  {
+    set (prefix_title, 0)
+    set (suffix_title, 0)
+  }
+  if (eq (title_method, 1))  {
+    set (prefix_title, title (person))
+    set (suffix_title, 0)
+  }
+  if (eq (title_method, 2))  {
+    set (prefix_title, 0)
+    set (suffix_title, title (person))
+  }
+  if (eq (title_method, 3))  {
+    set (prefix_title, 0)
+    set (suffix_title, 0)
+    if (t, title (person))  {
+      call is_prefix_title (t)
+      if (is_prefix_title_return)  {
+        set (prefix_title, t)
+      }  else  {
+        set (suffix_title, t)
+      }
+    }
+  }
+  set (xposdennis,add(64,mul(div (8000,max_depth),sub(depth,1))))
+  /* First draw the horiz. line */
+  /* 1=direct ancestor, 0=sibling, the "line" variable controls this */
+  /*  chart_type      "0 for ancestral, 1 for descendant chart" */
+  set (xposdennis_siboff,0) /* initial setting */
+/*  if (eq(chart_type,0)){*/
+	if (eq(line,0)){
+		set (xposdennis_siboff,25)
+  }/*}*/
+  "PA"
+  d (add(xposdennis,xposdennis_siboff))
+  ","
+  d (pos)
+  ";PD;PA"
+  d (add(xposdennis,div (8000,max_depth)))
+  ","
+  d (pos)
+  ";PU;"
+
+  /* now draw the text */
+  set(pos, add(pos,9))
+  set (xposdennis,add(12,xposdennis))
+  "PA"
+  d (add(xposdennis,xposdennis_siboff))
+  ","
+  d (pos)
+  if (gt(strlen(name (person)),longname_cutoff)){
+    longname_scale
+  }
+  else{
+    shortname_scale
+  }
+  "LB"
+  set (nlet, name_letters)
+  if (prefix_title)  {
+    set (nlet, sub (nlet, strlen (prefix_title)))
+  }
+  if (suffix_title)  {
+    set (nlet, sub (nlet, strlen (suffix_title)))
+  }
+
+  /* print name and title, if it exists */
+
+  if (prefix_title)  {
+    prefix_title " "
+  }
+  fullname (person, 0, 1, nlet)
+  if (suffix_title)  {
+    " " suffix_title
+  }
+  if(eq(all_same_line,1)){
+	  /* print birth date, if it exists */
+	  call dateplace (birth (person), dateplace_birth)
+	  if (dateplace_return)  {
+	    " b. " dateplace_return 
+	  }
+	  call dateplace (death (person), dateplace_death)
+	  if (dateplace_return)  {
+	    " d. " dateplace_return 
+	  }
+  }
+
+  "PU;"
+  set (mypos,sub(pos,40))
+
+  if(ne(all_same_line,1)){
+  /* print birth date, if it exists */
+  call dateplace (birth (person), dateplace_birth)
+  if (dateplace_return)  {
+    "PA"
+     d (add(xposdennis,xposdennis_siboff))
+   ","
+     d (mypos)
+    if (gt(strlen(dateplace_return),longdate_cutoff)){
+      longdate_scale
+    }
+    else{
+      shortdate_scale
+    }
+    "b. "
+    dateplace_return
+   
+    "PU;"
+    set (mypos,sub(mypos,35))
+  }
+ }
+
+  /* print marriage date, if it exists */
+  if (mdate)  {
+    "PA"
+     d (add(xposdennis,xposdennis_siboff))
+    ","
+     d (mypos)
+    if (gt(strlen(mdate),longdate_cutoff)){
+      longdate_scale
+    }
+    else{
+      shortdate_scale
+    }
+    "m. "
+    mdate
+    "PU;"
+    set (mypos,sub(mypos,35))
+  }
+
+  if(ne(all_same_line,1)){
+  /* print death date, if it exists */
+  call dateplace (death (person), dateplace_death)
+  if (dateplace_return)  {
+    "PA"
+     d (add(xposdennis,xposdennis_siboff))
+    ","
+     d (mypos)
+    if (gt(strlen(dateplace_return),longdate_cutoff)){
+      longdate_scale
+    }
+    else{
+      shortdate_scale
+    }
+    "d. "
+    dateplace_return
+    "PU;"
+    set (mypos,sub(mypos,35))
+  }
+  }  
+  /* optional special tagged note */
+  if (noteprint)  { /* make sure it exists */
+     if (gt(strlen(noteprint),0)){ /* make sure it is non-null */
+    "PA"
+     d (add(xposdennis,xposdennis_siboff))
+    ","
+     d (mypos)
+    if (gt(strlen(noteprint),longdate_cutoff)){
+      longdate_scale
+    }
+    else{
+      shortdate_scale
+    }
+    noteprint
+    "PU;"
+    set (mypos,sub(mypos,35))
+  }}
+
+
+
+  nl()
+}
+
+/*
+**  procedure: enqueue_vertical
+**
+**  Enqueue the data for a single vertical line onto the global lists.
+**
+*/
+
+proc enqueue_vertical (depth, low, high)
+{
+  enqueue (llist_depth,  depth)
+  enqueue (llist_low,    low)
+  enqueue (llist_high,   high)
+}
+
+/*
+**  procedure: dequeue_all_verticals
+**
+**  Dequeue and print all vertical lines.  The lines are stored in a
+**  second queue as they are printed and then placed back in the
+**  original, global, queue.
+**
+*/
+
+proc dequeue_all_verticals ()
+{
+  list (tlist_depth)
+  list (tlist_low)
+  list (tlist_high)
+
+  while (depth,  dequeue (llist_depth))  {
+    set (low,    dequeue (llist_low))
+    set (high,   dequeue (llist_high))
+
+    call print_vertical (depth, low, high)
+
+    enqueue (tlist_depth, depth)
+    enqueue (tlist_low,   low)
+    enqueue (tlist_high,  high)
+  }
+
+  while (depth,  dequeue (tlist_depth))  {
+    set (low,    dequeue (tlist_low))
+    set (high,   dequeue (tlist_high))
+
+    enqueue (llist_depth, depth)
+    enqueue (llist_low,   low)
+    enqueue (llist_high,  high)
+  }
+}
+
+/*
+**  procedure: print_vertical
+**
+**  Print a single vertical line to link a married couple or siblings.
+**
+*/
+
+proc print_vertical (depth, low, high)
+{
+	/* do same normalizations as in print_person */
+  /* since there is no floating point, multiply everything by another
+	1000/1000 to not lose too much precision*/
+  set(normpos,div(mul(high_pos_all,1000),9950))
+  set(low, sub(high_pos_all,low))
+  set(low, div(mul(low,1000),normpos))
+  set(high, sub(high_pos_all,high))
+  set(high, div(mul(high,1000),normpos))
+  /* extra offset for b. & d. lines of lowest person */
+  set(low, add(low,70)) 
+  set(high, add(high,70)) 
+
+
+  set (xposdennis,add(64,mul(div (8000,max_depth),depth)))
+
+  "PA"
+  d (xposdennis)
+  ","
+  d(low)
+ ";PD;PA"
+  d (xposdennis)
+  ","
+  d(high)
+ ";PU;"
+}
+
+/*
+**  procedure: print_thousandths
+**
+**  Since LifeLines does not offer a floating point type, decimal
+**  computation is done using integers that represent thousands.  This
+**  procedure converts a number in thousandths to decimal notation and
+**  prints it.  The length of the decimal part is checked to make sure
+**  it is padded with zeros correctly.
+**
+*/
+
+proc print_thousandths (n_arg)
+{
+
+  /* don't want to modify proc argument, so copy it */
+  set (n, n_arg)
+
+  if (lt (n, 0))  {
+    "-"
+    set (n, neg (n))
+  }
+  d (n)
+
+}
+
+/*
+**  procedure: print_header
+**
+**  Arguments:
+**    fn:  font name
+**    md:  maximum level, integer
+**    mp:  maximum position, integer in thousandths
+**    ctf: color true/false, string "true" or "false"
+**    cl:  chart label, string
+**    xi:  which horizontal page
+**    xn:  number of horizontal pages
+**    yi:  which vertical page
+**    yn:  number of vertical pages
+**
+**  Print the initial postscript code.  This code will likely be the
+**  bulk of the output file.  It prints the border, defines postscript
+**  functions for printing peoples names, dates and the lines on the
+**  chart, and more.  It will be followed by the data.
+**
+**  This postscript code was written by Thomas P. Blumer (blumer@ptltd.com).
+**  The only modification is where data from the arguments is inserted.
+**
+*/
+
+proc print_header (fn, ml, mp, ctf, cl, xi, xn, yi, yn)
+{
+"IN;SP1;RO90;TD1;IP;SC0,8128,0,10160;PW0.88;PU;PA17,17;PD;PA8111,17;PA8111,10143;PA17,10143;PA17,17;PW;PW0.25;PU;PA60,60;PD;PA8068,60;PA8068,10100;PA60,10100;PA60,60;PW;WU1;PW0.0255;PU;"
+}
+/*
+**  procedure: print_tailer
+**
+**  Print the terminating code HPGL.  This code will likely be the
+**  bulk of the output file.  It prints the border, defines postscript
+**  functions for printing peoples names, dates and the lines on the
+**  chart, and more.  It will be followed by the data.
+**
+**
+**  This HPGL code was written by Thomas P. Blumer (blumer@ptltd.com).
+**  The only modification is where data from the arguments is inserted.
+
+*/
+
+proc print_tailer ()
+{
+  "PU;PA0,0;SP;EC1;PG1;EC1"
+}

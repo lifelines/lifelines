@@ -1,0 +1,270 @@
+/* 
+ * @progname       extract_set.li
+ * @version        1.5
+ * @author         Scott McGee (smcgee@microware.com)
+ * @category       
+ * @output         function values
+ * @description    
+
+A library containing routines to allow extraction of a set of related persons
+from a database.
+
+The function extract_set() is passed a starting indi, and traverses selected
+persons relatives until no selections are left. It returns an indi set of 
+the selected persons.
+
+The do_info() function will return a string containing the name and birth/
+death type info on the indi passed as a parameter.
+
+@(#)extract_set.li	1.5 10/13/95
+*/
+
+func extract_set(indi){
+  list(w)      /* working list */
+  indiset(o)   /* output set */
+  indiset(out) /* output set */
+  table(t)     /* table of seen persons */
+  indiset(us)  /* temporary set */
+
+  set(first, 1)
+  set(count, 1)
+  enqueue(w, indi)
+  while (indi, dequeue(w)) {
+    if (not(lookup(t, key(indi)))) {
+      insert(t, key(indi), 1)
+      if (askabout(indi)) {
+        addtoset(o, indi, count)
+        incr(count)
+        if (j, father(indi)) { 
+          enqueue(w, j)
+        }
+        if (j, mother(indi)) { 
+          enqueue(w, j)
+        }
+        families(indi, f, s, n) {
+          if(s) {
+            enqueue(w, s)
+          }
+          children(f, j, m) {
+            enqueue(w, j)
+          }
+        }
+      }
+    }
+  }
+  print("You selected ", d(lengthset(o)), " individuals.\n")
+  set(useout, 0)
+  set(msg, "Do you want all the ancestors of these people added to this set? (y or n) ")
+  getstr(answer, msg)
+  if(eqstr(lower(trim(answer, 1)), "y")) {
+    set(anc, ancestorset(o))
+    if(anc) {
+      print("Found ", 
+            d(lengthset(difference(anc, intersect(anc, o)))),
+            " additional ancestors.\n")
+      set(out, union(o, anc))
+      set(rel, get_relatives(out))
+      if(rel){
+        print("Found ",
+              d(lengthset(difference(rel, intersect(rel, out)))),
+              " additional relatives.\n")
+        set(out, union(out, rel))
+      }
+      set(useout, 1)
+    }else{
+      print("no ancestors found\n")
+    }
+  }else{
+    set(msg, concat("Do you want all the ancestors of ", name(first_indi), 
+                    " added to this set? (y or n) "))
+    getstr(answer, msg)
+    if(eqstr(lower(trim(answer, 1)), "y")) {
+      set(m, 1)
+      addtoset(us, first_indi, m)
+      if(us) {
+        set(anc, ancestorset(us))
+        if(anc) {
+          print("Found ",
+                d(lengthset(difference(anc, intersect(anc, o)))),
+                " additional ancestors.\n")
+          set(out, union(o, anc))
+          set(rel, get_relatives(out))
+          if(rel){
+            print("Found ",
+                  d(lengthset(difference(rel, intersect(rel, out)))),
+                  " additional relatives.\n")
+            set(out, union(out, rel))
+          }
+          set(useout, 1)
+        }else{
+          print("no ancestors found\n")
+        }
+      }else{
+        print("error: nobody in 'us' set\n")
+      }
+    }
+  }
+  set(msg, "Do you want all the descendants of these people added to this set? (y or n) ")
+  getstr(answer, msg)
+  if(eqstr(lower(trim(answer, 1)), "y")) {
+    set(anc, descendantset(o))
+    if(anc) {
+      if(useout){
+        print("Found ", 
+              d(lengthset(difference(anc, intersect(anc, out)))),
+              " additional descendants.\n")
+        set(out, union(out, anc))
+      }else{
+        print("Found ", 
+              d(lengthset(difference(anc, intersect(anc, o)))),
+              " additional descendants.\n")
+        set(out, union(o, anc))
+      }
+      set(rel, get_relatives(union(o, anc)))
+      if(rel){
+        print("Found ",
+              d(lengthset(difference(rel, intersect(rel, out)))),
+              " additional relatives.\n")
+        set(out, union(out, rel))
+      }
+    }else{
+      print("no descendantss found\n")
+    }
+  }else{
+    set(msg, concat("Do you want all the descendants of ", name(first_indi), 
+                    " added to this set? (y or n) "))
+    getstr(answer, msg)
+    if(eqstr(lower(trim(answer, 1)), "y")) {
+      set(m, 1)
+      addtoset(us, first_indi, m)
+      if(us) {
+        set(anc, descendantset(us))
+        if(anc) {
+          if(useout){
+            print("Found ", 
+                  d(lengthset(difference(anc, intersect(anc, out)))),
+                  " additional descendants.\n")
+            set(out, union(out, anc))
+          }else{
+            print("Found ", 
+                  d(lengthset(difference(anc, intersect(anc, o)))),
+                  " additional descendants.\n")
+            set(out, union(o, anc))
+          }
+          set(rel, get_relatives(anc))
+          if(rel){
+            print("Found ",
+                  d(lengthset(difference(rel, intersect(rel, out)))),
+                  " additional relatives.\n")
+            set(out, union(out, rel))
+          }
+        }else{
+          print("no descendants found\n")
+        }
+      }else{
+        print("error: nobody in 'us' set\n")
+      }
+    }
+    if(not(useout)){
+      set(out, o)
+    }
+  }
+  return(out)
+}
+
+func askabout (indi) {
+  if(not(first)) {
+    call showinfo(indi)
+    set(s, concat("Do you want ", name(indi), 
+                  " in your output files? (y or n) "))
+    getstr(a, s)
+    return (eqstr(lower(trim(a, 1)), "y"))
+  }else{
+    set(first, 0)
+    return (1)
+  }
+}
+
+proc showinfo (indi) {
+  print(name(indi), do_info(indi), " (", key(indi), ")\n\n")
+  set(did_afn, afn(indi))
+  print("Father: ", name(father(indi)), do_info(father(indi)), "\n")
+  print("Mother: ", name(mother(indi)), do_info(mother(indi)), "\n\n\n\n\n\n\n")
+  set(f, 0) set(s, 0)
+  families(indi, fa, sp, n) {
+    if (eq(1, n)) {
+      set(f, fa)
+      set(s, sp)
+    }
+  }
+  print("Married: ", long(marriage(f)), "\n")
+  print("Spouse: ", name(s), do_info(s), "\n\n\n\n\n")
+  if(not(did_afn)){
+    print("\n")
+  }
+}
+
+func do_info(me){
+  if(not(me)){
+    return("")
+  }else{
+    set(out, " -")
+    if (evt, birth(me)) {
+      set(out, concat(out, " born ", short(evt)))
+    }
+    else {
+      if (evt, baptism(me)) {
+        set(out, concat(out, " baptised ", short(evt)))
+      }
+      else {
+        if (evt, bapt(me)) {
+          set(out, concat(out, " baptised ", short(evt)))
+        }
+      }
+    }
+    if (evt, death(me)) {
+      set(out, concat(out, " died ", short(evt)))
+    }
+    return(out)
+  }
+}
+
+func afn(indi){
+  if(indi){
+    fornodes(inode(indi), subnode){
+      if(eqstr(tag(subnode), "AFN")){
+        print("AFN ", value(subnode), "\n")
+        return(1)
+      }
+    }
+  }
+  return(0)
+}
+
+func get_relatives(in_set){
+  set(msg, "Do you want to add all relatives within a given link distance? (y or n) ")
+  getstr(answer, msg)
+  if(eqstr(lower(trim(answer, 1)), "y")) {
+  
+    getint(n, "Please enter link distance.")
+
+    /* create set with all ancestors and descendents */
+
+    indiset(out_set)
+    indiset(t)       /* temporary working set */
+
+    /* create set of additional, linked-to persons */
+
+    set(t, in_set)
+    while (gt(n, 0)) {
+      set(a, parentset(t))
+      set(b, childset(t))
+      set(c, spouseset(t))
+      set(t, union(t, union(a, union(b, c))))
+      set(n, sub(n, 1))
+    }
+    set(out_set, t)
+    return(out_set)
+  }
+  return(0)
+}

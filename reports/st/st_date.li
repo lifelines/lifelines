@@ -1,10 +1,14 @@
 /*
+ * @progname       st_date.li
  * @version        1.1 (2003-01-22)
  * @author         Perry Rapp
  * @category       self-test
  * @output         none
- * @description    validate date functions
-*/
+ * @description
+ *
+ * validate date functions
+ *
+ */
 
 char_encoding("ASCII")
 

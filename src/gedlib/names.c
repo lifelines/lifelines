@@ -133,7 +133,7 @@ static void
 parsenamerec (const RKEY * rkey, CNSTRING p)
 {
 	INT i;
-	rkey_cpy(rkey, &NRkey);
+	memcpy(&NRkey, rkey, sizeof(*rkey));
 /* Store name record in data structures */
 	memcpy (&NRcount, p, sizeof(INT));
 	ASSERT(NRcount < 1000000); /* 1000000 names in a given slot ? */
@@ -173,7 +173,7 @@ across database reloads
 	if (NRrec && eqrkey(rkey, &NRKEY))
 		return NRcount>0;
 */
-	rkey_cpy(rkey, &NRkey);
+	memcpy(&NRkey, rkey, sizeof(*rkey));
 	strfree(&NRrec);
 	p = NRrec = bt_getrecord(BTR, rkey, &NRsize);
 	if (!NRrec) {
@@ -234,7 +234,7 @@ rkey_eq (const RKEY * rkey1, const RKEY * rkey2)
 	return TRUE;
 }
 /*============================================
- * eqrkey - Are two rkeys the same ?
+ * rkey_cpy - copy rkeys from src to dest?
  *==========================================*/
 static void
 rkey_cpy (const RKEY * src, RKEY * dest)
@@ -382,6 +382,7 @@ add_name (STRING name, STRING key)
 			continue;
 		}
 		add_namekey(&rkeyname, name, &rkeyid);
+		strfree(&rkeystr);
 	}
 	destroy_table(donetab);
 

@@ -1,9 +1,9 @@
 /*
- * @progname       cron
+ * @progname       cron.ll
  * @version        1.0
  * @author         Stephen Dum
  * @category       
- * @output         html
+ * @output         HTML
  * @description    
 
 Generate calendar of birth, death, marriage events arranged by the year, month 

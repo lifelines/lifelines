@@ -1,0 +1,24 @@
+/*
+ * @progname       getbaptism.li
+ * @version        none
+ * @author         anon
+ * @category       
+ * @output         gedcom node function value
+ * @description
+ *
+ * getbaptism(ind) -> NODE
+ * The built-in baptism() function is limited to "CHR" records.
+ * Many programs use the "BAPM" and LDS uses "BAPL" so this version
+ * looks for all three in the order "CHR", "BAPM", "BAPL".
+ *
+ */
+func getbaptism(ind)
+{
+     if (e, baptism(ind)) { return (e) }
+     fornodes(root(ind), node) {
+          set(t, tag(node))
+          if (eqstr(t, "BAPM")) { return (node) }
+          if (eqstr(t, "BAPL")) { return (node) }
+     }
+     return (0)
+}

@@ -1,13 +1,14 @@
 /*
- * @progname       rslgen
- * @version        1.0
+ * @progname       rslgen.ll
+ * @version        1.1
  * @author         Eggert
  * @category       
  * @output         RSL format
- * @description    
+ * @description    Generate a Roots Surname List (RSL) submission
 
-a LifeLines report program to aid in the generation of
+rslgen - a LifeLines report program to aid in the generation of
 Roots Surname List (RSL) submissions.
+
 Given a person, this generates a RSL-like submission for that person and
 his/her ancestors.  The output will likely need considerable hand editing,
 but that is how it is.  If you need to know what the RSL is, I have enclosed
@@ -77,6 +78,7 @@ proc main() {
 
         set(year_min,9999) set(year_max,0)
         call locations_and_years(person)
+        set(final_key,save(key(person)))
         set(final_surname,save(surname(person)))
 
         if (m,mother(person)) { enqueue(ilist,m) }
@@ -104,7 +106,7 @@ proc main() {
                 }
             }
         }
-        call write_rsl_entry(final_surname)
+        call write_rsl_entry(final_key)
     }
     if (gt(rsl_entry_count,100)) {
         print("Warning:  Number of lines produced (")
@@ -116,7 +118,11 @@ proc main() {
 
 /* write_rsl_entry writes one line in the rsl submission */
 
-proc write_rsl_entry(surname_entry) {
+proc write_rsl_entry(key_entry) {
+    if (key_entry) {
+        set(surname_entry,save(surname(indi(key_entry))))
+        if (strlen(surname_entry)) {
+            if (strcmp(trim(surname_entry,1),"_")) {
     set(rsl_entry_count,add(rsl_entry_count,1))
     set(not_first,0)
     surname_entry col(14) d(year_min)
@@ -125,7 +131,10 @@ proc write_rsl_entry(surname_entry) {
         if (not_first) { ">" } else { set(not_first,1) }
         loc
     }
-    " " submitter_tag "\n"
+                " " submitter_tag " " key_entry "\n"
+            }
+        }
+    }
 }
 
 

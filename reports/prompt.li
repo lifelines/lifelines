@@ -1,0 +1,43 @@
+/*
+ * @progname       prompt.li
+ * @version        None
+ * @author         anon
+ * @category       
+ * @output         booleans and ints function values
+ * @description
+
+               miscellaneous prompt functions and procedures
+ */
+
+func askny(msg)
+{
+  set(prompt, concat(msg, "? [n/y] "))
+  getstrmsg(str, prompt)
+  if(and(gt(strlen(str), 0),
+     or(eq(strcmp(str, "y"),0), eq(strcmp(str, "Y"),0)))) {
+    return(1)
+  }
+  return(0)
+}
+
+func askyn(msg)
+{
+  set(prompt, concat(msg, "? [y/n] "))
+  getstrmsg(str, prompt)
+  if(and(gt(strlen(str), 0),
+     or(eq(strcmp(str, "n"),0), eq(strcmp(str, "N"),0)))) {
+    return(0)
+  }
+  return(1)
+}
+
+func getintdef(msg, def)
+{
+  set(prompt, concat(msg, "? [", d(def), "]"))
+  getstrmsg(str, prompt)
+  if(and(gt(strlen(str), 0),
+         gt(index("0123456789",trim(str,1),1),0))) {
+    return(atoi(str))
+  }
+  return(def)
+}

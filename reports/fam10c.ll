@@ -1,5 +1,5 @@
 /*
- * @progname       fam10c
+ * @progname       fam10c.ll
  * @version        1.0
  * @author         Manis
  * @category       

@@ -1,12 +1,15 @@
 /*
+ * @progname       st_db.li
  * @version        1.0
  * @author         Perry Rapp
  * @category       self-test
  * @output         none
- * @description    exercise some database functions
- 
- Dumps some of each type of record, followed by a gengedcomstrong
-*/
+ * @description
+ *
+ * Exercise some database functions.
+ * Dumps some of each type of record, followed by a gengedcomstrong.
+ *
+ */
 
 char_encoding("ASCII")
 

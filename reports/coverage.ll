@@ -1,85 +1,87 @@
 /*
- * @progname       coverage
- * @version        3.0
+ * @progname       coverage.ll
+ * @version        4
  * @author         Wetmore, Woodbridge, Eggert
  * @category       
  * @output         Text
- * @description    
+ * @description
  *
+ * Display percentage of ancestors of each generation discovered
 
-   Displays "ancestor coverage," that is, what percentage of
+   coverage -- Displays "ancestor coverage," that is, what percentage of
    ancestors have been discovered for each generation back in time.
 
    First version by T. Wetmore, 21 February 1994
    2nd   version by S. Woodbridge, 6 March 1994
    3rd   version by J. Eggert, 7 March 1994
+   4th   version by J. Eggert, 9 November 1998
 */
 
 proc main ()
 {
-        getindi(indi0, "Enter person to compute ancestor coverage for.")
-        print("Collecting data .... \n")
-        list(ilist)
-        list(glist)
-        list(garray)
-        table(dtable)
-        list(darray)
-        enqueue(ilist, indi0)
-        enqueue(glist, 1)
-        while(indi, dequeue(ilist)) {
-                set(gen, dequeue(glist))
-                set(i, getel(garray, gen))
-                set(i, add(i, 1))
-                setel(garray, gen, i)
-                if (not(lookup(dtable, key(indi)))) {
-                        insert(dtable, key(indi), gen)
-                        set(i, getel(darray, gen))
-                        set(i, add(i, 1))
-                        setel(darray, gen, i)
-                }
-/*                print(name(indi), "\n")       */
-                if (par,father(indi)) {
-                        enqueue(ilist, par)
-                        enqueue(glist, add(1, gen))
-                }
-                if (par,mother(indi)) {
-                        enqueue(ilist, par)
-                        enqueue(glist, add(1, gen))
-                }
+    getindi(person0, "Enter person to compute ancestor coverage for.")
+    print("Collecting data .... \n")
+
+    "Ancestor Coverage Table for " name(person0) "\n\n"
+    col(1) "Gen" col(9) "Total" col(19) "Found"
+    col(30) "(Diff)" col(38) "Percentage\n\n"
+
+    list(ilist)
+    list(glist)
+    table(dtable)
+    enqueue(ilist, person0)
+    enqueue(glist, 1)
+    set(g,0) set(d,0) set(gsum,0) set(dsum,0) set(totpos,1)
+    set(oldgen,1)
+    while(person, dequeue(ilist)) {
+        set(gen, dequeue(glist))
+        if (ne(gen,oldgen)) {
+            call printgen(oldgen,g,d,totpos)
+            set(gsum,add(gsum,g))
+            set(dsum,add(dsum,d))
+            set(g,0)
+            set(d,0)
+            set(totpos,mul(totpos,2))
+            set(oldgen,gen)
         }
-        set(i, 1)
-        set(tot, 1)
-        set(num, getel(garray, i))
-        set(dnum, getel(darray, i))
-        set(numsum, num)
-        set(dnumsum, dnum)
-        "Ancestor Coverage Table for " name(indi0) "\n\n"
-        col(1) "Gen" col(6) "Total" col(16) "Found"
-        col(26) "(Diff)" col(38) "Percentage\n\n"
-        while (num) {
-                col(1) d(sub(i, 1))
-                col(6) if (lt(i,31)) { d(tot) }
-                col(16) d(num)
-                if (ne(num, dnum)) { col(26) "(" d(dnum) ")" }
-                if (lt(i,31)) { col(38)
-                        set(u, mul(num, 100))
-                        set(q, div(u, tot))
-                        set(m, mod(u, tot))
-                        set(m, mul(m, 100))
-                        set(m, div(m, tot))
-                        d(q) "." if (lt(m, 10)) {"0"} d(m) " %"
-                        set(tot, mul(tot, 2))
-                }
-                set(i, add(i, 1))
-                set(num, getel(garray, i))
-                set(dnum, getel(darray, i))
-                set(numsum, add(numsum, num))
-                set(dnumsum, add(dnumsum, dnum))
-                print(d(i), "  ", d(num), "\n")
+        incr(g)
+        if (not(lookup(dtable, key(person)))) {
+            insert(dtable, key(person), gen)
+            incr(d)
         }
-        "\n\n"
-        col(1) "all" col(16) d(numsum)
-        if (ne(numsum, dnumsum)) { col(26) "(" d(dnumsum) ")" }
-        "\n"
+/*      print(name(person), "\n")       */
+        incr(gen)
+        if (par,father(person)) {
+            enqueue(ilist, par)
+            enqueue(glist, gen)
+        }
+        if (par,mother(person)) {
+            enqueue(ilist, par)
+            enqueue(glist, gen)
+        }
+    }
+    set(gsum,add(gsum,g))
+    set(dsum,add(dsum,d))
+    call printgen(oldgen,g,d,totpos)
+    "\n"
+    call printgen(0,gsum,dsum,0)
 }
 
+proc printgen(gen,g,d,tot) {
+    if (tot) {
+        col(1) rjustify(d(sub(gen,1)),3)
+        col(6) if (lt(gen,31)) { rjustify(d(tot),8) }
+    }
+    else { col(1) "all" }
+    col(16) rjustify(d(g),8)
+    if (ne(g,d)) { col(26) rjustify(concat("(",d(d),")"),10) }
+    if (and(tot,lt(gen,31))) { col(38)
+        set(u, mul(g, 100))
+        set(q, div(u, tot))
+        set(m, mod(u, tot))
+        set(m, mul(m, 100))
+        set(m, div(m, tot))
+        rjustify(d(q),3) "." if (lt(m, 10)) {"0"} d(m) " %"
+    }
+    "\n"
+}

@@ -1,5 +1,5 @@
 /*
- * @progname       cousins
+ * @progname       cousins.ll
  * @version        6.0
  * @author         Wetmore
  * @category       

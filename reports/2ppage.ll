@@ -1,10 +1,10 @@
 /*
- * @progname    2ppage
+ * @progname    2ppage.ll
  * @version     1.0
- * @author      Wetmore
+ * @author      Wetmore, Manis
  * @category
  * @output      Text, 80 cols
- * @description 2 INDI's per page
+ * @description
  *
  *   It will produce a report of all INDI's in the database, with
  *   two records printed per page.  Record 1 and 2 will be on the

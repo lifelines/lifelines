@@ -1,5 +1,5 @@
 /*
- * @progname       places
+ * @progname       places.ll
  * @version        5.0
  * @author         Olsen, Eggert
  * @category       
