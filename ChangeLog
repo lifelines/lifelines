@@ -5,6 +5,13 @@
 
 	More changes from gettextize/automake upgrade.
 
+	* ChangeLog
+	*NEW intl/eval-plural.h intl/gmo.h intl/localename.c
+	*NEW intl/os2compat.c intl/os2compat.h intl/osdep.c
+	*NEW intl/plural-exp.c intl/plural-exp.h:
+
+	Check in new intl files from gettextize upgrade.
+
 2002-06-04  Marc Nozell  <marc@nozell.com>
 
 	* Cleaned up Rafal's xml conversion of docs/lifelines.sgml.  Also
