@@ -98,8 +98,12 @@ add_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 	num_conform_pvalues("add", val1, val2, eflg, zerr);
 	if (*eflg) return;
 	switch (ptype(val1)) {
-	case PINT:   *pvalue_to_pint(val1) += pvalue_to_int(val2); break;
-	case PFLOAT: *pvalue_to_pfloat(val1) += pvalue_to_float(val2); break;
+	case PINT:
+		set_pvalue_int(val1, pvalue_to_int(val1) +  pvalue_to_int(val2));
+		break;
+	case PFLOAT:
+		set_pvalue_float(val1, pvalue_to_float(val1) + pvalue_to_float(val2));
+		break;
 	default: invalid_numeric_type("add", val1, eflg, zerr); return;
 	}
 	delete_pvalue(val2);
@@ -114,8 +118,12 @@ sub_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 	num_conform_pvalues("sub", val1, val2, eflg, zerr);
 	if (*eflg) return;
 	switch (ptype(val1)) {
-	case PINT:   *pvalue_to_pint(val1) -= pvalue_to_int(val2); break;
-	case PFLOAT: *pvalue_to_pfloat(val1) -= pvalue_to_float(val2); break;
+	case PINT:
+		set_pvalue_int(val1, pvalue_to_int(val1) - pvalue_to_int(val2));
+		break;
+	case PFLOAT:
+		set_pvalue_float(val1, pvalue_to_float(val1) - pvalue_to_float(val2));
+		break;
 	default: invalid_numeric_type("sub", val1, eflg, zerr); return;
 	}
 	delete_pvalue(val2);
@@ -130,8 +138,12 @@ mul_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 	num_conform_pvalues("mul", val1, val2, eflg, zerr);
 	if (*eflg) return;
 	switch (ptype(val1)) {
-	case PINT:   *pvalue_to_pint(val1) *= pvalue_to_int(val2); break;
-	case PFLOAT: *pvalue_to_pfloat(val1) *= pvalue_to_float(val2); break;
+	case PINT:
+		set_pvalue_int(val1, pvalue_to_int(val1) * pvalue_to_int(val2));
+		break;
+	case PFLOAT:
+		set_pvalue_float(val1, pvalue_to_float(val1) * pvalue_to_float(val2));
+		break;
 	default: invalid_numeric_type("mul", val1, eflg, zerr); return;
 	}
 	delete_pvalue(val2);
@@ -147,8 +159,12 @@ div_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 	if (*eflg) return;
 	if (is_numeric_zero(val2)) { illegal_value("div", val2, eflg, zerr); return; }
 	switch (ptype(val1)) {
-	case PINT:   *pvalue_to_pint(val1) /= pvalue_to_int(val2); break;
-	case PFLOAT: *pvalue_to_pfloat(val1) /= pvalue_to_float(val2); break;
+	case PINT: 
+		set_pvalue_int(val1, pvalue_to_int(val1) / pvalue_to_int(val2));
+		break;
+	case PFLOAT:
+		set_pvalue_float(val1, pvalue_to_float(val1) / pvalue_to_float(val2));
+		break;
 	default: invalid_numeric_type("div", val1, eflg, zerr); return;
 	}
 	delete_pvalue(val2);
@@ -167,7 +183,7 @@ mod_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 	case PINT:
 		{
 			INT i1 = pvalue_to_int(val1) % pvalue_to_int(val2);
-			*pvalue_to_pint(val1) = i1;
+			set_pvalue_int(val1, i1);
 		}
 		break;
 	default: invalid_numeric_type("mod", val1, eflg, zerr); return;
@@ -286,7 +302,7 @@ exp_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 			INT xi = 1, xe = pvalue_to_int(val1);
 			for (i = 1; i <= n; i++)
 				xi *= xe;
-			*pvalue_to_pint(val1) = xi;
+			set_pvalue_int(val1, xi);
 		}
 		break;
 	case PFLOAT:
@@ -294,7 +310,7 @@ exp_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 			float xf=1, xe = pvalue_to_float(val1);
 			for (i = 1; i <= n; i++)
 				xf *= xe;
-			*pvalue_to_pfloat(val1) = xf;
+			set_pvalue_float(val1, xf);
 		}
 		break;
 	default: invalid_numeric_type("exp", val1, eflg, zerr); return;
@@ -309,8 +325,12 @@ incr_pvalue (PVALUE val, BOOLEAN *eflg, ZSTR * zerr)
 {
 	if (*eflg) return;
 	switch (ptype(val)) {
-	case PINT:   *pvalue_to_pint(val) += 1; break;
-	case PFLOAT: *pvalue_to_pfloat(val) += 1.; break;
+	case PINT:
+		set_pvalue_int(val, pvalue_to_int(val) + 1);
+		break;
+	case PFLOAT:
+		set_pvalue_float(val, pvalue_to_float(val) + 1.0);
+		break;
 	default: invalid_numeric_type("incr", val, eflg, zerr); return;
 	}
 	return;
@@ -323,8 +343,12 @@ decr_pvalue (PVALUE val, BOOLEAN *eflg, ZSTR * zerr)
 {
 	if (*eflg) return;
 	switch (ptype(val)) {
-	case PINT:   *pvalue_to_pint(val) -= 1; break;
-	case PFLOAT: *pvalue_to_pfloat(val) -= 1.; break;
+	case PINT:
+		set_pvalue_int(val, pvalue_to_int(val) - 1);
+		break;
+	case PFLOAT:
+		set_pvalue_float(val, pvalue_to_float(val) - 1.0);
+		break;
 	default: invalid_numeric_type("decr", val, eflg, zerr); return;
 	}
 }
@@ -336,8 +360,12 @@ neg_pvalue (PVALUE val, BOOLEAN *eflg, ZSTR * zerr)
 {
 	if (*eflg) return;
 	switch (ptype(val)) {
-	case PINT:   *pvalue_to_pint(val) = -pvalue_to_int(val); break;
-	case PFLOAT: *pvalue_to_pfloat(val) = -pvalue_to_float(val); break;
+	case PINT:
+		set_pvalue_int(val, -pvalue_to_int(val));
+		break;
+	case PFLOAT:
+		set_pvalue_float(val, -pvalue_to_float(val));
+		break;
 	default: invalid_numeric_type("neg", val, eflg, zerr); return;
 	}
 	return;

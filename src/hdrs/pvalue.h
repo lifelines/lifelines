@@ -148,8 +148,6 @@ float pvalue_to_float(PVALUE val);
 INT pvalue_to_int(PVALUE);
 LIST pvalue_to_list(PVALUE val);
 NODE pvalue_to_node(PVALUE val);
-float* pvalue_to_pfloat(PVALUE);
-INT* pvalue_to_pint(PVALUE);
 RECORD pvalue_to_rec(PVALUE val);
 INDISEQ pvalue_to_seq(PVALUE val);
 STRING pvalue_to_string(PVALUE);
