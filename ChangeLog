@@ -44,6 +44,10 @@
 
 	Bugfix: handle null name from element_indiseq in list browse.
 
+	* ChangeLog gedlib/indiseq.c:
+
+	Bugfix: copied indiseq didn't get names, but got flag as if it did.
+
 2002-06-26 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog po/Makevars po/de.po po/el.po po/it.po po/sv.po:

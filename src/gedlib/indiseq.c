@@ -258,6 +258,7 @@ copy_indiseq (INDISEQ seq)
 	ENDINDISEQ
 	/* set flags after, so append doesn't do unique checks or generate names */
 	IFlags(newseq) = IFlags(seq);
+	IFlags(newseq) &= (~WITHNAMES); /* didn't generate names */
 	return newseq;
 }
 /*==================================================
