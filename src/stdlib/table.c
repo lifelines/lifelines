@@ -128,6 +128,7 @@ static struct tag_vtable vtable_for_tabit = {
 void
 init_table_module (void)
 {
+	/* Red/Black tree and stack modules need external assert & alloc handlers */
 	RbInitModule(&llassert, &llalloc);
 }
 /*=============================
@@ -720,8 +721,9 @@ increment_table_int (TABLE tab, CNSTRING key)
 static void
 llassert (int assertion, const char* error)
 {
-	if (!assertion)
-		FATAL2(error);
+	if (assertion)
+		return;
+	FATAL2(error);
 }
 /*=================================================
  * llalloc -- Implement alloc

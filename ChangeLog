@@ -4,6 +4,11 @@
 
 	Add newline to end of file (to placate gcc warning).
 
+	* ChangeLog src/hdrs/table.h src/stdlib/stdlib.c
+	src/stdlib/table.c
+
+	Make stdlib_init just call table_init.
+
 2005-02-24 Perry Rapp
 
 	* ChangeLog src/gedlib/lloptions.c

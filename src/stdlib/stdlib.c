@@ -1,6 +1,5 @@
 #include "llstdlib.h"
-#include "rbtree.h"
-#include "stack.h"
+#include "table.h"
 
 
 /*=================================================
@@ -31,7 +30,5 @@ stdlib_alloc (size_t numbytes)
 void
 init_stdlib (void)
 {
-	/* Red/Black tree and stack modules need external assert & alloc handlers */
-	RbInitModule(stdlib_assert, stdlib_alloc);
-	StackInitModule(stdlib_assert, stdlib_alloc);
+	init_table_module();
 }

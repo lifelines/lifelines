@@ -42,6 +42,9 @@ tables are homogenous (a table of integers can only hold integers)
 typedef struct tag_table *TABLE;
 typedef struct tag_table_iter * TABLE_ITER;
 
+/* initialize table module, and any of its private modules */
+void init_table_module(void);
+
 /* creating and deleting table */
 TABLE create_table_int(void);
 TABLE create_table_str(void);
