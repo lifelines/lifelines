@@ -90,11 +90,15 @@ typedef struct uiwindow_s {
 	struct uiwindow_s * parent; /* fixed or dynamic parent */
 	struct uiwindow_s * child;
 	BOOLEAN permsub;   /* TRUE if a fixed subwindow */
+	INT rows;
+	INT cols;
 } * UIWINDOW;
 #define uiw_win(x)      (x->win)
 #define uiw_parent(x)   (x->parent)
 #define uiw_child(x)    (x->child)
 #define uiw_permsub(x)  (x->permsub)
+#define uiw_rows(x)     (x->rows)
+#define uiw_cols(x)     (x->cols)
 
 extern INT ll_lines; /* number of lines used by LifeLines (usually LINES) */
 extern INT ll_cols;  /* number of columns used by LifeLines (usually COLSREQ) */

@@ -727,7 +727,7 @@ person_display (NODE indi, NODE fam, INT len)
 
 	/* give name any unused space events left */
 	if ((INT)strlen(scratch2)<evlen)
-		namelen += evlen-strlen(scratch2);
+		namelen += evlen-(INT)strlen(scratch2);
 	p = scratch1;
 	strcpy(p, indi_to_name(indi, ttd, namelen));
 	p += strlen(p);

@@ -307,6 +307,7 @@ STRING badenm      = SS "This person record has bad GEDCOM name syntax.";
 STRING badpsx      = SS "You cannot change the sex of a parent.";
 STRING badirf      = SS "REFN key is already in use.";
 STRING tag2long2cnc= SS "Tag is too long to connect automatically.";
+STRING dbrecstats  = SS "Database records: ";
 
 /* menus */
 STRING mtitle      = SS "LifeLines %s - Genealogical DB and Programming System";

@@ -61,7 +61,7 @@
  * external variables (no header)
  *********************************************/
 
-extern STRING idldir, nodbse, crdbse, nocrdb, iddbse, usage;
+extern STRING idldir, nodbse, crdbse, nocrdb, iddbse;
 extern STRING mtitle, norwandro, nofandl, bdlkar;
 
 extern INT csz_indi, icsz_indi;
@@ -310,7 +310,7 @@ main (INT argc, char **argv)
 			goto finish;
 		}
 	} else {
-		dbrequested = (unsigned char *)argv[optind];
+		dbrequested = argv[optind];
 		if (ISNULL(dbrequested)) {
 			showusage = TRUE;
 			goto usage;

@@ -451,7 +451,7 @@ setup_menu (INT screen, STRING Title, INT MenuRows, INT MenuCols
 			ASSERT(eqstr(Menu[i]->Choices, "123456789"));
 			for (j=1; j<=9; j++) {
 				char choice[2];
-				sprintf(choice, "%d\0", j);
+				sprintf(choice, "%d", j);
 				insert_cmd(cmds, choice, CMD_CHILD_DIRECT0+j, Menu[i]->Display);
 			}
 		} else {
@@ -576,7 +576,7 @@ insert_cmd (CMDARRAY cmds, STRING str, INT cmdnum, STRING display)
  * Joined repository: 2001/01/28, Perry Rapp
  *==========================*/
 void
-menuitem_initialize (cols)
+menuitem_initialize (INT cols)
 {
 	INT i;
 	INT scr;

@@ -171,6 +171,8 @@ static INT choose_tt(UIWINDOW wparent, STRING prompt);
 static UIWINDOW choose_win(INT desiredhgt, INT *actualhgt);
 static void clear_msgs(void);
 static void clearw(void);
+static UIWINDOW create_uisubwindow(UIWINDOW parent, INT rows, INT cols, INT begy, INT begx);
+static UIWINDOW create_uisubwindow2(UIWINDOW parent, INT rows, INT cols);
 static void create_windows(void);
 static void deactivate_uiwin(void);
 static void disp_codeset(UIWINDOW uiwin, INT row, INT col, STRING menuit, INT codeset);
@@ -205,6 +207,7 @@ static void repaint_rpc_menu(UIWINDOW uiwin);
 static void repaint_trans_menu(UIWINDOW uiwin);
 static void repaint_utils_menu(UIWINDOW uiwin);
 static void repaint_extra_menu(UIWINDOW uiwin);
+static void repaint_main_menu(UIWINDOW uiwin);
 static void rpt_cset_menu(UIWINDOW wparent);
 static void run_report(BOOLEAN picklist);
 static void save_tt_menu(UIWINDOW wparent);
@@ -400,11 +403,13 @@ paint_list_screen (void)
  * Created: 2001/11/24, Perry Rapp
  *========================================*/
 static UIWINDOW
-create_uiwindow_impl (WINDOW * win)
+create_uiwindow_impl (WINDOW * win, INT rows, INT cols)
 {
 	UIWINDOW uiwin = (UIWINDOW)stdalloc(sizeof(*uiwin));
 	memset(uiwin, 0, sizeof(*uiwin));
 	uiw_win(uiwin) = win;
+	uiw_rows(uiwin) = rows;
+	uiw_cols(uiwin) = cols;
 	return uiwin;
 }
 /*==========================================
@@ -415,7 +420,7 @@ static UIWINDOW
 create_newwin (INT rows, INT cols, INT begy, INT begx)
 {
 	WINDOW * win = newwin(rows, cols, begy, begx);
-	return create_uiwindow_impl(win);
+	return create_uiwindow_impl(win,rows,cols);
 }
 /*==========================================
  * create_newwin2 -- Create our WINDOW wrapper
@@ -425,18 +430,18 @@ static UIWINDOW
 create_newwin2 (INT rows, INT cols)
 {
 	WINDOW * win = NEWWIN(rows, cols);
-	return create_uiwindow_impl(win);
+	return create_uiwindow_impl(win,rows,cols);
 }
 /*==========================================
  * create_uisubwindow -- Create our WINDOW wrapper
  *  for a true (& permanent) subwindow
  * Created: 2001/11/24, Perry Rapp
  *========================================*/
-UIWINDOW
+static UIWINDOW
 create_uisubwindow (UIWINDOW parent, INT rows, INT cols, INT begy, INT begx)
 {
 	WINDOW * win = subwin(uiw_win(parent), rows, cols, begy, begx);
-	UIWINDOW uiwin = create_uiwindow_impl(win);
+	UIWINDOW uiwin = create_uiwindow_impl(win, rows, cols);
 	uiw_parent(uiwin) = parent;
 	uiw_permsub(uiwin) = TRUE;
 	return uiwin;
@@ -834,7 +839,7 @@ ask_for_db_filename (STRING ttl, STRING prmpt, STRING basedir)
 STRING
 ask_for_output_filename (STRING ttl, STRING path, STRING prmpt)
 {
-	path; /* unused by curses version */
+	/* path is unused by curses version */
 	return ask_for_string(ttl, prmpt);
 }
 /*======================================
@@ -844,7 +849,7 @@ ask_for_output_filename (STRING ttl, STRING path, STRING prmpt)
 STRING
 ask_for_input_filename (STRING ttl, STRING path, STRING prmpt)
 {
-	path; /* unused by curses version */
+	/* path is unused by curses version */
 	return ask_for_string(ttl, prmpt);
 }
 /*======================================
@@ -1875,21 +1880,28 @@ shw_array_of_strings (UIWINDOW uiwin, STRING *strings, INT len, INT top, INT cur
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT i, j, row = len > VIEWABLE ? VIEWABLE + 1 : len + 1;
+	char buffer[120];
+	INT width = uiw_cols(uiwin);
 	for (i = 2; i <= row; i++)
 		mvwaddstr(win, i, 1, empstr71);
 	row = 2;
 	for (i = top, j = 0; j < VIEWABLE && i < len; i++, j++) {
+		INT nlen=0,temp;
 		/* for short lists, we show leading numbers */
 		if (len<10) {
 			char numstr[12]="";
 			snprintf(numstr, sizeof(numstr), "%d: ", i+1);
 			if (i == cur) mvwaddch(win, row, 3, '>');
 			mvwaddstr(win, row, 4, numstr);
-			mvwaddstr(win, row, 4+strlen(numstr), strings[i]);
+			nlen = strlen(numstr);
 		} else {
 			if (i == cur) mvwaddch(win, row, 3, '>');
-			mvwaddstr(win, row, 4, strings[i]);
 		}
+		temp = width-6-nlen;
+		llstrncpy(buffer, strings[i], temp);
+		if ((INT)strlen(buffer) > temp-2)
+			strcpy(&buffer[temp-3], "...");
+		mvwaddstr(win, row, 4+nlen, buffer);
 		row++;
 	}
 }

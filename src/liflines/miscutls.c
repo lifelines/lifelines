@@ -40,6 +40,7 @@
 #include "llinesi.h"
 
 extern STRING btreepath;
+extern STRING dbrecstats;
 
 
 /*======================================
@@ -96,7 +97,7 @@ who_is_he_she (void)
 void
 show_database_stats (void)
 {
-	msg_info("Database `%s' contains (%dP, %dF, %dS, %dE, %dX) records.",
-	    btreepath, num_indis(), num_fams(), num_sours(),
+	msg_info("%s (%dP, %dF, %dS, %dE, %dX)",
+	    dbrecstats, num_indis(), num_fams(), num_sours(),
 	    num_evens(), num_othrs());
 }
