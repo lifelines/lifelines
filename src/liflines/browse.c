@@ -281,7 +281,7 @@ goto_fam_child(RECORD frec, int childno)
 }
 /*===============================================
  * pick_create_new_family -- 
- *  pulled out of browse_indi, 2001/02/04, Perry Rapp
+ * returns addref'd record
  *=============================================*/
 static RECORD
 pick_create_new_family (RECORD current, RECORD save, STRING * addstrings)
@@ -363,6 +363,7 @@ browse_indi_modes (RECORD *prec1, RECORD *prec2, INDISEQ *pseq, INT indimode)
 	indimodep = indimode;
 
 	while (TRUE) {
+		setrecord(&tmp, NULL);
 		if (nzkeynum(current) != nkeyp 
 			|| indimode != indimodep) {
 			show_reset_scroll();
@@ -703,11 +704,16 @@ reprocess_indi_cmd: /* so one command can forward to another */
 		}
 	}
 exitbrowse:
-	if (current) {
-		delref_record(current);
-		current = 0;
-	}
+	setrecord(&tmp, NULL);
+	setrecord(&current, NULL);
 	return rtn;
+}
+void
+delref_recptr (RECORD * prec)
+{
+	ASSERT(prec);
+	if (*prec) {
+	}
 }
 /*==========================================
  * display_aux -- Show aux node in current mode

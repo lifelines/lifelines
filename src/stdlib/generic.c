@@ -229,11 +229,13 @@ copy_generic_value (GENERIC *gen, const GENERIC * src)
 	/* check for self-assignment */
 	if (src == gen)
 		return;
-	/* clear old value, freeing any associated memory as appropriate */
-	clear_generic(gen);
+	
+	/* every case of select either calls clear_generic, 
+	or a set call which calls clear_generic */
+	
 	/* set new value */
 	switch(src->selector) {
-	case GENERIC_NULL: /* already cleared gen */ break;
+	case GENERIC_NULL: clear_generic(gen); break;
 	case GENERIC_INT: set_generic_int(gen, src->data.ival); break;
 	case GENERIC_FLOAT: set_generic_float(gen, *src->data.fval); break;
 	case GENERIC_STRING: set_generic_string(gen, src->data.sval); break;

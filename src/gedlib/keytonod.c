@@ -915,6 +915,7 @@ add_new_indi_to_cache (RECORD rec)
 	ASSERT(!crecord(cel));
 	record_set_cel(rec, cel);
 	crecord(cel) = rec;
+	addref_record(rec); /* cel holds reference */
 }
 /*===========================================
  * fam_to_cache -- Add family to family cache

@@ -71,6 +71,7 @@ get_unresolved_ref_error_string (INT count)
 /*==========================================================
  * add_indi_by_edit -- Add new person to database by editing
  * (with user interaction)
+ * returns addref'd record
  *========================================================*/
 RECORD
 add_indi_by_edit (RFMT rfmt)

@@ -1731,6 +1731,7 @@ invoke_search_menu (void)
 }
 /*============================
  * invoke_add_menu -- Handle add menu
+ * returns addref'd record
  *==========================*/
 static RECORD
 invoke_add_menu (void)

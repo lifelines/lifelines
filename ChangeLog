@@ -5,6 +5,14 @@
 
 	Change rptinfo->functab from old table to generic table.
 
+	* ChangeLog src/gedlib/keytonod.c src/liflines/add.c
+	src/liflines/browse.c src/liflines/error.c src/liflines/screen.c
+	src/stdlib/generic.c
+
+	Minor optimization in copy_generic_value (skip clear_generic call).
+	Avoid reentrancy in __fatal (to avoid infinite ASSERT loop).
+	Fix some reference counts in adding new person and new family.
+
 2005-02-02 Perry Rapp
 
 	* ChangeLog src/gedlib/gedcomi.h src/gedlib/keytonod.c

@@ -54,6 +54,11 @@ static char f_currentdb[MAXPATHLEN]="";
 void
 __fatal (STRING file, int line, CNSTRING details)
 {
+	/* avoid reentrancy */
+	static BOOLEAN failing=FALSE;
+	if (failing) return;
+	failing=TRUE;
+
 	/* send to error log if one is specified */
 	if (f_crashfile[0]) {
 		FILE * fp = fopen(f_crashfile, LLAPPENDTEXT);
@@ -84,6 +89,7 @@ __fatal (STRING file, int line, CNSTRING details)
 	close_lifelines();
 	shutdown_ui(TRUE); /* pause */
 	ll_abort(_("ASSERT failure"));
+	failing=FALSE;
 }
 /*===============================
  * __crashlog -- Details preceding a fatal error
