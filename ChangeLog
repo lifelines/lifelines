@@ -15,6 +15,10 @@
 	Fix dbverify to do setlocale.
 	Add rbtree & stack to MSVC6 project for dbverify.
 
+	* ChangeLog build/msvc6/llexec:/llexec.dsp
+
+	Add rbtree & stack to MSVC6 project for llexec.
+
 2005-02-22 Perry Rapp
 
 	* ChangeLog src/stdlib/table.c
