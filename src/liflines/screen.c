@@ -208,7 +208,7 @@ static RECORD invoke_fullscan_menu(void);
 static void invoke_utils_menu(void);
 static void output_menu(UIWINDOW uiwin, DYNMENU dynmenu);
 static void place_cursor_main(void);
-static void place_cursor_new(UIWINDOW uiwin);
+static void place_cursor_popup(UIWINDOW uiwin);
 static void place_std_msg(void);
 static void refresh_main(void);
 static void print_list_title(char * buffer, INT len, const listdisp * ld, STRING ttl);
@@ -715,6 +715,8 @@ update_browse_menu (INT screen)
 			check_menu(dynmenu);
 			/* display prompt immediately above menu */
 			llstrncpy(prompt, _(qSplschs), sizeof(prompt), uu8);
+			dynmenu->cur_x = strlen(_(qSplschs))+3;
+			dynmenu->cur_y = dynmenu->top - 1;
 			llstrapps(prompt, sizeof(prompt), uu8, "             ");
 			llstrappf(prompt, sizeof(prompt), uu8, _("(pg %d/%d)")
 				, dynmenu->page+1, dynmenu->pages);
@@ -1636,7 +1638,7 @@ invoke_fullscan_menu (void)
 
 	while (!done) {
 		activate_uiwin(uiwin);
-		place_cursor_new(uiwin);
+		place_cursor_popup(uiwin);
 		code = interact(uiwin, "fnrq", -1);
 
 		switch (code) {
@@ -1685,7 +1687,7 @@ invoke_search_menu (void)
 
 	while (!done) {
 		activate_uiwin(uiwin);
-		place_cursor_new(uiwin);
+		place_cursor_popup(uiwin);
 		code = interact(uiwin, "vcfq", -1);
 
 		switch (code) {
@@ -2889,10 +2891,13 @@ show_vert_line (UIWINDOW uiwin, INT row, INT col, INT len)
 	mvwaddch(win, row, col, gr_btee);
 }
 /*=============================================
- * place_cursor_new -- Move to cursor input location
+ * place_cursor_popup -- Move to cursor input location
+ * For use with UIWINDOW menus -- popup menus which live
+ * in their own private UIWINDOW (& curses) window,
+ * such as the full scan popup
  *===========================================*/
 static void
-place_cursor_new (UIWINDOW uiwin)
+place_cursor_popup (UIWINDOW uiwin)
 {
 	wmove(uiw_win(uiwin), uiw_cury(uiwin), uiw_curx(uiwin));
 }
@@ -2903,19 +2908,35 @@ place_cursor_new (UIWINDOW uiwin)
 static void
 place_cursor_main (void)
 {
-	DYNMENU dynmenu = get_screen_dynmenu(cur_screen);
 	INT row, col = 30;
 
 	switch (cur_screen) {
-	case MAIN_SCREEN:    row = 5;        break;
+	case MAIN_SCREEN:    
+		row = 5;
+		break;
+	case LIST_SCREEN:
+		row = LIST_LINES+2;
+		col = 75;
+		break;
 	case ONE_PER_SCREEN:
 	case ONE_FAM_SCREEN:
 	case AUX_SCREEN:
 	case TWO_PER_SCREEN:
 	case TWO_FAM_SCREEN:
-		row = dynmenu->top - 1; break;
-	case LIST_SCREEN:    row = LIST_LINES+2; col = 75; break;
-	default:             row = 1; col = 1; break;
+		{
+			/* These screens, which live on the main screen uiwindow,
+			all use dynamic menus, and the cursor position in dynamic
+			menus is controlled by the dynamic menu, because cursor
+			moves up & down with dynamic menu */
+			DYNMENU dynmenu = get_screen_dynmenu(cur_screen);
+			row = dynmenu->cur_y;
+			col = dynmenu->cur_x;
+		}
+		break;
+	default:
+		row = 1;
+		col = 1;
+		break;
 	}
 	wmove(uiw_win(main_win), row, col);
 }

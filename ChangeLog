@@ -1,3 +1,12 @@
+2003-07-26 Perry Rapp
+
+	* ChangeLog docs/ll-devguide.xml src/hdrs/menuitem.h
+	src/hdrs/screen.h src/liflines/screen.c
+
+	Add some documentation for screens, menus, and cursor position.
+	Rename place_cursor_new to place_cursor_popup.
+	Place cursor horizontally for main screens.
+
 2003-07-24 Perry Rapp
 
 	* ChangeLog src/gedlib/lloptions.c

@@ -90,8 +90,8 @@ typedef struct tag_uiwindow {
 	BOOLEAN dynamic;   /* TRUE means delete when finished */
 	INT rows;
 	INT cols;
-	INT cur_y;         /* row for blinking cursor */
-	INT cur_x;         /* col for blinking cursor */
+	INT cur_y;         /* row for input cursor */
+	INT cur_x;         /* col for input cursor */
 } * UIWINDOW;
 #define uiw_win(x)      (x->win)
 #define uiw_boxwin(x)   (x->boxwin)

@@ -11,7 +11,7 @@ This is only an outline, not a parseable XML file.
 2003-03-24, Perry Rapp
 
 
-* stdlib module
+* stdlib directory
 The stdlib directory contains various utility functions not specifically
 related to LifeLines, GEDCOM, or even genealogy.
 
@@ -80,7 +80,7 @@ related to LifeLines, GEDCOM, or even genealogy.
     * printpic functions
     TODO: (sprintpic0,1,2,3)
 
-* gedlib module
+* gedlib directory
 This directory is a collection of routines for GEDCOM and for its use in
 a LifeLines btree database.
 
@@ -125,7 +125,7 @@ a LifeLines btree database.
   Named browse lists are implemented here (temporary record lists named by
   user during this session).
 
-* interp module
+* interp directory
 The lifelines reporting language parser and interpreter are stored here.
 A custom lexical analyzer is in lex.c, and a yacc parser generator is
 in yacc.y. 
@@ -169,8 +169,32 @@ function), require conditions are tested in check_rpt_requires(...).
     exposed to the rest of the program (gdate & gdate_val, which correspond
     to GEDCOM date types), but not to the report language.
 
-* liflines module
+* liflines directory
 TODO:
+
+  * screen
+  The screen module contains most of the curses drawing code.
+
+    * DYNMENU
+    Each menu that is resizable and pageable, such as the menu at the bottom
+    of the person browse screen, has a DYNMENU structure, which contains all of
+    its menuitem strings and hotkeys (both English and localized to current
+    language), and also information about it size, and cursor point.
+
+    * UIWINDOW
+    Each actual curses window is inside a UIWINDOW, which is a structure that
+    holds our supplementary information for the window, such as its cursor point,
+    its parent and child in the (ui)window stack.
+
+    * cursor point
+    Note that both DYNMEMU and UIWINDOW structures have a cursor point. This is
+    because the cursor point is within the dynamic menu when it exists, but on
+    popup screens with no dynamic menu (such as full scan menu, or the partial
+    scan menu) the cursor point is held in the UIWINDOW itself. Further, the
+    full screen main menu is a special case, having neither DYNMENU nor UIWINDOW
+    of its own (it shares its UIWINDOW and its cursor window with all the
+    full screen browse screens), so its cursor point is hardcoded in 
+    place_cursor_main.
 
 -->
 

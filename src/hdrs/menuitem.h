@@ -95,6 +95,8 @@ struct tag_dynmenu {
 	INT bottom;
 	INT left;
 	INT width;
+	INT cur_y;     /* row for input cursor */
+	INT cur_x;     /* col for input cursor */
 };
 typedef struct tag_dynmenu *DYNMENU;
 
