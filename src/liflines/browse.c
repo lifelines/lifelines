@@ -74,6 +74,7 @@ extern STRING badhistcnt,badhistcnt2,badhistlen;
 
 #define ALLPARMS &indi1, &indi2, &fam1, &fam2, &seq
 #define MAX_SPOUSES 30
+struct hist;
 
 /*********************************************
  * local function prototypes
