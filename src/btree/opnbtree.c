@@ -34,16 +34,11 @@
 
 #include "sys_inc.h"
 #include "standard.h"
-#include "btree.h"
 #include "liflines.h"
 #include "screen.h"
-
-#include "index.h"
-#include "opnbtree.h"
-#include "utils.h"
+#include "btreei.h"
 
 static BOOLEAN initbtree (STRING basedir);
-static int llmkdir (STRING dir);
 
 /*============================================
  * openbtree -- Alloc and init BTREE structure
@@ -208,54 +203,6 @@ initbtree (STRING basedir)
 		return FALSE;
 	}
 	fclose(fd);
-	return TRUE;
-}
-/*=====================================================
- * llmkdir -- Make directory (some UNIXes have a mkdir)
- *===================================================*/
-static int
-llmkdir (STRING dir)    /* dir to create */
-{
-	static int status;
-#ifdef OBSOLETE_CODE
-	register int pid;
-	if ((pid = fork()))
-		while ((wait(&status) != pid));
-	else  {
-		close(2);
-		execl("/bin/mkdir", "mkdir", dir, 0);
-		exit(2);
-	}
-	return status>>8 == 0;
-#endif
-#ifdef WIN32
-	status = mkdir(dir);
-#else
-	status = mkdir(dir,0777);
-#endif
-	return status == 0;
-}
-/*===================================
- * mkalldirs -- Make all dirs in path
- *=================================*/
-#define exists(p)  (!(*p) || access((p),00) == 0)
-
-BOOLEAN
-mkalldirs (char  *path) /* path with dirs to be made */
-{
-	int i, n;
-	char *p = path;
-
-	for (i = 0, n = strlen(path); i < n; i++, p++)  {
-		if (*p != '/') continue;
-		*p = 0;
-		if (exists(path) || llmkdir(path))  {
-			*p = '/';
-			continue;
-		}
-		llwprintf("Can't create directory %s", path);
-		return FALSE;
-	}
 	return TRUE;
 }
 /*==========================

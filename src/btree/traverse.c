@@ -25,9 +25,7 @@
 /* Version 2.3.4 - controlled 24 June 1993 */
 
 #include "standard.h"
-#include "btree.h"
-
-#include "index.h"
+#include "btreei.h"
 
 /*========================================
  * traverse - Traverse BTREE, doing things

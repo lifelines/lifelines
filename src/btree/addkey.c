@@ -29,10 +29,7 @@
  *===========================================================*/
 
 #include "standard.h"
-#include "btree.h"
-
-#include "index.h"
-#include "utils.h"
+#include "btreei.h"
 
 /*===========================
  * addkey -- Add key to BTREE

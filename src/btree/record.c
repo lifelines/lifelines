@@ -32,12 +32,7 @@
 
 #include "sys_inc.h"
 #include "standard.h"
-#include "btree.h"
-
-#include "addkey.h"
-#include "block.h"
-#include "index.h"
-#include "utils.h"
+#include "btreei.h"
 
 static void filecopy (FILE*, INT, FILE*);
 static void movefiles (STRING, STRING);

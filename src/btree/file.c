@@ -30,7 +30,7 @@
 
 #include "sys_inc.h"
 #include "standard.h"
-#include "btree.h"
+#include "btreei.h"
 
 /*=========================================
  * addfile -- Add record to btree from file

@@ -28,9 +28,7 @@
  *===========================================================*/
 
 #include "standard.h"
-#include "btree.h"
-
-#include "utils.h"
+#include "btreei.h"
 
 /*========================================
  * allocblock -- Allocate memory for BLOCK

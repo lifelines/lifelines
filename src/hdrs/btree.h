@@ -134,6 +134,7 @@ BOOLEAN traverse(BTREE, INDEX, BOOLEAN (*ifunc)(), BOOLEAN (*dfunc)());
 /* utils.c */
 STRING rkey2str(RKEY);
 RKEY   str2rkey(STRING);
+STRING fkey2path(FKEY);
 
 extern INT bterrno;
 

@@ -29,11 +29,8 @@
  *   3.0.2 - 24 Nov 1994
  *===========================================================*/
 
-#include "standard.h"
-#include "btree.h"
-
-#include "index.h"
-#include "utils.h"
+#include "stdlib.h"
+#include "btreei.h"
 
 static INT incache (BTREE, FKEY);
 static BOOLEAN cacheindex (BTREE, INDEX);

@@ -6,18 +6,14 @@ noinst_LIBRARIES = libbtree.a
 
 libbtree_a_SOURCES = \
 	addkey.c \
-	addkey.h \
 	block.c \
-	block.h \
 	file.c \
 	index.c \
-	index.h \
 	opnbtree.c \
-	opnbtree.h \
 	record.c \
 	traverse.c \
 	utils.c \
-	utils.h
+	btreei.h
 
 INCLUDES=-I$(srcdir)/.. -I$(srcdir)/../hdrs
 
