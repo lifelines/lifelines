@@ -68,7 +68,7 @@ static INT REFNSCAN=2;
 
 static BOOLEAN pattern_match(SCAN_PATTERN *patt, CNSTRING name);
 static BOOLEAN ns_callback(CNSTRING key, CNSTRING name, BOOLEAN newset, void *param);
-static BOOLEAN rs_callback(STRING key, STRING refn, BOOLEAN newset, void *param);
+static BOOLEAN rs_callback(CNSTRING key, CNSTRING refn, BOOLEAN newset, void *param);
 static BOOLEAN set_pattern(SCAN_PATTERN * patt, STRING str, INT scantype);
 static RECORD name_scan(INT scantype, STRING sts);
 
@@ -128,7 +128,7 @@ ns_callback (CNSTRING key, CNSTRING name, BOOLEAN newset, void *param)
  * rs_callback -- callback for refn traversal
  *=========================================*/
 static BOOLEAN
-rs_callback (STRING key, STRING refn, BOOLEAN newset, void *param)
+rs_callback (CNSTRING key, CNSTRING refn, BOOLEAN newset, void *param)
 {
 	SCAN_PATTERN * patt = (SCAN_PATTERN *)param;
 	ASSERT(patt->scantype == REFNSCAN);

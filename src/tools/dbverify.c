@@ -111,28 +111,28 @@ typedef struct
  *********************************************/
 
 /* alphabetical */
-static NAMEREFN_REC * alloc_namerefn(STRING namerefn, STRING key, INT err);
-static BOOLEAN cgn_callback(STRING key, STRING name, BOOLEAN newset, void *param);
-static BOOLEAN cgr_callback(STRING key, STRING refn, BOOLEAN newset, void *param);
+static NAMEREFN_REC * alloc_namerefn(CNSTRING namerefn, CNSTRING key, INT err);
+static BOOLEAN cgn_callback(CNSTRING key, CNSTRING name, BOOLEAN newset, void *param);
+static BOOLEAN cgr_callback(CNSTRING key, CNSTRING refn, BOOLEAN newset, void *param);
 static BOOLEAN check_block(BTREE btr, BLOCK block, RKEY * lo, RKEY * hi);
 static BOOLEAN check_btree(BTREE btr);
-static BOOLEAN check_even(STRING key, RECORD rec);
-static BOOLEAN check_fam(STRING key, RECORD rec);
+static BOOLEAN check_even(CNSTRING key, RECORD rec);
+static BOOLEAN check_fam(CNSTRING key, RECORD rec);
 static void check_ghosts(void);
 static BOOLEAN check_keys(BTREE btr, BLOCK block, RKEY * lo, RKEY * hi);
 static BOOLEAN check_index(BTREE btr, INDEX index, TABLE fkeytab, RKEY * lo, RKEY * hi);
-static BOOLEAN check_indi(STRING key, RECORD rec);
-static void check_node(STRING key, NODE node, INT level);
+static BOOLEAN check_indi(CNSTRING key, RECORD rec);
+static void check_node(CNSTRING key, NODE node, INT level);
 static void check_nodes(void);
-static void check_pointers(STRING key, RECORD rec);
+static void check_pointers(CNSTRING key, RECORD rec);
 static void check_set(INDISEQ seq, char ctype);
-static BOOLEAN check_sour(STRING key, RECORD rec);
-static BOOLEAN check_othe(STRING key, RECORD rec);
-static BOOLEAN find_xref(STRING key, NODE node, STRING tag1, STRING tag2);
+static BOOLEAN check_sour(CNSTRING key, RECORD rec);
+static BOOLEAN check_othe(CNSTRING key, RECORD rec);
+static BOOLEAN find_xref(CNSTRING key, NODE node, CNSTRING tag1, CNSTRING tag2);
 static void finish_and_delete_nameset(void);
 static void finish_and_delete_refnset(void);
 static void free_namerefn(NAMEREFN_REC * rec);
-static BOOLEAN nodes_callback(STRING key, RECORD rec, void *param);
+static BOOLEAN nodes_callback(CNSTRING key, RECORD rec, void *param);
 static void printblock(BTREE btr, BLOCK block);
 static void print_usage(void);
 static void report_error(INT err, STRING fmt, ...);
@@ -266,7 +266,7 @@ report_progress (STRING fmt, ...)
  * Created: 2001/01/01, Perry Rapp
  *=============================================*/
 static NAMEREFN_REC *
-alloc_namerefn (STRING namerefn, STRING key, INT err)
+alloc_namerefn (CNSTRING namerefn, CNSTRING key, INT err)
 {
 	NAMEREFN_REC * rec = (NAMEREFN_REC *)stdalloc(sizeof(*rec));
 	rec->namerefn = strsave(namerefn);
@@ -334,7 +334,7 @@ check_ghosts (void)
  * Created: 2001/01/01, Perry Rapp
  *==========================================*/
 static BOOLEAN
-cgn_callback (STRING key, STRING name, BOOLEAN newset, void *param)
+cgn_callback (CNSTRING key, CNSTRING name, BOOLEAN newset, void *param)
 {
 	/* a name record which points at indi=key */
 	RECORD indi0 = qkey_to_irecord(key);
@@ -354,7 +354,7 @@ cgn_callback (STRING key, STRING name, BOOLEAN newset, void *param)
 		soundexseq = create_indiseq_sval();
 	}
 
-	append_indiseq_sval(soundexseq, strsave(key), name, strsave(name)
+	append_indiseq_sval(soundexseq, strsave(key), (STRING)name, strsave(name)
 		, TRUE, TRUE); /* sure, alloc */
 
 	if (!indi) {
@@ -389,7 +389,7 @@ cgn_callback (STRING key, STRING name, BOOLEAN newset, void *param)
  * Created: 2001/01/13, Perry Rapp
  *==========================================*/
 static BOOLEAN
-cgr_callback (STRING key, STRING refn, BOOLEAN newset, void *param)
+cgr_callback (CNSTRING key, CNSTRING refn, BOOLEAN newset, void *param)
 {
 	/* a refn record which points at record=key */
 	RECORD rec = key_to_record(key);
@@ -518,7 +518,7 @@ check_nodes (void)
  * Created: 2001/01/14, Perry Rapp
  *===========================================*/
 static BOOLEAN
-nodes_callback (STRING key, RECORD rec, void *param)
+nodes_callback (CNSTRING key, RECORD rec, void *param)
 {
 	param=param; /* unused */
 	if (noisy)
@@ -539,7 +539,7 @@ nodes_callback (STRING key, RECORD rec, void *param)
  * Created: 2001/01/14, Perry Rapp
  *===================================*/
 static BOOLEAN
-check_indi (STRING key, RECORD rec)
+check_indi (CNSTRING key, RECORD rec)
 {
 	static char prevkey[9];
 	NODE indi1, name1, refn1, sex1, body1, famc1, fams1;
@@ -604,7 +604,7 @@ check_indi (STRING key, RECORD rec)
  * Created: 2001/01/14, Perry Rapp
  *===================================*/
 static BOOLEAN
-check_fam (STRING key, RECORD rec)
+check_fam (CNSTRING key, RECORD rec)
 {
 	static char prevkey[9];
 	NODE fam1, fref1, husb1, wife1, chil1, rest1;
@@ -695,7 +695,7 @@ check_fam (STRING key, RECORD rec)
  * Created: 2001/01/14, Perry Rapp
  *===================================*/
 static BOOLEAN
-check_sour (STRING key, RECORD rec)
+check_sour (CNSTRING key, RECORD rec)
 {
 	static char prevkey[9];
 	if (!strcmp(key, prevkey)) {
@@ -711,7 +711,7 @@ check_sour (STRING key, RECORD rec)
  * Created: 2001/01/14, Perry Rapp
  *===================================*/
 static BOOLEAN
-check_even (STRING key, RECORD rec)
+check_even (CNSTRING key, RECORD rec)
 {
 	static char prevkey[9];
 	if (!strcmp(key, prevkey)) {
@@ -727,7 +727,7 @@ check_even (STRING key, RECORD rec)
  * Created: 2001/01/14, Perry Rapp
  *===================================*/
 static BOOLEAN
-check_othe (STRING key, RECORD rec)
+check_othe (CNSTRING key, RECORD rec)
 {
 	static char prevkey[9];
 	if (!strcmp(key, prevkey)) {
@@ -742,7 +742,7 @@ check_othe (STRING key, RECORD rec)
  * 2001/01/21, Perry Rapp
  *=================================*/
 static BOOLEAN
-find_xref (STRING key, NODE node, STRING tag1, STRING tag2)
+find_xref (CNSTRING key, NODE node, CNSTRING tag1, CNSTRING tag2)
 {
 	NODE node2;
 	CACHEEL ncel2;
@@ -769,7 +769,7 @@ exit_find:
  * 2001/01/21, Perry Rapp
  *===================================*/
 static void
-check_pointers (STRING key, RECORD rec)
+check_pointers (CNSTRING key, RECORD rec)
 {
 	check_node(key, nztop(rec), 0);
 }
@@ -779,7 +779,7 @@ check_pointers (STRING key, RECORD rec)
  * 2001/02/18, Perry Rapp
  *===================================*/
 static void
-check_node (STRING n0key, NODE node, INT level)
+check_node (CNSTRING n0key, NODE node, INT level)
 {
 	BOOLEAN lineage=FALSE;
 	/* ignore lineage links - they are checked elsewhere */

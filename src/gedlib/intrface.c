@@ -103,7 +103,7 @@ store_text_file_to_db (STRING key, CNSTRING file, TRANSLFNC transfnc)
  *=================================================*/
 typedef struct
 {
-	BOOLEAN(*func)(STRING key, STRING data, INT len, void * param);
+	BOOLEAN(*func)(CNSTRING key, STRING data, INT len, void * param);
 	void * param;
 } TRAV_PARAM;
 /* see above */
@@ -117,8 +117,8 @@ trav_callback (RKEY rkey, STRING data, INT len, void * param)
 }
 /* see above */
 void
-traverse_db_rec_keys (STRING lo, STRING hi, 
-	BOOLEAN(*func)(STRING key, STRING, INT len, void *param), void *param)
+traverse_db_rec_keys (CNSTRING lo, CNSTRING hi, 
+	BOOLEAN(*func)(CNSTRING key, STRING, INT len, void *param), void *param)
 {
 	RKEY lo1, hi1;
 	TRAV_PARAM tparam;
@@ -140,12 +140,12 @@ traverse_db_rec_keys (STRING lo, STRING hi,
  *==================================================*/
 typedef struct
 {
-	BOOLEAN(*func)(STRING key, RECORD rec, void * param);
+	BOOLEAN(*func)(CNSTRING key, RECORD rec, void * param);
 	void * param;
 } TRAV_RECORD_PARAM;
 /* see above */
 static BOOLEAN
-trav_rec_callback (STRING key, STRING data, INT len, void * param)
+trav_rec_callback (CNSTRING key, STRING data, INT len, void * param)
 {
 	TRAV_RECORD_PARAM *tparam = (TRAV_RECORD_PARAM *)param;
 	RECORD rec;
@@ -161,10 +161,10 @@ trav_rec_callback (STRING key, STRING data, INT len, void * param)
 }
 /* see above */
 void
-traverse_db_key_recs (BOOLEAN(*func)(STRING key, RECORD, void *param), void *param)
+traverse_db_key_recs (BOOLEAN(*func)(CNSTRING key, RECORD, void *param), void *param)
 {
 	TRAV_RECORD_PARAM tparam;
-	STRING lo,hi;
+	CNSTRING lo,hi;
 	tparam.param = param;
 	tparam.func = func;
 	lo = hi = NULL; /* all records */

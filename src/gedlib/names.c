@@ -54,7 +54,7 @@ static void cmpsqueeze(CNSTRING, STRING);
 static BOOLEAN dupcheck(TABLE tab, CNSTRING str);
 static BOOLEAN exactmatch(CNSTRING, CNSTRING);
 static void find_indis_worker(CNSTRING name, uchar finitial, CNSTRING sdex, TABLE donetab, LIST list);
-static void flush_name_cache();
+static void flush_name_cache(void);
 static INT getfinitial(CNSTRING);
 static void getnamerec(const RKEY * rkey);
 static CNSTRING getsurname_impl(CNSTRING name);
@@ -146,7 +146,7 @@ parsenamerec (const RKEY * rkey, CNSTRING p)
 		NRmax = NRcount + 10;
 		NRkeys = (RKEY *) stdalloc((NRmax)*sizeof(RKEY));
 		NRoffs = (INT *) stdalloc((NRmax)*sizeof(INT));
-		NRnames = (STRING *) stdalloc((NRmax)*sizeof(STRING));
+		NRnames = (CNSTRING *) stdalloc((NRmax)*sizeof(STRING));
 	}
 	for (i = 0; i < NRcount; i++) {
 		memcpy(&NRkeys[i], p, sizeof(RKEY));
@@ -182,7 +182,7 @@ across database reloads
 			NRmax = 10;
 			NRkeys = (RKEY *) stdalloc(10*sizeof(RKEY));
 			NRoffs = (INT *) stdalloc(10*sizeof(INT));
-			NRnames = (STRING *) stdalloc(10*sizeof(STRING));
+			NRnames = (CNSTRING *) stdalloc(10*sizeof(STRING));
 		}
 		return;
 	}
@@ -239,7 +239,7 @@ static void
 rkey_cpy (const RKEY * src, RKEY * dest)
 {
 	INT i;
-	for (i=0; i<sizeof(src->r_rkey); ++i)
+	for (i=0; i<(INT)sizeof(src->r_rkey); ++i)
 	{
 		dest->r_rkey[i] = src->r_rkey[i];
 	}
@@ -632,7 +632,6 @@ find_indis_by_name (CNSTRING name)
 	STRING surname = strsave(getsxsurname(name));
 	TABLE donetab = create_table(FREEKEY);
 	LIST list = create_list2(LISTDOFREE);
-	STRING rkeystr=0;
 
 	/* See if user is asking for person by key instead of name */
 	if ((rec = id_by_key(name, 'I'))) {

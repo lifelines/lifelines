@@ -90,12 +90,12 @@ file_to_line (FILE *fp,
 /*==============================================
  * string_to_line -- Get GEDCOM line from string
  *
- * STRING *ps:    [in,out] string ptr - advanced to next
- * INT *plev:     [out] level ptr
- * STRING *pxref: [out] cross-ref ptr
- * STRING *ptag:  [out] tag ptr
- * STRING *pval:  [out] value ptr
- * STRING *pmsg:  [out] error msg ptr
+ * STRING *ps:    [I/O] string ptr - advanced to next
+ * INT *plev:     [OUT] level ptr
+ * STRING *pxref: [OUT] cross-ref ptr
+ * STRING *ptag:  [OUT] tag ptr
+ * STRING *pval:  [OUT] value ptr
+ * STRING *pmsg:  [OUT] error msg ptr
  *============================================*/
 static BOOLEAN
 string_to_line (STRING *ps, INT *plev, STRING *pxref, STRING *ptag
@@ -447,6 +447,7 @@ next_fp_to_node (FILE *fp, BOOLEAN list, XLAT ttm,
 }
 /*============================================
  * string_to_record -- Read record from data block
+ *  (modifies string -- inserts 0 between lines)
  *  This is the layout for metadata nodes:
  *   Q___      (four bytes, but only first char used)
  *   0016      (offset to 0 INDI... line)
@@ -476,14 +477,16 @@ string_to_record (STRING str, CNSTRING key, INT len)
 		NB: UNTESTED because it isn't yet being written
 		Perry, 2001/01/15
 		*/
+#ifdef CODE_TO_BE_DELETED
 		INT * ptr = (INT *)str;
 		INT node_offset = ptr[1]; /* in characters */
 		char * whptr = (char *)&ptr[2];
-		char * node_ptr = str + node_offset;
+		const char * node_ptr = str + node_offset;
 		INT whlen = node_offset - 8;
 		ASSERT(0); /* not yet being written */
 		load_record_wh(rec, whptr, whlen);
 		node = string_to_node(node_ptr);
+#endif
 	} else {
 		if (!strcmp(str, "DELE\n")) {
 			/* should have been filtered out in getrecord */
@@ -502,6 +505,7 @@ string_to_record (STRING str, CNSTRING key, INT len)
 }
 /*========================================
  * string_to_node -- Read tree from string
+ *  (modifies string -- adds 0s between lines)
  *======================================*/
 NODE
 string_to_node (STRING str)

@@ -46,6 +46,7 @@ extern BTREE BTR;
  *********************************************/
 
 static BOOLEAN expand_traverse(NODE node, VPTR param);
+static void parserefnrec(RKEY rkey, CNSTRING p);
 static RKEY refn2rkey(STRING);
 static BOOLEAN resolve_traverse(NODE, VPTR param);
 
@@ -77,7 +78,7 @@ static BOOLEAN resolve_traverse(NODE, VPTR param);
  *   INT     RRcount - number of entries in current refn record
  *   INT    *RRoffs  - char offsets to refnl in current refn record
  *   RKEY   *RRkeys  - RKEYs of the INDI records with the refn
- *   STRING *RRrefns - refn values from INDI records that the
+ *   CNSTRING *RRrefns - refn values from INDI records that the
  *			  index is based upon
  *   INT     RRmax   - max allocation size of internal arrays
  *-------------------------------------------------------------------
@@ -96,7 +97,7 @@ static INT     RRsize;
 static INT     RRcount;
 static INT    *RRoffs;
 static RKEY   *RRkeys;
-static STRING *RRrefns;
+static CNSTRING *RRrefns;
 static INT     RRmax = 0;
 
 static STRING *RMkeys = NULL;
@@ -112,7 +113,7 @@ static INT     RMmax = 0;
  * parserefnrec -- Store refn rec in file buffers
  *==================================================*/
 static void
-parserefnrec (RKEY rkey, STRING p)
+parserefnrec (RKEY rkey, CNSTRING p)
 {
 	INT i;
 	RRkey = rkey;
@@ -123,12 +124,12 @@ parserefnrec (RKEY rkey, STRING p)
 		if (RRmax != 0) {
 			stdfree(RRkeys);
 			stdfree(RRoffs);
-			stdfree(RRrefns);
+			stdfree((STRING)RRrefns);
 		}
 		RRmax = RRcount + 10;
 		RRkeys = (RKEY *) stdalloc((RRmax)*sizeof(RKEY));
 		RRoffs = (INT *) stdalloc((RRmax)*sizeof(INT));
-		RRrefns = (STRING *) stdalloc((RRmax)*sizeof(STRING));
+		RRrefns = (CNSTRING *) stdalloc((RRmax)*sizeof(STRING));
 	}
 	for (i = 0; i < RRcount; i++) {
 		memcpy(&RRkeys[i], p, sizeof(RKEY));
@@ -158,7 +159,7 @@ getrefnrec (STRING refn)
 			RRmax = 10;
 			RRkeys = (RKEY *) stdalloc(10*sizeof(RKEY));
 			RRoffs = (INT *) stdalloc(10*sizeof(INT));
-			RRrefns = (STRING *) stdalloc(10*sizeof(STRING));
+			RRrefns = (CNSTRING *) stdalloc(10*sizeof(STRING));
 		}
 		return FALSE;
 	}
@@ -448,7 +449,7 @@ expand_traverse (NODE node, VPTR param)
  * symbolic_link -- See if value is symbolic link
  *=============================================*/
 BOOLEAN
-symbolic_link (STRING val)
+symbolic_link (CNSTRING val)
 {
 	if (!val || *val != '<' || strlen(val) < 3) return FALSE;
 	return val[strlen(val)-1] == '>';
@@ -457,7 +458,7 @@ symbolic_link (STRING val)
  * record_letter -- Return letter for record type
  *=============================================*/
 INT
-record_letter (STRING tag)
+record_letter (CNSTRING tag)
 {
 	if (eqstr("FATH", tag)) return 'I';
 	if (eqstr("MOTH", tag)) return 'I';
@@ -543,12 +544,12 @@ index_by_refn (NODE node,
  *==================================================*/
 typedef struct
 {
-	BOOLEAN(*func)(STRING key, STRING refn, BOOLEAN newset, void *param);
+	BOOLEAN(*func)(CNSTRING key, CNSTRING refn, BOOLEAN newset, void *param);
 	void * param;
 } TRAV_REFN_PARAM;
 /* see above */
 static BOOLEAN
-traverse_refn_callback (RKEY rkey, STRING data, INT len, void *param)
+traverse_refn_callback (RKEY rkey, CNSTRING data, INT len, void *param)
 {
 	TRAV_REFN_PARAM *tparam = (TRAV_REFN_PARAM *)param;
 	INT i;
@@ -565,7 +566,7 @@ traverse_refn_callback (RKEY rkey, STRING data, INT len, void *param)
 }
 /* see above */
 void
-traverse_refns (BOOLEAN(*func)(STRING key, STRING refn, BOOLEAN newset, void *param), void *param)
+traverse_refns (BOOLEAN(*func)(CNSTRING key, CNSTRING refn, BOOLEAN newset, void *param), void *param)
 {
 	TRAV_REFN_PARAM tparam;
 	tparam.param = param;

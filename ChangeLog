@@ -18,6 +18,13 @@
 
 	Bump version numbers to 3.0.34.
 
+	* ChangeLog build/msvc6/dbverify/dbverifyCmd.dsp
+	src/btree/traverse.c src/gedlib/intrface.c src/gedlib/names.c
+	src/gedlib/nodeio.c src/gedlib/refns.c src/hdrs/btree.h
+	src/hdrs/gedcom.h src/liflines/scan.c src/tools/dbverify.c
+
+	const fixes (and add soundex to msvc6 dbverify project).
+
 2003-09-15 Perry Rapp
 
 	* ChangeLog README.MAINTAINERS
