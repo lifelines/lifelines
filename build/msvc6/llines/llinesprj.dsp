@@ -149,6 +149,10 @@ SOURCE=..\..\..\gedlib\choose.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\gedlib\date.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\liflines\delete.c
 # End Source File
 # Begin Source File
