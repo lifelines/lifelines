@@ -10,6 +10,11 @@
 	Cleanup & fix compilation for gcc (order table.c includes so
 	struct tag_table only declared once).
 
+	* ChangeLog src/stdlib/rbtree.c src/stdlib/rbtree.h
+	src/stdlib/table.c
+
+	Tables are implemented with rbtree when property "rbtree" is set.
+
 2005-02-19 Perry Rapp
 
 	* build/msvc6/llines/llinesprj.dsp src/gedlib/date.c

@@ -41,7 +41,7 @@ typedef void * RBVALUE;
 typedef int (*KeyCompFuncType)(RBKEY key1, RBKEY key2);
 
 /* A function to free both key & info */
-typedef void (*KeyInfoDestFuncType)(RBKEY key, RBVALUE info);
+typedef void (*KeyInfoDestFuncType)(void * param, RBKEY key, RBVALUE info);
 
 /* A function to visit one node, during traversal (return 0 to stop traversal) */
 typedef int (*TraverseFuncType)(RBKEY key, RBVALUE info, void *param);
@@ -61,7 +61,7 @@ void RbInitModule(void (*AssertFunc)(int assertion, const char* error),
                   void * (*SafeMalloc)(size_t size));
 
 /* Create tree */
-RBTREE RbTreeCreate(KeyCompFuncType KeyCompFunc, KeyInfoDestFuncType KeyInfoDestFunc);
+RBTREE RbTreeCreate(void * param, KeyCompFuncType KeyCompFunc, KeyInfoDestFuncType KeyInfoDestFunc);
 
 /* Alter tree */
 RBNODE RbTreeInsert(RBTREE, RBKEY key, RBVALUE info);
@@ -88,6 +88,7 @@ int RbIsNil(RBTREE tree, RBNODE node);
 RBKEY RbGetKey(RBNODE node);
 RBVALUE RbGetInfo(RBNODE node);
 void NullFunction(void*);
+int RbGetCount(RBTREE);
 
 /* iteration */
 RBITER RbBeginIter(RBTREE tree, RBKEY low, RBKEY high);

@@ -33,6 +33,7 @@
 #include "table.h"
 #include "object.h"
 #include "hashtab.h"
+#include "rbtree.h"
 #include "lloptions.h"
 
 /*********************************************
@@ -60,6 +61,7 @@ struct tag_table {
 	enum TB_VALTYPE valtype;
 	DELFUNC destroyfunc; /* how to destroy elements */
 	HASHTAB hashtab;
+	RBTREE rbtree;
 };
 /* typedef struct tag_table *TABLE */ /* in table.h */
 
@@ -68,6 +70,7 @@ struct tag_table_iter {
 	struct tag_vtable *vtable; /* generic object */
 	INT refcnt; /* ref-countable object */
 	HASHTAB_ITER hashtab_iter;
+	RBITER rbit;
 };
 /* typedef struct tag_table_iter * TABLE_ITER; */ /* in table.h */
 
@@ -77,11 +80,17 @@ struct tag_table_iter {
 
 /* alphabetical */
 static TABLE create_table_impl(enum TB_VALTYPE valtype, DELFUNC delfunc);
-static void table_element_destructor(void * el);
-static void table_element_obj_destructor(void *el);
 static void free_table_iter(TABLE_ITER tabit);
+static VPTR get_rb_value(RBTREE rbtree, CNSTRING key);
+static void * llalloc(size_t size);
+static void llassert(int assertion, const char* error);
+static int rbcompare(RBKEY key1, RBKEY key2);
+static void rbdestroy(void * param, RBKEY key, RBVALUE info);
+static VPTR rb_valueof(RBTREE rbtree, CNSTRING key, BOOLEAN *there);
 static void tabit_destructor(VTABLE *obj);
 static void table_destructor(VTABLE *obj);
+static void table_element_destructor(void * el);
+static void table_element_obj_destructor(void *el);
 
 /*********************************************
  * local variables
@@ -114,6 +123,14 @@ static struct tag_vtable vtable_for_tabit = {
  *********************************************/
 
 /*=============================
+ * init_table_module -- Module initialization
+ *===========================*/
+void
+init_table_module (void)
+{
+	RbInitModule(&llassert, &llalloc);
+}
+/*=============================
  * create_table_impl -- Create table
  * All tables are created in this function
  * returns addref'd table
@@ -126,7 +143,10 @@ create_table_impl (enum TB_VALTYPE valtype, DELFUNC delfunc)
 	tab->vtable = &vtable_for_table;
 	tab->refcnt = 1;
 	tab->valtype = valtype;
-	tab->hashtab = create_hashtab();
+	if (getoptstr("rbtree", 0))
+		tab->rbtree = RbTreeCreate(tab, rbcompare, rbdestroy);
+	else
+		tab->hashtab = create_hashtab();
 	tab->destroyfunc = delfunc;
 	return tab;
 }
@@ -201,7 +221,10 @@ destroy_table (TABLE tab)
 	/* should not be called for a shared table */
 	ASSERT(tab->refcnt==1 || tab->refcnt==0);
 
-	destroy_hashtab(tab->hashtab, tab->destroyfunc);
+	if (tab->rbtree)
+		RbTreeDestroy(tab->rbtree);
+	else
+		destroy_hashtab(tab->hashtab, tab->destroyfunc);
 	memset(tab, 0, sizeof(*tab));
 	stdfree(tab);
 }
@@ -292,9 +315,16 @@ insert_table_ptr (TABLE tab, CNSTRING key, VPTR ptr)
 	ASSERT(tab);
 	ASSERT(tab->vtable == &vtable_for_table);
 
-	oldval = insert_hashtab(tab->hashtab, key, ptr);
-	if (oldval && tab->destroyfunc) {
-		(*tab->destroyfunc)(oldval);
+	if (tab->rbtree) {
+		RBNODE old = RbExactQuery(tab->rbtree, key);
+		if (old)
+			RbDeleteNode(tab->rbtree, old);
+		RbTreeInsert(tab->rbtree, strsave(key), ptr);
+	} else {
+		oldval = insert_hashtab(tab->hashtab, key, ptr);
+		if (oldval && tab->destroyfunc) {
+			(*tab->destroyfunc)(oldval);
+		}
 	}
 }
 /*======================================
@@ -333,9 +363,15 @@ delete_table_element (TABLE tab, CNSTRING key)
 	ASSERT(tab);
 	ASSERT(tab->vtable == &vtable_for_table);
 
-	oldval = remove_hashtab(tab->hashtab, key);
-	if (oldval && tab->destroyfunc) {
-		(*tab->destroyfunc)(oldval);
+	if (tab->rbtree) {
+		RBNODE old = RbExactQuery(tab->rbtree, key);
+		if (old)
+			RbDeleteNode(tab->rbtree, old);
+	} else {
+		oldval = remove_hashtab(tab->hashtab, key);
+		if (oldval && tab->destroyfunc) {
+			(*tab->destroyfunc)(oldval);
+		}
 	}
 }
 /*======================================
@@ -347,7 +383,11 @@ in_table (TABLE tab, CNSTRING key)
 	ASSERT(tab);
 	ASSERT(tab->vtable == &vtable_for_table);
 
-	return in_hashtab(tab->hashtab, key);
+	if (tab->rbtree) {
+		return RbExactQuery(tab->rbtree, key) != 0;
+	} else {
+		return in_hashtab(tab->hashtab, key);
+	}
 }
 /*===============================
  * valueof_int -- Find int value of entry
@@ -363,7 +403,11 @@ valueof_int (TABLE tab, CNSTRING key)
 	ASSERT(tab->vtable == &vtable_for_table);
 	ASSERT(tab->valtype == TB_INT);
 
-	val = find_hashtab(tab->hashtab, key, NULL);
+	if (tab->rbtree) {
+		val = get_rb_value(tab->rbtree, key);
+	} else {
+		val = find_hashtab(tab->hashtab, key, NULL);
+	}
 	return (val ? *val : 0);
 }
 /*===============================
@@ -376,7 +420,13 @@ valueof_str (TABLE tab, CNSTRING key)
 	ASSERT(tab->vtable == &vtable_for_table);
 	ASSERT(tab->valtype == TB_STR);
 
-	return (STRING)find_hashtab(tab->hashtab, key, NULL);
+	if (tab->rbtree) {
+		return (STRING)get_rb_value(tab->rbtree, key);
+	} else {
+		return (STRING)find_hashtab(tab->hashtab, key, NULL);
+	}
+
+
 }
 /*===============================
  * valueof_ptr -- Find pointer value of entry
@@ -388,7 +438,11 @@ valueof_ptr (TABLE tab, CNSTRING key)
 	ASSERT(tab->vtable == &vtable_for_table);
 	ASSERT(tab->valtype == TB_HPTR || tab->valtype == TB_VPTR);
 
-	return find_hashtab(tab->hashtab, key, NULL);
+	if (tab->rbtree) {
+		return (STRING)get_rb_value(tab->rbtree, key);
+	} else {
+		return find_hashtab(tab->hashtab, key, NULL);
+	}
 }
 /*===============================
  * valueof_obj -- Find object value of entry
@@ -400,7 +454,11 @@ valueof_obj (TABLE tab, CNSTRING key)
 	ASSERT(tab->vtable == &vtable_for_table);
 	ASSERT(tab->valtype == TB_OBJ);
 
-	return find_hashtab(tab->hashtab, key, NULL);
+	if (tab->rbtree) {
+		return get_rb_value(tab->rbtree, key);
+	} else {
+		return find_hashtab(tab->hashtab, key, NULL);
+	}
 }
 /*===================================
  * valueofbool_int -- Find pointer value of entry
@@ -415,7 +473,11 @@ valueofbool_int (TABLE tab, CNSTRING key, BOOLEAN *there)
 	ASSERT(tab->vtable == &vtable_for_table);
 	ASSERT(tab->valtype == TB_INT);
 
-	val = find_hashtab(tab->hashtab, key, there);
+	if (tab->rbtree) {
+		val = (INT *)rb_valueof(tab->rbtree, key, there);
+	} else {
+		val = find_hashtab(tab->hashtab, key, there);
+	}
 	return val ? *val : 0;
 }
 /*===================================
@@ -429,8 +491,11 @@ valueofbool_str (TABLE tab, CNSTRING key, BOOLEAN *there)
 	ASSERT(tab->vtable == &vtable_for_table);
 	ASSERT(tab->valtype == TB_STR);
 
-	return (STRING)find_hashtab(tab->hashtab, key, there);
-
+	if (tab->rbtree) {
+		return rb_valueof(tab->rbtree, key, there);
+	} else {
+		return (STRING)find_hashtab(tab->hashtab, key, there);
+	}
 }
 /*===================================
  * valueofbool_ptr -- Find pointer value of entry
@@ -443,7 +508,11 @@ valueofbool_ptr (TABLE tab, CNSTRING key, BOOLEAN *there)
 	ASSERT(tab->vtable == &vtable_for_table);
 	ASSERT(tab->valtype == TB_HPTR || tab->valtype == TB_VPTR);
 
-	return find_hashtab(tab->hashtab, key, there);
+	if (tab->rbtree) {
+		return rb_valueof(tab->rbtree, key, there);
+	} else {
+		return find_hashtab(tab->hashtab, key, there);
+	}
 }
 /*===================================
  * valueofbool_obj -- Find object value of entry
@@ -456,7 +525,11 @@ valueofbool_obj (TABLE tab, CNSTRING key, BOOLEAN *there)
 	ASSERT(tab->vtable == &vtable_for_table);
 	ASSERT(tab->valtype == TB_OBJ);
 
-	return find_hashtab(tab->hashtab, key, there);
+	if (tab->rbtree) {
+		return rb_valueof(tab->rbtree, key, there);
+	} else {
+		return find_hashtab(tab->hashtab, key, there);
+	}
 }
 /*=================================================
  * begin_table_iter -- Begin iteration of table
@@ -467,7 +540,11 @@ begin_table_iter (TABLE tab)
 {
 	TABLE_ITER tabit = (TABLE_ITER)stdalloc(sizeof(*tabit));
 	++tabit->refcnt;
-	tabit->hashtab_iter = begin_hashtab(tab->hashtab);
+	if (tab->rbtree) {
+		tabit->rbit = RbBeginIter(tab->rbtree, 0, 0);
+	} else {
+		tabit->hashtab_iter = begin_hashtab(tab->hashtab);
+	}
 	return tabit;
 }
 /*=================================================
@@ -489,8 +566,13 @@ BOOLEAN
 next_table_int (TABLE_ITER tabit, CNSTRING *pkey, INT * pival)
 {
 	VPTR val=0;
-	if (!next_hashtab(tabit->hashtab_iter, pkey, &val))
-		return FALSE;
+	if (tabit->rbit) {
+		if (!RbNext(tabit->rbit, pkey, &val))
+			return FALSE;
+	} else {
+		if (!next_hashtab(tabit->hashtab_iter, pkey, &val))
+			return FALSE;
+	}
 
 	*pival = *(INT *)val;
 	return TRUE;
@@ -531,7 +613,10 @@ get_table_count (TABLE tab)
 
 	ASSERT(tab->vtable == &vtable_for_table);
 
-	return get_hashtab_count(tab->hashtab);
+	if (tab->rbtree)
+		return RbGetCount(tab->rbtree);
+	else
+		return get_hashtab_count(tab->hashtab);
 }
 /*=================================================
  * copy_table -- Copy all elements from src to dest
@@ -624,4 +709,71 @@ increment_table_int (TABLE tab, CNSTRING key)
 	} else {
 		insert_table_int(tab, key, 1);
 	}
+}
+/*=================================================
+ * llassert -- Implement assertion
+ *  (for rbtree module, which does not include lifelines headers)
+ *===============================================*/
+static void
+llassert (int assertion, const char* error)
+{
+	if (!assertion)
+		FATAL2(error);
+}
+/*=================================================
+ * llalloc -- Implement alloc
+ *  (for rbtree module, which does not include lifelines headers)
+ *===============================================*/
+static void *
+llalloc (size_t size)
+{
+	return stdalloc(size);
+}
+/*=================================================
+ * rbcompare -- compare two rbtree keys
+ *  (for rbtree module, which treats keys as opaque)
+ *===============================================*/
+static int
+rbcompare (RBKEY key1, RBKEY key2)
+{
+	return cmpstrloc(key1, key2);
+}
+/*=================================================
+ * rbdestroy -- Destructor for key & value of rbtree
+ *  (for rbtree module, which does not manage key or value memory)
+ *===============================================*/
+static void
+rbdestroy (void * param, RBKEY key, RBVALUE info)
+{
+	TABLE tab = (TABLE)param;
+	stdfree((void *)key);
+	switch(tab->valtype) {
+	case TB_INT:
+	case TB_STR:
+	case TB_HPTR:
+		table_element_destructor(info);
+		break;
+	case TB_OBJ:
+		table_element_obj_destructor(info);
+	}
+}
+/*=================================================
+ * get_rb_value -- Shortcut fetch of value from rbtree key
+ *===============================================*/
+static VPTR
+get_rb_value (RBTREE rbtree, CNSTRING key)
+{
+	RBNODE node = RbExactQuery(rbtree, key);
+	return node ? RbGetInfo(node) : 0;
+}
+/*=================================================
+ * rb_valueof -- Get value & set *there to indicate presence
+ *===============================================*/
+static VPTR
+rb_valueof (RBTREE rbtree, CNSTRING key, BOOLEAN *there)
+{
+	RBNODE node = RbExactQuery(rbtree, key);
+	if (there)
+		*there = !!node;
+	return node ? RbGetInfo(node) : 0;
 }

@@ -24,8 +24,10 @@ struct rb_red_blk_tree {
   /*  node which should always be black but has aribtrary children and */
   /*  parent and no key or info.  The point of using these sentinels is so */
   /*  that the root and nil nodes do not require special cases in the code */
-  RBNODE root;             
-  RBNODE nil;              
+  RBNODE root;
+  RBNODE nil;
+  void * param;
+  int count;
 }; /* *RBTREE already declared in header */
 
 struct rb_red_blk_node {
@@ -105,12 +107,13 @@ RbInitModule (void (*AssertFunc)(int assertion, const char* error),
 /***********************************************************************/
 
 RBTREE
-RbTreeCreate (KeyCompFuncType KeyCompFunc, KeyInfoDestFuncType KeyInfoDestFunc)
+RbTreeCreate (void * param, KeyCompFuncType KeyCompFunc, KeyInfoDestFuncType KeyInfoDestFunc)
 {
   RBTREE newTree;
   RBNODE temp;
 
   newTree=(RBTREE) SafeMalloc(sizeof(*newTree));
+  newTree->param = param;
   newTree->CompareFnc =  KeyCompFunc;
   newTree->DestroyKeyInfoFnc = KeyInfoDestFunc;
 
@@ -313,6 +316,7 @@ RbTreeInsert (RBTREE tree, RBKEY key, RBVALUE info)
   RBNODE x;
   RBNODE newNode;
 
+  ++tree->count;
   x=(RBNODE) SafeMalloc(sizeof(*x));
   x->key=key;
   x->info=info;
@@ -708,6 +712,7 @@ RbDeleteNode (RBTREE tree, RBNODE z)
 
     if (!(y->red)) RbDeleteFixUp(tree,x);
   
+	--tree->count;
     TreeDestroyKeyInfo(tree, z->key, z->info);
     y->left=z->left;
     y->right=z->right;
@@ -721,6 +726,7 @@ RbDeleteNode (RBTREE tree, RBNODE z)
     }
     free(z); 
   } else {
+	--tree->count;
     TreeDestroyKeyInfo(tree, y->key, y->info);
     if (!(y->red)) RbDeleteFixUp(tree,x);
     free(y);
@@ -965,7 +971,7 @@ static void
 TreeDestroyKeyInfo(RBTREE tree, RBKEY key, RBVALUE info)
 {
 	Assert(tree && tree->DestroyKeyInfoFnc, "Bad argument to TreeDestroyKeyInfo");
-	(*tree->DestroyKeyInfoFnc)(key, info);
+	(*tree->DestroyKeyInfoFnc)(tree->param, key, info);
 }
 static void
 TreePrintKey(RBTREE tree, RBKEY key, KeyPrintFuncType KeyPrintFunc)
@@ -1001,4 +1007,9 @@ void
 NullFunction(void * junk)
 {
 	junk=junk; /* unused */
+}
+int
+RbGetCount (RBTREE rbtree)
+{
+	return rbtree->count;
 }
