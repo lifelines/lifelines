@@ -2133,7 +2133,7 @@ do_edit (void)
 static void
 bsd_mvwgetstr (UIWINDOW uiwin, INT row, INT col, STRING str, INT len)
 {
-	WINDOW * win = uiwin_win(uiwin);
+	WINDOW * win = uiw_win(uiwin);
 	STRING p = str;
 	INT c, ers = erasechar();
 	wmove(win, row, col);

@@ -1,3 +1,9 @@
+2001-12-09 Perry Rapp <puddle@users.sourceforge.net>
+
+	* Changelog liflines/screen.c
+
+	Bugfix for BSD section.
+
 2001-12-06 Matt Emmerton <memmerto@users.sourceforge.net>
 
 	* Changelog hdrs/feedback.h
