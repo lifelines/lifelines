@@ -976,11 +976,11 @@ get_free_cacheel (CACHE cache)
 
 	return cel;
 }
-#ifdef UNUSED
-/* Code to clear all the cel pointers in a node tree */
-/* experimental, Perry, 2004-09-05 */
-/* TODO: remove when proven unneeded */
-static void set_all_nodetree_to_cel(NODE node, CACHEEL cel)
+/*=======================================================
+ * set_all_nodetree_to_cel -- clear all the cel pointers in a node tree
+ *=====================================================*/
+static void
+set_all_nodetree_to_cel (NODE node, CACHEEL cel)
 {
 	BOOLEAN travdone = FALSE;
 	/* Now set all nodes in tree to point to cache record */
@@ -1002,7 +1002,6 @@ static void set_all_nodetree_to_cel(NODE node, CACHEEL cel)
 		node = nsibling(node);
 	}
 }
-#endif
 /*=======================================================
  * put_node_in_cache -- Low-level work of loading node into cacheel supplied
  *=====================================================*/
@@ -1061,6 +1060,8 @@ static void
 remove_from_cache (CACHE cache, STRING key)
 {
 	CACHEEL cel=0, celnext=0;
+	NODE node=0;
+
 	if (!key || *key == 0 || !cache)
 		return;
 	/* If it has a key, it is in the cache */
@@ -1069,17 +1070,12 @@ remove_from_cache (CACHE cache, STRING key)
 	ASSERT(!cclock(cel)); /* not supposed to remove locked elements */
 	ASSERT(cnode(cel));
 	remove_direct(cache, cel);
-#ifdef UNUSED
-/* code to clear out stale data in the nodetree & cel */
-/* experimental, Perry, 2004-09-05, part of investigating cache bug */
-/* TODO: delete if not needed */
-{
-	NODE node = cnode(cel);
+
+	/* Must clear node tree info, so later cache cleanup doesn't use it */
+	node = cnode(cel);
 	if (node)
 		set_all_nodetree_to_cel(node, 0);
 	cnode(cel) = 0;
-}
-#endif
 
 	celnext = cacfree(cache);
 	cnext(cel) = celnext;
