@@ -506,7 +506,6 @@ open_or_create_database (INT alteration, STRING dbrequested, STRING *dbused)
 		STRING dbpath = getoptstr("LLDATABASES", ".");
 		CNSTRING newdbdir = get_first_path_entry(dbpath);
 		STRING temp = *dbused;
-		STRING temp = *dbused;
 		if (newdbdir) {
 			char tempth[MAXPATHLEN];
 			newdbdir = strdup(newdbdir);

@@ -1108,6 +1108,10 @@ List Functions
 
           reverse sort list elements
 
+   LIST dup(LIST);
+
+          duplicate a list
+
 forlist (LIST, ANY_V, INT_V) { commands }
 
           loop through all elements of list
@@ -1157,9 +1161,13 @@ forlist (LIST, ANY_V, INT_V) { commands }
    essentially  both  are  sorted  using the sort order of the second
    argument.  (If only one argument is given, it is sorted on its own
    elements.)  rsort  sorts  in order reverse of sort. The order that
-   sort  produces  places  the largest element at position 1, and the
-   smallest element at the end of the list, such that pop will remove
-   the smallest element.
+   sort  produces  places the smallest element at position 1, and the
+   largest  element  at  the  end of the list, such that dequeue will
+   remove the smallest element.
+
+   dup  creates  a  copy  of  a  list.  If  b is a list, the function
+   set(a,b)  makes  the  variable a a reference to the list b. If you
+   want to make a new list, you must use set(a,dup(b)).
 
    Forlist  is  an iterator that loops through the element in a list.
    Its  first parameter is a LIST expression; its second parameter is

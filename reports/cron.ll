@@ -118,7 +118,7 @@ proc main ()
     print( d(length(dates))," events generated",nl())
     
     print("sorting data")
-    sort(events,dates)
+    rsort(events,dates)
     
     /* Now print out all the data for each year
      */

@@ -1,7 +1,7 @@
 
 LifeLines Documentation
 
-LifeLines Version 3.0.31
+LifeLines Version 3.0.32
 
 Thomas T. Wetmore , IV
      _____________________________________________________________
@@ -627,10 +627,9 @@ SCREEN EDITORS AND ENVIRONMENT VARIABLES
    may  add  the  line:  ED=emacs  to  your  login  profile file, and
    LifeLines will use emacs for editing.
 
-   There  are  five  other, LifeLines specific environment variables.
-   They  are  LLDATABASES,  LLARCHIVES,  LLPROGRAMS,  LLREPORTS,  and
-   LLNEWDBDIR.   LLDATABASES   and  LLPROGRAMS  are  UNIX  path  list
-   variables.
+   There  are  four  other, LifeLines specific environment variables.
+   They   are  LLDATABASES,  LLARCHIVES,  LLPROGRAMS  and  LLREPORTS.
+   LLDATABASES and LLPROGRAMS are UNIX path list variables.
 
    There  is also a configuration file, and entries in it may be used
    in  lieu of environment variables. It is ordinarily named .linesrc
@@ -663,10 +662,10 @@ SCREEN EDITORS AND ENVIRONMENT VARIABLES
    select a directory where all generated reports and program outputs
    will be placed.
 
-   LLNEWDBDIR  may  be  set  to  specific  a  single  directory - new
-   databases without paths will be created in this location if given.
-   This  is  of  course a convenience for users who generally put all
-   their databases under a single common directory.
+   New  databases without explicit paths will be created in the first
+   directory  listed  in  the  LLDATABASES  path.  (This is a change;
+   versions  from  3.0.6  to  3.0.31  used  a  now  obsolete variable
+   LLNEWDBDIR).
 
    You  are  not  required to use these environment variables; when a
    variable  is  not defined, LifeLines uses the current directory as

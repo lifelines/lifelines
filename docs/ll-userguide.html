@@ -37,7 +37,7 @@ CLASS="subtitle"
 ><TT
 CLASS="application"
 >LifeLines</TT
-> Version 3.0.31</H2
+> Version 3.0.32</H2
 ><H3
 CLASS="author"
 ><A
@@ -107,97 +107,97 @@ HREF="#AEN405"
 ></DT
 ><DT
 ><A
-HREF="#AEN463"
+HREF="#AEN461"
 >BASICS OF BROWSING</A
 ></DT
 ><DT
 ><A
-HREF="#AEN474"
+HREF="#AEN472"
 >IDENTIFYING A PERSON OR LIST OF PERSONS TO BROWSE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN500"
+HREF="#AEN498"
 >ZIP IDENTIFYING A NEW PERSON</A
 ></DT
 ><DT
 ><A
-HREF="#AEN515"
+HREF="#AEN513"
 >BROWSE DISPLAY BASICS</A
 ></DT
 ><DT
 ><A
-HREF="#AEN518"
+HREF="#AEN516"
 >PERSON BROWSE SCREEN</A
 ></DT
 ><DT
 ><A
-HREF="#AEN687"
+HREF="#AEN685"
 >LIST BROWSE SCREEN</A
 ></DT
 ><DT
 ><A
-HREF="#AEN775"
+HREF="#AEN773"
 >FAMILY BROWSE SCREEN</A
 ></DT
 ><DT
 ><A
-HREF="#AEN885"
+HREF="#AEN883"
 >TANDEM PERSON BROWSE MODE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN972"
+HREF="#AEN970"
 >TANDEM FAMILY BROWSE MODE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1080"
+HREF="#AEN1078"
 >PEDIGREE BROWSE MODE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1143"
+HREF="#AEN1141"
 >ADD OPERATION</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1150"
+HREF="#AEN1148"
 >DELETE OPERATION</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1160"
+HREF="#AEN1158"
 >CODESET CONVERSION</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1255"
+HREF="#AEN1253"
 >MISCELLANEOUS UTILITIES</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1353"
+HREF="#AEN1351"
 >IMPORT ERRORS</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1389"
+HREF="#AEN1387"
 >HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1554"
+HREF="#AEN1552"
 >FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1563"
+HREF="#AEN1561"
 >LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1612"
+HREF="#AEN1610"
 >System and User Properties</A
 ></DT
 ></DL
@@ -2500,7 +2500,7 @@ CLASS="application"
 </P
 ><P
 >&#13;
-     There are five other, <TT
+     There are four other, <TT
 CLASS="application"
 >LifeLines</TT
 >
@@ -2515,14 +2515,11 @@ CLASS="envar"
      <TT
 CLASS="envar"
 >LLPROGRAMS</TT
->, <TT
+> and <TT
 CLASS="envar"
 >LLREPORTS</TT
->,
-     and <TT
-CLASS="envar"
->LLNEWDBDIR</TT
->. <TT
+>.
+     <TT
 CLASS="envar"
 >LLDATABASES</TT
 > and
@@ -2645,14 +2642,10 @@ CLASS="envar"
 </P
 ><P
 >&#13;
-     <TT
-CLASS="envar"
->LLNEWDBDIR</TT
-> may be set to specific a single
-     directory - new databases without paths will be created in this
-     location if given. This is of course a convenience for users
-     who generally put all their databases under a single common
-     directory.
+     New databases without explicit paths will be created in the
+     first directory listed in the LLDATABASES path. (This is a 
+     change; versions from 3.0.6 to 3.0.31 used a now obsolete
+     variable LLNEWDBDIR).
 
 </P
 ><P
@@ -2703,7 +2696,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN463"
+NAME="AEN461"
 ></A
 >BASICS OF BROWSING</H2
 ><P
@@ -2774,7 +2767,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN474"
+NAME="AEN472"
 ></A
 >IDENTIFYING A PERSON OR LIST OF PERSONS TO BROWSE</H2
 ><P
@@ -2832,7 +2825,7 @@ CLASS="application"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN482"
+NAME="AEN480"
 ></A
 ><P
 ><B
@@ -2862,7 +2855,7 @@ t/wtmr/iv<br>
 <DIV
 CLASS="example"
 ><A
-NAME="AEN486"
+NAME="AEN484"
 ></A
 ><P
 ><B
@@ -2958,7 +2951,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN500"
+NAME="AEN498"
 ></A
 >ZIP IDENTIFYING A NEW PERSON</H2
 ><P
@@ -3067,7 +3060,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN515"
+NAME="AEN513"
 ></A
 >BROWSE DISPLAY BASICS</H2
 ><P
@@ -3085,7 +3078,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN518"
+NAME="AEN516"
 ></A
 >PERSON BROWSE SCREEN</H2
 ><P
@@ -3697,7 +3690,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN687"
+NAME="AEN685"
 ></A
 >LIST BROWSE SCREEN</H2
 ><P
@@ -4027,7 +4020,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN775"
+NAME="AEN773"
 ></A
 >FAMILY BROWSE SCREEN</H2
 ><P
@@ -4438,7 +4431,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN885"
+NAME="AEN883"
 ></A
 >TANDEM PERSON BROWSE MODE</H2
 ><P
@@ -4749,7 +4742,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN972"
+NAME="AEN970"
 ></A
 >TANDEM FAMILY BROWSE MODE</H2
 ><P
@@ -5109,7 +5102,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1080"
+NAME="AEN1078"
 ></A
 >PEDIGREE BROWSE MODE</H2
 ><P
@@ -5340,7 +5333,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1143"
+NAME="AEN1141"
 ></A
 >ADD OPERATION</H2
 ><P
@@ -5387,7 +5380,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1150"
+NAME="AEN1148"
 ></A
 >DELETE OPERATION</H2
 ><P
@@ -5451,7 +5444,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1160"
+NAME="AEN1158"
 ></A
 >CODESET CONVERSION</H2
 ><P
@@ -5793,7 +5786,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1255"
+NAME="AEN1253"
 ></A
 >MISCELLANEOUS UTILITIES</H2
 ><P
@@ -6034,7 +6027,7 @@ CLASS="replaceable"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1320"
+NAME="AEN1318"
 ></A
 ><P
 ><B
@@ -6134,7 +6127,7 @@ record template with the following:
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1337"
+NAME="AEN1335"
 ></A
 ><P
 ><B
@@ -6162,7 +6155,7 @@ CLASS="programlisting"
 you would edit the user option file to contain:<DIV
 CLASS="example"
 ><A
-NAME="AEN1340"
+NAME="AEN1338"
 ></A
 ><P
 ><B
@@ -6181,7 +6174,7 @@ CLASS="literallayout"
 or, using the \n escape so as to keep the entry on one line:<DIV
 CLASS="example"
 ><A
-NAME="AEN1343"
+NAME="AEN1341"
 ></A
 ><P
 ><B
@@ -6222,7 +6215,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1353"
+NAME="AEN1351"
 ></A
 >IMPORT ERRORS</H2
 ><P
@@ -6333,7 +6326,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1389"
+NAME="AEN1387"
 ></A
 >HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</H2
 ><P
@@ -6592,7 +6585,7 @@ CLASS="structfield"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1434"
+NAME="AEN1432"
 ></A
 ><P
 ><B
@@ -7313,7 +7306,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1554"
+NAME="AEN1552"
 ></A
 >FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</H2
 ><P
@@ -7387,7 +7380,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1563"
+NAME="AEN1561"
 ></A
 >LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</H2
 ><P
@@ -7474,7 +7467,7 @@ CLASS="application"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1578"
+NAME="AEN1576"
 ></A
 ><P
 ><B
@@ -7597,7 +7590,7 @@ CLASS="structfield"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1596"
+NAME="AEN1594"
 ></A
 ><P
 ><B
@@ -7708,7 +7701,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1612"
+NAME="AEN1610"
 ></A
 >System and User Properties</H2
 ><P

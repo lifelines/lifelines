@@ -1,3 +1,13 @@
+2003-09-12 Stephen Dum
+        * docs/Makefile.am docs/ll-reportmanual.html docs/ll-reportmanual.pdf
+	docs/ll-reportmanual.txt docs/ll-reportmanual.xml
+	docs/ll-userguide.html docs/ll-userguide.pdf docs/ll-userguide.txt
+	reports/anniver.ll reports/cron.ll src/liflines/llexec.c ChangeLog
+
+        Update documentation for sort/rsort's change in sorting direction
+	Update reports anniver and cron for same.  Add preliminary
+	documentation to reportmanual for the dup function.  And rebuild docs.
+
 2003-09-12 Perry Rapp
         * ChangeLog docs/ll-reportmanual.sv.xml docs/ll-userguide.sv.xml
 	docs/ll-reportmanual.sv.html docs/ll-userguide.sv.html 

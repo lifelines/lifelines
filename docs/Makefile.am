@@ -11,7 +11,7 @@ MANUALS_en =     ll-reportmanual.html ll-reportmanual.pdf \
 	     ll-userguide.html ll-userguide.pdf \
 	     ll-userguide.txt 
 
-MANUALS_sv = sv/ll-reportmanual.sv.xml sv/ll-userguide.sv.xml
+MANUALS_sv = ll-reportmanual.sv.html ll-userguide.sv.html
 
 MANUALS = $(MANUALS_en) $(MANUALS_sv)
 
