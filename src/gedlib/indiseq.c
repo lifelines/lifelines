@@ -192,7 +192,11 @@ remove_indiseq (INDISEQ seq)
  * Created: 2001/03/25, Perry Rapp
  * This takes care of the problem that report indiseqs
  * must use report-allocated values (pvalues) - and these
- * cannot be copied directly, a copy must be allocated
+ * cannot be copied directly, a copy must be allocated.
+ * This is a complication that is solved thru a vtable,
+ * because indiseq.c is in a layer lower than the interpreter,
+ * and does not know about pvalues. The interpreter registers
+ * a copy function in the seq's vtable to solve this.
  *============================*/
 static UNION
 copyval (INDISEQ seq, UNION uval)
