@@ -155,8 +155,8 @@ lower (STRING str)
 {
 	static unsigned char scratch[MAXLINELEN+1];
 	STRING p = scratch;
-	INT c;
-	while ((c = *str++))
+	INT c, i=0;
+	while ((c = *str++) && (++i < MAXLINELEN+1))
 		*p++ = ll_tolower(c);
 	*p = '\0';
 	return scratch;
@@ -170,8 +170,8 @@ upper (STRING str)
 {
 	static unsigned char scratch[MAXLINELEN+1];
 	STRING p = scratch;
-	INT c;
-	while ((c = *str++))
+	INT c, i=0;
+	while ((c = *str++) && (++i < MAXLINELEN+1))
 		*p++ = ll_toupper(c);
 	*p = '\0';
 	return scratch;

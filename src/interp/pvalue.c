@@ -273,11 +273,9 @@ create_pvalue (INT type, VPTR value)
 	if (type == PNONE) return NULL;
 	val = alloc_pvalue_memory();
 	if (type == PSTRING) {
-		if (!value) {
-			/* string functions don't handle NULL */
-			value = "";
+		if (value) {
+			value = (VPTR) strsave((STRING) value);
 		}
-		value = (VPTR) strsave((STRING) value);
 	}
 	ptype(val) = type;
 	pvalue(val) = value;
@@ -442,12 +440,9 @@ copy_pvalue (PVALUE val)
 	case PSTRING:
 		{
 			/*
-			PSTRING handling needs to be fixed
-			Some place(s) copy the pointer and delete the
-			old val.
-			2001/01/20, Perry Rapp
+			copy_pvalue is called below, and it will
+			strsave the value
 			*/
-			int debug=1;
 		}
 		break;
 	case PANY:
@@ -657,15 +652,13 @@ set_pvalue (PVALUE val,
 	if (type == PSTRING && ptype(val) == PSTRING 
 		&& value == pvalue(val)) {
 		/* string self-assignment */
-		if (!value) pvalue(val) = "";
 		return;
 	}
 	clear_pvalue(val);
 	ptype(val) = type;
 	if (type == PSTRING) {
-		if (!value) /* string functions don't handle NULL */
-			value = "";
-		value = (VPTR) strsave((STRING) value);
+		if (value)
+			value = (VPTR) strsave((STRING) value);
 	}
 	pvalue(val) = value;
 }
@@ -769,10 +762,6 @@ coerce_pvalue (INT type,       /* type to convert to */
 	/* PANY or PINT with NULL (0) value is convertible to any scalar */
 	if ((ptype(val) == PANY || ptype(val) == PINT) && pvalue(val) == NULL) {
 		if (type == PSET || type == PTABLE || type == PLIST) goto bad;
-		if (type == PSTRING) {
-			/* string functions don't handle NULL */
-			pvalue(val) = strsave("");
-		}
 		ptype(val) = type;
 		return;
 	}

@@ -1,5 +1,13 @@
 2001-04-29 Perry Rapp <puddle@users.sourceforge.net>
 
+	* ChangeLog NEWS interp/builtin.c interp/more.c interp/pvalue.c
+	stdlib/stdstrng.c:
+	Change back to use null pstrings
+	Modify some builtin functions to handle null pstrings.
+	Modify upper & lower to not overflow buffers.
+
+2001-04-29 Perry Rapp <puddle@users.sourceforge.net>
+
 	* btree/opnbtree.c gedlib/init.c hdrs/btree.h liflines/main.c
 	stdlib/fpattern.c:
 	Finished rearranging open db code so almost all non-ui parts are

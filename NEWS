@@ -5,6 +5,8 @@ http://lifelines.sourceforge.net
 Bug fixes in 3.0.6.1-dev
 ==================
 
+- upper or lower could overflow internal buffers
+
 - NULL PSTRINGs (eg, from getindi(), or father()) could crash string
   functions
 

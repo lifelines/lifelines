@@ -329,6 +329,7 @@ __substring (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	hi = (INT) pvalue(val2);
+	/* substr can handle str==NULL */
 	set_pvalue(val2, PSTRING, (VPTR) substring(str, lo, hi));
 	delete_pvalue(val1);
 	return val2;
@@ -376,6 +377,7 @@ compute_pi (STRING sub)
 }
 /*==============================
  * substring -- Return substring
+ *  handles NULL input
  *  returns static buffer
  *============================*/
 static STRING

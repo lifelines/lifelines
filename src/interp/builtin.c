@@ -1676,14 +1676,14 @@ PVALUE
 __strlen (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
+	INT len=0;
 	if (*eflg) {
 		prog_error(node, "the arg to strlen must be a string");
 		return NULL;
 	}
 	if (pvalue(val))
-		set_pvalue(val, PINT, (VPTR)strlen(pvalue(val)));
-	else
-		set_pvalue(val, PINT, 0);
+		len = strlen(pvalue(val));
+	set_pvalue(val, PINT, (VPTR)len);
 	return val;
 }
 /*=============================================+
@@ -1694,9 +1694,9 @@ PVALUE
 __concat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
-	INT len = 0, i, nstrs = 0;
+	INT len = 0, i, nstrs = 0, nonnull=0;
 	STRING hold[32];
-	STRING p, new, str;
+	STRING p, newstr, str;
 	PVALUE val;
 
 	while (arg) {
@@ -1713,22 +1713,33 @@ __concat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 #endif
 
 			hold[nstrs++] = strsave(str);
+			++nonnull;
 		} else
 			hold[nstrs++] = NULL;
 		arg = inext(arg);
 		delete_pvalue(val);
-	}
-	p = new = (STRING) stdalloc(len + 1);
-	for (i = 0; i < nstrs; i++) {
-		str = hold[i];
-		if (str) {
-			strcpy(p, str);
-			p += strlen(p);
-			stdfree(str);
+		if (nstrs == sizeof(hold)/sizeof(hold[0])) {
+			*eflg = TRUE;
+			prog_error(node, "Too many (>32) args to concat");
+			return NULL;
 		}
 	}
-	val = create_pvalue(PSTRING, (VPTR)new);
-	stdfree(new);
+	if (nonnull) {
+		p = newstr = (STRING) stdalloc(len + 1);
+		for (i = 0; i < nstrs; i++) {
+			str = hold[i];
+			if (str) {
+				strcpy(p, str);
+				p += strlen(p);
+				stdfree(str);
+			}
+		}
+	} else {
+		newstr = NULL;
+	}
+	val = create_pvalue(PSTRING, (VPTR)newstr);
+	if (newstr)
+		stdfree(newstr);
 	return val;
 }
 /*=======================================+
@@ -1744,7 +1755,9 @@ __lower (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "the arg to lower must be a string");
 		return NULL;
 	}
-	str = lower(pvalue(val));
+	str = pvalue(val);
+	if (str)
+		str = lower(str);
 	set_pvalue(val, PSTRING, str);
 	return val;
 }
@@ -1761,7 +1774,9 @@ __upper (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "the arg to upper must be a string");
 		return NULL;
 	}
-	str = upper(pvalue(val));
+	str = pvalue(val);
+	if (str)
+		str = upper(str);
 	set_pvalue(val, PSTRING, str);
 	return val;
 }
@@ -1778,7 +1793,9 @@ __capitalize (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "the arg to capitalize must be a string");
 		return NULL;
 	}
-	str = capitalize(pvalue(val));
+	str = pvalue(val);
+	if (str)
+		str = capitalize(str);
 	set_pvalue(val, PSTRING, str);
 	return val;
 }
