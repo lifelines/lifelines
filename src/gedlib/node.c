@@ -226,7 +226,8 @@ assign_nod0 (NOD0 nod0, char ntype, INT keynum)
 	char key[9];
 	sprintf(key, "%c%d", ntype, keynum);
 	sprintf(xref, "@%s@", key);
-	nxref(nztop(nod0)) = strsave(xref);
+	if (nztop(nod0))
+		nxref(nztop(nod0)) = strsave(xref);
 	nod0->nkey.key = strsave(key);
 	nod0->nkey.keynum = keynum;
 	nod0->nkey.ntype = ntype;

@@ -1,3 +1,11 @@
+2001-02-10 Perry Rapp <puddle@users.sourceforge.net>
+
+	* gedlib/node.c: bugfix for creating new NOD0s.
+
+2001-02-09 Matt Emmerton <memmerto@users.sourceforge.net>
+
+	Code clean-up (make stuff static, fix void declarations, etc).
+
 2001-02-08 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/lloptions.c:
