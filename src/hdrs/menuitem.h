@@ -110,7 +110,7 @@ enum {
 	, CMD_TEST88, CMD_TEST999
 };
 
-void menuitem_initialize();
+void menuitem_initialize(void);
 void menuitem_terminate(void);
 INT menuitem_check_cmd(INT screen, STRING cmd);
 
