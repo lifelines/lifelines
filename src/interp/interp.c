@@ -342,7 +342,7 @@ if (prog_debug) {
 		case ISCONS:
 			poutput(pvalue(ivalue(node)), &eflg);
 			if (eflg)
-				return INTERROR;
+				goto interp_fail;
 			break;
 		case IIDENT:
 			val = eval_and_coerce(PSTRING, node, stab, &eflg);
@@ -350,13 +350,13 @@ if (prog_debug) {
 				llwprintf(ierror, ifname(node), iline(node));
 				llwprintf("identifier: %s should be a string\n",
 				    iident(node));
-				return INTERROR;
+				goto interp_fail;
 			}
 			str = (STRING) pvalue(val);
 			if (str) {
 				poutput(str, &eflg);
 				if (eflg) {
-					return INTERROR;
+					goto interp_fail;
 				}
 			}
 			delete_pvalue(val);
@@ -366,37 +366,34 @@ if (prog_debug) {
 			llwprintf("BCALL: %s\n", iname(node));
 #endif
 			val = evaluate_func(node, stab, &eflg);
-			if (eflg) return INTERROR;
-#if 0
 			if (eflg) {
-				llwprintf(ierror, ifname(node), iline(node));
-				llwprintf("in function: `%s'\n", iname(node));
-				return INTERROR;
+				goto interp_fail;
 			}
-#endif
 			if (!val) break;
 			if (ptype(val) == PSTRING && pvalue(val)) {
 				poutput(pvalue(val), &eflg);
 				if (eflg)
-					return INTERROR;
+					goto interp_fail;
 			}
 			delete_pvalue(val);
 			break;
 		case IFCALL:
 			val = evaluate_ufunc(node, stab, &eflg);
-			if (eflg) return INTERROR;
+			if (eflg) {
+				goto interp_fail;
+			}
 #if 0
 			if (eflg) {
 				llwprintf(ierror, ifname(node), iline(node));
 				llwprintf("in function: `%s'\n", iname(node));
-				return INTERROR;
+				goto interp_fail;
 			}
 #endif
 			if (!val) break;
 			if (ptype(val) == PSTRING && pvalue(val)) {
 				poutput(pvalue(val), &eflg);
 				if (eflg)
-					return INTERROR;
+					goto interp_fail;
 			}
 			delete_pvalue(val);
 			break;
@@ -411,7 +408,7 @@ if (prog_debug) {
 				llwprintf(ierror, ifname(node), iline(node));
 				llwprintf("in children loop\n");
 #endif
-				return INTERROR;
+				goto interp_fail;
 			default:
 				return irc;
 			}
@@ -425,7 +422,7 @@ if (prog_debug) {
 				llwprintf(ierror, ifname(node), iline(node));
 				llwprintf("in spouses loop\n");
 #endif
-				return INTERROR;
+				goto interp_fail;
 			default:
 				return irc;
 			}
@@ -439,7 +436,7 @@ if (prog_debug) {
 				llwprintf(ierror, ifname(node), iline(node));
 				llwprintf("in families loop\n");
 #endif
-				return INTERROR;
+				goto interp_fail;
 			default:
 				return irc;
 			}
@@ -453,7 +450,7 @@ if (prog_debug) {
 				llwprintf(ierror, ifname(node), iline(node));
 				llwprintf("in fathers loop\n");
 #endif
-				return INTERROR;
+				goto interp_fail;
 			default:
 				return irc;
 			}
@@ -467,7 +464,7 @@ if (prog_debug) {
 				llwprintf(ierror, ifname(node), iline(node));
 				llwprintf("in mothers loop\n");
 #endif
-				return INTERROR;
+				goto interp_fail;
 			default:
 				return irc;
 			}
@@ -481,7 +478,7 @@ if (prog_debug) {
 				llwprintf(ierror, ifname(node), iline(node));
 				llwprintf("in parents loop\n");
 #endif
-				return INTERROR;
+				goto interp_fail;
 			default:
 				return irc;
 			}
@@ -495,7 +492,7 @@ if (prog_debug) {
 				llwprintf(ierror, ifname(node), iline(node));
 				llwprintf("in indiset loop\n");
 #endif
-				return INTERROR;
+				goto interp_fail;
 			default:
 				return irc;
 			}
@@ -509,7 +506,7 @@ if (prog_debug) {
 				llwprintf(ierror, ifname(node), iline(node));
 				llwprintf("in forindi loop\n");
 #endif
-				return INTERROR;
+				goto interp_fail;
 			default:
 				return irc;
 			}
@@ -523,7 +520,7 @@ if (prog_debug) {
 				llwprintf(ierror, ifname(node), iline(node));
 				llwprintf("in forfam loop\n");
 #endif
-				return INTERROR;
+				goto interp_fail;
 			default:
 				return irc;
 			}
@@ -537,7 +534,7 @@ if (prog_debug) {
 				llwprintf(ierror, ifname(node), iline(node));
 				llwprintf("in forsour loop\n");
 #endif
-				return INTERROR;
+				goto interp_fail;
 			default:
 				return irc;
 			}
@@ -551,7 +548,7 @@ if (prog_debug) {
 				llwprintf(ierror, ifname(node), iline(node));
 				llwprintf("in foreven loop\n");
 #endif
-				return INTERROR;
+				goto interp_fail;
 			default:
 				return irc;
 			}
@@ -565,7 +562,7 @@ if (prog_debug) {
 				llwprintf(ierror, ifname(node), iline(node));
 				printf("in forothr loop\n");
 #endif
-				return INTERROR;
+				goto interp_fail;
 			default:
 				return irc;
 			}
@@ -579,7 +576,7 @@ if (prog_debug) {
 				llwprintf(ierror, ifname(node), iline(node));
 				llwprintf("in forlist loop\n");
 #endif
-				return INTERROR;
+				goto interp_fail;
 			default:
 				return irc;
 			}
@@ -593,7 +590,7 @@ if (prog_debug) {
 				llwprintf(ierror, ifname(node), iline(node));
 				llwprintf("in fornotes loop\n");
 #endif
-				return INTERROR;
+				goto interp_fail;
 			default:
 				return irc;
 			}
@@ -607,7 +604,7 @@ if (prog_debug) {
 				llwprintf(ierror, ifname(node), iline(node));
 				llwprintf("in fornodes loop\n");
 #endif
-				return INTERROR;
+				goto interp_fail;
 			default:
 				return irc;
 			}
@@ -621,7 +618,7 @@ if (prog_debug) {
 				llwprintf(ierror, ifname(node), iline(node));
 				llwprintf("in traverse loop\n");
 #endif
-				return INTERROR;
+				goto interp_fail;
 			default:
 				return irc;
 			}
@@ -635,7 +632,7 @@ if (prog_debug) {
 				llwprintf(ierror, ifname(node), iline(node));
 				llwprintf("in if statement\n");
 #endif
-				return INTERROR;
+				goto interp_fail;
 			default:
 				return irc;
 			}
@@ -649,7 +646,7 @@ if (prog_debug) {
 				llwprintf(ierror, ifname(node), iline(node));
 				llwprintf("in while statement\n");
 #endif
-				return INTERROR;
+				goto interp_fail;
 			default:
 				return irc;
 			}
@@ -663,7 +660,7 @@ if (prog_debug) {
 				llwprintf(ierror, ifname(node), iline(node));
 				llwprintf("in procedure call\n");
 #endif
-				return INTERROR;
+				goto interp_fail;
 			default:
 				return irc;
 			}
@@ -684,11 +681,15 @@ if (prog_debug) {
 		default:
 			llwprintf("itype(node) is %d\n", itype(node));
 			llwprintf("HUH, HUH, HUH, HUNH!\n");
-			return INTERROR;
+			goto interp_fail;
 		}
 		node = inext(node);
 	}
 	return TRUE;
+
+interp_fail:
+	/* for breakpointing */
+	return INTERROR;
 }
 /*========================================+
  * interp_children -- Interpret child loop
@@ -1096,15 +1097,16 @@ interp_fornodes (PNODE node, SYMTAB stab, PVALUE *pval)
 		case INTCONTINUE:
 		case INTOKAY:
 			sub = nsibling(sub);
-			irc = INTOKAY;
-			break;
+			goto hloop;
 		case INTBREAK:
 			irc = INTOKAY;
 			goto hleave;
 		default:
 			goto hleave;
 		}
+hloop: ;
 	}
+	irc = INTOKAY;
 hleave:
 	delete_symtab(stab, ielement(node));
 	return irc;

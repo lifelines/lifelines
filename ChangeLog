@@ -7,6 +7,9 @@
 	Added comment for outstanding problem with __name
 	(it returns NULL PSTRING values).
 
+	* ChangeLog interp/interp.c:
+	Fix to fornodes so it returns success when no children.
+
 2001-04-15    <Marc.Nozell@compaq.com>
 
 	* tools/btedit.c: Fix btedit build.
