@@ -353,7 +353,7 @@ ZST qSsig11       = N_("SEGMENTATION ERROR");
 ZST qSsig12       = N_("SYSTEM CALL ERROR");
 ZST qSsig13       = N_("PIPE WRITE");
 ZST qSsig14       = N_("ALARM CLOCK");
-ZST qSsig15       = N_("TEMINATE FROM KILL");
+ZST qSsig15       = N_("TERMINATE FROM KILL");
 ZST qSsig16       = N_("USER SIGNAL 1");
 ZST qSsig17       = N_("USER SIGNAL 2");
 ZST qSsig18       = N_("DEATH OF CHILD");
@@ -412,7 +412,8 @@ ZST qSbadparsex   = N_("You cannot change the sex of a parent.");
 ZST qSbadirefn    = N_("REFN key is already in use.");
 
 ZST qStag2lng2cnc = N_("Tag is too long to connect automatically.");
-ZST qSdbrecstats  = N_("Database records (%dP, %dF, %dS, %dE, %dX)");
+	/* I,F,S,E,X are conventional letters, so leave them as is) */
+ZST qSdbrecstats  = N_("Database records (%dI, %dF, %dS, %dE, %dX)");
 
 /* initialization */
 ZST qSwin2big     = N_("The requested window size (%d,%d) is too large for your terminal (%d,%d).\n");
@@ -422,7 +423,9 @@ ZST qSwin2small   = N_("The requested window size (%d,%d) is too small for LifeL
 ZST qSmtitle      = N_("LifeLines %s - Genealogical DB and Programming System");
 ZST qScright      = N_("Copyright(c) 1991 to 1996, by T. T. Wetmore IV");
 ZST qSdbname      = N_("Current Database - %s");
+	/* immutable is read-only with no reader/writer conflict protection */
 ZST qSdbimmut     = N_(" (immutable)");
+	/* read-only has protection against reader/writer conflict */
 ZST qSdbrdonly    = N_(" (read only)");
 ZST qSplschs      = N_("Please choose an operation:");
 ZST qSmn_unkcmd   = N_("Not valid command");
@@ -603,13 +606,21 @@ ZST qSdater_aftB  = N_("after %1");
 ZST qSdater_betA  = N_("bet %1 and %2");
 ZST qSdater_betB  = N_("between %1 and %2");
 	/* &&origin/era trailers */
+	/* B.C. = Before Christ (calendar) */
 ZST qSdatetrl_bcA = N_("B.C.");
+	/* BC = Before Christ (calendar) */
 ZST qSdatetrl_bcB = N_("BC");
+	/* B.C.E. = Before Common Era (calendar) */
 ZST qSdatetrl_bcC = N_("B.C.E.");
+	/* BCE. = Before Common Era (calendar) */
 ZST qSdatetrl_bcD = N_("BCE");
+	/* A.D. = Anno Domini (calendar) */
 ZST qSdatetrl_adA = N_("A.D.");
+	/* AD = Anno Domini (calendar) */
 ZST qSdatetrl_adB = N_("AD");
+	/* C.E. = Common Era (calendar) */
 ZST qSdatetrl_adC = N_("C.E.");
+	/* CE = Common Era (calendar) */
 ZST qSdatetrl_adD = N_("CE");
 	/* &&calendar pics */
 	/* Julian calendar year */
