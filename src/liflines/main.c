@@ -101,7 +101,6 @@ static STRING usage = (STRING) "lines [-adkrwfmntcuy] [database]";
 
 BOOLEAN debugmode = FALSE; /* no signal handling, so we can get coredump */
 BOOLEAN opt_nocb  = FALSE;	/* no cb. data is displayed if TRUE */
-BOOLEAN alloclog  = FALSE;	/* alloc/free debugging */
 BOOLEAN keyflag   = TRUE;	/* show key values */
 BOOLEAN readonly  = FALSE;	/* database is read only */
 BOOLEAN writeable = FALSE;	/* database must be writeable */

@@ -1,3 +1,9 @@
+2001-09-24 Matt Emmerton <memmerto@users.sourceforge.net>
+
+        * ChangeLog liflines/main.c stdlib/memalloc.c:
+        Moved global variable 'alloclog' from liflines/main.c to
+	stdlib/memalloc.c
+
 2001-09-22 Perry Rapp <puddle@users.sourceforge.net>
 
 	* .linesrc ChangeLog lines.cfg btree/addkey.c gedlib/init.c

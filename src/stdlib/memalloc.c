@@ -33,10 +33,10 @@
 #include "llstdlib.h"
 
 /*********************************************
- * external variables (no header)
+ * global variables
  *********************************************/
 
-extern BOOLEAN alloclog;
+BOOLEAN alloclog = 0;
 
 /*********************************************
  * local function prototypes
