@@ -10,6 +10,11 @@
 	Fixes sf bug#1099208
 	 (FATAL error if no main() function in report).
 
+	* ChangeLog reports/st/st_convert.li
+
+	Remove Greek SAS test from string self-test,
+	as special sigma code is not implemented.
+
 2005-01-08 Matt Emmerton
 
 	* ChangeLog src/interp/intrpseq.c src/interp/builtin.c
