@@ -77,6 +77,10 @@ install -m 644 docs/llines.1 $RPM_BUILD_ROOT/usr/local/man/man1/llines.1
 /usr/local/man/man1/llines.1
 
 %changelog
+* Tue May 06 2003 Perry Rapp
+- Add btedit.1 (& alphabetize man pages)
+* Mon May 05 2003 Perry Rapp
+- Add dbverify.1
 * Mon Nov 11 2002 Perry Rapp
 - Add da.po
 - (post lifelines-3.0.21)
@@ -86,8 +90,4 @@ install -m 644 docs/llines.1 $RPM_BUILD_ROOT/usr/local/man/man1/llines.1
 - Implement patch by Karl DeBisschop: adds build root, list reports as group instead of individually
 - Add dbverify, de.po, fr.po, sv.po
 - (lifelines-3.0.19-1)
-* Mon May 05 2003 Perry Rapp
-- Add dbverify.1
-* Tues May 06 2003 Perry Rapp
-- Add btedit.1 (& alphabetize man pages)
 

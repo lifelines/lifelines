@@ -9,6 +9,10 @@
 
 	Add manuals to list of files (README.MAINTAINERS) to have version bumped.
 
+	* ChangeLog build/rpm/lifelines.spec
+
+	Fix rpm spec changelog format bugs.
+
 2003-05-09 Perry Rapp
 
 	* ChangeLog po/de.po
