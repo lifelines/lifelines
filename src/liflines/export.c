@@ -89,6 +89,7 @@ archive_in_file (void)
 		str = lloptions.hdr_subm;
 	if (!str || !str[0])
 		str = "1 SUBM";
+	fprintf(fn, "%s\n", str);
 	/* header gedcom version info */
 	str = valueof_str(useropts, "HDR_GEDC");
 	if (!str || !str[0])

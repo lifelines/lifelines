@@ -21,6 +21,11 @@
 	Changed put_out_line prototype to use void * win, so llinesi.h doesn't
 	require curses.
 
+	* .linesrc ChangeLog lines.cfg interp/interp.c liflines/browse.c
+	liflines/export.c liflines/tandem.c:
+
+	Typo fixes.
+
 2001-11-11 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/gstrings.c hdrs/interp.h interp/eval.c

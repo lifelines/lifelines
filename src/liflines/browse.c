@@ -544,7 +544,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 		case CMD_ADD_SOUR: /* add source */
 		case CMD_ADD_EVEN: /* add event */
 		case CMD_ADD_OTHR: /* add other */
-			c2 = (c==CMD_ADD_SOUR ? 'S' : (c2==CMD_ADD_EVEN ? 'E' : 'X'));
+			c2 = (c==CMD_ADD_SOUR ? 'S' : (c==CMD_ADD_EVEN ? 'E' : 'X'));
 			node = add_new_rec_maybe_ref(indi, c2);
 			if (node == indi) {
 				c = CMD_EDIT;
@@ -1485,12 +1485,6 @@ add_new_rec_maybe_ref (NODE node, char ntype)
 	char title[60];
 	INT rtn;
 
-    /* init choices */
-    choices[0] = autoxref;
-    choices[1] = editcur;
-    choices[2] = gotonew;
-    choices[3] = staycur;
-
 	/* create new node of requested type */
 	if (ntype=='E') 
 		newnode=add_event();
@@ -1509,7 +1503,12 @@ add_new_rec_maybe_ref (NODE node, char ntype)
 	/* now ask the user how to connect the new node */
 	sprintf(title, newrecis, nxref(newnode));
 	msg_info(title);
+	/* keep new node # in status so it will be visible during edit */
 	lock_status_msg(TRUE);
+	choices[0] = autoxref;
+	choices[1] = editcur;
+	choices[2] = gotonew;
+	choices[3] = staycur;
 	rtn = choose_from_array(NULL, 4, choices);
 	lock_status_msg(FALSE);
 	switch(rtn) {
