@@ -265,6 +265,7 @@ PNODE break_node(void);
 PNODE call_node(STRING, PNODE);
 PNODE children_node(PNODE, STRING, STRING, PNODE);
 PNODE children_node(PNODE, STRING, STRING, PNODE);
+PNODE continue_node(void);
 PNODE create_pnode(INT);
 PVALUE evaluate(PNODE, TABLE, BOOLEAN*);
 BOOLEAN evaluate_cond(PNODE, TABLE, BOOLEAN*);
@@ -276,6 +277,7 @@ NODE eval_indi(PNODE, TABLE, BOOLEAN*, CACHEEL*);
 NODE eval_fam(PNODE, TABLE, BOOLEAN*, CACHEEL*);
 void extract_date(STRING, INT*, INT*, INT*, INT*, STRING*);
 PNODE families_node(PNODE, STRING, STRING, STRING, PNODE);
+PNODE fathers_node(PNODE, STRING, STRING, STRING, PNODE);
 PNODE fcons_node(FLOAT);
 PNODE fdef_node(STRING, PNODE, PNODE);
 PNODE foreven_node(STRING, STRING, PNODE);
@@ -285,6 +287,7 @@ PNODE forindiset_node(PNODE, STRING, STRING, STRING, PNODE);
 PNODE forlist_node(PNODE, STRING, STRING, PNODE);
 STRING format_date(STRING, INT, INT, INT, INT, BOOLEAN);
 PNODE forsour_node(STRING, STRING, PNODE);
+PNODE fornodes_node(PNODE, STRING, PNODE);
 PNODE fornotes_node(PNODE, STRING, PNODE);
 PNODE forothr_node(STRING, STRING, PNODE);
 PNODE func_node(STRING, PNODE);
@@ -309,6 +312,7 @@ PNODE traverse_node(PNODE, STRING, STRING, PNODE);
 PVALUE valueof_iden(TABLE, STRING);
 PNODE while_node(PNODE, PNODE);
 int yylex(void);
+int yyparse(void);
 
 #endif /* _INTERP_H */
 

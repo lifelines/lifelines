@@ -508,7 +508,7 @@ PNODE break_node (void)
 /*======================================
  * continue_node -- Create continue node
  *====================================*/
-PNODE continue_node ()
+PNODE continue_node (void)
 {
 	PNODE node = create_pnode(ICONTINUE);
 	return node;
