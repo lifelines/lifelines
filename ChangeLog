@@ -3,7 +3,8 @@
         *Changelog reports/cgi_html.li reports/dump_html_sd.ll
 	reports/extract_html.ll reports/fileindex.ll reports/html.dn.ll
 	reports/index_html.ll src/gedlib/node.c src/hdrs/gedcom.h
-	src/liflines/show.c
+	src/liflines/show.c docs/ll-userguide.html docs/ll-userguide.pdf 
+	docs/ll-userguide.txt docs/ll-userguide.xml 
 
 	remove hardcoded database owner names and email addresses from reports
 	and use getproperty("user.fullname") and "user.email" instead.
