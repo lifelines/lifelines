@@ -5,6 +5,9 @@
 ** SourceForge Versions:
 **
 ** $Log$
+** Revision 1.3  2000/11/11 07:46:47  pere
+** Include index even when there is no bibliography.
+**
 ** Revision 1.2  2000/11/11 04:07:37  dabright
 **
 ** reports/book-latex.ll: Added processing for BAPM tag, corrected
@@ -759,34 +762,33 @@ proc main ()
     }
   }
 
+    set(basename, 
+      save(substring(outfile(), 1, sub(index(outfile(), ".tex", 1), 1))))
+
     /* Output bibliography commands */
     if (not (empty (bibList))) {
-      set(bibFile, 
-	  save(substring(outfile(), 1, sub(index(outfile(), ".tex", 1), 1))))
-
-
       "\n\n\\onecolumn"
       "\n\\cleardoublepage"
       "\n\\label{Bibliography}"
       "\n\\addcontentsline{toc}{chapter}{Bibliography}"
       "\n\\begin{thebibliography}{9.99}"
-      "\n\\input{" bibFile "-bib.tex}"
+      "\n\\input{" basename "-bib.tex}"
       "\n\\end{thebibliography}"
     }
    "\n\n\\cleardoublepage"
    "\n\\label{Index}"
    "\n\\addcontentsline{toc}{chapter}{Index}"
-   "\n\\input{" bibFile ".ind}"
+   "\n\\input{" basename ".ind}"
 
     "\n\n\\end{document}\n"
 
     /* Output bibliography file */
     print ("\n\nCreating support files ...")
     if (not (empty (bibList))) {
-      newfile (concat (bibFile, "-bib.tex"), 0)
+      newfile (concat (basename, "-bib.tex"), 0)
 	print ("writing to : ")
 	print("\n")
-	print(concat (bibFile, "-bib.tex"))
+	print(concat (basename, "-bib.tex"))
 	print("\n")
       while (b, dequeue (bibList)) { b }
     }

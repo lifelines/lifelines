@@ -1,3 +1,8 @@
+2000-11-11 Petter Reinholdtsen <pere@td.org.uit.no>
+
+	* reports/book-latex.ll: Bugfix.  Include index even when there
+	is no bibliography.
+
 2000-11-10 David Bright <dabright@users.sourceforge.net>
 
 	* reports/book-latex.ll: Added processing for BAPM tag, corrected
