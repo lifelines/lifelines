@@ -1,3 +1,9 @@
+2005-02-25 Perry Rapp
+
+	* ChangeLog src/stdlib/rbtree.c
+
+	Add newline to end of file (to placate gcc warning).
+
 2005-02-24 Perry Rapp
 
 	* ChangeLog src/gedlib/lloptions.c

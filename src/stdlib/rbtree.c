@@ -893,7 +893,6 @@ FindLast (RBTREE tree, RBKEY high)
 	RBNODE nil=tree->nil;
 	RBNODE x=tree->root->left;
 	RBNODE lastBest=nil;
-	int rtn=1;
 
 	/* Find starting location */
 	while(nil != x) {
