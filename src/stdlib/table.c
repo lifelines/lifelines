@@ -118,7 +118,6 @@ static ENTRY new_entry(void);
 static void replace_table_impl(TABLE tab, STRING key, UNION uval, INT whattofree);
 static void tabit_destructor(VTABLE *obj);
 static void table_destructor(VTABLE *obj);
-static UNION* valueofbool_impl(TABLE tab, STRING key);
 
 /*********************************************
  * local variables
@@ -288,7 +287,6 @@ new_table_entry_impl (TABLE tab, CNSTRING key, GENERIC * generic)
 	entry->enext = tab->entries[hval];
 	tab->entries[hval] = entry;
 	++tab->count;
-	/* used by old-style tables which use generics for int values */
 }
 /*======================================
  * replace_table_impl -- Insert key & value into table
@@ -419,6 +417,7 @@ void
 replace_table_str (TABLE tab, STRING key, STRING str, INT whattofree)
 {
 	UNION uval;
+	ASSERT(tab->whattofree != -2);
 	uval.w = str;
 	if (tab->valtype == TB_NULL)
 		tab->valtype = TB_STR;
@@ -459,18 +458,11 @@ in_table (TABLE tab, CNSTRING key)
 }
 /*===============================
  * valueof_ptr -- Find pointer value of entry
- * Created: 2001/06/03 (Perry Rapp)
  *=============================*/
 VPTR
 valueof_ptr (TABLE tab, CNSTRING key)
 {
-	ENTRY entry;
-	if (!tab->count || !key) return NULL;
-	ASSERT(tab->valtype == TB_PTR);
-	if ((entry = fndentry(tab, key)))
-		return entry->uval.w;
-	else
-		return NULL;
+	return valueofbool_ptr(tab, key, NULL);
 }
 /*===============================
  * valueof_int -- Find int value of entry
@@ -478,51 +470,17 @@ valueof_ptr (TABLE tab, CNSTRING key)
  * Created: 2001/06/03 (Perry Rapp)
  *=============================*/
 INT
-valueof_int (TABLE tab, CNSTRING key, INT defval)
+valueof_int (TABLE tab, CNSTRING key)
 {
-	ENTRY entry=0;
-	if (!tab->count || !key) 
-		return defval;
-	entry = fndentry(tab, key);
-	if (!entry)
-		return defval;
-	if (!is_generic_int(&entry->generic))
-		return defval;
-	return get_generic_int(&entry->generic);
+	return valueofbool_int(tab, key, NULL);
 }
 /*===============================
  * valueof_str -- Find string value of entry
- * Created: 2001/06/03 (Perry Rapp)
  *=============================*/
 STRING
 valueof_str (TABLE tab, CNSTRING key)
 {
-	ENTRY entry=0;
-	if (!tab->count || !key) return NULL;
-	entry = fndentry(tab, key);
-	if (!entry)
-		return NULL;
-	if (!is_generic_null(&entry->generic)) {
-		if (!is_generic_string(&entry->generic))
-			return NULL;
-		return get_generic_string(&entry->generic);
-	} else {
-		ASSERT(tab->valtype == TB_STR);
-		return entry->uval.w;
-	}
-}
-/*===================================
- * valueofbool_impl -- Find value of entry
- *=================================*/
-static UNION *
-valueofbool_impl (TABLE tab, STRING key)
-{
-	ENTRY entry;
-	if (!tab->count || !key) return NULL;
-	if ((entry = fndentry(tab, key))) {
-		return &entry->uval;
-	}
-	return NULL;
+	return valueofbool_str(tab, key, NULL);
 }
 /*===================================
  * valueofbool_ptr -- Find pointer value of entry
@@ -530,17 +488,27 @@ valueofbool_impl (TABLE tab, STRING key)
  * Created: 2001/06/03 (Perry Rapp)
  *=================================*/
 VPTR
-valueofbool_ptr (TABLE tab, STRING key, BOOLEAN *there)
+valueofbool_ptr (TABLE tab, CNSTRING key, BOOLEAN *there)
 {
-	UNION * val = valueofbool_impl(tab, key);
-	if (val) {
-		ASSERT(tab->valtype == TB_PTR);
-		*there = TRUE;
-		return val->w;
-	} else {
-		*there = FALSE;
-		return NULL;
+	ENTRY entry=0;
+	VPTR defval=0;
+	if (!tab->count || !key) {
+		if (there) *there=FALSE;
+		return defval;
 	}
+	entry = fndentry(tab, key);
+	if (!entry) {
+		if (there) *there=FALSE;
+		return defval;
+	}
+	if (there) *there=TRUE;
+	if (!is_generic_null(&entry->generic)) {
+		if (!is_generic_vptr(&entry->generic))
+			return NULL;
+		return get_generic_vptr(&entry->generic);
+	}
+	ASSERT(tab->valtype == TB_PTR);
+	return entry->uval.w;
 }
 /*===================================
  * valueofbool_int -- Find pointer value of entry
@@ -548,17 +516,20 @@ valueofbool_ptr (TABLE tab, STRING key, BOOLEAN *there)
  * Created: 2001/06/03 (Perry Rapp)
  *=================================*/
 INT
-valueofbool_int (TABLE tab, STRING key, BOOLEAN *there)
+valueofbool_int (TABLE tab, CNSTRING key, BOOLEAN *there)
 {
-	ENTRY entry = fndentry(tab, key);
+	ENTRY entry=0;
 	INT defval=0;
-	if (!entry) {
-		if (there)
-			*there = FALSE;
+	if (!tab->count || !key) {
+		if (there) *there=FALSE;
 		return defval;
 	}
-	if (there)
-		*there = TRUE;
+	entry = fndentry(tab, key);
+	if (!entry) {
+		if (there) *there=FALSE;
+		return defval;
+	}
+	if (there) *there=TRUE;
 	if (!is_generic_int(&entry->generic))
 		return defval;
 	return get_generic_int(&entry->generic);
@@ -569,17 +540,27 @@ valueofbool_int (TABLE tab, STRING key, BOOLEAN *there)
  * Created: 2001/06/03 (Perry Rapp)
  *=================================*/
 STRING
-valueofbool_str (TABLE tab, STRING key, BOOLEAN *there)
+valueofbool_str (TABLE tab, CNSTRING key, BOOLEAN *there)
 {
-	UNION * val = valueofbool_impl(tab, key);
-	if (val) {
-		ASSERT(tab->valtype == TB_STR);
-		*there = TRUE;
-		return val->w;
-	} else {
-		*there = FALSE;
-		return NULL;
+	ENTRY entry=0;
+	STRING defval=0;
+	if (!tab->count || !key) {
+		if (there) *there=FALSE;
+		return defval;
 	}
+	entry = fndentry(tab, key);
+	if (!entry) {
+		if (there) *there=FALSE;
+		return defval;
+	}
+	if (there) *there=TRUE;
+	if (!is_generic_null(&entry->generic)) {
+		if (!is_generic_string(&entry->generic))
+			return defval;
+		return get_generic_string(&entry->generic);
+	}
+	ASSERT(tab->valtype == TB_STR);
+	return entry->uval.w;
 }
 /*=============================
  * remove_table -- Remove table

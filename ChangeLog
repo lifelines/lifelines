@@ -12,6 +12,14 @@
 
 	Add more ASSERTs to key_to_cacheel.
 
+	* ChangeLog src/gedlib/date.c src/hdrs/table.h
+	src/stdlib/table.c
+
+	Handle generics in table valueofxx functions.
+	Remove function valueofbool_impl.
+	Implement table valuexx functions via valueofxx functions.
+	Remove default value argument to valueof_int.
+
 2005-02-01 Perry Rapp
 
 	* ChangeLog src/stdlib/table.c

@@ -1317,7 +1317,7 @@ get_date_tok (struct tag_dnum *pdnum)
 			*p = 0;
 		}
 		/* look it up in our big table of GEDCOM keywords */
-		i = valueof_int(keywordtbl, upperascii_s(scratch), 0);
+		i = valueof_int(keywordtbl, upperascii_s(scratch));
 		if (i >= 2001 && i < 2000 + GDV_CALENDARS_IX) {
 			pdnum->val = i - 2000;
 			return CALENDAR_TOK;
@@ -1333,12 +1333,12 @@ get_date_tok (struct tag_dnum *pdnum)
 		} while (sstr[0] && sstr[0]!=')' && !iswhite((uchar)sstr[0]));
 		*p = 0;
 		/* look it up in our big table of GEDCOM keywords */
-		i = valueof_int(keywordtbl, upperascii_s(scratch), 0);
+		i = valueof_int(keywordtbl, upperascii_s(scratch));
 		if (!i) {
 			/* unrecognized word */
 			return CHAR_TOK;
 		}
-		if ((i = valueof_int(keywordtbl, upperascii_s(scratch), 0)) > 0 && i <= 999) {
+		if (i > 0 && i <= 999) {
 			pdnum->val = i % 100;
 			/* TODO: we need to use the fact that calendar is i/100 */
 			/* That is, now we know what calendar this is in */

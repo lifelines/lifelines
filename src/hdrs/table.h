@@ -75,12 +75,12 @@ void insert_table_str(TABLE, CNSTRING key, STRING);
 void replace_table_str(TABLE tab, STRING key, STRING str, INT whattofree);
 void table_insert_ptr(TABLE tab, CNSTRING key, const VPTR value);
 void table_insert_string(TABLE tab, CNSTRING key, CNSTRING value);
-INT valueof_int(TABLE, CNSTRING, INT defval);
-VPTR valueof_ptr(TABLE, CNSTRING);
+INT valueof_int(TABLE tab, CNSTRING key);
+VPTR valueof_ptr(TABLE tab, CNSTRING key);
 STRING valueof_str(TABLE tab, CNSTRING key);
-INT valueofbool_int(TABLE tab, STRING key, BOOLEAN *there);
-VPTR valueofbool_ptr(TABLE tab, STRING key, BOOLEAN *there);
-STRING valueofbool_str(TABLE tab, STRING key, BOOLEAN *there);
+INT valueofbool_int(TABLE tab, CNSTRING key, BOOLEAN *there);
+VPTR valueofbool_ptr(TABLE tab, CNSTRING key, BOOLEAN *there);
+STRING valueofbool_str(TABLE tab, CNSTRING key, BOOLEAN *there);
 
 /* table iteration */
 TABLE_ITER begin_table_iter(TABLE tab);
