@@ -1,3 +1,11 @@
+2003-09-29 Robert Simms
+	* ChangeLog src/arch/Makefile.am src/btree/Makefile.am
+	src/gedlib/Makefile.am src/interp/Makefile.am src/liflines/Makefile.am
+	src/stdlib/Makefile.am src/tools/Makefile.am
+
+	Fixed so that config.h and libintl.h are found relative to the
+	build directory instead of a fixed location.
+
 2003-09-28 Stephen Dum
         * ChangeLog src/liflines/loadsave.c docs/ll-reportmanual.html
 	docs/ll-reportmanual.pdf docs/ll-reportmanual.sv.html
