@@ -1,7 +1,7 @@
 # This makefile is for the lifelines reports
 
 AUTOMAKE_OPTIONS = no-dependencies
-pkgdir := $(pkgdatadir)/reports
+### pkgdir := $(pkgdatadir)/reports
 pkg_REPORTS = \
 	2ppage.ll 4gen1.ll 6gen1.ll 8gen1.ll \
 	ahnentafel.ll alive.ll alllines.ll alllines.sgml.ll	\

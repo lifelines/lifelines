@@ -405,6 +405,37 @@
 	* COPYING
 	  - Point to LICENSE
 
+2000-08-23  John Chandler <jchbn@cuvmb.cc.columbia.edu>
+	* gedlib/indiseq.c, interp/intrpseq.c
+	  Fixed valuesort() to work with pvalues.  Also added support for
+	  sorting strings as well as integers.  If the values are not all
+	  the same type, the interpreter quits with an error message.
+
+	* liflines/valgdcom.c
+	  The GEDCOM import routine now avoids crashing on certain types
+	  of GEDCOM errors, such as multiply-defined INDI's.
+
+2000-05-01  John Chandler <jchbn@cuvmb.cc.columbia.edu>
+	* gedlib/messages.c - moved messages from import.c
+	* liflines/ask.c - correct disply of GEDCOM file names
+	* liflines/import.c - avoid abort if user tries to load while read-only
+	* liflines/screen.c - correct typo on utility menu
+
+2000-04-18  John Chandler <jchbn@cuvmb.cc.columbia.edu>
+	* gedlib/indiseq.c. interp/more.c, liflines/ask.c
+	  Changed search order for the functions getindi, getindiset, and
+	  genindiset, so that REFNs are checked ahead of names.
+
+	* interp/builtin.c, interp/date.c, interp/functab.c
+	  Added two new functions:
+	  - complexdate (similar to stddate, but supporting BC,
+	    modifiers, and double dates)
+	  - extractdatestr (returns the pieces of a date from a given
+	    string, rather than a node).
+
+2000-01-26  John Chandler <jchbn@cuvmb.cc.columbia.edu>
+	* btree/opnbtree.c Fixed bug in read-only mode. Leave the correct
+	  number of read-only users upon exiting.
 	
 2000-01-10  Marc Nozell  <marc@nozell.com>
 
