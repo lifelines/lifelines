@@ -1351,7 +1351,7 @@ interp_indisetloop (PNODE node, SYMTAB stab, PVALUE *pval)
 {
 	BOOLEAN eflg = FALSE;
 	INTERPTYPE irc;
-	PVALUE ival;
+	PVALUE indival, loopval;
 	INDISEQ seq = NULL;
 	PVALUE val = evaluate(iloopexp(node), stab, &eflg);
 	if (eflg || !val || ptype(val) != PSET) {
@@ -1359,26 +1359,32 @@ interp_indisetloop (PNODE node, SYMTAB stab, PVALUE *pval)
 		return INTERROR;
 	}
 	seq = (INDISEQ) pvalue(val);
-	delete_pvalue(val);
-	if (!seq) return INTOKAY;
+	if (!seq) {
+		delete_pvalue(val); /* delete temp evaluated val - may destruct seq */
+		return INTOKAY;
+	}
+	/* can't delete val until we're done with seq */
 	insert_symtab(stab, inum(node), PINT, (VPTR) 0);
 	FORINDISEQ(seq, el, ncount)
 #ifdef DEBUG
 		llwprintf("loopinterp - %s = ",ielement(node));
 		llwprintf("\n");
 #endif
-		ival = create_pvalue_from_indi_key(skey(el));
-		insert_symtab_pvalue(stab, ielement(node), ival);
+		/* put current indi in symbol table */
+		indival = create_pvalue_from_indi_key(skey(el));
+		insert_symtab_pvalue(stab, ielement(node), indival);
 #ifdef DEBUG
 		llwprintf("loopinterp - %s = ",ivalvar(node));
 		llwprintf("\n");
 #endif
-		val = sval(el).w;
-		if (val)
-			val = copy_pvalue(val);
+		/* put current indi's value in symbol table */
+		loopval = sval(el).w;
+		if (loopval)
+			loopval = copy_pvalue(loopval);
 		else
-			val = create_pvalue(PANY, (VPTR)NULL);
-		insert_symtab_pvalue(stab, ivalvar(node), val);
+			loopval = create_pvalue(PANY, (VPTR)NULL);
+		insert_symtab_pvalue(stab, ivalvar(node), loopval);
+		/* put counter in symbol table */
 		insert_symtab(stab, inum(node), PINT, (VPTR) (ncount + 1));
 		switch (irc = interpret((PNODE) ibody(node), stab, pval)) {
 		case INTCONTINUE:
@@ -1394,9 +1400,10 @@ hloop:	;
 	ENDINDISEQ
 	irc = INTOKAY;
 hleave:
-	delete_symtab(stab, ielement(node));
-	delete_symtab(stab, ivalvar(node));
-	delete_symtab(stab, inum(node));
+	delete_pvalue(val); /* delete temp evaluated val - may destruct seq */
+	delete_symtab(stab, ielement(node)); /* remove indi */
+	delete_symtab(stab, ivalvar(node)); /* remove indi's value */
+	delete_symtab(stab, inum(node)); /* remove counter */
 	return irc;
 }
 /*=====================================+
@@ -1417,14 +1424,17 @@ interp_forlist (PNODE node, SYMTAB stab, PVALUE *pval)
 		return INTERROR;
 	}
 	list = (LIST) pvalue(val);
-	delete_pvalue(val);
+	/* can't delete val until we're done with list */
 	if (!list) {
+		delete_pvalue(val); /* delete temp evaluated val - may destruct list */
 		prog_error(node, "1st arg to forlist is in error");
 		return INTERROR;
 	}
 	insert_symtab(stab, inum(node), PINT, (VPTR) 0);
 	FORLIST(list, el)
+		/* insert/update current element in symbol table */
 		insert_symtab_pvalue(stab, ielement(node), copy_pvalue(el));
+		/* insert/update counter in symbol table */
 		insert_symtab(stab, inum(node), PINT, (VPTR) ncount++);
 		switch (irc = interpret((PNODE) ibody(node), stab, pval)) {
 		case INTCONTINUE:
@@ -1440,6 +1450,8 @@ iloop:	;
 	ENDLIST
 	irc = INTOKAY;
 ileave:
+	delete_pvalue(val); /* delete temp evaluated val - may destruct list */
+	/* remove element & counter from symbol table */
 	delete_symtab(stab, ielement(node));
 	delete_symtab(stab, inum(node));
 	return irc;

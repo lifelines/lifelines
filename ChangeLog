@@ -1,3 +1,10 @@
+2001-06-12 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog interp/interp.c liflines/main.c:
+	Bugfix in interp_indisetloop & interp_forlist (temp values getting
+	deleted before used).
+	Added -d flag for debug mode (don't catch signals, so can coredump).
+
 2001-06-10 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog hdrs/interp.h interp/alloc.c liflines/main.c:

@@ -89,16 +89,17 @@ extern BTREE BTR;
 #ifdef FINNISH
 # ifdef FINNISHOPTION
 int opt_finnish  = FALSE;/* Finnish Language sorting order if TRUE */
-static STRING usage = (STRING) "lines [-akrwfmntcuFy] [database]   # Use -F for Finnish database";
+static STRING usage = (STRING) "lines [-adkrwfmntcuFy] [database]   # Use -F for Finnish database";
 # else
 int opt_finnish  = TRUE;/* Finnish Language sorting order if TRUE */
-static STRING usage = (STRING) "lines [-akrwfmntcuy] [database]   # Finnish database";
+static STRING usage = (STRING) "lines [-adkrwfmntcuy] [database]   # Finnish database";
 # endif
 #else
 int opt_finnish  = FALSE;/* Finnish Language sorting order id disabled*/
-static STRING usage = (STRING) "lines [-akrwfmntcuy] [database]";
+static STRING usage = (STRING) "lines [-adkrwfmntcuy] [database]";
 #endif
 
+BOOLEAN debugmode = FALSE; /* no signal handling, so we can get coredump */
 BOOLEAN opt_nocb  = FALSE;	/* no cb. data is displayed if TRUE */
 BOOLEAN alloclog  = FALSE;	/* alloc/free debugging */
 BOOLEAN keyflag   = TRUE;	/* show key values */
@@ -149,12 +150,9 @@ main (INT argc,
 	setlocale(LC_ALL, "");
 #endif
 
-	/* catch any fault, so we can close database */
-	set_signals();
-
 	/* Parse Command-Line Arguments */
 	opterr = 0;	/* turn off getopt's error message */
-	while ((c = getopt(argc, argv, "akrwfmntc:Fu:y")) != -1) {
+	while ((c = getopt(argc, argv, "adkrwfmntc:Fu:y")) != -1) {
 		switch (c) {
 		case 'c':	/* adjust cache sizes */
 			while(optarg && *optarg) {
@@ -197,6 +195,9 @@ main (INT argc,
 		case 'a':	/* debug allocation */
 			alloclog = TRUE;
 			break;
+		case 'd':	/* debug = no signal catchers */
+			debugmode = TRUE;
+			break;
 		case 'k':	/* don't show key values */
 			keyflag = FALSE;
 			break;
@@ -230,6 +231,10 @@ main (INT argc,
 			break;
 		}
 	}
+
+	/* catch any fault, so we can close database */
+	if (!debugmode)
+		set_signals();
 
 	/* Initialize Curses UI */
 	initscr();
