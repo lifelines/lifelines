@@ -25,6 +25,10 @@
 
 	Bugfix to STOPLIST use in interp_forlist.
 
+	* ChangeLog src/interp/builtin.c
+
+	More specific error when passing Null value to __set.
+
 2003-03-05 Perry Rapp
 
 	* ChangeLog docs/Install.LifeLines.Windows.txt

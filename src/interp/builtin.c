@@ -626,8 +626,13 @@ __set (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	val = evaluate(argexpr, stab, eflg);
 	if (*eflg || !val) {
-		*eflg = TRUE;
-		prog_var_error(node, stab, argexpr, val, badargx, "set", "2");
+		if (!(*eflg) && !val) {
+			*eflg = TRUE;
+			prog_var_error(node, stab, argexpr, val, _("set(%s, <Null>) is invalid"), iident(argvar));
+		} else {
+			*eflg = TRUE;
+			prog_var_error(node, stab, argexpr, val, badargx, "set", "2");
+		}
 		return NULL;
 	}
 	assign_iden(stab, iident(argvar), val);
