@@ -41,6 +41,11 @@
 
 	New self-test reports.
 
+	* ChangeLog src/interp/builtin.c src/interp/interp.c
+	src/interp/yacc.h src/stdlib/list.c:
+
+	Cleanup warnings.
+
 2002-11-29 Perry Rapp
 
 	* ChangeLog src/gedlib/codesets.c src/gedlib/init.c

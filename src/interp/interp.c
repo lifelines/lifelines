@@ -1972,6 +1972,7 @@ pa_handle_char_encoding (PACTX pactx, PNODE node)
 	PVALUE pval = ivalue(node);
 	STRING codeset;
 	ASSERT(ptype(pval)==PSTRING); /* grammar only allows strings */
+	pactx=pactx; /* unused */
 	codeset = pvalue(pval);
 	strupdate(&irptinfo(node)->codeset, codeset);
 }
@@ -2008,6 +2009,8 @@ pa_handle_include (PACTX pactx, PNODE node)
 	STRING fullpath=0, localpath=0;
 	ZSTR zstr=0;
 	struct pathinfo_s * pathinfo = 0;
+	pactx=pactx; /* unused */
+
 	ASSERT(ptype(pval)==PSTRING); /* grammar only allows strings */
 	newfname = pvalue(pval);
 	
@@ -2042,6 +2045,8 @@ pa_handle_require (PACTX pactx, PNODE node)
 	PVALUE pval = ivalue(node);
 	STRING str;
 	ASSERT(ptype(pval)==PSTRING);
+	pactx=pactx; /* unused */
+
 	str = pvalue(pval);
 	strupdate(&irptinfo(node)->requires, str);
 }

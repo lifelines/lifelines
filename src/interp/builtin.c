@@ -562,7 +562,7 @@ decode (STRING str, INT * offset)
 				goto decode_exit;
 			}
 			ptr += 2;
-			zs_appc(&zstr, n);
+			zs_appc(&zstr, (uchar)(unsigned int)n);
 		} else {
 			zs_appc(&zstr, *ptr);
 		}
