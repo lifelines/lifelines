@@ -475,7 +475,7 @@ ZST qSbadhex      = N_("Bad hexidecimal number format.");
 ZST qSnorplc      = N_("No replacement string on line.");
 ZST qSnoorig      = N_("No original string on line.");
 ZST qSbadesc      = N_("Bad escape format.");
-ZST qSmaperr      = N_("%s: line %d (entry %d): %s\n");
+ZST qSmaperr      = N_("%s: line %d (entry %d): %s");
 
 /* many menus */
 ZST qSmn_quit     = N_("q  Return to main menu");

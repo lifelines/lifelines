@@ -50,7 +50,7 @@ typedef struct closure_s
  *********************************************/
 
 static BOOLEAN closure_has_key(CLOSURE * closure, STRING key);
-static void closure_add_key(CLOSURE * closure, STRING key, STRING tag);
+static void closure_add_key(CLOSURE * closure, CNSTRING key, STRING tag);
 static void closure_add_output_node (CLOSURE * closure, NODE node);
 static void closure_init(CLOSURE * closure, int gengedcl);
 static void closure_free(CLOSURE * closure);
@@ -95,7 +95,7 @@ closure_has_key (CLOSURE * closure, STRING key)
  * neither gets an alloc of the tag
  *====================================================*/
 static void
-closure_add_key (CLOSURE * closure, STRING key, STRING tag)
+closure_add_key (CLOSURE * closure, CNSTRING key, STRING tag)
 {
 	if (in_table(closure->tab, key)) return;
 

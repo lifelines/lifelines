@@ -228,17 +228,24 @@ evaluate_func (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 evaluate_ufunc (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	STRING nam = (STRING) iname(node);
+	STRING procname = (STRING) iname(node);
 	PNODE func, arg, parm;
 	SYMTAB newstab = null_symtab();
 	PVALUE val=NULL;
 	INTERPTYPE irc;
+	INT count=0;
 
 	*eflg = TRUE;
-	if ((func = valueof_ptr(functab, nam)) == NULL) {
-		prog_error(node, "undefined function %s()", nam);
+	/* find func in local or global table */
+	func = get_proc_node(procname, irptinfo(node)->functab, gfunctab, &count);
+	if (!func) {
+		if (!count)
+			prog_error(node, _("Undefined func: %s"), procname);
+		else
+			prog_error(node, _("Ambiguous call to func: %s"), procname);
 		goto ufunc_leave;
 	}
+
 	create_symtab(&newstab);
 	arg = (PNODE) iargs(node);
 	parm = (PNODE) iargs(func);

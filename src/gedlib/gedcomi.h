@@ -3,7 +3,7 @@
 
 /* from charmaps.c */
 void custom_translate(ZSTR * pzstr, TRANTABLE tt);
-BOOLEAN init_map_from_file(CNSTRING file, CNSTRING mapname, TRANTABLE*);
+BOOLEAN init_map_from_file(CNSTRING file, CNSTRING mapname, TRANTABLE*, ZSTR *pzerr);
 
 /* from names.c */
 RECORD id_by_key(STRING name, char ctype);

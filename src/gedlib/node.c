@@ -754,7 +754,7 @@ next_fp_to_node (FILE *fp, BOOLEAN list, XLAT ttm,
  *   0 INDI    (or 0 FAM or 0 SOUR etc)
  *==========================================*/
 RECORD
-string_to_record (STRING str, STRING key, INT len)
+string_to_record (STRING str, CNSTRING key, INT len)
 {
 	RECORD rec = 0;
 	NODE node = 0;

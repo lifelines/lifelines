@@ -46,7 +46,6 @@
 #include "parse.h"
 #include <stdlib.h>
 
-extern TABLE proctab, functab;
 static PNODE this, prev;
 INT Yival;
 FLOAT Yfval;
@@ -77,7 +76,7 @@ defn 	:	proc
 		}
 	|	IDEN '(' SCONS ')' {
 			if (eqstr("include", (STRING) $1))
-				pa_handle_include((PNODE) $3);
+				pa_handle_include(pactx, (PNODE) $3);
 			if (eqstr("option", (STRING) $1))
 				pa_handle_option(ivalue((PNODE) $3));
 			if (eqstr("char_encoding", (STRING) $1))
@@ -89,12 +88,12 @@ defn 	:	proc
 	;
 
 proc	:	PROC IDEN '(' idenso ')' '{' tmplts '}' {
-			insert_table_ptr(proctab, (STRING)$2, (VPTR)proc_node(pactx, (STRING)$2, (PNODE)$4, (PNODE)$7));
+			pa_handle_proc(pactx, (STRING) $2, (PNODE) $4, (PNODE) $7);
 		}
 
 	;
 func	:	FUNC_TOK IDEN '(' idenso ')' '{' tmplts '}' {
-			insert_table_ptr(functab, (STRING)$2, (VPTR)fdef_node(pactx, (STRING)$2, (PNODE)$4, (PNODE)$7));
+			pa_handle_func(pactx, (STRING) $2, (PNODE) $4, (PNODE) $7);
 		}
 	;
 idenso	:	/* empty */ {

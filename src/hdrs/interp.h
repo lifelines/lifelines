@@ -39,99 +39,108 @@
 
 #include "cache.h"
 
+struct rptinfo_s {
+	STRING fullpath;
+	TABLE proctab;   /* all procs in this file */
+	TABLE functab;   /* all funcs in this file */
+	STRING codeset;  /* codeset of report */
+	STRING requires; /* version of lifelines report language required */
+};
+typedef struct rptinfo_s *RPTINFO;
+
 typedef struct itag *PNODE;
 struct itag {
-	char   i_type;	/* type of node */
-	PNODE  i_prnt;	/* parent of this node */
-	INT    i_line;	/* line where text of this node begins */
-	STRING i_file;	/* file where text of this node begins */
-	PNODE  i_next;	/* next node */
-	VPTR   i_word1;	/* variable data associated with node type */
-	VPTR   i_word2;	/* ... */
-	VPTR   i_word3;
-	VPTR   i_word4;
-	VPTR   i_word5;
+	char     i_type;       /* type of node */
+	PNODE    i_prnt;       /* parent of this node */
+	INT      i_line;	     /* line where text of this node begins */
+	RPTINFO  i_rptinfo;    /* information about this report file */
+	PNODE    i_next;       /* next node */
+	VPTR     i_word1;      /* variable data associated with node type */
+	VPTR     i_word2;	     /* ... */
+	VPTR     i_word3;
+	VPTR     i_word4;
+	VPTR     i_word5;
 };
 
-#define IICONS		 1	/* integer constant */
-#define IFCONS		 2	/* floating constant */
-#define ILCONS		 3	/* long integer constant */
-#define ISCONS		 4	/* string constant */
-#define IIDENT     	 5	/* identifier */
-#define IIF		 6	/* if statement */
-#define IWHILE		 7	/* while loop */
-#define IBREAK		 8	/* break statement */
-#define ICONTINUE	 9	/* continue statement */
-#define IRETURN		10	/* return statement */
-#define IPDEFN		11	/* user-defined procedure defn */
-#define IPCALL		12	/* user-defined procudure call */
-#define IFDEFN		13	/* user-defined function defn */
-#define IFCALL		14	/* user-defined function call */
-#define IBCALL		15	/* built-in function call */
-#define ITRAV		16	/* traverse loop */
-#define INODES		17	/* fornodes loop */
-#define IFAMILIES	18	/* families loop */
-#define ISPOUSES	19	/* spouses loop */
-#define ICHILDREN	20	/* children loop */
-#define IINDI		21	/* person loop */
-#define IFAM		22	/* family loop */
-#define ISOUR		23	/* source loop */
-#define IEVEN		24	/* event loop */
-#define IOTHR		25	/* other loop */
-#define ILIST		26	/* list loop */
-#define ISET		27	/* set loop */
-#define IFATHS		28	/* fathers loop */
-#define IMOTHS		29	/* mothers loop */
-#define IFAMCS		30	/* parents loop */
-#define INOTES		31	/* notes loop */
-#define IFREED    99 /* returned to free list */
+#define IICONS       1   /* integer constant */
+#define IFCONS       2   /* floating constant */
+#define ILCONS       3   /* long integer constant */
+#define ISCONS       4   /* string constant */
+#define IIDENT       5   /* identifier */
+#define IIF          6   /* if statement */
+#define IWHILE       7   /* while loop */
+#define IBREAK       8   /* break statement */
+#define ICONTINUE    9   /* continue statement */
+#define IRETURN     10   /* return statement */
+#define IPDEFN      11   /* user-defined procedure defn */
+#define IPCALL      12   /* user-defined procudure call */
+#define IFDEFN      13   /* user-defined function defn */
+#define IFCALL      14   /* user-defined function call */
+#define IBCALL      15   /* built-in function call */
+#define ITRAV       16   /* traverse loop */
+#define INODES      17   /* fornodes loop */
+#define IFAMILIES   18   /* families loop */
+#define ISPOUSES    19   /* spouses loop */
+#define ICHILDREN   20   /* children loop */
+#define IINDI       21   /* person loop */
+#define IFAM        22   /* family loop */
+#define ISOUR       23   /* source loop */
+#define IEVEN       24   /* event loop */
+#define IOTHR       25   /* other loop */
+#define ILIST       26   /* list loop */
+#define ISET        27   /* set loop */
+#define IFATHS      28   /* fathers loop */
+#define IMOTHS      29   /* mothers loop */
+#define IFAMCS      30   /* parents loop */
+#define INOTES      31   /* notes loop */
+#define IFREED      99   /* returned to free list */
 
-#define itype(i)     ((i)->i_type)	/* node type - all nodes */
-#define iprnt(i)     ((i)->i_prnt)	/* parent node - all nodes */
-#define inext(i)     ((i)->i_next)	/* next node - all nodes */
-#define iline(i)     ((i)->i_line)	/* program line - all nodes */
-#define ifname(i)    ((i)->i_file)	/* program name - all nodes */
+#define itype(i)     ((i)->i_type)  /* node type - all nodes */
+#define iprnt(i)     ((i)->i_prnt)  /* parent node - all nodes */
+#define inext(i)     ((i)->i_next)  /* next node - all nodes */
+#define iline(i)     ((i)->i_line)  /* program line - all nodes */
+#define irptinfo(i)  ((i)->i_rptinfo)  /* program name - all nodes */
 
 #define ivalue(i)    ((PVALUE)((i)->i_word1)) /* constant values */
 #define ivaluex(i)   ((i)->i_word1)     /* constant values, for setting */
-#define iident(i)    ((i)->i_word1)	/* ident nodes */
-#define iargs(i)     ((i)->i_word2)	/* param and arg lists */
-#define icond(i)     ((i)->i_word1)	/* cond expr in if & while */
-#define ithen(i)     ((i)->i_word2)	/* then statement in if */
-#define ielse(i)     ((i)->i_word3)	/* else statement in if */
+#define iident(i)    ((i)->i_word1)     /* ident nodes */
+#define iargs(i)     ((i)->i_word2)     /* param and arg lists */
+#define icond(i)     ((i)->i_word1)     /* cond expr in if & while */
+#define ithen(i)     ((i)->i_word2)     /* then statement in if */
+#define ielse(i)     ((i)->i_word3)     /* else statement in if */
 
-#define ifunc(i)     ((i)->i_word3)	/* func and builtin reference */
-#define ichild(i)    ((i)->i_word2)	/* var in children loop */
-#define ispouse(i)   ((i)->i_word2)	/* var in families and spouses loop */
-#define ifamily(i)   ((i)->i_word3)	/* var in all families type loops */
-#define iiparent(i)   ((i)->i_word2)	/* var in some families type loops */
-#define ivalvar(i)   ((i)->i_word3)	/* var in indiset loop */
-#define iname(i)     ((i)->i_word1)	/* proc, func and builtin names */
-#define ilev(i)      ((i)->i_word3)	/* var traverse loop */
+#define ifunc(i)     ((i)->i_word3)     /* func and builtin reference */
+#define ichild(i)    ((i)->i_word2)     /* var in children loop */
+#define ispouse(i)   ((i)->i_word2)     /* var in families and spouses loop */
+#define ifamily(i)   ((i)->i_word3)     /* var in all families type loops */
+#define iiparent(i)  ((i)->i_word2)    /* var in some families type loops */
+#define ivalvar(i)   ((i)->i_word3)     /* var in indiset loop */
+#define iname(i)     ((i)->i_word1)     /* proc, func and builtin names */
+#define ilev(i)      ((i)->i_word3)     /* var traverse loop */
 
-#define iloopexp(i)  ((i)->i_word1)	/* top loop expression */
-#define ielement(i)  ((i)->i_word2)	/* loop element */
-#define ibody(i)     ((i)->i_word5)	/* body of proc, func, loops */
-#define inum(i)      ((i)->i_word4)	/* counter used by many loops */
+#define iloopexp(i)  ((i)->i_word1)     /* top loop expression */
+#define ielement(i)  ((i)->i_word2)     /* loop element */
+#define ibody(i)     ((i)->i_word5)     /* body of proc, func, loops */
+#define inum(i)      ((i)->i_word4)     /* counter used by many loops */
 
-#define PNONE      0 /* needed? - remove later if not */
-#define PANY       1 /* any value -- no type restriction - should be NULL value*/
-#define PINT       2 /* integer */
-#define PLONG      3 /* long integer */
-#define PFLOAT     4 /* floating point */
-#define PBOOL      5 /* boolean */
-#define PSTRING    6 /* string */
-#define PGNODE	   7 /* GEDCOM node */
-#define PINDI      8 /* GEDCOM person record */
-#define PFAM       9 /* GEDCOM family record */
-#define PSOUR     10 /* GEDCOM source record */
-#define PEVEN     11 /* GEDCOM event record */
-#define POTHR     12 /* GEDCOM other record */
-#define PLIST     13 /* list */
-#define PTABLE    14 /* table */
-#define PSET      15 /* set */
-#define PFREED    99 /* returned to free list */
-#define PUNINT   100 /* just allocated */
+#define PNONE      0  /* needed? - remove later if not */
+#define PANY       1  /* any value -- no type restriction - should be NULL value*/
+#define PINT       2  /* integer */
+#define PLONG      3  /* long integer */
+#define PFLOAT     4  /* floating point */
+#define PBOOL      5  /* boolean */
+#define PSTRING    6  /* string */
+#define PGNODE	    7  /* GEDCOM node */
+#define PINDI      8  /* GEDCOM person record */
+#define PFAM       9  /* GEDCOM family record */
+#define PSOUR     10  /* GEDCOM source record */
+#define PEVEN     11  /* GEDCOM event record */
+#define POTHR     12  /* GEDCOM other record */
+#define PLIST     13  /* list */
+#define PTABLE    14  /* table */
+#define PSET      15  /* set */
+#define PFREED    99  /* returned to free list */
+#define PUNINT   100  /* just allocated */
 
 /*
  * ptag should be using a UNION not a VPTR
@@ -174,9 +183,9 @@ extern BUILTINS builtins[];
 extern INT nobuiltins;
 extern BOOLEAN prog_trace;
 
-extern TABLE functab;
+extern TABLE gfunctab;
 extern SYMTAB globtab;
-extern TABLE proctab;
+extern TABLE gproctab;
 
 extern FILE *Poutfp;
 extern INT _rows;
@@ -314,6 +323,7 @@ void assign_iden(SYMTAB, STRING, PVALUE);
 PNODE break_node(PACTX pactx);
 PNODE call_node(PACTX pactx, STRING, PNODE);
 PNODE children_node(PACTX pactx, PNODE, STRING, STRING, PNODE);
+void clear_rptinfos(void);
 PNODE continue_node(PACTX pactx);
 void debug_show_one_pnode(PNODE);
 PVALUE evaluate(PNODE, SYMTAB, BOOLEAN*);
@@ -328,7 +338,7 @@ PVALUE eval_without_coerce(PNODE node, SYMTAB stab, BOOLEAN *eflg);
 PNODE families_node(PACTX pactx, PNODE, STRING, STRING, STRING, PNODE);
 PNODE fathers_node(PACTX pactx, PNODE, STRING, STRING, STRING, PNODE);
 PNODE fcons_node(PACTX pactx, FLOAT);
-PNODE fdef_node(PACTX pactx, STRING, PNODE, PNODE);
+PNODE fdef_node(PACTX pactx, CNSTRING, PNODE, PNODE);
 PNODE foreven_node(PACTX pactx, STRING, STRING, PNODE);
 PNODE forfam_node(PACTX pactx, STRING, STRING, PNODE);
 PNODE forindi_node(PACTX pactx, STRING, STRING, PNODE);
@@ -341,7 +351,8 @@ PNODE forsour_node(PACTX pactx, STRING, STRING, PNODE);
 void free_all_pnodes(void);
 void free_pnode_tree(PNODE);
 PNODE func_node(PACTX pactx, STRING, PNODE);
-STRING get_rptfile_prop(PACTX pactx, STRING fname, STRING key);
+PNODE get_proc_node(CNSTRING procname, TABLE loctab, TABLE gtab, INT * count);
+RPTINFO get_rptinfo(CNSTRING fullpath);
 PNODE icons_node(PACTX pactx, INT ival);
 PNODE iden_node(PACTX pactx, STRING);
 PNODE if_node(PACTX pactx, PNODE, PNODE, PNODE);
@@ -352,12 +363,14 @@ PNODE make_internal_string_node(PACTX pactx, STRING);
 PNODE mothers_node(PACTX pactx, PNODE, STRING, STRING, STRING, PNODE);
 INT num_params(PNODE);
 void pa_handle_char_encoding(PACTX pactx, PNODE node);
-void pa_handle_include(PNODE node);
+void pa_handle_include(PACTX pactx, PNODE node);
+void pa_handle_func(PACTX pactx, CNSTRING funcname, PNODE nd_args, PNODE nd_body);
 void pa_handle_global(STRING iden);
 void pa_handle_option(PVALUE optval);
+void pa_handle_proc(PACTX pactx, CNSTRING procname, PNODE nd_args, PNODE nd_body);
 void pa_handle_require(PACTX pactx, PNODE node);
 PNODE parents_node(PACTX pactx, PNODE, STRING, STRING, PNODE);
-PNODE proc_node(PACTX pactx, STRING, PNODE, PNODE);
+PNODE proc_node(PACTX pactx, CNSTRING, PNODE, PNODE);
 void prog_error(PNODE, STRING, ...);
 void prog_var_error(PNODE node, SYMTAB stab, PNODE arg, PVALUE val, STRING fmt, ...);
 STRING prot(STRING str);

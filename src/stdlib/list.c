@@ -296,3 +296,15 @@ length_list (LIST list)
 {
 	return !list ? 0 : llen(list);
 }
+/*=======================================================
+ * peek_list_head - Retrieve head element without removing it
+ *=====================================================*/
+VPTR
+peek_list_head (LIST list)
+{
+	LNODE node;
+	if (!list) return 0;
+	node = lhead(list);
+	if (!node) return 0;
+	return lelement(node);
+}

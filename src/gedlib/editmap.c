@@ -14,6 +14,7 @@
 #include "liflines.h"
 #include "feedback.h"
 #include "gedcomi.h"
+#include "zstr.h"
 
 /*
 TODO
@@ -91,7 +92,10 @@ load_new_tt (CNSTRING filepath, INT ttnum)
 	TRANSLFNC transfnc = NULL; /* don't translate translation tables ! */
 	TRANTABLE tt=0;
 	CNSTRING mapname = get_map_name(ttnum);
-	if (!init_map_from_file(filepath, mapname, &tt)) {
+	ZSTR zerr=0;
+	if (!init_map_from_file(filepath, mapname, &tt, &zerr)) {
+		llwprintf(zs_str(zerr));
+		zs_free(&zerr);
 		if (tt)
 			remove_trantable(tt);
 		return FALSE;

@@ -226,6 +226,7 @@ pvalues_end (void)
 	cleaning_time = FALSE;
 	ASSERT(reports_time);
 	reports_time = FALSE;
+	clear_rptinfos();
 #ifdef DEBUG_REPORT_MEMORY
 	{
 		INT save = alloclog;

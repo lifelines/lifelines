@@ -437,7 +437,7 @@ __strsoundex (PNODE node, SYMTAB stab, BOOLEAN *eflg)
  * __bytecode -- Input string with escape codes
  *  and optionally specified codeset
  *  eg, bytecode("I$C3$B1$C3$A1rritu", "UTF-8")
- *   usage: code(STRING, [STRING]) -> STRING
+ *   usage: bytecode(STRING, [STRING]) -> STRING
  *==========================================*/
 PVALUE
 __bytecode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
@@ -449,15 +449,15 @@ __bytecode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	INT offset;
 	ZSTR zstr=0;
 	if (*eflg) {
-		prog_var_error(node, stab, arg, NULL, nonstr1, "bytecode");
-		goto decode_exit;
+		prog_var_error(node, stab, arg, NULL, nonstrx, "bytecode", "1");
+		goto bytecode_exit;
 	}
 	arg = inext(arg);
 	if (arg) {
 		PVALUE val2 = eval_and_coerce(PSTRING, arg, stab, eflg);
 		if (*eflg) {
-			prog_var_error(node, stab, arg, NULL, nonstr1, "bytecode");
-			goto decode_exit;
+			prog_var_error(node, stab, arg, NULL, nonstrx, "bytecode", "2");
+			goto bytecode_exit;
 		}
 		codeset = strsave(pvalue_to_string(val2));
 		delete_pvalue(val2);
@@ -467,10 +467,10 @@ __bytecode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	zstr = decode(pvalue_to_string(val), &offset);
 	if (offset >= 0) {
 		prog_var_error(node, stab, arg, val
-			, _("Bad UTF character %d in UTF escape string <%s>")
+			, _("Bad escape code at offset %d in bytecode string <%s>")
 			, offset+1, pvalue(val));
 		*eflg = TRUE;
-		goto decode_exit;
+		goto bytecode_exit;
 	}
 	/* raw is a special case meaning do NOT go to internal */
 	/* raw is for use in test scripts, testing codeconvert */
@@ -481,12 +481,67 @@ __bytecode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 			transl_xlat(xlat, &zstr);
 	}
 	newval = create_pvalue_from_string(zs_str(zstr));
-decode_exit:
+bytecode_exit:
 	zs_free(&zstr);
 	delete_pvalue(val);
 	strfree(&codeset);
 	return newval;
 }
+/*===========================================+
+ * __convertcode -- Convert string to another codeset
+ *  eg, convertcode(str, "UTF-8//html")
+ *  or for use in self-tests, convertcode(bytecode("$C3$B1$C3$A1"), "UTF-8", "ISO-8859-1")
+ *  (which should come out "ñá"
+ *   usage: convertcode(STRING, STRING, [STRING]) -> STRING
+ *==========================================*/
+PVALUE
+__convertcode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+	PNODE arg = (PNODE) iargs(node);
+	PVALUE val = eval_and_coerce(PSTRING, arg, stab, eflg);
+	PVALUE newval=0, tempval;
+	ZSTR zstr=0;
+	STRING cs_src=0, cs_dest=0;
+	XLAT xlat=0;
+	if (*eflg) {
+		prog_var_error(node, stab, arg, NULL, nonstrx, "convertcode", "1");
+		goto convertcode_exit;
+	}
+	arg = inext(arg);
+	ASSERT(arg);
+	tempval = eval_and_coerce(PSTRING, arg, stab, eflg);
+	if (*eflg) {
+		prog_var_error(node, stab, arg, NULL, nonstrx, "convertcode", "2");
+		goto convertcode_exit;
+	}
+	cs_dest = strsave(pvalue_to_string(tempval));
+	delete_pvalue(tempval);
+	arg = inext(arg);
+	if (arg) {
+		cs_src = cs_dest;
+		tempval = eval_and_coerce(PSTRING, arg, stab, eflg);
+		if (*eflg) {
+			prog_var_error(node, stab, arg, NULL, nonstrx, "convertcode", "3");
+			goto convertcode_exit;
+		}
+		cs_dest = strsave(pvalue_to_string(tempval));
+		delete_pvalue(tempval);
+	}
+	if (!cs_src)
+		cs_src = strsave(int_codeset);
+	zstr = zs_news(pvalue_to_string(val));
+	xlat = transl_get_xlat(cs_src, cs_dest);
+	if (xlat)
+		transl_xlat(xlat, &zstr);
+	newval = create_pvalue_from_string(zs_str(zstr));
+convertcode_exit:
+	strfree(&cs_src);
+	strfree(&cs_dest);
+	zs_free(&zstr);
+	delete_pvalue(val);
+	return newval;
+}
+
 /*===============================+
  * decode -- Convert any embedded escape codes into bytes
  *  str:    [IN]  string with embedded escape codes, eg:  "I$C3$B1$C3$A1rritu" 
@@ -500,8 +555,7 @@ decode (STRING str, INT * offset)
 	*offset = -1;
 	for (ptr=str; *ptr; ++ptr) {
 		if (*ptr == '$') {
-			INT n = get_hexidecimal(ptr);
-			++ptr;
+			INT n = get_hexidecimal(ptr+1);
 			/* error if bad hex escape */
 			if (n == -1) {
 				*offset = ptr - str;

@@ -63,6 +63,7 @@ VPTR get_list_element(LIST, INT);
 INT in_list(LIST, VPTR param, BOOLEAN (*func)(VPTR param, VPTR el));
 INT length_list(LIST);
 void make_list_empty(LIST);
+VPTR peek_list_head(LIST);
 VPTR pop_list(LIST);
 VPTR pop_list_tail(LIST);
 void push_list(LIST, VPTR);

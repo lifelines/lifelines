@@ -56,7 +56,7 @@ enum TB_VALTYPE
 static UNION* access_value_impl (TABLE tab, STRING key);
 static ENTRY fndentry(TABLE, CNSTRING);
 static void free_contents(ENTRY ent, INT whattofree);
-static void insert_table_impl(TABLE tab, STRING key, UNION uval);
+static void insert_table_impl(TABLE tab, CNSTRING key, UNION uval);
 static INT hash(TABLE tab, CNSTRING key);
 static BOOLEAN next_element(TABLE_ITER tabit);
 static void replace_table_impl(TABLE tab, STRING key, UNION uval, INT whattofree);
@@ -120,7 +120,7 @@ create_table (void)
  * Caller is reponsible for both key & value memory
  *====================================*/
 static void
-insert_table_impl (TABLE tab, STRING key, UNION uval)
+insert_table_impl (TABLE tab, CNSTRING key, UNION uval)
 {
 	ENTRY entry = fndentry(tab, key);
 	if (entry)
@@ -128,7 +128,7 @@ insert_table_impl (TABLE tab, STRING key, UNION uval)
 	else {
 		INT hval = hash(tab, key);
 		entry = (ENTRY) stdalloc(sizeof(*entry));
-		entry->ekey = key;
+		entry->ekey = (STRING)key;
 		entry->uval = uval;
 		entry->enext = tab->entries[hval];
 		tab->entries[hval] = entry;
@@ -164,7 +164,7 @@ replace_table_impl (TABLE tab, STRING key, UNION uval, INT whattofree)
  * Created: 2001/06/03 (Perry Rapp)
  *====================================*/
 void
-insert_table_ptr (TABLE tab, STRING key, VPTR ptr)
+insert_table_ptr (TABLE tab, CNSTRING key, VPTR ptr)
 {
 	UNION uval;
 	uval.w = ptr;
@@ -180,7 +180,7 @@ insert_table_ptr (TABLE tab, STRING key, VPTR ptr)
  * Created: 2001/06/03 (Perry Rapp)
  *====================================*/
 void
-insert_table_int (TABLE tab, STRING key, INT ival)
+insert_table_int (TABLE tab, CNSTRING key, INT ival)
 {
 	UNION uval;
 	uval.i = ival;
@@ -196,7 +196,7 @@ insert_table_int (TABLE tab, STRING key, INT ival)
  * Created: 2001/06/03 (Perry Rapp)
  *====================================*/
 void
-insert_table_str (TABLE tab, STRING key, STRING str)
+insert_table_str (TABLE tab, CNSTRING key, STRING str)
 {
 	UNION uval;
 	uval.w = str;
@@ -249,7 +249,7 @@ delete_table (TABLE tab, STRING key)
  * in_table() - Check for entry in table
  *====================================*/
 BOOLEAN
-in_table (TABLE tab, STRING key)
+in_table (TABLE tab, CNSTRING key)
 {
 	return fndentry(tab, key) != NULL;
 }

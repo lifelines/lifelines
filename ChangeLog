@@ -1,3 +1,29 @@
+2002-12-01 Perry Rapp
+
+	* ChangeLog src/gedlib/charmaps.c src/gedlib/editmap.c
+	src/gedlib/gedcomi.h src/gedlib/gengedc.c src/gedlib/init.c
+	src/gedlib/keytonod.c src/gedlib/messages.c src/gedlib/node.c
+	src/gedlib/translat.c src/gedlib/xlat.c src/hdrs/gedcom.h
+	src/hdrs/icvt.h src/hdrs/interp.h src/hdrs/list.h
+	src/hdrs/llstdlib.h src/hdrs/table.h src/hdrs/translat.h
+	src/hdrs/xlat.h src/hdrs/zstr.h src/interp/alloc.c
+	src/interp/builtin.c src/interp/eval.c src/interp/functab.c
+	src/interp/interp.c src/interp/interpi.h src/interp/pvalue.c
+	src/interp/yacc.h src/interp/yacc.y src/stdlib/icvt.c
+	src/stdlib/list.c src/stdlib/path.c src/stdlib/signals.c
+	src/stdlib/stralloc.c src/stdlib/strutf8.c src/stdlib/table.c
+	src/stdlib/zstr.c:
+
+	Made const correct through keytonod.c.
+	Moved RPTINFO structure to hold report properties.
+	Made report local proc & func tables, and revised call handlers for both
+	(duplicate procs & funcs not allowed in one file, and flagged at
+	runtime if an ambiguous call is encountered).
+	Altered include implementation to look in local directory first.
+	Changed exercise reports to self-test (st_*).
+	Implemented use of local translation tables if iconv missing.
+	Created some common translation tables; enough to pass st_convert.
+
 2002-11-29 Perry Rapp
 
 	* ChangeLog src/gedlib/codesets.c src/gedlib/init.c
@@ -5286,4 +5312,23 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 		add [PS] to name if both
 
 
+FOLLOWING ARE APPROXIMATED DATES, from before Open Source version
 
+1995-11-23  Thomas T. Wetmore IV
+  Version 3.0.3
+
+1994-12-22  Thomas T. Wetmore IV
+  Version 3.0.2
+
+1994-10-24  Thomas T. Wetmore IV
+  Apparently from Jun thru Oct of 1994
+  Version 3.0.0
+
+1993-10-29  Thomas T. Wetmore IV
+  Version 2.3.6
+
+1993-09-02  Thomas T. Wetmore IV
+  Version 2.3.5
+
+1993-06-24  Thomas T. Wetmore IV
+  Version 2.3.4

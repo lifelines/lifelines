@@ -40,7 +40,7 @@ is_dir_sep (char c)
  *  ie, does this begin with directory info
  *  handle WIN32 characters
  *=============================================*/
-static BOOLEAN
+BOOLEAN
 is_absolute_path (CNSTRING dir)
 {
 	if (is_dir_sep(dir[0]) || dir[0] == '.') return TRUE;

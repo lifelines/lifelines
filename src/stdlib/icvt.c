@@ -166,11 +166,13 @@ cvting:
 /*===================================================
  * init_win32_iconv_shim -- Helper for loading iconv.dll on win32
  *=================================================*/
-#ifdef WIN32_ICONV_SHIM
 void
 init_win32_iconv_shim (CNSTRING dllpath)
 {
+#ifdef WIN32_ICONV_SHIM
 	if (dllpath && dllpath[0])
 		iconvshim_set_property("dll_path", dllpath);
-}
+#else
+	dllpath=dllpath; /* unused */
 #endif
+}

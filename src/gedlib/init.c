@@ -224,9 +224,11 @@ set_gettext_codeset (CNSTRING codeset)
 #ifdef HAVE_BIND_TEXTDOMAIN_CODESET
 	if (codeset && codeset[0]) {
 		ZSTR zcsname=0;
+		/* extract just the codeset name, without any subcodings */
+		/* eg, just "UTF-8" out of "UTF-8//TrGreekAscii//TrCyrillicAscii" */
 		transl_parse_codeset(codeset, &zcsname, 0);
 		if (zs_str(zcsname)) {
-			/* can't attach //TRANSLIT for gettext before 0.11.3pre2 */
+			/* gettext automatically appends //TRANSLIT */
 			bind_textdomain_codeset(PACKAGE, zs_str(zcsname));
 		}
 		zs_free(&zcsname);

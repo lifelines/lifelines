@@ -57,7 +57,7 @@
  One problem -- finishrassa closes foutfp, so it may need longer lifetime
  that parseinfo currently has
 */
-TABLE proctab=0, functab=0;
+TABLE gproctab=0, gfunctab=0;
 SYMTAB globtab; /* assume all zero is null SYMTAB */
 STRING progname = NULL;       /* starting program name */
 FILE *Poutfp = NULL;          /* file to write program output to */
@@ -89,7 +89,8 @@ extern STRING qSunsupuniv;
 static STRING check_rpt_requires(PACTX pactx, STRING fname);
 static void disp_symtab(STRING title, SYMTAB stab);
 static BOOLEAN disp_symtab_cb(STRING key, PVALUE val, VPTR param);
-static BOOLEAN find_program(STRING fname, STRING *pfull);
+static void enqueue_parse_error(const char * fmt, ...);
+static BOOLEAN find_program(STRING fname, STRING localdir, STRING *pfull);
 static void init_pactx(PACTX pactx);
 static void parse_file(PACTX pactx, STRING fname, STRING fullpath);
 static void progmessage(MSG_LEVEL level, STRING);
@@ -102,6 +103,7 @@ static void wipe_pactx(PACTX pactx);
  *********************************************/
 
 INT dbg_mode = 0;
+LIST outstanding_parse_errors = 0;
 
 /*********************************************
  * local function definitions
@@ -214,6 +216,8 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 	PNODE first, parm;
 	struct pactx_s pact;
 	PACTX pactx = &pact;
+	STRING rootfilepath=0;
+
 	init_pactx(pactx);
 
 	pvalues_begin();
@@ -227,12 +231,14 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 		for (i = 1; i < nfiles+1; i++) {
 			STRING fullpath = 0;
 			STRING progfile = get_list_element(lifiles, i);
-			if (find_program(progfile, &fullpath)) {
+			if (find_program(progfile, 0, &fullpath)) {
 				struct pathinfo_s * pathinfo = new_pathinfo(progfile, fullpath);
 				strfree(&fullpath);
 				enqueue_list(plist, pathinfo);
+				if (i==1)
+					strupdate(&rootfilepath, pathinfo->fullpath);
 			} else {
-				/* what to do when file not found ? 2002-07-23, Perry */
+				enqueue_parse_error(_("Report not found: %s"), progfile);
 			}
 		}
 	} else {
@@ -254,6 +260,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 		strfree(&fname);
 		strfree(&fullpath);
 
+		strupdate(&rootfilepath, pathinfo->fullpath);
 		enqueue_list(plist, pathinfo);
 	}
 
@@ -262,10 +269,11 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 	/* Parse each file in the list -- don't reparse any file */
 	/* (paths are resolved before files are enqueued, & stored in pathinfo) */
 
-	proctab = create_table();
+	gproctab = create_table();
 	create_symtab(&globtab);
-	functab = create_table();
+	gfunctab = create_table();
 	initinterp();
+
 	while (!is_empty_list(plist)) {
 		struct pathinfo_s * pathinfo = (struct pathinfo_s *)dequeue_list(plist);
 		if (!in_table(pactx->filetab, pathinfo->fullpath)) {
@@ -289,6 +297,18 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 	plist=NULL;
 
 
+	if (outstanding_parse_errors) {
+		STRING str;
+		FORLIST(outstanding_parse_errors, el)
+			str = (STRING)el;
+			prog_error(NULL, str);
+			++Perrors;
+		ENDLIST
+		make_list_empty(outstanding_parse_errors);
+		remove_list(outstanding_parse_errors, 0);
+		outstanding_parse_errors=0;
+	}
+
 	if (Perrors) {
 		progmessage(MSG_ERROR, _("contains errors."));
 		goto interp_program_exit;
@@ -296,7 +316,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 
    /* Find top procedure */
 
-	if (!(first = (PNODE) valueof_ptr(proctab, proc))) {
+	if (!(first = (PNODE) valueof_ptr(get_rptinfo(rootfilepath)->proctab, proc))) {
 		progmessage(MSG_ERROR, _("needs a starting procedure."));
 		goto interp_program_exit;
 	}
@@ -394,33 +414,52 @@ named in include statements */
 	memset(pactx, 0, sizeof(*pactx));
 }
 /*===========================================+
- * remove_tables - Remove interpreter's tables
+ * freelistentry -- Clear list in entry in table
+ * This is used as a callback with traverse_table
+ * Created: 2002/11/30 (Perry Rapp)
+ *==========================================*/
+static void
+freelistentry (ENTRY ent)
+{
+	LIST list = (LIST)ent->uval.w;
+	make_list_empty(list);
+}
+/*===========================================+
+ * remove_tables -- Remove interpreter's tables
  *==========================================*/
 static void
 remove_tables (PACTX pactx)
 {
 	pactx=pactx; /* unused */
-	/* proctab has PNODESs that yacc.y put in there */
-	remove_table(proctab, DONTFREE);
-	proctab=NULL;
+	traverse_table(gproctab, &freelistentry);
+	remove_table(gproctab, FREEBOTH); /* values are empty lists */
+	gproctab=NULL;
 	remove_symtab(&globtab);
-	/* functab has PNODESs that yacc.y put in there */
-	remove_table(functab, DONTFREE);
-	functab=NULL;
+	traverse_table(gfunctab, &freelistentry);
+	remove_table(gfunctab, FREEBOTH); /* values are PNODES */
+	gfunctab=NULL;
 }
 /*======================================+
- * find_program - search for program file
+ * find_program -- search for program file
  *  fname: [IN]  filename desired
  *  pfull: [OUT] full path found (stdalloc'd)
  * Returns TRUE if found
  *=====================================*/
 static BOOLEAN
-find_program (STRING fname, STRING *pfull)
+find_program (STRING fname, STRING localdir, STRING *pfull)
 {
 	STRING programsdir = getoptstr("LLPROGRAMS", ".");
 	FILE * fp = 0;
+	ZSTR zstr=0;
 	if (!fname || *fname == 0) return FALSE;
-	fp = fopenpath(fname, LLREADTEXT, programsdir, ".ll", uu8, pfull);
+	/* prefer local dir, so prefix path with localdir */
+	if (localdir && localdir[0]) {
+		zs_sets(&zstr, localdir);
+		zs_apps(&zstr, LLSTRPATHSEPARATOR);
+	}
+	zs_apps(&zstr, programsdir);
+	fp = fopenpath(fname, LLREADTEXT, zs_str(zstr), ".ll", uu8, pfull);
+	zs_free(&zstr);
 	if (fp) {
 		fclose(fp);
 		return TRUE;
@@ -428,7 +467,7 @@ find_program (STRING fname, STRING *pfull)
 	return FALSE;
 }
 /*======================================+
- * parse_file - Parse single program file
+ * parse_file -- Parse single program file
  *  pactx: [I/O] pointer to global parsing context
  *  ifile: [IN]  file to parse
  * Parse file (yyparse may wind up adding entries to plist, via include statements)
@@ -1562,6 +1601,32 @@ interp_while (PNODE node, SYMTAB stab, PVALUE *pval)
 	}
 }
 /*=======================================+
+ * get_proc_node -- Find proc (or func) in local or global table
+ *  returns NULL if error, and sets *count to how many global listing
+ *  (ie, 0 or more than 1)
+ * Created: 2002/11/30 (Perry Rapp)
+ *======================================*/
+PNODE
+get_proc_node (CNSTRING procname, TABLE loctab, TABLE gtab, INT * count)
+{
+	LIST list=0;
+	PNODE proc = valueof_ptr(loctab, procname);
+	if (proc) return proc;
+	/* now look for global proc, and must be unique */
+	list = valueof_ptr(gtab, procname);
+	if (!list) {
+		*count = 0;
+		return NULL;
+	}
+	if (length_list(list)>1) {
+		*count = length_list(list);
+		return NULL;
+	}
+	proc = peek_list_head(list);
+	ASSERT(proc);
+	return proc;
+}
+/*=======================================+
  * interp_call -- Interpret call structure
  *======================================*/
 INTERPTYPE
@@ -1569,9 +1634,16 @@ interp_call (PNODE node, SYMTAB stab, PVALUE *pval)
 {
 	SYMTAB newstab=null_symtab();
 	INTERPTYPE irc=INTERROR;
-	PNODE arg=NULL, parm=NULL, proc = (PNODE) valueof_ptr(proctab, iname(node));
+	PNODE arg=NULL, parm=NULL, proc;
+	STRING procname = iname(node);
+	INT count=0;
+	/* find proc in local or global table */
+	proc = get_proc_node(procname, irptinfo(node)->proctab, gproctab, &count);
 	if (!proc) {
-		llwprintf("``%s'': undefined procedure\n", iname(node));
+		if (!count)
+			prog_error(node, _("Undefined proc: %s"), procname);
+		else
+			prog_error(node, _("Ambiguous call to proc: %s"), procname);
 		irc = INTERROR;
 		goto call_leave;
 	}
@@ -1819,10 +1891,10 @@ vprog_error (PNODE node, STRING fmt, va_list args)
 		return _("Report cancelled");
 	rptfile = getoptstr("ReportLog", NULL);
 	if (node) {
-		STRING fname = ifname(node);
+		STRING fname = irptinfo(node)->fullpath;
 		/* only display filename if different (or first error) */
 		if (!prevfile[0] || !eqstr(prevfile, fname)) {
-			llstrsets(prevfile, sizeof(prevfile), uu8, ifname(node));
+			llstrsets(prevfile, sizeof(prevfile), uu8, fname);
 			zs_apps(&zstr, _("Report file: "));
 			zs_apps(&zstr, fname);
 			zs_appc(&zstr, '\n');
@@ -1888,40 +1960,6 @@ pa_handle_option (PVALUE optval)
 	}
 }
 /*=============================================+
- * set_rptfile_prop -- set a property for a report file
- * These are stored in a table, hanging off the entry in the filetab
- *=============================================*/
-void
-set_rptfile_prop (PACTX pactx, STRING fname, STRING key, STRING value)
-{
-	VPTR * ptr = access_value_ptr(pactx->filetab, fname);
-	TABLE tabprop;
-	if (!*ptr) {
-		tabprop = create_table();
-		*ptr = tabprop;
-	} else {
-		tabprop = (TABLE)(*ptr);
-	}
-	replace_table_str(tabprop, key, value, FREEBOTH);
-	
-}
-/*=============================================+
- * get_rptfile_prop -- get a property for a report file
- * These are stored in a table, hanging off the entry in the filetab
- *=============================================*/
-STRING
-get_rptfile_prop (PACTX pactx, STRING fname, STRING key)
-{
-	VPTR * ptr = access_value_ptr(pactx->filetab, fname);
-	STRING value = 0;
-	TABLE tabprop;
-	if (ptr && *ptr) {
-		tabprop = (TABLE)(*ptr);
-		value = valueof_str(tabprop, key);
-	}
-	return value;
-}
-/*=============================================+
  * pa_handle_char_encoding -- report command char_encoding("...")
  *  parse-time handling of report command
  *  node:   [IN]  current parse node
@@ -1931,12 +1969,11 @@ get_rptfile_prop (PACTX pactx, STRING fname, STRING key)
 void
 pa_handle_char_encoding (PACTX pactx, PNODE node)
 {
-	STRING fname = ifname(node);
 	PVALUE pval = ivalue(node);
-	STRING ccs;
+	STRING codeset;
 	ASSERT(ptype(pval)==PSTRING); /* grammar only allows strings */
-	ccs = pvalue(pval);
-	set_rptfile_prop(pactx, fname, strsave("char_encoding"), strsave(ccs));
+	codeset = pvalue(pval);
+	strupdate(&irptinfo(node)->codeset, codeset);
 }
 /*=============================================+
  * make_internal_string_node -- make string node
@@ -1950,7 +1987,7 @@ make_internal_string_node (PACTX pactx, STRING str)
 	ZSTR zstr = zs_news(str);
 	if (str && str[0]) {
 		STRING fname = pactx->fullpath;
-		STRING rptcodeset = get_rptfile_prop(pactx, fname, "char_encoding");
+		STRING rptcodeset = get_rptinfo(fname)->codeset;
 		XLAT xlat = transl_get_xlat_to_int(rptcodeset);
 		transl_xlat(xlat, &zstr);
 	}
@@ -1963,20 +2000,28 @@ make_internal_string_node (PACTX pactx, STRING str)
  *  parse-time handling of report command
  *=============================================*/
 void
-pa_handle_include (PNODE node)
+pa_handle_include (PACTX pactx, PNODE node)
 {
 	/*STRING fname = ifname(node); */ /* current file */
 	PVALUE pval = ivalue(node);
 	STRING newfname;
-	STRING fullpath;
+	STRING fullpath=0, localpath=0;
+	ZSTR zstr=0;
 	struct pathinfo_s * pathinfo = 0;
 	ASSERT(ptype(pval)==PSTRING); /* grammar only allows strings */
 	newfname = pvalue(pval);
 	
-	/* TODO: be nice to extract path from fname, and pass to find_program 
-	so we can search directory of current file */
+	/* if it is relative, get local path to give to find_program */
+	if (!is_absolute_path(newfname)) {
+		STRING filename;
+		localpath = irptinfo(node)->fullpath;
+		filename = lastpathname(localpath);
+		zstr = zs_newsubs(localpath, strlen(localpath)-strlen(filename)-1);
+		localpath = zs_str(zstr);
+		
+	}
 
-	if (find_program(newfname, &fullpath)) {
+	if (find_program(newfname, localpath, &fullpath)) {
 		pathinfo = new_pathinfo(newfname, fullpath);
 		strfree(&fullpath);
 		enqueue_list(Plist, pathinfo);
@@ -1984,6 +2029,7 @@ pa_handle_include (PNODE node)
 		prog_error(node, "included file not found: %s\n", newfname);
 		++Perrors;
 	}
+	zs_free(&zstr);
 }
 /*=============================================+
  * pa_handle_require -- report command require("...")
@@ -1993,15 +2039,69 @@ pa_handle_include (PNODE node)
 void
 pa_handle_require (PACTX pactx, PNODE node)
 {
-	char propname[128];
-	STRING fname = ifname(node);
 	PVALUE pval = ivalue(node);
 	STRING str;
 	ASSERT(ptype(pval)==PSTRING);
 	str = pvalue(pval);
-	llstrsets(propname, sizeof(propname), uu8, "requires_");
-	llstrapps(propname, sizeof(propname), uu8, str);
-	set_rptfile_prop(pactx, fname, strsave(propname), strsave(str));
+	strupdate(&irptinfo(node)->requires, str);
+}
+/*=============================================+
+ * pa_handle_proc -- proc declaration (parse time)
+ * Created: 2002/11/30 (Perry Rapp)
+ *=============================================*/
+void
+pa_handle_proc (PACTX pactx, CNSTRING procname, PNODE nd_args, PNODE nd_body)
+{
+	RPTINFO rptinfo = get_rptinfo(pactx->fullpath);
+	PNODE procnode;
+	LIST list;
+
+	/* check for local duplicates, else add to local proc table */
+	procnode = (PNODE)valueof_ptr(rptinfo->proctab, procname);
+	if (procnode) {
+		enqueue_parse_error(_("Duplicate proc %s (lines %d and %d) in report: %s")
+			, procname, iline(procnode)+1, iline(nd_body)+1, pactx->fullpath);
+	}
+	procnode = proc_node(pactx, procname, nd_args, nd_body);
+	insert_table_ptr(rptinfo->proctab, strsave(procname), (VPTR)procnode);
+
+	/* add to global proc table */
+	list = (LIST)valueof_ptr(gproctab, procname);
+	if (!list) {
+		list = create_list();
+		set_list_type(list, LISTNOFREE);
+		insert_table_ptr(gproctab, procname, list);
+	}
+	enqueue_list(list, procnode);
+}
+/*=============================================+
+ * pa_handle_func -- func declaration (parse time)
+ * Created: 2002/11/30 (Perry Rapp)
+ *=============================================*/
+void
+pa_handle_func (PACTX pactx, CNSTRING procname, PNODE nd_args, PNODE nd_body)
+{
+	RPTINFO rptinfo = get_rptinfo(pactx->fullpath);
+	PNODE procnode;
+	LIST list;
+
+	/* check for local duplicates, else add to local proc table */
+	procnode = (PNODE)valueof_ptr(rptinfo->functab, procname);
+	if (procnode) {
+		enqueue_parse_error(_("Duplicate func %s (lines %d and %d) in report: %s")
+			, procname, iline(procnode)+1, iline(nd_body)+1, pactx->fullpath);
+	}
+	procnode = fdef_node(pactx, procname, nd_args, nd_body);
+	insert_table_ptr(rptinfo->functab, strsave(procname), (VPTR)procnode);
+
+	/* add to global proc table */
+	list = (LIST)valueof_ptr(gfunctab, procname);
+	if (!list) {
+		list = create_list();
+		set_list_type(list, LISTNOFREE);
+		insert_table_ptr(gfunctab, procname, list);
+	}
+	enqueue_list(list, procnode);
 }
 /*=============================================+
  * parse_error -- handle bison parse error
@@ -2056,4 +2156,24 @@ check_rpt_requires (PACTX pactx, STRING fname)
 	return 0;
 
 }
+/*=============================================+
+ * enqueue_parse_error -- Queue up a parsing error
+ *  for display after parsing complete
+ *  (this is fatal; it will prevent report execution)
+ * Created: 2002/11/30 (Perry Rapp)
+ *=============================================*/
+static void
+enqueue_parse_error (const char * fmt, ...)
+{
+	char buffer[512];
+	va_list args;
+	va_start(args, fmt);
 
+	if (!outstanding_parse_errors) {
+		outstanding_parse_errors = create_list();
+		set_list_type(outstanding_parse_errors, LISTDOFREE);
+	}
+	llstrsetvf(buffer, sizeof(buffer), 0, fmt, args);
+	va_end(args);
+	enqueue_list(outstanding_parse_errors, strsave(buffer));
+}

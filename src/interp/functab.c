@@ -71,6 +71,7 @@ BUILTINS builtins[] = {
 	{"complexformat",   1,    1,    __complexformat},
 	{"complexpic",      2,    2,    __complexpic },
 	{"concat",          1,    32,   __concat},
+	{"convertcode",     2,    3,    __convertcode}, 
 	{"copyfile",        1,    1,    __copyfile},
 	{"createnode",      2,    2,    __createnode},
 	{"d",               1,    1,    __d},

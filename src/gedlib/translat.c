@@ -321,7 +321,19 @@ translate_write(XLAT ttm, STRING in, INT *lenp
 XLAT
 transl_get_xlat_to_int (CNSTRING codeset)
 {
-	return xl_get_xlat(codeset, int_codeset);
+	BOOLEAN adhoc = TRUE;
+	return xl_get_xlat(codeset, int_codeset, adhoc);
+}
+/*==========================================================
+ * transl_get_xlat -- Get arbitrary translator
+ *  returns NULL if fails
+ * Created: 2002/11/30 (Perry Rapp)
+ *========================================================*/
+XLAT
+transl_get_xlat (CNSTRING src, CNSTRING dest)
+{
+	BOOLEAN adhoc = TRUE;
+	return xl_get_xlat(src, dest, adhoc);
 }
 /*==========================================================
  * transl_load_all_tts -- Load internal list of available translation
@@ -368,12 +380,13 @@ transl_load_xlats (void)
 
 	for (i=0; i<NUM_TT_MAPS; ++i) {
 		STRING src, dest;
+		BOOLEAN adhoc = FALSE;
 		if (!conversions[i].src_codeset)
 			continue;
 		ASSERT(conversions[i].dest_codeset);
 		src = *conversions[i].src_codeset;
 		dest = *conversions[i].dest_codeset;
-		conversions[i].xlat = xl_get_xlat(src, dest);
+		conversions[i].xlat = xl_get_xlat(src, dest, adhoc);
 	}
 }
 /*==========================================================
@@ -425,8 +438,7 @@ transl_get_predefined_xlat (INT ttnum)
 	struct conversion_s * conv;
 	ASSERT(ttnum>=0 && ttnum<NUM_TT_MAPS);
 	conv = &conversions[conv_array[ttnum]];
-	/* we could cache these XLATs */
-	return xl_get_xlat(*conv->src_codeset, *conv->dest_codeset);
+	return conv->xlat;
 }
 /*==========================================================
  * transl_parse_codeset -- Parse out subcode suffixes of a codeset
@@ -438,34 +450,7 @@ transl_get_predefined_xlat (INT ttnum)
 void
 transl_parse_codeset (CNSTRING codeset, ZSTR * zcsname, LIST * subcodes)
 {
-	CNSTRING p=codeset, prev=codeset;
-	BOOLEAN base=FALSE;
-	for ( ; ; ++p) {
-		if ( !p[0] || (p[0]=='/' && p[1]=='/')) {
-			if (!base) {
-				if (zcsname) {
-					zs_free(zcsname);
-					*zcsname = zs_newsubs(codeset, p-prev);
-				}
-				base=TRUE;
-			} else {
-				ZSTR ztemp=0;
-				if (subcodes) {
-					if (!*subcodes) {
-						*subcodes = create_list();
-						set_list_type(*subcodes, LISTDOFREE);
-					}
-					ztemp = zs_newsubs(prev, p-prev);
-					enqueue_list(*subcodes, strsave(zs_str(ztemp)));
-					zs_free(&ztemp);
-				}
-			}
-			if (!p[0])
-				return;
-			prev = p+2;
-			p = p+1; /* so we jump over both slashes */
-		}
-	}
+	xl_parse_codeset(codeset, zcsname, subcodes);
 }
 /*==========================================================
  * transl_are_all_conversions_ok -- 

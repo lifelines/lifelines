@@ -151,7 +151,7 @@ on_signals (int sig)
 	if (progrunning) {
 		char line[20];
 		snprintf(line, sizeof(line), "%d", iline(Pnode)+1);
-		zstr = zprintpic2(_(qSprogsig), ifname(Pnode), line);
+		zstr = zprintpic2(_(qSprogsig), irptinfo(Pnode)->fullpath, line);
 	}
 
 	close_lifelines();

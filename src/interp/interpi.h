@@ -71,6 +71,7 @@ extern PVALUE __complexdate(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __complexformat(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __complexpic(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __concat(PNODE, SYMTAB, BOOLEAN *);
+extern PVALUE __convertcode(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __copyfile(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __createnode(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __d(PNODE, SYMTAB, BOOLEAN *);

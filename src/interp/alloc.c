@@ -21,15 +21,10 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
-/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * alloc.c -- Allocate nodes for report generator
  * pnodes are parse nodes in the parse tree built by yacc.c
  * Copyright(c) 1991-95 by T.T. Wetmore IV; all rights reserved
- * pre-SourceForge version information:
- *   2.3.4 - 24 Jun 93    2.3.5 - 17 Aug 93
- *   3.0.0 - 28 Jun 94    3.0.2 - 23 Dec 94
- *   3.0.3 - 10 Aug 95
  *===========================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -47,6 +42,7 @@
 #include "interpi.h"
 #include "feedback.h"
 #include "liflines.h"
+#include "codesets.h"
 
 /*********************************************
  * global/exported variables
@@ -116,6 +112,7 @@ static PN_BLOCK block_list = 0;
 static PNODE free_list = 0;
 static STRING interp_locale = 0;
 static INT live_pnodes = 0;
+static TABLE f_rptinfos=0;
 
 /*********************************************
  * local & exported function definitions
@@ -215,7 +212,7 @@ create_pnode (PACTX pactx, INT type)
 	inext(node) = NULL;
 	iline(node) = pactx->lineno;
 	/* Assumption -- pactx->fullpath stays live longer than all pnodes */
-	ifname(node) = pactx->fullpath;
+	irptinfo(node) = get_rptinfo(pactx->fullpath);
 	node->i_word1 = node->i_word2 = node->i_word3 = NULL;
 	node->i_word4 = node->i_word5 = NULL;
 	return node;
@@ -594,7 +591,7 @@ fcons_node (PACTX pactx, FLOAT fval)
  *  body:  [IN]  body
  *=================================*/
 PNODE
-proc_node (PACTX pactx, STRING name, PNODE parms, PNODE body)
+proc_node (PACTX pactx, CNSTRING name, PNODE parms, PNODE body)
 {
 	PNODE node = create_pnode(pactx, IPDEFN);
 	iname(node) = (VPTR) name;
@@ -611,7 +608,7 @@ proc_node (PACTX pactx, STRING name, PNODE parms, PNODE body)
  *  body:  [IN]  body
  *================================================*/
 PNODE
-fdef_node (PACTX pactx, STRING name, PNODE parms, PNODE body)
+fdef_node (PACTX pactx, CNSTRING name, PNODE parms, PNODE body)
 {
 	PNODE node = create_pnode(pactx, IFDEFN);
 	iname(node) = (VPTR) name;
@@ -629,17 +626,23 @@ fdef_node (PACTX pactx, STRING name, PNODE parms, PNODE body)
 PNODE
 func_node (PACTX pactx, STRING name, PNODE elist)
 {
-	PNODE node;
+	PNODE node, func;
 	INT lo, hi, md=0, n, r;
 	BOOLEAN found = FALSE;
+	INT count;
 
 /* See if the function is user defined */
-	if (in_table(functab, name)) {
+	/* find func in local or global table */
+	func = get_proc_node(name, get_rptinfo(pactx->fullpath)->functab, gfunctab, &count);
+	if (func) {
 		node = create_pnode(pactx, IFCALL);
 		iname(node) = (VPTR) name;
 		iargs(node) = (VPTR) elist;
-		ifunc(node) = valueof_ptr(functab, name);
+		ifunc(node) = func;
 		return node;
+	} else if (count) {
+		/* ambiguous call */
+		goto func_node_bad;
 	}
 
 /*
@@ -679,6 +682,7 @@ func_node (PACTX pactx, STRING name, PNODE elist)
 	}
 
 /* If neither make it a user call to undefined function */
+func_node_bad:
 	node = create_pnode(pactx, IFCALL);
 	iname(node) = (VPTR) name;
 	iargs(node) = (VPTR) elist;
@@ -1046,5 +1050,49 @@ debug_show_one_pnode (PNODE node)     /* node to print */
 		break;
 	default:
 		break;
+	}
+}
+/*==========================================================
+ * get_rptinfo -- Fetch info about report file
+ * Created: 2002/11/30 (Perry Rapp)
+ *========================================================*/
+RPTINFO
+get_rptinfo (CNSTRING fullpath)
+{
+	RPTINFO rptinfo;
+	if (!f_rptinfos)
+		f_rptinfos = create_table();
+	rptinfo = (RPTINFO)valueof_ptr(f_rptinfos, fullpath);
+	if (!rptinfo) {
+		rptinfo = (RPTINFO)stdalloc(sizeof(*rptinfo));
+		rptinfo->fullpath = strsave(fullpath);
+		rptinfo->functab = create_table();
+		rptinfo->proctab = create_table();
+		rptinfo->codeset = strsave(report_codeset_in);
+		insert_table_ptr(f_rptinfos, fullpath, rptinfo);
+	}
+	return rptinfo;
+}
+/*==========================================================
+ * clear_rptinfos -- Fetch info about report file
+ * Created: 2002/11/30 (Perry Rapp)
+ *========================================================*/
+void
+clear_rptinfos (void)
+{
+	if (f_rptinfos) {
+		struct table_iter_s tabit;
+		STRING key=0;
+		VPTR ptr=0;
+		begin_table(f_rptinfos, &tabit);
+		while (next_table_ptr(&tabit, &key, &ptr)) {
+			RPTINFO rptinfo = (RPTINFO)ptr;
+			remove_table(rptinfo->proctab, FREEKEY); /* values are PNODES */
+			remove_table(rptinfo->functab, FREEKEY); /* values are PNODES */
+			strfree(&rptinfo->fullpath);
+			strfree(&rptinfo->codeset);
+		}
+		remove_table(f_rptinfos, FREEBOTH);
+		f_rptinfos = 0;
 	}
 }

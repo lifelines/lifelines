@@ -52,16 +52,16 @@ int listbadkeys = 0;
 static void add_record_to_direct(CACHE cache, RECORD rec, STRING key);
 static CACHE create_cache(STRING name, INT dirsize, INT indsize);
 static void dereference(CACHEEL);
-static CACHEEL key_to_cacheel(CACHE, STRING, STRING, INT);
-static CACHEEL key_to_even_cacheel (STRING key);
-static NODE key_typed_to_node(CACHE cache, STRING key, STRING tag);
-static RECORD key_to_record_impl(STRING key, INT reportmode);
-static RECORD key_typed_to_record(CACHE cache, STRING key, STRING tag);
-static CACHEEL key_to_othr_cacheel (STRING key);
-static CACHEEL key_to_sour_cacheel (STRING key);
+static CACHEEL key_to_cacheel(CACHE cache, CNSTRING key, STRING tag, INT reportmode);
+static CACHEEL key_to_even_cacheel(CNSTRING key);
+static NODE key_typed_to_node(CACHE cache, CNSTRING key, STRING tag);
+static RECORD key_to_record_impl(CNSTRING key, INT reportmode);
+static RECORD key_typed_to_record(CACHE cache, CNSTRING key, STRING tag);
+static CACHEEL key_to_othr_cacheel(CNSTRING key);
+static CACHEEL key_to_sour_cacheel(CNSTRING key);
 static void prepare_direct_space(CACHE cache);
-static NODE qkey_to_node(CACHE cache, STRING key, STRING tag);
-static RECORD qkey_typed_to_record(CACHE cache, STRING key, STRING tag);
+static NODE qkey_to_node(CACHE cache, CNSTRING key, STRING tag);
+static RECORD qkey_typed_to_record(CACHE cache, CNSTRING key, STRING tag);
 static void record_to_cache(CACHE cache, RECORD rec);
 
 
@@ -247,7 +247,7 @@ keynum_to_record (char ntype, int keynum)
  * TO DO - should become obsoleted by key_to_record
  *===================================*/
 NODE
-key_to_type (STRING key, INT reportmode)
+key_to_type (CNSTRING key, INT reportmode)
 {
 	switch(key[0])
 	{
@@ -263,7 +263,7 @@ key_to_type (STRING key, INT reportmode)
  * quiet -- that is, returns NULL if record not in database
  *===================================*/
 NODE
-qkey_to_type (STRING key)
+qkey_to_type (CNSTRING key)
 {
 	return key_to_type(key, TRUE);
 }
@@ -271,7 +271,7 @@ qkey_to_type (STRING key)
  * key_to_record_impl -- Convert key (any type) to RECORD
  *===================================*/
 static RECORD
-key_to_record_impl (STRING key, INT reportmode)
+key_to_record_impl (CNSTRING key, INT reportmode)
 {
 	switch(key[0])
 	{
@@ -287,7 +287,7 @@ key_to_record_impl (STRING key, INT reportmode)
  * ASSERTS if record not found in database
  *===================================*/
 RECORD
-key_to_record (STRING key)
+key_to_record (CNSTRING key)
 {
 	return key_to_record_impl(key, FALSE);
 }
@@ -296,7 +296,7 @@ key_to_record (STRING key)
  * quiet -- that is, returns NULL if record not in database
  *===================================*/
 RECORD
-qkey_to_record (STRING key)
+qkey_to_record (CNSTRING key)
 {
 	return key_to_record_impl(key, TRUE);
 }
@@ -307,23 +307,23 @@ qkey_to_record (STRING key)
  * TO DO - should become obsoleted by key_to_???0
  *===================================*/
 NODE
-key_to_indi (STRING key)
+key_to_indi (CNSTRING key)
 {
 	return key_typed_to_node(indicache, key, "INDI");
 }
-NODE key_to_fam (STRING key)
+NODE key_to_fam (CNSTRING key)
 {
 	return key_typed_to_node(famcache, key, "FAM");
 }
-NODE key_to_even (STRING key)
+NODE key_to_even (CNSTRING key)
 {
 	return key_typed_to_node(evencache, key, "EVEN");
 }
-NODE key_to_sour (STRING key)
+NODE key_to_sour (CNSTRING key)
 {
 	return key_typed_to_node(sourcache, key, "SOUR");
 }
-NODE key_to_othr (STRING key)
+NODE key_to_othr (CNSTRING key)
 {
 	return key_typed_to_node(othrcache, key, NULL);
 }
@@ -332,23 +332,23 @@ NODE key_to_othr (STRING key)
  *  (asserts if failure)
  *  5 symmetric versions
  *===================================*/
-RECORD key_to_irecord (STRING key)
+RECORD key_to_irecord (CNSTRING key)
 {
 	return key_typed_to_record(indicache, key, "INDI");
 }
-RECORD key_to_frecord (STRING key)
+RECORD key_to_frecord (CNSTRING key)
 {
 	return key_typed_to_record(famcache, key, "FAM");
 }
-RECORD key_to_erecord (STRING key)
+RECORD key_to_erecord (CNSTRING key)
 {
 	return key_typed_to_record(evencache, key, "EVEN");
 }
-RECORD key_to_srecord (STRING key)
+RECORD key_to_srecord (CNSTRING key)
 {
 	return key_typed_to_record(sourcache, key, "SOUR");
 }
-RECORD key_to_orecord (STRING key)
+RECORD key_to_orecord (CNSTRING key)
 {
 	return key_typed_to_record(othrcache, key, NULL);
 }
@@ -358,23 +358,23 @@ RECORD key_to_orecord (STRING key)
  *  5 symmetric versions
  * TO DO - should become obsoleted by key_to_???0
  *======================================*/
-NODE qkey_to_indi (STRING key)
+NODE qkey_to_indi (CNSTRING key)
 {
 	return qkey_to_node(indicache, key, "INDI");
 }
-NODE qkey_to_fam (STRING key)
+NODE qkey_to_fam (CNSTRING key)
 {
 	return qkey_to_node(famcache, key, "FAM");
 }
-NODE qkey_to_even (STRING key)
+NODE qkey_to_even (CNSTRING key)
 {
 	return qkey_to_node(evencache, key, "EVEN");
 }
-NODE qkey_to_sour (STRING key)
+NODE qkey_to_sour (CNSTRING key)
 {
 	return qkey_to_node(sourcache, key, "SOUR");
 }
-NODE qkey_to_othr (STRING key)
+NODE qkey_to_othr (CNSTRING key)
 {
 	return qkey_to_node(othrcache, key, NULL);
 }
@@ -383,23 +383,23 @@ NODE qkey_to_othr (STRING key)
  *  report mode (returns NULL if failure)
  *  5 symmetric versions
  *======================================*/
-RECORD qkey_to_irecord (STRING key)
+RECORD qkey_to_irecord (CNSTRING key)
 {
 	return qkey_typed_to_record(indicache, key, "INDI");
 }
-RECORD qkey_to_frecord (STRING key)
+RECORD qkey_to_frecord (CNSTRING key)
 {
 	return qkey_typed_to_record(famcache, key, "FAM");
 }
-RECORD qkey_to_erecord (STRING key)
+RECORD qkey_to_erecord (CNSTRING key)
 {
 	return qkey_typed_to_record(evencache, key, "EVEN");
 }
-RECORD qkey_to_srecord (STRING key)
+RECORD qkey_to_srecord (CNSTRING key)
 {
 	return qkey_typed_to_record(sourcache, key, "SOUR");
 }
-RECORD qkey_to_orecord (STRING key)
+RECORD qkey_to_orecord (CNSTRING key)
 {
 	return qkey_typed_to_record(othrcache, key, NULL);
 }
@@ -437,7 +437,7 @@ key_to_fam_cacheel (STRING key)
  * key_to_sour_cacheel -- Convert key to source_cacheel
  *===================================================*/
 static CACHEEL
-key_to_sour_cacheel (STRING key)
+key_to_sour_cacheel (CNSTRING key)
 {
 	return key_to_cacheel(sourcache, key, "SOUR", FALSE);
 }
@@ -445,7 +445,7 @@ key_to_sour_cacheel (STRING key)
  * key_to_even_cacheel -- Convert key to event_cacheel
  *==================================================*/
 static CACHEEL
-key_to_even_cacheel (STRING key)
+key_to_even_cacheel (CNSTRING key)
 {
 	return key_to_cacheel(evencache, key, "EVEN", FALSE);
 }
@@ -453,7 +453,7 @@ key_to_even_cacheel (STRING key)
  * key_to_othr_cacheel -- Convert key to other_cacheel
  *==================================================*/
 static CACHEEL
-key_to_othr_cacheel (STRING key)
+key_to_othr_cacheel (CNSTRING key)
 {
 	return key_to_cacheel(othrcache, key, NULL, FALSE);
 }
@@ -642,13 +642,14 @@ dereference (CACHEEL cel)
  *  reportmode: [IN] if non-zero, failures should be silent
  *======================================================*/
 static CACHEEL
-add_to_direct (CACHE cache, STRING key, INT reportmode)
+add_to_direct (CACHE cache, CNSTRING key, INT reportmode)
 {
 	STRING rawrec;
 	INT len;
 	CACHEEL cel;
 	RECORD rec;
 	int i, j;
+	STRING keycopy;
 
 #ifdef DEBUG
 	llwprintf("add_to_direct: key == %s\n", key);
@@ -684,10 +685,11 @@ add_to_direct (CACHE cache, STRING key, INT reportmode)
 	ASSERT(rec);
 	ASSERT(csizedir(cache) < cmaxdir(cache));
 	cel = (CACHEEL) stdalloc(sizeof(*cel));
-	insert_table_ptr(cdata(cache), key = strsave(key), cel);
+	keycopy = strsave(key);
+	insert_table_ptr(cdata(cache), keycopy, cel);
 	crecord(cel) = rec;
 	cnode(cel) = nztop(rec);
-	ckey(cel) = key;
+	ckey(cel) = keycopy;
 	cclock(cel) = 0;
 	csemilock(cel) = 0;
 	first_direct(cache, cel);
@@ -698,10 +700,7 @@ add_to_direct (CACHE cache, STRING key, INT reportmode)
  * key_to_cacheel -- Return CACHEEL corresponding to key
  *====================================================*/
 static CACHEEL
-key_to_cacheel (CACHE cache,
-                STRING key,
-                STRING tag,
-                INT reportmode)
+key_to_cacheel (CACHE cache, CNSTRING key, STRING tag, INT reportmode)
 {
 	CACHEEL cel;
 
@@ -747,7 +746,7 @@ prepare_direct_space (CACHE cache)
  * TO DO - should become obsoleted by key_typed_to_record
  *=============================================================*/
 static NODE
-key_typed_to_node (CACHE cache, STRING key, STRING tag)
+key_typed_to_node (CACHE cache, CNSTRING key, STRING tag)
 {
 	CACHEEL cel;
 	ASSERT(cache && key);
@@ -760,7 +759,7 @@ key_typed_to_node (CACHE cache, STRING key, STRING tag)
  * asserts if failure
  *=============================================================*/
 static RECORD
-key_typed_to_record (CACHE cache, STRING key, STRING tag)
+key_typed_to_record (CACHE cache, CNSTRING key, STRING tag)
 {
 	CACHEEL cel;
 	ASSERT(cache && key);
@@ -774,7 +773,7 @@ key_typed_to_record (CACHE cache, STRING key, STRING tag)
  * TO DO - should become obsoleted by qkey_typed_to_record
  *=============================================================*/
 static NODE
-qkey_to_node (CACHE cache, STRING key, STRING tag)
+qkey_to_node (CACHE cache, CNSTRING key, STRING tag)
 {
 	CACHEEL cel;
 	ASSERT(cache && key);
@@ -787,7 +786,7 @@ qkey_to_node (CACHE cache, STRING key, STRING tag)
  * report mode - returns NULL if failure
  *=============================================================*/
 static RECORD
-qkey_typed_to_record (CACHE cache, STRING key, STRING tag)
+qkey_typed_to_record (CACHE cache, CNSTRING key, STRING tag)
 {
 	CACHEEL cel;
 	ASSERT(cache && key);

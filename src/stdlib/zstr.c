@@ -15,6 +15,8 @@
 #include "zstr.h"
 
 static void dbgchk(ZSTR);
+static unsigned int safelen(const char *txt);
+static void zalloc(ZSTR * pzstr, unsigned int newmax);
 
 #define DEFSIZE 64
 
@@ -47,7 +49,11 @@ main()
 }
 #endif
 
-
+/*
+TODO: right now each zstr takes two mallocs
+one to hold the zstr_s, and one with the string
+twould be more efficient to combine these
+*/
 struct zstr_s {
 	char * str;
 	char * end;
@@ -106,17 +112,26 @@ zs_newn (unsigned int min)
 	DBGCHK(zstr);
 	return zstr;
 }
+/* strlen but it handles null */
+static unsigned int
+safelen (const char *txt)
+{
+	return txt ? strlen(txt) : 0;
+}
 /* create & return new zstring containing copy of input */
 ZSTR
 zs_news (const char * str)
 {
-	ZSTR zstr=0;
-	if (str) {
-		zstr = zs_newn(strlen(str)+4);
-		zs_sets(&zstr, str);
-	} else {
-		zstr = zs_new();
-	}
+	ZSTR zstr=zs_newn(safelen(str)+4);
+	zs_sets(&zstr, str);
+	return zstr;
+}
+/* create & return new zstring with copy of input zstring */
+ZSTR
+zs_newz (ZSTR zsrc)
+{
+	ZSTR zstr = zs_newn(zs_len(zsrc)+4);
+	zs_setz(&zstr, zsrc);
 	return zstr;
 }
 /* create & return new zstring containing first len bytes of str */
@@ -124,7 +139,7 @@ ZSTR
 zs_newsubs (const char * str, unsigned int len)
 {
 	ZSTR zstr = zs_news(str);
-	ASSERT(len>=0 && len<=strlen(str));
+	ASSERT(len<=safelen(str));
 	zstr->str[len]=0;
 	return zstr;
 }
@@ -195,25 +210,21 @@ zs_set_len (ZSTR * pzstr, unsigned int len)
 static char *
 zs_set_with_len (ZSTR * pzstr, const char * txt, unsigned int tlen)
 {
-	ZSTR zstr = *pzstr;
-	if (!zstr) {
-		*pzstr = zstr = zs_newn(tlen);
-	}
+	ZSTR zstr;
+	zs_reserve(pzstr, tlen+1);
+	zstr = *pzstr;
 	DBGCHK(zstr);
-	if (!tlen) return zstr->str;
-	if (tlen + 1 > zstr->max) {
-		zalloc(&zstr, tlen+1);
-		*pzstr = zstr;
+	if (tlen) {
+		strcpy(zstr->str, txt);
+		zstr->end = zstr->str + tlen;
 	}
-	strcpy(zstr->str, txt);
-	zstr->end = zstr->str + tlen;
 	return zstr->str;
 }
 /* set zstring value to input zero-terminated string*/
 char *
 zs_sets (ZSTR * pzstr, const char * txt)
 {
-	unsigned int tlen = txt ? strlen(txt) : 0;
+	unsigned int tlen = safelen(txt);
 	return zs_set_with_len(pzstr, txt, tlen);
 }
 /* set zstring value to copy of another zstring value */
@@ -228,18 +239,27 @@ zs_setz (ZSTR * pzstr, ZSTR zsrc)
 char *
 zs_apps (ZSTR * pzstr, const char * txt)
 {
-	ZSTR zstr = *pzstr;
-	int tlen;
-	DBGCHK(zstr);
-	if (!txt || !txt[0]) return zstr->str;
-	tlen = strlen(txt);
-	if (zs_len(zstr) + tlen + 1 > zstr->max) {
-		zalloc(&zstr, zs_len(zstr) + tlen + 1);
-		*pzstr = zstr;
+	int tlen = safelen(txt);
+	zs_reserve(pzstr, zs_len(*pzstr)+tlen+1);
+	DBGCHK(*pzstr);
+	if (tlen) {
+		strcpy((*pzstr)->end, txt);
+		(*pzstr)->end += tlen;
 	}
-	strcpy(zstr->end, txt);
-	zstr->end += tlen;
-	return zstr->str;
+	return (*pzstr)->str;
+}
+/* append input zstring to zstring */
+char *
+zs_appz(ZSTR * pzstr, ZSTR zsrc)
+{
+	int tlen = zs_len(zsrc);
+	zs_reserve(pzstr, zs_len(*pzstr)+tlen+1);
+	DBGCHK(*pzstr);
+	if (tlen) {
+		strcpy((*pzstr)->end, zs_str(zsrc));
+		(*pzstr)->end += tlen;
+	}
+	return (*pzstr)->str;
 }
 /* append input character to zstring */
 char *
