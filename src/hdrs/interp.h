@@ -34,7 +34,7 @@
 #ifndef _INTERP_H
 #define _INTERP_H
 
-#define LIFELINES_REPORTS_VERSION "1.1"
+#define LIFELINES_REPORTS_VERSION "1.3"
 
 
 #include "cache.h"
@@ -44,7 +44,6 @@ struct tag_rptinfo {
 	TABLE proctab;   /* all procs in this file */
 	TABLE functab;   /* all funcs in this file */
 	STRING codeset;  /* codeset of report */
-	STRING requires; /* version of lifelines report language required */
 };
 typedef struct tag_rptinfo *RPTINFO;
 
@@ -52,11 +51,11 @@ typedef struct tag_pnode *PNODE;
 struct tag_pnode {
 	char     i_type;       /* type of node */
 	PNODE    i_prnt;       /* parent of this node */
-	INT      i_line;	     /* line where text of this node begins */
+	INT      i_line;       /* line where text of this node begins */
 	RPTINFO  i_rptinfo;    /* information about this report file */
 	PNODE    i_next;       /* next node */
 	VPTR     i_word1;      /* variable data associated with node type */
-	VPTR     i_word2;	     /* ... */
+	VPTR     i_word2;      /* ... */
 	VPTR     i_word3;
 	VPTR     i_word4;
 	VPTR     i_word5;

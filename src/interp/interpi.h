@@ -36,6 +36,7 @@ struct tag_pactx {
 	FILE *Pinfp;     /* file to read program from */
 	STRING Pinstr;   /* string to read program from */
 	TABLE filetab;   /* table of files called by current report (incl. itself) */
+	                 /* a filetab entry holds optional table of string properties */
 	STRING ifile;    /* user's requested program path (current report) */
 	STRING fullpath; /* actual path of current program */
 	INT lineno;      /* current line number (0-based) */

@@ -412,6 +412,8 @@ init_pactx (PACTX pactx)
 static void
 wipe_pactx (PACTX pactx)
 {
+	/* 2003-03-24, Perry: */
+	/* leaking the file property tables optionally hanging off file entries */
 	remove_table(pactx->filetab, FREEBOTH);
 	pactx->filetab=NULL;
 	memset(pactx, 0, sizeof(*pactx));
@@ -2118,11 +2120,19 @@ pa_handle_require (PACTX pactx, PNODE node)
 {
 	PVALUE pval = ivalue(node);
 	STRING str;
+	STRING propstr = "requires_lifelines-reports.version:";
+	TABLE tab;
 	ASSERT(ptype(pval)==PSTRING);
 	pactx=pactx; /* unused */
 
+	tab = (TABLE)valueof_ptr(pactx->filetab, pactx->fullpath);
+	if (!tab) {
+		tab = create_table(FREEBOTH);
+		insert_table_ptr(pactx->filetab, strsave(cur_pathinfo->fullpath), tab);
+	}
+
 	str = pvalue(pval);
-	strupdate(&irptinfo(node)->requires, str);
+	insert_table_str(tab, propstr, strsave(str));
 }
 /*=============================================+
  * pa_handle_proc -- proc declaration (parse time)
@@ -2201,16 +2211,16 @@ parse_error (PACTX pactx, STRING str)
  *  this report file -- return desc. string if fail
  *=============================================*/
 static STRING
-check_rpt_requires (PACTX pactx, STRING fname)
+check_rpt_requires (PACTX pactx, STRING fullpath)
 {
-	TABLE tab = (TABLE)valueof_ptr(pactx->filetab, fname);
-	STRING str, propstr;
+	TABLE tab = (TABLE)valueof_ptr(pactx->filetab, fullpath);
+	STRING str;
+	STRING propstr = "requires_lifelines-reports.version:";
 	INT ours=0, desired=0;
 	STRING optr=LIFELINES_REPORTS_VERSION;
 	STRING dptr=0;
 	if (!tab)
 		return 0;
-	propstr = "requires_lifelines-reports.version:";
 	str = valueof_str(tab, propstr);
 	if (str) {
 		dptr=str+strlen(propstr)-strlen("requires_");
@@ -2230,6 +2240,9 @@ check_rpt_requires (PACTX pactx, STRING fname)
 				desired = desired*10 + (*dptr++ - '0');
 			if (desired > ours)
 				return _("This report requires a newer program to run");
+			if (desired < ours)
+				return 0;
+			/* else equal, continue to minor version blocks */
 		}
 	}
 	return 0;

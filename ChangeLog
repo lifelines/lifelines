@@ -1,3 +1,10 @@
+2003-03-24 Perry Rapp
+
+	* ChangeLog src/hdrs/interp.h src/interp/interp.c
+	src/interp/interpi.h
+
+	Fix requires command (in report language).
+
 2003-03-18 Stephen Dum
         * ChangeLog docs/ll-devguide.html docs/ll-devguide.xml
 	docs/ll-reportmanual.html docs/ll-reportmanual.pdf
