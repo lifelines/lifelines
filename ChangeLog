@@ -7,7 +7,11 @@
 	Fix fam_to_wife_node to ignore bad key (reference).
 	Rewrite FORCHILDREN, FORCHILDRENx, etc for maximal efficiency,
 	and to avoid ASSERTs.
-	dbverify: Handle null keys in print outputs;
+	dbverify: Handle null keys in print outputs.
+
+	* ChangeLog src/liflines/main.c
+
+	Remove declaration of nonexistent check_version_compat function.
 
 2005-02-03 Perry Rapp
 

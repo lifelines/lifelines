@@ -101,7 +101,6 @@ STRING  readpath = NULL;       /* database path used to open */
  *********************************************/
 
 /* alphabetical */
-static BOOLEAN check_version_compat(void);
 static BOOLEAN init_curses_ui(void);
 static BOOLEAN is_unadorned_directory(STRING path);
 static void load_usage(void);
