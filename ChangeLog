@@ -11,6 +11,8 @@
 	Added typedef CNSTRING for const char *.
 	Alphabetized translat.h.
 
+	* gedlib/gstrings.c gedlib/messages.c: Added fam_to_list_string.
+
 2001-02-11 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/choose.c gedlib/gstrings.c gedlib/indiseq.c

@@ -261,11 +261,11 @@ STRING rerwlv      = SS "The record begins at wrong level.";
 STRING nonnum      = SS "At least one argument to %s is not numeric";
 
 /* display abbreviations */
-STRING dsp_mar     = SS "m. ";
-STRING dsp_bir     = SS "b. ";
-STRING dsp_chr     = SS "bap. ";
-STRING dsp_dea     = SS "d. ";
-STRING dsp_bur     = SS "bur. ";
+STRING dspa_mar    = SS "m. ";
+STRING dspa_bir    = SS "b. ";
+STRING dspa_chr    = SS "bap. ";
+STRING dspa_dea    = SS "d. ";
+STRING dspa_bur    = SS "bur. ";
 
 /* menus */
 STRING mtitle      = SS "LifeLines %s - Genealogical DB and Programming System";

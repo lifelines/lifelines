@@ -39,7 +39,7 @@
  * external/imported variables
  *********************************************/
 
-extern STRING dsp_mar,dsp_bir,dsp_chr,dsp_dea,dsp_bur;
+extern STRING dspa_mar,dspa_bir,dspa_chr,dspa_dea,dspa_bur;
 extern STRING unksps;
 
 /*********************************************
@@ -115,11 +115,11 @@ indi_to_list_string (NODE indi,
 		name = unksps;
 	sprintf(p, "%s", name);
 	p += strlen(p);
-	if (fam)  evt = fam_to_event(fam, ttd, "MARR", dsp_mar, len, TRUE);
-	if (!evt) evt = indi_to_event(indi, ttd, "BIRT", dsp_bir, len, TRUE);
-	if (!evt) evt = indi_to_event(indi, ttd, "CHR", dsp_chr, len, TRUE);
-	if (!evt) evt = indi_to_event(indi, ttd, "DEAT", dsp_dea, len, TRUE);
-	if (!evt) evt = indi_to_event(indi, ttd, "BURI", dsp_bur, len, TRUE);
+	if (fam)  evt = fam_to_event(fam, ttd, "MARR", dspa_mar, len, TRUE);
+	if (!evt) evt = indi_to_event(indi, ttd, "BIRT", dspa_bir, len, TRUE);
+	if (!evt) evt = indi_to_event(indi, ttd, "CHR", dspa_chr, len, TRUE);
+	if (!evt) evt = indi_to_event(indi, ttd, "DEAT", dspa_dea, len, TRUE);
+	if (!evt) evt = indi_to_event(indi, ttd, "BURI", dspa_bur, len, TRUE);
 	if (evt) {
 		sprintf(p, ", %s", evt);
 		p += strlen(p);
@@ -157,7 +157,7 @@ indi_to_list_string (NODE indi,
 STRING
 sour_to_list_string(NODE sour, INT len, STRING delim)
 {
-	char unsigned scratch[1024];
+	char scratch[1024];
 	STRING name, p=scratch;
 	INT mylen=len;
 	TRANTABLE ttd = tran_tables[MINDS];
@@ -182,6 +182,64 @@ sour_to_list_string(NODE sour, INT len, STRING delim)
 		llstrcatn(&p, delim, &mylen);
 		llstrcatn(&p, name, &mylen);
 	}
+	return strsave(scratch);
+}
+/*================================================
+ * fam_to_list_string -- Return menu list string.
+ * Created: 2001/02/17, Perry Rapp
+ *==============================================*/
+STRING
+fam_to_list_string(NODE fam, INT len, STRING delim)
+{
+	char scratch[1024];
+	STRING name, p=scratch;
+	INT mylen=len;
+	char counts[32];
+	INT husbands=0, wives=0, children=0;
+	INT templen;
+	TRANTABLE ttd = tran_tables[MINDS];
+	NODE refn, husb, wife, chil, rest, node;
+	if (mylen>sizeof(scratch))
+		mylen=sizeof(scratch);
+	p[0]=0;
+	llstrcatn(&p, "(F", &mylen);
+	llstrcatn(&p, rmvat(nxref(fam))+1, &mylen);
+	llstrcatn(&p, ")", &mylen);
+	name = node_to_tag(fam, "REFN", ttd, len);
+	if (name) {
+		llstrcatn(&p, " ", &mylen);
+		llstrcatn(&p, name, &mylen);
+	}
+	split_fam(fam, &refn, &husb, &wife, &chil, &rest);
+	for (node=husb; node; node=nsibling(node))
+		husbands++;
+	for (node=wife; node; node=nsibling(node))
+		wives++;
+	for (node=chil; node; node=nsibling(node))
+		children++;
+	sprintf(counts, "%dh,%dw,%dch", husbands, wives, children);
+	llstrcatn(&p, " ", &mylen);
+	llstrcatn(&p, counts, &mylen);
+	if (husbands) {
+		llstrcatn(&p, delim, &mylen);
+		if (wives)
+			templen = (mylen-4)/2;
+		else
+			templen = mylen;
+		node = key_to_indi(rmvat(nval(husb)));
+		llstrcatn(&p, indi_to_name(node, ttd, templen), &mylen);
+		if (wives)
+			llstrcatn(&p, " m. ", &mylen);
+	}
+	if (wives) {
+		if (!husbands)
+			templen = mylen;
+		/* othewise we set templen above */
+		node = key_to_indi(rmvat(nval(wife)));
+		llstrcatn(&p, indi_to_name(node, ttd, templen), &mylen);
+	}
+	join_fam(fam, refn, husb, wife, chil, rest);
+	/* TO DO - print a husband and a wife out */
 	return strsave(scratch);
 }
 /*================================================
@@ -233,6 +291,9 @@ generic_to_list_string (NODE node, STRING key, INT len, STRING delim)
 			break;
 		case 'S':
 			str = sour_to_list_string(node, len, ", ");
+			break;
+		case 'F':
+			str = fam_to_list_string(node, len, ", ");
 			break;
 		case 'E':
 			/* TO DO - any expected structure for events ? */
