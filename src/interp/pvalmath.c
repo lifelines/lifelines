@@ -216,7 +216,7 @@ ge_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 	case PINT:
 		rel = (pvalue_to_int(val1) >= pvalue_to_int(val2)); 
 		break;
-	default: invalid_numeric_type("mod", val1, eflg, zerr); return;
+	default: invalid_numeric_type("ge", val1, eflg, zerr); return;
 	}
 	set_pvalue_bool(val1, rel);
 	delete_pvalue(val2);
@@ -239,7 +239,7 @@ lt_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 	case PINT: 
 		rel = (pvalue_to_int(val1) < pvalue_to_int(val2)); 
 		break;
-	default: invalid_numeric_type("mod", val1, eflg, zerr); return;
+	default: invalid_numeric_type("lt", val1, eflg, zerr); return;
 	}
 	set_pvalue_bool(val1, rel);
 	delete_pvalue(val2);
@@ -262,7 +262,7 @@ gt_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 	case PINT:
 		rel = pvalue_to_int(val1) > pvalue_to_int(val2);
 		break;
-	default: invalid_numeric_type("mod", val1, eflg, zerr); return;
+	default: invalid_numeric_type("gt", val1, eflg, zerr); return;
 	}
 	set_pvalue_bool(val1, rel);
 	delete_pvalue(val2);
@@ -379,7 +379,7 @@ num_conform_pvalues (CNSTRING op, PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR 
 	if (zerr) {
 		ZSTR zt1 = describe_pvalue(val1), zt2 = describe_pvalue(val2);
 		ASSERT(!(*zerr));
-		(*zerr) = zs_newf(_("%s: incompatible types: %s and %s")
+		(*zerr) = zs_newf(_("%s: not compatible numeric types: %s and %s")
 			, op, zs_str(zt1), zs_str(zt2));
 		zs_free(&zt1);
 		zs_free(&zt2);
