@@ -59,7 +59,7 @@ They must also implement crashlog, but it may do nothing, or
 it may just print its printf style args to the screen. It 
 should return.
 */
-void __fatal(STRING file, int line, STRING details);
+void __fatal(STRING file, int line, CNSTRING details);
 void crashlog(STRING fmt, ...);
 void crash_setcrashlog(STRING crashlog);
 void crash_setdb(STRING dbname);
@@ -137,6 +137,9 @@ ZSTR zprintpic2(CNSTRING pic, CNSTRING arg1, CNSTRING arg2);
 BOOLEAN sprintpic3(STRING buffer, INT len, INT utf8, CNSTRING pic, CNSTRING arg1
 	, CNSTRING arg2, CNSTRING arg3);
 ZSTR zprintpic3(CNSTRING pic, CNSTRING arg1, CNSTRING arg2, CNSTRING arg3);
+
+/* stdlib.c */
+void init_stdlib(void);
 
 /* stdstrng.c */
 INT chartype(INT);

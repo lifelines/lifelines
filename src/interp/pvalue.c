@@ -59,7 +59,7 @@ static void free_float_pvalue(PVALUE val);
 static BOOLEAN is_record_pvaltype(INT valtype);
 static OBJECT pvalue_copy(OBJECT obj, int deep);
 static void pvalue_destructor(VTABLE *obj);
-static void table_pvcleaner(ENTRY ent);
+static void table_pvcleaner(CNSTRING key, UNION uval);
 
 /*********************************************
  * local variables
@@ -193,7 +193,7 @@ set_pvalue (PVALUE val, INT type, VPTR value)
 	case PTABLE:
 		{
 			TABLE table = pvalue_to_table(val);
-			++table->refcnt;
+			addref_table(table);
 		}
 		break;
 	case PSET:
@@ -288,12 +288,7 @@ clear_pvalue (PVALUE val)
 	case PTABLE:
 		{
 			TABLE table = pvalue_to_table(val);
-			--table->refcnt;
-			if (!table->refcnt) {
-				/* TODO: this will go away when pvalues go away */
-				traverse_table(table, table_pvcleaner);
-				destroy_table(table);
-			}
+			delref_table(table, table_pvcleaner);
 		}
 		return;
 	case PSET:
@@ -341,11 +336,11 @@ clear_pv_indiseq (INDISEQ seq)
  * Created: 2001/03/24, Perry Rapp
  *======================================*/
 static void
-table_pvcleaner (ENTRY ent)
+table_pvcleaner (CNSTRING key, UNION uval)
 {
-	PVALUE val = ent->uval.w;
+	PVALUE val = uval.w;
 	delete_pvalue(val);
-	ent->uval.w = NULL;
+	uval.w = NULL;
 }
 /*========================================
  * delete_vptr_pvalue -- Delete a program value

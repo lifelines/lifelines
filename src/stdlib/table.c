@@ -50,6 +50,23 @@ enum TB_VALTYPE
 		, TB_NULL /* placeholder for newly created tables */
 	};
 
+struct tag_entry {
+	STRING ekey;
+	UNION uval;
+	ENTRY enext;
+};
+
+/* table object itself */
+struct tag_table {
+	struct tag_vtable *vtable;
+	INT refcnt; /* ref-countable object */
+	ENTRY *entries;
+	INT count; /* #entries */
+	INT valtype; /* TB_VALTYPE enum in table.c */
+	INT maxhash;
+	INT whattofree; /* TODO: set always in constructor */
+};
+
 /*********************************************
  * local function prototypes
  *********************************************/
@@ -494,7 +511,7 @@ free_contents (ENTRY ent, INT whattofree)
  * tproc: callback for each entry
  *===============================================*/
 void
-traverse_table (TABLE tab, void (*tproc)(ENTRY))
+traverse_table (TABLE tab, void (*tproc)(CNSTRING key, UNION uval))
 {
 	INT i;
 	ENTRY ent, nxt;
@@ -503,7 +520,7 @@ traverse_table (TABLE tab, void (*tproc)(ENTRY))
 		nxt = tab->entries[i];
 		while ((ent = nxt)) {
 			nxt = ent->enext;
-			(*tproc)(ent);
+			(*tproc)(ent->ekey, ent->uval);
 		}
 	}
 }
@@ -514,7 +531,7 @@ traverse_table (TABLE tab, void (*tproc)(ENTRY))
  *===============================================*/
 void
 traverse_table_param (TABLE tab,
-                INT (*tproc)(ENTRY, VPTR),
+                INT (*tproc)(CNSTRING key, UNION uval, VPTR param),
                 VPTR param)
 {
 	INT i;
@@ -524,7 +541,7 @@ traverse_table_param (TABLE tab,
 		nxt = tab->entries[i];
 		while ((ent = nxt)) {
 			nxt = ent->enext;
-			if (!(*tproc)(ent, param))
+			if (!(*tproc)(ent->ekey, ent->uval, param))
 				return;
 		}
 	}
@@ -687,4 +704,25 @@ table_destructor (VTABLE *obj)
 	TABLE tab = (TABLE)obj;
 	ASSERT((*obj) == &vtable_for_table);
 	destroy_table(tab);
+}
+/*=================================================
+ * addref_table -- increment reference count of table
+ *===============================================*/
+void
+addref_table (TABLE tab)
+{
+	++tab->refcnt;
+}
+/*=================================================
+ * delref_table -- decrement reference count of table
+ *  and free if appropriate (ref count hits zero)
+ *===============================================*/
+void
+delref_table (TABLE tab, void (*tproc)(CNSTRING key, UNION uval))
+{
+	--tab->refcnt;
+	if (!tab->refcnt) {
+		traverse_table(tab, tproc);
+		destroy_table(tab);
+	}
 }

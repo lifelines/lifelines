@@ -63,7 +63,7 @@ static void output_any_node(CLOSURE * closure, NODE node, STRING toptag, INT lvl
 static void output_top_node(CLOSURE * closure, NODE node, BOOLEAN *eflg);
 static void process_any_node(CLOSURE * closure, NODE node);
 static void table_incr_item(TABLE tab, STRING key);
-static int add_refd_fams(ENTRY ent, VPTR param);
+static int add_refd_fams(CNSTRING key, UNION uval, VPTR param);
 
 
 /*********************************************
@@ -385,11 +385,11 @@ table_incr_item (TABLE tab, STRING key)
  *  this is a callback from traverse_table_param
  *=================================================================*/
 static int
-add_refd_fams (ENTRY ent, VPTR param)
+add_refd_fams (CNSTRING key, UNION uval, VPTR param)
 {
 	CLOSURE * closure = (CLOSURE *)param;
-	if (ent->uval.i > 1)
-		closure_add_key(closure, ent->ekey, "FAM");
+	if (uval.i > 1)
+		closure_add_key(closure, key, "FAM");
 	return 1;
 }
 /*===================================================================

@@ -2173,7 +2173,7 @@ __length (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	else if (val && (type == PTABLE))
 	{
 		TABLE table = pvalue_to_table(val);
-		set_pvalue_int(val, table->count);
+		set_pvalue_int(val, get_table_count(table));
 	}
 	else if (val && (type == PSET))
 	{

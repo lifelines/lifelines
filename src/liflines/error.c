@@ -52,7 +52,7 @@ static char f_currentdb[MAXPATHLEN]="";
  *  handles null or empty details input
  *=============================*/
 void
-__fatal (STRING file, int line, STRING details)
+__fatal (STRING file, int line, CNSTRING details)
 {
 	/* send to error log if one is specified */
 	if (f_crashfile[0]) {

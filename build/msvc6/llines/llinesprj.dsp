@@ -469,6 +469,10 @@ SOURCE=..\..\..\src\interp\rassa.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\stdlib\rbtree.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\btree\record.c
 # End Source File
 # Begin Source File
@@ -522,6 +526,14 @@ SOURCE=..\..\..\src\gedlib\spltjoin.c
 # Begin Source File
 
 SOURCE=..\..\..\src\stdlib\sprintpic.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\stdlib\stack.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\stdlib\stdlib.c
 # End Source File
 # Begin Source File
 
@@ -821,6 +833,10 @@ SOURCE=..\..\..\src\hdrs\pvalue.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\stdlib\rbtree.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\resource.h
 # End Source File
 # Begin Source File
@@ -834,6 +850,10 @@ SOURCE=..\..\..\src\hdrs\screen.h
 # Begin Source File
 
 SOURCE=..\..\..\src\hdrs\sequence.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\stdlib\stack.h
 # End Source File
 # Begin Source File
 

@@ -140,6 +140,9 @@ main (INT argc, char **argv)
 	STRING configfile=0;
 	STRING crashlog=NULL;
 
+	/* initialize all the low-level library code */
+	init_stdlib();
+
 #if HAVE_SETLOCALE
 	/* initialize locales */
 	setlocale(LC_ALL, "");
@@ -153,6 +156,7 @@ main (INT argc, char **argv)
 
 	save_original_locales();
 	load_usage();
+
 
 	/* Parse Command-Line Arguments */
 	opterr = 0;	/* turn off getopt's error message */

@@ -436,9 +436,9 @@ wipe_pactx (PACTX pactx)
  * Created: 2002/11/30 (Perry Rapp)
  *==========================================*/
 static void
-freelistentry (ENTRY ent)
+freelistentry (CNSTRING key, UNION uval)
 {
-	LIST list = (LIST)ent->uval.w;
+	LIST list = (LIST)uval.w;
 	make_list_empty(list);
 }
 /*===========================================+
