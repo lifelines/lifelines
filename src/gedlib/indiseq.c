@@ -38,7 +38,9 @@
 #include "gedcom.h"
 #include "cache.h"
 #include "indiseq.h"
+#include "gengedc.h"
 #include "interp.h"
+#include "gedcomi.h"
 
 /* WARNING: append_indiseq allows an extra value to be stored.
  * this value must be a PVALUE if it is to be used in report programs.
@@ -59,6 +61,14 @@ extern BOOLEAN opt_finnish;		/* Finnish language support */
 #define ISPRN_FAMSEQ 1
 #define ISPRN_SPOUSESEQ 2
 
+static STRING get_print_el (INDISEQ, INT);
+static void append_all_tags(INDISEQ, NODE, STRING, BOOLEAN);
+
+/* Matt 1/1/1 - should these be static, or will they be used elsewhere? */
+INT name_compare (SORTEL, SORTEL);
+INT key_compare (SORTEL, SORTEL);
+INT value_str_compare (SORTEL, SORTEL);
+INT value_compare (SORTEL, SORTEL);
 
 /*==================================
  * create_indiseq -- Create sequence
@@ -1104,8 +1114,8 @@ name_to_indiseq (STRING name)
 static STRING
 generic_print_el (INDISEQ seq, INT i)
 {
-	STRING key, name, str;
-	INT fmt;
+	STRING key, name, str = NULL;
+	INT fmt=0;
 	element_indiseq(seq, i, &key, &name);
 
 	switch (key[0])
@@ -1183,7 +1193,7 @@ famseq_print_el (INDISEQ seq, INT i)
  * get_print_el -- Get appropriate format line for
  *  one element of an indiseq
  *==============================================*/
-STRING
+static STRING
 get_print_el (INDISEQ seq, INT i)
 {
 	STRING str;
@@ -1291,7 +1301,8 @@ str_to_indiseq (STRING name)
  * append_all_tags -- append all tags of specified type
  *  to indiseq (optionally recursive
  *=====================================================*/
-void append_all_tags(INDISEQ seq, NODE node, STRING tagname, BOOLEAN recurse)
+static void
+append_all_tags(INDISEQ seq, NODE node, STRING tagname, BOOLEAN recurse)
 {
 	if (eqstr(ntag(node), tagname))
 	{
