@@ -590,18 +590,24 @@ squeeze (STRING in, STRING out)
  *  pkeys: [out] keys matched (0...*pnum-1)
  *  exact: [in] unused!
  *==================================================*/
-STRING *
+void
 get_names (STRING name, INT *pnum, STRING **pkeys, BOOLEAN exact)
 {
 	INT i, n;
-	STRING *strs;
+	RECORD rec;
+	static unsigned char kbuf[MAXGEDNAMELEN];
+	static STRING kaddr;
 
 	exact = FALSE;		/* keep compiler happy */
 
    /* See if user is asking for person by key instead of name */
-	if ((strs = id_by_key(name, pkeys))) {
+	if ((rec = id_by_key(name, 'I'))) {
+		STRING key = rmvat(nxref(nztop(rec)));
+		llstrncpy(kbuf, key, sizeof(kbuf));
+		kaddr = kbuf;
+		*pkeys = &kaddr;
 		*pnum = 1;
-		return strs;
+		return;
 	}
 
    /* Clean up allocated memory from last call */
@@ -614,7 +620,7 @@ get_names (STRING name, INT *pnum, STRING **pkeys, BOOLEAN exact)
 	LMcount = 0;
 	if (!getnamerec(name)) {
 		*pnum = 0;
-		return NULL;
+		return;
 	}
 
    /* Compare user's name against all names in name record; the name
@@ -638,7 +644,6 @@ get_names (STRING name, INT *pnum, STRING **pkeys, BOOLEAN exact)
 	for (i = 0; i < NRcount; i++)
 		LMkeys[i] = strsave(rkey2str(NRkeys[i]));
 	*pkeys = LMkeys;
-	return NRnames;
 }
 /*====================================
  * namecmp -- Compare two GEDCOM names
@@ -919,48 +924,64 @@ name_surfirst (STRING name)
 	return scratch;
 }
 /*================================
- * id_by_key -- Find name from key
- *  name:  [in]
- *  pkeys:  [out]
+ * id_by_key -- Find record (if exists) from key
+ *  name:  [IN]  name to search for
+ *  ctype: [IN]  type of record (eg, 'I') (0 for any)
+ * returns record found, or NULL
  *==============================*/
-STRING *
-id_by_key (STRING name, STRING **pkeys)
+RECORD
+id_by_key (STRING name, char ctype)
 {
-	STRING rec, str;
 	STRING p = name; /* unsigned for chartype */
 	static unsigned char kbuf[MAXGEDNAMELEN];
-	static unsigned char nbuf[MAXGEDNAMELEN];
-	static STRING kaddr, naddr;
-	INT i = 0, c, len;
-	NODE indi;
+	INT i = 0, c;
 	while ((c = (uchar)*p++) && chartype(c) == WHITE)
 		;
 	if (c == 0) return NULL;
-	if (c != 'I' && c != 'i' && chartype(c) != DIGIT) return NULL;
-	if (chartype(c) != DIGIT) c = (uchar)*p++;
+	/* Is name as key compatible with requirement (ctype) ? */
+	/* A less long-winded way to do this would be nice */
+	switch(c) {
+	case 'I':
+	case 'i':
+		if (ctype && ctype != 'I') return NULL;
+		ctype = 'I';
+		break;
+	case 'F':
+	case 'f':
+		if (ctype && ctype != 'F') return NULL;
+		ctype = 'F';
+		break;
+	case 'S':
+	case 's':
+		if (ctype && ctype != 'S') return NULL;
+		ctype = 'S';
+		break;
+	case 'E':
+	case 'e':
+		if (ctype && ctype != 'E') return NULL;
+		ctype = 'E';
+		break;
+	case 'X':
+	case 'x':
+		if (ctype && ctype != 'X') return NULL;
+		ctype = 'X';
+		break;
+	default:
+		/* can't match numeric key without knowing what type */
+		if (!ctype) return NULL;
+		--p; /* back up because first character must be first digit */
+		break;
+	}
+	/* now we know what type, and p should point to first digit */
+	c = (uchar)*p++;
 	if (chartype(c) != DIGIT) return NULL;
-	kbuf[i++] = 'I';
+	kbuf[i++] = ctype;
 	kbuf[i++] = c;
 	while ((c = (uchar)*p++) && chartype(c) == DIGIT)
 		kbuf[i++] = c;
 	if (c != 0) return NULL;
 	kbuf[i] = 0;
-	kaddr = kbuf;
-	*pkeys = &kaddr;
-	if (!(rec = getrecord(BTR, str2rkey(kbuf), &len)))
-		return NULL;
-	if (!(indi = string_to_node(rec))) {
-		stdfree(rec);
-		return NULL;
-	}
-	if (!(str = nval(NAME(indi))) || *str == 0) {
-		stdfree(rec);
-		return NULL;
-	}
-	strcpy(nbuf, str);
-	naddr = nbuf;
-	stdfree(rec);
-	return &naddr;
+	return key_to_record(kbuf, TRUE);
 }
 /*============================================
  * name_to_list -- Convert name to string list

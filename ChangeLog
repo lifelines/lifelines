@@ -1,3 +1,23 @@
+2001-12-10 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/gedcomi.h gedlib/indiseq.c gedlib/messages.c
+	gedlib/names.c hdrs/feedback.h hdrs/gedcom.h hdrs/indiseq.h
+	hdrs/menuitem.h interp/more.c liflines/ask.c liflines/browse.c
+	liflines/lbrowse.c liflines/llinesi.h liflines/menuitem.c
+	liflines/screen.c liflines/tandem.c:
+
+	Change tandem commands to start with t.
+	Alter output_menu to handle other #cols besides 3.
+	Add commands to change #cols ("M<" & "M>").
+	Initialized #cols dependent on current screen width.
+	Changed code to use fill screen width by default.
+
+	Revised zip browse code to handle any type.
+	Changed id_by_key to return RECORD.
+	Removed (unused) return value from get_names.
+	Split zip (z) cmd into zip indi (zi) and zip any (zz).
+	Added zip cmds to aux browse screen.
+
 2001-12-09 Perry Rapp <puddle@users.sourceforge.net>
 
 	* Changelog liflines/screen.c

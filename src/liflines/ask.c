@@ -58,7 +58,7 @@ extern STRING nofopn,idbrws;
  *********************************************/
 
 static INDISEQ ask_for_indi_list_once(STRING, INT*);
-static RECORD ask_for_indi_once(STRING, ASK1Q, INT*);
+static RECORD ask_for_any_once(STRING ttl, char ctype, ASK1Q ask1, INT *prc);
 
 /*=====================================================
  * ask_for_fam_by_key -- Ask user to identify family by
@@ -260,18 +260,19 @@ ask_for_output_file (STRING mode,
 #define RC_SELECT   2
 /*=================================================
  * ask_for_indiseq -- Ask user to identify sequence
- *  ttl:  [in] prompt (title) to display
- *  prc:  [out] result code (RC_DONE, RC_SELECT, RC_NOSELECT)
+ *  ttl:   [IN]  prompt (title) to display
+ *  ctype: [IN]  type of record (eg, 'I') (0 for any)
+ *  prc:   [OUT] result code (RC_DONE, RC_SELECT, RC_NOSELECT)
  *===============================================*/
 INDISEQ
-ask_for_indiseq (STRING ttl, INT *prc)
+ask_for_indiseq (STRING ttl, char ctype, INT *prc)
 {
 	INDISEQ seq;
 	STRING name = ask_for_string(ttl, idbrws);
 	*prc = RC_DONE;
 	if (!name || *name == 0) return NULL;
 	*prc = RC_NOSELECT;
-	seq = str_to_indiseq(name);
+	seq = str_to_indiseq(name, ctype);
 	if (!seq) {
 		message(unknam);
 		return NULL;
@@ -280,17 +281,18 @@ ask_for_indiseq (STRING ttl, INT *prc)
 	return seq;
 }
 /*============================================================
- * ask_for_indi_once -- Have user identify sequence and select
+ * ask_for_any_once -- Have user identify sequence and select
  *   person
- *  ttl:  [IN]  title to present
- *  ask1: [IN]  whether to present list if only one matches their desc.
- *  prc:  [OUT] result (RC_DONE, RC_SELECT, RC_NOSELECT)
+ *  ttl:   [IN]  title to present
+ *  ctype: [IN]  type of record (eg, 'I') (0 for any)
+ *  ask1:  [IN]  whether to present list if only one matches their desc.
+ *  prc:   [OUT] result (RC_DONE, RC_SELECT, RC_NOSELECT)
  *==========================================================*/
 static RECORD
-ask_for_indi_once (STRING ttl, ASK1Q ask1, INT *prc)
+ask_for_any_once (STRING ttl, char ctype, ASK1Q ask1, INT *prc)
 {
 	RECORD indi = 0;
-	INDISEQ seq = ask_for_indiseq(ttl, prc);
+	INDISEQ seq = ask_for_indiseq(ttl, ctype, prc);
 	if (*prc == RC_DONE || *prc == RC_NOSELECT) return NULL;
 	indi = choose_from_indiseq(seq, ask1, ifone, notone);
 	remove_indiseq(seq);
@@ -317,8 +319,34 @@ ask_for_indi (STRING ttl, CONFIRMQ confirmq, ASK1Q ask1)
 {
 	while (TRUE) {
 		INT rc;
-		RECORD indi = ask_for_indi_once(ttl, ask1, &rc);
+		RECORD indi = ask_for_any_once(ttl, 'I', ask1, &rc);
 		if (rc == RC_DONE || rc == RC_SELECT) return indi;
+		if (confirmq != DOCONFIRM || !ask_yes_or_no(entnam)) return NULL;
+	}
+}
+/*=================================================================
+ * ask_for_any_old -- old interface to ask_for_any (q.v.)
+ *===============================================================*/
+NODE
+ask_for_any_old (STRING ttl, CONFIRMQ confirmq, ASK1Q ask1)
+{
+	return nztop(ask_for_any(ttl, confirmq, ask1));
+}
+/*=================================================================
+ * ask_for_any -- Ask user to identify sequence and select record
+ *   reask protocol used
+ * ttl:      [in] title for question
+ * confirmq: [in] whether to confirm after choice
+ * ask1:     [in] whether to present list if only one matches
+ *===============================================================*/
+RECORD
+ask_for_any (STRING ttl, CONFIRMQ confirmq, ASK1Q ask1)
+{
+	char ctype = 0; /* code for any type */
+	while (TRUE) {
+		INT rc;
+		RECORD record = ask_for_any_once(ttl, ctype, ask1, &rc);
+		if (rc == RC_DONE || rc == RC_SELECT) return record;
 		if (confirmq != DOCONFIRM || !ask_yes_or_no(entnam)) return NULL;
 	}
 }
@@ -332,7 +360,7 @@ static INDISEQ
 ask_for_indi_list_once (STRING ttl,
                         INT *prc)
 {
-	INDISEQ seq = ask_for_indiseq(ttl, prc);
+	INDISEQ seq = ask_for_indiseq(ttl, 'I', prc);
 	INT rv;
 	if (*prc == RC_DONE || *prc == RC_NOSELECT) return NULL;
 	rv = choose_list_from_indiseq(notone, seq);

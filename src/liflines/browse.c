@@ -58,7 +58,8 @@ extern STRING nonote, idnote, noptr, idptr;
 extern STRING idsbrs, idsrmv, idfbrs, idcbrs, idcrmv, iscnew, issnew;
 extern STRING idfcop, ntprnt, nofath, nomoth, nospse, noysib, noosib;
 extern STRING noprnt, nohusb, nowife, hasbth, hasnei, nocinf, nocofp;
-extern STRING idpnxt, ids2fm, idc2fm, idplst, idp2br, crtcfm, crtsfm;
+extern STRING idpnxt, idnxt;
+extern STRING ids2fm, idc2fm, idplst, idp2br, crtcfm, crtsfm;
 extern STRING ronlye, ronlya, idhbrs, idwbrs;
 extern STRING id1sbr, id2sbr, id1fbr, id2fbr, id1cbr, id2cbr;
 extern STRING id1hbr, id2hbr, id1wbr, id2wbr;
@@ -138,7 +139,7 @@ prompt_for_browse (NODE * node, INT * code, INDISEQ * seq)
 	STRING key, name;
 
 	if (*code == BROWSE_INDI) {
-		*seq = ask_for_indiseq(idplst, &rc);
+		*seq = ask_for_indiseq(idplst, 'I', &rc);
 		if (!*seq) return;
 		if ((len = length_indiseq(*seq)) < 1) return;
 		if (len == 1) {
@@ -391,9 +392,13 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			  }
 			}
 			break;
-		case CMD_BROWSE_ZIP:	/* Zip browse another person */
+		case CMD_BROWSE_ZIP_INDI:	/* Zip browse another person */
 			node = ask_for_indi_old(idpnxt, NOCONFIRM, NOASK1);
 			if (node) indi = node;
+			break;
+		case CMD_BROWSE_ZIP_ANY:	/* Zip browse any record */
+			*pindi1 = ask_for_any_old(idnxt, NOCONFIRM, NOASK1);
+			if (*pindi1) return BROWSE_UNK;
 			break;
 		case CMD_SPOUSE:	/* Browse to person's spouse */
 			node = choose_spouse(indi, nospse, idsbrs);
@@ -485,7 +490,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 				return BROWSE_2FAM;
 			break;
 		case CMD_BROWSE: 	/* Browse new list of persons */
-			seq = ask_for_indiseq(idplst, &rc);
+			seq = ask_for_indiseq(idplst, 'I', &rc);
 			if (!seq) break;
 			if (length_indiseq(seq) == 1) {
 				element_indiseq(seq, 0, &key, &name);
@@ -681,6 +686,14 @@ reprocess_aux_cmd:
 				*pindi1 = node;
 				return BROWSE_UNK;
 			}
+			break;
+		case CMD_BROWSE_ZIP_INDI:	/* Zip browse to new person */
+			*pindi1 = ask_for_indi_old(idpnxt, NOCONFIRM, NOASK1);
+			if (*pindi1) return BROWSE_INDI;
+			break;
+		case CMD_BROWSE_ZIP_ANY:	/* Zip browse any record */
+			*pindi1 = ask_for_any_old(idnxt, NOCONFIRM, NOASK1);
+			if (*pindi1) return BROWSE_UNK;
 			break;
 		case CMD_NOTES:	/* Browse to notes */
 			node = choose_note(aux, nonote, idnote);
@@ -987,7 +1000,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			save = NULL;
 			break;
 		case CMD_BROWSE: 	/* Browse to new list of persons */
-			seq = ask_for_indiseq(idplst, &rc);
+			seq = ask_for_indiseq(idplst, 'I', &rc);
 			if (!seq) break;
 			if (length_indiseq(seq) == 1) {
 				element_indiseq(seq, 0, &key, &name);
@@ -1000,9 +1013,13 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			*pseq = seq;
 			return BROWSE_LIST;
 			break;
-		case CMD_BROWSE_ZIP:	/* Zip browse to new person */
+		case CMD_BROWSE_ZIP_INDI:	/* Zip browse to new person */
 			*pindi1 = ask_for_indi_old(idpnxt, NOCONFIRM, NOASK1);
 			if (*pindi1) return BROWSE_INDI;
+			break;
+		case CMD_BROWSE_ZIP_ANY:	/* Zip browse any record */
+			*pindi1 = ask_for_any_old(idnxt, NOCONFIRM, NOASK1);
+			if (*pindi1) return BROWSE_UNK;
 			break;
 		case CMD_TANDEM:	/* Enter family tandem mode */
 			node = ask_for_fam(ids2fm, idc2fm);
@@ -1081,6 +1098,8 @@ reprocess_fam_cmd: /* so one command can forward to another */
 }
 /*======================================================
  * handle_menu_cmds -- Handle menuing commands
+ * That is, handle commands that are internal to the menuing 
+ * system (eg, paging, changing current menu size).
  * Created: 2001/01/31, Perry Rapp
  *====================================================*/
 BOOLEAN
@@ -1092,6 +1111,8 @@ handle_menu_cmds (INT c, BOOLEAN * reuse)
 	switch(c) {
 		case CMD_MENU_GROW: adjust_menu_height(+1); return TRUE;
 		case CMD_MENU_SHRINK: adjust_menu_height(-1); return TRUE;
+		case CMD_MENU_MORECOLS: adjust_menu_cols(+1); return TRUE;
+		case CMD_MENU_LESSCOLS: adjust_menu_cols(-1); return TRUE;
 		case CMD_MENU_MORE: cycle_menu(); return TRUE;
 		case CMD_MENU_TOGGLE: toggle_menu(); return TRUE;
 	}

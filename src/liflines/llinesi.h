@@ -13,9 +13,11 @@ void advanced_person_edit(NODE);
 void advanced_family_edit(NODE);
 
 /* ask.c */
-RECORD ask_for_indi(STRING, CONFIRMQ, ASK1Q);
-NODE ask_for_indi_old(STRING, CONFIRMQ, ASK1Q);
-INDISEQ ask_for_indiseq(STRING, INT*);
+RECORD ask_for_any(STRING ttl, CONFIRMQ, ASK1Q);
+NODE ask_for_any_old(STRING ttl, CONFIRMQ, ASK1Q);
+RECORD ask_for_indi(STRING ttl, CONFIRMQ, ASK1Q);
+NODE ask_for_indi_old(STRING ttl, CONFIRMQ, ASK1Q);
+INDISEQ ask_for_indiseq(STRING ttl, char ctype, INT *prc);
 BOOLEAN ask_yes_or_no(STRING);
 
 /* browse.c */
@@ -94,6 +96,7 @@ RECORD name_fragment_scan(void);
 RECORD refn_scan(void);
 
 /* screen.c */
+void adjust_menu_cols(INT delta);
 void adjust_menu_height(INT delta);
 INT aux_browse(NODE, INT mode, BOOLEAN reuse);
 void cycle_menu(void);

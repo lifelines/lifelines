@@ -140,7 +140,7 @@ browse_list (NODE *pindi1,
 			current_seq = NULL;
 			return BROWSE_TAND;
 		case 'b':	/* Browse new persons */
-			newseq = (INDISEQ) ask_for_indiseq(idplst, &rc);
+			newseq = (INDISEQ) ask_for_indiseq(idplst, 'I', &rc);
 			if (!newseq) break;
 			current_seq = seq = newseq;
 			element_indiseq(seq, 0, &key, &name);
@@ -155,7 +155,7 @@ browse_list (NODE *pindi1,
 			mark = -1;
 			break;
 		case 'a':	/* Add persons to current list */
-			newseq = (INDISEQ) ask_for_indiseq(lstpad, &rc);
+			newseq = (INDISEQ) ask_for_indiseq(lstpad, 'I', &rc);
 			if (!newseq) {
 				message(lstnad);
 				break;

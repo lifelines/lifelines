@@ -58,6 +58,15 @@
 #define LINESREQ 24
 #define COLSREQ  80
 #define MAXVIEWABLE 30
+/*
+OVERHEAD_MENU: 
+1 line across top of screen
+1 line above menu
+1 line below menu
+1 line of prompt message
+1 line at very bottom of screen
+This is how many lines can't be used by person (or whatever)
+*/
 #define OVERHEAD_MENU 5
 INT LISTWIN_WIDTH=0;
 INT MAINWIN_WIDTH=0;
@@ -185,7 +194,7 @@ static void invoke_trans_menu(UIWINDOW wparent);
 static void invoke_utils_menu(void);
 static void load_tt_menu(UIWINDOW wparent);
 static void msg_impl(STRING fmt, va_list args, INT level);
-static void output_menu(UIWINDOW uiwin, INT screen);
+static void output_menu(UIWINDOW uiwin, INT screen, INT bottom, INT width);
 void place_cursor(void);
 static void place_std_msg(void);
 static void refresh_main(void);
@@ -221,13 +230,10 @@ static char showing[150];
 static BOOLEAN now_showing_status = FALSE;
 
 
-static INT BAND;
-
 /* total screen lines used */
 INT LINESTOTAL = LINESREQ;
 /* number of lines for various menus */
 static INT EMPTY_MENU = -1; /* save one horizontal line */
-static INT EMPTY_LINES;
 /* the following values are increased if ll_lines > LINESREQ */
 int TANDEM_LINES = 6;		/* number of lines of tandem info */
 int LIST_LINES = 6;		/* number of lines of person info in list */
@@ -255,6 +261,7 @@ int
 init_screen (void)
 {
 	int extralines;
+	INT cols;
 	if (winx) { /* user specified window size */
 		ll_lines = winy;
 		ll_cols = winx;
@@ -264,28 +271,22 @@ init_screen (void)
 				ll_cols, ll_lines, COLS, LINES);
 			return 0; /* fail */
 		}
-		if (ll_cols < COLSREQ || ll_lines < LINESREQ) {
-			endwin();
-			fprintf(stderr, "The requested window size (%d,%d) is too small for LifeLines (%d,%d).\n",
-				ll_cols, ll_lines, COLSREQ, LINESREQ);
-			return 0; /* fail */
-		}
 	}
 	else {
-		ll_lines = LINES;	/* use all available lines */
-		ll_cols = COLSREQ;	/* only use this many columns ??? */
-
-		if (COLS < COLSREQ || LINES < LINESREQ) {
-			endwin();
-			fprintf(stderr, "Your terminal display (%d,%d) is too small for LifeLines (%d,%d).\n",
-				COLS, LINES, COLSREQ, LINESREQ);
-			return 0; /* fail */
-		}
+		/* by default, use full screen (as many rows & cols as they have */
+		ll_lines = LINES;
+		ll_cols = COLS;
+	}
+	/* check that terminal meet minimum requirements */
+	if (ll_cols < COLSREQ || ll_lines < LINESREQ) {
+		endwin();
+		fprintf(stderr, "The requested window size (%d,%d) is too small for LifeLines (%d,%d).\n",
+			ll_cols, ll_lines, COLSREQ, LINESREQ);
+		return 0; /* fail */
 	}
 
 	extralines = ll_lines - LINESREQ;
 	LINESTOTAL = ll_lines;
-	EMPTY_LINES = LINESTOTAL - OVERHEAD_MENU - EMPTY_MENU;
 	if(extralines > 0) {
 		TANDEM_LINES += (extralines / 2);
 		AUX_LINES += extralines;
@@ -293,9 +294,9 @@ init_screen (void)
 		VIEWABLE += extralines;
 		if(VIEWABLE > MAXVIEWABLE) VIEWABLE = MAXVIEWABLE;
 	}
-	BAND = 25;	/* width of columns of menu (3) */
 	create_windows();
-	menuitem_initialize();
+	cols = (ll_cols-5)/22; /* # of menu cols to start with */
+	menuitem_initialize(cols);
 	return 1; /* succeed */
 }
 /*============================
@@ -353,12 +354,14 @@ repaint_footer_menu (INT screen)
 {
 	UIWINDOW uiwin = main_win;
 	WINDOW *win = uiw_win(uiwin);
+	INT bottom = LINESTOTAL-3; /* 3 rows below menu */
+	INT width = ll_cols;
 	werase(win);
 	BOX(win, 0, 0);
 	show_horz_line(uiwin, ll_lines-3,  0, ll_cols);
 	if (!menu_enabled)
 		return;
-	output_menu(uiwin, screen);
+	output_menu(uiwin, screen, bottom, width);
 }
 /*==============================================
  * paint_list_screen -- Paint list browse screen
@@ -2156,11 +2159,31 @@ bsd_mvwgetstr (UIWINDOW uiwin, INT row, INT col, STRING str, INT len)
 }
 #endif
 /*================================================
- * output_menu -- print menu array to screen
- * for 3 column full width menus
+ * mvwaddstr_lim -- output a string, like mvwaddstr
+ *  except trim it to no more than maxlen wide
  *==============================================*/
 static void
-output_menu (UIWINDOW uiwin, INT screen)
+mvwaddstr_lim (WINDOW *wp, int x, int y, char *cp, INT maxlen)
+{
+	char buffer[60];
+	if ((INT)strlen(cp)<=maxlen)
+		mvwaddstr(wp, x, y, cp);
+	else {
+		if (maxlen > sizeof(buffer)-1)
+			maxlen = sizeof(buffer)-1;
+		llstrncpy(buffer, cp, maxlen-1);
+		strcat(buffer, "*");
+		mvwaddstr(wp, x, y, buffer);
+	}
+}
+/*================================================
+ * output_menu -- print menu array to screen
+ * Caller specifies bottom row to use, & width
+ * Menu structure contains all menu items & # of
+ * columns to use
+ *==============================================*/
+static void
+output_menu (UIWINDOW uiwin, INT screen, INT bottom, INT width)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row;
@@ -2168,13 +2191,19 @@ output_menu (UIWINDOW uiwin, INT screen)
 	INT col=3;
 	INT MenuRows = g_ScreenInfo[screen].MenuRows;
 	INT MenuSize = g_ScreenInfo[screen].MenuSize;
+	INT MenuCols = g_ScreenInfo[screen].MenuCols;
+	/* reserve 2 spaces at each end, and one space in front of each Col */
+	INT colwidth = (width-4)/MenuCols-1;
 	INT Item = 0;
 	INT page, pageitems, pages;
+	/* MenuRows includes the title row but not the horiz line */
+	INT top = bottom - (MenuRows+1);
 	char prompt[128];
 	MenuItem ** Menu = g_ScreenInfo[screen].Menu;
 	INT OnePageFlag = 0;
 	page = g_ScreenInfo[screen].MenuPage;
-	pageitems = (MenuRows-1)*3-2;
+	/* reserve 2 slots for q=quit and ?=more */
+	pageitems = (MenuRows-1)*MenuCols-2;
 	pages = (MenuSize-1)/pageitems+1;
 	if (MenuSize <= pageitems+1) /* don't need '?' if they fit */
 	{
@@ -2187,36 +2216,43 @@ output_menu (UIWINDOW uiwin, INT screen)
 		Item = ((MenuSize-1)/pageitems)*pageitems;
 	icol = 0;
 	col = 3;
-	row = LINESTOTAL-MenuRows-OVERHEAD_MENU+1;
-	show_horz_line(uiwin, row++, 0, ll_cols);
+	row = top;
+	/* display line across */
+	show_horz_line(uiwin, row++, 0, width);
+	/* display title */
 	sprintf(prompt, "%s            (pg %d/%d)", 
 		plschs, page+1, pages);
 	mvwaddstr(win, row++, 2, prompt);
+	/* now display all the menu items we can fit on this page */
 	while (1)
 	{
-		mvwaddstr(win, row, col, Menu[Item++]->Display);
+		mvwaddstr_lim(win, row, col, Menu[Item++]->Display, colwidth);
 		if (Item == MenuSize)
 			break;
 		row++;
-		if (icol<2 && row==LINESTOTAL-3)
+		if (icol<MenuCols-1 && row==bottom)
 		{
 			icol++;
-			col += BAND;
+			col += colwidth+1;
 			row = LINESTOTAL-MenuRows-2;
 			continue;
 		}
 		if (OnePageFlag) {
-			if (icol==2 && row==LINESTOTAL-4)
+			/* one slot reserved for "q" */
+			if (icol==MenuCols-1 && row==bottom-1)
 				break;
 		} else {
-			if (icol==2 && row==LINESTOTAL-5)
+			/* two slots reserved, "q" & "?" */
+			if (icol==MenuCols-1 && row==bottom-2)
 				break;
 		}
 	}
-	row = LINESTOTAL-5; col = 3+BAND*2;
+	/* print the "q" and "?" items */
+	row = bottom-2;
+	col = 3+(MenuCols-1)*(colwidth+1);
 	if (!OnePageFlag)
-		mvwaddstr(win, row, col, g_MenuItemOther.Display);
-	mvwaddstr(win, ++row, col, g_MenuItemQuit.Display);
+		mvwaddstr_lim(win, row, col, g_MenuItemOther.Display, colwidth);
+	mvwaddstr_lim(win, ++row, col, g_MenuItemQuit.Display, colwidth);
 }
 /*==================================================================
  * toggle_menu() - toggle display of menu
@@ -2267,6 +2303,21 @@ adjust_menu_height (INT delta)
 		g_ScreenInfo[cur_screen].MenuRows=min;
 	else if (g_ScreenInfo[cur_screen].MenuRows>max)
 		g_ScreenInfo[cur_screen].MenuRows=max;
+	menu_dirty = 1;
+}
+/*==================================================================
+ * adjust_menu_cols() - Change # of columsn in current menu
+ * Created: 2001/12/10, Perry Rapp
+ *================================================================*/
+void
+adjust_menu_cols (INT delta)
+{
+	INT min=1, max=7;
+	g_ScreenInfo[cur_screen].MenuCols += delta;
+	if (g_ScreenInfo[cur_screen].MenuCols<min)
+		g_ScreenInfo[cur_screen].MenuCols=min;
+	else if (g_ScreenInfo[cur_screen].MenuCols>max)
+		g_ScreenInfo[cur_screen].MenuCols=max;
 	menu_dirty = 1;
 }
 /*=========================================

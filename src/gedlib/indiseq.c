@@ -1467,14 +1467,14 @@ spouse_indiseq (INDISEQ seq)
 INDISEQ
 name_to_indiseq (STRING name)
 {
-	STRING *keys, *names;
+	STRING *keys;
 	INT i, num, c, lastchar;
 	INDISEQ seq = NULL;
 	BOOLEAN made = FALSE;
 	char scratch[MAXLINELEN+1];
 	if (!name || *name == 0) return NULL;
 	if (*name != '*') {
-		names = get_names(name, &num, &keys, TRUE);
+		get_names(name, &num, &keys, TRUE);
 		if (num == 0) return NULL;
 		seq = create_indiseq_null();
 		for (i = 0; i < num; i++)
@@ -1489,7 +1489,7 @@ name_to_indiseq (STRING name)
 	for (c = 'a'-1; c <= lastchar; c++) {
 		if(opt_finnish && !my_islower(c)) continue;
 		scratch[0] = c;
-		names = get_names(scratch, &num, &keys, TRUE);
+		get_names(scratch, &num, &keys, TRUE);
 		if (num == 0) continue;
 		if (!made) {
 			seq = create_indiseq_null();
@@ -1500,7 +1500,7 @@ name_to_indiseq (STRING name)
 		}
 	}
 	scratch[0] = '$';
-	names = get_names(scratch, &num, &keys, TRUE);
+	get_names(scratch, &num, &keys, TRUE);
 	if (num) {
 		if (!made) {
 			seq = create_indiseq_null();
@@ -1658,20 +1658,27 @@ refn_to_indiseq (STRING ukey, INT letr, INT sort)
 }
 /*=============================================================
  * key_to_indiseq -- Return person sequence of the matching key
+ *  name:  [IN]  name to search for
+ *  ctype: [IN]  type of record (eg, 'I') (0 for any)
  *=============================================================*/
 INDISEQ
-key_to_indiseq (STRING name)
+key_to_indiseq (STRING name, char ctype)
 {
-	STRING *keys;
+	STRING key;
 	INDISEQ seq = NULL;
+	RECORD rec;
 	if (!name) return NULL;
-	if (!(id_by_key(name, &keys))) return NULL;
+	rec = id_by_key(name, ctype);
+	if (!rec) return NULL;
+	key = rmvat(nxref(nztop(rec)));
 	seq = create_indiseq_null();
-	append_indiseq_null(seq, keys[0], NULL, FALSE, FALSE);
+	append_indiseq_null(seq, key, NULL, FALSE, FALSE);
 	return seq;
 }
 /*===========================================================
  * str_to_indiseq -- Return person sequence matching a string
+ *  name:  [IN]  name to search for
+ *  ctype: [IN]  type of record (eg, 'I') (0 for any)
  * The rules of search precedence are implemented here:
  *  1. named indiset
  *  2. key, with or without the leading "I"
@@ -1680,15 +1687,15 @@ key_to_indiseq (STRING name)
  * Returned indiseq is null type
  *===========================================================*/
 INDISEQ
-str_to_indiseq (STRING name)
+str_to_indiseq (STRING name, char ctype)
 {
 	INDISEQ seq;
 	TRANTABLE ttg = tran_tables[MDSIN];
 	uchar intname[100];
 	translate_string(ttg, name, intname, sizeof(intname)-1);
 	seq = find_named_seq(intname);
-	if (!seq) seq = key_to_indiseq(intname);
-	if (!seq) seq = refn_to_indiseq(intname, 'I', NAMESORT);
+	if (!seq) seq = key_to_indiseq(intname, ctype);
+	if (!seq) seq = refn_to_indiseq(intname, ctype, NAMESORT);
 	if (!seq) seq = name_to_indiseq(intname);
 	return seq;
 }

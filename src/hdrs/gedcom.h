@@ -253,7 +253,7 @@ STRING *get_child_strings(NODE, RFMT, INT*, STRING**);
 INT get_decimal(STRING);
 INT get_hexidecimal(STRING);
 STRING get_lifelines_version(INT maxlen);
-STRING *get_names(STRING, INT*, STRING**, BOOLEAN);
+void get_names(STRING name, INT *pnum, STRING **pkeys, BOOLEAN exact);
 void get_refns(STRING, INT*, STRING**, INT);
 STRING getasurname(STRING);
 STRING getexref(void);

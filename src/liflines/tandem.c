@@ -144,7 +144,7 @@ INT browse_tandem (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ
 			*pfam1 = node;
 			return BROWSE_FAM;
 		case CMD_BROWSE: 	/* browse to new person list */
-			seq = (INDISEQ) ask_for_indiseq(idplst, &rc);
+			seq = (INDISEQ) ask_for_indiseq(idplst, 'I', &rc);
 			if (!seq) break;
 			if (length_indiseq(seq) == 1) {
 				element_indiseq(seq, 0, &key, &name);

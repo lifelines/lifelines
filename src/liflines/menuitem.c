@@ -121,7 +121,8 @@ static MenuItem f_MenuItemNewPerson = { "n  Create new person", "n", CMD_NEWPERS
 static MenuItem f_MenuItemNewFamily = { "a  Create new family", "a", CMD_NEWFAMILY };
 static MenuItem f_MenuItemTandem = { "tt Enter tandem mode", "tt", CMD_TANDEM };
 static MenuItem f_MenuItemTandemFamily = { "tt Enter family tandem", "tt", CMD_TANDEM };
-static MenuItem f_MenuItemZipBrowse = { "z  Browse to person", "z", CMD_BROWSE_ZIP };
+static MenuItem f_MenuItemZipIndi = { "zi Browse to indi", "zi", CMD_BROWSE_ZIP_INDI };
+static MenuItem f_MenuItemZipBrowse = { "zz Browse to any", "zz", CMD_BROWSE_ZIP_ANY };
 static MenuItem f_MenuItemRemoveAsSpouse = { "r  Remove as spouse", "r", CMD_REMOVEASSPOUSE };
 static MenuItem f_MenuItemRemoveAsChild = { "d  Remove as child", "d", CMD_REMOVEASCHILD };
 static MenuItem f_MenuItemRemoveSpouseFrom = { "r  Remove spouse from", "r", CMD_REMOVESPOUSE };
@@ -149,16 +150,18 @@ static MenuItem f_MenuItemModeCycle = { "!! Cycle mode", "!!", CMD_MODE_CYCLE };
 static MenuItem f_MenuItemDigits = { "(1-9)  Browse to child", "123456789", CMD_CHILD_DIRECT0 };
 MenuItem f_MenuItemSyncMoves = { "y  Turn on sync", "y", CMD_NONE };
 static MenuItem f_MenuItemAdvanced = { "A  Advanced view", "A", CMD_ADVANCED };
-static MenuItem f_MenuItemTandemChildren = { "C  Tandem to children", "C", CMD_TANDEM_CHILDREN };
-static MenuItem f_MenuItemTandemFathers = { "tf  Tandem to father/s", "tf", CMD_TANDEM_FATHERS };
-static MenuItem f_MenuItemTandemFamilies = { "G  Tandem to family/s", "G", CMD_TANDEM_FAMILIES };
+static MenuItem f_MenuItemTandemChildren = { "tc Tandem to children", "tc", CMD_TANDEM_CHILDREN };
+static MenuItem f_MenuItemTandemFathers = { "tf Tandem to father/s", "tf", CMD_TANDEM_FATHERS };
+static MenuItem f_MenuItemTandemFamilies = { "tg Tandem to family/s", "tg", CMD_TANDEM_FAMILIES };
 static MenuItem f_MenuItemBothFathers = { "f  Browse to fathers", "f", CMD_BOTH_FATHERS };
 static MenuItem f_MenuItemBothMothers = { "m  Browse to mothers", "m", CMD_BOTH_MOTHERS };
-static MenuItem f_MenuItemTandemMothers = { "M  Tandem to mother/s", "M", CMD_TANDEM_MOTHERS };
-static MenuItem f_MenuItemTandemSpouses = { "S  Tandem to spouse/s", "S", CMD_TANDEM_SPOUSES };
-static MenuItem f_MenuItemTandemParents = { "U  Tandem to parents", "U", CMD_TANDEM_PARENTS };
+static MenuItem f_MenuItemTandemMothers = { "tm Tandem to mother/s", "tm", CMD_TANDEM_MOTHERS };
+static MenuItem f_MenuItemTandemSpouses = { "ts Tandem to spouse/s", "ts", CMD_TANDEM_SPOUSES };
+static MenuItem f_MenuItemTandemParents = { "tu Tandem to parents", "tu", CMD_TANDEM_PARENTS };
 static MenuItem f_MenuItemEnlargeMenu = { "<  Enlarge menu area", "<", CMD_MENU_GROW };
 static MenuItem f_MenuItemShrinkMenu = { ">  Shrink menu area", ">", CMD_MENU_SHRINK };
+static MenuItem f_MenuItemMoreCols = { "M> More menu cols", "M>", CMD_MENU_MORECOLS };
+static MenuItem f_MenuItemLessCols = { "M< Less menu cols", "M<", CMD_MENU_LESSCOLS };
 static MenuItem f_MenuItemNext = { "+  Next in db", "+", CMD_NEXT };
 static MenuItem f_MenuItemPrev = { "-  Prev in db", "-", CMD_PREV };
 static MenuItem f_MenuItemCopyTopToBottom = { "d  Copy top to bottom", "d", CMD_COPY_TOP_TO_BOTTOM };
@@ -212,6 +215,7 @@ static MenuItem * f_MenuPerson[] =
 	&f_MenuItemSwapFamilies,
 	&f_MenuItemTandem,
 	&f_MenuItemZipBrowse,
+	&f_MenuItemZipIndi,
 	&f_MenuItemScrollUp,
 	&f_MenuItemScrollDown,
 	&f_MenuItemToggleChildNos,
@@ -235,6 +239,8 @@ static MenuItem * f_MenuPerson[] =
 	&f_MenuItemDepthDown,
 	&f_MenuItemEnlargeMenu,
 	&f_MenuItemShrinkMenu,
+	&f_MenuItemMoreCols,
+	&f_MenuItemLessCols,
 	&f_MenuItemSources,
 	&f_MenuItemNotes,
 	&f_MenuItemPointers,
@@ -265,6 +271,7 @@ static MenuItem * f_MenuFamily[] =
 	&f_MenuItemTandemFamily,
 	&f_MenuItemBrowse,
 	&f_MenuItemZipBrowse,
+	&f_MenuItemZipIndi,
 	&f_MenuItemBrowseFamily,
 	&f_MenuItemScrollUp,
 	&f_MenuItemScrollDown,
@@ -281,6 +288,8 @@ static MenuItem * f_MenuFamily[] =
 	&f_MenuItemTandemMothers,
 	&f_MenuItemEnlargeMenu,
 	&f_MenuItemShrinkMenu,
+	&f_MenuItemMoreCols,
+	&f_MenuItemLessCols,
 	&f_MenuItemSources,
 	&f_MenuItemNotes,
 	&f_MenuItemPointers,
@@ -330,6 +339,8 @@ static MenuItem * f_Menu2Person[] =
 	&f_MenuItemDepthDown,
 	&f_MenuItemEnlargeMenu,
 	&f_MenuItemShrinkMenu,
+	&f_MenuItemMoreCols,
+	&f_MenuItemLessCols,
 	&f_MenuItemBrowse,
 	0
 };
@@ -358,6 +369,8 @@ static MenuItem * f_Menu2Family[] =
 	&f_MenuItemModeCycle,
 	&f_MenuItemEnlargeMenu,
 	&f_MenuItemShrinkMenu,
+	&f_MenuItemMoreCols,
+	&f_MenuItemLessCols,
 	0
 };
 
@@ -367,10 +380,14 @@ static MenuItem * f_MenuAux[] =
 	&f_MenuItemAddSour,
 	&f_MenuItemAddEven,
 	&f_MenuItemAddOthr,
+	&f_MenuItemZipBrowse,
+	&f_MenuItemZipIndi,
 	&f_MenuItemScrollUp,
 	&f_MenuItemScrollDown,
 	&f_MenuItemEnlargeMenu,
 	&f_MenuItemShrinkMenu,
+	&f_MenuItemMoreCols,
+	&f_MenuItemLessCols,
 	&f_MenuItemModeGedcom,
 	&f_MenuItemModeGedcomX,
 	&f_MenuItemModeGedcomT,
@@ -399,6 +416,8 @@ static MenuItem * f_MenuListPersons[] =
 	&f_MenuItemSwapMarkCurrent,
 	&f_MenuItemEnlargeMenu,
 	&f_MenuItemShrinkMenu,
+	&f_MenuItemMoreCols,
+	&f_MenuItemLessCols,
 	0
 };
 
@@ -557,12 +576,12 @@ insert_cmd (CMDARRAY cmds, STRING str, INT cmdnum, STRING display)
  * Joined repository: 2001/01/28, Perry Rapp
  *==========================*/
 void
-menuitem_initialize (void)
+menuitem_initialize (cols)
 {
 	INT i;
 	INT scr;
 	STRING Title;
-	INT MenuRows, MenuCols, MenuSize;
+	INT MenuRows, MenuCols=cols, MenuSize;
 	MenuItem ** Menu;
 	INT ItemSize;
 
@@ -571,7 +590,7 @@ menuitem_initialize (void)
 	{
 		g_ScreenInfo[i].Title = "Invalid";
 		g_ScreenInfo[i].MenuRows = 0;
-		g_ScreenInfo[i].MenuCols = 3;
+		g_ScreenInfo[i].MenuCols = cols;
 		g_ScreenInfo[i].MenuSize = 0;
 		g_ScreenInfo[i].Commands = NULL;
 		g_ScreenInfo[i].Menu = NULL;
@@ -583,7 +602,6 @@ menuitem_initialize (void)
 	scr = ONE_PER_SCREEN;
 	Title = mn_titindi;
 	MenuRows = 8;
-	MenuCols = 3;
 	MenuSize = sizeof(f_MenuPerson)/ItemSize-1;
 	Menu = f_MenuPerson;
 	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu);
@@ -591,7 +609,6 @@ menuitem_initialize (void)
 	scr = ONE_FAM_SCREEN;
 	Title = mn_titfam;
 	MenuRows = 6;
-	MenuCols = 3;
 	MenuSize = sizeof(f_MenuFamily)/ItemSize-1;
 	Menu = f_MenuFamily;
 	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu);
@@ -599,7 +616,6 @@ menuitem_initialize (void)
 	scr = TWO_PER_SCREEN;
 	Title = mn_tit2indi;
 	MenuRows = 5;
-	MenuCols = 3;
 	MenuSize = sizeof(f_Menu2Person)/ItemSize-1;
 	Menu = f_Menu2Person;
 	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu);
@@ -607,11 +623,11 @@ menuitem_initialize (void)
 	scr = TWO_FAM_SCREEN;
 	Title = mn_tit2fam;
 	MenuRows = 5;
-	MenuCols = 3;
 	MenuSize = sizeof(f_Menu2Family)/ItemSize-1;
 	Menu = f_Menu2Family;
 	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu);
 
+	/* TO DO: this is not used right now */
 	scr = LIST_SCREEN;
 	Title = (STRING)"LifeLines -- List Browse Screen";
 	MenuRows = 13;
@@ -620,10 +636,11 @@ menuitem_initialize (void)
 	Menu = f_MenuListPersons;
 	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu);
 
+	MenuCols = cols;
+
 	scr = AUX_SCREEN;
 	Title = mn_titaux;
 	MenuRows = 4;
-	MenuCols = 3;
 	MenuSize = sizeof(f_MenuAux)/ItemSize-1;
 	Menu = f_MenuAux;
 	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu);

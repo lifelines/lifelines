@@ -94,6 +94,7 @@ STRING issnew = SS "Is this the new spouse? ";
 STRING ifone  = SS "Is this the person?  Select if so.";
 STRING idcfam = SS "Select the child the new child precedes or select last.";
 STRING idpnxt = SS "Please identify next person to browse to.";
+STRING idnxt  = SS "Please identify record to browse to.";
 STRING idspse = SS "Please identify one of the spouses.";
 STRING idplst = SS "Please identify person or persons to browse to.";
 STRING idfcop = SS "Please choose family create operation.";

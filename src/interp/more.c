@@ -1060,7 +1060,7 @@ __genindiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	assign_iden(stab, iident(arg), create_pvalue(PSET, (VPTR)NULL));
 	if (!name || *name == 0) return NULL;
 	assign_iden(stab, iident(arg), create_pvalue(PSET,
-	    (VPTR)str_to_indiseq(name)));
+	    (VPTR)str_to_indiseq(name, 'I')));
 	return NULL;
 }
 /*POINT*/
