@@ -25,10 +25,5 @@
 #define LOCALE_ALIAS_PATH "."
 #define LOCALEDIR "."
 
-/*
-#define stat _stat
-
-#define open _open
-#define O_RDONLY _O_RDONLY
-*/
-
+#define HAVE_ICONV 1
+#define ICONV_CONST const

@@ -3,7 +3,7 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "msvc6lib"=".\msvc6lib.dsp" - Package Owner=<4>
+Project: "libintlvc6"=".\libintlvc6.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
