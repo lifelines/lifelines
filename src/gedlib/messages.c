@@ -88,7 +88,7 @@ STRING scnrfn = SS "Enter pattern to match against refn.";
 STRING scantt = SS "pattern: ";
 
 STRING chfamily = SS "Please choose a family.";
-STRING notone = SS "Please choose from among these persons.";
+STRING notone = SS "Please choose from among these records.";
 STRING iscnew = SS "Is this the new child? ";
 STRING issnew = SS "Is this the new spouse? ";
 STRING ifone  = SS "Is this the person?  Select if so.";
