@@ -2172,6 +2172,7 @@ pa_handle_proc (PACTX pactx, CNSTRING procname, PNODE nd_args, PNODE nd_body)
 		enqueue_parse_error(_("Duplicate proc %s (lines %d and %d) in report: %s")
 			, procname, iline(procnode)+1, iline(nd_body)+1, pactx->fullpath);
 	}
+	/* consumes procname */
 	procnode = proc_node(pactx, procname, nd_args, nd_body);
 	table_insert_ptr(rptinfo->proctab, procname, procnode);
 
@@ -2183,7 +2184,6 @@ pa_handle_proc (PACTX pactx, CNSTRING procname, PNODE nd_args, PNODE nd_body)
 		release_list(list); /* now table owns list */
 	}
 	enqueue_list(list, procnode);
-	/* procname belongs to procnode now */
 }
 /*=============================================+
  * pa_handle_func -- func declaration (parse time)
@@ -2202,6 +2202,7 @@ pa_handle_func (PACTX pactx, CNSTRING procname, PNODE nd_args, PNODE nd_body)
 		enqueue_parse_error(_("Duplicate func %s (lines %d and %d) in report: %s")
 			, procname, iline(procnode)+1, iline(nd_body)+1, pactx->fullpath);
 	}
+	/* consumes procname */
 	procnode = fdef_node(pactx, procname, nd_args, nd_body);
 	table_insert_ptr(rptinfo->functab, procname, procnode);
 
@@ -2213,7 +2214,6 @@ pa_handle_func (PACTX pactx, CNSTRING procname, PNODE nd_args, PNODE nd_body)
 		release_list(list); /* now table owns list */
 	}
 	enqueue_list(list, procnode);
-	/* procname belongs to procnode now */
 }
 /*=============================================+
  * parse_error -- handle bison parse error

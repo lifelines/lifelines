@@ -240,13 +240,18 @@ create_pnode (PACTX pactx, INT type)
 static void
 clear_pnode (PNODE node)
 {
-	if (itype(node)==ISCONS 
-		|| itype(node)==IICONS 
-		|| itype(node)==IFCONS) {
+	if (node->i_flags & PN_IVALUEX_PVALUE) {
 		if (ivaluex(node)) {
 			PVALUE val = ivaluex(node);
 			delete_pvalue(val);
 			ivaluex(node)=0;
+		}
+	}
+	if (node->i_flags & PN_INAME_HSTR) {
+		if (iname(node)) {
+			STRING str = iname(node);
+			stdfree(str);
+			iname(node) = 0;
 		}
 	}
 	/* most of the strings are inside the record */
@@ -272,6 +277,7 @@ string_node (PACTX pactx, STRING str)
 	PNODE node = create_pnode(pactx, ISCONS);
 	ASSERT(str); /* we're not converting NULL to "" because nobody passes us NULL */
 	ivaluex(node) = create_pvalue_from_string(str);
+	node->i_flags = PN_IVALUEX_PVALUE;
 	return node;
 }
 /*========================================
@@ -592,6 +598,7 @@ icons_node (PACTX pactx, INT ival)
 {
 	PNODE node = create_pnode(pactx, IICONS);
 	ivaluex(node) = create_pvalue_from_int(ival);
+	node->i_flags = PN_IVALUEX_PVALUE;
 	return node;
 }
 /*===================================
@@ -602,6 +609,7 @@ fcons_node (PACTX pactx, FLOAT fval)
 {
 	PNODE node = create_pnode(pactx, IFCONS);
 	ivaluex(node) = create_pvalue_from_float(fval);
+	node->i_flags = PN_IVALUEX_PVALUE;
 	return node;
 }
 /*===================================
@@ -618,6 +626,7 @@ proc_node (PACTX pactx, CNSTRING name, PNODE parms, PNODE body)
 	iname(node) = (VPTR) name;
 	iargs(node) = (VPTR) parms;
 	ibody(node) = (VPTR) body;
+	node->i_flags = PN_INAME_HSTR;
 	set_parents(body, node);
 	return node;
 }
@@ -635,6 +644,7 @@ fdef_node (PACTX pactx, CNSTRING name, PNODE parms, PNODE body)
 	iname(node) = (VPTR) name;
 	iargs(node) = (VPTR) parms;
 	ibody(node) = (VPTR) body;
+	node->i_flags = PN_INAME_HSTR;
 	set_parents(body, node);
 	return node;
 }
@@ -643,6 +653,7 @@ fdef_node (PACTX pactx, CNSTRING name, PNODE parms, PNODE body)
  *  pactx: [I/O] pointer to parseinfo structure (parse globals)
  *  name:  [IN]  function name
  *  elist: [IN]  param(s)
+ * consumes name heap pointer
  *=====================================================*/
 PNODE
 func_node (PACTX pactx, STRING name, PNODE elist)
@@ -659,6 +670,7 @@ func_node (PACTX pactx, STRING name, PNODE elist)
 		node = create_pnode(pactx, IFCALL);
 		iname(node) = (VPTR) name;
 		iargs(node) = (VPTR) elist;
+		node->i_flags = PN_INAME_HSTR;
 		ifunc(node) = func;
 		return node;
 	} else if (count) {
@@ -698,6 +710,7 @@ func_node (PACTX pactx, STRING name, PNODE elist)
 		iname(node) = (VPTR) name;
 		iargs(node) = (VPTR) elist;
 		ifunc(node) = (VPTR) builtins[md].ft_eval;
+		node->i_flags = PN_INAME_HSTR;
 		return node;
 		
 	}

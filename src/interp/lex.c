@@ -155,12 +155,7 @@ lextok (PACTX pactx, YYSTYPE * lvalp, INT c, INT t)
 		unreadchar(pactx, c);
 
 		if (reserved(tokbuf, &retval))  return retval;
-		/*
-		Perry, 2005-02-12
-		At least some IDEN strings are getting leaked
-		But, fdef_node for example, takes ownership of its IDEN string
-		so they have to be reviewed case-by-case in yacc.y
-		*/
+		/* IDEN values have to be passed from yacc.y to free_iden */
 		*lvalp = (PNODE) strsave(tokbuf);
 		return IDEN;
 	}
@@ -337,4 +332,12 @@ unreadchar (PACTX pactx, INT c)
 	} else {
 		--pactx->charpos;
 	}
+}
+/*================================================================
+ * free_iden -- Dispose of value of IDEN token
+ *==============================================================*/
+void
+free_iden (void *iden)
+{
+	stdfree((STRING)iden);
 }

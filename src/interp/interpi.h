@@ -113,6 +113,7 @@ struct tag_pnode {
 	VPTR     i_word5;
 };
 
+/* pnode types */
 #define IICONS       1   /* integer constant */
 #define IFCONS       2   /* floating constant */
 #define ILCONS       3   /* long integer constant */
@@ -145,6 +146,12 @@ struct tag_pnode {
 #define IFAMCS      30   /* parents loop */
 #define INOTES      31   /* notes loop */
 #define IFREED      99   /* returned to free list */
+
+/* pnode flags */
+enum {
+	PN_IVALUEX_PVALUE = 0x1 /* ivaluex is a pvalue */
+	, PN_INAME_HSTR = 0x2 /* iname is a string */
+};
 
 #define itype(i)     ((i)->i_type)  /* node type - all nodes */
 #define iprnt(i)     ((i)->i_prnt)  /* parent node - all nodes */
@@ -491,6 +498,7 @@ PNODE fornodes_node(PACTX pactx, PNODE, STRING, PNODE);
 PNODE fornotes_node(PACTX pactx, PNODE, STRING, PNODE);
 PNODE forothr_node(PACTX pactx, STRING, STRING, PNODE);
 PNODE forsour_node(PACTX pactx, STRING, STRING, PNODE);
+void free_iden(void *iden);
 void free_all_pnodes(void);
 void free_pnode_tree(PNODE);
 PNODE func_node(PACTX pactx, STRING, PNODE);

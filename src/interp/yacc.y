@@ -73,6 +73,8 @@ defn 	:	proc
 	|	IDEN '(' IDEN ')' {
 			if (eqstr("global", (STRING) $1))
 				pa_handle_global((STRING) $3);
+				free_iden($1);
+				free_iden($3);
 		}
 	|	IDEN '(' SCONS ')' {
 			if (eqstr("include", (STRING) $1))
@@ -83,16 +85,18 @@ defn 	:	proc
 				pa_handle_char_encoding(pactx, (PNODE) $3);
 			if (eqstr("require", (STRING) $1))
 				pa_handle_require(pactx, (PNODE) $3);
-
+			free_iden($1);
 		}
 	;
 
 proc	:	PROC IDEN '(' idenso ')' '{' tmplts '}' {
+			/* consumes $2 */
 			pa_handle_proc(pactx, (STRING) $2, (PNODE) $4, (PNODE) $7);
 		}
 
 	;
 func	:	FUNC_TOK IDEN '(' idenso ')' '{' tmplts '}' {
+			/* consumes $2 */
 			pa_handle_func(pactx, (STRING) $2, (PNODE) $4, (PNODE) $7);
 		}
 	;
@@ -104,9 +108,11 @@ idenso	:	/* empty */ {
 		}
 	;
 idens	:	IDEN {
+			/* consumes $1 */
 			$$ = iden_node(pactx, (STRING)$1);
 		}
 	|	IDEN ',' idens {
+			/* consumes $1 */
 			$$ = iden_node(pactx, (STRING)$1);
 			inext(((PNODE)$$)) = (PNODE) $3;
 		}
@@ -121,6 +127,7 @@ tmplts	:	tmplt {
 	;
 tmplt	:	CHILDREN m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
+			/* consumes $6 and $8 */
 			$$ = children_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (PNODE)$11);
 			((PNODE)$$)->i_line = (INT)$2;
 		}
@@ -264,10 +271,12 @@ elseo	:	/* empty */ {
 		}
 	;
 expr	:	IDEN {
+			/* consumes $1 */
 			$$ = iden_node(pactx, (STRING)$1);
 			iargs(((PNODE)$$)) = NULL;
 		}
 	|	IDEN m '(' exprso ')' {
+			/* consumes $1 */
 			$$ = func_node(pactx, (STRING)$1, (PNODE)$4);
 			((PNODE)$$)->i_line = (INT)$2;
 		}

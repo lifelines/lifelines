@@ -8,6 +8,11 @@
 
 	Add comment about leaking IDEN strings.
 
+	* ChangeLog src/interp/alloc.c src/interp/interp.c
+	src/interp/interpi.h src/interp/lex.c src/interp/yacc.y
+
+	Fix some IDEN leaks.
+
 2005-02-13 Stephen Dum
         * ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf 
 	docs/ll-userguide.html docs/ll-userguide.pdf reports/Makefile.am 
