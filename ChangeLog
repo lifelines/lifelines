@@ -1,3 +1,10 @@
+2002-06-04  Marc Nozell  <marc@nozell.com>
+
+	* Cleaned up Rafal's xml conversion of docs/lifelines.sgml.  Also
+	broke it into docs/ll-reportmanual.xml and docs/ll-userguide.xml.
+	Since not all platforms have the docbook toolchain, the PDF and
+	HTML versions of those documents are checked in also.
+    
 2002-06-04 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ABOUT-NLS ChangeLog Makefile.am README.DEVELOPERS configure.in
