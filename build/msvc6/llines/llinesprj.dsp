@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /O2 /I "../../../hdrs" /I "../../../hdrs/win32" /I "../../../intl" /I "." /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "HAVE_CONFIG_H" /YX /FD /c
+# ADD CPP /nologo /W3 /GX /O2 /I "../../../src/hdrs" /I "../../../src/hdrs/win32" /I "../../../intl" /I "." /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "HAVE_CONFIG_H" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -67,7 +67,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "../../../hdrs" /I "../../../hdrs/win32" /I "../../../intl" /I "." /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "HAVE_CONFIG_H" /FR /FD /GZ /c
+# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "../../../src/hdrs" /I "../../../src/hdrs/win32" /I "../../../intl" /I "." /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "HAVE_CONFIG_H" /FR /FD /GZ /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
@@ -89,131 +89,131 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=..\..\..\liflines\add.c
+SOURCE=..\..\..\src\liflines\add.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\btree\addkey.c
+SOURCE=..\..\..\src\btree\addkey.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\liflines\advedit.c
+SOURCE=..\..\..\src\liflines\advedit.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\interp\alloc.c
+SOURCE=..\..\..\src\interp\alloc.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\arch\alphasort.c
+SOURCE=..\..\..\src\arch\alphasort.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\appendstr.c
+SOURCE=..\..\..\src\stdlib\appendstr.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\liflines\ask.c
+SOURCE=..\..\..\src\liflines\ask.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\liflines\askprogram.c
+SOURCE=..\..\..\src\liflines\askprogram.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\bfs.c
+SOURCE=..\..\..\src\stdlib\bfs.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\btree\block.c
+SOURCE=..\..\..\src\btree\block.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\liflines\browse.c
+SOURCE=..\..\..\src\liflines\browse.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\brwslist.c
+SOURCE=..\..\..\src\gedlib\brwslist.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\interp\builtin.c
+SOURCE=..\..\..\src\interp\builtin.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\charmaps.c
+SOURCE=..\..\..\src\gedlib\charmaps.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\choose.c
+SOURCE=..\..\..\src\gedlib\choose.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\date.c
+SOURCE=..\..\..\src\gedlib\date.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\liflines\delete.c
+SOURCE=..\..\..\src\liflines\delete.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\dirs.c
+SOURCE=..\..\..\src\stdlib\dirs.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\double.c
+SOURCE=..\..\..\src\stdlib\double.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\liflines\edit.c
+SOURCE=..\..\..\src\liflines\edit.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\editmap.c
+SOURCE=..\..\..\src\gedlib\editmap.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\editvtab.c
+SOURCE=..\..\..\src\gedlib\editvtab.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\environ.c
+SOURCE=..\..\..\src\stdlib\environ.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\equaliso.c
+SOURCE=..\..\..\src\gedlib\equaliso.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\liflines\error.c
+SOURCE=..\..\..\src\liflines\error.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\interp\eval.c
+SOURCE=..\..\..\src\interp\eval.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\liflines\export.c
+SOURCE=..\..\..\src\liflines\export.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\btree\file.c
+SOURCE=..\..\..\src\btree\file.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\fpattern.c
+SOURCE=..\..\..\src\stdlib\fpattern.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\interp\functab.c
+SOURCE=..\..\..\src\interp\functab.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\gedcom.c
+SOURCE=..\..\..\src\gedlib\gedcom.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\gengedc.c
+SOURCE=..\..\..\src\gedlib\gengedc.c
 # End Source File
 # Begin Source File
 
@@ -221,11 +221,11 @@ SOURCE=..\..\..\win32\getopt.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\gstrings.c
+SOURCE=..\..\..\src\gedlib\gstrings.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\interp\heapused.c
+SOURCE=..\..\..\src\interp\heapused.c
 # End Source File
 # Begin Source File
 
@@ -233,27 +233,27 @@ SOURCE=..\..\..\win32\iconvshim.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\icvt.c
+SOURCE=..\..\..\src\stdlib\icvt.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\liflines\import.c
+SOURCE=..\..\..\src\liflines\import.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\btree\index.c
+SOURCE=..\..\..\src\btree\index.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\indiseq.c
+SOURCE=..\..\..\src\gedlib\indiseq.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\init.c
+SOURCE=..\..\..\src\gedlib\init.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\interp\interp.c
+SOURCE=..\..\..\src\interp\interp.c
 # End Source File
 # Begin Source File
 
@@ -261,31 +261,31 @@ SOURCE=..\..\..\win32\intlshim.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\intrface.c
+SOURCE=..\..\..\src\gedlib\intrface.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\interp\intrpseq.c
+SOURCE=..\..\..\src\interp\intrpseq.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\keytonod.c
+SOURCE=..\..\..\src\gedlib\keytonod.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\arch\langinfo.c
+SOURCE=..\..\..\src\arch\langinfo.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\liflines\lbrowse.c
+SOURCE=..\..\..\src\liflines\lbrowse.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\interp\lex.c
+SOURCE=..\..\..\src\interp\lex.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\lldate.c
+SOURCE=..\..\..\src\stdlib\lldate.c
 # End Source File
 # Begin Source File
 
@@ -293,51 +293,51 @@ SOURCE=.\llines.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\lloptions.c
+SOURCE=..\..\..\src\gedlib\lloptions.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\llstrcmp.c
+SOURCE=..\..\..\src\stdlib\llstrcmp.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\liflines\loadsave.c
+SOURCE=..\..\..\src\liflines\loadsave.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\locales.c
+SOURCE=..\..\..\src\gedlib\locales.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\liflines\main.c
+SOURCE=..\..\..\src\liflines\main.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\memalloc.c
+SOURCE=..\..\..\src\stdlib\memalloc.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\liflines\menuitem.c
+SOURCE=..\..\..\src\liflines\menuitem.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\liflines\merge.c
+SOURCE=..\..\..\src\liflines\merge.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\messages.c
+SOURCE=..\..\..\src\gedlib\messages.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\misc.c
+SOURCE=..\..\..\src\gedlib\misc.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\liflines\miscutls.c
+SOURCE=..\..\..\src\liflines\miscutls.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\interp\more.c
+SOURCE=..\..\..\src\interp\more.c
 # End Source File
 # Begin Source File
 
@@ -345,171 +345,171 @@ SOURCE=..\..\..\win32\mycurses.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\mystring.c
+SOURCE=..\..\..\src\stdlib\mystring.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\names.c
+SOURCE=..\..\..\src\gedlib\names.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\liflines\newrecs.c
+SOURCE=..\..\..\src\liflines\newrecs.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\node.c
+SOURCE=..\..\..\src\gedlib\node.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\nodeutls.c
+SOURCE=..\..\..\src\gedlib\nodeutls.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\btree\opnbtree.c
+SOURCE=..\..\..\src\btree\opnbtree.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\path.c
+SOURCE=..\..\..\src\stdlib\path.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\liflines\pedigree.c
+SOURCE=..\..\..\src\liflines\pedigree.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\place.c
+SOURCE=..\..\..\src\gedlib\place.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\property.c
+SOURCE=..\..\..\src\gedlib\property.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\interp\pvalmath.c
+SOURCE=..\..\..\src\interp\pvalmath.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\interp\pvalue.c
+SOURCE=..\..\..\src\interp\pvalue.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\interp\rassa.c
+SOURCE=..\..\..\src\interp\rassa.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\btree\record.c
+SOURCE=..\..\..\src\btree\record.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\refns.c
+SOURCE=..\..\..\src\gedlib\refns.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\remove.c
+SOURCE=..\..\..\src\gedlib\remove.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\replace.c
+SOURCE=..\..\..\src\gedlib\replace.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\liflines\scan.c
+SOURCE=..\..\..\src\liflines\scan.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\arch\scandir.c
+SOURCE=..\..\..\src\arch\scandir.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\liflines\screen.c
+SOURCE=..\..\..\src\liflines\screen.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\sequence.c
+SOURCE=..\..\..\src\stdlib\sequence.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\liflines\show.c
+SOURCE=..\..\..\src\liflines\show.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\signals.c
+SOURCE=..\..\..\src\stdlib\signals.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\spltjoin.c
+SOURCE=..\..\..\src\gedlib\spltjoin.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\sprintpic.c
+SOURCE=..\..\..\src\stdlib\sprintpic.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\stdstrng.c
+SOURCE=..\..\..\src\stdlib\stdstrng.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\stralloc.c
+SOURCE=..\..\..\src\stdlib\stralloc.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\strapp.c
+SOURCE=..\..\..\src\stdlib\strapp.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\strcvt.c
+SOURCE=..\..\..\src\stdlib\strcvt.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\strutf8.c
+SOURCE=..\..\..\src\stdlib\strutf8.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\strwhite.c
+SOURCE=..\..\..\src\stdlib\strwhite.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\liflines\swap.c
+SOURCE=..\..\..\src\liflines\swap.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\interp\symtab.c
+SOURCE=..\..\..\src\interp\symtab.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\table.c
+SOURCE=..\..\..\src\stdlib\table.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\liflines\tandem.c
+SOURCE=..\..\..\src\liflines\tandem.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\translat.c
+SOURCE=..\..\..\src\gedlib\translat.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\btree\traverse.c
+SOURCE=..\..\..\src\btree\traverse.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\btree\utils.c
+SOURCE=..\..\..\src\btree\utils.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\liflines\valgdcom.c
+SOURCE=..\..\..\src\liflines\valgdcom.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\valid.c
+SOURCE=..\..\..\src\gedlib\valid.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\valtable.c
+SOURCE=..\..\..\src\gedlib\valtable.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\arch\vsnprintf.c
+SOURCE=..\..\..\src\arch\vsnprintf.c
 # End Source File
 # Begin Source File
 
@@ -517,19 +517,19 @@ SOURCE=..\..\..\win32\w32systm.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\warehouse.c
+SOURCE=..\..\..\src\stdlib\warehouse.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\interp\write.c
+SOURCE=..\..\..\src\interp\write.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\xreffile.c
+SOURCE=..\..\..\src\gedlib\xreffile.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\interp\yacc.c
+SOURCE=..\..\..\src\interp\yacc.c
 # End Source File
 # End Group
 # Begin Group "Resource Files"
@@ -545,23 +545,23 @@ SOURCE=..\llines.ico
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\arch.h
+SOURCE=..\..\..\src\hdrs\arch.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\bfs.h
+SOURCE=..\..\..\src\hdrs\bfs.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\btree.h
+SOURCE=..\..\..\src\hdrs\btree.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\btree\btreei.h
+SOURCE=..\..\..\src\btree\btreei.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\cache.h
+SOURCE=..\..\..\src\hdrs\cache.h
 # End Source File
 # Begin Source File
 
@@ -569,115 +569,115 @@ SOURCE=.\config.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\win32\curses.h
+SOURCE=..\..\..\src\hdrs\win32\curses.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\date.h
+SOURCE=..\..\..\src\hdrs\date.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\feedback.h
+SOURCE=..\..\..\src\hdrs\feedback.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\fpattern.h
+SOURCE=..\..\..\src\hdrs\fpattern.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\gedcheck.h
+SOURCE=..\..\..\src\hdrs\gedcheck.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\gedcom.h
+SOURCE=..\..\..\src\hdrs\gedcom.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\gedlib\gedcomi.h
+SOURCE=..\..\..\src\gedlib\gedcomi.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\gengedc.h
+SOURCE=..\..\..\src\hdrs\gengedc.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\win32\getopt.h
+SOURCE=..\..\..\src\hdrs\win32\getopt.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\win32\iconv.h
+SOURCE=..\..\..\src\hdrs\win32\iconv.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\win32\iconvshim.h
+SOURCE=..\..\..\src\hdrs\win32\iconvshim.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\icvt.h
+SOURCE=..\..\..\src\hdrs\icvt.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\impfeed.h
+SOURCE=..\..\..\src\hdrs\impfeed.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\indiseq.h
+SOURCE=..\..\..\src\hdrs\indiseq.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\interp.h
+SOURCE=..\..\..\src\hdrs\interp.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\interp\interpi.h
+SOURCE=..\..\..\src\interp\interpi.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\win32\intlshim.h
+SOURCE=..\..\..\src\hdrs\win32\intlshim.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\langinfz.h
+SOURCE=..\..\..\src\hdrs\langinfz.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\liflines.h
+SOURCE=..\..\..\src\hdrs\liflines.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\liflines\llinesi.h
+SOURCE=..\..\..\src\liflines\llinesi.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\llnls.h
+SOURCE=..\..\..\src\hdrs\llnls.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\lloptions.h
+SOURCE=..\..\..\src\hdrs\lloptions.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\llstdlib.h
+SOURCE=..\..\..\src\hdrs\llstdlib.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\menuitem.h
+SOURCE=..\..\..\src\hdrs\menuitem.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\metadata.h
+SOURCE=..\..\..\src\hdrs\metadata.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\msvc.h
+SOURCE=..\..\..\src\hdrs\msvc.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\mystring.h
+SOURCE=..\..\..\src\hdrs\mystring.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\interp\parse.h
+SOURCE=..\..\..\src\interp\parse.h
 # End Source File
 # Begin Source File
 
@@ -685,39 +685,39 @@ SOURCE=.\resource.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\screen.h
+SOURCE=..\..\..\src\hdrs\screen.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\sequence.h
+SOURCE=..\..\..\src\hdrs\sequence.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\standard.h
+SOURCE=..\..\..\src\hdrs\standard.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\sys_inc.h
+SOURCE=..\..\..\src\hdrs\sys_inc.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\table.h
+SOURCE=..\..\..\src\hdrs\table.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\translat.h
+SOURCE=..\..\..\src\hdrs\translat.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\version.h
+SOURCE=..\..\..\src\hdrs\version.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\warehouse.h
+SOURCE=..\..\..\src\hdrs\warehouse.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\interp\yacc.h
+SOURCE=..\..\..\src\interp\yacc.h
 # End Source File
 # End Group
 # End Target

@@ -3,10 +3,9 @@
 
 # Pull in m4 (macro) files from m4 subdirectory
 # (gettext m4 files are there)
-ACLOCAL_AMFLAGS = -I m4 -I build/gnu
+ACLOCAL_AMFLAGS = -I m4 -I build/autotools
 
-SUBDIRS = build arch btree gedlib interp stdlib intl po m4 win32 liflines hdrs tools \
-	docs reports
+SUBDIRS = build src intl po win32 docs reports
 
 
 EXTRA_DIST = .linesrc LICENSE README.DEVELOPERS lines.cfg

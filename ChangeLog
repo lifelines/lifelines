@@ -1,3 +1,10 @@
+2002-09-21 Perry Rapp
+
+	* Makefile.am configure.in build/msvc6/llines/llinesprj.dsp
+	NEW: src/Makefile.am:
+
+	Fixing build system for relocated source files.
+
 2002-07-31 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog po/LINGUAS

@@ -3,7 +3,7 @@ dnl Configure script for lifelines software
 dnl
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(liflines/lbrowse.c)
+AC_INIT(src/liflines/lbrowse.c)
 AC_PREREQ(2.50)
 AC_REVISION([for lifelines, built with autoconf] AC_ACVERSION)
 AC_CONFIG_AUX_DIR(build/autotools)
@@ -164,16 +164,16 @@ dnl AC_TYPE_SIGNAL
 dnl we only use this if we do not have strsignal
 dnl AC_DECL_SYS_SIGLIST
 
-AC_OUTPUT(Makefile  m4/Makefile \
-        arch/Makefile \
-        btree/Makefile \
-        interp/Makefile \
-        gedlib/Makefile \
-        stdlib/Makefile \
-        liflines/Makefile \
-        tools/Makefile \
-        hdrs/Makefile \
-        hdrs/win32/Makefile \
+AC_OUTPUT(Makefile \
+        src/arch/Makefile \
+        src/btree/Makefile \
+        src/interp/Makefile \
+        src/gedlib/Makefile \
+        src/stdlib/Makefile \
+        src/liflines/Makefile \
+        src/tools/Makefile \
+        src/hdrs/Makefile \
+        src/hdrs/win32/Makefile \
         docs/Makefile \
         reports/Makefile
         win32/Makefile \
