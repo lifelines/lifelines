@@ -1114,6 +1114,9 @@ clear_rptinfos (void)
 			remove_table(rptinfo->functab, FREEKEY); /* values are PNODES */
 			strfree(&rptinfo->fullpath);
 			strfree(&rptinfo->codeset);
+			zs_free(&rptinfo->localpath);
+			zs_free(&rptinfo->localepath);
+			zs_free(&rptinfo->textdomain);
 		}
 		remove_table(f_rptinfos, FREEBOTH);
 		f_rptinfos = 0;
