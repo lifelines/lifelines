@@ -28,6 +28,10 @@
 
 	Cosmetic.
 
+	* ChangeLog liflines/screen.c:
+
+	Cosmetic.
+
 2002-06-26 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog po/Makevars po/de.po po/el.po po/it.po po/sv.po:

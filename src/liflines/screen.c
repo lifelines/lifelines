@@ -278,7 +278,6 @@ static llchtype gr_llx='*', gr_lrx='*', gr_ulx='*', gr_urx='*';
 
 /*============================
  * init_screen -- Init screens
- * Created: c. 2000/11, Perry Rapp
  *==========================*/
 int
 init_screen (BOOLEAN graphical)
@@ -336,7 +335,6 @@ init_screen (BOOLEAN graphical)
 }
 /*============================
  * term_screen -- Terminate screens
- * Created: 2001/02/01, Perry Rapp
  *  complement of init_screen
  *==========================*/
 void
@@ -401,7 +399,6 @@ repaint_main_menu (UIWINDOW uiwin)
 /*================================================
  * repaint_footer_menu -- Paint footer menu for 
  *  whichever screen requested.
- * Created: 2001/02/01, Perry Rapp
  *==============================================*/
 void
 repaint_footer_menu (INT screen)
@@ -449,7 +446,6 @@ paint_list_screen (void)
 }
 /*==========================================
  * create_uiwindow_impl -- Create our WINDOW wrapper
- * Created: 2001/11/24, Perry Rapp
  *========================================*/
 static UIWINDOW
 create_uiwindow_impl (WINDOW * win, INT rows, INT cols)
@@ -463,8 +459,7 @@ create_uiwindow_impl (WINDOW * win, INT rows, INT cols)
 }
 /*==========================================
  * create_boxed_newwin2 -- Create a window with
- *  an auxialiary box window outside it
- * Created: 2002/02/17, Perry Rapp
+ *  an auxiliary box window outside it
  *========================================*/
 static UIWINDOW
 create_boxed_newwin2 (INT rows, INT cols)
@@ -493,7 +488,6 @@ delete_uiwindow (UIWINDOW uiw)
 }
 /*==========================================
  * create_newwin -- Create our WINDOW wrapper
- * Created: 2001/11/24, Perry Rapp
  *========================================*/
 static UIWINDOW
 create_newwin (INT rows, INT cols, INT begy, INT begx)
@@ -503,7 +497,6 @@ create_newwin (INT rows, INT cols, INT begy, INT begx)
 }
 /*==========================================
  * create_newwin2 -- Create our WINDOW wrapper
- * Created: 2001/11/24, Perry Rapp
  *========================================*/
 static UIWINDOW
 create_newwin2 (INT rows, INT cols)
@@ -514,7 +507,6 @@ create_newwin2 (INT rows, INT cols)
 /*==========================================
  * create_uisubwindow -- Create our WINDOW wrapper
  *  for a true (& permanent) subwindow
- * Created: 2001/11/24, Perry Rapp
  *========================================*/
 static UIWINDOW
 create_uisubwindow (UIWINDOW parent, INT rows, INT cols, INT begy, INT begx)
@@ -587,7 +579,6 @@ display_screen (INT new_screen)
 /*=====================================
  * check_stdout -- Pause for stdout/err display
  *  if it is up
- * Created: 2001/12/28 (Perry Rapp)
  *===================================*/
 static void
 check_stdout (void)
@@ -667,8 +658,7 @@ main_menu (void)
 }
 /*=========================================
  * run_report -- run a report program
- *  picklist:  [IN]  display list of reports to user ?
- * Created: 2001/11/11, Perry Rapp
+ *  @picklist:  [IN]  display list of reports to user ?
  *=======================================*/
 void
 run_report (BOOLEAN picklist)
@@ -686,7 +676,6 @@ run_report (BOOLEAN picklist)
 /*=========================================
  * update_menu -- redraw menu if needed
  *  uses new menus
- * Created: 2001/02/01, Perry Rapp
  *=======================================*/
 static INT
 update_menu (INT screen)
@@ -699,12 +688,12 @@ update_menu (INT screen)
 }
 /*=========================================
  * show_indi -- Show indi according to mode
- *  uiwin:  [IN]  where to display
- *  indi:   [IN]  whom to display
- *  mode:   [IN]  how to display (eg, traditional, gedcom, ...)
- *  rect:   [IN]  rectangular area in which to display
- *  scroll: [I/O] how far down display is scrolled
- *  reuse:  [IN]  flag to save recalculating display strings
+ *  @uiwin:  [IN]  where to display
+ *  @indi:   [IN]  whom to display
+ *  @mode:   [IN]  how to display (eg, traditional, gedcom, ...)
+ *  @rect:   [IN]  rectangular area in which to display
+ *  @scroll: [I/O] how far down display is scrolled
+ *  @reuse:  [IN]  flag to save recalculating display strings
  *=======================================*/
 void
 show_indi (UIWINDOW uiwin, NODE indi, INT mode, LLRECT rect
@@ -887,7 +876,6 @@ interact_2fam (void)
 /*=======================================
  * aux_browse -- Handle aux_browse screen
  * This is used for browsing S, E, or X records.
- * Implemented: 2001/01/27, Perry Rapp
  *=====================================*/
 INT
 aux_browse (NODE node, INT mode, BOOLEAN reuse)
@@ -1222,10 +1210,9 @@ choose_or_view_array (STRING ttl, INT no, STRING *pstrngs, BOOLEAN selecting
  * handle_list_cmds -- Process choices from list display
  *  This handles moving up & down, adjusting size of detail,
  *  and scrolling detail.
- *  listdisp: [I/O] array of info about list display
- *  code:     [IN]  command to process
+ *  @listdisp: [I/O] array of info about list display
+ *  @code:     [IN]  command to process
  * Returns -1 if resized window, 1 if handled, 0 if unhandled.
- * Created: 2001/12/01 (Perry Rapp)
  *===========================================================*/
 static BOOLEAN
 handle_list_cmds (listdisp * ld, INT code)
@@ -1312,7 +1299,6 @@ handle_list_cmds (listdisp * ld, INT code)
  * handle_popup_list_resize -- Process resizes of popup list
  * In popup list, details & list compete, & menu is fixed
  * Returns TRUE if handled, FALSE if not
- * Created: 2001/12/01 (Perry Rapp)
  *===========================================================*/
 static BOOLEAN
 handle_popup_list_resize (listdisp * ld, INT code)
@@ -1346,9 +1332,8 @@ handle_popup_list_resize (listdisp * ld, INT code)
 /*=============================================================
  * activate_popup_list_uiwin --
  *  Choose list uiwin & activate
- *  listdisp:  [I/O]  caller must have filled this in
+ *  @listdisp:  [I/O]  caller must have filled this in
  *    This routine sets the uiwin, height, rows members
- * Created: 2001/12/01, Perry Rapp
  *===========================================================*/
 static void
 activate_popup_list_uiwin (listdisp * ld)
@@ -1422,9 +1407,9 @@ choose_one_from_indiseq (STRING ttl, INDISEQ seq)
 /*=============================================================
  * choose_one_or_list_from_indiseq -- 
  * Implements the two choose_xxx_from_indiseq
- *  ttl:   [IN]  title/caption for choice list
- *  seq:   [IN]  list from which to choose
- *  multi: [IN]  if true, selecting a sublist
+ *  @ttl:   [IN]  title/caption for choice list
+ *  @seq:   [IN]  list from which to choose
+ *  @multi: [IN]  if true, selecting a sublist
  * returns index of selected (or -1 for quit)
  * Rewritten to allow dynamic resizing (so user can
  *  resize detail area, ie, the [] functions), 2000/12, Perry Rapp
@@ -1547,7 +1532,6 @@ choose_list_from_indiseq (STRING ttl, INDISEQ seq)
 }
 /*==============================
  * draw_tt_win -- Draw menu for edit translations
- * Created: 2001/07/20 (Perry Rapp)
  *============================*/
 static void
 draw_tt_win (STRING prompt)
@@ -1612,7 +1596,6 @@ disp_trans_table_choice (UIWINDOW uiwin, INT row, INT col, STRING menuit, INT in
 }
 /*==============================
  * invoke_fullscan_menu -- Handle fullscan menu
- * Created: c. 2000/12, Perry Rapp
  *============================*/
 static RECORD
 invoke_fullscan_menu (void)
@@ -1662,7 +1645,6 @@ invoke_fullscan_menu (void)
 }
 /*==============================
  * invoke_search_menu -- Handle search menu
- * Created: 2002/06/23, Perry Rapp
  *============================*/
 static RECORD
 invoke_search_menu (void)
@@ -2143,12 +2125,15 @@ invoke_extra_menu (void)
 /*===============================
  * uopt_validate -- Validator when user edits 'user options table'
  *  returns descriptive string for failure, 0 for pass
- * Created: 2002/06/12 (Perry Rapp)
  *=============================*/
 static STRING
 uopt_validate (TABLE tab)
 {
 	STRING codeset = valueof_str(tab, "codeset");
+	/*
+	our only rule currently is that user may not change codeset
+	of a populated database
+	*/
 	if (!eqstr_ex(codeset, int_codeset)) {
 		if (num_indis()+num_fams()+num_sours()+num_evens()+num_othrs())
 			return _("Impermissible to change codeset in a populated database");
@@ -2156,7 +2141,7 @@ uopt_validate (TABLE tab)
 	return 0;
 }
 /*===============================
- * edit_place_table -- 
+ * edit_place_table -- Allow user to edit the table of place abbreviations
  *=============================*/
 static void
 edit_place_table (void)
@@ -2164,8 +2149,7 @@ edit_place_table (void)
 	edit_valtab_from_db("VPLAC", &placabbvs, ':', _(qSabverr), 0);
 }
 /*===============================
- * edit_user_options -- 
- * Created: 2001/08/02 (Perry Rapp)
+ * edit_user_options -- Allow user to edit options embedded in current db
  *=============================*/
 static void
 edit_user_options (void)
@@ -2184,6 +2168,7 @@ struct hdkeycvt { int key; int cmd; };
 static INT
 translate_hdware_key (INT c)
 {
+	/* curses constant, menuitem constant */
 	static struct hdkeycvt hdkey[] = {
 		{ KEY_UP, CMD_KY_UP }
 		, { KEY_DOWN, CMD_KY_DN }
@@ -2966,9 +2951,7 @@ output_menu (UIWINDOW uiwin, INT screen, INT bottom, INT width)
 	mvwaddstr_lim(win, ++row, col, g_MenuItemQuit.Display, colwidth);
 }
 /*==================================================================
- * toggle_menu() - toggle display of menu
- * Created: 1999/02, Perry Rapp
- * Joined repository: 2001/01/28, Perry Rapp
+ * toggle_menu() - toggle display of menu at bottom of screen
  *================================================================*/
 void
 toggle_menu (void)
@@ -2978,8 +2961,6 @@ toggle_menu (void)
 }
 /*==================================================================
  * cycle_menu() - show other menu choices
- * Created: 1999/03, Perry Rapp
- * Joined repository: 2001/01/28, Perry Rapp
  *================================================================*/
 void
 cycle_menu (void)
@@ -2997,8 +2978,6 @@ cycle_menu (void)
 }
 /*==================================================================
  * adjust_menu_height() - Change height of menu on person screen
- * Created: 1999/03, Perry Rapp
- * Joined repository: 2001/01/28, Perry Rapp
  *================================================================*/
 void
 adjust_menu_height (INT delta)
@@ -3018,7 +2997,6 @@ adjust_menu_height (INT delta)
 }
 /*==================================================================
  * adjust_menu_cols() - Change # of columsn in current menu
- * Created: 2001/12/10, Perry Rapp
  *================================================================*/
 void
 adjust_menu_cols (INT delta)
@@ -3033,8 +3011,6 @@ adjust_menu_cols (INT delta)
 }
 /*=========================================
  * calculate_screen_lines -- How many lines above menu?
- * Created: 1999/03, Perry Rapp
- * Joined repository: 2001/01/28, Perry Rapp
  *=======================================*/
 static INT
 calculate_screen_lines (INT screen)
@@ -3089,8 +3065,6 @@ color_hseg (WINDOW *win, INT row, INT x1, INT x2, char ch)
  * display_status -- put string in status line
  * We don't touch the status_transitory flag
  * That is caller's responsibility.
- * Created: 2001/11/11, Perry Rapp
- * Does not localize
  *=============================================*/
 static void
 display_status (STRING text)
@@ -3115,8 +3089,6 @@ display_status (STRING text)
 /*=========================================
  * msg_error -- handle error message
  * delegates to msg_outputv
- * Created: 2001/11/11, Perry Rapp
- * Does not localize
  *=======================================*/
 void
 msg_error (STRING fmt, ...)
@@ -3129,8 +3101,6 @@ msg_error (STRING fmt, ...)
 /*=========================================
  * msg_info -- handle regular messages
  * delegates to msg_outputv
- * Created: 2001/11/11, Perry Rapp
- * Does not localize
  *=======================================*/
 void
 msg_info (STRING fmt, ...)
@@ -3143,8 +3113,6 @@ msg_info (STRING fmt, ...)
 /*=========================================
  * msg_status -- handle transitory/status messages
  * delegates to msg_outputv
- * Created: 2001/11/11, Perry Rapp
- * Does not localize
  *=======================================*/
 void
 msg_status (STRING fmt, ...)
@@ -3157,8 +3125,6 @@ msg_status (STRING fmt, ...)
 /*=========================================
  * msg_output -- handle any message
  * delegates to msg_outputv
- * Created: 2001/12/16, Perry Rapp
- * Does not localize
  *=======================================*/
 void
 msg_output (MSG_LEVEL level, STRING fmt, ...)
@@ -3170,7 +3136,6 @@ msg_output (MSG_LEVEL level, STRING fmt, ...)
 }
 /*=====================================
  * msg_width -- get max width of msgs
- * Created: 2001/12/16, Perry Rapp
  *===================================*/
 INT
 msg_width (void)
@@ -3180,11 +3145,10 @@ msg_width (void)
 /*=========================================
  * msg_outputv -- output message varargs style arguments
  * Actually all other msg functions delegate to here.
- * fmt,args:  printf style varargs from client
- * level:     -1=error,0=info,1=status
+ *  @level:     -1=error,0=info,1=status
+ *  @fmt:   [IN]  printf style format string
+ *  @args:  [IN]  vprintf style varargs
  * Puts into message list and/or into status area
- * Created: 2001/11/11, Perry Rapp
- * Does not localize
  *=======================================*/
 void
 msg_outputv (MSG_LEVEL level, STRING fmt, va_list args)
@@ -3247,7 +3211,6 @@ msg_outputv (MSG_LEVEL level, STRING fmt, va_list args)
  * when the current command completes,
  * unless it only had one item, and it got
  * put on the status bar, and it wasn't too wide.
- * Created: 2001/11/11, Perry Rapp
  *=======================================*/
 static void
 append_to_msg_list (STRING msg)
@@ -3258,7 +3221,6 @@ append_to_msg_list (STRING msg)
 }
 /*=========================================
  * begin_action -- prepare to process users choice
- * Created: 2001/11/11, Perry Rapp
  *=======================================*/
 static
 void begin_action (void)
@@ -3268,7 +3230,6 @@ void begin_action (void)
 /*=========================================
  * end_action -- finished processing users choice
  *  show msg list if appropriate
- * Created: 2001/11/11, Perry Rapp
  *=======================================*/
 static
 void end_action (void)
@@ -3293,7 +3254,6 @@ void end_action (void)
  * clear_msgs -- delete msg list
  *  The msg list holds messages when several
  *  occurred during the last operation
- * Created: 2001/11/11, Perry Rapp
  *=======================================*/
 static void
 clear_msgs (void)
@@ -3310,7 +3270,6 @@ clear_msgs (void)
  * clear_status -- clear status string
  *  The status string is the last message displayed
  *  and is shown at the very bottom of the main screen
- * Created: 2002/02/16, Perry Rapp
  *=======================================*/
 static void
 clear_status (void)
@@ -3320,7 +3279,6 @@ clear_status (void)
 }
 /*=========================================
  * lock_status_msg -- temporarily hold status message
- * Created: 2001/11/11, Perry Rapp
  *=======================================*/
 void
 lock_status_msg (BOOLEAN lock)
@@ -3328,8 +3286,7 @@ lock_status_msg (BOOLEAN lock)
 	lock_std_msg = lock;
 }
 /*=====================================
- * repaint_add_menu -- 
- * Created: 2001/11/24, Perry Rapp
+ * repaint_add_menu -- Draw menu choices for main add item menu
  *===================================*/
 static void
 repaint_add_menu (UIWINDOW uiwin)
@@ -3345,8 +3302,7 @@ repaint_add_menu (UIWINDOW uiwin)
 	mvwaddstr(win, row++, 4, _(qSmn_ret));
 }
 /*=====================================
- * repaint_delete_menu -- 
- * Created: 2001/11/24, Perry Rapp
+ * repaint_delete_menu -- Draw menu choices for main delete item menu
  *===================================*/
 static void
 repaint_delete_menu (UIWINDOW uiwin)
@@ -3362,8 +3318,7 @@ repaint_delete_menu (UIWINDOW uiwin)
 	mvwaddstr(win, row++, 4, _(qSmn_ret));
 }
 /*=====================================
- * repaint_fullscan_menu -- 
- * Created: 2001/11/24, Perry Rapp
+ * repaint_fullscan_menu -- Draw menu choices for main full scan menu
  *===================================*/
 static void
 repaint_fullscan_menu (UIWINDOW uiwin)
@@ -3378,8 +3333,7 @@ repaint_fullscan_menu (UIWINDOW uiwin)
 	mvwaddstr(win, row++, 4, _(qSmn_ret));
 }
 /*=====================================
- * repaint_search_menu -- 
- * Created: 2002/06/23, Perry Rapp
+ * repaint_search_menu -- Draw menu for main history/scan menu
  *===================================*/
 static void
 repaint_search_menu (UIWINDOW uiwin)
@@ -3410,51 +3364,7 @@ repaint_search_menu (UIWINDOW uiwin)
 	mvwaddstr(win, row++, 4, _(qSmn_ret));
 }
 /*=====================================
- * repaint_tt_menu -- 
- * Created: 2001/11/24, Perry Rapp
- *===================================*/
-#ifdef UNIMPLEMENTED_CODE
-static void
-repaint_tt_menu (UIWINDOW uiwin)
-{
-	WINDOW *win = uiw_win(uiwin);
-	INT row = 1;
-	mvwaddstr(win, row++, 2, _(qSmn_tt_ttl));
-/*TO DO*/
-}
-#endif
-/*=====================================
- * repaint_trans_menu -- 
- * Created: 2001/11/24, Perry Rapp
- *===================================*/
-#ifdef UNUSED_CODE
-static void
-repaint_trans_menu (UIWINDOW uiwin)
-{
-	WINDOW *win = uiw_win(uiwin);
-	INT row = 1;
-	char line[120];
-	/*INT mylen = sizeof(line);*/
-	STRING ptr = line;
-	uierase(uiwin);
-	draw_win_box(win);
-	row = 1;
-	mvwaddstr(win, row++, 2, _(qSmn_tt_ttl));
-	mvwaddstr(win, row++, 4, _(qSmn_tt_edit));
-	mvwaddstr(win, row++, 4, _(qSmn_tt_load));
-	mvwaddstr(win, row++, 4, _(qSmn_tt_save));
-	mvwaddstr(win, row++, 4, _(qSmn_tt_exp));
-	mvwaddstr(win, row++, 4, _(qSmn_tt_imp));
-	ptr[0] = 0;
-/*	llstrcatn(&ptr, _(qSmn_tt_dir), &mylen); */
-/*	llstrcatn(&ptr, lloptions.llttexport, &mylen); */
-	mvwaddstr(win, row++, 4, line);
-	mvwaddstr(win, row++, 4, _(qSmn_ret));
-}
-#endif
-/*=====================================
  * repaint_utils_menu -- 
- * Created: 2001/11/24, Perry Rapp
  *===================================*/
 static void
 repaint_utils_menu (UIWINDOW uiwin)
@@ -3476,7 +3386,6 @@ repaint_utils_menu (UIWINDOW uiwin)
 }
 /*=====================================
  * repaint_extra_menu -- 
- * Created: 2001/11/24, Perry Rapp
  *===================================*/
 static void
 repaint_extra_menu (UIWINDOW uiwin)
@@ -3499,7 +3408,6 @@ repaint_extra_menu (UIWINDOW uiwin)
 /*============================
  * activate_uiwin -- 
  *  push new uiwindow on top of current one
- * Created: 2001/11/24, Perry Rapp
  *==========================*/
 static void
 activate_uiwin (UIWINDOW uiwin)
@@ -3523,7 +3431,6 @@ activate_uiwin (UIWINDOW uiwin)
  * reactivate_uiwin --
  *  push new window on top, if not already on top
  *  and refresh it in any case
- * Created: 2001/12/22 (Perry Rapp)
  *==========================*/
 #ifdef UNUSED_CODE
 static void
@@ -3541,7 +3448,6 @@ reactivate_uiwin (UIWINDOW uiwin)
 /*============================
  * deactivate_uiwin -- Remove currently active
  *  and pop to its parent (if it has one)
- * Created: 2001/11/24, Perry Rapp
  *==========================*/
 static void
 deactivate_uiwin (void)
@@ -3570,7 +3476,6 @@ deactivate_uiwin_and_touch_all (void)
 /*============================
  * touch_all -- Repaint all ancestors of current window
  * from furthest to nearest
- * Created: 2001/12/01, Perry Rapp
  *==========================*/
 static void
 touch_all (BOOLEAN includeCurrent)
@@ -3594,7 +3499,6 @@ touch_all (BOOLEAN includeCurrent)
  *  to new uiwin
  *  currently active uiwin (if any) must be solo
  *  new uiwin must be solo
- * Created: 2001/11/24, Perry Rapp
  *==========================*/
 static void
 switch_to_uiwin (UIWINDOW uiwin)
@@ -3617,7 +3521,6 @@ switch_to_uiwin (UIWINDOW uiwin)
 /*============================
  * refresh_stdout -- 
  *  bring stdout to front
- * Created: 2001/11/24, Perry Rapp
  *==========================*/
 void
 refresh_stdout (void)
@@ -3627,7 +3530,6 @@ refresh_stdout (void)
 /*============================
  * uierase -- erase window 
  *  handles manual erasing if broken_curses flag set
- * Created: 2001/11/24, Perry Rapp
  *==========================*/
 static void
 uierase (UIWINDOW uiwin)
@@ -3638,7 +3540,6 @@ uierase (UIWINDOW uiwin)
 /*================================================
  * wipe_window_rect -- Clear a rectangle in a window
  *  handle curses space bug
- * Created: 2001/02/04, Perry Rapp
  *==============================================*/
 void
 wipe_window_rect (UIWINDOW uiwin, LLRECT rect)
