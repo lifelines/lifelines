@@ -138,7 +138,7 @@ init_valtab_from_string (STRING str, TABLE tab, INT sep, STRING *pmsg)
 		while ((*q++ = c = *p++)) {
 			if (c == '\n') break;
 			if (c == '\\') {
-				if ((c = *p++) == EOF) break;
+				if ((c = *p++) == 0) break;
 					/* handle \n & \t escapes */
 				if (c == 'n')
 					*(q - 1) = '\n';
@@ -158,35 +158,3 @@ init_valtab_from_string (STRING str, TABLE tab, INT sep, STRING *pmsg)
 	}
 	return TRUE;
 }
-#ifdef UNUSED_CODE
-BOOLEAN lex_valtab (tab, sep, nextc, pmsg)
-TABLE *ptab;	/* hash table for values */
-INT sep;	/* separator char */
-STRING ermsg;	/* error message */
-
-	while (TRUE) {
-		p = tag;
-		while ((c = *p++ = getc(fp)) != EOF && c != sep && c != '\n')
-			;
-		if (c == EOF)  {
-			fclose(fp);
-			return rc ? (p - 1 == tag) : FALSE;
-		}
-		if (c == '\n') {
-			rc = FALSE;
-			continue;
-		}
-		*(p - 1) = 0;
-		p = val;
-		while ((c = *p++ = getc(fp)) != EOF) {
-			if (c == '\n') break;
-			if (c == '\\') {
-				if ((c = getc(fp)) == EOF) break;
-				*(p - 1) = c;
-			}
-		}
-		*(p - 1) = 0;
-		insert_table(tab, strsave(tag), strsave(val));
-		if (c == EOF) break;
-	}
-#endif /* UNUSED_CODE */
