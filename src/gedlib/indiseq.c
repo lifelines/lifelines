@@ -94,7 +94,7 @@ static void deleteval(INDISEQ seq, UNION uval);
 static INDISEQ dupseq(INDISEQ seq);
 static STRING get_print_el(INDISEQ, INT i, INT len, RFMT rfmt);
 static INT key_compare(SORTEL, SORTEL, VPTR param);
-static STRING key_to_name(STRING key);
+static STRING qkey_to_name(STRING key);
 static INT name_compare(SORTEL, SORTEL, VPTR param);
 static INT value_compare(SORTEL el1, SORTEL el2, VPTR param);
 
@@ -395,7 +395,7 @@ append_indiseq_impl (INDISEQ seq, STRING key, STRING name, UNION val
 	snam(el) = NULL;
 	if (*key == 'I' && (IFlags(seq) & WITHNAMES)) {
 		if (!name)
-			name = key_to_name(key);
+			name = qkey_to_name(key);
 		if (name)
 			snam(el) = strsave(name);
 		else
@@ -432,7 +432,7 @@ rename_indiseq (INDISEQ seq, STRING key)
 	data = IData(seq);
 	for (i = 0; i < n; i++) {
 		if (eqstr(key, skey(data[i]))) {
-			STRING name = key_to_name(key);
+			STRING name = qkey_to_name(key);
 			if (snam(data[i])) stdfree(snam(data[i]));
 			if (name)
 				snam(data[i]) = strsave(name);
@@ -2028,7 +2028,7 @@ calc_indiseq_names (INDISEQ seq)
 
 	FORINDISEQ(seq, el, num)
 		if (*skey(el)=='I' && !snam(el)) {
-			STRING name = key_to_name(skey(el));
+			STRING name = qkey_to_name(skey(el));
 			if (name)
 				snam(el) = strsave(name);
 		}
@@ -2036,13 +2036,20 @@ calc_indiseq_names (INDISEQ seq)
 	IFlags(seq) |= WITHNAMES;
 }
 /*=======================================================
- * key_to_name -- find the name for person with given key
+ * qkey_to_name -- find the name for person with given key
+ *  key: [IN]  key of person (eg, "46")
+ * Note: key must be non-NULL, but may be invalid
+ * Returns pointer into node cache memory
  * Created: 2002/02/14
  *=====================================================*/
 static STRING
-key_to_name (STRING key)
+qkey_to_name (STRING key)
 {
-	NODE indi = key_to_indi(key);
-	NODE name = NAME(indi);
-	return (name ? nval(name) : NULL);
+	NODE indi,name;
+
+	indi = qkey_to_indi(key);
+	if (!indi) return NULL;
+	name = NAME(indi);
+	if (!name) return NULL;
+	return nval(name);
 }

@@ -7,6 +7,10 @@
 	Added u=pageup, U=shpageup, d=pagedn, D=shpagedn to lists.
 	Added ^ and $ marks to top & bottom items of lists.
 
+	* ChangeLog gedlib/indiseq.c:
+
+	Bugfix for crash if invalid reference begins with I.
+
 2002-06-03 Perry Rapp <puddle@users.sourceforge.net>
 
 	.linesrc ChangeLog lines.cfg gedlib/messages.c gedlib/node.c
