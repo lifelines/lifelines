@@ -53,7 +53,7 @@ typedef struct tag_sortel {
 #define sprn(s) ((s)->s_prn)
 #define spri(s) ((s)->s_pri)
 
-typedef INT (*ELCMPFNC)(SORTEL, SORTEL, VPTR);
+typedef INT (*ELCMPFNC)(SORTEL *pel1, SORTEL *pel2, VPTR param);
 
 /*=================================================
  * Custom functions for caller-specified handling of values
@@ -102,14 +102,14 @@ typedef struct tag_indiseq_value_fnctable
  * INDISEQ -- Data type for an entire indi sequence
  *===============================================*/
 struct tag_indiseq {
-	INT is_size;	/* current length of list  */
-	INT is_max;	/* max length before increment */
-	INT is_flags;	/* attribute flags */
-	SORTEL *is_data;	/*  actual list of items */
-	INT is_prntype; /* for special cases (spouseseq & famseq) */
-	INT is_valtype; /* int, string, pointer */
-	INT is_refcnt; /* for interp */
-	STRING is_locale; /* used by namesort */
+	INT is_refcnt;     /* for interp */
+	INT is_size;       /* current length of list  */
+	INT is_max;        /* max length before increment */
+	INT is_flags;      /* attribute flags */
+	SORTEL *is_data;   /*  actual list of items */
+	INT is_prntype;    /* for special cases (spouseseq & famseq) */
+	INT is_valtype;    /* int, string, pointer */
+	STRING is_locale;  /* used by namesort */
 	INDISEQ_VALUE_FNCTABLE is_valfnctbl;
 };
 #ifndef INDISEQ_type_defined
@@ -117,13 +117,13 @@ typedef struct tag_indiseq *INDISEQ;
 #define INDISEQ_type_defined
 #endif
 
+#define IRefcnt(s)   ((s)->is_refcnt)
 #define ISize(s)     ((s)->is_size)
 #define IMax(s)      ((s)->is_max)
 #define IFlags(s)    ((s)->is_flags)
 #define IData(s)     ((s)->is_data)
 #define IPrntype(s)  ((s)->is_prntype)
 #define IValtype(s)  ((s)->is_valtype)
-#define IRefcnt(s)   ((s)->is_refcnt)
 #define ILocale(s)   ((s)->is_locale)
 #define IValfnctbl(s) ((s)->is_valfnctbl)
 
@@ -192,7 +192,6 @@ INDISEQ node_to_notes(NODE);
 INDISEQ node_to_pointers(NODE node);
 INDISEQ node_to_sources(NODE);
 INDISEQ parent_indiseq(INDISEQ);
-INT partition(INT, INT, SORTEL);
 void partition_sort(SORTEL*, INT, ELCMPFNC func, VPTR param);
 void preprint_indiseq(INDISEQ, INT len, RFMT rfmt);
 void print_indiseq_element (INDISEQ seq, INT i, STRING buf, INT len, RFMT rfmt);

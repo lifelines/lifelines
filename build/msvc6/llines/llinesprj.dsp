@@ -113,6 +113,10 @@ SOURCE=..\..\..\src\stdlib\appendstr.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\stdlib\array.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\liflines\ask.c
 # End Source File
 # Begin Source File
@@ -393,6 +397,10 @@ SOURCE=..\..\..\src\gedlib\nodeutls.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\stdlib\object.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\btree\opnbtree.c
 # End Source File
 # Begin Source File
@@ -609,6 +617,10 @@ SOURCE=..\..\..\src\hdrs\arch.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\hdrs\array.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\hdrs\btree.h
 # End Source File
 # Begin Source File
@@ -749,6 +761,10 @@ SOURCE=..\..\..\src\hdrs\mystring.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\hdrs\object.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\interp\parse.h
 # End Source File
 # Begin Source File
@@ -758,6 +774,10 @@ SOURCE=..\..\..\src\hdrs\proptbls.h
 # Begin Source File
 
 SOURCE=.\resource.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\interp\rptui.h
 # End Source File
 # Begin Source File
 
@@ -816,9 +836,5 @@ SOURCE=..\..\..\src\interp\yacc.h
 SOURCE=..\..\..\src\hdrs\zstr.h
 # End Source File
 # End Group
-# Begin Source File
-
-SOURCE=..\..\..\src\interp\rptui.h
-# End Source File
 # End Target
 # End Project

@@ -589,18 +589,5 @@ pvseq_compare_values (VPTR ptr1, VPTR ptr2, INT valtype)
 	ASSERT(valtype == ISVAL_PTR || valtype == ISVAL_NUL);
 	if (valtype == ISVAL_NUL)
 		return 0;
-	/* if dissimilar types, we'll use the numerical order of the types */
-	if (ptype(val1) != ptype(val2))
-		return ptype(val1) - ptype(val2);
-
-	/* ok, they are the same types, how do we compare them ? */
-	switch(ptype(val1)) {
-	case PSTRING:
-		return cmpstrloc(pvalue_to_string(val1), pvalue_to_string(val2));
-	case PINT:
-		return pvalue_to_int(val1) - pvalue_to_int(val2);
-	case PFLOAT:
-		return pvalue_to_float(val1) - pvalue_to_float(val2);
-	}
-	return 0; /* TODO: what about other types ? */
+	return pvalues_collate(val1, val2);
 }

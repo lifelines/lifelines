@@ -164,6 +164,9 @@ typedef STRING (*TRANSLFNC)(STRING str, INT len);
 struct tag_warehouse;
 typedef struct tag_warehouse *WAREHOUSE;
 
+struct tag_vtable;
+typedef struct tag_vtable ** OBJECT;
+
 /*
  short format ISO style time string:
  20 bytes 0-terminated YYYY-MM-DD-HH:MM:SS ending with Z (GMT)

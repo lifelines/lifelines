@@ -7,7 +7,6 @@
 */
 /*======================================================================
  * zstr.c -- dynamic buffer strings in C
- * Copyright(c) 2002 by Perry Rapp; all rights reserved
  *====================================================================*/
 
 #include "llstdlib.h"

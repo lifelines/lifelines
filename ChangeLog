@@ -1,3 +1,18 @@
+2003-02-28 Perry Rapp
+
+	* ChangeLog build/msvc6/llines/llinesprj.dsp
+	src/gedlib/indiseq.c src/hdrs/indiseq.h src/hdrs/interp.h
+	src/hdrs/standard.h src/interp/functab.c src/interp/interpi.h
+	src/interp/intrpseq.c src/interp/more.c src/interp/pvalue.c
+	src/stdlib/table.c src/stdlib/zstr.c
+	*NEW src/hdrs/array.h
+	*NEW src/hdrs/object.h
+	*NEW src/stdlib/array.c
+	*NEW src/stdlib/object.c
+
+	Add array types to interpreter, and new sort function.
+	Add object.* for client use of objects with vtables.
+
 2003-02-26 Perry Rapp
 
 	* ChangeLog po/sv.po

@@ -680,6 +680,6 @@ static void
 table_destructor (VTABLE *obj)
 {
 	TABLE tab = (TABLE)obj;
-	ASSERT((*obj)->vtable_class == vtable_for_table.vtable_class);
+	ASSERT((*obj) == &vtable_for_table);
 	destroy_table(tab);
 }

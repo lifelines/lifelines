@@ -32,7 +32,6 @@
 /* modified 2000-01-26 J.F.Chandler */
 
 #include "sys_inc.h"
-#include <curses.h>
 
 #include "llstdlib.h"
 #include "table.h"
@@ -46,6 +45,7 @@
 #include "lloptions.h"
 #include "feedback.h" /* call_system_cmd */
 #include "zstr.h"
+#include "array.h"
 
 /*********************************************
  * external/imported variables
@@ -1151,4 +1151,109 @@ __getproperty(PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	str = str ? get_property(str) : 0;
 	set_pvalue_string(val, str);
 	return val;
+}
+/*========================================
+ * list_to_array -- create array out of list
+ *======================================*/
+ARRAY
+list_to_array (LIST list)
+{
+	ARRAY array = create_array_objval(length_list(list));
+	int i=0;
+	FORLIST(list, el)
+		set_array_obj(array, i++, (OBJECT)el);
+	ENDLIST
+	return array;
+}
+/*========================================
+ * sort_array_by_array -- sort first array of pvalues
+ *  by comparing keys in second array of pvalues
+ *======================================*/
+struct array_by_pvarray_info {
+	ARRAY arr_vals;
+	ARRAY arr_keys;
+};
+static INT
+obj_lookup_comparator (OBJECT *pobj1, OBJECT *pobj2, VPTR param)
+{
+	struct array_by_pvarray_info * info = (struct array_by_pvarray_info *)param;
+	if (info->arr_keys) {
+		int i1 = pobj1 - (OBJECT *)&AData(info->arr_vals)[0];
+		int i2 = pobj2 - (OBJECT *)&AData(info->arr_vals)[0];
+		PVALUE val1 = AData(info->arr_keys)[i1];
+		PVALUE val2 = AData(info->arr_keys)[i2];
+		return pvalues_collate(val1, val2);
+	} else {
+		PVALUE val1 = (PVALUE)(*pobj1);
+		PVALUE val2 = (PVALUE)(*pobj2);
+		return pvalues_collate(val1, val2);
+	}
+}
+void
+sort_array_by_pvarray (ARRAY arr_vals, ARRAY arr_keys)
+{
+	struct array_by_pvarray_info info;
+	info.arr_keys = arr_keys;
+	info.arr_vals = arr_vals;
+	sort_array(arr_vals, obj_lookup_comparator, &info);
+}
+/*========================================
+ * __sort -- sort first container [using second container as keys]
+ *   usage: sort(LIST [, LIST]) -> VOID
+ *======================================*/
+PVALUE
+__sort(PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+	PNODE arg = (PNODE) iargs(node);
+	PVALUE val = eval_without_coerce(arg, stab, eflg);
+	ARRAY arr_vals = 0, arr_keys = 0;
+	BOOLEAN free_vals=FALSE, free_keys = FALSE;
+	if (ptype(val) == PLIST) {
+		LIST list = pvalue_to_list(val);
+		arr_vals = list_to_array(list);
+		if (!arr_vals) {
+			prog_error(node, _("Error converting list to array for sort"));
+			*eflg = TRUE;
+			return NULL;
+		}
+		free_vals = TRUE;
+	} else if (ptype(val) == PARRAY) {
+		arr_vals = pvalue_to_array(val);
+	} else {
+		prog_error(node, _("First argument to sort must be list or array"));
+		*eflg = TRUE;
+		return NULL;
+	}
+	arg = inext(arg);
+	if (arg) {
+		val = eval_without_coerce(arg, stab, eflg);
+		if (ptype(val) == PLIST) {
+			LIST list = pvalue_to_list(val);
+			arr_keys = list_to_array(list);
+			if (!arr_keys) {
+				prog_error(node, _("Error converting list to array for sort"));
+				*eflg = TRUE;
+				return NULL;
+			}
+			free_keys = TRUE;
+		} else if (ptype(val) == PARRAY) {
+			arr_keys = pvalue_to_array(val);
+		} else {
+			prog_error(node, _("Second argument to sort must be list or array"));
+			*eflg = TRUE;
+			return NULL;
+		}
+	}
+	/* else, no keys array, will use the value array itself */
+	if (arr_keys && get_array_size(arr_vals) > get_array_size(arr_keys)) {
+		prog_error(node, _("Keys to sort must contain at least as many elements as values"));
+		*eflg = TRUE;
+		return NULL;
+	}
+	sort_array_by_pvarray(arr_vals, arr_keys);
+	if (free_vals)
+		destroy_array(arr_vals);
+	if (free_keys)
+		destroy_array(arr_keys);
+	return NULL;
 }

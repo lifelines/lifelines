@@ -130,7 +130,7 @@ struct tag_pnode {
 #define PFLOAT     4  /* floating point */
 #define PBOOL      5  /* boolean */
 #define PSTRING    6  /* string */
-#define PGNODE	    7  /* GEDCOM node */
+#define PGNODE	   7  /* GEDCOM node */
 #define PINDI      8  /* GEDCOM person record */
 #define PFAM       9  /* GEDCOM family record */
 #define PSOUR     10  /* GEDCOM source record */
@@ -139,7 +139,8 @@ struct tag_pnode {
 #define PLIST     13  /* list */
 #define PTABLE    14  /* table */
 #define PSET      15  /* set */
-#define PMAXLIVE  PSET /* maximum live type */
+#define PARRAY    16  /* array */
+#define PMAXLIVE  PARRAY /* maximum live type */
 #define PFREED    99  /* returned to free list */
 #define PUNINT   100  /* just allocated */
 
@@ -285,6 +286,7 @@ BOOLEAN next_symtab_entry(SYMTAB_ITER tabit, STRING *pkey, PVALUE *ppval);
 SYMTAB null_symtab(void);
 void pvalues_begin(void);
 void pvalues_end(void);
+struct tag_array *pvalue_to_array(PVALUE val);
 BOOLEAN pvalue_to_bool(PVALUE);
 CACHEEL pvalue_to_cel(PVALUE val);
 float pvalue_to_float(PVALUE val);

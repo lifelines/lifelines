@@ -999,6 +999,14 @@ pvalue_to_pint (PVALUE val)
 	return (INT *)&pvalue(val);
 }
 /*==================================
+ * ARRAY: pvalue containing an array
+ *================================*/
+struct tag_array *
+pvalue_to_array (PVALUE val)
+{
+	return (struct tag_array *)pvalue(val);
+}
+/*==================================
  * LIST: pvalue containing a list
  *================================*/
 LIST
@@ -1091,3 +1099,25 @@ pvalue_copy (VTABLE *obj, int deep)
 	implement copy */
 	return 0;
 }
+/*=============================================
+ * pvalues_collate -- Compare two pvalues for collation
+ *============================================*/
+INT
+pvalues_collate (PVALUE val1, PVALUE val2)
+{
+	/* if dissimilar types, we'll use the numerical order of the types */
+	if (ptype(val1) != ptype(val2))
+		return ptype(val1) - ptype(val2);
+
+	/* ok, they are the same types, how do we compare them ? */
+	switch(ptype(val1)) {
+	case PSTRING:
+		return cmpstrloc(pvalue_to_string(val1), pvalue_to_string(val2));
+	case PINT:
+		return pvalue_to_int(val1) - pvalue_to_int(val2);
+	case PFLOAT:
+		return pvalue_to_float(val1) - pvalue_to_float(val2);
+	}
+	return 0; /* TODO: what about other types ? */
+}
+

@@ -216,6 +216,7 @@ BUILTINS builtins[] = {
 	{"short",           1,    1,    __short},
 	{"sibling",         1,    1,    __sibling},
 	{"siblingset",      1,    1,    __siblingset},
+	{"sort",            1,    2,    __sort},
 	{"soundex",         1,    1,    __soundex},
 	{"sp",              0,    0,    __space},
 	{"spouseset",       1,    1,    __spouseset},

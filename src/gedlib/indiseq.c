@@ -85,7 +85,7 @@ static void append_all_tags(INDISEQ, NODE, STRING tagname, BOOLEAN recurse, BOOL
 static void append_indiseq_impl(INDISEQ seq, STRING key, 
 	STRING name, UNION val, BOOLEAN sure, BOOLEAN alloc);
 static void calc_indiseq_name_el(INDISEQ seq, INT index);
-static INT canonkey_compare(SORTEL el1, SORTEL el2, VPTR param);
+static INT canonkey_compare(SORTEL *pel1, SORTEL *pel2, VPTR param);
 static INT canonkey_order(char c);
 static void check_indiseq_valtype(INDISEQ seq, INT valtype);
 static UNION copyval(INDISEQ seq, UNION uval);
@@ -95,11 +95,12 @@ static void deleteval(INDISEQ seq, UNION uval);
 static INDISEQ dupseq(INDISEQ seq);
 static STRING get_print_el(INDISEQ, INT i, INT len, RFMT rfmt);
 static BOOLEAN is_locale_current(INDISEQ seq);
-static INT key_compare(SORTEL, SORTEL, VPTR param);
-static INT name_compare(SORTEL, SORTEL, VPTR param);
+static INT key_compare(SORTEL *pel1, SORTEL *pel2, VPTR param);
+static INT name_compare(SORTEL *pel1, SORTEL *pel2, VPTR param);
+static INT partition(INT left, INT right, SORTEL * pivot);
 static STRING qkey_to_name(STRING key);
 static void update_locale(INDISEQ seq);
-static INT value_compare(SORTEL el1, SORTEL el2, VPTR param);
+static INT value_compare(SORTEL *pel1, SORTEL *pel2, VPTR param);
 
 /*********************************************
  * local variables
@@ -165,10 +166,9 @@ static INDISEQ
 create_indiseq_impl (INT valtype, INDISEQ_VALUE_FNCTABLE fnctable)
 {
 	INDISEQ seq = (INDISEQ) stdalloc(sizeof *seq);
-	ISize(seq) = 0;
+	memset(seq, 0, sizeof(*seq));
 	IMax(seq) = 20;
 	IData(seq) = (SORTEL *) stdalloc(20*sizeof(SORTEL));
-	IFlags(seq) = 0;
 	IPrntype(seq) = ISPRN_NORMALSEQ;
 	IValtype(seq) = valtype;
 	IValfnctbl(seq) = fnctable ? fnctable : &def_valfnctbl;
@@ -562,8 +562,10 @@ element_indiseq_ival (INDISEQ seq, INT index, STRING *pkey, INT *pval
  * name_compare -- Compare two names
  *================================*/
 INT
-name_compare (SORTEL el1, SORTEL el2, VPTR param)
+name_compare (SORTEL *pel1, SORTEL *pel2, VPTR param)
 {
+	SORTEL el1 = *pel1;
+	SORTEL el2 = *pel2;
 	if (!snam(el2)) {
 		if (snam(el1))
 			return -1;
@@ -574,15 +576,17 @@ name_compare (SORTEL el1, SORTEL el2, VPTR param)
 		INT rel = namecmp(snam(el1), snam(el2));
 		if (rel) return rel;
 	}
-	return canonkey_compare(el1, el2, param);
+	return canonkey_compare(pel1, pel2, param);
 }
 /*================================
  * key_compare -- Compare two keys
  * also used for integer value sort
  *==============================*/
 INT
-key_compare (SORTEL el1, SORTEL el2, VPTR param)
+key_compare (SORTEL *pel1, SORTEL *pel2, VPTR param)
 {
+	SORTEL el1 = *pel1;
+	SORTEL el2 = *pel2;
 	param = param; /* unused */
 	return spri(el1) - spri(el2);
 }
@@ -608,8 +612,10 @@ canonkey_order (char c)
  * Created: 2001/01/06, Perry Rapp
  *==============================*/
 static INT
-canonkey_compare (SORTEL el1, SORTEL el2, VPTR param)
+canonkey_compare (SORTEL *pel1, SORTEL *pel2, VPTR param)
 {
+	SORTEL el1 = *pel1;
+	SORTEL el2 = *pel2;
 	char c1=skey(el1)[0], c2=skey(el2)[0];
 	param = param; /* unused */
 	if (c1 == c2)
@@ -620,8 +626,10 @@ canonkey_compare (SORTEL el1, SORTEL el2, VPTR param)
  * value_compare -- Compare two values as strings
  *=================================================*/
 static INT
-value_compare (SORTEL el1, SORTEL el2, VPTR param)
+value_compare (SORTEL *pel1, SORTEL *pel2, VPTR param)
 {
+	SORTEL el1 = *pel1;
+	SORTEL el2 = *pel2;
 	INDISEQ seq = (INDISEQ)param;
 	INT valtype = IValtype(seq);
 	INT rel = 0;
@@ -646,7 +654,7 @@ value_compare (SORTEL el1, SORTEL el2, VPTR param)
 		/* nothing -- fall through to default to canonkey_compare */
 	}
 	if (!rel)
-		rel = canonkey_compare(el1, el2, param);
+		rel = canonkey_compare(pel1, pel2, param);
 	return rel;
 }
 /*==========================================
@@ -765,7 +773,7 @@ llqsort (INT left, INT right)
 {
 	INT pcur = getpivot(left, right);
 	if (pcur != LNULL) {
-		SORTEL pivot = ldata[pcur];
+		SORTEL * pivot = &ldata[pcur];
 		INT mid = partition(left, right, pivot);
 		llqsort(left, mid-1);
 		llqsort(mid, right);
@@ -774,19 +782,19 @@ llqsort (INT left, INT right)
 /*====================================
  * partition -- Partition around pivot
  *==================================*/
-INT
-partition (INT left, INT right, SORTEL pivot)
+static INT
+partition (INT left, INT right, SORTEL * pivot)
 {
 	INT i = left, j = right;
 	do {
 		SORTEL tmp = ldata[i];
 		ldata[i] = ldata[j];
 		ldata[j] = tmp;
-		while ((*lcmp)(ldata[i], pivot, lparam) < 0) {
+		while ((*lcmp)(&ldata[i], pivot, lparam) < 0) {
 			if (!(i<right)) return right; /* bad compare routine */
 			i++;
 		}
-		while ((*lcmp)(ldata[j], pivot, lparam) >= 0) {
+		while ((*lcmp)(&ldata[j], pivot, lparam) >= 0) {
 			if (!(j>left)) return left; /* bad compare routine */
 			j--;
 		}
@@ -797,14 +805,13 @@ partition (INT left, INT right, SORTEL pivot)
  * getpivot -- Choose key pivot
  *===========================*/
 INT
-getpivot (INT left,
-          INT right)
+getpivot (INT left, INT right)
 {
-	SORTEL pivot = ldata[left];
+	SORTEL * pivot = &ldata[left];
 	INT left0 = left, rel;
 	for (++left; left <= right; left++) {
-		SORTEL next = ldata[left];
-		if ((rel = (*lcmp)(next, pivot, lparam)) > 0) return left;
+		SORTEL *pnext = &ldata[left];
+		if ((rel = (*lcmp)(pnext, pivot, lparam)) > 0) return left;
 		if (rel < 0) return left0;
 	}
 	return LNULL;

@@ -54,6 +54,7 @@ PVALUE create_new_pvalue(void);
 void free_pvalue_memory(PVALUE val);
 void set_pvalue_node(PVALUE val, NODE node);
 /* pvalue.c */
+INT pvalues_collate(PVALUE val1, PVALUE val2);
 void init_pvalue_vtable(PVALUE val);
 
 
@@ -225,6 +226,7 @@ extern PVALUE __sex(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __short(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __sibling(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __siblingset(PNODE, SYMTAB, BOOLEAN *);
+extern PVALUE __sort(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __soundex(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __space(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __spouseset(PNODE, SYMTAB, BOOLEAN *);
