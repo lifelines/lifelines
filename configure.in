@@ -138,8 +138,7 @@ dnl AC_C_CONST
 dnl AC_HEADER_TIME
 
 echo Looking for library functions
-AC_CHECK_FUNCS( _vsnprintf heapwalk _heapwalk strcmpi strcasecmp \
-	getpwuid setlocale )
+AC_CHECK_FUNCS( _vsnprintf heapwalk _heapwalk getpwuid setlocale )
 
 dnl ngettext function missing from 0.10.35
 saved_libs="$LIBS"

@@ -1,3 +1,11 @@
+2003-01-11 Perry Rapp
+
+	* ChangeLog configure.in src/hdrs/arch.h src/stdlib/path.c:
+
+	Remove unused configure tests for strcmpi (was
+	only used once in liflines/scan.c, and only as a
+	test for equality).
+
 2003-01-07 Perry Rapp
 
 	*

@@ -71,16 +71,6 @@ extern size_t wcslen(const wchar_t *s);
 #endif /* HAVE_WCSLEN */
 
 /* *****************************************************************
- * strcmpi()           
- * ***************************************************************** */
-
-#ifndef HAVE_STRCMPI
-#ifdef HAVE_STRCASECMP
-#define strcmpi strcasecmp
-#endif /* HAVE_STRCASECMP */
-#endif /* HAVE_STRCMPI */
-
-/* *****************************************************************
  * getopt()           
  * ***************************************************************** */
 

@@ -67,15 +67,18 @@ path_match (CNSTRING path1, CNSTRING path2)
 #endif
 }
 /*=================================
- * path_cmp -- compare two paths
- * handle WIN32 filename case insensitivity
+ * path_cmp -- compare two paths as appropriate
+ *  handle WIN32 filename case insensitivity
  *===============================*/
 int
 path_cmp (CNSTRING path1, CNSTRING path2)
 {
+/* Special case for Win32, which needs case-insensitive */
 #ifdef WIN32
 	return _stricoll(path1, path2);
 #else
+/* We use direct RTL calls, because paths are not in
+internal codeset, they are in system codeset */
 #ifdef HAVE_STRCOLL_H
 	return strcoll(path1, path2);
 #else
