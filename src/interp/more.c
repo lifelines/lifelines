@@ -59,7 +59,6 @@ extern STRING nonind1,nonindx,nonfam1,nonrecx,nonnod1,nonnodx;
  *********************************************/
 
 /* alphabetical */
-static STRING allocsubbytes(STRING s, INT start, INT len);
 static STRING allocsubstring(STRING s, INT i, INT j);
 static void compute_pi(STRING pi, STRING sub);
 static INT ll_index(STRING str, STRING sub, INT num);
@@ -452,24 +451,6 @@ allocsubstring (STRING s, INT i, INT j)
 			numch=maxlen-startch;
 		return allocsubbytes(s, startch, numch);
 	}
-}
-/*==============================
- * allocsubbytes -- Return subbytestring
- *  assumes valid inputs
- *  returns alloc'd memory
- * start is 0-based start byte, len is # bytes
- * strictly at the byte level
- * client is responsible for codeset
- * Created: 2001/08/02 (Perry Rapp)
- *============================*/
-static STRING
-allocsubbytes (STRING s, INT start, INT num)
-{
-	STRING substr;
-	substr = stdalloc(num+1);
-	strncpy(substr, &s[start], num);
-	substr[num] = 0;
-	return substr;
 }
 /*===============================================
  * chooseindi -- Have user choose person from set

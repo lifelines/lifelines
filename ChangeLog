@@ -1,3 +1,10 @@
+2002-10-21 Perry Rapp
+
+	* .linesrc ChangeLog lines.cfg src/gedlib/lloptions.c
+	src/hdrs/llstdlib.h src/interp/more.c src/stdlib/stralloc.c:
+
+	Implement variables for config file.
+
 2002-10-20 Perry Rapp
 
 	* ChangeLog po/sv.po src/liflines/screen.c:
@@ -9,7 +16,8 @@
 	src/interp/alloc.c src/interp/builtin.c src/liflines/delete.c
 	src/liflines/screen.c:
 
-	Fix screen.c for crash. Pluralize some entries (_pl needs string literals).
+	Fix screen.c for crash.
+	Pluralize some entries (_pl needs string literals).
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp src/interp/interp.c
 

@@ -159,6 +159,7 @@ char *llstrncpyvf(char *dest, size_t n, int utf8, const char * fmt, va_list args
 char *llstrncpyvf(char *dest, size_t n, int utf8, const char * fmt, va_list args);
 
 /* stralloc.c */
+STRING allocsubbytes(STRING s, INT start, INT num);
 void free_array_strings(INT n, STRING * arr);
 STRING strconcat(STRING, STRING);
 void strfree(STRING *);

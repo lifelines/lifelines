@@ -4,7 +4,7 @@
 # As are blank lines
 # So all these lines are commented out...
 #
-# 2002/09/26
+# 2002/10/21
 #
 # All variables here are available to report programs
 # via the report language function getproperty, so, for
@@ -14,44 +14,48 @@
 # Similarly the built-in user name property:
 #user.name=myself
 
+# Set a variable for the lifelines root
+# Variables have % at start and end
+%llroot%=/home/user/LifeLines
+
 # Root path for utility/read command
-#InputPath=/home/user/LifeLines
+#InputPath=%llroot%
 
 # Place to store output of utility/save
-#LLARCHIVES=/home/user/LifeLines/Archives
+#LLARCHIVES=%llroot%/Archives
 
 # Path(s) to search for databases
-#LLDATABASES=/home/user/LifeLines/Databases
+#LLDATABASES=%llroot%/Databases
 
 # Path for new databases
-#LLNEWDBDIR=/home/user/LifeLines/Databases
+#LLNEWDBDIR=%llroot%/Databases
 
 # Path for report programs
-#LLPROGRAMS=/home/user/LifeLines/Reports
+#LLPROGRAMS=%llroot%/Reports
 
 # Path for report output
-#LLREPORTS=/home/user/LifeLines/Outputs
+#LLREPORTS=%llroot%/Outputs
 
 # Editor
 #LLEDITOR=/usr/local/vi
 
 # Path for global translation tables
-#TTDIR=/home/user/LifeLines/tt
+#TTDIR=%llroot%/tt
 
 # Path for exported translation tables (from a db)
-#LLTTEXPORT=/home/user/LifeLines/ttdb
+#LLTTEXPORT=%llroot%/ttdb
 
 # Refuse to execute system calls from report programs (default allowed)
 #DenySystemCalls=1
 
 # Log file for report errors (default none)
-#ReportLog=/home/user/LifeLines/reporterrs.log
+#ReportLog=%llroot%/reporterrs.log
 
 # Log file for crashes (default none)
-#CrashLog=/home/user/LifeLines/crashes.log
+#CrashLog=%llroot%/crashes.log
 
 # Log file for import errors (default errs.log)
-#ImportLog=/home/user/LifeLines/import.log
+#ImportLog=%llroot%/import.log
 
 # Delay (secs) between each report error on screen (default 0)
 #PerErrorDelay=4

@@ -33,6 +33,7 @@ extern STRING qSopt2long;
 /* alphabetical */
 static void copy_process(STRING dest, STRING src);
 static void create_notification_list_if_needed(void);
+static void expand_variables(STRING valbuf, INT max);
 static void free_optable(TABLE * ptab);
 static BOOLEAN load_config_file(STRING file, STRING * pmsg);
 static void send_notifications(void);
@@ -90,6 +91,35 @@ copy_process (STRING dest, STRING src)
 	}
 }
 /*==========================================
+ * expand_variables -- do any variable substitutions
+ *  (variables are option properties starting & ending with %
+ * Created: 2002/10/21, Perry Rapp
+ *========================================*/
+static void
+expand_variables (STRING valbuf, INT max)
+{
+	STRING start, end;
+	STRING ptr; /* remainder of valbuf to check */
+	ptr = valbuf;
+	while ((start=strchr(ptr, '%')) && (end=strchr(start+1, '%'))) {
+		STRING name = allocsubbytes(start, 0, end-start+1);
+		STRING value = valueof_str(f_global, name);
+		if (value) {
+			INT newlen = strlen(valbuf)-(end-start+1)+strlen(value);
+			if (newlen < max) {
+				STRING copy = strdup(valbuf);
+				if (start>valbuf)
+					strncpy(valbuf, copy, start-valbuf);
+				strcpy(start, value);
+				strcpy(start+strlen(value), copy+(end-valbuf+1));
+				stdfree(copy);
+			}
+		}
+		stdfree(name);
+		ptr = end+1;
+	}
+}
+/*==========================================
  * load_config_file -- read options in config file
  *  and load into table (f_global)
  * Created: 2001/02/04, Perry Rapp
@@ -102,6 +132,7 @@ load_config_file (STRING file, STRING * pmsg)
 	STRING oldval=NULL;
 	BOOLEAN there, failed, noesc;
 	char buffer[MAXLINELEN],valbuf[MAXLINELEN];
+	TABLE variables=0;
 	fp = fopen(file, LLREADTEXT);
 	if (!fp)
 		return TRUE; /* no config file, that is ok */
@@ -142,6 +173,7 @@ load_config_file (STRING file, STRING * pmsg)
 			llstrncpy(valbuf, ptr, sizeof(valbuf), uu8);
 		else
 			copy_process(valbuf, ptr);
+		expand_variables(valbuf, sizeof(valbuf));
 		val = valbuf;
 		insert_table_str(f_global, strsave(buffer), strsave(val));
 	}

@@ -79,3 +79,21 @@ free_array_strings (INT n, STRING * arr)
 		strfree(&arr[i]); /* frees & zeros pointer */
 	}
 }
+/*==============================
+ * allocsubbytes -- Return substring (by byte counts)
+ *  assumes valid inputs
+ *  returns alloc'd memory
+ * start is 0-based start byte, len is # bytes
+ * strictly at the byte level
+ * client is responsible for codeset
+ * Created: 2001/08/02 (Perry Rapp)
+ *============================*/
+STRING
+allocsubbytes (STRING s, INT start, INT num)
+{
+	STRING substr;
+	substr = stdalloc(num+1);
+	strncpy(substr, &s[start], num);
+	substr[num] = 0;
+	return substr;
+}
