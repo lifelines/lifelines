@@ -2126,7 +2126,7 @@ pa_handle_require (PACTX pactx, PNODE node)
 
 	tab = (TABLE)valueof_ptr(pactx->filetab, pactx->fullpath);
 	if (!tab) {
-		tab = create_table(FREEBOTH);
+		tab = create_table_old2(FREEBOTH);
 		insert_table_ptr(pactx->filetab, strsave(cur_pathinfo->fullpath), tab);
 	}
 

@@ -2211,7 +2211,7 @@ edit_place_table (void)
 static void
 edit_user_options (void)
 {
-	TABLE uopts = create_table(FREEBOTH);
+	TABLE uopts = create_table_old2(FREEBOTH);
 	get_db_options(uopts);
 	if (edit_valtab_from_db("VUOPT", &uopts, '=', _(qSuoperr), uopt_validate))
 		set_db_options(uopts);

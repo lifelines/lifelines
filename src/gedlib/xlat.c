@@ -407,7 +407,7 @@ xl_load_all_dyntts (CNSTRING ttpath)
 	}
 	if (!ttpath ||  !ttpath[0])
 		return;
-	f_dyntts = create_table(FREEBOTH);
+	f_dyntts = create_table_old2(FREEBOTH);
 	dirs = (STRING)stdalloc(strlen(ttpath)+2);
 	/* find directories in dirs & delimit with zeros */
 	chop_path(ttpath, dirs);

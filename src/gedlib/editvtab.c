@@ -106,7 +106,7 @@ edit_valtab_impl (TABLE *ptab, INT sep, STRING ermsg, STRING (*validator)(TABLE 
 
 	do_edit();
 	while (TRUE) {
-		tmptab = create_table(FREEBOTH);
+		tmptab = create_table_old2(FREEBOTH);
 		if (init_valtab_from_file(editfile, tmptab, ttmi, sep, &msg)) {
 			if (!validator || !(ptr = (*validator)(tmptab))) {
 				if (*ptab) destroy_table(*ptab);

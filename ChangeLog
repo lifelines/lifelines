@@ -4,6 +4,16 @@
 
 	More infrastructure for generics & mixed tables.
 
+	*ChangeLog src/gedlib/date.c src/gedlib/editvtab.c
+	src/gedlib/indiseq.c src/gedlib/init.c src/gedlib/keytonod.c
+	src/gedlib/lloptions.c src/gedlib/names.c src/gedlib/xlat.c
+	src/hdrs/table.h src/interp/builtin.c src/interp/interp.c
+	src/liflines/import.c src/liflines/llexec.c src/liflines/main.c
+	src/liflines/screen.c src/liflines/valgdcom.c
+	src/stdlib/proptbls.c src/stdlib/table.c src/tools/dbverify.c
+
+	Rename create_table to create_table_old2.
+
 2005-01-21 Perry Rapp
 
 	* ChangeLog src/gedlib/lloptions.c src/hdrs/generic.h

@@ -300,10 +300,10 @@ BOOLEAN
 init_lifelines_db (void)
 {
 	STRING emsg;
-	TABLE dbopts = create_table(FREEBOTH);
+	TABLE dbopts = create_table_old2(FREEBOTH);
 
-	tagtable = create_table(FREEKEY); /* values are same as keys */
-	placabbvs = create_table(FREEBOTH);
+	tagtable = create_table_old2(FREEKEY); /* values are same as keys */
+	placabbvs = create_table_old2(FREEBOTH);
 
 	init_valtab_from_rec("VPLAC", placabbvs, ':', &emsg);
 	init_valtab_from_rec("VUOPT", dbopts, '=', &emsg);
@@ -526,7 +526,7 @@ create_database (STRING dbpath)
 	/* first test that newdb props are legal */
 	STRING props = getoptstr("NewDbProps", 0);
 	if (props && props[0]) {
-		TABLE dbopts = create_table(FREEBOTH);
+		TABLE dbopts = create_table_old2(FREEBOTH);
 		STRING msg=0;
 		if (!init_valtab_from_string(props, dbopts, '=', &msg)) {
 			bterrno = BTERR_BADPROPS;
@@ -676,7 +676,7 @@ update_useropts (VPTR uparm)
 static void
 update_db_options (void)
 {
-	TABLE opttab = create_table(FREEBOTH);
+	TABLE opttab = create_table_old2(FREEBOTH);
 	STRING str=0;
 	get_db_options(opttab);
 

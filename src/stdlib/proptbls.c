@@ -63,7 +63,7 @@ add_dir_files_to_proplist (CNSTRING dir, SELECT_FNC selectfnc, LIST list)
 	INT n = scandir(dir, &programs, selectfnc, alphasort);
 	INT i;
 	for (i=0; i<n; ++i) {
-		TABLE table = create_table(FREEBOTH);
+		TABLE table = create_table_old2(FREEBOTH);
 		set_prop_dnum(table, 1, strsave("filename"), strsave(programs[i]->d_name));
 		set_prop_dnum(table, 2, strsave("dir"), strsave(dir));
 		stdfree(programs[i]);

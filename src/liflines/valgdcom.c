@@ -145,7 +145,7 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 	defline = 0;
 	curlev = 0;
 	clear_structures();
-	convtab = create_table(DONTFREE);
+	convtab = create_table_old2(DONTFREE);
 
 
 	rc = file_to_line(fp, xlat, &lev, &xref, &tag, &val, &msg);

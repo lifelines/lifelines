@@ -1433,7 +1433,7 @@ static void
 init_keywordtbl (void)
 {
 	INT i, j;
-	keywordtbl = create_table(DONTFREE);
+	keywordtbl = create_table_old2(DONTFREE);
 	/* Load GEDCOM keywords & values into keyword table */
 	for (i=0; i<ARRSIZE(gedkeys); ++i) {
 		j = gedkeys[i].value;

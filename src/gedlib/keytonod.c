@@ -535,7 +535,7 @@ create_cache (STRING name, INT dirsize)
 	caches, but right now (2003-10-08), tables do not expose a 
 	method to set their hash size.
 	*/
-	cacdata(cache) = create_table(FREEKEY);
+	cacdata(cache) = create_table_old2(FREEKEY);
 	cacfirstdir(cache) = caclastdir(cache) = NULL;
 	cacsizedir(cache) = 0;
 	cacmaxdir(cache) = dirsize;

@@ -92,6 +92,7 @@ struct tag_table {
  *********************************************/
 
 /* alphabetical */
+static TABLE create_table_impl(INT whattofree);
 static ENTRY fndentry(TABLE, CNSTRING);
 static void free_contents(ENTRY ent, INT whattofree);
 static void insert_table_impl(TABLE tab, CNSTRING key, UNION uval);
@@ -153,10 +154,10 @@ fndentry (TABLE tab, CNSTRING key)
 	return NULL;
 }
 /*=============================
- * create_table -- Create table
+ * create_table_impl -- Create table
  *===========================*/
-TABLE
-create_table (INT whattofree)
+static TABLE
+create_table_impl (INT whattofree)
 {
 	TABLE tab = (TABLE) stdalloc(sizeof(*tab));
 	INT i;
@@ -176,6 +177,17 @@ create_table (INT whattofree)
 	return tab;
 }
 /*=============================
+ * create_table_old2 -- Create table
+ * Caller specifies allocation strategy
+ * Will be obsoleted by using generics
+ * (in which entries themselves control their allocation)
+ *===========================*/
+TABLE
+create_table_old2 (INT whattofree)
+{
+	return create_table_impl(whattofree);
+}
+/*=============================
  * create_table_old -- Create table
  * Caller will specify whether keys or values are to be freed
  * at remove_table time
@@ -183,7 +195,7 @@ create_table (INT whattofree)
 TABLE
 create_table_old (void)
 {
-	return create_table(-1);
+	return create_table_impl(-1);
 }
 /*=============================
  * create_table_new -- Create table
@@ -193,7 +205,7 @@ create_table_old (void)
 TABLE
 create_table_new (void)
 {
-	return create_table(-2);
+	return create_table_impl(-2);
 }
 /*======================================
  * insert_table_impl -- Insert key & value into table
