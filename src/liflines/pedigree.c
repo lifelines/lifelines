@@ -275,7 +275,7 @@ add_dnodes (NODE node, INT gen, INT maxgen, INT * count, CANVASDATA canvas)
 	DISPNODE tn0, tn1, tn2;
 	NODE child, anode;
 	INT width = canvas->maxcol-2 - gen*6;
-	static char line[120], output[120]; /* must be same size */
+	static char line[MAXLINELEN], output[MAXLINELEN]; /* must be same size */
 	STRING ptr=output;
 	INT leader;
 	LIST list=NULL;

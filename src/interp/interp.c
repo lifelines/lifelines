@@ -1632,35 +1632,54 @@ traverse_leave:
  *  node:   current parsed node
  *  fmt:    printf style format string
  *  ...:    printf style varargs
+ * Prints error to the stdout-style curses window
+ * and to the report log (if one was specified in config file)
+ * Always includes line number of node, if available
+ * Only includes file name if not same as previous error
  *============================================*/
 void
 prog_error (PNODE node, STRING fmt, ...)
 {
 	INT num;
 	STRING rptfile;
-	char msg[320];
+	char msgf[320]=""; /* file msg */
+	char msg[320]; /* main msg */
+	static char prevfile[MAXPATHLEN]="";
 	va_list args;
 	if (rpt_cancelled)
 		return;
 	rptfile = getoptstr("ReportLog", NULL);
 	va_start(args, fmt);
 	if (node) {
+		STRING fname = ifname(node);
+		/* only display filename if different (or first error) */
+		if (!prevfile[0] || !eqstr(prevfile, fname)) {
+			if (progparsing)
+				snprintf(msgf, ARRSIZE(msgf)
+				, "\nParsing Error in \"%s\"", fname);
+			else
+				snprintf(msgf, ARRSIZE(msgf)
+					, "\nRuntime Error in: \"%s\"", fname);
+			llstrncpy(prevfile, ifname(node), ARRSIZE(prevfile));
+		}
+		/* But always display the line & error */
 		if (progparsing)
 			snprintf(msg, sizeof(msg)
-				, "\nParsing Error in \"%s\" at line %d: "
-				, ifname(node), iline(node));
+				, "\nParsing Error at line %d: ", iline(node));
 		else
 			snprintf(msg, sizeof(msg)
-				, "\nRuntime Error in \"%s\" at line %d: "
-				, ifname(node), iline(node));
+				, "\nRuntime Error at line %d: ", iline(node));
 	} else {
 		snprintf(msg, sizeof(msg), "\nAborting: ");
 	}
+	if (msgf[0])
+		llwprintf(msgf);
 	llwprintf(msg);
 	llvwprintf(fmt, args);
 	va_end(args);
-	llwprintf(".\n");
+	llwprintf(".");
 	++progerror;
+	/* if user specified a report error log (in config file) */
 	if (rptfile && rptfile[0]) {
 		FILE * fp = fopen(rptfile, LLAPPENDTEXT);
 		if (fp) {
@@ -1669,6 +1688,8 @@ prog_error (PNODE node, STRING fmt, ...)
 				get_current_lldate(&creation);
 				fprintf(fp, "\nReport Errors: %s", creation.datestr);
 			}
+			if (msgf[0])
+				fprintf(fp, msgf);
 			fprintf(fp, msg);
 			va_start(args, fmt);
 			vfprintf(fp, fmt, args);

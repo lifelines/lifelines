@@ -1,3 +1,13 @@
+2002-01-19 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog configure.in hdrs/version.h interp/interp.c
+	liflines/pedigree.c stdlib/mystring.c:
+
+	Fix infinite loop in !t mode (fix llstrncpy).
+	Fix !t mode to handle long lines (make buffer MAXLINELEN
+	in add_dnodes in pedigree.c). Change version to 3.0.8.
+
+
 2002-01-18 Matt Emmerton <memmerto@users.sourceforge.net>
 
 	* ChangeLog hdrs/gedcheck.h

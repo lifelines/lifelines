@@ -553,13 +553,13 @@ appendstr (char ** pdest, int * len, const char * src)
 {
 	int amount;
 	*pdest[0]=0; /* so client doesn't have to initialize */
-	if (*len<1) { *len=0; return; }
+	if (*len<=1) { *len=0; return; }
 
 	llstrncpy(*pdest, src, *len);
 	amount = strlen(*pdest);
 	*pdest += amount;
 	*len -= amount;
-	if (*len<1) *len=0;
+	if (*len<=1) *len=0;
 }
 /*==================================
  * appendstrf -- sprintf style append to string,
