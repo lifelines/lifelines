@@ -79,11 +79,16 @@ BOOLEAN
 init_lifelines_global (STRING * pmsg)
 {
 	STRING e;
-	STRING configfile = environ_determine_config_file();
 	STRING dirvars[] = { "LLPROGRAMS", "LLREPORTS", "LLARCHIVES"
 		, "LLDATABASES", "LLNEWDBDIR" };
 	INT i;
+	STRING configfile = getenv("LLCONFIGFILE");
+
 	*pmsg = NULL;
+
+	if (!configfile || !configfile[0])
+		configfile = environ_determine_config_file();
+	
 	if (!init_lifelines_options(configfile, pmsg))
 		return FALSE;
 #if ENABLE_NLS

@@ -1,3 +1,10 @@
+2002-05-11 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/init.c:
+
+	Add new environment variable LLCONFIGFILE to set path
+	for config file.
+
 2002-05-10 Perry Rapp <puddle@users.sourceforge.net>
 
 	* .linesrc ChangeLog lines.cfg gedlib/init.c hdrs/win32/curses.h
