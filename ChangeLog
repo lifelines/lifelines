@@ -1,5 +1,10 @@
 2000-12-31 Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* btree/opnbtree.c liflines/main.c: Use POSIX S_ISREG() and
+	S_ISDIR() macros instead of S_IFREG and S_IFDIR flags to test
+	result from stat().  Required to get this to compile with -ansi on
+	RedHat Linux 6.2.
+	
 	* interp/Makefile.am: Remove special CFLAGS setting, as using -O2
 	on pvalue.c no longer trigger compiler bug.  Tested using gcc
 	2.95.

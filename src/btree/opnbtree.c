@@ -103,7 +103,7 @@ openbtree (STRING dir,          /* btree base dir */
 			return NULL;
 		}
 	}
-	if (stat(dir, &sbuf) || !sbuf.st_mode&S_IFDIR) {
+	if (stat(dir, &sbuf) || !S_ISDIR(sbuf.st_mode)) {
 		bterrno = BTERRNOBTRE;
 		return NULL;
 	}
@@ -116,7 +116,7 @@ openbtree (STRING dir,          /* btree base dir */
 			return NULL;
 		}
 	}
-	if (stat(scratch, &sbuf) || !sbuf.st_mode&S_IFREG) {
+	if (stat(scratch, &sbuf) || !S_ISREG(sbuf.st_mode)) {
 		bterrno = BTERRKFILE;
 		return NULL;
 	}

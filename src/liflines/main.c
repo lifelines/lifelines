@@ -241,7 +241,7 @@ main (INT argc,
 		KEYFILEX kfilex;
 		struct stat sbuf;
 		sprintf(scratch, "%s/key", readpath);
-		if (stat(scratch, &sbuf) || !sbuf.st_mode&S_IFREG) {
+		if (stat(scratch, &sbuf) || !S_ISREG(sbuf.st_mode)) {
 			llwprintf("Database error -- ");
 			llwprintf("could not open, read or write the key file.");
 			goto finish;
