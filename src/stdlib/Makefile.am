@@ -15,7 +15,7 @@ assert.o: ../hdrs/standard.h
 assert.o: ../hdrs/mystring.h
 double.o: ../hdrs/standard.h
 double.o: ../hdrs/mystring.h
-environ.o: ../hdrs/sys_inc.h ../hdrs/stdlib.h
+environ.o: ../hdrs/sys_inc.h ../hdrs/llstdlib.h
 llstrcmp.o: ../hdrs/mystring.h
 memalloc.o: ../hdrs/standard.h
 memalloc.o: ../hdrs/mystring.h
