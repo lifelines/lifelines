@@ -256,7 +256,7 @@ void free_node(NODE);
 void free_nodes(NODE);
 void free_string_list(LIST list);
 void free_temp_node_tree(NODE);
-STRING full_value(NODE);
+STRING full_value(NODE, STRING sep);
 STRING generic_to_list_string(NODE node, STRING key, INT len, STRING delim, RFMT rfmt);
 ZSTR get_cache_stats_fam(void);
 ZSTR get_cache_stats_indi(void);
@@ -718,7 +718,7 @@ Perry, 2002.06.24
 		while (__node && nestr(tag, ntag(__node)))\
 			__node = nsibling(__node);\
 		if (__node == NULL) break;\
-		__value = value = full_value(__node);/*OBLIGATION*/\
+		__value = value = full_value(__node, "\n");/*OBLIGATION*/\
 		node = __node;\
 		{
 #define ENDTAGVALUES \

@@ -4,6 +4,11 @@
 	 docs/ll-reportmanual.pdf docs/ll-reportmanual.txt
 
 	 clean up formatting of report manual
+
+	* ChangeLog src/gedlib/misc.c src/hdrs/gedcom.h
+
+	Fix fornodes (FORTAGVALUES) to get CONC & CONT both.
+	(sf.net bug#696779)
    
 2003-03-03 Perry Rapp
 

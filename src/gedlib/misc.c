@@ -34,6 +34,7 @@
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
+#include "zstr.h"
 
 /*========================================
  * addat -- Add @'s to both ends of string
@@ -148,45 +149,40 @@ val_to_sex (NODE node)
 	return SEX_UNKNOWN;
 }
 /*====================================================
- * full_value -- Return value of node, with CONT lines
+ * full_value -- Return value of node, with CONC & CONT lines
+ * (sep is used before CONT lines, eg, "\n")
+ * heap-allocated string is returned
  *==================================================*/
 STRING
-full_value (NODE node)
+full_value (NODE node, STRING sep)
 {
-	NODE cont;
+	NODE child;
 	INT len = 0;
-	STRING p, q, str;
+	ZSTR zstr = 0;
+	STRING str = 0;
 	if (!node) return NULL;
-	if ((p = nval(node))) len += strlen(p) + 1;
-	cont = nchild(node);
-	while (cont && eqstr("CONT", ntag(cont))) {
-		if ((p = nval(cont)))
-			len += strlen(p) + 1;
-		else
-			len++;
-		cont = nsibling(cont);
+	if (nval(node))
+		zstr = zs_news(nval(node));
+	else
+		zstr = zs_new();
+	for (child = nchild(node); child	; child = nsibling(child)) {
+		if (nchild(child) || !ntag(child)) break;
+		if (eqstr("CONC", ntag(child))) {
+			if (nval(child)) {
+				zs_apps(zstr, nval(child));
+			}
+		} else if (eqstr("CONT", ntag(child))) {
+			if (sep) {
+				zs_apps(zstr, sep);
+			}
+			if (nval(child)) {
+				zs_apps(zstr, nval(child));
+			}
+		} else {
+			break;
+		}
 	}
-	if (len == 0) return NULL;
-#ifdef DEBUG
-	llwprintf("full_value: len = %d\n", len);
-#endif
-	str = p = (STRING) stdalloc(len + 1);
-	if ((q = nval(node))) {
-		sprintf(p, "%s\n", q);
-		p += strlen(p);
-	}
-	cont = nchild(node);
-	while (cont && eqstr("CONT", ntag(cont))) {
-		if ((q = nval(cont)))
-			sprintf(p, "%s\n", q);
-		else
-			sprintf(p, "\n");
-		p += strlen(p);
-		cont = nsibling(cont);
-	}
-	*(p - 1) = 0;
-#ifdef DEBUG
-	llwprintf("full_value: str = %s\n", str);
-#endif
+	str = strdup(zs_str(zstr));
+	zs_free(&zstr);
 	return str;
 }
