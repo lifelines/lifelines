@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Lifelines 3.0.24\n"
+"Project-Id-Version: Lifelines 3.0.25\n"
 "POT-Creation-Date: 2003-02-10 23:29-0500\n"
-"PO-Revision-Date: 2003-02-12 15:00+0200\n"
+"PO-Revision-Date: 2003-03-03 10:15+0200\n"
 "Last-Translator: Patrick Texier <p.texier@orsennes.com>\n"
 "Language-Team: Not a language team\n"
 "MIME-Version: 1.0\n"
@@ -1446,7 +1446,7 @@ msgstr "LifeLines %s - BdD Généalogique et Système de Programmation"
 
 #: src/gedlib/messages.c:418
 msgid "Copyright(c) 1991 to 1996, by T. T. Wetmore IV"
-msgstr "Copyright(c) de 1991 à 1996, par T. T. Wetmore IV"
+msgstr "Copyright © de 1991 à 1996, par T. T. Wetmore IV"
 
 #: src/gedlib/messages.c:419
 #, c-format
@@ -1970,7 +1970,7 @@ msgstr "de %1 à %2"
 
 #: src/gedlib/messages.c:586
 msgid "from %1 to %2"
-msgstr "de 1% à 2%"
+msgstr "de %1 à %2"
 
 #: src/gedlib/messages.c:587
 msgid "bef %1"
@@ -1994,7 +1994,7 @@ msgstr "ent %1 et %2"
 
 #: src/gedlib/messages.c:592
 msgid "between %1 and %2"
-msgstr "entre %1 et 2%"
+msgstr "entre %1 et %2"
 
 #: src/gedlib/messages.c:595
 msgid "B.C."
@@ -3294,8 +3294,7 @@ msgstr "Poursuivre quand même ?"
 
 #: src/liflines/import.c:183
 msgid "No current internal codeset, so no codeset conversion can be done"
-msgstr ""
-"Pas de jeu de caract. interne, aucune conversion ne peut être effectuée"
+msgstr "Pas de jeu de car. interne, aucune conversion ne peut être effectuée"
 
 #: src/liflines/import.c:184
 msgid "Proceed without codeset conversion ?"
@@ -3337,8 +3336,8 @@ msgstr[1] "Évènements"
 #: src/liflines/loadsave.c:107
 msgid "Other"
 msgid_plural "Others"
-msgstr[0] "Autres enreg."
-msgstr[1] "Autres enreg."
+msgstr[0] "Autre enregistrement"
+msgstr[1] "Autres enregistrements"
 
 #: src/liflines/loadsave.c:149
 msgid "Checking GEDCOM file for errors.\n"

@@ -1,3 +1,9 @@
+2003-03-03 Perry Rapp
+
+	* ChangeLog po/fr.po
+
+	Update to French message catalog from Patrick Texier.
+
 2003-03-02 Perry Rapp
 
 	* ChangeLog src/interp/more.c
