@@ -1,9 +1,17 @@
 2002-01-18 Matt Emmerton <memmerto@users.sourceforge.net>
 
+	* ChangeLog hdrs/gedcheck.h
+
+	Change CHAR typedef from char to unsigned char.  Remove check 
+	for elem->type >= 0 in KNOWNTYPE macro since this is always
+	true for unsigned chars.
+
+2002-01-18 Matt Emmerton <memmerto@users.sourceforge.net>
+
 	* ChangeLog hdrs/interp.h interp/pvalue.c
 
 	Change ptag.type from 'char' to 'unsigned char'.  Remove check
-	check for pvalue->type >= 0 since this is always true for
+	for pvalue->type >= 0 since this is always true for
 	unsigned chars.
 
 2002-01-18 Perry Rapp <puddle@users.sourceforge.net>

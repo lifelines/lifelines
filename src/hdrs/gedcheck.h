@@ -46,9 +46,9 @@
 #define BE_MALE   4
 #define BE_FEMALE 8
 
-#define KNOWNTYPE(t) ((Type(t)>=INDI_REC) && (Type(t)<=OTHR_REC))
+#define KNOWNTYPE(t) ((Type(t)<=OTHR_REC))
 
-typedef char CHAR;
+typedef unsigned char CHAR;
 
 typedef struct {
 	CHAR type;
