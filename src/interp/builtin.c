@@ -134,7 +134,6 @@ __getindi (PNODE node,
            BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
-	CACHEEL cel;
 	STRING key, msg = (STRING) "Identify person for program:";
 	PVALUE val = NULL;
 	if (!iistype(arg, IIDENT)) {
@@ -150,11 +149,12 @@ __getindi (PNODE node,
 		}
 		msg = (STRING) pvalue(val);
 	}
-	assign_iden(stab, iident(arg), create_pvalue(PINDI, NULL));
+	assign_iden(stab, iident(arg), create_pvalue_from_indi(NULL));
 	key = ask_for_indi_key(msg, NOCONFIRM, DOASK1);
-	if (!key) return NULL;
-	cel = key_to_indi_cacheel(key);
-	assign_iden(stab, iident(arg), create_pvalue(PINDI, cel));
+	if (key) {
+		assign_iden(stab, iident(arg)
+			, create_pvalue_from_indi_key(key));
+	}
 	if (val) delete_pvalue(val);
 	return NULL;
 }
@@ -168,7 +168,6 @@ __getfam (PNODE node,
           BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
-	CACHEEL cel = NULL;
 	NODE fam;
 	if (!iistype(arg, IIDENT)) {
 		prog_error(node, "1st arg to getfam must be a variable");
@@ -178,8 +177,7 @@ __getfam (PNODE node,
 	assign_iden(stab, iident(arg), NULL);
 	fam = ask_for_fam("Enter a spouse from family.",
 	    "Enter a sibling from family.");
-	if (fam) cel = fam_to_cacheel(fam);
-	assign_iden(stab, iident(arg), create_pvalue(PFAM, cel));
+	assign_iden(stab, iident(arg), create_pvalue_from_fam(fam));
 	return NULL;
 }
 /*=================================================+
@@ -448,7 +446,7 @@ __husband (PNODE node,
 		prog_error(node, "1st arg to husband must be a family");
 		return NULL;
 	}
-	return create_pvalue(PINDI, (VPTR)indi_to_cacheel(fam_to_husb(fam)));
+	return create_pvalue_from_indi(fam_to_husb(fam));
 }
 /*===================================+
  * __wife -- Find first wife of family
@@ -465,7 +463,7 @@ __wife (PNODE node,
 		prog_error(node, "1st arg to wife must be a family");
 		return NULL;
 	}
-	return create_pvalue(PINDI, (VPTR)indi_to_cacheel(fam_to_wife(fam)));
+	return create_pvalue_from_indi(fam_to_wife(fam));
 }
 /*==========================================+
  * __firstchild -- Find first child of family
@@ -482,7 +480,7 @@ __firstchild (PNODE node,
 		prog_error(node, "arg to firstchild must be a family");
 		return NULL;
 	}
-	return create_pvalue(PINDI, (VPTR)indi_to_cacheel(fam_to_first_chil(fam)));
+	return create_pvalue_from_indi(fam_to_first_chil(fam));
 }
 /*========================================+
  * __lastchild -- Find last child of family
@@ -499,7 +497,7 @@ __lastchild (PNODE node,
 		prog_error(node, "arg to firstchild must be a family");
 		return NULL;
 	}
-	return create_pvalue(PINDI, (VPTR)indi_to_cacheel(fam_to_last_chil(fam)));
+	return create_pvalue_from_indi(fam_to_last_chil(fam));
 }
 /*=================================+
  * __marr -- Find marriage of family
@@ -658,8 +656,8 @@ __fath (PNODE node,
 		prog_error(node, "arg to father must be a person");
 		return NULL;
 	}
-	if (!indi) return create_pvalue(PINDI, NULL);
-	return create_pvalue(PINDI, (VPTR)indi_to_cacheel(indi_to_fath(indi)));
+	if (!indi) return create_pvalue_from_indi(NULL);
+	return create_pvalue_from_indi(indi_to_fath(indi));
 }
 /*===============================+
  * __moth -- Find mother of person
@@ -675,8 +673,8 @@ __moth (PNODE node,
 		prog_error(node, "arg to mother must be a person");
 		return NULL;
 	}
-	if (!indi) return create_pvalue(PINDI, NULL);
-	return create_pvalue(PINDI, (VPTR)indi_to_cacheel(indi_to_moth(indi)));
+	if (!indi) return create_pvalue_from_indi(NULL);
+	return create_pvalue_from_indi(indi_to_moth(indi));
 }
 /*===========================================+
  * __parents -- Find parents' family of person
@@ -692,8 +690,8 @@ __parents (PNODE node,
 		prog_error(node, "arg to parents must be a person");
 		return NULL;
 	}
-	if (!indi) return create_pvalue(PFAM, NULL);
-	return create_pvalue(PFAM, (VPTR)fam_to_cacheel(indi_to_famc(indi)));
+	if (!indi) return create_pvalue_from_fam(NULL);
+	return create_pvalue_from_fam(indi_to_famc(indi));
 }
 /*==========================================+
  * __nextsib -- Find person's younger sibling
@@ -709,8 +707,8 @@ __nextsib (PNODE node,
 		prog_error(node, "arg to nextsib must be a person");
 		return NULL;
 	}
-	if (!indi) return create_pvalue(PINDI, NULL);
-	return create_pvalue(PINDI, (VPTR)indi_to_cacheel(indi_to_next_sib(indi)));
+	if (!indi) return create_pvalue_from_indi(NULL);
+	return create_pvalue_from_indi(indi_to_next_sib(indi));
 }
 /*========================================+
  * __prevsib -- Find person's older sibling
@@ -726,8 +724,8 @@ __prevsib (PNODE node,
 		prog_error(node, "arg to prevsib must be a person");
 		return NULL;
 	}
-	if (!indi) return create_pvalue(PINDI, NULL);
-	return create_pvalue(PINDI, (VPTR)indi_to_cacheel(indi_to_prev_sib(indi)));
+	if (!indi) return create_pvalue_from_indi(NULL);
+	return create_pvalue_from_indi(indi_to_prev_sib(indi));
 }
 /*========================================+
  * __d -- Return cardinal integer as string
@@ -2060,7 +2058,7 @@ __key (PNODE node,
 		prog_error(node, "1st arg to key is not a GEDCOM record");
 		return NULL;
 	}
-	cel = (CACHEEL) pvalue(val);
+	cel = get_cel_from_pvalue(val);
 	delete_pvalue(val);
 	if (!cel) return create_pvalue(PSTRING, NULL);
 	if (inext(arg)) {
@@ -2093,12 +2091,12 @@ __rot (PNODE node,
 		prog_error(node, "the arg to root is not a record");
 		return NULL;
 	}
-	if (!is_pvalue_cel(val)) {
+	if (!is_record_pvalue(val)) {
 		*eflg = TRUE;
 		prog_error(node, "the arg to root must be a record");
 		return NULL;
 	}
-	cel = (CACHEEL) pvalue(val);
+	cel = get_cel_from_pvalue(val);
 	if (cnode(cel)) {
 		set_pvalue(val, PGNODE, (VPTR)cnode(cel));
 		return val;
@@ -2873,7 +2871,8 @@ __indi (PNODE node,
  *		val = create_pvalue(PINDI, NULL);
  *	if (rec) stdfree(rec);
  */
- 	val = create_pvalue(PINDI, (VPTR)qkey_to_indi_cacheel(scratch));
+	val = create_pvalue_from_indi_key(scratch);
+/* 	val = create_pvalue(PINDI, (VPTR)qkey_to_indi_cacheel(scratch)); */
 	return val;
 }
 /*===========================+
@@ -2935,7 +2934,7 @@ eval_indi (PNODE expr,
 #endif
 
 	if (*eflg || !val) return NULL;
-	cel = (CACHEEL) pvalue(val);
+	cel = get_cel_from_pvalue(val);
 	delete_pvalue(val);
 	if (!cel) return NULL;
 	if (!cnode(cel)) cel = key_to_indi_cacheel(ckey(cel));
@@ -2960,7 +2959,7 @@ eval_fam (PNODE expr,
 	CACHEEL cel;
 	PVALUE val = eval_and_coerce(PFAM, expr, stab, eflg);
 	if (*eflg || !val) return NULL;
-	cel = (CACHEEL) pvalue(val);
+	cel = get_cel_from_pvalue(val);
 	delete_pvalue(val);
 	if (!cel) return NULL;
 	if (!cnode(cel)) cel = key_to_fam_cacheel(ckey(cel));

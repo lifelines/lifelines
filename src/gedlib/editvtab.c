@@ -37,7 +37,7 @@
 #include "liflines.h"
 #include "screen.h"
 
-extern STRING aredit;
+extern STRING aredit, dataerr;
 
 /*==============================================
  * edit_valtab -- Edit value table from database
@@ -54,7 +54,10 @@ edit_valtab (STRING key,        /* value table key */
 
 	unlink(editfile);
 
-	retrieve_file(key, editfile);
+	if (retrieve_file(key, editfile) == RECORD_ERROR) {
+		mprintf_error(dataerr);
+		return FALSE;
+	}
 	do_edit();
 	while (TRUE) {
 		tmptab = create_table();

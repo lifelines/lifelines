@@ -74,19 +74,21 @@ addfile (BTREE btree,   /* btree to add to */
 }
 /*===================================================
  * getfile -- Get record from btree and write to file
+ * BTREE btree: database btree
+ * RKEY rkey:   record key
+ * STRING file: file name
+ * returns RECORD_SUCCESS, RECORD_NOT_FOUND, RECORD_ERROR
  *=================================================*/
-BOOLEAN
-getfile (BTREE btree,    /* btree to get from */
-         RKEY rkey,      /* key of record */
-         STRING file)    /* file to write to */
+RECORD_STATUS
+write_record_to_file (BTREE btree, RKEY rkey, STRING file)
 {
 	FILE *fp;
 	INT len;
 	RECORD record = getrecord(btree, rkey, &len);
-	if (record == NULL) return FALSE;
+	if (record == NULL) return RECORD_NOT_FOUND;
 	if ((fp = fopen(file, LLWRITEBINARY)) == NULL) {
 		stdfree(record);
-		return FALSE;
+		return RECORD_ERROR;
 	}
 	/* WARNING: with WIN32 writing in TEXT mode, more characters
 	 * will be written than expected because of conversion of
@@ -95,9 +97,9 @@ getfile (BTREE btree,    /* btree to get from */
 	if (fwrite(record, len, 1, fp) != 1) {
 		stdfree(record);
 		fclose(fp);
-		return FALSE;
+		return RECORD_ERROR;
 	}
 	stdfree(record);
 	fclose(fp);
-	return TRUE;
+	return RECORD_SUCCESS;
 }

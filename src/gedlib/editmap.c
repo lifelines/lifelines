@@ -17,7 +17,7 @@
 #define NOMAPS 6
 
 extern STRING map_keys[];
-extern STRING cmperr, aredit, ronlye;
+extern STRING cmperr, aredit, ronlye, dataerr;
 
 /*==============================================
  * edit_mapping -- Edit character mapping record
@@ -40,8 +40,14 @@ edit_mapping (INT code) /* map code */
 
 	unlink(editfile);
 
-	if (tran_tables[code])
-		retrieve_file(map_keys[code], editfile);
+	if (tran_tables[code]) {
+		INT rtn;
+		rtn = retrieve_file(map_keys[code], editfile);
+		if (rtn == RECORD_ERROR) {
+			mprintf_error(dataerr);
+			return FALSE;
+		}
+	}
 	do_edit();
 	while (TRUE) {
 		tt = init_map_from_file(editfile, code, &err);

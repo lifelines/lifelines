@@ -1,3 +1,15 @@
+2001-03-18 Perry Rapp <puddle@users.sourceforge.net>
+
+	* btree/file.c gedlib/editmap.c gedlib/editvtab.c gedlib/init.c
+	gedlib/intrface.c gedlib/messages.c gedlib/valtable.c
+	hdrs/btree.h hdrs/gedcom.h hdrs/interp.h hdrs/standard.h
+	interp/builtin.c interp/interp.c interp/more.c interp/pvalue.c
+	liflines/main.c stdlib/environ.c tools/btedit.c
+	tools/dbverify.c:
+	Isolated PINDI etc storage as CACHEELs into one place.
+	Windows bugfix: notepad adding .txt to temp file
+	Windows bugfix: fread not reading full text because of CR/LF conversion
+
 2001-03-17 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/keytonod.c hdrs/cache.h hdrs/interp.h hdrs/mystring.h

@@ -691,6 +691,7 @@ interp_children (PNODE node,
 	INT nchil;
 	CACHEEL fcel, cel;
 	INTERPTYPE irc;
+	PVALUE val;
 	NODE fam = (NODE) eval_fam(iloopexp(node), stab, &eflg, &fcel);
 	if (eflg) {
 		prog_error(node, "1st arg to children must be a family");
@@ -703,9 +704,10 @@ interp_children (PNODE node,
 	if (!fam) return INTOKAY;
 	lock_cache(fcel);
 	FORCHILDREN(fam, chil, nchil)
-		insert_pvtable(stab, ichild(node), PINDI,
-		    (cel = indi_to_cacheel(chil)));
+		val = create_pvalue_from_indi(chil);
+		insert_pvtable_pvalue(stab, ichild(node), val);
 		insert_pvtable(stab, inum(node), PINT, (VPTR)nchil);
+		cel = get_cel_from_pvalue(val);
 		lock_cache(cel);
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		unlock_cache(cel);
@@ -741,6 +743,7 @@ interp_spouses (PNODE node,
 	INT nspouses;
 	CACHEEL icel, scel, fcel;
 	INTERPTYPE irc;
+	PVALUE sval, fval;
 	NODE indi = (NODE) eval_indi(iloopexp(node), stab, &eflg, &icel);
 	if (eflg) {
 		prog_error(node, "1st arg to spouses must be a person");
@@ -753,10 +756,12 @@ interp_spouses (PNODE node,
 	if (!indi) return TRUE;
 	lock_cache(icel);
 	FORSPOUSES(indi, spouse, fam, nspouses)
-		insert_pvtable(stab, ispouse(node), PINDI,
-		    (VPTR) (scel = indi_to_cacheel(spouse)));
-		insert_pvtable(stab, ifamily(node), PFAM,
-		    (VPTR) (fcel = fam_to_cacheel(fam)));
+		sval = create_pvalue_from_indi(spouse);
+		insert_pvtable_pvalue(stab, ispouse(node), sval);
+		fval = create_pvalue_from_fam(fam);
+		insert_pvtable_pvalue(stab, ifamily(node), fval);
+		scel = get_cel_from_pvalue(sval);
+		fcel = get_cel_from_pvalue(fval);
 		lock_cache(scel);
 		lock_cache(fcel);
 		insert_pvtable(stab, inum(node), PINT, (VPTR)nspouses);

@@ -403,7 +403,7 @@ __chooseindi (PNODE node,
 	if (!seq || length_indiseq(seq) < 1) return NULL;
 	indi = nztop(choose_from_indiseq(seq, DOASK1, ifone, notone));
 	if (!indi) return NULL;
-	return create_pvalue(PINDI, (VPTR)indi_to_cacheel(indi));
+	return create_pvalue_from_indi(indi);
 }
 /*================================================+
  * choosesubset -- Have user choose subset from set
@@ -449,28 +449,26 @@ __choosechild (PNODE node,
 		prog_error(node, "the arg to choosechild must be a person or family");
 		return NULL;
 	}
-	cel = (CACHEEL) pvalue(val);
+	cel = get_cel_from_pvalue(val);
 	delete_pvalue(val);
-	if (!cel) return create_pvalue(PINDI, (VPTR)NULL);
+	if (!cel) return create_pvalue_from_indi(NULL);
 	key = ckey(cel);
 	if (*key == 'I') {
 		indi = key_to_indi(key);
 		seq = indi_to_children(indi);
 		if (!seq || length_indiseq(seq) < 1)
-			return create_pvalue(PINDI, (VPTR)NULL);
+			return create_pvalue_from_indi(NULL);
 		indi = nztop(choose_from_indiseq(seq, DOASK1, ifone, notone));
 		remove_indiseq(seq, FALSE);
-		if (!indi) return create_pvalue(PINDI, (VPTR)NULL);
-		return create_pvalue(PINDI, (VPTR)indi_to_cacheel(indi));
+		return create_pvalue_from_indi(indi); /* indi may be NULL */
 	} else if (*key == 'F') {
 		fam = key_to_fam(key);
 		seq = fam_to_children(fam);
 		if (!seq || length_indiseq(seq) < 1)
-			return create_pvalue(PINDI, (VPTR)NULL);
+			return create_pvalue_from_indi(NULL);
 		indi = nztop(choose_from_indiseq(seq, DOASK1, ifone, notone));
 		remove_indiseq(seq, FALSE);
-		if (!indi) return create_pvalue(PINDI, (VPTR)NULL);
-		return create_pvalue(PINDI, (VPTR)indi_to_cacheel(indi));
+		return create_pvalue_from_indi(indi); /* indi may be NULL */
 	}
 	*eflg = TRUE;
 	prog_error(node, "major error in choosechild");
@@ -493,11 +491,10 @@ __choosespouse (PNODE node,
 	}
 	seq = indi_to_spouses(indi);
 	if (!seq || length_indiseq(seq) < 1)
-		return create_pvalue(PINDI, (VPTR)NULL);
+		return create_pvalue_from_indi(NULL);
 	indi = nztop(choose_from_indiseq(seq, DOASK1, ifone, notone));
 	remove_indiseq(seq, FALSE);
-	if (!indi) return create_pvalue(PINDI, (VPTR)NULL);
-	return create_pvalue(PINDI, (VPTR)indi_to_cacheel(indi));
+	return create_pvalue_from_indi(indi); /* indi may be NULL */
 }
 /*==============================================+
  * choosefam -- Have user choose family of person
@@ -516,11 +513,10 @@ __choosefam (PNODE node,
 	}
 	seq = indi_to_families(indi, TRUE);
 	if (!seq || length_indiseq(seq) < 1)
-		return create_pvalue(PFAM, (VPTR)NULL);
+		return create_pvalue_from_fam(NULL);
 	fam = nztop(choose_from_indiseq(seq, DOASK1, ifone, notone));
 	remove_indiseq(seq, FALSE);
-	if (!fam) return create_pvalue(PFAM, (VPTR)NULL);
-	return create_pvalue(PFAM, (VPTR)fam_to_cacheel(fam));
+	return create_pvalue_from_fam(fam); /* fam may be NULL */
 }
 /*===================================================+
  * menuchoose -- Have user choose from list of options
@@ -604,29 +600,6 @@ __system (PNODE node,
 	delete_pvalue(val);
 	return NULL;
 }
-/*=====================================================
- * get_indi_pvalue_from_keynum -- Return indi as pvalue
- *  helper for __firstindi etc
- *  handles i==0
- *===================================================*/
-static PVALUE
-get_indi_pvalue_from_keynum (INT i)
-{
-	static char key[10];
-	NODE indi;
-	PVALUE val;
-	STRING record;
-	INT len;
-	if (!i)
-		return create_pvalue(PINDI, (VPTR)NULL);
-	sprintf(key, "I%d", i);
-	ASSERT((record = retrieve_record(key, &len)));
-	ASSERT((indi = string_to_node(record)));
-	stdfree(record);
-	val = create_pvalue(PINDI, (VPTR)indi_to_cacheel(indi));
-	free_nodes(indi);/*yes*/
-	return val;
-}
 /*============================================+
  * firstindi -- Return first person in database
  *   usage: firstindi() -> INDI
@@ -637,7 +610,7 @@ __firstindi (PNODE node,
              BOOLEAN *eflg)
 {
 	*eflg = FALSE;
-	return get_indi_pvalue_from_keynum(xref_firsti());
+	return create_pvalue_from_indi_keynum(xref_firsti());
 }
 /*==========================================+
  * nextindi -- Return next person in database
@@ -656,11 +629,11 @@ __nextindi (PNODE node,
 		return NULL;
 	}
 	if (!indi)
-		return create_pvalue(PINDI, (VPTR)NULL);
+		return create_pvalue_from_indi_keynum(0);
 	strcpy(key, indi_to_key(indi));
 	i = atoi(&key[1]);
 	i = xref_nexti(i);
-	return get_indi_pvalue_from_keynum(i);
+	return create_pvalue_from_indi_keynum(i);
 }
 /*==============================================+
  * previndi -- Return previous person in database
@@ -679,11 +652,11 @@ __previndi (PNODE node,
 		return NULL;
 	}
 	if (!indi)
-		return create_pvalue(PINDI, (VPTR)NULL);
+		return create_pvalue_from_indi_keynum(0);
 	strcpy(key, indi_to_key(indi));
 	i = atoi(&key[1]);
 	i = xref_previ(i);
-	return get_indi_pvalue_from_keynum(i);
+	return create_pvalue_from_indi_keynum(i);
 }
 /*===========================================
  * lastindi -- Return last person in database
@@ -695,30 +668,7 @@ __lastindi (PNODE node,
             BOOLEAN *eflg)
 {
 	*eflg = FALSE;
-	return get_indi_pvalue_from_keynum(xref_lasti());
-}
-/*====================================================
- * get_fam_pvalue_from_keynum -- Return indi as pvalue
- *  helper for __firstfam etc
- *  handles i==0
- *==================================================*/
-static PVALUE
-get_fam_pvalue_from_keynum (INT i)
-{
-	static char key[10];
-	NODE fam;
-	PVALUE val;
-	STRING record;
-	INT len;
-	if (!i)
-		return create_pvalue(PFAM, (VPTR)NULL);
-	sprintf(key, "F%d", i);
-	ASSERT((record = retrieve_record(key, &len)));
-	ASSERT((fam = string_to_node(record)));
-	stdfree(record);
-	val = create_pvalue(PFAM, (VPTR)fam_to_cacheel(fam));
-	free_nodes(fam);/*yes*/
-	return val;
+	return create_pvalue_from_indi_keynum(xref_lasti());
 }
 /*===========================================+
  * firstfam -- Return first family in database
@@ -730,7 +680,7 @@ __firstfam (PNODE node,
             BOOLEAN *eflg)
 {
 	*eflg = FALSE;
-	return get_fam_pvalue_from_keynum(xref_firstf());
+	return create_pvalue_from_fam_keynum(xref_firstf());
 }
 /*=========================================+
  * nextfam -- Return next family in database
@@ -749,11 +699,11 @@ __nextfam (PNODE node,
 		return NULL;
 	}
 	if (!fam)
-		return create_pvalue(PFAM, (VPTR)NULL);
+		return create_pvalue_from_fam_keynum(0);
 	strcpy(key, fam_to_key(fam));
 	i = atoi(&key[1]);
 	i = xref_nextf(i);
-	return get_fam_pvalue_from_keynum(i);
+	return create_pvalue_from_fam_keynum(i);
 }
 /*=============================================+
  * prevfam -- Return previous family in database
@@ -772,11 +722,11 @@ __prevfam (PNODE node,
 		return NULL;
 	}
 	if (!fam)
-		return create_pvalue(PFAM, (VPTR)NULL);
+		return create_pvalue_from_fam_keynum(0);
 	strcpy(key, fam_to_key(fam));
 	i = atoi(&key[1]);
 	i = xref_prevf(i);
-	return get_fam_pvalue_from_keynum(i);
+	return create_pvalue_from_fam_keynum(i);
 }
 /*=========================================+
  * lastfam -- Return last family in database
@@ -788,7 +738,7 @@ __lastfam (PNODE node,
            BOOLEAN *eflg)
 {
 	*eflg = FALSE;
-	return get_fam_pvalue_from_keynum(xref_lastf());
+	return create_pvalue_from_fam_keynum(xref_lastf());
 }
 /*=============================================+
  * getrecord -- Read GEDCOM record from database
@@ -928,7 +878,7 @@ __lock (PNODE node,
 		prog_error(node, "the arg to lock must be a person or family");
 		return NULL;
 	}
-	cel = (CACHEEL) pvalue(val);
+	cel = get_cel_from_pvalue(val);
 	delete_pvalue(val);
 	if (cel) lock_cache(cel);
 	return NULL;
@@ -950,7 +900,7 @@ __unlock (PNODE node,
 		prog_error(node, "the arg to unlock must be a person or family");
 		return NULL;
 	}
-	cel = (CACHEEL) pvalue(val);
+	cel = get_cel_from_pvalue(val);
 	delete_pvalue(val);
 	if (cel) unlock_cache(cel);
 	return NULL;

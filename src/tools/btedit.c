@@ -73,8 +73,12 @@ main (int argc,
 		printf("could not open btree: %s\n", dbname);
 		return (1);
 	}
-	if (!getfile(btree, str2rkey(key), "btedit.tmp")) {
-		printf("there is no record with key: %s\n", key);
+	rtn = write_record_to_file(btree, str2rkey(key), "btedit.tmp");
+	if (rtn != RECORD_SUCCESS) {
+		if (rtn == RECORD_NOT_FOUND)
+			printf("there is no record with key: %s\n", key);
+		else
+			printf("error accessing record: %s\n", key);
 		closebtree(btree);
 		return (0);
 	}

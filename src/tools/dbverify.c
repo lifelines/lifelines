@@ -781,6 +781,7 @@ main (int argc,
 {
 	char *flags, *dbname;
 	char *ptr;
+	char * msg;
 
 	validate_errs();
 
@@ -808,7 +809,10 @@ main (int argc,
 		default: print_usage(); return (1); 
 		}
 	}
-	init_lifelines_global();
+	if (!init_lifelines_global(&msg)) {
+		printf("%s\n", msg);
+		return (1);
+	}
 	if (!(BTR = openbtree(dbname, FALSE, TRUE))) {
 		printf("could not open database: %s\n", dbname);
 		return (1);

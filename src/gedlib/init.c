@@ -70,17 +70,24 @@ static STRING getsaveenv(STRING key);
 /*=================================
  * init_lifelines_global -- Initialize LifeLines
  *  before db opened
+ * STRING * pmsg: heap-alloc'd error string if fails
  *===============================*/
-void
-init_lifelines_global (void)
+BOOLEAN
+init_lifelines_global (STRING * pmsg)
 {
 	STRING e;
+	*pmsg = NULL;
 	read_lloptions_from_config();
 	if (lloptions.lleditor[0])
 		e = lloptions.lleditor;
 	else
 		e = environ_determine_editor(PROGRAM_LIFELINES);
-	editfile = strsave(environ_determine_tempfile());
+	editfile = environ_determine_tempfile();
+	if (!editfile) {
+		*pmsg = strsave("Error creating temp file");
+		return FALSE;
+	}
+	editfile = strsave(editfile );
 	editstr = (STRING) stdalloc(strlen(e) + strlen(editfile) + 2);
 	sprintf(editstr, "%s %s", e, editfile);
 	/* read dirs from env if lacking */
@@ -112,6 +119,7 @@ init_lifelines_global (void)
 		changeoptstr(&lloptions.lldatabases, strsave("."));
 	if (!lloptions.llnewdbdir[0])
 		changeoptstr(&lloptions.llnewdbdir, strsave("."));
+	return TRUE;
 }
 /*=================================
  * init_lifelines_db -- Initialization after db opened

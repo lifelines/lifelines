@@ -50,7 +50,9 @@ environ_determine_tempfile (void)
 	if (ISNULL(e)) e = "\\temp"; /* fallback is \temp */
 	strcpy(win32_tempfile, e);
 	strcat(win32_tempfile, "\\lltmpXXXXXX");
-	return mktemp(win32_tempfile);
+	mktemp(win32_tempfile);
+	strcat(win32_tempfile, "."); /* so notepad doesn't add .txt */
+	return win32_tempfile;
 #else
 	static char unix_tempfile[] = "/tmp/lltmpXXXXXX";
 	return mktemp(unix_tempfile);

@@ -65,6 +65,7 @@ init_valtab_from_file (STRING fname,    /* file with value table */
 	struct stat buf;
 	STRING str;
 	BOOLEAN rc;
+	size_t siz;
 	if ((fp = fopen(fname, LLREADTEXT)) == NULL) return TRUE;
 	ASSERT(fstat(fileno(fp), &buf) == 0);
 	if (buf.st_size == 0) {
@@ -73,7 +74,9 @@ init_valtab_from_file (STRING fname,    /* file with value table */
 	}
 	str = (STRING) stdalloc(buf.st_size+1);
 	str[buf.st_size] = 0;
-	ASSERT(fread(str, buf.st_size, 1, fp) == 1);
+	siz = fread(str, buf.st_size, 1, fp);
+	/* may not read full buffer on Windows due to CR/LF translation */
+	ASSERT(siz == 1 || feof(fp));
 	fclose(fp);
  	rc = init_valtab_from_string(str, tab, sep, pmsg);
 	stdfree(str);

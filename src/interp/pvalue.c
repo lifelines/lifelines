@@ -217,28 +217,13 @@ create_pvalue (INT type, VPTR value)
 	ptype(val) = type;
 	pvalue(val) = value;
 	/* TO DO 2001/03/17, Perry - what about PGNODE ? */
-	if (is_pvalue_cel(val)) {
+	if (is_record_pvalue(val)) {
 		/* lock any cache elements, and unlock in clear_pvalue */
-		CACHEEL cel = pvalue(val);
+		CACHEEL cel = get_cel_from_pvalue(val);
 		if (cel)
 			semilock_cache(cel);
 	}
 	return val;
-}
-/*========================================
- * is_pvalue_cel -- Does pvalue contain CACHEEL ?
- * Created: 2001/03/17, Perry Rapp
- *======================================*/
-BOOLEAN
-is_pvalue_cel (PVALUE value)
-{
-	switch (ptype(value)) {
-	case PGNODE: /* TO DO 2001/03/17 ?? */
-		break;
-	case PINDI: case PFAM: case PSOUR: case PEVEN: case POTHR:
-		return TRUE;
-	}
-	return FALSE;
 }
 /*========================================
  * clear_pvalue -- Empty contents of pvalue
@@ -309,12 +294,12 @@ clear_pvalue (PVALUE val)
 		}
 		return;
 	}
-	if (is_pvalue_cel(val)) {
+	if (is_record_pvalue(val)) {
 		/*
 		unlock any cache elements
 		don't worry about memory - it is owned by cache
 		*/
-		CACHEEL cel = pvalue(val);
+		CACHEEL cel = get_cel_from_pvalue(val);
 		if (cel)
 			unsemilock_cache(cel);
 	}
@@ -400,13 +385,13 @@ copy_pvalue (PVALUE val)
 		}
 		break;
 	}
-	if (is_pvalue_cel(val)) {
+	if (is_record_pvalue(val)) {
 		/*
 		it is ok to just copy cache-managed elements,
 		but do adjust reference count as necessary
 		PINDI, PFAM, PSOUR, PEVEN, POTHR
 		*/
-		CACHEEL cel = pvalue(val);
+		CACHEEL cel = get_cel_from_pvalue(val);
 		if (cel)
 			semilock_cache(cel);
 	}
@@ -414,6 +399,103 @@ copy_pvalue (PVALUE val)
 	newval = pvalue(val);
 
 	return create_pvalue(ptype(val), newval);
+}
+/*==================================
+ * get_cel_from_pvalue -- Extract record from pvalue
+ * Created: 2001/03/17, Perry Rapp
+ *================================*/
+CACHEEL
+get_cel_from_pvalue (PVALUE val)
+{
+	CACHEEL cel = pvalue(val);
+	ASSERT(is_record_pvalue(val));
+	return cel;
+}
+/*=====================================================
+ * create_pvalue_from_indi -- Return indi as pvalue
+ *  handles NULL
+ * Created: 2001/03/18, Perry Rapp
+ *===================================================*/
+PVALUE
+create_pvalue_from_indi (NODE indi)
+{
+	CACHEEL cel = indi ? indi_to_cacheel(indi) : NULL;
+	return create_pvalue(PINDI, cel);
+}
+/*=====================================================
+ * create_pvalue_from_indi_key
+ *  handles NULL
+ * Created: 2000/12/30, Perry Rapp
+ *===================================================*/
+PVALUE
+create_pvalue_from_indi_key (STRING key)
+{
+	NODE indi;
+	PVALUE val;
+	STRING record;
+	INT len;
+	if (!key)
+		return create_pvalue_from_indi(NULL);
+	record = retrieve_record(key, &len);
+	if (!record)
+		return create_pvalue_from_indi(NULL);
+	ASSERT((indi = string_to_node(record)));
+	stdfree(record);
+	val = create_pvalue_from_indi(indi);
+	free_nodes(indi);/*yes*/
+	return val;
+}
+/*=====================================================
+ * create_pvalue_from_indi_keynum -- Return indi as pvalue
+ *  helper for __firstindi etc
+ *  handles i==0
+ * Created: 2000/12/30, Perry Rapp
+ *===================================================*/
+PVALUE
+create_pvalue_from_indi_keynum (INT i)
+{
+	static char key[10];
+	if (!i)
+		return create_pvalue_from_indi(NULL);
+	sprintf(key, "I%d", i);
+	return create_pvalue_from_indi_key(key);
+}
+/*=====================================================
+ * create_pvalue_from_fam -- Return fam as pvalue
+ *  handles NULL
+ * Created: 2001/03/18, Perry Rapp
+ *===================================================*/
+PVALUE
+create_pvalue_from_fam (NODE fam)
+{
+	CACHEEL cel = fam ? fam_to_cacheel(fam) : NULL;
+	return create_pvalue(PFAM, cel);
+}
+/*====================================================
+ * create_pvalue_from_fam_keynum -- Return indi as pvalue
+ *  helper for __firstfam etc
+ *  handles i==0
+ * Created: 2000/12/30, Perry Rapp
+ *==================================================*/
+PVALUE
+create_pvalue_from_fam_keynum (INT i)
+{
+	static char key[10];
+	NODE fam;
+	PVALUE val;
+	STRING record;
+	INT len;
+	if (!i)
+		return create_pvalue_from_fam(NULL);
+	sprintf(key, "F%d", i);
+	record = retrieve_record(key, &len);
+	if (!record)
+		return create_pvalue_from_fam(NULL);
+	ASSERT((fam = string_to_node(record)));
+	stdfree(record);
+	val = create_pvalue_from_fam(fam);
+	free_nodes(fam);/*yes*/
+	return val;
 }
 /*==================================
  * set_pvalue -- Set a program value
@@ -589,7 +671,6 @@ bad:
 	*eflg = TRUE;
 	return;
 }
-
 /*===========================================================
  * is_pvalue -- Checks PVALUE for validity -- doesn't do much
  *=========================================================*/
@@ -599,16 +680,20 @@ is_pvalue (PVALUE pval)
 	if (!pval) return FALSE;
 	return ptype(pval) >= PNONE  && ptype(pval) <= PSET;
 }
-/*=================================================
- * is_record_pvalue -- Checks PVALUE for recordness
- *===============================================*/
+/*========================================
+ * is_record_pvalue -- Does pvalue contain record ?
+ *======================================*/
 BOOLEAN
-is_record_pvalue (PVALUE val)
+is_record_pvalue (PVALUE value)
 {
-	INT type = ptype(val);
-	return type >= PINDI && type <= POTHR;
+	switch (ptype(value)) {
+	case PGNODE: /* TO DO 2001/03/17 ?? */
+		break;
+	case PINDI: case PFAM: case PSOUR: case PEVEN: case POTHR:
+		return TRUE;
+	}
+	return FALSE;
 }
-
 INT
 bool_to_int (BOOLEAN b)
 {
@@ -1068,6 +1153,20 @@ insert_pvtable (TABLE stab, STRING iden, INT type, VPTR value)
 	insert_table(stab, iden, create_pvalue(type, value));
 }
 /*======================================================
+ * insert_pvtable -- Update symbol table with new PVALUE
+ * TABLE stab:  symbol table
+ * STRING iden: variable in symbol table
+ * INT type:    type of new value to assign to identifier
+ * VPTR value:  new value of identifier
+ *====================================================*/
+void
+insert_pvtable_pvalue (TABLE stab, STRING iden, PVALUE val)
+{
+	PVALUE oldval = (PVALUE) valueof(stab, iden);
+	if (oldval) delete_pvalue(oldval);
+	insert_table(stab, iden, val);
+}
+/*======================================================
  * delete_pvtable -- Delete a value from a symbol table
  * TABLE stab:  symbol table
  * STRING iden: variable in symbol table
@@ -1147,7 +1246,7 @@ show_pvalue (PVALUE val)
 		llwprintf("%s>", (STRING) pvalue(val));
 		return;
 	case PINDI:
-		cel = (CACHEEL) pvalue(val);
+		cel = get_cel_from_pvalue(val);
 		if (!cnode(cel))
 			cel = key_to_indi_cacheel(ckey(cel));
         	node = cnode(cel);

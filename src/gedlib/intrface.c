@@ -55,11 +55,10 @@ store_record (STRING key,
 /*=========================================
  * retrieve_file -- Retrieve record to file
  *=======================================*/
-BOOLEAN
-retrieve_file (STRING key,
-               STRING file)
+RECORD_STATUS
+retrieve_file (STRING key, STRING file)
 {
-	return getfile(BTR, str2rkey(key), file);
+	return write_record_to_file(BTR, str2rkey(key), file);
 }
 /*=====================================
  * store_file -- Store record from file

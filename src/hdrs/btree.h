@@ -128,7 +128,7 @@ typedef struct {
 
 /* file.c */
 BOOLEAN addfile(BTREE, RKEY, STRING);
-BOOLEAN getfile(BTREE, RKEY, STRING);
+RECORD_STATUS write_record_to_file(BTREE btree, RKEY rkey, STRING file);
 
 /* opnbtree.c */
 BOOLEAN closebtree(BTREE);

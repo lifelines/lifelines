@@ -138,6 +138,7 @@ main (INT argc,
 {
 	extern char *optarg;
 	extern int optind;
+	char * msg;
 	int c,code=1;
 
 #ifdef OS_LOCALE
@@ -233,7 +234,10 @@ main (INT argc,
 	set_displaykeys(keyflag);
 	if (!init_screen())
 		goto finish;
-	init_lifelines_global();
+	if (!init_lifelines_global(&msg)) {
+		llwprintf("%s", msg);
+		goto finish;
+	}
 
 	/* Validate Command-Line Arguments */
 	if (readonly && writeable) {
