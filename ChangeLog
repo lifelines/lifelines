@@ -1,3 +1,11 @@
+2000-12-05 Perry Rapp <prapp@users.sourceforge.net>
+
+	* gedlib/misc.c gedlib/refns.c hdrs/gedcom.h:
+	Fixed bug resolving REFNs. I introduced this when
+	I tightened up error checking in rmvat, not realizing
+	it was also used for REFN references. I added a new
+	rmvbrackets to resolve this.
+
 2000-12-03 Perry Rapp <prapp@users.sourceforge.net>
 
 	* hdrs/win32/curses.h interp/pvalue.c liflines/main.c
