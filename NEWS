@@ -1,6 +1,19 @@
-LifeLines Source Release, Version 3.0.31
+LifeLines Source Release, Version 3.0.32
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
+
+New features added in 3.0.32
+============================
+- Added the dup() function, which does a "deep" copy of a list.
+- New directories created in first directory in LLDATABASES path.
+
+Bug fixes in 3.0.32
+============================
+- Fix translation table menu to show menu keys.
+- Fix basm and barm to not say "bapt" in birth display.
+- Peter Fales' bugfix for browsing to lower family from tandem.
+- Bugfix for set functions deleting temporary values too early (causing ASSERT).
+- Compile fix in wcslen.c (to fix compile on MacOS, re: va_list in arch.h).
 
 Bug fixes in 3.0.31
 ============================

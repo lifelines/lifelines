@@ -30,8 +30,8 @@
  *   3.0.2 - 24 Nov 94
  *============================================================*/
 
-#include "standard.h"
 #include "llstdlib.h"
+/* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
 #include "sequence.h"
 
 static BOOLEAN fndel (SEQUENCE, ELEMENT, INT *);

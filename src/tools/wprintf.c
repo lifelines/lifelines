@@ -24,6 +24,7 @@
 /* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 #include <stdio.h>
 #include "llstdlib.h"
+/* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
 #include "feedback.h"
 #include "gedcom.h"
 #include "interp.h" /* for poutput */

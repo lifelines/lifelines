@@ -1,3 +1,16 @@
+2003-09-12 Perry Rapp
+
+	* ChangeLog NEWS src/arch/alphasort.c src/arch/wcslen.c
+	src/hdrs/arch.h src/hdrs/llstdlib.h src/hdrs/standard.h
+	src/liflines/swap.c src/liflines/tandem.c
+	src/liflines/valgdcom.c src/stdlib/appendstr.c
+	src/stdlib/path.c src/stdlib/sequence.c src/stdlib/signals.c
+	src/stdlib/stdstrng.c src/stdlib/stralloc.c
+	src/stdlib/strset.c src/stdlib/zstr.c src/tools/wprintf.c
+
+	Ensure stdarg included for arch.h compiling wcslen.c (affects MacOS).
+	Little bit of clean up in include lines.
+
 2003-09-12 Stephen Dum
 
         * docs/Makefile.am docs/ll-reportmanual.html docs/ll-reportmanual.pdf

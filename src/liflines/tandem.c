@@ -32,6 +32,7 @@
  *===========================================================*/
 
 #include "llstdlib.h"
+/* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"

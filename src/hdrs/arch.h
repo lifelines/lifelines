@@ -94,6 +94,10 @@ extern int opterr;
  * ***************************************************************** */
 
 #ifndef HAVE_VSNPRINTF
+#ifndef INCLUDED_STDARG_H
+#include <stdarg.h>
+#define INCLUDED_STDARG_H
+#endif
 int vsnprintf(char *buffer, size_t count, const char *fmt, va_list args);
 #endif /* HAVE_VSNPRINTF */
 

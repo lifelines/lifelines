@@ -31,6 +31,10 @@
 #ifndef _STANDARD_H
 #define _STANDARD_H
 
+/*
+ * This file includes config.h at bottom via include of llnls.h
+ */
+
 #include "sys_inc.h"
 
 #if defined __CYGWIN32__ && !defined __CYGWIN__

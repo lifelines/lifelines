@@ -12,6 +12,7 @@
 
 
 #include "llstdlib.h"
+/* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
 #include "arch.h" /* vsnprintf */
 
 #ifndef INCLUDED_STDARG_H

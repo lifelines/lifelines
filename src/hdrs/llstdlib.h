@@ -27,8 +27,10 @@
 #define _LL_STDLIB_H
 
 /*
+ * standard.h:
+ *
  * for INT, STRING, LIST, VPTR, BOOLEAN
- * pulls in config.h
+ * pulls in config.h (via llnsl.h)
  * pulls in sys_inc.h (which pulls in a bunch of system includes)
  * defines macros for gettext if appropriate (eg, _(String))
  */
