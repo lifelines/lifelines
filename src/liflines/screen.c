@@ -87,14 +87,15 @@ static UIWINDOW extra_menu_win=NULL;
  * external/imported variables
  *********************************************/
 
-extern BOOLEAN alldone, progrunning;
+extern INT alldone;
+extern BOOLEAN progrunning;
 extern STRING qSwin2big,qSwin2small;
 extern STRING empstr,empstr71,empstr120,readpath,qSronlye,qSdataerr;
 extern STRING qSabverr,qSuoperr,qSbadttnum,qSnosuchtt,qSmouttt,qSmintt;
 extern STRING qSmtitle,qScright,qSdbname,qSdbimmut,qSdbrdonly,qSplschs;
 extern STRING qSmn_unkcmd,qSronlya,qSronlyr;
 extern STRING qSaskynq,qSaskynyn,qSaskyY;
-extern STRING qSmn_quit,qSmn_ret, qSmn_exit;
+extern STRING qSmn_quit, qSmn_changedb, qSmn_ret, qSmn_exit;
 extern STRING qSmn_mmbrws,qSmn_mmsear,qSmn_mmadd,qSmn_mmdel;
 extern STRING qSmn_mmprpt,qSmn_mmrpt,qSmn_mmcset;
 extern STRING qSmn_mmtt,qSmn_mmut,qSmn_mmex;
@@ -176,6 +177,7 @@ static void create_windows(void);
 static void deactivate_uiwin(void);
 static void deactivate_uiwin_and_touch_all(void);
 static void delete_uiwindow(UIWINDOW uiw);
+static void destroy_windows(void);
 static void disp_codeset(UIWINDOW uiwin, INT row, INT col, STRING menuit, INT codeset);
 static void disp_trans_table_choice(UIWINDOW uiwin, INT row, INT col, STRING menuit, INT indx);
 static void display_status(STRING text);
@@ -346,6 +348,8 @@ void
 term_screen (void)
 {
 	menuitem_terminate();
+	active_uiwin = 0;
+	destroy_windows();
 }
 /*=======================================
  * draw_win_box -- wrapper for curses box
@@ -391,6 +395,7 @@ repaint_main_menu (UIWINDOW uiwin)
 	mvwaddstr(win, row++, 4, _(qSmn_mmtt));
 	mvwaddstr(win, row++, 4, _(qSmn_mmut));
 	mvwaddstr(win, row++, 4, _(qSmn_mmex));
+	mvwaddstr(win, row++, 4, _(qSmn_changedb));
 	mvwaddstr(win, row++, 4, _(qSmn_exit));
 }
 /*================================================
@@ -521,9 +526,19 @@ create_uisubwindow (UIWINDOW parent, INT rows, INT cols, INT begy, INT begx)
 	return uiwin;
 }
 /*==========================================
+ * destroy_windows -- Undo create_windows
+ *========================================*/
+static void
+destroy_windows (void)
+{
+	delete_uiwindow(debug_win);
+	delete_uiwindow(stdout_win);
+	/* TODO finish these */
+}
+/*==========================================
  * create_windows -- Create and init windows
  *========================================*/
-void
+static void
 create_windows (void)
 {
 	INT col;
@@ -604,7 +619,7 @@ main_menu (void)
 	WINDOW * win = uiw_win(uiwin);
 	repaint_main_menu(uiwin);
 	display_screen(MAIN_SCREEN);
-	c = interact(uiwin, "bsadprctuxq", -1);
+	c = interact(uiwin, "bsadprctuxqQ", -1);
 	place_std_msg();
 	wrefresh(win);
 	switch (c) {
@@ -647,7 +662,11 @@ main_menu (void)
 		if (c != BROWSE_QUIT)
 			browse(NULL, c);
 		break;
-	case 'q': alldone = TRUE; break;
+	case 'q': alldone = 1; break;
+	case 'Q': 
+		uierase(main_win);
+		alldone = 2;
+		break;
 	}
 }
 /*=========================================

@@ -864,7 +864,7 @@ main (int argc,
 
 	validate_errs();
 
-	initlocale();
+	save_original_locales();
 
 #if ENABLE_NLS
 	bindtextdomain(PACKAGE, LOCALEDIR);

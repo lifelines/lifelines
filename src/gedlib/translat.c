@@ -33,6 +33,11 @@
 #ifdef HAVE_LOCALE_H
 # include <locale.h>
 #endif
+#ifdef HAVE_LANGINFO_CODESET
+# include <langinfo.h>
+#else
+# include "langinfz.h"
+#endif
 #if HAVE_ICONV
 # include <iconv.h>
 #endif
@@ -653,14 +658,14 @@ get_current_locale (INT category)
 }
 #endif /* HAVE_SETLOCALE */
 /*==========================================
- * initlocale -- grab current locales for later default
+ * save_original_locales -- grab current locales for later default
  *  We need these for an obscure problem. If user sets only
  *  locales for report, then when we switch back to GUI mode,
  *  we shouldn't stay in the customized report locale.
  * Created: 2002/02/24 (Perry Rapp)
  *========================================*/
 void
-initlocale (void)
+save_original_locales (void)
 {
 #ifdef HAVE_SETLOCALE
 	deflocale_coll = strsave(get_current_locale(LC_COLLATE));
@@ -675,6 +680,23 @@ initlocale (void)
 	if (!deflocale_msgs)
 		deflocale_msgs = getenv("LC_MESSAGES");
 
+}
+/*==========================================
+ * ll_langinfo -- wrapper for nl_langinfo
+ *  in case not provided (eg, MS-Windows)
+ *========================================*/
+STRING
+ll_langinfo (void)
+{
+	STRING str = nl_langinfo(CODESET);
+	/* TODO: Should we apply norm_charmap.c ?
+	http://www.cl.cam.ac.uk/~mgk25/ucs/norm_charmap.c
+	*/
+	/* TODO: In any case tho, Markus' nice replacement nl_langinfo gives the
+	wrong default codepages for MS-Windows I think -- eg, should be 1252 for 
+	generic default instead of 8859-1 */
+
+	return str ? str : ""; /* I don't know if nl_langinfo ever returns NULL */
 }
 /*==========================================
  * termlocale -- free locale related variables

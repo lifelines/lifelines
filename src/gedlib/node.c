@@ -533,7 +533,9 @@ NODE
 convert_first_fp_to_node (FILE *fp, BOOLEAN list, TRANMAPPING ttm,
 	STRING *pmsg,  BOOLEAN *peof)
 {
-	if (!check_file_for_unicode(fp)) {
+	STRING unitype = check_file_for_unicode(fp);
+	if (unitype && !eqstr(unitype, "UTF-8")) {
+		/* TODO: ought to pass unitype string to caller, but haven't a buffer */
 		*pmsg = _(qSunsupuni);
 		return NULL;
 	}

@@ -91,7 +91,7 @@ INT alloc_count(void);
 void report_alloc_live_count(STRING str);
 
 /* path.c */
-BOOLEAN check_file_for_unicode(FILE * fp);
+STRING check_file_for_unicode(FILE * fp);
 INT chop_path(STRING path, STRING dirs);
 STRING compress_path(STRING path, INT len);
 STRING concat_path(CNSTRING dir, CNSTRING file);

@@ -294,7 +294,7 @@ ZST qSwhatrpt     = N_("What is the name of the program?");
 
 ZST qSwhtout      = N_("What is the name of the output file?");
 ZST qSopt2long    = N_("Malformed configuration file: line too long.");
-ZST qSunsupuni    = N_("Unsupported Unicode format (only UTF-8 is supported).");
+ZST qSunsupuni    = N_("Unsupported file encoding (no multibyte encodings except UTF-8).");
 
 /* misc prompts */
 ZST qSchoostrttl  = N_("Enter string for program");
@@ -478,6 +478,7 @@ ZST qSmaperr      = N_("%s: line %d (entry %d): %s\n");
 ZST qSmn_quit     = N_("q  Return to main menu");
 ZST qSmn_ret      = N_("q  Return to previous menu");
 ZST qSmn_exit     = N_("q  Quit program");
+ZST qSmn_changedb = N_("Q  Quit current database");
 
 /* &&begin main menu (70 chars after spaces) */
 ZST qSmn_mmbrws   = N_("b  Browse the persons in the database");

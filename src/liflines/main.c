@@ -89,7 +89,7 @@ BOOLEAN readonly  = FALSE;     /* database is read only */
 BOOLEAN writeable = FALSE;     /* database must be writeable */
 BOOLEAN immutable = FALSE;     /* make no changes at all to database, for access to truly read-only medium */
 BOOLEAN cursesio  = TRUE;      /* use curses i/o */
-BOOLEAN alldone   = FALSE;     /* completion flag */
+INT alldone       = 0;         /* completion flag */
 BOOLEAN progrunning = FALSE;   /* program is running */
 BOOLEAN progparsing = FALSE;   /* program is being parsed */
 INT     progerror = 0;         /* error count during report program */
@@ -99,6 +99,7 @@ BOOLEAN selftest = FALSE;      /* selftest rules (ignore paths) */
 BOOLEAN showusage = FALSE;     /* show usage */
 STRING  btreepath = NULL;      /* database path given by user */
 STRING  readpath = NULL;       /* database path used to open */
+STRING  ext_codeset = 0;       /* default codeset from locale */
 
 /*********************************************
  * local function prototypes
@@ -139,13 +140,24 @@ main (INT argc, char **argv)
 	STRING progout=NULL;
 	BOOLEAN graphical=TRUE;
 
-	initlocale();
-	load_usage();
+#if HAVE_SETLOCALE
+	/* initialize locales */
+	setlocale(LC_CTYPE, "");
+#endif /* HAVE_SETLOCALE */
+	
+	/* capture user's default codeset */
+	ext_codeset = strsave(ll_langinfo());
+	/* TODO: We can use this info for default conversions */
 
 #if ENABLE_NLS
+	/* setup gettext translation */
 	bindtextdomain(PACKAGE, LOCALEDIR);
 	textdomain(PACKAGE);
 #endif
+
+	save_original_locales();
+	load_usage();
+
 
 	/* Parse Command-Line Arguments */
 	opterr = 0;	/* turn off getopt's error message */
@@ -246,6 +258,7 @@ main (INT argc, char **argv)
 			break;
 		}
 	}
+prompt_for_db:
 
 	/* catch any fault, so we can close database */
 	if (debugmode)
@@ -384,6 +397,11 @@ finish:
 	shutdown_interpreter();
 	close_lifelines();
 	shutdown_ui(!ok);
+	if (alldone == 2) {
+		alldone = 0;
+		c = 0;
+		goto prompt_for_db;
+	}
 	termlocale();
 
 usage:

@@ -302,36 +302,62 @@ compress_path (STRING path, INT len)
 	return buf;
 }
 /*========================================================================
- * check_file_for_unicode -- Check for MS-style headers for UTF-8 or
- * 16-bit unicode. Return FALSE if 16-bit unicode.
- * Advance past UTF-8 header & return TRUE.
- * return TRUE if none found.
- * Created: 2001/12/30 (Perry Rapp)
+ * check_file_for_unicode -- Check for BOM (byte order mark) bytes
+ *  return descriptive string if found, or 0 if not
+ *  return "?" if invalid BOM 
+ * Currently we don't handle any unicode except UTF-8)
+ * If found, advance file pointer past BOM.
+ * It would be nice if someone clever made this less messy.
  *======================================================================*/
-BOOLEAN
+STRING
 check_file_for_unicode (FILE * fp)
 {
 	INT c1 = (uchar)fgetc(fp);
 	if (c1 == 0xEF) {
 		INT c2 = (uchar)fgetc(fp);
 		if (c2 == 0xBB) {
+			/* EF BB BF is BOM for UTF-8 */
 			INT c3 = (uchar)fgetc(fp);
-			if (c3 == 0xBF) {
-				/* consume UTF-8 header & return ok */
-				return TRUE;
-			}
+			if (c3 == 0xBF)
+				return "UTF-8";
 			ungetc(c3, fp);
 		}
-		/* any other header starting with EF we reject */
-		/* TODO: This is a bit broader than needed, but this routine
-		is actually only used to check gedcom files, and they have to
-		start with a level# in any case */
+		/* No other BOMs start with EF */
 		ungetc(c2, fp);
 		ungetc(c1, fp);
-		return FALSE;
+		return 0;
+	} else if (c1 == 0xFF) {
+		INT c2 = (uchar)fgetc(fp);
+		if (c2 == 0xFE) {
+			/* FF FE is UTF-16LE BOM (or start of UTF-32LE BOM) -- we reject */
+			ungetc(c2, fp);
+			ungetc(c1, fp);
+			return "UTF-16LE or UTF-32LE";
+		}
+		/* No other BOMs start with FF */
+		ungetc(c2, fp);
+		ungetc(c1, fp);
+		return 0;
+	} else if (c1 == 0xFE) {
+		INT c2 = (uchar)fgetc(fp);
+		if (c2 == 0xFF) {
+			/* FE FF is UTF-16BE BOM -- we reject */
+			ungetc(c2, fp);
+			ungetc(c1, fp);
+			return "UTF-16BE";
+		}
+		/* No other BOMs start with FE */
+		ungetc(c2, fp);
+		ungetc(c1, fp);
+		return 0;
+	} else if (c1 == 0) {
+		/* Could be 00 00 FE FF for UTF-32BE, 
+		but we don't want it no matter what it is */
+		ungetc(c1, fp);
+		return "Possibly UTF-32BE?";
 	}
 	ungetc(c1, fp);
-	return TRUE;
+	return 0;
 }
 /*==================================================
  * chop_path -- copy path into buff, & zero-separate all dirs

@@ -83,7 +83,7 @@ static int rdr_count = 0;
 
 /*=================================
  * init_lifelines_global -- Initialization options & misc. stuff
- *  This is before database opened
+ *  This is called before first (or later) database opened
  *===============================*/
 BOOLEAN
 init_lifelines_global (STRING * pmsg)
@@ -105,6 +105,12 @@ init_lifelines_global (STRING * pmsg)
 	e = getoptstr("GuiOutputCharset", "");
 	if (e && *e)
 		bind_textdomain_codeset(PACKAGE, e);
+	/*
+	otherwise let gettext try to figure it out
+	gettext has a lot of nice code for this stuff, but it doesn't
+	know about DOS console windows, and will default to the MS-Windows default
+	codepage, which is not very close :(
+	*/
 #endif
 
 	/* check if any directories not specified, and try environment

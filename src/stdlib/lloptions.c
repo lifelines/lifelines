@@ -182,6 +182,7 @@ BOOLEAN
 init_lifelines_options (STRING configfile, STRING * pmsg)
 {
 	*pmsg = NULL;
+	term_lloptions(); /* clear if exists */
 	opttab = create_table();
 	if (!load_config_file(configfile, pmsg))
 		return FALSE;
