@@ -69,7 +69,7 @@ echo Looking for library functions
 AC_CHECK_FUNCS( getopt snprintf _snprintf heapwalk _heapwalk )
 
 dnl Check for replacement functions
-AC_REPLACE_FUNCS( sleep scandir alphasort )
+AC_REPLACE_FUNCS( sleep scandir alphasort _llnull )
 
 dnl AC_CHECK_FUNCS(strerror perror strsignal psignal getopt getopt_long random)
 dnl investigate using AC_MSG_ERROR for error reporting
