@@ -39,6 +39,12 @@
  *  all unrecognized (level 1) nodes go into body
  *====================================*/
 
+/*
+ 2002.06.02, Perry
+ I'm not sure if I need to replace split_indi_old with
+ one that takes a RECORD as an argument
+ */
+
 /*======================================
  * split_indi_old -- Split person into parts
  *  all unrecognized (level 1) nodes go into body
@@ -162,14 +168,18 @@ join_indi (NODE indi,
 /*=======================================
  * split_fam -- Split a family into parts
  *  all unrecognized (level 1) nodes go into rest
+ *  fam:   [I/O] node root of family
+ *  prefn: [OUT] first REFN (with others as sibs)
+ *  phusb: [OUT] first HUSB (with others as sibs)
+ *  pwife: [OUT] first WIFE (with others as sibs)
+ *  pchil: [OUT] first CHIL (with others as sibs)
+ *  prest: [OUT] first of rest (with others as sibs)
+ * family is broken apart, so each section (eg, husbands)
+ *  is not connected to other sections
  *=====================================*/
 void
-split_fam (NODE fam,
-           NODE *prefn,
-           NODE *phusb,
-           NODE *pwife,
-           NODE *pchil,
-           NODE *prest)
+split_fam (NODE fam, NODE *prefn, NODE *phusb, NODE *pwife, NODE *pchil
+	, NODE *prest)
 {
 	NODE node, rest, last, husb, lhsb, wife, lwfe, chil, lchl;
 	NODE prev, refn, lref;
@@ -201,10 +211,12 @@ split_fam (NODE fam,
 				lref = nsibling(lref) = node;
 			else
 				refn = lref = node;
-		} else if (rest)
-			last = nsibling(last) = node;
-		else
-			last = rest = node;
+		} else {
+			if (rest)
+				last = nsibling(last) = node;
+			else
+				last = rest = node;
+		}
 		prev = node;
 		node = nsibling(node);
 		nsibling(prev) = NULL;
@@ -217,14 +229,17 @@ split_fam (NODE fam,
 }
 /*===================================
  * join_fam -- Join family from parts
+ *  fam:  [I/O] FAM root node
+ *  refn: [I/O] REFN node(s)
+ *  husb: [I/O] HUSB node(s)
+ *  wife: [I/O] WIFE node(s)
+ *  chil: [I/O] CHILD node(s)
+ *  rest: [I/O] other node(s)
+ * Only call on pieces previously split by split_fam.
+ * This reassembles pieces, linking them back together
  *=================================*/
 void
-join_fam (NODE fam,
-          NODE refn,
-          NODE husb,
-          NODE wife,
-          NODE chil,
-          NODE rest)
+join_fam (NODE fam, NODE refn, NODE husb, NODE wife, NODE chil, NODE rest)
 {
 	NODE node = NULL;
 
@@ -263,5 +278,71 @@ join_fam (NODE fam,
 			nsibling(node) = chil;
 		else
 			nchild(fam) = chil;
+	}
+}
+/*=======================================
+ * split_othr -- Split a misc node tree into parts
+ *  all unrecognized (level 1) nodes go into rest
+ *  root:  [I/O] node root
+ *  prefn: [OUT] first REFN (with others as sibs)
+ *  prest: [OUT] first of rest (with others as sibs)
+ * node tree is broken apart, so each section (eg, refns)
+ *  is not connected to other sections
+ *=====================================*/
+void
+split_othr (NODE root, NODE *prefn, NODE *prest)
+{
+	NODE node, rest, last;
+	NODE prev, refn, lref;
+	STRING tag;
+
+	rest = last = NULL;
+	prev = refn = lref = NULL;
+	node = nchild(root);
+	nchild(root) = nsibling(root) = NULL;
+	while (node) {
+		tag = ntag(node);
+		if (eqstr("REFN", tag)) {
+			if (refn)
+				lref = nsibling(lref) = node;
+			else
+				refn = lref = node;
+		} else if (rest)
+			last = nsibling(last) = node;
+		else
+			last = rest = node;
+		prev = node;
+		node = nsibling(node);
+		nsibling(prev) = NULL;
+	}
+	*prefn = refn;
+	*prest = rest;
+}
+/*===================================
+ * join_othr -- Join misc. node tree from parts
+ *  root: [I/O] root node
+ *  refn: [I/O] REFN node(s)
+ *  rest: [I/O] other node(s)
+ * Only call on pieces previously split by split_othr.
+ * This reassembles pieces, linking them back together
+ *=================================*/
+void
+join_othr (NODE root, NODE refn, NODE rest)
+{
+	NODE node = NULL;
+
+	nchild(root) = NULL;
+	if (refn) {
+		nchild(root) = node = refn;
+		while (nsibling(node))
+			node = nsibling(node);
+	}
+	if (rest) {
+		if (node)
+			node = nsibling(node) = rest;
+		else
+			nchild(root) = node = rest;
+		while (nsibling(node))
+			node = nsibling(node);
 	}
 }

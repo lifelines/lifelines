@@ -37,15 +37,19 @@
 #include "indiseq.h"
 #include "liflines.h"
 #include "feedback.h"
+#include "lloptions.h"
 
 #include "llinesi.h"
 
 extern STRING qSiredit, qSfredit, qScfpupt, qScffupt, qSidpedt, qSidspse, qSidfbys;
+extern STRING qSireditopt, qSfreditopt;
 extern STRING qSntprnt, qSgdpmod, qSgdfmod, qSronlye;
 extern STRING qSparadox;
+extern STRING qSbadreflink, qSbadreflinks;
 
 /*=====================================
  * write_indi_to_editfile - write indi gedcom node to editfile
+ * (no user interaction)
  *===================================*/
 void
 write_indi_to_editfile(NODE indi)
@@ -68,6 +72,7 @@ write_indi_to_editfile(NODE indi)
 }
 /*=====================================
  * edit_indi -- Edit person in database
+ * (with user interaction)
  *===================================*/
 NODE
 edit_indi (NODE indi1)  /* may be NULL */
@@ -83,7 +88,10 @@ edit_indi (NODE indi1)  /* may be NULL */
 		return NULL;
 
 /* Prepare file for user to edit */
+	if (getoptint("ExpandRefnsDuringEdit", 0) > 0)
+		expand_refn_links(indi1);
 	write_indi_to_editfile(indi1);
+	resolve_refn_links(indi1);
 
 /* Have user edit file */
 
@@ -96,6 +104,7 @@ edit_indi (NODE indi1)  /* may be NULL */
 		return indi1;
 	}
 	while (TRUE) {
+		INT cnt;
 		indi2 = file_to_node(editfile, tti, &msg, &emp);
 		if (!indi2) {
 			if (ask_yes_or_no_msg(msg, _(qSiredit))) {
@@ -104,7 +113,10 @@ edit_indi (NODE indi1)  /* may be NULL */
 			} 
 			break;
 		}
-		if (!valid_indi_old(indi2, &msg, indi1)) {
+		cnt = resolve_refn_links(indi2);
+		/* check validation & allow user to reedit if invalid */
+		/* this is a showstopper, so alternative is to abort */
+		if (!valid_indi_tree(indi2, &msg, indi1)) {
 			if (ask_yes_or_no_msg(msg, _(qSiredit))) {
 				do_edit();
 				continue;
@@ -112,6 +124,17 @@ edit_indi (NODE indi1)  /* may be NULL */
 			free_nodes(indi2);
 			indi2 = NULL;
 			break;
+		}
+		/* Allow user to reedit if desired if any refn links unresolved */
+		/* this is not a showstopper, so alternative is to continue */
+		if (cnt > 0) {
+			char msgb[120];
+			snprintf(msgb, sizeof(msgb), _pl(qSbadreflink, qSbadreflinks, cnt), cnt);
+			if (ask_yes_or_no_msg(msgb, _(qSireditopt))) {
+				write_indi_to_editfile(indi2);
+				do_edit();
+				continue;
+			}
 		}
 		break;
 	}
@@ -126,10 +149,12 @@ edit_indi (NODE indi1)  /* may be NULL */
 
 /* Prepare to change database */
 
+	/* Move indi1 data into indi0 & delete it (saving names & refns */
 	split_indi_old(indi1, &name1, &refn1, &sex, &body, &famc, &fams);
 	indi0 = copy_node(indi1);
 	join_indi(indi0, NULL, NULL, sex, body, famc, fams);
 	free_nodes(indi0);
+	/* Move indi2 data into indi1, also copy out lists of names & refns */
 	split_indi_old(indi2, &name2, &refn2, &sex, &body, &famc, &fams);
 	namen = copy_nodes(name2, TRUE, TRUE);
 	refnn = copy_nodes(refn2, TRUE, TRUE);
@@ -138,7 +163,6 @@ edit_indi (NODE indi1)  /* may be NULL */
 
 /* Write changed person to database */
 
-	resolve_links(indi1);
 	indi_to_dbase(indi1);
 	key = rmvat(nxref(indi1));
 	classify_nodes(&name1, &namen, &name1n);
@@ -163,6 +187,7 @@ edit_indi (NODE indi1)  /* may be NULL */
 }
 /*=====================================
  * write fam gedcom node to editfile
+ * (no user interaction)
  *===================================*/
 void
 write_fam_to_editfile(NODE fam)
@@ -184,6 +209,7 @@ write_fam_to_editfile(NODE fam)
 }
 /*====================================
  * edit_fam -- Edit family in database
+ * (with user interaction)
  *==================================*/
 NODE
 edit_family (NODE fam1) /* may be NULL */
@@ -206,7 +232,10 @@ edit_family (NODE fam1) /* may be NULL */
 	}
 
 /* Prepare file for user to edit */
+	if (getoptint("ExpandRefnsDuringEdit", 0) > 0)
+		expand_refn_links(fam1);
 	write_fam_to_editfile(fam1);
+	resolve_refn_links(fam1);
 
 /* Have user edit record */
 	do_edit();
@@ -218,6 +247,7 @@ edit_family (NODE fam1) /* may be NULL */
 		return fam1;
 	}
 	while (TRUE) {
+		INT cnt;
 		fam2 = file_to_node(editfile, tti, &msg, &emp);
 		if (!fam2) {
 			if (ask_yes_or_no_msg(msg, _(qSfredit))) {
@@ -226,7 +256,10 @@ edit_family (NODE fam1) /* may be NULL */
 			}
 			break;
 		}
-		if (!valid_fam_old(fam2, &msg, fam1)) {
+		cnt = resolve_refn_links(fam2);
+		/* check validation & allow user to reedit if invalid */
+		/* this is a showstopper, so alternative is to abort */
+		if (!valid_fam_tree(fam2, &msg, fam1)) {
 			if (ask_yes_or_no_msg(msg, _(qSfredit))) {
 				do_edit();
 				continue;
@@ -234,6 +267,17 @@ edit_family (NODE fam1) /* may be NULL */
 			free_nodes(fam2);
 			fam2 = NULL;
 			break;
+		}
+		/* Allow user to reedit if desired if any refn links unresolved */
+		/* this is not a showstopper, so alternative is to continue */
+		if (cnt > 0) {
+			char msgb[120];
+			snprintf(msgb, sizeof(msgb), _pl(qSbadreflink, qSbadreflinks, cnt), cnt);
+			if (ask_yes_or_no_msg(msgb, _(qSfreditopt))) {
+				write_fam_to_editfile(fam2);
+				do_edit();
+				continue;
+			}
 		}
 		break;
 	}
@@ -248,10 +292,12 @@ edit_family (NODE fam1) /* may be NULL */
 
 /* Prepare to change database */
 
+	/* Move fam1 data into fam0 & delete it (saving refns) */
 	split_fam(fam1, &refn1, &husb, &wife, &chil, &body);
 	fam0 = copy_node(fam1);
 	join_fam(fam0, NULL, husb, wife, chil, body);
 	free_nodes(fam0);
+	/* Move fam2 data into fam1, also copy out list of refns */
 	split_fam(fam2, &refn2, &husb, &wife, &chil, &body);
 	refnn = copy_nodes(refn2, TRUE, TRUE);
 	join_fam(fam1, refn2, husb, wife, chil, body);
@@ -259,9 +305,9 @@ edit_family (NODE fam1) /* may be NULL */
 
 /* Change the database */
 
-	resolve_links(fam1);
 	fam_to_dbase(fam1);
 	key = rmvat(nxref(fam1));
+	/* remove deleted refns & add new ones */
 	classify_nodes(&refn1, &refnn, &refn1n);
 	for (node = refn1; node; node = nsibling(node))
 		if (nval(node)) remove_refn(nval(node), key);

@@ -155,15 +155,22 @@ ZST qShasnei      = N_("This family has neither spouse/parent; can't remove.");
 ZST qShaslnk      = N_("This family still has links; not removed.");
 
 ZST qSidfbys      = N_("Choose a family by selecting a spouse/parent.");
-ZST qSiredit      = N_("Do you want to edit the person again?");
-ZST qSfredit      = N_("Do you want to edit the family again?");
-ZST qSrredit      = N_("Do you want to edit the source again?");
-ZST qSeredit      = N_("Do you want to edit the event again?");
-ZST qSxredit      = N_("Do you want to edit the record again?");
+ZST qSiredit      = N_("Do you want to edit the person again? (Otherwise changes will be discarded.)");
+ZST qSireditopt   = N_("Do you want to edit the person again?");
+ZST qSfredit      = N_("Do you want to edit the family again? (Otherwise changes will be discarded.)");
+ZST qSfreditopt   = N_("Do you want to edit the family again?");
+ZST qSrredit      = N_("Do you want to edit the source again? (Otherwise changes will be discarded.)");
+ZST qSrreditopt   = N_("Do you want to edit the source again?");
+ZST qSeredit      = N_("Do you want to edit the event again? (Otherwise changes will be discarded.)");
+ZST qSereditopt   = N_("Do you want to edit the event again?");
+ZST qSxredit      = N_("Do you want to edit the record again? (Otherwise changes will be discarded.)");
+ZST qSxreditopt   = N_("Do you want to edit the record again?");
 ZST qSidpedt      = N_("Whom do you want to edit?");
 ZST qSidredt      = N_("Which source record do you want to edit?");
 ZST qSideedt      = N_("Which event record do you want to edit?");
 ZST qSidxedt      = N_("What record do you want to edit?");
+ZST qSbadreflink  = N_("There was %d unresolved reference.");
+ZST qSbadreflinks = N_("There were %d unresolved references.");
 
 ZST qScfpadd      = N_("Do you really want to add this person to the database?");
 ZST qScffadd      = N_("Do you really want to add this family to the database?");

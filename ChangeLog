@@ -1,3 +1,17 @@
+2002-06-03 Perry Rapp <puddle@users.sourceforge.net>
+
+	.linesrc ChangeLog lines.cfg gedlib/messages.c gedlib/node.c
+	gedlib/refns.c gedlib/replace.c gedlib/spltjoin.c
+	gedlib/valid.c hdrs/gedcom.h hdrs/liflines.h hdrs/standard.h
+	hdrs/version.h liflines/add.c liflines/advedit.c
+	liflines/browse.c liflines/edit.c liflines/import.c
+	liflines/llinesi.h liflines/merge.c liflines/newrecs.c
+	liflines/screen.c:
+
+	Added feature: check for unresolved refn links after editing.
+	Bugfix: S,E,X records ignored extra REFNs.
+	Added ExpandRefnsDuringEdit option.
+
 2002-06-02 Perry Rapp <puddle@users.sourceforge.net>
 
 	* .linesrc ChangeLog lines.cfg gedlib/messages.c interp/interp.c:

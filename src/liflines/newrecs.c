@@ -49,6 +49,8 @@ extern BTREE BTR;
 extern STRING qScfradd, qScfeadd, qScfxadd, qSrredit, qSeredit, qSxredit;
 extern STRING qScfrupt, qScfeupt, qScfxupt, qSgdrmod, qSgdemod, qSgdxmod;
 extern STRING qSidredt, qSideedt, qSidxedt, qSduprfn, qSronlya, qSronlye;
+extern STRING qSrreditopt, qSereditopt, qSxreditopt;
+extern STRING qSbadreflink, qSbadreflinks;
 extern STRING qSnofopn, qSidkyrfn;
 extern STRING qSdefsour,qSdefeven,qSdefothr,qSnosuchrec;
 
@@ -57,10 +59,11 @@ extern STRING qSdefsour,qSdefeven,qSdefothr,qSnosuchrec;
  *********************************************/
 
 /* alphabetical */
-static NODE add_record(STRING recstr, STRING redt, char ntype, STRING cfrm);
-static void edit_record(NODE node1, STRING idedt, INT letr, STRING redt,
-                         BOOLEAN (*val)(NODE, STRING *, NODE), STRING cfrm,
-                         STRING tag, void (*todbase)(NODE), STRING gdmsg);
+static NODE edit_add_record(STRING recstr, STRING redt, STRING redtopt
+	, char ntype, STRING cfrm);
+static void edit_record(NODE node1, STRING idedt, INT letr, STRING redt
+	, STRING redtopt , BOOLEAN (*val)(NODE, STRING *, NODE), STRING cfrm
+	, void (*todbase)(NODE), STRING gdmsg);
 static BOOLEAN ntagdiff(NODE node1, NODE node2);
 static BOOLEAN nvaldiff(NODE node1, NODE node2);
 
@@ -71,10 +74,10 @@ static BOOLEAN nvaldiff(NODE node1, NODE node2);
  *********************************************/
 
 /*================================================
- * add_source -- Add source to database by editing
+ * edit_add_source -- Add source to database by editing
  *==============================================*/
 NODE
-add_source (void)
+edit_add_source (void)
 {
 	STRING str;
 	if (readonly) {
@@ -82,13 +85,13 @@ add_source (void)
 		return NULL;
 	}
 	str = getoptstr("SOURREC", _(qSdefsour));
-	return add_record(str, _(qSrredit), 'S', _(qScfradd));
+	return edit_add_record(str, _(qSrredit), _(qSrreditopt), 'S', _(qScfradd));
 }
 /*==============================================
- * add_event -- Add event to database by editing
+ * edit_add_event -- Add event to database by editing
  *============================================*/
 NODE
-add_event (void)
+edit_add_event (void)
 {
 	STRING str;
 	if (readonly) {
@@ -96,13 +99,13 @@ add_event (void)
 		return NULL;
 	}
 	str = getoptstr("EVENREC", _(qSdefeven));
-	return add_record(str, _(qSeredit), 'E', _(qScfeadd));
+	return edit_add_record(str, _(qSeredit), _(qSereditopt), 'E', _(qScfeadd));
 }
 /*====================================================
- * add_other -- Add user record to database by editing
+ * edit_add_other -- Add user record to database by editing
  *==================================================*/
 NODE
-add_other (void)
+edit_add_other (void)
 {
 	STRING str;
 	if (readonly) {
@@ -110,17 +113,17 @@ add_other (void)
 		return NULL;
 	}
 	str = getoptstr("OTHR", _(qSdefothr));
-	return add_record(str, _(qSxredit), 'X', _(qScfxadd));
+	return edit_add_record(str, _(qSxredit), _(qSxreditopt), 'X', _(qScfxadd));
 }
 /*================================================
- * add_record -- Add record to database by editing
+ * edit_add_record -- Add record to database by editing
  *  recstr:  [IN] default record
  *  redt:    [IN] re-edit message
  *  ntype,   [IN] S, E, or X
  *  cfrm:    [IN] confirm message
  *==============================================*/
 NODE
-add_record (STRING recstr, STRING redt, char ntype, STRING cfrm)
+edit_add_record (STRING recstr, STRING redt, STRING redtopt, char ntype, STRING cfrm)
 {
 	FILE *fp;
 	NODE node=0, refn;
@@ -157,6 +160,7 @@ add_record (STRING recstr, STRING redt, char ntype, STRING cfrm)
 	fclose(fp);
 	do_edit();
 	while (TRUE) {
+		INT cnt;
 		node = file_to_node(editfile, tti, &msg, &emp);
 		if (!node) {
 			if (ask_yes_or_no_msg(msg, redt)) { /* yes, edit again */
@@ -165,14 +169,28 @@ add_record (STRING recstr, STRING redt, char ntype, STRING cfrm)
 			} 
 			break;
 		}
-		if (!valid_node_type(node, ntype, &msg, NULL)) { /* invalid */
-			if (ask_yes_or_no_msg(msg, redt)) { /* yes, edit again */
+		cnt = resolve_refn_links(node);
+		/* check validation & allow user to reedit if invalid */
+		/* this is a showstopper, so alternative is to abort */
+		if (!valid_node_type(node, ntype, &msg, NULL)) {
+			if (ask_yes_or_no_msg(msg, redt)) {
 				do_edit();
 				continue;
-			} /* otherwise leave rtn==-1 for cancel */
+			}
 			free_nodes(node);
-			node = NULL;
+			node = NULL; /* fail out */
 			break;
+		}
+		/* Allow user to reedit if desired if any refn links unresolved */
+		/* this is not a showstopper, so alternative is to continue */
+		if (cnt > 0) {
+			char msgb[120];
+			snprintf(msgb, sizeof(msgb), _pl(qSbadreflink, qSbadreflinks, cnt), cnt);
+			if (ask_yes_or_no_msg(msgb, redtopt)) {
+				write_node_to_editfile(node);
+				do_edit();
+				continue;
+			}
 		}
 		break;
 	}
@@ -196,8 +214,8 @@ add_record (STRING recstr, STRING redt, char ntype, STRING cfrm)
 void
 edit_source (NODE node)
 {
-	edit_record(node, _(qSidredt), 'S', _(qSrredit), valid_sour_tree,
-	    _(qScfrupt), "SOUR", sour_to_dbase, _(qSgdrmod));
+	edit_record(node, _(qSidredt), 'S', _(qSrredit), _(qSrreditopt)
+		, valid_sour_tree, _(qScfrupt), sour_to_dbase, _(qSgdrmod));
 }
 /*=====================================
  * edit_event -- Edit event in database
@@ -205,17 +223,17 @@ edit_source (NODE node)
 void
 edit_event (NODE node)
 {
-	edit_record(node, _(qSideedt), 'E', _(qSeredit), valid_even_tree,
-	     _(qScfeupt), "EVEN", even_to_dbase, _(qSgdemod));
+	edit_record(node, _(qSideedt), 'E', _(qSeredit), _(qSereditopt)
+		, valid_even_tree, _(qScfeupt), even_to_dbase, _(qSgdemod));
 }
 /*===========================================
- * edit_other -- Edit user record in database
+ * edit_other -- Edit other record in database (eg, NOTE)
  *=========================================*/
 void
 edit_other (NODE node)
 {
-	edit_record(node, _(qSidxedt), 'X', _(qSxredit), valid_othr_tree,
-	     _(qScfxupt), NULL, othr_to_dbase, _(qSgdxmod));
+	edit_record(node, _(qSidxedt), 'X', _(qSxredit), _(qSxreditopt)
+		, valid_othr_tree, _(qScfxupt), othr_to_dbase, _(qSgdxmod));
 }
 /*========================================================
  * write_node_to_editfile - write all parts of gedcom node
@@ -233,107 +251,155 @@ write_node_to_editfile (NODE node)
 }
 /*=======================================
  * edit_record -- Edit record in database
- *  node1:   [IN]  record to edit (may be NULL)
+ *  root1:   [IN]  record to edit (may be NULL)
  *  idedt:   [IN]  user id prompt
  *  letr:    [IN]  record type (E, S, or X)
- *  redt:    [IN]  reedit prompt displayed if error after editing
+ *  redt:    [IN]  reedit prompt displayed if hard error after editing
+ *  redtopt: [IN]  reedit prompt displayed if soft error (unresolved links)
  *  val:     [IN]  callback to validate routine
  *  cfrm:    [IN]  confirmation msg string
  *  tag:     [IN]  tag (SOUR, EVEN, or NULL)
  *  todbase: [IN]  callback to write record to dbase
  *  gdmsg:   [IN]  success message
  *=====================================*/
-void
-edit_record (NODE node1, STRING idedt, INT letr, STRING redt
+static void
+edit_record (NODE root1, STRING idedt, INT letr, STRING redt, STRING redtopt
 	, BOOLEAN (*val)(NODE, STRING *, NODE)
-	, STRING cfrm, STRING tag, void (*todbase)(NODE), STRING gdmsg)
+	, STRING cfrm, void (*todbase)(NODE), STRING gdmsg)
 {
 	TRANTABLE tti = tran_tables[MEDIN];
-	STRING msg, newr, oldr, key;
+	STRING msg, key;
 	BOOLEAN emp;
-	NODE refn, node2=0, temp;
-	STRING str;
-	tag=tag; /* unused */ /* TODO: what is this ? 2002/01/04 Perry */
+	NODE root0=0, root2=0;
+	NODE refn1=0, refn2=0, refnn=0, refn1n=0;
+	NODE body=0, node=0;
 
 /* Identify record if need be */
-	if (!node1) {
-		node1 = nztop(ask_for_record(idedt, letr));
+	if (!root1) {
+		root1 = nztop(ask_for_record(idedt, letr));
 	}
-	if (!node1) {
+	if (!root1) {
 		message(_(qSnosuchrec));
 		return;
 	}
-	refn = REFN(node1);
-	oldr = refn ? nval(refn) : NULL;
 
 /* Have user edit record */
-	write_node_to_editfile(node1);
+	if (getoptint("ExpandRefnsDuringEdit", 0) > 0)
+		expand_refn_links(root1);
+	write_node_to_editfile(root1);
+	resolve_refn_links(root1);
+
 	do_edit();
 	if (readonly) {
-		node2 = file_to_node(editfile, tti, &msg, &emp);
-		if (!equal_tree(node1, node2))
+		root2 = file_to_node(editfile, tti, &msg, &emp);
+		if (!equal_tree(root1, root2))
 			message(_(qSronlye));
-		free_nodes(node2);
+		free_nodes(root2);
 		return;
 	}
 
 	while (TRUE) {
-		node2 = file_to_node(editfile, tti, &msg, &emp);
-		if (!node2) {
+		INT cnt;
+		root2 = file_to_node(editfile, tti, &msg, &emp);
+		if (!root2) {
 			if (ask_yes_or_no_msg(msg, redt)) {
 				do_edit();
 				continue;
 			}
 			break;
 		}
-		if (!(*val)(node2, &msg, node1)) {
+		cnt = resolve_refn_links(root2);
+		/* check validation & allow user to reedit if invalid */
+		/* this is a showstopper, so alternative is to abort */
+		if (!(*val)(root2, &msg, root1)) {
 			if (ask_yes_or_no_msg(msg, redt)) {
 				do_edit();
 				continue;
 			}
-			free_nodes(node2);
-			node2 = NULL;
+			free_nodes(root2);
+			root2 = NULL;
 			break;
+		}
+		/* Allow user to reedit if desired if any refn links unresolved */
+		/* this is not a showstopper, so alternative is to continue */
+		if (cnt > 0) {
+			char msgb[120];
+			snprintf(msgb, sizeof(msgb), _pl(qSbadreflink, qSbadreflinks, cnt), cnt);
+			if (ask_yes_or_no_msg(msgb, redtopt)) {
+				write_node_to_editfile(root2);
+				do_edit();
+				continue;
+			}
 		}
 		break;
 	}
 
 /* If error or no change or user backs out return */
-	if (!node2) return;
-	if (equal_tree(node1, node2) || !ask_yes_or_no(cfrm)) {
-		free_nodes(node2);
+	if (!root2) return;
+	if (equal_tree(root1, root2) || !ask_yes_or_no(cfrm)) {
+		free_nodes(root2);
 		return;
 	}
 
+/* Prepare to change database */
+
+	/* Move root1 data into root0 & delete it (saving refns) */
+	split_othr(root1, &refn1, &body);
+	root0 = copy_node(root1);
+	join_othr(root0, NULL, body);
+	free_nodes(root0);
+	/* Move root2 data into root1, also copy out list of refns */
+	split_othr(root2, &refn2, &body);
+	refnn = copy_nodes(refn2, TRUE, TRUE);
+	join_othr(root1, refn2, body);
+	free_node(root2);
+
+/* Change the database */
+
+	(*todbase)(root1);
+	key = rmvat(nxref(root1));
+	/* remove deleted refns & add new ones */
+	classify_nodes(&refn1, &refnn, &refn1n);
+	for (node = refn1; node; node = nsibling(node))
+		if (nval(node)) remove_refn(nval(node), key);
+	for (node = refnn; node; node = nsibling(node))
+		if (nval(node)) add_refn(nval(node), key);
+	free_nodes(refn1);
+	free_nodes(refnn);
+	free_nodes(refn1n);
+	msg_info(gdmsg);
+
 /* Change database */
 
-	refn = REFN(node2);
+#if OLDCODE
+	/* BUG 2002.06.02 -- this assumes only one REFN */
+	refn = REFN(root2);
 	newr = refn ? nval(refn) : NULL;
 	if (newr && oldr && eqstr(newr, oldr)) {
 		newr = oldr = NULL;
 	}
-	key = rmvat(nxref(node1));
+	key = rmvat(nxref(root1));
 	if (oldr) remove_refn(oldr, key);
 	if (newr) add_refn(newr, key);
 	/* did value of top node change ? */
-	if (nvaldiff(node1, node2)) {
-		/* swap value of node2 into node1, which is the one we keep */
-		str = nval(node1);
-		nval(node1) = nval(node2);
-		nval(node2) = str;
+	if (nvaldiff(root1, root2)) {
+		/* swap value of root2 into root1, which is the one we keep */
+		str = nval(root1);
+		nval(root1) = nval(root2);
+		nval(root2) = str;
 	}
-	if (ntagdiff(node1, node2)) {
-		/* swap tag of node2 into node1, which is the one we keep */
-		str = ntag(node1);
-		ntag(node1) = ntag(node2);
-		ntag(node2) = str;
+	if (ntagdiff(root1, root2)) {
+		/* swap tag of root2 into root1, which is the one we keep */
+		str = ntag(root1);
+		ntag(root1) = ntag(root2);
+		ntag(root2) = str;
 	}
-	temp = nchild(node1);
-	nchild(node1) = nchild(node2);
-	nchild(node2) = temp;
-	(*todbase)(node1);
-	free_nodes(node2);
-	msg_info(gdmsg);
+	temp = nchild(root1);
+	nchild(root1) = nchild(root2);
+	nchild(root2) = temp;
+	(*todbase)(root1);
+	free_nodes(root2);
+#endif
 }
 /*===============================================
  * nvaldiff -- Do nodes have different values ?

@@ -4,7 +4,7 @@
 # As are blank lines
 # So all these lines are commented out...
 #
-# 2002/06/02
+# 2002/06/03
 #
 # All variables here are available to report programs
 # via the report language function getproperty, so, for
@@ -170,3 +170,7 @@
 # debugger=1
 # Default is 0
 
+# Expand record references to refn links if available
+# Eg, change 1 SOUR @S20@ to 1 SOUR <1850.Census> during edit
+# ExpandRefnsDuringEdit=1
+# Default is 0

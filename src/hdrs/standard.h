@@ -228,6 +228,8 @@ typedef enum { RECORD_ERROR, RECORD_NOT_FOUND, RECORD_SUCCESS }
 #include "libgnuintl.h"
 /* _() is used for normally translated strings */
 #define _(String) gettext(String)
+/* _pl() is used for plural strings */
+#define _pl(Singular, Plural, Num) ngettext(Singular, Plural, Num)
 /* We can't use _N() for nonstranslated strings (eg "%d") -- TODO */
 /* N_() is used for strings needing translation elsewhere, eg static inits */
 #define N_(String) (String)
@@ -237,6 +239,7 @@ typedef enum { RECORD_ERROR, RECORD_NOT_FOUND, RECORD_SUCCESS }
 #define N_(String) (String)
 #define textdomain(Domain)
 #define bindtextdomain(Package, Directory)
+#define ngettext(Singular, Plural, Num) Plural
 #endif
 
 

@@ -44,7 +44,6 @@
  *********************************************/
 
 INT flineno = 0;
-INT travlineno;
 BOOLEAN add_metadata = FALSE;
 
 /*********************************************
@@ -1466,7 +1465,6 @@ BOOLEAN
 traverse_nodes (NODE node, BOOLEAN (*func)(NODE, VPTR), VPTR param)
 {
 	while (node) {
-		travlineno++;
 		if (!(*func)(node, param)) return FALSE;
 		if (nchild(node)) {
 			if (!traverse_nodes(nchild(node), func, param))

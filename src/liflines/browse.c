@@ -109,7 +109,7 @@ static void init_hist(struct hist * histp, INT count);
 static void load_hist_lists(void);
 static void load_nkey_list(STRING key, struct hist * histp);
 static void pick_add_child_to_fam(NODE fam, NODE save);
-static void pick_add_spouse_to_family(NODE fam, NODE save);
+static void prompt_add_spouse_check_save(NODE fam, NODE save);
 static NODE pick_create_new_family(NODE indi, NODE save, STRING * addstrings);
 static void pick_remove_spouse_from_family(NODE fam);
 static void save_hist_lists(void);
@@ -556,10 +556,10 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			swap_families(indi);
 			break;
 		case CMD_ADDASSPOUSE:	/* Add person as spouse */
-			add_spouse(indi, NULL, TRUE);
+			prompt_add_spouse(indi, NULL, TRUE);
 			break;
 		case CMD_ADDASCHILD:    /* Add person as child */
-			add_child(indi, NULL);
+			prompt_add_child(indi, NULL);
 			break;
 		case CMD_PERSON:   /* switch to person browse */
 			indimode='i';
@@ -804,11 +804,14 @@ pick_remove_spouse_from_family (NODE fam)
 	choose_and_remove_spouse(spnodes[i], fam, TRUE);
 }
 /*===============================================
- * pick_add_spouse_to_family -- 
- *  pulled out of browse_fam, 2001/02/03, Perry Rapp
+ * prompt_add_spouse_check_save -- 
+ *  fam:  [IN]  family to which to add (required arg)
+ *  save: [IN]  possible spouse to add (optional arg)
+ * If save is passed, this checks with user whether that is desired spouse
+ * In either case, all work is delegated to prompt_add_spouse
  *=============================================*/
 static void
-pick_add_spouse_to_family (NODE fam, NODE save)
+prompt_add_spouse_check_save (NODE fam, NODE save)
 {
 	NODE fref, husb, wife, chil, rest;
 	char scratch[100];
@@ -834,18 +837,21 @@ pick_add_spouse_to_family (NODE fam, NODE save)
 			sprintf(scratch, "%s%s", _(qSissnew),
 				 indi_to_name(save, ttd, 56));
 		if (ask_yes_or_no(scratch)) {
-			add_spouse(save, fam, FALSE);
+			prompt_add_spouse(save, fam, FALSE);
 			return;
 		}
 	}
-	add_spouse(NULL, fam, TRUE);
+	prompt_add_spouse(NULL, fam, TRUE);
 }
 /*===============================================
- * pick_add_child_to_fam -- 
- *  pulled out of browse_fam, 2001/02/03, Perry Rapp
+ * prompt_add_child_check_save -- 
+ *  fam:  [IN]  family to which to add (required arg)
+ *  save: [IN]  possible child to add (optional arg)
+ * If save is passed, this checks with user whether that is desired child
+ * In either case, all work is delegated to prompt_add_child
  *=============================================*/
 static void
-pick_add_child_to_fam (NODE fam, NODE save)
+prompt_add_child_check_save (NODE fam, NODE save)
 {
 	char scratch[100];
 	TRANTABLE ttd = tran_tables[MINDS];
@@ -862,11 +868,11 @@ pick_add_child_to_fam (NODE fam, NODE save)
 			sprintf(scratch, "%s%s", _(qSiscnew),
 				 indi_to_name(save, ttd, 56));
 		if (ask_yes_or_no(scratch)) {
-			add_child(save, fam);
+			prompt_add_child(save, fam);
 			return;
 		}
 	}
-	add_child(NULL, fam);
+	prompt_add_child(NULL, fam);
 }
 /*===============================================
  * browse_fam -- Handle family browse selections.
@@ -990,7 +996,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			if (*pindi1) choose_and_remove_child(*pindi1, fam, TRUE);
 			break;
 		case CMD_ADDSPOUSE:	/* Add spouse to family */
-			pick_add_spouse_to_family(fam, save);
+			prompt_add_spouse_check_save(fam, save);
 			save = NULL;
 			break;
 		case CMD_REMOVESPOUSE:	/* Remove spouse from family */
@@ -1014,7 +1020,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_ADDCHILD:	/* Add child to family */
-			pick_add_child_to_fam(fam, save);
+			prompt_add_child_check_save(fam, save);
 			save = NULL;
 			break;
 		case CMD_BROWSE: 	/* Browse to new list of persons */
@@ -1654,11 +1660,11 @@ add_new_rec_maybe_ref (NODE node, char ntype)
 
 	/* create new node of requested type */
 	if (ntype=='E') 
-		newnode=add_event();
+		newnode=edit_add_event();
 	else if (ntype=='S')
-		newnode=add_source();
+		newnode=edit_add_source();
 	else
-		newnode=add_other();
+		newnode=edit_add_other();
 	/* bail if user cancelled creation */
 	if (!newnode)
 		return NULL;

@@ -47,7 +47,7 @@ replace_indi (NODE indi1,       /* original person - as now in database */
 	STRING key;
 
 	*pmsg = NULL;
-	if (!valid_indi_old(indi2, pmsg, indi1))  return FALSE;
+	if (!valid_indi_tree(indi2, pmsg, indi1))  return FALSE;
 	if (equal_tree(indi1, indi2)) return TRUE;
 	if (readonly) {
 		*pmsg = (STRING) "Database is read only -- can't change person.";
@@ -66,7 +66,7 @@ replace_indi (NODE indi1,       /* original person - as now in database */
 	classify_nodes(&name1, &namen, &name1n);
 	classify_nodes(&refn1, &refnn, &refn1n);
 
-	resolve_links(indi1);
+	resolve_refn_links(indi1);
 	indi_to_dbase(indi1);
 	key = rmvat(nxref(indi1));
 	for (node = name1; node; node = nsibling(node))
@@ -101,7 +101,7 @@ replace_fam (NODE fam1, /* original family - now in database */
 	STRING key;
 
 	*pmsg = NULL;
-	if (!valid_fam_old(fam2, pmsg, fam1)) return FALSE;
+	if (!valid_fam_tree(fam2, pmsg, fam1)) return FALSE;
 	if (equal_tree(fam1, fam2)) return TRUE;
 	if (readonly) {
 		*pmsg = (STRING) "Database is read only -- can't change family.";
@@ -118,7 +118,7 @@ replace_fam (NODE fam1, /* original family - now in database */
 	free_node(fam2);
 	classify_nodes(&refn1, &refnn, &refn1n);
 
-	resolve_links(fam1);
+	resolve_refn_links(fam1);
 	fam_to_dbase(fam1);
 	key = rmvat(nxref(fam1));
 	for (node = refn1; node; node = nsibling(node))

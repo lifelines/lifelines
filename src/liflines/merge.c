@@ -176,7 +176,7 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 			} 
 			break;
 		}
-		if (!valid_indi_old(indi4, &msg, indi3)) {
+		if (!valid_indi_tree(indi4, &msg, indi3)) {
 			if (ask_yes_or_no_msg(msg, _(qSiredit))) {
 				do_edit();
 				continue;
@@ -373,7 +373,7 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 
 /* done with changes, save new record to db */
 
-	resolve_links(indi4);
+	resolve_refn_links(indi4);
 	indi_to_dbase(indi4);
 
 /* finally we're done with indi1 & indi2 */
@@ -471,7 +471,9 @@ merge_two_fams (NODE fam1,
 			} 
 			break;
 		}
-		if (!valid_fam_old(fam4, &msg, fam3)) {
+		/* check validation & allow user to reedit if invalid */
+		/* this is a showstopper, so alternative is to abort */
+		if (!valid_fam_tree(fam4, &msg, fam3)) {
 			if (ask_yes_or_no_msg(_(qSbadata), _(qSiredit))) {
 				do_edit();
 				continue;
@@ -512,7 +514,7 @@ merge_two_fams (NODE fam1,
 	free_nodes(chil1);
 	free_nodes(rest1);
 	join_fam(fam2, fref4, husb4, wife4, chil4, rest4);
-	resolve_links(fam2);
+	resolve_refn_links(fam2);
 	fam_to_dbase(fam2);
 	return fam2;
 }

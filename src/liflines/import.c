@@ -225,10 +225,10 @@ restore_record (NODE node,
 	}
 	traverse_nodes(node, translate_values, 0);
 	if (type == INDI_REC) {
-		add_linked_indi(node);
+		add_indi_no_cache(node);
 		return;
 	}
-	resolve_links(node);
+	resolve_refn_links(node);
 	ASSERT(str = node_to_string(node));
 	key = rmvat(nxref(node));
 	ASSERT(store_record(key, str, strlen(str)));

@@ -1662,8 +1662,8 @@ invoke_add_menu (void)
 		node = nztop(add_indi_by_edit());
 		break;
 	case 'f': add_family(NULL, NULL, NULL); break;
-	case 'c': add_child(NULL, NULL); break;
-	case 's': add_spouse(NULL, NULL, TRUE); break;
+	case 'c': prompt_add_child(NULL, NULL); break;
+	case 's': prompt_add_spouse(NULL, NULL, TRUE); break;
 	case 'q': break;
 	}
 	return node;
@@ -2007,11 +2007,11 @@ invoke_extra_menu (void)
 		case 's': return BROWSE_SOUR;
 		case 'e': return BROWSE_EVEN;
 		case 'x': return BROWSE_AUX;
-		case '1': add_source(); return BROWSE_QUIT;
+		case '1': edit_add_source(); return BROWSE_QUIT;
 		case '2': edit_source(NULL); return BROWSE_QUIT;;
-		case '3': add_event(); return BROWSE_QUIT;;
+		case '3': edit_add_event(); return BROWSE_QUIT;;
 		case '4': edit_event(NULL); return BROWSE_QUIT;;
-		case '5': add_other(); return BROWSE_QUIT;;
+		case '5': edit_add_other(); return BROWSE_QUIT;;
 		case '6': edit_other(NULL); return BROWSE_QUIT;;
 		case 'q': return BROWSE_QUIT;;
 		}

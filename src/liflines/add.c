@@ -45,6 +45,8 @@
 
 extern BOOLEAN traditional;
 extern STRING qSidcfam, qSfredit, qScffadd, qSidprnt, qSunksex, qSidsbln, qSmklast;
+extern STRING qSireditopt, qSfreditopt;
+extern STRING qSbadreflink, qSbadreflinks;
 extern STRING qSidsadd, qSidsinf, qSkchild, qSiscinf, qSnotopp, qSidsps1, qSidsps2;
 extern STRING qSnosex,  qShashsb, qShaswif, qSidchld, qSgdfadd, qScfcadd, qSiredit;
 extern STRING qScfpadd, qScfsadd, qSgdpadd, qSgdcadd, qSgdsadd, qSronlya, qSronlye;
@@ -88,6 +90,7 @@ add_indi_by_edit (void)
 	fclose(fp);
 	do_edit();
 	while (TRUE) {
+		INT cnt;
 		indi0 = file_to_record(editfile, tti, &msg, &emp);
 		if (!indi0) {
 			if (ask_yes_or_no_msg(msg, _(qSiredit))) {
@@ -97,7 +100,10 @@ add_indi_by_edit (void)
 			break;
 		}
 		indi = nztop(indi0);
-		if (!valid_indi_old(indi, &msg, NULL)) {
+		cnt = resolve_refn_links(indi);
+		/* check validation & allow user to reedit if invalid */
+		/* this is a showstopper, so alternative is to abort */
+		if (!valid_indi_tree(indi, &msg, NULL)) {
 			if (ask_yes_or_no_msg(msg, _(qSiredit))) {
 				do_edit();
 				continue;
@@ -106,21 +112,32 @@ add_indi_by_edit (void)
 			indi0 = NULL;
 			break;
 		}
+		/* Allow user to reedit if desired if any refn links unresolved */
+		/* this is not a showstopper, so alternative is to continue */
+		if (cnt > 0) {
+			char msgb[120];
+			snprintf(msgb, sizeof(msgb), _pl(qSbadreflink, qSbadreflinks, cnt), cnt);
+			if (ask_yes_or_no_msg(msgb, _(qSireditopt))) {
+				write_indi_to_editfile(indi);
+				do_edit();
+				continue;
+			}
+		}
 		break;
 	}
 	if (!indi0 || !ask_yes_or_no(_(qScfpadd))) {
 		if (indi0) free_rec(indi0);
 		return NULL;
 	}
-	return add_unlinked_indi(indi0);
+	return add_new_indi(indi0);
 }
 /*==========================================================
- * add_unlinked_indi -- Add person with no links to database
+ * add_new_indi -- Add newly created person to database
  * (no user interaction)
  * creates record & adds to cache
  *========================================================*/
 RECORD
-add_unlinked_indi (RECORD indi0)
+add_new_indi (RECORD indi0)
 {
 	NODE name, refn, sex, body, dumb, node;
 	STRING key;
@@ -137,19 +154,20 @@ add_unlinked_indi (RECORD indi0)
 	for (node = refn; node; node = nsibling(node))
 		if (nval(node)) add_refn(nval(node), key);
 	join_indi(indi, name, refn, sex, body, NULL, NULL);
-	resolve_links(indi);
+	resolve_refn_links(indi);
 	indi_to_dbase(indi);
 	indi_to_cache(indi0);
 	msg_status(_(qSgdpadd), indi_to_name(indi, ttd, 35));
 	return indi0;
 }
 /*================================================================
- * add_linked_indi -- Add linked person to database; links assumed
- *   correct
+ * add_indi_no_cache -- Add new person to database
+ *  does not insert into cache
+ *  (used by import)
  * (no user interaction)
  *==============================================================*/
 BOOLEAN
-add_linked_indi (NODE indi)
+add_indi_no_cache (NODE indi)
 {
 	NODE node, name, refn, sex, body, famc, fams;
 	STRING str, key;
@@ -161,7 +179,7 @@ add_linked_indi (NODE indi)
 	for (node = refn; node; node = nsibling(node))
 		if (nval(node)) add_refn(nval(node), key);
 	join_indi(indi, name, refn, sex, body, famc, fams);
-	resolve_links(indi);
+	resolve_refn_links(indi);
 	str = node_to_string(indi);
 	store_record(key, str, strlen(str));
 	stdfree(str);
@@ -194,13 +212,13 @@ ask_child_order (NODE fam, PROMPTQ promptq, RFMT rfmt)
 	return i;
 }
 /*==================================
- * add_child --  Add child to family
+ * prompt_add_child --  Add child to family
  * (with user interaction)
  *  child: [in] new child to add
  *  fam:   [in] family to which to add
  *================================*/
 NODE
-add_child (NODE child, NODE fam)
+prompt_add_child (NODE child, NODE fam)
 {
 	INT i;
 	TRANTABLE ttd = tran_tables[MINDS];
@@ -286,18 +304,18 @@ add_child_to_fam (NODE child, NODE fam, INT i)
 
 /* Write updated records to database */
 
-	resolve_links(child);
-	resolve_links(fam);
+	resolve_refn_links(child);
+	resolve_refn_links(fam);
 	fam_to_dbase(fam);
 	indi_to_dbase(child);
 }
 /*===================================
- * add_spouse -- Add spouse to family
+ * prompt_add_spouse -- Add spouse to family
  * prompt for family & confirm if needed
  * (with user interaction)
  *=================================*/
 BOOLEAN
-add_spouse (NODE spouse,
+prompt_add_spouse (NODE spouse,
             NODE fam,
             BOOLEAN conf)
 {
@@ -398,8 +416,8 @@ add_spouse_to_fam (NODE spouse, NODE fam, INT sex)
 
 /* Write updated records to database */
 
-	resolve_links(spouse);
-	resolve_links(fam);
+	resolve_refn_links(spouse);
+	resolve_refn_links(fam);
 	indi_to_dbase(spouse);
 	fam_to_dbase(fam);
 	msg_status(_(qSgdsadd), indi_to_name(spouse, ttd, 35));
@@ -546,6 +564,7 @@ editfam:
 
 	do_edit();
 	while (TRUE) {
+		INT cnt;
 		fam2 = file_to_node(editfile, tti, &msg, &emp);
 		if (!fam2) {
 			if (ask_yes_or_no_msg(msg, _(qSfredit))) {
@@ -554,7 +573,10 @@ editfam:
 			}
 			break;
 		}
-		if (!valid_fam_old(fam2, &msg, fam1)) {
+		cnt = resolve_refn_links(fam2);
+		/* check validation & allow user to reedit if invalid */
+		/* this is a showstopper, so alternative is to abort */
+		if (!valid_fam_tree(fam2, &msg, fam1)) {
 			if (ask_yes_or_no_msg(msg, _(qSfredit))) {
 				do_edit();
 				continue;
@@ -562,6 +584,17 @@ editfam:
 			free_nodes(fam2);
 			fam2 = NULL;
 			break;
+		}
+		/* Allow user to reedit if desired if any refn links unresolved */
+		/* this is not a showstopper, so alternative is to continue */
+		if (cnt > 0) {
+			char msgb[120];
+			snprintf(msgb, sizeof(msgb), _pl(qSbadreflink, qSbadreflinks, cnt), cnt);
+			if (ask_yes_or_no_msg(msgb, _(qSfreditopt))) {
+				write_fam_to_editfile(fam2);
+				do_edit();
+				continue;
+			}
 		}
 		break;
 	}
@@ -586,10 +619,9 @@ editfam:
 	for (node = refn; node; node = nsibling(node))
 		if (nval(node)) add_refn(nval(node), key);
 	join_fam(fam2, refn, husb, wife, chil, body);
-	resolve_links(fam2);
-	resolve_links(spouse1);
-	resolve_links(spouse2);
-	resolve_links(child);
+	resolve_refn_links(spouse1);
+	resolve_refn_links(spouse2);
+	resolve_refn_links(child);
 	fam_to_dbase(fam2);
 	fam_to_cache(fam2);
 	if (spouse1) indi_to_dbase(spouse1);
@@ -660,10 +692,10 @@ add_family_to_db (NODE spouse1, NODE spouse2, NODE child)
 	for (node = refn; node; node = nsibling(node))
 		if (nval(node)) add_refn(nval(node), key);
 	join_fam(fam2, refn, husb, wife, chil, body);
-	resolve_links(fam2);
-	resolve_links(spouse1);
-	resolve_links(spouse2);
-	resolve_links(child);
+	resolve_refn_links(fam2);
+	resolve_refn_links(spouse1);
+	resolve_refn_links(spouse2);
+	resolve_refn_links(child);
 	fam_to_dbase(fam2);
 	fam_to_cache(fam2);
 	if (spouse1) indi_to_dbase(spouse1);

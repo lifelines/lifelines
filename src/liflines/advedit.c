@@ -44,7 +44,7 @@
 
 /* alphabetical */
 static NODE expand_tree(NODE);
-static BOOLEAN expand_traverse(NODE, VPTR param);
+static BOOLEAN advedit_expand_traverse(NODE, VPTR param);
 
 /*********************************************
  * local & exported function definitions
@@ -66,7 +66,7 @@ expand_tree (NODE root0)
 	root = root0;
 	expd = copy_nodes(root, TRUE, TRUE);
 	subs = create_list();
-	traverse_nodes(expd, expand_traverse, subs);
+	traverse_nodes(expd, advedit_expand_traverse, subs);
 
    /* expand the list of records into the copied record */
 	FORLIST(subs, el)
@@ -132,10 +132,10 @@ advanced_family_edit (NODE root0)
 	do_edit();
 }
 /*=================================================================
- * expand_traverse -- Traverse routine called when expanding record
+ * advedit_expand_traverse -- Traverse routine called when expanding record
  *===============================================================*/
 static BOOLEAN
-expand_traverse (NODE node, VPTR param)
+advedit_expand_traverse (NODE node, VPTR param)
 {
 	LIST subs = (LIST)param;
 	STRING key = value_to_xref(nval(node));

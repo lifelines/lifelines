@@ -45,6 +45,7 @@ extern BTREE BTR;
  * local function prototypes
  *********************************************/
 
+static BOOLEAN expand_traverse(NODE node, VPTR param);
 static RKEY refn2rkey(STRING);
 static BOOLEAN resolve_traverse(NODE, VPTR param);
 
@@ -358,21 +359,21 @@ get_refns (STRING refn,
 	*pkeys = RMkeys;
 }
 /*==========================================================
- * resolve_links -- Resolve and check all links in node tree
+ * resolve_refn_links -- Resolve and check all links in node tree
+ *  This converts, eg, "<1850.Census>" to "@S25@"
  *========================================================*/
-static BOOLEAN unresolved;
-void
-resolve_links (NODE node)
+INT
+resolve_refn_links (NODE node)
 {
-	travlineno = 0;
-	unresolved = FALSE;
-	if (!node) return;
-	traverse_nodes(node, resolve_traverse, 0);
+	INT unresolved = 0;
+	if (!node) return 0;
+	traverse_nodes(node, resolve_traverse, &unresolved);
+	return unresolved;
 }
 /*=======================================================
- * resolve_traverse -- Traverse routine for resolve_links
+ * resolve_traverse -- Traverse routine for resolve_refn_links (q.v.)
  *  node:    Current node in traversal
- *  VPTR:    client param we don't use (we passed in 0 in resolve_links)
+ *  VPTR:    client param (&resolved)
  *  returns TRUE to continue traversal
  *=====================================================*/
 static BOOLEAN
@@ -381,7 +382,7 @@ resolve_traverse (NODE node, VPTR param)
 	STRING refn, val = nval(node);
 	INT letr;
 	NODE refr;
-	param=param; /* unused */
+	INT * unresolved = (INT *)param;
 
 	if (!val) return TRUE;
 	if (symbolic_link(val)) {
@@ -391,8 +392,56 @@ resolve_traverse (NODE node, VPTR param)
 		if (refr) {
 			stdfree(nval(node));
 			nval(node) = strsave(nxref(refr));
+		} else {
+			++(*unresolved);
 		}
 	}
+	return TRUE;
+}
+/*==========================================================
+ * expand_refn_links -- Expand any references that have REFNs
+ *  This converts, eg, "@S25@" to "<1850.Census>"
+ *========================================================*/
+INT
+expand_refn_links (NODE node)
+{
+	INT expanded = 0;
+	if (!node) return 0;
+	traverse_nodes(node, expand_traverse, &expanded);
+	return expanded;
+}
+/*=======================================================
+ * expand_traverse -- Traverse routine for expand_refn_links (q.v.)
+ *  node:    Current node in traversal
+ *  VPTR:    client param (&expanded)
+ *  returns TRUE to continue traversal
+ *=====================================================*/
+static BOOLEAN
+expand_traverse (NODE node, VPTR param)
+{
+	STRING key=0;
+	INT * expanded = (INT *)param;
+	RECORD rec=0;
+	NODE refn=0;
+	char buffer[60];
+
+	key = value_to_xref(nval(node));
+	if (!key) return TRUE;
+	
+	rec = key_possible_to_record(key, *key);
+	if (!rec) return TRUE;
+	
+	refn = REFN(nztop(rec));
+	if (!refn || !nval(refn) || strlen(nval(refn))>sizeof(buffer)-3) return TRUE;
+
+	buffer[0]=0;
+	strcpy(buffer, "<");
+	strcat(buffer, nval(refn));
+	strcat(buffer, ">");
+	stdfree(nval(node));
+	nval(node) = strsave(buffer);
+	
+	++(*expanded);
 	return TRUE;
 }
 /*===============================================
@@ -457,6 +506,9 @@ RECORD key_possible_to_record (STRING str, /* string that may be a key */
 }
 /*================================================
  * refn_to_record - Get record from user reference
+ *  ukey: [IN]  refn key found
+ *  letr: [IN]  possible type of record (0 if any)
+ * eg, refn_to_record("1850.Census", "S")
  *==============================================*/
 NODE
 refn_to_record (STRING ukey,    /* user refn key */

@@ -9,11 +9,11 @@ typedef struct llrect_s {
 } *LLRECT;
 
 /* add.c */
-NODE add_child(NODE, NODE);
+NODE prompt_add_child(NODE, NODE);
 NODE add_family(NODE, NODE, NODE);
-BOOLEAN add_linked_indi(NODE);
-BOOLEAN add_spouse(NODE, NODE, BOOLEAN);
+BOOLEAN add_indi_no_cache(NODE);
 RECORD add_indi_by_edit(void);
+BOOLEAN prompt_add_spouse(NODE, NODE, BOOLEAN);
 
 /* advedit.c */
 void advanced_person_edit(NODE);
@@ -69,12 +69,12 @@ void who_is_he_she(void);
 
 /* newrecs.c */
 RECORD ask_for_record(STRING, INT);
+NODE edit_add_event(void);
+NODE edit_add_other(void);
+NODE edit_add_source(void);
 void edit_event(NODE);
 void edit_other(NODE);
 void edit_source(NODE);
-NODE add_event(void);
-NODE add_other(void);
-NODE add_source(void);
 
 /* pedigree.c */
 	/* gedcom view mode */
