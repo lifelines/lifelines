@@ -9,6 +9,7 @@
  * intlshim.c -- Shim to connect to gettext dll if available
  * Windows specific
  *   Created: 2002/06 by Perry Rapp
+ *   Edited:  2002/11/20 (Perry Rapp)
  *==============================================================*/
 
 #include "intlshim.h"
@@ -19,7 +20,7 @@
 #define INTLDECL
 #endif
 
-#define INTLSHIM_VERSION "1.1.0"
+#define INTLSHIM_VERSION "1.1.1"
 
 
 static FARPROC MyGetProcAddress(HMODULE hModule, LPCSTR lpProcName);
@@ -342,11 +343,15 @@ ishim_get_file_version (const char * filepath, char * verout, int veroutlen)
 	GetFileVersionInfo((char *)filepath, 0, len, buf);
 	VerQueryValue(buf, "\\", &lpvi, &verlen);
 	fileInfo = *(VS_FIXEDFILEINFO*)lpvi;
-	_snprintf(verout, veroutlen, "%d.%d.%d.%d"
+	_snprintf(verout, veroutlen, "FV:%d.%d.%d.%d, PV:%d.%d.%d.%d"
 		, HIWORD(fileInfo.dwFileVersionMS)
 		, LOWORD(fileInfo.dwFileVersionMS)
 		, HIWORD(fileInfo.dwFileVersionLS)
-		, LOWORD(fileInfo.dwFileVersionLS));
+		, LOWORD(fileInfo.dwFileVersionLS)
+		, HIWORD(fileInfo.dwProductVersionMS)
+		, LOWORD(fileInfo.dwProductVersionMS)
+		, HIWORD(fileInfo.dwProductVersionLS)
+		, LOWORD(fileInfo.dwProductVersionLS));
 	free(buf);
 	return len;
 }

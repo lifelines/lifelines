@@ -9,10 +9,12 @@
  * iconvshim.c -- Shim to connect to iconv dll if available
  * Windows specific
  *   Created: 2002/06 by Perry Rapp
+ *   Edited:  2002/11/20 (Perry Rapp)
  *==============================================================*/
 
 #include "config.h"
 #include "iconv.h"
+#include "iconvshim.h"
 #include <windows.h>
 #include <stdio.h>
 
@@ -20,11 +22,10 @@
 #define ICONVDECL
 #endif
 
-#define ICONVSHIM_VERSION "1.1.0"
+#define ICONVSHIM_VERSION "1.1.1"
 
 static FARPROC MyGetProcAddress(HMODULE hModule, LPCSTR lpProcName);
 static int ishim_get_dll_name(char * filepath, int pathlen);
-static int ishim_get_file_version(const char * filepath, char * verout, int veroutlen);
 static int ishim_set_dll_name(const char *filepath);
 static int load_dll(void);
 static void unload_dll(void);
@@ -218,7 +219,7 @@ ishim_get_dll_name (char * filepath, int pathlen)
 	return 1;
 }
 
-static int
+int
 ishim_get_file_version (const char * filepath, char * verout, int veroutlen)
 {
 	DWORD dwDummyHandle, len;
@@ -236,11 +237,15 @@ ishim_get_file_version (const char * filepath, char * verout, int veroutlen)
 	GetFileVersionInfo((char *)filepath, 0, len, buf);
 	VerQueryValue(buf, "\\", &lpvi, &verlen);
 	fileInfo = *(VS_FIXEDFILEINFO*)lpvi;
-	_snprintf(verout, veroutlen, "%d.%d.%d.%d"
+	_snprintf(verout, veroutlen, "FV:%d.%d.%d.%d, PV:%d.%d.%d.%d"
 		, HIWORD(fileInfo.dwFileVersionMS)
 		, LOWORD(fileInfo.dwFileVersionMS)
 		, HIWORD(fileInfo.dwFileVersionLS)
-		, LOWORD(fileInfo.dwFileVersionLS));
+		, LOWORD(fileInfo.dwFileVersionLS)
+		, HIWORD(fileInfo.dwProductVersionMS)
+		, LOWORD(fileInfo.dwProductVersionMS)
+		, HIWORD(fileInfo.dwProductVersionLS)
+		, LOWORD(fileInfo.dwProductVersionLS));
 	free(buf);
 	return 1;
 }

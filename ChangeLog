@@ -20,6 +20,11 @@
 
 	Remove duplicate typedef to make gcc happy.
 
+	* ChangeLog src/hdrs/win32/iconvshim.h win32/iconvshim.c
+	win32/intlshim.c:
+
+	More detail in reporting win32 intl/iconv dll versions.
+
 2002-11-17 Perry Rapp
 
 	* ChangeLog src/gedlib/translat.c src/hdrs/translat.h:

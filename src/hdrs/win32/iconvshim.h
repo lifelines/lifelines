@@ -8,6 +8,7 @@
 /*=============================================================
  * iconv.h -- Shim to connect to iconv dll if available
  *   Created: 2002/06 by Perry Rapp
+ *   Edited:  2002/11/20 (Perry Rapp)
  *==============================================================*/
 
 #ifndef ICONV_SHIM_H_INCLUDED
@@ -58,6 +59,9 @@ ICONVDECL int iconvctl (iconv_t cd, int request, void* argument);
 /* iconvshim specific API */
 ICONVDECL int iconvshim_get_property(const char *name, char * value, int valuelen);
 ICONVDECL int iconvshim_set_property(const char *name, const char *value);
+
+/* simple utility functions */
+int ishim_get_file_version(const char * filepath, char * verout, int veroutlen);
 
 #ifdef __cplusplus
 }
