@@ -1,3 +1,8 @@
+2001-02-07 Marc Nozell   <marc@nozell.com>
+
+	* hdrs/Makefile.am: Fixed distribution build.  A number of new
+	hdr/*.h files weren't in Makefile.am.
+
 2001-02-07 Perry Rapp <puddle@users.sourceforge.net>
 	
 	* gedlib/lloptions.c: Change use of itoa to sprintf.
