@@ -85,10 +85,13 @@ STKSTACK RbEnumerate(RBTREE tree, RBKEY low, RBKEY high);
 /* utility */
 RBNODE RbGetNil(RBTREE tree);
 int RbIsNil(RBTREE tree, RBNODE node);
-RBKEY RbGetKey(RBNODE node);
-RBVALUE RbGetInfo(RBNODE node);
 void NullFunction(void*);
 int RbGetCount(RBTREE);
+
+/* working with node in tree */
+RBKEY RbGetKey(RBNODE node);
+RBVALUE RbGetInfo(RBNODE node);
+RBVALUE RbSetInfo(RBNODE node, RBVALUE info);
 
 /* iteration */
 RBITER RbBeginIter(RBTREE tree, RBKEY low, RBKEY high);

@@ -957,6 +957,15 @@ RbGetInfo(RBNODE node)
 	Assert(node!=0, "RbGetInfo(NULL) called");
 	return node->info;
 }
+RBVALUE
+RbSetInfo (RBNODE node, RBVALUE info)
+{
+	RBVALUE old;
+	Assert(node!=0, "RbSetInfo(NULL,) called");
+	old = node->info;
+	node->info = info;
+	return old;
+}
 
 /***********************************************************************
  * Wrappers to call the client-supplied utility functions
@@ -970,31 +979,31 @@ TreeCompare (RBTREE tree, RBKEY key1, RBKEY key2)
 }
 
 static void
-TreeDestroyKeyInfo(RBTREE tree, RBKEY key, RBVALUE info)
+TreeDestroyKeyInfo (RBTREE tree, RBKEY key, RBVALUE info)
 {
 	Assert(tree && tree->DestroyKeyInfoFnc, "Bad argument to TreeDestroyKeyInfo");
 	(*tree->DestroyKeyInfoFnc)(tree->param, key, info);
 }
 static void
-TreePrintKey(RBTREE tree, RBKEY key, KeyPrintFuncType KeyPrintFunc)
+TreePrintKey (RBTREE tree, RBKEY key, KeyPrintFuncType KeyPrintFunc)
 {
 	Assert(tree && KeyPrintFunc, "Bad argument to TreePrintKey");
 	(*KeyPrintFunc)(key);
 }
 static void
-TreePrintInfo(RBTREE tree, RBVALUE info, InfoPrintFuncType InfoPrintFunc)
+TreePrintInfo (RBTREE tree, RBVALUE info, InfoPrintFuncType InfoPrintFunc)
 {
 	Assert(tree && InfoPrintFunc, "Bad argument to TreePrintInfo");
 	(*InfoPrintFunc)(info);
 }
 static void
-Assert(int assertion, char* error)
+Assert (int assertion, char* error)
 {
 	if (!f_AssertFnc) return;
 	(*f_AssertFnc)(assertion, error);
 }
 static void *
-SafeMalloc(size_t size)
+SafeMalloc (size_t size)
 {
 	return (*f_SafeMallocFnc)(size);
 }

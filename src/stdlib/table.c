@@ -86,6 +86,7 @@ static void * llalloc(size_t size);
 static void llassert(int assertion, const char* error);
 static int rbcompare(RBKEY key1, RBKEY key2);
 static void rbdestroy(void * param, RBKEY key, RBVALUE info);
+static void rbdestroy_value(void * param, RBVALUE info);
 static VPTR rb_valueof(RBTREE rbtree, CNSTRING key, BOOLEAN *there);
 static void tabit_destructor(VTABLE *obj);
 static void table_destructor(VTABLE *obj);
@@ -317,9 +318,16 @@ insert_table_ptr (TABLE tab, CNSTRING key, VPTR ptr)
 	ASSERT(tab->vtable == &vtable_for_table);
 
 	if (tab->rbtree) {
-		RBNODE old = RbExactQuery(tab->rbtree, key);
-		if (old)
-			RbDeleteNode(tab->rbtree, old);
+		/* first see if key already exists, so we can just change value */
+		RBNODE node = RbExactQuery(tab->rbtree, key);
+		if (node) {
+			VPTR oldptr = RbGetInfo(node);
+			if (oldptr != ptr) {
+				RbSetInfo(node, ptr);
+				rbdestroy_value(tab->rbtree, oldptr);
+			}
+			return;
+		}
 		RbTreeInsert(tab->rbtree, strsave(key), ptr);
 	} else {
 		oldval = insert_hashtab(tab->hashtab, key, ptr);
@@ -750,8 +758,17 @@ rbcompare (RBKEY key1, RBKEY key2)
 static void
 rbdestroy (void * param, RBKEY key, RBVALUE info)
 {
-	TABLE tab = (TABLE)param;
 	stdfree((void *)key);
+	rbdestroy_value(param, info);
+}
+/*=================================================
+ * rbdestroy_value -- Destroy value stored in rbtree
+ *  (for rbtree module, which does not manage key or value memory)
+ *===============================================*/
+static void
+rbdestroy_value (void * param, RBVALUE info)
+{
+	TABLE tab = (TABLE)param;
 	switch(tab->valtype) {
 	case TB_INT:
 	case TB_STR:
