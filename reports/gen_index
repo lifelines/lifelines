@@ -124,7 +124,8 @@ sub read_files {
 	}
 	$prog = $file;
 	$prog =~ s/.ll$//;  #strip off .ll
-	$prog =~ s/.*\///;  #strip off any path prefix on filename
+	$prog =~ s/.*\/reports\///;  #strip off any path prefix on filename
+	                             #   that includes '/reports/'
 	open(FIN,$file) or die "Unable to open $file for input";
 	$progname="";
 	$version="";

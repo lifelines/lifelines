@@ -1,3 +1,9 @@
+2003-07-07 Steve Dum
+       * ChangeLog reports/gen_index
+
+       recognize sub directories when generating index.html and retain
+       that information on file names.
+
 2003-07-08 Perry Rapp
 
 	* ChangeLog src/liflines/valgdcom.c
