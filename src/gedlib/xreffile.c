@@ -101,7 +101,7 @@ void closexref (void)
 /*====================================
  * getixref -- Return next ixref value
  *==================================*/
-STRING getixref ()
+STRING getixref (void)
 {
 	INT n;
 	static unsigned char scratch[12];
@@ -114,7 +114,7 @@ STRING getixref ()
 /*====================================
  * getfxref -- Return next fxref value
  *==================================*/
-STRING getfxref ()
+STRING getfxref (void)
 {
 	INT n;
 	static unsigned char scratch[12];
@@ -127,7 +127,7 @@ STRING getfxref ()
 /*====================================
  * getexref -- Return next exref value
  *==================================*/
-STRING getexref ()
+STRING getexref (void)
 {
 	INT n;
 	static unsigned char scratch[12];
@@ -140,7 +140,7 @@ STRING getexref ()
 /*====================================
  * getsxref -- Return next sxref value
  *==================================*/
-STRING getsxref ()
+STRING getsxref (void)
 {
 	INT n;
 	static unsigned char scratch[12];
@@ -153,7 +153,7 @@ STRING getsxref ()
 /*====================================
  * getxxref -- Return next xxref value
  *==================================*/
-STRING getxxref ()
+STRING getxxref (void)
 {
 	INT n;
 	static unsigned char scratch[12];
