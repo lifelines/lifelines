@@ -136,6 +136,7 @@ BOOLEAN sprintpic3(STRING buffer, INT len, CNSTRING pic, CNSTRING arg1
 INT chartype(INT);
 BOOLEAN eqstr_ex(STRING s1, STRING s2);
 BOOLEAN isletter(INT);
+BOOLEAN islinebreak(INT c);
 BOOLEAN iswhite(INT);
 INT ll_toupper(INT);
 INT ll_tolower(INT);

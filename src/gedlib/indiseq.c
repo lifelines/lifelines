@@ -31,8 +31,8 @@
 /* modified 2000-01-26 J.F.Chandler */
 /* modified 2000-08-21 J.F.Chandler */
 
-#include "llstdlib.h" 
-/* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
+#include "llstdlib.h" /* llstdlib.h includes standard.h, config.h, sys_inc.h */
+#include "bfs.h"
 #ifdef HAVE_LOCALE_H
 #include <locale.h>
 #endif
@@ -1766,29 +1766,53 @@ static void
 append_all_tags(INDISEQ seq, NODE node, STRING tagname
 	, BOOLEAN recurse, BOOLEAN nonptrs)
 {
-	if (!tagname || eqstr(ntag(node), tagname))
+	if (!tagname || (ntag(node) && eqstr(ntag(node), tagname)))
 	{
 		STRING key;
 		INT val=0;
 		key = nval(node);
 		if (key)
 		{
+			INT keylen = strlen(key);
 			STRING skey = rmvat(key);
 			BOOLEAN include=TRUE;
+			bfptr bfs = 0;
 			if (skey)
 				val = atoi(skey+1);
 			else
 			{
 				if (nonptrs) {
+					NODE chil;
 					/* include non-pointers, but mark invalid with val==-1 */
 					skey = key;
 					val = -1;
+					if (!bfs)
+						bfs = bfNew(keylen+100);
+					bfCpy(bfs, key);
+					/* collect any CONC or CONT children */
+					for (chil = nchild(node); chil; chil=nsibling(chil)) {
+						STRING text = nval(chil) ? nval(chil) : "";
+						BOOLEAN cr=FALSE;
+						if (eqstr_ex(ntag(chil), "CONC")) {
+						} else if (eqstr_ex(ntag(chil), "CONT")) {
+							cr=TRUE;
+						} else {
+							break;
+						}
+						if (cr)
+							bfCat(bfs, "\n");
+						bfCat(bfs, text);
+						skey = bfs->str;
+					}
 				} else {
 					include=FALSE;
 				}
 			}
 			if (include)
 				append_indiseq_ival(seq, skey, NULL, val, FALSE, FALSE);
+			if (bfs) {
+				bfDelete(bfs);
+			}
 		}
 	}
 	if (nchild(node) && recurse )

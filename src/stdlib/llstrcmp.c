@@ -137,7 +137,6 @@ widecmp (char *str1, char *str2, INT *rtn)
 			success = TRUE;
 		}
 	}
-failwidecmp:
 #else
 	str1=str1; /* unused */
 	str2=str2; /* unused */

@@ -95,6 +95,7 @@ chartype (INT c)
  * iswhite -- Check for white space
  * Note: input character is passed to isspace, so it
  *  should be in unsigned char range.
+ * TODO: Fix for Unicode
  *===============================*/
 BOOLEAN
 iswhite (INT c)
@@ -105,9 +106,18 @@ iswhite (INT c)
 	return c == ' ' || c == '\t' || c == '\n' || c == '\r';
 #endif
 }
-
+/*=================================
+ * islinebreak -- Check for linebreak
+ * TODO: Fix for Unicode
+ *===============================*/
+BOOLEAN
+islinebreak (INT c)
+{
+	return c == '\n' || c == '\r';
+}
 /*=============================
  * isletter -- Check for letter
+ * TODO: Fix for Unicode
  *===========================*/
 BOOLEAN
 isletter (INT c)
@@ -120,7 +130,6 @@ isletter (INT c)
 	return c >= 'A' && c <= 'Z';
 #endif
 }
-
 /*==========================================
  * ll_toupper -- Convert letter to uppercase
  *========================================*/

@@ -1,3 +1,11 @@
+2002-07-08 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog build/msvc6/llines/llines.rc gedlib/indiseq.c
+	gedlib/messages.c hdrs/llstdlib.h hdrs/version.h
+	liflines/screen.c stdlib/llstrcmp.c stdlib/stdstrng.c:
+
+	Add details to notes & sources popup lists.
+
 2002-07-07 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog hdrs/isolangs.h:

@@ -186,6 +186,7 @@ static void delete_uiwindow(UIWINDOW uiw);
 static void destroy_windows(void);
 static void disp_trans_table_choice(UIWINDOW uiwin, INT row, INT col, STRING menuit, INT indx);
 static void display_status(STRING text);
+static void display_string(UIWINDOW uiwin, LLRECT rect, STRING text);
 static void edit_tt_menu(void);
 static void edit_user_options(void);
 static void edit_place_table(void);
@@ -217,7 +218,7 @@ static void repaint_footer_menu(INT screen);
 static void repaint_main_menu(UIWINDOW uiwin);
 static void run_report(BOOLEAN picklist);
 static void show_fam (UIWINDOW uiwin, NODE fam, INT mode, INT row, INT hgt, INT width, INT * scroll, BOOLEAN reuse);
-static void show_record(UIWINDOW uiwin, STRING key, INT mode, LLRECT
+static BOOLEAN show_record(UIWINDOW uiwin, STRING key, INT mode, LLRECT
 	, INT * scroll, BOOLEAN reuse);
 static void show_tandem_line(UIWINDOW uiwin, INT row);
 static void shw_array_of_strings(STRING *strings, listdisp *ld
@@ -2320,8 +2321,36 @@ shw_recordlist_details (INDISEQ seq, listdisp * ld)
 		clear_hseg(win, i, ld->rectDetails.left, ld->rectDetails.right-10);
 	}
 	element_indiseq(seq, ld->cur, &key, &name);
-	show_record(ld->uiwin, key, ld->mode, &ld->rectDetails, &ld->details_scroll
-		, reuse);
+	if (!show_record(ld->uiwin, key, ld->mode, &ld->rectDetails
+		, &ld->details_scroll, reuse)) {
+		display_string(ld->uiwin, &ld->rectDetails, key);
+	}
+}
+/*=====================================================
+ * display_string -- Draw string in rectangle
+ *  handle embedded carriage returns
+ *===================================================*/
+static void
+display_string (UIWINDOW uiwin, LLRECT rect, STRING text)
+{
+	INT max = rect->right - rect->left + 2;
+	STRING str = stdalloc(max), p2;
+	WINDOW *win = uiw_win(uiwin);
+	INT row = rect->top;
+	wipe_window_rect(uiwin, rect);
+	for (row = rect->top; row <= rect->bottom; ++row) {
+		str[0] = 0;
+		p2 = str;
+		while (p2<str+max && text[0] && !islinebreak(text[0]))
+			*p2++ = *text++;
+		*p2 = 0;
+		mvwaddstr(win, row, rect->left, str);
+		if (!text[0])
+			break;
+		else
+			++text;
+	}
+	stdfree(str);
 }
 /*=====================================================
  * shw_recordlist_list -- Draw actual list items
@@ -2445,7 +2474,7 @@ manufacture a listdisp here
  *  scroll: [I/O] current scroll setting
  *  reuse:  [IN]  flag indicating if same record drawn last time
  *==============================================================*/
-static void
+static BOOLEAN
 show_record (UIWINDOW uiwin, STRING key, INT mode, LLRECT rect
 	, INT * scroll, BOOLEAN reuse)
 {
@@ -2456,15 +2485,19 @@ show_record (UIWINDOW uiwin, STRING key, INT mode, LLRECT rect
 		NODE indi = key_to_indi(key);
 		if (indi)
 			show_indi(uiwin, indi, mode, rect, scroll, reuse);
+		return indi != NULL;
 	} else if (key[0]=='F') {
 		NODE fam = key_to_fam(key);
 		if (fam)
 			show_fam(uiwin, fam, mode, row, hgt, width, scroll, reuse);
+		return fam != NULL;
+
 	} else {
 		/* could be S,E,X -- show_aux handles all of these */
 		NODE aux = qkey_to_type(key);
 		if (aux)
 			show_aux(uiwin, aux, mode, rect, scroll, reuse);
+		return aux != NULL;
 	}
 }
 /*================================================================
