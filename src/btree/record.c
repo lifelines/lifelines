@@ -75,8 +75,8 @@ check_offset (BLOCK block, RKEY rkey, INT i)
 		char msg[256];
 		sprintf(msg, "Working on rkey=%s ", rkey2str(rkey));
 		sprintf(msg+strlen(msg)
-			, "Found corrupt block#%x: key(%d) off=%d, len=%d, key(%d) off=%d"
-			, i-1, offlo, lenlo, i, offhi);
+			, "Found corrupt block#%x: index(%d) off=%d, len=%d, key(%d) off=%d"
+			, ixself(block), i-1, offlo, lenlo, i, offhi);
 		FATAL2(msg);
 	}
 }
