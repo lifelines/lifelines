@@ -32,13 +32,11 @@
 
 #include "llstdlib.h"
 #include <signal.h>
-#include "table.h"
 #include "translat.h"
-#include "gedcom.h"
-#include "cache.h"
 #include "interp.h"
 #include "liflines.h"
 #include "feedback.h"
+#include "zstr.h"
 
 #include "stdlibi.h"
 
@@ -140,8 +138,9 @@ on_signals (int sig)
 {
 	extern BOOLEAN progrunning;
 	extern PNODE Pnode;
-	char msg[100]="", signum[20];
+	char signum[20];
 	STRING signame;
+	ZSTR zstr=0;
 
 	/* Ok, we'll want the descriptive name of the signal */
 	load_signames();
@@ -152,14 +151,16 @@ on_signals (int sig)
 	if (progrunning) {
 		char line[20];
 		snprintf(line, sizeof(line), "%d", iline(Pnode)+1);
-		sprintpic2(msg, sizeof(msg), uu8, _(qSprogsig), ifname(Pnode), line);
+		zstr = zprintpic2(_(qSprogsig), ifname(Pnode), line);
 	}
 
 	close_lifelines();
 	shutdown_ui(TRUE); /* pause */
+	/* TODO: Shouldn't we be logging this ? */
 	/* now print report msg if we had one */
-	if (msg[0])
-		printf(msg);
+	if (zs_len(zstr))
+		printf(zs_str(zstr));
+	zs_free(&zstr);
 	/* now build description of signal (# and name) */
 	/* name is not translated til sprint'd into msg */
 	snprintf(signum, sizeof(signum), "%d", sig);
@@ -167,8 +168,9 @@ on_signals (int sig)
 		signame = sig_msgs[sig];
 	else
 		signame = _(qSsigunk);
-	sprintpic2(msg, sizeof(msg), uu8, _(qSsignal), signum, signame); 
-	ll_abort(msg);
+	zstr = zprintpic2(_(qSsignal), signum, signame); 
+	ll_abort(zs_str(zstr));
+	zs_free(&zstr);
 }
 /*================================
  * ll_abort -- print msg & stop

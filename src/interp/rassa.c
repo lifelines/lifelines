@@ -212,7 +212,7 @@ set_output_file (STRING outfname, BOOLEAN append)
 		Poutfp = NULL;
 	}
 	rptdir = getoptstr("LLREPORTS", ".");
-	Poutfp = fopenpath(outfname, modestr, rptdir, NULL, NULL);
+	Poutfp = fopenpath(outfname, modestr, rptdir, NULL, uu8, NULL);
 	if (!Poutfp) {
 		msg_error("Could not open file %s", outfname);
 		return FALSE;

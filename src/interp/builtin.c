@@ -3138,7 +3138,7 @@ __copyfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	fname = pvalue_to_string(val);
 	if (!(cfp = fopenpath(fname, LLREADTEXT, programsdir
-		, (STRING)NULL, (STRING *)NULL))) {
+		, (STRING)NULL, uu8, (STRING *)NULL))) {
 		*eflg = TRUE;
 		prog_var_error(node, stab, arg, val, nonfname1, "copyfile");
 		return NULL;

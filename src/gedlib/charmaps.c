@@ -368,7 +368,7 @@ check_for_user_charmaps (STRING basename, XLAT ttm, CNSTRING mapname)
 		if (!ttname || !ttname[0])
 			break;
 		/* user wishes to load translation table named ttname */
-		concat_path(ttdir, ttname, ttpath, sizeof(ttpath));
+		concat_path(ttdir, ttname, uu8, ttpath, sizeof(ttpath));
 		load_user_charmap(ttpath, mapname, ttm);
 	}
 }

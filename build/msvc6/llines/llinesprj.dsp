@@ -153,6 +153,10 @@ SOURCE=..\..\..\src\gedlib\choose.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\gedlib\codesets.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\gedlib\date.c
 # End Source File
 # Begin Source File
@@ -394,6 +398,10 @@ SOURCE=..\..\..\src\liflines\pedigree.c
 # Begin Source File
 
 SOURCE=..\..\..\src\gedlib\place.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\arch\platform.c
 # End Source File
 # Begin Source File
 

@@ -1,33 +1,13 @@
 /* 
    Copyright (c) 1991-1999 Thomas T. Wetmore IV
-
-   Permission is hereby granted, free of charge, to any person
-   obtaining a copy of this software and associated documentation
-   files (the "Software"), to deal in the Software without
-   restriction, including without limitation the rights to use, copy,
-   modify, merge, publish, distribute, sublicense, and/or sell copies
-   of the Software, and to permit persons to whom the Software is
-   furnished to do so, subject to the following conditions:
-
-   The above copyright notice and this permission notice shall be
-   included in all copies or substantial portions of the Software.
-
-   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-   SOFTWARE.
+   "The MIT license"
+   Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 /*======================================================
  * path.c -- Handle files with environment variables
  * Copyright (c) by T.T. Wetmore IV; all rights reserved
- * pre-SourceForge version information:
- *   2.3.4 - 24 Jun 93    2.3.5 - 12 Aug 93
- *   3.0.0 - 05 May 94    3.0.2 - 01 Dec 94
- *   3.0.3 - 06 Sep 95
  *=====================================================*/
 
 #include "llstdlib.h"
@@ -139,7 +119,8 @@ concat_path_alloc (CNSTRING dir, CNSTRING file)
 {
 	INT len = (dir ? strlen(dir) : 0) + (file ? strlen(file) : 0) +2;
 	STRING buffer = malloc(len);
-	return concat_path(dir, file, buffer, len);
+	INT myutf8=0; /* buffer is big enough, so won't matter */
+	return concat_path(dir, file, myutf8, buffer, len);
 }
 /*=============================================
  * concat_path -- add file & directory together
@@ -150,12 +131,12 @@ concat_path_alloc (CNSTRING dir, CNSTRING file)
  *  returns no trailing / if file is NULL
  *===========================================*/
 STRING
-concat_path (CNSTRING dir, CNSTRING file, STRING buffer, INT buflen)
+concat_path (CNSTRING dir, CNSTRING file, INT utf8, STRING buffer, INT buflen)
 {
 	ASSERT(buflen);
 	buffer[0] = 0;
 	if (dir && dir[0]) {
-		llstrapps(buffer, buflen, uu8, dir);
+		llstrapps(buffer, buflen, utf8, dir);
 		if (is_dir_sep(buffer[strlen(buffer)-1])) {
 			/* dir ends in sep */
 			if (!file || !file[0]) {
@@ -164,10 +145,10 @@ concat_path (CNSTRING dir, CNSTRING file, STRING buffer, INT buflen)
 			} else {
 				if (is_dir_sep(file[0])) {
 					/* file starts in sep */
-					llstrapps(buffer, buflen, uu8, &file[1]);
+					llstrapps(buffer, buflen, utf8, &file[1]);
 				} else {
 					/* file doesn't start in sep */
-					llstrapps(buffer, buflen, uu8, file);
+					llstrapps(buffer, buflen, utf8, file);
 				}
 			}
 		} else {
@@ -177,18 +158,18 @@ concat_path (CNSTRING dir, CNSTRING file, STRING buffer, INT buflen)
 			} else {
 				if (is_dir_sep(file[0])) {
 					/* file starts in sep */
-					llstrapps(buffer, buflen, uu8, file);
+					llstrapps(buffer, buflen, utf8, file);
 				} else {
 					/* file doesn't start in sep */
-					llstrapps(buffer, buflen, uu8, LLSTRDIRSEPARATOR);
-					llstrapps(buffer, buflen, uu8, file);
+					llstrapps(buffer, buflen, utf8, LLSTRDIRSEPARATOR);
+					llstrapps(buffer, buflen, utf8, file);
 				}
 			}
 		}
 	} else {
 		/* no dir, include file exactly as it is */
 		if (file && file[0])
-			llstrapps(buffer, buflen, uu8, file);
+			llstrapps(buffer, buflen, utf8, file);
 	}
 
 	return buffer;
@@ -199,10 +180,7 @@ concat_path (CNSTRING dir, CNSTRING file, STRING buffer, INT buflen)
  *  returns alloc'd buffer
  *=========================================*/
 STRING
-filepath (CNSTRING name,
-          CNSTRING mode,
-          CNSTRING path,
-          CNSTRING  ext)
+filepath (CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING  ext, INT utf8)
 {
 	char buf1[MAXPATHLEN], buf2[MAXPATHLEN];
 	STRING p, q;
@@ -238,7 +216,7 @@ filepath (CNSTRING name,
 	while (*p) {
 		q = buf2;
 		strcpy(q, p);
-		expand_special_fname_chars(buf2, sizeof(buf2));
+		expand_special_fname_chars(buf2, sizeof(buf2), utf8);
 		q += strlen(q);
 		if (q>buf2 && !is_dir_sep(q[-1])) {
 			strcpy(q, LLSTRDIRSEPARATOR);
@@ -259,7 +237,7 @@ filepath (CNSTRING name,
 	p = buf1;
 	q = buf2;
 	strcpy(q, p);
-	expand_special_fname_chars(buf2, sizeof(buf2));
+	expand_special_fname_chars(buf2, sizeof(buf2), utf8);
 	q += strlen(q);
 	strcpy(q, LLSTRDIRSEPARATOR);
 	q++;
@@ -272,15 +250,12 @@ filepath (CNSTRING name,
  *  pfname: [OUT]  stdalloc'd copy of full path found
  *=========================================*/
 FILE *
-fopenpath (STRING name,
-           STRING mode,
-           STRING path,
-           STRING ext,
-           STRING *pfname)
+fopenpath (STRING name, STRING mode, STRING path, STRING ext, INT utf8
+	, STRING *pfname)
 {
 	STRING str;
 	if(pfname) *pfname = NULL;
-	if (!(str = filepath(name, mode, path, ext))) return NULL;
+	if (!(str = filepath(name, mode, path, ext, utf8))) return NULL;
 	if(pfname) {
 		*pfname = str;
 	} else {
@@ -464,7 +439,7 @@ get_home (void)
  * expand_special_fname_chars -- Replace ~ with home
  *==========================================*/
 BOOLEAN
-expand_special_fname_chars (STRING buffer, INT buflen)
+expand_special_fname_chars (STRING buffer, INT buflen, INT utf8)
 {
 	if (buffer[0]=='~') {
 		if (is_dir_sep(buffer[1])) {
@@ -476,8 +451,8 @@ expand_special_fname_chars (STRING buffer, INT buflen)
 				}
 				tmp = strsave(buffer);
 				buffer[0] = 0;
-				llstrapps(buffer, buflen, uu8, home);
-				llstrapps(buffer, buflen, uu8, tmp+1);
+				llstrapps(buffer, buflen, utf8, home);
+				llstrapps(buffer, buflen, utf8, tmp+1);
 				strfree(&tmp);
 				return TRUE;
 			}

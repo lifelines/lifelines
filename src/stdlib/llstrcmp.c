@@ -100,7 +100,12 @@ ll_what_collation (void)
 	if (usersort && (*usersort)("a", "b", &rtn)) return "user-defined";
 
 #ifdef HAVE_WCSCOLL
-	if (uu8) return "wcscoll";
+	{
+		ZSTR zstr = makewide("test");
+		rtn = (zstr != 0);
+		zs_free(&zstr);
+		if (rtn) return "wcscoll";
+	}
 #endif
 
 #ifdef HAVE_STRCOLL

@@ -446,7 +446,7 @@ open_database (INT alteration, STRING dbpath)
 	/* tentatively copy paths into gedlib module versions */
 	readpath_file=strsave(lastpathname(dbpath));
 	llstrncpy(fpath, dbpath, sizeof(fpath), 0);
-	expand_special_fname_chars(fpath, sizeof(fpath));
+	expand_special_fname_chars(fpath, sizeof(fpath), uu8);
 	readpath=strsave(fpath);
 
 	if (f_dbnotify)
@@ -672,14 +672,14 @@ add_dbs_to_list (LIST dblist, LIST dbdesclist, STRING dir)
 	char dirbuf[MAXPATHLEN];
 
 	llstrncpy(dirbuf, dir, sizeof(dirbuf), 0);
-	if (!expand_special_fname_chars(dirbuf, sizeof(dirbuf)))
+	if (!expand_special_fname_chars(dirbuf, sizeof(dirbuf), uu8))
 		return;
 
 	n = scandir(dirbuf, &programs, 0, 0);
 	if (n < 0) return;
 	while (n--) {
-		concat_path(dirbuf, programs[n]->d_name, candidate, sizeof(candidate));
-		concat_path(dir, programs[n]->d_name, userpath, sizeof(userpath));
+		concat_path(dirbuf, programs[n]->d_name, uu8, candidate, sizeof(candidate));
+		concat_path(dir, programs[n]->d_name, uu8, userpath, sizeof(userpath));
 		if ((dbstr = getdbdesc(candidate, userpath)) != NULL) {
 			push_list(dblist, strsave(userpath));
 			push_list(dbdesclist, dbstr);

@@ -12,7 +12,9 @@
 
 
 #include "llstdlib.h"
+#include "codesets.h"
 #include "lloptions.h"
+#include "platform.h"
 
 #ifdef HAVE_LANGINFO_CODESET
 # include <langinfo.h>
@@ -20,10 +22,8 @@
 # include "langinfz.h"
 #endif
 
-#ifdef WIN32
-/* need the Win32-specific codeset stuff in mycurses */
-#include "curses.h"
-#endif
+
+
 
 /*********************************************
  * global/exported variables
@@ -151,10 +151,8 @@ init_codesets (void)
 		strfree(&gedcom_codeset_in);
 		gedcom_codeset_in = strsave(e);
 	}
-
-
+	/* TODO: finish these */
 }
-
 /*=================================================
  * term_codesets -- free all codeset variables
  * Created: 2002/11/27 (Perry Rapp)
@@ -165,3 +163,4 @@ term_codesets (void)
 	strfree(&gui_codeset_out);
 	strfree(&gui_codeset_in);
 }
+

@@ -87,9 +87,6 @@ int wprintw(WINDOW *wp, ...);
 int wrefresh(WINDOW *wp);
 /* win32 specific routines */
 void wtitle(const char * title); 
-int w_get_codepage(void); /* Windows codepage */
-int w_get_oemin_codepage(void); /* Console codepage */
-int w_get_oemout_codepage(void); /* Console output codepage */
 
 /*
  * Standard alternate character set.  The current ACS world is evolving,

@@ -420,7 +420,7 @@ find_program (STRING fname, STRING *pfull)
 	STRING programsdir = getoptstr("LLPROGRAMS", ".");
 	FILE * fp = 0;
 	if (!fname || *fname == 0) return FALSE;
-	fp = fopenpath(fname, LLREADTEXT, programsdir, ".ll", pfull);
+	fp = fopenpath(fname, LLREADTEXT, programsdir, ".ll", uu8, pfull);
 	if (fp) {
 		fclose(fp);
 		return TRUE;

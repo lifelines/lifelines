@@ -194,7 +194,7 @@ ask_for_file_worker (STRING mode,
 			ext = NULL;	/* the file name has the extension already */
 	}
 
-	if (!expand_special_fname_chars(fname, sizeof(fname))) {
+	if (!expand_special_fname_chars(fname, sizeof(fname), uu8)) {
 		msg_error(_(qSfn2long));
 		return NULL;
 	}
@@ -214,7 +214,7 @@ ask_for_file_worker (STRING mode,
 		return fp;
 	}
 
-	if (!(fp = fopenpath(fname, mode, path, ext, pfullpath))) {
+	if (!(fp = fopenpath(fname, mode, path, ext, uu8, pfullpath))) {
 		msg_error(_(qSnofopn), fname);
 		return NULL;
 	}

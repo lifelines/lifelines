@@ -12,6 +12,20 @@
 
 	Add new codesets.* files to Makefiles.
 
+	* ChangeLog build/msvc6/llines/llinesprj.dsp
+	src/arch/Makefile.am src/gedlib/Makefile.am
+	src/gedlib/charmaps.c src/gedlib/codesets.c src/gedlib/init.c
+	src/hdrs/llstdlib.h src/hdrs/win32/curses.h
+	src/interp/builtin.c src/interp/interp.c src/interp/rassa.c
+	src/liflines/ask.c src/liflines/llexec.c src/liflines/main.c
+	src/stdlib/Makefile.am src/stdlib/llstrcmp.c src/stdlib/path.c
+	src/stdlib/signals.c src/stdlib/stdlibi.h win32/mycurses.c
+	*NEW src/arch/platform.c
+	*NEW src/hdrs/platform.h
+
+	Add some win32 specific code in arch/platform.c.
+	Remove uu8 from lib/stdlib.a.
+
 2002-11-26 Perry Rapp
 
 	* ChangeLog src/gedlib/charmaps.c src/gedlib/editvtab.c
