@@ -461,15 +461,25 @@ init_display_fam (RECORD frec, INT width)
 	 * insert HUSB records before WIFE records.
 	 */
 	if (fam) {
-	    fnode = nchild(fam);
-	    husbstatus = next_spouse(&fnode,&ihusb);
+		fnode = nchild(fam);
+		husbstatus = next_spouse(&fnode,&ihusb);
+		husb = nztop(ihusb);
 		if (fnode) {
-		    fnode = nsibling(fnode);
-		    wifestatus = next_spouse(&fnode,&iwife);
+			fnode = nsibling(fnode);
+			wifestatus = next_spouse(&fnode,&iwife);
+			wife = nztop(iwife);
 		}
-
-	    husb = nztop(ihusb);
-	    wife = nztop(iwife);
+	}
+	/* if only one spouse and it's female list in second slot
+	 * hiding the non-traditional behavior
+	 */
+	if (wife == 0 && SEX(husb) == SEX_FEMALE) {
+		wife = husb;
+		husb = 0;
+		iwife = ihusb;
+		ihusb = 0;
+		wifestatus = husbstatus;
+		husbstatus  = 0;
 	}
 
 	if (husbstatus == 1) {

@@ -1,3 +1,8 @@
+2005-01-06 Stephen Dum
+        * ChangeLog src/liflines/show.c
+
+	make family screen show mother in mother slot if only one parent.
+
 2005-01-07 Perry Rapp
 
 	* ChangeLog src/gedlib/keytonod.c
