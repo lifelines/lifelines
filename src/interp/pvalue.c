@@ -25,6 +25,7 @@
 /*=============================================================
  * pvalue.c -- Handle program typed values
  * Copyright(c) 1991-95 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   3.0.3 - 03 Jul 96
  *===========================================================*/
 

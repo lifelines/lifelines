@@ -1,3 +1,8 @@
+/*=============================================================
+ * property.c -- Code for properties available to report programs
+ *   Created: 2001/01 by Petter Reinholdtsen
+ *==============================================================*/
+
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif

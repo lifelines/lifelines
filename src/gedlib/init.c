@@ -72,7 +72,7 @@ static STRING getsaveenv(STRING key);
 static int rdr_count = 0;
 
 /*********************************************
- * local function definitions
+ * local & exported function definitions
  * body of module
  *********************************************/
 
@@ -394,4 +394,3 @@ describe_dberror (INT dberr, STRING buffer, INT buflen)
 	}
 	llstrcatn(&ptr, msg, &mylen);
 }
-

@@ -24,6 +24,7 @@
 /*=============================================================
  * valid.c -- Record validation functions
  * Copyright(c) 1992-96 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   2.3.4 - 24 Jun 93    2.3.5 - 02 Sep 93
  *   3.0.0 - 11 Sep 94    3.0.2 - 13 Dec 94
  *   3.0.3 - 23 Jul 96

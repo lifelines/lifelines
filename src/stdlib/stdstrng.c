@@ -25,6 +25,7 @@
 /*=============================================================
  * stdstrng.c -- Standard string routines
  * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   3.0.2 - 31 Dec 94
  *===========================================================*/
 

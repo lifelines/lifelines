@@ -25,6 +25,7 @@
 /*=============================================================
  * write.c -- Handle changes to the database
  * Copyright(c) 1994-95 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   2.3.6 - 01 Jan 94    3.0.0 - 01 Jan 94
  *   3.0.2 - 11 Dec 94    3.0.3 - 07 Aug 95
  *===========================================================*/

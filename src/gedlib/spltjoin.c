@@ -24,6 +24,7 @@
 /*=============================================================
  * spltjoin.c -- Splits and joins persons and families
  * Copyright(c) 1993-94 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   3.0.0 - 16 May 94    3.0.2 - 21 Nov 94
  *   3.0.3 - 17 Jan 96
  *===========================================================*/

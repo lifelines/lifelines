@@ -24,6 +24,7 @@
 /*=============================================================
  * indiseq.h -- Header file for the INDISEQ data type
  * Copyright(c) 1993-94 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   2.3.4 - 24 Jun 93    2.3.5 - 03 Aug 93
  *   3.0.2 - 06 Dec 94    3.0.3 - 08 Aug 95
  *===========================================================*/

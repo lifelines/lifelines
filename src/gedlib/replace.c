@@ -25,6 +25,7 @@
 /*=============================================================
  * replace.c -- Replace persons and families
  * Copyright(c) 1995-96 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   3.0.3 - 20 Jan 96
  *===========================================================*/
 

@@ -2,7 +2,7 @@
    options.h
    Copyright (c) 2000-2001 Perry Rapp
    Created: 2000/12, Perry Rapp
-	Brought into repository: 2001/02/04
+   Brought into repository: 2001/02/04
 
    Permission is hereby granted, free of charge, to any person
    obtaining a copy of this software and associated documentation

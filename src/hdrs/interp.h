@@ -25,6 +25,7 @@
 /*=============================================================
  * interp.h - Header file for report interpreter
  * Copyright(c) 1991-95 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *  2.3.4 - 24 Jun 93   2.3.5 - 16 Aug 93
  *  3.0.0 - 19 Jun 94   3.0.2 - 21 Dec 94
  *  3.0.3 - 07 Aug 95

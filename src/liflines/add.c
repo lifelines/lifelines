@@ -26,6 +26,7 @@
  * add.c -- Add new person or family to database; add child to
  *   family; add spouse to family
  * Copyright(c) 1992-95 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   2.3.4 - 24 Jun 93    2.3.5 - 01 Sep 93
  *   2.3.6 - 29 Oct 93    3.0.0 - 23 Sep 94
  *   3.0.2 - 12 Dec 94    3.0.3 - 20 Jan 96

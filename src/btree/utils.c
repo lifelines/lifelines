@@ -22,8 +22,9 @@
    SOFTWARE.
 */
 /*=============================================================
- * utils.c - Low level BTREE utilities
+ * utils.c -- Low level BTREE utilities
  * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   2.3.4 - 24 Jun 93    3.0.0 - 04 Oct 94
  *   3.0.2 - 09 Nov 94
  *===========================================================*/

@@ -24,6 +24,7 @@
 /*=============================================================
  * place.c -- Handle place values
  * Copyright(c) 1993-94 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   2.3.4 - 30 Aug 93    3.0.0 - 28 Jun 94
  *===========================================================*/
 

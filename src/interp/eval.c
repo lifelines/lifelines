@@ -104,6 +104,7 @@ valueof_iden (SYMTAB stab, STRING iden)
 	if (there) return copy_pvalue(val);
 	val = symtab_valueofbool(globtab, iden, &there);
 	if (there) return copy_pvalue(val);
+	/* undeclared indentifier */
 	return create_pvalue(PANY, NULL);
 }
 /*================================================+

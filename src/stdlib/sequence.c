@@ -24,6 +24,7 @@
 /*==============================================================
  * sequence.c -- Sequence data type
  * Copyright (c) 1992-94 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   2.3.4 - 24 Jun 93    2.3.5 - 29 Sep 93
  *   2.3.6 - 01 Jan 94    3.0.0 - 09 May 94
  *   3.0.2 - 24 Nov 94

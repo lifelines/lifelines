@@ -25,6 +25,7 @@
 /*=============================================================
  * show.c -- Curses version of display functions
  * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   2.3.4 - 24 Jun 93    2.3.5 - 24 Aug 93
  *   3.0.0 - 14 Sep 94    3.0.2 - 24 Dec 94
  *   3.0.3 - 03 May 95

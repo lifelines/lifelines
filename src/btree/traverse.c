@@ -21,8 +21,13 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
-/* traverse.c - traverse a btree, doing things */
-/* Version 2.3.4 - controlled 24 June 1993 */
+/*===========================================================
+ * traverse.c -- traverse a btree, doing things
+ * Copyright(c) 1991-1999 by T.T. Wetmore IV; see above
+ * pre-SourceForge version information:
+ *  Version 2.3.4 - controlled 24 June 1993
+ *=========================================================*/
+
 
 #include "llstdlib.h"
 #include "btreei.h"

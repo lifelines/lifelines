@@ -26,6 +26,7 @@
  * alloc.c -- Allocate nodes for report generator
  * pnodes are parse nodes in the parse tree built by yacc.c
  * Copyright(c) 1991-95 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   2.3.4 - 24 Jun 93    2.3.5 - 17 Aug 93
  *   3.0.0 - 28 Jun 94    3.0.2 - 23 Dec 94
  *   3.0.3 - 10 Aug 95

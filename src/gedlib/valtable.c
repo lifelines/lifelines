@@ -25,6 +25,7 @@
 /*=============================================================
  * valtable.c -- Handle value tables in LifeLines
  * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   3.0.0 - 12 Sep 94    3.0.2 - 16 Oct 94
  *===========================================================*/
 

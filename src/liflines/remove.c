@@ -24,6 +24,7 @@
 /*=============================================================
  * remove.c -- Remove child or spouse from family
  * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   2.3.4 - 24 Jun 93    2.3.5 - 01 Sep 93
  *   3.0.0 - 23 Sep 94    3.0.2 - 05 Dec 94
  *   3.0.3 - 15 Aug 95
@@ -46,7 +47,8 @@ static INT num_fam_xrefs(NODE);
 
 /*===========================================
  * choose_and_remove_child -- Remove child
- *  from family (choosing either not provided)
+ *  from family (prompting for child and/or family
+ *  if NULL passed)
  *  nolast: don't remove last member of family?
  *=========================================*/
 BOOLEAN
@@ -117,7 +119,8 @@ remove_child (NODE indi, NODE fam)
 }
 /*===========================================
  * choose_and_remove_spouse -- Remove spouse 
- *  from family (choosing either not provided)
+ *  from family (prompting for spouse and/or family
+ *  if NULL passed)
  *  nolast: don't remove last member of family?
  *=========================================*/
 BOOLEAN

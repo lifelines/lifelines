@@ -25,6 +25,7 @@
 /*=============================================================
  * advedit.c -- Advanced edit features
  * Copyright(c) 1994 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   3.0.2 - 11 Dec 94
  *===========================================================*/
 

@@ -25,6 +25,7 @@
 /*=============================================================
  * standard.h -- Define standard macros and types
  * Copyright(c) 1991-95 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   3.0.0 - 05 May 94    3.0.2 - 23 Nov 94
  *   3.0.3 - 25 Jun 95
  *===========================================================*/

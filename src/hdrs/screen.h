@@ -24,6 +24,7 @@
 /*==============================================================
  * screen.h -- Header file for curses-based screen I/O
  * Copyright (c) 1991-94 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   2.3.4 - 24 Jun 93    2.3.5 - 20 Aug 93
  *   3.0.0 - 26 Jul 94    3.0.2 - 16 Dec 94
  *============================================================*/

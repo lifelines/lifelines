@@ -24,6 +24,7 @@
 /*=================================================================
  * swap.c -- Swaps two children of family or two families of person
  * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   2.3.4 - 24 Jun 93    2.3.5 - 27 Sep 93
  *   2.3.6 - 01 Nov 93    3.0.0 - 23 Sep 94
  *   3.0.2 - 02 Dec 94

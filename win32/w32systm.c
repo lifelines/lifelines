@@ -21,8 +21,12 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
-/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
-/* w32system() - replacement for system() that waits for program to complete*/
+/*=============================================================
+ * w32systm.c -- replacement for system() that waits for program to complete
+ *   Created: ? by Paul B. McBride (pmcbride@tiac.net)
+ *   C RTL version of system does not correctly block on Win95,98
+ *    (altho it is ok on WinNT)
+ *==============================================================*/
 
 #include <process.h>
 #include <stdio.h>

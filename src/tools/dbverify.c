@@ -182,7 +182,7 @@ static STRING lineage_tags[] = {
 	, "HUSB"
 };
 /*********************************************
- * local function definitions
+ * local & exported function definitions
  * body of module
  *********************************************/
 

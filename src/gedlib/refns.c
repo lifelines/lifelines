@@ -25,6 +25,7 @@
 /*=============================================================
  * refns.c -- Handle user reference indexing
  * Copyright(c) 1992-96 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   3.0.2 - 13 Dec 94    3.0.3 - 20 Jan 96
  *===========================================================*/
 

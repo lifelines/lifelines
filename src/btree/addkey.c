@@ -25,6 +25,7 @@
 /*=============================================================
  * addkey.c -- Adds a new key to a BTREE
  * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   2.3.4 - 24 Jun 93    3.0.0 - 24 Sep 94
  *===========================================================*/
 

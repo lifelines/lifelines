@@ -25,6 +25,7 @@
 /*=============================================================
  * table.c -- Hash table operations
  * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   2.3.4 - 24 Jun 93    2.3.5 - 29 Aug 93
  *   3.0.0 - 04 Sep 94    3.0.2 - 22 Dec 94
  *   3.0.3 - 19 Sep 95

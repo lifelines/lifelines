@@ -3,6 +3,22 @@
 	* ChangeLog hdrs/interp.h interp/alloc.c liflines/main.c:
 	Added init code to check builtins array (& FATAL2 if not correct).
 
+	* ChangeLog btree/addkey.c btree/traverse.c btree/utils.c
+	gedlib/init.c gedlib/place.c gedlib/property.c gedlib/refns.c
+	gedlib/replace.c gedlib/spltjoin.c gedlib/translat.c
+	gedlib/valid.c gedlib/valtable.c gedlib/xreffile.c
+	hdrs/gedcheck.h hdrs/gedcom.h hdrs/indiseq.h hdrs/interp.h
+	hdrs/lloptions.h hdrs/menuitem.h hdrs/screen.h hdrs/standard.h
+	hdrs/table.h hdrs/translat.h interp/alloc.c interp/eval.c
+	interp/pvalue.c interp/rassa.c interp/write.c liflines/add.c
+	liflines/advedit.c liflines/ask.c liflines/remove.c
+	liflines/screen.c liflines/show.c liflines/swap.c
+	liflines/tandem.c liflines/valgdcom.c stdlib/sequence.c
+	stdlib/signals.c stdlib/stdstrng.c stdlib/table.c
+	stdlib/warehouse.c tools/dbverify.c win32/w32systm.c:
+	(Comment changes.)
+	Labelled version info in file headers as pre-Sourceforge.
+
 2001-06-03 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/gengedc.c gedlib/indiseq.c gedlib/init.c

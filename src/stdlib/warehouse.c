@@ -23,6 +23,20 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+/*=============================================================
+ * warehouse.c -- Block storage routines
+ * Copyright(c) 2000-2001 by Perry Rapp; all rights reserved
+ *
+ * These are meant to be used for metadata, which has not
+ * been implemented yet after all. I was thinking of adding
+ * metadata (eg, record modification date) to the database,
+ * and a warehouse is a structure that helps provide forward &
+ * backward version compatibility -- unknown block types are
+ * ignored (forward compatibility), and missing block types
+ * must be handled by client (backward compatibility).
+ *  - Perry Rapp
+ *===========================================================*/
+
 
 #include "llstdlib.h"
 #include "warehouse.h"

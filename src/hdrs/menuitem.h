@@ -2,7 +2,7 @@
    menuitem.h
    Copyright (c) 1999-2001 Perry Rapp
    Created: 1999/03 for private build of LifeLines
-	Brought into repository: 2001/01/28
+   Brought into repository: 2001/01/28
 
    Permission is hereby granted, free of charge, to any person
    obtaining a copy of this software and associated documentation

@@ -26,6 +26,7 @@
 /*=============================================================
  * screen.c -- Curses user interface to LifeLines
  * Copyright(c) 1992-96 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   2.3.4 - 24 Jun 93    2.3.5 - 29 Sep 93
  *   2.3.6 - 01 Jan 94    3.0.0 - 06 Oct 94
  *   3.0.2 - 25 Mar 95    3.0.3 - 17 Jan 96

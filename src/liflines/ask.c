@@ -25,6 +25,7 @@
 /*=============================================================
  * ask.c -- Interact with user for various reasons
  * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   2.3.4 - 24 Jun 93    2.3.5 - 24 Aug 93
  *   2.3.6 - 30 Oct 93    3.0.0 - 19 Aug 94
  *   3.0.2 - 02 Dec 94

@@ -25,6 +25,7 @@
 /*===========================================================
  * translat.c -- LifeLines character mapping functions
  * Copyright(c) 1994 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   3.0.0 - 17 Jun 94    3.0.2 - 11 Nov 94
  *=========================================================*/
 

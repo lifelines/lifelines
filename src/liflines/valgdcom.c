@@ -26,6 +26,7 @@
 /*=============================================================
  * valgdcom.c -- Validate GEDCOM file
  * Copyright(c) 1993-96 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   2.3.4 - 24 Jun 93     2.3.5 - 02 Sep 93
  *   3.0.0 - 06 Jul 94     3.0.2 - 18 Feb 95
  *   3.0.3 - 29 Jun 96

@@ -24,6 +24,7 @@
 /*===========================================================
  * translat.h -- Header file for translate feature
  * Copyright(c) 1994 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   3.0.0 - 29 May 1994
  *=========================================================*/
 

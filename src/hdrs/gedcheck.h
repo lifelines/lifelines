@@ -24,6 +24,7 @@
 /*==========================================================
  * gedcheck.h -- Header for GEDCOM validation
  * Copyright(c) 1994 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   3.0.0 - 28 May 94
  *========================================================*/
 

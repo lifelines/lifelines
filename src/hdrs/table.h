@@ -24,6 +24,7 @@
 /*=============================================================
  * table.h -- Header file for hashed key table
  * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   2.3.4 - 24 Jun 93    2.3.5 - 20 Aug 93
  *   3.0.2 - 22 Dec 94
  *===========================================================*/
