@@ -27,6 +27,10 @@
 
 	New function setrecord. Fix record leaks in browse_indi_modes.
 
+	* ChangeLog src/liflines/browse.c
+
+	Fix record leaks in browse_fam.
+
 2005-01-26, Stephen Dum
         * ChangeLog docs/ll-reportmanual.xml docs/ll-userguide.sv.xml
 	docs/ll-userguide.xml
