@@ -33,6 +33,9 @@
 #include "standard.h"
 #include "table.h"
 
+static INT hash(STRING);
+static ENTRY fndentry(TABLE, STRING);
+
 /*======================
  * hash -- Hash function
  *====================*/

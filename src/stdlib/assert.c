@@ -32,6 +32,8 @@
 #include "liflines.h"
 #include "screen.h"
 
+#include "signals.h"
+
 /*===============================
  * __fatal -- Fatal error routine
  *=============================*/

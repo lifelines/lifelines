@@ -39,6 +39,7 @@
 #include "interp.h"
 #include "liflines.h"
 #include "screen.h"
+#include "signals.h"
 
 char *sig_msgs[] = {
 	"SIGNAL 0",
@@ -63,9 +64,9 @@ char *sig_msgs[] = {
 	"POWER-FAIL RESTART",
 	"WINDOW CHANGE",
 };
-#define NUM_SIGNALS (sizeof(sig_msgs)/sizeof(sig_msgs[0]))
+#define NUM_SIGNALS ARRAYSIZE(sig_msgs)
 
-static void on_signals();
+static void on_signals(int);
 
 /*======================================
  * set_signals -- Install signal handler
