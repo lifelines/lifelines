@@ -59,6 +59,7 @@ static LINESTRING Spers, Sbirt, Sdeat, Sfath, Smoth, Smarr;
 static LINESTRING Shusb, Shbirt, Shdeat, Swife, Swbirt, Swdeat;
 static LINESTRING Sothers[MAXOTHERS];
 static INT Solen = 0;
+static INT number_child_enable = 0;
 
 /*===============================================
  * init_display_indi -- Initialize display person
@@ -187,7 +188,10 @@ add_child_line (INT num,
 	STRING line;
 	if (Solen >= MAXOTHERS) return;
 	line = person_display(indi, NULL, 65);
-	sprintf(Sothers[Solen], "    child: %s", line);
+	if (number_child_enable)
+		sprintf(Sothers[Solen], "  %2dchild: %s", num, line);
+	else
+		sprintf(Sothers[Solen], "    child: %s", line);
 	Sothers[Solen++][78] = 0;
 }
 /*==============================================
@@ -622,3 +626,11 @@ show_sour_display (NODE node,
 	STRING key;
 }
 #endif
+/*==================================================================
+ * show_childnumbers() - toggle display of numbers for children
+ * (Perry) 1999/02
+ *================================================================*/
+void show_childnumbers ()
+{
+	number_child_enable = !number_child_enable;
+}

@@ -35,6 +35,7 @@
 #include "gedcom.h"
 
 static RKEY refn2rkey();
+static BOOLEAN resolve_traverse(NODE);
 
 extern BTREE BTR;
 
@@ -312,7 +313,6 @@ static BOOLEAN unresolved;
 void
 resolve_links (NODE node)
 {
-	BOOLEAN resolve_traverse();
 	tlineno = 0;
 	unresolved = FALSE;
 	if (!node) return;
@@ -321,7 +321,7 @@ resolve_links (NODE node)
 /*=======================================================
  * resolve_traverse -- Traverse routine for resolve_links
  *=====================================================*/
-BOOLEAN
+static BOOLEAN
 resolve_traverse (NODE node)
 {
 	STRING refn, val = nval(node);
@@ -346,8 +346,8 @@ resolve_traverse (NODE node)
 BOOLEAN
 symbolic_link (STRING val)
 {
-        if (!val || *val != '<' || strlen(val) < 3) return FALSE;
-        return val[strlen(val)-1] == '>';
+	if (!val || *val != '<' || strlen(val) < 3) return FALSE;
+	return val[strlen(val)-1] == '>';
 }
 /*===============================================
  * record_letter -- Return letter for record type
@@ -407,11 +407,11 @@ NODE
 refn_to_record (STRING ukey,    /* user refn key */
                 INT letr)       /* type of record */
 {
-        STRING *keys;
-        INT num;
+	STRING *keys;
+	INT num;
 
-        if (!ukey || *ukey == 0) return NULL;
-        get_refns(ukey, &num, &keys, letr);
+	if (!ukey || *ukey == 0) return NULL;
+	get_refns(ukey, &num, &keys, letr);
 	if (num)
 		return key_to_record(keys[0], *keys[0]);
 	else

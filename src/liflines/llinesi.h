@@ -61,6 +61,7 @@ void show_aux_display(NODE, INT, INT);
 void show_sour_display(NODE, INT, INT);
 void show_short_family(NODE, INT, INT);
 void show_long_family(NODE, INT, INT);
+void show_childnumbers();
 
 /* swap.c */
 BOOLEAN swap_children(NODE, NODE);

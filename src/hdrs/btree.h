@@ -42,6 +42,8 @@ typedef struct {
 	char r_rkey[8];
 }  RKEY; /*record key*/
 
+#define RKEYLEN 8
+
 typedef INT FKEY; /*file key*/
 
 typedef char *RECORD;

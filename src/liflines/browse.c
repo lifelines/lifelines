@@ -97,6 +97,39 @@ browse (NODE indi1)
 	}
 }
 /*================================================
+ * goto_indi_child - jump to child by number
+ *==============================================*/
+NODE
+goto_indi_child(NODE indi, int childno)
+{
+	INT num1, num2, i = 0;
+	NODE answer = 0;
+	if (!indi) return NULL;
+	FORFAMSS(indi, fam, spouse, num1)
+		FORCHILDREN(fam, chil, num2)
+			i++;
+			if (i == childno) answer = chil;
+		ENDCHILDREN
+	ENDFAMSS
+	return answer;
+}
+
+/*================================================
+ * goto_fam_child - jump to child by number
+ *==============================================*/
+NODE
+goto_fam_child(NODE fam, int childno)
+{
+	INT num, i = 0;
+	NODE answer = 0;
+	if (!fam) return NULL;
+	FORCHILDREN(fam, chil, num)
+		i++;
+		if (i == childno) answer = chil;
+	ENDCHILDREN
+	return answer;
+}
+/*================================================
  * browse_indi -- Handle person browse operations.
  *==============================================*/
 static INT
@@ -195,6 +228,22 @@ browse_indi (NODE *pindi1,
 			node = choose_child(indi, NULL, nocofp,
 			    idcbrs, FALSE);
 			if (node) indi = node;
+			break;
+		case '#':       /* toggle children numbers */
+			show_childnumbers();
+			break;
+		case '1':	/* Go to children by number */
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
+			node = goto_indi_child(indi, c-'0');
+			if (node) indi = node;
+			else message(nochil);
 			break;
 		case 'C':	/* browse to tandem children */
 			node = choose_child(indi, NULL, nocofp,
@@ -537,6 +586,22 @@ browse_fam (NODE *pindi,
 		case 'x':	/* Swap two children */
 			swap_children(NULL, fam);
 			break;
+		case '#':       /* toggle children numbers */
+			show_childnumbers();
+			break;
+		case '1':	/* Go to children by number */
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
+			*pindi = goto_fam_child(fam, c-'0');
+			if (*pindi) return BROWSE_INDI;
+			message(nochil);
+			break;
 		case '+':	/* Go to next fam in db */
 			{
 				i = atoi(key_of_record(fam));
@@ -577,12 +642,12 @@ browse_pedigree (NODE *pindi,
                  INDISEQ *pseq)
 {
 	NODE node, indi = *pindi;
-	INT i, rc;
+	INT c, i, rc;
 	STRING key, name;
 	INDISEQ seq = NULL;
 	if (!indi) return BROWSE_QUIT;
 	while (TRUE) {
-		switch (ped_browse(indi)) {
+		switch (c=ped_browse(indi)) {
 		case 'e':	/* Edit person */
 			indi = edit_indi(indi);
 			break;
@@ -623,6 +688,19 @@ browse_pedigree (NODE *pindi,
 			}
 			*pseq = seq;
 			return BROWSE_LIST;
+			break;
+		case '1':	/* Go to children by number */
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
+			node = goto_indi_child(indi, c-'0');
+			if (node) indi = node;
+			else message(nochil);
 			break;
 		case '+':	/* Go to next indi in db */
 			{

@@ -584,7 +584,7 @@ indi_browse (NODE indi)
 	show_person(indi, 1, PER_LINES);
 	display_screen(ONE_PER_SCREEN);
 	return interact(main_win,
-		"efmscoygubhirdpnaxtzqACFGMSU$+-");
+		"efmscoygubhirdpnaxtzqACFGMSU$#123456789+-");
 }
 /*=======================================
  * fam_browse -- Handle fam_browse screen
@@ -596,7 +596,7 @@ fam_browse (NODE fam)
 	show_long_family(fam, 1, FAM_LINES);
 	display_screen(ONE_FAM_SCREEN);
 	return interact(main_win, 
-		"efmcnsardxtbzqABCFM$+-");
+		"efmcnsardxtbzqABCFM$#123456789+-");
 }
 /*=============================================
  * tandem_browse -- Handle tandem_browse screen
