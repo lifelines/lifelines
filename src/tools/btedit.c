@@ -71,11 +71,7 @@ main (int argc,
 
 	editor = environ_figure_editor();
 	sprintf(cmdbuf, "%s btedit.tmp", editor);
-#ifdef WIN32
-	w32system(cmdbuf);	/* start program and wait for completion */
-#else
 	system(cmdbuf);
-#endif
 	addfile(btree, str2rkey(argv[2]), "btedit.tmp");
 	unlink("btedit.tmp");
 	closebtree(btree);
