@@ -1,5 +1,8 @@
 2000-11-06  Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* Makefile.am ChangeLog.usermap: New target 'ChangeLog.new' to
+	generate a changelog from CVS logs using cvs2cl.
+
 	* gedlib/brwslist.c gedlib/charmaps.c gedlib/choose.c
 	gedlib/editmap.c gedlib/editvtab.c gedlib/equaliso.c
 	gedlib/gedcom.c gedlib/gstrings.c gedlib/indiseq.c gedlib/init.c
