@@ -1,6 +1,11 @@
-LifeLines Source Release, Version 3.0.43
+LifeLines Source Release, Version 3.0.44
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
+
+Bug fixes in 3.0.44
+============================
+ - Fixed browing to family (for empty & non-traditional families)
+ - Remove keytonod record ASSERT which is firing
 
 Bug fixes in 3.0.43
 ============================
