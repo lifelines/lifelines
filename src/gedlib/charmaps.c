@@ -255,15 +255,16 @@ translate_match (TRANTABLE tt, CNSTRING in, CNSTRING * out)
 BOOLEAN
 init_map_from_rec (CNSTRING key, INT trnum, TRANTABLE * ptt)
 {
-	STRING rawrec;
+	STRING rawrec=0;
 	INT len;
 	BOOLEAN ok;
-	ZSTR zerr=zs_new();
+	ZSTR zerr=0;
 	CNSTRING mapname = transl_get_map_name(trnum);
 
 	*ptt = 0;
 	if (!(rawrec = retrieve_raw_record(key, &len)))
 		return TRUE;
+	zerr = zs_new();
 	ok = init_map_from_str(rawrec, mapname, ptt, zerr);
 	stdfree(rawrec);
 	if (!ok)

@@ -58,6 +58,10 @@
 
 	Fix block & index leak in initbtree.
 
+	* ChangeLog src/gedlib/charmaps.c
+
+	Fix zstr leak in init_map_from_rec.
+
 2005-01-26, Stephen Dum
         * ChangeLog docs/ll-reportmanual.xml docs/ll-userguide.sv.xml
 	docs/ll-userguide.xml
