@@ -23,6 +23,11 @@
 
 	Fix compilation & MSVC6 linking of llexec.
 
+	* ChangeLog src/gedlib/gengedc.c
+
+	Cleanup: remove declaration of (no longer existing) function
+	add_refd_fams.
+
 2005-02-16 Perry Rapp
 
 	* ChangeLog src/gedlib/xlat.c

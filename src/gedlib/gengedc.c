@@ -63,7 +63,6 @@ static void process_node_value(CLOSURE * closure, STRING v);
 static void output_any_node(CLOSURE * closure, NODE node, STRING toptag, INT lvl, BOOLEAN *eflg);
 static void output_top_node(CLOSURE * closure, NODE node, BOOLEAN *eflg);
 static void process_any_node(CLOSURE * closure, NODE node);
-static int add_refd_fams(CNSTRING key, UNION uval, GENERIC *pgeneric, VPTR param);
 
 
 /*********************************************
