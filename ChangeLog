@@ -18,6 +18,10 @@
 
 	Remove documentation of deleteel function.
 
+	* ChangeLog build/rpm/lifelines.spec
+
+	Update rpm spec file for new documentation files.
+
 2003-03-06 Steve Dum
 
 	* ChangeLog docs/Makefile.am
