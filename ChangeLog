@@ -1,3 +1,9 @@
+2002-02-24 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog liflines/screen.c:
+
+	Cleanup compiler warnings.
+
 2002-02-23 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog Makefile.am configure.in arch/alphasort.c

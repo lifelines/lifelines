@@ -169,7 +169,6 @@ static void clear_msgs(void);
 static void clear_status(void);
 static void clearw(void);
 static UIWINDOW create_uisubwindow(UIWINDOW parent, INT rows, INT cols, INT begy, INT begx);
-static UIWINDOW create_uisubwindow2(UIWINDOW parent, INT rows, INT cols);
 static void create_windows(void);
 static void deactivate_uiwin(void);
 static void delete_uiwindow(UIWINDOW uiw);
@@ -513,18 +512,6 @@ create_uisubwindow (UIWINDOW parent, INT rows, INT cols, INT begy, INT begx)
 	uiw_parent(uiwin) = parent;
 	uiw_permsub(uiwin) = TRUE;
 	return uiwin;
-}
-/*==========================================
- * create_uisubwindow2 -- Create our WINDOW wrapper
- *  for a true (& permanent) subwindow
- * Created: 2001/11/24, Perry Rapp
- *========================================*/
-static UIWINDOW
-create_uisubwindow2 (UIWINDOW uiparent, INT rows, INT cols)
-{
-	INT begy = (LINES - rows)/2;
-	INT begx = (COLS - cols)/2;
-	return create_uisubwindow(uiparent, rows, cols, begy, begx);
 }
 /*==========================================
  * create_windows -- Create and init windows
