@@ -8,6 +8,7 @@
 	Fix addtextfile to skip leading BOM.
 	Remove extra sets of map names.
 	Fix tt menu to show menu keys.
+	Fix basm & barm to not say bapt.
 
 	* ChangeLog src/liflines/tandem.c
 
