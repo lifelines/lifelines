@@ -1,3 +1,13 @@
+2004-04-14 Stephen Dum
+        *  ChangeLog INSTALL docs/ll-userguide.xml src/hdrs/fpattern.h
+	   src/interp/pvalue.c src/stdlib/fpattern.c
+        
+	Document some of the build dependencies in the INSTALL file.
+	fix bug where two pointers to database records (e.g., two families)
+	will never compare equal.
+	Modify fpattern so that searches are always case insensitive.
+	Add minimal documentation for search menu in user guide. 
+
 2004-03-29 Robert Simms
 	* ChangeLog src/liflines/browse.c
 
