@@ -16,18 +16,19 @@ dbverify_LDADD = ../gedlib/libgedcom.a ../btree/libbtree.a \
 	../stdlib/libstdlib.a ../arch/libarch.a \
 	@LIBINTL@ @LIBICONV@
 
+# 2002.06.29 Perry commented these out -- we don't need them I think
 # how do btedit and dbverify get built?
 # (this is set up explicitly so they don't get $(LIBS) (no curses!)
-btedit$(EXEEXT): $(btedit_OBJECTS) $(btedit_DEPENDENCIES)
-	@rm -f btedit$(EXEEXT)
-	$(LINK) $(btedit_LDFLAGS) $(btedit_OBJECTS) $(btedit_LDADD)
-
-dbverify$(EXEEXT): $(dbverify_OBJECTS) $(dbverify_DEPENDENCIES)
-	@rm -f dbverify$(EXEEXT)
-	$(LINK) $(dbverify_LDFLAGS) $(dbverify_OBJECTS) $(dbverify_LDADD)
+# btedit$(EXEEXT): $(btedit_OBJECTS) $(btedit_DEPENDENCIES)
+#	@rm -f btedit$(EXEEXT)
+#	$(LINK) $(btedit_LDFLAGS) $(btedit_OBJECTS) $(btedit_LDADD)
+#
+#dbverify$(EXEEXT): $(dbverify_OBJECTS) $(dbverify_DEPENDENCIES)
+#	@rm -f dbverify$(EXEEXT)
+#	$(LINK) $(dbverify_LDFLAGS) $(dbverify_OBJECTS) $(dbverify_LDADD)
 
 # .. for config.h, hdrs for lots of stuff, ../intl for libgnuintl.h
-INCLUDES=-I$(srcdir)/../hdrs -I$(srcdir)/../intl
+INCLUDES=-I$(srcdir)/.. -I$(srcdir)/../hdrs -I$(srcdir)/../intl
 
 # Stuff for gettext (copied from gnu hello-1.3.35)
 localedir = $(datadir)/locale

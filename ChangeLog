@@ -1,3 +1,9 @@
+2002-06-29 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog tools/Makefile.am:
+
+	Fix build in tools dir.
+
 2002-06-28 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog hdrs/date.h interp/date.c liflines/menuitem.c
