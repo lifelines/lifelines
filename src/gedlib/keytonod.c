@@ -72,15 +72,15 @@ struct tag_cacheel {
  *============================*/
 typedef struct {
 	char c_name[5];
-	TABLE c_data;		/* table of keys */
-	CACHEEL c_firstdir;	/* first direct */
-	CACHEEL c_lastdir;	/* last direct */
-	CACHEEL c_firstind;	/* first indirect */
-	CACHEEL c_lastind;	/* last indirect */
-	INT c_maxdir;		/* max in direct */
-	INT c_sizedir;		/* cur in direct */
-	INT c_maxind;		/* max in indirect */
-	INT c_sizeind;		/* cur in indirect */
+	TABLE c_data;        /* table of keys */
+	CACHEEL c_firstdir;  /* first direct */
+	CACHEEL c_lastdir;   /* last direct */
+	CACHEEL c_firstind;  /* first indirect */
+	CACHEEL c_lastind;   /* last indirect */
+	INT c_maxdir;        /* max in direct */
+	INT c_sizedir;       /* cur in direct */
+	INT c_maxind;        /* max in indirect */
+	INT c_sizeind;       /* cur in indirect */
 } *CACHE;
 #define cname(c)     ((c)->c_name)
 #define cdata(c)     ((c)->c_data)
@@ -510,9 +510,9 @@ init_caches (void)
 {
 	indicache = create_cache("INDI", csz_indi, icsz_indi);
 	famcache  = create_cache("FAM", csz_fam, icsz_fam);
-	evencache = create_cache("EVEN", (INT)csz_even, (INT)csz_even);
-	sourcache = create_cache("SOUR", (INT)csz_sour, (INT)icsz_sour);
-	othrcache = create_cache("OTHR", (INT)csz_othr, (INT)icsz_othr);
+	evencache = create_cache("EVEN", csz_even, icsz_even);
+	sourcache = create_cache("SOUR", csz_sour, icsz_sour);
+	othrcache = create_cache("OTHR", csz_othr, icsz_othr);
 }
 /*======================================
  * free_caches -- Release cache memory
@@ -538,6 +538,11 @@ create_cache (STRING name, INT dirsize, INT indsize)
 	if (indsize < 1) indsize = 1;
 	cache = (CACHE) stdalloc(sizeof(*cache));
 	llstrncpy(cname(cache), name, sizeof(cname(cache)), uu8);
+	/* 
+	It would be nice to set the table hash size larger for large 
+	caches, but right now (2003-10-08), tables do not expose a 
+	method to set their hash size.
+	*/
 	cdata(cache) = create_table(FREEKEY);
 	cfirstdir(cache) = clastdir(cache) = NULL;
 	cfirstind(cache) = clastind(cache) = NULL;
