@@ -708,6 +708,8 @@ begin_table_iter (TABLE tab)
 	memset(tabit, 0, sizeof(*tabit));
 	tabit->table = tab;
 	++tabit->refcnt;
+	/* table iterator starts at index=0, enext=0 */
+	/* memset above set that up, fortuitously */
 	return tabit;
 }
 /*=================================================
@@ -919,7 +921,7 @@ static void
 tabit_destructor (VTABLE *obj)
 {
 	TABLE_ITER tabit = (TABLE_ITER)obj;
-	ASSERT((*obj) == &vtable_for_tabit);
+	ASSERT(tabit->vtable == &vtable_for_tabit);
 	free_table_iter(tabit);
 }
 /*=================================================

@@ -1635,16 +1635,17 @@ name_to_indiseq (STRING name)
 	list = find_indis_by_name(name);
 	ASSERT(list);
 	if (length_list(list)) {
-		struct tag_list_iter listit;
+		LIST_ITER listit=0;
 		VPTR ptr=0;
 		/* add all entries from list to sequence */
 		seq = create_indiseq_null();
-		begin_list(list, &listit);
-		while (next_list_ptr(&listit, &ptr)) {
+		listit = begin_list(list);
+		while (next_list_ptr(listit, &ptr)) {
 			CNSTRING key = (CNSTRING)ptr;
 			/* skip dupe check, because we do unique_indiseq below */
 			append_indiseq_null(seq, strsave(key), NULL, TRUE, TRUE);
 		}
+		end_list_iter(&listit);
 		/* may have duplicates from multiple soundexes or wildcard searches */
 		unique_indiseq(seq);
 		/* people like to see lists alphabetically by name */

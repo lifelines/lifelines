@@ -19,7 +19,7 @@
  *********************************************/
 
 
-/* actual list */
+/* list object itself */
 struct tag_list {
 	/* a LIST is an OBJECT */
 	struct tag_vtable * vtable; /* generic object table (see vtable.h) */
@@ -30,6 +30,17 @@ struct tag_list {
 	INT l_type;
 	ELEMENT_DESTRUCTOR l_del_element;
 };
+/* typedef struct tag_list *LIST; */ /* in list.h */
+
+/* list iterator */
+struct tag_list_iter {
+	struct tag_vtable *vtable; /* generic object */
+	INT refcnt; /* ref-countable object */
+	LNODE current;
+	LIST list;
+	INT status; /* 1=forward, 1=reverse, 0=EOF */
+};
+/* typedef struct tag_list_iter * LIST_ITER; */ /* in list.h */
 
 /*********************************************
  * local enums & defines
@@ -46,7 +57,9 @@ struct tag_list {
 
 /* alphabetical */
 static void free_list_element(VPTR vptr);
+static void free_list_iter(LIST_ITER listit);
 static void list_destructor(VTABLE *obj);
+static void listit_destructor(VTABLE *obj);
 void make_list_empty_impl(LIST list, ELEMENT_DESTRUCTOR func);
 static LNODE nth_in_list_from_tail(LIST list, INT index1b, BOOLEAN createels
 	, LIST_CREATE_VALUE createfnc);
@@ -60,6 +73,16 @@ static struct tag_vtable vtable_for_list = {
 	VTABLE_MAGIC
 	, "list"
 	, &list_destructor
+	, &refcountable_isref
+	, &refcountable_addref
+	, &refcountable_release
+	, 0 /* copy_fnc */
+	, &generic_get_type_name
+};
+static struct tag_vtable vtable_for_listit = {
+	VTABLE_MAGIC
+	, "list_iter"
+	, &listit_destructor
 	, &refcountable_isref
 	, &refcountable_addref
 	, &refcountable_release
@@ -442,28 +465,37 @@ peek_list_head (LIST list)
 	return lelement(node);
 }
 /*=================================================
- * begin_list -- Begin iteration of list
+ * create_list_iter -- Create new list iterator
  *===============================================*/
-BOOLEAN
-begin_list (LIST list, LIST_ITER listit)
+static LIST_ITER
+create_list_iter (LIST list)
 {
+	LIST_ITER listit = (LIST_ITER)stdalloc(sizeof(*listit));
 	memset(listit, 0, sizeof(*listit));
 	listit->list = list;
-	listit->current = 0;
+	return listit;
+}
+/*=================================================
+ * begin_list -- Begin iteration of list
+ *===============================================*/
+LIST_ITER
+begin_list (LIST list)
+{
+	LIST_ITER listit = create_list_iter(list);
+	/* current=0 is signal to next_list_element that we're starting */
 	listit->status = (lhead(listit->list) ? 1 : 0);
-	return !!listit->status;
+	return listit;
 }
 /*=================================================
  * begin_list_rev -- Begin reverse iteration of list
  *===============================================*/
-BOOLEAN
-begin_list_rev (LIST list, LIST_ITER listit)
+LIST_ITER
+begin_list_rev (LIST list)
 {
-	memset(listit, 0, sizeof(*listit));
-	listit->list = list;
-	listit->current = 0;
+	LIST_ITER listit = create_list_iter(list);
+	/* current=0 is signal to next_list_element that we're starting */
 	listit->status = (ltail(listit->list) ? -1 : 0);
-	return !!listit->status;
+	return listit;
 }
 /*=================================================
  * next_element -- Find next element in list (iterating)
@@ -515,6 +547,31 @@ change_list_ptr (LIST_ITER listit, VPTR newptr)
 		return FALSE;
 	lelement(listit->current) = newptr;
 	return TRUE;
+}
+/*=================================================
+ * end_list_iter -- Release reference to list iterator object
+ *===============================================*/
+void
+end_list_iter (LIST_ITER * plistit)
+{
+	ASSERT(plistit);
+	ASSERT(*plistit);
+	--(*plistit)->refcnt;
+	if (!(*plistit)->refcnt) {
+		free_list_iter(*plistit);
+	}
+	*plistit = 0;
+}
+/*=================================================
+ * free_list_iter -- Delete & free table iterator object
+ *===============================================*/
+static void
+free_list_iter (LIST_ITER listit)
+{
+	if (!listit) return;
+	ASSERT(!listit->refcnt);
+	memset(listit, 0, sizeof(*listit));
+	stdfree(listit);
 }
 /*=================================================
  * lock_list_node -- Increment node lock count
@@ -602,6 +659,18 @@ list_destructor (VTABLE *obj)
 	ASSERT((*obj) == &vtable_for_list);
 	destroy_list(list);
 }
+/*=================================================
+ * listit_destructor -- destructor for list iterator
+ *  (vtable destructor)
+ *===============================================*/
+static void
+listit_destructor (VTABLE *obj)
+{
+	LIST_ITER listit = (LIST_ITER)obj;
+	ASSERT(listit->vtable == &vtable_for_listit);
+	free_list_iter(listit);
+}
+
 /*=================================================
  * addref_list -- increment reference count of list
  *===============================================*/

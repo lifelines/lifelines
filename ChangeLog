@@ -27,6 +27,11 @@
 	Reorg list.h in sections like table.h.
 	Rename remove list functions to destroy list.
 
+	* ChangeLog src/gedlib/indiseq.c src/hdrs/list.h src/hdrs/table.h
+	src/interp/more.c src/stdlib/list.c src/stdlib/table.c
+
+	Make list iterators heap objects like table iterators.
+
 2005-02-05 Perry Rapp
 
 	* ChangeLog NEWS src/gedlib/xreffile.c

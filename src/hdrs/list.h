@@ -28,19 +28,13 @@ struct tag_lnode {
 /* a LIST is an OBJECT */
 typedef struct tag_list *LIST;
 
+typedef struct tag_list_iter * LIST_ITER;
+
 #define LISTNOFREE 0
 #define LISTDOFREE 1
 
 typedef void (*ELEMENT_DESTRUCTOR)(VPTR);
 
-
-/* list iterator */
-struct tag_list_iter {
-	LNODE current;
-	LIST list;
-	INT status; /* 1=forward, 1=reverse, 0=EOF */
-};
-typedef struct tag_list_iter * LIST_ITER;
 
 
 /* for caller-defined function to create new values */
@@ -104,9 +98,10 @@ INT length_list(LIST);
 void make_list_empty(LIST);
 
 /* list iteration */
-BOOLEAN begin_list(LIST list, LIST_ITER listit);
-BOOLEAN begin_list_rev(LIST list, LIST_ITER listit);
+LIST_ITER begin_list(LIST list);
+LIST_ITER begin_list_rev(LIST list);
 BOOLEAN change_list_ptr(LIST_ITER listit, VPTR newptr);
+void end_list_iter(LIST_ITER * plistit);
 BOOLEAN next_list_ptr(LIST_ITER listit, VPTR *pptr);
 
 /* list macro support functions */

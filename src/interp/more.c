@@ -1289,17 +1289,18 @@ sortimpl (PNODE node, SYMTAB stab, BOOLEAN *eflg, BOOLEAN fwd)
 
 	/* reorder the values collection (1st argument) */
 	if (list_vals) {
-		struct tag_list_iter listit;
+		LIST_ITER listit=0;
 		VPTR ptr=0;
 		i=0;
 		if (fwd)
-			begin_list_rev(list_vals, &listit);
+			listit = begin_list_rev(list_vals);
 		else
-			begin_list(list_vals, &listit);
-		while (next_list_ptr(&listit, &ptr)) {
-			change_list_ptr(&listit, index[i]->value);
+			listit = begin_list(list_vals);
+		while (next_list_ptr(listit, &ptr)) {
+			change_list_ptr(listit, index[i]->value);
 			++i;
 		}
+		end_list_iter(&listit);
 	} else {
 		INT j;
 		ASSERT(arr_vals);
@@ -1310,17 +1311,18 @@ sortimpl (PNODE node, SYMTAB stab, BOOLEAN *eflg, BOOLEAN fwd)
 		}
 	}
 	if (list_keys) {
-		struct tag_list_iter listit;
+		LIST_ITER listit=0;
 		VPTR ptr=0;
 		i=0;
 		if (fwd)
-			begin_list_rev(list_keys, &listit);
+			listit = begin_list_rev(list_keys);
 		else
-			begin_list(list_keys, &listit);
-		while (next_list_ptr(&listit, &ptr)) {
-			change_list_ptr(&listit, index[i]->key);
+			listit = begin_list(list_keys);
+		while (next_list_ptr(listit, &ptr)) {
+			change_list_ptr(listit, index[i]->key);
 			++i;
 		}
+		end_list_iter(&listit);
 	} else if (arr_keys) {
 		INT j;
 		for (i=0; i<nsort; ++i) {
