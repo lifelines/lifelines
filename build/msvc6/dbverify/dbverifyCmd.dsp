@@ -156,6 +156,10 @@ SOURCE=..\..\..\src\gedlib\gedcom.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\stdlib\generic.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\gedlib\gengedc.c
 # End Source File
 # Begin Source File
@@ -269,6 +273,10 @@ SOURCE=..\..\..\src\gedlib\nodeio.c
 # Begin Source File
 
 SOURCE=..\..\..\src\gedlib\nodeutls.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\stdlib\object.c
 # End Source File
 # Begin Source File
 
@@ -424,6 +432,10 @@ SOURCE=..\..\..\src\hdrs\cache.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\hdrs\charprops.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\hdrs\codesets.h
 # End Source File
 # Begin Source File
@@ -460,7 +472,15 @@ SOURCE=..\..\..\src\gedlib\gedcomi.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\hdrs\generic.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\hdrs\gengedc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\win32\iconv.h
 # End Source File
 # Begin Source File
 
@@ -513,6 +533,26 @@ SOURCE=..\..\..\src\hdrs\log.h
 # Begin Source File
 
 SOURCE=..\..\..\src\hdrs\menuitem.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\metadata.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\msvc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\mychar.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\mystring.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\object.h
 # End Source File
 # Begin Source File
 

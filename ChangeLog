@@ -14,6 +14,11 @@
 
 	Rename create_table to create_table_old2.
 
+	* ChangeLog build/msvc6/dbverify/dbverifyCmd.dsp
+
+	Add object.c, generic.c, and miscellaneous headers to VC6 project,
+	to fix compilation.
+
 2005-01-21 Perry Rapp
 
 	* ChangeLog src/gedlib/lloptions.c src/hdrs/generic.h
