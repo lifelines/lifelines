@@ -1070,7 +1070,7 @@ parent_indiseq (INDISEQ seq)
 	STRING key;
 	UNION uval;
 	if (!seq) return NULL;
-	tab = create_table_old();
+	tab = create_table(DONTFREE);
 	par = create_indiseq_impl(IValtype(seq), IValfnctbl(seq));
 	FORINDISEQ(seq, el, num)
 		indi = key_to_indi(skey(el));
@@ -1089,7 +1089,7 @@ parent_indiseq (INDISEQ seq)
 			insert_table_int(tab, key, 0);
 		}
 	ENDINDISEQ
-	remove_table(tab, DONTFREE);
+	destroy_table(tab);
 	return par;
 }
 /*======================================================
@@ -1106,7 +1106,7 @@ child_indiseq (INDISEQ seq)
 	STRING key;
 	UNION uval;
 	if (!seq) return NULL;
-	tab = create_table_old();
+	tab = create_table(DONTFREE);
 	cseq = create_indiseq_impl(IValtype(seq), IValfnctbl(seq));
 	FORINDISEQ(seq, el, num)
 		indi = key_to_indi(skey(el));
@@ -1123,7 +1123,7 @@ child_indiseq (INDISEQ seq)
 			ENDCHILDRENx
 		ENDFAMSS
 	ENDINDISEQ
-	remove_table(tab, DONTFREE);
+	destroy_table(tab);
 	return cseq;
 }
 /*=========================================================
@@ -1332,7 +1332,7 @@ sibling_indiseq (INDISEQ seq,
 	STRING key, fkey;
 	INT num2;
 	/* table lists people already listed (values unused) */
-	TABLE tab = create_table_old();
+	TABLE tab = create_table(DONTFREE);
 	fseq = create_indiseq_null(); /* temporary */
 	sseq = create_indiseq_null();
 	FORINDISEQ(seq, el, num)
@@ -1354,7 +1354,7 @@ sibling_indiseq (INDISEQ seq,
 			}
 		ENDCHILDRENx
 	ENDINDISEQ
-	remove_table(tab, DONTFREE);
+	destroy_table(tab);
 	remove_indiseq(fseq);
 	return sseq;
 }
@@ -1376,7 +1376,7 @@ ancestor_indiseq (INDISEQ seq)
 	UNION uval;
 	if (!seq) return NULL;
 		/* table of people already added */
-	tab = create_table_old();
+	tab = create_table(DONTFREE);
 		/* paired processing list - see comments in descendant_indiseq code */
 	anclist = create_list();
 	genlist = create_list();
@@ -1410,7 +1410,7 @@ ancestor_indiseq (INDISEQ seq)
 			insert_table_int(tab, pkey, 0);
 		}
 	}
-	remove_table(tab, DONTFREE);
+	destroy_table(tab);
 	remove_list(anclist, NULL);
 	remove_list(genlist, NULL);
 	return anc;
@@ -1434,9 +1434,9 @@ descendent_indiseq (INDISEQ seq)
 	UNION uval;
 	if (!seq) return NULL;
 		/* itab = people already added */
-	itab = create_table_old();
+	itab = create_table(DONTFREE);
 		/* ftab = families already added (processed) */
-	ftab = create_table_old();
+	ftab = create_table(FREEKEY);
 		/*
 		deslist & genlist are paired - 
 		dequeue the person from deslist & the generation
@@ -1482,8 +1482,8 @@ descendent_indiseq (INDISEQ seq)
 		a:;
 		ENDFAMSS
 	}
-	remove_table(itab, DONTFREE);
-	remove_table(ftab, FREEKEY);
+	destroy_table(itab);
+	destroy_table(ftab);
 	return des;
 }
 /*========================================================
@@ -1498,7 +1498,7 @@ spouse_indiseq (INDISEQ seq)
 	NODE indi;
 	INT num1;
 	if (!seq) return NULL;
-	tab = create_table_old();
+	tab = create_table(DONTFREE);
 	sps = create_indiseq_impl(IValtype(seq), IValfnctbl(seq));
 	FORINDISEQ(seq, el, num)
 		indi = key_to_indi(skey(el));
@@ -1515,7 +1515,7 @@ spouse_indiseq (INDISEQ seq)
 			}
 		ENDSPOUSES
 	ENDINDISEQ
-	remove_table(tab, DONTFREE);
+	destroy_table(tab);
 	return sps;
 }
 /*============================================================

@@ -428,7 +428,7 @@ finish_and_delete_nameset (void)
 		name = sval(el).w;
 		if (!eqstr(skey(el), prevkey)) {
 			/* new person, start over */
-			remove_table(table, DONTFREE);
+			destroy_table(table);
 			table = create_table(DONTFREE);
 		}
 		if (in_table(table, name)) {
@@ -441,7 +441,7 @@ finish_and_delete_nameset (void)
 	ENDINDISEQ
 	remove_indiseq(soundexseq);
 	soundexseq = NULL;
-	remove_table(table, DONTFREE);
+	destroy_table(table);
 }
 /*=================================================================
  * finish_and_delete_refnset -- check for dups in a set of one refn
@@ -461,7 +461,7 @@ finish_and_delete_refnset (void)
 		refn = sval(el).w;
 		if (!eqstr(skey(el), prevkey)) {
 			/* new person, start over */
-			remove_table(table, DONTFREE);
+			destroy_table(table);
 			table = create_table(DONTFREE);
 		}
 		if (in_table(table, refn)) {
@@ -474,6 +474,7 @@ finish_and_delete_refnset (void)
 	ENDINDISEQ
 	remove_indiseq(soundexseq);
 	soundexseq = NULL;
+	destroy_table(table);
 }
 /*=================================
  * check_nodes -- Process all nodes

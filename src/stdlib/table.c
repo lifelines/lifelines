@@ -211,8 +211,10 @@ insert_table_int (TABLE tab, CNSTRING key, INT ival)
 {
 	UNION uval;
 	uval.i = ival;
-	if (tab->valtype == TB_NULL)
+	if (tab->valtype == TB_NULL) {
+		ASSERT(tab->whattofree==-1 || (tab->whattofree!=FREEBOTH && tab->whattofree!=FREEVALUE));
 		tab->valtype = TB_INT;
+	}
 	/* table must be homogenous, not mixed-type */
 	ASSERT(tab->valtype == TB_INT);
 	insert_table_impl(tab, key, uval);
@@ -661,7 +663,7 @@ copy_table (const TABLE src, TABLE dest, INT whattodup)
 void
 destroy_table (TABLE tab)
 {
-	ASSERT(tab);
+	if (!tab) return;
 	/* to use this (and I'd prefer all code to use this)
 	the whattofree must have been set, so I plan to revise
 	all code to set it at creation time */

@@ -139,7 +139,7 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 	defline = 0;
 	curlev = 0;
 	clear_structures();
-	convtab = create_table_old();
+	convtab = create_table(DONTFREE);
 
 
 	rc = file_to_line(fp, xlat, &lev, &xref, &tag, &val, &msg);
@@ -931,7 +931,7 @@ clear_structures (void)
 		stdfree(index_data[i]);
 	struct_len = 0;
 	if (convtab) {
-		remove_table(convtab, DONTFREE);
+		destroy_table(convtab);
 		convtab = NULL;
 	}
 }

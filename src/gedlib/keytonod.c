@@ -487,7 +487,7 @@ create_cache (STRING name, INT dirsize, INT indsize)
 	if (indsize < 1) indsize = 1;
 	cache = (CACHE) stdalloc(sizeof(*cache));
 	llstrncpy(cname(cache), name, sizeof(cname(cache)), uu8);
-	cdata(cache) = create_table_old();
+	cdata(cache) = create_table(FREEKEY);
 	cfirstdir(cache) = clastdir(cache) = NULL;
 	cfirstind(cache) = clastind(cache) = NULL;
 	csizedir(cache) = csizeind(cache) = 0;
@@ -504,7 +504,7 @@ delete_cache (CACHE * pcache)
 	CACHE cache = *pcache;
 	if (!cache) return;
 	release_all_in_cache(cache);
-	remove_table(cdata(cache), FREEKEY);
+	destroy_table(cdata(cache));
 	stdfree(cache);
 	*pcache = 0;
 }

@@ -1430,7 +1430,7 @@ static void
 init_keywordtbl (void)
 {
 	INT i, j;
-	keywordtbl = create_table_old();
+	keywordtbl = create_table(DONTFREE);
 	/* Load GEDCOM keywords & values into keyword table */
 	for (i=0; i<ARRSIZE(gedkeys); ++i) {
 		j = gedkeys[i].value;
@@ -1640,7 +1640,10 @@ void
 term_date (void)
 {
 	clear_lang();
-	/* TODO: clear keywordtbl */
+	if (keywordtbl) {
+		destroy_table(keywordtbl);
+		keywordtbl = 0;
+	}
 }
 /*=============================
  * get_todays_date -- Get today's date

@@ -58,6 +58,15 @@
 
 	Bugfix: [ 691936 ] dbverify ASSERT (3.0.25)
 
+	* ChangeLog src/gedlib/date.c src/gedlib/editvtab.c
+	src/gedlib/indiseq.c src/gedlib/init.c src/gedlib/keytonod.c
+	src/gedlib/lloptions.c src/gedlib/valtable.c
+	src/liflines/llexec.c src/liflines/main.c
+	src/liflines/screen.c src/liflines/valgdcom.c
+	src/stdlib/proptbls.c src/stdlib/table.c src/tools/dbverify.c
+
+	Changing some remove_table calls to destroy_table.
+
 2003-02-22 Perry Rapp
 
 	* ChangeLog build/msvc6/llexec/llexec.dsp

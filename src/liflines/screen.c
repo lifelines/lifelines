@@ -2190,11 +2190,11 @@ edit_place_table (void)
 static void
 edit_user_options (void)
 {
-	TABLE uopts = create_table_old();
+	TABLE uopts = create_table(FREEBOTH);
 	get_db_options(uopts);
 	if (edit_valtab_from_db("VUOPT", &uopts, '=', _(qSuoperr), uopt_validate))
 		set_db_options(uopts);
-	remove_table(uopts, FREEBOTH);
+	destroy_table(uopts);
 }
 /*===============================
  * translate_hdware_key -- 

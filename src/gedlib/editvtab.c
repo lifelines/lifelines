@@ -106,10 +106,10 @@ edit_valtab_impl (TABLE *ptab, INT sep, STRING ermsg, STRING (*validator)(TABLE 
 
 	do_edit();
 	while (TRUE) {
-		tmptab = create_table_old();
+		tmptab = create_table(FREEBOTH);
 		if (init_valtab_from_file(editfile, tmptab, ttmi, sep, &msg)) {
 			if (!validator || !(ptr = (*validator)(tmptab))) {
-				if (*ptab) remove_table(*ptab, DONTFREE);
+				if (*ptab) destroy_table(*ptab);
 				*ptab = tmptab;
 				return TRUE;
 			}
@@ -128,10 +128,10 @@ edit_valtab_impl (TABLE *ptab, INT sep, STRING ermsg, STRING (*validator)(TABLE 
 		if (ask_yes_or_no_msg(ptr, _(qSaredit)))
 			do_edit();
 		else {
-			remove_table(tmptab, DONTFREE);
+			destroy_table(tmptab);
 			return FALSE;
 		}
-		remove_table(tmptab, DONTFREE);
+		destroy_table(tmptab);
 	}
 }
 /*==============================================

@@ -252,10 +252,10 @@ BOOLEAN
 init_lifelines_db (void)
 {
 	STRING emsg;
-	TABLE dbopts = create_table_old();
+	TABLE dbopts = create_table(FREEBOTH);
 
-	tagtable = create_table_old();
-	placabbvs = create_table_old();
+	tagtable = create_table(FREEKEY); /* values are same as keys */
+	placabbvs = create_table(FREEBOTH);
 
 	init_valtab_from_rec("VPLAC", placabbvs, ':', &emsg);
 	init_valtab_from_rec("VUOPT", dbopts, '=', &emsg);
@@ -316,12 +316,12 @@ close_lifelines (void)
 void
 close_lldb ()
 {
-	remove_table(tagtable, FREEKEY); /* values are same as keys */
+	if (tagtable)
+		destroy_table(tagtable);
 	tagtable = 0;
-	/* TODO: reverse the rest of init_lifelines_db -- Perry, 2002.06.05
-	remove_table(placabbvs, ??)
-	placabbvs = 0;
-	*/
+	/* TODO: reverse the rest of init_lifelines_db -- Perry, 2002.06.05 */
+	if (placabbvs)
+		destroy_table(placabbvs);
 	free_caches();
 	closexref();
 	if (BTR) {
@@ -491,11 +491,11 @@ create_database (STRING dbpath)
 	/* first test that newdb props are legal */
 	STRING props = getoptstr("NewDbProps", 0);
 	if (props && props[0]) {
-		TABLE dbopts = create_table_old();
+		TABLE dbopts = create_table(FREEBOTH);
 		STRING msg=0;
 		if (!init_valtab_from_string(props, dbopts, '=', &msg)) {
 			bterrno = BTERR_BADPROPS;
-			remove_table(dbopts, FREEBOTH);
+			destroy_table(dbopts);
 			return FALSE;
 		}
 		remove_table(dbopts, FREEBOTH);
@@ -638,7 +638,7 @@ update_useropts (VPTR uparm)
 static void
 update_db_options (void)
 {
-	TABLE opttab = create_table_old();
+	TABLE opttab = create_table(FREEBOTH);
 	STRING str=0;
 	get_db_options(opttab);
 
@@ -655,7 +655,7 @@ update_db_options (void)
 		transl_load_xlats();
 	}
 
-	remove_table(opttab, FREEBOTH);
+	destroy_table(opttab);
 }
 /*==================================================
  * get_dblist -- find all dbs on path

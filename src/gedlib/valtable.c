@@ -98,7 +98,7 @@ init_valtab_from_file (STRING fname, TABLE tab, XLAT ttm, INT sep, STRING *pmsg)
 /*========================================================
  * init_valtab_from_string -- Init value table from string
  *  str:     [IN]  string holding all value/values
- *  tab:     [I/O] table in which to put key/value pairs
+ *  tab:     [I/O] table in which to put key/value pairs (a FREEBOTH table)
  *  sep:     [IN]  separator between name & value
  *  pmsg:    [OUT] error message (set if returns FALSE)
  *            pmsg points to static buffer
