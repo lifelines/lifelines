@@ -31,7 +31,8 @@
 #ifndef _INDISEQ_H
 #define _INDISEQ_H
 
-#include "standard.h"
+#include "standard.h"		/* for INT, STRING, etc */
+#include "gedcom.h"		/* for NODE */
 
 /*==================================================================
  * SORTEL -- Data type for indiseq elements; keys are always present
