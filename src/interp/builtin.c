@@ -674,6 +674,36 @@ __set (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	assign_iden(stab, iident(argvar), val);
 	return NULL;
 }
+/*===============================+
+ * __dup -- Dup operation
+ *   usage: dup(LIST) -> VOID
+ *==============================*/
+PVALUE
+__dup (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+	PNODE argexpr = iargs(node);
+	LIST list, newlist;
+	PVALUE val, newval;
+	INT i;
+
+	val = evaluate(argexpr, stab, eflg);
+	if (*eflg || !val) {
+		*eflg = TRUE;
+		prog_var_error(node, stab, argexpr, val, badargx, "dup", "1");
+		return NULL;
+	}
+	/* traverse and copy */
+	list = pvalue_to_list(val);
+	delete_pvalue(val);
+	newlist = create_list();
+	for (i=0; i<length_list(list); i++) {
+		newval = (PVALUE) get_list_element(list, i+1, NULL);
+		enqueue_list(newlist, copy_pvalue(newval));
+	}
+	/* assign new list */
+	newval = create_pvalue(PLIST, newlist);
+	return newval;
+}
 /*=========================================+
  * __husband -- Find first husband of family
  *   usage: husband(FAM) -> INDI

@@ -1,3 +1,10 @@
+2003-09-09 Matt Emmerton
+
+	* ChangeLog src/interp/builtin.c src/interp/functab.c
+	src/interp/interpi.h
+
+	Added the dup() function, which does a "deep" copy of a list.
+
 2003-09-09 Perry Rapp
 
 	* ChangeLog NEWS src/interp/more.c

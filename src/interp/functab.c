@@ -92,6 +92,7 @@ BUILTINS builtins[] = {
 	{"detachnode",      1,    1,    __detachnode},
 	{"difference",      2,    2,    __difference},
 	{"div",             2,    2,    __div},
+	{"dup",             1,    1,    __dup},
 	{"empty",           1,    1,    __empty},
 	{"enqueue",         2,    2,    __enqueue},
 	{"eq",              2,    2,    __eq},
