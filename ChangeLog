@@ -1,3 +1,25 @@
+2002-11-29 Perry Rapp
+
+	* ChangeLog src/gedlib/codesets.c src/gedlib/init.c
+	src/gedlib/lloptions.c src/gedlib/translat.c src/hdrs/icvt.h
+	src/hdrs/lloptions.h src/hdrs/translat.h src/hdrs/zstr.h
+	src/liflines/main.c src/liflines/screen.c src/stdlib/icvt.c
+	src/stdlib/zstr.c src/tools/dispcode.c src/tools/prettytt.c:
+
+	More codeset work.
+
+	* ChangeLog src/gedlib/codesets.c src/gedlib/init.c
+	src/gedlib/lloptions.c src/gedlib/translat.c src/hdrs/icvt.h
+	src/hdrs/lloptions.h src/hdrs/llstdlib.h src/hdrs/translat.h
+	src/hdrs/zstr.h src/interp/alloc.c src/interp/builtin.c
+	src/interp/functab.c src/interp/interp.c src/interp/interpi.h
+	src/liflines/main.c src/liflines/screen.c src/stdlib/icvt.c
+	src/stdlib/strutf8.c src/stdlib/zstr.c src/tools/dispcode.c
+	src/tools/prettytt.c:
+
+	More codeset work.
+	Changed __utf8 to __bytecode (& added codeset argument).
+
 2002-11-28 Perry Rapp
 
 	* .linesrc ChangeLog lines.cfg build/msvc6/llines/llinesprj.dsp

@@ -58,6 +58,7 @@ struct conversion_s {
 	INT zon_dest;
 	STRING * src_codeset;
 	STRING * dest_codeset;
+	XLAT xlat;
 };
 /* a predefined codeset, such as editor */
 struct zone_s {
@@ -79,6 +80,7 @@ enum { ZON_X, ZON_INT, ZON_GUI, ZON_EDI, ZON_RPT, ZON_GED, NUM_ZONES };
 static void global_translate(ZSTR * pzstr, LIST gtlist);
 static ZSTR iconv_trans_ttm(XLAT ttm, ZSTR zin, CNSTRING illegal);
 static void load_conv_array(void);
+static void free_xlat_ptrs(void);
 
 
 /*********************************************
@@ -95,20 +97,20 @@ struct zone_s zones[] = {
 };
 
 struct conversion_s conversions[] = {
-	{ MEDIN, "Editor to Internal", ZON_EDI, ZON_INT, &editor_codeset_in, &int_codeset }
-	, { MINED, "Internal to Editor", ZON_INT, ZON_EDI, &int_codeset, &editor_codeset_out }
-	, { MGDIN, "GEDCOM to Internal", ZON_GED, ZON_INT, &gedcom_codeset_in, &int_codeset }
-	, { MINGD, "Internal to GEDCOM", ZON_INT, ZON_GED, &int_codeset, &gedcom_codeset_out }
-	, { MDSIN, "Display to Internal", ZON_GUI, ZON_INT, &gui_codeset_in, &int_codeset }
-	, { MINDS, "Internal to Display", ZON_INT, ZON_GUI, &int_codeset, &gui_codeset_out }
-	, { MRPIN, "Report to Internal ", ZON_RPT, ZON_INT, &report_codeset_in, &int_codeset }
-	, { MINRP, "Internal to Report", ZON_INT, ZON_RPT, &int_codeset, &report_codeset_out }
+	{ MEDIN, "Editor to Internal", ZON_EDI, ZON_INT, &editor_codeset_in, &int_codeset, 0 }
+	, { MINED, "Internal to Editor", ZON_INT, ZON_EDI, &int_codeset, &editor_codeset_out, 0 }
+	, { MGDIN, "GEDCOM to Internal", ZON_GED, ZON_INT, &gedcom_codeset_in, &int_codeset, 0 }
+	, { MINGD, "Internal to GEDCOM", ZON_INT, ZON_GED, &int_codeset, &gedcom_codeset_out, 0 }
+	, { MDSIN, "Display to Internal", ZON_GUI, ZON_INT, &gui_codeset_in, &int_codeset, 0 }
+	, { MINDS, "Internal to Display", ZON_INT, ZON_GUI, &int_codeset, &gui_codeset_out, 0 }
+	, { MRPIN, "Report to Internal ", ZON_RPT, ZON_INT, &report_codeset_in, &int_codeset, 0 }
+	, { MINRP, "Internal to Report", ZON_INT, ZON_RPT, &int_codeset, &report_codeset_out, 0 }
 	/* These are all special-purpose translation tables, and maybe shouldn't even be here ? */
-	, { MSORT, "Custom Sort", ZON_X, ZON_X, 0, 0 }
-	, { MCHAR, "Custom Charset", ZON_X, ZON_X, 0, 0 }
-	, { MLCAS, "Custom Lowercase", ZON_X, ZON_X, 0, 0 }
-	, { MUCAS, "Custom Uppercase", ZON_X, ZON_X, 0, 0 }
-	, { MPREF, "Custom Prefix", ZON_X, ZON_X, 0, 0 }
+	, { MSORT, "Custom Sort", ZON_X, ZON_X, 0, 0, 0 }
+	, { MCHAR, "Custom Charset", ZON_X, ZON_X, 0, 0, 0 }
+	, { MLCAS, "Custom Lowercase", ZON_X, ZON_X, 0, 0, 0 }
+	, { MUCAS, "Custom Uppercase", ZON_X, ZON_X, 0, 0, 0 }
+	, { MPREF, "Custom Prefix", ZON_X, ZON_X, 0, 0, 0 }
 };
 
 static INT conv_array[NUM_TT_MAPS];
@@ -344,11 +346,13 @@ transl_xlat (XLAT xlat, ZSTR * pzstr)
 /*==========================================================
  * transl_load_xlats -- Load translations for all regular codesets
  *  (internal, GUI, ...)
+ * returns FALSE if needed conversions not available
  * Created: 2002/11/28 (Perry Rapp)
  *========================================================*/
 void
 transl_load_xlats (void)
 {
+	INT i;
 
 	ASSERT(NUM_TT_MAPS == ARRSIZE(map_names));
 	ASSERT(NUM_TT_MAPS == ARRSIZE(conversions));
@@ -356,6 +360,37 @@ transl_load_xlats (void)
 	ASSERT(NUM_TT_MAPS == ARRSIZE(conv_array));
 
 	load_conv_array();
+
+	free_xlat_ptrs();
+
+	if (!int_codeset)
+		return;
+
+	for (i=0; i<NUM_TT_MAPS; ++i) {
+		STRING src, dest;
+		if (!conversions[i].src_codeset)
+			continue;
+		ASSERT(conversions[i].dest_codeset);
+		src = *conversions[i].src_codeset;
+		dest = *conversions[i].dest_codeset;
+		conversions[i].xlat = xl_get_xlat(src, dest);
+	}
+}
+/*==========================================================
+ * free_xlat_ptrs -- Free cached regular conversions
+ * Created: 2002/11/28 (Perry Rapp)
+ *========================================================*/
+static void
+free_xlat_ptrs (void)
+{
+	INT i;
+	for (i=0; i<NUM_TT_MAPS; ++i) {
+		/*
+		xlat actually lives in xlat cache over in xlat.c.
+		we just zero our pointer to it.
+		*/
+		conversions[i].xlat = 0;
+	}
 }
 /*==========================================================
  * load_conv_array -- Load up conv_array
@@ -392,4 +427,58 @@ transl_get_predefined_xlat (INT ttnum)
 	conv = &conversions[conv_array[ttnum]];
 	/* we could cache these XLATs */
 	return xl_get_xlat(*conv->src_codeset, *conv->dest_codeset);
+}
+/*==========================================================
+ * transl_parse_codeset -- Parse out subcode suffixes of a codeset
+ *  eg, "CP437//TrGreekAscii//TrCyrillicAscii"
+ *  will recognize CP437 as the codeset name, and list
+ *  "TrGreekAscii" and "TrCyrillicAscii"  as subcodes
+ * Created: 2002/11/28 (Perry Rapp)
+ *========================================================*/
+void
+transl_parse_codeset (CNSTRING codeset, ZSTR * zcsname, LIST * subcodes)
+{
+	CNSTRING p=codeset, prev=codeset;
+	BOOLEAN base=FALSE;
+	for ( ; ; ++p) {
+		if ( !p[0] || (p[0]=='/' && p[1]=='/')) {
+			if (!base) {
+				if (zcsname) {
+					zs_free(zcsname);
+					*zcsname = zs_newsubs(codeset, p-prev);
+				}
+				base=TRUE;
+			} else {
+				ZSTR ztemp=0;
+				if (subcodes) {
+					if (!*subcodes) {
+						*subcodes = create_list();
+						set_list_type(*subcodes, LISTDOFREE);
+					}
+					ztemp = zs_newsubs(prev, p-prev);
+					enqueue_list(*subcodes, strsave(zs_str(ztemp)));
+					zs_free(&ztemp);
+				}
+			}
+			if (!p[0])
+				return;
+			prev = p+2;
+			p = p+1; /* so we jump over both slashes */
+		}
+	}
+}
+/*==========================================================
+ * transl_are_all_conversions_ok -- 
+ *  return FALSE if there any conversions we couldn't figure out
+ * Created: 2002/11/28 (Perry Rapp)
+ *========================================================*/
+BOOLEAN
+transl_are_all_conversions_ok (void)
+{
+	INT i;
+	for (i=0; i<NUM_TT_MAPS; ++i) {
+		if (conversions[i].src_codeset && !conversions[i].xlat)
+			return FALSE;
+	}
+	return TRUE;
 }

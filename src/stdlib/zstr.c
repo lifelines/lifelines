@@ -119,6 +119,15 @@ zs_news (const char * str)
 	}
 	return zstr;
 }
+/* create & return new zstring containing first len bytes of str */
+ZSTR
+zs_newsubs (const char * str, unsigned int len)
+{
+	ZSTR zstr = zs_news(str);
+	ASSERT(len>=0 && len<=strlen(str));
+	zstr->str[len]=0;
+	return zstr;
+}
 /* delete zstring & clear caller's pointer */
 void
 zs_free (ZSTR * pzstr)

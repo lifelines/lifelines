@@ -295,7 +295,7 @@ term_lloptions (void)
  * Created: 2001/11/22, Perry Rapp
  *=============================================*/
 STRING
-getoptstr (STRING optname, STRING defval)
+getoptstr (CNSTRING optname, STRING defval)
 {
 	STRING str = 0;
 	if (!str && f_cmd)
@@ -317,7 +317,7 @@ getoptstr (STRING optname, STRING defval)
  * Created: 2002/06/16, Perry Rapp
  *=============================================*/
 STRING
-getoptstr_rpt (STRING optname, STRING defval)
+getoptstr_rpt (CNSTRING optname, STRING defval)
 {
 	STRING str = 0;
 	if (!str && f_rpt)
@@ -333,7 +333,7 @@ getoptstr_rpt (STRING optname, STRING defval)
  * Created: 2002/06/16, Perry Rapp
  *=============================================*/
 STRING
-getoptstr_dbonly (STRING optname, STRING defval)
+getoptstr_dbonly (CNSTRING optname, STRING defval)
 {
 	STRING str = 0;
 	if (f_db)
@@ -352,7 +352,7 @@ getoptstr_dbonly (STRING optname, STRING defval)
  * Created: 2001/11/22, Perry Rapp
  *=============================================*/
 INT
-getoptint (STRING optname, INT defval)
+getoptint (CNSTRING optname, INT defval)
 {
 	STRING str = getoptstr(optname, 0);
 	return str ? atoi(str) : defval;

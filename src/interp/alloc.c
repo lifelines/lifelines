@@ -55,12 +55,13 @@
 /* reused report language error strings */
 STRING nonint1     = 0;
 STRING nonintx     = 0;
+STRING nonflox     = 0;
 STRING nonstr1     = 0;
 STRING nonstrx     = 0;
 STRING nullarg1    = 0;
 STRING nonfname1   = 0;
 STRING nonnodstr1  = 0;
-STRING nonind1     = N_("%s: the arg must be a person.");
+STRING nonind1     = 0;
 STRING nonindx     = 0;
 STRING nonfam1     = 0;
 STRING nonfamx     = 0;
@@ -703,11 +704,13 @@ clear_error_strings (void)
 {
 	strfree(&nonint1);
 	strfree(&nonintx);
+	strfree(&nonflox);
 	strfree(&nonstr1);
 	strfree(&nonstrx);
 	strfree(&nullarg1);
 	strfree(&nonfname1);
 	strfree(&nonnodstr1);
+	strfree(&nonind1);
 	strfree(&nonindx);
 	strfree(&nonfam1);
 	strfree(&nonfamx);
@@ -761,22 +764,24 @@ interp_load_lang (void)
 	clear_error_strings();
 	nonint1     = strsave(_("%s: the arg must be an integer."));
 	nonintx     = strsave(_("%s: the arg #%s must be an integer."));
+	nonflox     = strsave(_("%s: the arg #%s must be a float."));
 	nonstr1     = strsave(_("%s: the arg must be a string."));
 	nonstrx     = strsave(_("%s: the arg #%s must be a string."));
 	nullarg1    = strsave(_("%s: null arg not permissible."));
 	nonfname1   = strsave(_("%s: the arg must be a filename."));
 	nonnodstr1  = strsave(_("%s: the arg must be a node or string."));
+	nonind1     = strsave(_("%s: the arg must be a person."));
 	nonindx     = strsave(_("%s: the arg #%s must be a person."));
 	nonfam1     = strsave(_("%s: the arg must be a family."));
 	nonfamx     = strsave(_("%s: the arg #%s must be a family."));
-	nonrecx    = strsave(_("%s: the arg #%s must be a record."));
+	nonrecx     = strsave(_("%s: the arg #%s must be a record."));
 	nonnod1     = strsave(_("%s: the arg must be a node."));
 	nonnodx     = strsave(_("%s: the arg #%s must be a node."));
 	nonvar1     = strsave(_("%s: the arg must be a variable."));
 	nonvarx     = strsave(_("%s: the arg #%s must be a variable."));
 	nonboox     = strsave(_("%s: the arg #%s must be a boolean."));
-	nonlst1    = strsave(_("%s: the arg must be a list."));
-	nonlstx    = strsave(_("%s: the arg #%s must be a list."));
+	nonlst1     = strsave(_("%s: the arg must be a list."));
+	nonlstx     = strsave(_("%s: the arg #%s must be a list."));
 	badargs     = strsave(_("%s: Bad arguments"));
 	badargx     = strsave(_("%s: the arg #%s had a major error."));
 }

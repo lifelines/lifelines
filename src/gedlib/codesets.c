@@ -14,6 +14,7 @@
 #include "llstdlib.h"
 #include "codesets.h"
 #include "lloptions.h"
+#include "zstr.h"
 #include "arch.h"
 
 #ifdef HAVE_LANGINFO_CODESET
@@ -52,6 +53,7 @@ STRING report_codeset_in=0;  /* default for input from reports */
  *********************************************/
 
 /* alphabetical */
+static void set_codeset_pair(CNSTRING base, CNSTRING defval, STRING *pcsout, STRING *pcsin);
 
 
 /*********************************************
@@ -68,7 +70,7 @@ void
 init_codesets (void)
 {
 	STRING e;
-#ifndef WIN32
+#if defined(WIN32) && !defined(__CYGWIN__)
 	/*
 	The Win32 case is special because we care about both Windows & Console
 	codepages, at least when running in console mode.
@@ -89,14 +91,17 @@ init_codesets (void)
 #endif
 
 /* internal */
-	/* TODO: Move int_codeset code to here */
-	/* have to figure out exactly when this happens, as int_codeset needs db loaded */
+	/*
+	internal codeset is not handled here, becauase it must be checked
+	only in the database local options. It is handled in 
+	update_db_options() in init.c.
+	*/
 
 /* GuiCodesetOut */
 	e = getoptstr("GuiCodesetOut", "");
-	if (!e)
+	if (!e[0])
 		e = getoptstr("GuiCodeset", "");
-	if (!e) {
+	if (!e[0]) {
 #ifdef WIN32
 		char temp[32];
 		int cs = (w_get_has_console() ? w_get_oemout_codepage() : w_get_codepage());
@@ -106,16 +111,14 @@ init_codesets (void)
 		e = defval;
 #endif
 	}
-	if (e) {
-		strfree(&gui_codeset_out);
-		gui_codeset_out = strsave(e);
-	}
+	strfree(&gui_codeset_out);
+	gui_codeset_out = strsave(e);
 
 /* GuiCodesetIn */
 	e = getoptstr("GuiCodesetIn", "");
-	if (!e)
+	if (!e[0])
 		e = getoptstr("GuiCodeset", "");
-	if (!e) {
+	if (!e[0]) {
 #ifdef WIN32
 		char temp[32];
 		int cs = (w_get_has_console() ? w_get_oemin_codepage() : w_get_codepage());
@@ -125,33 +128,43 @@ init_codesets (void)
 		e = defval;
 #endif
 	}
-	if (e) {
-		strfree(&gui_codeset_in);
-		gui_codeset_in = strsave(e);
-	}
+	strfree(&gui_codeset_in);
+	gui_codeset_in = strsave(e);
 
-/* GedcomCodesetOut */
-	e = getoptstr("GedcomCodesetOut", "");
-	if (!e)
-		e = getoptstr("GedcomCodesetCodeset", "");
-	if (!e)
-		e = defval;
-	if (e) {
-		strfree(&gedcom_codeset_out);
-		gedcom_codeset_out = strsave(e);
-	}
+	/* remaining codesets are all straightforward */
+	set_codeset_pair("GedcomCodeset", defval, &gedcom_codeset_out, &gedcom_codeset_in);
+	set_codeset_pair("EditorCodeset", defval, &editor_codeset_out, &editor_codeset_in);
+	set_codeset_pair("ReportCodeset", defval, &report_codeset_out, &report_codeset_in);
 
-/* GedcomCodesetIn */
-	e = getoptstr("GedcomCodesetIn", "");
-	if (!e)
-		e = getoptstr("GedcomCodeset", "");
-	if (!e)
+}
+/*=================================================
+ * set_codeset_pair -- Initialize a pair of codesets
+ *  eg, GedcomCodesetOut & GedcomCodesetIn
+ * Created: 2002/11/28 (Perry Rapp)
+ *===============================================*/
+static void
+set_codeset_pair (CNSTRING base, CNSTRING defval, STRING *pcsout, STRING *pcsin)
+{
+	ZSTR zstr = zs_news(base);
+	CNSTRING e;
+	zs_apps(&zstr, "Out");
+	e = getoptstr(zs_str(zstr), "");
+	if (!e[0])
+		e = getoptstr(base, "");
+	if (!e[0])
 		e = defval;
-	if (e) {
-		strfree(&gedcom_codeset_in);
-		gedcom_codeset_in = strsave(e);
-	}
-	/* TODO: finish these */
+	strfree(pcsout);
+	*pcsout = strsave(e);
+
+	zs_sets(&zstr, base);
+	zs_apps(&zstr, "In");
+    e = getoptstr(zs_str(zstr), "");
+	if (!e[0])
+		e = getoptstr(base, "");
+	if (!e[0])
+		e = defval;
+	strfree(pcsin);
+	*pcsin = strsave(e);
 }
 /*=================================================
  * term_codesets -- free all codeset variables

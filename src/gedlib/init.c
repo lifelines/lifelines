@@ -41,9 +41,8 @@
 #include "version.h"
 #include "lloptions.h"
 #include "codesets.h"
-#ifdef WIN32_ICONV_SHIM
-#include "iconvshim.h"
-#endif
+#include "zstr.h"
+#include "icvt.h"
 
 /*********************************************
  * global/exported variables
@@ -73,7 +72,7 @@ extern STRING illegal_char;
 static void add_dbs_to_list(LIST dblist, LIST dbdesclist, STRING dir);
 static STRING getdbdesc(STRING path, STRING userpath);
 static void init_win32_gettext_shim(void);
-static void init_win32_iconv_shim(void);
+static void set_gettext_codeset(CNSTRING codeset);
 static void update_db_options(void);
 
 /*********************************************
@@ -125,30 +124,16 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 	/* now that codeset variables are set from config file, lets initialize codesets */
 	/* although int_codeset can't be determined yet, we need GUI codeset for gettext */
 	init_codesets();
+
 	/* for Windows, link dynamically to gettext & iconv if available */
 	init_win32_gettext_shim();
-	init_win32_iconv_shim();
+	init_win32_iconv_shim(getoptstr("iconv.path",""));
 
 #if ENABLE_NLS
 
-#ifdef HAVE_BIND_TEXTDOMAIN_CODESET
-	e = gedcom_codeset_out;
-	if (e && e[0]) {
-		/* This doesn't work with gettext before 0.11.3pre2
-		STRING suffix = getoptstr("GuiCodesetOutput", "");
-		STRING f = strconcat(int_codeset, suffix);
-		*/
-		STRING f=e;
-		bind_textdomain_codeset(PACKAGE, f);
-	}
-	/*
-	otherwise let gettext try to figure it out
-	gettext has a lot of nice code for this stuff, but it doesn't
-	know about DOS console windows, and will default to the MS-Windows default
-	codepage, which is not very close :(
-	TODO: So revise this to use the codeset we determine at startup
-	*/
-#endif /* HAVE_BIND_TEXTDOMAIN_CODESET */
+	/* until we have an internal codeset (which is until we open a database)
+	we want output in display codeset */
+	set_gettext_codeset(gui_codeset_out);
 
 	/* allow run-time specification of locale directory */
 	/* (LOCALEDIR is compile-time) */
@@ -197,21 +182,6 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 	return TRUE;
 }
 /*=================================
- * init_win32_iconv_shim -- 
- *  Handle user-specified gettext dll path
- *===============================*/
-static void
-init_win32_iconv_shim (void)
-{
-#ifdef WIN32_ICONV_SHIM
-	STRING e;
-	/* (re)load iconv.dll if path specified */
-	e = getoptstr("iconv.path", "");
-	if (e && *e)
-		iconvshim_set_property("dll_path", e);
-#endif
-}
-/*=================================
  * init_win32_gettext_shim -- 
  *  Handle user-specified iconv dll path
  *===============================*/
@@ -245,6 +215,25 @@ init_win32_gettext_shim (void)
 #endif
 }
 /*=================================
+ * set_gettext_codeset -- Tell gettext what codeset we want
+ * Created: 2002/11/28 (Perry Rapp)
+ *===============================*/
+static void
+set_gettext_codeset (CNSTRING codeset)
+{
+#ifdef HAVE_BIND_TEXTDOMAIN_CODESET
+	if (codeset && codeset[0]) {
+		ZSTR zcsname=0;
+		transl_parse_codeset(codeset, &zcsname, 0);
+		if (zs_str(zcsname)) {
+			/* can't attach //TRANSLIT for gettext before 0.11.3pre2 */
+			bind_textdomain_codeset(PACKAGE, zs_str(zcsname));
+		}
+		zs_free(&zcsname);
+	}
+#endif /* HAVE_BIND_TEXTDOMAIN_CODESET */
+}
+/*=================================
  * init_lifelines_db -- Initialization after db opened
  *===============================*/
 BOOLEAN
@@ -263,6 +252,14 @@ init_lifelines_db (void)
 	init_browse_lists();
 	if (!openxref(readonly))
 		return FALSE;
+
+
+#if ENABLE_NLS
+	set_gettext_codeset(int_codeset);
+#endif /* ENABLE_NLS */
+
+	transl_load_xlats();
+
 	return TRUE;
 }
 /*===============================================
@@ -605,9 +602,12 @@ update_useropts (VPTR uparm)
 		return;
 	update_db_options(); /* deal with db-specific options */
 	uilocale(); /* in case user changed locale */
-	/* if we were clever, we'd remember the codesets, so we'd know if we need
-	to reload mappings -- Perry, 2002.02.18 */
+	/* in case user changed any codesets */
+	init_codesets();
+	transl_load_xlats();
+	/* old system charmaps */
 	load_char_mappings(); /* in case user changed codesets */
+
 	strupdate(&illegal_char, getoptstr("IllegalChar", 0));
 }
 /*==================================================
@@ -621,11 +621,12 @@ update_db_options (void)
 	STRING str=0;
 	get_db_options(opttab);
 
-	strfree(&int_codeset);
 	if ((str = valueof_str(opttab, "codeset")) != 0) {
 		if (!eqstr_ex(int_codeset, str)) {
+			strfree(&int_codeset);
 			int_codeset = strsave(str);
 			uu8 = is_codeset_utf8(int_codeset);
+			transl_load_xlats();
 		}
 	}
 	

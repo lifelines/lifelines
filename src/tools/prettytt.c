@@ -1,25 +1,9 @@
 /* 
    Copyright (c) 2001 Perry Rapp
-
-   Permission is hereby granted, free of charge, to any person
-   obtaining a copy of this software and associated documentation
-   files (the "Software"), to deal in the Software without
-   restriction, including without limitation the rights to use, copy,
-   modify, merge, publish, distribute, sublicense, and/or sell copies
-   of the Software, and to permit persons to whom the Software is
-   furnished to do so, subject to the following conditions:
-
-   The above copyright notice and this permission notice shall be
-   included in all copies or substantial portions of the Software.
-
-   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-   SOFTWARE.
+   "The MIT license"
+   Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: 
+   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 /*=============================================================
  * prettytt.c -- 
@@ -38,14 +22,13 @@
 #define PROG_VERSION "prettytt: 2001/12/29"
 
 static void prettytt(const char * f1, const char * f2);
-static void dispversion();
-static void dispcode(int charnum);
+static void dispversion(void);
 
 typedef unsigned char uchar;
 
 static int skipws=0;
 
-int main(int argc, char * argv[])
+int main (int argc, char * argv[])
 {
 	const char *f1=0, *f2=0;
 	int count=0, i;
@@ -146,28 +129,6 @@ end:
 	if (fp2 != stdout) fclose(fp2);
 }
 
-static void
-dispall()
-{
-	int i, j;
-	int charnum;
-	char c;
-
-	/* 24 rows of display */
-	for (i=33; i<33+23; i++) {
-		if (i>33) printf("\n");
-		/* 10 columns across */
-		for (j=0; j<11; j++) {
-			charnum = i+j*23;
-			if (charnum > 255)
-				break;
-			printf("%3d:%c", charnum, charnum);
-			if (j<9)
-				printf("  "); /* inter-column padding */
-		}
-	}
-	scanf("%c", &c);
-}
 
 static void 
 dispversion (void)

@@ -15,5 +15,8 @@
 
 BOOLEAN iconv_trans(CNSTRING src, CNSTRING dest, CNSTRING sin, ZSTR * zout, CNSTRING illegal);
 BOOLEAN iconv_can_trans(CNSTRING src, CNSTRING dest);
+#ifdef WIN32_ICONV_SHIM
+void init_win32_iconv_shim(CNSTRING dllpath);
+#endif
 
 #endif /* ICVT_H_INCLUDED */

@@ -44,6 +44,7 @@
 #include "lloptions.h"
 #include "date.h"
 #include "zstr.h"
+#include "codesets.h"
 
 #include "interpi.h"
 
@@ -51,7 +52,7 @@
  * external/imported variables
  *********************************************/
 
-extern STRING nonint1,nonintx,nonstr1,nonstrx,nullarg1,nonfname1;
+extern STRING nonint1,nonintx,nonflox,nonstr1,nonstrx,nullarg1,nonfname1;
 extern STRING nonnodstr1;
 extern STRING nonind1,nonindx,nonfam1,nonrecx,nonnod1,nonnodx;
 extern STRING nonvar1,nonvarx,nonboox,nonlst1,nonlstx;
@@ -62,7 +63,7 @@ extern STRING badargs,qSaskstr,qSchoostrttl;
  *********************************************/
 
 static INT normalize_year(struct dnum_s yr);
-static ZSTR utf8cvt(STRING str, INT * offset);
+static ZSTR decode(STRING str, INT * offset);
 
 /*********************************************
  * local variables
@@ -433,82 +434,87 @@ __strsoundex (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return newval;
 }
 /*===========================================+
- * __utf8 -- Convert utf8 escape sequence to internal
- *   usage: utf8(STRING) -> STRING
+ * __bytecode -- Input string with escape codes
+ *  and optionally specified codeset
+ *  eg, bytecode("I$C3$B1$C3$A1rritu", "UTF-8")
+ *   usage: code(STRING, [STRING]) -> STRING
  *==========================================*/
 PVALUE
-__utf8 (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+__bytecode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
-	PVALUE newval, val = evaluate(arg, stab, eflg);
+	PVALUE val = eval_and_coerce(PSTRING, arg, stab, eflg);
+	PVALUE newval=0;
+	STRING codeset=0;
 	INT offset;
 	ZSTR zstr=0;
-	if (*eflg || !val || ptype(val) != PSTRING) {
-		*eflg = TRUE;
-		prog_var_error(node, stab, arg, NULL, nonstr1, "utf8");
-		return NULL;
+	if (*eflg) {
+		prog_var_error(node, stab, arg, NULL, nonstr1, "bytecode");
+		goto decode_exit;
 	}
-	zstr = utf8cvt(pvalue(val), &offset);
+	arg = inext(arg);
+	if (arg) {
+		PVALUE val2 = eval_and_coerce(PSTRING, arg, stab, eflg);
+		if (*eflg) {
+			prog_var_error(node, stab, arg, NULL, nonstr1, "bytecode");
+			goto decode_exit;
+		}
+		codeset = strsave(pvalue_to_string(val2));
+		delete_pvalue(val2);
+	} else {
+		codeset = strsave(report_codeset_in);
+	}
+	zstr = decode(pvalue_to_string(val), &offset);
 	if (offset >= 0) {
 		prog_var_error(node, stab, arg, val
 			, _("Bad UTF character %d in UTF escape string <%s>")
 			, offset+1, pvalue(val));
 		*eflg = TRUE;
-		newval = NULL;
-	} else {
-		newval = create_pvalue_from_string(zs_str(zstr));
+		goto decode_exit;
 	}
+	/* raw is a special case meaning do NOT go to internal */
+	/* raw is for use in test scripts, testing codeconvert */
+	if (!eqstr(codeset, "raw")) {
+	/* now translate to internal, if possible */
+		XLAT xlat = transl_get_xlat_to_int(codeset);
+		if (xlat)
+			transl_xlat(xlat, &zstr);
+	}
+	newval = create_pvalue_from_string(zs_str(zstr));
+decode_exit:
 	zs_free(&zstr);
 	delete_pvalue(val);
+	strfree(&codeset);
 	return newval;
 }
 /*===============================+
- * utf8cvt -- Convert utf8 escape string into internal codeset
- *  str:    [IN]  string with embedded UTF8 sequences like so: "I$C3$B1$C3$A1rritu" 
+ * decode -- Convert any embedded escape codes into bytes
+ *  str:    [IN]  string with embedded escape codes, eg:  "I$C3$B1$C3$A1rritu" 
  *  offset: [OUT] -1 if ok, else 0-based offset of failure
  *==============================*/
 static ZSTR
-utf8cvt (STRING str, INT * offset)
+decode (STRING str, INT * offset)
 {
-	ZSTR zstr = zs_newn((unsigned int)((strlen(str)*1.3+2)));
-	INT i, bufloc=0;
-	STRING ptr = str;
-	char buffer[7];
+	ZSTR zstr = zs_newn((unsigned int)((strlen(str)*2+2)));
+	STRING ptr;
 	*offset = -1;
-	while (1) {
-		if (!ptr[0]) {
-			if (bufloc) /* error if unfinished UTF-8 escape */
-				*offset = ptr - str;
-			return zstr;
-		}
-		if (ptr[0] == '$') {
+	for (ptr=str; *ptr; ++ptr) {
+		if (*ptr == '$') {
+			INT n = get_hexidecimal(ptr);
 			++ptr;
-			i = get_hexidecimal(ptr);
 			/* error if bad hex escape */
-			if (i == -1) {
+			if (n == -1) {
 				*offset = ptr - str;
-				return zstr;
+				goto decode_exit;
 			}
 			ptr += 2;
-			buffer[bufloc] = i;
-			++bufloc;
-			if (utf8len(buffer[0]) == bufloc) {
-				buffer[bufloc] = 0;
-				/* TODO: translate from UTF-8 to internal */
-				/* because we aren't doing that, this will fail unless internal is UTF-8 */
-				zs_apps(&zstr, buffer);
-				bufloc = 0;
-			}
+			zs_appc(&zstr, n);
 		} else {
-			/* error if unfinished UTF-8 escape */
-			if (bufloc) {
-				*offset = ptr - str;
-				return zstr;
-			}
-			zs_appc(&zstr, ptr[0]);
-			++str;
+			zs_appc(&zstr, *ptr);
 		}
 	}
+decode_exit:
+	return zstr;
 }
 /*===========================================+
  * __setlocale -- Set current locale
@@ -965,15 +971,15 @@ __f (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
 	if (*eflg) {
-		prog_error(node, _("the arg to f is not a float"));
+		prog_var_error(node, stab, arg, val, nonflox, "f", "1");
 		return NULL;
 	}
-/*HERE*/
 	u.w = pvalue(val);
-	if (inext(arg)) {
-		val = eval_and_coerce(PINT, inext(arg), stab, eflg);
+	arg = inext(arg);
+	if (arg) {
+		val = eval_and_coerce(PINT, arg, stab, eflg);
 		if (*eflg) {
-			prog_error(node, "2nd arg to f must be an integer");
+			prog_var_error(node, stab, arg, val, nonintx, "f", "2");
 			return NULL;
 		}
 		prec = pvalue_to_int(val);

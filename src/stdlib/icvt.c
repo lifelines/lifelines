@@ -22,6 +22,9 @@
 #include "icvt.h"
 
 
+/*===================================================
+ * iconv_can_trans -- Can iconv do this translation ?
+ *=================================================*/
 BOOLEAN
 iconv_can_trans (CNSTRING src, CNSTRING dest)
 {
@@ -39,7 +42,6 @@ iconv_can_trans (CNSTRING src, CNSTRING dest)
 	return FALSE;
 #endif
 }
-
 /*===================================================
  * iconv_trans -- Translate string via iconv
  *  src:     [IN]  source codeset
@@ -161,3 +163,14 @@ cvting:
 	return FALSE;
 #endif /* HAVE_ICONV */
 }
+/*===================================================
+ * init_win32_iconv_shim -- Helper for loading iconv.dll on win32
+ *=================================================*/
+#ifdef WIN32_ICONV_SHIM
+void
+init_win32_iconv_shim (CNSTRING dllpath)
+{
+	if (dllpath && dllpath[0])
+		iconvshim_set_property("dll_path", dllpath);
+}
+#endif

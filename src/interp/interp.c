@@ -1839,6 +1839,8 @@ vprog_error (PNODE node, STRING fmt, va_list args)
 		zs_apps(&zstr, _("Aborting: "));
 	}
 	zs_appvf(&zstr, fmt, args);
+	llwprintf("\n");
+	llwprintf(zs_str(zstr));
 	++progerror;
 	/* if user specified a report error log (in config file) */
 	if (rptfile && rptfile[0]) {

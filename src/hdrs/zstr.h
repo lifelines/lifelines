@@ -18,6 +18,7 @@ struct zstr_s;
 ZSTR zs_new(void);
 ZSTR zs_newn(unsigned int min);
 ZSTR zs_news(const char * str);
+ZSTR zs_newsubs(const char * str, unsigned int len);
 void zs_free(ZSTR * pzstr);
 char * zs_str(ZSTR);
 unsigned int zs_len(ZSTR zstr);

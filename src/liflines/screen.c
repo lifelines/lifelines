@@ -21,15 +21,9 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
-/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
-/* modified 2000-04-25 J.F.Chandler */
 /*=============================================================
  * screen.c -- Curses user interface to LifeLines
  * Copyright(c) 1992-96 by T.T. Wetmore IV; all rights reserved
- * pre-SourceForge version information:
- *   2.3.4 - 24 Jun 93    2.3.5 - 29 Sep 93
- *   2.3.6 - 01 Jan 94    3.0.0 - 06 Oct 94
- *   3.0.2 - 25 Mar 95    3.0.3 - 17 Jan 96
  *===========================================================*/
 
 #include "llstdlib.h"
@@ -48,6 +42,7 @@
 #ifdef WIN32_ICONV_SHIM
 #include "iconvshim.h"
 #endif
+#include "codesets.h"
 
 #define LINESREQ 24
 #define COLSREQ  80
@@ -1804,17 +1799,45 @@ invoke_cset_display (void)
 	zs_setf(&zstr, _("Collation routine: %s"), ll_what_collation());
 	enqueue_list(list, strsave(zs_str(zstr)));
 	
-	zs_setf(&zstr, _("GUI codeset: %s"), getoptstr("GuiCodeset",""));
-	enqueue_list(list, strsave(zs_str(zstr)));
+	if (eqstr_ex(gui_codeset_in, gui_codeset_out)) {
+		zs_setf(&zstr, _("GUI codeset: %s"), gui_codeset_in);
+		enqueue_list(list, strsave(zs_str(zstr)));
+	} else {
+		zs_setf(&zstr, _("GUI output codeset: %s"), gui_codeset_out);
+		enqueue_list(list, strsave(zs_str(zstr)));
+		zs_setf(&zstr, _("GUI input codeset: %s"), gui_codeset_in);
+		enqueue_list(list, strsave(zs_str(zstr)));
+	}
 
-	zs_setf(&zstr, _("Editor codeset: %s"), getoptstr("EditorCodeset",""));
-	enqueue_list(list, strsave(zs_str(zstr)));
+	if (eqstr_ex(editor_codeset_in, editor_codeset_out)) {
+		zs_setf(&zstr, _("editor codeset: %s"), editor_codeset_in);
+		enqueue_list(list, strsave(zs_str(zstr)));
+	} else {
+		zs_setf(&zstr, _("editor output codeset: %s"), editor_codeset_out);
+		enqueue_list(list, strsave(zs_str(zstr)));
+		zs_setf(&zstr, _("editor input codeset: %s"), editor_codeset_in);
+		enqueue_list(list, strsave(zs_str(zstr)));
+	}
 
-	zs_setf(&zstr, _("Report codeset: %s"), getoptstr("ReportCodeset",""));
-	enqueue_list(list, strsave(zs_str(zstr)));
+	if (eqstr_ex(report_codeset_in, report_codeset_out)) {
+		zs_setf(&zstr, _("report codeset: %s"), report_codeset_in);
+		enqueue_list(list, strsave(zs_str(zstr)));
+	} else {
+		zs_setf(&zstr, _("report output codeset: %s"), report_codeset_out);
+		enqueue_list(list, strsave(zs_str(zstr)));
+		zs_setf(&zstr, _("report input codeset: %s"), report_codeset_in);
+		enqueue_list(list, strsave(zs_str(zstr)));
+	}
 
-	zs_setf(&zstr, _("GEDCOM codeset: %s"), getoptstr("GedcomCodeset",""));
-	enqueue_list(list, strsave(zs_str(zstr)));
+	if (eqstr_ex(gedcom_codeset_in, gedcom_codeset_out)) {
+		zs_setf(&zstr, _("GEDCOM codeset: %s"), gedcom_codeset_in);
+		enqueue_list(list, strsave(zs_str(zstr)));
+	} else {
+		zs_setf(&zstr, _("gedcom output codeset: %s"), gedcom_codeset_out);
+		enqueue_list(list, strsave(zs_str(zstr)));
+		zs_setf(&zstr, _("gedcom input codeset: %s"), gedcom_codeset_in);
+		enqueue_list(list, strsave(zs_str(zstr)));
+	}
 
 	zs_setf(&zstr, "TTDIR: %s", getoptstr("TTDIR", ""));
 	enqueue_list(list, strsave(zs_str(zstr)));
