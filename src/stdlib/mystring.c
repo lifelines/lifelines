@@ -620,6 +620,7 @@ vappendstrf (char ** pdest, int * len, const char * fmt, va_list args)
 char *
 llstrncpy (char *dest, const char *src, size_t n)
 {
+	if (n<2) return dest;
 	strncpy(dest, src, n);
 	if (dest[n-1]) {
 		/* overflowed -- back up to last character that fits */
@@ -639,7 +640,23 @@ llstrncat (char *dest, const char *src, size_t n)
 {
 	size_t len = strlen(dest);
 	if (len < n) {
-		llstrncpy(dest+len, src, n-len);
+		llstrncpy(dest+len, src, n);
+	}
+	return dest;
+}
+/*==================================
+ * strappend -- llstrncat except limit includes existing string
+ *  ie, strncat except it always terminates, it handles UTF-8,
+ *  and the limit is inclusive of existing contents
+ * Created: 2002/06/13, Perry Rapp
+ *================================*/
+char *
+strappend (char *dest, const char *src, size_t limit)
+{
+	size_t len = strlen(dest);
+	size_t n = limit-len;
+	if (n > 0) {
+		llstrncpy(dest+len, src, n);
 	}
 	return dest;
 }

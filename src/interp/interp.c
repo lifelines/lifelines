@@ -1800,7 +1800,7 @@ handle_require (PNODE node)
 	ASSERT(ptype(pval)==PSTRING);
 	str = pvalue(pval);
 	llstrncpy(propname, "requires_", sizeof(propname));
-	llstrncat(propname+strlen(propname), str, sizeof(propname)-strlen(propname));
+	strappend(propname, str, sizeof(propname));
 	set_rptfile_prop(fname, strsave(propname), strsave(str));
 }
 /*=============================================+
