@@ -1,3 +1,12 @@
+2001-01-24 Perry Rapp <puddle@users.sourceforge.net>
+
+	btree/block.c btree/index.c btree/opnbtree.c btree/utils.c
+	hdrs/btree.h liflines/main.c:
+	Changed keyfile types to 1 & 2.
+	Check for overwriting existing database.
+
+	liflines/screen.c: (Matthew made small changes.)
+
 2001-01-21 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/keytonod.c hdrs/cache.h tools/dbverify.c:
