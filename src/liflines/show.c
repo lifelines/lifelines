@@ -304,8 +304,6 @@ init_display_indi (RECORD irec, INT width)
 
 
 	ASSERT(pers);
-	fth = indi_to_fath(pers);
-	mth = indi_to_moth(pers);
 
 	disp_person_name(Spers, _(qSdspl_indi), irec, width);
 
@@ -313,10 +311,12 @@ init_display_indi (RECORD irec, INT width)
 
 	disp_person_birthdeath(Sdeat, irec, f_death_tags, &disp_long_rfmt);
 
+	fth = indi_to_fath(pers);
 	s = person_display(fth, NULL, width-13);
 	if (s) llstrncpyf(Sfath, liwidth, uu8, "  %s: %s", _(qSdspl_fath), s);
 	else llstrncpyf(Sfath, liwidth, uu8, "  %s:", _(qSdspl_fath));
 
+	mth = indi_to_moth(pers);
 	s = person_display(mth, NULL, width-13);
 	if (s) llstrncpyf(Smoth, liwidth, uu8, "  %s: %s", _(qSdspl_moth), s);
 	else llstrncpyf(Smoth, liwidth, uu8, "  %s:", _(qSdspl_moth));

@@ -16,6 +16,10 @@
 	Add get_free_cacheel to make room in cache (I lost this
 	functionality when I removed indirect cache yesterday.)
 
+	* ChangeLog src/liflines/show.c
+
+	Minor: move population of father (&mother) next to display.
+
 2003-11-22 Perry Rapp
 
 	* ChangeLog src/gedlib/gedcomi.h src/gedlib/keytonod.c
