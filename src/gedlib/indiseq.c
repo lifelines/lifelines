@@ -1517,8 +1517,8 @@ ancestor_indiseq (INDISEQ seq)
 		ENDFAMCS
 	}
 	destroy_table(tab);
-	remove_empty_list(&anclist);
-	remove_empty_list(&genlist);
+	remove_empty_list(anclist);
+	remove_empty_list(genlist);
 	return anc;
 }
 /*=============================================================
@@ -1650,8 +1650,7 @@ name_to_indiseq (STRING name)
 		/* people like to see lists alphabetically by name */
 		namesort_indiseq(seq);
 	}
-	make_list_empty(list);
-	remove_list2(list, 0);
+	remove_list(list);
 	return seq;
 }
 /*===========================================

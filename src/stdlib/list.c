@@ -116,6 +116,18 @@ set_list_type (LIST list, int type)
 	ltype(list) = type;
 }
 /*===========================
+ * remove_list -- Delete all elements & delete list
+ *  list: [IN]  list to completely delete
+ *=========================*/
+void
+remove_list (LIST list)
+{
+	if (!list) return;
+	ASSERT(list->vtable == &vtable_for_list);
+	make_list_empty_impl(list, NULL);
+	remove_empty_list(list);
+}
+/*===========================
  * remove_list2 -- Delete all elements & delete list
  *  list: [IN]  list to completely delete
  *  func: [IN]  function to call on each element first (may be NULL)
@@ -123,20 +135,22 @@ set_list_type (LIST list, int type)
 void
 remove_list2 (LIST list, ELEMENT_DESTRUCTOR func)
 {
+	if (!list) return;
+	ASSERT(list->vtable == &vtable_for_list);
 	make_list_empty_impl(list, func);
-	stdfree(list);
+	remove_empty_list(list);
 }
 /*===========================
  * remove_empty_list -- Delete a list with no elements
  *  ASSERT check that list is in fact empty
  *=========================*/
 void
-remove_empty_list (LIST *plist)
+remove_empty_list (LIST list)
 {
-	if (!plist || !(*plist)) return;
-	ASSERT(llen(*plist) == 0);
-	stdfree(*plist);
-	*plist = NULL;
+	if (!list) return;
+	ASSERT(list->vtable == &vtable_for_list);
+	ASSERT(llen(list) == 0);
+	stdfree(list);
 }
 /*===========================
  * in_list -- find first element returning true from check function

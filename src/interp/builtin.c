@@ -1885,7 +1885,7 @@ __clear (PNODE node, SYMTAB stab, BOOLEAN *eflg)
               return NULL;
       }
       list = pvalue_to_list(val);
-      make_list_empty(list);
+      make_list_empty(list); /* leaking elements? 2005-02-05 Perry */
       return NULL;
 }
 /*============================+

@@ -43,6 +43,12 @@
 
 	Consolidate list element removal code into make_list_empty_impl.
 
+	* ChangeLog src/gedlib/indiseq.c src/gedlib/init.c src/gedlib/xlat.c
+	src/hdrs/list.h src/interp/builtin.c src/interp/interp.c
+	src/stdlib/list.c src/stdlib/listener.c
+
+	New function remove_list.
+
 2005-02-04 Perry Rapp
 
 	* ChangeLog src/gedlib/node.c src/hdrs/gedcom.h

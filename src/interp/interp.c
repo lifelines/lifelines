@@ -316,8 +316,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 			prog_error(NULL, str);
 			++Perrors;
 		ENDLIST
-		make_list_empty(outstanding_parse_errors);
-		remove_list2(outstanding_parse_errors, 0);
+		remove_list(outstanding_parse_errors);
 		outstanding_parse_errors=0;
 	}
 
@@ -440,7 +439,7 @@ freelistentry (CNSTRING key, UNION uval)
 {
 	LIST list = (LIST)uval.w;
 	key=key; /* unused */
-	make_list_empty(list);
+	make_list_empty(list); /* leaking list ? */
 }
 /*===========================================+
  * remove_tables -- Remove interpreter's tables
