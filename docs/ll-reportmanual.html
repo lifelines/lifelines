@@ -38,7 +38,7 @@ CLASS="subtitle"
 ><TT
 CLASS="application"
 >LifeLines</TT
-> Version 3.0.26</H2
+> Version 3.0.27</H2
 ><H3
 CLASS="author"
 ><A
@@ -114,83 +114,88 @@ HREF="#AEN350"
 ></DT
 ><DT
 ><A
-HREF="#AEN442"
+HREF="#AEN447"
 >Arithmetic and Logic Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN673"
+HREF="#AEN678"
 >Person Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1152"
+HREF="#AEN1157"
 >Family Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1354"
+HREF="#AEN1359"
 >Other types of records</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1388"
+HREF="#AEN1393"
 >List Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1582"
+HREF="#AEN1587"
 >Table Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1625"
+HREF="#AEN1630"
 >GEDCOM Node Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1753"
+HREF="#AEN1770"
 >Event and Date Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN2064"
+HREF="#AEN2211"
 >Value Extraction Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN2144"
+HREF="#AEN2309"
 >User Interaction Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN2284"
+HREF="#AEN2449"
 >String Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN2607"
+HREF="#AEN2785"
 >Output Mode Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN2784"
+HREF="#AEN2962"
 >Person Set Functions and GEDCOM Extraction</A
 ></DT
 ><DT
 ><A
-HREF="#AEN3095"
+HREF="#AEN3237"
 >Record Update Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN3165"
+HREF="#AEN3307"
 >Record Linking Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN3204"
+HREF="#AEN3346"
 >Miscellaneous Functions</A
+></DT
+><DT
+><A
+HREF="#AEN3509"
+>Deprecated Functions</A
 ></DT
 ></DL
 ></DD
@@ -1964,23 +1969,7 @@ CLASS="type"
 ></DT
 ><DD
 ><P
->&#13;
-union of all types
-
-</P
-></DD
-><DT
-><B
-><SPAN
-CLASS="type"
->INT</SPAN
-></B
-></DT
-><DD
-><P
->&#13;
-integer (on most systems a 32-bit signed value)
-
+>&#13;union of all types
 </P
 ></DD
 ><DT
@@ -1992,133 +1981,7 @@ CLASS="type"
 ></DT
 ><DD
 ><P
->&#13;
-boolean (0 represents false; anything else represents true)
-
-</P
-></DD
-><DT
-><B
-><SPAN
-CLASS="type"
->FLOAT</SPAN
-></B
-></DT
-><DD
-><P
->&#13;
-floating point number (may be used anywhere an INT may be used)
-
-</P
-></DD
-><DT
-><B
-><SPAN
-CLASS="type"
->STRING</SPAN
-></B
-></DT
-><DD
-><P
->&#13;
-text string
-
-</P
-></DD
-><DT
-><B
-><SPAN
-CLASS="type"
->LIST</SPAN
-></B
-></DT
-><DD
-><P
->&#13;
-arbitrary length list of any values (reference)
-
-</P
-></DD
-><DT
-><B
-><SPAN
-CLASS="type"
->TABLE</SPAN
-></B
-></DT
-><DD
-><P
->&#13;
-keyed look-up table (reference)
-
-</P
-></DD
-><DT
-><B
-><SPAN
-CLASS="type"
->INDI</SPAN
-></B
-></DT
-><DD
-><P
->&#13;
-person; reference to a <SPAN
-CLASS="acronym"
->GEDCOM</SPAN
-> INDI record (reference)
-
-</P
-></DD
-><DT
-><B
-><SPAN
-CLASS="type"
->FAM</SPAN
-></B
-></DT
-><DD
-><P
->&#13;
-family; reference to a <SPAN
-CLASS="acronym"
->GEDCOM</SPAN
-> FAM record (reference)
-
-</P
-></DD
-><DT
-><B
-><SPAN
-CLASS="type"
->SET</SPAN
-></B
-></DT
-><DD
-><P
->&#13;
-arbitrary length set of persons (reference)
-
-</P
-></DD
-><DT
-><B
-><SPAN
-CLASS="type"
->NODE</SPAN
-></B
-></DT
-><DD
-><P
->&#13;
-<SPAN
-CLASS="acronym"
->GEDCOM</SPAN
-> node; reference to a line in a <SPAN
-CLASS="acronym"
->GEDCOM</SPAN
-> tree/record (reference)
-
+>&#13;boolean (0 represents false; anything else represents true)
 </P
 ></DD
 ><DT
@@ -2130,12 +1993,142 @@ CLASS="type"
 ></DT
 ><DD
 ><P
->&#13;
-event; reference to substructure of nodes in a <SPAN
+>&#13;event; reference to substructure of nodes in a <SPAN
 CLASS="acronym"
 >GEDCOM</SPAN
 > record (reference)
-
+</P
+></DD
+><DT
+><B
+><SPAN
+CLASS="type"
+>FAM</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;family; reference to a <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> FAM record (reference)
+</P
+></DD
+><DT
+><B
+><SPAN
+CLASS="type"
+>FLOAT</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;floating point number (may be used anywhere an INT may be used)
+</P
+></DD
+><DT
+><B
+><SPAN
+CLASS="type"
+>INDI</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;person; reference to a <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> INDI record (reference)
+</P
+></DD
+><DT
+><B
+><SPAN
+CLASS="type"
+>INT</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;integer (on most systems a 32-bit signed value)
+</P
+></DD
+><DT
+><B
+><SPAN
+CLASS="type"
+>LIST</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;arbitrary length list of any values (reference)
+</P
+></DD
+><DT
+><B
+><SPAN
+CLASS="type"
+>NODE</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;<SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> node; reference to a line in a <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> tree/record (reference)
+</P
+></DD
+><DT
+><B
+><SPAN
+CLASS="type"
+>NUMBER</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;union of all arithmetic types (INT and FLOAT)
+</P
+></DD
+><DT
+><B
+><SPAN
+CLASS="type"
+>SET</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;arbitrary length set of persons (reference)
+</P
+></DD
+><DT
+><B
+><SPAN
+CLASS="type"
+>STRING</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;text string
+</P
+></DD
+><DT
+><B
+><SPAN
+CLASS="type"
+>TABLE</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;keyed look-up table (reference)
 </P
 ></DD
 ><DT
@@ -2147,9 +2140,7 @@ CLASS="type"
 ></DT
 ><DD
 ><P
->&#13;
-type with no values
-
+>&#13;type with no values
 </P
 ></DD
 ></DL
@@ -2232,7 +2223,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN442"
+NAME="AEN447"
 ></A
 >Arithmetic and Logic Functions</H2
 ><DIV
@@ -2240,10 +2231,10 @@ CLASS="glosslist"
 ><DL
 ><DT
 ><B
->&#13;	    <DIV
+><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN447"
+NAME="AEN452"
 ></A
 ><P
 ></P
@@ -2251,23 +2242,23 @@ NAME="AEN447"
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INT <TT
+>NUMBER <TT
 CLASS="function"
 >add</TT
 ></CODE
 >(<TT
 CLASS="parameter"
 ><I
->INT</I
+>NUMBER</I
 ></TT
 >,
-		<TT
+<TT
 CLASS="parameter"
 ><I
->INT</I
+>NUMBER</I
 ></TT
 >
-		<TT
+<TT
 CLASS="parameter"
 ><I
 >...</I
@@ -2277,14 +2268,11 @@ CLASS="parameter"
 ><P
 ></P
 ></DIV
->
-	  </B
+></B
 ></DT
 ><DD
 ><P
->&#13;
-addition - two to 32 arguments
-
+>&#13;addition - two to 32 arguments
 </P
 ></DD
 ><DT
@@ -2292,7 +2280,7 @@ addition - two to 32 arguments
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN459"
+NAME="AEN464"
 ></A
 ><P
 ></P
@@ -2300,20 +2288,20 @@ NAME="AEN459"
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INT <TT
+>NUMBER <TT
 CLASS="function"
 >sub</TT
 ></CODE
 >(<TT
 CLASS="parameter"
 ><I
->INT</I
+>NUMBER</I
 ></TT
 >,
-    <TT
+<TT
 CLASS="parameter"
 ><I
->INT</I
+>NUMBER</I
 ></TT
 >);</CODE
 ></P
@@ -2334,7 +2322,7 @@ subtraction
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN470"
+NAME="AEN475"
 ></A
 ><P
 ></P
@@ -2342,20 +2330,20 @@ NAME="AEN470"
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INT <TT
+>NUMBER <TT
 CLASS="function"
 >mul</TT
 ></CODE
 >(<TT
 CLASS="parameter"
 ><I
->INT</I
+>NUMBER</I
 ></TT
 >,
 <TT
 CLASS="parameter"
 ><I
->INT</I
+>NUMBER</I
 ></TT
 >
 <TT
@@ -2382,7 +2370,7 @@ multiplication - two to 32 arguments
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN482"
+NAME="AEN487"
 ></A
 ><P
 ></P
@@ -2390,20 +2378,20 @@ NAME="AEN482"
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INT <TT
+>NUMBER <TT
 CLASS="function"
 >div</TT
 ></CODE
 >(<TT
 CLASS="parameter"
 ><I
->INT</I
+>NUMBER</I
 ></TT
 >,
 <TT
 CLASS="parameter"
 ><I
->INT</I
+>NUMBER</I
 ></TT
 >);</CODE
 ></P
@@ -2424,7 +2412,7 @@ division
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN493"
+NAME="AEN498"
 ></A
 ><P
 ></P
@@ -2466,7 +2454,7 @@ modulus (remainder)
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN504"
+NAME="AEN509"
 ></A
 ><P
 ></P
@@ -2474,14 +2462,14 @@ NAME="AEN504"
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INT <TT
+>NUMBER <TT
 CLASS="function"
 >exp</TT
 ></CODE
 >(<TT
 CLASS="parameter"
 ><I
->INT</I
+>NUMBER</I
 ></TT
 >,
 <TT
@@ -2508,7 +2496,7 @@ exponentiation
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN515"
+NAME="AEN520"
 ></A
 ><P
 ></P
@@ -2516,14 +2504,14 @@ NAME="AEN515"
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INT <TT
+>NUMBER <TT
 CLASS="function"
 >neg</TT
 ></CODE
 >(<TT
 CLASS="parameter"
 ><I
->INT</I
+>NUMBER</I
 ></TT
 >);</CODE
 ></P
@@ -2535,7 +2523,7 @@ CLASS="parameter"
 ><DD
 ><P
 >&#13;
-integer negation
+negation
 
 </P
 ></DD
@@ -2544,7 +2532,7 @@ integer negation
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN525"
+NAME="AEN530"
 ></A
 ><P
 ></P
@@ -2559,7 +2547,7 @@ CLASS="function"
 >(<TT
 CLASS="parameter"
 ><I
->INT_V</I
+>NUMBER</I
 ></TT
 >);</CODE
 ></P
@@ -2580,7 +2568,7 @@ increment variable by one
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN535"
+NAME="AEN540"
 ></A
 ><P
 ></P
@@ -2595,7 +2583,7 @@ CLASS="function"
 >(<TT
 CLASS="parameter"
 ><I
->INT_V</I
+>NUMBER</I
 ></TT
 >);</CODE
 ></P
@@ -2616,7 +2604,7 @@ decrement variable by one
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN545"
+NAME="AEN550"
 ></A
 ><P
 ></P
@@ -2664,7 +2652,7 @@ logical and - two to 32 arguments
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN557"
+NAME="AEN562"
 ></A
 ><P
 ></P
@@ -2712,7 +2700,7 @@ logical or - two to 32 arguments
 > <DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN569"
+NAME="AEN574"
 ></A
 ><P
 ></P
@@ -2748,7 +2736,7 @@ logical not
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN579"
+NAME="AEN584"
 ></A
 ><P
 ></P
@@ -2790,7 +2778,7 @@ equality (not strings)
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN590"
+NAME="AEN595"
 ></A
 ><P
 ></P
@@ -2832,7 +2820,7 @@ non-equality
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN601"
+NAME="AEN606"
 ></A
 ><P
 ></P
@@ -2874,7 +2862,7 @@ less than
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN612"
+NAME="AEN617"
 ></A
 ><P
 ></P
@@ -2917,7 +2905,7 @@ greater than
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN623"
+NAME="AEN628"
 ></A
 ><P
 ></P
@@ -2959,7 +2947,7 @@ less than or equal
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN634"
+NAME="AEN639"
 ></A
 ><P
 ></P
@@ -3008,53 +2996,60 @@ CLASS="function"
 >, <TT
 CLASS="function"
 >mul</TT
-> and <TT
+> 
+and <TT
 CLASS="function"
 >div</TT
-> do integer arithmetic. Functions <TT
+> do normal arithmetic of integer or floating values.
+If any operand is float, the result is float.
+Functions <TT
 CLASS="function"
 >add</TT
 > and <TT
 CLASS="function"
 >mul</TT
-> can have two to 32 arguments;
-the sum or product of the full set of arguments is computed. Functions <TT
+> can have two to
+32 arguments; the sum or product of the full set of arguments is computed.
+Functions <TT
 CLASS="function"
 >sub</TT
 > and <TT
 CLASS="function"
 >div</TT
-> have two arguments
-each; <TT
+> have 
+two arguments each; <TT
 CLASS="function"
 >sub</TT
-> subtracts its second argument from its first, and <TT
+> subtracts its second argument
+from its first, and <TT
 CLASS="function"
 >div</TT
-> divides its first argument by its second.
+> divides its first argument by its
+second.
 The <TT
 CLASS="function"
 >mod</TT
-> function returns the remainder after dividing the first parameter by the second. If the second
-argument to <TT
+> function returns the remainder after dividing the
+first parameter by the second. If the second argument to 
+<TT
 CLASS="function"
 >div</TT
 > or <TT
 CLASS="function"
 >mod</TT
-> is zero, these functions return 0 and generate a run time error. <TT
+> is zero,
+these functions return 0 and generate a run time error.
+<TT
 CLASS="function"
 >Exp</TT
-> performs
-integer exponentiation. <TT
+> performs integer exponentiation.
+<TT
 CLASS="function"
 >Neg</TT
 > negates its argument.
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Incr</TT
 > and <TT
@@ -3062,11 +3057,9 @@ CLASS="function"
 >decr</TT
 > increment by one and decrement by one, respectively, the value of a variable. The
 argument to both functions must be a variable.
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >And</TT
 > and <TT
@@ -3078,11 +3071,9 @@ where the final value of the function becomes known. <TT
 CLASS="function"
 >Not</TT
 > does the logical not operation.
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Eq</TT
 >, <TT
@@ -3101,7 +3092,6 @@ CLASS="function"
 CLASS="function"
 >ge</TT
 > evaluate the six ordering relationships between two integers.
-
 </P
 ></DIV
 ><DIV
@@ -3109,7 +3099,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN673"
+NAME="AEN678"
 ></A
 >Person Functions</H2
 ><DIV
@@ -3117,10 +3107,10 @@ CLASS="glosslist"
 ><DL
 ><DT
 ><B
->&#13;	    <DIV
+><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN678"
+NAME="AEN683"
 ></A
 ><P
 ></P
@@ -3138,7 +3128,7 @@ CLASS="parameter"
 >INDI</I
 ></TT
 >,
-		  <TT
+<TT
 CLASS="parameter"
 ><I
 ><TT
@@ -3154,13 +3144,11 @@ CLASS="replaceable"
 ></P
 ></DIV
 >
-	  </B
+</B
 ></DT
 ><DD
 ><P
->&#13;
-default name of
-
+>&#13;default name of
 </P
 ></DD
 ><DT
@@ -3168,7 +3156,7 @@ default name of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN690"
+NAME="AEN695"
 ></A
 ><P
 ></P
@@ -3212,9 +3200,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-many name forms of
-
+>&#13;many name forms of
 </P
 ></DD
 ><DT
@@ -3222,7 +3208,7 @@ many name forms of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN703"
+NAME="AEN708"
 ></A
 ><P
 ></P
@@ -3248,9 +3234,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-surname of
-
+>&#13;surname of
 </P
 ></DD
 ><DT
@@ -3258,7 +3242,7 @@ surname of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN713"
+NAME="AEN718"
 ></A
 ><P
 ></P
@@ -3284,9 +3268,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-given names of
-
+>&#13;given names of
 </P
 ></DD
 ><DT
@@ -3294,7 +3276,7 @@ given names of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN723"
+NAME="AEN728"
 ></A
 ><P
 ></P
@@ -3326,9 +3308,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-trimmed name of
-
+>&#13;trimmed name of
 </P
 ></DD
 ><DT
@@ -3336,7 +3316,7 @@ trimmed name of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN734"
+NAME="AEN739"
 ></A
 ><P
 ></P
@@ -3362,9 +3342,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-first birth event of
-
+>&#13;first birth event of
 </P
 ></DD
 ><DT
@@ -3372,7 +3350,7 @@ first birth event of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN744"
+NAME="AEN749"
 ></A
 ><P
 ></P
@@ -3398,9 +3376,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-first death event of
-
+>&#13;first death event of
 </P
 ></DD
 ><DT
@@ -3408,7 +3384,7 @@ first death event of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN754"
+NAME="AEN759"
 ></A
 ><P
 ></P
@@ -3434,9 +3410,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-first baptism event of
-
+>&#13;first baptism event of
 </P
 ></DD
 ><DT
@@ -3444,7 +3418,7 @@ first baptism event of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN764"
+NAME="AEN769"
 ></A
 ><P
 ></P
@@ -3470,9 +3444,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-first burial event of
-
+>&#13;first burial event of
 </P
 ></DD
 ><DT
@@ -3480,7 +3452,7 @@ first burial event of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN774"
+NAME="AEN779"
 ></A
 ><P
 ></P
@@ -3506,9 +3478,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-first father of
-
+>&#13;first father of
 </P
 ></DD
 ><DT
@@ -3516,7 +3486,7 @@ first father of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN784"
+NAME="AEN789"
 ></A
 ><P
 ></P
@@ -3542,9 +3512,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-first mother of
-
+>&#13;first mother of
 </P
 ></DD
 ><DT
@@ -3552,7 +3520,7 @@ first mother of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN794"
+NAME="AEN799"
 ></A
 ><P
 ></P
@@ -3578,9 +3546,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-next (younger) sibling of
-
+>&#13;next (younger) sibling of
 </P
 ></DD
 ><DT
@@ -3588,7 +3554,7 @@ next (younger) sibling of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN804"
+NAME="AEN809"
 ></A
 ><P
 ></P
@@ -3614,9 +3580,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-previous (older) sibling of
-
+>&#13;previous (older) sibling of
 </P
 ></DD
 ><DT
@@ -3624,7 +3588,7 @@ previous (older) sibling of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN814"
+NAME="AEN819"
 ></A
 ><P
 ></P
@@ -3650,9 +3614,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-sex of
-
+>&#13;sex of
 </P
 ></DD
 ><DT
@@ -3660,7 +3622,7 @@ sex of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN824"
+NAME="AEN829"
 ></A
 ><P
 ></P
@@ -3686,9 +3648,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-male predicate
-
+>&#13;male predicate
 </P
 ></DD
 ><DT
@@ -3696,7 +3656,7 @@ male predicate
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN834"
+NAME="AEN839"
 ></A
 ><P
 ></P
@@ -3722,9 +3682,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-female predicate
-
+>&#13;female predicate
 </P
 ></DD
 ><DT
@@ -3732,7 +3690,7 @@ female predicate
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN844"
+NAME="AEN849"
 ></A
 ><P
 ></P
@@ -3764,9 +3722,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-pronoun referring to
-
+>&#13;pronoun referring to
 </P
 ></DD
 ><DT
@@ -3774,7 +3730,7 @@ pronoun referring to
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN855"
+NAME="AEN860"
 ></A
 ><P
 ></P
@@ -3800,9 +3756,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-number of spouses of
-
+>&#13;number of spouses of
 </P
 ></DD
 ><DT
@@ -3810,7 +3764,7 @@ number of spouses of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN865"
+NAME="AEN870"
 ></A
 ><P
 ></P
@@ -3836,9 +3790,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-number of families (as spouse/parent) of
-
+>&#13;number of families (as spouse/parent) of
 </P
 ></DD
 ><DT
@@ -3846,7 +3798,7 @@ number of families (as spouse/parent) of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN875"
+NAME="AEN880"
 ></A
 ><P
 ></P
@@ -3872,9 +3824,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-first parents' family of
-
+>&#13;first parents' family of
 </P
 ></DD
 ><DT
@@ -3882,7 +3832,7 @@ first parents' family of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN885"
+NAME="AEN890"
 ></A
 ><P
 ></P
@@ -3908,9 +3858,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-first title of
-
+>&#13;first title of
 </P
 ></DD
 ><DT
@@ -3918,7 +3866,7 @@ first title of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN895"
+NAME="AEN900"
 ></A
 ><P
 ></P
@@ -3955,9 +3903,7 @@ CLASS="replaceable"
 ></DT
 ><DD
 ><P
->&#13;
-internal key of (work for families also)
-
+>&#13;internal key of (work for families also)
 </P
 ></DD
 ><DT
@@ -3965,7 +3911,7 @@ internal key of (work for families also)
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN907"
+NAME="AEN912"
 ></A
 ><P
 ></P
@@ -3991,9 +3937,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-SOUNDEX code of
-
+>&#13;SOUNDEX code of
 </P
 ></DD
 ><DT
@@ -4001,7 +3945,7 @@ SOUNDEX code of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN917"
+NAME="AEN922"
 ></A
 ><P
 ></P
@@ -4027,9 +3971,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-root GEDCOM node of
-
+>&#13;root GEDCOM node of
 </P
 ></DD
 ><DT
@@ -4037,7 +3979,7 @@ root GEDCOM node of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN927"
+NAME="AEN932"
 ></A
 ><P
 ></P
@@ -4063,9 +4005,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-root GEDCOM node of
-
+>&#13;root GEDCOM node of
 </P
 ></DD
 ><DT
@@ -4073,7 +4013,7 @@ root GEDCOM node of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN937"
+NAME="AEN942"
 ></A
 ><P
 ></P
@@ -4099,9 +4039,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-find person with key value
-
+>&#13;find person with key value
 </P
 ></DD
 ><DT
@@ -4109,7 +4047,7 @@ find person with key value
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN947"
+NAME="AEN952"
 ></A
 ><P
 ></P
@@ -4130,9 +4068,7 @@ CLASS="function"
 ></DT
 ><DD
 ><P
->&#13;
-first person in database in key order
-
+>&#13;first person in database in key order
 </P
 ></DD
 ><DT
@@ -4140,7 +4076,7 @@ first person in database in key order
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN956"
+NAME="AEN961"
 ></A
 ><P
 ></P
@@ -4161,9 +4097,7 @@ CLASS="function"
 ></DT
 ><DD
 ><P
->&#13;
-last person in database in key order
-
+>&#13;last person in database in key order
 </P
 ></DD
 ><DT
@@ -4171,7 +4105,7 @@ last person in database in key order
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN965"
+NAME="AEN970"
 ></A
 ><P
 ></P
@@ -4197,9 +4131,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-next person in database in key order
-
+>&#13;next person in database in key order
 </P
 ></DD
 ><DT
@@ -4207,7 +4139,7 @@ next person in database in key order
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN975"
+NAME="AEN980"
 ></A
 ><P
 ></P
@@ -4233,9 +4165,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-previous person in database in key order
-
+>&#13;previous person in database in key order
 </P
 ></DD
 ><DT
@@ -4285,9 +4215,7 @@ CLASS="replaceable"
 ></DT
 ><DD
 ><P
->&#13;
-loop through all spouses of
-
+>&#13;loop through all spouses of
 </P
 ></DD
 ><DT
@@ -4336,9 +4264,7 @@ CLASS="replaceable"
 ></DT
 ><DD
 ><P
->&#13;
-loop through all families (as spouse) of
-
+>&#13;loop through all families (as spouse) of
 </P
 ></DD
 ><DT
@@ -4377,9 +4303,7 @@ CLASS="replaceable"
 ></DT
 ><DD
 ><P
->&#13;
-loop through all persons in database
-
+>&#13;loop through all persons in database
 </P
 ></DD
 ><DT
@@ -4428,9 +4352,7 @@ CLASS="replaceable"
 ></DT
 ><DD
 ><P
->&#13;
-loop through all female parents of a person
-
+>&#13;loop through all female parents of a person
 </P
 ></DD
 ><DT
@@ -4479,9 +4401,7 @@ CLASS="replaceable"
 ></DT
 ><DD
 ><P
->&#13;
-loop through all male parents of a person
-
+>&#13;loop through all male parents of a person
 </P
 ></DD
 ><DT
@@ -4525,22 +4445,16 @@ CLASS="replaceable"
 ></DT
 ><DD
 ><P
->&#13;
-loop through all familes a person is a child of
-
+>&#13;loop through all familes a person is a child of
 </P
 ></DD
 ></DL
 ></DIV
 ><P
->&#13;
-These functions take a person as a parameter and return information about him or her.
-
-
+>&#13;These functions take a person as a parameter and return information about him or her.
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Name</TT
 > returns the default name of a person; this is the name found on the first <TT
@@ -4561,12 +4475,9 @@ CLASS="returnvalue"
 >false</SPAN
 >, the surname is
 kept exactly as it is in the record.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Fullname</TT
 > returns the name of a person in a variety of formats. If the second parameter is <SPAN
@@ -4581,12 +4492,9 @@ CLASS="returnvalue"
 first, followed by a comma, followed by the other name parts. The fourth parameter specifies the
 maximum length field that can be used to show the name; various conversions occur if it is necessary to
 shorten the name to fit this length.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Surname</TT
 > returns the surname of the person, as found in the first <TT
@@ -4609,12 +4517,9 @@ CLASS="function"
 >Trimname</TT
 > returns the default name of the person trimmed to the
 maximum character length given in the second variable.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Birth</TT
 >, <TT
@@ -4637,12 +4542,9 @@ functions return <SPAN
 CLASS="returnvalue"
 >null</SPAN
 >.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Father</TT
 >, <TT
@@ -4666,12 +4568,9 @@ CLASS="function"
 CLASS="returnvalue"
 >null</SPAN
 > if there is no person in the role.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Sex</TT
 > returns the person's sex as the string <SPAN
@@ -4698,11 +4597,9 @@ respectively, or <SPAN
 CLASS="returnvalue"
 >false</SPAN
 > if not.
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Pn</TT
 > generates pronouns, useful when generating English text;
@@ -4711,7 +4608,7 @@ the second parameter selects the type of pronoun:
 ><DIV
 CLASS="informaltable"
 ><A
-NAME="AEN1089"
+NAME="AEN1094"
 ></A
 ><P
 ></P
@@ -4783,8 +4680,7 @@ VALIGN="MIDDLE"
 ></P
 ></DIV
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Nspouses</TT
 > returns the number of spouses the person has in the database, and <TT
@@ -4796,12 +4692,9 @@ number of families the person is a parent/spouse in; these two values are not ne
 CLASS="function"
 >Parents</TT
 > returns the first family that the person is a child in.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Title</TT
 > returns the value of the first <TT
@@ -4824,12 +4717,9 @@ CLASS="function"
 >Soundex</TT
 >
 returns the Soundex code of the person.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Root</TT
 > and <TT
@@ -4859,12 +4749,9 @@ CLASS="function"
 CLASS="function"
 >inode</TT
 > are synonyms.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Indi</TT
 > returns the person who's key is passed as an argument; if no person has the key <TT
@@ -4874,12 +4761,9 @@ CLASS="function"
 CLASS="returnvalue"
 >null</SPAN
 >.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Firstindi</TT
 >, <TT
@@ -4901,23 +4785,20 @@ CLASS="function"
 >Previndi</TT
 > returns the previous person before the argument person in key
 order.
-
-
 </P
 ><P
->&#13;
-<B
-CLASS="command"
->Spouses</B
+>&#13;<TT
+CLASS="function"
+>Spouses</TT
 > is an iterator that loops through each spouse a person has. The first argument is a person. The
 second argument is a person variable that iterates through the first person's spouses. The third
 argument is a family variable that iterates through the families the person and each spouse are in.
 The fourth argument is an integer variable that counts the iterations.
 </P
 ><P
->&#13;<B
-CLASS="command"
->Families</B
+>&#13;<TT
+CLASS="function"
+>Families</TT
 > is an iterator that loops through the families a person was a spouse/parent in. The first
 argument is a person. The second argument is a family variable that iterates through the families the
 first person was a spouse/parent in. The third argument iterates through the spouses from the families;
@@ -4925,9 +4806,9 @@ if there is no spouse in a particular family, the variable is set to null for th
 argument is an integer variable that counts the iterations.
 </P
 ><P
->&#13;<B
-CLASS="command"
->Forindi</B
+>&#13;<TT
+CLASS="function"
+>Forindi</TT
 > is an iterator that loops through every person in
 the database in ascending key order. Its first
 parameter is a variable that iterates through the persons; its second 
@@ -4935,9 +4816,9 @@ parameter is an integer counter
 variable that counts the persons starting at one.
 </P
 ><P
->&#13;<B
-CLASS="command"
->mothers</B
+>&#13;<TT
+CLASS="function"
+>mothers</TT
 > is an iterator that loops through every female
 parent of the specified individual. 
 Its first parameter is a person;
@@ -4948,11 +4829,11 @@ associated with the family in the third parameter;
 The fourth parameter is a variable that counts the families returned starting at one.
 </P
 ><P
->&#13;<B
-CLASS="command"
->Parents</B
+>&#13;<TT
+CLASS="function"
+>Parents</TT
 > is an iterator that loops through every family
-of that a person is a child in.  Note: This iterator's name begins with a
+that a person is a child in.  Note: This iterator's name begins with a
 capital P.  There is another function of the same name that begins with a
 lower case p.
 Its first parameter is a person;
@@ -4961,9 +4842,9 @@ that the person is a child in; and
 the third parameter is a variable that counts the families returned starting at one.
 </P
 ><P
->&#13;<B
-CLASS="command"
->Forindi</B
+>&#13;<TT
+CLASS="function"
+>Forindi</TT
 > is an iterator that loops through every person in
 the database in ascending key order. Its first
 parameter is a variable that iterates through the persons; its second 
@@ -4976,7 +4857,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1152"
+NAME="AEN1157"
 ></A
 >Family Functions</H2
 ><DIV
@@ -4987,7 +4868,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1157"
+NAME="AEN1162"
 ></A
 ><P
 ></P
@@ -5013,9 +4894,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-first marriage event of
-
+>&#13;first marriage event of
 </P
 ></DD
 ><DT
@@ -5023,7 +4902,7 @@ first marriage event of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1167"
+NAME="AEN1172"
 ></A
 ><P
 ></P
@@ -5049,9 +4928,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-first husband/father of
-
+>&#13;first husband/father of
 </P
 ></DD
 ><DT
@@ -5059,7 +4936,7 @@ first husband/father of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1177"
+NAME="AEN1182"
 ></A
 ><P
 ></P
@@ -5085,9 +4962,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-first wife/mother of
-
+>&#13;first wife/mother of
 </P
 ></DD
 ><DT
@@ -5095,7 +4970,7 @@ first wife/mother of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1187"
+NAME="AEN1192"
 ></A
 ><P
 ></P
@@ -5121,9 +4996,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-number of children in
-
+>&#13;number of children in
 </P
 ></DD
 ><DT
@@ -5131,7 +5004,7 @@ number of children in
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1197"
+NAME="AEN1202"
 ></A
 ><P
 ></P
@@ -5157,9 +5030,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-first child of
-
+>&#13;first child of
 </P
 ></DD
 ><DT
@@ -5167,7 +5038,7 @@ first child of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1207"
+NAME="AEN1212"
 ></A
 ><P
 ></P
@@ -5193,9 +5064,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-last child of
-
+>&#13;last child of
 </P
 ></DD
 ><DT
@@ -5203,7 +5072,7 @@ last child of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1217"
+NAME="AEN1222"
 ></A
 ><P
 ></P
@@ -5240,9 +5109,7 @@ CLASS="replaceable"
 ></DT
 ><DD
 ><P
->&#13;
-internal key of (works for persons also)
-
+>&#13;internal key of (works for persons also)
 </P
 ></DD
 ><DT
@@ -5250,7 +5117,7 @@ internal key of (works for persons also)
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1229"
+NAME="AEN1234"
 ></A
 ><P
 ></P
@@ -5276,9 +5143,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-root GEDCOM node of
-
+>&#13;root GEDCOM node of
 </P
 ></DD
 ><DT
@@ -5286,7 +5151,7 @@ root GEDCOM node of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1239"
+NAME="AEN1244"
 ></A
 ><P
 ></P
@@ -5312,9 +5177,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-root GEDCOM node of
-
+>&#13;root GEDCOM node of
 </P
 ></DD
 ><DT
@@ -5322,7 +5185,7 @@ root GEDCOM node of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1249"
+NAME="AEN1254"
 ></A
 ><P
 ></P
@@ -5348,9 +5211,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-find family from key
-
+>&#13;find family from key
 </P
 ></DD
 ><DT
@@ -5358,7 +5219,7 @@ find family from key
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1259"
+NAME="AEN1264"
 ></A
 ><P
 ></P
@@ -5379,9 +5240,7 @@ CLASS="function"
 ></DT
 ><DD
 ><P
->&#13;
-first family in database in key order
-
+>&#13;first family in database in key order
 </P
 ></DD
 ><DT
@@ -5389,7 +5248,7 @@ first family in database in key order
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1268"
+NAME="AEN1273"
 ></A
 ><P
 ></P
@@ -5410,9 +5269,7 @@ CLASS="function"
 ></DT
 ><DD
 ><P
->&#13;
-last family in database in key order
-
+>&#13;last family in database in key order
 </P
 ></DD
 ><DT
@@ -5420,7 +5277,7 @@ last family in database in key order
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1277"
+NAME="AEN1282"
 ></A
 ><P
 ></P
@@ -5446,9 +5303,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-next family in database in key order
-
+>&#13;next family in database in key order
 </P
 ></DD
 ><DT
@@ -5456,7 +5311,7 @@ next family in database in key order
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1287"
+NAME="AEN1292"
 ></A
 ><P
 ></P
@@ -5482,9 +5337,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-previous family in database in key order
-
+>&#13;previous family in database in key order
 </P
 ></DD
 ><DT
@@ -5528,9 +5381,7 @@ CLASS="replaceable"
 ></DT
 ><DD
 ><P
->&#13;
-loop through children of family
-
+>&#13;loop through children of family
 </P
 ></DD
 ><DT
@@ -5569,22 +5420,16 @@ CLASS="replaceable"
 ></DT
 ><DD
 ><P
->&#13;
-loop through all families in database
-
+>&#13;loop through all families in database
 </P
 ></DD
 ></DL
 ></DIV
 ><P
->&#13;
-These functions take a family as an argument and return information about it.
-
-
+>&#13;These functions take a family as an argument and return information about it.
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Marriage</TT
 > returns the first marriage event found in the family record, if any; it returns <SPAN
@@ -5592,12 +5437,9 @@ CLASS="returnvalue"
 >null</SPAN
 > if there is
 no marriage event.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Husband</TT
 > returns the first husband/father of the family, if any; and <TT
@@ -5608,42 +5450,30 @@ wife/mother of the family, if any. Each returns <SPAN
 CLASS="returnvalue"
 >null</SPAN
 > if the requested person is not in the family.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Nchildren</TT
 > returns the number of children in the family.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Firstchild</TT
 > and <TT
 CLASS="function"
 >lastchild</TT
 > return the first child and last child in a family, respectively.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Key</TT
 > was described in the section on person functions.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Root</TT
 > and <TT
@@ -5673,8 +5503,6 @@ CLASS="function"
 CLASS="function"
 >fnode</TT
 > are synonyms.
-
-
 </P
 ><P
 >&#13;<TT
@@ -5713,26 +5541,21 @@ CLASS="function"
 order.
 </P
 ><P
->&#13;
-<B
-CLASS="command"
->Children</B
+>&#13;<TT
+CLASS="function"
+>Children</TT
 > is an iterator that loops through the children in a family. Its first parameter is a family
 expression; its second parameter is a variable that iterates through each child; its third parameter is
 an integer counter variable that counts the children starting at one. These two variables may be used
 within the loop body.
-
-
 </P
 ><P
->&#13;
-<B
-CLASS="command"
->Forfam</B
+>&#13;<TT
+CLASS="function"
+>Forfam</TT
 > is an iterator that loops through every family in the database in ascending key order. Its first
 parameter is a variable that iterates through the families; its second parameter is an integer counter
 variable that counts the families starting at one.
-
 </P
 ></DIV
 ><DIV
@@ -5740,7 +5563,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1354"
+NAME="AEN1359"
 ></A
 >Other types of records</H2
 ><DIV
@@ -5782,9 +5605,7 @@ CLASS="replaceable"
 ></DT
 ><DD
 ><P
->&#13;
-loop through all sources in database
-
+>&#13;loop through all sources in database
 </P
 ></DD
 ><DT
@@ -5823,9 +5644,7 @@ CLASS="replaceable"
 ></DT
 ><DD
 ><P
->&#13;
-loop through all EVEN nodes in database
-
+>&#13;loop through all EVEN nodes in database
 </P
 ></DD
 ><DT
@@ -5864,31 +5683,29 @@ CLASS="replaceable"
 ></DT
 ><DD
 ><P
->&#13;
-loop through all other (notes, etc.) nodes in database
-
+>&#13;loop through all other (notes, etc.) nodes in database
 </P
 ></DD
 ></DL
 ></DIV
 ><P
->&#13;<B
-CLASS="command"
->forsour</B
+>&#13;<TT
+CLASS="function"
+>forsour</TT
 > is an iterator that loops through all the Source
 nodes in the database.  Its first argument is the SOUR record and its
 second parameter is an integer counter variable that counts the sources
 elements starting at one.
-<B
-CLASS="command"
->foreven</B
+<TT
+CLASS="function"
+>foreven</TT
 > is an iterator that loops through all the Event
 nodes in the database.  Its first argument is the EVEN record and its
 second parameter is an integer counter variable that counts the events
 elements starting at one.
-<B
-CLASS="command"
->forothr</B
+<TT
+CLASS="function"
+>forothr</TT
 > is an iterator that loops through all the Other
 nodes in the database.  Its first argument is the record (NOTE, etc.) and its
 second parameter is an integer counter variable that counts the nodes
@@ -5900,7 +5717,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1388"
+NAME="AEN1393"
 ></A
 >List Functions</H2
 ><DIV
@@ -5911,7 +5728,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1393"
+NAME="AEN1398"
 ></A
 ><P
 ></P
@@ -5937,9 +5754,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-declare a list
-
+>&#13;declare a list
 </P
 ></DD
 ><DT
@@ -5947,7 +5762,7 @@ declare a list
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1403"
+NAME="AEN1408"
 ></A
 ><P
 ></P
@@ -5973,9 +5788,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-check if list is empty
-
+>&#13;check if list is empty
 </P
 ></DD
 ><DT
@@ -5983,7 +5796,7 @@ check if list is empty
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1413"
+NAME="AEN1418"
 ></A
 ><P
 ></P
@@ -6009,8 +5822,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-length of list
+>&#13;length of list
 </P
 ></DD
 ><DT
@@ -6018,7 +5830,7 @@ length of list
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1423"
+NAME="AEN1428"
 ></A
 ><P
 ></P
@@ -6050,9 +5862,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-enqueue element on list
-
+>&#13;enqueue element on list
 </P
 ></DD
 ><DT
@@ -6060,7 +5870,7 @@ enqueue element on list
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1434"
+NAME="AEN1439"
 ></A
 ><P
 ></P
@@ -6086,9 +5896,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-dequeue and return element from list
-
+>&#13;dequeue and return element from list
 </P
 ></DD
 ><DT
@@ -6096,7 +5904,7 @@ dequeue and return element from list
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1444"
+NAME="AEN1449"
 ></A
 ><P
 ></P
@@ -6128,9 +5936,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-requeue an element on list
-
+>&#13;requeue an element on list
 </P
 ></DD
 ><DT
@@ -6138,7 +5944,7 @@ requeue an element on list
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1455"
+NAME="AEN1460"
 ></A
 ><P
 ></P
@@ -6170,9 +5976,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-push element on list
-
+>&#13;push element on list
 </P
 ></DD
 ><DT
@@ -6180,7 +5984,7 @@ push element on list
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1466"
+NAME="AEN1471"
 ></A
 ><P
 ></P
@@ -6206,9 +6010,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-pop and return element from list
-
+>&#13;pop and return element from list
 </P
 ></DD
 ><DT
@@ -6216,7 +6018,7 @@ pop and return element from list
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1476"
+NAME="AEN1481"
 ></A
 ><P
 ></P
@@ -6254,9 +6056,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-array element assignment
-
+>&#13;array element assignment
 </P
 ></DD
 ><DT
@@ -6264,7 +6064,7 @@ array element assignment
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1488"
+NAME="AEN1493"
 ></A
 ><P
 ></P
@@ -6296,9 +6096,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-array element selection
-
+>&#13;array element selection
 </P
 ></DD
 ><DT
@@ -6306,7 +6104,7 @@ array element selection
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1499"
+NAME="AEN1504"
 ></A
 ><P
 ></P
@@ -6338,9 +6136,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-is second argument in list.
-
+>&#13;is second argument in list.
 </P
 ></DD
 ><DT
@@ -6348,7 +6144,7 @@ is second argument in list.
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1510"
+NAME="AEN1515"
 ></A
 ><P
 ></P
@@ -6380,9 +6176,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-sort list elements
-
+>&#13;sort list elements
 </P
 ></DD
 ><DT
@@ -6390,7 +6184,7 @@ sort list elements
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1521"
+NAME="AEN1526"
 ></A
 ><P
 ></P
@@ -6422,9 +6216,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-reverse sort list elements
-
+>&#13;reverse sort list elements
 </P
 ></DD
 ><DT
@@ -6468,16 +6260,13 @@ CLASS="replaceable"
 ></DT
 ><DD
 ><P
->&#13;
-loop through all elements of list
-
+>&#13;loop through all elements of list
 </P
 ></DD
 ></DL
 ></DIV
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="application"
 >LifeLines</TT
 > provides general purpose lists that can be accessed as queues, stacks or arrays. A
@@ -6489,12 +6278,9 @@ variable with the <TT
 CLASS="function"
 >list</TT
 > clears it and restores it to being an empty list.
-
-
 </P
 ><P
->&#13;
-A list can have any number of elements. <TT
+>&#13;A list can have any number of elements. <TT
 CLASS="function"
 >Empty</TT
 > returns <SPAN
@@ -6509,12 +6295,9 @@ CLASS="function"
 >Length</TT
 > returns the length of the
 list. The only parameter to both is a list.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Enqueue</TT
 >, <TT
@@ -6543,12 +6326,9 @@ CLASS="function"
 CLASS="function"
 >requeue</TT
 > is the value to be added to the queue and can be any value.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Push</TT
 > and <TT
@@ -6567,12 +6347,9 @@ CLASS="function"
 >push</TT
 > is the value to be
 pushed on the stack and can be of any type.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Setel</TT
 > and <TT
@@ -6600,8 +6377,6 @@ CLASS="returnvalue"
 >0</SPAN
 >). Arrays automatically grow in size to accommodate the largest index value that is used.
 Passing 0 references the last element at the other end from 1, and -1 the one before it, etc. 
-
-
 </P
 ><P
 >&#13;<TT
@@ -6618,8 +6393,7 @@ CLASS="returnvalue"
 >.
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >sort</TT
 > and <TT
@@ -6628,20 +6402,17 @@ CLASS="function"
 > sort a list, using the elements of the second array to
 determine the new order. Both lists are reordered, so essentially both are sorted using the sort order of the second
 argument. (If only one argument is given, it is sorted on its own elements.) rsort sorts in order reverse of sort.
-
 </P
 ><P
->&#13;
-<B
-CLASS="command"
->Forlist</B
+>&#13;<TT
+CLASS="function"
+>Forlist</TT
 > is an iterator that loops through the element in a list. Its first parameter is a
 <SPAN
 CLASS="type"
 >LIST</SPAN
 > expression; its second parameter is a variable that iterates through the list elements; and its third
 parameter is an integer counter variable that counts the list elements starting at one.
-
 </P
 ></DIV
 ><DIV
@@ -6649,7 +6420,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1582"
+NAME="AEN1587"
 ></A
 >Table Functions</H2
 ><DIV
@@ -6660,7 +6431,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1587"
+NAME="AEN1592"
 ></A
 ><P
 ></P
@@ -6686,9 +6457,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-declare a table
-
+>&#13;declare a table
 </P
 ></DD
 ><DT
@@ -6696,7 +6465,7 @@ declare a table
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1597"
+NAME="AEN1602"
 ></A
 ><P
 ></P
@@ -6734,9 +6503,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-insert entry in table
-
+>&#13;insert entry in table
 </P
 ></DD
 ><DT
@@ -6744,7 +6511,7 @@ insert entry in table
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1609"
+NAME="AEN1614"
 ></A
 ><P
 ></P
@@ -6776,37 +6543,28 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-lookup and return entry from table
-
+>&#13;lookup and return entry from table
 </P
 ></DD
 ></DL
 ></DIV
 ><P
->&#13;
-These functions provide general purpose, keyed tables. A table must be declared with the <TT
+>&#13;These functions provide general purpose, keyed tables. A table must be declared with the <TT
 CLASS="function"
 >table</TT
 >
 function before it can be used.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Insert</TT
 > adds an object and its key to a table. Its first parameter is a table; the second parameter
 is the object's key; and the third parameter is the object itself. The key must be a string and the object can be any
 value. If there already is an object in the table with that key, the old object is replaced with the new.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Lookup</TT
 > retrieves an object from a table. Its first parameter is a table, and the second parameter
@@ -6815,7 +6573,6 @@ is the object's key. The function returns the object with that key from the tabl
 CLASS="returnvalue"
 >null</SPAN
 > is returned.
-
 </P
 ></DIV
 ><DIV
@@ -6823,7 +6580,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1625"
+NAME="AEN1630"
 ></A
 >GEDCOM Node Functions</H2
 ><DIV
@@ -6834,7 +6591,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1630"
+NAME="AEN1635"
 ></A
 ><P
 ></P
@@ -6860,9 +6617,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-cross reference index of
-
+>&#13;cross reference index of
 </P
 ></DD
 ><DT
@@ -6870,7 +6625,7 @@ cross reference index of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1640"
+NAME="AEN1645"
 ></A
 ><P
 ></P
@@ -6896,9 +6651,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-tag of
-
+>&#13;tag of
 </P
 ></DD
 ><DT
@@ -6906,7 +6659,7 @@ tag of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1650"
+NAME="AEN1655"
 ></A
 ><P
 ></P
@@ -6932,9 +6685,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-value of
-
+>&#13;value of
 </P
 ></DD
 ><DT
@@ -6942,7 +6693,7 @@ value of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1660"
+NAME="AEN1665"
 ></A
 ><P
 ></P
@@ -6968,9 +6719,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-parent node of
-
+>&#13;parent node of
 </P
 ></DD
 ><DT
@@ -6978,7 +6727,7 @@ parent node of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1670"
+NAME="AEN1675"
 ></A
 ><P
 ></P
@@ -7004,9 +6753,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-first child of
-
+>&#13;first child of
 </P
 ></DD
 ><DT
@@ -7014,7 +6761,7 @@ first child of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1680"
+NAME="AEN1685"
 ></A
 ><P
 ></P
@@ -7040,9 +6787,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-next sibling of
-
+>&#13;next sibling of
 </P
 ></DD
 ><DT
@@ -7050,7 +6795,7 @@ next sibling of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1690"
+NAME="AEN1695"
 ></A
 ><P
 ></P
@@ -7076,9 +6821,41 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-copy a node structure
-
+>&#13;copy a node structure
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1705"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INT <TT
+CLASS="function"
+>level</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>NODE</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;level of a node
 </P
 ></DD
 ><DT
@@ -7117,9 +6894,7 @@ CLASS="replaceable"
 ></DT
 ><DD
 ><P
->&#13;
-loop through child nodes
-
+>&#13;loop through child nodes
 </P
 ></DD
 ><DT
@@ -7158,9 +6933,7 @@ CLASS="replaceable"
 ></DT
 ><DD
 ><P
->&#13;
-loop through notes on a node
-
+>&#13;loop through notes on a node
 </P
 ></DD
 ><DT
@@ -7204,9 +6977,7 @@ CLASS="replaceable"
 ></DT
 ><DD
 ><P
->&#13;
-loop through all descendent nodes
-
+>&#13;loop through all descendent nodes
 </P
 ></DD
 ></DL
@@ -7222,11 +6993,9 @@ CLASS="acronym"
 > node as their
 only parameter, and each returns a different value associated with the node.
 
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Xref</TT
 > returns the cross reference index of the node, if any; <TT
@@ -7247,12 +7016,9 @@ value returns <SPAN
 CLASS="returnvalue"
 >null</SPAN
 >.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Parent</TT
 > returns the parent node of the node, if any; <TT
@@ -7271,24 +7037,24 @@ CLASS="acronym"
 >GEDCOM</SPAN
 > node
 tree.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Savenode</TT
 > makes a copy of the node, and the substructure of nodes below the node, that is passed to it.
 Beware: the memory used to make the copy is never returned to the system.
-
-
 </P
 ><P
->&#13;
-<B
-CLASS="command"
->Fornodes</B
+>&#13;The <TT
+CLASS="function"
+>level</TT
+> function returns the level of the node.
+</P
+><P
+>&#13;<TT
+CLASS="function"
+>Fornodes</TT
 > is an iterator that loops through the child nodes of a <SPAN
 CLASS="acronym"
 >GEDCOM</SPAN
@@ -7297,9 +7063,9 @@ node expression, and its second parameter is a variable that iterates through ea
 the first node.
 </P
 ><P
->&#13;<B
-CLASS="command"
->Fornotes</B
+>&#13;<TT
+CLASS="function"
+>Fornotes</TT
 > is an iterator that loops through the NOTE nodes 
 of a <SPAN
 CLASS="acronym"
@@ -7307,13 +7073,11 @@ CLASS="acronym"
 > node. Its first argument is a
 node expression, and its second parameter is a variable that returns the
 value of the NOTE.  The value includes processed sub CONC and CONT records.
-
 </P
 ><P
->&#13;
-<B
-CLASS="command"
->Traverse</B
+>&#13;<TT
+CLASS="function"
+>Traverse</TT
 > is an iterator providing a general method for traversing <SPAN
 CLASS="acronym"
 >GEDCOM</SPAN
@@ -7321,7 +7085,6 @@ CLASS="acronym"
 a node expression; its second parameter is a variable that iterates over every node under the first node
 in a top down, left to right manner; and its third parameter is a variable that is set to the level of the
 current node in the iteration.
-
 </P
 ></DIV
 ><DIV
@@ -7329,7 +7092,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1753"
+NAME="AEN1770"
 ></A
 >Event and Date Functions</H2
 ><DIV
@@ -7340,7 +7103,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1758"
+NAME="AEN1775"
 ></A
 ><P
 ></P
@@ -7366,14 +7129,12 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-date of, value of first <TT
+>&#13;date of, value of first <TT
 CLASS="structfield"
 ><I
 >DATE</I
 ></TT
 > line
-
 </P
 ></DD
 ><DT
@@ -7381,7 +7142,7 @@ CLASS="structfield"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1769"
+NAME="AEN1786"
 ></A
 ><P
 ></P
@@ -7407,14 +7168,12 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-place of, value of first <TT
+>&#13;place of, value of first <TT
 CLASS="structfield"
 ><I
 >PLAC</I
 ></TT
 > line
-
 </P
 ></DD
 ><DT
@@ -7422,7 +7181,7 @@ CLASS="structfield"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1780"
+NAME="AEN1797"
 ></A
 ><P
 ></P
@@ -7448,14 +7207,12 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-year or, 1st string of 3-4 digits in 1st <TT
+>&#13;year or, 1st string of 3-4 digits in 1st <TT
 CLASS="structfield"
 ><I
 >DATE</I
 ></TT
 > line
-
 </P
 ></DD
 ><DT
@@ -7463,7 +7220,7 @@ CLASS="structfield"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1791"
+NAME="AEN1808"
 ></A
 ><P
 ></P
@@ -7489,8 +7246,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-date and place, values of 1st <TT
+>&#13;date and place, values of 1st <TT
 CLASS="structfield"
 ><I
 >DATE</I
@@ -7501,7 +7257,6 @@ CLASS="structfield"
 >PLAC</I
 ></TT
 > lines
-
 </P
 ></DD
 ><DT
@@ -7509,7 +7264,7 @@ CLASS="structfield"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1803"
+NAME="AEN1820"
 ></A
 ><P
 ></P
@@ -7535,9 +7290,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-date and place of, abbreviated from
-
+>&#13;date and place of, abbreviated from
 </P
 ></DD
 ><DT
@@ -7545,7 +7298,7 @@ date and place of, abbreviated from
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1813"
+NAME="AEN1830"
 ></A
 ><P
 ></P
@@ -7566,9 +7319,7 @@ CLASS="function"
 ></DT
 ><DD
 ><P
->&#13;
-returns the `event' of the current date
-
+>&#13;returns the `event' of the current date
 </P
 ></DD
 ><DT
@@ -7576,7 +7327,7 @@ returns the `event' of the current date
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1822"
+NAME="AEN1839"
 ></A
 ><P
 ></P
@@ -7602,9 +7353,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-set day format for stddate calls
-
+>&#13;set day format for stddate calls
 </P
 ></DD
 ><DT
@@ -7612,7 +7361,7 @@ set day format for stddate calls
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1832"
+NAME="AEN1849"
 ></A
 ><P
 ></P
@@ -7638,9 +7387,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-set month format for stddate calls
-
+>&#13;set month format for stddate calls
 </P
 ></DD
 ><DT
@@ -7648,7 +7395,7 @@ set month format for stddate calls
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1842"
+NAME="AEN1859"
 ></A
 ><P
 ></P
@@ -7674,9 +7421,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-set year format for stddate calls
-
+>&#13;set year format for stddate calls
 </P
 ></DD
 ><DT
@@ -7684,7 +7429,7 @@ set year format for stddate calls
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1852"
+NAME="AEN1869"
 ></A
 ><P
 ></P
@@ -7710,9 +7455,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-set era format for stddate calls
-
+>&#13;set era format for stddate calls
 </P
 ></DD
 ><DT
@@ -7720,7 +7463,7 @@ set era format for stddate calls
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1862"
+NAME="AEN1879"
 ></A
 ><P
 ></P
@@ -7746,9 +7489,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-set date format for stddate calls
-
+>&#13;set date format for stddate calls
 </P
 ></DD
 ><DT
@@ -7756,7 +7497,41 @@ set date format for stddate calls
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1872"
+NAME="AEN1889"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID <TT
+CLASS="function"
+>datepic</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>STRING</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;set custom date format for stddate calls
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1899"
 ></A
 ><P
 ></P
@@ -7771,7 +7546,7 @@ CLASS="function"
 >(<TT
 CLASS="parameter"
 ><I
->EVENT</I
+>EVENT|STRING</I
 ></TT
 >);</CODE
 ></P
@@ -7782,22 +7557,124 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-date of, in current format
-
+>&#13;date of, in current format
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1909"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID <TT
+CLASS="function"
+>complexformat</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>INT</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;set complex date format
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1919"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID <TT
+CLASS="function"
+>complexpic</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>INT</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>STRING</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;set custom complex date picture string
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1930"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING <TT
+CLASS="function"
+>complexdate</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>EVENT|STRING</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;date of, in current complex format
 </P
 ></DD
 ></DL
 ></DIV
 ><P
->&#13;
-These functions extract information about the dates and places of events.
-
-
+>&#13;These functions extract information about the dates and places of events.
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Date</TT
 > returns the value of the first <TT
@@ -7836,12 +7713,9 @@ CLASS="structfield"
 ></TT
 >
 line in an event; this number is assumed to be the year of the event.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Long</TT
 > returns the verbatim values of the first <TT
@@ -7871,12 +7745,9 @@ CLASS="structfield"
 > lines, catenates the shortened information together with a comma separator and returns it. An abbreviated
 date is its year; an abbreviated place is the last component in the value, further abbreviated if the
 component has an entry in the place abbreviation table.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Gettoday</TT
 > creates an event that has today's date in the <TT
@@ -7885,19 +7756,17 @@ CLASS="structfield"
 >DATE</I
 ></TT
 > line.
-
-
 </P
 ><P
->&#13;
-The last six functions are used to format dates in a variety of ways.  <TT
-CLASS="function"
->Dayformat</TT
->,
+>&#13;The next seven functions are used to format dates in a variety of ways.
 <TT
 CLASS="function"
->monthformat</TT
+>Dayformat</TT
 >, <TT
+CLASS="function"
+>monthformat</TT
+>,
+<TT
 CLASS="function"
 >yearformat</TT
 >, <TT
@@ -7907,12 +7776,50 @@ CLASS="function"
 <TT
 CLASS="function"
 >dateformat</TT
-> select style options for formatting the day, month, year, era, and overall date
-structure; <TT
+> select style options for formatting the day,
+month, year, era, and overall date structure; <TT
 CLASS="function"
 >stddate</TT
-> returns dates in the selected style.
-
+>
+returns dates in the selected style.
+<TT
+CLASS="function"
+>datepic</TT
+> allows specifing a custom pattern that overides
+the date format selected with <TT
+CLASS="function"
+>dateformat</TT
+>.  The string
+supplied specifies the placement of the day, month and year in the string with
+%d, %m and %y.  A null argument disables the overided format.
+The argument to <TT
+CLASS="function"
+>stddate</TT
+> is normally an event and the
+date is extracted from the event and formatted. If the argument is a 
+date string it is converted using the current date formats.
+</P
+><P
+>&#13;The next three functions provide for more complex formatting of dates. Taking
+into acount the abt, est, cal, bef, aft, fr and to qualifiers on GEDCOM dates. 
+<TT
+CLASS="function"
+>complexformat</TT
+> selects the format to use.  The function
+<TT
+CLASS="function"
+>complexpic</TT
+> can be used to specify a custom picture string
+for any or all of the 9 custom format strings.  The custom string can be
+canceled by passing a null for the string.  <TT
+CLASS="function"
+>complexdate</TT
+>
+formats the date similarly to <TT
+CLASS="function"
+>stddate</TT
+>, but with the 
+addition of the complex date format string selected.
 </P
 ><P
 >&#13;The day format codes passed to <TT
@@ -7923,7 +7830,7 @@ CLASS="function"
 ><DIV
 CLASS="informaltable"
 ><A
-NAME="AEN1910"
+NAME="AEN1976"
 ></A
 ><P
 ></P
@@ -7984,7 +7891,7 @@ CLASS="function"
 ><DIV
 CLASS="informaltable"
 ><A
-NAME="AEN1925"
+NAME="AEN1991"
 ></A
 ><P
 ></P
@@ -8145,8 +8052,7 @@ VALIGN="MIDDLE"
 ></P
 ></DIV
 ><P
->&#13;
-The year format codes passed to <TT
+>&#13;The year format codes passed to <TT
 CLASS="function"
 >yearformat</TT
 > are:
@@ -8154,7 +8060,7 @@ CLASS="function"
 ><DIV
 CLASS="informaltable"
 ><A
-NAME="AEN1967"
+NAME="AEN2033"
 ></A
 ><P
 ></P
@@ -8207,8 +8113,7 @@ VALIGN="MIDDLE"
 ></P
 ></DIV
 ><P
->&#13;
-The era format codes passed to <TT
+>&#13;The era format codes passed to <TT
 CLASS="function"
 >eraformat</TT
 > are: 
@@ -8216,7 +8121,7 @@ CLASS="function"
 ><DIV
 CLASS="informaltable"
 ><A
-NAME="AEN1982"
+NAME="AEN2048"
 ></A
 ><P
 ></P
@@ -8341,8 +8246,7 @@ VALIGN="MIDDLE"
 ></P
 ></DIV
 ><P
->&#13;
-The full date formats passed to <TT
+>&#13;The full date formats passed to <TT
 CLASS="function"
 >stddate</TT
 > are:
@@ -8350,7 +8254,7 @@ CLASS="function"
 ><DIV
 CLASS="informaltable"
 ><A
-NAME="AEN2015"
+NAME="AEN2081"
 ></A
 ><P
 ></P
@@ -8546,13 +8450,357 @@ VALIGN="MIDDLE"
 ><P
 ></P
 ></DIV
+><P
+>&#13;The complex date formats selected by the <TT
+CLASS="function"
+>complexformat</TT
+>
+and used by <TT
+CLASS="function"
+>complexdate</TT
+> are: 
+</P
+><DIV
+CLASS="informaltable"
+><A
+NAME="AEN2133"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLSPACING="0"
+CELLPADDING="4"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;Mode
+</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;Example
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>3</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;use abbreviations in uppercase
+</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;ABT  1 JAN 2002
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>4</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;use abbreviations in titlecase
+</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;Abt  1 JAN 2002
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>5</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;use uppercased full words 
+</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;ABOUT  1 JAN 2002
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>6</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;use titlecased full words
+</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;About  1 JAN 2002
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>7</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;use abbreviations in lowercase
+</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;abt  1 JAN 2002
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>8</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;use lowercase full words
+</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;about  1 JAN 2002
+</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+><P
+>&#13;The complex date strings that are overridden with the
+<TT
+CLASS="function"
+>complexpic</TT
+> are: 
+</P
+><DIV
+CLASS="informaltable"
+><A
+NAME="AEN2167"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLSPACING="0"
+CELLPADDING="4"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;Abbreviation
+</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;Full word
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>0</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;abt %1
+</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;about %1
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>1</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;est %1
+</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;estimated %1
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>2</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;cal %1
+</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;Calculated %1
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>3</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;bef %1
+</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;before %1
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>4</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;aft %1
+</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;after %1
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>5</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;bet %1 and %2
+</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;between %1 and %2
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>6</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;fr %1
+</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;from %1
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>7</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;to %1
+</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;to %1
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>8</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;fr %1 to %2
+</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;from %1 to $2
+</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
 ></DIV
 ><DIV
 CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN2064"
+NAME="AEN2211"
 ></A
 >Value Extraction Functions</H2
 ><DIV
@@ -8563,7 +8811,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2069"
+NAME="AEN2216"
 ></A
 ><P
 ></P
@@ -8607,9 +8855,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-extract a date
-
+>&#13;extract a date
 </P
 ></DD
 ><DT
@@ -8617,7 +8863,7 @@ extract a date
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2082"
+NAME="AEN2229"
 ></A
 ><P
 ></P
@@ -8661,9 +8907,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-extract a name
-
+>&#13;extract a name
 </P
 ></DD
 ><DT
@@ -8671,7 +8915,7 @@ extract a name
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2095"
+NAME="AEN2242"
 ></A
 ><P
 ></P
@@ -8709,9 +8953,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-extract a place
-
+>&#13;extract a place
 </P
 ></DD
 ><DT
@@ -8719,7 +8961,7 @@ extract a place
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2107"
+NAME="AEN2254"
 ></A
 ><P
 ></P
@@ -8763,22 +9005,80 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-extract tokens
-
+>&#13;extract tokens
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2267"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID <TT
+CLASS="function"
+>extractdatestr</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>VARB</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>VARB</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>VARB</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>VARB</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>VARB</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>STRING</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;extract date from string
 </P
 ></DD
 ></DL
 ></DIV
 ><P
->&#13;
-Value extraction functions read the values of certain lines and return those values in extracted form.
-
-
+>&#13;Value extraction functions read the values of certain lines and return those values in extracted form.
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Extractdate</TT
 > extracts date values from either an event node
@@ -8793,28 +9093,26 @@ CLASS="structfield"
 ><I
 >DATE</I
 ></TT
->, the date is extracted from
-the value of that node; if its tag is not <TT
+>, the date is extracted 
+from the value of that node; if its tag is not <TT
 CLASS="structfield"
 ><I
 >DATE</I
 ></TT
->, the
-date is extracted from the first <TT
+>,
+the date is extracted from the first <TT
 CLASS="structfield"
 ><I
 >DATE</I
 ></TT
-> line one level below the argument node. The remaining three
-arguments are variables. The first is assigned the integer value of the extracted day; the second is
-assigned the integer value of the extracted month; and the third is assigned the integer value of the
-extracted year.
-
-
+> line one 
+level below the argument node. The remaining three arguments are variables.
+The first is assigned the integer value of the extracted day; the second is
+assigned the integer value of the extracted month; and the third is assigned
+the integer value of the extracted year.
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Extractnames</TT
 > extracts name components from a <TT
@@ -8857,73 +9155,84 @@ CLASS="literal"
 >/</TT
 > characters are removed from around the
 surname component. If there is no surname this argument variable is set to zero.
-
-
 </P
 ><P
->&#13;
-     <TT
+>&#13;<TT
 CLASS="function"
 >Extractplaces</TT
 > extracts place components
-     from a <TT
+from a <TT
 CLASS="structfield"
 ><I
 >PLAC</I
 ></TT
 > node. The first
-     argument is a node; if its tag is
-     <TT
+argument is a node; if its tag is
+<TT
 CLASS="structfield"
 ><I
 >PLAC</I
 ></TT
 >, the places are extracted from
-     the value of the node; if its tag is not
-     <TT
+the value of the node; if its tag is not
+<TT
 CLASS="structfield"
 ><I
 >PLAC</I
 ></TT
 >, places are extracted from the
-     first <TT
+first <TT
 CLASS="structfield"
 ><I
 >PLAC</I
 ></TT
 > line one level below the
-     argument node. The second parameter is a list that will hold
-     the extracted components. The third argument is an integer
-     variable that is set to the number of extracted
-     components. Place components are defined by the
-     comma-separated portions of the
-     <TT
+argument node. The second parameter is a list that will hold
+the extracted components. The third argument is an integer
+variable that is set to the number of extracted
+components. Place components are defined by the
+comma-separated portions of the
+<TT
 CLASS="structfield"
 ><I
 >PLAC</I
 ></TT
 > value; leading and trailing
-     white space is removed from the components, while all internal
-     white space is retained.
-
+white space is removed from the components, while all internal
+white space is retained.
 </P
 ><P
->&#13;
-     <TT
+>&#13;<TT
 CLASS="function"
 >Extracttokens</TT
 > extracts tokens from a
-     string and places them in a list. The first argument is the
-     string to extract tokens from. The second argument is the list
-     to hold the tokens. The third argument is an integer variable
-     that is set to the number of tokens extracted. The fourth
-     parameter is the string of delimiter characters that
-     <TT
+string and places them in a list. The first argument is the
+string to extract tokens from. The second argument is the list
+to hold the tokens. The third argument is an integer variable
+that is set to the number of tokens extracted. The fourth
+parameter is the string of delimiter characters that
+<TT
 CLASS="function"
 >extracttokens</TT
 > uses to break the input
-     string into tokens.
-
+string into tokens.
+</P
+><P
+>&#13;<TT
+CLASS="function"
+>extractdatestr</TT
+> extracts date values from a .
+<TT
+CLASS="structfield"
+><I
+>STRING</I
+></TT
+>.  It is intended for internal verification
+of date extraction code.
+The remaining five arguments are variables.
+The second is assigned the integer value of the extracted day; the third is
+assigned the integer value of the extracted month; and the fourth is assigned
+the integer value of the extracted year.
 </P
 ></DIV
 ><DIV
@@ -8931,7 +9240,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN2144"
+NAME="AEN2309"
 ></A
 >User Interaction Functions</H2
 ><DIV
@@ -8942,7 +9251,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2149"
+NAME="AEN2314"
 ></A
 ><P
 ></P
@@ -8979,9 +9288,7 @@ CLASS="replaceable"
 ></DT
 ><DD
 ><P
->&#13;
-identify person through user interface
-
+>&#13;identify person through user interface
 </P
 ></DD
 ><DT
@@ -8989,7 +9296,7 @@ identify person through user interface
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2161"
+NAME="AEN2326"
 ></A
 ><P
 ></P
@@ -9026,9 +9333,7 @@ CLASS="replaceable"
 ></DT
 ><DD
 ><P
->&#13;
-identify set of persons through user interface
-
+>&#13;identify set of persons through user interface
 </P
 ></DD
 ><DT
@@ -9036,7 +9341,7 @@ identify set of persons through user interface
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2173"
+NAME="AEN2338"
 ></A
 ><P
 ></P
@@ -9062,9 +9367,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-identify family through user interface
-
+>&#13;identify family through user interface
 </P
 ></DD
 ><DT
@@ -9072,7 +9375,7 @@ identify family through user interface
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2183"
+NAME="AEN2348"
 ></A
 ><P
 ></P
@@ -9109,9 +9412,7 @@ CLASS="replaceable"
 ></DT
 ><DD
 ><P
->&#13;
-get integer through user interface
-
+>&#13;get integer through user interface
 </P
 ></DD
 ><DT
@@ -9119,7 +9420,7 @@ get integer through user interface
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2195"
+NAME="AEN2360"
 ></A
 ><P
 ></P
@@ -9156,9 +9457,7 @@ CLASS="replaceable"
 ></DT
 ><DD
 ><P
->&#13;
-get string through user interface
-
+>&#13;get string through user interface
 </P
 ></DD
 ><DT
@@ -9166,7 +9465,7 @@ get string through user interface
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2207"
+NAME="AEN2372"
 ></A
 ><P
 ></P
@@ -9192,9 +9491,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-select child of person/family thru user interface
-
+>&#13;select child of person/family thru user interface
 </P
 ></DD
 ><DT
@@ -9202,7 +9499,7 @@ select child of person/family thru user interface
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2217"
+NAME="AEN2382"
 ></A
 ><P
 ></P
@@ -9228,9 +9525,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-select family person is in as spouse
-
+>&#13;select family person is in as spouse
 </P
 ></DD
 ><DT
@@ -9238,7 +9533,7 @@ select family person is in as spouse
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2227"
+NAME="AEN2392"
 ></A
 ><P
 ></P
@@ -9264,9 +9559,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-select person from set of persons
-
+>&#13;select person from set of persons
 </P
 ></DD
 ><DT
@@ -9274,7 +9567,7 @@ select person from set of persons
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2237"
+NAME="AEN2402"
 ></A
 ><P
 ></P
@@ -9300,9 +9593,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-select spouse of person
-
+>&#13;select spouse of person
 </P
 ></DD
 ><DT
@@ -9310,7 +9601,7 @@ select spouse of person
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2247"
+NAME="AEN2412"
 ></A
 ><P
 ></P
@@ -9336,9 +9627,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-select a subset of persons from set of persons
-
+>&#13;select a subset of persons from set of persons
 </P
 ></DD
 ><DT
@@ -9346,7 +9635,7 @@ select a subset of persons from set of persons
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2257"
+NAME="AEN2422"
 ></A
 ><P
 ></P
@@ -9383,22 +9672,16 @@ CLASS="replaceable"
 ></DT
 ><DD
 ><P
->&#13;
-select from a list of options
-
+>&#13;select from a list of options
 </P
 ></DD
 ></DL
 ></DIV
 ><P
->&#13;
-These functions interact with the user to get information needed by the program.
-
-
+>&#13;These functions interact with the user to get information needed by the program.
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Getindi</TT
 > asks the user to identify a person. The first argument is a variable that is set to the person.
@@ -9417,12 +9700,9 @@ CLASS="function"
 >getstr</TT
 > ask the user enter an integer and string,
 respectively.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Choosechild</TT
 > asks the user select a child of a family or person; its single argument is a person or family;
@@ -9443,12 +9723,9 @@ CLASS="function"
 >Choosesubset</TT
 > has the user select a subset of
 persons from a set of persons; its argument is the chosen subset.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Menuchoose</TT
 > allows the user to select from an arbitrary menu. The first argument is a list of strings
@@ -9461,7 +9738,6 @@ CLASS="function"
 CLASS="returnvalue"
 >zero</SPAN
 > is returned.
-
 </P
 ></DIV
 ><DIV
@@ -9469,7 +9745,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN2284"
+NAME="AEN2449"
 ></A
 >String Functions</H2
 ><DIV
@@ -9480,7 +9756,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2289"
+NAME="AEN2454"
 ></A
 ><P
 ></P
@@ -9506,9 +9782,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-convert to lower case
-
+>&#13;convert to lower case
 </P
 ></DD
 ><DT
@@ -9516,7 +9790,7 @@ convert to lower case
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2299"
+NAME="AEN2464"
 ></A
 ><P
 ></P
@@ -9542,9 +9816,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-convert to upper case
-
+>&#13;convert to upper case
 </P
 ></DD
 ><DT
@@ -9552,7 +9824,7 @@ convert to upper case
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2309"
+NAME="AEN2474"
 ></A
 ><P
 ></P
@@ -9578,9 +9850,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-capitalize first letter
-
+>&#13;capitalize first letter
 </P
 ></DD
 ><DT
@@ -9588,7 +9858,7 @@ capitalize first letter
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2319"
+NAME="AEN2484"
 ></A
 ><P
 ></P
@@ -9614,9 +9884,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-capitalize first letter of each word
-
+>&#13;capitalize first letter of each word
 </P
 ></DD
 ><DT
@@ -9624,7 +9892,7 @@ capitalize first letter of each word
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2329"
+NAME="AEN2494"
 ></A
 ><P
 ></P
@@ -9656,9 +9924,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-trim to length
-
+>&#13;trim to length
 </P
 ></DD
 ><DT
@@ -9666,7 +9932,7 @@ trim to length
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2340"
+NAME="AEN2505"
 ></A
 ><P
 ></P
@@ -9698,9 +9964,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-right justify in field
-
+>&#13;right justify in field
 </P
 ></DD
 ><DT
@@ -9708,7 +9972,7 @@ right justify in field
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2351"
+NAME="AEN2516"
 ></A
 ><P
 ></P
@@ -9734,9 +9998,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-save and return copy of string
-
+>&#13;save and return copy of string
 </P
 ></DD
 ><DT
@@ -9744,7 +10006,7 @@ save and return copy of string
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2361"
+NAME="AEN2526"
 ></A
 ><P
 ></P
@@ -9770,9 +10032,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-same as save function
-
+>&#13;same as save function
 </P
 ></DD
 ><DT
@@ -9780,7 +10040,7 @@ same as save function
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2371"
+NAME="AEN2536"
 ></A
 ><P
 ></P
@@ -9828,9 +10088,7 @@ CLASS="replaceable"
 ></DT
 ><DD
 ><P
->&#13;
-catenate two strings
-
+>&#13;catenate two strings
 </P
 ></DD
 ><DT
@@ -9838,7 +10096,7 @@ catenate two strings
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2385"
+NAME="AEN2550"
 ></A
 ><P
 ></P
@@ -9886,9 +10144,7 @@ CLASS="replaceable"
 ></DT
 ><DD
 ><P
->&#13;
-catenate two strings
-
+>&#13;catenate two strings
 </P
 ></DD
 ><DT
@@ -9896,7 +10152,7 @@ catenate two strings
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2399"
+NAME="AEN2564"
 ></A
 ><P
 ></P
@@ -9922,9 +10178,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-number of characters in string
-
+>&#13;number of characters in string
 </P
 ></DD
 ><DT
@@ -9932,7 +10186,7 @@ number of characters in string
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2409"
+NAME="AEN2574"
 ></A
 ><P
 ></P
@@ -9970,9 +10224,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-substring function
-
+>&#13;substring function
 </P
 ></DD
 ><DT
@@ -9980,7 +10232,7 @@ substring function
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2421"
+NAME="AEN2586"
 ></A
 ><P
 ></P
@@ -10018,9 +10270,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-index function
-
+>&#13;index function
 </P
 ></DD
 ><DT
@@ -10028,7 +10278,7 @@ index function
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2433"
+NAME="AEN2598"
 ></A
 ><P
 ></P
@@ -10054,9 +10304,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-number as decimal string
-
+>&#13;number as decimal string
 </P
 ></DD
 ><DT
@@ -10064,7 +10312,47 @@ number as decimal string
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2443"
+NAME="AEN2608"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING <TT
+CLASS="function"
+>f</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>FLOAT</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>INT</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;number as floating point string
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2619"
 ></A
 ><P
 ></P
@@ -10090,12 +10378,10 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-number in cardinal form (<TT
+>&#13;number in cardinal form (<TT
 CLASS="literal"
 >one, two, ...</TT
 >)
-
 </P
 ></DD
 ><DT
@@ -10103,7 +10389,7 @@ CLASS="literal"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2454"
+NAME="AEN2630"
 ></A
 ><P
 ></P
@@ -10129,12 +10415,10 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-number in ordinal form (<TT
+>&#13;number in ordinal form (<TT
 CLASS="literal"
 >first, second, ...</TT
 >)
-
 </P
 ></DD
 ><DT
@@ -10142,7 +10426,7 @@ CLASS="literal"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2465"
+NAME="AEN2641"
 ></A
 ><P
 ></P
@@ -10168,12 +10452,10 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-convert number to Latin letter (<TT
+>&#13;convert number to Latin letter (<TT
 CLASS="literal"
 >a, b, ...</TT
 >)
-
 </P
 ></DD
 ><DT
@@ -10181,7 +10463,7 @@ CLASS="literal"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2476"
+NAME="AEN2652"
 ></A
 ><P
 ></P
@@ -10207,12 +10489,10 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-number in Roman numeral form (<TT
+>&#13;number in Roman numeral form (<TT
 CLASS="literal"
 >i, ii, ...</TT
 >)
-
 </P
 ></DD
 ><DT
@@ -10220,7 +10500,7 @@ CLASS="literal"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2487"
+NAME="AEN2663"
 ></A
 ><P
 ></P
@@ -10246,9 +10526,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-find SOUNDEX value of arbitrary string
-
+>&#13;find SOUNDEX value of arbitrary string
 </P
 ></DD
 ><DT
@@ -10256,7 +10534,7 @@ find SOUNDEX value of arbitrary string
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2497"
+NAME="AEN2673"
 ></A
 ><P
 ></P
@@ -10282,9 +10560,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-convert numeric string to integer
-
+>&#13;convert numeric string to integer
 </P
 ></DD
 ><DT
@@ -10292,7 +10568,7 @@ convert numeric string to integer
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2507"
+NAME="AEN2683"
 ></A
 ><P
 ></P
@@ -10318,9 +10594,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-convert numeric string to integer
-
+>&#13;convert numeric string to integer
 </P
 ></DD
 ><DT
@@ -10328,7 +10602,7 @@ convert numeric string to integer
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2517"
+NAME="AEN2693"
 ></A
 ><P
 ></P
@@ -10360,9 +10634,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-general string compare
-
+>&#13;general string compare
 </P
 ></DD
 ><DT
@@ -10370,7 +10642,7 @@ general string compare
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2528"
+NAME="AEN2704"
 ></A
 ><P
 ></P
@@ -10402,9 +10674,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-compare strings for equality
-
+>&#13;compare strings for equality
 </P
 ></DD
 ><DT
@@ -10412,7 +10682,7 @@ compare strings for equality
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2539"
+NAME="AEN2715"
 ></A
 ><P
 ></P
@@ -10444,25 +10714,20 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-compare strings for inequality
-
+>&#13;compare strings for inequality
 </P
 ></DD
 ></DL
 ></DIV
 ><P
->&#13;
-These functions provide string handling. Prior to version 3.0.6, many of them used an approach to memory management
+>&#13;These functions provide string handling. Prior to version 3.0.6, many of them used an approach to memory management
 chosen for absolute minimal memory footprint. A function using this approach constructed its output string in its own string
 buffer, reusing that buffer each time it was called. When a function using this approach returned a string
 value it returned its buffer. In consequence the strings returned by these functions were to be either used or
 saved before the function was called again.
-
 </P
 ><P
->&#13;
-By the release of version 3.0.6, all string values are local copies, and the <TT
+>&#13;By the release of version 3.0.6, all string values are local copies, and the <TT
 CLASS="function"
 >save</TT
 > and
@@ -10470,11 +10735,9 @@ CLASS="function"
 CLASS="function"
 >strsave</TT
 > functions should be entirely unnecessary.
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Lower</TT
 > and <TT
@@ -10503,12 +10766,9 @@ CLASS="function"
 >titlecase</TT
 > converts the first letter of each word if it is
 a letter, to upper case and all other characters to lower case.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Trim</TT
 > shortens a string to the length specified by the second parameter. If the string is already of that
@@ -10526,12 +10786,9 @@ CLASS="function"
 >rjustify</TT
 > creates and returns
 a new string.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Save</TT
 > is present only for compatibility reasons. Previously it duplicated its argument (to prevent strings
@@ -10543,12 +10800,9 @@ CLASS="function"
 CLASS="function"
 >save</TT
 >.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Concat</TT
 > and <TT
@@ -10557,21 +10811,15 @@ CLASS="function"
 > catenate strings and return the result. They are identical functions. They may
 take two to 32 string arguments; null arguments are allowed. The arguments are catenated together into
 a single, newly allocated string, which is returned.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Strlen</TT
 > returns the length of the string argument.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Substring</TT
 > returns a substring of the first argument string. The second and third arguments are the
@@ -10580,22 +10828,17 @@ indices of the first and last characters in the argument string to use to form t
 CLASS="function"
 >Substring</TT
 > historically used the buffer return method.
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Index</TT
 > returns the character index of the nth occurrence of a substring within a string. The index is the
 relative one character offset to the beginning of the substring. The first argument is the string; the
 second argument is the substring; and the third argument is the occurrence number.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >D</TT
 >, <TT
@@ -10604,59 +10847,66 @@ CLASS="function"
 >, <TT
 CLASS="function"
 >ord</TT
->, <TT
+>,
+<TT
 CLASS="function"
 >alpha</TT
 > and <TT
 CLASS="function"
 >roman</TT
-> convert integers to strings. <TT
+> convert integers
+to strings. <TT
 CLASS="function"
 >D</TT
 > converts an integer to a numeric string;
 <TT
 CLASS="function"
 >card</TT
-> converts an integer to a cardinal number string (eg, <TT
+> converts an integer to a cardinal number string 
+(eg, <TT
 CLASS="literal"
 >one, two, three</TT
 >); <TT
 CLASS="function"
 >ord</TT
-> converts an integer to
-an ordinal number (eg, <TT
+> converts an
+integer to an ordinal number (eg, <TT
 CLASS="literal"
 >first, second, third</TT
->); <TT
-CLASS="function"
->alpha</TT
-> converts an integer to a letter (eg, <TT
-CLASS="literal"
->a, b, c</TT
->); and
+>);
 <TT
 CLASS="function"
+>alpha</TT
+> converts an integer to a letter
+(eg, <TT
+CLASS="literal"
+>a, b, c</TT
+>); and <TT
+CLASS="function"
 >roman</TT
-> converts an integer to a Roman numeral (eg, <TT
+> converts an 
+integer to a Roman numeral (eg, <TT
 CLASS="literal"
 >i, ii, iii</TT
 >).
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;The <TT
+CLASS="function"
+>f</TT
+> function converts a float to a string.  The
+optional second argument specifies the precision of the output.  The default
+precision is 2.
+</P
+><P
+>&#13;<TT
 CLASS="function"
 >Strsoundex</TT
 > converts an arbitrary string to a SOUNDEX value. Non-ASCII text characters are ignored
 in the string.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Strtoint</TT
 > converts a numeric string to an integer. <TT
@@ -10666,12 +10916,9 @@ CLASS="function"
 CLASS="function"
 >strtoint</TT
 >.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Strcmp</TT
 > compares two strings and returns an integer that is less than zero, equal to zero, or greater than
@@ -10694,7 +10941,6 @@ CLASS="function"
 >nestr</TT
 > all treat null strings as empty strings,
 which is to say they pretend that a null string is actually "". This means that all null and empty strings compare as equal.
-
 </P
 ></DIV
 ><DIV
@@ -10702,7 +10948,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN2607"
+NAME="AEN2785"
 ></A
 >Output Mode Functions</H2
 ><DIV
@@ -10713,7 +10959,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2612"
+NAME="AEN2790"
 ></A
 ><P
 ></P
@@ -10734,9 +10980,7 @@ CLASS="function"
 ></DT
 ><DD
 ><P
->&#13;
-use line output mode
-
+>&#13;use line output mode
 </P
 ></DD
 ><DT
@@ -10744,7 +10988,7 @@ use line output mode
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2621"
+NAME="AEN2799"
 ></A
 ><P
 ></P
@@ -10776,9 +11020,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-use page output mode with given page size
-
+>&#13;use page output mode with given page size
 </P
 ></DD
 ><DT
@@ -10786,7 +11028,7 @@ use page output mode with given page size
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2632"
+NAME="AEN2810"
 ></A
 ><P
 ></P
@@ -10812,9 +11054,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-position to column in output
-
+>&#13;position to column in output
 </P
 ></DD
 ><DT
@@ -10822,7 +11062,7 @@ position to column in output
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2642"
+NAME="AEN2820"
 ></A
 ><P
 ></P
@@ -10843,9 +11083,7 @@ CLASS="function"
 ></DT
 ><DD
 ><P
->&#13;
-get current column in output
-
+>&#13;get current column in output
 </P
 ></DD
 ><DT
@@ -10853,7 +11091,7 @@ get current column in output
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2651"
+NAME="AEN2829"
 ></A
 ><P
 ></P
@@ -10879,9 +11117,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-position to row in output
-
+>&#13;position to row in output
 </P
 ></DD
 ><DT
@@ -10889,7 +11125,7 @@ position to row in output
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2661"
+NAME="AEN2839"
 ></A
 ><P
 ></P
@@ -10921,9 +11157,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-position to (row, col) coordinate in output
-
+>&#13;position to (row, col) coordinate in output
 </P
 ></DD
 ><DT
@@ -10931,7 +11165,7 @@ position to (row, col) coordinate in output
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2672"
+NAME="AEN2850"
 ></A
 ><P
 ></P
@@ -10952,9 +11186,7 @@ CLASS="function"
 ></DT
 ><DD
 ><P
->&#13;
-output page buffer
-
+>&#13;output page buffer
 </P
 ></DD
 ><DT
@@ -10962,7 +11194,7 @@ output page buffer
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2681"
+NAME="AEN2859"
 ></A
 ><P
 ></P
@@ -10983,9 +11215,7 @@ CLASS="function"
 ></DT
 ><DD
 ><P
->&#13;
-newline character
-
+>&#13;newline character
 </P
 ></DD
 ><DT
@@ -10993,7 +11223,7 @@ newline character
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2690"
+NAME="AEN2868"
 ></A
 ><P
 ></P
@@ -11014,9 +11244,7 @@ CLASS="function"
 ></DT
 ><DD
 ><P
->&#13;
-space character
-
+>&#13;space character
 </P
 ></DD
 ><DT
@@ -11024,7 +11252,7 @@ space character
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2699"
+NAME="AEN2877"
 ></A
 ><P
 ></P
@@ -11045,9 +11273,7 @@ CLASS="function"
 ></DT
 ><DD
 ><P
->&#13;
-double quote character
-
+>&#13;double quote character
 </P
 ></DD
 ><DT
@@ -11055,7 +11281,7 @@ double quote character
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2708"
+NAME="AEN2886"
 ></A
 ><P
 ></P
@@ -11087,9 +11313,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-send program output to this file
-
+>&#13;send program output to this file
 </P
 ></DD
 ><DT
@@ -11097,7 +11321,7 @@ send program output to this file
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2719"
+NAME="AEN2897"
 ></A
 ><P
 ></P
@@ -11118,9 +11342,7 @@ CLASS="function"
 ></DT
 ><DD
 ><P
->&#13;
-return name of current program output file
-
+>&#13;return name of current program output file
 </P
 ></DD
 ><DT
@@ -11128,7 +11350,7 @@ return name of current program output file
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2728"
+NAME="AEN2906"
 ></A
 ><P
 ></P
@@ -11154,9 +11376,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-copy file contents to program output file
-
+>&#13;copy file contents to program output file
 </P
 ></DD
 ><DT
@@ -11164,7 +11384,7 @@ copy file contents to program output file
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2738"
+NAME="AEN2916"
 ></A
 ><P
 ></P
@@ -11212,16 +11432,13 @@ CLASS="replaceable"
 ></DT
 ><DD
 ><P
->&#13;
-print string to standard output window
-
+>&#13;print string to standard output window
 </P
 ></DD
 ></DL
 ></DIV
 ><P
->&#13;
-Reports can be generated in two modes, line mode and page mode. <TT
+>&#13;Reports can be generated in two modes, line mode and page mode. <TT
 CLASS="function"
 >Linemode</TT
 > selects line mode and
@@ -11240,12 +11457,9 @@ CLASS="function"
 > is called. Page mode is useful
 for generating charts (eg, pedigree charts or box charts) where it is convenient to compute the two-dimensional
 location of output.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Col</TT
 > positions output to the given column. If the current 
@@ -11259,23 +11473,18 @@ works in both modes.
 CLASS="function"
 >Getcol</TT
 > returns the current column in the output.
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Row</TT
 > positions output to the first character in the given row; <TT
 CLASS="function"
 >row</TT
 > can only be used in page mode.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Pos</TT
 > positions output to a specified row and column coordinate; the first argument specifies the row, and
@@ -11283,12 +11492,9 @@ the second specifies the column. <TT
 CLASS="function"
 >Pos</TT
 > can only be used in page mode.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Nl</TT
 > write a new line character to the output file; <TT
@@ -11306,12 +11512,9 @@ CLASS="literal"
 >\'</TT
 > can be used within string values to
 represent the newline and double quote characters.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Newfile</TT
 > specifies the name of the report output file. Its first argument is the file's name; its second
@@ -11327,21 +11530,15 @@ CLASS="function"
 CLASS="application"
 >LifeLines</TT
 > automatically asks for the name of the report output file.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Outfile</TT
 > returns the name of the current report output file.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Copyfile</TT
 > copies the contents of a file to the report output file; its argument is a string whose value is
@@ -11351,19 +11548,15 @@ CLASS="envar"
 > environment
 variable, if set, will be used to search for the file; the file is opened and its contents copied to the report
 output file.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Print</TT
 > prints its argument string to the standard output window; <TT
 CLASS="function"
 >print</TT
 > may have one to 32 arguments.
-
 </P
 ></DIV
 ><DIV
@@ -11371,7 +11564,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN2784"
+NAME="AEN2962"
 ></A
 >Person Set Functions and GEDCOM Extraction</H2
 ><DIV
@@ -11382,7 +11575,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2789"
+NAME="AEN2967"
 ></A
 ><P
 ></P
@@ -11408,9 +11601,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-declare a set variable
-
+>&#13;declare a set variable
 </P
 ></DD
 ><DT
@@ -11418,7 +11609,7 @@ declare a set variable
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2799"
+NAME="AEN2977"
 ></A
 ><P
 ></P
@@ -11456,9 +11647,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-add a person to a set
-
+>&#13;add a person to a set
 </P
 ></DD
 ><DT
@@ -11466,7 +11655,7 @@ add a person to a set
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2811"
+NAME="AEN2989"
 ></A
 ><P
 ></P
@@ -11504,9 +11693,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-remove a person from a set
-
+>&#13;remove a person from a set
 </P
 ></DD
 ><DT
@@ -11514,7 +11701,7 @@ remove a person from a set
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2823"
+NAME="AEN3001"
 ></A
 ><P
 ></P
@@ -11540,9 +11727,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-size of a set
-
+>&#13;size of a set
 </P
 ></DD
 ><DT
@@ -11550,7 +11735,7 @@ size of a set
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2833"
+NAME="AEN3011"
 ></A
 ><P
 ></P
@@ -11582,9 +11767,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-union of two sets
-
+>&#13;union of two sets
 </P
 ></DD
 ><DT
@@ -11592,7 +11775,7 @@ union of two sets
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2844"
+NAME="AEN3022"
 ></A
 ><P
 ></P
@@ -11624,9 +11807,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-intersection of two sets
-
+>&#13;intersection of two sets
 </P
 ></DD
 ><DT
@@ -11634,7 +11815,7 @@ intersection of two sets
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2855"
+NAME="AEN3033"
 ></A
 ><P
 ></P
@@ -11666,9 +11847,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-difference of two sets
-
+>&#13;difference of two sets
 </P
 ></DD
 ><DT
@@ -11676,7 +11855,7 @@ difference of two sets
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2866"
+NAME="AEN3044"
 ></A
 ><P
 ></P
@@ -11702,9 +11881,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-set of all parents
-
+>&#13;set of all parents
 </P
 ></DD
 ><DT
@@ -11712,7 +11889,7 @@ set of all parents
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2876"
+NAME="AEN3054"
 ></A
 ><P
 ></P
@@ -11738,9 +11915,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-set of all children
-
+>&#13;set of all children
 </P
 ></DD
 ><DT
@@ -11748,7 +11923,7 @@ set of all children
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2886"
+NAME="AEN3064"
 ></A
 ><P
 ></P
@@ -11774,9 +11949,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-set of all spouses
-
+>&#13;set of all spouses
 </P
 ></DD
 ><DT
@@ -11784,7 +11957,7 @@ set of all spouses
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2896"
+NAME="AEN3074"
 ></A
 ><P
 ></P
@@ -11810,9 +11983,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-set of all siblings
-
+>&#13;set of all siblings
 </P
 ></DD
 ><DT
@@ -11820,7 +11991,7 @@ set of all siblings
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2906"
+NAME="AEN3084"
 ></A
 ><P
 ></P
@@ -11846,9 +12017,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-set of all ancestors
-
+>&#13;set of all ancestors
 </P
 ></DD
 ><DT
@@ -11856,7 +12025,7 @@ set of all ancestors
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2916"
+NAME="AEN3094"
 ></A
 ><P
 ></P
@@ -11882,9 +12051,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-set of all descendents
-
+>&#13;set of all descendents
 </P
 ></DD
 ><DT
@@ -11892,7 +12059,7 @@ set of all descendents
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2926"
+NAME="AEN3104"
 ></A
 ><P
 ></P
@@ -11918,9 +12085,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-same as descendentset; spelling
-
+>&#13;same as descendentset; spelling
 </P
 ></DD
 ><DT
@@ -11928,7 +12093,7 @@ same as descendentset; spelling
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2936"
+NAME="AEN3114"
 ></A
 ><P
 ></P
@@ -11954,9 +12119,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-remove duplicates from set
-
+>&#13;remove duplicates from set
 </P
 ></DD
 ><DT
@@ -11964,7 +12127,7 @@ remove duplicates from set
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2946"
+NAME="AEN3124"
 ></A
 ><P
 ></P
@@ -11990,9 +12153,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-sort indiset by name
-
+>&#13;sort indiset by name
 </P
 ></DD
 ><DT
@@ -12000,7 +12161,7 @@ sort indiset by name
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2956"
+NAME="AEN3134"
 ></A
 ><P
 ></P
@@ -12026,9 +12187,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-sort indiset by key values
-
+>&#13;sort indiset by key values
 </P
 ></DD
 ><DT
@@ -12036,7 +12195,7 @@ sort indiset by key values
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2966"
+NAME="AEN3144"
 ></A
 ><P
 ></P
@@ -12062,9 +12221,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-sort indiset by auxiliary values
-
+>&#13;sort indiset by auxiliary values
 </P
 ></DD
 ><DT
@@ -12072,7 +12229,7 @@ sort indiset by auxiliary values
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2976"
+NAME="AEN3154"
 ></A
 ><P
 ></P
@@ -12104,9 +12261,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-generate indiset from GEDCOM name string
-
+>&#13;generate indiset from GEDCOM name string
 </P
 ></DD
 ><DT
@@ -12114,7 +12269,7 @@ generate indiset from GEDCOM name string
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2987"
+NAME="AEN3165"
 ></A
 ><P
 ></P
@@ -12146,120 +12301,10 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-<SPAN
+>&#13;<SPAN
 CLASS="returnvalue"
 >true</SPAN
 > if the Individual is in the set.
-
-</P
-></DD
-><DT
-><B
-><DIV
-CLASS="funcsynopsis"
-><A
-NAME="AEN2999"
-></A
-><P
-></P
-><P
-><CODE
-><CODE
-CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->gengedcom</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->);</CODE
-></P
-><P
-></P
-></DIV
-></B
-></DT
-><DD
-><P
->&#13;
-generate GEDCOM file from person set
-
-</P
-></DD
-><DT
-><B
-><DIV
-CLASS="funcsynopsis"
-><A
-NAME="AEN3009"
-></A
-><P
-></P
-><P
-><CODE
-><CODE
-CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->gengedcomweak</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->);</CODE
-></P
-><P
-></P
-></DIV
-></B
-></DT
-><DD
-><P
->&#13;
-generate GEDCOM file from person set
-
-</P
-></DD
-><DT
-><B
-><DIV
-CLASS="funcsynopsis"
-><A
-NAME="AEN3019"
-></A
-><P
-></P
-><P
-><CODE
-><CODE
-CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->gengedcomstrong</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->);</CODE
-></P
-><P
-></P
-></DIV
-></B
-></DT
-><DD
-><P
->&#13;
-generate GEDCOM file from person set
-
 </P
 ></DD
 ><DT
@@ -12308,27 +12353,21 @@ CLASS="replaceable"
 ></DT
 ><DD
 ><P
->&#13;
-loop through all persons in person set
-
+>&#13;loop through all persons in person set
 </P
 ></DD
 ></DL
 ></DIV
 ><P
->&#13;
-These functions allow you to manipulate person sets. A person set is a potentially large set of persons;
+>&#13;These functions allow you to manipulate person sets. A person set is a potentially large set of persons;
 each person may have an arbitrary value associated with him/her. A person set must be declared with
 the <TT
 CLASS="function"
 >indiset</TT
 > function before it can be used.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Addtoset</TT
 > adds a person to a set. The first argument is the set; the second argument is the person; and
@@ -12349,12 +12388,9 @@ CLASS="function"
 >Lengthset</TT
 > returns the number of persons in a
 person set.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Union</TT
 >, <TT
@@ -12366,12 +12402,9 @@ CLASS="function"
 > return the set union, set intersection and set difference, respectively,
 of two person sets. Each functions takes two person sets as arguments and returns a third person set. The
 functions do not affect the values of their two argument sets.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Parentset</TT
 >, <TT
@@ -12386,12 +12419,9 @@ CLASS="function"
 > return the set of all parents, set of all children, set of
 all spouses and set of all siblings, respectively, of the set of persons in their argument. In all cases there
 is no change to the argument person set.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Ancestorset</TT
 > returns the set all ancestors of all persons in the argument set. <TT
@@ -12405,21 +12435,16 @@ CLASS="function"
 CLASS="function"
 >descendentset</TT
 >; it allows an alternate spelling.
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Uniqueset</TT
 > sorts a person set by key value and then removes all entries with duplicate keys; the input
 set is modified and returned.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Namesort</TT
 >, <TT
@@ -12430,11 +12455,9 @@ CLASS="function"
 >valuesort</TT
 > sort a set of persons by name, by key and by associated value,
 respectively.
-
 </P
 ><P
->&#13;
-Each person in a person set has an associated value. When a person is added to a set with <TT
+>&#13;Each person in a person set has an associated value. When a person is added to a set with <TT
 CLASS="function"
 >addtoset</TT
 >, the
@@ -12481,11 +12504,9 @@ CLASS="function"
 >Valuesort</TT
 > sorts a person set by the values of these
 auxiliary values.
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Genindiset</TT
 > generates the set of persons that matches a string whose value is a name in <SPAN
@@ -12500,12 +12521,9 @@ the user interaction <TT
 CLASS="function"
 >getindiset</TT
 > function.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Inset</TT
 > returns <SPAN
@@ -12513,40 +12531,6 @@ CLASS="returnvalue"
 >true</SPAN
 > if the
 the specified individual is in the SET.
-
-</P
-><P
->&#13;Three functions are available for to generate <SPAN
-CLASS="acronym"
->GEDCOM</SPAN
->
-format output to the report output file of all persons in the argument
-person set.
-<TT
-CLASS="function"
->Gengedcom</TT
-> 
-output contains a person record for each person in the set,
-and all the family records that
-link at least two of the persons in the set together.
-This function is provided for backwards compatiblity. Source, Event and
-Other(X) record pointers are output unmodified, but none of their records
-are output - this yields an inconsistent output.
-</P
-><P
->&#13;<TT
-CLASS="function"
->Gengedcomweak</TT
-> 
-output does not contain Source, Event or Other(X) record pointers 
-or their records.
-<TT
-CLASS="function"
->Gengedcomstrong</TT
-> includes 
-the Source, Event and Other(X) record pointers and all top-level nodes
-referenced by them.
-  
 </P
 ><P
 >&#13;<TT
@@ -12556,7 +12540,6 @@ CLASS="function"
 The second parameter is a variable that iterates through each person in the set. The third parameter
 iterates through the values associated with the persons. The fourth parameter is an integer variable
 that counts the iterations.
-
 </P
 ></DIV
 ><DIV
@@ -12564,7 +12547,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN3095"
+NAME="AEN3237"
 ></A
 >Record Update Functions</H2
 ><DIV
@@ -12575,7 +12558,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3100"
+NAME="AEN3242"
 ></A
 ><P
 ></P
@@ -12607,9 +12590,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-create a GEDCOM node
-
+>&#13;create a GEDCOM node
 </P
 ></DD
 ><DT
@@ -12617,7 +12598,7 @@ create a GEDCOM node
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3111"
+NAME="AEN3253"
 ></A
 ><P
 ></P
@@ -12655,9 +12636,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-add a node to a GEDCOM tree
-
+>&#13;add a node to a GEDCOM tree
 </P
 ></DD
 ><DT
@@ -12665,7 +12644,7 @@ add a node to a GEDCOM tree
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3123"
+NAME="AEN3265"
 ></A
 ><P
 ></P
@@ -12691,9 +12670,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-delete a node from a GEDCOM tree
-
+>&#13;delete a node from a GEDCOM tree
 </P
 ></DD
 ><DT
@@ -12701,7 +12678,7 @@ delete a node from a GEDCOM tree
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3133"
+NAME="AEN3275"
 ></A
 ><P
 ></P
@@ -12727,9 +12704,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-write a person back to the database
-
+>&#13;write a person back to the database
 </P
 ></DD
 ><DT
@@ -12737,7 +12712,7 @@ write a person back to the database
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3143"
+NAME="AEN3285"
 ></A
 ><P
 ></P
@@ -12763,25 +12738,19 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-write a family back to the database
-
+>&#13;write a family back to the database
 </P
 ></DD
 ></DL
 ></DIV
 ><P
->&#13;
-These functions allow you to modify an internal <SPAN
+>&#13;These functions allow you to modify an internal <SPAN
 CLASS="acronym"
 >GEDCOM</SPAN
 > node tree.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Createnode</TT
 > creates a <SPAN
@@ -12813,12 +12782,9 @@ CLASS="function"
 >writefam</TT
 > writes a family record back to the database, allowing the
 report to make permanent changes to the database.
-
-
 </P
 ><P
->&#13;
-The node functions only change data in memory; there is no effect on the database until and unless
+>&#13;The node functions only change data in memory; there is no effect on the database until and unless
 <TT
 CLASS="function"
 >writeindi</TT
@@ -12827,7 +12793,6 @@ CLASS="function"
 >writeindi</TT
 > are called. These functions may be changed or extended
 in the future to allow database changes.
-
 </P
 ></DIV
 ><DIV
@@ -12835,7 +12800,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN3165"
+NAME="AEN3307"
 ></A
 >Record Linking Functions</H2
 ><DIV
@@ -12846,7 +12811,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3170"
+NAME="AEN3312"
 ></A
 ><P
 ></P
@@ -12872,9 +12837,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-determine if string is a cross reference
-
+>&#13;determine if string is a cross reference
 </P
 ></DD
 ><DT
@@ -12882,7 +12845,7 @@ determine if string is a cross reference
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3180"
+NAME="AEN3322"
 ></A
 ><P
 ></P
@@ -12908,9 +12871,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-reference cross reference or key to node tree
-
+>&#13;reference cross reference or key to node tree
 </P
 ></DD
 ><DT
@@ -12918,7 +12879,7 @@ reference cross reference or key to node tree
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3190"
+NAME="AEN3332"
 ></A
 ><P
 ></P
@@ -12944,16 +12905,13 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-same as dereference
-
+>&#13;same as dereference
 </P
 ></DD
 ></DL
 ></DIV
 ><P
->&#13;
-These functions allow you to recognize values that are cross references and to read the records they refer
+>&#13;These functions allow you to recognize values that are cross references and to read the records they refer
 to. <TT
 CLASS="function"
 >Reference</TT
@@ -12972,7 +12930,6 @@ CLASS="function"
 CLASS="function"
 >dereference</TT
 >.
-
 </P
 ></DIV
 ><DIV
@@ -12980,7 +12937,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN3204"
+NAME="AEN3346"
 ></A
 >Miscellaneous Functions</H2
 ><DIV
@@ -12991,7 +12948,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3209"
+NAME="AEN3351"
 ></A
 ><P
 ></P
@@ -13017,9 +12974,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-lock a person or family in memory
-
+>&#13;lock a person or family in memory
 </P
 ></DD
 ><DT
@@ -13027,7 +12982,7 @@ lock a person or family in memory
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3219"
+NAME="AEN3361"
 ></A
 ><P
 ></P
@@ -13053,9 +13008,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-unlock a person or family from memory
-
+>&#13;unlock a person or family from memory
 </P
 ></DD
 ><DT
@@ -13063,7 +13016,7 @@ unlock a person or family from memory
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3229"
+NAME="AEN3371"
 ></A
 ><P
 ></P
@@ -13084,9 +13037,7 @@ CLASS="function"
 ></DT
 ><DD
 ><P
->&#13;
-return name of current database
-
+>&#13;return name of current database
 </P
 ></DD
 ><DT
@@ -13094,7 +13045,7 @@ return name of current database
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3238"
+NAME="AEN3380"
 ></A
 ><P
 ></P
@@ -13115,9 +13066,7 @@ CLASS="function"
 ></DT
 ><DD
 ><P
->&#13;
-return name of current program
-
+>&#13;return name of current program
 </P
 ></DD
 ><DT
@@ -13125,7 +13074,7 @@ return name of current program
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3247"
+NAME="AEN3389"
 ></A
 ><P
 ></P
@@ -13146,12 +13095,10 @@ CLASS="function"
 ></DT
 ><DD
 ><P
->&#13;
-return version of <TT
+>&#13;return version of <TT
 CLASS="application"
 >LifeLines</TT
 > program
-
 </P
 ></DD
 ><DT
@@ -13159,7 +13106,7 @@ CLASS="application"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3257"
+NAME="AEN3399"
 ></A
 ><P
 ></P
@@ -13185,9 +13132,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-execute string as a UNIX shell command
-
+>&#13;execute string as a UNIX shell command
 </P
 ></DD
 ><DT
@@ -13195,7 +13140,36 @@ execute string as a UNIX shell command
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3267"
+NAME="AEN3409"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INT <TT
+CLASS="function"
+>heapused</TT
+></CODE
+>(void);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;amount of heap used for windows
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3418"
 ></A
 ><P
 ></P
@@ -13221,9 +13195,195 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;
-extract system or user property.  Function available after v3.0.5.
-
+>&#13;extract system or user property.  Function available after v3.0.5.
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3428"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING <TT
+CLASS="function"
+>setlocale</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>STRING</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;set the locale
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3438"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING <TT
+CLASS="function"
+>bytecode</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>STRING</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>STRING</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;encode a string in a codeset
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3449"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING <TT
+CLASS="function"
+>convertcode</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>STRING</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>STRING</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>STRING</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;convert string from one codeset to another
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3461"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID <TT
+CLASS="function"
+>debug</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>BOOLEAN</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;set interperter debug mode
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3471"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING <TT
+CLASS="function"
+>pvalue</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>ANY</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;dump information about a pvalue
 </P
 ></DD
 ></DL
@@ -13246,11 +13406,9 @@ CLASS="acronym"
 >RAM</SPAN
 > memory, respectively.
 
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Database</TT
 > returns the name of the current database, useful
@@ -13267,14 +13425,11 @@ CLASS="application"
 >LifeLines</TT
 > program, eg, <TT
 CLASS="literal"
->3.0.26</TT
+>3.0.27</TT
 >.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >System</TT
 > executes its string argument as a
@@ -13287,11 +13442,16 @@ CLASS="acronym"
 > as appropriate) shell
 command, by invoking the system shell. This will not occur if the user has
 chosen to disallow report system calls (via the DenySystemCalls user option).
-
 </P
 ><P
->&#13;
-The <TT
+>&#13;The <TT
+CLASS="function"
+>heapused</TT
+> function returnes the amount of system heap
+that is in use at the time.  This is implemented only on windows.
+</P
+><P
+>&#13;The <TT
 CLASS="function"
 >getproperty</TT
 > function extracts system or user
@@ -13299,6 +13459,428 @@ properties.  Properties are named group.subgroup.property,
 group.property or even property.  The keys are available at the moment can 
 be found in the ll-userguide under System and User Properties.
 </P
+><P
+>&#13;The <TT
+CLASS="function"
+>setlocale</TT
+> function sets the locale and returns
+the previous setting of locale.
+</P
+><P
+>&#13;The <TT
+CLASS="function"
+>bytecode</TT
+> function converts the supplied string
+with escape codes to the current codeset, or to the codeset specified by the
+optional second parameter if specified.  A escaped code is a dollar sign ($)
+followed by 2 hex characters, e.g. $C1.
+</P
+><P
+>&#13;The <TT
+CLASS="function"
+>convertcode</TT
+> function converts a string to another
+codeset.  In the two argument form, the second argument is the destination
+codeset, and the source codeset is the internal codeset.  In the 3 argument
+form, the second argument is the source codeset and the third argument is the
+destination codeset.
+</P
+><P
+>&#13;The <TT
+CLASS="function"
+>debug</TT
+> function turns on or off programming debugging.
+When enabled gobs of information is printed as a 
+<TT
+CLASS="application"
+>LifeLines</TT
+> program is run.  This can be useful
+to figure out why a program is not behaving as expected.
+</P
+><P
+>&#13;The <TT
+CLASS="function"
+>pvalue</TT
+> function returns a string that represents
+the contents of a variable in the interpreter.  This is present for debug
+purposes.
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN3509"
+></A
+>Deprecated Functions</H2
+><P
+>&#13;The functionality of the following three functions,
+<TT
+CLASS="function"
+>getindimsg</TT
+>,
+<TT
+CLASS="function"
+>getintmsg</TT
+> and
+<TT
+CLASS="function"
+>getstrmsg</TT
+>
+is now available using the optional parameter of
+<TT
+CLASS="function"
+>getindi</TT
+>,
+<TT
+CLASS="function"
+>getint</TT
+> and
+<TT
+CLASS="function"
+>getstr</TT
+>.
+These functions should no longer be used as they will be removed from a future
+version of <TT
+CLASS="application"
+>Lifelines</TT
+>.
+</P
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3522"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID <TT
+CLASS="function"
+>getindimsg</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>INDI_V</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+><TT
+CLASS="replaceable"
+><I
+>STRING</I
+></TT
+></I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;identify person through user interface
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3534"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID <TT
+CLASS="function"
+>getintmsg</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>INT_V</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+><TT
+CLASS="replaceable"
+><I
+>STRING</I
+></TT
+></I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;get integer through user interface
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3546"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID <TT
+CLASS="function"
+>getstrmsg</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>STRING_V</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+><TT
+CLASS="replaceable"
+><I
+>STRING</I
+></TT
+></I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;get string through user interface
+</P
+></DD
+></DL
+></DIV
+><P
+>&#13;Three functions are available for to generate <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>
+format output to the report output file of all persons in the argument
+person set.  These functions do not in most cases generate consistant
+and usable output.  This can be done with a program, but it is 
+suggested that these routines are probably not what you really wanted.
+</P
+><P
+>&#13;<TT
+CLASS="function"
+>Gengedcom</TT
+> 
+output contains a person record for each person in the set,
+and all the family records that
+link at least two of the persons in the set together.
+This function is provided for backwards compatiblity. Source, Event and
+Other(X) record pointers are output unmodified, but none of their records
+are output - this yields an inconsistent output.
+</P
+><P
+>&#13;<TT
+CLASS="function"
+>Gengedcomweak</TT
+> 
+output does not contain Source, Event or Other(X) record pointers 
+or their records.
+<TT
+CLASS="function"
+>Gengedcomstrong</TT
+> includes 
+the Source, Event and Other(X) record pointers and all top-level nodes
+referenced by them.
+</P
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3566"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID <TT
+CLASS="function"
+>gengedcom</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>SET</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;generate GEDCOM file from person set
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3576"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID <TT
+CLASS="function"
+>gengedcomweak</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>SET</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;generate GEDCOM file from person set
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3586"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID <TT
+CLASS="function"
+>gengedcomstrong</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>SET</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;generate GEDCOM file from person set
+</P
+></DD
+></DL
+></DIV
+><P
+>&#13;The function <TT
+CLASS="function"
+>free</TT
+> does not work reliably, do not use it.
+Some of the functionality of it, deallocating space for structures like a
+list can be obtained by redeclaring the object.  list(a) not only
+declares a list, but if a was already a list, it will free all resources
+used by the list and create a new empty list.  This is not useful if the
+list in question is in parameter in a subroutine, as the reference to the list
+is released, but the caller still has access to the original list.
+</P
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3599"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID <TT
+CLASS="function"
+>free</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>ANY</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;free space associated with a variable
+</P
+></DD
+></DL
+></DIV
 ></DIV
 ></DIV
 ></DIV

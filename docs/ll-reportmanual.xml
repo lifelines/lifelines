@@ -2,7 +2,7 @@
 
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                  "http://www.oasis-open.org/docbook/xml/4.0/docbookx.dtd"
-[<!ENTITY llversion '3.0.26'>]>
+[<!ENTITY llversion '3.0.27'>]>
 <book id="docbook">
 
   <bookinfo>
@@ -18,7 +18,7 @@
 _________________________________________________________
 
 <!DOCTYPE BOOK PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
-	<!entity llversion	"3.0.26"> 
+	<!entity llversion	"3.0.27"> 
 ]>	
 	
 <book id="docbook">
@@ -870,116 +870,94 @@ separated into logical categories and described.
 
 
 <title>
-
 Value Types
-
 </title>
 
-<glosslist><glossentry><glossterm><type>ANY</type></glossterm><glossdef>
-
+<glosslist>
+<glossentry><glossterm><type>ANY</type></glossterm><glossdef>
 <para>
-
 union of all types
-
 </para>
+</glossdef></glossentry>
 
-</glossdef></glossentry><glossentry><glossterm><type>INT</type></glossterm><glossdef>
-
+<glossentry><glossterm><type>BOOL</type></glossterm><glossdef>
 <para>
-
-integer (on most systems a 32-bit signed value)
-
-</para>
-
-</glossdef></glossentry><glossentry><glossterm><type>BOOL</type></glossterm><glossdef>
-
-<para>
-
 boolean (0 represents false; anything else represents true)
-
 </para>
+</glossdef></glossentry>
 
-</glossdef></glossentry><glossentry><glossterm><type>FLOAT</type></glossterm><glossdef>
-
+<glossentry><glossterm><type>EVENT</type></glossterm><glossdef>
 <para>
-
-floating point number (may be used anywhere an INT may be used)
-
-</para>
-
-</glossdef></glossentry><glossentry><glossterm><type>STRING</type></glossterm><glossdef>
-
-<para>
-
-text string
-
-</para>
-
-</glossdef></glossentry><glossentry><glossterm><type>LIST</type></glossterm><glossdef>
-
-<para>
-
-arbitrary length list of any values (reference)
-
-</para>
-
-</glossdef></glossentry><glossentry><glossterm><type>TABLE</type></glossterm><glossdef>
-
-<para>
-
-keyed look-up table (reference)
-
-</para>
-
-</glossdef></glossentry><glossentry><glossterm><type>INDI</type></glossterm><glossdef>
-
-<para>
-
-person; reference to a <acronym>GEDCOM</acronym> INDI record (reference)
-
-</para>
-
-</glossdef></glossentry><glossentry><glossterm><type>FAM</type></glossterm><glossdef>
-
-<para>
-
-family; reference to a <acronym>GEDCOM</acronym> FAM record (reference)
-
-</para>
-
-</glossdef></glossentry><glossentry><glossterm><type>SET</type></glossterm><glossdef>
-
-<para>
-
-arbitrary length set of persons (reference)
-
-</para>
-
-</glossdef></glossentry><glossentry><glossterm><type>NODE</type></glossterm><glossdef>
-
-<para>
-
-<acronym>GEDCOM</acronym> node; reference to a line in a <acronym>GEDCOM</acronym> tree/record (reference)
-
-</para>
-
-</glossdef></glossentry><glossentry><glossterm><type>EVENT</type></glossterm><glossdef>
-
-<para>
-
 event; reference to substructure of nodes in a <acronym>GEDCOM</acronym> record (reference)
-
 </para>
+</glossdef></glossentry>
 
-</glossdef></glossentry><glossentry><glossterm><type>VOID</type></glossterm><glossdef>
-
+<glossentry><glossterm><type>FAM</type></glossterm><glossdef>
 <para>
-
-type with no values
-
+family; reference to a <acronym>GEDCOM</acronym> FAM record (reference)
 </para>
+</glossdef></glossentry>
 
-</glossdef></glossentry></glosslist>
+<glossentry><glossterm><type>FLOAT</type></glossterm><glossdef>
+<para>
+floating point number (may be used anywhere an INT may be used)
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><type>INDI</type></glossterm><glossdef>
+<para>
+person; reference to a <acronym>GEDCOM</acronym> INDI record (reference)
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><type>INT</type></glossterm><glossdef>
+<para>
+integer (on most systems a 32-bit signed value)
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><type>LIST</type></glossterm><glossdef>
+<para>
+arbitrary length list of any values (reference)
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><type>NODE</type></glossterm><glossdef>
+<para>
+<acronym>GEDCOM</acronym> node; reference to a line in a <acronym>GEDCOM</acronym> tree/record (reference)
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><type>NUMBER</type></glossterm><glossdef>
+<para>
+union of all arithmetic types (INT and FLOAT)
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><type>SET</type></glossterm><glossdef>
+<para>
+arbitrary length set of persons (reference)
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><type>STRING</type></glossterm><glossdef>
+<para>
+text string
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><type>TABLE</type></glossterm><glossdef>
+<para>
+keyed look-up table (reference)
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><type>VOID</type></glossterm><glossdef>
+<para>
+type with no values
+</para>
+</glossdef></glossentry>
+</glosslist>
 
 <para>
 
@@ -1004,49 +982,31 @@ a reference type.
 
 </para>
 
-
-
 </sect1>
-
-
 
 <sect1>
 
-
-
 <title>
-
 Arithmetic and Logic Functions
-
 </title>
 
+<glosslist>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>NUMBER <function>add</function></funcdef>
+<paramdef><parameter>NUMBER</parameter>,
+<parameter>NUMBER</parameter>
+<parameter>...</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
-      <glosslist>
-	<glossentry>
-	  <glossterm>
-	    <funcsynopsis>
-	      <funcprototype>
-		<funcdef>INT <function>add</function></funcdef>
-	      <paramdef><parameter>INT</parameter>,
-		<parameter>INT</parameter>
-		<parameter>...</parameter></paramdef>
-	      </funcprototype>
-	    </funcsynopsis>
-	  </glossterm>
-	  <glossdef>
-	 
 <para>
-
 addition - two to 32 arguments
-
 </para>
 </glossdef></glossentry>
-
 	   
 <glossentry><glossterm><funcsynopsis><funcprototype>
-    <funcdef>INT <function>sub</function></funcdef>
-    <paramdef><parameter>INT</parameter>,
-    <parameter>INT</parameter></paramdef>
+<funcdef>NUMBER <function>sub</function></funcdef>
+<paramdef><parameter>NUMBER</parameter>,
+<parameter>NUMBER</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1057,9 +1017,9 @@ subtraction
 </glossdef></glossentry>
 
 <glossentry><glossterm><funcsynopsis><funcprototype>
-<funcdef>INT <function>mul</function></funcdef>
-<paramdef><parameter>INT</parameter>,
-<parameter>INT</parameter>
+<funcdef>NUMBER <function>mul</function></funcdef>
+<paramdef><parameter>NUMBER</parameter>,
+<parameter>NUMBER</parameter>
 <parameter>...</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
@@ -1071,9 +1031,9 @@ multiplication - two to 32 arguments
 </glossdef></glossentry>
 
 <glossentry><glossterm><funcsynopsis><funcprototype>
-<funcdef>INT <function>div</function></funcdef>
-<paramdef><parameter>INT</parameter>,
-<parameter>INT</parameter></paramdef>
+<funcdef>NUMBER <function>div</function></funcdef>
+<paramdef><parameter>NUMBER</parameter>,
+<parameter>NUMBER</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1097,8 +1057,8 @@ modulus (remainder)
 </glossdef></glossentry>
 
 <glossentry><glossterm><funcsynopsis><funcprototype>
-<funcdef>INT <function>exp</function></funcdef>
-<paramdef><parameter>INT</parameter>,
+<funcdef>NUMBER <function>exp</function></funcdef>
+<paramdef><parameter>NUMBER</parameter>,
 <parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
@@ -1110,20 +1070,20 @@ exponentiation
 </glossdef></glossentry>
 
 <glossentry><glossterm><funcsynopsis><funcprototype>
-<funcdef>INT <function>neg</function></funcdef>
-<paramdef><parameter>INT</parameter></paramdef>
+<funcdef>NUMBER <function>neg</function></funcdef>
+<paramdef><parameter>NUMBER</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 
-integer negation
+negation
 
 </para>
 </glossdef></glossentry>
 
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>incr</function></funcdef>
-<paramdef><parameter>INT_V</parameter></paramdef>
+<paramdef><parameter>NUMBER</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1135,7 +1095,7 @@ increment variable by one
 
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>decr</function></funcdef>
-<paramdef><parameter>INT_V</parameter></paramdef>
+<paramdef><parameter>NUMBER</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1266,75 +1226,62 @@ greater than or equal
 
 </glosslist>
 <para>
-<function>Add</function>, <function>sub</function>, <function>mul</function> and <function>div</function> do integer arithmetic. Functions <function>add</function> and <function>mul</function> can have two to 32 arguments;
-the sum or product of the full set of arguments is computed. Functions <function>sub</function> and <function>div</function> have two arguments
-each; <function>sub</function> subtracts its second argument from its first, and <function>div</function> divides its first argument by its second.
-The <function>mod</function> function returns the remainder after dividing the first parameter by the second. If the second
-argument to <function>div</function> or <function>mod</function> is zero, these functions return 0 and generate a run time error. <function>Exp</function> performs
-integer exponentiation. <function>Neg</function> negates its argument.
-
+<function>Add</function>, <function>sub</function>, <function>mul</function> 
+and <function>div</function> do normal arithmetic of integer or floating values.
+If any operand is float, the result is float.
+Functions <function>add</function> and <function>mul</function> can have two to
+32 arguments; the sum or product of the full set of arguments is computed.
+Functions <function>sub</function> and <function>div</function> have 
+two arguments each; <function>sub</function> subtracts its second argument
+from its first, and <function>div</function> divides its first argument by its
+second.
+The <function>mod</function> function returns the remainder after dividing the
+first parameter by the second. If the second argument to 
+<function>div</function> or <function>mod</function> is zero,
+these functions return 0 and generate a run time error.
+<function>Exp</function> performs integer exponentiation.
+<function>Neg</function> negates its argument.
 </para>
 
 
 
 <para>
-
 <function>Incr</function> and <function>decr</function> increment by one and decrement by one, respectively, the value of a variable. The
 argument to both functions must be a variable.
-
 </para>
 
 
 
 <para>
-
 <function>And</function> and <function>or</function> do logical operations. Both functions take two to 32 arguments. All arguments are and'ed or
 or'ed together, respectively. The arguments are evaluated from left to right, but only up to the point
 where the final value of the function becomes known. <function>Not</function> does the logical not operation.
-
 </para>
 
 
 
 <para>
-
 <function>Eq</function>, <function>ne</function>, <function>lt</function>, <function>le</function>, <function>gt</function> and <function>ge</function> evaluate the six ordering relationships between two integers.
-
 </para>
-
-
 
 </sect1>
 
-
-
 <sect1>
 
-
-
 <title>
-
 Person Functions
-
 </title>
 
-      <glosslist>
-	<glossentry>
-	  <glossterm>
-	    <funcsynopsis>
-	      <funcprototype>
-		<funcdef>STRING <function>name</function></funcdef>
-		<paramdef><parameter>INDI</parameter>,
-		  <parameter><replaceable>BOOL</replaceable></parameter></paramdef>
-	  </funcprototype>
-	  </funcsynopsis>
-	  </glossterm>
-	  <glossdef>
+<glosslist>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRING <function>name</function></funcdef>
+<paramdef><parameter>INDI</parameter>,
+<parameter><replaceable>BOOL</replaceable></parameter></paramdef>
+</funcprototype></funcsynopsis>
+</glossterm><glossdef>
 
 <para>
-
 default name of
-
 </para>
 </glossdef></glossentry>
 
@@ -1347,9 +1294,7 @@ default name of
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 many name forms of
-
 </para>
 </glossdef></glossentry>
 
@@ -1359,9 +1304,7 @@ many name forms of
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 surname of
-
 </para>
 
 </glossdef></glossentry>
@@ -1371,9 +1314,7 @@ surname of
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 given names of
-
 </para>
 
 </glossdef></glossentry>
@@ -1384,9 +1325,7 @@ given names of
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 trimmed name of
-
 </para>
 
 </glossdef></glossentry>
@@ -1396,9 +1335,7 @@ trimmed name of
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 first birth event of
-
 </para>
 
 </glossdef></glossentry>
@@ -1408,9 +1345,7 @@ first birth event of
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 first death event of
-
 </para>
 
 </glossdef></glossentry>
@@ -1420,9 +1355,7 @@ first death event of
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 first baptism event of
-
 </para>
 
 </glossdef></glossentry>
@@ -1432,9 +1365,7 @@ first baptism event of
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 first burial event of
-
 </para>
 
 </glossdef></glossentry>
@@ -1444,9 +1375,7 @@ first burial event of
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 first father of
-
 </para>
 
 </glossdef></glossentry>
@@ -1456,9 +1385,7 @@ first father of
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 first mother of
-
 </para>
 
 </glossdef></glossentry>
@@ -1468,9 +1395,7 @@ first mother of
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 next (younger) sibling of
-
 </para>
 
 </glossdef></glossentry>
@@ -1480,9 +1405,7 @@ next (younger) sibling of
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 previous (older) sibling of
-
 </para>
 
 </glossdef></glossentry>
@@ -1492,9 +1415,7 @@ previous (older) sibling of
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 sex of
-
 </para>
 
 </glossdef></glossentry>
@@ -1504,9 +1425,7 @@ sex of
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 male predicate
-
 </para>
 
 </glossdef></glossentry>
@@ -1516,9 +1435,7 @@ male predicate
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 female predicate
-
 </para>
 
 </glossdef></glossentry>
@@ -1529,9 +1446,7 @@ female predicate
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 pronoun referring to
-
 </para>
 
 </glossdef></glossentry>
@@ -1541,9 +1456,7 @@ pronoun referring to
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 number of spouses of
-
 </para>
 
 </glossdef></glossentry>
@@ -1553,9 +1466,7 @@ number of spouses of
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 number of families (as spouse/parent) of
-
 </para>
 
 </glossdef></glossentry>
@@ -1565,9 +1476,7 @@ number of families (as spouse/parent) of
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 first parents' family of
-
 </para>
 
 </glossdef></glossentry>
@@ -1577,9 +1486,7 @@ first parents' family of
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 first title of
-
 </para>
 
 </glossdef></glossentry>
@@ -1590,9 +1497,7 @@ first title of
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 internal key of (work for families also)
-
 </para>
 
 </glossdef></glossentry>
@@ -1602,9 +1507,7 @@ internal key of (work for families also)
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 SOUNDEX code of
-
 </para>
 
 </glossdef></glossentry>
@@ -1614,9 +1517,7 @@ SOUNDEX code of
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 root GEDCOM node of
-
 </para>
 
 </glossdef></glossentry>
@@ -1626,9 +1527,7 @@ root GEDCOM node of
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 root GEDCOM node of
-
 </para>
 
 </glossdef></glossentry>
@@ -1638,9 +1537,7 @@ root GEDCOM node of
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 find person with key value
-
 </para>
 
 </glossdef></glossentry>
@@ -1649,9 +1546,7 @@ find person with key value
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 first person in database in key order
-
 </para>
 
 </glossdef></glossentry>
@@ -1660,9 +1555,7 @@ first person in database in key order
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 last person in database in key order
-
 </para>
 
 </glossdef></glossentry>
@@ -1672,9 +1565,7 @@ last person in database in key order
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 next person in database in key order
-
 </para>
 
 </glossdef></glossentry>
@@ -1684,9 +1575,7 @@ next person in database in key order
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 previous person in database in key order
-
 </para>
 </glossdef></glossentry>
 
@@ -1694,140 +1583,93 @@ previous person in database in key order
 </glossterm><glossdef>
 
 <para>
-
 loop through all spouses of
-
 </para>
 </glossdef></glossentry>
 
 <glossentry><glossterm><synopsis><command>families</command> (<replaceable>INDI</replaceable>, <replaceable>FAM</replaceable>, <replaceable>INDI</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
-
 loop through all families (as spouse) of
-
 </para>
 
 </glossdef></glossentry>
 <glossentry><glossterm><synopsis><command>forindi</command> (<replaceable>INDI</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
-
 loop through all persons in database
-
 </para>
 
 </glossdef></glossentry>
 <glossentry><glossterm><synopsis><command>mothers</command> (<replaceable>INDI</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>FAM_V</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
-
 loop through all female parents of a person
-
 </para>
 
 </glossdef></glossentry>
 <glossentry><glossterm><synopsis><command>fathers</command> (<replaceable>INDI</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>FAM_V</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
-
 loop through all male parents of a person
-
 </para>
 
 </glossdef></glossentry>
 <glossentry><glossterm><synopsis><command>Parents</command> (<replaceable>INDI</replaceable>, <replaceable>FAM</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
-
 loop through all familes a person is a child of
-
 </para>
 
 </glossdef></glossentry>
 </glosslist>
 
 <para>
-
 These functions take a person as a parameter and return information about him or her.
-
-
 </para>
 
-
-
 <para>
-
 <function>Name</function> returns the default name of a person; this is the name found on the first <structfield>1 NAME</structfield> line in the
 person's record; the slashes are removed and the surname is made all capitals; <function>name</function> can take an
 optional second parameter - if it is <returnvalue>true</returnvalue> the function acts as described above; if <returnvalue>false</returnvalue>, the surname is
 kept exactly as it is in the record.
-
-
 </para>
 
-
-
 <para>
-
 <function>Fullname</function> returns the name of a person in a variety of formats. If the second parameter is <returnvalue>true</returnvalue> the
 surname is shown in upper case; otherwise the surname is as in the record. If the third parameter is
 <returnvalue>true</returnvalue> the parts of the name are shown in the order as found in the record; otherwise the surname is given
 first, followed by a comma, followed by the other name parts. The fourth parameter specifies the
 maximum length field that can be used to show the name; various conversions occur if it is necessary to
 shorten the name to fit this length.
-
-
 </para>
 
-
-
 <para>
-
 <function>Surname</function> returns the surname of the person, as found in the first <structfield>1 NAME</structfield> line; the slashes are
 removed. <function>Givens</function> returns the given names of the person in the same order and format as found in the
 first <structfield>1 NAME</structfield> line of the record. <function>Trimname</function> returns the default name of the person trimmed to the
 maximum character length given in the second variable.
-
-
 </para>
 
-
-
 <para>
-
 <function>Birth</function>, <function>death</function>, <function>baptism</function> and <function>burial</function> return the first birth, death, baptism and burial event in the
 person's record, respectively. An event is a level <structfield>1 GEDCOM</structfield> node. If there is no matching event these
 functions return <returnvalue>null</returnvalue>.
-
-
 </para>
 
-
-
 <para>
-
 <function>Father</function>, <function>mother</function>, <function>nextsib</function> and <function>prevsib</function> return the father, mother, next younger sibling and next older
 sibling of the person, respectively. If the person has more than one father (mother) the <function>father</function>
 (<function>mother</function>) function returns the first one. These functions return <returnvalue>null</returnvalue> if there is no person in the role.
-
-
 </para>
 
-
-
 <para>
-
 <function>Sex</function> returns the person's sex as the string <returnvalue>M</returnvalue> if the person is male, <returnvalue>F</returnvalue> if the person is female, or <returnvalue>U</returnvalue> if the
 sex of the person is not known. <function>Male</function> and <function>female</function> return <returnvalue>true</returnvalue> if the person is male or female,
 respectively, or <returnvalue>false</returnvalue> if not.
-
 </para>
 
-
-
 <para>
-
 <function>Pn</function> generates pronouns, useful when generating English text;
 the second parameter selects the type of pronoun:
 </para>
@@ -1861,69 +1703,43 @@ the second parameter selects the type of pronoun:
 </informaltable>
 
 <para>
-
 <function>Nspouses</function> returns the number of spouses the person has in the database, and <function>nfamilies</function> returns the
 number of families the person is a parent/spouse in; these two values are not necessarily the same.
 <function>Parents</function> returns the first family that the person is a child in.
-
-
 </para>
 
-
-
 <para>
-
 <function>Title</function> returns the value of the first <structfield>1 TITL</structfield> line in the record. <function>Key</function> returns the key value of a person or
 family; it there is a second parameter and it is non-null, the leading <literal>I</literal> or <literal>F</literal> will be stripped. <function>Soundex</function>
 returns the Soundex code of the person.
-
-
 </para>
 
-
-
 <para>
-
 <function>Root</function> and <function>Inode</function> return the root node of the person's <acronym>GEDCOM</acronym> node tree. Note that an <type>INDI</type> value is
 not a <type>NODE</type> value. If you want to process the nodes within a person node tree, you must first use the
 <function>root</function> or <function>inode</function> function to get the root of the person node tree. <function>Root</function> and <function>inode</function> are synonyms.
-
-
 </para>
 
-
-
 <para>
-
 <function>Indi</function> returns the person who's key is passed as an argument; if no person has the key <function>indi</function> returns <returnvalue>null</returnvalue>.
-
-
 </para>
 
-
-
 <para>
-
 <function>Firstindi</function>, <function>nextindi</function> and <function>previndi</function> allow you to iterate through all persons in the database. <function>Firstindi</function>
 returns the first person in the database in key order. <function>Nextindi</function> returns the next person after the
 argument person in key order. <function>Previndi</function> returns the previous person before the argument person in key
 order.
-
-
 </para>
 
-
-
 <para>
-
-<command>Spouses</command> is an iterator that loops through each spouse a person has. The first argument is a person. The
+<function>Spouses</function> is an iterator that loops through each spouse a person has. The first argument is a person. The
 second argument is a person variable that iterates through the first person's spouses. The third
 argument is a family variable that iterates through the families the person and each spouse are in.
 The fourth argument is an integer variable that counts the iterations.
 </para>
 
 <para>
-<command>Families</command> is an iterator that loops through the families a person was a spouse/parent in. The first
+<function>Families</function> is an iterator that loops through the families a person was a spouse/parent in. The first
 argument is a person. The second argument is a family variable that iterates through the families the
 first person was a spouse/parent in. The third argument iterates through the spouses from the families;
 if there is no spouse in a particular family, the variable is set to null for that iteration. The fourth
@@ -1931,7 +1747,7 @@ argument is an integer variable that counts the iterations.
 </para>
 
 <para>
-<command>Forindi</command> is an iterator that loops through every person in
+<function>Forindi</function> is an iterator that loops through every person in
 the database in ascending key order. Its first
 parameter is a variable that iterates through the persons; its second 
 parameter is an integer counter
@@ -1939,7 +1755,7 @@ variable that counts the persons starting at one.
 </para>
 
 <para>
-<command>mothers</command> is an iterator that loops through every female
+<function>mothers</function> is an iterator that loops through every female
 parent of the specified individual. 
 Its first parameter is a person;
 its third parameter is a family variable that iterates through the familes
@@ -1951,8 +1767,8 @@ The fourth parameter is a variable that counts the families returned starting at
 
 
 <para>
-<command>Parents</command> is an iterator that loops through every family
-of that a person is a child in.  Note: This iterator's name begins with a
+<function>Parents</function> is an iterator that loops through every family
+that a person is a child in.  Note: This iterator's name begins with a
 capital P.  There is another function of the same name that begins with a
 lower case p.
 Its first parameter is a person;
@@ -1962,27 +1778,19 @@ the third parameter is a variable that counts the families returned starting at 
 </para>
 
 <para>
-<command>Forindi</command> is an iterator that loops through every person in
+<function>Forindi</function> is an iterator that loops through every person in
 the database in ascending key order. Its first
 parameter is a variable that iterates through the persons; its second 
 parameter is an integer counter
 variable that counts the persons starting at one.
 </para>
 
-
-
 </sect1>
-
-
 
 <sect1>
 
-
-
 <title>
-
 Family Functions
-
 </title>
 
 <glosslist>
@@ -1992,9 +1800,7 @@ Family Functions
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 first marriage event of
-
 </para>
 
 </glossdef></glossentry>
@@ -2004,9 +1810,7 @@ first marriage event of
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 first husband/father of
-
 </para>
 
 </glossdef></glossentry>
@@ -2016,9 +1820,7 @@ first husband/father of
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 first wife/mother of
-
 </para>
 
 </glossdef></glossentry>
@@ -2028,9 +1830,7 @@ first wife/mother of
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 number of children in
-
 </para>
 
 </glossdef></glossentry>
@@ -2040,9 +1840,7 @@ number of children in
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 first child of
-
 </para>
 
 </glossdef></glossentry>
@@ -2052,9 +1850,7 @@ first child of
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 last child of
-
 </para>
 
 </glossdef></glossentry>
@@ -2065,9 +1861,7 @@ last child of
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 internal key of (works for persons also)
-
 </para>
 
 </glossdef></glossentry>
@@ -2077,9 +1871,7 @@ internal key of (works for persons also)
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 root GEDCOM node of
-
 </para>
 
 </glossdef></glossentry>
@@ -2089,9 +1881,7 @@ root GEDCOM node of
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 root GEDCOM node of
-
 </para>
 
 </glossdef></glossentry>
@@ -2101,9 +1891,7 @@ root GEDCOM node of
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 find family from key
-
 </para>
 
 </glossdef></glossentry>
@@ -2112,9 +1900,7 @@ find family from key
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 first family in database in key order
-
 </para>
 
 </glossdef></glossentry>
@@ -2123,9 +1909,7 @@ first family in database in key order
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 last family in database in key order
-
 </para>
 
 </glossdef></glossentry>
@@ -2135,9 +1919,7 @@ last family in database in key order
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 next family in database in key order
-
 </para>
 
 </glossdef></glossentry>
@@ -2147,103 +1929,60 @@ next family in database in key order
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 previous family in database in key order
-
 </para>
 
 </glossdef></glossentry>
 <glossentry><glossterm><synopsis><command>children</command> (<replaceable>FAM</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
-
 loop through children of family
-
 </para>
 
 </glossdef></glossentry>
 <glossentry><glossterm><synopsis><command>forfam</command> (<replaceable>FAM_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
-
 loop through all families in database
-
 </para>
 
 </glossdef></glossentry></glosslist>
 
 <para>
-
 These functions take a family as an argument and return information about it.
-
-
 </para>
 
-
-
 <para>
-
 <function>Marriage</function> returns the first marriage event found in the family record, if any; it returns <returnvalue>null</returnvalue> if there is
 no marriage event.
-
-
 </para>
 
-
-
 <para>
-
 <function>Husband</function> returns the first husband/father of the family, if any; and <function>wife</function> returns the first
 wife/mother of the family, if any. Each returns <returnvalue>null</returnvalue> if the requested person is not in the family.
-
-
 </para>
 
-
-
 <para>
-
 <function>Nchildren</function> returns the number of children in the family.
-
-
 </para>
 
-
-
 <para>
-
 <function>Firstchild</function> and <function>lastchild</function> return the first child and last child in a family, respectively.
-
-
 </para>
 
-
-
 <para>
-
 <function>Key</function> was described in the section on person functions.
-
-
 </para>
 
-
-
 <para>
-
 <function>Root</function> and <function>fnode</function> return the root node of a family <acronym>GEDCOM</acronym> node tree. Note that a <type>FAM</type> value is not a
 <type>NODE</type> value. If you want to process the nodes within a family node tree, you must first use <function>root</function> or
 <function>fnode</function> function to get the root of the family node tree. <function>Root</function> and <function>fnode</function> are synonyms.
-
-
 </para>
-
-
 
 <para>
 <function>Fam</function> returns the family who's key is passed as an argument; if no family has the key <function>fam</function> returns <returnvalue>null</returnvalue>.
 </para>
-
-
 
 <para>
 <function>Firstfam</function>, <function>nextfam</function> and <function>prevfam</function> allow you to iterate through all families in the database. <function>Firstfam</function>
@@ -2252,81 +1991,61 @@ argument family in key order. <function>Prevfam</function> returns the previous 
 order.
 </para>
 
-
-
 <para>
-
-<command>Children</command> is an iterator that loops through the children in a family. Its first parameter is a family
+<function>Children</function> is an iterator that loops through the children in a family. Its first parameter is a family
 expression; its second parameter is a variable that iterates through each child; its third parameter is
 an integer counter variable that counts the children starting at one. These two variables may be used
 within the loop body.
-
-
 </para>
-
-
 
 <para>
-
-<command>Forfam</command> is an iterator that loops through every family in the database in ascending key order. Its first
+<function>Forfam</function> is an iterator that loops through every family in the database in ascending key order. Its first
 parameter is a variable that iterates through the families; its second parameter is an integer counter
 variable that counts the families starting at one.
-
 </para>
-
-
 
 </sect1>
 
 
 <sect1>
 
-
-
 <title>
 Other types of records
 </title>
-
 
 <glosslist>
 <glossentry><glossterm><synopsis><command>forsour</command> (<replaceable>NODE_V</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
-
 loop through all sources in database
-
 </para>
 </glossdef></glossentry>
 
 <glossentry><glossterm><synopsis><command>foreven</command> (<replaceable>NODE_V</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
-
 loop through all EVEN nodes in database
-
 </para>
 </glossdef></glossentry>
 
 <glossentry><glossterm><synopsis><command>forothr</command> (<replaceable>NODE_V</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
-
 loop through all other (notes, etc.) nodes in database
-
 </para>
 </glossdef></glossentry>
 </glosslist>
 
 <para>
-<command>forsour</command> is an iterator that loops through all the Source
+<function>forsour</function> is an iterator that loops through all the Source
 nodes in the database.  Its first argument is the SOUR record and its
 second parameter is an integer counter variable that counts the sources
 elements starting at one.
-<command>foreven</command> is an iterator that loops through all the Event
+<function>foreven</function> is an iterator that loops through all the Event
 nodes in the database.  Its first argument is the EVEN record and its
 second parameter is an integer counter variable that counts the events
 elements starting at one.
-<command>forothr</command> is an iterator that loops through all the Other
+<function>forothr</function> is an iterator that loops through all the Other
 nodes in the database.  Its first argument is the record (NOTE, etc.) and its
 second parameter is an integer counter variable that counts the nodes
 starting at one.
@@ -2334,15 +2053,10 @@ starting at one.
 
 </sect1>
 
-
 <sect1>
 
-
-
 <title>
-
 List Functions
-
 </title>
 
 <glosslist>
@@ -2352,9 +2066,7 @@ List Functions
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 declare a list
-
 </para>
 
 </glossdef></glossentry>
@@ -2364,9 +2076,7 @@ declare a list
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 check if list is empty
-
 </para>
 </glossdef></glossentry>
 
@@ -2376,7 +2086,6 @@ check if list is empty
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 length of list
 </para>
 </glossdef></glossentry>
@@ -2388,9 +2097,7 @@ length of list
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 enqueue element on list
-
 </para>
 
 </glossdef></glossentry>
@@ -2400,9 +2107,7 @@ enqueue element on list
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 dequeue and return element from list
-
 </para>
 
 </glossdef></glossentry>
@@ -2413,9 +2118,7 @@ dequeue and return element from list
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 requeue an element on list
-
 </para>
 
 </glossdef></glossentry>
@@ -2426,9 +2129,7 @@ requeue an element on list
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 push element on list
-
 </para>
 
 </glossdef></glossentry>
@@ -2438,9 +2139,7 @@ push element on list
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 pop and return element from list
-
 </para>
 
 </glossdef></glossentry>
@@ -2452,9 +2151,7 @@ pop and return element from list
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 array element assignment
-
 </para>
 
 </glossdef></glossentry>
@@ -2465,9 +2162,7 @@ array element assignment
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 array element selection
-
 </para>
 
 </glossdef></glossentry>
@@ -2478,9 +2173,7 @@ array element selection
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 is second argument in list.
-
 </para>
 
 </glossdef></glossentry>
@@ -2492,9 +2185,7 @@ is second argument in list.
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 sort list elements
-
 </para>
 
 </glossdef></glossentry>
@@ -2505,71 +2196,46 @@ sort list elements
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 reverse sort list elements
-
 </para>
 
 </glossdef></glossentry>
 <glossentry><glossterm><synopsis><command>forlist</command> (<replaceable>LIST</replaceable>, <replaceable>ANY_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
-
 loop through all elements of list
-
 </para>
 
 </glossdef></glossentry></glosslist>
 
 <para>
-
 <application>LifeLines</application> provides general purpose lists that can be accessed as queues, stacks or arrays. A
 list must be declared with the <function>list</function> function before it can be used. Redeclaring an existing
 variable with the <function>list</function> clears it and restores it to being an empty list.
-
-
 </para>
 
-
-
 <para>
-
 A list can have any number of elements. <function>Empty</function> returns <returnvalue>true</returnvalue> if the list
 has no elements and <returnvalue>false</returnvalue> otherwise. <function>Length</function> returns the length of the
 list. The only parameter to both is a list.
-
-
 </para>
 
-
-
 <para>
-
 <function>Enqueue</function>, <function>dequeue</function> and <function>requeue</function> provide queue access to a
 list.  <function>Enqueue</function> adds an element to the back of a queue, <function>dequeue</function> removes and
 returns the element from the front of a queue, and <function>requeue</function> adds an element to the front of a queue.
 The first parameter to all three is a list, and the second parameter to <function>enqueue</function> and
 <function>requeue</function> is the value to be added to the queue and can be any value.
-
-
 </para>
 
-
-
 <para>
-
 <function>Push</function> and <function>pop</function> provide stack access to a list. <function>Push</function> pushes
 an element on the stack, and <function>pop</function> removes and returns the most recently pushed element from the
 stack. The first parameter to both is a list, and the second parameter to <function>push</function> is the value to be
 pushed on the stack and can be of any type.
-
-
 </para>
 
-
-
 <para>
-
 <function>Setel</function> and <function>getel</function> provide array access to a list.  <function>Setel</function>
 sets a value of an array element, and <function>getel</function> returns the value of an array element. The first
 parameter to both is a list; the second parameter to both is an integer index into the array; and the third parameter to
@@ -2577,8 +2243,6 @@ parameter to both is a list; the second parameter to both is an integer index in
 indexed starting at one. Unassigned elements are assumed to be <returnvalue>null</returnvalue>
 (<returnvalue>0</returnvalue>). Arrays automatically grow in size to accommodate the largest index value that is used.
 Passing 0 references the last element at the other end from 1, and -1 the one before it, etc. 
-
-
 </para>
 
 <para>
@@ -2587,37 +2251,24 @@ in the list.  If it finds a match <function>inlist</function> returns
 <returnvalue>true</returnvalue>.
 </para>
 
-
 <para>
-
 <function>sort</function> and <function>rsort</function> sort a list, using the elements of the second array to
 determine the new order. Both lists are reordered, so essentially both are sorted using the sort order of the second
 argument. (If only one argument is given, it is sorted on its own elements.) rsort sorts in order reverse of sort.
-
 </para>
 
 <para>
-
-<command>Forlist</command> is an iterator that loops through the element in a list. Its first parameter is a
+<function>Forlist</function> is an iterator that loops through the element in a list. Its first parameter is a
 <type>LIST</type> expression; its second parameter is a variable that iterates through the list elements; and its third
 parameter is an integer counter variable that counts the list elements starting at one.
-
 </para>
-
-
 
 </sect1>
 
-
-
 <sect1>
 
-
-
 <title>
-
 Table Functions
-
 </title>
 
 <glosslist>
@@ -2627,9 +2278,7 @@ Table Functions
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 declare a table
-
 </para>
 
 </glossdef></glossentry>
@@ -2641,9 +2290,7 @@ declare a table
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 insert entry in table
-
 </para>
 
 </glossdef></glossentry>
@@ -2654,56 +2301,34 @@ insert entry in table
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 lookup and return entry from table
-
 </para>
 
 </glossdef></glossentry></glosslist>
 
 <para>
-
 These functions provide general purpose, keyed tables. A table must be declared with the <function>table</function>
 function before it can be used.
-
-
 </para>
 
-
-
 <para>
-
 <function>Insert</function> adds an object and its key to a table. Its first parameter is a table; the second parameter
 is the object's key; and the third parameter is the object itself. The key must be a string and the object can be any
 value. If there already is an object in the table with that key, the old object is replaced with the new.
-
-
 </para>
 
-
-
 <para>
-
 <function>Lookup</function> retrieves an object from a table. Its first parameter is a table, and the second parameter
 is the object's key. The function returns the object with that key from the table; if there is no such object,
 <returnvalue>null</returnvalue> is returned.
-
 </para>
-
-
 
 </sect1>
 
-
-
 <sect1>
 
-
-
 <title>
-
 GEDCOM Node Functions
-
 </title>
 
 <glosslist>
@@ -2713,108 +2338,98 @@ GEDCOM Node Functions
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 cross reference index of
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>tag</function></funcdef>
 <paramdef><parameter>NODE</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 tag of
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>value</function></funcdef>
 <paramdef><parameter>NODE</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 value of
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>NODE <function>parent</function></funcdef>
 <paramdef><parameter>NODE</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 parent node of
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>NODE <function>child</function></funcdef>
 <paramdef><parameter>NODE</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 first child of
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>NODE <function>sibling</function></funcdef>
 <paramdef><parameter>NODE</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 next sibling of
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>NODE <function>savenode</function></funcdef>
 <paramdef><parameter>NODE</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 copy a node structure
+</para>
+</glossdef></glossentry>
 
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INT <function>level</function></funcdef>
+<paramdef><parameter>NODE</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+level of a node
 </para>
 </glossdef></glossentry>
 
 <glossentry><glossterm><synopsis><command>fornodes</command> (<replaceable>NODE</replaceable>, <replaceable>NODE_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
-
 loop through child nodes
-
 </para>
 </glossdef></glossentry>
 
 <glossentry><glossterm><synopsis><command>fornotes</command> (<replaceable>ANY</replaceable>, <replaceable>STRING</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
-
 loop through notes on a node
-
 </para>
 
 </glossdef></glossentry>
 <glossentry><glossterm><synopsis><command>traverse</command> (<replaceable>NODE</replaceable>, <replaceable>NODE_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
-
 loop through all descendent nodes
-
 </para>
 
 </glossdef></glossentry></glosslist>
@@ -2824,84 +2439,59 @@ loop through all descendent nodes
 These functions provide access to the components of a <acronym>GEDCOM</acronym> node. All take a <acronym>GEDCOM</acronym> node as their
 only parameter, and each returns a different value associated with the node.
 
-
 </para>
 
-
-
 <para>
-
 <function>Xref</function> returns the cross reference index of the node, if any; <function>tag</function> returns the tag of the node; and <function>value</function>
 returns the value of the node, if any. If there is no cross reference, <function>xref</function> returns <returnvalue>null</returnvalue>; if there is no value,
 value returns <returnvalue>null</returnvalue>.
-
-
 </para>
 
-
-
 <para>
-
 <function>Parent</function> returns the parent node of the node, if any; <function>child</function> returns the first child node of the node, if any;
 and <function>sibling</function> returns the next sibling node of the node, if any. Whenever there is no such related node,
 these functions return <returnvalue>null</returnvalue>. These three functions allow simple navigation through a <acronym>GEDCOM</acronym> node
 tree.
-
-
 </para>
 
-
-
 <para>
-
 <function>Savenode</function> makes a copy of the node, and the substructure of nodes below the node, that is passed to it.
 Beware: the memory used to make the copy is never returned to the system.
+</para>
 
-
+<para>
+The <function>level</function> function returns the level of the node.
 </para>
 
 
-
 <para>
-
-<command>Fornodes</command> is an iterator that loops through the child nodes of a <acronym>GEDCOM</acronym> node. Its first argument is a
+<function>Fornodes</function> is an iterator that loops through the child nodes of a <acronym>GEDCOM</acronym> node. Its first argument is a
 node expression, and its second parameter is a variable that iterates through each direct child node of
 the first node.
 </para>
 
 <para>
-<command>Fornotes</command> is an iterator that loops through the NOTE nodes 
+<function>Fornotes</function> is an iterator that loops through the NOTE nodes 
 of a <acronym>GEDCOM</acronym> node. Its first argument is a
 node expression, and its second parameter is a variable that returns the
 value of the NOTE.  The value includes processed sub CONC and CONT records.
-
 </para>
 
 
 
 <para>
-
-<command>Traverse</command> is an iterator providing a general method for traversing <acronym>GEDCOM</acronym> trees. Its first parameter is
+<function>Traverse</function> is an iterator providing a general method for traversing <acronym>GEDCOM</acronym> trees. Its first parameter is
 a node expression; its second parameter is a variable that iterates over every node under the first node
 in a top down, left to right manner; and its third parameter is a variable that is set to the level of the
 current node in the iteration.
-
 </para>
-
-
 
 </sect1>
 
-
-
 <sect1>
 
-
-
 <title>
-
 Event and Date Functions
-
 </title>
 
 <glosslist>
@@ -2911,193 +2501,209 @@ Event and Date Functions
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 date of, value of first <structfield>DATE</structfield> line
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>place</function></funcdef>
 <paramdef><parameter>EVENT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 place of, value of first <structfield>PLAC</structfield> line
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>year</function></funcdef>
 <paramdef><parameter>EVENT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 year or, 1st string of 3-4 digits in 1st <structfield>DATE</structfield> line
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>long</function></funcdef>
 <paramdef><parameter>EVENT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 date and place, values of 1st <structfield>DATE</structfield> and <structfield>PLAC</structfield> lines
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>short</function></funcdef>
 <paramdef><parameter>EVENT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 date and place of, abbreviated from
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>EVENT <function>gettoday</function></funcdef><void/>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 returns the `event' of the current date
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>dayformat</function></funcdef>
 <paramdef><parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 set day format for stddate calls
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>monthformat</function></funcdef>
 <paramdef><parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 set month format for stddate calls
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>yearformat</function></funcdef>
 <paramdef><parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 set year format for stddate calls
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>eraformat</function></funcdef>
 <paramdef><parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 set era format for stddate calls
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>dateformat</function></funcdef>
 <paramdef><parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 set date format for stddate calls
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
-<funcdef>STRING <function>stddate</function></funcdef>
-<paramdef><parameter>EVENT</parameter></paramdef>
+<funcdef>VOID <function>datepic</function></funcdef>
+<paramdef><parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
+set custom date format for stddate calls
+</para>
+</glossdef></glossentry>
 
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRING <function>stddate</function></funcdef>
+<paramdef><parameter>EVENT|STRING</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
 date of, in current format
-
 </para>
+</glossdef></glossentry>
 
-</glossdef></glossentry></glosslist>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>VOID <function>complexformat</function></funcdef>
+<paramdef><parameter>INT</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
+set complex date format
+</para>
+</glossdef></glossentry>
 
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>VOID <function>complexpic</function></funcdef>
+<paramdef><parameter>INT</parameter>,
+<parameter>STRING</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+set custom complex date picture string
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRING <function>complexdate</function></funcdef>
+<paramdef><parameter>EVENT|STRING</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+date of, in current complex format
+</para>
+</glossdef></glossentry>
+
+</glosslist>
+
+<para>
 These functions extract information about the dates and places of events.
-
-
 </para>
 
-
-
 <para>
-
 <function>Date</function> returns the value of the first <structfield>DATE</structfield> line in an event, a node in a <acronym>GEDCOM</acronym> record tree. <function>Date</function>
 finds the first <structfield>DATE</structfield> line one level deeper than the event node. <function>Place</function> returns the value of the first
 <structfield>PLAC</structfield> line in an event. <function>Year</function> returns the first three or four digit number in the value of the first <structfield>DATE</structfield>
 line in an event; this number is assumed to be the year of the event.
-
-
 </para>
 
-
-
 <para>
-
 <function>Long</function> returns the verbatim values of the first <structfield>DATE</structfield> and <structfield>PLAC</structfield> lines in an event, catenated together
 and separated by a comma. <function>Short</function> abbreviates information from the first <structfield>DATE</structfield> and <structfield>PLAC</structfield> lines, catenates the shortened information together with a comma separator and returns it. An abbreviated
 date is its year; an abbreviated place is the last component in the value, further abbreviated if the
 component has an entry in the place abbreviation table.
-
-
 </para>
 
-
-
 <para>
-
 <function>Gettoday</function> creates an event that has today's date in the <structfield>DATE</structfield> line.
-
-
 </para>
 
-
+<para>
+The next seven functions are used to format dates in a variety of ways.
+<function>Dayformat</function>, <function>monthformat</function>,
+<function>yearformat</function>, <function>eraformat</function>, and
+<function>dateformat</function> select style options for formatting the day,
+month, year, era, and overall date structure; <function>stddate</function>
+returns dates in the selected style.
+<function>datepic</function> allows specifing a custom pattern that overides
+the date format selected with <function>dateformat</function>.  The string
+supplied specifies the placement of the day, month and year in the string with
+%d, %m and %y.  A null argument disables the overided format.
+The argument to <function>stddate</function> is normally an event and the
+date is extracted from the event and formatted. If the argument is a 
+date string it is converted using the current date formats.
+</para>
 
 <para>
-
-The last six functions are used to format dates in a variety of ways.  <function>Dayformat</function>,
-<function>monthformat</function>, <function>yearformat</function>, <function>eraformat</function>, and
-<function>dateformat</function> select style options for formatting the day, month, year, era, and overall date
-structure; <function>stddate</function> returns dates in the selected style.
-
+The next three functions provide for more complex formatting of dates. Taking
+into acount the abt, est, cal, bef, aft, fr and to qualifiers on GEDCOM dates. 
+<function>complexformat</function> selects the format to use.  The function
+<function>complexpic</function> can be used to specify a custom picture string
+for any or all of the 9 custom format strings.  The custom string can be
+canceled by passing a null for the string.  <function>complexdate</function>
+formats the date similarly to <function>stddate</function>, but with the 
+addition of the complex date format string selected.
 </para>
 
 <para>
@@ -3212,7 +2818,6 @@ upper case roman letter (eg, I, II)
 </informaltable>
 
 <para>
-
 The year format codes passed to <function>yearformat</function> are:
 </para>
 
@@ -3242,9 +2847,7 @@ no space or leading 0 before years
 </tgroup>
 </informaltable>
 
-
 <para>
-
 The era format codes passed to <function>eraformat</function> are: 
 </para>
 
@@ -3311,7 +2914,6 @@ trailing CE or BCE
 </informaltable>
 
 <para>
-
 The full date formats passed to <function>stddate</function> are:
 </para>
 
@@ -3413,18 +3015,191 @@ da/mo yr
 </tgroup>
 </informaltable>
 
+<para>
+The complex date formats selected by the <function>complexformat</function>
+and used by <function>complexdate</function> are: 
+</para>
+
+<informaltable pgwide='0' frame='none'>
+<tgroup cols='3'>
+<colspec colwidth='0.5in'></colspec>
+<tbody>
+<row>
+<entry> </entry>
+<entry>
+Mode
+</entry>
+<entry>
+Example
+</entry>
+</row>
+<row>
+<entry>3</entry>
+<entry>
+use abbreviations in uppercase
+</entry>
+<entry>
+ABT  1 JAN 2002
+</entry>
+</row>
+<row>
+<entry>4</entry>
+<entry>
+use abbreviations in titlecase
+</entry>
+<entry>
+Abt  1 JAN 2002
+</entry>
+</row>
+<row>
+<entry>5</entry>
+<entry>
+use uppercased full words 
+</entry>
+<entry>
+ABOUT  1 JAN 2002
+</entry>
+</row>
+<row>
+<entry>6</entry>
+<entry>
+use titlecased full words
+</entry>
+<entry>
+About  1 JAN 2002
+</entry>
+</row>
+<row>
+<entry>7</entry>
+<entry>
+use abbreviations in lowercase
+</entry>
+<entry>
+abt  1 JAN 2002
+</entry>
+</row>
+<row>
+<entry>8</entry>
+<entry>
+use lowercase full words
+</entry>
+<entry>
+about  1 JAN 2002
+</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para>
+The complex date strings that are overridden with the
+<function>complexpic</function> are: 
+</para>
+
+<informaltable pgwide='0' frame='none'>
+<tgroup cols='3'>
+<colspec colwidth='0.5in'></colspec>
+<tbody>
+<row>
+<entry> </entry>
+<entry>
+Abbreviation
+</entry>
+<entry>
+Full word
+</entry>
+</row>
+<row>
+<entry>0</entry>
+<entry>
+abt %1
+</entry>
+<entry>
+about %1
+</entry>
+</row>
+<row>
+<entry>1</entry>
+<entry>
+est %1
+</entry>
+<entry>
+estimated %1
+</entry>
+</row>
+<row>
+<entry>2</entry>
+<entry>
+cal %1
+</entry>
+<entry>
+Calculated %1
+</entry>
+</row>
+<row>
+<entry>3</entry>
+<entry>
+bef %1
+</entry>
+<entry>
+before %1
+</entry>
+</row>
+<row>
+<entry>4</entry>
+<entry>
+aft %1
+</entry>
+<entry>
+after %1
+</entry>
+</row>
+<row>
+<entry>5</entry>
+<entry>
+bet %1 and %2
+</entry>
+<entry>
+between %1 and %2
+</entry>
+</row>
+<row>
+<entry>6</entry>
+<entry>
+fr %1
+</entry>
+<entry>
+from %1
+</entry>
+</row>
+<row>
+<entry>7</entry>
+<entry>
+to %1
+</entry>
+<entry>
+to %1
+</entry>
+</row>
+<row>
+<entry>8</entry>
+<entry>
+fr %1 to %2
+</entry>
+<entry>
+from %1 to $2
+</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
 </sect1>
-
-
 
 <sect1>
 
-
-
 <title>
-
 Value Extraction Functions
-
 </title>
 
 <glosslist>
@@ -3437,12 +3212,10 @@ Value Extraction Functions
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 extract a date
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>extractnames</function></funcdef>
 <paramdef><parameter>NODE</parameter>,
@@ -3452,12 +3225,10 @@ extract a date
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 extract a name
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>extractplaces</function></funcdef>
 <paramdef><parameter>NODE</parameter>,
@@ -3466,12 +3237,10 @@ extract a name
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 extract a place
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>extracttokens</function></funcdef>
 <paramdef><parameter>STRING</parameter>,
@@ -3481,40 +3250,44 @@ extract a place
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 extract tokens
-
 </para>
+</glossdef></glossentry>
 
-</glossdef></glossentry></glosslist>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>VOID <function>extractdatestr</function></funcdef>
+<paramdef><parameter>VARB</parameter>,
+<parameter>VARB</parameter>,
+<parameter>VARB</parameter>,
+<parameter>VARB</parameter>,
+<parameter>VARB</parameter>,
+<parameter>STRING</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
+extract date from string
+</para>
+</glossdef></glossentry>
 
+</glosslist>
+
+<para>
 Value extraction functions read the values of certain lines and return those values in extracted form.
-
-
 </para>
 
-
-
 <para>
-
 <function>Extractdate</function> extracts date values from either an event node
 or <structfield>DATE</structfield> node. The first parameter must be
-a node; if its tag is <structfield>DATE</structfield>, the date is extracted from
-the value of that node; if its tag is not <structfield>DATE</structfield>, the
-date is extracted from the first <structfield>DATE</structfield> line one level below the argument node. The remaining three
-arguments are variables. The first is assigned the integer value of the extracted day; the second is
-assigned the integer value of the extracted month; and the third is assigned the integer value of the
-extracted year.
-
-
+a node; if its tag is <structfield>DATE</structfield>, the date is extracted 
+from the value of that node; if its tag is not <structfield>DATE</structfield>,
+the date is extracted from the first <structfield>DATE</structfield> line one 
+level below the argument node. The remaining three arguments are variables.
+The first is assigned the integer value of the extracted day; the second is
+assigned the integer value of the extracted month; and the third is assigned
+the integer value of the extracted year.
 </para>
 
-
-
 <para>
-
 <function>Extractnames</function> extracts name components from a <structfield>NAME</structfield> line. Its first argument is either an <structfield>INDI</structfield> or a
 <structfield>NAME</structfield> node. If it is a <structfield>NAME</structfield> line, the components are extracted from the value of that node; if it is an
 <structfield>INDI</structfield> line, the components are extracted from the value of the first <structfield>NAME</structfield> line in the person record.
@@ -3522,61 +3295,54 @@ The second argument is a list that will hold the extracted components. The third
 variable that is set to the number of extracted components. The fourth argument is a variable that is set
 to the index (starting at one) of the surname component; the <literal>/</literal> characters are removed from around the
 surname component. If there is no surname this argument variable is set to zero.
-
-
 </para>
-
-
 
 <para>
-
-     <function>Extractplaces</function> extracts place components
-     from a <structfield>PLAC</structfield> node. The first
-     argument is a node; if its tag is
-     <structfield>PLAC</structfield>, the places are extracted from
-     the value of the node; if its tag is not
-     <structfield>PLAC</structfield>, places are extracted from the
-     first <structfield>PLAC</structfield> line one level below the
-     argument node. The second parameter is a list that will hold
-     the extracted components. The third argument is an integer
-     variable that is set to the number of extracted
-     components. Place components are defined by the
-     comma-separated portions of the
-     <structfield>PLAC</structfield> value; leading and trailing
-     white space is removed from the components, while all internal
-     white space is retained.
-
+<function>Extractplaces</function> extracts place components
+from a <structfield>PLAC</structfield> node. The first
+argument is a node; if its tag is
+<structfield>PLAC</structfield>, the places are extracted from
+the value of the node; if its tag is not
+<structfield>PLAC</structfield>, places are extracted from the
+first <structfield>PLAC</structfield> line one level below the
+argument node. The second parameter is a list that will hold
+the extracted components. The third argument is an integer
+variable that is set to the number of extracted
+components. Place components are defined by the
+comma-separated portions of the
+<structfield>PLAC</structfield> value; leading and trailing
+white space is removed from the components, while all internal
+white space is retained.
 </para>
-
-
 
 <para>
-
-     <function>Extracttokens</function> extracts tokens from a
-     string and places them in a list. The first argument is the
-     string to extract tokens from. The second argument is the list
-     to hold the tokens. The third argument is an integer variable
-     that is set to the number of tokens extracted. The fourth
-     parameter is the string of delimiter characters that
-     <function>extracttokens</function> uses to break the input
-     string into tokens.
-
+<function>Extracttokens</function> extracts tokens from a
+string and places them in a list. The first argument is the
+string to extract tokens from. The second argument is the list
+to hold the tokens. The third argument is an integer variable
+that is set to the number of tokens extracted. The fourth
+parameter is the string of delimiter characters that
+<function>extracttokens</function> uses to break the input
+string into tokens.
 </para>
 
+<para>
+<function>extractdatestr</function> extracts date values from a .
+<structfield>STRING</structfield>.  It is intended for internal verification
+of date extraction code.
+The remaining five arguments are variables.
+The second is assigned the integer value of the extracted day; the third is
+assigned the integer value of the extracted month; and the fourth is assigned
+the integer value of the extracted year.
+</para>
 
 
 </sect1>
 
-
-
 <sect1>
 
-
-
 <title>
-
 User Interaction Functions
-
 </title>
 
 <glosslist>
@@ -3587,12 +3353,10 @@ User Interaction Functions
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 identify person through user interface
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>getindiset</function></funcdef>
 <paramdef><parameter>SET_V</parameter>,
@@ -3600,24 +3364,20 @@ identify person through user interface
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 identify set of persons through user interface
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>getfam</function></funcdef>
 <paramdef><parameter>FAM_V</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 identify family through user interface
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>getint</function></funcdef>
 <paramdef><parameter>INT_V</parameter>,
@@ -3625,12 +3385,10 @@ identify family through user interface
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 get integer through user interface
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>getstr</function></funcdef>
 <paramdef><parameter>STRING_V</parameter>,
@@ -3638,72 +3396,60 @@ get integer through user interface
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 get string through user interface
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INDI <function>choosechild</function></funcdef>
 <paramdef><parameter>INDI|FAM</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 select child of person/family thru user interface
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>FAM <function>choosefam</function></funcdef>
 <paramdef><parameter>INDI</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 select family person is in as spouse
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INDI <function>chooseindi</function></funcdef>
 <paramdef><parameter>SET</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 select person from set of persons
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INDI <function>choosespouse</function></funcdef>
 <paramdef><parameter>INDI</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 select spouse of person
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>SET <function>choosesubset</function></funcdef>
 <paramdef><parameter>SET</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 select a subset of persons from set of persons
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INT <function>menuchoose</function></funcdef>
 <paramdef><parameter>LIST</parameter>,
@@ -3711,71 +3457,45 @@ select a subset of persons from set of persons
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 select from a list of options
-
 </para>
+</glossdef></glossentry>
 
-</glossdef></glossentry></glosslist>
+</glosslist>
 
 <para>
-
 These functions interact with the user to get information needed by the program.
-
-
 </para>
 
-
-
 <para>
-
 <function>Getindi</function> asks the user to identify a person. The first argument is a variable that is set to the person.
 The second is an optional string to use as a prompt. <function>Getindiset</function> asks the user to identify a set of persons.
 <function>Getfam</function> asks the user identify a family. <function>Getint</function> and <function>getstr</function> ask the user enter an integer and string,
 respectively.
-
-
 </para>
 
-
-
 <para>
-
 <function>Choosechild</function> asks the user select a child of a family or person; its single argument is a person or family;
 it return the child. <function>Choosefam</function> has the user select a family that a person is in as a spouse; its argument
 is a person; it returns the family. <function>Chooseindi</function> has the user select one person from a set of persons; its
 argument in a set of persons; it returns the chosen person. <function>Choosespouse</function> has the user select a spouse of a
 person; its argument is a person; it returns the chosen spouse. <function>Choosesubset</function> has the user select a subset of
 persons from a set of persons; its argument is the chosen subset.
-
-
 </para>
 
-
-
 <para>
-
 <function>Menuchoose</function> allows the user to select from an arbitrary menu. The first argument is a list of strings
 making up the items in the menu; the second, optional argument is a prompt string for the menu;
 <function>menuchoose</function> returns the integer index of the item selected by the user; if the user doesn't select an item,
 <returnvalue>zero</returnvalue> is returned.
-
 </para>
-
-
 
 </sect1>
 
-
-
 <sect1>
 
-
-
 <title>
-
 String Functions
-
 </title>
 
 <glosslist>
@@ -3785,21 +3505,17 @@ String Functions
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 convert to lower case
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>upper</function></funcdef>
 <paramdef><parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 convert to upper case
-
 </para>
 </glossdef></glossentry>
 
@@ -3809,9 +3525,7 @@ convert to upper case
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 capitalize first letter
-
 </para>
 </glossdef></glossentry>
 
@@ -3821,9 +3535,7 @@ capitalize first letter
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 capitalize first letter of each word
-
 </para>
 </glossdef></glossentry>
 
@@ -3834,12 +3546,10 @@ capitalize first letter of each word
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 trim to length
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>rjustify</function></funcdef>
 <paramdef><parameter>STRING</parameter>,
@@ -3847,36 +3557,30 @@ trim to length
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 right justify in field
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>save</function></funcdef>
 <paramdef><parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 save and return copy of string
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>strsave</function></funcdef>
 <paramdef><parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 same as save function
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>concat</function></funcdef>
 <paramdef><parameter>STRING</parameter>,
@@ -3885,12 +3589,10 @@ same as save function
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 catenate two strings
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>strconcat</function></funcdef>
 <paramdef><parameter>STRING</parameter>,
@@ -3899,24 +3601,20 @@ catenate two strings
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 catenate two strings
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INT <function>strlen</function></funcdef>
 <paramdef><parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 number of characters in string
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>substring(</function></funcdef>
 <paramdef><parameter>STRING</parameter>,
@@ -3925,12 +3623,10 @@ number of characters in string
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 substring function
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INT <function>index</function></funcdef>
 <paramdef><parameter>STRING</parameter>,
@@ -3939,108 +3635,101 @@ substring function
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 index function
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>d</function></funcdef>
 <paramdef><parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 number as decimal string
-
 </para>
-
 </glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRING <function>f</function></funcdef>
+<paramdef><parameter>FLOAT</parameter>,
+<parameter>INT</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+number as floating point string
+</para>
+</glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>card</function></funcdef>
 <paramdef><parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 number in cardinal form (<literal>one, two, ...</literal>)
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>ord</function></funcdef>
 <paramdef><parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 number in ordinal form (<literal>first, second, ...</literal>)
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>alpha</function></funcdef>
 <paramdef><parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 convert number to Latin letter (<literal>a, b, ...</literal>)
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>roman</function></funcdef>
 <paramdef><parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 number in Roman numeral form (<literal>i, ii, ...</literal>)
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>strsoundex</function></funcdef>
 <paramdef><parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 find SOUNDEX value of arbitrary string
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INT <function>strtoint</function></funcdef>
 <paramdef><parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 convert numeric string to integer
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INT <function>atoi</function></funcdef>
 <paramdef><parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 convert numeric string to integer
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INT <function>strcmp</function></funcdef>
 <paramdef><parameter>STRING</parameter>,
@@ -4048,12 +3737,10 @@ convert numeric string to integer
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 general string compare
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>BOOL <function>eqstr</function></funcdef>
 <paramdef><parameter>STRING</parameter>,
@@ -4061,12 +3748,10 @@ general string compare
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 compare strings for equality
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>BOOL <function>nestr</function></funcdef>
 <paramdef><parameter>STRING</parameter>,
@@ -4074,33 +3759,27 @@ compare strings for equality
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 compare strings for inequality
-
 </para>
+</glossdef></glossentry>
 
-</glossdef></glossentry></glosslist>
+</glosslist>
 
 <para>
-
 These functions provide string handling. Prior to version 3.0.6, many of them used an approach to memory management
 chosen for absolute minimal memory footprint. A function using this approach constructed its output string in its own string
 buffer, reusing that buffer each time it was called. When a function using this approach returned a string
 value it returned its buffer. In consequence the strings returned by these functions were to be either used or
 saved before the function was called again.
-
 </para>
 
 <para>
-
 By the release of version 3.0.6, all string values are local copies, and the <function>save</function> and
 <function>strsave</function> functions should be entirely unnecessary.
-
 </para>
 
 
 <para>
-
 <function>Lower</function> and <function>upper</function> convert the letters
 in their arguments to lower or upper case, respectively.
 <function>Capitalize</function> converts the first character of the argument,
@@ -4109,133 +3788,85 @@ if it is a letter, to upper case. <function>Lower</function> and
 <function>capitalize</function> operates on and returns its argument.
 <function>titlecase</function> converts the first letter of each word if it is
 a letter, to upper case and all other characters to lower case.
-
-
 </para>
 
-
-
 <para>
-
 <function>Trim</function> shortens a string to the length specified by the second parameter. If the string is already of that
 length or shorter the string is not changed. <function>Rjustify</function> right justifies a string into another string of the
 length specified by the second parameter. If the original string is shorter than the justified string,
 blanks are inserted to the left of the original string; if the string is longer than the justified string, the
 original string is truncated on the right. <function>Trim</function> historically used the buffer return method; <function>rjustify</function> creates and returns
 a new string.
-
-
 </para>
 
-
-
 <para>
-
 <function>Save</function> is present only for compatibility reasons. Previously it duplicated its argument (to prevent strings
 from becoming stale; this is not currently necessary (and this function no longer does anything).
  <function>Strsave</function> is the same function as <function>save</function>.
-
-
 </para>
 
-
-
 <para>
-
 <function>Concat</function> and <function>strconcat</function> catenate strings and return the result. They are identical functions. They may
 take two to 32 string arguments; null arguments are allowed. The arguments are catenated together into
 a single, newly allocated string, which is returned.
-
-
 </para>
 
-
-
 <para>
-
 <function>Strlen</function> returns the length of the string argument.
-
-
 </para>
 
-
-
 <para>
-
 <function>Substring</function> returns a substring of the first argument string. The second and third arguments are the
 indices of the first and last characters in the argument string to use to form the substring. The indexes are relative one.
 <function>Substring</function> historically used the buffer return method.
-
 </para>
 
-
-
 <para>
-
 <function>Index</function> returns the character index of the nth occurrence of a substring within a string. The index is the
 relative one character offset to the beginning of the substring. The first argument is the string; the
 second argument is the substring; and the third argument is the occurrence number.
-
-
 </para>
 
-
-
 <para>
-
-<function>D</function>, <function>card</function>, <function>ord</function>, <function>alpha</function> and <function>roman</function> convert integers to strings. <function>D</function> converts an integer to a numeric string;
-<function>card</function> converts an integer to a cardinal number string (eg, <literal>one, two, three</literal>); <function>ord</function> converts an integer to
-an ordinal number (eg, <literal>first, second, third</literal>); <function>alpha</function> converts an integer to a letter (eg, <literal>a, b, c</literal>); and
-<function>roman</function> converts an integer to a Roman numeral (eg, <literal>i, ii, iii</literal>).
-
-
+<function>D</function>, <function>card</function>, <function>ord</function>,
+<function>alpha</function> and <function>roman</function> convert integers
+to strings. <function>D</function> converts an integer to a numeric string;
+<function>card</function> converts an integer to a cardinal number string 
+(eg, <literal>one, two, three</literal>); <function>ord</function> converts an
+integer to an ordinal number (eg, <literal>first, second, third</literal>);
+<function>alpha</function> converts an integer to a letter
+(eg, <literal>a, b, c</literal>); and <function>roman</function> converts an 
+integer to a Roman numeral (eg, <literal>i, ii, iii</literal>).
 </para>
 
-
-
 <para>
-
+The <function>f</function> function converts a float to a string.  The
+optional second argument specifies the precision of the output.  The default
+precision is 2.
+</para>
+<para>
 <function>Strsoundex</function> converts an arbitrary string to a SOUNDEX value. Non-ASCII text characters are ignored
 in the string.
-
-
 </para>
 
-
-
 <para>
-
 <function>Strtoint</function> converts a numeric string to an integer. <function>Atoi</function> is identical to <function>strtoint</function>.
-
-
 </para>
 
-
-
 <para>
-
 <function>Strcmp</function> compares two strings and returns an integer that is less than zero, equal to zero, or greater than
 zero, if, respectively, the first string is lexicographically less than, equal to, or greater than the second
 string. <function>Eqstr</function> and <function>nestr</function> return whether two strings are equal or not equal, respectively.
 <function>Strcmp</function>, <function>Eqstr</function>, and <function>nestr</function> all treat null strings as empty strings,
 which is to say they pretend that a null string is actually "". This means that all null and empty strings compare as equal.
-
 </para>
-
-
 
 </sect1>
 
-
-
 <sect1>
 
-
-
 <title>
-
 Output Mode Functions
-
 </title>
 
 <glosslist>
@@ -4244,9 +3875,7 @@ Output Mode Functions
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 use line output mode
-
 </para>
 
 </glossdef></glossentry>
@@ -4257,9 +3886,7 @@ use line output mode
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 use page output mode with given page size
-
 </para>
 </glossdef></glossentry>
 
@@ -4269,9 +3896,7 @@ use page output mode with given page size
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 position to column in output
-
 </para>
 </glossdef></glossentry>
 
@@ -4280,9 +3905,7 @@ position to column in output
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 get current column in output
-
 </para>
 </glossdef></glossentry>
 
@@ -4292,9 +3915,7 @@ get current column in output
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 position to row in output
-
 </para>
 
 </glossdef></glossentry>
@@ -4305,9 +3926,7 @@ position to row in output
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 position to (row, col) coordinate in output
-
 </para>
 
 </glossdef></glossentry>
@@ -4316,9 +3935,7 @@ position to (row, col) coordinate in output
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 output page buffer
-
 </para>
 
 </glossdef></glossentry>
@@ -4327,9 +3944,7 @@ output page buffer
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 newline character
-
 </para>
 
 </glossdef></glossentry>
@@ -4338,9 +3953,7 @@ newline character
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 space character
-
 </para>
 
 </glossdef></glossentry>
@@ -4349,9 +3962,7 @@ space character
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 double quote character
-
 </para>
 
 </glossdef></glossentry>
@@ -4362,9 +3973,7 @@ double quote character
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 send program output to this file
-
 </para>
 
 </glossdef></glossentry>
@@ -4373,9 +3982,7 @@ send program output to this file
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 return name of current program output file
-
 </para>
 
 </glossdef></glossentry>
@@ -4385,9 +3992,7 @@ return name of current program output file
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 copy file contents to program output file
-
 </para>
 
 </glossdef></glossentry>
@@ -4399,15 +4004,12 @@ copy file contents to program output file
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 print string to standard output window
-
 </para>
 
 </glossdef></glossentry></glosslist>
 
 <para>
-
 Reports can be generated in two modes, line mode and page mode. <function>Linemode</function> selects line mode and
 <function>pagemode</function> selects page mode; line mode is the default. The first parameter to <function>pagemode</function> is the number
 of rows per page; the second parameter is the number of columns per page. When in the line mode report
@@ -4415,107 +4017,59 @@ output is written directly to the output file as the program runs, line by line.
 is buffered into pages which are written to the output file when <function>pageout</function> is called. Page mode is useful
 for generating charts (eg, pedigree charts or box charts) where it is convenient to compute the two-dimensional
 location of output.
-
-
 </para>
 
-
-
 <para>
-
 <function>Col</function> positions output to the given column. If the current 
 column is greater than the argument, col
 positions output to the given column on the next line. <function>Col</function>
 works in both modes.
 <function>Getcol</function> returns the current column in the output.
-
 </para>
 
-
-
 <para>
-
 <function>Row</function> positions output to the first character in the given row; <function>row</function> can only be used in page mode.
-
-
 </para>
 
-
-
 <para>
-
 <function>Pos</function> positions output to a specified row and column coordinate; the first argument specifies the row, and
 the second specifies the column. <function>Pos</function> can only be used in page mode.
-
-
 </para>
 
-
-
 <para>
-
 <function>Nl</function> write a new line character to the output file; <function>sp</function> writes a space character to the output file; and <function>qt</function>
 writes a quote character to the output file. Note that <literal>\n</literal> and <literal>\'</literal> can be used within string values to
 represent the newline and double quote characters.
-
-
 </para>
 
-
-
 <para>
-
 <function>Newfile</function> specifies the name of the report output file. Its first argument is the file's name; its second
 argument is an append flag - if its value is non-zero the report appends to this file; if its value is zero
 the report overwrites the contents of the file. <function>Newfile</function> can be called many times; this allows a single report program to generate many report output files during one execution. Programs are not required to
 use <function>newfile</function>; if it is not used then <application>LifeLines</application> automatically asks for the name of the report output file.
-
-
 </para>
 
-
-
 <para>
-
 <function>Outfile</function> returns the name of the current report output file.
-
-
 </para>
 
-
-
 <para>
-
 <function>Copyfile</function> copies the contents of a file to the report output file; its argument is a string whose value is
 the name of a file; if the file name is not absolute nor relative, then the <envar>LLPROGRAMS</envar> environment
 variable, if set, will be used to search for the file; the file is opened and its contents copied to the report
 output file.
-
-
 </para>
-
-
 
 <para>
-
 <function>Print</function> prints its argument string to the standard output window; <function>print</function> may have one to 32 arguments.
-
 </para>
-
-
 
 </sect1>
 
-
-
 <sect1>
 
-
-
 <title>
-
 Person Set Functions and GEDCOM Extraction
-
 </title>
 
 <glosslist>
@@ -4525,9 +4079,7 @@ Person Set Functions and GEDCOM Extraction
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 declare a set variable
-
 </para>
 
 </glossdef></glossentry>
@@ -4539,9 +4091,7 @@ declare a set variable
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 add a person to a set
-
 </para>
 
 </glossdef></glossentry>
@@ -4553,9 +4103,7 @@ add a person to a set
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 remove a person from a set
-
 </para>
 
 </glossdef></glossentry>
@@ -4565,9 +4113,7 @@ remove a person from a set
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 size of a set
-
 </para>
 
 </glossdef></glossentry>
@@ -4578,9 +4124,7 @@ size of a set
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 union of two sets
-
 </para>
 
 </glossdef></glossentry>
@@ -4591,9 +4135,7 @@ union of two sets
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 intersection of two sets
-
 </para>
 
 </glossdef></glossentry>
@@ -4604,9 +4146,7 @@ intersection of two sets
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 difference of two sets
-
 </para>
 
 </glossdef></glossentry>
@@ -4616,9 +4156,7 @@ difference of two sets
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 set of all parents
-
 </para>
 
 </glossdef></glossentry>
@@ -4628,9 +4166,7 @@ set of all parents
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 set of all children
-
 </para>
 
 </glossdef></glossentry>
@@ -4640,9 +4176,7 @@ set of all children
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 set of all spouses
-
 </para>
 
 </glossdef></glossentry>
@@ -4652,9 +4186,7 @@ set of all spouses
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 set of all siblings
-
 </para>
 
 </glossdef></glossentry>
@@ -4664,9 +4196,7 @@ set of all siblings
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 set of all ancestors
-
 </para>
 
 </glossdef></glossentry>
@@ -4676,9 +4206,7 @@ set of all ancestors
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 set of all descendents
-
 </para>
 
 </glossdef></glossentry>
@@ -4688,9 +4216,7 @@ set of all descendents
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 same as descendentset; spelling
-
 </para>
 
 </glossdef></glossentry>
@@ -4700,9 +4226,7 @@ same as descendentset; spelling
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 remove duplicates from set
-
 </para>
 
 </glossdef></glossentry>
@@ -4712,9 +4236,7 @@ remove duplicates from set
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 sort indiset by name
-
 </para>
 
 </glossdef></glossentry>
@@ -4724,9 +4246,7 @@ sort indiset by name
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 sort indiset by key values
-
 </para>
 
 </glossdef></glossentry>
@@ -4736,9 +4256,7 @@ sort indiset by key values
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 sort indiset by auxiliary values
-
 </para>
 
 </glossdef></glossentry>
@@ -4749,12 +4267,10 @@ sort indiset by auxiliary values
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 generate indiset from GEDCOM name string
-
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>BOOL <function>inset</function></funcdef>
 <paramdef><parameter>SET</parameter>,
@@ -4762,135 +4278,63 @@ generate indiset from GEDCOM name string
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 <returnvalue>true</returnvalue> if the Individual is in the set.
-
-</para>
-
-</glossdef></glossentry>
-<glossentry><glossterm><funcsynopsis><funcprototype>
-<funcdef>VOID <function>gengedcom</function></funcdef>
-<paramdef><parameter>SET</parameter></paramdef>
-</funcprototype></funcsynopsis></glossterm><glossdef>
-
-<para>
-
-generate GEDCOM file from person set
-
-</para>
-
-</glossdef></glossentry>
-<glossentry><glossterm><funcsynopsis><funcprototype>
-<funcdef>VOID <function>gengedcomweak</function></funcdef>
-<paramdef><parameter>SET</parameter></paramdef>
-</funcprototype></funcsynopsis></glossterm><glossdef>
-
-<para>
-
-generate GEDCOM file from person set
-
 </para>
 </glossdef></glossentry>
 
-<glossentry><glossterm><funcsynopsis><funcprototype>
-<funcdef>VOID <function>gengedcomstrong</function></funcdef>
-<paramdef><parameter>SET</parameter></paramdef>
-</funcprototype></funcsynopsis></glossterm><glossdef>
-
-<para>
-
-generate GEDCOM file from person set
-
-</para>
-</glossdef></glossentry>
 
 <glossentry><glossterm><synopsis><command>forindiset</command>( <replaceable>SET</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>ANY_V</replaceable>, <replaceable>INT_V</replaceable> ) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
-
 loop through all persons in person set
-
 </para>
 
-</glossdef></glossentry></glosslist>
+</glossdef></glossentry>
+</glosslist>
 
 <para>
-
 These functions allow you to manipulate person sets. A person set is a potentially large set of persons;
 each person may have an arbitrary value associated with him/her. A person set must be declared with
 the <function>indiset</function> function before it can be used.
-
-
 </para>
 
-
-
 <para>
-
 <function>Addtoset</function> adds a person to a set. The first argument is the set; the second argument is the person; and
 the third argument may be any value. The same person may be added to a set more than once, each time
 with a different value. <function>Deletefromset</function> removes a person from a set. The first argument is the set; the
 second argument is the person; if the third parameter is <returnvalue>true</returnvalue> all of the person's entries are removed
 from the set; if <returnvalue>false</returnvalue> only the first entry is removed. <function>Lengthset</function> returns the number of persons in a
 person set.
-
-
 </para>
 
-
-
 <para>
-
 <function>Union</function>, <function>intersect</function> and <function>difference</function> return the set union, set intersection and set difference, respectively,
 of two person sets. Each functions takes two person sets as arguments and returns a third person set. The
 functions do not affect the values of their two argument sets.
-
-
 </para>
 
-
-
 <para>
-
 <function>Parentset</function>, <function>childset</function>, <function>spouseset</function> and <function>siblingset</function> return the set of all parents, set of all children, set of
 all spouses and set of all siblings, respectively, of the set of persons in their argument. In all cases there
 is no change to the argument person set.
-
-
 </para>
 
-
-
 <para>
-
 <function>Ancestorset</function> returns the set all ancestors of all persons in the argument set. <function>Descendentset</function> returns the
 set of all descendents of all persons in the argument set. <function>Descendantset</function> is the same as <function>descendentset</function>; it allows an alternate spelling.
-
 </para>
 
-
-
 <para>
-
 <function>Uniqueset</function> sorts a person set by key value and then removes all entries with duplicate keys; the input
 set is modified and returned.
-
-
 </para>
 
-
-
 <para>
-
 <function>Namesort</function>, <function>keysort</function> and <function>valuesort</function> sort a set of persons by name, by key and by associated value,
 respectively.
-
 </para>
 
-
-
 <para>
-
 Each person in a person set has an associated value. When a person is added to a set with <function>addtoset</function>, the
 value is explicitly assigned. When new sets are created by other functions, a number of rules are used to
 associate values with persons as they are added to the new sets. For <function>parentset</function>, <function>childset</function> and
@@ -4902,73 +4346,32 @@ the new person is away from the <emphasis>first</emphasis> person in the input s
 new person is related to more than one person in the input set, the value is set for the nearest
 relationship; that is, the value is as low as possible. <function>Valuesort</function> sorts a person set by the values of these
 auxiliary values.
-
 </para>
 
-
-
 <para>
-
 <function>Genindiset</function> generates the set of persons that matches a string whose value is a name in <acronym>GEDCOM</acronym>
 format. <function>Genindiset</function> uses the same algorithm that matches names entered at the browse prompt or by
 the user interaction <function>getindiset</function> function.
-
-
 </para>
 
 <para>
-
 <function>Inset</function> returns <returnvalue>true</returnvalue> if the
 the specified individual is in the SET.
-
 </para>
-
-<para>
-Three functions are available for to generate <acronym>GEDCOM</acronym>
-format output to the report output file of all persons in the argument
-person set.
-<function>Gengedcom</function> 
-output contains a person record for each person in the set,
-and all the family records that
-link at least two of the persons in the set together.
-This function is provided for backwards compatiblity. Source, Event and
-Other(X) record pointers are output unmodified, but none of their records
-are output - this yields an inconsistent output.
-</para>
-<para>
-<function>Gengedcomweak</function> 
-output does not contain Source, Event or Other(X) record pointers 
-or their records.
-<function>Gengedcomstrong</function> includes 
-the Source, Event and Other(X) record pointers and all top-level nodes
-referenced by them.
-  
-</para>
-
-
 
 <para>
 <function>Forindiset</function> is an iterator that loops through each person in an indiset. The first parameter is an indiset.
 The second parameter is a variable that iterates through each person in the set. The third parameter
 iterates through the values associated with the persons. The fourth parameter is an integer variable
 that counts the iterations.
-
 </para>
-
-
 
 </sect1>
 
-
-
 <sect1>
 
-
-
 <title>
-
 Record Update Functions
-
 </title>
 
 <glosslist>
@@ -4979,9 +4382,7 @@ Record Update Functions
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 create a GEDCOM node
-
 </para>
 
 </glossdef></glossentry>
@@ -4993,9 +4394,7 @@ create a GEDCOM node
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 add a node to a GEDCOM tree
-
 </para>
 
 </glossdef></glossentry>
@@ -5005,9 +4404,7 @@ add a node to a GEDCOM tree
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 delete a node from a GEDCOM tree
-
 </para>
 
 </glossdef></glossentry>
@@ -5017,9 +4414,7 @@ delete a node from a GEDCOM tree
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 write a person back to the database
-
 </para>
 
 </glossdef></glossentry>
@@ -5029,24 +4424,16 @@ write a person back to the database
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 write a family back to the database
-
 </para>
 
 </glossdef></glossentry></glosslist>
 
 <para>
-
 These functions allow you to modify an internal <acronym>GEDCOM</acronym> node tree.
-
-
 </para>
 
-
-
 <para>
-
 <function>Createnode</function> creates a <acronym>GEDCOM</acronym> node; the two arguments are tag and value strings,
 respectively; the value string can be <returnvalue>null</returnvalue>. <function>Addnode</function> adds a node to a
 node tree. The first argument is the new node; the second is the node in the tree that becomes the parent of the new
@@ -5055,34 +4442,20 @@ node; the third is the node in the tree that becomes the previous sibling of the
 <function>Detachnode</function> removes a node from a node tree. <function>writeindi</function> writes an individual
 record back to the database, and <function>writefam</function> writes a family record back to the database, allowing the
 report to make permanent changes to the database.
-
-
 </para>
 
-
-
 <para>
-
 The node functions only change data in memory; there is no effect on the database until and unless
 <function>writeindi</function> or <function>writeindi</function> are called. These functions may be changed or extended
 in the future to allow database changes.
-
 </para>
-
-
 
 </sect1>
 
-
-
 <sect1>
 
-
-
 <title>
-
 Record Linking Functions
-
 </title>
 
 <glosslist>
@@ -5092,9 +4465,7 @@ Record Linking Functions
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 determine if string is a cross reference
-
 </para>
 
 </glossdef></glossentry>
@@ -5104,9 +4475,7 @@ determine if string is a cross reference
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 reference cross reference or key to node tree
-
 </para>
 
 </glossdef></glossentry>
@@ -5116,36 +4485,24 @@ reference cross reference or key to node tree
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 same as dereference
-
 </para>
 
 </glossdef></glossentry></glosslist>
 
 <para>
-
 These functions allow you to recognize values that are cross references and to read the records they refer
 to. <function>Reference</function> returns <returnvalue>true</returnvalue> if its string argument is a cross reference value, that is, the internal key of
 one of the records in the database. <function>Dereference</function> returns the node tree of the record referred to by its cross
 reference string argument. <function>Getrecord</function> is a synonym for <function>dereference</function>.
-
 </para>
-
-
 
 </sect1>
 
-
-
 <sect1>
 
-
-
 <title>
-
 Miscellaneous Functions
-
 </title>
 
 <glosslist>
@@ -5155,9 +4512,7 @@ Miscellaneous Functions
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 lock a person or family in memory
-
 </para>
 
 </glossdef></glossentry>
@@ -5167,9 +4522,7 @@ lock a person or family in memory
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 unlock a person or family from memory
-
 </para>
 </glossdef></glossentry>
 
@@ -5178,9 +4531,7 @@ unlock a person or family from memory
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 return name of current database
-
 </para>
 </glossdef></glossentry>
 
@@ -5189,9 +4540,7 @@ return name of current database
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 return name of current program
-
 </para>
 </glossdef></glossentry>
 
@@ -5200,9 +4549,7 @@ return name of current program
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 return version of <application>LifeLines</application> program
-
 </para>
 
 </glossdef></glossentry>
@@ -5212,9 +4559,16 @@ return version of <application>LifeLines</application> program
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 execute string as a UNIX shell command
+</para>
 
+</glossdef></glossentry>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INT <function>heapused</function></funcdef><void/>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+amount of heap used for windows
 </para>
 
 </glossdef></glossentry>
@@ -5224,12 +4578,63 @@ execute string as a UNIX shell command
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-
 extract system or user property.  Function available after v3.0.5.
-
 </para>
-
 </glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRING <function>setlocale</function></funcdef>
+<paramdef><parameter>STRING</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+set the locale
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRING <function>bytecode</function></funcdef>
+<paramdef><parameter>STRING</parameter>,
+<parameter>STRING</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+encode a string in a codeset
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRING <function>convertcode</function></funcdef>
+<paramdef><parameter>STRING</parameter>,
+<parameter>STRING</parameter>,
+<parameter>STRING</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+convert string from one codeset to another
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>VOID <function>debug</function></funcdef>
+<paramdef><parameter>BOOLEAN</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+set interperter debug mode
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRING <function>pvalue</function></funcdef>
+<paramdef><parameter>ANY</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+dump information about a pvalue
+</para>
+</glossdef></glossentry>
+
 </glosslist>
 
 <para>
@@ -5238,40 +4643,208 @@ extract system or user property.  Function available after v3.0.5.
 person or family into <acronym>RAM</acronym> memory, and to unlock a person or family
 from <acronym>RAM</acronym> memory, respectively.
 
-
 </para>
 
-
-
 <para>
-
 <function>Database</function> returns the name of the current database, useful
 in titling reports. <function>program</function> returns the
 name of the current report program. <function>Version</function> returns the
 version of the running <application>LifeLines</application> program, eg, <literal>&llversion;</literal>.
-
-
 </para>
 
-
-
 <para>
-
 <function>System</function> executes its string argument as a
 <acronym>UNIX</acronym> (or <acronym>MS-Windows</acronym> as appropriate) shell
 command, by invoking the system shell. This will not occur if the user has
 chosen to disallow report system calls (via the DenySystemCalls user option).
-
 </para>
 
 <para>
+The <function>heapused</function> function returnes the amount of system heap
+that is in use at the time.  This is implemented only on windows.
+</para>
 
+<para>
 The <function>getproperty</function> function extracts system or user
 properties.  Properties are named group.subgroup.property,
 group.property or even property.  The keys are available at the moment can 
 be found in the ll-userguide under System and User Properties.
 </para>
+
+<para>
+The <function>setlocale</function> function sets the locale and returns
+the previous setting of locale.
+</para>
+
+<para>
+The <function>bytecode</function> function converts the supplied string
+with escape codes to the current codeset, or to the codeset specified by the
+optional second parameter if specified.  A escaped code is a dollar sign ($)
+followed by 2 hex characters, e.g. $C1.
+</para>
+
+<para>
+The <function>convertcode</function> function converts a string to another
+codeset.  In the two argument form, the second argument is the destination
+codeset, and the source codeset is the internal codeset.  In the 3 argument
+form, the second argument is the source codeset and the third argument is the
+destination codeset.
+</para>
+
+<para>
+The <function>debug</function> function turns on or off programming debugging.
+When enabled gobs of information is printed as a 
+<application>LifeLines</application> program is run.  This can be useful
+to figure out why a program is not behaving as expected.
+</para>
+
+<para>
+The <function>pvalue</function> function returns a string that represents
+the contents of a variable in the interpreter.  This is present for debug
+purposes.
+</para>
+
 </sect1>
+
+<sect1>
+
+<title>
+Deprecated Functions
+</title>
+
+<para>
+The functionality of the following three functions,
+<function>getindimsg</function>,
+<function>getintmsg</function> and
+<function>getstrmsg</function>
+is now available using the optional parameter of
+<function>getindi</function>,
+<function>getint</function> and
+<function>getstr</function>.
+These functions should no longer be used as they will be removed from a future
+version of <application>Lifelines</application>.
+</para>
+
+<glosslist>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>VOID <function>getindimsg</function></funcdef>
+<paramdef><parameter>INDI_V</parameter>,
+<parameter><replaceable>STRING</replaceable></parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+identify person through user interface
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>VOID <function>getintmsg</function></funcdef>
+<paramdef><parameter>INT_V</parameter>,
+<parameter><replaceable>STRING</replaceable></parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+get integer through user interface
+</para>
+</glossdef></glossentry>
+
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>VOID <function>getstrmsg</function></funcdef>
+<paramdef><parameter>STRING_V</parameter>,
+<parameter><replaceable>STRING</replaceable></parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+get string through user interface
+</para>
+</glossdef></glossentry>
+
+</glosslist>
+
+<para>
+Three functions are available for to generate <acronym>GEDCOM</acronym>
+format output to the report output file of all persons in the argument
+person set.  These functions do not in most cases generate consistant
+and usable output.  This can be done with a program, but it is 
+suggested that these routines are probably not what you really wanted.
+</para>
+<para>
+<function>Gengedcom</function> 
+output contains a person record for each person in the set,
+and all the family records that
+link at least two of the persons in the set together.
+This function is provided for backwards compatiblity. Source, Event and
+Other(X) record pointers are output unmodified, but none of their records
+are output - this yields an inconsistent output.
+</para>
+
+<para>
+<function>Gengedcomweak</function> 
+output does not contain Source, Event or Other(X) record pointers 
+or their records.
+<function>Gengedcomstrong</function> includes 
+the Source, Event and Other(X) record pointers and all top-level nodes
+referenced by them.
+</para>
+
+<glosslist>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>VOID <function>gengedcom</function></funcdef>
+<paramdef><parameter>SET</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+generate GEDCOM file from person set
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>VOID <function>gengedcomweak</function></funcdef>
+<paramdef><parameter>SET</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+generate GEDCOM file from person set
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>VOID <function>gengedcomstrong</function></funcdef>
+<paramdef><parameter>SET</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+generate GEDCOM file from person set
+</para>
+</glossdef></glossentry>
+</glosslist>
+
+<para>
+The function <function>free</function> does not work reliably, do not use it.
+Some of the functionality of it, deallocating space for structures like a
+list can be obtained by redeclaring the object.  list(a) not only
+declares a list, but if a was already a list, it will free all resources
+used by the list and create a new empty list.  This is not useful if the
+list in question is in parameter in a subroutine, as the reference to the list
+is released, but the caller still has access to the original list.
+</para>
+
+<glosslist>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>VOID <function>free</function></funcdef>
+<paramdef><parameter>ANY</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+free space associated with a variable
+</para>
+</glossdef></glossentry>
+
+</glosslist>
+
+</sect1>
+
 </chapter>
 </book>
 
