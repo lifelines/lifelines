@@ -877,9 +877,15 @@ prompt_add_child_check_save (NODE fam, NODE save)
 	}
 	if (save) {
 		if (keyflag)
-			sprintf(scratch, "%s%s (%s)", _(qSiscnew),
-				 indi_to_name(save, 56),
-				 rmvat(nxref(save))+1);
+			if(getoptint("DisplayKeyTags", 0) > 0) {
+				sprintf(scratch, "%s%s (i%s)", _(qSiscnew),
+				 	indi_to_name(save, 56),
+				 	rmvat(nxref(save))+1);
+			} else {
+				sprintf(scratch, "%s%s (%s)", _(qSiscnew),
+				 	indi_to_name(save, 56),
+				 	rmvat(nxref(save))+1);
+			}
 		else
 			sprintf(scratch, "%s%s", _(qSiscnew),
 				 indi_to_name(save, 56));
