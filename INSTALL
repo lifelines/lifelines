@@ -1,10 +1,23 @@
-LifeLines Source Release, Version 3.0.7
+LifeLines Source Release, Version 3.0.9post
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
-*****************
-UNIX installation
-*****************
+********************************
+Contents:
+1. General (UNIX) installation
+2. Platform specific notes
+ 2a) Microsoft Windows
+ 2b) cygwin
+ 2c) gcc 2.7.2.1
+ 2d) curses
+ 2e) Mac OS X
+********************************
+
+
+
+******************************
+1. General (UNIX) installation
+******************************
 
 
 This is the source distribution of the LifeLines system, a genealogy
@@ -39,10 +52,14 @@ and is extremely powerful.  You should only use this program under the
 expert guidance of a LifeLines developer.
 
 
-***********************
-MS-Windows installation
-***********************
+**************************
+2. Platform specific notes
+**************************
 
+
+*********************
+2a) Microsoft Windows
+*********************
 
 For installing the binary distribution on MS-Windows, refer to the
 file Install.LifeLines.Windows.txt included in that distribution
@@ -50,45 +67,63 @@ file Install.LifeLines.Windows.txt included in that distribution
 distributions).
 
 For compiling from source on MS-Windows, if using cygwin, refer to
-the UNIX notes above. If using MS Visual C++, you may use the
-project files included in the subdirectories beneath /win32/msvc6
-(these are in fact used to generate the binaries in the MS-Windows
+the General (UNIX) instruction above (and see also the cygwin note
+below). If using MS Visual C++, you may use the project files
+included in the subdirectories beneath /win32/msvc6 (which are
+currently used by Perry to generate the binaries in the MS-Windows
 binary distribution).
 
 
-***********************
-Platform specific notes
-***********************
-
-
-* Cygwin
+**********
+2b) Cygwin
+**********
 
 Cygwin is a UNIX environment for MS-Windows. 
-(http://sources.redhat.com/cygwin)
+    http://sources.redhat.com/cygwin
 The lines around the boxes in the lifelines curses GUI use OEM
 box characters, and so only display correctly with this setting:
     export CYGWIN=codepage:oem
 This of course affects the console code page. If all your data is
 ASCII, this solution may work fine for you. Otherwise, you may
 invoke llines with the -z switch to suppress curses graphics, and
-use primitive ASCII graphics. This is ugly, but usable -- we
-welcome suggestions.
+use primitive ASCII graphics. This is not particularly attractive,
+but is usable. Suggestions are welcome.
+Note that the -z commandline switch was added after the 3.0.9 
+release.
 
 
-
-* gcc 2.7.2.1
+***************
+2c) gcc 2.7.2.1
+***************
 
 gcc 2.7.2.1 does not understand -Wreturn-type, so this
 must be removed from configure and from CFLAGS in
 interp/Makefile* files. This must be done before configuring,
 because it causes configure tests to fail spuriously.
+(Jan, 2002)
 
 
-* curses
+**********
+2d) curses
+**********
 
 Compiling with curses (lacking ncurses) on a BSDI 3.1 box,
 I had to add
-   -ltermcap
+    -ltermcap
 to the LIBS line in liflines/Makefile. (The symptom was
 "unknown symbol... _tputs.)
+However, I wound up core dumping at run-time, so I don't know
+what is going on. 
+(Perry, Jan, 2002)
+
+
+************
+2e) Mac OS X
+************
+
+Please see the following page about LifeLines on Mac OS X:
+    http://homepage.mac.com/shrubbery/LifeLines
+(which is also available via the Apple downloads site and Stepwise.)
+This page offers both precompiled binaries and instructions for
+compilation.
 
