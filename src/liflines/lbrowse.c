@@ -126,13 +126,23 @@ browse_list (NODE *pindi1,
 				message(_(qSlsttop));
 				break;
 			}
-			if (top >= VIEWABLE) {
-				cur -= VIEWABLE;
-				top -= VIEWABLE;
-			} else {
-				cur -= top;
-				top -= top;
+			tmp = VIEWABLE;
+			if (tmp > top) tmp = top;
+			cur -= tmp;
+			top -= tmp;
+			element_indiseq(seq, cur, &key, &name);
+			indi = key_to_indi(key);
+			break;
+		case CMD_KY_SHPGUP:
+			if (top <= 0) {
+				message(_(qSlsttop));
+				break;
 			}
+			tmp = (len)/10;
+			if (tmp < VIEWABLE*2) tmp = VIEWABLE*2;
+			if (tmp > top) tmp = top;
+			cur -= tmp;
+			top -= tmp;
 			element_indiseq(seq, cur, &key, &name);
 			indi = key_to_indi(key);
 			break;

@@ -1172,6 +1172,7 @@ static BOOLEAN
 handle_list_cmds (listdisp * ld, INT code)
 {
 	INT rows = ld->rectList.bottom - ld->rectList.top + 1;
+	INT tmp;
 	switch(code) {
 	case 'j': /* next item */
 	case CMD_KY_DN:
@@ -1205,13 +1206,17 @@ handle_list_cmds (listdisp * ld, INT code)
 		}
 		return TRUE; /* handled */
 	case CMD_KY_PGUP:
-		if (ld->top >= rows) {
-			ld->cur -= rows;
-			ld->top -= rows;
-		} else {
-			ld->cur -= ld->top;
-			ld->top -= ld->top;
-		}
+		tmp = rows;
+		if (tmp > ld->top) tmp = ld->top;
+		ld->cur -= tmp;
+		ld->top -= tmp;
+		return TRUE; /* handled */
+	case CMD_KY_SHPGUP:
+		tmp = (ld->listlen)/10;
+		if (tmp < rows*2) tmp = rows*2;
+		if (tmp > ld->top) tmp = ld->top;
+		ld->cur -= tmp;
+		ld->top -= tmp;
 		return TRUE; /* handled */
 	case '^': /* jump to top of list */
 	case CMD_KY_HOME:
@@ -2040,6 +2045,8 @@ translate_hdware_key (INT c)
 		, { KEY_DOWN, CMD_KY_DN }
 		, { KEY_NPAGE, CMD_KY_PGDN }
 		, { KEY_PPAGE, CMD_KY_PGUP }
+		, { KEY_SNEXT, CMD_KY_SHPGDN }
+		, { KEY_SPREVIOUS, CMD_KY_SHPGUP }
 		, { KEY_HOME, CMD_KY_HOME }
 		, { KEY_END, CMD_KY_END }
 		, { KEY_ENTER, CMD_KY_ENTER }

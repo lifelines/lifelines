@@ -12,6 +12,10 @@
 	Bugfix: S,E,X records ignored extra REFNs.
 	Added ExpandRefnsDuringEdit option.
 
+	* ChangeLog hdrs/menuitem.h liflines/lbrowse.c liflines/screen.c:
+
+	Added shift-pageup command to lists.
+
 2002-06-02 Perry Rapp <puddle@users.sourceforge.net>
 
 	* .linesrc ChangeLog lines.cfg gedlib/messages.c interp/interp.c:
