@@ -4,6 +4,13 @@
 	interp/intrpseq.c liflines/lbrowse.c liflines/scan.c:
 	Stored value type in indiseqs.
 
+	* gedlib/messages.c gedlib/misc.c hdrs/gedcom.h hdrs/liflines.h
+	liflines/ask.c liflines/browse.c liflines/delete.c
+	liflines/llinesi.h liflines/remove.c liflines/screen.c:
+	Add delete family to delete menu.
+	Split up remove_spouse & remove_child into interactive & silent parts.
+	Rename nod0_to_keynum -> node_to_keynum.
+
 2001-01-07 Petter Reinholdtsen <pere@td.org.uit.no>
 
 	* tools/dbverify.c: Fix typo.
