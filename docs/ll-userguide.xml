@@ -472,6 +472,15 @@ than the vt100 special characters.
 </para>
 
 <para>
+By default lifelines supports a traditional family concept, that is, each
+family has at most one father and one mother.  The -n flag relaxes this
+restriction.  However, not all the code in lifelines supports these
+relaxations.  For example, the default family browse screen will only display
+two parents, however by switching to one of the gedcom modes of displaying the
+family you can see all the data.
+</para>
+
+<para>
 
      If you don't give the name of a database on the command line,
      <application>LifeLines</application> will prompt you for
@@ -2077,7 +2086,7 @@ Remove the person as a child in an existing family.
 
 </para>
 
-</glossdef></glossentry><glossentry><glossterm><keycap>p</keycap><action>Pedigree mode.</action></glossterm><glossdef>
+</glossdef></glossentry><glossentry><glossterm><keycap>p</keycap> <action>Pedigree mode.</action></glossterm><glossdef>
 
 <para>
 
@@ -2350,7 +2359,8 @@ FAMILY BROWSE SCREEN
 
      This browse screen displays information about a family. The top
      panel shows basic information about the family. The bottom
-     panel shows the menu of available commands.
+     panel shows the menu of available commands.  If the database contains
+     more than two parents for this family only the first two are displayed.
 
 <screen>
 father: Thomas Trask WETMORE IV (1)
