@@ -989,11 +989,11 @@ Please choose an operation:
    a Add information to the database
    d Delete information from the database
    p Pick a report from list and run
-   r Generate reports from the database
+   r Generate report by entering report name
    t Modify character translation tables
    u Miscellaneous utilities
    x Handle source, event and other records
-   q Quit and return to UNIX
+   q Quit program
 </screen>
 
 
@@ -1376,7 +1376,7 @@ SCREEN EDITORS AND ENVIRONMENT VARIABLES
      <userinput><envar>LLDATABASES</envar>=<replaceable>.:/home/ttw4/LifeLines/Databases</replaceable></userinput>
      indicates that databases should be searched for in the current
      directory first, and if not found there, then searched for in:
-     <filename>/usr/ttw4/LifeLines/Databases</filename>
+     <filename>/home/ttw4/LifeLines/Databases</filename>
 
 </para>
 
@@ -1501,10 +1501,10 @@ BASICS OF BROWSING
      There are six browsing screens. The person and family screens
      concentrate on a single person and family, respectively. The
      list screen allows you to browse through a list of persons. The
-     person tandem screen shows two persons at once, and the family
-     tandem screen shows two families at once. The auxiliary screen
-     is used browsing any other type of records (e.g., events,
-     sources, notes).
+     two person browse screen shows two persons at once, and the
+     two family browse screen shows two families at once. The
+     auxiliary screen is used browsing any other type of records
+     (e.g., events, sources, notes).
 
 </para>
 
@@ -1529,13 +1529,14 @@ BASICS OF BROWSING
 </para>
 
 <para>
-     The tandem person screen has the same modes as the person screen.
+     The two person browse screen has the same modes as the person
+     screen.
 </para>
 
 <para>
-     The family screen and tandem family screen alike have normal mode
-     (showing a summary of vitals), GEDCOM mode, and expanded GEDCOM
-     mode.
+     The two family browse screen and tandem family screen alike have
+     normal mode (showing a summary of vitals), GEDCOM mode, and
+     expanded GEDCOM mode.
 </para>
 
 <para>
@@ -1647,9 +1648,9 @@ Example of using wildcard in browsing
      searches for all persons who match. There are three
      possibilities: no one matches; one person matches; or more
      than one person matches. In the first case
-     <application>LifeLines</application> writes: <screen>There is
-     no one in the database with that name.</screen> and leaves you
-     in the main menu.
+     <application>LifeLines</application> writes: <screen>There is no
+     one in the database with that name or key.</screen> and leaves
+     you in the main menu.
 
 </para>
 
@@ -1723,7 +1724,7 @@ ZIP IDENTIFYING A NEW PERSON
      <application>LifeLines</application> displays something like:
 
 <screen>
-Please choose from among these persons.
+Please choose from among these records.
   >Thomas Trask Wetmore, b. 1826, N.B. (42)
    Thomas Trask Wetmore IV, b. 1949, Conn. (1)
    Thomas Trask Wetmore III, b. 1925, Conn. (6)
@@ -1755,9 +1756,9 @@ Commands: j Move down k Move up i Select q Quit
 <para>
 
      With version 3.0.15, lists may also be navigated with the up
-     and down arrows, PageUp and PageDown keys, Home and End keys.
-     Shift-PageUp and Shift-PageDown move more than one page at a
-     time in a given direction. The keyboard equivalents are
+     and down arrows, PageUp and PageDown keys, Home and End keys, and
+     the Enter key. Shift-PageUp and Shift-PageDown move more than one
+     page at a time in a given direction. The keyboard equivalents are
      j=UpArrow, k=DownArrow, u=PageUp, d=PageDown, ^=Home, $=End,
      U=Shift-PageUp, D=Shift-PageDown, i=Enter.
 
@@ -1853,7 +1854,7 @@ person: Thomas Trask WETMORE Sr (25)
   spouse: Arleen M KEENEY, m. 1914, Conn. (75)
 _______________________________________________________________________
 Please choose an operation:             (pg 1/3)
-  e  Edit the person       g  Browse to family    p  Show pedigree
+  e  Edit the person       g  Browse to family    p  Pedigree mode
   f  Browse to father      u  Browse to parents   n  Create new person
   m  Browse to mother      b  Browse to persons   a  Create new family
   s  Browse to spouse/s    h  Add as spouse       x  Swap two families
@@ -2077,7 +2078,7 @@ Remove the person as a child in an existing family.
 
 </para>
 
-</glossdef></glossentry><glossentry><glossterm><keycap>p</keycap> <action>Show pedigree.</action></glossterm><glossdef>
+</glossdef></glossentry><glossentry><glossterm><keycap>p</keycap><action>Pedigree mode.</action></glossterm><glossdef>
 
 <para>
 
@@ -2097,7 +2098,7 @@ Remove the person as a child in an existing family.
 
 </para>
 
-</glossdef></glossentry><glossentry><glossterm><keycap>t</keycap> <action>Enter tandem mode.</action></glossterm><glossdef>
+</glossdef></glossentry><glossentry><glossterm><keycap>tt</keycap> <action>Enter tandem mode.</action></glossterm><glossdef>
 
 <para>
 
@@ -2218,9 +2219,9 @@ LifeLines -- List Browse Screen
 <para>
 
      With version 3.0.15, lists may also be navigated with the up
-     and down arrows, PageUp and PageDown keys, Home and End keys.
-     Shift-PageUp and Shift-PageDown move more than one page at a
-     time in a given direction. The keyboard equivalents are
+     and down arrows, PageUp and PageDown keys, Home and End keys, and
+     the Enter key. Shift-PageUp and Shift-PageDown move more than one
+     page at a time in a given direction. The keyboard equivalents are
      j=UpArrow, k=DownArrow, u=PageUp, d=PageDown, ^=Home, $=End,
      U=Shift-PageUp, D=Shift-PageDown, i=Enter.
 
@@ -3669,7 +3670,7 @@ Errors generated during a GEDCOM import are logged to a file, by default named e
 <para>
 
      Each FAM record must have an XREF value beginning with the letter F.
-     (The XREF is the letters between "0" and "INDI".)
+     (The XREF is the letters between "0" and "FAM".)
 
 </para>
 
@@ -3705,7 +3706,7 @@ Errors generated during a GEDCOM import are logged to a file, by default named e
 <para>
 
      Each FAM record must have an XREF value.
-     (The XREF is the letters between "0" and "INDI".)
+     (The XREF is the letters between "0" and "FAM".)
 
 </para>
 
@@ -4161,9 +4162,9 @@ enter key or refn:
      to give this record a symbolic name you can use when you want
      to refer to it from other records. See the section on using
      <structfield>REFN</structfield> values. You may adjust the
-     other template via the OTHRREC user option (either at the
-     database level, via the user options, or globally, via the
-     configuration file).
+     other template via the OTHR user option (either at the database
+     level, via the user options, or globally, via the configuration
+     file).
 
 </para>
 
