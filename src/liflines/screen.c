@@ -59,7 +59,7 @@
 
 WINDOW *choose_win();
 extern BOOLEAN alldone, progrunning;
-extern STRING version, betaversion, empstr, empstr71, readpath;
+extern STRING version, empstr, empstr71, readpath;
 extern STRING abverr, uoperr;
 STRING mtitle = (STRING) "LifeLines %s - Genealogical Database and Programming System";
 STRING cright = (STRING) "Copyright(c) 1991 to 1996, by T. T. Wetmore IV";
@@ -209,20 +209,13 @@ paint_main_screen(void)
 {
 	WINDOW *win = main_win;
 	INT row;
-#ifdef BETA
-	char buffer[100];
-#endif
+
 	werase(win);
 	BOX(win, 0, 0);
 	show_horz_line(win, 4, 0, ll_cols);
 	show_horz_line(win, ll_lines-3, 0, ll_cols);
 	wmove(win, 1, 2);
-#ifdef BETA
-	sprintf(buffer, "%s%s", version, betaversion);
-	wprintw(win, mtitle, buffer);
-#else
 	wprintw(win, mtitle, version);
-#endif
 	mvwaddstr(win, 2, 4, cright);
 	mvwprintw(win, 3, 4, "Current Database - %s", readpath);
 	if (readonly)

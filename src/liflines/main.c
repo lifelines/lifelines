@@ -44,8 +44,7 @@
 #include "liflines.h"
 #include "arch.h"
 
-/* TO DO - needs adding to autoconf */
-#ifdef WIN32
+#ifdef HAVE_GETOPT_H
 #include "getopt.h"
 #endif
 
@@ -97,11 +96,6 @@ BOOLEAN showusage = FALSE;	/* show usage */
 STRING btreepath;		/* database path given by user */
 STRING readpath;		/* database path used to open */
 STRING version = (STRING) "3.0.6-dev";
-#ifdef WIN32
-STRING betaversion = (STRING) "-0.4";
-#else
-STRING betaversion = (STRING) "-0.4Win32j";
-#endif
 extern int opterr;
 extern BTREE BTR;
 char *getenv();
