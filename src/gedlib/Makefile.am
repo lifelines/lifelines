@@ -12,6 +12,7 @@ libgedcom_a_SOURCES = brwslist.c charmaps.c choose.c editmap.c \
 	property.c
 
 INCLUDES=-I$(srcdir)/.. -I$(srcdir)/../hdrs
+EXTRA_DIST = gedcomi.h
 
 
 # since we're not doing dependencies automagically...

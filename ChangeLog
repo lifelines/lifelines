@@ -1,4 +1,16 @@
-2001-01-02  Marc Nozell  <nozell@dl360r5.ispworks.com>
+2001-01-02  Marc Nozell  <marc@nozell.com>
+
+	* stdlib/Makefile.am: Added stdlibi.h
+
+	* btree/Makefile.am: Added btreei.h
+	
+	* liflines/Makefile.am: Added llinesi.h
+	
+	* interp/Makefile.am: added interpi.h
+	
+	* hdrs/Makefile.am: Added gengedc.h
+	
+	* gedlib/Makefile.am: Added gedcomi.h
 
 	* hdrs/Makefile.am: Removed interpi.h (its in interp/)
 

@@ -14,7 +14,7 @@ AM_YFLAGS = -d
 # The CFLAGS below is gcc specific.  Sorry. -marc
 CFLAGS = -g -W -Wall -Wcast-align -Wmissing-declarations -Wmissing-prototypes -Wreturn-type -Wstrict-prototypes -pedantic -g
 
-EXTRA_DIST = yacc.h
+EXTRA_DIST = yacc.h interpi.h
 
 lex.o: yacc.h
 

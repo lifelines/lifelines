@@ -16,6 +16,8 @@ llines_LDADD = ../interp/libinterp.a ../gedlib/libgedcom.a \
 
 INCLUDES=-I$(srcdir)/../hdrs
 
+EXTRA_DIST = llinesi.h
+
 
 # these dependencies are so that building parts ('make btedit' or 'make
 # lines') will work

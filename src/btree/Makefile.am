@@ -16,6 +16,7 @@ libbtree_a_SOURCES = \
 	btreei.h
 
 INCLUDES=-I$(srcdir)/.. -I$(srcdir)/../hdrs
+EXTRA_DIST = btreei.h
 
 # since we're not doing dependencies automagically...
 addkey.o: ../hdrs/standard.h ../hdrs/mystring.h ../hdrs/btree.h

@@ -10,6 +10,9 @@ libstdlib_a_SOURCES = assert.c dirs.c double.c memalloc.c path.c \
 
 INCLUDES=-I$(srcdir)/.. -I$(srcdir)/../hdrs
 
+EXTRA_DIST = stdlibi.h
+
+
 # since we're not doing dependencies automagically...
 assert.o: ../hdrs/standard.h
 assert.o: ../hdrs/mystring.h
