@@ -1,6 +1,10 @@
 2000-12-24 Perry Rapp <puddle@users.sourceforge.net>
 
-	* getdlib/names.c interp/builtin.c:
+	* gedlib/gstrings.c gedlib/init.c gedlib/names.c
+	gedlib/refns.c hdrs/gedcom.h hdrs/llstdlib.h hdrs/screen.h
+	hdrs/standard.h interp/builtin.c interp/pvalue.c
+	liflines/main.c liflines/screen.c stdlib/assert.c
+	stdlib/environ.c stdlib/path.c win32/mycurses.c:
 	Moved getasurname from builtin.c to names.c.
 	Misc. cleanup to get rid of compiler warnings.
 	Revised init_screen to return instead of exiting.
