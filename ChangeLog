@@ -1,3 +1,8 @@
+2003-05-28 Steve Dum
+       * ChangeLog docs/ll-devguide.html docs/ll-devguide.xml
+
+       Update devguide and flush it out a little
+
 2003-05-26 Steve Dum
        * ChangeLog build/rpm/lifelines.spec
 
