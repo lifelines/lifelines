@@ -1,5 +1,7 @@
 2000-11-11 Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* stdlib/signals.c: Write signal name when asking to dump core.
+
 	* interp/eval.c: Cleanup. Call prog_error() directly with vararg
 	argument instead of first preparing a string.
 	

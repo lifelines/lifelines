@@ -123,7 +123,8 @@ void
 ll_abort(int sig)
 {
 	int c;
-	fprintf(stdout,"\nAborting on signal %d\nCore dump? [y/n]",sig);
+	fprintf(stdout,"\nAborting on signal %d:%s\nCore dump? [y/n]",
+		sig, sig_msgs[sig]);
 	fflush(stdout);
 	c = getchar();
 	putchar(c);
