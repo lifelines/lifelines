@@ -16,6 +16,10 @@
 
 	Fix argument type specified for fornotes in report manual.
 
+	* ChangeLog reports/st/st_db.li
+
+	Add fornotes loop to st_db.li.
+
 2005-01-31 lifelines beta 3.0.41 RELEASE
 
 2005-01-31 Perry Rapp

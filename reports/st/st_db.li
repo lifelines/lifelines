@@ -1,13 +1,13 @@
 /*
  * @progname       st_db.li
- * @version        1.25 [of 2005-01-25]
+ * @version        1.26 [of 2005-02-01]
  * @author         Perry Rapp
  * @category       self-test
  * @output         none
  * @description
  *
  * Exercise some database functions.
- * Dumps some of each type of record, followed by a gengedcomstrong.
+ * Dumps some of each type of record, followed by all 3 gengedcoms.
  *
  */
 
@@ -285,6 +285,9 @@ proc exerciseIndi(indi)
 	call dumpnode("birth", birth(indi))
 	call dumpnodetr("death", death(indi))
 	unlock(indi)
+	fornotes(inode(indi), notetext) { /* exercise fornotes */
+		set(currentext, notetext)
+	}
 }
 
 proc dumpnode(desc, node)
