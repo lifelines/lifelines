@@ -71,14 +71,14 @@ extern INT winx, winy;
 #ifdef FINNISH
 # ifdef FINNISHOPTION
 int opt_finnish  = FALSE;/* Finnish Language sorting order if TRUE */
-static STRING usage = (STRING) "lines [-akrwfmntcF] [database]   # Use -F for Finnish database";
+static STRING usage = (STRING) "lines [-akrwfmntcuF] [database]   # Use -F for Finnish database";
 # else
 int opt_finnish  = TRUE;/* Finnish Language sorting order if TRUE */
-static STRING usage = (STRING) "lines [-akrwfmntc] [database]   # Finnish database";
+static STRING usage = (STRING) "lines [-akrwfmntcu] [database]   # Finnish database";
 # endif
 #else
 int opt_finnish  = FALSE;/* Finnish Language sorting order id disabled*/
-static STRING usage = (STRING) "lines [-akrwfmntc] [database]";
+static STRING usage = (STRING) "lines [-akrwfmntcu] [database]";
 #endif
 
 BOOLEAN opt_nocb  = FALSE;	/* no cb. data is displayed if TRUE */
