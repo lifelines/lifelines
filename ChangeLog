@@ -15,6 +15,11 @@
 
 	Cosmetic cleanup.
 
+	* ChangeLog configure.in gedlib/messages.c gedlib/node.c
+	hdrs/gedcom.h liflines/import.c liflines/main.c:
+
+	Bugfix for import (UTF-8 BOM marker was causing import to fail).
+
 2002-06-05 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog Makefile.am configure.in

@@ -78,6 +78,8 @@ static NODE alloc_node(void);
 static void assign_record(RECORD rec, char ntype, INT keynum);
 static BOOLEAN buffer_to_line (STRING p, INT *plev, STRING *pxref
 	, STRING *ptag, STRING *pval, STRING *pmsg);
+static NODE do_first_fp_to_node(FILE *fp, BOOLEAN list, TRANTABLE tt,
+	STRING *pmsg,  BOOLEAN *peof);
 static STRING fixup (STRING str);
 static STRING fixtag (STRING tag);
 static void load_record_wh(RECORD rec, char * whptr, INT whlen);
@@ -507,11 +509,7 @@ file_to_node (STRING fname, TRANTABLE tt, STRING *pmsg, BOOLEAN *pemp)
 		*pmsg = scratch;
 		return NULL;
 	}
-	if (!check_file_for_unicode(fp)) {
-		*pmsg = _(qSunsupuni);
-		return NULL;
-	}
-	node = first_fp_to_node(fp, TRUE, tt, pmsg, pemp);
+	node = convert_first_fp_to_node(fp, TRUE, tt, pmsg, pemp);
 	fclose(fp);
 	return node;
 }
@@ -523,7 +521,7 @@ static STRING val;
 static BOOLEAN lahead = FALSE;
 static BOOLEAN ateof = FALSE;
 /*================================================================
- * first_fp_to_node -- Convert first GEDCOM record in file to tree
+ * convert_first_fp_to_node -- Convert first GEDCOM record in file to tree
  *
  * FILE *fp:      [in] file that holds GEDCOM record/s
  * BOOLEAN list:  [in] can be list at level 0?
@@ -532,7 +530,27 @@ static BOOLEAN ateof = FALSE;
  * BOOLEAN *peof: [out] set true if file is at end of file
  *==============================================================*/
 NODE
-first_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
+convert_first_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
+	STRING *pmsg,  BOOLEAN *peof)
+{
+	if (!check_file_for_unicode(fp)) {
+		*pmsg = _(qSunsupuni);
+		return NULL;
+	}
+	return do_first_fp_to_node(fp, list, tt, pmsg, peof);
+}
+/*================================================================
+ * do_first_fp_to_node -- Convert first GEDCOM record in file to tree
+ *
+ *  fp:    [IN]  file that holds GEDCOM record/s
+ *  list:  [IN]  can be list at level 0?
+ *  tt:    [IN]  character translation table
+ *  *pmsg: [OUT] possible error message
+ *  *peof: [OUT] set true if file is at end of file
+ * Called after unicode header processed
+ *==============================================================*/
+static NODE
+do_first_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
 	STRING *pmsg,  BOOLEAN *peof)
 {
 	INT rc;
@@ -588,7 +606,6 @@ next_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
 	*peof = FALSE;
 	if (ateof) {
 		ateof = *peof = TRUE;
-		*pmsg = _(qSfileof);
 		lahead = FALSE;
 		return NULL;
 	}
@@ -596,7 +613,6 @@ next_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
 		rc = file_to_line(fp, tt, &lev, &xref, &tag, &val, pmsg);
 		if (rc == DONE) {
 			ateof = *peof = TRUE;
-			*pmsg = _(qSfileof);
 			return NULL;
 		} else if (rc == ERROR)
 			return NULL;

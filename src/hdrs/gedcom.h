@@ -258,7 +258,7 @@ NODE file_to_node(STRING, TRANTABLE, STRING*, BOOLEAN*);
 INT file_to_line(FILE*, TRANTABLE, INT*, STRING*, STRING*, STRING*, STRING*);
 NODE find_node(NODE, STRING, STRING, NODE*);
 NODE find_tag(NODE, STRING);
-NODE first_fp_to_node(FILE*, BOOLEAN, TRANTABLE, STRING*, BOOLEAN*);
+NODE convert_first_fp_to_node(FILE*, BOOLEAN, TRANTABLE, STRING*, BOOLEAN*);
 void free_name_list(LIST list);
 void free_rec(RECORD);
 void free_node(NODE);

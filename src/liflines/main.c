@@ -311,7 +311,7 @@ main (INT argc, char **argv)
 	if (c <= 0) {
 		/* ask_for_db_filename returns static buffer, we save it below */
 		dbrequested = ask_for_db_filename(_(qSidldir), _(qSidldrp), dbdir);
-		if (ISNULL(dbrequested)) {
+		if (dbrequested && eqstr(dbrequested, "?")) {
 			INT n=0;
 			LIST dblist = get_dblist(dbdir, &n);
 			if (dblist) {
@@ -323,6 +323,10 @@ main (INT argc, char **argv)
 				}
 				release_dblist(dblist);
 			}
+			dbrequested = NULL;
+			llwprintf(_(qSiddbse));
+			goto finish;
+		} else if (ISNULL(dbrequested)) {
 			dbrequested = NULL;
 			llwprintf(_(qSiddbse));
 			goto finish;

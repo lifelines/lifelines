@@ -160,7 +160,7 @@ import_from_file (void)
 	wfield(14, 1, "     0 Others");
 
 /* Add records to database */
-	node = first_fp_to_node(fp, FALSE, tt, &msg, &emp);
+	node = convert_first_fp_to_node(fp, FALSE, tt, &msg, &emp);
 	while (node) {
 		if (!(conv = node_to_node(node, &type))) {
 			free_nodes(node);
@@ -178,6 +178,9 @@ import_from_file (void)
 		restore_record(conv, type, num);
 		free_nodes(node);
 		node = next_fp_to_node(fp, FALSE, tt, &msg, &emp);
+	}
+	if (msg) {
+		msg_error(msg);
 	}
 	if(gd_reuse && ((totkeys - totused) > 0)) {
 	    wfield(15, 0, _(qSdbdelk));
