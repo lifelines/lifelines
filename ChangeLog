@@ -1,5 +1,8 @@
 2001-04-16 Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* Makefile.am: The ANNOUNCEMENT file is removed. Track change in
+	makefile.
+	
 	* docs/lifelines.sgml: Correct SGML tags in getproperty
 	description.
 
