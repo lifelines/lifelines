@@ -230,7 +230,7 @@ set_cmd_options (TABLE opts)
 {
 	ASSERT(opts);
 	free_optable(&f_cmd);
-	f_cmd = create_table_old2(FREEBOTH);
+	f_cmd = create_table();
 	copy_table(opts, f_cmd, FREEBOTH);
 	send_notifications();
 }
@@ -243,7 +243,7 @@ set_db_options (TABLE opts)
 {
 	ASSERT(opts);
 	free_optable(&f_db);
-	f_db = create_table_old2(FREEBOTH);
+	f_db = create_table();
 	copy_table(opts, f_db, FREEBOTH);
 	send_notifications();
 }
@@ -255,7 +255,7 @@ void
 get_db_options (TABLE opts)
 {
 	if (!f_db)
-		f_db = create_table_old2(FREEBOTH);
+		f_db = create_table();
 	copy_table(f_db, opts, FREEBOTH);
 }
 /*==========================================
@@ -362,7 +362,7 @@ void
 setoptstr_fallback (STRING optname, STRING newval)
 {
 	if (!f_fallback)
-		f_fallback = create_table_old2(FREEBOTH);
+		f_fallback = create_table();
 	replace_table_str(f_fallback, strsave(optname), newval, FREEBOTH);
 	send_notifications();
 }

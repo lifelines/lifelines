@@ -103,7 +103,7 @@ init_valtab_from_file (STRING fname, TABLE tab, XLAT ttm, INT sep, STRING *pmsg)
 /*========================================================
  * init_valtab_from_string -- Init value table from string
  *  str:     [IN]  string holding all value/values
- *  tab:     [I/O] table in which to put key/value pairs (a FREEBOTH table)
+ *  tab:     [I/O] table in which to put key/value pairs (a string table)
  *  sep:     [IN]  separator between name & value
  *  pmsg:    [OUT] error message (set if returns FALSE)
  *            pmsg points to static buffer
@@ -156,10 +156,7 @@ init_valtab_from_string (CNSTRING str, TABLE tab, INT sep, STRING *pmsg)
 			}
 		}
 		*(q - 1) = 0;
-#ifdef DEBUG
-	llwprintf("val, tag = %s %s\n", val, tag);
-#endif
-		insert_table_str(tab, strsave(tag), strsave(val));
+		table_insert_string(tab, tag, val);
 		if (c == 0) break;
 	}
 

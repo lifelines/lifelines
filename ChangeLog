@@ -1,3 +1,13 @@
+2005-02-14 Perry Rapp
+
+	* ChangeLog src/gedlib/editvtab.c src/gedlib/indiseq.c
+	src/gedlib/init.c src/gedlib/lloptions.c src/gedlib/node.c
+	src/gedlib/valtable.c src/liflines/import.c src/liflines/llexec.c
+	src/liflines/main.c src/liflines/screen.c src/liflines/valgdcom.c
+	src/stdlib/table.c
+
+	Convert more occurrences of create_table_old to create_table.
+
 2005-02-13 lifelines beta 3.0.44 RELEASE
 
 2005-02-13 Perry Rapp

@@ -429,7 +429,12 @@ void
 replace_table_str (TABLE tab, STRING key, STRING str, INT whattofree)
 {
 	UNION uval;
-	ASSERT(tab->whattofree != -2); /* not implemented for generic tables */
+	if (tab->whattofree == -2) {
+		delete_table_element(tab, key);
+		table_insert_string(tab, key, str);
+		return;
+	}
+
 	uval.w = str;
 	if (tab->valtype == TB_NULL)
 		tab->valtype = TB_STR;
@@ -889,7 +894,7 @@ copy_table (const TABLE src, TABLE dest, INT whattodup)
 	ASSERT(get_table_count(dest)==0);
 	if (get_table_count(src)==0)
 		return;
-	ASSERT(!dupval || src->valtype==TB_STR); /* can only dup strings */
+	ASSERT(!dupval || src->valtype==TB_STR || src->valtype==TB_GENERIC); /* can only dup strings */
 
 	dest->valtype = src->valtype;
 	if (src->maxhash == dest->maxhash)
@@ -907,6 +912,8 @@ copy_table (const TABLE src, TABLE dest, INT whattodup)
 			if (src->maxhash == dest->maxhash) {
 				/* copy src item directly into dest (skip hashing) */
 				ENTRY entry = new_entry();
+				if (dest->whattofree == -2)
+					key = strsave(key);
 				entry->ekey = key;
 				copy_generic_value(&entry->generic, &ent->generic);
 				entry->uval = uval;

@@ -1503,7 +1503,7 @@ ancestor_indiseq (INDISEQ seq)
 	UNION uval;
 	if (!seq) return NULL;
 		/* table of people already added */
-	tab = create_table_old2(DONTFREE);
+	tab = create_table();
 		/* paired processing list - see comments in descendant_indiseq code */
 	anclist = create_list();
 	genlist = create_list();
@@ -1617,7 +1617,7 @@ spouse_indiseq (INDISEQ seq)
 	NODE indi;
 	INT num1;
 	if (!seq) return NULL;
-	tab = create_table_old2(DONTFREE);
+	tab = create_table();
 	sps = create_indiseq_impl(IValtype(seq), IValfnctbl(seq));
 	FORINDISEQ(seq, el, num)
 		indi = key_to_indi(skey(el));

@@ -301,10 +301,10 @@ BOOLEAN
 init_lifelines_db (void)
 {
 	STRING emsg;
-	TABLE dbopts = create_table_old2(FREEBOTH);
+	TABLE dbopts = create_table();
 
 	tagtable = create_table(); /* values are same as keys */
-	placabbvs = create_table_old2(FREEBOTH);
+	placabbvs = create_table();
 
 	init_valtab_from_rec("VPLAC", placabbvs, ':', &emsg);
 	init_valtab_from_rec("VUOPT", dbopts, '=', &emsg);
@@ -528,14 +528,14 @@ create_database (STRING dbpath)
 	/* first test that newdb props are legal */
 	STRING props = getoptstr("NewDbProps", 0);
 	if (props && props[0]) {
-		TABLE dbopts = create_table_old2(FREEBOTH);
+		TABLE dbopts = create_table();
 		STRING msg=0;
 		if (!init_valtab_from_string(props, dbopts, '=', &msg)) {
 			bterrno = BTERR_BADPROPS;
 			destroy_table(dbopts);
 			return FALSE;
 		}
-		remove_table(dbopts, FREEBOTH);
+		destroy_table(dbopts);
 	}
 
 	/* tentatively copy paths into gedlib module versions */
@@ -678,7 +678,7 @@ update_useropts (VPTR uparm)
 static void
 update_db_options (void)
 {
-	TABLE opttab = create_table_old2(FREEBOTH);
+	TABLE opttab = create_table();
 	STRING str=0;
 	get_db_options(opttab);
 
@@ -687,7 +687,7 @@ update_db_options (void)
 	if (!int_codeset)
 		strupdate(&int_codeset, "");
 	if (!eqstr_ex(int_codeset, str)) {
-		strupdate(&int_codeset, str);
+		strupdate(&int_codeset, strsave(str));
 		uu8 = is_codeset_utf8(int_codeset);
 		/* always translate to internal codeset */
 #ifdef ENABLE_NLS
