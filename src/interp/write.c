@@ -55,6 +55,11 @@ __createnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (*eflg) return NULL;
 	val = (STRING) evaluate(inext((PNODE)iargs(node)), stab, eflg);
 	if (*eflg) return NULL;
+/*
+  TODO: 2002.02.19, Perry -- a NODE is *not* a PVALUE
+  So this looks quite wrong -- I think it should use
+  create_pvalue_from_node
+ */
 	return (VPTR) create_node(NULL, tag, val, NULL);
 }
 /*=======================================
