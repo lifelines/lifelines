@@ -1,51 +1,27 @@
 LifeLines installation for Windows
-  Edited: 2002/09/22 by Perry Rapp
+  Edited: 2002/11/11 by Perry Rapp
 
 1)
-Choose & create your directories, eg:
-\Program Files\LifeLines (for the program)
-\My Documents\LifeLines\Archives (for ged files)
-\My Documents\LifeLines\Databases (for databases)
-\My Documents\LifeLines\Programs (for report programs)
-\My Documents\LifeLines\Outputs (for report outputs)
-\My Documents\LifeLines\ttref (for translation tables)
+Extract the lifelines zip, eg, to c:\
+which should result in all the lifelines programs & files
+appearing under c:\lifelines
 
-2a)
-Place the LifeLines program (Lines.exe) & 
- configuration file (lines.cfg) into the
- program directory (eg, \Program Files\LifeLines)
-2b)
-Install the gettext & iconv dlls in the same location.
-You can get the set which I built from
-  http://sourceforge.net/projects/gettext/
-Rename the libintl.dll to gettext.dll, and put all three dlls
-(gettext.dll, iconv.dll, and libcharset.dll) into the directory
-with your Lines.exe.
+2)
+If your root lifelines directory is not c:\lifelines, edit lines.cfg
+and adjust the variable %llroot% accordingly.
+Also, make any necessary changes to other directory variables in the
+file, if they are not correct for your setup.
 
 3)
-Unzip the translation files under the program directory
-(eg, you get \Program Files\LifeLines\sv\LC_MESSAGES\lifelines.mo)
+Set your codeset correctly; for U.S. English Windows, set GuiCodeset to be CP437,
+and the EditorCodeset, if you're using notepad.exe (the default), should be
+CP1252.
 
-4a)
-Edit lines.cfg and adjust your codepages as appropriate
-(Edit the entries GuiCodeset, EditorCodeset, ReportCodeset, and GedcomCodset)
-For U.S. Windows, the GuiCodeset should be CP437, and the Editor Codeset,
-if you're using notepad.exe (the default), should be CP1252.
-
-4b)
-Enable the UTF-8 setting in your lines.cfg
-(Edit the entry NewDbProps)
+4)
+If you want to use UTF-8 internally, enable the UTF-8 setting in your lines.cfg
+(Edit the entry NewDbProps). This is still under development!
 
 5)
-Optionally install any translation tables (eg, to allow you to enter
-letters that your editor will not create). Translation tables are still
-undergoing development, and more instructions will be added later.
-
-6)
-Edit the configuration file (lines.cfg) to reflect your
- directory choices from step (1)
-
-7)
 In a windows explorer window (eg, right-click on 
  My Computer and choose Explore), browse to your program
  directory of step (2) (eg, \Program Files\LifeLines),
@@ -55,7 +31,7 @@ In a windows explorer window (eg, right-click on
  right-click and choose Paste Shortcut. This is your
  desktop shortcut to run the program.
 
-8)
+6)
 Right-click on the new shortcut icon on your desktop,
 and choose Rename. Adjust the name as you like
 (eg, to LifeLines).

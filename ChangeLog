@@ -19,6 +19,10 @@
 
 	Creating release 3.0.22.
 
+	* ChangeLog lines.cfg docs/Install.LifeLines.Windows.txt:
+
+	Revising default MS-Windows directory layout & documentation.
+
 2002-11-08 Perry Rapp
 
 	* ChangeLog src/interp/builtin.c src/liflines/brwsmenu.c
