@@ -231,7 +231,7 @@ main (INT argc, char **argv)
 				parse_arg(optarg, &optname, &optval);
 				if (optname && optval) {
 					if (!exargs) {
-						exargs = create_table_();
+						exargs = create_table();
 					}
 					table_insert_string(exargs, optname, optval);
 				}
