@@ -73,6 +73,11 @@ static struct tag_vtable vtable_for_errorinfo = {
 	, &generic_get_type_name
 };
 
+/*********************************************
+ * local & exported function definitions
+ * body of module
+ *********************************************/
+
 /*========================================
  * init_errorinfo_vtable -- set this errorinfo's vtable
  *======================================*/

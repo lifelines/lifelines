@@ -46,6 +46,10 @@
 
 	New function xlat_shutdown to fix some xlat leaks.
 
+	* ChangeLog src/gedlib/lldatabase.c src/gedlib/xreffile.c
+
+	Fix some leaks in closexref.
+
 2005-01-26, Stephen Dum
         * ChangeLog docs/ll-reportmanual.xml docs/ll-userguide.sv.xml
 	docs/ll-userguide.xml

@@ -49,7 +49,11 @@ extern BTREE BTR;
  * nixrefs==2 means there is one deleted INDI key (ixrefs[1])
  *=================================================================*/
 
-/*==================================== 
+/*********************************************
+ * local types
+ *********************************************/
+
+ /*==================================== 
  * deleteset -- set of deleted records
  *  NB: storage order is IFESX
  *  whereas canonical order is IFSEX
@@ -64,14 +68,24 @@ struct deleteset_s
 typedef struct deleteset_s *DELETESET;
 
 
-static BOOLEAN readxrefs(void);
-static void readrecs(DELETESET set);
-static STRING getxref(DELETESET set);
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+/* alphabetical */
 static void add_xref_to_set(INT key, DELETESET set);
+static void freexref(DELETESET set);
+static STRING getxref(DELETESET set);
 static void growxrefs(DELETESET set);
-static INT num_set(DELETESET set);
 static STRING newxref(STRING xrefp, BOOLEAN flag, DELETESET set);
+static INT num_set(DELETESET set);
+static void readrecs(DELETESET set);
+static BOOLEAN readxrefs(void);
 static INT xref_last(DELETESET set);
+
+/*********************************************
+ * local variables
+ *********************************************/
 
 /* INDI, FAM, EVEN, SOUR, other sets */
 static struct deleteset_s irecs, frecs, srecs, erecs, xrecs;
@@ -80,6 +94,11 @@ static FILE *xreffp=0;	/* open xref file pointer */
 static BOOLEAN xrefReadonly = FALSE;
 
 static INT maxkeynum=-1; /* cache value of largest key extant (-1 means not sure) */
+
+/*********************************************
+ * local & exported function definitions
+ * body of module
+ *********************************************/
 
 /*==================================== 
  * initdset -- Initialize a delete set
@@ -151,6 +170,11 @@ closexref (void)
 	if (xreffp) {
 		fclose(xreffp); xreffp = 0;
 	}
+	freexref(&irecs);
+	freexref(&frecs);
+	freexref(&srecs);
+	freexref(&erecs);
+	freexref(&xrecs);
 }
 /*=========================================
  * getxrefnum -- Return new keynum for type
@@ -259,8 +283,8 @@ readxrefs (void)
 	ASSERT(xrecs.n > 0);
 	if (irecs.n > irecs.max) growxrefs(&irecs);
 	if (frecs.n > frecs.max) growxrefs(&frecs);
-	if (erecs.n > erecs.max) growxrefs(&erecs);
 	if (srecs.n > srecs.max) growxrefs(&srecs);
+	if (erecs.n > erecs.max) growxrefs(&erecs);
 	if (xrecs.n > xrecs.max) growxrefs(&xrecs);
 	readrecs(&irecs);
 	readrecs(&frecs);
@@ -369,10 +393,10 @@ static void
 growxrefs (DELETESET set)
 {
 	INT i, m = set->max, *newp;
-	if (set->n < 500)
-		set->max = set->n + 10;
-	else
-		set->max = set->n + 100;
+	if (set->max == 0)
+		set->max = 64;
+	while (set->max < set->n)
+		set->max = set->max >> 1;
 	newp = (INT *) stdalloc((set->max)*sizeof(INT));
 	if (m) {
 		for (i = 0; i < set->n; i++)
@@ -380,6 +404,24 @@ growxrefs (DELETESET set)
 		stdfree(set->recs);
 	}
 	set->recs = newp;
+}
+/*==========================================
+ * freexref -- Free memory & clear xrefs array
+ *  Called when database is closed
+ *========================================*/
+static void
+freexref (DELETESET set)
+{
+	ASSERT(set);
+	if (set->recs) {
+		stdfree(set->recs);
+		set->recs = 0;
+		set->max = 0;
+		set->n = 0;
+	} else {
+		ASSERT(set->max == 0);
+		ASSERT(set->n == 0);
+	}
 }
 /*==========================================================
  * num_????s -- Return number of type of things in database.
