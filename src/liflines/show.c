@@ -89,7 +89,7 @@ variable, and checked & resized at init_display_indi time */
 static void add_child_line(INT, RECORD, INT width);
 static void add_spouse_line(INT, NODE, NODE, INT width);
 static BOOLEAN append_event(STRING * pstr, STRING evt, INT * plen, INT minlen);
-static void disp_person_birth(ZSTR * zstr, RECORD irec, INT width, RFMT rfmt);
+static void disp_person_birth(ZSTR * zstr, RECORD irec, RFMT rfmt);
 static void disp_person_name(ZSTR * zstr, STRING prefix, RECORD irec, INT width);
 static void indi_events(STRING outstr, NODE indi, INT len);
 static void init_display_indi(RECORD irec, INT width);
@@ -179,6 +179,7 @@ term_show_module (void)
 static void
 disp_person_name (ZSTR * zstr, STRING prefix, RECORD irec, INT width)
 {
+/* TODO: width handling is wrong, it should not be byte based */
 	ZSTR zkey = zs_news(key_of_record(nztop(irec)));
 	/* ": " between prefix and name, and " ()" for key */
 	INT avail = width - strlen(prefix)-zs_len(zkey)-5;
@@ -214,7 +215,7 @@ static struct tag_prefix {
  * Created: 2003-01-12 (Perry Rapp)
  *=============================================*/
 static void
-disp_person_birth (ZSTR * zstr, RECORD irec, INT width, RFMT rfmt)
+disp_person_birth (ZSTR * zstr, RECORD irec, RFMT rfmt)
 {
 	struct tag_prefix *tg, *tgdate=NULL, *tgplac=NULL;
 	STRING date=NULL, plac=NULL, td=NULL, tp=NULL;
@@ -238,7 +239,6 @@ disp_person_birth (ZSTR * zstr, RECORD irec, INT width, RFMT rfmt)
 		predate = _(tgdate->prefix);
 		if (rfmt && rfmt->rfmt_date)
 			date = (*rfmt->rfmt_date)(date);
-/* TODO: need to limit length, see indi_to_event */
 		zs_appf(&zdate, "%s: %s", predate, date);
 	}
 	if (plac) {
@@ -247,7 +247,6 @@ disp_person_birth (ZSTR * zstr, RECORD irec, INT width, RFMT rfmt)
 		if (eqstr(preplac, predate)) preplac=NULL;
 		if (rfmt && rfmt->rfmt_plac)
 			plac = (*rfmt->rfmt_plac)(plac);
-/* TODO: need to limit length, see indi_to_event */
 		if (preplac)
 			zs_setf(&zplac, "%s: %s", preplac, plac);
 		else
@@ -261,7 +260,6 @@ disp_person_birth (ZSTR * zstr, RECORD irec, INT width, RFMT rfmt)
 			zs_appz(zstr, zplac);
 		}
 		zs_free(&zplac);
-/* TODO: combine place into zstr */
 	} else {
 		zs_sets(zstr, zs_str(zdate));
 	}
@@ -281,7 +279,6 @@ init_display_indi (RECORD irec, INT width)
 	NODE fth;
 	NODE mth;
 	CACHEEL icel;
-	ZSTR ztemp=0;
 
 	ASSERT(width < ll_cols+1); /* size of Spers etc */
 
@@ -292,7 +289,7 @@ init_display_indi (RECORD irec, INT width)
 
 	disp_person_name(&Spers, _(qSdspl_indi), irec, width);
 
-	disp_person_birth(&Sbirt, irec, width-3, &disp_long_rfmt);
+	disp_person_birth(&Sbirt, irec, &disp_long_rfmt);
 
 	s = sh_indi_to_event_long(pers, "DEAT", _(qSdspl_dea), (width-3));
 	if (!s) s = sh_indi_to_event_long(pers, "BURI", _(qSdspl_bur), (width-3));
@@ -359,6 +356,7 @@ show_indi_vitals (UIWINDOW uiwin, RECORD irec, LLRECT rect
 	/* we keep putting lines out til we run out or exhaust our alloted
 	height */
 	localrow = row - *scroll;
+	/* TODO: Pass length limit, so they may be limited in output charset */
 	mvccwaddstr(win, row+0, 1, zs_str(Spers));
 	if (hgt==1) return;
 	mvccwaddstr(win, row+1, 1, zs_str(Sbirt));
@@ -428,7 +426,7 @@ init_display_fam (RECORD frec, INT width)
 {
 	NODE fam=nztop(frec);
 	NODE husb=0, wife=0;
-	STRING s=0, ik=0;
+	STRING s=0;
 	ZSTR famkey = zs_news(key_of_record(fam));
 	INT nch, nm, wtemp;
 	STRING father = _(qSdspl_fath);

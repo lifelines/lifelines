@@ -13,6 +13,10 @@
 
 	Implement most of new birth display code.
 
+	* ChangeLog src/liflines/show.c:
+
+	Revise comments about what needs doing for display.
+
 2003-01-12 Perry Rapp
 
 	* ChangeLog src/gedlib/misc.c src/gedlib/node.c
