@@ -23,6 +23,13 @@
 
 	Ran "cvs admin -kb *.pdf" to make all pdfs binary in cvs.
 
+	* ChangeLog src/interp/functab.c src/interp/interpi.h
+	src/interp/more.c
+
+	Change source function name from __getrecord to __dereference
+	(because it returns a node not a record).
+
+
 2005-01-01 Perry Rapp
 
 	* ChangeLog src/hdrs/arch.h src/interp/builtin.c

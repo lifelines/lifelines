@@ -868,13 +868,13 @@ __lastfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return create_pvalue_from_fam_keynum(xref_lastf());
 }
 /*=============================================+
- * getrecord -- Read GEDCOM record from database
- *  usage: getrecord(STRING) -> NODE
+ * __dereference -- Read top node of GEDCOM record from database
+ *  usage: dereference(STRING) -> NODE
  *  usage: dereference(STRING) -> NODE
  *  NOTE: persons and families NOT cached!
  *============================================*/
 PVALUE
-__getrecord (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+__dereference (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	STRING key;
 	PNODE arg = iargs(node);
@@ -883,7 +883,7 @@ __getrecord (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	STRING rawrec = NULL;
 	NODE node2 = NULL;
 	if (*eflg) {
-		prog_var_error(node, stab, arg, val, nonstr1, "getrecord");
+		prog_var_error(node, stab, arg, val, nonstr1, "dereference");
 		return NULL;
 	}
 	key = pvalue_to_string(val);
