@@ -39,6 +39,8 @@ iconv_trans (CNSTRING src, CNSTRING dest, bfptr bfsIn, CNSTRING illegal, BOOLEAN
 	size_t inleft;
 	size_t outleft;
 	size_t cvted;
+	int transliterate=2; 
+	/* testing recursive transliteration in my private iconv, Perry, 2002.07.11 */
 
 	ASSERT(src && dest);
 
@@ -49,6 +51,7 @@ iconv_trans (CNSTRING src, CNSTRING dest, bfptr bfsIn, CNSTRING illegal, BOOLEAN
 			*success = FALSE;
 		return bfsIn;
 	}
+	iconvctl(ict, ICONV_SET_TRANSLITERATE, &transliterate);
 
 	bfReserve(bfsIn, (int)(strlen(src)*1.3+2));
 
@@ -71,21 +74,21 @@ cvting:
 			outleft = bfsOut->size - bfLen(bfsOut) - 1;
 			goto cvting;
 		} else {
+			size_t wid = 1;
 			CNSTRING placeholder = illegal ? illegal : "%";
 			if (eqstr(src, "UTF-8")) {
-				inptr += utf8len(*inptr);
-			} else {
-				/*
-				invalid multibyte sequence, but we don't know how long, so advance
-				one byte & retry
-				*/
-				++inptr;
+				wid = utf8len(*inptr);
 			}
+			if (wid > inleft)
+				wid = inleft;
+			inptr += wid;
+			inleft -= wid;
 			/* zero terminate & fix bfptr */
 			*outptr=0;
 			bfsOut->end = outptr;
 
 			bfCat(bfsOut, placeholder);
+			outleft = bfsOut->size - bfLen(bfsOut) - 1;
 			goto cvting;
 		}
 	}
