@@ -82,4 +82,14 @@ extern int opterr;
 #endif /* HAVE_GETOPT */
 #endif /* HAVE_GETOPT_H */
 
+/* *****************************************************************
+ * S_ISREGT()           
+ * ***************************************************************** */
+#ifdef WIN32
+#ifdef _MSC_VER
+/* temporary hack by Perry - needs fix to smarter hack */
+#define S_ISREG(qq) (qq & S_IFREG)
+#define S_ISDIR(qq) (qq & S_IFDIR)
+#endif
+#endif
 #endif /* ARCH_H */
