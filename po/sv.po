@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LifeLines 3.0.10post\n"
 "POT-Creation-Date: 2002-02-24 14:44+0100\n"
-"PO-Revision-Date: 2002-03-04 23:35+0100\n"
+"PO-Revision-Date: 2002-04-20 16:57+0200\n"
 "Last-Translator: Jens Arvidsson <arvid-jens@algonet.se>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -87,7 +87,7 @@ msgstr "mönster: "
 
 #: gedlib/messages.c:158
 msgid "Do you really want to add this source to the database?"
-msgstr "Vill du verkligen lägga till den här händelsen i databasen?"
+msgstr "Vill du verkligen lägga till den här källan i databasen?"
 
 #: gedlib/messages.c:159
 msgid "Do you really want to add this event to the database?"
@@ -236,11 +236,11 @@ msgstr "c  Inställningar för teckenuppsättning"
 
 #: gedlib/messages.c:387
 msgid "t  Modify character translation tables"
-msgstr "Modifiera teckenöversättningstabeller"
+msgstr "t  Modifiera teckenöversättningstabeller"
 
 #: gedlib/messages.c:388
 msgid "u  Miscellaneous utilities"
-msgstr "Diverse verktyg"
+msgstr "u  Diverse verktyg"
 
 #: gedlib/messages.c:389
 msgid "x  Handle source, event and other records"

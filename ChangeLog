@@ -1,3 +1,9 @@
+2002-04-20 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog po/sv.po:
+
+	Bugfixes to Swedish translation.
+
 2002-04-07 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog configure.in gedlib/charmaps.c gedlib/gstrings.c
