@@ -8,7 +8,7 @@ libinterp_a_SOURCES = alloc.c builtin.c date.c eval.c functab.c interp.c \
 	intrpseq.c lex.c more.c pvalue.c rassa.c write.c heapused.c yacc.y
 
 INCLUDES=-I$(srcdir)/.. -I$(srcdir)/../hdrs
-
+CFLAGS=
 AM_YFLAGS = -d
 
 EXTRA_DIST = yacc.h
