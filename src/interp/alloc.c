@@ -66,6 +66,7 @@ STRING nonnod1     = 0;
 STRING nonnodx     = 0;
 STRING nonvar1     = 0;
 STRING nonvarx     = 0;
+STRING nontabx     = 0;
 STRING nonboox     = 0;
 STRING nonlst1     = 0;
 STRING nonlstx     = 0;
@@ -726,6 +727,7 @@ clear_error_strings (void)
 	strfree(&nonboox);
 	strfree(&nonlst1);
 	strfree(&nonlstx);
+	strfree(&nontabx);
 	strfree(&badargs);
 	strfree(&badargx);
 	strfree(&interp_locale);
@@ -786,6 +788,7 @@ interp_load_lang (void)
 	nonboox     = strsave(_("%s: the arg #%s must be a boolean."));
 	nonlst1     = strsave(_("%s: the arg must be a list."));
 	nonlstx     = strsave(_("%s: the arg #%s must be a list."));
+	nontabx     = strsave(_("%s: the arg #%s must be a table."));
 	badargs     = strsave(_("%s: Bad arguments"));
 	badargx     = strsave(_("%s: the arg #%s had a major error."));
 }

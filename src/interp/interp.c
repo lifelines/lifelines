@@ -1767,35 +1767,41 @@ void
 prog_var_error (PNODE node, SYMTAB stab, PNODE arg, PVALUE val, STRING fmt, ...)
 {
 	STRING choices[4];
-	STRING titl;
 	INT rtn;
 	va_list args;
+	ZSTR zstr;
 
 	arg = arg; /* unused */
-	val = val; /* unused */
+	/* TODO: What to do with arg ? Perry, 2003-01-19 */
 
 	va_start(args, fmt);
-	titl = vprog_error(node, fmt, args);
+	zstr = zs_newvf(fmt, args);
 	va_end(args);
+	if (val) {
+		ZSTR zval = describe_pvalue(val);
+		zs_appf(zstr, " (value: %s)", zs_str(zval));
+	}
+	prog_error(node, zs_str(zstr));
+	zs_free(&zstr);
 
 	if (!getoptint("debugger", 0))
 		return;
 
 	if (dbg_mode != -99) {
-		char buf[64];
+		ZSTR zstr=zs_new();
 		INT n=0,i=0;
 		/* report debugger: Option to display list of local symbols */
 		n = (stab.tab ? get_table_count(stab.tab) : 0);
-		llstrncpyf(buf, sizeof(buf), uu8, _("Display locals (%d)"), n);
-		choices[i++] = strsave(buf);
+		zs_setf(zstr, _("Display locals (%d)"), n);
+		choices[i++] = strsave(zs_str(zstr));
 		n = (globtab.tab ? get_table_count(globtab.tab) : 0);
-		llstrncpyf(buf, sizeof(buf), uu8, _("Display globals (%d)"), n);
-		choices[i++] = strsave(buf);
+		zs_setf(zstr, _("Display globals (%d)"), n);
+		choices[i++] = strsave(zs_str(zstr));
 		choices[i++] = strsave(_("Pop one level"));
 		choices[i++] = strsave(_("Quit debugger"));
 		ASSERT(i==ARRSIZE(choices));
 dbgloop:
-		rtn = choose_from_array(titl, ARRSIZE(choices), choices);
+		rtn = choose_from_array(_("Report debugger"), ARRSIZE(choices), choices);
 		if (rtn == 3 || rtn == -1)
 			dbg_mode = -99;
 		else if (rtn == 0) {
@@ -1806,6 +1812,7 @@ dbgloop:
 			disp_symtab(_("Global variables"), globtab);
 			goto dbgloop;
 		}
+		zs_free(&zstr);
 		free_array_strings(ARRSIZE(choices), choices);
 	}
 }
@@ -1834,6 +1841,7 @@ disp_symtab (STRING title, SYMTAB stab)
 		}
 	}
 	/* Title of report debugger's list of local symbols */
+	/* TODO: 2003-01-19, we could allow drilldown on lists, tables & sets here */
 	view_array(title, n, sdata.locals);
 	free_array_strings(n, sdata.locals);
 }
@@ -1848,12 +1856,13 @@ static BOOLEAN
 disp_symtab_cb (STRING key, PVALUE val, VPTR param)
 {
 	struct dbgsymtab_s * sdata = (struct dbgsymtab_s *)param;
-	char line[64];
+	ZSTR zline = zs_newn(80), zval;
 	ASSERT(sdata->current < sdata->count);
-	llstrncpyf(line, sizeof(line), uu8, "%s: %s", key
-		, debug_pvalue_as_string(val));
-	line[sizeof(line)-1] = 0;
-	sdata->locals[sdata->current++] = strsave(line);
+	zval = describe_pvalue(val);
+	zs_setf(zline, "%s: %s", key, zs_str(zval));
+	zs_free(&zval);
+	sdata->locals[sdata->current++] = strsave(zs_str(zline));
+	zs_free(&zline);
 	return TRUE; /* continue */
 }
 /*=============================================+
@@ -1890,26 +1899,29 @@ vprog_error (PNODE node, STRING fmt, va_list args)
 	ZSTR zstr=zs_newn(256);
 	static char msgbuff[100];
 	static char prevfile[MAXPATHLEN]="";
+	static INT prevline=-1;
 	if (rpt_cancelled)
 		return _("Report cancelled");
 	rptfile = getoptstr("ReportLog", NULL);
 	if (node) {
 		STRING fname = irptinfo(node)->fullpath;
-		/* only display filename if different (or first error) */
-		if (!prevfile[0] || !eqstr(prevfile, fname)) {
+		INT lineno = iline(node)+1;
+		/* Display filename if not same as last error */
+		if (!eqstr(prevfile, fname)) {
 			llstrsets(prevfile, sizeof(prevfile), uu8, fname);
 			zs_apps(zstr, _("Report file: "));
 			zs_apps(zstr, fname);
 			zs_appc(zstr, '\n');
+			prevline = -1; /* force line number display */
 		}
-		/* But always display the line & error */
-		if (progparsing)
-			llstrsetf(msgbuff, sizeof(msgbuff), uu8
-				, _("Parsing Error at line %d: "), iline(node)+1);
-		else
-			llstrsetf(msgbuff, sizeof(msgbuff), uu8
-				, _("Runtime Error at line %d: "), iline(node)+1);
-		zs_appf(zstr, msgbuff);
+		/* Display line number if not same as last error */
+		if (prevline != lineno) {
+			prevline = lineno;
+			if (progparsing)
+				zs_appf(zstr, _("Parsing Error at line %d: "), lineno);
+			else
+				zs_appf(zstr, _("Runtime Error at line %d: "), lineno);
+		}
 	} else {
 		zs_apps(zstr, _("Aborting: "));
 	}
@@ -1924,8 +1936,7 @@ vprog_error (PNODE node, STRING fmt, va_list args)
 			if (progerror == 1) {
 				LLDATE creation;
 				get_current_lldate(&creation);
-				fprintf(fp, _("\nReport Errors: %s")
-					, creation.datestr);
+				fprintf(fp, "\n%s\n", creation.datestr);
 			}
 			fprintf(fp, zs_str(zstr));
 			fprintf(fp, "\n");

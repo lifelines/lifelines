@@ -56,6 +56,7 @@ extern STRING nonint1,nonintx,nonflox,nonstr1,nonstrx,nullarg1,nonfname1;
 extern STRING nonnodstr1;
 extern STRING nonind1,nonindx,nonfam1,nonrecx,nonnod1,nonnodx;
 extern STRING nonvar1,nonvarx,nonboox,nonlst1,nonlstx;
+extern STRING nontabx;
 extern STRING badargs,qSaskstr,qSchoostrttl;
 
 /*********************************************
@@ -2034,16 +2035,13 @@ __concat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	while (arg) {
 		val = eval_and_coerce(PSTRING, arg, stab, eflg);
 		if (*eflg) {
-			prog_error(node, "an arg to concat is not a string");
+			char argnum[8];
+			sprintf(argnum, "%d", nstrs+1);
+			prog_var_error(node, stab, arg, val, nonstrx, "concat", argnum);
 			return NULL;
 		}
 		if ((str = pvalue_to_string(val))) {
 			len += strlen(str);
-
-#ifdef DEBUG
-	llwprintf("concat: str: ``%s'' ", str);
-#endif
-
 			hold[nstrs++] = strsave(str);
 			++nonnull;
 		} else
@@ -2052,7 +2050,7 @@ __concat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		delete_pvalue(val);
 		if (nstrs == ARRSIZE(hold)) {
 			*eflg = TRUE;
-			prog_error(node, "Too many (>32) args to concat");
+			prog_error(node, _("Too many (>32) args to concat"));
 			return NULL;
 		}
 	}
@@ -2391,12 +2389,11 @@ __table (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	TABLE tab;
 	PVALUE val;
 	PNODE var = (PNODE) iargs(node);
-	*eflg = TRUE;
 	if (!iistype(var, IIDENT)) {
+		*eflg = TRUE;
 		prog_var_error(node, stab, var, NULL, nonvar1, "table");
 		return NULL;
 	}
-	*eflg = FALSE;
 	tab = create_table();
 	val = create_pvalue(PTABLE, (VPTR)tab);
 
@@ -2422,9 +2419,8 @@ __insert (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 #endif
 
 	if (*eflg || (pvalue(valtab) == NULL)) {
-	        *eflg = TRUE;
-		prog_error(node, "1st arg to insert is not a table but %s",
-		           debug_pvalue_as_string(valtab));
+        *eflg = TRUE;
+		prog_var_error(node, stab, arg, valtab, nontabx, "insert", "1");
 		return NULL;
 	}
 	tab = (TABLE) pvalue(valtab);
@@ -2438,8 +2434,7 @@ __insert (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	val = eval_and_coerce(PSTRING, arg, stab, eflg);
 	if (*eflg || !val || !pvalue(val)) {
 		*eflg = TRUE;
-		prog_error(node, "2nd arg to insert is not a string but %s",
-		           debug_pvalue_as_string(val));
+		prog_var_error(node, stab, arg, val, nonstrx, "insert", "2");
 		return NULL;
 	}
 	str = strsave(pvalue_to_string(val));

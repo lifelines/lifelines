@@ -37,6 +37,7 @@
 #include "interp.h"
 #include "liflines.h"
 #include "feedback.h"
+#include "zstr.h"
 
 /*********************************************
  * local types
@@ -1173,49 +1174,74 @@ show_pvalue (PVALUE val)
  * debug_pvalue_as_string -- DEBUG routine that shows a PVALUE
  *  returns static buffer
  *====================================================*/
-STRING
-debug_pvalue_as_string (PVALUE val)
+ZSTR
+describe_pvalue (PVALUE val)
 {
-	NODE node;
-	CACHEEL cel;
 	INT type;
 	UNION u;
-	static char scratch[40];
-	INT len = sizeof(scratch);
-	char *p;
+	ZSTR zstr = zs_new();
 
 	if (!is_pvalue(val)) {
-		return "*NOT PVALUE*";
+		zs_sets(zstr, _("NOT PVALUE!"));
+		return zstr;
 	}
 	type = ptype(val);
-	llstrncpyf(scratch, len, uu8, "<%s,", ptypes[type]);
-	p = scratch + strlen(scratch);
-	len -= strlen(scratch);
+	zs_appc(zstr, '<');
+	zs_apps(zstr, ptypes[type]);
+	zs_appc(zstr, ',');
 	if (pvalue(val) == NULL) {
-		llstrncpyf(p, len, uu8, "NULL>");
-		return (STRING) scratch;
+		zs_apps(zstr, "NULL>");
+		return zstr;
 	}
 	u.w = pvalue(val);
 	switch (type) {
 	case PINT:
-		llstrncpyf(p, len, uu8, "%d>", u.i);
+		zs_appf(zstr, "%d", u.i);
 		break;
 	case PFLOAT:
-		llstrncpyf(p, len, uu8, "%f>", pvalue_to_float(val));
+		zs_appf(zstr, "%f", pvalue_to_float(val));
 		break;
 	case PSTRING:
-		llstrncpyf(p, len, uu8, "\"%s\">", pvalue_to_string(val));
+		zs_appf(zstr, "\"%s\"", pvalue_to_string(val));
 		break;
 	case PINDI:
-		cel = (CACHEEL) pvalue(val);
-		if (!cnode(cel))
-			cel = key_to_indi_cacheel(ckey(cel));
-        	node = cnode(cel);
-		llstrncpyf(p, len, uu8, "%s>", nval(NAME(node)));
+		{
+			NODE node;
+			CACHEEL cel = (CACHEEL) pvalue(val);
+			STRING nam;
+			if (!cnode(cel))
+				cel = key_to_indi_cacheel(ckey(cel));
+       		node = cnode(cel);
+			node = NAME(node);
+			nam = node ? nval(node) : _("{NoName}");
+			zs_appf(zstr, nam);
+		}
+		break;
+	case PLIST:
+		{
+			LIST list = (LIST) pvalue(val);
+			INT n = length_list(list);
+			zs_appf(zstr, _pl("%d item", "%d items", n), n);
+		}
+		break;
+	case PTABLE:
+		{
+			TABLE table = (TABLE)pvalue(val);
+			INT n = get_table_count(table);
+			zs_appf(zstr, _pl("%d entry", "%d entries", n), n);
+		}
+		break;
+	case PSET:
+		{
+			INDISEQ seq = (INDISEQ)pvalue(val);
+			INT n = length_indiseq(seq);
+			zs_appf(zstr, _pl("%d record", "%d records", n), n);
+		}
 		break;
 	default:
-		llstrncpyf(p, len, uu8, "%p>", pvalue(val));
+		zs_appf(zstr, "%p", pvalue(val));
 		break;
 	}
-	return (STRING) scratch;
+	zs_appc(zstr, '>');
+	return zstr;
 }

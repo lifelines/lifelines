@@ -255,7 +255,7 @@ PVALUE create_pvalue_from_othr_keynum(INT i);
 PVALUE create_pvalue_from_set(VPTR seq);
 PVALUE create_pvalue_from_sour_keynum(INT i);
 PVALUE create_pvalue_from_string(STRING str);
-STRING debug_pvalue_as_string(PVALUE);
+ZSTR describe_pvalue(PVALUE);
 void delete_vptr_pvalue(VPTR ptr);
 void delete_pvalue(PVALUE);
 void delete_symtab(SYMTAB stab, STRING iden);

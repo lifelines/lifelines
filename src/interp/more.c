@@ -45,6 +45,7 @@
 #include "liflines.h"
 #include "lloptions.h"
 #include "feedback.h" /* call_system_cmd */
+#include "zstr.h"
 
 /*********************************************
  * external/imported variables
@@ -1096,6 +1097,7 @@ PVALUE
 __pvalue (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PVALUE val = evaluate(iargs(node), stab, eflg);
+	ZSTR zstr;
 #ifdef DEBUG
 	debug_show_one_pnode(node);
 	llwprintf("\npvalue: %d ",val);
@@ -1106,7 +1108,10 @@ __pvalue (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	show_pvalue(val);
 	llwprintf("\n");
 #endif
-	return create_pvalue_from_string(debug_pvalue_as_string(val));
+	zstr = describe_pvalue(val);
+	val = create_pvalue_from_string(zs_str(zstr));
+	zs_free(&zstr);
+	return val;
 }
 /*============================================+
  * __program -- Returns name of current program
