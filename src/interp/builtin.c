@@ -1263,6 +1263,7 @@ __nspouses (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	if (!indi) return create_pvalue_from_int(0);
 	FORSPOUSES(indi,spouse,fam,nspouses)
+		++nactual;
 	ENDSPOUSES
 	/* nspouses is number of pointers, nactual is number of valid pointers */
 	return create_pvalue_from_int(nactual);
