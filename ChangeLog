@@ -5,6 +5,10 @@
 	Bugfix so classify doesn't crash if one value is NULL.
 	Bugfix so editing value of top-level other node works.
 
+	* ChangeLog interp/interp.c:
+
+	Fix Plist declaration broken two days ago.
+
 2002-06-20 Matt Emmerton <memmerto@users.sourceforge.net>
 
 	* ChangeLog configure.in
