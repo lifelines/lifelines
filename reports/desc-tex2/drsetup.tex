@@ -1,0 +1,193 @@
+% drsetup.tex
+%
+% Some definitions for desc-tex2
+%
+% D. Roegel, (roegel@loria.fr) 15 January 1995
+%
+% Don't modify this file, but the file mysetup.tex,
+% which is loaded at the end of this file.
+% ================================================
+%
+%
+\newif\ifDR
+% Uncomment this ONLY if you are the author
+%
+%\DRtrue
+%
+\hsize=10in
+\vsize=7.5in
+\parindent=20pt
+% This can probably be removed: 
+     \hoffset=-0.8in
+     \voffset=-0.8in
+%
+\nopagenumbers
+%
+% english \today 
+\def\today{\ifcase\month\or
+  January\or February\or March\or April\or May\or June\or
+  July\or August\or September\or October\or November\or December\fi
+  \space\number\day, \number\year}
+%
+% This is for the frenchmen... (and includes french definition of \today)
+\ifDR
+  \input french.sty
+\fi
+%
+% The tree macros: must be loaded after french.sty, *if* french.sty
+% is loaded, otherwise some things won't work
+% (the test for the \tree and \subtree arguments won't work
+%  because they are not `catcode-independant' and french.sty changes
+%  some key catcodes)
+%
+\input drtree
+%
+% The credits:
+% (put your favorite text here)
+\def\credits{\vbox{\hsize15cm\noindent
+              This tree was made on \today\ by ******* with
+              the {\tt Lifelines} program (from T.~Wetmore), the \TeX\ 
+              text processor (from D.~Knuth), 
+              \TeX\ commands for trees (from D.~Eppstein),
+              \TeX\ commands for posters (from T. Van Zandt)
+              and a program by E.~Majani completed by D.~Roegel.\par
+              It may contain mistakes or omissions and I please
+              those who would notice some to signal them to me at the 
+              following address:\par
+              \noindent$\underline{\hbox{\tt **, 
+                                             **, 
+                                             **,
+                                             USA}}$}}
+\ifDR
+\def\credits{\vbox{\hsize15cm\noindent
+              Cet arbre a \'et\'e r\'ealis\'e le \today\
+              par Denis Roegel \`a l'aide du logiciel {\tt Lifelines}
+              (de T.~Wetmore), du formatteur \TeX\ (de D.~Knuth), de
+              commandes \TeX\ de r\'ealisation d'arbres (de D.~Eppstein),
+              de commandes \TeX\ de d\'ecoupage (de T. Van Zandt)
+              et d'un programme de E.~Majani compl\'et\'e par moi-m\^eme.\par
+              Il peut comporter des erreurs ou des omissions et je prie
+              ceux qui en rel\`everaient de me les signaler \`a l'adresse
+              suivante:\par
+              \noindent$\underline{\hbox{\tt Denis Roegel, 
+                                             7 rue de la fonderie, 
+                                             67400 ILLKIRCH-GRAFFENSTADEN}}$}}
+\fi
+%
+%---------------------------------------------------------------------------
+%    Title of the tree
+%
+% The title is centered above the tree
+% You can change the title fonts here.
+% You may also change the title text in the report produced.
+%
+%---------------------------------------------------------------------------
+\font\titlefont=cmbx12 scaled 4300
+\font\subtitlefont=cmbx10 scaled \magstep5
+\ifDR % this is for the author only
+   \def\title#1#2#3#4#5{% #1 = name of the ancestor
+                        % #2 = birth date
+                        % #3 = death date
+                        % #4 = number of generations (children=only one generation)
+                        % #5 = total width of the tree
+        \hbox to#5{\hss\hbox{\titlefont Descendance de #1}\hss}
+        \kern1cm
+        \hbox to#5{\hss\hbox{\titlefont (#2 -- #3)}\hss}
+        \kern1cm
+        \hbox to#5{\hss\hbox{\subtitlefont(#4 g\'en\'erations)}\hss}
+        }
+\else
+   \def\title#1#2#3#4#5{% #1 = name of the ancestor
+                        % #2 = birth date
+                        % #3 = death date
+                        % #4 = number of generations (children=only one generation)
+                        % #5 = total width of the tree
+        \hbox to#5{\hss\hbox{\titlefont Descendance of #1}\hss}
+        \kern1cm
+        \hbox to#5{\hss\hbox{\titlefont (#2 -- #3)}\hss}
+        \kern1cm
+        \hbox to#5{\hss\hbox{\subtitlefont(#4 generations)}\hss}
+        }
+\fi
+%---------------------------------------------------------------------------
+%    Special fonts
+%---------------------------------------------------------------------------
+\font\descfont=cmssbx10     % descendants
+\font\spousefont=cmss10     % spouses
+\font\occufont=cmssi10      % occupations
+\font\datefont=cmss8        % dates
+\font\placefont=cmss8       % places
+%---------------------------------------------------------------------------
+% Various formatting things:
+\def\spouse#1{\spousefont#1}
+% Formatting of the occupation:
+\def\occupation#1{{\setbox0=\hbox{\occufont#1}%
+                   \ifdim\wd0>5cm
+                       \vbox{\hsize5cm\pretolerance10000
+                             \raggedright\noindent\occufont#1\endgraf}%
+                   \else
+                     {\occufont#1}%
+                   \fi
+                   }}
+% Separation line in the boxes:
+\def\sepline{\noalign{\kern2pt\hrule\kern2pt}}
+%---------------------------------------------------------------------------
+%     Tags
+%---------------------------------------------------------------------------
+% birth tag:
+%\def\btag{N:}
+\def\btag{$\circ$}
+% baptism tag:
+%\def\bapttag{B:}
+\def\bapttag{{\datefont bp:}}
+% marriage tag:
+%\def\mtag{M:}
+\def\mtag{$\mathord{\scriptstyle\bigcirc\mskip-10mu\bigcirc}$}
+% death tag:
+%\def\dtag{D:}
+\def\dtag{$\dag$}
+% at tag:
+\ifDR
+  \def\at{\`a}
+  \def\seeabove{** voir plus haut **}
+  \def\unknown{(nom inconnu)}
+\else
+  \def\at{at}
+  \def\seeabove{** see above **}
+  \def\unknown{(unknown name)}
+\fi
+%---------------------------------------------------------------------------
+%     Month names
+%---------------------------------------------------------------------------
+\ifDR
+   \def\jan{janvier}
+   \def\feb{f\'evrier}
+   \def\mar{mars}
+   \def\apr{avril}
+   \def\may{mai}
+   \def\jun{juin}
+   \def\jul{juillet}
+   \def\aug{ao\^ut}
+   \def\sep{septembre}
+   \def\oct{octobre}
+   \def\nov{novembre}
+   \def\dec{d\'ecembre}
+\else
+   \def\jan{jan}
+   \def\feb{feb}
+   \def\mar{mar}
+   \def\apr{apr}
+   \def\may{may}
+   \def\jun{jun}
+   \def\jul{jul}
+   \def\aug{aug}
+   \def\sep{sep}
+   \def\oct{oct}
+   \def\nov{nov}
+   \def\dec{dec}
+\fi
+% Add your modifications to this file:
+\input mysetup
+% ----------------- end of file drsetup.tex --------------------
+
+

@@ -1,0 +1,66 @@
+The "novel" report program is designed to produce a book about an individual
+from a LifeLines database. Its called "novel" because it produces a book,
+but there is already a report program called "book". Purists would argue
+that "novel" is a totally inappropriate name, because there should be
+absolutely no fiction in a Lifelines database!
+
+The idea of the program is to select a person from the database and format
+the Gedcom into a readable form that can be understood by anybody, giving
+all the information about the person and his/her ancestors and descendants.
+
+There is also an introductory section put on the front of the report in
+which you can describe what it contains, and also add things like requests
+for information. The idea is to produce a personalised report you can send
+off to a relation, telling them lots of information with the hope that they
+will come back with a lot more and let you know about any errors.
+
+It is structured to handle all the common Gedcom tags and print them as an
+intelligible sentence, hopefully not sounding too like junk mail from companies
+like "Registers Digest". If it finds a Gedcom tag that isn't programmed in,
+it still prints the information, but you will need to add a small routine to
+make it read sensibly. There are lots of examples there to use as model.
+
+Add the call to the routine for a new gedcom node type to longvitals(i), and then
+modify othernodes(i)/subnode to prevent it being printed with unknown types. 
+
+I use a node of CNAM for a person's common name/alias e.g.
+	1 NAME Margaret Winifred Thorpe
+	2 CNAM Peggy
+Thus in a paragraph about the person she would be first referenced as "Peggy" and
+subsequently as "she" or "her". Without the CNAM record we would use "Margaret"
+instead of "Peggy". Sometimes references are made to other folks and if this happens
+then the next "she" or "her" would be replaced by "Peggy".
+
+The order of the text in the descriptions does not entirely rely on the Gedcom being
+in chronological order, but it does help. It assumes birth, then "EDUC" nodes
+detailing schooling, marriage, "OCCU" for occupation, "RESI" for where they lived,
+"RETI" for retirement, then any unknown nodes, then death. NOTE and TEXT records can
+be shown from any level. 
+
+The output from the program is used as input to nroff/troff/groff using the
+mm set of macros. See the examples at the start of the program. This enables
+you to have a document which fits your printer as closely as possible to
+give the recipient a good impression.
+	E.g.
+		nroff -mm filename > filename.out
+		groff -mgm -Tascii filename >filename.out
+		groff -mgm filename >filename.ps       [PostScript output/Linux]
+
+
+The files required are:
+
+	novel.ll	The report program itself.
+	novel.intro	A file containing the introductory text. Use the one
+			supplied as a model.
+	novel.head	Nroff macros definitions etc. You can modify this if
+			you know what you are doing, to vary the output
+			style.
+	novel.README	This file.
+
+This program is not being actively worked upon, it only gets changed as
+needed and when I have time available. Maintaining the UK+Ireland WWW server
+takes all my time. At some stage in the future I intend to include support
+for the psfig troff extensions, so that scanned images can also be included.
+
+Phil Stringer - 10 July 1995 - email: P.Stringer@mcc.ac.uk
+ 

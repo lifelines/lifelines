@@ -1,3 +1,28 @@
+2004-07-20 Stephen Dum
+        * ChangeLog docs/ll-userguide.xml docs/ll-userguide.html
+	docs/ll-userguide.pdf docs/ll-userguide.txt docs/ll-reportmanual.html
+	docs/ll-reportmanual.pdf docs/ll-reportmanual.txt
+	In the reports directory...
+	   Makefile.am CREDIT README grand.ll desc-tex2/README
+	   desc-tex2/desc-tex.ll desc-tex2/desc-tex2.ll desc-tex2/drsetup.tex
+	   desc-tex2/drtree.tex desc-tex2/ex1.tex desc-tex2/extree1.tex
+	   desc-tex2/extree2.tex desc-tex2/mysetup.tex desc-tex2/poster.doc
+	   desc-tex2/poster.tex desc-tex2/poster1.tex desc-tex2/poster2.tex
+	   desc-tex2/pstricks.con desc-tex2/pstricks.pro desc-tex2/pstricks.tex
+	   desc-tex2/setup.tex desc-tex2/tree.tex novel/novel.README
+	   novel/novel.head novel/novel.intro novel/novel.ll pedtex/pedtex.ll
+	   pedtex/pedtex.readme pedtex/setup.tex pedtex/tree.tex
+	   ps-circ/ps-circ.ll ps-circ/ps-circ.ps ps-fan/ps-fan.ps
+	src/gedlib/charprops.c src/gedlib/init.c src/gedlib/keytonod.c
+	src/gedlib/names.c src/gedlib/nodeio.c src/gedlib/xlat.c
+	src/gedlib/xreffile.c src/interp/pvalue.c src/liflines/loadsave.c
+	src/stdlib/icvt.c src/stdlib/strutf8.c
+
+	Document GuiCodeset and fix spelling of GedcomCodeset and
+	EditorCodeset - as per Tracker id 837378
+	Add more reports from Vincent Broman's recent posting, as well as
+	making the 'lint' changes to the sources that he made.
+	
 2004-07-19 Stephen Dum
 	lines.cfg reports/bday_cover.ll reports/cron.ll reports/regvital.ll
 

@@ -65,7 +65,9 @@ iconv_trans (CNSTRING src, CNSTRING dest, CNSTRING sin, ZSTR zout, char illegal)
 	size_t inleft;
 	size_t outleft;
 	size_t cvted;
+#ifdef ICONV_SET_TRANSLITERATE
 	int transliterate=2; 
+#endif
 	double expand=1.3;
 	int chwidth=1;
 	int inlen = sin ? strlen(sin) : 0;

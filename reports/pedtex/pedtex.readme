@@ -1,0 +1,55 @@
+From:         "(Eric Majani)" <eric@ELROY.JPL.NASA.GOV>
+Subject:      pedtex: generating TeX files for pedigree charts
+
+Introducing PEDTEX: a program which generates a TeX file that can then be used
+ to
+produce a Pedigree Chart in PostScript format. All you need is to have TeX
+installed on your machine, and three files included here: pedtex, tree.tex,
+and setup.tex.
+
+Good luck! Feel free to ask me questions about pedtex and the \tree, \endtree,
+\subtree, \endsubtree TeX macros,  but please, no questions
+about TeX. Ask your local TeX wizard for Tex-specific questions. Thanks.
+
+----------------------- Remarks on the use of pedtex -------------------------
+
+1. You can change the prinindi procedure to anything you like. The example
+   given here is just that, an example.
+
+2. Beware of the use of TeX special characters, and their interpretation
+   by Lifelines (i.e. \' will be changed to /'): however I already
+   found out that \& is not modified by LifeLines.
+
+3. pedtex creates a basic TeX file which can always be modified to suit your
+   tastes, additions of special TeX characters. The nice thing about pedtex
+   is that it puts all the genealogy information from the database. You can
+   therefore include the pedigree chart in a TeX document (if you're writing
+   a book on your family for example).
+
+4. The steps to produce a Postscript file (or a .dvi file for visualization
+   by xdvi for example):
+
+   4.1 Make sure the files setup.tex and tree.tex (and pedtex) are in the
+ current directory
+
+   4.2 Run lines
+
+   4.3 Use the report generation menu and run the pedtex program. Make sure that
+       your output file is of the type: filename.tex
+       The integer to enter is the number of generations desired.
+
+   4.4 Quit lines
+
+   4.5 Run tex on filename.tex: tex filename
+
+   4.6 Run dvips (or xdvi for visualization) on filename.dvi: dvips filename
+
+   4.7 Print or visualize the PostScript file filename.ps
+
+
+5. Do not modify the tree.tex file, unless you are a TeX programming expert
+
+6. The setup.tex file however should be modified to your taste. You should
+   however have no problem with the one I provide (no guarantees though).
+
+7. The files that follow are: tree.tex, setup.tex

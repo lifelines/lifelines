@@ -1,7 +1,7 @@
 
 LifeLines Documentation
 
-LifeLines Version 3.0.37
+LifeLines Version 3.0.38
 
 Thomas T. Wetmore , IV
      _____________________________________________________________
@@ -1657,7 +1657,7 @@ CODESET CONVERSION
    might  wish  to  temporarily  adjust your report output codeset so
    that  you  will  get  interpolated  ASCII  letters for the Russian
    letters.   You   could   do   this  by  temporarily  altering  the
-   configuration  variable  ReportCodeSetOut to be "ASCII" (actually,
+   configuration  variable  ReportCodesetOut to be "ASCII" (actually,
    if  any  of  your  data  has characters in it that are reserved in
    HTML,  such  as  the  less  than sign, or the ampersand, you would
    probaby want "ASCII//HTML").
@@ -2471,42 +2471,49 @@ System and User Properties
    provided  for  UTF-8, which may be entered as "UTF-8", "utf-8", or
    "65001". (The official, and preferred, name is UTF-8.
 
-   GedcomCodeSet
+   GedcomCodeset
           Specifies the default Codeset to use when processing Gedcom
-          files.  There  are  actually 3 properties. GedcomCodeSetOut
-          and  GedcomCodeSetIn can be used to specify the codeset for
+          files.  There  are  actually 3 properties. GedcomCodesetOut
+          and  GedcomCodesetIn can be used to specify the codeset for
           output  or  input.  If  either  of  these  is not specified
-          GedcomCodeSet  is  used. Most Gedcom files should contain a
+          GedcomCodeset  is  used. Most Gedcom files should contain a
           codeset  property,  so  this  is  not usually relevant when
           reading a Gedcom file, unless the input Gedcom file lacks a
           codeset property. This is used, however, when writing out a
           Gedcom  file.  NB:  This  is ignored if the database has no
           internal codeset specified.
 
-   EditorCodeSet
+   EditorCodeset
           Specifies  the  codeset  to  use  for  editing.  There  are
-          actually 3 properties. EditorCodeSetOut and EditorCodeSetIn
+          actually 3 properties. EditorCodesetOut and EditorCodesetIn
           can  be used to specify the codeset for output or input. If
-          either  of  these  is  not specified EditorCodeSet is used.
+          either  of  these  is  not specified EditorCodeset is used.
           This property allows lifelines to convert from its internal
           codeset  to  the  one  you  use  in your editor, so this is
           important when your editor does not use the same codeset as
           your  database.  NB: This is ignored if the database has no
           internal codeset specified.
 
-   ReportCodeSet
+   ReportCodeset
           Specifies  the  codeset  to  use  for  reports.  There  are
-          actually 3 properties. ReportCodeSetOut and ReportCodeSetIn
+          actually 3 properties. ReportCodesetOut and ReportCodesetIn
           can  be used to specify the codeset for output or input. If
-          either  of  these  is  not specified ReportCodeSet is used.
+          either  of  these  is  not specified ReportCodeset is used.
           Recently   created   reports  may  actually  specify  their
           codeset,  in  which  case this is not used, but for reports
           which  do  not  include  a  specification  of  codeset, the
-          ReportCodeSetIn (or ReportCodeSet) specifies how the report
+          ReportCodesetIn (or ReportCodeset) specifies how the report
           will  be  understood.  In  any case, the output of a report
           program   will   be   written   in  the  codeset  given  by
-          ReportCodeSetOut (or ReportCodeSet). NB: This is ignored if
+          ReportCodesetOut (or ReportCodeset). NB: This is ignored if
           the database has no internal codeset specified.
+
+   GuiCodeset
+          Specifies  the  codeset  to  use  for  interaction with the
+          graphical  user interface. There are actually 3 properties.
+          GuiCodesetOut  and  GuiCodesetIn can be used to specify the
+          codeset  for  output  or  input.  If either of these is not
+          specified GuiCodeset is used.
 
    LongDisplayDate
           Six comma separated numbers. Specifing the format for days,

@@ -1,0 +1,319 @@
+%% BEGIN poster.doc
+%%
+%% Documentation for poster.tex/poster.sty.
+%% Run with LaTeX, with or without the NFSS.
+%%
+%% Change these for a4 paper:
+\def\paperwidth{8.5in}
+\def\paperheight{11in}
+
+\def\FileVersion{1.2}
+\def\FileDate{August 28, 1993}
+
+\documentstyle[12pt]{article}
+
+%% PAGE PARAMETERS
+
+% Paragraphs are marked by large space rather than indentation:
+\parindent 0pt
+\parskip 6pt plus 1pt minus 1pt
+
+% No headers, 1in top margin
+\topmargin 0pt
+\headheight 0pt
+\headsep 0pt
+
+% Total bottom margin 1in, text height 9in
+\textheight 9in
+\footskip .625in
+
+% Now adjust for different paper size:
+\newdimen\mydim
+\mydim=\paperwidth
+\advance\mydim-8.5in
+\divide\mydim 2
+\advance\oddsidemargin \mydim
+\advance\evensidemargin \mydim
+\mydim=\paperheight
+\advance\mydim-11in
+\divide\mydim 2
+\advance\topmargin \mydim
+
+%% OTHER
+
+% Short meta (works in verbatim. Can't use < for other purposes.
+\catcode`\<=13 \def<#1>{{\rm\it #1\/}}    % <meta> (works in verbatim)
+
+% Short verbatim.
+\catcode`\"=13
+\def"{\verb"}
+
+% To make smaller sections:
+\def\thesubsection{\arabic{subsection}}
+
+\catcode`\@=12  % In case I'm using AmS-LaTeX
+
+\begin{document}
+
+\begin{center}
+\begingroup
+  \large\bf
+  Documentation for poster.tex/poster.sty\\[2pt]
+  Posters and banners with Generic \TeX\\[6pt]
+\endgroup
+  Version \FileVersion\\
+  \FileDate\\[6pt]
+  Timothy Van Zandt\\
+  tvz@Princeton.EDU
+\end{center}
+
+\subsection{The macros}
+
+"poster.tex/poster.sty" contains the macro
+\begin{verbatim}
+    \poster{<stuff>}
+\end{verbatim}
+for making posters and banners. <stuff> is processed in restricted horizontal
+mode (i.e., "\hbox" or ``LR-mode'') and is then printed on as many sheets of
+paper as are needed. You can then construct the poster or banner by trimming
+and piecing together the sheets of paper.
+
+You can also write
+\begin{verbatim}
+    \Poster <stuff>\endPoster
+\end{verbatim}
+and \LaTeX\ users can write
+\begin{verbatim}
+    \begin{Poster} <stuff>\end{Poster}
+\end{verbatim}
+
+Here are a few details:
+\begin{itemize}
+\item Use a "\vbox" or \LaTeX's "minipage" or "\parbox" in <stuff> if you want
+to include vertical mode material. For more help with LR-boxes, see
+"fancybox.sty", available from archives everywhere.
+
+\item Don't worry about margins, headers or footers; "\poster" ignores output
+routines entirely.
+
+\item <stuff> can contain "\catcode" changes, such as verbatim environments.
+\end{itemize}
+
+If you want to use your regular output routines, and have "poster.tex" print
+out each page of your document as a poster, then instead put the command
+\begin{verbatim}
+    \PosterPage
+\end{verbatim}
+towards the beginning of your document, or in the \LaTeX\ preamble. Each page
+is printed without its margins, but with the headers and footers, if any. (You
+can print out your whole dissertation on $8\times 10$-feet pages.) With
+"\PosterPage", you do not have to worry about LR-boxes.
+
+\subsection{Making the output look big}
+
+You can use these macros to print a large diagram, such as a genealogical
+tree, that would not normally fit on one page. You might also want to magnify
+the contents of the poster. For example, you might want to print ``Happy
+Birthday'' in 6 inch high letters. Here is a brief description of three ways
+to make your output look big. Note that these are not part of "poster.tex",
+but are described here for your convenience. For more information, see the
+\TeX book.
+\begin{enumerate}
+\item The simplest and most general method is to set \TeX's "\mag" parameter,
+by inserting the line
+\begin{verbatim}
+    \mag <int>
+\end{verbatim}
+at or near the beginning of the document (or in the \LaTeX\ preamble). The
+integer <int> should be 1000 times the magnification factor. For example, to
+double the size of the output, use
+\begin{verbatim}
+    \mag 2000
+\end{verbatim}
+You may need to generate big bitmaps if using bitmapped fonts (e.g., \TeX's
+usual Metafont fonts), rather than scalable outline fonts (e.g., PostScript
+fonts). You can reduce the need for extra font bitmaps by using
+\begin{verbatim}
+    \mag \magstep<n>
+\end{verbatim}
+to magnify the document by $1.2^n$. $n$ can be between 1 and 5. For example,
+to magnify the document by $1.2^4=2.074$, use
+\begin{verbatim}
+    \mag \magstep4
+\end{verbatim}
+You can also set "\mag" to "\magstephalf", which scales the document by
+$1.2^{1.5}$.
+
+\item If you are making a banner with just one font, then you can define a
+large font. For example,
+\begin{verbatim}
+  \font\bigroman=cmr at 8in
+  \bigroman
+  \poster[vcenter=true,landscape=true]{Happy Birthday}
+\end{verbatim}
+It is best to use scalable fonts, such as PostScript fonts, if available.
+
+\item If you are using a PostScript printer, then you can use macros for
+scaling boxes, such as the "\scalebox" and "\scaleboxto" commands in the
+PSTricks package. For example, here is the banner from the previous example:
+\begin{verbatim}
+  \poster[vcenter=true,landscape=true]{%
+    \scaleboxto(0,8in){Happy Birthday}}
+\end{verbatim}
+You must use scalable fonts, because scaled bitmaps look very ugly.
+\end{enumerate}
+
+\subsection{Parameters}
+
+ "\poster", "\Poster" and "\PosterPage" use the following parameters:
+\begin{center}
+  \def\arraystretch{1.1}
+  \begin{tabular}{lll}
+    {\em Parameter} & {\em Value} & {\em Default}\\[2pt]
+    "paperwidth"    & <dim>       & "8.5in"\\
+    "paperheight"   & <dim>       & "11in"\\
+    "imagewidth"    & <dim>       & "7.5in"\\
+    "imageheight"   & <dim>       & "10in"\\
+    "landscape"     & "true"/"false" & "false"\\
+    "hcenter"       & "true"/"false" & "false"\\
+    "vcenter"       & "true"/"false" & "false"\\
+    "crop"          & "none"/"corners"/"full" & "corners"\\
+    "cropwidth"     & <dim>       & "2pt"\\
+    "clip"          & "none"/"pstricks"  & "none"\\
+    "immediatewrites" & "true"/"false" & "true"\\
+    "numbering"     & "auto"/"rowcol"/"page"/"serial" & "auto"
+  \end{tabular}
+\end{center}
+
+You can include parameter changes as a list of "<key>=<value>" pairs in an
+optional argument to "\poster", "\Poster" or "\PosterPage", enclosed in square
+brackets. E.g.,
+\begin{verbatim}
+  \poster[clip=pstricks,hcenter=true]{foo}
+\end{verbatim}
+No extraneous spaces, please.
+
+You can also redefine the parameters using "\def" or "\LaTeX"'s
+"\renewcommand". For parameter "foo", you should redefine "\POSTERfoo". E.g.,
+the next example is like the last one:
+\begin{verbatim}
+  \def\POSTERclip{pstricks}
+  \def\POSTERhcenter{true}
+  \poster{foo}
+\end{verbatim}
+This is mainly of interest when developing your own custom "\poster" command
+or "poster.tex" file.
+
+Here are some comments on the parameters:
+\begin{itemize}
+\item
+Don't adjust the "paper" and "image" dimensions for your document's
+magnification (and don't use \TeX's "true" dimensions). "poster.tex" does this
+for you. (That is, set the "page" and "image" dimensions to the actual values
+you want for the output.)
+
+\item
+Most printers cannot print right up to the edge of the paper. That is why the
+"imagewidth" and "imageheight" should be smaller than the "paperwidth" and
+"paperheight". The default values are good for printing on 8.5in by 11in paper
+in portrait mode with one-half inch margins.
+
+\item
+Setting "landscape" to "true" is just a convenient way to switch the "height"
+and "width" parameters. You still have to take care of printing your document
+in landscape mode. E.g., with Rokicki's "dvips", use
+\begin{verbatim}
+    \special{landscape}
+\end{verbatim}
+For other dvi driver's, consult the documentation.
+
+\item
+Setting "hcenter" and "vcenter" to "true" causes the image to be centered
+horizontally and vertically, respectively, in the total number of pages that
+are printed. E.g., when "vcenter" is "true", extra space is added to the top
+of the first row of pages and to the bottom of the last row of pages.
+
+\item
+The "crop" parameter specifies what kind of crop marks are drawn, to help you
+trim each page to size. When "crop" equals "full", you get crop marks along
+the full length of all four sides. "cropwidth" is the width of the crop mark
+lines. The crop marks lie entirely off the page, for any width.
+
+\item
+Setting "clip" to "pstricks" causes each page to be clipped to the size of the
+image (rather than having the image overlap in the margins on each page), but
+this only works if you have loaded the PSTricks package.
+
+\item
+When "immediatewrites" is "true", all "\write"'s are "\immediate". I.e.,
+auxiliary files are written to only when the poster file is first processed.
+This is the default. The page references may be incorrect in multi-page
+posters. Setting "immediatewrites" to "false" will fix the page references,
+but writing to auxiliary files will be repeated with each page of the poster.
+E.g., \LaTeX\ users will get errors about multiply defined labels, if they use
+the "\label" command in a poster.
+
+\item
+The "numbering" parameter sets the page numbers, as recognized by your "dvi"
+driver (it does not affect the page numbering as it appears in the document).
+Here is the scheme:
+\begin{description}
+  \item["rowcol"] Each page is numbered  "[<row>.<col>]".
+  \item["page"] Each page is numbered "[<page>.<row>.<col>]", where <page> is
+"\count0" (e.g., \LaTeX's "page" counter).
+  \item["serial"] Pages are numbering serially.
+  \item["auto"] Page numbering is "rowcol" for "\poster" and "\Poster", and
+"page" for "\PosterPage".
+\end{description}
+In each case, if the poster contains only one row of pages (i.e., if it is a
+banner), the <row> number is suppressed.
+\end{itemize}
+
+\subsection{Samples}
+
+The file "poster1.tex" contains the following sample of a framed poster with a
+whole page of text:
+\begin{verbatim}
+    \documentstyle[poster]{article}
+
+    \mag\magstep5  % Magnification of 1.2^5 (roughly 2.5)
+    % Use `true' dimensions below for magnified values.
+
+    \begin{document}
+
+    \begin{Poster}[vcenter=true,hcenter=true]
+      \setlength{\fboxsep}{.8truein}%
+      \setlength{\fboxrule}{.1truein}%
+      \fbox{\begin{minipage}{11.1truein}
+        <stuff>
+      \end{minipage}}%
+    \end{Poster}
+
+    \end{document}
+\end{verbatim}
+
+The file "poster2.tex" contain the following sample of a banner in landscape
+mode. "ptmr" is meant to be the name of the Times-Roman PostScript font, if
+your dvi driver supports such a thing.
+\begin{verbatim}
+    \font\bigroman=ptmr at 7.5in
+    \bigroman
+    \poster[vcenter=true,landscape=true]{Animals}
+\end{verbatim}
+
+\subsection{Changes}
+
+\begin{description}
+\item[V1.2, 28 August 1993] Add "cropwidth" parameter.
+
+\item[V1.1, 1 June 1993] Added "immediatewrites" and "numbering" parameters.
+
+\item[V1.0, 13 May 1993] Added "\PosterPage".
+
+\item[V0.93, 11~Feb~1993] First stable release.
+\end{description}
+
+\end{document}
+%%
+%% END poster.doc
+

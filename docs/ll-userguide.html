@@ -37,7 +37,7 @@ CLASS="subtitle"
 ><TT
 CLASS="application"
 >LifeLines</TT
-> Version 3.0.37</H2
+> Version 3.0.38</H2
 ><H3
 CLASS="author"
 ><A
@@ -5817,7 +5817,7 @@ NAME="AEN1210"
      cousin, and you know that your cousin's computer has no font for Cyrillic letters,
      you might wish to temporarily adjust your report output codeset so that you will
      get interpolated ASCII letters for the Russian letters. You could do this by
-     temporarily altering the configuration variable ReportCodeSetOut to be "ASCII" 
+     temporarily altering the configuration variable ReportCodesetOut to be "ASCII" 
      (actually, if any of your data has characters in it that are reserved in HTML, 
      such as the less than sign, or the ampersand, you would probaby want "ASCII//HTML").
 
@@ -8268,7 +8268,7 @@ CLASS="glosslist"
 ><DL
 ><DT
 ><B
->GedcomCodeSet</B
+>GedcomCodeset</B
 ></DT
 ><DD
 ><P
@@ -8276,15 +8276,15 @@ CLASS="glosslist"
 There are actually 3 properties.
 <I
 CLASS="glossterm"
->GedcomCodeSetOut</I
+>GedcomCodesetOut</I
 > and <I
 CLASS="glossterm"
->GedcomCodeSetIn</I
+>GedcomCodesetIn</I
 >
 can be used to specify the codeset for output or input.  If either of these is
 not specified <I
 CLASS="glossterm"
->GedcomCodeSet</I
+>GedcomCodeset</I
 > is used. Most Gedcom files should
 contain a codeset property, so this is not usually relevant when reading a Gedcom
 file, unless the input Gedcom file lacks a codeset property. This is used, however,
@@ -8294,22 +8294,22 @@ NB: This is ignored if the database has no internal codeset specified.
 ></DD
 ><DT
 ><B
->EditorCodeSet</B
+>EditorCodeset</B
 ></DT
 ><DD
 ><P
 >&#13;Specifies the codeset to use for editing.  There are actually 3 properties.
 <I
 CLASS="glossterm"
->EditorCodeSetOut</I
+>EditorCodesetOut</I
 > and <I
 CLASS="glossterm"
->EditorCodeSetIn</I
+>EditorCodesetIn</I
 >
 can be used to specify the codeset for output or input.  If either of these is
 not specified <I
 CLASS="glossterm"
->EditorCodeSet</I
+>EditorCodeset</I
 > is used. This property allows
 lifelines to convert from its internal codeset to the one you use in your editor, so
 this is important when your editor does not use the same codeset as your database.
@@ -8318,42 +8318,64 @@ NB: This is ignored if the database has no internal codeset specified.
 ></DD
 ><DT
 ><B
->ReportCodeSet</B
+>ReportCodeset</B
 ></DT
 ><DD
 ><P
 >&#13;Specifies the codeset to use for reports.  There are actually 3 properties.
 <I
 CLASS="glossterm"
->ReportCodeSetOut</I
+>ReportCodesetOut</I
 > and <I
 CLASS="glossterm"
->ReportCodeSetIn</I
+>ReportCodesetIn</I
 >
 can be used to specify the codeset for output or input.  If either of these is
 not specified <I
 CLASS="glossterm"
->ReportCodeSet</I
+>ReportCodeset</I
 > is used. Recently created
 reports may actually specify their codeset, in which case this is not used, but
 for reports which do not include a specification of codeset, the
 <I
 CLASS="glossterm"
->ReportCodeSetIn</I
+>ReportCodesetIn</I
 > (or <I
 CLASS="glossterm"
->ReportCodeSet</I
+>ReportCodeset</I
 >)
 specifies how the report will be understood. In any case, the output of a 
 report program will be written in the codeset given by
 <I
 CLASS="glossterm"
->ReportCodeSetOut</I
+>ReportCodesetOut</I
 > (or <I
 CLASS="glossterm"
->ReportCodeSet</I
+>ReportCodeset</I
 >).
 NB: This is ignored if the database has no internal codeset specified.
+</P
+></DD
+><DT
+><B
+>GuiCodeset</B
+></DT
+><DD
+><P
+>&#13;Specifies the codeset to use for interaction with the graphical user interface.
+There are actually 3 properties.
+<I
+CLASS="glossterm"
+>GuiCodesetOut</I
+> and <I
+CLASS="glossterm"
+>GuiCodesetIn</I
+>
+can be used to specify the codeset for output or input.  If either of these is
+not specified <I
+CLASS="glossterm"
+>GuiCodeset</I
+> is used. 
 </P
 ></DD
 ><DT

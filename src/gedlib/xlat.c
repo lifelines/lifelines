@@ -398,7 +398,6 @@ void
 xl_load_all_dyntts (CNSTRING ttpath)
 {
 	STRING dirs,p;
-	FILE * fp=0;
 	free_dyntts();
 	if (getoptint("TTPATH.debug", 0)) {
 		if (!ttpath ||  !ttpath[0])

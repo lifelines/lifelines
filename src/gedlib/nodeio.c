@@ -667,12 +667,14 @@ write_indi_to_file (NODE indi, CNSTRING file, BOOLEAN bom)
 void
 write_indi_to_file_for_edit (NODE indi, CNSTRING file, RFMT rfmt)
 {
-	BOOLEAN bom = FALSE;
+	BOOLEAN bom =
 #ifdef WIN32
-	bom = TRUE;
+	TRUE;
+#else
+	FALSE;
 #endif
 	annotate_with_supplemental(indi, rfmt);
-	write_indi_to_file(indi, editfile, bom);
+	write_indi_to_file(indi, file, bom);
 	resolve_refn_links(indi);
 }
 /*=====================================

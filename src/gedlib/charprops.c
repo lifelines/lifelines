@@ -72,12 +72,14 @@ charprops_load_utf8 (void)
 		return FALSE;
 	while (fgets(line, sizeof(line), fp)) {
 		INT ch, chup, chlo;
+		unsigned int uich;
 		const char *ptr;
 		if (line[0] == '#')
 			continue;
-		if (1 != sscanf(line, "%x", &ch)) {
+		if (1 != sscanf(line, "%x", &uich)) {
 			continue;
 		}
+		ch = uich;
 		ptr = line;
 		chup = chlo = ch;
 		for (i=0; i<13; ++i) {
@@ -85,10 +87,14 @@ charprops_load_utf8 (void)
 			if (!ptr)
 				break;
 			if (i==11) {
-				if (1 != sscanf(ptr+1, "%x", &chup))
+				if (1 == sscanf(ptr+1, "%x", &uich))
+					chup = uich;
+				else
 					chup = ch;
 			} else if (i==12) {
-				if (1 != sscanf(ptr+1, "%x", &chlo))
+				if (1 == sscanf(ptr+1, "%x", &uich))
+					chlo = uich;
+				else
 					chlo = ch;
 			}
 			++ptr;
@@ -234,7 +240,6 @@ charprops_load (const char * codepage)
 static ZSTR
 charprops_toupperz (CNSTRING s)
 {
-	ZSTR zstr = 0;
 	ASSERT(uu8 && loaded_utf8==1);
 	return convert_utf8(uppers, s);
 }
@@ -246,7 +251,6 @@ charprops_toupperz (CNSTRING s)
 static ZSTR
 charprops_tolowerz (CNSTRING s)
 {
-	ZSTR zstr = 0;
 	ASSERT(uu8 && loaded_utf8==1);
 	return convert_utf8(lowers, s);
 }

@@ -1,0 +1,68 @@
+.if t .pl 10.9i		\" Page length
+.if n .pl 10.7i
+.if t .ll 6.75i		\" Line length
+.if n .ll 7.25i
+.\".if t .lt 6.75i		\" Title length
+.\".if n .lt 7.25i
+.if t .lt 7.75i		\" Title length
+.if n .lt 9.25i
+.po 0.5i		\" Left margin
+.ls 1			\" Line spacing
+.\".nr Ej 1		\" New page before chapter headings
+.nr Hb 1		\" Line break after all headings
+.nr Hs 6		\" Blank line after all headings
+.\".nr Hc 1		\" Centre chapter headings
+.nr Hu 1		\" Un-numbered headings are at level 1
+.nr Hi 1		\" Indent after head same as paras
+.nr Pt 0		\" Don't indent paras
+.nr Cl 6		\" Heads in table of contents up to level 6
+.if t .ds HF 3 3 3 3 3 3 2         \" Heading fonts
+.ds HP +6 +6 +2 +2 +2 +2 +1  \" Heading point sizes
+.ds pB Phil Stringer
+.ds iN The Stringers
+.rm )k			\" Remove cut marks at top of page
+.if "\nd"0" .nr m \n(mo-1
+.if "\nm"0" .ds mO January
+.if "\nm"1" .ds mO February
+.if "\nm"2" .ds mO March
+.if "\nm"3" .ds mO April
+.if "\nm"4" .ds mO May
+.if "\nm"5" .ds mO June
+.if "\nm"6" .ds mO July
+.if "\nm"7" .ds mO August
+.if "\nm"8" .ds mO September
+.if "\nm"9" .ds mO October
+.if "\nm"10" .ds mO November
+.if "\nm"11" .ds mO December
+.PF "'\fIProduced by \*(pB\fR'- \\\\nP -'\fI\n(dy \*(mO 19\n(yr\fR'"
+.PH
+.de GN
+.br
+.ne 2i
+.sp 2
+.in 0
+.ce
+.if t \s+3\fHGENERATION \\$1\fH\s-3
+.if n GENERATION \\$1
+..
+.de CH
+..
+.de IN
+.sp
+.in 0
+..
+.de IX
+.SK
+.HU Index
+All the people mentioned in this report are given below. Please note that
+the numbers printed after the name are not page numbers. They are the section
+number(s) in which that person is mentioned. 
+.if t .2C
+..
+.de .I
+.if t \fI\\$1
+.if n \\$1
+..
+.de .R
+.if t \fR
+..

@@ -1,0 +1,327 @@
+% Modifications to tree.tex by D. Roegel, for desc-tex2
+% -----------------------------------------------------
+%
+% (compare with the original file to see changes)
+%
+% 16 January 1995 D. Roegel (roegel@loria.fr)
+%
+% There are now six kinds of \subtree nodes:
+%
+%   These nodes are boxes which are marked through a distinct
+%   very small depth. This correspond to a dirty trick
+%   mentionned in Appendix D of the TeXbook.
+%
+%    \subtree{normal}                     (depth 0sp) 
+%                                          
+%    \subtree{unframed;rules:right}       (depth 5sp)    
+%
+%    \subtree{unframed;rules:left,right}  (depth 1sp)
+%
+%    \subtree{unframed;rules:left}        (depth 3sp)     
+%                  
+%    \subtree{framed;rules:right}         (depth 2sp) 
+%                               
+%    \subtree{unframed;norules}           (depth 4sp) 
+%
+%    Case ``unframed;rules:left'' is normally never needed 
+%    and remains for historical reasons.
+%
+%
+%  Note that 1sp is very small since 65536x72.27sp=2.54cm
+%
+% -----------------------------------------------------------------------
+% Old documentation
+%
+%              Tree -- a macro to make aligned (horizontal) trees in TeX
+%
+%    Input is of the form
+%        \tree
+%           item
+%           \subtree
+%              \leaf{item}
+%                 .
+%                 .
+%                 .
+%           \endsubtree
+%           \subtree
+%              .
+%              .
+%              .
+%           \endsubtree
+%        \endsubtree
+%     \endtree
+%
+%    Nesting is to any level.  \leaf is defined as a subtree of one item:
+% \def\leaf#1{\subtree#1\endsubtree}.
+%
+%    A structure:
+%       \subtree
+%          item_part1
+%          item_part2
+%               .
+%               .
+%               .
+%
+% will print item_part2 directly below item_part1 as a single item
+% as if they were in a \box.
+%
+%    The macro is a 3-pass macro.  On the first pass it sets up a data
+% structure from the \subtree ... \endsubtree definitions.  On the second pass
+% it recursively calculates the width of each level of the tree.  On the third
+% pass it sets up the boxes, glue and rules.
+%
+%    By David Eppstein, TUGboat, vol. 6 (1985), no. 1, pp. 31--35.
+%    Transcribed by Margaret Kromer (peg), Feb., 1986.
+%
+%             Pass 1
+% At the end of pass 1, the tree is coded as a nested collection of \hboxes
+% and \vboxes.
+\newbox\treebox\newcount\treeboxcnt
+%----------------------------------------------------------------------------
+% Some new things:
+\def\ifequal#1#2{\def\first{#1}\def\second{#2}\ifx\first\second}
+\newif\ifdontframe
+\dontframefalse
+\newif\ifnolinkleft
+\nolinkleftfalse
+\newif\ifnolinkright
+\nolinkrightfalse
+\newif\ifnothing
+\nothingfalse
+\newif\ifrootandsecondfam
+\rootandsecondfamfalse
+\def\framesep{1mm}
+\def\framerule{0.4pt}
+\def\frameseprule{3.24pt}
+%----------------------------------------------------------------------------
+\def\tree#1{\message{Begin tree}\treeboxcnt=1\global\setbox\treebox=\boxtree{#1}}
+\def\subtree#1{\ettext \advance\treeboxcnt by 1 \boxtree{#1}}
+\def\leaf#1{\subtree{n}#1\endsubtree}
+\def\endsubtree{\ettext \egroup \advance\treeboxcnt-1{}%
+             \ifnum\treeboxcnt=-1 \treeerrora\fi}
+\def\endtree{\endsubtree \ifnum\treeboxcnt>0 \treeerrorb\fi%
+             \settreesizes \typesettree\message{-- end tree}}
+% Error messages for unbalanced tree
+\def\treeerrora{\errhelp=\treeerrorahelp%
+             \errmessage{Unbalanced tree -- too many endsubtrees}}
+\newhelp\treeerrorahelp{There are more subtrees closed than opened}
+\def\treeerrorb{\errhelp=\treeerrorbhelp%
+             \errmessage{Unbalanced tree -- not enough endsubtrees}}
+\newhelp\treeerrorbhelp{Not all the subtrees of the tree are closed.
+If you continue, you'll get some mysterious secondary errors.}
+%        Set up \vbox containing root of tree
+\newif\iftreetext\treetextfalse         % Whether still aligning text
+\def\boxtree#1{\hbox\bgroup               % Start outer box of tree or subtree
+  \baselineskip 2.5ex                   % Narrow line spacing slightly
+  \tabskip 0pt                          % No spurious glue in alignment
+  %\kern\framerule
+  %\kern\framesep
+  \vbox\bgroup                          % Start inner text \vbox
+  \kern\framerule
+  \kern\framesep
+% Some new things:
+  \ifequal{#1}{unframed;rules:left,right}\dontframetrue\fi
+  \ifequal{#1}{framed;rules:right}\nolinklefttrue\fi
+  \ifequal{#1}{unframed;rules:left}\nolinkrighttrue\fi
+  \ifequal{#1}{unframed;norules}\nothingtrue\fi
+  \ifequal{#1}{unframed;rules:right}\rootandsecondfamtrue\fi
+  \treetexttrue                         % Remember for \ettext
+  \let\par\crcr \obeylines              % New line breaks without explicit \cr
+  \halign\bgroup##\hfil\cr}             % Start alignment with simple template
+\def\ettext{\iftreetext                 % Are we still in inner text \vbox?
+  \crcr\egroup 
+% Some new things:
+  \kern\framesep
+  \kern\framerule
+    % various depths are added when some flags are set:
+    \ifdontframe\hrule height0ptwidth0ptdepth1sp\fi
+    \dontframefalse
+    \ifnolinkleft\hrule height0ptwidth0ptdepth2sp\fi
+    \nolinkleftfalse
+    \ifnolinkright\hrule height0ptwidth0ptdepth3sp\fi
+    \nolinkrightfalse
+    \ifnothing\hrule height0ptwidth0ptdepth4sp\fi
+    \nothingfalse
+    \ifrootandsecondfam\hrule height0ptwidth0ptdepth5sp\fi
+    \rootandsecondfamfalse
+  \egroup   
+  \hskip\frameseprule\relax
+  %\hskip\framerule\relax
+  \fi}             % Yes, end alignment and box
+%             Pass 2
+% Recursively calculate widths of tree with \setsizes; keep results in
+% \treesizes; \treewidth contains total width calculated so far.  \treeworkbox
+% is workspace containing subtree being sized.
+\newbox\treeworkbox
+\def\cons#1#2{\edef#2{\xmark #1#2}}     % Add something to start of list
+\def\car#1{\expandafter\docar#1\docar}  % Take first element of list
+\def\docar\xmark#1\xmark#2\docar{#1}    % ..by ignoring rest in expansion
+\def\cdr#1{\expandafter\docdr#1\docdr#1}% Similarly, drop first element
+\def\docdr\xmark#1\xmark#2\docdr#3{\def#3{\xmark #2}}
+\def\xmark{\noexpand\xmark}             % List separator expands to self
+\def\nil{\xmark}                        % Empty list is just separator
+\def\settreesizes{\setbox\treeworkbox=\copy\treebox%
+              \global\let\treesizes\nil \setsizes}
+\newdimen\treewidth                     % Width of this part of the tree
+\def\setsizes{\setbox\treeworkbox=\hbox\bgroup% Get a horiz list as a workspace
+  \unhbox\treeworkbox\unskip            % Take tree, unpack it into horiz list
+  \inittreewidth                        % Get old width at this level
+  \sizesubtrees                         % Recurse through all subtrees
+  \sizelevel                            % Now set width from remaining \vbox
+  \egroup}                              % All done, finish our \hbox
+\def\inittreewidth{\ifx\treesizes\nil   % If this is the first at this level
+    \treewidth=0pt                      % ..then we have no previous max width
+ \else \treewidth=\car\treesizes        % Otherwise take old max level width
+   \global\cdr\treesizes                % ..and advance level width storage
+   \fi}                                 % ..in preparation for next level.
+\def\sizesubtrees{\loop                 % For each box in horiz list (subtree)
+  \setbox\treeworkbox=\lastbox \unskip  % ..pull it off list and flush glue
+  \ifhbox\treeworkbox \setsizes         % If hbox, it's a subtree - recurse
+  \repeat}                              % ..and loop; end loop on tree text
+\def\sizelevel{%
+  \ifdim\treewidth<\wd\treeworkbox      % If greater than previous maximum
+  \treewidth=\wd\treeworkbox \fi        % Then set max to new high
+ \global\cons{\the\treewidth}\treesizes}% In either case, put back on list
+%             Pass 3
+% Recursively typeset tree with \maketree by adding an \hbox containing
+% a subtree (in \treebox) to the horizontal list.
+\newdimen\treeheight                    % Height of this part of the tree
+\newif\ifleaf                           % Tree has no subtrees (is a leaf)
+\newif\ifbotsub                         % Bottom subtree of parent
+\newif\iftopsub                         % Top subtree of parent
+\def\typesettree{\medskip\maketree\medskip}  % Make whole tree
+\def\maketree{\hbox{\treewidth=\car\treesizes  % Get width at this level
+  \cdr\treesizes                        % Set up width list for recursion
+  \makesubtreebox\unskip                % Set \treebox to text, make subtrees
+  \ifleaf \makeleaf                     % No subtrees, add glue
+  \else \makeparent\fi}}                % Have subtrees, stick them at right
+{\catcode`@=11                          % Be able to use \voidb@x
+\gdef\makesubtreebox{\unhbox\treebox    % Open up tree or subtree
+  \unskip\global\setbox\treebox\lastbox % Pick up very last box
+  \ifvbox\treebox                       % If we're already at the \vbox
+    \global\leaftrue \let\next\relax    % ..then this is a leaf
+  \else \botsubtrue                     % Otherwise, we have subtrees
+    \setbox\treeworkbox\box\voidb@x     % Init stack of processed subs
+    \botsubtrue \let\next\makesubtree   % ..and call \maketree on them
+  \fi \next}}                           % Finish up for whichever it was
+\def\makesubtree{\setbox1\maketree      % Call \maketree on this subtree
+  \unskip\global\setbox\treebox\lastbox % Pick up box before it
+  \treeheight=\ht1                      % Get height of subtree we made
+  \advance\treeheight 2ex               % Add some room around the edges
+  \ifhbox\treebox \topsubfalse          % If picked up box is a \vbox,
+    \else \topsubtrue \fi               % ..this is the top, otherwise not
+  \addsubtreebox                        % Stack subtree with the rest
+  \iftopsub \global\leaffalse           % If top, remember not a leaf
+    \let\next\relax \else           % ..(after recursion), set return
+    \botsubfalse \let\next\makesubtree  % Otherwise, we have more subtrees
+  \fi \next}                         % Do tail recursion or return
+\def\addsubtreebox{%
+        \setbox\treeworkbox=\vbox{\subtreebox\unvbox\treeworkbox}}
+\def\subtreebox{\hbox\bgroup            % Start \hbox of tree and lines
+  \ifdim\dp1=2sp\def\norules{1}%
+  \else\def\norules{0}%
+  \fi
+  \vbox to \treeheight\bgroup           % Start \vbox for vertical rules
+    \ifbotsub \iftopsub \vfil           % If both bottom and top subtree
+        \if\norules1%
+           \hrule height0pt width 0.4pt 
+        \else
+           \hrule width 0.4pt           % ..vertical rule is just a dot
+        \fi
+     \else \treehalfrule{\norules}\fi \vfil      % Bottom gets half-height rule
+    \else \iftopsub 
+             \vfil \treehalfrule{\norules}% Top gets half-height the other way
+     \else \if\norules1\hrule width 0.4pt height 0pt\kern\treeheight
+           \else 
+               \hrule width 0.4pt height \treeheight
+           \fi
+      \fi\fi % Middle, full height
+    \egroup                             % Finish vertical rule \vbox
+  %\treectrbox{\hrule width 1em}\hskip 0.2em\treectrbox{\box1}\egroup}
+% Some new things:
+  \if\norules1%
+    \treectrbox{\hrule width 1em height0pt}%
+  \else
+    \treectrbox{\hrule width 1em}%
+  \fi
+  \treectrbox{\box1
+                     % this rule enforces the depth to be 0pt,
+                     % and avoids transmission of this depth
+                     % towards the left
+                              \hrule width0ptheight0ptdepth0pt
+                              }\egroup}
+\def\treectrbox#1{{\setbox0=\vbox{#1}%
+                   \ifdim\dp0=2sp
+                     \gdef\newdp{2}%
+                   \else
+                     \gdef\newdp{0}%
+                   \fi
+                   \ifdim\dp0=1sp\gdef\newdp{1}\fi
+                   \vbox to \treeheight{\vfil\box0\vfil
+                                     \hrule width0ptheight0ptdepth\newdp sp}}}
+\def\treehalfrule#1{\dimen\treeworkbox=\treeheight   % Get total height
+  \divide\dimen\treeworkbox 2%
+  \advance\dimen\treeworkbox 0.2pt      % Divide by two, add half horiz height
+  \if#11\hrule width 0.4pt height 0pt\kern\dimen\treeworkbox
+  \else \hrule width 0.4pt height \dimen\treeworkbox
+  \fi
+       }% Make a vertical rule that high
+% Some new things:
+% The frame is partly put *inside* the box, since we do not want
+% to change the dimensions of the resulting box (see \ettext)
+\def\ifdepth#1#2#3{\ifdim\dp\treebox=#1sp\gdef\newdp{#2}\gdef\newdpl{#3}\fi}
+\def\noframedtreebox#1{\hbox{\kern\framerule\kern\framesep
+                             \vbox{\kern\framerule\kern\framesep             
+                                   \box\treebox
+                                   \kern\framerule\kern\framesep
+                                   #1}%
+                             \kern\framerule\kern\framesep}}
+\def\makeleaf{\gdef\newdpl{0}\gdef\newdp{0}%
+              \ifdepth{2}{2}{0}%
+              \ifdepth{1}{1}{1}%
+              \ifdepth{3}{1}{3}%
+              \ifdepth{4}{2}{3}%
+              \ifdepth{5}{2}{3}%
+              \ifdim\dp\treebox=1sp
+                 \noframedtreebox{}%
+              \else
+                  \if\newdpl3
+                     \ifdim\dp\treebox=5sp\gdef\newdpl{0}\fi
+                     \noframedtreebox{\hrule height0ptwidth0ptdepth\newdp sp}%
+                  \else
+                       \vbox{\hrule
+                             \hbox{\vrule\kern\framesep
+                                   \vbox{%\kern\framesep
+                                         \box\treebox
+                                         %\kern\framesep
+                                        }%
+                                   \kern\framesep
+                                   \vrule
+                                  }%
+                             \hrule
+                             \hrule height0ptwidth0ptdepth\newdp sp
+                            }%
+                  \fi
+              \fi
+              }%            % Add leaf box to horiz list
+% This is an alternative definition giving braces:
+%\def\makeleaf{\vbox{\hbox{$\left\{\vcenter{\box\treebox}\right.$}\kern0pt}}%
+%\def\makeleaf{\box\treebox}% original definition
+\def\makeparent{\ifdim\ht\treebox>%
+    \ht\treeworkbox                     % If text is higher than subtrees
+    \treeheight=\ht\treebox             % ..use that height
+  \else \treeheight=\ht\treeworkbox \fi % Otherwise use height of subtrees
+  \advance\treewidth-\wd\treebox        % Take remainder of level width
+  \advance\treewidth 1em                % ..after accounting for text and glue
+  %\treectrbox{\box\treebox}\hskip 0.2em % Add text, space before connection
+  \treectrbox{\makeleaf}%\hskip 0.2em
+  \if\newdpl3%
+     \treectrbox{\hrule height 0pt width \treewidth}%
+  \else
+     \treectrbox{\hrule height 0.4pt width \treewidth}%
+  \fi
+  \treectrbox{\box\treeworkbox}}        % Add \hrule, subs
+
+
+
+

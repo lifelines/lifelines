@@ -1,0 +1,22 @@
+%% BEGIN poster2.tex
+%%
+%% A sample file for poster.tex/poster.sty. Makes a banner.
+%% Use Plain TeX (or add preamble and use LaTeX)
+
+\input poster
+
+\special{landscape}  % This works with Rokicki's dvips
+
+% ptmr should be name of the PostScript Times-Roman font:
+% 8in is a good size for this font, but might not work with other fonts.
+% You can use a Computer Modern font, if you are prepared to make a big
+% font bitmap.
+
+\font\bigroman=ptmr at 8in
+\bigroman
+
+\poster[vcenter=true,landscape=true]{Happy}
+
+\end
+%% END poster2.tex
+

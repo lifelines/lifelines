@@ -53,7 +53,7 @@ static void clear_pvalue(PVALUE val);
 static PVALUE create_pvalue_from_keynum_impl(INT i, INT ptype);
 static PVALUE create_pvalue_from_key_impl(STRING key, INT ptype);
 static PVALUE create_pvalue_from_record(RECORD rec, INT ptype);
-static BOOLEAN eq_pstrings(PVALUE val1, PVALUE val2);
+/* static BOOLEAN eq_pstrings(PVALUE val1, PVALUE val2); */
 static int float_to_int(float f);
 static void free_float_pvalue(PVALUE val);
 static BOOLEAN is_record_pvaltype(INT valtype);
@@ -517,7 +517,7 @@ create_pvalue_from_othr_keynum (INT i)
 static PVALUE
 create_pvalue_from_record (RECORD rec, INT ptype)
 {
-	// record pvalues simply point to their heap-alloc'd record
+	/* record pvalues simply point to their heap-alloc'd record */
 	return create_pvalue(ptype, rec);
 }
 /*====================================================
@@ -817,6 +817,7 @@ bad_type_error (CNSTRING op, ZSTR *zerr, PVALUE val1, PVALUE val2)
  * eq_pstrings -- Compare two PSTRINGS
  *  Caller is responsible for ensuring these are PSTRINGS
  *=============================================*/
+/* unused
 static BOOLEAN
 eq_pstrings (PVALUE val1, PVALUE val2)
 {
@@ -826,6 +827,7 @@ eq_pstrings (PVALUE val1, PVALUE val2)
 	if (!str2) str2 = "";
 	return eqstr(str1, str2);
 }
+unused */
 /*===========================================
  * eq_pvalues -- See if two PVALUEs are equal
  * Result into val1, deletes val2

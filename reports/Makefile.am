@@ -20,7 +20,7 @@ LL_REPORTS = \
 	fdesc.ll find.ll findmissing.ll fix_nameplac.ll			\
 	formatted_gedcom.ll gedall.ll gedlist.ll gedlod.ll gedn.ll	\
 	gedtags.ll ged_write.li genancc1.ll genancc2.ll gender_order.ll \
-	gendex.ll	\
+	gendex.ll							\
 	genetics.ll genetics2.ll getbaptism.li givens_gender.ll		\
 	givens_gender_finder.ll hasnotes1.ll hp-anc.ll htmlahnen.ll	\
 	html.dn.ll htmlfam.ll html.ll igi-filter.ll igi-import.ll	\
@@ -29,16 +29,17 @@ LL_REPORTS = \
 	least_related.ll line.ll listsour.ll ll2html4.ll ll2visio.ll	\
 	longlines.ll maritalinfo.ll marriages1.ll menu.ll name2html.ll	\
 	namefreq.ll names_freq.ll namesformat1.ll net-ped.ll		\
-	nonpatronymics.ll outsources.li paf-export.ll pafcompat.ll 	\
-	partition.ll pdesc.ll paf-import.ll ped.ll pedigreel.ll		\
-	pedigree_html.ll pedigreelhs.ll pedigree.ll places.ll		\
-	pointers.ll prompt.li ps-anc.ll ps-circle.ll reg_html.ll	\
+        novel/novel.ll nonpatronymics.ll outsources.li paf-export.ll 	\
+	pafcompat.ll partition.ll pdesc.ll paf-import.ll ped.ll 	\
+	pedigreel.ll pedigree_html.ll pedigreelhs.ll pedigree.ll 	\
+	pedtex/pedtex.ll places.ll pointers.ll prompt.li ps-anc.ll 	\
+	ps-circ/ps-circ.ll ps-circle.ll ps-fan/ps-fan.ll reg_html.ll	\
 	register-rtf.ll register-tex.ll register1.ll register1-dot.ll	\
 	regvital.ll relate.ll related_spouses.ll relation.ll relink.ll	\
 	rfc.ll rllgen.ll rootset.ll rslgen.ll rtflib.li sealing_line.ll	\
 	select.ll sgsgen.ll shorten.li showlines1.ll simpleged.ll 	\
 	soundex1.ll soundex-isfm.ll sour2.li sources.ll sources_bib.ll	\
-	sour.li src.ll src-rtf.ll ssdi_aid.ll ssdi-import.ll	\
+	sour.li src.ll src-rtf.ll ssdi_aid.ll ssdi-import.ll		\
 	ssdi-search-list.ll stats.ll surname1.ll 	\
 	timeline1.ll timeline2.ll tinytafel1.ll tools.li	\
 	tree_density.ll ttable.ll upl2.li verify.ll wife.ll	\
@@ -47,7 +48,17 @@ LL_REPORTS = \
 	st/st_collate_8859-1.li st/st_collate_UTF-8.li \
 	st/st_convert.li st/st_date.li st/st_db.li \
 	st/st_number.li st/st_string.li st/st_string_UTF-8.li
-OTHER_REPORTS = boc.gif ll.png gen_index bib2html.c bury.c
+OTHER_REPORTS = boc.gif ll.png gen_index bib2html.c bury.c \
+        desc-tex2/drtree.tex desc-tex2/extree2.tex desc-tex2/poster2.tex \
+        desc-tex2/pstricks.con desc-tex2/README \
+        desc-tex2/ex1.tex desc-tex2/mysetup.tex desc-tex2/poster.doc \
+        desc-tex2/pstricks.pro desc-tex2/setup.tex \
+        desc-tex2/drsetup.tex desc-tex2/extree1.tex desc-tex2/poster1.tex \
+        desc-tex2/poster.tex desc-tex2/pstricks.tex desc-tex2/tree.tex \
+        novel/novel.head novel/novel.intro novel/novel.README \
+        pedtex/pedtex.readme pedtex/setup.tex pedtex/tree.tex \
+        ps-circ/ps-circ.ps ps-fan/ps-fan.ps \
+        ps-pedigree.ps tree.tex
 dist_pkgdata_DATA = index.html
 pkg_REPORTS = $(LL_REPORTS) $(OTHER_REPORTS) $(dist_pkgdata_DATA)
 

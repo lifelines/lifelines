@@ -61,7 +61,7 @@ static void getnamerec(const RKEY * rkey);
 static CNSTRING getsurname_impl(CNSTRING name);
 static STRING name_surfirst(STRING);
 static void name_to_parts(CNSTRING, STRING*);
-static void name2rkey(CNSTRING, RKEY *);
+/* static void name2rkey(CNSTRING, RKEY *); */
 static CNSTRING nextpiece(CNSTRING);
 static STRING parts_to_name(STRING*);
 static BOOLEAN piecematch(STRING, STRING);
@@ -192,6 +192,7 @@ across database reloads
 /*============================================
  * name2rkey - Convert name to name record key
  *==========================================*/
+/* unused
 static void
 name2rkey (CNSTRING name, RKEY * rkey)
 {
@@ -205,6 +206,7 @@ name2rkey (CNSTRING name, RKEY * rkey)
 	rkey->r_rkey[6] = *sdex++;
 	rkey->r_rkey[7] = *sdex;
 }
+unused */
 /*============================================
  * soundex2rkey - Convert soundex coded name to name record key
  *==========================================*/

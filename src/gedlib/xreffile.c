@@ -32,9 +32,10 @@
 #include "sys_inc.h"
 #include "llstdlib.h"
 #include "btree.h"
+#include "gedcom.h"
+#include "gedcomi.h"
 #include "table.h"
 #include "translat.h"
-#include "gedcom.h"
 
 extern BTREE BTR;
 

@@ -1,0 +1,323 @@
+%!PS-Adobe-2.0 EPSF-1.2
+%%BoundingBox:0 0 1100 790
+/maxlevel 5 def
+/color false def
+/lr 0 def /lg 1 def /lb 1 def
+/Lr 0 def /Lg 0 def /Lb 1 def
+/tr 0 def /tg 1 def /tb 1 def
+/Tr 0 def /Tg 0 def /Tb 1 def
+/fontname /Helvetica def
+/encvec [
+16#80 /Ccedilla
+16#81 /udieresis
+16#82 /eacute
+16#83 /acircumflex
+16#84 /adieresis
+16#85 /agrave
+16#86 /aring
+16#87 /ccedilla
+16#88 /ecircumflex
+16#89 /edieresis
+16#8a /egrave
+16#8b /idieresis
+16#8c /icircumflex
+16#8d /igrave
+16#8e /Adieresis
+16#8f /Aring
+16#90 /Eacute
+16#91 /ae
+16#92 /AE
+16#93 /ocircumflex
+16#94 /odieresis
+16#95 /ograve
+16#96 /ucircumflex
+16#97 /ugrave
+16#98 /ydieresis
+16#99 /Odieresis
+16#9a /Udieresis
+16#9b /cent
+16#9c /sterling
+16#9d /yen
+16#9f /florin
+16#a0 /aacute
+16#a1 /iacute
+16#a2 /oacute
+16#a3 /uacute
+16#a4 /ntilde
+16#a5 /Ntilde
+16#a6 /ordfeminine
+16#a7 /ordmasculine
+16#a8 /questiondown
+16#aa /logicalnot
+16#ab /onehalf
+16#ac /onequarter
+16#ad /exclamdown
+16#ae /guillemotleft
+16#af /guillemotright
+] def
+% Copyright (c) 1991-1993 Thomas P. Blumer.  All Rights Reserved.
+/border true def
+
+color {
+        /setcmykcolor where { pop
+                Tr Tg Tb add add 0 eq {
+                        /Tk 1 def
+                } {
+                        /Tk 0 def
+                        /Tr 1 Tr sub def /Tg 1 Tg sub def /Tb 1 Tb sub def
+                } ifelse
+
+                Lr Lg Lb add add 0 eq {
+                        /Lk 1 def
+                } {
+                        /Lk 0 def
+                        /Lr 1 Lr sub def /Lg 1 Lg sub def /Lb 1 Lb sub def
+                } ifelse
+
+                /textcolr0 {Tr Tg Tb Tk setcmykcolor} bind def % direct ancestor name
+                /lincolr0 {Lr Lg Lb Lk setcmykcolor} bind def  % direct ancestor lines
+        } {
+                /textcolr0 {Tr Tg Tb setrgbcolor} bind def % direct ancestor name
+                /lincolr0 {Lr Lg Lb setrgbcolor} bind def  % direct ancestor lines
+        } ifelse
+} {
+        /textcolr0 {} bind def
+        /lincolr0 {} bind def
+} ifelse
+
+% get printable area
+clippath pathbbox newpath
+/ury exch def /urx exch def
+/lly exch def /llx exch def
+/lly lly 5 add def
+/ury ury 10 sub def
+
+% set landscape mode, get width and height
+/w ury lly sub def
+/h urx llx sub def
+w h lt {
+        % stay in portrait mode
+        llx lly translate
+        /tmp h def
+        /h w def
+        /w tmp def
+} {
+        % set landscape mode
+        urx lly translate 90 rotate
+} ifelse
+
+% decorative border
+border {
+        /bwid1 2.5 def
+        /gapwid 1.5 def
+        /bwid2 0.7 def
+        /rect {
+                /rh exch def
+                /rw exch def
+                moveto
+                rw 0 rlineto
+                0 rh rlineto
+                rw neg 0 rlineto
+                closepath stroke
+        } def
+
+        bwid1 setlinewidth
+        lincolr0
+        bwid1 2 div  dup  w bwid1 sub  h bwid1 sub  rect
+
+        bwid2 setlinewidth
+        bwid1 gapwid bwid2 2 div add add  dup
+        w bwid1 2 mul sub gapwid 2 mul sub bwid2 sub
+        h bwid1 2 mul sub gapwid 2 mul sub bwid2 sub rect
+
+        % cut the border out of the imageable area
+        /tmp bwid1 gapwid bwid2 gapwid add add add def
+        tmp tmp translate
+        /w w tmp 2 mul sub def
+        /h h tmp 2 mul sub def
+} if
+
+% Reencode the font so that we can use the IBMPC set of international chars
+/encdict 12 dict def
+/reenc {
+        encdict begin
+        /newenc exch def
+        /nfont exch def
+        /ofont exch def
+        /ofontdict ofont findfont def
+        /newfont ofontdict maxlength 1 add dict def
+        ofontdict {
+                exch dup /FID ne {
+                        dup /Encoding eq
+                         {exch dup length array copy newfont 3 1 roll put}
+                         {exch newfont 3 1 roll put} ifelse
+                }
+                {pop pop}
+                ifelse
+        } forall
+        newfont /Fontname nfont put
+        newenc aload pop
+        newenc length 2 idiv
+        { newfont /Encoding get 3 1 roll put}
+        repeat
+        nfont newfont definefont pop
+        end
+} def
+
+fontname /gedfont encvec reenc
+/fontname /gedfont def
+% end font reencoding
+
+% clear path
+newpath
+
+% get radius of circular chart
+/r w 2 div def
+/dy h r sub def
+/dx r r mul dy dy mul sub sqrt def
+/a dy dx atan def
+
+% get center of circle, make it origin
+/cx r def
+/cy dy def
+cx cy translate
+
+% ang1 = end angle for chart
+% ang2 = begin angle for chart
+/ang1 a 180 add def
+/ang2 a neg def
+/ang ang1 ang2 sub def
+
+% draw outline of chart
+%0 0 moveto 0 0 r ang2 ang1 arc closepath stroke
+
+% 1-icf = fraction of radius segment for inner circle
+/icf .67 def
+
+% length of one radius segment
+/rl r maxlevel icf sub div def
+
+% calculate base font size from segment length
+/fntsize rl 9.0 div def
+fontname findfont fntsize scalefont setfont
+/space ( ) stringwidth pop def
+
+% calc line width from segment length - .24 pts = 1 pixel
+/linwid fntsize .1 mul def
+linwid setlinewidth
+/namey linwid 2 mul def
+
+2 setlinecap
+
+% name string length for 0 generation
+/len0 rl def
+
+% name string length for other generations
+/len1 rl space 2 mul sub def
+
+% show string given as argument
+% select font size so that string fits in available length
+/wshow {
+        /s exch def
+        /len exch def
+        fontname findfont fntsize scalefont setfont
+        s stringwidth pop dup len lt {
+                pop
+        } {
+                % compute new font size for exact fit
+                len exch div fntsize mul /fsize exch def
+                fontname findfont fsize scalefont setfont
+        } ifelse
+        textcolr0
+        s show
+} bind def
+
+% starting y for root children
+/siby fntsize -2 mul def
+
+% called once for each individual on chart
+/i {
+        /leaf exch def
+        /level exch def
+        /death exch def
+        /birth exch def
+        /name exch def
+        level maxlevel lt {
+            level 0 eq {
+                % print name, birth date, death date
+                gsave
+                len0 -2 div siby translate
+                /x 0 def
+                x namey moveto
+                len0 name wshow
+                /siby siby fntsize 2 mul sub def
+
+                fontname findfont fntsize scalefont setfont
+                birth length 0 gt {
+                        x fntsize neg moveto
+                        len0 birth wshow
+                        /siby siby fntsize sub def
+                } if
+                death length 0 gt {
+                        x fntsize neg 2 mul moveto
+                        len0 death wshow
+                        /siby siby fntsize sub def
+                } if
+                grestore
+            } {
+                % x1 = inner radius, x2 = outer radius
+                /x1 level icf sub rl mul def
+                /x2 x1 rl add def
+
+                % aw = angle of wedge for one individual in this generation
+                /aw ang 2 level bitshift div def
+
+                % a = angular position of this individual
+                /a aw leaf 2 mul 1 add mul def
+                /a ang1 a sub def
+
+                % rotate coord system so this individual is on x axis
+                % display name and other info
+                gsave
+                a 90 lt {
+                        a rotate
+                        lincolr0
+                        x1 0 moveto x2 0 lineto stroke
+                        /x x1 space add def
+                } {
+                        a 180 sub rotate
+                        lincolr0
+                        x2 neg 0 moveto x1 neg 0 lineto stroke
+                        /x x2 neg space add def
+                } ifelse
+
+                % print name, birth date, death date
+                x namey moveto
+                len1 name wshow
+
+                fontname findfont fntsize scalefont setfont
+                birth length 0 gt {
+                        x fntsize neg moveto
+                        len1 birth wshow
+                } if
+                death length 0 gt {
+                        x fntsize neg 2 mul moveto
+                        len1 death wshow
+                } if
+                grestore
+
+                % draw arc connecting this individual to his/her child
+                level 0 gt {
+                        leaf 1 and 0 eq {
+                                % father
+                                lincolr0
+                                0 0 x1 a aw sub a arc stroke
+                        } {
+                                % mother
+                                lincolr0
+                                0 0 x1 a a aw add arc stroke
+                        } ifelse
+                } if
+            } ifelse
+        } if
+} bind def

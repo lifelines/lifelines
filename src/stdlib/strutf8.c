@@ -153,7 +153,7 @@ skip_BOM (STRING * pstr)
 void
 unicode_to_utf8 (INT wch, char * utf8)
 {
-	unsigned char * lpd = utf8;
+	unsigned char *lpd = (unsigned char *)utf8;
 	unsigned int uch = (unsigned int)wch;
 	if (uch < 0x80)
 	{

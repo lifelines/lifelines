@@ -53,7 +53,7 @@ static void import_adding_unused_keys(void);
 static void import_beginning_import(STRING msg);
 static void import_error_invalid(STRING reason);
 static void import_readonly(void);
-static void import_report_timing(INT elapsed_sec, INT uitime_sec);
+/* static void import_report_timing(INT elapsed_sec, INT uitime_sec); */
 static void import_validated_rec(char ctype, STRING tag, INT count);
 static void import_validating(void);
 static void import_validation_error(STRING msg);

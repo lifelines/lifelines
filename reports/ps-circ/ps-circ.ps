@@ -1,0 +1,386 @@
+%!PS-Adobe-3.0 EPSF-30.
+%%BoundingBox: 0 0 612 792
+%%Title: (CIRC.PS - Genealogical Circular Pedigree Chart)
+%%Creator1: David Campbell, Grand Prairie, TX (campbell@cse.uta.edu)
+%%Creator2: John Dunn, Houston, Tx (dunn@pat.mdc.com)
+%%Creator3: Jim Eggert, Bedford MA (eggertj@ll.mit.edu)
+%%Creationdate: (8/30/93)
+%%Modificationdate: (9/17/93)
+%%EndComments
+
+% support PC and Mac character encoding schemes
+
+/#findfont /findfont load def
+/findfont {
+dup #findfont dup /Encoding get 8#340 get /.notdef eq {
+        12 dict begin
+% PC encoding scheme:
+%        /newcodesandnames [
+%        8#200   /aacute         8#335   /acircumflex    8#336   /adieresis
+%        8#337   /agrave         8#202   /atilde         8#201   /aring
+%        8#340   /ccedilla       8#342   /eacute         8#344   /ecircumflex
+%        8#345   /edieresis      8#346   /egrave         8#203   /iacute
+%        8#347   /icircumflex    8#354   /idieresis      8#204   /igrave
+%        8#205   /ntilde         8#206   /oacute         8#355   /ocircumflex
+%        8#356   /odieresis      8#207   /ograve         8#210   /otilde
+%        8#211   /scaron         8#212   /uacute         8#357   /ucircumflex
+%        8#360   /udieresis      8#362   /ugrave         8#213   /ydieresis
+%        8#214   /zcaron
+%        8#215   /Aacute         8#300   /Acircumflex    8#311   /Adieresis
+%        8#314   /Agrave         8#217   /Atilde         8#216   /Aring
+%        8#321   /Ccedilla       8#322   /Eacute         8#323   /Ecircumflex
+%        8#324   /Edieresis      8#325   /Egrave         8#220   /Iacute
+%        8#326   /Icircumflex    8#327   /Idieresis      8#221   /Igrave
+%        8#222   /Ntilde         8#223   /Oacute         8#330   /Ocircumflex
+%        8#331   /Odieresis      8#224   /Ograve         8#225   /Otilde
+%        8#226   /Scaron         8#227   /Uacute         8#332   /Ucircumflex
+%        8#333   /Udieresis      8#334   /Ugrave         8#230   /Ydieresis
+%        8#231   /Zcaron
+%        ] def
+% Mac encoding scheme:
+        /newcodesandnames [
+        8#200   /Adieresis      8#201   /Aring          8#202   /Ccedilla
+        8#203   /Eacute         8#204   /Ntilde         8#205   /Odieresis
+        8#206   /Udieresis      8#207   /aacute         8#210   /agrave
+        8#211   /acircumflex    8#212   /adieresis      8#213   /atilde
+        8#214   /aring          8#215   /ccedilla       8#216   /eacute
+        8#217   /egrave         8#220   /ecircumflex    8#221   /edieresis
+        8#222   /iacute         8#223   /igrave         8#224   /icircumflex
+        8#225   /idieresis      8#226   /ntilde         8#227   /oacute
+        8#230   /ograve         8#231   /ocircumflex    8#232   /odieresis
+        8#233   /otilde         8#234   /uacute         8#235   /ugrave
+        8#236   /ucircumflex    8#237   /udieresis      8#240   /dagger
+        8#241   /degree         8#242   /cent           8#243   /sterling
+        8#244   /section        8#245   /bullet         8#246   /paragraph
+        8#247   /germandbls     8#240   /registered     8#251   /copyright
+        8#252   /trademark      8#253   /acute          8#254   /dieresis
+        8#255   /notequal       8#256   /AE             8#257   /Oslash
+        8#260   /infinity       8#261   /plusminus      8#262   /lessequal
+        8#263   /greaterequal   8#264   /yen            8#265   /mu
+        8#266   /partialdiff    8#267   /summation      8#270   /product
+        8#271   /pi             8#272   /integral       8#273   /ordfeminine
+        8#274   /ordmasculine   8#275   /Omega          8#276   /ae
+        8#277   /oslash         8#300   /questiondown   8#301   /exclamdown
+        8#302   /logicalnot     8#303   /radical        8#304   /florin
+        8#305   /approxequal    8#306   /Delta          8#307   /guillemotleft
+        8#310   /quillemotright 8#311   /ellipsis       8#312   /blank
+        8#313   /Agrave         8#314   /Atilde         8#315   /Otilde
+        8#316   /OE             8#317   /oe             8#320   /endash
+        8#321   /emdash         8#322   /quotedblleft   8#323   /quotedblright
+        8#324   /quoteleft      8#325   /quoteright     8#326   /divide
+        8#327   /lozenge        8#330   /ydieresis      8#331   /Ydieresis
+        8#332   /fraction       8#333   /currency       8#334   /guilsinglleft
+        8#335   /guilsinglright 8#336   /fi             8#337   /fl
+        8#340   /daggerdbl      8#341   /periodcentered 8#342   /quotesinglbase
+        8#343   /quotedblbase   8#344   /perthousand    8#345   /Acircumflex
+        8#346   /Ecircumflex    8#347   /Aacute         8#350   /Edieresis
+        8#351   /Egrave         8#352   /lacute         8#353   /lcircumflex
+        8#354   /ldieresis      8#355   /lgrave         8#356   /Oacute
+        8#357   /Ocircumflex    8#360   /apple          8#361   /Ograve
+        8#362   /Uacute         8#363   /Ucircumflex    8#364   /Ugrave
+        8#365   /dotlessi       8#366   /circumflex     8#367   /tilde
+        8#370   /macron         8#371   /breve          8#372   /dotaccent
+        8#373   /ring           8#374   /cedilla        8#375   /hungarumlaut
+        8#376   /ogonek         8#377   /caron
+        ] def
+        /basefontdict exch def
+        /newfontname exch def
+        /newfont basefontdict maxlength dict def
+        basefontdict {
+                exch dup /FID ne {
+                        dup /Encoding eq { exch 256 array copy } { exch } ifelse
+                        newfont 3 1 roll put
+                } { pop pop } ifelse
+        } forall
+        newfont /FontName newfontname put
+        newcodesandnames aload pop
+        newcodesandnames length 2 idiv { newfont /Encoding get 3 1 roll put }
+        repeat newfontname newfont definefont
+        end
+} { exch pop } ifelse
+} def
+
+%Coordinate conversion utilities
+/inch {72 mul} def
+/polar %(ang rad) -> (x y)
+  {/rad exch def
+  /ang exch def
+  /x rad ang cos mul def
+  /y rad ang sin mul def
+  x y} def
+/midang {11.25 mul -90.0 add} def
+/midang2 {11.25 mul 90.0 add} def
+
+%Shortcut macros
+/m {moveto} def
+/l {lineto} def
+
+%Constants
+/pi 3.141593 def
+/ptsize 10 def
+/offset ptsize 1.25 mul neg def
+
+%Compute position from Ahnentafel number
+%circtype selects the John Dunn (0) or the David Campbell arrangement (~0)
+/position  %(Ahnentafel#)
+{ circtype 0 ne { [ 0  8 12  4 14 10  2  6 15 13 9 11 1 3 7 5
+   16 15 14 13  9 10 12 11  1  2 4  3 8 7 5 6] exch get
+   } if
+ circtype 0 eq { [ 0  8 12  4 14 10  6  2 15 13 11 9 7 5 3 1
+   16 15 14 13 12 11 10  9  8  7  6 5 4 3 2 1] exch get
+   } if
+} def
+
+/layer %(Ahnentafel#)
+ {/ahnen exch def
+  [0 radtab1 radtab2 radtab3 radtab4 radtab5
+   0 radtab1 radtab2 radtab3 radtab4 radtab5]
+  [0 1 2 2 3 3 3 3 4 4 4 4 4 4 4 4
+   5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5
+   0 1 2 2 3 3 3 3 4 4 4 4 4 4 4 4
+   5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5] ahnen get get
+ } def
+
+%Values for fan radii
+/radtab1 1.0 inch def
+/radtab2 radtab1 2.5 3.0 div inch add def
+/radtab3 radtab2 2.5 3.0 div inch add def
+/radtab4 3.5 inch def
+/radtab5 5.5 inch def
+
+%Values for radii of spokes
+/spokes  [radtab4 radtab3 radtab4 radtab2 radtab4
+          radtab3 radtab4 radtab1 radtab4 radtab3
+          radtab4 radtab2 radtab4 radtab3 radtab4] def
+/spokes2 [radtab4 radtab3 radtab4 radtab2 radtab4
+          radtab3 radtab4 radtab1 radtab4 radtab3
+          radtab4 radtab2 radtab4 radtab3 radtab4] def
+
+%Draw one spoke
+/spoke
+  {
+  /ndx exch def
+  /ang -90.0 11.25 add ndx 11.25 mul add def
+  /ang2 -90.0 -11.25 add ndx -11.25 mul add def
+  /rad spokes ndx get def
+  /rad2 spokes2 ndx get def
+  newpath
+  ang rad polar m
+  ang radtab5 polar l
+  ang2 rad2 polar m
+  ang2 radtab5 polar l
+  stroke
+  } def
+
+%Fan Template
+/fan  %print fan chart background
+  {
+  gsave
+  0.0 inch 5.5 inch translate
+  newpath 0.0 0.0 radtab1   0 360 arc stroke
+  newpath 0.0 0.0 radtab2   0 360 arc stroke
+  newpath 0.0 0.0 radtab3   0 360 arc stroke
+  newpath 0.0 0.0 radtab4   0 360 arc stroke
+  newpath 0.0 0.0 radtab5   0 360 arc stroke
+
+  newpath 0.0 radtab5 m 0.0 radtab5 neg l stroke
+
+  0 1 14 {spoke} for
+
+  grestore
+  } def
+
+%Angled Line Printing Procedure
+
+/angtext  %(str ang offset flip)
+  {
+  /flip exch def
+  /offst exch def
+  /ang exch def
+  /str exch def
+  gsave
+  0.0 inch 5.5 inch translate
+  ang rotate
+  4.5 inch 0.0 translate
+  flip rotate
+  str stringwidth pop 2 div neg offst moveto
+  str show
+  grestore
+  } def
+
+/angtext2 %(str ang2 offset flip)
+  {
+  /flip exch def
+  /offst exch def
+  /ang2 exch def
+  /str exch def
+  gsave
+  0.0 inch 5.5 inch translate
+  ang2 rotate
+  -4.5 inch 0.0 translate
+  flip rotate
+  str stringwidth pop 2 div neg offst moveto
+  str show
+  grestore
+  } def
+
+%Circular Line Printing Procedures
+
+/circtext  %print outside circle (string center radius start-angle)
+  {
+  /angle exch def
+  /radius exch def
+  /yval exch def
+  /xval exch def
+  /str exch def
+  /xradius radius ptsize 4 div add def
+  gsave
+  xval yval translate
+  angle str calculateangle add rotate
+  str {/charcode exch def ( ) dup 0 charcode put circchar} forall
+  grestore
+  } def
+
+/circtext2  %print outside circle (string center radius start-angle)
+  {
+  /angle2 exch def
+  /radius2 exch def
+  /yval2 exch def
+  /xval2 exch def
+  /str exch def
+  /xradius2 radius2 ptsize 4 div add def
+  gsave
+  xval2 yval2 translate
+  angle2 str calculateangle2 sub rotate
+  str {/charcode exch def ( ) dup 0 charcode put circchar2} forall
+  grestore
+  } def
+
+/calculateangle  %find half of angle
+{stringwidth pop 2 div
+ 2 xradius mul pi mul div 360 mul} def
+
+/calculateangle2  %find half of angle
+{stringwidth pop 2 div
+ 2 xradius2 mul pi mul div 360 mul} def
+
+/circchar  %show character upright on circle clockwise
+  {/char exch def
+  /halfangle char calculateangle def
+  gsave
+  halfangle neg rotate
+  radius 0 translate
+  -90 rotate
+  char stringwidth pop 2 div neg 0 moveto
+  char show
+  grestore
+  halfangle 2 mul neg rotate
+  } def
+
+/circchar2  %show character upright on circle counter-clockwise
+  {/char exch def
+  /halfangle char calculateangle2 def
+  gsave
+  halfangle neg rotate
+  radius2 ptsize 2 div add 0 translate
+  90 rotate
+  char stringwidth pop 2 div 0 moveto
+  halfangle 2 mul rotate
+  char show
+  grestore
+  halfangle 2 mul rotate
+  } def
+
+%These simplify things some
+/info1  %(ahnen noffset)
+ {/noffset exch def
+  /ahnen exch def
+  /place ahnen position def
+  /radtab ahnen layer def
+  ahnen 16 lt {radtab place noffset inner} if
+  ahnen 16 ge {place noffset outer} if
+ } def
+
+/info2  %(ahnen noffset)
+ {/noffset exch def
+  /ahnen exch def
+  /place ahnen position def
+  /radtab ahnen layer def
+  ahnen 16 lt {radtab place noffset inner2} if
+  ahnen 16 ge {place noffset outer2} if
+ } def
+
+/inner  %(str radtab place noffset)
+ {/noffset exch def
+  /place exch def
+  /radtab exch def
+  0.0 inch 5.5 inch radtab noffset offset mul add place midang circtext
+ } def
+
+/inner2  %(str radtab place noffset)
+ {/noffset exch def
+  /place exch def
+  /radtab exch def
+  0.0 inch 5.5 inch radtab noffset offset mul add place midang2 circtext2
+ } def
+
+/outer  %(str place noffset)
+ {
+ /noffset exch def
+ /place exch def
+ /flip place 8 le {0 def} if
+       place 9 ge {180 def} if
+ /ang place midang
+      place 8 le {noffset -1.2 add -2.8125 mul add} if
+      place 9 ge {-11.25 add
+                  noffset -1.2 add 2.8125 mul add} if
+      def
+ ang offset flip angtext
+ } def
+
+/outer2  %(str place noffset)
+ {
+ /noffset exch def
+ /place exch def
+ /flip place 8 le {0 def} if
+       place 9 ge {180 def} if
+ /ang2 place midang
+      place 8 le {noffset -5.2 add 2.8125 mul add} if
+      place 9 ge {-11.25 add
+                  noffset -5.2 add -2.8125 mul add} if
+      def
+ ang2 offset flip angtext2
+ } def
+
+%Begin Program
+
+% ------------------ Background Template ---------------------
+
+%% 10.0 11.0 div 10.0 11.0 div scale
+%% 0.5 inch 0.5 inch translate
+4.25 inch 1.5 inch translate
+0.7 0.7 scale
+
+% The following is a kludge for my setup.
+% You may or may not need something similar to center the chart.
+% Uncomment if necessary.  -- DJC
+% 0.0 inch -0.5 inch translate
+
+0 setgray
+/Times-Bold findfont ptsize scalefont setfont
+%% This font looks pretty good too. -- JCD
+%% /Palatino-Bold findfont ptsize scalefont setfont
+
+% <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+% <<<<<<<<<<<<<< APPEND YOUR DATA HERE AS FOLLOWS: >>>>>>>>>>>>>>
+% <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+%
+%  /circtype 0 def                  % 0 or 1 selects the name ordering
+%  fan                              % prints the background template
+%  (string) Ahnentafel# line# info1 % prints line of upper data on chart
+%                    .
+%                    .
+%                    .
+%  (string) Ahnentafel# line# info2 % prints line of lower data on chart
+%  showpage                         % displays the results
+% <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

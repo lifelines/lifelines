@@ -461,7 +461,6 @@ open_database_impl (LLDATABASE lldb, INT alteration)
 	readonly = !bwrite(btree);
 	immutable = bimmut(btree);
 	if (readonly && writeable) {
-		int myerr=0;
 		c = bkfile(btree).k_ostat;
 		if (c < 0) {
 			bterrno = BTERR_WRITER;
