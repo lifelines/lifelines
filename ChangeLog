@@ -17,6 +17,10 @@
 
 	Prepare NEWS for 3.0.41.
 
+	* ChangeLog README.MAINTAINERS
+
+	Revise release order to get new pot and po files into release.
+
 2005-01-30 Matt Emmerton
 
 	* ChangeLog src/interp/interp.c

@@ -16,12 +16,6 @@ Edit the version number, setting it to the new release:
   docs/ll-reportmanual.xml (2 occurrences)
   docs/ll-userguide.xml (2 occurrences)
 
-Add an entry mentioning the new version in the
-  ChangeLog
-
-Commit changes (new version number):
-  $ cvs -z3 ci
-
 Run autotools:
   $ sh autogen.sh
 
@@ -37,6 +31,12 @@ Update master message catalog template (for i18n):
   $ cd po
   $ make lifelines.pot
   $ cd ..
+
+Add an entry mentioning the new version in the
+  ChangeLog
+
+Commit changes (new version number):
+  $ cvs -z3 ci
 
 Build distribution tarball:
   $ ../make dist
