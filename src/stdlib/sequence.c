@@ -32,7 +32,8 @@
 #include "standard.h"
 #include "sequence.h"
 
-static BOOLEAN fndel (SEQUENCE seq, ELEMENT val, INT *loc);
+static BOOLEAN fndel (SEQUENCE, ELEMENT, INT *);
+static BOOLEAN sfndel (SEQUENCE, ELEMENT, INT *);
 
 INT seqerr = NONE;
 /*==========================
@@ -271,7 +272,7 @@ fndel (SEQUENCE seq,   /* sequence */
 /*===========================================================
  * sfndel -- Search sorted sequence for key - return location
  *=========================================================*/
-BOOLEAN
+static BOOLEAN
 sfndel (SEQUENCE seq,   /* sequence */
         ELEMENT key,    /* search key */
         INT *loc)       /* index if found */
