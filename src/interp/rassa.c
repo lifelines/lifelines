@@ -80,7 +80,7 @@ static INT outputmode = BUFFERED;
 static STRING pagebuffer = NULL;
 static char linebuffer[1024];
 static INT linebuflen = 0;
-static STRING bufptr = linebuffer;
+static STRING bufptr = (STRING)linebuffer;
 
 static STRING outfilename;
 extern STRING qSwhtout;
@@ -99,7 +99,7 @@ initrassa (void)
 {
 	outputmode = BUFFERED;
 	linebuflen = 0;
-	bufptr = linebuffer;
+	bufptr = (STRING)linebuffer;
 	curcol = 1;
 }
 /*======================================+
@@ -111,7 +111,7 @@ finishrassa (void)
 	if (outputmode == BUFFERED && linebuflen > 0 && Poutfp) {
 		fwrite(linebuffer, linebuflen, 1, Poutfp);
 		linebuflen = 0;
-		bufptr = linebuffer;
+		bufptr = (STRING)linebuffer;
 		curcol = 1;
 	}
 }
@@ -162,7 +162,7 @@ __linemode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	stab=stab; /* unused */
 	outputmode = BUFFERED;
 	linebuflen = 0;
-	bufptr = linebuffer;
+	bufptr = (STRING)linebuffer;
 	curcol = 1;
 	*eflg = FALSE;
 	return NULL;
@@ -423,14 +423,14 @@ poutput (STRING str, BOOLEAN *eflg)
 			fwrite(linebuffer, linebuflen, 1, Poutfp);
 			fwrite(str, len, 1, Poutfp);
 			linebuflen = 0;
-			bufptr = linebuffer;
+			bufptr = (STRING)linebuffer;
 			adjust_cols(str);
 			goto exit_poutput;
 		}
 		if (len + linebuflen >= 1024) {
 			fwrite(linebuffer, linebuflen, 1, Poutfp);
 			linebuflen = 0;
-			bufptr = linebuffer;
+			bufptr = (STRING)linebuffer;
 		}
 		linebuflen += len;
 		while ((c = *bufptr++ = *str++)) {
