@@ -4,6 +4,10 @@
 
 	Fix leak of record in indi_to_next_sib_old.
 
+	* ChangeLog src/tools/dbverify.c
+
+	Cosmetic: added newline to bottom of dbverify.c.
+
 2005-02-09 Stephen Dum
 	* ChangeLog  src/gedlib/date.c  src/stdlib/list.c
 
