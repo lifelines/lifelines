@@ -8,6 +8,11 @@
 	Remove warehouse code (which was unused).
 	Move two functions taking CACHE into keytonod.c statics.
 
+	*DELETED src/hdrs/warehouse.h
+	*DELETED src/stdlib/warehouse.c
+
+	Remove warehouse code files (unused).
+
 2003-10-06 Perry Rapp
 
 	* ChangeLog src/gedlib/keytonod.c src/hdrs/cache.h
