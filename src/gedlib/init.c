@@ -1,3 +1,4 @@
+
 /* 
    Copyright (c) 1991-1999 Thomas T. Wetmore IV
 
@@ -46,6 +47,13 @@ STRING editstr, editfile;
 STRING llarchives, llreports, llprograms;
 char *getenv();
 
+
+#if WIN32
+char win32_tempfile[1024]; /* TO DO - this should be MAX_PATH if stdlib or whatever was included */
+#else
+char unix_tempfile[] = "/tmp/lltmpXXXXXX";
+#endif
+
 /*=================================
  * figure_tempfile -- calculate temporary file (fully qualified path)
  *===============================*/
@@ -53,14 +61,11 @@ static STRING
 figure_tempfile()
 {
 
-	char unix_tempfile[] = "/tmp/lltmpXXXXXX";
 
 #ifdef WIN32
+
 	STRING e;
-	char win32_tempfile[1024]; /* TO DO - this should be MAX_PATH if stdlib or whatever was included */
-#endif
 
-#ifdef WIN32
 	/* windows has per-user temporary directory, depending on version */
 	e = (STRING)getenv("TEMP");
 	if (!e || *e == 0) e = (STRING)getenv("TMP");

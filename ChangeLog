@@ -1,3 +1,9 @@
+2000-11-21 Marc Nozell <marc@nozell.com>
+
+	* gedlib/init.c: move unix_tempfile and win32_tempfile declaration
+	out of figure_tempfile into global.  Function was referencing
+	variables already popped off the stack.
+ 
 2000-11-20 Perry Rapp <puddle@users.sourceforge.net>
 	interp/lex.c:
 	Renamed unchar to unreadchar, to avoid clash with
