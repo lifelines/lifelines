@@ -6,6 +6,12 @@
 
 	Updating cvsignore files.
 
+	* .cvsignore po/.cvsignore reports/.cvsignore src/.cvsignore
+	src/liflines/.cvsignore
+	*NEW intl/.cvsignore
+
+	Updating cvsignore files for building in source tree.
+
 2003-10-02 Perry Rapp
 
 	* ChangeLog src/gedlib/refns.c
