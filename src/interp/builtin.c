@@ -2086,9 +2086,9 @@ __insert (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	llwprintf("\n");
 #endif
 
-	old = (PVALUE) valueofbool(tab, str, &there);
+	old = valueofbool_ptr(tab, str, &there);
 	if (there && old) delete_pvalue(old);
-	insert_table(tab, str, val);
+	insert_table_ptr(tab, str, val);
 	if (there) stdfree(str);	/* key is already in table. free this one */
 	delete_pvalue(valtab); /* finished with our copy of table */
 	return NULL;
@@ -2124,7 +2124,7 @@ __lookup (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	str = (STRING) pvalue(val);
-	newv = (PVALUE) valueof(tab, str);
+	newv = valueof_ptr(tab, str);
 	delete_pvalue(val);
 	newv = (newv ? copy_pvalue(newv) : create_pvalue(PANY, NULL));
 #if 0
@@ -2817,9 +2817,9 @@ __free (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		*eflg = TRUE;
 		return NULL;
 	}
-	val = (PVALUE) symtab_valueofbool(stab, iident(arg), &there);
+	val = symtab_valueofbool(stab, iident(arg), &there);
 	if (!there) {
-	    val = (PVALUE) symtab_valueofbool(globtab, iident(arg), &there);
+	    val = symtab_valueofbool(globtab, iident(arg), &there);
 	}
 	if (there && val) {
 		switch(ptype(val)) {

@@ -124,7 +124,9 @@ closure_add_key (CLOSURE * closure, STRING key, STRING tag)
 	append_indiseq_sval(closure->seq, strsave(key), NULL, strsave(tag),
 	    TRUE, TRUE);
 	/* during gengedcom, all tables alloc their own keys */
-	insert_table(closure->tab, strsave(key), NULL);
+	/* we don't use the value at all, only the fact that the
+	key is present */
+	insert_table_int(closure->tab, strsave(key), 1);
 }
 /*======================================================
  * closure_add_output_node -- add a (top-level) node to the output list
@@ -380,21 +382,19 @@ process_any_node (CLOSURE * closure, NODE node)
 /*====================================================
  * table_incr_item -- increment value of item in table
  *  (or add with 1 value)
- *  TO DO: This should be revised to use pointers
- *   instead of assuming pointers & INTs are same size
- *   (coordinate with add_refd_fams)
+ * (we store int values in table)
  *   (2001/02/04, Perry)
  *==================================================*/
 static void
 table_incr_item (TABLE tab, STRING key)
 {
 	INT * value;
-	value = (INT *)access_value(tab, key);
+	value = access_value_int(tab, key);
 	if (value)
 		(*value)++;
 	else
 		/* during gengedcom, all tables alloc their own keys */
-		insert_table(tab, strsave(key), (VPTR)1);
+		insert_table_int(tab, strsave(key), 1);
 }
 /*===================================================================
  * add_refd_fams -- add all families in table with #refs>1 to closure
@@ -404,7 +404,7 @@ static int
 add_refd_fams (ENTRY ent, VPTR param)
 {
 	CLOSURE * closure = (CLOSURE *)param;
-	if ((INT)ent->evalue > 1)
+	if (ent->uval.i > 1)
 		closure_add_key(closure, ent->ekey, "FAM");
 	return 1;
 }

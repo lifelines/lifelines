@@ -100,9 +100,9 @@ valueof_iden (SYMTAB stab, STRING iden)
 	  	  iden, stab, globtab);
 #endif
 
-	val = (PVALUE) symtab_valueofbool(stab, iden, &there);
+	val = symtab_valueofbool(stab, iden, &there);
 	if (there) return copy_pvalue(val);
-	val = (PVALUE) symtab_valueofbool(globtab, iden, &there);
+	val = symtab_valueofbool(globtab, iden, &there);
 	if (there) return copy_pvalue(val);
 	return create_pvalue(PANY, NULL);
 }
@@ -176,7 +176,7 @@ evaluate_ufunc (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	INTERPTYPE irc;
 
 	*eflg = TRUE;
-	if ((func = (PNODE) valueof(functab, nam)) == NULL) {
+	if ((func = valueof_ptr(functab, nam)) == NULL) {
 		prog_error(node, "undefined function %s()", nam);
 		goto ufunc_leave;
 	}

@@ -115,7 +115,7 @@ static int ScrollMax = 0;
 static DISPNODE Root = 0;
 
 /*********************************************
- * local function definitions
+ * local & exported function definitions
  * body of module
  *********************************************/
 

@@ -34,14 +34,17 @@
 #include "translat.h"
 #include "gedcom.h"
 
+static BOOLEAN init_valtab_from_string(STRING, TABLE, INT, STRING*);
+
 /*=====================================================
  * init_valtab_from_rec -- Init value table from record
+ * STRING key:    record key
+ * TABLE tab:     hash table (values are strings)
+ * INT sep:       separator char used in records
+ * STRING *pmsg:  [OUT] error message
  *===================================================*/
 BOOLEAN
-init_valtab_from_rec (STRING key,       /* record key */
-                      TABLE tab,        /* hash table */
-                      INT sep,  /* separator char */
-                      STRING *pmsg)     /* error message */
+init_valtab_from_rec (STRING key, TABLE tab, INT sep, STRING *pmsg)
 {
 	INT len;
 	STRING rec;
@@ -54,12 +57,13 @@ init_valtab_from_rec (STRING key,       /* record key */
 }
 /*====================================================
  * init_valtab_from_file -- Init value table from file
+ * STRING fname,     file with value table
+ * TABLE tab,        hash table for values (table entries are string values)
+ * INT sep,          separator char
+ * STRING *pmsg:     error message
  *==================================================*/
 BOOLEAN
-init_valtab_from_file (STRING fname,    /* file with value table */
-                       TABLE tab,       /* hash table for values */
-                       INT sep,         /* separator char */
-                       STRING *pmsg)    /* error message */
+init_valtab_from_file (STRING fname, TABLE tab, INT sep, STRING *pmsg)
 {
 	FILE *fp;
 	struct stat buf;
@@ -69,6 +73,7 @@ init_valtab_from_file (STRING fname,    /* file with value table */
 	if ((fp = fopen(fname, LLREADTEXT)) == NULL) return TRUE;
 	ASSERT(fstat(fileno(fp), &buf) == 0);
 	if (buf.st_size == 0) {
+		/* TO DO - should pmsg be set here ? Perry, 2001/06/03 */
 		fclose(fp);
 		return TRUE;
 	}
@@ -84,12 +89,13 @@ init_valtab_from_file (STRING fname,    /* file with value table */
 }
 /*========================================================
  * init_valtab_from_string -- Init value table from string
+ * STRING str,      string with value table
+ * TABLE tab,       table for values (entry type is string values)
+ * INT sep,         separator char
+ * STRING *pmsg:    error message
  *======================================================*/
-BOOLEAN
-init_valtab_from_string (STRING str,    /* string with value table */
-                         TABLE tab,     /* hash table for values */
-                         INT sep,       /* separator char */
-                         STRING *pmsg)  /* error message */
+static BOOLEAN
+init_valtab_from_string (STRING str, TABLE tab, INT sep, STRING *pmsg)
 {
 	STRING tag, val, q, p = str;
 	INT c;
@@ -123,7 +129,7 @@ init_valtab_from_string (STRING str,    /* string with value table */
 #ifdef DEBUG
 	llwprintf("val, tag = %s %s\n", val, tag);
 #endif
-		insert_table(tab, strsave(tag), strsave(val));
+		insert_table_str(tab, strsave(tag), strsave(val));
 		if (c == 0) break;
 	}
 	return TRUE;

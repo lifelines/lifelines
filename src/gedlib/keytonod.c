@@ -611,7 +611,7 @@ add_to_direct (CACHE cache,
 	ASSERT(nod0);
 	ASSERT(csizedir(cache) < cmaxdir(cache));
 	cel = (CACHEEL) stdalloc(sizeof(*cel));
-	insert_table(cdata(cache), key = strsave(key), cel);
+	insert_table_ptr(cdata(cache), key = strsave(key), cel);
 	cnod0(cel) = nod0;
 	cnode(cel) = nod0->top;
 	ckey(cel) = key;
@@ -636,7 +636,7 @@ key_to_cacheel (CACHE cache,
 	keybuf[keyidx][31] = '\0';
 	keyidx++;
 	if(keyidx >= 10) keyidx = 0;
-	if ((cel = (CACHEEL) valueof(cdata(cache), key))) {
+	if ((cel = (CACHEEL) valueof_ptr(cdata(cache), key))) {
 		if (cnode(cel))
 			direct_to_first(cache, cel);
 		else
@@ -868,7 +868,7 @@ nod0_to_cache (CACHE cache,
 	STRING key;
 	ASSERT(cache && nod0 && nztop(nod0));
 	key = node_to_key(nztop(nod0));
-	ASSERT(!valueof(cdata(cache), key));
+	ASSERT(!valueof_ptr(cdata(cache), key));
 	prepare_direct_space(cache);
 	add_nod0_to_direct(cache, nod0, key);
 }
@@ -893,7 +893,7 @@ add_nod0_to_direct (CACHE cache, NOD0 nod0, STRING key)
 	ASSERT(cache && node);
 	ASSERT(csizedir(cache) < cmaxdir(cache));
 	cel = (CACHEEL) stdalloc(sizeof(*cel));
-	insert_table(cdata(cache), keynew=strsave(key), cel);
+	insert_table_ptr(cdata(cache), keynew=strsave(key), cel);
 	cnod0(cel) = nod0;
 	cnode(cel) = node;
 	ckey(cel) = keynew;
@@ -925,7 +925,7 @@ remove_from_cache (CACHE cache, STRING key)
 	CACHEEL cel;
 	if (!key || *key == 0 || !cache)
 		return;
-	if (!(cel = (CACHEEL) valueof(cdata(cache), key)))
+	if (!(cel = (CACHEEL) valueof_ptr(cdata(cache), key)))
 		return;
 	ASSERT(!cclock(cel) && !csemilock(cel));
 	if (cnode(cel))

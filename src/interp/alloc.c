@@ -564,7 +564,7 @@ func_node (STRING name,    /* function name */
 		node = create_pnode(IFCALL);
 		iname(node) = (VPTR) name;
 		iargs(node) = (VPTR) elist;
-		ifunc(node) = (VPTR) valueof(functab, name);
+		ifunc(node) = valueof_ptr(functab, name);
 		return node;
 	}
 

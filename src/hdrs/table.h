@@ -40,10 +40,16 @@
 #define FREEVALUE 2
 #define FREEBOTH  3
 
+/*
+tables hold key,value pairs, but all values in a specific
+table must be of the same UNION type
+INT, or VPTR, or STRING
+(and ASSERTs in the insert_table_xxx functions enforce this)
+*/
 typedef struct etag *ENTRY;
 struct etag {
 	STRING ekey;
-	VPTR evalue;
+	UNION uval;
 	ENTRY enext;
 };
 
@@ -54,19 +60,32 @@ struct etag {
 */
 struct table_s {
 	ENTRY *entries;
-	INT refcnt;
+	INT count; /* #entries */
+	INT refcnt; /* used by pvalues which share table pointers */
+	INT valtype; /* TB_VALTYPE enum in table.c */
 };
 typedef struct table_s *TABLE;
 
 TABLE create_table(void);
-void insert_table(TABLE, STRING, VPTR);
+void insert_table_ptr(TABLE, STRING key, VPTR);
+void insert_table_int(TABLE, STRING key, INT);
+void insert_table_str(TABLE, STRING key, STRING);
 void delete_table(TABLE, STRING);
-void remove_table(TABLE, INT);
+void remove_table(TABLE, INT whattofree);
 void traverse_table(TABLE, void (*proc)(ENTRY));
 void traverse_table_param(TABLE tab, INT (*tproc)(ENTRY, VPTR), VPTR param);
 BOOLEAN in_table(TABLE, STRING);
-VPTR valueof(TABLE, STRING);
-VPTR valueofbool(TABLE, STRING, BOOLEAN*);
-VPTR * access_value(TABLE tab, STRING key);
+VPTR valueof_ptr(TABLE, STRING);
+INT valueof_int(TABLE, STRING, INT defval);
+STRING valueof_str(TABLE, STRING);
+VPTR valueofbool_ptr(TABLE, STRING, BOOLEAN*);
+INT valueofbool_int(TABLE, STRING, BOOLEAN*);
+STRING valueofbool_str(TABLE, STRING, BOOLEAN*);
+VPTR * access_value_ptr(TABLE tab, STRING key);
+INT * access_value_int(TABLE tab, STRING key);
+/*
+access_value_str can't be done because of type limitation in implementation
+(UNION doesn't have STRING inside it
+*/
 
 #endif /* _TABLE_H */

@@ -45,10 +45,10 @@
  * global/exported variables
  *********************************************/
 
-TABLE tagtable;		/* table for tag strings */
-TABLE placabbvs;	/* table for place abbrevs */
-TABLE useropts;		/* table for user options */
-BTREE BTR = NULL;	/* database */
+TABLE tagtable=NULL;		/* table for tag strings */
+TABLE placabbvs=NULL;	/* table for place abbrevs */
+TABLE useropts=NULL;		/* table for user options */
+BTREE BTR=NULL;	/* database */
 STRING editstr=NULL; /* edit command to run to edit (has editfile inside of it) */
 STRING editfile=NULL; /* file used for editing, name obtained via mktemp */
 

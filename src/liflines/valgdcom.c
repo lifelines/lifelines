@@ -808,7 +808,7 @@ INT
 xref_to_index (STRING xref)
 {
 	BOOLEAN there;
-	INT dex = (INT)valueofbool(convtab, xref, &there);
+	INT dex = valueofbool_int(convtab, xref, &there);
 	return there ? dex : -1;
 }
 /*=========================================================
@@ -831,7 +831,7 @@ add_to_structures(STRING xref,
 	}
 	i = struct_len;
 	index_data[i] = el;
-	insert_table(convtab, xref, (VPTR) struct_len++);
+	insert_table_int(convtab, xref, struct_len++);
 	return struct_len - 1;
 }
 /*========================================================

@@ -129,9 +129,9 @@ static STRING
 fixtag (STRING tag)
 {
 	STRING str;
-	if ((str = (STRING) valueof(tagtable, tag))) return str;
+	if ((str = valueof_str(tagtable, tag))) return str;
 	str = strsave(tag);
-	insert_table(tagtable, str, str);
+	insert_table_str(tagtable, str, str);
 	return str;
 }
 /*=====================================
@@ -1356,7 +1356,7 @@ shorten_plac (STRING plac)
 		;
 	plac--;
 	if (*plac == 0) return plac0;
-	if ((val = (STRING) valueof(placabbvs, plac))) return val;
+	if ((val = valueof_str(placabbvs, plac))) return val;
 	return plac;
 }
 

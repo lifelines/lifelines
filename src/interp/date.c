@@ -515,7 +515,7 @@ get_date_tok (INT *pival,
 		*--p = 0;
 		sstr--;
 		*psval = scratch;
-		if ((i = (INT)valueof(monthtbl, upper(scratch))) > 0 && i <= 12) {
+		if ((i = valueof_int(monthtbl, upper(scratch), 0)) > 0 && i <= 12) {
 			*pival = i;
 			return MONTH_TOK;
 		}
@@ -555,11 +555,11 @@ init_monthtbl (void)
 	monthtbl = create_table();
 	for (i = 0; i < 19; i++) {
 		j = i + 1;
-		insert_table(monthtbl, monthstrs[i].su, (VPTR)j);
-		insert_table(monthtbl, monthstrs[i].lu, (VPTR)j);
+		insert_table_int(monthtbl, monthstrs[i].su, j);
+		insert_table_int(monthtbl, monthstrs[i].lu, j);
 	}
-	insert_table(monthtbl, "EST", (VPTR)-1);  /* ignored after date */
-	insert_table(monthtbl, "BC", (VPTR)-99);
+	insert_table_int(monthtbl, "EST", -1);  /* ignored after date */
+	insert_table_int(monthtbl, "BC", -99);
 }
 /*=============================
  * get_date -- Get today's date

@@ -86,7 +86,7 @@ add_source (void)
 		message(ronlya);
 		return NULL;
 	}
-	str = (STRING) valueof(useropts, "SOURREC");
+	str = valueof_str(useropts, "SOURREC");
 	if (!str) str = rstr;
 	return add_record(str, rredit, 'S', cfradd);
 }
@@ -101,7 +101,7 @@ add_event (void)
 		message(ronlya);
 		return NULL;
 	}
-	str = (STRING) valueof(useropts, "EVENREC");
+	str = valueof_str(useropts, "EVENREC");
 	if (!str) str = estr;
 	return add_record(str, eredit, 'E', cfeadd);
 }
@@ -116,7 +116,7 @@ add_other (void)
 		message(ronlya);
 		return NULL;
 	}
-	str = (STRING) valueof(useropts, "OTHRREC");
+	str = valueof_str(useropts, "OTHRREC");
 	if (!str) str = xstr;
 	return add_record(str, xredit, 'X', cfxadd);
 

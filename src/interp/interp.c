@@ -195,7 +195,7 @@ interp_program (STRING proc,    /* proc to call */
 	while (!empty_list(plist)) {
 		ifile = (STRING) dequeue_list(plist);
 		if (!in_table(filetab, ifile)) {
-			insert_table(filetab, ifile, 0);
+			insert_table_int(filetab, ifile, 0);
 #ifdef DEBUG
 			llwprintf("About to parse file %s.\n", ifile);
 #endif
@@ -212,7 +212,7 @@ interp_program (STRING proc,    /* proc to call */
 
    /* Find top procedure */
 
-	if (!(first = (PNODE) valueof(proctab, proc))) {
+	if (!(first = (PNODE) valueof_ptr(proctab, proc))) {
 		progmessage("needs a starting procedure.");
 		goto interp_program_exit;
 	}
@@ -1488,7 +1488,7 @@ interp_call (PNODE node, SYMTAB stab, PVALUE *pval)
 {
 	SYMTAB newstab=null_symtab();
 	INTERPTYPE irc=INTERROR;
-	PNODE arg=NULL, parm=NULL, proc = (PNODE) valueof(proctab, iname(node));
+	PNODE arg=NULL, parm=NULL, proc = (PNODE) valueof_ptr(proctab, iname(node));
 	if (!proc) {
 		llwprintf("``%s'': undefined procedure\n", iname(node));
 		irc = INTERROR;

@@ -1,3 +1,21 @@
+2001-06-03 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/gengedc.c gedlib/indiseq.c gedlib/init.c
+	gedlib/keytonod.c gedlib/lloptions.c gedlib/node.c
+	gedlib/property.c gedlib/valtable.c hdrs/gedcom.h
+	hdrs/interp.h hdrs/table.h interp/alloc.c interp/builtin.c
+	interp/date.c interp/eval.c interp/interp.c interp/pvalue.c
+	interp/yacc.y liflines/add.c liflines/newrecs.c
+	liflines/pedigree.c liflines/valgdcom.c stdlib/table.c
+	tools/dbverify.c:
+	Changed TABLEs to hold UNION instead of VPTR (they were already
+	being used to store INTs sometimes anyway). This removed a lot of
+	casting.
+	Fixed bug in dbverify - it was flagging names with same soundex 
+	as duplicates.
+	Made init_valtab_from_string into static.
+	Corrected comments in symtab_valofbool.
+
 2001-05-29 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog docs/Run.LifeLines.Windows.txt docs/lifelines.sgml

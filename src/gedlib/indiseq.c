@@ -266,15 +266,17 @@ check_indiseq_valtype (INDISEQ seq, INT valtype)
 /*==================================================
  * append_indiseq_ival -- Append element to sequence
  *  with INT value
+ * INDISEQ seq:    sequence
+ * STRING key:     key - not NULL
+ * STRING name:    name - may be NULL
+ * INT val:        extra val
+ * BOOLEAN sure:   no dupe check?
+ * BOOLEAN alloc:  key alloced?
  * Created: 2001/01/05, Perry Rapp
  *================================================*/
 void
-append_indiseq_ival (INDISEQ seq,    /* sequence */
-                     STRING key,     /* key - not NULL */
-                     STRING name,    /* name - may be NULL */
-                     INT val,       /* extra val */
-                     BOOLEAN sure,   /* no dupe check? */
-                     BOOLEAN alloc)  /* key alloced? */
+append_indiseq_ival (INDISEQ seq, STRING key, STRING name, INT val
+	, BOOLEAN sure, BOOLEAN alloc)
 {
 	UNION u;
 	u.i = val;
@@ -345,14 +347,16 @@ append_indiseq_null (INDISEQ seq,    /* sequence */
 /*==================================================
  * append_indiseq_impl -- Append element to sequence
  *  all type appends use this implementation
+ * INDISEQ seq:      sequence
+ * STRING key:       key - not NULL
+ * STRING name:      name - may be NULL
+ * UNION val:        extra val is pointer
+ * BOOLEAN sure:     no dupe check?
+ * BOOLEAN alloc:    key alloced?
  *================================================*/
 static void
-append_indiseq_impl (INDISEQ seq,    /* sequence */
-                     STRING key,     /* key - not NULL */
-                     STRING name,    /* name - may be NULL */
-                     UNION val,       /* extra val is pointer */
-                     BOOLEAN sure,   /* no dupe check? */
-                     BOOLEAN alloc)  /* key alloced? */
+append_indiseq_impl (INDISEQ seq, STRING key, STRING name, UNION val
+	, BOOLEAN sure, BOOLEAN alloc)
 {
 	INT i, m, n;
 	SORTEL el, *new, *old;
@@ -1000,7 +1004,7 @@ difference_indiseq (INDISEQ one,
 INDISEQ
 parent_indiseq (INDISEQ seq)
 {
-	TABLE tab;
+	TABLE tab; /* table of people inserted (values not used) */
 	INDISEQ par;
 	NODE indi, fath, moth;
 	STRING key;
@@ -1016,13 +1020,13 @@ parent_indiseq (INDISEQ seq)
 			/* indiseq values must be copied with copyval */
 			uval = copyval(seq, sval(el));
 			append_indiseq_impl(par, strsave(key), NULL, uval, TRUE, TRUE);
-			insert_table(tab, key, NULL);
+			insert_table_int(tab, key, 0);
 		}
 		if (moth && !in_table(tab, key = indi_to_key(moth))) {
 			/* indiseq values must be copied with copyval */
 			uval = copyval(seq, sval(el));
 			append_indiseq_impl(par, strsave(key), NULL, uval, TRUE, TRUE);
-			insert_table(tab, key, NULL);
+			insert_table_int(tab, key, 0);
 		}
 	ENDINDISEQ
 	remove_table(tab, DONTFREE);
@@ -1036,7 +1040,7 @@ INDISEQ
 child_indiseq (INDISEQ seq)
 {
 	INT num1, num2;
-	TABLE tab;
+	TABLE tab; /* table of people already inserted (values not used) */
 	INDISEQ cseq;
 	NODE indi;
 	STRING key;
@@ -1054,7 +1058,7 @@ child_indiseq (INDISEQ seq)
 					/* indiseq values must be copied with copyval */
 					uval = copyval(seq, sval(el));
 					append_indiseq_impl(cseq, key, NULL, uval, TRUE, TRUE);
-					insert_table(tab, key, NULL);
+					insert_table_int(tab, key, 0);
 				}
 			ENDCHILDREN
 		ENDFAMSS
@@ -1267,6 +1271,7 @@ sibling_indiseq (INDISEQ seq,
 	NODE indi, fam;
 	STRING key, fkey;
 	INT num2;
+	/* table lists people already listed (values unused) */
 	TABLE tab = create_table();
 	fseq = create_indiseq_null(); /* temporary */
 	sseq = create_indiseq_null();
@@ -1276,7 +1281,7 @@ sibling_indiseq (INDISEQ seq,
 			fkey = fam_to_key(fam);
 			append_indiseq_null(fseq, strsave(fkey), NULL, FALSE, TRUE);
 		}
-		if (!close) insert_table(tab, skey(el), NULL);
+		if (!close) insert_table_int(tab, skey(el), 0);
 	ENDINDISEQ
 	FORINDISEQ(fseq, el, num)
 		fam = key_to_fam(skey(el));
@@ -1285,7 +1290,7 @@ sibling_indiseq (INDISEQ seq,
 			if (!in_table(tab, key)) {
 				key = strsave(key);
 				append_indiseq_null(sseq, key, NULL, TRUE, TRUE);
-				insert_table(tab, key, NULL);
+				insert_table_int(tab, key, 0);
 			}
 		ENDCHILDREN
 	ENDINDISEQ
@@ -1301,6 +1306,7 @@ sibling_indiseq (INDISEQ seq,
 INDISEQ
 ancestor_indiseq (INDISEQ seq)
 {
+	/* table lists people already listed (values unused) */
 	TABLE tab;
 	LIST anclist, genlist;
 	INDISEQ anc;
@@ -1332,7 +1338,7 @@ ancestor_indiseq (INDISEQ seq)
 			append_indiseq_pval(anc, pkey, NULL, uval.w, TRUE, TRUE);
 			enqueue_list(anclist, (VPTR)pkey);
 			enqueue_list(genlist, (VPTR)gen);
-			insert_table(tab, pkey, NULL);
+			insert_table_int(tab, pkey, 0);
 		}
 		if (moth && !in_table(tab, pkey = indi_to_key(moth))) {
 				/* key copy for seq & list - owned by seq */
@@ -1341,7 +1347,7 @@ ancestor_indiseq (INDISEQ seq)
 			append_indiseq_pval(anc, pkey, NULL, uval.w, TRUE, TRUE);
 			enqueue_list(anclist, (VPTR)pkey);
 			enqueue_list(genlist, (VPTR)gen);
-			insert_table(tab, pkey, NULL);
+			insert_table_int(tab, pkey, 0);
 		}
 	}
 	remove_table(tab, DONTFREE);
@@ -1358,6 +1364,8 @@ INDISEQ
 descendent_indiseq (INDISEQ seq)
 {
 	INT gen;
+	/* itab lists people already entered, ftab families
+	(values in both are unused) */
 	TABLE itab, ftab;
 	LIST deslist, genlist;
 	INDISEQ des;
@@ -1395,7 +1403,7 @@ descendent_indiseq (INDISEQ seq)
 				/* skip families already processed */
 			if (in_table(ftab, fkey = fam_to_key(fam)))
 				goto a;
-			insert_table(ftab, strsave(fkey), NULL);
+			insert_table_int(ftab, strsave(fkey), 0);
 			FORCHILDREN(fam, child, num2)
 					/* only do people not processed */
 				if (!in_table(itab,
@@ -1408,7 +1416,7 @@ descendent_indiseq (INDISEQ seq)
 						/* also want descendants, so add person to processing list */
 					enqueue_list(deslist, (VPTR)dkey);
 					enqueue_list(genlist, (VPTR)gen);
-					insert_table(itab, dkey, NULL);
+					insert_table_int(itab, dkey, 0);
 				}
 			ENDCHILDREN
 		a:;
@@ -1443,7 +1451,7 @@ spouse_indiseq (INDISEQ seq)
 				u = copyval(seq, sval(el));
 				append_indiseq_impl(sps, spkey, NULL,
 					u, TRUE, TRUE);
-				insert_table(tab, spkey, NULL);
+				insert_table_int(tab, spkey, 0);
 			}
 		ENDSPOUSES
 	ENDINDISEQ

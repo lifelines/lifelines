@@ -117,8 +117,8 @@ static void check_set(INDISEQ seq, char ctype);
 static BOOLEAN check_sour(STRING key, NOD0 nod0);
 static BOOLEAN check_othe(STRING key, NOD0 nod0);
 static BOOLEAN find_xref(STRING key, NODE node, STRING tag1, STRING tag2);
-static void finish_and_delete_nameset(INDISEQ seq);
-static void finish_and_delete_refnset(INDISEQ seq);
+static void finish_and_delete_nameset(void);
+static void finish_and_delete_refnset(void);
 static void free_namerefn(NAMEREFN_REC * rec);
 static BOOLEAN nodes_callback(STRING key, NOD0 nod0, void *param);
 static void print_usage(void);
@@ -132,7 +132,7 @@ static void validate_errs(void);
  *********************************************/
 
 enum {
-	ERR_ORPHANNAME,  ERR_GHOSTNAME, ERR_DUPNAME
+	ERR_ORPHANNAME,  ERR_GHOSTNAME, ERR_DUPNAME, ERR_DUPREFN
 	, ERR_NONINDINAME, ERR_DUPINDI, ERR_DUPFAM
 	, ERR_DUPSOUR, ERR_DUPEVEN, ERR_DUPOTHE
 	, ERR_MISSING, ERR_DELETED, ERR_BADNAME
@@ -146,6 +146,7 @@ static struct errinfo errs[] = {
 	{ ERR_ORPHANNAME, 0, 0, "Orphan names" }
 	, { ERR_GHOSTNAME, 0, 0, "Ghost names" }
 	, { ERR_DUPNAME, 0, 0, "Duplicate names" }
+	, { ERR_DUPREFN, 0, 0, "Duplicate names" }
 	, { ERR_NONINDINAME, 0, 0, "Non-indi names" }
 	, { ERR_DUPINDI, 0, 0, "Duplicate individuals" }
 	, { ERR_DUPFAM, 0, 0, "Duplicate families" }
@@ -170,7 +171,8 @@ static struct errinfo errs[] = {
 };
 static struct work todo;
 static LIST tofix;
-static INDISEQ dupseq;
+/* sequence of NAMEs or REFNs in the same block */
+static INDISEQ soundexseq;
 static BOOLEAN noisy=FALSE;
 static INDISEQ seq_indis, seq_fams, seq_sours, seq_evens, seq_othes;
 static STRING lineage_tags[] = {
@@ -273,11 +275,10 @@ static void
 check_ghosts (void)
 {
 	tofix = create_list();
-	dupseq = create_indiseq_null();
-	/* dupseq is used inside cgn_callback, across calls */
+	soundexseq = create_indiseq_sval();
+	/* soundexseq is used inside cgn_callback, across calls */
 	traverse_names(cgn_callback, NULL);
-	finish_and_delete_nameset(dupseq);
-	dupseq = NULL;
+	finish_and_delete_nameset();
 
 	if (todo.fix_ghosts) {
 		NAMEREFN_REC * rec;
@@ -289,13 +290,12 @@ check_ghosts (void)
 		}
 	}
 
-	ASSERT(empty_list(tofix) && !dupseq);
+	ASSERT(empty_list(tofix) && !soundexseq);
 
-	dupseq = create_indiseq_null();
-	/* dupseq is used inside cgr_callback, across calls */
+	soundexseq = create_indiseq_sval();
+	/* soundexseq is used inside cgr_callback, across calls */
 	traverse_refns(cgr_callback, NULL);
-	finish_and_delete_refnset(dupseq);
-	dupseq = NULL;
+	finish_and_delete_refnset();
 
 	if (todo.fix_ghosts) {
 		NAMEREFN_REC * rec;
@@ -328,11 +328,12 @@ cgn_callback (STRING key, STRING name, BOOLEAN newset, void *param)
 	}
 
 	if (newset) {
-		finish_and_delete_nameset(dupseq);
-		dupseq = create_indiseq_null();
+		finish_and_delete_nameset();
+		soundexseq = create_indiseq_sval();
 	}
 
-	append_indiseq_null(dupseq, strsave(key), name, TRUE, TRUE);
+	append_indiseq_sval(soundexseq, strsave(key), name, strsave(name)
+		, TRUE, TRUE); /* sure, alloc */
 
 	if (!indi) {
 		report_error(ERR_ORPHANNAME, "Orphaned name: %s", name);
@@ -373,10 +374,11 @@ cgr_callback (STRING key, STRING refn, BOOLEAN newset, void *param)
 	NODE node = nztop(nod0);
 
 	if (newset) {
-		finish_and_delete_refnset(dupseq);
-		dupseq = create_indiseq_null();
+		finish_and_delete_refnset();
+		soundexseq = create_indiseq_sval();
 	}
-	append_indiseq_null(dupseq, strsave(key), refn, TRUE, TRUE);
+	append_indiseq_sval(soundexseq, strsave(key), NULL, strsave(refn)
+		, TRUE, TRUE); /* sure, alloc */
 	
 	if (!node) {
 		report_error(ERR_ORPHANNAME, "Orphaned refn: %s", refn);
@@ -391,39 +393,73 @@ cgr_callback (STRING key, STRING refn, BOOLEAN newset, void *param)
 }
 /*=================================================================
  * finish_and_delete_nameset -- check for dups in a set of one name
+ * soundexseq is sequence of NAMEs all in the same block (equivalent
+ *       names as far as NAME storage goes)
  * Created: 2001/01/13, Perry Rapp
  *===============================================================*/
 static void
-finish_and_delete_nameset (INDISEQ seq)
+finish_and_delete_nameset (void)
 {
 	char prevkey[8];
+	STRING name="";
+	TABLE table = create_table();
 	prevkey[0]=0;
-	keysort_indiseq(seq);
-	FORINDISEQ(seq, el, num)
-		if (!strcmp(skey(el), prevkey)) {
-			report_error(ERR_DUPNAME, "Duplicate name for %s (%s)", prevkey, snam(el));
+	keysort_indiseq(soundexseq);
+	/*
+	We go thru the list of equivalent names, sorted by person,
+	and for each person, table all their names, watching for
+	duplicates
+	*/
+	FORINDISEQ(soundexseq, el, num)
+		name = sval(el).w;
+		if (!eqstr(skey(el), prevkey)) {
+			/* new person, start over */
+			remove_table(table, DONTFREE);
+			table = create_table();
+		}
+		if (in_table(table, name)) {
+			report_error(ERR_DUPNAME, "Duplicate name for %s (%s)"
+				, skey(el), name);
+		} else {
+			insert_table_int(table, name, 1);
 		}
 		strcpy(prevkey, skey(el));
 	ENDINDISEQ
-	remove_indiseq(seq);
+	remove_indiseq(soundexseq);
+	soundexseq = NULL;
+	remove_table(table, DONTFREE);
 }
 /*=================================================================
  * finish_and_delete_refnset -- check for dups in a set of one refn
+ * soundexseq is sequence of REFNs all in the same block (equivalent
+ *       names as far as REFN storage goes)
  * Created: 2001/01/13, Perry Rapp
  *===============================================================*/
 static void
-finish_and_delete_refnset (INDISEQ seq)
+finish_and_delete_refnset (void)
 {
 	char prevkey[8];
+	STRING refn="";
+	TABLE table = create_table();
 	prevkey[0]=0;
-	canonkeysort_indiseq(seq);
-	FORINDISEQ(seq, el, num)
-		if (!strcmp(skey(el), prevkey)) {
-			report_error(ERR_DUPNAME, "Duplicate refn for %s (%s)", prevkey, snam(el));
+	canonkeysort_indiseq(soundexseq);
+	FORINDISEQ(soundexseq, el, num)
+		refn = sval(el).w;
+		if (!eqstr(skey(el), prevkey)) {
+			/* new person, start over */
+			remove_table(table, DONTFREE);
+			table = create_table();
+		}
+		if (in_table(table, refn)) {
+			report_error(ERR_DUPREFN, "Duplicate refn for %s (%s)"
+				, skey(el), refn);
+		} else {
+			insert_table_int(table, refn, 1);
 		}
 		strcpy(prevkey, skey(el));
 	ENDINDISEQ
-	remove_indiseq(seq);
+	remove_indiseq(soundexseq);
+	soundexseq = NULL;
 }
 /*=================================
  * check_nodes -- Process all nodes

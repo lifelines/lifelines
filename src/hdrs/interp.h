@@ -244,7 +244,7 @@ STRING pvalue_to_string(PVALUE);
 void remove_symtab(SYMTAB *);
 void set_pvalue(PVALUE, INT, VPTR);
 void show_pvalue(PVALUE);
-VPTR symtab_valueofbool(SYMTAB, STRING, BOOLEAN*);
+PVALUE symtab_valueofbool(SYMTAB, STRING, BOOLEAN*);
 #ifndef HOGMEMORY
 void zero_pventry(ENTRY);
 #endif

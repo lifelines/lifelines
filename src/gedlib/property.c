@@ -67,7 +67,7 @@ get_property(STRING opt)
   if (NULL == opt)
     return NULL;
 
-  val = (STRING) valueof(useropts, opt);
+  val = valueof_str(useropts, opt);
   if (NULL == val)
     {
       if (0 == strcmp(opt, "user.fullname"))

@@ -390,9 +390,9 @@ clear_pv_indiseq (INDISEQ seq)
 static void
 table_pvcleaner (ENTRY ent)
 {
-	PVALUE val = ent->evalue;
+	PVALUE val = ent->uval.w;
 	delete_pvalue(val);
-	ent->evalue = 0;
+	ent->uval.w = NULL;
 }
 /*========================================
  * delete_vptr_pvalue -- Delete a program value
@@ -1311,9 +1311,9 @@ is_zero (PVALUE val)
 void
 insert_symtab (SYMTAB stab, STRING iden, INT type, VPTR value)
 {
-	PVALUE val = (PVALUE) valueof(stab.tab, iden);
+	PVALUE val = (PVALUE) valueof_ptr(stab.tab, iden);
 	if (val) delete_pvalue(val);
-	insert_table(stab.tab, iden, create_pvalue(type, value));
+	insert_table_ptr(stab.tab, iden, create_pvalue(type, value));
 }
 /*======================================================
  * insert_symtab_pvalue -- Update symbol table with PVALUE
@@ -1324,9 +1324,9 @@ insert_symtab (SYMTAB stab, STRING iden, INT type, VPTR value)
 void
 insert_symtab_pvalue (SYMTAB stab, STRING iden, PVALUE val)
 {
-	PVALUE oldval = (PVALUE) valueof(stab.tab, iden);
+	PVALUE oldval = (PVALUE) valueof_ptr(stab.tab, iden);
 	if (oldval) delete_pvalue(oldval);
-	insert_table(stab.tab, iden, val);
+	insert_table_ptr(stab.tab, iden, val);
 }
 /*======================================================
  * delete_symtab -- Delete a value from a symbol table
@@ -1337,7 +1337,7 @@ insert_symtab_pvalue (SYMTAB stab, STRING iden, PVALUE val)
 void
 delete_symtab (SYMTAB stab, STRING iden)
 {
-	PVALUE val = (PVALUE) valueof(stab.tab, iden);
+	PVALUE val = (PVALUE) valueof_ptr(stab.tab, iden);
 	if (val) delete_pvalue(val);
 	delete_table(stab.tab, iden);
 }
@@ -1350,11 +1350,11 @@ delete_symtab (SYMTAB stab, STRING iden)
 static void
 symtab_cleaner (ENTRY ent)
 {
-	PVALUE val = ent->evalue;
+	PVALUE val = ent->uval.w;
 	if (val) {
 		ASSERT(is_pvalue(val));
 		delete_pvalue(val);
-		ent->evalue = NULL;
+		ent->uval.w = NULL;
 	}
 }
 /*========================================
@@ -1494,11 +1494,14 @@ pvalue_to_string (PVALUE val)
 }
 /*======================================================
  * symtab_valueofbool -- Convert pvalue to boolean if present
- *  returns static buffer
+ * SYMTAB stab:     [in] symbol table
+ * STRING key:      [in] key desired
+ * BOOLEAN *there:  [out] whether or not key was found
+ *  returns PVALUE assigned to key in symbol table, if found
  * Created: 2001/03/22, Perry Rapp
  *====================================================*/
-VPTR
+PVALUE
 symtab_valueofbool (SYMTAB stab, STRING key, BOOLEAN *there)
 {
-	return valueofbool(stab.tab, key, there);
+	return (PVALUE)valueofbool_ptr(stab.tab, key, there);
 }

@@ -106,16 +106,16 @@ init_lloptions (void)
 
 	/* load table with defaults */
 	for (i=0; i<ARRSIZE(int_options); i++) {
-		insert_table(opttab, int_options[i].name,
+		insert_table_str(opttab, int_options[i].name,
 			strsave(numtostr(int_options[i].defval)));
 		if (int_options[i].db == DBNO)
-			insert_table(nodbopt, int_options[i].name, 0);
+			insert_table_int(nodbopt, int_options[i].name, 1);
 	}
 	for (i=0; i<ARRSIZE(str_options); i++) {
-		insert_table(opttab, str_options[i].name,
+		insert_table_str(opttab, str_options[i].name,
 			strsave(str_options[i].defval));
 		if (str_options[i].db == DBNO)
-			insert_table(nodbopt, str_options[i].name, 0);
+			insert_table_int(nodbopt, str_options[i].name, 1);
 	}
 }
 /*==========================================
@@ -178,8 +178,9 @@ load_config_file (STRING file)
 {
 	FILE * fp = fopen(file, LLREADTEXT);
 	STRING ptr, val;
-	VPTR *oldval;
+	STRING oldval=NULL;
 	INT len;
+	BOOLEAN there;
 	char buffer[MAXLINELEN];
 	if (!fp)
 		return;
@@ -191,16 +192,16 @@ load_config_file (STRING file)
 		if (*ptr != '=')
 			continue; /* ignore lines without = */
 		*ptr=0; /* zero-terminate key */
-		oldval = access_value(opttab, buffer);
-		if (!oldval)
-			continue; /* ignore keys we don't have */
-		stdfree(*oldval);
+		oldval = valueofbool_str(opttab, buffer, &there);
+		if (!there) continue; /* ignore keys we don't have */
+		ASSERT(oldval); /* no nulls in opttab */
+		stdfree(oldval);
 		ptr++;
 		val = ptr;
 		len = strlen(val);
 		if (val[len-1]=='\n')
 			val[len-1] = 0;
-		*oldval = strsave(val);
+		insert_table_str(opttab, buffer, strsave(val));
 	}
 	fclose(fp);
 }
@@ -224,12 +225,12 @@ update_opt (ENTRY ent)
 {
 	STRING key, value;
 	key = ent->ekey;
-	if (valueof(nodbopt, key))
+	if (valueof_int(nodbopt, key, 0))
 		return;
-	value = (STRING) valueof(useropts, key);
+	value = valueof_str(useropts, key);
 	if (value) {
-		stdfree(ent->evalue);
-		ent->evalue = strsave(value);
+		stdfree((STRING)ent->uval.w);
+		ent->uval.w = strsave(value);
 	}
 }
 /*===============================================
@@ -241,7 +242,7 @@ void
 changeoptstr (STRING * str, STRING newval)
 {
 	INT i;
-	VPTR *oldval;
+	STRING oldval=NULL;
 	stdfree(*str);
 	if (!newval)
 		newval = strsave("");
@@ -249,9 +250,12 @@ changeoptstr (STRING * str, STRING newval)
 	/* update value in table */
 	for (i=0; i<ARRSIZE(str_options); i++) {
 		if (str_options[i].value == str) {
-			oldval = access_value(opttab, str_options[i].name);
-			stdfree(*oldval);
-			*oldval = strsave(newval);
+			/* remove & free old value & replace with new one */
+			BOOLEAN there;
+			oldval = valueofbool_str(opttab, str_options[i].name, &there);
+			ASSERT(there);
+			stdfree(oldval);
+			insert_table_str(opttab, str_options[i].name, strsave(newval));
 		}
 	}
 }
@@ -266,11 +270,11 @@ store_to_lloptions (void)
 	INT i;
 	/* store values back to options list */
 	for (i=0; i<ARRSIZE(int_options); i++) {
-		STRING str = valueof(opttab, int_options[i].name);
+		STRING str = valueof_str(opttab, int_options[i].name);
 		*int_options[i].value = atoi(str);
 	}
 	for (i=0; i<ARRSIZE(str_options); i++) {
-		STRING str = valueof(opttab, str_options[i].name);
+		STRING str = valueof_str(opttab, str_options[i].name);
 		*str_options[i].value = strsave(str);
 	}
 }
@@ -286,7 +290,7 @@ cleanup_lloptions (void)
 	INT i;
 	/* free string values */
 	for (i=0; i<ARRSIZE(str_options); i++) {
-		STRING str = valueof(opttab, str_options[i].name);
+		STRING str = valueof_str(opttab, str_options[i].name);
 		STRING * pstr = str_options[i].value;
 		if (*pstr) {
 			stdfree(*pstr);

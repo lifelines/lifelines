@@ -250,7 +250,6 @@ void init_new_nod0(NOD0 nod0, char ntype, INT keynum);
 void init_show_module(void);
 BOOLEAN init_valtab_from_file(STRING, TABLE, INT, STRING*);
 BOOLEAN init_valtab_from_rec(STRING, TABLE, INT, STRING*);
-BOOLEAN init_valtab_from_string(STRING, TABLE, INT, STRING*);
 BOOLEAN in_string(INT, STRING);
 BOOLEAN iso_list(NODE, NODE);
 BOOLEAN iso_nodes(NODE, NODE, BOOLEAN, BOOLEAN);
