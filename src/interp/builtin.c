@@ -77,7 +77,7 @@ __getint (PNODE node,
 		msg = (STRING) pvalue(mval);
 	}
 	val = ask_for_int(msg);
-	assign_iden(stab, iident(arg), create_pvalue(PINT, (WORD)val));
+	assign_iden(stab, iident(arg), create_pvalue(PINT, (VPTR)val));
 	if (mval) delete_pvalue(mval);
 	return NULL;
 }
@@ -111,7 +111,7 @@ __getstr (PNODE node,
 		msg = (STRING) pvalue(mval);
 	}
 	val = (STRING) ask_for_string(msg, "enter string: ");
-	assign_iden(stab, iident(arg), create_pvalue(PSTRING, (WORD)val));
+	assign_iden(stab, iident(arg), create_pvalue(PSTRING, (VPTR)val));
 	if (mval) delete_pvalue(mval);
 	return NULL;
 }
@@ -145,7 +145,7 @@ __getindi (PNODE node,
 	key = ask_for_indi_key(msg, NOCONFIRM, TRUE);
 	if (!key) return NULL;
 	cel = key_to_indi_cacheel(key);
-	assign_iden(stab, iident(arg), create_pvalue(PINDI, (WORD)cel));
+	assign_iden(stab, iident(arg), create_pvalue(PINDI, (VPTR)cel));
 	if (val) delete_pvalue(val);
 	return NULL;
 }
@@ -154,7 +154,7 @@ __getindi (PNODE node,
  * __getindidate -- Have user identify person
  *   usage: getindidate(IDEN, INT [,STRING]) --> VOID
  *=================================================*/
-WORD
+VPTR
 __getindidate (PNODE node,
                TABLE stab,
                BOOLEAN *eflg)
@@ -171,7 +171,7 @@ __getindidate (PNODE node,
 	if (inext(arg)) ttl = (STRING) evaluate(inext(arg), stab, eflg);
 	if (*eflg) return NULL;
 	cel = key_to_indi_cacheel(ask_for_indi_key(ttl, NOCONFIRM, TRUE));
-	assign_iden(stab, iident(arg), (WORD) cel);
+	assign_iden(stab, iident(arg), (VPTR) cel);
 	return NULL;
 }
 #endif
@@ -196,7 +196,7 @@ __getfam (PNODE node,
 	fam = ask_for_fam("Enter a spouse from family.",
 	    "Enter a sibling from family.");
 	if (fam) cel = fam_to_cacheel(fam);
-	assign_iden(stab, iident(arg), create_pvalue(PFAM, (WORD)cel));
+	assign_iden(stab, iident(arg), create_pvalue(PFAM, (VPTR)cel));
 	return NULL;
 }
 /*=================================================+
@@ -227,7 +227,7 @@ __getindiset (PNODE node,
 	}
 	seq = (INDISEQ) ask_for_indi_list(msg, TRUE);
 	if (val) delete_pvalue(val);
-	assign_iden(stab, iident(arg), create_pvalue(PSET, (WORD)seq));
+	assign_iden(stab, iident(arg), create_pvalue(PSET, (VPTR)seq));
 	return NULL;
 }
 /*==================================+
@@ -247,7 +247,7 @@ __gettoday (PNODE node,
 #endif
 
 	nchild(prnt) = chil;
-	return create_pvalue(PGNODE, (WORD)prnt);
+	return create_pvalue(PGNODE, (VPTR)prnt);
 }
 /*====================================+
  * __name -- Find person's name
@@ -282,7 +282,7 @@ PVALUE __name (PNODE node,
 		return NULL;
 	}
 	return create_pvalue(PSTRING,
-	    (WORD)manip_name(nval(name), ttr, caps, TRUE, 68));
+	    (VPTR)manip_name(nval(name), ttr, caps, TRUE, 68));
 }
 /*==================================================+
  * __fullname -- Process person's name
@@ -335,7 +335,7 @@ __fullname (PNODE node,
 		return NULL;
 	}
 	return create_pvalue(PSTRING,
-	    (WORD)manip_name(nval(name), ttr, caps, myreg, len));
+	    (VPTR)manip_name(nval(name), ttr, caps, myreg, len));
 }
 /*==================================+
  * __surname -- Find person's surname using new getasurname() routine.
@@ -357,7 +357,7 @@ __surname (PNODE node,
 		prog_error(node, "person does not have a name");
 		return NULL;
 	}
-	return create_pvalue(PSTRING, (WORD)getasurname(nval(name)));
+	return create_pvalue(PSTRING, (VPTR)getasurname(nval(name)));
 }
 /*========================================+
  * __soundex -- SOUNDEX function on persons
@@ -379,7 +379,7 @@ __soundex (PNODE node,
 		prog_error(node, "person does not have a name");
 		return NULL;
 	}
-	return create_pvalue(PSTRING, (WORD)soundex(getsurname(nval(name))));
+	return create_pvalue(PSTRING, (VPTR)soundex(getsurname(nval(name))));
 }
 /*===========================================+
  * __strsoundex -- SOUNDEX function on strings
@@ -396,7 +396,7 @@ __strsoundex (PNODE node,
 		prog_error(node, "1st arg to strsoundex must be a string");
 		return NULL;
 	}
-	new = create_pvalue(PSTRING, (WORD)soundex(pvalue(val)));
+	new = create_pvalue(PSTRING, (VPTR)soundex(pvalue(val)));
 	delete_pvalue(val);
 	return new;
 }
@@ -420,7 +420,7 @@ __givens (PNODE node,
 		prog_error(node, "person does not have a name");
 		return NULL;
 	}
-	return create_pvalue(PSTRING, (WORD)givens(nval(name)));
+	return create_pvalue(PSTRING, (VPTR)givens(nval(name)));
 }
 /*===============================+
  * __set -- Assignment operation
@@ -463,7 +463,7 @@ __husband (PNODE node,
 		prog_error(node, "1st arg to husband must be a family");
 		return NULL;
 	}
-	return create_pvalue(PINDI, (WORD)indi_to_cacheel(fam_to_husb(fam)));
+	return create_pvalue(PINDI, (VPTR)indi_to_cacheel(fam_to_husb(fam)));
 }
 /*===================================+
  * __wife -- Find first wife of family
@@ -480,7 +480,7 @@ __wife (PNODE node,
 		prog_error(node, "1st arg to wife must be a family");
 		return NULL;
 	}
-	return create_pvalue(PINDI, (WORD)indi_to_cacheel(fam_to_wife(fam)));
+	return create_pvalue(PINDI, (VPTR)indi_to_cacheel(fam_to_wife(fam)));
 }
 /*==========================================+
  * __firstchild -- Find first child of family
@@ -497,7 +497,7 @@ __firstchild (PNODE node,
 		prog_error(node, "arg to firstchild must be a family");
 		return NULL;
 	}
-	return create_pvalue(PINDI, (WORD)indi_to_cacheel(fam_to_first_chil(fam)));
+	return create_pvalue(PINDI, (VPTR)indi_to_cacheel(fam_to_first_chil(fam)));
 }
 /*========================================+
  * __lastchild -- Find last child of family
@@ -514,7 +514,7 @@ __lastchild (PNODE node,
 		prog_error(node, "arg to firstchild must be a family");
 		return NULL;
 	}
-	return create_pvalue(PINDI, (WORD)indi_to_cacheel(fam_to_last_chil(fam)));
+	return create_pvalue(PINDI, (VPTR)indi_to_cacheel(fam_to_last_chil(fam)));
 }
 /*=================================+
  * __marr -- Find marriage of family
@@ -531,7 +531,7 @@ __marr (PNODE node,
 		return NULL;
 	}
 	if (!fam) return create_pvalue(PGNODE, NULL);
-	return create_pvalue(PGNODE, (WORD)MARR(fam));
+	return create_pvalue(PGNODE, (VPTR)MARR(fam));
 }
 /*==========================================+
  * __birt -- Find first birth event of person
@@ -548,7 +548,7 @@ __birt (PNODE node,
 		return NULL;
 	} 
 	if (!indi) return create_pvalue(PGNODE, NULL);
-	return create_pvalue(PGNODE, (WORD)BIRT(indi));
+	return create_pvalue(PGNODE, (VPTR)BIRT(indi));
 }
 /*==========================================+
  * __deat -- Find first death event of person
@@ -565,7 +565,7 @@ __deat (PNODE node,
 		return NULL;
 	}
 	if (!indi) return create_pvalue(PGNODE, NULL);
-	return create_pvalue(PGNODE, (WORD)DEAT(indi));
+	return create_pvalue(PGNODE, (VPTR)DEAT(indi));
 }
 /*============================================+
  * __bapt -- Find first baptism event of person
@@ -582,7 +582,7 @@ __bapt (PNODE node,
 		return NULL;
 	}
 	if (!indi) return create_pvalue(PGNODE, NULL);
-	return create_pvalue(PGNODE, (WORD)BAPT(indi));
+	return create_pvalue(PGNODE, (VPTR)BAPT(indi));
 }
 /*===========================================+
  * __buri -- Find first burial event of person
@@ -599,7 +599,7 @@ __buri (PNODE node,
 		return NULL;
 	}
 	if (!indi) return create_pvalue(PGNODE, NULL);
-	return create_pvalue(PGNODE, (WORD)BURI(indi));
+	return create_pvalue(PGNODE, (VPTR)BURI(indi));
 }
 /*====================================+
  * __titl -- Find first title of person
@@ -617,7 +617,7 @@ __titl (PNODE node,
 	}
 	if (!indi) return create_pvalue(PSTRING, NULL);
 	titl = find_tag(nchild(indi), "TITL");
-	return create_pvalue(PSTRING, (WORD)(titl ? nval(titl) : NULL));
+	return create_pvalue(PSTRING, (VPTR)(titl ? nval(titl) : NULL));
 }
 /*===================================+
  * __long -- Return long form of event
@@ -637,7 +637,7 @@ __long (PNODE node,
 	}
 	even = (NODE) pvalue(val);
 	delete_pvalue(val);
-	return create_pvalue(PSTRING, (WORD)event_to_string(even, ttr, FALSE));
+	return create_pvalue(PSTRING, (VPTR)event_to_string(even, ttr, FALSE));
 }
 /*=====================================+
  * __short -- Return short form of event
@@ -657,7 +657,7 @@ __short (PNODE node,
 	}
 	even = (NODE) pvalue(val);
 	delete_pvalue(val);
-	return create_pvalue(PSTRING, (WORD)event_to_string(even, ttr, TRUE));
+	return create_pvalue(PSTRING, (VPTR)event_to_string(even, ttr, TRUE));
 }
 /*===============================+
  * __fath -- Find father of person
@@ -674,7 +674,7 @@ __fath (PNODE node,
 		return NULL;
 	}
 	if (!indi) return create_pvalue(PINDI, NULL);
-	return create_pvalue(PINDI, (WORD)indi_to_cacheel(indi_to_fath(indi)));
+	return create_pvalue(PINDI, (VPTR)indi_to_cacheel(indi_to_fath(indi)));
 }
 /*===============================+
  * __moth -- Find mother of person
@@ -691,7 +691,7 @@ __moth (PNODE node,
 		return NULL;
 	}
 	if (!indi) return create_pvalue(PINDI, NULL);
-	return create_pvalue(PINDI, (WORD)indi_to_cacheel(indi_to_moth(indi)));
+	return create_pvalue(PINDI, (VPTR)indi_to_cacheel(indi_to_moth(indi)));
 }
 /*===========================================+
  * __parents -- Find parents' family of person
@@ -708,7 +708,7 @@ __parents (PNODE node,
 		return NULL;
 	}
 	if (!indi) return create_pvalue(PFAM, NULL);
-	return create_pvalue(PFAM, (WORD)fam_to_cacheel(indi_to_famc(indi)));
+	return create_pvalue(PFAM, (VPTR)fam_to_cacheel(indi_to_famc(indi)));
 }
 /*==========================================+
  * __nextsib -- Find person's younger sibling
@@ -725,7 +725,7 @@ __nextsib (PNODE node,
 		return NULL;
 	}
 	if (!indi) return create_pvalue(PINDI, NULL);
-	return create_pvalue(PINDI, (WORD)indi_to_cacheel(indi_to_next_sib(indi)));
+	return create_pvalue(PINDI, (VPTR)indi_to_cacheel(indi_to_next_sib(indi)));
 }
 /*========================================+
  * __prevsib -- Find person's older sibling
@@ -742,7 +742,7 @@ __prevsib (PNODE node,
 		return NULL;
 	}
 	if (!indi) return create_pvalue(PINDI, NULL);
-	return create_pvalue(PINDI, (WORD)indi_to_cacheel(indi_to_prev_sib(indi)));
+	return create_pvalue(PINDI, (VPTR)indi_to_cacheel(indi_to_prev_sib(indi)));
 }
 /*========================================+
  * __d -- Return cardinal integer as string
@@ -761,7 +761,7 @@ __d (PNODE node,
 		return NULL;
 	}
 	sprintf(scratch, "%d", (INT) pvalue(val));
-	set_pvalue(val, PSTRING, (WORD)scratch);
+	set_pvalue(val, PSTRING, (VPTR)scratch);
 	return val;
 }
 /*=============================================+
@@ -802,7 +802,7 @@ __f (PNODE node,
 #endif
 
 	sprintf(scratch, format, u.f);
-	set_pvalue(val, PSTRING, (WORD)scratch);
+	set_pvalue(val, PSTRING, (VPTR)scratch);
 	return val;
 }
 /*==========================================+
@@ -825,7 +825,7 @@ ___alpha (PNODE node,
 		sprintf(scratch, "XX");
 	else
 		sprintf(scratch, "%c", 'a' + i - 1);
-	return create_pvalue(PSTRING, (WORD)scratch);
+	return create_pvalue(PSTRING, (VPTR)scratch);
 }
 /*================================================+
  * __ord -- Convert small integer to ordinal string
@@ -852,7 +852,7 @@ __ord (PNODE node,
 		sprintf(scratch, "%dth", i);
 	else
 		sprintf(scratch, ordinals[i - 1]);
-	return create_pvalue(PSTRING, (WORD)scratch);
+	return create_pvalue(PSTRING, (VPTR)scratch);
 }
 /*==================================================+
  * __card -- Convert small integer to cardinal string
@@ -879,7 +879,7 @@ __card (PNODE node,
 		sprintf(scratch, "%d", i);
 	else
 		sprintf(scratch, cardinals[i]);
-	return create_pvalue(PSTRING, (WORD)scratch);
+	return create_pvalue(PSTRING, (VPTR)scratch);
 }
 /*==========================================+
  * __roman -- Convert integer to Roman numeral
@@ -907,7 +907,7 @@ __roman (PNODE node,
 		sprintf(scratch, "%d", i);
 	else
 		sprintf(scratch, "%s%s", rotens[i/10], rodigits[i%10]);
-	return create_pvalue(PSTRING, (WORD)scratch);
+	return create_pvalue(PSTRING, (VPTR)scratch);
 }
 /*================================================+
  * __nchildren -- Find number of children in family
@@ -924,7 +924,7 @@ __nchildren (PNODE node,
 		return NULL;
 	}
 	if (!fam) return create_pvalue(PINT, 0);
-	return create_pvalue(PINT, (WORD)length_nodes(CHIL(fam)));
+	return create_pvalue(PINT, (VPTR)length_nodes(CHIL(fam)));
 }
 /*===================================================+
  * __nfamilies -- Find number of families person is in
@@ -941,7 +941,7 @@ __nfamilies (PNODE node,
 		return NULL;
 	}
 	if (!indi) return create_pvalue(PINT, 0);
-	return create_pvalue(PINT, (WORD)length_nodes(FAMS(indi)));
+	return create_pvalue(PINT, (VPTR)length_nodes(FAMS(indi)));
 }
 /*===============================================+
  * __nspouses -- Find number of spouses person has
@@ -960,7 +960,7 @@ __nspouses (PNODE node,
 	}
 	if (!indi) return create_pvalue(PINT, 0);
 	FORSPOUSES(indi,spouse,fam,nspouses) ENDSPOUSES
-	return create_pvalue(PINT, (WORD)nspouses);
+	return create_pvalue(PINT, (VPTR)nspouses);
 }
 /*=============================+
  * __eq -- Equal operation
@@ -1146,7 +1146,7 @@ __and (PNODE node,
 			delete_pvalue(val2);
 		}
 	}
-	return create_pvalue(PBOOL, (WORD)rc);
+	return create_pvalue(PBOOL, (VPTR)rc);
 }
 /*================================+
  * __or -- Or operation
@@ -1177,7 +1177,7 @@ __or (PNODE node,
 			delete_pvalue(val2);
 		}
 	}
-	return create_pvalue(PBOOL, (WORD)rc);
+	return create_pvalue(PBOOL, (VPTR)rc);
 }
 /*================================+
  * __add -- Add operation
@@ -1421,7 +1421,7 @@ __strcmp (PNODE node,
 	llwprintf("\n");
 #endif
 
-	set_pvalue(val1, PINT, (WORD)ll_strcmp(str1, str2));
+	set_pvalue(val1, PINT, (VPTR)ll_strcmp(str1, str2));
 	delete_pvalue(val2);
 	return val1;
 }
@@ -1450,7 +1450,7 @@ __nestr (PNODE node,
 	str2 = (STRING) pvalue(val2);
 	if (!str1) str1 = emp;
 	if (!str2) str2 = emp;
-	set_pvalue(val1, PBOOL, (WORD)(ll_strcmp(str1, str2) != 0));
+	set_pvalue(val1, PBOOL, (VPTR)(ll_strcmp(str1, str2) != 0));
 	delete_pvalue(val2);
 	return val1;
 }
@@ -1479,7 +1479,7 @@ __eqstr (PNODE node,
 	str2 = (STRING) pvalue(val2);
 	if (!str1) str1 = emp;
 	if (!str2) str2 = emp;
-	set_pvalue(val1, PBOOL, (WORD)(ll_strcmp(str1, str2) == 0));
+	set_pvalue(val1, PBOOL, (VPTR)(ll_strcmp(str1, str2) == 0));
 	delete_pvalue(val2);
 	return val1;
 }
@@ -1502,7 +1502,7 @@ __strtoint (PNODE node,
 	if (!pvalue(val))
 		set_pvalue(val, PINT, 0);
 	else
-		set_pvalue(val, PINT, (WORD)atoi(pvalue(val)));
+		set_pvalue(val, PINT, (VPTR)atoi(pvalue(val)));
 	return val;
 }
 /*============================+
@@ -1523,7 +1523,7 @@ __list (PNODE node,
 	}
 	*eflg = FALSE;
 	list = create_list();
-	assign_iden(stab, iident(var), create_pvalue(PLIST, (WORD) list));
+	assign_iden(stab, iident(var), create_pvalue(PLIST, (VPTR) list));
 	return NULL;
 }
 /*=======================================+
@@ -1580,7 +1580,7 @@ __inlist (PNODE node,
 		return NULL;
 	}
 	list = (LIST) pvalue(val);
-	set_pvalue(val, PBOOL, (WORD)in_list(list, el, eqv_pvalues));
+	set_pvalue(val, PBOOL, (VPTR)in_list(list, el, eqv_pvalues));
 	delete_pvalue(el);
 	return val;
 }
@@ -1701,7 +1701,7 @@ __empty (PNODE node,
 		return NULL;
 	}
 	list = (LIST) pvalue(val);
-	set_pvalue(val, PBOOL, (WORD)empty_list(list));
+	set_pvalue(val, PBOOL, (VPTR)empty_list(list));
 	return val;
 }
 /*==================================+
@@ -1790,7 +1790,7 @@ __length (PNODE node,
 		return NULL;
 	}
 	list = (LIST) pvalue(val);
-	set_pvalue(val, PINT, (WORD)length_list(list));
+	set_pvalue(val, PINT, (VPTR)length_list(list));
 	return val;
 }
 /*==========================+
@@ -1807,7 +1807,7 @@ __not (PNODE node,
 		prog_error(node, "the arg to not is not boolean");
 		return NULL;
 	}
-	set_pvalue(val, PBOOL, (WORD)!((BOOLEAN) pvalue(val)));
+	set_pvalue(val, PBOOL, (VPTR)!((BOOLEAN) pvalue(val)));
 	return val;
 }
 /*===============================+
@@ -1841,7 +1841,7 @@ __strlen (PNODE node,
 		return NULL;
 	}
 	if (pvalue(val))
-		set_pvalue(val, PINT, (WORD)strlen(pvalue(val)));
+		set_pvalue(val, PINT, (VPTR)strlen(pvalue(val)));
 	else
 		set_pvalue(val, PINT, 0);
 	return val;
@@ -1889,7 +1889,7 @@ __concat (PNODE node,
                         stdfree(str);
                 }
         }
-	val = create_pvalue(PSTRING, (WORD)new);
+	val = create_pvalue(PSTRING, (VPTR)new);
 	stdfree(new);
         return val;
 }
@@ -1907,7 +1907,7 @@ __lower (PNODE node,
 		prog_error(node, "the arg to lower must be a string");
 		return NULL;
 	}
-	set_pvalue(val, PSTRING, (WORD)lower(pvalue(val)));
+	set_pvalue(val, PSTRING, (VPTR)lower(pvalue(val)));
 	return val;
 }
 /*=======================================+
@@ -1924,7 +1924,7 @@ __upper (PNODE node,
 		prog_error(node, "the arg to upper must be a string");
 		return NULL;
 	}
-	set_pvalue(val, PSTRING, (WORD)upper(pvalue(val)));
+	set_pvalue(val, PSTRING, (VPTR)upper(pvalue(val)));
 	return val;
 }
 /*=====================================+
@@ -1941,7 +1941,7 @@ __capitalize (PNODE node,
 		prog_error(node, "the arg to capitalize must be a string");
 		return NULL;
 	}
-	set_pvalue(val, PSTRING, (WORD)capitalize(pvalue(val)));
+	set_pvalue(val, PSTRING, (VPTR)capitalize(pvalue(val)));
 	return val;
 }
 /*================================+
@@ -1972,9 +1972,9 @@ __pn (PNODE node,
 		return NULL;
 	}
 	if (SEX(indi) == SEX_FEMALE) 
-		set_pvalue(val, PSTRING, (WORD)fpns[typ]);
+		set_pvalue(val, PSTRING, (VPTR)fpns[typ]);
 	else
-		set_pvalue(val, PSTRING, (WORD)mpns[typ]);
+		set_pvalue(val, PSTRING, (VPTR)mpns[typ]);
 	return val;
 }
 /*==================================+
@@ -2017,10 +2017,10 @@ __sex (PNODE node,
 		prog_error(node, "the arg to sex is not a person");
 		return NULL;
 	}
-	if (!indi) return create_pvalue(PSTRING, (WORD)str);
+	if (!indi) return create_pvalue(PSTRING, (VPTR)str);
 	if ((sex = SEX(indi)) == SEX_MALE) str = (STRING) "M";
 	else if (sex == SEX_FEMALE) str = (STRING) "F";
-	return create_pvalue(PSTRING, (WORD)str);
+	return create_pvalue(PSTRING, (VPTR)str);
 }
 /*=================================+
  * __male -- Check if person is male
@@ -2037,7 +2037,7 @@ __male (PNODE node,
 		return NULL;
 	}
 	if (!indi) return create_pvalue(PBOOL, FALSE);
-	return create_pvalue(PBOOL, (WORD)(SEX(indi) == SEX_MALE));
+	return create_pvalue(PBOOL, (VPTR)(SEX(indi) == SEX_MALE));
 }
 /*=====================================+
  * __female -- Check if person is female
@@ -2054,7 +2054,7 @@ __female (PNODE node,
 		return NULL;
 	}
 	if (!indi) return create_pvalue(PBOOL, FALSE);
-	return create_pvalue(PBOOL, (WORD)(SEX(indi) == SEX_FEMALE));
+	return create_pvalue(PBOOL, (VPTR)(SEX(indi) == SEX_FEMALE));
 }
 /*========================================+
  * __key -- Return person or family key
@@ -2088,7 +2088,7 @@ __key (PNODE node,
 		delete_pvalue(val);
 	}
 	key = (STRING) ckey(cel);
-	return create_pvalue(PSTRING, (WORD)(strip ? key + 1 : key));
+	return create_pvalue(PSTRING, (VPTR)(strip ? key + 1 : key));
 }
 /*==============================================+
  * __root -- Return root of cached record
@@ -2110,7 +2110,7 @@ __rot (PNODE node,
 	}
 	cel = (CACHEEL) pvalue(val);
 	if (cnode(cel)) {
-		set_pvalue(val, PGNODE, (WORD)cnode(cel));
+		set_pvalue(val, PGNODE, (VPTR)cnode(cel));
 		return val;
 	}
 	key = ckey(cel);
@@ -2122,7 +2122,7 @@ __rot (PNODE node,
 	case 'X': gnode = key_to_othr(key); break;
 	default:  FATAL();
 	}
-	set_pvalue(val, PGNODE, (WORD)gnode); 
+	set_pvalue(val, PGNODE, (VPTR)gnode); 
 	return val;
 }
 /*================================+
@@ -2140,7 +2140,7 @@ __inode (PNODE node,
 		prog_error(node, "the arg to inode is not a person");
 		return NULL;
 	}
-	return create_pvalue(PGNODE, (WORD)indi);
+	return create_pvalue(PGNODE, (VPTR)indi);
 }
 /*================================+
  * __fnode -- Return root of family
@@ -2157,7 +2157,7 @@ __fnode (PNODE node,
 		return NULL;
 	}
 	if (!fam) return create_pvalue(PGNODE, NULL);
-	return create_pvalue(PGNODE, (WORD)fam);
+	return create_pvalue(PGNODE, (VPTR)fam);
 }
 /*=============================+
  * __table -- Create table
@@ -2178,7 +2178,7 @@ __table (PNODE node,
 	}
 	*eflg = FALSE;
 	tab = create_table();
-	val = create_pvalue(PTABLE, (WORD)tab);
+	val = create_pvalue(PTABLE, (VPTR)tab);
 
 #ifdef DEBUG
 	llwprintf("__table: ");show_pvalue(val);wprintf("\n");
@@ -2324,7 +2324,7 @@ __trim (PNODE node,
 	}
 	str = (STRING) pvalue(val1);
 	len = (INT) pvalue(val2);
-	set_pvalue(val2, PSTRING, (WORD)trim(str, len));
+	set_pvalue(val2, PSTRING, (VPTR)trim(str, len));
 	delete_pvalue(val1);
 	return val2;
 }
@@ -2358,7 +2358,7 @@ __trimname (PNODE node,
 		return NULL;
 	}
 	len = (INT) pvalue(val);
-	set_pvalue(val, PSTRING, (WORD)name_string(trim_name(nval(indi), len)));
+	set_pvalue(val, PSTRING, (VPTR)name_string(trim_name(nval(indi), len)));
 	return val;
 }
 /*==============================+
@@ -2378,7 +2378,7 @@ __date (PNODE node,
 		return NULL;
 	}
 	line = (NODE) pvalue(val);
-	return create_pvalue(PSTRING, (WORD)event_to_date(line, ttr, FALSE));
+	return create_pvalue(PSTRING, (VPTR)event_to_date(line, ttr, FALSE));
 }
 /*=====================================================+
  * __extractdate -- Extract date from EVENT or DATE NODE
@@ -2420,9 +2420,9 @@ __extractdate (PNODE node,
 	else
 		str = nval(line);
 	extract_date(str, &mod, &da, &mo, &yr, &syr);
-	assign_iden(stab, iident(dvar), create_pvalue(PINT, (WORD)da));
-	assign_iden(stab, iident(mvar), create_pvalue(PINT, (WORD)mo));
-	assign_iden(stab, iident(yvar), create_pvalue(PINT, (WORD)yr));
+	assign_iden(stab, iident(dvar), create_pvalue(PINT, (VPTR)da));
+	assign_iden(stab, iident(mvar), create_pvalue(PINT, (VPTR)mo));
+	assign_iden(stab, iident(yvar), create_pvalue(PINT, (VPTR)yr));
 	*eflg = FALSE;
 	return NULL;
 }
@@ -2477,11 +2477,11 @@ __extractdatestr (PNODE node,
 		str = (STRING) pvalue(val);
 	}
 	extract_date(str, &mod, &da, &mo, &yr, &yrstr);
-	assign_iden(stab, iident(modvar), create_pvalue(PINT, (WORD)mod));
-	assign_iden(stab, iident(dvar), create_pvalue(PINT, (WORD)da));
-	assign_iden(stab, iident(mvar), create_pvalue(PINT, (WORD)mo));
-	assign_iden(stab, iident(yvar), create_pvalue(PINT, (WORD)yr));
-	assign_iden(stab, iident(ystvar), create_pvalue(PSTRING, (WORD)yrstr));
+	assign_iden(stab, iident(modvar), create_pvalue(PINT, (VPTR)mod));
+	assign_iden(stab, iident(dvar), create_pvalue(PINT, (VPTR)da));
+	assign_iden(stab, iident(mvar), create_pvalue(PINT, (VPTR)mo));
+	assign_iden(stab, iident(yvar), create_pvalue(PINT, (VPTR)yr));
+	assign_iden(stab, iident(ystvar), create_pvalue(PSTRING, (VPTR)yrstr));
 	*eflg = FALSE;
 	return NULL;
 }
@@ -2504,7 +2504,7 @@ __stddate (PNODE node,
 		return NULL;
 	}
 	evnt = (NODE) pvalue(val);
-	set_pvalue(val, PSTRING, (WORD)format_date(event_to_date(evnt, NULL, FALSE),
+	set_pvalue(val, PSTRING, (VPTR)format_date(event_to_date(evnt, NULL, FALSE),
 	    daycode, monthcode, 1, datecode, FALSE));
 	return val;
 }
@@ -2524,7 +2524,7 @@ __complexdate (PNODE node,
 		return NULL;
 	}
 	evnt = (NODE) pvalue(val);
-	set_pvalue(val, PSTRING, (WORD)format_date(event_to_date(evnt, NULL, FALSE),
+	set_pvalue(val, PSTRING, (VPTR)format_date(event_to_date(evnt, NULL, FALSE),
 	    daycode, monthcode, 1, datecode, TRUE));
 	return val;
 }
@@ -2613,7 +2613,7 @@ __year (PNODE node,
 		return NULL;
 	}
 	evnt = (NODE) pvalue(val);
-	set_pvalue(val, PSTRING, (WORD)event_to_date(evnt, NULL, TRUE));
+	set_pvalue(val, PSTRING, (VPTR)event_to_date(evnt, NULL, TRUE));
 	return val;
 }
 /*================================+
@@ -2639,7 +2639,7 @@ __place (PNODE node,
 		return NULL;
 	}
 	evnt = (NODE) pvalue(val);
-	set_pvalue(val, PSTRING, (WORD)event_to_plac(evnt, FALSE));
+	set_pvalue(val, PSTRING, (VPTR)event_to_plac(evnt, FALSE));
 	return val;
 }
 /*============================+
@@ -2658,7 +2658,7 @@ __tag (PNODE node,
 		return NULL;
 	}
 	ged = (NODE) pvalue(val);
-	set_pvalue(val, PSTRING, (WORD)(ged ? ntag(ged) : NULL));
+	set_pvalue(val, PSTRING, (VPTR)(ged ? ntag(ged) : NULL));
 	return val;
 }
 /*===============================+
@@ -2677,7 +2677,7 @@ __value (PNODE node,
 		return NULL;
 	}
 	ged = (NODE) pvalue(val);
-	set_pvalue(val, PSTRING, (WORD)nval(ged));
+	set_pvalue(val, PSTRING, (VPTR)nval(ged));
 	return val;
 }
 /*=============================+
@@ -2696,7 +2696,7 @@ __xref (PNODE node,
 		return NULL;
 	}
 	ged = (NODE) pvalue(val);
-	set_pvalue(val, PSTRING, (WORD)nxref(ged));
+	set_pvalue(val, PSTRING, (VPTR)nxref(ged));
 	return val;
 }
 /*===============================+
@@ -2715,7 +2715,7 @@ __child (PNODE node,
 		return NULL;
 	}
 	ged = (NODE) pvalue(val);
-	set_pvalue(val, PGNODE, (WORD)nchild(ged));
+	set_pvalue(val, PGNODE, (VPTR)nchild(ged));
 	return val;
 }
 /*=================================+
@@ -2734,7 +2734,7 @@ __parent (PNODE node,
 		return NULL;
 	}
 	ged = (NODE) pvalue(val);
-	set_pvalue(val, PGNODE, (WORD)nparent(ged));
+	set_pvalue(val, PGNODE, (VPTR)nparent(ged));
 	return val;
 }
 /*========================================+
@@ -2753,7 +2753,7 @@ __sibling (PNODE node,
 		return NULL;
 	}
 	ged = (NODE) pvalue(val);
-	set_pvalue(val, PGNODE, (WORD)nsibling(ged));
+	set_pvalue(val, PGNODE, (VPTR)nsibling(ged));
 	return val;
 }
 /*===============================+
@@ -2777,7 +2777,7 @@ __level (PNODE node,
 		lev++;
 		ged = nparent(ged);
 	}
-	set_pvalue(val, PINT, (WORD)lev);
+	set_pvalue(val, PINT, (VPTR)lev);
 	return val;
 }
 /*=================================+
@@ -2819,7 +2819,7 @@ __nl (PNODE node,
       BOOLEAN *eflg)
 {
 	*eflg = FALSE;
-	return create_pvalue(PSTRING, (WORD)"\n");
+	return create_pvalue(PSTRING, (VPTR)"\n");
 }
 /*=========================+
  * __space -- Space function
@@ -2831,7 +2831,7 @@ __space (PNODE node,
          BOOLEAN *eflg)
 {
 	*eflg = FALSE;
-	return create_pvalue(PSTRING, (WORD)" ");
+	return create_pvalue(PSTRING, (VPTR)" ");
 }
 /*=============================+
  * __qt -- Double quote function
@@ -2843,7 +2843,7 @@ __qt (PNODE node,
       BOOLEAN *eflg)
 {
 	*eflg = FALSE;
-	return create_pvalue(PSTRING, (WORD)"\"");
+	return create_pvalue(PSTRING, (VPTR)"\"");
 }
 /*=============================+
  * __indi -- Convert key to INDI
@@ -2879,12 +2879,12 @@ __indi (PNODE node,
 /*
  *	rec = (STRING) retrieve_record(scratch, &len);
  *	if (rec && len > 6)
- *		val = create_pvalue(PINDI, (WORD)key_to_indi_cacheel(scratch));
+ *		val = create_pvalue(PINDI, (VPTR)key_to_indi_cacheel(scratch));
  *	else
  *		val = create_pvalue(PINDI, NULL);
  *	if (rec) stdfree(rec);
  */
- 	val = create_pvalue(PINDI, (WORD)qkey_to_indi_cacheel(scratch));
+ 	val = create_pvalue(PINDI, (VPTR)qkey_to_indi_cacheel(scratch));
 	return val;
 }
 /*===========================+
@@ -2920,7 +2920,7 @@ __fam (PNODE node,
 	if (strlen(scratch) == 1) return NULL;
 	rec = (STRING) retrieve_record(scratch, &len);
 	if (rec && len > 6)
-		val = create_pvalue(PFAM, (WORD)key_to_fam_cacheel(scratch));
+		val = create_pvalue(PFAM, (VPTR)key_to_fam_cacheel(scratch));
 	else
 		val = create_pvalue(PFAM, NULL);
 	if (rec) stdfree(rec);
@@ -3020,14 +3020,14 @@ __free (PNODE node,
 				len = length_list(keysets);
 				for(i = 1; i <= len; i++) {
 					if(get_list_element(keysets, i) == pvalue(val)) {
-						set_list_element(keysets, i, (WORD)0);
+						set_list_element(keysets, i, (VPTR)0);
 						break;
 					}
 				}
 			}
 			break;
 		}
-		pvalue(val) = (WORD)0;
+		pvalue(val) = (VPTR)0;
 	}
 	return NULL;
 }

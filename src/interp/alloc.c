@@ -67,7 +67,7 @@ PNODE
 string_node (STRING str)
 {
 	PNODE node = create_pnode(ISCONS);
-	ivalue(node) = create_pvalue(PSTRING, (WORD) str);
+	ivalue(node) = create_pvalue(PSTRING, (VPTR) str);
 	return node;
 }
 /*========================================
@@ -80,10 +80,10 @@ children_node (PNODE fexpr,     /* expr */
                PNODE body)      /* loop body */
 {
 	PNODE node = create_pnode(ICHILDREN);
-	iloopexp(node) = (WORD) fexpr;
-	ichild(node) = (WORD) cvar;
-	inum(node) = (WORD) nvar;
-	ibody(node) = (WORD) body;
+	iloopexp(node) = (VPTR) fexpr;
+	ichild(node) = (VPTR) cvar;
+	inum(node) = (VPTR) nvar;
+	ibody(node) = (VPTR) body;
 	set_parents(body, node);
 	return node;
 }
@@ -98,11 +98,11 @@ spouses_node (PNODE pexpr,      /* expr */
               PNODE body)       /* body */
 {
 	PNODE node = create_pnode(ISPOUSES);
-	iloopexp(node) = (WORD) pexpr;
-	ispouse(node) = (WORD) svar;
-	ifamily(node) = (WORD) fvar;
-	inum(node) = (WORD) nvar;
-	ibody(node) = (WORD) body;
+	iloopexp(node) = (VPTR) pexpr;
+	ispouse(node) = (VPTR) svar;
+	ifamily(node) = (VPTR) fvar;
+	inum(node) = (VPTR) nvar;
+	ibody(node) = (VPTR) body;
 	set_parents(body, node);
 	return node;
 }
@@ -117,11 +117,11 @@ families_node (PNODE pexpr,     /* expr */
                PNODE body)      /* body */
 {
 	PNODE node = create_pnode(IFAMILIES);
-	iloopexp(node) = (WORD) pexpr;
-	ifamily(node) = (WORD) fvar;
-	ispouse(node) = (WORD) svar;
-	inum(node) = (WORD) nvar;
-	ibody(node) = (WORD) body;
+	iloopexp(node) = (VPTR) pexpr;
+	ifamily(node) = (VPTR) fvar;
+	ispouse(node) = (VPTR) svar;
+	inum(node) = (VPTR) nvar;
+	ibody(node) = (VPTR) body;
 	set_parents(body, node);
 	return node;
 }
@@ -136,11 +136,11 @@ fathers_node (PNODE pexpr,      /* expr */
               PNODE body)       /* body */
 {
 	PNODE node = create_pnode(IFATHS);
-	iloopexp(node) = (WORD) pexpr;
-	iiparent(node) = (WORD) pvar;
-	ifamily(node) = (WORD) fvar;
-	inum(node) = (WORD) nvar;
-	ibody(node) = (WORD) body;
+	iloopexp(node) = (VPTR) pexpr;
+	iiparent(node) = (VPTR) pvar;
+	ifamily(node) = (VPTR) fvar;
+	inum(node) = (VPTR) nvar;
+	ibody(node) = (VPTR) body;
 	set_parents(body, node);
 	return node;
 }
@@ -155,11 +155,11 @@ mothers_node (PNODE pexpr,      /* expr */
               PNODE body)       /* body */
 {
 	PNODE node = create_pnode(IMOTHS);
-	iloopexp(node) = (WORD) pexpr;
-	iiparent(node) = (WORD) pvar;
-	ifamily(node) = (WORD) fvar;
-	inum(node) = (WORD) nvar;
-	ibody(node) = (WORD) body;
+	iloopexp(node) = (VPTR) pexpr;
+	iiparent(node) = (VPTR) pvar;
+	ifamily(node) = (VPTR) fvar;
+	inum(node) = (VPTR) nvar;
+	ibody(node) = (VPTR) body;
 	set_parents(body, node);
 	return node;
 }
@@ -173,10 +173,10 @@ parents_node (PNODE pexpr,      /* expr */
               PNODE body)       /* body */
 {
 	PNODE node = create_pnode(IFAMCS);
-	iloopexp(node) = (WORD) pexpr;
-	ifamily(node) = (WORD) fvar;
-	inum(node) = (WORD) nvar;
-	ibody(node) = (WORD) body;
+	iloopexp(node) = (VPTR) pexpr;
+	ifamily(node) = (VPTR) fvar;
+	inum(node) = (VPTR) nvar;
+	ibody(node) = (VPTR) body;
 	set_parents(body, node);
 	return node;
 }
@@ -191,11 +191,11 @@ forindiset_node (PNODE iexpr,   /* expr */
                  PNODE body)    /* body */
 {
 	PNODE node = create_pnode(ISET);
-	iloopexp(node) = (WORD) iexpr;
-	ielement(node) = (WORD) ivar;
-	ivalvar(node) = (WORD) vvar;
-	inum(node) = (WORD) nvar;
-	ibody(node) = (WORD) body;
+	iloopexp(node) = (VPTR) iexpr;
+	ielement(node) = (VPTR) ivar;
+	ivalvar(node) = (VPTR) vvar;
+	inum(node) = (VPTR) nvar;
+	ibody(node) = (VPTR) body;
 	set_parents(body, node);
 	return node;
 }
@@ -209,10 +209,10 @@ forlist_node (PNODE iexpr,      /* expr */
               PNODE body)       /* body */
 {
 	PNODE node = create_pnode(ILIST);
-	iloopexp(node) = (WORD) iexpr;
-	ielement(node) = (WORD) evar;
-	inum(node) = (WORD) nvar;
-	ibody(node) = (WORD) body;
+	iloopexp(node) = (VPTR) iexpr;
+	ielement(node) = (VPTR) evar;
+	inum(node) = (VPTR) nvar;
+	ibody(node) = (VPTR) body;
 	set_parents(body, node);
 	return node;
 }
@@ -225,9 +225,9 @@ forindi_node (STRING ivar,      /* pers */
               PNODE body)       /* body */
 {
 	PNODE node = create_pnode(IINDI);
-	ielement(node) = (WORD) ivar;
-	inum(node) = (WORD) nvar;
-	ibody(node) = (WORD) body;
+	ielement(node) = (VPTR) ivar;
+	inum(node) = (VPTR) nvar;
+	ibody(node) = (VPTR) body;
 	set_parents(body, node);
 	return node;
 }
@@ -240,9 +240,9 @@ forsour_node (STRING fvar,    /* fam */
               PNODE body)     /* body */
 {
 	PNODE node = create_pnode(ISOUR);
-	ielement(node) = (WORD) fvar;
-	inum(node) = (WORD) nvar;
-	ibody(node) = (WORD) body;
+	ielement(node) = (VPTR) fvar;
+	inum(node) = (VPTR) nvar;
+	ibody(node) = (VPTR) body;
 	set_parents(body, node);
 	return node;
 }
@@ -255,9 +255,9 @@ foreven_node (STRING fvar,    /* fam */
               PNODE body)     /* body */
 {
 	PNODE node = create_pnode(IEVEN);
-	ielement(node) = (WORD) fvar;
-	inum(node) = (WORD) nvar;
-	ibody(node) = (WORD) body;
+	ielement(node) = (VPTR) fvar;
+	inum(node) = (VPTR) nvar;
+	ibody(node) = (VPTR) body;
 	set_parents(body, node);
 	return node;
 }
@@ -270,9 +270,9 @@ forothr_node (STRING fvar,    /* fam */
               PNODE body)     /* body */
 {
 	PNODE node = create_pnode(IOTHR);
-	ielement(node) = (WORD) fvar;
-	inum(node) = (WORD) nvar;
-	ibody(node) = (WORD) body;
+	ielement(node) = (VPTR) fvar;
+	inum(node) = (VPTR) nvar;
+	ibody(node) = (VPTR) body;
 	set_parents(body, node);
 	return node;
 }
@@ -285,9 +285,9 @@ forfam_node (STRING fvar,    /* fam */
              PNODE body)     /* body */
 {
 	PNODE node = create_pnode(IFAM);
-	ielement(node) = (WORD) fvar;
-	inum(node) = (WORD) nvar;
-	ibody(node) = (WORD) body;
+	ielement(node) = (VPTR) fvar;
+	inum(node) = (VPTR) nvar;
+	ibody(node) = (VPTR) body;
 	set_parents(body, node);
 	return node;
 }
@@ -300,9 +300,9 @@ fornotes_node (PNODE nexpr,   /* expr */
                PNODE body)    /* body */
 {
         PNODE node = create_pnode(INOTES);
-        iloopexp(node) = (WORD) nexpr;
-        ielement(node) = (WORD) vvar;
-        ibody(node) = (WORD) body;
+        iloopexp(node) = (VPTR) nexpr;
+        ielement(node) = (VPTR) vvar;
+        ibody(node) = (VPTR) body;
         set_parents(body, node);
         return node;
 }
@@ -315,9 +315,9 @@ fornodes_node (PNODE nexpr,    /* expr */
                PNODE body)     /* body */
 {
 	PNODE node = create_pnode(INODES);
-	iloopexp(node) = (WORD) nexpr;
-	ielement(node) = (WORD) nvar;
-	ibody(node) = (WORD) body;
+	iloopexp(node) = (VPTR) nexpr;
+	ielement(node) = (VPTR) nvar;
+	ibody(node) = (VPTR) body;
 	set_parents(body, node);
 	return node;
 }
@@ -331,10 +331,10 @@ traverse_node (PNODE nexpr,    /* node */
                PNODE body)     /* body */
 {
 	PNODE node = create_pnode(ITRAV);
-	iloopexp(node) = (WORD) nexpr;
-	ielement(node) = (WORD) snode;
-	ilev(node) = (WORD) levv;
-	ibody(node) = (WORD) body;
+	iloopexp(node) = (VPTR) nexpr;
+	ielement(node) = (VPTR) snode;
+	ilev(node) = (VPTR) levv;
+	ibody(node) = (VPTR) body;
 	set_parents(body, node);
 	return node;
 }
@@ -345,7 +345,7 @@ PNODE
 iden_node (STRING iden)
 {
 	PNODE node = create_pnode(IIDENT);
-	iident(node) = (WORD) iden;
+	iident(node) = (VPTR) iden;
 	return node;
 }
 /*==================================
@@ -355,7 +355,7 @@ PNODE
 icons_node (INT ival)
 {
 	PNODE node = create_pnode(IICONS);
-	ivalue(node) = create_pvalue(PINT, (WORD) ival);
+	ivalue(node) = create_pvalue(PINT, (VPTR) ival);
 	return node;
 }
 /*===================================
@@ -379,9 +379,9 @@ proc_node (STRING name,    /* proc name */
            PNODE body)     /* body */
 {
 	PNODE node = create_pnode(IPDEFN);
-	iname(node) = (WORD) name;
-	iargs(node) = (WORD) parms;
-	ibody(node) = (WORD) body;
+	iname(node) = (VPTR) name;
+	iargs(node) = (VPTR) parms;
+	ibody(node) = (VPTR) body;
 	set_parents(body, node);
 	return node;
 }
@@ -394,9 +394,9 @@ fdef_node (STRING name,    /* proc name */
            PNODE body)     /* body */
 {
 	PNODE node = create_pnode(IFDEFN);
-	iname(node) = (WORD) name;
-	iargs(node) = (WORD) parms;
-	ibody(node) = (WORD) body;
+	iname(node) = (VPTR) name;
+	iargs(node) = (VPTR) parms;
+	ibody(node) = (VPTR) body;
 	set_parents(body, node);
 	return node;
 }
@@ -414,9 +414,9 @@ func_node (STRING name,    /* function name */
 /* See if the function is user defined */
 	if (in_table(functab, name)) {
 		node = create_pnode(IFCALL);
-		iname(node) = (WORD) name;
-		iargs(node) = (WORD) elist;
-		ifunc(node) = (WORD) valueof(functab, name);
+		iname(node) = (VPTR) name;
+		iargs(node) = (VPTR) elist;
+		ifunc(node) = (VPTR) valueof(functab, name);
 		return node;
 	}
 
@@ -443,17 +443,17 @@ func_node (STRING name,    /* function name */
 			Perrors++;
 		}
 		node = create_pnode(IBCALL);
-		iname(node) = (WORD) name;
-		iargs(node) = (WORD) elist;
-		ifunc(node) = (WORD) builtins[md].ft_eval;
+		iname(node) = (VPTR) name;
+		iargs(node) = (VPTR) elist;
+		ifunc(node) = (VPTR) builtins[md].ft_eval;
 		return node;
 		
 	}
 
 /* If neither make it a user call to undefined function */
 	node = create_pnode(IFCALL);
-	iname(node) = (WORD) name;
-	iargs(node) = (WORD) elist;
+	iname(node) = (VPTR) name;
+	iargs(node) = (VPTR) elist;
 	ifunc(node) = NULL;
 	return node;
 }
@@ -466,9 +466,9 @@ if_node (PNODE cond,     /* cond expr */
          PNODE enode)    /* else */
 {
 	PNODE node = create_pnode(IIF);
-	icond(node) = (WORD) cond;
-	ithen(node) = (WORD) tnode;
-	ielse(node) = (WORD) enode;
+	icond(node) = (VPTR) cond;
+	ithen(node) = (VPTR) tnode;
+	ielse(node) = (VPTR) enode;
 	set_parents(tnode, node);
 	set_parents(enode, node);
 	return node;
@@ -481,8 +481,8 @@ while_node (PNODE cond,     /* cond expr */
             PNODE body)     /* body */
 {
 	PNODE node = create_pnode(IWHILE);
-	icond(node) = (WORD) cond;
-	ibody(node) = (WORD) body;
+	icond(node) = (VPTR) cond;
+	ibody(node) = (VPTR) body;
 	set_parents(body, node);
 	return node;
 }
@@ -494,8 +494,8 @@ call_node (STRING name,    /* proc name */
            PNODE args)     /* arg/s */
 {
 	PNODE node = create_pnode(IPCALL);
-	iname(node) = (WORD) name;
-	iargs(node) = (WORD) args;
+	iname(node) = (VPTR) name;
+	iargs(node) = (VPTR) args;
 	return node;
 }
 /*================================
@@ -521,7 +521,7 @@ PNODE
 return_node (PNODE args)
 {
 	PNODE node = create_pnode(IRETURN);
-	iargs(node) = (WORD) args;
+	iargs(node) = (VPTR) args;
 	return node;
 }
 /*==============================================

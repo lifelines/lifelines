@@ -133,7 +133,7 @@ cgn_callback (STRING key, STRING name, void *param)
 	if (!indi) {
 		report_error(ERR_ORPHANNAME, "Orphaned name: %s", name);
 		if (fixGhosts)
-			enqueue_list(tofix, (WORD)alloc_namerefn(name, key));
+			enqueue_list(tofix, (VPTR)alloc_namerefn(name, key));
 	} else {
 		NODE node;
 		BOOLEAN found=FALSE;
@@ -147,7 +147,7 @@ cgn_callback (STRING key, STRING name, void *param)
 		if (!found) {
 			report_error(ERR_GHOSTNAME, "Ghost name: %s", name);
 			if (fixGhosts)
-				enqueue_list(tofix, (WORD)alloc_namerefn(name, key));
+				enqueue_list(tofix, (VPTR)alloc_namerefn(name, key));
 		}
 	}
 

@@ -42,7 +42,7 @@
 typedef struct stag {
 	STRING s_key;	/* person or family key */
 	STRING s_nam;	/* name of person */
-	WORD s_val;	/* any value */
+	VPTR s_val;	/* any value */
 	STRING s_prn;	/* menu print string */
 	INT s_pri;	/* key as integer (exc valuesort_indiseq puts values here) */
 }
@@ -86,10 +86,10 @@ typedef struct  {
  *===================*/
 
 void add_browse_list(STRING, INDISEQ);
-INDISEQ ancestor_indiseq(INDISEQ seq, WORD (*create_value_fnc)(INT gen));
+INDISEQ ancestor_indiseq(INDISEQ seq, VPTR (*create_value_fnc)(INT gen));
 void append_indiseq_null(INDISEQ, STRING, STRING, BOOLEAN sure, BOOLEAN alloc);
 void append_indiseq_ival(INDISEQ, STRING, STRING, INT val, BOOLEAN sure, BOOLEAN alloc);
-void append_indiseq_pval(INDISEQ, STRING, STRING, WORD val, BOOLEAN sure, BOOLEAN alloc);
+void append_indiseq_pval(INDISEQ, STRING, STRING, VPTR val, BOOLEAN sure, BOOLEAN alloc);
 void append_indiseq_sval(INDISEQ, STRING, STRING, STRING sval, BOOLEAN sure, BOOLEAN alloc);
 void canonkeysort_indiseq(INDISEQ);
 INDISEQ child_indiseq(INDISEQ);
@@ -99,7 +99,7 @@ INDISEQ create_indiseq_null(void);
 INDISEQ create_indiseq_pval(void);
 INDISEQ create_indiseq_sval(void);
 BOOLEAN delete_indiseq(INDISEQ, STRING, STRING, INT);
-INDISEQ descendent_indiseq(INDISEQ seq, WORD (*create_value_fnc)(INT gen));
+INDISEQ descendent_indiseq(INDISEQ seq, VPTR (*create_value_fnc)(INT gen));
 INDISEQ difference_indiseq(INDISEQ, INDISEQ);
 BOOLEAN element_indiseq(INDISEQ, INT, STRING*, STRING*);
 BOOLEAN element_indiseq_ival(INDISEQ, INT, STRING*, INT *, STRING*);
@@ -135,7 +135,7 @@ void remove_browse_list(STRING, INDISEQ);
 void remove_indiseq(INDISEQ,BOOLEAN);
 void rename_indiseq(INDISEQ, STRING);
 INDISEQ sibling_indiseq(INDISEQ, BOOLEAN);
-INDISEQ spouse_indiseq(INDISEQ, WORD (*copy_value_fnc)(WORD val));
+INDISEQ spouse_indiseq(INDISEQ, VPTR (*copy_value_fnc)(VPTR val));
 INDISEQ str_to_indiseq(STRING);
 void unique_indiseq(INDISEQ);
 INDISEQ union_indiseq(INDISEQ, INDISEQ);

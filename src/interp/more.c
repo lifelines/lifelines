@@ -101,17 +101,17 @@ __extractnames (PNODE node,
 		prog_error(node, "1st arg to extractnames doesn't lead to a NAME line");
 		return NULL;
 	}
-	insert_pvtable(stab, iident(lvar), PINT, (WORD)0);
+	insert_pvtable(stab, iident(lvar), PINT, (VPTR)0);
 	*eflg = FALSE;
 	str = nval(line);
 	if (!str || *str == 0) return NULL;
 	temp = create_list();
 	name_to_list(str, temp, &len, &sind);
 	FORLIST(temp, el)
-		push_list(list, create_pvalue(PSTRING, (WORD)el));
+		push_list(list, create_pvalue(PSTRING, (VPTR)el));
 	ENDLIST
-	insert_pvtable(stab, iident(lvar), PINT, (WORD)len);
-	insert_pvtable(stab, iident(svar), PINT, (WORD)sind);
+	insert_pvtable(stab, iident(lvar), PINT, (VPTR)len);
+	insert_pvtable(stab, iident(svar), PINT, (VPTR)sind);
 	return NULL;
 }
 /*==============================================================+
@@ -155,7 +155,7 @@ __extractplaces (PNODE node,
 		prog_error(node, "3rd arg to extractplaces must be a variable");
 		return NULL;
 	}
-	insert_pvtable(stab, iident(lvar), PINT, (WORD)0);
+	insert_pvtable(stab, iident(lvar), PINT, (VPTR)0);
 	*eflg = FALSE;
 	if (!line) return NULL;
 	if (strcmp("PLAC", ntag(line)) && !(line = PLAC(line))) return NULL;
@@ -164,9 +164,9 @@ __extractplaces (PNODE node,
 	temp = create_list();
 	place_to_list(str, temp, &len);
 	FORLIST(temp, el)
-		push_list(list, create_pvalue(PSTRING, (WORD)el));
+		push_list(list, create_pvalue(PSTRING, (VPTR)el));
 	ENDLIST
-	insert_pvtable(stab, iident(lvar), PINT, (WORD)len);
+	insert_pvtable(stab, iident(lvar), PINT, (VPTR)len);
 	return NULL;
 }
 /*==========================================================+
@@ -214,13 +214,13 @@ __extracttokens (PNODE node,
 		return NULL;
 	}
 	*eflg = FALSE;
-	insert_pvtable(stab, iident(lvar), PINT, (WORD)0);
+	insert_pvtable(stab, iident(lvar), PINT, (VPTR)0);
 	temp = create_list();
 	value_to_list(str, temp, &len, dlm);
 	FORLIST(temp, el)
-		push_list(list, create_pvalue(PSTRING, (WORD)el));
+		push_list(list, create_pvalue(PSTRING, (VPTR)el));
 	ENDLIST
-	insert_pvtable(stab, iident(lvar), PINT, (WORD)len);
+	insert_pvtable(stab, iident(lvar), PINT, (VPTR)len);
 	delete_pvalue(val1);
 	delete_pvalue(val2);
 	return NULL;
@@ -248,7 +248,7 @@ __database (PNODE node,
 		delete_pvalue(val);
 	}
 	return create_pvalue(PSTRING,
-	    (WORD)(full ? readpath : lastpathname(readpath)));
+	    (VPTR)(full ? readpath : lastpathname(readpath)));
 }
 /*===========================================+
  * __index -- Find nth occurrence of substring
@@ -282,7 +282,7 @@ __index (PNODE node,
 		return NULL;
 	}
 	num = (INT) pvalue(val3);
-	set_pvalue(val3, PINT, (WORD) ll_index(str, sub, num));
+	set_pvalue(val3, PINT, (VPTR) ll_index(str, sub, num));
 	delete_pvalue(val1);
 	delete_pvalue(val2);
 	return val3;
@@ -320,7 +320,7 @@ __substring (PNODE node,
 		return NULL;
 	}
 	hi = (INT) pvalue(val2);
-	set_pvalue(val2, PSTRING, (WORD) substring(str, lo, hi));
+	set_pvalue(val2, PSTRING, (VPTR) substring(str, lo, hi));
 	delete_pvalue(val1);
 	return val2;
 }
@@ -401,7 +401,7 @@ __chooseindi (PNODE node,
 	if (!seq || length_indiseq(seq) < 1) return NULL;
 	indi = nztop(choose_from_indiseq(seq, TRUE, ifone, notone));
 	if (!indi) return NULL;
-	return create_pvalue(PINDI, (WORD)indi_to_cacheel(indi));
+	return create_pvalue(PINDI, (VPTR)indi_to_cacheel(indi));
 }
 /*================================================+
  * choosesubset -- Have user choose subset from set
@@ -425,7 +425,7 @@ __choosesubset (PNODE node,
 	newseq = copy_indiseq(seq);
 	msg = (length_indiseq(newseq) > 1) ? notone : ifone;
 	newseq = (INDISEQ) choose_list_from_indiseq(msg, newseq);
-	return create_pvalue(PSET, (WORD)newseq);
+	return create_pvalue(PSET, (VPTR)newseq);
 }
 /*=========================================================+
  * choosechild -- Have user choose child of person or family
@@ -449,26 +449,26 @@ __choosechild (PNODE node,
 	}
 	cel = (CACHEEL) pvalue(val);
 	delete_pvalue(val);
-	if (!cel) return create_pvalue(PINDI, (WORD)NULL);
+	if (!cel) return create_pvalue(PINDI, (VPTR)NULL);
 	key = ckey(cel);
 	if (*key == 'I') {
 		indi = key_to_indi(key);
 		seq = indi_to_children(indi);
 		if (!seq || length_indiseq(seq) < 1)
-			return create_pvalue(PINDI, (WORD)NULL);
+			return create_pvalue(PINDI, (VPTR)NULL);
 		indi = nztop(choose_from_indiseq(seq, TRUE, ifone, notone));
 		remove_indiseq(seq, FALSE);
-		if (!indi) return create_pvalue(PINDI, (WORD)NULL);
-		return create_pvalue(PINDI, (WORD)indi_to_cacheel(indi));
+		if (!indi) return create_pvalue(PINDI, (VPTR)NULL);
+		return create_pvalue(PINDI, (VPTR)indi_to_cacheel(indi));
 	} else if (*key == 'F') {
 		fam = key_to_fam(key);
 		seq = fam_to_children(fam);
 		if (!seq || length_indiseq(seq) < 1)
-			return create_pvalue(PINDI, (WORD)NULL);
+			return create_pvalue(PINDI, (VPTR)NULL);
 		indi = nztop(choose_from_indiseq(seq, TRUE, ifone, notone));
 		remove_indiseq(seq, FALSE);
-		if (!indi) return create_pvalue(PINDI, (WORD)NULL);
-		return create_pvalue(PINDI, (WORD)indi_to_cacheel(indi));
+		if (!indi) return create_pvalue(PINDI, (VPTR)NULL);
+		return create_pvalue(PINDI, (VPTR)indi_to_cacheel(indi));
 	}
 	*eflg = TRUE;
 	prog_error(node, "major error in choosechild");
@@ -491,11 +491,11 @@ __choosespouse (PNODE node,
 	}
 	seq = indi_to_spouses(indi);
 	if (!seq || length_indiseq(seq) < 1)
-		return create_pvalue(PINDI, (WORD)NULL);
+		return create_pvalue(PINDI, (VPTR)NULL);
 	indi = nztop(choose_from_indiseq(seq, TRUE, ifone, notone));
 	remove_indiseq(seq, FALSE);
-	if (!indi) return create_pvalue(PINDI, (WORD)NULL);
-	return create_pvalue(PINDI, (WORD)indi_to_cacheel(indi));
+	if (!indi) return create_pvalue(PINDI, (VPTR)NULL);
+	return create_pvalue(PINDI, (VPTR)indi_to_cacheel(indi));
 }
 /*==============================================+
  * choosefam -- Have user choose family of person
@@ -514,11 +514,11 @@ __choosefam (PNODE node,
 	}
 	seq = indi_to_families(indi, TRUE);
 	if (!seq || length_indiseq(seq) < 1)
-		return create_pvalue(PFAM, (WORD)NULL);
+		return create_pvalue(PFAM, (VPTR)NULL);
 	fam = nztop(choose_from_indiseq(seq, TRUE, ifone, notone));
 	remove_indiseq(seq, FALSE);
-	if (!fam) return create_pvalue(PFAM, (WORD)NULL);
-	return create_pvalue(PFAM, (WORD)fam_to_cacheel(fam));
+	if (!fam) return create_pvalue(PFAM, (VPTR)NULL);
+	return create_pvalue(PFAM, (VPTR)fam_to_cacheel(fam));
 }
 /*===================================================+
  * menuchoose -- Have user choose from list of options
@@ -544,7 +544,7 @@ __menuchoose (PNODE node,
 	delete_pvalue(val);
 	val = NULL;
 	if (!list || length_list(list) < 1)
-		return create_pvalue(PINT, (WORD)0);
+		return create_pvalue(PINT, (VPTR)0);
 	msg = NULL;
 	arg = (PNODE) inext(arg);
 	if (arg) {
@@ -566,7 +566,7 @@ __menuchoose (PNODE node,
 	i = choose_from_list(ttl, len, strngs);
 	stdfree(strngs);
 	delete_pvalue(val);
-	return create_pvalue(PINT, (WORD)(i + 1));
+	return create_pvalue(PINT, (VPTR)(i + 1));
 }
 /*================================+
  * system -- Run shell command
@@ -612,12 +612,12 @@ get_indi_pvalue_from_keynum (INT i)
 	STRING record;
 	INT len;
 	if (!i)
-		return create_pvalue(PINDI, (WORD)NULL);
+		return create_pvalue(PINDI, (VPTR)NULL);
 	sprintf(key, "I%d", i);
 	ASSERT((record = retrieve_record(key, &len)));
 	ASSERT((indi = string_to_node(record)));
 	stdfree(record);
-	val = create_pvalue(PINDI, (WORD)indi_to_cacheel(indi));
+	val = create_pvalue(PINDI, (VPTR)indi_to_cacheel(indi));
 	free_nodes(indi);/*yes*/
 	return val;
 }
@@ -650,7 +650,7 @@ __nextindi (PNODE node,
 		return NULL;
 	}
 	if (!indi)
-		return create_pvalue(PINDI, (WORD)NULL);
+		return create_pvalue(PINDI, (VPTR)NULL);
 	strcpy(key, indi_to_key(indi));
 	i = atoi(&key[1]);
 	i = xref_nexti(i);
@@ -673,7 +673,7 @@ __previndi (PNODE node,
 		return NULL;
 	}
 	if (!indi)
-		return create_pvalue(PINDI, (WORD)NULL);
+		return create_pvalue(PINDI, (VPTR)NULL);
 	strcpy(key, indi_to_key(indi));
 	i = atoi(&key[1]);
 	i = xref_previ(i);
@@ -705,12 +705,12 @@ get_fam_pvalue_from_keynum (INT i)
 	STRING record;
 	INT len;
 	if (!i)
-		return create_pvalue(PFAM, (WORD)NULL);
+		return create_pvalue(PFAM, (VPTR)NULL);
 	sprintf(key, "F%d", i);
 	ASSERT((record = retrieve_record(key, &len)));
 	ASSERT((fam = string_to_node(record)));
 	stdfree(record);
-	val = create_pvalue(PFAM, (WORD)fam_to_cacheel(fam));
+	val = create_pvalue(PFAM, (VPTR)fam_to_cacheel(fam));
 	free_nodes(fam);/*yes*/
 	return val;
 }
@@ -743,7 +743,7 @@ __nextfam (PNODE node,
 		return NULL;
 	}
 	if (!fam)
-		return create_pvalue(PFAM, (WORD)NULL);
+		return create_pvalue(PFAM, (VPTR)NULL);
 	strcpy(key, fam_to_key(fam));
 	i = atoi(&key[1]);
 	i = xref_nextf(i);
@@ -766,7 +766,7 @@ __prevfam (PNODE node,
 		return NULL;
 	}
 	if (!fam)
-		return create_pvalue(PFAM, (WORD)NULL);
+		return create_pvalue(PFAM, (VPTR)NULL);
 	strcpy(key, fam_to_key(fam));
 	i = atoi(&key[1]);
 	i = xref_prevf(i);
@@ -811,13 +811,13 @@ __getrecord (PNODE node,
 	    *key == 'E' || *key == 'X') {
 		rec = retrieve_record(key, &len);
 		delete_pvalue(val);
-		if (rec == NULL) return create_pvalue(PGNODE, (WORD)NULL);
-		val = create_pvalue(PGNODE, (WORD)string_to_node(rec));
+		if (rec == NULL) return create_pvalue(PGNODE, (VPTR)NULL);
+		val = create_pvalue(PGNODE, (VPTR)string_to_node(rec));
 		stdfree(rec);
 		return val;
 	}
 	delete_pvalue(val);
-	return create_pvalue(PGNODE, (WORD)NULL);
+	return create_pvalue(PGNODE, (VPTR)NULL);
 }
 #if UNUSED
 /*==================================================+
@@ -851,7 +851,7 @@ __reference (PNODE node,
 	key = (STRING) pvalue(val);
 	rc = (key && *key && (strlen(key) > 2) && (*key == '@') &&
 	    (key[strlen(key)-1] == '@'));
-	set_pvalue(val, PBOOL, (WORD) rc);
+	set_pvalue(val, PBOOL, (VPTR) rc);
 	return val;
 }
 /*========================================+
@@ -880,7 +880,7 @@ __rjustify (PNODE node,
 	}
 	len = (INT) pvalue(val2);
 	delete_pvalue(val2);
-	set_pvalue(val1, PSTRING, (WORD) rightjustify(str, len));
+	set_pvalue(val1, PSTRING, (VPTR) rightjustify(str, len));
 	return val1;
 }
 /*===========================================
@@ -966,7 +966,7 @@ __savenode (PNODE node,
 	}
 	line = (NODE) pvalue(val);
 	if (!line) return val;
-	set_pvalue(val, PGNODE, (WORD) copy_nodes(line, TRUE, TRUE));
+	set_pvalue(val, PGNODE, (VPTR) copy_nodes(line, TRUE, TRUE));
 	return val;
 }
 /*===================================================+
@@ -994,10 +994,10 @@ __genindiset (PNODE node,
 		prog_error(node, "2nd arg to genindiset must be a variable");
 		return NULL;
 	}
-	assign_iden(stab, iident(arg), create_pvalue(PSET, (WORD)NULL));
+	assign_iden(stab, iident(arg), create_pvalue(PSET, (VPTR)NULL));
 	if (!name || *name == 0) return NULL;
 	assign_iden(stab, iident(arg), create_pvalue(PSET,
-	    (WORD)str_to_indiseq(name)));
+	    (VPTR)str_to_indiseq(name)));
 	return NULL;
 }
 /*POINT*/
@@ -1012,7 +1012,7 @@ __version (PNODE node,
 {
 	extern STRING version;
 	*eflg = FALSE;
-	return create_pvalue(PSTRING, (WORD)version);
+	return create_pvalue(PSTRING, (VPTR)version);
 }
 /*========================================+
  * __pvalue -- Show a PVALUE -- Debug routine
@@ -1034,7 +1034,7 @@ __pvalue (PNODE node,
 	show_pvalue(val);
 	llwprintf("\n");
 #endif
-	return create_pvalue(PSTRING, (WORD)pvalue_to_string(val));
+	return create_pvalue(PSTRING, (VPTR)pvalue_to_string(val));
 }
 /*============================================+
  * __program -- Returns name of current program
@@ -1045,7 +1045,7 @@ __program (PNODE node,
            TABLE stab,
            BOOLEAN *eflg)
 {
-	return create_pvalue(PSTRING, (WORD)progname);
+	return create_pvalue(PSTRING, (VPTR)progname);
 }
 /*============================================+
  * __debug -- Turn on/off programming debugging

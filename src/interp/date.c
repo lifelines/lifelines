@@ -556,11 +556,11 @@ init_monthtbl (void)
 	monthtbl = create_table();
 	for (i = 0; i < 19; i++) {
 		j = i + 1;
-		insert_table(monthtbl, monthstrs[i].su, (WORD)j);
-		insert_table(monthtbl, monthstrs[i].lu, (WORD)j);
+		insert_table(monthtbl, monthstrs[i].su, (VPTR)j);
+		insert_table(monthtbl, monthstrs[i].lu, (VPTR)j);
 	}
-	insert_table(monthtbl, "EST", (WORD)-1);  /* ignored after date */
-	insert_table(monthtbl, "BC", (WORD)-99);
+	insert_table(monthtbl, "EST", (VPTR)-1);  /* ignored after date */
+	insert_table(monthtbl, "BC", (VPTR)-99);
 }
 /*=============================
  * get_date -- Get today's date

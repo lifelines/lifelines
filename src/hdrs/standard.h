@@ -82,20 +82,20 @@ typedef char *STRING;
 #define LONG long
 #define FLOAT double
 
-typedef void *WORD;
+typedef void *VPTR;
 typedef union {
         BOOLEAN b;
         INT     i;
         FLOAT   f;
-        WORD    w;
+        VPTR    w;
         /*LONG   l;*/
 } UNION;
 
 #define MAXLINELEN 512
 
-#define WORDSIZE sizeof(WORD)
+#define VPTRSIZE sizeof(VPTR)
 
-/*typedef WORD (*FUNC)();*/
+/*typedef VPTR (*FUNC)();*/
 
 #ifndef max
 #define max(x,y) ((x)>(y)?(x):(y))
@@ -128,7 +128,7 @@ extern BOOLEAN alloclog;
 
 typedef struct lntag *LNODE;
 struct lntag {
-	WORD l_element;
+	VPTR l_element;
 	LNODE l_prev;
 	LNODE l_next;
 };
@@ -151,7 +151,7 @@ typedef struct ltag {
 #define FORLIST(l,e)\
 	{\
 		LNODE _lnode = l->l_last;\
-		WORD e;\
+		VPTR e;\
 		while (_lnode) {\
 			e = _lnode->l_element;
 #define ENDLIST\

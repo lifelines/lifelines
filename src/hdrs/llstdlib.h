@@ -26,7 +26,7 @@
 #ifndef _LL_STDLIB_H
 #define _LL_STDLIB_H
 
-#include "standard.h"	/* for INT, STRING, LIST, WORD, BOOLEAN */
+#include "standard.h"	/* for INT, STRING, LIST, VPTR, BOOLEAN */
 #include "interp.h"	/* for PVALUE */
 
 /* assert.c */
@@ -37,19 +37,19 @@ void __assert(BOOLEAN, STRING, int);
 BOOLEAN mkalldirs(STRING);
 
 /* double.c */
-void back_list(LIST, WORD);
+void back_list(LIST, VPTR);
 LIST create_list(void);
-WORD dequeue_list(LIST);
+VPTR dequeue_list(LIST);
 BOOLEAN empty_list(LIST);
-void enqueue_list(LIST, WORD);
-WORD get_list_element(LIST, INT);
-BOOLEAN in_list(LIST, WORD, int (*func)(PVALUE, PVALUE));
+void enqueue_list(LIST, VPTR);
+VPTR get_list_element(LIST, INT);
+BOOLEAN in_list(LIST, VPTR, int (*func)(PVALUE, PVALUE));
 INT length_list(LIST);
 void make_list_empty(LIST);
-WORD pop_list(LIST);
-void push_list(LIST, WORD);
-void remove_list(LIST, void (*func)(WORD));
-void set_list_element(LIST, INT, WORD);
+VPTR pop_list(LIST);
+void push_list(LIST, VPTR);
+void remove_list(LIST, void (*func)(VPTR));
+void set_list_element(LIST, INT, VPTR);
 void set_list_type(LIST, INT);
 
 /* environ.c */

@@ -296,7 +296,7 @@ __getcol (PNODE node,
           BOOLEAN *eflg)
 {
 	*eflg = FALSE;
-	return create_pvalue(PINT, (WORD)curcol);
+	return create_pvalue(PINT, (VPTR)curcol);
 }
 /*======================================================
  * __pageout -- Output current page and clear page buffer

@@ -47,7 +47,7 @@ static char *ptypes[] = {
  *======================================*/
 PVALUE
 create_pvalue (INT type,
-               WORD value)
+               VPTR value)
 {
 	PVALUE val;
 
@@ -55,7 +55,7 @@ create_pvalue (INT type,
 	val = (PVALUE) stdalloc(sizeof(*val));
 	switch (type) {
 	case PSTRING:
-		if (value) value = (WORD) strsave((STRING) value);
+		if (value) value = (VPTR) strsave((STRING) value);
 		break;
 	case PANY: case PINT: case PFLOAT: case PLONG: case PGNODE:
 	case PINDI: case PFAM: case PSOUR: case PEVEN: case POTHR:
@@ -107,7 +107,7 @@ copy_pvalue (PVALUE val)
 void
 set_pvalue (PVALUE val,
             INT type,
-            WORD value)
+            VPTR value)
 {
 #ifdef DEBUG
 	llwprintf("\nset_pvalue called: val=");
@@ -116,7 +116,7 @@ set_pvalue (PVALUE val,
 #endif
 	if (ptype(val) == PSTRING && pvalue(val)) stdfree(pvalue(val));
 	ptype(val) = type;
-	if (type == PSTRING && value) value = (WORD) strsave((STRING) value);
+	if (type == PSTRING && value) value = (VPTR) strsave((STRING) value);
 	pvalue(val) = value;
 }
 /*==================================================
@@ -208,7 +208,7 @@ coerce_pvalue (INT type,       /* type to convert to */
 	if (type == ptype(val)) return;
 	u.w = pvalue(val);
 	if (type == PBOOL) {	 /* Handle PBOOL as special case */
-		set_pvalue(val, PBOOL, (WORD)(u.w != NULL));
+		set_pvalue(val, PBOOL, (VPTR)(u.w != NULL));
 		return;
 	}
 	if (type == PANY) {	/* Handle PANY as a special case */
@@ -473,7 +473,7 @@ eq_pvalues (PVALUE val1,
 		rel = (pvalue(val1) == pvalue(val2));
 		break;
 	}
-	set_pvalue(val1, PBOOL, (WORD)rel);
+	set_pvalue(val1, PBOOL, (VPTR)rel);
 	delete_pvalue(val2);
 }
 /*===============================================
@@ -515,7 +515,7 @@ ne_pvalues (PVALUE val1,
 	llwprintf("%d\n", rel);
 #endif
 
-	set_pvalue(val1, PBOOL, (WORD)rel);
+	set_pvalue(val1, PBOOL, (VPTR)rel);
 	delete_pvalue(val2);
 }
 /*================================================
@@ -534,7 +534,7 @@ le_pvalues (PVALUE val1,
 	/*case LONG:*/
 	default: rel = ((INT) pvalue(val1) <= (INT) pvalue(val2));
 	}
-	set_pvalue(val1, PBOOL, (WORD)rel);
+	set_pvalue(val1, PBOOL, (VPTR)rel);
 	delete_pvalue(val2);
 }
 /*================================================
@@ -562,7 +562,7 @@ ge_pvalues (PVALUE val1,
 	/*case LONG:*/
 	default: rel = ((INT) pvalue(val1) >= (INT) pvalue(val2));
 	}
-	set_pvalue(val1, PBOOL, (WORD)rel);
+	set_pvalue(val1, PBOOL, (VPTR)rel);
 	delete_pvalue(val2);
 }
 /*===============================================
@@ -595,7 +595,7 @@ lt_pvalues (PVALUE val1,
 	/*case LONG:*/
 	default: rel = ((INT) pvalue(val1) < (INT) pvalue(val2));
 	}
-	set_pvalue(val1, PBOOL, (WORD)rel);
+	set_pvalue(val1, PBOOL, (VPTR)rel);
 	delete_pvalue(val2);
 	if (prog_debug) {
 		llwprintf("lt_pvalues: at end: val1 = ");
@@ -627,7 +627,7 @@ if (prog_debug) {
 	default: rel = ((INT) pvalue(val1) > (INT) pvalue(val2));
 if (prog_debug) llwprintf("rel is %d\n", rel);
 	}
-	set_pvalue(val1, PBOOL, (WORD)rel);
+	set_pvalue(val1, PBOOL, (VPTR)rel);
 	delete_pvalue(val2);
 if (prog_debug) {
 	llwprintf("gt_pvalues: at end: val1 = ");
@@ -668,7 +668,7 @@ exp_pvalues (PVALUE val1,
 	/*case PLONG:*/
 	default: u.i = 0;
 	}
-	set_pvalue(val1, ptype(val1), (WORD)u.w);
+	set_pvalue(val1, ptype(val1), (VPTR)u.w);
 	delete_pvalue(val2);
 }
 /*==================================
@@ -746,7 +746,7 @@ insert_pvtable (TABLE stab,     /* symbol table */
                 STRING iden,    /* variable in symbol table */
                 INT type,       /* type of new value to assign to
                                    identifier */
-                WORD value)     /* new value of identifier */
+                VPTR value)     /* new value of identifier */
 {
 	PVALUE val = (PVALUE) valueof(stab, iden);
 	if (val) delete_pvalue(val);

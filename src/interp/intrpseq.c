@@ -69,7 +69,7 @@ __indiset (PNODE node,
 	}
 	*eflg = FALSE;
 	seq = create_indiseq_pval();
-	assign_iden(stab, iident(var), create_pvalue(PSET, (WORD) seq));
+	assign_iden(stab, iident(var), create_pvalue(PSET, (VPTR) seq));
 	push_list(keysets, seq);
 	return NULL;
 }
@@ -131,8 +131,8 @@ __lengthset (PNODE node,
 	}
 	seq = (INDISEQ) pvalue(val);
 	delete_pvalue(val);
-	if (!seq) return create_pvalue(PINT, (WORD) 0);
-	return create_pvalue(PINT, (WORD) length_indiseq(seq));
+	if (!seq) return create_pvalue(PINT, (VPTR) 0);
+	return create_pvalue(PINT, (VPTR) length_indiseq(seq));
 }
 /*====================================+
  * inset -- See if person is in INDISEQ
@@ -160,13 +160,13 @@ __inset (PNODE node,
 		prog_error(node, "2nd arg to inset must be a person.");
 		return NULL;
 	}
-	if (!indi) return create_pvalue(PBOOL, (WORD) FALSE);
+	if (!indi) return create_pvalue(PBOOL, (VPTR) FALSE);
 	if (!(key = strsave(rmvat(nxref(indi))))) {
 		*eflg = TRUE;
 		prog_error(node, "major error in inset.");
 		return NULL;
 	}
-	return create_pvalue(PBOOL, (WORD) in_indiseq(seq, key));
+	return create_pvalue(PBOOL, (VPTR) in_indiseq(seq, key));
 }
 /*===========================================+
  * deletefromset -- Remove person from INDISEQ
@@ -426,17 +426,17 @@ __childset (PNODE node,
  * create_value_pvalue -- Callback for creating values
  *  in pvalue indiseqs
  *==================================================*/
-static WORD
+static VPTR
 create_value_pvalue (INT gen)
 {
-	return create_pvalue(PINT, (WORD)gen);
+	return create_pvalue(PINT, (VPTR)gen);
 }
 /*===================================================+
  * copy_value_pvalue -- Callback for copy values
  *  in pvalue indiseqs
  *==================================================*/
-static WORD
-copy_value_pvalue (WORD pvalue)
+static VPTR
+copy_value_pvalue (VPTR pvalue)
 {
 	/* would incr if reference-counting */
 	return pvalue;

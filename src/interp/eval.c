@@ -192,7 +192,7 @@ evaluate_ufunc (PNODE node,
 		BOOLEAN eflg;
 		PVALUE value = evaluate(arg, stab, &eflg);
 		if (eflg) return INTERROR;
-		insert_table(newtab, iident(parm), (WORD) value);
+		insert_table(newtab, iident(parm), (VPTR) value);
 		arg = inext(arg);
 		parm = inext(parm);
 	}
@@ -249,7 +249,7 @@ num_params (PNODE node)
 void
 assign_iden (TABLE stab,
              STRING id,
-             WORD value)
+             VPTR value)
 {
 	TABLE tab = stab;
 #ifdef HOGMEMORY

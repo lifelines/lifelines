@@ -357,14 +357,14 @@ table_incr_item (TABLE tab, STRING key)
 		(*value)++;
 	else
 		/* during gengedcom, all tables alloc their own keys */
-		insert_table(tab, strsave(key), (WORD)1);
+		insert_table(tab, strsave(key), (VPTR)1);
 }
 /*===================================================================
  * add_refd_fams -- add all families in table with #refs>1 to closure
  *  this is a callback from traverse_table_param
  *=================================================================*/
 static int
-add_refd_fams (ENTRY ent, WORD param)
+add_refd_fams (ENTRY ent, VPTR param)
 {
 	CLOSURE * closure = (CLOSURE *)param;
 	if ((INT)ent->evalue > 1)

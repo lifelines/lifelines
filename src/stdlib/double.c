@@ -57,7 +57,7 @@ set_list_type (LIST list,
  *=========================*/
 void
 remove_list (LIST list,
-             void (*func)(WORD))
+             void (*func)(VPTR))
 {
 	LNODE lnode0, lnode;
 	if (!list) return;
@@ -75,7 +75,7 @@ remove_list (LIST list,
  *=========================*/
 BOOLEAN
 in_list (LIST list,
-         WORD el,
+         VPTR el,
          int (*func)(PVALUE, PVALUE))
 {
 	LNODE lnode;
@@ -121,7 +121,7 @@ empty_list (LIST list)
  *================================*/
 void
 push_list (LIST list,
-           WORD el)
+           VPTR el)
 {
 	LNODE node = NULL;
 
@@ -143,7 +143,7 @@ push_list (LIST list,
  *=======================================*/
 void
 back_list (LIST list,
-           WORD el)
+           VPTR el)
 {
 	LNODE node = NULL;
 
@@ -163,11 +163,11 @@ back_list (LIST list,
 /*==================================
  * pop_list -- Pop element from list
  *================================*/
-WORD
+VPTR
 pop_list (LIST list)
 {
 	LNODE node;
-	WORD el;
+	VPTR el;
 	if (empty_list(list)) return NULL;
 	node = lfirst(list);
 	lfirst(list) = lnext(node);
@@ -184,18 +184,18 @@ pop_list (LIST list)
  *======================================*/
 void
 enqueue_list (LIST list,
-              WORD el)
+              VPTR el)
 {
 	push_list(list, el);
 }
 /*==========================================
  * dequeue_list -- Dequeue element from list
  *========================================*/
-WORD
+VPTR
 dequeue_list (LIST list)
 {
 	LNODE node;
-	WORD el;
+	VPTR el;
 	if (empty_list(list)) return NULL;
 	node = llast(list);
 	llast(list) = lprev(node);
@@ -233,7 +233,7 @@ nth_in_list (LIST list,
 void
 set_list_element (LIST list,
                   INT ind,
-                  WORD val)
+                  VPTR val)
 {
 	LNODE node = NULL;
 	if (!list) return;
@@ -244,7 +244,7 @@ set_list_element (LIST list,
 /*=======================================================
  * get_list_element - Retrieve element using array access
  *=====================================================*/
-WORD
+VPTR
 get_list_element (LIST list,
                   INT ind)
 {

@@ -44,19 +44,19 @@ typedef struct etag *ENTRY;
 typedef ENTRY *TABLE;
 struct etag {
 	STRING ekey;
-	WORD evalue;
+	VPTR evalue;
 	ENTRY enext;
 };
 
 TABLE create_table(void);
-void insert_table(TABLE, STRING, WORD);
+void insert_table(TABLE, STRING, VPTR);
 void delete_table(TABLE, STRING);
 void remove_table(TABLE, INT);
 void traverse_table(TABLE, INT (*proc)(ENTRY));
-void traverse_table_param(TABLE tab, INT (*tproc)(ENTRY, WORD), WORD param);
+void traverse_table_param(TABLE tab, INT (*tproc)(ENTRY, VPTR), VPTR param);
 BOOLEAN in_table(TABLE, STRING);
-WORD valueof(TABLE, STRING);
-WORD valueofbool(TABLE, STRING, BOOLEAN*);
-WORD * access_value(TABLE tab, STRING key);
+VPTR valueof(TABLE, STRING);
+VPTR valueofbool(TABLE, STRING, BOOLEAN*);
+VPTR * access_value(TABLE tab, STRING key);
 
 #endif /* _TABLE_H */

@@ -56,7 +56,7 @@ __createnode (PNODE node,
 	if (*eflg) return NULL;
 	val = (STRING) evaluate(inext((PNODE)iargs(node)), stab, eflg);
 	if (*eflg) return NULL;
-	return (WORD) create_node(NULL, tag, val, NULL);
+	return (VPTR) create_node(NULL, tag, val, NULL);
 }
 /*=======================================
  * addnode -- Add a node to a GEDCOM tree

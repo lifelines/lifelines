@@ -87,11 +87,11 @@ enqueue_list(Plist, pvalue((PVALUE) ivalue((PNODE) $3)));
 	;
 
 proc	:	PROC IDEN '(' idenso ')' '{' tmplts '}' {
-			insert_table(proctab, (STRING)$2, (WORD)proc_node((STRING)$2, (PNODE)$4, (PNODE)$7));
+			insert_table(proctab, (STRING)$2, (VPTR)proc_node((STRING)$2, (PNODE)$4, (PNODE)$7));
 		}
 
 func	:	FUNC_TOK IDEN '(' idenso ')' '{' tmplts '}' {
-			insert_table(functab, (STRING)$2, (WORD)fdef_node((STRING)$2, (PNODE)$4, (PNODE)$7));
+			insert_table(functab, (STRING)$2, (VPTR)fdef_node((STRING)$2, (PNODE)$4, (PNODE)$7));
 		}
 	;
 idenso	:	/* empty */ {
@@ -200,7 +200,7 @@ tmplt	:	CHILDREN m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 				this = (PNODE) ielse(this);
 			}
 			if (prev) {
-				ielse(prev) = (WORD)$11;
+				ielse(prev) = (VPTR)$11;
 				$$ = if_node((PNODE)$4, (PNODE)$8,
 				    (PNODE)$10);
 			} else
@@ -244,7 +244,7 @@ elsifs	:	elsif {
 			$$ = $1;
 		}
 	|	elsif  elsifs {
-			ielse((PNODE)$1) = (WORD)$2;
+			ielse((PNODE)$1) = (VPTR)$2;
 			$$ = $1;
 		}
 	;

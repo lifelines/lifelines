@@ -42,11 +42,11 @@ struct itag {
 	INT    i_line;	/* line where text of this node begins */
 	STRING i_file;	/* file where text of this node begins */
 	PNODE  i_next;	/* next node */
-	WORD   i_word1;	/* variable data associated with node type */
-	WORD   i_word2;	/* ... */
-	WORD   i_word3;
-	WORD   i_word4;
-	WORD   i_word5;
+	VPTR   i_word1;	/* variable data associated with node type */
+	VPTR   i_word2;	/* ... */
+	VPTR   i_word3;
+	VPTR   i_word4;
+	VPTR   i_word5;
 };
 
 #define IICONS		 1	/* integer constant */
@@ -128,7 +128,7 @@ struct itag {
 typedef struct ptag *PVALUE;
 struct ptag {
 	char type;	/* type of value */
-	WORD value;	/* value */
+	VPTR value;	/* value */
 };
 
 typedef PVALUE (*PFUNC)(PNODE, TABLE, BOOLEAN *);
@@ -205,7 +205,7 @@ void eq_pvalues(PVALUE, PVALUE, BOOLEAN*);
 /* PVALUE Functions */
 void coerce_pvalue(INT, PVALUE, BOOLEAN*);
 PVALUE copy_pvalue(PVALUE);
-PVALUE create_pvalue(INT, WORD);
+PVALUE create_pvalue(INT, VPTR);
 void delete_pvalue(PVALUE);
 void eq_conform_pvalues(PVALUE, PVALUE, BOOLEAN*);
 BOOLEAN eqv_pvalues(PVALUE, PVALUE);
@@ -214,10 +214,10 @@ BOOLEAN is_record_pvalue(PVALUE);
 BOOLEAN is_zero(PVALUE);
 void num_conform_pvalues(PVALUE, PVALUE, BOOLEAN*);
 BOOLEAN numeric_pvalue(PVALUE);
-void set_pvalue(PVALUE, INT, WORD);
+void set_pvalue(PVALUE, INT, VPTR);
 void show_pvalue(PVALUE);
 STRING pvalue_to_string(PVALUE);
-void insert_pvtable(TABLE, STRING, INT, WORD);
+void insert_pvtable(TABLE, STRING, INT, VPTR);
 void remove_pvtable(TABLE);
 #ifndef HOGMEMORY
 void zero_pventry(ENTRY);
@@ -227,7 +227,7 @@ void zero_pventry(ENTRY);
 void initinterp(void);
 void initset(void);
 void initrassa(void);
-void interp_program(STRING, INT, WORD*, INT, STRING*, STRING, BOOLEAN picklist);
+void interp_program(STRING, INT, VPTR*, INT, STRING*, STRING, BOOLEAN picklist);
 void finishinterp(void);
 void finishrassa(void);
 void progmessage(char*);
@@ -254,7 +254,7 @@ INTERPTYPE interp_call (PNODE, TABLE, PVALUE*);
 INTERPTYPE interp_traverse (PNODE, TABLE, PVALUE*);
 
 /* Prototypes */
-void assign_iden(TABLE, STRING, WORD);
+void assign_iden(TABLE, STRING, VPTR);
 INT bool_to_int(BOOLEAN);
 FLOAT bool_to_float(BOOLEAN);
 PNODE break_node(void);

@@ -22,17 +22,8 @@ get_user_fullname(void)
   struct passwd *pwent = getpwuid(getuid());
   if (NULL != pwent && NULL != pwent->pw_gecos)
     retval = (STRING) pwent->pw_gecos; /* XXX Is it safe to pass this on? */
-#elif defined(WIN32)
-  /*
-  one solution is GetUserName, for a single account name
-  another solution is LookupAccountName on NT, for
-  an account name and also an authority name
-  both require windows.h, which is incompatible
-  with type WORD
-  */
-  return "unimplemented";
 #else
-# error "port me"
+	return NULL;
 #endif
 
   return retval;
@@ -57,15 +48,8 @@ get_user_email(void)
       username[sizeof(username)-1] = '\0';
       retval = (STRING) username;
     }
-#elif WIN32
-  /*
-  It is not obvious what to do with this on Windows,
-  which does not have the convention of an MTA on
-  every machine
-  */
-  return "unimplementable";
 #else
-# error "port me"
+	return NULL;
 #endif
 
   return retval;

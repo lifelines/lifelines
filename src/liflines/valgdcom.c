@@ -841,7 +841,7 @@ add_to_structures(STRING xref,
 	}
 	i = struct_len;
 	index_data[i] = el;
-	insert_table(convtab, xref, (WORD) struct_len++);
+	insert_table(convtab, xref, (VPTR) struct_len++);
 	return struct_len - 1;
 }
 /*========================================================

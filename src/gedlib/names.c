@@ -947,7 +947,7 @@ name_to_list (STRING name,      /* GEDCOM name */
  * free_name_el -- free element of list created by name_to_list
  *==================================================*/
 static void
-free_name_el(WORD w)
+free_name_el(VPTR w)
 {
 	free((STRING)w);
 }

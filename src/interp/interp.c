@@ -113,7 +113,7 @@ progmessage(char *msg)
 void
 interp_program (STRING proc,    /* proc to call */
                 INT nargs,      /* number of arguments */
-                WORD *args,     /* arguments */
+                VPTR *args,     /* arguments */
                 INT nifiles,    /* number of program files - can be zero*/
                 STRING *ifiles, /* program files */
                 STRING ofile,   /* output file - can be NULL */
@@ -657,7 +657,7 @@ interp_children (PNODE node,
 	FORCHILDREN(fam, chil, nchil)
 		insert_pvtable(stab, ichild(node), PINDI,
 		    (cel = indi_to_cacheel(chil)));
-		insert_pvtable(stab, inum(node), PINT, (WORD)nchil);
+		insert_pvtable(stab, inum(node), PINT, (VPTR)nchil);
 		lock_cache(cel);
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		unlock_cache(cel);
@@ -703,12 +703,12 @@ interp_spouses (PNODE node,
 	lock_cache(icel);
 	FORSPOUSES(indi, spouse, fam, nspouses)
 		insert_pvtable(stab, ispouse(node), PINDI,
-		    (WORD) (scel = indi_to_cacheel(spouse)));
+		    (VPTR) (scel = indi_to_cacheel(spouse)));
 		insert_pvtable(stab, ifamily(node), PFAM,
-		    (WORD) (fcel = fam_to_cacheel(fam)));
+		    (VPTR) (fcel = fam_to_cacheel(fam)));
 		lock_cache(scel);
 		lock_cache(fcel);
-		insert_pvtable(stab, inum(node), PINT, (WORD)nspouses);
+		insert_pvtable(stab, inum(node), PINT, (VPTR)nspouses);
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		unlock_cache(scel);
 		unlock_cache(fcel);
@@ -757,7 +757,7 @@ interp_families (PNODE node,
 		    (fcel = fam_to_cacheel(fam)));
 		insert_pvtable(stab, ispouse(node), PINDI,
 		     (scel = indi_to_cacheel(spouse)));
-		insert_pvtable(stab, inum(node), PINT, (WORD)nfams);
+		insert_pvtable(stab, inum(node), PINT, (VPTR)nfams);
 		lock_cache(fcel);
 		if (scel) lock_cache(scel);
 		irc = interpret((PNODE) ibody(node), stab, pval);
@@ -803,14 +803,14 @@ interp_fathers (PNODE node,
 	}
 	if (!indi) return TRUE;
 	lock_cache(icel);
-	insert_pvtable(stab, inum(node), PINT, (WORD) 0);
+	insert_pvtable(stab, inum(node), PINT, (VPTR) 0);
 	FORFAMCS(indi, fam, husb, wife, nfams)
 		scel = indi_to_cacheel(husb);
 		if (!scel) goto d;
 		insert_pvtable(stab, ifamily(node), PFAM,
-		    (WORD) (fcel = fam_to_cacheel(fam)));
-		insert_pvtable(stab, iiparent(node), PINDI, (WORD) scel);
-		insert_pvtable(stab, inum(node), PINT, (WORD) ncount++);
+		    (VPTR) (fcel = fam_to_cacheel(fam)));
+		insert_pvtable(stab, iiparent(node), PINDI, (VPTR) scel);
+		insert_pvtable(stab, inum(node), PINT, (VPTR) ncount++);
 		lock_cache(fcel);
 		lock_cache(scel);
 		irc = interpret((PNODE) ibody(node), stab, pval);
@@ -857,14 +857,14 @@ interp_mothers (PNODE node,
 	if (eflg || (indi && nestr(ntag(indi), "INDI"))) return INTERROR;
 	if (!indi) return TRUE;
 	lock_cache(icel);
-	insert_pvtable(stab, inum(node), PINT, (WORD) 0);
+	insert_pvtable(stab, inum(node), PINT, (VPTR) 0);
 	FORFAMCS(indi, fam, husb, wife, nfams)
 		scel = indi_to_cacheel(wife);
 		if (!scel) goto e;
 		insert_pvtable(stab, ifamily(node), PFAM,
-		    (WORD) (fcel = fam_to_cacheel(fam)));
+		    (VPTR) (fcel = fam_to_cacheel(fam)));
 		insert_pvtable(stab, iiparent(node), PINDI, scel);
-		insert_pvtable(stab, inum(node), PINT, (WORD) ncount++);
+		insert_pvtable(stab, inum(node), PINT, (VPTR) ncount++);
 		lock_cache(fcel);
 		lock_cache(scel);
 		irc = interpret((PNODE) ibody(node), stab, pval);
@@ -911,8 +911,8 @@ interp_parents (PNODE node,
 	lock_cache(icel);
 	FORFAMCS(indi, fam, husb, wife, nfams)
 		insert_pvtable(stab, ifamily(node), PFAM,
-		    (WORD) (fcel = fam_to_cacheel(fam)));
-		insert_pvtable(stab, inum(node), PINT, (WORD) nfams);
+		    (VPTR) (fcel = fam_to_cacheel(fam)));
+		insert_pvtable(stab, inum(node), PINT, (VPTR) nfams);
 		lock_cache(fcel);
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		unlock_cache(fcel);
@@ -1032,7 +1032,7 @@ interp_forindi (PNODE node,
 		icount++;
 		insert_pvtable(stab, ielement(node), PINDI,
 		    indi_to_cacheel(indi));
-		insert_pvtable(stab, inum(node), PINT, (WORD)count);
+		insert_pvtable(stab, inum(node), PINT, (VPTR)count);
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		free_nodes(indi);
 		stdfree(record);
@@ -1074,7 +1074,7 @@ interp_forsour (PNODE node,
 		scount++;
 		insert_pvtable(stab, ielement(node), PSOUR,
 		    sour_to_cacheel(sour));
-		insert_pvtable(stab, inum(node), PINT, (WORD)count);
+		insert_pvtable(stab, inum(node), PINT, (VPTR)count);
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		free_nodes(sour);
 		stdfree(record);
@@ -1105,7 +1105,7 @@ interp_foreven (PNODE node,
 	INTERPTYPE irc;
 	INT len, count = 0;
 	INT ecount = 0;
-	insert_pvtable(stab, inum(node), PINT, (WORD)count);
+	insert_pvtable(stab, inum(node), PINT, (VPTR)count);
 	while (TRUE) {
 		sprintf(key, "E%d", ++count);
 		if (!(record = retrieve_record(key, &len))) {
@@ -1116,7 +1116,7 @@ interp_foreven (PNODE node,
 		ecount++;
 		insert_pvtable(stab, ielement(node), PEVEN,
 		    even_to_cacheel(even));
-		insert_pvtable(stab, inum(node), PINT, (WORD)count);
+		insert_pvtable(stab, inum(node), PINT, (VPTR)count);
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		free_nodes(even);
 		stdfree(record);
@@ -1147,7 +1147,7 @@ interp_forothr (PNODE node,
 	INTERPTYPE irc;
 	INT len, count = 0;
 	INT ocount = 0;
-	insert_pvtable(stab, inum(node), PINT, (WORD)count);
+	insert_pvtable(stab, inum(node), PINT, (VPTR)count);
 	while (++count <= num_othrs()) {
 		sprintf(key, "X%d", count);
 		if (!(record = retrieve_record(key, &len)))
@@ -1155,8 +1155,8 @@ interp_forothr (PNODE node,
 		if (!(othr = string_to_node(record))) continue;
 		ocount++;
 		insert_pvtable(stab, ielement(node), POTHR,
-		    (WORD)othr_to_cacheel(othr));
-		insert_pvtable(stab, inum(node), PINT, (WORD)count);
+		    (VPTR)othr_to_cacheel(othr));
+		insert_pvtable(stab, inum(node), PINT, (VPTR)count);
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		free_nodes(othr);
 		stdfree(record);
@@ -1187,7 +1187,7 @@ interp_forfam (PNODE node,
 	INTERPTYPE irc;
 	INT len, count = 0;
 	INT fcount = 0;
-	insert_pvtable(stab, inum(node), PINT, (WORD)count);
+	insert_pvtable(stab, inum(node), PINT, (VPTR)count);
 	while (TRUE) {
 		sprintf(key, "F%d", ++count);
 		if (!(record = retrieve_record(key, &len))) {
@@ -1197,8 +1197,8 @@ interp_forfam (PNODE node,
 		if (!(fam = string_to_node(record))) continue;
 		fcount++;
 		insert_pvtable(stab, ielement(node), PFAM,
-		    (WORD) fam_to_cacheel(fam));
-		insert_pvtable(stab, inum(node), PINT, (WORD)count);
+		    (VPTR) fam_to_cacheel(fam));
+		insert_pvtable(stab, inum(node), PINT, (VPTR)count);
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		free_nodes(fam);
 		stdfree(record);
@@ -1232,22 +1232,22 @@ interp_indisetloop (PNODE node,
 	}
 	seq = (INDISEQ) pvalue(val);
 	delete_pvalue(val);
-	insert_pvtable(stab, inum(node), PINT, (WORD) 0);
+	insert_pvtable(stab, inum(node), PINT, (VPTR) 0);
 	FORINDISEQ(seq, el, ncount)
 #ifdef DEBUG
 		llwprintf("loopinterp - %s = ",ielement(node));
 		llwprintf("\n");
 #endif
 		insert_pvtable(stab, ielement(node), PINDI,
-		(WORD)key_to_indi_cacheel(skey(el)));
+		(VPTR)key_to_indi_cacheel(skey(el)));
 #ifdef DEBUG
 		llwprintf("loopinterp - %s = ",ivalvar(node));
 		llwprintf("\n");
 #endif
 		insert_table(stab, ivalvar(node),
-			 (WORD) (sval(el) ? (WORD)sval(el)
-				: (WORD)create_pvalue(PANY, (WORD)NULL)));
-		insert_pvtable(stab, inum(node), PINT, (WORD) (ncount + 1));
+			 (VPTR) (sval(el) ? (VPTR)sval(el)
+				: (VPTR)create_pvalue(PANY, (VPTR)NULL)));
+		insert_pvtable(stab, inum(node), PINT, (VPTR) (ncount + 1));
 		switch (irc = interpret((PNODE) ibody(node), stab, pval)) {
 		case INTCONTINUE:
 		case INTOKAY:
@@ -1284,10 +1284,10 @@ interp_forlist (PNODE node,
 		prog_error(node, "1st arg to forlist is in error");
 		return INTERROR;
 	}
-	insert_pvtable(stab, inum(node), PINT, (WORD) 0);
+	insert_pvtable(stab, inum(node), PINT, (VPTR) 0);
 	FORLIST(list, el)
 		insert_table(stab, ielement(node), copy_pvalue(el));
-		insert_pvtable(stab, inum(node), PINT, (WORD) ncount++);
+		insert_pvtable(stab, inum(node), PINT, (VPTR) ncount++);
 		switch (irc = interpret((PNODE) ibody(node), stab, pval)) {
 		case INTCONTINUE:
 		case INTOKAY:
@@ -1363,7 +1363,7 @@ interp_call (PNODE node,
 		BOOLEAN eflg = FALSE;
 		PVALUE value = evaluate(arg, stab, &eflg);
 		if (eflg) return INTERROR;
-		insert_table(newtab, iident(parm), (WORD) value);
+		insert_table(newtab, iident(parm), (VPTR) value);
 		arg = inext(arg);
 		parm = inext(parm);
 	}
@@ -1414,8 +1414,8 @@ interp_traverse (PNODE node,
 	if (!root) return INTOKAY;
 	stack[++lev] = snode = root;
 	while (TRUE) {
-		insert_pvtable(stab, ielement(node), PGNODE, (WORD)snode);
-		insert_pvtable(stab, ilev(node), PINT, (WORD)lev);
+		insert_pvtable(stab, ielement(node), PGNODE, (VPTR)snode);
+		insert_pvtable(stab, ilev(node), PINT, (VPTR)lev);
 		switch (irc = interpret((PNODE) ibody(node), stab, pval)) {
 		case INTCONTINUE:
 		case INTOKAY:

@@ -89,7 +89,7 @@ static INT canonkey_compare(SORTEL el1, SORTEL el2);
 static INT value_str_compare (SORTEL, SORTEL);
 static INDISEQ create_indiseq_impl (INT valtype);
 static void append_indiseq_impl (INDISEQ seq, STRING key, 
-	STRING name, WORD val, BOOLEAN sure, BOOLEAN alloc);
+	STRING name, VPTR val, BOOLEAN sure, BOOLEAN alloc);
 static void check_indiseq_valtype (INDISEQ seq, INT valtype);
 
 /*===============================================
@@ -198,7 +198,7 @@ append_indiseq_ival (INDISEQ seq,    /* sequence */
                      BOOLEAN sure,   /* no dupe check? */
                      BOOLEAN alloc)  /* key alloced? */
 {
-	WORD wval=(WORD)val;
+	VPTR wval=(VPTR)val;
 	check_indiseq_valtype(seq, ISVAL_INT);
 	append_indiseq_impl(seq, key, name, wval, sure, alloc);
 }
@@ -210,7 +210,7 @@ void
 append_indiseq_pval (INDISEQ seq,    /* sequence */
                      STRING key,     /* key - not NULL */
                      STRING name,    /* name - may be NULL */
-                     WORD pval,       /* extra val */
+                     VPTR pval,       /* extra val */
                      BOOLEAN sure,   /* no dupe check? */
                      BOOLEAN alloc)  /* key alloced? */
 {
@@ -229,7 +229,7 @@ append_indiseq_sval (INDISEQ seq,    /* sequence */
                      BOOLEAN sure,   /* no dupe check? */
                      BOOLEAN alloc)  /* key alloced? */
 {
-	WORD wval=(WORD)sval;
+	VPTR wval=(VPTR)sval;
 	check_indiseq_valtype(seq, ISVAL_STR);
 	append_indiseq_impl(seq, key, name, wval, sure, alloc);
 }
@@ -255,7 +255,7 @@ static void
 append_indiseq_impl (INDISEQ seq,    /* sequence */
                      STRING key,     /* key - not NULL */
                      STRING name,    /* name - may be NULL */
-                     WORD val,       /* extra val is pointer */
+                     VPTR val,       /* extra val is pointer */
                      BOOLEAN sure,   /* no dupe check? */
                      BOOLEAN alloc)  /* key alloced? */
 {
@@ -1105,7 +1105,7 @@ sibling_indiseq (INDISEQ seq,
  *  (passed to create_value callback)
  *=======================================================*/
 INDISEQ
-ancestor_indiseq (INDISEQ seq, WORD (*create_value_fnc)(INT gen))
+ancestor_indiseq (INDISEQ seq, VPTR (*create_value_fnc)(INT gen))
 {
 	TABLE tab;
 	LIST anclist, genlist;
@@ -1119,8 +1119,8 @@ ancestor_indiseq (INDISEQ seq, WORD (*create_value_fnc)(INT gen))
 	genlist = create_list();
 	anc = create_indiseq_pval();
 	FORINDISEQ(seq, el, num)
-		enqueue_list(anclist, (WORD)skey(el));
-		enqueue_list(genlist, (WORD)0);
+		enqueue_list(anclist, (VPTR)skey(el));
+		enqueue_list(genlist, (VPTR)0);
 	ENDINDISEQ
 	while (!empty_list(anclist)) {
 		key = (STRING) dequeue_list(anclist);
@@ -1132,16 +1132,16 @@ ancestor_indiseq (INDISEQ seq, WORD (*create_value_fnc)(INT gen))
 			pkey = strsave(pkey);
 			append_indiseq_pval(anc, pkey, NULL,
 				(*create_value_fnc)(gen), TRUE, TRUE);
-			enqueue_list(anclist, (WORD)pkey);
-			enqueue_list(genlist, (WORD)gen);
+			enqueue_list(anclist, (VPTR)pkey);
+			enqueue_list(genlist, (VPTR)gen);
 			insert_table(tab, pkey, NULL);
 		}
 		if (moth && !in_table(tab, pkey = indi_to_key(moth))) {
 			pkey = strsave(pkey);
 			append_indiseq_pval(anc, pkey, NULL,
 				(*create_value_fnc)(gen), TRUE, TRUE);
-			enqueue_list(anclist, (WORD)pkey);
-			enqueue_list(genlist, (WORD)gen);
+			enqueue_list(anclist, (VPTR)pkey);
+			enqueue_list(genlist, (VPTR)gen);
 			insert_table(tab, pkey, NULL);
 		}
 	}
@@ -1156,7 +1156,7 @@ ancestor_indiseq (INDISEQ seq, WORD (*create_value_fnc)(INT gen))
  *  (passed to create_value callback)
  *===========================================================*/
 INDISEQ
-descendent_indiseq (INDISEQ seq, WORD (*create_value_fnc)(INT gen))
+descendent_indiseq (INDISEQ seq, VPTR (*create_value_fnc)(INT gen))
 {
 	INT gen;
 	TABLE itab, ftab;
@@ -1171,8 +1171,8 @@ descendent_indiseq (INDISEQ seq, WORD (*create_value_fnc)(INT gen))
 	genlist = create_list();
 	des = create_indiseq_pval();
 	FORINDISEQ(seq, el, num)
-		enqueue_list(deslist, (WORD)skey(el));
-		enqueue_list(genlist, (WORD)0);
+		enqueue_list(deslist, (VPTR)skey(el));
+		enqueue_list(genlist, (VPTR)0);
 	ENDINDISEQ
 	while (!empty_list(deslist)) {
 		INT num1, num2;
@@ -1190,8 +1190,8 @@ descendent_indiseq (INDISEQ seq, WORD (*create_value_fnc)(INT gen))
 					append_indiseq_pval(des, dkey, NULL, 
 					    (*create_value_fnc)(gen),
 					    TRUE, TRUE);
-					enqueue_list(deslist, (WORD)dkey);
-					enqueue_list(genlist, (WORD)gen);
+					enqueue_list(deslist, (VPTR)dkey);
+					enqueue_list(genlist, (VPTR)gen);
 					insert_table(itab, dkey, NULL);
 				}
 			ENDCHILDREN
@@ -1206,14 +1206,14 @@ descendent_indiseq (INDISEQ seq, WORD (*create_value_fnc)(INT gen))
  * spouse_indiseq -- Create spouses sequence of a sequence
  *======================================================*/
 INDISEQ
-spouse_indiseq (INDISEQ seq, WORD (*copy_value_fnc)(WORD val))
+spouse_indiseq (INDISEQ seq, VPTR (*copy_value_fnc)(VPTR val))
 {
 	TABLE tab;
 	INDISEQ sps;
 	STRING spkey;
 	NODE indi;
 	INT num1;
-	WORD newval;
+	VPTR newval;
 	if (!seq) return NULL;
 	tab = create_table();
 	sps = create_indiseq_impl(IValtype(seq));

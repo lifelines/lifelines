@@ -366,7 +366,7 @@ choose_from_indiseq (
 	i = choose_one_from_indiseq_if_needed(seq, ask1, titl1, titln);
 	if (i == -1) return NULL;
 	listbadkeys=1;
-	if ((WORD)-1 == sval(IData(seq)[i])) /* invalid pointer */
+	if ((VPTR)-1 == sval(IData(seq)[i])) /* invalid pointer */
 		badkeylist[0] = 0;
 	else {
 		skey = skey(IData(seq)[i]);

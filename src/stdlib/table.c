@@ -85,7 +85,7 @@ create_table (void)
 void
 insert_table (TABLE tab,
               STRING key,
-              WORD val)
+              VPTR val)
 {
 	ENTRY entry = fndentry(tab, key);
 	if (entry)
@@ -132,7 +132,7 @@ in_table (TABLE tab,
 /*===============================
  * valueof -- Find value of entry
  *=============================*/
-WORD
+VPTR
 valueof (TABLE tab,
          STRING key)
 {
@@ -146,7 +146,7 @@ valueof (TABLE tab,
 /*===================================
  * valueofbool -- Find value of entry
  *=================================*/
-WORD
+VPTR
 valueofbool (TABLE tab,
              STRING key,
              BOOLEAN *there)
@@ -164,7 +164,7 @@ valueofbool (TABLE tab,
  * access_value -- get pointer to value
  * returns 0 if not found
  *=================================*/
-WORD * access_value(TABLE tab, STRING key)
+VPTR * access_value(TABLE tab, STRING key)
 {
 	ENTRY entry;
 	if (!key)
@@ -229,7 +229,7 @@ traverse_table (TABLE tab,
  *===============================================*/
 void
 traverse_table_param (TABLE tab,
-                INT (*tproc)(ENTRY, WORD),
+                INT (*tproc)(ENTRY, VPTR),
                 void * param)
 {
 	INT i;

@@ -98,7 +98,7 @@ __heapused (PNODE node,
 		    (long)heapused, (long)heapfree, (long)heapcnt);
 	fflush(errfp);
 
-	return create_pvalue(PINT, (WORD)heapfree);
+	return create_pvalue(PINT, (VPTR)heapfree);
 #else
 	/* Unsupported, what should we do? return error or give bogus value? */
 	*eflg = TRUE;
