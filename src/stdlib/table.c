@@ -79,10 +79,6 @@ static TABLE create_table_impl(enum TB_VALTYPE valtype, DELFUNC delfunc);
 static void table_element_destructor(void * el);
 static void table_element_obj_destructor(void *el);
 static void free_table_iter(TABLE_ITER tabit);
-static void insert_table_impl(TABLE tab, CNSTRING key, UNION uval);
-static INT hash(TABLE tab, CNSTRING key);
-static BOOLEAN next_element(TABLE_ITER tabit);
-static void replace_table_impl(TABLE tab, STRING key, UNION uval, INT whattofree);
 static void tabit_destructor(VTABLE *obj);
 static void table_destructor(VTABLE *obj);
 
@@ -268,7 +264,6 @@ void
 insert_table_int (TABLE tab, CNSTRING key, INT ival)
 {
 	INT * newval = stdalloc(sizeof(*newval));
-	INT * oldval = 0;
 
 	*newval = ival;
 

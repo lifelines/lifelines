@@ -28,6 +28,10 @@
 	Cleanup: remove declaration of (no longer existing) function
 	add_refd_fams.
 
+	* ChangeLog src/interp/builtin.c src/stdlib/table.c
+
+	Cleanup: remove unused variables & no longer existing functions.
+
 2005-02-16 Perry Rapp
 
 	* ChangeLog src/gedlib/xlat.c

@@ -2638,7 +2638,7 @@ PVALUE
 __insert (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
-	PVALUE old=NULL, val=NULL;
+	PVALUE val=NULL;
 	PVALUE valtab = eval_and_coerce(PTABLE, arg, stab, eflg);
 	TABLE tab;
 	STRING str;
