@@ -1,3 +1,10 @@
+2005-01-12 Perry Rapp
+
+	* ChangeLog configure.in src/hdrs/version.h
+
+	Bump version to 3.0.39i to differentiate interim
+	tarballs from released version.
+
 2005-01-11 Matt Emmerton
 
 	* ChangeLog reports/Makefile.am
