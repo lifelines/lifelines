@@ -6,6 +6,11 @@
  * @output         PostScript
  * @description    
  *
+ *   This report builds a postscript ancestory chart, a "tree", containing
+ *   data on five generations. It prompts for the individual to begin with
+ *   and draws the tree including this person. The further from this person
+ *   the less data is printed.
+ *
  *   famtree1
  *
  *   version one:  9 May 1993

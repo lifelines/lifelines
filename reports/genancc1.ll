@@ -5,7 +5,17 @@
  * @category       
  * @output         GEDCOM
  * @description    
-
+ *
+ * This program is useful for extracting 
+ * data when a person requests data about someone from your database.
+ * The output of this report is a GEDCOM file of the following: 
+ * all ancestors, 
+ * all spouses and 
+ * all children of all ancestors and 
+ * all descendents of a person, 
+ * as well as the person him/herself 
+ * and his/her spouses.  
+ *
  *   genancc1
  *
  *   by Tom Wetmore, ttw@cbnewsl.att.com

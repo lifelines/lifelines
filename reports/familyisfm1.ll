@@ -6,6 +6,13 @@
  * @output         Text, 132 cols
  * @description    
  *
+ *   It will produce a report of all the INDI's in the database,
+ *   in the format as seen at end of report.  May be sorted easily
+ *   to see the Father or Mother column sorted report.
+ *   The report name come from: isfm (Indi Spouse Father Mother)
+ *   It is designed for 16 pitch, HP laserjet III, 132 column
+ *   (ASCII output).
+ *
  *   familyisfm1
  *
  *   Code by Tom Wetmore, ttw@cbnewsl.att.com
@@ -15,15 +22,6 @@
  *
  *   version one of this report was written by Tom Wetmore, in 1991,
  *   and it has been modified many times since.
- *
- *   It will produce a report of all the INDI's in the database,
- *   in the format as seen at end of report.  May be sorted easily
- *   to see the Father or Mother column sorted report.
- *
- *   The report name come from: isfm (Indi Spouse Father Mother)
- *   It is designed for 16 pitch, HP laserjet III, 132 column.
- *
- *   This report produces an ASCII output file.
  *
  */
  

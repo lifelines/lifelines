@@ -6,6 +6,13 @@
  * @output         Text
  * @description    
 
+This program calculates the relationship between individuals in a
+database.  It does so in three modes.  Mode 1 just does one pair of
+individuals and then exits.  Mode 2 does any number of pairs with a
+common "from" person.  Mode 3 does all pairs with a common "from"
+person.  In general, mode 1 is fastest for simple relationships, but
+if you want one complicated relationship, you may as well do them all.
+
 relation - a LifeLines relation computing program
         by Jim Eggert (eggertj@atc.ll.mit.edu)
         Version 1,  21 November 1992
@@ -13,13 +20,6 @@ relation - a LifeLines relation computing program
         Version 3,  (changed format slightly, modified code somewhat)
         Version 4,   6 July 1993 (added English language)
         Version 5,   6 September 1993 (generified language)
-
-This program calculates the relationship between individuals in a
-database.  It does so in three modes.  Mode 1 just does one pair of
-individuals and then exits.  Mode 2 does any number of pairs with a
-common "from" person.  Mode 3 does all pairs with a common "from"
-person.  In general, mode 1 is fastest for simple relationships, but
-if you want one complicated relationship, you may as well do them all.
 
 Each computed relation is composed of the minimal combination of
 parent (fm), sibling (bsS), child (zdC), and spouse (hw) giving the

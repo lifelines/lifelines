@@ -6,11 +6,13 @@
  * @output         GEDCOM
  * @description    
 
+This is a quicky to show how to fix name and place spacing.
+
+
 fix_nameplac - a LifeLines names and places fixing program
         by Jim Eggert (eggertj@atc.ll.mit.edu)
         Version 1,  8 January 1993
 
-This is a quicky to show how to fix name and place spacing.
 
 */
 

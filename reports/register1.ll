@@ -6,6 +6,12 @@
  * @output         nroff
  * @description    
  *
+ *   It will produce a report of all descendents of a person,
+ *   and is presently designed for 12 pitch, HP laserjet III.
+ *   All NOTE and CONT lines from data will be printed in the this report.
+ *   This report will produce a paginated output.   It is similiar
+ *   to the report 'regvital1'.
+ *
  *   register1
  *
  *   This report does NOT have a footer and header
@@ -16,13 +22,6 @@
  *
  *   version one of this report was written by Tom Wetmore, in 1990,
  *   and it has been modified many times since.
- *
- *   It will produce a report of all descendents of a person,
- *   and is presently designed for 12 pitch, HP laserjet III.
- *
- *   All NOTE and CONT lines from data will be printed in the this report.
- *   This report will produce a paginated output.   It is similiar
- *   to the report 'regvital1'.
  *
  *   This report produces a nroff output, and to produce the
  *   output, use:  nroff filename > filename.out

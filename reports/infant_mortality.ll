@@ -6,14 +6,14 @@
  * @output         Text
  * @description    
 
-infant_mortality - a LifeLines program
-         by Jim Eggert (eggertj@atc.ll.mit.edu)
-         Version 1,  19 September 1994
-
 This program finds families that have lost multiple children.
 You give it the threshold for the number of young deaths, and the
 threshold for the age at death, and it finds all the appropriate
 families.
+
+infant_mortality - a LifeLines program
+         by Jim Eggert (eggertj@atc.ll.mit.edu)
+         Version 1,  19 September 1994
 
 */
 

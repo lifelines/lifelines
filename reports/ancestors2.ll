@@ -6,6 +6,9 @@
  * @output         Text
  * @description    
  *
+ *   It will produce a report of all ancestors of a person, with
+ *   sorted names as output, birth and death dates.
+ *
  *   ancestors2
  *
  *   Initial Code by Tom Wetmore, ttw@cbnewsl.att.com

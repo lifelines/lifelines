@@ -6,6 +6,9 @@
  * @output         Text, 80/132 cols
  * @description    
  *
+ *   This report creates 
+ *   Ascii timeline showing birth, marriage, and death events of
+ *   selected individuals; shows which individuals were contemporaies.
  *
  *   timeline1
  *

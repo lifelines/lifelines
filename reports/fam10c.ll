@@ -6,6 +6,8 @@
  * @output         Text
  * @description    
  *
+ * Generates a Family Report for one family.
+ *
  *   fam10c
  *   by:  Cliff Manis  <cmanis@csoftec.csf.com>
  *   Family Report for LifeLines
@@ -86,7 +88,7 @@ proc main ()
 }
 
 /* End of Report */
-
+/*
 --
 Cliff Manis            K4ZTF           Manis/Manes Family History
 Researching: MANIS MANES MANESS MANAS WHITEHORN CANTER BIRD CORBETT NEWMAN
@@ -95,4 +97,4 @@ Researching: MANIS MANES MANESS MANAS WHITEHORN CANTER BIRD CORBETT NEWMAN
 -=> Don't waste time learning the tricks of the trade, learn the trade  !
  Standard Disclaimer:      We are not associated with anyone. (PERIOD). (.)
 --
-
+*/

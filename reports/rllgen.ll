@@ -6,16 +6,16 @@
  * @output         RLL format
  * @description    
 
-rllgen - a LifeLines report program to aid in the generation of
+A LifeLines report program to aid in the generation of
 Roots Location List (RLL) submissions.
-
-Version 1, 18 November 1994, by Jim Eggert, eggertj@ll.mit.edu
-                                Requires LifeLines 3.0.1 or higher
-
 Given a person, this generates a RLL-like submission for that person and
 his/her ancestors.  The output will likely need considerable hand editing,
 but that is how it is.  If you need to know what the RLL is, I have enclosed
 a description at the end of this file.
+
+
+Version 1, 18 November 1994, by Jim Eggert, eggertj@ll.mit.edu
+                                Requires LifeLines 3.0.1 or higher
 
 This program will work better if you follow strict placename
 conventions.  You should probably run the places report program first

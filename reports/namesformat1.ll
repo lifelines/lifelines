@@ -6,6 +6,9 @@
  * @output         Text
  * @description    
  *
+ *   This program produces a report of how the names format may be printed
+ *   using the LifeLines Report Generator.
+ *
  *   namesformat1
  *
  *   Code by Cliff Manis, cmanis@csoftec.csf.com

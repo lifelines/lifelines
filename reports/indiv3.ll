@@ -6,14 +6,14 @@
  * @output         Text
  * @description    
 
+   Produces an indented report on an individual and all families associated
+   with that individual.  Details on individuals include NOTE lines.
+   Linewrapping is done with indenting maintained.
+
    indiv3.ll
 
    Written by: Robert Simms, 27 Mar 1996
                rsimms@math.clemson.edu, http://www.math.clemson.edu/~rsimms
-
-   Produces an indented report on an individual and all families associated
-   with that individual.  Details on individuals include NOTE lines.
-   Linewrapping is done with indenting maintained.
 
    At the beginning of main() is provided the means to easily change page width,
    tab size, left margin, and whether or not to include notes in output.

@@ -6,15 +6,15 @@
  * @output         Text
  * @description    
 
-count_anc - a LifeLines ancestors counting program
-         by Jim Eggert (eggertj@atc.ll.mit.edu)
-         Version 1,  19 November 1992
-         Version 2,  16 February 1995, use lengthset(), print(,)
-
 This program counts ancestors of a person by generation.
 Only unique individuals in each generation are counted.
 A person counts in all the generations he/she is in,
 but only counts once in the grand total.
+
+count_anc - a LifeLines ancestors counting program
+         by Jim Eggert (eggertj@atc.ll.mit.edu)
+         Version 1,  19 November 1992
+         Version 2,  16 February 1995, use lengthset(), print(,)
 */
 
 proc main ()

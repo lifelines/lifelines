@@ -6,6 +6,11 @@
  * @output         Text, 132 cols
  * @description    
  *
+ *   select and produce a ancestor report for the person selected.
+ *   Ancestors report format, which print the event in long format.
+ *   Output is an ASCII file, and will probably need to be printed
+ *   using 132 column format.
+ *
  *   pedigreel
  *
  *   Code by Tom Wetmore, ttw@cbnewsl.att.com
@@ -15,12 +20,6 @@
  *
  *   version one of this report was written by Tom Wetmore, in 1990,
  *   name is from pedigreel  (long format)
- *
- *   select and produce a ancestor report for the person selected.
- *   Ancestors report format, which print the event in long format.
- *
- *   Output is an ASCII file, and will probably need to be printed
- *   using 132 column format.
  *
  *   An example of the output may be seen at end of this report.
  */

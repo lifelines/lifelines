@@ -5,6 +5,8 @@
  * @category       
  * @output         Text
  * @description    
+ *
+ * Generate an ahnentafel chart for the selected person.
  * 
  * ahnentafel -- Generate an ahnentafel chart */
 /* Tom Wetmore        */

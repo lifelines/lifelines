@@ -6,6 +6,10 @@
  * @output      Text, 80 cols
  * @description 2 INDI's per page
  *
+ *   It will produce a report of all INDI's in the database, with
+ *   two records printed per page.  Record 1 and 2 will be on the
+ *   first page.
+ *
  *   2ppage               (2 INDI's per page)
  *
  *

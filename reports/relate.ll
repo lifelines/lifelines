@@ -6,6 +6,8 @@
  * @output         Text
  * @description    
 
+ *  Finds a shortest path between two persons in a LifeLines database.
+ *  Inspiration from Jim Eggert's relation program.
 
 
 relate - Finds a shortest path between two persons in a LifeLines

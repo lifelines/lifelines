@@ -5,6 +5,12 @@
  * @category       
  * @output         Text
  * @description    
+ *
+ * Prints out the value of all the lines in your database with the PLAC tag,
+ * along with enough information so you can find the line easily. The purpose
+ * of this report is so you can find all the places that seem wrong
+ * (misspelled, ambiguous, incomplete [left out the county name], etc), and
+ * double-check them or correct them. 
 
 places
 

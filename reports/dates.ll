@@ -6,6 +6,13 @@
  * @output         Text
  * @description    
 
+Prints out the value of all the lines in your database with the DATE
+tag, along with enough information so you can find the line easily.
+The purpose of this report is so you can sort all the dates in the
+database, so you can look for illegal dates, make birthday lists, etc.
+The dates are printed in the order that they appear in the database,
+Output can then be sorted if this is more useful than the native form.
+
 dates - a LifeLines dates extraction program
         by Jim Eggert (eggertj@atc.ll.mit.edu)
         Version 1,  3 December 1992

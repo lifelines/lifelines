@@ -6,15 +6,6 @@
  * @output         Text
  * @description    
 
-gender_order - a LifeLines gender order statistics program
-        by Jim Eggert (eggertj@ll.mit.edu)
-        Version 1,  5 August 1993
-                listsort code by John Chandler (JCHBN@CUVMB.CC.COLUMBIA.EDU)
-        Version 2, 10 August 1993
-                added family examples, modified output format slightly
-        Version 3, 26 March 1995
-                changed listsort to quicksort
-
 This program computes gender order statistics for children in all the
 families in a database.  Genders are considered to be ternary: male
 (M), female (F), or unknown (U).  Children in a family form a pattern
@@ -25,6 +16,15 @@ gender patterns are computed.  For the above example, the initial
 patterns are . (no children), M, MF, MFF, and MFFM.  The frequency of
 these initial patterns can be used to answer questions such as how
 many families with a boy then two girls go on to have another boy.
+
+gender_order - a LifeLines gender order statistics program
+        by Jim Eggert (eggertj@ll.mit.edu)
+        Version 1,  5 August 1993
+                listsort code by John Chandler (JCHBN@CUVMB.CC.COLUMBIA.EDU)
+        Version 2, 10 August 1993
+                added family examples, modified output format slightly
+        Version 3, 26 March 1995
+                changed listsort to quicksort
 
 For example, suppose you want to know what fraction of families with a
 child gender pattern P (e.g., P=MFFM) have no more children, have a

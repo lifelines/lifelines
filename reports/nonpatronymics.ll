@@ -6,6 +6,11 @@
  * @output         Text
  * @description    
  *
+ *   Find all cases of nonpatronymic inheritances in the database.
+ *   If the child's surname is not identical to the father's surname,
+ *   print both out.  If the two surnames have different soundex
+ *   codes, undent the printout.  Print statistics at the end.
+ *
  *   nonpatronymics
  *
  *   Code by Jim Eggert, eggertj@ll.mit.edu
@@ -13,11 +18,6 @@
  *   This report works only with the LifeLines Genealogy program
  *
  *   version one of this report was written by Jim Eggert, in 1992.
- *
- *   Find all cases of nonpatronymic inheritances in the database.
- *   If the child's surname is not identical to the father's surname,
- *   print both out.  If the two surnames have different soundex
- *   codes, undent the printout.  Print statistics at the end.
  *
  *   Output is an ASCII file.
  */

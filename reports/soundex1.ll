@@ -6,6 +6,11 @@
  * @output         Text
  * @description    
  *
+ *   Produces a chart of all surnames in database with corresponding 
+ *   SOUNDEX codes.
+ *   It is designed for 10 or 12 pitch, HP laserjet III, or any
+ *   other printer.
+ *
  *   soundex1
  *
  *   Code by James P. Jones, jjones@nas.nasa.gov
@@ -14,11 +19,6 @@
  *
  *   version one of this report was written by James P. Jones, 28 Sep 1992
  *
- *   Produces a chart of all surnames in database with corresponding 
- *   SOUNDEX codes.
- *
- *   It is designed for 10 or 12 pitch, HP laserjet III, or any
- *   other printer.
  *
  *   Output is an ASCII file.
  *

@@ -6,6 +6,10 @@
  * @output         Text, 132 cols
  * @description    
  *
+ *   Produce an 8 generation descendant report for the person selected.
+ *   Output is an ASCII file, and will probably need to be printed
+ *   using 132 column format.
+ *
  *   8gen1
  *
  *   Code by Tom Wetmore, ttw@cbnewsl.att.com

@@ -6,6 +6,8 @@
  * @output         nroff
  * @description    
  *
+ *   Family Group Sheet report program, with in-line source references.
+ *
  *   famrep3
  *
  *   Code by James P. Jones, jjones@nas.nasa.gov
@@ -14,8 +16,6 @@
  *
  *   version two of this report was written by James P. Jones, 1 Nov 1992
  *   version three of  this report was written by James P. Jones, 28 Mar 1993
- *
- *   Family Group Sheet report program, with in-line source references.
  *
  *   I use:     tbl fam.out | xroff -me -tstdout | ipr -Pim7 -D"jobheader off"
  *   Can use:   tbl fam.out | xroff -me -PprinterName

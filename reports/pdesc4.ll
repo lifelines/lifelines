@@ -6,6 +6,13 @@
  * @output         Text
  * @description    
  *
+ * Produces indented descendant list with line wrapping at 80 columns
+ * (user-specifiable) while maintaining the indentation level. Enhancement
+ * from version 2 is the addition of user-specified maximum number of
+ * generations. Version 4 makes the page_width (not 1 less) the limit on
+ * character a shift inplacement. Also eliminated an extra space at the
+ * beginning of each line that was not controlled by a left_margin parameter.
+ *
  *   pdesc3.ll
  *
  *   Code by Tom Wetmore, ttw@cbnewsl.att.com

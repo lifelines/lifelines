@@ -5,8 +5,9 @@
  * @category       
  * @output         Text
  * @description    
+ *
 
-   coverage -- Displays "ancestor coverage," that is, what percentage of
+   Displays "ancestor coverage," that is, what percentage of
    ancestors have been discovered for each generation back in time.
 
    First version by T. Wetmore, 21 February 1994

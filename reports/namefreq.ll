@@ -6,6 +6,10 @@
  * @output         Text
  * @description    
 
+This report counts occurrences of all first (given) names in the
+database.  Individuals with only surnames are not counted.  If the
+surname is listed first, the next word is taken as the given name.
+
 namefreq
 
 Tabulate frequency of first names in database.
@@ -14,10 +18,6 @@ Version 1 - 1993 Jun 16 - John F. Chandler
 Version 2 - 1993 Jun 18 (sort output by frequency)
 Version 3 - 1995 Mar 8  (requires LL 3.0 or higher)
 			(Uses Jim Eggert's Quicksort routine)
-
-This report counts occurrences of all first (given) names in the
-database.  Individuals with only surnames are not counted.  If the
-surname is listed first, the next word is taken as the given name.
 
 The output file is normally sorted in order of decreasing frequency,
 but the sort order can be altered by changing func "compare", e.g.,

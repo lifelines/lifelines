@@ -6,15 +6,14 @@
  * @output         Text
  * @description    
 
+This LifeLines report program checks a LifeLines database for
+compatibility with PAF.  I used the Mac PAF manual for field length
+specification, and Mac PAF v2.11 for a little testing.
 
 pafcompat - a LifeLines PAF compatibility checker
 	by Jim Eggert (eggertj@ll.mit.edu)
 	Version 1, 2 January 1993
 	Version 2, 7 January 1993 added 80 character max for all values
-
-This LifeLines report program checks a LifeLines database for
-compatibility with PAF.  I used the Mac PAF manual for field length
-specification, and Mac PAF v2.11 for a little testing.
 
 This program checks:
 1.  Number (<=3) and length (<=16) of given names.

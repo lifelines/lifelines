@@ -6,6 +6,12 @@
  * @output         Text, 132 cols
  * @description    
  *
+ *   This program will select and produce a descendant report for the person
+ *   selected.   Children of each spouse are printed below that spouse.
+ *   Descendants report format, which print the date in long format.
+ *   Output is an ASCII file, and will probably need to be printed
+ *   using 132 column format.
+ *
  *   pdesc1
  *
  *   Code by Tom Wetmore, ttw@cbnewsl.att.com
@@ -16,14 +22,6 @@
  *   This report works only with the LifeLines Genealogy program
  *
  *   version one of this report was written by Tom Wetmore, in 1990.
- *
- *   It will select and produce a descendant report for the person
- *   selected.   Children of each spouse are printed below that spouse.
- *
- *   Descendants report format, which print the date in long format.
- *
- *   Output is an ASCII file, and will probably need to be printed
- *   using 132 column format.
  *
  *   An example of the output may be seen at end of this report.
  */

@@ -6,13 +6,20 @@
  * @output         Text
  * @description    
 
-   Written by: Robert Simms, 19 Sep 1997
-               rsimms@math.clemson.edu, http://www.math.clemson.edu/~rsimms
 
    Asks for a descendant and an ancestor then produces, for the line
    connecting the two persons,
    an indented report on an individual and all families associated
    with that individual.  Details on individuals include NOTE lines.
+   This is handy for explaining to someone how you're connected to their
+   ancestor. (I find closure by filling in details on everyone's family
+   groups, rather than just having a string of sibling-less individuals that
+   connect me with distant cousins. This report helps me do the same for
+   others.)
+
+   Written by: Robert Simms, 19 Sep 1997
+               rsimms@math.clemson.edu, http://www.math.clemson.edu/~rsimms
+
    Linewrapping is done with indenting maintained.
 
    This program does not check to make sure that the descendant given is really

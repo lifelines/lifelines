@@ -5,6 +5,12 @@
  * @category       
  * @output         PostScript
  * @description    
+**  
+**  This LifeLines report program generates Postscript ancestral and
+**  descendant charts.  The ancestral charts can include the siblings
+**  of all direct ancestors (aunts, uncles, great-aunts, great-uncles,
+**  etc.).  A multi-page poster chart can also be generated.  The
+**  chart format is based on the program GedChart, by Tom Blumer.
 ** 
 **  ps-anc2, 16 August 1994, by Fred Wheeler (wheeler@ipl.rpi.edu)
 **  

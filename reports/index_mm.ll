@@ -6,16 +6,16 @@
  * @output         Text
  * @description    
 
+This program lists everyone in a database, with women listed by both
+maiden name and married name.  It assumes that all women take the surname
+of their husbands, which is not always correct.
+
 index_mm - a LifeLines database listing program
         by Jim Eggert (eggertj@atc.ll.mit.edu)
         Version 1,  25 November 1992
         Version 2,  29 November 1992 (gave up on bubblesort)
         Version 3,  11 January  1993 (added deathdate and marriage)
         Version 4,  18 April    1993 (bug fix, made namewidth variable)
-
-This program lists everyone in a database, with women listed by both
-maiden name and married name.  It assumes that all women take the surname
-of their husbands, which is not always correct.
 
 To sort the resulting report by name, enter the Unix command
         sort -b +1 report > sorted.report

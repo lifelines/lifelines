@@ -5,6 +5,9 @@
  * @category       
  * @output         Text
  * @description    
+ *
+ * find persons that are 'isolated' in your database - no parents and not
+ * in any families..
  */
 proc main ()
 {

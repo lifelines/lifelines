@@ -7,7 +7,7 @@
  * @output         SGML
  * @description    
  *
- * alllines.sgml - This program shows all ancestral lines of a specified person
+ * This program shows all ancestral lines of a specified person
  * using a pseudo-Register format.
  *
  * Output is in nroff or sgml format.  This may change to something

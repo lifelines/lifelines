@@ -6,6 +6,9 @@
  * @output         Text, 132 cols
  * @description    
 
+ *  LifeLines Report for quickly getting output of all individuals with a
+ * a particular surname.
+
 
  *  surname1
  *

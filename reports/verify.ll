@@ -6,6 +6,10 @@
  * @output         Text
  * @description    
 
+This LifeLines report program generates a text file which lists
+exceptions to assertions or checks about the database.	There are two
+forms of the output report, terse or verbose, selectable at runtime.
+
 verify - a LifeLines database verification report program
 	by Jim Eggert (eggertj@atc.ll.mit.edu)
 	Version 1,  3 November 1992 (unreleased, first simple try)

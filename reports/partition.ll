@@ -6,6 +6,11 @@
  * @output         GEDCOM
  * @description    
 
+This program partitions individuals in a database into disjoint
+partitions.  A partition is composed of people related by one or more
+multiples of the following relations: parent, sibling, child, spouse.
+There is no known relationship between people in different partitions.
+
 
 partition - a LifeLines database partitioning program
     by Jim Eggert (eggertj@atc.ll.mit.edu)

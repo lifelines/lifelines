@@ -6,6 +6,11 @@
  * @output         Text
  * @description    
  *
+ *   This program produces a family report of the person (husband), wife, 
+ *   their children, and some data about the children's marriages.
+ *   It is presently designed for 16 pitch, HP laserjet III,
+ *   printing a single page of information about that family.
+ *
  *   fam16rn1
  *
  *   Code by Tom Wetmore, ttw@cbnewsl.att.com
@@ -15,12 +20,6 @@
  *
  *   version one of this report was written by Tom Wetmore, in 1990,
  *   and it has been modified many times since.
- *
- *   It will produce a family report of the person (husband), wife, 
- *   their children, and some data about the children's marriages.
- * 
- *   It is presently designed for 16 pitch, HP laserjet III,
- *   printing a single page of information about that family.
  *
  *   Output is an ASCII file.
  *

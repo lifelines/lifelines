@@ -10,7 +10,8 @@
    this funny little program is based on Tom Wetmore's "genancc1"
    and generates a GEDCOM file with descendants of a chosen individual
    who have the same surname (usually this means male line descendants
-   plus illegitimate children of daughters) plus their spouses;
+   plus illegitimate children of daughters) plus their spouses.
+
    a truely good program would need to exclude cases of daughters'
    marriages with guys of the same surname but not related and include
    male line descendants who changed surnames */

@@ -6,16 +6,16 @@
  * @output         Text
  * @description    
 
-related_spouses - a LifeLines program to identify related spouses
-	by Jim Eggert (eggertj@atc.ll.mit.edu)
-	Version 1,  31 March 1993 (first release)
-	Version 2,  15 March 1995 (use new set functions, generation numbers)
-
 This program identifies spouses with known common ancestors.  For each
 marriage of related spouses, the spouses' names are printed, along
 with the first common ancestor in each branch of the ancestry tree,
 and the number of intervening generations for the husband and wife,
 respectively.
+
+related_spouses - a LifeLines program to identify related spouses
+	by Jim Eggert (eggertj@atc.ll.mit.edu)
+	Version 1,  31 March 1993 (first release)
+	Version 2,  15 March 1995 (use new set functions, generation numbers)
 
 */
 

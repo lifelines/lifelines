@@ -6,6 +6,9 @@
  * @output         Text, 80 cols
  * @description    
  *
+ *   select and produce an a output report of all marriages in
+ *   the database, with date of marriage if known.
+ *
  *   marriages1
  *
  *   Code by Tom Wetmore, ttw@cbnewsl.att.com

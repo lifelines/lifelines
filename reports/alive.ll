@@ -6,11 +6,11 @@
  * @output         Text
  * @description    Finding people alive in a given year
 
-alive - a LifeLines report program for finding live people
-
 This finds who in the database, or among ancestors or descendants of
 an individual, was likely alive in a certain year.  Good for looking at
 population snapshots like censuses, tax rolls, etc.
+
+alive - a LifeLines report program for finding live people
 
 Version 1, 13 July 1994, by Jim Eggert, eggertj@ll.mit.edu
 Version 2, 14 July 1994, by Jim Eggert, fixed bug in estimate_byear
@@ -22,6 +22,9 @@ Version 5, 17 March 1995, J.F.Chandler, modified to prune place list
 ** SourceForge Versions:
 **
 ** $Log$
+** Revision 1.5  2003/01/19 02:50:23  dr_doom
+** move 1 paragraph description to immediately before @description  for index.html
+**
 ** Revision 1.4  2000/11/29 12:17:11  nozell
 ** Fix typo.
 **

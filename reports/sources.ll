@@ -5,6 +5,8 @@
  * @category       
  * @output         Text
  * @description    
+ *
+ * Print the sources associated with an individual.
  */
 global(refn)    /* root node of references record */
 global(reftab)  /* table of reference keys reported on */

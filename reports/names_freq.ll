@@ -6,17 +6,17 @@
  * @output         Text
  * @description    
 
+Tabulate frequency of names in database.  Like namefreq (by John
+Chandler), but it computes frequencies for the first five given names,
+the surname, and the first two post-surnames.
+The output can be sorted by frequency or by alphabet, or not at all.
+
 names_freq - a LifeLines names frequency calculation program
         by Jim Eggert (eggertj@ll.mit.edu)
         Version 1,   8 November 1993 (initial release)
                 listsort code by John Chandler (JCHBN@CUVMB.CC.COLUMBIA.EDU)
         Version 2,  10 April 1995 changed listsort to quicksort
 
-Tabulate frequency of names in database.  Like namefreq (by John
-Chandler), but it computes frequencies for the first five given names,
-the surname, and the first two post-surnames.
-
-The output can be sorted by frequency or by alphabet, or not at all.
 */
 
 global(indices)         /* table for indexing into the various lists */

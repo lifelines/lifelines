@@ -6,6 +6,12 @@
  * @output         Text, 80/132 cols
  * @description    
  *
+ *   This report creates one of the following timeline charts:
+ *      1. Ascii timeline graph showing birth, marriage, and death events of
+ *         selected individuals; shows which individuals were contemporaies.
+ *      2. Ascii timeline chart data with the above information for use with
+ *         the my timeline generation program or the today program.
+ *
  *   timeline2 - create a timeline of select individuals
  *
  *   version one:  4 Sept 1993

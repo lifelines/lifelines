@@ -7,6 +7,19 @@
  * @description    
 
 
+This LifeLines report program computes mean statistics of various
+quantities binned over other quantities.  The quantities it knows
+about are ages at and dates of birth, christening, first and last
+marriage, first and last child's birth, death, burial, and today; the
+number of children, siblings, and marriages; and sex, surname, first
+name, soundex, and any simple GEDCOM tag.  These can be combined
+nearly arbitrarily and evaluated over the whole database, or
+restricted to ancestors or descendants of a chosen individual or to
+members of a predetermined set.  Further restrictions on the
+individuals included in the statistics can be based on any quantity
+that the program knows about.  The program will optionally print out
+the names of all the individuals included in the statistics.
+
 stats - a LifeLines database statistical extraction report program
         by Jim Eggert (eggertj@atc.ll.mit.edu)
         Version 1 (14 Dec 1992)
@@ -23,19 +36,6 @@ stats - a LifeLines database statistical extraction report program
                 Requires LifeLines v3.0.1 or later
         Version 8 (4 Sep 1995) added min and max, no printing of bogus 0s
         Version 9 (29 Sep 1995) fixed minor bugs, added indiset, substrings
-
-This LifeLines report program computes mean statistics of various
-quantities binned over other quantities.  The quantities it knows
-about are ages at and dates of birth, christening, first and last
-marriage, first and last child's birth, death, burial, and today; the
-number of children, siblings, and marriages; and sex, surname, first
-name, soundex, and any simple GEDCOM tag.  These can be combined
-nearly arbitrarily and evaluated over the whole database, or
-restricted to ancestors or descendants of a chosen individual or to
-members of a predetermined set.  Further restrictions on the
-individuals included in the statistics can be based on any quantity
-that the program knows about.  The program will optionally print out
-the names of all the individuals included in the statistics.
 
 For example, you can produce statistics of
     the age at death of as a function of birth year,

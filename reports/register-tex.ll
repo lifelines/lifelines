@@ -6,6 +6,12 @@
  * @output         LaTeX
  * @description    
 **
+** This report prints, in book format, information about all descendants of a
+** person and all of their spouses.  It tries to understand as many different
+** GEDCOM tags as possible.  All source iformation (SOUR lines) is in the
+** footnotes.
+** The output is in LaTeX format.  
+**
 ** register-tex
 **
 ** Version 2  24 Feb 1993

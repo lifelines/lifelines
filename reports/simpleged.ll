@@ -6,11 +6,11 @@
  * @output         GEDCOM
  * @description    
 
-simpleged
-
 This program generates a simple GEDCOM file from a database.  It can
 be modified to convert your own LifeLines database formats to other
 GEDCOM formats.
+
+simpleged
 
 Written by Tom Wetmore, July 1993.
 */

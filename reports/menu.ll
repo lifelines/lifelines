@@ -6,6 +6,8 @@
  * @output         GUI
  * @description    
 
+   Menu driven shell for LifeLines report programs
+
 menu.ll - Menu driven shell for LifeLines report programs
 
 To use this shell, rename "proc main()" in a report to "proc <call_name>()",

@@ -5,7 +5,11 @@
  * @category       
  * @output         Text
  * @description    
-
+ *
+ *   It will produce a report of all descendents of a person,
+ *   and is presently designed for 16 pitch, HP laserjet III.
+ *   This report produces an ASCII file, in output format.
+ *
  *   bkdes16-1
  *
  *   Code by Tom Wetmore, ttw@cbnewsl.att.com
@@ -16,10 +20,6 @@
  *   version one of this report was written by Tom Wetmore, in 1990,
  *   and it has been modified many times since.
  *
- *   It will produce a report of all descendents of a person,
- *   and is presently designed for 16 pitch, HP laserjet III.
- *
- *   This report produces an ASCII file, in output format.
  */
  
 proc main ()

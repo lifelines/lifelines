@@ -6,7 +6,7 @@
  * @output         nroff
  * @description    
 
- * alllines - This program shows all ancestral lines of a specified person
+ * This program shows all ancestral lines of a specified person
  * using a pseudo-Register format.
  *
  * Output is in nroff format.  This may change to something more generic.

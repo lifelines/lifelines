@@ -6,6 +6,7 @@
  * @output         TinyTafel
  * @description    
 
+This report will produce a tinytafel report on a person.
 
 tinytafel1
 

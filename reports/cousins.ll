@@ -6,8 +6,12 @@
  * @output         Text
  * @description    
 
-  cousins -- Finds the relationship between two persons in a
-  LifeLines database.  In the cases where the two persons are
+  Finds the relationship between two persons in a
+  LifeLines database.   If there is no common ancestor, the program
+  will attempt to find a sequence of genetic relations that link the two
+  persons.
+
+  In the cases where the two persons are
   genetically related (have a common ancestor), the program will
   find and display the relationship.  If the two persons are not
   genetically related, the program will attempt to discover a

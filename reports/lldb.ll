@@ -4,6 +4,11 @@
  * @author   Nozell 
  * @category palmpilot
  * @output   CSV for palmpilot
+ * @description
+ *
+ *   This program produces a report of all INDI's in the database, with
+ *   sorted names as output for inport into Tom Dyas' Open Source DB
+ *   PalmOS app.  
  *
  *   lldb.ll V1.02
  *
@@ -50,6 +55,9 @@
  *   Updated URLs
  * 
  *  $Log$
+ *  Revision 1.6  2003/01/19 02:50:23  dr_doom
+ *  move 1 paragraph description to immediately before @description  for index.html
+ *
  *  Revision 1.5  2000/11/28 21:39:45  nozell
  *  Add keyword tags to all reports
  *  Extend the report script menu to display script output format

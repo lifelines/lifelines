@@ -6,22 +6,21 @@
  * @output         nroff
  * @description    
 
+This program produces a report of all descendents of a given person,
+and is presently designed for 12 pitch, HP laserjet III, for printing
+a book about that person.  All NOTE and CONT lines are included in the
+report, along with the vital statistics, occupations, immigrations,
+attributes, and wills.
+At the end of the report is a sorted listing of names of everyone
+mentioned, with reference numbers giving the first occurrences of all
+the names.
+
 
 regvital
 
 version 1 by Tom Wetmore
 version 2 by Cliff Manis
 version 3 by John Chandler, 1994
-
-This program produces a report of all descendents of a given person,
-and is presently designed for 12 pitch, HP laserjet III, for printing
-a book about that person.  All NOTE and CONT lines are included in the
-report, along with the vital statistics, occupations, immigrations,
-attributes, and wills.
-
-At the end of the report is a sorted listing of names of everyone
-mentioned, with reference numbers giving the first occurrences of all
-the names.
 
 This program has paginated output with a footer and header.
 

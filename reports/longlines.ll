@@ -5,14 +5,14 @@
  * @category       
  * @output         Text
  * @description    
+
+Find the maximal-length male and female lineages in the database.
+Optionally, find the maximal-length lineage through a specified ancestor.
  
 longlines
 
 Version 1 - 1994 May 19 - John F. Chandler
 Version 2 - 2000 May 4 - John F. Chandler
-
-Find the maximal-length male and female lineages in the database.
-Optionally, find the maximal-length lineage through a specified ancestor.
 
 This program works only with LifeLines.
 

@@ -6,6 +6,10 @@
  * @output         nroff
  * @description    
  *
+ *   This report program produces a Family Group Sheet for the selected
+ *   individual, with options for generating sheets for married children
+ *   of the individual, and their children, etc.
+ *
  *   famrep6
  *
  *   Code by James P. Jones, jjones@nas.nasa.gov

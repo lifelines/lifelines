@@ -6,9 +6,8 @@
  * @output         RSL format
  * @description    
 
-rslgen - a LifeLines report program to aid in the generation of
+a LifeLines report program to aid in the generation of
 Roots Surname List (RSL) submissions.
-
 Given a person, this generates a RSL-like submission for that person and
 his/her ancestors.  The output will likely need considerable hand editing,
 but that is how it is.  If you need to know what the RSL is, I have enclosed

@@ -7,6 +7,12 @@
  * @description    
 
 
+This program helps you merge IGI data.  IGI data consists of "families"
+which are actually events.  A real family may be documented by several
+events in the IGI database, and thus be represented by several "families".
+This program will help you to locate and merge those "families" back into
+real families again.
+
 igi-merge - a LifeLines IGI database merging program
         by Jim Eggert (eggertj@atc.ll.mit.edu)
         Version 1,  2 February 1993  Requires LifeLines 2.3.3 or later.
@@ -15,12 +21,6 @@ igi-merge - a LifeLines IGI database merging program
                                      added windup and restart
         Version 4,  9 November 1994  Requires LifeLines 3.0.1 or later.
                                      Minor windup bug fix.
-
-This program helps you merge IGI data.  IGI data consists of "families"
-which are actually events.  A real family may be documented by several
-events in the IGI database, and thus be represented by several "families".
-This program will help you to locate and merge those "families" back into
-real families again.
 
 The program locates candidate "families" to be merged by comparing the
 soundex, double initials of husband to husband and wife to wife, and

@@ -6,14 +6,15 @@
  * @output         GEDCOM
  * @description    
 
-formatted_gedcom - a LifeLines formatted GEDCOM listing program
-         by Jim Eggert (eggertj@atc.ll.mit.edu)
-         Version 1,  7 September 1993
-
 This program outputs a LifeLines database in modified GEDCOM format.
 Two additions to GEDCOM are made: an inter-record delimiter and a
 level indenter.  These are set up as global parameters and initialized
 at the beginning of the main() procedure.
+
+formatted_gedcom - a LifeLines formatted GEDCOM listing program
+         by Jim Eggert (eggertj@atc.ll.mit.edu)
+         Version 1,  7 September 1993
+
 
 The header() procedure writes a GEDCOM header.  You will definitely
 want to edit this part of the program to reflect your name and

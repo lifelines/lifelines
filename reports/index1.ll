@@ -6,6 +6,11 @@
  * @output         Text
  * @description    
  *
+ *   This program produces a report of all INDI's in the database, with
+ *   sorted names as output.
+ *   It is presently designed for 12 pitch, HP laserjet III,
+ *   for printing a index of person in the database (ASCII output).
+ *
  *   index1
  *
  *   Code by Tom Wetmore, ttw@cbnewsl.att.com
@@ -15,14 +20,6 @@
  *
  *   version one of this report was written by Tom Wetmore, in 1990,
  *   and it has been modified many times since.
- *
- *   It will produce a report of all INDI's in the database, with
- *   sorted names as output.
- *
- *   It is presently designed for 12 pitch, HP laserjet III,
- *   for printing a index of person in the database.
- *
- *   It will produce ASCII file output.
  *
  */
 

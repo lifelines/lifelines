@@ -6,6 +6,10 @@
  * @output         Text
  * @description    
 
+This program prints out a descendants report, assigning a d'Aboville,
+Henry, modified Henry, or modern Henry code to the individuals.  The
+chosen ancestor, and all of his/her spouses, descendants, and
+descendants' spouses are included in the report.
 
 desc-henry - a LifeLines descendants listing program using Henry codes
     by Jim Eggert (eggertj@atc.ll.mit.edu)
@@ -15,11 +19,6 @@ desc-henry - a LifeLines descendants listing program using Henry codes
     Version 6, ???????????
     Version 7, 17 Mar 1995 (added grouped code option)
     Version 8,  6 Jun 1995 (added numbering options)
-
-This program prints out a descendants report, assigning a d'Aboville,
-Henry, modified Henry, or modern Henry code to the individuals.  The
-chosen ancestor, and all of his/her spouses, descendants, and
-descendants' spouses are included in the report.
 
 Some sample codes are:
             d'Aboville     Henry     modified Henry  modern Henry

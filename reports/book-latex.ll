@@ -6,11 +6,18 @@
 ** @output         LaTeX
 ** @description    
 **
+** Generates really spiffy register reports for formatting with LaTex. Reports
+** read like a book. Includes source citation, footnotes, etc. Register
+** reports are either descendent or ancestor/ahnentafel style.
+
 ** $Id$
 ** 
 ** SourceForge Versions:
 **
 ** $Log$
+** Revision 1.9  2003/01/19 02:50:23  dr_doom
+** move 1 paragraph description to immediately before @description  for index.html
+**
 ** Revision 1.8  2001/10/03 02:58:55  dabright
 **         * reports/book-latex.ll: Restored some previous additions
 ** 	to this report. The update from Dennis Nicklaus on 12 Aug 2001

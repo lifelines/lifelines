@@ -6,7 +6,10 @@
  * @output         Text
  * @description    
 
-bias
+Ever notice that certain families seem to have all boys or all girls?
+Sometimes five or six in a row of all the same sex?  Is this a mere
+statistical fluctuation, or is something special happening?
+This program gives statistics for male vs female births.  
 
 Compute sex bias based on previous births
 

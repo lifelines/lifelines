@@ -6,6 +6,10 @@
  * @output         Text, 80 cols
  * @description    
  *
+ *   select and produce a ancestor report for the person selected.
+ *   Output is an ASCII file, and will probably need to be printed
+ *   using 10 or 12 pitch.
+ *
  *   4gen1
  *
  *   Code by Tom Wetmore, ttw@cbnewsl.att.com

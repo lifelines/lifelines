@@ -6,6 +6,10 @@
  * @output         Text, 132 cols
  * @description    
  *
+ *   This program will  produce a report of all the INDI's in the database,
+ *   in the format as seen at end of report.  May be sorted easily
+ *   to see the Father or Mother column sorted report.
+ *
  *   soundex-isfm
  *
  *   Code by Tom Wetmore, ttw@cbnewsl.att.com, 1991
@@ -13,10 +17,6 @@
  *   Modifications by Jim Eggert, atc.ll.mit.edu!eggertj Fri Feb 26 1993
  *
  *   This report works only with the LifeLines Genealogy program
- *
- *   It will produce a report of all the INDI's in the database,
- *   in the format as seen at end of report.  May be sorted easily
- *   to see the Father or Mother column sorted report.
  *
  *   This report can be used to output everyone in the database,
  *   or selected by a single soundex code.  The soundex code

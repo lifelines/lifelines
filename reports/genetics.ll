@@ -6,6 +6,11 @@
  * @output         Text
  * @description    
 
+This LifeLines report program computes the degree of blood relatedness
+between any two people in a database.  It does this by finding all the
+common ancestors, known or implied, and their ancestral distance along
+any known path to the two people. 
+
 genetics - a LifeLines report program to calculate degree of relatedness
         by Jim Eggert (eggertj@atc.ll.mit.edu)
         Version 1 (15 Sept 1995)

@@ -6,6 +6,14 @@
  * @output         nroff
  * @description    
  *
+ *   It will produce a report of all descendents of a person,
+ *   and is presently designed for 12 pitch, HP laserjet III,
+ *   for printing a book about that in ancestor.
+ *   It prints a sorts listing of names, at the end of the report
+ *   of everyone in the report.  All NOTE and CONT lines will
+ *   be printed in the this report.  This report will produced
+ *   a paginated output.
+ *
  *   regvital1
  *
  *   This report does have a footer and header

@@ -5,6 +5,11 @@
  * @category       
  * @output         Text
  * @description    
+ *
+ *   It will produce a report of all the numbers and names (INDI's)
+ *   in the database which have a "NOTE" line at level 1 in the record.
+ *   It is designed for 10 or 12 pitch, HP laserjet III, or any
+ *   other printer (ASCII output).
 
  *   hasnotes1
  *
@@ -14,14 +19,6 @@
  *   This report works only with the LifeLines Genealogy program
  *
  *   version one of this report was written by Tom Wetmore, in Sep 1992,
- *
- *   It will produce a report of all the numbers and names (INDI's)
- *   in the database which have a "NOTE" line at level 1 in the record.
- *
- *   It is designed for 10 or 12 pitch, HP laserjet III, or any
- *   other printer.
- *
- *   Output is an ASCII file.
  *
  */
 

@@ -6,6 +6,9 @@
  * @output         Text
  * @description    
 
+ *   This program will produce a report of all ancestors of a person,
+ *   and is presently designed for 10 or 12 pitch, HP laserjet III.
+
  *   showlines1
  *
  *   Code by Tom Wetmore, ttw@cbnewsl.att.com
@@ -14,8 +17,6 @@
  *
  *   version one of this report was written by Tom Wetmore, in 1991.
  *
- *   It will produce a report of all ancestors of a person,
- *   and is presently designed for 10 or 12 pitch, HP laserjet III.
  *
  *   Output is an ASCII file
  *
