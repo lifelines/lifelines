@@ -1,3 +1,14 @@
+2003-01-23 Steve Dum
+  
+        * ChangeLog reports/Makefile.am, reports/gen_index, 
+	  reports/ll.png, reports/boc.gif, reports/*.ll,
+
+	Modify Makefile.am to generate index.html file using perl
+	script gen_index for reports.
+	Add image files ll.png, boc.gif for use by index.html, and
+	modify all reports to have a 1 paragraph description following
+	the description tag.
+
 2003-01-23 Perry Rapp
 
 	* ChangeLog src/liflines/show.c:
