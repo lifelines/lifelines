@@ -10,6 +10,15 @@
 	New function string_node_in_internal_codeset to convert report
 	codeset to internal.
 
+	* ChangeLog build/msvc6/llines/llinesprj.dsp hdrs/interp.h
+	hdrs/llstdlib.h interp/Makefile.am interp/alloc.c
+	interp/interp.c interp/lex.c interp/yacc.h interp/yacc.y
+	liflines/pedigree.c stdlib/path.c
+	NEW: interp/parse.c
+	NEW: interp/parse.h:
+
+	Move more parse globals into parse context.
+
 2002-07-12 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog stdlib/icvt.c

@@ -109,6 +109,7 @@ char * dcngettext_null(const char *, const char *, const char *, unsigned long i
 /* path.c */
 STRING check_file_for_unicode(FILE * fp);
 INT chop_path(STRING path, STRING dirs);
+void closefp(FILE **pfp);
 STRING compress_path(CNSTRING path, INT len);
 STRING concat_path(CNSTRING dir, CNSTRING file, STRING buffer, INT buflen);
 BOOLEAN expand_special_fname_chars(STRING buffer, INT buflen);

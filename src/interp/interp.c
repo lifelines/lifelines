@@ -56,13 +56,11 @@
  that parseinfo currently has
 */
 STRING Pfname = NULL;	/* file to read program from */
-static TABLE filetab=0;
 TABLE proctab=0, functab=0;
 SYMTAB globtab; /* assume all zero is null SYMTAB */
 STRING progname = NULL;       /* starting program name */
 FILE *Poutfp = NULL;          /* file to write program output to */
 STRING Poutstr = NULL;	      /* string to write program output to */
-INT Plineno = 1;
 INT Perrors = 0;
 LIST Plist = NULL;     /* list of program files still to read */
 PNODE Pnode = NULL;           /* node being interpreted */
@@ -87,12 +85,12 @@ extern STRING badargs, badargx, nonrecx;
  * local function prototypes
  *********************************************/
 
-static STRING check_rpt_requires(STRING fname);
+static STRING check_rpt_requires(void *pactx, STRING fname);
 static void disp_symtab(STRING title, SYMTAB stab);
 static BOOLEAN disp_symtab_cb(STRING key, PVALUE val, VPTR param);
-static void parse_file(STRING ifile, LIST plist);
+static void parse_file(void *pactx, STRING ifile, LIST plist);
 static void progmessage(MSG_LEVEL level, STRING);
-static void remove_tables(void);
+static void remove_tables(void *pactx);
 static STRING vprog_error(PNODE node, STRING fmt, va_list args);
 
 /*********************************************
@@ -185,6 +183,7 @@ interp_program (STRING proc, INT nargs, VPTR *args, INT nifiles
 	INT i;
 	STRING ifile;
 	PNODE first, parm;
+	void * pactx = create_pactx();
 
 	pvalues_begin();
 
@@ -224,21 +223,20 @@ interp_program (STRING proc, INT nargs, VPTR *args, INT nifiles
 	on the list. - Perry, 2002.06.18
 	*/
 
-	filetab = create_table();
 	proctab = create_table();
 	create_symtab(&globtab);
 	functab = create_table();
 	initinterp();
 	while (!is_empty_list(plist)) {
 		ifile = (STRING) dequeue_list(plist);
-		if (!in_table(filetab, ifile)) {
+		if (!in_table(get_filetab(pactx), ifile)) {
 			STRING str;
-			insert_table_ptr(filetab, ifile, 0);
+			insert_table_ptr(get_filetab(pactx), ifile, 0);
 #ifdef DEBUG
 			llwprintf("About to parse file %s.\n", ifile);
 #endif
-			parse_file(ifile, plist);
-			if ((str = check_rpt_requires(ifile)) != 0) {
+			parse_file(pactx, ifile, plist);
+			if ((str = check_rpt_requires(pactx, ifile)) != 0) {
 				progmessage(MSG_ERROR, str);
 				goto interp_program_exit;
 			}
@@ -309,22 +307,19 @@ interp_program (STRING proc, INT nargs, VPTR *args, INT nifiles
 	Poutfp = NULL;
 
 interp_program_exit:
-	remove_tables();
+	remove_tables(pactx);
 	remove_symtab(&stab);
 	pvalues_end();
+	delete_pactx(pactx);
+	pactx=0;
 	return;
 }
 /*===========================================+
  * remove_tables - Remove interpreter's tables
  *==========================================*/
 static void
-remove_tables (void)
+remove_tables (void *pactx)
 {
-/* we can't free the keys in filetab, because the
-parser put those pointers into pvalues for files
-named in include statements */
-	remove_table(filetab, DONTFREE);
-	filetab=NULL;
 	/* proctab has PNODESs that yacc.y put in there */
 	remove_table(proctab, DONTFREE);
 	proctab=NULL;
@@ -335,28 +330,31 @@ named in include statements */
 }
 /*======================================+
  * parse_file - Parse single program file
+ *  pactx: [I/O] pointer to global parsing context
  *  ifile: [IN]  file to parse
  *  plist: [I/O] list of files still to parse
  * Parse file (yyparse may wind up adding entries to plist, via include statements)
  *=====================================*/
 static void
-parse_file (STRING ifile, LIST plist)
+parse_file (void *pactx, STRING ifile, LIST plist)
 {
 	STRING programsdir = getoptstr("LLPROGRAMS", ".");
-	struct parseinfo pinfo;
-	memset(&pinfo, 0, sizeof(pinfo));
+	STRING fullpath=0;
+	FILE *fp;
 	Pfname = ifile;
 	if (!ifile || *ifile == 0) return;
 	Plist = plist;
-	pinfo.Pinfp = fopenpath(ifile, LLREADTEXT, programsdir, ".ll", (STRING *)NULL);
-	if (!pinfo.Pinfp) {
+	fp = fopenpath(ifile, LLREADTEXT, programsdir, ".ll", &fullpath);
+	if (!fp) {
 		llwprintf(_("Error: file <%s> not found.\n"), ifile);
 		Perrors++;
 		return;
 	}
-	Plineno = 1;
-	yyparse((void *)&pinfo);
-	fclose(pinfo.Pinfp);
+	set_infp(pactx, fp, ifile, fullpath);
+	strfree(&fullpath);
+	adj_lineno(pactx, +1);
+	yyparse(pactx);
+	close_infp(pactx);
 }
 /*====================================+
  * interp_main -- Interpreter main proc
@@ -1760,20 +1758,20 @@ vprog_error (PNODE node, STRING fmt, va_list args)
 	return msgbuff;
 }
 /*=============================================+
- * handle_global -- declare global variable
- * Created: 2002/06/12, Perry Rapp (pulled out of yacc.y)
+ * pa_handle_global -- declare global variable
+ * Called directly from generated parser code (ie, from code in yacc.y)
  *=============================================*/
 void
-handle_global (STRING iden)
+pa_handle_global (STRING iden)
 {
 	insert_symtab(globtab, iden, create_pvalue_any());
 }
 /*=============================================+
- * handle_option -- process option specified in report
- * Created: 2001/11/11, Perry Rapp
+ * pa_handle_option -- process option specified in report
+ * Called directly from generated parser code (ie, from code in yacc.y)
  *=============================================*/
 void
-handle_option (PVALUE optval)
+pa_handle_option (PVALUE optval)
 {
 	STRING optstr;
 	ASSERT(ptype(optval)==PSTRING); /* grammar only allows strings */
@@ -1787,12 +1785,11 @@ handle_option (PVALUE optval)
 /*=============================================+
  * set_rptfile_prop -- set a property for a report file
  * These are stored in a table, hanging off the entry in the filetab
- * Created: 2002/06/12, Perry Rapp
  *=============================================*/
 void
-set_rptfile_prop (STRING fname, STRING key, STRING value)
+set_rptfile_prop (void *pactx, STRING fname, STRING key, STRING value)
 {
-	VPTR * ptr = access_value_ptr(filetab, fname);
+	VPTR * ptr = access_value_ptr(get_filetab(pactx), fname);
 	TABLE tabprop;
 	if (!*ptr) {
 		tabprop = create_table();
@@ -1804,38 +1801,41 @@ set_rptfile_prop (STRING fname, STRING key, STRING value)
 	
 }
 /*=============================================+
- * handle_char_encoding -- report command char_encoding("...")
+ * pa_handle_char_encoding -- report command char_encoding("...")
  *  parse-time handling of report command
+ *  node:   [IN]  current parse node
+ *  vpinfo: [I/O] pointer to parseinfo structure (parse globals)
+ * Called directly from generated parser code (ie, from code in yacc.y)
  *=============================================*/
 void
-handle_char_encoding (PNODE node)
+pa_handle_char_encoding (void *pactx, PNODE node)
 {
 	STRING fname = ifname(node);
 	PVALUE pval = ivalue(node);
 	STRING ccs;
 	ASSERT(ptype(pval)==PSTRING); /* grammar only allows strings */
 	ccs = pvalue(pval);
-	set_rptfile_prop(fname, strsave("char_encoding"), strsave(ccs));
+	set_rptfile_prop(pactx, fname, strsave("char_encoding"), strsave(ccs));
 }
 /*=============================================+
- * string_node_in_internal_codeset -- make string node
+ * make_internal_string_node -- make string node
  *  do any needed codeset conversion here
  *  lexical analysis time (same as parse-time) handling of string constants
  *=============================================*/
 PNODE
-string_node_in_internal_codeset (STRING str)
+make_internal_string_node (void *pactx, STRING str)
 {
 	/*
 	TODO: look up codeset of current report file
 	*/
-	return string_node(str);
+	return string_node(pactx, str);
 }
 /*=============================================+
- * handle_include -- report command include("...")
+ * pa_handle_include -- report command include("...")
  *  parse-time handling of report command
  *=============================================*/
 void
-handle_include (PNODE node)
+pa_handle_include (PNODE node)
 {
 	STRING fname = ifname(node); /* current file */
 	PVALUE pval = ivalue(node);
@@ -1850,11 +1850,12 @@ handle_include (PNODE node)
 	enqueue_list(Plist, newfname);
 }
 /*=============================================+
- * handle_require -- report command require("...")
- * Created: 2002/06/12, Perry Rapp
+ * pa_handle_require -- report command require("...")
+ *  pactx: [I/O] pointer to parseinfo structure (parse globals)
+ *  node:  [IN]  current parse node
  *=============================================*/
 void
-handle_require (PNODE node)
+pa_handle_require (void *pactx, PNODE node)
 {
 	char propname[128];
 	STRING fname = ifname(node);
@@ -1864,17 +1865,33 @@ handle_require (PNODE node)
 	str = pvalue(pval);
 	llstrncpy(propname, "requires_", sizeof(propname));
 	llstrapp(propname, sizeof(propname), str);
-	set_rptfile_prop(fname, strsave(propname), strsave(str));
+	set_rptfile_prop(pactx, fname, strsave(propname), strsave(str));
+}
+/*=============================================+
+ * parse_error -- handle bison parse error
+ *  pactx: [I/O] pointer to parseinfo structure (parse globals)
+ *  yyloc: [IN]  token location
+ *  node:  [IN]  current parse node
+ *=============================================*/
+void
+parse_error (void *pactx, YYLTYPE *ploc, STRING str)
+{
+	STRING ifile, fullpath;
+	INT lineno = get_lineno(pactx);
+	get_infp_info(pactx, &ifile, &fullpath);
+
+	/* TO DO - how to pass current pnode ? */
+	prog_error(NULL, "Syntax Error (%s): %s: line %d\n", str, fullpath, lineno);
+	Perrors++;
 }
 /*=============================================+
  * check_rpt_requires -- check any prerequisites for
  *  this report file -- return desc. string if fail
- * Created: 2002/06/12, Perry Rapp
  *=============================================*/
 static STRING
-check_rpt_requires (STRING fname)
+check_rpt_requires (void *pactx, STRING fname)
 {
-	TABLE tab = (TABLE)valueof_ptr(filetab, fname);
+	TABLE tab = (TABLE)valueof_ptr(get_filetab(pactx), fname);
 	STRING str, propstr;
 	INT ours=0, desired=0;
 	STRING optr=LIFELINES_REPORTS_VERSION;

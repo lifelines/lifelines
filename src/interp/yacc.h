@@ -1,5 +1,5 @@
-#ifndef BISON_______INTERP_YACC_H
-# define BISON_______INTERP_YACC_H
+#ifndef BISON_YACC_H
+# define BISON_YACC_H
 
 # ifndef YYSTYPE
 #  define YYSTYPE int
@@ -37,4 +37,4 @@
 # define	FCONS	286
 
 
-#endif /* not BISON_______INTERP_YACC_H */
+#endif /* not BISON_YACC_H */

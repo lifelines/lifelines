@@ -108,7 +108,6 @@ static DISPNODE Root = 0; /* cached tree we display */
 /*=================================================
  * alloc_displaynode -- get new displaynode
  *  In preparation for using a block allocator
- * Created: 2001/04/14, Perry Rapp
  *===============================================*/
 static DISPNODE
 alloc_displaynode (void)
@@ -123,7 +122,6 @@ alloc_displaynode (void)
 /*========================================
  * free_displaynode -- return displaynode to free-list
  * (see alloc_displaynode comments)
- * Created: 2001/04/04, Perry Rapp
  *======================================*/
 static void
 free_displaynode (DISPNODE tn)
@@ -139,7 +137,6 @@ free_displaynode (DISPNODE tn)
 }
 /*=================================================
  * add_children -- add children to tree recursively
- * Created: 2000/12/07, Perry Rapp
  *===============================================*/
 static DISPNODE
 add_children (NODE indi, INT gen, INT maxgen, INT * count)
@@ -177,7 +174,6 @@ add_children (NODE indi, INT gen, INT maxgen, INT * count)
 /*===========================
  * text_to_list -- Split text into list of lines
  *  each no more than width
- * Created: 2001/04/15, Perry Rapp
  *=========================*/
 static LIST
 text_to_list (STRING text, INT width)
@@ -195,7 +191,6 @@ text_to_list (STRING text, INT width)
  * NB: We also build list from last to first, so client can use
  *  FORLIST traversal (which is backwards)
  *  TO DO: Break at whitespace
- * Created: 2001/04/15, Perry Rapp
  *=================================================*/
 static void
 append_to_text_list (LIST list, STRING text, INT width, BOOLEAN newline)
@@ -252,7 +247,6 @@ append_to_text_list (LIST list, STRING text, INT width, BOOLEAN newline)
  *  dnode tree
  * if a line overflows, give it succeeding sibling dnodes
  * also, check for subordinate CONT & CONC dnodes to be assimilated
- * Created: 2001/04/15, Perry Rapp
  *===============================================*/
 static DISPNODE
 add_dnodes (NODE node, INT gen, INT maxgen, INT * count, CANVASDATA canvas)
@@ -392,7 +386,6 @@ add_dnodes (NODE node, INT gen, INT maxgen, INT * count, CANVASDATA canvas)
 }
 /*=================================================
  * count_nodes -- count descendent nodes
- * Created: 2001/01/27, Perry Rapp
  *===============================================*/
 static void
 count_nodes (NODE node, INT gen, INT maxgen, INT * count)
@@ -408,7 +401,6 @@ count_nodes (NODE node, INT gen, INT maxgen, INT * count)
 }
 /*===============================================
  * add_parents -- add parents to tree recursively
- * Created: 2000/12/07, Perry Rapp
  *=============================================*/
 static DISPNODE
 add_parents (NODE indi, INT gen, INT maxgen, INT * count)

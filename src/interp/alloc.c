@@ -104,6 +104,7 @@ typedef struct pn_block *PN_BLOCK;
 static PNODE alloc_pnode_memory(void);
 static void clear_error_strings(void);
 static void clear_pnode(PNODE node);
+static PNODE create_pnode(void *pactx, INT type);
 static void delete_pnode(PNODE node);
 static void free_pnode_memory(PNODE node);
 static void set_parents(PNODE body, PNODE node);
@@ -207,15 +208,17 @@ free_all_pnodes (void)
  * create_pnode -- Create PNODE node
  * 2001/01/21 changed to block allocator
  *================================*/
-PNODE
-create_pnode (INT type)
+static PNODE
+create_pnode (void *pactx, INT type)
 {
 	PNODE node = alloc_pnode_memory();
+	STRING ifile, fullpath;
+	get_infp_info(pactx, &ifile, &fullpath);
 	itype(node) = type;
 	iprnt(node) = NULL;
 	inext(node) = NULL;
-	iline(node) = Plineno;
-	ifname(node) = Pfname;
+	iline(node) = get_lineno(pactx);
+	ifname(node) = fullpath;
 	node->i_word1 = node->i_word2 = node->i_word3 = NULL;
 	node->i_word4 = node->i_word5 = NULL;
 	return node;
@@ -250,23 +253,25 @@ delete_pnode (PNODE node)
  *  a static buffer
  *================================*/
 PNODE
-string_node (STRING str)
+string_node (void *pactx, STRING str)
 {
-	PNODE node = create_pnode(ISCONS);
+	PNODE node = create_pnode(pactx, ISCONS);
 	ASSERT(str); /* we're not converting NULL to "" because nobody passes us NULL */
 	ivaluex(node) = create_pvalue_from_string(str);
 	return node;
 }
 /*========================================
  * children_node -- Create child loop node
+ *  pactx: [I/O] pointer to parseinfo structure (parse globals)
+ *  fexpr: [IN]  expr
+ *  cvar:  [IN]  child
+ *  nvar:  [IN]  counter
+ *  body:  [IN]  loop body statements
  *======================================*/
 PNODE
-children_node (PNODE fexpr,     /* expr */
-               STRING cvar,     /* child */
-               STRING nvar,     /* counter */
-               PNODE body)      /* loop body */
+children_node (void *pactx, PNODE fexpr, STRING cvar, STRING nvar, PNODE body)
 {
-	PNODE node = create_pnode(ICHILDREN);
+	PNODE node = create_pnode(pactx, ICHILDREN);
 	iloopexp(node) = (VPTR) fexpr;
 	ichild(node) = (VPTR) cvar;
 	inum(node) = (VPTR) nvar;
@@ -276,15 +281,17 @@ children_node (PNODE fexpr,     /* expr */
 }
 /*========================================
  * spouses_node -- Create spouse loop node
+ *  pactx: [IN]  pointer to parseinfo structure (parse globals)
+ *  pexpr: [IN]  expr
+ *  svar:  [IN]  spouse
+ *  fvar:  [IN]  family
+ *  nvar:  [IN]  counter
+ *  body:  [IN]  loop body statements
  *======================================*/
 PNODE
-spouses_node (PNODE pexpr,      /* expr */
-              STRING svar,      /* spouse */
-              STRING fvar,      /* family */
-              STRING nvar,      /* counter */
-              PNODE body)       /* body */
+spouses_node (void *pactx, PNODE pexpr, STRING svar, STRING fvar, STRING nvar, PNODE body)
 {
-	PNODE node = create_pnode(ISPOUSES);
+	PNODE node = create_pnode(pactx, ISPOUSES);
 	iloopexp(node) = (VPTR) pexpr;
 	ispouse(node) = (VPTR) svar;
 	ifamily(node) = (VPTR) fvar;
@@ -295,15 +302,17 @@ spouses_node (PNODE pexpr,      /* expr */
 }
 /*=========================================
  * families_node -- Create family loop node
+ *  pactx: [IN]  pointer to parseinfo structure (parse globals)
+ *  pexpr: [IN]  expr
+ *  fvar:  [IN]  family
+ *  svar:  [IN]  spouse
+ *  nvar:  [IN]  counter
+ *  body:  [IN]  loop body statements
  *=======================================*/
 PNODE
-families_node (PNODE pexpr,     /* expr */
-               STRING fvar,     /* family */
-               STRING svar,     /* spouse */
-               STRING nvar,     /* counter */
-               PNODE body)      /* body */
+families_node (void *pactx, PNODE pexpr, STRING fvar, STRING svar, STRING nvar, PNODE body)
 {
-	PNODE node = create_pnode(IFAMILIES);
+	PNODE node = create_pnode(pactx, IFAMILIES);
 	iloopexp(node) = (VPTR) pexpr;
 	ifamily(node) = (VPTR) fvar;
 	ispouse(node) = (VPTR) svar;
@@ -314,15 +323,17 @@ families_node (PNODE pexpr,     /* expr */
 }
 /*=========================================
  * fathers_node -- Create fathers loop node
+ *  pactx: [IN]  pointer to parseinfo structure (parse globals)
+ *  pexpr, [IN]  expression
+ *  pvar:  [IN]  father
+ *  fvar:  [IN]  family
+ *  nvar:  [IN]  counter
+ *  body:  [IN]  loop body statements
  *=======================================*/
 PNODE
-fathers_node (PNODE pexpr,      /* expr */
-              STRING pvar,      /* father */
-              STRING fvar,      /* family */
-              STRING nvar,      /* counter */
-              PNODE body)       /* body */
+fathers_node (void *pactx, PNODE pexpr, STRING pvar, STRING fvar, STRING nvar, PNODE body)
 {
-	PNODE node = create_pnode(IFATHS);
+	PNODE node = create_pnode(pactx, IFATHS);
 	iloopexp(node) = (VPTR) pexpr;
 	iiparent(node) = (VPTR) pvar;
 	ifamily(node) = (VPTR) fvar;
@@ -333,15 +344,17 @@ fathers_node (PNODE pexpr,      /* expr */
 }
 /*=========================================
  * mothers_node -- Create mothers loop node
+ *  pactx: [IN]  pointer to parseinfo structure (parse globals)
+ *  pexpr, [IN]  expression
+ *  pvar:  [IN]  mother
+ *  fvar:  [IN]  family
+ *  nvar:  [IN]  counter
+ *  body:  [IN]  loop body statements
  *=======================================*/
 PNODE
-mothers_node (PNODE pexpr,      /* expr */
-              STRING pvar,      /* mother */
-              STRING fvar,      /* family */
-              STRING nvar,      /* counter */
-              PNODE body)       /* body */
+mothers_node (void *pactx, PNODE pexpr, STRING pvar, STRING fvar, STRING nvar, PNODE body)
 {
-	PNODE node = create_pnode(IMOTHS);
+	PNODE node = create_pnode(pactx, IMOTHS);
 	iloopexp(node) = (VPTR) pexpr;
 	iiparent(node) = (VPTR) pvar;
 	ifamily(node) = (VPTR) fvar;
@@ -352,14 +365,16 @@ mothers_node (PNODE pexpr,      /* expr */
 }
 /*=========================================
  * parents_node -- Create parents loop node
+ *  pactx: [IN]  pointer to parseinfo structure (parse globals)
+ *  pexpr, [IN]  expression
+ *  fvar:  [IN]  family
+ *  nvar:  [IN]  counter
+ *  body:  [IN]  loop body statements
  *=======================================*/
 PNODE
-parents_node (PNODE pexpr,      /* expr */
-              STRING fvar,      /* family */
-              STRING nvar,      /* counter */
-              PNODE body)       /* body */
+parents_node (void *pactx, PNODE pexpr, STRING fvar, STRING nvar, PNODE body)
 {
-	PNODE node = create_pnode(IFAMCS);
+	PNODE node = create_pnode(pactx, IFAMCS);
 	iloopexp(node) = (VPTR) pexpr;
 	ifamily(node) = (VPTR) fvar;
 	inum(node) = (VPTR) nvar;
@@ -369,15 +384,17 @@ parents_node (PNODE pexpr,      /* expr */
 }
 /*========================================
  * forindiset_node -- Create set loop node
+ *  pactx: [IN]  pointer to parseinfo structure (parse globals)
+ *  iexpr, [IN]  expression
+ *  ivar:  [IN]  person
+ *  vvar:  [IN]  value
+ *  nvar:  [IN]  counter
+ *  body:  [IN]  loop body statements
  *======================================*/
 PNODE
-forindiset_node (PNODE iexpr,   /* expr */
-                 STRING ivar,   /* person */
-                 STRING vvar,   /* value */
-                 STRING nvar,   /* counter */
-                 PNODE body)    /* body */
+forindiset_node (void *pactx, PNODE iexpr, STRING ivar, STRING vvar, STRING nvar, PNODE body)
 {
-	PNODE node = create_pnode(ISET);
+	PNODE node = create_pnode(pactx, ISET);
 	iloopexp(node) = (VPTR) iexpr;
 	ielement(node) = (VPTR) ivar;
 	ivalvar(node) = (VPTR) vvar;
@@ -388,14 +405,16 @@ forindiset_node (PNODE iexpr,   /* expr */
 }
 /*======================================
  * forlist_node -- Create list loop node
+ *  pactx: [IN]  pointer to parseinfo structure (parse globals)
+ *  iexpr, [IN]  expression
+ *  evar:  [IN]  element
+ *  nvar:  [IN]  counter
+ *  body:  [IN]  loop body statements
  *====================================*/
 PNODE
-forlist_node (PNODE iexpr,      /* expr */
-              STRING evar,      /* element */
-              STRING nvar,      /* counter */
-              PNODE body)       /* body */
+forlist_node (void *pactx, PNODE iexpr, STRING evar, STRING nvar, PNODE body)
 {
-	PNODE node = create_pnode(ILIST);
+	PNODE node = create_pnode(pactx, ILIST);
 	iloopexp(node) = (VPTR) iexpr;
 	ielement(node) = (VPTR) evar;
 	inum(node) = (VPTR) nvar;
@@ -405,13 +424,15 @@ forlist_node (PNODE iexpr,      /* expr */
 }
 /*=========================================
  * forindi_node -- Create forindi loop node
+ *  pactx: [IN]  pointer to parseinfo structure (parse globals)
+ *  ivar,  [IN]  person
+ *  nvar:  [IN]  counter
+ *  body:  [IN]  loop body statements
  *=======================================*/
 PNODE
-forindi_node (STRING ivar,      /* pers */
-              STRING nvar,      /* counter */
-              PNODE body)       /* body */
+forindi_node (void *pactx, STRING ivar, STRING nvar, PNODE body)
 {
-	PNODE node = create_pnode(IINDI);
+	PNODE node = create_pnode(pactx, IINDI);
 	ielement(node) = (VPTR) ivar;
 	inum(node) = (VPTR) nvar;
 	ibody(node) = (VPTR) body;
@@ -420,14 +441,16 @@ forindi_node (STRING ivar,      /* pers */
 }
 /*=========================================
  * forsour_node -- Create forsour loop node
+ *  pactx: [IN]  pointer to parseinfo structure (parse globals)
+ *  svar,  [IN]  source
+ *  nvar:  [IN]  counter
+ *  body:  [IN]  loop body statements
  *=======================================*/
 PNODE
-forsour_node (STRING fvar,    /* fam */
-              STRING nvar,    /* counter */
-              PNODE body)     /* body */
+forsour_node (void *pactx, STRING svar, STRING nvar, PNODE body)
 {
-	PNODE node = create_pnode(ISOUR);
-	ielement(node) = (VPTR) fvar;
+	PNODE node = create_pnode(pactx, ISOUR);
+	ielement(node) = (VPTR) svar;
 	inum(node) = (VPTR) nvar;
 	ibody(node) = (VPTR) body;
 	set_parents(body, node);
@@ -435,14 +458,16 @@ forsour_node (STRING fvar,    /* fam */
 }
 /*=========================================
  * foreven_node -- Create foreven loop node
+ *  pactx: [IN]  pointer to parseinfo structure (parse globals)
+ *  evar,  [IN]  event
+ *  nvar:  [IN]  counter
+ *  body:  [IN]  loop body statements
  *=======================================*/
 PNODE
-foreven_node (STRING fvar,    /* fam */
-              STRING nvar,    /* counter */
-              PNODE body)     /* body */
+foreven_node (void *pactx, STRING evar, STRING nvar, PNODE body)
 {
-	PNODE node = create_pnode(IEVEN);
-	ielement(node) = (VPTR) fvar;
+	PNODE node = create_pnode(pactx, IEVEN);
+	ielement(node) = (VPTR) evar;
 	inum(node) = (VPTR) nvar;
 	ibody(node) = (VPTR) body;
 	set_parents(body, node);
@@ -450,14 +475,16 @@ foreven_node (STRING fvar,    /* fam */
 }
 /*=========================================
  * forothr_node -- Create forothr loop node
+ *  pactx: [IN]  pointer to parseinfo structure (parse globals)
+ *  ovar,  [IN]  other record
+ *  nvar:  [IN]  counter
+ *  body:  [IN]  loop body statements
  *=======================================*/
 PNODE
-forothr_node (STRING fvar,    /* fam */
-              STRING nvar,    /* counter */
-              PNODE body)     /* body */
+forothr_node (void *pactx, STRING ovar, STRING nvar, PNODE body)
 {
-	PNODE node = create_pnode(IOTHR);
-	ielement(node) = (VPTR) fvar;
+	PNODE node = create_pnode(pactx, IOTHR);
+	ielement(node) = (VPTR) ovar;
 	inum(node) = (VPTR) nvar;
 	ibody(node) = (VPTR) body;
 	set_parents(body, node);
@@ -465,13 +492,15 @@ forothr_node (STRING fvar,    /* fam */
 }
 /*=======================================
  * forfam_node -- Create forfam loop node
+ *  pactx: [IN]  pointer to parseinfo structure (parse globals)
+ *  fvar,  [IN]  family
+ *  nvar:  [IN]  counter
+ *  body:  [IN]  loop body statements
  *=====================================*/
 PNODE
-forfam_node (STRING fvar,    /* fam */
-             STRING nvar,    /* counter */
-             PNODE body)     /* body */
+forfam_node (void *pactx, STRING fvar, STRING nvar, PNODE body)
 {
-	PNODE node = create_pnode(IFAM);
+	PNODE node = create_pnode(pactx, IFAM);
 	ielement(node) = (VPTR) fvar;
 	inum(node) = (VPTR) nvar;
 	ibody(node) = (VPTR) body;
@@ -480,28 +509,32 @@ forfam_node (STRING fvar,    /* fam */
 }
 /*===========================================
  * fornotes_node -- Create fornotes loop node
+ *  pactx: [IN]  pointer to parseinfo structure (parse globals)
+ *  nexpr: [IN]  expression
+ *  vvar:  [IN]  value
+ *  body:  [IN]  loop body statements
  *=========================================*/
 PNODE
-fornotes_node (PNODE nexpr,   /* expr */
-               STRING vvar,   /* value */
-               PNODE body)    /* body */
+fornotes_node (void *pactx, PNODE nexpr, STRING vvar, PNODE body)
 {
-        PNODE node = create_pnode(INOTES);
-        iloopexp(node) = (VPTR) nexpr;
-        ielement(node) = (VPTR) vvar;
-        ibody(node) = (VPTR) body;
-        set_parents(body, node);
-        return node;
+	PNODE node = create_pnode(pactx, INOTES);
+	iloopexp(node) = (VPTR) nexpr;
+	ielement(node) = (VPTR) vvar;
+	ibody(node) = (VPTR) body;
+	set_parents(body, node);
+	return node;
 }
 /*===========================================
  * fornodes_node -- Create fornodes loop node
+ *  pactx: [IN]  pointer to parseinfo structure (parse globals)
+ *  nexpr: [IN]  expression
+ *  vvar:  [IN]  node (next level)
+ *  body:  [IN]  loop body statements
  *=========================================*/
 PNODE
-fornodes_node (PNODE nexpr,    /* expr */
-               STRING nvar,    /* node (next level) */
-               PNODE body)     /* body */
+fornodes_node (void *pactx, PNODE nexpr, STRING nvar, PNODE body)
 {
-	PNODE node = create_pnode(INODES);
+	PNODE node = create_pnode(pactx, INODES);
 	iloopexp(node) = (VPTR) nexpr;
 	ielement(node) = (VPTR) nvar;
 	ibody(node) = (VPTR) body;
@@ -510,14 +543,16 @@ fornodes_node (PNODE nexpr,    /* expr */
 }
 /*===========================================
  * traverse_node -- Create traverse loop node
+ *  pactx: [IN]  pointer to parseinfo structure (parse globals)
+ *  nexpr: [IN]  node
+ *  snode: [IN]  subnode
+ *  levv:  [IN]  level
+ *  body:  [IN]  loop body statements
  *=========================================*/
 PNODE
-traverse_node (PNODE nexpr,    /* node */
-               STRING snode,   /* subnode */
-               STRING levv,    /* level */
-               PNODE body)     /* body */
+traverse_node (void *pactx, PNODE nexpr, STRING snode, STRING levv, PNODE body)
 {
-	PNODE node = create_pnode(ITRAV);
+	PNODE node = create_pnode(pactx, ITRAV);
 	iloopexp(node) = (VPTR) nexpr;
 	ielement(node) = (VPTR) snode;
 	ilev(node) = (VPTR) levv;
@@ -529,9 +564,9 @@ traverse_node (PNODE nexpr,    /* node */
  * iden_node -- Create identifier node
  *==================================*/
 PNODE
-iden_node (STRING iden)
+iden_node (void *pactx, STRING iden)
 {
-	PNODE node = create_pnode(IIDENT);
+	PNODE node = create_pnode(pactx, IIDENT);
 	iident(node) = (VPTR) iden;
 	return node;
 }
@@ -539,9 +574,9 @@ iden_node (STRING iden)
  * icons_node -- Create integer node
  *================================*/
 PNODE
-icons_node (INT ival)
+icons_node (void *pactx, INT ival)
 {
-	PNODE node = create_pnode(IICONS);
+	PNODE node = create_pnode(pactx, IICONS);
 	ivaluex(node) = create_pvalue_from_int(ival);
 	return node;
 }
@@ -549,21 +584,23 @@ icons_node (INT ival)
  * fcons_node -- Create floating node
  *=================================*/
 PNODE
-fcons_node (FLOAT fval)
+fcons_node (void *pactx, FLOAT fval)
 {
-	PNODE node = create_pnode(IFCONS);
+	PNODE node = create_pnode(pactx, IFCONS);
 	ivaluex(node) = create_pvalue_from_float(fval);
 	return node;
 }
 /*===================================
  * proc_node -- Create procedure node
+ *  pactx: [I/O] pointer to parseinfo structure (parse globals)
+ *  name:  [IN]  proc name
+ *  parms: [IN]  param/s
+ *  body:  [IN]  body
  *=================================*/
 PNODE
-proc_node (STRING name,    /* proc name */
-           PNODE parms,    /* param/s */
-           PNODE body)     /* body */
+proc_node (void *pactx, STRING name, PNODE parms, PNODE body)
 {
-	PNODE node = create_pnode(IPDEFN);
+	PNODE node = create_pnode(pactx, IPDEFN);
 	iname(node) = (VPTR) name;
 	iargs(node) = (VPTR) parms;
 	ibody(node) = (VPTR) body;
@@ -572,13 +609,15 @@ proc_node (STRING name,    /* proc name */
 }
 /*==================================================
  * fdef_node -- Create user function definition node
+ *  pactx: [I/O] pointer to parseinfo structure (parse globals)
+ *  name:  [IN]  proc name
+ *  parms: [IN]  param/s
+ *  body:  [IN]  body
  *================================================*/
 PNODE
-fdef_node (STRING name,    /* proc name */
-           PNODE parms,    /* param/s */
-           PNODE body)     /* body */
+fdef_node (void *pactx, STRING name, PNODE parms, PNODE body)
 {
-	PNODE node = create_pnode(IFDEFN);
+	PNODE node = create_pnode(pactx, IFDEFN);
 	iname(node) = (VPTR) name;
 	iargs(node) = (VPTR) parms;
 	ibody(node) = (VPTR) body;
@@ -587,11 +626,12 @@ fdef_node (STRING name,    /* proc name */
 }
 /*=======================================================
  * func_node -- Create builtin or user function call node
- * STRING name:  [in] function name
- * PNODE elist:  [in] param(s)
+ *  pactx: [I/O] pointer to parseinfo structure (parse globals)
+ *  name:  [IN]  function name
+ *  elist: [IN]  param(s)
  *=====================================================*/
 PNODE
-func_node (STRING name, PNODE elist)
+func_node (void *pactx, STRING name, PNODE elist)
 {
 	PNODE node;
 	INT lo, hi, md=0, n, r;
@@ -599,7 +639,7 @@ func_node (STRING name, PNODE elist)
 
 /* See if the function is user defined */
 	if (in_table(functab, name)) {
-		node = create_pnode(IFCALL);
+		node = create_pnode(pactx, IFCALL);
 		iname(node) = (VPTR) name;
 		iargs(node) = (VPTR) elist;
 		ifunc(node) = valueof_ptr(functab, name);
@@ -626,15 +666,18 @@ func_node (STRING name, PNODE elist)
 		}
 	}
 	if (found) {
+		INT lineno = get_lineno(pactx);
+		STRING ifile, fullpath;
+		get_infp_info(pactx, &ifile, &fullpath); 
 		if ((n = num_params(elist)) < builtins[md].ft_nparms_min
 		    || n > builtins[md].ft_nparms_max) {
-			llwprintf(_("Error: file \"%s\": line %d: "), Pfname, Plineno);
+			llwprintf(_("Error: file \"%s\": line %d: "), ifile, lineno);
 			llwprintf("%s: must have %d to %d parameters (found with %d).\n"
 				, name, builtins[md].ft_nparms_min, builtins[md].ft_nparms_max
 				, n);
 			Perrors++;
 		}
-		node = create_pnode(IBCALL);
+		node = create_pnode(pactx, IBCALL);
 		iname(node) = (VPTR) name;
 		iargs(node) = (VPTR) elist;
 		ifunc(node) = (VPTR) builtins[md].ft_eval;
@@ -643,7 +686,7 @@ func_node (STRING name, PNODE elist)
 	}
 
 /* If neither make it a user call to undefined function */
-	node = create_pnode(IFCALL);
+	node = create_pnode(pactx, IFCALL);
 	iname(node) = (VPTR) name;
 	iargs(node) = (VPTR) elist;
 	ifunc(node) = NULL;
@@ -772,14 +815,15 @@ verify_builtins (void)
 }
 /*=============================
  * if_node -- Create an if node
- * PNODE cond:   [in] cond expr
- * PNODE tnode:  [in] then
- * PNODE enode:  [in] else
+ *  pactx: [I/O] pointer to parseinfo structure (parse globals)
+ *  cond:  [IN]  conditional expression governing if
+ *  tnode: [IN]  then statements
+ *  enode: [IN]  else statements
  *===========================*/
 PNODE
-if_node (PNODE cond, PNODE tnode, PNODE enode)
+if_node (void *pactx, PNODE cond, PNODE tnode, PNODE enode)
 {
-	PNODE node = create_pnode(IIF);
+	PNODE node = create_pnode(pactx, IIF);
 	icond(node) = (VPTR) cond;
 	ithen(node) = (VPTR) tnode;
 	ielse(node) = (VPTR) enode;
@@ -789,12 +833,14 @@ if_node (PNODE cond, PNODE tnode, PNODE enode)
 }
 /*================================
  * while_node -- Create while node
+ *  pactx: [I/O] pointer to parseinfo structure (parse globals)
+ *  cond:  [IN]  conditional expression governing while loop
+ *  body:  [IN]  body statements of while loop
  *==============================*/
 PNODE
-while_node (PNODE cond,     /* cond expr */
-            PNODE body)     /* body */
+while_node (void *pactx, PNODE cond, PNODE body)
 {
-	PNODE node = create_pnode(IWHILE);
+	PNODE node = create_pnode(pactx, IWHILE);
 	icond(node) = (VPTR) cond;
 	ibody(node) = (VPTR) body;
 	set_parents(body, node);
@@ -802,12 +848,14 @@ while_node (PNODE cond,     /* cond expr */
 }
 /*===================================
  * call_node -- Create proc call node
+ *  pactx: [I/O] pointer to parseinfo structure (parse globals)
+ *  name:  [IN]  procedure name
+ *  args:  [IN]  argument(s)
  *=================================*/
 PNODE
-call_node (STRING name,    /* proc name */
-           PNODE args)     /* arg/s */
+call_node (void *pactx, STRING name, PNODE args)
 {
-	PNODE node = create_pnode(IPCALL);
+	PNODE node = create_pnode(pactx, IPCALL);
 	iname(node) = (VPTR) name;
 	iargs(node) = (VPTR) args;
 	return node;
@@ -815,26 +863,26 @@ call_node (STRING name,    /* proc name */
 /*================================
  * break_node -- Create break node
  *==============================*/
-PNODE break_node (void)
+PNODE break_node (void *pactx)
 {
-	PNODE node = create_pnode(IBREAK);
+	PNODE node = create_pnode(pactx, IBREAK);
 	return node;
 }
 /*======================================
  * continue_node -- Create continue node
  *====================================*/
-PNODE continue_node (void)
+PNODE continue_node (void *pactx)
 {
-	PNODE node = create_pnode(ICONTINUE);
+	PNODE node = create_pnode(pactx, ICONTINUE);
 	return node;
 }
 /*==================================
  * return_node -- Create return node
  *================================*/
 PNODE
-return_node (PNODE args)
+return_node (void *pactx, PNODE args)
 {
-	PNODE node = create_pnode(IRETURN);
+	PNODE node = create_pnode(pactx, IRETURN);
 	iargs(node) = (VPTR) args;
 	return node;
 }

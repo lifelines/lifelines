@@ -30,7 +30,7 @@
  *   3.0.3 - 21 Sep 95
  *===========================================================*/
 
-#define YYSTYPE PNODE
+/*#define YYSTYPE PNODE*/
 
 #ifdef __OpenBSD__
 #define _XOPEN_SOURCE
@@ -43,26 +43,23 @@
 #include "gedcom.h"
 #include "cache.h"
 #include "interp.h"
-#include "yacc.h"
 #include "parse.h"
-
-void initlex (struct parseinfo *pinfo, int mode);
-
-extern INT Plineno;	/* program line number */
+#include "yacc.h"
 
 static INT Lexmode = FILEMODE;
 static STRING Lp;	/* pointer into program string */
 
 
-static INT inchar(FILE *infp);
-static int lowyylex(YYSTYPE * lvalp, void * parm);
+static INT inchar(void *pactx);
+static int lowyylex(void *pactx, YYSTYPE * lvalp);
 static BOOLEAN reserved(STRING, INT*);
-static void unreadchar(INT c, FILE * infp);
+static void unreadchar(void *pactx, INT c);
 
 /*============================
  * initlex -- Initialize lexer
  * TODO: 2002.07.14, Perry: This is not used -- find out intent
  *==========================*/
+#if UNUSED_CODE
 void
 initlex (struct parseinfo *pinfo, int mode)
 {
@@ -70,15 +67,16 @@ initlex (struct parseinfo *pinfo, int mode)
 	Lexmode = mode;
 	if (Lexmode == STRINGMODE) Lp = pinfo->Pinstr;
 }
+#endif
 /*===================================================
  * yylex -- High level lexer function (for debugging)
  *  lvalp:    [I/O] pointer to bison's data (primarily return value)
  *  yaccparm: [IN]  pointer to data passed by interp.c to bison's yyparse 
  *=================================================*/
 int
-yylex (YYSTYPE * lvalp, void * parm)
+yylex (YYSTYPE * lvalp, YYLTYPE *llocp, void * pactx)
 {
-	INT lex = lowyylex(lvalp, parm);
+	INT lex = lowyylex(pactx, lvalp);
 
 #ifdef DEBUG
 	if (isascii(lex))
@@ -100,33 +98,32 @@ is_iden_char (INT c, INT t)
 /*===========================
  * lowyylex -- Lexer function
  *=========================*/
-int
-lowyylex (YYSTYPE * lvalp, void * parm)
+static int
+lowyylex (void *pactx, YYSTYPE * lvalp)
 {
 	INT c=0, t=0, retval, mul;
 	extern INT Yival;
 	extern FLOAT Yfval;
 	static char tokbuf[200];	/* token buffer */
 	STRING p = tokbuf;
-	struct parseinfo * pinfo = (struct parseinfo *)parm;
-	FILE * infp = pinfo->Pinfp;
+	FILE * infp = get_infp(pactx);
 	/* TODO: pass report codeset thru to here, & on to the
 	string_node_in_internal_codeset calls below */
 
 	while (TRUE) {
-		while ((t = chartype(c = inchar(infp))) == WHITE)
+		while ((t = chartype(c = inchar(pactx))) == WHITE)
 			;
 		if (c != '/') break;
-		if ((c = inchar(infp)) != '*') {
-			unreadchar(c, infp);
+		if ((c = inchar(pactx)) != '*') {
+			unreadchar(pactx, c);
 			return '/';
 		}
 		/* inside a comment -- advance til end */
 		while (TRUE) {
-			while ((c = inchar(infp)) != '*' && c != EOF)
+			while ((c = inchar(pactx)) != '*' && c != EOF)
 				;
 			if (c == EOF) return 0;
-			while ((c = inchar(infp)) == '*')
+			while ((c = inchar(pactx)) == '*')
 				;
 			if (c == '/') break;
 			if (c == EOF) return 0;
@@ -141,10 +138,10 @@ lowyylex (YYSTYPE * lvalp, void * parm)
 				/* token overlong -- ignore end of it */
 				/* TODO: How can we force a parse error from here ? */
 			}
-			t = chartype(c = inchar(infp));
+			t = chartype(c = inchar(pactx));
 		}
 		*p = 0;
-		unreadchar(c, infp);
+		unreadchar(pactx, c);
 #ifdef DEBUG
 		llwprintf("in lex.c -- IDEN is %s\n", tokbuf);
 #endif
@@ -158,9 +155,9 @@ lowyylex (YYSTYPE * lvalp, void * parm)
 		FLOAT fdiv;
 		mul = 1;
 		if (t == '-') {
-			t = chartype(c = inchar(infp));
+			t = chartype(c = inchar(pactx));
 			if (t != '.' && t != DIGIT) {
-				unreadchar(c, infp);
+				unreadchar(pactx, c);
 				return '-';
 			}
 			mul = -1;
@@ -169,28 +166,28 @@ lowyylex (YYSTYPE * lvalp, void * parm)
 		while (t == DIGIT) {
 			whole = TRUE;
 			Yival = Yival*10 + c - '0';
-			t = chartype(c = inchar(infp));
+			t = chartype(c = inchar(pactx));
 		}
 		if (t != '.') {
-			unreadchar(c, infp);
+			unreadchar(pactx, c);
 			Yival *= mul;
 			*lvalp = NULL;
 			return ICONS;
 		}
-		t = chartype(c = inchar(infp));
+		t = chartype(c = inchar(pactx));
 		Yfval = 0.0;
 		fdiv = 1.0;
 		while (t == DIGIT) {
 			frac = TRUE;
 			Yfval = Yfval*10 + c - '0';
 			fdiv *= 10.;
-			t = chartype(c = inchar(infp));
+			t = chartype(c = inchar(pactx));
 		}
-		unreadchar(c, infp);
+		unreadchar(pactx, c);
 		if (!whole && !frac) {
-			unreadchar(c, infp);
+			unreadchar(pactx, c);
 			if (mul == -1) {
-				unreadchar('.', infp);
+				unreadchar(pactx, '.');
 				return '-';
 			} else
 				return '.';
@@ -202,14 +199,14 @@ lowyylex (YYSTYPE * lvalp, void * parm)
 	if (c == '"') {
 		p = tokbuf;
 		while (TRUE) {
-			while ((c = inchar(infp)) != EOF && c != '"' && c != '\\')
+			while ((c = inchar(pactx)) != EOF && c != '"' && c != '\\')
 				*p++ = c;
 			if (c == 0 || c == '"') {
 				*p = 0;
-				*lvalp = string_node_in_internal_codeset(tokbuf);
+				*lvalp = make_internal_string_node(pactx, tokbuf);
 				return SCONS;
 			}
-			switch (c = inchar(infp)) {
+			switch (c = inchar(pactx)) {
 			case 'n': *p++ = '\n'; break;
 			case 't': *p++ = '\t'; break;
 			case 'v': *p++ = '\v'; break;
@@ -220,7 +217,7 @@ lowyylex (YYSTYPE * lvalp, void * parm)
 			case '\\': *p++ = '\\'; break;
 			case EOF:
 				*p = 0;
-				*lvalp = string_node_in_internal_codeset(tokbuf);
+				*lvalp = make_internal_string_node(pactx, tokbuf);
 				return SCONS;
 			default:
 				*p++ = c; break;
@@ -286,10 +283,11 @@ reserved (STRING word,
 /*==============================================================
  * inchar -- Read char from input file/string; track line number
  *============================================================*/
-INT
-inchar (FILE *infp)
+static INT
+inchar (void *pactx)
 {
 	INT c;
+	FILE *infp = get_infp(pactx);
 #ifdef SKIPCTRLZ
 	do {
 #endif
@@ -300,18 +298,24 @@ inchar (FILE *infp)
 #ifdef SKIPCTRLZ
 	} while(c == 26);		/* skip CTRL-Z */
 #endif
-	if (c == '\n') Plineno++;
+	if (c == '\n') {
+		adj_lineno(pactx, +1);
+	}
 	return c;
 }
 /*================================================================
  * unreadchar -- Unread char from input file/string; track line number
  *==============================================================*/
-void
-unreadchar (INT c, FILE * infp)
+static void
+unreadchar (void *pactx, INT c)
 {
-	if (Lexmode == FILEMODE)
+	if (Lexmode == FILEMODE) {
+		FILE *infp = get_infp(pactx);
 		ungetc(c, infp);
-	else
+	} else {
 		Lp--;
-	if (c == '\n') Plineno--;
+	}
+	if (c == '\n') {
+		adj_lineno(pactx, -1);
+	}
 }

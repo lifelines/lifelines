@@ -268,6 +268,17 @@ fopenpath (STRING name,
 	if(pfname) *pfname = str;
 	return fopen(str, mode);
 }
+/*===========================================
+ * closefp -- Close file pointer & set pointer to zero
+ *=========================================*/
+void
+closefp (FILE **pfp)
+{
+	if (pfp && *pfp) {
+		fclose(*pfp);
+		*pfp = 0;
+	}
+}
 /*=================================================
  * lastpathname -- Return last component of a path
  * returns static buffer
