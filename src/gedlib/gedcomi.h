@@ -11,8 +11,6 @@ void dbnotify_close(void);
 
 /* keytonod.c */
 void cel_remove_record(CACHEEL cel, RECORD rec);
-void cel_set_record(CACHEEL cel, RECORD rec);
-
 NODE is_cel_loaded(CACHEEL cel);
 
 /* names.c */
@@ -25,7 +23,8 @@ void set_record_key_info(RECORD rec, char ntype, INT keynum);
 RECORD create_record_for_keyed_node(NODE node, CNSTRING key);
 RECORD create_record_for_unkeyed_node(NODE node);
 NODE is_record_temp(RECORD rec);
-void set_record_cache_info(RECORD rec, CACHEEL cel);
+void record_remove_cel(RECORD rec, CACHEEL cel);
+void record_set_cel(RECORD rec, CACHEEL cel);
 
 
 /* xreffile.c */

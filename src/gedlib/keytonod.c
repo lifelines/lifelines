@@ -676,8 +676,9 @@ add_to_direct (CACHE cache, CNSTRING key, INT reportmode)
 	ASSERT(rec);
 	/* record was just loaded, nztop should not need to load it */
 	cel = node_to_cache(cache, nztop(rec));
+	ASSERT(!crecord(cel));
 	/* node_to_cache did a first_direct call, so record in cache */
-	set_record_cache_info(rec, cel);
+	record_set_cel(rec, cel);
 	/* our new rec above has one reference, which is held by cel */
 	crecord(cel) = rec;
 	stdfree(rawrec);
@@ -762,7 +763,8 @@ get_record_for_cel (CACHEEL cel)
 	ASSERT(nxref(node));
 
 	rec = alloc_new_record();
-	set_record_cache_info(rec, cel);
+	record_set_cel(rec, cel);
+	crecord(cel) = rec;
 	key = node_to_key(node);
 
 	set_record_key_info(rec, key[0], atoi(key+1));
@@ -898,7 +900,9 @@ add_new_indi_to_cache (RECORD rec)
 	CACHEEL cel=0;
 	NODE root = is_record_temp(rec);
 	cel = node_to_cache(indicache, root);
-	set_record_cache_info(rec, cel);
+	ASSERT(!crecord(cel));
+	record_set_cel(rec, cel);
+	crecord(cel) = rec;
 }
 /*===========================================
  * fam_to_cache -- Add family to family cache
@@ -1136,6 +1140,7 @@ remove_cel_from_cache (CACHE cache, CACHEEL cel)
 	if (crecord(cel)) {
 		/* cel holds the original reference to the record */
 		RECORD rec = crecord(cel);
+		record_remove_cel(rec, cel);
 		delref_record(rec);
 		crecord(cel) = 0;
 	}
@@ -1394,18 +1399,4 @@ cel_remove_record (CACHEEL cel, RECORD rec)
 	ASSERT(rec);
 	ASSERT(crecord(cel) == rec);
 	crecord(cel) = 0;
-}
-/*==============================================
- * cel_set_record -- Link to specified record
- *  Requires non-null inputs
- *============================================*/
-void
-cel_set_record (CACHEEL cel, RECORD rec)
-{
-	ASSERT(cel);
-	ASSERT(rec);
-	if (crecord(cel) != rec) {
-		ASSERT(!crecord(cel));
-		crecord(cel) = rec;
-	}
 }

@@ -83,9 +83,9 @@ free_rec (RECORD rec)
 		that we're dying, so it doesn't point to us anymore */
 		cel_remove_record(rec->rec_cel, rec);
 		rec->rec_cel = 0; /* cel memory belongs to cache */
-	} else {
-		/* free record */
-		ASSERT(rec->rec_top);
+	}
+	if (rec->rec_top) {
+		/* free node tree */
 		free_nodes(rec->rec_top);
 		rec->rec_top = 0;
 	}
@@ -158,16 +158,26 @@ nzcel (RECORD rec)
 	return rec->rec_cel;
 }
 /*==============================================
- * set_record_cache_info -- Assign cache element to record
+ * record_set_cel -- Assign cache element to record
  *  both inputs must be valid (non-null)
  *============================================*/
 void
-set_record_cache_info (RECORD rec, CACHEEL cel)
+record_set_cel (RECORD rec, CACHEEL cel)
 {
 	ASSERT(rec && cel);
 	rec->rec_top = 0;
 	rec->rec_cel = cel;
-	cel_set_record(rec->rec_cel, rec);
+}
+/*==============================================
+ * record_remove_cel -- cache element is being cleared
+ *  both inputs must be valid (non-null)
+ *============================================*/
+void
+record_remove_cel (RECORD rec, CACHEEL cel)
+{
+	ASSERT(rec && cel);
+	ASSERT(rec->rec_cel == cel);
+	rec->rec_cel = 0;
 }
 /*===================================
  * set_record_key_info -- put key info into record

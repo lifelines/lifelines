@@ -1,3 +1,13 @@
+2005-02-02 Perry Rapp
+
+	* ChangeLog src/gedlib/gedcomi.h src/gedlib/keytonod.c
+	src/gedlib/record.c
+
+	Fix ASSERT crash when cache fills.
+	Remove function cel_set_record.
+	New function record_remove_cel.
+	Rename set_record_cache_info to record_set_cel;
+
 2005-02-01 Perry Rapp
 
 	* ChangeLog src/stdlib/table.c
