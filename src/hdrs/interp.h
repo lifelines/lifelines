@@ -156,6 +156,37 @@ extern TABLE functab;
 extern TABLE globtab;
 extern TABLE proctab;
 
+extern INT Plineno;
+extern FILE *Pinfp;
+extern FILE *Poutfp;
+extern INT curcol;
+extern INT currow;
+extern INT _rows;
+extern INT _cols;
+extern INT Perrors;
+extern INT nobuiltins;
+
+/* Input and output modes */
+
+#define FILEMODE   0	/* input from a file */
+#define STRINGMODE 1	/* input or output from or to a string */
+#define UNBUFFERED 2	/* output unbuffered to a file */
+#define BUFFERED   3	/* output buffered to a file */
+#define PAGEMODE   4	/* output page buffered to a file */
+
+#define INTERPTYPE INT
+#define INTERROR    0
+#define INTOKAY     1
+#define INTBREAK    2
+#define INTCONTINUE 3
+#define INTRETURN   4
+
+#define TYPE_CHECK(t, v) \
+	if (ptype(v) != t) {\
+		*eflg = TRUE;\
+		return NULL;\
+	}
+
 /* PVALUE Arithmetic Functions */
 void add_pvalues(PVALUE, PVALUE, BOOLEAN*);
 void sub_pvalues(PVALUE, PVALUE, BOOLEAN*);
@@ -193,6 +224,37 @@ void remove_pvtable(TABLE);
 #ifndef HOGMEMORY
 void zero_pventry(ENTRY);
 #endif
+
+/* Report Interpreter */
+void initinterp(void);
+void initset(void);
+void initrassa(void);
+void interp_program(STRING, INT, WORD*, INT, STRING*, STRING);
+void finishinterp(void);
+void finishrassa(void);
+void progmessage(char*);
+void remove_tables(void);
+void parse_file(STRING, LIST);
+
+INTERPTYPE interp_children (PNODE, TABLE, PVALUE *);
+INTERPTYPE interp_spouses (PNODE, TABLE, PVALUE *);
+INTERPTYPE interp_families (PNODE, TABLE, PVALUE *);
+INTERPTYPE interp_fathers (PNODE, TABLE, PVALUE *);
+INTERPTYPE interp_mothers (PNODE, TABLE, PVALUE *);
+INTERPTYPE interp_parents (PNODE, TABLE, PVALUE *);
+INTERPTYPE interp_fornotes (PNODE, TABLE, PVALUE *);
+INTERPTYPE interp_fornodes (PNODE, TABLE, PVALUE *);
+INTERPTYPE interp_forindi (PNODE, TABLE, PVALUE *);
+INTERPTYPE interp_forsour (PNODE, TABLE, PVALUE *);
+INTERPTYPE interp_foreven (PNODE, TABLE, PVALUE *);
+INTERPTYPE interp_forothr (PNODE, TABLE, PVALUE *);
+INTERPTYPE interp_forfam (PNODE, TABLE, PVALUE *);
+INTERPTYPE interp_indisetloop (PNODE, TABLE, PVALUE *);
+INTERPTYPE interp_forlist (PNODE, TABLE, PVALUE *);
+INTERPTYPE interp_if (PNODE, TABLE, PVALUE *);
+INTERPTYPE interp_while (PNODE, TABLE, PVALUE *);
+INTERPTYPE interp_call (PNODE, TABLE, PVALUE *);
+INTERPTYPE interp_traverse (PNODE, TABLE, PVALUE *);
 
 /* Prototypes */
 void assign_iden(TABLE, STRING, WORD);
@@ -245,37 +307,6 @@ PNODE string_node(STRING);
 PNODE traverse_node(PNODE, STRING, STRING, PNODE);
 PVALUE valueof_iden(TABLE, STRING);
 PNODE while_node(PNODE, PNODE);
-
-extern INT Plineno;
-extern FILE *Pinfp;
-extern FILE *Poutfp;
-extern INT curcol;
-extern INT currow;
-extern INT _rows;
-extern INT _cols;
-extern INT Perrors;
-extern INT nobuiltins;
-
-/* Input and output modes */
-
-#define FILEMODE   0	/* input from a file */
-#define STRINGMODE 1	/* input or output from or to a string */
-#define UNBUFFERED 2	/* output unbuffered to a file */
-#define BUFFERED   3	/* output buffered to a file */
-#define PAGEMODE   4	/* output page buffered to a file */
-
-#define INTERPTYPE INT
-#define INTERROR    0
-#define INTOKAY     1
-#define INTBREAK    2
-#define INTCONTINUE 3
-#define INTRETURN   4
-
-#define TYPE_CHECK(t, v) \
-	if (ptype(v) != t) {\
-		*eflg = TRUE;\
-		return NULL;\
-	}
 
 #endif /* _INTERP_H */
 

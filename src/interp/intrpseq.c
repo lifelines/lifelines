@@ -48,7 +48,7 @@ INDISEQ sibling_indiseq();
 /*======================================================+
  * initset -- Initialize list that holds created INDISEQs
  *=====================================================*/
-initset ()
+void initset (void)
 {
 	keysets = create_list();
 }
@@ -138,7 +138,6 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	NODE indi;
 	STRING key;
-	BOOLEAN all, rc;
 	INDISEQ seq;
 	PNODE arg1 = (PNODE) iargs(node), arg2 = inext(arg1);
 	PVALUE val = eval_and_coerce(PSET, arg1, stab, eflg);

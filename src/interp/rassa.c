@@ -46,19 +46,22 @@
 INT __cols = 0, __rows = 0;
 INT curcol = 1, currow = 1;
 INT outputmode = BUFFERED;
+
 static STRING pagebuffer = NULL;
 static unsigned char linebuffer[1024];
 static INT linebuflen = 0;
 static STRING bufptr = linebuffer;
-STRING outfilename;
 
+static void adjust_cols(STRING);
+
+STRING outfilename;
 STRING noreport = (STRING) "No report was generated.";
 STRING whtout = (STRING) "What is the name of the output file?";
 
 /*======================================+
  * initrassa -- Initialize program output
  *=====================================*/
-initrassa ()
+void initrassa (void)
 {
 	outputmode = BUFFERED;
 	linebuflen = 0;
@@ -68,7 +71,7 @@ initrassa ()
 /*======================================+
  * finishrassa -- Finalize program output
  *=====================================*/
-finishrassa ()
+void finishrassa (void)
 {
 	if (outputmode == BUFFERED && linebuflen > 0 && Poutfp) {
 		fwrite(linebuffer, linebuflen, 1, Poutfp);
@@ -117,8 +120,8 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __linemode -- Switch output to line mode
  *   usage: linemode() -> VOID
  *=======================================*/
-PVALUE __linemode (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE __linemode (eflg)
+BOOLEAN *eflg;
 {
 	outputmode = BUFFERED;
 	linebuflen = 0;
@@ -172,8 +175,8 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __outfile -- Return output file name
  *   usage: outfile() -> STRING
  *===================================*/
-PVALUE __outfile (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE __outfile (eflg)
+BOOLEAN *eflg;
 {
 	if (!Poutfp) {
 		Poutfp = ask_for_file(LLWRITETEXT, whtout, &outfilename, llreports, NULL);
@@ -270,8 +273,8 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __getcol -- Return current column
  *   usage: getcol() -> INT
  *================================*/
-PVALUE __getcol (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE __getcol (eflg)
+BOOLEAN *eflg;
 {
 	*eflg = FALSE;
 	return create_pvalue(PINT, (WORD)curcol);
@@ -280,8 +283,8 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __pageout -- Output current page and clear page buffer
  *   usage: pageout() -> VOID
  *====================================================*/
-PVALUE __pageout (node, stab, eflg)
-PNODE node; TABLE stab; BOOLEAN *eflg;
+PVALUE __pageout (eflg)
+BOOLEAN *eflg;
 {
 	char scratch[MAXCOLS+2];
 	STRING p;
@@ -350,7 +353,7 @@ STRING str;
 			bufptr = linebuffer;
 		}
 		linebuflen += len;
-		while (c = *bufptr++ = *str++) {
+		while ((c = *bufptr++ = *str++)) {
 			if (c == '\n')
 				curcol = 1;
 			else
@@ -360,7 +363,7 @@ STRING str;
 		return;
 	case PAGEMODE:
 		p = pagebuffer + (currow - 1)*__cols + curcol - 1;
-		while (c = *str++) {
+		while ((c = *str++)) {
 			if (c == '\n') {
 				curcol = 1;
 				currow++;
@@ -379,11 +382,11 @@ STRING str;
 /*==================================================+
  * adjust_cols -- Adjust column after printing string
  *=================================================*/
-adjust_cols (str)
+static void adjust_cols (str)
 STRING str;
 {
 	INT c;
-	while (c = *str++) {
+	while ((c = *str++)) {
 		if (c == '\n')
 			curcol = 1;
 		else
