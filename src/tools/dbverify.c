@@ -52,10 +52,10 @@ static BOOLEAN noisy=FALSE;
  * print_usage -- Explain arguments
  *===============================*/
 static void
-print_usage ()
+print_usage (void)
 {
 	printf(
-		"usage: btedit -(flags) <btree>\n"
+		"usage: dbverify -(flags) <btree>\n"
 		"flags:\n"
 		"\t-g = Check for ghosts (names/refns)\n"
 		"\t-G = Check for & fix ghosts (names/refns)\n"

@@ -1,3 +1,7 @@
+2001-01-07 Petter Reinholdtsen <pere@td.org.uit.no>
+
+	* tools/dbverify.c: Fix typo.
+
 2001-01-07 Marc Nozell <marc@nozell.com>
 
 	* .cvsignore: added yacc.h, a generated file
