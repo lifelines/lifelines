@@ -4,6 +4,10 @@
 
 	Remove some of the extra draw code used to fight curses space bug.
 
+	* gedlib/messages.c liflines/screen.c:
+
+	i18n.
+
 2002-05-27 Perry Rapp <puddle@users.sourceforge.net>
 
 	Fixes & changes to win32 curses emulation.

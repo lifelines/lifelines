@@ -113,6 +113,7 @@ extern STRING qSchlist,qSvwlist,qSerrlist,qSdefttl,qSiddefpath;
 extern STRING qSmn_uttl;
 extern STRING qSmn_xttl;
 extern STRING qSmn_notimpl;
+extern STRING qShitkey;
 
 extern STRING qSmn_add_ttl,qSmn_add_indi,qSmn_add_fam,qSmn_add_chil,qSmn_add_spou;
 extern STRING qSmn_del_ttl,qSmn_del_chil,qSmn_del_spou,qSmn_del_indi,qSmn_del_fam;
@@ -583,7 +584,7 @@ check_stdout (void)
 {
 	if (active_uiwin == stdout_win) {
 		if (stdout_vis) {
-			llwprintf("\nStrike any key to continue.\n");
+			llwprintf("\n%s\n", _(qShitkey));
 			crmode();
 			(void) wgetch(uiw_win(stdout_win));
 			nocrmode();

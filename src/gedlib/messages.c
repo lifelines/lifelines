@@ -317,6 +317,7 @@ ZST qSchoostrttl  = N_("Enter string for program");
 ZST qSaskstr      = N_("enter string: ");
 ZST qSaskint      = N_("enter integer:");
 ZST qSasknam      = N_("enter name: ");
+ZST qShitkey      = N_("Strike any key to continue.");
 
 /* new records prototypes */
 	/* (all-caps words are in GEDCOM language -- don't change) */
