@@ -49,7 +49,7 @@ extern BTREE BTR;
 extern STRING cfradd, cfeadd, cfxadd, rredit, eredit, xredit;
 extern STRING cfrupt, cfeupt, cfxupt, gdrmod, gdemod, gdxmod;
 extern STRING idredt, ideedt, idxedt, duprfn, ronlya, ronlye;
-extern STRING nofopn;
+extern STRING nofopn, idkyrfn;
 extern STRING defsour,defeven,defothr;
 
 /*********************************************
@@ -361,14 +361,14 @@ ntagdiff (NODE node1, NODE node2)
 /*===============================================
  * ask_for_record -- Ask user to identify record
  *  lookup by key or by refn (& handle dup refns)
- * idstr  question prompt
- * letr:  letter to possibly prepend to key (ie, I/F/S/E/X)
+ *  idstr: [IN]  question prompt (will translate)
+ *  letr:  [IN]  letter to possibly prepend to key (ie, I/F/S/E/X)
  *=============================================*/
 RECORD
 ask_for_record (STRING idstr, INT letr)
 {
 	RECORD rec;
-	STRING str = ask_for_string(idstr, "enter key or refn: ");
+	STRING str = ask_for_string(idstr, idkyrfn);
 	if (!str || *str == 0) return NULL;
 	rec = key_possible_to_record(str, letr);
 	if (!rec) {

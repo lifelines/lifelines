@@ -168,7 +168,7 @@ set_pattern (SCAN_PATTERN * patt, STRING str, INT scantype)
 /*==============================
  * name_scan -- traverse names looking for pattern matching
  *  scantype:  [IN]  which type of scan (full or partial)
- *  sts:       [IN]  status msg to display during scan (unlocalized)
+ *  sts:       [IN]  status msg to display during scan (will localize)
  *============================*/
 static RECORD
 name_scan (INT scantype, STRING sts)
@@ -203,7 +203,7 @@ name_scan (INT scantype, STRING sts)
 }
 /*==============================================
  * name_fragment_scan -- traverse name fragments
- *  sts: [IN]  status to show during scan (unlocalized)
+ *  sts: [IN]  status to show during scan (will localize)
  *  looking for pattern matching
  *============================================*/
 RECORD
@@ -213,7 +213,7 @@ name_fragment_scan (STRING sts)
 }
 /*======================================
  * full_name_scan -- traverse full names
- *  sts: [IN]  status to show during scan (unlocalized)
+ *  sts: [IN]  status to show during scan (will localize)
  *  looking for pattern matching
  *====================================*/
 RECORD
@@ -223,7 +223,7 @@ full_name_scan (STRING sts)
 }
 /*==============================
  * refn_scan -- traverse refns
- *  sts: [IN]  status to show during scan (unlocalized)
+ *  sts: [IN]  status to show during scan (will localize)
  *  looking for pattern matching
  *============================*/
 RECORD

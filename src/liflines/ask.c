@@ -53,6 +53,7 @@ extern char badkeylist[];
 
 extern STRING ntchld,ntprnt,idfbrs,entnam,notone,ifone;
 extern STRING nofopn,idbrws,whtfname,whtfnameext;
+extern STRING nonamky,paradox,askint;
 
 /*********************************************
  * local function prototypes
@@ -85,7 +86,7 @@ ask_for_fam (STRING pttl,
 		sib = ask_for_indi_old(sttl, NOCONFIRM, DOASK1);
 		if (!sib) return NULL;
 		if (!(fam = FAMC(sib))) {
-			message(ntchld);
+			message(_(ntchld));
 			return NULL;
 		}
 		fam = key_to_fam(rmvat(nval(fam)));
@@ -95,16 +96,17 @@ ask_for_fam (STRING pttl,
 		message(ntprnt);
 		return NULL;
 	}
-	return choose_family(prn, "e", idfbrs, TRUE);
+	return choose_family(prn, paradox, idfbrs, TRUE);
 }
 /*===========================================
  * ask_for_int -- Ask user to provide integer
+ * titl: [IN]  prompt title (will translate)
  *=========================================*/
 INT
 ask_for_int (STRING ttl)
 {
 	INT ival, c, neg;
-	STRING p = ask_for_string(ttl, "enter integer:");
+	STRING p = ask_for_string(ttl, askint);
 	while (TRUE) {
 		neg = 1;
 		while (iswhite(*p++))
@@ -156,7 +158,8 @@ expand_special_chars (STRING fname, STRING buffer, INT buflen)
 }
 /*======================================
  * ask_for_file_worker -- Ask for and open file
- * pfname - optional output parameter (pass NULL if undesired)
+ *  ttl:    [IN]  title of question (1rst line) (will localize)
+ *  pfname: [OUT] optional output parameter (pass NULL if undesired)
  *====================================*/
 typedef enum { INPUT, OUTPUT } DIRECTION;
 static FILE *
@@ -240,7 +243,8 @@ make_fname_prompt (STRING fnamebuf, INT len, STRING ext)
 }
 /*======================================
  * ask_for_input_file -- Ask for and open file for input
- * pfname - optional output parameter (pass NULL if undesired)
+ *  ttl:   [IN]  title of question (1rst line) (will localize)
+ *  pfname [OUT] optional output parameter (pass NULL if undesired)
  *====================================*/
 FILE *
 ask_for_input_file (STRING mode,
@@ -255,7 +259,8 @@ ask_for_input_file (STRING mode,
 
 /*======================================
  * ask_for_output_file -- Ask for and open file for output
- * pfname - optional output parameter (pass NULL if undesired)
+ *  ttl:   [IN]  title of question (1rst line) (will localize)
+ *  pfname [OUT] optional output parameter (pass NULL if undesired)
  *====================================*/
 FILE *
 ask_for_output_file (STRING mode,
@@ -275,7 +280,7 @@ ask_for_output_file (STRING mode,
 #define RC_SELECT   2
 /*=================================================
  * ask_for_indiseq -- Ask user to identify sequence
- *  ttl:   [IN]  prompt (title) to display
+ *  ttl:   [IN]  prompt (title) to display (will localize)
  *  ctype: [IN]  type of record (eg, 'I') (0 for any)
  *  prc:   [OUT] result code (RC_DONE, RC_SELECT, RC_NOSELECT)
  *===============================================*/
@@ -283,14 +288,13 @@ INDISEQ
 ask_for_indiseq (STRING ttl, char ctype, INT *prc)
 {
 	INDISEQ seq;
-	STRING name = ask_for_string(ttl, N_(idbrws));
+	STRING name = ask_for_string(ttl, idbrws); /* will localize */
 	*prc = RC_DONE;
 	if (!name || *name == 0) return NULL;
 	*prc = RC_NOSELECT;
 	seq = str_to_indiseq(name, ctype);
 	if (!seq) {
-		STRING unknam = _("There is no one in the database with that name or key.");
-		message(unknam);
+		msg_error(_(nonamky));
 		return NULL;
 	}
 	*prc = RC_SELECT;
@@ -420,8 +424,8 @@ ask_for_indi_key (STRING ttl,
  * choose_one_from_indiseq_if_needed  -- handle ask1 cases
  *  seq:   [IN]  sequence from which to choose
  *  ask1:  [IN]  whether to prompt if only one element in sequence
- *  titl1: [IN]  title if sequence has one element (unlocalized)
- *  titln: [IN]  title if sequence has multiple elements (unlocalized)
+ *  titl1: [IN]  title if sequence has one element (will localize)
+ *  titln: [IN]  title if sequence has multiple elements (will localize)
  *=============================================================*/
 static INT
 choose_one_from_indiseq_if_needed (INDISEQ seq, ASK1Q ask1, STRING titl1
@@ -440,8 +444,8 @@ choose_one_from_indiseq_if_needed (INDISEQ seq, ASK1Q ask1, STRING titl1
  *  several ways.
  *  seq:   [IN]  sequence from which to choose
  *  ask1:  [IN]  whether to prompt if only one element in sequence
- *  titl1: [IN]  title if sequence has one element (unlocalized)
- *  titln: [IN]  title if sequence has multiple elements (unlocalized)
+ *  titl1: [IN]  title if sequence has one element (will localize)
+ *  titln: [IN]  title if sequence has multiple elements (will localize)
  *=====================================================*/
 RECORD
 choose_from_indiseq (INDISEQ seq, ASK1Q ask1, STRING titl1, STRING titln)

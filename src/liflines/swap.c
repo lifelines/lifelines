@@ -45,7 +45,7 @@
  *********************************************/
 extern STRING idcswp, id1csw, id2csw, id1fsw, id2fsw, idfbys, ntprnt;
 extern STRING less2c, okcswp, less2f, okfswp, idfswp, ronlye;
-extern STRING idcrdr, ntchld;
+extern STRING idcrdr, ntchld, paradox;
 
 /*********************************************
  * local function prototypes
@@ -75,7 +75,7 @@ swap_children (NODE prnt, NODE fam)
 	if (!prnt) return FALSE;
 	nfam = num_families(prnt);
 	if (nfam <= 0) {
-		message(ntchld);
+		message(_(ntchld));
 		return FALSE;
 	}
 
@@ -165,7 +165,7 @@ reorder_child (NODE prnt, NODE fam)
 	if (!prnt) return FALSE;
 	nfam = num_families(prnt);
 	if (nfam <= 0) {
-		message(ntchld);
+		message(_(ntchld));
 		return FALSE;
 	}
 
@@ -262,7 +262,7 @@ swap_families (NODE indi)
 	}
 	nfam = num_families(indi);
 	if (nfam < 2) {
-		message(less2f);
+		msg_error(_(less2f));
 		return FALSE;
 	}
 
@@ -276,9 +276,9 @@ swap_families (NODE indi)
 		NODE fam1, fam2;
 		STRING key1, key2;
 		/* prompt for families */
-		fam1 = choose_family(indi, "e", id1fsw, TRUE);
+		fam1 = choose_family(indi, paradox, id1fsw, TRUE);
 		if (!fam1) return FALSE;
-		fam2 = choose_family(indi, "e", id2fsw, TRUE);
+		fam2 = choose_family(indi, paradox, id2fsw, TRUE);
 		if (!fam2) return FALSE;
 		if (fam1 == fam2) return FALSE;
 		key1 = nxref(fam1);

@@ -45,6 +45,7 @@ extern STRING idpdel, cfpdel, cffdel, cffdeld;
 extern STRING idfrmv, idfrsp, idfrch;
 extern STRING idcrmv, ntchld, ntprnt, idsrmv, idsrmf, normls, cfcrmv;
 extern STRING okcrmv, ntsinf, ntcinf, cfsrmv, oksrmv, ronlye, idcrmf;
+extern STRING paradox;
 
 /*=====================================================
  * choose_and_remove_family -- Choose & delete a family
@@ -60,7 +61,7 @@ choose_and_remove_family (void)
 	STRING cfptr=confirm; /* build & localize string */
 	INT cflen=sizeof(confirm);
 
-	fam = ask_for_fam_by_key(idfrmv, idfrsp, idfrch);
+	fam = ask_for_fam_by_key(_(idfrmv), _(idfrsp), idfrch);
 	if (!fam)
 		return;
 
@@ -147,7 +148,7 @@ choose_and_remove_spouse (NODE indi, NODE fam, BOOLEAN nolast)
 	}
 
 /* Identify family to remove spouse from */
-	if (!fam) fam = choose_family(indi, "e", idsrmf, TRUE);
+	if (!fam) fam = choose_family(indi, paradox, idsrmf, TRUE);
 	if (!fam) return FALSE;
 	if (nolast && num_fam_xrefs(fam) < 2) {
 		message(_(normls));
@@ -181,12 +182,12 @@ choose_and_remove_child (NODE indi, NODE fam, BOOLEAN nolast)
 	if (!indi) indi = ask_for_indi_old(_(idcrmv), NOCONFIRM, NOASK1);
 	if (!indi) return FALSE;
 	if (!FAMC(indi)) {
-		message(ntchld);
+		message(_(ntchld));
 		return FALSE;
 	}
 
 /* Identify family to remove child from */
-	if (!fam) fam = choose_family(indi, "e", idcrmf, FALSE);
+	if (!fam) fam = choose_family(indi, paradox, _(idcrmf), FALSE);
 	if (!fam) return FALSE;
 	if (nolast && num_fam_xrefs(fam) < 2) {
 		message(_(normls));

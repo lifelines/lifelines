@@ -42,6 +42,7 @@
 
 extern STRING iredit, fredit, cfpupt, cffupt, idpedt, idspse, idfbys;
 extern STRING ntprnt, gdpmod, gdfmod, ronlye;
+extern STRING paradox;
 
 /*=====================================
  * write_indi_to_editfile - write indi gedcom node to editfile
@@ -200,7 +201,7 @@ edit_family (NODE fam1) /* may be NULL */
 			message(ntprnt);
 			return NULL;
 		} 
-		fam1 = choose_family(indi, "e", idfbys, TRUE);
+		fam1 = choose_family(indi, paradox, idfbys, TRUE);
 		if (!fam1) return FALSE; 
 	}
 

@@ -146,7 +146,7 @@ import_from_file (void)
 	/* test for read-only database here */
 
 	if(readonly) {
-		wfield(10, 0, dbrdon);
+		wfield(10, 0, _(dbrdon));
 		wpos(11, 0);
 		fclose(fp);
 		fp=NULL;

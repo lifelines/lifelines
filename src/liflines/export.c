@@ -119,7 +119,7 @@ archive_in_file (void)
 	fprintf(fn, "0 TRLR\n");
 	fclose(fn);
 	wpos(7,0);
-	msg_info(outfin, btreepath, fname);
+	msg_info(_(outfin), btreepath, fname);
 	return TRUE;
 }
 /*========================================================

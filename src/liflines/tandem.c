@@ -107,13 +107,13 @@ INT browse_tandem (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ
 			return BROWSE_INDI;
 		case CMD_FATHER: 	/* browse top person's father */
 			if (!(node = indi_to_fath(indi1)))
-				message(nofath);
+				msg_error(_(nofath));
 			else
 				indi1 = node;
 			break;
 		case CMD_MOTHER: 	/* browse top person's mother */
 			if (!(node = indi_to_moth(indi1)))
-				message(nomoth);
+				msg_error(_(nomoth));
 			else
 				indi1 = node;
 			break;

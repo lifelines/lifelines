@@ -92,7 +92,7 @@ extern STRING empstr,empstr71,empstr120,readpath,ronlye,dataerr;
 extern STRING abverr,uoperr,badttnum,nosuchtt,mouttt,mintt;
 extern STRING mtitle,cright,plschs;
 extern STRING mn_unkcmd,ronlya,ronlyr;
-extern STRING askynq,askynyn,askyny;
+extern STRING askynq,askynyn,askyY;
 extern STRING mn_quit,mn_ret, mn_exit;
 extern STRING mn_mmbrws,mn_mmsear,mn_mmadd,mn_mmdel;
 extern STRING mn_mmprpt,mn_mmrpt,mn_mmcset;
@@ -374,7 +374,7 @@ repaint_main_menu (UIWINDOW uiwin)
 		wprintw(win, " (read only)");
 	row = 5;
 	/* i18n problem: the letters are not being read from the menu strings */
-	mvwaddstr(win, row++, 2, plschs);
+	mvwaddstr(win, row++, 2, _(plschs));
 	mvwaddstr(win, row++, 4, _(mn_mmbrws));
 	mvwaddstr(win, row++, 4, _(mn_mmsear));
 	mvwaddstr(win, row++, 4, _(mn_mmadd));
@@ -916,6 +916,8 @@ ask_for_db_filename (STRING ttl, STRING prmpt, STRING basedir)
 /*======================================
  * ask_for_output_filename -- Ask user for filename to which to write
  *  returns static buffer
+ *  ttl1:   [IN] title of question (1rst line) (will localize)
+ *  prmpt:  [IN] prompt of question (3rd line) (will localize)
  *====================================*/
 STRING
 ask_for_output_filename (STRING ttl, STRING path, STRING prmpt)
@@ -935,6 +937,8 @@ ask_for_output_filename (STRING ttl, STRING path, STRING prmpt)
 /*======================================
  * ask_for_input_filename -- Ask user for filename from which to read
  *  returns static buffer
+ *  ttl1:   [IN] title of question (1rst line) (will localize)
+ *  prmpt:  [IN] prompt of question (3rd line) (will localize)
  *====================================*/
 STRING
 ask_for_input_filename (STRING ttl, STRING path, STRING prmpt)
@@ -964,9 +968,10 @@ refresh_main (void)
 /*======================================
  * ask_for_string -- Ask user for string
  *  returns static buffer
- *  ttl:   [IN]  title of question (1rst line)
- *  prmpt: [IN]  prompt of question (2nd line)
+ *  ttl:   [IN]  title of question (1rst line) (will translate)
+ *  prmpt: [IN]  prompt of question (2nd line) (will translate)
  * returns static buffer (less than 100 chars)
+ * ask_for_string localizes both of its arguments
  *====================================*/
 STRING
 ask_for_string (STRING ttl, STRING prmpt)
@@ -976,8 +981,8 @@ ask_for_string (STRING ttl, STRING prmpt)
 	STRING rv, p;
 	werase(win);
 	draw_win_box(win);
-	mvwaddstr(win, 1, 1, ttl);
-	mvwaddstr(win, 2, 1, prmpt);
+	mvwaddstr(win, 1, 1, _(ttl));
+	mvwaddstr(win, 2, 1, _(prmpt));
 	activate_uiwin(uiwin);
 	rv = get_answer(uiwin, 2, strlen(prmpt) + 2); /* less than 100 chars */
 	deactivate_uiwin();
@@ -992,9 +997,9 @@ ask_for_string (STRING ttl, STRING prmpt)
  * ask_for_string2 -- Ask user for string
  * Two lines of title
  *  returns static buffer
- *  ttl1:   [IN] title of question (1rst line)
- *  ttl2:   [IN] 2nd line of title
- *  prmpt:  [IN] prompt of question (3rd line)
+ *  ttl1:   [IN] title of question (1rst line) (will localize)
+ *  ttl2:   [IN] 2nd line of title (will localize)
+ *  prmpt:  [IN] prompt of question (3rd line) (will localize)
  * returns static buffer (less than 100 chars)
  *====================================*/
 STRING
@@ -1002,14 +1007,15 @@ ask_for_string2 (STRING ttl1, STRING ttl2, STRING prmpt)
 {
 	UIWINDOW uiwin = ask_msg_win;
 	WINDOW *win = uiw_win(uiwin);
+	STRING locprmpt = _(prmpt);
 	STRING rv, p;
 	werase(win);
 	draw_win_box(win);
-	mvwaddstr(win, 1, 1, ttl1);
-	mvwaddstr(win, 2, 1, ttl2);
-	mvwaddstr(win, 3, 1, prmpt);
+	mvwaddstr(win, 1, 1, _(ttl1));
+	mvwaddstr(win, 2, 1, _(ttl2));
+	mvwaddstr(win, 3, 1, locprmpt);
 	wrefresh(win);
-	rv = get_answer(uiwin, 3, strlen(prmpt) + 2); /* less than 100 chars */
+	rv = get_answer(uiwin, 3, strlen(locprmpt) + 2); /* less than 100 chars */
 	if (!rv) return (STRING) "";
 	p = rv;
 	while (chartype((uchar)*p) == WHITE)
@@ -1027,7 +1033,7 @@ ask_yes_or_no (STRING ttl)
 {
 	STRING ptr;
 	INT c = ask_for_char(ttl, askynq, askynyn);
-	for (ptr = askyny; *ptr; ptr++) {
+	for (ptr = _(askyY); *ptr; ptr++) {
 		if (c == *ptr) return TRUE;
 	}
 	return FALSE;
@@ -1040,34 +1046,35 @@ ask_yes_or_no_msg (STRING msg, STRING ttl)
 {
 	STRING ptr;
 	INT c = ask_for_char_msg(msg, ttl, askynq, askynyn);
-	for (ptr = askyny; *ptr; ptr++) {
+	for (ptr = askyY; *ptr; ptr++) {
 		if (c == *ptr) return TRUE;
 	}
 	return FALSE;
 }
 /*=======================================
  * ask_for_char -- Ask user for character
+ *  ttl:   [IN]  1nd line displayed (will localize)
+ *  prmpt: [IN]  2nd line text before cursor (will localize)
+ *  ptrn:  [IN]  List of allowable character responses (will localize)
  *=====================================*/
 INT
-ask_for_char (STRING ttl,
-              STRING prmpt,
-              STRING ptrn)
+ask_for_char (STRING ttl, STRING prmpt, STRING ptrn)
 {
 	UIWINDOW uiwin = ask_win;
 	WINDOW *win = uiw_win(uiwin);
 	werase(win);
 	draw_win_box(win);
-	mvwaddstr(win, 1, 2, ttl);
-	mvwaddstr(win, 2, 2, prmpt);
+	mvwaddstr(win, 1, 2, _(ttl));
+	mvwaddstr(win, 2, 2, _(prmpt));
 	wrefresh(win);
-	return interact(uiwin, ptrn, -1);
+	return interact(uiwin, _(ptrn), -1);
 }
 /*===========================================
  * ask_for_char_msg -- Ask user for character
- *  msg:   [IN]  top line displayed
- *  ttl:   [IN]  2nd line displayed
- *  prmpt: [IN]  3rd line text before cursor
- *  ptrn:  [IN]  List of allowable character responses
+ *  msg:   [IN]  top line displayed (will localize)
+ *  ttl:   [IN]  2nd line displayed (will localize)
+ *  prmpt: [IN]  3rd line text before cursor (will localize)
+ *  ptrn:  [IN]  List of allowable character responses (will localize)
  *=========================================*/
 INT
 ask_for_char_msg (STRING msg, STRING ttl, STRING prmpt, STRING ptrn)
@@ -1077,11 +1084,11 @@ ask_for_char_msg (STRING msg, STRING ttl, STRING prmpt, STRING ptrn)
 	INT rv;
 	werase(win);
 	draw_win_box(win);
-	mvwaddstr(win, 1, 2, msg);
-	mvwaddstr(win, 2, 2, ttl);
-	mvwaddstr(win, 3, 2, prmpt);
+	mvwaddstr(win, 1, 2, _(msg));
+	mvwaddstr(win, 2, 2, _(ttl));
+	mvwaddstr(win, 3, 2, _(prmpt));
 	wrefresh(win);
-	rv = interact(uiwin, ptrn, -1);
+	rv = interact(uiwin, _(ptrn), -1);
 	return rv;
 }
 /*============================================
@@ -1283,7 +1290,7 @@ activate_popup_list_uiwin (listdisp * ld)
  * choose_one_from_indiseq -- 
  * Choose a single person from indiseq
  * Returns index of selected item (or -1 if user quit)
- *  ttl:  [IN]  title (unlocalized)
+ *  ttl:  [IN]  title (will localize)
  *===========================================================*/
 INT
 choose_one_from_indiseq (STRING ttl, INDISEQ seq)
@@ -1293,12 +1300,13 @@ choose_one_from_indiseq (STRING ttl, INDISEQ seq)
 /*=============================================================
  * choose_one_or_list_from_indiseq -- 
  * Implements the two choose_xxx_from_indiseq
- *  ttl:   [IN]  title/caption for choice list (unlocalized)
+ *  ttl:   [IN]  title/caption for choice list (will unlocalize)
  *  seq:   [IN]  list from which to choose
  *  multi: [IN]  if true, selecting a sublist
  * returns index of selected (or -1 for quit)
  * Rewritten to allow dynamic resizing (so user can
  *  resize detail area, ie, the [] functions), 2000/12, Perry Rapp
+ * Localizes ttl
  *===========================================================*/
 static INT
 choose_one_or_list_from_indiseq (STRING ttl, INDISEQ seq, BOOLEAN multi)
@@ -2020,7 +2028,7 @@ interact (UIWINDOW uiwin, STRING str, INT screen)
 			if (cmdnum != CMD_NONE && cmdnum != CMD_PARTIAL)
 				return cmdnum;
 			if (cmdnum != CMD_PARTIAL) {
-				msg_error(mn_unkcmd);
+				msg_error(_(mn_unkcmd));
 				offset = 0;
 			}
 		}
@@ -2677,7 +2685,7 @@ output_menu (UIWINDOW uiwin, INT screen, INT bottom, INT width)
 	show_horz_line(uiwin, row++, 0, width);
 	/* display title */
 	sprintf(prompt, "%s            (pg %d/%d)", 
-		plschs, page+1, pages);
+		_(plschs), page+1, pages);
 	mvwaddstr(win, row++, 2, prompt);
 	/* now display all the menu items we can fit on this page */
 	while (1)
@@ -2847,6 +2855,7 @@ display_status (STRING text)
  * msg_error -- handle error message
  * delegates to msg_outputv
  * Created: 2001/11/11, Perry Rapp
+ * Caller must have localized strings
  *=======================================*/
 void
 msg_error (STRING fmt, ...)
@@ -2860,6 +2869,7 @@ msg_error (STRING fmt, ...)
  * msg_info -- handle regular messages
  * delegates to msg_outputv
  * Created: 2001/11/11, Perry Rapp
+ * Caller must have localized strings
  *=======================================*/
 void
 msg_info (STRING fmt, ...)
@@ -2873,6 +2883,7 @@ msg_info (STRING fmt, ...)
  * msg_status -- handle transitory/status messages
  * delegates to msg_outputv
  * Created: 2001/11/11, Perry Rapp
+ * Caller must have localized strings
  *=======================================*/
 void
 msg_status (STRING fmt, ...)
@@ -2886,6 +2897,7 @@ msg_status (STRING fmt, ...)
  * msg_output -- handle any message
  * delegates to msg_outputv
  * Created: 2001/12/16, Perry Rapp
+ * Caller must have localized strings
  *=======================================*/
 void
 msg_output (MSG_LEVEL level, STRING fmt, ...)

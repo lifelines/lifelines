@@ -1,5 +1,15 @@
 2002-04-20 Perry Rapp <puddle@users.sourceforge.net>
 
+	* ChangeLog gedlib/choose.c gedlib/messages.c hdrs/feedback.h
+	liflines/ask.c liflines/delete.c liflines/edit.c
+	liflines/export.c liflines/import.c liflines/newrecs.c
+	liflines/scan.c liflines/screen.c liflines/swap.c
+	liflines/tandem.c:
+
+	More i18n.
+
+2002-04-20 Perry Rapp <puddle@users.sourceforge.net>
+
 	* ChangeLog po/sv.po:
 
 	Bugfixes to Swedish translation.
