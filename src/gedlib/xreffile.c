@@ -184,11 +184,11 @@ BOOLEAN readxrefs (void)
 	if (nexrefs > maxexrefs) growexrefs();
 	if (nsxrefs > maxsxrefs) growsxrefs();
 	if (nxxrefs > maxxxrefs) growxxrefs();
-	ASSERT(fread(ixrefs, sizeof(INT), nixrefs, xreffp) == nixrefs);
-	ASSERT(fread(fxrefs, sizeof(INT), nfxrefs, xreffp) == nfxrefs);
-	ASSERT(fread(exrefs, sizeof(INT), nexrefs, xreffp) == nexrefs);
-	ASSERT(fread(sxrefs, sizeof(INT), nsxrefs, xreffp) == nsxrefs);
-	ASSERT(fread(xxrefs, sizeof(INT), nxxrefs, xreffp) == nxxrefs);
+	ASSERT((INT)fread(ixrefs, sizeof(INT), nixrefs, xreffp) == nixrefs);
+	ASSERT((INT)fread(fxrefs, sizeof(INT), nfxrefs, xreffp) == nfxrefs);
+	ASSERT((INT)fread(exrefs, sizeof(INT), nexrefs, xreffp) == nexrefs);
+	ASSERT((INT)fread(sxrefs, sizeof(INT), nsxrefs, xreffp) == nsxrefs);
+	ASSERT((INT)fread(xxrefs, sizeof(INT), nxxrefs, xreffp) == nxxrefs);
 	return TRUE;
 }
 /*================================
@@ -203,11 +203,11 @@ BOOLEAN writexrefs (void)
 	ASSERT(fwrite(&nexrefs, sizeof(INT), 1, xreffp) == 1);
 	ASSERT(fwrite(&nsxrefs, sizeof(INT), 1, xreffp) == 1);
 	ASSERT(fwrite(&nxxrefs, sizeof(INT), 1, xreffp) == 1);
-	ASSERT(fwrite(ixrefs, sizeof(INT), nixrefs, xreffp) == nixrefs);
-	ASSERT(fwrite(fxrefs, sizeof(INT), nfxrefs, xreffp) == nfxrefs);
-	ASSERT(fwrite(exrefs, sizeof(INT), nexrefs, xreffp) == nexrefs);
-	ASSERT(fwrite(sxrefs, sizeof(INT), nsxrefs, xreffp) == nsxrefs);
-	ASSERT(fwrite(xxrefs, sizeof(INT), nxxrefs, xreffp) == nxxrefs);
+	ASSERT((INT)fwrite(ixrefs, sizeof(INT), nixrefs, xreffp) == nixrefs);
+	ASSERT((INT)fwrite(fxrefs, sizeof(INT), nfxrefs, xreffp) == nfxrefs);
+	ASSERT((INT)fwrite(exrefs, sizeof(INT), nexrefs, xreffp) == nexrefs);
+	ASSERT((INT)fwrite(sxrefs, sizeof(INT), nsxrefs, xreffp) == nsxrefs);
+	ASSERT((INT)fwrite(xxrefs, sizeof(INT), nxxrefs, xreffp) == nxxrefs);
 	fflush(xreffp);
 	return TRUE;
 }

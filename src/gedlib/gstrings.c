@@ -124,7 +124,7 @@ INT len;
 		*p = '\0';
 	    }
 	}
-	if (strlen(scratch) > len)
+	if ((INT)strlen(scratch) > len)
 		scratch[len] = 0;
 	return strsave(scratch);
 }

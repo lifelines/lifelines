@@ -1195,8 +1195,8 @@ NODE faml;	/* list of FAMC and/or FAMS nodes */
  * children_nodes -- Given list of FAMS or FAMC nodes, returns list of CHIL
  *   lines they contain
  *=======================================================================*/
-NODE children_nodes (NODE faml,	/* list of FAMC and/or FAMS nodes */
-		     int role)
+NODE children_nodes (faml)
+NODE faml;	/* list of FAMC and/or FAMS nodes */
 {
 	NODE fam, refn, husb, wife, chil, rest;
 	NODE old = NULL, new = NULL;

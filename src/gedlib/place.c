@@ -28,6 +28,7 @@
  *===========================================================*/
 
 #include "standard.h"
+#include "gedcom.h"
 
 BOOLEAN value_to_list (STRING str,
 		       LIST list,
@@ -68,7 +69,7 @@ BOOLEAN value_to_list (STRING str,
 	buf[len + 1] = 0;
 	p = buf;
 	j = 1;
-	while (c = *p++) {
+	while ((c = *p++)) {
 		if (in_string(c, dlm)) {
 			*(p - 1) = 0;
 			j++;

@@ -656,7 +656,7 @@ INT len;
 	INT i, sdex = -1, nparts;
 	name_to_parts(name, parts);
 	name = parts_to_name(parts);
-	if (strlen(name) <= len + 2) return name;
+	if ((INT)strlen(name) <= len + 2) return name;
 	for (i = 0; i < MAXPARTS; i++) {
 		if (!parts[i]) break;
 		if (*parts[i] == '/') sdex = i;
@@ -670,17 +670,17 @@ INT len;
 	for (i = sdex-1; i >= 0; --i) {
 		*(parts[i] + 1) = 0;
 		name = parts_to_name(parts);
-		if (strlen(name) <= len + 2) return name;
+		if ((INT)strlen(name) <= len + 2) return name;
 	}
 	for (i = sdex-1; i >= 1; --i) {
 		parts[i] = NULL;
 		name = parts_to_name(parts);
-		if (strlen(name) <= len + 2) return name;
+		if ((INT)strlen(name) <= len + 2) return name;
 	}
 	for (i = nparts-1; i > sdex; --i) {
 		parts[i] = NULL;
 		name = parts_to_name(parts);
- 		if (strlen(name) <= len + 2) return name;
+		if ((INT)strlen(name) <= len + 2) return name;
 	}
 	return name;
 }

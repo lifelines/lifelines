@@ -69,7 +69,6 @@ INT *ptype;
 	case OTHR_REC: return othr_to_othr(node);
 	default: FATAL();
 	}
-	/* NOTREACHED */
 	return NULL;		/* keep compiler happy */
 }
 /*=======================================================
