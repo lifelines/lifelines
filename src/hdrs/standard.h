@@ -212,11 +212,6 @@ typedef enum { RECORD_ERROR, RECORD_NOT_FOUND, RECORD_SUCCESS }
 #include "config.h"
 #endif
 
-/* must capture this before including libgnuintl.h */
-#ifdef LC_MESSAGES
-#define HAVE_LC_MESSAGES
-#endif
-
 /* NLS (National Language Support) */
 #if ENABLE_NLS
 /*#include <libintl.h>*/
