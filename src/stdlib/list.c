@@ -65,6 +65,7 @@ static struct tag_vtable vtable_for_list = {
 
 /*===========================
  * create_list -- Create list
+ * returns addref'd list
  *=========================*/
 LIST
 create_list (void)
@@ -72,6 +73,7 @@ create_list (void)
 	LIST list = (LIST) stdalloc(sizeof(*list));
 	memset(list, 0, sizeof(*list));
 	list->vtable = &vtable_for_list;
+	list->l_refcnt = 1;
 	ltype(list) = LISTNOFREE;
 	lhead(list) = ltail(list) = NULL;
 	llen(list) = 0;
@@ -80,6 +82,7 @@ create_list (void)
 }
 /*===========================
  * create_list2 -- Create list, with free type
+ * returns addref'd list
  *=========================*/
 LIST
 create_list2 (INT whattofree)

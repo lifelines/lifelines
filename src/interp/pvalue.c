@@ -1190,3 +1190,14 @@ create_new_pvalue_table (void)
 	delref_table(tab, table_pvcleaner); /* release our ref to table */
 	return val;
 }
+/*=============================================
+ * create_new_pvalue_list -- Create new list inside new pvalue
+ *============================================*/
+PVALUE
+create_new_pvalue_list (void)
+{
+	LIST list = create_list();
+	PVALUE val = create_pvalue_from_list(list);
+	delref_list(list, delete_vptr_pvalue); /* release our ref to list */
+	return val;
+}

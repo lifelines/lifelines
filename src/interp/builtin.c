@@ -1895,7 +1895,7 @@ __clear (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __list (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	LIST newlist=0;
+
 	PVALUE newval=0;
 	PNODE arg = (PNODE) iargs(node);
 	if (!iistype(arg, IIDENT)) {
@@ -1904,8 +1904,9 @@ __list (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	*eflg = FALSE;
-	newlist = create_list();
-	newval = create_pvalue_from_list(newlist);
+
+	newval = create_new_pvalue_list();
+
 	assign_iden(stab, iident(arg), newval);
 	return NULL;
 }
@@ -2617,7 +2618,6 @@ __fnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __table (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	TABLE newtab=0;
 	PVALUE newval=0;
 	PNODE var = (PNODE) iargs(node);
 	if (!iistype(var, IIDENT)) {

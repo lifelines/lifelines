@@ -27,6 +27,11 @@
 	Make rptinfo into an object (with vtable).
 	Store rptinfos in table as objects.
 
+	* ChangeLog src/hdrs/pvalue.h
+	src/interp/builtin.c src/interp/pvalue.c src/stdlib/list.c
+
+	Create lists with refcount of 1.
+
 2005-02-01 Perry Rapp
 
 	* ChangeLog src/stdlib/table.c
