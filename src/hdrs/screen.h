@@ -31,11 +31,19 @@
 #ifndef _SCREEN_H
 #define _SCREEN_H
 
+#ifndef _GEDCOM_H
+#include "gedcom.h"
+#endif
+
+#ifndef _INDISEQ_h
+#include "indiseq.h"
+#endif
+
 #undef TRUE
 #undef FALSE
 
 #ifdef WIN32
-#include <mycurses.h>
+#include "mycurses.h"
 #else
 #include <curses.h>
 #endif
@@ -94,5 +102,56 @@ extern WINDOW *start_menu_win;
 extern WINDOW *add_menu_win;
 extern WINDOW *del_menu_win;
 extern WINDOW *utils_menu_win;
+
+/* Function Prototype */
+void init_screen (void);
+void paint_main_screen(void);
+void paint_one_per_screen(void);
+void paint_one_fam_screen(void);
+void paint_two_per_screen(void);
+void paint_two_fam_screen(void);
+void paint_ped_screen(void);
+void paint_list_screen(void);
+void paint_aux_screen(void);
+void create_windows(void);
+void init_all_windows(void);
+void display_screen(INT);
+void main_menu(void);
+INT indi_browse(NODE);
+INT fam_browse(NODE);
+INT tandem_browse(NODE, NODE);
+INT twofam_browse(NODE, NODE);
+INT ped_browse(NODE);
+INT aux_browse(NODE);
+INT list_browse(INDISEQ, INT, INT, INT);
+STRING ask_for_string(STRING, STRING);
+INT ask_for_char(STRING, STRING, STRING);
+INT ask_for_char_msg(STRING, STRING, STRING, STRING);
+INT choose_from_list(STRING, INT, STRING*);
+INT choose_one_from_indiseq(STRING, INDISEQ);
+void add_menu(void);
+void del_menu(void);
+void trans_menu(void);
+void utils_menu(void);
+void extra_menu (void);
+INT interact (WINDOW*, STRING);
+STRING get_answer (WINDOW*, STRING);
+INT indiseq_interact (WINDOW*, STRING, INDISEQ);
+void shw_list (WINDOW*, INDISEQ, INT, INT, INT);
+void shw_list_of_strings (WINDOW*, STRING*, INT, INT, INT);
+INT list_interact(WINDOW*, STRING, INT, STRING*);
+void mprintf (STRING fmt, ...);
+void message (STRING);
+STRING message_string (void);
+void place_std_msg (void);
+void llwprintf (STRING fmt, ...);
+void clearw (void);
+void wfield (INT, INT, STRING);
+void wpos (INT, INT);
+void show_horz_line (WINDOW*, INT, INT, INT);
+void show_vert_line (WINDOW*, INT, INT, INT);
+void place_cursor (void);
+void dbprintf (STRING, INT, INT, INT, INT, INT, INT, INT);
+void do_edit (void);
 
 #endif /* _SCREEN_H */
