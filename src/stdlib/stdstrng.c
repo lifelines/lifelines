@@ -44,70 +44,12 @@ STRING  int_codeset=0;      /* This is the internal codeset, not the user's. */
  *********************************************/
 extern BOOLEAN opt_finnish;
 
-/*********************************************
- * local function prototypes
- *********************************************/
-
-/* alphabetical */
-static BOOLEAN printpic_arg(STRING *b, INT max, CNSTRING arg, INT arglen);
 
 /*********************************************
  * local & exported function definitions
  * body of module
  *********************************************/
 
-/*===============================
- * strsave -- Save copy of string
- * returns stdalloc'd memory
- *=============================*/
-STRING
-strsave (CNSTRING str)
-{
-	ASSERT(str);
-	return strcpy(stdalloc(strlen(str) + 1), str);
-}
-/*===============================
- * strfree -- Free & clear a STRING by ref
- *  (STRING may be NULL)
- *=============================*/
-void
-strfree (STRING * str)
-{
-	if (*str) {
-		stdfree(*str);
-		*str = NULL;
-	}
-}
-/*===============================
- * strupdate -- strfree followed by strsave
- *  (STRING may be NULL)
- *=============================*/
-void
-strupdate (STRING * str, CNSTRING value)
-{
-	strfree(str);
-	if (value)
-		*str = strsave(value);
-}
-/*==================================
- * strconcat -- Catenate two strings
- * Either (but not both) args may be null
- * returns stdalloc'd memory
- *================================*/
-STRING
-strconcat (STRING s1, STRING s2)
-{
-	INT c, len;
-	STRING s3, p;
-	if (!s1) return strsave(s2);
-	if (!s2) return strsave(s1);
-	len = strlen(s1) + strlen(s2);
-	p = s3 = (STRING) stdalloc(len+1);
-	while ((c = *s1++)) *p++ = c;
-	while ((c = *s2++)) *p++ = c;
-	*p = '\0';
-	return s3;
-}
 /*==================================
  * chartype -- Return character type
  *================================*/
@@ -179,91 +121,6 @@ isletter (INT c)
 #endif
 }
 
-/*=========================================
- * isnumeric -- Check string for all digits
- *=======================================*/
-BOOLEAN
-isnumeric (STRING str)
-{
-	INT c;
-	if (!str) return FALSE;
-	while ((c = (uchar)*str++)) {
-#ifndef OS_NOCTYPE
-		if (chartype(c) != DIGIT) return FALSE;
-#else
-		if (!isdigit(c)) return FALSE;
-#endif
-	}
-	return TRUE;
-}
-/*======================================
- * lower -- Convert string to lower case
- *  returns static buffer
- *====================================*/
-STRING
-lower (STRING str)
-{
-	static char scratch[MAXLINELEN+1];
-	STRING p = scratch;
-	INT c, i=0;
-	while ((c = (uchar)*str++) && (++i < MAXLINELEN+1))
-		*p++ = ll_tolower(c);
-	*p = '\0';
-	return scratch;
-}
-/*======================================
- * upper -- Convert string to upper case
- *  returns static buffer
- *====================================*/
-STRING
-upper (STRING str)
-{
-	static char scratch[MAXLINELEN+1];
-	STRING p = scratch;
-	INT c, i=0;
-	/* TODO: This does not work with UTF-8 */
-	while ((c = (uchar)*str++) && (++i < MAXLINELEN+1))
-		*p++ = ll_toupper(c);
-	*p = '\0';
-	return scratch;
-}
-/*================================
- * capitalize -- Capitalize string
- *  returns static buffer (borrowed from lower)
- *==============================*/
-STRING
-capitalize (STRING str)
-{
-	/* TODO: This does not work with UTF-8 */
-	STRING p = lower(str);
-	*p = ll_toupper((uchar)*p);
-	return p;
-}
-/*================================
- * titlecase -- Titlecase string
- * Created: 2001/12/30 (Perry Rapp)
- *  returns static buffer (borrowed from lower)
- *==============================*/
-STRING
-titlecase (STRING str)
-{
-	/* % sequences aren't a problem, as % isn't lower */
-	STRING p = lower(str), buf=p;
-	if (!p[0]) return p;
-	while (1) {
-		/* TODO: This does not work with UTF-8 */
-		/* capitalize first letter of word */
-		*p = ll_toupper((uchar)*p);
-		/* skip to end of word */
-		while (*p && !iswhite((uchar)*p))
-			++p;
-		if (!*p) return buf;
-		/* skip to start of next word */
-		while (*p && iswhite((uchar)*p))
-			++p;
-		if (!*p) return buf;
-	}
-}
 /*==========================================
  * ll_toupper -- Convert letter to uppercase
  *========================================*/
@@ -294,305 +151,6 @@ ll_tolower (INT c)
 	return c + 'a' - 'A';
 #endif
 }
-/*================================
- * trim -- Trim string if too long
- *  returns static buffer (or NULL)
- *==============================*/
-STRING
-trim (STRING str, INT len)
-{
-	static char scratch[MAXLINELEN+1];
-	if (!str || strlen(str) > MAXLINELEN) return NULL;
-	if (len < 0) len = 0;
-	if (len > MAXLINELEN) len = MAXLINELEN;
-	strcpy(scratch, str);
-	scratch[len] = '\0';
-	return scratch;
-}
-/*=========================================
- * striptrail -- Strip trailing white space
- *  modifies argument (zeros out trailing whitespace)
- *=======================================*/
-void
-striptrail (STRING p)
-{
-	STRING q = p + strlen(p) - 1;
-	while (q >= p && iswhite((uchar)*q))
-		*q-- = '\0';
-}
-#ifdef UNUSED_CODE
-/*=======================================
- * striplead -- Strip leading white space
- *  modifies argument (shifts up string towards
- *  beginning to eliminate any leading whitespace)
- * UNUSED CODE
- *=====================================*/
-void
-striplead (STRING p)
-{
-	INT i = strlen(p);
-	STRING  e = p + i - 1;
-	STRING b = p;
-	STRING q = p;
-
-	while (iswhite((uchar)*q) && q <= e) {
-		++q;
-		--i; /* keep from copying past end of p */
-	}
-	if (q == p) return;
-
-	while (b <= e && --i >= 0)
-		*b++ = *q++;
-	*b++ = '\0';
-}
-#endif /* UNUSED_CODE */
-/*=========================================
- * allwhite -- Check if string is all white
- *=======================================*/
-BOOLEAN
-allwhite (STRING p)
-{
-	while (*p)
-		if (!iswhite((uchar)*p++)) return FALSE;
-	return TRUE;
-}
-/*==============================
- * utf8len -- Length of a utf-8 character
- *  ch: [in] starting byte
- * Created: 2001/08/02 (Perry Rapp)
- *============================*/
-INT
-utf8len (char ch)
-{
-	/* test short cases first, as probably much more common */
-	if (!(ch & 0x80 && ch & 0x40))
-		return 1;
-	if (!(ch & 0x20))
-		return 2;
-	if (!(ch & 0x10))
-		return 3;
-	if (!(ch & 0x08))
-		return 4;
-	if (!(ch & 0x04))
-		return 5;
-	return 6;
-}
-/*==============================
- * printpic_arg -- Print an arg to a string
- *  This is the heart of sprintpic, here so we
- *  can use it in all sprintpic's.
- *  b:      [I/O] pointer to output buffer
- *  max:    [IN]  space left in output buffer
- *  arg:    [IN]  arg to insert
- *  arglen: [IN]  (precomputed) length of arg
- * returns FALSE if can't fit entire arg.
- * Created: 2001/12/30 (Perry Rapp)
- *============================*/
-static BOOLEAN
-printpic_arg (STRING *b, INT max, CNSTRING arg, INT arglen)
-{
-	if (!arglen) return TRUE;
-	if (arglen > max) {
-		/* can't fit it all */
-		llstrncpy(*b, arg, max+1); 
-		b[max] = 0;
-		return FALSE;
-	} else {
-		/* it fits */
-		strcpy(*b, arg);
-		*b += arglen;
-		return TRUE;
-	}
-}
-/*=========================================
- * find_prev_char -- Back up to start of previous character.
- * Return pointer to start of previous character,
- *  and optionally its width.
- * (This is of course trivial if we're not in UTF-8 mode.)
- * If limit is non-zero, don't back up beyond this.
- * This will set *width=0 if it gets back to limit without 
- *  finding valid character.
- * Created: 2002/06/12, Perry Rapp
- *=======================================*/
-STRING
-find_prev_char (STRING ptr, INT * width, STRING limit)
-{
-	INT len=1;
-	if (int_utf8) {
-		while (1) {
-			if (ptr == limit) {
-				len = 0;
-				break;
-			}
-			--ptr;
-			if (utf8len(*ptr)<=len)
-				break;
-		}
-	} else {
-		if (ptr == limit) {
-			len = 0;
-		}
-		--ptr;
-	}
-	if (width)
-		*width = len;
-	return ptr;
-}
-/*=========================================
- * sprintpic0 -- Print using a picture string
- *  with no arguments
- * This is just snprintf, but fixed to always
- * zero-terminate.
- *=======================================*/
-void
-sprintpic0 (STRING buffer, INT len, CNSTRING pic)
-{
-	if (len == snprintf(buffer, len, pic)) {
-		/* overflowed -- back up to last character that fits */
-		INT width=0;
-		STRING prev = find_prev_char(&buffer[len-1], &width, buffer);
-		prev[width]=0;
-	}
-
-}
-/*==============================
- * sprintpic1 -- Print using a picture string
- *  with one argument, eg "From %1"
- *  buffer:  [I/O] output buffer
- *  len:     [IN]  size of output buffer
- *  pic:     [IN]  picture string
- *  arg1:    [IN]  argument (for %1)
- * (Multiple occurrences of %1 are allowed.)
- * returns FALSE if it couldn't fit whole thing.
- * Created: 2001/12/30 (Perry Rapp)
- *============================*/
-BOOLEAN
-sprintpic1 (STRING buffer, INT len, CNSTRING pic, CNSTRING arg1)
-{
-	STRING b = buffer, bmax = &buffer[len-1];
-	CNSTRING p=pic;
-	INT arg1len = arg1 ? strlen(arg1) : 0; /* precompute */
-	while (1) {
-		if (p[0]=='%' && p[1]=='1') {
-			if (!printpic_arg(&b, bmax-b, arg1, arg1len))
-				return FALSE;
-			p += 2;
-		} else {
-			*b++ = *p++;
-		}
-		if (!p[0]) { /* ran out of input */
-			*b=0;
-			return TRUE;
-		}
-		if (b == bmax) { /* ran out of output room */
-			*b=0;
-			return FALSE;
-		}
-	}
-}
-/*==============================
- * sprintpic2 -- Print using a picture string
- *  with two arguments, eg "From %1 To %s"
- * See sprintpic1 for argument explanation.
- * Created: 2001/12/30 (Perry Rapp)
- *============================*/
-BOOLEAN
-sprintpic2 (STRING buffer, INT len, CNSTRING pic, CNSTRING arg1, CNSTRING arg2)
-{
-	STRING b = buffer, bmax = &buffer[len-1];
-	CNSTRING p=pic;
-	INT arg1len = arg1 ? strlen(arg1) : 0; /* precompute */
-	INT arg2len = arg2 ? strlen(arg2) : 0;
-	while (1) {
-		if (p[0]=='%' && p[1]=='1') {
-			if (!printpic_arg(&b, bmax-b, arg1, arg1len))
-				return FALSE;
-			p += 2;
-		} else if (p[0]=='%' && p[1]=='2') {
-			if (!printpic_arg(&b, bmax-b, arg2, arg2len))
-				return FALSE;
-			p += 2;
-		} else {
-			*b++ = *p++;
-		}
-		if (!p[0]) { /* ran out of input */
-			*b=0;
-			return TRUE;
-		}
-		if (b == bmax) { /* ran out of output room */
-			*b=0;
-			return FALSE;
-		}
-	}
-}
-/*==============================
- * sprintpic3 -- Print using a picture string
- *  with three arguments, eg "%1/%2/%3"
- * See sprintpic1 for argument explanation.
- * Created: 2001/12/30 (Perry Rapp)
- *============================*/
-BOOLEAN
-sprintpic3 (STRING buffer, INT len, CNSTRING pic, CNSTRING arg1, CNSTRING arg2
-	, CNSTRING arg3)
-{
-	STRING b = buffer, bmax = &buffer[len-1];
-	CNSTRING p=pic;
-	INT arg1len = arg1 ? strlen(arg1) : 0; /* precompute */
-	INT arg2len = arg2 ? strlen(arg2) : 0;
-	INT arg3len = arg3 ? strlen(arg3) : 0;
-	while (1) {
-		if (p[0]=='%' && p[1]=='1') {
-			if (!printpic_arg(&b, bmax-b, arg1, arg1len))
-				return FALSE;
-			p += 2;
-		} else if (p[0]=='%' && p[1]=='2') {
-			if (!printpic_arg(&b, bmax-b, arg2, arg2len))
-				return FALSE;
-			p += 2;
-		} else if (p[0]=='%' && p[1]=='3') {
-			if (!printpic_arg(&b, bmax-b, arg3, arg3len))
-				return FALSE;
-			p += 2;
-		} else {
-			*b++ = *p++;
-		}
-		if (!p[0]) { /* ran out of input */
-			*b=0;
-			return TRUE;
-		}
-		if (b == bmax) { /* ran out of output room */
-			*b=0;
-			return FALSE;
-		}
-	}
-}
-/*============================================
- * chomp -- remove any trailing carriage return/linefeed
- * Created: 2002/01/03 (Perry Rapp)
- *==========================================*/
-void
-chomp (STRING str)
-{
-	STRING p = str + strlen(str) - 1;
-	while (p>=str && (*p=='\r' || *p=='\n')) {
-		*p=0;
-		--p;
-	}
-}
-/*=============================================+
- * free_array_strings -- Free all strings in an array
- *  n:   [IN]  size of array
- *  arr: [I/O] array
- *============================================*/
-void
-free_array_strings (INT n, STRING * arr)
-{
-	INT i;
-	for (i=0; i<n; ++i)
-	{
-		strfree(&arr[i]); /* frees & zeros pointer */
-	}
-}
 /*===============================
  * eqstr_ex -- Are two strings equal ?
  *  This is just eqstr extended to handle empty or null strings
@@ -611,4 +169,63 @@ eqstr_ex (STRING s1, STRING s2)
 		else
 			return eqstr(s1, s2);
 	}
+}
+/*==================================
+ * llstrncpy -- strncpy that always zero-terminates
+ * handles UTF-8
+ * Created: 2001/03/17, Perry Rapp
+ *================================*/
+char *
+llstrncpy (char *dest, const char *src, size_t n)
+{
+	/* must have valid strings, and copying at least one byte */
+	if (!dest || !src || !src[0] || n<2) return dest;
+	strncpy(dest, src, n);
+	if (dest[n-1]) {
+		/* overflowed -- back up to last character that fits */
+		INT width=0;
+		STRING prev = find_prev_char(&dest[n-1], &width, dest);
+		prev[width]=0;
+	}
+	return dest;
+}
+/*==================================
+ * llstrncpyf -- snprintf replacement
+ * handles UTF-8
+ * Created: 2002/06/16, Perry Rapp
+ *================================*/
+char *
+llstrncpyf (char *dest, size_t n, const char * fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	llstrncpyvf(dest, n, fmt, args);
+	va_end(args);
+	return dest;
+}
+/*==================================
+ * llstrncpyvf -- vsnprintf replacement
+ * handles UTF-8
+ * Created: 2002/06/16, Perry Rapp
+ *================================*/
+char *
+llstrncpyvf (char *dest, size_t n, const char * fmt, va_list args)
+{
+	if (n<1) return dest;
+	dest[0] = 0;
+	return llstrappvf(dest, n, fmt, args);
+}
+/*==================================
+ * llstrncat -- strncat that always zero-terminates
+ * handles UTF-8
+ * Created: 2001/03/17, Perry Rapp
+ *================================*/
+char *
+llstrncat (char *dest, const char *src, size_t n)
+{
+	size_t len = strlen(dest);
+	if (len > n-2) /* must fit trailing zero */
+		return dest;
+	llstrncpy(dest+len, src, n);
+	return dest;
 }

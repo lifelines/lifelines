@@ -663,8 +663,8 @@ add_dbs_to_list (LIST dblist, LIST dbdesclist, STRING dir)
 	n = scandir(dirbuf, &programs, 0, 0);
 	if (n < 0) return;
 	while (n--) {
-		strcpy(candidate, concat_path(dirbuf, programs[n]->d_name));
-		strcpy(userpath, concat_path(dir, programs[n]->d_name));
+		concat_path(dirbuf, programs[n]->d_name, candidate, sizeof(candidate));
+		concat_path(dir, programs[n]->d_name, userpath, sizeof(userpath));
 		if ((dbstr = getdbdesc(candidate, userpath)) != NULL) {
 			push_list(dblist, strsave(userpath));
 			push_list(dbdesclist, dbstr);

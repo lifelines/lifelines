@@ -1,3 +1,19 @@
+2002-06-27 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog build/msvc6/llines/llinesprj.dsp gedlib/charmaps.c
+	gedlib/init.c gedlib/names.c hdrs/llstdlib.h hdrs/mystring.h
+	interp/interp.c interp/rassa.c liflines/ask.c
+	liflines/askprogram.c liflines/export.c liflines/loadsave.c
+	liflines/main.c liflines/screen.c stdlib/Makefile.am
+	stdlib/mystring.c stdlib/path.c stdlib/stdstrng.c
+	NEW: stdlib/appendstr.c stdlib/sprintpic.c stdlib/stralloc.c
+	NEW: stdlib/strapp.c stdlib/strcvt.c stdlib/strutf8.c
+	NEW: stdlib/strwhite.c:
+
+	Split string functions by type.
+	Fix bug in filepath & bug in concat_path. Change concat_path to
+	use caller buffer (instead of static buffer).
+
 2002-06-26 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog po/Makevars po/de.po po/el.po po/it.po po/sv.po:

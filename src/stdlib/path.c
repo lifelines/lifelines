@@ -104,67 +104,78 @@ path_cmp (CNSTRING path1, CNSTRING path2)
 /*=============================================
  * test_concat_path -- test code for concat_path
  *===========================================*/
-#if TEST_CODE
+#ifdef TEST_CODE
 static void
 test_concat_path (void)
 {
+	char buffer[MAXPATHLEN];
 	STRING testpath;
-	testpath = concat_path("hey", "jude");
-	testpath = concat_path("hey", "/jude");
-	testpath = concat_path("hey/", "jude");
-	testpath = concat_path("hey/", "/jude");
-	testpath = concat_path("hey", "jude");
-	testpath = concat_path("hey", "\\jude");
-	testpath = concat_path("hey/", "jude");
-	testpath = concat_path("hey\\", "\\jude");
-	testpath = concat_path(NULL, "\\jude");
-	testpath = concat_path("hey", NULL);
+	testpath = concat_path("hey", "jude", buffer, sizeof(buffer));
+	testpath = concat_path("hey", "/jude", buffer, sizeof(buffer));
+	testpath = concat_path("hey/", "jude", buffer, sizeof(buffer));
+	testpath = concat_path("hey/", "/jude", buffer, sizeof(buffer));
+	testpath = concat_path("hey", "jude", buffer, sizeof(buffer));
+	testpath = concat_path("hey", "\\jude", buffer, sizeof(buffer));
+	testpath = concat_path("hey/", "jude", buffer, sizeof(buffer));
+	testpath = concat_path("hey\\", "\\jude", buffer, sizeof(buffer));
+	testpath = concat_path(NULL, "\\jude", buffer, sizeof(buffer));
+	testpath = concat_path(NULL, "jude", buffer, sizeof(buffer));
+	testpath = concat_path("hey", NULL, buffer, sizeof(buffer));
+	testpath = concat_path("hey/", NULL, buffer, sizeof(buffer));
+	testpath = concat_path(NULL, NULL, buffer, sizeof(buffer));
+	testpath = concat_path("/", NULL, buffer, sizeof(buffer));
 }
 #endif
 /*=============================================
  * concat_path -- add file & directory together
- *  returns static buffer
- *  handles NULL in either argument
+ *  dir:  [IN]  directory (may be NULL)
+ *  file: [IN]  file (may be NULL)
  *  handles trailing / in dir and/or leading / in file
  *  (see test_concat_path above)
  *  returns no trailing / if file is NULL
- *  returns static buffer
  *===========================================*/
 STRING
-concat_path (CNSTRING dir, CNSTRING file)
+concat_path (CNSTRING dir, CNSTRING file, STRING buffer, INT buflen)
 {
-	static char buffer[MAXPATHLEN];
-	STRING ptr = buffer;
-	INT len=sizeof(buffer);
-	ptr[0]=0;
-	if (dir)
-		llstrcatn(&ptr, dir, &len);
-	if (is_dir_sep(buffer[strlen(buffer)-1])) {
-		if (!file) {
-			buffer[strlen(buffer)-1] = 0;
-		} else {
+	ASSERT(buflen);
+	buffer[0] = 0;
+	if (dir && dir[0]) {
+		llstrapp(buffer, buflen, dir);
+		if (is_dir_sep(buffer[strlen(buffer)-1])) {
 			/* dir ends in sep */
-			if (is_dir_sep(file[0])) {
-				/* file starts in sep */
-				llstrcatn(&ptr, &file[1], &len);
+			if (!file || !file[0]) {
+				/* dir but no file, we don't include trailing slash */
+				buffer[strlen(buffer)-1] = 0;
 			} else {
-				/* file doesn't start in sep */
-				llstrcatn(&ptr, file, &len);
+				if (is_dir_sep(file[0])) {
+					/* file starts in sep */
+					llstrapp(buffer, buflen, &file[1]);
+				} else {
+					/* file doesn't start in sep */
+					llstrapp(buffer, buflen, file);
+				}
+			}
+		} else {
+			/* dir doesn't end in sep */
+			if (!file || !file[0]) {
+				/* dir but no file, we don't include trailing slash */
+			} else {
+				if (is_dir_sep(file[0])) {
+					/* file starts in sep */
+					llstrapp(buffer, buflen, file);
+				} else {
+					/* file doesn't start in sep */
+					llstrapp(buffer, buflen, LLSTRDIRSEPARATOR);
+					llstrapp(buffer, buflen, file);
+				}
 			}
 		}
 	} else {
-		if (!file) {
-		} else {
-			if (is_dir_sep(file[0])) {
-				/* file starts in sep */
-				llstrcatn(&ptr, file, &len);
-			} else {
-				/* file doesn't start in sep */
-				llstrcatn(&ptr, LLSTRDIRSEPARATOR, &len);
-				llstrcatn(&ptr, file, &len);
-			}
-		}
+		/* no dir, include file exactly as it is */
+		if (file && file[0])
+			llstrapp(buffer, buflen, file);
 	}
+
 	return buffer;
 }
 /*===========================================

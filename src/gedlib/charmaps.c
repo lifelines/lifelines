@@ -202,7 +202,7 @@ check_for_user_charmaps (STRING basename, TRANMAPPING ttm, CNSTRING mapname)
 		if (!ttname || !ttname[0])
 			break;
 		/* user wishes to load translation table named ttname */
-		llstrncpy(ttpath, concat_path(ttdir, ttname), sizeof(ttpath));
+		concat_path(ttdir, ttname, ttpath, sizeof(ttpath));
 		load_user_charmap(ttpath, mapname, ttm);
 	}
 }

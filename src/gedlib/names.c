@@ -767,7 +767,7 @@ trim_name (STRING name, INT len)
 	for (i = sdex-1; i >= 0; --i) {
 		/* chop to initial */
 		/* TODO: This doesn't handle composition */
-		if (int_utf8 == 8) {
+		if (int_utf8) {
 			INT wid = utf8len(parts[i][0]);
 			if (wid>1) {
 				INT len = strlen(parts[i]);

@@ -496,7 +496,9 @@ open_or_create_database (INT alteration, STRING dbrequested, STRING *dbused)
 		STRING newdbdir = getoptstr("LLNEWDBDIR", 0);
 		STRING temp = *dbused;
 		if (newdbdir) {
-			*dbused = strsave(concat_path(newdbdir, *dbused));
+			char tempth[MAXPATHLEN];
+			concat_path(newdbdir, *dbused, tempth, sizeof(tempth));
+			*dbused = strsave(tempth);
 			stdfree(temp);
 		}
 	}

@@ -109,6 +109,10 @@ SOURCE=..\..\..\arch\alphasort.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\stdlib\appendstr.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\liflines\ask.c
 # End Source File
 # Begin Source File
@@ -429,7 +433,31 @@ SOURCE=..\..\..\gedlib\spltjoin.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\stdlib\sprintpic.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\stdlib\stdstrng.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\stdlib\stralloc.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\stdlib\strapp.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\stdlib\strcvt.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\stdlib\strutf8.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\stdlib\strwhite.c
 # End Source File
 # Begin Source File
 

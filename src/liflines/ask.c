@@ -147,6 +147,7 @@ ask_for_int (STRING ttl)
  * ask_for_file_worker -- Ask for and open file
  *  ttl:    [IN]  title of question (1rst line)
  *  pfname: [OUT] optional output parameter (pass NULL if undesired)
+ *              pfname is allocated on heap
  *====================================*/
 typedef enum { INPUT, OUTPUT } DIRECTION;
 static FILE *
@@ -203,7 +204,7 @@ ask_for_file_worker (STRING mode,
 	}
 
 	if (!(fp = fopenpath(fname, mode, path, ext, pfname))) {
-		if(pfname && (*pfname == NULL)) *pfname = fname;
+		if (pfname && (*pfname == NULL)) *pfname = strsave(fname);
 		msg_error(_(qSnofopn), fname);
 		return NULL;
 	}

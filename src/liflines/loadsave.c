@@ -195,6 +195,7 @@ load_gedcom (void)
 	srcdir = getoptstr("InputPath", ".");
 	fp = ask_for_input_file(LLREADTEXT
 		, _("Please enter the name of the GEDCOM file."), &fname, srcdir, ".ged");
+	strfree(&fname);
 	if (!fp) return;
 
 	memset(&ifeed, 0, sizeof(ifeed));

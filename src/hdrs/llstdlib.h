@@ -39,6 +39,12 @@
 extern BOOLEAN int_utf8;
 extern STRING  int_codeset;
 
+/* appendstr.c */
+void appendstr(char ** pdest, int * len, const char * src);
+void appendstrf(char ** pdest, int * len, const char * fmt,...);
+void appendstrvf(char ** pdest, int * len, const char * fmt, va_list args);
+	/* llstrcatn is a bad name, because its prototype is different from strcatn! */
+#define llstrcatn(dest, src, len) appendstr(dest, len, src)
 
 /* assert.c */
 /*
@@ -104,7 +110,7 @@ char * dcngettext_null(const char *, const char *, const char *, unsigned long i
 STRING check_file_for_unicode(FILE * fp);
 INT chop_path(STRING path, STRING dirs);
 STRING compress_path(CNSTRING path, INT len);
-STRING concat_path(CNSTRING dir, CNSTRING file);
+STRING concat_path(CNSTRING dir, CNSTRING file, STRING buffer, INT buflen);
 BOOLEAN expand_special_fname_chars(STRING buffer, INT buflen);
 STRING filepath(CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING ext);
 FILE* fopenpath(STRING, STRING, STRING, STRING, STRING*);
@@ -118,35 +124,54 @@ BOOLEAN path_match(CNSTRING path1, CNSTRING path2);
 void set_signals(void);
 void ll_abort(STRING);
 
-/* stdstrng.c */
-BOOLEAN allwhite(STRING);
-STRING capitalize(STRING);
-INT chartype(INT);
-void chomp(STRING);
-BOOLEAN eqstr_ex(STRING s1, STRING s2);
-STRING find_prev_char(STRING ptr, INT * width, STRING limit);
-void free_array_strings(INT n, STRING * arr);
-BOOLEAN isletter(INT);
-BOOLEAN isnumeric(STRING);
-BOOLEAN iswhite(INT);
-INT ll_toupper(INT);
-INT ll_tolower(INT);
-STRING lower(STRING);
+/* sprintpic.c */
 void sprintpic0(STRING buffer, INT len, CNSTRING pic);
 BOOLEAN sprintpic1(STRING buffer, INT len, CNSTRING pic, CNSTRING arg1);
 BOOLEAN sprintpic2(STRING buffer, INT len, CNSTRING pic, CNSTRING arg1
 	, CNSTRING arg2);
 BOOLEAN sprintpic3(STRING buffer, INT len, CNSTRING pic, CNSTRING arg1
 	, CNSTRING arg2, CNSTRING arg3);
+
+/* stdstrng.c */
+INT chartype(INT);
+BOOLEAN eqstr_ex(STRING s1, STRING s2);
+BOOLEAN isletter(INT);
+BOOLEAN iswhite(INT);
+INT ll_toupper(INT);
+INT ll_tolower(INT);
+char *llstrncat(char *dest, const char *src, size_t n);
+char *llstrncpy(char *dest, const char *src, size_t n);
+char *llstrncpyf(char *dest, size_t n, const char * fmt, ...);
+char *llstrncpyvf(char *dest, size_t n, const char * fmt, va_list args);
+
+/* stralloc.c */
+void free_array_strings(INT n, STRING * arr);
 STRING strconcat(STRING, STRING);
 void strfree(STRING *);
-void striplead(STRING);
-void striptrail(STRING);
 STRING strsave(CNSTRING);
 void strupdate(STRING * str, CNSTRING value);
+
+/* strapp.c */
+char *llstrapp(char *dest, size_t limit, const char *src);
+char *llstrappf(char *dest, int limit, const char *fmt, ...);
+char *llstrappvf(char *dest, int limit, const char *fmt, va_list args);
+
+/* strcvt.c */
+STRING capitalize(STRING);
+BOOLEAN isnumeric(STRING);
+STRING lower(STRING);
 STRING titlecase(STRING);
-STRING trim(STRING, INT);
 STRING upper(STRING);
+
+/* strutf8.c */
+STRING find_prev_char(STRING ptr, INT * width, STRING limit);
 INT utf8len(char ch);
+
+/* strwhite.c */
+BOOLEAN allwhite(STRING);
+void chomp(STRING);
+void striplead(STRING);
+void striptrail(STRING);
+STRING trim(STRING, INT);
 
 #endif /* _LL_STDLIB_H */

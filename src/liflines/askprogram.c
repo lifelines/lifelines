@@ -354,6 +354,7 @@ get_choice (PROGRAM_INFO head, int choice)
 
 /*===================================================
  * ask_for_program -- Ask for and open program script
+ *  pfname: [OUT]  allocated on heap (name we tried to open)
  *=================================================*/
 FILE *
 ask_for_program (STRING mode,
@@ -369,6 +370,8 @@ ask_for_program (STRING mode,
   STRING *list = NULL;
   STRING programsdir = getoptstr("LLPROGRAMS", ".");
   static char fname[MAXLINELEN]; /* for returning path */
+
+  if (pfname) *pfname = 0;
 
   if (!picklist)
     {
@@ -415,7 +418,7 @@ ask_for_program (STRING mode,
           /* give path to caller, whether or not we succeeded */
           strncpy(fname, cur->filename,sizeof(fname)-1);
           fname[sizeof(fname)-1] = '\0';
-          *pfname = fname;
+          *pfname = strsave(fname);
         }
       free_program_list(head, list, len);
     }

@@ -1994,8 +1994,7 @@ load_tt_action (void)
 		if (!load_new_tt(fname, ttnum))
 			msg_error(_(qSdataerr));
 	}
-	if (fname)
-		stdfree(fname);
+	strfree(&fname);
 }
 /*======================================
  * save_tt_action -- save a translation table
@@ -2028,11 +2027,11 @@ save_tt_action (void)
 		/* Save it */
 		if (!save_tt_to_file(ttnum, fname)) {
 			msg_error(_(qSdataerr));
+			strfree(&fname);
 			return;
 		}
 	}
-	if (fname)
-		stdfree(fname);
+	strfree(&fname);
 }
 #endif
 /*======================================

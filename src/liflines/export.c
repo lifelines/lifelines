@@ -84,6 +84,7 @@ archive_in_file (void)
 
 	fn = ask_for_output_file(LLWRITETEXT, _(qSoutarc), &fname, archivesdir, ".ged");
 	if (!fn) {
+		strfree(&fname);
 		msg_error("The database was not saved.");
 		return FALSE; 
 	}
@@ -119,6 +120,7 @@ archive_in_file (void)
 	fclose(fn);
 	wpos(7,0);
 	msg_info(_(qSoutfin), btreepath, fname);
+	strfree(&fname);
 	return TRUE;
 }
 /*========================================================

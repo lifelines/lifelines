@@ -200,10 +200,11 @@ interp_program (STRING proc, INT nargs, VPTR *args, INT nifiles
 				/* tried & failed to open report program */
 				llwprintf(_("Error: file <%s> not found"), ifile);
 			}
+			strfree(&ifile);
 			goto interp_program_exit;
 		}
 		fclose(fp);
-		progname = strsave(ifile);
+		progname = ifile;
 
 		enqueue_list(plist, strsave(ifile));
 	}
@@ -1723,7 +1724,7 @@ vprog_error (PNODE node, STRING fmt, va_list args)
 		llstrncpyf(msglineno, sizeof(msglineno), _("Aborting: "));
 	}
 	appendstr(&ptr, &mylen, msglineno);
-	vappendstrf(&ptr, &mylen, fmt, args);
+	appendstrvf(&ptr, &mylen, fmt, args);
 	if (msgf[0])
 		llwprintf(msgf);
 	llwprintf("\n");

@@ -241,11 +241,12 @@ request_file (BOOLEAN *eflg)
 		*eflg = TRUE;
 		/* set cancel flag to suppress traceback */
 		rpt_cancelled = TRUE;
+		strfree(&fname);
 		return FALSE;
 	}
 	if (outfilename)
 		stdfree(outfilename);
-	outfilename = strsave(fname);
+	outfilename = fname;
 	return TRUE;
 }
 /*====================================+
