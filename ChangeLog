@@ -20,7 +20,7 @@
 	Fix crash involving pointers.
 	Restore ALL_LINGUAS (to ease life of Debian maintainer).
 
-	*
+	* ChangeLog src/interp/builtin.c:
 
 	Remove unnecessary code conversions.
 
