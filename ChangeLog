@@ -23,6 +23,10 @@
 
 	Revising default MS-Windows directory layout & documentation.
 
+	* ChangeLog build/rpm/lifelines.spec:
+
+	Needed to add da.po to one more location in rpm spec file.
+
 2002-11-08 Perry Rapp
 
 	* ChangeLog src/interp/builtin.c src/liflines/brwsmenu.c

@@ -63,6 +63,7 @@ install -m 644 docs/llines.1 $RPM_BUILD_ROOT/usr/local/man/man1/llines.1
 /usr/local/bin/llines
 /usr/local/bin/llexec
 /usr/local/bin/dbverify
+/usr/local/share/locale/da/LC_MESSAGES/lifelines.mo
 /usr/local/share/locale/de/LC_MESSAGES/lifelines.mo
 /usr/local/share/locale/fr/LC_MESSAGES/lifelines.mo
 /usr/local/share/locale/sv/LC_MESSAGES/lifelines.mo
