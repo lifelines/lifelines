@@ -3419,7 +3419,8 @@ repaint_search_menu (UIWINDOW uiwin)
 			, "c  Review change history (%d records)"
 			, n), n);
 	} else {
-		llstrncpy(buffer, "(change history is empty)", sizeof(buffer), uu8);
+		llstrncpy(buffer, _("(change history is empty)")
+			, sizeof(buffer), uu8);
 	}
 	mvccwaddstr(win, row++, 4, buffer);
 	mvccwaddstr(win, row++, 4, _(qSmn_sea_scan));

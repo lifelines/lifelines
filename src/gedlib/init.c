@@ -117,10 +117,6 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 		cfg_file = environ_determine_config_file();
 		/* first try $HOME/config_file */
 		llstrncpy(cfg_name,getenv("HOME") , sizeof(cfg_name), 0);
-		/*
-		llstrncat(cfg_name,"/",sizeof(cfg_name),0);
-		llstrncat(cfg_name,cfg_file,sizeof(cfg_name),0);
-		*/
 		llstrappc(cfg_name, sizeof(cfg_name), '/');
 		llstrapps(cfg_name, sizeof(cfg_name), 0, cfg_file);
 		if (!load_global_options(cfg_name, pmsg)) {
@@ -128,17 +124,13 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 			update_useropts(NULL);
 			return FALSE;
 		}
-		if (!load_global_options(cfg_file, pmsg)) {
-			suppress_reload = FALSE;
-			update_useropts(NULL);
-			return FALSE;
-		}
-	} else {
-		if (!load_global_options(configfile, pmsg)) {
-			suppress_reload = FALSE;
-			update_useropts(NULL);
-			return FALSE;
-		}
+		configfile = cfg_file;
+		/* fall through to open config file */
+	}
+	if (!load_global_options(configfile, pmsg)) {
+		suppress_reload = FALSE;
+		update_useropts(NULL);
+		return FALSE;
 	}
 
 #ifdef WIN32

@@ -554,7 +554,8 @@ static void
 print_report_duration (INT duration, INT uiduration)
 {
 	ZSTR zt1=approx_time(duration-uiduration), zt2=approx_time(uiduration);
-	llwprintf("\nReport duration %s (ui duration %s)\n", zs_str(zt1), zs_str(zt2));
+	llwprintf(_("\nReport duration %s (ui duration %s)\n")
+		, zs_str(zt1), zs_str(zt2));
 	zs_free(&zt1);
 	zs_free(&zt2);
 }

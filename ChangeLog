@@ -1,3 +1,12 @@
+2003-06-19 Perry Rapp
+
+	* ChangeLog src/gedlib/init.c src/hdrs/pvalue.h
+	src/interp/interp.c src/liflines/screen.c
+
+	i18n occurrences reported by Frank Ellebrecht.
+	Fix comments in pvalue.h from C++ to C.
+	Remove CR characters I introduced recently.
+
 2003-06-18 Matt Emmerton
 
 	* ChangeLog src/interp/pvalue.c

@@ -28,12 +28,12 @@
 #ifndef _PVALUE_H
 #define _PVALUE_H
 
-#include "array.h"	// for ARRAY
-#include "list.h"	// for LIST
-#include "cache.h"	// for CACHEEL
-#include "gedcom.h"	// for NODE, RECORD
-#include "indiseq.h"	// for INDISEQ
-#include "table.h"	// for TABLE
+#include "array.h"      /* for ARRAY */
+#include "list.h"       /* for LIST */
+#include "cache.h"      /* for CACHEEL */
+#include "gedcom.h"     /* for NODE, RECORD */
+#include "indiseq.h"    /* for INDISEQ */
+#include "table.h"      /* for TABLE */
 
 typedef union {
 	/* "basic" types, should be same as UNION */
