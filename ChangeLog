@@ -1,4 +1,10 @@
-2003-08-17  Jens Arvidsson  <jya@sverige.nu>
+2003-08-24  Jens Arvidsson
+
+	* ChangeLog docs/sv/ll-reportmanual.sv.xml po/sv.po
+	
+	 Error corrections in Swedish message catalog and report manual.
+
+2003-08-17  Jens Arvidsson
 
 	* ChangeLog po/sv.po
 	
