@@ -343,7 +343,7 @@ add_name (STRING name,  /* person's name */
 	INT i, len, off;
 	RKEY rkey;
 	rkey = str2rkey(key);
-	ASSERT(getnamerec(name));
+	(void) getnamerec(name);
 	for (i = 0; i < NRcount; i++) {
 		if (!ll_strncmp(rkey.r_rkey, NRkeys[i].r_rkey, 8) &&
 		    eqstr(name, NRnames[i]))

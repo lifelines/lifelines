@@ -74,7 +74,8 @@ merge_two_indis (NODE indi1,    /* two persons to merge - can't be null */
 	NODE indi4;
 	NODE fam, husb, wife, chil, rest, fref, keep=NULL;
 	NODE this, that, prev, next, node, head;
-	NODE fam12, name12, refn12;
+	NODE fam12;
+	NODE name24, refn24;
 	TRANTABLE tti = tran_tables[MEDIN], tto = tran_tables[MINED];
 	FILE *fp;
 	INT sx2;
@@ -129,6 +130,7 @@ merge_two_indis (NODE indi1,    /* two persons to merge - can't be null */
 	indi02 = indi2;	/* keep original indi2 for later update and return */
 	indi2 = copy_nodes(indi2, TRUE, TRUE);
 
+/* we split indi1 & indi2 and leave them split until near the end */
 	split_indi(indi1, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
 	split_indi(indi2, &name2, &refn2, &sex2, &body2, &famc2, &fams2);
 	indi3 = indi2; 
@@ -157,7 +159,12 @@ merge_two_indis (NODE indi1,    /* two persons to merge - can't be null */
 	join_indi(indi3, name3, refn3, sex3, body3, famc3, fams3);
 
 /*CONDITION 2 -- 3 (init combined) created and joined*/
-
+/* 
+	indi1 & indi2 are originals
+	indi3 is combined version
+	indi4 will be what user creates editing indi3
+	(and then we'll throw away indi3)
+*/
 /* Have user edit merged person */
 	do_edit();
 	while (TRUE) {
@@ -197,7 +204,12 @@ merge_two_indis (NODE indi1,    /* two persons to merge - can't be null */
 
 	classify_nodes(&famc1, &famc2, &fam12);
 
-/* Both were children in same family; remove first as child */
+/*
+ process fam12 - the list of FAMC in both original nodes
+ Both were children in same family; remove first as child
+ FAMCs in indi4 are union of indi1 & indi2 because we don't
+ allow the user to edit these 
+ */
 
 	this = fam12;
 	while (this) {
@@ -234,7 +246,7 @@ merge_two_indis (NODE indi1,    /* two persons to merge - can't be null */
 		this = nsibling(this);
 	}
 
-/*HERE*/
+/* process famc1 - the list of FAMC only in first original node */
 /* Only first was child; make family refer to second */
 
 	this = famc1;
@@ -262,7 +274,12 @@ merge_two_indis (NODE indi1,    /* two persons to merge - can't be null */
 
 	classify_nodes(&fams1, &fams2, &fam12);
 
-/* Both were parents in same family; remove first as parent */
+/*
+ process fam12 - the list of FAMS in both original nodes
+ Both were parents in same family; remove first as parent
+ FAMSs in indi4 are union of indi1 & indi2 because we don't
+ allow the user to edit these 
+ */
 
 	this = fam12;
 	while (this) {
@@ -297,7 +314,7 @@ merge_two_indis (NODE indi1,    /* two persons to merge - can't be null */
 		this = nsibling(this);
 	}
 
-/*HERE*/
+/* process fams1 - the list of FAMS only in first original node */
 /* Only first was parent; make family refer to second */
 
 	this = fams1;
@@ -320,42 +337,61 @@ merge_two_indis (NODE indi1,    /* two persons to merge - can't be null */
 	}
 	free_nodes(fam12);
 
-/*HERE*/
+/*
+ name1 holds original names of #1/
+ name2 holds original names of #2
+ indi4 holds new/edited names
 
-	classify_nodes(&name1, &name2, &name12);
-	classify_nodes(&refn1, &refn2, &refn12);
+ The NAMEs & REFNs in original #1 (indi01) will get deleted
+  when indi01 is deleted below
+ We just need to take care of any changes from indi02 to indi4
+  diff name2 vs name4 & delete any dropped ones, & add new ones
+ But instead of messing with indi4, which is the new record
+  we'll make a scratch copy (in indi3, which is not used now)
+*/
+
+	indi3 = copy_nodes(indi4, TRUE, TRUE);
+
+	split_indi(indi3, &name3, &refn3, &sex3, &body3, &famc3, &fams3);
+	classify_nodes(&name2, &name3, &name24);
+	classify_nodes(&refn2, &refn3, &refn24);
 
 	key = rmvat(nxref(indi4));
-	for (node = name1; node; node = nsibling(node))
+	for (node = name2; node; node = nsibling(node))
+		remove_name(nval(node), key);
+	for (node = name3; node; node = nsibling(node))
 		add_name(nval(node), key);
 	rename_from_browse_lists(key);
-	for (node = refn1; node; node = nsibling(node))
+	for (node = refn2; node; node = nsibling(node))
+		if (nval(node)) remove_refn(nval(node), key);
+	for (node = refn3; node; node = nsibling(node))
 		if (nval(node)) add_refn(nval(node), key);
+	join_indi(indi3, name3, refn3, sex3, body3, famc3, fams3);
+	free_nodes(indi3);
+	free_nodes(name24);
+	free_nodes(refn24);
+
+/* done with changes, save new record to db */
+
 	resolve_links(indi4);
 	indi_to_dbase(indi4);
+
+/* finally we're done with indi1 & indi2 */
+
 	join_indi(indi1, name1, refn1, sex1, body1, famc1, fams1);
 	free_nodes(indi1);
 	join_indi(indi2, name2, refn2, sex2, body2, famc2, fams2);
 	free_nodes(indi2);
-	free_nodes(name12);
-	free_nodes(refn12);
 
-	/* update indi02 to contain info from new merged record in indi4 */
+/* update indi02 to contain info from new merged record in indi4 */
+/* Note - we could probably just save indi4 and delete indi02 
+	- Perry, 2000/12/06 */
 
 	split_indi(indi4, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
 	split_indi(indi02, &name2, &refn2, &sex2, &body2, &famc2, &fams2);
 	join_indi(indi4, name2, refn2, sex2, body2, famc2, fams2);
 	join_indi(indi02, name1, refn1, sex1, body1, famc1, fams1);
 	free_nodes(indi4);
-
-/* BUG!
-  Nodes in indi02 that were edited out of indi4 are not deleted.
-  For example, orphaned NAMEs from indi2 are now ghost names
-  pointing at indi4. If indi4 is deleted, the ghost names will
-  remain, and will point at whatever record is later put into
-  the key# of indi4.
-  Perry, 2000/11/16
-*/
 
 	delete_indi(indi01, FALSE);	/* this is the original indi1 */
 	return indi02;			/* this is the updated indi2 */
