@@ -128,7 +128,7 @@ lowyylex (void)
 	if (t == LETTER) {
 		p = tokbuf;
 		while (is_iden_char(c, t)) {
-			if (p-tokbuf < sizeof(tokbuf) - 3) {
+			if (p-tokbuf < (int)sizeof(tokbuf) - 3) {
 				*p++ = c;
 			} else {
 				/* token overlong -- ignore end of it */

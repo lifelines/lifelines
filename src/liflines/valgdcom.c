@@ -111,7 +111,7 @@ static void handle_value(STRING, INT);
 static BOOLEAN openlog(void);
 static void handle_warn(struct import_feedback * ifeed, STRING, ...);
 static void handle_err(struct import_feedback * ifeed, STRING, ...);
-static void set_import_log(STRING logpath);;
+static void set_import_log(STRING logpath);
 
 /*===================================================
  * validate_gedcom -- Validate GEDCOM records in file

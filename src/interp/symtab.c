@@ -36,16 +36,6 @@
 #include "liflines.h"
 #include "feedback.h"
 
-/*********************************************
- * local function prototypes
- *********************************************/
-
-/* alphabetical */
-static BOOLEAN  symtrav(ENTRY ent, VPTR param);
-
-/*********************************************
- * local variables
- *********************************************/
 
 /*********************************************
  * local function definitions

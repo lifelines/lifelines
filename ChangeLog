@@ -22,6 +22,11 @@
 
 	Fixes for gcc.
 
+	* ChangeLog interp/lex.c interp/symtab.c liflines/browse.c
+	liflines/valgdcom.c stdlib/double.c:
+
+	More cleanup.
+
 2002-06-16 Perry Rapp <puddle@users.sourceforge.net>
 
 	*? .linesrc ChangeLog lines.cfg gedlib/init.c interp/builtin.c:

@@ -32,7 +32,6 @@
  *===========================================================*/
 
 #include "llstdlib.h"
-#include "lloptions.h"
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
@@ -41,6 +40,7 @@
 #include "feedback.h"
 #include "menuitem.h"
 #include "cache.h"
+#include "lloptions.h"
 
 #include "llinesi.h"
 
