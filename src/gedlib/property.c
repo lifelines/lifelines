@@ -44,7 +44,16 @@ get_user_email(void)
   if (NULL != pwent &&
       (int)sizeof(hostname) > gethostname(hostname, sizeof(hostname)))
     {
-      snprintf(username, sizeof(username), "%s@%s", pwent->pw_name, hostname);
+#ifdef HAVE_SNPRINTF
+      snprintf(username, sizeof(username), "%s@%s",
+#else
+#ifdef HAVE__SNPRINTF
+      _snprintf(username, sizeof(username), "%s@%s",
+#else
+      sprintf(username, "%s@%s",
+#endif /* HAVE__SNPRINTF */
+#endif /* HAVE_SNPRINTF */
+	       pwent->pw_name, hostname);
       username[sizeof(username)-1] = '\0';
       retval = (STRING) username;
     }

@@ -1,6 +1,6 @@
 /*
  * @progname       longlines
- * @version        1.0
+ * @version        2.0
  * @author         Chandler
  * @category       
  * @output         Text
@@ -9,8 +9,10 @@
 longlines
 
 Version 1 - 1994 May 19 - John F. Chandler
+Version 2 - 2000 May 4 - John F. Chandler
 
 Find the maximal-length male and female lineages in the database.
+Optionally, find the maximal-length lineage through a specified ancestor.
 
 This program works only with LifeLines.
 
@@ -21,12 +23,21 @@ global(ends)    /* keys of last persons */
 global(linsex)  /* sex of lineage desired */
 
 proc main(){
-"Longest lineages in database\n\n   Male"
-set(linsex,"M")
-call dumplines()
-"\n   Female"
-set(linsex,"F")
-call dumplines()
+getindi(indi,"Enter specific ancestor, if any, whose longest line you want:")
+if(indi) {
+        "Longest descent from " name(indi) " (" key(indi) ")\n\n"
+        set(linsex,sex(indi))
+        set(len,1)
+        call getline(indi)
+        call dumplines()
+} else {
+        "Longest lineages in database\n\n   Male"
+        call getall("M")
+        call dumplines()
+        "\n   Female"
+        call getall("F")
+        call dumplines()
+}
 }
 
 /* scan all offspring matching the sex of the input person, and
@@ -34,7 +45,7 @@ call dumplines()
    offspring, just return the input person as a lineage */
 proc getline(indi)
 {
-set(len,add(len,1))
+incr(len)
 families(indi,fam,spou,num) {
         children(fam,child,numc) {
                 if(eq(0,strcmp(linsex,sex(child)))) {
@@ -43,15 +54,16 @@ families(indi,fam,spou,num) {
                 }
         }
 }
-set(len,sub(len,1))
+decr(len)
 if(and(not(found),ge(len,lenmax))) {
         if(gt(len,lenmax)) {list(ends)}
         enqueue(ends,save(key(indi)))
         set(lenmax,len)
 }}
 
-proc dumplines()
+proc getall(this_sex)
 {
+set(linsex,this_sex)
 set(lenmax,0)
 print("Starting ", linsex, " ...\n")
 
@@ -66,7 +78,10 @@ forindi (indi, num) {
                 set(len,1)
                 call getline(indi)
         }
-}
+}}
+
+proc dumplines()
+{
 /* report results */
 "\n   Maximal length " d(lenmax) "\n"
 /* dump each lineage, starting with most recent person */
@@ -74,8 +89,10 @@ while(end, dequeue(ends)) {
         "\n"
         set(count, lenmax)
         set(line,indi(end))
-        while(gt(count,0)) {
-                set(count,sub(count,1))
+        while(line) {
+                if(eq(count,0)) {"   (extension of the requested line...)\n"}
+                decr(count)
+                if(eq(0,strcmp(name(line),""))) {"_____"}
                 name(line) " (" key(line) ")"
                 if(x, birth(line)) {" b. " year(x)}
                 if(y, death(line)) {
@@ -86,4 +103,5 @@ while(end, dequeue(ends)) {
                 if(eq(0,strcmp(linsex,"M"))) {set(line,father(line))}
                 else {set(line,mother(line))}
         }
+        if(lt(count,0)) {"   (length " d(sub(lenmax,count)) " with extension)\n"}
 }}
