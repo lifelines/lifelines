@@ -1,19 +1,17 @@
 /*
- * @progname       pdesc
- * @version        3.0
+ * @progname       pdesc.ll
+ * @version        4.3
  * @author         Wetmore, Manis, Jones, Eggert, Simms
  * @category       
  * @output         Text
  * @description    
  *
- * Produces indented descendant list with line wrapping at 80 columns
+ * Produces indented descendant list with line wrapping at 78 columns
  * (user-specifiable) while maintaining the indentation level. Enhancement
  * from version 2 is the addition of user-specified maximum number of
  * generations. Version 4 makes the page_width (not 1 less) the limit on
  * character a shift inplacement. Also eliminated an extra space at the
  * beginning of each line that was not controlled by a left_margin parameter.
- *
- *   pdesc.ll
  *
  *   Code by Tom Wetmore, ttw@cbnewsl.att.com
  *   With modifications by:  Cliff Manis
@@ -22,6 +20,7 @@
  *   With modifications by:  Robert Simms (indented line wrap) Mar '96
  *                                        (max number of generations) Jun '97
  *                                        (line wrap cleaned up) 16 Feb 2000
+ *   With modifications by:  Vincent Broman (header cleanup) 2003-02
  *
  *   This report works only with the LifeLines Genealogy program
  *
@@ -41,7 +40,7 @@ global(max_depth)
 global(left_margin)
 
 proc main () {
-	set(page_size, 80)
+	set(page_size, 78)
 	set(tab_size, 3)    /* extra indentation upon line-wrap */
 	set(left_margin, 0)
 
