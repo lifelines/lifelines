@@ -1,3 +1,10 @@
+2003-09-18 Stephen Dum
+        * ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf
+	docs/ll-reportmanual.txt docs/ll-reportmanual.xml
+
+	Add to reportmanual information about duplicate includes, parameters
+	of functions and procedures and dup() for lists.
+
 2003-09-18 Perry Rapp
 
 	* ChangeLog src/gedlib/translat.c

@@ -282,6 +282,12 @@ Procedures and Functions
    function  that  calls  it.  Values  are  returned  by  the  return
    statement,  described  below.  Recursive  functions are allowed. A
    function is called by invoking it in an expression.
+
+   Function  and  procedure parameters are passed by value except for
+   list,   set  and  table  types  which  are  passed  by  reference.
+   Redeclaration  of  a  parameter instantiates a new variable of the
+   stated  or  implied type. The previous instance continues to exist
+   in the scope of the caller.
      _____________________________________________________________
 
 Comments
@@ -453,13 +459,19 @@ Include Feature
    library  files  that  can be used by many programs. Included files
    may  in  turn  contain include statements, and so on to any depth.
    LifeLines  will  use  the  LLPROGRAMS  shell  variable, if set, to
-   search for the include files.
+   search  for  the  include files. Each file included with a include
+   statement  is  only  read once. If multiple include statements are
+   encountered  that  include the same file, only the first statement
+   has any effect.
 
    The only main procedure actually executed is the one in the report
    the  user  chose.  main  procedures  in  other  reports  which are
    included  do  not  get  run.  This  allows a module intended to be
    included  in  other  programs  to  have  a main procedure for test
-   purposes.
+   purposes.  If  multiple functions or procedures with the same name
+   are  included,  the last one read in is the one that will be used.
+   Currently  no  errors  or  warnings  are  generated  for duplicate
+   function or procedure names.
      _____________________________________________________________
 
 Built-in Functions

@@ -540,7 +540,17 @@ in an <type>expression</type>.
 
 </para>
 
+<para>
+<type>Function</type> and <type>procedure</type> parameters are passed
+by value except for <type>list</type>, <type>set</type> and <type>table</type>
+types which are passed by reference.
+Redeclaration of a parameter instantiates a new variable of the
+stated or implied type.  The previous instance continues to exist 
+in the scope of the caller.
+</para>
 
+<para>
+</para>
 
 </sect1>
 
@@ -829,13 +839,18 @@ statement is encountered, the program that it refers to is read at that point, e
 included file had been in the body of the original file at that point. This allows you to create <application>LifeLines</application>
 program library files that can be used by many programs. Included files may in turn contain <type>include</type>
 statements, and so on to any depth. <application>LifeLines</application> will use the <envar>LLPROGRAMS</envar> shell variable, if set, to
-search for the <type>include</type> files.
+search for the <type>include</type> files.  Each file included with a include
+statement is only read once.  If multiple include statements are encountered
+that include the same file, only the first statement has any effect.
 </para>
 <para>
 The only main procedure actually executed is the one in the
 report the user chose.  main procedures in other reports
 which are included do not get run.  This allows a module intended
 to be included in other programs to have a main procedure for test purposes.
+If multiple functions or procedures with the same name are included, the 
+last one read in is the one that will be used.  Currently no errors or
+warnings are generated for duplicate function or procedure names.
 </para>
 
 
@@ -2315,9 +2330,11 @@ will remove the smallest element.
 </para>
 
 <para>
-<function>dup</function> creates a copy of a list.  If b is a list, the 
-function set(a,b) makes the variable a a reference to the list b.  If you
-want to make a new list, you must use set(a,dup(b)).
+<function>dup</function> creates a copy of a <type>list</type>.  If b is a 
+<type>list</type>, the function <function>set</function>(a,b) makes the variable a a reference 
+to the <type>list</type> b.  If you
+want to make a new <type>list</type>, you must use 
+<function>set</function>(a,<function>dup</function>(b)).
 </para>
 
 <para>
