@@ -5,6 +5,14 @@
 	Added prototypes for static functions at top of files.
 	Added block headers at top of files (enums, variables, prototypes,..).
 
+	* ChangeLog btree/traverse.c gedlib/intrface.c gedlib/names.c
+	gedlib/node.c gedlib/refns.c gedlib/valid.c gedlib/xreffile.c
+	hdrs/gedcom.h hdrs/liflines.h liflines/main.c
+	liflines/valgdcom.c tools/btedit.c tools/dbverify.c:
+	Began I,F,S,E,X checks in dbverify.
+	Moved pointer_value into gedlib/valid.c.
+	Some top of module commenting.
+
 2001-01-13 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/gengedc.c gedlib/names.c gedlib/refns.c hdrs/gedcom.h
