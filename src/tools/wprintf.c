@@ -43,6 +43,7 @@ llwprintf (char *fmt, ...)
 #ifdef UNUSED_CODE
 /*===========================================================
  * mprintf -- Called as mprintf(fmt, arg, arg, arg, ...)
+ * UNUSED CODE
  *===========================================================*/
 /*VARARGS*/
 void
@@ -53,7 +54,7 @@ mprintf (char *fmt, ...)
 	vprintf(fmt, args);
 	va_end(args);
 }
-#endif
+#endif /* UNUSED_CODE */
 /*======================================
  * poutput -- Print argument as a string
  *====================================*/

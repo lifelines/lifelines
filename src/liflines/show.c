@@ -71,6 +71,9 @@ typedef char *LINESTRING;
 /* alphabetical */
 static void add_child_line(INT, NODE, INT width);
 static void add_spouse_line(INT, NODE, NODE, INT width);
+static BOOLEAN append_event(STRING * pstr, STRING evt, INT * plen, INT minlen);
+static void family_events(STRING outstr, TRANTABLE tt, NODE indi, NODE fam, INT len);
+static void indi_events(STRING outstr, TRANTABLE tt, NODE indi, INT len);
 static void init_display_indi(NODE, INT width);
 static void init_display_fam(NODE, INT width);
 static STRING person_display(NODE, NODE, INT);
@@ -100,21 +103,23 @@ static INT number_child_enable = 0;
 void
 init_show_module ()
 {
-	int i;
-	Spers = (LINESTRING)stdalloc(ll_cols);
-	Sbirt = (LINESTRING)stdalloc(ll_cols);
-	Sdeat = (LINESTRING)stdalloc(ll_cols);
-	Sfath = (LINESTRING)stdalloc(ll_cols);
-	Smoth = (LINESTRING)stdalloc(ll_cols);
-	Smarr = (LINESTRING)stdalloc(ll_cols);
-	Shusb = (LINESTRING)stdalloc(ll_cols);
-	Shbirt = (LINESTRING)stdalloc(ll_cols);
-	Shdeat = (LINESTRING)stdalloc(ll_cols);
-	Swife = (LINESTRING)stdalloc(ll_cols);
-	Swbirt = (LINESTRING)stdalloc(ll_cols);
-	Swdeat = (LINESTRING)stdalloc(ll_cols);
+	INT i;
+	INT width = ll_cols+1;
+
+	Spers = (LINESTRING)stdalloc(width);
+	Sbirt = (LINESTRING)stdalloc(width);
+	Sdeat = (LINESTRING)stdalloc(width);
+	Sfath = (LINESTRING)stdalloc(width);
+	Smoth = (LINESTRING)stdalloc(width);
+	Smarr = (LINESTRING)stdalloc(width);
+	Shusb = (LINESTRING)stdalloc(width);
+	Shbirt = (LINESTRING)stdalloc(width);
+	Shdeat = (LINESTRING)stdalloc(width);
+	Swife = (LINESTRING)stdalloc(width);
+	Swbirt = (LINESTRING)stdalloc(width);
+	Swdeat = (LINESTRING)stdalloc(width);
 	for (i=0; i<MAXOTHERS; i++)
-		Sothers[i] = (LINESTRING)stdalloc(ll_cols);
+		Sothers[i] = (LINESTRING)stdalloc(width);
 }
 /*===============================================
  * init_display_indi -- Initialize display person
@@ -130,6 +135,9 @@ init_display_indi (NODE pers, INT width)
 	NODE mth;
 	TRANTABLE ttd = tran_tables[MINDS];
 	CACHEEL icel;
+
+	ASSERT(width < ll_cols+1); /* size of Spers etc */
+
 
 	ASSERT(pers);
 	fth = indi_to_fath(pers);
@@ -189,13 +197,15 @@ init_display_indi (NODE pers, INT width)
 }
 /*==============================
  * show_person -- Display person
- * [in] win:    which curses window (usually MAIN_WIN)
- * [in] pers:   whom to display
- * [in] row:    starting row to draw upon
- * [in] hgt:    how many rows to use
- * [in] width:  how many columns to use
- * [in] scroll: how many rows to skip over at top
- * [in] reuse:  flag to avoid recomputing display strings
+ *  win:    [in] which curses window (usually MAIN_WIN)
+ *  pers:   [in] whom to display
+ *  row:    [in] starting row to draw upon
+ *  hgt:    [in] how many rows to use
+ *  width:  [in] how many columns to use
+ *  scroll: [in] how many rows to skip over at top
+ *  reuse:  [in] flag to avoid recomputing display strings
+ * Caller sets reuse flag if it knows that this is the same
+ * person displayed last.
  *============================*/
 void
 show_person (WINDOW * win, NODE pers, INT row, INT hgt
@@ -407,9 +417,10 @@ show_long_family (NODE fam, INT row, INT hgt, INT width, BOOLEAN reuse)
 		message(buf);
 	}
 }
-#ifdef UNUSED
+#ifdef UNUSED_CODE
 /*====================================
  * show_short_family -- Display family
+ * UNUSED CODE
  *==================================*/
 void
 show_short_family (NODE fam, INT row, INT hgt, INT width)
@@ -451,7 +462,7 @@ show_short_family (NODE fam, INT row, INT hgt, INT width)
 		message(buf);
 	}
 }
-#endif
+#endif /* UNUSED_CODE */
 /*================================================
  * show_ancestors -- Show pedigree/ancestors
  * Created: 2001/02/04, Perry Rapp
@@ -552,57 +563,140 @@ indi_to_ped_fix (NODE indi,
 	return scratch;
 }
 /*=============================================
+ * append_event -- Add an event if present to output string
+ *  pstr:  [in,out] end of printed event string 
+ *  ttd:   [in] translation table to use for data
+ *  indi:  [in] whom to display
+ *  plen:  [in,out] max length of output
+ * If event found, this prints it
+ *  & advances *pstr & reduces *plen
+ * Does nothing if event not found
+ * returns FALSE if (*plen)<minlen after advancing
+ * Created: 2001/07/04 (Perry Rapp)
+ *===========================================*/
+static BOOLEAN
+append_event (STRING * pstr, STRING evt, INT * plen, INT minlen)
+{
+	llstrcatn(pstr, ", ", plen);
+	llstrcatn(pstr, evt, plen);
+	return *plen >= minlen;
+}
+/*=============================================
+ * family_events -- Print string of events
+ *  outstr: [in,out] printed event string 
+ *  ttd:    [in] translation table to use for data
+ *  indi:   [in] whom to display
+ *  fam:    [in] family record (used when displaying spouses)
+ *  len:    [in] max length of output
+ * If none are found, this will write a 0 to first char of outstr
+ * If anything written, starts with ", "
+ * Created: 2001/07/04 (Perry Rapp)
+ *===========================================*/
+static void
+family_events (STRING outstr, TRANTABLE ttd, NODE indi, NODE fam, INT len)
+{
+	STRING evt = NULL;
+	STRING p = outstr;
+	INT mylen = len;
+	p[0] = 0;
+	evt = fam_to_event(fam, ttd, "MARR", "m. ", mylen, TRUE);
+	if (evt && !append_event(&p, evt, &mylen, 10))
+		return;
+	if (!opt_nocb) {
+		NODE chld;
+		if ((chld = fam_to_first_chil(fam))) {
+			evt = indi_to_event(chld, ttd, "BIRT", "cb. ", mylen, TRUE);
+			if (evt && !append_event(&p, evt, &mylen, 10))
+				return;
+			evt = indi_to_event(chld, ttd, "CHR", "cb. ", mylen, TRUE);
+			if (evt && !append_event(&p, evt, &mylen, 10))
+				return;
+		}
+	}
+	evt = indi_to_event(indi, ttd, "BIRT", "b. ", mylen, TRUE);
+	if (evt && !append_event(&p, evt, &mylen, 10))
+		return;
+	evt = indi_to_event(indi, ttd, "CHR", "bap. ", mylen, TRUE);
+	if (evt && !append_event(&p, evt, &mylen, 10))
+		return;
+	evt = indi_to_event(indi, ttd, "DEAT", "d. ", mylen, TRUE);
+	if (evt && !append_event(&p, evt, &mylen, 10))
+		return;
+	evt = indi_to_event(indi, ttd, "BURI", "bur. ", mylen, TRUE);
+	if (evt && !append_event(&p, evt, &mylen, 10))
+		return;
+}
+/*=============================================
+ * indi_events -- Print string of events
+ *  outstr: [in,out] printed event string 
+ *  tt:     [in] translation table to use for data
+ *  indi:   [in] whom to display
+ *  len:    [in] max length of output
+ * If none are found, this will write a 0 to first char of outstr
+ * If anything written, starts with ", "
+ * Created: 2001/07/04 (Perry Rapp)
+ *===========================================*/
+static void
+indi_events (STRING outstr, TRANTABLE ttd, NODE indi, INT len)
+{
+	STRING evt = NULL;
+	INT width = (len-2)/2;
+	STRING p = outstr;
+	INT mylen = len;
+	p[0] = 0;
+
+	evt = indi_to_event(indi, ttd, "BIRT", "b. ", width, TRUE);
+	if (!evt)
+		evt = indi_to_event(indi, ttd, "CHR", "bap. ", width, TRUE);
+	if (evt) {
+		llstrcatn(&p, ", ", &mylen);
+		llstrcatn(&p, evt, &mylen);
+	}
+	if (p == outstr)
+		width = len;
+	evt = indi_to_event(indi, ttd, "DEAT", "d. ", width, TRUE);
+	if (!evt) evt = indi_to_event(indi, ttd, "BURI", "bur. ", width,  TRUE);
+	if (evt) {
+		llstrcatn(&p, ", ", &mylen);
+		llstrcatn(&p, evt, &mylen);
+	}
+}
+/*=============================================
  * person_display -- Create person display line
+ *  indi:  [in] whom to display
+ *  fam:   [in] family record (used when displaying spouses)
+ *  len:   max length of output
  *===========================================*/
 static STRING
-person_display (NODE indi,
-                NODE fam,
-                INT len)
+person_display (NODE indi, NODE fam, INT len)
 {
-	static unsigned char scratch[100];
-	STRING p = scratch, evt = NULL;
-	NODE chld;
+	static unsigned char scratch1[120];
+	static unsigned char scratch2[100];
+	STRING p;
 	TRANTABLE ttd = tran_tables[MINDS];
+	/* 10 for key, 2 for comma space, and split between name & events */
+	INT evlen = (len-12)/2;
+	INT namelen;
+
 	if (!indi) return NULL;
-	strcpy(p, indi_to_name(indi, ttd, 40));
-	p += strlen(p);
+
+	if (evlen > sizeof(scratch2)/sizeof(scratch2[0])-1)
+		evlen = sizeof(scratch2)/sizeof(scratch2[0])-1;
 	if (fam) {
-		evt = fam_to_event(fam, ttd, "MARR", "m. ", 35, TRUE);
-		if (!evt && !opt_nocb) {
-			if ((chld = fam_to_first_chil(fam))) {
-				evt = indi_to_event(chld, ttd, "BIRT", "cb. ",
-				    35, TRUE);
-				if (!evt) evt = indi_to_event(chld, ttd, "CHR",
-					    "cb. ", 35, TRUE);
-			}
-		}
-		if (!evt) evt = indi_to_event(indi, ttd, "BIRT", "b. ", 35,
-		    TRUE);
-		if (!evt) evt = indi_to_event(indi, ttd, "CHR", "bap. ", 35,
-		    TRUE);
-		if (!evt) evt = indi_to_event(indi, ttd, "DEAT", "d. ", 35,
-		    TRUE);
-		if (!evt) evt = indi_to_event(indi, ttd, "BURI", "bur. ", 35,
-		    TRUE);
+		family_events(scratch2, ttd, indi, fam, evlen);
 	} else {
-		evt = indi_to_event(indi, ttd, "BIRT", "b. ", 20, TRUE);
-		if (!evt) evt = indi_to_event(indi, ttd, "CHR", "bap. ", 20,
-		    TRUE);
-		if (evt) {
-			sprintf(p, ", %s", evt);
-			p += strlen(p);
-		}
-		evt = indi_to_event(indi, ttd, "DEAT", "d. ", 20, TRUE);
-		if (!evt) evt = indi_to_event(indi, ttd, "BURI", "bur. ", 20,
-		    TRUE);
+		indi_events(scratch2, ttd, indi, evlen);
 	}
-	if (evt) {
-		sprintf(p, ", %s", evt);
+	namelen = len - strlen(scratch2);
+	p = scratch1;
+	strcpy(p, indi_to_name(indi, ttd, namelen));
+	p += strlen(p);
+	if (scratch2[0]) {
+		strcpy(p, scratch2);
 		p += strlen(p);
 	}
 	sprintf(p, " (%s)", key_of_record(indi));
-	scratch[66] = 0;
-	return scratch;
+	return scratch1;
 }
 
 static STRING empstr = (STRING) "                                                 ";

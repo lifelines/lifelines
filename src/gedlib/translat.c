@@ -163,12 +163,15 @@ translate_catn (TRANTABLE tt, STRING * pdest, CNSTRING src, INT * len)
 }
 /*===================================================
  * translate_string -- Translate string via TRANTABLE
+ *  tt:    [in] tran table
+ *  in:    [in] in string
+ *  out:   [out] string
+ *  max:   [out] max len of out string
+ * Output string is limited to max length via use of
+ * add_char & add_string.
  *=================================================*/
 void
-translate_string (TRANTABLE tt, /* tran table */
-                  CNSTRING in,    /* in string */
-                  STRING out,   /* out string */
-                  INT max)      /* max len of out string */
+translate_string (TRANTABLE tt, CNSTRING in, STRING out, INT max)
 {
 	CNSTRING p, q;
 	STRING r;
@@ -178,14 +181,14 @@ translate_string (TRANTABLE tt, /* tran table */
 	*out = 0;
 	if (!in) return;
 	if (!tt) {
-		strcpy(out, in);
+		llstrncpy(out, in, max);
 		return;
 	}
 	p = q = in;
 	r = out;
 	n = strlen(in);
-	l = 0;
-	while (n > 0) {
+	l = 0; /* output length, must be limited to max */
+	while (n > 0 && l<max) {
 		node = tt->start[(unsigned char)*p];
 		if (!node) {	/* this char starts no patterns */
 			add_char(out, &l, max, *p++);
@@ -232,14 +235,20 @@ translate_string (TRANTABLE tt, /* tran table */
 }
 /*==========================================================
  * translate_write -- Translate and output lines in a buffer
+ *  tt:   [in] translation table (may be NULL)
+ *  in:   [in] input string to write
+ *  lenp: [in,out] #characters left in buffer (set to 0 if a full write)
+ *  ofp:  [in] output file
+ *  last: [in] flag to write final line if no trailing \n
+ * Loops thru & prints out lines until end of string
+ *  (or until last line if not terminated with \n)
+ * *lenp will be set to zero unless there is a final line
+ * not terminated by \n and caller didn't ask to write it anyway
+ * NB: If no translation table, entire string is always written
  *========================================================*/
 BOOLEAN
-translate_write(TRANTABLE tt,   /* tran table */
-                STRING in,      /* in string */
-                INT *lenp,      /* points to number of characters in
-                                   buffer (updated) */
-                FILE *ofp,      /* output file */
-                BOOLEAN last)   /* translate remainder of buffer even if no '\n' */
+translate_write(TRANTABLE tt, STRING in, INT *lenp
+	, FILE *ofp, BOOLEAN last)
 {
 	char intmp[MAXLINELEN+2];
 	char out[MAXLINELEN+2];
@@ -254,40 +263,49 @@ translate_write(TRANTABLE tt,   /* tran table */
 	}
 
 	bp = (char *)in;
+	/* loop through lines one by one */
 	for(i = 0; i < *lenp; ) {
-	    tp = intmp;
-	    for(j = 0; (j <= MAXLINELEN) && (i < *lenp) && (*bp != '\n'); j++) {
-		i++;
-		*tp++ = *bp++;
-	    }
-	    *tp = '\0';
-	    if(i < *lenp) {
-		if(*bp == '\n') {
-		    *tp++ = *bp++;
-		    *tp = '\0';
-		    i++;
+		/* copy in to intmp, up to first \n or our buffer size-1 */
+		tp = intmp;
+		for(j = 0; (j <= MAXLINELEN) && (i < *lenp) && (*bp != '\n'); j++) {
+			i++;
+			*tp++ = *bp++;
 		}
-	    }
-	    else if(!last) {
-		    /* the last line is not complete, return it in buffer  */
-		    strcpy(in, intmp);
-		    *lenp = strlen(in);
-		    return(TRUE);
-	    }
-	    translate_string(tt, intmp, out, MAXLINELEN+2);
-	    ASSERT(fwrite(out, strlen(out), 1, ofp) == 1);
+		*tp = '\0';
+		if(i < *lenp) {
+			/* partial, either a single line or a single buffer full */
+			if(*bp == '\n') {
+				/* single line, include the \n */
+				/* it is important that we limited size earlier so we
+				have room here to add one more character */
+				*tp++ = *bp++;
+				*tp = '\0';
+				i++;
+			}
+		}
+		else if(!last) {
+			/* the last line is not complete, return it in buffer  */
+			strcpy(in, intmp);
+			*lenp = strlen(in);
+			return(TRUE);
+		}
+		/* translate & write out current line */
+		translate_string(tt, intmp, out, MAXLINELEN+2);
+		ASSERT(fwrite(out, strlen(out), 1, ofp) == 1);
 	}
 	*lenp = 0;
 	return(TRUE);
 }
 /*======================================
  * add_char -- Add char to output string
+ *  buf:    [in]  output string
+ *  plen:   [in,out]  address of current output length
+ *  max:    [in] max output length
+ *  achar:  [in] character to add
+ * NB: Handles *plen >= max (won't write past max)
  *====================================*/
 void
-add_char (STRING buf,
-          INT *plen,
-          INT max,
-          INT achar)
+add_char (STRING buf, INT *plen, INT max, INT achar)
 {
 	if (*plen >= max - 1)
 		buf[max] = 0;

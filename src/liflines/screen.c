@@ -257,9 +257,10 @@ paint_screen (INT screen)
 		return;
 	output_menu(win, screen);
 }
-#ifdef UNUSED
+#ifdef UNUSED_CODE
 /*================================================
  * paint_two_fam_screen -- Paint two family screen
+ * UNUSED CODE
  *==============================================*/
 void
 paint_two_fam_screen (void)
@@ -284,7 +285,7 @@ paint_two_fam_screen (void)
 	mvwaddstr(win, row++, col, "j  Merge bottom to top");
 	mvwaddstr(win, row++, col, "q  Return to main menu");
 }
-#endif
+#endif /* UNUSED_CODE */
 /*==============================================
  * paint_list_screen -- Paint list browse screen
  *============================================*/

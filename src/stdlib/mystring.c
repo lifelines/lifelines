@@ -530,7 +530,6 @@ int main()
   return 0;
 }
 #endif
-
 /*==================================
  * llstrcatn -- Copy source string to destination
  *  advancing destination pointer, and decreasing length

@@ -32,19 +32,59 @@
 #include "llstdlib.h"
 #include "btreei.h"
 
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+/* alphabetical */
+static BOOLEAN addfile_impl(BTREE btree, RKEY rkey, STRING file, STRING mode);
+static RECORD_STATUS write_record_to_file_impl (BTREE btree, RKEY rkey, STRING file, STRING mode);
+
+/*********************************************
+ * local & exported function definitions
+ * body of module
+ *********************************************/
+
 /*=========================================
  * addfile -- Add record to btree from file
+ *  btree:  [in] btree to add to
+ *  rkey:   [in] key of new record
+ *  file:   [in] file with new record
  *=======================================*/
 BOOLEAN
-addfile (BTREE btree,   /* btree to add to */
-         RKEY rkey,     /* key of new record */
-         STRING file)   /* file with new record */
+addfile (BTREE btree, RKEY rkey, STRING file)
+{
+	return addfile_impl(btree, rkey, file, LLREADBINARY);
+}
+/*=========================================
+ * addtextfile -- Add record to btree from text file
+ *  btree:  [in] btree to add to
+ *  rkey:   [in] key of new record
+ *  file:   [in] file with new record
+ * handles problem of MSDOS files \n <-> \r\n
+ * internally records are kept with just \n, so db is portable
+ *=======================================*/
+BOOLEAN
+addtextfile (BTREE btree, RKEY rkey, STRING file)
+{
+	return addfile_impl(btree, rkey, file, LLREADTEXT);
+}
+/*=========================================
+ * addfile -- Add record to btree from file
+ *  btree:  [in] btree to add to
+ *  rkey:   [in] key of new record
+ *  file:   [in] file with new record
+ *=======================================*/
+static BOOLEAN
+addfile_impl (BTREE btree, RKEY rkey, STRING file, STRING mode)
 {
 	FILE *fp;
 	STRING mem = 0;
+	INT siz;
 	struct stat buf;
 	ASSERT(bwrite(btree));
-	if ((fp = fopen(file, LLREADBINARY)) == NULL) return FALSE;
+	if ((fp = fopen(file, mode)) == NULL) return FALSE;
 	if (fstat(fileno(fp), &buf) != 0) {
 		fclose(fp);
 		return FALSE;
@@ -63,7 +103,8 @@ addfile (BTREE btree,   /* btree to add to */
 	 * will be read than expected because of conversion of
 	 * \r\n to \n
 	 */
-	if (fread(mem, buf.st_size, 1, fp) != 1) {
+	siz = fread(mem, 1, buf.st_size, fp);
+	if (ferror(fp)) {
 		fclose(fp);
 		return FALSE;
 	}
@@ -74,19 +115,47 @@ addfile (BTREE btree,   /* btree to add to */
 }
 /*===================================================
  * write_record_to_file -- Get record from btree and write to file
- * BTREE btree: database btree
- * RKEY rkey:   record key
- * STRING file: file name
+ *  btree: [in] database btree
+ *  rkey:  [in] record key
+ *  file:  [in] file name
  * returns RECORD_SUCCESS, RECORD_NOT_FOUND, RECORD_ERROR
  *=================================================*/
 RECORD_STATUS
 write_record_to_file (BTREE btree, RKEY rkey, STRING file)
 {
+	return write_record_to_file_impl(btree, rkey, file, LLWRITEBINARY);
+}
+/*===================================================
+ * write_record_to_textfile -- Get record from btree and write to file
+ *  btree: [in] database btree
+ *  rkey:  [in] record key
+ *  file:  [in] file name
+ * returns RECORD_SUCCESS, RECORD_NOT_FOUND, RECORD_ERROR
+ * handles textfiles for MSDOS \n <->\r\n
+ * internally records are kept with just \n, so db is portable
+ *=================================================*/
+RECORD_STATUS
+write_record_to_textfile (BTREE btree, RKEY rkey, STRING file)
+{
+	return write_record_to_file_impl(btree, rkey, file, LLWRITETEXT);
+}
+/*===================================================
+ * write_record_to_file -- Get record from btree and write to file
+ *  btree: [in] database btree
+ *  rkey:  [in] record key
+ *  file:  [in] file name
+ *  mode:  [in] fopen mode (for MSDOS text file problem)
+ * returns RECORD_SUCCESS, RECORD_NOT_FOUND, RECORD_ERROR
+ *=================================================*/
+static RECORD_STATUS
+write_record_to_file_impl (BTREE btree, RKEY rkey, STRING file, STRING mode)
+{
 	FILE *fp;
 	INT len;
+	INT siz;
 	RECORD record = getrecord(btree, rkey, &len);
 	if (record == NULL) return RECORD_NOT_FOUND;
-	if ((fp = fopen(file, LLWRITEBINARY)) == NULL) {
+	if ((fp = fopen(file, mode)) == NULL) {
 		stdfree(record);
 		return RECORD_ERROR;
 	}
@@ -94,7 +163,8 @@ write_record_to_file (BTREE btree, RKEY rkey, STRING file)
 	 * will be written than expected because of conversion of
 	 * \n to \r\n
 	 */
-	if (fwrite(record, len, 1, fp) != 1) {
+	siz = fwrite(record, 1, len, fp);
+	if (ferror(fp)) {
 		stdfree(record);
 		fclose(fp);
 		return RECORD_ERROR;

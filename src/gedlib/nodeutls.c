@@ -107,6 +107,7 @@ union_nodes (NODE node1,
 #ifdef UNUSED_CODE
 /*=========================================================
  * intersect_nodes -- Return intersection of two node trees
+ * UNUSED CODE
  *=======================================================*/
 NODE
 intersect_nodes (NODE node1,
@@ -161,18 +162,18 @@ intersect_nodes (NODE node1,
 	free_nodes(node2);
 	return node3;
 }
-#endif
+#endif /* UNUSED_CODE */
 /*========================================================================
  * classify_nodes -- Convert two value lists to three lists - first
  *   returned list holds all values that were only in original first
  *   list - second returned list holds all values that were just in
  *   original second list - third returned list holds all values that were
  *   in both original lists
+ * pnode1 & pnode2 are the input lists to compare
+ * pnode1, pnode2, & pnode3 are the output lists.
  *======================================================================*/
 void
-classify_nodes (NODE *pnode1,
-                NODE *pnode2,
-                NODE *pnode3)
+classify_nodes (NODE *pnode1, NODE *pnode2, NODE *pnode3)
 {
 	NODE node1, node2, node3, curs1, curs2, curs3;
 	NODE prev1, prev2, next2;
@@ -217,11 +218,12 @@ classify_nodes (NODE *pnode1,
 	*pnode2 = node2;
 	*pnode3 = node3;
 }
+#ifdef UNUSED_CODE
 /*========================================================================
  * difference_nodes -- Return difference of two node lists -- all in node1
  *   that are not in node2
+ * UNUSED CODE
  *======================================================================*/
-#ifdef UNUSED_CODE
 NODE
 difference_nodes (NODE node1,
                   NODE node2,
@@ -251,8 +253,11 @@ difference_nodes (NODE node1,
 	}
 	return node1;
 }
+#endif /* UNUSED_CODE */
+#ifdef UNUSED_CODE
 /*================================================================
  * value_in_nodes -- See if a list of nodes contains a given value
+ * UNUSED CODE
  *==============================================================*/
 BOOLEAN
 value_in_nodes (NODE node,
@@ -264,4 +269,4 @@ value_in_nodes (NODE node,
 	}
 	return FALSE;
 }
-#endif
+#endif /* UNUSED_CODE */

@@ -26,18 +26,26 @@
 #include "llstdlib.h"
 extern int opt_finnish;
 
+/*===================================================
+ * ll_strcmp -- Compare two strings
+ *  this is just a wrapper for strcmp
+ *  except in the Finnish build, it does Finnish
+ *  localizedcomparison
+ *=================================================*/
 int
-ll_strcmp(char *str1,
-          char *str2)
+ll_strcmp (char *str1, char *str2)
 {
 	if(opt_finnish) return(MY_STRCMP(str1, str2));
 	return(strcmp(str1, str2));
 }
-
+/*===================================================
+ * ll_strncmp -- Compare two strings
+ *  this is just a wrapper for strncmp
+ *  except in the Finnish build, it does Finnish
+ *  localized comparison
+ *=================================================*/
 int
-ll_strncmp(char *str1,
-           char *str2,
-           int len)
+ll_strncmp (char *str1, char *str2, int len)
 {
 	if(opt_finnish) return(MY_STRNCMP(str1, str2, len));
 	return(strncmp(str1, str2, len));

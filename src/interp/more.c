@@ -864,17 +864,6 @@ __getrecord (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	delete_pvalue(val);
 	return create_pvalue(PGNODE, (VPTR)NULL);
 }
-#if UNUSED
-/*==================================================+
- * freerecord -- Free GEDCOM node tree from getrecord
- *  usage: getrecord(STRING) -> NODE
- *=================================================*/
-PVALUE
-__freerecord (PNODE node, SYMTAB stab, BOOLEAN *eflg)
-{
-#  error "Unimplemented function!"
-}
-#endif
 /*================================================+
  * reference -- Check if STRING is record reference
  *  usage: reference(STRING) -> BOOLEAN

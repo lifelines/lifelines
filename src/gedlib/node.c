@@ -99,7 +99,7 @@ NODE children_nodes(NODE faml);
 NODE father_nodes(NODE faml);
 NODE mother_nodes(NODE faml);
 NODE parents_nodes(NODE faml);
-#endif
+#endif /* UNUSED_CODE */
 
 /*********************************************
  * local variables
@@ -382,12 +382,12 @@ string_to_line (STRING *ps,     /* string ptr - modified */
 /*================================================================
  * buffer_to_line -- Get GEDCOM line from buffer with <= 1 newline
  *
- * STRING p:      [in]  buffer
- * INT *plev:     [out] level number
- * STRING *pxref: [out] xref
- * STRING *ptag:  [out] tag
- * STRING *pval:  [out] value
- * STRING *pmsg:  [out] error msg (in static buffer)
+ *  p:      [in]  buffer
+ *  plev:   [out] level number
+ *  pxref:  [out] xref
+ *  ptag:   [out] tag
+ *  pval:   [out] value
+ *  pmsg:   [out] error msg (in static buffer)
  *==============================================================*/
 static BOOLEAN
 buffer_to_line (STRING p, INT *plev, STRING *pxref
@@ -1167,42 +1167,53 @@ STRING node_to_tag (NODE node, STRING tag, TRANTABLE tt, INT len)
 }
 /*==============================================
  * indi_to_event -- Convert event tree to string
+ *  node: [in] event subtree to search
+ *  tt:   [in] translation table to apply to event strings
+ *  tag:  [in] desired tag (eg, "BIRT")
+ *  head: [in] header to print in output (eg, "born: ")
+ *  len:  [in] max length output desired
+ *  shrt: [in] flag indicating desire short form output
+ * Searches node substree for desired tag
+ *  returns formatted string if found, else NULL
  *============================================*/
 STRING
-indi_to_event (NODE node,
-               TRANTABLE tt,
-               STRING tag,
-               STRING head,
-               INT len,
-               BOOLEAN shrt)
+indi_to_event (NODE node, TRANTABLE tt, STRING tag, STRING head
+	, INT len, BOOLEAN shrt)
 {
 	static unsigned char scratch[200];
+	STRING p = scratch;
+	INT mylen = sizeof(scratch)/sizeof(scratch[0]);
 	STRING event;
 	INT n;
 	if (!node) return NULL;
 	if (!(node = find_tag(nchild(node), tag))) return NULL;
 	event = event_to_string(node, tt, shrt);
 	if (!event) return NULL;
-	sprintf(scratch, "%s%s", head, event);
+	p[0] = 0;
+	llstrcatn(&p, head, &mylen);
+	llstrcatn(&p, event, &mylen);
 	n = strlen(scratch);
 	if (scratch[n-1] != '.') {
-		scratch[n] = '.';
-		scratch[++n] = 0;
+		llstrcatn(&p, ".", &mylen);
 	}
-	if (n > len)  scratch[len] = 0;
 	return scratch;
 }
 /*===========================================
  * event_to_string -- Convert event to string
+ *  node:  [in] node subtree of event
+ *  tt:    [in] translation table to apply to strings
+ *  shrt:  [in] flag if caller wants short version
+ * Finds DATE & PLACE nodes, and prints a string
+ * representation of them.
  *=========================================*/
 STRING
-event_to_string (NODE node,
-                 TRANTABLE tt,
-                 BOOLEAN shrt)
+event_to_string (NODE node, TRANTABLE tt, BOOLEAN shrt)
 {
 	static unsigned char scratch1[MAXLINELEN+1];
 	static unsigned char scratch2[MAXLINELEN+1];
-	STRING date, plac, p;
+	STRING p = scratch1;
+	INT mylen = sizeof(scratch1)/sizeof(scratch1[0]);
+	STRING date, plac;
 	date = plac = NULL;
 	if (!node) return NULL;
 	node = nchild(node);
@@ -1217,24 +1228,14 @@ event_to_string (NODE node,
 		plac = shorten_plac(plac);
 		if (!date && !plac) return NULL;
 	}
-	p = scratch1;
-	if (date && !plac) {
-		strcpy(p, date);
-		p += strlen(p);
+	p[0] = 0;
+	if (date)
+		llstrcatn(&p, date, &mylen);
+	if (plac) {
+		if (date)
+			llstrcatn(&p, ", ", &mylen);
+		llstrcatn(&p, plac, &mylen);
 	}
-	if (date && plac) {
-		strcpy(p, date);
-		p += strlen(p);
-		strcpy(p, ", ");
-		p += 2;
-		strcpy(p, plac);
-		p += strlen(p);
-	}
-	if (!date && plac) {
-		strcpy(p, plac);
-		p += strlen(p);
-	}
-	*p = 0;
 	translate_string(tt, scratch1, scratch2, MAXLINELEN);
 	return scratch2;
 }
@@ -1363,6 +1364,7 @@ shorten_plac (STRING plac)
 #ifdef UNUSED_CODE
 /*============================================
  * all_digits -- Check if string is all digits
+ * UNUSED CODE
  *==========================================*/
 static BOOLEAN
 all_digits (STRING s)
@@ -1373,7 +1375,7 @@ all_digits (STRING s)
 	}
 	return TRUE;
 }
-#endif
+#endif /* UNUSED_CODE */
 /*=======================
  * copy_node -- Copy node
  *=====================*/
@@ -1469,6 +1471,7 @@ find_node (NODE prnt, STRING tag, STRING val, NODE *plast)
 /*=======================================================================
  * father_nodes -- Given list of FAMS or FAMC nodes, returns list of HUSB
  *   lines they contain
+ * UNUSED CODE
  *=====================================================================*/
 NODE
 father_nodes (NODE faml)      /* list of FAMC and/or FAMS nodes */

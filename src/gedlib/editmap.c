@@ -42,7 +42,7 @@ edit_mapping (INT code) /* map code */
 
 	if (tran_tables[code]) {
 		INT rtn;
-		rtn = retrieve_file(map_keys[code], editfile);
+		rtn = retrieve_to_textfile(map_keys[code], editfile);
 		if (rtn == RECORD_ERROR) {
 			mprintf_error(dataerr);
 			return FALSE;
@@ -55,7 +55,7 @@ edit_mapping (INT code) /* map code */
 			if (tran_tables[code])
 				remove_trantable(tran_tables[code]);
 			tran_tables[code] = tt;
-			store_file(map_keys[code], editfile);
+			store_text_file(map_keys[code], editfile);
 			return TRUE;
 		}
 		if (ask_yes_or_no_msg(cmperr, aredit))

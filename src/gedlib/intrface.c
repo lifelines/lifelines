@@ -44,30 +44,52 @@ retrieve_record (STRING key,
 }
 /*=========================================
  * store_record -- Store record in database
+ *  key:  [in] where to store record in db
+ *  rec:  [in] data to store
+ *  len:  [in] length of data to store
  *=======================================*/
 BOOLEAN
-store_record (STRING key,
-              STRING rec,
-              INT len)
+store_record (STRING key, STRING rec, INT len)
 {
 	return addrecord (BTR, str2rkey(key), rec, len);
 }
 /*=========================================
- * retrieve_file -- Retrieve record to file
+ * retrieve_to_file -- Retrieve record to file
  *=======================================*/
 RECORD_STATUS
-retrieve_file (STRING key, STRING file)
+retrieve_to_file (STRING key, STRING file)
 {
 	return write_record_to_file(BTR, str2rkey(key), file);
 }
+/*=========================================
+ * retrieve_to_textfile -- Retrieve record to file
+ *=======================================*/
+RECORD_STATUS
+retrieve_to_textfile (STRING key, STRING file)
+{
+	return write_record_to_textfile(BTR, str2rkey(key), file);
+}
 /*=====================================
  * store_file -- Store record from file
+ *  key:  [in] db key in which to store record
+ *  file: [in] file from which to get record
  *===================================*/
 BOOLEAN
-store_file (STRING key,
-            STRING file)
+store_file (STRING key, STRING file)
 {
 	return addfile(BTR, str2rkey(key), file);
+}
+/*=====================================
+ * store_text_file -- Store record from text file
+ *  key:  [in] db key in which to store record
+ *  file: [in] file from which to get record
+ * for MSDOS, translates \r\n in files to \n in record
+ * Created: 2001/07/04 (Perry Rapp)
+ *===================================*/
+BOOLEAN
+store_text_file (STRING key, STRING file)
+{
+	return addtextfile(BTR, str2rkey(key), file);
 }
 /*===================================================
  * traverse_db_key_keys -- traverse a span of records

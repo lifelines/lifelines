@@ -59,8 +59,7 @@ strfree (STRING * str)
  * strconcat -- Catenate two strings
  *================================*/
 STRING
-strconcat (STRING s1,
-           STRING s2)
+strconcat (STRING s1, STRING s2)
 {
 	INT c, len;
 	STRING s3, p;
@@ -234,6 +233,7 @@ trim (STRING str, INT len)
 }
 /*=========================================
  * striptrail -- Strip trailing white space
+ *  modifies argument (zeros out trailing whitespace)
  *=======================================*/
 void
 striptrail (STRING p)
@@ -242,23 +242,32 @@ striptrail (STRING p)
 	while (q >= p && iswhite(*q))
 		*q-- = '\0';
 }
+#ifdef UNUSED_CODE
 /*=======================================
  * striplead -- Strip leading white space
+ *  modifies argument (shifts up string towards
+ *  beginning to eliminate any leading whitespace)
+ * UNUSED CODE
  *=====================================*/
 void
 striplead (STRING p)
 {
-	unsigned char *e = p + strlen(p) - 1;
+	INT i = strlen(p);
+	unsigned char *e = p + i - 1;
 	unsigned char *b = p;
 	unsigned char *q = p;
 
-	while (iswhite(*q) && q <= e)
-		q++;
+	while (iswhite(*q) && q <= e) {
+		++q;
+		--i; /* keep from copying past end of p */
+	}
+	if (q == p) return;
 
-	while (b <= e)
+	while (b <= e && --i >= 0)
 		*b++ = *q++;
 	*b++ = '\0';
 }
+#endif /* UNUSED_CODE */
 /*=========================================
  * allwhite -- Check if string is all white
  *=======================================*/

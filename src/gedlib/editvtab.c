@@ -41,12 +41,17 @@ extern STRING aredit, dataerr;
 
 /*==============================================
  * edit_valtab -- Edit value table from database
+ *  key:   [in] db key where record to edit is stored
+ *  ptab:  [in,out] hash table for key/value strings
+ *  sep:   [in] separator char between key & value on each line
+ *  ermsg: [in] error message to print in retry prompt if parse fails
+ * Looks up key in db, gets record, puts it in temp file
+ * and allows user to interactively edit it.
+ * key/value pairs are separated by \n, and their is a
+ * single character (the sep arg) between each key & value.
  *============================================*/
 BOOLEAN
-edit_valtab (STRING key,        /* value table key */
-             TABLE *ptab,       /* hash table for values */
-             INT sep,           /* separator char */
-             STRING ermsg)      /* error message */
+edit_valtab (STRING key, TABLE *ptab, INT sep, STRING ermsg)
 {
 	TABLE tmptab = NULL;
 	STRING msg;
@@ -54,7 +59,7 @@ edit_valtab (STRING key,        /* value table key */
 
 	unlink(editfile);
 
-	if (retrieve_file(key, editfile) == RECORD_ERROR) {
+	if (retrieve_to_textfile(key, editfile) == RECORD_ERROR) {
 		mprintf_error(dataerr);
 		return FALSE;
 	}
@@ -64,7 +69,7 @@ edit_valtab (STRING key,        /* value table key */
 		if (init_valtab_from_file(editfile, tmptab, sep, &msg)) {
 			if (*ptab) remove_table(*ptab, DONTFREE);
 			*ptab = tmptab;
-			store_file(key, editfile);
+			store_text_file(key, editfile);
 			return TRUE;
 		}
 		if (ask_yes_or_no_msg(ermsg, aredit))

@@ -39,10 +39,12 @@ static BOOLEAN init_valtab_from_string(STRING, TABLE, INT, STRING*);
 
 /*=====================================================
  * init_valtab_from_rec -- Init value table from record
- * STRING key:    record key
- * TABLE tab:     hash table (values are strings)
- * INT sep:       separator char used in records
- * STRING *pmsg:  [OUT] error message
+ *  key:   [in] record key (in db)
+ *  tab:   [in,out] hash table (values are strings)
+ *  sep:   [in] separator char in each line between key & value
+ *  pmsg:  [out] error message
+ * Reads record from db, parses it into key/value strings
+ * and inserts them into hash table provided (tab).
  *===================================================*/
 BOOLEAN
 init_valtab_from_rec (STRING key, TABLE tab, INT sep, STRING *pmsg)
@@ -58,10 +60,10 @@ init_valtab_from_rec (STRING key, TABLE tab, INT sep, STRING *pmsg)
 }
 /*====================================================
  * init_valtab_from_file -- Init value table from file
- * STRING fname,     file with value table
- * TABLE tab,        hash table for values (table entries are string values)
- * INT sep,          separator char
- * STRING *pmsg:     error message
+ *  fname:   [in] file holding key/values strings
+ *  tab:     [in,out] hash table for key/value string pairs
+ *  sep:     [in] separator char between key & value
+ *  pmsg:    [out] error message (set if returns FALSE)
  *==================================================*/
 BOOLEAN
 init_valtab_from_file (STRING fname, TABLE tab, INT sep, STRING *pmsg)
@@ -70,7 +72,7 @@ init_valtab_from_file (STRING fname, TABLE tab, INT sep, STRING *pmsg)
 	struct stat buf;
 	STRING str;
 	BOOLEAN rc;
-	size_t siz;
+	INT siz;
 	if ((fp = fopen(fname, LLREADTEXT)) == NULL) return TRUE;
 	ASSERT(fstat(fileno(fp), &buf) == 0);
 	if (buf.st_size == 0) {
@@ -80,9 +82,9 @@ init_valtab_from_file (STRING fname, TABLE tab, INT sep, STRING *pmsg)
 	}
 	str = (STRING) stdalloc(buf.st_size+1);
 	str[buf.st_size] = 0;
-	siz = fread(str, buf.st_size, 1, fp);
+	siz = fread(str, 1, buf.st_size, fp);
 	/* may not read full buffer on Windows due to CR/LF translation */
-	ASSERT(siz == 1 || feof(fp));
+	ASSERT(siz == buf.st_size || feof(fp));
 	fclose(fp);
  	rc = init_valtab_from_string(str, tab, sep, pmsg);
 	stdfree(str);
@@ -90,10 +92,15 @@ init_valtab_from_file (STRING fname, TABLE tab, INT sep, STRING *pmsg)
 }
 /*========================================================
  * init_valtab_from_string -- Init value table from string
- * STRING str,      string with value table
- * TABLE tab,       table for values (entry type is string values)
- * INT sep,         separator char
- * STRING *pmsg:    error message
+ *  str:     [in,modified] string holding all value/values
+ *  tab:     [in,out] table in which to put key/value pairs
+ *  sep:     [in] separator char
+ *  pmsg:    [out] error message (set if returns FALSE)
+ * eg, "PA:Pennsylvania\nVA:Virginia"
+ *  could be passed as str, with sep of :
+ *  and two key/value pairs would be inserted
+ *  pairs inside str are always separated by \n
+ *  sep is the separator between key & value
  *======================================================*/
 static BOOLEAN
 init_valtab_from_string (STRING str, TABLE tab, INT sep, STRING *pmsg)
@@ -135,7 +142,7 @@ init_valtab_from_string (STRING str, TABLE tab, INT sep, STRING *pmsg)
 	}
 	return TRUE;
 }
-#if 0
+#ifdef UNUSED_CODE
 BOOLEAN lex_valtab (tab, sep, nextc, pmsg)
 TABLE *ptab;	/* hash table for values */
 INT sep;	/* separator char */
@@ -166,4 +173,4 @@ STRING ermsg;	/* error message */
 		insert_table(tab, strsave(tag), strsave(val));
 		if (c == EOF) break;
 	}
-#endif
+#endif /* UNUSED_CODE */

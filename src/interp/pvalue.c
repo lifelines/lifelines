@@ -727,19 +727,13 @@ eq_conform_pvalues (PVALUE val1,
 }
 /*=========================================================
  * coerce_pvalue -- Convert PVALUE from one type to another
+ *  type:  [in] type to convert to
+ *  val:   [in,out] value to convert in place
+ *  eflg:  [out] error flag (set to TRUE if error)
  *=======================================================*/
 void
-coerce_pvalue (INT type,       /* type to convert to */
-               PVALUE val,     /* old and new value */
-               BOOLEAN *eflg)
+coerce_pvalue (INT type, PVALUE val, BOOLEAN *eflg)
 {
-#ifdef UNUSED_CODE
-	PVALUE new;
-	INT vint;
-	/*LONG vlong;*/
-	FLOAT vfloat;
-	BOOLEAN vbool;
-#endif
 	UNION u;
 
 #ifdef DEBUG

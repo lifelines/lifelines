@@ -1,3 +1,39 @@
+2001-07-04 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog btree/file.c btree/opnbtree.c gedlib/editmap.c
+	gedlib/editvtab.c gedlib/intrface.c gedlib/node.c
+	gedlib/nodeutls.c gedlib/translat.c gedlib/valtable.c
+	hdrs/btree.h hdrs/gedcom.h interp/more.c interp/pvalue.c
+	liflines/screen.c liflines/show.c stdlib/llstrcmp.c
+	stdlib/mystring.c stdlib/stdstrng.c tools/wprintf.c:
+
+	Fixed a possibility of buffer overflow in translate_write.
+
+	More (function header) documentation of various functions.
+
+	Fixed buffer overwrite bug in striplead, then ifdef'd it
+	out as UNUSED_CODE.
+
+	Standardized UNUSED/UNUSED_CODE ifdefs, so all are ifdef UNUSED_CODE,
+	and have comment in function header docs.
+
+	Deleted some unused variables in coerce_pvalue.
+
+	Deleted unused & unimplemented function freerecord in more.c.
+
+	Fixed translate_string (translat.c) for possible buffer overflow.
+
+	Fixed indi_to_event to use fixed length string copying (to
+	avoid any possibility of buffer overflow).
+
+	Modified event_to_string to avoid any possibility of buffer overflow.
+
+	Modified person_display into subroutines, and started respecting len.
+	Modified spouse display to include more events when room.
+
+	Fixed bug in translation tables & place abbrev tables on MSDOS
+	(\r <-> \r\n file problem).
+
 2001-07-02 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog btree/opnbtree.c gedlib/translat.c:
