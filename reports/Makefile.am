@@ -1,7 +1,7 @@
 # This makefile is for the lifelines reports
 
 AUTOMAKE_OPTIONS = no-dependencies
-### pkgdir := $(pkgdatadir)/reports
+
 LL_REPORTS = \
 	2ppage.ll 4gen1.ll 6gen1.ll 8gen1.ll \
 	af-import.ll afn_match.ll ahnenliste.ll ahnentafel.ll alive.ll	\
@@ -48,6 +48,7 @@ LL_REPORTS = \
 	st/st_collate_8859-1.li st/st_collate_UTF-8.li \
 	st/st_convert.li st/st_date.li st/st_db.li \
 	st/st_number.li st/st_string.li st/st_string_UTF-8.li
+
 OTHER_REPORTS = boc.gif ll.png gen_index bib2html.c bury.c \
         desc-tex2/drtree.tex desc-tex2/extree2.tex desc-tex2/poster2.tex \
         desc-tex2/pstricks.con desc-tex2/README \
@@ -59,13 +60,15 @@ OTHER_REPORTS = boc.gif ll.png gen_index bib2html.c bury.c \
         pedtex/pedtex.readme pedtex/setup.tex pedtex/tree.tex \
         ps-fan/ps-fan.ps \
         ps-pedigree.ps tree.tex
-dist_pkgdata_DATA = index.html
-pkg_REPORTS = $(LL_REPORTS) $(OTHER_REPORTS) $(dist_pkgdata_DATA)
 
-EXTRA_DIST = \
-	$(pkg_REPORTS) \
-	tree.tex \
-	CREDIT README
+pkg_REPORTS = $(LL_REPORTS) $(OTHER_REPORTS)
+pkg_REPORTS_MISC = index.html CREDIT README tree.tex
+
+EXTRA_DIST = $(pkg_REPORTS) \
+	     $(pkg_REPORTS_MISC)
+
+dist_pkgdata_DATA = $(EXTRA_DIST)
+
 PERL = perl
 index.html: $(LL_REPORTS)
 	-$(PERL) $(top_srcdir)/reports/gen_index $^

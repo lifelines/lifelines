@@ -1,4 +1,14 @@
+2005-01-11 Matt Emmerton
+
+	* ChangeLog reports/Makefile.am
+
+	Changes to Makefile.am to always install reports.
+	This fixes problems on systems with older versions of
+	automake that don't understand the newer syntax and
+	end up not installing any of the reports.
+
 2005-01-10 Stephen Dum
+
         * ChangeLog docs/ll-reportmanual.xml src/gedlib/gengedc.c 
 	  src/gedlib/indiseq.c src/hdrs/gedcom.h src/liflines/browse.c 
 	  src/liflines/show.c 
