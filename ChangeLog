@@ -1,5 +1,12 @@
 2002-06-18 Matt Emmerton <memmerto@users.sourceforge.net>
 
+	* ChangeLog build build/gnu build/msvc6 build/rpm
+
+	Added build directory hierarchy to hold all build and
+	packaging tools.
+
+2002-06-18 Matt Emmerton <memmerto@users.sourceforge.net>
+
 	* ChangeLog interp/rassa.c
 
 	Add some casts to remove compiler warnings
