@@ -1,6 +1,10 @@
 2002-01-04 Matt Emmerton <memmerto@users.sourceforge.net>
 
-	* ChangeLog configure.in
+	* ChangeLog INSTALL
+
+	Added blurb about compiling --with-cygnus.
+	Reworded various sections.
+
 
 	Added --with-cygwin option to configure which enables compilation
     options required for clean compilation on cygwin.

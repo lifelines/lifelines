@@ -1,27 +1,39 @@
-LifeLines Source Release, Version 3.0.6
+LifeLines Source Release, Version 3.0.7
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
 This is the source distribution of the LifeLines system, a genealogy
-software system.  To build and install LifeLines, execute the 
-following commands:
+software system.
+
+LifeLines should compile correcting using GNU gcc or any native C compiler.
+It also will build using the Cygnus tools on Windows.
+
+To build and install LifeLines (NOT using Cygnus tools), do the following:
 
 	./configure (if that does't work, try 'sh ./configure')
 	make
-        make install
+	make install
+
+To build and install LifeLines (using Cygnus tools), do the following:
+
+	./configure --with-cygnus
+	make
+	make install
 
 This will generate Makefiles suitable for your platform and then build
-and install the LifeLines programs.  You will end up with three
+and install the LifeLines programs.  You will end up with the following
 executables (installed in various places, depending on your platform):
 
-llines  -- main LifeLines system program
-btedit -- general purpose btree edit program
+llines   -- main LifeLines system program
+btedit   -- general purpose btree edit program
 dbverify -- checks a LifeLines database for problems
 
-llines is the LifeLines program you want.
+llines is the main LifeLines program.
 
-Don't use btedit unless you know exactly what it does.  It is a superuser
-administration tool for unmangling mangled databases -- powerful, but
-deadly.  It is rarely, if ever, needed.
+dverify can be used to verify the correctness of a LifeLines database.
+This is handy if you're storing databases on floppies, or just for
+peace of mind.
 
-
+btedit is a administration tool used for unmangling mangled databases, 
+and is extremely powerful.  You should only use this program under the
+expert guidance of a LifeLines developer.
