@@ -1,3 +1,10 @@
+2003-01-03 Perry Rapp
+
+	* ChangeLog
+	*NEW src/arch/has_key.c:
+
+	Add file with new has_key (trivial placeholder) implementation.
+
 2003-01-02 Perry Rapp
 
 	* ChangeLog configure.in src/hdrs/version.h:
