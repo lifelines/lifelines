@@ -115,11 +115,13 @@ edit_valtab_impl (TABLE *ptab, INT sep, STRING ermsg, STRING (*validator)(TABLE 
 			}
 		} else {
 			INT max = sizeof(fullerr);
-			char temp[64], chardesc[8];
+			char temp[64], chardesc[8], temp2[2];
 
 			llstrncpyf(fullerr, max, uu8, "%s %s ", ermsg, msg);
 			llstrncpyf(chardesc, sizeof(chardesc), uu8, "%c", (uchar)sep);
-			llstrncpyf(temp, sizeof(temp), uu8, _(qSsepch), (uchar)sep);  /* (separator is %s) */
+			temp2[0] = sep;
+			temp2[1] = 0;
+			llstrncpyf(temp, sizeof(temp), uu8, _(qSsepch), temp2);  /* (separator is %s) */
 			llstrapps(fullerr, max, uu8, temp);
 			ptr = fullerr; /* static buffer */
 		}

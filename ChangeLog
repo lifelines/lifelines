@@ -12,6 +12,10 @@
 
 	Andreas Kirschbaum's fix to prevent crash in birth display.
 
+	* ChangeLog src/gedlib/editvtab.c:
+
+	Andreas Kirschbaum's fix to prevent crash editing place abbrev.
+
 2003-02-07 Perry Rapp
 
 	* ChangeLog src/hdrs/indiseq.h src/hdrs/interp.h
