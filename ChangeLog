@@ -11,6 +11,10 @@
 	Add first cut at list of databases to opening prompt.
 	Fix various bugs in opening & closing databases.
 
+	* ChangeLog gedlib/init.c liflines/main.c liflines/menuitem.c:
+
+	Cosmetic cleanup.
+
 2002-06-05 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog Makefile.am configure.in

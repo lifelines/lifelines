@@ -316,7 +316,7 @@ main (INT argc, char **argv)
 			LIST dblist = get_dblist(dbdir, &n);
 			if (dblist) {
 				INT i;
-				i = choose_from_list("(Not implemented) List of candidate dbs", n, dblist);
+				i = choose_from_list("(Currently display only) List of candidate dbs", n, dblist);
 				if (i >= 0) {
 					/* TODO: something, but we have to sort out how to get the db
 					out of the choice string -- Perry, 2002.06.05 */

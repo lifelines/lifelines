@@ -69,7 +69,6 @@ extern STRING qSdbrecstats;
 static void add_dbs_to_list(LIST dblist, STRING dir);
 static void free_dblist_el(VPTR w);
 static STRING getdbdesc(STRING path);
-static INT select_lldbs(const struct dirent *entry);
 
 /*********************************************
  * local variables
@@ -524,7 +523,7 @@ add_dbs_to_list (LIST dblist, STRING dir)
 	stdfree(programs);
 }
 /*==================================================
- * select_lldbs -- Check a file or directory to see if it
+ * getdbdesc -- Check a file or directory to see if it
  *  is a lifelines database
  *  returns stdalloc'd string or NULL (if not db)
  *================================================*/
