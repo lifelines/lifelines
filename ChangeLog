@@ -22,6 +22,12 @@
 
 	Include llexec.h as source for llexec.
 
+	* ChangeLog configure.in build/msvc6/llines/llines.rc
+	build/rpm/lifelines.spec po/de.po po/el.po po/fr.po po/it.po
+	po/sv.po src/hdrs/version.h:
+
+	Releasing version 3.0.21.
+
 2002-10-06 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp

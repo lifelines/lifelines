@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Lifelines 3.0.18\n"
-"POT-Creation-Date: 2002-09-29 05:23-0400\n"
+"POT-Creation-Date: 2002-10-07 19:23-0400\n"
 "PO-Revision-Date: 2002-09-25 08:45+0200\n"
 "Last-Translator: Patrick Texier <p.texier@orsennes.com>\n"
 "Language-Team: Not a language team\n"
@@ -2477,280 +2477,280 @@ msgstr "%s : l'arg #%s a une erreur majeure."
 msgid "Enter integer for program"
 msgstr "Entrez un entier pour le programme"
 
-#: src/interp/builtin.c:176
+#: src/interp/builtin.c:179
 msgid "Identify person for program:"
 msgstr "Sélectionnez une personne pour le programme"
 
-#: src/interp/builtin.c:204
+#: src/interp/builtin.c:207
 msgid "Enter a spouse from family."
 msgstr "Entrez le conjoint de la famille"
 
-#: src/interp/builtin.c:205
+#: src/interp/builtin.c:208
 msgid "Enter a sibling from family."
 msgstr "Entrez un enfant de la famille."
 
-#: src/interp/builtin.c:238
+#: src/interp/builtin.c:241
 msgid "Identify list of persons for program:"
 msgstr "Identifiez une liste de personnes pour le programme :"
 
-#: src/interp/builtin.c:297
+#: src/interp/builtin.c:300
 msgid "name: person does not have a name"
 msgstr "name : personne sans nom"
 
-#: src/interp/builtin.c:350
+#: src/interp/builtin.c:353
 msgid "fullname: person does not have a name"
 msgstr "fullname : personne sans nom"
 
-#: src/interp/builtin.c:378
+#: src/interp/builtin.c:381
 msgid "surname: person does not have a name"
 msgstr "surname : personne sans nom"
 
-#: src/interp/builtin.c:404
+#: src/interp/builtin.c:407
 msgid "soundex: person does not have a name"
 msgstr "soundex: personne sans nom"
 
-#: src/interp/builtin.c:451
+#: src/interp/builtin.c:454
 #, c-format
 msgid "Bad UTF character %d in UTF escape string <%s>"
 msgstr "Caractère UFT invalide %d dans la chaîne <%s>."
 
-#: src/interp/builtin.c:551
+#: src/interp/builtin.c:554
 msgid "(givens) person does not have a name"
 msgstr "(givens) personne sans nom"
 
-#: src/interp/builtin.c:578
+#: src/interp/builtin.c:581
 msgid "set: error evaluating 2nd arg"
 msgstr "set: erreur d'évalution 2e arg."
 
-#: src/interp/builtin.c:965
+#: src/interp/builtin.c:968
 msgid "the arg to f is not a float"
 msgstr "l'arg. de f n'est pas un décimal"
 
-#: src/interp/builtin.c:1015
+#: src/interp/builtin.c:1018
 msgid "first"
 msgstr "premier"
 
-#: src/interp/builtin.c:1015
+#: src/interp/builtin.c:1018
 msgid "second"
 msgstr "second"
 
-#: src/interp/builtin.c:1015
+#: src/interp/builtin.c:1018
 msgid "third"
 msgstr "troisième"
 
-#: src/interp/builtin.c:1015
+#: src/interp/builtin.c:1018
 msgid "fourth"
 msgstr "quatrième"
 
-#: src/interp/builtin.c:1015
+#: src/interp/builtin.c:1018
 msgid "fifth"
 msgstr "cinquième"
 
-#: src/interp/builtin.c:1016
+#: src/interp/builtin.c:1019
 msgid "sixth"
 msgstr "sixième"
 
-#: src/interp/builtin.c:1016
+#: src/interp/builtin.c:1019
 msgid "seventh"
 msgstr "septième"
 
-#: src/interp/builtin.c:1016
+#: src/interp/builtin.c:1019
 msgid "eighth"
 msgstr "huitième"
 
-#: src/interp/builtin.c:1016
+#: src/interp/builtin.c:1019
 msgid "ninth"
 msgstr "neuvième"
 
-#: src/interp/builtin.c:1016
+#: src/interp/builtin.c:1019
 msgid "tenth"
 msgstr "dixième"
 
-#: src/interp/builtin.c:1017
+#: src/interp/builtin.c:1020
 msgid "eleventh"
 msgstr "onzième"
 
-#: src/interp/builtin.c:1017
+#: src/interp/builtin.c:1020
 msgid "twelfth"
 msgstr "douzième"
 
-#: src/interp/builtin.c:1030
+#: src/interp/builtin.c:1033
 #, c-format
 msgid "%dth"
 msgstr "%dème"
 
-#: src/interp/builtin.c:1040
+#: src/interp/builtin.c:1043
 msgid "zero"
 msgstr "zéro"
 
-#: src/interp/builtin.c:1040
+#: src/interp/builtin.c:1043
 msgid "one"
 msgstr "un"
 
-#: src/interp/builtin.c:1040
+#: src/interp/builtin.c:1043
 msgid "two"
 msgstr "deux"
 
-#: src/interp/builtin.c:1040
+#: src/interp/builtin.c:1043
 msgid "three"
 msgstr "trois"
 
-#: src/interp/builtin.c:1040
+#: src/interp/builtin.c:1043
 msgid "four"
 msgstr "quatre"
 
-#: src/interp/builtin.c:1040
+#: src/interp/builtin.c:1043
 msgid "five"
 msgstr "cinq"
 
-#: src/interp/builtin.c:1041
+#: src/interp/builtin.c:1044
 msgid "six"
 msgstr "six"
 
-#: src/interp/builtin.c:1041
+#: src/interp/builtin.c:1044
 msgid "seven"
 msgstr "sept"
 
-#: src/interp/builtin.c:1041
+#: src/interp/builtin.c:1044
 msgid "eight"
 msgstr "huit"
 
-#: src/interp/builtin.c:1041
+#: src/interp/builtin.c:1044
 msgid "nine"
 msgstr "neuf"
 
-#: src/interp/builtin.c:1041
+#: src/interp/builtin.c:1044
 msgid "ten"
 msgstr "dix"
 
-#: src/interp/builtin.c:1042
+#: src/interp/builtin.c:1045
 msgid "eleven"
 msgstr "onze"
 
-#: src/interp/builtin.c:1042
+#: src/interp/builtin.c:1045
 msgid "twelve"
 msgstr "douze"
 
-#: src/interp/builtin.c:2089
+#: src/interp/builtin.c:2092
 msgid "He"
 msgstr "Il"
 
-#: src/interp/builtin.c:2089
+#: src/interp/builtin.c:2092
 msgid "he"
 msgstr "il"
 
-#: src/interp/builtin.c:2089
+#: src/interp/builtin.c:2092
 msgid "His"
 msgstr "Son"
 
-#: src/interp/builtin.c:2089
+#: src/interp/builtin.c:2092
 msgid "his"
 msgstr "son"
 
-#: src/interp/builtin.c:2089
+#: src/interp/builtin.c:2092
 msgid "him"
 msgstr "lui"
 
-#: src/interp/builtin.c:2090
+#: src/interp/builtin.c:2093
 msgid "She"
 msgstr "Elle"
 
-#: src/interp/builtin.c:2090
+#: src/interp/builtin.c:2093
 msgid "she"
 msgstr "elle"
 
-#: src/interp/builtin.c:2090
+#: src/interp/builtin.c:2093
 msgid "Her"
 msgstr "Son"
 
-#: src/interp/builtin.c:2090
+#: src/interp/builtin.c:2093
 msgid "her"
 msgstr "son"
 
-#: src/interp/builtin.c:2493
+#: src/interp/builtin.c:2496
 msgid "(trimname) person does not have a name"
 msgstr "(trimname) la personne n'a pas de nom"
 
-#: src/interp/interp.c:247
+#: src/interp/interp.c:248
 #, c-format
 msgid "Error: file <%s> not found"
 msgstr "Erreur : fichier <%s> non trouvé"
 
-#: src/interp/interp.c:300
+#: src/interp/interp.c:301
 msgid "contains errors."
 msgstr "contient des erreurs."
 
-#: src/interp/interp.c:307
+#: src/interp/interp.c:308
 msgid "needs a starting procedure."
 msgstr "a besoin d'une procédure de démarrage."
 
-#: src/interp/interp.c:314
+#: src/interp/interp.c:315
 #, c-format
 msgid "Error: output file <%s> could not be created.\n"
 msgstr "Erreur : Le fichier de sortie <%s> ne peut être créé.\n"
 
-#: src/interp/interp.c:324
+#: src/interp/interp.c:325
 #, c-format
 msgid "Proc %s must be called with %d (not %d) parameters."
 msgstr "La proc. %s doit être appelée avec %d paramètres et non %d."
 
-#: src/interp/interp.c:339
+#: src/interp/interp.c:340
 msgid "is running..."
 msgstr "s'exécute..."
 
-#: src/interp/interp.c:343
+#: src/interp/interp.c:344
 msgid "was run successfully."
 msgstr "s'est correctement exécuté."
 
-#: src/interp/interp.c:347
+#: src/interp/interp.c:348
 msgid "was cancelled."
 msgstr "a été interrompu."
 
-#: src/interp/interp.c:349
+#: src/interp/interp.c:350
 msgid "was not run because of errors."
 msgstr "a été imterrompu à cause d'erreurs."
 
-#: src/interp/interp.c:451
+#: src/interp/interp.c:452
 #, c-format
 msgid "Error: file <%s> not found: %s\n"
 msgstr "Erreur : fichier <%s> non trouvé : %s\n"
 
-#: src/interp/interp.c:526
+#: src/interp/interp.c:527
 #, c-format
 msgid "identifier: %s should be a string\n"
 msgstr "identifieur : %s doit être une chaîne\n"
 
-#: src/interp/interp.c:1716
+#: src/interp/interp.c:1717
 #, c-format
 msgid "Display locals (%d)"
 msgstr "Afficher locals (%d)"
 
-#: src/interp/interp.c:1719
+#: src/interp/interp.c:1720
 #, c-format
 msgid "Display globals (%d)"
 msgstr "Afficher globals (%d)"
 
-#: src/interp/interp.c:1721
+#: src/interp/interp.c:1722
 msgid "Pop one level"
 msgstr "Descendre d'un niveau"
 
-#: src/interp/interp.c:1722
+#: src/interp/interp.c:1723
 msgid "Quit debugger"
 msgstr "Quitter le deboggueur"
 
-#: src/interp/interp.c:1729
+#: src/interp/interp.c:1730
 msgid "Local variables"
 msgstr "Variables locales"
 
-#: src/interp/interp.c:1733
+#: src/interp/interp.c:1734
 msgid "Global variables"
 msgstr "Variables globales"
 
-#: src/interp/interp.c:1824
+#: src/interp/interp.c:1825
 msgid "Report cancelled"
 msgstr "Report interrompu"
 
-#: src/interp/interp.c:1832
+#: src/interp/interp.c:1833
 #, c-format
 msgid ""
 "\n"
@@ -2759,7 +2759,7 @@ msgstr ""
 "\n"
 "Erreur d'interprétation en <%s>"
 
-#: src/interp/interp.c:1835
+#: src/interp/interp.c:1836
 #, c-format
 msgid ""
 "\n"
@@ -2768,21 +2768,21 @@ msgstr ""
 "\n"
 "Erreur d'exécution en : <%s>"
 
-#: src/interp/interp.c:1841
+#: src/interp/interp.c:1842
 #, c-format
 msgid "Parsing Error at line %d: "
 msgstr "Erreur d'interprétation en ligne %d :"
 
-#: src/interp/interp.c:1844
+#: src/interp/interp.c:1845
 #, c-format
 msgid "Runtime Error at line %d: "
 msgstr "Erreur d'exécution à la ligne %d : "
 
-#: src/interp/interp.c:1846
+#: src/interp/interp.c:1847
 msgid "Aborting: "
 msgstr "Interruption :"
 
-#: src/interp/interp.c:1863
+#: src/interp/interp.c:1864
 #, c-format
 msgid ""
 "\n"
@@ -2791,13 +2791,27 @@ msgstr ""
 "\n"
 "Erreurs de rapport : %s"
 
-#: src/interp/interp.c:2076
+#: src/interp/interp.c:2077
 msgid "This report requires a newer program to run"
 msgstr "Ce rapport nécessite un programme plus récent pour fonctionner"
 
-#: src/interp/more.c:689
+#: src/interp/more.c:691
 msgid "Please choose from the following list."
 msgstr "Choisissez dans la liste suivante."
+
+#: src/interp/more.c:727
+msgid "Illegal type found in list in menuchoose"
+msgstr ""
+
+#: src/interp/more.c:1017
+#, fuzzy
+msgid "the arg to lock must be a person or family"
+msgstr "%s : l'arg. doit être une famille."
+
+#: src/interp/more.c:1040
+#, fuzzy
+msgid "the arg to unlock must be a person or family"
+msgstr "%s : l'arg. doit être une famille."
 
 #: src/liflines/add.c:62
 #, c-format
@@ -2806,29 +2820,29 @@ msgid_plural "There were %d unresolved references."
 msgstr[0] "Il y a %d référence non résolue."
 msgstr[1] "Il y a %d références non résolues."
 
-#: src/liflines/error.c:55
+#: src/liflines/error.c:59
 msgid "Fatal Error"
 msgstr "Erreur fatale"
 
-#: src/liflines/error.c:62
+#: src/liflines/error.c:66
 #, c-format
 msgid "    in file <%s> at line %d\n"
 msgstr "    dans le fichier <%s> à la ligne %d\n"
 
-#: src/liflines/error.c:64 src/liflines/error.c:75
+#: src/liflines/error.c:68 src/liflines/error.c:79
 msgid "Current database"
 msgstr "Base courante"
 
-#: src/liflines/error.c:69
+#: src/liflines/error.c:73
 msgid "FATAL ERROR"
 msgstr "ERREUR FATALE"
 
-#: src/liflines/error.c:73
+#: src/liflines/error.c:77
 #, c-format
 msgid "  in file <%s> at line %d\n"
 msgstr "  dans le fichier <%s> à la ligne %d\n"
 
-#: src/liflines/error.c:78
+#: src/liflines/error.c:82
 msgid "ASSERT failure"
 msgstr "ASSERT échec"
 
@@ -2883,11 +2897,11 @@ msgstr "Enregistrements ajoutés (%dP, %dF, %dS, %dE, %dX)"
 msgid "Please enter the name of the GEDCOM file."
 msgstr "Entrez le nom du fichier GEDCOM."
 
-#: src/liflines/main.c:334
+#: src/liflines/main.c:352
 msgid "Choose database to open"
 msgstr "Sélectionnez la base à ouvrir"
 
-#: src/liflines/main.c:342
+#: src/liflines/main.c:360
 msgid "No databases found in database path"
 msgstr "Pas de base trouvée dans le chemin d'accès"
 
