@@ -44,6 +44,14 @@
 #include "screen.h" /* need to make interface for the wfield calls */
 #include "lloptions.h"
 
+extern STRING qSmisixr, qSmisfxr, qSmisexr, qSmissxr, qSmisrxr;
+extern STRING qSmulper, qSmulfam, qSmulsrc, qSmulevn, qSmuloth;
+extern STRING qSmatper, qSmatfam, qSmatsrc, qSmatevn, qSmatoth;
+extern STRING qSmisval, qSundper, qSundfam, qSundrec, qSundsrc;
+extern STRING qSundevn, qSbadlev, qSnoname, qSmulfth, qSmulmth;
+extern STRING qSmulhsb, qSmulwif, qStwosex, qSmlefml, qSfmlmle;
+extern STRING qSimpsex;
+
 /* external data set by check_stdkeys() , used by addmissingkeys() */
 
 INT gd_itot = 0;        /* total number of individuals */
@@ -75,42 +83,6 @@ static FILE *flog;
 
 ELMNT *index_data = NULL;
 
-#define SS (STRING)
-
-STRING misixr = SS "Line %d: The person defined here has no key: skipped.";
-STRING misfxr = SS "Line %d: The family defined here has no key.";
-STRING misexr = SS "Line %d: The event defined here has no key.";
-STRING missxr = SS "Line %d: The source defined here has no key.";
-STRING misrxr = SS "Line %d: The record defined here has no key.";
-STRING mulper = SS "Lines %d and %d: Person %s is multiply defined: skipped.";
-STRING mulfam = SS "Lines %d and %d: Family %s is multiply defined.";
-STRING mulsrc = SS "Lines %d and %d: Source %s is multiply defined.";
-STRING mulevn = SS "Lines %d and %d: Event %s is multiply defined.";
-STRING muloth = SS "Lines %d and %d: Record %s is multiply defined.";
-STRING matper = SS "Line %d: Person %s has an incorrect key: skipped.";
-STRING matfam = SS "Line %d: Family %s has an incorrect key.";
-STRING matsrc = SS "Line %d: Source %s has an incorrect key.";
-STRING matevn = SS "Line %d: Event %s has an incorrect key.";
-STRING matoth = SS "Line %d: Record %s has an incorrect key.";
-STRING misval = SS "Line %d: This %s line is missing a value field.";
-STRING undper = SS "Person %s is referred to but not defined.";
-STRING undfam = SS "Family %s is referred to but not defined.";
-STRING undrec = SS "Record %s is referred to but not defined.";
-STRING undsrc = SS "Source %s is referred to but not defined.";
-STRING undevn = SS "Event %s is referred to but not defined.";
-STRING badlev = SS "Line %d: This line has a level number that is too large.";
-STRING noname = SS "Line %d: Person defined here has no name.";
-STRING mulfth = SS "Line %d: Person %s has multiple father links.";
-STRING mulmth = SS "Line %d: Person %s has multiple mother links.";
-STRING mulhsb = SS "Line %d: Family %s has multiple husband links.";
-STRING mulwif = SS "Line %d: Family %s has multiple wife links.";
-STRING twosex = SS "Line %d: Person %s is both male and female.";
-STRING mlefml = SS "Line %d: Person %s is male but must be female.";
-STRING fmlmle = SS "Line %d: Person %s is female but must be male.";
-STRING impsex = SS "Line %d: Person %s is implied to be both male and female.";
-#if 0
-STRING noxref = SS "Line %d: This record has no cross reference value.";
-#endif
 
 static INT add_even_defn(STRING, INT);
 static INT add_fam_defn(STRING, INT);
@@ -171,7 +143,7 @@ validate_gedcom (FILE *fp)
 			if (rc == ERROR)
 				handle_err(msg);
 			else
-				handle_err(badlev, flineno);
+				handle_err(qSbadlev, flineno);
 			handle_value(val, flineno);
 			curlev = lev;
 			rc = file_to_line(fp, tt, &lev, &xref, &tag, &val,
@@ -191,7 +163,7 @@ validate_gedcom (FILE *fp)
 			char str[10];
 			if (rec_type == INDI_REC && !named) {
 				if (getoptint("RequireNames", 0)) {
-					handle_err(noname, defline);
+					handle_err(qSnoname, defline);
 				}
 			}
 			defline = flineno;
@@ -239,7 +211,7 @@ validate_gedcom (FILE *fp)
 		xref = xref ? rmvat(xref) : NULL;
 	}
 	if (rec_type == INDI_REC && !named)
-		handle_err(noname, defline);
+		handle_err(qSnoname, defline);
 	check_references();
 	if (logopen) {
 		fclose(flog);
@@ -263,7 +235,7 @@ add_indi_defn (STRING xref,     /* ref value */
 
 	*pel = NULL;
 	if (!xref || *xref == 0) {
-		handle_err(misixr, line);
+		handle_err(_(qSmisixr), line);
 		return -2;
 	}
 	if ((dex = xref_to_index(xref)) == -1) {
@@ -279,12 +251,12 @@ add_indi_defn (STRING xref,     /* ref value */
 	} else
 		*pel = el = index_data[dex];
 	if (KNOWNTYPE(el) && Type(el) != INDI_REC) {
-		handle_err(matper, line, xref);
+		handle_err(qSmatper, line, xref);
 		return -2;
 	}
 	if (Type(el) == INDI_REC) {
 		if (Line(el) && line) {
-			handle_err(mulper, Line(el), line, xref);
+			handle_err(qSmulper, Line(el), line, xref);
 			return -2;
 		}
 		if (line) Line(el) = line;
@@ -307,7 +279,7 @@ add_fam_defn (STRING xref,      /* cross ref value */
 	ELMNT el;
 	INT dex;
 	if (!xref || *xref == 0) {
-		handle_err(misfxr, line);
+		handle_err(qSmisfxr, line);
 		return -1;
 	}
 	if ((dex = xref_to_index(xref)) == -1) {
@@ -322,12 +294,12 @@ add_fam_defn (STRING xref,      /* cross ref value */
 	} else
 		el = index_data[dex];
 	if (KNOWNTYPE(el) && Type(el) != FAM_REC) {
-		handle_err(matfam, line, xref);
+		handle_err(qSmatfam, line, xref);
 		return -1;
 	}
 	if (Type(el) == FAM_REC) {
 		if (Line(el) && line) {
-			handle_err(mulfam, Line(el), line, xref);
+			handle_err(qSmulfam, Line(el), line, xref);
 			return -1;
 		}
 		if (line) Line(el) = line;
@@ -349,7 +321,7 @@ add_sour_defn (STRING xref,     /* cross ref value */
 	ELMNT el;
 	INT dex;
 	if (!xref || *xref == 0) {
-		handle_err(missxr, line);
+		handle_err(qSmissxr, line);
 		return -1;
 	}
 	if ((dex = xref_to_index(xref)) == -1) {
@@ -362,12 +334,12 @@ add_sour_defn (STRING xref,     /* cross ref value */
 	} else
 		el = index_data[dex];
 	if (KNOWNTYPE(el) && Type(el) != SOUR_REC) {
-		handle_err(matsrc, line, xref);
+		handle_err(qSmatsrc, line, xref);
 		return -1;
 	}
 	if (Type(el) == SOUR_REC) {
 		if (Line(el) && line) {
-			handle_err(mulsrc, Line(el), line, xref);
+			handle_err(qSmulsrc, Line(el), line, xref);
 			return -1;
 		}
 		if (line) Line(el) = line;
@@ -387,7 +359,7 @@ add_even_defn (STRING xref,     /* cross ref value */
 	ELMNT el;
 	INT dex;
 	if (!xref || *xref == 0) {
-		handle_err(misexr, line);
+		handle_err(qSmisexr, line);
 		return -1;
 	}
 	if ((dex = xref_to_index(xref)) == -1) {
@@ -400,12 +372,12 @@ add_even_defn (STRING xref,     /* cross ref value */
 	} else
 		el = index_data[dex];
 	if (KNOWNTYPE(el) && Type(el) != EVEN_REC) {
-		handle_err(matevn, line, xref);
+		handle_err(qSmatevn, line, xref);
 		return -1;
 	}
 	if (Type(el) == EVEN_REC) {
 		if (Line(el) && line) {
-			handle_err(mulevn, Line(el), line, xref);
+			handle_err(qSmulevn, Line(el), line, xref);
 			return -1;
 		}
 		if (line) Line(el) = line;
@@ -425,7 +397,7 @@ add_othr_defn (STRING xref,     /* cross ref value */
 	ELMNT el;
 	INT dex;
 	if (!xref || *xref == 0) {
-		handle_err(misrxr, line);
+		handle_err(qSmisrxr, line);
 		return -1;
 	}
 	if ((dex = xref_to_index(xref)) == -1) {
@@ -438,12 +410,12 @@ add_othr_defn (STRING xref,     /* cross ref value */
 	} else
 		el = index_data[dex];
 	if (KNOWNTYPE(el) && Type(el) != OTHR_REC) {
-		handle_err(matoth, line, xref);
+		handle_err(qSmatoth, line, xref);
 		return -1;
 	}
 	if (Type(el) == OTHR_REC) {
 		if (Line(el) && line) {
-			handle_err(muloth, Line(el), line, xref);
+			handle_err(qSmuloth, Line(el), line, xref);
 			return -1;
 		}
 		if (line) Line(el) = line;
@@ -469,19 +441,19 @@ handle_indi_lev1 (STRING tag,
 	indi = index_data[person];
 	if (eqstr(tag, "FAMC")) {
 		if (!pointer_value(val)) {
-			handle_err(misval, line, "FAMC");
+			handle_err(qSmisval, line, "FAMC");
 			return;
 		}
 		(void) add_fam_defn(rmvat(val), 0);
 	} else if (eqstr(tag, "FAMS")) {
 		if (!pointer_value(val)) {
-			handle_err(misval, line, "FAMS");
+			handle_err(qSmisval, line, "FAMS");
 			return;
 		}
 		(void) add_fam_defn(rmvat(val), 0);
 	} else if (eqstr(tag, "FATH")) {
 		if (!pointer_value(val)) {
-			handle_warn(misval, line, "FATH");
+			handle_warn(qSmisval, line, "FATH");
 			return;
 		}
 		Male(indi) += 1;
@@ -489,7 +461,7 @@ handle_indi_lev1 (STRING tag,
 			Sex(pers) |= BE_MALE;
 	} else if (eqstr(tag, "MOTH")) {
 		if (!pointer_value(val)) {
-			handle_warn(misval, line, "MOTH");
+			handle_warn(qSmisval, line, "MOTH");
 			return;
 		}
 		Fmle(indi) += 1;
@@ -525,7 +497,7 @@ handle_fam_lev1 (STRING tag,
 	fam = (family != -1) ? index_data[family] : NULL;
 	if (eqstr(tag, "HUSB")) {
 		if (!pointer_value(val)) {
-			handle_err(misval, line, "HUSB");
+			handle_err(qSmisval, line, "HUSB");
 			return;
 		}
 		if (fam) Male(fam) += 1;
@@ -533,7 +505,7 @@ handle_fam_lev1 (STRING tag,
 			Sex(pers) |= BE_MALE;
 	} else if (eqstr(tag, "WIFE")) {
 		if (!pointer_value(val)) {
-			handle_err(misval, line, "WIFE");
+			handle_err(qSmisval, line, "WIFE");
 			return;
 		}
 		if (fam) Fmle(fam) += 1;
@@ -541,7 +513,7 @@ handle_fam_lev1 (STRING tag,
 			Sex(pers) |= BE_FEMALE;
 	} else if (eqstr(tag, "CHIL")) {
 		if (!pointer_value(val)) {
-			handle_err(misval, line, "CHIL");
+			handle_err(qSmisval, line, "CHIL");
 			return;
 		}
 		(void) add_indi_defn(rmvat(val), 0, &pers);
@@ -680,7 +652,7 @@ check_references (void)
 		case EVEN_REC: check_even_links(el); break;
 		case SOUR_REC: check_sour_links(el); break;
 		case OTHR_REC: check_othr_links(el); break;
-		default: handle_err(undrec, Key(el));
+		default: handle_err(qSundrec, Key(el));
 		}
 	}
 }
@@ -691,20 +663,20 @@ static void
 check_indi_links (ELMNT per)
 {
 	BOOLEAN jm, jf, bm, bf;
-	if (Male(per) > 1)  handle_warn(mulfth, Line(per), Key(per));
-	if (Fmle(per) > 1)  handle_warn(mulmth, Line(per), Key(per));
+	if (Male(per) > 1)  handle_warn(qSmulfth, Line(per), Key(per));
+	if (Fmle(per) > 1)  handle_warn(qSmulmth, Line(per), Key(per));
 	if (Line(per) == 0) {
-		handle_err(undper, Key(per));
+		handle_err(qSundper, Key(per));
 		return;
 	}
 	jm = Sex(per) & IS_MALE;
 	jf = Sex(per) & IS_FEMALE;
 	bm = Sex(per) & BE_MALE;
 	bf = Sex(per) & BE_FEMALE;
-	if (jm && jf) handle_err(twosex, Line(per), Key(per));
-	if (jm && bf) handle_err(mlefml, Line(per), Key(per));
-	if (jf && bm) handle_err(fmlmle, Line(per), Key(per));
-	if (bm && bf) handle_err(impsex, Line(per), Key(per));
+	if (jm && jf) handle_err(qStwosex, Line(per), Key(per));
+	if (jm && bf) handle_err(qSmlefml, Line(per), Key(per));
+	if (jf && bm) handle_err(qSfmlmle, Line(per), Key(per));
+	if (bm && bf) handle_err(qSimpsex, Line(per), Key(per));
 }
 /*======================================
  * check_fam_links -- Check family links
@@ -712,9 +684,9 @@ check_indi_links (ELMNT per)
 static void
 check_fam_links (ELMNT fam)
 {
-	if (Line(fam) == 0) handle_err(undfam, Key(fam));
-	if (Male(fam) > 1)  handle_warn(mulhsb, Line(fam), Key(fam));
-	if (Fmle(fam) > 1)  handle_warn(mulwif, Line(fam), Key(fam));
+	if (Line(fam) == 0) handle_err(qSundfam, Key(fam));
+	if (Male(fam) > 1)  handle_warn(qSmulhsb, Line(fam), Key(fam));
+	if (Fmle(fam) > 1)  handle_warn(qSmulwif, Line(fam), Key(fam));
 }
 /*======================================
  * check_even_links -- Check event links
@@ -722,7 +694,7 @@ check_fam_links (ELMNT fam)
 static void
 check_even_links (ELMNT evn)
 {
-	if (Line(evn) == 0) handle_err(undevn, Key(evn));
+	if (Line(evn) == 0) handle_err(qSundevn, Key(evn));
 }
 /*=======================================
  * check_sour_links -- Check source links
@@ -730,7 +702,7 @@ check_even_links (ELMNT evn)
 static void
 check_sour_links (ELMNT src)
 {
-	if (Line(src) == 0) handle_err(undsrc, Key(src));
+	if (Line(src) == 0) handle_err(qSundsrc, Key(src));
 }
 /*======================================
  * check_othr_links -- Check other links
@@ -738,7 +710,7 @@ check_sour_links (ELMNT src)
 static void
 check_othr_links (ELMNT otr)
 {
-	if (Line(otr) == 0) handle_err(undrec, Key(otr));
+	if (Line(otr) == 0) handle_err(qSundrec, Key(otr));
 }
 /*=======================================
  * handle_value -- Handle arbitrary value

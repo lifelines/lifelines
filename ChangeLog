@@ -1,3 +1,9 @@
+2002-05-22 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/messages.c liflines/valgdcom.c:
+
+	More i18n.
+
 2002-05-13 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog btree/opnbtree.c gedlib/init.c gedlib/xreffile.c
