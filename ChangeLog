@@ -13,7 +13,7 @@
 
 	* btree/opnbtree.c gedlib/indiseq.c gedlib/keytonod.c
 	hdrs/cache.h hdrs/gedcom.h interp/builtin.c liflines/browse.c:
-	Change to use qkey for functions than handle possibly bad keys
+	Change to use qkey for functions that handle possibly bad keys
 	(ie, report mode), instead of the ambiguous rkey notation.
 
 2000-12-31 Marc Nozell <marc@nozell.com>
