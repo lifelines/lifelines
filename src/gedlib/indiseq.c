@@ -1091,32 +1091,28 @@ difference_indiseq (INDISEQ one, INDISEQ two)
 INDISEQ
 parent_indiseq (INDISEQ seq)
 {
-	TABLE tab; /* table of people inserted (values not used) */
-	INDISEQ par;
-	NODE indi, fath, moth;
-	STRING key;
+	TABLE tab=0; /* table of people inserted (values not used) */
+	INDISEQ par=0;
+	NODE indi=0;
+	INT fnum=0, snum=0;
+	STRING key=0;
 	UNION uval;
 	if (!seq) return NULL;
 	tab = create_table(DONTFREE);
 	par = create_indiseq_impl(IValtype(seq), IValfnctbl(seq));
 	FORINDISEQ(seq, el, num)
 		indi = key_to_indi(skey(el));
-		fath = indi_to_fath(indi);
-		moth = indi_to_moth(indi);
-		if (fath && !in_table(tab, key = indi_to_key(fath))) {
-			/* indiseq values must be copied with copyval */
-			uval = copyval(seq, sval(el));
-			key = strsave(key);
-			append_indiseq_impl(par, key, NULL, uval, TRUE, TRUE);
-			insert_table_int(tab, key, 0);
-		}
-		if (moth && !in_table(tab, key = indi_to_key(moth))) {
-			/* indiseq values must be copied with copyval */
-			uval = copyval(seq, sval(el));
-			key = strsave(key);
-			append_indiseq_impl(par, key, NULL, uval, TRUE, TRUE);
-			insert_table_int(tab, key, 0);
-		}
+		FORFAMCS(indi, fam, fath, moth, fnum)
+			FORFAMSPOUSES(fam, spouse, snum)
+				if (spouse && !in_table(tab, key = indi_to_key(spouse))) {
+					/* indiseq values must be copied with copyval */
+					uval = copyval(seq, sval(el));
+					key = strsave(key);
+					append_indiseq_impl(par, key, NULL, uval, TRUE, TRUE);
+					insert_table_int(tab, key, 0);
+				}
+			ENDFAMSPOUSES
+		ENDFAMCS
 	ENDINDISEQ
 	destroy_table(tab);
 	return par;

@@ -776,6 +776,10 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 	if (__node && nestr(ntag(__node), "FAMS")) __node = NULL;\
 	}}
 
+/* FORFAMCS iterate over all parent families of indi
+ * Up to one father and mother are given for each
+ * (This ignores non-traditional parents)
+ */
 #define FORFAMCS(indi,fam,fath,moth,num) \
 	{\
 	NODE __node = FAMC(indi);\
@@ -800,6 +804,9 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 		if (__node && nestr(ntag(__node), "FAMC")) __node = NULL;\
 	}}
 
+/* FORHUSBS iterate over all husbands in one family
+ * (This handles more than one husband in a family)
+ */
 #define FORHUSBS(fam,husb,num) \
 	{\
 	NODE __node = find_tag(nchild(fam), "HUSB");\
@@ -822,6 +829,9 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 		if (__node && nestr(ntag(__node), "HUSB")) __node = NULL;\
 	}}
 
+/* FORWIFES iterate over all wives in one family
+ * (This handles more than one wife in a family)
+ */
 #define FORWIFES(fam,wife,num) \
 	{\
 	NODE __node = find_tag(nchild(fam), "WIFE");\
@@ -843,6 +853,34 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 		}\
 		__node = nsibling(__node);\
 		if (__node && nestr(ntag(__node), "WIFE")) __node = NULL;\
+	}}
+
+/* FORFAMSPOUSES iterate over all spouses in one family
+ * (All husbands and wives)
+ */
+#define FORFAMSPOUSES(fam,spouse,num) \
+	{\
+	NODE __node = nchild(fam);\
+	NODE spouse=0;\
+	STRING __key=0;\
+	num = 0;\
+	while (__node) {\
+		if (!eqstr(ntag(__node), "HUSB") && !eqstr(ntag(__node), "WIFE")) {\
+			__node = nsibling(__node);\
+			continue;\
+		}\
+		__key = rmvat(nval(__node));\
+		if (!__key || !(spouse = key_to_indi(__key))) {\
+			++num;\
+			__node = nsibling(__node);\
+			continue;\
+		}\
+		++num;\
+		{
+
+#define ENDFAMSPOUSES \
+		}\
+		__node = nsibling(__node);\
 	}}
 
 #define FORTAGVALUES(root,tag,node,value)\

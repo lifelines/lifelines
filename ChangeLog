@@ -14,6 +14,12 @@
 	on undefined function.
 	Fixes sf bug#1102127 (ASSERT on call to undefined function)
 
+	* ChangeLog src/gedlib/indiseq.c src/hdrs/gedcom.h
+
+	Fix parent_indiseq to handle non-traditional families.
+	New traversal macro FORFAMSPOUSES.
+	Fixes sf bug#1102130 (parentset doesn't include extra parents)
+
 2005-01-13 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp
