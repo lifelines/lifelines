@@ -2640,7 +2640,7 @@ ta bort och returnera element från lista
 
 <para>
 
-arrayelementstilldelning
+vektorelementstilldelning
 
 </para>
 </glossdef></glossentry>
@@ -2653,7 +2653,7 @@ arrayelementstilldelning
 
 <para>
 
-välj arrayelement
+välj vektorelement
 
 </para>
 </glossdef></glossentry>
@@ -2708,7 +2708,7 @@ loopa igenom alla element i lista
 
 	<application>LifeLines</application> tillhandahåller listor
 	för allmänna syften som kan åtkommas som köer, stackar eller
-	arrayer. En lista måste deklareras med funktionen
+	vektorer. En lista måste deklareras med funktionen
 	<function>list</function> innan den kan användas. Att
 	återdeklarera en befintlig variabel med
 	<function>list</function> tömmer den och återställer den till
@@ -2759,17 +2759,17 @@ loopa igenom alla element i lista
 <para>
 
 	<function>Setel</function> och <function>getel</function>
-	tillhandahåller arrayåtkomst till en lista.
+	tillhandahåller vektoråtkomst till en lista.
 	<function>Setel</function> anger ett värde för ett
-	arrayelement, och <function>getel</function> returnerar
-	värdet för ett arrayelement. Den första parametern för båda
+	vektorelement, och <function>getel</function> returnerar
+	värdet för ett vektorelement. Den första parametern för båda
 	är en lista; den andra parametern för båda är en
-	heltalsposition i arrayen; och den tredje parametern för
+	heltalsposition i vektorn; och den tredje parametern för
 	<function>setel</function> är värdet att tilldela till
-	arrayelementet och kan vara av vilken typ som helst.
-	Arrayelement numreras med början på ett. Otilldelade
+	vektorelementet och kan vara av vilken typ som helst.
+	Vektorelement numreras med början på ett. Otilldelade
 	element antas vara <returnvalue>noll</returnvalue>
-	(<returnvalue>0</returnvalue>). Arrayer växer automatiskt i
+	(<returnvalue>0</returnvalue>). Vektorer växer automatiskt i
 	storlek för att anpassas till den största använda
 	positionsangivelsen. Att ange 0 refererar till det sista
 	elementet i andra änden från 1, -1 den före det, o. s. v.
@@ -2789,7 +2789,7 @@ loopa igenom alla element i lista
 
 	<function>Sort</function> och <function>rsort</function>
 	sorterar en lista, och använder elemententen i den andra
-	arrayen för att bestämma den nya ordningen. Båda listorna
+	vektorn för att bestämma den nya ordningen. Båda listorna
 	ordnas om, så i grunden sorteras båda med användning av
 	sorteringsordningen i det andra argumentet. (Om bara ett
 	argument anges, så sorteras det mot sina egna element.) Rsort

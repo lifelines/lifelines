@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.29\n"
 "POT-Creation-Date: 2003-08-15 15:42+0200\n"
-"PO-Revision-Date: 2003-08-17 15:08+0200\n"
+"PO-Revision-Date: 2003-08-24 10:46+0200\n"
 "Last-Translator: Jens Arvidsson <jya@sverige.nu>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1318,7 +1318,7 @@ msgstr "bf. "
 
 #: src/gedlib/messages.c:383
 msgid "married: "
-msgstr "gift: "
+msgstr "gifta: "
 
 #: src/gedlib/messages.c:384
 msgid "born: "
@@ -2386,7 +2386,7 @@ msgstr "%s: argumentet nr. %s måste vara en sträng."
 #: src/interp/alloc.c:779
 #, c-format
 msgid "%s: null arg not permissible."
-msgstr "%s: nollargument inte tillåtet."
+msgstr "%s: nullargument inte tillåtet."
 
 #: src/interp/alloc.c:780
 #, c-format
@@ -2526,7 +2526,7 @@ msgstr "(givens) personen har inget namn"
 #: src/interp/builtin.c:664
 #, c-format
 msgid "set(%s, <Null>) is invalid"
-msgstr "set(%s, <Noll>) är ogiltigt"
+msgstr "set(%s, <Null>) är ogiltigt"
 
 #: src/interp/builtin.c:1104
 msgid "first"
@@ -2663,11 +2663,11 @@ msgstr "hon"
 
 #: src/interp/builtin.c:2278
 msgid "Her"
-msgstr "Henne"
+msgstr "Hennes"
 
 #: src/interp/builtin.c:2278
 msgid "her"
-msgstr "henne"
+msgstr "hennes"
 
 #: src/interp/builtin.c:2278
 msgid "her_"
@@ -2851,7 +2851,7 @@ msgstr "argumentet till unlock måste vara en person eller familj."
 
 #: src/interp/more.c:1223
 msgid "First argument to (r)sort must be list or array"
-msgstr "Första argumentet till (r)sort måste vara lista eller array"
+msgstr "Första argumentet till (r)sort måste vara lista eller vektor"
 
 #: src/interp/more.c:1233 src/interp/more.c:1244
 msgid "Arguments to (r)sort must be of same size"
@@ -2859,7 +2859,7 @@ msgstr "Argument till (r)sort måste vara av samma storlek"
 
 #: src/interp/more.c:1253
 msgid "Second argument to (r)sort must be list or array"
-msgstr "Andra argumentet till (r)sort måste vara lista eller array"
+msgstr "Andra argumentet till (r)sort måste vara lista eller vektor"
 
 #: src/interp/rassa.c:221
 #, c-format
@@ -3084,7 +3084,7 @@ msgstr ")) Rulla båda ned"
 
 #: src/liflines/brwsmenu.c:117
 msgid "#  Toggle childnos"
-msgstr "#  Slå på/av barnno"
+msgstr "#  Slå på/av barnnr"
 
 #: src/liflines/brwsmenu.c:118
 msgid "!g GEDCOM mode"
@@ -3204,11 +3204,11 @@ msgstr "k  Gå uppåt i lista"
 
 #: src/liflines/brwsmenu.c:148 src/liflines/screen.c:419
 msgid "e  Edit this person"
-msgstr "e Redigera denna pers."
+msgstr "e  Redigera denna person"
 
 #: src/liflines/brwsmenu.c:149 src/liflines/screen.c:420
 msgid "i  Browse this person"
-msgstr "i  Bläddra till denna pers"
+msgstr "i  Bl. till denna person"
 
 #: src/liflines/brwsmenu.c:150 src/liflines/screen.c:421
 msgid "m  Mark this person"
@@ -4175,7 +4175,7 @@ msgstr "Uppsättning för borttagning innehåller giltig post %s"
 #: src/tools/dbverify.c:848
 #, c-format
 msgid "Invalid errs array[%d] in dbverify - fix program\n"
-msgstr "Ogiltig fel-array[%d] i dbverify - laga programmet\n"
+msgstr "Ogiltig felvektor[%d] i dbverify - laga programmet\n"
 
 #: src/tools/dbverify.c:979
 #, c-format
