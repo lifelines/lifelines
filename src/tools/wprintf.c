@@ -40,21 +40,18 @@ llwprintf (char *fmt, ...)
 	va_end(args);
 }
 
-#ifdef UNUSED_CODE
 /*===========================================================
  * mprintf -- Called as mprintf(fmt, arg, arg, arg, ...)
- * UNUSED CODE
  *===========================================================*/
 /*VARARGS*/
 void
-mprintf (char *fmt, ...)
+mprintf_error (char *fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
 	vprintf(fmt, args);
 	va_end(args);
 }
-#endif /* UNUSED_CODE */
 /*======================================
  * poutput -- Print argument as a string
  *====================================*/
