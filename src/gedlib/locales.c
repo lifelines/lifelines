@@ -13,6 +13,7 @@
 #include "llstdlib.h"
 #ifdef HAVE_LOCALE_H
 # include <locale.h>
+# include "isolangs.h"
 #endif
 #ifdef HAVE_LANGINFO_CODESET
 # include <langinfo.h>
@@ -412,7 +413,6 @@ llsetlocale (int category, char * locale)
 #endif /* HAVE_SETLOCALE */
 #ifdef ENABLE_NLS
 	if (rtn && is_msgcategory(category)) {
-		/* use original locale, not corrupted by MS-Windows hack */
 		setmsgs(locale);
 	}
 #endif /* ENABLE_NLS */
@@ -437,55 +437,9 @@ static char *
 win32_setlocale (int category, char * locale)
 {
 	char * rtn = 0;
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(__CYGWIN__)
 	/* TODO: Obviously this needs work -- and move to win32 subdir ? */
 	if (locale) {
-		/* TODO: This is a first guess, not tested. I don't
-		even know if it only works on English Windows :( */
-		static const char * langs[] = {
-			"ar", "Arabic"
-			, "bg", "Bulgarian"
-			, "bg", "Bulgarian"
-			, "cs", "Czech"
-			, "da", "Danish"
-			, "de", "German"
-			, "el", "Greek"
-			, "de", "German"
-			, "en", "English"
-			, "es", "Spanish"
-			, "fi", "Finnish"
-			, "fr", "French"
-			, "hr", "Croation"
-			, "hu", "Hungarian"
-			, "is", "Icelandic"
-			, "it", "Italian"
-			, "iw", "Hebrew"
-			, "ja", "Japanese"
-			, "ko", "Korean"
-			, "mk", "Macedonian"
-			, "nl", "Dutch"
-			, "no", "Norwegian"
-			, "pl", "Polish"
-			, "pt", "Portuguese"
-			, "ro", "Romanian"
-			, "ru", "Russian"
-			/*, "sh", "Serbian Latin" */
-			, "sl", "Slovene"
-			, "sk", "Slovak"
-			/* , "sr", "Serbian Cyrillic" */
-			/*, "sh", "Serbian Latin" */
-			, "sv", "Swedish"
-			, "tr", "Turkish"
-			, "zh", "Chinese"
-			, 0, 0
-		};
-		static const char * countries[] = {
-			/* TODO: Obviously this isn't even close to complete */
-			"FI", "FINLAND"
-			, "PL", "POLAND"
-			, "US", "United States"
-			, 0, 0
-		};
 		char w32loc[30]="";
 		char * ptr;
 		int i;

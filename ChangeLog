@@ -1,3 +1,9 @@
+2002-07-04 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/locales.c hdrs/Makefile.am:
+
+	Move language & country arrays from gedlib/locales.c into hdrs/isolang.h.
+
 2002-07-03 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog build/msvc6/btedit/btedit.rc
