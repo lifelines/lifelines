@@ -20,6 +20,7 @@
 #include "indiseq.h"
 #include "interp.h"	/* for poutput */
 #include "gengedc.h"
+#include "generic.h"
 
 /*********************************************
  * local types
@@ -63,7 +64,7 @@ static void output_any_node(CLOSURE * closure, NODE node, STRING toptag, INT lvl
 static void output_top_node(CLOSURE * closure, NODE node, BOOLEAN *eflg);
 static void process_any_node(CLOSURE * closure, NODE node);
 static void table_incr_item(TABLE tab, STRING key);
-static int add_refd_fams(CNSTRING key, UNION uval, VPTR param);
+static int add_refd_fams(CNSTRING key, UNION uval, GENERIC *pgeneric, VPTR param);
 
 
 /*********************************************
@@ -91,7 +92,7 @@ closure_has_key (CLOSURE * closure, STRING key)
 /*======================================================
  * closure_add_key -- add a (top-level) node to the closure
  * we store the key (eg, "I1") and also the tag (eg, "INDI")
- * both tab and seq get their own allocs of the key
+ * We give seq a new alloc of the key (tab makes its own)
  * neither gets an alloc of the tag
  *====================================================*/
 static void
@@ -107,10 +108,10 @@ closure_add_key (CLOSURE * closure, CNSTRING key, STRING tag)
 	 during gengedcom, all append_indiseqs alloc their own keys & vals (tags) */
 	append_indiseq_sval(closure->seq, strsave(key), NULL, strsave(tag),
 	    TRUE, TRUE);
-	/* during gengedcom, all tables alloc their own keys */
+	/* generic tables handle their own allocation of keys & values */
 	/* we don't use the value at all, only the fact that the
 	key is present */
-	insert_table_int(closure->tab, strsave(key), 1);
+	insert_table_int(closure->tab, key, 1);
 }
 /*======================================================
  * closure_add_output_node -- add a (top-level) node to the output list
@@ -132,7 +133,7 @@ closure_add_output_node (CLOSURE * closure, NODE node)
 static void
 closure_init (CLOSURE * closure, int gengedcl)
 {
-	closure->tab = create_table_old();
+	closure->tab = create_table_new();
 	closure->seq = create_indiseq_sval();
 	closure->outseq = create_indiseq_sval();
 	closure->gengedcl = gengedcl;
@@ -148,7 +149,7 @@ closure_free (CLOSURE * closure)
 	closure->seq=NULL;
 	remove_indiseq(closure->outseq);
 	closure->outseq=NULL;
-	remove_table(closure->tab, FREEKEY);
+	destroy_table(closure->tab);
 	closure->tab=NULL;
 }
 /*======================================================
@@ -386,11 +387,18 @@ table_incr_item (TABLE tab, STRING key)
  *  this is a callback from traverse_table_param
  *=================================================================*/
 static int
-add_refd_fams (CNSTRING key, UNION uval, VPTR param)
+add_refd_fams (CNSTRING key, UNION uval, GENERIC *pgeneric, VPTR param)
 {
 	CLOSURE * closure = (CLOSURE *)param;
-	if (uval.i > 1)
+	INT count=0;
+	if (!is_generic_null(pgeneric)) {
+		count = get_generic_int(pgeneric);
+	} else {
+		count = uval.i;
+	}
+	if (count > 1) {
 		closure_add_key(closure, key, "FAM");
+	}
 	return 1;
 }
 /*===================================================================
@@ -401,16 +409,20 @@ add_refd_fams (CNSTRING key, UNION uval, VPTR param)
  * this is a rewrite by Perry Rapp 2000/10
  *  of the orginal (by the same name) by Tom Wetmore
  *  this version handles sources (in strong mode - see gengedcl modes)
+ * gengedcl tells which type of closure to make:
+ *  GENGEDCOM_ORIGINAL: output broken references (to SOUR, NOTE, etc)
+ *  GENGEDCOM_WEAK_DUMP: filter out references (to SOUR, NOTE, etc)
+ *  GENGEDCOM_STRONG_DUMP: output referenced records (SOUR, NOTE etc)
  *=================================================================*/
 void
 gen_gedcom (INDISEQ seq, int gengedcl, BOOLEAN * eflg)
 {
-	INT num1;
-	NODE indi, famc;
-	NODE node;
+	INT num1=0;
+	NODE indi=0, famc=0;
+	NODE node=0;
 	CLOSURE closure;
-	INDISEQ tempseq;
-	TABLE fams; /* all families referenced - value is #references */
+	INDISEQ tempseq=0;
+	TABLE famstab=0; /* all families referenced - value is #references */
 	if (!seq) return;
 
 	closure_init(&closure, gengedcl);
@@ -423,19 +435,20 @@ gen_gedcom (INDISEQ seq, int gengedcl, BOOLEAN * eflg)
 	/* now go thru all indis and figure out which
 	families to keep */
 
-	fams = create_table_old();
+	famstab = create_table_old();
 	FORINDISEQ(seq, el, num)
 		indi = key_to_indi(skey(el));
 		famc = indi_to_famc(indi);
 		if (famc)
-			table_incr_item(fams, fam_to_key(famc));
+			table_incr_item(famstab, fam_to_key(famc));
 		FORFAMS(indi, fam, num1)
-			table_incr_item(fams, fam_to_key(fam));
+			table_incr_item(famstab, fam_to_key(fam));
 		ENDFAMS
 	ENDINDISEQ
 
-	traverse_table_param(fams, &add_refd_fams, &closure);
-	remove_table(fams, FREEKEY);
+	traverse_table_param(famstab, &add_refd_fams, &closure);
+	remove_table(famstab, FREEKEY);
+	famstab=0;
 
 	/* now we have to process every node, including new
 	 ones that get added during processing */

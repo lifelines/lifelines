@@ -83,7 +83,7 @@ void replace_table_str(TABLE tab, STRING key, STRING str, INT whattofree);
 void table_insert_ptr(TABLE tab, CNSTRING key, const VPTR value);
 void table_insert_string(TABLE tab, CNSTRING key, CNSTRING value);
 void traverse_table(TABLE tab, void (*tproc)(CNSTRING key, UNION uval));
-void traverse_table_param(TABLE tab, INT (*tproc)(CNSTRING key, UNION uval, VPTR), VPTR param);
+void traverse_table_param(TABLE tab, INT (*tproc)(CNSTRING key, UNION uval, GENERIC *pgeneric, VPTR param), VPTR param);
 INT valueof_int(TABLE, CNSTRING, INT defval);
 VPTR valueof_ptr(TABLE, CNSTRING);
 STRING valueof_str(TABLE tab, CNSTRING key);

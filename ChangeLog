@@ -50,6 +50,12 @@
 	Fix __uniqueset, __union, __intersect, __difference to
 	use prog_var_error. Add interset, difference calls to st_db.li.
 
+	* ChangeLog src/gedlib/gengedc.c src/hdrs/standard.h
+	src/hdrs/table.h src/stdlib/table.c
+
+	Convert gengedcom tables to new generic style.
+	Adjust traverse_table_param to handle generic values.
+
 2005-01-22 Perry Rapp
 
 	* ChangeLog src/stdlib/generic.c src/stdlib/table.c

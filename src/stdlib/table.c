@@ -652,7 +652,7 @@ traverse_table (TABLE tab, void (*tproc)(CNSTRING key, UNION uval))
  *===============================================*/
 void
 traverse_table_param (TABLE tab,
-                INT (*tproc)(CNSTRING key, UNION uval, VPTR param),
+                INT (*tproc)(CNSTRING key, UNION uval, GENERIC * pgeneric, VPTR param),
                 VPTR param)
 {
 	INT i;
@@ -662,7 +662,7 @@ traverse_table_param (TABLE tab,
 		nxt = tab->entries[i];
 		while ((ent = nxt)) {
 			nxt = ent->enext;
-			if (!(*tproc)(ent->ekey, ent->uval, param))
+			if (!(*tproc)(ent->ekey, ent->uval, &ent->generic, param))
 				return;
 		}
 	}

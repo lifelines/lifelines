@@ -167,7 +167,11 @@ typedef STRING (*TRANSLFNC)(STRING str, INT len);
 */
 #define ARRSIZE(qq) ((INT)(sizeof(qq)/sizeof(qq[0])))
 
+/* forward declaration for containers */
 struct tag_vtable;
+typedef struct generic_tag GENERIC;
+
+/* forward declaration for objects */
 typedef struct tag_vtable ** OBJECT;
 
 /*
