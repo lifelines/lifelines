@@ -127,9 +127,6 @@ static int
 expand_special_chars (STRING fname, STRING buffer, INT buflen)
 {
 #ifdef WIN32
-// getenv needs <stdlib.h>, but "standard.h" clashes with it over min,max
-char *getenv( const char *varname );
-
 	if (fname[0] == '~')	{
 		/* replace ~ with user's home directory, if present */
 		char * home = (STRING)getenv("USERPROFILE");
@@ -160,6 +157,7 @@ ask_for_file_worker (STRING mode,
 	STRING fname;
 	char fnamebuf[512];
 	int elen, flen;
+	unsigned char pathtemp[MAXPATHLEN];
 	
 	if (ISNULL(ext)) {
 	  ext = NULL;	/* a null extension is the same as no extension */
@@ -183,6 +181,11 @@ ask_for_file_worker (STRING mode,
 		flen = strlen(fname);
 		if((elen < flen) && (strcmp(fname+flen-elen, ext) == 0))
 			ext = NULL;	/* the file name has the extension already */
+	}
+
+	if (expand_special_chars(fname, pathtemp, sizeof(pathtemp)))
+	{
+		/* TO DO - use pathtemp - but what about space in fname ? */
 	}
 
 	if (ISNULL(path)) {
