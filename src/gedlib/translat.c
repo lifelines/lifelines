@@ -676,6 +676,7 @@ llsetenv (STRING name, STRING value)
 	
 	buffer[0] = 0;
 	appendstr(&str, &len, name);
+	appendstr(&str, &len, "=");
 	appendstr(&str, &len, value);
 
 #ifdef HAVE_SETENV
@@ -757,7 +758,7 @@ customlocale (STRING prefix)
 			str = setmsgs(str);
 		}
 		if (!str && customized_msgs)
-			setmsgs(deflocale_msgs);
+			setmsgs(deflocale_msgs ? deflocale_msgs : "");
 	}
 	
 	if (customized_msgs) {
