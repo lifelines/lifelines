@@ -2155,7 +2155,7 @@ pa_handle_proc (PACTX pactx, CNSTRING procname, PNODE nd_args, PNODE nd_body)
 			, procname, iline(procnode)+1, iline(nd_body)+1, pactx->fullpath);
 	}
 	procnode = proc_node(pactx, procname, nd_args, nd_body);
-	insert_table_ptr(rptinfo->proctab, strsave(procname), (VPTR)procnode);
+	table_insert_ptr(rptinfo->proctab, procname, procnode);
 
 	/* add to global proc table */
 	list = (LIST)valueof_ptr(gproctab, procname);

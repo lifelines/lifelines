@@ -17,6 +17,10 @@
 
 	After adding new S/E/X record, browse to it.
 
+	* ChangeLog src/interp/alloc.c src/interp/interp.c
+
+	Change rptinfo->proctab from old table to generic table.
+
 2005-02-02 Perry Rapp
 
 	* ChangeLog src/gedlib/gedcomi.h src/gedlib/keytonod.c

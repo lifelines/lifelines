@@ -1106,7 +1106,7 @@ get_rptinfo (CNSTRING fullpath)
 		rptinfo = create_rptinfo();
 		rptinfo->fullpath = strsave(fullpath);
 		rptinfo->functab = create_table();
-		rptinfo->proctab = create_table_old();
+		rptinfo->proctab = create_table();
 		rptinfo->codeset = strsave(report_codeset_in);
 
 		/* calculate localpath & localepath for report gettext */
@@ -1145,7 +1145,7 @@ rptinfo_destructor (VTABLE *obj)
 	RPTINFO rptinfo = (RPTINFO)obj;
 	ASSERT(rptinfo->vtable == &vtable_for_rptinfo);
 
-	remove_table(rptinfo->proctab, FREEKEY); /* values are PNODES */
+	destroy_table(rptinfo->proctab); /* values are vptr PNODES */
 	destroy_table(rptinfo->functab); /* values are vptr PNODES */
 	strfree(&rptinfo->fullpath);
 	strfree(&rptinfo->codeset);
