@@ -213,6 +213,7 @@ upper (STRING str)
 	static char scratch[MAXLINELEN+1];
 	STRING p = scratch;
 	INT c, i=0;
+	/* TODO: This does not work with UTF-8 */
 	while ((c = (uchar)*str++) && (++i < MAXLINELEN+1))
 		*p++ = ll_toupper(c);
 	*p = '\0';
@@ -225,6 +226,7 @@ upper (STRING str)
 STRING
 capitalize (STRING str)
 {
+	/* TODO: This does not work with UTF-8 */
 	STRING p = lower(str);
 	*p = ll_toupper((uchar)*p);
 	return p;
@@ -241,6 +243,7 @@ titlecase (STRING str)
 	STRING p = lower(str), buf=p;
 	if (!p[0]) return p;
 	while (1) {
+		/* TODO: This does not work with UTF-8 */
 		/* capitalize first letter of word */
 		*p = ll_toupper((uchar)*p);
 		/* skip to end of word */

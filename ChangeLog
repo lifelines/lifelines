@@ -18,6 +18,8 @@
 
 	Fix possible char sign-extension problem in askprogram.c.
 
+	Annotate some routines (with TODO) that must be fixed for UTF-8.
+
 2002-06-10 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog hdrs/standard.h:
