@@ -13,6 +13,11 @@
 
 	Fix prototype for addxref_impl to fix gcc compilation.
 
+	* ChangeLog src/gedlib/gedcomi.h src/gedlib/lldatabase.c
+	src/gedlib/node.c
+
+	New function check_node_leaks.
+
 2005-02-06 Perry Rapp
 
 	* ChangeLog src/liflines/llexec.c src/liflines/main.c

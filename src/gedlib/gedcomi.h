@@ -20,6 +20,7 @@ NODE is_cel_loaded(CACHEEL cel);
 RECORD id_by_key(CNSTRING name, char ctype);
 
 /* node.c */
+void check_node_leaks(void);
 void set_record_key_info(RECORD rec, char ntype, INT keynum);
 
 /* record.c */

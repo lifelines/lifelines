@@ -80,6 +80,7 @@ NODE parents_nodes(NODE faml);
 
 /* node allocator's free list */
 static NDALLOC first_blck = (NDALLOC) 0;
+static INT live_count = 0;
 
 static struct tag_vtable vtable_for_node = {
 	VTABLE_MAGIC
@@ -150,6 +151,7 @@ alloc_node (void)
 	}
 	node = (NODE) first_blck;
 	first_blck = first_blck->next;
+	++live_count;
 	return node;
 }
 /*======================================
@@ -167,7 +169,7 @@ free_node (NODE node)
 	*/
 	((NDALLOC) node)->next = first_blck;
 	first_blck = (NDALLOC) node;
-	
+	--live_count;
 }
 /*===========================
  * create_node -- Create NODE
@@ -1139,4 +1141,16 @@ node_destructor (VTABLE *obj)
 	NODE node = (NODE)obj;
 	ASSERT((*obj) == &vtable_for_node);
 	free_node(node);
+}
+/*=================================================
+ * check_node_leaks -- Called when database closing
+ *  for debugging
+ *===============================================*/
+void
+check_node_leaks (void)
+{
+	if (live_count) {
+		char msg[128];
+		sprintf(msg, "Leaked nodes: %d", live_count);
+	}
 }
