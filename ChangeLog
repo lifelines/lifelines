@@ -19,6 +19,10 @@
 	Split soundex code into soundex.c (& rename trad_soundex).
 	Some const fixes. Pass rkey pointers instead of values.
 
+	*NEW src/gedlib/soundex.c
+
+	Forgot to add new soundex file earlier.
+
 2003-09-14 Jens Arvidsson
 
 	* ChangeLog po/sv.po
