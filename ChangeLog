@@ -1,3 +1,10 @@
+2001-01-05 Perry Rapp <puddle@users.sourceforge.net>
+
+	* gedlib/init.c hdrs/llstdlib.h stdlib/environ.c tools/btedit.c:
+	New LLNEWDBs environ var to control placement of new databases.
+	Revised environ_determine_editor to default to vi under win32
+	for btedit.
+
 2001-01-04  Marc Nozell  <marc@nozell.com>
 
 	* configure.in: Fix UNIX build, Add check for pwd.h.
