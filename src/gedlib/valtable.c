@@ -129,7 +129,8 @@ init_valtab_from_string (CNSTRING str, TABLE tab, INT sep, STRING *pmsg)
 			if (c == '\n') n++;
 		}
 		--p;
-		if (c == 0) return TRUE;
+		if (c == 0)
+			goto endinitvaltab;
 		while ((c = *q++ = *p++) && c != sep && c != '\n')
 			;
 		if (c == 0 || c =='\n') {

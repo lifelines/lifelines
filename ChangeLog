@@ -67,6 +67,10 @@
 
 	Fix lldb leaks.
 
+	* ChangeLog src/gedlib/valtable.c
+
+	Fix string leak in init_valtab_from_string.
+
 2005-01-26, Stephen Dum
         * ChangeLog docs/ll-reportmanual.xml docs/ll-userguide.sv.xml
 	docs/ll-userguide.xml
