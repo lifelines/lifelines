@@ -29,6 +29,7 @@ struct tag_record { /* RECORD */
  * local function prototypes
  *********************************************/
 
+static void free_rec(RECORD rec);
 static BOOLEAN is_record_loaded (RECORD rec);
 static void record_destructor(VTABLE *obj);
 
@@ -65,6 +66,31 @@ alloc_new_record (void)
 	rec->rec_nkey.ntype = 0;
 	++rec->refcnt;
 	return rec;
+}
+/*===================================
+ * free_rec -- record deallocator 
+ *  Works for both free records (not in cache, have own node tree)
+ *  and bound records (in cache, point to cache element)
+ * Created: 2000/12/30, Perry Rapp
+ *=================================*/
+static void
+free_rec (RECORD rec)
+{
+	--f_nrecs;
+	if (rec->rec_cel) {
+		/* cached record */
+		/* cel memory belongs to cache, but we must tell it
+		that we're dying, so it doesn't point to us anymore */
+		cel_remove_record(rec->rec_cel, rec);
+		rec->rec_cel = 0; /* cel memory belongs to cache */
+	} else {
+		/* free record */
+		ASSERT(rec->rec_top);
+		free_nodes(rec->rec_top);
+		rec->rec_top = 0;
+	}
+	strcpy(rec->rec_nkey.key, "");
+	stdfree(rec);
 }
 /*==============================================
  * nztop -- Return first NODE of a RECORD
@@ -249,31 +275,6 @@ create_record_for_unkeyed_node (NODE node)
 	RECORD rec = alloc_new_record();
 	rec->rec_top = node;
 	return rec;
-}
-/*===================================
- * free_rec -- record deallocator 
- *  Works for both free records (not in cache, have own node tree)
- *  and bound records (in cache, point to cache element)
- * Created: 2000/12/30, Perry Rapp
- *=================================*/
-static void
-free_rec (RECORD rec)
-{
-	--f_nrecs;
-	if (rec->rec_cel) {
-		/* cached record */
-		/* cel memory belongs to cache, but we must tell it
-		that we're dying, so it doesn't point to us anymore */
-		cel_remove_record(rec->rec_cel, rec);
-		rec->rec_cel = 0; /* cel memory belongs to cache */
-	} else {
-		/* free record */
-		ASSERT(rec->rec_top);
-		free_nodes(rec->rec_top);
-		rec->rec_top = 0;
-	}
-	strcpy(rec->rec_nkey.key, "");
-	stdfree(rec);
 }
 /*=================================================
  * addref_record -- increment reference count of record
