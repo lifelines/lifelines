@@ -1,3 +1,15 @@
+2000-11-03  Matt Emmerton <matt@gsicomp.on.ca>
+
+	* Updated function prototypes in hdrs/*.h
+
+	* Updated #include statments in most C files (anything that
+	used gedlib.h or indiseq.h) to reflect new-found header
+	dependencies due to types used in function prototypes
+
+	* Wrapped all debug code into #ifdef DEBUG ... #endif blocks
+
+	* Various code cleanups (removed unused variables, etc.)
+
 2000-11-03  Petter Reinholdtsen <pere@td.org.uit.no>
 
 	* Makefile.am: Move docs last to be able to compile even if some
