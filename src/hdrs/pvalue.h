@@ -117,7 +117,7 @@ PVALUE create_pvalue_from_fam(NODE fam);
 PVALUE create_pvalue_from_fam_key(STRING key);
 PVALUE create_pvalue_from_fam_keynum(INT i);
 PVALUE create_pvalue_from_indi(NODE indi);
-PVALUE create_pvalue_from_indi_key(STRING key);
+PVALUE create_pvalue_from_indi_key(CNSTRING key);
 PVALUE create_pvalue_from_indi_keynum(INT i);
 PVALUE create_pvalue_from_int(INT ival);
 PVALUE create_pvalue_from_list(LIST list);

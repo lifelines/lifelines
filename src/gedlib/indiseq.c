@@ -75,13 +75,31 @@
 #define ISPRN_SPOUSESEQ 2
 
 /*********************************************
+ * local types
+ *********************************************/
+
+/*==================================================================
+ * SORTEL -- Data type for indiseq elements; keys are always present
+ *   and belong to the structure; names are always present for
+ *   persons and belong; values do not belong to the structure
+ *================================================================*/
+struct tag_sortel {
+	STRING s_key;	/* person or family key */
+	STRING s_nam;	/* name of person */
+	UNION s_val;	/* any value */
+	STRING s_prn;	/* menu print string */
+	INT s_pri;	/* key as integer (exc valuesort_indiseq puts values here) */
+};
+/* typedef struct tag_sortel *SORTEL; */ /* in indiseq.h */
+
+/*********************************************
  * local function prototypes
  *********************************************/
 
 /* alphabetical */
 static void append_all_tags(INDISEQ, NODE, STRING tagname, BOOLEAN recurse, BOOLEAN nonptrs);
 static void append_indiseq_impl(INDISEQ seq, STRING key, 
-	STRING name, UNION val, BOOLEAN sure, BOOLEAN alloc);
+	CNSTRING name, UNION val, BOOLEAN sure, BOOLEAN alloc);
 static void calc_indiseq_name_el(INDISEQ seq, INT index);
 static INT canonkey_compare(SORTEL el1, SORTEL el2, VPTR param);
 static INT canonkey_order(char c);
@@ -328,7 +346,7 @@ append_indiseq_pval (INDISEQ seq,    /* sequence */
 void
 append_indiseq_sval (INDISEQ seq,    /* sequence */
                      STRING key,     /* key - not NULL */
-                     STRING name,    /* name - may be NULL */
+                     CNSTRING name,    /* name - may be NULL */
                      STRING sval,       /* extra val */
                      BOOLEAN sure,   /* no dupe check? */
                      BOOLEAN alloc)  /* key alloced? */
@@ -346,7 +364,7 @@ append_indiseq_sval (INDISEQ seq,    /* sequence */
 void
 append_indiseq_null (INDISEQ seq,    /* sequence */
                      STRING key,     /* key - not NULL */
-                     STRING name,    /* name - may be NULL */
+                     CNSTRING name,    /* name - may be NULL */
                      BOOLEAN sure,   /* no dupe check? */
                      BOOLEAN alloc)  /* key alloced? */
 {
@@ -360,13 +378,13 @@ append_indiseq_null (INDISEQ seq,    /* sequence */
  *  all type appends use this implementation
  * INDISEQ seq:      sequence
  * STRING key:       key - not NULL
- * STRING name:      name - may be NULL
+ * CNSTRING name:    name - may be NULL
  * UNION val:        extra val is pointer
  * BOOLEAN sure:     no dupe check?
  * BOOLEAN alloc:    key alloced?
  *================================================*/
 static void
-append_indiseq_impl (INDISEQ seq, STRING key, STRING name, UNION val
+append_indiseq_impl (INDISEQ seq, STRING key, CNSTRING name, UNION val
 	, BOOLEAN sure, BOOLEAN alloc)
 {
 	INT i, m, n;
@@ -557,6 +575,67 @@ element_indiseq_ival (INDISEQ seq, INT index, STRING *pkey, INT *pval
 	*pval = sval(IData(seq)[index]).i;
 	*pname = snam(IData(seq)[index]);
 	return TRUE;
+}
+/*================================================
+ * element_key_indiseq -- Return element key from sequence
+ *  or NULL if bad inputs
+ *==============================================*/
+CNSTRING
+element_key_indiseq (INDISEQ seq, INT index)
+{
+	if (!seq) return NULL;
+	if (index<0 || index>=ISize(seq)) return NULL;
+	return skey(IData(seq)[index]);
+}
+/*================================================
+ * element_skey -- Return element key from indiseq element
+ *  Requires valid input
+ *==============================================*/
+CNSTRING
+element_skey (SORTEL el)
+{
+	ASSERT(el);
+	return el->s_key;
+}
+/*================================================
+ * element_name -- Return element name from indiseq element
+ *  Requires valid input
+ *==============================================*/
+CNSTRING
+element_name (SORTEL el)
+{
+	ASSERT(el);
+	return el->s_nam;
+}
+/*================================================
+ * element_sval -- Return string value from indiseq element
+ *  Requires valid input
+ *==============================================*/
+CNSTRING
+element_sval (SORTEL el)
+{
+	ASSERT(el);
+	return el->s_val.w;
+}
+/*================================================
+ * element_pval -- Return pointer value from indiseq element
+ *  Requires valid input
+ *==============================================*/
+VPTR
+element_pval (SORTEL el)
+{
+	ASSERT(el);
+	return el->s_val.w;
+}
+/*================================================
+ * set_element_pval -- Change pointer value of element
+ *  Requires valid input
+ *==============================================*/
+void
+set_element_pval (SORTEL el, VPTR ptr)
+{
+	ASSERT(el);
+	el->s_val.w = ptr;
 }
 /*==================================
  * name_compare -- Compare two names

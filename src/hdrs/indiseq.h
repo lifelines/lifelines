@@ -35,18 +35,8 @@
 #include "standard.h"		/* for INT, STRING, etc */
 #include "gedcom.h"		/* for NODE */
 
-/*==================================================================
- * SORTEL -- Data type for indiseq elements; keys are always present
- *   and belong to the structure; names are always present for
- *   persons and belong; values do not belong to the structure
- *================================================================*/
-typedef struct tag_sortel {
-	STRING s_key;	/* person or family key */
-	STRING s_nam;	/* name of person */
-	UNION s_val;	/* any value */
-	STRING s_prn;	/* menu print string */
-	INT s_pri;	/* key as integer (exc valuesort_indiseq puts values here) */
-} *SORTEL;
+typedef struct tag_sortel *SORTEL;
+
 #define skey(s) ((s)->s_key)
 #define snam(s) ((s)->s_nam)
 #define sval(s) ((s)->s_val)
@@ -143,10 +133,10 @@ typedef struct tag_indiseq *INDISEQ;
 
 void add_browse_list(STRING, INDISEQ);
 INDISEQ ancestor_indiseq(INDISEQ seq);
-void append_indiseq_null(INDISEQ, STRING, STRING, BOOLEAN sure, BOOLEAN alloc);
-void append_indiseq_ival(INDISEQ, STRING, STRING, INT val, BOOLEAN sure, BOOLEAN alloc);
-void append_indiseq_pval(INDISEQ, STRING, STRING, VPTR val, BOOLEAN sure);
-void append_indiseq_sval(INDISEQ, STRING, STRING, STRING sval, BOOLEAN sure, BOOLEAN alloc);
+void append_indiseq_null(INDISEQ, STRING key, CNSTRING name, BOOLEAN sure, BOOLEAN alloc);
+void append_indiseq_ival(INDISEQ, STRING key, STRING name, INT val, BOOLEAN sure, BOOLEAN alloc);
+void append_indiseq_pval(INDISEQ, STRING key, STRING name, VPTR val, BOOLEAN sure);
+void append_indiseq_sval(INDISEQ, STRING key, CNSTRING name, STRING sval, BOOLEAN sure, BOOLEAN alloc);
 void calc_indiseq_names(INDISEQ seq);
 void canonkeysort_indiseq(INDISEQ);
 INDISEQ child_indiseq(INDISEQ);
@@ -163,7 +153,12 @@ BOOLEAN delete_indiseq(INDISEQ, STRING, STRING, INT);
 INDISEQ descendent_indiseq(INDISEQ seq);
 INDISEQ difference_indiseq(INDISEQ, INDISEQ);
 BOOLEAN element_indiseq(INDISEQ, INT, STRING*, STRING*);
-BOOLEAN element_indiseq_ival(INDISEQ, INT, STRING*, INT *, STRING*);
+BOOLEAN element_indiseq_ival(INDISEQ seq, INT index, STRING*, INT *, STRING*);
+CNSTRING element_key_indiseq(INDISEQ seq, INT index);
+CNSTRING element_name(SORTEL el);
+VPTR element_pval(SORTEL el);
+CNSTRING element_skey(SORTEL el);
+CNSTRING element_sval(SORTEL el);
 INDISEQ fam_to_children(NODE);
 INDISEQ fam_to_fathers(NODE);
 INDISEQ fam_to_mothers(NODE);
@@ -198,6 +193,7 @@ INDISEQ refn_to_indiseq(STRING, INT letr, INT sort);
 void remove_browse_list(STRING, INDISEQ);
 void remove_indiseq(INDISEQ);
 void rename_indiseq(INDISEQ, STRING);
+void set_element_pval(SORTEL el, VPTR ptr);
 void set_indiseq_value_funcs(INDISEQ seq, INDISEQ_VALUE_FNCTABLE valfnctbl);
 INDISEQ sibling_indiseq(INDISEQ, BOOLEAN);
 INDISEQ spouse_indiseq(INDISEQ);

@@ -52,7 +52,7 @@ static INT bool_to_int(BOOLEAN);
 static void clear_pv_indiseq(INDISEQ seq);
 static void clear_pvalue(PVALUE val);
 static PVALUE create_pvalue_from_keynum_impl(INT i, INT ptype);
-static PVALUE create_pvalue_from_key_impl(STRING key, INT ptype);
+static PVALUE create_pvalue_from_key_impl(CNSTRING key, INT ptype);
 static PVALUE create_pvalue_from_record(RECORD rec, INT ptype);
 /* static BOOLEAN eq_pstrings(PVALUE val1, PVALUE val2); */
 static int float_to_int(float f);
@@ -309,10 +309,10 @@ clear_pv_indiseq (INDISEQ seq)
 	/* NUL value indiseqs can get into reports via getindiset */
 	ASSERT(IValtype(seq) == ISVAL_PTR || IValtype(seq) == ISVAL_NUL);
 	FORINDISEQ(seq, el, ncount)
-		val = (PVALUE) sval(el).w;
+		val = (PVALUE)element_pval(el);
 		if (val) {
 			delete_pvalue(val);
-			sval(el).w = NULL;
+			set_element_pval(el, NULL);
 		}
 	ENDINDISEQ
 }
@@ -411,7 +411,7 @@ create_pvalue_from_indi (NODE indi)
  * Created: 2000/12/30, Perry Rapp
  *===================================================*/
 PVALUE
-create_pvalue_from_indi_key (STRING key)
+create_pvalue_from_indi_key (CNSTRING key)
 {
 	return create_pvalue_from_key_impl(key, PINDI);
 }
@@ -543,7 +543,7 @@ free_float_pvalue (PVALUE val)
  * Created: 2001/03/20, Perry Rapp
  *================================*/
 static PVALUE
-create_pvalue_from_key_impl (STRING key, INT ptype)
+create_pvalue_from_key_impl (CNSTRING key, INT ptype)
 {
 	/* report mode, so may return NULL */
 	RECORD rec = qkey_to_record(key); /* addref'd record */

@@ -100,12 +100,12 @@ choose_and_remove_family (void)
 		else {
 			/* the last remove command will delete the family */
 			FORINDISEQ(spseq, el, num)
-				indi = key_to_indi(skey(el));
+				indi = key_to_indi(element_skey(el));
 				remove_spouse(indi, fam);
 			ENDINDISEQ
 
 			FORINDISEQ(chseq, el, num)
-				indi = key_to_indi(skey(el));
+				indi = key_to_indi(element_skey(el));
 				remove_child(indi, fam);
 			ENDINDISEQ
 		}

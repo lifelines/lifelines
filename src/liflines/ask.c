@@ -447,7 +447,7 @@ choose_from_indiseq (INDISEQ seq, ASK1Q ask1, STRING titl1, STRING titln)
 {
 	INT i = 0;
 	RECORD rec=0;
-	STRING skey;
+
 	i = choose_one_from_indiseq_if_needed(seq, ask1, titl1, titln);
 	if (i == -1) return NULL;
 	listbadkeys=1;
@@ -459,7 +459,7 @@ choose_from_indiseq (INDISEQ seq, ASK1Q ask1, STRING titl1, STRING titln)
 	if (-1 == get_indiseq_ival(seq, i)) /* invalid pointer */
 		badkeylist[0] = 0;
 	else {
-		skey = skey(IData(seq)[i]);
+		CNSTRING skey = element_key_indiseq(seq, i);
 		rec = key_to_record(skey);
 	}
 	listbadkeys = 0;

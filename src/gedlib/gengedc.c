@@ -430,14 +430,14 @@ gen_gedcom (INDISEQ seq, int gengedcl, BOOLEAN * eflg)
 	/* must load closure with all indis first
 	 for succeeding logic to pick out what families to include */
 	FORINDISEQ(seq, el, num)
-		closure_add_key(&closure, skey(el), "INDI");
+		closure_add_key(&closure, element_skey(el), "INDI");
 	ENDINDISEQ
 	/* now go thru all indis and figure out which
 	families to keep */
 
 	famstab = create_table_new();
 	FORINDISEQ(seq, el, num)
-		indi = key_to_indi(skey(el));
+		indi = key_to_indi(element_skey(el));
 		famc = indi_to_famc(indi);
 		if (famc)
 			table_incr_item(famstab, fam_to_key(famc));
@@ -454,23 +454,25 @@ gen_gedcom (INDISEQ seq, int gengedcl, BOOLEAN * eflg)
 	 ones that get added during processing */
 	while (length_indiseq(closure.seq))
 	{
-		STRING sval;
+		CNSTRING sval=0, skey=0;
 		tempseq = create_indiseq_sval();
 		/* move all from to-process list to
 		temporary processing list, because the
 		processing will add stuff to the to-process list */
 		FORINDISEQ(closure.seq, el, num)
-			sval = sval(el).w;
+			sval = element_sval(el);
+			skey = element_skey(el);
 			/* during gengedcom, all append_indiseqs alloc their own keys & vals (tags) */
-			append_indiseq_sval(tempseq, strsave(skey(el)), NULL, strsave(sval),
+			append_indiseq_sval(tempseq, strsave(skey), NULL, strsave(sval),
 				 TRUE, TRUE);
 		ENDINDISEQ
 		/* clear to-process list */
 		closure_wipe_processlist(&closure);
 		/* cycle thru temp processing list & process each */
 		FORINDISEQ(tempseq, el, num)
+			skey = element_skey(el);
 			/* tag was stored in the value */
-			node = key_to_type(skey(el), FALSE);
+			node = key_to_type(skey, FALSE);
 			process_any_node(&closure, node);
 			closure_add_output_node(&closure, node);
 		ENDINDISEQ
@@ -479,7 +481,7 @@ gen_gedcom (INDISEQ seq, int gengedcl, BOOLEAN * eflg)
 	}
 	canonkeysort_indiseq(closure.outseq);
 	FORINDISEQ(closure.outseq, el, num)
-		node = key_to_type(skey(el), FALSE);
+		node = key_to_type(element_skey(el), FALSE);
 		output_top_node(&closure, node, eflg);
 		if (*eflg)
 			return;

@@ -217,13 +217,17 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 			mark = -1;
 			break;
 		case 'a':        /* Add persons to current list */
+		{
+			CNSTRING skey=0, snam=0;
 			newseq = ask_for_indiseq(_(qSlstpad), 'I', &rc);
 			if (!newseq) {
 				message(_(qSlstnad));
 				break;
 			}
-			FORINDISEQ(newseq, e, i)
-				append_indiseq_null(seq, strsave(skey(e)), snam(e), FALSE, TRUE);
+			FORINDISEQ(newseq, el, i)
+				skey = element_skey(el);
+				snam = element_name(el);
+				append_indiseq_null(seq, strsave(key), snam, FALSE, TRUE);
 			ENDINDISEQ
 			namesort_indiseq(seq);
 			cur = top = 0;
@@ -232,6 +236,7 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 			remove_indiseq(newseq);
 			message(_(qSlstnew));
 			break;
+		}
 		case 'n':        /* Name this list */
 			name_the_list(seq);
 			break;

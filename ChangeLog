@@ -25,6 +25,14 @@
 
 	Cosmetic: Remove (my) questioning comment in set_pvalue.
 
+	* ChangeLog src/gedlib/gengedc.c src/gedlib/indiseq.c
+	src/hdrs/indiseq.h src/hdrs/pvalue.h
+	src/interp/interp.c src/interp/pvalue.c
+	src/liflines/ask.c src/liflines/delete.c src/liflines/lbrowse.c
+
+	Move SORTEL (indiseq element) structure from indiseq.h to indiseq.c.
+	Related const fixes.
+
 2005-01-29, Perry Rapp
 
 	* ChangeLog src/hdrs/table.h src/stdlib/table.c

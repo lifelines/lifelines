@@ -1537,7 +1537,7 @@ interp_indisetloop (PNODE node, SYMTAB stab, PVALUE *pval)
 {
 	BOOLEAN eflg = FALSE;
 	INTERPTYPE irc;
-	PVALUE indival, loopval;
+	PVALUE indival=0, loopval=0;
 	INDISEQ seq = NULL;
 	PVALUE val = evaluate(iloopexp(node), stab, &eflg);
 	if (eflg || !val || ptype(val) != PSET) {
@@ -1554,10 +1554,10 @@ interp_indisetloop (PNODE node, SYMTAB stab, PVALUE *pval)
 	insert_symtab(stab, inum(node), create_pvalue_from_int(0));
 	FORINDISEQ(seq, el, ncount)
 		/* put current indi in symbol table */
-		indival = create_pvalue_from_indi_key(skey(el));
+		indival = create_pvalue_from_indi_key(element_skey(el));
 		insert_symtab(stab, ielement(node), indival);
 		/* put current indi's value in symbol table */
-		loopval = sval(el).w;
+		loopval = element_pval(el);
 		if (loopval)
 			loopval = copy_pvalue(loopval);
 		else
