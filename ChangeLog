@@ -1,5 +1,11 @@
 2005-01-07 Matt Emmerton
 
+	* ChangeLog build/autotools/acinclude.m4
+
+	Fix up to keep automake-1.9 from complaining.
+
+2005-01-07 Matt Emmerton
+
 	* ChangeLog src/interp/interpi.h src/interp/interp.c
 	src/interp/eval.c src/interp/symtab.c
 
