@@ -88,7 +88,7 @@ typedef struct ScreenInfo_struct {
 global array of menu information, produced by menuitem.c
 and used by both screen.c and menuitem.c
 */
-extern ScreenInfo g_ScreenInfo[MAX_SCREEN];
+extern ScreenInfo g_ScreenInfo[];
 
 
 enum { 

@@ -1,3 +1,12 @@
+2001-11-12 Matt Emmerton <memmerto@users.sourceforge.net>
+
+	* ChangeLog liflines/tandem.c hdrs/menuitem.h
+
+	Converted tandem.c to use feedback.h instead of screen.h.
+	Changed extern definition of ScreenInfo to not depend on
+	MAX_SCREEN, defined in screen.h.  (This allows source that
+	uses menuitem to use feedback.h instead of screen.h)
+
 2001-11-12 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/messages.c gedlib/node.c gedlib/valid.c
