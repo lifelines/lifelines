@@ -45,6 +45,7 @@
 #include "date.h"
 #include "zstr.h"
 #include "codesets.h"
+#include "arch.h"
 
 #include "interpi.h"
 
@@ -3607,7 +3608,7 @@ PVALUE
 __test (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg1, arg2;
-	PVALUE arg1val, arg2val, val = NULL;
+	PVALUE arg1val=0, arg2val=0, val = NULL;
 	STRING arg1str, arg2str;
 	struct stat statdata;
 	int rc;
@@ -3616,8 +3617,7 @@ __test (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	arg1val = eval_and_coerce(PSTRING, arg1, stab, eflg);
 	if (*eflg) {
 		prog_var_error(node, stab, arg1, arg1val, nonstrx, "test", "1");
-		delete_pvalue(arg1val);
-		return NULL;
+		goto end_test;
 	}
 	arg1str = pvalue_to_string(arg1val);
 
@@ -3625,16 +3625,14 @@ __test (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	arg2val = eval_and_coerce(PSTRING, arg2, stab, eflg);
 	if (*eflg) {
 		prog_var_error(node, stab, arg2, arg2val, nonstrx, "test", "2");
-		delete_pvalue(arg2val);
-		return NULL;
+		goto end_test;
 	}
 	arg2str = pvalue_to_string(arg2val);
-	delete_pvalue(arg2val);
 
 	rc = stat(arg2str, &statdata);
 	if (rc) {
 		val = create_pvalue_from_bool(FALSE);
-		return val;
+		goto end_test;
 	}
 
 	if (eqstr(arg1str,"r")) {
@@ -3669,10 +3667,11 @@ __test (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 			val = create_pvalue_from_bool(TRUE);
 	} else {
 		prog_var_error(node, stab, arg1, arg1val, badargx, "test", "1");
-		delete_pvalue(arg1val);
-		return NULL;
+		goto end_test;
 	}
 
-	delete_pvalue(arg1val);
+end_test:
+	if (arg1val) delete_pvalue(arg1val);
+	if (arg2val) delete_pvalue(arg2val);
 	return val;
 }

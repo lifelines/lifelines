@@ -109,8 +109,18 @@ int vsnprintf(char *buffer, size_t count, const char *fmt, va_list args);
 /* MS-Windows/Microsoft Visual C++ */
 #define S_ISREG(qq) ((qq) & S_IFREG)
 #define S_ISDIR(qq) ((qq) & S_IFDIR)
+/* MS-Windows/Microsoft Visual C++ sys/stat.h uses old System 7 names */
+#ifndef S_IRUSR
+#define S_IRUSR _S_IREAD
 #endif
+#ifndef S_IWUSR
+#define S_IWUSR _S_IWRITE
 #endif
+#ifndef S_IXUSR
+#define S_IXUSR _S_IEXEC
+#endif
+#endif /* _MSC_VER */
+#endif /* WIN32 */
 
 /* *****************************************************************
  * Win32 codepage functions

@@ -4,6 +4,11 @@
 
 	Fix compilation on MS-Windows (add cursors version macros).
 
+	* ChangeLog src/hdrs/arch.h src/interp/builtin.c
+
+	Fix compilation on MS-Windows (old stat macros), and bug in
+	test function, and some pvalue leaks in test.
+
 2004-12-30 Stephen Dum
         *Changelog reports/count_paternal_desc.ll reports/desc_ged.ll
 	Alter scripts to use lengthset rather than copying loop counter
