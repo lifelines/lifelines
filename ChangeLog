@@ -1,3 +1,9 @@
+2003-10-28 Stephen Dum
+        * ChangeLog src/gedlib/names.c docs/ll-userguide.xml
+	Fix bug in storing name records in database.  rkey_eq()
+	was ignoring the last character of the key. Update docs for
+	CrashLog_llexec and CrashLog_llines definition.
+
 2003-10-26 Matt Emmerton
 
 	* ChangeLog src/liflines/main.c src/liflines/llexec.c

@@ -225,7 +225,7 @@ static BOOLEAN
 rkey_eq (const RKEY * rkey1, const RKEY * rkey2)
 {
 	INT i;
-	for (i=0; i<7; ++i)
+	for (i=0; i<RKEYLEN; ++i)
 	{
 		if (rkey1->r_rkey[i] != rkey2->r_rkey[i])
 			return FALSE;

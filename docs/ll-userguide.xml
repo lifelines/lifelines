@@ -4980,14 +4980,16 @@ use stdout curses window.
 <glossentry><glossterm>CrashLog_llexec</glossterm><glossdef>
 
 <para>
-file to write crash log into for llexec.
+file to write crash log into for llexec.  If not set, log is written to
+the file <filename>CrashLog_llexec.log</filename>.
 </para>
 </glossdef></glossentry>
 
 <glossentry><glossterm>CrashLog_llines</glossterm><glossdef>
 
 <para>
-file to write crash log into for llines.
+file to write crash log into for llines. If not set, log is written to
+the file <filename>CrashLog_llines.log</filename>.
 </para>
 </glossdef></glossentry>
 <glossentry><glossterm>LLTTEXPORT</glossterm><glossdef>
