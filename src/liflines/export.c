@@ -28,13 +28,13 @@
  *   3.0.0 - 29 May 94    3.0.2 - 09 Nov 94
  *===========================================================*/
 
+#include <sys/types.h>
+#include <time.h>
 #include "standard.h"
 #include "btree.h"
 #include "table.h"
-#include "gedcom.h"
-#include <sys/types.h>
-#include <time.h>
 #include "translat.h"
+#include "gedcom.h"
 
 extern STRING btreepath, llarchives;
 extern BTREE BTR;
@@ -125,7 +125,7 @@ FILE *fo, *fn;
 INT len, c;
 TRANTABLE tt;
 {
-	char in[BUFLEN], *p;
+	char in[BUFLEN];
 	char scratch[10];
 	char *inp;
 	int remlen;

@@ -64,8 +64,8 @@ typedef struct  {
 	INT is_max;	/* max length before increment */
 	INT is_flags;	/* attribute flags */
 	SORTEL *is_data;	/*  actual list of items */
-}
-	*INDISEQ;
+} *INDISEQ;
+
 #define ISize(s)  ((s)->is_size)
 #define IMax(s)   ((s)->is_max)
 #define IFlags(s) ((s)->is_flags)
@@ -78,19 +78,19 @@ typedef struct  {
 
 #define length_indiseq(seq)  (ISize(seq))
 
-INDISEQ create_indiseq();
-INDISEQ copy_indiseq();
-BOOLEAN in_indiseq();
-INDISEQ indi_to_children();
-INDISEQ indi_to_fathers();
-INDISEQ indi_to_mothers();
-INDISEQ fam_to_children();
-INDISEQ fam_to_fathers();
-INDISEQ fam_to_mothers();
-INDISEQ indi_to_spouses();
-INDISEQ indi_to_families();
-INDISEQ name_to_indiseq();
-INDISEQ refn_to_indiseq();
+INDISEQ create_indiseq(void);
+INDISEQ copy_indiseq(INDISEQ);
+BOOLEAN in_indiseq(INDISEQ, STRING);
+INDISEQ indi_to_children(NODE);
+INDISEQ indi_to_fathers(NODE);
+INDISEQ indi_to_mothers(NODE);
+INDISEQ fam_to_children(NODE);
+INDISEQ fam_to_fathers(NODE);
+INDISEQ fam_to_mothers(NODE);
+INDISEQ indi_to_spouses(NODE);
+INDISEQ indi_to_families(NODE, BOOLEAN);
+INDISEQ name_to_indiseq(STRING);
+INDISEQ refn_to_indiseq(STRING);
 
 #define FORINDISEQ(s,e,i)\
 	{	int i, _n;\

@@ -137,10 +137,10 @@ typedef PVALUE (*PFUNC)();
 #define pitype(i)	ptype(ivalue(i))
 #define pivalue(i)	pvalue(ivalue(i))
 
-extern PNODE string_node();
-extern PNODE children_node();
-extern PNODE iden_node();
-extern PNODE proc_node();
+PNODE string_node(STRING);
+PNODE children_node(PNODE, STRING, STRING, PNODE);
+PNODE iden_node(STRING);
+PNODE proc_node(STRING, PNODE, PNODE);
 
 typedef struct {
 	char *ft_name;
@@ -157,19 +157,19 @@ extern TABLE functab;
 extern TABLE globtab;
 extern TABLE proctab;
 
-extern PVALUE evaluate();
-extern PVALUE evaluate_iden();
-extern PVALUE evaluate_func();
-extern PVALUE evaluate_ufunc();
-extern PVALUE eval_and_coerce();
-extern BOOLEAN evaluate_cond();
-extern PVALUE create_pvalue();
-extern void delete_pvalue();
-extern PVALUE copy_pvalue();
-extern NODE eval_indi();
-extern NODE eval_fam();
-extern PVALUE valueof_iden();
-extern STRING get_date();
+PVALUE evaluate(PNODE, TABLE, BOOLEAN*);
+PVALUE evaluate_iden(PNODE, TABLE, BOOLEAN*);
+PVALUE evaluate_func(PNODE, TABLE, BOOLEAN*);
+PVALUE evaluate_ufunc(PNODE, TABLE, BOOLEAN*);
+PVALUE eval_and_coerce(INT, PNODE, TABLE, BOOLEAN*);
+BOOLEAN evaluate_cond(PNODE, TABLE, BOOLEAN*);
+PVALUE create_pvalue(INT, WORD);
+void delete_pvalue(PVALUE);
+PVALUE copy_pvalue(PVALUE);
+NODE eval_indi(PNODE, TABLE, BOOLEAN*, CACHEEL*);
+NODE eval_fam(PNODE, TABLE, BOOLEAN*, CACHEEL*);
+PVALUE valueof_iden(TABLE, STRING);
+STRING get_date(void);
 
 extern INT Plineno;
 extern FILE *Pinfp;

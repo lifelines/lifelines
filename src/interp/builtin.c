@@ -33,11 +33,12 @@
 
 #include "standard.h"
 #include "table.h"
+#include "translat.h"
 #include "gedcom.h"
 #include "cache.h"
 #include "interp.h"
 #include "indiseq.h"
-#include "translat.h"
+#include "liflines.h"
 
 int *eqv_pvalues();
 
@@ -186,7 +187,6 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	    "Enter a sibling from family.");
 	if (fam) cel = fam_to_cacheel(fam);
 	assign_iden(stab, iident(arg), create_pvalue(PFAM, (WORD)cel));
-/*llwprintf("got to end of getfam okay\n");/*DEBUG*/
 	return NULL;
 }
 /*=================================================+
@@ -227,7 +227,11 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	NODE prnt = create_node(NULL, "EVEN", NULL, NULL);
 	NODE chil = create_node(NULL, "DATE", get_date(), prnt);
-/*llwprintf("__gettoday: called\n");/*DEBUG*/
+
+#ifdef DEBUG
+	llwprintf("__gettoday: called\n");
+#endif
+
 	nchild(prnt) = chil;
 	return create_pvalue(PGNODE, (WORD)prnt);
 }
@@ -754,7 +758,11 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 		if (prec > 10) prec = 10;
 	}
 	sprintf(format, "%%.%df", prec);
-/*llwprintf("format is %s\n", format);/*DEBUG*/
+
+#ifdef DEBUG
+	llwprintf("format is %s\n", format);
+#endif
+
 	sprintf(scratch, format, u.f);
 	set_pvalue(val, PSTRING, (WORD)scratch);
 	return val;
@@ -993,7 +1001,11 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
-/*llwprintf("__lt @ %d\n", iline(node));/*DEBUG*/
+
+#ifdef DEBUG
+	llwprintf("__lt @ %d\n", iline(node));
+#endif
+
 	if (*eflg) return NULL;
 	val2 = evaluate(inext(arg), stab, eflg);
 	if (*eflg) return NULL;
@@ -1018,8 +1030,11 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	if (*eflg) return NULL;
 	gt_pvalues(val1, val2, eflg);
 	if (*eflg) {
-show_pvalue(val1);/*DEBUG*/
-show_pvalue(val2);/*DEBUG*/
+
+#ifdef DEBUG
+	show_pvalue(val1);
+	show_pvalue(val2);
+#endif
 		prog_error(node, "incorrect operands for gt");
 		return NULL;
 	}
@@ -1036,18 +1051,28 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	PVALUE val2, val1 = eval_and_coerce(PBOOL, arg, stab, eflg);
 	BOOLEAN rc = TRUE;
 	if (*eflg) {
-show_pvalue(val1);/*DEBUG*/
+
+#ifdef DEBUG
+	show_pvalue(val1);
+#endif
 		prog_error(node, "an arg to and is not boolean");
 		return NULL;
 	}
 	rc = rc && (BOOLEAN) pvalue(val1);
-/*llwprintf("rc == %d\n", rc);/*DEBUG*/
+
+#ifdef DEBUG
+	llwprintf("rc == %d\n", rc);
+#endif
+
 	delete_pvalue(val1);
 	while (arg = inext(arg)) {
 		if (rc) {
 			val2 = eval_and_coerce(PBOOL, arg, stab, eflg);
 			if (*eflg) {
-show_pvalue(val2);/*DEBUG*/
+
+#ifdef DEBUG
+	show_pvalue(val2);
+#endif
 				prog_error(node, "an arg to and is not boolean");
 				return NULL;
 			}
@@ -1299,8 +1324,15 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	str2 = (STRING) pvalue(val2);
 	if (!str1) str1 = emp;
 	if (!str2) str2 = emp;
-/*llwprintf("__strcmp: ");show_pvalue(val1);wprintf(" ");show_pvalue(val2);
-llwprintf("\n");/*DEBUG*/
+
+#ifdef DEBUG
+	llwprintf("__strcmp: ");
+	show_pvalue(val1);
+	llwprintf(" ");
+	show_pvalue(val2);
+	llwprintf("\n");
+#endif
+
 	set_pvalue(val1, PINT, (WORD)ll_strcmp(str1, str2));
 	delete_pvalue(val2);
 	return val1;
@@ -1713,7 +1745,11 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 		}
 		if (str = (STRING) pvalue(val)) {
                         len += strlen(str);
-/*llwprintf("concat: str: ``%s'' ", str);/*DEBUG*/
+
+#ifdef DEBUG
+	llwprintf("concat: str: ``%s'' ", str);
+#endif
+
                         hold[nstrs++] = strsave(str);
                 } else
                         hold[nstrs++] = NULL;
@@ -1993,7 +2029,11 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	*eflg = FALSE;
 	tab = create_table();
 	val = create_pvalue(PTABLE, (WORD)tab);
-/*llwprintf("__table: ");show_pvalue(val);wprintf("\n");/*DEBUG*/
+
+#ifdef DEBUG
+	llwprintf("__table: ");show_pvalue(val);wprintf("\n");
+#endif
+
 	assign_iden(stab, iident(var), val);
 	return NULL;
 }
@@ -2009,14 +2049,23 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	PVALUE old, val = eval_and_coerce(PTABLE, arg, stab, eflg);
 	TABLE tab;
 	STRING str;
-/*llwprintf("__insert:\n");/*DEBUG*/
+
+#ifdef DEBUG
+	llwprintf("__insert:\n");
+#endif
+
 	if (*eflg || (pvalue(val) == NULL)) {
 	        *eflg = TRUE;
 		prog_error(node, "1st arg to insert is not a table");
 		return NULL;
 	}
 	tab = (TABLE) pvalue(val);
-/*show_pvalue(val);llwprintf(" ");/*DEBUG*/
+
+#ifdef DEBUG
+	show_pvalue(val);
+	llwprintf(" ");
+#endif
+
 	delete_pvalue(val);
 	arg = inext(arg);
 	val = eval_and_coerce(PSTRING, arg, stab, eflg);
@@ -2027,14 +2076,24 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	}
 	str = strsave((STRING) pvalue(val));
 	delete_pvalue(val);
-/*show_pvalue(val);llwprintf(" ");/*DEBUG*/
+
+#ifdef DEBUG
+	show_pvalue(val);
+	llwprintf(" ");
+#endif
+
 	val = evaluate(inext(arg), stab, eflg);
 	if (*eflg || !val) {
 		*eflg = TRUE;
 		prog_error(node, "3rd arg to insert is in error");
 		return NULL;
 	}
-/*show_pvalue(val);llwprintf("\n");/*DEBUG*/
+
+#ifdef DEBUG
+	show_pvalue(val);
+	llwprintf("\n");
+#endif
+
 	old = (PVALUE) valueofbool(tab, str, &there);
 	if(there && old) delete_pvalue(old);
 	insert_table(tab, str, val);
@@ -2053,7 +2112,10 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	TABLE tab;
 	STRING str;
 
-/*if(prog_debug) llwprintf("lookup called\n");/*DEBUG*/
+#ifdef DEBUG
+	llwprintf("lookup called\n");
+#endif
+
 	arg = (PNODE) iargs(node);
 	val = eval_and_coerce(PTABLE, arg, stab, eflg);
 	if (*eflg || (pvalue(val) == NULL)) {
@@ -2386,7 +2448,13 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	NODE evnt;
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
-/*llwprintf("__place: val = ");show_pvalue(val);wprintf("\n");/*DEBUG*/
+
+#ifdef DEBUG
+	llwprintf("__place: val = ");
+	show_pvalue(val);
+	llwprintf("\n");
+#endif
+
 	if (*eflg) {
 		prog_error(node, "the arg to place is not a record line");
 		return NULL;
@@ -2663,8 +2731,13 @@ PNODE expr; TABLE stab; BOOLEAN *eflg; CACHEEL *pcel;
 	NODE indi;
 	CACHEEL cel;
 	PVALUE val = eval_and_coerce(PINDI, expr, stab, eflg);
-/*llwprintf("eval_indi: val, eflg == ");show_pvalue(val);wprintf(", %d\n",
-*eflg);/*DEBUG*/
+
+#ifdef DEBUG
+	llwprintf("eval_indi: val, eflg == ");
+	show_pvalue(val);
+	llwprintf(", %d\n",*eflg);
+#endif
+
 	if (*eflg || !val) return NULL;
 	cel = (CACHEEL) pvalue(val);
 	delete_pvalue(val);

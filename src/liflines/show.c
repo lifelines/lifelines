@@ -33,9 +33,9 @@
 #include "standard.h"
 #include "screen.h"
 #include "table.h"
+#include "translat.h"
 #include "gedcom.h"
 #include "indiseq.h"
-#include "translat.h"
 #include "cache.h"
 
 extern BOOLEAN opt_nocb;	/* TRUE to suppress display of cb. data */
@@ -54,7 +54,7 @@ typedef char LINESTRING[80];
 static LINESTRING Spers, Sbirt, Sdeat, Sfath, Smoth, Smarr;
 static LINESTRING Shusb, Shbirt, Shdeat, Swife, Swbirt, Swdeat;
 static LINESTRING Sothers[MAXOTHERS];
-static INT Solen = 0, Sotop = 0;
+static INT Solen = 0;
 
 /*===============================================
  * init_display_indi -- Initialize display person
@@ -151,7 +151,6 @@ INT hgt;	/* avail rows */
 	mvwaddstr(main_win, row+2, 1, Sdeat);
 	mvwaddstr(main_win, row+3, 1, Sfath);
 	mvwaddstr(main_win, row+4, 1, Smoth);
-	Sotop = 0;
 	for (i = 0; i < Solen && i < hgt-5; i++)
 		mvwaddstr(main_win, row+5+i, 1, Sothers[i]);
 	listbadkeys = 0;
@@ -273,7 +272,6 @@ INT row, hgt;
 	mvwaddstr(main_win, row+4, 1, Swbirt);
 	mvwaddstr(main_win, row+5, 1, Swdeat);
 	mvwaddstr(main_win, row+6, 1, Smarr);
-	Sotop = 0;
 	for (i = 0; i < Solen && i < hgt-7; i++)
 		mvwaddstr(main_win, row+7+i, 1, Sothers[i]+1);
 	listbadkeys = 0;
@@ -319,7 +317,6 @@ INT hgt;
 		mvwaddstr(main_win, row+3, 1, Swbirt);
 
 	mvwaddstr(main_win, row+4, 1, Smarr);
-	Sotop = 0;
 	for (i = 0; i < Solen && i < hgt-5; i++)
 		mvwaddstr(main_win, row+5+i, 1, Sothers[i]+1);
 	listbadkeys = 0;
@@ -591,8 +588,8 @@ INT row, hgt;
 		mvwaddch(main_win, row+i, ll_cols-1, ACS_VLINE);
 #endif
 	}
-	key = rmvat(nxref(node));
 #if 0
+	key = rmvat(nxref(node));
 	switch (*key) {
 	case 'S':
 		show_sour_display(node, row, hgt);

@@ -32,8 +32,10 @@
 
 #include "standard.h"
 #include "table.h"
-#include "gedcom.h"
 #include "translat.h"
+#include "gedcom.h"
+#include "indiseq.h"
+#include "liflines.h"
 
 extern STRING iredit, fredit, cfpupt, cffupt, idpedt, idspse, idfbys;
 extern STRING ntprnt, gdpmod, gdfmod, ronlye;
@@ -154,47 +156,26 @@ NODE fam1;	/* may be NULL */
 	NODE fam2, husb, wife, chil, body, refn1, refn2, refnn, refn1n;
 	NODE indi, node, fam0;
 	TRANTABLE tti = tran_tables[MEDIN], tto = tran_tables[MINED];
-	INT i;
-	STRING msg, key;
-	FILE *fp;
+	STRING msg, key; FILE *fp;
 	BOOLEAN emp;
-
 /* Identify family if need be */
-
-	if (!fam1) {
-		indi = ask_for_indi(idspse, FALSE, FALSE);
-		if (!indi) return NULL;
-		if (!FAMS(indi)) {
-			message(ntprnt);
-			return NULL;
-		}
-		fam1 = choose_family(indi, "e", idfbys, TRUE);
-		if (!fam1) return FALSE;
-	}
-
+	if (!fam1) { indi = ask_for_indi(idspse, FALSE, FALSE);
+		if (!indi) return NULL; if (!FAMS(indi)) {
+			message(ntprnt); return NULL;
+		} fam1 = choose_family(indi, "e", idfbys, TRUE);
+		if (!fam1) return FALSE; }
 /* Prepare file for user to edit */
-
 	ASSERT(fp = fopen(editfile, LLWRITETEXT));
-	split_fam(fam1, &refn1, &husb, &wife, &chil, &body);
-	write_nodes(0, fp, tto, fam1,  TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, refn1, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, husb,  TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, wife,  TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, body,  TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, chil,  TRUE, TRUE, TRUE);
-	join_fam(fam1, refn1, husb, wife, chil, body);
+	split_fam(fam1, &refn1, &husb, &wife, &chil, &body); write_nodes(0, fp, tto, fam1,  TRUE, TRUE, TRUE);
+	write_nodes(1, fp, tto, refn1, TRUE, TRUE, TRUE); write_nodes(1, fp, tto, husb,  TRUE, TRUE, TRUE);
+	write_nodes(1, fp, tto, wife,  TRUE, TRUE, TRUE); write_nodes(1, fp, tto, body,  TRUE, TRUE, TRUE);
+	write_nodes(1, fp, tto, chil,  TRUE, TRUE, TRUE); join_fam(fam1, refn1, husb, wife, chil, body);
 	fclose(fp);
-
 /* Have user edit record */
-
-	do_edit();
-	if (readonly) {
-		fam2 = file_to_node(editfile, tti, &msg, &emp);
-		join_fam(fam1, refn1, husb, wife, chil, body);
-		if (!equal_tree(fam1, fam2))
-			message(ronlye);
-		free_nodes(fam2);
-		return fam1;
+	do_edit(); if (readonly) {
+		fam2 = file_to_node(editfile, tti, &msg, &emp); join_fam(fam1, refn1, husb, wife, chil, body);
+		if (!equal_tree(fam1, fam2)) message(ronlye);
+		free_nodes(fam2); return fam1;
 	}
 	while (TRUE) {
 		fam2 = file_to_node(editfile, tti, &msg, &emp);

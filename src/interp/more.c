@@ -33,6 +33,7 @@
 #include <stdio.h>
 #include "standard.h"
 #include "table.h"
+#include "translat.h"
 #include "gedcom.h"
 #include "cache.h"
 #include "interp.h"
@@ -199,7 +200,9 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 		return NULL;
 	}
 	dlm = (STRING) pvalue(val2);
-/*llwprintf("dlm = %s\n", dlm);/*DEBUG*/
+#ifdef DEBUG
+	llwprintf("dlm = %s\n", dlm);
+#endif
 	*eflg = TRUE;
 	if (!iistype(lvar, IIDENT)) {
 		prog_error(node, "3rd arg to extracttokens must be a variable");
@@ -790,7 +793,9 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	}
 	key = (STRING) pvalue(val);
 	if (*key == '@') key = rmvat(key);
-/* llwprintf("__getrecord: key = %s\n", key);/*DEBUG*/
+#ifdef DEBUG
+	llwprintf("__getrecord: key = %s\n", key);
+#endif
 	if (*key == 'I' || *key == 'F' || *key == 'S' ||
 	    *key == 'E' || *key == 'X') {
 		rec = retrieve_record(key, &len);
@@ -989,10 +994,16 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	extern STRING pvalue_to_string();
 	PVALUE val = evaluate(iargs(node), stab, eflg);
-/*show_one_pnode(node);
-llwprintf("\npvalue: %d ",val);if(val)wprintf("%d\n",ptype(val));
-else printf("BLECH\n");
-show_pvalue(val);llwprintf("\n");/*DEBUG*/
+#ifdef DEBUG
+	show_one_pnode(node);
+	llwprintf("\npvalue: %d ",val);
+	if(val)
+		llwprintf("%d\n",ptype(val));
+	else
+		printf("BLECH\n");
+	show_pvalue(val);
+	llwprintf("\n");
+#endif
 	return create_pvalue(PSTRING, (WORD)pvalue_to_string(val));
 }
 /*============================================+

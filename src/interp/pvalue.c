@@ -30,6 +30,7 @@
 
 #include "standard.h"
 #include "table.h"
+#include "translat.h"
 #include "gedcom.h"
 #include "cache.h"
 #include "interp.h"
@@ -74,7 +75,11 @@ WORD value;
 void delete_pvalue (val)
 PVALUE val;
 {
-/*llwprintf("__delete_pvalue: val == ");show_pvalue(val);wprintf("\n");/*DEBUG*/
+#ifdef DEBUG
+	llwprintf("__delete_pvalue: val == ");
+	show_pvalue(val);
+	llwprintf("\n");
+#endif	
         if (!val) return;
         switch (ptype(val)) {
         case PSTRING:
@@ -107,8 +112,11 @@ PVALUE val;
 INT type;
 WORD value;
 {
-/*llwprintf("\nset_pvalue called: val=");show_pvalue(val);
-llwprintf(" new type=%d new value = %d\n", type, value);/*DEBUG*/
+#ifdef DEBUG
+	llwprintf("\nset_pvalue called: val=");
+	show_pvalue(val);
+	llwprintf(" new type=%d new value = %d\n", type, value);
+#endif
 	if (ptype(val) == PSTRING && pvalue(val)) stdfree(pvalue(val));
 	ptype(val) = type;
 	if (type == PSTRING && value) value = (WORD) strsave((STRING) value);
@@ -189,8 +197,11 @@ BOOLEAN *eflg;
 	BOOLEAN vbool;
 	UNION u;
 
-/*llwprintf("coerce_pvalue: coerce ");show_pvalue(val);
-llwprintf(" to %s\n", ptypes[type]);/*DEBUG*/
+#ifdef DEBUG
+	llwprintf("coerce_pvalue: coerce ");
+	show_pvalue(val);
+	llwprintf(" to %s\n", ptypes[type]);
+#endif
 	if (*eflg) return;
 	ASSERT(is_pvalue(val));
 	if (type == ptype(val)) return;
@@ -470,8 +481,15 @@ BOOLEAN *eflg;
 
 	if (*eflg) return;
 	eq_conform_pvalues(val1, val2, eflg);
-/*llwprintf("ne_pvalues: val1, val2, rel = ");show_pvalue(val1);wprintf(", ");
-show_pvalue(val2);llwprintf(", ");/*DEBUG*/
+
+#ifdef DEBUG
+	llwprintf("ne_pvalues: val1, val2, rel = ");
+	show_pvalue(val1);
+	llwprintf(", ");
+	show_pvalue(val2);
+	llwprintf(", ");
+#endif
+
 	if (*eflg) return;
 	switch (ptype(val1)) {
 	case PSTRING:
@@ -484,7 +502,11 @@ show_pvalue(val2);llwprintf(", ");/*DEBUG*/
 		rel = (pvalue(val1) != pvalue(val2));
 		break;
 	}
-/*llwprintf("%d\n", rel);/*DEBUG*/
+
+#ifdef DEBUG
+	llwprintf("%d\n", rel);
+#endif
+
 	set_pvalue(val1, PBOOL, (WORD)rel);
 	delete_pvalue(val2);
 }
@@ -517,8 +539,15 @@ BOOLEAN *eflg;
 	if (*eflg) return;
 	num_conform_pvalues(val1, val2, eflg);
 	if (*eflg) return;
-/*llwprintf("ge_pvalues: val1, val2 = ");show_pvalue(val1);
-llwprintf(", ");show_pvalue(val2);wprintf("\n");/*DEBUG*/
+
+#ifdef DEBUG
+	llwprintf("ge_pvalues: val1, val2 = ");
+	show_pvalue(val1);
+	llwprintf(", ");
+	show_pvalue(val2);
+	llwprintf("\n");
+#endif
+
 	switch (ptype(val1)) {
 	/*case LONG:*/
 	default: rel = ((INT) pvalue(val1) >= (INT) pvalue(val2));

@@ -31,7 +31,10 @@
 
 #include "standard.h"
 #include "table.h"
+#include "translat.h"
 #include "gedcom.h"
+#include "indiseq.h"
+#include "liflines.h"
 
 extern STRING idcswp, id1csw, id2csw, id1fsw, id2fsw, idfbys, ntprnt;
 extern STRING less2c, okcswp, less2f, okfswp, idfswp, ronlye;

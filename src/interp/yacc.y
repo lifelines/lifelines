@@ -34,11 +34,15 @@
  *   3.0.3 - 08 Aug 95
  *===========================================================*/
 %{
-#define YACC_C
+/*#define YACC_C */
 #include "standard.h"
 #include "table.h"
+#include "translat.h"
 #include "gedcom.h"
+#include "cache.h"
+#include "indiseq.h"
 #include "interp.h"
+#include "liflines.h"
 
 extern TABLE proctab, functab;
 static PNODE this, prev;
@@ -75,7 +79,7 @@ enqueue_list(Plist, pvalue((PVALUE) ivalue((PNODE) $3)));
 	;
 
 proc	:	PROC IDEN '(' idenso ')' '{' tmplts '}' {
-			insert_table(proctab, $2, proc_node($2, $4, $7));
+			insert_table(proctab, $2, proc_node((STRING)$2, (PNODE)$4, (PNODE)$7));
 		}
 
 func	:	FUNC_TOK IDEN '(' idenso ')' '{' tmplts '}' {
@@ -89,10 +93,10 @@ idenso	:	/* empty */ {
 			$$ = $1;
 		}
 idens	:	IDEN {
-			$$ = (INT) iden_node($1);
+			$$ = (INT) iden_node((STRING)$1);
 		}
 	|	IDEN ',' idens {
-			$$ = (INT) iden_node($1);
+			$$ = (INT) iden_node((STRING)$1);
 			inext(((PNODE)$$)) = (PNODE) $3;
 		}
 	;
@@ -106,7 +110,7 @@ tmplts	:	tmplt {
 	;
 tmplt	:	CHILDREN m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
-			$$ = (INT) children_node($4, $6, $8, $11);
+			$$ = (INT) children_node((PNODE)$4, (STRING)$6, (STRING)$8, (PNODE)$11);
 			((PNODE)$$)->i_line = $2;
 		}
 	|	SPOUSES m '(' expr ',' IDEN ',' IDEN ',' IDEN ')' '{' tmplts '}'
@@ -248,7 +252,7 @@ elseo	:	/* empty */ {
 		}
 	;
 expr	:	IDEN {
-			$$ = (INT) iden_node($1);
+			$$ = (INT) iden_node((STRING)$1);
 			iargs(((PNODE)$$)) = NULL;
 		}
 	|	IDEN m '(' exprso ')' {

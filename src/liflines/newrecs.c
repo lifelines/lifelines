@@ -30,10 +30,12 @@
  *===========================================================*/
 
 #include "standard.h"
-#include "table.h"
-#include "gedcom.h"
-#include "translat.h"
 #include "btree.h"
+#include "table.h"
+#include "translat.h"
+#include "gedcom.h"
+#include "indiseq.h"
+#include "liflines.h"
 
 extern BTREE BTR;
 
@@ -98,7 +100,7 @@ INT (*tocache)();	/* write record to cache */
 {
 	FILE *fp;
 	NODE node, refn;
-	STRING msg, str, key;
+	STRING msg, key;
 	BOOLEAN emp;
 	TRANTABLE tti = tran_tables[MEDIN];
 
@@ -185,7 +187,6 @@ INT (*todbase)();	/* write record to dbase */
 STRING gdmsg;		/* success message */
 {
 	TRANTABLE tti = tran_tables[MEDIN], tto = tran_tables[MINED];
-	INT i;
 	STRING msg, newr, oldr, key;
 	FILE *fp;
 	BOOLEAN emp;

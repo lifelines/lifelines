@@ -31,7 +31,10 @@
 
 #include "standard.h"
 #include "table.h"
+#include "translat.h"
 #include "gedcom.h"
+#include "indiseq.h"
+#include "liflines.h"
 
 extern STRING idcrmv, ntchld, ntprnt, idsrmv, idsrmf, normls, cfcrmv;
 extern STRING okcrmv, ntsinf, ntcinf, cfsrmv, oksrmv, ronlye, idcrmf;
@@ -101,7 +104,7 @@ NODE indi, fam;
 BOOLEAN nolast;	/* don't remove last member of family? */
 {
 	NODE node, last;
-	INT i, sex;
+	INT sex;
 	STRING stag;
 
 	if (readonly) {

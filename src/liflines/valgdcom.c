@@ -33,9 +33,9 @@
 
 #include "standard.h"
 #include "table.h"
+#include "translat.h"
 #include "gedcom.h"
 #include "gedcheck.h"
-#include "translat.h"
 
 /* external data set by check_stdkeys() , used by addmissingkeys() */
 
@@ -135,7 +135,6 @@ FILE *fp;
 	ELMNT el;
 	TRANTABLE tt = tran_tables[MGDIN];
 	STRING xref, tag, val, msg;
-	char scratch[200];
 
 	nindi = nfam = nsour = neven = nothr = 0;
 	num_errors = num_warns = 0;
@@ -448,7 +447,6 @@ static handle_indi_lev1 (tag, val, line)
 STRING tag, val;
 INT line;
 {
-	INT fam, dex;
 	ELMNT indi, pers;
 	ASSERT(person != -1);
 	if (person == -2) {
@@ -473,7 +471,7 @@ INT line;
 			return;
 		}
 		Male(indi) += 1;
-		if ((dex = add_indi_defn(rmvat(val), 0, &pers)) >= 0)
+		if (add_indi_defn(rmvat(val), 0, &pers) >= 0)
 			Sex(pers) |= BE_MALE;
 	} else if (eqstr(tag, "MOTH")) {
 		if (!pointer_value(val)) {
@@ -481,7 +479,7 @@ INT line;
 			return;
 		}
 		Fmle(indi) += 1;
-		if ((dex = add_indi_defn(rmvat(val), 0, &pers)) >= 0)
+		if (add_indi_defn(rmvat(val), 0, &pers) >= 0)
 			Sex(pers) |= BE_FEMALE;
 	} else if (eqstr(tag, "SEX")) {
 		if (val && (*val == 'M'))
@@ -504,10 +502,11 @@ static handle_fam_lev1 (tag, val, line)
 STRING tag, val;
 INT line;
 {
-	INT dex;
 	ELMNT fam, pers;
-/*llwprintf("handle_fam_lev1: %s, %s, %d\n",tag,val,line);/*DEBUG*/
-/*llwprintf("handle_fam_lev1: family == %d\n", family);/*DEBUG*/
+#ifdef DEBUG
+	llwprintf("handle_fam_lev1: %s, %s, %d\n",tag,val,line);
+	llwprintf("handle_fam_lev1: family == %d\n", family);
+#endif
 	fam = (family != -1) ? index_data[family] : NULL;
 	if (eqstr(tag, "HUSB")) {
 		if (!pointer_value(val)) {
@@ -515,7 +514,7 @@ INT line;
 			return;
 		}
 		if (fam) Male(fam) += 1;
-		if ((dex = add_indi_defn(rmvat(val), 0, &pers)) >= 0)
+		if (add_indi_defn(rmvat(val), 0, &pers) >= 0)
 			Sex(pers) |= BE_MALE;
 	} else if (eqstr(tag, "WIFE")) {
 		if (!pointer_value(val)) {
@@ -523,7 +522,7 @@ INT line;
 			return;
 		}
 		if (fam) Fmle(fam) += 1;
-		if ((dex = add_indi_defn(rmvat(val), 0, &pers)) >= 0)
+		if (add_indi_defn(rmvat(val), 0, &pers) >= 0)
 			Sex(pers) |= BE_FEMALE;
 	} else if (eqstr(tag, "CHIL")) {
 		if (!pointer_value(val)) {
@@ -724,7 +723,6 @@ STRING val;
 INT line;
 {
 	ELMNT el;
-	INT dex;
 	STRING xref;
 
 	if (rec_type == IGNR_REC) return;
@@ -756,11 +754,9 @@ WORD arg1, arg2, arg3, arg4;
 {
 	char str[100];
 	if (!logopen) {
-#ifdef WIN32
+
 		unlink("err.log");
-#else
-		system("rm -f err.log");
-#endif
+
 		ASSERT(flog = fopen("err.log", LLWRITETEXT));
 		logopen = TRUE;
 	}
@@ -831,7 +827,7 @@ ELMNT el;
  *======================================================*/
 static clear_structures ()
 {
-	INT i, n;
+	INT i;
 
 	for (i = 0; i < struct_len; i++)
 		stdfree(index_data[i]);

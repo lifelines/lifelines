@@ -157,6 +157,8 @@ extern WORD pop_list(), get_list_element();
 extern INT length_list();
 extern enqueue_list();
 extern WORD dequeue_list();
+STRING trim(STRING, INT);
+FILE*  fopenpath(STRING, STRING, STRING, STRING, STRING*);
 
 #define FORLIST(l,e)\
 	{\

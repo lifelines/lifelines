@@ -32,7 +32,10 @@
 
 #include "standard.h"
 #include "table.h"
+#include "translat.h"
 #include "gedcom.h"
+#include "indiseq.h"
+#include "liflines.h"
 
 extern STRING idpdel, cfpdel, haslnk;
 static del_in_dbase();
@@ -41,7 +44,7 @@ static del_in_dbase();
  * delete_indi -- Delete person and links; if this leaves families
  *   with no links, remove them
  *==============================================================*/
-delete_indi (indi, conf)
+void delete_indi (indi, conf)
 NODE indi;	/* person to remove - may be null */
 BOOLEAN conf;	/* have user confirm */
 {

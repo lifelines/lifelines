@@ -33,8 +33,10 @@
 
 #include "standard.h"
 #include "table.h"
-#include "gedcom.h"
 #include "translat.h"
+#include "gedcom.h"
+#include "indiseq.h"
+#include "liflines.h"
 
 extern STRING idcfam, fredit, cffadd, idprnt, unksex, idsbln, mklast;
 extern STRING idsadd, idsinf, kchild, iscinf, notopp, idsps1, idsps2;
@@ -46,7 +48,7 @@ extern TRANTABLE tran_tables[];
 /*==========================================================
  * add_indi_by_edit -- Add new person to database by editing
  *========================================================*/
-NODE add_indi_by_edit ()
+NODE add_indi_by_edit (void)
 {
 	FILE *fp;
 	NODE indi;

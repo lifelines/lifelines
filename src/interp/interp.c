@@ -32,10 +32,12 @@
 
 #include "standard.h"
 #include "table.h"
+#include "translat.h"
 #include "gedcom.h"
-#include "interp.h"
 #include "cache.h"
+#include "interp.h"
 #include "indiseq.h"
+#include "liflines.h"
 
 extern STRING llprograms;
 extern BOOLEAN progrunning;
@@ -131,7 +133,7 @@ STRING ofile;	/* output file - can be NULL */
 		if ((fp == NULL) || (ifile == NULL))  {
 		    	if(fp) fclose(fp);
 			llwprintf("Error: file \"%s\" not found.\n",
-				  (ifile ? ifile : ""));
+				  (ifile ? (char*)ifile : ""));
 			return;
 		}
 		fclose(fp);
@@ -151,7 +153,9 @@ STRING ofile;	/* output file - can be NULL */
 		ifile = (STRING) dequeue_list(plist);
 		if (!in_table(filetab, ifile)) {
 			insert_table(filetab, ifile, 0);
-/*llwprintf("About to parse file %s.\n", ifile);/*DEBUG*/
+#ifdef DEBUG
+			llwprintf("About to parse file %s.\n", ifile);
+#endif
 			parse_file(ifile, plist);
 		} else
 			stdfree(ifile);
@@ -251,7 +255,7 @@ LIST plist;
  *===================================*/
 interp_main ()
 {
-	interp_program("main", 0, NULL, 0, NULL, NULL);/*DEBUG*/
+	interp_program("main", 0, NULL, 0, NULL, NULL);
 }
 /*======================================
  * interpret -- Interpret statement list
@@ -292,7 +296,9 @@ if (prog_debug) {
 			delete_pvalue(val);
 			break;
 		case IBCALL:
-/*llwprintf("BCALL: %s\n", iname(node));/*DEBUG*/
+#ifdef DEBUG
+			llwprintf("BCALL: %s\n", iname(node));
+#endif
 			val = evaluate_func(node, stab, &eflg);
 			if (eflg) return INTERROR;
 #if 0
@@ -597,7 +603,11 @@ if (prog_debug) {
 		case IRETURN:
 			if (iargs(node))
 				*pval = evaluate(iargs(node), stab, &eflg);
-/*llwprintf("interp return ");show_pvalue(*pval); wprintf("\n");/*DEBUG*/
+#ifdef DEBUG
+				llwprintf("interp return ");
+				show_pvalue(*pval);
+				llwprintf("\n");
+#endif
 			return INTRETURN;
 		default:
 			llwprintf("itype(node) is %d\n", itype(node));
@@ -1186,10 +1196,16 @@ PNODE node; TABLE stab; WORD *pval;
 	delete_pvalue(val);
 	insert_pvtable(stab, inum(node), PINT, (WORD) 0);
 	FORINDISEQ(seq, el, ncount)
-/*llwprintf("loopinterp - %s = ",ielement(node));wprintf("\n");/*DEBUG*/
+#ifdef DEBUG
+		llwprintf("loopinterp - %s = ",ielement(node));
+		llwprintf("\n");
+#endif
 		insert_pvtable(stab, ielement(node), PINDI,
-		    key_to_indi_cacheel(skey(el)));
-/*llwprintf("loopinterp - %s = ",ivalvar(node));wprintf("\n");/*DEBUG*/
+		key_to_indi_cacheel(skey(el)));
+#ifdef DEBUG
+		llwprintf("loopinterp - %s = ",ivalvar(node));
+		llwprintf("\n");
+#endif
 		insert_table(stab, ivalvar(node),
 			 (WORD) (sval(el) ? (WORD)sval(el)
 				: (WORD)create_pvalue(PANY, (WORD)NULL)));

@@ -33,8 +33,10 @@
 #include "standard.h"
 #include "btree.h"
 #include "table.h"
-#include "gedcom.h"
 #include "translat.h"
+#include "gedcom.h"
+#include "indiseq.h"
+#include "liflines.h"
 
 extern BOOLEAN traditional;
 extern STRING iredit, cfpmrg, nopmrg, noqmrg, noxmrg, nofmrg;
@@ -59,16 +61,15 @@ BOOLEAN conf;		/* have user confirm change */
 	NODE name1, refn1, sex1, body1, famc1, fams1;
 	NODE name2, refn2, sex2, body2, famc2, fams2;
 	NODE indi3, name3, refn3, sex3, body3, famc3, fams3;
-	NODE indi4, name4, refn4, sex4, body4, famc4, fams4;
+	NODE indi4;
 	NODE fam, husb, wife, chil, rest, fref, keep;
 	NODE this, that, prev, next, node, head;
 	NODE fam12, name12, refn12;
 	TRANTABLE tti = tran_tables[MEDIN], tto = tran_tables[MINED];
 	FILE *fp;
-	char name[100];
 	INT sx2;
 	STRING msg, key;
- 	BOOLEAN emp, iso_nodes();
+ 	BOOLEAN emp;
 
 /* Do start up checks */
 

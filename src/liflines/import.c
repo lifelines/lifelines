@@ -32,10 +32,10 @@
 
 #include "standard.h"
 #include "table.h"
+#include "translat.h"
 #include "gedcom.h"
 #include "sequence.h"
 #include "gedcheck.h"
-#include "translat.h"
 #include "screen.h"
 
 /* external data set by check_stdkeys() */
@@ -78,7 +78,6 @@ BOOLEAN import_from_file ()
 	INT nindi = 0, nfam = 0, neven = 0;
 	INT nsour = 0, nothr = 0, type, num;
 	INT totkeys, totused;
-	int errs;
 	char msgbuf[80];
 
 /* Open and validate GEDCOM file */
@@ -176,7 +175,6 @@ NODE node;
 INT type;
 {
 	STRING old, new, str, key;
-	NODE refn;
 	char scratch[10];
 
 	if (!node) return;
@@ -237,6 +235,7 @@ STRING key;		/* key does not have surrounding @ chars */
 	default:
 		FATAL();
 	}
+	/* NOTREACHED */
 }
 /*============================================================
  * translate_values -- Traverse function to translate pointers

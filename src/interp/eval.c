@@ -32,7 +32,9 @@
 
 #include "standard.h"
 #include "table.h"
+#include "translat.h"
 #include "gedcom.h"
+#include "cache.h"
 #include "interp.h"
 
 extern BOOLEAN traceprogram;
@@ -80,8 +82,12 @@ TABLE stab;  STRING iden;
 {
 	BOOLEAN there;
 	PVALUE val;
-/*llwprintf("valueof_iden: iden, stab, globtab: %s, %d, %d\n",
-iden, stab, globtab);/*DEBUG*/
+
+#ifdef DEBUG
+	llwprintf("valueof_iden: iden, stab, globtab: %s, %d, %d\n",
+	  	  iden, stab, globtab);
+#endif
+
 	val = (PVALUE) valueofbool(stab, iden, &there);
 	if (there) return copy_pvalue(val);
 	val = (PVALUE) valueofbool(globtab, iden, &there);
@@ -112,7 +118,11 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 		prog_error(node, "error in conditional expression");
 		return FALSE;
 	}
-/*llwprintf("interp_if: cond = ");show_pvalue(val);wprintf("\n");/*DEBUG*/
+#ifdef DEBUG
+	llwprintf("interp_if: cond = ");
+	show_pvalue(val);
+	wprintf("\n");
+#endif
 	if (var) assign_iden(stab, iident(node), copy_pvalue(val));
 	coerce_pvalue(PBOOL, val, eflg);
 	rc = (BOOLEAN) pvalue(val);
@@ -181,8 +191,11 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	switch (irc) {
 	case INTRETURN:
 	case INTOKAY:
-/*llwprintf("Successful ufunc call -- val returned was ");
-show_pvalue(val);llwprintf("\n");/*DEBUG*/
+#ifdef DEBUG
+	llwprintf("Successful ufunc call -- val returned was ");
+	show_pvalue(val);
+	llwprintf("\n");
+#endif
 		*eflg = FALSE;
 		return val;
 	case INTBREAK:

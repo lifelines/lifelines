@@ -73,9 +73,9 @@ typedef struct {
 #define cmaxind(c)   ((c)->c_maxind)
 #define csizedir(c)  ((c)->c_sizedir)
 
-extern CACHEEL key_to_indi_cacheel();
-extern CACHEEL key_to_fam_cacheel();
-extern CACHEEL indi_to_cacheel();
-extern CACHEEL fam_to_cacheel();
+CACHEEL key_to_indi_cacheel(STRING);
+CACHEEL key_to_fam_cacheel(STRING);
+CACHEEL indi_to_cacheel(NODE);
+CACHEEL fam_to_cacheel(NODE);
 
 #endif /* _CACHE_H */

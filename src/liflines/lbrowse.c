@@ -31,8 +31,10 @@
 
 #include "standard.h"
 #include "table.h"
+#include "translat.h"
 #include "gedcom.h"
 #include "indiseq.h"
+#include "liflines.h"
 
 #define VIEWABLE 13
 
@@ -49,7 +51,7 @@ INT browse_list (pindi1, pindi2, pfam1, pfam2, pseq)
 NODE *pindi1, *pindi2, *pfam1, *pfam2;
 INDISEQ *pseq;
 {
-	INT c, top, cur, mark, len, tmp, rc;
+	INT top, cur, mark, len, tmp, rc;
 	STRING key, name, newname, lname;
 	NODE indi;
 	INDISEQ seq, newseq;
@@ -64,7 +66,7 @@ INDISEQ *pseq;
 	current_seq = seq;
 
 	while (TRUE) {
-		switch (c = list_browse(seq, top, cur, mark)) {
+		switch (list_browse(seq, top, cur, mark)) {
 		case 'j':	/* Move down line */
 			if (cur >= len - 1) {
 				message(lstbot);

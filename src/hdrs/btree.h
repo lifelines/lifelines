@@ -114,17 +114,17 @@ typedef struct {
 /*====================================
  * BTREE library function declarations 
  *==================================*/
-extern INDEX  getindex();
-extern INDEX  readindex();
-extern INDEX  crtindex();
-extern STRING fkey2path();
-extern STRING rkey2str();
-extern FKEY   path2fkey();
-extern RKEY   str2rkey();
-extern BTREE  openbtree();
-extern BLOCK  crtblock();
-extern RECORD getrecord();
-extern BLOCK  allocblock();
+INDEX  getindex(BTREE, FKEY);
+INDEX  readindex(STRING, FKEY);
+INDEX  crtindex(BTREE);
+STRING fkey2path(FKEY);
+STRING rkey2str(RKEY);
+FKEY   path2fkey(STRING);
+RKEY   str2rkey(STRING);
+BTREE  openbtree(STRING, BOOLEAN, BOOLEAN);
+BLOCK  crtblock(BTREE);
+RECORD getrecord(BTREE, RKEY, INT*);
+BLOCK  allocblock(void);
 
 extern INT bterrno;
 

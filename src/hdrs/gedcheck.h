@@ -68,6 +68,7 @@ typedef struct {
 #define Fmle(e) ((e)->fmle)
 
 extern ELMNT *index_data;
-extern INT xref_to_index();
+
+INT xref_to_index(STRING);
 
 #endif /* _GEDCHECK_H */

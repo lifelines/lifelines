@@ -31,7 +31,9 @@
 
 #include "standard.h"
 #include "table.h"
+#include "translat.h"
 #include "gedcom.h"
+#include "cache.h"
 #include "interp.h"
 
 /* WARNING: this file has not been updated for new evaluate() function
@@ -119,7 +121,9 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	ASSERT(rec = retrieve_record(rmvat(nxref(indi2)), &len));
         ASSERT(indi1 = string_to_node(rec));
 	if (replace_indi(indi1, indi2, &msg)) {
-llwprintf("Oh, happy days, person written to database okay.\n");/*DEBUG*/
+#ifdef DEBUG
+	llwprintf("Oh, happy days, person written to database okay.\n");
+#endif
 		return NULL;
 	} else {
 		*eflg = TRUE;
@@ -142,7 +146,9 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	ASSERT(rec = retrieve_record(rmvat(nxref(fam2)), &len));
         ASSERT(fam1 = string_to_node(rec));
 	if (replace_fam(fam1, fam2, &msg)) {
-llwprintf("Oh, happy days, family written to database okay.\n");/*DEBUG*/
+#ifdef DEBUG
+		llwprintf("Oh, happy days, family written to database okay.\n");
+#endif
 		return NULL;
 	} else {
 		*eflg = TRUE;

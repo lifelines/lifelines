@@ -32,8 +32,10 @@
 
 #include "standard.h"
 #include "table.h"
+#include "translat.h"
 #include "gedcom.h"
 #include "indiseq.h"
+#include "liflines.h"
 
 extern STRING nofath, nomoth, nospse, nocofp;
 extern STRING twohsb, twowif, idsbrs, idplst, idcbrs;
@@ -48,12 +50,11 @@ INDISEQ *pseq;
 	NODE node, indi1 = *pindi1, indi2 = *pindi2;
 	STRING key, name;
 	INDISEQ seq;
-	INT c, len, rc;
+	INT rc;
 
 	if (!indi1 || !indi2) return BROWSE_QUIT;
 	while (TRUE) {
-		c = tandem_browse(indi1, indi2);
-		switch (c) {
+		switch (tandem_browse(indi1, indi2)) {
 		case 'e': 	/* edit top person */
 			indi1 = edit_indi(indi1);
 			break;
@@ -103,7 +104,7 @@ INDISEQ *pseq;
 		case 'b': 	/* browse to new person list */
 			seq = (INDISEQ) ask_for_indiseq(idplst, &rc);
 			if (!seq) break;
-			if ((len = length_indiseq(seq)) == 1) {
+			if (length_indiseq(seq) == 1) {
 				element_indiseq(seq, 0, &key, &name);
 				*pindi1 = key_to_indi(key);
 				remove_indiseq(seq, FALSE);

@@ -28,9 +28,6 @@
  *   3.0.2 - 22 Dec 94
  *===========================================================*/
 
-#ifndef _TABLE_H
-#define _TABLE_H
-
 #define MAXHASH 512
 
 #define DONTFREE  0
@@ -46,6 +43,4 @@ struct etag {
 	ENTRY enext;
 };
 
-extern TABLE create_table();
-
-#endif /* _TABLE_H */
+TABLE create_table(void);

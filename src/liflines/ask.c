@@ -33,8 +33,10 @@
 
 #include "standard.h"
 #include "table.h"
+#include "translat.h"
 #include "gedcom.h"
 #include "indiseq.h"
+#include "liflines.h"
 
 extern STRING ntchld, ntprnt, idfbrs, entnam, unknam, notone, ifone;
 extern STRING nofopn;
@@ -182,7 +184,6 @@ STRING ttl;
 INT *prc;
 {
 	INDISEQ seq;
-	NODE indi;
 	STRING name = ask_for_string(ttl, "enter name, key, refn or list:");
 	*prc = RC_DONE;
 	if (!name || *name == 0) return NULL;
@@ -235,9 +236,6 @@ INDISEQ ask_for_indi_list_once (ttl, prc)
 STRING ttl;
 INT *prc;
 {
-	STRING name;
-	NODE indi;
-	INT i, len;
 	INDISEQ seq = ask_for_indiseq(ttl, prc);
 	if (*prc == RC_DONE || *prc == RC_NOSELECT) return NULL;
 	format_indiseq(seq, FALSE, FALSE);

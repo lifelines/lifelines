@@ -34,8 +34,10 @@
 #include "standard.h"
 #include "screen.h"
 #include "table.h"
+#include "translat.h"
 #include "gedcom.h"
 #include "indiseq.h"
+#include "liflines.h"
 #ifdef WIN32
 #include <stdarg.h>
 #endif
@@ -126,8 +128,10 @@ init_screen ()
 paint_main_screen()
 {
 	WINDOW *win = main_win;
-	INT row, col;
+	INT row;
+#ifdef BETA
 	char buffer[100];
+#endif
 	werase(win);
 	BOX(win, 0, 0);
 	show_horz_line(win, 4, 0, COLSREQ);
@@ -827,9 +831,7 @@ STRING str;
 	while (TRUE) {
 		crmode();
 		c = wgetch(win);
-#if 1
-		if(c == EOF) c = 'q';
-#endif
+		if (c == EOF) c = 'q';
 		nocrmode();
 		now_showing = FALSE;
 		if (!progrunning)
@@ -863,7 +865,7 @@ STRING prmpt;
 static WINDOW *list_wins[MAXVIEWABLE];
 win_list_init ()
 {
-	INT i, row, col = (COLSREQ - 73)/2;
+	INT i;
 	for (i = 0; i < VIEWABLE; i++) {
 		list_wins[i] = NEWWIN(i+6, 73);
 	}
@@ -886,7 +888,7 @@ WINDOW *win;
 STRING ttl;
 INDISEQ seq;
 {
-	INT c, top, cur, len, row;
+	INT top, cur, len, row;
 	top = cur = 0;
 	len = length_indiseq(seq);
 	werase(win);
@@ -899,7 +901,7 @@ INDISEQ seq;
 		shw_list(win, seq, len, top, cur);
 		wmove(win, row, 11);
 		wrefresh(win);
-		switch (c = interact(win, "jkiq")) {
+		switch (interact(win, "jkiq")) {
 		case 'j':
 			if (cur >= len - 1) break;
 			cur++;
@@ -923,7 +925,7 @@ WINDOW *win;
 STRING ttl;
 INDISEQ seq;
 {
-	INT c, top, cur, len, len0, row;
+	INT top, cur, len, len0, row;
 
 	top = cur = 0;
 	len = len0 = length_indiseq(seq);
@@ -937,7 +939,7 @@ INDISEQ seq;
 		shw_list(win, seq, len0, top, cur);
 		wmove(win, row, 11);
 		wrefresh(win);
-		switch (c = interact(win, "jkdiq")) {
+		switch (interact(win, "jkdiq")) {
 		case 'j':
 			if (cur >= len - 1) break;
 			cur++;
@@ -1011,7 +1013,7 @@ STRING ttl;	/* title */
 INT len;	/* list length */
 STRING *strings;/* string list */
 {
-	INT c, top = 0, cur = 0, row;
+		INT top = 0, cur = 0, row;
 	while (TRUE) {
 		werase(win);
 		BOX(win, 0, 0);
@@ -1021,7 +1023,7 @@ STRING *strings;/* string list */
 		mvwaddstr(win, row, 2, "Commands:   j Move down     k Move up    i Select     q Quit");
 		shw_list_of_strings(win, strings, len, top, cur);
 		wrefresh(win);
-		switch (c = interact(win, "jkiq")) {
+		switch (interact(win, "jkiq")) {
 		case 'j':
 			if (cur >= len - 1) break;
 			cur++;

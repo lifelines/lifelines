@@ -41,6 +41,7 @@
 #include "screen.h"
 #include "btree.h"
 #include "table.h"
+#include "translat.h"
 #include "gedcom.h"
 
 extern STRING idldir, nodbse, crdbse, nocrdb, iddbse, usage;

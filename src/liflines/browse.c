@@ -33,9 +33,10 @@
 
 #include "standard.h"
 #include "table.h"
-#include "indiseq.h"
-#include "gedcom.h"
 #include "translat.h"
+#include "gedcom.h"
+#include "indiseq.h"
+#include "liflines.h"
 
 extern STRING idsbrs, idsrmv, idfbrs, idcbrs, idcrmv, iscnew, issnew;
 extern STRING idfcop, ntprnt, nofath, nomoth, nospse, noysib, noosib;
@@ -97,7 +98,7 @@ NODE *pindi1, *pindi2, *pfam1, *pfam2;
 INDISEQ *pseq;
 {
 	STRING key, name, addstrings[2];
-	INT i, c, len, rc;
+	INT i, c, rc;
 	NODE node, save = NULL, indi = *pindi1;
 	NODE node2;
 	INDISEQ seq = NULL;
@@ -227,7 +228,7 @@ INDISEQ *pseq;
 		case 'b': 	/* Browse new list of persons */
 			seq = ask_for_indiseq(idplst, &rc);
 			if (!seq) break;
-			if ((len = length_indiseq(seq)) == 1) {
+			if (length_indiseq(seq) == 1) {
 				element_indiseq(seq, 0, &key, &name);
 				indi = key_to_indi(key);
 				remove_indiseq(seq, FALSE);
@@ -306,9 +307,9 @@ INT browse_fam (pindi, pdum, pfam1, pfam2, pseq)
 NODE *pfam1, *pindi, *pdum, *pfam2;
 INDISEQ *pseq;
 {
-	INT i, c, len, rc;
+	INT i, c, rc;
 	NODE save = NULL, fam = *pfam1, node, husb, wife, chil, rest;
-	NODE root, this, fref, spnodes[30];
+	NODE root, fref, spnodes[30];
 	INDISEQ seq;
 	STRING key, name, spstrings[2];
 	char scratch[100];
@@ -474,7 +475,7 @@ INDISEQ *pseq;
 		case 'b': 	/* Browse to new list of persons */
 			seq = ask_for_indiseq(idplst, &rc);
 			if (!seq) break;
-			if ((len = length_indiseq(seq)) == 1) {
+			if (length_indiseq(seq) == 1) {
 				element_indiseq(seq, 0, &key, &name);
 				*pindi = key_to_indi(key);
 				remove_indiseq(seq, FALSE);
@@ -513,7 +514,7 @@ NODE *pindi, *pfam, *pdum1, *pdum2;
 INDISEQ *pseq;
 {
 	NODE node, indi = *pindi;
-	INT rc, len;
+	INT rc;
 	STRING key, name;
 	INDISEQ seq = NULL;
 	if (!indi) return BROWSE_QUIT;
@@ -551,7 +552,7 @@ INDISEQ *pseq;
 		case 'b': 	/* Browse new list of persons */
 			seq = ask_for_indiseq(idplst, &rc);
 			if (!seq) break;
-			if ((len = length_indiseq(seq)) == 1) {
+			if (length_indiseq(seq) == 1) {
 				element_indiseq(seq, 0, &key, &name);
 				indi = key_to_indi(key);
 				remove_indiseq(seq, FALSE);

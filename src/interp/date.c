@@ -551,7 +551,7 @@ static init_monthtbl ()
 /*=============================
  * get_date -- Get today's date
  *===========================*/
-STRING get_date ()
+STRING get_date (void)
 {
 	struct tm *pt;
 	time_t curtime;

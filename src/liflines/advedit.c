@@ -30,14 +30,14 @@
 
 #include "standard.h"
 #include "table.h"
-#include "gedcom.h"
 #include "translat.h"
+#include "gedcom.h"
 
 static NODE root;	/* root of record being edited */
 static LIST subs;	/* list of contained records */
 static NODE expd;	/* expanded main record - copy */
 
-expand_tree (root0)
+void expand_tree (root0)
 NODE root0;
 {
 	NODE copy, node, sub;
@@ -48,12 +48,13 @@ NODE root0;
 	expd = copy_nodes(root, TRUE, TRUE);
 	subs = create_list();
 	traverse_nodes(expd, expand_traverse);
-/*FORLIST(subs, el) llwprintf("in list: %s %s\n", ntag(el), nval(el));
-ENDLIST/*DEBUG*/
 
    /* expand the list of records into the copied record */
 	FORLIST(subs, el)
 		node = (NODE) el;
+#ifdef DEBUG
+		llwprintf("in list: %s %s\n", ntag(node), nval(node));
+#endif
 		key = rmvat(nval(node));
 		if (sub = key_to_record(key, *key)) {
 			copy = copy_nodes(sub, TRUE, FALSE);
@@ -65,7 +66,9 @@ ENDLIST/*DEBUG*/
   value and possibly xref [probably not] are still being referred to */
 		}
 	ENDLIST
-/*show_node(expd);/*DEBUG*/
+#ifdef DEBUG
+	show_node(expd);
+#endif
 }
 
 advanced_person_edit (root0)
@@ -73,8 +76,10 @@ NODE root0;
 {
 	FILE *fp;
 
-/*llwprintf("advanced_person_edit: %s %s %s\n", nxref(root0), ntag(root0),
-nval(root0));/*DEBUG*/
+#ifdef DEBUG
+	llwprintf("advanced_person_edit: %s %s %s\n", nxref(root0), 
+		  ntag(root0),nval(root0));
+#endif
 	expand_tree(root0);
 	ASSERT(fp = fopen(editfile, LLWRITETEXT));
 	write_nodes(0, fp, NULL, expd, TRUE, TRUE, TRUE);
@@ -87,8 +92,10 @@ NODE root0;
 {
 	FILE *fp;
 
-/*llwprintf("advanced_family_edit: %s %s %s\n", nxref(root0), ntag(root0),
-nval(root0));/*DEBUG*/
+#ifdef DEBUG
+	llwprintf("advanced_family_edit: %s %s %s\n", nxref(root0),
+		  ntag(root0),nval(root0));
+#endif
 	expand_tree(root0);
 	ASSERT(fp = fopen(editfile, LLWRITETEXT));
 	write_nodes(0, fp, NULL, expd, TRUE, TRUE, TRUE);
@@ -101,13 +108,16 @@ nval(root0));/*DEBUG*/
 BOOLEAN expand_traverse (node)
 NODE node;
 {
-	NODE refd;
 	STRING key = value_to_xref(nval(node));
 	if (!key) return TRUE;
 	key = strsave(key);
-/*llwprintf("expand_traverse: %s %s\n", ntag(node), nval(node));/*DEBUG*/
+#ifdef DEBUG
+	llwprintf("expand_traverse: %s %s\n", ntag(node), nval(node));
+#endif
 	FORLIST(subs, el)
-/*llwprintf("expand_traverse: %s %s\n", key, rmvat(nval((NODE) el)));/*DEBUG*/
+#ifdef DEBUG
+	llwprintf("expand_traverse: %s %s\n", key, rmvat(nval((NODE) el)));
+#endif DEBUG
 		if (eqstr(key, rmvat(nval((NODE) el)))) {
 			stdfree(key);
 			return TRUE;

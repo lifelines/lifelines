@@ -44,9 +44,10 @@ typedef struct {
 	XNODE start[256];
 } *TRANTABLE;
 
-extern TRANTABLE create_trantable();
-extern TRANTABLE init_map_from_str();
-extern BOOLEAN translate_string();
+TRANTABLE create_trantable(STRING*, STRING*, INT);
+TRANTABLE init_map_from_str(STRING, INT, BOOLEAN*);
+BOOLEAN translate_string(TRANTABLE, STRING, STRING, INT);
+
 extern TRANTABLE tran_tables[];
 
 #endif /* _TRANSLAT_H */
