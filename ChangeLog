@@ -4,6 +4,10 @@
 
 	Add LINES-L mailing list to README.MAINTAINERS.
 
+	* ChangeLog src/gedlib/indiseq.c
+
+	Bugfix for name_to_indiseq (browse list not alphabetical). (sf#806495)
+
 Released 3.0.33 beta.
 
 2003-09-15 Perry Rapp
@@ -19,7 +23,7 @@ Released 3.0.33 beta.
 	src/gedlib/names.c src/hdrs/gedcom.h
 
 	Rewrite soundex handling in names for multiple soundexes.
-	Fix wildcard soundex handling for non-ASCII.
+	Fix wildcard soundex handling for non-ASCII. (sf#805701)
 
 	* ChangeLog NEWS src/gedlib/nodeio.c src/hdrs/gedcom.h
 	src/liflines/add.c src/liflines/edit.c
@@ -30,6 +34,7 @@ Released 3.0.33 beta.
 	src/gedlib/xlat.c src/hdrs/gedcom.h src/hdrs/xlat.h
 
 	Prepend UTF-8 BOM to edit file on Windows when appropriate.
+	(sf#806300)
 
 	* ChangeLog NEWS configure.in build/msvc6/llines/llines.rc
 	build/rpm/lifelines.spec docs/ll-devguide.xml
@@ -181,6 +186,7 @@ Released 3.0.33 beta.
 	* ChangeLog src/interp/intrpseq.c
 
 	Bugfix for set functions deleting temporary values too early.
+	(sf#804082)
 
 2003-09-10 Jens Arvidsson
 
@@ -220,7 +226,7 @@ Released 3.0.33 beta.
 
 	* ChangeLog src/gedlib/valtable.c
 
-	Fix user option editor to skip UTF-8 BOM.
+	Fix user option editor to skip UTF-8 BOM. (sf#803483)
 
 	* ChangeLog NEWS src/gedlib/translat.c src/gedlib/xlat.c
 	src/hdrs/translat.h src/hdrs/xlat.h

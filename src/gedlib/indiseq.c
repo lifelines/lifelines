@@ -1570,9 +1570,10 @@ name_to_indiseq (STRING name)
 			/* skip dupe check, because we do unique_indiseq below */
 			append_indiseq_null(seq, strsave(key), NULL, TRUE, TRUE);
 		}
-		namesort_indiseq(seq);
 		/* may have duplicates from multiple soundexes or wildcard searches */
 		unique_indiseq(seq);
+		/* people like to see lists alphabetically by name */
+		namesort_indiseq(seq);
 	}
 	make_list_empty(list);
 	remove_list(list, 0);
