@@ -97,8 +97,11 @@ iconv_trans (CNSTRING src, CNSTRING dest, CNSTRING sin, ZSTR zout, CNSTRING ille
 	}
 	/* TODO: What about UTF-16 or UTF-32 ? */
 
+	zs_reserve(zout, (unsigned int)(inlen*expand+6));
+
 	if (!inlen) {
-		return TRUE;
+		outptr = zs_str(zout);
+		goto icvt_terminate_and_exit;
 	}
 
 	/* testing recursive transliteration in my private iconv, Perry, 2002.07.11 */
@@ -106,7 +109,6 @@ iconv_trans (CNSTRING src, CNSTRING dest, CNSTRING sin, ZSTR zout, CNSTRING ille
 	iconvctl(ict, ICONV_SET_TRANSLITERATE, &transliterate);
 #endif
 
-	zs_reserve(zout, (unsigned int)(inlen*expand+6));
 
 	inptr = sin;
 	outptr = zs_str(zout);
@@ -152,6 +154,7 @@ cvting:
 		goto cvting;
 	}
 
+icvt_terminate_and_exit:
 	/* zero-terminate with appropriately wide zero */
 	if (chwidth > 1) {
 		*outptr++=0;
