@@ -1,3 +1,20 @@
+2004-07-18 Stephen Dum
+	remove: ps-anc2.ll   ps-anc5.ll   ps-anc6.ll   ps-anc7.ll   ps-anc8.ll
+	add: ps-anc.ll
+	remove: regvital1.ll 
+	remove: famrep1.ll famrep3.ll famrep6.ll; add: famrep.ll
+	remove: indiv2.r.ll  indiv3.ll: add: indiv.ll
+	remove: pdesc1.ll pdesc2.r.ll pdesc3.ll pdesc4.ll; add: pdesc.ll
+	remove: namefreq2.ll; add: namefreq.ll 
+	remove: select.li; add: select.ll
+	update Makefile.am
+
+	Starting clean up of reports.  Removed instances where a reports
+	multiple versions are checked in as report1.ll, report2.ll, etc.
+	They are now checked in as report.ll.  The earlier versions are
+	checked in as report.ll so that the history of the earlier versions
+	are preserved.
+   
 2004-06-18  Marc Nozell
 
 	* reports/register-tex.ll: Checked in updates by Robert Simms that
