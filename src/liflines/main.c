@@ -180,6 +180,7 @@ char **argv;
 			break;
 		case '?':
 			llwprintf(usage);
+			sleep(5);
 			exit_it(1);
 		}
 	}
