@@ -21,6 +21,13 @@
 
 	Add LIBICONV to link (needed if gettext doesn't pull it in).
 
+	* ChangeLog configure.in arch/Makefile.am reports/exercise.ll
+	stdlib/Makefile.am
+	*NEW arch/bind_textdomain_codeset.c arch/ngettext.c
+	*DELETED stdlib/llnls.c:
+
+	Move null nls implementations to arch.
+
 2002-06-13 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/editvtab.c gedlib/init.c gedlib/names.c

@@ -22,7 +22,9 @@ I run this report before checking in code changes.
 */
 
 
-char_encoding("UTF-8") /* TODO: put in non-ascii tests */
+/* I'll use UTF-8 escapes instead of actually typing UTF-8 */
+/* char_encoding("UTF-8") */
+
 require("lifelines-reports.version:1.3")
 option("explicitvars") /* Disallow use of undefined variables */
 

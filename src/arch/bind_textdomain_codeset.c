@@ -22,7 +22,7 @@
    SOFTWARE.
 */
 /*=============================================================
- * llnls.c -- Wrappers for running with old gettext
+ * bind_textdomain_codeset.c -- Null replacement for bind_textdomain_codeset
  *   Created: 2002 by Perry Rapp
  *==============================================================*/
 
@@ -35,34 +35,6 @@
  *********************************************/
 
 #if ENABLE_NLS
-/*
-  null replacements in case they're using an old gettext
-  by pulling these in, we can avoid ifdefs in the main code
-  and avoid implementing these with macros
-*/
-#if !HAVE_NGETTEXT
-char * ngettext (const char * msgid, const char * msgid_plural,
-                  unsigned long int n)
-{
-	return n>1 ? (char *)msgid_plural : (char *)msgid;
-}
-
-char * dngettext (const char * domainname,
-                   const char * msgid, const char * msgid_plural,
-                   unsigned long int n)
-{
-	domainname=domainname; /* unused */
-	return n>1 ? (char *)msgid_plural : (char *)msgid;
-}
-char * dcngettext (const char * domainname,
-                    const char * msgid, const char * msgid_plural,
-                    unsigned long int n, int category)
-{
-	domainname=domainname; /* unused */
-	category=category; /* unused */
-	return n>1 ? (char *)msgid_plural : (char *)msgid;
-}
-#endif /* !HAVE_NGETTEXT */
 #if !HAVE_BIND_TEXTDOMAIN_CODESET
 char * bind_textdomain_codeset (const char * domainname,
                                 const char * codeset)

@@ -143,6 +143,9 @@ dnl Check for replacement functions
 AC_REPLACE_FUNCS( sleep scandir alphasort getopt snprintf vsnprintf \
 	_llnull langinfo)
 
+dnl gettext functions not present in old gettext versions
+AC_REPLACE_FUNCS( ngettext bind_textdomain_codeset)
+
 dnl AC_CHECK_FUNCS(strerror perror strsignal psignal getopt getopt_long random)
 dnl investigate using AC_MSG_ERROR for error reporting
 dnl echo Looking for OPTIONAL library functions
