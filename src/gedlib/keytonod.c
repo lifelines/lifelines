@@ -767,12 +767,14 @@ get_record_for_cel (CACHEEL cel)
 	node = cnode(cel);
 	ASSERT(nxref(node));
 
-	rec = alloc_new_record();
+	key = ckey(cel);
+
+	rec = make_new_record_with_info(key, cel);
 	record_set_cel(rec, cel);
 	crecord(cel) = rec;
 	key = node_to_key(node);
 
-	set_record_key_info(rec, key[0], atoi(key+1));
+	set_record_key_info(rec, key);
 	addref_record(rec);
 	return rec;
 }

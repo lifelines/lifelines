@@ -30,6 +30,7 @@ struct tag_record { /* RECORD */
  * local function prototypes
  *********************************************/
 
+static RECORD alloc_new_record(void);
 static void free_rec(RECORD rec);
 static BOOLEAN is_record_loaded (RECORD rec);
 static void record_destructor(VTABLE *obj);
@@ -55,7 +56,7 @@ static int f_nrecs=0;
  *  perhaps should use special allocator like nodes
  * returns addref'd record
  *=================================*/
-RECORD
+static RECORD
 alloc_new_record (void)
 {
 	RECORD rec;
@@ -183,17 +184,29 @@ record_remove_cel (RECORD rec, CACHEEL cel)
 	rec->rec_cel = 0;
 }
 /*===================================
+ * make_new_record_with_info -- creates new record
+ *  with key and cacheel set
+ * returns addref'd record
+ *=================================*/
+RECORD
+make_new_record_with_info (CNSTRING key, CACHEEL cel)
+{
+	RECORD rec = alloc_new_record();
+	set_record_key_info(rec, key);
+	record_set_cel(rec, cel);
+	return rec;
+}
+/*===================================
  * set_record_key_info -- put key info into record
  * Also set the xref of the root node correctly
- * Created: 2001/02/04, Perry Rapp
  *=================================*/
 void
-set_record_key_info (RECORD rec, char ntype, INT keynum)
+set_record_key_info (RECORD rec, CNSTRING key)
 {
 	char xref[12];
-	char key[MAXKEYWIDTH+1];
-	NODE node;
-	sprintf(key, "%c%d", ntype, keynum);
+	NODE node=0;
+	INT keynum = atoi(key+1);
+	char ntype = key[0];
 	sprintf(xref, "@%s@", key);
 	strcpy(rec->rec_nkey.key, key);
 	rec->rec_nkey.keynum = keynum;
@@ -259,9 +272,9 @@ is_record_temp (RECORD rec)
  * Created: 2001/02/04, Perry Rapp
  *=================================*/
 void
-init_new_record (RECORD rec, char ntype, INT keynum)
+init_new_record (RECORD rec, CNSTRING key)
 {
-	set_record_key_info(rec, ntype, keynum);
+	set_record_key_info(rec, key);
 }
 /*===================================
  * create_record_for_keyed_node -- 
@@ -272,12 +285,10 @@ RECORD
 create_record_for_keyed_node (NODE node, CNSTRING key)
 {
 	RECORD rec = alloc_new_record();
-	INT keynum = 0;
 	if (!key)
 		key = nxref(node);
-	keynum = ll_atoi(&key[1], 0);
 	rec->rec_top = node;
-	init_new_record(rec, key[0], keynum);
+	init_new_record(rec, key);
 	return rec;
 }
 /*===================================

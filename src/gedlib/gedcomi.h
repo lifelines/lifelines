@@ -21,13 +21,14 @@ RECORD id_by_key(CNSTRING name, char ctype);
 
 /* node.c */
 void check_node_leaks(void);
-void set_record_key_info(RECORD rec, char ntype, INT keynum);
+void set_record_key_info(RECORD rec, CNSTRING key);
 
 /* record.c */
 void check_record_leaks(void);
 RECORD create_record_for_keyed_node(NODE node, CNSTRING key);
 RECORD create_record_for_unkeyed_node(NODE node);
 NODE is_record_temp(RECORD rec);
+RECORD make_new_record_with_info(CNSTRING key, CACHEEL cel);
 void record_remove_cel(RECORD rec, CACHEEL cel);
 void record_set_cel(RECORD rec, CACHEEL cel);
 

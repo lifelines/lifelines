@@ -308,7 +308,7 @@ void init_disp_reformat(void);
 BOOLEAN init_lifelines_db(void);
 BOOLEAN init_lifelines_global(STRING configfile, STRING * pmsg, void (*notify)(STRING db, BOOLEAN opening));
 CNSTRING init_get_config_file(void);
-void init_new_record(RECORD rec, char ntype, INT keynum);
+void init_new_record(RECORD rec, CNSTRING key);
 BOOLEAN init_valtab_from_file(STRING, TABLE, XLAT, INT sep, STRING*);
 BOOLEAN init_valtab_from_rec(CNSTRING, TABLE, INT sep, STRING*);
 BOOLEAN init_valtab_from_string(CNSTRING, TABLE, INT sep, STRING*);
@@ -527,7 +527,6 @@ struct tag_node_iter {
 	NODE next;
 };
 typedef struct tag_node_iter * NODE_ITER;
-RECORD alloc_new_record(void);
 void begin_node_it(NODE node, NODE_ITER nodeit);
 INT fam_to_husb(RECORD frec, RECORD * prec);
 NODE fam_to_husb_node(NODE);
