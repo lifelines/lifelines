@@ -114,39 +114,26 @@ typedef struct {
 /*====================================
  * BTREE library function declarations 
  *==================================*/
-INDEX  getindex(BTREE, FKEY);
-INDEX  readindex(STRING, FKEY);
-INDEX  crtindex(BTREE);
-STRING fkey2path(FKEY);
-STRING rkey2str(RKEY);
-FKEY   path2fkey(STRING);
-RKEY   str2rkey(STRING);
-BTREE  openbtree(STRING, BOOLEAN, BOOLEAN);
-BLOCK  crtblock(BTREE);
-RECORD getrecord(BTREE, RKEY, INT*);
-BLOCK  allocblock(void);
-void   writeindex(STRING, INDEX);
-void   addkey(BTREE, FKEY, RKEY, FKEY);
+
+/* file.c */
 BOOLEAN addfile(BTREE, RKEY, STRING);
 BOOLEAN getfile(BTREE, RKEY, STRING);
-void   initcache(BTREE, INT);
-BOOLEAN cacheindex(BTREE, INDEX);
-void   putindex(BTREE, INDEX);
-void   putheader(BTREE, BLOCK);
-BOOLEAN initbtree(STRING);
-int    llmkdir(STRING);
-BOOLEAN mkalldirs(char *);
+
+/* opnbtree.c */
+BTREE openbtree(STRING, BOOLEAN, BOOLEAN);
 BOOLEAN closebtree(BTREE);
+
+/* record.c */
 BOOLEAN addrecord(BTREE, RKEY, RECORD, INT);
-void   filecopy(FILE*, INT, FILE*);
-void   movefiles(STRING, STRING);
+RECORD getrecord(BTREE, RKEY, INT*);
 BOOLEAN isrecord(BTREE, RKEY);
+
+/* traverse.c */
+BOOLEAN traverse(BTREE, INDEX, BOOLEAN (*ifunc)(), BOOLEAN (*dfunc)());
+
+/* utils.c */
 STRING rkey2str(RKEY);
 RKEY   str2rkey(STRING);
-STRING fkey2path(FKEY);
-FKEY   path2fkey(STRING);
-void   nextfkey(BTREE);
-BOOLEAN newmaster(BTREE, INDEX);
 
 extern INT bterrno;
 

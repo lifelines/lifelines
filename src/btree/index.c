@@ -32,7 +32,11 @@
 #include "standard.h"
 #include "btree.h"
 
+#include "index.h"
+#include "utils.h"
+
 static INT incache (BTREE, FKEY);
+static BOOLEAN cacheindex (BTREE, INDEX);
 
 /*======================================
  * crtindex - Create new index for btree
@@ -105,7 +109,7 @@ initcache (BTREE btree, /* btree handle */
 /*============================================
  * cacheindex -- Place INDEX or BLOCK in cache
  *==========================================*/
-BOOLEAN
+static BOOLEAN
 cacheindex (BTREE btree, /* btree handle */
             INDEX index) /* INDEX or BLOCK */
 {

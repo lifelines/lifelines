@@ -30,6 +30,8 @@
 #include "standard.h"
 #include "btree.h"
 
+#include "utils.h"
+
 /*========================================
  * allocblock -- Allocate memory for BLOCK
  *======================================*/

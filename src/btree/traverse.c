@@ -27,6 +27,8 @@
 #include "standard.h"
 #include "btree.h"
 
+#include "index.h"
+
 /*========================================
  * traverse - Traverse BTREE, doing things
  *======================================*/

@@ -34,6 +34,14 @@
 #include "standard.h"
 #include "btree.h"
 
+#include "addkey.h"
+#include "block.h"
+#include "index.h"
+#include "utils.h"
+
+static void filecopy (FILE*, INT, FILE*);
+static void movefiles (STRING, STRING);
+
 /*=================================
  * addrecord -- Add record to BTREE
  *===============================*/
@@ -255,7 +263,7 @@ splitting:
 /*======================================================
  * filecopy -- Copy record from one data file to another
  *====================================================*/
-void
+static void
 filecopy (FILE *fo,
           INT len,
           FILE *fn)
@@ -344,7 +352,7 @@ getrecord (BTREE btree,
 /*=======================================
  * movefiles -- Move first file to second
  *=====================================*/
-void
+static void
 movefiles (STRING from,
            STRING to)
 {

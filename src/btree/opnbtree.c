@@ -38,6 +38,13 @@
 #include "liflines.h"
 #include "screen.h"
 
+#include "index.h"
+#include "opnbtree.h"
+#include "utils.h"
+
+static BOOLEAN initbtree (STRING basedir);
+static int llmkdir (STRING dir);
+
 /*============================================
  * openbtree -- Alloc and init BTREE structure
  *==========================================*/
@@ -128,7 +135,7 @@ openbtree (STRING dir,          /* btree base dir */
 /*==================================
  * initbtree -- Initialize new BTREE
  *================================*/
-BOOLEAN
+static BOOLEAN
 initbtree (STRING basedir)
 {
 	KEYFILE kfile;
@@ -206,7 +213,7 @@ initbtree (STRING basedir)
 /*=====================================================
  * llmkdir -- Make directory (some UNIXes have a mkdir)
  *===================================================*/
-int
+static int
 llmkdir (STRING dir)    /* dir to create */
 {
 	static int status;

@@ -31,6 +31,9 @@
 #include "standard.h"
 #include "btree.h"
 
+#include "opnbtree.h"
+#include "utils.h"
+
 INT bterrno = 0;
 
 /*=========================================

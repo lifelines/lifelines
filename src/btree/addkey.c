@@ -31,6 +31,9 @@
 #include "standard.h"
 #include "btree.h"
 
+#include "index.h"
+#include "utils.h"
+
 /*===========================
  * addkey -- Add key to BTREE
  *=========================*/
