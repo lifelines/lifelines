@@ -1,0 +1,69 @@
+## Produced from ans2uni.out from 
+##  http://heiner-eichmann.de/gedcom/ans2uni.out
+##  Perry Rapp, 2002-1214
+## Remainder of file from ans2uni.out:
+## created: 2001-03-19
+$A1	$C5$81	# u0141 #latin capital letter L with stroke
+$A2	$C3$98	# u00d8 #latin capital letter O with stroke
+$A3	$C4$90	# u0110 #latin capital letter D with stroke
+$A4	$C3$9E	# u00de #latin capital letter thorn
+$A5	$C3$86	# u00c6 #latin capital letter AE
+$A6	$C5$92	# u0152 #latin capital ligature OE
+$A7	$CA$B9	# u02b9 #modified letter prime
+$A8	$C2$B7	# u00b7 #middle dot
+$A9	$E2$99$AD	# u266d #music flat sign
+$AA	$C2$AE	# u00ae #registered sign
+$AB	$C2$B1	# u00b1 #plus-minus sign
+$AC	$C6$A0	# u01a0 #latin capital letter O with horn
+$AD	$C6$AF	# u01af #latin capital letter U with horn
+$AE	$CA$BC	# u02bc #modifier letter apostrophe
+$B0	$CA$BB	# u02bb #modifier letter turned comma
+$B1	$C5$82	# u0142 #latin small letter L with stroke
+$B2	$C3$B8	# u00f8 #latin small letter O with stroke
+$B3	$C4$91	# u0111 #latin small letter D with stroke
+$B4	$C3$BE	# u00fe #latin small letter thorn
+$B5	$C3$A6	# u00e6 #latin small letter AE
+$B6	$C5$93	# u0153 #latin small ligature OE
+$B7	$CA$BA	# u02ba #modified letter double prime
+$B8	$C4$B1	# u0131 #latin small letter dotless i
+$B9	$C2$A3	# u00a3 #pound sign
+$BA	$C3$B0	# u00f0 #latin small letter eth
+$BC	$C6$A1	# u01a1 #latin small letter O with horn
+$BD	$C6$B0	# u01b0 #latin small letter U with horn
+$C0	$C2$B0	# u00b0 #degree sign
+$C1	$E2$84$93	# u2113 #script small L
+$C2	$E2$84$97	# u2117 #sound recording copyright
+$C3	$C2$A9	# u00a9 #copyright sign
+$C4	$E2$99$AF	# u266f #music sharp sign
+$C5	$C2$BF	# u00bf #inverted question mark
+$C6	$C2$A1	# u00a1 #inverted exclamation mark
+$CF	$C3$9F	# u00df #latin small letter sharp S
+$E0	$CC$89	# u0309 #combining hook above
+$E1	$CC$80	# u0300 #combining grave accent
+$E2	$CC$81	# u0301 #combining acute accent
+$E3	$CC$82	# u0302 #combining circumflex accent
+$E4	$CC$83	# u0303 #combining tilde
+$E5	$CC$84	# u0304 #combining macron
+$E6	$CC$86	# u0306 #combining breve
+$E7	$CC$87	# u0307 #combining dot above
+$E8	$CC$88	# u0308 #combining diaeresis
+$E9	$CC$8C	# u030c #combining caron
+$EA	$CC$8A	# u030a #combining ring above
+$EB	$EF$B8$A0	# ufe20 #combining ligature left half
+$EC	$EF$B8$A1	# ufe21 #combining ligature right half
+$ED	$CC$95	# u0315 #combining comma above right
+$EE	$CC$8B	# u030b #combining double acute accent
+$EF	$CC$90	# u0310 #combining candrabindu
+$F0	$CC$A7	# u0327 #combining cedilla
+$F1	$CC$A8	# u0328 #combining ogonek
+$F2	$CC$A3	# u0323 #combining dot below
+$F3	$CC$A4	# u0324 #combining diaeresis below
+$F4	$CC$A5	# u0325 #combining ring below
+$F5	$CC$B3	# u0333 #combining double low line
+$F6	$CC$B2	# u0332 #combining low line
+$F7	$CC$A6	# u0326 #combining comma below
+$F8	$CC$A1	# u0321 #combining ogonek
+$F9	$CC$AE	# u032e #combining breve below
+$FA	$EF$B8$A2	# ufe22 #combining double tilde left half
+$FB	$EF$B8$A3	# ufe23 #combining double tilde right half
+$FE	$CC$93	# u0313 #combining comma above

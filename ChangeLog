@@ -15,6 +15,13 @@
 	Remove internal conversions to display codeset; this only needs to
 	happen in cscurses.
 
+	*  ChangeLog reports/st/st_convert.ll src/gedlib/xlat.c
+	*NEW tt/ANSEL_UTF-8.tt
+	*NEW tt/UTF-8_ANSEL.tt:
+
+	Add translation tables for ANSEL<->UTF-8.
+	Add ANSEL<->UTF-8 test to self-test.
+
 2002-12-13 Perry Rapp
 
 	* ChangeLog src/gedlib/charmaps.c src/gedlib/codesets.c

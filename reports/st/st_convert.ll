@@ -1,5 +1,5 @@
 /*
- * @version        1.0
+ * @version        1.01 (2002-12-14)
  * @author         Perry Rapp
  * @category       self-test
  * @output         none
@@ -35,7 +35,7 @@ proc convert_tests()
 	call checkconv("silver fox", "UTF-8", "silver fox", "ISO-8859-1")
 	call checkconv("silver fox", "UTF-8", "silver fox", "ISO-8859-2")
 
-	/* LATIN SMALL LETTER N WITH TILDE */
+	/* LATIN SMALL LETTER N WITH TILDE u000F1 */
 	call checkconv("$C3$B1", "UTF-8", "$F1", "ISO-8859-1")
 
 	/* LATIN SMALL LETTER A WITH ACUTE u000E1 */
@@ -47,6 +47,7 @@ proc convert_tests()
 
 	/* LATIN CAPITAL LETTER L WITH STROKE u00141 */
 	call checkconv("$C5$81", "UTF-8", "$A3", "ISO-8859-2")
+	call checkconv("$C5$81", "UTF-8", "$A1", "ANSEL")
 
 	/* LATIN SMALL LETTER S WITH CEDILLA u0015F */
 	call checkconv("$C5$9F", "UTF-8", "$BA", "ISO-8859-2")
@@ -55,9 +56,16 @@ proc convert_tests()
 	/* LATIN SMALL LETTER G WITH CEDILLA u00123 */
 	call checkconv("$C4$A3", "UTF-8", "$BB", "ISO-8859-4")
 
+	/* LATIN SMALL LETTER AE u000E6 */
+	call checkconv("$C3$A6", "UTF-8", "$E6", "ISO-8859-1")
+	call checkconv("$C3$A6", "UTF-8", "$B5", "ANSEL")
 
 	/* LATIN CAPITAL LETTER N WITH CARON */
-/*	call checkconv("$C3$A1", "UTF-8", "$u00147_", "ISO-8859-2") */
+	call checkconv("$C5$87", "UTF-8", "$D2", "ISO-8859-2")
+
+	/* LATIN CAPITAL LETTER THORN u000DE */
+	call checkconv("$C3$9E", "UTF-8", "$DE", "ISO-8859-1")
+	call checkconv("$C3$9E", "UTF-8", "$A4", "ANSEL")
 }
 
 /* test a conversion and its reverse */

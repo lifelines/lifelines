@@ -229,8 +229,9 @@ xl_get_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 		XLSTEP xstep = create_iconv_step(src, dest);
 		enqueue_list(xlat->steps, xstep);
 	} else {
-		add_dyntt_step(xlat
-			, get_conversion_dyntt(zs_str(zsrc), zs_str(zdest)));
+		DYNTT dyntt = get_conversion_dyntt(zs_str(zsrc), zs_str(zdest));
+		if (dyntt)
+			add_dyntt_step(xlat, dyntt);
 	}
 
 	/* in destination codeset, do subcodings requested by source */
