@@ -1,3 +1,10 @@
+2001-01-28 Perry Rapp <puddle@users.sourceforge.net>
+
+	* hdrs/screen.h liflines/browse.c liflines/llinesi.h
+	liflines/screen.c
+	NEW hdrs/menuitem.h liflines/menuitem.c:
+	New paging & resizable menu system.
+
 2001-01-27 Marc Nozell <marc@nozell.com>
 
 	* stdlib/Makefile.am: Fix UNIX build.
