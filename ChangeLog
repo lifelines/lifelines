@@ -1,3 +1,7 @@
+2001-01-02  Marc Nozell  <nozell@dl360r5.ispworks.com>
+
+	* hdrs/Makefile.am: Removed interpi.h (its in interp/)
+
 2001-01-02  Marc Nozell  <marc@nozell.com>
 
 	* liflines/valgdcom.c: Add another prototype, include llinesi.h.
