@@ -3463,6 +3463,10 @@ __indi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	p = str = pvalue_to_string(val);
+	if (!p) {
+		delete_pvalue(val);
+		return NULL;
+	}
 	while ((c = (uchar)*p++) && chartype(c) != DIGIT)
 		;
 	if (c == 0) {

@@ -5,6 +5,10 @@
 
 	Convert tagtable into generic table.
 
+	* ChangeLog src/interp/builtin.c
+
+	Modify __indi not to crash on empty string.
+
 2005-01-23 Perry Rapp
 
 	* ChangeLog src/gedlib/date.c src/stdlib/table.c
