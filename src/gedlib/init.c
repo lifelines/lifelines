@@ -453,7 +453,7 @@ open_database_impl (LLDATABASE lldb, INT alteration)
 	if (alteration > 0 && !alterdb(alteration)) return FALSE;
 
 	/* call btree module to do actual open of BTR */
-	if (!(btree = openbtree(readpath, FALSE, writ, immutable)))
+	if (!(btree = bt_openbtree(readpath, FALSE, writ, immutable)))
 		return FALSE;
 	lldb_set_btree(lldb, btree);
 	/* we have to set the global variable readonly correctly, because
@@ -541,7 +541,7 @@ create_database (STRING dbpath)
 	readpath_file=strsave(lastpathname(dbpath));
 	readpath=strsave(dbpath);
 
-	if (!(btree = openbtree(dbpath, TRUE, 2, immutable))) {
+	if (!(btree = bt_openbtree(dbpath, TRUE, 2, immutable))) {
 		/* open failed so clean up, preserve bterrno */
 		int myerr = bterrno;
 		lldb_close(lldb);

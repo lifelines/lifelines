@@ -159,7 +159,7 @@ RECORD_STATUS write_record_to_textfile(BTREE btree, RKEY rkey, STRING file, TRAN
 /* opnbtree.c */
 BOOLEAN closebtree(BTREE);
 void describe_dberror(INT dberr, STRING buffer, INT buflen);
-BTREE openbtree(STRING dir, BOOLEAN cflag, INT writ, BOOLEAN immut);
+BTREE bt_openbtree(STRING dir, BOOLEAN cflag, INT writ, BOOLEAN immut);
 BOOLEAN validate_keyfile2(KEYFILE2 *);
 
 /* index.c */

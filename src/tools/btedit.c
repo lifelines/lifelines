@@ -78,7 +78,7 @@ main (int argc,
 	}
 	dbname = argv[1];
 	key = argv[2];
-	if (!(btree = openbtree(dbname, cflag, writ, immut))) {
+	if (!(btree = bt_openbtree(dbname, cflag, writ, immut))) {
 		printf("could not open btree: %s\n", dbname);
 		return (1);
 	}

@@ -1037,7 +1037,7 @@ main (int argc,
 		printf("%s\n", msg);
 		goto done;
 	}
-	if (!(BTR = openbtree(dbname, cflag, writ, immut))) {
+	if (!(BTR = bt_openbtree(dbname, cflag, writ, immut))) {
 		char buffer[256];
 		describe_dberror(bterrno, buffer, ARRSIZE(buffer));
 		puts(buffer);

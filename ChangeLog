@@ -4,6 +4,15 @@
 
 	Simplify error return in open_database_impl.
 
+	* ChangeLog build/msvc6/btedit/bteditCmd.dsp
+	build/msvc6/dbverify/dbverifyCmd.dsp src/btree/opnbtree.c
+	src/gedlib/init.c src/hdrs/btree.h src/tools/btedit.c
+	src/tools/dbverify.c
+
+	Prefix openbtree with bt_.
+	Fix bteditCmd.dsp (MSVC6 project) to compile.
+	Fix dbverifyCmd.dsp (MSVC6 project) to compile.
+
 2004-01-17 Perry Rapp
 
 	* ChangeLog src/btree/file.c src/btree/record.c

@@ -101,7 +101,7 @@ validate_keyfile2 (KEYFILE2 * kfile2)
 	return TRUE;
 }
 /*============================================
- * openbtree -- Alloc and init BTREE structure
+ * bt_openbtree -- Alloc and init BTREE structure
  *  If it fails, it returns NULL and sets the global bterrno
  *  dir:   [in] btree base dir
  *  cflag: [in] create btree if no exist?
@@ -111,7 +111,7 @@ validate_keyfile2 (KEYFILE2 * kfile2)
  *  as appropriate (eg, if keyfile couldn't be opened in readwrite mode)
  *==========================================*/
 BTREE
-openbtree (STRING dir, BOOLEAN cflag, INT writ, BOOLEAN immut)
+bt_openbtree (STRING dir, BOOLEAN cflag, INT writ, BOOLEAN immut)
 {
 	BTREE btree;
 	char scratch[200];
