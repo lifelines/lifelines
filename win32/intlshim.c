@@ -33,7 +33,7 @@ static void unload_dll(void);
 static HINSTANCE f_hinstDll=0;
 static int f_failed=0;
 static char f_dllpath[MAX_PATH]="";
-static char * f_defaults[] = { "gettext.dll", "libintl.dll" };
+static char * f_defaults[] = { "gettext.dll", "libintl.dll", "intl.dll" };
 
 
 typedef char * (*gettext_type)(const char *m);

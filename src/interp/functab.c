@@ -130,6 +130,7 @@ BUILTINS builtins[] = {
 	{"getrecord",       1,    1,    __getrecord},
 	{"getstr",          1,    2,    __getstr},
 	{"getstrmsg",       2,    2,    __getstr},
+	{"gettext",         1,    1,    __gettext},
 	{"gettoday",        0,    0,    __gettoday},
 	{"givens",          1,    1,    __givens},
 	{"gt",              2,    2,    __gt},

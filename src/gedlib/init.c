@@ -71,7 +71,6 @@ extern STRING illegal_char;
 static void add_dbs_to_list(LIST dblist, LIST dbdesclist, STRING dir);
 static STRING getdbdesc(STRING path, STRING userpath);
 static void init_win32_gettext_shim(void);
-static void set_gettext_codeset(CNSTRING codeset);
 static void update_db_options(void);
 
 /*********************************************
@@ -164,7 +163,7 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 
 	/* until we have an internal codeset (which is until we open a database)
 	we want output in display codeset */
-	set_gettext_codeset(gui_codeset_out);
+	set_gettext_codeset(PACKAGE, gui_codeset_out);
 
 	/* allow run-time specification of locale directory */
 	/* (LOCALEDIR is compile-time) */
@@ -250,8 +249,8 @@ init_win32_gettext_shim (void)
  * set_gettext_codeset -- Tell gettext what codeset we want
  * Created: 2002/11/28 (Perry Rapp)
  *===============================*/
-static void
-set_gettext_codeset (CNSTRING codeset)
+void
+set_gettext_codeset (CNSTRING domain, CNSTRING codeset)
 {
 #if ENABLE_NLS
 #ifdef HAVE_BIND_TEXTDOMAIN_CODESET
@@ -278,8 +277,9 @@ set_gettext_codeset (CNSTRING codeset)
 		*/
 		strupdate(&prevcodeset, gui_codeset_out);
 	}
-	bind_textdomain_codeset(PACKAGE, prevcodeset);
-	locales_notify_uicodeset_changes();
+	bind_textdomain_codeset(domain, prevcodeset);
+	if (eqstr(domain, PACKAGE))
+		locales_notify_uicodeset_changes();
 #endif /* HAVE_BIND_TEXTDOMAIN_CODESET */
 #endif /* ENABLE_NLS */
 }
@@ -690,7 +690,7 @@ update_db_options (void)
 		strupdate(&int_codeset, str);
 		uu8 = is_codeset_utf8(int_codeset);
 		/* always translate to internal codeset */
-		set_gettext_codeset(int_codeset);
+		set_gettext_codeset(PACKAGE, int_codeset);
 		/* need to reload all predefined codeset conversions */
 		transl_load_xlats();
 	}

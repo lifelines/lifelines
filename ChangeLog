@@ -1,5 +1,16 @@
 2003-05-18 Perry Rapp
 
+	* ChangeLog src/gedlib/init.c src/hdrs/gedcom.h
+	src/hdrs/interp.h src/hdrs/version.h src/interp/alloc.c
+	src/interp/builtin.c src/interp/functab.c src/interp/interp.c
+	src/interp/interpi.h win32/intlshim.c
+
+	Add report language gettext.
+	Fix gettext (intl) shim to recognize intl.dll (the name used
+	by gettext-0.12).
+
+2003-05-18 Perry Rapp
+
 	* ChangeLog src/hdrs/version.h
 
 	Make version 3.0.28p1 (includes compile guards needed for OS/X).

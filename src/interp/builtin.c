@@ -245,6 +245,36 @@ __getindiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*==================================+
+ * __gettext -- translate to ambient locale
+ *   usage: gettext(STRING) --> STRING
+ *=================================*/
+PVALUE
+__gettext (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+	STRING str=0,str2=0,textdomain=0,localepath=0;
+	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
+	PVALUE newval=0;
+	if (*eflg) {
+		prog_error(node, nonstr1, "gettext");
+		return NULL;
+	}
+	str = pvalue_to_string(val);
+#if ENABLE_NLS
+	textdomain = zs_str(irptinfo(node)->textdomain);
+	localepath = zs_str(irptinfo(node)->localepath);
+	bindtextdomain(textdomain, localepath);
+	set_gettext_codeset(textdomain, "work_around_set_gettext_codeset_cache");
+	set_gettext_codeset(textdomain, int_codeset);
+	str2 = irptinfo(node)->fullpath;
+	str2 = _(str);
+	bindtextdomain(PACKAGE, localepath);
+	str = str2;
+#endif
+	newval = create_pvalue_from_string(str);
+	delete_pvalue(val);
+	return newval;
+}
+/*==================================+
  * __gettoday -- Create today's event
  *   usage: gettoday() --> EVENT
  *=================================*/

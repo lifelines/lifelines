@@ -451,6 +451,7 @@ void rptlocale(void);
 void save_original_locales(void);
 BOOLEAN save_tt_to_file(INT ttnum, STRING filename);
 void set_displaykeys(BOOLEAN);
+void set_gettext_codeset(CNSTRING domain, CNSTRING codeset);
 void set_temp_node(NODE, BOOLEAN temp);
 STRING shorten_plac(STRING);
 void show_node(NODE node);

@@ -139,6 +139,7 @@ extern PVALUE __getint(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __getproperty(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __getrecord(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __getstr(PNODE, SYMTAB, BOOLEAN *);
+extern PVALUE __gettext(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __gettoday(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __givens(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __gt(PNODE, SYMTAB, BOOLEAN *);

@@ -2096,12 +2096,7 @@ pa_handle_include (PACTX pactx, PNODE node)
 	
 	/* if it is relative, get local path to give to find_program */
 	if (!is_absolute_path(newfname)) {
-		STRING filename;
-		localpath = irptinfo(node)->fullpath;
-		filename = lastpathname(localpath);
-		zstr = zs_newsubs(localpath, strlen(localpath)-strlen(filename)-1);
-		localpath = zs_str(zstr);
-		
+		localpath = zs_str(irptinfo(node)->localpath);
 	}
 
 	if (find_program(newfname, localpath, &fullpath)) {

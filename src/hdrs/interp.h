@@ -40,7 +40,10 @@
 #include "cache.h"
 
 struct tag_rptinfo {
-	STRING fullpath;
+	STRING fullpath; /* fully qualified path to file */
+	ZSTR localpath;  /* directory file is in */
+	ZSTR localepath; /* directory for message catalogs */
+	ZSTR textdomain; /* domain for message catalog for this report */
 	TABLE proctab;   /* all procs in this file */
 	TABLE functab;   /* all funcs in this file */
 	STRING codeset;  /* codeset of report */

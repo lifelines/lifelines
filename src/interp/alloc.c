@@ -43,6 +43,7 @@
 #include "feedback.h"
 #include "liflines.h"
 #include "codesets.h"
+#include "zstr.h"
 
 /*********************************************
  * global/exported variables
@@ -1070,11 +1071,24 @@ get_rptinfo (CNSTRING fullpath)
 		f_rptinfos = create_table_old();
 	rptinfo = (RPTINFO)valueof_ptr(f_rptinfos, fullpath);
 	if (!rptinfo) {
+		STRING filename=0;
+		ZSTR zstr=0;
+
 		rptinfo = (RPTINFO)stdalloc(sizeof(*rptinfo));
 		rptinfo->fullpath = strsave(fullpath);
 		rptinfo->functab = create_table_old();
 		rptinfo->proctab = create_table_old();
 		rptinfo->codeset = strsave(report_codeset_in);
+
+		/* calculate localpath & localepath for report gettext */
+		filename = lastpathname(fullpath);
+		zstr = zs_newsubs(fullpath, strlen(fullpath)-strlen(filename)-1);
+		rptinfo->localpath = zstr;
+		filename = concat_path_alloc(zs_str(zstr), "locale");
+		rptinfo->localepath = zs_news(filename);
+		strfree(&filename);
+		rptinfo->textdomain = zs_news("llreports"); /* for now, fixed textdomain */
+		
 		insert_table_ptr(f_rptinfos, strsave(fullpath), rptinfo);
 	}
 	return rptinfo;
