@@ -5,6 +5,10 @@
 	Fix autoadd_xref to put nodes in lifelines canonical order.
 	(rf. sf.net bug#1059724: Problem with add source/event/other commands)
 
+	* ChangeLog docs/ll-reportmanual.pdf
+
+	Change docs/ll-reportmanual.pdf to binary file type in cvs
+
 2005-01-01 Perry Rapp
 
 	* ChangeLog src/hdrs/arch.h src/interp/builtin.c
