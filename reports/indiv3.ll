@@ -1,12 +1,12 @@
 /*
- * @progname       indiv2
+ * @progname       indiv3
  * @version        3.0
  * @author         Simms
  * @category       
  * @output         Text
  * @description    
 
-   indiv2.ll
+   indiv3.ll
 
    Written by: Robert Simms, 27 Mar 1996
                rsimms@math.clemson.edu, http://www.math.clemson.edu/~rsimms
