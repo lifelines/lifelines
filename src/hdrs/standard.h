@@ -62,7 +62,12 @@
 
 #include "mystring.h"
 
-typedef unsigned char *STRING;
+/* Having 'char *' instead of 'unsigned char *' removes about */
+/* 1800 compiler warnings.  We still need to investigate *every* */
+/* instance where a STRING is dereferenced and the contents acted */
+/* upon directly to determine if there are sign problems */
+typedef char *STRING;
+
 #ifndef BOOLEAN
 #	define BOOLEAN int
 #endif
