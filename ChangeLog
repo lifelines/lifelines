@@ -5,7 +5,12 @@
 	* ChangeLog NEWS configure.in lifelines.spec hdrs/version.h
 	win32/msvc/llines/llines.rc:
 
-	Release 2.0.13.
+	Building release 2.0.13.
+
+	* configure.in po/LINGUAS po/de.po po/sv.po reports/Makefile.am
+
+	Building release 2.0.13.
+	(exercise.ll wasn't in reports/Makefile.am)
 
 2002-05-25 Perry Rapp <puddle@users.sourceforge.net>
 
