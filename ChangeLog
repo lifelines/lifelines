@@ -1,3 +1,9 @@
+2003-05-26 Steve Dum
+       * ChangeLog build/rpm/lifelines.spec
+
+       add index.html, boc.gif and ll.png to the distribution.
+       fixed a typo in the spec's file.
+
 2003-05-18 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c src/hdrs/gedcom.h
