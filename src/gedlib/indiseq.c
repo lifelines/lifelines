@@ -1386,10 +1386,11 @@ ancestor_indiseq (INDISEQ seq)
 	/* table lists people already listed (values unused) */
 	TABLE tab;
 	LIST anclist, genlist;
-	INDISEQ anc;
-	NODE indi, fath, moth;
+	INDISEQ anc=0;
+	NODE indi=0;
 	STRING key, pkey;
-	INT gen;
+	INT gen=0;
+	INT fnum=0, snum=0;
 	UNION uval;
 	if (!seq) return NULL;
 		/* table of people already added */
@@ -1406,26 +1407,20 @@ ancestor_indiseq (INDISEQ seq)
 		key = (STRING) dequeue_list(anclist);
 		gen = (INT) dequeue_list(genlist) + 1;
 		indi = key_to_indi(key);
-		fath = indi_to_fath(indi);
-		moth = indi_to_moth(indi);
-		if (fath && !in_table(tab, pkey = indi_to_key(fath))) {
-				/* key copy for seq & list - owned by seq */
-			pkey = strsave(pkey);
-			uval = creategenval(seq, gen);
-			append_indiseq_pval(anc, pkey, NULL, uval.w, TRUE, TRUE);
-			enqueue_list(anclist, (VPTR)pkey);
-			enqueue_list(genlist, (VPTR)gen);
-			insert_table_int(tab, pkey, 0);
-		}
-		if (moth && !in_table(tab, pkey = indi_to_key(moth))) {
-				/* key copy for seq & list - owned by seq */
-			pkey = strsave(pkey);
-			uval = creategenval(seq, gen);
-			append_indiseq_pval(anc, pkey, NULL, uval.w, TRUE, TRUE);
-			enqueue_list(anclist, (VPTR)pkey);
-			enqueue_list(genlist, (VPTR)gen);
-			insert_table_int(tab, pkey, 0);
-		}
+
+		FORFAMCS(indi, fam, fath, moth, fnum)
+			FORFAMSPOUSES(fam, spouse, snum)
+				if (spouse && !in_table(tab, pkey = indi_to_key(spouse))) {
+						/* key copy for seq & list - owned by seq */
+					pkey = strsave(pkey);
+					uval = creategenval(seq, gen);
+					append_indiseq_pval(anc, pkey, NULL, uval.w, TRUE, TRUE);
+					enqueue_list(anclist, (VPTR)pkey);
+					enqueue_list(genlist, (VPTR)gen);
+					insert_table_int(tab, pkey, 0);
+				}
+			ENDFAMSPOUSES
+		ENDFAMCS
 	}
 	destroy_table(tab);
 	remove_list(anclist, NULL);

@@ -24,6 +24,12 @@
 
 	Simplify indi_to_spouses to use new FORFAMSPOUSES.
 
+	* ChangeLog src/gedlib/indiseq.c
+
+	Fix ancestor_indiseq to handle extra parents.
+	Fixes sf bug#1102138 (ancestorset doesn't include extra parents)
+
+
 2005-01-13 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp
