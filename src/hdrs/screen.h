@@ -37,11 +37,7 @@
 #undef TRUE
 #undef FALSE
 
-#ifdef WIN32
-#include "mycurses.h"
-#else
 #include <curses.h>
-#endif
 
 #include <stdarg.h>
 

@@ -31,11 +31,7 @@
 /* modified 2000-01-26 J.F.Chandler */
 
 #include "sys_inc.h"
-#ifdef WIN32
-#include "mycurses.h"
-#else
 #include <curses.h>
-#endif
 
 #include "llstdlib.h"
 #include "table.h"

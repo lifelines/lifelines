@@ -29,11 +29,7 @@
  *===========================================================*/
 
 #include "sys_inc.h"
-#ifndef WIN32
 #include <curses.h>
-#else
-#include "mycurses.h"
-#endif
 #include "llstdlib.h"
 #include "table.h"
 #include "translat.h"
