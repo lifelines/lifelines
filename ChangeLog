@@ -18,6 +18,13 @@
 	Implement most of goto from refn_scan.
 	Add placeholder browse_source,browse_event,browse_other.
 
+	* gedlib/keytonod.c gedlib/node.c gedlib/refns.c
+	gedlib/xreffile.c hdrs/gedcom.h liflines/advedit.c
+	liflines/browse.c liflines/llinesi.h liflines/main.c
+	liflines/newrecs.c liflines/screen.c liflines/show.c:
+	More NODE->NODE0s. Fix bubble-sort in xreffile to be 
+	O(n) when sorted.
+
 2001-01-05 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/init.c hdrs/llstdlib.h stdlib/environ.c tools/btedit.c:
