@@ -66,7 +66,7 @@ extern STRING qSdbrecstats;
  * local function prototypes
  *********************************************/
 
-static void add_dbs_to_list(LIST dblist, STRING dir);
+static void add_dbs_to_list(LIST dblist, LIST dbdesclist, STRING dir);
 static void free_dblist_el(VPTR w);
 static STRING getdbdesc(STRING path);
 
@@ -473,31 +473,36 @@ update_useropts (void)
 }
 /*==================================================
  * get_dblist -- find all dbs on path
- *  path:  [IN]  list of directories to be searched
- *  num:   [OUT] # dbs found (length of returned list)
+ *  path:       [IN]  list of directories to be searched
+ *  dblist:     [OUT] list of database paths found
+ *  dbdesclist: [OUT] list of descriptions of databases found
+ *  num:        [OUT] # dbs found (length of returned list)
  * TODO: put #elements into LIST objects, & we don't have
  * to pass this silly count around - Perry, 2002.06.05
  *================================================*/
-LIST
-get_dblist (STRING path, INT * num)
+INT
+get_dblist (STRING path, LIST * dblist, LIST * dbdesclist)
 {
 	char dirs[MAXPATHLEN+1];
 	INT ndirs=0;
 	STRING p=0;
-	LIST dblist = create_list();
+	INT num=0;
+	ASSERT(!(*dblist) && !(*dbdesclist));
+	*dblist = create_list();
+	*dbdesclist = create_list();
 	if (!path || !path[0] || strlen(path) > sizeof(dirs)-2)
-		return dblist;
+		return 0;
 	/* find directories in dirs & delimit with zeros */
 	ndirs = chop_path(path, dirs);
 	for (p=dirs; ndirs>0; --ndirs) {
 		ASSERT(p);
-		add_dbs_to_list(dblist, p);
+		add_dbs_to_list(*dblist, *dbdesclist, p);
 		p += strlen(p)+1;
 	}
-	FORLIST(dblist, el)
-		++(*num);
+	FORLIST((*dblist), el)
+		++num;
 	ENDLIST
-	return dblist;
+	return num;
 }
 /*==================================================
  * add_dbs_to_list -- Add all dbs in specified dir to list
@@ -505,7 +510,7 @@ get_dblist (STRING path, INT * num)
  *  dir:    [IN]  directory to be searched for more databases
  *================================================*/
 static void
-add_dbs_to_list (LIST dblist, STRING dir)
+add_dbs_to_list (LIST dblist, LIST dbdesclist, STRING dir)
 {
 	int n=0;
 	struct dirent **programs=0;
@@ -516,8 +521,10 @@ add_dbs_to_list (LIST dblist, STRING dir)
 	if (n < 0) return;
 	while (n--) {
 		strcpy(candidate, concat_path(dir, programs[n]->d_name));
-		if ((dbstr = getdbdesc(candidate)) != NULL)
-			push_list(dblist, dbstr);
+		if ((dbstr = getdbdesc(candidate)) != NULL) {
+			push_list(dblist, strsave(candidate));
+			push_list(dbdesclist, dbstr);
+		}
 		stdfree(programs[n]);
 	}
 	stdfree(programs);
@@ -551,6 +558,7 @@ getdbdesc (STRING path)
 		}
 	}
 	close_lldb();
+	readonly = FALSE;
 	BTR = 0;
 	return desc[0] ? strdup(desc) : 0;
 }

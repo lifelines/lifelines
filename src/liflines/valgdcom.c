@@ -41,16 +41,14 @@
 #include "gedcheck.h"
 #include "liflines.h"
 #include "llinesi.h"
-#include "screen.h" /* need to make interface for the wfield calls */
+#include "impfeed.h"
 #include "lloptions.h"
 
-extern STRING qSmisixr, qSmisfxr, qSmisexr, qSmissxr, qSmisrxr;
-extern STRING qSmulper, qSmulfam, qSmulsrc, qSmulevn, qSmuloth;
-extern STRING qSmatper, qSmatfam, qSmatsrc, qSmatevn, qSmatoth;
-extern STRING qSmisval, qSundper, qSundfam, qSundrec, qSundsrc;
-extern STRING qSundevn, qSbadlev, qSnoname, qSmulfth, qSmulmth;
-extern STRING qSmulhsb, qSmulwif, qStwosex, qSmlefml, qSfmlmle;
-extern STRING qSimpsex;
+extern STRING qSmisixr, qSmisfxr;
+extern STRING qSmulper, qSmulfam;
+extern STRING qSmatper, qSmatfam;
+extern STRING qSundper, qSundfam, qSundsrc;
+extern STRING qSundevn, qSbadlev, qSnoname;
 
 /* external data set by check_stdkeys() , used by addmissingkeys() */
 
@@ -81,27 +79,30 @@ static INT defline;
 static BOOLEAN logopen;
 static FILE *flog;
 
+static STRING qSmisval      = N_("Line %d: This %s line is missing a value field.");
+static STRING qSundrec      = N_("Record %s is referred to but not defined.");
+
 ELMNT *index_data = NULL;
 
 
-static INT add_even_defn(STRING, INT);
-static INT add_fam_defn(STRING, INT);
-static INT add_indi_defn(STRING, INT, ELMNT*);
-static INT add_othr_defn(STRING, INT);
-static INT add_sour_defn(STRING, INT);
+static INT add_even_defn(struct import_feedback * ifeed, STRING, INT);
+static INT add_fam_defn(struct import_feedback * ifeed, STRING, INT);
+static INT add_indi_defn(struct import_feedback * ifeed, STRING, INT, ELMNT*);
+static INT add_othr_defn(struct import_feedback * ifeed, STRING, INT);
+static INT add_sour_defn(struct import_feedback * ifeed, STRING, INT);
 static INT add_to_structures(STRING, ELMNT);
-static void check_even_links(ELMNT);
-static void check_fam_links(ELMNT);
-static void check_indi_links(ELMNT);
-static void check_othr_links(ELMNT);
-static void check_references(void);
-static void check_sour_links(ELMNT);
-static void handle_fam_lev1(STRING, STRING, INT);
-static void handle_indi_lev1(STRING, STRING, INT);
+static void check_even_links(struct import_feedback * ifeed, ELMNT);
+static void check_fam_links(struct import_feedback * ifeed, ELMNT);
+static void check_indi_links(struct import_feedback * ifeed, ELMNT per);
+static void check_othr_links(struct import_feedback * ifeed, ELMNT);
+static void check_references(struct import_feedback * ifeed);
+static void check_sour_links(struct import_feedback * ifeed, ELMNT src);
+static void handle_fam_lev1(struct import_feedback * ifeed, STRING tag, STRING val, INT line);
+static void handle_indi_lev1(struct import_feedback * ifeed, STRING, STRING, INT);
 static void handle_value(STRING, INT);
 static void clear_structures(void);
-static void handle_warn(STRING, ...);
-static void handle_err(STRING, ...);
+static void handle_warn(struct import_feedback * ifeed, STRING, ...);
+static void handle_err(struct import_feedback * ifeed, STRING, ...);
 static int check_akey (int firstchar,
 		       STRING keyp,
 		       INT *maxp);
@@ -110,7 +111,7 @@ static int check_akey (int firstchar,
  * validate_gedcom -- Validate GEDCOM records in file
  *=================================================*/
 BOOLEAN
-validate_gedcom (FILE *fp)
+validate_gedcom (struct import_feedback * ifeed, FILE *fp)
 {
 	INT lev, rc, curlev = 0;
 	INT nindi, nfam, nsour, neven, nothr;
@@ -127,13 +128,6 @@ validate_gedcom (FILE *fp)
 	clear_structures();
 	convtab = create_table();
 
-	wfield(1, 1, "     0 Persons");
-	wfield(2, 1, "     0 Families");
-	wfield(3, 1, "     0 Events");
-	wfield(4, 1, "     0 Sources");
-	wfield(5, 1, "     0 Others");
-	wfield(6, 1, "     0 Errors");
-	wfield(7, 1, "     0 Warnings");
 
 	rc = file_to_line(fp, tt, &lev, &xref, &tag, &val, &msg);
 	xref = xref ? rmvat(xref) : NULL;
@@ -141,9 +135,9 @@ validate_gedcom (FILE *fp)
 	while (rc != DONE)  {
 		if (lev > curlev + 1 || rc == ERROR) {
 			if (rc == ERROR)
-				handle_err(msg);
+				handle_err(ifeed, msg);
 			else
-				handle_err(qSbadlev, flineno);
+				handle_err(ifeed, qSbadlev, flineno);
 			handle_value(val, flineno);
 			curlev = lev;
 			rc = file_to_line(fp, tt, &lev, &xref, &tag, &val,
@@ -160,49 +154,48 @@ validate_gedcom (FILE *fp)
 			continue;
 		}
 		if (lev == 0) {
-			char str[10];
 			if (rec_type == INDI_REC && !named) {
 				if (getoptint("RequireNames", 0)) {
-					handle_err(qSnoname, defline);
+					handle_err(ifeed, qSnoname, defline);
 				}
 			}
 			defline = flineno;
 			if (eqstr("HEAD", tag) || eqstr("TRLR", tag))
 				rec_type = IGNR_REC;
-			else if (eqstr("INDI", tag)) {
-				sprintf(str, "%6d", ++nindi);
-				wfield(1, 1, str);
-				rec_type = INDI_REC;
-				named = FALSE;
-				person = add_indi_defn(xref, flineno, &el);
-				/* pretend a NAME if the record is skipped */
-				if (person == -2) named = TRUE;
-			} else if (eqstr("FAM", tag)) {
-				sprintf(str, "%6d", ++nfam);
-				wfield(2, 1, str);
-				rec_type = FAM_REC;
-				family = add_fam_defn(xref, flineno);
-			} else if (eqstr("EVEN", tag)) {
-				sprintf(str, "%6d", ++neven);
-				wfield(3, 1, str);
-				rec_type = EVEN_REC;
-				event = add_even_defn(xref, flineno);
-			} else if (eqstr("SOUR", tag)) {
-				sprintf(str, "%6d", ++nsour);
-				wfield(4, 1, str);
-				rec_type = SOUR_REC;
-				source = add_sour_defn(xref, flineno);
-			} else {
-				sprintf(str, "%6d", ++nothr);
-				wfield(5, 1, str);
-				rec_type = OTHR_REC;
-				other = add_othr_defn(xref, flineno);
+			else {
+				INT count=0;
+				if (eqstr("INDI", tag)) {
+					count = ++nindi;
+					rec_type = INDI_REC;
+					named = FALSE;
+					person = add_indi_defn(ifeed, xref, flineno, &el);
+					/* pretend a NAME if the record is skipped */
+					if (person == -2) named = TRUE;
+				} else if (eqstr("FAM", tag)) {
+					count = ++nfam;
+					rec_type = FAM_REC;
+					family = add_fam_defn(ifeed, xref, flineno);
+				} else if (eqstr("EVEN", tag)) {
+					count = ++neven;
+					rec_type = EVEN_REC;
+					event = add_even_defn(ifeed, xref, flineno);
+				} else if (eqstr("SOUR", tag)) {
+					count = ++nsour;
+					rec_type = SOUR_REC;
+					source = add_sour_defn(ifeed, xref, flineno);
+				} else {
+					count = ++nothr;
+					rec_type = OTHR_REC;
+					other = add_othr_defn(ifeed, xref, flineno);
+				}
+				if (ifeed && ifeed->added_rec_fnc)
+					ifeed->validated_rec_fnc(tag[0], tag, count);
 			}
 		} else {
 			if (rec_type == INDI_REC)
-				handle_indi_lev1(tag, val, flineno);
+				handle_indi_lev1(ifeed, tag, val, flineno);
 			else if (rec_type == FAM_REC)
-				handle_fam_lev1(tag, val, flineno);
+				handle_fam_lev1(ifeed, tag, val, flineno);
 			else
 				handle_value(val, flineno);
 		}
@@ -211,8 +204,8 @@ validate_gedcom (FILE *fp)
 		xref = xref ? rmvat(xref) : NULL;
 	}
 	if (rec_type == INDI_REC && !named)
-		handle_err(qSnoname, defline);
-	check_references();
+		handle_err(ifeed, qSnoname, defline);
+	check_references(ifeed);
 	if (logopen) {
 		fclose(flog);
 		logopen = FALSE;
@@ -224,18 +217,19 @@ validate_gedcom (FILE *fp)
  *  return index of person structure or
  *         -1 if unexplained error or
  *         -2 if explained error
+ *  xref:    ref value
+ *  line:    line num
+ *  pel:
  *=====================================*/
 static INT
-add_indi_defn (STRING xref,     /* ref value */
-               INT line,        /* line num */
-               ELMNT *pel)
+add_indi_defn (struct import_feedback * ifeed, STRING xref, INT line, ELMNT *pel)
 {
 	ELMNT el;
 	INT dex;
 
 	*pel = NULL;
 	if (!xref || *xref == 0) {
-		handle_err(_(qSmisixr), line);
+		handle_err(ifeed, _(qSmisixr), line);
 		return -2;
 	}
 	if ((dex = xref_to_index(xref)) == -1) {
@@ -251,12 +245,12 @@ add_indi_defn (STRING xref,     /* ref value */
 	} else
 		*pel = el = index_data[dex];
 	if (KNOWNTYPE(el) && Type(el) != INDI_REC) {
-		handle_err(qSmatper, line, xref);
+		handle_err(ifeed, qSmatper, line, xref);
 		return -2;
 	}
 	if (Type(el) == INDI_REC) {
 		if (Line(el) && line) {
-			handle_err(qSmulper, Line(el), line, xref);
+			handle_err(ifeed, qSmulper, Line(el), line, xref);
 			return -2;
 		}
 		if (line) Line(el) = line;
@@ -271,15 +265,16 @@ add_indi_defn (STRING xref,     /* ref value */
 }
 /*======================================
  * add_fam_defn -- Add family definition
+ *  xref:    ref value
+ *  line:    line num
  *====================================*/
 static INT
-add_fam_defn (STRING xref,      /* cross ref value */
-              INT line)         /* line num */
+add_fam_defn (struct import_feedback * ifeed, STRING xref, INT line)
 {
 	ELMNT el;
 	INT dex;
 	if (!xref || *xref == 0) {
-		handle_err(qSmisfxr, line);
+		handle_err(ifeed, qSmisfxr, line);
 		return -1;
 	}
 	if ((dex = xref_to_index(xref)) == -1) {
@@ -294,12 +289,12 @@ add_fam_defn (STRING xref,      /* cross ref value */
 	} else
 		el = index_data[dex];
 	if (KNOWNTYPE(el) && Type(el) != FAM_REC) {
-		handle_err(qSmatfam, line, xref);
+		handle_err(ifeed, qSmatfam, line, xref);
 		return -1;
 	}
 	if (Type(el) == FAM_REC) {
 		if (Line(el) && line) {
-			handle_err(qSmulfam, Line(el), line, xref);
+			handle_err(ifeed, qSmulfam, Line(el), line, xref);
 			return -1;
 		}
 		if (line) Line(el) = line;
@@ -313,15 +308,18 @@ add_fam_defn (STRING xref,      /* cross ref value */
 }
 /*=======================================
  * add_sour_defn -- Add source definition
+ *  xref:    ref value
+ *  line:    line num
  *=====================================*/
 static INT
-add_sour_defn (STRING xref,     /* cross ref value */
-               INT line)        /* line num */
+add_sour_defn (struct import_feedback * ifeed, STRING xref, INT line)
 {
 	ELMNT el;
 	INT dex;
 	if (!xref || *xref == 0) {
-		handle_err(qSmissxr, line);
+		handle_err(ifeed
+			, _("Line %d: The source defined here has no key.")
+			, line);
 		return -1;
 	}
 	if ((dex = xref_to_index(xref)) == -1) {
@@ -334,12 +332,16 @@ add_sour_defn (STRING xref,     /* cross ref value */
 	} else
 		el = index_data[dex];
 	if (KNOWNTYPE(el) && Type(el) != SOUR_REC) {
-		handle_err(qSmatsrc, line, xref);
+		handle_err(ifeed
+			, _("Line %d: Source %s has an incorrect key.")
+			, line, xref);
 		return -1;
 	}
 	if (Type(el) == SOUR_REC) {
 		if (Line(el) && line) {
-			handle_err(qSmulsrc, Line(el), line, xref);
+			handle_err(ifeed
+				, _("Lines %d and %d: Source %s is multiply defined.")
+				, Line(el), line, xref);
 			return -1;
 		}
 		if (line) Line(el) = line;
@@ -351,15 +353,18 @@ add_sour_defn (STRING xref,     /* cross ref value */
 }
 /*======================================
  * add_even_defn -- Add event definition
+ *  xref:    ref value
+ *  line:    line num
  *====================================*/
 static INT
-add_even_defn (STRING xref,     /* cross ref value */
-               INT line)        /* line num */
+add_even_defn (struct import_feedback * ifeed, STRING xref, INT line)
 {
 	ELMNT el;
 	INT dex;
 	if (!xref || *xref == 0) {
-		handle_err(qSmisexr, line);
+		handle_err(ifeed
+			, _("Line %d: The event defined here has no key.")
+			, line);
 		return -1;
 	}
 	if ((dex = xref_to_index(xref)) == -1) {
@@ -372,12 +377,16 @@ add_even_defn (STRING xref,     /* cross ref value */
 	} else
 		el = index_data[dex];
 	if (KNOWNTYPE(el) && Type(el) != EVEN_REC) {
-		handle_err(qSmatevn, line, xref);
+		handle_err(ifeed
+			, _("Line %d: Event %s has an incorrect key.")
+			, line, xref);
 		return -1;
 	}
 	if (Type(el) == EVEN_REC) {
 		if (Line(el) && line) {
-			handle_err(qSmulevn, Line(el), line, xref);
+			handle_err(ifeed
+				, _("Lines %d and %d: Event %s is multiply defined.")
+				, Line(el), line, xref);
 			return -1;
 		}
 		if (line) Line(el) = line;
@@ -389,15 +398,18 @@ add_even_defn (STRING xref,     /* cross ref value */
 }
 /*==================================================
  * add_othr_defn -- Add other record type definition
+ *  xref:    ref value
+ *  line:    line num
  *================================================*/
 static INT
-add_othr_defn (STRING xref,     /* cross ref value */
-               INT line)        /* line num */
+add_othr_defn (struct import_feedback * ifeed, STRING xref, INT line)
 {
 	ELMNT el;
 	INT dex;
 	if (!xref || *xref == 0) {
-		handle_err(qSmisrxr, line);
+		handle_err(ifeed
+			, _("Line %d: The record defined here has no key.")
+			, line);
 		return -1;
 	}
 	if ((dex = xref_to_index(xref)) == -1) {
@@ -410,12 +422,16 @@ add_othr_defn (STRING xref,     /* cross ref value */
 	} else
 		el = index_data[dex];
 	if (KNOWNTYPE(el) && Type(el) != OTHR_REC) {
-		handle_err(qSmatoth, line, xref);
+		handle_err(ifeed
+			, _("Line %d: Record %s has an incorrect key.")
+			, line, xref);
 		return -1;
 	}
 	if (Type(el) == OTHR_REC) {
 		if (Line(el) && line) {
-			handle_err(qSmuloth, Line(el), line, xref);
+			handle_err(ifeed
+				, _("Lines %d and %d: Record %s is multiply defined.")
+				, Line(el), line, xref);
 			return -1;
 		}
 		if (line) Line(el) = line;
@@ -429,9 +445,7 @@ add_othr_defn (STRING xref,     /* cross ref value */
  * handle_indi_lev1 -- Handle level 1 lines in person records
  *=========================================================*/
 static void
-handle_indi_lev1 (STRING tag,
-                  STRING val,
-                  INT line)
+handle_indi_lev1 (struct import_feedback * ifeed, STRING tag, STRING val, INT line)
 {
 	ELMNT indi, pers;
 	ASSERT(person != -1);
@@ -441,31 +455,31 @@ handle_indi_lev1 (STRING tag,
 	indi = index_data[person];
 	if (eqstr(tag, "FAMC")) {
 		if (!pointer_value(val)) {
-			handle_err(qSmisval, line, "FAMC");
+			handle_err(ifeed, qSmisval, line, "FAMC");
 			return;
 		}
-		(void) add_fam_defn(rmvat(val), 0);
+		(void) add_fam_defn(ifeed, rmvat(val), 0);
 	} else if (eqstr(tag, "FAMS")) {
 		if (!pointer_value(val)) {
-			handle_err(qSmisval, line, "FAMS");
+			handle_err(ifeed, qSmisval, line, "FAMS");
 			return;
 		}
-		(void) add_fam_defn(rmvat(val), 0);
+		(void) add_fam_defn(ifeed, rmvat(val), 0);
 	} else if (eqstr(tag, "FATH")) {
 		if (!pointer_value(val)) {
-			handle_warn(qSmisval, line, "FATH");
+			handle_warn(ifeed, qSmisval, line, "FATH");
 			return;
 		}
 		Male(indi) += 1;
-		if (add_indi_defn(rmvat(val), 0, &pers) >= 0)
+		if (add_indi_defn(ifeed, rmvat(val), 0, &pers) >= 0)
 			Sex(pers) |= BE_MALE;
 	} else if (eqstr(tag, "MOTH")) {
 		if (!pointer_value(val)) {
-			handle_warn(qSmisval, line, "MOTH");
+			handle_warn(ifeed, qSmisval, line, "MOTH");
 			return;
 		}
 		Fmle(indi) += 1;
-		if (add_indi_defn(rmvat(val), 0, &pers) >= 0)
+		if (add_indi_defn(ifeed, rmvat(val), 0, &pers) >= 0)
 			Sex(pers) |= BE_FEMALE;
 	} else if (eqstr(tag, "SEX")) {
 		if (val && (*val == 'M'))
@@ -475,7 +489,7 @@ handle_indi_lev1 (STRING tag,
 	} else if (eqstr(tag, "NAME")) {
 		named = TRUE;
 		if (!val || *val == 0 || !valid_name(val)) {
-			handle_err("Line %d: Bad NAME syntax.\n", line);
+			handle_err(ifeed, _("Line %d: Bad NAME syntax."), line);
 			return;
 		}
 	} else
@@ -485,9 +499,7 @@ handle_indi_lev1 (STRING tag,
  * handle_fam_lev1 -- Handle level 1 lines in family records
  *========================================================*/
 static void
-handle_fam_lev1 (STRING tag,
-                 STRING val,
-                 INT line)
+handle_fam_lev1 (struct import_feedback * ifeed, STRING tag, STRING val, INT line)
 {
 	ELMNT fam, pers;
 #ifdef DEBUG
@@ -497,26 +509,26 @@ handle_fam_lev1 (STRING tag,
 	fam = (family != -1) ? index_data[family] : NULL;
 	if (eqstr(tag, "HUSB")) {
 		if (!pointer_value(val)) {
-			handle_err(qSmisval, line, "HUSB");
+			handle_err(ifeed, qSmisval, line, "HUSB");
 			return;
 		}
 		if (fam) Male(fam) += 1;
-		if (add_indi_defn(rmvat(val), 0, &pers) >= 0)
+		if (add_indi_defn(ifeed, rmvat(val), 0, &pers) >= 0)
 			Sex(pers) |= BE_MALE;
 	} else if (eqstr(tag, "WIFE")) {
 		if (!pointer_value(val)) {
-			handle_err(qSmisval, line, "WIFE");
+			handle_err(ifeed, qSmisval, line, "WIFE");
 			return;
 		}
 		if (fam) Fmle(fam) += 1;
-		if (add_indi_defn(rmvat(val), 0, &pers) >= 0)
+		if (add_indi_defn(ifeed, rmvat(val), 0, &pers) >= 0)
 			Sex(pers) |= BE_FEMALE;
 	} else if (eqstr(tag, "CHIL")) {
 		if (!pointer_value(val)) {
-			handle_err(qSmisval, line, "CHIL");
+			handle_err(ifeed, qSmisval, line, "CHIL");
 			return;
 		}
-		(void) add_indi_defn(rmvat(val), 0, &pers);
+		(void) add_indi_defn(ifeed, rmvat(val), 0, &pers);
 	} else
 		handle_value(val, line);
 }
@@ -641,18 +653,18 @@ addmissingkeys (INT t)          /* type of record: INDI_REC ... */
  * check_references -- Check for undefined problems
  *===============================================*/
 static void
-check_references (void)
+check_references (struct import_feedback * ifeed)
 {
 	INT i;
 	for (i = 0; i < struct_len; i++) {
 		ELMNT el = index_data[i];
 		switch (Type(el)) {
-		case INDI_REC: check_indi_links(el); break;
-		case FAM_REC:  check_fam_links(el);  break;
-		case EVEN_REC: check_even_links(el); break;
-		case SOUR_REC: check_sour_links(el); break;
-		case OTHR_REC: check_othr_links(el); break;
-		default: handle_err(qSundrec, Key(el));
+		case INDI_REC: check_indi_links(ifeed, el); break;
+		case FAM_REC:  check_fam_links(ifeed, el);  break;
+		case EVEN_REC: check_even_links(ifeed, el); break;
+		case SOUR_REC: check_sour_links(ifeed, el); break;
+		case OTHR_REC: check_othr_links(ifeed, el); break;
+		default: handle_err(ifeed, qSundrec, Key(el));
 		}
 	}
 }
@@ -660,57 +672,82 @@ check_references (void)
  * check_indi_links -- Check person links
  *=====================================*/
 static void
-check_indi_links (ELMNT per)
+check_indi_links (struct import_feedback * ifeed, ELMNT per)
 {
 	BOOLEAN jm, jf, bm, bf;
-	if (Male(per) > 1)  handle_warn(qSmulfth, Line(per), Key(per));
-	if (Fmle(per) > 1)  handle_warn(qSmulmth, Line(per), Key(per));
+	if (Male(per) > 1)
+		handle_warn(ifeed
+		, _("Line %d: Person %s has multiple father links.")
+		, Line(per), Key(per));
+	if (Fmle(per) > 1)
+		handle_warn(ifeed
+		, _("Line %d: Person %s has multiple mother links.")
+		, Line(per), Key(per));
 	if (Line(per) == 0) {
-		handle_err(qSundper, Key(per));
+		handle_err(ifeed, qSundper, Key(per));
 		return;
 	}
 	jm = Sex(per) & IS_MALE;
 	jf = Sex(per) & IS_FEMALE;
 	bm = Sex(per) & BE_MALE;
 	bf = Sex(per) & BE_FEMALE;
-	if (jm && jf) handle_err(qStwosex, Line(per), Key(per));
-	if (jm && bf) handle_err(qSmlefml, Line(per), Key(per));
-	if (jf && bm) handle_err(qSfmlmle, Line(per), Key(per));
-	if (bm && bf) handle_err(qSimpsex, Line(per), Key(per));
+	if (jm && jf)
+		handle_err(ifeed
+		, _("Line %d: Person %s is both male and female.")
+		, Line(per), Key(per));
+	if (jm && bf)
+		handle_err(ifeed
+		, _("Line %d: Person %s is male but must be female.")
+		, Line(per), Key(per));
+	if (jf && bm)
+		handle_err(ifeed
+		, _("Line %d: Person %s is female but must be male.")
+			, Line(per), Key(per));
+	if (bm && bf)
+		handle_err(ifeed
+		, _("Line %d: Person %s is implied to be both male and female.")
+		, Line(per), Key(per));
 }
 /*======================================
  * check_fam_links -- Check family links
  *====================================*/
 static void
-check_fam_links (ELMNT fam)
+check_fam_links (struct import_feedback * ifeed, ELMNT fam)
 {
-	if (Line(fam) == 0) handle_err(qSundfam, Key(fam));
-	if (Male(fam) > 1)  handle_warn(qSmulhsb, Line(fam), Key(fam));
-	if (Fmle(fam) > 1)  handle_warn(qSmulwif, Line(fam), Key(fam));
+	if (Line(fam) == 0) handle_err(ifeed, qSundfam, Key(fam));
+	if (Male(fam) > 1)
+		handle_warn(ifeed
+		, _("Line %d: Family %s has multiple husband links.")
+		, Line(fam), Key(fam));
+	if (Fmle(fam) > 1)
+		handle_warn(ifeed
+		, _("Line %d: Family %s has multiple wife links.")
+			, Line(fam), Key(fam));
+
 }
 /*======================================
  * check_even_links -- Check event links
  *====================================*/
 static void
-check_even_links (ELMNT evn)
+check_even_links (struct import_feedback * ifeed, ELMNT evn)
 {
-	if (Line(evn) == 0) handle_err(qSundevn, Key(evn));
+	if (Line(evn) == 0) handle_err(ifeed, qSundevn, Key(evn));
 }
 /*=======================================
  * check_sour_links -- Check source links
  *=====================================*/
 static void
-check_sour_links (ELMNT src)
+check_sour_links (struct import_feedback * ifeed, ELMNT src)
 {
-	if (Line(src) == 0) handle_err(qSundsrc, Key(src));
+	if (Line(src) == 0) handle_err(ifeed, qSundsrc, Key(src));
 }
 /*======================================
  * check_othr_links -- Check other links
  *====================================*/
 static void
-check_othr_links (ELMNT otr)
+check_othr_links (struct import_feedback * ifeed, ELMNT otr)
 {
-	if (Line(otr) == 0) handle_err(qSundrec, Key(otr));
+	if (Line(otr) == 0) handle_err(ifeed, qSundrec, Key(otr));
 }
 /*=======================================
  * handle_value -- Handle arbitrary value
@@ -737,7 +774,7 @@ handle_value (STRING val,
  * handle_err -- Handle GEDCOM error
  *================================*/
 static void
-handle_err (STRING fmt, ...)
+handle_err (struct import_feedback * ifeed, STRING fmt, ...)
 {
 	va_list args;
 	char str[100];
@@ -755,13 +792,14 @@ handle_err (STRING fmt, ...)
 	va_end(args);
 	fprintf(flog, "\n");
 	sprintf(str, "%6d Errors (see log file `err.log')", ++num_errors);
-	wfield(6, 1, str);
+	if (ifeed && ifeed->validation_error_fnc)
+		(*ifeed->validation_error_fnc)(str);
 }
 /*=====================================
  * handle_warn -- Handle GEDCOM warning
  *===================================*/
 static void
-handle_warn (STRING fmt, ...)
+handle_warn (struct import_feedback * ifeed, STRING fmt, ...)
 {
 	va_list args;
 	char str[100];
@@ -776,7 +814,8 @@ handle_warn (STRING fmt, ...)
 	va_end(args);
 	fprintf(flog, "\n");
 	sprintf(str, "%6d Warnings (see log file `err.log')", ++num_warns);
-	wfield(7, 1, str);
+	if (ifeed && ifeed->validation_warning_fnc)
+		(*ifeed->validation_warning_fnc)(str);
 }
 /*=========================================
  * xref_to_index - Convert pointer to index

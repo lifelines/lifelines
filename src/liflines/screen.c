@@ -2029,7 +2029,7 @@ invoke_utils_menu (void)
 	begin_action();
 	switch (code) {
 	case 's': archive_in_file(); break;
-	case 'r': import_from_file(); break;
+	case 'r': load_gedcom(); break;
 	case 'k': key_util(); break;
 	case 'i': who_is_he_she(); break;
 	case 'd': show_database_stats(); break;
@@ -2954,6 +2954,16 @@ calculate_screen_lines (INT screen)
 	if (!menu_enabled) menu = EMPTY_MENU;
 	lines = LINESTOTAL-OVERHEAD_MENU-menu;
 	return lines;
+}
+/*=====================
+ * clear_stdout_hseg -- clear a horizontal line segment on stdout win
+ *====================*/
+void
+clear_stdout_hseg (INT row, INT x1, INT x2)
+{
+	UIWINDOW uiwin = stdout_win;
+	WINDOW *win = uiw_win(uiwin);
+	clear_hseg(win, row, x1, x2);
 }
 /*=====================
  * clear_hseg -- clear a horizontal line segment

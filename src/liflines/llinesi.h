@@ -8,6 +8,8 @@ typedef struct llrect_s {
 	INT right;
 } *LLRECT;
 
+struct import_feedback;
+
 /* add.c */
 NODE prompt_add_child(NODE, NODE);
 NODE add_family(NODE, NODE, NODE);
@@ -53,10 +55,13 @@ NODE edit_indi(NODE);
 BOOLEAN archive_in_file (void);
 
 /* import.c */
-BOOLEAN import_from_file(void);
+BOOLEAN import_from_gedcom_file(struct import_feedback * ifeed, FILE *fp);
 
 /* lbrowse.c */
 INT browse_list(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
+
+/* loadsave.c */
+void load_gedcom(void);
 
 /* merge.c */
 NODE merge_two_indis(NODE, NODE, BOOLEAN);
@@ -143,6 +148,6 @@ INT browse_2fam(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
 int check_stdkeys (void);
 void addmissingkeys (INT);
 INT xref_to_index (STRING);
-BOOLEAN validate_gedcom (FILE*);
+BOOLEAN validate_gedcom (struct import_feedback * ifeed, FILE*);
 
 #endif /* _LIFLINES_PRIV_H */

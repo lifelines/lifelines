@@ -182,8 +182,7 @@ pop_list (LIST list)
  * enqueue_list -- Enqueue element on list
  *======================================*/
 void
-enqueue_list (LIST list,
-              VPTR el)
+enqueue_list (LIST list, VPTR el)
 {
 	push_list(list, el);
 }
@@ -210,8 +209,7 @@ dequeue_list (LIST list)
  * nth_in_list -- Find nth node in list, relative 1
  *===============================================*/
 static LNODE
-nth_in_list (LIST list,
-             INT n)
+nth_in_list (LIST list, INT n)
 {
 	INT i = 1;
 	LNODE node = NULL;
@@ -230,9 +228,7 @@ nth_in_list (LIST list,
  * set_list_element - Set element using array access
  *================================================*/
 void
-set_list_element (LIST list,
-                  INT ind,
-                  VPTR val)
+set_list_element (LIST list, INT ind, VPTR val)
 {
 	LNODE node = NULL;
 	if (!list) return;
@@ -244,8 +240,7 @@ set_list_element (LIST list,
  * get_list_element - Retrieve element using array access
  *=====================================================*/
 VPTR
-get_list_element (LIST list,
-                  INT ind)
+get_list_element (LIST list, INT ind)
 {
 	LNODE node = NULL;
 	if (!list) return 0;

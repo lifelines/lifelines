@@ -27,3 +27,9 @@
 
 #define HAVE_ICONV 1
 #define ICONV_CONST const
+
+#define IN_LIBINTL
+
+/* MSVC locale.h doesn't have */
+#define LANG_SORBIAN 0x2e
+

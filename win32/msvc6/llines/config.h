@@ -6,3 +6,4 @@
 #define HAVE_SETLOCALE
 #define HAVE_LOCALE_H
 #define HAVE__PUTENV
+#define IN_LIBINTL

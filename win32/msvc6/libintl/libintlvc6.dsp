@@ -141,7 +141,15 @@ SOURCE=..\..\..\intl\localealias.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\intl\localename.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\intl\ngettext.c
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\intl\plural-exp.c"
 # End Source File
 # Begin Source File
 
@@ -182,6 +190,10 @@ SOURCE=..\..\..\intl\libgnuintl.h
 # Begin Source File
 
 SOURCE=..\..\..\intl\loadinfo.h
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\intl\plural-exp.h"
 # End Source File
 # End Group
 # End Target

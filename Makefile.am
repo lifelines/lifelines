@@ -6,7 +6,7 @@
 # (gettext m4 files are there)
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = arch btree gedlib interp stdlib intl po liflines hdrs tools reports win32 docs
+SUBDIRS = arch btree gedlib interp stdlib intl po m4 liflines hdrs tools reports win32 docs
 
 EXTRA_DIST = config.rpath  .linesrc LICENSE README.DEVELOPERS lines.cfg
 

@@ -9,8 +9,8 @@ bin_PROGRAMS = llines
 # what goes into lines?
 llines_SOURCES = add.c advedit.c ask.c askprogram.c browse.c \
 	delete.c edit.c error.c export.c import.c lbrowse.c \
-	main.c menuitem.c merge.c miscutls.c newrecs.c \
-	pedigree.c scan.c show.c screen.c swap.c \
+	loadsave.c main.c menuitem.c merge.c miscutls.c \
+	newrecs.c pedigree.c scan.c show.c screen.c swap.c \
 	tandem.c valgdcom.c llinesi.h 
 
 # extra stuff for lines

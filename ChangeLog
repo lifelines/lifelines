@@ -1,3 +1,19 @@
+2002-06-08 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog Makefile.am gedlib/init.c gedlib/messages.c
+	hdrs/Makefile.am hdrs/gedcheck.h hdrs/gedcom.h hdrs/screen.h
+	liflines/Makefile.am liflines/import.c liflines/llinesi.h
+	liflines/main.c liflines/screen.c liflines/valgdcom.c
+	m4/Makefile.am po/POTFILES.in po/de.po po/el.po po/it.po
+	po/sv.po stdlib/double.c win32/msvc6/libintl/config.h
+	win32/msvc6/libintl/libintlvc6.dsp win32/msvc6/llines/config.h
+	win32/msvc6/llines/llines.rc win32/msvc6/llines/llinesprj.dsp
+	*NEW hdrs/impfeed.h liflines/loadsave.c:
+
+	Remove curses code from import.c via interface functions.
+	Implement opening database from list at start.
+	Put all the m4 files into EXTRA_DIST (otherwise make fails).
+
 2002-06-07 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog docs/ll-userguide.xml:

@@ -1,5 +1,5 @@
 /* 
-   Copyright (c) 1991-1999 Thomas T. Wetmore IV
+   Copyright (c) 2002 Perry Rapp
 
    Permission is hereby granted, free of charge, to any person
    obtaining a copy of this software and associated documentation
@@ -21,51 +21,27 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
-/*==========================================================
- * gedcheck.h -- Header for GEDCOM validation
- * Copyright(c) 1994 by T.T. Wetmore IV; all rights reserved
- * pre-SourceForge version information:
- *   3.0.0 - 28 May 94
- *========================================================*/
+/*==============================================================
+ * feedback.h -- Header file for I/O feedback from
+ *  GEDCOM import/export code
+ * Copyright (c) 2002 by Perry Rapp; all rights reserved
+ *============================================================*/
 
-#ifndef _GEDCHECK_H
-#define _GEDCHECK_H
+#ifndef _IMPFEED_H
+#define _IMPFEED_H
 
-#include "standard.h"
+struct import_feedback {
+	void (*validation_warning_fnc)(STRING msg);
+	void (*validation_error_fnc)(STRING msg);
+	void (*error_invalid_fnc)(STRING reason);
+	void (*validating_fnc)(void);
+	void (*validated_rec_fnc)(char ctype, STRING tag, INT count);
+	void (*beginning_import_fnc)(STRING msg);
+	void (*error_readonly_fnc)(void);
+	void (*adding_unused_keys_fnc)(void);
+	void (*import_done_fnc)(INT nindi, INT nfam, INT nsour, INT neven, INT nothr);
+	void (*added_rec_fnc)(char ctype, STRING tag, INT count);
+};
 
-enum { INDI_REC, FAM_REC, SOUR_REC, EVEN_REC, OTHR_REC, UNKN_REC, IGNR_REC };
+#endif /* _IMPFEED_H */
 
-#define IS_MALE   1
-#define IS_FEMALE 2
-#define BE_MALE   4
-#define BE_FEMALE 8
-
-#define KNOWNTYPE(t) ((Type(t)<=OTHR_REC))
-
-typedef unsigned char CHAR;
-
-typedef struct {
-	CHAR type;
-	CHAR sex;
-	CHAR male;
-	CHAR fmle;
-	INT dex;
-	INT line;
-	STRING key;
-	STRING new;
-} *ELMNT;
-
-#define Type(e) ((e)->type)
-#define Key(e)  ((e)->key)
-#define New(e)  ((e)->new)
-#define Dex(e)  ((e)->dex)
-#define Line(e) ((e)->line)
-#define Sex(e)  ((e)->sex)
-#define Male(e) ((e)->male)
-#define Fmle(e) ((e)->fmle)
-
-extern ELMNT *index_data;
-
-INT xref_to_index(STRING);
-
-#endif /* _GEDCHECK_H */

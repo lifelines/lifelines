@@ -37,10 +37,10 @@
 #include "sequence.h"
 #include "gedcheck.h"
 #include "liflines.h"
-#include "lloptions.h"
 
 #include "llinesi.h"
-#include "screen.h" /* use wfield & wpos */
+#include "feedback.h"
+#include "impfeed.h"
 
 
 
@@ -61,8 +61,8 @@ extern INT gd_smax;	/* maximum source key number */
 extern INT gd_emax;	/* maximum event key number */
 extern INT gd_xmax;	/* maximum other key number */
 
-extern STRING qSidgedf, qSgdcker, qSgdnadd, qSdboldk, qSdbnewk, qSdbodel;
-extern STRING qScfoldk, qSdbdelk, qSdbrdon, qSunsupuni;
+extern STRING qSgdnadd, qSdboldk, qSdbnewk, qSdbodel;
+extern STRING qScfoldk, qSunsupuni;
 extern TRANTABLE tran_tables[];
 
 /*********************************************
@@ -70,7 +70,7 @@ extern TRANTABLE tran_tables[];
  *********************************************/
 
 /* alphabetical */
-static void restore_record(NODE node, INT type, INT num);
+static void restore_record(struct import_feedback * ifeed, NODE node, INT type, INT num);
 static STRING translate_key(STRING);
 static BOOLEAN translate_values(NODE, VPTR);
 
@@ -87,35 +87,35 @@ static INT gd_reuse = 1;/* reuse original keys in GEDCOM file if possible */
 
 /*=================================================
  * import_from_file -- Read GEDCOM file to database
+ *  ifeed: [IN]  output methods
+ *  fp:    [I/O] GEDCOM file whence to load data
  *===============================================*/
 BOOLEAN
-import_from_file (void)
+import_from_gedcom_file (struct import_feedback * ifeed, FILE *fp)
 {
-	FILE *fp;
 	NODE node, conv;
 	TRANTABLE tt = tran_tables[MGDIN];
-	STRING msg, fname;
+	STRING msg;
 	BOOLEAN emp;
 	INT nindi = 0, nfam = 0, neven = 0;
 	INT nsour = 0, nothr = 0, type, num = 0;
 	INT totkeys = 0, totused = 0;
 	char msgbuf[80];
-	STRING srcdir=NULL;
+	BOOLEAN succeeded=FALSE;
 
 /* Open and validate GEDCOM file */
-	srcdir = getoptstr("InputPath", ".");
-	fp = ask_for_input_file(LLREADTEXT, _(qSidgedf), &fname, srcdir, ".ged");
-	if (!fp) return FALSE;
 	if (!check_file_for_unicode(fp)) {
 		msg_error(_(qSunsupuni));
+		goto end_import;
 	}
-	llwprintf(_(qSgdcker), fname);
-	if (!validate_gedcom(fp)) {
-		fclose(fp);
-		fp=NULL;
-		wfield(9, 0, _(qSgdnadd));
-		wpos(10, 0);
-		return FALSE;
+	/* validate */
+	if (ifeed && ifeed->validating_fnc)
+		(*ifeed->validating_fnc)();
+
+	if (!validate_gedcom(ifeed, fp)) {
+		if (ifeed && ifeed->error_invalid_fnc)
+			(*ifeed->error_invalid_fnc)(_(qSgdnadd));
+		goto end_import;
 	}
 
 	if((num_indis() > 0)
@@ -131,33 +131,32 @@ import_from_file (void)
 		}
 		else strcpy(msgbuf, " ");
 		gd_reuse = ask_yes_or_no_msg(msgbuf, _(qScfoldk));
+/*
+TODO: why were these here ?
 		touchwin(uiw_win(stdout_win));
 		wrefresh(uiw_win(stdout_win));
+*/
 	}
 
 	/* start loading the file */
 	rewind(fp);
 
-	if(gd_reuse)
-	  wfield(9,  0, _(qSdboldk));
-	else
-	  wfield(9,  0, _(qSdbnewk));
-
 	/* test for read-only database here */
 
 	if(readonly) {
-		wfield(10, 0, _(qSdbrdon));
-		wpos(11, 0);
-		fclose(fp);
-		fp=NULL;
-		return FALSE;
+		if (ifeed && ifeed->error_readonly_fnc)
+			(*ifeed->error_readonly_fnc)();
+		goto end_import;
 	}
 
-	wfield(10, 1, "     0 Persons");
-	wfield(11, 1, "     0 Families");
-	wfield(12, 1, "     0 Events");
-	wfield(13, 1, "     0 Sources");
-	wfield(14, 1, "     0 Others");
+	/* tell user we are beginning real part of import */
+	if (ifeed && ifeed->beginning_import_fnc) {
+		if(gd_reuse)
+			(*ifeed->beginning_import_fnc)(_(qSdboldk));
+		else
+			(*ifeed->beginning_import_fnc)(_(qSdbnewk));
+	}
+
 
 /* Add records to database */
 	node = convert_first_fp_to_node(fp, FALSE, tt, &msg, &emp);
@@ -175,7 +174,9 @@ import_from_file (void)
 		case OTHR_REC: num = ++nothr; break;
 		default: FATAL();
 		}
-		restore_record(conv, type, num);
+		restore_record(ifeed, conv, type, num);
+		if (ifeed && ifeed->added_rec_fnc)
+			ifeed->added_rec_fnc(nxref(conv)[1], ntag(conv), num);
 		free_nodes(node);
 		node = next_fp_to_node(fp, FALSE, tt, &msg, &emp);
 	}
@@ -183,29 +184,26 @@ import_from_file (void)
 		msg_error(msg);
 	}
 	if(gd_reuse && ((totkeys - totused) > 0)) {
-	    wfield(15, 0, _(qSdbdelk));
-	    addmissingkeys(INDI_REC);
-	    addmissingkeys(FAM_REC);
-	    addmissingkeys(EVEN_REC);
-	    addmissingkeys(SOUR_REC);
-	    addmissingkeys(OTHR_REC);
+		if (ifeed && ifeed->adding_unused_keys_fnc)
+			(*ifeed->adding_unused_keys_fnc)();
+		addmissingkeys(INDI_REC);
+		addmissingkeys(FAM_REC);
+		addmissingkeys(EVEN_REC);
+		addmissingkeys(SOUR_REC);
+		addmissingkeys(OTHR_REC);
 	}
-	wpos(15, 0);
-	msg_info("Added (%dP, %dF, %dS, %dE, %dX) records from file `%s'.",
-	    nindi, nfam, nsour, neven, nothr, fname);
+	if (ifeed && ifeed->adding_unused_keys_fnc)
+	succeeded = TRUE;
 
-	fclose(fp);
-	fp=NULL;
+end_import:
 
-	return TRUE;
+	return succeeded;
 }
 /*=============================================
  * restore_record -- Restore record to database
  *===========================================*/
 static void
-restore_record (NODE node,
-                INT type,
-                INT num)
+restore_record (struct import_feedback * ifeed, NODE node, INT type, INT num)
 {
 	STRING old, new, str, key;
 	char scratch[10];
@@ -215,11 +213,11 @@ restore_record (NODE node,
 	new = translate_key(rmvat(old));
 	sprintf(scratch, "%6d", num);
 	switch (type) {
-	case INDI_REC: wfield(10, 1, scratch); break;
-	case FAM_REC:  wfield(11, 1, scratch); break;
-	case EVEN_REC: wfield(12, 1, scratch); break;
-	case SOUR_REC: wfield(13, 1, scratch); break;
-	case OTHR_REC: wfield(14, 1, scratch); break;
+	case INDI_REC: break;
+	case FAM_REC:  break;
+	case EVEN_REC: break;
+	case SOUR_REC: break;
+	case OTHR_REC: break;
 	default: FATAL();
 	}
 	if (nestr(old, new)) {

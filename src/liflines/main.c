@@ -311,36 +311,35 @@ main (INT argc, char **argv)
 	if (c <= 0) {
 		/* ask_for_db_filename returns static buffer, we save it below */
 		dbrequested = ask_for_db_filename(_(qSidldir), _(qSidldrp), dbdir);
-		if (dbrequested && eqstr(dbrequested, "?")) {
+		if (!dbrequested || !dbrequested[0]) {
+			dbrequested = NULL;
+			llwprintf(_(qSiddbse));
+			goto finish;
+		}
+		dbrequested = strsave(dbrequested);
+		if (eqstr(dbrequested, "?")) {
 			INT n=0;
-			LIST dblist = get_dblist(dbdir, &n);
-			if (dblist) {
+			LIST dblist=0, dbdesclist=0;
+			strfree(&dbrequested);
+			if ((n=get_dblist(dbdir, &dblist, &dbdesclist)) > 0) {
 				INT i;
-				i = choose_from_list("(Currently display only) List of candidate dbs", n, dblist);
+				i = choose_from_list(
+					_("Choose database to open")
+					, n, dbdesclist);
 				if (i >= 0) {
-					/* TODO: something, but we have to sort out how to get the db
-					out of the choice string -- Perry, 2002.06.05 */
+					dbrequested = strsave(get_list_element(dblist, i+1));
 				}
 				release_dblist(dblist);
+				release_dblist(dbdesclist);
 			}
-			dbrequested = NULL;
-			llwprintf(_(qSiddbse));
-			goto finish;
-		} else if (ISNULL(dbrequested)) {
-			dbrequested = NULL;
-			llwprintf(_(qSiddbse));
-			goto finish;
+			if (!dbrequested) {
+				llwprintf(_(qSiddbse));
+				goto finish;
+			}
 		}
 	} else {
-		dbrequested = argv[optind];
-		if (ISNULL(dbrequested)) {
-			dbrequested = NULL;
-			showusage = TRUE;
-			goto usage;
-		}
+		dbrequested = strsave(argv[optind]);
 	}
-	/* we will own the memory in dbpath */
-	dbrequested = strsave(dbrequested);
 
 	/* search for database */
 	/* search for file in lifelines path */

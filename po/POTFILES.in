@@ -8,3 +8,5 @@ gedlib/messages.c
 liflines/menuitem.c
 liflines/screen.c
 liflines/show.c
+liflines/valgdcom.c
+liflines/loadsave.c
