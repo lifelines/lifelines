@@ -1093,7 +1093,7 @@ CODESET
      be suitable, because the lifelines screens run in the console, but 
      you are likely to use MS-Windows applications either for editing or 
      for viewing output, and the MS-Windows console uses a different 
-     codeset from MS-Windows application. Also, if you use lifelines in a
+     codeset from MS-Windows applications. Also, if you use lifelines in a
      different language than English, this may not be suitable, because 
      the gettext message catalogs (for non-English interface) will not 
      be converted into your codeset.
