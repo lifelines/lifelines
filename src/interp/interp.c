@@ -352,7 +352,8 @@ parse_file (void *pactx, STRING ifile, LIST plist)
 	}
 	set_infp(pactx, fp, ifile, fullpath);
 	strfree(&fullpath);
-	adj_lineno(pactx, +1);
+	set_lineno(pactx, 0);
+	set_charpos(pactx, 0);
 	yyparse(pactx);
 	close_infp(pactx);
 }
@@ -1878,10 +1879,12 @@ parse_error (void *pactx, YYLTYPE *ploc, STRING str)
 {
 	STRING ifile, fullpath;
 	INT lineno = get_lineno(pactx);
+	INT charpos = get_charpos(pactx);
 	get_infp_info(pactx, &ifile, &fullpath);
 
 	/* TO DO - how to pass current pnode ? */
-	prog_error(NULL, "Syntax Error (%s): %s: line %d\n", str, fullpath, lineno);
+	prog_error(NULL, "Syntax Error (%s): %s: line %d, char %d\n"
+		, str, fullpath, lineno+1, charpos+1);
 	Perrors++;
 }
 /*=============================================+

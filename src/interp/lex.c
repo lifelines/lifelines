@@ -51,9 +51,10 @@ static STRING Lp;	/* pointer into program string */
 
 
 static INT inchar(void *pactx);
-static int lowyylex(void *pactx, YYSTYPE * lvalp);
+static int lowyylex(void *pactx, YYLTYPE *llocp, YYSTYPE * lvalp);
 static BOOLEAN reserved(STRING, INT*);
 static void unreadchar(void *pactx, INT c);
+static int lextok(void *pactx, YYSTYPE * lvalp, INT c, INT t);
 
 /*============================
  * initlex -- Initialize lexer
@@ -76,7 +77,7 @@ initlex (struct parseinfo *pinfo, int mode)
 int
 yylex (YYSTYPE * lvalp, YYLTYPE *llocp, void * pactx)
 {
-	INT lex = lowyylex(pactx, lvalp);
+	INT lex = lowyylex(pactx, llocp, lvalp);
 
 #ifdef DEBUG
 	if (isascii(lex))
@@ -99,17 +100,12 @@ is_iden_char (INT c, INT t)
  * lowyylex -- Lexer function
  *=========================*/
 static int
-lowyylex (void *pactx, YYSTYPE * lvalp)
+lowyylex (void *pactx, YYLTYPE *llocp, YYSTYPE * lvalp)
 {
-	INT c=0, t=0, retval, mul;
-	extern INT Yival;
-	extern FLOAT Yfval;
-	static char tokbuf[200];	/* token buffer */
-	STRING p = tokbuf;
-	FILE * infp = get_infp(pactx);
-	/* TODO: pass report codeset thru to here, & on to the
-	string_node_in_internal_codeset calls below */
+	INT c=0, t=0;
+	/* TODO: set location in lvalp */
 
+	/* skip over whitespace or comments up to start of token */
 	while (TRUE) {
 		while ((t = chartype(c = inchar(pactx))) == WHITE)
 			;
@@ -129,6 +125,26 @@ lowyylex (void *pactx, YYSTYPE * lvalp)
 			if (c == EOF) return 0;
 		}
 	}
+	llocp->first_line = get_lineno(pactx);
+	llocp->first_column = get_charpos(pactx);
+	/* now read token */
+	c = lextok(pactx, lvalp, c, t);
+	llocp->last_line = get_lineno(pactx);
+	llocp->last_column = get_charpos(pactx);
+	return c;
+}
+/*===========================
+ * lextok -- lex the next token
+ *=========================*/
+static int
+lextok (void *pactx, YYSTYPE * lvalp, INT c, INT t)
+{
+	INT retval, mul;
+	extern INT Yival;
+	extern FLOAT Yfval;
+	static char tokbuf[200];	/* token buffer */
+	STRING p = tokbuf;
+
 	if (t == LETTER) {
 		p = tokbuf;
 		while (is_iden_char(c, t)) {
@@ -300,6 +316,9 @@ inchar (void *pactx)
 #endif
 	if (c == '\n') {
 		adj_lineno(pactx, +1);
+		set_charpos(pactx, 0);
+	} else {
+		adj_charpos(pactx, +1);
 	}
 	return c;
 }
@@ -317,5 +336,8 @@ unreadchar (void *pactx, INT c)
 	}
 	if (c == '\n') {
 		adj_lineno(pactx, -1);
+		set_charpos(pactx, 0);
+	} else {
+		adj_charpos(pactx, -1);
 	}
 }

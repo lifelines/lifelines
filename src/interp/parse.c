@@ -37,7 +37,8 @@ struct pactx_s {
 	TABLE filetab;   /* table of files called by current report (incl. itself) */
 	STRING ifile;    /* user's requested program path (current report) */
 	STRING fullpath; /* actual path of current program */
-	INT lineno;      /* current line number */
+	INT lineno;      /* current line number (0-based) */
+	INT charpos;     /* current offset on line (0-based) */
 };
 
 /*********************************************
@@ -128,7 +129,7 @@ close_infp (void *pactx)
 	strfree(&pctx->fullpath);
 }
 /*===============================================
- * get_lineno -- return current line number
+ * get_lineno -- return current line number (0-based)
  *=============================================*/
 INT
 get_lineno (void *pactx)
@@ -136,6 +137,16 @@ get_lineno (void *pactx)
 	struct pactx_s *pctx = (struct pactx_s *)pactx;
 	ASSERT(pctx);
 	return pctx->lineno;
+}
+/*===============================================
+ * get_charpos -- return current offset on line (0-based)
+ *=============================================*/
+INT
+get_charpos (void *pactx)
+{
+	struct pactx_s *pctx = (struct pactx_s *)pactx;
+	ASSERT(pctx);
+	return pctx->charpos;
 }
 /*===============================================
  * adj_lineno -- change current line number
@@ -146,4 +157,34 @@ adj_lineno (void *pactx, int delta)
 	struct pactx_s *pctx = (struct pactx_s *)pactx;
 	ASSERT(pctx);
 	pctx->lineno += delta;
+}
+/*===============================================
+ * adj_charpos -- change current offset on line
+ *=============================================*/
+void
+adj_charpos (void *pactx, int delta)
+{
+	struct pactx_s *pctx = (struct pactx_s *)pactx;
+	ASSERT(pctx);
+	pctx->charpos += delta;
+}
+/*===============================================
+ * set_lineno -- set new character offset
+ *=============================================*/
+void
+set_lineno (void *pactx, int val)
+{
+	struct pactx_s *pctx = (struct pactx_s *)pactx;
+	ASSERT(pctx);
+	pctx->lineno = val;
+}
+/*===============================================
+ * set_charpos -- set new character offset
+ *=============================================*/
+void
+set_charpos (void *pactx, int val)
+{
+	struct pactx_s *pctx = (struct pactx_s *)pactx;
+	ASSERT(pctx);
+	pctx->charpos = val;
 }

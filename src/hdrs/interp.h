@@ -375,14 +375,18 @@ void interp_main(BOOLEAN picklist);
 
 
 /* parse.c */
+void adj_charpos(void *pactx, int delta);
 void adj_lineno(void *pactx, int delta);
 void close_infp(void *pactx);
 void * create_pactx(void);
 void delete_pactx(void *pactx);
+INT get_charpos(void *pactx);
 TABLE get_filetab(void *pactx);
 FILE * get_infp(void *pactx);
 void get_infp_info(void *pactx, STRING *pifile, STRING *pfullpath);
 INT get_lineno(void *pactx);
+void set_charpos(void *pactx, int val);
 void set_infp(void *pactx, FILE *fp, STRING file, STRING fullpath);
+void set_lineno(void *pactx, int val);
 
 #endif /* _INTERP_H */
