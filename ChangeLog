@@ -1,33 +1,30 @@
+2003-11-07 Robert Simms
+	* ChangeLog tt/UTF-8_ISO-8859-8.tt tt/ISO-8859-8_UTF-8.tt
+	Added translation tables for UTF-8 to/from ISO-8859-8 (Hebrew).
+
 2003-11-06 Perry Rapp
 
 	* ChangeLog src/liflines/screen.c
-
 	Fix display of default TTPATH in u/c.
 
 	* ChangeLog src/liflines/screen.c
-
 	Better description of whether iconv/gettext support compiled in.
 
 	* ChangeLog src/gedlib/xlat.c
-
 	Implement two-pass tt conversions (via UTF-8).
 
 	* ChangeLog src/stdlib/strcvt.c
-
 	Fix ll_toupperz sign extension bug (sf:836960).
 
 	* ChangeLog NEWS
-
 	Update NEWS with recent bugfixes.
 
 2003-11-05 Perry Rapp
 
 	* ChangeLog src/liflines/screen.c
-
 	Alter occurrences of TTDIR to TTPATH.
 
         * ChangeLog src/hdrs/gedcom.h
-
         Make FORSPOUSES graceful with missing keys.
 
 2003-11-03 Matt Emmerton

@@ -1,0 +1,66 @@
+##!name: ISO-8859-8 to UTF-8
+## ISO-8859-8 to UTF-8
+## covers the 8-bit characters in ISO-8859-8,
+##    which includes the Hebrew alphabet
+## created by Robert Simms: 7 November 2003
+
+$a0	$c2$a0	# no-break space
+
+$a2	$c2$a2	# cent sign
+$a3	$c2$a3	# pound sign
+$a4	$c2$a4	# currency sign
+$a5	$c2$a5	# yen sign
+$a6	$c2$a6	# broken bar
+$a7	$c2$a7	# section sign
+$a8	$c2$a8	# diaeresis
+$a9	$c2$a9	# copyright sign
+$aa	$c3$97	# multiplication sign
+$ab	$c2$ab	# left-pointing double angle quotation mark
+$ac	$c2$ac	# not sign
+$ad	$c2$ad	# soft hyphen
+$ae	$c2$ae	# registered sign
+$af	$c2$af	# macron or overline
+$b0	$c2$b0	# degree sign
+$b1	$c2$b1	# plus-minus sign
+$b2	$c2$b2	# superscript two
+$b3	$c2$b3	# superscript three
+$b4	$c2$b4	# acute accent
+$b5	$c2$b5	# micro sign
+$b6	$c2$b6	# pilcrow sign
+$b7	$c2$b7	# middle dot
+$b8	$c2$b8	# cedilla
+$b9	$c2$b9	# superscript one
+$ba	$c3$b7	# division sign
+$bb	$c2$bb	# right-pointing double angle quotation mark
+$bc	$c2$bc	# vulgar fraction one quarter
+$bd	$c2$bd	# vulgar fraction one half
+$be	$c2$be	# vulgar fraction three quarters
+
+$df	$e2$80$97	# double low line
+$e0	$d7$90	# alef
+$e1	$d7$91	# bet
+$e2	$d7$92	# gimel
+$e3	$d7$93	# dalet
+$e4	$d7$94	# he
+$e5	$d7$95	# vav
+$e6	$d7$96	# zayin
+$e7	$d7$97	# het
+$e8	$d7$98	# tet
+$e9	$d7$99	# yod
+$ea	$d7$9a	# final kaf
+$eb	$d7$9b	# kaf
+$ec	$d7$9c	# lamed
+$ed	$d7$9d	# final mem
+$ee	$d7$9e	# mem
+$ef	$d7$9f	# final nun
+$f0	$d7$a0	# nun
+$f1	$d7$a1	# samekh
+$f2	$d7$a2	# ayin
+$f3	$d7$a3	# final pe
+$f4	$d7$a4	# pe
+$f5	$d7$a5	# final tsadi
+$f6	$d7$a6	# tsadi
+$f7	$d7$a7	# qof
+$f8	$d7$a8	# resh
+$f9	$d7$a9	# shin
+$fa	$d7$aa	# tav
