@@ -105,6 +105,8 @@ BUILTINS builtins[] = {
 	{"fullname",	4,	4,	__fullname},
 	{"ge",		2,	2,	__ge},
 	{"gengedcom",	1,	1,	__gengedcom},
+	{"gengedcomstrong",	1,	1,	__gengedcomstrong},
+	{"gengedcomweak",	1,	1,	__gengedcomweak},
 	{"genindiset",	2,	2,	__genindiset},
 	{"getcol",	0,	0,	__getcol},
 	{"getel",	2,	2,	__getel},

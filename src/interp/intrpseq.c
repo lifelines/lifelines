@@ -37,8 +37,10 @@
 #include "cache.h"
 #include "interp.h"
 #include "indiseq.h"
+#include "gengedc.h"
 
 LIST keysets;
+
 
 /*======================================================+
  * initset -- Initialize list that holds created INDISEQs
@@ -527,6 +529,44 @@ __gengedcom (PNODE node,
 	}
 	ASSERT(seq = (INDISEQ) pvalue(val));
 	delete_pvalue(val);
-	gen_gedcom(seq);
+	gen_gedcom(seq, GENGEDCOM_ORIGINAL);
+	return NULL;
+}
+
+/*===================================================+
+ * gengedcomweak -- Generate GEDCOM output from an INDISEQ
+ *   gengedcom(SET) -> VOID
+ * Perry 2000/11/03
+ *==================================================*/
+PVALUE __gengedcomweak (PNODE node, TABLE stab, BOOLEAN *eflg)
+{
+	INDISEQ seq;
+	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
+	if (*eflg) {
+		prog_error(node, "the arg to gengedcomweak must be a set.");
+		return NULL;
+	}
+	ASSERT(seq = (INDISEQ) pvalue(val));
+	delete_pvalue(val);
+	gen_gedcom(seq, GENGEDCOM_WEAK_DUMP);
+	return NULL;
+}
+
+/*===================================================+
+ * gengedcomstrong -- Generate GEDCOM output from an INDISEQ
+ *   gengedcom(SET) -> VOID
+ * Perry 2000/11/03
+ *==================================================*/
+PVALUE __gengedcomstrong (PNODE node, TABLE stab, BOOLEAN *eflg)
+{
+	INDISEQ seq;
+	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
+	if (*eflg) {
+		prog_error(node, "the arg to gengedcomstrong must be a set.");
+		return NULL;
+	}
+	ASSERT(seq = (INDISEQ) pvalue(val));
+	delete_pvalue(val);
+	gen_gedcom(seq, GENGEDCOM_STRONG_DUMP);
 	return NULL;
 }

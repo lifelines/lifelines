@@ -96,7 +96,7 @@ INDISEQ fam_to_children(NODE);
 INDISEQ fam_to_fathers(NODE);
 INDISEQ fam_to_mothers(NODE);
 INDISEQ find_named_seq(STRING);
-void gen_gedcom(INDISEQ);
+void gen_gedcom(INDISEQ, INT gegedcl); // Perry
 INDISEQ get_all_even(void);
 INDISEQ get_all_othe(void);
 INDISEQ get_all_sour(void);
@@ -119,7 +119,7 @@ INDISEQ parent_indiseq(INDISEQ);
 INT partition(INT, INT, SORTEL);
 void partition_sort(SORTEL*, INT, INT (*func)(SORTEL, SORTEL));
 void preprint_indiseq(INDISEQ);
-void print_indiseq_element(INDISEQ seq, INT i, STRING buf, INT len);
+void print_indiseq_element (INDISEQ seq, INT i, STRING buf, INT len);
 INDISEQ refn_to_indiseq(STRING, INT letr, INT sort);
 void remove_browse_list(STRING, INDISEQ);
 void remove_indiseq(INDISEQ,BOOLEAN);
@@ -133,7 +133,6 @@ void update_browse_list(STRING, INDISEQ);
 void valuesort_indiseq(INDISEQ, BOOLEAN*);
 void write_family(STRING, TABLE);
 void write_nonlink_indi(NODE);
-
 
 
 /*==================

@@ -501,7 +501,8 @@ key_to_node (CACHE cache, STRING key, STRING tag)
 {
 	CACHEEL cel;
 	ASSERT(cache && key);
-	if (!(cel = key_to_cacheel(cache, key, tag, FALSE))) return NULL;
+	if (!(cel = key_to_cacheel(cache, key, tag, FALSE)))
+		return NULL;
 	return cnode(cel);
 }
 /*===============================================================
@@ -513,7 +514,8 @@ qkey_to_node (CACHE cache, STRING key, STRING tag)
 {
 	CACHEEL cel;
 	ASSERT(cache && key);
-	if (!(cel = key_to_cacheel(cache, key, tag, TRUE))) return NULL;
+	if (!(cel = key_to_cacheel(cache, key, tag, TRUE)))
+		return NULL;
 	return cnode(cel);
 }
 /*======================================

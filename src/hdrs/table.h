@@ -53,8 +53,10 @@ void insert_table(TABLE, STRING, WORD);
 void delete_table(TABLE, STRING);
 void remove_table(TABLE, INT);
 void traverse_table(TABLE, INT (*proc)(ENTRY));
+void traverse_table_param(TABLE tab, INT (*tproc)(ENTRY, WORD), WORD param);
 BOOLEAN in_table(TABLE, STRING);
 WORD valueof(TABLE, STRING);
 WORD valueofbool(TABLE, STRING, BOOLEAN*);
+WORD * access_value(TABLE tab, STRING key);
 
 #endif /* _TABLE_H */

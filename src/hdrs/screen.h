@@ -138,6 +138,6 @@ void wpos (INT, INT);
 void show_horz_line (WINDOW*, INT, INT, INT);
 void show_vert_line (WINDOW*, INT, INT, INT);
 void dbprintf (STRING, ...);
-void do_edit (void);
+void do_edit(void);
 
 #endif /* _SCREEN_H */

@@ -374,7 +374,6 @@ valuesort_indiseq (INDISEQ seq,
 	IFlags(seq) &= ~KEYSORT;
 	IFlags(seq) |= VALUESORT;
 }
-
 /*=========================================
  * partition_sort -- Partition (quick) sort
  *=======================================*/
@@ -711,20 +710,20 @@ indi_to_spouses (NODE indi)
 		}
 #else
 		FORHUSBS(fam, husb, num1)
-			if(husb != indi) {
-				len++;
-				key = indi_to_key(husb);
-				val = atoi(fam_to_key(fam) + 1); /* PVALUE NEEDED */
-				append_indiseq(seq, key, NULL, (WORD)val, TRUE, FALSE);
-			}
+		    if(husb != indi) {
+			len++;
+			key = indi_to_key(husb);
+			val = atoi(fam_to_key(fam) + 1); /* PVALUE NEEDED */
+			append_indiseq(seq, key, NULL, (WORD)val, TRUE, FALSE);
+		    }
 		ENDHUSBS
 		FORWIFES(fam, wife, num1)
-			if(wife != indi) {
-				len++;
-				key = indi_to_key(wife);
-				val = atoi(fam_to_key(fam) + 1);
-				append_indiseq(seq, key, NULL, (WORD)val, TRUE, FALSE);
-			}
+		    if(wife != indi) {
+			len++;
+			key = indi_to_key(wife);
+			val = atoi(fam_to_key(fam) + 1);
+			append_indiseq(seq, key, NULL, (WORD)val, TRUE, FALSE);
+		    }
 		ENDWIFES
 #endif
 	ENDFAMSS
@@ -1038,174 +1037,6 @@ spouse_indiseq (INDISEQ seq)
 	ENDINDISEQ
 	remove_table(tab, DONTFREE);
 	return sps;
-}
-/*===================================================================
- * gen_gedcom -- Generate GEDCOM file from sequence; only persons in
- *   sequence are in file; families that at least two persons in
- *   sequence refer to are also in file; other persons referred to by
- *   families are not included
- *=================================================================*/
-void
-gen_gedcom (INDISEQ seq)
-{
-	INT num1, num2, sex;
-	NODE indi, husb, wife, chil, rest, famc, fref;
-	INDISEQ fseq;
-	TABLE itab, ftab;
-	BOOLEAN addfam;
-	STRING tag, dkey;
-	char scratch[30];
-	if (!seq) return;
-	fseq = create_indiseq();
-	itab = create_table();
-	ftab = create_table();
-	FORINDISEQ(seq, el, num)
-		insert_table(itab, skey(el), NULL);
-	ENDINDISEQ
-	FORINDISEQ(seq, el, num)
-		indi = key_to_indi(skey(el));
-		sex = SEX(indi);
-		write_nonlink_indi(indi);
-		famc = indi_to_famc(indi);
-		if (!famc) goto c;
-		addfam = FALSE;
-		split_fam(famc, &fref, &husb, &wife, &chil, &rest);
-		join_fam(famc, fref, husb, wife, chil, rest);
-		if (husb && in_table(itab, rmvat(nval(husb)))) addfam = TRUE;
-		if (!addfam && wife && in_table(itab, rmvat(nval(wife))))
-			addfam = TRUE;
-		if (!addfam) {
-			FORCHILDREN(famc, chl, num2)
-				dkey = indi_to_key(chl);
-				if (in_table(itab, dkey) &&
-				    nestr(skey(el), dkey)) {
-					addfam = TRUE;
-					goto a;
-				}
-			ENDCHILDREN
-	a:;
-		}
-		if (addfam) {
-			tag = rmvat(nxref(famc));
-			sprintf(scratch, "1 FAMC @%s@\n", tag);
-			poutput(scratch);
-			if (!in_table(ftab, tag)) {
-				tag = strsave(tag);
-				append_indiseq(fseq, tag, NULL, NULL,
-				    TRUE, TRUE);
-				insert_table(ftab, tag, NULL);
-			}
-		}
-	c:
-		FORFAMSS(indi, fam, spouse, num1)
-			addfam = FALSE;
-			if (spouse && in_table(itab, indi_to_key(spouse)))
-				addfam = TRUE;
-			if (!addfam) {
-				FORCHILDREN(fam, chl, num2)
-					if (in_table(itab, indi_to_key(chl))) {
-						addfam = TRUE;
-						goto b;
-					}
-				ENDCHILDREN
-	b:;
-			}
-			if (addfam) {
-				tag = rmvat(nxref(fam));
-				sprintf(scratch, "1 FAMS @%s@\n", tag);
-				poutput(scratch);
-				if (!in_table(ftab, tag)) {
-					tag = strsave(tag);
-					append_indiseq(fseq, tag, NULL, NULL,
-					    TRUE, TRUE);
-					insert_table(ftab, tag, NULL);
-				}
-			}
-		ENDFAMSS
-	ENDINDISEQ
-	FORINDISEQ(fseq, el, num)
-		write_family(skey(el), itab);
-	ENDINDISEQ
-	remove_indiseq(fseq, FALSE);
-	remove_table(itab, DONTFREE);
-	remove_table(ftab, DONTFREE);
-}
-/*======================================================
- * write_nonlink_indi -- Write person minus linking info
- *====================================================*/
-void
-write_nonlink_indi (NODE indi)
-{
-	STRING t;
-	char scratch[30];
-	sprintf(scratch, "0 %s INDI\n", nxref(indi));
-	poutput(scratch);
-	indi = nchild(indi);
-	while (indi) {
-		t = ntag(indi);
-		if (eqstr("FAMS", t) || eqstr("FAMC", t)) break;
-		new_write_node(1, indi, FALSE);
-		indi = nsibling(indi);
-	}
-}
-/*==================================================
- * new_write_node -- Recursively write nodes to file
- * NOTE: consolidate with write_node?
- *================================================*/
-void
-new_write_node (INT levl,       /* level of root */
-                NODE node,      /* root */
-                BOOLEAN list)   /* output siblings? */
-{
-	char unsigned scratch[MAXLINELEN+1];
-	STRING p = scratch;
-	if (!node) return;
-	sprintf(p, "%d", levl);
-	p += strlen(p);
-	if (nxref(node)) {
-		sprintf(p, " %s", nxref(node));
-		p += strlen(p);
-	}
-	sprintf(p, " %s", ntag(node));
-	p += strlen(p);
-	if (nval(node)) {
-		sprintf(p, " %s", nval(node));
-		p += strlen(p);
-	}
-	sprintf(p, "\n");
-	poutput(scratch);
-	new_write_node(levl + 1, nchild(node), TRUE);
-	if (list)
-		new_write_node(levl, nsibling(node), TRUE);
-}
-/*============================================
- * write_family -- Write family record to file
- *==========================================*/
-void
-write_family (STRING key,     /* family key */
-              TABLE itab)     /* table of persons in file */
-{
-	NODE fam = key_to_fam(key);
-	char scratch[30];
-	STRING t;
-	sprintf(scratch, "0 %s FAM\n", nxref(fam));
-	poutput(scratch);
-	fam = nchild(fam);
-	while (fam) {
-		t = ntag(fam);
-		if (eqstr("HUSB", t)) {
-			if (in_table(itab, rmvat(nval(fam))))
-				new_write_node(1, fam, FALSE);
-		} else if (eqstr("WIFE", t)) {
-			if (in_table(itab, rmvat(nval(fam))))
-				new_write_node(1, fam, FALSE);
-		} else if (eqstr("CHIL", t)) {
-			if (in_table(itab, rmvat(nval(fam))))
-				new_write_node(1, fam, FALSE);
-		} else
-			new_write_node(1, fam, FALSE);
-		fam = nsibling(fam);
-	}
 }
 /*============================================================
  * name_to_indiseq -- Return person sequence whose names match

@@ -160,6 +160,21 @@ valueofbool (TABLE tab,
 	}
 	return NULL;
 }
+/*===================================
+ * access_value -- get pointer to value
+ * returns 0 if not found
+ *=================================*/
+WORD * access_value(TABLE tab, STRING key)
+{
+	ENTRY entry;
+	if (!key)
+		return 0;
+	if (NULL == (entry = fndentry(tab, key)))
+		return 0;
+
+	return &entry->evalue;
+}
+
 /*=============================
  * remove_table -- Remove table
  *===========================*/
@@ -204,6 +219,28 @@ traverse_table (TABLE tab,
 		while ((ent = nxt)) {
 			nxt = ent->enext;
 			(*tproc)(ent);
+		}
+	}
+}
+
+/*=================================================
+ * traverse_table_param -- Traverse table doing something, with extra callback param
+ * also, use return value of proc to allow abort (proc returns 0 for abort)
+ *===============================================*/
+void
+traverse_table_param (TABLE tab,
+                INT (*tproc)(ENTRY, WORD),
+                void * param)
+{
+	INT i;
+	ENTRY ent, nxt;
+	if (!tab || !tproc) return;
+	for (i = 0; i < MAXHASH; i++) {
+		nxt = tab[i];
+		while ((ent = nxt)) {
+			nxt = ent->enext;
+			if (!(*tproc)(ent, param))
+				return;
 		}
 	}
 }

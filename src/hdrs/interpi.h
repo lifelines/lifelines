@@ -91,6 +91,8 @@ extern PVALUE __free(PNODE, TABLE, BOOLEAN *);
 extern PVALUE __fullname(PNODE, TABLE, BOOLEAN *);
 extern PVALUE __ge(PNODE, TABLE, BOOLEAN *);
 extern PVALUE __gengedcom(PNODE, TABLE, BOOLEAN *);
+extern PVALUE __gengedcomweak(PNODE, TABLE, BOOLEAN *);
+extern PVALUE __gengedcomstrong(PNODE, TABLE, BOOLEAN *);
 extern PVALUE __genindiset(PNODE, TABLE, BOOLEAN *);
 extern PVALUE __getcol(PNODE, TABLE, BOOLEAN *);
 extern PVALUE __getel(PNODE, TABLE, BOOLEAN *);
