@@ -1,0 +1,48 @@
+Lifelines was gettextized in Feb of 2002.
+
+Included versions are:
+  sv: Swedish (Thanks to Jens Arvidsson)
+
+Versions under development or consideration:
+  de: German
+  fr: French
+
+If you would like to volunteer to help with a new or existing
+translation, please send email to the long-running lifelines mailing
+list, LINES-L, which is explained at:
+     http://www.rootsweb.com/~nozell/lines-l
+
+
+Issues for translators:
+ gettext
+  If you are not familiar with gettext, it would be beneficial to
+  look not only at the ABOUT-NLS file (in the root of lifelines), but
+  also the gettext manual, which may be seen at
+     http://www.gnu.org/manual/gettext/index.html
+
+ Menus.
+  The large menus (main menu, utility menu, etc) still have hardcoded
+  letters, so that "u" always invokes the utility menu from the main
+  menu, and this cannot be changed at present.
+  The list browse screen also has fixed menu letters.
+  Widths.
+   The main menu has room for 70 characters after the spaces of each item
+   (eg, after "u  " you may use 70 characters).
+   Submenus must be smaller.
+
+  The small menus at the bottom of browse screens (person browse,
+  family browse, tandem browses, other browse, but not list browse) 
+  draw their menu assignment letters from the actual text, so that they
+  may be internationalized. Also, the column widths of these are figured
+  dynamically from the width of the widest menu item.
+
+ May:
+  The month of May has the same short & long form in English, so the
+  short form is marked as "may**", so that it may be localized. Do not
+  include asterisks in your localized version.
+
+ French Republic months:
+  The names of the French Republic months (eg, Vendemiaire) should
+  probably stay in French.
+
+
