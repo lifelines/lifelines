@@ -1,3 +1,9 @@
+2007-07-31 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog btree/file.c btree/index.c btree/record.c
+	btree/traverse.c hdrs/btree.h hdrs/lloptions.h:
+	Changed typedef RECORD to RAWRECORD. Misc additional header documentation.
+
 2007-07-29 Perry Rapp <puddle@users.sourceforge.net>
 
 	Deleted redundant ARRAYSIZE macro (same as ARRSIZE).

@@ -161,7 +161,7 @@ write_record_to_file_impl (BTREE btree, RKEY rkey, STRING file
 	FILE *fp;
 	INT len;
 	INT siz;
-	RECORD record = getrecord(btree, rkey, &len);
+	RAWRECORD record = getrecord(btree, rkey, &len);
 	if (record == NULL)
 		return RECORD_NOT_FOUND;
 	if (translfnc) {

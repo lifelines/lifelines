@@ -47,6 +47,7 @@ static BOOLEAN traverse_index(BTREE btree, INDEX index, RKEY lo, RKEY hi, BOOLEA
 
 /*=====================================================
  * traverse_index_blocks - Traverse BTREE, doing things
+ * this calls readindex directly, so it skips the index cache
  *===================================================*/
 BOOLEAN
 traverse_index_blocks (BTREE btree, INDEX index,
@@ -79,7 +80,9 @@ traverse_index_blocks (BTREE btree, INDEX index,
 /*====================================================
  * traverse_block -- traverse subtree whilst under key
  *  either lo or hi can have 0 as its first character
+ *  (which means unspecified)
  * NB: This covers all records, including DELE records.
+ * this calls getindex, so it uses the index cache
  *==================================================*/
 static BOOLEAN
 traverse_block (BTREE btree, BLOCK block, RKEY lo, RKEY hi,
@@ -87,7 +90,7 @@ traverse_block (BTREE btree, BLOCK block, RKEY lo, RKEY hi,
 {
 	STRING p;
 	INT i, len;
-	RECORD rec;
+	RAWRECORD rawrec;
 	INT nkeys=nkeys(block); /* caller loaded block */
 	FKEY nfkeyme = ixself(block);
 	for (i=0; i<nkeys;i++)
@@ -103,12 +106,12 @@ traverse_block (BTREE btree, BLOCK block, RKEY lo, RKEY hi,
 			continue;
 		if (hi.r_rkey[0] && ll_strncmp(hi.r_rkey, rkeys(block, i).r_rkey, 8) < 0)
 			continue;
-		rec = readrec(btree, block, i, &len);
+		rawrec = readrec(btree, block, i, &len);
 		/*
-		NB: rec could be NULL if len of record was 0 
+		NB: rawrec could be NULL if len of record was 0 
 		I don't know if this would ever happen - Perry, 2001/05/26
 		*/
-		p = rec;
+		p = rawrec;
 		if (!(*func)(rkeys(block,i), p, len, param))
 			return FALSE;
 	}

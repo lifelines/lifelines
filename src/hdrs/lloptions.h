@@ -41,10 +41,11 @@
   after read_lloptions has been called
 */
 struct lloptions_s {
+  /* options set by either user's config or db user options */
 	INT list_detail_lines;
 	INT add_metadata;
 	STRING email_addr;
-	/* below options not read from db options */
+	/* options only set by user's config */
 	STRING lleditor;
 	STRING llprograms;
 	STRING llreports;

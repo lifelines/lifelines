@@ -53,7 +53,7 @@ typedef struct {
 
 typedef INT FKEY; /*file key*/
 
-typedef char *RECORD;
+typedef char *RAWRECORD;
 
 typedef struct {
 	FKEY k_mkey;	/*current master key*/
@@ -163,10 +163,10 @@ BOOLEAN validate_keyfile2(KEYFILE2 *);
 /* names.c */
 
 /* record.c */
-BOOLEAN addrecord(BTREE, RKEY, RECORD, INT);
-RECORD getrecord(BTREE, RKEY, INT*);
+BOOLEAN addrecord(BTREE, RKEY, RAWRECORD, INT);
+RAWRECORD getrecord(BTREE, RKEY, INT*);
 BOOLEAN isrecord(BTREE, RKEY);
-RECORD readrec(BTREE btree, BLOCK block, INT i, INT *plen);
+RAWRECORD readrec(BTREE btree, BLOCK block, INT i, INT *plen);
 
 /* traverse.c */
 BOOLEAN traverse_index_blocks(BTREE, INDEX, BOOLEAN (*ifunc)(BTREE, INDEX), BOOLEAN (*dfunc)(BTREE, BLOCK));

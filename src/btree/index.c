@@ -57,10 +57,12 @@ crtindex (BTREE btree)
 }
 /*=================================
  * readindex - Read index from file
+ *  basedir: [in] base directory for files making up btree
+ *  ikey:    [in] index file key (number which indicates a file)
+ * this is below the level of the index cache
  *===============================*/
 INDEX
-readindex (STRING basedir,  /* basedir of btree */
-           FKEY ikey)       /* index file key */
+readindex (STRING basedir, FKEY ikey)
 {
 	FILE *fp;
 	INDEX index;
@@ -133,10 +135,11 @@ cacheindex (BTREE btree, /* btree handle */
 }
 /*================================
  * getindex - Get index from btree
+ *  checks cache first to avoid disk read if possible
+ *  also loads cache if read from disk
  *==============================*/
 INDEX
-getindex (BTREE btree,
-          FKEY fkey)
+getindex (BTREE btree, FKEY fkey)
 {
 	INT j;
 	INDEX index;

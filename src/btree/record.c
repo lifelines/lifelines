@@ -50,12 +50,13 @@ static void movefiles(STRING, STRING);
 
 /*=================================
  * addrecord -- Add record to BTREE
+ *  btree:  [in] btree to add record to
+ *  rkey:   [in] key of record (eg, "     I67")
+ *  record: [in] record data to add
+ *  len:    [in] record length
  *===============================*/
 BOOLEAN
-addrecord (BTREE btree,         /* btree to add record to */
-           RKEY rkey,           /* key of record */
-           RECORD record,       /* record to add */
-           INT len)             /* record length */
+addrecord (BTREE btree, RKEY rkey, RAWRECORD record, INT len)
 {
 	INDEX index;
 	BLOCK old, newb, xtra;
@@ -301,13 +302,17 @@ filecopy (FILE* fpsrc, STRING fnamesrc, INT len, FILE* fpdest, STRING fnamedest)
 }
 /*==================================
  * readrec -- read record from block
+ *  btree: [in]  database pointer
+ *  block: [in]  block of data from disk (leaf of btree)
+ *  i:     [in]  index in leaf block desired
+ *  plen:  [out] length of returned data
  *================================*/
-RECORD
+RAWRECORD
 readrec(BTREE btree, BLOCK block, INT i, INT *plen)
 {
 	char scratch[MAXPATHLEN];
 	FILE *fr;
-	RECORD record;
+	RAWRECORD rawrec;
 	INT len;
 
 	sprintf(scratch, "%s/%s", bbasedir(btree), fkey2path(ixself(block)));
@@ -334,33 +339,34 @@ readrec(BTREE btree, BLOCK block, INT i, INT *plen)
 			, len, rkey2str(rkeys(block, i)));
 		FATAL2(msg);
 	}
-	record = (RECORD) stdalloc(len + 1);
-	if (!(fread(record, len, 1, fr) == 1)) {
+	rawrec = (RAWRECORD) stdalloc(len + 1);
+	if (!(fread(rawrec, len, 1, fr) == 1)) {
 		char msg[sizeof(scratch)+64];
 		sprintf(msg, "Read for %d bytes failed for blockfile (rkey=%s)"
 			, len, rkey2str(rkeys(block, i)));
 		FATAL2(msg);
 	}
 	fclose(fr);
-	record[len] = 0;
+	rawrec[len] = 0;
 	*plen = len;
-	return record;
+	return rawrec;
 }
 /*===================================
  * getrecord -- Get record from BTREE
- *  (ignore deleted records)
+ * (ignore deleted records)
+ *  btree: [in]  database pointer
+ *  rkey:  [in]  key to data (eg, "    I313")
+ *  plen:  [out] length of returned data
  *=================================*/
-RECORD
-getrecord (BTREE btree,
-           RKEY rkey,
-           INT *plen)
+RAWRECORD
+getrecord (BTREE btree, RKEY rkey, INT *plen)
 {
 	INDEX index;
 	SHORT i, n, lo, hi;
 	FKEY nfkey;
 	BLOCK block;
 	BOOLEAN found = FALSE;
-	RECORD rec;
+	RAWRECORD rawrec;
 
 #ifdef DEBUG
 	llwprintf("GETRECORD: rkey: %s\n", rkey2str(rkey));
@@ -399,12 +405,12 @@ getrecord (BTREE btree,
 	}
 	if (!found) return NULL;
 
-	rec = readrec(btree, block, lo, plen);
-	if (rec && !strcmp(rec, "DELE\n")) {
-		stdfree(rec);
-		rec=NULL;
+	rawrec = readrec(btree, block, lo, plen);
+	if (rawrec && !strcmp(rawrec, "DELE\n")) {
+		stdfree(rawrec);
+		rawrec=NULL;
 	}
-	return rec;
+	return rawrec;
 }
 /*=======================================
  * movefiles -- Move first file to second
