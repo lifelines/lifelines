@@ -2681,7 +2681,7 @@ array_interact (STRING ttl, INT len, STRING *strings
 	INT row, done;
 	char fulltitle[128];
 	STRING responses = len<10 ? "jkiq123456789[]()$^" : "jkiq[]()$^";
-	STRING promptline = selectable ? _(qSchlist ): _(qSvwlist);
+	STRING promptline = selectable ? _(qSchlist) : _(qSvwlist);
 	listdisp ld; /* structure used in resizable list displays */
 
 	memset(&ld, 0, sizeof(ld));

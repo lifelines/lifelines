@@ -41,6 +41,7 @@ extern STRING qSmtitle,qSnorwandro,qSnofandl,qSbdlkar;
 extern STRING qSusgFinnOpt,qSusgFinnAlw,qSusgNorm;
 extern STRING qSbaddb,qSdefttl,qSiddefpath;
 extern STRING qSaskynq,qSaskynyn,qSaskyY,qSaskint;
+extern STRING qSchlistx,qSvwlistx;
 
 extern INT csz_indi, icsz_indi;
 extern INT csz_fam, icsz_fam;
@@ -81,6 +82,7 @@ INT screen_width = 20; /* TODO */
 static INT ask_for_char_msg(STRING msg, STRING ttl, STRING prmpt, STRING ptrn);
 static BOOLEAN ask_for_filename_impl(STRING ttl, STRING path, STRING prmpt, STRING buffer, INT buflen);
 static INT choose_one_or_list_from_indiseq(STRING ttl, INDISEQ seq, BOOLEAN multi);
+static INT choose_or_view_array(STRING ttl, INT no, STRING *pstrngs, BOOLEAN selectable);
 static void init_browse_module(void);
 static void init_show_module(void);
 static BOOLEAN is_unadorned_directory(STRING path);
@@ -754,15 +756,14 @@ ask_yes_or_no_msg (STRING msg, STRING ttl)
 INT
 choose_from_array (STRING ttl, INT no, STRING *pstrngs)
 {
-	/* TODO */
-	/* Another one where we may want implementation, as it is above curses level */
-	return -1;
+	BOOLEAN selectable = TRUE;
+	return choose_or_view_array(ttl, no, pstrngs, selectable);
 }
 void
 view_array (STRING ttl, INT no, STRING *pstrngs)
 {
-	/* TODO */
-	/* Another one where we may want implementation, as it is above curses level */
+	BOOLEAN selectable = FALSE;
+	choose_or_view_array(ttl, no, pstrngs, selectable);
 }
 INT
 choose_from_list (STRING ttl, LIST list)
@@ -806,7 +807,7 @@ choose_one_or_list_from_indiseq (STRING ttl, INDISEQ seq, BOOLEAN multi)
 {
 	calc_indiseq_names(seq); /* we certainly need the names */
 
-	/* TODO */
+	/* TODO: imitate choose_from_list & delegate to array chooser */
 	return 0;
 }
 BOOLEAN
@@ -853,5 +854,48 @@ INT
 prompt_stdout (STRING prompt)
 {
 	return ask_for_char(NULL, prompt, NULL);
+}
+static INT
+choose_or_view_array (STRING ttl, INT no, STRING *pstrngs, BOOLEAN selectable)
+{
+	/* TODO: The q ought to be localized */
+	STRING promptline = selectable ? _(qSchlistx) : _(qSvwlistx);
+	STRING responses = selectable ? "0123456789udq" : "udq";
+	INT i=0;
+	while (1) {
+		INT j;
+		INT rv;
+		for (j=i; j<i+10 && j<no; ++j) {
+			printf("%d: %s\n", j-i, pstrngs[j]);
+		}
+		printf("%s\n", promptline);
+		rv = interact(responses);
+		switch(rv) {
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
+			rv = i+rv-'0';
+			if (selectable && rv < no) {
+				return rv;
+			}
+			break;
+		case 'd':
+			if (i+10 < no)
+				i += 10;
+			break;
+		case 'u':
+			if (i>9)
+				i -= 10;
+			break;
+		case 'q': return -1;
+		}
+	}
 }
 

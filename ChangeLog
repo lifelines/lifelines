@@ -14,7 +14,13 @@
 
 	* ChangeLog src/interp/builtin.c
 
-	Fix buggy f() report function (sf bug#704336: f() report function crashes.)
+	Fix buggy f() report function.
+	(sf bug#704336: f() report function crashes.)
+
+	* ChangeLog src/gedlib/messages.c src/liflines/llexec.c
+	src/liflines/screen.c
+
+	Implement choose/view array for llexec (not a great implementation).
 
 2003-03-13 Stephen Dum
 
