@@ -285,6 +285,10 @@ SOURCE=..\..\..\src\interp\lex.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\stdlib\listener.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\stdlib\lldate.c
 # End Source File
 # Begin Source File

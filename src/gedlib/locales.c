@@ -39,6 +39,7 @@ static BOOLEAN is_locale_delim(char ch);
 static BOOLEAN is_msgcategory(int category);
 static STRING llsetenv(STRING name, STRING value);
 static void notify_gettext_language_changed(void);
+static void send_uilang_callbacks(void);
 static STRING setmsgs(STRING localename);
 static char * win32_setlocale(int category, char * locale);
 
@@ -53,6 +54,7 @@ static BOOLEAN customized_msgs = FALSE;
 static STRING  current_coll = NULL; /* most recent */
 static STRING  current_msgs = NULL; /* most recent */
 static STRING  rptlocalestr = NULL; /* if set by report program */
+static LIST f_uilang_callbacks = NULL; /* list of callbacks for UI language changes */
 
 
 /*********************************************
@@ -279,7 +281,7 @@ setmsgs (STRING localename)
 #endif
 	if (str) {
 		notify_gettext_language_changed();
-		/* TODO: inform menuitem of language change */
+		send_uilang_callbacks();
 		date_update_lang();
 	}
 	return str;
@@ -353,12 +355,6 @@ customlocale (STRING prefix)
 #endif /* HAVE_SETLOCALE */
 
 #if ENABLE_NLS
-/*
- * TODO: 2002.03.03, Perry
- * We need to watch for changes here, and 
- * propagate them to menuitem and to date modules,
- * which have to reload arrays if the language changes
- */
 	/* did user set, eg, UiLocaleMessages option ? */
 	strcpy(option+prefixlen, "Messages");
 	str = getoptstr(option, 0);
@@ -477,3 +473,28 @@ is_locale_delim (char ch)
 {
 	return ch=='_' || ch=='.' || ch=='@';
 }
+/*==========================================
+ * register_uilang_callback -- 
+ *========================================*/
+void
+register_uilang_callback (CALLBACK_FNC fncptr, VPTR uparm)
+{
+	add_listener(&f_uilang_callbacks, fncptr, uparm);
+}
+/*==========================================
+ * unregister_uilang_callback -- 
+ *========================================*/
+void
+unregister_uilang_callback (CALLBACK_FNC fncptr, VPTR uparm)
+{
+	delete_listener(&f_uilang_callbacks, fncptr, uparm);
+}
+/*==========================================
+ * send_uilang_callbacks -- 
+ *========================================*/
+static void
+send_uilang_callbacks (void)
+{
+	notify_listeners(&f_uilang_callbacks);
+}
+

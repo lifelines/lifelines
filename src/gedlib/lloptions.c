@@ -16,6 +16,7 @@
 #endif
 #include "llstdlib.h"
 #include "gedcom.h"
+#include "gedcomi.h"
 #include "lloptions.h"
 
 
@@ -32,7 +33,6 @@ extern STRING qSopt2long;
 /* alphabetical */
 static void copy_process(STRING dest, STRING src);
 static void create_notification_list_if_needed(void);
-static void delete_notification_list_if_needed(void);
 static void free_optable(TABLE * ptab);
 static BOOLEAN load_config_file(STRING file, STRING * pmsg);
 static void send_notifications(void);
@@ -153,28 +153,6 @@ load_config_file (STRING file, STRING * pmsg)
 	return TRUE;
 }
 /*=================================
- * create_notification_list --
- *===============================*/
-static void
-create_notification_list_if_needed (void)
-{
-	if (!f_notifications) {
-		f_notifications = create_list();
-	}
-}
-/*=================================
- * delete_notification_list -- 
- *===============================*/
-static void
-delete_notification_list_if_needed (void)
-{
-	if (f_notifications) {
-		make_list_empty(f_notifications);
-		remove_list(f_notifications, 0);
-		f_notifications = 0;
-	}
-}
-/*=================================
  * load_global_options -- 
  *  Load internal table of global options from caller-specified config file
  * STRING * pmsg: heap-alloc'd error string if fails
@@ -185,7 +163,6 @@ load_global_options (STRING configfile, STRING * pmsg)
 	*pmsg = NULL;
 	free_optable(&f_global);
 	f_global= create_table();
-	create_notification_list_if_needed();
 	if (!load_config_file(configfile, pmsg))
 		return FALSE;
 	return TRUE;
@@ -262,7 +239,7 @@ term_lloptions (void)
 	free_optable(&f_db);
 	free_optable(&f_global);
 	free_optable(&f_fallback);
-	delete_notification_list_if_needed();
+	remove_listeners(&f_notifications);
 }
 /*===============================================
  * getoptstr -- get an option (from db or from global)
@@ -334,7 +311,6 @@ getoptint (STRING optname, INT defval)
 /*===============================================
  * setoptstr_fallback -- Set option fallback value
  *  newval must be in heap!
- * Created: 2001/02/04, Perry Rapp
  *=============================================*/
 void
 setoptstr_fallback (STRING optname, STRING newval)
@@ -345,49 +321,26 @@ setoptstr_fallback (STRING optname, STRING newval)
 	send_notifications();
 }
 /*===============================================
- * register_notify -- Put notification on the callback list
- * Created: 2002/06/16, Perry Rapp
+ * register_notify -- Caller wants to be notified when options change
  *=============================================*/
 void
-register_notify (options_notify_fnc fncptr)
+register_notify (CALLBACK_FNC fncptr)
 {
-	create_notification_list_if_needed();
-	enqueue_list(f_notifications, (VPTR)fncptr);
+	add_listener(&f_notifications, fncptr, 0);
 }
 /*===============================================
- * unregister_notify -- Take notification off the callback list
- * Created: 2002/06/16, Perry Rapp
+ * unregister_notify -- Caller no longer wants to be notified when options change
  *=============================================*/
 void
-unregister_notify (options_notify_fnc fncptr)
+unregister_notify (CALLBACK_FNC fncptr)
 {
-	/* Our lists don't have remove from middle, so we just make a new copy */
-	LIST lold = 0;
-	if (!f_notifications || is_empty_list(f_notifications))
-		return;
-	lold = f_notifications;
-	f_notifications = 0;
-	create_notification_list_if_needed();
-	while (!is_empty_list(lold)) {
-		VPTR vptr = pop_list(lold);
-		if ((VPTR)fncptr != vptr)
-			enqueue_list(f_notifications, (VPTR)fncptr);
-	}
-	make_list_empty(lold);
-	remove_list(lold, 0);
+	delete_listener(&f_notifications, fncptr, 0);
 }
 /*===============================================
  * send_notifications -- Send notifications to any registered listeners
- * Created: 2002/06/18, Perry Rapp
  *=============================================*/
 static void
 send_notifications (void)
 {
-	options_notify_fnc fncptr=0;
-	if (!f_notifications || is_empty_list(f_notifications))
-		return;
-	FORLIST(f_notifications, el)
-		fncptr=(options_notify_fnc)el;
-		(*fncptr)();
-	ENDLIST
+	notify_listeners(&f_notifications);
 }

@@ -5,6 +5,15 @@
 	i18n menu page title.
 	Fix locales.c to call llsetlocale (for win32 fix for locale names).
 
+	* ChangeLog build/msvc6/llines/llinesprj.dsp src/gedlib/init.c
+	src/gedlib/lloptions.c src/gedlib/locales.c src/hdrs/gedcom.h
+	src/hdrs/lloptions.h src/hdrs/llstdlib.h
+	src/liflines/menuitem.c src/stdlib/Makefile.am
+	src/tools/wprintf.c
+	NEW: src/stdlib/listener.c
+
+	Propagate on-the-fly language changes to menuitem.c.
+
 2002-09-25 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llines.rc src/hdrs/version.h

@@ -101,7 +101,7 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 	INT i;
 
 	/* request notification when options change */
-	register_notify(update_useropts);
+	register_notify(&update_useropts);
 	suppress_reload = TRUE;
 
 	f_dbnotify = notify;
@@ -118,7 +118,7 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 
 	if (!load_global_options(svconfigfile, pmsg)) {
 		suppress_reload = FALSE;
-		update_useropts();
+		update_useropts(NULL);
 		return FALSE;
 	}
 
@@ -181,7 +181,7 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 	sprintf(editstr, "%s %s", e, editfile);
 	set_usersort(custom_sort);
 	suppress_reload = FALSE;
-	update_useropts();
+	update_useropts(0);
 	return TRUE;
 }
 /*=================================
@@ -586,8 +586,9 @@ is_codeset_utf8 (STRING codename)
  * dependent on user options
  *=================================================*/
 void
-update_useropts (void)
+update_useropts (VPTR uparm)
 {
+	uparm = uparm; /* unused */
 	if (suppress_reload)
 		return;
 	update_db_options(); /* deal with db-specific options */

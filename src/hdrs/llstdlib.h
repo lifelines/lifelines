@@ -87,6 +87,14 @@ STRING environ_determine_config_file(void);
 STRING environ_determine_editor(INT program);
 STRING environ_determine_tempfile(void);
 
+/* listener.c */
+	/* callback for language change */
+typedef void (*CALLBACK_FNC)(VPTR);
+void add_listener(LIST * notifiees, CALLBACK_FNC fncptr, VPTR uparm);
+void delete_listener(LIST * notifiees, CALLBACK_FNC fncptr, VPTR uparm);
+void notify_listeners(LIST * notifiees);
+void remove_listeners(LIST * notifiees);
+
 /* lldate.c */
 void get_current_lldate(LLDATE * creation);
 

@@ -24,8 +24,9 @@
 /* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 #include <stdarg.h>
 #include <stdio.h>
-#include "standard.h"
+#include "llstdlib.h"
 #include "feedback.h"
+#include "gedcom.h"
 #include "interp.h"
 
 /*=============================================================

@@ -13,6 +13,7 @@
 
 #include "llstdlib.h"
 #include "feedback.h"
+#include "gedcom.h"
 #include "menuitem.h"
 
 /*********************************************
@@ -64,6 +65,7 @@ static void grow_cmd_array(CMDARRAY cmds);
 static void insert_cmd(STRING Title, CMDARRAY cmds, STRING str, INT cmdnum
 	, STRING display);
 static INT menuitem_find_cmd(CMDARRAY cmds, STRING cmd);
+static void on_lang_change(VPTR uparm);
 static void setup_menu(ScreenInfo * sinfo, STRING Title, INT MenuRows
 	, INT MenuCols ,INT Size, MenuItem ** Menu);
 
@@ -72,6 +74,7 @@ static void setup_menu(ScreenInfo * sinfo, STRING Title, INT MenuRows
  *********************************************/
 
 static BOOLEAN f_initialized=FALSE;
+static BOOLEAN f_reloading=FALSE;
 
 /* normal menu items */
 static MenuItem f_MenuItemEditIndi = { N_("e  Edit the person"), 0, CMD_EDIT, 0 };
@@ -718,15 +721,19 @@ menuitem_initialize (INT cols)
 
 	for (i=1; i<=MAX_SCREEN; i++)
 		g_ScreenInfo[i].MenuPage = 0;
+
+	if (!f_reloading)
+		register_uilang_callback(on_lang_change, 0);
 }
 /*============================
- * menuitem_terminate -- free menu arrays
- * Created: 2001/02/01, Perry Rapp
+ * menuitem_terminate_worker -- free menu arrays
  *==========================*/
 void
 menuitem_terminate (void)
 {
 	INT i;
+	if (!f_reloading)
+		unregister_uilang_callback(on_lang_change, 0);
 	for (i=1; i<=MAX_SCREEN; i++) {
 		if (g_ScreenInfo[i].Commands) {
 			free_cmds(g_ScreenInfo[i].Commands);
@@ -734,6 +741,7 @@ menuitem_terminate (void)
 		}
 		strfree(&g_ScreenInfo[i].Title);
 	}
+	f_initialized = FALSE;
 }
 /*============================
  * free_cmds -- free menu arrays
@@ -784,3 +792,16 @@ menuitem_find_cmd (CMDARRAY cmds, STRING str)
 		return menuitem_find_cmd(subarr, &str[1]);
 	}
 }
+/*============================
+ * on_lang_change -- UI language has changed
+ *==========================*/
+static void
+on_lang_change (VPTR uparm)
+{
+	uparm = uparm; /* unused */
+	f_reloading = TRUE;
+	menuitem_terminate();
+	menuitem_initialize(3);
+	f_reloading = FALSE;
+}
+

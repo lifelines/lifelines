@@ -181,6 +181,9 @@ enum {
 	/* number of maps listed above */
 #define NUM_TT_MAPS 12
 
+/* callback for language change */
+typedef void (*uilang_notify_fnc)(void);
+
 /*========
  * Globals
  *======*/
@@ -421,6 +424,7 @@ RECORD qkeynum_to_frecord(int keynum);
 NODE qkeynum_to_indi(int keynum);
 INT record_letter(STRING);
 NODE refn_to_record(STRING, INT);
+void register_uilang_callback(CALLBACK_FNC fncptr, VPTR uparm);
 void release_dblist(LIST dblist);
 BOOLEAN remove_child(NODE indi, NODE fam);
 BOOLEAN remove_empty_fam(NODE);
@@ -473,7 +477,8 @@ void uilocale(void);
 NODE union_nodes(NODE, NODE, BOOLEAN, BOOLEAN);
 NODE unique_nodes(NODE, BOOLEAN);
 void unknown_node_to_dbase(NODE node);
-void update_useropts(void);
+void unregister_uilang_callback(CALLBACK_FNC fncptr, VPTR uparm);
+void update_useropts(VPTR uparm);
 BOOLEAN valid_indi_tree(NODE, STRING*, NODE);
 BOOLEAN valid_fam_tree(NODE, STRING*, NODE);
 BOOLEAN valid_name(STRING);

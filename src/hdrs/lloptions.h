@@ -22,18 +22,17 @@
 #ifndef TABLE_H_INCLUDED
 typedef struct table_s *TABLE;
 #endif
-typedef void (*options_notify_fnc)(void);
 
 /* initialization & termination */
 void get_db_options(TABLE opts); /* free with FREEBOTH */
 void get_global_options(TABLE opts); /* free with FREEBOTH */
 BOOLEAN load_global_options(STRING configfile, STRING * pmsg);
-void register_notify(options_notify_fnc fncptr);
+void register_notify(CALLBACK_FNC fncptr);
 void set_db_options(TABLE opts);
 void set_global_options(TABLE opts);
 void setoptstr_fallback(STRING optname, STRING newval);
 void term_lloptions(void);
-void unregister_notify(options_notify_fnc fncptr);
+void unregister_notify(CALLBACK_FNC fncptr);
 
 
 /* use */
