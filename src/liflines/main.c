@@ -101,6 +101,7 @@ STRING  readpath = NULL;       /* database path used to open */
  *********************************************/
 
 /* alphabetical */
+static BOOLEAN init_curses_ui(void);
 static BOOLEAN is_unadorned_directory(STRING path);
 static void load_usage(void);
 static void main_db_notify(STRING db, BOOLEAN opening);
@@ -278,11 +279,9 @@ prompt_for_db:
 		set_signals();
 
 	/* Initialize Curses UI */
-	if (!initscr())
+	if (!init_curses_ui())
 		goto finish;
 	platform_init();
-	noecho();
-	keypad(0, 1);
 	set_displaykeys(keyflag);
 	/* initialize options & misc. stuff */
 	if (!init_lifelines_global(configfile, &msg, &main_db_notify)) {
@@ -600,5 +599,18 @@ main_db_notify (STRING db, BOOLEAN opening)
 		crash_setdb(db);
 	else
 		crash_setdb("");
+}
+/*==================================================
+ * init_curses_ui -- 
+ * Created: 2003/01/03, Perry Rapp
+ *================================================*/
+static BOOLEAN
+init_curses_ui (void)
+{
+        WINDOW *win = initscr();
+        if (!win) return FALSE;
+        noecho();
+        keypad(win, 1);
+        return TRUE;
 }
 
