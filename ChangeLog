@@ -4,6 +4,10 @@
 
 	Fix infinite loop in remove_any_xrefs_node_list.
 
+	* ChangeLog src/liflines/loadsave.c
+
+	Fix initial counts for save (row was wrong and lacked i18n).
+
 2005-01-12 Matt Emmerton
 
 	* ChangeLog configure.in

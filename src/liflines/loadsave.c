@@ -118,6 +118,9 @@ update_rec_count (INT pass, char ctype, STRING tag, INT count)
 	clear_stdout_hseg(row, 1, 70); /* TODO: how wide should this be ? */
 	wfield(row, 1, msg);
 }
+/*================================
+ * Display 0 counts for all types
+ *==============================*/
 static void
 clear_rec_counts (INT pass)
 {
@@ -270,12 +273,9 @@ save_gedcom (void)
 	efeed.added_rec_fnc = export_saved_rec;
 
 	llwprintf("Saving database `%s' in file `%s'.", readpath_file, fullpath);
-	wfield(2, 1, "     0 Persons");
-	wfield(3, 1, "     0 Families");
-	wfield(4, 1, "     0 Events");
-	wfield(5, 1, "     0 Sources");
-	wfield(6, 1, "     0 Others");
-	
+
+	/* Display 0 counts */
+	clear_rec_counts(0);
 
 	archive_in_file(&efeed, fp);
 	fclose(fp);
