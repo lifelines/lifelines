@@ -641,7 +641,7 @@ typedef struct
 } TRAV_REFN_PARAM;
 /* see above */
 static BOOLEAN
-traverse_refn_callback (RKEY rkey, CNSTRING data, INT len, void *param)
+traverse_refn_callback (RKEY rkey, STRING data, INT len, void *param)
 {
 	TRAV_REFN_PARAM *tparam = (TRAV_REFN_PARAM *)param;
 	INT i;

@@ -26,6 +26,12 @@
 
 	Rename PANY to PNULL.
 
+	* ChangeLog src\btree/traverse.c src/gedlib/intrface.c
+	src/gedlib/nodeio.c src/gedlib/refns.c src/hdrs/btree.h
+	src/hdrs/gedcom.h
+
+	Fix const typing in db traversal.
+
 2005-01-15 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c src/hdrs/list.h
