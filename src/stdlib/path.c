@@ -275,3 +275,26 @@ lastpathname (STRING path)
 	}
 	return q;
 }
+/*========================================
+ * compress_path -- return path truncated
+ *  returns static buffer in all cases
+ *  truncates path from the front if needed
+ * Created: 2001/12/22 (Perry Rapp)
+ *======================================*/
+STRING
+compress_path (STRING path, INT len)
+{
+	static char buf[120];
+	INT pathlen = strlen(path);
+	if (len > sizeof(buf)-1) len=sizeof(buf)-1;
+	/* TODO: be nice to expand "."  */
+	if (pathlen > len) {
+		STRING dotdotdot = "...";
+		INT delta = pathlen - len - strlen(dotdotdot);
+		strcpy(buf, dotdotdot);
+		strcpy(buf+strlen(dotdotdot), path+delta);
+	} else {
+		strcpy(buf, path);
+	}
+	return buf;
+}

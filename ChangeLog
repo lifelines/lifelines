@@ -5,6 +5,15 @@
 	Bugfix invoke_trans_menu was calling activate_uiwin twice,
 	leading to ASSERT failure.
 
+	* ChangeLog gedlib/messages.c hdrs/feedback.h hdrs/llstdlib.h
+	hdrs/screen.h interp/interp.c liflines/screen.c stdlib/path.c:
+
+	Bugfix -- push std message out to screen immediately
+	in place_std_msg (in case a submenu is up).
+	Fix progmessage to use wider screen.
+	Create new function compress_path (for display use).
+	Revise ask_for_output_filename & input to display default path.
+
 2001-12-19 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog arch/alphasort.c arch/scandir.c hdrs/llstdlib.h

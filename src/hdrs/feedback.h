@@ -65,7 +65,8 @@ void do_edit(void);
 
 /* msg boxes */
 BOOLEAN ask_yes_or_no_msg(STRING, STRING);
-STRING ask_for_string(STRING, STRING);
+STRING ask_for_string(STRING ttl, STRING prmpt);
+STRING ask_for_string2(STRING ttl1, STRING ttl2, STRING prmpt);
 
 /* called by interp when finished */
 void refresh_stdout(void);

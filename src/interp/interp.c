@@ -58,7 +58,7 @@ SYMTAB globtab; /* assume all zero is null SYMTAB */
 
 extern BOOLEAN progrunning, progparsing;
 extern INT progerror;
-extern STRING whatrpt;
+extern STRING whatrpt,idrpt;
 
 /*********************************************
  * local function prototypes
@@ -126,26 +126,25 @@ finishinterp (void)
 static void
 progmessage (MSG_LEVEL level, STRING msg)
 {
-	char buf[80];
+	char buf[120];
 	char *ptr=buf;
 	INT mylen=sizeof(buf);
+	INT maxwidth = msg_width();
 	INT msglen = strlen(msg);
-	if(progname && *progname && msglen+20 < msg_width()) {
-		INT len = strlen(progname);
-		STRING dotdotdot="";
-		if (msg_width() >= 0 && len > msg_width() - msglen) {
-			len -= msg_width() - msglen;
-			dotdotdot = "...";
-		} else {
-			len = 0;
+	if (maxwidth >= 0 && maxwidth < mylen)
+		mylen = maxwidth;
+	if(progname && *progname && msglen+20 < maxwidth) {
+		INT len = 99999;
+		if (msg_width() >= 0) {
+			len = sizeof(buf)-strlen(idrpt)-1-1-msglen;
 		}
-		llstrcatn(&ptr, "Program ", &mylen);
-		llstrcatn(&ptr, dotdotdot, &mylen);
-		llstrcatn(&ptr, progname+len, &mylen);
+		llstrcatn(&ptr, idrpt, &mylen);
+		llstrcatn(&ptr, " ", &mylen);
+		llstrcatn(&ptr, compress_path(progname, len), &mylen);
 		llstrcatn(&ptr, " ", &mylen);
 		llstrcatn(&ptr, msg, &mylen);
 	} else {
-		llstrcatn(&ptr, "The program ", &mylen);
+		llstrcatn(&ptr, idrpt, &mylen);
 		llstrcatn(&ptr, msg, &mylen);
 	}
 	msg_output(level, buf);

@@ -117,12 +117,12 @@ extern STRING mn_csttl,mn_cstt,mn_csintcs,mn_csrptcs,mn_csndloc;
 extern STRING mn_cstsort,mn_cspref,mn_cschar,mn_cslcas,mn_csucas,mn_csrpt;
 extern STRING mn_csdsploc,mn_csrpttl,mn_csrptloc,mn_csnrloc;
 extern STRING idsortttl,idloc;
-extern STRING mn_edttttl;
+extern STRING mn_edttttl,mn_svttttl;
 extern STRING mn_utsave,mn_utread,mn_utkey,mn_utkpers,mn_utdbstat,mn_utmemsta;
 extern STRING mn_utplaces,mn_utusropt;
 extern STRING mn_xxbsour, mn_xxbeven, mn_xxbothr, mn_xxasour, mn_xxesour;
 extern STRING mn_xxaeven, mn_xxeeven, mn_xxaothr, mn_xxeothr;
-extern STRING chlist,vwlist,errlist,defttl;
+extern STRING chlist,vwlist,errlist,defttl,iddefpath;
 
 extern STRING mn_uttl;
 extern STRING mn_xttl;
@@ -186,6 +186,7 @@ static void display_status(STRING text);
 static void edit_tt_menu(UIWINDOW wparent);
 static void end_action(void);
 static void export_tts(void);
+static STRING get_answer(UIWINDOW uiwin, INT row, INT col);
 static INT handle_list_cmds(listdisp * ld, INT code);
 static void import_tts(void);
 static INT interact(UIWINDOW uiwin, STRING str, INT screen);
@@ -212,6 +213,7 @@ static void repaint_rpc_menu(UIWINDOW uiwin);
 static void repaint_trans_menu(UIWINDOW uiwin);
 static void repaint_utils_menu(UIWINDOW uiwin);
 static void repaint_extra_menu(UIWINDOW uiwin);
+static void repaint_footer_menu(INT screen);
 static void repaint_main_menu(UIWINDOW uiwin);
 static void rpt_cset_menu(UIWINDOW wparent);
 static void run_report(BOOLEAN picklist);
@@ -847,8 +849,17 @@ ask_for_db_filename (STRING ttl, STRING prmpt, STRING basedir)
 STRING
 ask_for_output_filename (STRING ttl, STRING path, STRING prmpt)
 {
-	/* path is unused by curses version */
-	return ask_for_string(ttl, prmpt);
+	/* display current path (truncated to fit) */
+	char curpath[120];
+	STRING ptr = curpath;
+	INT mylen = sizeof(curpath);
+	if (mylen > uiw_cols(ask_msg_win)-2)
+		mylen = uiw_cols(ask_msg_win)-2;
+	ptr[0]=0;
+	llstrcatn(&ptr, iddefpath, &mylen);
+	llstrcatn(&ptr, compress_path(path, mylen-1), &mylen);
+
+	return ask_for_string2(ttl, curpath, prmpt);
 }
 /*======================================
  * ask_for_input_filename -- Ask user for filename from which to read
@@ -857,8 +868,17 @@ ask_for_output_filename (STRING ttl, STRING path, STRING prmpt)
 STRING
 ask_for_input_filename (STRING ttl, STRING path, STRING prmpt)
 {
-	/* path is unused by curses version */
-	return ask_for_string(ttl, prmpt);
+	/* display current path (truncated to fit) */
+	char curpath[120];
+	STRING ptr = curpath;
+	INT mylen = sizeof(curpath);
+	if (mylen > uiw_cols(ask_msg_win)-2)
+		mylen = uiw_cols(ask_msg_win)-2;
+	ptr[0]=0;
+	llstrcatn(&ptr, iddefpath, &mylen);
+	llstrcatn(&ptr, compress_path(path, mylen-1), &mylen);
+
+	return ask_for_string2(ttl, curpath, prmpt);
 }
 /*======================================
  * refresh_main -- touch & refresh main or stdout
@@ -874,8 +894,8 @@ refresh_main (void)
 /*======================================
  * ask_for_string -- Ask user for string
  *  returns static buffer
- *  ttl:   [in] title of question (1rst line)
- *  prmpt: [in] prompt of question (2nd line)
+ *  ttl:   [IN]  title of question (1rst line)
+ *  prmpt: [IN]  prompt of question (2nd line)
  * returns static buffer (less than 100 chars)
  *====================================*/
 STRING
@@ -889,10 +909,40 @@ ask_for_string (STRING ttl, STRING prmpt)
 	mvwaddstr(win, 1, 1, ttl);
 	mvwaddstr(win, 2, 1, prmpt);
 	wrefresh(win);
-	rv = get_answer(uiwin, prmpt); /* less then 100 chars */
+	rv = get_answer(uiwin, 2, strlen(prmpt) + 2); /* less than 100 chars */
 	if (!rv) return (STRING) "";
 	p = rv;
-	while (chartype((unsigned char)*p) == WHITE)
+	while (chartype((uchar)*p) == WHITE)
+		p++;
+	striptrail(p);
+	refresh_main();
+	return p;
+}
+/*======================================
+ * ask_for_string2 -- Ask user for string
+ * Two lines of title
+ *  returns static buffer
+ *  ttl1:   [IN] title of question (1rst line)
+ *  ttl2:   [IN] 2nd line of title
+ *  prmpt:  [IN] prompt of question (3rd line)
+ * returns static buffer (less than 100 chars)
+ *====================================*/
+STRING
+ask_for_string2 (STRING ttl1, STRING ttl2, STRING prmpt)
+{
+	UIWINDOW uiwin = ask_msg_win;
+	WINDOW *win = uiw_win(uiwin);
+	STRING rv, p;
+	werase(win);
+	BOX(win, 0, 0);
+	mvwaddstr(win, 1, 1, ttl1);
+	mvwaddstr(win, 2, 1, ttl2);
+	mvwaddstr(win, 3, 1, prmpt);
+	wrefresh(win);
+	rv = get_answer(uiwin, 3, strlen(prmpt) + 2); /* less than 100 chars */
+	if (!rv) return (STRING) "";
+	p = rv;
+	while (chartype((uchar)*p) == WHITE)
 		p++;
 	striptrail(p);
 	refresh_main();
@@ -943,12 +993,13 @@ ask_for_char (STRING ttl,
 }
 /*===========================================
  * ask_for_char_msg -- Ask user for character
+ *  msg:   [IN]  top line displayed
+ *  ttl:   [IN]  2nd line displayed
+ *  prmpt: [IN]  3rd line text before cursor
+ *  ptrn:  [IN]  List of allowable character responses
  *=========================================*/
 INT
-ask_for_char_msg (STRING msg,
-                  STRING ttl,
-                  STRING prmpt,
-                  STRING ptrn)
+ask_for_char_msg (STRING msg, STRING ttl, STRING prmpt, STRING ptrn)
 {
 	UIWINDOW uiwin = ask_msg_win;
 	WINDOW *win = uiw_win(uiwin);
@@ -1597,6 +1648,8 @@ load_tt_menu (UIWINDOW wparent)
 static void
 save_tt_menu (UIWINDOW wparent)
 {
+	INT tt = choose_tt(wparent, mn_svttttl);
+	if (tt == -1) return;
 	message(mn_notimpl);
 }
 /*======================================
@@ -1623,17 +1676,12 @@ choose_tt (UIWINDOW wparent, STRING prompt)
 {
 	INT code;
 	UIWINDOW uiwin = tt_menu_win;
-	WINDOW *win = uiw_win(uiwin);
 	while (1) {
-		stdout_vis=FALSE;
-		wrefresh(uiw_win(wparent));
-		touchwin(win);
 		draw_tt_win(prompt);
-		wrefresh(win);
-		wmove(win, 1, strlen(prompt)+3);
+		activate_uiwin(uiwin);
+		wmove(uiw_win(uiwin), 1, strlen(prompt)+3);
 		code = interact(uiwin, "emixgdrq", -1);
-		touchwin(uiw_win(wparent));
-		wrefresh(uiw_win(wparent));
+		deactivate_uiwin();
 		switch (code) {
 		case 'e': return MEDIN;
 		case 'm': return MINED;
@@ -1778,12 +1826,13 @@ interact (UIWINDOW uiwin, STRING str, INT screen)
 }
 /*============================================
  * get_answer -- Have user respond with string
- *  win:   [in] which window to use
- *  prmpt: [in] prompt string to show
- *  returns static buffer 100 length
+ *  uiwin:   [IN] which window to use
+ *  row:     [IN]  prompt location (vert)
+ *  col:     [IN]  prompt location (horiz)
+ *  returns static buffer <=100 length
  *==========================================*/
 STRING
-get_answer (UIWINDOW uiwin, STRING prmpt)
+get_answer (UIWINDOW uiwin, INT row, INT col)
 {
 	static char lcl[100];
 	WINDOW *win = uiw_win(uiwin);
@@ -1791,10 +1840,10 @@ get_answer (UIWINDOW uiwin, STRING prmpt)
 #ifndef USEBSDMVGETSTR
 	echo();
 	/* would be nice to use mvwgetnstr here */
-	mvwgetstr(win, 2, strlen(prmpt) + 2, lcl);
+	mvwgetstr(win, row, col, lcl);
 	noecho();
 #else
-	bsd_mvwgetstr(win, 2, strlen(prmpt) + 2, lcl, sizeof(lcl));
+	bsd_mvwgetstr(win, row, col, lcl, sizeof(lcl));
 #endif
 	return lcl;
 }
@@ -2119,6 +2168,7 @@ place_std_msg (void)
 	} else
 		mvwaddstr(win, row, 2, empstr);
 	mvwaddstr(win, row, 2, str);
+	wrefresh(win); /* ensure message is displayed */
 	place_cursor();
 }
 /*=================================================

@@ -349,6 +349,8 @@ STRING dataerr     = SS "Error accessing data";
 STRING idhist      = SS "Choose from history";
 STRING norwandro   = SS "Cannot combine immutable (-i) or read-only (-r) with read-write (-w) access.";
 STRING nofandl     = SS "Cannot combine forceopen (-f) and lock (-l) flags.";
+STRING idrpt       = SS "Program";
+STRING iddefpath   = SS "Default path: ";
 
 /* translation table errors */
 STRING baddec      = SS "Bad decimal number format.";
@@ -412,8 +414,9 @@ STRING mn_tt_save  = SS "s  save a table to a file (from db)";
 STRING mn_tt_exp   = SS "x  export all tables (from db to files)";
 STRING mn_tt_imp   = SS "i  import all tables (from files into db)";
 STRING mn_tt_dir   = SS "export/import directory:";
-/* menu for edit translation table */
+/* menus for translation tables */
 STRING mn_edttttl  = SS "Which character mapping do you want to edit?";
+STRING mn_svttttl  = SS "Which character mapping do you want to save?";
 /* strings for choosing translation table (these looks best if choices padded to same length)*/
 STRING mn_tt_edin   = SS "e  Editor to Internal mapping ";
 STRING mn_tt_ined   = SS "m  Internal to Editor mapping ";

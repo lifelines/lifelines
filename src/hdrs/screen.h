@@ -122,14 +122,12 @@ STRING ask_for_db_filename(STRING, STRING, STRING);
 INT choose_one_from_indiseq(STRING, INDISEQ);
 void display_screen(INT);
 void dbprintf(STRING, ...);
-STRING get_answer (UIWINDOW, STRING);
 int init_screen(void);
 void main_menu(void);
 STRING message_string (void);
 void paint_main_screen(void);
 void paint_two_fam_screen(void);
 void paint_list_screen(void);
-void repaint_footer_menu(INT screen);
 void show_horz_line(UIWINDOW, INT, INT, INT);
 void show_indi(UIWINDOW uiwin, NODE indi, INT mode, INT row, INT hgt
 	, int width, INT * scroll, BOOLEAN reuse);

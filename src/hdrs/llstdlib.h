@@ -86,6 +86,7 @@ INT alloc_count(void);
 void report_alloc_live_count(STRING str);
 
 /* path.c */
+STRING compress_path(STRING path, INT len);
 STRING concat_path(CNSTRING dir, CNSTRING file);
 STRING filepath(CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING ext);
 FILE* fopenpath(STRING, STRING, STRING, STRING, STRING*);
