@@ -46,7 +46,7 @@ extern BTREE BTR;
 
 extern STRING cfradd, cfeadd, cfxadd, rredit, eredit, xredit;
 extern STRING cfrupt, cfeupt, cfxupt, gdrmod, gdemod, gdxmod;
-extern STRING idredt, ideedt, idxedt;
+extern STRING idredt, ideedt, idxedt, duprfn;
 
 SS rstr = (STRING) "0 SOUR\n1 REFN\n1 TITL Title\n1 AUTH Author";
 SS estr = (STRING) "0 EVEN\n1 REFN\n1 DATE\n1 PLAC\n1 INDI\n  2 NAME\n  2 ROLE\n1 SOUR";
@@ -265,9 +265,10 @@ edit_record (NODE node1,           /* record to edit, poss NULL */
 	free_nodes(node2);
 	mprintf_info(gdmsg);
 }
-/*==============================================
+/*===============================================
  * ask_for_record -- Ask user to identify record
- *============================================*/
+ *  lookup by key or by refn (& handle dup refns)
+ *=============================================*/
 NODE
 ask_for_record (STRING idstr,   /* question prompt */
                 INT letr)       /* letter to possibly prepend to key */
@@ -276,6 +277,12 @@ ask_for_record (STRING idstr,   /* question prompt */
 	STRING str = ask_for_string(idstr, "enter key or refn: ");
 	if (!str || *str == 0) return NULL;
 	node = key_to_record(str, letr);
-	if (!node) node = refn_to_record(str, letr);
+	if (!node) {
+		INDISEQ seq;
+		seq = refn_to_indiseq(str, letr, KEYSORT);
+		if (!seq) return NULL;
+		node = format_and_choose_generic(seq, FALSE, duprfn, duprfn);
+		remove_indiseq(seq, FALSE);
+	}
 	return node;
 }

@@ -1334,24 +1334,23 @@ format_famseq (INDISEQ seq)
  * refn_to_indiseq -- Return indiseq whose user references match
  *============================================================*/
 INDISEQ
-refn_to_indiseq (STRING ukey)
+refn_to_indiseq (STRING ukey, INT letr, INT sort)
 {
 	STRING *keys;
 	INT num, i;
 	INDISEQ seq;
 
 	if (!ukey || *ukey == 0) return NULL;
-	get_refns(ukey, &num, &keys, 'I');
+	get_refns(ukey, &num, &keys, letr);
 	if (num == 0) return NULL;
 	seq = create_indiseq();
 	for (i = 0; i < num; i++) {
 		append_indiseq(seq, keys[i], NULL, NULL, FALSE, FALSE);
 	}
-	if (length_indiseq(seq) == 0) {
-		remove_indiseq(seq, FALSE);
-		return NULL;
-	}
-	namesort_indiseq(seq);
+	if (sort == NAMESORT)
+		namesort_indiseq(seq);
+	else
+		keysort_indiseq(seq);
 	return seq;
 }
 /*=============================================================
@@ -1382,7 +1381,7 @@ str_to_indiseq (STRING name)
 	INDISEQ seq;
 	seq = find_named_seq(name);
 	if (!seq) seq = key_to_indiseq(name);
-	if (!seq) seq = refn_to_indiseq(name);
+	if (!seq) seq = refn_to_indiseq(name, 'I', NAMESORT);
 	if (!seq) seq = name_to_indiseq(name);
 	return seq;
 }

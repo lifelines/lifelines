@@ -119,7 +119,7 @@ INDISEQ node_to_sources(NODE);
 INDISEQ parent_indiseq(INDISEQ);
 INT partition(INT, INT, SORTEL);
 void partition_sort(SORTEL*, INT, INT (*func)(SORTEL, SORTEL));
-INDISEQ refn_to_indiseq(STRING);
+INDISEQ refn_to_indiseq(STRING, INT letr, INT sort);
 void remove_browse_list(STRING, INDISEQ);
 void remove_indiseq(INDISEQ,BOOLEAN);
 void rename_indiseq(INDISEQ, STRING);

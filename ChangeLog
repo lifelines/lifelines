@@ -5,6 +5,9 @@
 	Sorted indiseq.h functions & removed dups.
 	Changed add_to_record to extern.
 
+	* gedlib/indiseq.c gedlib/messages.c hdrs/indiseq.h liflines/newrecs.c:
+	Make ask_for_record handle dup REFNs.
+
 2000-12-30 Petter Reinholdtsen <pere@td.org.uit.no>
 
 	* configure.in: New option --with-profiling to generate runtime
