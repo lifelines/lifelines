@@ -88,6 +88,7 @@ static DISPNODE add_children(NODE indi, INT gen, INT maxgen, INT * count);
 static DISPNODE add_parents(NODE indi, INT gen, INT maxgen, INT * count);
 static DISPNODE alloc_displaynode(void);
 static void append_to_text_list(LIST list, STRING text, INT width, BOOLEAN newline);
+static void check_scroll_max(CANVASDATA canvas);
 static void count_nodes(NODE node, INT gen, INT maxgen, INT * count);
 static void draw_gedcom_text(NODE node, CANVASDATA canvas, BOOLEAN reuse);
 static void free_displaynode(DISPNODE tn);
@@ -101,7 +102,7 @@ static void trav_bin_in_print_tn(DISPNODE tn, INT * row, INT gen, CANVASDATA can
 static void trav_pre_print_nd(NODE node, INT * row, INT gen, CANVASDATA canvas, INT gdvw);
 static void trav_pre_print_tn(DISPNODE tn, INT * row, INT gen, CANVASDATA canvas);
 static void trav_pre_print_tn_str(DISPNODE tn, INT * row, INT gen, CANVASDATA canvas);
-static void SetScrollMax(CANVASDATA canvas, INT count);
+static void set_scroll_max(CANVASDATA canvas, INT count);
 
 /*********************************************
  * local variables
@@ -110,7 +111,7 @@ static void SetScrollMax(CANVASDATA canvas, INT count);
 static int Gens = 4;
 static int Ancestors_mode = 1;
 static int ScrollMax = 0;
-static DISPNODE Root = 0;
+static DISPNODE Root = 0; /* cached tree we display */
 
 /*********************************************
  * local & exported function definitions
@@ -457,8 +458,10 @@ print_to_screen (INT gen, INT * row, LINEPRINT_FNC fnc
 		strcpy(ptr, "");
 		for (i=0; i<gen*6; i++)
 			llstrcatn(&ptr, " ", &mylen);
+		/* call thru fnc pointer to make string */
 		line = (*fnc)(mylen, lpf_param);
 		llstrcatn(&ptr, line, &mylen);
+		/* tell canvas to put line out */
 		(*canvas->line)(canvas, drow, 1, buffer, overflow);
 	}
 	(*row)++;
@@ -605,20 +608,27 @@ trav_bin_in_print_tn (DISPNODE tn, INT * row, INT gen, CANVASDATA canvas)
 		trav_bin_in_print_tn(tn->firstchild->nextsib, row, gen+1, canvas);
 }
 /*======================================================
- * SetScrollMax -- compute max allowable scroll based on
+ * set_scroll_max -- compute max allowable scroll based on
  *  number of rows in this pedigree tree
- *  canvas:  [IN,OUT]  canvas data given by client
- *            This routine truncates the canvas->scroll member.
+ *  canvas:  [I/O] canvas data from client (we adjust scroll)
  *  count:   [IN]  # of items being displayed
  * Created: 2000/12/07, Perry Rapp
  *====================================================*/
 static void
-SetScrollMax (CANVASDATA canvas, INT count)
+set_scroll_max (CANVASDATA canvas, INT count)
 {
 	INT hgt = canvas->maxrow - canvas->minrow + 1;
-	INT max = count - hgt;
-	if (max<0) max=0;
-	if (canvas->scroll > max) canvas->scroll = max;
+	ScrollMax = count - hgt;
+	if (ScrollMax<0) ScrollMax=0;
+}
+/*======================================================
+ * check_scroll_max -- ensure current scroll is within range
+ *  canvas [I/O] canvas data from client (we adjust scroll member)
+ *====================================================*/
+static void
+check_scroll_max( CANVASDATA canvas)
+{
+	if (canvas->scroll > ScrollMax) canvas->scroll = ScrollMax;
 	if (canvas->scroll < 0) canvas->scroll = 0;
 }
 /*=========================================================
@@ -637,8 +647,9 @@ pedigree_draw_descendants (NODE indi, CANVASDATA canvas, BOOLEAN reuse)
 		INT count=0;
 		free_entire_tree();
 		Root = add_children(indi, gen, Gens, &count);
-		SetScrollMax(canvas, count);
+		set_scroll_max(canvas, count);
 	}
+	check_scroll_max(canvas);
 	/* preorder traversal */
 	trav_pre_print_tn(Root, &row, gen, canvas);
 }
@@ -655,7 +666,8 @@ pedigree_draw_gedcom (NODE node, INT gdvw, CANVASDATA canvas, BOOLEAN reuse)
 		return;
 	}
 	count_nodes(node, gen, Gens, &count);
-		SetScrollMax(canvas, count);
+	set_scroll_max(canvas, count);
+	check_scroll_max(canvas);
 	/* preorder traversal */
 	trav_pre_print_nd(node, &row, gen, canvas, gdvw);
 }
@@ -676,8 +688,9 @@ draw_gedcom_text (NODE node, CANVASDATA canvas, BOOLEAN reuse)
 		INT skip=0;
 		free_entire_tree();
 		Root = add_dnodes(node, gen, Gens, &count, canvas);
-		SetScrollMax(canvas, count); 
+		set_scroll_max(canvas, count); 
 	}
+	check_scroll_max(canvas);
 	/* preorder traversal */
 	/* root may have siblings due to overflow/assimilation */
 	for (tn=Root ; tn; tn = tn->nextsib) {
@@ -700,8 +713,9 @@ pedigree_draw_ancestors (NODE indi, CANVASDATA canvas, BOOLEAN reuse)
 		INT count=0;
 		free_entire_tree();
 		Root = add_parents(indi, gen, Gens, &count);
-		SetScrollMax(canvas, count);
+		set_scroll_max(canvas, count);
 	}
+	check_scroll_max(canvas);
 	/* inorder traversal */
 	trav_bin_in_print_tn(Root, &row, gen, canvas);
 }

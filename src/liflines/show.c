@@ -506,6 +506,7 @@ show_ancestors (NODE indi, INT row, INT hgt, BOOLEAN reuse)
 		/* clear & draw pedigree */
 	wipe_window(main_win, row, hgt);
 	pedigree_draw_ancestors(indi, &canvas, reuse);
+	Scroll1 = canvas.scroll;
 }
 /*================================================
  * show_descendants -- Show pedigree/descendants
@@ -525,6 +526,7 @@ show_descendants (NODE indi, INT row, INT hgt, BOOLEAN reuse)
 		/* clear & draw pedigree */
 	wipe_window(main_win, row, hgt);
 	pedigree_draw_descendants(indi, &canvas, reuse);
+	Scroll1 = canvas.scroll;
 }
 /*================================================
  * wipe_window -- Clear window
@@ -561,6 +563,7 @@ show_gedcom (WINDOW *w, NODE node, INT gdvw, INT row, INT hgt, BOOLEAN reuse)
 		/* clear & draw pedigree */
 	wipe_window(w, row, hgt);
 	pedigree_draw_gedcom(node, gdvw, &canvas, reuse);
+	Scroll1 = canvas.scroll;
 }
 /*================================================
  * show_gedcom_main -- Show node in gedcom format
@@ -597,6 +600,8 @@ indi_to_ped_fix (NODE indi, INT len)
 	static unsigned char scratch[100];
 	unsigned char tmp1[100];
 	TRANTABLE ttd = tran_tables[MINDS];
+
+/*	return person_display(indi, 0, len); */
 
 	if (!indi) return (STRING) "------------";
 	bevt = event_to_date(BIRT(indi), ttd, TRUE);
@@ -662,14 +667,16 @@ family_events (STRING outstr, TRANTABLE ttd, NODE indi, NODE fam, INT len)
 */
 	if (!opt_nocb) {
 		NODE chld;
+		/* Look for birth or christening of first child */
 		if ((chld = fam_to_first_chil(fam))) {
 			evt = sh_indi_to_event_shrt(chld, ttd, "BIRT", dspa_chbr, mylen-2);
 			if (evt && !append_event(&p, evt, &mylen, 10))
 				return;
-			if (!evt)
+			if (!evt) {
 				evt = sh_indi_to_event_shrt(chld, ttd, "CHR", dspa_chbr, mylen-2);
-			if (evt && !append_event(&p, evt, &mylen, 10))
-				return;
+				if (evt && !append_event(&p, evt, &mylen, 10))
+					return;
+			}
 		}
 	}
 	evt = sh_indi_to_event_shrt(indi, ttd, "BIRT", dspa_bir, mylen-2);

@@ -1,3 +1,10 @@
+2001-11-21 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog liflines/pedigree.c liflines/show.c tools/dbverify.c:
+
+	Fixed pedigree scroll.
+	Fixed duplicate "cb." bug in family_events.
+
 2001-11-20 Perry Rapp <puddle@users.sourceforge.net>
 
 	* .linesrc ChangeLog lines.cfg docs/lifelines.sgml
@@ -8,9 +15,11 @@
 	(Internat.) Moved some indi strings ("born"...) into messages.c.
 	Added getoptstr function (encapsulate getting option string).
 	Added ShortOmitString option & add support in indi_event.
-	Fix bug in family_events which could print two cb. events.
+	Attempted fix bug in family_events which could print two cb. events.
 	Fixed namelen bug in person_display.
 	Include Jens' addition for docs.
+
+	Fix pedigree scroll.
 
 2001-11-19 Perry Rapp <puddle@users.sourceforge.net>
 
