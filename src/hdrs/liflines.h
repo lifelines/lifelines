@@ -5,13 +5,9 @@
 #include "gedcom.h"
 #include "indiseq.h"
 
-/* Type declarations */
-/* confirm choice */
-typedef INT CONFIRMQ;
-#define DOCONFIRM 1
-#define NOCONFIRM 0
-
 /* Function Prototypes */
+/* add.c */
+NODE add_family_to_db(NODE spouse1, NODE spouse2, NODE child);
 
 /* from ask.c */
 NODE ask_for_fam(STRING, STRING);

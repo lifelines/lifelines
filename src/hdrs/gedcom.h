@@ -79,6 +79,12 @@ NODE nztop(NOD0); /* function so it can handle NULL input */
  * Option type enumerations (but we use defines)
  *============================================*/
 
+/* ask to ensure user got to see the indi */
+typedef INT CONFIRMQ;
+#define DOCONFIRM 1
+#define NOCONFIRM 0
+
+/* whether to prompt for new child if none existing */
 typedef INT PROMPTQ;
 #define ALWAYS_PROMPT 0
 #define PROMPT_IF_CHILDREN 1
@@ -284,6 +290,18 @@ void othr_to_cache(NODE);
 void othr_to_dbase(NODE);
 BOOLEAN piecematch(STRING, STRING);
 BOOLEAN place_to_list(STRING, LIST, INT*);
+NODE qkey_to_even(STRING);
+NOD0 qkey_to_even0(STRING);
+NODE qkey_to_fam(STRING);
+NOD0 qkey_to_fam0(STRING);
+NODE qkey_to_indi(STRING);
+NOD0 qkey_to_indi0(STRING);
+NODE qkey_to_othr(STRING);
+NOD0 qkey_to_othr0(STRING);
+NODE qkey_to_sour(STRING);
+NOD0 qkey_to_sour0(STRING);
+NODE qkeynum_to_fam(int keynum);
+NODE qkeynum_to_indi(int keynum);
 INT record_letter(STRING);
 NODE refn_to_record(STRING, INT);
 void remove_indi_cache(STRING);
@@ -297,18 +315,6 @@ BOOLEAN replace_indi(NODE, NODE, STRING*);
 void resolve_links(NODE);
 BOOLEAN retrieve_file(STRING, STRING);
 STRING retrieve_record(STRING, INT*);
-NODE qkey_to_even(STRING);
-NOD0 qkey_to_even0(STRING);
-NODE qkey_to_fam(STRING);
-NOD0 qkey_to_fam0(STRING);
-NODE qkey_to_indi(STRING);
-NOD0 qkey_to_indi0(STRING);
-NODE qkey_to_othr(STRING);
-NOD0 qkey_to_othr0(STRING);
-NODE qkey_to_sour(STRING);
-NOD0 qkey_to_sour0(STRING);
-NODE qkeynum_to_fam(int keynum);
-NODE qkeynum_to_indi(int keynum);
 STRING rmvat(STRING);
 STRING rmvbrackets(STRING str);
 void set_displaykeys(BOOLEAN);
