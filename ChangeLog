@@ -1,3 +1,9 @@
+2000-12-07 Perry Rapp (prapp@users.sourceforge.net)
+
+	* hdrs/gedcom.h liflines/browse.c liflines/llinesi.h:
+	Moved init_show_module declaration,
+	and added '$' (xref sources) to browse_pedigree.
+
 2000-12-06 Perry Rapp <prapp@users.sourceforge.net>
 
 	* btree/opnbtree.c gedlib/init.c hdrs/btree.h
