@@ -1,3 +1,16 @@
+2001-01-19 John Chandler <jchbn@cuvmb.columbia.edu>
+	* reports/longlines.ll
+	  New version with option to find the longest line(s) through a
+	  specific person.
+
+	* hdrs/standard.h
+	  Removed BOOLEAN casts on TRUE and FALSE.  These were causing
+	  compilations to fail.
+
+	* gedlib/property.c
+	  Use sprintf as fallback replacement for another instance of
+	  snprintf.
+
 2001-01-15 Perry Rapp <puddle@users.sourceforge.net>
 
 	* tools/dbverify.c: dbverify bugfix & begin fam check for child.
