@@ -395,8 +395,8 @@ growxrefs (DELETESET set)
 	INT i, m = set->max, *newp;
 	if (set->max == 0)
 		set->max = 64;
-	while (set->max < set->n)
-		set->max = set->max >> 1;
+	while (set->max <= set->n)
+		set->max = set->max << 1;
 	newp = (INT *) stdalloc((set->max)*sizeof(INT));
 	if (m) {
 		for (i = 0; i < set->n; i++)

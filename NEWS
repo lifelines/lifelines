@@ -8,6 +8,10 @@ New features added in 3.0.42
 - delete orphan record choice added to delete menu
 - dbverify can fix bad family linking references
 
+Bug fixes in 3.0.42
+============================
+- Fixed ASSERT failure adding 65th skipped key at import
+
 New features added in 3.0.41
 ============================
 - ancestorset and parentset now support non-traditional families

@@ -1,3 +1,11 @@
+2005-02-05 Perry Rapp
+
+	* ChangeLog NEWS src/gedlib/xreffile.c
+
+	Fix buggy growxrefs; set->max must be bigger than set->n,
+	and shift was wrong direction, so this utterly failed 
+	at 65th insert.
+
 2005-02-04 Perry Rapp
 
 	* ChangeLog src/gedlib/node.c src/hdrs/gedcom.h
