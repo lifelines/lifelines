@@ -76,18 +76,18 @@ chartype (INT c)
 		return WHITE;
 	if (isletter(c))
 		return LETTER;
-	if (isnumber(c))
+	if (isnumch(c))
 		return DIGIT;
 	return c;
 }
 /*=================================
- * isnumber -- Check if character is a digit
+ * isnumch -- Check if character is a digit
  * Note: input character is passed to isdigit, so it
  *  should be in unsigned char range.
  * TODO: Fix for Unicode
  *===============================*/
 BOOLEAN
-isnumber (INT c)
+isnumch (INT c)
 {
 #ifndef OS_NOCTYPE
 	return (isdigit(c));

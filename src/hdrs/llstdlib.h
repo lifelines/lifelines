@@ -149,7 +149,7 @@ INT chartype(INT);
 BOOLEAN eqstr_ex(STRING s1, STRING s2);
 BOOLEAN isletter(INT);
 BOOLEAN islinebreak(INT c);
-BOOLEAN isnumber(INT c);
+BOOLEAN isnumch(INT c);
 BOOLEAN iswhite(INT);
 INT ll_atoi(STRING str, INT defval);
 INT ll_toupper(INT);

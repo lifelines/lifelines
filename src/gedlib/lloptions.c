@@ -32,7 +32,6 @@ extern STRING qSopt2long;
 
 /* alphabetical */
 static void copy_process(STRING dest, STRING src);
-static void create_notification_list_if_needed(void);
 static void expand_variables(STRING valbuf, INT max);
 static void free_optable(TABLE * ptab);
 static BOOLEAN load_config_file(STRING file, STRING * pmsg);
@@ -132,7 +131,6 @@ load_config_file (STRING file, STRING * pmsg)
 	STRING oldval=NULL;
 	BOOLEAN there, failed, noesc;
 	char buffer[MAXLINELEN],valbuf[MAXLINELEN];
-	TABLE variables=0;
 	fp = fopen(file, LLREADTEXT);
 	if (!fp)
 		return TRUE; /* no config file, that is ok */

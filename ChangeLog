@@ -1,3 +1,11 @@
+2002-11-14 Perry Rapp
+
+	* ChangeLog src/gedlib/lloptions.c src/hdrs/llstdlib.h
+	src/stdlib/stdstrng.c:
+
+	Rename isnumber to isnumch (to avoid clash with existing function).
+	Cleanup of lloptions.c.
+
 2002-11-11 Perry Rapp
 
 	* ChangeLog build/rpm/lifelines.spec po/LINGUAS
