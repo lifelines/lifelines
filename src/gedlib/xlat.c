@@ -437,7 +437,7 @@ check_tt_name (CNSTRING filename, ZSTR * pzsrc, ZSTR * pzdest)
 		}
 	}
 	if (!underbar || underbar==filename ||
-		!underbar[1] || (underbar[1]=='_' && underbar[2])) {
+		!underbar[1] || (underbar[1]=='_' && !underbar[2])) {
 		return 0;
 	}
 	*pzsrc = zs_newsubs(filename, underbar-filename);
