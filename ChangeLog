@@ -1,3 +1,9 @@
+2005-01-14 Perry Rapp
+
+	* ChangeLog po/sv.po
+
+	Change no-break space to space (in [ Minska menu item).
+
 2005-01-13 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp

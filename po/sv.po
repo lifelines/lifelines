@@ -3151,7 +3151,7 @@ msgstr "]  Öka träddjup"
 
 #: src/liflines/brwsmenu.c:111
 msgid "[  Decrease tree depth"
-msgstr "[  Minska träddjup"
+msgstr "[  Minska träddjup"
 
 #: src/liflines/brwsmenu.c:112
 msgid "(t Scroll top up"
