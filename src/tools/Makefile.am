@@ -10,7 +10,7 @@ dbverify_SOURCES = dbverify.c wprintf.c
 
 # what libraries to btedit and dbverify need?
 btedit_LDADD = ../btree/libbtree.a ../stdlib/libstdlib.a
-dbverify_LDADD = ../gedlib/libgedcom.a ../btree/libbtree.a ../stdlib/libstdlib.a
+dbverify_LDADD = ../gedlib/libgedcom.a ../btree/libbtree.a ../stdlib/libstdlib.a ../arch/libarch.a
 
 # how do btedit and dbverify get built?
 # (this is set up explicitly so they don't get $(LIBS) (no curses!)

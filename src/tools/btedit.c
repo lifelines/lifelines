@@ -57,6 +57,7 @@ main (int argc,
 	char cmdbuf[512];
 	char *editor;
 	char *dbname, *key;
+	RECORD_STATUS rtn;
 
 #ifdef WIN32
 	/* TO DO - research if this is necessary */

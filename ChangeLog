@@ -1,3 +1,7 @@
+2001-03-30 John Chandler <jchbn@cuvmb.columbia.edu>
+	* tools/btedit.c:
+	  inserted missing declaration for rtn
+
 2001-03-26 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog btree/file.c gedlib/brwslist.c gedlib/choose.c
@@ -48,6 +52,10 @@
 	* gedlib/lloptions.c hdrs/lloptions.h interp/builtin.c
 	interp/interp.c interp/more.c:
 	Add DenySystemCalls option. Typecheck root() report call.
+
+2001-03-14 John Chandler <jchbn@cuvmb.columbia.edu>
+	* tools/Makefile.am:
+	  added arch/archlib.a to load list for dbverify (needed for snprintf)
 
 2001-03-04 Perry Rapp <puddle@users.sourceforge.net>
 
