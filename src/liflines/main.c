@@ -629,7 +629,7 @@ init_curses_ui (void)
           printf("There are known problems with this version of ncurses\n");
           printf("that prevents LifeLines from running.  The LL developers\n");
           printf("are working on a solution. For status updates and/or\n");
-          printf("assistance, please email lifelines-dev@sourceforge.net.\n");
+          printf("assistance, please email lifelines-dev@lists.sourceforge.net.\n");
           return FALSE;
 	} 
 
