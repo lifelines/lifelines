@@ -1,3 +1,10 @@
+2005-02-12 Perry Rapp
+
+	* ChangeLog src/gedlib/xlat.c
+
+	Free leaked strings in free_xlat.
+
+
 2005-02-13 Stephen Dum
         * ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf 
 	docs/ll-userguide.html docs/ll-userguide.pdf reports/Makefile.am 

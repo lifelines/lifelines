@@ -137,6 +137,8 @@ free_xlat (XLAT xlat)
 		xstep->dyntt = 0; /* f_dyntts owns dyntt memory */
 	ENDLIST
 	destroy_list(xlat->steps);
+	strfree(&xlat->src);
+	strfree(&xlat->dest);
 	stdfree(xlat);
 }
 /*==========================================================
