@@ -1,5 +1,14 @@
 2001-02-01 Perry Rapp <puddle@users.sourceforge.net>
 
+	* gedlib/messages.c hdrs/menuitem.h hdrs/screen.h
+	liflines/browse.c liflines/llinesi.h liflines/menuitem.c
+	liflines/screen.c liflines/show.c stdlib/signals.c:
+	New menuing system in auxiliary menu.
+	Display invalid command when appropriate.
+	Bugfix on #pages in menu.
+
+2001-02-01 Perry Rapp <puddle@users.sourceforge.net>
+
 	* liflines/pedigree.c:
 	Fix ancestor/descendant tree leaks found by Petter Reinholdtsen.
 	Added comment note on possible optimization to show_ancestors.
