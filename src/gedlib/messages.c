@@ -289,4 +289,4 @@ STRING askyny      = SS "yY";
 
 /* misc */
 STRING unksps      = SS "Spouse unknown";
-
+STRING nohist      = SS "No more history";

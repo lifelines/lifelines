@@ -153,7 +153,7 @@ keynum_to_sour (int keynum)
 NODE
 keynum_to_even (int keynum)
 {
-	char keystr[20];
+	char keystr[MAXKEYWIDTH+1];
 	sprintf(keystr,"E%d",keynum);
 	return key_to_even(keystr);
 }

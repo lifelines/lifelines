@@ -202,3 +202,87 @@ othr_to_othr (NODE oth)
 {
 	return oth;
 }
+/*==================================================
+ * node_to_nkey -- get NKEY from NODE (if exists)
+ *================================================*/
+BOOLEAN
+node_to_nkey (NODE node, NKEY * nkey)
+{
+	nkey_clear(nkey);
+	if (!node) {
+		*nkey = nkey_zero();
+		return FALSE;
+	}
+	nkey->key = strdup(node_to_key(node));
+	nkey->ntype = nkey->key[0];
+	sscanf(&nkey->key[1], "%d", &nkey->keynum);
+	return TRUE;
+}
+/*==================================================
+ * nkey_to_node -- get NODE from nkey (if exists)
+ *================================================*/
+BOOLEAN
+nkey_to_node (NKEY * nkey, NODE * node)
+{
+	if (!nkey->keynum) {
+		*node = NULL;
+		return FALSE;
+	}
+	nkey_load_key(nkey);
+	*node = qkey_to_type(nkey->key);
+	return *node != NULL;
+}
+/*==================================================
+ * nkey_load_key -- load key field of NKEY (if not loaded)
+ *================================================*/
+void
+nkey_load_key (NKEY * nkey)
+{
+	char key[MAXKEYWIDTH+1];
+	if (nkey->key)
+		return;
+	sprintf(key, "%c%d", nkey->ntype, nkey->keynum);
+	nkey->key = strdup(key);
+}
+/*==================================================
+ * nkey_eq -- compare two NKEYs
+ *================================================*/
+BOOLEAN
+nkey_eq (NKEY * nkey1, NKEY * nkey2)
+{
+	if (nkey1->ntype != nkey2->ntype) return FALSE;
+	if (nkey1->keynum != nkey2->keynum) return FALSE;
+	return TRUE;
+}
+/*==================================================
+ * nkey_copy -- copy NKEY
+ *================================================*/
+void
+nkey_copy (NKEY * src, NKEY * dest)
+{
+	nkey_clear(dest);
+	dest->key = src->key ? strdup(src->key) : NULL;
+	dest->keynum = src->keynum;
+	dest->ntype = src->ntype;
+}
+/*==================================================
+ * nkey_clear -- clear NKEY & free memory
+ *================================================*/
+void
+nkey_clear (NKEY * nkey)
+{
+	if (nkey->key) {
+		free(nkey->key);
+		nkey->key = 0;
+	}
+	nkey->keynum = 0;
+}
+/*==================================================
+ * nkey_zero -- return a null NKEY
+ *================================================*/
+NKEY
+nkey_zero (void)
+{
+	static NKEY nkey; /* all zeros */
+	return nkey;
+}

@@ -174,6 +174,9 @@ static MenuItem f_MenuItemSwapMarkCurrent = { "x  Swap mark/current", "x", CMD_N
 static MenuItem f_MenuItemSources = { "$s  List sources", "$s", CMD_SOURCES };
 static MenuItem f_MenuItemNotes = { "$n  List notes", "$n", CMD_NOTES };
 static MenuItem f_MenuItemPointers = { "$$  List references", "$$", CMD_POINTERS };
+static MenuItem f_MenuItemHistoryBack = { "^b  History/back", "^b", CMD_HISTORY_BACK };
+static MenuItem f_MenuItemHistoryFwd = { "^f  History/fwd", "^f", CMD_HISTORY_FWD };
+
 /*
 static MenuItemOption f_MenuItemOptionSources =
 	{ "$s  show sources", "$s  hide sources", "$S", CMD_SHOWSOURCES };
@@ -230,6 +233,8 @@ static MenuItem * f_MenuPerson[] =
 	&f_MenuItemPointers,
 	&f_MenuItemNext,
 	&f_MenuItemPrev,
+	&f_MenuItemHistoryBack,
+	&f_MenuItemHistoryFwd,
 	0
 };
 /*
@@ -274,6 +279,8 @@ static MenuItem * f_MenuFamily[] =
 	&f_MenuItemPointers,
 	&f_MenuItemNext,
 	&f_MenuItemPrev,
+	&f_MenuItemHistoryBack,
+	&f_MenuItemHistoryFwd,
 	0
 };
 
@@ -357,6 +364,8 @@ static MenuItem * f_MenuAux[] =
 	&f_MenuItemPointers,
 	&f_MenuItemNext,
 	&f_MenuItemPrev,
+	&f_MenuItemHistoryBack,
+	&f_MenuItemHistoryFwd,
 	0
 };
 

@@ -62,7 +62,9 @@ extern STRING idpnxt, ids2fm, idc2fm, idplst, idp2br, crtcfm, crtsfm;
 extern STRING ronlye, ronlya, idhbrs, idwbrs;
 extern STRING id1sbr, id2sbr, id1fbr, id2fbr, id1cbr, id2cbr;
 extern STRING id1hbr, id2hbr, id1wbr, id2wbr;
-extern STRING spover, idfamk;
+extern STRING spover, idfamk, nohist;
+static INT hist_start=-1, hist_past_end=0;
+static NKEY hist_list[4];
 
 /*********************************************
  * local enums & defines
@@ -92,6 +94,9 @@ static NODE goto_fam_child(NODE fam, int childno);
 static NODE goto_indi_child(NODE indi, int childno);
 static BOOLEAN handle_aux_mode_cmds(INT c, INT * mode);
 static BOOLEAN handle_menu_commands_old(INT c);
+static NODE history_back(void);
+static void history_record(NODE node);
+static NODE history_fwd(void);
 static void pick_add_child_to_fam(NODE fam, NODE save);
 static void pick_add_spouse_to_family(NODE fam, NODE save);
 static NODE pick_create_new_family(NODE indi, NODE save, STRING * addstrings);
@@ -156,6 +161,7 @@ browse (NODE node, INT code)
 {
 	NODE indi1, indi2, fam1, fam2;
 	INDISEQ seq = NULL;
+	STRING key;
 
 	if (!node)
 		prompt_for_browse(&node, &code, &seq);
@@ -165,19 +171,7 @@ browse (NODE node, INT code)
 
 	/* set up ALLPARMS if not list */
 	if (node) {
-		STRING key = rmvat(nxref(node));
-		if (key[0] == 'F') {
-			fam1 = node;
-		} else {
-			indi1 = node;
-		}
-		if (code==BROWSE_UNK) {
-			switch(key[0]) {
-			case 'I': code=BROWSE_INDI; break;
-			case 'F': code=BROWSE_FAM; break;
-			default: code=BROWSE_AUX; break;
-			}
-		}
+		fam1 = indi1 = node;
 	}
 
 	while (code != BROWSE_QUIT) {
@@ -198,6 +192,13 @@ browse (NODE node, INT code)
 		case BROWSE_SOUR:
 		case BROWSE_AUX:
 			code = browse_aux(ALLPARMS); break;
+		case BROWSE_UNK:
+			key = rmvat(nxref(indi1));
+			switch(key[0]) {
+			case 'I': code=BROWSE_INDI; break;
+			case 'F': code=BROWSE_FAM; break;
+			default: code=BROWSE_AUX; break;
+			}
 		}
 	}
 }
@@ -330,6 +331,7 @@ browse_indi_modes (NODE *pindi1,
 			|| indimode != indimodep) {
 			show_reset_scroll();
 		}
+		history_record(indi);
 		c = display_indi(indi, indimode);
 		/* last keynum & mode, so can tell if changed */
 		nkeyp = indi_to_keynum(indi);
@@ -579,6 +581,22 @@ browse_indi_modes (NODE *pindi1,
 				return BROWSE_UNK;
 			}
 			break;
+		case CMD_HISTORY_BACK:
+			node = history_back();
+			if (node) {
+				*pindi1 = node;
+				return BROWSE_UNK;
+			}
+			message(nohist);
+			break;
+		case CMD_HISTORY_FWD:
+			node = history_fwd();
+			if (node) {
+				*pindi1 = node;
+				return BROWSE_UNK;
+			}
+			message(nohist);
+			break;
 		case CMD_QUIT:
 		default:
 			return BROWSE_QUIT;
@@ -626,6 +644,7 @@ browse_aux (NODE *pindi1, NODE *pindi2, NODE *pfam1,
 			|| auxmode != auxmodep) {
 			show_reset_scroll();
 		}
+		history_record(node);
 		c = display_aux(node, auxmode);
 		/* last keynum & mode, so can tell if changed */
 		nkeyp = node_to_keynum(ntype, node);
@@ -649,7 +668,7 @@ browse_aux (NODE *pindi1, NODE *pindi2, NODE *pfam1,
 			break;
 		case CMD_POINTERS:	/* Browse to references */
 			node2 = choose_pointer(node, noptr, idptr);
-			if (node)
+			if (node2)
 				node = node2;
 			break;
 		case CMD_NEXT:	/* Go to next in db */
@@ -668,6 +687,22 @@ browse_aux (NODE *pindi1, NODE *pindi2, NODE *pfam1,
 				else message(norec);
 				break;
 			}
+		case CMD_HISTORY_BACK:
+			node = history_back();
+			if (node) {
+				*pindi1 = node;
+				return BROWSE_UNK;
+			}
+			message(nohist);
+			break;
+		case CMD_HISTORY_FWD:
+			node = history_fwd();
+			if (node) {
+				*pindi1 = node;
+				return BROWSE_UNK;
+			}
+			message(nohist);
+			break;
 		case CMD_QUIT:
 		default:
 			return BROWSE_QUIT;
@@ -828,8 +863,8 @@ display_2fam (NODE fam1, NODE fam2, INT mode)
  * browse_fam -- Handle family browse selections.
  *=============================================*/
 static INT
-browse_fam (NODE *pindi,
-            NODE *pdum,
+browse_fam (NODE *pindi1,
+            NODE *pindi2,
             NODE *pfam1,
             NODE *pfam2,
             INDISEQ *pseq)
@@ -853,6 +888,7 @@ browse_fam (NODE *pindi,
 			|| fammode != fammodep) {
 			show_reset_scroll();
 		}
+		history_record(fam);
 		c = display_fam(fam, fammode);
 		/* last keynum & mode, so can tell if changed */
 		nkeyp = fam_to_keynum(fam);
@@ -882,47 +918,47 @@ browse_fam (NODE *pindi,
 				fam = node;
 			break;
 		case CMD_FATHER:	/* Browse to family's father */
-			*pindi = choose_father(NULL, fam, nohusb,
+			*pindi1 = choose_father(NULL, fam, nohusb,
 			    idhbrs, NOASK1);
-			if (*pindi) return BROWSE_INDI;
+			if (*pindi1) return BROWSE_INDI;
 			break;
 		case CMD_TANDEM_FATHERS:	/* Tandem Browse to family's fathers */
-			*pindi = choose_father(NULL, fam, nohusb,
+			*pindi1 = choose_father(NULL, fam, nohusb,
 			    id1hbr, NOASK1);
-			if (*pindi) {
-			  *pdum = choose_father(NULL, fam, nohusb,
+			if (*pindi1) {
+			  *pindi2 = choose_father(NULL, fam, nohusb,
 			    id2hbr, NOASK1);
-			  if (*pdum) 
+			  if (*pindi2) 
 				return BROWSE_TAND;
 			}
 			break;
 		case CMD_MOTHER:	/* Browse to family's mother */
-			*pindi = choose_mother(NULL, fam, nowife,
+			*pindi1 = choose_mother(NULL, fam, nowife,
 			    idwbrs, NOASK1);
-			if (*pindi) return BROWSE_INDI;
+			if (*pindi1) return BROWSE_INDI;
 			break;
 		case CMD_TANDEM_MOTHERS:	/* Tandem Browse to family's mother */
-			*pindi = choose_mother(NULL, fam, nowife,
+			*pindi1 = choose_mother(NULL, fam, nowife,
 			    id1wbr, NOASK1);
-			if (*pindi) {
-				*pdum = choose_mother(NULL, fam, nowife, 
+			if (*pindi1) {
+				*pindi2 = choose_mother(NULL, fam, nowife, 
 					id2wbr, NOASK1);
-				if (*pdum) 
+				if (*pindi2) 
 					return BROWSE_TAND;
 			}
 			break;
 		case CMD_CHILDREN:	/* Browse to a child */
-			*pindi = choose_child(NULL, fam, nocinf,
+			*pindi1 = choose_child(NULL, fam, nocinf,
 				idcbrs, NOASK1);
-			if (*pindi) return BROWSE_INDI;
+			if (*pindi1) return BROWSE_INDI;
 			break;
 		case CMD_TANDEM_CHILDREN:	/* browse to tandem children */
-			*pindi = choose_child(NULL, fam, nocinf,
+			*pindi1 = choose_child(NULL, fam, nocinf,
 			    id1cbr, NOASK1);
-			if (*pindi) {
-				*pdum = choose_child(NULL, fam, nocinf,
+			if (*pindi1) {
+				*pindi2 = choose_child(NULL, fam, nocinf,
 					id2cbr, NOASK1);
-				if (*pdum) 
+				if (*pindi2) 
 					return BROWSE_TAND;
 			}
 			break;
@@ -931,9 +967,9 @@ browse_fam (NODE *pindi,
 				message(ronlye);
 				break;
 			}
-			*pindi = choose_child(NULL, fam, nocinf,
+			*pindi1 = choose_child(NULL, fam, nocinf,
 			    idcrmv, DOASK1);
-			if (*pindi) choose_and_remove_child(*pindi, fam, TRUE);
+			if (*pindi1) choose_and_remove_child(*pindi1, fam, TRUE);
 			break;
 		case CMD_ADDSPOUSE:	/* Add spouse to family */
 			pick_add_spouse_to_family(fam, save);
@@ -954,7 +990,7 @@ browse_fam (NODE *pindi,
 			if (!seq) break;
 			if (length_indiseq(seq) == 1) {
 				element_indiseq(seq, 0, &key, &name);
-				*pindi = key_to_indi(key);
+				*pindi1 = key_to_indi(key);
 				remove_indiseq(seq, FALSE);
 				seq=NULL;
 				return BROWSE_INDI;
@@ -964,8 +1000,8 @@ browse_fam (NODE *pindi,
 			return BROWSE_LIST;
 			break;
 		case CMD_BROWSE_ZIP:	/* Zip browse to new person */
-			*pindi = ask_for_indi(idpnxt, NOCONFIRM, NOASK1);
-			if (*pindi) return BROWSE_INDI;
+			*pindi1 = ask_for_indi(idpnxt, NOCONFIRM, NOASK1);
+			if (*pindi1) return BROWSE_INDI;
 			break;
 		case CMD_TANDEM:	/* Enter family tandem mode */
 			node = ask_for_fam(ids2fm, idc2fm);
@@ -990,8 +1026,8 @@ browse_fam (NODE *pindi,
 		case CMD_CHILD_DIRECT0+7:
 		case CMD_CHILD_DIRECT0+8:
 		case CMD_CHILD_DIRECT0+9:
-			*pindi = goto_fam_child(fam, c-CMD_CHILD_DIRECT0);
-			if (*pindi) return BROWSE_INDI;
+			*pindi1 = goto_fam_child(fam, c-CMD_CHILD_DIRECT0);
+			if (*pindi1) return BROWSE_INDI;
 			message(nochil);
 			break;
 		case CMD_NEXT:	/* Go to next fam in db */
@@ -999,7 +1035,8 @@ browse_fam (NODE *pindi,
 				i = xref_nextf(nkeyp);
 				if (i)
 					fam = keynum_to_fam(i);
-				else message(nofam);
+				else
+					message(nofam);
 				break;
 			}
 		case CMD_PREV:	/* Go to prev fam in db */
@@ -1007,15 +1044,32 @@ browse_fam (NODE *pindi,
 				i = xref_prevf(nkeyp);
 				if (i)
 					fam = keynum_to_fam(i);
-				else message(nofam);
+				else
+					message(nofam);
 				break;
 			}
 		case CMD_SOURCES:	/* Browse to sources */
 			node = choose_source(fam, nosour, idsour);
 			if (node) {
-				*pindi = node;
+				*pindi1 = node;
 				return BROWSE_AUX;
 			}
+			break;
+		case CMD_HISTORY_BACK:
+			node = history_back();
+			if (node) {
+				*pindi1 = node;
+				return BROWSE_UNK;
+			}
+			message(nohist);
+			break;
+		case CMD_HISTORY_FWD:
+			node = history_fwd();
+			if (node) {
+				*pindi1 = node;
+				return BROWSE_UNK;
+			}
+			message(nohist);
 			break;
 		case CMD_QUIT:
 		default:
@@ -1184,4 +1238,73 @@ choose_any_other (void)
 	nod0 = choose_from_indiseq(seq, DOASK1, idothe, idothe);
 	remove_indiseq(seq, FALSE);
 	return nod0;
+}
+/*==================================================
+ * history_record -- add node to history if different from top of history
+ *================================================*/
+static void
+history_record (NODE node)
+{
+	NKEY nkey = nkey_zero();
+	INT last;
+	if (hist_start==-1) {
+		node_to_nkey(node, &hist_list[0]);
+		hist_start=hist_past_end;
+		hist_past_end = (hist_past_end== ARRSIZE(hist_list)-1) ? 0 : hist_past_end+1;
+		/* hist_list[1+] are all zero because of static data initialization */
+		return;
+	}
+	/*
+	copy new node into nkey variable so we can check
+	if this is the same as our most recent (hist_list[last])
+	*/
+	node_to_nkey(node, &nkey);
+	last = hist_past_end ? hist_past_end-1 : ARRSIZE(hist_list)-1;
+	if (nkey_eq(&nkey, &hist_list[last]))
+		return;
+	/* it is a new one so add it to circular list */
+	nkey_copy(&nkey, &hist_list[hist_past_end]);
+	if (hist_start == hist_past_end) {
+		hist_start = (hist_start== ARRSIZE(hist_list)-1) ? 0 : hist_start+1;
+	}
+	hist_past_end = (hist_past_end== ARRSIZE(hist_list)-1) ? 0 : hist_past_end+1;
+}
+/*==================================================
+ * history_back -- return prev NODE in history, if exists
+ *================================================*/
+static NODE
+history_back (void)
+{
+	INT last;
+	NODE node;
+	if (hist_start==-1)
+		return NULL;
+	/* back up from hist_past_end to current item */
+	last = hist_past_end ? hist_past_end-1 : ARRSIZE(hist_list)-1;
+	while (last != hist_start) {
+		/* loop is to keep going over deleted ones */
+		/* now back up before current item */
+		last = last ? last-1 : ARRSIZE(hist_list)-1;
+		if (last == hist_start)
+			hist_start = -1; /* empty history */
+		hist_past_end = last; /* current will get written here */
+		nkey_to_node(&hist_list[last], &node);
+		if (node)
+			return node;
+	}
+	return NULL;
+}
+/*==================================================
+ * history_fwd -- return later NODE in history, if exists
+ *================================================*/
+static NODE
+history_fwd (void)
+{
+	INT next;
+	NODE node;
+	if (hist_start == -1 && hist_past_end == hist_start)
+		return NULL; /* at end of full history */
+	next = hist_past_end;
+	nkey_to_node(&hist_list[next], &node);
+	return node;
 }

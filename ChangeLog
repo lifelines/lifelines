@@ -3,6 +3,11 @@
 	* .linesrc gedlib/lloptions.c hdrs/lloptions.h liflines/import.c:
 	Removed ReadFromArchives option, and added InputPath option.
 
+	* gedlib/gedcom.c gedlib/keytonod.c gedlib/messages.c
+	hdrs/gedcom.h hdrs/menuitem.h interp/interp.c
+	liflines/browse.c liflines/menuitem.c:
+	Added back (history) menu item.
+
 2001-02-25  Marc Nozell  <marc@nozell.com>
 	
 	* configure.in, docs/Makefile.am: Added building of documentation if

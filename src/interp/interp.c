@@ -1070,7 +1070,7 @@ interp_forindi (PNODE node,
                 PVALUE *pval)
 {
 	NODE indi;
-	static char key[MAXKEYWIDTH];
+	static char key[MAXKEYWIDTH+1];
 	STRING record;
 	INTERPTYPE irc;
 	INT len, count = 0;
@@ -1112,7 +1112,7 @@ interp_forsour (PNODE node,
                 PVALUE *pval)
 {
 	NODE sour;
-	static char key[MAXKEYWIDTH];
+	static char key[MAXKEYWIDTH+1];
 	STRING record;
 	INTERPTYPE irc;
 	INT len, count = 0;
@@ -1154,7 +1154,7 @@ interp_foreven (PNODE node,
                 PVALUE *pval)
 {
 	NODE even;
-	static char key[MAXKEYWIDTH];
+	static char key[MAXKEYWIDTH+1];
 	STRING record;
 	INTERPTYPE irc;
 	INT len, count = 0;
@@ -1196,7 +1196,7 @@ interp_forothr (PNODE node,
                 PVALUE *pval)
 {
 	NODE othr;
-	static char key[MAXKEYWIDTH];
+	static char key[MAXKEYWIDTH+1];
 	STRING record;
 	INTERPTYPE irc;
 	INT len, count = 0;
@@ -1236,7 +1236,7 @@ interp_forfam (PNODE node,
                PVALUE *pval)
 {
 	NODE fam;
-	static char key[MAXKEYWIDTH];
+	static char key[MAXKEYWIDTH+1];
 	STRING record;
 	INTERPTYPE irc;
 	INT len, count = 0;
