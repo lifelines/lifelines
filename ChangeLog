@@ -7,6 +7,8 @@
 	to disambiguate from indiseq's itype
 	rename a variable
 
+	* gedlib/xreffile.c: Bugfix (heap corruption).
+
 2001-01-03 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/property.c liflines/askprogram.c tools/dbverify.c:
