@@ -256,6 +256,7 @@ main (INT argc, char **argv)
 	initscr();
 	platform_init();
 	noecho();
+	keypad(0, 1);
 	set_displaykeys(keyflag);
 	/* initialize options & misc. stuff */
 	if (!init_lifelines_global(&msg)) {

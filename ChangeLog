@@ -4,6 +4,11 @@
 
 	More i18n.
 
+	* ChangeLog hdrs/menuitem.h liflines/browse.c liflines/lbrowse.c
+	liflines/main.c liflines/screen.c:
+
+	Handle arrow & page up & down keys in lists.
+
 2002-05-13 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog btree/opnbtree.c gedlib/init.c gedlib/xreffile.c

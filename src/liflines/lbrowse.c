@@ -36,6 +36,7 @@
 #include "indiseq.h"
 #include "liflines.h"
 #include "feedback.h"
+#include "menuitem.h"
 
 #include "llinesi.h"
 
@@ -78,6 +79,7 @@ browse_list (NODE *pindi1,
 	while (TRUE) {
 		switch (c = list_browse(seq, top, &cur, mark, &indi)) {
 		case 'j':	/* Move down line */
+		case CMD_KY_DN:
 			if (cur >= len - 1) {
 				message(_(qSlstbot));
 				break;
@@ -87,7 +89,20 @@ browse_list (NODE *pindi1,
 			indi = key_to_indi(key);
 			if (cur >= top + VIEWABLE) top++;
 			break;
+		case CMD_KY_PGDN:
+			if (top + VIEWABLE >= len-1) {
+				message(_(qSlstbot));
+				break;
+			}
+			cur += VIEWABLE;
+			if (cur >= len-1)
+				cur = len-1;
+			top += VIEWABLE;
+			element_indiseq(seq, cur, &key, &name);
+			indi = key_to_indi(key);
+			break;
 		case 'k':	/* Move up line */
+		case CMD_KY_UP:
 			if (cur <= 0) {
 				message(_(qSlsttop));
 				break;
@@ -96,6 +111,21 @@ browse_list (NODE *pindi1,
 			element_indiseq(seq, cur, &key, &name);
 			indi = key_to_indi(key);
 			if (cur + 1 == top) top--;
+			break;
+		case CMD_KY_PGUP:
+			if (top <= 0) {
+				message(_(qSlsttop));
+				break;
+			}
+			if (top >= VIEWABLE) {
+				cur -= VIEWABLE;
+				top -= VIEWABLE;
+			} else {
+				cur -= top;
+				top -= top;
+			}
+			element_indiseq(seq, cur, &key, &name);
+			indi = key_to_indi(key);
 			break;
 		case 'e':	/* Edit current person */
 			indi = edit_indi(indi);
@@ -197,7 +227,6 @@ browse_list (NODE *pindi1,
 			if (cur > top + VIEWABLE - 1) top = cur;
 			break;
 		case 'q':	/* Return to main menu */
-		default:
 			current_seq = NULL;
 			return BROWSE_QUIT;
 		}

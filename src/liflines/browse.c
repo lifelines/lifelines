@@ -614,7 +614,6 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_QUIT:
-		default:
 			return BROWSE_QUIT;
 		}
 	}
@@ -745,7 +744,6 @@ reprocess_aux_cmd:
 				break;
 			}
 		case CMD_QUIT:
-		default:
 			return BROWSE_QUIT;
 		}
 	}
@@ -1111,7 +1109,6 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_QUIT:
-		default:
 			return BROWSE_QUIT;
 		}
 	}

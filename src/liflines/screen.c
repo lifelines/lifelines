@@ -229,6 +229,7 @@ static void switch_to_uiwin(UIWINDOW uiwin);
 static void test_locale_name(void);
 #endif
 static void touch_all(BOOLEAN includeCurrent);
+static INT translate_hdware_key(INT c);
 static void uicolor(UIWINDOW, char ch);
 static void uierase(UIWINDOW uiwin);
 static INT update_menu(INT screen);
@@ -1170,6 +1171,7 @@ handle_list_cmds (listdisp * ld, INT code)
 	INT rows = ld->rectList.bottom - ld->rectList.top + 1;
 	switch(code) {
 	case 'j': /* next item */
+	case CMD_KY_DN:
 		if (ld->cur < ld->listlen - 1) {
 			ld->cur++;
 			if (ld->cur >= ld->top + rows)
@@ -1177,6 +1179,7 @@ handle_list_cmds (listdisp * ld, INT code)
 		}
 		return TRUE; /* handled */
 	case 'k': /* previous item */
+	case CMD_KY_UP:
 		if (ld->cur > 0) {
 			ld->cur--;
 			if (ld->cur < ld->top)
@@ -1406,7 +1409,6 @@ resize_win: /* we come back here if we resize the window */
 				}
 				break;
 			case 'q':
-			default:
 				done=TRUE;
 				ld.cur = -1; /* ld.cur == -1 means cancelled */
 				break;
@@ -1995,6 +1997,24 @@ user_options (void)
 	update_useropts();
 }
 /*===============================
+ * translate_hdware_key -- 
+ *  translate curses keycode into menuitem.h constant
+ *=============================*/
+static INT
+translate_hdware_key (INT c)
+{
+FILE * fp=fopen("junk.txt", "a");
+fprintf(fp, "%d: %c\n", c, c);
+fclose(fp);
+	switch(c) {
+	case KEY_UP: return CMD_KY_UP;
+	case KEY_DOWN: return CMD_KY_DN;
+	case KEY_NPAGE: return CMD_KY_PGDN;
+	case KEY_PPAGE: return CMD_KY_PGUP;
+	}
+	return CMD_NONE;
+}
+/*===============================
  * interact -- Interact with user
  *=============================*/
 static INT
@@ -2006,6 +2026,7 @@ interact (UIWINDOW uiwin, STRING str, INT screen)
 	INT c, i, n = str ? strlen(str) : 0;
 	while (TRUE) {
 		crmode();
+		keypad(uiw_win(uiwin),1);
 		c = wgetch(uiw_win(uiwin));
 		if (c == EOF) c = 'q';
 		nocrmode();
@@ -2016,6 +2037,9 @@ interact (UIWINDOW uiwin, STRING str, INT screen)
 				status_showing[0] = 0;
 				place_std_msg();
 			}
+		}
+		if (has_key(c)) {
+			return translate_hdware_key(c);
 		}
 		if (str) { /* traditional */
 			for (i = 0; i < n; i++) {
@@ -2434,7 +2458,6 @@ resize_win: /* we come back here if we resize the window */
 				}
 				break;
 			case 'q':
-			default:
 				done=TRUE;
 				ld.cur = -1; /* ld.cur == -1 means cancelled */
 			}
