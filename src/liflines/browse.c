@@ -882,7 +882,6 @@ browse_fam (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2
 	NODE save = NULL, fam = *pfam1, node;
 	INDISEQ seq;
 	STRING key, name;
-	char scratch[100];
 	char c2;
 
 	if (!fam) return BROWSE_QUIT;
@@ -924,9 +923,11 @@ reprocess_fam_cmd: /* so one command can forward to another */
 		case CMD_BROWSE_FAM:
 			i = ask_for_int(idfamk);
 			if(i > 0) {
-				sprintf(scratch, "F%d", i);
-				if((node = key_to_fam(scratch))) {
+				if((node = qkeynum_to_fam(i))) {
 					fam = node;
+				} else {
+					STRING unknfam = _("No such family.");
+					message(unknfam);
 				}
 			}
 			break;

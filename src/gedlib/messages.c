@@ -139,7 +139,6 @@ STRING haswif = SS "This family already has a wife/female parent.";
 STRING hasbth = SS "This family has both spouses/parents; can't add another.";
 STRING hasnei = SS "This family has neither spouse/parent; can't remove.";
 STRING haslnk = SS "This family still has links; not removed.";
-STRING unknam = SS "There is no one in the database with that name or key.";
 
 STRING idfbys = SS "Choose a family by selecting a spouse/parent.";
 STRING iredit = SS "Do you want to edit the person again?";

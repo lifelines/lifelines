@@ -50,7 +50,7 @@
 extern INT listbadkeys;
 extern char badkeylist[];
 
-extern STRING ntchld,ntprnt,idfbrs,entnam,unknam,notone,ifone;
+extern STRING ntchld,ntprnt,idfbrs,entnam,notone,ifone;
 extern STRING nofopn,idbrws,whtfname,whtfnameext;
 
 /*********************************************
@@ -288,6 +288,7 @@ ask_for_indiseq (STRING ttl, char ctype, INT *prc)
 	*prc = RC_NOSELECT;
 	seq = str_to_indiseq(name, ctype);
 	if (!seq) {
+		STRING unknam = _("There is no one in the database with that name or key.");
 		message(unknam);
 		return NULL;
 	}
