@@ -22,6 +22,11 @@
 
 	Fix add child asking twice bug.
 
+	* ChangeLog reports/st/st_all.ll
+	*NEW reports/st/st_list.ll:
+
+	Add list self-test functions.
+
 2002-12-16 Perry Rapp
 
 	* ChangeLog src/gedlib/xlat.c:

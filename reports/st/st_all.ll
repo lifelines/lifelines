@@ -1,5 +1,5 @@
 /*
- * @version        1.11 (2002-12-15)
+ * @version        1.12 (2002-12-16)
  * @author         Perry Rapp
  * @category       self-test
  * @output         mixed
@@ -11,7 +11,6 @@ and optionally dumps various data to a file
 
 Perry is using this for a a regression test.
 
-Covered: strings, numbers, dates, collation locales
 TODO: more conversion tests
 TODO: logic
 TODO: non-ASCII dates
@@ -30,6 +29,7 @@ include("st_collate")
 include("st_date")
 include("st_number")
 include("st_convert")
+include("st_list")
 include("st_db")
 
 global(true)
@@ -48,6 +48,9 @@ proc main()
 	}
 	if (dostep(alltests, "Test strings ? (0=no)")) {
 		call testStrings()
+	}
+	if (dostep(alltests, "Test lists ? (0=no)")) {
+		call testLists()
 	}
 	if (dostep(alltests, "Test UTF-8strings ? (0=no)")) {
 		call testStrings_UTF_8()
