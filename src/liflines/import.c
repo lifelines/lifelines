@@ -111,9 +111,9 @@ import_from_file (void)
 	rewind(fp);
 
 	if(gd_reuse)
-	  wfield(9,  0, dboldk);
+		wfield(9,  0, dboldk);
 	else
-	  wfield(9,  0, dbnewk);
+		wfield(9,  0, dbnewk);
 
 	/* test for read-only database here */
 

@@ -37,9 +37,6 @@
 
 extern BTREE BTR;
 
-static BOOLEAN readxrefs(void);
-static STRING getxref (char ctype, INT *nxrefs, INT *xrefs);
-static void addxref (INT key, INT *nxrefs, INT *maxxrefs, INT **xrefs, void (*growfnc)(void));
 
 /*===================================================================
  * First five words in xrefs file are number of INDI, FAM, EVEN, SOUR
@@ -50,40 +47,53 @@ static void addxref (INT key, INT *nxrefs, INT *maxxrefs, INT **xrefs, void (*gr
  * nixrefs==2 means there is one deleted INDI key (ixrefs[1])
  *=================================================================*/
 
-/*============================== 
+/*==================================== 
  * deleteset -- set of deleted records
- *  not yet implemented
- *============================*/
+ *==================================*/
 struct deleteset_s
 {
-	INT n;
+	INT n; /* num keys + 1, ie, starts at 1 */
 	INT * recs;
 	INT max;
+	char ctype;
 };
 typedef struct deleteset_s *DELETESET;
+
+
+static BOOLEAN readxrefs(void);
+static void readrecs(DELETESET set);
+static STRING getxref(DELETESET set);
+static void addxref(INT key, DELETESET set);
+static void growxrefs(DELETESET set);
 
 /* INDI, FAM, EVEN, SOUR, other sets */
 static struct deleteset_s irecs, frecs, erecs, srecs, xrecs;
 
-/* current implementation */
-static INT nixrefs;	/* num of INDI keys */
-static INT nfxrefs;	/* num of FAM keys */
-static INT nexrefs;	/* num of EVEN keys */
-static INT nsxrefs;	/* num of SOUR keys */
-static INT nxxrefs;	/* num of other keys */
-static INT *ixrefs;	/* list of INDI keys */
-static INT *fxrefs;	/* list of FAM keys */
-static INT *exrefs;	/* list of EVEN keys */
-static INT *sxrefs;	/* list of SOUR keys */
-static INT *xxrefs;	/* list of other keys */
-static INT maxixrefs = 0;
-static INT maxfxrefs = 0;
-static INT maxexrefs = 0;
-static INT maxsxrefs = 0;
-static INT maxxxrefs = 0;
 static FILE *xreffp=0;	/* open xref file pointer */
-static BOOLEAN xrefopen = FALSE;
 
+/*==================================== 
+ * initdset -- Initialize a delete set
+ *==================================*/
+static void
+initdset (DELETESET set, char ctype)
+{
+	set->ctype = ctype;
+	set->max = 0;
+	set->n = 1;
+	set->recs = 0;
+}
+/*=================================== 
+ * initdsets -- Initialize delete sets
+ *=================================*/
+static void
+initdsets ()
+{
+	initdset(&irecs, 'I');
+	initdset(&frecs, 'F');
+	initdset(&srecs, 'S');
+	initdset(&erecs, 'E');
+	initdset(&xrecs, 'X');
+}
 /*============================== 
  * initxref -- Create xrefs file
  *============================*/
@@ -92,7 +102,8 @@ initxref (void)
 {
 	char scratch[100];
 	INT i = 1, j;
-	ASSERT(!xrefopen);
+	initdsets();
+	ASSERT(!xreffp);
 	sprintf(scratch, "%s/xrefs", BTR->b_basedir);
 	ASSERT(xreffp = fopen(scratch, LLWRITEBINARY));
 	for (j = 0; j < 10; j++) {
@@ -107,10 +118,10 @@ BOOLEAN
 openxref (void)
 {
 	char scratch[100];
-	ASSERT(!xrefopen);
+	initdsets();
+	ASSERT(!xreffp);
 	sprintf(scratch, "%s/xrefs", BTR->b_basedir);
 	if (!(xreffp = fopen(scratch, LLREADBINARYUPDATE))) return FALSE;
-	xrefopen = TRUE;
 	return readxrefs();
 }
 /*==============================
@@ -122,7 +133,6 @@ closexref (void)
 	if (xreffp) {
 		fclose(xreffp); xreffp = 0;
 	}
-	xrefopen = FALSE;
 }
 /*=========================================
  * getxref -- Return new keynum for type
@@ -131,62 +141,51 @@ closexref (void)
  *  generic for all 5 types
  *=======================================*/
 static STRING
-getxref (char ctype, INT *nxrefs, INT *xrefs)
+getxref (DELETESET set)
 {
-	INT n;
+	INT keynum;
 	static unsigned char scratch[12];
-	ASSERT(xrefopen && *nxrefs >= 1);
-	n = (*nxrefs == 1) ? xrefs[0]++ : xrefs[--(*nxrefs)];
+	ASSERT(xreffp && set->n >= 1);
+	keynum = (set->n == 1) ? set->recs[0]++ : set->recs[--(set->n)];
 	ASSERT(writexrefs());
-	sprintf(scratch, "@%c%d@", ctype, n);
+	sprintf(scratch, "@%c%d@", set->ctype, keynum);
 	return scratch;
 }
 /*===================================================
  * get?xref -- Wrappers for each type to getxref (qv)
  *  5 symmetric versions
  *=================================================*/
-STRING getixref (void)
-{
-	return getxref('I', &nixrefs, ixrefs);
-}
-STRING getfxref (void)
-{
-	return getxref('F', &nfxrefs, fxrefs);
-}
-STRING getexref (void)
-{
-	return getxref('E', &nexrefs, exrefs);
-}
-STRING getsxref (void)
-{
-	return getxref('S', &nsxrefs, sxrefs);
-}
-STRING getxxref (void)
-{
-	return getxref('X', &nxxrefs, xxrefs);
-}
+STRING getixref (void) { return getxref(&irecs); }
+STRING getfxref (void) { return getxref(&frecs); }
+STRING getexref (void) { return getxref(&erecs); }
+STRING getsxref (void) { return getxref(&srecs); }
+STRING getxxref (void) { return getxref(&xrecs); }
 /*======================================
  * sortxref -- Sort xrefs after reading
  *====================================*/
 static void
-sortxref (INT nxrefs, INT * xrefs)
+sortxref (DELETESET set)
 {
 	/*
 	TO DO - call qsort instead
 	and also flag sorted file by changing file structure
-	- Perry, 2001/01/05
 	*/
-	/* they should normally already be sorted, 
-	so a bubble-sort will be O(n) to verify */
+	/*
+	sort from high to low, so lowest at top of
+	array, ready to be handed out
+
+	they should normally already be sorted, 
+	so use watchtful bubble-sort for O(n)
+	*/
 	INT i,j, temp, ct;
-	for (i=1; i<nxrefs; i++) {
+	for (i=1; i<set->n; i++) {
 		ct=0;
-		for (j=i+1; j<nxrefs; j++) {
-			if (xrefs[i] > xrefs[j]) {
+		for (j=i+1; j<set->n; j++) {
+			if (set->recs[i] < set->recs[j]) {
 				ct++;
-				temp = xrefs[j];
-				xrefs[j] = xrefs[i];
-				xrefs[i] = temp;
+				temp = set->recs[j];
+				set->recs[j] = set->recs[i];
+				set->recs[i] = temp;
 			}
 			if (i==1 && !ct) return; /* already sorted */
 		}
@@ -198,11 +197,11 @@ sortxref (INT nxrefs, INT * xrefs)
 static void
 sortxrefs (void)
 {
-	sortxref(nixrefs, ixrefs);
-	sortxref(nfxrefs, fxrefs);
-	sortxref(nexrefs, exrefs);
-	sortxref(nsxrefs, sxrefs);
-	sortxref(nxxrefs, xxrefs);
+	sortxref(&irecs);
+	sortxref(&frecs);
+	sortxref(&erecs);
+	sortxref(&srecs);
+	sortxref(&xrecs);
 }
 /*=============================
  * readxrefs -- Read xrefs file
@@ -210,29 +209,37 @@ sortxrefs (void)
 static BOOLEAN
 readxrefs (void)
 {
-	ASSERT(xrefopen);
-	ASSERT(fread(&nixrefs, sizeof(INT), 1, xreffp) == 1);
-	ASSERT(fread(&nfxrefs, sizeof(INT), 1, xreffp) == 1);
-	ASSERT(fread(&nexrefs, sizeof(INT), 1, xreffp) == 1);
-	ASSERT(fread(&nsxrefs, sizeof(INT), 1, xreffp) == 1);
-	ASSERT(fread(&nxxrefs, sizeof(INT), 1, xreffp) == 1);
-	ASSERT(nixrefs > 0);
-	ASSERT(nfxrefs > 0);
-	ASSERT(nexrefs > 0);
-	ASSERT(nsxrefs > 0);
-	ASSERT(nxxrefs > 0);
-	if (nixrefs > maxixrefs) growixrefs();
-	if (nfxrefs > maxfxrefs) growfxrefs();
-	if (nexrefs > maxexrefs) growexrefs();
-	if (nsxrefs > maxsxrefs) growsxrefs();
-	if (nxxrefs > maxxxrefs) growxxrefs();
-	ASSERT((INT)fread(ixrefs, sizeof(INT), nixrefs, xreffp) == nixrefs);
-	ASSERT((INT)fread(fxrefs, sizeof(INT), nfxrefs, xreffp) == nfxrefs);
-	ASSERT((INT)fread(exrefs, sizeof(INT), nexrefs, xreffp) == nexrefs);
-	ASSERT((INT)fread(sxrefs, sizeof(INT), nsxrefs, xreffp) == nsxrefs);
-	ASSERT((INT)fread(xxrefs, sizeof(INT), nxxrefs, xreffp) == nxxrefs);
+	ASSERT(xreffp);
+	ASSERT(fread(&irecs.n, sizeof(INT), 1, xreffp) == 1);
+	ASSERT(fread(&frecs.n, sizeof(INT), 1, xreffp) == 1);
+	ASSERT(fread(&erecs.n, sizeof(INT), 1, xreffp) == 1);
+	ASSERT(fread(&srecs.n, sizeof(INT), 1, xreffp) == 1);
+	ASSERT(fread(&xrecs.n, sizeof(INT), 1, xreffp) == 1);
+	ASSERT(irecs.n > 0);
+	ASSERT(frecs.n > 0);
+	ASSERT(erecs.n > 0);
+	ASSERT(srecs.n > 0);
+	ASSERT(xrecs.n > 0);
+	if (irecs.n > irecs.max) growxrefs(&irecs);
+	if (frecs.n > frecs.max) growxrefs(&frecs);
+	if (erecs.n > erecs.max) growxrefs(&erecs);
+	if (srecs.n > srecs.max) growxrefs(&srecs);
+	if (xrecs.n > xrecs.max) growxrefs(&xrecs);
+	readrecs(&irecs);
+	readrecs(&frecs);
+	readrecs(&erecs);
+	readrecs(&srecs);
+	readrecs(&xrecs);
 	sortxrefs();
 	return TRUE;
+}
+/*=========================================
+ * readrecs -- Read in one array of records
+ *=======================================*/
+static void
+readrecs (DELETESET set)
+{
+	ASSERT((INT)fread(set->recs, sizeof(INT), set->n, xreffp) == set->n);
 }
 /*================================
  * writexrefs -- Write xrefs file.
@@ -240,18 +247,18 @@ readxrefs (void)
 BOOLEAN
 writexrefs (void)
 {
-	ASSERT(xrefopen);
+	ASSERT(xreffp);
 	rewind(xreffp);
-	ASSERT(fwrite(&nixrefs, sizeof(INT), 1, xreffp) == 1);
-	ASSERT(fwrite(&nfxrefs, sizeof(INT), 1, xreffp) == 1);
-	ASSERT(fwrite(&nexrefs, sizeof(INT), 1, xreffp) == 1);
-	ASSERT(fwrite(&nsxrefs, sizeof(INT), 1, xreffp) == 1);
-	ASSERT(fwrite(&nxxrefs, sizeof(INT), 1, xreffp) == 1);
-	ASSERT((INT)fwrite(ixrefs, sizeof(INT), nixrefs, xreffp) == nixrefs);
-	ASSERT((INT)fwrite(fxrefs, sizeof(INT), nfxrefs, xreffp) == nfxrefs);
-	ASSERT((INT)fwrite(exrefs, sizeof(INT), nexrefs, xreffp) == nexrefs);
-	ASSERT((INT)fwrite(sxrefs, sizeof(INT), nsxrefs, xreffp) == nsxrefs);
-	ASSERT((INT)fwrite(xxrefs, sizeof(INT), nxxrefs, xreffp) == nxxrefs);
+	ASSERT(fwrite(&irecs.n, sizeof(INT), 1, xreffp) == 1);
+	ASSERT(fwrite(&frecs.n, sizeof(INT), 1, xreffp) == 1);
+	ASSERT(fwrite(&erecs.n, sizeof(INT), 1, xreffp) == 1);
+	ASSERT(fwrite(&srecs.n, sizeof(INT), 1, xreffp) == 1);
+	ASSERT(fwrite(&xrecs.n, sizeof(INT), 1, xreffp) == 1);
+	ASSERT((INT)fwrite(irecs.recs, sizeof(INT), irecs.n, xreffp) == irecs.n);
+	ASSERT((INT)fwrite(frecs.recs, sizeof(INT), frecs.n, xreffp) == frecs.n);
+	ASSERT((INT)fwrite(erecs.recs, sizeof(INT), erecs.n, xreffp) == erecs.n);
+	ASSERT((INT)fwrite(srecs.recs, sizeof(INT), srecs.n, xreffp) == srecs.n);
+	ASSERT((INT)fwrite(xrecs.recs, sizeof(INT), xrecs.n, xreffp) == xrecs.n);
 	fflush(xreffp);
 	return TRUE;
 }
@@ -260,259 +267,189 @@ writexrefs (void)
  *  generic for all types
  *===================================*/
 static void
-addxref (INT key, INT *nxrefs, INT *maxxrefs, INT **xrefs, void (*growfnc)(void))
+addxref (INT key, DELETESET set)
 {
 	INT lo,hi,md, i;
-	if (key <= 0 || !xrefopen || (*nxrefs) < 1) FATAL();
-	if (*nxrefs >= *maxxrefs)
-		(*growfnc)();
-	ASSERT(*nxrefs < *maxxrefs);
+	if (key <= 0 || !xreffp || (set->n) < 1) FATAL();
+	if (set->n >= set->max)
+		growxrefs(set);
+	ASSERT(set->n < set->max);
 	lo=1;
-	hi=(*nxrefs)-1;
+	hi=(set->n)-1;
 	/* binary search to find where to insert key */
 	while (lo<=hi) {
 		md = (lo + hi)/2;
-		if (key<(*xrefs)[md])
+		if (key>(set->recs)[md])
 			hi=--md;
-		else if (key>(*xrefs)[md])
+		else if (key<(set->recs)[md])
 			lo=++md;
 		else
 			FATAL(); /* deleting a deleted record! */
 	}
 	/* key replaces xrefs[lo] - push lo+ up */
-	for (i=lo; i<*nxrefs; i++)
-		(*xrefs)[i+1] = (*xrefs)[i];
-	(*xrefs)[lo] = key;
-	(*nxrefs)++;
+	for (i=lo; i<set->n; i++)
+		(set->recs)[i+1] = (set->recs)[i];
+	(set->recs)[lo] = key;
+	(set->n)++;
 	ASSERT(writexrefs());
 }
 /*===================================================
  * add?xref -- Wrappers for each type to addxref (qv)
  *  5 symmetric versions
  *=================================================*/
-void addixref (INT key)
-{
-	addxref(key, &nixrefs, &maxixrefs, &ixrefs, &growixrefs);
-}
-void addfxref (INT key)
-{
-	addxref(key, &nfxrefs, &maxfxrefs, &fxrefs, &growfxrefs);
-}
-void addexref (INT key)
-{
-	addxref(key, &nexrefs, &maxexrefs, &exrefs, &growexrefs);
-}
-void addsxref (INT key)
-{
-	addxref(key, &nsxrefs, &maxsxrefs, &sxrefs, &growsxrefs);
-}
-void addxxref (INT key)
-{
-	addxref(key, &nxxrefs, &maxxxrefs, &xxrefs, &growxxrefs);
-}
+void addixref (INT key) { addxref(key, &irecs); }
+void addfxref (INT key) { addxref(key, &frecs); }
+void addexref (INT key) { addxref(key, &erecs); }
+void addsxref (INT key) { addxref(key, &srecs); }
+void addxxref (INT key) { addxref(key, &xrecs); }
 /*==========================================
  * growxrefs -- Grow memory for xrefs array.
  *  generic for all types
  *========================================*/
 static void
-growxrefs (INT nxrefs, INT *maxxrefs, INT **xrefs)
+growxrefs (DELETESET set)
 {
-	INT i, m = *maxxrefs, *newp;
-	*maxxrefs = nxrefs + 10;
-	newp = (INT *) stdalloc((*maxxrefs)*sizeof(INT));
+	INT i, m = set->max, *newp;
+	if (set->n < 500)
+		set->max = set->n + 10;
+	else
+		set->max = set->n + 100;
+	newp = (INT *) stdalloc((set->max)*sizeof(INT));
 	if (m) {
-		for (i = 0; i < nxrefs; i++)
-			newp[i] = (*xrefs)[i];
-		stdfree(*xrefs);
+		for (i = 0; i < set->n; i++)
+			newp[i] = set->recs[i];
+		stdfree(set->recs);
 	}
-	(*xrefs) = newp;
-}
-/*======================================================
- * grow?xrefs -- Wrappers for each type to growxrefs (qv)
- *  5 symmetric versions
- *=====================================================*/
-void growixrefs (void)
-{
-	growxrefs(nixrefs, &maxixrefs, &ixrefs);
-}
-void growfxrefs (void)
-{
-	growxrefs(nfxrefs, &maxfxrefs, &fxrefs);
-}
-void growexrefs (void)
-{
-	growxrefs(nexrefs, &maxexrefs, &exrefs);
-}
-void growsxrefs (void)
-{
-	growxrefs(nsxrefs, &maxsxrefs, &sxrefs);
-}
-void growxxrefs (void)
-{
-	growxrefs(nxxrefs, &maxxxrefs, &xxrefs);
+	set->recs = newp;
 }
 /*==========================================================
  * num_????s -- Return number of type of things in database.
  *  5 symmetric versions
  *========================================================*/
-INT num_indis (void)
+INT num_set (DELETESET set)
 {
-	return ixrefs[0] - nixrefs;
+	return set->recs[0] - set->n;
 }
-INT num_fams (void)
+INT num_indis (void) { return num_set(&irecs); }
+INT num_fams (void) { return num_set(&frecs); }
+INT num_evens (void) { return num_set(&erecs); }
+INT num_sours (void) { return num_set(&srecs); }
+INT num_othrs (void) { return num_set(&xrecs); }
+/*================================================
+ * newixref -- Return original or next ixref value
+ * xrefp = key of the individual
+ * flag = use the current key
+ *  returns static buffer
+ *==============================================*/
+STRING
+newxref (STRING xrefp, BOOLEAN flag, DELETESET set)
 {
-	return fxrefs[0] - nfxrefs;
-}
-INT num_evens (void)
-{
-	return exrefs[0] - nexrefs;
-}
-INT num_sours (void)
-{
-	return sxrefs[0] - nsxrefs;
-}
-INT num_othrs (void)
-{
-	return xxrefs[0] - nxxrefs;
+	INT keynum;
+	BOOLEAN changed;
+	static unsigned char scratch[12];
+	if(flag) {
+		keynum = atoi(xrefp+1);
+		changed = ((set->n != 1) || (keynum >= set->recs[0]));
+		if(set->n != 1)
+			set->n = 1;	/* forget about deleted entries */
+		if(keynum >= set->recs[0])
+			set->recs[0] = keynum+1;	/* next available */
+		if(changed)
+			ASSERT(writexrefs());
+		sprintf(scratch, "@%s@", xrefp);
+		return(scratch);
+	}
+	return(getxref(set));
 }
 /*================================================
  * newixref -- Return original or next ixref value
+ * xrefp = key of the individual
+ * flag = use the current key
  *==============================================*/
 STRING
-newixref (STRING xrefp, /* key of the individual */
-          BOOLEAN flag) /* use the current key */
+newixref (STRING xrefp, BOOLEAN flag)
 {
-	INT n;
-	BOOLEAN changed;
-	static unsigned char scratch[12];
-	if(flag) {
-		n = atoi(xrefp+1);
-		changed = ((nixrefs != 1) || (n >= ixrefs[0]));
-		if(nixrefs != 1) nixrefs = 1;	/* forget about deleted entries */
-		if(n >= ixrefs[0]) ixrefs[0] = n+1;	/* next available */
-		if(changed) ASSERT(writexrefs());
-		sprintf(scratch, "@%s@", xrefp);
-		return(scratch);
-	}
-	return(getixref());
+	return newxref(xrefp, flag, &irecs);
 }
 /*================================================
  * newfxref -- Return original or next fxref value
+ * xrefp = key of the individual
+ * flag = use the current key
  *==============================================*/
 STRING
-newfxref (STRING xrefp, /* key of the individual */
-          BOOLEAN flag) /* use the current key */
+newfxref (STRING xrefp, BOOLEAN flag)
 {
-	INT n;
-	BOOLEAN changed;
-	static unsigned char scratch[12];
-	if(flag) {
-		n = atoi(xrefp+1);
-		changed = ((nfxrefs != 1) || (n >= fxrefs[0]));
-		nfxrefs = 1;	/* forget about deleted entries */
-		if(n >= fxrefs[0]) fxrefs[0] = n+1;	/* next available */
-		if(changed) ASSERT(writexrefs());
-		sprintf(scratch, "@%s@", xrefp);
-		return(scratch);
-	}
-	return(getfxref());
+	return newxref(xrefp, flag, &frecs);
 }
 /*================================================
  * newsxref -- Return original or next sxref value
+ * xrefp = key of the individual
+ * flag = use the current key
  *==============================================*/
 STRING
-newsxref (STRING xrefp, /* key of the individual */
-          BOOLEAN flag) /* use the current key */
+newsxref (STRING xrefp, BOOLEAN flag)
 {
-	INT n;
-	BOOLEAN changed;
-	static unsigned char scratch[12];
-	if(flag) {
-		n = atoi(xrefp+1);
-		changed = ((nsxrefs != 1) || (n >= sxrefs[0]));
-		nsxrefs = 1;	/* forget about deleted entries */
-		if(n >= sxrefs[0]) sxrefs[0] = n+1;	/* next available */
-		if(changed) ASSERT(writexrefs());
-		sprintf(scratch, "@%s@", xrefp);
-		return(scratch);
-	}
-	return(getsxref());
+	return newxref(xrefp, flag, &srecs);
 }
 /*================================================
  * newexref -- Return original or next exref value
+ * xrefp = key of the individual
+ * flag = use the current key
  *==============================================*/
 STRING
-newexref (STRING xrefp, /* key of the individual */
-          BOOLEAN flag) /* use the current key */
+newexref (STRING xrefp, BOOLEAN flag)
 {
-	INT n;
-	BOOLEAN changed;
-	static unsigned char scratch[12];
-	if(flag) {
-		n = atoi(xrefp+1);
-		changed = ((nexrefs != 1) || (n >= exrefs[0]));
-		nexrefs = 1;	/* forget about deleted entries */
-		if(n >= exrefs[0]) exrefs[0] = n+1;	/* next available */
-		if(changed) ASSERT(writexrefs());
-		sprintf(scratch, "@%s@", xrefp);
-		return(scratch);
-	}
-	return(getexref());
+	return newxref(xrefp, flag, &erecs);
 }
 /*================================================
  * newxxref -- Return original or next xxref value
+ * xrefp = key of the individual
+ * flag = use the current key
  *==============================================*/
 STRING
-newxxref (STRING xrefp, /* key of the individual */
-          BOOLEAN flag) /* use the current key */
+newxxref (STRING xrefp, BOOLEAN flag)
 {
-	INT n;
-	BOOLEAN changed;
-	static unsigned char scratch[12];
-	if(flag) {
-		n = atoi(xrefp+1);
-		changed = ((nxxrefs != 1) || (n >= xxrefs[0]));
-		nxxrefs = 1;	/* forget about deleted entries */
-		if(n >= xxrefs[0]) xxrefs[0] = n+1;	/* next available */
-		if(changed) ASSERT(writexrefs());
-		sprintf(scratch, "@%s@", xrefp);
-		return(scratch);
-	}
-	return(getxxref());
+	return newxref(xrefp, flag, &xrecs);
 }
 /*================================================
  * xref_isvalid_impl -- is this a valid whatever ?
  *  generic for all 5 types
  * (internal use)
  *==============================================*/
-static INT
-xref_isvalid_impl(INT nxrefs, INT * xrefs, INT i)
+static BOOLEAN
+xref_isvalid_impl (DELETESET set, INT keynum)
 {
-	int j;
-	if (nxrefs == xrefs[0]) return 0; /* no valids */
-	/*
-	TO DO: 
-	Change this to a binary sort, when xrefs sorting
-	has been tested.
-	Perry, 2001/01/01
-	*/
-	for (j=1; j< nxrefs; j++)
-		if (i == xrefs[j])
-			return 0;
-	return 1;
+	INT lo,hi,md;
+	if (set->n == set->recs[0]) return TRUE; /* no valids */
+	if (set->n == 1) return FALSE; /* all valid */
+	/* binary search deleteds */
+	lo=1;
+	hi=(set->n)-1;
+	while (lo<=hi) {
+		md = (lo + hi)/2;
+		if (keynum>(set->recs)[md])
+			hi=--md;
+		else if (keynum<(set->recs)[md])
+			lo=++md;
+		else
+			return FALSE;
+	}
+	return TRUE;
 }
 /*====================================================
  * xref_next -- Return next valid of some type after i
  *  returns 0 if none found
  *  generic for all 5 types
+ *  this could be more efficient (after first one work
+ *  thru tree)
  *==================================================*/
 static INT
-xref_next(INT nxrefs, INT * xrefs, INT i)
+xref_next (DELETESET set, INT i)
 {
-	if (nxrefs == xrefs[0]) return 0; /* no valids */
-	while (++i < xrefs[0])
+	if (set->n == set->recs[0]) return 0; /* no valids */
+	while (++i < set->recs[0])
 	{
-		if (xref_isvalid_impl(nxrefs, xrefs, i)) return i;
+		if (xref_isvalid_impl(set, i)) return i;
 	}
 	return 0;
 }
@@ -522,12 +459,12 @@ xref_next(INT nxrefs, INT * xrefs, INT i)
  *  generic for all 5 types
  *===================================================*/
 static INT
-xref_prev(INT nxrefs, INT * xrefs, INT i)
+xref_prev (DELETESET set, INT i)
 {
-	if (nxrefs == xrefs[0]) return 0; /* no valids */
+	if (set->n == set->recs[0]) return 0; /* no valids */
 	while (--i)
 	{
-		if (xref_isvalid_impl(nxrefs, xrefs, i)) return i;
+		if (xref_isvalid_impl(set, i)) return i;
 	}
 	return 0;
 }
@@ -536,98 +473,42 @@ xref_prev(INT nxrefs, INT * xrefs, INT i)
  *  returns 0 if none found
  *  5 symmetric versions
  *=============================================*/
-INT xref_nexti (INT i) 
-{
-	return xref_next(nixrefs, ixrefs, i); 
-}
-INT xref_nextf (INT i)
-{
-	return xref_next(nfxrefs, fxrefs, i);
-}
-INT xref_nexte (INT i)
-{
-	return xref_next(nexrefs, exrefs, i);
-}
-INT xref_nexts (INT i)
-{
-	return xref_next(nsxrefs, sxrefs, i);
-}
-INT xref_nextx (INT i)
-{
-	return xref_next(nxxrefs, xxrefs, i);
-}
+INT xref_nexti (INT i) { return xref_next(&irecs, i); }
+INT xref_nextf (INT i) { return xref_next(&frecs, i); }
+INT xref_nexte (INT i) { return xref_next(&erecs, i); }
+INT xref_nexts (INT i) { return xref_next(&srecs, i); }
+INT xref_nextx (INT i) { return xref_next(&xrecs, i); }
 /*================================================
  * xref_prev? -- Return prev valid indi/? before i
  *  returns 0 if none found
  *  5 symmetric versions
  *==============================================*/
-INT xref_previ(INT i)
-{
-	return xref_prev(nixrefs, ixrefs, i);
-}
-INT xref_prevf (INT i)
-{
-	return xref_prev(nfxrefs, fxrefs, i);
-}
-INT xref_preve (INT i)
-{
-	return xref_prev(nexrefs, exrefs, i);
-}
-INT xref_prevs (INT i)
-{
-	return xref_prev(nsxrefs, sxrefs, i);
-}
-INT xref_prevx (INT i)
-{
-	return xref_prev(nxxrefs, xxrefs, i);
-}
+INT xref_previ (INT i) { return xref_prev(&irecs, i); }
+INT xref_prevf (INT i) { return xref_prev(&frecs, i); }
+INT xref_preve (INT i) { return xref_prev(&erecs, i); }
+INT xref_prevs (INT i) { return xref_prev(&srecs, i); }
+INT xref_prevx (INT i) { return xref_prev(&xrecs, i); }
 /*=========================================
  * xref_first? -- Return first valid indi/?
  *  returns 0 if none found
  *  5 symmetric versions
  *=======================================*/
-INT xref_firsti (void)
-{
-	return xref_nexti(0);
-}
-INT xref_firstf (void)
-{
-	return xref_nextf(0);
-}
-INT xref_firste (void)
-{
-	return xref_nexte(0);
-}
-INT xref_firsts (void)
-{
-	return xref_nexts(0);
-}
-INT xref_firstx (void)
-{
-	return xref_nextx(0);
-}
+INT xref_firsti (void) { return xref_nexti(0); }
+INT xref_firstf (void) { return xref_nextf(0); }
+INT xref_firste (void) { return xref_nexte(0); }
+INT xref_firsts (void) { return xref_nexts(0); }
+INT xref_firstx (void) { return xref_nextx(0); }
 /*=======================================
  * xref_last? -- Return last valid indi/?
  *  returns 0 if none found
  *  5 symmetric versions
  *=====================================*/
-INT xref_lasti (void)
+INT xref_last (DELETESET set)
 {
-	return xref_previ(ixrefs[0]);
+	return xref_prev(set, set->recs[0]);
 }
-INT xref_lastf (void)
-{
-	return xref_prevf(fxrefs[0]);
-}
-INT xref_laste (void)
-{
-	return xref_prevf(exrefs[0]);
-}
-INT xref_lasts (void)
-{
-	return xref_prevf(sxrefs[0]);
-}
-INT xref_lastx (void)
-{
-	return xref_prevf(xxrefs[0]);
-}
+INT xref_lasti (void) { return xref_last(&irecs); }
+INT xref_lastf (void) { return xref_last(&frecs); }
+INT xref_laste (void) { return xref_last(&erecs); }
+INT xref_lasts (void) { return xref_last(&srecs); }
+INT xref_lastx (void) { return xref_last(&xrecs); }

@@ -611,7 +611,7 @@ check_stdkeys (void)
 void
 addmissingkeys (INT t)          /* type of record: INDI_REC ... */
 {
-    	INT tmax, ttot;
+  	INT tmax, ttot;
 	INT i,j;
 	INT keystoadd;
 	char *kp;
@@ -627,30 +627,38 @@ addmissingkeys (INT t)          /* type of record: INDI_REC ... */
 	}
 
 	if((keystoadd = (tmax - ttot)) > 0) {
-	    ASSERT(kp = (char *)stdalloc(tmax+1));
-	    for(i = 0; i < tmax; i++) kp[i] = 0;
-	    for (i = 0; i < struct_len; i++) {
-		ELMNT el = index_data[i];
-		if(Type(el) == t) {
-		    j = atoi(Key(el)+1);
-		    ASSERT((j>0) && (j <= tmax));
-		    kp[j] = 1;
+		ASSERT(kp = (char *)stdalloc(tmax+1));
+		for(i = 0; i < tmax; i++) kp[i] = 0;
+		for (i = 0; i < struct_len; i++) {
+			ELMNT el = index_data[i];
+			if(Type(el) == t) {
+				j = atoi(Key(el)+1);
+				ASSERT((j>0) && (j <= tmax));
+				kp[j] = 1;
+			}
 		}
-	    }
-	    for(i = 1; (keystoadd > 0) && (i <= tmax); i++) {
-		if(kp[i] == 0) {
-		    switch(t)
-		    {
-		    case INDI_REC: addixref(i); break;
-		    case FAM_REC:  addfxref(i); break;
-		    case EVEN_REC: addexref(i); break;
-		    case SOUR_REC: addsxref(i); break;
-		    case OTHR_REC: addxxref(i); break;
-		    }
-		    keystoadd--;
+		/*
+		TO DO - ought to run this loop down instead of up
+		because it is much more efficient for xreffile.c
+		but I'm not sure if keystoadd is all of them
+		Also ought to tell xreffile.c to preallocate,
+		except I don't know how many of which.
+		Perry, 2001/01/05
+		*/
+		for(i = 1; (keystoadd > 0) && (i <= tmax); i++) {
+			if(kp[i] == 0) {
+				switch(t)
+				{
+				case INDI_REC: addixref(i); break;
+				case FAM_REC:  addfxref(i); break;
+				case EVEN_REC: addexref(i); break;
+				case SOUR_REC: addsxref(i); break;
+				case OTHR_REC: addxxref(i); break;
+				}
+				keystoadd--;
+			}
 		}
-	    }
-	    stdfree(kp);
+		stdfree(kp);
 	}
 }
 /*=================================================
