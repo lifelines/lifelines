@@ -213,6 +213,7 @@ void addxref(CNSTRING key);
 void addxxref(INT key);
 BOOLEAN add_refn(CNSTRING refn, CNSTRING key);
 BOOLEAN are_locales_supported(void);
+void change_node_tag(NODE node, STRING newtag);
 RECORD choose_child(RECORD irec, RECORD frec, STRING msg0, STRING msgn, ASK1Q ask1);
 void choose_and_remove_family(void);
 RECORD choose_father(RECORD irec, RECORD frec, STRING msg0, STRING msgn, ASK1Q ask1);

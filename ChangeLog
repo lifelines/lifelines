@@ -1,3 +1,11 @@
+2005-02-04 Perry Rapp
+
+	* ChangeLog src/gedlib/node.c src/hdrs/gedcom.h
+	src\tools/dbverify.c
+
+	New function change_node_tag.
+	Fix bug in fix_bad_pointer which was corrupting node tags.
+
 2005-02-04 Jens Arvidsson
 
 	* ChangeLog po/sv.po

@@ -1024,9 +1024,7 @@ fix_bad_pointer (CNSTRING key, RECORD rec, NODE node)
 	rec=rec; /* unused */
 
 	if (todo.fix_alter_pointers) {
-		STRING oldtag = ntag(node);
-		stdfree(oldtag);
-		ntag(node) = strsave("_badptr");
+		change_node_tag(node, "_badptr");
 		return TRUE;
 	}
 	return FALSE;

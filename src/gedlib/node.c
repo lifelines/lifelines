@@ -121,6 +121,15 @@ fixtag (STRING tag)
 	return str;
 }
 /*=====================================
+ * change_node_tag -- Give new tag to node
+ *===================================*/
+void
+change_node_tag (NODE node, STRING newtag)
+{
+	/* tag belongs to tagtable, so don't free old one */
+	ntag(node) = fixtag(newtag);
+}
+/*=====================================
  * alloc_node -- Special node allocator
  *===================================*/
 static NODE
