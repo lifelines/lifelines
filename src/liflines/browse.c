@@ -1481,9 +1481,16 @@ static NODE
 add_new_rec_maybe_ref (NODE node, char ntype)
 {
 	NODE newnode=NULL;
-	STRING choices[4] = { autoxref,editcur,gotonew,staycur };
+	STRING choices[4];
 	char title[60];
 	INT rtn;
+
+    /* init choices */
+    choices[0] = autoxref;
+    choices[1] = editcur;
+    choices[2] = gotonew;
+    choices[3] = staycur;
+
 	/* create new node of requested type */
 	if (ntype=='E') 
 		newnode=add_event();
