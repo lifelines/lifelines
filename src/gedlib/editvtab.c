@@ -68,7 +68,7 @@ edit_valtab (STRING key, TABLE *ptab, INT sep, STRING ermsg)
 	unlink(editfile);
 
 	if (retrieve_to_textfile(key, editfile, trans_ined) == RECORD_ERROR) {
-		mprintf_error(dataerr);
+		msg_error(dataerr);
 		return FALSE;
 	}
 	do_edit();

@@ -994,10 +994,10 @@ name_to_list (STRING name,      /* GEDCOM name */
 	return TRUE;
 }
 /*====================================================
- * free_name_el -- free element of list created by name_to_list
+ * free_string_el -- free alloc'd string element of list
  *==================================================*/
 static void
-free_name_el(VPTR w)
+free_string_el(VPTR w)
 {
 	stdfree((STRING)w);
 }
@@ -1007,7 +1007,17 @@ free_name_el(VPTR w)
 void
 free_name_list (LIST list)
 {
-	remove_list(list, free_name_el);
+	/* name list is just string list */
+	free_string_list(list);
+}
+/*====================================================
+ * free_string_list -- free list of alloc'd strings
+ * Created: 2001/11/11, Perry Rapp
+ *==================================================*/
+void
+free_string_list(LIST list)
+{
+	remove_list(list, free_string_el);
 }
 /*====================================================
  * traverse_names -- traverse names in db

@@ -71,7 +71,7 @@ archive_in_file (void)
 	fn = ask_for_output_file(LLWRITETEXT, "Enter name of output archive file.",
 	    &fname, lloptions.llarchives, ".ged");
 	if (!fn) {
-		mprintf_error("The database was not saved.");
+		msg_error("The database was not saved.");
 		return FALSE; 
 	}
 	curtime = time(NULL);
@@ -116,7 +116,7 @@ archive_in_file (void)
 	fprintf(fn, "0 TRLR\n");
 	fclose(fn);
 	wpos(7,0);
-	mprintf_info("Database `%s' has been saved in `%s'.", btreepath, fname);
+	msg_info("Database `%s' has been saved in `%s'.", btreepath, fname);
 	return TRUE;
 }
 /*========================================================

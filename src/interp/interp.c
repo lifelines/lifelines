@@ -109,16 +109,18 @@ finishinterp (void)
 	finishrassa();
 	/* give 5 seconds for user to read error messages */
 	/* is this necessary ? */
+
 	if (progerror) {
 		wrefresh(stdout_win);
 		sleep(5);
 	}
+
 }
 /*================================================================+
  * progmessage -- Display a status message about the report program
  *===============================================================*/
 void
-progmessage(char *msg)
+progmessage (char *msg)
 {
 	char buf[80];
 	char *ptr=buf;
@@ -147,15 +149,17 @@ progmessage(char *msg)
 }
 /*=============================================+
  * interp_program -- Interpret LifeLines program
+ *  proc:     [IN]  proc to call
+ *  nargs:    [IN]  number of arguments
+ *  args:     [IN]  arguments
+ *  nifiles:  [IN]  number of program files - can be zero
+ *  ifiles:   [IN]  program files
+ *  ofile:    [IN]  output file - can be NULL
+ *  picklist: [IN]  see list of existing reports
  *============================================*/
 void
-interp_program (STRING proc,    /* proc to call */
-                INT nargs,      /* number of arguments */
-                VPTR *args,     /* arguments */
-                INT nifiles,    /* number of program files - can be zero*/
-                STRING *ifiles, /* program files */
-                STRING ofile,   /* output file - can be NULL */
-                BOOLEAN picklist) /* see list of existing reports */
+interp_program (STRING proc, INT nargs, VPTR *args, INT nifiles
+	, STRING *ifiles, STRING ofile, BOOLEAN picklist) 
 {
 	FILE *fp;
 	LIST plist;
@@ -214,7 +218,7 @@ interp_program (STRING proc,    /* proc to call */
 	}
 	remove_list(plist, NULL); plist=NULL;
 	if (Perrors) {
-		progmessage("contains errors.\n");
+		progmessage("contains errors.");
 		goto interp_program_exit;
 	}
 
@@ -228,7 +232,7 @@ interp_program (STRING proc,    /* proc to call */
    /* Open output file if name is provided */
 
 	if (ofile && !(Poutfp = fopen(ofile, LLWRITETEXT))) {
-		mprintf_error("Error: file \"%s\" could not be created.\n", ofile);
+		msg_error("Error: file \"%s\" could not be created.\n", ofile);
 		goto interp_program_exit;
 	}
 	if (Poutfp) setbuf(Poutfp, NULL);
@@ -237,7 +241,7 @@ interp_program (STRING proc,    /* proc to call */
 
 	parm = (PNODE) iargs(first);
 	if (nargs != num_params(parm)) {
-		mprintf_error("Proc %s must be called with %d (not %d) parameters.",
+		msg_error("Proc %s must be called with %d (not %d) parameters.",
 			proc, num_params(parm), nargs);
 		goto interp_program_exit;
 	}

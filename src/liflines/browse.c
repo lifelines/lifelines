@@ -262,7 +262,7 @@ pick_create_new_family (NODE indi, NODE save, STRING * addstrings)
 		message(ronlya);
 		return NULL;
 	}
-	i = choose_from_list(idfcop, 2, addstrings);
+	i = choose_from_array(idfcop, 2, addstrings);
 	if (i == -1) return NULL;
 	if (i == 0) node = add_family(NULL, NULL, indi);
 	else if (save) {
@@ -766,7 +766,7 @@ pick_remove_spouse_from_family (NODE fam)
 		}
 	}
 	join_fam(fam, fref, husb, wife, chil, rest);
-	i = choose_from_list(idsrmv, i, spstrings);
+	i = choose_from_array(idsrmv, i, spstrings);
 	if (i == -1) return;
 	choose_and_remove_spouse(spnodes[i], fam, TRUE);
 }

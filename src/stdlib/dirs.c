@@ -37,7 +37,7 @@ mkalldirs (STRING path) /* path with dirs to be made */
 			*p = '/';
 			continue;
 		}
-		llwprintf("Can't create directory %s", path);
+		msg_error("Can't create directory %s", path);
 		return FALSE;
 	}
 	return TRUE;

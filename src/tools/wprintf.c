@@ -27,10 +27,11 @@
 #include "screen.h"
 #include "interp.h"
 
-/*===========================================================
- * llwprintf -- Called as llwprintf(fmt, arg, arg, arg, ...)
+/*=============================================================
+ * Implement all the required feedback functions as simple
+ * prints to sdtout
+ * Refer to feedback.h for information about these functions.
  *===========================================================*/
-/*VARARGS*/
 void
 llwprintf (char *fmt, ...)
 {
@@ -39,26 +40,29 @@ llwprintf (char *fmt, ...)
 	vprintf(fmt, args);
 	va_end(args);
 }
-
-/*===========================================================
- * mprintf_error -- Called as mprintf_error(fmt, arg, ...)
- *===========================================================*/
-/*VARARGS*/
 void
-mprintf_error (char *fmt, ...)
+msg_error (char *fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
 	vprintf(fmt, args);
 	va_end(args);
 }
-/*===========================================================
- * message - Print a simple message to the screen
- *===========================================================*/
 void
-message(char *s)
+msg_info (char *fmt, ...)
 {
-	printf("%s",s);
+	va_list args;
+	va_start(args, fmt);
+	vprintf(fmt, args);
+	va_end(args);
+}
+void
+msg_status (char *fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	vprintf(fmt, args);
+	va_end(args);
 }
 /*======================================
  * poutput -- Print argument as a string

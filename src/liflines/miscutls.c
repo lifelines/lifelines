@@ -51,7 +51,7 @@ key_util (void)
 	TRANTABLE ttd = tran_tables[MINDS];
 	NODE indi = ask_for_indi("Whose key value do you want?", NOCONFIRM, NOASK1);
 	if (!indi) return;
-	mprintf_info("%s - %s", rmvat(nxref(indi)), indi_to_name(indi, ttd, 70));
+	msg_info("%s - %s", rmvat(nxref(indi)), indi_to_name(indi, ttd, 70));
 }
 /*===================================================
  * who_is_he_she -- Find who person is from key value
@@ -74,20 +74,20 @@ who_is_he_she (void)
 	else
 		strcpy(&nkey[1], key);
 	if (!(rec = retrieve_record(nkey, &len))) {
-		mprintf_error("No one in database has key value %s.", key);
+		msg_error("No one in database has key value %s.", key);
 		return;
 	}
 	if (!(indi = string_to_node(rec))) {
-		mprintf_error("No one in database has key value %s.", key);
+		msg_error("No one in database has key value %s.", key);
 		stdfree(rec);
 		return;
 	}
 	if (!(str = indi_to_name(indi, ttd, 60)) || *str == 0) {
-		mprintf_error("No one in database has key value %s.", key);
+		msg_error("No one in database has key value %s.", key);
 		stdfree(rec);
 		return;
 	}
-	mprintf_info("%s - %s", key, str);
+	msg_info("%s - %s", key, str);
 }
 /*===========================================
  * show_database_stats -- Show database stats
@@ -95,7 +95,7 @@ who_is_he_she (void)
 void
 show_database_stats (void)
 {
-	mprintf_info("Database `%s' contains (%dP, %dF, %dS, %dE, %dX) records.",
+	msg_info("Database `%s' contains (%dP, %dF, %dS, %dE, %dX) records.",
 	    btreepath, num_indis(), num_fams(), num_sours(),
 	    num_evens(), num_othrs());
 }

@@ -83,6 +83,14 @@ extern int opterr;
 #endif /* HAVE_GETOPT_H */
 
 /* *****************************************************************
+ * vsnprintf()
+ * ***************************************************************** */
+
+#ifndef HAVE_VSNPRINTF
+int vsnprintf(char *buffer, size_t count, const char *fmt, va_list args);
+#endif /* HAVE_VSNPRINTF */
+
+/* *****************************************************************
  * WIN32/MSVC hacks
  * ***************************************************************** */
 #ifdef WIN32

@@ -173,7 +173,7 @@ __newfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	if (!(Poutfp = fopenpath(outfilename,
 			 aflag?LLAPPENDTEXT:LLWRITETEXT, lloptions.llreports, NULL, (STRING *)NULL))) {
-		mprintf_error("Could not open file %s", outfilename);
+		msg_error("Could not open file %s", outfilename);
 		return NULL;
 	}
 	return NULL;

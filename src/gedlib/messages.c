@@ -292,6 +292,11 @@ STRING askynq      = SS "enter y (yes) or n (no): ";
 STRING askynyn     = SS "yYnN";
 STRING askyny      = SS "yY";
 
+/* list menu */
+STRING chlist      = SS "Commands:   j Move down     k Move up    i Select     q Quit";
+STRING vwlist      = SS "Commands:   j Move down     k Move up    q Quit";
+STRING errlist     = SS "Messages:";
+
 /* misc */
 STRING unksps      = SS "Spouse unknown";
 STRING nohist      = SS "No more history";

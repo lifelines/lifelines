@@ -15,3 +15,5 @@ alphasort.o: ../hdrs/arch.h
 getopt.o: ../hdrs/arch.h
 scandir.o: ../hdrs/arch.h
 sleep.o: ../hdrs/arch.h
+snprintf.o: ../hdrs/arch.h
+vsnprintf.o: ../hdrs/arch.h

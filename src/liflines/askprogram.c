@@ -401,7 +401,7 @@ ask_for_program (STRING mode,
     goto AskForString; /* note - can this happen at all ? */
   else
     {
-      choice = choose_from_list(ttl, len, list);
+      choice = choose_from_array(ttl, len, list);
       if (choice == -1)
         {
           free_program_list(head, list, len);

@@ -29,11 +29,16 @@
 #ifndef _FEEDBACK_H
 #define _FEEDBACK_H
 
-/* called in many places to display feedback information */
-void message(STRING);
-void mprintf_error(STRING fmt, ...);
-void mprintf_info(STRING fmt, ...);
-void mprintf_status(STRING fmt, ...);
+/* Ways for engine & code to report to ui */
+	/* report an error */
+void msg_error(STRING fmt, ...);
+	/* report a message */
+void msg_info(STRING fmt, ...);
+	/* report transitory state that should not be preserved */
+void msg_status(STRING fmt, ...);
+	/* legacy */
+#define message(str) msg_error(str)
+	/* report to stdout style output (uses embedded carriage returns */
 void llwprintf(STRING fmt, ...);
 
 /* called by signal handler before invoking exit() */

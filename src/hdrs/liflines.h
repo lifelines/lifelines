@@ -22,7 +22,7 @@ STRING ask_for_indi_key(STRING, CONFIRMQ, ASK1Q);
 INDISEQ ask_for_indi_list(STRING, BOOLEAN);
 INT ask_for_int(STRING);
 
-INT choose_from_list(STRING, INT, STRING*);
+INT choose_from_array(STRING, INT, STRING*);
 INDISEQ choose_list_from_indiseq(STRING, INDISEQ);
 INT choose_one_from_indiseq(STRING, INDISEQ);
 NOD0 choose_from_indiseq(INDISEQ, ASK1Q ask1, STRING titl1, STRING titln);

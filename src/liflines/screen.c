@@ -113,10 +113,12 @@ extern STRING mn_utsave,mn_utread,mn_utkey,mn_utkpers,mn_utdbstat,mn_utmemsta;
 extern STRING mn_utplaces,mn_utusropt;
 extern STRING mn_xxbsour, mn_xxbeven, mn_xxbothr, mn_xxasour, mn_xxesour;
 extern STRING mn_xxaeven, mn_xxeeven, mn_xxaothr, mn_xxeothr;
+extern STRING chlist,vwlist,errlist;
 
 extern STRING mn_uttl;
 extern STRING mn_xttl;
 extern STRING mn_notimpl;
+
 
 /*********************************************
  * local function prototypes
@@ -124,10 +126,13 @@ extern STRING mn_notimpl;
 
 /* alphabetical */
 static NODE add_menu(void);
+static INT array_interact(WINDOW *win, STRING ttl, INT len, STRING *strings, BOOLEAN selecting);
 static INT calculate_screen_lines(INT screen);
+static INT choose_or_view_array (STRING ttl, INT no, STRING *pstrngs, BOOLEAN selecting);
 static void choose_sort(STRING * localestr);
 static INT choose_tt(WINDOW *wparent, STRING prompt);
 static WINDOW *choose_win(INT desiredlen, INT *actuallen);
+static void clear_msgs(void);
 static void clearw(void);
 static void create_windows(void);
 static void cset_menu(WINDOW *wparent);
@@ -135,6 +140,7 @@ static void del_menu(void);
 static void disp_codeset(WINDOW * win, INT row, INT col, STRING menuit, INT codeset);
 static void disp_locale(WINDOW * win, INT row, INT col, STRING menuit);
 static void disp_trans_table_choice(WINDOW * win, INT row, INT col, STRING menuit, INT indx);
+static void display_status(STRING text);
 static void draw_cset_win(void);
 static void edit_tt_menu(WINDOW *wparent);
 static void export_tts(void);
@@ -144,12 +150,13 @@ static INT indiseq_interact(WINDOW *win, STRING ttl, INDISEQ seq);
 static INDISEQ indiseq_list_interact(WINDOW *win, STRING ttl, INDISEQ seq);
 static void init_all_windows(void);
 static INT interact(WINDOW *win, STRING str, INT screen);
-static INT list_interact(WINDOW *win, STRING ttl, INT len, STRING *strings);
 static void load_tt_menu(WINDOW *wparent);
+static void msg_impl(STRING fmt, va_list args, INT level);
 static void output_menu(WINDOW *win, INT screen);
-static void place_cursor(void);
+void place_cursor(void);
 static void place_std_msg(void);
 static void rpt_cset_menu(WINDOW *wparent);
+static void run_report(BOOLEAN picklist);
 static void save_tt_menu(WINDOW *wparent);
 static NOD0 scan_menu(void);
 static void show_indi_mode(NODE indi, INT mode, INT row, INT hgt, BOOLEAN reuse);
@@ -162,12 +169,18 @@ static void utils_menu(void);
 static void vmprintf(STRING fmt, va_list args);
 static void win_list_init(void);
 
+/*********************************************
+ * local variables
+ *********************************************/
 
 static INT menu_enabled = 1;
 static INT menu_dirty = 0;
 
+static char showing[150];
+static BOOLEAN now_showing = FALSE;
 
-INT BAND;
+
+static INT BAND;
 
 /* total screen lines used */
 INT LINESTOTAL = LINESREQ;
@@ -182,8 +195,9 @@ int VIEWABLE = 10;		/* can be increased up to MAXVIEWABLE */
 
 int winx=0, winy=0; /* user specified window size */
 
-static char showing[150];
-static BOOLEAN now_showing = FALSE;
+static LIST msg_list = 0;
+static BOOLEAN msg_flag = FALSE; /* need to show msg list */
+static BOOLEAN viewing_msgs = FALSE; /* user is viewing msgs */
 
 /*********************************************
  * local & exported function definitions
@@ -543,8 +557,8 @@ main_menu (void)
 			del_menu();
 		}
 		break;
-	case 'p': interp_main(TRUE); break;
-	case 'r': interp_main(FALSE); break;
+	case 'p': run_report(TRUE); break;
+	case 'r': run_report(FALSE); break;
 	case 'c': cset_menu(main_win); break;
 	case 't': edit_tt_menu(main_win); break;
 	case 'u': utils_menu(); break;
@@ -555,6 +569,24 @@ main_menu (void)
 		break;
 	case 'q': alldone = TRUE; break;
 	}
+}
+/*=========================================
+ * run_report -- run a report program
+ *  picklist:  [IN]  display list of reports to user ?
+ * Created: 2001/11/11, Perry Rapp
+ *=======================================*/
+void
+run_report (BOOLEAN picklist)
+{
+	/*
+	Begin/End action doesn't work because the llwprintf statements
+	have a lot of embedded carriage returns
+	*/
+/*	begin_action();*/
+	interp_main(picklist);
+	if (length_list(msg_list) < 8)
+		clear_msgs();
+/*	end_action();*/
 }
 /*=========================================
  * update_menu -- redraw menu if needed
@@ -844,24 +876,51 @@ ask_for_char_msg (STRING msg,
 	return rv;
 }
 /*============================================
- * choose_from_list -- Choose from string list
+ * choose_from_array -- Choose from string list
+ *  ttl:      [IN] title for choice display
+ *  no:       [IN] number of choices
+ *  pstrngs:  [IN] array of choices
  *==========================================*/
 INT
-choose_from_list (STRING ttl,
-                  INT no,
-                  STRING *pstrngs)
+choose_from_array (STRING ttl, INT no, STRING *pstrngs)
+{
+	BOOLEAN selecting = TRUE;
+	return choose_or_view_array(ttl, no, pstrngs, selecting);
+}
+/*============================================
+ * view_array -- Choose from string list
+ *  ttl:      [IN] title for choice display
+ *  no:       [IN] number of choices
+ *  pstrngs:  [IN] array of choices
+ *==========================================*/
+void
+view_array (STRING ttl, INT no, STRING *pstrngs)
+{
+	BOOLEAN selecting = FALSE;
+	choose_or_view_array(ttl, no, pstrngs, selecting);
+}
+/*============================================
+ * choose_or_view_array -- Implement choose/view from array
+ *  ttl:       [IN] title for choice display
+ *  no:        [IN] number of choices
+ *  pstrngs:   [IN] array of choices
+ *  selecting: [IN] if FALSE then view-only
+ *==========================================*/
+static INT
+choose_or_view_array (STRING ttl, INT no, STRING *pstrngs, BOOLEAN selecting)
 {
 	WINDOW *win = choose_win(no, NULL);
 	INT rv;
 	werase(win);
 	BOX(win, 0, 0);
 	wrefresh(win);
-	rv = list_interact(win, ttl, no, pstrngs);
+	rv = array_interact(win, ttl, no, pstrngs, selecting);
 	win = stdout_vis ? stdout_win : main_win;
 	touchwin(win);
 	wrefresh(win);
 	return rv;
 }
+
 /*=============================================================
  * choose_one_from_indiseq -- User chooses person from sequence
  * Resize rewrite: c. 2000/12, Perry Rapp
@@ -1436,6 +1495,7 @@ utils_menu (void)
 	code = interact(win, "srkidmeoq", -1);
 	touchwin(main_win);
 	wrefresh(main_win);
+	begin_action();
 	switch (code) {
 	case 's': archive_in_file(); break;
 	case 'r': import_from_file(); break;
@@ -1447,6 +1507,7 @@ utils_menu (void)
 	case 'o': user_options(); break;
 	case 'q': break;
 	}
+	end_action();
 }
 /*================================
  * extra_menu -- Handle extra menu
@@ -1723,14 +1784,15 @@ shw_list (WINDOW *win,
 	}
 }
 /*================================================================
- * shw_list_of_strings -- Show string list in list interact window
+ * shw_array_of_strings -- Show string list in list interact window
+ *  win:     [IN] curses window to use
+ *  strings: [IN] array (of choices) to be listed
+ *  len,:    [IN] size of array
+ *  top:     [IN] show items starting with this one
+ *  cur:     [IN] currently selected item
  *==============================================================*/
 void
-shw_list_of_strings (WINDOW *win,
-                     STRING *strings,
-                     INT len,
-                     INT top,
-                     INT cur)
+shw_array_of_strings (WINDOW *win, STRING *strings, INT len, INT top, INT cur)
 {
 	INT i, j, row = len > VIEWABLE ? VIEWABLE + 1 : len + 1;
 	for (i = 2; i <= row; i++)
@@ -1743,23 +1805,26 @@ shw_list_of_strings (WINDOW *win,
 	}
 }
 /*==============================================
- * list_interact -- Interact with user over list
+ * array_interact -- Interact with user over list
+ *  win:        [IN] interaction window
+ *  ttl:        [IN] title
+ *  len:        [IN] number of choices
+ *  strings:    [IN] array of choices
+ *  selectable: [IN] FALSE for view-only
  *============================================*/
 INT
-list_interact(WINDOW *win,    /* interaction window */
-              STRING ttl,     /* title */
-              INT len,        /* list length */
-              STRING *strings)/* string list */
+array_interact(WINDOW *win, STRING ttl, INT len, STRING *strings, BOOLEAN selectable)
 {
 	INT top = 0, cur = 0, row;
+	STRING promptline = selectable ? chlist : vwlist;
 	while (TRUE) {
 		werase(win);
 		BOX(win, 0, 0);
 		mvwaddstr(win, 1, 1, ttl);
 		row = len > VIEWABLE ? VIEWABLE + 2 : len + 2;
 		show_horz_line(win, row++, 0, 73);
-		mvwaddstr(win, row, 2, "Commands:   j Move down     k Move up    i Select     q Quit");
-		shw_list_of_strings(win, strings, len, top, cur);
+		mvwaddstr(win, row, 2, promptline);
+		shw_array_of_strings(win, strings, len, top, cur);
 		wrefresh(win);
 		switch (interact(win, "jkiq", -1)) {
 		case 'j':
@@ -1773,85 +1838,14 @@ list_interact(WINDOW *win,    /* interaction window */
 			if (cur + 1 == top) top--;
 			break;
 		case 'i':
-			return cur;
+			if (selectable)
+				return cur;
+			break;
 		case 'q':
 		default:
 			return -1;
 		}
 	}
-}
-/*===============================================
- * vmprintf -- send error, info, or status message out
- *=============================================*/
-static void
-vmprintf (STRING fmt, va_list args)
-{
-	INT row;
-	wmove(main_win, row = ll_lines-2, 2);
-	if (cur_screen != LIST_SCREEN) {
-		wclrtoeol(main_win);
-		mvwaddch(main_win, row, ll_cols-1, ACS_VLINE);
-	} else
-		mvwaddstr(main_win, row, 2, empstr);
-	wmove(main_win, row, 2);
-	vsprintf(showing, fmt, args);
-	mvwaddstr(main_win, row, 2, showing);
-	now_showing = TRUE;
-	place_cursor();
-	wrefresh(main_win);
-}
-/*===============================================
- * mprintf_error -- Call as mprintf_error(fmt, ...)
- *  tell the user something went wrong
- *  This is a feedback function called from non-ui code.
- * Created: c. 2000/11, Perry Rapp
- *=============================================*/
-void
-mprintf_error (STRING fmt, ...)
-{
-	va_list args;
-	va_start(args, fmt);
-	vmprintf(fmt, args);
-	va_end(args);
-}
-/*===============================================
- * mprintf_info -- Call as mprintf_info(fmt, ...)
- *  usually displaying results of user's action
- *  This is a feedback function called from non-ui code.
- * Created: c. 2000/11, Perry Rapp
- *  fmt:   printf style format string
- *  ...:   remainder of printf style varargs
- *=============================================*/
-void
-mprintf_info (STRING fmt, ...)
-{
-	va_list args;
-	va_start(args, fmt);
-	vmprintf(fmt, args);
-	va_end(args);
-}
-/*===============================================
- * mprintf_status -- Call as mprintf_status(fmt, ...)
- *  transient status during import/export, eg, counting nodes
- *  This is a feedback function called from non-ui code.
- * Created: c. 2000/11, Perry Rapp
- *=============================================*/
-void
-mprintf_status (STRING fmt, ...)
-{
-	va_list args;
-	va_start(args, fmt);
-	vmprintf(fmt, args);
-	va_end(args);
-}
-/*=======================================
- * message -- Simple interface to mprintf
- *  This is a feedback function called from non-ui code.
- *=====================================*/
-void
-message (STRING s)
-{
-	mprintf_info("%s", s);
 }
 /*===================================================
  * message_string -- Return background message string
@@ -1883,13 +1877,14 @@ place_std_msg (void)
  * llvwprintf -- Called as wprintf(fmt, argp)
  *===============================================*/
 void
-llvwprintf (STRING fmt,
-            va_list args)
+llvwprintf (STRING fmt, va_list args)
 {
 	if (!stdout_vis)
 		clearw();
 	vwprintw(stdout_win, fmt, args);
 	wrefresh(stdout_win);
+	/* following doesn't work because of embedded carriage returns */
+/*	msg_impl(fmt, args, -1);*/ /* also send to msg list */
 }
 /*=================================================
  * llwprintf -- Called as wprintf(fmt, arg, arg, ...)
@@ -2182,4 +2177,166 @@ calculate_screen_lines (INT screen)
 	if (!menu_enabled) menu = EMPTY_MENU;
 	lines = LINESTOTAL-OVERHEAD_MENU-menu;
 	return lines;
+}
+/*===============================================
+ * vmprintf -- send error, info, or status message out
+ * legacy
+ *=============================================*/
+static void
+vmprintf (STRING fmt, va_list args)
+{
+	vsnprintf(showing, sizeof(showing), fmt, args);
+	if (strlen(showing)>60) {
+		showing[60] = 0;
+		strcat(showing, "...");
+	}
+	display_status(showing);
+}
+/*===============================================
+ * display_status -- put string in status line
+ * Created: 2001/11/11, Perry Rapp
+ * TO DO - how do we limit its length ? Yet another copy ?
+ *=============================================*/
+static void
+display_status (STRING text)
+{
+	INT row;
+	wmove(main_win, row = ll_lines-2, 2);
+	if (cur_screen != LIST_SCREEN) {
+		wclrtoeol(main_win);
+		mvwaddch(main_win, row, ll_cols-1, ACS_VLINE);
+	} else
+		mvwaddstr(main_win, row, 2, empstr);
+	wmove(main_win, row, 2);
+	mvwaddstr(main_win, row, 2, text);
+	now_showing = TRUE;
+	place_cursor();
+	wrefresh(main_win);
+}
+/*=========================================
+ * msg_error -- handle error message
+ * delegates to msg_impl
+ * Created: 2001/11/11, Perry Rapp
+ *=======================================*/
+void
+msg_error (STRING fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	msg_impl(fmt, args, -1);
+	va_end(args);
+}
+/*=========================================
+ * msg_info -- handle regular messages
+ * delegates to msg_impl
+ * Created: 2001/11/11, Perry Rapp
+ *=======================================*/
+void
+msg_info (STRING fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	msg_impl(fmt, args, 0);
+	va_end(args);
+}
+/*=========================================
+ * msg_status -- handle transitory/status messages
+ * delegates to msg_impl
+ * Created: 2001/11/11, Perry Rapp
+ *=======================================*/
+void
+msg_status (STRING fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	msg_impl(fmt, args, 1);
+	va_end(args);
+}
+/*=========================================
+ * msg_impl -- handle all messages
+ * fmt,args:  printf style varargs from client
+ * level:     -1=error,0=info,1=status
+ * Created: 2001/11/11, Perry Rapp
+ *=======================================*/
+void
+msg_impl (STRING fmt, va_list args, INT level)
+{
+	char buffer[250];
+	STRING ptr;
+	unsigned int width = MAINWIN_WIDTH-5;
+	/* prefix errors & infos with * and space respectively */
+	switch(level) {
+		case -1:
+			buffer[0] = '*';
+			ptr = &buffer[1];
+			break;
+		case 0:
+			buffer[0] = ' ';
+			ptr = &buffer[1];
+			break;
+		default:
+			ptr = buffer;
+			break;
+	}
+	vsnprintf(ptr, sizeof(buffer), fmt, args);
+	/* first add it to msg list */
+	if (level<1) {
+		if (!msg_list)
+			msg_list = create_list();
+		enqueue_list(msg_list, strsave(buffer));
+		if (!viewing_msgs && !msg_flag &&
+			(length_list(msg_list)>1 || strlen(buffer)>width)) {
+			msg_flag = TRUE;
+		}
+		
+	}
+	/* now put it to status area if appropriate */
+	if (strlen(buffer)>width) {
+		buffer[width-3]=0;
+		strcat(buffer, "...");
+	}
+	display_status(buffer);
+}
+/*=========================================
+ * begin_action -- prepare to process users choice
+ * Created: 2001/11/11, Perry Rapp
+ *=======================================*/
+static
+void begin_action (void)
+{
+	clear_msgs();
+}
+/*=========================================
+ * end_action -- finished processing users choice
+ *  show error list if appropriate
+ * Created: 2001/11/11, Perry Rapp
+ *=======================================*/
+static
+void end_action (void)
+{
+	if (msg_flag) {
+		STRING * strngs = (STRING *)stdalloc(length_list(msg_list)*sizeof(STRING));
+		INT i=0;
+		FORLIST(msg_list, el)
+			strngs[i++] = el;
+		ENDLIST
+		viewing_msgs = TRUE; /* suppress msg generation */
+		view_array(errlist, length_list(msg_list), strngs);
+		viewing_msgs = FALSE;
+		stdfree(strngs);
+		clear_msgs();
+	}
+}
+/*=========================================
+ * clear_msgs -- delete msg list
+ * Created: 2001/11/11, Perry Rapp
+ *=======================================*/
+void
+clear_msgs (void)
+{
+	if (msg_list) {
+		free_string_list(msg_list);
+		msg_list = 0;
+	}
+	msg_flag = FALSE;
 }

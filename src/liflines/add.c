@@ -143,7 +143,7 @@ add_unlinked_indi (NOD0 indi0)
 	resolve_links(indi);
 	indi_to_dbase(indi);
 	indi0_to_cache(indi0);
-	mprintf_status(gdpadd, indi_to_name(indi, ttd, 35));
+	msg_status(gdpadd, indi_to_name(indi, ttd, 35));
 	return indi0;
 }
 /*================================================================
@@ -192,7 +192,7 @@ ask_child_order (NODE fam, PROMPTQ promptq, RFMT rfmt)
 /* If not first, find where child belongs */
 	} else {
 		childstrings[nchildren] = mklast;
-		i = choose_from_list(idcfam, nchildren+1, childstrings);
+		i = choose_from_array(idcfam, nchildren+1, childstrings);
 	}
 	return i;
 }
@@ -229,7 +229,7 @@ add_child (NODE child, NODE fam)
 /* Add FAMC node to child */
 
 	add_child_to_fam(child, fam, i);
-	mprintf_status(gdcadd, indi_to_name(child, ttd, 35));
+	msg_status(gdcadd, indi_to_name(child, ttd, 35));
 	return fam;
 }
 
@@ -403,7 +403,7 @@ add_spouse_to_fam (NODE spouse, NODE fam, INT sex)
 	resolve_links(fam);
 	indi_to_dbase(spouse);
 	fam_to_dbase(fam);
-	mprintf_status(gdsadd, indi_to_name(spouse, ttd, 35));
+	msg_status(gdsadd, indi_to_name(spouse, ttd, 35));
 }
 /*=========================================
  * add_members_to_family -- Add members to new family

@@ -185,7 +185,7 @@ import_from_file (void)
 	    addmissingkeys(OTHR_REC);
 	}
 	wpos(15, 0);
-	mprintf_info("Added (%dP, %dF, %dS, %dE, %dX) records from file `%s'.",
+	msg_info("Added (%dP, %dF, %dS, %dE, %dX) records from file `%s'.",
 	    nindi, nfam, nsour, neven, nothr, fname);
 
 	fclose(fp);

@@ -882,7 +882,7 @@ void
 display_cache_stats (void)
 {
 	STRING stats = get_cache_stats();
-	mprintf_info(stats);
+	msg_info(stats);
 }
 /*===============================================
  * init_disp_reformat -- Initialize reformatting for display

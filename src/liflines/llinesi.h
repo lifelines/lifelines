@@ -29,7 +29,6 @@ BOOLEAN handle_indi_mode_cmds(INT c, INT * mode);
 BOOLEAN handle_menu_cmds(INT c, BOOLEAN * reuse);
 BOOLEAN handle_scroll_cmds(INT c, BOOLEAN * reuse);
 
-
 /* delete.c */
 void delete_indi(NODE, BOOLEAN);
 void choose_and_delete_family(void);
@@ -57,6 +56,10 @@ NODE merge_two_fams(NODE, NODE);
 void key_util(void);
 void show_database_stats(void);
 void who_is_he_she(void);
+
+/* msg.c */
+void begin_action(void);
+void end_action(void);
 
 /* newrecs.c */
 NOD0 ask_for_record(STRING, INT);

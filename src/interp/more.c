@@ -708,7 +708,7 @@ __menuchoose (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		}
 		++i;
 	ENDLIST
-	i = choose_from_list(ttl, len, strngs);
+	i = choose_from_array(ttl, len, strngs);
 	for (j=0; j<len; j++)
 		stdfree(strngs[j]);
 	stdfree(strngs);

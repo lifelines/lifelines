@@ -157,7 +157,7 @@ edit_indi (NODE indi1)  /* may be NULL */
 	free_nodes(refn1);
 	free_nodes(refnn);
 	free_nodes(refn1n);
-	mprintf_status(gdpmod, indi_to_name(indi1, ttd, 35));
+	msg_status(gdpmod, indi_to_name(indi1, ttd, 35));
 	return indi1;
 }
 /*=====================================
@@ -269,6 +269,6 @@ edit_family (NODE fam1) /* may be NULL */
 	free_nodes(refn1);
 	free_nodes(refnn);
 	free_nodes(refn1n);
-	mprintf_status(gdfmod);
+	msg_status(gdfmod);
 	return fam1;
 }

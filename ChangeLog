@@ -10,6 +10,20 @@
 	Fix interp_foreven, interp_forothr (more efficient style, and lock loop
 	variables in cache through loop body).
 
+	* ChangeLog configure.in arch/Makefile.am gedlib/charmaps.c
+	gedlib/editmap.c gedlib/editvtab.c gedlib/messages.c
+	gedlib/names.c hdrs/arch.h hdrs/feedback.h hdrs/gedcom.h
+	hdrs/liflines.h hdrs/screen.h interp/interp.c interp/more.c
+	interp/rassa.c liflines/add.c liflines/ask.c
+	liflines/askprogram.c liflines/browse.c liflines/edit.c
+	liflines/export.c liflines/import.c liflines/lbrowse.c
+	liflines/llinesi.h liflines/miscutls.c liflines/newrecs.c
+	liflines/screen.c liflines/show.c stdlib/dirs.c
+	tools/wprintf.c:
+
+	Built buffered message system (built on msg_impl), and routed all messages through
+	it except llwprintf.
+
 2001-11-09 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog liflines/export.c

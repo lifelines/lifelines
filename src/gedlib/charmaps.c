@@ -98,7 +98,7 @@ init_mapping (void)
 	for (indx = 0; indx < NUM_TT_MAPS; indx++) {
 		tran_tables[indx] = init_map_from_rec(indx, &err);
 		if (err) {
-			mprintf_error("Error initializing %s map.\n"
+			msg_error("Error initializing %s map.\n"
 				, map_names[indx]);
 		}
 	}

@@ -31,7 +31,7 @@ edit_mapping (INT code)
 	BOOLEAN err;
 
 	if (code < 0 || code >= NUM_TT_MAPS) {
-		mprintf_error("System error: illegal map code");
+		msg_error("System error: illegal map code");
 		return FALSE;
 	}
 	if (readonly) {
@@ -47,7 +47,7 @@ edit_mapping (INT code)
 		TRANSLFNC translfnc = NULL; /* Must not translate the translation table! */
 		rtn = retrieve_to_textfile(map_keys[code], editfile, translfnc);
 		if (rtn == RECORD_ERROR) {
-			mprintf_error(dataerr);
+			msg_error(dataerr);
 			return FALSE;
 		}
 	}

@@ -338,7 +338,7 @@ edit_record (NODE node1,           /* record to edit, poss NULL */
 	nchild(node2) = temp;
 	(*todbase)(node1);
 	free_nodes(node2);
-	mprintf_info(gdmsg);
+	msg_info(gdmsg);
 }
 /*===============================================
  * nvaldiff -- Do nodes have different values ?
