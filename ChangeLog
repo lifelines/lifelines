@@ -4,6 +4,10 @@
 
 	Bugfix to id_by_key (was crashing on nonexistent key number).
 
+	* ChangeLog README.MAINTAINERS:
+
+	Update for new paths.
+
 2002-09-22 Perry Rapp
 
 	* ChangeLog configure.in po/POTFILES.in po/de.po po/el.po
