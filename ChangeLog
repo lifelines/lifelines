@@ -7,6 +7,10 @@
 	Fix !t mode to handle long lines (make buffer MAXLINELEN
 	in add_dnodes in pedigree.c). Change version to 3.0.8.
 
+	* win32/msvc6/*
+
+	Added project files for MSVC6 (Microsoft Visual C++).
+
 
 2002-01-18 Matt Emmerton <memmerto@users.sourceforge.net>
 
