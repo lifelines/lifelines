@@ -1,6 +1,10 @@
-LifeLines Source Release, Version 3.0.34
+LifeLines Source Release, Version 3.0.35
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
+
+Bug fixes in 3.0.35
+============================
+- Fix name corruption bug in 3.0.33 and 3.0.34.
 
 Bug fixes in 3.0.34
 ============================

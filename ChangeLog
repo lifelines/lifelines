@@ -4,6 +4,13 @@
 
 	Fix corruption bug in add_names (was freeing record before done).
 
+	* ChangeLog NEWS configure.in build/msvc6/llines/llines.rc
+	build/rpm/lifelines.spec docs/ll-devguide.xml
+	docs/ll-reportmanual.xml docs/ll-userguide.xml
+	src/hdrs/version.h
+
+	Bump versions to 3.0.35.
+
 2003-09-16 Matt Emmerton
 
 	* ChangeLog src/hdrs/ui.h src/ui/Makefile.am src/ui/ui_cli.c
