@@ -132,6 +132,10 @@
 
 	Add prototypes for add?xref_impl.
 
+	* ChangeLog src/gedlib/xreffile.c
+
+	Remove unused function add_xref_to_set.
+
 2005-02-05 Perry Rapp
 
 	* ChangeLog NEWS src/gedlib/xreffile.c

@@ -77,7 +77,6 @@ typedef struct deleteset_s *DELETESET;
  *********************************************/
 
 /* alphabetical */
-static void add_xref_to_set(INT keynum, DELETESET set);
 static BOOLEAN addxref_impl(CNSTRING key, BOOLEAN silent);
 static INT find_slot(INT keynum, DELETESET set);
 static void freexref(DELETESET set);
@@ -389,16 +388,6 @@ add_xref_to_set_impl (INT keynum, DELETESET set, DUPS dups)
 	ASSERT(writexrefs());
 	maxkeynum=-1;
 	return TRUE;
-}
-/*=====================================
- * add_xref_to_set -- Add deleted key to xrefs.
- *  generic for all types
- * ASSERT if anything goes wrong, or key already free
- *===================================*/
-static void
-add_xref_to_set (INT key, DELETESET set)
-{
-	add_xref_to_set_impl(key, set, NODUPS);
 }
 /*===================================================
  * add?xref_impl -- Wrappers for each type to add_xref_to_set (qv)
