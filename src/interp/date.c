@@ -84,7 +84,7 @@ static void format_complex(GDATEVAL gdv, STRING output, INT len, INT cmplx
 	, STRING ymd2, STRING ymd3);
 static void format_day(INT da, INT dfmt, STRING output);
 static STRING format_month(INT cal, INT mo, INT mfmt);
-static void format_origin(struct gdate_s * pdate, CNSTRING ymd, INT ofmt
+static void format_eratime(struct gdate_s * pdate, CNSTRING ymd, INT efmt
 	, STRING output, INT len);
 static STRING format_year(INT, INT);
 static void format_ymd(STRING, STRING, STRING, INT, STRING*, INT *len);
@@ -248,14 +248,14 @@ static TABLE keywordtbl = NULL;
  *  mfmt: [IN]  month format code (see format_month function below)
  *  yfmt: [IN]  year format code (see format_year function below)
  *  sfmt: [IN]  combining code (see format_ymd function below)
- *  ofmt: [IN]  origin format (see format_origin function below)
+ *  efmt: [IN]  era format (see format_eratime function below)
  * cmplx - 0 is year only, 1 is complex, including
  *         date modifiers, ranges, and/or double-dating
  * Returns static buffer
  *========================================*/
 STRING
 do_format_date (STRING str, INT dfmt, INT mfmt,
-             INT yfmt, INT sfmt, INT ofmt, INT cmplx)
+             INT yfmt, INT sfmt, INT efmt, INT cmplx)
 {
 	STRING smo, syr;
 	static char daystr[3], ymd[60], ymd2[60], ymd3[60], complete[100];
@@ -282,10 +282,10 @@ do_format_date (STRING str, INT dfmt, INT mfmt,
 		*p = 0;
 		format_ymd(syr, smo, daystr, sfmt, &p, &len);
 		if (gdv->date1.calendar) {
-			format_origin(&gdv->date1, ymd, ofmt, ymd2, sizeof(ymd2));
+			format_eratime(&gdv->date1, ymd, efmt, ymd2, sizeof(ymd2));
 			format_cal(gdv->date1.calendar, ymd2, ymd3, sizeof(ymd3));
 		} else {
-			format_origin(&gdv->date1, ymd, ofmt, ymd3, sizeof(ymd3));
+			format_eratime(&gdv->date1, ymd, efmt, ymd3, sizeof(ymd3));
 		}
 		free_gdateval(gdv);
 		return ymd3;
@@ -301,10 +301,10 @@ do_format_date (STRING str, INT dfmt, INT mfmt,
 		*p = 0;
 		format_ymd(syr, smo, daystr, sfmt, &p, &len);
 		if (gdv->date1.calendar) {
-			format_origin(&gdv->date1, ymd, ofmt, ymd2, sizeof(ymd2));
+			format_eratime(&gdv->date1, ymd, efmt, ymd2, sizeof(ymd2));
 			format_cal(gdv->date1.calendar, ymd2, ymd3, sizeof(ymd3));
 		} else {
-			format_origin(&gdv->date1, ymd, ofmt, ymd3, sizeof(ymd3));
+			format_eratime(&gdv->date1, ymd, efmt, ymd3, sizeof(ymd3));
 		}
 		if (gdateval_isdual(gdv)) {
 			/* build 2nd date string into ymd2 */
@@ -317,10 +317,10 @@ do_format_date (STRING str, INT dfmt, INT mfmt,
 			*p = 0;
 			format_ymd(syr, smo, daystr, sfmt, &p, &len);
 			if (gdv->date2.calendar) {
-				format_origin(&gdv->date2, ymd, ofmt, complete, sizeof(complete));
+				format_eratime(&gdv->date2, ymd, efmt, complete, sizeof(complete));
 				format_cal(gdv->date2.calendar, complete, ymd2, sizeof(ymd2));
 			} else {
-				format_origin(&gdv->date2, ymd, ofmt, ymd2, sizeof(ymd2));
+				format_eratime(&gdv->date2, ymd, efmt, ymd2, sizeof(ymd2));
 			}
 		} else {
 			ymd2[0] = 0;
@@ -331,10 +331,10 @@ do_format_date (STRING str, INT dfmt, INT mfmt,
 	}
 }
 /*===================================================
- * format_origin -- Add AD/BC info to date
+ * format_eratime -- Add AD/BC info to date
  *  pdate:  [IN]  actual date information
  *  ymd:    [IN]  date string consisting of yr, mo, da portion
- *  ofmt:   [IN]  origin format code
+ *  efmt:   [IN]  eratime format code
  *                0 - no AD/BC marker
  *                1 - trailing B.C. if appropriate
  *                2 - trailing A.D. or B.C.
@@ -349,17 +349,17 @@ do_format_date (STRING str, INT dfmt, INT mfmt,
  * Created: 2001/12/28 (Perry Rapp)
  *=================================================*/
 static void
-format_origin (struct gdate_s * pdate, CNSTRING ymd, INT ofmt, STRING output
+format_eratime (struct gdate_s * pdate, CNSTRING ymd, INT efmt, STRING output
 	, INT len)
 {
 	/* TODO: calendar-specific handling */
-	if (pdate->origin == GDV_BC) {
-		if (ofmt > 0) {
+	if (pdate->eratime == GDV_BC) {
+		if (efmt > 0) {
 			STRING p = output;
 			STRING tag = 0;
 			p[0] = 0;
 			llstrcatn(&p, ymd, &len);
-			switch (ofmt/10) {
+			switch (efmt/10) {
 				case 1: tag = datetrl_bcB; break;
 				case 2: tag = datetrl_bcC; break;
 				case 3: tag = datetrl_bcD; break;
@@ -372,12 +372,12 @@ format_origin (struct gdate_s * pdate, CNSTRING ymd, INT ofmt, STRING output
 			return;
 		}
 	} else {
-		if (ofmt > 1) {
+		if (efmt > 1) {
 			STRING p = output;
 			STRING tag = 0;
 			p[0] = 0;
 			llstrcatn(&p, ymd, &len);
-			switch (ofmt/10) {
+			switch (efmt/10) {
 				case 1: tag = datetrl_adB; break;
 				case 2: tag = datetrl_adC; break;
 				case 3: tag = datetrl_adD; break;
@@ -551,6 +551,7 @@ format_ymd (STRING syr, STRING smo, STRING sda, INT sfmt
 
 	if (date_pic) {
 		sprintpic3(*output, *len, date_pic, syr, smo, sda);
+		*len += strlen(*output);
 		return;
 	}
 	switch (sfmt) {
@@ -978,18 +979,18 @@ analyze_word (GDATEVAL gdv, struct gdate_s * pdate, struct nums_s * nums
 			}
 			break;
 		case GD_AD:
-			if (pdate->origin)
+			if (pdate->eratime)
 				mark_invalid(gdv);
 			else {
 				mark_freeform(gdv); /* AD is not in GEDCOM */
-				pdate->origin = GDV_AD;
+				pdate->eratime = GDV_AD;
 			}
 			break;
 		case GD_BC:
-			if (pdate->origin)
+			if (pdate->eratime)
 				mark_invalid(gdv);
 			else
-				pdate->origin = GDV_BC;
+				pdate->eratime = GDV_BC;
 			break;
 		default:
 			mark_invalid(gdv);
@@ -1043,18 +1044,18 @@ analyze_word (GDATEVAL gdv, struct gdate_s * pdate, struct nums_s * nums
 			}
 			break;
 		case GD_AD:
-			if (pdate->origin)
+			if (pdate->eratime)
 				mark_invalid(gdv);
 			else {
 				mark_freeform(gdv); /* AD is not in GEDCOM */
-				pdate->origin = GDV_AD;
+				pdate->eratime = GDV_AD;
 			}
 			break;
 		case GD_BC:
-			if (pdate->origin)
+			if (pdate->eratime)
 				mark_invalid(gdv);
 			else
-				pdate->origin = GDV_BC;
+				pdate->eratime = GDV_BC;
 			break;
 		default:
 			mark_invalid(gdv);

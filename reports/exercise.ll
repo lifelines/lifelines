@@ -700,6 +700,7 @@ proc testNums()
 
 /* 
   (Worker routine for testDates)
+  Test parsing & formatting simultaneously
   Using specified formats, check stddate(src) against dests
   and complexdate(src) against destc
   tdfb = test date format both (simple & complex)
@@ -711,7 +712,7 @@ proc tdfb(src, dayfmt, monfmt, yrfmt, sfmt, ofmt, cfmt, dests, destc)
 	monthformat(monfmt)
 	yearformat(yrfmt)
 	dateformat(sfmt)
-	originformat(ofmt)
+	eraformat(ofmt)
 	set(result, stddate(src))
 	if (ne(result, dests)) 
 	{
@@ -739,6 +740,18 @@ proc tdfb(src, dayfmt, monfmt, yrfmt, sfmt, ofmt, cfmt, dests, destc)
 	}
 }
 
+/* Test parsing only, using year(), month(), and day() functions */
+proc tdparse(src, yr, mo, da)
+{
+	set(result, year(src))
+	if (ne(result, yr)) 
+	{
+		call reportfail(concat("year(", src, ") failure: ", yr, "<>", result))
+	} else {
+		incr(testok)
+	}
+}
+
 /* 
   test some date functions with various GEDCOM dates
   */
@@ -747,11 +760,24 @@ proc testDates()
 	set(testok, 0)
 	set(testfail, 0)
 
+/* Test parsing only */
+	call tdparse("2 JAN 1953", "1953", "1", "2")
+	call tdparse("14 FEB 857", "857", "2", "14")
+	call tdparse("8/14/33", "33", "8", "14")
+	call tdparse("9/22/1", "1", "9", "22")
+	call tdparse("14 OCT 3 B.C.", "3", "9", "22")
+	call tdparse("9/22/1", "1", "9", "22")
+	call tdparse("AFT 3 SEP 1630", "1630", "9", "3")
+	call tdparse("FROM 30 SEP 1630 TO 1700", "1630", "9", "30")
+	call tdparse("@#DJULIAN@ 5 MAY 1204", "1204", "5", "5")
+	call tdparse("@#DHEBREW@ 1 ADR 3011", "3011", "7", "1")
+	call tdparse("@#DFRENCH R@ 1 VEND 11", "11", "1", "1")
 
-/* NB: We do not test all possible combinations, as there are quite a lot
-  (3 day formats, 7 month formats, 3 year formats, 14 combining formats,
-  9 origin formats -- multiply out to over 5000 combinations for stddate
+/* NB: We do not test all possible format combinations, as there are quite a lot
+  (3 day formats, 11 month formats, 3 year formats, 14 combining formats,
+  9 era formats -- multiply out to over thousands of combinations for stddate
   and times 6 cmplx formats for each complex date) */
+
 
 	datepic(0)
 /* test simple 4 digit year dates */
@@ -771,7 +797,7 @@ proc testDates()
 	call tdfb("2 JAN 1953", 2, 9, 0, 0, 0, 1, "2 JAN 1953", "*")
 	call tdfb("2 JAN 1953", 2,10, 0, 0, 0, 1, "2 i 1953", "*")
 	call tdfb("2 JAN 1953", 2,11, 0, 0, 0, 1, "2 I 1953", "*")
-	/* test different origin formats */
+	/* test different era formats */
 	call tdfb("2 JAN 1953", 2, 2, 0, 0, 2, 1, "2 1 1953 A.D.", "*")
 	call tdfb("2 JAN 1953", 2, 2, 0, 0, 12, 1, "2 1 1953 AD", "*")
 	call tdfb("2 JAN 1953", 2, 2, 0, 0, 22, 1, "2 1 1953 C.E.", "*")
@@ -792,6 +818,8 @@ proc testDates()
 	call tdfb("2 JAN 1953", 2, 2, 0, 10, 32, 1, "2.1.1953 CE", "*")
 	datepic("%d of %m, %y")
 	call tdfb("2 JAN 1953", 2, 4, 0, 10, 1, 1, "2 of Jan, 1953", "*")
+	datepic("%y.%m.%d")
+	call tdfb("2 JAN 1953", 2, 10, 2, 10, 1, 1, "1953.i.2", "*")
 	datepic(0)
 	/* test missing day or month (legal in GEDCOM) */
 	call tdfb("2 JAN 1953", 1, 1, 1, 2, 2, 1, "01/02/1953 A.D.", "*")

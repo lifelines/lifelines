@@ -111,6 +111,7 @@ NODE nztop(RECORD); /* function so it can handle NULL input */
 struct rfmt_s {
 	STRING (*rfmt_date)(STRING); /* returns static buffer */
 	STRING (*rfmt_plac)(STRING); /* returns static buffer */
+	STRING combopic; /* stdalloc'd buffer, eg, "%1, %2" */
 };
 typedef struct rfmt_s *RFMT;
 

@@ -1,3 +1,13 @@
+2002-01-13 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/node.c hdrs/gedcom.h hdrs/interp.h
+	interp/builtin.c interp/date.c interp/functab.c
+	interp/interpi.h liflines/show.c reports/exercise.ll:
+
+	New options LongDisplayDatePic & ShortDisplayDatePic.
+	Revised year() report function to also accept string.
+	Renamed originformat to eraformat.
+
 2002-01-12 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/init.c hdrs/llstdlib.h hdrs/standard.h

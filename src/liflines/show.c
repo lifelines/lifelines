@@ -886,11 +886,15 @@ static void
 init_disp_reformat (void)
 {
 	/* Set up long formats */
+	memset(&disp_long_rfmt, 0, sizeof(disp_long_rfmt));
 	disp_long_rfmt.rfmt_date = &disp_long_format_date;
 	disp_long_rfmt.rfmt_plac = 0; /* use place as is */
+	disp_long_rfmt.combopic = "%1, %2";
 	/* Set up short formats */
+	memset(&disp_shrt_rfmt, 0, sizeof(disp_shrt_rfmt));
 	disp_shrt_rfmt.rfmt_date = &disp_shrt_format_date;
 	disp_shrt_rfmt.rfmt_plac = &disp_shrt_format_plac;
+	disp_shrt_rfmt.combopic = "%1, %2";
 }
 /*===========================================================
  * disp_long_format_date -- Convert date according to options
@@ -898,22 +902,29 @@ init_disp_reformat (void)
 static STRING
 disp_long_format_date (STRING date)
 {
-	INT dfmt=0,mfmt=0,yfmt=0,sfmt=0,ofmt=0, cmplx;
+	INT dfmt=0,mfmt=0,yfmt=0,sfmt=0,efmt=0, cmplx;
 	INT n;
-	STRING fmts;
+	STRING fmts, pic;
 
 	if (!date) return NULL;
 
+	n = 0;
 	fmts = getoptstr("LongDisplayDate", NULL);
-	if (!fmts)
-		return date;
+	if (fmts) {
+		/* try to use user-specified format */
+		n = sscanf(fmts, "%d,%d,%d,%d,%d,%d" 
+			, &dfmt, &mfmt, &yfmt, &sfmt, &efmt, &cmplx);
+	}
+	if (n != 6) {
+		dfmt=mfmt=yfmt=sfmt=efmt=cmplx=0;
+		sfmt=14; /* GEDCOM as is */
+	}
+
+	pic = getoptstr("LongDisplayDatePic", NULL);
+	if (pic && pic[0])
+		set_date_pic(pic);
 	
-	/* try to use user-specified format */
-	n = sscanf(fmts, "%d,%d,%d,%d,%d,%d"
-		, &dfmt, &mfmt, &yfmt, &sfmt, &ofmt, &cmplx);
-	if (n != 6) return date;
-	
-	return do_format_date(date, dfmt, mfmt, yfmt, sfmt, ofmt, cmplx);
+	return do_format_date(date, dfmt, mfmt, yfmt, sfmt, efmt, cmplx);
 }
 /*===============================================================
  * disp_shrt_format_date -- short form of date for display
@@ -924,9 +935,9 @@ disp_long_format_date (STRING date)
 static STRING
 disp_shrt_format_date (STRING date)
 {
-	INT dfmt=0,mfmt=0,yfmt=0,sfmt=0,ofmt=0, cmplx;
+	INT dfmt=0,mfmt=0,yfmt=0,sfmt=0,efmt=0, cmplx;
 	INT n;
-	STRING fmts;
+	STRING fmts, pic;
 
 	if (!date) return NULL;
 
@@ -935,14 +946,18 @@ disp_shrt_format_date (STRING date)
 	if (fmts) {
 		/* try to use user-specified format */
 		n = sscanf(fmts, "%d,%d,%d,%d,%d,%d"
-			, &dfmt, &mfmt, &yfmt, &sfmt, &ofmt, &cmplx);
+			, &dfmt, &mfmt, &yfmt, &sfmt, &efmt, &cmplx);
 	}
 	if (n != 6) {
 		dfmt=mfmt=yfmt=sfmt=cmplx=0;
 		sfmt=12; /* old style short form -- year only */
 	}
 
-	return do_format_date(date, dfmt, mfmt, yfmt, sfmt, ofmt, cmplx);
+	pic = getoptstr("ShortDisplayDatePic", NULL);
+	if (pic && pic[0])
+		set_date_pic(pic);
+
+	return do_format_date(date, dfmt, mfmt, yfmt, sfmt, efmt, cmplx);
 }
 /*================================================================
  * disp_shrt_format_plac -- short form of place for display

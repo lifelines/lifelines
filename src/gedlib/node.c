@@ -1229,6 +1229,24 @@ indi_to_event (NODE node, TRANTABLE tt, STRING tag, STRING head
 	return scratch;
 }
 /*===========================================
+ * event_to_date_place  -- Find date & place
+ *  node:  [IN]  node tree of event to describe
+ *  date:  [OUT] value of first DATE line
+ *  plac:  [OUT] value of first PLACE line
+ *=========================================*/
+static void
+event_to_date_place (NODE node, STRING * date, STRING * plac)
+{
+	*date = *plac = NULL;
+	if (!node) return;
+	node = nchild(node);
+	while (node) {
+		if (eqstr("DATE", ntag(node)) && !*date) *date = nval(node);
+		if (eqstr("PLAC", ntag(node)) && !*plac) *plac = nval(node);
+		node = nsibling(node);
+	}
+}
+/*===========================================
  * event_to_string -- Convert event to string
  * Finds DATE & PLACE nodes, and prints a string
  * representation of them.
@@ -1241,30 +1259,22 @@ event_to_string (NODE node, TRANTABLE tt, RFMT rfmt)
 {
 	static char scratch1[MAXLINELEN+1];
 	static char scratch2[MAXLINELEN+1];
-	STRING p = scratch1;
-	INT mylen = sizeof(scratch1)/sizeof(scratch1[0]);
 	STRING date, plac;
-	date = plac = NULL;
-	if (!node) return NULL;
-	node = nchild(node);
-	while (node) {
-		if (eqstr("DATE", ntag(node)) && !date) date = nval(node);
-		if (eqstr("PLAC", ntag(node)) && !plac) plac = nval(node);
-		node = nsibling(node);
-	}
+	event_to_date_place(node, &date, &plac);
 	if (!date && !plac) return NULL;
 	/* Apply optional, caller-specified date & place reformatting */
 	if (rfmt && date && rfmt->rfmt_date)
 		date = (*rfmt->rfmt_date)(date);
 	if (rfmt && plac && rfmt->rfmt_plac)
 		plac = (*rfmt->rfmt_plac)(plac);
-	p[0] = 0;
-	if (date)
-		llstrcatn(&p, date, &mylen);
-	if (plac) {
-		if (date)
-			llstrcatn(&p, ", ", &mylen);
-		llstrcatn(&p, plac, &mylen);
+	if (date && date[0] && plac && plac[0]) {
+		sprintpic2(scratch1, sizeof(scratch1), rfmt->combopic, date, plac);
+	} else if (date && date[0]) {
+		llstrncpy(scratch1, date, sizeof(scratch1));
+	} else if (plac && plac[0]) {
+		llstrncpy(scratch1, plac, sizeof(scratch1));
+	} else {
+		return NULL;
 	}
 	translate_string(tt, scratch1, scratch2, MAXLINELEN);
 	return scratch2;

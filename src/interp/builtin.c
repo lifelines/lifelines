@@ -619,11 +619,15 @@ static void
 init_rpt_reformat (void)
 {
 	/* Set up long reformats */
+	memset(&rpt_long_rfmt, 0, sizeof(rpt_long_rfmt));
 	rpt_long_rfmt.rfmt_date = 0; /* use date as is */
 	rpt_long_rfmt.rfmt_plac = 0; /* use place as is */
+	rpt_long_rfmt.combopic = "%1, %2";
 	/* Set up short reformats */
+	memset(&rpt_shrt_rfmt, 0, sizeof(rpt_shrt_rfmt));
 	rpt_shrt_rfmt.rfmt_date = &rpt_shrt_format_date;
 	rpt_shrt_rfmt.rfmt_plac = &rpt_shrt_format_plac;
+	rpt_shrt_rfmt.combopic = "%1, %2";
 }
 /*===================================+
  * __long -- Return long form of event
@@ -2444,7 +2448,7 @@ static INT daycode = 0;
 static INT monthcode = 3;
 static INT yearcode = 0;
 static INT datecode = 0;
-static INT origincode = 0;
+static INT eratimecode = 0;
 static INT cmplxcode = 1;
 PVALUE
 __stddate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
@@ -2464,7 +2468,7 @@ __stddate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		str = event_to_date(evnt, NULL, FALSE);
 	}
 	set_pvalue(val, PSTRING, do_format_date(str,
-	    daycode, monthcode, yearcode, datecode, origincode, FALSE));
+	    daycode, monthcode, yearcode, datecode, eratimecode, FALSE));
 	return val;
 }
 /*========================================================================+
@@ -2490,7 +2494,7 @@ __complexdate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		str = event_to_date(evnt, NULL, FALSE);
 	}
 	set_pvalue(val, PSTRING, do_format_date(str,
-	    daycode, monthcode, yearcode, datecode, origincode, cmplxcode));
+	    daycode, monthcode, yearcode, datecode, eratimecode, cmplxcode));
 	return val;
 }
 /*===============================================+
@@ -2578,24 +2582,24 @@ __dateformat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*===============================================+
- * __originformat -- Set format for AD/BC trailer
- *   usage: originformat(INT) -> NULL
+ * __eraformat -- Set format for AD/BC trailer
+ *   usage: eraformat(INT) -> NULL
  * Created: 2001/12/28, Perry Rapp
  *==============================================*/
 PVALUE
-__originformat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+__eraformat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	INT value;
 	PVALUE val = eval_and_coerce(PINT, arg, stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonint1, "originformat");
+		prog_error(node, nonint1, "eraformat");
 		return NULL;
 	}
 	value = (INT) pvalue(val);
 	delete_pvalue(val);
 	if (value < 0) value = 0;
-	origincode = value;
+	eratimecode = value;
 	return NULL;
 }
 /*===============================================+
@@ -2679,18 +2683,37 @@ __complexpic (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 /*==============================+
  * __year -- Return year of event
  *   usage: year(EVENT) -> STRING
+ *      or  year(STRING) -> STRING
  *=============================*/
 PVALUE
 __year (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE evnt;
-	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
-	if (*eflg) {
-		prog_error(node, "the arg to year is not a record line");
-		return NULL;
+	STRING str=0;
+	char buff[20];
+	GDATEVAL gdv;
+	PVALUE val = eval_without_coerce(iargs(node), stab, eflg);
+	if (ptype(val) == PSTRING) {
+		str = (STRING) pvalue(val);
+	} else {
+		NODE evnt;
+		coerce_pvalue(PGNODE, val, eflg);
+		if (*eflg) {
+			prog_error(node, "the arg to year is not a record line (or string)");
+			return NULL;
+		}
+		evnt = (NODE) pvalue(val);
+		str = event_to_date(evnt, NULL, FALSE);
 	}
-	evnt = (NODE) pvalue(val);
-	set_pvalue(val, PSTRING, (VPTR)event_to_date(evnt, NULL, TRUE));
+	gdv = extract_date(str);
+	if (gdv->date1.yearstr && gdv->date1.yearstr[0]) {
+		str = gdv->date1.yearstr;
+	} else if (gdv->date1.year > -99999) {
+		snprintf(buff, sizeof(buff), "%d", gdv->date1.year);
+		str = buff;
+	} else
+		str = 0;
+	set_pvalue(val, PSTRING, str);
+	free_gdateval(gdv);
 	return val;
 }
 /*================================+

@@ -202,7 +202,7 @@ struct gdate_s {
 	INT month;
 	INT day;
 	INT mod;
-	INT origin; /* eg, AD, BC */
+	INT eratime; /* eg, AD, BC */
 	STRING yearstr;
 };
 struct gdateval_s {
