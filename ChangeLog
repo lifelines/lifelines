@@ -2,6 +2,9 @@
 
 	* tools/btedit.c: Fix btedit build.
 
+	* ChangeLog NEWS interp/interp.c interp/pvalue.c:
+	Fixes for pvalue problems.
+
 2001-04-14 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog NEWS hdrs/interp.h interp/pvalue.c

@@ -5,6 +5,8 @@ http://lifelines.sourceforge.net
 Bug fixes in 3.0.6.1-dev
 ==================
 
+- was double-deleting strings for filenames named in include statements
+
 - added readonly message when adding/editing S/E/X records
    (instead of ASSERT coredump)
 

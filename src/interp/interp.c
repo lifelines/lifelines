@@ -200,8 +200,9 @@ interp_program (STRING proc,    /* proc to call */
 			llwprintf("About to parse file %s.\n", ifile);
 #endif
 			parse_file(ifile, plist);
-		} else
+		} else {
 			stdfree(ifile);
+		}
 	}
 	remove_list(plist, NULL); plist=NULL;
 	if (Perrors) {
@@ -272,7 +273,10 @@ interp_program_exit:
 static void
 remove_tables (void)
 {
-	remove_table(filetab, FREEKEY);
+/* we can't free the keys in filetab, because the
+parser put those pointers into pvalues for files
+named in include statements */
+	remove_table(filetab, DONTFREE);
 	/* proctab has PNODESs that yacc.y put in there */
 	remove_table(proctab, DONTFREE);
 	remove_symtab(&globtab);
@@ -1222,7 +1226,7 @@ interp_foreven (PNODE node, SYMTAB stab, PVALUE *pval)
 	INT ecount = 0;
 	insert_symtab(stab, inum(node), PINT, (VPTR)count);
 	while (TRUE) {
-		eval = create_pvalue_from_sour_keynum(++count);
+		eval = create_pvalue_from_even_keynum(++count);
 		ecel = get_cel_from_pvalue(eval);
 		if (!ecel) {
 			delete_pvalue(eval);
@@ -1270,7 +1274,7 @@ interp_forothr (PNODE node, SYMTAB stab, PVALUE *pval)
 			continue;
 		if (!(othr = string_to_node(record))) continue;
 		ocount++;
-// TO DO - fix 2001/03/19
+// TO DO - fix 2001/03/19 - imitate interp_forsour
 		insert_symtab(stab, ielement(node), POTHR,
 		    (VPTR)othr_to_cacheel(othr));
 		insert_symtab(stab, inum(node), PINT, (VPTR)count);
@@ -1364,9 +1368,12 @@ interp_indisetloop (PNODE node, SYMTAB stab, PVALUE *pval)
 		llwprintf("loopinterp - %s = ",ivalvar(node));
 		llwprintf("\n");
 #endif
-		insert_symtab_pvalue(stab, ivalvar(node),
-			 (PVALUE) (sval(el).w ? sval(el).w
-				: create_pvalue(PANY, (VPTR)NULL)));
+		val = sval(el).w;
+		if (val)
+			val = copy_pvalue(val);
+		else
+			val = create_pvalue(PANY, (VPTR)NULL);
+		insert_symtab_pvalue(stab, ivalvar(node), val);
 		insert_symtab(stab, inum(node), PINT, (VPTR) (ncount + 1));
 		switch (irc = interpret((PNODE) ibody(node), stab, pval)) {
 		case INTCONTINUE:

@@ -101,13 +101,11 @@ static INT debugging_pvalues = FALSE;
 static void
 debug_check (void)
 {
-#ifdef DEBUG_PVALUES
 	PVALUE val;
 	for (val=free_list; val; val=val->value)
 	{
 		ASSERT(val->type == 99 && val->value != val);
 	}
-#endif
 }
 /*========================================
  * alloc_pvalue_memory -- return new pvalue memory
@@ -279,7 +277,11 @@ create_pvalue (INT type, VPTR value)
 	}
 	ptype(val) = type;
 	pvalue(val) = value;
-	/* TO DO 2001/03/17, Perry - what about PGNODE ? */
+	/*
+	we really ought strongly lock for PGNODE
+	but it isn't convenient to find the cacheel
+	2001/04/15, Perry Rapp
+	*/
 	if (is_record_pvalue(val)) {
 		/* lock any cache elements, and unlock in clear_pvalue */
 		CACHEEL cel = get_cel_from_pvalue(val);
@@ -307,16 +309,8 @@ clear_pvalue (PVALUE val)
 	*/
 	/*
 	PANY is a null value
+	I think PGNODEs point into cache memory (2001/04/15, Perry Rapp)
 	*/
-	case PGNODE:
-		{
-			/*
-			I've not figured out how memory for these works
-			2001/01/20, Perry Rapp
-			*/
-			int debug=1;
-		}
-		break;
 	/* nodes from cache handled below switch - PINDI, PFAM, PSOUR, PEVEN, POTHR */
 	case PSTRING:
 		if (pvalue(val)) stdfree((STRING) pvalue(val));
