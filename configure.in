@@ -171,8 +171,8 @@ AC_OUTPUT(Makefile  m4/Makefile \
         docs/Makefile \
         reports/Makefile
         win32/Makefile \
-		build/msvc6/Makefile \
-		build/rpm/Makefile \
+        build/msvc6/Makefile \
+        build/rpm/Makefile \
         build/autotools/Makefile \
         intl/Makefile po/Makefile.in)
 

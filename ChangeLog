@@ -1,3 +1,9 @@
+2002-06-25 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog configure.in:
+
+	Make indenting consistent.
+
 2002-06-24 Matt Emmerton <memmerto@users.sourceforge.net>
 
 	* ChangeLog README.DEVELOPERS autogen.sh
@@ -21,7 +27,7 @@
 	* ChangeLog configure.in Makefile.am
 
 	Update to find autotools glue in build/autotools and to
-    include it in distributions.
+	include it in distributions.
 
 	DELETED:	build/gnu
 	NEW:		build/autotools
