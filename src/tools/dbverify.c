@@ -134,6 +134,7 @@ static void report_results(void);
 #define ERR_MISSING 9
 #define ERR_DELETED 10
 #define ERR_BADNAME 11
+#define ERR_BADFAMREF 12
 
 static struct errinfo errs[] = {
 	{ ERR_ORPHANNAME, 0, 0, "Orphan names" }
@@ -148,6 +149,7 @@ static struct errinfo errs[] = {
 	, { ERR_MISSING, 0, 0, "Missing records" }
 	, { ERR_DELETED, 0, 0, "Deleted records" }
 	, { ERR_BADNAME, 0, 0, "Bad name" }
+	, { ERR_BADFAMREF, 0, 0, "Bad family reference" }
 };
 static struct work todo;
 static LIST tofix;
@@ -294,11 +296,12 @@ cgn_callback (STRING key, STRING name, BOOLEAN newset, void *param)
 		finish_and_delete_nameset(dupseq);
 		dupseq = create_indiseq_null();
 	}
-	append_indiseq_null(dupseq, strsave(key), NULL, TRUE, TRUE);
+
+	append_indiseq_null(dupseq, strsave(key), name, TRUE, TRUE);
 
 	if (!indi) {
 		report_error(ERR_ORPHANNAME, "Orphaned name: %s", name);
-		if (todo.fix_evens)
+		if (todo.fix_ghosts)
 			enqueue_list(tofix, (VPTR)alloc_namerefn(name, key, ERR_ORPHANNAME));
 	} else {
 		NODE node;
@@ -312,7 +315,7 @@ cgn_callback (STRING key, STRING name, BOOLEAN newset, void *param)
 		join_indi(indi, nam, refn, sex, body, famc, fams);
 		if (!found) {
 			report_error(ERR_GHOSTNAME, "Ghost name: %s -> %s", name, key);
-			if (todo.find_ghosts)
+			if (todo.fix_ghosts)
 				enqueue_list(tofix, (VPTR)alloc_namerefn(name, key, ERR_GHOSTNAME));
 		}
 	}
@@ -337,11 +340,11 @@ cgr_callback (STRING key, STRING refn, BOOLEAN newset, void *param)
 		finish_and_delete_refnset(dupseq);
 		dupseq = create_indiseq_null();
 	}
-	append_indiseq_null(dupseq, strsave(key), NULL, TRUE, TRUE);
+	append_indiseq_null(dupseq, strsave(key), refn, TRUE, TRUE);
 	
 	if (!node) {
 		report_error(ERR_ORPHANNAME, "Orphaned refn: %s", refn);
-		if (todo.find_ghosts)
+		if (todo.fix_ghosts)
 			enqueue_list(tofix, (VPTR)alloc_namerefn(refn, key, ERR_ORPHANNAME));
 	} else {
 	}
@@ -397,10 +400,12 @@ check_nodes (void)
 	seq_evens = create_indiseq_null();
 	seq_othes = create_indiseq_null();
 	traverse_db_key_nod0s(nodes_callback, NULL);
+	/* check what we saw against delete sets */
 	check_set(seq_indis, 'I');
-	/*
-	TO DO: compare these seqs against deletesets
-	*/
+	check_set(seq_fams, 'F');
+	check_set(seq_sours, 'S');
+	check_set(seq_evens, 'E');
+	check_set(seq_othes, 'X');
 	remove_indiseq(seq_indis, FALSE);
 	remove_indiseq(seq_fams, FALSE);
 	remove_indiseq(seq_sours, FALSE);
@@ -437,10 +442,13 @@ check_indi (STRING key, NOD0 nod0)
 	NODE indi1, name1, refn1, sex1, body1, famc1, fams1;
 	NODE node;
 	INT keynum = atoi(&key[1]);
+	CACHEEL icel;
 	if (!strcmp(key, prevkey)) {
 		report_error(ERR_DUPINDI, "Duplicate individual for %s", key);
 	}
 	indi1 = nztop(nod0);
+	icel = indi_to_cacheel(indi1);
+	lock_cache(icel);
 	split_indi(indi1, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
 	for (node = name1; node; node = nsibling(node)) {
 		STRING name=nval(node);
@@ -449,11 +457,24 @@ check_indi (STRING key, NOD0 nod0)
 		}
 		/* TO DO: verify that name is in db */
 	}
+	for (node = refn1; node; node = nsibling(node)) {
+		STRING refn=nval(node);
+		/* TO DO: verify that refn is in db */
+	}
+	for (node = famc1; node; node = nsibling(node)) {
+		STRING famkey=rmvat(nval(node));
+		NODE fam = qkey_to_fam(famkey);
+		if (!fam) {
+			report_error(ERR_BADFAMREF, "Bad family reference (%s) individual %s", famkey, key);
+		}
+		/* TO DO: verify that family lists indi */
+	}
 	/* TO DO: check lineage links */
 	join_indi(indi1, name1, refn1, sex1, body1, famc1, fams1);
 	/*
 	TO DO: check pointers ?
 	*/
+	unlock_cache(icel);
 	append_indiseq_null(seq_indis, strsave(key), NULL, TRUE, TRUE);
 	return TRUE;
 }
