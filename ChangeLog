@@ -13,6 +13,11 @@
 
 	Fix user option editor to skip UTF-8 BOM.
 
+	* ChangeLog src/gedlib/translat.c src/gedlib/xlat.c
+	src/hdrs/translat.h src/hdrs/xlat.h
+
+	Include legacy translation tables in translations.
+
 2003-09-08 Matt Emmerton
 
 	* ChangeLog src/gedlib/init.c
