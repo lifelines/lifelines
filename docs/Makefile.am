@@ -7,7 +7,7 @@
 MANUALSSRC = ll-reportmanual.xml ll-userguide.xml
 
 MANUALS_en =     ll-reportmanual.html ll-reportmanual.pdf \
-	     ll-reportmanual.txt \
+	     ll-reportmanual.txt listops.jpg \
 	     ll-userguide.html ll-userguide.pdf \
 	     ll-userguide.txt 
 

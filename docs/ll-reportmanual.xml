@@ -2263,7 +2263,14 @@ list is removed and a new list is created.
 <para>
 A list can have any number of elements. <function>Empty</function> returns <returnvalue>true</returnvalue> if the list
 has no elements and <returnvalue>false</returnvalue> otherwise. <function>Length</function> returns the length of the
-list. The only parameter to both is a list.
+list. The only parameter to both is a list.  The following diagram
+indicates how the various access functions for a list interact:
+</para>
+<para>
+<inlinemediaobject>
+<imageobject> <imagedata fileref="listops.jpg" format="JPG "/>
+</imageobject>
+</inlinemediaobject>
 </para>
 
 <para>
