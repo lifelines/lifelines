@@ -35,7 +35,7 @@
 #include "gedcom.h"
 
 static RKEY refn2rkey();
-static BOOLEAN resolve_traverse(NODE);
+static BOOLEAN resolve_traverse (NODE node);
 
 extern BTREE BTR;
 

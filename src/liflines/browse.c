@@ -712,6 +712,8 @@ browse_pedigree (NODE *pindi,
 {
 	return browse_indi_modes(pindi, pdum1, pfam, pdum2, pseq, 'p');
 }
+
+#ifdef 0
 /*======================================================
  * browse_pedigree1 -- Handle pedigree browse selections.
  *  (OBSOLETE 2000/12/17)
@@ -841,6 +843,9 @@ browse_pedigree1 (NODE *pindi,
 		}
 	}
 }
+#endif
+
+
 /*==================================================
  * choose_any_source -- choose from list of all sources
  *================================================*/

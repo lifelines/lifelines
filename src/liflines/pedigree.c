@@ -90,7 +90,7 @@ add_children (NODE indi, int gen, int maxgen, int * count)
 static treenode
 add_parents (NODE indi, int gen, int maxgen, int * count)
 {
-	NODE f=0, m=0;
+  /*	NODE f=0, m=0; */
 	treenode tn = (treenode)malloc(sizeof(*tn));
 	tn->keynum = indi_to_keynum(indi);
 	tn->firstchild = 0;

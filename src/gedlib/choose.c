@@ -85,7 +85,6 @@ choose_source (NODE what, STRING msg0, STRING msgn)
 {
 	INDISEQ seq;
 	NODE node;
-	INT i = 0;
 	if (!what) return NULL;
 	if (!(seq = node_to_sources(what))) {
 		message(msg0);

@@ -1,3 +1,8 @@
+2000-12-21    <marc@nozell.com>
+
+	* liflines/browse.c, liflines/pedigree.c, gedlib/choose.c,
+	hdrs/gedcom.h: Cleanup compiler warning.
+
 2000-12-17 Perry Rapp <prapp@users.sourceforge.net>
 
 	* ChangeLog liflines/browse.c liflines/llinesi.h
