@@ -23,6 +23,10 @@
 
 	Prepend UTF-8 BOM to edit file on Windows when appropriate.
 
+	*
+
+	Change version for experimental release 3.0.33.
+
 2003-09-14 Perry Rapp
 
 	* src/gedlib/intrface.c src/hdrs/icvt.h src/hdrs/table.h
