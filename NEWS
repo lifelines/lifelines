@@ -5,6 +5,8 @@ http://lifelines.sourceforge.net
 Bug fixes in 3.0.6.1-dev
 ==================
 
+- dbverify reported soundex-equivalent names for one indi as duplicate names
+
 - traverse could crash due to index and/or buffer falling out of cache
 
 - bugfixes in child_indiseq & difference_indiseq.
