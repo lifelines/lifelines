@@ -1,6 +1,13 @@
-LifeLines Source Release, Version 3.0.17
+LifeLines Source Release, Version 3.0.18
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
+
+New features added in 3.0.18
+============================
+
+- Directory structure changes to group sources in src and build stuff in build
+- Some improvements in collation & partial UTF-8 support
+- French translation (po file)
 
 New features added in 3.0.17
 ============================
