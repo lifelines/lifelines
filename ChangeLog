@@ -1,3 +1,9 @@
+2003-02-08 Perry Rapp
+
+	* ChangeLog src/interp/builtin.c src/interp/write.c:
+
+	Check for null parent in addnode.
+
 2003-02-07 Perry Rapp
 
 	* ChangeLog src/hdrs/indiseq.h src/hdrs/interp.h

@@ -2402,6 +2402,7 @@ record_to_node (PVALUE val)
 
 	gnode = nztop(rec);
 	set_pvalue_node(val, gnode); 
+	ASSERT(gnode);
 	return TRUE;
 }
 /*================================+

@@ -92,6 +92,11 @@ __addnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	prnt = pvalue_to_node(val);
+	if (!prnt) {
+		prog_var_error(node, stab, arg, val, nonnodx, "addnode", "2");
+		delete_pvalue(val);
+		return NULL;
+	}
 	delete_pvalue_wrapper(val);
 	val = eval_and_coerce(PGNODE, arg=inext(arg), stab, eflg);
 	if (*eflg) {
@@ -104,6 +109,7 @@ __addnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	/* reparent node, but ensure its locking is only relative to new parent */
 	dolock_node_in_cache(newchild, FALSE);
 	nparent(newchild) = prnt;
+	newchild->n_rec = prnt->n_rec;
 	set_temp_node(newchild, is_temp_node(prnt));
 	dolock_node_in_cache(newchild, TRUE);
 	if (prev == NULL) {
