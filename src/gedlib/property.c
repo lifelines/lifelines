@@ -16,6 +16,7 @@
 
 /*=====================================================
  * get_user_fullname -- Extract current users full name
+ *  returns static buffer (actually system buffer)
  *===================================================*/
 static STRING
 get_user_fullname(void)
@@ -36,9 +37,10 @@ get_user_fullname(void)
 
 /*=======================================================================
  * get_user_email -- Construct email address using username and host name
+ *  returns static buffer
  *=====================================================================*/
 static STRING
-get_user_email(void)
+get_user_email (void)
 {
   STRING retval = NULL;
 
@@ -62,10 +64,10 @@ get_user_email(void)
 }
 
 /*===============================================================
- * get_property -- Get value from useropts, environment or system
+ * get_property -- Get value from useropts table, environment or system
  *=============================================================*/
 STRING
-get_property(STRING opt)
+get_property (STRING opt)
 {
   STRING val;
 

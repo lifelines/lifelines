@@ -126,8 +126,9 @@ enum {
 #define MINED 1
 #define MGDIN 2
 #define MINGD 3
-#define MINDS 4
-#define MINRP 5
+#define MDSIN 4
+#define MINDS 5
+#define MINRP 6
 
 /*========
  * Globals
@@ -284,7 +285,6 @@ NODE keynum_to_even(int keynum);
 NODE keynum_to_othr(int keynum);
 INT length_nodes(NODE);
 STRING manip_name(STRING, TRANTABLE, BOOLEAN, BOOLEAN, INT);
-void maperror(INT, INT, STRING);
 int namecmp(STRING, STRING);
 STRING name_string(STRING);
 STRING name_surfirst(STRING);

@@ -247,10 +247,11 @@ ask_for_output_file (STRING mode,
 #define RC_SELECT   2
 /*=================================================
  * ask_for_indiseq -- Ask user to identify sequence
+ *  ttl:  [in] prompt (title) to display
+ *  prc:  [out] result code (RC_SELECT etc)
  *===============================================*/
 INDISEQ
-ask_for_indiseq (STRING ttl,
-                 INT *prc)
+ask_for_indiseq (STRING ttl, INT *prc)
 {
 	INDISEQ seq;
 	STRING name = ask_for_string(ttl, "enter name, key, refn or list:");
@@ -285,11 +286,12 @@ ask_for_indi_once (STRING ttl,
 /*=================================================================
  * ask_for_indi -- Ask user to identify sequence and select person;
  *   reask protocol used
+ * ttl:      [in] title for question
+ * confirmq: [in] whether to confirm after choice
+ * ask1:     [in] whether to present list if only one matches
  *===============================================================*/
 NODE
-ask_for_indi (STRING ttl,
-              CONFIRMQ confirmq,
-              ASK1Q ask1)
+ask_for_indi (STRING ttl, CONFIRMQ confirmq, ASK1Q ask1)
 {
 	while (TRUE) {
 		INT rc;

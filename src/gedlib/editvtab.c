@@ -55,6 +55,10 @@ edit_valtab (STRING key, TABLE *ptab, INT sep, STRING ermsg)
 {
 	TABLE tmptab = NULL;
 	STRING msg;
+	char fullerr[78];
+	STRING ptr;
+	char temp[25];
+	INT mylen;
 	endwin();
 
 	unlink(editfile);
@@ -72,7 +76,15 @@ edit_valtab (STRING key, TABLE *ptab, INT sep, STRING ermsg)
 			store_text_file(key, editfile);
 			return TRUE;
 		}
-		if (ask_yes_or_no_msg(ermsg, aredit))
+		ptr=fullerr;
+		ptr[0]=0;
+		mylen=sizeof(fullerr)/sizeof(fullerr[0]);
+		llstrcatn(&ptr, ermsg, &mylen);
+		llstrcatn(&ptr, " ", &mylen);
+		llstrcatn(&ptr, msg, &mylen);
+		snprintf(temp, sizeof(temp), " (Separator is %c)", (uchar)sep);
+		llstrcatn(&ptr, temp, &mylen);
+		if (ask_yes_or_no_msg(fullerr, aredit))
 			do_edit();
 		else {
 			remove_table(tmptab, DONTFREE);

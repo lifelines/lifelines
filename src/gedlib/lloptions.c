@@ -31,7 +31,6 @@
 #include "screen.h"
 #include "gedcom.h"
 #include "liflines.h"
-#include "arch.h"
 #include "lloptions.h"
 
 
@@ -173,7 +172,7 @@ static STRING
 numtostr (INT num)
 {
 	static char buffer[33];
-	snprintf(buffer,sizeof(buffer),"%d",num);
+	snprintf(buffer, sizeof(buffer), "%d", num);
 	return buffer;
 }
 /*==========================================

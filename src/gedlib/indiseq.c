@@ -1479,10 +1479,11 @@ name_to_indiseq (STRING name)
 		namesort_indiseq(seq);
 		return seq;
 	}
-	sprintf(scratch, "a/%s/", getsurname(name));
+	sprintf(scratch, "a/%s/", getasurname(name));
 	lastchar = 'z';
 	if(opt_finnish) lastchar = 255;
-	for (c = 'a'; c <= lastchar; c++) {
+	/* start with '@' to include non-ASCII letters */
+	for (c = 'a'-1; c <= lastchar; c++) {
 		if(opt_finnish && !my_islower(c)) continue;
 		scratch[0] = c;
 		names = get_names(scratch, &num, &keys, TRUE);
@@ -1679,10 +1680,13 @@ INDISEQ
 str_to_indiseq (STRING name)
 {
 	INDISEQ seq;
-	seq = find_named_seq(name);
-	if (!seq) seq = key_to_indiseq(name);
-	if (!seq) seq = refn_to_indiseq(name, 'I', NAMESORT);
-	if (!seq) seq = name_to_indiseq(name);
+	TRANTABLE ttg = tran_tables[MDSIN];
+	uchar intname[100];
+	translate_string(ttg, name, intname, sizeof(intname)-1);
+	seq = find_named_seq(intname);
+	if (!seq) seq = key_to_indiseq(intname);
+	if (!seq) seq = refn_to_indiseq(intname, 'I', NAMESORT);
+	if (!seq) seq = name_to_indiseq(intname);
 	return seq;
 }
 /*=======================================================

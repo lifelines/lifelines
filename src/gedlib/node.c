@@ -1201,9 +1201,6 @@ indi_to_event (NODE node, TRANTABLE tt, STRING tag, STRING head
 }
 /*===========================================
  * event_to_string -- Convert event to string
- *  node:  [in] node subtree of event
- *  tt:    [in] translation table to apply to strings
- *  shrt:  [in] flag if caller wants short version
  * Finds DATE & PLACE nodes, and prints a string
  * representation of them.
  *  node:  [in] node tree of event to describe

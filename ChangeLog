@@ -1,3 +1,20 @@
+2007-07-15 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/charmaps.c gedlib/editvtab.c gedlib/indiseq.c
+	gedlib/lloptions.c gedlib/messages.c gedlib/names.c
+	gedlib/node.c gedlib/property.c gedlib/valtable.c hdrs/arch.h
+	hdrs/gedcom.h hdrs/sys_inc.h liflines/ask.c liflines/screen.c
+	liflines/show.c stdlib/memalloc.c tools/dbverify.c:
+	Improved feedback for errors in user options or place abbrev.
+	or translation tables.
+	Changed a few sprintf calls to snprintf.
+	Revised translation menu to stay up until user chooses quit.
+	Added display-to-internal mapping.
+	Moved mapping menu choices to messages.c.
+	Added length limit to bsd_mvwgetstr.
+	Modified str_to_indiseq to use new display-to-internal mapping.
+	Modified squeeze to leave non-ascii characters.
+
 2007-07-13 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/charmaps.c gedlib/translat.c:

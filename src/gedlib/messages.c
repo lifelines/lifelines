@@ -202,9 +202,9 @@ STRING dhusb  = SS "The families have different fathers/husbands; cannot merge."
 STRING dwife  = SS "The families have different wives/mothers; cannot merge.";
 STRING idpdel = SS "Who do you want to remove from the database?";
 STRING mklast = SS "Place the child last in the family.";
-STRING abverr = SS "The abbreviations file contains errors.";
-STRING uoperr = SS "The user options file contains errors.";
-STRING cmperr = SS "The character mapping file contains errors.";
+STRING abverr = SS "Error in abbreviations file.";
+STRING uoperr = SS "Error in user options file.";
+STRING cmperr = SS "Error in character mapping file.";
 STRING aredit = SS "Do you want to re-edit it?";
 
 STRING gdpadd = SS "%s was added to the database.";
@@ -268,6 +268,7 @@ STRING dspa_bir    = SS "b. ";
 STRING dspa_chr    = SS "bap. ";
 STRING dspa_dea    = SS "d. ";
 STRING dspa_bur    = SS "bur. ";
+STRING dspa_chbr   = SS "cb. ";
 
 /* menus */
 STRING mtitle      = SS "LifeLines %s - Genealogical DB and Programming System";
@@ -292,3 +293,21 @@ STRING unksps      = SS "Spouse unknown";
 STRING nohist      = SS "No more history";
 STRING dataerr     = SS "Error accessing data";
 STRING idhist      = SS "Choose from history";
+
+/* translation table errors */
+STRING baddec      = SS "Bad decimal number format.";
+STRING badhex      = SS "Bad hexidecimal number format.";
+STRING norplc      = SS "No replacement string on line.";
+STRING badesc      = SS "Bad escape format.";
+
+/* many menus */
+STRING mn_quit     = SS  "q  Return to main menu";
+
+/* translation table menu */
+STRING mn_edin     = SS  "e  Editor to Internal mapping";
+STRING mn_ined     = SS  "m  Internal to Editor mapping";
+STRING mn_gdin     = SS  "i  GEDCOM to Internal mapping";
+STRING mn_ingd     = SS  "x  Internal to GEDCOM mapping";
+STRING mn_dsin     = SS  "g  Display to Internal mapping";
+STRING mn_inds     = SS  "d  Internal to Display mapping";
+STRING mn_inrp     = SS  "r  Internal to Report mapping";

@@ -94,6 +94,8 @@ extern STRING abverr, uoperr;
 extern STRING mtitle, cright, plschs;
 extern STRING mn_unkcmd, ronlya, ronlyr;
 extern STRING askynq, askynyn, askyny;
+extern STRING mn_quit;
+extern STRING mn_edin,mn_ined,mn_gdin,mn_ingd,mn_dsin,mn_inds,mn_inrp;
 extern struct rfmt_s disprfmt; /* reformatting used for display */
 
 /*********************************************
@@ -157,7 +159,7 @@ int
 init_screen (void)
 {
 	int extralines;
-	if (winx) {
+	if (winx) { /* user specified window size */
 		ll_lines = winy;
 		ll_cols = winx;
 		if (ll_cols > COLS || ll_lines > LINES) {
@@ -189,11 +191,11 @@ init_screen (void)
 	LINESTOTAL = ll_lines;
 	EMPTY_LINES = LINESTOTAL - OVERHEAD_MENU - EMPTY_MENU;
 	if(extralines > 0) {
-	    TANDEM_LINES += (extralines / 2);
-		 AUX_LINES += extralines;
-	    LIST_LINES += extralines;
-	    VIEWABLE += extralines;
-	    if(VIEWABLE > MAXVIEWABLE) VIEWABLE = MAXVIEWABLE;
+		TANDEM_LINES += (extralines / 2);
+		AUX_LINES += extralines;
+		LIST_LINES += extralines;
+		VIEWABLE += extralines;
+		if(VIEWABLE > MAXVIEWABLE) VIEWABLE = MAXVIEWABLE;
 	}
 	BAND = 25;	/* width of columns of menu (3) */
 	create_windows();
@@ -284,7 +286,7 @@ paint_two_fam_screen (void)
 	mvwaddstr(win, row++, col, "x  Switch top/bottom");
 	row = 2*TANDEM_LINES+4; col = 3 + 2*BAND;
 	mvwaddstr(win, row++, col, "j  Merge bottom to top");
-	mvwaddstr(win, row++, col, "q  Return to main menu");
+	mvwaddstr(win, row++, col, mn_quit);
 }
 #endif /* UNUSED_CODE */
 /*==============================================
@@ -316,7 +318,7 @@ paint_list_screen (void)
 	mvwaddstr(win, row++, col, "b  Browse new persons");
 	mvwaddstr(win, row++, col, "a  Add to this list");
 	mvwaddstr(win, row++, col, "x  Swap mark/current");
-	mvwaddstr(win, row++, col, "q  Return to main menu");
+	mvwaddstr(win, row++, col, mn_quit);
 }
 /*==========================================
  * create_windows -- Create and init windows
@@ -339,7 +341,7 @@ create_windows (void)
 	add_menu_win = NEWWIN(8, 66);
 	del_menu_win = NEWWIN(8, 66);
 	scan_menu_win = NEWWIN(7,66);
-	trans_menu_win = NEWWIN(10,66);
+	trans_menu_win = NEWWIN(11,66);
 	utils_menu_win = NEWWIN(12, 66);
 	extra_menu_win = NEWWIN(13,66);
 	ask_win = NEWWIN(4, 73);
@@ -397,13 +399,14 @@ init_all_windows (void)
 	row = 1;
 	mvwaddstr(win, row++, 2,
 	    "Which character mapping do you want to edit?");
-	mvwaddstr(win, row++, 4, "e  Editor to Internal mapping");
-	mvwaddstr(win, row++, 4, "m  Internal to Editor mapping");
-	mvwaddstr(win, row++, 4, "i  GEDCOM to Internal mapping");
-	mvwaddstr(win, row++, 4, "x  Internal to GEDCOM mapping");
-	mvwaddstr(win, row++, 4, "d  Internal to Display mapping");
-	mvwaddstr(win, row++, 4, "r  Internal to Report mapping");
-	mvwaddstr(win, row++, 4, "q  Return to the main menu");
+	mvwaddstr(win, row++, 4, mn_edin);
+	mvwaddstr(win, row++, 4, mn_ined);
+	mvwaddstr(win, row++, 4, mn_gdin);
+	mvwaddstr(win, row++, 4, mn_ingd);
+	mvwaddstr(win, row++, 4, mn_dsin);
+	mvwaddstr(win, row++, 4, mn_inds);
+	mvwaddstr(win, row++, 4, mn_inrp);
+	mvwaddstr(win, row++, 4, mn_quit);
 
 	win = utils_menu_win;
 	row = 1;
@@ -416,7 +419,7 @@ init_all_windows (void)
 	mvwaddstr(win, row++, 4, "m  Show memory statistics");
 	mvwaddstr(win, row++, 4, "e  Edit the place abbreviation file");
 	mvwaddstr(win, row++, 4, "o  Edit the user options file");
-	mvwaddstr(win, row++, 4, "q  Return to the main menu");
+	mvwaddstr(win, row++, 4, mn_quit);
 
 	win = extra_menu_win;
 	row = 1;
@@ -430,7 +433,7 @@ init_all_windows (void)
 	mvwaddstr(win, row++, 4, "4  Edit event record from the database");
 	mvwaddstr(win, row++, 4, "5  Add an other record to the database");
 	mvwaddstr(win, row++, 4, "6  Edit other record from the database");
-	mvwaddstr(win, row++, 4, "q  Return to the main menu");
+	mvwaddstr(win, row++, 4, mn_quit);
 }
 /*=================================
  * display_screen -- Display screen
@@ -709,10 +712,12 @@ ask_for_input_filename (STRING ttl, STRING path, STRING prmpt)
 /*======================================
  * ask_for_string -- Ask user for string
  *  returns static buffer
+ *  ttl:   [in] title of question (1rst line)
+ *  prmpt: [in] prompt of question (2nd line)
+ * answer less than 100 chars
  *====================================*/
 STRING
-ask_for_string (STRING ttl,
-                STRING prmpt)
+ask_for_string (STRING ttl, STRING prmpt)
 {
 	WINDOW *win = ask_win;
 	STRING rv, p;
@@ -721,7 +726,7 @@ ask_for_string (STRING ttl,
 	mvwaddstr(win, 1, 1, ttl);
 	mvwaddstr(win, 2, 1, prmpt);
 	wrefresh(win);
-	rv = get_answer(win, prmpt);
+	rv = get_answer(win, prmpt); /* less then 100 chars */
 	if (!rv) return (STRING) "";
 	p = rv;
 	while (chartype((unsigned char)*p) == WHITE)
@@ -1043,20 +1048,23 @@ static void
 trans_menu (void)
 {
 	INT code;
-	touchwin(trans_menu_win);
-	wmove(trans_menu_win, 1, 47);
-	wrefresh(trans_menu_win);
-	code = interact(trans_menu_win, "emixdrq", -1);
-	touchwin(main_win);
-	wrefresh(main_win);
-	switch (code) {
-	case 'e': edit_mapping(MEDIN); break;
-	case 'm': edit_mapping(MINED); break;
-	case 'i': edit_mapping(MGDIN); break;
-	case 'x': edit_mapping(MINGD); break;
-	case 'd': edit_mapping(MINDS); break;
-	case 'r': edit_mapping(MINRP); break;
-	case 'q': break;
+	while (1) {
+		touchwin(trans_menu_win);
+		wmove(trans_menu_win, 1, 47);
+		wrefresh(trans_menu_win);
+		code = interact(trans_menu_win, "emixgdrq", -1);
+		touchwin(main_win);
+		wrefresh(main_win);
+		switch (code) {
+		case 'e': edit_mapping(MEDIN); break;
+		case 'm': edit_mapping(MINED); break;
+		case 'i': edit_mapping(MGDIN); break;
+		case 'x': edit_mapping(MINGD); break;
+		case 'g': edit_mapping(MDSIN); break;
+		case 'd': edit_mapping(MINDS); break;
+		case 'r': edit_mapping(MINRP); break;
+		case 'q': return;
+		}
 	}
 }
 /*====================================
@@ -1156,20 +1164,22 @@ interact (WINDOW *win, STRING str, INT screen)
 }
 /*============================================
  * get_answer -- Have user respond with string
- *  returns static buffer
+ *  win:   [in] which window to use
+ *  prmpt: [in] prompt string to show
+ *  returns static buffer 100 length
  *==========================================*/
 STRING
-get_answer (WINDOW *win,
-            STRING prmpt)
+get_answer (WINDOW *win, STRING prmpt)
 {
-	static unsigned char lcl[100];
+	static uchar lcl[100];
 
 #ifndef USEBSDMVGETSTR
 	echo();
+	/* would be nice to use mvwgetnstr here */
 	mvwgetstr(win, 2, strlen(prmpt) + 2, lcl);
 	noecho();
 #else
-	bsd_mvwgetstr(win, 2, strlen(prmpt) + 2, lcl);
+	bsd_mvwgetstr(win, 2, strlen(prmpt) + 2, lcl, sizeof(lcl));
 #endif
 	return lcl;
 }
@@ -1644,13 +1654,15 @@ do_edit (void)
 /*==================================================================
  * bsd_mvwgetstr -- Special BSD version of mvwgetstr that does erase
  *   character handling
+ *  win:  [in] window to use
+ *  row:  [in] y location to start
+ *  col:  [in] x location to start
+ *  str:  [out] user's string
+ *  len:  [in] max length of string
  *================================================================*/
 #ifdef BSD
-void
-bsd_mvwgetstr (WINDOW *win,
-               INT row,
-               INT col,
-               STRING str)
+static void
+bsd_mvwgetstr (WINDOW *win, INT row, INT col, STRING str, INT len)
 {
 	STRING p = str;
 	INT c, ers = erasechar();
@@ -1662,7 +1674,7 @@ bsd_mvwgetstr (WINDOW *win,
 			waddch(win, ' ');
 			wmove(win, row, col);
 			--p;
-		} else if (c != ers) {
+		} else if (c != ers && p < str+len-1) {
 			waddch(win, c);
 			col++;
 			*p++ = c;

@@ -96,6 +96,7 @@ init_valtab_from_file (STRING fname, TABLE tab, INT sep, STRING *pmsg)
  *  tab:     [in,out] table in which to put key/value pairs
  *  sep:     [in] separator char
  *  pmsg:    [out] error message (set if returns FALSE)
+ *            pmsg points to static buffer
  * eg, "PA:Pennsylvania\nVA:Virginia"
  *  could be passed as str, with sep of :
  *  and two key/value pairs would be inserted
@@ -121,6 +122,7 @@ init_valtab_from_string (STRING str, TABLE tab, INT sep, STRING *pmsg)
 			;
 		if (c == 0 || c =='\n') {
 			sprintf(errmsg, "line %d: no value", n);
+			*pmsg = errmsg;
 			return FALSE;
 		}
 		*(q - 1) = 0;

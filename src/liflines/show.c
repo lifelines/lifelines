@@ -58,6 +58,7 @@ extern INT LIST_LINES;		/* person info display lines above list */
 extern INT MAINWIN_WIDTH;
 extern INT listbadkeys;
 extern char badkeylist[];
+extern STRING dspa_chbr;
 
 /*********************************************
  * local types
@@ -619,10 +620,10 @@ family_events (STRING outstr, TRANTABLE ttd, NODE indi, NODE fam, INT len)
 	if (!opt_nocb) {
 		NODE chld;
 		if ((chld = fam_to_first_chil(fam))) {
-			evt = sh_indi_to_event(chld, ttd, "BIRT", "cb. ", mylen, TRUE);
+			evt = sh_indi_to_event(chld, ttd, "BIRT", dspa_chbr, mylen, TRUE);
 			if (evt && !append_event(&p, evt, &mylen, 10))
 				return;
-			evt = sh_indi_to_event(chld, ttd, "CHR", "cb. ", mylen, TRUE);
+			evt = sh_indi_to_event(chld, ttd, "CHR", dspa_chbr, mylen, TRUE);
 			if (evt && !append_event(&p, evt, &mylen, 10))
 				return;
 		}

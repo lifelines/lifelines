@@ -540,8 +540,9 @@ piecematch (STRING part,
 }
 /*===============================================================
  * squeeze -- Squeeze string to superstring, string of uppercase,
- *   0-terminated words, ending with another 0; non-letters not
- *   copied; eg., `Anna /Van Cott/' maps to `ANNA\0VANCOTT\0\0'.
+ *   0-terminated words, ending with another 0
+ * Ignores ASCII non-letters
+ *   eg., `Anna /Van Cott/' maps to `ANNA\0VANCOTT\0\0'.
  *  in:   [in] string of words
  *  out:  [out] superstring of words
  *=============================================================*/
@@ -549,7 +550,7 @@ static void
 squeeze (STRING in, STRING out)
 {
 	INT c;
-	while ((c = (uchar)*in++) && chartype(c) != LETTER)
+	while ((c = (uchar)*in++) && c<128 && chartype(c) != LETTER)
 		;
 	if (c == 0) {
 		*out++ = 0; *out = 0;
@@ -558,14 +559,14 @@ squeeze (STRING in, STRING out)
 	while (TRUE) {
 		*out++ = ll_toupper(c);
 		while ((c = (uchar)*in++) && c != NAMESEP && chartype(c) != WHITE) {
-			if (chartype(c) == LETTER) *out++ = ll_toupper(c);
+			if (chartype(c) == LETTER || c>127) *out++ = ll_toupper(c);
 		}
 		if (c == 0) {
 			*out++ = 0; *out = 0;
 			return;
 		}
 		*out++ = 0;
-		while ((c = (uchar)*in++) && chartype(c) != LETTER)
+		while ((c = (uchar)*in++) && c<128 && chartype(c) != LETTER)
 			;
 		if (c == 0) {
 			*out++ = 0; *out = 0;
@@ -575,12 +576,13 @@ squeeze (STRING in, STRING out)
 }
 /*====================================================
  * get_names -- Find all persons who match name or key
+ *  name:  [in] name of person desired
+ *  pnum:  [out] number of matches
+ *  pkeys: [out] keys matched (0...*pnum-1)
+ *  exact: [in] unused!
  *==================================================*/
 STRING *
-get_names (STRING name,
-           INT *pnum,
-           STRING **pkeys,
-           BOOLEAN exact)       /* unused! */
+get_names (STRING name, INT *pnum, STRING **pkeys, BOOLEAN exact)
 {
 	INT i, n;
 	STRING *strs;
@@ -750,6 +752,7 @@ trim_name (STRING name,
 	 */
 	if(sdex == -1) sdex = nparts;
 	for (i = sdex-1; i >= 0; --i) {
+		/* Assumes 8-bit character code ! 2001/07/14 */
 		*(parts[i] + 1) = 0;
 		name = parts_to_name(parts);
 		if ((INT)strlen(name) <= len + 2) return name;

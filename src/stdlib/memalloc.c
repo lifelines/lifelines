@@ -130,6 +130,6 @@ report_alloc_live_count (STRING str)
 {
 	char buffer[64];
 	alloc_out(str);
-	sprintf(buffer, "Live count: %d", live_allocs);
+	snprintf(buffer, sizeof(buffer), "Live count: %d", live_allocs);
 	alloc_out(buffer);
 }

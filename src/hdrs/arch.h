@@ -87,10 +87,9 @@ extern int opterr;
  * ***************************************************************** */
 #ifdef WIN32
 #ifdef _MSC_VER
-/* hacks by Perry to compile */
+/* MS-Windows/Microsoft Visual C++ */
 #define S_ISREG(qq) ((qq) & S_IFREG)
 #define S_ISDIR(qq) ((qq) & S_IFDIR)
-#define snprintf _snprintf
 #endif
 #endif
 

@@ -36,31 +36,56 @@
 #include "liflines.h"
 #include "screen.h"
 
+/*********************************************
+ * global/exported variables
+ *********************************************/
+
 TRANTABLE tran_tables[] = {
-	NULL, NULL, NULL, NULL, NULL, NULL,
+	NULL, NULL, NULL, NULL, NULL, NULL, NULL
 };
-char *map_names[] = {
+char *map_keys[] = {
+	"MEDIN", "MINED", "MGDIN", "MINGD", "MDSIN", "MINDS", "MINRP",
+};
+
+/*********************************************
+ * external/imported variables
+ *********************************************/
+
+extern STRING baddec, badhex, norplc, badesc;
+
+/*********************************************
+ * local enums & defines
+ *********************************************/
+
+#define NOMAPS 7
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+/* alphabetical */
+static TRANTABLE init_map_from_rec(INT, BOOLEAN*);
+static TRANTABLE init_map_from_str(STRING, INT, BOOLEAN*);
+static void maperror(INT index, INT entry, INT line, STRING errmsg);
+
+/*********************************************
+ * local variables
+ *********************************************/
+
+static char *map_names[] = {
 	"Editor to Internal",
 	"Internal to Editor",
 	"GEDCOM to Internal",
 	"Internal to GEDCOM",
+	"Display to Internal",
 	"Internal to Display",
 	"Internal to Report",
 };
-char *map_keys[] = {
-	"MEDIN", "MINED", "MGDIN", "MINGD", "MINDS", "MINRP",
-};
-#define NOMAPS 6
 
-TRANTABLE init_map_from_rec(INT, BOOLEAN*);
-TRANTABLE init_map_from_str(STRING, INT, BOOLEAN*);
-TRANTABLE init_map_from_file(STRING, INT, BOOLEAN*);
-
-static STRING baddec = (STRING) "Bad decimal number format.";
-static STRING badhex = (STRING) "Bad hexidecimal number format.";
-static STRING norplc = (STRING) "No replacement string on line.";
-static STRING badesc = (STRING) "Bad escape format.";
-/* static STRING notabs = (STRING) "Tabs not allowed in replacement string."; */
+/*********************************************
+ * local & exported function definitions
+ * body of module
+ *********************************************/
 
 /*========================================
  * init_mapping -- Init translation tables
@@ -139,7 +164,7 @@ init_map_from_file (STRING file, INT indx, BOOLEAN *perr)
 TRANTABLE
 init_map_from_str (STRING str, INT indx, BOOLEAN *perr)
 {
-	INT i, n, maxn, line = 1, newc;
+	INT i, n, maxn, entry=1, line=1, newc;
 	INT sep = (uchar)'\t'; /* default separator */
 	BOOLEAN done;
 	unsigned char c, scratch[50];
@@ -190,7 +215,7 @@ init_map_from_str (STRING str, INT indx, BOOLEAN *perr)
 		if (*str == '\r' || *str == '\n') skip=TRUE;
 		if (*str =='#' && str[1] == '#') {
 			skip=TRUE;
-			if (!strncmp(str, "##sep", 5)) {
+			if (!strncmp(str, "##sep", 5) || !strncmp(str, "##!sep", 6)) {
 				/* new separator character if legal */
 				if (str[5]=='=')
 					sep='=';
@@ -212,7 +237,7 @@ init_map_from_str (STRING str, INT indx, BOOLEAN *perr)
 					*p++ = newc;
 					str += 3;
 				} else {
-					maperror(indx, line, baddec);
+					maperror(indx, entry, line, baddec);
 					goto fail;
 				}
 			} else if (c == '$') {
@@ -221,20 +246,20 @@ init_map_from_str (STRING str, INT indx, BOOLEAN *perr)
 					*p++ = newc;
 					str += 2;
 				} else {
-					maperror(indx, line, badhex);
+					maperror(indx, entry, line, badhex);
 					goto fail;
 				}
 			} else if ((c == '\n') || (c == '\r'))   {
-				maperror(indx, line, norplc);
+				maperror(indx, entry, line, norplc);
 				goto fail;
 			} else if (c == 0) {
-				maperror(indx, line, norplc);
+				maperror(indx, entry, line, norplc);
 				goto fail;
 			} else if (c == '\\') {
 				c = *str++;
 				if (c == '\t' || c == 0 || c == '\n'
 				    || c == '\r') {
-					maperror(indx, line, badesc);
+					maperror(indx, entry, line, badesc);
 					goto fail;
 				}
 				*p++ = c;
@@ -254,7 +279,7 @@ init_map_from_str (STRING str, INT indx, BOOLEAN *perr)
 					*p++ = newc;
 					str += 3;
 				} else {
-					maperror(indx, line, baddec);
+					maperror(indx, entry, line, baddec);
 					goto fail;
 				}
 			} else if (c == '$') {
@@ -263,11 +288,12 @@ init_map_from_str (STRING str, INT indx, BOOLEAN *perr)
 					*p++ = newc;
 					str += 2;
 				} else {
-					maperror(indx, line, badhex);
+					maperror(indx, entry, line, badhex);
 					goto fail;
 				}
 			} else if (c == '\n') {
-				line++;
+				++line;
+				++entry;
 				break;
 			} else if (c == 0) {
 				done = TRUE;
@@ -276,7 +302,7 @@ init_map_from_str (STRING str, INT indx, BOOLEAN *perr)
 				c = *str++;
 				if (c == '\t' || c == 0 || c == '\n'
 				    || c == '\r') {
-					maperror(indx, line, badesc);
+					maperror(indx, entry, line, badesc);
 					goto fail;
 				}
 				if (c == 't') c='\t'; /* "\t" -> tab */
@@ -285,9 +311,11 @@ init_map_from_str (STRING str, INT indx, BOOLEAN *perr)
 				/* treat as beginning of a comment */
 				while(*str && (*str != '\n'))
 					str++;
-				if(*str == '\n')
+				if(*str == '\n') {
 					str++;
-				line++;
+					line++;
+					entry++;
+				}
 				break;
 			} else if (c == '\r') {
 				/* ignore (MSDOS has this before \n) */
@@ -353,11 +381,13 @@ hexvalue (INT c)
 }
 /*====================================================
  * maperror -- Print error message from reading string
+ *  indx:   [in] which translation table
+ *  entry:  [in] index of entry, 1-based
+ *  line:   [in] raw line number in file, 1-based
+ *  errmsg:  [in] error message
  *==================================================*/
 void
-maperror(INT indx,
-         INT line,
-         STRING errmsg)
+maperror (INT indx, INT entry, INT line, STRING errmsg)
 {
-	llwprintf("%s: line %d: %s\n", map_names[indx], line, errmsg);
+	llwprintf("%s: line %d (entry %d): %s\n", map_names[indx], line, entry, errmsg);
 }

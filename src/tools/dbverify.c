@@ -194,7 +194,8 @@ static void
 print_usage (void)
 {
 	char verstr[80];
-	sprintf(verstr, mtitle, get_lifelines_version(sizeof(verstr)-1-strlen(mtitle)));
+	snprintf(verstr, sizeof(verstr), mtitle
+		, get_lifelines_version(sizeof(verstr)-1-strlen(mtitle)));
 	printf(
 		"usage: dbverify -(flags) <btree>\n"
 		"flags:\n"
@@ -923,7 +924,7 @@ __allocate (int len,     /* number of bytes to allocate */
 	if ((p = malloc(len)) == NULL)
 	{
 		char msg[64];
-		sprintf(msg, "Malloc failure for %d bytes", len);
+		snprintf(msg, sizeof(msg), "Malloc failure for %d bytes", len);
 		FATAL2(msg);
 	}
 	return p;

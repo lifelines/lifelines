@@ -32,6 +32,7 @@ extern int w32system(const char *cp);
 #include <direct.h>
 #include <fcntl.h> /* _O_BINARY */
 #include "msvc.h" /* pragmas to suppress warnings */
+#define snprintf _snprintf
 #endif
 
 #else
