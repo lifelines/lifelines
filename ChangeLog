@@ -13,6 +13,13 @@
 
 	Add record leak count to leak log.
 
+	* ChangeLog INSTALL build/msvc6/dbverify/dbVerify.rc
+	build/msvc6/llexec/llexec.rc build/msvc6/llines/llines.rc
+	build/rpm/lifelines.spec configure.in docs/ll-devguide.xml
+	docs/ll-reportmanual.xml docs/ll-userguide.xml src/hdrs/version.h
+
+	Bump version for 3.0.42.
+
 2005-02-07 Perry Rapp
 
 	* ChangeLog lines.cfg src/interp/pvalue.c src/interp/symtab.c
