@@ -372,6 +372,7 @@ NODE key_to_othr (CNSTRING key)
  * key_to_???0 -- Convert key to person
  *  (asserts if failure)
  *  5 symmetric versions
+ * returns addref'd record
  *===================================*/
 RECORD key_to_irecord (CNSTRING key)
 {
@@ -728,6 +729,7 @@ key_typed_to_node (CACHE cache, CNSTRING key, STRING tag)
 /*===============================================================
  * key_typed_to_record -- Return record from key; add to cache if not there
  * asserts if failure
+ * returns addref'd record
  *=============================================================*/
 static RECORD
 key_typed_to_record (CACHE cache, CNSTRING key, STRING tag)

@@ -1025,6 +1025,7 @@ name_surfirst (STRING name)
  *  name:  [IN]  name to search for
  *  ctype: [IN]  type of record (eg, 'I') (0 for any)
  * returns record found, or NULL
+ * returns addref'd record
  *==============================*/
 RECORD
 id_by_key (CNSTRING name, char ctype)

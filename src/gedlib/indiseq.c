@@ -1711,6 +1711,7 @@ key_to_indiseq (STRING name, char ctype)
 	rec = id_by_key(name, ctype);
 	if (!rec) return NULL;
 	key = rmvat(nxref(nztop(rec)));
+	delref_record(rec); /* done with record */
 	seq = create_indiseq_null();
 	append_indiseq_null(seq, key, NULL, FALSE, FALSE);
 	return seq;

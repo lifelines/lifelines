@@ -150,7 +150,7 @@ static struct hist chist; /* records changed */
  *  code:  [I/O]  current browse type
  *  pseq:  [OUT]  current sequence
  * Sets either *prec or *pseq & sets *code to appropriate browse type
- * Created: 2001/02/25, Perry Rapp
+ *  returns addref'd record
  *=======================================*/
 static void
 prompt_for_browse (RECORD * prec, INT * code, INDISEQ * pseq)
