@@ -75,7 +75,6 @@ struct trantable_s {
 /* alphabetical */
 static XNODE create_xnode(XNODE, INT, STRING);
 static void init_charmaps_if_needed(void);
-static BOOLEAN init_map_from_rec(INT, TRANTABLE*);
 static BOOLEAN init_map_from_str(STRING str, CNSTRING mapname, TRANTABLE * ptt, ZSTR * pzerr);
 static void load_custom_db_mappings(void);
 static void load_global_char_mapping(void);
@@ -376,7 +375,7 @@ load_custom_db_mappings (void)
 		remove_trantable(*ptt);
 		*ptt = 0;
 		if (is_db_open()) {
-			if (!init_map_from_rec(indx, ptt)) {
+			if (!init_map_from_rec(map_keys[indx], indx, ptt)) {
 				msg_error(_("Error initializing %s map.\n"), map_names[indx]);
 			}
 		}
@@ -427,7 +426,7 @@ set_dbtrantable (INT ttnum, TRANTABLE tt)
  * But if no tt found, *ptt=0 and returns TRUE.
  *=================================================*/
 BOOLEAN
-init_map_from_rec (INT indx, TRANTABLE * ptt)
+init_map_from_rec (CNSTRING key, INT trnum, TRANTABLE * ptt)
 {
 	STRING rawrec;
 	INT len;
@@ -435,9 +434,9 @@ init_map_from_rec (INT indx, TRANTABLE * ptt)
 	ZSTR zerr=0;
 
 	*ptt = 0;
-	if (!(rawrec = retrieve_raw_record(map_keys[indx], &len)))
+	if (!(rawrec = retrieve_raw_record(key, &len)))
 		return TRUE;
-	ok = init_map_from_str(rawrec, map_names[indx], ptt, &zerr);
+	ok = init_map_from_str(rawrec, map_names[trnum], ptt, &zerr);
 	stdfree(rawrec);
 	if (!ok)
 		maperror(zs_str(zerr));

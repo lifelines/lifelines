@@ -134,6 +134,14 @@ zs_newz (ZSTR zsrc)
 	zs_setz(&zstr, zsrc);
 	return zstr;
 }
+/* create & return new zstring copying from varargs input */
+ZSTR
+zs_newvf (const char * fmt, va_list args)
+{
+	ZSTR zstr = zs_newn(strlen(fmt)+8);
+	zs_setvf(&zstr, fmt, args);
+	return zstr;
+}
 /* create & return new zstring containing first len bytes of str */
 ZSTR
 zs_newsubs (const char * str, unsigned int len)

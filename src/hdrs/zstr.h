@@ -19,6 +19,7 @@ ZSTR zs_new(void);
 ZSTR zs_newn(unsigned int min);
 ZSTR zs_news(const char * str);
 ZSTR zs_newz(ZSTR zsrc);
+ZSTR zs_newvf(const char * fmt, va_list args);
 ZSTR zs_newsubs(const char * str, unsigned int len);
 void zs_free(ZSTR * pzstr);
 char * zs_str(ZSTR);

@@ -43,6 +43,7 @@
 
 #include "llinesi.h"
 #include "screen.h"
+#include "cscurses.h"
 
 /*********************************************
  * global/exported variables
@@ -280,15 +281,15 @@ show_indi_vitals (UIWINDOW uiwin, NODE pers, LLRECT rect
 	/* we keep putting lines out til we run out or exhaust our alloted
 	height */
 	localrow = row - *scroll;
-	mvwaddstr(win, row+0, 1, Spers);
+	mvccwaddstr(win, row+0, 1, Spers);
 	if (hgt==1) return;
-	mvwaddstr(win, row+1, 1, Sbirt);
+	mvccwaddstr(win, row+1, 1, Sbirt);
 	if (hgt==2) return;
-	mvwaddstr(win, row+2, 1, Sdeat);
+	mvccwaddstr(win, row+2, 1, Sdeat);
 	if (hgt==3) return;
-	mvwaddstr(win, row+3, 1, Sfath);
+	mvccwaddstr(win, row+3, 1, Sfath);
 	if (hgt==4) return;
-	mvwaddstr(win, row+4, 1, Smoth);
+	mvccwaddstr(win, row+4, 1, Smoth);
 	if (hgt==5) return;
 	for (i = *scroll; i < Solen && i < hgt-5+ *scroll; i++)
 	{
@@ -449,19 +450,19 @@ show_fam_vitals (UIWINDOW uiwin, NODE fam, INT row, INT hgt
 			*scroll = 0;
 	}
 	localrow = row - *scroll;
-	mvwaddstr(win, row+0, 1, Shusb);
+	mvccwaddstr(win, row+0, 1, Shusb);
 	if (hgt==1) return;
-	mvwaddstr(win, row+1, 1, Shbirt);
+	mvccwaddstr(win, row+1, 1, Shbirt);
 	if (hgt==2) return;
-	mvwaddstr(win, row+2, 1, Shdeat);
+	mvccwaddstr(win, row+2, 1, Shdeat);
 	if (hgt==3) return;
-	mvwaddstr(win, row+3, 1, Swife);
+	mvccwaddstr(win, row+3, 1, Swife);
 	if (hgt==4) return;
-	mvwaddstr(win, row+4, 1, Swbirt);
+	mvccwaddstr(win, row+4, 1, Swbirt);
 	if (hgt==5) return;
-	mvwaddstr(win, row+5, 1, Swdeat);
+	mvccwaddstr(win, row+5, 1, Swdeat);
 	if (hgt==6) return;
-	mvwaddstr(win, row+6, 1, Smarr);
+	mvccwaddstr(win, row+6, 1, Smarr);
 	for (i = *scroll; i < Solen && i < hgt-7+*scroll; i++)
 	{
 		overflow = ((i+1 == hgt-7+*scroll)&&(i+1 != Solen));
@@ -859,7 +860,7 @@ put_out_line (UIWINDOW uiwin, INT y, INT x, STRING string, INT maxcol, INT flag)
 		buffer[i++] = '+';
 		buffer[i++] = '\0';
 	}
-	mvwaddstr(win, y, x, buffer);
+	mvccwaddstr(win, y, x, buffer);
 }
 /*==================================================================
  * show_childnumbers - toggle display of numbers for children

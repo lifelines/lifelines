@@ -52,13 +52,15 @@ CNSTRING map_names[] = {
 
 /* a predefined conversion, such as editor-to-internal */
 struct conversion_s {
-	INT ttnum;
+	INT trnum;
+	CNSTRING key;
 	CNSTRING name;
 	INT zon_src;
 	INT zon_dest;
 	STRING * src_codeset;
 	STRING * dest_codeset;
 	XLAT xlat;
+	TRANTABLE tt_legacy;
 };
 /* a predefined codeset, such as editor */
 struct zone_s {
@@ -97,21 +99,23 @@ struct zone_s zones[] = {
 };
 
 struct conversion_s conversions[] = {
-	{ MEDIN, "Editor to Internal", ZON_EDI, ZON_INT, &editor_codeset_in, &int_codeset, 0 }
-	, { MINED, "Internal to Editor", ZON_INT, ZON_EDI, &int_codeset, &editor_codeset_out, 0 }
-	, { MGDIN, "GEDCOM to Internal", ZON_GED, ZON_INT, &gedcom_codeset_in, &int_codeset, 0 }
-	, { MINGD, "Internal to GEDCOM", ZON_INT, ZON_GED, &int_codeset, &gedcom_codeset_out, 0 }
-	, { MDSIN, "Display to Internal", ZON_GUI, ZON_INT, &gui_codeset_in, &int_codeset, 0 }
-	, { MINDS, "Internal to Display", ZON_INT, ZON_GUI, &int_codeset, &gui_codeset_out, 0 }
-	, { MRPIN, "Report to Internal ", ZON_RPT, ZON_INT, &report_codeset_in, &int_codeset, 0 }
-	, { MINRP, "Internal to Report", ZON_INT, ZON_RPT, &int_codeset, &report_codeset_out, 0 }
+	{ MEDIN, "MEDIN", "Editor to Internal", ZON_EDI, ZON_INT, &editor_codeset_in, &int_codeset, 0, 0 }
+	, { MINED, "MINED", "Internal to Editor", ZON_INT, ZON_EDI, &int_codeset, &editor_codeset_out, 0, 0 }
+	, { MGDIN, "MGDIN", "GEDCOM to Internal", ZON_GED, ZON_INT, &gedcom_codeset_in, &int_codeset, 0, 0 }
+	, { MINGD, "MINGD", "Internal to GEDCOM", ZON_INT, ZON_GED, &int_codeset, &gedcom_codeset_out, 0, 0 }
+	, { MDSIN, "MDSIN", "Display to Internal", ZON_GUI, ZON_INT, &gui_codeset_in, &int_codeset, 0, 0 }
+	, { MINDS, "MINDS", "Internal to Display", ZON_INT, ZON_GUI, &int_codeset, &gui_codeset_out, 0, 0 }
+	, { MRPIN, "MRPIN", "Report to Internal ", ZON_RPT, ZON_INT, &report_codeset_in, &int_codeset, 0, 0 }
+	, { MINRP, "MINRP", "Internal to Report", ZON_INT, ZON_RPT, &int_codeset, &report_codeset_out, 0, 0 }
 	/* These are all special-purpose translation tables, and maybe shouldn't even be here ? */
-	, { MSORT, "Custom Sort", ZON_X, ZON_X, 0, 0, 0 }
-	, { MCHAR, "Custom Charset", ZON_X, ZON_X, 0, 0, 0 }
-	, { MLCAS, "Custom Lowercase", ZON_X, ZON_X, 0, 0, 0 }
-	, { MUCAS, "Custom Uppercase", ZON_X, ZON_X, 0, 0, 0 }
-	, { MPREF, "Custom Prefix", ZON_X, ZON_X, 0, 0, 0 }
+	, { MSORT, "MSORT", "Custom Sort", ZON_X, ZON_X, 0, 0, 0, 0 }
+	, { MCHAR, "MCHAR", "Custom Charset", ZON_X, ZON_X, 0, 0, 0, 0 }
+	, { MLCAS, "MLCAS", "Custom Lowercase", ZON_X, ZON_X, 0, 0, 0, 0 }
+	, { MUCAS, "MUCAS", "Custom Uppercase", ZON_X, ZON_X, 0, 0, 0, 0 }
+	, { MPREF, "MPREF", "Custom Prefix", ZON_X, ZON_X, 0, 0, 0, 0 }
 };
+
+
 
 static INT conv_array[NUM_TT_MAPS];
 
@@ -381,12 +385,14 @@ transl_load_xlats (void)
 	for (i=0; i<NUM_TT_MAPS; ++i) {
 		STRING src, dest;
 		BOOLEAN adhoc = FALSE;
+		ASSERT(conversions[i].trnum == i);
 		if (!conversions[i].src_codeset)
 			continue;
 		ASSERT(conversions[i].dest_codeset);
 		src = *conversions[i].src_codeset;
 		dest = *conversions[i].dest_codeset;
 		conversions[i].xlat = xl_get_xlat(src, dest, adhoc);
+		init_map_from_rec(conversions[i].key, i, &conversions->tt_legacy);
 	}
 }
 /*==========================================================
@@ -407,7 +413,7 @@ free_xlat_ptrs (void)
 }
 /*==========================================================
  * load_conv_array -- Load up conv_array
- *  it is used to map a ttnum to a slot in the conversions array
+ *  it is used to map a trnum to a slot in the conversions array
  * Created: 2002/11/28 (Perry Rapp)
  *========================================================*/
 static void
@@ -418,10 +424,10 @@ load_conv_array (void)
 		conv_array[i] = -1;
 	}
 	for (i=0; i<NUM_TT_MAPS; ++i) {
-		INT ttnum = conversions[i].ttnum;
-		ASSERT(ttnum>=0 && ttnum<NUM_TT_MAPS);
-		ASSERT(conv_array[ttnum]==-1);
-		conv_array[ttnum]=i;
+		INT trnum = conversions[i].trnum;
+		ASSERT(trnum>=0 && trnum<NUM_TT_MAPS);
+		ASSERT(conv_array[trnum]==-1);
+		conv_array[trnum]=i;
 	}
 	for (i=0; i<NUM_TT_MAPS; ++i) {
 		ASSERT(conv_array[i] >= 0);
@@ -433,11 +439,11 @@ load_conv_array (void)
  * Created: 2002/11/28 (Perry Rapp)
  *========================================================*/
 XLAT
-transl_get_predefined_xlat (INT ttnum)
+transl_get_predefined_xlat (INT trnum)
 {
 	struct conversion_s * conv;
-	ASSERT(ttnum>=0 && ttnum<NUM_TT_MAPS);
-	conv = &conversions[conv_array[ttnum]];
+	ASSERT(trnum>=0 && trnum<NUM_TT_MAPS);
+	conv = &conversions[conv_array[trnum]];
 	return conv->xlat;
 }
 /*==========================================================

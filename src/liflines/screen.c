@@ -38,6 +38,7 @@
 #include "llinesi.h"
 #include "menuitem.h"
 #include "screen.h"
+#include "cscurses.h"
 #include "zstr.h"
 #ifdef WIN32_ICONV_SHIM
 #include "iconvshim.h"
@@ -366,28 +367,28 @@ repaint_main_menu (UIWINDOW uiwin)
 	if (width > ll_cols-4)
 		width = ll_cols-4;
 	llstrncpyf(title, width, uu8, _(qSmtitle), get_lifelines_version(ll_cols-4));
-	mvwaddstr(win, 1, 2, title);
-	mvwaddstr(win, 2, 4, _(qScright));
+	mvccwaddstr(win, 1, 2, title);
+	mvccwaddstr(win, 2, 4, _(qScright));
 	str = getoptint("FullDbPath", 1) ? readpath : readpath_file;
-	mvwprintw(win, 3, 4, _(qSdbname), str);
+	mvccwprintw(win, 3, 4, _(qSdbname), str);
 	if (immutable)
 		wprintw(win, _(qSdbimmut));
 	else if (readonly)
 		wprintw(win, _(qSdbrdonly));
 	row = 5;
 	/* i18n problem: the letters are not being read from the menu strings */
-	mvwaddstr(win, row++, 2, _(qSplschs));
-	mvwaddstr(win, row++, 4, _(qSmn_mmbrws));
-	mvwaddstr(win, row++, 4, _(qSmn_mmsear));
-	mvwaddstr(win, row++, 4, _(qSmn_mmadd));
-	mvwaddstr(win, row++, 4, _(qSmn_mmdel));
-	mvwaddstr(win, row++, 4, _(qSmn_mmprpt));
-	mvwaddstr(win, row++, 4, _(qSmn_mmrpt));
-	mvwaddstr(win, row++, 4, _(qSmn_mmtt));
-	mvwaddstr(win, row++, 4, _(qSmn_mmut));
-	mvwaddstr(win, row++, 4, _(qSmn_mmex));
-	mvwaddstr(win, row++, 4, _(qSmn_changedb));
-	mvwaddstr(win, row++, 4, _(qSmn_exit));
+	mvccwaddstr(win, row++, 2, _(qSplschs));
+	mvccwaddstr(win, row++, 4, _(qSmn_mmbrws));
+	mvccwaddstr(win, row++, 4, _(qSmn_mmsear));
+	mvccwaddstr(win, row++, 4, _(qSmn_mmadd));
+	mvccwaddstr(win, row++, 4, _(qSmn_mmdel));
+	mvccwaddstr(win, row++, 4, _(qSmn_mmprpt));
+	mvccwaddstr(win, row++, 4, _(qSmn_mmrpt));
+	mvccwaddstr(win, row++, 4, _(qSmn_mmtt));
+	mvccwaddstr(win, row++, 4, _(qSmn_mmut));
+	mvccwaddstr(win, row++, 4, _(qSmn_mmex));
+	mvccwaddstr(win, row++, 4, _(qSmn_changedb));
+	mvccwaddstr(win, row++, 4, _(qSmn_exit));
 }
 /*==============================================
  * paint_list_screen -- Paint list browse screen
@@ -404,20 +405,20 @@ paint_list_screen (void)
 	show_horz_line(uiwin, ll_lines-3, 0, ll_cols);
 	show_vert_line(uiwin, LIST_LINES+1, 52, 15);
 	mvwaddch(win, LIST_LINES+1, 52, gr_ttee);
-	mvwaddstr(win, LIST_LINES+2, 54, "Choose an operation:");
+	mvccwaddstr(win, LIST_LINES+2, 54, _("Choose an operation:"));
 	row = LIST_LINES+3; col = 55;
-	mvwaddstr(win, row++, col, _("j  Move down list"));
-	mvwaddstr(win, row++, col, _("k  Move up list"));
-	mvwaddstr(win, row++, col, _("e  Edit this person"));
-	mvwaddstr(win, row++, col, _("i  Browse this person"));
-	mvwaddstr(win, row++, col, _("m  Mark this person"));
-	mvwaddstr(win, row++, col, _("r  Remove from list"));
-	mvwaddstr(win, row++, col, _("t  Enter tandem mode"));
-	mvwaddstr(win, row++, col, _("n  Name this list"));
-	mvwaddstr(win, row++, col, _("b  Browse new persons"));
-	mvwaddstr(win, row++, col, _("a  Add to this list"));
-	mvwaddstr(win, row++, col, _("x  Swap mark/current"));
-	mvwaddstr(win, row++, col, _(qSmn_quit));
+	mvccwaddstr(win, row++, col, _("j  Move down list"));
+	mvccwaddstr(win, row++, col, _("k  Move up list"));
+	mvccwaddstr(win, row++, col, _("e  Edit this person"));
+	mvccwaddstr(win, row++, col, _("i  Browse this person"));
+	mvccwaddstr(win, row++, col, _("m  Mark this person"));
+	mvccwaddstr(win, row++, col, _("r  Remove from list"));
+	mvccwaddstr(win, row++, col, _("t  Enter tandem mode"));
+	mvccwaddstr(win, row++, col, _("n  Name this list"));
+	mvccwaddstr(win, row++, col, _("b  Browse new persons"));
+	mvccwaddstr(win, row++, col, _("a  Add to this list"));
+	mvccwaddstr(win, row++, col, _("x  Swap mark/current"));
+	mvccwaddstr(win, row++, col, _(qSmn_quit));
 }
 /*==========================================
  * create_uiwindow_impl -- Create our WINDOW wrapper
@@ -551,7 +552,7 @@ display_screen (INT new_screen)
 	if (!status_showing[0] || status_transitory)
 		place_std_msg();
 	else
-		mvwaddstr(win, ll_lines-2, 2, status_showing);
+		mvccwaddstr(win, ll_lines-2, 2, status_showing);
 	place_cursor();
 	switch_to_uiwin(uiwin);
 }
@@ -682,7 +683,7 @@ update_browse_menu (INT screen)
 			/* display line across */
 			show_horz_line(uiwin, dynmenu->top-2, 0, width);
 			/* display prompt */
-			mvwaddstr(win, dynmenu->top-1, dynmenu->left-1, prompt);
+			mvccwaddstr(win, dynmenu->top-1, dynmenu->left-1, prompt);
 			/* draw menu */
 			output_menu(uiwin, dynmenu);
 		}
@@ -999,8 +1000,8 @@ ask_for_string (STRING ttl, STRING prmpt, STRING buffer, INT buflen)
 	BOOLEAN rtn;
 	uierase(uiwin);
 	draw_win_box(win);
-	mvwaddstr(win, 1, 1, ttl);
-	mvwaddstr(win, 2, 1, prmpt);
+	mvccwaddstr(win, 1, 1, ttl);
+	mvccwaddstr(win, 2, 1, prmpt);
 	activate_uiwin(uiwin);
 	rtn = get_answer(uiwin, 2, strlen(prmpt) + 2, buffer, buflen);
 	deactivate_uiwin_and_touch_all();
@@ -1024,9 +1025,9 @@ ask_for_string2 (STRING ttl1, STRING ttl2, STRING prmpt, STRING buffer, INT bufl
 	BOOLEAN rtn;
 	uierase(uiwin);
 	draw_win_box(win);
-	mvwaddstr(win, 1, 1, ttl1);
-	mvwaddstr(win, 2, 1, ttl2);
-	mvwaddstr(win, 3, 1, prmpt);
+	mvccwaddstr(win, 1, 1, ttl1);
+	mvccwaddstr(win, 2, 1, ttl2);
+	mvccwaddstr(win, 3, 1, prmpt);
 	wrefresh(win);
 	activate_uiwin(uiwin);
 	rtn = get_answer(uiwin, 3, strlen(prmpt) + 2, buffer, buflen);
@@ -1091,9 +1092,9 @@ ask_for_char_msg (STRING msg, STRING ttl, STRING prmpt, STRING ptrn)
 	draw_win_box(win);
 	y = 1;
 	if (msg)
-		mvwaddstr(win, y++, 2, msg);
-	mvwaddstr(win, y++, 2, ttl);
-	mvwaddstr(win, y++, 2, prmpt);
+		mvccwaddstr(win, y++, 2, msg);
+	mvccwaddstr(win, y++, 2, ttl);
+	mvccwaddstr(win, y++, 2, prmpt);
 	wrefresh(win);
 	rv = interact(uiwin, ptrn, -1);
 	return rv;
@@ -1453,12 +1454,12 @@ resize_win: /* we come back here if we resize the window */
 	draw_win_box(win);
 	row = ld.rectMenu.top-1;
 	show_horz_line(ld.uiwin, row++, 0, uiw_cols(ld.uiwin));
-	mvwaddstr(win, row, ld.rectMenu.left, menu);
+	mvccwaddstr(win, row, ld.rectMenu.left, menu);
 	done = FALSE;
 	while (!done) {
 		INT code=0, ret=0;
 		print_list_title(fulltitle, sizeof(fulltitle), &ld, ttl);
-		mvwaddstr(win, 1, 1, fulltitle);
+		mvccwaddstr(win, 1, 1, fulltitle);
 		shw_popup_list(seq, &ld);
 		wmove(win, row, 11);
 		wrefresh(win);
@@ -1539,7 +1540,7 @@ draw_tt_win (STRING prompt)
 	uierase(uiwin);
 	draw_win_box(win);
 	row = 1;
-	mvwaddstr(win, row++, 2, prompt);
+	mvccwaddstr(win, row++, 2, prompt);
 	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_tt_edin), MEDIN);
 	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_tt_ined), MINED);
 	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_tt_gdin), MGDIN);
@@ -1547,7 +1548,7 @@ draw_tt_win (STRING prompt)
 	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_tt_dsin), MDSIN);
 	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_tt_inds), MINDS);
 	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_tt_inrp), MINRP);
-	mvwaddstr(win, row++, 4, _(qSmn_ret));
+	mvccwaddstr(win, row++, 4, _(qSmn_ret));
 }
 /*==============================
  * disp_trans_table_choice -- Display line in
@@ -1583,7 +1584,7 @@ disp_trans_table_choice (UIWINDOW uiwin, INT row, INT col, STRING menuit, INT in
 	else {
 		llstrcatn(&ptr, "     (None)", &mylen);
 	}
-	mvwaddstr(win, row, col, line);
+	mvccwaddstr(win, row, col, line);
 }
 /*==============================
  * invoke_fullscan_menu -- Handle fullscan menu
@@ -2303,7 +2304,7 @@ get_answer (UIWINDOW uiwin, INT row, INT col, STRING buffer, INT buflen)
 
 	echo();
 	wmove(win, row, col);
-	if (wgetnstr(win, buffer, buflen) != ERR)
+	if (wgetccnstr(win, buffer, buflen) != ERR)
 		rtn = TRUE;
 	noecho();
 	buffer[buflen-1] = 0; /* ensure zero-termination */
@@ -2321,10 +2322,10 @@ shw_popup_list (INDISEQ seq, listdisp * ld)
 	if (ld->details) {
 		INT row = ld->rectDetails.top-1;
 		clear_hseg(win, row, ld->rectDetails.left, ld->rectDetails.right);
-		mvwaddstr(win, row, 2, "--- CURRENT SELECTION ---");
+		mvccwaddstr(win, row, 2, _("--- CURRENT SELECTION ---"));
 		shw_recordlist_details(seq, ld);
 		row = ld->rectDetails.bottom+1;
-		mvwaddstr(win, row, ld->rectDetails.left, "--- LIST ---");
+		mvccwaddstr(win, row, ld->rectDetails.left, _("--- LIST ---"));
 	}
 	shw_recordlist_list(seq, ld);
 }
@@ -2366,7 +2367,7 @@ display_string (UIWINDOW uiwin, LLRECT rect, STRING text)
 		while (p2<str+max && text[0] && !islinebreak(text[0]))
 			*p2++ = *text++;
 		*p2 = 0;
-		mvwaddstr(win, row, rect->left, str);
+		mvccwaddstr(win, row, rect->left, str);
 		if (!text[0])
 			break;
 		else
@@ -2413,10 +2414,10 @@ shw_recordlist_list (INDISEQ seq, listdisp * ld)
 			if (ld->listlen < 10) {
 				char numstr[12];
 				sprintf(numstr, "%d:", i+1);
-				mvwaddstr(win, row, ld->rectList.left+4, numstr);
+				mvccwaddstr(win, row, ld->rectList.left+4, numstr);
 			}
 			print_indiseq_element(seq, i, buffer, width, &disp_shrt_rfmt);
-			mvwaddstr(win, row, ld->rectList.left+offset, buffer);
+			mvccwaddstr(win, row, ld->rectList.left+offset, buffer);
 		}
 	}
 }
@@ -2456,7 +2457,7 @@ manufacture a listdisp here
 	calc_indiseq_names(seq); /* we certainly need the names */
 	
 	for (i = LIST_LINES+2; i < LIST_LINES+2+viewlines; i++)
-		mvwaddstr(win, i, 1, empstr49);
+		mvccwaddstr(win, i, 1, empstr49);
 	row = LIST_LINES+2;
 	for (i = top, j = 0; j < viewlines && i < len; i++, j++) {
 		element_indiseq(seq, i, &key, &name);
@@ -2483,7 +2484,7 @@ manufacture a listdisp here
 			llstrapps(scratch, sizeof(scratch), uu8, " ");
 		}
 		llstrappf(scratch, sizeof(scratch), uu8, "(%s)", key_of_record(indi, ttmd));
-		mvwaddstr(win, row, 4, scratch);
+		mvccwaddstr(win, row, 4, scratch);
 		row++;
 	}
 }
@@ -2546,12 +2547,12 @@ shw_array_of_strings (STRING *strings, listdisp * ld, DETAILFNC detfnc
 	for (i = 0; i<lines; ++i) {
 		row = i+2;
 		llstrncpy(buffer, empstr120, width-1, uu8);
-		mvwaddstr(win, row, 1, buffer);
+		mvccwaddstr(win, row, 1, buffer);
 	}
 	row = 2;
 	if (ld->details) {
 		row = 3+ld->details;
-		mvwaddstr(win, row++, 2, "--- LIST ---");
+		mvccwaddstr(win, row++, 2, _("--- LIST ---"));
 	}
 	for (j=0; j<rows;++j) {
 		INT nlen=0,temp;
@@ -2563,7 +2564,7 @@ shw_array_of_strings (STRING *strings, listdisp * ld, DETAILFNC detfnc
 			char numstr[12]="";
 			llstrncpyf(numstr, sizeof(numstr), uu8, "%d: ", i+1);
 			if (i == ld->cur) mvwaddch(win, row, 3, '>');
-			mvwaddstr(win, row, 4, numstr);
+			mvccwaddstr(win, row, 4, numstr);
 			nlen = strlen(numstr);
 		} else {
 			if (i == ld->cur) mvwaddch(win, row, 3, '>');
@@ -2575,19 +2576,19 @@ shw_array_of_strings (STRING *strings, listdisp * ld, DETAILFNC detfnc
 				overflag=TRUE;
 			strcpy(&buffer[temp-3], "...");
 		}
-		mvwaddstr(win, row, 4+nlen, buffer);
+		mvccwaddstr(win, row, 4+nlen, buffer);
 		row++;
 	}
 	if (ld->details) {
 		STRING ptr = strings[ld->cur];
 		INT count;
 		row = 2;
-		mvwaddstr(win, row++, 2, "-- CURRENT SELECTION --");
+		mvccwaddstr(win, row++, 2, _("-- CURRENT SELECTION --"));
 		for (i=0; i<ld->details; ++i) {
 			/* TODO: scroll */
 			if (!ptr[0]) break;
 			llstrncpy(buffer, ptr, width-5, uu8);
-			mvwaddstr(win, row++, 4, buffer);
+			mvccwaddstr(win, row++, 4, buffer);
 			ptr += strlen(buffer);
 		}
 		count = ld->details-1;
@@ -2608,7 +2609,7 @@ shw_array_of_strings (STRING *strings, listdisp * ld, DETAILFNC detfnc
 			dets.maxlen = width;
 			(*detfnc)(&dets, param);
 			for (j=0 ; j<count; ++j) {
-				mvwaddstr(win, row++, 4, linestr[j]);
+				mvccwaddstr(win, row++, 4, linestr[j]);
 			}
 			for (j=0; j<count; ++j)
 				stdfree(linestr[j]);
@@ -2678,12 +2679,12 @@ resize_win: /* we come back here if we resize the window */
 	draw_win_box(win);
 	row = ld.rectMenu.top-1;
 	show_horz_line(ld.uiwin, row++, 0, uiw_cols(ld.uiwin));
-	mvwaddstr(win, row, ld.rectMenu.left, promptline);
+	mvccwaddstr(win, row, ld.rectMenu.left, promptline);
 	done = FALSE;
 	while (!done) {
 		INT code=0, ret=0;
 		print_list_title(fulltitle, sizeof(fulltitle), &ld, _(ttl));
-		mvwaddstr(win, 1, 1, fulltitle);
+		mvccwaddstr(win, 1, 1, fulltitle);
 		shw_array_of_strings(strings, &ld, detfnc, param);
 		wrefresh(win);
 		code = interact(ld.uiwin, responses, -1);
@@ -2748,7 +2749,7 @@ place_std_msg (void)
 	STRING str = message_string();
 	INT row = ll_lines-2;
 	clear_hseg(win, row, 2, ll_cols-2);
-	mvwaddstr(win, row, 2, str);
+	mvccwaddstr(win, row, 2, str);
 	/* now we need to repaint main window, but if there are
 	subwindows up, instead we call the touch_all routine,
 	which does them all from ancestor to descendant */
@@ -2771,10 +2772,10 @@ llvwprintf (STRING fmt, va_list args)
 			clearw();
 			activate_uiwin(uiwin);
 		}
-		vwprintw(win, fmt, args);
+		vccwprintw(win, fmt, args);
 		wrefresh(win);
 	} else {
-		vprintf(fmt, args);
+		vccprintf(fmt, args);
 	}
 	/*
 	TO DO
@@ -2793,7 +2794,6 @@ void
 llwprintf (STRING fmt, ...)
 {
 	va_list args;
-
 	va_start(args, fmt);
 	llvwprintf(fmt, args);
 	va_end(args);
@@ -2822,7 +2822,7 @@ wfield (INT row, INT col, STRING str)
 	UIWINDOW uiwin = stdout_win;
 	WINDOW *win = uiw_win(uiwin);
 	if (!stdout_vis) clearw();
-	mvwaddstr(win, row, col, str);
+	mvccwaddstr(win, row, col, str);
 	wrefresh(win);
 }
 /*===========================================
@@ -2890,7 +2890,7 @@ dbprintf (STRING fmt, ...)
 	va_list args;
 	touchwin(uiw_win(debug_box_win));
 	va_start(args, fmt);
-	vwprintw(uiw_win(debug_win), fmt, args);
+	vccwprintw(uiw_win(debug_win), fmt, args);
 	va_end(args);
 	wrefresh(uiw_win(debug_box_win));
 	sleep(2);
@@ -2923,13 +2923,13 @@ mvwaddstr_lim (WINDOW *wp, int x, int y, char *cp, INT maxlen)
 {
 	char buffer[60];
 	if ((INT)strlen(cp)<=maxlen)
-		mvwaddstr(wp, x, y, cp);
+		mvccwaddstr(wp, x, y, cp);
 	else {
 		if (maxlen > (INT)sizeof(buffer)-1)
 			maxlen = sizeof(buffer)-1;
 		llstrncpy(buffer, cp, maxlen-1, uu8);
 		strcat(buffer, "*");
-		mvwaddstr(wp, x, y, buffer);
+		mvccwaddstr(wp, x, y, buffer);
 	}
 }
 /*================================================
@@ -3112,7 +3112,7 @@ display_status (STRING text)
 	row = ll_lines-2;
 	clear_hseg(win, row, 2, ll_cols-2);
 	wmove(win, row, 2);
-	mvwaddstr(win, row, 2, status_showing);
+	mvccwaddstr(win, row, 2, status_showing);
 	place_cursor();
 	wrefresh(win);
 }
@@ -3324,12 +3324,12 @@ repaint_add_menu (UIWINDOW uiwin)
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
 	draw_win_box(win);
-	mvwaddstr(win, row++, 2, _(qSmn_add_ttl));
-	mvwaddstr(win, row++, 4, _(qSmn_add_indi));
-	mvwaddstr(win, row++, 4, _(qSmn_add_fam));
-	mvwaddstr(win, row++, 4, _(qSmn_add_chil));
-	mvwaddstr(win, row++, 4, _(qSmn_add_spou));
-	mvwaddstr(win, row++, 4, _(qSmn_ret));
+	mvccwaddstr(win, row++, 2, _(qSmn_add_ttl));
+	mvccwaddstr(win, row++, 4, _(qSmn_add_indi));
+	mvccwaddstr(win, row++, 4, _(qSmn_add_fam));
+	mvccwaddstr(win, row++, 4, _(qSmn_add_chil));
+	mvccwaddstr(win, row++, 4, _(qSmn_add_spou));
+	mvccwaddstr(win, row++, 4, _(qSmn_ret));
 }
 /*=====================================
  * repaint_delete_menu -- Draw menu choices for main delete item menu
@@ -3340,12 +3340,12 @@ repaint_delete_menu (UIWINDOW uiwin)
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
 	draw_win_box(win);
-	mvwaddstr(win, row++, 2, _(qSmn_del_ttl));
-	mvwaddstr(win, row++, 4, _(qSmn_del_chil));
-	mvwaddstr(win, row++, 4, _(qSmn_del_spou));
-	mvwaddstr(win, row++, 4, _(qSmn_del_indi));
-	mvwaddstr(win, row++, 4, _(qSmn_del_fam));
-	mvwaddstr(win, row++, 4, _(qSmn_ret));
+	mvccwaddstr(win, row++, 2, _(qSmn_del_ttl));
+	mvccwaddstr(win, row++, 4, _(qSmn_del_chil));
+	mvccwaddstr(win, row++, 4, _(qSmn_del_spou));
+	mvccwaddstr(win, row++, 4, _(qSmn_del_indi));
+	mvccwaddstr(win, row++, 4, _(qSmn_del_fam));
+	mvccwaddstr(win, row++, 4, _(qSmn_ret));
 }
 /*=====================================
  * repaint_fullscan_menu -- Draw menu choices for main full scan menu
@@ -3356,11 +3356,11 @@ repaint_fullscan_menu (UIWINDOW uiwin)
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
 	draw_win_box(win);
-	mvwaddstr(win, row++, 2, _(qSmn_sca_ttl));
-	mvwaddstr(win, row++, 4, _(qSmn_sca_nmfu));
-	mvwaddstr(win, row++, 4, _(qSmn_sca_nmfr));
-	mvwaddstr(win, row++, 4, _(qSmn_sca_refn));
-	mvwaddstr(win, row++, 4, _(qSmn_ret));
+	mvccwaddstr(win, row++, 2, _(qSmn_sca_ttl));
+	mvccwaddstr(win, row++, 4, _(qSmn_sca_nmfu));
+	mvccwaddstr(win, row++, 4, _(qSmn_sca_nmfr));
+	mvccwaddstr(win, row++, 4, _(qSmn_sca_refn));
+	mvccwaddstr(win, row++, 4, _(qSmn_ret));
 }
 /*=====================================
  * repaint_search_menu -- Draw menu for main history/scan menu
@@ -3373,7 +3373,7 @@ repaint_search_menu (UIWINDOW uiwin)
 	INT n = 0;
 	char buffer[80];
 	draw_win_box(win);
-	mvwaddstr(win, row++, 2, _(qSmn_sea_ttl));
+	mvccwaddstr(win, row++, 2, _(qSmn_sea_ttl));
 	n = get_vhist_len();
 	if (n>0) {
 		llstrncpyf(buffer, sizeof(buffer), uu8
@@ -3381,9 +3381,9 @@ repaint_search_menu (UIWINDOW uiwin)
 			, "v  Review visit history (%d records)"
 			, n), n);
 	} else {
-		llstrncpy(buffer, "(visit history is empty)", sizeof(buffer), uu8);
+		llstrncpy(buffer, _("(visit history is empty)"), sizeof(buffer), uu8);
 	}
-	mvwaddstr(win, row++, 4, buffer);
+	mvccwaddstr(win, row++, 4, buffer);
 	n = get_chist_len();
 	if (n>0) {
 		llstrncpyf(buffer, sizeof(buffer), uu8
@@ -3393,9 +3393,9 @@ repaint_search_menu (UIWINDOW uiwin)
 	} else {
 		llstrncpy(buffer, "(change history is empty)", sizeof(buffer), uu8);
 	}
-	mvwaddstr(win, row++, 4, buffer);
-	mvwaddstr(win, row++, 4, _(qSmn_sea_scan));
-	mvwaddstr(win, row++, 4, _(qSmn_ret));
+	mvccwaddstr(win, row++, 4, buffer);
+	mvccwaddstr(win, row++, 4, _(qSmn_sea_scan));
+	mvccwaddstr(win, row++, 4, _(qSmn_ret));
 }
 /*=====================================
  * repaint_utils_menu -- 
@@ -3406,18 +3406,18 @@ repaint_utils_menu (UIWINDOW uiwin)
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
 	draw_win_box(win);
-	mvwaddstr(win, row++, 2, _(qSmn_uttl));
-	mvwaddstr(win, row++, 4, _(qSmn_utsave));
-	mvwaddstr(win, row++, 4, _(qSmn_utread));
-	mvwaddstr(win, row++, 4, _(qSmn_utgdchoo));
-	mvwaddstr(win, row++, 4, _(qSmn_utkey));
-	mvwaddstr(win, row++, 4, _(qSmn_utkpers));
-	mvwaddstr(win, row++, 4, _(qSmn_utdbstat));
-	mvwaddstr(win, row++, 4, _(qSmn_utmemsta));
-	mvwaddstr(win, row++, 4, _(qSmn_utplaces));
-	mvwaddstr(win, row++, 4, _(qSmn_utusropt));
-	mvwaddstr(win, row++, 4, _(qSmn_mmcset));
-	mvwaddstr(win, row++, 4, _(qSmn_quit));
+	mvccwaddstr(win, row++, 2, _(qSmn_uttl));
+	mvccwaddstr(win, row++, 4, _(qSmn_utsave));
+	mvccwaddstr(win, row++, 4, _(qSmn_utread));
+	mvccwaddstr(win, row++, 4, _(qSmn_utgdchoo));
+	mvccwaddstr(win, row++, 4, _(qSmn_utkey));
+	mvccwaddstr(win, row++, 4, _(qSmn_utkpers));
+	mvccwaddstr(win, row++, 4, _(qSmn_utdbstat));
+	mvccwaddstr(win, row++, 4, _(qSmn_utmemsta));
+	mvccwaddstr(win, row++, 4, _(qSmn_utplaces));
+	mvccwaddstr(win, row++, 4, _(qSmn_utusropt));
+	mvccwaddstr(win, row++, 4, _(qSmn_mmcset));
+	mvccwaddstr(win, row++, 4, _(qSmn_quit));
 }
 /*=====================================
  * repaint_extra_menu -- 
@@ -3428,17 +3428,17 @@ repaint_extra_menu (UIWINDOW uiwin)
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
 	draw_win_box(win);
-	mvwaddstr(win, row++, 2, _(qSmn_xttl));
-	mvwaddstr(win, row++, 4, _(qSmn_xxbsour));
-	mvwaddstr(win, row++, 4, _(qSmn_xxbeven));
-	mvwaddstr(win, row++, 4, _(qSmn_xxbothr));
-	mvwaddstr(win, row++, 4, _(qSmn_xxasour));
-	mvwaddstr(win, row++, 4, _(qSmn_xxesour));
-	mvwaddstr(win, row++, 4, _(qSmn_xxaeven));
-	mvwaddstr(win, row++, 4, _(qSmn_xxeeven));
-	mvwaddstr(win, row++, 4, _(qSmn_xxaothr));
-	mvwaddstr(win, row++, 4, _(qSmn_xxeothr));
-	mvwaddstr(win, row++, 4, _(qSmn_quit));
+	mvccwaddstr(win, row++, 2, _(qSmn_xttl));
+	mvccwaddstr(win, row++, 4, _(qSmn_xxbsour));
+	mvccwaddstr(win, row++, 4, _(qSmn_xxbeven));
+	mvccwaddstr(win, row++, 4, _(qSmn_xxbothr));
+	mvccwaddstr(win, row++, 4, _(qSmn_xxasour));
+	mvccwaddstr(win, row++, 4, _(qSmn_xxesour));
+	mvccwaddstr(win, row++, 4, _(qSmn_xxaeven));
+	mvccwaddstr(win, row++, 4, _(qSmn_xxeeven));
+	mvccwaddstr(win, row++, 4, _(qSmn_xxaothr));
+	mvccwaddstr(win, row++, 4, _(qSmn_xxeothr));
+	mvccwaddstr(win, row++, 4, _(qSmn_quit));
 }
 /*============================
  * activate_uiwin -- 

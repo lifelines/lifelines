@@ -279,7 +279,7 @@ xl_do_xlat (XLAT xlat, ZSTR * pzstr)
 {
 	BOOLEAN cvtd=FALSE;
 	struct xlat_step_s * xstep=0;
-	if (!xlat) return cvtd;
+	if (!xlat || !xlat->steps) return cvtd;
 	/* simply cycle through & perform each step */
 	FORLIST(xlat->steps, el)
 		xstep = (struct xlat_step_s *)el;
@@ -404,7 +404,7 @@ select_tts (const struct dirent *entry)
 {
 	INT tlen = strlen(entry->d_name);
 	CNSTRING entext;
-	if (tlen < sizeof(f_ttext)) return 0;
+	if (tlen < (INT)sizeof(f_ttext)) return 0;
 
 	/* examine end of entry->d_name */
 	entext = entry->d_name + tlen - (sizeof(f_ttext)-1);

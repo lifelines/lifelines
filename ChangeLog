@@ -4,6 +4,15 @@
 
 	Change nth_in_list to count from front (so dblist is in order).
 
+	* ChangeLog src/gedlib/charmaps.c src/gedlib/translat.c
+	src/gedlib/xlat.c src/hdrs/Makefile.am src/hdrs/screen.h
+	src/hdrs/translat.h src/hdrs/zstr.h src/liflines/Makefile.am
+	src/liflines/screen.c src/liflines/show.c src/stdlib/zstr.c
+	*NEW src/hdrs/cscurses.h
+	*NEW src/liflines/cscurses.c:
+
+	New cscurses.* module to translate between internal & GUI codesets.
+
 2002-12-02 Perry Rapp
 
 	* ChangeLog
