@@ -1,3 +1,9 @@
+2001-01-07 Perry Rapp <puddle@users.sourceforge.net>
+
+	* gedlib/gengedc.c gedlib/indiseq.c hdrs/gedcom.h hdrs/indiseq.h
+	interp/intrpseq.c liflines/lbrowse.c liflines/scan.c:
+	Stored value type in indiseqs.
+
 2001-01-07 Petter Reinholdtsen <pere@td.org.uit.no>
 
 	* tools/dbverify.c: Fix typo.
