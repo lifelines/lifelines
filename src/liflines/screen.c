@@ -32,6 +32,9 @@
  *   3.0.2 - 25 Mar 95    3.0.3 - 17 Jan 96
  *===========================================================*/
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 #include "sys_inc.h"
 #include <stdarg.h>
 #ifdef HAVE_LOCALE_H
