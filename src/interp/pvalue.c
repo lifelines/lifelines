@@ -68,7 +68,7 @@ static void table_pvcleaner(ENTRY ent);
 static char *ptypes[] = {
 	"PNONE", "PANY", "PINT", "PLONG", "PFLOAT", "PBOOL", "PSTRING",
 	"PGNODE", "PINDI", "PFAM", "PSOUR", "PEVEN", "POTHR", "PLIST",
-	"PTABLE", "PSET"
+	"PTABLE", "PSET", "PARRAY"
 };
 static struct tag_vtable vtable_for_pvalue = {
 	VTABLE_MAGIC
@@ -106,8 +106,9 @@ create_pvalue (INT type, VPTR value)
 void
 set_pvalue (PVALUE val, INT type, VPTR value)
 {
-	if (type == ptype(val) && value == pvalue(val)) {
+	if (type == ptype(val) && value == pvalvv(val)) {
 		/* self-assignment */
+		/* (Perry: 2003-12-09) For reference counted types, don't we need to fall through ? */
 		return;
 	}
 
@@ -170,7 +171,7 @@ set_pvalue (PVALUE val, INT type, VPTR value)
 	}
 
 	ptype(val) = type;
-	pvalue(val) = value;
+	pvalvv(val) = value;
 
 	/* reference counted types and so forth */
 	switch(type) {
@@ -244,7 +245,7 @@ clear_pvalue (PVALUE val)
 	switch (ptype(val)) {
 	/*
 	embedded values have no referenced memory to clear
-	PINT, PBOOLEAN  (PLONG is unused)
+	PINT, PBOOLEAN 
 	*/
 	/*
 	PANY is a null value
@@ -355,16 +356,21 @@ delete_vptr_pvalue (VPTR ptr)
 	delete_pvalue(val);
 }
 /*========================================
- * delete_pvalue_wrapper -- Delete the pvalue
- * shell, but not the value inside
- * Created: 2003-02-02 (Perry Rapp)
+ * remove_node_and_delete_pvalue -- Remove
+ *  node inside pvalue, and delete pvalue
  *======================================*/
-void
-delete_pvalue_wrapper (PVALUE val)
+NODE
+remove_node_and_delete_pvalue (PVALUE * pval)
 {
-	if (!val) return;
-	pvalue(val) = 0; /* remove pointer to payload */
-	delete_pvalue(val);
+	NODE node=0;
+	if (*pval) {
+		PVALUE vl= *pval;
+		node = pvalue_to_node(vl);
+		pvalvv(vl) = 0; /* remove pointer to payload */
+		delete_pvalue(vl);
+	}
+	*pval = 0;
+	return node;
 }
 /*========================================
  * delete_pvalue -- Delete a program value
@@ -392,13 +398,14 @@ delete_pvalue_ptr (PVALUE * valp)
 /*====================================
  * copy_pvalue -- Create a new pvalue & copy into it
  *  handles NULL
+ * delegates all the real work to create_pvalue
  *==================================*/
 PVALUE
 copy_pvalue (PVALUE val)
 {
 	if (!val)
 		return NULL;
-	return create_pvalue(ptype(val), pvalue(val));
+	return create_pvalue(ptype(val), pvalvv(val));
 }
 /*=====================================================
  * create_pvalue_from_indi -- Return indi as pvalue
@@ -543,7 +550,7 @@ create_pvalue_from_keynum_impl (INT i, INT ptype)
 static void
 free_float_pvalue (PVALUE val)
 {
-	float *ptr = (float *)pvalue(val);
+	float *ptr = (float *)pvalvv(val);
 	stdfree(ptr);
 }
 /*==================================
@@ -577,14 +584,14 @@ eq_conform_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 
 	ASSERT(val1 && val2);
 	if (ptype(val1) == ptype(val2)) return;
-	if (ptype(val1) == PANY && pvalue(val1) == NULL)
+	if (ptype(val1) == PANY)
 		ptype(val1) = ptype(val2);
-	if (ptype(val2) == PANY && pvalue(val2) == NULL)
+	if (ptype(val2) == PANY)
 		ptype(val2) = ptype(val1);
 	if (ptype(val1) == ptype(val2)) return;
-	if (ptype(val1) == PINT && pvalue(val1) == 0 && !is_numeric_pvalue(val2))
+	if (ptype(val1) == PINT && pvalue_to_int(val1) == 0 && !is_numeric_pvalue(val2))
 		ptype(val1) = ptype(val2);
-	if (ptype(val2) == PINT && pvalue(val2) == 0 && !is_numeric_pvalue(val1))
+	if (ptype(val2) == PINT && pvalue_to_int(val2) == 0 && !is_numeric_pvalue(val1))
 		ptype(val2) = ptype(val1);
 	if (ptype(val1) == ptype(val2)) return;
 	if (is_numeric_pvalue(val1) && is_numeric_pvalue(val2)) {
@@ -611,7 +618,7 @@ coerce_pvalue (INT type, PVALUE val, BOOLEAN *eflg)
 
 	if (type == PBOOL) {
 		/* Anything is convertible to PBOOL */
-		BOOLEAN boo = (pvalue(val) != NULL);
+		BOOLEAN boo = (pvalvv(val) != NULL);
 		set_pvalue_bool(val, boo);
 		return;
 	}
@@ -625,7 +632,7 @@ coerce_pvalue (INT type, PVALUE val, BOOLEAN *eflg)
 	}
 
 	/* PANY or PINT with NULL (0) value is convertible to any scalar (1995.07.31) */
-	if ((ptype(val) == PANY || ptype(val) == PINT) && pvalue(val) == NULL) {
+	if (ptype(val) == PANY || (ptype(val) == PINT && pvalue_to_int(val) == 0)) {
 		if (type == PSET || type == PTABLE || type == PLIST) goto bad;
 		/*
 		  INTs convert to FLOATs numerically further down, no special 
@@ -756,18 +763,25 @@ eqv_pvalues (VPTR ptr1, VPTR ptr2)
 	BOOLEAN rel = FALSE;
 	if(val1 && val2 && (ptype(val1) == ptype(val2))) {
 		switch (ptype(val1)) {
+		/* types with value semantics do value comparison */
 		case PSTRING:
-			v1 = pvalue(val1);
-			v2 = pvalue(val2);
+			v1 = pvalue_to_string(val1);
+			v2 = pvalue_to_string(val2);
 			if(v1 && v2) rel = eqstr(v1, v2);
 			else rel = (v1 == v2);
 			break;
 		case PFLOAT:
 			rel = (pvalue_to_float(val1) == pvalue_to_float(val2));
 			break;
+		case PINT:
+			rel = (pvalue_to_int(val1) == pvalue_to_int(val2));
+			break;
+		case PBOOL:
+			rel = (pvalue_to_bool(val1) == pvalue_to_bool(val2));
+			break;
 		/* for everything else, just compare value pointer */
 		default:
-			rel = (pvalue(val1) == pvalue(val2));
+			rel = (pvalvv(val1) == pvalvv(val2));
 			break;
 		}
 	}
@@ -797,7 +811,8 @@ bad_type_error (CNSTRING op, ZSTR *zerr, PVALUE val1, PVALUE val2)
 static BOOLEAN
 eq_pstrings (PVALUE val1, PVALUE val2)
 {
-	STRING str1 = pvalue(val1), str2 = pvalue(val2);
+	STRING str1 = pvalue_to_string(val1);
+	STRING str2 = pvalue_to_string(val2);
 	if (!str1) str1 = "";
 	if (!str2) str2 = "";
 	return eqstr(str1, str2);
@@ -817,18 +832,9 @@ eq_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 		bad_type_error("eq", zerr, val1, val2);
 		return;
 	}
-	switch (ptype(val1)) {
-	case PSTRING:
-		rel = eq_pstrings(val1, val2);
-		break;
-	case PFLOAT:
-		rel = (pvalue_to_float(val1) == pvalue_to_float(val2));
-		break;
-		/* for everything else, just compare value pointer */
-	default:
-		rel = (pvalue(val1) == pvalue(val2));
-		break;
-	}
+	rel = eqv_pvalues(val1, val2);
+
+	/* Now store answer into val1, and delete val2 */
 	set_pvalue_bool(val1, rel);
 	delete_pvalue(val2);
 }
@@ -847,17 +853,9 @@ ne_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 		bad_type_error("ne", zerr, val1, val2);
 		return;
 	}
-	switch (ptype(val1)) {
-	case PSTRING:
-		rel = !eq_pstrings(val1, val2);
-		break;
-	case PFLOAT:
-		rel = (pvalue_to_float(val1) != pvalue_to_float(val2));
-		break;
-	default:
-		rel = (pvalue(val1) != pvalue(val2));
-		break;
-	}
+	rel = !eqv_pvalues(val1, val2);
+
+	/* Now store answer into val1, and delete val2 */
 	set_pvalue_bool(val1, rel);
 	delete_pvalue(val2);
 }
@@ -893,7 +891,7 @@ describe_pvalue (PVALUE val)
 	zs_appc(zstr, '<');
 	zs_apps(zstr, ptypes[type]);
 	zs_appc(zstr, ',');
-	if (pvalue(val) == NULL) {
+	if (pvalvv(val) == NULL) {
 		zs_apps(zstr, "NULL>");
 		return zstr;
 	}
@@ -908,13 +906,16 @@ describe_pvalue (PVALUE val)
 		zs_appf(zstr, "\"%s\"", pvalue_to_string(val));
 		break;
 	case PINDI:
+	case PFAM:
+	case PSOUR:
+	case PEVEN:
+	case POTHR:
 		{
-			CACHEEL cel = (CACHEEL) pvalue(val);
-			NODE node = cacheel_to_node(cel);
-			STRING nam;
-			node = NAME(node);
-			nam = node ? nval(node) : _("{NoName}");
-			zs_appf(zstr, nam);
+			RECORD rec = pvalue_to_rec(val);
+			if (rec)
+				zs_appf(zstr, nzkey(rec));
+			else
+				zs_appf(zstr, "NULL");
 		}
 		break;
 	case PLIST:
@@ -938,8 +939,15 @@ describe_pvalue (PVALUE val)
 			zs_appf(zstr, _pl("%d record", "%d records", n), n);
 		}
 		break;
+	case PARRAY:
+		{
+			ARRAY arr = pvalue_to_array(val);
+			INT n = get_array_size(arr);
+			zs_appf(zstr, _pl("%d element", "%d elements", n), n);
+		}
+		break;
 	default:
-		zs_appf(zstr, "%p", pvalue(val));
+		zs_appf(zstr, "%p", pvalvv(val));
 		break;
 	}
 	zs_appc(zstr, '>');
@@ -969,7 +977,7 @@ set_pvalue_bool (PVALUE val, BOOLEAN bnum)
 BOOLEAN
 pvalue_to_bool (PVALUE val)
 {
-	return (BOOLEAN)pvalue(val);
+	return (BOOLEAN)pvalvv(val);
 }
 /*==================================
  * PFLOAT: pvalue containing a float
@@ -990,14 +998,14 @@ float
 pvalue_to_float (PVALUE val)
 {
 	/* TODO: change when ptag goes to UNION */
-	return *(float*)pvalue(val);
+	return *(float*)pvalvv(val);
 }
 float*
 pvalue_to_pfloat (PVALUE val)
 {
 	/* convenience for math */
 	/* TODO: change when ptag goes to UNION */
-	return (float*)pvalue(val);
+	return (float*)pvalvv(val);
 }
 /*==================================
  * PGNODE: pvalue containing a GEDCOM node
@@ -1015,7 +1023,7 @@ set_pvalue_node (PVALUE val, NODE node)
 NODE
 pvalue_to_node (PVALUE val)
 {
-	return (NODE)pvalue(val);
+	return (NODE)pvalvv(val);
 }
 /*==================================
  * PINT: pvalue containing an int
@@ -1033,13 +1041,13 @@ set_pvalue_int (PVALUE val, INT inum)
 INT
 pvalue_to_int (PVALUE val)
 {
-	return (INT)pvalue(val);
+	return (INT)pvalvv(val);
 }
 INT*
 pvalue_to_pint (PVALUE val)
 {
 	/* convenience for math */
-	return (INT *)&pvalue(val);
+	return (INT *)&pvalvv(val);
 }
 /*==================================
  * ARRAY: pvalue containing an array
@@ -1047,7 +1055,7 @@ pvalue_to_pint (PVALUE val)
 ARRAY
 pvalue_to_array (PVALUE val)
 {
-	return (ARRAY)pvalue(val);
+	return (ARRAY)pvalvv(val);
 }
 /*==================================
  * LIST: pvalue containing a list
@@ -1055,7 +1063,7 @@ pvalue_to_array (PVALUE val)
 LIST
 pvalue_to_list (PVALUE val)
 {
-	return (LIST)pvalue(val);
+	return (LIST)pvalvv(val);
 }
 /*==================================
  * record pvalues (PINDI, PFAM, ...)
@@ -1063,7 +1071,7 @@ pvalue_to_list (PVALUE val)
 RECORD
 pvalue_to_rec (PVALUE val)
 {
-	RECORD rec = pvalue(val); /* may be NULL */
+	RECORD rec = pvalvv(val); /* may be NULL */
 	ASSERT(is_record_pvalue(val));
 	return rec;
 }
@@ -1086,7 +1094,7 @@ create_pvalue_from_set (INDISEQ seq)
 INDISEQ
 pvalue_to_seq (PVALUE val)
 {
-	return (INDISEQ)pvalue(val);
+	return (INDISEQ)pvalvv(val);
 }
 /*==================================
  * PSTRING: pvalue containing a string
@@ -1104,12 +1112,12 @@ set_pvalue_string (PVALUE val, CNSTRING str)
 STRING
 pvalue_to_string (PVALUE val)
 {
-	return (STRING)pvalue(val);
+	return (STRING)pvalvv(val);
 }
 TABLE
 pvalue_to_table (PVALUE val)
 {
-	return (TABLE)pvalue(val);
+	return (TABLE)pvalvv(val);
 }
 /*========================================
  * init_pvalue_vtable -- set vtable (for allocator in pvalalloc.c)

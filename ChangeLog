@@ -1,3 +1,15 @@
+2003-12-10 Perry Rapp
+
+	* ChangeLog src/hdrs/pvalue.h src/interp/pvalalloc.c
+	src/interp/pvalmath.c src/interp/pvalue.c src/interp/write.c
+
+	Rename is_zero to is_numeric_zero, and ASSERT if nonnumeric input.
+	Rename pvalue() macro to pvalvv (for greppability).
+	Replace delete_pvalue_wrapper with remove_node_and_delete_pvalue.
+	Fix eqv_pvalues for PBOOL. Remove unused PLONG.
+	Fix how describe_pvalue handles indis, add handling for all records
+	and arrays.
+
 2003-12-03 Perry Rapp
 
 	* ChangeLog src/hdrs/pvalue.h src/interp/builtin.c

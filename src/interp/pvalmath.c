@@ -145,7 +145,7 @@ div_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 	if (*eflg) return;
 	num_conform_pvalues("div", val1, val2, eflg, zerr);
 	if (*eflg) return;
-	if (is_zero(val2)) { illegal_value("div", val2, eflg, zerr); return; }
+	if (is_numeric_zero(val2)) { illegal_value("div", val2, eflg, zerr); return; }
 	switch (ptype(val1)) {
 	case PINT:   *pvalue_to_pint(val1) /= pvalue_to_int(val2); break;
 	case PFLOAT: *pvalue_to_pfloat(val1) /= pvalue_to_float(val2); break;
@@ -162,7 +162,7 @@ mod_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 	if (*eflg) return;
 	num_conform_pvalues("mod", val1, val2, eflg, zerr);
 	if (*eflg) return;
-	if (is_zero(val2)) { illegal_value("mod", val2, eflg, zerr); return; }
+	if (is_numeric_zero(val2)) { illegal_value("mod", val2, eflg, zerr); return; }
 	switch (ptype(val1)) {
 	case PINT:
 		{
@@ -343,17 +343,18 @@ neg_pvalue (PVALUE val, BOOLEAN *eflg, ZSTR * zerr)
 	return;
 }
 /*=================================
- * is_zero -- See if PVALUE is zero
+ * is_numeric_zero -- See if numeric PVALUE is zero
  *===============================*/
 BOOLEAN
-is_zero (PVALUE val)
+is_numeric_zero (PVALUE val)
 {
 	switch (ptype(val)) {
 	case PINT: return pvalue_to_int(val) == 0;
 	case PFLOAT: return pvalue_to_float(val) == 0.;
-	case PANY: return pvalue(val) == NULL;
-	default: return TRUE;
+	case PANY: return TRUE;
 	}
+	ASSERT(0); /* No other numeric types */
+	return FALSE;
 }
 /*============================================================
  * num_conform_pvalues -- Make the types of two values conform
@@ -363,9 +364,9 @@ num_conform_pvalues (CNSTRING op, PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR 
 {
 	ASSERT(val1 && val2);
 
-	if (ptype(val1) == PANY && pvalue(val1) == NULL)
+	if (ptype(val1) == PANY)
 		ptype(val1) = ptype(val2);
-	if (ptype(val2) == PANY && pvalue(val2) == NULL)
+	if (ptype(val2) == PANY)
 		ptype(val2) = ptype(val1);
 	if (ptype(val1) == PANY && ptype(val2) == PANY)
 		ptype(val1) = ptype(val2) = PINT;

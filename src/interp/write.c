@@ -75,35 +75,41 @@ __addnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = iargs(node);
 	NODE newchild, next, prnt, prev;
+
+	/* first argument, node (must be nonnull) */
 	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
 	if (*eflg) {
 		prog_var_error(node, stab, arg, val, nonnodx, "addnode", "1");
 		delete_pvalue(val);
 		return NULL;
 	}
-	newchild = pvalue_to_node(val);
-	delete_pvalue_wrapper(val);
+	newchild = remove_node_and_delete_pvalue(&val);
+	if (!newchild) {
+		prog_var_error(node, stab, arg, val, nonnodx, "addnode", "1");
+		return NULL;
+	}
+
+	/* second argument, parent (must be nonnull) */
 	val = eval_and_coerce(PGNODE, arg=inext(arg), stab, eflg);
 	if (*eflg) {
 		prog_var_error(node, stab, arg, val, nonnodx, "addnode", "2");
-		delete_pvalue(val);
 		return NULL;
 	}
-	prnt = pvalue_to_node(val);
+	prnt = remove_node_and_delete_pvalue(&val);
 	if (!prnt) {
 		prog_var_error(node, stab, arg, val, nonnodx, "addnode", "2");
-		delete_pvalue(val);
 		return NULL;
 	}
-	delete_pvalue_wrapper(val);
+
+	/* third argument, prior sibling (may be null) */
 	val = eval_and_coerce(PGNODE, arg=inext(arg), stab, eflg);
 	if (*eflg) {
 		prog_var_error(node, stab, arg, val, nonnodx, "addnode", "3");
 		delete_pvalue(val);
 		return NULL;
 	}
-	prev = pvalue_to_node(val);
-	delete_pvalue_wrapper(val);
+	prev = remove_node_and_delete_pvalue(&val);
+
 	/* reparent node, but ensure its locking is only relative to new parent */
 	dolock_node_in_cache(newchild, FALSE);
 	nparent(newchild) = prnt;

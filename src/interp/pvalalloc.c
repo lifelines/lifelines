@@ -131,7 +131,7 @@ alloc_pvalue_memory (void)
 	live_pvalues++;
 	/* set type to uninitialized - caller ought to set type */
 	ptype(val) = PUNINT;
-	pvalue(val) = 0;
+	pvalvv(val) = 0;
 	return val;
 }
 /*========================================

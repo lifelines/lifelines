@@ -62,10 +62,10 @@ struct tag_pvalue {
 
 /* PVALUE types */
 
-#define PNONE      0  /* needed? - remove later if not */
-#define PANY       1  /* any value -- no type restriction - should be NULL value*/
+#define PNONE      0  /* transitory: type set by create_new_pvalue (caller changes) */
+#define PANY       1  /* (freed pvalue) any value -- no type restriction - always NULL value */
 #define PINT       2  /* integer */
-#define PLONG      3  /* long integer */ /* OBSOLETE */
+/* PLONG==3 is obsolete */
 #define PFLOAT     4  /* floating point */
 #define PBOOL      5  /* boolean */
 #define PSTRING    6  /* string */
@@ -84,8 +84,8 @@ struct tag_pvalue {
 #define PUNINT   100  /* just allocated */
 
 /* Handy PVALUE macros */
-#define ptype(p)	((p)->type)	/* type of expression */
-#define pvalue(p)	((p)->value)	/* value of expression */
+#define ptype(p)        ((p)->type)     /* type of expression */
+#define pvalvv(p)       ((p)->value)    /* value of expression */
 
 /* PVALUE Arithmetic Functions */
 void add_pvalues(PVALUE, PVALUE, BOOLEAN*eflg, ZSTR * zerr);
@@ -130,13 +130,13 @@ ZSTR describe_pvalue(PVALUE);
 void delete_vptr_pvalue(VPTR ptr);
 void delete_pvalue(PVALUE);
 void delete_pvalue_ptr(PVALUE * valp);
-void delete_pvalue_wrapper(PVALUE);
+NODE remove_node_and_delete_pvalue(PVALUE *);
 void eq_conform_pvalues(PVALUE, PVALUE, BOOLEAN*);
 BOOLEAN eqv_pvalues(VPTR, VPTR);
 BOOLEAN is_numeric_pvalue(PVALUE);
 BOOLEAN is_pvalue(PVALUE);
 BOOLEAN is_record_pvalue(PVALUE);
-BOOLEAN is_zero(PVALUE); /* should be is_zero_pvalue */
+BOOLEAN is_numeric_zero(PVALUE);
 void pvalues_begin(void);
 void pvalues_end(void);
 
