@@ -93,8 +93,8 @@ variable, and checked & resized at init_display_indi time */
 static void add_child_line(INT, RECORD, INT width);
 static void add_spouse_line(INT, NODE, NODE, INT width);
 static BOOLEAN append_event(STRING * pstr, STRING evt, INT * plen, INT minlen);
-static void disp_person_birthdeath(ZSTR * zstr, RECORD irec, struct tag_prefix * tags, RFMT rfmt);
-static void disp_person_name(ZSTR * zstr, STRING prefix, RECORD irec, INT width);
+static void disp_person_birthdeath(ZSTR zstr, RECORD irec, struct tag_prefix * tags, RFMT rfmt);
+static void disp_person_name(ZSTR zstr, STRING prefix, RECORD irec, INT width);
 static void indi_events(STRING outstr, NODE indi, INT len);
 static void init_display_indi(RECORD irec, INT width);
 static void init_display_fam(RECORD frec, INT width);
@@ -153,18 +153,18 @@ init_show_module (void)
 	INT i;
 	liwidth = ll_cols+1;
 
-	zs_reserve(&Spers, 60);
-	zs_reserve(&Sbirt, 60);
-	zs_reserve(&Sdeat, 60);
+	Spers = zs_new();
+	Sbirt = zs_new();
+	Sdeat = zs_new();
 	Sfath = (LINESTRING)stdalloc(liwidth);
 	Smoth = (LINESTRING)stdalloc(liwidth);
 	Smarr = (LINESTRING)stdalloc(liwidth);
-	zs_reserve(&Shusb, 60);
-	zs_reserve(&Shbirt, 60);
-	zs_reserve(&Shdeat, 60);
-	zs_reserve(&Swife, 60);
-	zs_reserve(&Swbirt, 60);
-	zs_reserve(&Swdeat, 60);
+	Shusb = zs_new();
+	Shbirt = zs_new();
+	Shdeat = zs_new();
+	Swife = zs_new();
+	Swbirt = zs_new();
+	Swdeat = zs_new();
 	for (i=0; i<MAXOTHERS; i++)
 		Sothers[i] = (LINESTRING)stdalloc(liwidth);
 	init_disp_reformat();
@@ -198,7 +198,7 @@ term_show_module (void)
  * Created: 2003-01-11 (Perry Rapp)
  *=============================================*/
 static void
-disp_person_name (ZSTR * zstr, STRING prefix, RECORD irec, INT width)
+disp_person_name (ZSTR zstr, STRING prefix, RECORD irec, INT width)
 {
 /* TODO: width handling is wrong, it should not be byte based */
 	ZSTR zkey = zs_news(key_of_record(nztop(irec)));
@@ -207,7 +207,7 @@ disp_person_name (ZSTR * zstr, STRING prefix, RECORD irec, INT width)
 	STRING name = indi_to_name(nztop(irec), avail);
 	zs_clear(zstr);
 	zs_setf(zstr, "%s: %s ", prefix, name);
-	avail = width - zs_len(*zstr)-zs_len(zkey)-2;
+	avail = width - zs_len(zstr)-zs_len(zkey)-2;
 	if (avail > 10) {
 		STRING t = indi_to_title(nztop(irec), avail-3);
 		if (t) zs_appf(zstr, "[%s] ", t);
@@ -223,7 +223,7 @@ disp_person_name (ZSTR * zstr, STRING prefix, RECORD irec, INT width)
  * Created: 2003-01-12 (Perry Rapp)
  *=============================================*/
 static void
-disp_person_birthdeath (ZSTR * zstr, RECORD irec, struct tag_prefix * tags
+disp_person_birthdeath (ZSTR zstr, RECORD irec, struct tag_prefix * tags
 	, RFMT rfmt)
 {
 	struct tag_prefix *tg, *tgdate=NULL, *tgplac=NULL;
@@ -248,18 +248,18 @@ disp_person_birthdeath (ZSTR * zstr, RECORD irec, struct tag_prefix * tags
 		predate = _(tgdate->prefix);
 		if (rfmt && rfmt->rfmt_date)
 			date = (*rfmt->rfmt_date)(date);
-		zs_appf(&zdate, "%s: %s", predate, date);
+		zs_appf(zdate, "%s: %s", predate, date);
 	}
 	if (plac) {
-		ZSTR zplac=0;
+		ZSTR zplac=zs_new();
 		preplac = _(tgplac->prefix);
 		if (eqstr(preplac, predate)) preplac=NULL;
 		if (rfmt && rfmt->rfmt_plac)
 			plac = (*rfmt->rfmt_plac)(plac);
 		if (preplac)
-			zs_setf(&zplac, "%s: %s", preplac, plac);
+			zs_setf(zplac, "%s: %s", preplac, plac);
 		else
-			zs_sets(&zplac, plac);
+			zs_sets(zplac, plac);
 		if (zdate) {
 			static char scratch1[MAXLINELEN+1];
 			sprintpic2(scratch1, sizeof(scratch1), uu8, rfmt->combopic
@@ -272,7 +272,7 @@ disp_person_birthdeath (ZSTR * zstr, RECORD irec, struct tag_prefix * tags
 	} else {
 		zs_sets(zstr, zs_str(zdate));
 	}
-	if (zs_len(*zstr)<3) {
+	if (zs_len(zstr)<3) {
 		zs_apps(zstr, _(tags[0].prefix));
 		zs_apps(zstr, ": ");
 	}
@@ -300,11 +300,11 @@ init_display_indi (RECORD irec, INT width)
 	fth = indi_to_fath(pers);
 	mth = indi_to_moth(pers);
 
-	disp_person_name(&Spers, _(qSdspl_indi), irec, width);
+	disp_person_name(Spers, _(qSdspl_indi), irec, width);
 
-	disp_person_birthdeath(&Sbirt, irec, f_birth_tags, &disp_long_rfmt);
+	disp_person_birthdeath(Sbirt, irec, f_birth_tags, &disp_long_rfmt);
 
-	disp_person_birthdeath(&Sdeat, irec, f_death_tags, &disp_long_rfmt);
+	disp_person_birthdeath(Sdeat, irec, f_death_tags, &disp_long_rfmt);
 
 	s = person_display(fth, NULL, width-13);
 	if (s) llstrncpyf(Sfath, liwidth, uu8, "  %s: %s", _(qSdspl_fath), s);
@@ -449,25 +449,25 @@ init_display_fam (RECORD frec, INT width)
 
 	if (ihusb) {
 		INT avail = width - zs_len(famkey) - 3;
-		disp_person_name(&Shusb, father, ihusb, avail);
+		disp_person_name(Shusb, father, ihusb, avail);
 	} else {
-		zs_setf(&Shusb, "%s:", father);
+		zs_setf(Shusb, "%s:", father);
 	}
-	zs_appf(&Shusb, " (%s)", zs_str(famkey));
+	zs_appf(Shusb, " (%s)", zs_str(famkey));
 	zs_free(&famkey);
 
-	disp_person_birthdeath(&Shbirt, ihusb, f_birth_tags, &disp_long_rfmt);
-	disp_person_birthdeath(&Shdeat, ihusb, f_death_tags, &disp_long_rfmt);
+	disp_person_birthdeath(Shbirt, ihusb, f_birth_tags, &disp_long_rfmt);
+	disp_person_birthdeath(Shdeat, ihusb, f_death_tags, &disp_long_rfmt);
 
 	if (iwife) {
 		INT avail = width;
-		disp_person_name(&Swife, mother, iwife, avail);
+		disp_person_name(Swife, mother, iwife, avail);
 	} else {
-		zs_setf(&Swife, "%s:", mother);
+		zs_setf(Swife, "%s:", mother);
 	}
 
-	disp_person_birthdeath(&Swbirt, iwife, f_birth_tags, &disp_long_rfmt);
-	disp_person_birthdeath(&Swdeat, iwife, f_death_tags, &disp_long_rfmt);
+	disp_person_birthdeath(Swbirt, iwife, f_birth_tags, &disp_long_rfmt);
+	disp_person_birthdeath(Swdeat, iwife, f_death_tags, &disp_long_rfmt);
 
 	s = sh_indi_to_event_long(fam, "MARR", _(qSdspl_mar), width-3);
 	if (s) llstrncpyf(Smarr, liwidth, uu8, s);

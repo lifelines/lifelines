@@ -93,7 +93,7 @@ enum { ZON_X, ZON_INT, ZON_GUI, ZON_EDI, ZON_RPT, ZON_GED, NUM_ZONES };
 static void clear_legacy_tt(INT trnum);
 static void clear_predefined_list(void);
 static struct conversion_s * getconvert(INT trnum);
-static void global_translate(ZSTR * pzstr, LIST gtlist);
+static void global_translate(ZSTR zstr, LIST gtlist);
 static BOOLEAN is_legacy_first(INT trnum);
 static void local_init(void);
 
@@ -170,20 +170,20 @@ ZSTR
 translate_string_to_zstring (XLAT xlat, CNSTRING in)
 {
 	ZSTR zstr = zs_news(in);
-	transl_xlat(xlat, &zstr);
+	transl_xlat(xlat, zstr);
 	return zstr;
 }
 /*===================================================
  * global_translate -- Apply list of user global transforms
  *=================================================*/
 static void
-global_translate (ZSTR * pzstr, LIST gtlist)
+global_translate (ZSTR zstr, LIST gtlist)
 {
 	TRANTABLE ttx=0;
 	FORLIST(gtlist, tbel)
 		ttx = tbel;
 		ASSERT(ttx);
-		custom_translate(pzstr, ttx);
+		custom_translate(zstr, ttx);
 		ttx = 0;
 	ENDLIST
 }
@@ -311,9 +311,9 @@ transl_load_all_tts (void)
  * Created: 2002/11/28 (Perry Rapp)
  *========================================================*/
 BOOLEAN
-transl_xlat (XLAT xlat, ZSTR * pzstr)
+transl_xlat (XLAT xlat, ZSTR zstr)
 {
-	return xl_do_xlat(xlat, pzstr);
+	return xl_do_xlat(xlat, zstr);
 }
 /*==========================================================
  * transl_init -- One-time initialization of this module
@@ -432,7 +432,7 @@ transl_get_description (XLAT xlat)
  * Created: 2002/11/28 (Perry Rapp)
  *========================================================*/
 void
-transl_parse_codeset (CNSTRING codeset, ZSTR * zcsname, LIST * subcodes)
+transl_parse_codeset (CNSTRING codeset, ZSTR zcsname, LIST * subcodes)
 {
 	xl_parse_codeset(codeset, zcsname, subcodes);
 }

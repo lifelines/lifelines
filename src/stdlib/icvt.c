@@ -56,10 +56,9 @@ iconv_can_trans (CNSTRING src, CNSTRING dest)
  * Only called if HAVE_ICONV
  *=================================================*/
 BOOLEAN
-iconv_trans (CNSTRING src, CNSTRING dest, CNSTRING sin, ZSTR * pzout, CNSTRING illegal)
+iconv_trans (CNSTRING src, CNSTRING dest, CNSTRING sin, ZSTR zout, CNSTRING illegal)
 {
 #ifdef HAVE_ICONV
-	ZSTR zout=0;
 	iconv_t ict;
 	const char * inptr;
 	char * outptr;
@@ -107,7 +106,7 @@ iconv_trans (CNSTRING src, CNSTRING dest, CNSTRING sin, ZSTR * pzout, CNSTRING i
 	iconvctl(ict, ICONV_SET_TRANSLITERATE, &transliterate);
 #endif
 
-	zout = zs_newn((unsigned int)(inlen*expand+6));
+	zs_reserve(zout, (unsigned int)(inlen*expand+6));
 
 	inptr = sin;
 	outptr = zs_str(zout);
@@ -123,7 +122,7 @@ cvting:
 	/* zero terminate & fix output zstring */
 	/* there may be embedded nulls, if UCS-2/4 is target! */
 	*outptr=0;
-	zs_set_len(&zout, outptr-zs_str(zout));
+	zs_set_len(zout, outptr-zs_str(zout));
 
 	/* handle error cases */
 	if (cvted == (size_t)-1) {
@@ -131,7 +130,7 @@ cvting:
 		iconv in a dll & didn't get errno */
 		if (outleft<3) {
 			/* may be out of space, so grow & retry */
-			zs_reserve(&zout, (unsigned int)(inleft * expand + 6 + zs_allocsize(zout)));
+			zs_reserve(zout, (unsigned int)(inleft * expand + 6 + zs_allocsize(zout)));
 		} else {
 			/* unconvertible input character */
 			/* append placeholder & skip over */
@@ -144,7 +143,7 @@ cvting:
 				wid = inleft;
 			inptr += wid;
 			inleft -= wid;
-			zs_apps(&zout, placeholder);
+			zs_apps(zout, placeholder);
 		}
 		/* update output variables */
 		/* (may have reallocated, plus need to point to end */
@@ -162,16 +161,15 @@ cvting:
 		}
 	}
 	*outptr=0;
-	zs_set_len(&zout, outptr-zs_str(zout));
+	zs_set_len(zout, outptr-zs_str(zout));
 
 	iconv_close(ict);
-	*pzout = zout;
 	return TRUE;
 #else
 	src=src; /* unused */
 	dest=dest; /* unused */
 	sin=sin; /* unused */
-	pzout=pzout; /* unused */
+	zout=zout; /* unused */
 	illegal=illegal; /* unused */
 	return FALSE;
 #endif /* HAVE_ICONV */

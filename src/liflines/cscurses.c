@@ -23,22 +23,22 @@
  * Created: 2002/12/03 (Perry Rapp)
  *==========================*/
 void
-int_to_disp (ZSTR * pzstr)
+int_to_disp (ZSTR zstr)
 {
 	XLAT xlat = transl_get_predefined_xlat(MINDS);
 	if (xlat)
-		transl_xlat(xlat, pzstr); /* ignore failure */
+		transl_xlat(xlat, zstr); /* ignore failure */
 }
 /*============================
  * disp_to_int -- convert GUI codeset to internal
  * Created: 2002/12/03 (Perry Rapp)
  *==========================*/
 void
-disp_to_int (ZSTR * pzstr)
+disp_to_int (ZSTR zstr)
 {
 	XLAT xlat = transl_get_predefined_xlat(MDSIN);
 	if (xlat)
-		transl_xlat(xlat, pzstr); /* ignore failure */
+		transl_xlat(xlat, zstr); /* ignore failure */
 }
 /*============================
  * mvcuwaddstr -- convert to GUI codeset & output to screen
@@ -59,7 +59,7 @@ mvccwaddstr (WINDOW *wp, int y, int x, char *cp)
 {
 	ZSTR zstr = zs_news(cp);
 	int rtn;
-	int_to_disp(&zstr);
+	int_to_disp(zstr);
 	rtn = mvwaddstr(wp, y, x, zs_str(zstr));
 	zs_free(&zstr);
 	return rtn;
@@ -73,7 +73,7 @@ mvccwaddnstr (WINDOW *wp, int y, int x, char *cp, int n)
 {
 	ZSTR zstr = zs_news(cp);
 	int rtn;
-	int_to_disp(&zstr);
+	int_to_disp(zstr);
 	/* TODO: Need to be using wcswidth for UTF-8 displays */
 	if (zs_len(zstr) < (unsigned)n) {
 		rtn = mvwaddstr(wp, y, x, zs_str(zstr));
@@ -108,7 +108,7 @@ vccwprintw (WINDOW *wp, char *fmt, va_list args)
 {
 	ZSTR zstr = zs_newvf(fmt, args);
 	int rtn;
-	int_to_disp(&zstr);
+	int_to_disp(zstr);
 	rtn = waddstr(wp, zs_str(zstr));
 	zs_free(&zstr);
 	return rtn;
@@ -122,7 +122,7 @@ vccprintf (char *fmt, va_list args)
 {
 	int rtn;
 	ZSTR zstr = zs_newvf(fmt, args);
-	int_to_disp(&zstr);
+	int_to_disp(zstr);
 	rtn = printf(zs_str(zstr));
 	zs_free(&zstr);
 	return rtn;
@@ -137,7 +137,7 @@ wgetccnstr (WINDOW *wp, char *cp, int n)
 	ZSTR zstr=0;
 	int rtn = wgetnstr(wp, cp, n);
 	zstr = zs_news(cp);
-	disp_to_int(&zstr);
+	disp_to_int(zstr);
 	llstrsets(cp, n, uu8, zs_str(zstr));
 	zs_free(&zstr);
 	return rtn;

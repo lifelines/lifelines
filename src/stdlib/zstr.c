@@ -16,7 +16,7 @@
 
 static void dbgchk(ZSTR);
 static unsigned int safelen(const char *txt);
-static void zalloc(ZSTR * pzstr, unsigned int newmax);
+static void zalloc(ZSTR zstr, unsigned int newmax);
 
 #define DEFSIZE 64
 
@@ -55,17 +55,16 @@ one to hold the zstr_s, and one with the string
 twould be more efficient to combine these
 */
 struct zstr_s {
+	int magic;
 	char * str;
 	char * end;
 	unsigned int max;
-	int magic;
 };
 
 /* reallocate buffer to be at least newmax */
 static void
-zalloc (ZSTR * pzstr, unsigned int newmax)
+zalloc (ZSTR zstr, unsigned int newmax)
 {
-	ZSTR zstr = *pzstr;
 	char * ptr;
 	int len = zs_len(zstr);
 	while (zstr->max < newmax)
@@ -123,15 +122,15 @@ ZSTR
 zs_news (const char * str)
 {
 	ZSTR zstr=zs_newn(safelen(str)+4);
-	zs_sets(&zstr, str);
+	zs_sets(zstr, str);
 	return zstr;
 }
 /* create & return new zstring with copy of input zstring */
 ZSTR
-zs_newz (ZSTR zsrc)
+zs_newz (ZCSTR zsrc)
 {
 	ZSTR zstr = zs_newn(zs_len(zsrc)+4);
-	zs_setz(&zstr, zsrc);
+	zs_setz(zstr, zsrc);
 	return zstr;
 }
 /* create & return new zstring copying from varargs input */
@@ -139,7 +138,7 @@ ZSTR
 zs_newvf (const char * fmt, va_list args)
 {
 	ZSTR zstr = zs_newn(strlen(fmt)+8);
-	zs_setvf(&zstr, fmt, args);
+	zs_setvf(zstr, fmt, args);
 	return zstr;
 }
 /* create & return new zstring containing first len bytes of str */
@@ -166,7 +165,7 @@ zs_free (ZSTR * pzstr)
 }
 /* return current string */
 STRING
-zs_str (ZSTR zstr)
+zs_str (ZCSTR zstr)
 {
 	if (!zstr) return "";
 	DBGCHK(zstr);
@@ -174,7 +173,7 @@ zs_str (ZSTR zstr)
 }
 /* return current length of string */
 unsigned int
-zs_len (ZSTR zstr)
+zs_len (ZCSTR zstr)
 {
 	if (!zstr) return 0;
 	DBGCHK(zstr);
@@ -182,7 +181,7 @@ zs_len (ZSTR zstr)
 }
 /* return current size of underlying buffer */
 unsigned int
-zs_allocsize (ZSTR zstr)
+zs_allocsize (ZCSTR zstr)
 {
 	if (!zstr) return 0;
 	DBGCHK(zstr);
@@ -199,13 +198,8 @@ zs_fix (ZSTR zstr)
 }
 /* set length directly; caller may use this if using embedded nulls */
 char *
-zs_set_len (ZSTR * pzstr, unsigned int len)
+zs_set_len (ZSTR zstr, unsigned int len)
 {
-	ZSTR zstr = *pzstr;
-	if  (!zstr) {
-		zstr = zs_newn(len>0?len:0);
-		*pzstr = zstr;
-	}
 	DBGCHK(zstr);
 	if (len == (unsigned int)-1) {
 		len = strlen(zstr->str);
@@ -216,12 +210,10 @@ zs_set_len (ZSTR * pzstr, unsigned int len)
 }
 /* set zstring value to input zero-terminated string*/
 static char *
-zs_set_with_len (ZSTR * pzstr, const char * txt, unsigned int tlen)
+zs_set_with_len (ZSTR zstr, const char * txt, unsigned int tlen)
 {
-	ZSTR zstr;
-	zs_reserve(pzstr, tlen+1);
-	zstr = *pzstr;
 	DBGCHK(zstr);
+	zs_reserve(zstr, tlen+1);
 	if (tlen) {
 		strcpy(zstr->str, txt);
 		zstr->end = zstr->str + tlen;
@@ -230,101 +222,92 @@ zs_set_with_len (ZSTR * pzstr, const char * txt, unsigned int tlen)
 }
 /* set zstring value to input zero-terminated string*/
 char *
-zs_sets (ZSTR * pzstr, const char * txt)
+zs_sets (ZSTR zstr, const char * txt)
 {
 	unsigned int tlen = safelen(txt);
-	return zs_set_with_len(pzstr, txt, tlen);
+	return zs_set_with_len(zstr, txt, tlen);
 }
 /* set zstring value to copy of another zstring value */
 char *
-zs_setz (ZSTR * pzstr, ZSTR zsrc)
+zs_setz (ZSTR zstr, ZCSTR zsrc)
 {
 	const char * txt = zsrc ? zsrc->str : "";
-	unsigned int tlen = zsrc ? zsrc->end-zsrc->str : 0;
-	return zs_set_with_len(pzstr, txt, tlen);
+	unsigned int tlen = zsrc ? (zsrc->end)-(zsrc->str) : 0;
+	DBGCHK(zstr);
+	return zs_set_with_len(zstr, txt, tlen);
 }
 /* append zero-terminated input to zstring */
 char *
-zs_apps (ZSTR * pzstr, const char * txt)
+zs_apps (ZSTR zstr, const char * txt)
 {
 	int tlen = safelen(txt);
-	zs_reserve(pzstr, zs_len(*pzstr)+tlen+1);
-	DBGCHK(*pzstr);
+	DBGCHK(zstr);
+	zs_reserve(zstr, zs_len(zstr)+tlen+1);
 	if (tlen) {
-		strcpy((*pzstr)->end, txt);
-		(*pzstr)->end += tlen;
+		strcpy(zstr->end, txt);
+		zstr->end += tlen;
 	}
-	return (*pzstr)->str;
+	return zstr->str;
 }
 /* append input zstring to zstring */
 char *
-zs_appz(ZSTR * pzstr, ZSTR zsrc)
+zs_appz(ZSTR zstr, ZCSTR zsrc)
 {
-	int tlen = zs_len(zsrc);
-	zs_reserve(pzstr, zs_len(*pzstr)+tlen+1);
-	DBGCHK(*pzstr);
-	if (tlen) {
-		strcpy((*pzstr)->end, zs_str(zsrc));
-		(*pzstr)->end += tlen;
-	}
-	return (*pzstr)->str;
+	if (!zsrc) return zstr->str;
+	return zs_apps(zstr, zsrc->str);
 }
 /* append input character to zstring */
 char *
-zs_appc (ZSTR * pzstr, char ch)
+zs_appc (ZSTR zstr, char ch)
 {
 	char buffer[2];
 	buffer[0] = ch;
 	buffer[1] = 0;
-	return zs_apps(pzstr, buffer);
+	return zs_apps(zstr, buffer);
 }
 /* set printf style input to zstring */
 char *
-zs_setf (ZSTR * pzstr, const char * fmt, ...)
+zs_setf (ZSTR zstr, const char * fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	zs_setvf(pzstr, fmt, args);
+	zs_setvf(zstr, fmt, args);
 	va_end(args);
-	return (*pzstr)->str;
+	return zstr->str;
 }
 /* append printf style input to zstring */
 char *
-zs_appf (ZSTR * pzstr, const char * fmt, ...)
+zs_appf (ZSTR zstr, const char * fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	zs_appvf(pzstr, fmt, args);
+	zs_appvf(zstr, fmt, args);
 	va_end(args);
-	return (*pzstr)->str;
+	return zstr->str;
 }
 /* set varargs printf style input to zstring */
 char *
-zs_setvf (ZSTR * pzstr, const char * fmt, va_list args)
+zs_setvf (ZSTR zstr, const char * fmt, va_list args)
 {
-	zs_clear(pzstr);
-	zs_appvf(pzstr, fmt, args);
-	return (*pzstr)->str;
+	zs_clear(zstr);
+	zs_appvf(zstr, fmt, args);
+	return zstr->str;
 }
 /* append varargs printf style input to zstring */
 char *
-zs_appvf (ZSTR * pzstr, const char * fmt, va_list args)
+zs_appvf (ZSTR zstr, const char * fmt, va_list args)
 {
 	/* if we know that the system implementation of snprintf was
 	standards conformant, we could use snprintf(0, ...), but how to tell ? */
 	static char buffer[4096];
 	vsnprintf(buffer, sizeof(buffer), fmt, args);
-	zs_apps(pzstr, buffer);
-	return (*pzstr)->str;
+	zs_apps(zstr, buffer);
+	return zstr->str;
 }
 /* set zstring to empty */
 char *
-zs_clear (ZSTR * pzstr)
+zs_clear (ZSTR zstr)
 {
-	ZSTR zstr = *pzstr;
-	if (!zstr) {
-		*pzstr = zstr = zs_new();
-	}
 	DBGCHK(zstr);
 	zstr->str[0] = 0;
 	zstr->end = zstr->str;
@@ -332,22 +315,28 @@ zs_clear (ZSTR * pzstr)
 }
 /* ensure at least min bytes in underlying buffer */
 char *
-zs_reserve (ZSTR * pzstr, unsigned int min)
+zs_reserve (ZSTR zstr, unsigned int min)
 {
-	if (!*pzstr)
-		*pzstr = zs_newn(min);
-	if (min > (*pzstr)->max)
-		zalloc(pzstr, min);
-	return (*pzstr)->str;
+	DBGCHK(zstr);
+	if (min > zstr->max)
+		zalloc(zstr, min);
+	return zstr->str;
 }
 /* add at least min bytes more to underlying buffer */
 char *
-zs_reserve_extra (ZSTR * pzstr, unsigned int delta)
+zs_reserve_extra (ZSTR zstr, unsigned int delta)
 {
-	if (!*pzstr) {
-		*pzstr = zs_newn(delta);
-	} else {
-		zalloc(pzstr, (*pzstr)->max+delta);
-	}
-	return (*pzstr)->str;
+	zalloc(zstr, (zstr->max)+delta);
+	return zstr->str;
+}
+/* move data from pzsrc to zstr (clearing pzsrc) */
+void
+zs_move (ZSTR zstr, ZSTR * pzsrc)
+{
+	DBGCHK(zstr);
+	zs_clear(zstr);
+	if (!pzsrc)
+		return;
+	memcpy(zstr, (*pzsrc), sizeof(*zstr));
+	(*pzsrc)=0;
 }

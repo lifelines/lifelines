@@ -33,14 +33,13 @@ BOOLEAN
 edit_mapping (INT trnum)
 {
 	BOOLEAN rtn=FALSE;
-	ZSTR zstr=0;
+	ZSTR zstr=zs_new();
 	if (trnum < 0 || trnum >= NUM_TT_MAPS) {
 		msg_error(_(qSbadttnum));
-		return FALSE;
+		goto end_edit_mapping;
 	}
 	if (readonly) {
 		msg_error(_(qSronlye));
-		rtn = FALSE;
 		goto end_edit_mapping;
 	}
 	endwin();
@@ -50,7 +49,7 @@ edit_mapping (INT trnum)
 	if (transl_get_legacy_tt(trnum)) {
 		if (!save_tt_to_file(trnum, editfile)) {
 			msg_error(_(qSdataerr));
-			return FALSE;
+			goto end_edit_mapping;
 		}
 	}
 	do_edit();
@@ -59,13 +58,12 @@ edit_mapping (INT trnum)
 			rtn = TRUE;
 			goto end_edit_mapping;
 		}
-		zs_apps(&zstr,_(qScmperr));
-		zs_appc(&zstr, ' ');
-		zs_appf(&zstr, _(qSsepch), "<tab>"); /* (separator is %s) */
+		zs_apps(zstr,_(qScmperr));
+		zs_appc(zstr, ' ');
+		zs_appf(zstr, _(qSsepch), "<tab>"); /* (separator is %s) */
 		if (ask_yes_or_no_msg(zs_str(zstr), _(qSaredit)))
 			do_edit();
 		else {
-			rtn = FALSE;
 			goto end_edit_mapping;
 		}
 	}
@@ -101,8 +99,8 @@ load_new_tt (CNSTRING filepath, INT trnum)
 	TRANSLFNC transfnc = NULL; /* don't translate translation tables ! */
 	TRANTABLE tt=0;
 	CNSTRING mapname = get_map_name(trnum);
-	ZSTR zerr=0;
-	if (!init_map_from_file(filepath, mapname, &tt, &zerr)) {
+	ZSTR zerr=zs_new();
+	if (!init_map_from_file(filepath, mapname, &tt, zerr)) {
 		llwprintf(zs_str(zerr));
 		zs_free(&zerr);
 		if (tt)

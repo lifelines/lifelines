@@ -450,21 +450,24 @@ find_program (STRING fname, STRING localdir, STRING *pfull)
 {
 	STRING programsdir = getoptstr("LLPROGRAMS", ".");
 	FILE * fp = 0;
-	ZSTR zstr=0;
-	if (!fname || *fname == 0) return FALSE;
+	ZSTR zstr=zs_new();
+	BOOLEAN rtn=FALSE;
+	if (!fname || *fname == 0) goto end_find_program;
 	/* prefer local dir, so prefix path with localdir */
 	if (localdir && localdir[0]) {
-		zs_sets(&zstr, localdir);
-		zs_apps(&zstr, LLSTRPATHSEPARATOR);
+		zs_sets(zstr, localdir);
+		zs_apps(zstr, LLSTRPATHSEPARATOR);
 	}
-	zs_apps(&zstr, programsdir);
+	zs_apps(zstr, programsdir);
 	fp = fopenpath(fname, LLREADTEXT, zs_str(zstr), ".ll", uu8, pfull);
-	zs_free(&zstr);
 	if (fp) {
 		fclose(fp);
-		return TRUE;
+		rtn = TRUE;
 	}
-	return FALSE;
+
+end_find_program:
+	zs_free(&zstr);
+	return rtn;
 }
 /*======================================+
  * parse_file -- Parse single program file
@@ -1895,9 +1898,9 @@ vprog_error (PNODE node, STRING fmt, va_list args)
 		/* only display filename if different (or first error) */
 		if (!prevfile[0] || !eqstr(prevfile, fname)) {
 			llstrsets(prevfile, sizeof(prevfile), uu8, fname);
-			zs_apps(&zstr, _("Report file: "));
-			zs_apps(&zstr, fname);
-			zs_appc(&zstr, '\n');
+			zs_apps(zstr, _("Report file: "));
+			zs_apps(zstr, fname);
+			zs_appc(zstr, '\n');
 		}
 		/* But always display the line & error */
 		if (progparsing)
@@ -1906,11 +1909,11 @@ vprog_error (PNODE node, STRING fmt, va_list args)
 		else
 			llstrsetf(msgbuff, sizeof(msgbuff), uu8
 				, _("Runtime Error at line %d: "), iline(node)+1);
-		zs_appf(&zstr, msgbuff);
+		zs_appf(zstr, msgbuff);
 	} else {
-		zs_apps(&zstr, _("Aborting: "));
+		zs_apps(zstr, _("Aborting: "));
 	}
-	zs_appvf(&zstr, fmt, args);
+	zs_appvf(zstr, fmt, args);
 	llwprintf("\n");
 	llwprintf(zs_str(zstr));
 	++progerror;
@@ -1990,7 +1993,7 @@ make_internal_string_node (PACTX pactx, STRING str)
 		STRING fname = pactx->fullpath;
 		STRING rptcodeset = get_rptinfo(fname)->codeset;
 		XLAT xlat = transl_get_xlat_to_int(rptcodeset);
-		transl_xlat(xlat, &zstr);
+		transl_xlat(xlat, zstr);
 	}
 	node = string_node(pactx, zs_str(zstr));
 	zs_free(&zstr);

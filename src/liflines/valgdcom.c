@@ -819,7 +819,7 @@ handle_value (STRING val, INT line)
 static void
 handle_err (struct import_feedback * ifeed, STRING fmt, ...)
 {
-	ZSTR zstr=0;
+	ZSTR zstr=zs_new();
 
 	if (openlog()) {
 		va_list args;
@@ -831,11 +831,11 @@ handle_err (struct import_feedback * ifeed, STRING fmt, ...)
 	}
 
 	++num_errors;
-	zs_setf(&zstr, _pl("%6d Error", "%6d Errors", num_errors), num_errors);
+	zs_setf(zstr, _pl("%6d Error", "%6d Errors", num_errors), num_errors);
 	if (f_logopen)
-		zs_appf(&zstr, _(" (see log file <%s>)"), f_logpath);
+		zs_appf(zstr, _(" (see log file <%s>)"), f_logpath);
 	else
-		zs_apps(&zstr, _(" (no log file)"));
+		zs_apps(zstr, _(" (no log file)"));
 
 	if (ifeed && ifeed->validation_error_fnc)
 		(*ifeed->validation_error_fnc)(zs_str(zstr));
@@ -847,7 +847,7 @@ handle_err (struct import_feedback * ifeed, STRING fmt, ...)
 static void
 handle_warn (struct import_feedback * ifeed, STRING fmt, ...)
 {
-	ZSTR zstr=0;
+	ZSTR zstr=zs_new();
 
 	if (openlog()) {
 		va_list args;
@@ -859,11 +859,11 @@ handle_warn (struct import_feedback * ifeed, STRING fmt, ...)
 	}
 	
 	++num_warns;
-	zs_setf(&zstr, _pl("%6d Warning", "%6d Warnings", num_warns), num_warns);
+	zs_setf(zstr, _pl("%6d Warning", "%6d Warnings", num_warns), num_warns);
 	if (f_logopen)
-		zs_appf(&zstr, _(" (see log file <%s>)"), f_logpath);
+		zs_appf(zstr, _(" (see log file <%s>)"), f_logpath);
 	else
-		zs_appf(&zstr, _(" (no log file)"));
+		zs_appf(zstr, _(" (no log file)"));
 	if (ifeed && ifeed->validation_warning_fnc)
 		(*ifeed->validation_warning_fnc)(zs_str(zstr));
 	zs_free(&zstr);

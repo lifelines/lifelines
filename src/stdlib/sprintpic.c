@@ -117,10 +117,10 @@ zprintpic1 (CNSTRING pic, CNSTRING arg1)
 	CNSTRING p=pic;
 	while (*p) {
 		if (p[0]=='%' && p[1]=='1') {
-			zs_apps(&zstr, arg1);
+			zs_apps(zstr, arg1);
 			p += 2;
 		} else {
-			zs_appc(&zstr, *p++);
+			zs_appc(zstr, *p++);
 		}
 	}
 	return zstr;
@@ -171,13 +171,13 @@ zprintpic2 (CNSTRING pic, CNSTRING arg1, CNSTRING arg2)
 	CNSTRING p=pic;
 	while (*p) {
 		if (p[0]=='%' && p[1]=='1') {
-			zs_apps(&zstr, arg1);
+			zs_apps(zstr, arg1);
 			p += 2;
 		} else if (p[0]=='%' && p[1]=='2') {
-			zs_apps(&zstr, arg2);
+			zs_apps(zstr, arg2);
 			p += 2;
 		} else {
-			zs_appc(&zstr, *p++);
+			zs_appc(zstr, *p++);
 		}
 	}
 	return zstr;
@@ -234,16 +234,16 @@ zprintpic3 (CNSTRING pic, CNSTRING arg1, CNSTRING arg2, CNSTRING arg3)
 	CNSTRING p=pic;
 	while (*p) {
 		if (p[0]=='%' && p[1]=='1') {
-			zs_apps(&zstr, arg1);
+			zs_apps(zstr, arg1);
 			p += 2;
 		} else if (p[0]=='%' && p[1]=='2') {
-			zs_apps(&zstr, arg2);
+			zs_apps(zstr, arg2);
 			p += 2;
 		} else if (p[0]=='%' && p[1]=='3') {
-			zs_apps(&zstr, arg3);
+			zs_apps(zstr, arg3);
 			p += 2;
 		} else {
-			zs_appc(&zstr, *p++);
+			zs_appc(zstr, *p++);
 		}
 	}
 	return zstr;

@@ -85,13 +85,13 @@ static void clear_dnum(struct dnum_s * dnum);
 static void clear_numbers(struct nums_s * nums);
 static ZSTR do_zformat_date(STRING str, INT dfmt, INT mfmt,
              INT yfmt, INT sfmt, INT efmt, INT cmplx);
-static void format_cal(ZSTR * pzstr, INT cal);
+static void format_cal(ZSTR zstr, INT cal);
 static ZSTR format_complex(GDATEVAL gdv, INT cmplx, STRING ymd2, STRING ymd3);
 static void format_day(struct dnum_s da, INT dfmt, STRING output);
 static STRING format_month(INT cal, struct dnum_s mo, INT mfmt);
-static void format_eratime(ZSTR * pzstr, INT eratime, INT efmt);
+static void format_eratime(ZSTR zstr, INT eratime, INT efmt);
 static STRING format_year(struct dnum_s yr, INT yfmt);
-static void format_ymd(ZSTR * pzstr, STRING syr, STRING smo, STRING sda, INT sfmt);
+static void format_ymd(ZSTR zstr, STRING syr, STRING smo, STRING sda, INT sfmt);
 static void free_gdate(struct gdate_s *);
 static INT get_date_tok(struct dnum_s*);
 static void init_keywordtbl(void);
@@ -290,7 +290,7 @@ do_zformat_date (STRING str, INT dfmt, INT mfmt,
 		return zstr;
 	}
 	if (sfmt==14) {
-		zs_sets(&zstr, str);
+		zs_sets(zstr, str);
 		return zstr;
 	}
 	if (!cmplx) {
@@ -299,10 +299,10 @@ do_zformat_date (STRING str, INT dfmt, INT mfmt,
 		format_day(gdv->date1.day, dfmt, daystr);
 		smo = format_month(gdv->date1.calendar, gdv->date1.month, mfmt);
 		syr = format_year(gdv->date1.year, yfmt);
-		format_ymd(&zstr, syr, smo, daystr, sfmt);
-		format_eratime(&zstr, gdv->date1.eratime, efmt);
+		format_ymd(zstr, syr, smo, daystr, sfmt);
+		format_eratime(zstr, gdv->date1.eratime, efmt);
 		if (gdv->date1.calendar) {
-			format_cal(&zstr, gdv->date1.calendar);
+			format_cal(zstr, gdv->date1.calendar);
 		}
 		free_gdateval(gdv);
 		return zstr;
@@ -315,10 +315,10 @@ do_zformat_date (STRING str, INT dfmt, INT mfmt,
 		smo = format_month(gdv->date1.calendar, gdv->date1.month, mfmt);
 		syr = (gdv->date1.year.str ? gdv->date1.year.str 
 			: format_year(gdv->date1.year, yfmt));
-		format_ymd(&zstr, syr, smo, daystr, sfmt);
-		format_eratime(&zstr, gdv->date1.eratime, efmt);
+		format_ymd(zstr, syr, smo, daystr, sfmt);
+		format_eratime(zstr, gdv->date1.eratime, efmt);
 		if (gdv->date1.calendar) {
-			format_cal(&zstr, gdv->date1.calendar);
+			format_cal(zstr, gdv->date1.calendar);
 		}
 		if (gdateval_isdual(gdv)) {
 			/* build 2nd date string into ymd2 */
@@ -326,10 +326,10 @@ do_zformat_date (STRING str, INT dfmt, INT mfmt,
 			smo = format_month(gdv->date2.calendar, gdv->date2.month, mfmt);
 			syr = (gdv->date2.year.str ? gdv->date2.year.str 
 				: format_year(gdv->date2.year, yfmt));
-			format_ymd(&zstr2, syr, smo, daystr, sfmt);
-			format_eratime(&zstr2, gdv->date2.eratime, efmt);
+			format_ymd(zstr2, syr, smo, daystr, sfmt);
+			format_eratime(zstr2, gdv->date2.eratime, efmt);
 			if (gdv->date2.calendar) {
-				format_cal(&zstr2, gdv->date2.calendar);
+				format_cal(zstr2, gdv->date2.calendar);
 			}
 		}
 		zstr3 = format_complex(gdv, cmplx, zs_str(zstr), zs_str(zstr2));
@@ -342,7 +342,7 @@ do_zformat_date (STRING str, INT dfmt, INT mfmt,
 /*===================================================
  * format_eratime -- Add AD/BC info to date
  *  pdate:  [IN]  actual date information
- *  pzstr:  [I/O] date string consisting of yr, mo, da portion
+ *  zstr:  [I/O] date string consisting of yr, mo, da portion
  *  efmt:   [IN]  eratime format code
  *                0 - no AD/BC marker
  *                1 - trailing B.C. if appropriate
@@ -356,7 +356,7 @@ do_zformat_date (STRING str, INT dfmt, INT mfmt,
  * Created: 2001/12/28 (Perry Rapp)
  *=================================================*/
 static void
-format_eratime (ZSTR * pzstr, INT eratime, INT efmt)
+format_eratime (ZSTR zstr, INT eratime, INT efmt)
 {
 	/* TODO: calendar-specific handling */
 	if (eratime == GDV_BC) {
@@ -370,8 +370,8 @@ format_eratime (ZSTR * pzstr, INT eratime, INT efmt)
 			/* this way we handle if one is blank */
 			if (!tag || !tag[0])
 				tag = _(qSdatetrl_bcA);
-			zs_apps(pzstr, " ");
-			zs_apps(pzstr, tag);
+			zs_apps(zstr, " ");
+			zs_apps(zstr, tag);
 			return;
 		}
 	} else {
@@ -385,8 +385,8 @@ format_eratime (ZSTR * pzstr, INT eratime, INT efmt)
 			/* this way we handle if one is blank */
 			if (!tag || !tag[0])
 				tag = _(qSdatetrl_adA);
-			zs_apps(pzstr, " ");
-			zs_apps(pzstr, tag);
+			zs_apps(zstr, " ");
+			zs_apps(zstr, tag);
 			return;
 		}
 	}
@@ -401,13 +401,12 @@ format_eratime (ZSTR * pzstr, INT eratime, INT efmt)
  * Created: 2001/12/31 (Perry Rapp)
  *=================================================*/
 static void
-format_cal (ZSTR * pzstr, INT cal)
+format_cal (ZSTR zstr, INT cal)
 {
 	ASSERT(cal>=0 && cal<ARRSIZE(calendar_pics));
 	if (calendar_pics[cal]) {
-		ZSTR zs2 = zprintpic1(calendar_pics[cal], zs_str(*pzstr));
-		zs_free(pzstr);
-		*pzstr = zs2;
+		ZSTR zs2 = zprintpic1(calendar_pics[cal], zs_str(zstr));
+		zs_move(zstr, &zs2);
 	}
 }
 /*===================================================
@@ -511,14 +510,14 @@ format_complex (GDATEVAL gdv, INT cmplx	, STRING ymd2, STRING ymd3)
 		break;
 	case GDV_DATE:
 	default:
-		zs_sets(&zstr, ymd2);
+		zstr = zs_news(ymd2);
 		break;
 	}
 	return zstr;
 }
 /*===================================================
  * format_ymd -- Assembles date according to dateformat
- *  pzstr:  [I/O]  resultant formatted zstring
+ *  zstr:  [I/O]  resultant formatted zstring
  *  syr:    [IN]   year string
  *  smo:    [IN]   month string
  *  sda:    [IN]   day string
@@ -541,148 +540,147 @@ format_complex (GDATEVAL gdv, INT cmplx	, STRING ymd2, STRING ymd3)
  * This routine applies the custom date pic if present (date_pic)
  *=================================================*/
 static void
-format_ymd (ZSTR * pzstr, STRING syr, STRING smo, STRING sda, INT sfmt)
+format_ymd (ZSTR zstr, STRING syr, STRING smo, STRING sda, INT sfmt)
 {
-	zs_clear(pzstr);
+	zs_clear(zstr);
 
 	if (date_pic) {
 		ZSTR zs2 = zprintpic3(date_pic, syr, smo, sda);
-		zs_free(pzstr);
-		*pzstr = zs2;
+		zs_move(zstr, &zs2);
 		return;
 	}
 	switch (sfmt) {
 	case 0:		/* da mo yr */
 		if (sda) {
-			zs_apps(pzstr, sda);
-			zs_appc(pzstr, ' ');
+			zs_apps(zstr, sda);
+			zs_appc(zstr, ' ');
 		}
 		if (smo) {
-			zs_apps(pzstr, smo);
-			zs_appc(pzstr, ' ');
+			zs_apps(zstr, smo);
+			zs_appc(zstr, ' ');
 		}
 		if (syr) {
-			zs_apps(pzstr, syr);
+			zs_apps(zstr, syr);
 		}
 		break;
 	case 1:		/* mo da, yr */
 		if (smo) {
-			zs_apps(pzstr, smo);
-			zs_appc(pzstr, ' ');
+			zs_apps(zstr, smo);
+			zs_appc(zstr, ' ');
 		}
 		if (sda) {
-			zs_apps(pzstr, sda);
-			zs_apps(pzstr, ", ");
+			zs_apps(zstr, sda);
+			zs_apps(zstr, ", ");
 		}
 		if (syr)
-			zs_apps(pzstr, syr);
+			zs_apps(zstr, syr);
 		break;
 	case 2:		/* mo/da/yr */
 		if (smo)
-			zs_apps(pzstr, smo);
-		zs_appc(pzstr, '/');
+			zs_apps(zstr, smo);
+		zs_appc(zstr, '/');
 		if (sda)
-			zs_apps(pzstr, sda);
-		zs_appc(pzstr, '/');
+			zs_apps(zstr, sda);
+		zs_appc(zstr, '/');
 		if (syr)
-			zs_apps(pzstr, syr);
+			zs_apps(zstr, syr);
 		break;
 	case 3:		/* da/mo/yr */
 		if (sda)
-			zs_apps(pzstr, sda);
-		zs_appc(pzstr, '/');
+			zs_apps(zstr, sda);
+		zs_appc(zstr, '/');
 		if (smo)
-			zs_apps(pzstr, smo);
-		zs_appc(pzstr, '/');
+			zs_apps(zstr, smo);
+		zs_appc(zstr, '/');
 		if (syr)
-			zs_apps(pzstr, syr);
+			zs_apps(zstr, syr);
 		break;
 	case 4:		/* mo-da-yr */
 		if (smo)
-			zs_apps(pzstr, smo);
-		zs_appc(pzstr, '-');
+			zs_apps(zstr, smo);
+		zs_appc(zstr, '-');
 		if (sda)
-			zs_apps(pzstr, sda);
-		zs_appc(pzstr, '-');
+			zs_apps(zstr, sda);
+		zs_appc(zstr, '-');
 		if (syr)
-			zs_apps(pzstr, syr);
+			zs_apps(zstr, syr);
 		break;
 	case 5:		/* da-mo-yr */
 		if (sda)
-			zs_apps(pzstr, sda);
-		zs_appc(pzstr, '-');
+			zs_apps(zstr, sda);
+		zs_appc(zstr, '-');
 		if (smo)
-			zs_apps(pzstr, smo);
-		zs_appc(pzstr, '-');
+			zs_apps(zstr, smo);
+		zs_appc(zstr, '-');
 		if (syr)
-			zs_apps(pzstr, syr);
+			zs_apps(zstr, syr);
 		break;
 	case 6:		/* modayr */
 		if (smo)
-			zs_apps(pzstr, smo);
+			zs_apps(zstr, smo);
 		if (sda)
-			zs_apps(pzstr, sda);
+			zs_apps(zstr, sda);
 		if (syr)
-			zs_apps(pzstr, syr);
+			zs_apps(zstr, syr);
 		break;
 	case 7:		/* damoyr */
 		if (sda)
-			zs_apps(pzstr, sda);
+			zs_apps(zstr, sda);
 		if (smo)
-			zs_apps(pzstr, smo);
+			zs_apps(zstr, smo);
 		if (syr)
-			zs_apps(pzstr, syr);
+			zs_apps(zstr, syr);
 		break;
 	case 8:         /* yr mo da */
 		if (syr)
-			zs_apps(pzstr, syr);
+			zs_apps(zstr, syr);
 		if (smo) {
-			zs_appc(pzstr, ' ');
-			zs_apps(pzstr, smo);
+			zs_appc(zstr, ' ');
+			zs_apps(zstr, smo);
 		}
 		if (sda) {
-			zs_appc(pzstr, ' ');
-			zs_apps(pzstr, sda);
+			zs_appc(zstr, ' ');
+			zs_apps(zstr, sda);
 		}
 		break;
 	case 9:         /* yr/mo/da */
 		if (syr)
-			zs_apps(pzstr, syr);
-		zs_appc(pzstr, '/');
+			zs_apps(zstr, syr);
+		zs_appc(zstr, '/');
 		if (smo)
-			zs_apps(pzstr, smo);
-		zs_appc(pzstr, '/');
+			zs_apps(zstr, smo);
+		zs_appc(zstr, '/');
 		if (sda)
-			zs_apps(pzstr, sda);
+			zs_apps(zstr, sda);
 		break;
 	case 10:        /* yr-mo-da */
 		if (syr)
-			zs_apps(pzstr, syr);
-		zs_appc(pzstr, '-');
+			zs_apps(zstr, syr);
+		zs_appc(zstr, '-');
 		if (smo)
-			zs_apps(pzstr, smo);
-		zs_appc(pzstr, '-');
+			zs_apps(zstr, smo);
+		zs_appc(zstr, '-');
 		if (sda)
-			zs_apps(pzstr, sda);
+			zs_apps(zstr, sda);
 		break;
 	case 11:        /* yrmoda */
 		if (syr)
-			zs_apps(pzstr, syr);
+			zs_apps(zstr, syr);
 		if (smo)
-			zs_apps(pzstr, smo);
+			zs_apps(zstr, smo);
 		if (sda)
-			zs_apps(pzstr, sda);
+			zs_apps(zstr, sda);
 		break;
 	/* 12 (year only) was handled directly in do_format_date */
 	case 13:      /* da/mo yr */
 		if (sda)
-			zs_apps(pzstr, sda);
-		zs_appc(pzstr, '/');
+			zs_apps(zstr, sda);
+		zs_appc(zstr, '/');
 		if (smo)
-			zs_apps(pzstr, smo);
-		zs_appc(pzstr, ' ');
+			zs_apps(zstr, smo);
+		zs_appc(zstr, ' ');
 		if (syr)
-			zs_apps(pzstr, syr);
+			zs_apps(zstr, syr);
 		break;
 	/* 14 (as GEDCOM) was handled directly in do_format_date */
         }
@@ -1825,7 +1823,7 @@ static ZSTR
 zshorten_date (STRING str)
 {
 	STRING sht = shorten_date(str);
-	ZSTR zstr=0;
-	zs_sets(&zstr, sht);
+	ZSTR zstr=zs_new();
+	zs_sets(zstr, sht);
 	return zstr;
 }

@@ -74,7 +74,7 @@ struct trantable_s {
 
 /* alphabetical */
 static XNODE create_xnode(XNODE, INT, STRING);
-static BOOLEAN init_map_from_str(STRING str, CNSTRING mapname, TRANTABLE * ptt, ZSTR * pzerr);
+static BOOLEAN init_map_from_str(STRING str, CNSTRING mapname, TRANTABLE * ptt, ZSTR zerr);
 static void maperror(CNSTRING errmsg);
 static void remove_xnodes(XNODE);
 static void show_xnode(XNODE node);
@@ -256,12 +256,12 @@ init_map_from_rec (CNSTRING key, INT trnum, TRANTABLE * ptt)
 	STRING rawrec;
 	INT len;
 	BOOLEAN ok;
-	ZSTR zerr=0;
+	ZSTR zerr=zs_new();
 
 	*ptt = 0;
 	if (!(rawrec = retrieve_raw_record(key, &len)))
 		return TRUE;
-	ok = init_map_from_str(rawrec, map_names[trnum], ptt, &zerr);
+	ok = init_map_from_str(rawrec, map_names[trnum], ptt, zerr);
 	stdfree(rawrec);
 	if (!ok)
 		maperror(zs_str(zerr));
@@ -277,7 +277,7 @@ init_map_from_rec (CNSTRING key, INT trnum, TRANTABLE * ptt)
  * But if file is empty, *ptt=0 and returns TRUE.
  *==================================================*/
 BOOLEAN
-init_map_from_file (CNSTRING file, CNSTRING mapname, TRANTABLE * ptt, ZSTR *pzerr)
+init_map_from_file (CNSTRING file, CNSTRING mapname, TRANTABLE * ptt, ZSTR zerr)
 {
 	FILE *fp;
 	struct stat buf;
@@ -299,7 +299,7 @@ init_map_from_file (CNSTRING file, CNSTRING mapname, TRANTABLE * ptt, ZSTR *pzer
 	/* may not read full buffer on Windows due to CR/LF translation */
 	ASSERT(siz == buf.st_size || feof(fp));
 	fclose(fp);
-	ok = init_map_from_str(mem, mapname, ptt, pzerr);
+	ok = init_map_from_str(mem, mapname, ptt, zerr);
 	stdfree(mem);
 	return ok;
 }
@@ -318,7 +318,7 @@ init_map_from_file (CNSTRING file, CNSTRING mapname, TRANTABLE * ptt, ZSTR *pzer
  * Returns NULL if ok, else error string
  *================================================*/
 static BOOLEAN
-init_map_from_str (STRING str, CNSTRING mapname, TRANTABLE * ptt, ZSTR * pzerr)
+init_map_from_str (STRING str, CNSTRING mapname, TRANTABLE * ptt, ZSTR zerr)
 {
 	INT i, n, maxn, entry=1, line=1, newc;
 	INT sep = (uchar)'\t'; /* default separator */
@@ -516,7 +516,7 @@ none:
 	return ok;
 
 fail:
-	zs_setf(pzerr, _(qSmaperr), mapname, line, entry, errmsg);
+	zs_setf(zerr, _(qSmaperr), mapname, line, entry, errmsg);
 
 	for (i = 0; i < n; i++) /* rights not consumed by tt */
 		stdfree(rights[i]);
@@ -633,23 +633,22 @@ show_xnode (XNODE node)
  * returns translated string
  *=================================================*/
 void
-custom_translate (ZSTR * pzstr, TRANTABLE tt)
+custom_translate (ZSTR zstr, TRANTABLE tt)
 {
-	ZSTR zin = *pzstr;
-	ZSTR zout = zs_newn((unsigned int)(zs_len(zin)*1.3+2));
-	STRING p = zs_str(zin);
+	ZSTR zout = zs_newn((unsigned int)(zs_len(zstr)*1.3+2));
+	STRING p = zs_str(zstr);
 	while (*p) {
 		CNSTRING tmp;
 		INT len = translate_match(tt, p, &tmp);
 		if (len) {
 			p += len;
-			zs_apps(&zout, tmp);
+			zs_apps(zout, tmp);
 		} else {
-			zs_appc(&zout, *p++);
+			zs_appc(zout, *p++);
 		}
 	}
-	zs_free(pzstr);
-	*pzstr = zout;
+	zs_setz(zstr, zout);
+	zs_free(&zout);
 }
 /*===================================================
  * custom_sort -- Compare two strings with custom sort
@@ -736,12 +735,12 @@ get_trantable_desc (TRANTABLE tt)
 	ZSTR zstr=zs_new();
 	char buffer[36];
     if (tt->name[0]) {
-		zs_apps(&zstr, tt->name);
+		zs_apps(zstr, tt->name);
 	} else {
-		zs_apps(&zstr, "(Unnamed table)");
+		zs_apps(zstr, "(Unnamed table)");
 	}
 	sprintf(buffer, " [%d]", tt->total);
-	zs_apps(&zstr, buffer);
+	zs_apps(zstr, buffer);
 	return zstr;
 }
 /*===================================================

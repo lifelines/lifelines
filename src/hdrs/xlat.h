@@ -15,7 +15,7 @@
 #define xlat_h_included
 
 /* xlat.c */
-BOOLEAN xl_do_xlat(XLAT xlat, ZSTR * pzstr);
+BOOLEAN xl_do_xlat(XLAT xlat, ZSTR zstr);
 void xl_free_adhoc_xlats(void);
 void xl_free_xlats(void);
 ZSTR xlat_get_description(XLAT xlat);
@@ -25,7 +25,7 @@ XLAT xl_get_xlat(CNSTRING src, CNSTRING dest, BOOLEAN adhoc);
 BOOLEAN xl_is_xlat_valid(XLAT xlat);
 void xl_load_all_dyntts(CNSTRING ttpath);
 void xl_set_name(XLAT xlat, CNSTRING name);
-void xl_parse_codeset(CNSTRING codeset, ZSTR * zcsname, LIST * subcodes);
+void xl_parse_codeset(CNSTRING codeset, ZSTR zcsname, LIST * subcodes);
 void xl_release_xlat(XLAT xlat);
 
 #endif /* xlat_h_included */

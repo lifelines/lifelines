@@ -55,7 +55,7 @@ typedef struct xlat_step_s {
 
 /* alphabetical */
 static void add_dyntt_step(XLAT xlat, DYNTT dyntt);
-static INT check_tt_name(CNSTRING filename, ZSTR * pzsrc, ZSTR * pzdest);
+static INT check_tt_name(CNSTRING filename, ZSTR zsrc, ZSTR zdest);
 static XLSTEP create_iconv_step(CNSTRING src, CNSTRING dest);
 static XLSTEP create_dyntt_step(DYNTT dyntt);
 static XLAT create_null_xlat(void);
@@ -185,12 +185,13 @@ XLAT
 xl_get_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 {
 	XLAT xlat=0;
-	ZSTR zsrc=0, zdest=0;
+	ZSTR zsrc=zs_new(), zdest=zs_new();
 	LIST srcsubs=0, destsubs=0;
 	STRING subcoding=0;
 	
 	if (!src || !src[0] || !dest || !dest[0]) {
-		return create_null_xlat();
+		xlat = create_null_xlat();
+		goto end_get_xlat;
 	}
 
 	/* first check existing cache */
@@ -199,22 +200,24 @@ xl_get_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 		FORLIST(f_xlats, el)
 			xlattemp = (XLAT)el;
 			if (eqstr_ex(xlattemp->src, src) && eqstr_ex(xlattemp->dest, dest)) {
-				return xlattemp;
+				xlat = xlattemp;
+				goto end_get_xlat;
 			}
 		ENDLIST
 	}
 	/* check if identity */
 	if (eqstr(src, dest)) {
 		/* new empty xlat will work for identity */
-		return create_xlat(src, dest, adhoc);
+		xlat = create_xlat(src, dest, adhoc);
+		goto end_get_xlat;
 	}
 
 	/* create new xlat & fill it out */
 	xlat = create_xlat(src, dest, adhoc);
 
 	/* parse out codesets & subcodings */
-	xl_parse_codeset(src, &zsrc, &srcsubs);
-	xl_parse_codeset(dest, &zdest, &destsubs);
+	xl_parse_codeset(src, zsrc, &srcsubs);
+	xl_parse_codeset(dest, zdest, &destsubs);
 
 	/* in source codeset, do subcodings requested by destination */
 	/* eg, if going from UTF-8 to GUI, transliterations done in UTF-8 first */
@@ -250,6 +253,9 @@ xl_get_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 		ENDLIST
 	}
 
+end_get_xlat:
+	zs_free(&zsrc);
+	zs_free(&zdest);
 	return xlat;
 }
 /*==========================================================
@@ -286,8 +292,8 @@ get_conversion_dyntt (CNSTRING src, CNSTRING dest)
 {
 	DYNTT dyntt;
 	ZSTR zttname = zs_news(src);
-	zs_appc(&zttname, '_');
-	zs_apps(&zttname, dest);
+	zs_appc(zttname, '_');
+	zs_apps(zttname, dest);
 	dyntt = (DYNTT)valueof_ptr(f_dyntts, zs_str(zttname));
 	zs_free(&zttname);
 	return dyntt;
@@ -301,8 +307,8 @@ get_subcoding_dyntt (CNSTRING codeset, CNSTRING subcoding)
 {
 	DYNTT dyntt;
 	ZSTR zttname = zs_news(codeset);
-	zs_apps(&zttname, "__");
-	zs_apps(&zttname, subcoding);
+	zs_apps(zttname, "__");
+	zs_apps(zttname, subcoding);
 	dyntt = (DYNTT)valueof_ptr(f_dyntts, zs_str(zttname));
 	zs_free(&zttname);
 	return dyntt;
@@ -314,19 +320,20 @@ get_subcoding_dyntt (CNSTRING codeset, CNSTRING subcoding)
 static void
 load_dyntt_if_needed (DYNTT dyntt)
 {
-	ZSTR zerr=0;
+	ZSTR zerr=zs_new();
 	if (dyntt->tt || dyntt->loadfailure)
 		return;
-	if (!init_map_from_file(dyntt->path, dyntt->path, &dyntt->tt, &zerr)) {
+	if (!init_map_from_file(dyntt->path, dyntt->path, &dyntt->tt, zerr)) {
 		dyntt->loadfailure = TRUE;
 	}
+	zs_free(&zerr);
 }
 /*==========================================================
  * xl_do_xlat -- Perform a translation on a string
  * Created: 2002/11/25 (Perry Rapp)
  *========================================================*/
 BOOLEAN
-xl_do_xlat (XLAT xlat, ZSTR * pzstr)
+xl_do_xlat (XLAT xlat, ZSTR zstr)
 {
 	BOOLEAN cvtd=FALSE;
 	XLSTEP xstep=0;
@@ -336,18 +343,17 @@ xl_do_xlat (XLAT xlat, ZSTR * pzstr)
 		xstep = (XLSTEP)el;
 		if (xstep->iconv_src) {
 			/* an iconv step */
-			ZSTR ztemp=0;
-			if (iconv_trans(xstep->iconv_src, xstep->iconv_dest, zs_str(*pzstr), &ztemp, "?")) {
+			ZSTR ztemp=zs_new();
+			if (iconv_trans(xstep->iconv_src, xstep->iconv_dest, zs_str(zstr), ztemp, "?")) {
 				cvtd=TRUE;
-				zs_free(pzstr);
-				*pzstr = ztemp;
+				zs_move(zstr, &ztemp);
 			} else {
 				/* iconv failed, anything to do ? */
 			}
 		} else if (xstep->dyntt) {
 			/* a custom translation table step */
 			if (xstep->dyntt->tt)
-				custom_translate(pzstr, xstep->dyntt->tt);
+				custom_translate(zstr, xstep->dyntt->tt);
 		}
 	ENDLIST
 	return cvtd;
@@ -390,8 +396,8 @@ load_dynttlist_from_dir (STRING dir)
 		CNSTRING ttfile = programs[i]->d_name;
 		/* filename without extension */
 		ZSTR zfile = zs_newsubs(ttfile, strlen(ttfile)-(sizeof(f_ttext)-1));
-		ZSTR zsrc=0, zdest=0;
-		INT ntype = check_tt_name(zs_str(zfile), &zsrc, &zdest);
+		ZSTR zsrc=zs_new(), zdest=zs_new();
+		INT ntype = check_tt_name(zs_str(zfile), zsrc, zdest);
 		/*
 		Valid names are like so:
 			UTF-8_ISO-8859-1 (type 1; code conversion)
@@ -420,10 +426,11 @@ load_dynttlist_from_dir (STRING dir)
  *  returns 0 if not valid name for tt
  *==========================================================*/
 static INT
-check_tt_name (CNSTRING filename, ZSTR * pzsrc, ZSTR * pzdest)
+check_tt_name (CNSTRING filename, ZSTR zsrc, ZSTR zdest)
 {
 	CNSTRING ptr;
 	CNSTRING underbar=0;
+	ZSTR ztemp;
 	for (ptr=filename; *ptr; ++ptr) {
 		if (*ptr=='_') {
 			if (!underbar) {
@@ -440,12 +447,13 @@ check_tt_name (CNSTRING filename, ZSTR * pzsrc, ZSTR * pzdest)
 		!underbar[1] || (underbar[1]=='_' && !underbar[2])) {
 		return 0;
 	}
-	*pzsrc = zs_newsubs(filename, underbar-filename);
+	ztemp = zs_newsubs(filename, underbar-filename);
+	zs_move(zsrc, &ztemp);
 	if (underbar[1]=='_') {
-		zs_sets(pzdest, underbar+2);
+		zs_sets(zdest, underbar+2);
 		return 2;
 	} else {
-		zs_sets(pzdest, underbar+1);
+		zs_sets(zdest, underbar+1);
 		return 1;
 	}
 }
@@ -557,21 +565,19 @@ zero_dyntt (DYNTT dyntt)
  * Created: 2002/12/01 (Perry Rapp)
  *========================================================*/
 void
-xl_parse_codeset (CNSTRING codeset, ZSTR * zcsname, LIST * subcodes)
+xl_parse_codeset (CNSTRING codeset, ZSTR zcsname, LIST * subcodes)
 {
 	CNSTRING p=codeset, prev=codeset;
 	BOOLEAN base=FALSE;
 	for ( ; ; ++p) {
 		if ( !p[0] || (p[0]=='/' && p[1]=='/')) {
 			if (!base) {
-				if (zcsname) {
-					zs_free(zcsname);
-					*zcsname = zs_newsubs(codeset, p-prev);
-				}
+				ZSTR ztemp = zs_newsubs(codeset, p-prev);
+				zs_move(zcsname, &ztemp);
 				base=TRUE;
 			} else {
-				ZSTR ztemp=0;
 				if (subcodes) {
+					ZSTR ztemp=0;
 					if (!*subcodes) {
 						*subcodes = create_list();
 						set_list_type(*subcodes, LISTDOFREE);
@@ -607,34 +613,39 @@ ZSTR
 xlat_get_description (XLAT xlat)
 {
 	INT count=0;
-	ZSTR zrtn=0;  /* final string to return */
-	ZSTR zstr=0; /* string with details of iconv conversions */
+	ZSTR zrtn=zs_new();  /* final string to return */
+	ZSTR zstr=zs_new(); /* string with details of iconv conversions */
 	char stepcount[32];
 	XLSTEP xstep=0;
-	if (!xlat || !xlat->steps) return zs_news(_("(no conversion)"));
+	if (!xlat || !xlat->steps) {
+		zs_sets(zrtn, _("(no conversion)"));
+		goto end_get_desc;
+	}
 	/* simply cycle through & perform each step */
 	FORLIST(xlat->steps, el)
 		xstep = (XLSTEP)el;
 		++count;
 		if (xstep->iconv_src) {
 			/* an iconv step */
-			if (zs_len(zstr)) zs_apps(&zstr, ", ");
-			zs_apps(&zstr, "iconv(");
-			zs_apps(&zstr, xstep->iconv_src);
-			zs_apps(&zstr, ",");
-			zs_apps(&zstr, xstep->iconv_dest);
-			zs_apps(&zstr, ")");
+			if (zs_len(zstr)) zs_apps(zstr, ", ");
+			zs_apps(zstr, "iconv(");
+			zs_apps(zstr, xstep->iconv_src);
+			zs_apps(zstr, ",");
+			zs_apps(zstr, xstep->iconv_dest);
+			zs_apps(zstr, ")");
 		} else if (xstep->dyntt) {
-			if (zs_len(zstr)) zs_apps(&zstr, ", ");
-			zs_apps(&zstr, "tt(");
-			zs_apps(&zstr, tt_get_name(xstep->dyntt->tt));
-			zs_apps(&zstr, ")");
+			if (zs_len(zstr)) zs_apps(zstr, ", ");
+			zs_apps(zstr, "tt(");
+			zs_apps(zstr, tt_get_name(xstep->dyntt->tt));
+			zs_apps(zstr, ")");
 		}
 	ENDLIST
 	snprintf(stepcount, sizeof(stepcount), _pl("%d step", "%d steps", count), count);
-	zs_sets(&zrtn, stepcount);
-	zs_apps(&zrtn, ": ");
-	zs_appz(&zrtn, zstr);
+	zs_sets(zrtn, stepcount);
+	zs_apps(zrtn, ": ");
+	zs_appz(zrtn, zstr);
+
+end_get_desc:
 	zs_free(&zstr);
 	return zrtn;
 }

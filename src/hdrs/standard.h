@@ -181,7 +181,7 @@ typedef enum { RECORD_ERROR, RECORD_NOT_FOUND, RECORD_SUCCESS }
 /* types for zstrings */
 struct zstr_s;
 typedef struct zstr_s * ZSTR;
-
+typedef const ZSTR ZCSTR;
 
 /*
  Pull in declarations & macros for NLS (National Language Support)

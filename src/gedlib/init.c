@@ -225,10 +225,10 @@ set_gettext_codeset (CNSTRING codeset)
 #if ENABLE_NLS
 #ifdef HAVE_BIND_TEXTDOMAIN_CODESET
 	if (codeset && codeset[0]) {
-		ZSTR zcsname=0;
+		ZSTR zcsname=zs_new();
 		/* extract just the codeset name, without any subcodings */
 		/* eg, just "UTF-8" out of "UTF-8//TrGreekAscii//TrCyrillicAscii" */
-		transl_parse_codeset(codeset, &zcsname, 0);
+		transl_parse_codeset(codeset, zcsname, 0);
 		if (zs_str(zcsname)) {
 			/* gettext automatically appends //TRANSLIT */
 			bind_textdomain_codeset(PACKAGE, zs_str(zcsname));

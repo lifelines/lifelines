@@ -477,7 +477,7 @@ __bytecode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	/* now translate to internal, if possible */
 		XLAT xlat = transl_get_xlat_to_int(codeset);
 		if (xlat)
-			transl_xlat(xlat, &zstr);
+			transl_xlat(xlat, zstr);
 	}
 	newval = create_pvalue_from_string(zs_str(zstr));
 bytecode_exit:
@@ -531,7 +531,7 @@ __convertcode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	zstr = zs_news(pvalue_to_string(val));
 	xlat = transl_get_xlat(cs_src, cs_dest);
 	if (xlat)
-		transl_xlat(xlat, &zstr);
+		transl_xlat(xlat, zstr);
 	newval = create_pvalue_from_string(zs_str(zstr));
 convertcode_exit:
 	strfree(&cs_src);
@@ -561,9 +561,9 @@ decode (STRING str, INT * offset)
 				goto decode_exit;
 			}
 			ptr += 2;
-			zs_appc(&zstr, (uchar)(unsigned int)n);
+			zs_appc(zstr, (uchar)(unsigned int)n);
 		} else {
-			zs_appc(&zstr, *ptr);
+			zs_appc(zstr, *ptr);
 		}
 	}
 decode_exit:

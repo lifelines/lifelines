@@ -10,8 +10,8 @@
  *  providing conversion to internal codeset
  *==============================================================*/
 
-void disp_to_int(ZSTR * pzstr);
-void int_to_disp(ZSTR * pzstr);
+void disp_to_int(ZSTR zstr);
+void int_to_disp(ZSTR zstr);
 
 int mvccuwaddstr(UIWINDOW uiw, int y, int x, char *cp);
 int mvccwaddnstr(WINDOW *wp, int y, int x, char *cp, int n);

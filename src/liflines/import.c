@@ -156,17 +156,19 @@ do_import (struct import_feedback * ifeed, FILE *fp)
 retry_input_codeset:
 		ttm = transl_get_xlat(gedcom_codeset_in, int_codeset);
 		if (!transl_is_xlat_valid(ttm)) {
-			ZSTR zstr=0;
+			ZSTR zstr=zs_new();
 			char csname[64];
+			BOOLEAN b;
 			transl_release_xlat(ttm);
 			ttm = 0;
-			zs_setf(&zstr, _("Cannot convert codeset (from <%s> to <%s>)")
+			zs_setf(zstr, _("Cannot convert codeset (from <%s> to <%s>)")
 				, gedcom_codeset_in, int_codeset);
-			if (!ask_for_string(zs_str(zstr)
+			b = ask_for_string(zs_str(zstr)
 				, _("Enter codeset to assume (* for none)")
-				, csname, sizeof(csname)) || !csname[0]) {
+				, csname, sizeof(csname)) && csname[0];
+			zs_free(&zstr);
+			if (!b)
 				goto end_import;
-			}
 			if (!eqstr(csname, "*")) {
 				strupdate(&gedcom_codeset_in, csname);
 				goto retry_input_codeset;
