@@ -1478,7 +1478,8 @@ do_edit (void)
 {
 	endwin();
 #ifdef WIN32
-	w32system(editstr);
+//	w32system(editstr);
+	system(editstr);
 #else
 	system(editstr);
 #endif

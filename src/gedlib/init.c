@@ -56,6 +56,10 @@ static STRING
 figure_tempfile()
 {
 #ifdef WIN32
+#ifdef _MSC_VER
+/* MSVC has _MAX_PATH, apparently Borland has PATH_MAX */
+#define PATH_MAX _MAX_PATH
+#endif
 	STRING e;
 	char win32_tempfile[PATH_MAX]; 
 
