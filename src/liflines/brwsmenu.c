@@ -603,6 +603,16 @@ on_lang_change (VPTR uparm)
 	f_reloading = FALSE;
 }
 /*============================
+ * brwsmenu_on_codeset_change -- handle codeset change
+ * we handle this by simply reloading
+ *==========================*/
+void
+brwsmenu_on_codeset_change (void)
+{
+	/* forward to on_lang_change, which reloads */
+	on_lang_change(0);
+}
+/*============================
  * get_screen_menuset -- get menuset of specified browse screen
  * Created: 2002/10/27, Perry Rapp
  *==========================*/

@@ -21,8 +21,6 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
-/* modified 17 Aug 2000 by Matt Emmerton (matt@gsicomp.on.ca)  */
-/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * init.c -- Initialize LifeLines data structures
  * Copyright(c) 1991-95 by T.T. Wetmore IV; all rights reserved
@@ -41,6 +39,7 @@
 #include "version.h"
 #include "lloptions.h"
 #include "codesets.h"
+#include "menuitem.h"
 #include "zstr.h"
 #include "icvt.h"
 #include "date.h"
@@ -225,14 +224,20 @@ set_gettext_codeset (CNSTRING codeset)
 {
 #if ENABLE_NLS
 #ifdef HAVE_BIND_TEXTDOMAIN_CODESET
+	static STRING prevcodeset = 0;
+	if (eqstr_ex(prevcodeset, codeset))
+		return;
 	if (codeset && codeset[0]) {
 		ZSTR zcsname=zs_new();
 		/* extract just the codeset name, without any subcodings */
 		/* eg, just "UTF-8" out of "UTF-8//TrGreekAscii//TrCyrillicAscii" */
 		transl_parse_codeset(codeset, zcsname, 0);
 		if (zs_str(zcsname)) {
+			strupdate(&prevcodeset, zs_str(zcsname));
 			/* gettext automatically appends //TRANSLIT */
-			bind_textdomain_codeset(PACKAGE, zs_str(zcsname));
+		} else {
+			/* what do we do if they gave us an empty one ? */
+			strupdate(&prevcodeset, "ASCII");
 		}
 		zs_free(&zcsname);
 	} else {
@@ -240,8 +245,11 @@ set_gettext_codeset (CNSTRING codeset)
 		We need to set some codeset, in case it was set to 
 		UTF-8 in last db 
 		*/
-		bind_textdomain_codeset(PACKAGE, gui_codeset_out);
+		strupdate(&prevcodeset, gui_codeset_out);
 	}
+	bind_textdomain_codeset(PACKAGE, prevcodeset);
+	/* now the menus must be relocalized */
+	brwsmenu_on_codeset_change();
 #endif /* HAVE_BIND_TEXTDOMAIN_CODESET */
 #endif /* ENABLE_NLS */
 }

@@ -25,6 +25,12 @@
 	Updated dateformat documentation (new for yearformat and
 	eraformat).
 
+	* ChangeLog src/gedlib/init.c src/hdrs/menuitem.h
+	src/liflines/brwsmenu.c
+
+	Bugfix for menu items not getting localized into internal 
+	codeset (sf bug#696157).
+
 2003-03-01 Perry Rapp
 
 	* ChangeLog src/gedlib/indiseq.c src/hdrs/array.h
