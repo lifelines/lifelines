@@ -28,6 +28,7 @@ void xl_set_name(XLAT xlat, CNSTRING name);
 void xl_parse_codeset(CNSTRING codeset, ZSTR zcsname, LIST * subcodes);
 void xl_release_xlat(XLAT xlat);
 void xl_set_legtt(XLAT, void * vp);
+CNSTRING xl_get_dest_codeset(XLAT xlat);
 void * xl_get_legtt(XLAT);
 
 #endif /* xlat_h_included */

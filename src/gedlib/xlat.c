@@ -683,4 +683,12 @@ xl_get_legtt (XLAT xlat)
 {
 	return xlat->legvp;
 }
+/*==========================================================
+ * xl_get_dest_codeset -- return name of codeset of destination
+ *========================================================*/
+CNSTRING
+xl_get_dest_codeset (XLAT xlat)
+{
+	return xlat->dest;
+}
 

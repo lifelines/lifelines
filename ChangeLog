@@ -18,6 +18,11 @@
 
 	Fix all edits of indi to expand refns (not all were doing it).
 
+	* ChangeLog src/gedlib/init.c src/gedlib/nodeio.c
+	src/gedlib/xlat.c src/hdrs/gedcom.h src/hdrs/xlat.h
+
+	Prepend UTF-8 BOM to edit file on Windows when appropriate.
+
 2003-09-14 Perry Rapp
 
 	* src/gedlib/intrface.c src/hdrs/icvt.h src/hdrs/table.h

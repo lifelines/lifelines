@@ -20,6 +20,7 @@
 #include "metadata.h"
 #include "lloptions.h"
 #include "date.h"
+#include "xlat.h"
 
 /*********************************************
  * global/exported variables
@@ -49,6 +50,7 @@ static BOOLEAN string_to_line(STRING *ps, INT *plev, STRING *pxref,
 	STRING *ptag, STRING *pval, STRING *pmsg);
 static STRING swrite_node(INT levl, NODE node, STRING p);
 static STRING swrite_nodes(INT levl, NODE node, STRING p);
+static void write_indi_to_file(NODE indi, CNSTRING file, BOOLEAN bom);
 static void write_node(INT levl, FILE *fp, XLAT ttm,
 	NODE node, BOOLEAN indent);
 
@@ -699,13 +701,17 @@ load_record_wh (RECORD rec, char * whptr, INT whlen)
  * (no user interaction)
  *===================================*/
 void
-write_indi_to_file (NODE indi, CNSTRING file)
+write_indi_to_file (NODE indi, CNSTRING file, BOOLEAN bom)
 {
 	FILE *fp;
 	XLAT ttmo = transl_get_predefined_xlat(MINED);
 	NODE name, refn, sex, body, famc, fams;
 	
 	ASSERT(fp = fopen(file, LLWRITETEXT));
+	if (bom && is_codeset_utf8(xl_get_dest_codeset(ttmo))) {
+		char bom[] = "\xEF\xBB\xBF";
+		fwrite(bom, strlen(bom), 1, fp);
+	}
 	split_indi_old(indi, &name, &refn, &sex, &body, &famc, &fams);
 	write_nodes(0, fp, ttmo, indi, TRUE, TRUE, TRUE);
 	write_nodes(1, fp, ttmo, name, TRUE, TRUE, TRUE);
@@ -725,9 +731,13 @@ write_indi_to_file (NODE indi, CNSTRING file)
 void
 write_indi_to_file_for_edit (NODE indi, CNSTRING file)
 {
+	BOOLEAN bom = FALSE;
+#ifdef WIN32
+	bom = TRUE;
+#endif
 	if (getoptint("ExpandRefnsDuringEdit", 0) > 0)
 		expand_refn_links(indi);
-	write_indi_to_file(indi, editfile);
+	write_indi_to_file(indi, editfile, bom);
 	resolve_refn_links(indi);
 }
 /*=====================================

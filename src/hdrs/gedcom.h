@@ -312,7 +312,7 @@ BOOLEAN init_valtab_from_file(STRING, TABLE, XLAT, INT sep, STRING*);
 BOOLEAN init_valtab_from_rec(CNSTRING, TABLE, INT sep, STRING*);
 BOOLEAN init_valtab_from_string(CNSTRING, TABLE, INT sep, STRING*);
 BOOLEAN is_db_open(void);
-BOOLEAN is_codeset_utf8(STRING codeset);
+BOOLEAN is_codeset_utf8(CNSTRING codeset);
 BOOLEAN is_iconv_supported(void);
 BOOLEAN is_nls_supported(void);
 BOOLEAN is_temp_node(NODE);
@@ -477,7 +477,6 @@ INT val_to_sex(NODE);
 BOOLEAN value_to_list(STRING, LIST, INT*, STRING);
 STRING value_to_xref(STRING);
 BOOLEAN writexrefs(void);
-void write_indi_to_file(NODE indi, CNSTRING file);
 void write_indi_to_file_for_edit(NODE indi, CNSTRING file);
 void write_fam_to_file(NODE fam, CNSTRING file);
 void write_node_to_editfile(NODE); /* used by Ethel */

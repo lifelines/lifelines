@@ -633,7 +633,7 @@ describe_dberror (INT dberr, STRING buffer, INT buflen)
  * is_codeset_utf8 -- Is this the name of UTF-8 ?
  *=================================================*/
 BOOLEAN
-is_codeset_utf8 (STRING codename)
+is_codeset_utf8 (CNSTRING codename)
 {
 	if (!codename || !codename[0]) return FALSE;
 	if (eqstr("UTF-8", codename)||eqstr("utf-8", codename)||eqstr("65001", codename))
