@@ -317,7 +317,7 @@ prompt_for_db:
 					_("Choose database to open")
 					, dbdesclist);
 				if (i >= 0) {
-					dbrequested = strsave(get_list_element(dblist, i+1));
+					dbrequested = strsave(get_list_element(dblist, i+1, 0));
 				}
 				release_dblist(dblist);
 				release_dblist(dbdesclist);
@@ -469,6 +469,7 @@ is_unadorned_directory (STRING path)
 static BOOLEAN
 open_or_create_database (INT alteration, STRING dbrequested, STRING *dbused)
 {
+	dbrequested=dbrequested; /* unused */
 	/* Open Database */
 	if (open_database(alteration, *dbused)) {
 		return TRUE;
@@ -627,6 +628,7 @@ void
 msg_output (MSG_LEVEL level, STRING fmt, ...)
 {
 	va_list args;
+	level=level;
 	va_start(args, fmt);
 	vprintf(fmt, args);
 	va_end(args);

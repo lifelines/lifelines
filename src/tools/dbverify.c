@@ -603,9 +603,9 @@ check_fam (STRING key, RECORD rec)
 	if (eqstr(key, prevkey)) {
 		report_error(ERR_DUPFAM, _("Duplicate family for %s"), key);
 	}
-	fam1 = nztop(rec);
-	fcel1 = fam_to_cacheel(fam1);
+	fcel1 = fam_to_cacheel(rec);
 	lock_cache(fcel1);
+	fam1 = nztop(rec);
 	split_fam(fam1, &fref1, &husb1, &wife1, &chil1, &rest1);
 	/* check refns */
 	for (node1 = fref1; node1; node1 = nsibling(node1)) {
@@ -736,7 +736,7 @@ find_xref (STRING key, NODE node, STRING tag1, STRING tag2)
 	NODE node2;
 	CACHEEL ncel2;
 	BOOLEAN found=FALSE;
-	ncel2 = node_to_cacheel(node);
+	ncel2 = node_to_cacheel_old(node);
 	lock_cache(ncel2);
 	for (node2 = nchild(node); node2; node2 = nsibling(node2)) {
 		if (eqstr(tag1, ntag(node2))

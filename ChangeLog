@@ -4,6 +4,11 @@
 
 	Placeholder version of has_key for Solaris system lacking it.
 
+	* ChangeLog src/liflines/llexec.c src/liflines/screen.c
+	src/tools/dbverify.c:
+
+	Miscellaneous fixes for recent changes.
+
 2003-01-01 Perry Rapp
 
 	* ChangeLog src/gedlib/keytonod.c src/hdrs/cache.h

@@ -1559,8 +1559,12 @@ draw_tt_win (STRING prompt)
 static void
 disp_trans_table_choice (UIWINDOW uiwin, INT row, INT col, STRING menuit, INT trnum)
 {
-	XLAT xlat = transl_get_predefined_xlat(trnum);
-	ZSTR zstr = transl_get_predefined_name(trnum);
+	XLAT xlat;
+	ZSTR zstr;
+
+	menuit=menuit; /* unused */
+	xlat = transl_get_predefined_xlat(trnum);
+	zstr = transl_get_predefined_name(trnum);
 	zs_apps(&zstr, " : ");
 	if (xlat) {
 		zs_appz(&zstr, transl_get_description(xlat));
