@@ -1,8 +1,9 @@
 2002-06-26 Perry Rapp <puddle@users.sourceforge.net>
 
-	*
+	* ChangeLog po/Makevars po/de.po po/el.po po/it.po po/sv.po:
 
 	Test for bind_textdomain_codeset & ngettext for old gettext versions.
+	Start using _pl macro for ngettext (plural gettext).
 	Cosmetic cleanup.
 
 2002-06-25 Perry Rapp <puddle@users.sourceforge.net>
