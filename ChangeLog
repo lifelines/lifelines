@@ -1,3 +1,7 @@
+2000-12-31 Perry Rapp <puddle@users.sourceforge.net>
+
+	* liflines/screen.c: Removed some unnecessary local prototypes.
+
 2000-12-30 Petter Reinholdtsen <pere@td.org.uit.no>
 
 	* configure.in: New option --with-profiling to generate runtime

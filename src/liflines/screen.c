@@ -144,13 +144,6 @@ BOOLEAN import_from_file ();
 void key_util (void);
 void who_is_he_she (void);
 void show_database_stats (void);
-/* in newrecs.c */
-BOOLEAN add_source (void);
-void edit_source (NODE node);
-BOOLEAN add_event (void);
-void edit_event (NODE node);
-BOOLEAN add_other (void);
-void edit_other (NODE node);
 
 /*============================
  * init_screen -- Init screens
