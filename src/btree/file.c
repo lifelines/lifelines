@@ -43,7 +43,7 @@ RKEY rkey;	/* key of new record */
 STRING file;	/* file with new record */
 {
 	FILE *fp;
-	STRING mem;
+	STRING mem = 0;
 	struct stat buf;
 	ASSERT(bwrite(btree));
 	if ((fp = fopen(file, LLREADBINARY)) == NULL) return FALSE;

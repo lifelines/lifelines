@@ -70,6 +70,7 @@ INT *ptype;
 	default: FATAL();
 	}
 	/* NOTREACHED */
+	return NULL;		/* keep compiler happy */
 }
 /*=======================================================
  * indi_to_indi - Convert person record to LifeLines form
@@ -77,8 +78,8 @@ INT *ptype;
 static NODE indi_to_indi (indi)
 NODE indi;
 {
-	NODE node, last, name, famc, lfmc, fams, lfms, frst, prev;
-	last = name = famc = fams = frst = NULL;
+	NODE node, last, name, famc, lfmc, fams, lfms, frst, prev = 0;
+	last = name = famc = fams = frst = lfmc =lfms = NULL;
 	node = nchild(indi);
 	while (node) {
 		STRING tag = ntag(node);
@@ -127,7 +128,7 @@ static NODE fam_to_fam (fam)
 NODE fam;
 {
 	NODE node, frst, last, husb, wife, chil, lchl, prev;
-	frst = last = husb = wife = chil = NULL;
+	frst = last = husb = wife = chil = lchl = NULL;
 	node = nchild(fam);
 	while (node) {
 		STRING tag = ntag(node);
