@@ -1,3 +1,10 @@
+2002-07-30 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog po/LINGUAS
+	NEW: po/fr.po:
+
+	Add French message file.
+
 2002-07-27 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog interp/interp.c interp/parse.h interp/yacc.h
