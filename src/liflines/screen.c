@@ -91,6 +91,43 @@ int VIEWABLE = 10;		/* can be increased up to MAXVIEWABLE */
 static char showing[150];
 static BOOLEAN now_showing = FALSE;
 
+/* forward refs */
+void win_list_init (void);
+
+/* in show.c */
+void show_person (NODE pers,	/* person */
+		  INT row,	/* start row */
+		  INT hgt);	/* avail rows */
+void show_long_family (NODE fam,
+		       INT row,
+		       INT hgt);
+void show_short_family (NODE fam,
+			INT row,
+			INT hgt);
+void show_pedigree (NODE indi);
+void show_aux_display (NODE node,
+		       INT row,
+		       INT hgt);
+void show_list (INDISEQ seq,
+		INT top,
+		INT cur,
+		INT mark);
+/* export.c */
+BOOLEAN archive_in_file ();
+/* import.c */
+BOOLEAN import_from_file ();
+/* in miscutls.c */
+void key_util (void);
+void who_is_he_she (void);
+void show_database_stats (void);
+/* in newrecs.c */
+BOOLEAN add_source (void);
+void edit_source (NODE node);
+BOOLEAN add_event (void);
+void edit_event (NODE node);
+BOOLEAN add_other (void);
+void edit_other (NODE node);
+
 /*============================
  * init_screen -- Init screens
  *==========================*/
@@ -493,7 +530,7 @@ void main_menu (void)
 	INT c;
 	if (cur_screen != MAIN_SCREEN) paint_main_screen();
 	display_screen(MAIN_SCREEN);
-	/*place_std_msg();/*POSS*/
+	/* place_std_msg(); */ /*POSS*/
 	c = interact(main_win, "badrtuxq");
 	place_std_msg();
 	wrefresh(main_win);
@@ -576,9 +613,10 @@ NODE node;
 /*=========================================
  * list_browse -- Handle list_browse screen
  *=======================================*/
-INT list_browse (seq, top, cur, mark)
-INDISEQ seq;
-INT top, cur, mark;
+INT list_browse (INDISEQ seq,
+		 INT top,
+		 INT cur,
+		 INT mark)
 {
 	if (cur_screen != LIST_SCREEN) paint_list_screen();
 	show_list(seq, top, cur, mark);

@@ -158,8 +158,7 @@ void (*tocache)();	/* write record to cache */
 /*=======================================
  * edit_source -- Edit source in database
  *=====================================*/
-void edit_source (node)
-NODE node;
+void edit_source (NODE node)
 {
 	edit_record(node, idredt, 'S', rredit, valid_sour_tree,
 	    cfrupt, "SOUR", sour_to_dbase, gdrmod);
@@ -167,8 +166,7 @@ NODE node;
 /*=====================================
  * edit_event -- Edit event in database
  *===================================*/
-void edit_event (node)
-NODE node;
+void edit_event (NODE node)
 {
 	edit_record(node, ideedt, 'E', eredit, valid_even_tree,
 	     cfeupt, "EVEN", even_to_dbase, gdemod);
@@ -176,8 +174,7 @@ NODE node;
 /*===========================================
  * edit_other -- Edit user record in database
  *=========================================*/
-void edit_other (node)
-NODE node;
+void edit_other (NODE node)
 {
 	edit_record(node, idxedt, 'X', xredit, valid_othr_tree,
 	     cfxupt, NULL, othr_to_dbase, gdxmod);

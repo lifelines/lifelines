@@ -1,5 +1,9 @@
 2000-11-05    <marc@nozell.com>
 
+	* liflines/newrecs.c: cleanup
+
+	* liflines/show.c: cleanup
+
 	* liflines/advedit.c: cleanup
 
 	* liflines/swap.c: cleanup

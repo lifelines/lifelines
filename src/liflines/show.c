@@ -131,10 +131,9 @@ NODE pers;
 /*==============================
  * show_person -- Display person
  *============================*/
-void show_person (pers, row, hgt)
-NODE pers;	/* person */
-INT row;	/* start row */
-INT hgt;	/* avail rows */
+void show_person (NODE pers,	/* person */
+		  INT row,	/* start row */
+		  INT hgt)	/* avail rows */
 {
 	INT i;
 	char buf[132];
@@ -251,9 +250,9 @@ NODE fam;	/* family */
 /*===================================
  * show_long_family -- Display family
  *=================================*/
-void show_long_family (fam, row, hgt)
-NODE fam;
-INT row, hgt;
+void show_long_family (NODE fam,
+		       INT row,
+		       INT hgt)
 {
 	INT i;
 	char buf[132];
@@ -285,10 +284,9 @@ INT row, hgt;
 /*====================================
  * show_short_family -- Display family
  *==================================*/
-void show_short_family (fam, row, hgt)
-NODE fam;
-INT row;
-INT hgt;
+void show_short_family (NODE fam,
+			INT row,
+			INT hgt)
 {
 	INT i;
 	char buf[132];
@@ -339,8 +337,7 @@ INT hgt;
 /*================================================
  * show_pedigree -- Show person in pedigree format
  *==============================================*/
-void show_pedigree (indi)
-NODE indi;
+void show_pedigree (NODE indi)
 {
 	char s[300];			/* used by mvwprintw replacement */
 	NODE f = indi_to_fath(indi);	/* 2nd generation */
@@ -540,9 +537,10 @@ static STRING empstr = (STRING) "                                               
  * show_list - Show name list in list screen
  *========================================*/
 #define VIEWABLE 13
-void show_list (seq, top, cur, mark)
-INDISEQ seq;
-INT top, cur, mark;
+void show_list (INDISEQ seq,
+		INT top,
+		INT cur,
+		INT mark)
 {
 	WINDOW *win = main_win;
 	INT i, j, row, len = length_indiseq(seq);
@@ -575,9 +573,9 @@ INT top, cur, mark;
 /*========================================================
  * show_aux_display -- Show source, event or other record
  *======================================================*/
-void show_aux_display (node, row, hgt)
-NODE node;
-INT row, hgt;
+void show_aux_display (NODE node,
+		       INT row,
+		       INT hgt)
 {
 	STRING key;
 	INT i;

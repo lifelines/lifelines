@@ -44,6 +44,13 @@ extern STRING idplst, lstnew, mrkper;
 extern INDISEQ current_seq;
 LIST browse_lists;
 
+/* in screen.c */
+INT list_browse (INDISEQ seq,
+		 INT top,
+		 INT cur,
+		 INT mark);
+
+
 /*=======================================
  * browse_list -- Handle list browse mode
  *=====================================*/
