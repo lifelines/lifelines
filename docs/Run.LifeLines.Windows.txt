@@ -19,6 +19,12 @@ It must be a valid Windows directory name
 LifeLines will then create & open this brand new
 empty database for you.
 
+This will be a directory underneath your lifelines
+database directory, and you can rename it at any
+time later by simply renaming the directory -- of
+course you should not do this whilst you have 
+that database open in LifeLines.
+
 3)
 At this point, your best course of action is to
 connect to the Internet, browse to the LifeLines
@@ -35,8 +41,25 @@ http://genealogy.org/~ttw/lines/userguide/qref.html
 would be well-advised to read the previous
 Introduction to GEDCOM section as well.)
 
+4)
+When adding a new record (eg, a new person to the 
+database), LifeLines will cause Notepad to appear.
+Enter your information in Notepad -- the following
+page of the online manual discusses entering your
+first person:
 
- - Perry Rapp, 2001/03/03
+http://genealogy.org/~ttw/lines/userguide/first.html
+
+After you have entered the information into Notepad,
+save the document by choose Save from the File menu,
+and then close Notepad (eg, Alt-F4). Switch back to
+LifeLines if necessary, and click on its titlebar if
+it is not highlighted. It will have a prompt displayed,
+asking whether or not you really wish to add the new
+person. Normally you respond y and add your new
+person.
+
+ - Perry Rapp, 2001/03/31
 
 
 References:
