@@ -552,6 +552,7 @@ void
 appendstr (char ** pdest, int * len, const char * src)
 {
 	int amount;
+	*pdest[0]=0; /* so client doesn't have to initialize */
 	if (*len<1) { *len=0; return; }
 
 	llstrncpy(*pdest, src, *len);
@@ -576,6 +577,7 @@ appendstrf (char ** pdest, int * len, const char * fmt, ...)
 {
 	va_list args;
 	int amount;
+	*pdest[0]=0; /* so client doesn't have to initialize */
 	if (*len<1) { *len=0; return; }
 
 	va_start(args, fmt);
