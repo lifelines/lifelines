@@ -1,5 +1,7 @@
 2000-11-08  Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* btree/Makefile.am: Add new header files to distribution.
+
 	* Makefile.am README.DEVELOPERS: Add first guess on source layout
 	description.  Make sure it is included in distribution.
 

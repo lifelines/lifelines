@@ -4,7 +4,20 @@ AUTOMAKE_OPTIONS = no-dependencies
 
 noinst_LIBRARIES = libbtree.a
 
-libbtree_a_SOURCES = addkey.c block.c file.c index.c opnbtree.c record.c traverse.c utils.c
+libbtree_a_SOURCES = \
+	addkey.c \
+	addkey.h \
+	block.c \
+	block.h \
+	file.c \
+	index.c \
+	index.h \
+	opnbtree.c \
+	opnbtree.h \
+	record.c \
+	traverse.c \
+	utils.c \
+	utils.h
 
 INCLUDES=-I$(srcdir)/.. -I$(srcdir)/../hdrs
 
