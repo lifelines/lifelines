@@ -15,6 +15,8 @@
 	Change extra_menu so the new browse functions return
 	to extra_menu when done
 
+	Added more text to annotation of source tree in README.DEVELOPERS.
+
 2000-12-05 Perry Rapp <prapp@users.sourceforge.net>
 
 	* gedlib/misc.c gedlib/refns.c hdrs/gedcom.h:
