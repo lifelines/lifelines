@@ -18,6 +18,10 @@
 
 	Bump version to 3.0.40.
 
+	* ChangeLog build/msvc6/llines/llines.rc build/msvc6/llines/llinesprj.dsp
+
+	Bump windows versions.
+
 2005-01-12 Perry Rapp
 
 	* ChangeLog src/gedlib/remove.c

@@ -685,6 +685,10 @@ SOURCE=..\..\..\src\hdrs\dbfuncs.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\hdrs\dbfuncsi.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\hdrs\feedback.h
 # End Source File
 # Begin Source File
@@ -879,10 +883,6 @@ SOURCE=..\..\..\src\hdrs\zstr.h
 # Begin Source File
 
 SOURCE=..\..\..\ChangeLog
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\hdrs\dbfuncsi.h
 # End Source File
 # End Target
 # End Project
