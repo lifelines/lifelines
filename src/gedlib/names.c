@@ -66,7 +66,7 @@ static CNSTRING nextpiece(CNSTRING);
 static STRING parts_to_name(STRING*);
 static BOOLEAN piecematch(STRING, STRING);
 static void remove_namekey(const RKEY * rkeyname, CNSTRING name, const RKEY * rkeyid);
-/* static void rkey_cpy(const RKEY * src, RKEY * dest);*/
+/* static void rkey_cpy(const RKEY * src, RKEY * dest); */
 static BOOLEAN rkey_eq(const RKEY * rkey1, const RKEY * rkey2);
 static void soundex2rkey(char finitial, CNSTRING sdex, RKEY * rkey);
 static void squeeze(CNSTRING, STRING);
@@ -238,7 +238,7 @@ rkey_eq (const RKEY * rkey1, const RKEY * rkey2)
 /*============================================
  * rkey_cpy - copy rkeys from src to dest?
  *==========================================*/
-/* unused 
+/* unused
 static void
 rkey_cpy (const RKEY * src, RKEY * dest)
 {
@@ -1147,12 +1147,12 @@ free_string_list(LIST list)
  *==================================================*/
 typedef struct
 {
-	BOOLEAN(*func)(STRING key, CNSTRING name, BOOLEAN newset, void *param);
+	TRAV_RECORD_FUNC func;
 	void * param;
 } TRAV_NAME_PARAM;
 /* see above */
 static BOOLEAN
-traverse_name_callback (RKEY rkey, CNSTRING data, INT len, void *param)
+traverse_name_callback (TRAV_RECORD_FUNC_ARGS(rkey, data, len, param) )
 {
 	TRAV_NAME_PARAM *tparam = (TRAV_NAME_PARAM *)param;
 	INT i;
@@ -1162,14 +1162,14 @@ traverse_name_callback (RKEY rkey, CNSTRING data, INT len, void *param)
 
 	for (i=0; i<NRcount; i++)
 	{
-		if (!tparam->func(rkey2str(NRkeys[i]), NRnames[i], !i, tparam->param))
+		if (!tparam->func(NRkeys[i], (STRING)NRnames[i], !i, tparam->param))
 			return FALSE;
 	}
 	return TRUE;
 }
 /* see above */
 void
-traverse_names (BOOLEAN(*func)(STRING key, CNSTRING name, BOOLEAN newset, void *param), void *param)
+traverse_names (TRAV_RECORD_FUNC func, void *param)
 {
 	TRAV_NAME_PARAM tparam;
 	tparam.param = param;

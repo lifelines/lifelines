@@ -67,8 +67,8 @@ static INT REFNSCAN=2;
  *********************************************/
 
 static BOOLEAN pattern_match(SCAN_PATTERN *patt, CNSTRING name);
-static BOOLEAN ns_callback(CNSTRING key, CNSTRING name, BOOLEAN newset, void *param);
-static BOOLEAN rs_callback(CNSTRING key, CNSTRING refn, BOOLEAN newset, void *param);
+static BOOLEAN ns_callback(TRAV_RECORD_FUNC_ARGS(key, name, newset, param));
+static BOOLEAN rs_callback(TRAV_RECORD_FUNC_ARGS(key, refn, newset, param));
 static BOOLEAN set_pattern(SCAN_PATTERN * patt, STRING str, INT scantype);
 static RECORD name_scan(INT scantype, STRING sts);
 
@@ -95,7 +95,7 @@ pattern_match (SCAN_PATTERN *patt, CNSTRING name)
  * ns_callback -- callback for name traversal
  *=========================================*/
 static BOOLEAN
-ns_callback (CNSTRING key, CNSTRING name, BOOLEAN newset, void *param)
+ns_callback (TRAV_RECORD_FUNC_ARGS(key, name, newset, param))
 {
 	LIST list;
 	INT len, ind;
@@ -105,7 +105,7 @@ ns_callback (CNSTRING key, CNSTRING name, BOOLEAN newset, void *param)
 	if (patt->scantype == NAMESCAN_FULL) {
 		if (pattern_match(patt, name)) {
 			/* if we pass in name, append_indiseq won't check for dups */
-			append_indiseq_null(results_seq, strsave(key), NULL, FALSE, TRUE);
+			append_indiseq_null(results_seq, strsave(rkey2str(key)), NULL, FALSE, TRUE);
 		}
 	} else {
 		/* NAMESCAN_FRAG */
@@ -115,7 +115,7 @@ ns_callback (CNSTRING key, CNSTRING name, BOOLEAN newset, void *param)
 			piece = (STRING)el;
 			if (pattern_match(patt, piece)) {
 				/* if we pass in name, append_indiseq won't check for dups */
-				append_indiseq_null(results_seq, strsave(key), NULL, FALSE, TRUE);
+				append_indiseq_null(results_seq, strsave(rkey2str(key)), NULL, FALSE, TRUE);
 				STOPLIST
 				break;
 			}
@@ -128,7 +128,7 @@ ns_callback (CNSTRING key, CNSTRING name, BOOLEAN newset, void *param)
  * rs_callback -- callback for refn traversal
  *=========================================*/
 static BOOLEAN
-rs_callback (CNSTRING key, CNSTRING refn, BOOLEAN newset, void *param)
+rs_callback (TRAV_RECORD_FUNC_ARGS(key, refn, newset, param))
 {
 	SCAN_PATTERN * patt = (SCAN_PATTERN *)param;
 	ASSERT(patt->scantype == REFNSCAN);
@@ -136,7 +136,7 @@ rs_callback (CNSTRING key, CNSTRING refn, BOOLEAN newset, void *param)
 
 	if (pattern_match(patt, refn)) {
 		/* if we pass in name, append_indiseq won't check for dups */
-		append_indiseq_null(results_seq, strsave(key), NULL, FALSE, TRUE);
+		append_indiseq_null(results_seq, strsave(rkey2str(key)), NULL, FALSE, TRUE);
 	}
 	return TRUE;
 }

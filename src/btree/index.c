@@ -130,9 +130,9 @@ initcache (BTREE btree, /* btree handle */
 	for (i = 0;  i < n;  i++)
 		bcache(btree)[i] = NULL;
 }
-/*==============================================
- * initcache -- Initialize index cache for btree
- *============================================*/
+/*========================================
+ * freecache -- Free index cache for btree
+ *======================================*/
 void
 freecache (BTREE btree)
 {
