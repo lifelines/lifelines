@@ -5,7 +5,6 @@
    The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * double.c -- Doubly-linked list data type
  * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
@@ -22,7 +21,6 @@
 static LNODE nth_in_list_from_tail(LIST list, INT index1b, LIST_CREATE_VALUE createfnc4);
 static void validate_list(LIST list);
 
-
 /*===========================
  * create_list -- Create list
  *=========================*/
@@ -31,10 +29,10 @@ create_list (void)
 {
 	LIST list = (LIST) stdalloc(sizeof(*list));
 	memset(list, 0, sizeof(*list));
+	lrefcnt(list) = 1;
 	ltype(list) = LISTNOFREE;
 	lhead(list) = ltail(list) = NULL;
 	llen(list) = 0;
-	lrefcnt(list) = 1;
 	validate_list(list);
 	return list;
 }

@@ -875,7 +875,7 @@ __long (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_var_error(node, stab, arg, val, nonnod1, "long");
 		return NULL;
 	}
-	even = (NODE) pvalue(val);
+	even = pvalue_to_node(val);
 	delete_pvalue(val);
 
 	/* if we were cleverer, we wouldn't call this every time */
@@ -900,7 +900,7 @@ __short (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_var_error(node, stab, arg, val, nonnod1, "short");
 		return NULL;
 	}
-	even = (NODE) pvalue(val);
+	even = pvalue_to_node(val);
 	delete_pvalue(val);
 
 	/* if we were cleverer, we wouldn't call this every time */
@@ -2106,49 +2106,27 @@ PVALUE
 __concat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
-	INT len = 0, i, nstrs = 0, nonnull=0;
-	STRING hold[32];
-	STRING p, newstr, str;
+	INT argcnt = 0;
+	STRING str;
 	PVALUE val;
+	ZSTR zstr = zs_new();
 
 	while (arg) {
 		val = eval_and_coerce(PSTRING, arg, stab, eflg);
 		if (*eflg) {
 			char argnum[8];
-			sprintf(argnum, "%d", nstrs+1);
+			sprintf(argnum, "%d", argcnt+1);
 			prog_var_error(node, stab, arg, val, nonstrx, "concat", argnum);
 			return NULL;
 		}
-		if ((str = pvalue_to_string(val))) {
-			len += strlen(str);
-			hold[nstrs++] = strsave(str);
-			++nonnull;
-		} else
-			hold[nstrs++] = NULL;
+		str = pvalue_to_string(val);
+		zs_apps(zstr, str);
 		arg = inext(arg);
+		++argcnt;
 		delete_pvalue(val);
-		if (nstrs == ARRSIZE(hold)) {
-			*eflg = TRUE;
-			prog_error(node, _("Too many (>32) args to concat"));
-			return NULL;
-		}
 	}
-	if (nonnull) {
-		p = newstr = (STRING) stdalloc(len + 1);
-		for (i = 0; i < nstrs; i++) {
-			str = hold[i];
-			if (str) {
-				strcpy(p, str);
-				p += strlen(p);
-				stdfree(str);
-			}
-		}
-	} else {
-		newstr = NULL;
-	}
-	val = create_pvalue_from_string(newstr);
-	if (newstr)
-		stdfree(newstr);
+	val = create_pvalue_from_string(zs_str(zstr));
+	zs_free(&zstr);
 	return val;
 }
 /*=======================================+
@@ -2158,16 +2136,18 @@ __concat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __lower (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
+	PNODE arg = iargs(node);
+	PVALUE val = eval_and_coerce(PSTRING, arg, stab, eflg);
 	STRING str;
 	if (*eflg) {
-		prog_error(node, nonstr1, "lower");
+		prog_var_error(node, stab, arg, val, nonstr1, "lower");
+		delete_pvalue(val);
 		return NULL;
 	}
-	str = pvalue(val);
+	str = pvalue_to_string(val);
 	if (str)
 		str = lower(str);
-	set_pvalue(val, PSTRING, str);
+	set_pvalue_string(val, str);
 	return val;
 }
 /*=======================================+
@@ -2177,16 +2157,18 @@ __lower (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __upper (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
+	PNODE arg = iargs(node);
+	PVALUE val = eval_and_coerce(PSTRING, arg, stab, eflg);
 	STRING str;
 	if (*eflg) {
-		prog_error(node, nonstr1, "upper");
+		prog_var_error(node, stab, arg, val, nonstr1, "upper");
+		delete_pvalue(val);
 		return NULL;
 	}
-	str = pvalue(val);
+	str = pvalue_to_string(val);
 	if (str)
 		str = upper(str);
-	set_pvalue(val, PSTRING, str);
+	set_pvalue_string(val, str);
 	return val;
 }
 /*=====================================+
@@ -2196,16 +2178,18 @@ __upper (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __capitalize (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
+	PNODE arg = iargs(node);
+	PVALUE val = eval_and_coerce(PSTRING, arg, stab, eflg);
 	STRING str;
 	if (*eflg) {
-		prog_error(node, nonstr1, "capitalize");
+		prog_var_error(node, stab, arg, val, nonstr1, "capitalize");
+		delete_pvalue(val);
 		return NULL;
 	}
-	str = pvalue(val);
+	str = pvalue_to_string(val);
 	if (str)
 		str = capitalize(str);
-	set_pvalue(val, PSTRING, str);
+	set_pvalue_string(val, str);
 	return val;
 }
 /*=====================================+
@@ -2216,16 +2200,18 @@ __capitalize (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __titlcase (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
+	PNODE arg = iargs(node);
+	PVALUE val = eval_and_coerce(PSTRING, arg, stab, eflg);
 	STRING str;
 	if (*eflg) {
-		prog_error(node, nonstr1, "titlecase");
+		prog_var_error(node, stab, arg, val, nonstr1, "titlecase");
+		delete_pvalue(val);
 		return NULL;
 	}
-	str = pvalue(val);
+	str = pvalue_to_string(val);
 	if (str)
 		str = titlecase(str);
-	set_pvalue(val, PSTRING, str);
+	set_pvalue_string(val, str);
 	return val;
 }
 /*================================+
@@ -2649,7 +2635,7 @@ __date (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, nonnod1, "date");
 		return NULL;
 	}
-	line = (NODE) pvalue(val);
+	line = pvalue_to_node(val);
 	str = event_to_date(line, FALSE);
 	delete_pvalue(val);
 	return create_pvalue_from_string(str);
@@ -2686,7 +2672,7 @@ __extractdate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, nonnodx, "extractdate", "1");
 		return NULL;
 	}
-	line = (NODE) pvalue(val);
+	line = pvalue_to_node(val);
 	*eflg = TRUE;
 	if (!iistype(dvar, IIDENT)) {
 		prog_error(node, nonvarx, "extractdate", "2");
@@ -2809,7 +2795,7 @@ __stddate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 			prog_error(node, nonnodstr1, "stddate");
 			return NULL;
 		}
-		evnt = (NODE) pvalue(val);
+		evnt = pvalue_to_node(val);
 		str = event_to_date(evnt, FALSE);
 	}
 	set_pvalue(val, PSTRING, do_format_date(str,
@@ -2835,7 +2821,7 @@ __complexdate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 			prog_error(node, nonnodstr1, "complexdate");
 			return NULL;
 		}
-		evnt = (NODE) pvalue(val);
+		evnt = pvalue_to_node(val);
 		str = event_to_date(evnt, FALSE);
 	}
 	set_pvalue(val, PSTRING, do_format_date(str,
@@ -3046,7 +3032,7 @@ __year (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 			prog_error(node, nonnodstr1, "year");
 			return NULL;
 		}
-		evnt = (NODE) pvalue(val);
+		evnt = pvalue_to_node(val);
 		str = event_to_date(evnt, FALSE);
 	}
 	gdv = extract_date(str);
@@ -3078,7 +3064,7 @@ __place (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_var_error(node, stab, arg, val, nonnod1, "place");
 		return NULL;
 	}
-	evnt = (NODE) pvalue(val);
+	evnt = pvalue_to_node(val);
 	set_pvalue(val, PSTRING, (VPTR)event_to_plac(evnt, FALSE));
 	return val;
 }
@@ -3097,7 +3083,7 @@ __tag (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_var_error(node, stab, arg, val, nonnod1, "tag");
 		return NULL;
 	}
-	ged = (NODE) pvalue(val);
+	ged = pvalue_to_node(val);
 	if (ged)
 		str=ntag(ged);
 	set_pvalue(val, PSTRING, (VPTR)str);
@@ -3117,7 +3103,7 @@ __value (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_var_error(node, stab, arg, val, nonnod1, "value");
 		return NULL;
 	}
-	ged = (NODE) pvalue(val);
+	ged = pvalue_to_node(val);
 	if (!ged) {
 		*eflg = TRUE;
 		prog_var_error(node, stab, arg, val, nullarg1, "value");
@@ -3140,7 +3126,7 @@ __xref (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_var_error(node, stab, arg, val, nonnod1, "xref");
 		return NULL;
 	}
-	ged = (NODE) pvalue(val);
+	ged = pvalue_to_node(val);
 	if (!ged) {
 		*eflg = TRUE;
 		prog_var_error(node, stab, arg, val, nullarg1, "xref");
@@ -3163,7 +3149,7 @@ __child (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_var_error(node, stab, arg, val, nonnod1, "child");
 		return NULL;
 	}
-	ged = (NODE) pvalue(val);
+	ged = pvalue_to_node(val);
 	if (!ged) {
 		*eflg = TRUE;
 		prog_var_error(node, stab, arg, val, nullarg1, "child");
@@ -3186,7 +3172,7 @@ __parent (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_var_error(node, stab, arg, val, nonnod1, "parent");
 		return NULL;
 	}
-	ged = (NODE) pvalue(val);
+	ged = pvalue_to_node(val);
 	if (!ged) {
 		*eflg = TRUE;
 		prog_var_error(node, stab, arg, val, nullarg1, "parent");
@@ -3209,7 +3195,7 @@ __sibling (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_var_error(node, stab, arg, val, nonnod1, "sibling");
 		return NULL;
 	}
-	ged = (NODE) pvalue(val);
+	ged = pvalue_to_node(val);
 	if (!ged) {
 		*eflg = TRUE;
 		prog_var_error(node, stab, arg, val, nullarg1, "sibling");
@@ -3233,7 +3219,7 @@ __level (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_var_error(node, stab, arg, val, nonnod1, "level");
 		return NULL;
 	}
-	ged = (NODE) pvalue(val);
+	ged = pvalue_to_node(val);
 	while (ged) {
 		lev++;
 		ged = nparent(ged);

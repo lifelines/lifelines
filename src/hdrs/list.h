@@ -12,6 +12,7 @@
 #ifndef list_h_included
 #define list_h_included
 
+typedef struct ovtbl_s *OVTBL;
 
 /* types for lists */
 typedef struct lntag *LNODE;
@@ -25,17 +26,17 @@ struct lntag {
 #define lelement(n) ((n)->l_element)
 
 typedef struct ltag {
+	INT l_refcnt;
 	LNODE l_head;
 	LNODE l_tail;
 	INT l_len;
 	INT l_type;
-	INT l_refcnt;
 } *LIST;
-#define ltype(l) ((l)->l_type)
-#define lhead(l) ((l)->l_head)
-#define ltail(l) ((l)->l_tail)
-#define llen(l) ((l)->l_len)
 #define lrefcnt(l) ((l)->l_refcnt)
+#define ltype(l)   ((l)->l_type)
+#define lhead(l)   ((l)->l_head)
+#define ltail(l)   ((l)->l_tail)
+#define llen(l)    ((l)->l_len)
 
 #define LISTNOFREE 0
 #define LISTDOFREE 1

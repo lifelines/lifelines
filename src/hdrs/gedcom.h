@@ -75,6 +75,7 @@ struct ntag {
 	NODE   n_child;   /* first child */
 	NODE   n_sibling;	/* sibling */
 	INT    n_flag;    /* eg, ND_TEMP */
+	int    n_refcnt;  /* refcount for temp nodes */
 };
 #define nxref(n)    ((n)->n_xref)
 #define ntag(n)     ((n)->n_tag)
@@ -83,6 +84,7 @@ struct ntag {
 #define nchild(n)   ((n)->n_child)
 #define nsibling(n) ((n)->n_sibling)
 #define nflag(n)    ((n)->n_flag)
+#define nrefcnt(n)  ((n)->n_refcnt)
 enum { ND_TEMP=1 };
 
 struct nkeytag { char ntype; INT keynum; STRING key; };

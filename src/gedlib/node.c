@@ -205,12 +205,13 @@ create_node (STRING xref, STRING tag, STRING val, NODE prnt)
 	nchild(node) = NULL;
 	nsibling(node) = NULL;
 	nflag(node) = 0;
+	nrefcnt(node) = 1;
 	return node;
 }
 /*===========================
  * create_temp_node -- Create NODE for temporary use
  *  (not to be connected to a record)
- *
+ * [All arguments are duplicated, so caller doesn't have to]
  * STRING xref  [in] xref
  * STRING tag   [in] tag
  * STRING val:  [in] value
@@ -220,13 +221,7 @@ create_node (STRING xref, STRING tag, STRING val, NODE prnt)
 NODE
 create_temp_node (STRING xref, STRING tag, STRING val, NODE prnt)
 {
-	NODE node = alloc_node();
-	nxref(node) = fixup(xref);
-	ntag(node) = fixtag(tag);
-	nval(node) = fixup(val);
-	nparent(node) = prnt;
-	nchild(node) = NULL;
-	nsibling(node) = NULL;
+	NODE node = create_node(xref, tag, val, prnt);
 	nflag(node) = ND_TEMP;
 	return node;
 }

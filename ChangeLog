@@ -33,6 +33,13 @@
 
 	More standardizing argument handling in interpreter.
 
+	* ChangeLog src/gedlib/node.c src/hdrs/gedcom.h
+	src/hdrs/interp.h src/hdrs/list.h src/hdrs/standard.h
+	src/interp/builtin.c src/interp/pvalue.c src/interp/write.c
+	src/stdlib/list.c:
+
+	More cleaning, and begin fixing write.c.
+
 2003-02-01 Perry Rapp
 
 	* ChangeLog src/gedlib/node.c src/interp/interp.c

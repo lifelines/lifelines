@@ -40,51 +40,90 @@
 #include "liflines.h"
 #include "feedback.h"
 
-/* WARNING: this file has not been updated for new evaluate() function
- * which returns PVALUES.
+/*
+ ***** WARNING !!!!!! **********
+ Only createnode, addnode, __deletenode have been fixed, because evaluate() returns PVALUES, not NODES 
+ 2003-02-02 (Perry)
  */
+
+/*********************************************
+ * external/imported variables
+ *********************************************/
+
+extern STRING nonstrx,nonnod1,nonnodx;
 
 /*=====================================
  * createnode -- Create GEDCOM node
  *   createnode(STRING, STRING) -> NODE
+ *   args: (tag, value)
  *===================================*/
 PVALUE
 __createnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = iargs(node);
-	NODE newnode=0;
-	STRING val, tag = (STRING) evaluate(arg, stab, eflg);
-	if (*eflg) return NULL;
-	val = (STRING) evaluate(arg=inext(arg), stab, eflg);
-	if (*eflg) return NULL;
-	newnode = create_node(NULL, tag, val, NULL);
+	NODE newnode=0, prnt=NULL;
+	PVALUE val1, val2;
+	STRING str1, str2;
+	val1 = eval_and_coerce(PSTRING, arg, stab, eflg);
+	if (*eflg) {
+		prog_var_error(node, stab, arg, val1, nonstrx, "createnode", "1");
+		delete_pvalue(val1);
+		return NULL;
+	}
+	str1 = pvalue_to_string(val1);
+	val2 = eval_and_coerce(PSTRING, arg=inext(arg), stab, eflg);
+	if (*eflg) {
+		prog_var_error(node, stab, arg, val2, nonstrx, "createnode", "2");
+		delete_pvalue(val2);
+		return NULL;
+	}
+	str2 = pvalue_to_string(val2);
+	newnode = create_temp_node(NULL, str1, str2, prnt);
 	return create_pvalue_from_node(newnode);
 }
 /*=======================================
  * addnode -- Add a node to a GEDCOM tree
  *   addnode(NODE, NODE, NODE) -> VOID
+ *  args: (node being added, parent, previous child)
  *=====================================*/
 PVALUE
 __addnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg = (PNODE) iargs(node);
-	NODE next, prnt, prev;
-	NODE this = (NODE) evaluate(arg, stab, eflg);
-	if (*eflg || this == NULL) return NULL;
-	arg = inext(arg);
-	prnt = (NODE) evaluate(arg, stab, eflg);
-	if (*eflg || prnt == NULL) return NULL;
-	prev = (NODE) evaluate(inext(arg), stab, eflg);
-	if (*eflg) return NULL;
-	nparent(this) = prnt;
+	PNODE arg = iargs(node);
+	NODE newchild, next, prnt, prev;
+	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
+	if (*eflg) {
+		prog_var_error(node, stab, arg, val, nonnodx, "addnode", "1");
+		delete_pvalue(val);
+		return NULL;
+	}
+	newchild = pvalue_to_node(val);
+	delete_pvalue_wrapper(val);
+	val = eval_and_coerce(PGNODE, arg=inext(arg), stab, eflg);
+	if (*eflg) {
+		prog_var_error(node, stab, arg, val, nonnodx, "addnode", "2");
+		delete_pvalue(val);
+		return NULL;
+	}
+	prnt = pvalue_to_node(val);
+	delete_pvalue_wrapper(val);
+	val = eval_and_coerce(PGNODE, arg=inext(arg), stab, eflg);
+	if (*eflg) {
+		prog_var_error(node, stab, arg, val, nonnodx, "addnode", "3");
+		delete_pvalue(val);
+		return NULL;
+	}
+	prev = pvalue_to_node(val);
+	delete_pvalue_wrapper(val);
+	nparent(newchild) = prnt;
 	if (prev == NULL) {
 		next = nchild(prnt);
-		nchild(prnt) = this;
+		nchild(prnt) = newchild;
 	} else {
 		next = nsibling(prev);
-		nsibling(prev) = this;
+		nsibling(prev) = newchild;
 	}
-	nsibling(this) = next;
+	nsibling(newchild) = next;
 	return NULL;
 }
 /*============================================
@@ -95,22 +134,30 @@ __addnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __deletenode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE prnt, prev, curs, next;
-	NODE this = (NODE) evaluate(iargs(node), stab, eflg);
-	if (*eflg || this == NULL) return NULL;
-	if ((prnt = nparent(this)) == NULL) return NULL;
-	prev = NULL;
-	curs = nchild(prnt);
-	while (curs && curs != this) {
-		prev = curs;
-		curs = nsibling(curs);
+	PNODE arg = iargs(node);
+	NODE dead, prnt;
+	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
+	if (*eflg) {
+		prog_var_error(node, stab, arg, val, nonnod1, "deletenode");
+		delete_pvalue(val);
+		return NULL;
 	}
-	if (curs == NULL) return NULL;
-	next = nsibling(this);
-	if (prev == NULL) 
-		nchild(prnt) = next;
-	else
-		nsibling(prev) = next;
+	dead = pvalue_to_node(val);
+	if (prnt = nparent(dead)) {
+		NODE prev = NULL, next;
+		NODE curs = nchild(prnt);
+		while (curs && curs != dead) {
+			prev = curs;
+			curs = nsibling(curs);
+		}
+		ASSERT(curs); /* else broken tree: dead was not child of its parent */
+		next = nsibling(dead);
+		if (prev == NULL) 
+			nchild(prnt) = next;
+		else
+			nsibling(prev) = next;
+	}
+	delete_pvalue(val); /* will destroy node if temp */
 	return NULL;
 }
 /*======================================

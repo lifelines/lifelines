@@ -332,7 +332,10 @@ clear_pvalue (PVALUE val)
 		{
 			NODE node = (NODE)pvalue(val);
 			if (node && (nflag(node) & ND_TEMP)) {
-				free_temp_node_tree(node);
+				--nrefcnt(node);
+				if (!nrefcnt(node)) {
+					free_temp_node_tree(node);
+				}
 			}
 		}
 		return;
@@ -350,7 +353,7 @@ clear_pvalue (PVALUE val)
 	case PLIST:
 		{
 			LIST list = (LIST) pvalue(val);
-			lrefcnt(list)--;
+			--lrefcnt(list);
 			if (!lrefcnt(list)) {
 				remove_list(list, delete_vptr_pvalue);
 			}
@@ -359,7 +362,7 @@ clear_pvalue (PVALUE val)
 	case PTABLE:
 		{
 			TABLE table = (TABLE)pvalue(val);
-			table->refcnt--;
+			--table->refcnt;
 			if (!table->refcnt) {
 				traverse_table(table, table_pvcleaner);
 				remove_table(table, FREEKEY);
@@ -371,7 +374,7 @@ clear_pvalue (PVALUE val)
 			INDISEQ seq = (INDISEQ)pvalue(val);
 			/* because of getindiset, seq might be NULL */
 			if (seq) {
-				IRefcnt(seq)--;
+				--IRefcnt(seq);
 				if (!IRefcnt(seq)) {
 					clear_pv_indiseq(seq);
 					remove_indiseq(seq);
@@ -432,17 +435,24 @@ delete_vptr_pvalue (VPTR ptr)
 	delete_pvalue(val);
 }
 /*========================================
+ * delete_pvalue_wrapper -- Delete the pvalue
+ * shell, but not the value inside
+ * Created: 2003-02-02 (Perry Rapp)
+ *======================================*/
+void
+delete_pvalue_wrapper (PVALUE val)
+{
+	if (!val) return;
+	pvalue(val) = 0; /* remove pointer to payload */
+	delete_pvalue(val);
+}
+/*========================================
  * delete_pvalue -- Delete a program value
  * see create_pvalue - Perry Rapp, 2001/01/19
  *======================================*/
 void
 delete_pvalue (PVALUE val)
 {
-#ifdef DEBUG
-	llwprintf("__delete_pvalue: val == ");
-	show_pvalue(val);
-	llwprintf("\n");
-#endif	
 	if (!val) return;
 	clear_pvalue(val);
 	free_pvalue_memory(val);
@@ -496,6 +506,8 @@ copy_pvalue (PVALUE val)
 		break;
 	case PGNODE:
 		{
+			NODE node = pvalue_to_node(val);
+			++nrefcnt(node);
 			/* pointers into cache elements */
 		}
 		break;
@@ -503,14 +515,14 @@ copy_pvalue (PVALUE val)
 	the is_record_pvalue code */
 	case PLIST:
 		{
-			LIST list = (LIST) pvalue(val);
-			lrefcnt(list)++;
+			LIST list = pvalue_to_list(val);
+			++lrefcnt(list);
 		}
 		break;
 	case PTABLE:
 		{
-			TABLE table = (TABLE)pvalue(val);
-			table->refcnt++;
+			TABLE table = pvalue_to_table(val);
+			++table->refcnt;
 		}
 		break;
 	case PSET:
@@ -518,7 +530,7 @@ copy_pvalue (PVALUE val)
 			INDISEQ seq = (INDISEQ)pvalue(val);
 			/* because of getindiset, seq might be NULL */
 			if (seq) {
-				IRefcnt(seq)++;
+				++IRefcnt(seq);
 			}
 		}
 		break;
@@ -778,10 +790,25 @@ pvalue_to_list (PVALUE val)
 {
 	return (LIST)pvalue(val);
 }
+NODE
+pvalue_to_node (PVALUE val)
+{
+	return (NODE)pvalue(val);
+}
+INDISEQ
+pvalue_to_seq (PVALUE val)
+{
+	return (INDISEQ)pvalue(val);
+}
 STRING
 pvalue_to_string (PVALUE val)
 {
 	return (STRING)pvalue(val);
+}
+TABLE
+pvalue_to_table (PVALUE val)
+{
+	return (TABLE)pvalue(val);
 }
 /*==================================
  * pvalue_to_pxxxx -- Access value for modification
