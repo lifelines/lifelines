@@ -1252,7 +1252,7 @@ INT arg1, arg2, arg3, arg4, arg5, arg6, arg7;
 /*==================================================
  * do_edit -- Shift to user's screen editor and back
  *================================================*/
-do_edit ()
+void do_edit (void)
 {
 	endwin();
 #ifdef WIN32
