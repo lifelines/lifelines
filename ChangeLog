@@ -5,6 +5,14 @@
 	Change DYNTT to be object type. Change f_dyntts to be generic
 	table.
 
+	* ChangeLog src/gedlib/init.c src/gedlib/lloptions.c src/hdrs/proptbls.h
+	src/hdrs/table.h src/liflines/askgedc.c src/liflines/askprogram.c
+	src/stdlib/proptbls.c src/stdlib/table.c
+
+	New function create_table_strings. Convert proparrays to new
+	table (table of strings). Fix some option string leaks.
+	Remove now unused insert_table_str. const fixes.
+
 2005-02-14 Perry Rapp
 
 	* ChangeLog src/gedlib/editvtab.c src/gedlib/indiseq.c

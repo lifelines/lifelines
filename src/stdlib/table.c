@@ -227,6 +227,16 @@ create_table (void)
 {
 	return create_table_impl(-2);
 }
+/*=============================
+ * create_table_strings -- Create table to hold heap strings
+ * All keys & values will be dup'd by table & freed by table
+ * returns addref'd table
+ *===========================*/
+TABLE
+create_table_strings (void)
+{
+	return create_table();
+}
 /*======================================
  * insert_table_impl -- Insert key & value into table
  * Caller is reponsible for both key & value memory
@@ -338,23 +348,6 @@ insert_table_int (TABLE tab, CNSTRING key, INT ival)
 	}
 }
 /*======================================
- * insert_table_str -- Insert key & STRING value into table
- * Caller is responsible for both key & ptr memory (no dups here)
- * Created: 2001/06/03 (Perry Rapp)
- *====================================*/
-void
-insert_table_str (TABLE tab, CNSTRING key, STRING str)
-{
-	UNION uval;
-	uval.w = str;
-	ASSERT(tab->whattofree != -2);
-	if (tab->valtype == TB_NULL)
-		tab->valtype = TB_STR;
-	/* table must be homogenous, not mixed-type */
-	ASSERT(tab->valtype == TB_STR);
-	insert_table_impl(tab, key, uval);
-}
-/*======================================
  * table_insert_string -- Insert key & STRING value into table
  * Table copies (allocates) both
  *====================================*/
@@ -426,21 +419,11 @@ table_insert_object (TABLE tab, CNSTRING key, const VPTR value)
  * Created: 2001/11/23, Perry Rapp
  *====================================*/
 void
-replace_table_str (TABLE tab, STRING key, STRING str, INT whattofree)
+replace_table_str (TABLE tab, CNSTRING key, CNSTRING str)
 {
-	UNION uval;
-	if (tab->whattofree == -2) {
-		delete_table_element(tab, key);
-		table_insert_string(tab, key, str);
-		return;
-	}
-
-	uval.w = str;
-	if (tab->valtype == TB_NULL)
-		tab->valtype = TB_STR;
-	/* table must be homogenous, not mixed-type */
-	ASSERT(tab->valtype == TB_STR);
-	replace_table_impl(tab, key, uval, whattofree);
+	ASSERT(tab->whattofree == -2);
+	delete_table_element(tab, key);
+	table_insert_string(tab, key, str);
 }
 /*==========================================
  * delete_table_element -- Remove element from table

@@ -18,38 +18,34 @@
 
 /*==========================================================
  * add_prop_dnum -- Add named property table as new last display order
- * Caller must have already dup'd name & value
- * Created: 2002/10/19, Perry Rapp
  *========================================================*/
 void
-add_prop_dnum (TABLE props, STRING name, STRING value)
+add_prop_dnum (TABLE props, CNSTRING name, CNSTRING value)
 {
 	STRING str = valueof_str(props, "dn");
 	INT n = ll_atoi(str, 0)+1;
 	char temp[20];
 	sprintf(temp, "d%d", n);
-	insert_table_str(props, strsave(temp), name);
-	insert_table_str(props, strsave(name), value);
+	table_insert_string(props, temp, name);
+	table_insert_string(props, name, value);
 	sprintf(temp, "%d", n);
-	replace_table_str(props, strsave("dn"), strsave(temp), FREEBOTH);
+	replace_table_str(props, "dn", temp);
 }
 /*==========================================================
  * set_prop_dnum -- Set named property in table, at specified display number
- * Caller must have already dup'd name & value
- * Created: 2002/10/19, Perry Rap9
  *========================================================*/
 void
-set_prop_dnum (TABLE props, INT n, STRING name, STRING value)
+set_prop_dnum (TABLE props, INT n, CNSTRING name, CNSTRING value)
 {
 	STRING str = valueof_str(props, "dn");
 	INT max = ll_atoi(str, 0);
 	char temp[20];
 	sprintf(temp, "d%d", n);
-	replace_table_str(props, strsave(temp), name, FREEBOTH);
-	replace_table_str(props, strsave(name), value, FREEBOTH);
+	replace_table_str(props, temp, name);
+	replace_table_str(props, name, value);
 	if (n>max) {
 		sprintf(temp, "%d", n);
-		replace_table_str(props, strsave("dn"), strsave(temp), FREEBOTH);
+		replace_table_str(props, "dn", temp);
 	}
 }
 /*===================================================
@@ -63,9 +59,9 @@ add_dir_files_to_proplist (CNSTRING dir, SELECT_FNC selectfnc, LIST list)
 	INT n = scandir(dir, &programs, selectfnc, alphasort);
 	INT i;
 	for (i=0; i<n; ++i) {
-		TABLE table = create_table_old2(FREEBOTH);
-		set_prop_dnum(table, 1, strsave("filename"), strsave(programs[i]->d_name));
-		set_prop_dnum(table, 2, strsave("dir"), strsave(dir));
+		TABLE table = create_table_strings();
+		set_prop_dnum(table, 1, "filename", programs[i]->d_name);
+		set_prop_dnum(table, 2, "dir", dir);
 		stdfree(programs[i]);
 		programs[i] = NULL;
 		enqueue_list(list, table);

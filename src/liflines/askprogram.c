@@ -139,7 +139,7 @@ add_program_props (TABLE fileprops)
 	for (i=0; i<ARRSIZE(tagsfound); ++i) {
 		if (tagsfound[i]) {
 			/* TODO: translate tagsfound[i] with charset */
-			add_prop_dnum(fileprops, strdup(f_tags[i]), strdup(tagsfound[i]));
+			add_prop_dnum(fileprops, f_tags[i], tagsfound[i]);
 			strfree(&tagsfound[i]);
 		}
 	}

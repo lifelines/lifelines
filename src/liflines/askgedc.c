@@ -87,7 +87,7 @@ add_gedcom_props (TABLE fileprops)
 		else
 			sprintf(str, "%ldb", (long)sbuf.st_size);
 
-		add_prop_dnum(fileprops, strdup("bytes"), strdup(str));
+		add_prop_dnum(fileprops, "bytes", str);
 	}
 
 	if (NULL == (fp = fopen(filepath, "r")))
@@ -126,7 +126,7 @@ add_gedcom_props (TABLE fileprops)
 	/* add any metainfo we found to the property table */
 	for (i=0; i<ARRSIZE(tagsfound); ++i) {
 		if (tagsfound[i]) {
-			add_prop_dnum(fileprops, strdup(f_tags[i]), strdup(tagsfound[i]));
+			add_prop_dnum(fileprops, f_tags[i], tagsfound[i]);
 			strfree(&tagsfound[i]);
 		}
 	}

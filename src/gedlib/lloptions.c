@@ -356,14 +356,13 @@ getoptint (CNSTRING optname, INT defval)
 }
 /*===============================================
  * setoptstr_fallback -- Set option fallback value
- *  newval must be in heap!
  *=============================================*/
 void
 setoptstr_fallback (STRING optname, STRING newval)
 {
 	if (!f_fallback)
 		f_fallback = create_table();
-	replace_table_str(f_fallback, strsave(optname), newval, FREEBOTH);
+	replace_table_str(f_fallback, optname, newval);
 	send_notifications();
 }
 /*===============================================

@@ -17,10 +17,10 @@
 typedef int (*SELECT_FNC)(const struct dirent *);
 INT add_dir_files_to_proplist(CNSTRING dir, SELECT_FNC selectfnc, LIST list);
 INT add_path_files_to_proplist(CNSTRING path, SELECT_FNC selectfnc, LIST list);
-void add_prop_dnum(TABLE props, STRING name, STRING value);
+void add_prop_dnum(TABLE props, CNSTRING name, CNSTRING value);
 TABLE * convert_proplist_to_proparray(LIST list);
 void free_proparray(TABLE ** props);
 TABLE * get_proparray_of_files_in_path(CNSTRING path, SELECT_FNC selectfnc, INT * nfiles);
-void set_prop_dnum(TABLE props, INT n, STRING name, STRING value);
+void set_prop_dnum(TABLE props, INT n, CNSTRING name, CNSTRING value);
 
 #endif /* proptbls_h_included */

@@ -183,14 +183,14 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 		STRING str = getenv(dirvars[i]);
 		if (!str)
 			str = ".";
-		setoptstr_fallback(dirvars[i], strsave(str));
+		setoptstr_fallback(dirvars[i], str);
 	}
 	/* also check environment variable for editor */
 	{
 		STRING str = getenv("LLEDITOR");
 		if (!str)
 			str = environ_determine_editor(PROGRAM_LIFELINES);
-		setoptstr_fallback("LLEDITOR", strsave(str));
+		setoptstr_fallback("LLEDITOR", str);
 	}
 	/* editor falls back to platform-specific default */
 	e = getoptstr("LLEDITOR", NULL);
