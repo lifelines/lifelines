@@ -32,7 +32,7 @@ struct tag_xlat {
 	LIST steps;
 	BOOLEAN adhoc;
 	BOOLEAN valid;
-	void * legvp; /* hack pointer to legacy tt */
+	INT uparam; /* opaque number used by client */
 };
 /* dynamically loadable translation table, entry in dyntt list */
 typedef struct tag_dyntt {
@@ -194,11 +194,15 @@ xl_get_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 	}
 
 	/* first check existing cache */
-	if (f_xlats) {
+	/* (only adhoc xlats can use the cache) */
+	if (adhoc && f_xlats) {
 		XLAT xlattemp;
 		FORLIST(f_xlats, el)
 			xlattemp = (XLAT)el;
-			if (eqstr_ex(xlattemp->src, src) && eqstr_ex(xlattemp->dest, dest)) {
+			if (xlattemp->adhoc 
+				&& eqstr_ex(xlattemp->src, src)
+				&& eqstr_ex(xlattemp->dest, dest)
+				) {
 				xlat = xlattemp;
 				STOPLIST
 				goto end_get_xlat;
@@ -664,14 +668,14 @@ xl_release_xlat (XLAT xlat)
 	*/
 }
 void
-xl_set_legtt (XLAT xlat, void * vp)
+xl_set_uparam (XLAT xlat, INT uparam)
 {
-	xlat->legvp = vp;
+	xlat->uparam = uparam;
 }
-void *
-xl_get_legtt (XLAT xlat)
+INT
+xl_get_uparam (XLAT xlat)
 {
-	return xlat->legvp;
+	return xlat->uparam;
 }
 /*==========================================================
  * xl_get_dest_codeset -- return name of codeset of destination

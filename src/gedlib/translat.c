@@ -309,7 +309,8 @@ transl_load_all_tts (void)
 void
 transl_xlat (XLAT xlat, ZSTR zstr)
 {
-	struct legacytt_s * legtt = xl_get_legtt(xlat);
+	INT index = xl_get_uparam(xlat)-1;
+	struct legacytt_s * legtt = (index>=0 ? &legacytts[index] : NULL);
 	if (legtt && legtt->tt && legtt->first) {
 		custom_translate(zstr, legtt->tt);
 	}
@@ -370,13 +371,13 @@ transl_load_xlats (void)
 		I just added this today quickly today to get legacy translations 
 		working; this is kind of confusing and ought to be cleaned
 		up */
-		xl_set_legtt(conv->xlat, 0);
+		xl_set_uparam(conv->xlat, 0);
 		if (BTR) {
 			TRANTABLE tt=0;
 			if (init_map_from_rec(conv->key, i, &tt) && tt) {
 				transl_set_legacy_tt(i, tt);
 			}
-			xl_set_legtt(conv->xlat, &legacytts[i]);
+			xl_set_uparam(conv->xlat, i+1);
 		}
 	}
 }
@@ -454,7 +455,8 @@ ZSTR
 transl_get_description (XLAT xlat)
 {
 	ZSTR zstr = xlat_get_description(xlat);
-	struct legacytt_s * legtt = xl_get_legtt(xlat);
+	INT index = xl_get_uparam(xlat)-1;
+	struct legacytt_s * legtt = (index>=0 ? &legacytts[index] : NULL);
 	if (legtt && legtt->tt) {
 		ZSTR zdesc = get_trantable_desc(legtt->tt);
 		/* TRANSLATORS: db internal translation table note for tt menu */

@@ -43,12 +43,13 @@ Need translation chain
  put embedded table into chain (?) with flag for which end, or put into list ? how does this work now when edited ?
 */
 
-
+/* A TRANTABLE is a single conversion table; multiple 
+TRANTABLES may make up one xlat */
 typedef struct tag_trantable *TRANTABLE;
 
-/* a translation mapping, which may have a TRANTABLE, and may have iconv info */
+/* An XLAT is a conversion system between two codesets; it may 
+contain TRANTABLES and iconv steps, and even a legacy tt */
 typedef struct tag_xlat *XLAT;
-
 
 
 /* Functions */

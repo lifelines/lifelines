@@ -6,6 +6,11 @@
 	Remove unused name from xlat structure (which is shared, so shouldn't
 	have the name). (sf#806664)
 
+	* ChangeLog src/gedlib/translat.c src/gedlib/xlat.c
+	src/hdrs/translat.h src/hdrs/xlat.h src/liflines/screen.c
+
+	Fix legacy (db internal) translation tables (had to disable xlat cache).
+
 2003-09-15 Perry Rapp
 
 	* ChangeLog README.MAINTAINERS

@@ -19,15 +19,15 @@ BOOLEAN xl_do_xlat(XLAT xlat, ZSTR zstr);
 void xl_free_adhoc_xlats(void);
 void xl_free_xlats(void);
 ZSTR xlat_get_description(XLAT xlat);
+CNSTRING xl_get_dest_codeset(XLAT xlat);
 TRANTABLE xl_get_legacy_tt(XLAT xlat);
 XLAT xl_get_null_xlat(void);
+INT xl_get_uparam(XLAT);
 XLAT xl_get_xlat(CNSTRING src, CNSTRING dest, BOOLEAN adhoc);
 BOOLEAN xl_is_xlat_valid(XLAT xlat);
 void xl_load_all_dyntts(CNSTRING ttpath);
 void xl_parse_codeset(CNSTRING codeset, ZSTR zcsname, LIST * subcodes);
 void xl_release_xlat(XLAT xlat);
-void xl_set_legtt(XLAT, void * vp);
-CNSTRING xl_get_dest_codeset(XLAT xlat);
-void * xl_get_legtt(XLAT);
+void xl_set_uparam(XLAT, INT uparam);
 
 #endif /* xlat_h_included */

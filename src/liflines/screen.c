@@ -547,7 +547,7 @@ create_windows (void)
 	MAINWIN_WIDTH = ll_cols;
 	LISTWIN_WIDTH = ll_cols-7;
  	main_win = create_newwin2("main", ll_lines, MAINWIN_WIDTH);
-	tt_menu_win = create_newwin2("tt_menu", 12,73);
+	tt_menu_win = create_newwin2("tt_menu", 12,MAINWIN_WIDTH-7);
 	ask_win = create_newwin2("ask", 4, 73);
 	ask_msg_win = create_newwin2("ask_msg", 5, 73);
 	choose_from_list_win = create_newwin2("choose_from_list", 15, 73);
