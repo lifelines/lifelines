@@ -189,6 +189,34 @@ sour_to_list_string (NODE sour, INT len, STRING delim)
 	return strsave(scratch);
 }
 /*================================================
+ * even_to_list_string -- Return menu list string.
+ * Created: 2001/12/16, Perry Rapp
+ *==============================================*/
+STRING
+even_to_list_string (NODE even, INT len, STRING delim)
+{
+	char scratch[1024];
+	STRING name, p=scratch;
+	INT mylen=len;
+	TRANTABLE ttd = tran_tables[MINDS];
+	if (mylen>(INT)sizeof(scratch))
+		mylen=sizeof(scratch);
+	p[0]=0;
+	llstrcatn(&p, "(E", &mylen);
+	llstrcatn(&p, rmvat(nxref(even))+1, &mylen);
+	llstrcatn(&p, ") ", &mylen);
+	name = node_to_tag(even, "NAME", ttd, len);
+	if (name)
+		llstrcatn(&p, name, &mylen);
+        name = node_to_tag(even, "REFN", ttd, len);
+        if (name) {
+		llstrcatn(&p, " (", &mylen);
+                llstrcatn(&p, name, &mylen);
+		llstrcatn(&p, ")", &mylen);
+	}
+	return strsave(scratch);
+}
+/*================================================
  * fam_to_list_string -- Return menu list string.
  * Created: 2001/02/17, Perry Rapp
  *==============================================*/
@@ -329,7 +357,7 @@ generic_to_list_string (NODE node, STRING key, INT len, STRING delim, RFMT rfmt)
 			str = fam_to_list_string(node, len, ", ");
 			break;
 		case 'E':
-			/* TO DO - any expected structure for events ? */
+			str = even_to_list_string(node, len, ", ");
 			break;
 		case 'X':
 			str = other_to_list_string(node, len, ", ");

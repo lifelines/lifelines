@@ -225,6 +225,7 @@ BOOLEAN equal_node(NODE, NODE);
 BOOLEAN equal_nodes(NODE, NODE, BOOLEAN, BOOLEAN);
 void even_to_cache(NODE);
 void even_to_dbase(NODE);
+STRING even_to_list_string(NODE even, INT len, STRING delim);
 STRING event_to_date(NODE, TRANTABLE, BOOLEAN);
 STRING event_to_plac(NODE, BOOLEAN);
 STRING event_to_string(NODE, TRANTABLE, RFMT rfmt);
