@@ -22,11 +22,18 @@
    SOFTWARE.
 */
 #include "sys_inc.h"
+#ifdef HAVE_WCHAR_H
+#include <wchar.h>
+#endif
 #include "llstdlib.h"
+#include "bfs.h"
+#include "icvt.h"
 
 extern int opt_finnish;
 
 static usersortfnc usersort = 0;
+
+static BOOLEAN widecmp(char *str1, char *str2, INT *rtn);
 
 /*===================================================
  * ll_strcmp -- Compare two strings
@@ -61,6 +68,9 @@ ll_strcmploc (char *str1, char *str2)
 	if (usersort && (*usersort)(str1, str2, &rtn))
 		return rtn;
 
+	if (widecmp(str1, str2, &rtn))
+		return rtn;
+
 #ifdef HAVE_STRCOLL
 	errno = 0;
 	rtn = strcoll(str1, str2); /* sets errno if fails */
@@ -91,4 +101,44 @@ void
 set_usersort (usersortfnc fnc)
 {
 	usersort = fnc;
+}
+
+/*===================================================
+ * widecmp -- Perform unicode string comparison, if availalble
+ *=================================================*/
+static BOOLEAN
+widecmp (char *str1, char *str2, INT *rtn)
+{
+	bfptr bfs1=0, bfs2=0;
+	BOOLEAN success = FALSE;
+#ifdef HAVE_WCSCOLL
+	if (int_utf8) {
+#ifdef _WIN32
+		/* MS-Windows really only handles UCS-2 */
+		CNSTRING dest = "UCS-2-INTERNAL";
+#else
+		CNSTRING dest = "UCS-4-INTERNAL";
+#endif
+		BOOLEAN success;
+		bfs1 = bfNew(strlen(str1)*4+3);
+		bfCpy(bfs1, str1);
+		bfs1 = iconv_trans("UTF-8", dest, bfs1, "?", &success);
+		if (!success) goto failwidecmp;
+
+		bfs2 = bfNew(strlen(str2)*4+3);
+		bfCpy(bfs2, str2);
+		bfs2 = iconv_trans("UTF-8", dest, bfs2, "?", &success);
+		if (!success) goto failwidecmp;
+		
+		*rtn = wcscoll((const wchar_t *)bfs1->str, (const wchar_t *)bfs2->str);
+		success = TRUE;
+	}
+#endif
+
+failwidecmp:
+	if (bfs1)
+		bfDelete(bfs1);
+	if (bfs2)
+		bfDelete(bfs2);
+	return success;
 }

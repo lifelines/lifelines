@@ -233,6 +233,10 @@ SOURCE=..\..\..\win32\iconvshim.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\stdlib\icvt.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\liflines\import.c
 # End Source File
 # Begin Source File
@@ -298,6 +302,10 @@ SOURCE=..\..\..\stdlib\llstrcmp.c
 # Begin Source File
 
 SOURCE=..\..\..\liflines\loadsave.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\gedlib\locales.c
 # End Source File
 # Begin Source File
 
@@ -602,6 +610,10 @@ SOURCE=..\..\..\hdrs\win32\iconv.h
 # Begin Source File
 
 SOURCE=..\..\..\hdrs\win32\iconvshim.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\hdrs\icvt.h
 # End Source File
 # Begin Source File
 

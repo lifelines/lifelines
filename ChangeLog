@@ -1,3 +1,24 @@
+2002-07-02 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog arch/vsnprintf.c build/msvc6/llines/config.h
+	build/msvc6/llines/llines.rc build/msvc6/llines/llinesprj.dsp
+	gedlib/Makefile.am gedlib/gengedc.c gedlib/indiseq.c
+	gedlib/lloptions.c gedlib/translat.c hdrs/Makefile.am
+	hdrs/bfs.h hdrs/feedback.h hdrs/gedcom.h hdrs/impfeed.h
+	hdrs/llnls.h hdrs/lloptions.h hdrs/metadata.h hdrs/warehouse.h
+	hdrs/win32/iconvshim.h liflines/main.c liflines/menuitem.c
+	liflines/pedigree.c stdlib/Makefile.am stdlib/bfs.c
+	stdlib/llstrcmp.c stdlib/strutf8.c
+	NEW: gedlib/locales.c
+	NEW: hdrs/icvt.h
+	NEW: stdlib/icvt.c
+
+	Implemented wide char collation (wcscoll).
+	Changed most of my license headers to wide & short versions.
+	Moved locale code from translat.c to locales.c.
+	Suppress message language changes to current language.
+	Propagate message language changes to date.c.
+
 2002-06-29 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog tools/Makefile.am:

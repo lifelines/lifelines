@@ -705,7 +705,7 @@ static BOOLEAN
 is_locale_current (INDISEQ seq)
 {
 	if (are_locales_supported())
-		return eqstr(ILocale(seq), setlocale(LC_COLLATE, NULL));
+		return eqstr(ILocale(seq), llsetlocale(LC_COLLATE, NULL));
 	else
 		return TRUE;
 }
@@ -716,14 +716,12 @@ is_locale_current (INDISEQ seq)
 static void
 update_locale (INDISEQ seq)
 {
-#ifdef HAVE_SETLOCALE
-	const char *locstr = setlocale(LC_COLLATE, NULL);
+	const char *locstr = llsetlocale(LC_COLLATE, NULL);
 	if (!ILocale(seq) || !eqstr(ILocale(seq), locstr)) {
 		if (ILocale(seq))
 			stdfree(ILocale(seq));
 		ILocale(seq) = strsave(locstr);
 	}
-#endif
 }
 /*============================================
  * valuesort_indiseq -- Sort sequence by value

@@ -9,6 +9,8 @@
 #define HAVE_LOCALE_H 1
 #define HAVE__PUTENV 1
 #define HAVE_ICONV 1
+#define HAVE_WCSCOLL 1
+#define HAVE_WCHAR_H 1
 #define IN_LIBINTL 1
 #define WIN32_INTL_SHIM 1
 #define WIN32_ICONV_SHIM 1

@@ -1,0 +1,443 @@
+/* 
+   Copyright (c) 2001-2002 Perry Rapp
+   "The MIT license"
+   Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+/*=============================================================
+ * locales.c -- functions dealing with locales
+ * TODO: this is a mess of ifdefs -- please clean up at some point
+ *==============================================================*/
+
+#include "llstdlib.h"
+#ifdef HAVE_LOCALE_H
+# include <locale.h>
+#endif
+#ifdef HAVE_LANGINFO_CODESET
+# include <langinfo.h>
+#else
+# include "langinfz.h"
+#endif
+#include "translat.h"
+#include "liflines.h"
+#include "feedback.h"
+#include "bfs.h"
+#include "icvt.h"
+#include "lloptions.h"
+#include "date.h"
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+/* alphabetical */
+static void customlocale(STRING prefix);
+static STRING get_current_locale(INT category);
+static BOOLEAN ismsgcategory(int category);
+static STRING llsetenv(STRING name, STRING value);
+static void notify_gettext_language_changed(void);
+static STRING setmsgs(STRING localename);
+
+/*********************************************
+ * local variables
+ *********************************************/
+
+static STRING  deflocale_coll = NULL;
+static STRING  deflocale_msgs = NULL;
+static BOOLEAN customized_loc = FALSE;
+static BOOLEAN customized_msgs = FALSE;
+static STRING  current_coll = NULL; /* most recent */
+static STRING  current_msgs = NULL; /* most recent */
+static STRING  rptlocalestr = NULL; /* if set by report program */
+
+
+/*********************************************
+ * local & exported function definitions
+ * body of module
+ *********************************************/
+
+/*==========================================
+ * get_current_locale -- return current locale
+ *  returns "C" in case setlocale(x, 0) returns 0
+ * Created: 2002/02/24 (Perry Rapp)
+ *========================================*/
+#ifdef HAVE_SETLOCALE
+static STRING
+get_current_locale (INT category)
+{
+	STRING str = 0;
+	str = setlocale(category, NULL);
+	return str ? str : "C";
+}
+#endif /* HAVE_SETLOCALE */
+/*==========================================
+ * save_original_locales -- grab current locales for later default
+ *  We need these for an obscure problem. If user sets only
+ *  locales for report, then when we switch back to GUI mode,
+ *  we shouldn't stay in the customized report locale.
+ * Created: 2002/02/24 (Perry Rapp)
+ *========================================*/
+void
+save_original_locales (void)
+{
+	/* get collation locale, if available */
+#ifdef HAVE_SETLOCALE
+	deflocale_coll = strsave(get_current_locale(LC_COLLATE));
+	current_coll = strsave(deflocale_coll);
+#endif /* HAVE_SETLOCALE */
+
+	/* get messages locale (via locale or via environ.) */
+#ifdef HAVE_SETLOCALE
+#ifdef LC_MESSAGES
+	if (LC_MESSAGES >= 0 && LC_MESSAGES != 1729) {
+		/* 1729 is the gettext code when there wasn't any LC_MESSAGES */
+		deflocale_msgs = strsave(get_current_locale(LC_MESSAGES));
+		current_msgs = strsave(deflocale_msgs);
+	}
+#endif /* LC_MESSAGES */
+#endif /* HAVE_SETLOCALE */
+	/* fallback to the environment (see setmsgs) */
+	if (!deflocale_msgs) {
+		STRING msgs = getenv("LC_MESSAGES");
+		deflocale_msgs = strsave(msgs ? msgs : "");
+		current_msgs = strsave(deflocale_msgs);
+	}
+
+}
+/*==========================================
+ * get_original_locale_collate -- Get collation locale captured at startup
+ * caller may not alter string
+ * Created: 2002/06/15 (Perry Rapp)
+ *========================================*/
+STRING
+get_original_locale_collate (void)
+{
+#ifdef HAVE_SETLOCALE
+	return deflocale_coll;
+#endif /* HAVE_SETLOCALE */
+	return "";
+}
+/*==========================================
+ * get_current_locale_collate -- Get collation locale (as last set)
+ * caller may not alter string
+ * Created: 2002/06/15 (Perry Rapp)
+ *========================================*/
+STRING
+get_current_locale_collate (void)
+{
+	return current_coll;
+}
+/*==========================================
+ * get_original_locale_msgs -- Get LC_MESSAGES locale captured at startup
+ * caller may not alter string
+ * Created: 2002/06/15 (Perry Rapp)
+ *========================================*/
+STRING
+get_original_locale_msgs (void)
+{
+	return deflocale_msgs;
+}
+/*==========================================
+ * get_current_locale_msgs -- Get LC_MESSAGES locale (as last set)
+ * caller may not alter string
+ * Created: 2002/06/15 (Perry Rapp)
+ *========================================*/
+STRING
+get_current_locale_msgs (void)
+{
+	return current_msgs;
+}
+/*==========================================
+ * are_locales_supported -- locale support compiled in ?
+ * Created: 2002/06/15 (Perry Rapp)
+ *========================================*/
+BOOLEAN
+are_locales_supported (void)
+{
+#ifdef HAVE_SETLOCALE
+	return TRUE;
+#endif /* HAVE_SETLOCALE */
+	return FALSE;
+}
+/*==========================================
+ * is_nls_supported -- is NLS (National Language Support) compiled in ?
+ * Created: 2002/06/15 (Perry Rapp)
+ *========================================*/
+BOOLEAN
+is_nls_supported (void)
+{
+#ifdef ENABLE_NLS
+	return TRUE;
+#endif /* ENABLE_NLS */
+	return FALSE;
+}
+/*==========================================
+ * is_iconv_supported -- is iconv (codeset conversion library) compiled in ?
+ * Created: 2002/06/15 (Perry Rapp)
+ *========================================*/
+BOOLEAN
+is_iconv_supported (void)
+{
+#ifdef HAVE_ICONV
+	return TRUE;
+#endif /* HAVE_ICONV */
+	return FALSE;
+}
+/*==========================================
+ * ll_langinfo -- wrapper for nl_langinfo
+ *  in case not provided (eg, MS-Windows)
+ *========================================*/
+STRING
+ll_langinfo (void)
+{
+	STRING str = nl_langinfo(CODESET);
+	/* TODO: Should we apply norm_charmap.c ?
+	http://www.cl.cam.ac.uk/~mgk25/ucs/norm_charmap.c
+	*/
+	/* TODO: In any case tho, Markus' nice replacement nl_langinfo gives the
+	wrong default codepages for MS-Windows I think -- eg, should be 1252 for 
+	generic default instead of 8859-1 */
+
+	/* TODO: Check out libcharset (in the libiconv distribution)
+	It probably has the Win32 code in it */
+
+	return str ? str : ""; /* I don't know if nl_langinfo ever returns NULL */
+}
+/*==========================================
+ * termlocale -- free locale related variables
+ * Created: 2002/02/24 (Perry Rapp)
+ *========================================*/
+void
+termlocale (void)
+{
+	/* free & zero out globals */
+	strfree(&deflocale_coll);
+	strfree(&deflocale_msgs);
+}
+/*==========================================
+ * uilocale -- set locale to GUI locale
+ *  (eg, for displaying a sorted list of people)
+ * Created: 2001/08/02 (Perry Rapp)
+ *========================================*/
+void
+uilocale (void)
+{
+	customlocale("UiLocale");
+}
+/*==========================================
+ * rptlocale -- set locale to report locale
+ *  (eg, for _namesort)
+ * Created: 2001/08/02 (Perry Rapp)
+ *========================================*/
+void
+rptlocale (void)
+{
+	customlocale("RptLocale");
+	if (rptlocalestr) /* report has specified locale */
+		llsetlocale(LC_ALL, rptlocalestr);
+}
+/*==========================================
+ * rpt_setlocale -- set report locale to custom locale
+ *  used by report language
+ * Created: 2002/06/27 (Perry Rapp)
+ *========================================*/
+STRING
+rpt_setlocale (STRING str)
+{
+	strfree(&rptlocalestr);
+	rptlocalestr = llsetlocale(LC_ALL, str);
+	if (rptlocalestr)
+		rptlocalestr = strsave(rptlocalestr);
+	return rptlocalestr;
+}
+/*==========================================
+ * setmsgs -- set locale for LC_MESSAGES
+ * Returns non-null string if succeeds
+ *========================================*/
+static STRING
+setmsgs (STRING localename)
+{
+	STRING str;
+	if (eqstr_ex(current_msgs, localename))
+		return localename; /* skip it if already current */
+#if defined(HAVE_SETLOCALE) && defined(HAVE_LC_MESSAGES)
+	str = setlocale(LC_MESSAGES, localename);
+	if (str) {
+		strfree(&current_msgs);
+		current_msgs = strsave(str);
+	}
+#else
+	str = llsetenv("LC_MESSAGES", localename);
+	if (str) {
+		strfree(&current_msgs);
+		current_msgs = strsave(str);
+	}
+#endif
+	if (str) {
+		notify_gettext_language_changed();
+		/* TODO: inform menuitem of language change */
+		date_update_lang();
+	}
+	return str;
+}
+/*==========================================
+ * llsetenv -- assign a value to an environment variable
+ * Returns value if it succeeded
+ *========================================*/
+static STRING
+llsetenv (STRING name, STRING value)
+{
+	char buffer[128];
+	STRING str = 0;
+	INT len = ARRSIZE(buffer);
+	
+	llstrncpy(buffer, name, len);
+	llstrapp(buffer, len, "=");
+	llstrapp(buffer, len, value);
+
+#ifdef HAVE_SETENV
+	if (setenv(name, value, 1) != -1)
+		str = value;
+#else
+#ifdef HAVE_PUTENV
+	if (putenv(buffer) != -1)
+		str = value;
+#else
+#ifdef HAVE__PUTENV
+	if (_putenv(buffer) != -1)
+		str = value;
+#endif /* HAVE__PUTENV */
+#endif /* HAVE_PUTENV */
+#endif /* HAVE_SETENV */
+	return str;
+}
+/*==========================================
+ * customlocale -- set locale to custom setting
+ *  depending on user options
+ *  prefix:  [IN]  option prefix (eg, "UiLocale")
+ * Created: 2002/02/24 (Perry Rapp)
+ *========================================*/
+static void
+customlocale (STRING prefix)
+{
+	char option[64];
+	STRING str;
+	INT prefixlen = strlen(prefix);
+	
+	if (prefixlen > 30) return;
+
+	strcpy(option, prefix);
+
+#ifdef HAVE_SETLOCALE
+	/* did user set, eg, UiLocaleCollate option ? */
+	strcpy(option+prefixlen, "Collate");
+	str = getoptstr(option, 0);
+	if (str) {
+		customized_loc = TRUE;
+		str = setlocale(LC_COLLATE, str);
+	}
+	if (!str) {
+		/* did user set, eg, UiLocale option ? */
+		option[prefixlen] = 0;
+		str = getoptstr(option, 0);
+		if (str) {
+			customized_loc = TRUE;
+			str = setlocale(LC_COLLATE, str);
+		}
+		/* nothing set, so try to revert to startup value */
+		if (!str && customized_loc)
+			setlocale(LC_COLLATE, deflocale_coll);
+	}
+#endif /* HAVE_SETLOCALE */
+
+#if ENABLE_NLS
+/*
+ * TODO: 2002.03.03, Perry
+ * We need to watch for changes here, and 
+ * propagate them to menuitem and to date modules,
+ * which have to reload arrays if the language changes
+ */
+	/* did user set, eg, UiLocaleMessages option ? */
+	strcpy(option+prefixlen, "Messages");
+	str = getoptstr(option, 0);
+	if (str) {
+		customized_msgs = TRUE;
+		str = setmsgs(str);
+	} else {
+		/* did user set, eg, UiLocale option ? */
+		option[prefixlen] = 0;
+		str = getoptstr(option, 0);
+		if (str) {
+			customized_msgs = TRUE;
+			str = setmsgs(str);
+		}
+		if (!str && customized_msgs)
+			setmsgs(deflocale_msgs ? deflocale_msgs : "");
+	}
+#endif /* ENABLE_NLS */
+}
+/*==========================================
+ * notify_gettext_language_changed --
+ *  signal gettext that desired language has changed
+ * Created: 2002/06/15 (Perry Rapp)
+ *========================================*/
+static void
+notify_gettext_language_changed (void)
+{
+#if ENABLE_NLS
+#if  WIN32_INTL_SHIM
+	gt_notify_language_change();
+#else
+	extern int _nl_msg_cat_cntr;
+	++_nl_msg_cat_cntr;
+#endif
+#endif
+}
+/*==========================================
+ * llsetlocale -- wrapper for setlocale
+ * Handle MS-Windows annoying lack of LC_MESSAGES
+ * TODO: clean up other translat.c functions by calling this
+ *========================================*/
+char *
+llsetlocale (int category, char * locale)
+{
+	char * rtn = "C";
+#ifdef HAVE_SETLOCALE
+	rtn = setlocale(category, locale);
+#ifdef _WIN32
+	/* TODO: Obviously this is a quick hack */
+	if (!rtn && locale) {
+		if (eqstr(locale, "fi_FI"))
+			rtn = setlocale(LC_ALL, "Finnish_FINLAND");
+		else if (eqstr(locale, "pl_PL"))
+			rtn = setlocale(LC_ALL, "Polish_POLAND");
+		else if (eqstr(locale, "es"))
+			rtn = setlocale(LC_ALL, "Spanish");
+		else if (eqstr(locale, "en_US"))
+			rtn = setlocale(LC_ALL, "English_United States");
+		else if (eqstr(locale, "sv"))
+			rtn = setlocale(LC_ALL, "Swedish");
+	}
+#endif /* _WIN32 */
+#endif /* HAVE_SETLOCALE */
+#ifdef ENABLE_NLS
+	if (rtn && ismsgcategory(category)) {
+		/* use original locale, not corrupted by MS-Windows hack */
+		setmsgs(locale);
+	}
+#endif /* ENABLE_NLS */
+	return rtn;
+}
+/*==========================================
+ * ismsgcategory -- check for LC_ALL or LC_MESSAGES
+ *========================================*/
+static BOOLEAN
+ismsgcategory (int category)
+{
+#ifdef LC_MESSAGES
+	return category==LC_ALL || category==LC_MESSAGES;
+#else
+	return category==LC_ALL;
+#endif
+}

@@ -115,6 +115,7 @@ struct rfmt_s {
 };
 typedef struct rfmt_s *RFMT;
 
+
 /*==============================================
  * Option type enumerations (but we use defines)
  *============================================*/
@@ -361,6 +362,7 @@ INT length_nodes(NODE);
 STRING ll_langinfo(void);
 void load_char_mappings(void);
 BOOLEAN load_new_tt(CNSTRING filepath, INT ttnum);
+char * llsetlocale(int category, char * locale);
 STRING manip_name(STRING, TRANMAPPING, BOOLEAN, BOOLEAN, INT);
 int namecmp(STRING, STRING);
 STRING name_string(STRING);
