@@ -305,7 +305,9 @@ ZST qSimpsex      = N_("Line %d: Person %s is implied to be both male and female
 STRING noxref = SS "Line %d: This record has no cross reference value.";
 #endif
 
+	/* Option at bottom of list, if none in list are desired */
 ZST qSextrpt      = N_("<Choose outside this list>");
+	/* What report program to run ? */
 ZST qSwhatrpt     = N_("What is the name of the program?");
 
 ZST qSwhtout      = N_("What is the name of the output file?");

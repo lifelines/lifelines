@@ -1,3 +1,10 @@
+2002-06-02 Perry Rapp <puddle@users.sourceforge.net>
+
+	* .linesrc ChangeLog lines.cfg gedlib/messages.c interp/interp.c:
+
+	Document debugger option in code & in config files.
+	More i18n in interpreter.
+
 2002-05-30 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog configure.in arch/Makefile.am:

@@ -191,8 +191,8 @@ interp_program (STRING proc, INT nargs, VPTR *args, INT nifiles
 			programsdir, ".ll", picklist);
 		if (fp == NULL) {
 			if (ifile != NULL)  {
-				/* tried & failed to open file */
-				llwprintf("Error: file \"%s\" not found.\n", ifile);
+				/* tried & failed to open report program */
+				llwprintf(_("Error: file <%s> not found"), ifile);
 			}
 			goto interp_program_exit;
 		}
@@ -1666,6 +1666,7 @@ prog_var_error (PNODE node, SYMTAB stab, PNODE arg, PVALUE val, STRING fmt, ...)
 	if (dbg_mode != -99) {
 		char buf[64];
 		INT n = (stab.tab ? get_table_count(stab.tab) : 0);
+		/* report debugger: Option to display list of local symbols */
 		snprintf(buf, sizeof(buf), _("Display locals (%d)"), n);
 		buf[sizeof(buf)-1] = 0;
 		choices[0] = strsave(buf);
@@ -1682,6 +1683,10 @@ dbgloop:
 		free_array_strings(ARRSIZE(choices), choices);
 	}
 }
+/*====================================================
+ * disp_symtab -- Display contents of a symbol table
+ *  This is part of the report language debugger
+ *==================================================*/
 static void
 disp_symtab (SYMTAB stab)
 {
@@ -1693,17 +1698,27 @@ disp_symtab (SYMTAB stab)
 	sdata.count = n;
 	sdata.locals = (STRING *)malloc(bytes);
 	memset(sdata.locals, 0, bytes);
+	/* Now traverse & print the actual entries via disp_symtab_cb() */
 	traverse_symtab(stab, &sdata.locals, disp_symtab_cb);
+	/* Title of report debugger's list of local symbols */
 	view_array(_("Local variables"), n, sdata.locals);
 	free_array_strings(n, sdata.locals);
 }
+/*====================================================
+ * disp_symtab_cb -- Display one entry in symbol table
+ *  This is part of the report language debugger
+ *  key:   [IN]  name of current symbol
+ *  val:   [IN]  value of current symbol
+ *  param: [I/O] points to dbgsymtab_s, where list is being printed
+ *==================================================*/
 static BOOLEAN
 disp_symtab_cb (STRING key, PVALUE val, VPTR param)
 {
 	struct dbgsymtab_s * sdata = (struct dbgsymtab_s *)param;
 	char line[64];
 	ASSERT(sdata->current < sdata->count);
-	snprintf(line, sizeof(line), "%s: %s", key, debug_pvalue_as_string(val));
+	snprintf(line, sizeof(line), "%s: %s", key
+		, debug_pvalue_as_string(val));
 	line[sizeof(line)-1] = 0;
 	sdata->locals[sdata->current++] = strsave(line);
 	return TRUE; /* continue */
@@ -1746,7 +1761,7 @@ vprog_error (PNODE node, STRING fmt, va_list args)
 	STRING ptr = msgbuff;
 	INT mylen = sizeof(msgbuff);
 	if (rpt_cancelled)
-		return "Report cancelled";
+		return _("Report cancelled");
 	rptfile = getoptstr("ReportLog", NULL);
 	if (node) {
 		STRING fname = ifname(node);
@@ -1754,21 +1769,21 @@ vprog_error (PNODE node, STRING fmt, va_list args)
 		if (!prevfile[0] || !eqstr(prevfile, fname)) {
 			if (progparsing)
 				snprintf(msgf, ARRSIZE(msgf)
-				, "\nParsing Error in \"%s\"", fname);
+					, _("\nParsing Error in <%s>"), fname);
 			else
 				snprintf(msgf, ARRSIZE(msgf)
-					, "\nRuntime Error in: \"%s\"", fname);
+					, _("\nRuntime Error in: <%s>"), fname);
 			llstrncpy(prevfile, ifname(node), ARRSIZE(prevfile));
 		}
 		/* But always display the line & error */
 		if (progparsing)
 			snprintf(msglineno, sizeof(msglineno)
-				, "Parsing Error at line %d: ", iline(node));
+				, _("Parsing Error at line %d: "), iline(node));
 		else
 			snprintf(msglineno, sizeof(msglineno)
-				, "Runtime Error at line %d: ", iline(node));
+				, _("Runtime Error at line %d: "), iline(node));
 	} else {
-		snprintf(msglineno, sizeof(msglineno), "Aborting: ");
+		snprintf(msglineno, sizeof(msglineno), _("Aborting: "));
 	}
 	appendstr(&ptr, &mylen, msglineno);
 	vappendstrf(&ptr, &mylen, fmt, args);
@@ -1785,7 +1800,8 @@ vprog_error (PNODE node, STRING fmt, va_list args)
 			if (progerror == 1) {
 				LLDATE creation;
 				get_current_lldate(&creation);
-				fprintf(fp, "\nReport Errors: %s", creation.datestr);
+				fprintf(fp, _("\nReport Errors: %s")
+					, creation.datestr);
 			}
 			if (msgf[0])
 				fprintf(fp, msgf);
