@@ -94,6 +94,7 @@ static void format_ymd(STRING, STRING, STRING, INT, STRING*, INT *len);
 static void free_gdate(struct gdate_s *);
 static INT get_date_tok(struct dnum_s*);
 static void init_keywordtbl(void);
+static void initialize_if_needed(void);
 static BOOLEAN is_date_delim(char c);
 static BOOLEAN is_valid_day(struct gdate_s * pdate, struct dnum_s day);
 static BOOLEAN is_valid_month(struct gdate_s * pdate, struct dnum_s month);
@@ -244,6 +245,7 @@ static struct gedcom_keywords_s gedkeys[] = {
 
 static STRING sstr=NULL, sstr_start=NULL;
 static TABLE keywordtbl = NULL;
+static BOOLEAN lang_changed=FALSE;
 
 /*==========================================
  * do_format_date -- Do general date formatting
@@ -268,6 +270,8 @@ do_format_date (STRING str, INT dfmt, INT mfmt,
 	GDATEVAL gdv = 0;
 	
 	if (!str) return NULL;
+
+	initialize_if_needed();
 
 	if (sfmt==12) {
 		/* This is what used to be the shrt flag */
@@ -557,7 +561,7 @@ format_ymd (STRING syr, STRING smo, STRING sda, INT sfmt
 
 	if (date_pic) {
 		sprintpic3(*output, *len, date_pic, syr, smo, sda);
-		*len += strlen(*output);
+		*len -= strlen(*output);
 		return;
 	}
 	switch (sfmt) {
@@ -1292,11 +1296,7 @@ set_date_string (STRING str)
 {
 	sstr = str;
 	sstr_start = str;
-	if (!keywordtbl) {
-		init_keywordtbl();
-		load_lang();
-	} else if (0) /* language changed */
-		load_lang();
+	initialize_if_needed();
 }
 /*==================================================
  * get_date_tok -- Return next date extraction token
@@ -1487,11 +1487,10 @@ load_one_cmplx_pic (INT ecmplx, STRING abbrev, STRING full)
 /*=============================
  * load_one_month -- Generate case variations
  *  of one month name
- *  monum:  [IN]  month num (0-based)
- *  monarr: [I/O] month array
- *  abbrev: [IN]  eg, "jan"
- *  full:   [IN]  eg, "january"
- * Created: 2001/12/31 (Perry Rapp)
+ *  @monum:  [IN]  month num (0-based)
+ *  @monarr: [I/O] month array
+ *  @abbrev: [IN]  eg, "jan"
+ *  @full:   [IN]  eg, "january"
  *===========================*/
 static void
 load_one_month (INT monum, MONTH_NAMES * monarr, STRING abbrev, STRING full)
@@ -1516,7 +1515,6 @@ load_one_month (INT monum, MONTH_NAMES * monarr, STRING abbrev, STRING full)
  * load_lang -- Load generated picture strings
  *  based on current language
  * This must be called if current language changes.
- * Created: 2001/12/30 (Perry Rapp)
  *===========================*/
 static void
 load_lang (void)
@@ -1667,19 +1665,29 @@ get_todays_date (void)
 	STRING month;
 	curtime = time(NULL);
 	pt = localtime(&curtime);
-	if (!keywordtbl) {
-		init_keywordtbl();
-		load_lang();
-	}
+	initialize_if_needed();
 	/* TODO: Should this be one of the customizable formats ? */
 	month = gedkeys[pt->tm_mon].keyword;
 	sprintf(dat, "%d %s %d", pt->tm_mday, month, 1900 + pt->tm_year);
 	return dat;
 }
 /*=============================
+ * initialize_if_needed -- init module or reload language
+ *===========================*/
+static void
+initialize_if_needed (void)
+{
+	if (!keywordtbl) {
+		init_keywordtbl();
+		load_lang();
+	} else if (lang_changed) {
+		load_lang();
+		lang_changed = FALSE;
+	}
+}
+/*=============================
  * gdateval_isdual -- Does gdateval contain
  * two dates ?
- * Created: 2001/12/28 (Perry Rapp)
  *===========================*/
 BOOLEAN
 gdateval_isdual (GDATEVAL gdv)
@@ -1784,3 +1792,12 @@ set_date_pic (STRING pic)
 		}
 	}
 }
+/*=============================
+ * update_lang -- Adjust for new translation language
+ *===========================*/
+void
+date_update_lang (void)
+{
+	lang_changed = TRUE;
+}
+

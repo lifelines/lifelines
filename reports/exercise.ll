@@ -1,6 +1,6 @@
 /*
  * @progname       exercise
- * @version        0.98 (2002/06/27)
+ * @version        0.99 (2002/06/28)
  * @author         Perry Rapp
  
  * @category       test
@@ -18,6 +18,8 @@ May be used as a regression test.
  - Tests date functions
 
 TODO: logic tests
+TODO: Add simple German & Greek date tests
+TODO: Flag date tests for gedcom legal vs illegal
 
 */
 
@@ -40,8 +42,10 @@ global(cutoff_yr)
 global(true)
 global(undef) /* variable with no set value, used in string tests */
 global(dbuse)
+global(logout)
 global(testok)
 global(testfail)
+global(testskip)
 
 global(A)
 global(K)
@@ -75,7 +79,7 @@ proc setchars()
 }
 proc finnish()
 {
-	if (not(set_and_check_locale("fi_FI.UTF-8", "Finnish", "Finnish"))) {
+	if (not(set_and_check_locale("fi_FI", "Finnish"))) {
 		return()
 	}
 	call check_collate(A, Z, A, Z)
@@ -84,7 +88,7 @@ proc finnish()
 }
 proc polish()
 {
-	if (not(set_and_check_locale("pl_PO.UTF-8", "Polish", "Polish"))) {
+	if (not(set_and_check_locale("pl_PL", "Polish"))) {
 		return()
 	}
 	call check_collate(A, Z, A, Z)
@@ -93,7 +97,7 @@ proc polish()
 }
 proc spanish()
 {
-	if (not(set_and_check_locale("es.UTF-8", "Spanish", "Spanish"))) {
+	if (not(set_and_check_locale("es", "Spanish"))) {
 		return()
 	}
 	call check_collate(A, Z, A, Z)
@@ -107,17 +111,13 @@ proc check_collate(str1, str2, str1nam, str2nam)
 		call reportfail(fstr)
 	}
 }
-func set_and_check_locale(locstr, locstr2, locname)
+func set_and_check_locale(locstr, locname)
 {
 	set(res, setlocale(locstr))
 	if (nestr(res, "C")) {
 		return(1)
 	}
-	set(res, setlocale(locstr2)) /* MS-Windows name */
-	if (nestr(res, "C")) {
-		return(1)
-	}
-	call reportfail(concat("Locale missing: ", locstr))
+	call reportfail(concat("Locale missing: ", locstr, " (", locname, ")"))
 	return (0)
 }
 proc testCollate()
@@ -133,9 +133,14 @@ proc main()
 	set(true,1)
 	set(testok,0)
 	set(testfail,0)
+	set(testskip,0)
 
 	getint(dbuse, "Exercise db functions ? (0=no)")
 	set(cutoff_yr, 1900) /* assume anyone born before this is dead */
+
+	if (not(dbuse)) {
+	  getint(logout, "Output errors to file (0=no)")
+	}
 
 	getint(locales, "Test collation locales ? (0=no)")
 
@@ -422,7 +427,7 @@ proc reportfail(str)
 {
 	print(str)
 	print("\n")
-	if (dbuse) {
+	if (or(dbuse, logout)) {
 		str nl()
 	}
 	incr(testfail)
@@ -435,6 +440,7 @@ proc testStrings()
 {
 	set(testok, 0)
 	set(testfail, 0)
+	set(testskip, 0)
 
 	set(str,"hey")
 	set(str2,upper(str))
@@ -905,9 +911,8 @@ proc testDates()
 	set(testok, 0)
 	set(testfail, 0)
 
-/* TODO: The ones with month names will mostly fail in other locales
- We need to specifically request English or C locale */
-
+	set_and_check_locale("en_US", "English")
+	
 /* Test parsing only */
 	call tdparse("2 JAN 1953", 1953, 1, 2)
 	call tdparse("14 FEB 857", 857, 2, 14)
@@ -992,6 +997,32 @@ proc testDates()
 	call tdfb("2 JAN 1953", 1, 1, 1, 2, 2, 1, "01/02/1953 A.D.", "*")
 	call tdfb("JAN 1953", 1, 1, 1, 2, 2, 1, "01/  /1953 A.D.", "*")
 	call tdfb("1953", 1, 1, 1, 2, 2, 1, "  /  /1953 A.D.", "*")
+
+/* test Italian months */
+	if (not(set_and_check_locale("it", "Italian"))) {
+	set(testskip, add(testskip, 6))
+	} else {
+	call tdfb("2 JAN 1953", 2, 3, 0, 0, 0, 1, "2 GEN 1953", "*")
+	call tdfb("2 JAN 1953", 2, 4, 0, 0, 0, 1, "2 Gen 1953", "*")
+	call tdfb("2 JAN 1953", 2, 5, 0, 0, 0, 1, "2 GENNAIO 1953", "*")
+	call tdfb("2 JAN 1953", 2, 6, 0, 0, 0, 1, "2 Gennaio 1953", "*")
+	call tdfb("2 JAN 1953", 2, 7, 0, 0, 0, 1, "2 gen 1953", "*")
+	call tdfb("2 JAN 1953", 2, 8, 0, 0, 0, 1, "2 gennaio 1953", "*")
+	set_and_check_locale("en_US", "English")
+	}
+
+/* test Swedish months */
+	if (not(set_and_check_locale("sv", "Swedish"))) {
+	set(testskip, add(testskip, 6))
+	} else {
+	call tdfb("2 OCT 1953", 2, 3, 0, 0, 0, 1, "2 OKT 1953", "*")
+	call tdfb("2 OCT 1953", 2, 4, 0, 0, 0, 1, "2 Okt 1953", "*")
+	call tdfb("2 OCT 1953", 2, 5, 0, 0, 0, 1, "2 OKTOBER 1953", "*")
+	call tdfb("2 OCT 1953", 2, 6, 0, 0, 0, 1, "2 Oktober 1953", "*")
+	call tdfb("2 OCT 1953", 2, 7, 0, 0, 0, 1, "2 okt 1953", "*")
+	call tdfb("2 OCT 1953", 2, 8, 0, 0, 0, 1, "2 oktober 1953", "*")
+	set_and_check_locale("en_US", "English")
+	}
 
 /* test roman numeral months */
 	call tdfb("2 JAN 1953", 2,10, 0, 0, 0, 1, "2 i 1953", "*")
@@ -1246,7 +1277,12 @@ proc testDates()
 
 proc reportSubsection(title)
 {
-	print(concat("Passed ", d(testok), "/", d(add(testok,testfail)), " ", title, "\n"))
+	set(res, concat("Passed ", d(testok), "/", d(add(testok,testfail)), " "))
+	if (gt(testskip, 0)) {
+		set(res, concat(res, "(skipped ", d(testskip), ") "))
+	}
+	set(res, concat(res, title, "\n"))
+	print(res)
 	set(testok, 0)
 	set(testfail, 0)
 }

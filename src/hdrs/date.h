@@ -59,6 +59,7 @@ enum { GDV_AD=1, GDV_BC };
 
 GDATEVAL create_gdateval(void);
 STRING do_format_date(STRING, INT, INT, INT, INT, INT, INT);
+void date_update_lang(void);
 GDATEVAL extract_date(STRING);
 void free_gdateval(GDATEVAL gdv);
 BOOLEAN gdateval_isdual(GDATEVAL);

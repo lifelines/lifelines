@@ -34,6 +34,17 @@
 #include "menuitem.h"
 
 /*********************************************
+ * global/exported variables
+ *********************************************/
+
+ScreenInfo g_ScreenInfo[MAX_SCREEN+1]; /* init'd by menuitem_initialize */
+
+/* These are not listed as part of the menus below, because these are
+added on-the-fly to every menu page displayed */
+MenuItem g_MenuItemOther = { N_("?  Other menu choices"), 0, CMD_MENU_MORE, 0 };
+MenuItem g_MenuItemQuit = { N_("q  Return to main menu"), 0, CMD_QUIT, 0 };
+
+/*********************************************
  * external/imported variables
  *********************************************/
 
@@ -78,12 +89,7 @@ static void setup_menu(ScreenInfo * sinfo, STRING Title, INT MenuRows
  * local variables
  *********************************************/
 
-ScreenInfo g_ScreenInfo[MAX_SCREEN+1]; /* init'd by menuitem_initialize */
-
-/* These are not listed as part of the menus below, because these are
-added on-the-fly to every menu page displayed */
-MenuItem g_MenuItemOther = { N_("?  Other menu choices"), 0, CMD_MENU_MORE, 0 };
-MenuItem g_MenuItemQuit = { N_("q  Return to main menu"), 0, CMD_QUIT, 0 };
+static BOOLEAN f_initialized=FALSE;
 
 /* normal menu items */
 static MenuItem f_MenuItemEditIndi = { N_("e  Edit the person"), 0, CMD_EDIT, 0 };
@@ -663,15 +669,18 @@ menuitem_initialize (INT cols)
 	char title[120];
 
 	ItemSize = sizeof(f_MenuPerson[0]);
-	for (i=1; i<=MAX_SCREEN; i++)
-	{
-		memset(&g_ScreenInfo[i], 0, sizeof(g_ScreenInfo[i]));
-		g_ScreenInfo[i].Title = strsave(_("Missing title"));
-		g_ScreenInfo[i].MenuRows = 0;
-		g_ScreenInfo[i].MenuCols = cols;
-		g_ScreenInfo[i].MenuSize = 0;
-		g_ScreenInfo[i].Commands = NULL;
-		g_ScreenInfo[i].Menu = NULL;
+	if (!f_initialized) {
+		for (i=1; i<=MAX_SCREEN; i++)
+		{
+			memset(&g_ScreenInfo[i], 0, sizeof(g_ScreenInfo[i]));
+			g_ScreenInfo[i].Title = strsave(_("Missing title"));
+			g_ScreenInfo[i].MenuRows = 0;
+			g_ScreenInfo[i].MenuCols = cols;
+			g_ScreenInfo[i].MenuSize = 0;
+			g_ScreenInfo[i].Commands = NULL;
+			g_ScreenInfo[i].Menu = NULL;
+		}
+		f_initialized = TRUE;
 	}
 
 	scr = ONE_PER_SCREEN;
