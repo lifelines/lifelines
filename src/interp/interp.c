@@ -102,8 +102,10 @@ static void wipe_pactx(PACTX pactx);
  * local variables
  *********************************************/
 
-INT dbg_mode = 0;
-LIST outstanding_parse_errors = 0;
+static INT dbg_mode = 0;
+static LIST outstanding_parse_errors = 0;
+static char vprog_prevfile[MAXPATHLEN]="";
+static INT vprog_prevline=-1;
 
 /*********************************************
  * local function definitions
@@ -121,6 +123,9 @@ initinterp (void)
 	initset();
 	Perrors = 0;
 	rpt_cancelled = FALSE;
+	/* clear previous information */
+	vprog_prevfile[0] = 0;
+	vprog_prevline=-1;
 }
 /*==================================+
  * finishinterp -- Finish interpreter
@@ -1898,8 +1903,6 @@ vprog_error (PNODE node, STRING fmt, va_list args)
 	STRING rptfile;
 	ZSTR zstr=zs_newn(256);
 	static char msgbuff[100];
-	static char prevfile[MAXPATHLEN]="";
-	static INT prevline=-1;
 	if (rpt_cancelled)
 		return _("Report cancelled");
 	rptfile = getoptstr("ReportLog", NULL);
@@ -1907,16 +1910,16 @@ vprog_error (PNODE node, STRING fmt, va_list args)
 		STRING fname = irptinfo(node)->fullpath;
 		INT lineno = iline(node)+1;
 		/* Display filename if not same as last error */
-		if (!eqstr(prevfile, fname)) {
-			llstrsets(prevfile, sizeof(prevfile), uu8, fname);
+		if (!eqstr(vprog_prevfile, fname)) {
+			llstrsets(vprog_prevfile, sizeof(vprog_prevfile), uu8, fname);
 			zs_apps(zstr, _("Report file: "));
 			zs_apps(zstr, fname);
 			zs_appc(zstr, '\n');
-			prevline = -1; /* force line number display */
+			vprog_prevline = -1; /* force line number display */
 		}
 		/* Display line number if not same as last error */
-		if (prevline != lineno) {
-			prevline = lineno;
+		if (vprog_prevline != lineno) {
+			vprog_prevline = lineno;
 			if (progparsing)
 				zs_appf(zstr, _("Parsing Error at line %d: "), lineno);
 			else

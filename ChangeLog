@@ -1,3 +1,9 @@
+2003-01-30 Perry Rapp
+
+	* ChangeLog src/interp/interp.c:
+
+	Clear previous error info when running a new report.
+
 2003-01-23 Steve Dum
   
         * ChangeLog reports/Makefile.am, reports/gen_index, 
