@@ -1,3 +1,10 @@
+2001-01-14 Perry Rapp <puddle@users.sourceforge.net>
+
+	* gedlib/gengedc.c liflines/pedigree.c liflines/scan.c
+	stdlib/environ.c tools/dbverify.c:
+	Added prototypes for static functions at top of files.
+	Added block headers at top of files (enums, variables, prototypes,..).
+
 2001-01-13 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/gengedc.c gedlib/names.c gedlib/refns.c hdrs/gedcom.h
