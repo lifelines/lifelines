@@ -4837,6 +4837,24 @@ printed.
 </para>
 </glossdef></glossentry>
 
+<glossentry><glossterm>DisplayKeyTags</glossterm><glossdef>
+
+<para>
+If set to 1 an i or f is prepended to individual and family keys when shown
+on-screen.
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>AnnotatePointers</glossterm><glossdef>
+
+<para>
+If set to 1 a descriptive comment is added to pointers when editing family or
+individual records to help identify who is being refered to.  These tags
+are removed when the edit is finished and not stored in the database.
+</para>
+
+</glossdef></glossentry>
+
 <glossentry><glossterm>TTPATH</glossterm><glossdef>
 
 <para>

@@ -1,7 +1,7 @@
 
 LifeLines Documentation
 
-LifeLines Version 3.0.32
+LifeLines Version 3.0.36
 
 Thomas T. Wetmore , IV
      _____________________________________________________________
@@ -2462,6 +2462,16 @@ System and User Properties
    ShortOmitString
           If defined this string replaces characters at the end of an
           event being printed.
+
+   DisplayKeyTags
+          If set to 1 an i or f is prepended to individual and family
+          keys when shown on-screen.
+
+   AnnotatePointers
+          If set to 1 a descriptive comment is added to pointers when
+          editing  family  or individual records to help identify who
+          is  being  refered to. These tags are removed when the edit
+          is finished and not stored in the database.
 
    TTPATH
           list  of  directories to search for translation table files

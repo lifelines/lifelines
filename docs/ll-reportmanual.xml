@@ -769,6 +769,8 @@ In addition to these conventional statements, the report generator provides othe
 for looping through genealogical and other types of data. For example, the <type>children</type> statement
 iterates through the children of a family, the <type>spouses</type> statement iterates through the spouses of a
 person, and the <type>families</type> statement iterates through the families that a person is a spouse or parent in.
+A number of arguments to the iterator are set with values for each iteration.
+After completion of the iteration, these variables have the value null.
 These iterators and others are described in more detail later under the appropriate data types.
 
 </para>

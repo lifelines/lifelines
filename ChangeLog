@@ -1,3 +1,15 @@
+2003-09-28 Stephen Dum
+        * ChangeLog src/liflines/loadsave.c docs/ll-reportmanual.html
+	docs/ll-reportmanual.pdf docs/ll-reportmanual.sv.html
+	docs/ll-reportmanual.sv.xml docs/ll-reportmanual.txt
+	docs/ll-reportmanual.xml docs/ll-userguide.html
+	docs/ll-userguide.pdf docs/ll-userguide.sv.html
+	docs/ll-userguide.txt docs/ll-userguide.xml
+
+	Update formatted docs.  Modify save gedcom command to print
+	actual filename data is saved to, rather than what user typed in.
+	Add documention for option AnnotatePointers and DisplayKeyTags.
+
 2003-09-28 Jens Arvidsson
 
 	* ChangeLog docs/ll-reportmanual.sv.xml docs/ll-userguide.sv.xml

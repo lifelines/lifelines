@@ -2852,8 +2852,6 @@ loopa igenom alla element i lista
 
 </para>
 
-</para>
-
 <para>
 
 	<function>Forlist</function> är en iterator som loopar igenom
