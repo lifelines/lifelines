@@ -253,7 +253,8 @@ STRING dbdelk = SS "Adding unused keys as deleted keys...";
 STRING dbrdon = SS "The database is read-only; loading has been canceled.";
 STRING outarc = SS "Enter name of output archive file.";
 STRING outfin = SS "Database `%s' has been saved in `%s'.";
-STRING outtt  = SS "Enter name of output translation table file";
+STRING mouttt = SS "Enter name of translation table file to write";
+STRING mintt  = SS "Enter name of translation table file to read";
 
 STRING extrpt      = SS "<Choose outside this list>";
 STRING whatrpt     = SS "What is the name of the program?";
@@ -474,3 +475,7 @@ STRING mn_sca_ttl  = SS "What scan type?";
 STRING mn_sca_nmfu = SS "f  Full name scan";
 STRING mn_sca_nmfr = SS "n  Name fragment (whitespace-delimited) scan";
 STRING mn_sca_refn = SS "r  Refn scan";
+STRING sts_sca_ful = SS "Performing full name scan";
+STRING sts_sca_fra = SS "Performing name fragment scan";
+STRING sts_sca_ref = SS "Performing refn scan";
+STRING sts_sca_non = SS "No records found in scan";

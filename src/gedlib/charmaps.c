@@ -65,8 +65,8 @@ extern STRING baddec, badhex, norplc, badesc;
  *********************************************/
 
 /* alphabetical */
-static TRANTABLE init_map_from_rec(INT, BOOLEAN*);
-static TRANTABLE init_map_from_str(STRING, INT, BOOLEAN*);
+static BOOLEAN init_map_from_rec(INT, TRANTABLE*);
+static BOOLEAN init_map_from_str(STRING, INT, TRANTABLE*);
 static void maperror(INT index, INT entry, INT line, STRING errmsg);
 
 /*********************************************
@@ -95,10 +95,8 @@ void
 init_mapping (void)
 {
 	INT indx;
-	BOOLEAN err;
 	for (indx = 0; indx < NUM_TT_MAPS; indx++) {
-		tran_tables[indx] = init_map_from_rec(indx, &err);
-		if (err) {
+		if (!init_map_from_rec(indx, &tran_tables[indx])) {
 			msg_error("Error initializing %s map.\n"
 				, map_names[indx]);
 		}
@@ -107,42 +105,48 @@ init_mapping (void)
 /*===================================================
  * init_map_from_rec -- Init single translation table
  *  indx:  [IN]  which translation table (see defn of map_keys)
- *  perr:  [OUT] flag set to TRUE if error
+ *  ptt:   [OUT] new translation table, if created
+ * Returns FALSE if error
+ * But if no tt found, *ptt=0 and returns TRUE.
  *=================================================*/
-TRANTABLE
-init_map_from_rec (INT indx, BOOLEAN *perr)
+BOOLEAN
+init_map_from_rec (INT indx, TRANTABLE * ptt)
 {
 	STRING rawrec;
 	INT len;
-	TRANTABLE tt;
+	BOOLEAN ok;
 
-	*perr = FALSE;
+	*ptt = 0;
 	if (!(rawrec = retrieve_raw_record(map_keys[indx], &len)))
-		return NULL;
-	tt = init_map_from_str(rawrec, indx, perr);
+		return TRUE;
+	ok = init_map_from_str(rawrec, indx, ptt);
 	stdfree(rawrec);
-	return tt;
+	return ok;
 }
 /*====================================================
  * init_map_from_file -- Init single translation table
  *  file: [IN]  file from which to read translation table
  *  indx: [IN]  which translation table (see defn of map_keys)
- *  perr: [OUT] flag set to TRUE if error
+ *  ptt:  [OUT] new translation table if created
+ * Returns FALSE if error.
+ * But if file is empty, *ptt=0 and returns TRUE.
  *==================================================*/
-TRANTABLE
-init_map_from_file (STRING file, INT indx, BOOLEAN *perr)
+BOOLEAN
+init_map_from_file (STRING file, INT indx, TRANTABLE * ptt)
 {
 	FILE *fp;
 	struct stat buf;
 	STRING mem;
 	INT siz;
+	BOOLEAN ok;
 
-	*perr = FALSE;
-	if ((fp = fopen(file, LLREADTEXT)) == NULL) return NULL;
+	*ptt = 0;
+
+	if ((fp = fopen(file, LLREADTEXT)) == NULL) return TRUE;
 	ASSERT(fstat(fileno(fp), &buf) == 0);
 	if (buf.st_size == 0) {
 		fclose(fp);
-		return NULL;
+		return TRUE;
 	}
 	mem = (STRING) stdalloc(buf.st_size+1);
 	mem[buf.st_size] = 0;
@@ -150,7 +154,9 @@ init_map_from_file (STRING file, INT indx, BOOLEAN *perr)
 	/* may not read full buffer on Windows due to CR/LF translation */
 	ASSERT(siz == buf.st_size || feof(fp));
 	fclose(fp);
-	return init_map_from_str(mem, indx, perr);
+	ok = init_map_from_str(mem, indx, ptt);
+	stdfree(mem);
+	return ok;
 }
 /*==================================================
  * init_map_from_str -- Init single tranlation table
@@ -160,18 +166,19 @@ init_map_from_file (STRING file, INT indx, BOOLEAN *perr)
  *
  * <original>{sep}<translation>
  * sep is separator character, by default tab
- *  str:  [in] input string to translate
- *  indx: [in] which translation table (see defn of map_keys)
- *  perr: [out] error flag set TRUE by function if error
+ *  str:  [IN] input string to translate
+ *  indx: [IN] which translation table (see defn of map_keys)
+ *  ptt:  [OUT] new translation table if created
  * May return NULL
  *================================================*/
-static TRANTABLE
-init_map_from_str (STRING str, INT indx, BOOLEAN *perr)
+static BOOLEAN
+init_map_from_str (STRING str, INT indx, TRANTABLE * ptt)
 {
 	INT i, n, maxn, entry=1, line=1, newc;
 	INT sep = (uchar)'\t'; /* default separator */
 	BOOLEAN done;
 	BOOLEAN skip;
+	BOOLEAN ok = TRUE; /* return value */
 	unsigned char c;
 	char scratch[50];
 	STRING p, *lefts, *rights;
@@ -180,9 +187,9 @@ init_map_from_str (STRING str, INT indx, BOOLEAN *perr)
 	name[0] = 0;
 
 	ASSERT(str);
+	*ptt = 0;
 
 /* Count newlines to find lefts and rights sizes */
-	*perr = TRUE;
 	p = str;
 	n = 0;
 	skip = TRUE;
@@ -209,7 +216,6 @@ init_map_from_str (STRING str, INT indx, BOOLEAN *perr)
 	if (!skip) ++n; /* include last line */
 	if (!n) {
 		/* empty translation table ignored */
-		*perr = FALSE;
 		goto none;
 	}
 	lefts = (STRING *) stdalloc(n*sizeof(STRING));
@@ -349,20 +355,19 @@ init_map_from_str (STRING str, INT indx, BOOLEAN *perr)
 		*p = 0;
 		rights[n++] = strsave(scratch);
 	}
-	tt = create_trantable(lefts, rights, n);
-	strcpy(tt->name, name);
-	*perr = FALSE;
+	*ptt = create_trantable(lefts, rights, n, name);
 end:
 	for (i = 0; i < n; i++)		/* don't free rights */
 		stdfree(lefts[i]);
 	stdfree(lefts);
 	stdfree(rights);
 none:
-	return tt;
+	return ok;
 
 fail:
 	for (i = 0; i < n; i++) /* rights not consumed by tt */
 		stdfree(rights[i]);
+	ok = FALSE;
 	goto end;
 }
 /*==================================================

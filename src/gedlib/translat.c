@@ -74,18 +74,21 @@ static INT translate_match(TRANTABLE tt, CNSTRING in, CNSTRING * out);
 
 /*=============================================
  * create_trantable -- Create translation table
- *  lefts:  [in] patterns
- *  rights: [in] replacements
- *  n:      [in] num pairs
+ *  lefts:  [IN]  patterns
+ *  rights: [IN]  replacements
+ *  n:      [IN]  num pairs
+ *  name:   [IN]  user-chosen name
  *===========================================*/
 TRANTABLE
-create_trantable (STRING *lefts, STRING *rights, INT n)
+create_trantable (STRING *lefts, STRING *rights, INT n, STRING name)
 {
 	TRANTABLE tt = (TRANTABLE) stdalloc(sizeof(*tt));
 	STRING left, right;
 	INT i, c;
 	XNODE node;
 	tt->name[0] = 0;
+	tt->total = n;
+	llstrncpy(tt->name, name, sizeof(tt->name));
 	for (i = 0; i < 256; i++)
 		tt->start[i] = NULL;
 	/* if empty, n==0, this is valid */

@@ -2,7 +2,7 @@
 #define _GEDCOM_PRIV_H
 
 /* from charmaps.c */
-TRANTABLE init_map_from_file(STRING, INT, BOOLEAN*);
+BOOLEAN init_map_from_file(STRING, INT, TRANTABLE*);
 
 /* from names.c */
 RECORD id_by_key(STRING name, char ctype);

@@ -1,3 +1,22 @@
+2001-12-26 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog lines.cfg gedlib/charmaps.c gedlib/editmap.c
+	gedlib/gedcomi.h gedlib/messages.c gedlib/translat.c
+	hdrs/gedcom.h hdrs/translat.h interp/date.c liflines/llinesi.h
+	liflines/scan.c liflines/screen.c stdlib/lloptions.c:
+
+	Made msg_outputv & place_std_message & display_status
+	call touch_all when done.
+	Fix edit_mapping to not show errors after finished.
+	Add status messages during name/refn scans.
+	Change ask_for_string & invoke_scan_menu to use
+	activate/deactivate system (so ancestor menus get
+	repainted).
+	Added counts to translation table menu.
+	Modified lloptions.c to recognize := to mean no 
+	escape processing.
+	Implemented load_tt_action.
+
 2001-12-24 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog liflines/browse.c liflines/screen.c:
@@ -22,6 +41,7 @@
 	Modified __stddate to work on strings as well as nodes.
 	Added date testing section to exercise.ll.
 	Added __yearformat function.
+	Implemented save_tt_action.
 
 2001-12-23 Perry Rapp <puddle@users.sourceforge.net>
 

@@ -321,6 +321,7 @@ NODE keynum_to_sour(int keynum);
 NODE keynum_to_even(int keynum);
 NODE keynum_to_othr(int keynum);
 INT length_nodes(NODE);
+BOOLEAN load_new_tt(STRING filepath, INT ttnum);
 STRING manip_name(STRING, TRANTABLE, BOOLEAN, BOOLEAN, INT);
 int namecmp(STRING, STRING);
 STRING name_string(STRING);

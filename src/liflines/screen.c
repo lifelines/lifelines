@@ -107,7 +107,7 @@ UIWINDOW extra_menu_win=NULL;
 
 extern BOOLEAN alldone, progrunning;
 extern STRING empstr,empstr71,empstr120,readpath,ronlye,dataerr;
-extern STRING abverr,uoperr,badttnum,nosuchtt,outtt;
+extern STRING abverr,uoperr,badttnum,nosuchtt,mouttt,mintt;
 extern STRING mtitle,cright,plschs;
 extern STRING mn_unkcmd,ronlya,ronlyr;
 extern STRING askynq,askynyn,askyny;
@@ -134,6 +134,7 @@ extern STRING mn_sca_ttl,mn_sca_nmfu,mn_sca_nmfr,mn_sca_refn;
 extern STRING mn_tt_ttl,mn_tt_edit,mn_tt_load,mn_tt_save,mn_tt_exp,mn_tt_imp,mn_tt_dir;
 extern STRING mn_tt_edin,mn_tt_ined,mn_tt_gdin,mn_tt_ingd;
 extern STRING mn_tt_dsin,mn_tt_inds,mn_tt_inrp;
+extern STRING sts_sca_ful,sts_sca_fra,sts_sca_ref,sts_sca_non;
 
 /*********************************************
  * local types
@@ -197,7 +198,7 @@ static INT invoke_extra_menu(void);
 static RECORD invoke_scan_menu(void);
 static void invoke_trans_menu(UIWINDOW wparent);
 static void invoke_utils_menu(void);
-static void load_tt_menu(UIWINDOW wparent);
+static void load_tt_action(UIWINDOW wparent);
 static void output_menu(UIWINDOW uiwin, INT screen, INT bottom, INT width);
 void place_cursor(void);
 static void place_std_msg(void);
@@ -217,7 +218,7 @@ static void repaint_footer_menu(INT screen);
 static void repaint_main_menu(UIWINDOW uiwin);
 static void rpt_cset_menu(UIWINDOW wparent);
 static void run_report(BOOLEAN picklist);
-static void save_tt_menu(UIWINDOW wparent);
+static void save_tt_action(UIWINDOW wparent);
 static void show_fam (UIWINDOW uiwin, NODE fam, INT mode, INT row, INT hgt, INT width, INT * scroll, BOOLEAN reuse);
 static void show_tandem_line(UIWINDOW uiwin, INT row);
 static void shw_array_of_strings(STRING *strings, listdisp *ld
@@ -555,7 +556,7 @@ main_menu (void)
 		{
 			NODE node;
 			if (readonly) {
-				message(ronlya);
+				msg_error(ronlya);
 				break;
 			}
 			node = invoke_add_menu();
@@ -566,7 +567,7 @@ main_menu (void)
 	case 'd':
 		{
 			if (readonly) {
-				message(ronlyr);
+				msg_error(ronlyr);
 				break;
 			}
 			invoke_del_menu();
@@ -908,14 +909,14 @@ ask_for_string (STRING ttl, STRING prmpt)
 	BOX(win, 0, 0);
 	mvwaddstr(win, 1, 1, ttl);
 	mvwaddstr(win, 2, 1, prmpt);
-	wrefresh(win);
+	activate_uiwin(uiwin);
 	rv = get_answer(uiwin, 2, strlen(prmpt) + 2); /* less than 100 chars */
+	deactivate_uiwin();
 	if (!rv) return (STRING) "";
 	p = rv;
 	while (chartype((uchar)*p) == WHITE)
 		p++;
 	striptrail(p);
-	refresh_main();
 	return p;
 }
 /*======================================
@@ -1370,7 +1371,7 @@ static void
 disp_trans_table_choice (UIWINDOW uiwin, INT row, INT col, STRING menuit, INT indx)
 {
 	TRANTABLE tt = tran_tables[indx];
-	char line[120];
+	char line[120], count[20];
 	WINDOW * win = uiw_win(uiwin);
 	INT mylen = sizeof(line);
 	STRING ptr = line;
@@ -1386,6 +1387,9 @@ disp_trans_table_choice (UIWINDOW uiwin, INT row, INT col, STRING menuit, INT in
 		else {
 			llstrcatn(&ptr, "     (Unnamed table)", &mylen);
 		}
+		sprintf(count, " [%d]", tt->total);
+		if (mylen > (INT)strlen(count))
+			llstrcatn(&ptr, count, &mylen);
 	}
 	else {
 		llstrcatn(&ptr, "     (None)", &mylen);
@@ -1400,7 +1404,6 @@ RECORD
 invoke_scan_menu (void)
 {
 	UIWINDOW uiwin=0;
-	WINDOW *win=0;
 	RECORD rec=0;
 	INT code=0;
 	BOOLEAN done=FALSE;
@@ -1411,26 +1414,25 @@ invoke_scan_menu (void)
 		repaint_scan_menu(scan_menu_win);
 	}
 	uiwin = scan_menu_win;
-	win = uiw_win(uiwin);
-	activate_uiwin(uiwin);
 
 	while (!done) {
-		wmove(win, 1, 27);
+		activate_uiwin(uiwin);
+		wmove(uiw_win(uiwin), 1, 27);
 		code = interact(uiwin, "fnrq", -1);
 
 		switch (code) {
 		case 'f':
-			rec = full_name_scan();
+			rec = full_name_scan(sts_sca_ful);
 			if (rec)
 				done=TRUE;
 			break;
 		case 'n':
-			rec = name_fragment_scan();
+			rec = name_fragment_scan(sts_sca_fra);
 			if (rec)
 				done=TRUE;
 			break;
 		case 'r':
-			rec = refn_scan();
+			rec = refn_scan(sts_sca_ref);
 			if (rec)
 				done=TRUE;
 			break;
@@ -1438,8 +1440,10 @@ invoke_scan_menu (void)
 			done=TRUE;
 			break;
 		}
+		deactivate_uiwin();
+		if (!done)
+			msg_status(sts_sca_non);
 	}
-	deactivate_uiwin();
 	return rec;
 }
 /*============================
@@ -1614,8 +1618,8 @@ invoke_trans_menu (UIWINDOW wparent)
 
 		switch (code) {
 		case 'e': edit_tt_menu(uiwin); break;
-		case 'l': load_tt_menu(uiwin); break;
-		case 's': save_tt_menu(uiwin); break;
+		case 'l': load_tt_action(uiwin); break;
+		case 's': save_tt_action(uiwin); break;
 		case 'x': export_tts(); break;
 		case 'i': import_tts(); break;
 		case 'q': done=TRUE; break;
@@ -1632,28 +1636,54 @@ edit_tt_menu (UIWINDOW wparent)
 	INT ttnum;
 	while ((ttnum = choose_tt(wparent, mn_edttttl)) != -1) {
 		edit_mapping(ttnum);
+		stdout_vis = FALSE; /* don't need to see errors after done */
 	}
 }
 /*======================================
- * load_tt_menu -- menu for "Load translation table"
+ * load_tt_action -- menu for "Load translation table"
  *====================================*/
 static void
-load_tt_menu (UIWINDOW wparent)
+load_tt_action (UIWINDOW wparent)
 {
+	FILE * fp;
+	STRING fname=0;
+	INT ttnum;
+	STRING ttimportdir;
+
 	if (readonly) {
-		message(ronlye);
+		msg_error(ronlye);
 		return;
 	}
-	message(mn_notimpl);
+
+	/* Ask which table */
+	ttnum = choose_tt(wparent, mn_svttttl);
+	if (ttnum == -1) return;
+	if (ttnum < 0 || ttnum >= NUM_TT_MAPS) {
+		msg_error(badttnum);
+		return;
+	}
+
+	/* Ask whence to load it */
+	ttimportdir = getoptstr("LLTTREF", ".");
+	fp = ask_for_input_file(LLREADTEXT, mintt, &fname, ttimportdir, ".tt");
+	if (fp) {
+		fclose(fp);
+		/* Load it */
+		if (!load_new_tt(fname, ttnum))
+			msg_error(dataerr);
+	}
+	if (fname)
+		stdfree(fname);
 }
 /*======================================
- * save_tt_menu -- menu for "Save translation table"
+ * save_tt_action -- save a translation table
+ * to a file
  *====================================*/
 static void
-save_tt_menu (UIWINDOW wparent)
+save_tt_action (UIWINDOW wparent)
 {
-	char fnamebuf[512];
-	STRING fname;
+	FILE * fp;
+	STRING fname=0;
 	INT ttnum;
 	STRING ttexportdir;
 	
@@ -1668,17 +1698,19 @@ save_tt_menu (UIWINDOW wparent)
 		msg_error(nosuchtt);
 		return;
 	}
-	/* Ask where to save it */
+	/* Ask whither to save it */
 	ttexportdir = getoptstr("LLTTEXPORT", ".");
-	make_fname_prompt(fnamebuf, sizeof(fnamebuf), ".ll");
-	fname = ask_for_output_filename(outtt, ttexportdir, fnamebuf);
-	if (ISNULL(fname)) return;
-
-	/* Save it */
-	if (!save_tt_to_file(ttnum, fname)) {
-		msg_error(dataerr);
-		return;
+	fp = ask_for_output_file(LLWRITETEXT, mouttt, &fname, ttexportdir, ".tt");
+	if (fp) {
+		fclose(fp);
+		/* Save it */
+		if (!save_tt_to_file(ttnum, fname)) {
+			msg_error(dataerr);
+			return;
+		}
 	}
+	if (fname)
+		stdfree(fname);
 }
 /*======================================
  * import_tts -- import translation tables
@@ -1686,7 +1718,7 @@ save_tt_menu (UIWINDOW wparent)
 static void
 import_tts (void)
 {
-	message(mn_notimpl);
+	msg_error(mn_notimpl);
 }
 /*======================================
  * export_tts -- export translation tables
@@ -1694,7 +1726,7 @@ import_tts (void)
 static void
 export_tts (void)
 {
-	message(mn_notimpl);
+	msg_error(mn_notimpl);
 }
 /*======================================
  * choose_tt -- select a translation table (-1 for none)
@@ -1832,7 +1864,7 @@ interact (UIWINDOW uiwin, STRING str, INT screen)
 			for (i = 0; i < n; i++) {
 				if (c == str[i]) return c;
 			}
-		} else { /* new menus */
+		} else { /* new menus (in menuitem.c) */
 			if (offset < (INT)sizeof(buffer)-1) {
 				buffer[offset] = c;
 				buffer[offset+1] = 0;
@@ -1846,10 +1878,11 @@ interact (UIWINDOW uiwin, STRING str, INT screen)
 			if (cmdnum != CMD_NONE && cmdnum != CMD_PARTIAL)
 				return cmdnum;
 			if (cmdnum != CMD_PARTIAL) {
-				message(mn_unkcmd);
+				msg_error(mn_unkcmd);
 				offset = 0;
 			}
 		}
+		/* choice was no good, we loop & wait for another choice */
 	}
 }
 /*============================================
@@ -2198,6 +2231,8 @@ place_std_msg (void)
 	mvwaddstr(win, row, 2, str);
 	wrefresh(win); /* ensure message is displayed */
 	place_cursor();
+	if (active_uiwin)
+		touch_all();
 }
 /*=================================================
  * llvwprintf -- Called as wprintf(fmt, argp)
@@ -2611,6 +2646,8 @@ display_status (STRING text)
 	mvwaddstr(win, row, 2, status_showing);
 	place_cursor();
 	wrefresh(win);
+	if (active_uiwin)
+		touch_all();
 }
 /*=========================================
  * msg_error -- handle error message

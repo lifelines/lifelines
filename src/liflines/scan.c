@@ -71,7 +71,7 @@ static BOOLEAN pattern_match(SCAN_PATTERN *patt, STRING name);
 static BOOLEAN ns_callback(STRING key, STRING name, BOOLEAN newset, void *param);
 static BOOLEAN rs_callback(STRING key, STRING refn, BOOLEAN newset, void *param);
 static BOOLEAN set_pattern(SCAN_PATTERN * patt, STRING str, INT scantype);
-static RECORD name_scan(INT scantype);
+static RECORD name_scan(INT scantype, STRING sts);
 
 /*********************************************
  * local variables
@@ -164,11 +164,12 @@ set_pattern (SCAN_PATTERN * patt, STRING str, INT scantype)
 	return TRUE;
 }
 /*==============================
- * name_scan -- traverse names
- *  looking for pattern matching
+ * name_scan -- traverse names looking for pattern matching
+ *  scantype:  [IN]  which type of scan (full or partial)
+ *  sts:       [IN]  status msg to display during scan
  *============================*/
 static RECORD
-name_scan (INT scantype)
+name_scan (INT scantype, STRING sts)
 {
 	SCAN_PATTERN patt;
 	RECORD indi = NULL;
@@ -186,6 +187,7 @@ name_scan (INT scantype)
 			break;
 	}
 
+	msg_status(sts);
 
 	results_seq = create_indiseq_null();
 	traverse_names(ns_callback, &patt);
@@ -202,25 +204,25 @@ name_scan (INT scantype)
  *  looking for pattern matching
  *============================================*/
 RECORD
-name_fragment_scan (void)
+name_fragment_scan (STRING sts)
 {
-	return name_scan(NAMESCAN_FRAG);
+	return name_scan(NAMESCAN_FRAG, sts);
 }
 /*======================================
  * full_name_scan -- traverse full names
  *  looking for pattern matching
  *====================================*/
 RECORD
-full_name_scan (void)
+full_name_scan (STRING sts)
 {
-	return name_scan(NAMESCAN_FULL);
+	return name_scan(NAMESCAN_FULL, sts);
 }
 /*==============================
  * refn_scan -- traverse refns
  *  looking for pattern matching
  *============================*/
 RECORD
-refn_scan (void)
+refn_scan (STRING sts)
 {
 	SCAN_PATTERN patt;
 	RECORD rec = NULL;
@@ -235,6 +237,8 @@ refn_scan (void)
 		if (set_pattern(&patt, str, scantype))
 			break;
 	}
+
+	msg_status(sts);
 
 	results_seq = create_indiseq_null();
 	traverse_refns(rs_callback, &patt);

@@ -117,13 +117,14 @@ load_config_file (STRING file, STRING * pmsg)
 	STRING ptr, val;
 	STRING oldval=NULL;
 	INT len;
-	BOOLEAN there, failed;
+	BOOLEAN there, failed, noesc;
 	char buffer[MAXLINELEN],valbuf[MAXLINELEN];
 	fp = fopen(file, LLREADTEXT);
 	if (!fp)
 		return TRUE; /* no config file, that is ok */
 	/* read thru config file til done (or error) */
 	while (fgets(buffer, sizeof(buffer), fp)) {
+		noesc = FALSE;
 		if (buffer[0] == '#')
 			continue; /* ignore lines starting with # */
 		if (!feof(fp) && buffer[strlen(buffer)-1] != '\n') {
@@ -133,9 +134,13 @@ load_config_file (STRING file, STRING * pmsg)
 		/* find =, which separates key from value */
 		for (ptr = buffer; *ptr && *ptr!='='; ptr++)
 			;
-		if (*ptr != '=')
-			continue; /* ignore lines without = */
+		if (*ptr != '=' || ptr==buffer)
+			continue; /* ignore lines without = or key */
 		*ptr=0; /* zero-terminate key */
+		if (ptr[-1] == ':') {
+			noesc = TRUE; /* := means don't do backslash escapes */
+			ptr[-1] = 0;
+		}
 		/* overwrite any previous value */
 		oldval = valueofbool_str(opttab, buffer, &there);
 		if (there) {
@@ -149,7 +154,10 @@ load_config_file (STRING file, STRING * pmsg)
 		this handles escapes (eg, "\n")
 		the output (valbuf) is no longer than the input (ptr)
 		*/
-		copy_process(valbuf, ptr);
+		if (noesc)
+			llstrncpy(valbuf, ptr, sizeof(valbuf));
+		else
+			copy_process(valbuf, ptr);
 		val = valbuf;
 		len = strlen(val);
 		if (val[len-1]=='\n')

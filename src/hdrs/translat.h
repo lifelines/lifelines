@@ -48,6 +48,7 @@ struct xnode {
 typedef struct {
 	XNODE start[256];
 	char name[20];
+	INT total;
 } *TRANTABLE;
 
 /* forward declaration - real declaration in bfs.h */
@@ -62,7 +63,7 @@ extern TRANTABLE tran_tables[];
 
 void add_char(STRING, INT*, INT, INT);
 void add_string(STRING, INT*, INT, STRING);
-TRANTABLE create_trantable(STRING*, STRING*, INT);
+TRANTABLE create_trantable(STRING *lefts, STRING *rights, INT n, STRING name);
 BOOLEAN custom_sort(char *str1, char *str2, INT * rtn);
 INT get_codeset(INT index);
 LIST get_codesets(void);

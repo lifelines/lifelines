@@ -27,15 +27,12 @@ extern STRING sepch;
 BOOLEAN
 edit_mapping (INT ttnum)
 {
-	TRANTABLE tt;
-	BOOLEAN err;
-
 	if (ttnum < 0 || ttnum >= NUM_TT_MAPS) {
 		msg_error(badttnum);
 		return FALSE;
 	}
 	if (readonly) {
-		message(ronlye);
+		msg_error(ronlye);
 		return FALSE;
 	}
 	endwin();
@@ -53,15 +50,8 @@ edit_mapping (INT ttnum)
 		char buffer[128], temp[64];
 		STRING ptr=buffer;
 		INT mylen = sizeof(buffer);
-		tt = init_map_from_file(editfile, ttnum, &err);
-		if (!err) {
-			TRANSLFNC transfnc = NULL; /* don't translate translation tables ! */
-			if (tran_tables[ttnum])
-				remove_trantable(tran_tables[ttnum]);
-			tran_tables[ttnum] = tt;
-			store_text_file_to_db(map_keys[ttnum], editfile, transfnc);
+		if (load_new_tt(editfile, ttnum))
 			return TRUE;
-		}
 		ptr[0] = 0;
 		llstrcatn(&ptr, cmperr, &mylen);
 		llstrcatn(&ptr, " ", &mylen);
@@ -70,10 +60,8 @@ edit_mapping (INT ttnum)
 		if (ask_yes_or_no_msg(buffer, aredit))
 			do_edit();
 		else {
-			remove_trantable(tt);
 			return FALSE;
 		}
-		remove_trantable(tt);
 	}
 }
 /*==============================================
@@ -90,4 +78,29 @@ save_tt_to_file (INT ttnum, STRING filename)
 	ASSERT(ttnum>=0 && ttnum<NUM_TT_MAPS);
 	rtn = retrieve_to_textfile(map_keys[ttnum], filename, translfnc);
 	return (rtn != RECORD_ERROR);
+}
+/*==============================================
+ * load_new_tt -- Load translation table from file
+ *  also update permanent record in database
+ *  filepath:  [IN]  file whence to get new table
+ *  ttnum:     [IN]  which translation table to load
+ * Created: 2001/12/26, Perry Rapp
+ *============================================*/
+BOOLEAN
+load_new_tt (STRING filepath, INT ttnum)
+{
+	TRANSLFNC transfnc = NULL; /* don't translate translation tables ! */
+	TRANTABLE tt=0;
+	if (!init_map_from_file(filepath, ttnum, &tt)) {
+		if (tt)
+			remove_trantable(tt);
+		return FALSE;
+	}
+	/* change from old one to new one */
+	if (tran_tables[ttnum])
+		remove_trantable(tran_tables[ttnum]);
+	tran_tables[ttnum] = tt;
+	/* store new one in permanent record in database */
+	store_text_file_to_db(map_keys[ttnum], filepath, transfnc);
+	return TRUE;
 }

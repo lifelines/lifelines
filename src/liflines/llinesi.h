@@ -89,9 +89,9 @@ void pedigree_increase_generations(INT delta);
 void pedigree_toggle_mode(void);
 
 /* scan.c */
-RECORD full_name_scan(void);
-RECORD name_fragment_scan(void);
-RECORD refn_scan(void);
+RECORD full_name_scan(STRING sts);
+RECORD name_fragment_scan(STRING sts);
+RECORD refn_scan(STRING sts);
 
 /* screen.c */
 void adjust_menu_cols(INT delta);
