@@ -7,7 +7,8 @@ SUBDIRS = win32
 
 EXTRA_DIST = arch.h array.h btree.h \
 	cache.h charprops.h codesets.h cscurses.h \
-	date.h feedback.h fpattern.h \
+	date.h dbfuncs.h dbfuncsi.h \
+	feedback.h fpattern.h \
 	gedcheck.h gedcom.h gengedc.h \
 	icvt.h impfeed.h indiseq.h \
 	isolangs.h interp.h \

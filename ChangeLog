@@ -1,3 +1,9 @@
+2005-01-03 Perry Rapp
+
+	* ChangeLog src/hdrs/Makefile.am
+
+	Add dbfuncs.h and dbfuncsi.h to Makefile.am.
+
 2005-01-02 Perry Rapp
 
 	* ChangeLog src/liflines/browse.c
