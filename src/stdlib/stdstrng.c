@@ -472,7 +472,7 @@ sprintpic3 (STRING buffer, INT len, CNSTRING pic, CNSTRING arg1, CNSTRING arg2
 			if (!printpic_arg(&b, bmax-b, arg1, arg1len))
 				return FALSE;
 			p += 2;
-		} else if (p[0]=='%' && p[1]=='2' && arg2len) {
+		} else if (p[0]=='%' && p[1]=='2') {
 			if (!printpic_arg(&b, bmax-b, arg2, arg2len))
 				return FALSE;
 			p += 2;
