@@ -4,19 +4,13 @@
  *   3.0.2 - 09 Nov 1994
  *========================================================*/
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#ifndef WIN32
-#include <unistd.h>
-#else
-#include <dir.h>
-#endif
+#include "sys_inc.h"
+#include <curses.h>
 #include "standard.h"
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
 #include "liflines.h"
-#include <curses.h>
 
 #define NOMAPS 6
 

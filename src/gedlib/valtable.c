@@ -28,8 +28,7 @@
  *   3.0.0 - 12 Sep 94    3.0.2 - 16 Oct 94
  *===========================================================*/
 
-#include <sys/types.h>
-#include <sys/stat.h>
+#include "sys_inc.h"
 #include "standard.h"
 #include "table.h"
 #include "translat.h"

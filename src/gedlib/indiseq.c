@@ -31,7 +31,7 @@
 /* modified 2000-01-26 J.F.Chandler */
 /* modified 2000-08-21 J.F.Chandler */
 
-#include <stdlib.h>
+#include "sys_inc.h"
 #include "standard.h"
 #include "table.h"
 #include "translat.h"

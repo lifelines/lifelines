@@ -28,13 +28,10 @@
  *   3.0.0 - 12 Sep 94    3.0.2 - 22 Dec 94
  *===========================================================*/
 
-#include <sys/types.h>
-#include <sys/stat.h>
+#include "sys_inc.h"
 #ifndef WIN32
-#include <unistd.h>
 #include <curses.h>
 #else
-#include <dir.h>
 #include "mycurses.h"
 #endif
 #include "standard.h"

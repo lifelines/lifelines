@@ -29,7 +29,7 @@
  *   3.0.0 - 02 May 94    3.0.2 - 10 Nov 94
  *===========================================================*/
 
-#include <stdlib.h>
+#include "sys_inc.h"
 #include "standard.h"
 #include "btree.h"
 #include "table.h"
