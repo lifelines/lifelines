@@ -45,6 +45,8 @@
 #include "interp.h"
 #include "yacc.h"
 
+void initlex (int mode);
+
 extern FILE *Pinfp;	/* file that holds program */
 extern STRING Pinstr;	/* string that holds program */
 extern INT Plineno;	/* program line number */

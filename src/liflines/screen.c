@@ -81,6 +81,8 @@ static void clearw (void);
 static void place_cursor (void);
 static INT interact (WINDOW *win, STRING str);
 static INT list_interact(WINDOW *win, STRING ttl, INT len, STRING *strings);
+static void vmprintf (STRING fmt, va_list args);
+
 static INT indiseq_interact (WINDOW *win, STRING ttl, INDISEQ seq);
 static WINDOW *choose_win(INT);
 
@@ -1232,7 +1234,7 @@ list_interact(WINDOW *win,    /* interaction window */
 /*===============================================
  * vmprintf -- send error, info, or status message out
  *=============================================*/
-void
+static void
 vmprintf (STRING fmt, va_list args)
 {
 	INT row;

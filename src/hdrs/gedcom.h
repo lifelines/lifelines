@@ -290,6 +290,7 @@ STRING rmvbrackets(STRING str);
 void set_displaykeys(BOOLEAN);
 STRING shorten_date(STRING);
 STRING shorten_plac(STRING);
+void show_node (NODE node);
 void show_node_rec(INT, NODE);
 STRING soundex(STRING);
 void sour_to_cache(NODE);

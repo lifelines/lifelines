@@ -24,6 +24,8 @@
 /* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 #include <stdarg.h>
 #include <stdio.h>
+#include "screen.h"
+#include "interp.h"
 
 /*===========================================================
  * llwprintf -- Called as llwprintf(fmt, arg, arg, arg, ...)
@@ -37,6 +39,8 @@ llwprintf (char *fmt, ...)
 	vprintf(fmt, args);
 	va_end(args);
 }
+
+#ifdef UNUSED_CODE
 /*===========================================================
  * mprintf -- Called as mprintf(fmt, arg, arg, arg, ...)
  *===========================================================*/
@@ -49,6 +53,7 @@ mprintf (char *fmt, ...)
 	vprintf(fmt, args);
 	va_end(args);
 }
+#endif
 /*======================================
  * poutput -- Print argument as a string
  *====================================*/

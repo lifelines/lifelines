@@ -38,6 +38,8 @@
 extern BTREE BTR;
 
 static BOOLEAN readxrefs(void);
+static STRING getxref (char ctype, INT *nxrefs, INT *xrefs);
+static void addxref (INT key, INT *nxrefs, INT maxxrefs, INT *xrefs, void (*growfnc)(void));
 
 /*===================================================================
  * First five words in xrefs file are number of INDI, FAM, EVEN, SOUR
@@ -112,7 +114,7 @@ closexref (void)
  *  a new highnumber
  *  generic for all 5 types
  *=======================================*/
-STRING
+static STRING
 getxref (char ctype, INT *nxrefs, INT *xrefs)
 {
 	INT n;
@@ -233,7 +235,7 @@ writexrefs (void)
  * addxref -- Add deleted key to xrefs.
  *  generic for all types
  *===================================*/
-void
+static void
 addxref (INT key, INT *nxrefs, INT maxxrefs, INT *xrefs, void (*growfnc)(void))
 {
 	INT lo,hi,md, i;

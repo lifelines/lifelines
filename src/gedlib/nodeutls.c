@@ -103,6 +103,8 @@ union_nodes (NODE node1,
 	}
 	return node1;
 }
+
+#ifdef UNUSED_CODE
 /*=========================================================
  * intersect_nodes -- Return intersection of two node trees
  *=======================================================*/
@@ -159,6 +161,7 @@ intersect_nodes (NODE node1,
 	free_nodes(node2);
 	return node3;
 }
+#endif
 /*========================================================================
  * classify_nodes -- Convert two value lists to three lists - first
  *   returned list holds all values that were only in original first
@@ -218,6 +221,7 @@ classify_nodes (NODE *pnode1,
  * difference_nodes -- Return difference of two node lists -- all in node1
  *   that are not in node2
  *======================================================================*/
+#ifdef UNUSED_CODE
 NODE
 difference_nodes (NODE node1,
                   NODE node2,
@@ -260,3 +264,4 @@ value_in_nodes (NODE node,
 	}
 	return FALSE;
 }
+#endif

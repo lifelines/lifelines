@@ -293,6 +293,8 @@ add_string (STRING buf,
 		*plen += len;
 	}
 }
+
+#ifdef DEBUG
 /*=======================================================
  * show_trantable -- DEBUG routine that shows a TRANTABLE
  *=====================================================*/
@@ -312,6 +314,8 @@ show_trantable (TRANTABLE tt)
 		}
 	}
 }
+#endif /* DEBUG */
+
 /*===============================================
  * show_xnodes -- DEBUG routine that shows XNODEs
  *=============================================*/

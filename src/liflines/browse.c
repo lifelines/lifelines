@@ -54,6 +54,9 @@ extern STRING id1hbr, id2hbr, id1wbr, id2wbr;
 static INT browse_indi(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
 static INT browse_fam(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
 static INT browse_pedigree(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
+static NODE goto_indi_child(NODE indi, int childno);
+static NODE goto_fam_child(NODE fam, int childno);
+
 
 #define ALLPARMS &indi1, &indi2, &fam1, &fam2, &seq
 
@@ -99,7 +102,7 @@ browse (NODE indi1)
 /*================================================
  * goto_indi_child - jump to child by number
  *==============================================*/
-NODE
+static NODE
 goto_indi_child(NODE indi, int childno)
 {
 	INT num1, num2, i = 0;
@@ -117,7 +120,7 @@ goto_indi_child(NODE indi, int childno)
 /*================================================
  * goto_fam_child - jump to child by number
  *==============================================*/
-NODE
+static NODE
 goto_fam_child(NODE fam, int childno)
 {
 	INT num, i = 0;

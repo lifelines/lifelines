@@ -22,6 +22,32 @@
 
 #include "llinesi.h"
 
+int select_programs(const struct dirent *entry);
+void remove_trailing_space(STRING s);
+struct program_info *parse_program(STRING directory,
+				   STRING filename);
+struct program_info *load_programs(STRING directory,
+				   STRING ext,
+				   struct program_info *head);
+struct program_info *find_all_programs(STRING path,
+				       STRING ext);
+
+void free_program_list(struct program_info *head,
+		       STRING *list,
+		       int len);
+int make_program_list(struct program_info *head,
+		      STRING leader,
+		      STRING **list);
+FILE *get_choice(struct program_info *head,
+		 int choice,
+		 STRING *pfname);
+FILE *ask_for_program (STRING mode,
+		       STRING ttl,
+		       STRING *pfname,
+		       STRING path,
+		       STRING ext,
+		       BOOLEAN picklist);
+
 #define PATHSEPARATOR ':'
 extern STRING llprograms;
 

@@ -23,7 +23,7 @@
 */
 #include "sys_inc.h"
 #include "mystring.h"
-
+#include "llstdlib.h"
 extern int opt_finnish;
 
 int

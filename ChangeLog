@@ -1,4 +1,17 @@
-2001-01-02    <marc@nozell.com>
+2001-01-03  Marc Nozell <marc@nozell.com>
+
+	* tools/wprintf.c, interp/lex.c, stdlib/assert.c,
+	stdlib/signals.c, liflines/screen.c, liflines/export.c,
+	liflines/browse.c, gedlib/xreffile.c, hdrs/gedcom.h,
+	liflines/askprogram.c, stdlib/llstrcmp.c, cleanup compiler
+	prototype warnings.
+
+	* tools/wprintf.c, liflines/add.c, gedlib/node.c,
+	gedlib/nodeutls.c: #ifdef'd UNUSED_CODE
+
+	* gedlib/translat.c: #ifdef'd DEBUG debug code
+	
+2001-01-02  Marc Nozell <marc@nozell.com>
 
 	* hdrs/gedcom.h, gedlib/node.c: More compiler prototype warning
 	cleanups, #ifdef'd UNUSED_CODE

@@ -37,6 +37,7 @@
 #include "gedcom.h"
 #include "liflines.h"
 #include "screen.h"
+#include "llinesi.h"
 
 extern STRING btreepath, llarchives;
 extern BTREE BTR;

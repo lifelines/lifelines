@@ -40,6 +40,7 @@
 #include "liflines.h"
 #include "screen.h"
 #include "stdlibi.h"
+#include "llstdlib.h"
 
 char *sig_msgs[] = {
 	"SIGNAL 0",
