@@ -2393,27 +2393,15 @@ __rot (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 BOOLEAN
 record_to_node (PVALUE val)
 {
- 	CACHEEL cel = pvalue_to_cel(val); /* may be NULL */
-	STRING key;
+	RECORD rec = pvalue_to_rec(val); /* may be NULL */
 	NODE gnode=0;
 
-	if (!cel) return FALSE;
-	
-	if (cnode(cel)) {
-		gnode = cnode(cel);
-	} else {
-		/* not in direct cache, so load into cache */
-		key = ckey(cel);
-		switch (*key) {
-		case 'I': gnode = key_to_indi(key); break;
-		case 'F': gnode = key_to_fam(key);  break;
-		case 'S': gnode = key_to_sour(key); break;
-		case 'E': gnode = key_to_even(key); break;
-		case 'X': gnode = key_to_othr(key); break;
-		default:  FATAL();
-		}
-	}
-	set_pvalue(val, PGNODE, gnode); 
+	if (!rec) return FALSE;
+
+	/* pvalue_to_rec loads the record into direct cache */
+
+	gnode = nztop(rec);
+	set_pvalue_node(val, gnode); 
 	return TRUE;
 }
 /*================================+
@@ -3154,7 +3142,7 @@ __child (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_var_error(node, stab, arg, val, nullarg1, "child");
 		return NULL;
 	}
-	set_pvalue(val, PGNODE, nchild(ged));
+	set_pvalue_node(val, nchild(ged));
 	return val;
 }
 /*=================================+

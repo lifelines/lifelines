@@ -109,7 +109,6 @@ create_table (void)
 	tab->maxhash = MAXHASH_DEF;
 	tab->entries = (ENTRY *)stdalloc(tab->maxhash*sizeof(ENTRY));
 	tab->count = 0;
-	tab->refcnt = 1;
 	tab->valtype = TB_NULL;
 	for (i = 0; i < tab->maxhash; i++)
 		tab->entries[i] = NULL;

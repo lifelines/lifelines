@@ -35,29 +35,17 @@
 #include "gedcom.h"
 #include "cache.h"
 #include "interp.h"
+#include "interpi.h"
 #include "liflines.h"
 #include "feedback.h"
 #include "zstr.h"
 
-/*********************************************
- * local types
- *********************************************/
-
-/* block of pvalues - see comments in alloc_pvalue_memory() */
-struct pv_block
-{
-	struct pv_block * next;
-	struct ptag values[100]; /* arbitrary size may be adjusted */
-};
-typedef struct pv_block *PV_BLOCK;
-#define BLOCK_VALUES (sizeof(((PV_BLOCK)0)->values)/sizeof(((PV_BLOCK)0)->values[0]))
 
 /*********************************************
  * local function prototypes
  *********************************************/
 
 /* alphabetical */
-static CACHEEL access_cel_from_pvalue(PVALUE val);
 static FLOAT bool_to_float(BOOLEAN);
 static INT bool_to_int(BOOLEAN);
 static void clear_pv_indiseq(INDISEQ seq);
@@ -67,9 +55,7 @@ static PVALUE create_pvalue_from_key_impl(STRING key, INT ptype);
 static PVALUE create_pvalue_from_record(RECORD rec, INT ptype);
 static BOOLEAN eq_pstrings(PVALUE val1, PVALUE val2);
 static int float_to_int(float f);
-static void free_all_pvalues(void);
 static void free_float_pvalue(PVALUE val);
-static BOOLEAN is_pvalue_or_freed(PVALUE pval);
 static void table_pvcleaner(ENTRY ent);
 
 /*********************************************
@@ -81,19 +67,6 @@ static char *ptypes[] = {
 	"PGNODE", "PINDI", "PFAM", "PSOUR", "PEVEN", "POTHR", "PLIST",
 	"PTABLE", "PSET"};
 
-static PVALUE free_list = 0;
-static INT live_pvalues = 0;
-static PV_BLOCK block_list = 0;
-static BOOLEAN reports_time = FALSE;
-static BOOLEAN cleaning_time = FALSE;
-#ifdef DEBUG_REPORT_MEMORY_DETAIL
-static BOOLEAN alloclog_save = FALSE;
-#endif
-#ifdef DEBUG_PVALUES
-static INT debugging_pvalues = TRUE;
-#else
-static INT debugging_pvalues = FALSE;
-#endif
 
 /*********************************************
  * local function definitions
@@ -101,207 +74,96 @@ static INT debugging_pvalues = FALSE;
  *********************************************/
 
 /*========================================
- * debug_check -- check every pvalue in free list
- * This is of course slow, but invaluable for tracking
- * down pvalue corruption bugs - so don't define
- * DEBUG_PVALUES unless you are working on a pvalue
- * corruption bug.
- * Created: 2001/03, Perry Rapp
- *======================================*/
-static void
-debug_check (void)
-{
-	PVALUE val;
-	for (val=free_list; val; val=val->value)
-	{
-		ASSERT(val->type == 99 && val->value != val);
-	}
-}
-/*========================================
- * alloc_pvalue_memory -- return new pvalue memory
- * We use a custom allocator, which lowers our overhead
- *  (no heap overhead per pvalue, only per block)
- *  and also allows us to clean them all up after the
- *  report.
- * NB: This is not traditional garbage collection - we're
- *  not doing any live/dead analysis; we depend entirely
- *  on carnal knowledge of the program.
- * We also mark freed ones, so we can scan the blocks
- *  to find leaked ones (which used to be nearly
- *  all of them)
- * Created: 2001/01/19, Perry Rapp
- *======================================*/
-static PVALUE
-alloc_pvalue_memory (void)
-{
-	PVALUE val;
-	
-	ASSERT(reports_time);
-	/*
-	We assume that all pvalues are scoped
-	within report processing. If this ceases to
-	be true, this has to be rethought.
-	Eg, we could use a bitmask in the type field to mark
-	truly heap-alloc'd pvalues, used outside of reports.
-	*/
-	if (!free_list) {
-		/* no pvalues available, make a new block */
-		PV_BLOCK new_block = stdalloc(sizeof(*new_block));
-		INT i;
-		new_block->next = block_list;
-		block_list = new_block;
-		/* add all pvalues in new block to free list */
-		for (i=0; i<(INT)BLOCK_VALUES; i++) {
-			PVALUE val1 = &new_block->values[i];
-			val1->type = PFREED;
-			val1->value = free_list;
-			free_list = val1;
-			if (debugging_pvalues)
-				debug_check();
-		}
-	}
-	/* pull pvalue off of free list */
-	val = free_list;
-	free_list = free_list->value;
-	if (debugging_pvalues)
-		debug_check();
-	live_pvalues++;
-	/* set type to uninitialized - caller ought to set type */
-	ptype(val) = PUNINT;
-	pvalue(val) = 0;
-	return val;
-}
-/*========================================
- * free_pvalue_memory -- return pvalue to free-list
- * (see alloc_pvalue_memory comments)
- * Created: 2001/01/19, Perry Rapp
- *======================================*/
-static void
-free_pvalue_memory (PVALUE val)
-{
-	/* see alloc_pvalue_memory for discussion of this ASSERT */
-	ASSERT(reports_time);
-	if (ptype(val)==PFREED) {
-		/*
-		this can happen during cleaning - eg, if we find
-		orphaned values in a table before we find the orphaned
-		table
-		*/
-		ASSERT(cleaning_time);
-		return;
-	}
-	/* put on free list */
-	val->type = PFREED;
-	val->value = free_list;
-	free_list = val;
-	if (debugging_pvalues)
-		debug_check();
-	live_pvalues--;
-	ASSERT(live_pvalues>=0);
-}
-/*======================================
- * pvalues_begin -- Start of programs
- * Created: 2001/01/20, Perry Rapp
- *====================================*/
-void
-pvalues_begin (void)
-{
-	ASSERT(!reports_time);
-	reports_time = TRUE;
-#ifdef DEBUG_REPORT_MEMORY_DETAIL
-	alloclog_save = alloclog;
-	alloclog = TRUE;
-#endif
-}
-/*======================================
- * pvalues_end -- End of programs
- * Created: 2001/01/20, Perry Rapp
- *====================================*/
-void
-pvalues_end (void)
-{
-	ASSERT(!cleaning_time);
-	cleaning_time = TRUE;
-	free_all_pvalues();
-	free_all_pnodes();
-	cleaning_time = FALSE;
-	ASSERT(reports_time);
-	reports_time = FALSE;
-	clear_rptinfos();
-#ifdef DEBUG_REPORT_MEMORY
-	{
-		INT save = alloclog;
-		alloclog = TRUE;
-		report_alloc_live_count("pvalues_end");
-		alloclog = save;
-	}
-#ifdef DEBUG_REPORT_MEMORY_DETAIL
-	alloclog = alloclog_save;
-#endif
-#endif
-}
-/*======================================
- * free_all_pvalues -- Free every pvalue
- * Created: 2001/01/20, Perry Rapp
- *====================================*/
-static void
-free_all_pvalues (void)
-{
-	PV_BLOCK block;
-	/* live_pvalues is the # leaked */
-	while ((block = block_list)) {
-		PV_BLOCK next = block->next;
-		/*
-		As we free the blocks, all their pvalues go back to CRT heap
-		so we must not touch them again - so keep zeroing out free_list
-		for each block
-		*/
-		free_list = 0;
-		if (live_pvalues) {
-			INT i;
-			for (i=0; i<(INT)BLOCK_VALUES; i++) {
-				PVALUE val1=&block->values[i];
-				if (val1->type != PFREED) {
-					/* leaked */
-					delete_pvalue(val1);
-				}
-			}
-		}
-		stdfree(block);
-		block_list = next;
-	}
-	free_list = 0;
-}
-/*========================================
  * create_pvalue -- Create a program value
  *======================================*/
 PVALUE
 create_pvalue (INT type, VPTR value)
 {
-	PVALUE val;
-
-	if (type == PNONE) return NULL;
-	val = alloc_pvalue_memory();
-	if (type == PSTRING) {
-		/* ALWAYS copy strings, so caller never needs to */
-		if (value) {
-			value = (VPTR) strsave((STRING) value);
-		}
+	PVALUE val = create_new_pvalue();
+	set_pvalue(val, type, value);
+	return val;
+}
+/*==================================
+ * set_pvalue -- Set a program value
+ *  val:   [I/O] pvalue getting new info
+ *  type:  [IN]  new type for pvalue
+ *  value: [IN]  new value for pvalue
+ *================================*/
+void
+set_pvalue (PVALUE val, INT type, VPTR value)
+{
+	if (type == ptype(val) && value == pvalue(val)) {
+		/* self-assignment */
+		return;
 	}
+	clear_pvalue(val);
+
+	/* sanity check */
+	switch(type) {
+	case PNONE: 
+	case PANY:
+		ASSERT(!value);
+		break;
+	}
+	/* types that don't simply assign pointer */
+	switch(type) {
+	case PSTRING:
+		{
+		/* always copies string so caller doesn't have to */
+		if (value)
+			value = (VPTR) strsave((STRING) value);
+		break;
+		}
+	case PFLOAT:
+		{
+			/* floats don't fit into VPTR, so we're using heap copies */
+			float *ptr = (float *)stdalloc(sizeof(*ptr));
+			*ptr = *(float *)value;
+			value = ptr;
+		}
+		break;
+	}
+
 	ptype(val) = type;
 	pvalue(val) = value;
 
-	if (ptype(val) == PGNODE) {
-		dolock_node_in_cache(get_node_from_pvalue(val), TRUE);
+	/* reference counted types and so forth */
+	switch(type) {
+	case PGNODE:
+		{
+			NODE node = pvalue_to_node(val);
+			if (node) {
+				++nrefcnt(node);
+				dolock_node_in_cache(node, TRUE);
+			}
+		}
+		break;
+	case PLIST:
+		{
+			LIST list = pvalue_to_list(val);
+			++lrefcnt(list);
+		}
+		break;
+	case PTABLE:
+		{
+			TABLE table = pvalue_to_table(val);
+			++table->refcnt;
+		}
+		break;
+	case PSET:
+		{
+			INDISEQ seq = pvalue_to_seq(val);
+			/* because of getindiset, seq might be NULL */
+			if (seq) {
+				++IRefcnt(seq);
+			}
+		}
+		break;
 	}
 	if (is_record_pvalue(val)) {
-		/* lock any cache elements, and unlock in clear_pvalue */
-		/* a semilock holds the cache element, but not necessarily 
-		in direct cache -- it could fall to indirect cache -- the
-		element is still valid, but its contents aren't */
+		/* instead of reference counting records, we lock them */
 		dosemilock_record_in_cache(pvalue_to_rec(val), TRUE);
 	}
-	return val;
 }
 /*========================================
  * dosemilock_record_in_cache -- semi-Lock/unlock record
@@ -351,11 +213,7 @@ dolock_node_in_cache (NODE node, BOOLEAN lock)
 static void
 clear_pvalue (PVALUE val)
 {
-	if (cleaning_time) {
-		ASSERT(is_pvalue_or_freed(val));
-	} else {
-		ASSERT(is_pvalue(val));
-	}
+	check_pvalue_validity(val);
 	switch (ptype(val)) {
 	/*
 	embedded values have no referenced memory to clear
@@ -366,7 +224,7 @@ clear_pvalue (PVALUE val)
 	*/
 	case PGNODE:
 		{
-			NODE node = get_node_from_pvalue(val);
+			NODE node = pvalue_to_node(val);
 			if (node) {
 				dolock_node_in_cache(node, FALSE);
 				--nrefcnt(node);
@@ -511,131 +369,9 @@ delete_pvalue_ptr (PVALUE * valp)
 PVALUE
 copy_pvalue (PVALUE val)
 {
-	VPTR newval;
 	if (!val)
 		return NULL;
-	switch (ptype(val)) {
-	/*
-	embedded values have no referenced memory
-	and are copied directly
-	PINT, PBOOLEAN  (PLONG is unused)
-	*/
-	case PFLOAT:
-		{
-			return create_pvalue_from_float(pvalue_to_float(val));
-		}
-		break;
-	case PSTRING:
-		{
-			/*
-			copy_pvalue is called below, and it will
-			strsave the value
-			*/
-		}
-		break;
-	case PANY:
-		{
-			/* unassigned values, should be NULL - Perry Rapp, 2001/04/21 */
-			ASSERT(pvalue(val) == NULL);
-		}
-		break;
-	case PGNODE:
-		{
-			NODE node = pvalue_to_node(val);
-			if (node) {
-				++nrefcnt(node);
-				dolock_node_in_cache(node, TRUE);
-			}
-		}
-		break;
-	/* nodes from caches handled below switch (q.v.), inside
-	the is_record_pvalue code */
-	case PLIST:
-		{
-			LIST list = pvalue_to_list(val);
-			++lrefcnt(list);
-		}
-		break;
-	case PTABLE:
-		{
-			TABLE table = pvalue_to_table(val);
-			++table->refcnt;
-		}
-		break;
-	case PSET:
-		{
-			INDISEQ seq = pvalue_to_seq(val);
-			/* because of getindiset, seq might be NULL */
-			if (seq) {
-				++IRefcnt(seq);
-			}
-		}
-		break;
-	}
-	if (is_record_pvalue(val)) {
-		/*
-		2001/03/21
-		it is ok to just copy cache-managed elements,
-		the reference count must be adjusted
-		but create_pvalue() does this part
-		(it knows about record pvalues, unlike lists etc)
-		(this oddity will go away when I switch to key values)
-		*/
-	}
-
-	newval = pvalue(val);
-
-	return create_pvalue(ptype(val), newval);
-}
-/*==================================
- * pvalue_to_cel -- Extract record from pvalue
- *  and load into direct
- * Might return NULL
- * Created: 2001/03/17, Perry Rapp
- *================================*/
-CACHEEL
-pvalue_to_cel (PVALUE val)
-{
-	CACHEEL cel = access_cel_from_pvalue(val); /* may be NULL */
-	load_cacheel(cel); /* handles null cel ok */
-	return cel;
-}
-/*==================================
- * pvalue_to_rec -- Extract record from pvalue
- *  and load into direct
- * Might return NULL
- * Created: 2003-02-06, Perry Rapp
- *================================*/
-RECORD
-pvalue_to_rec (PVALUE val)
-{
-	CACHEEL cel = pvalue_to_cel(val);
-	if (!cel) return NULL;
-	return crecord(cel);
-}
-/*==================================
- * get_node_from_pvalue -- Extract node from pvalue
- * Might return NULL
- * Created: 2003-02-06, Perry Rapp
- *================================*/
-NODE
-get_node_from_pvalue (PVALUE val)
-{
-	NODE node = (NODE)pvalue(val);
-	return node;
-}
-/*==================================
- * access_cel_from_pvalue -- Extract record from pvalue
- *  doesn't load into direct
- * Might return NULL
- * Created: 2001/03/17, Perry Rapp
- *================================*/
-static CACHEEL
-access_cel_from_pvalue (PVALUE val)
-{
-	CACHEEL cel = pvalue(val); /* may be NULL */
-	ASSERT(is_record_pvalue(val));
-	return cel;
+	return create_pvalue(ptype(val), pvalue(val));
 }
 /*=====================================================
  * create_pvalue_from_indi -- Return indi as pvalue
@@ -761,133 +497,6 @@ create_pvalue_from_keynum_impl (INT i, INT ptype)
 	return create_pvalue_from_key_impl(key, ptype);
 }
 /*==================================
- * create_pvalue_from_float -- Create pvalue from float
- * ptag's value is not large enough, so we have to store
- * heap pointer.
- * Created: 2002/01/09, Perry Rapp
- *================================*/
-PVALUE
-create_pvalue_from_float (float fval)
-{
-	/* TODO: change when ptag goes to UNION */
-	float *ptr = (float *)stdalloc(sizeof(*ptr));
-	*ptr = fval;
-	return create_pvalue(PFLOAT, ptr);
-}
-/***
- * Thin typesafe wrappers for various PVALUE types
- */
-void
-set_pvalue_float (PVALUE val, float fnum)
-{
-	float *ptr = (float *)stdalloc(sizeof(*ptr));
-	*ptr = fnum;
-	set_pvalue(val, PFLOAT, (VPTR)ptr);
-}
-PVALUE
-create_pvalue_any (void)
-{
-	return create_pvalue(PANY, NULL);
-}
-PVALUE
-create_pvalue_from_bool (BOOLEAN bval)
-{
-	return create_pvalue_from_int(bval);
-}
-void
-set_pvalue_bool (PVALUE val, BOOLEAN bnum)
-{
-	set_pvalue(val, PBOOL, (VPTR)bnum);
-}
-PVALUE
-create_pvalue_from_int (INT ival)
-{
-	return create_pvalue(PINT, (VPTR) ival);
-}
-void
-set_pvalue_int (PVALUE val, INT inum)
-{
-	set_pvalue(val, PINT, (VPTR)inum);
-}
-PVALUE
-create_pvalue_from_node (NODE node)
-{
-	return create_pvalue(PGNODE, node);
-}
-PVALUE
-create_pvalue_from_set (VPTR ptr)
-{ /* passes as VPTR to keep INDISEQ out of interp.h */
-	INDISEQ seq = ptr;
-	return create_pvalue(PSET, seq);
-}
-PVALUE
-create_pvalue_from_string (STRING str)
-{
-	return create_pvalue(PSTRING, str);
-}
-void
-set_pvalue_string (PVALUE val, CNSTRING str)
-{
-	set_pvalue(val, PSTRING, (VPTR)str); /* makes new copy of string */
-}
-BOOLEAN
-pvalue_to_bool (PVALUE val)
-{
-	return (BOOLEAN)pvalue(val);
-}
-float
-pvalue_to_float (PVALUE val)
-{
-	/* TODO: change when ptag goes to UNION */
-	return *(float*)pvalue(val);
-}
-INT
-pvalue_to_int (PVALUE val)
-{
-	return (INT)pvalue(val);
-}
-LIST
-pvalue_to_list (PVALUE val)
-{
-	return (LIST)pvalue(val);
-}
-NODE
-pvalue_to_node (PVALUE val)
-{
-	return (NODE)pvalue(val);
-}
-INDISEQ
-pvalue_to_seq (PVALUE val)
-{
-	return (INDISEQ)pvalue(val);
-}
-STRING
-pvalue_to_string (PVALUE val)
-{
-	return (STRING)pvalue(val);
-}
-TABLE
-pvalue_to_table (PVALUE val)
-{
-	return (TABLE)pvalue(val);
-}
-/*==================================
- * pvalue_to_pxxxx -- Access value for modification
- * These are for convenience of math functions in pvalmath.c
- * Created: 2002/01/09, Perry Rapp
- *================================*/
-float*
-pvalue_to_pfloat (PVALUE val)
-{
-	/* TODO: change when ptag goes to UNION */
-	return (float*)pvalue(val);
-}
-INT*
-pvalue_to_pint (PVALUE val)
-{
-	return (INT *)&pvalue(val);
-}
-/*==================================
  * free_float_pvalue -- Delete float pvalue
  * Inverse of make_float_pvalue
  * Created: 2002/01/09, Perry Rapp
@@ -909,33 +518,6 @@ create_pvalue_from_key_impl (STRING key, INT ptype)
 	RECORD rec = qkey_to_record(key);
 	PVALUE val = create_pvalue_from_record(rec, ptype);
 	return val;
-}
-/*==================================
- * set_pvalue -- Set a program value
- *  val:   [I/O] pvalue getting new info
- *  type:  [IN]  new type for pvalue
- *  value: [IN]  new value for pvalue
- *================================*/
-void
-set_pvalue (PVALUE val, INT type, VPTR value)
-{
-#ifdef DEBUG
-	llwprintf("\nset_pvalue called: val=");
-	show_pvalue(val);
-	llwprintf(" new type=%d new value = %d\n", type, value);
-#endif
-	if (type == ptype(val) && value == pvalue(val)) {
-		/* self-assignment */
-		return;
-	}
-	clear_pvalue(val);
-	ptype(val) = type;
-	if (type == PSTRING) {
-		/* always copies string so caller doesn't have to */
-		if (value)
-			value = (VPTR) strsave((STRING) value);
-	}
-	pvalue(val) = value;
 }
 /*==================================================
  * is_numeric_pvalue -- See if program value is numeric
@@ -1070,26 +652,6 @@ bad:
 	*eflg = TRUE;
 	return;
 }
-/*===========================================================
- * is_pvalue -- Checks that PVALUE is a valid type
- *=========================================================*/
-BOOLEAN
-is_pvalue (PVALUE pval)
-{
-	if (!pval) return FALSE;
-	return (ptype(pval) <= PSET);
-}
-/*===========================================================
- * is_pvalue_or_freed -- Checks that PVALUE is a valid type
- *  or freed
- *=========================================================*/
-static BOOLEAN
-is_pvalue_or_freed (PVALUE pval)
-{
-	if (!pval) return FALSE;
-	if (ptype(pval) == PFREED) return TRUE;
-	return (ptype(pval) <= PSET);
-}
 /*========================================
  * is_record_pvalue -- Does pvalue contain record ?
  *======================================*/
@@ -1204,7 +766,7 @@ eq_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 		rel = (pvalue(val1) == pvalue(val2));
 		break;
 	}
-	set_pvalue(val1, PBOOL, (VPTR)rel);
+	set_pvalue_bool(val1, rel);
 	delete_pvalue(val2);
 }
 /*===============================================
@@ -1233,7 +795,7 @@ ne_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 		rel = (pvalue(val1) != pvalue(val2));
 		break;
 	}
-	set_pvalue(val1, PBOOL, (VPTR)rel);
+	set_pvalue_bool(val1, rel);
 	delete_pvalue(val2);
 }
 /*=================================================
@@ -1242,43 +804,9 @@ ne_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 void
 show_pvalue (PVALUE val)
 {
-	NODE node;
-	CACHEEL cel;
-	INT type;
-	UNION u;
-
-	if (!is_pvalue(val)) {
-		if(val) llwprintf("*NOT PVALUE (%d,?)*", ptype(val));
-		else llwprintf("*NOT PVALUE (NULL)*");
-		return;
-	}
-	type = ptype(val);
-	llwprintf("<%s,", ptypes[type]);
-	if (pvalue(val) == NULL) {
-		llwprintf("0>");
-		return;
-	}
-	u.w = pvalue(val);
-	switch (type) {
-	case PINT:
-		llwprintf("%d>", u.i);
-		return;
-	case PFLOAT:
-		llwprintf("%f>", pvalue_to_float(val));
-		break;
-	case PSTRING:
-		llwprintf("%s>", pvalue_to_string(val));
-		return;
-	case PINDI:
-		cel = pvalue_to_cel(val);
-		if (!cnode(cel))
-			cel = key_to_indi_cacheel(ckey(cel));
-		node = cnode(cel);
-		llwprintf("%s>", nval(NAME(node)));
-		return;
-	default:
-		llwprintf("%d>", pvalue(val)); return;
-	}
+	ZSTR zstr = describe_pvalue(val);
+	llwprintf(zs_str(zstr));
+	zs_free(&zstr);
 }
 /*======================================================
  * debug_pvalue_as_string -- DEBUG routine that shows a PVALUE
@@ -1291,8 +819,12 @@ describe_pvalue (PVALUE val)
 	UNION u;
 	ZSTR zstr = zs_new();
 
+	if (!val) {
+		zs_sets(zstr, _("NOT PVALUE: NULL!"));
+		return zstr;
+	}
 	if (!is_pvalue(val)) {
-		zs_sets(zstr, _("NOT PVALUE!"));
+		zs_setf(zstr, _("NOT PVALUE: invalid type=%d)!"), ptype(val));
 		return zstr;
 	}
 	type = ptype(val);
@@ -1354,4 +886,163 @@ describe_pvalue (PVALUE val)
 	}
 	zs_appc(zstr, '>');
 	return zstr;
+}
+/*==================================
+ * PANY: pvalue with no content
+ *================================*/
+PVALUE
+create_pvalue_any (void)
+{
+	return create_pvalue(PANY, NULL);
+}
+/*==================================
+ * PBOOL: pvalue containing a boolean
+ *================================*/
+PVALUE
+create_pvalue_from_bool (BOOLEAN bval)
+{
+	return create_pvalue_from_int(bval);
+}
+void
+set_pvalue_bool (PVALUE val, BOOLEAN bnum)
+{
+	set_pvalue(val, PBOOL, (VPTR)bnum);
+}
+BOOLEAN
+pvalue_to_bool (PVALUE val)
+{
+	return (BOOLEAN)pvalue(val);
+}
+/*==================================
+ * PFLOAT: pvalue containing a float
+ * ptag's value is not large enough, so we have to store
+ * heap pointer.
+ *================================*/
+PVALUE
+create_pvalue_from_float (float fval)
+{
+	return create_pvalue(PFLOAT, &fval);
+}
+void
+set_pvalue_float (PVALUE val, float fnum)
+{
+	set_pvalue(val, PFLOAT, &fnum);
+}
+float
+pvalue_to_float (PVALUE val)
+{
+	/* TODO: change when ptag goes to UNION */
+	return *(float*)pvalue(val);
+}
+float*
+pvalue_to_pfloat (PVALUE val)
+{
+	/* convenience for math */
+	/* TODO: change when ptag goes to UNION */
+	return (float*)pvalue(val);
+}
+/*==================================
+ * PGNODE: pvalue containing a GEDCOM node
+ *================================*/
+PVALUE
+create_pvalue_from_node (NODE node)
+{
+	return create_pvalue(PGNODE, node);
+}
+void
+set_pvalue_node (PVALUE val, NODE node)
+{
+	set_pvalue(val, PGNODE, (VPTR)node);
+}
+NODE
+pvalue_to_node (PVALUE val)
+{
+	return (NODE)pvalue(val);
+}
+/*==================================
+ * PINT: pvalue containing an int
+ *================================*/
+PVALUE
+create_pvalue_from_int (INT ival)
+{
+	return create_pvalue(PINT, (VPTR) ival);
+}
+void
+set_pvalue_int (PVALUE val, INT inum)
+{
+	set_pvalue(val, PINT, (VPTR)inum);
+}
+INT
+pvalue_to_int (PVALUE val)
+{
+	return (INT)pvalue(val);
+}
+INT*
+pvalue_to_pint (PVALUE val)
+{
+	/* convenience for math */
+	return (INT *)&pvalue(val);
+}
+/*==================================
+ * LIST: pvalue containing a list
+ *================================*/
+LIST
+pvalue_to_list (PVALUE val)
+{
+	return (LIST)pvalue(val);
+}
+/*==================================
+ * record pvalues (PINDI, PFAM, ...)
+ *================================*/
+CACHEEL
+pvalue_to_cel (PVALUE val)
+{
+	/* also load record into direct cache */
+	CACHEEL cel = pvalue(val); /* may be NULL */
+	ASSERT(is_record_pvalue(val));
+	load_cacheel(cel); /* handles null cel ok */
+	return cel;
+}
+RECORD
+pvalue_to_rec (PVALUE val)
+{
+	CACHEEL cel = pvalue_to_cel(val);
+	if (!cel) return NULL;
+	return crecord(cel);
+}
+/*==================================
+ * PSET: pvalue containing a set (INDISEQ)
+ *================================*/
+PVALUE
+create_pvalue_from_set (INDISEQ seq)
+{
+	return create_pvalue(PSET, seq);
+}
+INDISEQ
+pvalue_to_seq (PVALUE val)
+{
+	return (INDISEQ)pvalue(val);
+}
+/*==================================
+ * PSTRING: pvalue containing a string
+ *================================*/
+PVALUE
+create_pvalue_from_string (STRING str)
+{
+	return create_pvalue(PSTRING, str);
+}
+void
+set_pvalue_string (PVALUE val, CNSTRING str)
+{
+	set_pvalue(val, PSTRING, (VPTR)str); /* makes new copy of string */
+}
+STRING
+pvalue_to_string (PVALUE val)
+{
+	return (STRING)pvalue(val);
+}
+TABLE
+pvalue_to_table (PVALUE val)
+{
+	return (TABLE)pvalue(val);
 }

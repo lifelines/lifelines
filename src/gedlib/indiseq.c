@@ -171,7 +171,6 @@ create_indiseq_impl (INT valtype, INDISEQ_VALUE_VTABLE vtable)
 	IFlags(seq) = 0;
 	IPrntype(seq) = ISPRN_NORMALSEQ;
 	IValtype(seq) = valtype;
-	IRefcnt(seq) = 1;
 	IValvtbl(seq) = vtable ? vtable : &def_valvtbl;
 	return seq;
 }

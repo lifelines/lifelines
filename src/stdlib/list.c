@@ -29,7 +29,6 @@ create_list (void)
 {
 	LIST list = (LIST) stdalloc(sizeof(*list));
 	memset(list, 0, sizeof(*list));
-	lrefcnt(list) = 1;
 	ltype(list) = LISTNOFREE;
 	lhead(list) = ltail(list) = NULL;
 	llen(list) = 0;

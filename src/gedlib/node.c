@@ -174,7 +174,6 @@ create_node (STRING xref, STRING tag, STRING val, NODE prnt)
 	ntag(node) = fixtag(tag);
 	nval(node) = fixup(val);
 	nparent(node) = prnt;
-	nrefcnt(node) = 1;
 	if (prnt)
 		node->n_rec = prnt->n_rec;
 	return node;

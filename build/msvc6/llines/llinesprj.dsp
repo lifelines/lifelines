@@ -421,6 +421,10 @@ SOURCE=..\..\..\src\stdlib\proptbls.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\interp\pvalalloc.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\interp\pvalmath.c
 # End Source File
 # Begin Source File

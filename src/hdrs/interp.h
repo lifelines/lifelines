@@ -139,6 +139,7 @@ struct itag {
 #define PLIST     13  /* list */
 #define PTABLE    14  /* table */
 #define PSET      15  /* set */
+#define PMAXLIVE  PSET /* maximum live type */
 #define PFREED    99  /* returned to free list */
 #define PUNINT   100  /* just allocated */
 
@@ -268,7 +269,6 @@ void dolock_node_in_cache(NODE, BOOLEAN lock);
 void dosemilock_record_in_cache(RECORD rec, BOOLEAN lock);
 void eq_conform_pvalues(PVALUE, PVALUE, BOOLEAN*);
 BOOLEAN eqv_pvalues(VPTR, VPTR);
-NODE get_node_from_pvalue(PVALUE val);
 BOOLEAN in_symtab(SYMTAB stab, STRING key);
 void insert_symtab(SYMTAB stab, STRING iden, PVALUE val);
 BOOLEAN is_numeric_pvalue(PVALUE);
@@ -294,6 +294,7 @@ TABLE pvalue_to_table(PVALUE val);
 void remove_symtab(SYMTAB *);
 void set_pvalue(PVALUE, INT, VPTR);
 void set_pvalue_bool(PVALUE val, BOOLEAN bv);
+void set_pvalue_float(PVALUE val, float fnum);
 void set_pvalue_int(PVALUE val, INT iv);
 void set_pvalue_string(PVALUE val, CNSTRING str);
 void show_pvalue(PVALUE);

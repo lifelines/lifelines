@@ -47,6 +47,16 @@ struct pathinfo_s {
 	STRING fullpath; /* fully qualified path */
 };
 
+
+PVALUE alloc_pvalue_memory(void);
+void check_pvalue_validity(PVALUE val);
+PVALUE create_new_pvalue(void);
+void free_pvalue_memory(PVALUE val);
+void set_pvalue_node(PVALUE val, NODE node);
+
+
+/* interpreter language command entry points */
+
 extern PVALUE ___alpha(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __add(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __addnode(PNODE, SYMTAB, BOOLEAN *);
