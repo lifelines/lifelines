@@ -11,4 +11,7 @@ libarch_a_LIBADD = @LIBOBJS@
 INCLUDES=-I$(srcdir)/.. -I$(srcdir)/../hdrs
 
 #need explicit dependencies
+alphasort.o: ../hdrs/arch.h
+getopt.o: ../hdrs/arch.h
 scandir.o: ../hdrs/arch.h
+sleep.o: ../hdrs/arch.h
