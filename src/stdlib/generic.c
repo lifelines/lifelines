@@ -262,13 +262,22 @@ get_generic_float (GENERIC *gen)
 	return *gen->fval;
 }
 /*=================================================
- * get_generic_object -- retrieve string from inside generic
+ * get_generic_string -- retrieve string from inside generic
  *===============================================*/
 STRING
 get_generic_string (GENERIC *gen)
 {
 	ASSERT(gen->selector == GENERIC_STRING || gen->selector == GENERIC_STRING_SHARED);
 	return gen->oval;
+}
+/*=================================================
+ * get_generic_vptr -- retrieve opaque VPTR from inside generic
+ *===============================================*/
+VPTR
+get_generic_vptr (GENERIC *gen)
+{
+	ASSERT(gen->selector == GENERIC_VPTR);
+	return gen->vptr;
 }
 /*=================================================
  * get_generic_object -- retrieve object from inside generic

@@ -179,7 +179,8 @@ sort_array (ARRAY array, OBJCMPFNC cmp, VPTR param)
 	partition_sort((SORTEL *)&AData(array)[0], ASize(array), array_comparator, &info);
 }
 /*=================================================
- * array_destructor -- destructor for vtable
+ * array_destructor -- destructor for array
+ *  (destructor entry in vtable)
  *===============================================*/
 static void
 array_destructor (VTABLE *obj)

@@ -40,6 +40,11 @@ typedef struct generic_tag GENERIC;
 #define GENERIC_TAG_GENERIC_DECLARED
 #endif /* #ifndef GENERIC_TAG_GENERIC_DECLARED */
 
+/*
+ NB:
+  Most of these functions would be faster as macros,
+  but during development these are functions to help catch bugs
+*/
 
 /* Functions that work on uninitialized GENERIC data */
 void init_generic_null(GENERIC *gen);
@@ -65,8 +70,6 @@ void set_generic_object(GENERIC *gen, VPTR oval);
 void copy_generic_value(GENERIC *gen, const GENERIC * src);
 
 /* Test type of generic */
-/* NB: Obviously macro versions would be much faster, but
-using functions for development */
 BOOLEAN is_generic_null(GENERIC *gen);
 BOOLEAN is_generic_int(GENERIC *gen);
 BOOLEAN is_generic_float(GENERIC *gen);

@@ -52,6 +52,10 @@ enum TB_VALTYPE
 		, TB_GENERIC /* new table holding only generics */
 	};
 
+/*********************************************
+ * local types
+ *********************************************/
+
 /*
 2005-01-17
  Perry is in process of converting table to use generics instead of unions
@@ -71,13 +75,13 @@ struct tag_entry {
 	STRING ekey;
 	GENERIC generic; /* holds generic null value if uval in use */
 	UNION uval;
-	ENTRY enext;
+	struct tag_entry *enext;
 };
-/* typedef struct tag_entry *ENTRY */
+typedef struct tag_entry *ENTRY;
 
 /* table object itself */
 struct tag_table {
-	struct tag_vtable *vtable;
+	struct tag_vtable *vtable; /* generic object */
 	INT refcnt; /* ref-countable object */
 	ENTRY *entries;
 	INT count; /* #entries */
@@ -85,7 +89,17 @@ struct tag_table {
 	INT maxhash;
 	INT whattofree; /* TODO: set always in constructor */
 };
-/* typedef struct tag_table *TABLE */
+/* typedef struct tag_table *TABLE */ /* in table.h */
+
+/* table iterator */
+struct tag_table_iter {
+	struct tag_vtable *vtable; /* generic object */
+	INT refcnt; /* ref-countable object */
+	INT index;
+	ENTRY enext;
+	TABLE table;
+};
+/* typedef struct tag_table_iter * TABLE_ITER; */ /* in table.h */
 
 /*********************************************
  * local function prototypes
@@ -95,11 +109,13 @@ struct tag_table {
 static TABLE create_table_impl(INT whattofree);
 static ENTRY fndentry(TABLE, CNSTRING);
 static void free_contents(ENTRY ent, INT whattofree);
+static void free_table_iter(TABLE_ITER tabit);
 static void insert_table_impl(TABLE tab, CNSTRING key, UNION uval);
 static INT hash(TABLE tab, CNSTRING key);
 static BOOLEAN next_element(TABLE_ITER tabit);
 static ENTRY new_entry(void);
 static void replace_table_impl(TABLE tab, STRING key, UNION uval, INT whattofree);
+static void tabit_destructor(VTABLE *obj);
 static void table_destructor(VTABLE *obj);
 static UNION* valueofbool_impl(TABLE tab, STRING key);
 
@@ -111,6 +127,16 @@ static struct tag_vtable vtable_for_table = {
 	VTABLE_MAGIC
 	, "table"
 	, &table_destructor
+	, &refcountable_isref
+	, &refcountable_addref
+	, &refcountable_delref
+	, 0 /* copy_fnc */
+	, &generic_get_type_name
+};
+static struct tag_vtable vtable_for_tabit = {
+	VTABLE_MAGIC
+	, "table_iter"
+	, &tabit_destructor
 	, &refcountable_isref
 	, &refcountable_addref
 	, &refcountable_delref
@@ -666,25 +692,27 @@ traverse_table_param (TABLE tab,
 	}
 }
 /*=================================================
- * begin_table -- Begin iteration of table
- * Created: 2002/06/16, Perry Rapp
+ * begin_table_iter -- Begin iteration of table
+ *  returns addref'd iterator object
  *===============================================*/
-BOOLEAN
-begin_table (TABLE tab, TABLE_ITER tabit)
+TABLE_ITER
+begin_table_iter (TABLE tab)
 {
+	TABLE_ITER tabit = (TABLE_ITER)stdalloc(sizeof(*tabit));
 	memset(tabit, 0, sizeof(*tabit));
 	tabit->table = tab;
-	tabit->enext = 0;
-	tabit->index = 0;
-	return tabit->table->count>0;
+	++tabit->refcnt;
+	return tabit;
 }
 /*=================================================
  * next_element -- Find next element in table (iterating)
- * Created: 2002/06/16, Perry Rapp
+ * This doesn't know or need to know about element types or generics
  *===============================================*/
 static BOOLEAN
 next_element (TABLE_ITER tabit)
 {
+	ASSERT(tabit);
+	if (!tabit->table) return FALSE;
 	if (tabit->index == -1 || tabit->table->count == 0)
 		return FALSE;
 	if (tabit->enext) {
@@ -703,20 +731,39 @@ next_element (TABLE_ITER tabit)
 	return FALSE;
 }
 /*=================================================
- * next_table_ptr -- Iterating table with pointers
- * Created: 2002/06/16, Perry Rapp
+ * next_table_ptr -- Advance to next pointer in table
+ * skips over any other types of table elements
+ * returns FALSE if runs out of table elements
  *===============================================*/
 BOOLEAN
 next_table_ptr (TABLE_ITER tabit, STRING *pkey, VPTR *pptr)
 {
-	ASSERT(tabit->table->valtype == TB_PTR || tabit->table->valtype == TB_NULL);
+advance:
 	if (!next_element(tabit)) {
 		*pkey = 0;
 		*pptr = 0;
 		return FALSE;
 	}
-	*pkey = tabit->enext->ekey;
-	*pptr = tabit->enext->uval.w;
+	if (!is_generic_null(&tabit->enext->generic)) {
+		if (is_generic_vptr(&tabit->enext->generic)) {
+			*pkey = tabit->enext->ekey;
+			*pptr = get_generic_vptr(&tabit->enext->generic);
+			return TRUE;
+		} else {
+			/* wrong type of element, skip it */
+			goto advance;
+		}
+	} else {
+		if (tabit->table->valtype == TB_PTR) {
+			*pkey = tabit->enext->ekey;
+			*pptr = tabit->enext->uval.w;
+			return TRUE;
+		} else {
+			/* wrong type of table, only generic elements might be ok */
+			/* so skip this element */
+			goto advance;
+		}
+	}
 	return TRUE;
 }
 /*=================================================
@@ -730,6 +777,31 @@ change_table_ptr (TABLE_ITER tabit, VPTR newptr)
 		return FALSE;
 	tabit->enext->uval.w = newptr;
 	return TRUE;
+}
+/*=================================================
+ * end_table_iter -- Release reference to table iterator object
+ *===============================================*/
+void
+end_table_iter (TABLE_ITER * ptabit)
+{
+	ASSERT(ptabit);
+	ASSERT(*ptabit);
+	--(*ptabit)->refcnt;
+	if (!(*ptabit)->refcnt) {
+		free_table_iter(*ptabit);
+	}
+	*ptabit = 0;
+}
+/*=================================================
+ * free_table_iter -- Delete & free table iterator object
+ *===============================================*/
+static void
+free_table_iter (TABLE_ITER tabit)
+{
+	if (!tabit) return;
+	ASSERT(!tabit->refcnt);
+	memset(tabit, 0, sizeof(*tabit));
+	stdfree(tabit);
 }
 /*=================================================
  * get_table_count -- Return #elements
@@ -820,7 +892,8 @@ destroy_table (TABLE tab)
 	remove_table(tab, tab->whattofree);
 }
 /*=================================================
- * table_destructor -- destructor for vtable
+ * table_destructor -- destructor for table
+ *  (destructor entry in vtable)
  *===============================================*/
 static void
 table_destructor (VTABLE *obj)
@@ -828,6 +901,17 @@ table_destructor (VTABLE *obj)
 	TABLE tab = (TABLE)obj;
 	ASSERT((*obj) == &vtable_for_table);
 	destroy_table(tab);
+}
+/*=================================================
+ * tabit_destructor -- destructor for table iterator
+ *  (vtable destructor)
+ *===============================================*/
+static void
+tabit_destructor (VTABLE *obj)
+{
+	TABLE_ITER tabit = (TABLE_ITER)obj;
+	ASSERT((*obj) == &vtable_for_tabit);
+	free_table_iter(tabit);
 }
 /*=================================================
  * addref_table -- increment reference count of table

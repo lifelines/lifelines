@@ -302,7 +302,8 @@ delref_record (RECORD rec)
 	}
 }
 /*=================================================
- * record_destructor -- destructor for vtable
+ * record_destructor -- destructor for record
+ *  (destructor entry in vtable)
  *===============================================*/
 static void
 record_destructor (VTABLE *obj)

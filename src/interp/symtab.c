@@ -35,13 +35,48 @@
 #include "interpi.h"
 #include "liflines.h"
 #include "feedback.h"
+#include "vtable.h"
+
+
+/*********************************************
+ * local types
+ *********************************************/
+
+struct tag_symtab_iter {
+	struct tag_vtable *vtable; /* generic object */
+	INT refcnt; /* ref-countable object */
+	TABLE_ITER tabit; /* iterator over our table of symbols */
+};
+/* typedef struct tag_symtab_iter *SYMTAB_ITER; */ /* in interpi.h */
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+/* alphabetical */
+static void free_symtable_iter(SYMTAB_ITER symtabit);
+static void symtabit_destructor(VTABLE *obj);
+
+/*********************************************
+ * local variables
+ *********************************************/
+
+static struct tag_vtable vtable_for_symtabit = {
+	VTABLE_MAGIC
+	, "symtab_iter"
+	, &symtabit_destructor
+	, &refcountable_isref
+	, &refcountable_addref
+	, &refcountable_delref
+	, 0 /* copy_fnc */
+	, &generic_get_type_name
+};
 
 
 /*********************************************
  * local function definitions
  * body of module
  *********************************************/
-
 
 /*======================================================
  * insert_symtab -- Update symbol table with PVALUE
@@ -79,12 +114,12 @@ remove_symtab (SYMTAB stab)
 {
 	STRING key=0;
 	VPTR ptr=0;
-	struct tag_table_iter tabits;
-	TABLE_ITER tabit = &tabits;
+	TABLE_ITER tabit=0;
 
 	ASSERT(stab);
 
-	begin_table(stab->tab, tabit);
+	tabit = begin_table_iter(stab->tab);
+
 	while (next_table_ptr(tabit, &key, &ptr))
 	{
 		if (ptr) {
@@ -94,6 +129,7 @@ remove_symtab (SYMTAB stab)
 			change_table_ptr(tabit, 0);
 		}
 	}
+	end_table_iter(&tabit);
 	remove_table(stab->tab, DONTFREE);
 	stdfree(stab);
 }
@@ -104,12 +140,12 @@ remove_symtab (SYMTAB stab)
 SYMTAB
 create_symtab (void)
 {
-	SYMTAB tmp;
+	SYMTAB symtab = (SYMTAB)stdalloc(sizeof(*symtab));
+	memset(symtab, 0, sizeof(*symtab));
 
-	tmp = stdalloc(sizeof(struct tag_symtab));
-	tmp->tab = create_table_old();
+	symtab->tab = create_table_old();
 
-	return tmp;
+	return symtab;
 }
 /*======================================================
  * in_symtab -- Does symbol table have this entry ?
@@ -134,18 +170,19 @@ symtab_valueofbool (SYMTAB stab, STRING key, BOOLEAN *there)
 	return (PVALUE)valueofbool_ptr(stab->tab, key, there);
 }
 /*======================================================
- * begin_symtab -- Begin iterating a symbol table
+ * begin_symtab_iter -- Begin iterating a symbol table
  *  @stab:   [IN]  symbol table to iterate
- *  @stabit: [I/O] iterator to use (wiped & populated)
+ * returns iterator object ready to start
  *====================================================*/
-BOOLEAN
-begin_symtab (SYMTAB stab, SYMTAB_ITER stabit)
+SYMTAB_ITER
+begin_symtab_iter (SYMTAB stab)
 {
-	/* MTE: Is the initialization neccesary? */
-	/* stabit->tabiters is the only element, */
-	/* and it is initialized in begin_table(). */
-	memset(stabit, 0, sizeof(*stabit));
-	return begin_table(stab->tab, &stabit->tabiters);
+	SYMTAB_ITER symtabit = (SYMTAB_ITER)stdalloc(sizeof(*symtabit));
+	memset(symtabit, 0, sizeof(*symtabit));
+	symtabit->vtable = &vtable_for_symtabit;
+	++symtabit->refcnt;
+	symtabit->tabit = begin_table_iter(stab->tab);
+	return symtabit;
 }
 /*======================================================
  * next_symtab_entry -- Continue iterating a symbol table
@@ -154,13 +191,50 @@ begin_symtab (SYMTAB stab, SYMTAB_ITER stabit)
  *  @ppval: [OUT]  next value
  *====================================================*/
 BOOLEAN
-next_symtab_entry (SYMTAB_ITER tabit, STRING *pkey, PVALUE *ppval)
+next_symtab_entry (SYMTAB_ITER symtabit, STRING *pkey, PVALUE *ppval)
 {
 	VPTR vptr=0;
 	*pkey=0;
 	*ppval=0;
-	if (!next_table_ptr(&tabit->tabiters, pkey, &vptr))
+	if (!next_table_ptr(symtabit->tabit, pkey, &vptr))
 		return FALSE;
 	*ppval = vptr;
 	return TRUE;
+}
+/*=================================================
+ * end_symtab_iter -- Release reference to symbol table iterator object
+ *===============================================*/
+void
+end_symtab_iter (SYMTAB_ITER * psymtabit)
+{
+	ASSERT(psymtabit);
+	ASSERT(*psymtabit);
+	end_table_iter(&(*psymtabit)->tabit);
+	--(*psymtabit)->refcnt;
+	if (!(*psymtabit)->refcnt) {
+		free_symtable_iter(*psymtabit);
+	}
+	*psymtabit = 0;
+}
+/*=================================================
+ * free_symtable_iter -- Delete & free symbol table iterator object
+ *===============================================*/
+static void
+free_symtable_iter (SYMTAB_ITER symtabit)
+{
+	if (!symtabit) return;
+	ASSERT(!symtabit->refcnt);
+	memset(symtabit, 0, sizeof(*symtabit));
+	stdfree(symtabit);
+}
+/*=================================================
+ * symtabit_destructor -- destructor for symbol table iterator
+ *  (destructor entry in vtable)
+ *===============================================*/
+static void
+symtabit_destructor (VTABLE *obj)
+{
+	SYMTAB_ITER symtabit = (SYMTAB_ITER)obj;
+	ASSERT((*obj) == &vtable_for_symtabit);
+	free_symtable_iter(symtabit);
 }

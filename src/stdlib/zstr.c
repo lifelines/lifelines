@@ -401,6 +401,7 @@ init_zstr_vtable (ZSTR zstr)
 }
 /*=================================================
  * zstr_destructor -- destructor for zstr
+ *  (destructor entry in vtable)
  *===============================================*/
 static void
 zstr_destructor (VTABLE *obj)

@@ -47,47 +47,46 @@ INT, or VPTR, or STRING
 (and ASSERTs in the insert_table_xxx functions enforce this)
 */
 
-/* entry in a table */
-typedef struct tag_entry *ENTRY;
 typedef struct tag_table *TABLE;
 
-/* table iterator */
-struct tag_table_iter {
-	INT index;
-	ENTRY enext;
-	TABLE table;
-};
 typedef struct tag_table_iter * TABLE_ITER;
 
-
-
+/* creating, deleting, and copying table */
 void addref_table(TABLE tab);
-BOOLEAN begin_table(TABLE tab, TABLE_ITER tabit);
-BOOLEAN change_table_ptr(TABLE_ITER tabit, VPTR newptr);
 void copy_table(const TABLE src, TABLE dest, INT whattodup);
 TABLE create_table_old2(INT whattofree);
 TABLE create_table_new(void);
 TABLE create_table_old(void);
-void delete_table(TABLE tab, CNSTRING key);
 void delref_table(TABLE tab, void (*tproc)(CNSTRING key, UNION uval));
 void destroy_table(TABLE);
+
+/* working with entire table */
 INT get_table_count(TABLE);
+void remove_table(TABLE, INT whattofree); /* TODO: remove this */
+void traverse_table(TABLE tab, void (*tproc)(CNSTRING key, UNION uval));
+void traverse_table_param(TABLE tab, INT (*tproc)(CNSTRING key, UNION uval, GENERIC *pgeneric, VPTR param), VPTR param);
+
+/* working with elements of table */
+void delete_table(TABLE tab, CNSTRING key);
 BOOLEAN in_table(TABLE, CNSTRING);
 void insert_table_ptr(TABLE, CNSTRING key, VPTR);
 void insert_table_int(TABLE, CNSTRING key, INT);
 void insert_table_str(TABLE, CNSTRING key, STRING);
-BOOLEAN next_table_ptr(TABLE_ITER tabit, STRING *pkey, VPTR *pptr);
-void remove_table(TABLE, INT whattofree); /* TODO: remove this */
 void replace_table_str(TABLE tab, STRING key, STRING str, INT whattofree);
 void table_insert_ptr(TABLE tab, CNSTRING key, const VPTR value);
 void table_insert_string(TABLE tab, CNSTRING key, CNSTRING value);
-void traverse_table(TABLE tab, void (*tproc)(CNSTRING key, UNION uval));
-void traverse_table_param(TABLE tab, INT (*tproc)(CNSTRING key, UNION uval, GENERIC *pgeneric, VPTR param), VPTR param);
 INT valueof_int(TABLE, CNSTRING, INT defval);
 VPTR valueof_ptr(TABLE, CNSTRING);
 STRING valueof_str(TABLE tab, CNSTRING key);
 INT valueofbool_int(TABLE tab, STRING key, BOOLEAN *there);
 VPTR valueofbool_ptr(TABLE tab, STRING key, BOOLEAN *there);
 STRING valueofbool_str(TABLE tab, STRING key, BOOLEAN *there);
+
+/* table iteration */
+TABLE_ITER begin_table_iter(TABLE tab);
+BOOLEAN change_table_ptr(TABLE_ITER tabit, VPTR newptr);
+BOOLEAN next_table(TABLE_ITER tabit);
+BOOLEAN next_table_ptr(TABLE_ITER tabit, STRING *pkey, VPTR *pptr);
+void end_table_iter(TABLE_ITER * ptabit);
 
 #endif /* TABLE_H_INCLUDED */

@@ -1104,11 +1104,11 @@ void
 clear_rptinfos (void)
 {
 	if (f_rptinfos) {
-		struct tag_table_iter tabit;
+		TABLE_ITER tabit=0;
 		STRING key=0;
 		VPTR ptr=0;
-		begin_table(f_rptinfos, &tabit);
-		while (next_table_ptr(&tabit, &key, &ptr)) {
+		tabit = begin_table_iter(f_rptinfos);
+		while (next_table_ptr(tabit, &key, &ptr)) {
 			RPTINFO rptinfo = (RPTINFO)ptr;
 			remove_table(rptinfo->proctab, FREEKEY); /* values are PNODES */
 			remove_table(rptinfo->functab, FREEKEY); /* values are PNODES */
@@ -1118,6 +1118,7 @@ clear_rptinfos (void)
 			zs_free(&rptinfo->localepath);
 			zs_free(&rptinfo->textdomain);
 		}
+		end_table_iter(&tabit);
 		remove_table(f_rptinfos, FREEBOTH);
 		f_rptinfos = 0;
 	}

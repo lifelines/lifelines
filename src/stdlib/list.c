@@ -537,7 +537,8 @@ trav_list_tail (LIST list)
 	return list->l_tail;
 }
 /*=================================================
- * list_destructor -- destructor for vtable
+ * list_destructor -- destructor for list
+ *  (destructor entry in vtable)
  *===============================================*/
 static void
 list_destructor (VTABLE *obj)

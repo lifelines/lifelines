@@ -573,15 +573,17 @@ static void
 free_dyntts (void)
 {
 	if (f_dyntts) {
-		struct tag_table_iter tabit;
+		TABLE_ITER tabit=0;
 		xl_free_xlats(); /* xlats point into f_dyntts */
-		if (begin_table(f_dyntts, &tabit)) {
-			VPTR ptr;
-			STRING key;
-			while (next_table_ptr(&tabit, &key, &ptr)) {
+		tabit = begin_table_iter(f_dyntts);
+		if (tabit) {
+			VPTR ptr=0;
+			STRING key=0;
+			while (next_table_ptr(tabit, &key, &ptr)) {
 				DYNTT dyntt = (DYNTT)ptr;
 				zero_dyntt(dyntt);
 			}
+			end_table_iter(&tabit);
 		}
 		destroy_table(f_dyntts);
 		f_dyntts = 0;

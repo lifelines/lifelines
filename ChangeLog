@@ -4,6 +4,15 @@
 
 	Remove unused function next_table_str.
 
+	* ChangeLog src/gedlib/node.c src/gedlib/record.c
+	src/gedlib/xlat.c src/hdrs/generic.h src/hdrs/table.h
+	src/interp/alloc.c src/interp/interp.c src/interp/interpi.h
+	src/interp/symtab.c src/stdlib/array.c src/stdlib/generic.c
+	src/stdlib/list.c src/stdlib/table.c src/stdlib/zstr.c
+
+	Encapsulated table & symbol table iterators into implementation
+	(behind typedef'd pointers TABLE_ITER and SYMTAB_ITER).
+
 2005-01-28, Perry Rapp
 
 	* ChangeLog src/interp/alloc.c

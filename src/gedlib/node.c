@@ -1112,7 +1112,8 @@ parents_nodes (NODE faml)      /* list of FAMC and/or FAMS nodes */
 }
 #endif /* UNUSED_CODE */
 /*=================================================
- * node_destructor -- destructor for vtable
+ * node_destructor -- destructor for node
+ *  (destructor entry in vtable)
  *===============================================*/
 static void
 node_destructor (VTABLE *obj)
