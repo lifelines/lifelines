@@ -15,6 +15,14 @@
 	Fix next_spouse to not ASSERT on missing spouse.
 	Fix 2 record leaks (ihusb & iwife) in init_display_fam.
 
+	* ChangeLog INSTALL NEWS README.MAINTAINERS
+	build/msvc6/dbverify/dbVerify.rc build/msvc6/llexec/llexec.rc
+	build/msvc6/llines/llines.rc build/rpm/lifelines.spec
+	configure.in docs/ll-devguide.xml docs/ll-reportmanual.xml
+	docs/ll-userguide.xml src/hdrs/version.h
+
+	Bump versions for 3.0.43.
+
 2005-02-10 Perry Rapp
 
 	* ChangeLog src/gedlib/keytonod.c src/gedlib/node.c
@@ -314,7 +322,7 @@
 2005-02-04 Perry Rapp
 
 	* ChangeLog src/gedlib/node.c src/hdrs/gedcom.h
-	src\tools/dbverify.c
+	src/tools/dbverify.c
 
 	New function change_node_tag.
 	dbverify: Fix bug in fix_bad_pointer which was corrupting node tags.

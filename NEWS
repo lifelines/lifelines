@@ -1,6 +1,10 @@
-LifeLines Source Release, Version 3.0.42
+LifeLines Source Release, Version 3.0.43
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
+
+Bug fixes in 3.0.43
+============================
+ - ASSERT failures browsing from family to indi
 
 New features added in 3.0.42
 ============================
