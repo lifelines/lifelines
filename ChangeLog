@@ -1,3 +1,10 @@
+2003-10-25 Perry Rapp
+
+	* ChangeLog src/gedlib/init.c
+
+	Fix set_gettext_codeset for systems without
+	HAVE_BIND_TEXTDOMAIN_CODESET.
+
 2003-10-17 Perry Rapp
 
 	* ChangeLog src/interp/builtin.c
