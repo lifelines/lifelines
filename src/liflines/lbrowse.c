@@ -47,8 +47,6 @@ extern STRING qSasknam;
 extern STRING qSidplst, qSlstnew, qSmrkper;
 extern INDISEQ current_seq;
 
-LIST browse_lists;
-
 /*=======================================
  * browse_list -- Handle list browse mode
  *=====================================*/

@@ -78,7 +78,7 @@ static void setup_menu(ScreenInfo * sinfo, STRING Title, INT MenuRows
  * local variables
  *********************************************/
 
-ScreenInfo g_ScreenInfo[MAX_SCREEN+1];
+ScreenInfo g_ScreenInfo[MAX_SCREEN+1]; /* init'd by menuitem_initialize */
 
 /* These are not listed as part of the menus below, because these are
 added on-the-fly to every menu page displayed */
@@ -653,6 +653,7 @@ menuitem_initialize (INT cols)
 	ItemSize = sizeof(f_MenuPerson[0]);
 	for (i=1; i<=MAX_SCREEN; i++)
 	{
+		memset(&g_ScreenInfo[i], 0, sizeof(g_ScreenInfo[i]));
 		g_ScreenInfo[i].Title = strdup(_("Missing title"));
 		g_ScreenInfo[i].MenuRows = 0;
 		g_ScreenInfo[i].MenuCols = cols;

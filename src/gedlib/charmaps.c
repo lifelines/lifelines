@@ -41,11 +41,8 @@
  * global/exported variables
  *********************************************/
 
-TRANTABLE tran_tables[NUM_TT_MAPS] = {
-	NULL, NULL, NULL, NULL,
-	NULL, NULL, NULL, NULL,
-	NULL, NULL, NULL, NULL
-};
+TRANTABLE tran_tables[NUM_TT_MAPS]; /* init'd by init_mapping */
+
 char *map_keys[NUM_TT_MAPS] = {
 	"MEDIN", "MINED", "MGDIN", "MINGD",
 	"MDSIN", "MINDS", "MINRP", "MSORT",
@@ -101,7 +98,9 @@ init_mapping (void)
 	/* we assume here that NUM_TT_MAPS is size of tran_table */
 	ASSERT(NUM_TT_MAPS == ARRSIZE(tran_tables));
 	for (indx = 0; indx < NUM_TT_MAPS; indx++) {
-		if (!init_map_from_rec(indx, &tran_tables[indx])) {
+		TRANTABLE * tt = &tran_tables[indx];
+		memset(tt, 0, sizeof(*tt));
+		if (!init_map_from_rec(indx, tt)) {
 			msg_error("Error initializing %s map.\n"
 				, map_names[indx]);
 		}

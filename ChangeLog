@@ -22,6 +22,11 @@
 	gettextize).
 	Added autogen.sh wrapper for autotools invocations.
 
+	* ChangeLog gedlib/charmaps.c liflines/lbrowse.c
+	liflines/menuitem.c:
+
+	Minor fixes to static initialization.
+
 2002-06-04  gettextize  <bug-gnu-gettext@gnu.org>
 
 	* Makefile.am (ACLOCAL_AMFLAGS): New variable.
