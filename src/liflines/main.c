@@ -295,6 +295,7 @@ main (INT argc,
  */
 
 finish:
+	init_cleanup();
 	term_screen();
 	if (code) /* if error, give user a second to read it */
 		sleep(1);

@@ -383,3 +383,9 @@ describe_dberror (INT dberr, STRING buffer, INT buflen)
 	}
 	llstrcatn(&ptr, msg, &mylen);
 }
+
+/* Cleanup Routines */
+void init_cleanup(void)
+{
+	cleanup_lloptions();
+}

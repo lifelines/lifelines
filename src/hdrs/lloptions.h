@@ -61,5 +61,6 @@ void read_lloptions_from_config(void);
 void read_lloptions_from_db(void);
 void changeoptstr(STRING * str, STRING newval);
 void term_lloptions(void);
+void cleanup_lloptions(void);
 
 #endif /* _OPTIONS_H */

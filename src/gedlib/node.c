@@ -163,8 +163,11 @@ alloc_node (void)
 void
 free_node (NODE node)
 {
+	if (nxref(node)) free(nxref(node));
+	if (nval(node)) free(nval(node));
 	((NDALLOC) node)->next = first_blck;
 	first_blck = (NDALLOC) node;
+	
 }
 /*===========================
  * create_node -- Create NODE

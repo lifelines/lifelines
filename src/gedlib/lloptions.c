@@ -274,3 +274,19 @@ store_to_lloptions (void)
 		*str_options[i].value = strsave(str);
 	}
 }
+/*==========================================
+ * cleanup_lloptions -- deallocate structures
+ * used by lloptions at program termination
+ * Created: 2001/04/30, Matt Emmerton
+ *========================================*/
+void
+cleanup_lloptions(void)
+{
+	INT i;
+	/* free string values */
+	for (i=0; i<ARRSIZE(str_options); i++) {
+		STRING str = valueof(opttab, str_options[i].name);
+		free(*str_options[i].value);
+		*str_options[i].value = NULL;
+	}
+}

@@ -242,6 +242,7 @@ STRING indi_to_title(NODE, TRANTABLE, INT);
 void initxref(void);
 void init_browse_lists(void);
 void init_caches(void);
+void init_cleanup(void);
 void init_lifelines_db(void);
 BOOLEAN init_lifelines_global(STRING * pmsg);
 void init_mapping(void);
