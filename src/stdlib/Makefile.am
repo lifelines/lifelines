@@ -4,7 +4,7 @@
 
 noinst_LIBRARIES = libstdlib.a
 
-libstdlib_a_SOURCES = assert.c bfs.c dirs.c double.c environ.c fpattern.c\
+libstdlib_a_SOURCES = bfs.c dirs.c double.c environ.c fpattern.c\
 	lldate.c llstrcmp.c memalloc.c mystring.c path.c sequence.c\
 	signals.c stdstrng.c stdlibi.h table.c warehouse.c lloptions.c
 
@@ -14,8 +14,6 @@ EXTRA_DIST = stdlibi.h
 
 
 # since we're not doing dependencies automagically...
-assert.o: ../hdrs/standard.h
-assert.o: ../hdrs/mystring.h
 bfs.o: ../hdrs/llstdlib.h
 bfs.o: ../hdrs/bfs.h
 double.o: ../hdrs/standard.h

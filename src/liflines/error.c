@@ -23,7 +23,7 @@
 */
 /* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
- * assert.c -- Standard assertion routines
+ * error.c -- Standard error routines
  * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
  *   3.0.2 - 16 Oct 94
  *===========================================================*/
@@ -32,7 +32,6 @@
 #include "liflines.h"
 #include "screen.h"
 #include "arch.h"
-#include "stdlibi.h"
 #include "llstdlib.h"
 
 static char errorfile[MAXPATHLEN]="";
@@ -101,16 +100,3 @@ crashlog (STRING fmt, ...)
 	llvwprintf(fmt, args);
 	va_end(args);
 }
-/*============================
- * __assert -- Check assertion
- *==========================*/
-/* Apparently unused 2001/05/25, Perry
-void
-__assert (BOOLEAN exp,
-          STRING file,
-          int line)
-{
-	if (exp) return;
-	__fatal(file, line);
-}
-*/
