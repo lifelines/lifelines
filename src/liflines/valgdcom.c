@@ -141,7 +141,6 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 	f_logopen = FALSE;
 	f_flog = 0;
 	set_import_log(getoptstr("ImportLog", "errs.log"));
-	flineno = 0;
 	defline = 0;
 	curlev = 0;
 	clear_structures();
@@ -590,6 +589,9 @@ handle_fam_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line)
 }
 /*=================================================
  * check_akey -- Check for a standard format key
+ *               lifelines assumes key's are of form 
+ *               a letter followed by a number with no leading zeros 
+ *               e.g. I248
  *===============================================*/
 static int
 check_akey (int firstchar,
@@ -599,7 +601,7 @@ check_akey (int firstchar,
     INT val;
     if(keyp && (*keyp == firstchar)) {
 	keyp++;
-	if(*keyp && isdigit((uchar)*keyp)) {
+	if(*keyp && (*keyp != '0') && isdigit(*keyp)) {
 	    val = atoi(keyp);
 	    if(val > *maxp) *maxp = val;
 	    while(*keyp && isdigit((uchar)*keyp)) keyp++;
@@ -1005,6 +1007,7 @@ scan_header (FILE * fp, TABLE metadatatab, ZSTR * zerr)
 				break;
 			} else {
 				fseek(fp, lastoff, SEEK_SET);
+				flineno--;
 				/* finished head */
 				break;
 			}

@@ -1,3 +1,19 @@
+2004-10-27 Stephen Dum
+        *  ChangeLog docs/ll-reportmanual.xml docs/ll-reportmanual.pdf
+	docs/ll-reportmanual.txt docs/ll-reportmanual.html
+	src/btree/utils.c src/gedlib/nodeio.c src/hdrs/btree.h 
+	src/liflines/import.c src/liflines/valgdcom.c
+
+
+        Some minor bug fixes.  ll-reportmanual.xml was missing some end of
+	block tags.  Replace some explict constants with their Macro name.
+	Make buffer in next_fp_to_node() static so it's contents remain valid
+	after return (an error message was getting lost).  Fix gedcom read
+	routines so that line numbers reported when errors are encountered
+	are accurate.  Fix check_akey() to assure key's in correct format
+	when gedcom is read in, rather than an assert later when accessing
+	the key.
+
 2004-10-27 Matt Emmerton
 
 	Revert changes made on 2004-10-16, *except* for the

@@ -119,6 +119,7 @@ import_from_gedcom_file (IMPORT_FEEDBACK ifeed, FILE *fp)
 	/* save & restore default gedcom codeset in */
 	strupdate(&geddef, gedcom_codeset_in); 
 	
+	flineno = 0;
 	rtn = do_import(ifeed, fp);
 
 	strupdate(&gedcom_codeset_in, geddef);

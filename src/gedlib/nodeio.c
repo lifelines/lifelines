@@ -342,7 +342,7 @@ next_fp_to_node (FILE *fp, BOOLEAN list, XLAT ttm,
 {
 	INT curlev, bcode, rc;
 	NODE root, node, curnode;
-	char scratch[100];
+	static char scratch[100]; /*we return errors with this, keep it around*/
 	*pmsg = NULL;
 	*peof = FALSE;
 	if (ateof) {

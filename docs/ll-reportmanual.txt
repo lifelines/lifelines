@@ -1074,6 +1074,10 @@ List Functions
 
           declare a list
 
+   VOID clear(LIST);
+
+          clear a list
+
    BOOL empty(LIST);
 
           check if list is empty

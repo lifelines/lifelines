@@ -43,14 +43,13 @@
 
 /*
 All records in a LifeLines btree are indexed on 8 character keys
+Note that this must be the same as MAXKEYWIDTH in gedcom.h
 */
+#define RKEYLEN 8
 typedef struct {
-	char r_rkey[8];
+	char r_rkey[RKEYLEN];
 }  RKEY; /*record key*/
 
-/* This must be sizeof(((RKEY*)(0))->r_rkey) */
-/* Note that this must be the same as MAXKEYWIDTH in gedcom.h */
-#define RKEYLEN 8
 
 typedef INT FKEY; /*file key*/
 

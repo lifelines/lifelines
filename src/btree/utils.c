@@ -44,9 +44,9 @@ rkey2str (RKEY rkey)
 {
 	static char rbuf[RKEYLEN+1];
 	SHORT i;
-	for (i = 0; i < 8; i++)
+	for (i = 0; i < RKEYLEN; i++)
 		rbuf[i] = rkey.r_rkey[i];
-	rbuf[8] = 0;
+	rbuf[RKEYLEN] = 0;
 	for (i = 0; rbuf[i] == ' '; i++)
 		;
 	return &rbuf[i];
@@ -60,12 +60,12 @@ str2rkey (CNSTRING str)
 	RKEY rkey;
 	SHORT i = 0, n = strlen(str);
 	ASSERT(n > 0);
-	n = 8 - n;
+	n = RKEYLEN - n;
 	i = 0;
 	if (n > 0)
 		for (; i < n; i++)
 			rkey.r_rkey[i] = ' ';
-	for (; i < 8; i++) 
+	for (; i < RKEYLEN; i++) 
 		rkey.r_rkey[i] = *str++;
 	return rkey;
 }
