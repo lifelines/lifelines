@@ -263,33 +263,33 @@ initbtree (STRING basedir)
 BOOLEAN
 closebtree (BTREE btree)
 {
-    FILE *fp;
-    KEYFILE kfile;
+	FILE *fp;
+	KEYFILE kfile;
 
-    if(btree && ((fp = bkfp(btree)) != NULL)) {
-	kfile = btree->b_kfile;
-	if (kfile.k_ostat <= 0)
-		kfile.k_ostat = 0;
-	else { /* read-only, get current shared status */
+	if(btree && ((fp = bkfp(btree)) != NULL)) {
+		kfile = btree->b_kfile;
+		if (kfile.k_ostat <= 0)
+			kfile.k_ostat = 0;
+		else { /* read-only, get current shared status */
+			rewind(fp);
+			if (fread(&kfile, sizeof(KEYFILE), 1, fp) != 1) {
+				bterrno = BTERRKFILE;
+				fclose(fp);
+				return FALSE;
+			}
+			if (kfile.k_ostat <= 0) { /* someone has seized the DB */
+				fclose(fp);
+				return TRUE;
+			}
+			kfile.k_ostat--;
+		}
 		rewind(fp);
-		if (fread(&kfile, sizeof(KEYFILE), 1, fp) != 1) {
+		if (fwrite(&kfile, sizeof(KEYFILE), 1, fp) != 1) {
 			bterrno = BTERRKFILE;
 			fclose(fp);
 			return FALSE;
 		}
-		if (kfile.k_ostat <= 0) { /* someone has seized the DB */
-			fclose(fp);
-			return TRUE;
-		}
-		kfile.k_ostat--;
-	}
-	rewind(fp);
-	if (fwrite(&kfile, sizeof(KEYFILE), 1, fp) != 1) {
-		bterrno = BTERRKFILE;
 		fclose(fp);
-		return FALSE;
 	}
-	fclose(fp);
-    }
-    return TRUE;
+	return TRUE;
 }

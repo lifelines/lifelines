@@ -1286,7 +1286,7 @@ generic_print_el (INDISEQ seq, INT i)
 		break;
 	case 'S':
 		{
-			NODE sour = rkey_to_sour(key);
+			NODE sour = qkey_to_sour(key);
 			if (sour)
 			{
 				str = sour_to_list_string(sour, 68, ", ");

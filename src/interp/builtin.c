@@ -2885,7 +2885,7 @@ __indi (PNODE node,
  *		val = create_pvalue(PINDI, NULL);
  *	if (rec) stdfree(rec);
  */
- 	val = create_pvalue(PINDI, (WORD)rkey_to_indi_cacheel(scratch));
+ 	val = create_pvalue(PINDI, (WORD)qkey_to_indi_cacheel(scratch));
 	return val;
 }
 /*===========================+

@@ -832,7 +832,7 @@ browse_pedigree1 (NODE *pindi,
 				i = atoi(key_of_record(indi));
 				i = xref_nexti(i);
 				if (i)
-					indi = rkeynum_to_indi(i);
+					indi = qkeynum_to_indi(i);
 				else message(nopers);
 				break;
 			}
@@ -841,7 +841,7 @@ browse_pedigree1 (NODE *pindi,
 				i = atoi(key_of_record(indi));
 				i = xref_previ(i);
 				if (i)
-					indi = rkeynum_to_indi(i);
+					indi = qkeynum_to_indi(i);
 				else message(nopers);
 				break;
 			}

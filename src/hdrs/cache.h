@@ -85,11 +85,11 @@ CACHEEL sour_to_cacheel(NODE);
 
 CACHEEL key_to_indi_cacheel(STRING);
 CACHEEL key_to_fam_cacheel(STRING);
-CACHEEL rkey_to_even_cacheel(STRING);
-CACHEEL rkey_to_fam_cacheel(STRING);
-CACHEEL rkey_to_indi_cacheel(STRING);
-CACHEEL rkey_to_sour_cacheel(STRING);
-CACHEEL rkey_to_othr_cacheel(STRING);
+CACHEEL qkey_to_even_cacheel(STRING);
+CACHEEL qkey_to_fam_cacheel(STRING);
+CACHEEL qkey_to_indi_cacheel(STRING);
+CACHEEL qkey_to_sour_cacheel(STRING);
+CACHEEL qkey_to_othr_cacheel(STRING);
 
 void lock_cache(CACHEEL);
 void node_to_cache(CACHE, NODE);

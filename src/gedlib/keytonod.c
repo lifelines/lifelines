@@ -51,7 +51,7 @@ INT icsz_othr = 2000;		/* indirect cache size for othr */
 
 static CACHE create_cache(INT, INT);
 static NODE key_to_node (CACHE cache, STRING key, STRING tag);
-static NODE rkey_to_node (CACHE cache, STRING key, STRING tag);
+static NODE qkey_to_node (CACHE cache, STRING key, STRING tag);
 static CACHEEL key_to_cacheel(CACHE, STRING, STRING, INT);
 static void dereference(CACHEEL);
 static void add_node_to_direct(CACHE cache, NODE node);
@@ -75,16 +75,17 @@ keynum_to_indi(int keynum)
 	sprintf(keystr,"I%d",keynum);
 	return key_to_indi(keystr);
 }
-/*================================================
- * rkeynum_to_indi -- Convert a numeric key to an indi node
- *  report mode - it returns NULL if failed (ie, no indi with that number)
- *==============================================*/
+/*=========================================================
+ * qkeynum_to_indi -- Convert a numeric key to an indi node
+ *  report mode - it returns NULL if failed
+ *  (ie, no indi with that number)
+ *=======================================================*/
 NODE
-rkeynum_to_indi(int keynum)
+qkeynum_to_indi(int keynum)
 {
 	char keystr[20];
 	sprintf(keystr,"I%d",keynum);
-	return rkey_to_indi(keystr);
+	return qkey_to_indi(keystr);
 }
 /*================================================
  * keynum_to_fam -- Convert a numeric key to a fam node
@@ -97,16 +98,17 @@ keynum_to_fam(int keynum)
 	sprintf(keystr,"F%d",keynum);
 	return key_to_fam(keystr);
 }
-/*================================================
- * rkeynum_to_fam -- Convert a numeric key to a fam node
- *  report mode - it returns NULL if failed (ie, no fam with that number)
- *==============================================*/
+/*======================================================
+ * qkeynum_to_fam -- Convert a numeric key to a fam node
+ *  report mode - it returns NULL if failed
+ *  (ie, no fam with that number)
+ *====================================================*/
 NODE
-rkeynum_to_fam(int keynum)
+qkeynum_to_fam(int keynum)
 {
 	char keystr[20];
 	sprintf(keystr,"F%d",keynum);
-	return rkey_to_fam(keystr);
+	return qkey_to_fam(keystr);
 }
 /*================================================
  * keynum_to_sour -- Convert a numeric key to a sour node
@@ -127,102 +129,63 @@ key_to_type (STRING key, INT reportmode)
 {
 	switch(key[0])
 	{
-	case 'I': return reportmode ? rkey_to_indi(key) : key_to_indi(key);
-	case 'F': return reportmode ? rkey_to_fam(key) : key_to_fam(key);
-	case 'E': return reportmode ? rkey_to_even(key) : key_to_even(key);
-	case 'S': return reportmode ? rkey_to_sour(key) : key_to_sour(key);
+	case 'I': return reportmode ? qkey_to_indi(key) : key_to_indi(key);
+	case 'F': return reportmode ? qkey_to_fam(key) : key_to_fam(key);
+	case 'E': return reportmode ? qkey_to_even(key) : key_to_even(key);
+	case 'S': return reportmode ? qkey_to_sour(key) : key_to_sour(key);
 	}
-	return reportmode ? rkey_to_othr(key) : key_to_othr(key);
+	return reportmode ? qkey_to_othr(key) : key_to_othr(key);
 }
 /*=====================================
- * key_to_indi -- Convert key to person
- * (asserts if failure)
+ * key_to_??? -- Convert key to person
+ *  (asserts if failure)
+ *  5 symmetric versions
  *===================================*/
 NODE
 key_to_indi (STRING key)
 {
 	return key_to_node(indicache, key, "INDI");
 }
-/*=====================================
- * rkey_to_indi -- Convert key to person
- * report mode (returns NULL if failure)
- *===================================*/
-NODE
-rkey_to_indi (STRING key)
-{
-	return rkey_to_node(indicache, key, "INDI");
-}
-/*====================================
- * key_to_fam -- Convert key to family
- * (asserts if failure)
- *==================================*/
-NODE
-key_to_fam (STRING key)
+NODE key_to_fam (STRING key)
 {
 	return key_to_node(famcache, key, "FAM");
 }
-/*====================================
- * rkey_to_fam -- Convert key to family
- * report mode (returns NULL if failure)
- *==================================*/
-NODE
-rkey_to_fam (STRING key)
-{
-	return rkey_to_node(famcache, key, "FAM");
-}
-/*====================================
- * key_to_even -- Convert key to event
- * (asserts if failure)
- *==================================*/
-NODE
-key_to_even (STRING key)
+NODE key_to_even (STRING key)
 {
 	return key_to_node(evencache, key, "EVEN");
 }
-/*====================================
- * rkey_to_even -- Convert key to event
- * report mode (returns NULL if failure)
- *==================================*/
-NODE
-rkey_to_even (STRING key)
-{
-	return rkey_to_node(evencache, key, "EVEN");
-}
-/*=====================================
- * key_to_sour -- Convert key to source
- * (asserts if failure)
- *===================================*/
-NODE
-key_to_sour (STRING key)
+NODE key_to_sour (STRING key)
 {
 	return key_to_node(sourcache, key, "SOUR");
 }
-/*=====================================
- * rkey_to_sour -- Convert key to source
- * report mode (returns NULL if failure)
- *===================================*/
-NODE
-rkey_to_sour (STRING key)
-{
-	return rkey_to_node(sourcache, key, "SOUR");
-}
-/*====================================
- * key_to_othr -- Convert key to other
- * (asserts if failure)
- *==================================*/
-NODE
-key_to_othr (STRING key)
+NODE key_to_othr (STRING key)
 {
 	return key_to_node(othrcache, key, NULL);
 }
-/*====================================
- * rkey_to_othr -- Convert key to other
- * report mode (returns NULL if failure)
- *==================================*/
-NODE
-rkey_to_othr (STRING key)
+/*========================================
+ * qkey_to_??? -- Convert key to node type
+ *  report mode (returns NULL if failure)
+ *  5 symmetric versions
+ *======================================*/
+NODE qkey_to_indi (STRING key)
 {
-	return rkey_to_node(othrcache, key, NULL);
+	return qkey_to_node(indicache, key, "INDI");
+}
+NODE qkey_to_fam (STRING key)
+{
+	return qkey_to_node(famcache, key, "FAM");
+}
+NODE qkey_to_even (STRING key)
+{
+	return qkey_to_node(evencache, key, "EVEN");
+}
+NODE qkey_to_sour (STRING key)
+{
+	return qkey_to_node(sourcache, key, "SOUR");
+}
+NODE qkey_to_othr (STRING key)
+{
+	return qkey_to_node(othrcache, key, NULL);
 }
 /*=====================================================
  * key_to_indi_cacheel -- Convert key to person cacheel
@@ -542,11 +505,11 @@ key_to_node (CACHE cache, STRING key, STRING tag)
 	return cnode(cel);
 }
 /*===============================================================
- * rkey_to_node -- Return tree from key; add to cache if not there
+ * qkey_to_node -- Return tree from key; add to cache if not there
  * report mode - returns NULL if failure
  *=============================================================*/
 static NODE
-rkey_to_node (CACHE cache, STRING key, STRING tag)
+qkey_to_node (CACHE cache, STRING key, STRING tag)
 {
 	CACHEEL cel;
 	ASSERT(cache && key);
@@ -798,43 +761,28 @@ key_of_record (NODE node)
         if (refn && nval(refn)) return nval(refn);
         return rmvat(nxref(node)) + 1;
 }
-/*=====================================================
- * rkey_to_indi_cacheel -- Convert key to person cacheel (report mode)
- *===================================================*/
-CACHEEL
-rkey_to_indi_cacheel (STRING key)
+/*==============================================
+ * qkey_to_???_cacheel -- Convert key to cacheel
+ *  (report mode - returns NULL if failure)
+ *  5 symmetric versions
+ *============================================*/
+CACHEEL qkey_to_indi_cacheel (STRING key)
 {
 	return key_to_cacheel(indicache, key, "INDI", TRUE);
 }
-/*====================================================
- * key_to_fam_cacheel -- Convert key to family_cacheel (report mode)
- *==================================================*/
-CACHEEL
-rkey_to_fam_cacheel (STRING key)
+CACHEEL qkey_to_fam_cacheel (STRING key)
 {
 	return key_to_cacheel(famcache, key, "FAM", TRUE);
 }
-/*====================================================
- * key_to_even_cacheel -- Convert key to event_cacheel (report mode)
- *==================================================*/
-CACHEEL
-rkey_to_even_cacheel (STRING key)
+CACHEEL qkey_to_even_cacheel (STRING key)
 {
 	return key_to_cacheel(evencache, key, "EVEN", TRUE);
 }
-/*=====================================================
- * key_to_sour_cacheel -- Convert key to source_cacheel (report mode)
- *===================================================*/
-CACHEEL
-rkey_to_sour_cacheel (STRING key)
+CACHEEL qkey_to_sour_cacheel (STRING key)
 {
 	return key_to_cacheel(sourcache, key, "SOUR", TRUE);
 }
-/*====================================================
- * key_to_othr_cacheel -- Convert key to other_cacheel (report mode)
- *==================================================*/
-CACHEEL
-rkey_to_othr_cacheel (STRING key)
+CACHEEL qkey_to_othr_cacheel (STRING key)
 {
 	return key_to_cacheel(othrcache, key, NULL, TRUE);
 }
