@@ -425,7 +425,7 @@ chop_path (STRING path, STRING dirs)
 		*p++ = 0;
 		++ndirs;
 	}
-	*(++p) = 0;
+	*p = 0; /* ends with extra trailing zero after last one */
 	return ndirs;
 }
 /*============================================

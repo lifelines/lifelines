@@ -1,3 +1,9 @@
+2002-10-18 Perry Rapp
+
+	* ChangeLog src/gedlib/init.c src/stdlib/path.c:
+
+	Fix bug in chop_path.
+
 2002-10-17 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c src/stdlib/path.c:
