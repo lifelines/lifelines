@@ -38,7 +38,7 @@ extern STRING scanrs, scnnmf, scnfnm, scnrfn, scantt;
 typedef struct
 {
 	INT scantype;
-	char string[12];
+	char string[64];
 } SCAN_PATTERN;
 
 static INDISEQ seq;
@@ -113,20 +113,26 @@ rs_callback (STRING key, STRING refn, void *param)
 	}
 	return TRUE;
 }
-/*============================================
- * valid_pattern -- check pattern for validity
+/*=================================================
+ * set_pattern -- check pattern for validity
  *  for first cut, just refuse anything with spaces
- *===========================================*/
+ *===============================================*/
 static BOOLEAN
-valid_pattern (STRING str, INT scantype)
+set_pattern (SCAN_PATTERN * patt, STRING str, INT scantype)
 {
 	INT i;
 	/* for full name & refn scans, accept anything ? */
-	if (scantype != NAMESCAN_FRAG)
-		return TRUE;
-	for (i=0; str[i]; i++)
-		if (str[i] == ' ')
-			return FALSE;
+	if (scantype == NAMESCAN_FRAG) {
+		for (i=0; str[i]; i++)
+			if (str[i] == ' ')
+				return FALSE;
+	}
+
+	if (strlen(str) > sizeof(patt->string)-1)
+		return FALSE;
+
+	strcpy(patt->string, str);
+
 	return TRUE;
 }
 /*==============================
@@ -148,11 +154,10 @@ name_scan (INT scantype)
 			str = ask_for_string(scnfnm, scantt);
 		if (!str || !str[0])
 			return NULL;
-		if (valid_pattern(str, scantype))
+		if (set_pattern(&patt, str, scantype))
 			break;
 	}
 
-	strcpy(patt.string, str);
 
 	seq = create_indiseq();
 	traverse_names(ns_callback, &patt);
@@ -198,11 +203,9 @@ refn_scan(void)
 		str = ask_for_string(scnrfn, scantt);
 		if (!str || !str[0])
 			return NULL;
-		if (valid_pattern(str, scantype))
+		if (set_pattern(&patt, str, scantype))
 			break;
 	}
-
-	strcpy(patt.string, str);
 
 	seq = create_indiseq();
 	traverse_refns(rs_callback, &patt);

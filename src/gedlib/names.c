@@ -34,7 +34,6 @@
 #include "btree.h"
 #include "translat.h"
 #include "gedcom.h"
-#include "indiseq.h"
 #include "gedcomi.h"
 
 extern BOOLEAN opt_finnish;
