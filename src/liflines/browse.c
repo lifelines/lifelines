@@ -313,6 +313,24 @@ pick_create_new_family (RECORD current, RECORD save, STRING * addstrings)
 	return rec;
 }
 /*====================================================
+ * setrecord -- Move record in src to dest
+ *  Handles releasing old reference
+ *==================================================*/
+static void
+setrecord (RECORD * dest, RECORD * src)
+{
+	ASSERT(dest);
+	if (*dest) {
+		delref_record(*dest);
+	}
+	if (src) {
+		*dest = *src;
+		*src = 0;
+	} else {
+		*dest = 0;
+	}
+}
+/*====================================================
  * browse_indi_modes -- Handle person/pedigree browse.
  *  prec1 [I/O]  current record (or upper in tandem screens)
  *  prec2 [I/O]  lower record in tandem screens
@@ -333,10 +351,11 @@ browse_indi_modes (RECORD *prec1, RECORD *prec2, INDISEQ *pseq, INT indimode)
 
 	ASSERT(prec1 && *prec1 && nztype(*prec1)=='I');
 	ASSERT(!*prec2 && !*pseq);
-	current = *prec1;
 
-	*prec1 = 0;
-	*prec2 = 0;
+	/* move working record into current */
+	setrecord(&current, prec1);
+	setrecord(prec1, 0);
+	setrecord(prec2, 0);
 
 	show_reset_scroll();
 	nkeyp = 0;
@@ -377,8 +396,9 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			edit_indi(current, &disp_long_rfmt);
 			break;
 		case CMD_FAMILY: 	/* Browse to person's family */
-			if ((*prec1 = choose_family(current, _(qSntprnt)
+			if ((tmp = choose_family(current, _(qSntprnt)
 				,  _(qSidfbrs), TRUE))) {
+				setrecord(prec1, &tmp);
 				rtn = BROWSE_FAM;
 				goto exitindi;
 			}
@@ -388,8 +408,8 @@ reprocess_indi_cmd: /* so one command can forward to another */
 				_(qSid1fbr), TRUE)) != 0) {
 				if ((tmp2 = choose_family(current, _(qSntprnt),
 					_(qSid2fbr), TRUE)) != 0) {
-					*prec1 = tmp;
-					*prec2 = tmp2;
+					setrecord(prec1, &tmp);
+					setrecord(prec2, &tmp2);
 					rtn = BROWSE_2FAM;
 					goto exitindi;
 				}
@@ -398,7 +418,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 		case CMD_FATHER: 	/* Browse to person's father */
 			if ((tmp = choose_father(current, NULL, _(qSnofath),
 				_(qSidhbrs), NOASK1)) != 0) {
-				current = tmp;
+				setrecord(&current, &tmp);
 			}
 			break;
 		case CMD_TANDEM_FATHERS:	/* Tandem Browse to person's fathers */
@@ -406,8 +426,8 @@ reprocess_indi_cmd: /* so one command can forward to another */
 				_(qSid1hbr), NOASK1)) != 0) {
 				if ((tmp2 = choose_father(current, NULL, _(qSnofath),
 					_(qSid2hbr), NOASK1)) != 0) {
-					*prec1 = tmp;
-					*prec2 = tmp2;
+					setrecord(prec1, &tmp);
+					setrecord(prec2, &tmp2);
 					rtn = BROWSE_TAND;
 					goto exitindi;
 				}
@@ -416,7 +436,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 		case CMD_MOTHER:	/* Browse to person's mother */
 			if ((tmp = choose_mother(current, NULL, _(qSnomoth),
 				_(qSidwbrs), NOASK1)) != 0) {
-				current = tmp;
+				setrecord(&current, &tmp);
 			}
 			break;
 		case CMD_TANDEM_MOTHERS:	/* Tandem Browse to person's mothers */
@@ -424,8 +444,8 @@ reprocess_indi_cmd: /* so one command can forward to another */
 				_(qSid1wbr), NOASK1)) != 0) {
 				if ((tmp2 = choose_mother(current, NULL, _(qSnomoth),
 					_(qSid2wbr), NOASK1)) != 0) {
-					*prec1 = tmp;
-					*prec2 = tmp2;
+					setrecord(prec1, &tmp);
+					setrecord(prec2, &tmp2);
 					rtn = BROWSE_TAND;
 					goto exitindi;
 				}
@@ -433,28 +453,28 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			break;
 		case CMD_BROWSE_ZIP_INDI:	/* Zip browse another person */
 			if ((tmp = ask_for_indi(_(qSidpnxt), NOCONFIRM, NOASK1)) != 0)
-				current = tmp;
+				setrecord(&current, &tmp);
 			break;
 		case CMD_BROWSE_ZIP_ANY:	/* Zip browse any record */
 			if ((tmp = ask_for_any(_(qSidnxt), NOCONFIRM, NOASK1)) != 0) {
 				if (nztype(tmp) != 'I') {
-					*prec1 = tmp;
+					setrecord(prec1, &tmp);
 					rtn = BROWSE_UNK;
 					goto exitindi;
 				} else {
-					current = tmp;
+					setrecord(&current, &tmp);
 				}
 			}
 			break;
 		case CMD_SPOUSE:	/* Browse to person's spouse */
 			if ((tmp = choose_spouse(current, _(qSnospse), _(qSidsbrs))) != 0)
-				current = tmp;
+				setrecord(&current, &tmp);
 			break;
 		case CMD_TANDEM_SPOUSES:	/* browse to tandem spouses */
 			if ((tmp = choose_spouse(current, _(qSnospse), _(qSid1sbr))) != 0) {
 				if ((tmp2 = choose_spouse(current, _(qSnospse), _(qSid2sbr))) != 0) {
-					*prec1 = tmp;
-					*prec2 = tmp2;
+					setrecord(prec1, &tmp);
+					setrecord(prec2, &tmp2);
 					rtn = BROWSE_TAND;
 					goto exitindi;
 				}
@@ -462,8 +482,9 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			break;
 		case CMD_CHILDREN:	/* Browse to person's child */
 			if ((tmp = choose_child(current, NULL, _(qSnocofp),
-				_(qSidcbrs), NOASK1)) != 0)
-				current = tmp;
+				_(qSidcbrs), NOASK1)) != 0) {
+				setrecord(&current, &tmp);
+			}
 			break;
 		case CMD_TOGGLE_PEDTYPE:       /* toggle pedigree mode (ancestors/descendants) */
 			pedigree_toggle_mode();
@@ -487,7 +508,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 		case CMD_CHILD_DIRECT0+8:
 		case CMD_CHILD_DIRECT0+9:
 			if ((tmp = goto_indi_child(current, c-CMD_CHILD_DIRECT0)) != 0)
-				current = tmp;
+				setrecord(&current, &tmp);
 			else
 				message(_(qSnochil));
 			break;
@@ -496,8 +517,8 @@ reprocess_indi_cmd: /* so one command can forward to another */
 				_(qSid1cbr), NOASK1)) != 0) {
 				if ((tmp2 = choose_child(current, NULL, _(qSnocofp),
 					_(qSid2cbr), NOASK1)) != 0) {
-					*prec1 = tmp;
-					*prec2 = tmp2;
+					setrecord(prec1, &tmp);
+					setrecord(prec2, &tmp2);
 					rtn = BROWSE_TAND;
 					goto exitindi;
 				}
@@ -511,20 +532,20 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			break;
 		case CMD_UPSIB:	/* Browse to older sib */
 			if ((tmp = indi_to_prev_sib(current)) != 0)
-				current = tmp;
+				setrecord(&current, &tmp);
 			else
 				message(_(qSnoosib));
 			break;
 		case CMD_DOWNSIB:	/* Browse to younger sib */
 			if ((tmp = indi_to_next_sib(current)) != 0)
-				current = tmp;
+				setrecord(&current, &tmp);
 			else
 				message(_(qSnoysib));
 			break;
 		case CMD_PARENTS:	/* Browse to parents' family */
 			if ((tmp = choose_family(current, _(qSnoprnt),
 				_(qSidfbrs), FALSE)) != 0) {
-				*prec1 = tmp;
+				setrecord(prec1, &tmp);
 				rtn = BROWSE_FAM;
 				goto exitindi;
 			}
@@ -534,8 +555,8 @@ reprocess_indi_cmd: /* so one command can forward to another */
 				_(qSid1fbr), FALSE)) != 0) {
 				if ((tmp2 = choose_family(current, _(qSnoprnt),
 					_(qSid2fbr), FALSE)) != 0) {
-					*prec1 = tmp;
-					*prec2 = tmp2;
+					setrecord(prec1, &tmp);
+					setrecord(prec2, &tmp2);
 					rtn = BROWSE_2FAM;
 					goto exitindi;
 				}
@@ -546,11 +567,12 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			if (!seq) break;
 			if (length_indiseq(seq) == 1) {
 				element_indiseq(seq, 0, &key, &name);
-				current = key_to_record(key);
+				tmp = key_to_record(key);
+				setrecord(&current, &tmp);
 				remove_indiseq(seq);
 				seq=NULL;
 				if (nztype(current) != 'I') {
-					*prec1 = current;
+					setrecord(prec1, &current);
 					rtn = BROWSE_UNK;
 					goto exitindi;
 				}
@@ -561,9 +583,10 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_NEWPERSON:	/* Add new person */
-			if (!(tmp = add_indi_by_edit(&disp_long_rfmt))) break;
-			save = current;
-			current = tmp;
+			if (!(tmp = add_indi_by_edit(&disp_long_rfmt))) 
+				break;
+			setrecord(&save, &current);
+			setrecord(&current, &tmp);
 			break;
 		case CMD_NEWFAMILY:	/* Add family for current person */
 			{
@@ -571,8 +594,8 @@ reprocess_indi_cmd: /* so one command can forward to another */
 				addstrings[0] = _(qScrtcfm);
 				addstrings[1] = _(qScrtsfm);
 				if ((tmp = pick_create_new_family(current, save, addstrings)) != 0) {
-					save = NULL;
-					*prec1 = tmp;
+					setrecord(&save, NULL);
+					setrecord(prec1, &tmp);
 					rtn = BROWSE_FAM;
 					goto exitindi;
 				}
@@ -587,15 +610,15 @@ reprocess_indi_cmd: /* so one command can forward to another */
 					c = CMD_EDIT;
 					goto reprocess_indi_cmd; /* forward to edit */
 				}
-				*prec1 = tmp;
+				setrecord(prec1, &tmp);
 				rtn = BROWSE_UNK;
 				goto exitindi;
 			}
 			break;
 		case CMD_TANDEM:	/* Switch to tandem browsing */
 			if ((tmp = ask_for_indi(_(qSidp2br), NOCONFIRM, NOASK1)) != 0) {
-				*prec1 = current;
-				*prec2 = tmp;
+				setrecord(prec1, &current);
+				setrecord(prec2, &tmp);
 				rtn = BROWSE_TAND;
 				goto exitindi;
 			}
@@ -627,36 +650,42 @@ reprocess_indi_cmd: /* so one command can forward to another */
 		case CMD_NEXT:	/* Go to next indi in db */
 			{
 				i = xref_nexti(nkeyp);
-				if (i)
-					current = keynum_to_irecord(i);
-				else message(_(qSnopers));
+				if (i) {
+					tmp = keynum_to_irecord(i);
+					setrecord(&current, &tmp);
+				} else {
+					message(_(qSnopers));
+				}
 			}
 			break;
 		case CMD_PREV:	/* Go to prev indi in db */
 			{
 				i = xref_previ(nkeyp);
-				if (i)
-					current = keynum_to_irecord(i);
-				else message(_(qSnopers));
+				if (i) {
+					tmp = keynum_to_irecord(i);
+					setrecord(&current, &tmp);
+				} else {
+					message(_(qSnopers));
+				}
 			}
 			break;
 		case CMD_SOURCES:	/* Browse to sources */
 			if ((tmp = choose_source(current, _(qSnosour), _(qSidsour))) != 0) {
-				*prec1 = tmp;
+				setrecord(prec1, &tmp);
 				rtn = BROWSE_AUX;
 				goto exitindi;
 			}
 			break;
 		case CMD_NOTES:	/* Browse to notes */
 			if ((tmp = choose_note(current, _(qSnonote), _(qSidnote))) != 0) {
-				*prec1 = tmp;
+				setrecord(prec1, &tmp);
 				rtn = BROWSE_AUX;
 				goto exitindi;
 			}
 			break;
 		case CMD_POINTERS:	/* Browse to references */
 			if ((tmp = choose_pointer(current, _(qSnoptr), _(qSidptr))) != 0) {
-				*prec1 = tmp;
+				setrecord(prec1, &tmp);
 				rtn = BROWSE_AUX;
 				goto exitindi;
 			}
