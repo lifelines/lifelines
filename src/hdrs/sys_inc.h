@@ -13,7 +13,9 @@
 
 /* WIN32 - COMMON INCLUDES */
 #include <io.h>
-#include <limits.h>
+#ifndef _POSIX_
+#define PATH_MAX _MAX_PATH
+#endif
 
 /* WIN32 - BORLAND INCLUDES */
 #ifdef __BORLANDC__
