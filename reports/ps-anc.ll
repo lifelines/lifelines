@@ -1,6 +1,6 @@
 /*
  * @progname       ps-anc
- * @version        6.0
+ * @version        7.0
  * @author         Wheeler, Stringer
  * @category       
  * @output         PostScript
@@ -12,7 +12,7 @@
 **  etc.).  A multi-page poster chart can also be generated.  The
 **  chart format is based on the program GedChart, by Tom Blumer.
 ** 
-**  ps-anc6, 30 Jan 1997, enhanced by Phil Stringer (P.Stringer@mcc.ac.uk)
+**  ps-anc7, 1 Feb 1997, enhanced by Phil Stringer (P.Stringer@mcc.ac.uk)
 **  ps-anc, 9 September 1994, by Fred Wheeler (wheeler@ipl.rpi.edu)
 **
 **  GETTING THIS FILE
@@ -83,7 +83,7 @@
 **    John F. Chandler (jchbn@cuvmb.cc.columbia.edu)
 **    Susan Radel
 **
-**  Changes since version 2:
+**  Changes in version 3:
 **    Birth/death/marriage date style addition (full date with short place).
 **    Examples for including other fonts.
 **    Option for bold lines/text for direct line of ascent.
@@ -95,14 +95,22 @@
 **      text split over sheets.
 **    Option to show aunts/uncles from parents multiple marriages.
 **
-**  Changes since version 3:
+**  Changes in version 4:
 **    Border enhanced at the corners.
 **    Chart title font changed.
 **    Lines now used to join families rather than being used as a framework.
 **    Names now adjacent to line or halfway between if in 2 families.
 **    Descendant chart has reduced lines and is more tree like
 **
-**  Changes since version 4:
+**  Changes in version 5:
+**    Enhanced descendant chart
+**    Automatic choice of chart type if no children or no ancestors
+**    Multi page landscape bug fixed
+**    Enhancements to user option specification
+**    Character set enhanced to iso-8859-1
+**    Additional personal titles 
+**
+**  Changes in version 6:
 **    Corrected multi-page landscape printing
 **    Descriptive title at bottom of chart
 **    Smaller and faster PostScript code on multi-page output (previously n-pages had
@@ -110,6 +118,13 @@
 **    Automatic choice of ancestor/descendant chart if no descendants/ancestors
 **    Fixed bug on descendant charts of overprinting if it branched up, and there was a
 **      spouse with birth and death details, and no children in that family.
+**    Character set inadvertently lost iso-8859-1 support.
+**
+**  Changes in version 7:
+**    Fixed bug on descendant charts of overlapping vertical lines if it branched up, and 
+**      there was a spouse and no children in that family.
+**    iso-8859-1 support re-instated.
+**    More efficient print_all_persons code from Fred Wheeler
 **
 **  CREDITS
 **
@@ -176,7 +191,7 @@ global (branch_dist_same)     /* minimum distance from same generation */
 global (branch_dist_next)     /* minimum distance from next generation */
 
 /* stacks for storing the information for each person on the chart */
-/* see proc's enqueue_person and dequeue_all_persons */
+/* see proc's enqueue_person and print_all_persons */
 
 global (plist_person)  /* the person (to extract name, birth, death) */
 global (plist_depth)   /* generation depth */
@@ -602,7 +617,7 @@ proc main ()
 	call fromto(root_person)
       ") printhead" nl()
 
-      call dequeue_all_persons ()
+      call print_all_persons ()
       call dequeue_all_verticals ()
       "showpage" nl()
       "%--- End of page " d(xi) "/" d(yi) " ---" nl()
@@ -1021,12 +1036,14 @@ proc do_des (person, depth, min_pos_arg, anc, branch_up)
   }
   set (ffcp, pos)
 
-
+  /* Run through all the families to process all the children as this will likely
+     move us down the page a bit */ 
+ 
   families (person, fam, spouse, fn)  {
-    set (make_line, 1)
-/*    if (eq (fn, 1))  {
-      set (line_top, pos)
-    }*/
+    if (or(spouse,nchildren(fam))) {
+	/* If we have a spouse or any children, this family will need a vertical line */
+      set (make_line, 1)
+    }
     if (branch_up)  {
       call dateplace (marriage (fam), dateplace_marriage)
       set (mdate, dateplace_return)
@@ -1074,14 +1091,10 @@ proc do_des (person, depth, min_pos_arg, anc, branch_up)
     if (branch_up) {
       if (spouse)  {
         set (known_spouse, 1)
-/*	if (had_kids) {
-          set (nms, sub (start_fam, name_height))
-	} else {*/
 	  set (nms, start_fam)
-/*	}*/
-	if (eq (1,fn)) {
+	  if (eq (1,fn)) {
           set (line_top, nms)
-	}
+	  }
         call enqueue_person (spouse, depth, nms, 0, mdate, 0, 1)
         call person_height (person)
         set (nms, add (nms, person_height_return))
@@ -1114,13 +1127,15 @@ proc do_des (person, depth, min_pos_arg, anc, branch_up)
     }
   }
 
+  /* Now work out where to put this person */
+
   if (branch_up)  {
+    /* If we are branching up its more difficult as we could have a spouse to put in first */
     if (had_kids) {
       set (pos, add (pos, name_height))
     }
     if (and (had_kids, not (known_spouse))) {
       set (nmp, add (line_top, div (sub(line_bot, line_top), 2)))
-      call enqueue_person (person, depth, nmp, 1, 0, anc, des)
       call enqueue_person (person, depth, nmp, 1, 0, anc, des)
       push (do_anc_stack, nmp)
       set (nmp, add (nmp, person_height_return))
@@ -1272,38 +1287,40 @@ proc is_prefix_title (t)
 {
   set (is_prefix_title_return, 0)
 
+  if (index (t, "Arch", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Baron", 1))   { set (is_prefix_title_return, 1) }
+  if (index (t, "Bish", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Brot", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Card", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Canon", 1))   { set (is_prefix_title_return, 1) }
+  if (index (t, "Cong", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Deacon", 1))  { set (is_prefix_title_return, 1) }
+  if (index (t, "Dr", 1))      { set (is_prefix_title_return, 1) }
+  if (index (t, "Duke", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Father", 1))  { set (is_prefix_title_return, 1) }
+  if (index (t, "Fr", 1))      { set (is_prefix_title_return, 1) }
+  if (index (t, "Hon", 1))     { set (is_prefix_title_return, 1) }
+  if (index (t, "Judge", 1))   { set (is_prefix_title_return, 1) }
+  if (index (t, "King", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Lady", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Lord", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Miss", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Mons", 1))    { set (is_prefix_title_return, 1) }
   if (index (t, "Mr", 1))      { set (is_prefix_title_return, 1) }
   if (index (t, "Mrs", 1))     { set (is_prefix_title_return, 1) }
   if (index (t, "Ms", 1))      { set (is_prefix_title_return, 1) }
-  if (index (t, "Miss", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Dr", 1))      { set (is_prefix_title_return, 1) }
-  if (index (t, "Prof", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Hon", 1))     { set (is_prefix_title_return, 1) }
-  if (index (t, "Judge", 1))   { set (is_prefix_title_return, 1) }
-  if (index (t, "Brot", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Sis", 1))     { set (is_prefix_title_return, 1) }
-  if (index (t, "Canon", 1))  { set (is_prefix_title_return, 1) }
-  if (index (t, "Deacon", 1))  { set (is_prefix_title_return, 1) }
-  if (index (t, "Fr", 1))      { set (is_prefix_title_return, 1) }
-  if (index (t, "Father", 1))  { set (is_prefix_title_return, 1) }
-  if (index (t, "Mons", 1))    { set (is_prefix_title_return, 1) }
   if (index (t, "Msgr", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Arch", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Bish", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Card", 1))    { set (is_prefix_title_return, 1) }
   if (index (t, "Pope", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Lord", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Sir", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Baron", 1))   { set (is_prefix_title_return, 1) }
-  if (index (t, "Duke", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Princ", 1))   { set (is_prefix_title_return, 1) }
-  if (index (t, "Lady", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Queen", 1))   { set (is_prefix_title_return, 1) }
-  if (index (t, "King", 1))    { set (is_prefix_title_return, 1) }
   if (index (t, "Pres", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Sen", 1))     { set (is_prefix_title_return, 1) }
-  if (index (t, "Cong", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Princ", 1))   { set (is_prefix_title_return, 1) }
+  if (index (t, "Prof", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Queen", 1))   { set (is_prefix_title_return, 1) }
+  if (index (t, "Rabbi", 1))   { set (is_prefix_title_return, 1) }
+  if (index (t, "Rav", 1))     { set (is_prefix_title_return, 1) }
   if (index (t, "Rep", 1))     { set (is_prefix_title_return, 1) }
+  if (index (t, "Sen", 1))     { set (is_prefix_title_return, 1) }
+  if (index (t, "Sir", 1))     { set (is_prefix_title_return, 1) }
+  if (index (t, "Sis", 1))     { set (is_prefix_title_return, 1) }
 }
 
 /*
@@ -1325,61 +1342,27 @@ proc enqueue_person (person, depth, pos, line, mdate, anc, des)
   enqueue (plist_des,    des)
 }
 
+
 /*
-**  procedure: dequeue_all_persons
+**  procedure: print_all_persons
 **
-**  Dequeue and print all persons stored in the global lists.  The
-**  lines are stored in a second queue as they are printed and then
-**  placed back in the original, global, queue.
-**
+**  Print all persons stored in the global lists.
 */
 
-proc dequeue_all_persons ()
+proc print_all_persons()
 {
-  list (tlist_person)
-  list (tlist_depth)
-  list (tlist_pos)
-  list (tlist_line)
-  list (tlist_mdate)
-  list (tlist_anc)
-  list (tlist_des)
-
-  while (person, dequeue (plist_person))  {
-    set (depth,  dequeue (plist_depth))
-    set (pos,    dequeue (plist_pos))
-    set (line,   dequeue (plist_line))
-    set (mdate,  dequeue (plist_mdate))
-    set (anc,    dequeue (plist_anc))
-    set (des,    dequeue (plist_des))
+  forlist(plist_person,person,pnum) {
+    set (depth,  getel (plist_depth, pnum))
+    set (pos,    getel (plist_pos, pnum))
+    set (line,   getel (plist_line, pnum))
+    set (mdate,  getel (plist_mdate, pnum))
+    set (anc,    getel (plist_anc, pnum))
+    set (des,    getel (plist_des, pnum))                                     
 
     call print_person (person, depth, pos, line, mdate, anc, des)
-
-    enqueue (tlist_person, person)
-    enqueue (tlist_depth,  depth)
-    enqueue (tlist_pos,    pos)
-    enqueue (tlist_line,   line)
-    enqueue (tlist_mdate,  mdate)
-    enqueue (tlist_anc,    anc)
-    enqueue (tlist_des,    des)
-  }
-
-  while (person, dequeue (tlist_person))  {
-    set (depth,  dequeue (tlist_depth))
-    set (pos,    dequeue (tlist_pos))
-    set (line,   dequeue (tlist_line))
-    set (mdate,  dequeue (tlist_mdate))
-    set (anc,    dequeue (tlist_anc))
-    set (des,    dequeue (tlist_des))
-
-    enqueue (plist_person, person)
-    enqueue (plist_depth,  depth)
-    enqueue (plist_pos,    pos)
-    enqueue (plist_line,   line)
-    enqueue (plist_mdate,  mdate)
-    enqueue (plist_anc,    anc)
-    enqueue (plist_des,    des)
   }
 }
+
 
 /*
 **  procedure: print_person
@@ -2064,39 +2047,118 @@ proc print_header (cl, ctf, fn, xn, yn, mp, ml)
   "16#8d /igrave" nl()
   "16#8e /Adieresis" nl()
   "16#8f /Aring" nl()
-  "16#90 /Eacute" nl()
-  "16#91 /ae" nl()
-  "16#92 /AE" nl()
-  "16#93 /ocircumflex" nl()
-  "16#94 /odieresis" nl()
-  "16#95 /ograve" nl()
-  "16#96 /ucircumflex" nl()
-  "16#97 /ugrave" nl()
-  "16#98 /ydieresis" nl()
-  "16#99 /Odieresis" nl()
-  "16#9a /Udieresis" nl()
-  "16#9b /cent" nl()
-  "16#9c /sterling" nl()
-  "16#9d /yen" nl()
-  "16#9f /florin" nl()
-  "16#a0 /aacute" nl()
-  "16#a1 /iacute" nl()
-  "16#a2 /oacute" nl()
-  "16#a3 /uacute" nl()
-  "16#a4 /ntilde" nl()
-  "16#a5 /Ntilde" nl()
-  "16#a6 /ordfeminine" nl()
-  "16#a7 /ordmasculine" nl()
-  "16#a8 /questiondown" nl()
-  "16#aa /logicalnot" nl()
-  "16#ab /onehalf" nl()
-  "16#ac /onequarter" nl()
-  "16#ad /exclamdown" nl()
-  "16#ae /guillemotleft" nl()
-  "16#af /guillemotright" nl()
-  "16#f8 /degree" nl()
-  "16#f9 /bullet" nl()
-  "16#fa /periodcentered" nl()
+  "16#90 /dotlessi" nl()
+  "16#91 /grave" nl()
+  "16#92 /acute" nl()
+  "16#93 /circumflex" nl()
+  "16#94 /tilde" nl()
+  "16#95 /macron" nl()
+  "16#96 /breve" nl()
+  "16#97 /dotaccent" nl()
+  "16#98 /dieresis" nl()
+  "16#99 /.notdef" nl()
+  "16#9a /ring" nl()
+  "16#9b /cedilla" nl()
+  "16#9c /.notdef" nl()
+  "16#9d /hungarumlaut" nl()
+  "16#9e /ogonek" nl()
+  "16#9f /caron" nl()
+  "16#a0 /space" nl()
+  "16#a1 /exclamdown" nl()
+  "16#a2 /cent" nl()
+  "16#a3 /sterling" nl()
+  "16#a4 /currency" nl()
+  "16#a5 /yen" nl()
+  "16#a6 /brokenbar" nl()
+  "16#a7 /section" nl()
+  "16#a8 /dieresis" nl()
+  "16#a9 /copyright" nl()
+  "16#aa /ordfeminine" nl()
+  "16#ab /guillemotleft" nl()
+  "16#ac /logicalnot" nl()
+  "16#ad /hyphen" nl()
+  "16#ae /registered" nl()
+  "16#af /macron" nl()
+  "16#b0 /degree" nl()
+  "16#b1 /plusminus" nl()
+  "16#b2 /twosuperior" nl()
+  "16#b3 /threesuperior" nl()
+  "16#b4 /acute" nl()
+  "16#b5 /mu" nl()
+  "16#b6 /paragraph" nl()
+  "16#b7 /periodcentered" nl()
+  "16#b8 /cedilla" nl()
+  "16#b9 /onesuperior" nl()
+  "16#ba /ordmasculine" nl()
+  "16#bb /guillemotright" nl()
+  "16#bc /onequarter" nl()
+  "16#bd /onehalf" nl()
+  "16#be /threequarters" nl()
+  "16#bf /questiondown" nl()
+  "16#c0 /Agrave" nl()
+  "16#c1 /Aacute" nl()
+  "16#c2 /Acircumflex" nl()
+  "16#c3 /Atilde" nl()
+  "16#c4 /Adieresis" nl()
+  "16#c5 /Aring" nl()
+  "16#c6 /AE" nl()
+  "16#c7 /Ccedilla" nl()
+  "16#c8 /Egrave" nl()
+  "16#c9 /Eacute" nl()
+  "16#ca /Ecircumflex" nl()
+  "16#cb /Edieresis" nl()
+  "16#cc /Igrave" nl()
+  "16#cd /Iacute" nl()
+  "16#ce /Icircumflex" nl()
+  "16#cf /Idieresis" nl()
+  "16#d0 /Eth" nl()
+  "16#d1 /Ntilde" nl()
+  "16#d2 /Ograve" nl()
+  "16#d3 /Oacute" nl()
+  "16#d4 /Ocircumflex" nl()
+  "16#d5 /Otilde" nl()
+  "16#d6 /Odieresis" nl()
+  "16#d7 /multiply" nl()
+  "16#d8 /Oslash" nl()
+  "16#d9 /Ugrave" nl()
+  "16#da /Uacute" nl()
+  "16#db /Ucircumflex" nl()
+  "16#dc /Udieresis" nl()
+  "16#dd /Yacute" nl()
+  "16#de /Thorn" nl()
+  "16#df /germandbls" nl()
+  "16#e0 /agrave" nl()
+  "16#e1 /aacute" nl()
+  "16#e2 /acircumflex" nl()
+  "16#e3 /atilde" nl()
+  "16#e4 /adieresis" nl()
+  "16#e5 /aring" nl()
+  "16#e6 /ae" nl()
+  "16#e7 /ccedilla" nl()
+  "16#e8 /egrave" nl()
+  "16#e9 /eacute" nl()
+  "16#ea /ecircumflex" nl()
+  "16#eb /edieresis" nl()
+  "16#ec /igrave" nl()
+  "16#ed /iacute" nl()
+  "16#ee /icircumflex" nl()
+  "16#ef /idieresis" nl()
+  "16#f0 /eth" nl()
+  "16#f1 /ntilde" nl()
+  "16#f2 /ograve" nl()
+  "16#f3 /oacute" nl()
+  "16#f4 /ocircumflex" nl()
+  "16#f5 /otilde" nl()
+  "16#f6 /odieresis" nl()
+  "16#f7 /divide" nl()
+  "16#f8 /oslash" nl()
+  "16#f9 /ugrave" nl()
+  "16#fa /uacute" nl()
+  "16#fb /ucircumflex" nl()
+  "16#fc /udieresis" nl()
+  "16#fd /yacute" nl()
+  "16#fe /thorn" nl()
+  "16#ff /ydieresis" nl()
   "] def" nl()
   "% Copyright (c) 1991-1993 Thomas P. Blumer.  All Rights Reserved." nl()
   "% Permission granted to use in LifeLines report generation." nl()
