@@ -1,3 +1,10 @@
+2003-07-08 Perry Rapp
+
+    * ChangeLog src/liflines/valgdcom.c
+
+	Extend HEAD limit from 50 to 500 (to handle GEDCOM torture test).
+	PATCH#767219.
+
 2003-07-01 Matt Emmerton
 
 	* ChangeLog src/hdrs/interp.h src/stdlib/signals.c src/interp/interp.c

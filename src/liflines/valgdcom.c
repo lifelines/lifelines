@@ -970,7 +970,7 @@ scan_header (FILE * fp, TABLE metadatatab, ZSTR * zerr)
 		STRING xref, tag, val, msg;
 		lastoff = ftell(fp);
 		curlev = lev;
-		if (linno==50) {
+		if (linno==500) {
 			*zerr = zs_newf(_("Processed %d lines without finding end of HEAD"), linno);
 			break;
 		}
