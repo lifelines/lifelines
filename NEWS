@@ -2,6 +2,11 @@ LifeLines Source Release, Version 3.0.6
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
+New Features Added in 3.0.6.1
+===========================
+
+- New Display-to-Internal translation table.
+
 Bug fixes in 3.0.6.1-dev
 ==================
 
