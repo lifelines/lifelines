@@ -4,6 +4,7 @@ To release a new version, edit the version number in
   build/rpm/lifelines.spec
   src/hdrs/version.h
   build/msvc6/llines/llines.rc
+  docs/ll-*.xml
 
 Add an entry mentioning the new version in the
   ChangeLog

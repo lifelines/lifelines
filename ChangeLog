@@ -5,6 +5,10 @@
 
 	Bump version to 3.0.28.
 
+	* ChangeLog README.MAINTAINERS docs/ll-devguide.xml
+
+	Add manuals to list of files (README.MAINTAINERS) to have version bumped.
+
 2003-05-09 Perry Rapp
 
 	* ChangeLog po/de.po
