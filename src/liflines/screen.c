@@ -2894,7 +2894,7 @@ clear_hseg (WINDOW *win, INT row, INT x1, INT x2)
 	/* workaround for curses bug with spacs */
 	if (getoptint("ForceScreenErase", 0) > 0) {
 		/* fill virtual output with dots */
-		color_hseg(win, row, x1, x2, '.');
+		color_hseg(win, row, x1, x2, '_');
 		wnoutrefresh(win);
 		/* now fill it back with spaces */
 		color_hseg(win, row, x1, x2, ' ');
@@ -3494,8 +3494,10 @@ wipe_window_rect (UIWINDOW uiwin, LLRECT rect)
 		redrawwin, instead of using wrefresh.
 		Perry, 2002.05.27
 		*/
-		uicolor(uiwin, rect, '.');
+		/*
+		uicolor(uiwin, rect, '=');
 		wnoutrefresh(win);
+		*/
 		/* now fill it back with spaces */
 		uicolor(uiwin, rect, ' ');
 		redrawwin(win);
