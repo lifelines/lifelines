@@ -2,6 +2,11 @@ LifeLines Source Release, Version 3.0.21
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
+New features added in 3.0.21
+============================
+
+- New commandline option -I to set property name & value
+
 Bug fixes in 3.0.21
 ============================
 

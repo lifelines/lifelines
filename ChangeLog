@@ -12,6 +12,10 @@
 
 	Add -I argument to pass in properties from commandline (eg, -Iroot_indi=I1).
 
+	* ChangeLog NEWS build/rpm/lifelines.spec
+
+	Add llexec to rpm. Mention new -I param in NEWS.
+
 2002-10-06 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp

@@ -34,6 +34,7 @@ make
 %install
 install -d -m 755 $RPM_BUILD_ROOT/usr/local/bin
 install -s -m 755 src/liflines/llines $RPM_BUILD_ROOT/usr/local/bin
+install -s -m 755 src/liflines/llexec $RPM_BUILD_ROOT/usr/local/bin
 install -s -m 755 src/tools/dbverify $RPM_BUILD_ROOT/usr/local/bin
 
 install -d -m 755 $RPM_BUILD_ROOT/usr/local/share/locale/de/LC_MESSAGES
@@ -57,6 +58,7 @@ install -m 644 docs/llines.1 $RPM_BUILD_ROOT/usr/local/man/man1/llines.1
 %doc README ChangeLog NEWS AUTHORS LICENSE docs/lifelines.sgml docs/quickref.pdf docs/quickref.ps
 
 /usr/local/bin/llines
+/usr/local/bin/llexec
 /usr/local/bin/dbverify
 /usr/local/share/locale/de/LC_MESSAGES/lifelines.mo
 /usr/local/share/locale/fr/LC_MESSAGES/lifelines.mo
@@ -65,6 +67,8 @@ install -m 644 docs/llines.1 $RPM_BUILD_ROOT/usr/local/man/man1/llines.1
 /usr/local/man/man1/llines.1
 
 %changelog
+* Mon Oct 07 2002 Perry Rapp
+- Add new binary llexec
 * Sun Sep 29 2002 Perry Rapp
 - Implement patch by Karl DeBisschop: adds build root, list reports as group instead of individually
 - Add dbverify, de.po, fr.po, sv.po
