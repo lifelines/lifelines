@@ -3,10 +3,14 @@
 	* gedlib/translat.c interp/builtin.c:
 	Changed a variable name for more convenient greps.
 
+	* ChangeLog gedlib/keytonod.c gedlib/node.c gedlib/xreffile.c
+	hdrs/cache.h hdrs/gedcom.h hdrs/interpi.h interp/functab.c
+	interp/interp.c interp/more.c interp/yacc.h:
 	Combined some xref code, and added firsti, lasti etc.
 	Sorted xref lists (when read, and then kept them sorted in memory).
 	Combined code into get_indi_pvalue_from_keynum.
 	Implemented __lastindi & __lastfam.
+	Fixed firstindi, nextindi.., firstfam,nextfam,...
 	Added NOD0 type to cacheel to hold info on the entire record (indi...).
 
 2000-12-29 Perry Rapp <puddle@users.sourceforge.net>
