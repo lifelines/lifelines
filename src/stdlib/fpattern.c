@@ -72,7 +72,7 @@ static const char	copyright[] =
 #include <locale.h>
 #include <stdio.h>
 #include <string.h>
-#ifdef _MSC_VER // Microsoft Visual C++
+#ifdef _MSC_VER /* Microsoft Visual C++ */
 #include <stdlib.h>
 #define sleep(q) Sleep(q*1000)
 #include <windows.h>

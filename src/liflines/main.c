@@ -102,7 +102,6 @@ BOOLEAN opt_nocb  = FALSE;	/* no cb. data is displayed if TRUE */
 BOOLEAN alloclog  = FALSE;	/* alloc/free debugging */
 BOOLEAN keyflag   = TRUE;	/* show key values */
 BOOLEAN readonly  = FALSE;	/* database is read only */
-BOOLEAN forceopen = FALSE;	/* force database status to 0 */
 BOOLEAN writeable = FALSE;	/* database must be writeable */
 BOOLEAN cursesio  = TRUE;	/* use curses i/o */
 BOOLEAN alldone   = FALSE;	/* completion flag */
@@ -119,10 +118,11 @@ STRING readpath = NULL;		/* database path used to open */
  * local function prototypes
  *********************************************/
 
+static BOOLEAN is_unadorned_directory(STRING path);
+static BOOLEAN open_or_create_database(BOOLEAN forceopen, STRING dbrequested, STRING dbused);
+static void platform_init(void);
 static void show_open_error(INT dberr);
 static BOOLEAN trytocreate(STRING);
-static void platform_init(void);
-static int open_database(STRING dbpath, STRING dbactual);
 
 /*********************************************
  * local function definitions
@@ -140,8 +140,9 @@ main (INT argc,
 	extern int optind;
 	char * msg;
 	int c,code=1;
-	STRING dbpath=NULL; /* database (path) requested */
-	STRING dbactual=NULL; /* database (path) found */
+	STRING dbrequested=NULL; /* database (path) requested */
+	STRING dbused=NULL; /* database (path) found */
+	BOOLEAN forceopen = FALSE;	/* force database status to 0 */
 
 #ifdef OS_LOCALE
 	setlocale(LC_ALL, "");
@@ -257,30 +258,28 @@ main (INT argc,
 	/* Get Database Name (Prompt or Command-Line) */
 	if (c <= 0) {
 		/* ask_for_lldb returns static buffer, we save it below */
-		dbpath = ask_for_lldb(idldir, "enter path: ", lloptions.lldatabases);
-		if (ISNULL(dbpath)) {
+		dbrequested = ask_for_lldb(idldir, "enter path: ", lloptions.lldatabases);
+		if (ISNULL(dbrequested)) {
 			llwprintf(iddbse);
 			goto finish;
 		}
 	} else {
-		dbpath = (unsigned char *)argv[optind];
-		if (ISNULL(btreepath)) {
+		dbrequested = (unsigned char *)argv[optind];
+		if (ISNULL(dbrequested)) {
 			showusage = TRUE;
 			goto usage;
 		}
 	}
 	/* we will own the memory in dbpath */
-	dbpath = strsave(dbpath);
+	dbrequested = strsave(dbrequested);
 
-	
 	/* search for database */
-	// TO DO dbpath = find_database(btreepath); 
 	/* search for file in lifelines path */
-	dbactual = filepath(dbpath, "r", lloptions.lldatabases, NULL);
-	if (!dbactual) dbactual = dbpath;
+	dbused = filepath(dbrequested, "r", lloptions.lldatabases, NULL);
+	if (!dbused) dbused = dbrequested;
 
-	/* Open Database */
-	if (!open_database(dbpath, dbactual)) goto finish;
+	if (!open_or_create_database(forceopen, dbrequested, dbused))
+		goto finish;
 
 	/* Start Program */
 	init_lifelines_db();
@@ -362,118 +361,39 @@ is_unadorned_directory (STRING path)
 	return TRUE;
 }
 /*==================================================
- * open_database_impl -- open database
- * dbpath: database to report
- * dbactual: actual database path (may be relative also)
- * If the llwprintfs were moved out of here, this could
- * be reused by non-curses versions
+ * open_or_create_database -- open database, prompt for
+ *  creating new one if it doesn't exist
+ * if fails, displays error (show_open_error) and returns 
+ *  FALSE
+ * dbrequested database specified by user
+ * dbused: actual database path (may be relative also, if not found yet)
+ * Created: 2001/04/29, Perry Rapp
  *================================================*/
 static BOOLEAN
-open_database_impl (void)
+open_or_create_database (BOOLEAN forceopen, STRING dbrequested, STRING dbused)
 {
-	int c;
-
-	if (forceopen) {
-		/*
-		Forcefully alter reader/writer count to 0.
-		But do check keyfile2 checks first (in case it is a
-		database from a different alignment).
-		*/
-		char scratch[200];
-		FILE *fp;
-		KEYFILE1 kfile1;
-		KEYFILE2 kfile2;
-		struct stat sbuf;
-		sprintf(scratch, "%s/key", readpath);
-		if (stat(scratch, &sbuf) || !S_ISREG(sbuf.st_mode)) {
-			llwprintf("Database error -- ");
-			llwprintf("could not open, read or write the key file.");
-			return FALSE;
-		}
-		if (!(fp = fopen(scratch, LLREADBINARYUPDATE)) ||
-		    fread(&kfile1, sizeof(kfile1), 1, fp) != 1) {
-			llwprintf("Database error -- ");
-			llwprintf("could not open, read or write the key file.");
-			return FALSE;
-		}
-		if (fread(&kfile2, sizeof(kfile2), 1, fp) == 1) {
-			if (!validate_keyfile2(&kfile2)) {
-				llwprintf("Database error -- ");
-				llwprintf("Invalid keyfile!");
-				return FALSE;
-			}
-		}
-		kfile1.k_ostat = 0;
-		rewind(fp);
-		if (fwrite(&kfile1, sizeof(kfile1), 1, fp) != 1) {
-			llwprintf("Database error -- ");
-			llwprintf("could not open, read or write the key file.");
-			printf("Cannot properly write the new key file.\n");
-			fclose(fp);
-	 		return FALSE;
-		}
-		fclose(fp);
-		/* okay, cleared reader/writer count
-		now fall through to normal opening code */
-	}
-	if (!(BTR = openbtree(readpath, FALSE, !readonly))) {
-		switch (bterrno) {
-		case BTERR_NODB:
-		case BTERR_NOKEY:	{
-				/* error was only that db doesn't exist */
-				/* unspecified new db is put in llnewdbdir */
-				if (!selftest && is_unadorned_directory(btreepath)) {
-					readpath = strsave(concat_path(lloptions.llnewdbdir, btreepath));
-				}
-				/* see if we can make a new db */
-				if(!trytocreate(readpath)) {
-					show_open_error(bterrno);
-					return FALSE;
-				}
-			}
-			break;
-		default:
-			show_open_error(bterrno);
-			return FALSE;
-		}
-	}
-	readonly = !bwrite(BTR);
-	if (readonly && writeable) {
-		c = bkfile(BTR).k_ostat;
-		if (c < 0) {
-			llwprintf("The database is already opened for ");
-			llwprintf("write access.\n  Try again later.");
-		} else {
-			llwprintf("The database is already opened for ");
-			llwprintf("read access by %d users.\n  ", c - 1);
-			llwprintf("Try again later.");
-		}
-		close_lifelines();
+	/* Open Database */
+	if (open_database(forceopen, dbrequested, dbused))
+		return TRUE;
+	/* filter out real errors */
+	if (bterrno != BTERR_NODB && bterrno != BTERR_NOKEY)
+	{
+		show_open_error(bterrno);
 		return FALSE;
 	}
-	return TRUE;
-}
-/*==================================================
- * open_database -- open database
- * dbpath: database to report
- * dbactual: actual database path (may be relative also)
- *================================================*/
-static BOOLEAN
-open_database (STRING dbpath, STRING dbactual)
-{
-	BOOLEAN rtn;
-
-	/* tentatively copy paths */
-	btreepath=strsave(dbpath);
-	readpath=strsave(dbactual);
-
-	rtn = open_database_impl();
-	if (!rtn) {
-		/* open failed so clean up */
-		close_lifelines();
-		strfree(&btreepath);
-		strfree(&readpath);
+	/*
+	error was only that db doesn't exist, so lets try
+	making a new one -- unspecified new db is put in llnewdbdir
+	*/
+	if (!selftest && is_unadorned_directory(dbused)) {
+		STRING temp = dbused;
+		dbused = strsave(concat_path(lloptions.llnewdbdir, dbused));
+		stdfree(temp);
 	}
-	return rtn;
+	/* see if we can make a new db */
+	if (trytocreate(dbused))
+		return TRUE; /* ok it worked */
+	/* still no dice */
+	show_open_error(bterrno);
+	return FALSE;
 }
-

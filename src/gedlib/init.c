@@ -33,6 +33,7 @@
 
 #include "sys_inc.h"
 #include "llstdlib.h"
+#include "arch.h"
 #include "btree.h"
 #include "table.h"
 #include "translat.h"
@@ -55,13 +56,20 @@ STRING editfile=NULL; /* file used for editing, name obtained via mktemp */
  * external/imported variables
  *********************************************/
 
-extern BOOLEAN selftest;
+extern BOOLEAN selftest, writeable;
+extern STRING btreepath,readpath;
 
 /*********************************************
  * local function prototypes
  *********************************************/
 
 static STRING getsaveenv(STRING key);
+
+/*********************************************
+ * local variables
+ *********************************************/
+
+static int rdr_count = 0;
 
 /*********************************************
  * local function definitions
@@ -190,4 +198,188 @@ close_lifelines (void)
 		stdfree(editstr);
 		editstr=NULL;
 	}
+}
+/*==================================================
+ * force_open_db -- open a writer-locked database
+ *  returns FALSE & sets bterrno if error (eg, keyfile corrupt)
+ *================================================*/
+static BOOLEAN
+force_open_db ()
+{
+	/*
+	Forcefully alter reader/writer count to 0.
+	But do check keyfile2 checks first (in case it is a
+	database from a different alignment).
+	*/
+	char scratch[200];
+	FILE *fp=NULL;
+	BOOLEAN result=FALSE;
+	KEYFILE1 kfile1;
+	KEYFILE2 kfile2;
+	struct stat sbuf;
+	sprintf(scratch, "%s/key", readpath);
+	if (stat(scratch, &sbuf) || !S_ISREG(sbuf.st_mode)) {
+		bterrno = BTERR_KFILE;
+		goto force_open_db_exit;
+	}
+	if (!(fp = fopen(scratch, LLREADBINARYUPDATE)) ||
+		  fread(&kfile1, sizeof(kfile1), 1, fp) != 1) {
+		bterrno = BTERR_KFILE;
+		goto force_open_db_exit;
+	}
+	if (fread(&kfile2, sizeof(kfile2), 1, fp) == 1) {
+		if (!validate_keyfile2(&kfile2)) {
+			/* validate set bterrno */
+			goto force_open_db_exit;
+		}
+	}
+	kfile1.k_ostat = 0;
+	rewind(fp);
+	if (fwrite(&kfile1, sizeof(kfile1), 1, fp) != 1) {
+		bterrno = BTERR_KFILE;
+		goto force_open_db_exit;
+	}
+	/* ok everything went successfully */
+	result=TRUE;
+
+force_open_db_exit:
+	if (fp) fclose(fp);
+	return result;
+}
+/*==================================================
+ * open_database_impl -- open database
+ * forceopen: user requesting override of write-locked db
+ *  uses globals btreepath & readpath
+ *  btreepath: database to report
+ *  readpath: actual database path (may be relative also)
+ * Upon failure, sets bterrno and returns false
+ *================================================*/
+static BOOLEAN
+open_database_impl (BOOLEAN forceopen)
+{
+	int c;
+
+	if (forceopen) {
+		if (!force_open_db()) {
+			return FALSE;
+		}
+
+		/* okay, cleared reader/writer count
+		now fall through to normal opening code */
+	}
+	/* call btree module to do actual open of BTR */
+	if (!(BTR = openbtree(readpath, FALSE, !readonly)))
+		return FALSE;
+	readonly = !bwrite(BTR);
+	if (readonly && writeable) {
+		int myerr=0;
+		c = bkfile(BTR).k_ostat;
+		if (c < 0) {
+			myerr = BTERR_WRITER;
+		} else {
+			rdr_count = c-1;
+			myerr = BTERR_READERS;
+		}
+		/* close_lifelines could set bterrno itself */
+		close_lifelines();
+		bterrno = myerr;
+		return FALSE;
+	}
+	return TRUE;
+}
+/*==================================================
+ * open_database -- open database
+ * dbrequested: database to report
+ * dbused: actual database path (may be relative also)
+ *================================================*/
+BOOLEAN
+open_database (BOOLEAN forceopen, STRING dbrequested, STRING dbused)
+{
+	BOOLEAN rtn;
+
+	/* tentatively copy paths into gedlib module versions */
+	btreepath=strsave(dbrequested);
+	readpath=strsave(dbused);
+
+	rtn = open_database_impl(forceopen);
+	if (!rtn) {
+		/* open failed so clean up, preserve bterrno */
+		int myerr = bterrno;
+		close_lifelines();
+		bterrno = myerr;
+		strfree(&btreepath);
+		strfree(&readpath);
+	}
+	return rtn;
+}
+/*===================================================
+ * describe_dberror -- Describe database opening error
+ * dberr: [in] error whose description is sought
+ * buffer: [out] buffer for description
+ * buflen: [in]  size of buffer
+ *=================================================*/
+void
+describe_dberror (INT dberr, STRING buffer, INT buflen)
+{
+	char localbuff[128];
+	STRING ptr = buffer;
+	STRING msg;
+	INT mylen = buflen;
+
+	if (dberr != BTERR_WRITER)
+		llstrcatn(&ptr, "Database error -- ", &mylen);
+
+	switch (dberr) {
+	case BTERR_NODB:
+		msg = "requested database does not exist.";
+		break;
+	case BTERR_DBBLOCKEDBYFILE:
+		msg = "db directory is file, not directory.";
+		break;
+	case BTERR_DBCREATEFAILED:
+		msg = "creation of new database failed.";
+		break;
+	case BTERR_DBACCESS:
+		msg = "error accessing database directory.";
+		break;
+	case BTERR_NOKEY:
+		msg = "no keyfile (directory does not appear to be a database.";
+		break;
+	case BTERR_INDEX:
+		msg = "could not open, read or write an index file.";
+		break;
+	case BTERR_KFILE:
+		msg = "could not open, read or write the key file.";
+		break;
+	case BTERR_BLOCK:
+		msg = "could not open, read or write a block file.";
+		break;
+	case BTERR_LNGDIR:
+		msg = "name of database is too long.";
+		break;
+	case BTERR_WRITER:
+		msg = "The database is already open for writing.";
+		break;
+	case BTERR_ILLEGKF:
+		msg = "keyfile is corrupt.";
+		break;
+	case BTERR_ALIGNKF:
+		msg = "keyfile is wrong alignment.";
+		break;
+	case BTERR_VERKF:
+		msg = "keyfile is wrong version.";
+		break;
+	case BTERR_EXISTS:
+		msg = "Existing database found.";
+		break;
+	case BTERR_READERS:
+		sprintf(localbuff
+			, "The database is already opened for read access by %d users.\n  "
+			, rdr_count);
+		msg = localbuff;
+	default:
+		msg = "Undefined database error -- This can't happen.";
+		break;
+	}
+	llstrcatn(&ptr, msg, &mylen);
 }

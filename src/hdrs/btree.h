@@ -133,6 +133,7 @@ RECORD_STATUS write_record_to_file(BTREE btree, RKEY rkey, STRING file);
 /* opnbtree.c */
 BOOLEAN closebtree(BTREE);
 void describe_dberror(INT dberr, STRING buffer, INT buflen);
+int open_database(BOOLEAN forceopen, STRING dbpath, STRING dbactual);
 BTREE openbtree(STRING, BOOLEAN, BOOLEAN);
 BOOLEAN validate_keyfile2(KEYFILE2 *);
 
@@ -161,15 +162,16 @@ enum {
 , BTERR_DBCREATEFAILED    /* failed to create db directory */
 , BTERR_DBACCESS          /* access error to db directory */
 , BTERR_NOKEY             /* no keyfile */
-, BTERR_KFILE              /*problem with the key file*/
+, BTERR_KFILE             /*problem with the key file*/
 , BTERR_INDEX             /*problem with an index file*/
-, BTERR_BLOCK              /*problem with a data block file*/
-, BTERR_LNGDIR             /*base directory name too long*/
-, BTERR_WRITER             /*can't open database because writer has it*/
-, BTERR_ILLEGKF            /* illegal keyfile */
-, BTERR_ALIGNKF            /* wrong alignment key file */
-, BTERR_VERKF              /* wrong version key file */
+, BTERR_BLOCK             /*problem with a data block file*/
+, BTERR_LNGDIR            /*base directory name too long*/
+, BTERR_WRITER            /*can't open database because writer has it*/
+, BTERR_ILLEGKF           /* illegal keyfile */
+, BTERR_ALIGNKF           /* wrong alignment key file */
+, BTERR_VERKF             /* wrong version key file */
 , BTERR_EXISTS            /* previous database found (create was specified) */
+, BTERR_READERS           /* db locked by readers (string in custom string) */
 
 };
 
