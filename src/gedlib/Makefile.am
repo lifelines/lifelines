@@ -16,9 +16,10 @@ libgedcom_a_SOURCES = brwslist.c charmaps.c choose.c codesets.c \
 	valid.c valtable.c xlat.c xreffile.c
 
 # $(top_srcdir)          for config.h
-# $(top_srcdir)/intl     for libintl
+# $(top_srcdir)/intl     for intl headers
+# ../../intl             for generated libintl.h
 # $(top_srcdir)/src/hdrs for headers
-INCLUDES=-I$(top_srcdir) -I$(top_srcdir)/intl -I$(top_srcdir)/src/hdrs
+INCLUDES=-I$(top_srcdir) -I$(top_srcdir)/intl -I../../intl -I$(top_srcdir)/src/hdrs
 
 EXTRA_DIST = gedcomi.h
 

@@ -1,3 +1,31 @@
+2003-01-05 Perry Rapp
+
+	* ABOUT-NLS ChangeLog configure.in build/Makefile.am
+	build/gettext/README build/gettext/gettext.m4
+	build/gettext/iconv.m4 build/gettext/lcmessage.m4
+	build/gettext/lib-link.m4 intl/ChangeLog intl/Makefile.in
+	intl/VERSION intl/bindtextdom.c intl/config.charset
+	intl/dcgettext.c intl/dcigettext.c intl/dcngettext.c
+	intl/dgettext.c intl/dngettext.c intl/eval-plural.h
+	intl/gettext.c intl/gettextP.h intl/gmo.h intl/intl-compat.c
+	intl/l10nflist.c intl/libgnuintl.h intl/loadinfo.h
+	intl/loadmsgcat.c intl/localcharset.c intl/localename.c
+	intl/ngettext.c intl/os2compat.c intl/plural-exp.h
+	intl/textdomain.c src/arch/Makefile.am src/btree/Makefile.am
+	src/gedlib/Makefile.am src/interp/Makefile.am
+	src/liflines/Makefile.am src/stdlib/Makefile.am
+	src/tools/Makefile.am
+	*NEW build/gettext/intdiv0.m4
+	*NEW build/gettext/inttypes-pri.m4
+	*NEW build/gettext/inttypes.m4
+	*NEW build/gettext/inttypes_h.m4
+	*NEW build/gettext/stdint_h.m4
+	*NEW build/gettext/uintmax_t.m4
+	*NEW build/gettext/ulonglong.m4
+
+	gettextized to 0.11.5. Added ../../intl to all source includes
+	(to get generated libintl.h for systems lacking it).
+
 2003-01-04 Matt Emmerton
 
 	* ChangeLog src/arch/Makefile.am

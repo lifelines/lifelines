@@ -28,9 +28,10 @@ dbverify_LDADD = ../gedlib/libgedcom.a ../btree/libbtree.a \
 #	$(LINK) $(dbverify_LDFLAGS) $(dbverify_OBJECTS) $(dbverify_LDADD)
 
 # $(top_srcdir)          for config.h
-# $(top_srcdir)/intl     for libintl
+# $(top_srcdir)/intl     for intl headers
+# ../../intl             for generated libintl.h
 # $(top_srcdir)/src/hdrs for headers
-INCLUDES=-I$(top_srcdir) -I$(top_srcdir)/intl -I$(top_srcdir)/src/hdrs
+INCLUDES=-I$(top_srcdir) -I$(top_srcdir)/intl -I../../intl -I$(top_srcdir)/src/hdrs
 
 # Stuff for gettext (copied from gnu hello-1.3.35)
 localedir = $(datadir)/locale

@@ -7,9 +7,17 @@
 EXTRA_DIST = rpm/lifelines.spec \
              \
              gettext/README gettext/codeset.m4 gettext/gettext.m4 \
-             gettext/glibc21.m4 gettext/iconv.m4 gettext/isc-posix.m4 \
+             gettext/glibc21.m4 gettext/iconv.m4 \
+             gettext/intdiv0.m4 \
+             gettext/inttypes-pri.m4 \
+             gettext/inttypes.m4 \
+             gettext/inttypes_h.m4 \
+             gettext/isc-posix.m4 \
              gettext/lcmessage.m4 gettext/lib-ld.m4 gettext/lib-link.m4 \
              gettext/lib-prefix.m4 gettext/progtest.m4 \
+             gettext/stdint_h.m4 \
+             gettext/uintmax_t.m4 \
+             gettext/ulonglong.m4 \
              \
              autotools/config.sub autotools/config.guess autotools/depcomp \
              autotools/missing autotools/mkinstalldirs autotools/install-sh \
