@@ -90,6 +90,6 @@ void transl_load_xlats(void);
 void transl_parse_codeset(CNSTRING codeset, ZSTR zcsname, LIST * subcodes);
 void transl_release_xlat(XLAT xlat);
 void transl_set_legacy_tt(INT trnum, TRANTABLE tt);
-BOOLEAN transl_xlat(XLAT xlat, ZSTR zstr);
+void transl_xlat(XLAT xlat, ZSTR zstr);
 
 #endif /* _TRANSLAT_H */

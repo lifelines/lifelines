@@ -33,6 +33,7 @@ struct tag_xlat {
 	LIST steps;
 	BOOLEAN adhoc;
 	BOOLEAN valid;
+	void * legvp; /* hack pointer to legacy tt */
 };
 /* dynamically loadable translation table, entry in dyntt list */
 typedef struct tag_dyntt {
@@ -675,3 +676,14 @@ xl_release_xlat (XLAT xlat)
 	to recopy the list)
 	*/
 }
+void
+xl_set_legtt (XLAT xlat, void * vp)
+{
+	xlat->legvp = vp;
+}
+void *
+xl_get_legtt (XLAT xlat)
+{
+	return xlat->legvp;
+}
+

@@ -57,6 +57,11 @@ extern BTREE BTR;
  * local types
  *********************************************/
 
+/* legacy (embedded) translation table */
+struct legacytt_s {
+	TRANTABLE tt;
+	BOOLEAN first; /* comes at start of translation ? */
+};
 /* a predefined conversion, such as editor-to-internal */
 struct conversion_s {
 	INT trnum;
@@ -72,11 +77,6 @@ struct conversion_s {
 struct zone_s {
 	INT znum;
 	CNSTRING name;
-};
-/* legacy (embedded) translation table */
-struct legacytt_s {
-	TRANTABLE tt;
-	BOOLEAN first; /* comes at start of translation ? */
 };
 
 /*********************************************
@@ -295,10 +295,19 @@ transl_load_all_tts (void)
  * xl_do_xlat -- Perform a translation on a string
  * Created: 2002/11/28 (Perry Rapp)
  *========================================================*/
-BOOLEAN
+void
 transl_xlat (XLAT xlat, ZSTR zstr)
 {
-	return xl_do_xlat(xlat, zstr);
+	struct legacytt_s * legtt = xl_get_legtt(xlat);
+	if (legtt && legtt->tt && legtt->first) {
+		custom_translate(zstr, legtt->tt);
+	}
+
+	xl_do_xlat(xlat, zstr);
+
+	if (legtt && legtt->tt && !legtt->first) {
+		custom_translate(zstr, legtt->tt);
+	}
 }
 /*==========================================================
  * transl_init -- One-time initialization of this module
@@ -348,11 +357,17 @@ transl_load_xlats (void)
 			in which to store any legacy translation tables */
 			conv->xlat = xl_get_null_xlat();
 		}
+		/* 2003-09-09, Perry
+		I just added this today quickly today to get legacy translations 
+		working; this is kind of confusing and ought to be cleaned
+		up */
+		xl_set_legtt(conv->xlat, 0);
 		if (BTR) {
 			TRANTABLE tt=0;
 			if (init_map_from_rec(conv->key, i, &tt) && tt) {
 				transl_set_legacy_tt(i, tt);
 			}
+			xl_set_legtt(conv->xlat, &legacytts[i]);
 		}
 	}
 }
