@@ -1,3 +1,10 @@
+2000-12-12 Perry Rapp <prapp@users.sourceforge.net>
+
+	* gedlib/messages.c liflines/scan.c stdlib/stdstrng.c:
+	Revised name scan to do simple wildcards (. and
+	trailing *) and use lifelines case-insensitive code
+	(which handles the Finnish option).
+
 2000-12-11  Marc Nozell  <marc@nozell.com>
 
 	* liflines/scan.c: Fix broken build.  strcmpi (Windows) vs
