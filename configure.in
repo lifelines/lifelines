@@ -43,11 +43,24 @@ if test "${ac_cv_prog_gcc}" = "yes"; then
   CFLAGS="${CFLAGS} -g"
 fi
 
+# Are we using Cygwin Tools
+AC_ARG_WITH(cygwin,
+    [  --with-cygwin           Using the Cygwin tools on a Windows platform                                      ],
+    [with_cygwin=$withval],
+    [with_cygwin=no]
+)
+
+if test "$with_cygwin" = "yes"
+then
+  dnl Add flags needed to link with curses library
+  CFLAGS="${CFLAGS} -static -DBROKEN_LINKER"
+fi
+
 # Shall we build the docs?
 AC_ARG_WITH(docs,
-    [  --with-docs          Skip building of the documentation. (useful if you don't have sgmltools installed)],
+    [  --with-docs             Build the docs (requires sgmltools) ],
     [with_docs=$withval],
-    [with_docs=yes]
+    [with_docs=no]
 )
 
 docs_dirs="docs"
