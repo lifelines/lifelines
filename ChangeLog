@@ -22,6 +22,18 @@
 	Implement GuiCodesetOutput option instead of hardcoding //TRANSLIT
 	always for output to display.
 
+	* ChangeLog
+	*NEW: build/msvc6/btedit/btedit.rc build/msvc6/btedit/bteditCmd.dsp
+	*NEW: build/msvc6/btedit/bteditCmd.dsw build/msvc6/btedit/resource.h
+	*NEW: build/msvc6/dbverify/dbVerify.rc
+	*NEW: build/msvc6/dbverify/dbverifyCmd.dsp
+	*NEW: build/msvc6/dbverify/dbverifyCmd.dsw
+	*NEW: build/msvc6/dbverify/resource.h build/msvc6/llines/config.h
+	*NEW: build/msvc6/llines/llines.rc build/msvc6/llines/llinesprj.dsp
+	*NEW: build/msvc6/llines/llinesprj.dsw build/msvc6/llines/resource.h:
+
+	Add MVC build stuff that didn't get added before.
+
 2002-06-22 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/init.c stdlib/stdstrng.c:
