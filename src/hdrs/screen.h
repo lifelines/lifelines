@@ -48,6 +48,8 @@
 #include <curses.h>
 #endif
 
+#include <stdarg.h>
+
 #ifndef TRUE
 #	define TRUE 1
 #	define FALSE 0
@@ -144,6 +146,7 @@ void mprintf (STRING fmt, ...);
 void message (STRING);
 STRING message_string (void);
 void place_std_msg (void);
+void llvwprintf (STRING fmt, va_list args);
 void llwprintf (STRING fmt, ...);
 void clearw (void);
 void wfield (INT, INT, STRING);

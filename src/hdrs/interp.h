@@ -298,7 +298,7 @@ PNODE mothers_node(PNODE, STRING, STRING, STRING, PNODE);
 INT num_params(PNODE);
 PNODE parents_node(PNODE, STRING, STRING, PNODE);
 PNODE proc_node(STRING, PNODE, PNODE);
-void prog_error(PNODE, STRING);
+void prog_error(PNODE, STRING, ...);
 PNODE return_node(PNODE);
 void set_parents(PNODE, PNODE);
 void show_one_pnode(PNODE);

@@ -1172,13 +1172,23 @@ void place_std_msg (void)
 	place_cursor();
 }
 /*=================================================
+ * llvwprintf -- Called as wprintf(fmt, argp)
+ *===============================================*/
+void
+llvwprintf (STRING fmt,
+            va_list args)
+{
+	vwprintw(stdout_win, fmt, args);
+}
+/*=================================================
  * llwprintf -- Called as wprintf(fmt, arg, arg, ...)
  *===============================================*/
-void llwprintf (STRING fmt, ...)
+void
+llwprintf (STRING fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	vwprintw(stdout_win, fmt, args);
+	llvwprintf(fmt, args);
 	va_end(args);
 }
 
