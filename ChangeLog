@@ -10,6 +10,10 @@
 
 	Set win32 version to 3.0.39.15007.
 
+	* ChangeLog NEWS
+
+	Add recent bugfixes for arcane family issues.
+
 2005-01-07 Matt Emmerton
 
 	* ChangeLog build/autotools/acinclude.m4

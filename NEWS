@@ -13,6 +13,8 @@ Bug fixes in 3.0.39
 - Importing GED file with keys with leading zeros (eg, I01) led to crash (sf#1094199)
 - A bad xref (eg, "@I23") would cause report engine to crash (sf#1093628)
 - Inserting 0 into a table could lead to crash (sf#954704)
+- Removing unsexed spouse led to ASSERT (sf#1097583,sf#1097608)
+- Removing empty child led to ASSERT (sf#1097629)
 
 New features added in 3.0.38
 ============================
