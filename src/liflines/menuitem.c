@@ -58,14 +58,14 @@ struct CmdArray_s {
  *********************************************/
 
 /* alphabetical */
-static void add_menu_item(CMDARRAY cmds, MenuItem * mitem);
+static void add_menu_item(STRING Title, CMDARRAY cmds, MenuItem * mitem);
 static CMDARRAY create_cmd_array(INT alloc);
 static void copy_cmditem(CMDITEM dest, CMDITEM src);
 static BOOLEAN find_cmd(CMDARRAY cmds, char c, INT * pos);
 static void free_cmds(CMDARRAY cmds);
 static void get_menu_choice(STRING display, STRING choice, INT max);
 static void grow_cmd_array(CMDARRAY cmds);
-static void insert_cmd(CMDARRAY cmds, STRING str, INT cmdnum
+static void insert_cmd(STRING Title, CMDARRAY cmds, STRING str, INT cmdnum
 	, STRING display);
 static INT menuitem_find_cmd(CMDARRAY cmds, STRING cmd);
 static void setup_menu(ScreenInfo * sinfo, STRING Title, INT MenuRows
@@ -450,18 +450,19 @@ setup_menu (ScreenInfo * sinfo, STRING Title, INT MenuRows, INT MenuCols
 	sinfo->Menu = Menu;
 	sinfo->Commands = cmds;
 	for (i=0; i<Size; i++)
-		add_menu_item(cmds, Menu[i]);
-	add_menu_item(cmds, &g_MenuItemOther);
-	add_menu_item(cmds, &g_MenuItemQuit);
+		add_menu_item(Title, cmds, Menu[i]);
+	add_menu_item(Title, cmds, &g_MenuItemOther);
+	add_menu_item(Title, cmds, &g_MenuItemQuit);
 }
 /*============================
  * add_menu_item - add cmd for menu to cmdarray
+ *  Title: [IN]  title of menu (only used for log msgs)
  *  cmds:  [I/O] cmdarray (tree used for command recognition)
  *  mitem: [IN]  new menu item to add to cmds
  * Created: 2002/01/24
  *==========================*/
 static void
-add_menu_item (CMDARRAY cmds, MenuItem * mitem)
+add_menu_item (STRING Title, CMDARRAY cmds, MenuItem * mitem)
 {
 	INT i;
 	char display[32];
@@ -476,7 +477,7 @@ add_menu_item (CMDARRAY cmds, MenuItem * mitem)
 		for (i=1; i<=9; i++) {
 			char choice[2];
 			sprintf(choice, "%d", i);
-			insert_cmd(cmds, choice, CMD_CHILD_DIRECT0+i, display);
+			insert_cmd(Title, cmds, choice, CMD_CHILD_DIRECT0+i, display);
 		}
 	} else {
 		char choice[9];
@@ -485,7 +486,7 @@ add_menu_item (CMDARRAY cmds, MenuItem * mitem)
 		else
 			get_menu_choice(display, choice, sizeof(choice));
 		/* add to nested menu arrays (stored by choice keys */
-		insert_cmd(cmds, choice, mitem->Command, display);
+		insert_cmd(Title, cmds, choice, mitem->Command, display);
 	}
 }
 /*============================
@@ -575,27 +576,39 @@ find_cmd (CMDARRAY cmds, char c, INT * pos)
 }
 /*============================
  * insert_cmd -- add cmd to array (recursive)
+ *  Title:   [IN]  title of menu (for log msgs)
+ *  cmds:    [I/O] cmd tree or subtree to which we add
+ *  str:     [IN]  remaining part of cmd hotkey sequence
+ *  cmdnum:  [IN]  cmd code to store (eg, CMD_QUIT)
+ *  display: [IN]  menu item text (for log msgs)
  * Created: 2001/02/01, Perry Rapp
  *==========================*/
 static void
-insert_cmd (CMDARRAY cmds, STRING str, INT cmdnum, STRING display)
+insert_cmd (STRING Title, CMDARRAY cmds, STRING str, INT cmdnum, STRING display)
 {
 	INT len = strlen(str);
 	INT pos;
-	char error[128];
 	char c = str[0];
 	if (find_cmd(cmds, c, &pos)) {
 		if (len==1) {
-			msg_error(error, _("Conflicting command string: %s"), display);
-			FATAL();
+			crashlog(_("In menu: %s"), Title);
+			if (cmds->array[pos].direct) {
+				crashlog(_("Duplicate hotkey for item: %s")
+					, display);
+			} else {
+				crashlog(_("Clash with longer hotkey in item: %s")
+					, display);
+				
+			}
 		} else {
 			/* multicharacter new cmd */
 			if (cmds->array[pos].direct) {
-				msg_error(error, _("Conflicting command string: %s"), display);
-				FATAL();
+				crashlog(_("In menu: %s"), Title);
+				crashlog(_("Clash with shorter hotkey in item: %s")
+					, display);
 			} else {
 				CMDARRAY subarr = (CMDARRAY)cmds->array[pos].value.w;
-				insert_cmd(subarr, &str[1], cmdnum, display);
+				insert_cmd(Title, subarr, &str[1], cmdnum, display);
 			}
 		}
 	} else {
@@ -614,7 +627,7 @@ insert_cmd (CMDARRAY cmds, STRING str, INT cmdnum, STRING display)
 			CMDARRAY newcmds = create_cmd_array(8);
 			cmds->array[pos].direct = FALSE;
 			cmds->array[pos].value.w = newcmds;
-			insert_cmd(newcmds, &str[1], cmdnum, display);
+			insert_cmd(Title, newcmds, &str[1], cmdnum, display);
 		}
 		cmds->used++;
 	}

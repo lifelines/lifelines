@@ -1,3 +1,16 @@
+2002-04-07 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog configure.in gedlib/charmaps.c gedlib/gstrings.c
+	gedlib/translat.c hdrs/gedcom.h hdrs/menuitem.h
+	hdrs/translat.h liflines/main.c liflines/menuitem.c po/LINGUAS
+	tools/Makefile.am
+	*NEW po/de.po:
+
+	Set crashlog file before initializing menus, so menuitem conflicts
+	will be logged. Revised menuitem to continue if menuitem conflict.
+	New German translation.
+	Fix tran_tables to be correct size.
+
 2002-03-04 Perry Rapp <puddle@users.sourceforge.net>
 
 	Update to Swedish translation.

@@ -54,6 +54,8 @@
   If Choices is 0 (as it is for all as of 2002.01), then the
   first characters of Display up to whitespace are used for the
   choice characters, eg, "f  Browse to fathers"
+  NB: The direct-to-child item is specially coded to use digits 1-9,
+  and does not use the Choices string.
 */
 typedef struct MenuItem_s {
 	STRING Display;
@@ -62,10 +64,7 @@ typedef struct MenuItem_s {
 	STRING LocalizedDisplay;
 } MenuItem;
 /*
-Note: MenuItem.Choices could be dropped, and the
-initializing code could read the choice from the beginning of Display
-up to the first space.
-Also, a LongDisplay could be added (for, eg, status bar,
+A LongDisplay could be added (for, eg, status bar,
 or for some type of extended command info display).
 - Perry Rapp, 2001/02/10
 */
@@ -88,9 +87,8 @@ typedef struct CmdItem_s * CMDITEM;
 typedef struct CmdArray_s * CMDARRAY;
 
 /* each screen has a lot of menu information */
-/* As of 2001/04/08, MenuCols can't be anything but 3
-until some work is done somewhere - and this menu system
-is not used by lists in the repository code - Perry */
+/* This menu system is only used by browse screens,
+and not the list screens nor the main menus */
 typedef struct ScreenInfo_struct {
 	STRING Title;    /* string at bottom of screen */
 	INT MenuRows;    /* height of menu (at start) */

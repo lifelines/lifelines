@@ -14,7 +14,7 @@ AM_CONFIG_HEADER(config.h)
 
 dnl Set of available languages (gettext)
 dnl Perry is using test entries in Italian (ascii) & Greek (utf-8)
-ALL_LINGUAS="el it sv"
+ALL_LINGUAS="de el it sv"
 
 AC_PREFIX_DEFAULT($HOME)
 

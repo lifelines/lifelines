@@ -18,11 +18,11 @@ dbverify_LDADD = ../gedlib/libgedcom.a ../btree/libbtree.a ../stdlib/libstdlib.a
 # how do btedit and dbverify get built?
 # (this is set up explicitly so they don't get $(LIBS) (no curses!)
 btedit$(EXEEXT): $(btedit_OBJECTS) $(btedit_DEPENDENCIES)
-	@rm -f btedit
+	@rm -f btedit$(EXEEXT)
 	$(LINK) $(btedit_LDFLAGS) $(btedit_OBJECTS) $(btedit_LDADD)
 
 dbverify$(EXEEXT): $(dbverify_OBJECTS) $(dbverify_DEPENDENCIES)
-	@rm -f dbverify
+	@rm -f dbverify$(EXEEXT)
 	$(LINK) $(dbverify_LDFLAGS) $(dbverify_OBJECTS) $(dbverify_LDADD)
 
 # .. for config.h, hdrs for lots of stuff, ../intl for libgnuintl.h

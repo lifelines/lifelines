@@ -379,6 +379,7 @@ generic_to_list_string (NODE node, STRING key, INT len, STRING delim, RFMT rfmt)
 }
 /*=======================================================
  * set_displaykeys -- Enable/disable keys in list strings
+ *  That is, whether or not to show key numbers in items
  * Created: 2001/01/01, Perry Rapp
  *=====================================================*/
 void

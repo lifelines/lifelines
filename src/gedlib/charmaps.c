@@ -42,7 +42,8 @@
  *********************************************/
 
 TRANTABLE tran_tables[] = {
-	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+	NULL, NULL, NULL, NULL, NULL, NULL, NULL
+	, NULL, NULL, NULL, NULL, NULL
 };
 char *map_keys[] = {
 	"MEDIN", "MINED", "MGDIN", "MINGD", "MDSIN", "MINDS", "MINRP"
@@ -95,6 +96,8 @@ void
 init_mapping (void)
 {
 	INT indx;
+	/* we assume here that NUM_TT_MAPS is size of tran_table */
+	ASSERT(NUM_TT_MAPS == ARRSIZE(tran_tables));
 	for (indx = 0; indx < NUM_TT_MAPS; indx++) {
 		if (!init_map_from_rec(indx, &tran_tables[indx])) {
 			msg_error("Error initializing %s map.\n"

@@ -56,8 +56,7 @@ struct Buffer_s;
 
 /* Variables */
 
-extern TRANTABLE tran_tables[];
-#define NUM_TT_MAPS 12
+extern TRANTABLE tran_tables[]; /* size is NUM_TT_MAPS */
 
 /* Functions */
 

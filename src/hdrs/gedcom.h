@@ -152,18 +152,33 @@ enum {
 	, BROWSE_UNK
 };
 
+/* custom translation tables */
+	/* MEDIN: translate editor characters to internal */
 #define MEDIN 0
+	/* MINED: translate internal characters to editor */
 #define MINED 1
+	/* MGDIN: translate gedcom file characters to internal */
 #define MGDIN 2
+	/* MGDIN: translate internal characters to gedcom file */
 #define MINGD 3
+	/* MDSIN: translate display characters to internal */
 #define MDSIN 4
+	/* MINDS: translate internal characters to display */
 #define MINDS 5
+	/* MINRP: translate internal characters to report */
 #define MINRP 6
+	/* MSORT: custom sort table, characters to numeric order */
 #define MSORT 7
+	/* MCHAR: character table (translation result unused) */
 #define MCHAR 8
+	/* MLCAS: translate character to lower-case (UNIMPLEMENTED) */
 #define MLCAS 9
+	/* MUCAS: translate character to upper-case (UNIMPLEMENTED) */
 #define MUCAS 10
+	/* MPREF: prefix to skip for sorting (UNIMPLEMENTED) */
 #define MPREF 11
+	/* number of maps listed above */
+#define NUM_TT_MAPS 12
 
 /*========
  * Globals

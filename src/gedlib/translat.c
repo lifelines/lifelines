@@ -478,6 +478,7 @@ custom_sort (char *str1, char *str2, INT * rtn)
 	STRING ptr1=str1, ptr2=str2;
 	INT len1, len2;
 	if (!tts) return FALSE;
+/* This was an attempt at handling skip-over prefixes (eg, Mc) */
 #if 0 /* must be done earlier */
 	if (ptr1[0] && ptr2[0]) {
 		/* check for prefix skips */

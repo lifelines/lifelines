@@ -274,14 +274,16 @@ main (INT argc, char **argv)
 	platform_init();
 	noecho();
 	set_displaykeys(keyflag);
-	/* initialize curses interface */
-	if (!init_screen(graphical))
-		goto finish;
 	/* initialize options & misc. stuff */
 	if (!init_lifelines_global(&msg)) {
 		llwprintf("%s", msg);
 		goto finish;
 	}
+	/* setup crashlog in case init_screen fails (eg, bad menu shortcuts) */
+	crash_setcrashlog(getoptstr("CrashLog", NULL));
+	/* initialize curses interface */
+	if (!init_screen(graphical))
+		goto finish;
 	if (selftest) {
 		/* need to always find test stuff locally */
 		changeoptstr("LLPROGRAMS", strsave("."));
@@ -289,7 +291,6 @@ main (INT argc, char **argv)
 		changeoptstr("LLDATABASES", strsave("."));
 		changeoptstr("LLNEWDBDIR", strsave("."));
 	}
-	crash_setcrashlog(getoptstr("CrashLog", NULL));
 	init_interpreter(); /* give interpreter its turn at initialization */
 
 	/* Validate Command-Line Arguments */
