@@ -44,14 +44,15 @@
 extern BOOLEAN opt_nocb;	/* TRUE to suppress display of cb. data */
 extern INT LIST_LINES;		/* person info display lines above list */
 extern INT PED_LINES;		/* pedigree lines */
+extern INT MAINWIN_WIDTH;
 extern INT listbadkeys;
 extern char badkeylist[];
 
 static STRING person_display(NODE, NODE, INT);
-static void add_child_line(INT, NODE);
-static void add_spouse_line(INT, NODE, NODE);
-static void init_display_indi(NODE);
-static void init_display_fam(NODE);
+static void add_child_line(INT, NODE, INT width);
+static void add_spouse_line(INT, NODE, NODE, INT width);
+static void init_display_indi(NODE, INT width);
+static void init_display_fam(NODE, INT width);
 
 #define MAXOTHERS 30
 typedef char *LINESTRING;
@@ -90,7 +91,7 @@ init_show_module ()
  * init_display_indi -- Initialize display person
  *=============================================*/
 static void
-init_display_indi (NODE pers)
+init_display_indi (NODE pers, INT width)
 {
 	INT nsp, nch, num, nm;
 	STRING s,t;
@@ -102,45 +103,44 @@ init_display_indi (NODE pers)
 	ASSERT(pers);
 	fth = indi_to_fath(pers);
 	mth = indi_to_moth(pers);
-	s = indi_to_name(pers, ttd, 60);
+	s = indi_to_name(pers, ttd, width-20);
 	sprintf(Spers, "person: %s ", s);
-	if((num = strlen(s)) < 50) {
-	    t = indi_to_title(pers, ttd, 60 - num - 3);
+	if((num = strlen(s)) < width-30) {
+	    t = indi_to_title(pers, ttd, width-20 - num - 3);
 	    if(t) sprintf(Spers+strlen(Spers), "[%s] ", t);
 	}
 	sprintf(Spers+strlen(Spers), "(%s)", key_of_record(pers));
 
-	s = indi_to_event(pers, ttd, "BIRT", "  born: ", 77, FALSE);
-	if (!s) s = indi_to_event(pers, ttd, "CHR", "  bapt: ", 77, FALSE);
-	/* WARNING: shouldn't the sprintf() be strcpy() instead? - pbm */
+	s = indi_to_event(pers, ttd, "BIRT", "  born: ", (width-3), FALSE);
+	if (!s) s = indi_to_event(pers, ttd, "CHR", "  bapt: ", (width-3), FALSE);
 	if (s) sprintf(Sbirt, s);
 	else sprintf(Sbirt, "  born:");
 
 	/* add a RESIdence if none was in the birth event */
 	if(strchr(Sbirt, ',') == 0) {
-	    num = strlen(Sbirt);
-	    if(num < 50) {
-	      s = indi_to_event(pers, ttd, "RESI", ", of ", 77-num-5, FALSE);
-	      if(s) {
-		  if(num < 8) strcat(Sbirt, s+1);
-		  else {
-		      /* overwrite the trailing "." on the birth info */
-		      strcpy(Sbirt + strlen(Sbirt)-1, s);
-		  }
-	      }
-	    }
+		num = strlen(Sbirt);
+		if(num < width-30) {
+			s = indi_to_event(pers, ttd, "RESI", ", of ", (width-3)-num-5, FALSE);
+			if(s) {
+				if(num < 8) strcat(Sbirt, s+1);
+				else {
+					/* overwrite the trailing "." on the birth info */
+					strcpy(Sbirt + strlen(Sbirt)-1, s);
+				}
+			}
+		}
 	}
 
-	s = indi_to_event(pers, ttd, "DEAT", "  died: ", 77, FALSE);
-	if (!s) s = indi_to_event(pers, ttd, "BURI", "  buri: ", 77, FALSE);
+	s = indi_to_event(pers, ttd, "DEAT", "  died: ", (width-3), FALSE);
+	if (!s) s = indi_to_event(pers, ttd, "BURI", "  buri: ", (width-3), FALSE);
 	if (s) sprintf(Sdeat, s);
 	else sprintf(Sdeat, "  died:");
 
-	s = person_display(fth, NULL, 67);
+	s = person_display(fth, NULL, width-13);
 	if (s) sprintf(Sfath, "  father: %s", s);
 	else sprintf(Sfath, "  father:");
 
-	s = person_display(mth, NULL, 67);
+	s = person_display(mth, NULL, width-13);
 	if (s) sprintf(Smoth, "  mother: %s", s);
 	else sprintf(Smoth, "  mother:");
 
@@ -149,9 +149,9 @@ init_display_indi (NODE pers)
 	icel = indi_to_cacheel(pers);
 	lock_cache(icel);
 	FORFAMSS(pers, fam, sp, num)
-		if (sp) add_spouse_line(++nsp, sp, fam);
+		if (sp) add_spouse_line(++nsp, sp, fam, width);
 		FORCHILDREN(fam, chld, nm)
-			if(chld) add_child_line(++nch, chld);
+			if(chld) add_child_line(++nch, chld, width);
 		ENDCHILDREN
 	ENDFAMSS
 	unlock_cache(icel);
@@ -160,41 +160,50 @@ init_display_indi (NODE pers)
  * show_person -- Display person
  *============================*/
 void
-show_person (NODE pers, /* person */
-             INT row,   /* start row */
-             INT hgt)   /* avail rows */
+show_person(WINDOW * win,
+            NODE pers, /* person */
+            INT row,   /* start row */
+            INT hgt,   /* avail rows */
+            INT width, /* avail cols */
+            INT *scroll)
 {
 	INT i;
 	INT localrow;
 	INT overflow;
 	badkeylist[0] = '\0';
 	listbadkeys = 1;
-	init_display_indi(pers);
+	if (!hgt) return;
+	init_display_indi(pers, width);
 	for (i = 0; i < hgt; i++) {
-		wmove(main_win, row+i, 1);
-		wclrtoeol(main_win);
+		wmove(win, row+i, 1);
+		wclrtoeol(win);
 #ifndef BSD
-		mvwaddch(main_win, row+i, ll_cols-1, ACS_VLINE);
+		mvwaddch(win, row+i, ll_cols-1, ACS_VLINE);
 #endif
 	}
-	if (Scroll1) {
-		if (Scroll1 > Solen + 5 - hgt)
-			Scroll1 = Solen + 5 - hgt;
-		if (Scroll1 < 0)
-			Scroll1 = 0;
+	if (*scroll) {
+		if (*scroll > Solen + 5 - hgt)
+			*scroll = Solen + 5 - hgt;
+		if (*scroll < 0)
+			*scroll = 0;
 	}
-	localrow = row - Scroll1;
-	mvwaddstr(main_win, row+0, 1, Spers);
-	mvwaddstr(main_win, row+1, 1, Sbirt);
-	mvwaddstr(main_win, row+2, 1, Sdeat);
-	mvwaddstr(main_win, row+3, 1, Sfath);
-	mvwaddstr(main_win, row+4, 1, Smoth);
-	for (i = Scroll1; i < Solen && i < hgt-5+Scroll1; i++)
+	localrow = row - *scroll;
+	mvwaddstr(win, row+0, 1, Spers);
+	if (hgt==1) return;
+	mvwaddstr(win, row+1, 1, Sbirt);
+	if (hgt==2) return;
+	mvwaddstr(win, row+2, 1, Sdeat);
+	if (hgt==3) return;
+	mvwaddstr(win, row+3, 1, Sfath);
+	if (hgt==4) return;
+	mvwaddstr(win, row+4, 1, Smoth);
+	if (hgt==5) return;
+	for (i = *scroll; i < Solen && i < hgt-5+ *scroll; i++)
 	{
-		overflow = ((i+1 == hgt-5+Scroll1)&&(i+1 != Solen));
-		if (Scroll1 && (i == Scroll1))
+		overflow = ((i+1 == hgt-5+ *scroll)&&(i+1 != Solen));
+		if (*scroll && (i == *scroll))
 			overflow = 1;
-		put_out_line(main_win, localrow+5+i, 1, Sothers[i], overflow);
+		put_out_line(win, localrow+5+i, 1, Sothers[i], width, overflow);
 	}
 	listbadkeys = 0;
 	if(badkeylist[0]) {
@@ -203,14 +212,24 @@ show_person (NODE pers, /* person */
 		message(buf);
 	}
 }
-/*==============================
- * show_person2 -- Display person using 2nd scroll adjustments
- *============================*/
-void show_person2 (NODE pers, INT row, INT hgt)
+/*====================================
+ * show_person_main1 -- Display person
+ *==================================*/
+void
+show_person_main1 (NODE pers, /* person */
+                   INT row,   /* start row */
+                   INT hgt)   /* avail rows */
+{
+	show_person(main_win, pers, row, hgt, MAINWIN_WIDTH, &Scroll1);
+}
+/*=================================================================
+ * show_person_main2 -- Display person using 2nd scroll adjustments
+ *===============================================================*/
+void show_person_main2 (NODE pers, INT row, INT hgt)
 {
 	INT save = Scroll1;
 	Scroll1 = Scroll2;
-	show_person(pers, row, hgt);
+	show_person_main1(pers, row, hgt);
 	Scroll2 = Scroll1;
 	Scroll1 = save;
 }
@@ -218,37 +237,34 @@ void show_person2 (NODE pers, INT row, INT hgt)
  * add_spouse_line -- Add spouse line to others
  *===========================================*/
 static void
-add_spouse_line (INT num,
-                 NODE indi,
-                 NODE fam)
+add_spouse_line (INT num, NODE indi, NODE fam, INT width)
 {
 	STRING line;
 	if (Solen >= MAXOTHERS) return;
-	line = person_display(indi, fam, 76);
+	line = person_display(indi, fam, width-14);
 	sprintf(Sothers[Solen], "  spouse: %s", line);
-	Sothers[Solen++][78] = 0;
+	Sothers[Solen++][width-2] = 0;
 }
 /*===========================================
  * add_child_line -- Add child line to others
  *=========================================*/
 static void
-add_child_line (INT num,
-                NODE indi)
+add_child_line (INT num, NODE indi, INT width)
 {
 	STRING line;
 	if (Solen >= MAXOTHERS) return;
-	line = person_display(indi, NULL, 65);
+	line = person_display(indi, NULL, width-15);
 	if (number_child_enable)
 		sprintf(Sothers[Solen], "  %2dchild: %s", num, line);
 	else
 		sprintf(Sothers[Solen], "    child: %s", line);
-	Sothers[Solen++][78] = 0;
+	Sothers[Solen++][width-2] = 0;
 }
 /*==============================================
  * init_display_fam -- Initialize display family
  *============================================*/
 static void
-init_display_fam (NODE fam)     /* family */
+init_display_fam (NODE fam, INT width)
 {
 	NODE husb;
 	NODE wife;
@@ -267,51 +283,49 @@ init_display_fam (NODE fam)     /* family */
 	} else
 		sprintf(Shusb, "father: (%s)", fk);
 
-	s = indi_to_event(husb, ttd, "BIRT", "  born: ", 77, FALSE);
-	if (!s) s = indi_to_event(husb, ttd, "CHR", "  bapt: ", 77, FALSE);
+	s = indi_to_event(husb, ttd, "BIRT", "  born: ", width-3, FALSE);
+	if (!s) s = indi_to_event(husb, ttd, "CHR", "  bapt: ", width-3, FALSE);
 	if (s) sprintf(Shbirt, s);
 	else sprintf(Shbirt, "  born:");
 
-	s = indi_to_event(husb, ttd, "DEAT", "  died: ", 77, FALSE);
-	if (!s) s = indi_to_event(husb, ttd, "BURI", "  buri: ", 77, FALSE);
+	s = indi_to_event(husb, ttd, "DEAT", "  died: ", width-3, FALSE);
+	if (!s) s = indi_to_event(husb, ttd, "BURI", "  buri: ", width-3, FALSE);
 	if (s) sprintf(Shdeat, s);
 	else sprintf(Shdeat, "  died:");
 
 	if (wife) {
 		ik = key_of_record(wife);
-		len = 67 - strlen(ik);
+		len = (width-13) - strlen(ik);
 		s = indi_to_name(wife, ttd, len);
 		sprintf(Swife, "mother: %s (%s)", s, ik);
 	} else
 		sprintf(Swife, "mother:");
 
-	s = indi_to_event(wife, ttd, "BIRT", "  born: ", 77, FALSE);
-	if (!s) s = indi_to_event(wife, ttd, "CHR", " bapt: ", 77, FALSE);
+	s = indi_to_event(wife, ttd, "BIRT", "  born: ", width-3, FALSE);
+	if (!s) s = indi_to_event(wife, ttd, "CHR", " bapt: ", width-3, FALSE);
 	if (s) sprintf(Swbirt, s);
 	else sprintf(Swbirt, "  born:");
 
-	s = indi_to_event(wife, ttd, "DEAT", "  died: ", 77, FALSE);
-	if (!s) s = indi_to_event(wife, ttd, "BURI", " buri: ", 77, FALSE);
+	s = indi_to_event(wife, ttd, "DEAT", "  died: ", width-3, FALSE);
+	if (!s) s = indi_to_event(wife, ttd, "BURI", " buri: ", width-3, FALSE);
 	if (s) sprintf(Swdeat, s);
 	else sprintf(Swdeat, "  died:");
 
-	s = indi_to_event(fam, ttd, "MARR", "married: ", 77, FALSE);
+	s = indi_to_event(fam, ttd, "MARR", "married: ", width-3, FALSE);
 	if (s) sprintf(Smarr, s);
 	else sprintf(Smarr, "married:");
 
 	Solen = 0;
 	nch = 0;
 	FORCHILDREN(fam, chld, nm)
-		add_child_line(++nch, chld);
+		add_child_line(++nch, chld, width);
 	ENDCHILDREN
 }
 /*===================================
  * show_long_family -- Display family
  *=================================*/
 void
-show_long_family (NODE fam,
-                  INT row,
-                  INT hgt)
+show_long_family (NODE fam, INT row, INT hgt, INT width)
 {
 	INT i;
 	INT localrow;
@@ -319,12 +333,12 @@ show_long_family (NODE fam,
 	char buf[132];
 	badkeylist[0] = '\0';
 	listbadkeys = 1;
-	init_display_fam(fam);
+	init_display_fam(fam, width);
 	for (i = 0; i < hgt; i++) {
 		wmove(main_win, row+i, 1);
 		wclrtoeol(main_win);
 #ifndef BSD
-		mvwaddch(main_win, row+i, ll_cols-1, ACS_VLINE);
+		mvwaddch(main_win, row+i, width-1, ACS_VLINE);
 #endif
 	}
 	if (Scroll1) {
@@ -346,7 +360,7 @@ show_long_family (NODE fam,
 		overflow = ((i+1 == hgt-7+Scroll1)&&(i+1 != Solen));
 		if (Scroll1 && (i == Scroll1))
 			overflow = 1;
-		put_out_line(main_win, localrow+7+i, 1, Sothers[i]+1, overflow);
+		put_out_line(main_win, localrow+7+i, 1, Sothers[i]+1, width, overflow);
 	}
 	listbadkeys = 0;
 	if(badkeylist[0]) {
@@ -358,15 +372,13 @@ show_long_family (NODE fam,
  * show_short_family -- Display family
  *==================================*/
 void
-show_short_family (NODE fam,
-                   INT row,
-                   INT hgt)
+show_short_family (NODE fam, INT row, INT hgt, INT width)
 {
 	INT i;
 	char buf[132];
 	badkeylist[0] = '\0';
 	listbadkeys = 1;
-	init_display_fam(fam);
+	init_display_fam(fam, width);
 	for (i = 0; i < hgt; i++) {
 		wmove(main_win, row+i, 1);
 		wclrtoeol(main_win);
@@ -655,7 +667,7 @@ show_list (INDISEQ seq,
 		if (i == mark) mvwaddch(win, row, 2, 'x');
 		if (i == cur) {
 			mvwaddch(win, row, 3, '>');
-			show_person(indi, 1, LIST_LINES);
+			show_person_main1(indi, 1, LIST_LINES);
 		}
 		name = manip_name(name, ttd, TRUE, TRUE, 40);
 		strcpy(scratch, name);
@@ -748,7 +760,7 @@ show_reset_scroll (void)
  * but also append + at end if requested
  *====================================*/
 void
-put_out_line (WINDOW * win, INT x, INT y, STRING string, INT flag)
+put_out_line (WINDOW * win, INT x, INT y, STRING string, INT width, INT flag)
 {
 	if (!flag)
 	{
@@ -757,13 +769,13 @@ put_out_line (WINDOW * win, INT x, INT y, STRING string, INT flag)
 	else
 	{
 		INT i, pos;
-		LINESTRING linebuffer = (LINESTRING)malloc(ll_cols);
+		LINESTRING linebuffer = (LINESTRING)malloc(width);
 		char * ptr = &linebuffer[0];
-		int mylen=ll_cols;
+		int mylen=width;
 		ptr[0] = 0;
 		llstrcatn(&ptr, string, &mylen);
 		i = strlen(linebuffer);
-		pos = ll_cols-4;
+		pos = width-4;
 		if (i>pos)
 			i = pos;
 		for (; i<pos; i++)

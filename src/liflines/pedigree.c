@@ -114,11 +114,12 @@ print_to_buffer (int keynum, int gen, int * row)
 {
 	char buffer[140], *ptr=buffer;
 	int mylen = sizeof(buffer);
+	INT width = ll_cols;
 	NODE indi = 0;
 	int i, overflow=0;
 	WINDOW *w = main_win;
-	if (mylen > ll_cols-5)
-		mylen = ll_cols-5;
+	if (mylen > width-5)
+		mylen = width-5;
 	if (*row>Scrollp && *row-Scrollp<=ll_lines-9) {
 		if (*row==Scrollp+1 && Scrollp>0)
 			overflow=1;
@@ -130,7 +131,7 @@ print_to_buffer (int keynum, int gen, int * row)
 		if (keynum)
 			indi = keynum_to_indi(keynum);
 		llstrcatn(&ptr, indi_to_ped_fix(indi, mylen), &mylen);
-		put_out_line(w, *row-Scrollp, 2, buffer, overflow);
+		put_out_line(w, *row-Scrollp, 1, buffer, width, overflow);
 	}
 	(*row)++;
 }

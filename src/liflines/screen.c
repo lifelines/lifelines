@@ -48,6 +48,10 @@
 #define LINESREQ 24
 #define COLSREQ  80
 #define MAXVIEWABLE 30
+INT LISTWIN_WIDTH=0;
+INT MAINWIN_WIDTH=0;
+static INT list_detail_lines = 0;
+
 /* center windows on real physical screen (LINES x COLS) */
 #define NEWWIN(r,c)   newwin(r,c,(LINES - (r))/2,(COLS - (c))/2)
 #define SUBWIN(w,r,c) subwin(w,r,c,(LINES - (r))/2,(COLS - (c))/2)
@@ -73,7 +77,7 @@ static void scan_menu (void);
 static void trans_menu (void);
 static void utils_menu (void);
 static void win_list_init (void);
-static void shw_list (WINDOW *win, INDISEQ seq, INT len0, INT top, INT cur);
+static void shw_list(WINDOW *win, INDISEQ seq, INT len0, INT top, INT cur, INT *scroll);
 static void place_std_msg (void);
 static void clearw (void);
 static void place_cursor (void);
@@ -82,7 +86,7 @@ static INT list_interact(WINDOW *win, STRING ttl, INT len, STRING *strings);
 static void vmprintf (STRING fmt, va_list args);
 
 static INT indiseq_interact (WINDOW *win, STRING ttl, INDISEQ seq);
-static WINDOW *choose_win(INT);
+static WINDOW *choose_win(INT desiredlen, INT *actuallen);
 
 INT ll_lines = LINESREQ; /* update to be number of lines in screen */
 INT ll_cols = COLSREQ;	 /* number of columns in screen used by LifeLines */
@@ -119,16 +123,6 @@ static BOOLEAN now_showing = FALSE;
 void win_list_init (void);
 
 /* in show.c */
-void show_person (NODE pers,	/* person */
-		  INT row,	/* start row */
-		  INT hgt);	/* avail rows */
-void show_long_family (NODE fam,
-		       INT row,
-		       INT hgt);
-void show_short_family (NODE fam,
-			INT row,
-			INT hgt);
-void show_pedigree (NODE indi);
 void show_aux_display (NODE node,
 		       INT row,
 		       INT hgt);
@@ -457,7 +451,9 @@ create_windows (void)
 	debug_win = subwin(debug_box_win, 6, ll_cols-col-4, 2, col+1);
 	scrollok(debug_win, TRUE);
 
- 	main_win = NEWWIN(ll_lines, ll_cols);
+	MAINWIN_WIDTH = ll_cols;
+	LISTWIN_WIDTH = 73;
+ 	main_win = NEWWIN(ll_lines, MAINWIN_WIDTH);
 	add_menu_win = NEWWIN(8, 66);
 	del_menu_win = NEWWIN(8, 66);
 	scan_menu_win = NEWWIN(7,66);
@@ -609,7 +605,7 @@ INT
 indi_browse (NODE indi)
 {
 	if (cur_screen != ONE_PER_SCREEN) paint_one_per_screen();
-	show_person(indi, 1, PER_LINES);
+	show_person_main1(indi, 1, PER_LINES);
 	display_screen(ONE_PER_SCREEN);
 	return interact(main_win,
 		"efmscoygubhirdpnaxtzqACFGMSU()$#123456789+-");
@@ -621,7 +617,7 @@ INT
 fam_browse (NODE fam)
 {
 	if (cur_screen != ONE_FAM_SCREEN) paint_one_fam_screen();
-	show_long_family(fam, 1, FAM_LINES);
+	show_long_family(fam, 1, FAM_LINES, MAINWIN_WIDTH);
 	display_screen(ONE_FAM_SCREEN);
 	return interact(main_win, 
 		"efmcnsardxtbzqABCFM()$#123456789+-");
@@ -630,12 +626,11 @@ fam_browse (NODE fam)
  * tandem_browse -- Handle tandem_browse screen
  *===========================================*/
 INT
-tandem_browse (NODE indi1,
-                   NODE indi2)
+tandem_browse (NODE indi1, NODE indi2)
 {
 	if (cur_screen != TWO_PER_SCREEN) paint_two_per_screen();
-	show_person(indi1, 1, TANDEM_LINES);
-	show_person2(indi2, TANDEM_LINES+2, TANDEM_LINES);
+	show_person_main1(indi1, 1, TANDEM_LINES);
+	show_person_main2(indi2, TANDEM_LINES+2, TANDEM_LINES);
 	display_screen(TWO_PER_SCREEN);
 	return interact(main_win, "etfmscbdajxq");
 }
@@ -645,9 +640,10 @@ tandem_browse (NODE indi1,
 INT
 twofam_browse (NODE fam1, NODE fam2)
 {
+	INT width=MAINWIN_WIDTH;
 	if (cur_screen != TWO_FAM_SCREEN) paint_two_fam_screen();
-	show_short_family(fam1, 1, TANDEM_LINES);
-	show_short_family(fam2, TANDEM_LINES+2, TANDEM_LINES);
+	show_short_family(fam1, 1, TANDEM_LINES, width);
+	show_short_family(fam2, TANDEM_LINES+2, TANDEM_LINES, width);
 	display_screen(TWO_FAM_SCREEN);
 	return interact(main_win, "etbfmxjq");
 }
@@ -783,7 +779,7 @@ choose_from_list (STRING ttl,
                   INT no,
                   STRING *pstrngs)
 {
-	WINDOW *win = choose_win(no);
+	WINDOW *win = choose_win(no, NULL);
 	INT rv;
 	werase(win);
 	BOX(win, 0, 0);
@@ -797,20 +793,107 @@ choose_from_list (STRING ttl,
  * choose_one_from_indiseq -- User chooses person from sequence
  *===========================================================*/
 INT
-choose_one_from_indiseq (STRING ttl,
-                         INDISEQ seq)
+choose_one_from_indiseq (STRING ttl, INDISEQ seq)
 {
 	WINDOW *win;
-	INT rv, len;
+	INT rv, len, actlen, minlen, asklen;
+	INT top, cur, row, done;
+	INT scroll;
+	char fulltitle[128];
+	char buffer[31];
+	char * ptr;
+	INT titlen;
 	ASSERT(seq);
 	len = length_indiseq(seq);
 	if (len<50)
 		preprint_indiseq(seq);
-	win = choose_win(len);
+		
+	scroll=0;
+	/*
+	prevent shrinking because we're not redrawing
+	window beneath us
+	*/
+	minlen = len;
+	top = cur = 0;
+resize_win:
+	asklen = len+list_detail_lines;
+	if (asklen < minlen)
+		asklen = minlen;
+	win = choose_win(asklen, &actlen);
+	if (actlen > minlen)
+		minlen = actlen;
+	/* check in case we pushed current offscreen */
+	if (cur-scroll>actlen-1-list_detail_lines)
+		cur=actlen-1-list_detail_lines+scroll;
 	werase(win);
 	BOX(win, 0, 0);
 	wrefresh(win);
-	rv = indiseq_interact(win, ttl, seq);
+	len = length_indiseq(seq);
+	werase(win);
+	BOX(win, 0, 0);
+	row = len + list_detail_lines + 2;
+	if (row > VIEWABLE + 2)
+		row = VIEWABLE + 2;
+	show_horz_line(win, row++, 0, 73);
+	mvwaddstr(win, row, 2, "Commands:   j Move down     k Move up    i Select     q Quit");
+	done = FALSE;
+	while (!done) {
+		fulltitle[0] = 0;
+		titlen = LISTWIN_WIDTH-1;
+		if (titlen > sizeof(fulltitle))
+			titlen = sizeof(fulltitle);
+		ptr = fulltitle;
+		llstrcatn(&ptr, ttl, &titlen);
+		sprintf(buffer, " (%d/%d)", cur+1, len);
+		llstrcatn(&ptr, buffer, &titlen);
+		mvwaddstr(win, 1, 1, fulltitle);
+		shw_list(win, seq, len, top, cur, &scroll);
+		wmove(win, row, 11);
+		wrefresh(win);
+		switch (interact(win, "jkiq()[]")) {
+		case 'j':
+			if (cur >= len - 1) break;
+			cur++;
+			if (cur >= top + VIEWABLE - list_detail_lines)
+				top++;
+			break;
+		case 'k':
+			if (cur <= 0) break;
+			cur--;
+			if (cur + 1 == top) top--;
+			break;
+		case 'i':
+			done=TRUE;
+			break;
+		case '(':
+			if (scroll)
+				scroll--;
+			break;
+		case ')':
+			if (scroll<2)
+				scroll++;
+			break;
+		case '[':
+			if (list_detail_lines) {
+				list_detail_lines--;
+				goto resize_win;
+			}
+			break;
+		case ']':
+			if (list_detail_lines < 8) {
+				list_detail_lines++;
+				goto resize_win;
+			}
+			break;
+		case 'q':
+		default:
+			done=TRUE;
+			cur = -1;
+			break;
+		}
+	}
+	rv = cur;
+	
 	if (stdout_vis) {
 		touchwin(stdout_win);
 		wrefresh(stdout_win);
@@ -834,7 +917,7 @@ choose_list_from_indiseq (STRING ttl,
 	len = length_indiseq(seq);
 	if (len<50)
 		preprint_indiseq(seq);
-	win = choose_win(len);
+	win = choose_win(len+list_detail_lines, NULL);
 	werase(win);
 	BOX(win, 0, 0);
 	wrefresh(win);
@@ -1051,17 +1134,24 @@ win_list_init (void)
 {
 	INT i;
 	for (i = 0; i < VIEWABLE; i++) {
-		list_wins[i] = NEWWIN(i+6, 73);
+		list_wins[i] = NEWWIN(i+6, LISTWIN_WIDTH);
 	}
 }
 /*=========================================
  * choose_win -- Choose window to hold list
  *=======================================*/
 static WINDOW *
-choose_win (INT len)        /* length */
+choose_win (INT desiredlen, INT *actuallen)
 {
 	WINDOW *win = list_wins[VIEWABLE-1];
-	if (len <= VIEWABLE) win = list_wins[len-1];
+	INT retlen;
+	retlen = VIEWABLE;
+	if (desiredlen <= VIEWABLE) {
+		win = list_wins[desiredlen-1];
+		retlen = desiredlen;
+	}
+	if (actuallen)
+		*actuallen = retlen;
 	return win;
 }
 /*=====================================================
@@ -1073,6 +1163,7 @@ indiseq_interact (WINDOW *win,
                   INDISEQ seq)
 {
 	INT top, cur, len, row;
+	INT scroll=0;
 	top = cur = 0;
 	len = length_indiseq(seq);
 	werase(win);
@@ -1082,7 +1173,7 @@ indiseq_interact (WINDOW *win,
 	show_horz_line(win, row++, 0, 73);
 	mvwaddstr(win, row, 2, "Commands:   j Move down     k Move up    i Select     q Quit");
 	while (TRUE) {
-		shw_list(win, seq, len, top, cur);
+		shw_list(win, seq, len, top, cur, &scroll);
 		wmove(win, row, 11);
 		wrefresh(win);
 		switch (interact(win, "jkiq")) {
@@ -1114,24 +1205,29 @@ indiseq_list_interact (WINDOW *win,
                        INDISEQ seq)
 {
 	INT top, cur, len, len0, row;
+	INT scroll;
 
 	top = cur = 0;
 	len = len0 = length_indiseq(seq);
+	scroll = 0;
 	werase(win);
 	BOX(win, 0, 0);
 	mvwaddstr(win, 1, 1, ttl);
-	row = len0 > VIEWABLE ? VIEWABLE + 2 : len0 + 2;
+	row = len0 + list_detail_lines + 2;
+	if (row > VIEWABLE + 2)
+		row = VIEWABLE + 2;
 	show_horz_line(win, row++, 0, 73);
 	mvwaddstr(win, row, 2, "Commands:  j Move down   k Move up  d Delete   i Select   q Quit");
 	while (TRUE) {
-		shw_list(win, seq, len0, top, cur);
+		shw_list(win, seq, len0, top, cur, &scroll);
 		wmove(win, row, 11);
 		wrefresh(win);
 		switch (interact(win, "jkdiq")) {
 		case 'j':
 			if (cur >= len - 1) break;
 			cur++;
-			if (cur >= top + VIEWABLE) top++;
+			if (cur >= top + VIEWABLE - list_detail_lines)
+				top++;
 			break;
 		case 'k':
 			if (cur <= 0) break;
@@ -1157,26 +1253,44 @@ indiseq_list_interact (WINDOW *win,
 }
 /*=====================================================
  * shw_list -- Show string list in list interact window
+ *  len0 is original length of list (items may have
+ *  been deleted)
  *===================================================*/
 void
 shw_list (WINDOW *win,
           INDISEQ seq,
           INT len0,
           INT top,
-          INT cur)
+          INT cur,
+          INT *scroll)
 {
-	INT i, j, row = 2, len;
+	INT i, j, row, nrows, len, numdet;
 	char buffer[60];
 	len = length_indiseq(seq);
-	j = len0 > VIEWABLE ? VIEWABLE : len0;
-	for (i = 0; i < j; i++)
-		mvwaddstr(win, row++, 1, empstr71);
-	row = 2;
-	for (i = top, j = 0; j < VIEWABLE && i < len; i++, j++) {
-		if (i == cur) mvwaddch(win, row, 3, '>');
-		print_indiseq_element(seq, i, buffer, sizeof(buffer));
-		mvwaddstr(win, row, 4, buffer);
-		row++;
+	numdet = list_detail_lines;
+	nrows = numdet + len0;
+	if (nrows>VIEWABLE)
+		nrows=VIEWABLE;
+	for (j=0; j<nrows; j++) {
+		row=2+j;
+		mvwaddstr(win, row, 1, empstr71);
+		if (j>=numdet) {
+			i=j-numdet+top;
+			if (i<len) {
+				if (i == cur) mvwaddch(win, row, 3, '>');
+				print_indiseq_element(seq, i, buffer, sizeof(buffer));
+				mvwaddstr(win, row, 4, buffer);
+			}
+		}
+	}
+	if (numdet) {
+		STRING key, name;
+		element_indiseq(seq, cur, &key, &name);
+		if (key[0]=='I') {
+			NODE indi = key_to_indi(key);
+			mvwaddstr(win, numdet+1, 2, "---");
+			show_person(win, indi, 2, numdet-1, LISTWIN_WIDTH, scroll);
+		}
 	}
 }
 /*================================================================
