@@ -1,3 +1,13 @@
+2002-02-03 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog hdrs/version.h hdrs/win32/curses.h interp/date.c
+	liflines/screen.c stdlib/stdstrng.c win32/mycurses.c:
+
+	Bugfix for sprintpic3. Recognize dates with two numbers as day,year
+	if legal day, or as year,day if legal day. Bugfix for graphic chars
+	in screen.c (need to be chtype, not char). Fix win32 curses
+	emulation to use chtype where appropriate (instead of char).
+
 2002-01-31 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog INSTALL hdrs/interp.h hdrs/screen.h

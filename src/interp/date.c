@@ -1105,7 +1105,8 @@ analyze_numbers (GDATEVAL gdv, struct gdate_s * pdate, struct nums_s * nums)
 		set_year(pdate, nums->num1);
 		return;
 	}
-	/* we've exhausted all the reasonably GEDCOM cases */
+	/* we need at least day or month */
+	/* and we have at least 2 numbers */
 	mark_freeform(gdv);
 	if (pdate->month && pdate->year != BAD_YEAR) {
 		/* if all we need is day, see if it can be day */
@@ -1115,7 +1116,7 @@ analyze_numbers (GDATEVAL gdv, struct gdate_s * pdate, struct nums_s * nums)
 		return;
 	}
 	if (pdate->month) {
-		/* if we get here, we need year */
+		/* if we get here, we need day & year */
 		/* prefer first num for day, if legal */
 		if (is_valid_day(pdate, nums->num1)) {
 			pdate->day = nums->num1;
@@ -1127,9 +1128,16 @@ analyze_numbers (GDATEVAL gdv, struct gdate_s * pdate, struct nums_s * nums)
 		}
 		return;
 	}
-	/* if we get here, we need month */
+	/*
+	if we get here, we need at least month and have 2+ numbers
+	if we don't know month, then we don't know day either, as
+	we only recognize day during parsing if we see it before month
+	*/
+	ASSERT(!pdate->day);
+	/* so we need at least day & month, & have 2+ numbers */
+	
 	if (pdate->year != BAD_YEAR) {
-		/* we have year, but not month, and we have at least 2 numbers */
+		/* we need day & month, but not year, and have 2+ numbers */
 		/* can we interpret them unambiguously ? */
 		if (is_valid_month(pdate, nums->num1) 
 			&& !is_valid_month(pdate, nums->num2)
@@ -1150,19 +1158,23 @@ analyze_numbers (GDATEVAL gdv, struct gdate_s * pdate, struct nums_s * nums)
 		/* not unambiguous, so don't guess */
 		return;
 	}
-	/* if we get here, we need month & year */
+	/* if we get here, we need day, month, & year, and have 2+ numbers */
 	if (nums->num3 == BAD_YEAR) {
-		/* we have no month & only two numbers, so only do year */
-		set_year(pdate, nums->num1);
+		/* we need day, month, & year, and have 2 numbers */
+		/* how about day, year ? */
+		if (is_valid_day(pdate, nums->num1)) {
+			pdate->day = nums->num1;
+			set_year(pdate, nums->num2);
+		}
+		/* how about year, day ? */
+		if (is_valid_day(pdate, nums->num2)) {
+			pdate->day = nums->num2;
+			set_year(pdate, nums->num1);
+		}
+		/* give up */
 		return;
 	}
-	/* we have three numbers, and need at least month & year */
-	if (pdate->day) {
-		/* we have 3 numbers, but only need month & year, so only do year */
-		set_year(pdate, nums->num1);
-		return;
-	}
-	/* we have 3 numbers, and need day, month, & year */
+	/* we need day, month, & year, and have 3 numbers */
 	/* how about day, month, year ? */
 	if (is_valid_day(pdate, nums->num1) && is_valid_month(pdate, nums->num2)) {
 		pdate->day = nums->num1;
