@@ -1,4 +1,10 @@
-2000-12-07 Perry Rapp (prapp@users.sourceforge.net)
+2000-12-09 Perry Rapp <prapp@users.sourceforge.net>
+
+	* gedlib/node.c hdrs/gedcom.h liflines/screen.c:
+	rename num_spouses to num_spouses_of_indi
+	include arch from screen.c (because it calls sleep)
+
+2000-12-07 Perry Rapp <prapp@users.sourceforge.net>
 
 	* hdrs/gedcom.h liflines/browse.c liflines/llinesi.h:
 	Moved init_show_module declaration,
