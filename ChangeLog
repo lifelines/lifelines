@@ -1,8 +1,9 @@
 2004-03-08 Perry Rapp
 
 	* ChangeLog
-	*NEW dbfuncs.h
-	*NEW dbfuncsi.h
+	*NEW src/hdrs/dbfuncs.h
+	*NEW src/hdrs/dbfuncsi.h
+	*NEW src/gedlib/dbfuncs.c
 
 	New interface headers for database functions.
 
