@@ -1380,9 +1380,8 @@ remove_symtab (SYMTAB * stab)
 	{
 		traverse_table(stab->tab, symtab_cleaner);
 		remove_table(stab->tab, DONTFREE);
-		stab->tab = 0;
+		stab->tab = 0; /* same as *stab=null_symtab(); */
 	}
-	*stab = null_symtab();
 }
 /*======================================================
  * create_symtab -- Create a symbol table

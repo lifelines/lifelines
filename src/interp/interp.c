@@ -277,11 +277,14 @@ remove_tables (void)
 parser put those pointers into pvalues for files
 named in include statements */
 	remove_table(filetab, DONTFREE);
+	filetab=NULL;
 	/* proctab has PNODESs that yacc.y put in there */
 	remove_table(proctab, DONTFREE);
+	proctab=NULL;
 	remove_symtab(&globtab);
 	/* functab has PNODESs that yacc.y put in there */
 	remove_table(functab, DONTFREE);
+	functab=NULL;
 }
 /*======================================+
  * parse_file - Parse single program file

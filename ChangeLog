@@ -1,3 +1,10 @@
+2001-05-27 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog interp/interp.c interp/pvalue.c:
+	Fixed bug - filetab etc getting removed but not set to NULL.
+	(Crashed if you choose "p" then "q" from main menu, after
+	having run a report before.)
+
 2001-05-26 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog btree/record.c btree/traverse.c btree/utils.c
