@@ -12,7 +12,7 @@ llines_SOURCES = add.c advedit.c ask.c browse.c delete.c edit.c \
 
 # extra stuff for lines
 llines_LDADD = ../interp/libinterp.a ../gedlib/libgedcom.a \
-	../stdlib/libstdlib.a ../btree/libbtree.a
+	../stdlib/libstdlib.a ../btree/libbtree.a ../arch/libarch.a
 
 INCLUDES=-I$(srcdir)/../hdrs
 
