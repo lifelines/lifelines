@@ -152,7 +152,7 @@ translate_string (TRANTABLE tt, /* tran table */
 	STRING p, q, r;
 	STRING add;
 	INT n, l, depth, nxtch;
-	XNODE node, cnode;
+	XNODE node, chnode;
 	*out = 0;
 	if (!in) return TRUE;
 	if (!tt) {
@@ -174,11 +174,11 @@ translate_string (TRANTABLE tt, /* tran table */
 /* Match as far as possible */
 			while (n > 1 && node->child) {
 				nxtch = *(q + 1);
-				cnode = node->child;
-				while (cnode && cnode->achar != nxtch)
-					cnode = cnode->sibling;
-				if (!cnode) break;
-				node = cnode;
+				chnode = node->child;
+				while (chnode && chnode->achar != nxtch)
+					chnode = chnode->sibling;
+				if (!chnode) break;
+				node = chnode;
 				depth++;
 				--n;
 				q++;

@@ -2102,13 +2102,13 @@ __rot (PNODE node,
  	PVALUE val = evaluate(iargs(node), stab, eflg);
  	CACHEEL cel;
 	NODE gnode;
-        if (*eflg || !val || !is_record_pvalue(val)) {
+	if (*eflg || !val || !is_record_pvalue(val)) {
 		*eflg = TRUE;
 		prog_error(node, "the arg to root is not a record");
 		return NULL;
 	}
 	cel = (CACHEEL) pvalue(val);
-        if (cnode(cel)) {
+	if (cnode(cel)) {
 		set_pvalue(val, PGNODE, (WORD)cnode(cel));
 		return val;
 	}
