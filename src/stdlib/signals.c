@@ -74,7 +74,6 @@ static void on_signals(int);
 void
 set_signals (void)
 {
-return; // Perry
 	if (signal(SIGINT, SIG_IGN) != SIG_IGN)
 		signal(SIGINT, on_signals);
 #ifdef SIGHUP

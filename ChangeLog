@@ -1,7 +1,9 @@
 2000-11-20 Perry Rapp <puddle@users.sourceforge.net>
-	liflines/askprogram.c stdlib/double.c stdlib/signals.c:
+	liflines/askprogram.c stdlib/double.c: stdlib/signals.c
 	Handle nulls in get_list_element & set.
 	Fix bug in my recent additions to askprogram.c.
+	(Accidentally checked in signals.c with signals
+	disabled, and backed it back out.)
 
 2000-11-20 Perry Rapp <puddle@users.sourceforge.net>
 	gedlib/xreffile.c: Set xreffp to zero after closing
