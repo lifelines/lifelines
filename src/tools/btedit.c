@@ -70,7 +70,7 @@ main (int argc,
 		return (0);
 	}
 
-	editor = environ_determine_editor();
+	editor = environ_determine_editor(PROGRAM_BTEDIT);
 	sprintf(cmdbuf, "%s btedit.tmp", editor);
 	system(cmdbuf);
 	addfile(btree, str2rkey(key), "btedit.tmp");

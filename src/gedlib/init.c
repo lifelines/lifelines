@@ -65,7 +65,7 @@ init_lifelines (void)
 	init_caches();
 	init_browse_lists();
 	init_mapping();
-	e = environ_determine_editor();
+	e = environ_determine_editor(PROGRAM_LIFELINES);
 	editfile = strsave(environ_determine_tempfile());
 	editstr = (STRING) stdalloc(strlen(e) + strlen(editfile) + 2);
 	sprintf(editstr, "%s %s", e, editfile);

@@ -53,9 +53,12 @@ void set_list_element(LIST, INT, WORD);
 void set_list_type(LIST, INT);
 
 /* environ.c */
-STRING environ_determine_editor(void);
-STRING environ_determine_tempfile(void);
+#define PROGRAM_LIFELINES 1
+#define PROGRAM_BTEDIT 2
 STRING environ_determine_database(void);
+STRING environ_determine_editor(INT program);
+STRING environ_determine_newdbs(void);
+STRING environ_determine_tempfile(void);
 
 /* llstrcmp.c */
 int ll_strcmp(char*, char*);

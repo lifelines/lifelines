@@ -49,10 +49,10 @@ environ_determine_tempfile (void)
 #endif
 }
 /*============================================================
- * environ_determine_editor -- calculate editor program to use
+ * environ_determine_editor -- determine editor program to use
  *==========================================================*/
 STRING
-environ_determine_editor (void)
+environ_determine_editor (INT program)
 {
 	STRING e;
 
@@ -60,8 +60,13 @@ environ_determine_editor (void)
 	if (ISNULL(e)) e = (STRING) getenv("ED");
 	if (ISNULL(e)) e = (STRING) getenv("EDITOR");
 #ifdef WIN32
-	/* win32 fallback is notepad */
-	if (ISNULL(e)) e = (STRING) "notepad.exe";
+	/* win32 fallback is notepad for LifeLines */
+	if (program == PROGRAM_LIFELINES) {
+		if (ISNULL(e)) e = (STRING) "notepad.exe";
+	} else if (program == PROGRAM_BTEDIT) {
+		/* btedit requires a binary editor */
+		if (ISNULL(e)) e = (STRING) "vi";
+	}
 #else
 	/* unix fallback is vi */
 	if (ISNULL(e)) e = (STRING) "vi";
@@ -77,6 +82,19 @@ environ_determine_database (void)
 	STRING e;
 
 	e = (STRING) getenv("LLDATABASES");
+	if (ISNULL(e)) e = (STRING) ".";
+
+	return e;
+}
+/*=================================================================
+ * environ_determine_newdbs -- determine location for new databases
+ *===============================================================*/
+STRING
+environ_determine_newdbs (void)
+{
+	STRING e;
+
+	e = (STRING) getenv("LLNEWDBS");
 	if (ISNULL(e)) e = (STRING) ".";
 
 	return e;
