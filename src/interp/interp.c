@@ -407,6 +407,7 @@ interp_program_notfound:
 	}
 	strfree(&rootfilepath);
 	remove_list(donelist, NULL);
+	remove_list(plist, NULL);
 	return ranit;
 }
 /*===============================================
