@@ -28,6 +28,10 @@
 
 	Pass 3 overlooked string constants to gettext.
 
+	* ChangeLog po/POTFILES.in po/de.po po/it.po po/sv.po:
+
+	Propagating new i18n'd strings into de & it & sv.po translations.
+
 2002-04-25 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog interp/interp.c:

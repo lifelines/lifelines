@@ -1,6 +1,7 @@
 # List of source files containing translatable strings.
-# This list is (obviously) NOT complete.
-# - Perry 2002.02.22
+# Most strings are in messages.c, and the browse menu strings are
+# in menuitem.c. Then a handful are scattered elsewhere.
+# This list may not be complete.
 
 gedlib/messages.c
 
