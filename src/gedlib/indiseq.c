@@ -38,7 +38,6 @@
 #include "gedcom.h"
 #include "cache.h"
 #include "indiseq.h"
-#include "gengedc.h"
 #include "interp.h"
 #include "gedcomi.h"
 
