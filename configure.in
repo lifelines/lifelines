@@ -8,7 +8,7 @@ AC_PREREQ(2.13)
 AC_REVISION([for lifelines, built with autoconf] AC_ACVERSION)
 AC_CANONICAL_HOST
 
-AM_INIT_AUTOMAKE(lifelines, 3.0.8post)
+AM_INIT_AUTOMAKE(lifelines, 3.0.9)
 AM_CONFIG_HEADER(config.h)
 
 AC_PREFIX_DEFAULT($HOME)
@@ -153,6 +153,9 @@ AC_OUTPUT(Makefile \
         liflines/Makefile \
         tools/Makefile \
         hdrs/Makefile \
+        hdrs/win32/Makefile \
         docs/Makefile \
-        reports/Makefile)
+        reports/Makefile
+        win32/Makefile \
+        win32/msvc6/Makefile)
 

@@ -1,6 +1,9 @@
-# This makefile creates the B-Tree database subsystem
+# Process this file with automake to produce Makefile.in
+# (configure will process the resulting Makefile.in to produce Makefile)
 
 # AUTOMAKE_OPTIONS = no-dependencies
+
+SUBDIRS = win32
 
 EXTRA_DIST = arch.h bfs.h btree.h fpattern.h cache.h gedcheck.h gedcom.h gengedc.h \
 	feedback.h fpattern.h indiseq.h interp.h liflines.h lloptions.h llstdlib.h \

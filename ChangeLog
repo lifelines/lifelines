@@ -4,6 +4,14 @@
 
 	Fix list browse overwriting right-hand box line.
 
+	* ChangeLog Makefile.am configure.in hdrs/Makefile.am
+	hdrs/version.h
+	*NEW hdrs/win32/Makefile.am win32/Makefile.am
+	win32/msvc6/Makefile.am:
+
+	Add files in hdrs/win32 & win32 & win32 subdirs to dist.
+	Bump version to 3.0.9 (for a new distribution).
+
 2002-01-25 Perry Rapp <puddle@users.sourceforge.net>
 
 	* .linesrc ChangeLog lines.cfg gedlib/property.c
