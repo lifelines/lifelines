@@ -1,3 +1,9 @@
+2004-01-07 Perry Rapp
+
+	* ChangeLog src/ui/.cvsignore
+
+	Add .deps to src/ui/.cvsignore
+
 2004-01-05 Matt Emmerton
 
 	* ChangeLog docs/ll-reportmanual.xml
