@@ -2912,6 +2912,7 @@ place_cursor_main (void)
 
 	switch (cur_screen) {
 	case MAIN_SCREEN:    
+		col = strlen(_(qSplschs))+3;
 		row = 5;
 		break;
 	case LIST_SCREEN:

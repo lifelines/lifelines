@@ -1,3 +1,9 @@
+2003-07-28 Perry Rapp
+
+	* ChangeLog src/liflines/screen.c
+
+	Set cursor for main screen.
+
 2003-07-26 Perry Rapp
 
 	* ChangeLog docs/ll-devguide.xml src/hdrs/menuitem.h
