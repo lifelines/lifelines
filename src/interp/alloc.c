@@ -44,6 +44,7 @@
 #include "liflines.h"
 #include "codesets.h"
 #include "zstr.h"
+#include "vtable.h"
 
 /*********************************************
  * global/exported variables
@@ -106,6 +107,7 @@ static void clear_pnode(PNODE node);
 static PNODE create_pnode(PACTX pactx, INT type);
 static void delete_pnode(PNODE node);
 static void free_pnode_memory(PNODE node);
+static void rptinfo_destructor(VTABLE *obj);
 static void set_parents(PNODE body, PNODE node);
 static void verify_builtins(void);
 
@@ -118,6 +120,17 @@ static PNODE free_list = 0;
 static STRING interp_locale = 0;
 static INT live_pnodes = 0;
 static TABLE f_rptinfos=0;
+
+static struct tag_vtable vtable_for_rptinfo = {
+	VTABLE_MAGIC
+	, "rptinfo"
+	, &rptinfo_destructor
+	, &refcountable_isref
+	, &refcountable_addref
+	, &refcountable_delref
+	, 0 /* copy_fnc */
+	, &generic_get_type_name
+};
 
 /*********************************************
  * local & exported function definitions
@@ -1063,21 +1076,34 @@ debug_show_one_pnode (PNODE node)     /* node to print */
 	}
 }
 /*==========================================================
+ * create_rptinfo -- Create new empty report info object
+ * returns addref'd rptinfo
+ *========================================================*/
+RPTINFO
+create_rptinfo (void)
+{
+	RPTINFO rptinfo = (RPTINFO)stdalloc(sizeof(*rptinfo));
+	memset(rptinfo, 0, sizeof(*rptinfo));
+	rptinfo->vtable = &vtable_for_rptinfo;
+	rptinfo->refcnt = 1;
+	return rptinfo;
+}
+/*==========================================================
  * get_rptinfo -- Fetch info about report file
- * Created: 2002/11/30 (Perry Rapp)
+ *  create if not yet known
  *========================================================*/
 RPTINFO
 get_rptinfo (CNSTRING fullpath)
 {
 	RPTINFO rptinfo;
 	if (!f_rptinfos)
-		f_rptinfos = create_table_old();
-	rptinfo = (RPTINFO)valueof_ptr(f_rptinfos, fullpath);
+		f_rptinfos = create_table();
+	rptinfo = (RPTINFO)valueof_obj(f_rptinfos, fullpath);
 	if (!rptinfo) {
 		STRING filename=0;
 		ZSTR zstr=0;
 
-		rptinfo = (RPTINFO)stdalloc(sizeof(*rptinfo));
+		rptinfo = create_rptinfo();
 		rptinfo->fullpath = strsave(fullpath);
 		rptinfo->functab = create_table_old();
 		rptinfo->proctab = create_table_old();
@@ -1092,34 +1118,39 @@ get_rptinfo (CNSTRING fullpath)
 		strfree(&filename);
 		rptinfo->textdomain = zs_news("llreports"); /* for now, fixed textdomain */
 		
-		insert_table_ptr(f_rptinfos, strsave(fullpath), rptinfo);
+		table_insert_object(f_rptinfos, fullpath, rptinfo);
+		--rptinfo->refcnt; /* release our reference on rptinfo */
+		ASSERT(rptinfo->refcnt>0);
 	}
 	return rptinfo;
 }
 /*==========================================================
- * clear_rptinfos -- Fetch info about report file
- * Created: 2002/11/30 (Perry Rapp)
+ * clear_rptinfos -- Delete all allocated rptinfos
  *========================================================*/
 void
 clear_rptinfos (void)
 {
 	if (f_rptinfos) {
-		TABLE_ITER tabit=0;
-		STRING key=0;
-		VPTR ptr=0;
-		tabit = begin_table_iter(f_rptinfos);
-		while (next_table_ptr(tabit, &key, &ptr)) {
-			RPTINFO rptinfo = (RPTINFO)ptr;
-			remove_table(rptinfo->proctab, FREEKEY); /* values are PNODES */
-			remove_table(rptinfo->functab, FREEKEY); /* values are PNODES */
-			strfree(&rptinfo->fullpath);
-			strfree(&rptinfo->codeset);
-			zs_free(&rptinfo->localpath);
-			zs_free(&rptinfo->localepath);
-			zs_free(&rptinfo->textdomain);
-		}
-		end_table_iter(&tabit);
-		remove_table(f_rptinfos, FREEBOTH);
+		destroy_table(f_rptinfos);
 		f_rptinfos = 0;
 	}
+}
+/*=================================================
+ * rptinfo_destructor -- destructor for rptinfo
+ *  (destructor entry in vtable)
+ *===============================================*/
+static void
+rptinfo_destructor (VTABLE *obj)
+{
+	RPTINFO rptinfo = (RPTINFO)obj;
+	ASSERT(rptinfo->vtable == &vtable_for_rptinfo);
+
+	remove_table(rptinfo->proctab, FREEKEY); /* values are PNODES */
+	remove_table(rptinfo->functab, FREEKEY); /* values are PNODES */
+	strfree(&rptinfo->fullpath);
+	strfree(&rptinfo->codeset);
+	zs_free(&rptinfo->localpath);
+	zs_free(&rptinfo->localepath);
+	zs_free(&rptinfo->textdomain);
+	stdfree(rptinfo);
 }

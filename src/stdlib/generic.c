@@ -25,7 +25,7 @@ static void init_generic(GENERIC *gen);
  *********************************************/
 
 /*=================================================
- * init_generic_int -- construct a generic holding an INT
+ * init_generic -- construct a null generic
  *===============================================*/
 static void
 init_generic (GENERIC *gen)
@@ -104,6 +104,7 @@ init_generic_object (GENERIC *gen, VPTR oval)
 	init_generic(gen);
 	gen->selector = GENERIC_OBJECT;
 	gen->data.oval = obj;
+	addref_obj(obj);
 }
 /*=================================================
  * set_generic_null -- populate gen with null generic
@@ -353,4 +354,12 @@ BOOLEAN
 is_generic_vptr (GENERIC *gen)
 {
 	return gen->selector == GENERIC_VPTR;
+}
+/*=================================================
+ * is_generic_object -- return TRUE if generic is an object
+ *===============================================*/
+BOOLEAN
+is_generic_object (GENERIC *gen)
+{
+	return gen->selector == GENERIC_OBJECT;
 }

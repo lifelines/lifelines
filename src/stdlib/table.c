@@ -409,6 +409,28 @@ table_insert_ptr (TABLE tab, CNSTRING key, const VPTR value)
 	}
 }
 /*======================================
+ * table_insert_object -- Insert key & object value into table
+ * Table copies (allocates) the key & addrefs the object
+ *====================================*/
+void
+table_insert_object (TABLE tab, CNSTRING key, const VPTR value)
+{
+	ENTRY entry = fndentry(tab, key);
+	ASSERT(tab->whattofree == -2 && tab->valtype == TB_GENERIC);
+	if (!entry) {
+		/* insert new entries as generics */
+		GENERIC gen;
+		init_generic_object(&gen, value);
+		new_table_entry_impl(tab, key, &gen);
+		clear_generic(&gen);
+	} else {
+		/* Only new-style tables should call table_insert_string */
+		ASSERT(!is_generic_null(&entry->generic));
+		/* update existing value */
+		set_generic_object(&entry->generic, value);
+	}
+}
+/*======================================
  * replace_table_str -- Insert or replace
  *  key & value
  * Created: 2001/11/23, Perry Rapp
@@ -457,6 +479,14 @@ in_table (TABLE tab, CNSTRING key)
 	return fndentry(tab, key) != NULL;
 }
 /*===============================
+ * valueof_obj -- Find object value of entry
+ *=============================*/
+VPTR
+valueof_obj (TABLE tab, CNSTRING key)
+{
+	return valueofbool_obj(tab, key, NULL);
+}
+/*===============================
  * valueof_ptr -- Find pointer value of entry
  *=============================*/
 VPTR
@@ -483,9 +513,31 @@ valueof_str (TABLE tab, CNSTRING key)
 	return valueofbool_str(tab, key, NULL);
 }
 /*===================================
+ * valueofbool_obj -- Find object value of entry
+ * BOOLEAN *there:   [OUT] FALSE if not found
+ *=================================*/
+VPTR
+valueofbool_obj (TABLE tab, CNSTRING key, BOOLEAN *there)
+{
+	ENTRY entry=0;
+	VPTR defval=0;
+	if (!tab->count || !key) {
+		if (there) *there=FALSE;
+		return defval;
+	}
+	entry = fndentry(tab, key);
+	if (!entry) {
+		if (there) *there=FALSE;
+		return defval;
+	}
+	if (there) *there=TRUE;
+	if (!is_generic_object(&entry->generic))
+		return defval;
+	return get_generic_object(&entry->generic);
+}
+/*===================================
  * valueofbool_ptr -- Find pointer value of entry
  * BOOLEAN *there:   [OUT] FALSE if not found
- * Created: 2001/06/03 (Perry Rapp)
  *=================================*/
 VPTR
 valueofbool_ptr (TABLE tab, CNSTRING key, BOOLEAN *there)
@@ -504,7 +556,7 @@ valueofbool_ptr (TABLE tab, CNSTRING key, BOOLEAN *there)
 	if (there) *there=TRUE;
 	if (!is_generic_null(&entry->generic)) {
 		if (!is_generic_vptr(&entry->generic))
-			return NULL;
+			return defval;
 		return get_generic_vptr(&entry->generic);
 	}
 	ASSERT(tab->valtype == TB_PTR);
@@ -513,7 +565,6 @@ valueofbool_ptr (TABLE tab, CNSTRING key, BOOLEAN *there)
 /*===================================
  * valueofbool_int -- Find pointer value of entry
  * BOOLEAN *there:   [OUT] FALSE if not found
- * Created: 2001/06/03 (Perry Rapp)
  *=================================*/
 INT
 valueofbool_int (TABLE tab, CNSTRING key, BOOLEAN *there)
@@ -537,7 +588,6 @@ valueofbool_int (TABLE tab, CNSTRING key, BOOLEAN *there)
 /*===================================
  * valueofbool_str -- Find string value of entry
  * BOOLEAN *there:   [OUT] FALSE if not found
- * Created: 2001/06/03 (Perry Rapp)
  *=================================*/
 STRING
 valueofbool_str (TABLE tab, CNSTRING key, BOOLEAN *there)
@@ -853,7 +903,7 @@ static void
 table_destructor (VTABLE *obj)
 {
 	TABLE tab = (TABLE)obj;
-	ASSERT((*obj) == &vtable_for_table);
+	ASSERT(tab->vtable == &vtable_for_table);
 	destroy_table(tab);
 }
 /*=================================================

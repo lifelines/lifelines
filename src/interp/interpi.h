@@ -57,6 +57,8 @@ typedef struct tag_pathinfo {
 } *PATHINFO;
 
 struct tag_rptinfo {
+	struct tag_vtable *vtable; /* generic object */
+	INT refcnt; /* ref-countable object */
 	STRING fullpath; /* fully qualified path to file */
 	ZSTR localpath;  /* directory file is in */
 	ZSTR localepath; /* directory for message catalogs */

@@ -20,6 +20,13 @@
 	Implement table valuexx functions via valueofxx functions.
 	Remove default value argument to valueof_int.
 
+	* ChangeLog src/hdrs/generic.h src/hdrs/table.h
+	src/interp/alloc.c src/interp/interpi.h
+	src/stdlib/generic.c src/stdlib/table.c src/stdlib/vtable.c
+
+	Make rptinfo into an object (with vtable).
+	Store rptinfos in table as objects.
+
 2005-02-01 Perry Rapp
 
 	* ChangeLog src/stdlib/table.c
