@@ -237,10 +237,8 @@ main (INT argc,
 
 	/* Open Database */
 	readpath = filepath(btreepath, "r", lldatabases, NULL);
-	if (!readpath) {
-		STRING llnewdbdir = environ_determine_newdbdir();
-		readpath = strsave(concat_path(llnewdbdir, btreepath));
-	}
+	if (!readpath)
+		readpath = btreepath;
 	if (forceopen) {
 		char scratch[200];
 		FILE *fp;
@@ -280,10 +278,13 @@ main (INT argc,
 	if (!(BTR = openbtree(readpath, FALSE, !readonly))) {
 		switch (bterrno) {
 		case BTERRNOBTRE:
-		case BTERRKFILE:	/*NEW*/
-	    		if(!trytocreate(readpath)) {
-				show_open_error();
-				goto finish;
+		case BTERRKFILE:	{/*NEW*/
+				STRING llnewdbdir = environ_determine_newdbdir();
+				readpath = strsave(concat_path(llnewdbdir, btreepath));
+				if(!trytocreate(readpath)) {
+					show_open_error();
+					goto finish;
+				}
 			}
 			break;
 		default:
