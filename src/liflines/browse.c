@@ -61,12 +61,14 @@ extern STRING idpnxt, ids2fm, idc2fm, idplst, idp2br, crtcfm, crtsfm;
 extern STRING ronlye, ronlya, idhbrs, idwbrs;
 extern STRING id1sbr, id2sbr, id1fbr, id2fbr, id1cbr, id2cbr;
 extern STRING id1hbr, id2hbr, id1wbr, id2wbr;
+extern STRING spover;
 
 /*********************************************
  * local enums & defines
  *********************************************/
 
 #define ALLPARMS &indi1, &indi2, &fam1, &fam2, &seq
+#define MAX_SPOUSES 30
 
 /*********************************************
  * local function prototypes
@@ -176,20 +178,16 @@ goto_fam_child(NODE fam, int childno)
  * display_indi -- Show indi in current mode
  *========================================*/
 static INT
-display_indi (NODE indi, INT mode)
+display_indi (NODE indi, INT indimode)
 {
 	CACHEEL icel;
 	INT c;
+	INT mode;
 	icel = indi_to_cacheel(indi);
 	lock_cache(icel);
-	if (mode == 'i') {
-		if (gedcom_mode)
-			c = indi_ged_browse(indi);
-		else
-			c = indi_browse(indi);
-	}
-	else
-		c = ped_browse(indi);
+	/* combine indimode & gedcom_mode */
+	mode = (indimode=='i')?(gedcom_mode?'g':'i'):'p';
+	c = indi_browse(indi, mode);
 	unlock_cache(icel);
 	return c;
 }
@@ -644,19 +642,57 @@ display_fam (NODE fam, INT fammode)
 {
 	CACHEEL icel;
 	INT c=0;
+	INT mode;
 	icel = fam_to_cacheel(fam);
 	lock_cache(icel);
-	if (fammode == 'f') {
-		if (gedcom_mode)
-			c = fam_ged_browse(fam);
-		else
-			c = fam_browse(fam);
-	}
-	else {
-		ASSERT(0); /* no other modes */
-	}
+	/* combine fammode & gedcom_mode */
+	/* no fammode supported but 'f' */
+	mode=gedcom_mode?'g':'f';
+	c = fam_browse(fam, mode);
 	unlock_cache(icel);
 	return c;
+}
+/*===============================================
+ * remove_spouse_from_family -- 
+ *  pulled out of browse_fam, 2001/02/03, Perry Rapp
+ *=============================================*/
+static void
+remove_spouse_from_family(NODE fam)
+{
+	NODE node, husb, wife, chil, rest;
+	NODE root, fref, spnodes[MAX_SPOUSES];
+	STRING spstrings[MAX_SPOUSES];
+	INT i;
+	if (readonly) {
+		message(ronlye);
+		return;
+	}
+	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
+	if (!husb && !wife) {
+		message(hasnei);
+		return;
+	}
+	i = 0;
+	for (node = husb; node; node = nsibling(node)) {
+		root = key_to_indi(rmvat(nval(node)));
+		spstrings[i] = indi_to_list_string(root,
+			 NULL, 66);
+		spnodes[i++] = root;
+	}
+	for (node = wife; node; node = nsibling(node)) {
+		root = key_to_indi(rmvat(nval(node)));
+		spstrings[i] = indi_to_list_string(root,
+			 NULL, 66);
+		spnodes[i++] = root;
+		if (i == MAX_SPOUSES) {
+			message(spover);
+			break;
+		}
+	}
+	join_fam(fam, fref, husb, wife, chil, rest);
+	i = choose_from_list(idsrmv, i, spstrings);
+	if (i == -1) return;
+	choose_and_remove_spouse(spnodes[i], fam, TRUE);
 }
 /*===============================================
  * browse_fam -- Handle family browse selections.
@@ -672,9 +708,9 @@ browse_fam (NODE *pindi,
 	INT fammode='f';
 	INT nkeyp, fammodep;
 	NODE save = NULL, fam = *pfam1, node, husb, wife, chil, rest;
-	NODE root, fref, spnodes[30];
+	NODE fref;
 	INDISEQ seq;
-	STRING key, name, spstrings[2];
+	STRING key, name;
 	char scratch[100];
 	TRANTABLE ttd = tran_tables[MINDS];
 
@@ -765,7 +801,7 @@ browse_fam (NODE *pindi,
 			}
 			*pindi = choose_child(NULL, fam, nocinf,
 			    idcrmv, DOASK1);
-			if (*pindi) choose_and_remove_child(*pindi, NULL, TRUE);
+			if (*pindi) choose_and_remove_child(*pindi, fam, TRUE);
 			break;
 		case 's':	/* Add spouse to family */
 			if (readonly) {
@@ -798,32 +834,7 @@ browse_fam (NODE *pindi,
 			save = NULL;
 			break;
 		case 'r':	/* Remove spouse from family */
-			if (readonly) {
-				message(ronlye);
-				break;
-			}
-			split_fam(fam, &fref, &husb, &wife, &chil, &rest);
-			if (!husb && !wife) {
-				message(hasnei);
-				break;
-			}
-			i = 0;
-			for (node = husb; node; node = nsibling(node)) {
-				root = key_to_indi(rmvat(nval(node)));
-				spstrings[i] = indi_to_list_string(root,
-				    NULL, 66);
-				spnodes[i++] = root;
-			}
-			for (node = wife; node; node = nsibling(node)) {
-				root = key_to_indi(rmvat(nval(node)));
-				spstrings[i] = indi_to_list_string(root,
-				    NULL, 66);
-				spnodes[i++] = root;
-			}
-			join_fam(fam, fref, husb, wife, chil, rest);
-			i = choose_from_list(idsrmv, i, spstrings);
-			if (i == -1) break;
-			choose_and_remove_spouse(spnodes[i], fam, TRUE);
+			remove_spouse_from_family(fam);
 			break;
 		case 'n':	/* Add person to database */
 			save = add_indi_by_edit();

@@ -4,6 +4,16 @@
 	liflines/screen.c stdlib/signals.c:
 	Bugfixes: direct-to-child navigation, & pedigree mode.
 
+	* gedlib/messages.c hdrs/screen.h liflines/browse.c
+	liflines/screen.c stdlib/signals.c:
+	Fix array overflow removing spouse from family with 3+ spouses
+	(new remove_spouse_from_family, handles up to 30, and truncates
+	list to 30, with message).
+	Changed remove child from family to always remove from current
+	family on-screen.
+	Combine indi_browse, indi_ged_browse, and ped_browse.
+	Combine fam_browse and fam_ged_browse.
+
 2001-02-01 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/messages.c hdrs/menuitem.h hdrs/screen.h

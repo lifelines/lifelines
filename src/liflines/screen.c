@@ -506,18 +506,6 @@ main_menu (void)
 	}
 }
 /*=========================================
- * indi_browse -- Handle indi_browse screen
- *=======================================*/
-INT
-indi_browse (NODE indi)
-{
-	INT screen = ONE_PER_SCREEN;
-	INT lines = update_menu(screen);
-	show_person_main1(indi, 1, lines);
-	display_screen(screen);
-	return interact(main_win, NULL, screen);
-}
-/*=========================================
  * update_menu -- redraw menu if needed
  *  uses new menus
  * Created: 2001/02/01, Perry Rapp
@@ -532,15 +520,19 @@ update_menu (INT screen)
 	return lines;
 }
 /*=========================================
- * indi_ged_browse -- Handle indi_browse screen
- *  in gedcom mode
+ * indi_browse -- Handle indi_browse screen
  *=======================================*/
 INT
-indi_ged_browse (NODE indi)
+indi_browse (NODE indi, INT mode)
 {
 	INT screen = ONE_PER_SCREEN;
 	INT lines = update_menu(screen);
-	show_gedcom(indi, lines);
+	if (mode=='g')
+		show_gedcom(indi, lines);
+	else if (mode=='p')
+		show_pedigree(indi, lines);
+	else
+		show_person_main1(indi, 1, lines);
 	display_screen(screen);
 	return interact(main_win, NULL, screen);
 }
@@ -558,23 +550,14 @@ fam_interact (void)
  * fam_browse -- Handle fam_browse screen
  *=====================================*/
 INT
-fam_browse (NODE fam)
+fam_browse (NODE fam, INT mode)
 {
 	INT screen = ONE_FAM_SCREEN;
 	INT lines = update_menu(screen);
-	show_long_family(fam, 1, lines, MAINWIN_WIDTH);
-	display_screen(screen);
-	return fam_interact();
-}
-/*=======================================
- * fam_ged_browse -- Handle fam_browse screen
- *=====================================*/
-INT
-fam_ged_browse (NODE fam)
-{
-	INT screen = ONE_FAM_SCREEN;
-	INT lines = update_menu(screen);
-	show_gedcom(fam, lines);
+	if (mode=='g')
+		show_gedcom(fam, lines);
+	else
+		show_long_family(fam, 1, lines, MAINWIN_WIDTH);
 	display_screen(screen);
 	return fam_interact();
 }
@@ -602,18 +585,6 @@ twofam_browse (NODE fam1, NODE fam2)
 	show_short_family(fam2, TANDEM_LINES+2, TANDEM_LINES, width);
 	display_screen(TWO_FAM_SCREEN);
 	return interact(main_win, "etbfmxjq", -1);
-}
-/*=======================================
- * ped_browse -- Handle ped_browse screen
- *=====================================*/
-INT
-ped_browse (NODE indi)
-{
-	INT screen = ONE_PER_SCREEN;
-	INT lines = update_menu(screen);
-	show_pedigree(indi, lines);
-	display_screen(ONE_PER_SCREEN);
-	return interact(main_win, NULL, screen);
 }
 /*=======================================
  * aux_browse -- Handle aux_browse screen

@@ -161,6 +161,7 @@ STRING cfpmrg = SS "Do you really want to merge these two persons?";
 STRING cffmrg = SS "Do you really want to merge these two families?";
 STRING cfcrmv = SS "Do you really want to remove this child from his/her family?";
 STRING cfsrmv = SS "Do you really want to remove this spouse from his/her family?";
+STRING spover = SS "Too many spouses to display full list";
 
 STRING badata = SS "There is something wrong with the data.";
 STRING idchld = SS "Please identify the child.";
