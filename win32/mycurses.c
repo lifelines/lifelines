@@ -33,6 +33,7 @@
 static int mycur_init(int fullscreen);
 static int mycur_getc(void);
 static void adjust_linescols(void);
+static void console_resize_callback(void);
 
 
 /* Windows Console */
@@ -116,10 +117,6 @@ int endwin()
 	return(0);
 }
 
-void wtitle(const char *title)
-{
-	SetConsoleTitle(title);
-}
 
 WINDOW	*initscr()
 {
@@ -770,6 +767,7 @@ static int mycur_getc(void)
 			LINES = height;
 			COLS = width;
 			adjust_linescols();
+			console_resize_callback();
 		}
 		else if (inrec.EventType == KEY_EVENT && inrec.Event.KeyEvent.bKeyDown
 			&& inrec.Event.KeyEvent.wVirtualKeyCode != VK_MENU)
@@ -839,4 +837,36 @@ static int mycur_getc(void)
 			}
 		}
 	}
+}
+
+void wtitle(const char *title)
+{
+	SetConsoleTitle(title);
+}
+
+int w_get_codepage(void)
+{
+	return GetACP();
+}
+
+int w_get_oemout_codepage(void)
+{
+	return GetConsoleOutputCP();
+}
+
+int w_get_oemin_codepage(void)
+{
+	return GetConsoleCP();
+}
+static void * cbparam = 0;
+static void (*cbfunc)(void *) = 0;
+void w_set_console_resize_callback(void (*fptr)(void * param), void * param)
+{
+	cbparam = param;
+	cbfunc = fptr;
+}
+static void console_resize_callback(void)
+{
+	if (cbfunc)
+		(cbfunc)(cbparam);
 }

@@ -21,8 +21,7 @@
 # include "langinfz.h"
 #endif
 #include "translat.h"
-#include "liflines.h"
-#include "feedback.h"
+#include "gedcom.h"
 #include "zstr.h"
 #include "icvt.h"
 #include "lloptions.h"

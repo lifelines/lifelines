@@ -35,12 +35,6 @@
 
 
 /*********************************************
- * global/exported variables
- *********************************************/
-BOOLEAN uu8=0;         /* This is the internal codeset, not the user's. */
-STRING  int_codeset=0;      /* This is the internal codeset, not the user's. */
-
-/*********************************************
  * external/imported variables
  *********************************************/
 extern BOOLEAN opt_finnish;

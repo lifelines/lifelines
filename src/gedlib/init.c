@@ -40,6 +40,7 @@
 #include "gedcom.h"
 #include "version.h"
 #include "lloptions.h"
+#include "codesets.h"
 #ifdef WIN32_ICONV_SHIM
 #include "iconvshim.h"
 #endif
@@ -121,14 +122,17 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 		update_useropts(NULL);
 		return FALSE;
 	}
-
+	/* now that codeset variables are set from config file, lets initialize codesets */
+	/* although int_codeset can't be determined yet, we need GUI codeset for gettext */
+	init_codesets();
+	/* for Windows, link dynamically to gettext & iconv if available */
 	init_win32_gettext_shim();
 	init_win32_iconv_shim();
 
 #if ENABLE_NLS
 
 #ifdef HAVE_BIND_TEXTDOMAIN_CODESET
-	e = getoptstr("GuiCodeset", "");
+	e = gedcom_codeset_out;
 	if (e && e[0]) {
 		/* This doesn't work with gettext before 0.11.3pre2
 		STRING suffix = getoptstr("GuiCodesetOutput", "");

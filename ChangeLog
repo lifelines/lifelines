@@ -1,3 +1,13 @@
+2002-11-27 Perry Rapp
+
+	* ChangeLog src/gedlib/init.c src/gedlib/translat.c
+	src/hdrs/win32/curses.h src/liflines/main.c src/stdlib/icvt.c
+	src/stdlib/stdstrng.c win32/iconvshim.c win32/mycurses.c
+	*NEW src/gedlib/codesets.c
+	*NEW src/hdrs/codesets.h:
+
+	Ongoing reimplementation of codesets.
+
 2002-11-26 Perry Rapp
 
 	* ChangeLog src/gedlib/charmaps.c src/gedlib/editvtab.c
@@ -15,8 +25,8 @@
 	src/liflines/valgdcom.c src/stdlib/icvt.c src/stdlib/signals.c
 	src/stdlib/zstr.c:
 
-	Rename TRANMAPPING to XLAT (will be main interface to codeset conversion).
-	Consolidate translation table code into charmaps.c.
+	Rename TRANMAPPING to XLAT (will be main interface to codeset
+	conversion). Consolidate translation table code into charmaps.c.
 	Making file header license statements shorter (with Tom's permission).
 	Implement new XLAT chains for simple case of single iconv step chain.
 	Fix uninitialized string bug in signal handler code.

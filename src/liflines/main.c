@@ -95,7 +95,6 @@ BOOLEAN traditional = TRUE;    /* use traditional family rules */
 BOOLEAN showusage = FALSE;     /* show usage */
 STRING  readpath_file = NULL;  /* last component of readpath */
 STRING  readpath = NULL;       /* database path used to open */
-STRING  ext_codeset = 0;       /* default codeset from locale */
 
 /*********************************************
  * local function prototypes
@@ -143,10 +142,6 @@ main (INT argc, char **argv)
 	setlocale(LC_ALL, "");
 #endif /* HAVE_SETLOCALE */
 	
-	/* capture user's default codeset */
-	ext_codeset = strsave(ll_langinfo());
-	/* TODO: We can use this info for default conversions */
-
 #if ENABLE_NLS
 	/* setup gettext translation */
 	bindtextdomain(PACKAGE, LOCALEDIR);

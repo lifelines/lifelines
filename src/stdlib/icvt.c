@@ -40,11 +40,6 @@ iconv_can_trans (CNSTRING src, CNSTRING dest)
 #endif
 }
 
-BOOLEAN
-iconv_tranz (CNSTRING src, CNSTRING dest, ZSTR * zstr, CNSTRING illegal)
-{
-	
-}
 /*===================================================
  * iconv_trans -- Translate string via iconv
  *  src:     [IN]  source codeset
