@@ -43,10 +43,13 @@ LL_REPORTS = \
 	ssdi-search-list.ll stats.ll surname1.ll 	\
 	timeline1.ll timeline2.ll tinytafel1.ll tools.li	\
 	tree_density.ll ttable.ll upl2.li verify.ll wife.ll	\
-	xml-dtd.ll xmlize.ll zombies.ll	\
+	xml-dtd.ll xmlize.ll zombies.ll
+
+ST_REPORTS = \
 	st/st_all.ll st/st_aux.li st/st_collate.li \
 	st/st_collate_8859-1.li st/st_collate_UTF-8.li \
 	st/st_convert.li st/st_date.li st/st_db.li \
+	st/st_list.li st_name.li \
 	st/st_number.li st/st_string.li st/st_string_UTF-8.li
 
 OTHER_REPORTS = boc.gif ll.png gen_index bib2html.c bury.c \
@@ -61,7 +64,7 @@ OTHER_REPORTS = boc.gif ll.png gen_index bib2html.c bury.c \
         ps-fan/ps-fan.ps \
         ps-pedigree.ps tree.tex
 
-pkg_REPORTS = $(LL_REPORTS) $(OTHER_REPORTS)
+pkg_REPORTS = $(LL_REPORTS) $(ST_REPORTS) $(OTHER_REPORTS)
 pkg_REPORTS_MISC = index.html CREDIT README tree.tex
 
 EXTRA_DIST = $(pkg_REPORTS) \
