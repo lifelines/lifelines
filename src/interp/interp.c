@@ -214,8 +214,9 @@ delete_pathinfo (PATHINFO * pathinfo)
  *  ifiles:   [IN]  program files
  *  ofile:    [IN]  output file - can be NULL
  *  picklist: [IN]  show user list of existing reports ?
+ * returns 0 if it didn't actually run (eg, not found, or no report picked)
  *============================================*/
-void
+static INT
 interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 	, STRING ofile, BOOLEAN picklist)
 {
@@ -228,6 +229,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 	struct tag_pactx pact;
 	PACTX pactx = &pact;
 	STRING rootfilepath=0;
+	INT ranit=0;
 
 	init_pactx(pactx);
 
@@ -354,7 +356,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 	}
 
    /* Interpret top procedure */
-
+	ranit = 1;
 	progparsing = FALSE;
 	progrunning = TRUE;
 	progerror = 0;
@@ -399,7 +401,7 @@ interp_program_exit:
 	}
 	strfree(&rootfilepath);
 	remove_list(donelist, NULL);
-	return;
+	return ranit;
 }
 /*===============================================
  * init_pactx -- initialize global parsing context
@@ -572,6 +574,7 @@ interp_main (LIST lifiles, STRING ofile, BOOLEAN picklist, BOOLEAN timing)
 {
 	time_t begin = time(NULL);
 	int elapsed, uitime;
+	int ranit=0;
 	/* whilst still in uilocale, check if we need to reload report strings
 	(in case first time or uilocale changed) */
 	interp_load_lang();
@@ -580,12 +583,12 @@ interp_main (LIST lifiles, STRING ofile, BOOLEAN picklist, BOOLEAN timing)
 	rptui_init(); /* clear ui time counter */
 
 	rptlocale();
-	interp_program_list("main", 0, NULL, lifiles, ofile, picklist);
+	ranit = interp_program_list("main", 0, NULL, lifiles, ofile, picklist);
 	uilocale();
 	elapsed = time(NULL) - begin;
 	uitime = rptui_elapsed();
 
-	if (timing)
+	if (ranit && timing)
 		print_report_duration(elapsed, uitime);
 	
 	/*

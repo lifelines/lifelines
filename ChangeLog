@@ -4,6 +4,10 @@
 
 	Fix cursor display for main fixed menu screens (from psfales).
 
+	* ChangeLog src/interp/interp.c src/interp/interpi.h
+
+	Suppress report timing if report didn't run.
+
 2003-07-22 Perry Rapp
 
 	* ChangeLog src/liflines/screen.c

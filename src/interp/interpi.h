@@ -191,7 +191,6 @@ typedef struct {
 
 void initinterp(void);
 void initrassa(void);
-void interp_program_list(STRING, INT, VPTR*, LIST, STRING, BOOLEAN picklist);
 void finishinterp(void);
 void finishrassa(void);
 
