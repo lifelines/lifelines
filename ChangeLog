@@ -49,6 +49,10 @@
 
 	New function remove_list.
 
+	* ChangeLog NEWS
+
+	Fix NEWS now that missing record fixes are in dbverify not llines.
+
 2005-02-04 Perry Rapp
 
 	* ChangeLog src/gedlib/node.c src/hdrs/gedcom.h
