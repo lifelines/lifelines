@@ -24,9 +24,10 @@
    SOFTWARE.
 */
 
-/*
- warehouse.h
- Copyright Perry Rapp, 2000
+/*==============================================================
+ warehouse.h -- Header file for metadata
+ Copyright (c) 1999-2001 by Perry Rapp; all rights reserved
+  Added during 3.0.6 development
  Created by Perry Rapp, 2000/12/02
  
  A warehouse is made up of three parts:
@@ -42,7 +43,10 @@
  Forward compatibility - there may be blocks in the warehouse
   of unknown type
  Backward compatibility - blocks may be missing from the warehouse
-*/
+ *============================================================*/
+
+#ifndef _WAREHOUSE_H
+#define _WAREHOUSE_H
 
 struct WAREHOUSE_S
 {
@@ -69,3 +73,5 @@ void wh_add_block_int (WAREHOUSE wh, INT blockid, INT val);
 void wh_delete_block(WAREHOUSE wh, INT blockid);
 INT wh_get_blocktype(WAREHOUSE wh, INT blockid);
 void wh_assign_from_blob(WAREHOUSE wh, void * data, INT len);
+
+#endif /* _WAREHOUSE_H */

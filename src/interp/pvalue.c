@@ -23,7 +23,7 @@
 */
 /* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
- * pvalue.c -- Handle prgram typed values
+ * pvalue.c -- Handle program typed values
  * Copyright(c) 1991-95 by T.T. Wetmore IV; all rights reserved
  *   3.0.3 - 03 Jul 96
  *===========================================================*/
