@@ -11,6 +11,14 @@
 ** SourceForge Versions:
 **
 ** $Log$
+** Revision 1.6  2001/07/11 04:16:41  dabright
+**         * reports/book-latex.ll: Added CREM (cremated) tag processing;
+** 	modified OCCU tag processing so that it can recognize date ranges
+** 	(and so avoid saying "xx is a yy and a zz and a ..."); modified
+** 	OCCU tag processing to recognize a subordinate AGNC tag indicating
+** 	employer; modified onDate to recognize date ranges (FROM dd mmm
+** 	yyyy TO dd mmm yyyy) - this still has some rough edges.
+**
 ** Revision 1.5  2000/11/28 21:39:45  nozell
 ** Add keyword tags to all reports
 ** Extend the report script menu to display script output format
@@ -268,7 +276,7 @@
 		  which tells me everything about the person and
 		  I don't want to mess things up by citing it
 		  separately 8 times for birth, death, marr,...
-     1 evnt ...	- BIRT, CHR, DEAT, BURI, MARR, DIV, DIVF, or ANUL,...
+     1 evnt ...	- BIRT, CHR, DEAT, BURI, CREM, MARR, DIV, DIVF, or ANUL,...
      2 DATE ...	- Date should be of format
 		  [ABT|BEF|AFT|BET] [day] [JAN|...|DEC] [year] [-year for BET]
      2 PLAC ...	- Comma separated list of localities appropriate for the
@@ -282,6 +290,8 @@
      2 NOTE ... - Text to be inserted in book following technical details
 		  of the event. (I use this instead of TEXT)
      3 SOUR ...	- Source for text.
+     1 OCCU ... - Description (title) of an occupation (job).
+     2 AGNC ... - Employer (produces "worked [or became] a <OCCU> with <AGNC>").
      1 TEXT ... - Text to be inserted in book about the person.
 		  I toyed with putting this before the death info,
 		  but decided I like having all the vital stuff first,
@@ -736,6 +746,7 @@ proc main ()
   insert (eventNameTable, "CHR",  "was baptized")
   insert (eventNameTable, "DEAT", "died")
   insert (eventNameTable, "BURI", "was buried")
+  insert (eventNameTable, "CREM", "was cremated")
   insert (eventNameTable, "GRAD", "")/* left blank since it is done
 					as a separate case */
   insert (eventNameTable, "NATU", "was naturalized")
@@ -1437,15 +1448,16 @@ proc longvitals(i, name_parents, name_type)
 		}
             }
                 if (or(eq(strcmp(tag(n), "BURI"), 0),
-                      or (eq(strcmp(tag(n), "CENS"), 0),
-                         or (eq(strcmp(tag(n), "CHRA"), 0),
-                            or (eq(strcmp(tag(n), "DEAT"), 0),
-                               or (eq(strcmp(tag(n), "NATU"), 0),
-                                  or (eq(strcmp(tag(n), "RETI"), 0),
-                                     or (eq(strcmp(tag(n), "RESI"), 0),
-                                        or (eq(strcmp(tag(n), "PROB"), 0),
-                                          eq(strcmp(tag(n), "WILL"), 0)
-			))))))))){
+                      or (eq(strcmp(tag(n), "CREM"), 0),
+                         or (eq(strcmp(tag(n), "CENS"), 0),
+                            or (eq(strcmp(tag(n), "CHRA"), 0),
+                               or (eq(strcmp(tag(n), "DEAT"), 0),
+                                  or (eq(strcmp(tag(n), "NATU"), 0),
+                                     or (eq(strcmp(tag(n), "RETI"), 0),
+                                        or (eq(strcmp(tag(n), "RESI"), 0),
+                                           or (eq(strcmp(tag(n), "PROB"), 0),
+                                             eq(strcmp(tag(n), "WILL"), 0)
+			)))))))))){
 			pronoun set(printedOne,0) 
                         call process_event(n)
 			if (putPeriod) {". "}
@@ -1468,6 +1480,7 @@ proc longvitals(i, name_parents, name_type)
 			pronoun set(printedOne,0) 
                         /* should also check for a RETIred node
                            and always say WAS if it exists */
+/* DAB - replace with do_occu; delete this when do_occu accepted
 			call getValue(inode(i),"RETI")
 			if (gotValue){ " was"}
 			else { call iswas(i)}
@@ -1475,6 +1488,8 @@ proc longvitals(i, name_parents, name_type)
 			call aAn(value(n)) " "
 			call valuec(n)
                         call process_event(n)
+*/
+			call do_occu(n, i)
 			if (putPeriod) {". "}
                 }
                 if (eq(strcmp(tag(n), "PROP"), 0)) {
@@ -1491,6 +1506,62 @@ proc longvitals(i, name_parents, name_type)
 	}
 }
 
+/* isRange(d) - Indicate if a date node is a range
+ * 
+ * d - DATE node (could be NIL)
+ *
+ * Returns: 1 if <d> is of the form "[BET] date1-date2"; 0 otgherwise
+ *
+ */
+
+func isRange(d)
+{
+    set(r, 0)
+    if (d) {
+    	if (i, index (d, "-", 1)) { 
+    	    set(r, 1)
+    	} elsif (i, index (d, "FROM", 1)) { 
+    	    set(r, 1)
+	}
+    }
+    return(r)
+}
+
+/* do_occu(n, i) - Process an OCCU node
+ * 
+ * n - OCCU node
+ * i - INDI containing <n>
+ *
+ * An OCCU node will produce text saying "<name> is/was a <occu> with <agnc> ...."
+ * It is assumed that the <name> was printed before this routine was called.
+ * If the person is (likely) deceased, if the OCCU node has a subordinate RETI node,
+ * or if the DATE tag subordinate to the OCCU node is a range, then "was" is used in
+ * the sentence; otherwise, "is" is used. The "with <agnc>" clause is added if a
+ * AGNC node is subordinate to the OCCU node; it is taken to be the name of the 
+ * employer.
+ *
+ */
+
+proc do_occu(n, i)
+{
+    /* Check for date range or RETI node and use "was" if either present. */
+    set(d, date(n))
+    call getValue(inode(i), "RETI")
+    if (or(gotValue, isRange(d))) {
+	" was"
+    } else {
+	call iswas(i)
+    }
+    " "
+    call aAn(value(n)) " "
+    call valuec(n)
+    call getValue(n, "AGNC")
+    if (gotValue) {
+        " with " gottenValue
+    }
+    call process_event(n)
+/*    if (putPeriod) {". "} */
+}
 
 /* spousevitals (spouse, fam)
    Prints out information about a marriage (fam) and about a spouse in the
@@ -1498,7 +1569,6 @@ proc longvitals(i, name_parents, name_type)
 
 proc spousevitals (spouse, fam)
 {
-
   call texname(inode(spouse), 3)
 
   if (spouse){ call print_sources(inode(spouse))}
@@ -1633,6 +1703,7 @@ proc spousevitals (spouse, fam)
 
 		/* should also check for a RETIred node
                    and always say WAS if it exists */
+/* DAB - replace with do_occu; delete this when do_occu is accepted
 		call getValue(inode(spouse),"RETI")
 		if (gotValue){ " was"}
 		else { call iswas(spouse)}
@@ -1641,6 +1712,8 @@ proc spousevitals (spouse, fam)
 		call valuec(savenode)
                 call process_event(savenode)
 		". "
+*/
+	call do_occu(savenode, spouse) ". "
       }
       call getText(inode(spouse),0)
       call process_book_notes (spouse)
@@ -2027,7 +2100,8 @@ proc vitalEvent (event, reset) {
       " " eventName
       if (or (not (strcmp (tag (event), "ADOP")), 
               or (not (strcmp (tag (event), "CHR")), 
-	          not (strcmp (tag (event), "BURI"))))) {
+              or (not (strcmp (tag (event), "CREM")), 
+	          not (strcmp (tag (event), "BURI")))))) {
 	set (previousDayNumber, dayNumber)
       } else {
 	set (previousDayNumber, 0)
@@ -2119,7 +2193,36 @@ proc onDate (event) {
     elsif (eq (index (d, "Bef", 1), 1)) { "\nsome time before " }
     elsif (eq (index (d, "ABT", 1), 1)) { "\ncirca " }
     elsif (eq (index (d, "Abt", 1), 1)) { "\ncirca " }
-    elsif (i, index (d, "-", 1)) { 
+    elsif (eq (index (d, "FROM", 1), 1)) { 
+      set(t, index(d, "TO", 1))
+/* DAB - experimental (and not working) 
+      set(fromDateEvent, createnode("EVEN", ""))
+      set(fromDateNode, createnode("DATE", substring (d, add(1, strlen("FROM")), sub (t, 1)) ))
+      addnode(fromDateNode, fromDateEvent, 0)
+      set(toDateEvent, createnode("EVEN", ""))
+      set(toDateNode, createnode("DATE", substring (d, add (t, strlen("TO")), strlen (d)) ))
+      addnode(toDateNode, toDateEvent, 0)
+   DEBUG:
+"\n from date nodes: " traverse(fromDateEvent, xx, yy) {
+d(yy) ": " tag(xx) " " value(xx)
+}
+"\n to date nodes: " traverse(toDateEvent, xx, yy) {
+d(yy) ": " tag(xx) " " value(xx)
+}
+
+      "\nfrom " stddate(fromDateEvent)
+      " to " stddate(toDateEvent)
+      deletenode(toDateNode)
+      deletenode(toDateEvent)
+      deletenode(fromDateNode)
+      deletenode(fromDateEvent)
+   DAB - end of experimental */
+/* DAB - This way works, but doesn't necessarily produce dates in the same format as stddate */
+      "\nfrom " substring (d, add(1, strlen("FROM")), sub (t, 1)) 
+      " to " substring (d, add (t, strlen("TO")), strlen (d)) 
+/**/
+      set (event, 0)
+    } elsif (i, index (d, "-", 1)) { 
       "\nbetween " substring (d, 1, sub (i, 1)) 
       " and " substring (d, add (i, 1), strlen (d)) 
       set (event, 0)

@@ -1,3 +1,12 @@
+2001-07-10  David A. Bright <dabright@users.sourceforge.net>
+
+        * reports/book-latex.ll: Added CREM (cremated) tag processing;
+	modified OCCU tag processing so that it can recognize date ranges
+	(and so avoid saying "xx is a yy and a zz and a ..."); modified
+	OCCU tag processing to recognize a subordinate AGNC tag indicating
+	employer; modified onDate to recognize date ranges (FROM dd mmm
+	yyyy TO dd mmm yyyy) - this still has some rough edges.
+
 2001-07-10 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/charmaps.c gedlib/misc.c gedlib/names.c
