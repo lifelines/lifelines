@@ -40,14 +40,26 @@ typedef struct ltag {
 #define LISTNOFREE 0
 #define LISTDOFREE 1
 
-/* cycle through list from head to tail */
+/* cycle through list from tail to head */
 #define FORLIST(l,e)\
+	{\
+		LNODE _lnode = l->l_tail;\
+		VPTR e;\
+		while (_lnode) {\
+			e = _lnode->l_element;
+#define ENDLIST\
+			_lnode = _lnode->l_prev;\
+		}\
+	}
+
+/* cycle through list from head to tail */
+#define FORXLIST(l,e)\
 	{\
 		LNODE _lnode = l->l_head;\
 		VPTR e;\
 		while (_lnode) {\
 			e = _lnode->l_element;
-#define ENDLIST\
+#define ENDXLIST\
 			_lnode = _lnode->l_next;\
 		}\
 	}

@@ -1,3 +1,11 @@
+2002-12-17 Perry Rapp
+
+	* ChangeLog reports/st/st_list.ll src/hdrs/list.h
+	src/liflines/screen.c src/stdlib/list.c src/stdlib/proptbls.c:
+
+	Add requeue tests to st/st_list.ll.
+	Revert enqueue to push, and getel & FORLIST to go from tail to head.
+
 2002-12-16 Perry Rapp
 
 	* ChangeLog po/fr.po:

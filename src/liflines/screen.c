@@ -1144,12 +1144,12 @@ choose_from_list (STRING ttl, LIST list)
 
 	array = (STRING *) stdalloc(len*sizeof(STRING));
 	i = 0;
-	FORLIST(list, el)
+	FORXLIST(list, el)
 		choice = (STRING)el;
 		ASSERT(choice);
 		array[i] = strsave(choice);
 		++i;
-	ENDLIST
+	ENDXLIST
 
 	rtn = choose_from_array(ttl, len, array);
 

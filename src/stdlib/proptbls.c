@@ -68,7 +68,7 @@ add_dir_files_to_proplist (CNSTRING dir, SELECT_FNC selectfnc, LIST list)
 		set_prop_dnum(table, 2, strsave("dir"), strsave(dir));
 		stdfree(programs[i]);
 		programs[i] = NULL;
-		back_list(list, table);
+		enqueue_list(list, table);
 	}
 	if (n>0)
 		stdfree(programs);

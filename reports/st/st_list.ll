@@ -1,5 +1,5 @@
 /*
- * @version        1.0
+ * @version        1.01 (2002-12-17-0600)
  * @author         Perry Rapp
  * @category       self-test
  * @output         none
@@ -41,20 +41,39 @@ proc testLists()
 	}
 	else { incr(testok) }
 /* enqueue & dequeue */
-	enqueue(li, 1)
-	enqueue(li, 2)
+	enqueue(li, 100)
+	enqueue(li, 200)
 	set(te, dequeue(li))
-	if (ne(te, 1)) {
-		call reportfail("dequeue(1)#2 FAILED")
+	if (ne(te, 100)) {
+		call reportfail("dequeue(100) FAILED")
 	}
 	else { incr(testok) }
 	set(te, dequeue(li))
-	if (ne(te, 2)) {
-		call reportfail("dequeue(2) FAILED")
+	if (ne(te, 200)) {
+		call reportfail("dequeue(200) FAILED")
 	}
 	else { incr(testok) }
 	if (not(empty(li))) {
-		call reportfail("empty#2 FAILED")
+		call reportfail("empty (enqueue & dequeue) FAILED")
+	}
+	else { incr(testok) }
+/* requeue */
+	enqueue(li, 10)
+	enqueue(li, 20)
+	set(te, dequeue(li))
+	if (ne(te, 10)) {
+		call reportfail("dequeue(10) FAILED")
+	}
+	else { incr(testok) }
+	requeue(li, 8)
+	set(te, dequeue(li))
+	if (ne(te, 8)) {
+		call reportfail("dequeue(8) FAILED")
+	}
+	else { incr(testok) }
+	dequeue(li)
+	if (not(empty(li))) {
+		call reportfail("empty (requeue) FAILED")
 	}
 	else { incr(testok) }
 /* push & pop */
@@ -71,7 +90,7 @@ proc testLists()
 	}
 	else { incr(testok) }
 	if (not(empty(li))) {
-		call reportfail("empty#3 FAILED")
+		call reportfail("empty (push&pop) FAILED")
 	}
 	else { incr(testok) }
 /* getel & setel */
@@ -102,6 +121,10 @@ proc testLists()
 	set(te, dequeue(li))
 	if (ne(te, 4)) {
 		call reportfail("dequeue(4) from setel FAILED")
+	}
+	else { incr(testok) }
+	if (not(empty(li))) {
+		call reportfail("empty (getel & setel) FAILED")
 	}
 	else { incr(testok) }
 

@@ -19,6 +19,8 @@
  *********************************************/
 
 /* alphabetical */
+static LNODE nth_in_list_from_head(LIST list, INT index1b);
+static LNODE nth_in_list_from_tail(LIST list, INT index1b);
 static void validate_list(LIST list);
 
 
@@ -206,20 +208,20 @@ validate_list (LIST list)
 #endif
 }
 /*========================================
- * enqueue_list -- Enqueue element on tail of list
+ * enqueue_list -- Enqueue element on head of list
  *======================================*/
 void
 enqueue_list (LIST list, VPTR el)
 {
-	back_list(list, el);
+	push_list(list, el);
 }
 /*==========================================
- * dequeue_list -- Dequeue element from head of list
+ * dequeue_list -- Dequeue element from tail of list
  *========================================*/
 VPTR
 dequeue_list (LIST list)
 {
-	return pop_list(list);
+	return pop_list_tail(list);
 }
 /*==========================================
  * pop_list_tail -- Pop element from tail of list
@@ -243,11 +245,11 @@ pop_list_tail (LIST list)
 	return el;
 }
 /*=================================================
- * nth_in_list -- Find nth node in list, relative 1
+ * nth_in_list_from_head -- Find nth node in list, relative 1
  *  start at head & count towards tail
  *===============================================*/
 static LNODE
-nth_in_list (LIST list, INT index1b)
+nth_in_list_from_head (LIST list, INT index1b)
 {
 	INT i = 1;
 	LNODE node = NULL;
@@ -260,9 +262,31 @@ nth_in_list (LIST list, INT index1b)
 	validate_list(list);
 	if (i == index1b && node) return node;
 	while (i++ <= index1b)
-		enqueue_list(list, NULL);
+		back_list(list, NULL);
 	validate_list(list);
 	return ltail(list);
+}
+/*=================================================
+ * nth_in_list_from_tail -- Find nth node in list, relative 1
+ *  start at tail & count towards head
+ *===============================================*/
+static LNODE
+nth_in_list_from_tail (LIST list, INT index1b)
+{
+	INT i = 1;
+	LNODE node = NULL;
+	if (!list) return NULL;
+	node = ltail(list);
+	while (i < index1b && node) {
+		i++;
+		node = lprev(node);
+	}
+	validate_list(list);
+	if (i == index1b && node) return node;
+	while (i++ <= index1b)
+		enqueue_list(list, NULL);
+	validate_list(list);
+	return lhead(list);
 }
 /*==================================================
  * set_list_element - Set element using array access
@@ -272,7 +296,7 @@ set_list_element (LIST list, INT index1b, VPTR val)
 {
 	LNODE node = NULL;
 	if (!list) return;
-	node = nth_in_list(list, index1b);
+	node = nth_in_list_from_tail(list, index1b);
 	if (!node) return;
 	lelement(node) = val;
 	validate_list(list);
@@ -285,7 +309,7 @@ get_list_element (LIST list, INT index1b)
 {
 	LNODE node = NULL;
 	if (!list) return 0;
-	node = nth_in_list(list, index1b);
+	node = nth_in_list_from_tail(list, index1b);
 	if (!node) return 0;
 	return lelement(node);
 }
