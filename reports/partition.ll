@@ -8,17 +8,19 @@
 
 
 partition - a LifeLines database partitioning program
-        by Jim Eggert (eggertj@atc.ll.mit.edu)
-        Version 1,  19 November 1992 (unreleased)
-        Version 2,  20 November 1992 (completely revamped using queues)
-        Version 3,  23 November 1992 (added GEDCOM TRLR line,
-                                        changed to key-based queues)
-        Version 4,   1 December 1992 (slight code updates)
-        Version 5,   9 January  1993 (added birth and death dates to full)
-        Version 6,  30 January  1993 (now writes multiple GEDCOM output files)
-                This version requires LifeLines v2.3.3 or later.
-        Version 7,  21 September1994 (can partition about selected person)
-        Version 8,  31 March    1995 (allow non-traditional families)
+    by Jim Eggert (eggertj@atc.ll.mit.edu)
+    Version 1,  19 November 1992 (unreleased)
+    Version 2,  20 November 1992 (completely revamped using queues)
+    Version 3,  23 November 1992 (added GEDCOM TRLR line,
+                                  changed to key-based queues)
+    Version 4,   1 December 1992 (slight code updates)
+    Version 5,   9 January  1993 (added birth and death dates to full)
+    Version 6,  30 January  1993 (now writes multiple GEDCOM output files)
+        This version requires LifeLines v2.3.3 or later.
+    Version 7,  21 September1994 (can partition about selected person)
+    Version 8,  31 March    1995 (allow non-traditional families)
+    Version 9,  23 February 1999 (changed to depth-first algorithm)
+    Version 10, 24 September2001 (use cumcount, not forindi loop variable)
 
 This program partitions individuals in a database into disjoint
 partitions.  A partition is composed of people related by one or more
@@ -58,29 +60,33 @@ global(hopcount)
 global(prev_hopcount)
 global(prev_pcount)
 global(setcount)
-
+global(cumcount)
 
 proc include(person,hops,setcount,report_type)
 {
     if (person) {
-        set(pkey,key(person))
-        if (lookup(mark,pkey)) {
-            set(include_new,0)
+    set(pkey,key(person))
+    if (lookup(mark,pkey)) {
+        set(include_new,0)
+    }
+    else {
+        set(pkey2,save(pkey))
+        enqueue(plist,pkey2)
+        enqueue(hlist,hops)
+        insert(mark,pkey2,setcount)
+        addtoset(pset,person,hops)
+        incr(pcount)
+        if (not(mod(pcount,100))) {
+            print(d(pcount),"/",d(length(plist))," ")
         }
-        else {
-            enqueue(plist,save(pkey))
-            enqueue(hlist,hops)
-            insert(mark,save(pkey),setcount)
-            addtoset(pset,person,hops)
-            incr(pcount)
-            set(include_new,1)
-            if (eq(report_type,1)) {
-                d(setcount) col(6) d(hops)
-                col(11) pkey col(18) name(person)
-                col(48) stddate(birth(person))
-                col(62) stddate(death(person)) "\n"
-            }
+        set(include_new,1)
+        if (eq(report_type,1)) {
+        d(setcount) col(6) d(hops)
+        col(11) pkey col(18) name(person)
+        col(48) stddate(birth(person))
+        col(62) stddate(death(person)) "\n"
         }
+    }
     }
 }
 
@@ -96,110 +102,108 @@ proc main ()
     dateformat(0)
 
     getindimsg(person_root,
-        "Enter a person for just one partition, nothing for all partitions:")
+    "Enter a person for just one partition, nothing for all partitions:")
     getintmsg(report_type,
-        "Enter 0 for overview, 1 for full, 2 for GEDCOM report:")
+    "Enter 0 for overview, 1 for full, 2 for GEDCOM report:")
     if (eq(report_type,2)) {
-        if (person_root) {
-            set(prompt,"Enter filename for GEDCOM partition:")
-        }
-        else {
-            set(prompt,"Enter root filename for GEDCOM partitions:")
-        }
-        getstrmsg(gedcom_root,prompt)
-        set(gedcom_root,save(concat(gedcom_root,".")))
+    if (person_root) {
+        set(prompt,"Enter filename for GEDCOM partition:")
+    }
+    else {
+        set(prompt,"Enter root filename for GEDCOM partitions:")
+    }
+    getstrmsg(gedcom_root,prompt)
+    set(gedcom_root,save(concat(gedcom_root,".")))
     }
     else { set(gedcom_root,0) }
 
     set(setcount,1)
     set(pcount,0)
-    set(hopcount,0)
+    set(hopcount,1)
     set(prev_hopcount,neg(1))
     set(prev_pcount,0)
     set(cumcount,0)
     if (eq(report_type,1)) {
-        "Ptn  Hops Key    Person"
-        col(48) "Birthdate" col(62) "Deathdate\n"
+    "Ptn  Hops Key    Person"
+    col(48) "Birthdate" col(62) "Deathdate\n"
     }
     if (person_root) {
-        call do_one_partition(person_root,report_type,gedcom_root)
+    call do_one_partition(person_root,report_type,gedcom_root)
     }
     else {
-        forindi(person,num) {
-            call do_one_partition(person,report_type,gedcom_root)
-        }
-        if (le(report_type,1)) {
-            "Entire database contains " d(num) " individual"
-            if (gt(num,1)) { "s" }
-            " in " d(sub(setcount,1)) " partition"
-            if (gt(setcount,2)) { "s" }
-            ".\n"
-        }
+    forindi(person,num) {
+        call do_one_partition(person,report_type,gedcom_root)
+    }
+    if (le(report_type,1)) {
+        "Entire database contains " d(cumcount) " individual"
+        if (gt(cumcount,1)) { "s" }
+        " in " d(sub(setcount,1)) " partition"
+        if (gt(setcount,2)) { "s" }
+        ".\n"
+    }
     }
 }
 
 proc do_one_partition(person,report_type,gedcom_root) {
+    list(hopcountlist)
     call include(person,hopcount,setcount,report_type)
     if (include_new) {
-        if (eq(report_type,0)) {
-            "Ptn  Hops Individuals\n"
-        }
-        print("\n",d(setcount),": ")
-        while (pkey,dequeue(plist)) {
-            set(person,indi(pkey))
-            set(hopcount,dequeue(hlist))
-            if (ne(hopcount,prev_hopcount)) {
-                print(d(pcount)," ")
-                if (eq(report_type,0)) {
-                    d(setcount) col(6) d(hopcount)
-                    col(11) d(sub(pcount,prev_pcount)) "\n"
-                }
-                set(prev_pcount,pcount)
-                set(prev_hopcount,hopcount)
-            }
-            incr(hopcount)
+    if (eq(report_type,0)) {
+        "Ptn  Hops Individuals\n"
+    }
+    print("\n",d(setcount),": ")
+    while (pkey,pop(plist)) {
+        set(person,indi(pkey))
+        set(hopcount,pop(hlist))
+/*    print(pkey,d(hopcount)) */
+        setel(hopcountlist,hopcount,add(1,getel(hopcountlist,hopcount)))
+        incr(hopcount)
 
 /* Look for family links and follow them to the families,
    then look for links to other individuals in those families.
    Nonstandard linking tags may be added here.
 */
 
-            fornodes(inode(person),node) {
-                set(t,tag(node))
-                if (or(not(strcmp(t,"FAMS")),
-                       not(strcmp(t,"FAMC")))) {
-                    set(family,fam(value(node)))
-                    fornodes(fnode(family),node2) {
-                        set(t,tag(node2))
-                        if (or(not(strcmp(t,"HUSB")),
-                               not(strcmp(t,"WIFE")),
-                               not(strcmp(t,"CHIL")))) {
-                            call include(indi(value(node2)),
-                                        hopcount,setcount,report_type)
-                        }
-                    }
-                }
+        fornodes(inode(person),node) {
+        set(t,tag(node))
+        if (or(not(strcmp(t,"FAMS")),
+               not(strcmp(t,"FAMC")))) {
+            set(family,fam(value(node)))
+            fornodes(fnode(family),node2) {
+            set(t,tag(node2))
+            if (or(not(strcmp(t,"HUSB")),
+                   not(strcmp(t,"WIFE")),
+                   not(strcmp(t,"CHIL")))) {
+                call include(indi(value(node2)),
+                    hopcount,setcount,report_type)
+            }
             }
         }
-
-        if (le(report_type,1)) {
-            "Partition " d(setcount) " contains " d(pcount)
-            " individual"
-            if (gt(pcount,1)) { "s" }
-            ".\n"
-            "------------------------------------------------------------\n"
         }
-        if (eq(report_type,2)) {
-            newfile(concat(gedcom_root,d(setcount)),0)
-            gengedcom(pset)
-            "0 TRLR\n"
+    }
+    if (eq(report_type,0)) {
+        forlist(hopcountlist,counter,hops) {
+        print(d(setcount),d(counter), " ")
         }
-        set(cumcount,add(cumcount,pcount))
-        indiset(pset)
-        set(pcount,0)
-        set(hopcount,0)
-        set(prev_hopcount,neg(1))
-        set(prev_pcount,pcount)
-        incr(setcount)
+    }
+    if (le(report_type,1)) {
+        "Partition " d(setcount) " contains " d(pcount)
+        " individual"
+        if (gt(pcount,1)) { "s" }
+        ".\n"
+        "------------------------------------------------------------\n"
+    }
+    if (eq(report_type,2)) {
+        newfile(concat(gedcom_root,d(setcount)),0)
+        gengedcom(pset)
+        "0 TRLR\n"
+    }
+    set(cumcount,add(cumcount,pcount))
+    indiset(pset)
+    set(pcount,0)
+    set(hopcount,0)
+    set(prev_hopcount,neg(1))
+    set(prev_pcount,pcount)
+    incr(setcount)
     }
 }
