@@ -13,6 +13,10 @@
 	Fix generics not to use unnamed member (to avoid pre-gcc 3
 	compilation problems).
 
+	* ChangeLog NEWS
+
+	Prepare NEWS for 3.0.41.
+
 2005-01-30 Matt Emmerton
 
 	* ChangeLog src/interp/interp.c

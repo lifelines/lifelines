@@ -1,6 +1,15 @@
-LifeLines Source Release, Version 3.0.40
+LifeLines Source Release, Version 3.0.41
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
+
+New features added in 3.0.41
+============================
+- ancestorset and parentset now support non-traditional families
+
+Bug fixes in 3.0.41
+============================
+- Crash on some systems with ncurses 5.4
+- ASSERT failure if report calls undefined function
 
 New features added in 3.0.40
 ============================
