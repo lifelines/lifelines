@@ -20,6 +20,10 @@
 	liflines/scan.c liflines/swap.c liflines/tandem.c:
 	Implement ASK1Q typedef for ask1 & values DOASK1/NOASK1.
 
+	* hdrs/gedcom.h hdrs/liflines.h:
+	Fixed alphabetization in gedcom.h.
+	Moved CONFIRM type & values to gedcom.h.
+
 2001-01-07 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/gengedc.c gedlib/indiseq.c hdrs/gedcom.h hdrs/indiseq.h
