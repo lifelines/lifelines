@@ -23,7 +23,9 @@
 
 	Prepend UTF-8 BOM to edit file on Windows when appropriate.
 
-	*
+	* ChangeLog NEWS configure.in build/msvc6/llines/llines.rc
+	build/rpm/lifelines.spec docs/ll-devguide.xml
+	docs/ll-reportmanual.xml docs/ll-userguide.xml src/hdrs/version.h
 
 	Change version for experimental release 3.0.33.
 
