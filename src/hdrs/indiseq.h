@@ -124,7 +124,7 @@ INDISEQ find_named_seq(STRING);
 void remove_browse_list(STRING, INDISEQ);
 void update_browse_list(STRING, INDISEQ);
 
-void partition_sort(SORTEL*, INT, INT (*func)());
+void partition_sort(SORTEL*, INT, INT (*func)(SORTEL, SORTEL));
 void llqsort(INT, INT);
 INT partition(INT, INT, SORTEL);
 INT getpivot(INT, INT);

@@ -3038,7 +3038,7 @@ __free (PNODE node,
 	    case PSTRING:
 		if(pvalue(val)) stdfree((STRING)pvalue(val)); break;
 	    case PLIST:
-		if(pvalue(val)) remove_list(pvalue(val), (int(*)())delete_pvalue);
+		if(pvalue(val)) remove_list(pvalue(val), delete_pvalue);
 		break;
 	    case PTABLE: break;
 	    case PSET:

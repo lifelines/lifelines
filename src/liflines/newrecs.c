@@ -53,8 +53,13 @@ SS estr = (STRING) "0 EVEN\n1 REFN\n1 DATE\n1 PLAC\n1 INDI\n  2 NAME\n  2 ROLE\n
 SS xstr = (STRING) "0 XXXX\n1 REFN";
 
 static NODE ask_for_record(STRING, INT);
-static void edit_record(NODE, STRING, INT, STRING, BOOLEAN (*func1)(), STRING, STRING, void (*func2)(), STRING);
-static BOOLEAN add_record (STRING, STRING, BOOLEAN (*val)(), STRING, STRING (*getref)(), void (*todbase)(), void (*tocache)());
+static void edit_record (NODE node1, STRING idedt, INT letr, STRING redt,
+                         BOOLEAN (*val)(NODE, STRING *, NODE), STRING cfrm,
+                         STRING tag, void (*todbase)(NODE), STRING gdmsg);
+static BOOLEAN add_record (STRING recstr, STRING redt,
+                           BOOLEAN (*val)(NODE, STRING *, NODE), STRING cfrm,
+                           STRING (*getref)(void), void (*todbase)(NODE),
+                           void (*tocache)(NODE));
 
 void edit_event(NODE);
 void edit_other(NODE);

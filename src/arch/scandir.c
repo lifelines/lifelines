@@ -37,12 +37,10 @@
 #include <string.h>
 #include <stdlib.h>
 #include <sys/types.h>
-#include "compat.h"
+#include "arch.h"
+
 #ifdef HAVE_DIRENT_H
 #  include <dirent.h>
-#endif
-#ifdef HAVE_WINDOWS_H
-#  include <windows.h>
 #endif
 
 /*
@@ -50,11 +48,14 @@
  * just passes all unsorted.
  */
 
-#ifdef _WINDOWS
+#ifdef HAVE_WINDOWS_H
+
+#include <windows.h>
+
 int
 scandir(const char *dir, struct dirent ***namelist,
         int (*select)(const struct dirent *),
-        int (*compar)(const void *, const void *))
+        int (*compar)(const struct dirent **, const struct dirent **))
 {
   WIN32_FIND_DATA file_data;
   HANDLE handle;
@@ -120,7 +121,7 @@ scandir(const char *dir, struct dirent ***namelist,
 int
 scandir(const char *dir, struct dirent ***namelist,
         int (*select)(const struct dirent *),
-        int (*compar)(const void *, const void *))
+        int (*compar)(const struct dirent **, const struct dirent **))
 {
   DIR *d = opendir(dir);
   struct dirent *current;

@@ -27,7 +27,8 @@ struct dirent /* Simple replacement for the less fortunate platforms */
 #ifndef HAVE_SCANDIR
 extern int scandir(const char *dir, struct dirent ***namelist,
                    int (*select)(const struct dirent *),
-                   int (*compar)(const dirent **, const dirent **));
+                   int (*compar)(const struct dirent **,
+                                 const struct dirent **));
 #endif
 
 #ifndef HAVE_ALPHASORT
