@@ -8,6 +8,10 @@
 	(or returning) out of a FORLIST loop. This fixes the
 	ASSERT crash when doing a successful name scan.
 
+	* ChangeLog NEWS
+
+	Document list fix above as bugfix.
+
 2003-03-05 Perry Rapp
 
 	* ChangeLog docs/Install.LifeLines.Windows.txt
