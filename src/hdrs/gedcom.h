@@ -36,7 +36,7 @@
 #include "table.h"
 #include "translat.h"
 
-#define MAXNAMELEN 512
+#define MAXGEDNAMELEN 512
 
 #define OKAY  1
 #define ERROR 0

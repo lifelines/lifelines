@@ -161,7 +161,7 @@ interp_program (STRING proc,    /* proc to call */
 				/* tried & failed to open file */
 				llwprintf("Error: file \"%s\" not found.\n", ifile);
 			}
-			return;
+			goto interp_program_exit;
 		}
 		fclose(fp);
 		progname = strsave(ifile);
@@ -219,7 +219,7 @@ interp_program (STRING proc,    /* proc to call */
 		mprintf_error("Proc %s must be called with %d (not %d) parameters.",
 			proc, num_params(parm), nargs);
 		remove_tables();
-		return;
+		goto interp_program_exit;
 	}
 	stab = create_table();
 	for (i = 0; i < nargs; i++) {

@@ -915,7 +915,7 @@ indi_to_title (NODE node,
  *====================================*/
 STRING node_to_tag (NODE node, STRING tag, TRANTABLE tt, INT len)
 {
-	static unsigned char scratch[MAXNAMELEN+1];
+	static unsigned char scratch[MAXGEDNAMELEN+1];
 	STRING refn;
 	if (!node) return NULL;
 	if (!(node = find_tag(nchild(node), tag))) return NULL;

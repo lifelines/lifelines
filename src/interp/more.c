@@ -199,6 +199,7 @@ __extracttokens (PNODE node,
 	}
 	list = (LIST) pvalue(val2);
 	delete_pvalue(val2);
+	make_list_empty(list);
 	val2 = eval_and_coerce(PSTRING, dexp, stab, eflg);
 	if (*eflg) {
 		prog_error(node, "4th arg to extracttokens must be a string");

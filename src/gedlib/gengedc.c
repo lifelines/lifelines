@@ -258,7 +258,7 @@ process_node_value (CLOSURE * closure, STRING v)
 static void
 output_any_node (CLOSURE * closure, NODE node, STRING toptag, INT lvl)
 {
-	char newval[MAXNAMELEN]; /* for modified values */
+	char newval[MAXGEDNAMELEN]; /* for modified values */
 	STRING v,pv;
 	BOOLEAN dump, trimmed, insidepointer;
 	v=nval(node);

@@ -1,3 +1,20 @@
+2001-01-24 John Chandler <jchbn@cuvmb.columbia.edu>
+	* hdrs/gedcom.h, gedlib/gengedc.c, gedlib/name.c, gedlib/node.c,
+	  gedlib/refns.c:
+	  Change MAXNAMELEN to MAXGEDNAMELEN to avoid conflict with
+	  system symbol.
+
+	* interp/interp.c:
+	  Avoid fatal error when report program not found.
+
+	* interp/more.c:
+	  Revert to pre-3.0.3 behavior for extracttokens(), i.e.,
+	  the list is cleared before the tokens are added to it.
+
+	* interp/pvalue.c:
+	  Treat as error any undeclared variable used in a context that
+	  must be a list, table, or indiset.
+	
 2001-01-24 Perry Rapp <puddle@users.sourceforge.net>
 
 	btree/block.c btree/index.c btree/opnbtree.c btree/utils.c

@@ -504,6 +504,7 @@ coerce_pvalue (INT type,       /* type to convert to */
 	}
 /* NEW - 7/31/95 */
 	if ((ptype(val) == PANY || ptype(val) == PINT) && pvalue(val) == NULL) {
+		if(type == PSET || type == PTABLE || type == PLIST) goto bad;
 		ptype(val) = type;
 		return;
 	}

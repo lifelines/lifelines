@@ -426,7 +426,7 @@ NOD0 key_to_record (STRING str, /* string that may be a key */
                     INT let)    /* if string starts with letter it
                                    must be this */
 {
-	char kbuf[MAXNAMELEN];
+	char kbuf[MAXGEDNAMELEN];
 	INT i = 0, c;
 
 	if (!str || *str == 0) return NULL;

@@ -292,10 +292,10 @@ getfinitial (STRING name)       /* GEDCOM name */
 STRING
 soundex (STRING name)   /* surname */
 {
-	static unsigned char scratch[MAXNAMELEN+2];
+	static unsigned char scratch[MAXGEDNAMELEN+2];
 	STRING p = name, q = scratch;
 	INT c, i, j;
-	if (!name || strlen(name) > MAXNAMELEN || eqstr(name, "____"))
+	if (!name || strlen(name) > MAXGEDNAMELEN || eqstr(name, "____"))
 		return (STRING) "Z999";
 	p = name;
 	q = scratch;
@@ -494,10 +494,10 @@ static BOOLEAN
 exactmatch (STRING partial,             /* name from user */
             STRING complete)    /* GEDCOM name */
 {
-	char part[MAXNAMELEN+2], comp[MAXNAMELEN+2], *p, *q;
+	char part[MAXGEDNAMELEN+2], comp[MAXGEDNAMELEN+2], *p, *q;
 	BOOLEAN okay;
 
-	if (strlen(partial) > MAXNAMELEN || strlen(complete) > MAXNAMELEN)
+	if (strlen(partial) > MAXGEDNAMELEN || strlen(complete) > MAXGEDNAMELEN)
 		return FALSE;
 	squeeze(partial, part);
 	squeeze(complete, comp);
@@ -632,7 +632,7 @@ int
 namecmp (STRING name1,
          STRING name2)
 {
-	unsigned char sqz1[MAXNAMELEN], sqz2[MAXNAMELEN];
+	unsigned char sqz1[MAXGEDNAMELEN], sqz2[MAXGEDNAMELEN];
 	STRING p1 = sqz1, p2 = sqz2;
 	INT r = nestr(getsurname(name1), getsurname(name2));
 	if (r) return r;
@@ -682,7 +682,7 @@ STRING
 givens (STRING name)
 {
 	INT c;
-	static unsigned char scratch[MAXNAMELEN+1];
+	static unsigned char scratch[MAXGEDNAMELEN+1];
 	STRING out = scratch;
 	while ((name = nextpiece(name))) {
 		while (TRUE) {
@@ -768,10 +768,10 @@ static void
 name_to_parts (STRING name,     /* GEDCOM name */
                STRING *parts)
 {
-	static unsigned char scratch[MAXNAMELEN+1];
+	static unsigned char scratch[MAXGEDNAMELEN+1];
 	STRING p = scratch;
 	INT c, i = 0;
-	ASSERT(strlen(name) <= MAXNAMELEN);
+	ASSERT(strlen(name) <= MAXGEDNAMELEN);
 	for (i = 0; i < MAXPARTS; i++)
 		parts[i] = NULL;
 	i = 0;
@@ -803,7 +803,7 @@ static STRING
 parts_to_name (STRING *parts)
 {
 	INT i;
-	static unsigned char scratch[MAXNAMELEN+1];
+	static unsigned char scratch[MAXGEDNAMELEN+1];
 	STRING p = scratch;
 	for (i = 0; i < MAXPARTS; i++) {
 		if (!parts[i]) continue;
@@ -823,7 +823,7 @@ parts_to_name (STRING *parts)
 static STRING
 upsurname (STRING name)
 {
-	static unsigned char scratch[MAXNAMELEN+1];
+	static unsigned char scratch[MAXGEDNAMELEN+1];
 	STRING p = scratch;
 	INT c;
 	while ((c = *p++ = *name++) && c != '/')
@@ -847,9 +847,9 @@ manip_name (STRING name,        /* name */
             BOOLEAN regorder,   /* regular order? (not surname first) */
             INT len)            /* max name length */
 {
-	static unsigned char scratch[MAXNAMELEN+1];
+	static unsigned char scratch[MAXGEDNAMELEN+1];
 	if (!name || *name == 0) return NULL;
-	translate_string(tt, name, scratch, MAXNAMELEN+1);
+	translate_string(tt, name, scratch, MAXGEDNAMELEN+1);
 	name = scratch;
 	if (caps) name = upsurname(name);
 	name = trim_name(name, regorder ? len: len-1);
@@ -862,9 +862,9 @@ manip_name (STRING name,        /* name */
 STRING
 name_string (STRING name)
 {
-	static unsigned char scratch[MAXNAMELEN+1];
+	static unsigned char scratch[MAXGEDNAMELEN+1];
 	STRING p = scratch;
-	ASSERT(strlen(name) <= MAXNAMELEN);
+	ASSERT(strlen(name) <= MAXGEDNAMELEN);
 	while (*name) {
 		if (*name != '/') *p++ = *name;
 		name++;
@@ -879,9 +879,9 @@ name_string (STRING name)
 STRING
 name_surfirst (STRING name)
 {
-	static unsigned char scratch[MAXNAMELEN+1];
+	static unsigned char scratch[MAXGEDNAMELEN+1];
 	STRING p = scratch;
-	ASSERT(strlen(name) <= MAXNAMELEN);
+	ASSERT(strlen(name) <= MAXGEDNAMELEN);
 	strcpy(p, getasurname(name));
 	p += strlen(p);
 	strcpy(p, ", ");
@@ -897,8 +897,8 @@ id_by_key (STRING name,
            STRING **pkeys)
 {
 	STRING rec, str, p = name;
-	static unsigned char kbuf[MAXNAMELEN];
-	static unsigned char nbuf[MAXNAMELEN];
+	static unsigned char kbuf[MAXGEDNAMELEN];
+	static unsigned char nbuf[MAXGEDNAMELEN];
 	static STRING kaddr, naddr;
 	INT i = 0, c, len;
 	NODE indi;
