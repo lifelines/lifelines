@@ -40,9 +40,9 @@
 
 #include "llinesi.h"
 
-extern STRING iredit, fredit, cfpupt, cffupt, idpedt, idspse, idfbys;
-extern STRING ntprnt, gdpmod, gdfmod, ronlye;
-extern STRING paradox;
+extern STRING iredit, fredit, qScfpupt, qScffupt, idpedt, qSidspse, idfbys;
+extern STRING qSntprnt, gdpmod, gdfmod, qSronlye;
+extern STRING qSparadox;
 
 /*=====================================
  * write_indi_to_editfile - write indi gedcom node to editfile
@@ -91,7 +91,7 @@ edit_indi (NODE indi1)  /* may be NULL */
 	if (readonly) {
 		indi2 = file_to_node(editfile, tti, &msg, &emp);
 		if (!equal_tree(indi1, indi2))
-			message(_(ronlye));
+			message(_(qSronlye));
 		free_nodes(indi2);
 		return indi1;
 	}
@@ -119,7 +119,7 @@ edit_indi (NODE indi1)  /* may be NULL */
 /* Editing done; see if database changes */
 
 	if (!indi2) return indi1;
-	if (equal_tree(indi1, indi2) || !ask_yes_or_no(_(cfpupt))) {
+	if (equal_tree(indi1, indi2) || !ask_yes_or_no(_(qScfpupt))) {
 		free_nodes(indi2);
 		return indi1;
 	}
@@ -195,13 +195,13 @@ edit_family (NODE fam1) /* may be NULL */
 	BOOLEAN emp;
 /* Identify family if need be */
 	if (!fam1) {
-		indi = ask_for_indi_old(idspse, NOCONFIRM, NOASK1);
+		indi = ask_for_indi_old(_(qSidspse), NOCONFIRM, NOASK1);
 		if (!indi) return NULL;
 		if (!FAMS(indi)) {
-			message(ntprnt);
+			message(_(qSntprnt));
 			return NULL;
 		} 
-		fam1 = choose_family(indi, paradox, idfbys, TRUE);
+		fam1 = choose_family(indi, _(qSparadox), idfbys, TRUE);
 		if (!fam1) return FALSE; 
 	}
 
@@ -213,7 +213,7 @@ edit_family (NODE fam1) /* may be NULL */
 	if (readonly) {
 		fam2 = file_to_node(editfile, tti, &msg, &emp);
 		if (!equal_tree(fam1, fam2))
-			message(_(ronlye));
+			message(_(qSronlye));
 		free_nodes(fam2); 
 		return fam1;
 	}
@@ -241,7 +241,7 @@ edit_family (NODE fam1) /* may be NULL */
 /* If error or user backs out return */
 
 	if (!fam2) return fam1;
-	if (equal_tree(fam1, fam2) || !ask_yes_or_no(_(cffupt))) {
+	if (equal_tree(fam1, fam2) || !ask_yes_or_no(_(qScffupt))) {
 		free_nodes(fam2);
 		return fam1;
 	}

@@ -43,7 +43,7 @@
  * external variables (no header)
  *********************************************/
 
-extern STRING scanrs, scnnmf, scnfnm, scnrfn, scantt;
+extern STRING qSscanrs, qSscnnmf, qSscnfnm, qSscnrfn, qSscantt;
 
 /*********************************************
  * local types
@@ -168,7 +168,7 @@ set_pattern (SCAN_PATTERN * patt, STRING str, INT scantype)
 /*==============================
  * name_scan -- traverse names looking for pattern matching
  *  scantype:  [IN]  which type of scan (full or partial)
- *  sts:       [IN]  status msg to display during scan (will localize)
+ *  sts:       [IN]  status msg to display during scan
  *============================*/
 static RECORD
 name_scan (INT scantype, STRING sts)
@@ -180,22 +180,22 @@ name_scan (INT scantype, STRING sts)
 	patt.scantype = scantype;
 	while (1) {
 		if (scantype == NAMESCAN_FRAG)
-			str = ask_for_string(_(scnnmf), _(scantt));
+			str = ask_for_string(_(qSscnnmf), _(qSscantt));
 		else
-			str = ask_for_string(_(scnfnm), _(scantt));
+			str = ask_for_string(_(qSscnfnm), _(qSscantt));
 		if (!str || !str[0])
 			return NULL;
 		if (set_pattern(&patt, str, scantype))
 			break;
 	}
 
-	msg_status(_(sts));
+	msg_status(sts);
 
 	results_seq = create_indiseq_null();
 	traverse_names(ns_callback, &patt);
 
 	if (length_indiseq(results_seq)) {
-		indi = choose_from_indiseq(results_seq, DOASK1, scanrs, scanrs);
+		indi = choose_from_indiseq(results_seq, DOASK1, _(qSscanrs), _(qSscanrs));
 	}
 	remove_indiseq(results_seq);
 	results_seq=NULL;
@@ -203,7 +203,7 @@ name_scan (INT scantype, STRING sts)
 }
 /*==============================================
  * name_fragment_scan -- traverse name fragments
- *  sts: [IN]  status to show during scan (will localize)
+ *  sts: [IN]  status to show during scan
  *  looking for pattern matching
  *============================================*/
 RECORD
@@ -213,7 +213,7 @@ name_fragment_scan (STRING sts)
 }
 /*======================================
  * full_name_scan -- traverse full names
- *  sts: [IN]  status to show during scan (will localize)
+ *  sts: [IN]  status to show during scan
  *  looking for pattern matching
  *====================================*/
 RECORD
@@ -223,7 +223,7 @@ full_name_scan (STRING sts)
 }
 /*==============================
  * refn_scan -- traverse refns
- *  sts: [IN]  status to show during scan (will localize)
+ *  sts: [IN]  status to show during scan
  *  looking for pattern matching
  *============================*/
 RECORD
@@ -236,20 +236,20 @@ refn_scan (STRING sts)
 
 	patt.scantype = scantype;
 	while (1) {
-		str = ask_for_string(_(scnrfn), _(scantt));
+		str = ask_for_string(_(qSscnrfn), _(qSscantt));
 		if (!str || !str[0])
 			return NULL;
 		if (set_pattern(&patt, str, scantype))
 			break;
 	}
 
-	msg_status(_(sts));
+	msg_status(sts);
 
 	results_seq = create_indiseq_null();
 	traverse_refns(rs_callback, &patt);
 
 	if (length_indiseq(results_seq)) {
-		rec = choose_from_indiseq(results_seq, DOASK1, scanrs, scanrs);
+		rec = choose_from_indiseq(results_seq, DOASK1, _(qSscanrs), _(qSscanrs));
 	}
 	remove_indiseq(results_seq);
 	results_seq=NULL;

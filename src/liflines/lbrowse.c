@@ -42,7 +42,8 @@
 #define VIEWABLE 13
 
 extern STRING lstnam, lstnon, lstwht, lstnad, lstpad, lstbot, lsttop;
-extern STRING idplst, lstnew, mrkper;
+extern STRING qSasknam;
+extern STRING qSidplst, lstnew, mrkper;
 extern INDISEQ current_seq;
 
 LIST browse_lists;
@@ -143,7 +144,7 @@ browse_list (NODE *pindi1,
 			current_seq = NULL;
 			return BROWSE_TAND;
 		case 'b':	/* Browse new persons */
-			newseq = (INDISEQ) ask_for_indiseq(idplst, 'I', &rc);
+			newseq = (INDISEQ) ask_for_indiseq(_(qSidplst), 'I', &rc);
 			if (!newseq) break;
 			current_seq = seq = newseq;
 			element_indiseq(seq, 0, &key, &name);
@@ -176,7 +177,7 @@ browse_list (NODE *pindi1,
 			message(lstnew);
 			break;
 		case 'n':	/* Name this list */
-			newname = ask_for_string(lstwht, "enter name: ");
+			newname = ask_for_string(lstwht, _(qSasknam));
 			if (!newname || *newname == 0)
 				message(lstnon);
 			else {

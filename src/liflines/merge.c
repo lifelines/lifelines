@@ -43,11 +43,9 @@
 #include "llinesi.h"
 
 extern BOOLEAN traditional;
-extern STRING iredit, cfpmrg, nopmrg, noqmrg, noxmrg, nofmrg;
-extern STRING dhusb,  dwife,  cffmrg, fredit, badata, ronlym;
-
-STRING mgsfam = (STRING) "These persons are children in different families.";
-STRING mgconf = (STRING) "Are you sure you want to merge them?";
+extern STRING iredit, qScfpmrg, nopmrg, noqmrg, noxmrg, nofmrg;
+extern STRING dhusb,  dwife,  qScffmrg, fredit, badata, qSronlym;
+extern STRING qSmgsfam,qSmgconf;
 
 static void merge_fam_links(NODE, NODE, NODE, NODE, INT);
 static NODE remove_dupes(NODE, NODE);
@@ -56,16 +54,18 @@ static NODE sort_children(NODE, NODE);
 /*================================================================
  * merge_two_indis -- Merge first person to second; data from both
  *   are put in file that user edits; first person removed
+ *  indi1: [IN]  person who will be deleted (non-null)
+ *  indi2: [IN]  person who will receive new (combined & edited) data (non-null)
+ *  conf:  [IN]  should we prompt user to confirm change ?
  *---------------------------------------------------------------
+ *  These are the four main variables
  *   indi1 - person in database -- indi1 is merged into indi2
  *   indi2 - person in database -- indi1 is merged into this person
  *   indi3 - merged version of the two persons before editing
  *   indi4 - merged version of the two persons after editing
  *==============================================================*/
 NODE
-merge_two_indis (NODE indi1,    /* two persons to merge - can't be null */
-                 NODE indi2,
-                 BOOLEAN conf)          /* have user confirm change */
+merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 {
 	NODE indi01, indi02;	/* original arguments */
 	NODE name1, refn1, sex1, body1, famc1, fams1;
@@ -88,7 +88,7 @@ merge_two_indis (NODE indi1,    /* two persons to merge - can't be null */
 	ASSERT(eqstr("INDI", ntag(indi1)));
 	ASSERT(eqstr("INDI", ntag(indi2)));
 	if (readonly) {
-		message(_(ronlym));
+		message(_(qSronlym));
 		return NULL;
 	}
 	if (indi1 == indi2) {
@@ -103,7 +103,7 @@ merge_two_indis (NODE indi1,    /* two persons to merge - can't be null */
 /*LOOSEEND -- THIS CHECK IS NOT GOOD ENOUGH */
 	if (traditional) {
 		if (famc1 && famc2 && nestr(nval(famc1), nval(famc2))) {
-			if (!ask_yes_or_no_msg(mgsfam, mgconf)) {
+			if (!ask_yes_or_no_msg(_(qSmgsfam), _(qSmgconf))) {
 				message(noqmrg);
 				return NULL;
 			}
@@ -190,7 +190,7 @@ merge_two_indis (NODE indi1,    /* two persons to merge - can't be null */
 	free_nodes(indi3);
 
 /* Have user confirm changes */
-	if (!indi4 || (conf && !ask_yes_or_no(cfpmrg))) {
+	if (!indi4 || (conf && !ask_yes_or_no(_(qScfpmrg)))) {
 		if (indi4) free_nodes(indi4);
 		join_indi(indi1, name1, refn1, sex1, body1, famc1, fams1);
 		free_nodes(indi1);
@@ -414,7 +414,7 @@ merge_two_fams (NODE fam1,
 	BOOLEAN emp;
 
 	if (readonly) {
-		message(_(ronlym));
+		message(_(qSronlym));
 		return NULL;
 	}
 	ASSERT(fam1 && fam2);
@@ -486,7 +486,7 @@ merge_two_fams (NODE fam1,
 
 /* Have user confirm changes */
 
-	if (!fam4 || !ask_yes_or_no(cffmrg)) {
+	if (!fam4 || !ask_yes_or_no(_(qScffmrg))) {
 		if (fam4) free_nodes(fam4);
 		join_fam(fam1, fref1, husb1, wife1, chil1, rest1);
 		join_fam(fam2, fref2, husb2, wife2, chil2, rest2);

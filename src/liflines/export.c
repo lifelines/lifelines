@@ -48,7 +48,7 @@
 extern STRING btreepath;
 extern BTREE BTR;
 extern TRANTABLE tran_tables[];
-extern STRING outarc,outfin;
+extern STRING qSoutarc,qSoutfin;
 
 /*********************************************
  * local variables
@@ -83,7 +83,7 @@ archive_in_file (void)
 	STRING fname, str;
 	STRING archivesdir = getoptstr("LLARCHIVES", ".");
 
-	fn = ask_for_output_file(LLWRITETEXT, outarc, &fname, archivesdir, ".ged");
+	fn = ask_for_output_file(LLWRITETEXT, _(qSoutarc), &fname, archivesdir, ".ged");
 	if (!fn) {
 		msg_error("The database was not saved.");
 		return FALSE; 
@@ -119,7 +119,7 @@ archive_in_file (void)
 	fprintf(fn, "0 TRLR\n");
 	fclose(fn);
 	wpos(7,0);
-	msg_info(_(outfin), btreepath, fname);
+	msg_info(_(qSoutfin), btreepath, fname);
 	return TRUE;
 }
 /*========================================================

@@ -43,9 +43,9 @@
 /*********************************************
  * external/imported variables
  *********************************************/
-extern STRING idcswp, id1csw, id2csw, id1fsw, id2fsw, idfbys, ntprnt;
-extern STRING less2c, okcswp, less2f, okfswp, idfswp, ronlye;
-extern STRING idcrdr, ntchld, paradox;
+extern STRING qSidcswp, qSid1csw, qSid2csw, qSid1fsw, qSid2fsw, idfbys, qSntprnt;
+extern STRING qSless2c, okcswp, qSless2f, okfswp, qSidfswp, qSronlye;
+extern STRING qSidcrdr, qSntchld, qSparadox;
 
 /*********************************************
  * local function prototypes
@@ -65,17 +65,17 @@ swap_children (NODE prnt, NODE fam)
 	INT nfam, nchil;
 
 	if (readonly) {
-		message(_(ronlye));
+		message(_(qSronlye));
 		return FALSE;
 	}
 
 /* Identify parent if need be */
 	if (fam) goto gotfam;
-	if (!prnt) prnt = ask_for_indi_old(idcswp, NOCONFIRM, NOASK1);
+	if (!prnt) prnt = ask_for_indi_old(_(qSidcswp), NOCONFIRM, NOASK1);
 	if (!prnt) return FALSE;
 	nfam = num_families(prnt);
 	if (nfam <= 0) {
-		message(_(ntchld));
+		message(_(qSntchld));
 		return FALSE;
 	}
 
@@ -84,11 +84,11 @@ swap_children (NODE prnt, NODE fam)
 		fam = key_to_fam(rmvat(nval(FAMS(prnt))));
 		goto gotfam;
 	}
-	if (!(fam = choose_family(prnt, ntprnt, idfbys, TRUE))) return FALSE;
+	if (!(fam = choose_family(prnt, _(qSntprnt), idfbys, TRUE))) return FALSE;
 gotfam:
 	nchil = num_children(fam);
 	if (nchil < 2) {
-		message(less2c);
+		message(_(qSless2c));
 		return FALSE;
 	}
 
@@ -100,9 +100,9 @@ gotfam:
 		NODE chil1, chil2;
 		STRING key1, key2;
 		/* Identify children to swap */
-		chil1 = choose_child(NULL, fam, "e", id1csw, NOASK1);
+		chil1 = choose_child(NULL, fam, "e", _(qSid1csw), NOASK1);
 		if (!chil1) return FALSE;
-		chil2 = choose_child(NULL, fam, "e", id2csw, NOASK1);
+		chil2 = choose_child(NULL, fam, "e", _(qSid2csw), NOASK1);
 		if (!chil2) return FALSE;
 		if (chil1 == chil2) return FALSE;
 		key1 = nxref(chil1);
@@ -155,17 +155,17 @@ reorder_child (NODE prnt, NODE fam)
 	NODE child;
 
 	if (readonly) {
-		message(_(ronlye));
+		message(_(qSronlye));
 		return FALSE;
 	}
 
 /* Identify parent if need be */
 	if (fam) goto gotfam;
-	if (!prnt) prnt = ask_for_indi_old(idcswp, NOCONFIRM, NOASK1);
+	if (!prnt) prnt = ask_for_indi_old(_(qSidcswp), NOCONFIRM, NOASK1);
 	if (!prnt) return FALSE;
 	nfam = num_families(prnt);
 	if (nfam <= 0) {
-		message(_(ntchld));
+		message(_(qSntchld));
 		return FALSE;
 	}
 
@@ -174,11 +174,11 @@ reorder_child (NODE prnt, NODE fam)
 		fam = key_to_fam(rmvat(nval(FAMS(prnt))));
 		goto gotfam;
 	}
-	if (!(fam = choose_family(prnt, ntprnt, idfbys, TRUE))) return FALSE;
+	if (!(fam = choose_family(prnt, _(qSntprnt), idfbys, TRUE))) return FALSE;
 gotfam:
 	nchil = num_children(fam);
 	if (nchil < 2) {
-		message(less2c);
+		message(_(qSless2c));
 		return FALSE;
 	}
 
@@ -192,7 +192,7 @@ gotfam:
 	}
 
 	/* Identify children to swap */
-	child = choose_child(NULL, fam, "e", idcrdr, NOASK1);
+	child = choose_child(NULL, fam, "e", _(qSidcrdr), NOASK1);
 	if (!child) return FALSE;
 
 	prevorder = child_index(child, fam);
@@ -249,20 +249,20 @@ swap_families (NODE indi)
 	STRING str;
 
 	if (readonly) {
-		message(_(ronlye));
+		message(_(qSronlye));
 		return FALSE;
 	}
 
 /* Find person and assure has >= 2 families */
-	if (!indi) indi = ask_for_indi_old(idfswp, NOCONFIRM, NOASK1);
+	if (!indi) indi = ask_for_indi_old(_(qSidfswp), NOCONFIRM, NOASK1);
 	if (!indi) return FALSE;
 	if (!(fams = FAMS(indi))) {
-		message(ntprnt);
+		message(_(qSntprnt));
 		return FALSE;
 	}
 	nfam = num_families(indi);
 	if (nfam < 2) {
-		msg_error(_(less2f));
+		msg_error(_(qSless2f));
 		return FALSE;
 	}
 
@@ -276,9 +276,9 @@ swap_families (NODE indi)
 		NODE fam1, fam2;
 		STRING key1, key2;
 		/* prompt for families */
-		fam1 = choose_family(indi, paradox, id1fsw, TRUE);
+		fam1 = choose_family(indi, _(qSparadox), _(qSid1fsw), TRUE);
 		if (!fam1) return FALSE;
-		fam2 = choose_family(indi, paradox, id2fsw, TRUE);
+		fam2 = choose_family(indi, _(qSparadox), _(qSid2fsw), TRUE);
 		if (!fam2) return FALSE;
 		if (fam1 == fam2) return FALSE;
 		key1 = nxref(fam1);

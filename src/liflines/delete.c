@@ -41,11 +41,11 @@
 
 #include "llinesi.h"
 
-extern STRING idpdel, cfpdel, cffdel, cffdeld;
-extern STRING idfrmv, idfrsp, idfrch;
-extern STRING idcrmv, ntchld, ntprnt, idsrmv, idsrmf, normls, cfcrmv;
-extern STRING okcrmv, ntsinf, ntcinf, cfsrmv, oksrmv, ronlye, idcrmf;
-extern STRING paradox;
+extern STRING idpdel, qScfpdel, qScffdel, qScffdeld;
+extern STRING qSidfrmv, qSidfrsp, qSidfrch;
+extern STRING qSidcrmv, qSntchld, qSntprnt, qSidsrmv, qSidsrmf, qSnormls, qScfcrmv;
+extern STRING okcrmv, ntsinf, ntcinf, qScfsrmv, oksrmv, qSronlye, qSidcrmf;
+extern STRING qSparadox;
 
 /*=====================================================
  * choose_and_remove_family -- Choose & delete a family
@@ -61,7 +61,7 @@ choose_and_remove_family (void)
 	STRING cfptr=confirm; /* build & localize string */
 	INT cflen=sizeof(confirm);
 
-	fam = ask_for_fam_by_key(_(idfrmv), _(idfrsp), idfrch);
+	fam = ask_for_fam_by_key(_(qSidfrmv), _(qSidfrsp), _(qSidfrch));
 	if (!fam)
 		return;
 
@@ -80,8 +80,8 @@ choose_and_remove_family (void)
 	}
 
 	/* build confirm string */
-	sprintf(members, cffdeld, fam_to_key(fam), ISize(spseq), ISize(chseq));
-	llstrcatn(&cfptr, _(cffdel), &cflen);
+	sprintf(members, _(qScffdeld), fam_to_key(fam), ISize(spseq), ISize(chseq));
+	llstrcatn(&cfptr, _(qScffdel), &cflen);
 	llstrcatn(&cfptr, members, &cflen);
 
 	if (ask_yes_or_no(confirm)) {
@@ -120,7 +120,7 @@ delete_indi (NODE indi, BOOLEAN conf)
 	if (!indi && !(indi = ask_for_indi_old(idpdel, NOCONFIRM, DOASK1)))
 		return;
 	/* confirm if caller desired */
-	if (conf && !ask_yes_or_no(_(cfpdel))) return;
+	if (conf && !ask_yes_or_no(_(qScfpdel))) return;
 
 	/* alright, we finished the UI, so delegate to the internal workhorse */
 	remove_indi(indi);
@@ -135,26 +135,26 @@ BOOLEAN
 choose_and_remove_spouse (NODE indi, NODE fam, BOOLEAN nolast)
 {
 	if (readonly) {
-		message(_(ronlye));
+		message(_(qSronlye));
 		return FALSE;
 	}
 
 /* Identify spouse to remove */
-	if (!indi) indi = ask_for_indi_old(_(idsrmv), NOCONFIRM, NOASK1);
+	if (!indi) indi = ask_for_indi_old(_(qSidsrmv), NOCONFIRM, NOASK1);
 	if (!indi) return FALSE;
 	if (!FAMS(indi)) {
-		message(ntprnt);
+		message(_(qSntprnt));
 		return FALSE;
 	}
 
 /* Identify family to remove spouse from */
-	if (!fam) fam = choose_family(indi, paradox, idsrmf, TRUE);
+	if (!fam) fam = choose_family(indi, _(qSparadox), _(qSidsrmf), TRUE);
 	if (!fam) return FALSE;
 	if (nolast && num_fam_xrefs(fam) < 2) {
-		message(_(normls));
+		message(_(qSnormls));
 		return FALSE;
 	}
-	if (!ask_yes_or_no(cfsrmv)) return FALSE;
+	if (!ask_yes_or_no(_(qScfsrmv))) return FALSE;
 
 	/* call internal workhorse remove_spouse() to do the actual removal */
 	if (!remove_spouse(indi, fam)) {
@@ -174,26 +174,26 @@ BOOLEAN
 choose_and_remove_child (NODE indi, NODE fam, BOOLEAN nolast)
 {
 	if (readonly) {
-		message(_(ronlye));
+		message(_(qSronlye));
 		return FALSE;
 	}
 		
 /* Identify child and check for FAMC nodes */
-	if (!indi) indi = ask_for_indi_old(_(idcrmv), NOCONFIRM, NOASK1);
+	if (!indi) indi = ask_for_indi_old(_(qSidcrmv), NOCONFIRM, NOASK1);
 	if (!indi) return FALSE;
 	if (!FAMC(indi)) {
-		message(_(ntchld));
+		message(_(qSntchld));
 		return FALSE;
 	}
 
 /* Identify family to remove child from */
-	if (!fam) fam = choose_family(indi, paradox, _(idcrmf), FALSE);
+	if (!fam) fam = choose_family(indi, _(qSparadox), _(qSidcrmf), FALSE);
 	if (!fam) return FALSE;
 	if (nolast && num_fam_xrefs(fam) < 2) {
-		message(_(normls));
+		message(_(qSnormls));
 		return FALSE;
 	}
-	if (!ask_yes_or_no(cfcrmv)) return TRUE;
+	if (!ask_yes_or_no(_(qScfcrmv))) return TRUE;
 
 	if (!remove_child(indi, fam)) {
 		message(ntcinf);

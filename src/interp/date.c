@@ -43,27 +43,27 @@
  * external/imported variables
  *********************************************/
 
-extern STRING datea_abtA,datea_abtB,datea_estA,datea_estB,datea_calA;
-extern STRING datea_calB,datep_fromA,datep_fromB,datep_toA,datep_toB;
-extern STRING datep_frtoA,datep_frtoB,dater_befA,dater_befB,dater_aftA;
-extern STRING dater_aftB,dater_betA,dater_betB;
-extern STRING datetrl_bcA,datetrl_bcB,datetrl_bcC,datetrl_bcD;
-extern STRING datetrl_adA,datetrl_adB,datetrl_adC,datetrl_adD;
-extern STRING caljul,calheb,calfr,calrom;
-extern STRING mon_gj1A,mon_gj1B,mon_gj2A,mon_gj2B,mon_gj3A,mon_gj3B;
-extern STRING mon_gj4A,mon_gj4B,mon_gj5A,mon_gj5B,mon_gj6A,mon_gj6B;
-extern STRING mon_gj7A,mon_gj7B,mon_gj8A,mon_gj8B,mon_gj9A,mon_gj9B;
-extern STRING mon_gj10A,mon_gj10B,mon_gj11A,mon_gj11B,mon_gj12A,mon_gj12B;
-extern STRING mon_heb1A,mon_heb1B,mon_heb2A,mon_heb2B,mon_heb3A,mon_heb3B;
-extern STRING mon_heb4A,mon_heb4B,mon_heb5A,mon_heb5B,mon_heb6A,mon_heb6B;
-extern STRING mon_heb7A,mon_heb7B,mon_heb8A,mon_heb8B,mon_heb9A,mon_heb9B;
-extern STRING mon_heb10A,mon_heb10B,mon_heb11A,mon_heb11B;
-extern STRING mon_heb12A,mon_heb12B,mon_heb13A,mon_heb13B;
-extern STRING mon_fr1A,mon_fr1B,mon_fr2A,mon_fr2B,mon_fr3A,mon_fr3B;
-extern STRING mon_fr4A,mon_fr4B,mon_fr5A,mon_fr5B,mon_fr6A,mon_fr6B;
-extern STRING mon_fr7A,mon_fr7B,mon_fr8A,mon_fr8B,mon_fr9A,mon_fr9B;
-extern STRING mon_fr10A,mon_fr10B,mon_fr11A,mon_fr11B;
-extern STRING mon_fr12A,mon_fr12B,mon_fr13A,mon_fr13B;
+extern STRING qSdatea_abtA,qSdatea_abtB,qSdatea_estA,qSdatea_estB,qSdatea_calA;
+extern STRING qSdatea_calB,qSdatep_fromA,qSdatep_fromB,qSdatep_toA,qSdatep_toB;
+extern STRING qSdatep_frtoA,qSdatep_frtoB,qSdater_befA,qSdater_befB,qSdater_aftA;
+extern STRING qSdater_aftB,qSdater_betA,qSdater_betB;
+extern STRING qSdatetrl_bcA,qSdatetrl_bcB,qSdatetrl_bcC,qSdatetrl_bcD;
+extern STRING qSdatetrl_adA,qSdatetrl_adB,qSdatetrl_adC,qSdatetrl_adD;
+extern STRING qScaljul,qScalheb,qScalfr,qScalrom;
+extern STRING qSmon_gj1A,qSmon_gj1B,qSmon_gj2A,qSmon_gj2B,qSmon_gj3A,qSmon_gj3B;
+extern STRING qSmon_gj4A,qSmon_gj4B,qSmon_gj5A,qSmon_gj5B,qSmon_gj6A,qSmon_gj6B;
+extern STRING qSmon_gj7A,qSmon_gj7B,qSmon_gj8A,qSmon_gj8B,qSmon_gj9A,qSmon_gj9B;
+extern STRING qSmon_gj10A,qSmon_gj10B,qSmon_gj11A,qSmon_gj11B,qSmon_gj12A,qSmon_gj12B;
+extern STRING qSmon_heb1A,qSmon_heb1B,qSmon_heb2A,qSmon_heb2B,qSmon_heb3A,qSmon_heb3B;
+extern STRING qSmon_heb4A,qSmon_heb4B,qSmon_heb5A,qSmon_heb5B,qSmon_heb6A,qSmon_heb6B;
+extern STRING qSmon_heb7A,qSmon_heb7B,qSmon_heb8A,qSmon_heb8B,qSmon_heb9A,qSmon_heb9B;
+extern STRING qSmon_heb10A,qSmon_heb10B,qSmon_heb11A,qSmon_heb11B;
+extern STRING qSmon_heb12A,qSmon_heb12B,qSmon_heb13A,qSmon_heb13B;
+extern STRING qSmon_fr1A,qSmon_fr1B,qSmon_fr2A,qSmon_fr2B,qSmon_fr3A,qSmon_fr3B;
+extern STRING qSmon_fr4A,qSmon_fr4B,qSmon_fr5A,qSmon_fr5B,qSmon_fr6A,qSmon_fr6B;
+extern STRING qSmon_fr7A,qSmon_fr7B,qSmon_fr8A,qSmon_fr8B,qSmon_fr9A,qSmon_fr9B;
+extern STRING qSmon_fr10A,qSmon_fr10B,qSmon_fr11A,qSmon_fr11B;
+extern STRING qSmon_fr12A,qSmon_fr12B,qSmon_fr13A,qSmon_fr13B;
 
 /*********************************************
  * local types used in local function prototypes
@@ -366,13 +366,13 @@ format_eratime (struct gdate_s * pdate, CNSTRING ymd, INT efmt, STRING output
 			p[0] = 0;
 			llstrcatn(&p, ymd, &len);
 			switch (efmt/10) {
-				case 1: tag = datetrl_bcB; break;
-				case 2: tag = datetrl_bcC; break;
-				case 3: tag = datetrl_bcD; break;
+				case 1: tag = _(qSdatetrl_bcB); break;
+				case 2: tag = _(qSdatetrl_bcC); break;
+				case 3: tag = _(qSdatetrl_bcD); break;
 			}
-			/* this way we handle if, eg, datetrl_bc4 is blank */
+			/* this way we handle if one is blank */
 			if (!tag || !tag[0])
-				tag = datetrl_bcA;
+				tag = _(qSdatetrl_bcA);
 			llstrcatn(&p, " ", &len);
 			llstrcatn(&p, tag, &len);
 			return;
@@ -384,13 +384,13 @@ format_eratime (struct gdate_s * pdate, CNSTRING ymd, INT efmt, STRING output
 			p[0] = 0;
 			llstrcatn(&p, ymd, &len);
 			switch (efmt/10) {
-				case 1: tag = datetrl_adB; break;
-				case 2: tag = datetrl_adC; break;
-				case 3: tag = datetrl_adD; break;
+				case 1: tag = _(qSdatetrl_adB); break;
+				case 2: tag = _(qSdatetrl_adC); break;
+				case 3: tag = _(qSdatetrl_adD); break;
 			}
-			/* this way we handle if, eg, datetrl_ad4 is blank */
+			/* this way we handle if one is blank */
 			if (!tag || !tag[0])
-				tag = datetrl_adA;
+				tag = _(qSdatetrl_adA);
 			llstrcatn(&p, " ", &len);
 			llstrcatn(&p, tag, &len);
 			return;
@@ -1465,8 +1465,8 @@ init_keywordtbl (void)
 static void
 load_one_cmplx_pic (INT ecmplx, STRING abbrev, STRING full)
 {
-	STRING loc_abbrev = strdup(_(abbrev));
-	STRING loc_full = strdup(_(full));
+	STRING loc_abbrev = strdup(abbrev);
+	STRING loc_full = strdup(full);
 	ASSERT(ecmplx>=0 && ecmplx <ECMPLX_END);
 	/* 0=ABT (cmplx=3) */
 	cmplx_pics[ecmplx][0] = strdup(upper(loc_abbrev));
@@ -1497,8 +1497,8 @@ static void
 load_one_month (INT monum, MONTH_NAMES * monarr, STRING abbrev, STRING full)
 {
 	/* 0-5 codes as in load_cmplx_pic(...) above */
-	STRING locx_abbrev = strdup(_(abbrev));
-	STRING loc_full = strdup(_(full));
+	STRING locx_abbrev = strdup(abbrev);
+	STRING loc_full = strdup(full);
 	STRING loc_abbrev = locx_abbrev;
 	/* special handling for **may, to differentiate from may */
 	if (loc_abbrev[0]=='*' && loc_abbrev[1]=='*')
@@ -1536,15 +1536,15 @@ load_lang (void)
 		}
 	}
 	/* load complex pics */
-	load_one_cmplx_pic(ECMPLX_ABT, datea_abtA, datea_abtB);
-	load_one_cmplx_pic(ECMPLX_EST, datea_estA, datea_estB);
-	load_one_cmplx_pic(ECMPLX_CAL, datea_calA, datea_calB);
-	load_one_cmplx_pic(ECMPLX_FROM, datep_fromA, datep_fromB);
-	load_one_cmplx_pic(ECMPLX_TO, datep_toA, datep_toB);
-	load_one_cmplx_pic(ECMPLX_FROM_TO, datep_frtoA, datep_frtoB);
-	load_one_cmplx_pic(ECMPLX_BEF, dater_befA, dater_befB);
-	load_one_cmplx_pic(ECMPLX_AFT, dater_aftA, dater_aftB);
-	load_one_cmplx_pic(ECMPLX_BET_AND, dater_betA, dater_betB);
+	load_one_cmplx_pic(ECMPLX_ABT, _(qSdatea_abtA), _(qSdatea_abtB));
+	load_one_cmplx_pic(ECMPLX_EST, _(qSdatea_estA), _(qSdatea_estB));
+	load_one_cmplx_pic(ECMPLX_CAL, _(qSdatea_calA), _(qSdatea_calB));
+	load_one_cmplx_pic(ECMPLX_FROM, _(qSdatep_fromA), _(qSdatep_fromB));
+	load_one_cmplx_pic(ECMPLX_TO, _(qSdatep_toA), _(qSdatep_toB));
+	load_one_cmplx_pic(ECMPLX_FROM_TO, _(qSdatep_frtoA), _(qSdatep_frtoB));
+	load_one_cmplx_pic(ECMPLX_BEF, _(qSdater_befA), _(qSdater_befB));
+	load_one_cmplx_pic(ECMPLX_AFT, _(qSdater_aftA), _(qSdater_aftB));
+	load_one_cmplx_pic(ECMPLX_BET_AND, _(qSdater_betA), _(qSdater_betB));
 	/* test that all were loaded */	
 	for (i=0; i<ECMPLX_END; ++i) {
 		for (j=0; j<6; ++j) {
@@ -1559,10 +1559,10 @@ load_lang (void)
 			calendar_pics[i] = 0;
 		}
 	}
-	calendar_pics[GDV_JULIAN] = strdup(caljul);
-	calendar_pics[GDV_HEBREW] = strdup(calheb);
-	calendar_pics[GDV_FRENCH] = strdup(calfr);
-	calendar_pics[GDV_ROMAN] = strdup(calrom);
+	calendar_pics[GDV_JULIAN] = strdup(_(qScaljul));
+	calendar_pics[GDV_HEBREW] = strdup(_(qScalheb));
+	calendar_pics[GDV_FRENCH] = strdup(_(qScalfr));
+	calendar_pics[GDV_ROMAN] = strdup(_(qScalrom));
 	/* not all slots in calendar_pics are used */
 
 	/* clear Gregorian/Julian month names */
@@ -1575,18 +1575,18 @@ load_lang (void)
 		}
 	}
 	/* load Gregorian/Julian month names */
-	load_one_month(0, months_gj, mon_gj1A, mon_gj1B);
-	load_one_month(1, months_gj, mon_gj2A, mon_gj2B);
-	load_one_month(2, months_gj, mon_gj3A, mon_gj3B);
-	load_one_month(3, months_gj, mon_gj4A, mon_gj4B);
-	load_one_month(4, months_gj, mon_gj5A, mon_gj5B);
-	load_one_month(5, months_gj, mon_gj6A, mon_gj6B);
-	load_one_month(6, months_gj, mon_gj7A, mon_gj7B);
-	load_one_month(7, months_gj, mon_gj8A, mon_gj8B);
-	load_one_month(8, months_gj, mon_gj9A, mon_gj9B);
-	load_one_month(9, months_gj, mon_gj10A, mon_gj10B);
-	load_one_month(10, months_gj, mon_gj11A, mon_gj11B);
-	load_one_month(11, months_gj, mon_gj12A, mon_gj12B);
+	load_one_month(0, months_gj, _(qSmon_gj1A), _(qSmon_gj1B));
+	load_one_month(1, months_gj, _(qSmon_gj2A), _(qSmon_gj2B));
+	load_one_month(2, months_gj, _(qSmon_gj3A), _(qSmon_gj3B));
+	load_one_month(3, months_gj, _(qSmon_gj4A), _(qSmon_gj4B));
+	load_one_month(4, months_gj, _(qSmon_gj5A), _(qSmon_gj5B));
+	load_one_month(5, months_gj, _(qSmon_gj6A), _(qSmon_gj6B));
+	load_one_month(6, months_gj, _(qSmon_gj7A), _(qSmon_gj7B));
+	load_one_month(7, months_gj, _(qSmon_gj8A), _(qSmon_gj8B));
+	load_one_month(8, months_gj, _(qSmon_gj9A), _(qSmon_gj9B));
+	load_one_month(9, months_gj, _(qSmon_gj10A), _(qSmon_gj10B));
+	load_one_month(10, months_gj, _(qSmon_gj11A), _(qSmon_gj11B));
+	load_one_month(11, months_gj, _(qSmon_gj12A), _(qSmon_gj12B));
 	/* test that all were loaded */	
 	for (i=0; i<ARRSIZE(months_gj); ++i) {
 		for (j=0; j<ARRSIZE(months_gj[0]); ++j) {
@@ -1604,19 +1604,19 @@ load_lang (void)
 		}
 	}
 	/* load Hebrew month names */
-	load_one_month(0, months_heb, mon_heb1A, mon_heb1B);
-	load_one_month(1, months_heb, mon_heb2A, mon_heb2B);
-	load_one_month(2, months_heb, mon_heb3A, mon_heb3B);
-	load_one_month(3, months_heb, mon_heb4A, mon_heb4B);
-	load_one_month(4, months_heb, mon_heb5A, mon_heb5B);
-	load_one_month(5, months_heb, mon_heb6A, mon_heb6B);
-	load_one_month(6, months_heb, mon_heb7A, mon_heb7B);
-	load_one_month(7, months_heb, mon_heb8A, mon_heb8B);
-	load_one_month(8, months_heb, mon_heb9A, mon_heb9B);
-	load_one_month(9, months_heb, mon_heb10A, mon_heb10B);
-	load_one_month(10, months_heb, mon_heb11A, mon_heb11B);
-	load_one_month(11, months_heb, mon_heb12A, mon_heb12B);
-	load_one_month(12, months_heb, mon_heb13A, mon_heb13B);
+	load_one_month(0, months_heb, _(qSmon_heb1A), _(qSmon_heb1B));
+	load_one_month(1, months_heb, _(qSmon_heb2A), _(qSmon_heb2B));
+	load_one_month(2, months_heb, _(qSmon_heb3A), _(qSmon_heb3B));
+	load_one_month(3, months_heb, _(qSmon_heb4A), _(qSmon_heb4B));
+	load_one_month(4, months_heb, _(qSmon_heb5A), _(qSmon_heb5B));
+	load_one_month(5, months_heb, _(qSmon_heb6A), _(qSmon_heb6B));
+	load_one_month(6, months_heb, _(qSmon_heb7A), _(qSmon_heb7B));
+	load_one_month(7, months_heb, _(qSmon_heb8A), _(qSmon_heb8B));
+	load_one_month(8, months_heb, _(qSmon_heb9A), _(qSmon_heb9B));
+	load_one_month(9, months_heb, _(qSmon_heb10A), _(qSmon_heb10B));
+	load_one_month(10, months_heb, _(qSmon_heb11A), _(qSmon_heb11B));
+	load_one_month(11, months_heb, _(qSmon_heb12A), _(qSmon_heb12B));
+	load_one_month(12, months_heb, _(qSmon_heb13A), _(qSmon_heb13B));
 	/* test that all were loaded */	
 	for (i=0; i<ARRSIZE(months_heb); ++i) {
 		for (j=0; j<ARRSIZE(months_heb[0]); ++j) {
@@ -1634,19 +1634,19 @@ load_lang (void)
 		}
 	}
 	/* load French Republic month names */
-	load_one_month(0, months_fr, mon_fr1A, mon_fr1B);
-	load_one_month(1, months_fr, mon_fr2A, mon_fr2B);
-	load_one_month(2, months_fr, mon_fr3A, mon_fr3B);
-	load_one_month(3, months_fr, mon_fr4A, mon_fr4B);
-	load_one_month(4, months_fr, mon_fr5A, mon_fr5B);
-	load_one_month(5, months_fr, mon_fr6A, mon_fr6B);
-	load_one_month(6, months_fr, mon_fr7A, mon_fr7B);
-	load_one_month(7, months_fr, mon_fr8A, mon_fr8B);
-	load_one_month(8, months_fr, mon_fr9A, mon_fr9B);
-	load_one_month(9, months_fr, mon_fr10A, mon_fr10B);
-	load_one_month(10, months_fr, mon_fr11A, mon_fr11B);
-	load_one_month(11, months_fr, mon_fr12A, mon_fr12B);
-	load_one_month(12, months_fr, mon_fr13A, mon_fr13B);
+	load_one_month(0, months_fr, _(qSmon_fr1A), _(qSmon_fr1B));
+	load_one_month(1, months_fr, _(qSmon_fr2A), _(qSmon_fr2B));
+	load_one_month(2, months_fr, _(qSmon_fr3A), _(qSmon_fr3B));
+	load_one_month(3, months_fr, _(qSmon_fr4A), _(qSmon_fr4B));
+	load_one_month(4, months_fr, _(qSmon_fr5A), _(qSmon_fr5B));
+	load_one_month(5, months_fr, _(qSmon_fr6A), _(qSmon_fr6B));
+	load_one_month(6, months_fr, _(qSmon_fr7A), _(qSmon_fr7B));
+	load_one_month(7, months_fr, _(qSmon_fr8A), _(qSmon_fr8B));
+	load_one_month(8, months_fr, _(qSmon_fr9A), _(qSmon_fr9B));
+	load_one_month(9, months_fr, _(qSmon_fr10A), _(qSmon_fr10B));
+	load_one_month(10, months_fr, _(qSmon_fr11A), _(qSmon_fr11B));
+	load_one_month(11, months_fr, _(qSmon_fr12A), _(qSmon_fr12B));
+	load_one_month(12, months_fr, _(qSmon_fr13A), _(qSmon_fr13B));
 	/* test that all were loaded */	
 	for (i=0; i<ARRSIZE(months_fr); ++i) {
 		for (j=0; j<ARRSIZE(months_fr[0]); ++j) {

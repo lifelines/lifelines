@@ -17,7 +17,7 @@
 
 
 extern STRING map_keys[];
-extern STRING cmperr,aredit,ronlye,dataerr,badttnum;
+extern STRING cmperr,aredit,qSronlye,dataerr,badttnum;
 extern STRING sepch;
 
 /*==============================================
@@ -32,7 +32,7 @@ edit_mapping (INT ttnum)
 		return FALSE;
 	}
 	if (readonly) {
-		msg_error(_(ronlye));
+		msg_error(_(qSronlye));
 		return FALSE;
 	}
 	endwin();

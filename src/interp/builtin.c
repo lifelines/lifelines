@@ -54,7 +54,7 @@ extern STRING nonint1,nonintx,nonstr1,nonstrx,nullarg1,nonfname1;
 extern STRING nonnodstr1;
 extern STRING nonind1,nonindx,nonfam1,nonrecx,nonnod1,nonnodx;
 extern STRING nonvar1,nonvarx,nonboox,nonlst1,nonlstx;
-extern STRING badargs;
+extern STRING badargs,qSaskstr,qSchoostrttl;
 
 /*********************************************
  * local function prototypes
@@ -118,7 +118,7 @@ __getstr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE arg = (PNODE) iargs(node);
 	PNODE arg2;
 	STRING val;
-	STRING msg = (STRING) "Enter string for program";
+	STRING msg = _(qSchoostrttl);
 	PVALUE mval = NULL;
 	if (!iistype(arg, IIDENT)) {
 		prog_var_error(node, stab, arg, NULL, nonvarx, "getstr", "1");
@@ -136,7 +136,7 @@ __getstr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		}
 		msg = pvalue_to_string(mval);
 	}
-	val = ask_for_string(msg, "enter string: ");
+	val = ask_for_string(msg, _(qSaskstr));
 	assign_iden(stab, iident(arg), create_pvalue_from_string(val));
 	if (mval) delete_pvalue(mval);
 	return NULL;

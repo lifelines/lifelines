@@ -46,7 +46,7 @@ typedef enum { MSG_ERROR=-1, MSG_INFO, MSG_STATUS } MSG_LEVEL;
 void msg_output(MSG_LEVEL, STRING fmt, ...);
 void msg_outputv(MSG_LEVEL, STRING fmt, va_list args);
 	/* legacy */
-	/* message () is a macro -- will localize */
+	/* message () is a macro -- does not localize */
 #define message(str) msg_error(str)
 	/* report to stdout style output (uses embedded carriage returns */
 void llwprintf(STRING fmt, ...);

@@ -51,9 +51,9 @@
 extern INT listbadkeys;
 extern char badkeylist[];
 
-extern STRING ntchld,ntprnt,idfbrs,entnam,notone,ifone;
-extern STRING nofopn,idbrws,whtfname,whtfnameext;
-extern STRING nonamky,paradox,askint;
+extern STRING qSntchld,qSntprnt,qSidfbrs,qSentnam,qSnotone,qSifone;
+extern STRING qSnofopn,qSidbrws,whtfname,whtfnameext;
+extern STRING qSnonamky,qSparadox,qSaskint,misskeys,badkeyptr;
 
 /*********************************************
  * local function prototypes
@@ -63,9 +63,12 @@ static INDISEQ ask_for_indi_list_once(STRING, INT*);
 static RECORD ask_for_any_once(STRING ttl, char ctype, ASK1Q ask1, INT *prc);
 
 /*=====================================================
- * ask_for_fam_by_key -- Ask user to identify family by
+ * ask_for_fam_by_key -- Ask user to identify family by 
  *  key (or REFN)
  *  (if they enter nothing, it will fall thru to ask_for_fam)
+ *  fttl: [IN]  title for prompt
+ *  pttl: [IN]  title for prompt to identify spouse
+ *  sttl: [IN]  title for prompt to identify sibling
  *========================================================*/
 NODE
 ask_for_fam_by_key (STRING fttl, STRING pttl, STRING sttl)
@@ -74,11 +77,12 @@ ask_for_fam_by_key (STRING fttl, STRING pttl, STRING sttl)
 	return fam ? nztop(fam) : ask_for_fam(pttl, sttl);
 }
 /*===========================================
- * ask_for_fam -- Ask user to identify family
+ * ask_for_fam -- Ask user to identify family by spouses
+ *  pttl: [IN]  title for prompt to identify spouse
+ *  sttl: [IN]  title for prompt to identify sibling
  *=========================================*/
 NODE
-ask_for_fam (STRING pttl,
-             STRING sttl)
+ask_for_fam (STRING pttl, STRING sttl)
 {
 	NODE sib, fam, prn;
 	prn = ask_for_indi_old(pttl, NOCONFIRM, DOASK1);
@@ -86,27 +90,27 @@ ask_for_fam (STRING pttl,
 		sib = ask_for_indi_old(sttl, NOCONFIRM, DOASK1);
 		if (!sib) return NULL;
 		if (!(fam = FAMC(sib))) {
-			message(_(ntchld));
+			message(_(qSntchld));
 			return NULL;
 		}
 		fam = key_to_fam(rmvat(nval(fam)));
 		return fam;
 	}
 	if (!FAMS(prn)) {
-		message(ntprnt);
+		message(_(qSntprnt));
 		return NULL;
 	}
-	return choose_family(prn, paradox, idfbrs, TRUE);
+	return choose_family(prn, _(qSparadox), _(qSidfbrs), TRUE);
 }
 /*===========================================
  * ask_for_int -- Ask user to provide integer
- * titl: [IN]  prompt title (will translate)
+ * titl: [IN]  prompt title
  *=========================================*/
 INT
 ask_for_int (STRING ttl)
 {
 	INT ival, c, neg;
-	STRING p = ask_for_string(ttl, askint);
+	STRING p = ask_for_string(ttl, _(qSaskint));
 	while (TRUE) {
 		neg = 1;
 		while (iswhite(*p++))
@@ -129,7 +133,7 @@ ask_for_int (STRING ttl)
 			--p;
 			if (*p == 0) return ival*neg;
 		}
-		p = ask_for_string(ttl, "enter integer:");
+		p = ask_for_string(ttl, _(qSaskint));
 	}
 }
 /*============================================
@@ -158,7 +162,7 @@ expand_special_chars (STRING fname, STRING buffer, INT buflen)
 }
 /*======================================
  * ask_for_file_worker -- Ask for and open file
- *  ttl:    [IN]  title of question (1rst line) (will localize)
+ *  ttl:    [IN]  title of question (1rst line)
  *  pfname: [OUT] optional output parameter (pass NULL if undesired)
  *====================================*/
 typedef enum { INPUT, OUTPUT } DIRECTION;
@@ -212,7 +216,7 @@ ask_for_file_worker (STRING mode,
 			if(fp && pfname) *pfname = fname;
 		}
 		if (fp == NULL) {
-			msg_error(nofopn, fname);
+			msg_error(_(qSnofopn), fname);
 			return NULL;
 		}
 		return fp;
@@ -220,7 +224,7 @@ ask_for_file_worker (STRING mode,
 
 	if (!(fp = fopenpath(fname, mode, path, ext, pfname))) {
 		if(pfname && (*pfname == NULL)) *pfname = fname;
-		msg_error(nofopn, fname);
+		msg_error(_(qSnofopn), fname);
 		return NULL;
 	}
 	return fp;
@@ -243,7 +247,7 @@ make_fname_prompt (STRING fnamebuf, INT len, STRING ext)
 }
 /*======================================
  * ask_for_input_file -- Ask for and open file for input
- *  ttl:   [IN]  title of question (1rst line) (will localize)
+ *  ttl:   [IN]  title of question (1rst line)
  *  pfname [OUT] optional output parameter (pass NULL if undesired)
  *====================================*/
 FILE *
@@ -259,7 +263,7 @@ ask_for_input_file (STRING mode,
 
 /*======================================
  * ask_for_output_file -- Ask for and open file for output
- *  ttl:   [IN]  title of question (1rst line) (will localize)
+ *  ttl:   [IN]  title of question (1rst line)
  *  pfname [OUT] optional output parameter (pass NULL if undesired)
  *====================================*/
 FILE *
@@ -280,7 +284,7 @@ ask_for_output_file (STRING mode,
 #define RC_SELECT   2
 /*=================================================
  * ask_for_indiseq -- Ask user to identify sequence
- *  ttl:   [IN]  prompt (title) to display (will localize)
+ *  ttl:   [IN]  prompt (title) to display
  *  ctype: [IN]  type of record (eg, 'I') (0 for any)
  *  prc:   [OUT] result code (RC_DONE, RC_SELECT, RC_NOSELECT)
  *===============================================*/
@@ -288,13 +292,13 @@ INDISEQ
 ask_for_indiseq (STRING ttl, char ctype, INT *prc)
 {
 	INDISEQ seq;
-	STRING name = ask_for_string(ttl, idbrws); /* will localize */
+	STRING name = ask_for_string(ttl, _(qSidbrws));
 	*prc = RC_DONE;
 	if (!name || *name == 0) return NULL;
 	*prc = RC_NOSELECT;
 	seq = str_to_indiseq(name, ctype);
 	if (!seq) {
-		msg_error(_(nonamky));
+		msg_error(_(qSnonamky));
 		return NULL;
 	}
 	*prc = RC_SELECT;
@@ -314,7 +318,7 @@ ask_for_any_once (STRING ttl, char ctype, ASK1Q ask1, INT *prc)
 	RECORD indi = 0;
 	INDISEQ seq = ask_for_indiseq(ttl, ctype, prc);
 	if (*prc == RC_DONE || *prc == RC_NOSELECT) return NULL;
-	indi = choose_from_indiseq(seq, ask1, ifone, notone);
+	indi = choose_from_indiseq(seq, ask1, _(qSifone), _(qSnotone));
 	remove_indiseq(seq);
 	*prc = indi ? RC_SELECT : RC_NOSELECT;
 	return indi;
@@ -340,8 +344,10 @@ ask_for_indi (STRING ttl, CONFIRMQ confirmq, ASK1Q ask1)
 	while (TRUE) {
 		INT rc;
 		RECORD indi = ask_for_any_once(ttl, 'I', ask1, &rc);
-		if (rc == RC_DONE || rc == RC_SELECT) return indi;
-		if (confirmq != DOCONFIRM || !ask_yes_or_no(entnam)) return NULL;
+		if (rc == RC_DONE || rc == RC_SELECT) 
+			return indi;
+		if (confirmq != DOCONFIRM || !ask_yes_or_no(_(qSentnam))) 
+			return NULL;
 	}
 }
 /*=================================================================
@@ -366,8 +372,10 @@ ask_for_any (STRING ttl, CONFIRMQ confirmq, ASK1Q ask1)
 	while (TRUE) {
 		INT rc;
 		RECORD record = ask_for_any_once(ttl, ctype, ask1, &rc);
-		if (rc == RC_DONE || rc == RC_SELECT) return record;
-		if (confirmq != DOCONFIRM || !ask_yes_or_no(entnam)) return NULL;
+		if (rc == RC_DONE || rc == RC_SELECT)
+			return record;
+		if (confirmq != DOCONFIRM || !ask_yes_or_no(_(qSentnam)))
+			return NULL;
 	}
 }
 /*===============================================================
@@ -383,7 +391,7 @@ ask_for_indi_list_once (STRING ttl,
 	INDISEQ seq = ask_for_indiseq(ttl, 'I', prc);
 	INT rv;
 	if (*prc == RC_DONE || *prc == RC_NOSELECT) return NULL;
-	rv = choose_list_from_indiseq(notone, seq);
+	rv = choose_list_from_indiseq(_(qSnotone), seq);
 	if (rv == -1) {
 		remove_indiseq(seq);
 		seq = NULL;
@@ -404,8 +412,10 @@ ask_for_indi_list (STRING ttl,
 	while (TRUE) {
 		INT rc;
 		INDISEQ seq = ask_for_indi_list_once(ttl, &rc);
-		if (rc == RC_DONE || rc == RC_SELECT) return seq;
-		if (!reask || !ask_yes_or_no(entnam)) return NULL;
+		if (rc == RC_DONE || rc == RC_SELECT)
+			return seq;
+		if (!reask || !ask_yes_or_no(_(qSentnam)))
+			return NULL;
 	}
 }
 /*==========================================================
@@ -424,8 +434,8 @@ ask_for_indi_key (STRING ttl,
  * choose_one_from_indiseq_if_needed  -- handle ask1 cases
  *  seq:   [IN]  sequence from which to choose
  *  ask1:  [IN]  whether to prompt if only one element in sequence
- *  titl1: [IN]  title if sequence has one element (will localize)
- *  titln: [IN]  title if sequence has multiple elements (will localize)
+ *  titl1: [IN]  title if sequence has one element
+ *  titln: [IN]  title if sequence has multiple elements
  *=============================================================*/
 static INT
 choose_one_from_indiseq_if_needed (INDISEQ seq, ASK1Q ask1, STRING titl1
@@ -444,8 +454,8 @@ choose_one_from_indiseq_if_needed (INDISEQ seq, ASK1Q ask1, STRING titl1
  *  several ways.
  *  seq:   [IN]  sequence from which to choose
  *  ask1:  [IN]  whether to prompt if only one element in sequence
- *  titl1: [IN]  title if sequence has one element (will localize)
- *  titln: [IN]  title if sequence has multiple elements (will localize)
+ *  titl1: [IN]  title if sequence has one element
+ *  titln: [IN]  title if sequence has multiple elements
  *=====================================================*/
 RECORD
 choose_from_indiseq (INDISEQ seq, ASK1Q ask1, STRING titl1, STRING titln)
@@ -471,9 +481,9 @@ choose_from_indiseq (INDISEQ seq, ASK1Q ask1, STRING titl1, STRING titln)
 	if(!rec) {
 		char buf[132];
 		if (badkeylist[0])
-			sprintf(buf, "WARNING: missing keys: %.40s", badkeylist);
+			snprintf(buf, sizeof(buf), "%s: %.40s", _(misskeys), badkeylist);
 		else
-			sprintf(buf, "WARNING: invalid pointer");
+			snprintf(buf, sizeof(buf), _(badkeyptr));
 		message(buf);
 	}
 	return rec;

@@ -39,8 +39,8 @@
  * choose_child -- Choose child of person or family
  *  indi: [in] parent (may be null if fam provided)
  *  fam:  [in] family (may be null if indi provided)
- *  msg0: [in] message to display if no children (will localize)
- *  msgn: [in] title for choosing child from list (will localize)
+ *  msg0: [in] message to display if no children
+ *  msgn: [in] title for choosing child from list
  *  ask1: [in] whether to prompt if only one child
  *===============================================*/
 NODE
@@ -51,7 +51,7 @@ choose_child (NODE indi, NODE fam, STRING msg0, STRING msgn, ASK1Q ask1)
 	if (indi) seq = indi_to_children(indi);
 	if (!indi && fam) seq = fam_to_children(fam);
 	if (!seq) {
-		msg_error(_(msg0));
+		msg_error(msg0);
 		return NULL;
 	}
 	node = nztop(choose_from_indiseq(seq, ask1, msgn, msgn));
@@ -61,8 +61,8 @@ choose_child (NODE indi, NODE fam, STRING msg0, STRING msgn, ASK1Q ask1)
 /*========================================
  * choose_spouse -- Choose person's spouse
  *  indi: [in] known person (gives up if this is null)
- *  msg0: [in] message to display if no spouses (will localize)
- *  msgn: [in] title for choosing spouse from list (will localize)
+ *  msg0: [in] message to display if no spouses
+ *  msgn: [in] title for choosing spouse from list
  *  asks if multiple
  *======================================*/
 NODE
@@ -72,7 +72,7 @@ choose_spouse (NODE indi, STRING msg0, STRING msgn)
 	NODE node;
 	if (!indi) return NULL;
 	if (!(seq = indi_to_spouses(indi))) {
-		message(_(msg0));
+		message(msg0);
 		return NULL;
 	}
 	node = nztop(choose_from_indiseq(seq, NOASK1, NULL, msgn));
@@ -142,8 +142,8 @@ choose_pointer (NODE what, STRING msg0, STRING msgn)
  * choose_family -- Choose family from person's FAMS/C lines
  *  asks if multiple
  * indi: [IN]  person of interest
- * msg0: [IN]  message to display if no families (will localize)
- * msgn: [IN]  title if need to choose which family (will localize)
+ * msg0: [IN]  message to display if no families
+ * msgn: [IN]  title if need to choose which family
  * fams: [IN]  want spousal families of indi ? (or families indi is child in)
  *========================================================*/
 NODE
@@ -153,7 +153,7 @@ choose_family (NODE indi, STRING msg0, STRING msgn, BOOLEAN fams)
 	INDISEQ seq = indi_to_families(indi, fams);
 	if (!seq) {
 		if (msg0)
-			msg_error(_(msg0));
+			msg_error(msg0);
 		return NULL;
 	}
 	node = nztop(choose_from_indiseq(seq, NOASK1, NULL, msgn));
@@ -164,8 +164,8 @@ choose_family (NODE indi, STRING msg0, STRING msgn, BOOLEAN fams)
  * choose_father -- Choose father of person or family
  * indi: [IN]  person of interest if non-null
  * fam:  [IN]  family of interest if non-null
- * msg0: [IN]  message to display if no fathers (will localize)
- * msgn: [IN]  title if need to choose which father (will localize)
+ * msg0: [IN]  message to display if no fathers
+ * msgn: [IN]  title if need to choose which father
  * ask1: [IN]  whether or not to prompt if only one father found
  *=================================================*/
 NODE
@@ -176,7 +176,7 @@ choose_father (NODE indi, NODE fam, STRING msg0, STRING msgn, ASK1Q ask1)
 	if (indi) seq = indi_to_fathers(indi);
 	if (!indi && fam) seq = fam_to_fathers(fam);
 	if (!seq) {
-		msg_error(_(msg0));
+		msg_error(msg0);
 		return NULL;
 	}
 	node = nztop(choose_from_indiseq(seq, ask1, msgn, msgn));
@@ -187,8 +187,8 @@ choose_father (NODE indi, NODE fam, STRING msg0, STRING msgn, ASK1Q ask1)
  * choose_mother -- Choose mother of person or family
  * indi: [IN]  person of interest if non-null
  * fam:  [IN]  family of interest if non-null
- * msg0: [IN]  message to display if no mothers (will localize)
- * msgn: [IN]  title if need to choose which mother (will localize)
+ * msg0: [IN]  message to display if no mothers
+ * msgn: [IN]  title if need to choose which mother
  * ask1: [IN]  whether or not to prompt if only one mother found
  *=================================================*/
 NODE
@@ -199,7 +199,7 @@ choose_mother (NODE indi, NODE fam, STRING msg0, STRING msgn, ASK1Q ask1)
 	if (indi) seq = indi_to_mothers(indi);
 	if (!indi && fam) seq = fam_to_mothers(fam);
 	if (!seq) {
-		msg_error(_(msg0));
+		msg_error(msg0);
 		return NULL;
 	}
 	node = nztop(choose_from_indiseq(seq, ask1, msgn, msgn));

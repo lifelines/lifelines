@@ -43,10 +43,10 @@
 
 #include "llinesi.h"
 
-extern STRING idcfam, fredit, cffadd, idprnt, unksex, idsbln, mklast;
+extern STRING qSidcfam, fredit, cffadd, qSidprnt, unksex, idsbln, mklast;
 extern STRING idsadd, idsinf, kchild, iscinf, notopp, idsps1, idsps2;
 extern STRING nosex,  hashsb, haswif, idchld, gdfadd, cfcadd, iredit;
-extern STRING cfpadd, cfsadd, gdpadd, gdcadd, gdsadd, ronlya, ronlye;
+extern STRING cfpadd, cfsadd, gdpadd, gdcadd, gdsadd, qSronlya, qSronlye;
 
 extern TRANTABLE tran_tables[];
 
@@ -66,7 +66,7 @@ add_indi_by_edit (void)
 	TRANTABLE tti = tran_tables[MEDIN];
 
 	if (readonly) {
-		message(_(ronlya));
+		message(_(qSronlya));
 		return NULL;
 	}
 
@@ -188,7 +188,7 @@ ask_child_order (NODE fam, PROMPTQ promptq, RFMT rfmt)
 /* If not first, find where child belongs */
 	} else {
 		childstrings[nchildren] = mklast;
-		i = choose_from_array(idcfam, nchildren+1, childstrings);
+		i = choose_from_array(_(qSidcfam), nchildren+1, childstrings);
 	}
 	return i;
 }
@@ -205,7 +205,7 @@ add_child (NODE child, NODE fam)
 	TRANTABLE ttd = tran_tables[MINDS];
 
 	if (readonly) {
-		message(_(ronlye));
+		message(_(qSronlye));
 		return NULL;
 	}
 
@@ -216,7 +216,7 @@ add_child (NODE child, NODE fam)
 
 /* Identify family if caller did not */
 
-	if (!fam) fam = ask_for_fam(idprnt, idsbln);
+	if (!fam) fam = ask_for_fam(_(qSidprnt), idsbln);
 	if (!fam) return NULL;
 
 	i = ask_child_order(fam, ALWAYS_PROMPT, &disp_shrt_rfmt);
@@ -304,7 +304,7 @@ add_spouse (NODE spouse,
 	NODE husb, wife, chil, rest, fref;
 
 	if (readonly) {
-		message(_(ronlye));
+		message(_(qSronlye));
 		return FALSE;
 	}
 
@@ -471,7 +471,7 @@ add_family (NODE spouse1,
 	FILE *fp;
 
 	if (readonly) {
-		message(_(ronlya));
+		message(_(qSronlya));
 		return NULL;
 	}
 

@@ -46,11 +46,11 @@
  *********************************************/
 
 extern BTREE BTR;
-extern STRING cfradd, cfeadd, cfxadd, rredit, eredit, xredit;
-extern STRING cfrupt, cfeupt, cfxupt, gdrmod, gdemod, gdxmod;
-extern STRING idredt, ideedt, idxedt, duprfn, ronlya, ronlye;
-extern STRING nofopn, idkyrfn;
-extern STRING defsour,defeven,defothr;
+extern STRING qScfradd, qScfeadd, qScfxadd, rredit, eredit, xredit;
+extern STRING qScfrupt, qScfeupt, qScfxupt, gdrmod, gdemod, gdxmod;
+extern STRING idredt, ideedt, idxedt, duprfn, qSronlya, qSronlye;
+extern STRING qSnofopn, qSidkyrfn;
+extern STRING qSdefsour,qSdefeven,qSdefothr,nosuchrec;
 
 /*********************************************
  * local function prototypes
@@ -78,11 +78,11 @@ add_source (void)
 {
 	STRING str;
 	if (readonly) {
-		message(_(ronlya));
+		message(_(qSronlya));
 		return NULL;
 	}
-	str = getoptstr("SOURREC", _(defsour));
-	return add_record(str, rredit, 'S', _(cfradd));
+	str = getoptstr("SOURREC", _(qSdefsour));
+	return add_record(str, rredit, 'S', _(qScfradd));
 }
 /*==============================================
  * add_event -- Add event to database by editing
@@ -92,11 +92,11 @@ add_event (void)
 {
 	STRING str;
 	if (readonly) {
-		message(_(ronlya));
+		message(_(qSronlya));
 		return NULL;
 	}
-	str = getoptstr("EVENREC", _(defeven));
-	return add_record(str, eredit, 'E', _(cfeadd));
+	str = getoptstr("EVENREC", _(qSdefeven));
+	return add_record(str, eredit, 'E', _(qScfeadd));
 }
 /*====================================================
  * add_other -- Add user record to database by editing
@@ -106,18 +106,18 @@ add_other (void)
 {
 	STRING str;
 	if (readonly) {
-		message(_(ronlya));
+		message(_(qSronlya));
 		return NULL;
 	}
-	str = getoptstr("OTHR", _(defothr));
-	return add_record(str, xredit, 'X', _(cfxadd));
+	str = getoptstr("OTHR", _(qSdefothr));
+	return add_record(str, xredit, 'X', _(qScfxadd));
 }
 /*================================================
  * add_record -- Add record to database by editing
  *  recstr:  [IN] default record
  *  redt:    [IN] re-edit message
  *  ntype,   [IN] S, E, or X
- *  cfrm:    [IN] confirm message (localized)
+ *  cfrm:    [IN] confirm message
  *==============================================*/
 NODE
 add_record (STRING recstr, STRING redt, char ntype, STRING cfrm)
@@ -148,7 +148,7 @@ add_record (STRING recstr, STRING redt, char ntype, STRING cfrm)
 
 /* Create template for user to edit */
 	if (!(fp = fopen(editfile, LLWRITETEXT))) {
-		msg_error(nofopn, editfile);
+		msg_error(_(qSnofopn), editfile);
 		return FALSE;
 	}
 	fprintf(fp, "%s\n", recstr);
@@ -197,7 +197,7 @@ void
 edit_source (NODE node)
 {
 	edit_record(node, idredt, 'S', rredit, valid_sour_tree,
-	    _(cfrupt), "SOUR", sour_to_dbase, gdrmod);
+	    _(qScfrupt), "SOUR", sour_to_dbase, gdrmod);
 }
 /*=====================================
  * edit_event -- Edit event in database
@@ -206,7 +206,7 @@ void
 edit_event (NODE node)
 {
 	edit_record(node, ideedt, 'E', eredit, valid_even_tree,
-	     _(cfeupt), "EVEN", even_to_dbase, gdemod);
+	     _(qScfeupt), "EVEN", even_to_dbase, gdemod);
 }
 /*===========================================
  * edit_other -- Edit user record in database
@@ -215,7 +215,7 @@ void
 edit_other (NODE node)
 {
 	edit_record(node, idxedt, 'X', xredit, valid_othr_tree,
-	     _(cfxupt), NULL, othr_to_dbase, gdxmod);
+	     _(qScfxupt), NULL, othr_to_dbase, gdxmod);
 }
 /*========================================================
  * write_node_to_editfile - write all parts of gedcom node
@@ -236,8 +236,9 @@ write_node_to_editfile (NODE node)
  *  node1:   [IN]  record to edit (may be NULL)
  *  idedt:   [IN]  user id prompt
  *  letr:    [IN]  record type (E, S, or X)
+ *  redt:    [IN]  reedit prompt displayed if error after editing
  *  val:     [IN]  callback to validate routine
- *  cfrm:    [IN]  confirmation msg string (localized)
+ *  cfrm:    [IN]  confirmation msg string
  *  tag:     [IN]  tag (SOUR, EVEN, or NULL)
  *  todbase: [IN]  callback to write record to dbase
  *  gdmsg:   [IN]  success message
@@ -259,7 +260,7 @@ edit_record (NODE node1, STRING idedt, INT letr, STRING redt
 		node1 = nztop(ask_for_record(idedt, letr));
 	}
 	if (!node1) {
-		message("There is no record with that key or reference.");
+		message(nosuchrec);
 		return;
 	}
 	refn = REFN(node1);
@@ -271,7 +272,7 @@ edit_record (NODE node1, STRING idedt, INT letr, STRING redt
 	if (readonly) {
 		node2 = file_to_node(editfile, tti, &msg, &emp);
 		if (!equal_tree(node1, node2))
-			message(_(ronlye));
+			message(_(qSronlye));
 		free_nodes(node2);
 		return;
 	}
@@ -361,14 +362,14 @@ ntagdiff (NODE node1, NODE node2)
 /*===============================================
  * ask_for_record -- Ask user to identify record
  *  lookup by key or by refn (& handle dup refns)
- *  idstr: [IN]  question prompt (will translate)
+ *  idstr: [IN]  question prompt
  *  letr:  [IN]  letter to possibly prepend to key (ie, I/F/S/E/X)
  *=============================================*/
 RECORD
 ask_for_record (STRING idstr, INT letr)
 {
 	RECORD rec;
-	STRING str = ask_for_string(idstr, idkyrfn);
+	STRING str = ask_for_string(idstr, _(qSidkyrfn));
 	if (!str || *str == 0) return NULL;
 	rec = key_possible_to_record(str, letr);
 	if (!rec) {

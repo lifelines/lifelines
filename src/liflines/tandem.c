@@ -46,8 +46,8 @@
  * external/imported variables
  *********************************************/
 
-extern STRING nofath, nomoth, nospse, nocofp;
-extern STRING twohsb, twowif, idsbrs, idplst, idcbrs;
+extern STRING qSnofath, qSnomoth, qSnospse, nocofp;
+extern STRING twohsb, twowif, qSidsbrs, qSidplst, qSidcbrs;
 
 /*********************************************
  * local function prototypes
@@ -107,23 +107,23 @@ INT browse_tandem (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ
 			return BROWSE_INDI;
 		case CMD_FATHER: 	/* browse top person's father */
 			if (!(node = indi_to_fath(indi1)))
-				msg_error(_(nofath));
+				msg_error(_(qSnofath));
 			else
 				indi1 = node;
 			break;
 		case CMD_MOTHER: 	/* browse top person's mother */
 			if (!(node = indi_to_moth(indi1)))
-				msg_error(_(nomoth));
+				msg_error(_(qSnomoth));
 			else
 				indi1 = node;
 			break;
 		case CMD_SPOUSE: 	/* browse top person's spouse/s */
-			node = choose_spouse(indi1, nospse, idsbrs);
+			node = choose_spouse(indi1, _(qSnospse), _(qSidsbrs));
 			if (node) indi1 = node;
 			break;
 		case CMD_CHILDREN: 	/* browse top person's children */
 			if ((node = choose_child(indi1, NULL, nocofp,
-			    idcbrs, NOASK1)))
+			    _(qSidcbrs), NOASK1)))
 				indi1 = node;
 			break;
 		case CMD_MERGE_BOTTOM_TO_TOP: 	/* merge two persons */
@@ -146,7 +146,7 @@ INT browse_tandem (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ
 			*pfam1 = node;
 			return BROWSE_FAM;
 		case CMD_BROWSE: 	/* browse to new person list */
-			seq = (INDISEQ) ask_for_indiseq(idplst, 'I', &rc);
+			seq = (INDISEQ) ask_for_indiseq(_(qSidplst), 'I', &rc);
 			if (!seq) break;
 			if (length_indiseq(seq) == 1) {
 				element_indiseq(seq, 0, &key, &name);

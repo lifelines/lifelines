@@ -60,8 +60,8 @@
  * external variables (no header)
  *********************************************/
 
-extern STRING idldir,idldrp,nodbse,crdbse,iddbse;
-extern STRING mtitle,norwandro,nofandl,bdlkar;
+extern STRING qSidldir,qSidldrp,qSnodbse,qScrdbse,qSiddbse;
+extern STRING mtitle,norwandro,nofandl,qSbdlkar;
 
 extern INT csz_indi, icsz_indi;
 extern INT csz_fam, icsz_fam;
@@ -303,7 +303,7 @@ main (INT argc, char **argv)
 		goto finish;
 	}
 	if (lockchange && lockarg != 'y' && lockarg != 'n') {
-		llwprintf(_(bdlkar));
+		llwprintf(_(qSbdlkar));
 		goto finish;
 	}
 	if (forceopen)
@@ -324,10 +324,10 @@ main (INT argc, char **argv)
 	/* Get Database Name (Prompt or Command-Line) */
 	if (c <= 0) {
 		/* ask_for_db_filename returns static buffer, we save it below */
-		dbrequested = ask_for_db_filename(_(idldir), _(idldrp), dbdir);
+		dbrequested = ask_for_db_filename(_(qSidldir), _(qSidldrp), dbdir);
 		if (ISNULL(dbrequested)) {
 			dbrequested = NULL;
-			llwprintf(_(iddbse));
+			llwprintf(_(qSiddbse));
 			goto finish;
 		}
 	} else {
@@ -481,7 +481,7 @@ open_or_create_database (INT alteration, STRING dbrequested, STRING *dbused)
 	}
 
 	/* Is user willing to make a new db ? */
-	if (!ask_yes_or_no_msg(_(nodbse), _(crdbse))) 
+	if (!ask_yes_or_no_msg(_(qSnodbse), _(qScrdbse))) 
 		return FALSE;
 
 	/* try to make a new db */

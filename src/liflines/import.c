@@ -62,7 +62,7 @@ extern INT gd_emax;	/* maximum event key number */
 extern INT gd_xmax;	/* maximum other key number */
 
 extern STRING idgedf, gdcker, gdnadd, dboldk, dbnewk, dbodel;
-extern STRING cfoldk, dbdelk, dbrdon, unsupuni;
+extern STRING cfoldk, dbdelk, qSdbrdon, unsupuni;
 extern TRANTABLE tran_tables[];
 
 /*********************************************
@@ -146,7 +146,7 @@ import_from_file (void)
 	/* test for read-only database here */
 
 	if(readonly) {
-		wfield(10, 0, _(dbrdon));
+		wfield(10, 0, _(qSdbrdon));
 		wpos(11, 0);
 		fclose(fp);
 		fp=NULL;

@@ -57,15 +57,15 @@ NODE jumpnode; /* used by Ethel for direct navigation */
 extern STRING nochil, nopers, nofam, nosour, idsour, norec;
 extern STRING nosour, idsour, noeven, ideven, noothe, idothe;
 extern STRING nonote, idnote, noptr, idptr;
-extern STRING idsbrs, idsrmv, idfbrs, idcbrs, idcrmv, iscnew, issnew;
-extern STRING idfcop, ntprnt, nofath, nomoth, nospse, noysib, noosib;
+extern STRING qSidsbrs, qSidsrmv, qSidfbrs, qSidcbrs, qSidcrmv, qSiscnew, qSissnew;
+extern STRING qSidfcop, qSntprnt, qSnofath, qSnomoth, qSnospse, noysib, noosib;
 extern STRING noprnt, nohusb, nowife, hasbth, hasnei, nocinf, nocofp;
-extern STRING idpnxt, idnxt;
-extern STRING ids2fm, idc2fm, idplst, idp2br, crtcfm, crtsfm;
-extern STRING ronlye, ronlya, idhbrs, idwbrs;
-extern STRING id1sbr, id2sbr, id1fbr, id2fbr, id1cbr, id2cbr;
-extern STRING id1hbr, id2hbr, id1wbr, id2wbr;
-extern STRING spover, idfamk, nohist, idhist, histclr;
+extern STRING qSidpnxt, qSidnxt;
+extern STRING ids2fm, idc2fm, qSidplst, idp2br, crtcfm, crtsfm;
+extern STRING qSronlye, qSronlya, qSidhbrs, qSidwbrs;
+extern STRING qSid1sbr, qSid2sbr, qSid1fbr, qSid2fbr, qSid1cbr, qSid2cbr;
+extern STRING qSid1hbr, qSid2hbr, qSid1wbr, qSid2wbr;
+extern STRING qSspover, qSidfamk, nohist, idhist, histclr;
 extern STRING tag2long2cnc,newrecis,autoxref,editcur,gotonew,staycur;
 extern STRING badhistcnt,badhistcnt2,badhistlen;
 
@@ -156,7 +156,7 @@ prompt_for_browse (NODE * node, INT * code, INDISEQ * seq)
 	STRING key, name;
 
 	if (*code == BROWSE_INDI) {
-		*seq = ask_for_indiseq(idplst, 'I', &rc);
+		*seq = ask_for_indiseq(_(qSidplst), 'I', &rc);
 		if (!*seq) return;
 		if ((len = length_indiseq(*seq)) < 1) return;
 		if (len == 1) {
@@ -277,19 +277,19 @@ pick_create_new_family (NODE indi, NODE save, STRING * addstrings)
 	TRANTABLE ttd = tran_tables[MINDS];
 	char scratch[100];
 	if (readonly) {
-		message(_(ronlya));
+		message(_(qSronlya));
 		return NULL;
 	}
-	i = choose_from_array(idfcop, 2, addstrings);
+	i = choose_from_array(_(qSidfcop), 2, addstrings);
 	if (i == -1) return NULL;
 	if (i == 0) node = add_family(NULL, NULL, indi);
 	else if (save) {
 		if (keyflag)
-			sprintf(scratch, "%s%s (%s)", issnew,
+			sprintf(scratch, "%s%s (%s)", _(qSissnew),
 				    indi_to_name(save, ttd, 55),
 				 rmvat(nxref(save))+1);
 		else
-			sprintf(scratch, "%s%s", issnew,
+			sprintf(scratch, "%s%s", _(qSissnew),
 				 indi_to_name(save, ttd, 55));
 		if (ask_yes_or_no(scratch))
 			node = add_family(indi, save, NULL);
@@ -361,28 +361,28 @@ reprocess_indi_cmd: /* so one command can forward to another */
 				indi = node;
 			break;
 		case CMD_FAMILY: 	/* Browse to person's family */
-			if ((*pfam1 = choose_family(indi, ntprnt, 
-				idfbrs, TRUE)))
+			if ((*pfam1 = choose_family(indi, _(qSntprnt), 
+				_(qSidfbrs), TRUE)))
 				return BROWSE_FAM;
 			break;
 		case CMD_TANDEM_FAMILIES:
-			if ((*pfam1 = choose_family(indi, ntprnt,
-				id1fbr, TRUE)))
-			  if ((*pfam2 = choose_family(indi, ntprnt,
-				id2fbr, TRUE)))
+			if ((*pfam1 = choose_family(indi, _(qSntprnt),
+				_(qSid1fbr), TRUE)))
+			  if ((*pfam2 = choose_family(indi, _(qSntprnt),
+				_(qSid2fbr), TRUE)))
 				return BROWSE_2FAM;
 			break;
 		case CMD_FATHER: 	/* Browse to person's father */
-			node = choose_father(indi, NULL, nofath,
-			    idhbrs, NOASK1);
+			node = choose_father(indi, NULL, _(qSnofath),
+			    _(qSidhbrs), NOASK1);
 			if (node) indi = node;
 			break;
 		case CMD_TANDEM_FATHERS:	/* Tandem Browse to person's fathers */
-			node = choose_father(indi, NULL, nofath,
-			    id1hbr, NOASK1);
+			node = choose_father(indi, NULL, _(qSnofath),
+			    _(qSid1hbr), NOASK1);
 			if (node) {
-			  node2 = choose_father(indi, NULL, nofath,
-			    id2hbr, NOASK1);
+			  node2 = choose_father(indi, NULL, _(qSnofath),
+			    _(qSid2hbr), NOASK1);
 			  if (node2) {
 				*pindi1 = node;
 				*pindi2 = node2;
@@ -391,16 +391,16 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_MOTHER:	/* Browse to person's mother */
-			node = choose_mother(indi, NULL, nomoth,
-			    idwbrs, NOASK1);
+			node = choose_mother(indi, NULL, _(qSnomoth),
+			    _(qSidwbrs), NOASK1);
 			if (node) indi = node;
 			break;
 		case CMD_TANDEM_MOTHERS:	/* Tandem Browse to person's mothers */
-			node = choose_mother(indi, NULL, nomoth,
-			    id1wbr, NOASK1);
+			node = choose_mother(indi, NULL, _(qSnomoth),
+			    _(qSid1wbr), NOASK1);
 			if (node) {
-			  node2 = choose_mother(indi, NULL, nomoth,
-			    id2wbr, NOASK1);
+			  node2 = choose_mother(indi, NULL, _(qSnomoth),
+			    _(qSid2wbr), NOASK1);
 			  if (node2) {
 				*pindi1 = node;
 				*pindi2 = node2;
@@ -409,21 +409,21 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_BROWSE_ZIP_INDI:	/* Zip browse another person */
-			node = ask_for_indi_old(idpnxt, NOCONFIRM, NOASK1);
+			node = ask_for_indi_old(_(qSidpnxt), NOCONFIRM, NOASK1);
 			if (node) indi = node;
 			break;
 		case CMD_BROWSE_ZIP_ANY:	/* Zip browse any record */
-			*pindi1 = ask_for_any_old(idnxt, NOCONFIRM, NOASK1);
+			*pindi1 = ask_for_any_old(_(qSidnxt), NOCONFIRM, NOASK1);
 			if (*pindi1) return BROWSE_UNK;
 			break;
 		case CMD_SPOUSE:	/* Browse to person's spouse */
-			node = choose_spouse(indi, nospse, idsbrs);
+			node = choose_spouse(indi, _(qSnospse), _(qSidsbrs));
 			if (node) indi = node;
 			break;
 		case CMD_TANDEM_SPOUSES:	/* browse to tandem spouses */
-			node = choose_spouse(indi, nospse, id1sbr);
+			node = choose_spouse(indi, _(qSnospse), _(qSid1sbr));
 			if (node) {
-			  node2 = choose_spouse(indi, nospse, id2sbr);
+			  node2 = choose_spouse(indi, _(qSnospse), _(qSid2sbr));
 			  if (node2) {
 				*pindi1 = node;
 				*pindi2 = node2;
@@ -433,7 +433,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			break;
 		case CMD_CHILDREN:	/* Browse to person's child */
 			node = choose_child(indi, NULL, nocofp,
-			    idcbrs, NOASK1);
+			    _(qSidcbrs), NOASK1);
 			if (node) indi = node;
 			break;
 		case CMD_TOGGLE_PEDTYPE:       /* toggle pedigree mode (ancestors/descendants) */
@@ -463,10 +463,10 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			break;
 		case CMD_TANDEM_CHILDREN:	/* browse to tandem children */
 			node = choose_child(indi, NULL, nocofp,
-			    id1cbr, NOASK1);
+			    _(qSid1cbr), NOASK1);
 			if (node) {
 			  node2 = choose_child(indi, NULL, nocofp,
-			    id2cbr, NOASK1);
+			    _(qSid2cbr), NOASK1);
 			  if (node2) {
 				*pindi1 = node;
 				*pindi2 = node2;
@@ -495,18 +495,18 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			break;
 		case CMD_PARENTS:	/* Browse to parents' family */
 			if ((*pfam1 = choose_family(indi, noprnt,
-				idfbrs, FALSE)))
+				_(qSidfbrs), FALSE)))
 				return BROWSE_FAM;
 			break;
 		case CMD_TANDEM_PARENTS:	/* tandem browse to two parents families*/
 			if ((*pfam1 = choose_family(indi, noprnt,
-				id1fbr, FALSE)))
+				_(qSid1fbr), FALSE)))
 			  if ((*pfam2 = choose_family(indi, noprnt,
-				id2fbr, FALSE)))
+				_(qSid2fbr), FALSE)))
 				return BROWSE_2FAM;
 			break;
 		case CMD_BROWSE: 	/* Browse new list of persons */
-			seq = ask_for_indiseq(idplst, 'I', &rc);
+			seq = ask_for_indiseq(_(qSidplst), 'I', &rc);
 			if (!seq) break;
 			if (length_indiseq(seq) == 1) {
 				element_indiseq(seq, 0, &key, &name);
@@ -708,11 +708,11 @@ reprocess_aux_cmd:
 			}
 			break;
 		case CMD_BROWSE_ZIP_INDI:	/* Zip browse to new person */
-			*pindi1 = ask_for_indi_old(idpnxt, NOCONFIRM, NOASK1);
+			*pindi1 = ask_for_indi_old(_(qSidpnxt), NOCONFIRM, NOASK1);
 			if (*pindi1) return BROWSE_INDI;
 			break;
 		case CMD_BROWSE_ZIP_ANY:	/* Zip browse any record */
-			*pindi1 = ask_for_any_old(idnxt, NOCONFIRM, NOASK1);
+			*pindi1 = ask_for_any_old(_(qSidnxt), NOCONFIRM, NOASK1);
 			if (*pindi1) return BROWSE_UNK;
 			break;
 		case CMD_NOTES:	/* Browse to notes */
@@ -774,7 +774,7 @@ pick_remove_spouse_from_family (NODE fam)
 	STRING spstrings[MAX_SPOUSES];
 	INT i;
 	if (readonly) {
-		message(_(ronlye));
+		message(_(qSronlye));
 		return;
 	}
 	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
@@ -795,12 +795,12 @@ pick_remove_spouse_from_family (NODE fam)
 			 NULL, 66, &disp_shrt_rfmt);
 		spnodes[i++] = root;
 		if (i == MAX_SPOUSES) {
-			message(spover);
+			message(_(qSspover));
 			break;
 		}
 	}
 	join_fam(fam, fref, husb, wife, chil, rest);
-	i = choose_from_array(_(idsrmv), i, spstrings);
+	i = choose_from_array(_(qSidsrmv), i, spstrings);
 	if (i == -1) return;
 	choose_and_remove_spouse(spnodes[i], fam, TRUE);
 }
@@ -815,7 +815,7 @@ pick_add_spouse_to_family (NODE fam, NODE save)
 	char scratch[100];
 	TRANTABLE ttd = tran_tables[MINDS];
 	if (readonly) {
-		message(_(ronlye));
+		message(_(qSronlye));
 		return;
 	}
 	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
@@ -828,11 +828,11 @@ pick_add_spouse_to_family (NODE fam, NODE save)
 #endif
 	if (save) {
 		if (keyflag)
-			sprintf(scratch, "%s%s (%s)", issnew,
+			sprintf(scratch, "%s%s (%s)", _(qSissnew),
 				 indi_to_name(save, ttd, 56),
 				 rmvat(nxref(save))+1);
 		else
-			sprintf(scratch, "%s%s", issnew,
+			sprintf(scratch, "%s%s", _(qSissnew),
 				 indi_to_name(save, ttd, 56));
 		if (ask_yes_or_no(scratch)) {
 			add_spouse(save, fam, FALSE);
@@ -851,16 +851,16 @@ pick_add_child_to_fam (NODE fam, NODE save)
 	char scratch[100];
 	TRANTABLE ttd = tran_tables[MINDS];
 	if (readonly) {
-		message(_(ronlye));
+		message(_(qSronlye));
 		return;
 	}
 	if (save) {
 		if (keyflag)
-			sprintf(scratch, "%s%s (%s)", iscnew,
+			sprintf(scratch, "%s%s (%s)", _(qSiscnew),
 				 indi_to_name(save, ttd, 56),
 				 rmvat(nxref(save))+1);
 		else
-			sprintf(scratch, "%s%s", iscnew,
+			sprintf(scratch, "%s%s", _(qSiscnew),
 				 indi_to_name(save, ttd, 56));
 		if (ask_yes_or_no(scratch)) {
 			add_child(save, fam);
@@ -922,7 +922,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			advanced_family_edit(fam);
 			break;
 		case CMD_BROWSE_FAM:
-			i = ask_for_int(idfamk);
+			i = ask_for_int(_(qSidfamk));
 			if(i > 0) {
 				if((node = qkeynum_to_fam(i))) {
 					fam = node;
@@ -939,56 +939,56 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			break;
 		case CMD_FATHER:	/* Browse to family's father */
 			*pindi1 = choose_father(NULL, fam, nohusb,
-			    idhbrs, NOASK1);
+			    _(qSidhbrs), NOASK1);
 			if (*pindi1) return BROWSE_INDI;
 			break;
 		case CMD_TANDEM_FATHERS:	/* Tandem Browse to family's fathers */
 			*pindi1 = choose_father(NULL, fam, nohusb,
-			    id1hbr, NOASK1);
+			    _(qSid1hbr), NOASK1);
 			if (*pindi1) {
 			  *pindi2 = choose_father(NULL, fam, nohusb,
-			    id2hbr, NOASK1);
+			    _(qSid2hbr), NOASK1);
 			  if (*pindi2) 
 				return BROWSE_TAND;
 			}
 			break;
 		case CMD_MOTHER:	/* Browse to family's mother */
 			*pindi1 = choose_mother(NULL, fam, nowife,
-			    idwbrs, NOASK1);
+			    _(qSidwbrs), NOASK1);
 			if (*pindi1) return BROWSE_INDI;
 			break;
 		case CMD_TANDEM_MOTHERS:	/* Tandem Browse to family's mother */
 			*pindi1 = choose_mother(NULL, fam, nowife,
-			    id1wbr, NOASK1);
+			    _(qSid1wbr), NOASK1);
 			if (*pindi1) {
 				*pindi2 = choose_mother(NULL, fam, nowife, 
-					id2wbr, NOASK1);
+					_(qSid2wbr), NOASK1);
 				if (*pindi2) 
 					return BROWSE_TAND;
 			}
 			break;
 		case CMD_CHILDREN:	/* Browse to a child */
 			*pindi1 = choose_child(NULL, fam, nocinf,
-				idcbrs, NOASK1);
+				_(qSidcbrs), NOASK1);
 			if (*pindi1) return BROWSE_INDI;
 			break;
 		case CMD_TANDEM_CHILDREN:	/* browse to tandem children */
 			*pindi1 = choose_child(NULL, fam, nocinf,
-			    id1cbr, NOASK1);
+			    _(qSid1cbr), NOASK1);
 			if (*pindi1) {
 				*pindi2 = choose_child(NULL, fam, nocinf,
-					id2cbr, NOASK1);
+					_(qSid2cbr), NOASK1);
 				if (*pindi2) 
 					return BROWSE_TAND;
 			}
 			break;
 		case CMD_REMOVECHILD:	/* Remove a child */
 			if (readonly) {
-				message(_(ronlye));
+				message(_(qSronlye));
 				break;
 			}
 			*pindi1 = choose_child(NULL, fam, nocinf,
-			    _(idcrmv), DOASK1);
+			    _(qSidcrmv), DOASK1);
 			if (*pindi1) choose_and_remove_child(*pindi1, fam, TRUE);
 			break;
 		case CMD_ADDSPOUSE:	/* Add spouse to family */
@@ -1020,7 +1020,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			save = NULL;
 			break;
 		case CMD_BROWSE: 	/* Browse to new list of persons */
-			seq = ask_for_indiseq(idplst, 'I', &rc);
+			seq = ask_for_indiseq(_(qSidplst), 'I', &rc);
 			if (!seq) break;
 			if (length_indiseq(seq) == 1) {
 				element_indiseq(seq, 0, &key, &name);
@@ -1034,11 +1034,11 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			return BROWSE_LIST;
 			break;
 		case CMD_BROWSE_ZIP_INDI:	/* Zip browse to new person */
-			*pindi1 = ask_for_indi_old(idpnxt, NOCONFIRM, NOASK1);
+			*pindi1 = ask_for_indi_old(_(qSidpnxt), NOCONFIRM, NOASK1);
 			if (*pindi1) return BROWSE_INDI;
 			break;
 		case CMD_BROWSE_ZIP_ANY:	/* Zip browse any record */
-			*pindi1 = ask_for_any_old(idnxt, NOCONFIRM, NOASK1);
+			*pindi1 = ask_for_any_old(_(qSidnxt), NOCONFIRM, NOASK1);
 			if (*pindi1) return BROWSE_UNK;
 			break;
 		case CMD_TANDEM:	/* Enter family tandem mode */
