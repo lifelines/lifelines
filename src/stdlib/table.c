@@ -438,12 +438,19 @@ access_value_int (TABLE tab, STRING key)
 	ASSERT(tab->valtype == TB_INT);
 	return &val->i;
 }
-/*
-Can't implement access_value_str 
-because void ** is not compatible with STRING *
-but client can use valueofbool_str to get old value,
-then insert_table_str to replace with new value
-*/
+/*===================================
+ * access_value_str -- get pointer to string value
+ * returns NULL if not found
+ * Created: 2003/06/16 (Matt Emmerton)
+ *=================================*/
+STRING *
+access_value_str (TABLE tab, STRING key)
+{
+	UNION * val = access_value_impl(tab, key);
+	if (!val) return NULL;
+	ASSERT(tab->valtype == TB_STR);
+	return &val->s;
+}
 /*=============================
  * remove_table -- Remove table
  * TABLE tab

@@ -79,6 +79,7 @@ typedef struct tag_table_iter * TABLE_ITER;
 
 INT * access_value_int(TABLE tab, STRING key);
 VPTR * access_value_ptr(TABLE tab, STRING key);
+STRING * access_value_str(TABLE tab, STRING key);
 BOOLEAN begin_table(TABLE tab, TABLE_ITER tabit);
 BOOLEAN change_table_ptr(TABLE_ITER tabit, VPTR newptr);
 void copy_table(const TABLE src, TABLE dest, INT whattodup);
@@ -103,9 +104,5 @@ STRING valueof_str(TABLE tab, CNSTRING key);
 INT valueofbool_int(TABLE tab, STRING key, BOOLEAN *there);
 VPTR valueofbool_ptr(TABLE tab, STRING key, BOOLEAN *there);
 STRING valueofbool_str(TABLE tab, STRING key, BOOLEAN *there);
-/*
-access_value_str can't be done because of type limitation in implementation
-(UNION doesn't have STRING inside it
-*/
 
 #endif /* TABLE_H_INCLUDED */

@@ -1,3 +1,9 @@
+2003-06-19 Matt Emmerton
+
+	* ChangeLog src/hdrs/table.h src/stdlib/table.c
+
+	Add access_value_str function.
+
 2003-06-19 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c src/hdrs/pvalue.h
