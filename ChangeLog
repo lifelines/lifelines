@@ -1,3 +1,11 @@
+2003-09-14 Jens Arvidsson
+
+	* ChangeLog docs/ll-reportmanual.sv.xml docs/ll-userguide.sv.xml
+	po/sv.po
+
+	Translation update of Swedish message catalog and doc files; typo
+	fixes.
+
 2003-09-14 Perry Rapp
 
 	* ChangeLog src/hdrs/array.h src/hdrs/list.h src/stdlib/zstr.c
