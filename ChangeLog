@@ -16,6 +16,10 @@
 	Minor editing of developer docs xml.
 	Bump version to 3.0.30 for beta.
 
+	* ChangeLog src/gedlib/nodeio.c
+
+	Remove unused function convert_first_fp_to_record.
+
 2003-09-04 Matt Emmerton
 
 	* ChangeLog src/arch/wcslen.c src/gedlib/init.c src/gedlib/locales.c

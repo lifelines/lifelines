@@ -40,8 +40,6 @@ extern STRING qSrerbln, qSrernwt, qSrerilv, qSrerwlv, qSunsupunix, qSunsupuniv;
 
 static BOOLEAN buffer_to_line(STRING p, INT *plev, STRING *pxref
 	, STRING *ptag, STRING *pval, STRING *pmsg);
-static RECORD convert_first_fp_to_record(FILE *fp, BOOLEAN list, XLAT ttm
-	, STRING *pmsg, BOOLEAN *peof);
 static NODE do_first_fp_to_node(FILE *fp, BOOLEAN list, XLAT tt
 	, STRING *pmsg, BOOLEAN *peof);
 static RECORD do_first_fp_to_record(FILE *fp, BOOLEAN list, XLAT tt
@@ -277,29 +275,6 @@ convert_first_fp_to_node (FILE *fp, BOOLEAN list, XLAT ttm,
 		return NULL;
 	}
 	return do_first_fp_to_node(fp, list, ttm, pmsg, peof);
-}
-/*================================================================
- * convert_first_fp_to_record -- Convert first GEDCOM record in file to tree
- *
- * fp:   [IN]  file that holds GEDCOM record/s
- * list: [IN]  can be list at level 0?
- * ttm:  [IN]  character translation table
- * pmsg: [OUT] possible error message
- * peof: [OUT] set true if file is at end of file
- *==============================================================*/
-static RECORD
-convert_first_fp_to_record (FILE *fp, BOOLEAN list, XLAT ttm,
-	STRING *pmsg,  BOOLEAN *peof)
-{
-	STRING unitype = check_file_for_unicode(fp);
-	if (unitype && !eqstr(unitype, "UTF-8")) {
-		char msg[120];
-		llstrncpyf(msg, sizeof(msg), uu8, _(qSunsupuniv), unitype);
-		/* TODO: need to pass msg up to caller somehow */
-		*pmsg = _(qSunsupunix);
-		return NULL;
-	}
-	return do_first_fp_to_record(fp, list, ttm, pmsg, peof);
 }
 /*================================================================
  * do_first_fp_to_node -- Convert first GEDCOM record in file to tree
