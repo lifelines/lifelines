@@ -2139,6 +2139,8 @@ __print (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 			return NULL;
 		}
 		str = pvalue_to_string(val);
+		/* TODO: this has to be pushed higher, so llexec can handle this
+		also must switch to UI locale for this -- 2002-11-02 Perry */
 		if (str) llwprintf("%s", str);
 		delete_pvalue(val);
 		arg = inext(arg);

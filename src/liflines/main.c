@@ -105,8 +105,7 @@ STRING  ext_codeset = 0;       /* default codeset from locale */
 static BOOLEAN is_unadorned_directory(STRING path);
 static void load_usage(void);
 static void main_db_notify(STRING db, BOOLEAN opening);
-static BOOLEAN open_or_create_database(INT alteration, STRING dbrequested
-	, STRING *dbused);
+static BOOLEAN open_or_create_database(INT alteration, STRING *dbused);
 static void parse_arg(const char * optarg, char ** optname, char **optval);
 static void platform_init(void);
 static void show_open_error(INT dberr);
@@ -371,7 +370,7 @@ prompt_for_db:
 	if (!dbused) dbused = dbrequested;
 	dbused = strsave(dbused);
 
-	if (!open_or_create_database(alteration, dbrequested, &dbused))
+	if (!open_or_create_database(alteration, &dbused))
 		goto finish;
 
 	/* Start Program */
@@ -512,10 +511,10 @@ is_unadorned_directory (STRING path)
  * Created: 2001/04/29, Perry Rapp
  *================================================*/
 static BOOLEAN
-open_or_create_database (INT alteration, STRING dbrequested, STRING *dbused)
+open_or_create_database (INT alteration, STRING *dbused)
 {
 	/* Open Database */
-	if (open_database(alteration, dbrequested, *dbused)) {
+	if (open_database(alteration, *dbused)) {
 		return TRUE;
 	}
 	/* filter out real errors */
@@ -550,7 +549,7 @@ open_or_create_database (INT alteration, STRING dbrequested, STRING *dbused)
 		return FALSE;
 
 	/* try to make a new db */
-	if (create_database(dbrequested, *dbused))
+	if (create_database(*dbused))
 		return TRUE;
 
 	show_open_error(bterrno);

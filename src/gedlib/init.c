@@ -331,12 +331,12 @@ alterdb (INT alteration)
 	struct stat sbuf;
 	sprintf(scratch, "%s/key", readpath);
 	if (stat(scratch, &sbuf) || !S_ISREG(sbuf.st_mode)) {
-		bterrno = BTERR_KFILE;
+		bterrno = BTERR_KFILE_ALTERDB;
 		goto force_open_db_exit;
 	}
 	if (!(fp = fopen(scratch, LLREADBINARYUPDATE)) ||
 		  fread(&kfile1, sizeof(kfile1), 1, fp) != 1) {
-		bterrno = BTERR_KFILE;
+		bterrno = BTERR_KFILE_ALTERDB;
 		goto force_open_db_exit;
 	}
 	if (fread(&kfile2, sizeof(kfile2), 1, fp) == 1) {
@@ -380,7 +380,7 @@ alterdb (INT alteration)
 	}
 	rewind(fp);
 	if (fwrite(&kfile1, sizeof(kfile1), 1, fp) != 1) {
-		bterrno = BTERR_KFILE;
+		bterrno = BTERR_KFILE_ALTERDB;
 		goto force_open_db_exit;
 	}
 	/* ok everything went successfully */
@@ -433,17 +433,16 @@ open_database_impl (INT alteration)
 /*==================================================
  * open_database -- open database
  *  forceopen:    [in] flag to override reader/writer protection
- *  dbrequested:  [in] database to report
  *  dbused:       [in] actual database path (may be relative also)
  *================================================*/
 BOOLEAN
-open_database (BOOLEAN alteration, STRING dbrequested, STRING dbused)
+open_database (INT alteration, STRING dbused)
 {
 	BOOLEAN rtn;
 	char fpath[MAXPATHLEN];
 
 	/* tentatively copy paths into gedlib module versions */
-	btreepath=strsave(dbrequested);
+	btreepath=strsave(lastpathname(dbused));
 	llstrncpy(fpath, dbused, sizeof(fpath), 0);
 	expand_special_fname_chars(fpath, sizeof(fpath));
 	readpath=strsave(fpath);
@@ -467,7 +466,7 @@ open_database (BOOLEAN alteration, STRING dbrequested, STRING dbused)
  *  newpath:  [in] path of database about to create
  *================================================*/
 BOOLEAN
-create_database (STRING dbrequested, STRING dbused)
+create_database (STRING dbused)
 {
 	/* first test that newdb props are legal */
 	STRING props = getoptstr("NewDbProps", 0);
@@ -483,7 +482,7 @@ create_database (STRING dbrequested, STRING dbused)
 	}
 
 	/* tentatively copy paths into gedlib module versions */
-	btreepath=strsave(dbrequested);
+	btreepath=strsave(lastpathname(dbused));
 	readpath=strsave(dbused);
 
 	if (!(BTR = openbtree(dbused, TRUE, 2, immutable))) {
@@ -536,6 +535,9 @@ describe_dberror (INT dberr, STRING buffer, INT buflen)
 		break;
 	case BTERR_KFILE:
 		llstrapp(b, n, u8,  _("could not open, read or write the key file."));
+		break;
+	case BTERR_KFILE_ALTERDB:
+		llstrapp(b, n, u8,  _("could not open, read or write the key file (to alter database)."));
 		break;
 	case BTERR_BLOCK:
 		llstrapp(b, n, u8,  _("could not open, read or write a block file."));

@@ -157,9 +157,7 @@ RECORD_STATUS write_record_to_textfile(BTREE btree, RKEY rkey, STRING file, TRAN
 
 /* opnbtree.c */
 BOOLEAN closebtree(BTREE);
-BOOLEAN create_database(STRING dbrequested, STRING dbused);
 void describe_dberror(INT dberr, STRING buffer, INT buflen);
-int open_database(BOOLEAN forcingopen, STRING dbpath, STRING dbactual);
 BTREE openbtree(STRING dir, BOOLEAN cflag, INT writ, BOOLEAN immut);
 BOOLEAN validate_keyfile2(KEYFILE2 *);
 
@@ -189,6 +187,7 @@ enum {
 , BTERR_DBACCESS          /* access error to db directory */
 , BTERR_NOKEY             /* no keyfile */
 , BTERR_KFILE             /*problem with the key file*/
+, BTERR_KFILE_ALTERDB     /*problem with the key file trying to alter a db*/
 , BTERR_INDEX             /*problem with an index file*/
 , BTERR_BLOCK             /*problem with a data block file*/
 , BTERR_LNGDIR            /*base directory name too long*/

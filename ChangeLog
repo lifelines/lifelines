@@ -1,3 +1,11 @@
+2002-11-02 Perry Rapp
+
+	* ChangeLog src/gedlib/init.c src/hdrs/btree.h src/hdrs/gedcom.h
+	src/interp/builtin.c src/liflines/main.c:
+
+	Change open & create db calls to only take one argument.
+	More explicit keyfile errors.
+
 2002-10-31 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp src/hdrs/menuitem.h
