@@ -30,6 +30,12 @@
 
 	Implement Unicode in upper & lower. Begin UTF-8 string self-tests.
 
+	* ChangeLog configure.in build/msvc6/llines/config.h
+	reports/st/st_all.ll reports/st/st_collate_UTF-8.ll
+	src/stdlib/strcvt.c:
+
+	Protect iswupper via HAVE_ISWUPPER etc.
+
 2002-12-14 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c:

@@ -109,6 +109,7 @@ lower (STRING str)
 	static char scratch[MAXLINELEN+1];
 	STRING p = scratch;
 	INT c, i=0;
+#ifdef HAVE_TOWLOWER
 	ZSTR zstr=makewide(str);
 	if (zstr) {
 		ZSTR zout=0;
@@ -120,6 +121,9 @@ lower (STRING str)
 		llstrsets(scratch, sizeof(scratch), uu8, zs_str(zout));
 		zs_free(&zstr);
 		zs_free(&zout);
+#else
+	if (0) {
+#endif
 	} else {
 		while ((c = (uchar)*str++) && (++i < MAXLINELEN+1))
 			*p++ = ll_tolower(c);
@@ -137,6 +141,7 @@ upper (STRING str)
 	static char scratch[MAXLINELEN+1];
 	STRING p = scratch;
 	INT c, i=0;
+#ifdef HAVE_TOWUPPER
 	ZSTR zstr=makewide(str);
 	if (zstr) {
 		ZSTR zout=0;
@@ -148,6 +153,9 @@ upper (STRING str)
 		llstrsets(scratch, sizeof(scratch), uu8, zs_str(zout));
 		zs_free(&zstr);
 		zs_free(&zout);
+#else
+	if (0) {
+#endif
 	} else {
 		while ((c = (uchar)*str++) && (++i < MAXLINELEN+1))
 			*p++ = ll_toupper(c);

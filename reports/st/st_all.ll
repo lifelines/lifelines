@@ -1,5 +1,5 @@
 /*
- * @version        1.1 (2002-12-15)
+ * @version        1.11 (2002-12-15)
  * @author         Perry Rapp
  * @category       self-test
  * @output         mixed
@@ -25,7 +25,7 @@ char_encoding("ASCII")
 require("lifelines-reports.version:1.3")
 option("explicitvars") /* Disallow use of undefined variables */
 include("st_string")
-include("st_string_UTF_8")
+include("st_string_UTF-8")
 include("st_collate")
 include("st_date")
 include("st_number")
