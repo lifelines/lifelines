@@ -2,6 +2,8 @@
 
 AUTOMAKE_OPTIONS = no-dependencies
 
+# LL_REPORTS is to hold the actual report files
+# (included files go in a different target below)
 LL_REPORTS = \
 	2ppage.ll 4gen1.ll 6gen1.ll 8gen1.ll \
 	af-import.ll afn_match.ll ahnenliste.ll ahnentafel.ll alive.ll	\
@@ -40,18 +42,13 @@ LL_REPORTS = \
 	select.ll sgsgen.ll shorten.li showlines1.ll simpleged.ll 	\
 	soundex1.ll soundex-isfm.ll sour2.li sources.ll sources_bib.ll	\
 	sour.li src.ll src-rtf.ll ssdi_aid.ll ssdi-import.ll		\
-	ssdi-search-list.ll stats.ll surname1.ll 	\
-	timeline1.ll timeline2.ll tinytafel1.ll tools.li	\
-	tree_density.ll ttable.ll upl2.li verify.ll wife.ll	\
+	ssdi-search-list.ll stats.ll st/st_all.ll surname1.ll    \
+	timeline1.ll timeline2.ll tinytafel1.ll tools.li         \
+	tree_density.ll ttable.ll upl2.li verify.ll wife.ll      \
 	xml-dtd.ll xmlize.ll zombies.ll
 
-ST_REPORTS = \
-	st/st_all.ll st/st_aux.li st/st_collate.li \
-	st/st_collate_8859-1.li st/st_collate_UTF-8.li \
-	st/st_convert.li st/st_date.li st/st_db.li \
-	st/st_list.li st/st_name.li \
-	st/st_number.li st/st_string.li st/st_string_UTF-8.li
-
+# OTHER_REPORTS is to hold included files besides actual report files
+# (eg, supporting files, graphics, included files)
 OTHER_REPORTS = boc.gif ll.png gen_index bib2html.c bury.c \
         desc-tex2/drtree.tex desc-tex2/extree2.tex desc-tex2/poster2.tex \
         desc-tex2/pstricks.con desc-tex2/README \
@@ -62,7 +59,12 @@ OTHER_REPORTS = boc.gif ll.png gen_index bib2html.c bury.c \
         novel/novel.head novel/novel.intro novel/novel.README \
         pedtex/pedtex.readme pedtex/setup.tex pedtex/tree.tex \
         ps-fan/ps-fan.ps \
-        ps-pedigree.ps tree.tex
+        ps-pedigree.ps tree.tex \
+	st/st_aux.li st/st_collate.li    \
+	st/st_collate_8859-1.li st/st_collate_UTF-8.li \
+	st/st_convert.li st/st_date.li st/st_db.li \
+	st/st_list.li st/st_name.li \
+	st/st_number.li st/st_string.li st/st_string_UTF-8.li
 
 pkg_REPORTS = $(LL_REPORTS) $(ST_REPORTS) $(OTHER_REPORTS)
 pkg_REPORTS_MISC = index.html CREDIT README tree.tex
