@@ -219,3 +219,23 @@ trim (STRING str, INT len)
 	scratch[len] = 0;
 	return scratch;
 }
+/*=========================================
+ * striptrail -- Strip trailing white space
+ *=======================================*/
+void
+striptrail (STRING p)
+{
+        unsigned char *q = p + strlen(p) - 1;
+        while (iswhite(*q) && q >= p)
+                *q-- = 0;
+}
+/*=========================================
+ * allwhite -- Check if string is all white
+ *=======================================*/
+BOOLEAN
+allwhite (STRING p)
+{
+        while (*p)
+                if (!iswhite(*p++)) return FALSE;
+        return TRUE;
+}
