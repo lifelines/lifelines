@@ -39,7 +39,6 @@
 
 #include "llinesi.h"
 
-extern STRING btreepath;
 extern STRING qSdbrecstats,qSdbrecords;
 
 

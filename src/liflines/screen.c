@@ -92,7 +92,7 @@ static UIWINDOW extra_menu_win=NULL;
 extern INT alldone;
 extern BOOLEAN progrunning;
 extern STRING qSwin2big,qSwin2small;
-extern STRING empstr,empstr71,empstr120,readpath,btreepath,qSronlye,qSdataerr;
+extern STRING empstr,empstr71,empstr120,readpath,readpath_file,qSronlye,qSdataerr;
 extern STRING qSabverr,qSuoperr,qSbadttnum,qSnosuchtt,qSmouttt,qSmintt;
 extern STRING qSmtitle,qScright,qSdbname,qSdbimmut,qSdbrdonly,qSplschs;
 extern STRING qSmn_unkcmd,qSronlya,qSronlyr;
@@ -374,7 +374,7 @@ repaint_main_menu (UIWINDOW uiwin)
 	llstrncpyf(title, width, uu8, _(qSmtitle), get_lifelines_version(ll_cols-4));
 	mvwaddstr(win, 1, 2, title);
 	mvwaddstr(win, 2, 4, _(qScright));
-	str = getoptint("FullDbPath", 1) ? readpath : btreepath;
+	str = getoptint("FullDbPath", 1) ? readpath : readpath_file;
 	mvwprintw(win, 3, 4, _(qSdbname), str);
 	if (immutable)
 		wprintw(win, _(qSdbimmut));

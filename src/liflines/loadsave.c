@@ -61,7 +61,7 @@ static void update_rec_count(INT pass, char ctype, STRING tag, INT count);
  * external/imported variables
  *********************************************/
 
-extern STRING btreepath;
+extern STRING readpath_file;
 extern STRING qSoutarc, qSoutfin;
 extern STRING qSwhatgedc;
 
@@ -248,7 +248,7 @@ save_gedcom (void)
 	memset(&efeed, 0, sizeof(efeed));
 	efeed.added_rec_fnc = export_saved_rec;
 
-	llwprintf("Saving database in `%s' in file `%s'.", btreepath, fname);
+	llwprintf("Saving database `%s' in file `%s'.", readpath_file, fname);
 	wfield(2, 1, "     0 Persons");
 	wfield(3, 1, "     0 Families");
 	wfield(4, 1, "     0 Events");
@@ -260,7 +260,7 @@ save_gedcom (void)
 	fclose(fp);
 
 	wpos(7,0);
-	msg_info(_(qSoutfin), btreepath, fname);
+	msg_info(_(qSoutfin), readpath_file, fname);
 	strfree(&fname);
 	
 	return TRUE;

@@ -53,7 +53,7 @@ extern STRING qSmtitle, qSbaddb;
  *********************************************/
 
 BOOLEAN selftest = FALSE; /* selftest rules (ignore paths) */
-STRING btreepath = NULL;	/* normally defined in liflines/main.c */
+STRING readpath_file = NULL;	/* normally defined in liflines/main.c */
 STRING readpath = NULL;		/* normally defined in liflines/main.c */
 BOOLEAN readonly = FALSE;	/* normally defined in liflines/main.c */
 BOOLEAN writeable = FALSE;	/* normally defined in liflines/main.c */

@@ -60,7 +60,7 @@ STRING editfile=NULL; /* file used for editing, name obtained via mktemp */
  *********************************************/
 
 extern BOOLEAN writeable;
-extern STRING btreepath,readpath;
+extern STRING readpath,readpath_file;
 extern STRING qSdbrecstats;
 extern STRING illegal_char;
 
@@ -393,9 +393,7 @@ force_open_db_exit:
 /*==================================================
  * open_database_impl -- open database
  *  alteration:  [in] flag for forceopen (3), lock (2), & unlock (1)
- *  uses globals btreepath & readpath
- *  btreepath: database to report
- *  readpath: actual database path (may be relative also)
+ *  uses global readpath
  * Upon failure, sets bterrno and returns false
  *================================================*/
 static BOOLEAN
@@ -433,17 +431,17 @@ open_database_impl (INT alteration)
 /*==================================================
  * open_database -- open database
  *  forceopen:    [in] flag to override reader/writer protection
- *  dbused:       [in] actual database path (may be relative also)
+ *  dbpath:       [in] database path to open
  *================================================*/
 BOOLEAN
-open_database (INT alteration, STRING dbused)
+open_database (INT alteration, STRING dbpath)
 {
 	BOOLEAN rtn;
 	char fpath[MAXPATHLEN];
 
 	/* tentatively copy paths into gedlib module versions */
-	btreepath=strsave(lastpathname(dbused));
-	llstrncpy(fpath, dbused, sizeof(fpath), 0);
+	readpath_file=strsave(lastpathname(dbpath));
+	llstrncpy(fpath, dbpath, sizeof(fpath), 0);
 	expand_special_fname_chars(fpath, sizeof(fpath));
 	readpath=strsave(fpath);
 
@@ -456,17 +454,17 @@ open_database (INT alteration, STRING dbused)
 		int myerr = bterrno;
 		close_lldb();
 		bterrno = myerr;
-		strfree(&btreepath);
+		strfree(&readpath_file);
 		strfree(&readpath);
 	}
 	return rtn;
 }
 /*==================================================
  * create_database -- create (& open) brand new database
- *  newpath:  [in] path of database about to create
+ *  dbpath:  [IN]  path of database about to create
  *================================================*/
 BOOLEAN
-create_database (STRING dbused)
+create_database (STRING dbpath)
 {
 	/* first test that newdb props are legal */
 	STRING props = getoptstr("NewDbProps", 0);
@@ -482,15 +480,15 @@ create_database (STRING dbused)
 	}
 
 	/* tentatively copy paths into gedlib module versions */
-	btreepath=strsave(lastpathname(dbused));
-	readpath=strsave(dbused);
+	readpath_file=strsave(lastpathname(dbpath));
+	readpath=strsave(dbpath);
 
-	if (!(BTR = openbtree(dbused, TRUE, 2, immutable))) {
+	if (!(BTR = openbtree(dbpath, TRUE, 2, immutable))) {
 		/* open failed so clean up, preserve bterrno */
 		int myerr = bterrno;
 		close_lldb();
 		bterrno = myerr;
-		strfree(&btreepath);
+		strfree(&readpath_file);
 		strfree(&readpath);
 		return FALSE;
 	}

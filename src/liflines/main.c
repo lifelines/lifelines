@@ -93,7 +93,7 @@ BOOLEAN progparsing = FALSE;   /* program is being parsed */
 INT     progerror = 0;         /* error count during report program */
 BOOLEAN traditional = TRUE;    /* use traditional family rules */
 BOOLEAN showusage = FALSE;     /* show usage */
-STRING  btreepath = NULL;      /* database path given by user */
+STRING  readpath_file = NULL;  /* last component of readpath */
 STRING  readpath = NULL;       /* database path used to open */
 STRING  ext_codeset = 0;       /* default codeset from locale */
 
@@ -400,9 +400,9 @@ finish:
 	/* we free this not because we care so much about these tiny amounts
 	of memory, but to ensure we have the memory management right */
 	/* strfree frees memory & nulls pointer */
-	if (dbused) strfree(&dbused);
-	if (dbrequested) strfree(&dbrequested);
-	if (btreepath) strfree(&btreepath);
+	strfree(&dbused);
+	strfree(&dbrequested);
+	strfree(&readpath_file);
 	shutdown_interpreter();
 	close_lifelines();
 	shutdown_ui(!ok);
