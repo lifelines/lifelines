@@ -28,7 +28,7 @@
  *   3.0.2 - 16 Oct 94
  *===========================================================*/
 
-#include "llstdlib.h"
+#include "llstdlib.h" /* includes standard.h, sys_inc.h, llnls.h, config.h */
 
 /*********************************************
  * global variables

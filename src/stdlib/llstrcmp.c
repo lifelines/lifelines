@@ -21,17 +21,17 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
-#include "sys_inc.h"
+#include "llstdlib.h" /* includes standard.h, sys_inc.h, llnls.h, config.h */
 #ifdef HAVE_WCHAR_H
 #include <wchar.h>
 #endif
-#include "llstdlib.h"
 #include "bfs.h"
-#include "icvt.h"
 
 extern int opt_finnish;
 
 static usersortfnc usersort = 0;
+
+extern bfptr makewide(const char *str);
 
 static BOOLEAN widecmp(char *str1, char *str2, INT *rtn);
 
@@ -44,6 +44,7 @@ static BOOLEAN widecmp(char *str1, char *str2, INT *rtn);
  * llstrcmploc, which is only used via cmpstrloc
  * Most callers of this had been using eqstr, and did NOT
  * need custom sort (eg, eqstr(tag,"HEAD"))
+ * TODO: Why isn't this used ? index must not use locale sort
  *=================================================*/
 #if UNUSED_CODE
 int
@@ -63,11 +64,16 @@ int
 ll_strcmploc (char *str1, char *str2)
 {
 	INT rtn;
+
+	/* special Finnish version */
 	if (opt_finnish)
 		return(MY_STRCMP(str1, str2));
+
+	/* user-defined collation */
 	if (usersort && (*usersort)(str1, str2, &rtn))
 		return rtn;
 
+	/* regular wchar.h implementation */
 	if (widecmp(str1, str2, &rtn))
 		return rtn;
 
@@ -102,9 +108,8 @@ set_usersort (usersortfnc fnc)
 {
 	usersort = fnc;
 }
-
 /*===================================================
- * widecmp -- Perform unicode string comparison, if availalble
+ * widecmp -- Perform unicode string comparison, if available
  *=================================================*/
 static BOOLEAN
 widecmp (char *str1, char *str2, INT *rtn)
@@ -113,28 +118,31 @@ widecmp (char *str1, char *str2, INT *rtn)
 	BOOLEAN success = FALSE;
 #ifdef HAVE_WCSCOLL
 	if (int_utf8) {
+		/* convert to wchar_t & use wide compare (wcscoll) */
 #ifdef _WIN32
 		/* MS-Windows really only handles UCS-2 */
 		CNSTRING dest = "UCS-2-INTERNAL";
 #else
 		CNSTRING dest = "UCS-4-INTERNAL";
 #endif
-		BOOLEAN success;
-		bfs1 = bfNew(strlen(str1)*4+3);
-		bfCpy(bfs1, str1);
-		bfs1 = iconv_trans("UTF-8", dest, bfs1, "?", &success);
-		if (!success) goto failwidecmp;
+		bfs1 = makewide(str1);
+		if (bfs1) {
+			bfs2 = makewide(str2);
+		}
 
-		bfs2 = bfNew(strlen(str2)*4+3);
-		bfCpy(bfs2, str2);
-		bfs2 = iconv_trans("UTF-8", dest, bfs2, "?", &success);
-		if (!success) goto failwidecmp;
-		
-		*rtn = wcscoll((const wchar_t *)bfs1->str, (const wchar_t *)bfs2->str);
-		success = TRUE;
+		if (bfs1 && bfs2) {
+			const wchar_t * wfs1 = (const wchar_t *)bfs1->str;
+			const wchar_t * wfs2 = (const wchar_t *)bfs2->str;
+			*rtn = wcscoll(wfs1, wfs2);
+			success = TRUE;
+		}
 	}
 failwidecmp:
-#endif
+#else
+	str1=str1; /* unused */
+	str2=str2; /* unused */
+	rtn=rtn; /* unused */
+#endif /* HAVE_WCSCOLL */
 
 	if (bfs1)
 		bfDelete(bfs1);

@@ -4,6 +4,11 @@
 
 	Added new header isolangs.h.
 
+	* ChangeLog stdlib/llstrcmp.c stdlib/memalloc.c stdlib/strcvt.c:
+
+	Moved string widening code in strcmp into new function makewide
+	in strcvt.c.
+
 2002-07-04 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/locales.c hdrs/Makefile.am:
