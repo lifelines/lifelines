@@ -9,6 +9,11 @@
 	and access_value_str.
 	Implement generics in integers stored in table.
 
+	*NEW src/hdrs/generic.h
+	*NEW src/stdlib/generic.c
+
+	New generic module.
+
 2005-01-17 Perry Rapp
 
 	* ChangeLog src/gedlib/names.c
