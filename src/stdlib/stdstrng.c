@@ -215,7 +215,7 @@ llvsnprintf (char *dest, size_t len, int utf8, const char * fmt, va_list args)
 {
 	INT rtn;
 	rtn = vsnprintf(dest, len, fmt, args);
-	if (rtn == (int)(len-1) || rtn == -1 || dest[len-1]) {
+	if (rtn >= (int)(len-1) || rtn == -1) {
 		/* overflowed -- back up to last character that fits */
 		INT width=0;
 		STRING prev;

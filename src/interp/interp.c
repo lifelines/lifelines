@@ -392,7 +392,8 @@ interp_program_exit:
 		struct pathinfo_s * pathinfo = (struct pathinfo_s *)dequeue_list(donelist);
 		delete_pathinfo(&pathinfo);
 	}
-	
+	strfree(&rootfilepath);
+	remove_list(donelist, NULL);
 	return;
 }
 /*===============================================
