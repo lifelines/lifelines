@@ -1,0 +1,191 @@
+#! /usr/bin/perl -w
+
+# Parse lifeline reports programs and generate a index
+# Written by Stephen Dum  steve_dum@mentorg.com
+# January 2003 
+
+use strict;
+
+my $debug = 0;		#non-zero to enable debug output
+my $viewoutput = 0;	#non-zero to enable printing output information
+
+sub usage {
+    print "usage: $0 <llprog> ...\n";
+    print("   generate index.html file from all programs listed\n");
+    exit(0);
+}
+
+# parse arguments
+while (defined($_=$ARGV[0]) && /^-/) {
+    shift;
+    /-d/ && ($debug++,next);
+    /-o/ && ($viewoutput++,next);
+    /-h/ && usage();
+}
+
+open OUT,">index.html" or die "Unable to open index.html for output";
+print_header();
+read_files();
+print_trailer();
+
+
+
+sub print_header {
+print OUT  <<EOF
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en" >
+<head>
+<title>Report programs for use with Lifelines genealogy Software</title>
+<style TYPE="text/css" TITLE="Bright Colours">
+A:link, A:active
+	{
+	text-decoration	:	none;
+	color		:	#ff0000;
+	background	:	transparent;
+	}
+A:visited 
+	{
+   	text-decoration	:	none; 
+   	color		:	#993300; 
+  	background	:	transparent; 
+	}		
+A:hover 	{ 
+   	text-decoration	:	none; 
+	color		:	#000000;
+	background	:	#ffcc00;
+	}
+</style> 
+</head>
+
+<body text="#000080" bgcolor="#F4ECBE">
+<table width="100%">
+<tr>
+<td width="33%">
+<img src="boc.gif" alt="LifeLines stork logo">
+<br>
+
+<hr>
+</td>
+<td width="34%">
+<center>
+<img src="ll.png" alt="LifeLines, second generation genealogy software">
+<br>
+<font size="+3">Report Programs</font>
+</center>
+</td>
+<td width="33%"></td>
+</tr>
+</table>
+<P>
+This is an overview of the report programs distributed with Lifelines.
+If you want more information about a program, often their are comments
+at the beginning of the program that talk about functionality, algorithms,
+have sample output, and examples of post processing commands required to
+properly view the results.
+Some programs require slight customization before use, for example they might
+have text identifing the person who generated the report.
+<dl>
+EOF
+}
+sub print_trailer {
+    my $today = `date "+%d %b %Y"`;
+    print OUT  <<EOF
+</DL>
+<center>
+<small>
+This overview was generated
+$today
+</small>
+</center>
+<!- generated automatically by gen_index, written by Stephen Dum
+-->
+</body>
+EOF
+}
+sub read_files {
+    my $file;
+    my $prog;
+    my $progname;
+    my $version;
+    my $author;
+    my $category;
+    my $output;
+    my $description;
+    my $char_encoding;
+    while ($file = shift @ARGV ) {
+	print  $file . "\n" if $debug;
+	next if $file =~ /\.li$/;
+	if ($file eq "least_related.ll") {
+	    print "Skipping $file\n";
+	    next;
+	}
+	$prog = $file;
+	$prog =~ s/.ll$//;
+	open(FIN,$file) or die "Unable to open $file for input";
+	$progname="";
+	$version="";
+	$author="";
+	$category="";
+	$output="";
+	$description="";
+	$char_encoding="";
+	while (<FIN>) {
+	    if (/^.*\@progname\s*(.*)\s*$/) {
+		print "    progname: $1\n" if $debug;
+		$progname=$1;
+	    } elsif (/^.*\@version\s*(.*)\s*$/) {
+		print "    version: $1\n" if $debug;
+		$version=$1;
+	    } elsif (/^.*\@author\s*(.*)\s*$/) {
+		print "    author: $1\n" if $debug;
+		$author=$1;
+	    } elsif (/^.*\@category\s*(.*)\s*$/) {
+		print "    category: $1\n" if $debug;
+		$category=$1;
+	    } elsif (/^.*\@output\s*(.*)\s*$/) {
+		print "    output: $1\n" if $debug || $viewoutput;
+		print "$file output: $1\n" if $viewoutput == 2;
+		$output=$1;
+	    } elsif (/^.*\@description\s*(.*)\s*$/) {
+		print "    description: $1\n" if $debug;
+		#$description=$1;
+		if (length($description) == 0) {
+		    while(<FIN>) { 
+			# skip blank lines 
+			last unless /^\s*\**\s*$/;
+		    }
+		    s/^\s*\**\s*//;
+		    $description=$_;
+		    while(<FIN>) { 
+			# collect descriptin until we get a blank line 
+			# or end of the comment
+			last if /^\s*\**\s*$/ || /\*\//;
+			s/^\s*\**\s*//;
+			$description .= $_;
+		    }
+
+		}
+	    } elsif (/\*\//) {
+		print "End of program meta tags at line $. for file $file\n" if $debug;
+		last;
+	    }
+	}
+	while(<FIN>) {
+	    next unless /\s*char_encoding\("(.*)"\)/;
+	    $char_encoding = $1;
+	    last;
+	}
+	close(FIN);
+	#print OUT "<dt><b><a href=\"$file\">$prog\n</a></b><dd>";
+	print OUT "<dt><b>$prog</b>\n<dd>";
+	print OUT "Version $version; " if length($version) != 0;
+	print OUT "by $author" if length($author) != 0;
+	print OUT "; output format $output" if length($output) != 0;
+	print OUT "; char encoding $char_encoding" if length($char_encoding) != 0;
+	$description =~ s/\</&lt;/g;
+	print OUT ".\n<br>\n$description";
+    }
+}
+
