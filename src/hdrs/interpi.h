@@ -100,6 +100,7 @@ extern PVALUE __getfam(PNODE, TABLE, BOOLEAN *);
 extern PVALUE __getindi(PNODE, TABLE, BOOLEAN *);
 extern PVALUE __getindiset(PNODE, TABLE, BOOLEAN *);
 extern PVALUE __getint(PNODE, TABLE, BOOLEAN *);
+extern PVALUE __getproperty(PNODE, TABLE, BOOLEAN *);
 extern PVALUE __getrecord(PNODE, TABLE, BOOLEAN *);
 extern PVALUE __getstr(PNODE, TABLE, BOOLEAN *);
 extern PVALUE __gettoday(PNODE, TABLE, BOOLEAN *);

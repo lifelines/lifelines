@@ -1,5 +1,10 @@
 2001-01-01 Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* configure.in docs/lifelines.sgml gedlib/Makefile.am
+	gedlib/property.c hdrs/gedcom.h hdrs/interpi.h interp/functab.c
+	interp/more.c: Implement new report function getproperty() to make
+	the user options available in report programs.
+
 	* btree/utils.c: Change mkalldirs() param from 'char *' to
 	'STRING' to match the prototype in "llstdlib.h".
 

@@ -95,7 +95,8 @@ dnl AC_C_CONST
 dnl AC_HEADER_TIME
 
 echo Looking for library functions
-AC_CHECK_FUNCS( snprintf _snprintf heapwalk _heapwalk strcmpi strcasecmp )
+AC_CHECK_FUNCS( snprintf _snprintf heapwalk _heapwalk strcmpi strcasecmp \
+	getpwuid )
 
 dnl Check for replacement functions
 AC_REPLACE_FUNCS( sleep scandir alphasort getopt _llnull )

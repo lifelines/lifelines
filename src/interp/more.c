@@ -1058,3 +1058,25 @@ __debug (PNODE node,
 	prog_debug = (BOOLEAN) pvalue(val);
 	return NULL;
 }
+
+/*========================================
+ * __getproperty -- Return property string
+ *   usage: getproperty(STRING) -> STRING
+ *======================================*/
+PVALUE
+__getproperty(PNODE node,
+              TABLE stab,
+              BOOLEAN *eflg)
+{
+	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
+	if (*eflg || !val || ptype(val) != PSTRING) {
+		*eflg = TRUE;
+		prog_error(node, "the arg to getproperty is not a string");
+		return NULL;
+	}
+	if (!pvalue(val))
+		return NULL;
+	else
+		set_pvalue(val, PSTRING, (STRING)get_property(pvalue(val)));
+	return val;
+}
