@@ -131,11 +131,10 @@ progmessage (MSG_LEVEL level, STRING msg)
 	INT mylen=sizeof(buf);
 	INT msglen = strlen(msg);
 	if(progname && *progname && msglen+20 < msg_width()) {
-		INT limit = msg_width() - msglen;
 		INT len = strlen(progname);
 		STRING dotdotdot="";
-		if(len > limit) {
-			len -= limit;
+		if (msg_width() >= 0 && len > msg_width() - msglen) {
+			len -= msg_width() - msglen;
 			dotdotdot = "...";
 		} else {
 			len = 0;
