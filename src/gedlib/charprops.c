@@ -14,6 +14,10 @@
 #include "translat.h"
 #include "gedcom.h"
 #include "gedcomi.h"
+#include "lloptions.h"
+
+/* 763 upper case letters, and 754 lower case letters, 2003-11-13 */
+#define MAXCASES 1024
 
 /*********************************************
  * local function prototypes
@@ -43,15 +47,73 @@ static struct my_charset_info_tag * charset_info = 0;
 BOOLEAN
 charprops_load_utf8 (void)
 {
+	FILE * fp=0;
+	CNSTRING ttpath = getoptstr("TTPATH", ".");
+	STRING upleft[MAXCASES], upright[MAXCASES], loleft[MAXCASES], loright[MAXCASES];
+	INT upcount=0, locount=0;
+	INT i;
+	char filepath[MAXPATHLEN], line[MAXPATHLEN];
+
 	if (loaded_utf8) return TRUE;
-	/*
-	Load UnicodeData.txt file into uppers and lowers
-	Use TTPATH to find it
-	NB: actual load must be done in charmaps.c, where tag_trantable is
-	set loaded_utf8 to +1 or -1
-	*/
+	
 	loaded_utf8 = -1;
-	return FALSE;
+	strcpy(filepath, ttpath);
+	strcat(filepath, LLSTRDIRSEPARATOR);
+	strcat(filepath, "UnicodeData.txt");
+	fp = fopen(filepath, "r");
+	if (!fp)
+		return FALSE;
+	while (fgets(line, sizeof(line), fp)) {
+		INT ch, chup, chlo;
+		const char *ptr;
+		if (1 != sscanf(line, "%x", &ch)) {
+			continue;
+		}
+		ptr = line;
+		chup = chlo = ch;
+		for (i=0; i<13; ++i) {
+			ptr = strchr(ptr, ';');
+			if (!ptr)
+				break;
+			if (i==11) {
+				if (1 != sscanf(ptr+1, "%x", &chup))
+					chup = ch;
+			} else if (i==12) {
+				if (1 != sscanf(ptr+1, "%x", &chlo))
+					chlo = ch;
+			}
+			++ptr;
+		}
+		if (chup != ch && upcount<MAXCASES) {
+			char chleft[8], chright[8];
+			unicode_to_utf8(ch, chleft);
+			unicode_to_utf8(chup, chright);
+			upleft[upcount] = strsave(chleft);
+			upright[upcount] = strsave(chright);
+			++upcount;
+		}
+		if (chlo != ch && upcount<MAXCASES) {
+			char chleft[8], chright[8];
+			unicode_to_utf8(ch, chleft);
+			unicode_to_utf8(chlo, chright);
+			loleft[locount] = strsave(chleft);
+			loright[locount] = strsave(chright);
+			++locount;
+		}
+		if (i != 13)
+			continue;
+	}
+	fclose(fp);
+
+	uppers = create_trantable(upleft, upright, upcount, "UTF-8 upper");
+	lowers = create_trantable(loleft, loright, locount, "UTF-8 upper");
+
+	for (i=0; i<upcount; ++i)
+		stdfree(upleft[i]);
+	for (i=0; i<locount; ++i)
+		stdfree(loleft[i]);
+	loaded_utf8 = 1;
+	return TRUE;
 }
 /*==========================================
  * charprops_free_all -- Free all allocated resources
@@ -96,6 +158,7 @@ charprops_load (const char * codepage)
 	#3) build the charset_info table
 	#4) set loaded_codepage
 	*/
+	strupdate(&charset_name, codepage);
 	return FALSE;
 }
 /*==========================================

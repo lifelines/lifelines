@@ -1,3 +1,11 @@
+2003-11-13 Perry Rapp
+
+	* ChangeLog src/gedlib/charmaps.c src/gedlib/charprops.c
+	src/gedlib/date.c src/gedlib/gedcomi.h src/gedlib/names.c
+	src/hdrs/llstdlib.h src/interp/builtin.c src/stdlib/strutf8.c
+
+	Load UnicodeData.txt in charprops.c. Now charprops UTF-8 casing works.
+
 2003-11-12 Perry Rapp
 
 	* .linesrc ChangeLog lines.cfg build/msvc6/llines/llinesprj.dsp

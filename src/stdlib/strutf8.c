@@ -147,3 +147,57 @@ skip_BOM (STRING * pstr)
 	if ((uchar)str[0] == 0xEF && (uchar)str[1] == 0xBB && (uchar)str[2] == 0xBF)
 		*pstr += 3;
 }
+/*=========================================
+ * unicode_to_utf8 -- convert UCS-4 (native alignment) to UTF-8
+ *=======================================*/
+void
+unicode_to_utf8 (INT wch, char * utf8)
+{
+	unsigned char * lpd = utf8;
+	unsigned int uch = (unsigned int)wch;
+	if (uch < 0x80)
+	{
+		*lpd++ = uch;
+	}
+	else if (uch < 0x800)
+	{
+		*lpd++ = 0xC0 + (uch >> 6);
+		*lpd++ = 0x80 + (uch & 0x3F);
+	}
+	else if (uch < 0x10000)
+	{
+		*lpd++ = 0xE0 + (uch >> 12);
+		*lpd++ = 0x80 + ((uch >> 6) & 0x3F);
+		*lpd++ = 0x80 + (uch & 0x3F);
+	}
+	else if (uch < 0x200000)
+	{
+		*lpd++ = 0xF0 + (uch >> 18);
+		*lpd++ = 0x80 + ((uch >> 12) & 0x3F);
+		*lpd++ = 0x80 + ((uch >> 6) & 0x3F);
+		*lpd++ = 0x80 + (uch & 0x3F);
+	}
+	else if (uch < 0x4000000)
+	{
+		*lpd++ = 0xF8 + (uch >> 24);
+		*lpd++ = 0x80 + ((uch >> 18) & 0x3F);
+		*lpd++ = 0x80 + ((uch >> 12) & 0x3F);
+		*lpd++ = 0x80 + ((uch >> 6) & 0x3F);
+		*lpd++ = 0x80 + (uch & 0x3F);
+	}
+	else if (uch < 0x80000000)
+	{
+		*lpd++ = 0xF8 + (uch >> 30);
+		*lpd++ = 0x80 + ((uch >> 24) & 0x3F);
+		*lpd++ = 0x80 + ((uch >> 18) & 0x3F);
+		*lpd++ = 0x80 + ((uch >> 12) & 0x3F);
+		*lpd++ = 0x80 + ((uch >> 6) & 0x3F);
+		*lpd++ = 0x80 + (uch & 0x3F);
+	}
+	else
+	{
+		*lpd++ = '?';
+	}
+	*lpd++ = 0;
+}
+

@@ -1449,7 +1449,7 @@ init_keywordtbl (void)
 static STRING
 upper_dup (STRING s)
 {
-	ZSTR zstr = ll_toupperz(s, uu8);
+	ZSTR zstr = charprops_toupperz(s, uu8);
 	STRING str = strdup(zs_str(zstr));
 	zs_free(&zstr);
 	return str;

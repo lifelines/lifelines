@@ -94,9 +94,11 @@ static INT translate_match(TRANTABLE tt, CNSTRING in, CNSTRING * out);
 /*=============================================
  * create_trantable -- Create translation table
  *  lefts:  [IN]  patterns
- *  rights: [IN]  replacements
+ *  rights: [IN]  replacements (heap-alloc'd)
  *  n:      [IN]  num pairs
  *  name:   [IN]  user-chosen name
+ *  This function consumes the right side strings
+ *  That is, it takes over their memory
  *===========================================*/
 TRANTABLE
 create_trantable (STRING *lefts, STRING *rights, INT n, STRING name)

@@ -185,15 +185,12 @@ ZSTR ll_totitlecasez(STRING, INT utf8);
 ZSTR ll_toupperz(CNSTRING s, INT utf8);
 STRING upperascii_s(STRING str);
 
-
-
 /* strutf8.c */
 STRING find_prev_char(STRING ptr, INT * width, STRING limit, int utf8);
 INT utf8len(char ch);
 INT next_char32(STRING * ptr, int utf8);
 void skip_BOM(STRING * pstr);
-
-
+void unicode_to_utf8(INT wch, char * utf8);
 
 /* strwhite.c */
 BOOLEAN allwhite(STRING);
