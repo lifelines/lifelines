@@ -6,6 +6,12 @@
 
 	Load UnicodeData.txt in charprops.c. Now charprops UTF-8 casing works.
 
+	* ChangeLog src/gedlib/charprops.c
+	*NEW tt/UnicodeDataExcerpt.txt
+
+	Add file of unicode character properties (UnicodeDataExcerpt.txt),
+	and revise parser to allow comments.
+
 2003-11-12 Perry Rapp
 
 	* .linesrc ChangeLog lines.cfg build/msvc6/llines/llinesprj.dsp

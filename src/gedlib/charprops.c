@@ -59,13 +59,15 @@ charprops_load_utf8 (void)
 	loaded_utf8 = -1;
 	strcpy(filepath, ttpath);
 	strcat(filepath, LLSTRDIRSEPARATOR);
-	strcat(filepath, "UnicodeData.txt");
+	strcat(filepath, "UnicodeDataExcerpt.txt");
 	fp = fopen(filepath, "r");
 	if (!fp)
 		return FALSE;
 	while (fgets(line, sizeof(line), fp)) {
 		INT ch, chup, chlo;
 		const char *ptr;
+		if (line[0] == '#')
+			continue;
 		if (1 != sscanf(line, "%x", &ch)) {
 			continue;
 		}
