@@ -426,7 +426,7 @@ record_letter (STRING tag)
 /*=========================================
  * key_to_record -- Returns record with key
  *=======================================*/
-NOD0 key_to_record (STRING str, /* string that may be a key */
+RECORD key_to_record (STRING str, /* string that may be a key */
                     INT let)    /* if string starts with letter it
                                    must be this */
 {

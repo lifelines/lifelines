@@ -68,7 +68,7 @@ static NODE ask_for_indi_once(STRING, ASK1Q, INT*);
 NODE
 ask_for_fam_by_key (STRING fttl, STRING pttl, STRING sttl)
 {
-	NOD0 fam = ask_for_record(fttl, 'F');
+	RECORD fam = ask_for_record(fttl, 'F');
 	return fam ? nztop(fam) : ask_for_fam(pttl, sttl);
 }
 /*===========================================
@@ -374,7 +374,7 @@ choose_one_from_indiseq_if_needed (INDISEQ seq,
  * This handles bad pointers, which can get into the data
  *  several ways.
  *=====================================================*/
-NOD0
+RECORD
 choose_from_indiseq (
 	INDISEQ seq,    /* sequence */
 	ASK1Q ask1,   /* choose if len one? */
@@ -382,7 +382,7 @@ choose_from_indiseq (
 	STRING titln)   /* title if len > one */
 {
 	INT i = 0;
-	NOD0 nod0=0;
+	RECORD nod0=0;
 	STRING skey;
 	i = choose_one_from_indiseq_if_needed(seq, ask1, titl1, titln);
 	if (i == -1) return NULL;

@@ -135,7 +135,7 @@ static NKEY hist_list[20];
 static void
 prompt_for_browse (NODE * node, INT * code, INDISEQ * seq)
 {
-	NOD0 nod0;
+	RECORD nod0;
 	INT len, rc;
 	STRING key, name;
 
@@ -1270,11 +1270,11 @@ browse_pedigree (NODE *pindi,
 /*==================================================
  * choose_any_source -- choose from list of all sources
  *================================================*/
-NOD0
+RECORD
 choose_any_source (void)
 {
 	INDISEQ seq;
-	NOD0 nod0;
+	RECORD nod0;
 	seq = get_all_sour();
 	if (!seq)
 	{
@@ -1288,11 +1288,11 @@ choose_any_source (void)
 /*==================================================
  * choose_any_event -- choose from list of all events
  *================================================*/
-NOD0
+RECORD
 choose_any_event (void)
 {
 	INDISEQ seq;
-	NOD0 nod0;
+	RECORD nod0;
 	seq = get_all_even();
 	if (!seq)
 	{
@@ -1306,11 +1306,11 @@ choose_any_event (void)
 /*==================================================
  * choose_any_other -- choose from list of all others
  *================================================*/
-NOD0
+RECORD
 choose_any_other (void)
 {
 	INDISEQ seq;
-	NOD0 nod0;
+	RECORD nod0;
 	seq = get_all_othe();
 	if (!seq)
 	{

@@ -10,7 +10,7 @@
 void add_child_to_fam(NODE child, NODE fam, INT i);
 NODE add_family_to_db(NODE spouse1, NODE spouse2, NODE child);
 void add_spouse_to_fam(NODE spouse, NODE fam, INT sex);
-NOD0 add_unlinked_indi(NOD0 indi0);
+RECORD add_unlinked_indi(RECORD indi0);
 INT ask_child_order(NODE fam, PROMPTQ promptq, RFMT rfmt);
 
 /* from ask.c */
@@ -25,7 +25,7 @@ INT ask_for_int(STRING);
 INT choose_from_array(STRING, INT, STRING*);
 INDISEQ choose_list_from_indiseq(STRING, INDISEQ);
 INT choose_one_from_indiseq(STRING, INDISEQ);
-NOD0 choose_from_indiseq(INDISEQ, ASK1Q ask1, STRING titl1, STRING titln);
+RECORD choose_from_indiseq(INDISEQ, ASK1Q ask1, STRING titl1, STRING titln);
 
 /* from askprogram.c */
 FILE *ask_for_program(STRING, STRING, STRING*, STRING, STRING, BOOLEAN picklist);

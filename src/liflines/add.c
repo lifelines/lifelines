@@ -55,11 +55,11 @@ extern TRANTABLE tran_tables[];
  * add_indi_by_edit -- Add new person to database by editing
  * (with user interaction)
  *========================================================*/
-NOD0
+RECORD
 add_indi_by_edit (void)
 {
 	FILE *fp;
-	NOD0 indi0=0;
+	RECORD indi0=0;
 	NODE indi=0;
 	STRING str, msg;
 	BOOLEAN emp;
@@ -122,8 +122,8 @@ add_indi_by_edit (void)
  * (no user interaction)
  * creates nod0 & adds to cache
  *========================================================*/
-NOD0
-add_unlinked_indi (NOD0 indi0)
+RECORD
+add_unlinked_indi (RECORD indi0)
 {
 	NODE name, refn, sex, body, dumb, node;
 	STRING key;

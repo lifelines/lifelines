@@ -362,10 +362,10 @@ nvaldiff (NODE node1, NODE node2)
  * idstr  question prompt
  * letr:  letter to possibly prepend to key (ie, I/F/S/E/X)
  *=============================================*/
-NOD0
+RECORD
 ask_for_record (STRING idstr, INT letr)
 {
-	NOD0 nod0;
+	RECORD nod0;
 	STRING str = ask_for_string(idstr, "enter key or refn: ");
 	if (!str || *str == 0) return NULL;
 	nod0 = key_to_record(str, letr);

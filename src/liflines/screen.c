@@ -158,7 +158,7 @@ static void place_std_msg(void);
 static void rpt_cset_menu(WINDOW *wparent);
 static void run_report(BOOLEAN picklist);
 static void save_tt_menu(WINDOW *wparent);
-static NOD0 scan_menu(void);
+static RECORD scan_menu(void);
 static void show_indi_mode(NODE indi, INT mode, INT row, INT hgt, BOOLEAN reuse);
 static void show_fam_mode(NODE fam, INT mode, INT row, INT hgt, INT width, BOOLEAN reuse);
 static void shw_list(WINDOW *win, INDISEQ seq, INT len0, INT top, INT cur, INT *scroll);
@@ -531,7 +531,7 @@ main_menu (void)
 	case 'b': browse(NULL, BROWSE_INDI); break;
 	case 's':
 		{
-			NOD0 nod0 = scan_menu();
+			RECORD nod0 = scan_menu();
 			if (nod0)
 				browse(nztop(nod0), BROWSE_UNK);
 		}
@@ -1237,10 +1237,10 @@ disp_trans_table_choice (WINDOW * win, INT row, INT col, STRING menuit, INT indx
  * scan_menu -- Handle scan menu
  * Created: c. 2000/12, Perry Rapp
  *============================*/
-NOD0
+RECORD
 scan_menu (void)
 {
-	NOD0 nod0;
+	RECORD nod0;
 	INT code;
 	while (1) {
 		touchwin(scan_menu_win);

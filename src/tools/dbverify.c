@@ -107,21 +107,21 @@ typedef struct
 static NAMEREFN_REC * alloc_namerefn(STRING namerefn, STRING key, INT err);
 static BOOLEAN cgn_callback(STRING key, STRING name, BOOLEAN newset, void *param);
 static BOOLEAN cgr_callback(STRING key, STRING refn, BOOLEAN newset, void *param);
-static BOOLEAN check_even(STRING key, NOD0 nod0);
-static BOOLEAN check_fam(STRING key, NOD0 nod0);
+static BOOLEAN check_even(STRING key, RECORD nod0);
+static BOOLEAN check_fam(STRING key, RECORD nod0);
 static void check_ghosts(void);
-static BOOLEAN check_indi(STRING key, NOD0 nod0);
+static BOOLEAN check_indi(STRING key, RECORD nod0);
 static void check_node(STRING key, NODE node, INT level);
 static void check_nodes(void);
-static void check_pointers(STRING key, NOD0 nod0);
+static void check_pointers(STRING key, RECORD nod0);
 static void check_set(INDISEQ seq, char ctype);
-static BOOLEAN check_sour(STRING key, NOD0 nod0);
-static BOOLEAN check_othe(STRING key, NOD0 nod0);
+static BOOLEAN check_sour(STRING key, RECORD nod0);
+static BOOLEAN check_othe(STRING key, RECORD nod0);
 static BOOLEAN find_xref(STRING key, NODE node, STRING tag1, STRING tag2);
 static void finish_and_delete_nameset(void);
 static void finish_and_delete_refnset(void);
 static void free_namerefn(NAMEREFN_REC * rec);
-static BOOLEAN nodes_callback(STRING key, NOD0 nod0, void *param);
+static BOOLEAN nodes_callback(STRING key, RECORD nod0, void *param);
 static void print_usage(void);
 static void report_error(INT err, STRING fmt, ...);
 static void report_progress(STRING fmt, ...);
@@ -321,7 +321,7 @@ static BOOLEAN
 cgn_callback (STRING key, STRING name, BOOLEAN newset, void *param)
 {
 	/* a name record which points at indi=key */
-	NOD0 indi0 = qkey_to_indi0(key);
+	RECORD indi0 = qkey_to_indi0(key);
 	NODE indi = nztop(indi0);
 
 	/* bail out immediately if not INDI */
@@ -373,7 +373,7 @@ static BOOLEAN
 cgr_callback (STRING key, STRING refn, BOOLEAN newset, void *param)
 {
 	/* a refn record which points at nod0=key */
-	NOD0 nod0 = key_to_typ0(key, TRUE);
+	RECORD nod0 = key_to_typ0(key, TRUE);
 	NODE node = nztop(nod0);
 
 	if (newset) {
@@ -496,7 +496,7 @@ check_nodes (void)
  * Created: 2001/01/14, Perry Rapp
  *===========================================*/
 static BOOLEAN
-nodes_callback (STRING key, NOD0 nod0, void *param)
+nodes_callback (STRING key, RECORD nod0, void *param)
 {
 	if (noisy)
 		report_progress("Node: %s", key);
@@ -516,7 +516,7 @@ nodes_callback (STRING key, NOD0 nod0, void *param)
  * Created: 2001/01/14, Perry Rapp
  *===================================*/
 static BOOLEAN
-check_indi (STRING key, NOD0 nod0)
+check_indi (STRING key, RECORD nod0)
 {
 	static char prevkey[9];
 	NODE indi1, name1, refn1, sex1, body1, famc1, fams1;
@@ -582,7 +582,7 @@ check_indi (STRING key, NOD0 nod0)
  * Created: 2001/01/14, Perry Rapp
  *===================================*/
 static BOOLEAN
-check_fam (STRING key, NOD0 nod0)
+check_fam (STRING key, RECORD nod0)
 {
 	static char prevkey[9];
 	NODE fam1, fref1, husb1, wife1, chil1, rest1;
@@ -662,7 +662,7 @@ check_fam (STRING key, NOD0 nod0)
  * Created: 2001/01/14, Perry Rapp
  *===================================*/
 static BOOLEAN
-check_sour (STRING key, NOD0 nod0)
+check_sour (STRING key, RECORD nod0)
 {
 	static char prevkey[9];
 	INT keynum = atoi(&key[1]);
@@ -679,7 +679,7 @@ check_sour (STRING key, NOD0 nod0)
  * Created: 2001/01/14, Perry Rapp
  *===================================*/
 static BOOLEAN
-check_even (STRING key, NOD0 nod0)
+check_even (STRING key, RECORD nod0)
 {
 	static char prevkey[9];
 	INT keynum = atoi(&key[1]);
@@ -696,7 +696,7 @@ check_even (STRING key, NOD0 nod0)
  * Created: 2001/01/14, Perry Rapp
  *===================================*/
 static BOOLEAN
-check_othe (STRING key, NOD0 nod0)
+check_othe (STRING key, RECORD nod0)
 {
 	static char prevkey[9];
 	INT keynum = atoi(&key[1]);
@@ -739,7 +739,7 @@ exit_find:
  * 2001/01/21, Perry Rapp
  *===================================*/
 static void
-check_pointers (STRING key, NOD0 nod0)
+check_pointers (STRING key, RECORD nod0)
 {
 	check_node(key, nztop(nod0), 0);
 }

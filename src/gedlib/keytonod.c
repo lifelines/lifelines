@@ -50,18 +50,18 @@ int listbadkeys = 0;
  *********************************************/
 
 static void add_node_to_direct(CACHE cache, NODE node, STRING key);
-static void add_nod0_to_direct(CACHE cache, NOD0 nod0, STRING key);
+static void add_nod0_to_direct(CACHE cache, RECORD nod0, STRING key);
 static CACHE create_cache(STRING name, INT dirsize, INT indsize);
 static void dereference(CACHEEL);
 static CACHEEL key_to_cacheel(CACHE, STRING, STRING, INT);
 static CACHEEL key_to_even_cacheel (STRING key);
 static NODE key_to_node(CACHE cache, STRING key, STRING tag);
-static NOD0 key_to_nod0(CACHE cache, STRING key, STRING tag);
+static RECORD key_to_nod0(CACHE cache, STRING key, STRING tag);
 static CACHEEL key_to_othr_cacheel (STRING key);
 static CACHEEL key_to_sour_cacheel (STRING key);
 static void prepare_direct_space(CACHE cache);
 static NODE qkey_to_node(CACHE cache, STRING key, STRING tag);
-static NOD0 qkey_to_nod0(CACHE cache, STRING key, STRING tag);
+static RECORD qkey_to_nod0(CACHE cache, STRING key, STRING tag);
 
 
 INT csz_indi = 200;		/* cache size for indi */
@@ -215,7 +215,7 @@ qkey_to_type (STRING key)
 /*=====================================
  * key_to_typ0 -- Convert key to nod0
  *===================================*/
-NOD0
+RECORD
 key_to_typ0 (STRING key, INT reportmode)
 {
 	switch(key[0])
@@ -259,24 +259,24 @@ NODE key_to_othr (STRING key)
  *  (asserts if failure)
  *  5 symmetric versions
  *===================================*/
-NOD0
+RECORD
 key_to_indi0 (STRING key)
 {
 	return key_to_nod0(indicache, key, "INDI");
 }
-NOD0 key_to_fam0 (STRING key)
+RECORD key_to_fam0 (STRING key)
 {
 	return key_to_nod0(famcache, key, "FAM");
 }
-NOD0 key_to_even0 (STRING key)
+RECORD key_to_even0 (STRING key)
 {
 	return key_to_nod0(evencache, key, "EVEN");
 }
-NOD0 key_to_sour0 (STRING key)
+RECORD key_to_sour0 (STRING key)
 {
 	return key_to_nod0(sourcache, key, "SOUR");
 }
-NOD0 key_to_othr0 (STRING key)
+RECORD key_to_othr0 (STRING key)
 {
 	return key_to_nod0(othrcache, key, NULL);
 }
@@ -311,23 +311,23 @@ NODE qkey_to_othr (STRING key)
  *  report mode (returns NULL if failure)
  *  5 symmetric versions
  *======================================*/
-NOD0 qkey_to_indi0 (STRING key)
+RECORD qkey_to_indi0 (STRING key)
 {
 	return qkey_to_nod0(indicache, key, "INDI");
 }
-NOD0 qkey_to_fam0 (STRING key)
+RECORD qkey_to_fam0 (STRING key)
 {
 	return qkey_to_nod0(famcache, key, "FAM");
 }
-NOD0 qkey_to_even0 (STRING key)
+RECORD qkey_to_even0 (STRING key)
 {
 	return qkey_to_nod0(evencache, key, "EVEN");
 }
-NOD0 qkey_to_sour0 (STRING key)
+RECORD qkey_to_sour0 (STRING key)
 {
 	return qkey_to_nod0(sourcache, key, "SOUR");
 }
-NOD0 qkey_to_othr0 (STRING key)
+RECORD qkey_to_othr0 (STRING key)
 {
 	return qkey_to_nod0(othrcache, key, NULL);
 }
@@ -553,7 +553,7 @@ dereference (CACHEEL cel)
 {
 	STRING rec;
 	INT len;
-	NOD0 nod0;
+	RECORD nod0;
 	ASSERT(cel);
 	ASSERT(rec = retrieve_record(ckey(cel), &len));
 	ASSERT(nod0 = string_to_nod0(rec, ckey(cel), len));
@@ -575,7 +575,7 @@ add_to_direct (CACHE cache,
 	STRING record;
 	INT len;
 	CACHEEL cel;
-	NOD0 nod0;
+	RECORD nod0;
 	int i, j;
 
 #ifdef DEBUG
@@ -687,7 +687,7 @@ key_to_node (CACHE cache, STRING key, STRING tag)
  * key_to_nod0 -- Return tree from key; add to cache if not there
  * asserts if failure
  *=============================================================*/
-static NOD0
+static RECORD
 key_to_nod0 (CACHE cache, STRING key, STRING tag)
 {
 	CACHEEL cel;
@@ -714,7 +714,7 @@ qkey_to_node (CACHE cache, STRING key, STRING tag)
  * qkey_to_nod0 -- Return tree from key; add to cache if not there
  * report mode - returns NULL if failure
  *=============================================================*/
-static NOD0
+static RECORD
 qkey_to_nod0 (CACHE cache, STRING key, STRING tag)
 {
 	CACHEEL cel;
@@ -805,7 +805,7 @@ get_cache_stats (void)
  * indi0_to_cache -- Add person to person cache
  *==========================================*/
 void
-indi0_to_cache (NOD0 nod0)
+indi0_to_cache (RECORD nod0)
 {
 	nod0_to_cache(indicache, nod0);
 }
@@ -856,7 +856,7 @@ void
 node_to_cache (CACHE cache,
                NODE node)
 {
-	NOD0 nod0 = create_nod0(node);
+	RECORD nod0 = create_nod0(node);
 	nod0_to_cache(cache, nod0);
 }
 /*========================================
@@ -864,7 +864,7 @@ node_to_cache (CACHE cache,
  *======================================*/
 void
 nod0_to_cache (CACHE cache,
-               NOD0 nod0)
+               RECORD nod0)
 {
 	STRING key;
 	ASSERT(cache && nod0 && nztop(nod0));
@@ -879,14 +879,14 @@ nod0_to_cache (CACHE cache,
 static void
 add_node_to_direct (CACHE cache, NODE node, STRING key)
 {
-	NOD0 nod0 = create_nod0(node);
+	RECORD nod0 = create_nod0(node);
 	add_nod0_to_direct(cache, nod0, key);
 }
 /*=======================================================
  * add_nod0_to_direct -- Add node to direct part of cache
  *=====================================================*/
 static void
-add_nod0_to_direct (CACHE cache, NOD0 nod0, STRING key)
+add_nod0_to_direct (CACHE cache, RECORD nod0, STRING key)
 {
 	CACHEEL cel;
 	STRING keynew;
@@ -1069,11 +1069,11 @@ CACHEEL qkey_to_othr_cacheel (STRING key)
 	return key_to_cacheel(othrcache, key, NULL, TRUE);
 }
 /*==============================================
- * nztop -- Return first NODE of a NOD0
+ * nztop -- Return first NODE of a RECORD
  *  handle NULL input
  *============================================*/
 NODE
-nztop (NOD0 nod0)
+nztop (RECORD nod0)
 {
 	return nod0 ? nod0->top : 0;
 }

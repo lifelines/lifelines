@@ -66,21 +66,21 @@ struct blck { NDALLOC next; };
  * local enums & defines
  *********************************************/
 
-enum { NEW_NOD0, EXISTING_LACKING_WH_NOD0 };
+enum { NEW_RECORD, EXISTING_LACKING_WH_RECORD };
 
 /*********************************************
  * local function prototypes, alphabetical
  *********************************************/
 
-static NOD0 alloc_new_nod0(void);
-static NOD0 alloc_nod0_from_key(STRING key);
-static void alloc_nod0_wh(NOD0 nod0, INT isnew);
+static RECORD alloc_new_nod0(void);
+static RECORD alloc_nod0_from_key(STRING key);
+static void alloc_nod0_wh(RECORD nod0, INT isnew);
 static NODE alloc_node(void);
 static BOOLEAN buffer_to_line (STRING p, INT *plev, STRING *pxref
 	, STRING *ptag, STRING *pval, STRING *pmsg);
 static STRING fixup (STRING str);
 static STRING fixtag (STRING tag);
-static void load_nod0_wh(NOD0 nod0, char * whptr, INT whlen);
+static void load_nod0_wh(RECORD nod0, char * whptr, INT whlen);
 static INT node_strlen(INT levl, NODE node);
 static BOOLEAN string_to_line(STRING *ps, INT *plev, STRING *pxref, 
 	STRING *ptag, STRING *pval, STRING *pmsg);
@@ -194,11 +194,11 @@ create_node (STRING xref, STRING tag, STRING val, NODE prnt)
  *  perhaps should use special allocator like nodes
  * Created: 2001/01/25, Perry Rapp
  *=================================*/
-static NOD0
+static RECORD
 alloc_new_nod0 (void)
 {
-	NOD0 nod0;
-	nod0 = (NOD0)stdalloc(sizeof(*nod0));
+	RECORD nod0;
+	nod0 = (RECORD)stdalloc(sizeof(*nod0));
 	/* these must be filled in by caller */
 	nod0->nkey.key = "";
 	nod0->nkey.keynum = 0;
@@ -211,10 +211,10 @@ alloc_new_nod0 (void)
  * alloc_nod0_from_key -- allocate nod0 with key
  * Created: 2001/01/25, Perry Rapp
  *=================================*/
-static NOD0
+static RECORD
 alloc_nod0_from_key (STRING key)
 {
-	NOD0 nod0 = alloc_new_nod0();
+	RECORD nod0 = alloc_new_nod0();
 	assign_nod0(nod0, key[0], atoi(key+1));
 	return nod0;
 }
@@ -223,7 +223,7 @@ alloc_nod0_from_key (STRING key)
  * Created: 2001/02/04, Perry Rapp
  *=================================*/
 void
-assign_nod0 (NOD0 nod0, char ntype, INT keynum)
+assign_nod0 (RECORD nod0, char ntype, INT keynum)
 {
 	char xref[12];
 	char key[9];
@@ -241,10 +241,10 @@ assign_nod0 (NOD0 nod0, char ntype, INT keynum)
  * Created: 2001/02/04, Perry Rapp
  *=================================*/
 void
-init_new_nod0 (NOD0 nod0, char ntype, INT keynum)
+init_new_nod0 (RECORD nod0, char ntype, INT keynum)
 {
 	assign_nod0(nod0, ntype, keynum);
-	alloc_nod0_wh(nod0, NEW_NOD0);
+	alloc_nod0_wh(nod0, NEW_RECORD);
 }
 /*===================================
  * alloc_nod0_wh -- allocate warehouse for
@@ -252,7 +252,7 @@ init_new_nod0 (NOD0 nod0, char ntype, INT keynum)
  * Created: 2001/02/04, Perry Rapp
  *=================================*/
 static void
-alloc_nod0_wh (NOD0 nod0, INT isnew)
+alloc_nod0_wh (RECORD nod0, INT isnew)
 {
 	LLDATE creation;
 	ASSERT(!nod0->mdwh);
@@ -262,7 +262,7 @@ alloc_nod0_wh (NOD0 nod0, INT isnew)
 	wh_allocate(nod0->mdwh);
 	get_current_lldate(&creation);
 	wh_add_block_var(nod0->mdwh, MD_CREATE_DATE, &creation, sizeof(creation));
-	if (isnew == EXISTING_LACKING_WH_NOD0)
+	if (isnew == EXISTING_LACKING_WH_RECORD)
 		wh_add_block_int(nod0->mdwh, MD_CONVERTED_BOOL, 1);
 }
 /*===================================
@@ -271,7 +271,7 @@ alloc_nod0_wh (NOD0 nod0, INT isnew)
  * Created: 2001/02/04, Perry Rapp
  *=================================*/
 static void
-load_nod0_wh (NOD0 nod0, char * whptr, INT whlen)
+load_nod0_wh (RECORD nod0, char * whptr, INT whlen)
 {
 	nod0->mdwh = (WAREHOUSE)stdalloc(sizeof(*(nod0->mdwh)));
 	wh_assign_from_blob(nod0->mdwh, whptr, whlen);
@@ -280,10 +280,10 @@ load_nod0_wh (NOD0 nod0, char * whptr, INT whlen)
  * create_nod0 -- create nod0 to wrap top node
  * Created: 2001/01/29, Perry Rapp
  *=================================*/
-NOD0
+RECORD
 create_nod0 (NODE node)
 {
-	NOD0 nod0 = 0;
+	RECORD nod0 = 0;
 	if (nxref(node))
 		nod0 = alloc_nod0_from_key(node_to_key(node));
 	else
@@ -296,7 +296,7 @@ create_nod0 (NODE node)
  * Created: 2000/12/30, Perry Rapp
  *=================================*/
 void
-free_nod0 (NOD0 nod0)
+free_nod0 (RECORD nod0)
 {
 	if (nod0->top)
 		free_nodes(nod0->top);
@@ -475,11 +475,11 @@ gettag:
  * STRING *pmsg:  [out] possible error message
  * BOOLEAN *pemp: [out] set true if file is empty
  *===============================================*/
-NOD0
+RECORD
 file_to_nod0 (STRING fname, TRANTABLE tt, STRING *pmsg, BOOLEAN *pemp)
 {
 	NODE node = file_to_node(fname, tt, pmsg, pemp);
-	NOD0 nod0 = 0;
+	RECORD nod0 = 0;
 	if (node) {
 		nod0 = create_nod0(node);
 	}
@@ -555,7 +555,7 @@ first_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
  * STRING *pmsg:  [out] possible error message
  * BOOLEAN *peof: [out] set true if file is at end of file
  *============================================================*/
-NOD0
+RECORD
 next_fp_to_nod0 (FILE *fp, BOOLEAN list, TRANTABLE tt,
 	STRING *pmsg, BOOLEAN *peof)
 {
@@ -664,10 +664,10 @@ next_fp_to_node (FILE *fp, BOOLEAN list, TRANTABLE tt,
  *  This is the layout for traditional nodes:
  *   0 INDI    (or 0 FAM or 0 SOUR etc)
  *==========================================*/
-NOD0
+RECORD
 string_to_nod0 (STRING str, STRING key, INT len)
 {
-	NOD0 nod0 = 0;
+	RECORD nod0 = 0;
 	NODE node = 0;
 
 	/* create it now, & release it at bottom if we fail */
@@ -703,7 +703,7 @@ string_to_nod0 (STRING str, STRING key, INT len)
 		nod0->top = node;
 		assign_nod0(nod0, key[0], atoi(key+1));
 		if (!nod0->mdwh)
-			alloc_nod0_wh(nod0, EXISTING_LACKING_WH_NOD0);
+			alloc_nod0_wh(nod0, EXISTING_LACKING_WH_RECORD);
 	} else { /* node==0, we failed, clean up */
 		free_nod0(nod0);
 		nod0 = 0;
@@ -942,8 +942,8 @@ void
 indi_to_dbase (NODE node)
 {
 	/*
-	To start storing metadata, we need the NOD0 here
-	If we were using NOD0 everywhere, we'd pass it in here
+	To start storing metadata, we need the RECORD here
+	If we were using RECORD everywhere, we'd pass it in here
 	We could look it up in the cache, but it might not be there
 	(new records)
 	(and this applies to fam_to_dbase, sour_to_dbase, etc)

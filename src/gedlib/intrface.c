@@ -136,15 +136,15 @@ traverse_db_rec_keys (STRING lo, STRING hi,
  *==================================================*/
 typedef struct
 {
-	BOOLEAN(*func)(STRING key, NOD0 nod0, void * param);
+	BOOLEAN(*func)(STRING key, RECORD nod0, void * param);
 	void * param;
-} TRAV_NOD0_PARAM;
+} TRAV_RECORD_PARAM;
 /* see above */
 static BOOLEAN
 trav_nod0_callback (STRING key, STRING data, INT len, void * param)
 {
-	TRAV_NOD0_PARAM *tparam = (TRAV_NOD0_PARAM *)param;
-	NOD0 nod0;
+	TRAV_RECORD_PARAM *tparam = (TRAV_RECORD_PARAM *)param;
+	RECORD nod0;
 	BOOLEAN keepgoing;
 	if (key[0]!='I' && key[0]!='F' && key[0]!='S' && key[0]!='E' && key[0]!='X')
 		return TRUE;
@@ -157,9 +157,9 @@ trav_nod0_callback (STRING key, STRING data, INT len, void * param)
 }
 /* see above */
 void
-traverse_db_key_nod0s (BOOLEAN(*func)(STRING key, NOD0, void *param), void *param)
+traverse_db_key_nod0s (BOOLEAN(*func)(STRING key, RECORD, void *param), void *param)
 {
-	TRAV_NOD0_PARAM tparam;
+	TRAV_RECORD_PARAM tparam;
 	STRING lo,hi;
 	tparam.param = param;
 	tparam.func = func;

@@ -6,7 +6,7 @@ NODE add_child(NODE, NODE);
 NODE add_family(NODE, NODE, NODE);
 BOOLEAN add_linked_indi(NODE);
 BOOLEAN add_spouse(NODE, NODE, BOOLEAN);
-NOD0 add_indi_by_edit(void);
+RECORD add_indi_by_edit(void);
 
 /* advedit.c */
 void advanced_person_edit(NODE);
@@ -19,9 +19,9 @@ BOOLEAN ask_yes_or_no(STRING);
 
 /* browse.c */
 void browse(NODE, INT code);
-NOD0 choose_any_event(void);
-NOD0 choose_any_other(void);
-NOD0 choose_any_source(void);
+RECORD choose_any_event(void);
+RECORD choose_any_other(void);
+RECORD choose_any_source(void);
 INT display_2fam(NODE fam1, NODE fam2, INT mode);
 INT display_2indi(NODE indi1, NODE indi2, INT mode);
 BOOLEAN handle_fam_mode_cmds(INT c, INT * mode);
@@ -62,7 +62,7 @@ void begin_action(void);
 void end_action(void);
 
 /* newrecs.c */
-NOD0 ask_for_record(STRING, INT);
+RECORD ask_for_record(STRING, INT);
 void edit_event(NODE);
 void edit_other(NODE);
 void edit_source(NODE);
@@ -90,9 +90,9 @@ void pedigree_increase_generations(INT delta);
 void pedigree_toggle_mode(void);
 
 /* scan.c */
-NOD0 full_name_scan(void);
-NOD0 name_fragment_scan(void);
-NOD0 refn_scan(void);
+RECORD full_name_scan(void);
+RECORD name_fragment_scan(void);
+RECORD refn_scan(void);
 
 /* screen.c */
 void adjust_menu_height(INT delta);

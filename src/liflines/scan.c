@@ -71,7 +71,7 @@ static BOOLEAN pattern_match(SCAN_PATTERN *patt, STRING name);
 static BOOLEAN ns_callback(STRING key, STRING name, BOOLEAN newset, void *param);
 static BOOLEAN rs_callback(STRING key, STRING refn, BOOLEAN newset, void *param);
 static BOOLEAN set_pattern(SCAN_PATTERN * patt, STRING str, INT scantype);
-static NOD0 name_scan(INT scantype);
+static RECORD name_scan(INT scantype);
 
 /*********************************************
  * local variables
@@ -167,11 +167,11 @@ set_pattern (SCAN_PATTERN * patt, STRING str, INT scantype)
  * name_scan -- traverse names
  *  looking for pattern matching
  *============================*/
-static NOD0
+static RECORD
 name_scan (INT scantype)
 {
 	SCAN_PATTERN patt;
-	NOD0 indi = NULL;
+	RECORD indi = NULL;
 	STRING str;
 
 	patt.scantype = scantype;
@@ -201,7 +201,7 @@ name_scan (INT scantype)
  * name_fragment_scan -- traverse name fragments
  *  looking for pattern matching
  *============================================*/
-NOD0
+RECORD
 name_fragment_scan (void)
 {
 	return name_scan(NAMESCAN_FRAG);
@@ -210,7 +210,7 @@ name_fragment_scan (void)
  * full_name_scan -- traverse full names
  *  looking for pattern matching
  *====================================*/
-NOD0
+RECORD
 full_name_scan (void)
 {
 	return name_scan(NAMESCAN_FULL);
@@ -219,11 +219,11 @@ full_name_scan (void)
  * refn_scan -- traverse refns
  *  looking for pattern matching
  *============================*/
-NOD0
+RECORD
 refn_scan (void)
 {
 	SCAN_PATTERN patt;
-	NOD0 nod0 = NULL;
+	RECORD nod0 = NULL;
 	STRING str;
 	INT scantype = REFNSCAN;
 

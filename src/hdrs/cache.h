@@ -40,7 +40,7 @@
  *=============================*/
 typedef struct c_elem *CACHEEL;
 struct c_elem {
-	NOD0 c_nod0;
+	RECORD c_nod0;
 	NODE c_node;	/* root node */
 	CACHEEL c_prev;	/* previous el */
 	CACHEEL c_next;	/* next el */
@@ -99,7 +99,7 @@ CACHEEL qkey_to_othr_cacheel(STRING);
 
 void load_cacheel(CACHEEL);
 void lock_cache(CACHEEL);
-void nod0_to_cache(CACHE cache, NOD0 nod0);
+void nod0_to_cache(CACHE cache, RECORD nod0);
 void node_to_cache(CACHE, NODE);
 void remove_from_cache(CACHE, STRING);
 void semilock_cache(CACHEEL);
