@@ -4,6 +4,10 @@
 
 	Fix writeindi to report error instead of failing silently.
 
+	* ChangeLog src/interp/write.c
+
+	Fix addtonode to refuse bad arguments (prev not child of parent).
+
 2004-03-08 Perry Rapp
 
 	* ChangeLog

@@ -110,6 +110,15 @@ __addnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	prev = remove_node_and_delete_pvalue(&val);
 
+	if (prev) {
+		/* Check that previous sibling actually is child of new parent */
+		if (prnt != nparent(prev)) {
+			prog_error(node, "2nd arg to addnode must be parent of 3rd arg");
+			*eflg = 1;
+			return NULL;
+		}
+	}
+
 	/* reparent node, but ensure its locking is only relative to new parent */
 	dolock_node_in_cache(newchild, FALSE);
 	nparent(newchild) = prnt;
