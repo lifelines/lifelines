@@ -33,7 +33,7 @@ LL_REPORTS = \
 	pafcompat.ll partition.ll pdesc.ll paf-import.ll ped.ll 	\
 	pedigreel.ll pedigree_html.ll pedigreelhs.ll pedigree.ll 	\
 	pedtex/pedtex.ll places.ll pointers.ll prompt.li ps-anc.ll 	\
-	ps-circ/ps-circ.ll ps-circle.ll ps-fan/ps-fan.ll reg_html.ll	\
+	ps-circle.ll ps-fan/ps-fan.ll ps-pedigree.ll reg_html.ll	\
 	register-rtf.ll register-tex.ll register1.ll register1-dot.ll	\
 	regvital.ll relate.ll related_spouses.ll relation.ll relink.ll	\
 	rfc.ll rllgen.ll rootset.ll rslgen.ll rtflib.li sealing_line.ll	\
@@ -57,7 +57,7 @@ OTHER_REPORTS = boc.gif ll.png gen_index bib2html.c bury.c \
         desc-tex2/poster.tex desc-tex2/pstricks.tex desc-tex2/tree.tex \
         novel/novel.head novel/novel.intro novel/novel.README \
         pedtex/pedtex.readme pedtex/setup.tex pedtex/tree.tex \
-        ps-circ/ps-circ.ps ps-fan/ps-fan.ps \
+        ps-fan/ps-fan.ps \
         ps-pedigree.ps tree.tex
 dist_pkgdata_DATA = index.html
 pkg_REPORTS = $(LL_REPORTS) $(OTHER_REPORTS) $(dist_pkgdata_DATA)
