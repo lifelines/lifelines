@@ -33,6 +33,8 @@
 	Makefile changes for new files
 	Added dependencies for askprogram.c & property.c
 
+	* .linesrc: Added sample config file for LifeLines.
+
 2001-02-03 Perry Rapp <puddle@users.sourceforge.net>
 
 	* hdrs/screen.h liflines/browse.c liflines/menuitem.c
