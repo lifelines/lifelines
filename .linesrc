@@ -4,7 +4,7 @@
 # As are blank lines
 # So some of the examples are commented out...
 #
-# 2003/08/27
+# 2003/09/11
 #
 # Note that paths are assigned with :=
 # Other values are assigned with =
@@ -35,9 +35,9 @@
 
 # Path(s) to search for databases
 #LLDATABASES=%llroot%/Databases
+# (New databases will be created in first directory of this path.)
 
-# Path for new databases
-#LLNEWDBDIR=%llroot%/Databases
+# (LLNEWDBDIR {Path for new databases} is obsolete)
 
 # Path for report programs
 #LLPROGRAMS=%llroot%/Reports

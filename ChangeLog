@@ -5,6 +5,10 @@
 
 	Remove LLNEWDBDIR and instead use first component of path (LLDATABASES).
 
+	* .linesrc ChangeLog lines.cfg
+
+	Mark LLNEWDBDIR as obsolete in config files.
+
 2003-09-10 Perry Rapp
 
 	* ChangeLog src/btree/file.c src/gedlib/charmaps.c
