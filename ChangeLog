@@ -1,3 +1,13 @@
+2003-01-01 Perry Rapp
+
+	* ChangeLog src/gedlib/keytonod.c src/hdrs/cache.h
+	src/hdrs/interp.h src/hdrs/screen.h src/interp/pvalue.c
+	src/liflines/browse.c src/liflines/llinesi.h
+	src/liflines/pedigree.c src/liflines/screen.c
+	src/liflines/show.c src/liflines/tandem.c:
+
+	Replace some uses of NODE with RECORD.
+
 2002-12-31 Perry Rapp
 
 	* ChangeLog src/hdrs/interp.h src/interp/builtin.c

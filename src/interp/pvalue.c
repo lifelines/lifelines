@@ -593,7 +593,7 @@ create_pvalue_from_indi_keynum (INT i)
 PVALUE
 create_pvalue_from_fam (NODE fam)
 {
-	CACHEEL cel = fam ? fam_to_cacheel(fam) : NULL;
+	CACHEEL cel = fam ? fam_to_cacheel_old(fam) : NULL;
 	return create_pvalue(PFAM, cel);
 }
 /*====================================================
@@ -642,7 +642,7 @@ create_pvalue_from_othr_keynum (INT i)
 static PVALUE
 create_pvalue_from_node_impl (NODE node, INT ptype)
 {
-	CACHEEL cel = node ? node_to_cacheel(node) : NULL;
+	CACHEEL cel = node ? node_to_cacheel_old(node) : NULL;
 	return create_pvalue(ptype, cel);
 }
 /*====================================================

@@ -166,9 +166,7 @@ qkeynum_to_frecord (int keynum)
 NODE
 keynum_to_sour (int keynum)
 {
-	char keystr[20];
-	sprintf(keystr,"S%d",keynum);
-	return key_to_sour(keystr);
+	return nztop(keynum_to_srecord(keynum));
 }
 RECORD
 keynum_to_srecord (int keynum)
@@ -184,9 +182,7 @@ keynum_to_srecord (int keynum)
 NODE
 keynum_to_even (int keynum)
 {
-	char keystr[MAXKEYWIDTH+1];
-	sprintf(keystr,"E%d",keynum);
-	return key_to_even(keystr);
+	return nztop(keynum_to_erecord(keynum));
 }
 RECORD
 keynum_to_erecord (int keynum)
@@ -249,14 +245,7 @@ keynum_to_record (char ntype, int keynum)
 NODE
 key_to_type (CNSTRING key, INT reportmode)
 {
-	switch(key[0])
-	{
-	case 'I': return reportmode ? qkey_to_indi(key) : key_to_indi(key);
-	case 'F': return reportmode ? qkey_to_fam(key) : key_to_fam(key);
-	case 'S': return reportmode ? qkey_to_sour(key) : key_to_sour(key);
-	case 'E': return reportmode ? qkey_to_even(key) : key_to_even(key);
-	}
-	return reportmode ? qkey_to_othr(key) : key_to_othr(key);
+	return nztop(key_to_record_impl(key, reportmode));
 }
 /*=====================================
  * qkey_to_type -- Convert key to node
@@ -1026,6 +1015,7 @@ value_to_xref (STRING val)
 CACHEEL
 indi_to_cacheel (RECORD indi)
 {
+	/* TODO: We could store a cachel pointer directly in the record */
 	CACHEEL cel;
 	if (!indi || !nztop(indi)) return NULL;
 	cel = key_to_indi_cacheel(rmvat(nxref(nztop(indi))));
@@ -1052,7 +1042,19 @@ indi_to_cacheel_old (NODE indi)
  * fam_to_cacheel -- Convert family to cache element
  *================================================*/
 CACHEEL
-fam_to_cacheel (NODE fam)
+fam_to_cacheel (RECORD frec)
+{
+	CACHEEL cel;
+	if (!frec) return NULL;
+	cel = key_to_fam_cacheel(rmvat(nxref(nztop(frec))));
+	ASSERT(cel);
+	return cel;
+}
+/*==================================================
+ * fam_to_cacheel_old -- Convert family to cache element
+ *================================================*/
+CACHEEL
+fam_to_cacheel_old (NODE fam)
 {
 	CACHEEL cel;
 	if (!fam) return NULL;
@@ -1100,12 +1102,28 @@ othr_to_cacheel (NODE othr)
  * node_to_cacheel -- Convert any node to cache element
  *================================================*/
 CACHEEL
-node_to_cacheel (NODE node)
+node_to_cacheel (RECORD rec)
+{
+	STRING key = rmvat(nxref(nztop(rec)));
+	switch(key[0]) {
+	case 'I': return indi_to_cacheel(rec);
+	case 'F': return fam_to_cacheel(rec);
+	case 'S': return sour_to_cacheel(nztop(rec));
+	case 'E': return even_to_cacheel(nztop(rec));
+	case 'X': return othr_to_cacheel(nztop(rec));
+	}
+	ASSERT(0); return NULL;
+}
+/*==================================================
+ * node_to_cacheel_old -- Convert any node to cache element
+ *================================================*/
+CACHEEL
+node_to_cacheel_old (NODE node)
 {
 	STRING key = rmvat(nxref(node));
 	switch(key[0]) {
 	case 'I': return indi_to_cacheel_old(node);
-	case 'F': return fam_to_cacheel(node);
+	case 'F': return fam_to_cacheel_old(node);
 	case 'S': return sour_to_cacheel(node);
 	case 'E': return even_to_cacheel(node);
 	case 'X': return othr_to_cacheel(node);

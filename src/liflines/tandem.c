@@ -97,7 +97,7 @@ INT browse_tandem (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 			|| mode != modep) {
 			show_reset_scroll();
 		}
-		display_2indi(nztop(current1), nztop(current2), mode);
+		display_2indi(current1, current2, mode);
 		c = interact_2indi();
 		/* last keynum & mode, so can tell if changed */
 		nkey1p = nzkeynum(current1);
@@ -214,7 +214,7 @@ INT browse_2fam (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 			|| mode != modep) {
 			show_reset_scroll();
 		}
-		display_2fam(nztop(current1), nztop(current2), mode);
+		display_2fam(current1, current2, mode);
 		c = interact_2fam();
 		/* last keynum & mode, so can tell if changed */
 		nkey1p = nzkeynum(current1);

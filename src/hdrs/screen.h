@@ -135,15 +135,15 @@ void adjust_browse_menu_height(INT delta);
 INT ask_for_char(STRING, STRING, STRING);
 INT ask_for_char_msg(STRING, STRING, STRING, STRING);
 BOOLEAN ask_for_db_filename(STRING ttl, STRING prmpt, STRING basedir, STRING buffer, INT buflen);
-INT aux_browse(NODE, INT mode, BOOLEAN reuse);
+INT aux_browse(RECORD rec, INT mode, BOOLEAN reuse);
 INT choose_one_from_indiseq(STRING, INDISEQ);
 void clear_hseg(WINDOW *, INT row, INT x1, INT x2);
 void clear_stdout_hseg(INT row, INT x1, INT x2);
 void cycle_browse_menu(void);
-void display_2fam(NODE fam1, NODE fam2, INT mode);
-void display_2indi(NODE indi1, NODE indi2, INT mode);
-void display_fam(NODE, INT mode, BOOLEAN reuse);
-void display_indi(NODE, INT mode, BOOLEAN reuse);
+void display_2fam(RECORD frec1, RECORD frec2, INT mode);
+void display_2indi(RECORD irec1, RECORD irec2, INT mode);
+void display_fam(RECORD fam, INT mode, BOOLEAN reuse);
+void display_indi(RECORD indi, INT mode, BOOLEAN reuse);
 void display_screen(INT);
 void dbprintf(STRING, ...);
 int init_screen(BOOLEAN graphical);
@@ -159,9 +159,9 @@ void paint_main_screen(void);
 void paint_two_fam_screen(void);
 void paint_list_screen(void);
 void show_horz_line(UIWINDOW, INT, INT, INT);
-void show_indi(UIWINDOW uiwin, NODE indi, INT mode, LLRECT
+void show_indi(UIWINDOW uiwin, RECORD indi, INT mode, LLRECT
 	, INT * scroll, BOOLEAN reuse);
-void show_indi_vitals(UIWINDOW uiwin, NODE, LLRECT, INT *scroll, BOOLEAN reuse);
+void show_indi_vitals(UIWINDOW uiwin, RECORD irec, LLRECT, INT *scroll, BOOLEAN reuse);
 void show_vert_line(UIWINDOW, INT, INT, INT);
 void term_screen(void);
 void toggle_browse_menu(void);
@@ -177,17 +177,17 @@ extern struct rfmt_s disp_long_rfmt, disp_shrt_rfmt;
 extern INT Scroll1;
 void display_cache_stats(void);
 void init_show_module(void);
-void show_ancestors (UIWINDOW uiwin, NODE indi, LLRECT
+void show_ancestors (UIWINDOW uiwin, RECORD irec, LLRECT
 	, INT * scroll, BOOLEAN reuse);
-void show_aux(UIWINDOW uiwin, NODE, INT mode, LLRECT
+void show_aux(UIWINDOW uiwin, RECORD rec, INT mode, LLRECT
 	, INT * scroll, BOOLEAN reuse);
 void show_big_list(INDISEQ, INT, INT, INT);
 void show_childnumbers(void);
-void show_descendants(UIWINDOW uiwin, NODE indi, LLRECT
+void show_descendants(UIWINDOW uiwin, RECORD rec, LLRECT
 	, INT * scroll, BOOLEAN reuse);
-void show_fam_vitals (UIWINDOW uiwin, NODE fam, INT row, INT hgt
+void show_fam_vitals (UIWINDOW uiwin, RECORD frec, INT row, INT hgt
 	, INT width, INT *scroll, BOOLEAN reuse);
-void show_gedcom (UIWINDOW uiwin, NODE node, INT gdvw, LLRECT
+void show_gedcom (UIWINDOW uiwin, RECORD rec, INT gdvw, LLRECT
 	, INT * scroll, BOOLEAN reuse);
 void show_reset_scroll(void);
 void show_sour_display(NODE, INT, INT);

@@ -78,7 +78,7 @@ static DISPNODE alloc_displaynode(void);
 static void append_to_text_list(LIST list, STRING text, INT width, BOOLEAN newline);
 static void check_scroll_max(CANVASDATA canvas);
 static void count_nodes(NODE node, INT gen, INT maxgen, INT * count);
-static void draw_gedcom_text(NODE node, CANVASDATA canvas, BOOLEAN reuse);
+static void draw_gedcom_text(RECORD rec, CANVASDATA canvas, BOOLEAN reuse);
 static void free_displaynode(DISPNODE tn);
 static void free_dispnode_tree(DISPNODE tn);
 static void free_entire_tree(void);
@@ -639,7 +639,7 @@ check_scroll_max( CANVASDATA canvas)
  * Created: 2000/12/07, Perry Rapp
  *=======================================================*/
 void
-pedigree_draw_descendants (NODE indi, CANVASDATA canvas, BOOLEAN reuse)
+pedigree_draw_descendants (RECORD rec, CANVASDATA canvas, BOOLEAN reuse)
 {
 	INT gen=0;
 	INT row = canvas->rect->top;
@@ -647,7 +647,7 @@ pedigree_draw_descendants (NODE indi, CANVASDATA canvas, BOOLEAN reuse)
 	if (!reuse) {
 		INT count=0;
 		free_entire_tree();
-		Root = add_children(indi, gen, Gens, &count);
+		Root = add_children(nztop(rec), gen, Gens, &count);
 		set_scroll_max(canvas, count);
 	}
 	check_scroll_max(canvas);
@@ -659,18 +659,18 @@ pedigree_draw_descendants (NODE indi, CANVASDATA canvas, BOOLEAN reuse)
  * Created: 2001/01/27, Perry Rapp
  *=======================================================*/
 void
-pedigree_draw_gedcom (NODE node, INT gdvw, CANVASDATA canvas, BOOLEAN reuse)
+pedigree_draw_gedcom (RECORD rec, INT gdvw, CANVASDATA canvas, BOOLEAN reuse)
 {
 	INT count=0, gen=0, row=canvas->rect->top;
 	if (gdvw == GDVW_TEXT) {
-		draw_gedcom_text(node, canvas, reuse);
+		draw_gedcom_text(rec, canvas, reuse);
 		return;
 	}
-	count_nodes(node, gen, Gens, &count);
+	count_nodes(nztop(rec), gen, Gens, &count);
 	set_scroll_max(canvas, count);
 	check_scroll_max(canvas);
 	/* preorder traversal */
-	trav_pre_print_nd(node, &row, gen, canvas, gdvw);
+	trav_pre_print_nd(nztop(rec), &row, gen, canvas, gdvw);
 }
 /*=========================================================
  * draw_gedcom_text -- print out gedcom node tree in text wrapped view
@@ -679,7 +679,7 @@ pedigree_draw_gedcom (NODE node, INT gdvw, CANVASDATA canvas, BOOLEAN reuse)
  * Created: 2001/04/15, Perry Rapp
  *=======================================================*/
 static void
-draw_gedcom_text (NODE node, CANVASDATA canvas, BOOLEAN reuse)
+draw_gedcom_text (RECORD rec, CANVASDATA canvas, BOOLEAN reuse)
 {
 	int gen=0;
 	INT row = canvas->rect->top;
@@ -688,7 +688,7 @@ draw_gedcom_text (NODE node, CANVASDATA canvas, BOOLEAN reuse)
 		INT count=0;
 		/* INT skip=0; */
 		free_entire_tree();
-		Root = add_dnodes(node, gen, Gens, &count, canvas);
+		Root = add_dnodes(nztop(rec), gen, Gens, &count, canvas);
 		set_scroll_max(canvas, count); 
 	}
 	check_scroll_max(canvas);
@@ -705,7 +705,7 @@ draw_gedcom_text (NODE node, CANVASDATA canvas, BOOLEAN reuse)
  * Created: 2000/12/07, Perry Rapp
  *===================================================*/
 void
-pedigree_draw_ancestors (NODE indi, CANVASDATA canvas, BOOLEAN reuse)
+pedigree_draw_ancestors (RECORD irec, CANVASDATA canvas, BOOLEAN reuse)
 {
 	int gen=0;
 	INT row = canvas->rect->top;
@@ -713,7 +713,7 @@ pedigree_draw_ancestors (NODE indi, CANVASDATA canvas, BOOLEAN reuse)
 	if (!reuse) {
 		INT count=0;
 		free_entire_tree();
-		Root = add_parents(indi, gen, Gens, &count);
+		Root = add_parents(nztop(irec), gen, Gens, &count);
 		set_scroll_max(canvas, count);
 	}
 	check_scroll_max(canvas);

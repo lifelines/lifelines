@@ -215,7 +215,7 @@ static void repaint_utils_menu(UIWINDOW uiwin);
 static void repaint_extra_menu(UIWINDOW uiwin);
 static void repaint_main_menu(UIWINDOW uiwin);
 static void run_report(BOOLEAN picklist);
-static void show_fam (UIWINDOW uiwin, NODE fam, INT mode, INT row, INT hgt, INT width, INT * scroll, BOOLEAN reuse);
+static void show_fam (UIWINDOW uiwin, RECORD frec, INT mode, INT row, INT hgt, INT width, INT * scroll, BOOLEAN reuse);
 static BOOLEAN show_record(UIWINDOW uiwin, STRING key, INT mode, LLRECT
 	, INT * scroll, BOOLEAN reuse);
 static void show_tandem_line(UIWINDOW uiwin, INT row);
@@ -701,60 +701,60 @@ update_browse_menu (INT screen)
  *  @reuse:  [IN]  flag to save recalculating display strings
  *=======================================*/
 void
-show_indi (UIWINDOW uiwin, NODE indi, INT mode, LLRECT rect
+show_indi (UIWINDOW uiwin, RECORD irec, INT mode, LLRECT rect
 	, INT * scroll, BOOLEAN reuse)
 {
 	CACHEEL icel;
-	icel = indi_to_cacheel_old(indi);
+	icel = indi_to_cacheel(irec);
 	lock_cache(icel);
 	if (mode=='g')
-		show_gedcom(uiwin, indi, GDVW_NORMAL, rect, scroll, reuse);
+		show_gedcom(uiwin, irec, GDVW_NORMAL, rect, scroll, reuse);
 	else if (mode=='x')
-		show_gedcom(uiwin, indi, GDVW_EXPANDED, rect, scroll, reuse);
+		show_gedcom(uiwin, irec, GDVW_EXPANDED, rect, scroll, reuse);
 	else if (mode=='t')
-		show_gedcom(uiwin, indi, GDVW_TEXT, rect, scroll, reuse);
+		show_gedcom(uiwin, irec, GDVW_TEXT, rect, scroll, reuse);
 	else if (mode=='a')
-		show_ancestors(uiwin, indi, rect, scroll, reuse);
+		show_ancestors(uiwin, irec, rect, scroll, reuse);
 	else if (mode=='d')
-		show_descendants(uiwin, indi, rect, scroll, reuse);
+		show_descendants(uiwin, irec, rect, scroll, reuse);
 	else
-		show_indi_vitals(uiwin, indi, rect, scroll, reuse);
+		show_indi_vitals(uiwin, irec, rect, scroll, reuse);
 	unlock_cache(icel);
 }
 /*=========================================
  * show_fam -- Show family
- * [in] fam:  whom to display
- * [in] mode:  how to display
- * [in] row:   starting row to use
- * [in] hgt:   how many rows allowed
- * [in] width: how many columns allowed
- * [in] reuse: flag to save recalculating display strings
+ *  fam:   [IN]  whom to display
+ *  mode:  [IN]  how to display
+ *  row:   [IN]  starting row to use
+ *  hgt:   [IN]  how many rows allowed
+ *  width: [IN]  how many columns allowed
+ *  reuse: [IN]  flag to save recalculating display strings
  *=======================================*/
 static void
-show_fam (UIWINDOW uiwin, NODE fam, INT mode, INT row, INT hgt
+show_fam (UIWINDOW uiwin, RECORD frec, INT mode, INT row, INT hgt
 	, INT width, INT * scroll, BOOLEAN reuse)
 {
 	struct llrect_s rect;
 	CACHEEL fcel;
-	fcel = fam_to_cacheel(fam);
+	fcel = fam_to_cacheel(frec);
 	lock_cache(fcel);
 	rect.top = row;
 	rect.bottom = row+hgt-1;
 	rect.left = 1;
 	rect.right = width-1;
 	if (mode=='g')
-		show_gedcom(uiwin, fam, GDVW_NORMAL, &rect, scroll, reuse);
+		show_gedcom(uiwin, frec, GDVW_NORMAL, &rect, scroll, reuse);
 	else if (mode=='x')
-		show_gedcom(uiwin, fam, GDVW_EXPANDED, &rect, scroll, reuse);
+		show_gedcom(uiwin, frec, GDVW_EXPANDED, &rect, scroll, reuse);
 	else
-		show_fam_vitals(uiwin, fam, row, hgt, width, scroll, reuse);
+		show_fam_vitals(uiwin, frec, row, hgt, width, scroll, reuse);
 	unlock_cache(fcel);
 }
 /*=========================================
  * display_indi -- Paint indi on-screen
  *=======================================*/
 void
-display_indi (NODE indi, INT mode, BOOLEAN reuse)
+display_indi (RECORD indi, INT mode, BOOLEAN reuse)
 {
 	INT screen = ONE_PER_SCREEN;
 	INT lines = update_browse_menu(screen);
@@ -780,12 +780,12 @@ interact_indi (void)
  * display_fam -- Paint fam on-screen
  *=====================================*/
 void
-display_fam (NODE fam, INT mode, BOOLEAN reuse)
+display_fam (RECORD frec, INT mode, BOOLEAN reuse)
 {
 	INT width = MAINWIN_WIDTH;
 	INT screen = ONE_FAM_SCREEN;
 	INT lines = update_browse_menu(screen);
-	show_fam(main_win, fam, mode, 1, lines, width, &Scroll1, reuse);
+	show_fam(main_win, frec, mode, 1, lines, width, &Scroll1, reuse);
 	display_screen(screen);
 }
 /*=========================================
@@ -801,7 +801,7 @@ interact_fam (void)
  * display_2indi -- Paint tandem indi screen
  *===========================================*/
 void
-display_2indi (NODE indi1, NODE indi2, INT mode)
+display_2indi (RECORD irec1, RECORD irec2, INT mode)
 {
 	INT screen = TWO_PER_SCREEN;
 	INT lines = update_browse_menu(screen);
@@ -817,12 +817,12 @@ display_2indi (NODE indi1, NODE indi2, INT mode)
 	rect.left = 1;
 	rect.right = MAINWIN_WIDTH-2;
 
-	show_indi(main_win, indi1, mode, &rect, &Scroll1, reuse);
+	show_indi(main_win, irec1, mode, &rect, &Scroll1, reuse);
 	show_tandem_line(main_win, lines1+1);
 	switch_scrolls();
 	rect.top = lines1+2;
 	rect.bottom = lines+1;
-	show_indi(main_win, indi2, mode, &rect, &Scroll1, reuse);
+	show_indi(main_win, irec2, mode, &rect, &Scroll1, reuse);
 	switch_scrolls();
 
 	display_screen(screen);
@@ -849,7 +849,7 @@ show_tandem_line (UIWINDOW win, INT row)
  * display_2fam -- Paint tandem families
  *===========================================*/
 void
-display_2fam (NODE fam1, NODE fam2, INT mode)
+display_2fam (RECORD frec1, RECORD frec2, INT mode)
 {
 	UIWINDOW uiwin = main_win;
 	INT width=MAINWIN_WIDTH;
@@ -861,10 +861,10 @@ display_2fam (NODE fam1, NODE fam2, INT mode)
 	lines2 = lines/2;
 	lines1 = lines - lines2;
 
-	show_fam(uiwin, fam1, mode, 1, lines1, width, &Scroll1, reuse);
+	show_fam(uiwin, frec1, mode, 1, lines1, width, &Scroll1, reuse);
 	show_tandem_line(main_win, lines1+1);
 	switch_scrolls();
-	show_fam(uiwin, fam2, mode, lines1+2, lines2, width, &Scroll1, reuse);
+	show_fam(uiwin, frec2, mode, lines1+2, lines2, width, &Scroll1, reuse);
 	switch_scrolls();
 
 	display_screen(screen);
@@ -883,7 +883,7 @@ interact_2fam (void)
  * This is used for browsing S, E, or X records.
  *=====================================*/
 INT
-aux_browse (NODE node, INT mode, BOOLEAN reuse)
+aux_browse (RECORD rec, INT mode, BOOLEAN reuse)
 {
 	UIWINDOW uiwin = main_win;
 	INT screen = AUX_SCREEN;
@@ -893,7 +893,7 @@ aux_browse (NODE node, INT mode, BOOLEAN reuse)
 	rect.bottom = lines;
 	rect.left = 1;
 	rect.right = MAINWIN_WIDTH-1;
-	show_aux(uiwin, node, mode, &rect,  &Scroll1, reuse);
+	show_aux(uiwin, rec, mode, &rect,  &Scroll1, reuse);
 	display_screen(screen);
 	return interact(uiwin, NULL, screen);
 }
@@ -2477,22 +2477,22 @@ show_record (UIWINDOW uiwin, STRING key, INT mode, LLRECT rect
 	INT hgt = rect->bottom - rect->top + 1;
 	INT width = rect->right - rect->left + 1;
 	if (key[0]=='I') {
-		NODE indi = key_to_indi(key);
-		if (indi)
-			show_indi(uiwin, indi, mode, rect, scroll, reuse);
-		return indi != NULL;
+		RECORD irec = key_to_irecord(key);
+		if (irec)
+			show_indi(uiwin, irec, mode, rect, scroll, reuse);
+		return irec != NULL;
 	} else if (key[0]=='F') {
-		NODE fam = key_to_fam(key);
-		if (fam)
-			show_fam(uiwin, fam, mode, row, hgt, width, scroll, reuse);
-		return fam != NULL;
+		RECORD frec = key_to_frecord(key);
+		if (frec)
+			show_fam(uiwin, frec, mode, row, hgt, width, scroll, reuse);
+		return frec != NULL;
 
 	} else {
 		/* could be S,E,X -- show_aux handles all of these */
-		NODE aux = qkey_to_type(key);
-		if (aux)
-			show_aux(uiwin, aux, mode, rect, scroll, reuse);
-		return aux != NULL;
+		RECORD rec = qkey_to_record(key);
+		if (rec)
+			show_aux(uiwin, rec, mode, rect, scroll, reuse);
+		return rec != NULL;
 	}
 }
 /*================================================================

@@ -101,9 +101,9 @@ enum { GDVW_NORMAL, GDVW_EXPANDED, GDVW_TEXT };
 	typedef struct canvasdata_s { LLRECT rect; INT scroll; void * param;
 		PEDLINE line; } *CANVASDATA;
 	/* functions */
-void pedigree_draw_ancestors(NODE indi, CANVASDATA canvasdata, BOOLEAN reuse);
-void pedigree_draw_descendants(NODE indi, CANVASDATA canvasdata, BOOLEAN reuse);
-void pedigree_draw_gedcom(NODE node, INT gdvw, CANVASDATA canvasdata, BOOLEAN reuse);
+void pedigree_draw_ancestors(RECORD rec, CANVASDATA canvasdata, BOOLEAN reuse);
+void pedigree_draw_descendants(RECORD rec, CANVASDATA canvasdata, BOOLEAN reuse);
+void pedigree_draw_gedcom(RECORD rec, INT gdvw, CANVASDATA canvasdata, BOOLEAN reuse);
 void pedigree_increase_generations(INT delta);
 void pedigree_toggle_mode(void);
 

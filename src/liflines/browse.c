@@ -93,7 +93,7 @@ static INT browse_fam(RECORD *prec1, RECORD *prec2, INDISEQ *pseq);
 static INT browse_indi_modes(RECORD *prec1, RECORD *prec2, INDISEQ *pseq
 	, INT indimode);
 static INT browse_pedigree(RECORD *prec1, RECORD *prec2, INDISEQ *pseq);
-static INT display_aux(NODE node, INT mode, BOOLEAN reuse);
+static INT display_aux(RECORD rec, INT mode, BOOLEAN reuse);
 static INT get_hist_count(struct hist * histp);
 static RECORD goto_fam_child(RECORD frec, int childno);
 static RECORD goto_indi_child(RECORD irec, int childno);
@@ -335,7 +335,7 @@ browse_indi_modes (RECORD *prec1, RECORD *prec2, INDISEQ *pseq, INT indimode)
 		}
 		history_record(current, &vhist);
 			/* display & get input, preserving INDI in cache */
-		display_indi(nztop(current), indimode, reuse);
+		display_indi(current, indimode, reuse);
 		c = interact_indi();
 		/* last keynum & mode, so can tell if changed */
 		nkeyp = nzkeynum(current);
@@ -636,13 +636,13 @@ reprocess_indi_cmd: /* so one command can forward to another */
  * Created: 2001/01/27, Perry Rapp
  *========================================*/
 static INT
-display_aux (NODE node, INT mode, BOOLEAN reuse)
+display_aux (RECORD rec, INT mode, BOOLEAN reuse)
 {
 	CACHEEL cel;
 	INT c;
-	cel = node_to_cacheel(node);
+	cel = node_to_cacheel(rec);
 	lock_cache(cel);
-	c = aux_browse(node, mode, reuse);
+	c = aux_browse(rec, mode, reuse);
 	unlock_cache(cel);
 	return c;
 }
@@ -681,7 +681,7 @@ browse_aux (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 		}
 		ntype = nztype(current);
 		history_record(current, &vhist);
-		c = display_aux(nztop(current), auxmode, reuse);
+		c = display_aux(current, auxmode, reuse);
 		/* last keynum & mode, so can tell if changed */
 		nkeyp = nzkeynum(current);
 		ntypep = nztype(current);
@@ -929,7 +929,7 @@ browse_fam (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 			show_reset_scroll();
 		}
 		history_record(current, &vhist);
-		display_fam(nztop(current), fammode, reuse);
+		display_fam(current, fammode, reuse);
 		c = interact_fam();
 		/* last keynum & mode, so can tell if changed */
 		nkeyp = nzkeynum(current);
