@@ -31,7 +31,7 @@ mkalldirs (STRING path) /* path with dirs to be made */
 	char *p = path;
 
 	for (i = 0, n = strlen(path); i < n; i++, p++)  {
-		if (*p != '/') continue;
+		if (!is_dir_sep(*p)) continue;
 		*p = 0;
 		if (exists(path) || llmkdir(path))  {
 			*p = '/';

@@ -10,6 +10,10 @@
 	Checked-in current warehouse code.
 	Back out accidentally checked-in code disabling signals.
 
+	stdlib/dirs.c: 
+	Propagate bugfix from btree/utils.c/mkalldirs
+	to stdlib/dirs.c/mkalldirs.
+
 2001-01-24 John Chandler <jchbn@cuvmb.columbia.edu>
 	* hdrs/gedcom.h, gedlib/gengedc.c, gedlib/name.c, gedlib/node.c,
 	  gedlib/refns.c:
