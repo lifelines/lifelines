@@ -7,7 +7,7 @@ AC_INIT(liflines/lbrowse.c)
 AC_PREREQ(2.13)
 AC_REVISION([for lifelines, built with autoconf] AC_ACVERSION)
 
-AM_INIT_AUTOMAKE(lifelines, 3.0.6-dev)
+AM_INIT_AUTOMAKE(lifelines, 3.0.6)
 AM_CONFIG_HEADER(config.h)
 
 AC_PREFIX_DEFAULT($HOME)
@@ -42,6 +42,31 @@ if test "${ac_cv_prog_gcc}" = "yes"; then
   dnl Add debugging as well
   CFLAGS="${CFLAGS} -g"
 fi
+
+# Shall we build the docs?
+AC_ARG_WITH(docs,
+    [  --with-docs          Skip building of the documentation. (useful if you don't have sgmltools installed)],
+    [with_docs=$withval],
+    [with_docs=yes]
+)
+
+docs_dirs="docs"
+if test "$with_docs" = "yes"
+then
+   	echo Looking for sgmltools
+	AC_PATH_PROG(SGMLTOOLS, sgmltools, FAIL)
+	if test "$SGMLTOOLS" = "FAIL"; then
+		AC_MSG_RESULT( ******************************************************************* )
+		AC_MSG_RESULT( *** Cannot find sgmltools to build docs. skipping building docs *** )
+		AC_MSG_RESULT( *** Visit http://sgmltools-lite.sourceforge.net and install it. *** )
+		AC_MSG_RESULT( ******************************************************************* )
+	       docs_dirs=""
+
+	fi
+fi
+
+AC_SUBST(docs_dirs)
+
 
 # Compile with profiling, to find bottlenecks
 AC_ARG_WITH(profiling,

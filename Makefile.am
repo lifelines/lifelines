@@ -1,7 +1,7 @@
 
 #AUTOMAKE_OPTIONS = no-dependencies
 
-SUBDIRS = arch btree gedlib interp stdlib tools liflines hdrs reports docs .
+SUBDIRS = arch btree gedlib interp stdlib tools liflines hdrs reports @docs_dirs@
 
 EXTRA_DIST = LICENSE ANNOUNCEMENT README.DEVELOPERS
 

@@ -1,3 +1,13 @@
+2001-02-25  Marc Nozell  <marc@nozell.com>
+	
+	* configure.in, docs/Makefile.am: Added building of documentation if
+	possible.  --with-docs=yes/no
+
+	* configure.in, lifelines.spec, hdrs/version.h: Changed version to
+	3.0.6dev from 3.0.6.  RPM doesn't like the hypen.
+
+	* lifelines.spec: include new tree.tex
+	
 2001-02-25 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/choose.c gedlib/indiseq.c gedlib/messages.c
