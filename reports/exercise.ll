@@ -1,6 +1,6 @@
 /*
  * @progname       exercise
- * @version        0.96 (2002/06/12)
+ * @version        0.97 (2002/06/14)
  * @author         Perry Rapp
  
  * @category       test
@@ -12,12 +12,12 @@
 Exercises some report language functions,
 and optionally does a gengedcomstrong dump of
 the first few of each type of record.
+May be used as a regression test.
 
-It has routines to exercise strings & dates.
+ - Tests string functions
+ - Tests date functions
 
 TODO: logic tests
-
-I run this report before checking in code changes.
 
 */
 
@@ -36,6 +36,52 @@ global(dbuse)
 global(testok)
 global(testfail)
 
+global(A)
+global(K)
+global(L)
+global(M)
+global(Z)
+global(Adia)
+global(Odia)
+global(Lstroke)
+
+proc setchars()
+{
+/* LAT. CAP. == LATIN CAPITAL LETTER */
+/* W/ == WITH */
+/*
+	set(A, "A")
+	set(K, "K")
+	set(L, "L")
+	set(M, "M")
+	set(Adia, unicode("C4")) /* utf8("C384") LAT. CAP. A W/ DIAERESIS */
+	set(Odia, unicode("D6")) /* utf8("C396") LAT. CAP. O W/ DIAERESIS */
+	set(Lstroke, unicode("0141")) /* utf8("C581") LAT. CAP. L W/ STROKE */
+*/
+}
+proc finnish()
+{
+/*
+	/* What to do about screwy MS-Windows locale names ? */
+	locale("fi_FI")
+	check_collate(A, Z)
+	check_collate(Z, Adia)
+	check_collate(Adia, Odia)
+*/
+}
+proc polish()
+{
+/*
+	locale("po_PO")
+	check_collate(L, Lstroke)
+	check_collate(Lstroke, M)
+*/
+}
+proc testCollate()
+{
+	call finnish()
+	call polish()
+}
 
 proc main()
 {
@@ -50,6 +96,7 @@ proc main()
 	call testStrings()
 	call testNums()
 	call testDates()
+	call testCollate()
 
 	if (dbuse) 
 	{
