@@ -1,5 +1,9 @@
 2000-11-11 Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* reports/alive.ll: Get this report working.  Fixed type problems
+	and handle empty place tags without crashing.  Add meta
+	information.
+	
 	* arch/scandir.c hdrs/arch.h hdrs/indiseq.h interp/builtin.c
 	liflines/askprogram.c liflines/newrecs.c: Fix some typos and types
 	as reported by Perry Rapp.

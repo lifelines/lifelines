@@ -1,4 +1,7 @@
 /*
+ * @progname    alive
+ * @description Finding people alive in a given year
+ * @output      Text
 
 alive - a LifeLines report program for finding live people
 
@@ -13,6 +16,14 @@ Version 3, 22 July 1994, by Jim Eggert, fixed another bug in estimate_byear,
 Version 4, 15 March 1995, by Frank Flaesland, added support for listing places
 Version 5, 17 March 1995, J.F.Chandler, modified to prune place list
 
+** SourceForge Versions:
+**
+** $Log$
+** Revision 1.2  2000/11/11 17:48:13  pere
+** Get this report working.  Fixed type problems and handle empty
+** place tags without crashing.  Add meta information.
+**
+**
 */
 
 global(byear)
@@ -88,6 +99,10 @@ proc print_places(person) {
     traverse (inode(person), node, level) {
 	if (eq(strcmp(tag(node), "PLAC"), 0)) {
 	    set(p, value(node))
+
+	    /* Skip empty places */
+	    if(eq(0, strlen(p))) { continue() }
+
 	    if(lookup(places_seen,p)) { continue() }
 	    insert(places_seen, p, 1)
 	    extractplaces(node, place_names, num_places)
@@ -101,7 +116,7 @@ proc print_places(person) {
 }
 
 proc print_header(year) {
-    set(current_year,d(year(gettoday())))
+    set(current_year,strtoint(year(gettoday())))
     if (ge(year,current_year)) { set(future,1) } else { set(future,0) }
 
   "________________________________________________________________________\n"
