@@ -83,6 +83,7 @@ typedef struct uiwindow_s {
 	struct uiwindow_s * parent; /* fixed or dynamic parent */
 	struct uiwindow_s * child;
 	BOOLEAN permsub;   /* TRUE if a fixed subwindow */
+	BOOLEAN dynamic;   /* TRUE means delete when finished */
 	INT rows;
 	INT cols;
 } * UIWINDOW;
@@ -90,6 +91,7 @@ typedef struct uiwindow_s {
 #define uiw_parent(x)   (x->parent)
 #define uiw_child(x)    (x->child)
 #define uiw_permsub(x)  (x->permsub)
+#define uiw_dynamic(x)  (x->dynamic)
 #define uiw_rows(x)     (x->rows)
 #define uiw_cols(x)     (x->cols)
 

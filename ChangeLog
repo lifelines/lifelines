@@ -4,6 +4,13 @@
 
 	Fixed sprintpic family to handle null args (occur with partial dates).
 
+	* ChangeLog hdrs/screen.h hdrs/win32/curses.h liflines/screen.c
+	liflines/show.c win32/mycurses.c:
+
+	Added delwin to win32 curses. Revised list show routines to get closer
+	to being able to use for full-screen list. Added digits to short lists.
+	Switched to creating & deleting popup list curses window on-the-fly.
+
 2002-01-22 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog hdrs/screen.h liflines/export.c liflines/llinesi.h

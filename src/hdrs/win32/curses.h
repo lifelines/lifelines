@@ -49,6 +49,7 @@ int box(WINDOW *wp, chtype x, chtype y);
 int cbreak();
 int clearok(WINDOW *wp, int okay);
 int crmode();
+int delwin(WINDOW *wp);
 int echo();
 int endwin();
 int mvwaddch(WINDOW *wp, int x, int y, chtype ch);

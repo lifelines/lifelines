@@ -267,8 +267,8 @@ show_indi_vitals (UIWINDOW uiwin, NODE pers, LLRECT rect
 	INT overflow;
 	WINDOW * win = uiw_win(uiwin);
 	INT row = rect->top;
-	INT width = rect->right - rect->left;
-	INT hgt = rect->bottom - rect->top;
+	INT width = rect->right - rect->left + 1;
+	INT hgt = rect->bottom - rect->top + 1;
 
 	badkeylist[0] = '\0';
 	listbadkeys = 1;
@@ -276,7 +276,7 @@ show_indi_vitals (UIWINDOW uiwin, NODE pers, LLRECT rect
 	if (!reuse)
 		init_display_indi(pers, width);
 	for (i = 0; i < hgt; i++) {
-		clear_hseg(win, row+i, 1, ll_cols-2);
+		clear_hseg(win, row+i, rect->left, rect->right);
 	}
 	if (*scroll) {
 		if (*scroll > Solen + 5 - hgt)

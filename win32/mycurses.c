@@ -160,6 +160,12 @@ WINDOW  *newwin(int nlines, int ncols, int begy, int begx)
 	return(wp);
 }
 
+int delwin(WINDOW *wp)
+{
+	free(wp);
+	return(0);
+}
+
 WINDOW  *subwin(WINDOW *wp, int nlines, int ncols, int begy, int begx)
 {
 	WINDOW *swp;
