@@ -4,6 +4,9 @@
 # To generate RPMs, place the tar.gz in /usr/src/packages/SOURCES/ and
 # (or /usr/src/redhat/SOURCES as appropriate)
 # then "rpm -ba lifelines.spec"
+# or on newer systems, "rpmbuild -ba lifelines.spec"
+#
+# Add comment to top of comments at bottom if you revise this file.
 #
 
 %define lifelines_version       3.0.40
@@ -78,6 +81,8 @@ install -m 644 docs/llines.1 $RPM_BUILD_ROOT/usr/local/man/man1/llines.1
 /usr/local/man/man1/llines.1
 
 %changelog
+* Sun Jan 30 2005 Perry Rapp
+- Add comment about using rpmbuild on newer systems, and instruction about adding comments down here.
 * Tue May 06 2003 Perry Rapp
 - Add btedit.1 (& alphabetize man pages)
 * Mon May 05 2003 Perry Rapp
