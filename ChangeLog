@@ -12,6 +12,10 @@
 	Building release 2.0.13.
 	(exercise.ll wasn't in reports/Makefile.am)
 
+	* .linesrc ChangeLog lines.cfg
+
+	Added ForceScreenErase to prototype config files.
+
 2002-05-25 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog btree/opnbtree.c hdrs/menuitem.h liflines/lbrowse.c
