@@ -1,3 +1,9 @@
+2001-02-01 Perry Rapp <puddle@users.sourceforge.net>
+
+	* liflines/pedigree.c:
+	Fix ancestor/descendant tree leaks found by Petter Reinholdtsen.
+	Added comment note on possible optimization to show_ancestors.
+
 2001-01-31 Perry Rapp <puddle@users.sourceforge.net>
 
 	* liflines/browse.c liflines/llinesi.h liflines/menuitem.c
