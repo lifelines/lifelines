@@ -2,6 +2,11 @@ LifeLines Source Release, Version 3.0.12
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
+New features added in 3.0.12.post
+============================
+
+- Arrow keys, page keys, home/end keys supported in list browse.
+
 New Features Added in 3.0.11
 ============================
 

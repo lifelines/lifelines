@@ -11,10 +11,14 @@
 
 	* ChangeLog hdrs/menuitem.h hdrs/version.h hdrs/win32/curses.h
 	liflines/lbrowse.c liflines/screen.c win32/mycurses.c
-	win32/msvc6/llines/llines.rc win32/msvc6/llines/llinesprj.dsp:
+	win32/msvc6/llines/llines.rc:
 
 	Implement arrow, page, home/end keys in win32 curses emulation.
 	Add support for home/end in list browse.
+
+	* ChangeLog NEWS README.INTERNATIONAL:
+
+	Documenting.
 
 2002-05-13 Perry Rapp <puddle@users.sourceforge.net>
 

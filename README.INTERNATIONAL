@@ -11,7 +11,7 @@ Versions under private development:
 If you would like to volunteer to help with a new or existing
 translation, please contact the Free Translation Project
      http://www.iro.montreal.ca/contrib/po/HTML
-except for the de, fr, sv translations, please send email to
+except for the de & fr translations, for which send email to
 the long-running lifelines mailing list, LINES-L, which is
 explained at:
      http://www.rootsweb.com/~nozell/lines-l
@@ -41,9 +41,18 @@ Issues for translators:
 
   The small menus at the bottom of browse screens (person browse,
   family browse, tandem browses, other browse, but not list browse) 
-  draw their menu assignment letters from the actual text, so that they
-  may be internationalized. Also, the column widths of these are figured
+  draw their menu assignment letters from the actual text, so that the
+  the letter codes may be localized. Note that you must be familiar with
+  the lifelines menu screens to localize these letters; if not, simply
+  leave the leading letter codes as they are, and localize the subsequent
+  explanatory test. Eg, for "e  Edit top person", leave the leading e
+  as it is, unless you have worked out an entire set of localized letters
+  for this menu (this particular menu item is used in both the tandem
+  person menu and the tandem family menu).
+  The column widths of these flexible menu items are also figured
   dynamically from the width of the widest menu item.
+  NB: These texts are all drawn from menuitem.c, whereas the fixed menu
+  texts are all drawn from messages.c.
 
  Months:
   Month short & long names are explicitly in the translations, rather
