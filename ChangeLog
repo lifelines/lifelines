@@ -20,6 +20,10 @@
 	Implement report functions utf8() and setlocale().
 	Put some collation tests into exercise.ll.
 
+	* ChangeLog hdrs/llnls.h:
+
+	Define _pl if not ENABLE_NLS.
+
 2002-06-26 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog po/Makevars po/de.po po/el.po po/it.po po/sv.po:

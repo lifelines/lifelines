@@ -67,7 +67,7 @@
 #define N_(String) (String)
 #define textdomain(Domain)
 #define bindtextdomain(Package, Directory)
-#define ngettext(Singular, Plural, Num) (Num>1 ? Plural : Singular)
+#define _pl(Singular, Plural, Num) (Num > 1 ? Plural : Singular)
 
 #endif /* ENABLE_NLS */
 
