@@ -229,6 +229,7 @@ static void switch_to_uiwin(UIWINDOW uiwin);
 static void test_locale_name(void);
 #endif
 static void touch_all(BOOLEAN includeCurrent);
+static INT translate_control_key(INT c);
 static INT translate_hdware_key(INT c);
 static void uicolor(UIWINDOW, char ch);
 static void uierase(UIWINDOW uiwin);
@@ -905,7 +906,7 @@ list_browse (INDISEQ seq,
 	if (cur_screen != LIST_SCREEN) paint_list_screen();
 	show_big_list(seq, top, *cur, mark);
 	display_screen(LIST_SCREEN);
-	return interact(main_win, "jkeimdtbanxq", -1);
+	return interact(main_win, "jkeimdtbanx$^fbq", -1);
 }
 /*======================================
  * ask_for_db_filename -- Ask user for lifelines database directory
@@ -1178,6 +1179,21 @@ handle_list_cmds (listdisp * ld, INT code)
 				ld->top = ld->cur + 1 - rows;
 		}
 		return TRUE; /* handled */
+	case CMD_KY_PGDN:
+		if (ld->top + rows < ld->listlen) {
+			ld->cur += rows;
+			if (ld->cur > ld->listlen - 1)
+				ld->cur = ld->listlen - 1;
+			ld->top += rows;
+		}
+		return TRUE; /* handled */
+	case '$': /* jump to end of list */
+	case CMD_KY_END:
+		ld->top = ld->listlen - rows;
+		if (ld->top < 0)
+			ld->top = 0;
+		ld->cur = ld->listlen-1;
+		return TRUE; /* handled */
 	case 'k': /* previous item */
 	case CMD_KY_UP:
 		if (ld->cur > 0) {
@@ -1185,6 +1201,19 @@ handle_list_cmds (listdisp * ld, INT code)
 			if (ld->cur < ld->top)
 				ld->top = ld->cur;
 		}
+		return TRUE; /* handled */
+	case CMD_KY_PGUP:
+		if (ld->top >= rows) {
+			ld->cur -= rows;
+			ld->top -= rows;
+		} else {
+			ld->cur -= ld->top;
+			ld->top -= ld->top;
+		}
+		return TRUE; /* handled */
+	case '^': /* jump to top of list */
+	case CMD_KY_HOME:
+		ld->top = ld->cur = 0;
 		return TRUE; /* handled */
 	case '(': /* scroll detail area up */
 		if (ld->details_scroll)
@@ -1340,10 +1369,10 @@ choose_one_or_list_from_indiseq (STRING ttl, INDISEQ seq, BOOLEAN multi)
 	/* TO DO: connect this to menuitem system */
 	if (multi) {
 		menu = "Commands:  j Move down   k Move up  d Delete   i Select   q Quit";
-		choices = "jkiq123456789()[]";
+		choices = "jkiq123456789()[]$^";
 	} else {
 		menu = "Commands:   j Move down     k Move up    i Select     q Quit";
-		choices = "jkdiq123456789()[]";
+		choices = "jkdiq123456789()[]$^";
 	}
 
 resize_win: /* we come back here if we resize the window */
@@ -1391,6 +1420,7 @@ resize_win: /* we come back here if we resize the window */
 				if (ld.cur < ld.top) ld.top = ld.cur;
 				break;
 			case 'i':
+			case CMD_KY_ENTER:
 				done=TRUE;
 				/* ld.cur points to currently selected */
 				break;
@@ -2011,9 +2041,28 @@ translate_hdware_key (INT c)
 		, { KEY_PPAGE, CMD_KY_PGUP }
 		, { KEY_HOME, CMD_KY_HOME }
 		, { KEY_END, CMD_KY_END }
+		, { KEY_ENTER, CMD_KY_ENTER }
 	};
 	int i;
-	for (i=0; i<sizeof(hdkey)/sizeof(hdkey[0]); ++i) {
+	for (i=0; i<ARRSIZE(hdkey); ++i) {
+		if (c == hdkey[i].key)
+			return hdkey[i].cmd;
+	}
+	return CMD_NONE;
+}
+/*===============================
+ * translate_control_key -- 
+ *  translate control keys into menuitem.h constant
+ *=============================*/
+static INT
+translate_control_key (INT c)
+{
+	static struct hdkeycvt hdkey[] = {
+		{ '\r', CMD_KY_ENTER } /* Win32 */
+		, { '\n', CMD_KY_ENTER } /* UNIX */
+	};
+	int i;
+	for (i=0; i<ARRSIZE(hdkey); ++i) {
 		if (c == hdkey[i].key)
 			return hdkey[i].cmd;
 	}
@@ -2042,6 +2091,9 @@ interact (UIWINDOW uiwin, STRING str, INT screen)
 				status_showing[0] = 0;
 				place_std_msg();
 			}
+		}
+		if (c<0x20) {
+			return translate_control_key(c);
 		}
 		if (has_key(c)) {
 			return translate_hdware_key(c);
@@ -2409,7 +2461,7 @@ array_interact (STRING ttl, INT len, STRING *strings
 	WINDOW *win=0;
 	INT row, done;
 	char fulltitle[128];
-	STRING responses = len<10 ? "jkiq123456789[]()" : "jkiq[]()";
+	STRING responses = len<10 ? "jkiq123456789[]()$^" : "jkiq[]()$^";
 	STRING promptline = selectable ? _(qSchlist ): _(qSvwlist);
 	listdisp ld; /* structure used in resizable list displays */
 

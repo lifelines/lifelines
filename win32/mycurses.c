@@ -30,8 +30,9 @@
 #include <curses.h>
 
 /* fullscreen==1 to use screen buffer size instead of window size */
-static void mycur_init(int fullscreen);
-static int mycur_getc();
+static int mycur_init(int fullscreen);
+static int mycur_getc(void);
+static void adjust_linescols(void);
 
 
 /* Windows Console */
@@ -127,7 +128,8 @@ WINDOW	*initscr()
 	 	errfp = fopen("mycurses.err", "w");
 #endif
 
-	mycur_init(1);
+	if (!mycur_init(1))
+		return NULL;
 	if(curscr == NULL)
 		{
 		curscr = newwin(LINES, COLS, 0, 0);
@@ -598,8 +600,8 @@ int wgetnstr(WINDOW *wp, char *cp, int n)
 }
 
 /* Win32 Stuff */
-
-static void mycur_init(int fullscreen)
+/* returns 0 if fails */
+static int mycur_init(int fullscreen)
 {
 	COORD cStartPos;
 	DWORD dwLen;
@@ -622,74 +624,83 @@ static void mycur_init(int fullscreen)
 		/* set up console I/O */
 		first = FALSE;
 		hStdin = GetStdHandle((DWORD)STD_INPUT_HANDLE);
-		if(hStdin != INVALID_HANDLE_VALUE)
+		if(hStdin == INVALID_HANDLE_VALUE)
 		{
-			GetConsoleMode(hStdin, &dwModeIn);
-			dwModeIn &= ~(ENABLE_LINE_INPUT
-				| ENABLE_ECHO_INPUT
-				| ENABLE_MOUSE_INPUT
-				| ENABLE_WINDOW_INPUT);
-			dwModeIn |=	ENABLE_PROCESSED_INPUT;
-			SetConsoleMode(hStdin, dwModeIn);
+			printf("Error opening console window for input\n");
+			return 0;
 		}
-		/* else fprintf(errfp, "GetStdHandle() failed.\n"); */
+		GetConsoleMode(hStdin, &dwModeIn);
+		dwModeIn &= ~(ENABLE_LINE_INPUT
+			| ENABLE_ECHO_INPUT
+			| ENABLE_MOUSE_INPUT
+			| ENABLE_WINDOW_INPUT);
+		dwModeIn |=	ENABLE_PROCESSED_INPUT;
+		SetConsoleMode(hStdin, dwModeIn);
 
 		hStdout = GetStdHandle((DWORD)STD_OUTPUT_HANDLE);
-		if(hStdout != INVALID_HANDLE_VALUE)
+		if (hStdout == INVALID_HANDLE_VALUE)
 		{
-/*			{ 
-				COORD coord = { 100, 30 };
-				if (!SetConsoleScreenBufferSize(hStdout, coord))
-				{
-					dwLen=GetLastError();
-				}
-			}
-			*/
-			GetConsoleMode(hStdout, &dwModeOut);
-			/* SetConsoleMode(hStdout, dwModeOut); */
-			GetConsoleScreenBufferInfo(hStdout, &sScreenInfo);
+			printf("Error opening console window for input\n");
+			return 0;
+		}
+
+		GetConsoleScreenBufferInfo(hStdout, &sScreenInfo);
 #ifdef DEBUG
-			fprintf(errfp, "Screen buffer: (%d,%d) pos=(%d,%d)\n",
-				sScreenInfo.dwSize.X, sScreenInfo.dwSize.Y,
-				sScreenInfo.dwCursorPosition.X, sScreenInfo.dwCursorPosition.Y);
-			fprintf(errfp, "Window: (%d-%d,%d-%d) max=(%d,%d)\n",
-				sScreenInfo.srWindow.Left, sScreenInfo.srWindow.Right,
-				sScreenInfo.srWindow.Top, sScreenInfo.srWindow.Bottom,
-				sScreenInfo.dwMaximumWindowSize.X,
-				sScreenInfo.dwMaximumWindowSize.Y);
+		fprintf(errfp, "Screen buffer: (%d,%d) pos=(%d,%d)\n",
+			sScreenInfo.dwSize.X, sScreenInfo.dwSize.Y,
+			sScreenInfo.dwCursorPosition.X, sScreenInfo.dwCursorPosition.Y);
+		fprintf(errfp, "Window: (%d-%d,%d-%d) max=(%d,%d)\n",
+			sScreenInfo.srWindow.Left, sScreenInfo.srWindow.Right,
+			sScreenInfo.srWindow.Top, sScreenInfo.srWindow.Bottom,
+			sScreenInfo.dwMaximumWindowSize.X,
+			sScreenInfo.dwMaximumWindowSize.Y);
 #endif
-			if (sScreenInfo.srWindow.Left || sScreenInfo.srWindow.Top)
-			{
-				/* WARNING: this code will not work correctly with offset window */
-			}
-			cStartPos.X = 0;
-			cStartPos.Y = 0;
-			FillConsoleOutputCharacter(hStdout, (TCHAR)' ',
+		if (sScreenInfo.srWindow.Left || sScreenInfo.srWindow.Top)
+		{
+			/* WARNING: this code will not work correctly with offset window */
+		}
+		cStartPos.X = 0;
+		cStartPos.Y = 0;
+		/* clear console (fill with blanks) */
+		FillConsoleOutputCharacter(hStdout, (TCHAR)' ',
 			(DWORD)(sScreenInfo.dwSize.X*sScreenInfo.dwSize.Y),
 			cStartPos, &dwLen);
-			if (fullscreen)
-			{
-				LINES = sScreenInfo.dwSize.Y;
-				COLS = sScreenInfo.dwSize.X;
-			}
-			else
-			{
-				LINES = sScreenInfo.srWindow.Bottom;
-				COLS = sScreenInfo.srWindow.Right;
-			}
-			if(LINES > CUR_MAXLINES)
-				LINES = CUR_MAXLINES;
-			if(COLS > CUR_MAXCOLS)
-				COLS = CUR_MAXCOLS;
+		/* save size into curses globals LINES & COLS */
+		if (fullscreen)
+		{
+			LINES = sScreenInfo.dwSize.Y;
+			COLS = sScreenInfo.dwSize.X;
 		}
-	/* else fprintf(errfp, "GetStdHandle() failed.\n"); */
+		else
+		{
+			LINES = sScreenInfo.srWindow.Bottom;
+			COLS = sScreenInfo.srWindow.Right;
+		}
+		adjust_linescols();
 	}
+	return 1;
 }
 
+static void adjust_linescols()
+{
+	if(LINES > CUR_MAXLINES)
+		LINES = CUR_MAXLINES;
+	if(COLS > CUR_MAXCOLS)
+		COLS = CUR_MAXCOLS;
+}
+
+/* helper structure for key table in mycur_getc */
 struct keycvt { int win; int curs; };
 
-static int mycur_getc()
+/*
+ In May of 2002 Perry changed from ReadConsole to ReadConsoleInput
+ in order to be able to get arrow keys etc
+*/
+
+static int mycur_getc(void)
 {
+	/* table of curses names for special keys */
+	/* NB: These are not single-byte constants, so return value must be int */
 	static struct keycvt keymap[] = {
 		{ VK_DOWN, KEY_DOWN }
 		, { VK_UP, KEY_UP }
@@ -697,27 +708,73 @@ static int mycur_getc()
 		, { VK_PRIOR, KEY_PPAGE }
 		, { VK_HOME, KEY_HOME }
 		, { VK_END, KEY_END }
+		, { VK_RETURN, KEY_ENTER }
 	};
-	if(hStdin == INVALID_HANDLE_VALUE)
+	if (hStdin == INVALID_HANDLE_VALUE)
 		return getchar();
 
 	while (1)
 	{
 		INPUT_RECORD inrec;
-		int nrecs=0, ch, i;
-		FlushConsoleInputBuffer(hStdin);
-		if (!ReadConsoleInput(hStdin, &inrec, 1, &nrecs))
+		int nrecs=0, i;
+
+		if (WaitForSingleObject(hStdin,INFINITE)!=WAIT_OBJECT_0)
 			return EOF;
-		if (inrec.EventType != KEY_EVENT)
-			continue;
-		if (!inrec.Event.KeyEvent.bKeyDown)
-			continue;
-		if ((ch = inrec.Event.KeyEvent.uChar.AsciiChar) > 0)
-			return ch;
-		for (i=0; i<sizeof(keymap)/sizeof(keymap[0]); ++i)
+		PeekConsoleInput(hStdin, &inrec, 1, &nrecs);
+		if (inrec.EventType == WINDOW_BUFFER_SIZE_EVENT)
 		{
-			if (inrec.Event.KeyEvent.wVirtualKeyCode == keymap[i].win)
-				return keymap[i].curs;
+			if (ReadConsoleInput(hStdin, &inrec, 1, &nrecs))
+			{
+				int width= inrec.Event.WindowBufferSizeEvent.dwSize.X;
+				int height = inrec.Event.WindowBufferSizeEvent.dwSize.Y;
+				/* 
+				Console window resized
+				but I don't know how to report this via curses
+				*/
+				LINES = height;
+				COLS = width;
+				adjust_linescols();
+			}
+		}
+		else if (inrec.EventType == KEY_EVENT 
+			&& inrec.Event.KeyEvent.bKeyDown)
+		{
+			/*
+			Have to send normal keys & alt-down keys thru ReadConsole
+			so that alt escapes for non-ASCII keys work
+			2002.05.25
+			There is still a bug here -- if the user pressed alt, but
+			doesn't follow it up with a key-generating sequence (eg, the
+			user pressed alt-tab), we fall into here, and will ignore
+			arrow & page keys until the user presses a simple key.
+			*/
+			if (inrec.Event.KeyEvent.uChar.AsciiChar != '\0'
+				|| inrec.Event.KeyEvent.dwControlKeyState & LEFT_ALT_PRESSED
+				|| inrec.Event.KeyEvent.dwControlKeyState & RIGHT_ALT_PRESSED
+				)
+			{
+				int ch=0;
+				ReadConsole(hStdin, &ch, 1, &nrecs, NULL);
+				return ch; /* return normal keys */
+			}
+			else
+			{
+				/* To get special keys, have to use ReadConsoleInput */
+				ReadConsoleInput(hStdin, &inrec, 1, &nrecs);
+				/* check if it is a hardware key we handle */
+				/* if so, map it to curses constant */
+				for (i=0; i<sizeof(keymap)/sizeof(keymap[0]); ++i)
+				{
+					if (inrec.Event.KeyEvent.wVirtualKeyCode == keymap[i].win)
+						return keymap[i].curs;
+				}
+			}
+		}
+		else
+		{
+			/* either key up, or mouse or something else we don't care about */
+			/* read it but ignore it */
+			ReadConsoleInput(hStdin, &inrec, 1, &nrecs);
 		}
 	}
 }

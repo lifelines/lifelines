@@ -78,7 +78,7 @@ browse_list (NODE *pindi1,
 
 	while (TRUE) {
 		switch (c = list_browse(seq, top, &cur, mark, &indi)) {
-		case 'j':	/* Move down line */
+		case 'j':        /* Move down line */
 		case CMD_KY_DN:
 			if (cur >= len - 1) {
 				message(_(qSlstbot));
@@ -95,18 +95,22 @@ browse_list (NODE *pindi1,
 				break;
 			}
 			cur += VIEWABLE;
-			if (cur >= len-1)
+			if (cur > len-1)
 				cur = len-1;
 			top += VIEWABLE;
 			element_indiseq(seq, cur, &key, &name);
 			indi = key_to_indi(key);
 			break;
-		case CMD_KY_HOME:
-			top = cur = 0;
+		case '$':        /* jump to end of list */
+		case CMD_KY_END:
+			top = len - VIEWABLE;
+			if (top < 0)
+				top = 0;
+			cur = len-1;
 			element_indiseq(seq, cur, &key, &name);
 			indi = key_to_indi(key);
 			break;
-		case 'k':	/* Move up line */
+		case 'k':        /* Move up line */
 		case CMD_KY_UP:
 			if (cur <= 0) {
 				message(_(qSlsttop));
@@ -132,15 +136,13 @@ browse_list (NODE *pindi1,
 			element_indiseq(seq, cur, &key, &name);
 			indi = key_to_indi(key);
 			break;
-		case CMD_KY_END:
-			top = len - VIEWABLE;
-			if (top < 0)
-				top = 0;
-			cur = len-1;
+		case '^':        /* jump to top of list */
+		case CMD_KY_HOME:
+			top = cur = 0;
 			element_indiseq(seq, cur, &key, &name);
 			indi = key_to_indi(key);
 			break;
-		case 'e':	/* Edit current person */
+		case 'e':        /* Edit current person */
 			indi = edit_indi(indi);
 	    		if ((len = length_indiseq(seq)) <= 0) {
 				remove_browse_list(lname, seq);
@@ -150,16 +152,17 @@ browse_list (NODE *pindi1,
 			}
 			if (cur >= len) cur = len - 1;
 			break;
-		case 'i':	/* Browse current person */
+		case 'i':        /* Browse current person */
+		case CMD_KY_ENTER:
 			*pindi1 = indi;
 			if (current_seq)
 				remove_indiseq(current_seq);
 			current_seq = NULL;
 			return BROWSE_INDI;
-		case 'm':	/* Mark current person */
+		case 'm':        /* Mark current person */
 			mark = (cur == mark) ? -1: cur;
 			break;
-		case 'd':	/* Delete person from list */
+		case 'd':        /* Delete person from list */
 			if (len <= 1) {
 				if (current_seq)
 					remove_indiseq(current_seq);
@@ -176,7 +179,7 @@ browse_list (NODE *pindi1,
 				indi = key_to_indi(key);
 			if (cur < top) top = cur;
 			break;
-		case 't':	/* Enter tandem mode */
+		case 't':        /* Enter tandem mode */
 			if (mark == -1 || cur == mark) {
 				message(_(qSmrkper));
 				break;
@@ -186,7 +189,7 @@ browse_list (NODE *pindi1,
 			*pindi1 = key_to_indi(key);
 			current_seq = NULL;
 			return BROWSE_TAND;
-		case 'b':	/* Browse new persons */
+		case 'b':        /* Browse new persons */
 			newseq = (INDISEQ) ask_for_indiseq(_(qSidplst), 'I', &rc);
 			if (!newseq) break;
 			current_seq = seq = newseq;
@@ -201,7 +204,7 @@ browse_list (NODE *pindi1,
 			top = cur = 0;
 			mark = -1;
 			break;
-		case 'a':	/* Add persons to current list */
+		case 'a':        /* Add persons to current list */
 			newseq = (INDISEQ) ask_for_indiseq(_(qSlstpad), 'I', &rc);
 			if (!newseq) {
 				message(_(qSlstnad));
@@ -219,7 +222,7 @@ browse_list (NODE *pindi1,
 			remove_indiseq(newseq);
 			message(_(qSlstnew));
 			break;
-		case 'n':	/* Name this list */
+		case 'n':        /* Name this list */
 			newname = ask_for_string(_(qSlstwht), _(qSasknam));
 			if (!newname || *newname == 0)
 				message(_(qSlstnon));
@@ -229,7 +232,7 @@ browse_list (NODE *pindi1,
 				msg_info(_(qSlstnam), newname);
 			}
 			break;
-		case 'x':	/* Swap current with marked */
+		case 'x':        /* Swap current with marked */
 			if (mark == -1) break;
 			tmp = mark;
 			mark = cur;
@@ -239,7 +242,7 @@ browse_list (NODE *pindi1,
 			if (cur < top) top = cur;
 			if (cur > top + VIEWABLE - 1) top = cur;
 			break;
-		case 'q':	/* Return to main menu */
+		case 'q':        /* Return to main menu */
 			current_seq = NULL;
 			return BROWSE_QUIT;
 		}

@@ -253,7 +253,8 @@ main (INT argc, char **argv)
 		set_signals();
 
 	/* Initialize Curses UI */
-	initscr();
+	if (!initscr())
+		goto finish;
 	platform_init();
 	noecho();
 	keypad(0, 1);

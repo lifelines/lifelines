@@ -107,6 +107,8 @@ validate_keyfile2 (KEYFILE2 * kfile2)
  *  cflag: [in] create btree if no exist?
  *  writ:  [in] requesting write access? 1=yes, 2=requiring 
  *  immut: [in,out] user can/will not change anything including keyfile
+ * If this succeeds, it sets readonly & immutable flags in btree structure
+ *  as appropriate (eg, if keyfile couldn't be opened in readwrite mode)
  *==========================================*/
 BTREE
 openbtree (STRING dir, BOOLEAN cflag, INT writ, BOOLEAN immut)
@@ -195,13 +197,14 @@ immutretry:
 		goto failopenbtree;
 	}
 /* Read & validate KEYFILE2 - if not present, we'll add it below */
+	/* see btree.h for explanation of KEYFILE2 */
 	if (fread(&kfile2, sizeof(kfile2), 1, fp) == 1) {
 		if (!validate_keyfile2(&kfile2))
 			goto failopenbtree; /* validate set bterrno */
 		keyed2=TRUE;
 	}
 	if (writ < 2 && kfile1.k_ostat == -2)
-		immut = TRUE;
+		immut = TRUE; /* keyfile contains the flag for immutable access only */
 	/* if not immutable, handle reader/writer protection update */
 	if (!immut) {
 		if (kfile1.k_ostat == -1) {
