@@ -188,7 +188,7 @@ proc main ()
     list(alist)
     enqueue(ilist, indi)
     enqueue(alist, 1)
-    while(indi, dequeue(ilist)) {
+    while (indi, dequeue(ilist)) {
       set(ahnen, dequeue(alist))
       d(ahnen) ". " name(indi) nl()
       if (e, birth(indi)) { " b. " long(e) nl() }
@@ -417,8 +417,8 @@ default form of a person's name. The <function>nl</function> function returns a 
 The next two lines:
 
 <programlisting>
-if(e, birth(indi)) { " b. " long(e) nl() }
-if(e, death(indi)) { " d. " long(e) nl() }
+if (e, birth(indi)) { " b. " long(e) nl() }
+if (e, death(indi)) { " d. " long(e) nl() }
 </programlisting>
 
 write out basic birth and death information about a person. These
@@ -506,7 +506,7 @@ Procedures and Functions
 
 <para>
 
-A <application>LifeLines</application> program is made up of one or more <type>procedures</type> and <type>functions</type>. A <type>procedure</type> has format:<synopsis>proc name ( params ) { statements }</synopsis>
+A <application>LifeLines</application> program is made up of one or more <type>procedures</type> and <type>functions</type>. A <type>procedure</type> has format:<synopsis>proc name(params) { statements }</synopsis>
 
 </para>
 
@@ -526,7 +526,7 @@ the first <type>statement</type> in the <type>procedure</type> named <literal>ma
 
 <para>
 
-A function has format:<synopsis>func name ( params ) { statements }</synopsis>
+A function has format:<synopsis>func name(params) { statements }</synopsis>
 
 </para>
 
@@ -635,7 +635,7 @@ Statements
 
      <synopsis>while ([varb,] expr ) { statements }</synopsis>
 
-     <synopsis>call name ( args )</synopsis>
+     <synopsis>call name(args)</synopsis>
 
 </para>
 
@@ -660,7 +660,7 @@ single <type>expression</type>, it is simply evaluated. If the <type>conditional
 Note that <type>if</type> treats null strings as false, but empty strings as true. This has the benefit that
 
 <programlisting>
-if(birth(indi))
+if (birth(indi))
 </programlisting>
 
 will return true if there is a BIRT record, even if it is empty, but will return false if there is no BIRT record
@@ -1029,11 +1029,9 @@ Arithmetic and Logic Functions
 	    <funcsynopsis>
 	      <funcprototype>
 		<funcdef>INT <function>add</function></funcdef>
-	      <paramdef>
-		<parameter>INT</parameter>,
+	      <paramdef><parameter>INT</parameter>,
 		<parameter>INT</parameter>
-		<parameter>...</parameter>
-	      </paramdef>
+		<parameter>...</parameter></paramdef>
 	      </funcprototype>
 	    </funcsynopsis>
 	  </glossterm>
@@ -1049,10 +1047,8 @@ addition - two to 32 arguments
 	   
 <glossentry><glossterm><funcsynopsis><funcprototype>
     <funcdef>INT <function>sub</function></funcdef>
-    <paramdef>
-    <parameter>INT</parameter>,
-    <parameter>INT</parameter>
-    </paramdef>
+    <paramdef><parameter>INT</parameter>,
+    <parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1064,11 +1060,10 @@ subtraction
 
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INT <function>mul</function></funcdef>
-<paramdef>
-<parameter>INT</parameter>,
+<paramdef><parameter>INT</parameter>,
 <parameter>INT</parameter>
-<parameter>...</parameter>
-</paramdef></funcprototype></funcsynopsis></glossterm><glossdef>
+<parameter>...</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 
@@ -1079,10 +1074,9 @@ multiplication - two to 32 arguments
 
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INT <function>div</function></funcdef>
-<paramdef>
-<parameter>INT</parameter>,
-<parameter>INT</parameter>
-</paramdef></funcprototype></funcsynopsis></glossterm><glossdef>
+<paramdef><parameter>INT</parameter>,
+<parameter>INT</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 
@@ -1093,10 +1087,9 @@ division
 
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INT <function>mod</function></funcdef>
-<paramdef>
-<parameter>INT</parameter>,
-<parameter>INT</parameter>
-</paramdef></funcprototype></funcsynopsis></glossterm><glossdef>
+<paramdef><parameter>INT</parameter>,
+<parameter>INT</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 
@@ -1107,10 +1100,8 @@ modulus (remainder)
 
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INT <function>exp</function></funcdef>
-<paramdef>
-<parameter>INT</parameter>,
-<parameter>INT</parameter>
-</paramdef>
+<paramdef><parameter>INT</parameter>,
+<parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1122,9 +1113,7 @@ exponentiation
 
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INT <function>neg</function></funcdef>
-<paramdef>
-<parameter>INT</parameter>
-</paramdef>
+<paramdef><parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1136,9 +1125,7 @@ integer negation
 
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>incr</function></funcdef>
-<paramdef>
-<parameter>INT_V</parameter>
-</paramdef>
+<paramdef><parameter>INT_V</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1150,9 +1137,7 @@ increment variable by one
 
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>decr</function></funcdef>
-<paramdef>
-<parameter>INT_V</parameter>
-</paramdef>
+<paramdef><parameter>INT_V</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1164,11 +1149,9 @@ decrement variable by one
 
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>BOOL <function>and</function></funcdef>
-<paramdef>
-<parameter>BOOL</parameter>,
+<paramdef><parameter>BOOL</parameter>,
 <parameter>BOOL</parameter>
-<parameter>...</parameter>
-</paramdef>
+<parameter>...</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1180,11 +1163,9 @@ logical and - two to 32 arguments
 
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>BOOL <function>or</function></funcdef>
-<paramdef>
-<parameter>BOOL</parameter>,
+<paramdef><parameter>BOOL</parameter>,
 <parameter>BOOL</parameter>
-<parameter>...</parameter>
-</paramdef>
+<parameter>...</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1196,9 +1177,7 @@ logical or - two to 32 arguments
 
 <glossentry><glossterm> <funcsynopsis><funcprototype>
 <funcdef>BOOL <function>not</function></funcdef>
-<paramdef>
-<parameter>BOOL</parameter>
-</paramdef>
+<paramdef><parameter>BOOL</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1210,10 +1189,8 @@ logical not
 
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>BOOL <function>eq</function></funcdef>
-<paramdef>
-<parameter>ANY</parameter>,
-<parameter>ANY</parameter>
-</paramdef>
+<paramdef><parameter>ANY</parameter>,
+<parameter>ANY</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1225,10 +1202,8 @@ equality (not strings)
 
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>BOOL <function>ne</function></funcdef>
-<paramdef>
-<parameter>ANY</parameter>,
-<parameter>ANY</parameter>
-</paramdef>
+<paramdef><parameter>ANY</parameter>,
+<parameter>ANY</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1240,10 +1215,8 @@ non-equality
 
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>BOOL <function>lt</function></funcdef>
-<paramdef>
-<parameter>ANY</parameter>,
-<parameter>ANY</parameter>
-</paramdef>
+<paramdef><parameter>ANY</parameter>,
+<parameter>ANY</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1255,11 +1228,9 @@ less than
 
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>BOOL <function>gt</function></funcdef>
-<paramdef>
-<parameter>ANY</parameter>,
+<paramdef><parameter>ANY</parameter>,
 <parameter>ANY</parameter>
-</paramdef>
-</funcprototype></funcsynopsis></glossterm><glossdef>
+</paramdef></funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 
@@ -1270,10 +1241,8 @@ greater than
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>BOOL <function>le</function></funcdef>
-<paramdef>
-<parameter>ANY</parameter>,
-<parameter>ANY</parameter>
-</paramdef>
+<paramdef><parameter>ANY</parameter>,
+<parameter>ANY</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1285,10 +1254,8 @@ less than or equal
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>BOOL <function>ge</function></funcdef>
-<paramdef>
-<parameter>ANY</parameter>,
-<parameter>ANY</parameter>
-</paramdef>
+<paramdef><parameter>ANY</parameter>,
+<parameter>ANY</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1359,10 +1326,8 @@ Person Functions
 	    <funcsynopsis>
 	      <funcprototype>
 		<funcdef>STRING <function>name</function></funcdef>
-		<paramdef>
-		<parameter>INDI</parameter>,
-		  <parameter><replaceable>BOOL</replaceable></parameter>
-	  </paramdef>
+		<paramdef><parameter>INDI</parameter>,
+		  <parameter><replaceable>BOOL</replaceable></parameter></paramdef>
 	  </funcprototype>
 	  </funcsynopsis>
 	  </glossterm>
@@ -1377,12 +1342,10 @@ default name of
 
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>fullname</function></funcdef>
-<paramdef>
-<parameter>INDI</parameter>,
+<paramdef><parameter>INDI</parameter>,
 <parameter>BOOL</parameter>,
 <parameter>BOOL</parameter>,
-<parameter>INT</parameter>
-</paramdef>
+<parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1394,9 +1357,7 @@ many name forms of
 
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>surname</function></funcdef>
-<paramdef>
-<parameter>INDI</parameter>
-</paramdef>
+<paramdef><parameter>INDI</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1408,9 +1369,7 @@ surname of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>givens</function></funcdef>
-<paramdef>
-<parameter>INDI</parameter>
-</paramdef>
+<paramdef><parameter>INDI</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1422,10 +1381,8 @@ given names of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>trimname</function></funcdef>
-<paramdef>
-<parameter>INDI</parameter>,
-<parameter>INT</parameter>
-</paramdef>
+<paramdef><parameter>INDI</parameter>,
+<parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1437,9 +1394,7 @@ trimmed name of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>EVENT <function>birth</function></funcdef>
-<paramdef>
-<parameter>INDI</parameter>
-</paramdef>
+<paramdef><parameter>INDI</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1451,9 +1406,7 @@ first birth event of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>EVENT <function>death</function></funcdef>
-<paramdef>
-<parameter>INDI</parameter>
-</paramdef>
+<paramdef><parameter>INDI</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1465,9 +1418,7 @@ first death event of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>EVENT <function>baptism</function></funcdef>
-<paramdef>
-<parameter>INDI</parameter>
-</paramdef>
+<paramdef><parameter>INDI</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1479,9 +1430,7 @@ first baptism event of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>EVENT <function>burial</function></funcdef>
-<paramdef>
-<parameter>INDI</parameter>
-</paramdef>
+<paramdef><parameter>INDI</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1493,9 +1442,7 @@ first burial event of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INDI <function>father</function></funcdef>
-<paramdef>
-<parameter>INDI</parameter>
-</paramdef>
+<paramdef><parameter>INDI</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1507,9 +1454,7 @@ first father of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INDI <function>mother</function></funcdef>
-<paramdef>
-<parameter>INDI</parameter>
-</paramdef>
+<paramdef><parameter>INDI</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1521,9 +1466,7 @@ first mother of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INDI <function>nextsib</function></funcdef>
-<paramdef>
-<parameter>INDI</parameter>
-</paramdef>
+<paramdef><parameter>INDI</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1535,9 +1478,7 @@ next (younger) sibling of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INDI <function>prevsib</function></funcdef>
-<paramdef>
-<parameter>INDI</parameter>
-</paramdef>
+<paramdef><parameter>INDI</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1549,9 +1490,7 @@ previous (older) sibling of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>sex</function></funcdef>
-<paramdef>
-<parameter>INDI</parameter>
-</paramdef>
+<paramdef><parameter>INDI</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1563,9 +1502,7 @@ sex of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>BOOL <function>male</function></funcdef>
-<paramdef>
-<parameter>INDI</parameter>
-</paramdef>
+<paramdef><parameter>INDI</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1577,9 +1514,7 @@ male predicate
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>BOOL <function>female</function></funcdef>
-<paramdef>
-<parameter>INDI</parameter>
-</paramdef>
+<paramdef><parameter>INDI</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1591,10 +1526,8 @@ female predicate
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>pn</function></funcdef>
-<paramdef>
-<parameter>INDI</parameter>,
-<parameter>INT</parameter>
-</paramdef>
+<paramdef><parameter>INDI</parameter>,
+<parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1606,9 +1539,7 @@ pronoun referring to
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INT <function>nspouses</function></funcdef>
-<paramdef>
-<parameter>INDI</parameter>
-</paramdef>
+<paramdef><parameter>INDI</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1620,9 +1551,7 @@ number of spouses of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INT <function>nfamilies</function></funcdef>
-<paramdef>
-<parameter>INDI</parameter>
-</paramdef>
+<paramdef><parameter>INDI</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1634,9 +1563,7 @@ number of families (as spouse/parent) of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>FAM <function>parents</function></funcdef>
-<paramdef>
-<parameter>INDI</parameter>
-</paramdef>
+<paramdef><parameter>INDI</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1648,9 +1575,7 @@ first parents' family of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>title</function></funcdef>
-<paramdef>
-<parameter>INDI</parameter>
-</paramdef>
+<paramdef><parameter>INDI</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1662,10 +1587,8 @@ first title of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>key</function></funcdef>
-<paramdef>
-<parameter>INDI|FAM</parameter>,
-<parameter><replaceable>BOOL</replaceable></parameter>
-</paramdef>
+<paramdef><parameter>INDI|FAM</parameter>,
+<parameter><replaceable>BOOL</replaceable></parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1677,9 +1600,7 @@ internal key of (work for families also)
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>soundex</function></funcdef>
-<paramdef>
-<parameter>INDI</parameter>
-</paramdef>
+<paramdef><parameter>INDI</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1691,9 +1612,7 @@ SOUNDEX code of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>NODE <function>inode</function></funcdef>
-<paramdef>
-<parameter>INDI</parameter>
-</paramdef>
+<paramdef><parameter>INDI</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1705,9 +1624,7 @@ root GEDCOM node of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>NODE <function>root</function></funcdef>
-<paramdef>
-<parameter>INDI</parameter>
-</paramdef>
+<paramdef><parameter>INDI</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1719,9 +1636,7 @@ root GEDCOM node of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INDI <function>indi</function></funcdef>
-<paramdef>
-<parameter>STRING</parameter>
-</paramdef>
+<paramdef><parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1755,9 +1670,7 @@ last person in database in key order
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INDI <function>nextindi</function></funcdef>
-<paramdef>
-<parameter>INDI</parameter>
-</paramdef>
+<paramdef><parameter>INDI</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1769,9 +1682,7 @@ next person in database in key order
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INDI <function>previndi</function></funcdef>
-<paramdef>
-<parameter>INDI</parameter>
-</paramdef>
+<paramdef><parameter>INDI</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1781,7 +1692,7 @@ previous person in database in key order
 </para>
 </glossdef></glossentry>
 
-<glossentry><glossterm><synopsis><command>spouses</command>( <replaceable>INDI</replaceable>, <replaceable>INDI</replaceable>, <replaceable>FAM</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis>
+<glossentry><glossterm><synopsis><command>spouses</command> (<replaceable>INDI</replaceable>, <replaceable>INDI</replaceable>, <replaceable>FAM</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis>
 </glossterm><glossdef>
 
 <para>
@@ -1791,7 +1702,7 @@ loop through all spouses of
 </para>
 </glossdef></glossentry>
 
-<glossentry><glossterm><synopsis><command>families</command>(<replaceable>INDI</replaceable>, <replaceable>FAM</replaceable>, <replaceable>INDI</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
+<glossentry><glossterm><synopsis><command>families</command> (<replaceable>INDI</replaceable>, <replaceable>FAM</replaceable>, <replaceable>INDI</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
 
@@ -1800,7 +1711,7 @@ loop through all families (as spouse) of
 </para>
 
 </glossdef></glossentry>
-<glossentry><glossterm><synopsis><command>forindi</command>(<replaceable>INDI</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
+<glossentry><glossterm><synopsis><command>forindi</command> (<replaceable>INDI</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
 
@@ -1891,8 +1802,11 @@ respectively, or <returnvalue>false</returnvalue> if not.
 
 <para>
 
-<function>Pn</function> generates pronouns, useful when generating English text; the second parameter selects the type of
-pronoun:<variablelist><varlistentry><term>0</term><listitem>
+<function>Pn</function> generates pronouns, useful when generating English text;
+the second parameter selects the type of pronoun:
+</para>
+
+<variablelist><varlistentry><term>0</term><listitem>
 <para>He/She</para>
 
 </listitem></varlistentry><varlistentry><term>1</term><listitem>
@@ -1928,9 +1842,6 @@ him/her
 </para>
 
 </listitem></varlistentry></variablelist>
-
-</para>
-
 
 
 <para>
@@ -2039,9 +1950,7 @@ Family Functions
 <glosslist>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>EVENT <function>marriage</function></funcdef>
-<paramdef>
-<parameter>FAM</parameter>
-</paramdef>
+<paramdef><parameter>FAM</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2053,9 +1962,7 @@ first marriage event of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INDI <function>husband</function></funcdef>
-<paramdef>
-<parameter>FAM</parameter>
-</paramdef>
+<paramdef><parameter>FAM</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2067,9 +1974,7 @@ first husband/father of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INDI <function>wife</function></funcdef>
-<paramdef>
-<parameter>FAM</parameter>
-</paramdef>
+<paramdef><parameter>FAM</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2081,9 +1986,7 @@ first wife/mother of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INT <function>nchildren</function></funcdef>
-<paramdef>
-<parameter>FAM</parameter>
-</paramdef>
+<paramdef><parameter>FAM</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2095,9 +1998,7 @@ number of children in
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INDI <function>firstchild</function></funcdef>
-<paramdef>
-<parameter>FAM</parameter>
-</paramdef>
+<paramdef><parameter>FAM</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2109,9 +2010,7 @@ first child of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INDI <function>lastchild</function></funcdef>
-<paramdef>
-<parameter>FAM</parameter>
-</paramdef>
+<paramdef><parameter>FAM</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2123,10 +2022,8 @@ last child of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>key</function></funcdef>
-<paramdef>
-<parameter>FAM|INDI</parameter>,
-<parameter><replaceable>BOOL</replaceable></parameter>
-</paramdef>
+<paramdef><parameter>FAM|INDI</parameter>,
+<parameter><replaceable>BOOL</replaceable></parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2138,9 +2035,7 @@ internal key of (works for persons also)
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>NODE <function>fnode</function></funcdef>
-<paramdef>
-<parameter>FAM</parameter>
-</paramdef>
+<paramdef><parameter>FAM</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2152,9 +2047,7 @@ root GEDCOM node of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>NODE <function>root</function></funcdef>
-<paramdef>
-<parameter>FAM</parameter>
-</paramdef>
+<paramdef><parameter>FAM</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2166,9 +2059,7 @@ root GEDCOM node of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>FAM <function>fam</function></funcdef>
-<paramdef>
-<parameter>STRING</parameter>
-</paramdef>
+<paramdef><parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2202,9 +2093,7 @@ last family in database in key order
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>FAM <function>nextfam</function></funcdef>
-<paramdef>
-<parameter>FAM</parameter>
-</paramdef>
+<paramdef><parameter>FAM</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2216,9 +2105,7 @@ next family in database in key order
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>FAM <function>prevfam</function></funcdef>
-<paramdef>
-<parameter>FAM</parameter>
-</paramdef>
+<paramdef><parameter>FAM</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2228,7 +2115,7 @@ previous family in database in key order
 </para>
 
 </glossdef></glossentry>
-<glossentry><glossterm><synopsis><command>children</command>( <replaceable>FAM</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
+<glossentry><glossterm><synopsis><command>children</command> (<replaceable>FAM</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
 
@@ -2237,7 +2124,7 @@ loop through children of family
 </para>
 
 </glossdef></glossentry>
-<glossentry><glossterm><synopsis><command>forfam</command>( <replaceable>FAM_V</replaceable>, <replaceable>INT_V</replaceable> ) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
+<glossentry><glossterm><synopsis><command>forfam</command> (<replaceable>FAM_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
 
@@ -2393,9 +2280,7 @@ List Functions
 <glosslist>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>list</function></funcdef>
-<paramdef>
-<parameter>LIST_V</parameter>
-</paramdef>
+<paramdef><parameter>LIST_V</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2407,9 +2292,7 @@ declare a list
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>BOOL <function>empty</function></funcdef>
-<paramdef>
-<parameter>LIST</parameter>
-</paramdef>
+<paramdef><parameter>LIST</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2421,10 +2304,8 @@ check if list is empty
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>enqueue</function></funcdef>
-<paramdef>
-<parameter>LIST</parameter>,
-<parameter>ANY</parameter>
-</paramdef>
+<paramdef><parameter>LIST</parameter>,
+<parameter>ANY</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2436,9 +2317,7 @@ enqueue element on list
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>ANY <function>dequeue</function></funcdef>
-<paramdef>
-<parameter>LIST</parameter>
-</paramdef>
+<paramdef><parameter>LIST</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2450,10 +2329,8 @@ dequeue and return element from list
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>requeue</function></funcdef>
-<paramdef>
-<parameter>LIST</parameter>,
-<parameter>ANY</parameter>
-</paramdef>
+<paramdef><parameter>LIST</parameter>,
+<parameter>ANY</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2465,10 +2342,8 @@ requeue an element on list
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>push</function></funcdef>
-<paramdef>
-<parameter>LIST</parameter>,
-<parameter>ANY</parameter>
-</paramdef>
+<paramdef><parameter>LIST</parameter>,
+<parameter>ANY</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2480,9 +2355,7 @@ push element on list
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>ANY <function>pop</function></funcdef>
-<paramdef>
-<parameter>LIST</parameter>
-</paramdef>
+<paramdef><parameter>LIST</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2494,11 +2367,9 @@ pop and return element from list
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>setel</function></funcdef>
-<paramdef>
-<parameter>LIST</parameter>,
+<paramdef><parameter>LIST</parameter>,
 <parameter>INT</parameter>,
-<parameter>ANY</parameter>
-</paramdef>
+<parameter>ANY</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2510,10 +2381,8 @@ array element assignment
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>ANY <function>getel</function></funcdef>
-<paramdef>
-<parameter>LIST</parameter>,
-<parameter>INT</parameter>
-</paramdef>
+<paramdef><parameter>LIST</parameter>,
+<parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2525,11 +2394,9 @@ array element selection
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>deleteel</function></funcdef>
-<paramdef>
-<parameter>LIST</parameter>,
+<paramdef><parameter>LIST</parameter>,
 <parameter>INT</parameter>,
-<parameter>ANY</parameter>
-</paramdef>
+<parameter>ANY</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2541,10 +2408,8 @@ array element deletion
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>sort</function></funcdef>
-<paramdef>
-<parameter>LIST</parameter>,
-<parameter>LISt</parameter>
-</paramdef>
+<paramdef><parameter>LIST</parameter>,
+<parameter>LISt</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2556,10 +2421,8 @@ sort list elements
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>rsort</function></funcdef>
-<paramdef>
-<parameter>LIST</parameter>,
-<parameter>LIST</parameter>
-</paramdef>
+<paramdef><parameter>LIST</parameter>,
+<parameter>LIST</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2569,7 +2432,7 @@ reverse sort list elements
 </para>
 
 </glossdef></glossentry>
-<glossentry><glossterm><synopsis><command>forlist</command>( <replaceable>LIST</replaceable>, <replaceable>ANY_V</replaceable>, <replaceable>INT_V</replaceable> ) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
+<glossentry><glossterm><synopsis><command>forlist</command> (<replaceable>LIST</replaceable>, <replaceable>ANY_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
 
@@ -2678,9 +2541,7 @@ Table Functions
 <glosslist>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>table</function></funcdef>
-<paramdef>
-<parameter>TABLE_V</parameter>
-</paramdef>
+<paramdef><parameter>TABLE_V</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2692,11 +2553,9 @@ declare a table
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>insert</function></funcdef>
-<paramdef>
-<parameter>TABLE</parameter>,
+<paramdef><parameter>TABLE</parameter>,
 <parameter>STRING</parameter>,
-<parameter>ANY</parameter>
-</paramdef>
+<parameter>ANY</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2708,10 +2567,8 @@ insert entry in table
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>ANY <function>lookup</function></funcdef>
-<paramdef>
-<parameter>TABLE</parameter>,
-<parameter>STRING</parameter>
-</paramdef>
+<paramdef><parameter>TABLE</parameter>,
+<parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2770,9 +2627,7 @@ GEDCOM Node Functions
 <glosslist>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>xref</function></funcdef>
-<paramdef>
-<parameter>NODE</parameter>
-</paramdef>
+<paramdef><parameter>NODE</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2784,9 +2639,7 @@ cross reference index of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>tag</function></funcdef>
-<paramdef>
-<parameter>NODE</parameter>
-</paramdef>
+<paramdef><parameter>NODE</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2798,9 +2651,7 @@ tag of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>value</function></funcdef>
-<paramdef>
-<parameter>NODE</parameter>
-</paramdef>
+<paramdef><parameter>NODE</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2812,9 +2663,7 @@ value of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>NODE <function>parent</function></funcdef>
-<paramdef>
-<parameter>NODE</parameter>
-</paramdef>
+<paramdef><parameter>NODE</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2826,9 +2675,7 @@ parent node of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>NODE <function>child</function></funcdef>
-<paramdef>
-<parameter>NODE</parameter>
-</paramdef>
+<paramdef><parameter>NODE</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2840,9 +2687,7 @@ first child of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>NODE <function>sibling</function></funcdef>
-<paramdef>
-<parameter>NODE</parameter>
-</paramdef>
+<paramdef><parameter>NODE</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2854,9 +2699,7 @@ next sibling of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>NODE <function>savenode</function></funcdef>
-<paramdef>
-<parameter>NODE</parameter>
-</paramdef>
+<paramdef><parameter>NODE</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2866,7 +2709,7 @@ copy a node structure
 </para>
 
 </glossdef></glossentry>
-<glossentry><glossterm><synopsis><command>fornodes</command>( <replaceable>NODE</replaceable>, <replaceable>NODE_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
+<glossentry><glossterm><synopsis><command>fornodes</command> (<replaceable>NODE</replaceable>, <replaceable>NODE_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
 
@@ -2875,7 +2718,7 @@ loop through child nodes
 </para>
 
 </glossdef></glossentry>
-<glossentry><glossterm><synopsis><command>traverse</command>( <replaceable>NODE</replaceable>, <replaceable>NODE_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
+<glossentry><glossterm><synopsis><command>traverse</command> (<replaceable>NODE</replaceable>, <replaceable>NODE_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
 
@@ -2967,9 +2810,7 @@ Event and Date Functions
 <glosslist>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>date</function></funcdef>
-<paramdef>
-<parameter>EVENT</parameter>
-</paramdef>
+<paramdef><parameter>EVENT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2981,9 +2822,7 @@ date of, value of first <structfield>DATE</structfield> line
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>place</function></funcdef>
-<paramdef>
-<parameter>EVENT</parameter>
-</paramdef>
+<paramdef><parameter>EVENT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -2995,9 +2834,7 @@ place of, value of first <structfield>PLAC</structfield> line
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>year</function></funcdef>
-<paramdef>
-<parameter>EVENT</parameter>
-</paramdef>
+<paramdef><parameter>EVENT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -3009,9 +2846,7 @@ year or, 1st string of 3-4 digits in 1st <structfield>DATE</structfield> line
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>long</function></funcdef>
-<paramdef>
-<parameter>EVENT</parameter>
-</paramdef>
+<paramdef><parameter>EVENT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -3023,9 +2858,7 @@ date and place, values of 1st <structfield>DATE</structfield> and <structfield>P
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>short</function></funcdef>
-<paramdef>
-<parameter>EVENT</parameter>
-</paramdef>
+<paramdef><parameter>EVENT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -3048,9 +2881,7 @@ returns the `event' of the current date
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>dayformat</function></funcdef>
-<paramdef>
-<parameter>INT</parameter>
-</paramdef>
+<paramdef><parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -3062,9 +2893,7 @@ set day format for stddate calls
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>monthformat</function></funcdef>
-<paramdef>
-<parameter>INT</parameter>
-</paramdef>
+<paramdef><parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -3076,9 +2905,7 @@ set month format for stddate calls
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>yearformat</function></funcdef>
-<paramdef>
-<parameter>INT</parameter>
-</paramdef>
+<paramdef><parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -3090,9 +2917,7 @@ set year format for stddate calls
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>eraformat</function></funcdef>
-<paramdef>
-<parameter>INT</parameter>
-</paramdef>
+<paramdef><parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -3104,9 +2929,7 @@ set era format for stddate calls
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>dateformat</function></funcdef>
-<paramdef>
-<parameter>INT</parameter>
-</paramdef>
+<paramdef><parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -3118,9 +2941,7 @@ set date format for stddate calls
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>stddate</function></funcdef>
-<paramdef>
-<parameter>EVENT</parameter>
-</paramdef>
+<paramdef><parameter>EVENT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -3580,12 +3401,10 @@ Value Extraction Functions
 <glosslist>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>extractdate</function></funcdef>
-<paramdef>
-<parameter>NODE</parameter>,
+<paramdef><parameter>NODE</parameter>,
 <parameter>INT_V</parameter>,
 <parameter>INT_V</parameter>,
-<parameter>INT_V</parameter>
-</paramdef>
+<parameter>INT_V</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -3597,12 +3416,10 @@ extract a date
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>extractnames</function></funcdef>
-<paramdef>
-<parameter>NODE</parameter>,
+<paramdef><parameter>NODE</parameter>,
 <parameter>LIST_V</parameter>,
 <parameter>INT_V</parameter>,
-<parameter>INT_V</parameter>
-</paramdef>
+<parameter>INT_V</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -3614,11 +3431,9 @@ extract a name
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>extractplaces</function></funcdef>
-<paramdef>
-<parameter>NODE</parameter>,
+<paramdef><parameter>NODE</parameter>,
 <parameter>LIST_V</parameter>,
-<parameter>INT_V</parameter>
-</paramdef>
+<parameter>INT_V</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -3630,12 +3445,10 @@ extract a place
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>extracttokens</function></funcdef>
-<paramdef>
-<parameter>STRING</parameter>,
+<paramdef><parameter>STRING</parameter>,
 <parameter>LIST_V</parameter>,
 <parameter>INT_V</parameter>,
-<parameter>STRING</parameter>
-</paramdef>
+<parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -3740,10 +3553,8 @@ User Interaction Functions
 <glosslist>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>getindi</function></funcdef>
-<paramdef>
-<parameter>INDI_V</parameter>,
-<parameter><replaceable>STRING</replaceable></parameter>
-</paramdef>
+<paramdef><parameter>INDI_V</parameter>,
+<parameter><replaceable>STRING</replaceable></parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -3755,10 +3566,8 @@ identify person through user interface
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>getindiset</function></funcdef>
-<paramdef>
-<parameter>SET_V</parameter>,
-<parameter><replaceable>STRING</replaceable></parameter>
-</paramdef>
+<paramdef><parameter>SET_V</parameter>,
+<parameter><replaceable>STRING</replaceable></parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -3770,9 +3579,7 @@ identify set of persons through user interface
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>getfam</function></funcdef>
-<paramdef>
-<parameter>FAM_V</parameter>
-</paramdef>
+<paramdef><parameter>FAM_V</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -3784,10 +3591,8 @@ identify family through user interface
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>getint</function></funcdef>
-<paramdef>
-<parameter>INT_V</parameter>,
-<parameter><replaceable>STRING</replaceable></parameter>
-</paramdef>
+<paramdef><parameter>INT_V</parameter>,
+<parameter><replaceable>STRING</replaceable></parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -3799,10 +3604,8 @@ get integer through user interface
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>getstr</function></funcdef>
-<paramdef>
-<parameter>STRING_V</parameter>,
-<parameter><replaceable>STRING</replaceable></parameter>
-</paramdef>
+<paramdef><parameter>STRING_V</parameter>,
+<parameter><replaceable>STRING</replaceable></parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -3814,9 +3617,7 @@ get string through user interface
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INDI <function>choosechild</function></funcdef>
-<paramdef>
-<parameter>INDI|FAM</parameter>
-</paramdef>
+<paramdef><parameter>INDI|FAM</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -3828,9 +3629,7 @@ select child of person/family thru user interface
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>FAM <function>choosefam</function></funcdef>
-<paramdef>
-<parameter>INDI</parameter>
-</paramdef>
+<paramdef><parameter>INDI</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -3842,9 +3641,7 @@ select family person is in as spouse
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INDI <function>chooseindi</function></funcdef>
-<paramdef>
-<parameter>SET</parameter>
-</paramdef>
+<paramdef><parameter>SET</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -3856,9 +3653,7 @@ select person from set of persons
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INDI <function>choosespouse</function></funcdef>
-<paramdef>
-<parameter>INDI</parameter>
-</paramdef>
+<paramdef><parameter>INDI</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -3870,9 +3665,7 @@ select spouse of person
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>SET <function>choosesubset</function></funcdef>
-<paramdef>
-<parameter>SET</parameter>
-</paramdef>
+<paramdef><parameter>SET</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -3884,10 +3677,8 @@ select a subset of persons from set of persons
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INT <function>menuchoose</function></funcdef>
-<paramdef>
-<parameter>LIST</parameter>,
-<parameter><replaceable>STRING</replaceable></parameter>
-</paramdef>
+<paramdef><parameter>LIST</parameter>,
+<parameter><replaceable>STRING</replaceable></parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -3961,9 +3752,7 @@ String Functions
 <glosslist>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>lower</function></funcdef>
-<paramdef>
-<parameter>STRING</parameter>
-</paramdef>
+<paramdef><parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -3975,9 +3764,7 @@ convert to lower case
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>upper</function></funcdef>
-<paramdef>
-<parameter>STRING</parameter>
-</paramdef>
+<paramdef><parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -3989,9 +3776,7 @@ convert to upper case
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>capitalize</function></funcdef>
-<paramdef>
-<parameter>STRING</parameter>
-</paramdef>
+<paramdef><parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4003,10 +3788,8 @@ capitalize first letter
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>trim</function></funcdef>
-<paramdef>
-<parameter>STRING</parameter>,
-<parameter>INT</parameter>
-</paramdef>
+<paramdef><parameter>STRING</parameter>,
+<parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4018,10 +3801,8 @@ trim to length
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>rjustify</function></funcdef>
-<paramdef>
-<parameter>STRING</parameter>,
-<parameter>INT</parameter>
-</paramdef>
+<paramdef><parameter>STRING</parameter>,
+<parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4033,9 +3814,7 @@ right justify in field
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>save</function></funcdef>
-<paramdef>
-<parameter>STRING</parameter>
-</paramdef>
+<paramdef><parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4047,9 +3826,7 @@ save and return copy of string
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>strsave</function></funcdef>
-<paramdef>
-<parameter>STRING</parameter>
-</paramdef>
+<paramdef><parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4061,11 +3838,9 @@ same as save function
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>concat</function></funcdef>
-<paramdef>
-<parameter>STRING</parameter>,
+<paramdef><parameter>STRING</parameter>,
 <parameter><replaceable>STRING</replaceable></parameter>
-<parameter><replaceable>...</replaceable></parameter>
-</paramdef>
+<parameter><replaceable>...</replaceable></parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4077,11 +3852,9 @@ catenate two strings
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>strconcat</function></funcdef>
-<paramdef>
-<parameter>STRING</parameter>,
+<paramdef><parameter>STRING</parameter>,
 <parameter><replaceable>STRING</replaceable></parameter>
-<parameter><replaceable>...</replaceable></parameter>
-</paramdef>
+<parameter><replaceable>...</replaceable></parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4093,9 +3866,7 @@ catenate two strings
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INT <function>strlen</function></funcdef>
-<paramdef>
-<parameter>STRING</parameter>
-</paramdef>
+<paramdef><parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4107,11 +3878,9 @@ number of characters in string
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>substring(</function></funcdef>
-<paramdef>
-<parameter>STRING</parameter>,
+<paramdef><parameter>STRING</parameter>,
 <parameter>INT</parameter>,
-<parameter>INT</parameter>
-</paramdef>
+<parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4123,11 +3892,9 @@ substring function
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INT <function>index</function></funcdef>
-<paramdef>
+<paramdef><parameter>STRING</parameter>,
 <parameter>STRING</parameter>,
-<parameter>STRING</parameter>,
-<parameter>INT</parameter>
-</paramdef>
+<parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4139,9 +3906,7 @@ index function
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>d</function></funcdef>
-<paramdef>
-<parameter>INT</parameter>
-</paramdef>
+<paramdef><parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4153,9 +3918,7 @@ number as decimal string
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>card</function></funcdef>
-<paramdef>
-<parameter>INT</parameter>
-</paramdef>
+<paramdef><parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4167,9 +3930,7 @@ number in cardinal form (<literal>one, two, ...</literal>)
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>ord</function></funcdef>
-<paramdef>
-<parameter>INT</parameter>
-</paramdef>
+<paramdef><parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4181,9 +3942,7 @@ number in ordinal form (<literal>first, second, ...</literal>)
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>alpha</function></funcdef>
-<paramdef>
-<parameter>INT</parameter>
-</paramdef>
+<paramdef><parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4195,9 +3954,7 @@ convert number to Latin letter (<literal>a, b, ...</literal>)
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>roman</function></funcdef>
-<paramdef>
-<parameter>INT</parameter>
-</paramdef>
+<paramdef><parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4209,9 +3966,7 @@ number in Roman numeral form (<literal>i, ii, ...</literal>)
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>strsoundex</function></funcdef>
-<paramdef>
-<parameter>STRING</parameter>
-</paramdef>
+<paramdef><parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4223,9 +3978,7 @@ find SOUNDEX value of arbitrary string
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INT <function>strtoint</function></funcdef>
-<paramdef>
-<parameter>STRING</parameter>
-</paramdef>
+<paramdef><parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4237,9 +3990,7 @@ convert numeric string to integer
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INT <function>atoi</function></funcdef>
-<paramdef>
-<parameter>STRING</parameter>
-</paramdef>
+<paramdef><parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4251,10 +4002,8 @@ convert numeric string to integer
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INT <function>strcmp</function></funcdef>
-<paramdef>
-<parameter>STRING</parameter>,
-<parameter>STRING</parameter>
-</paramdef>
+<paramdef><parameter>STRING</parameter>,
+<parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4266,10 +4015,8 @@ general string compare
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>BOOL <function>eqstr</function></funcdef>
-<paramdef>
-<parameter>STRING</parameter>,
-<parameter>STRING</parameter>
-</paramdef>
+<paramdef><parameter>STRING</parameter>,
+<parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4281,10 +4028,8 @@ compare strings for equality
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>BOOL <function>nestr</function></funcdef>
-<paramdef>
-<parameter>STRING</parameter>,
-<parameter>STRING</parameter>
-</paramdef>
+<paramdef><parameter>STRING</parameter>,
+<parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4461,10 +4206,8 @@ use line output mode
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>pagemode</function></funcdef>
-<paramdef>
-<parameter>INT</parameter>,
-<parameter>INT</parameter>
-</paramdef>
+<paramdef><parameter>INT</parameter>,
+<parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4476,9 +4219,7 @@ use page output mode with given page size
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>col</function></funcdef>
-<paramdef>
-<parameter>INT</parameter>
-</paramdef>
+<paramdef><parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4490,9 +4231,7 @@ position to column in output
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>row</function></funcdef>
-<paramdef>
-<parameter>INT</parameter>
-</paramdef>
+<paramdef><parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4504,10 +4243,8 @@ position to row in output
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>pos</function></funcdef>
-<paramdef>
-<parameter>INT</parameter>,
-<parameter>INT</parameter>
-</paramdef>
+<paramdef><parameter>INT</parameter>,
+<parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4563,10 +4300,8 @@ double quote character
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>newfile</function></funcdef>
-<paramdef>
-<parameter>STRING</parameter>,
-<parameter>BOOL</parameter>
-</paramdef>
+<paramdef><parameter>STRING</parameter>,
+<parameter>BOOL</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4589,9 +4324,7 @@ return name of current program output file
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>copyfile</function></funcdef>
-<paramdef>
-<parameter>STRING</parameter>
-</paramdef>
+<paramdef><parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4603,11 +4336,9 @@ copy file contents to program output file
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>print</function></funcdef>
-<paramdef>
-<parameter>STRING</parameter>,
+<paramdef><parameter>STRING</parameter>,
 <parameter><replaceable>STRING</replaceable></parameter>
-<parameter><replaceable>...</replaceable></parameter>
-</paramdef>
+<parameter><replaceable>...</replaceable></parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4731,9 +4462,7 @@ Person Set Functions and GEDCOM Extraction
 <glosslist>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>indiset</function></funcdef>
-<paramdef>
-<parameter>SET_V</parameter>
-</paramdef>
+<paramdef><parameter>SET_V</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4745,11 +4474,9 @@ declare a set variable
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>SET <function>addtoset</function></funcdef>
-<paramdef>
-<parameter>SET</parameter>,
+<paramdef><parameter>SET</parameter>,
 <parameter>INDI</parameter>,
-<parameter>ANY</parameter>
-</paramdef>
+<parameter>ANY</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4761,11 +4488,9 @@ add a person to a set
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>SET <function>deletefromset</function></funcdef>
-<paramdef>
-<parameter>SET</parameter>,
+<paramdef><parameter>SET</parameter>,
 <parameter>INDI</parameter>,
-<parameter>BOOL</parameter>
-</paramdef>
+<parameter>BOOL</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4777,9 +4502,7 @@ remove a person from a set
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>INT <function>lengthset</function></funcdef>
-<paramdef>
-<parameter>SET</parameter>
-</paramdef>
+<paramdef><parameter>SET</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4791,10 +4514,8 @@ size of a set
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>SET <function>union</function></funcdef>
-<paramdef>
-<parameter>SET</parameter>,
-<parameter>SET</parameter>
-</paramdef>
+<paramdef><parameter>SET</parameter>,
+<parameter>SET</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4806,10 +4527,8 @@ union of two sets
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>SET <function>intersect</function></funcdef>
-<paramdef>
-<parameter>SET</parameter>,
-<parameter>SET</parameter>
-</paramdef>
+<paramdef><parameter>SET</parameter>,
+<parameter>SET</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4821,10 +4540,8 @@ intersection of two sets
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>SET <function>difference</function></funcdef>
-<paramdef>
-<parameter>SET</parameter>,
-<parameter>SET</parameter>
-</paramdef>
+<paramdef><parameter>SET</parameter>,
+<parameter>SET</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4836,9 +4553,7 @@ difference of two sets
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>SET <function>parentset</function></funcdef>
-<paramdef>
-<parameter>SET</parameter>
-</paramdef>
+<paramdef><parameter>SET</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4850,9 +4565,7 @@ set of all parents
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>SET <function>childset</function></funcdef>
-<paramdef>
-<parameter>SET</parameter>
-</paramdef>
+<paramdef><parameter>SET</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4864,9 +4577,7 @@ set of all children
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>SET <function>spouseset</function></funcdef>
-<paramdef>
-<parameter>SET</parameter>
-</paramdef>
+<paramdef><parameter>SET</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4878,9 +4589,7 @@ set of all spouses
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>SET <function>siblingset</function></funcdef>
-<paramdef>
-<parameter>SET</parameter>
-</paramdef>
+<paramdef><parameter>SET</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4892,9 +4601,7 @@ set of all siblings
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>SET <function>ancestorset</function></funcdef>
-<paramdef>
-<parameter>SET</parameter>
-</paramdef>
+<paramdef><parameter>SET</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4906,9 +4613,7 @@ set of all ancestors
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>SET <function>descendentset</function></funcdef>
-<paramdef>
-<parameter>SET</parameter>
-</paramdef>
+<paramdef><parameter>SET</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4920,9 +4625,7 @@ set of all descendents
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>SET <function>descendantset</function></funcdef>
-<paramdef>
-<parameter>SET</parameter>
-</paramdef>
+<paramdef><parameter>SET</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4934,9 +4637,7 @@ same as descendentset; spelling
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>SET <function>uniqueset</function></funcdef>
-<paramdef>
-<parameter>SET</parameter>
-</paramdef>
+<paramdef><parameter>SET</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4948,9 +4649,7 @@ remove duplicates from set
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>namesort</function></funcdef>
-<paramdef>
-<parameter>SET</parameter>
-</paramdef>
+<paramdef><parameter>SET</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4962,9 +4661,7 @@ sort indiset by name
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>keysort</function></funcdef>
-<paramdef>
-<parameter>SET</parameter>
-</paramdef>
+<paramdef><parameter>SET</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4976,9 +4673,7 @@ sort indiset by key values
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>valuesort</function></funcdef>
-<paramdef>
-<parameter>SET</parameter>
-</paramdef>
+<paramdef><parameter>SET</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -4990,10 +4685,8 @@ sort indiset by auxiliary values
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>genindiset</function></funcdef>
-<paramdef>
-<parameter>STRING</parameter>,
-<parameter>SET</parameter>
-</paramdef>
+<paramdef><parameter>STRING</parameter>,
+<parameter>SET</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -5005,9 +4698,7 @@ generate indiset from GEDCOM name string
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>gengedcom</function></funcdef>
-<paramdef>
-<parameter>SET</parameter>
-</paramdef>
+<paramdef><parameter>SET</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -5170,10 +4861,8 @@ Record Update Functions
 <glosslist>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>NODE <function>createnode</function></funcdef>
-<paramdef>
-<parameter>STRING</parameter>,
-<parameter>STRING</parameter>
-</paramdef>
+<paramdef><parameter>STRING</parameter>,
+<parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -5185,11 +4874,9 @@ create a GEDCOM node
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>addnode</function></funcdef>
-<paramdef>
+<paramdef><parameter>NODE</parameter>,
 <parameter>NODE</parameter>,
-<parameter>NODE</parameter>,
-<parameter>NODE</parameter>
-</paramdef>
+<parameter>NODE</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -5201,9 +4888,7 @@ add a node to a GEDCOM tree
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>detachnode</function></funcdef>
-<paramdef>
-<parameter>NODE</parameter>
-</paramdef>
+<paramdef><parameter>NODE</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -5215,9 +4900,7 @@ delete a node from a GEDCOM tree
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>writeindi</function></funcdef>
-<paramdef>
-<parameter>INDI</parameter>
-</paramdef>
+<paramdef><parameter>INDI</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -5229,9 +4912,7 @@ write a person back to the database
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>writefam</function></funcdef>
-<paramdef>
-<parameter>FAM</parameter>
-</paramdef>
+<paramdef><parameter>FAM</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -5294,9 +4975,7 @@ Record Linking Functions
 <glosslist>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>BOOL <function>reference</function></funcdef>
-<paramdef>
-<parameter>STRING</parameter>
-</paramdef>
+<paramdef><parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -5308,9 +4987,7 @@ determine if string is a cross reference
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>NODE <function>dereference</function></funcdef>
-<paramdef>
-<parameter>STRING</parameter>
-</paramdef>
+<paramdef><parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -5322,9 +4999,7 @@ reference cross reference or key to node tree
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>NODE <function>getrecord</function></funcdef>
-<paramdef>
-<parameter>STRING</parameter>
-</paramdef>
+<paramdef><parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -5363,9 +5038,7 @@ Miscellaneous Functions
 <glosslist>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>lock</function></funcdef>
-<paramdef>
-<parameter>INDI|FAM</parameter>
-</paramdef>
+<paramdef><parameter>INDI|FAM</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -5377,9 +5050,7 @@ lock a person or family in memory
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>unlock</function></funcdef>
-<paramdef>
-<parameter>INDI|FAM</parameter>
-</paramdef>
+<paramdef><parameter>INDI|FAM</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -5413,9 +5084,7 @@ return version of <application>LifeLines</application> program
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>system</function></funcdef>
-<paramdef>
-<parameter>STRING</parameter>
-</paramdef>
+<paramdef><parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -5427,9 +5096,7 @@ execute string as a UNIX shell command
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>getproperty</function></funcdef>
-<paramdef>
-<parameter>STRING</parameter>
-</paramdef>
+<paramdef><parameter>STRING</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
