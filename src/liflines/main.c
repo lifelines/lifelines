@@ -194,6 +194,7 @@ main (INT argc,
 			break;
 		case '?':
 			showusage = TRUE;
+			goto usage;
 			break;
 		}
 	}
@@ -211,6 +212,7 @@ main (INT argc,
 	c = argc - optind;
 	if (c > 1) {
 		showusage = TRUE;
+		goto usage;
 	}
 
 	/* Get Database Name (Prompt or Command-Line) */
@@ -225,6 +227,7 @@ main (INT argc,
 		btreepath = (unsigned char *)argv[optind];
 		if (!btreepath || *btreepath == 0) {
 			showusage = TRUE;
+			goto usage;
 		}
 	}
 
@@ -298,13 +301,6 @@ main (INT argc,
 		goto finish;
 	}
 
-	/* Show Usage */
-	if (showusage) {
-		llwprintf(usage);
-		sleep(5);
-		goto finish;
-	}
-
 	/* Start Program */
 	init_lifelines();
 	while (!alldone)
@@ -315,6 +311,10 @@ main (INT argc,
 finish:
 	/* Terminate Curses UI */
 	endwin();
+
+usage:
+	/* Display Command-Line Usage Help */
+	if (showusage) puts(usage);
 
 	/* Exit */
 	return(code);
