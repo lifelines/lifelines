@@ -89,33 +89,31 @@ __getint (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = iargs(node);
 	PNODE arg2;
-	INT val;
+	INT num;
 	STRING msg = 0;
-	PVALUE mval = NULL;
+	PVALUE val = NULL;
 	if (!iistype(arg, IIDENT)) {
 		prog_var_error(node, stab, arg, NULL, nonvarx, "getint", "1");
 		*eflg = TRUE;
 		return NULL;
 	}
 	if ((arg2 = inext(arg)) != NULL) {
-		mval = evaluate(arg2, stab, eflg);
-		if (*eflg) return NULL;
-		if (ptype(mval) != PSTRING) {
-			*eflg = TRUE;
-			prog_var_error(node, stab, arg2, mval, nonstrx, "getint", "2");
-			delete_pvalue(mval);
+		val = eval_and_coerce(PSTRING, arg2, stab, eflg);
+		if (*eflg) {
+			prog_var_error(node, stab, arg2, val, nonstrx, "getint", "2");
+			delete_pvalue(val);
 			return NULL;
 		}
-		msg = pvalue_to_string(mval);
+		msg = pvalue_to_string(val);
 	}
 	if (!msg)
 		msg = _("Enter integer for program");
-	if (!ask_for_int(msg, &val)) {
+	if (!ask_for_int(msg, &num)) {
 		*eflg = TRUE;
 		return NULL;
 	}
-	assign_iden(stab, iident(arg), create_pvalue_from_int(val));
-	if (mval) delete_pvalue(mval);
+	assign_iden(stab, iident(arg), create_pvalue_from_int(num));
+	delete_pvalue(val);
 	return NULL;
 }
 /*========================================+
@@ -128,7 +126,7 @@ __getstr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE arg = (PNODE) iargs(node);
 	PNODE arg2;
 	STRING msg = _(qSchoostrttl);
-	PVALUE mval = NULL, ansval;
+	PVALUE val = NULL, ansval;
 	char buffer[MAXPATHLEN];
 	if (!iistype(arg, IIDENT)) {
 		prog_var_error(node, stab, arg, NULL, nonvarx, "getstr", "1");
@@ -136,15 +134,13 @@ __getstr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	if ((arg2 = inext(arg)) != NULL) {
-		mval = evaluate(arg2, stab, eflg);
-		if (*eflg) return NULL;
-		if (ptype(mval) != PSTRING) {
-			*eflg = TRUE;
-			prog_var_error(node, stab, arg2, mval, nonstrx, "getstr", "2");
-			delete_pvalue(mval);
+		val = eval_and_coerce(PSTRING, arg2, stab, eflg);
+		if (*eflg) {
+			prog_var_error(node, stab, arg2, val, nonstrx, "getstr", "2");
+			delete_pvalue(val);
 			return NULL;
 		}
-		msg = pvalue_to_string(mval);
+		msg = pvalue_to_string(val);
 	}
 	if (!ask_for_string(msg, _(qSaskstr), buffer, sizeof(buffer))) {
 		/* Cancel yields empty string */
@@ -152,7 +148,7 @@ __getstr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	ansval = create_pvalue_from_string(buffer);
 	assign_iden(stab, iident(arg), ansval);
-	if (mval) delete_pvalue(mval);
+	delete_pvalue(val);
 	return NULL;
 }
 /*=========================================+
@@ -175,6 +171,7 @@ __getindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		val = eval_and_coerce(PSTRING, arg2, stab, eflg);
 		if (*eflg) {
 			prog_var_error(node, stab, arg2, val, nonstrx, "getindi", "2");
+			delete_pvalue(val);
 			return NULL;
 		}
 		msg = pvalue_to_string(val);
@@ -237,6 +234,7 @@ __getindiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		val = eval_and_coerce(PSTRING, arg2, stab, eflg);
 		if (*eflg) {
 			prog_var_error(node, stab, arg2, val, nonstrx, "getindiset", "2");
+			delete_pvalue(val);
 			return NULL;
 		}
 		msg = pvalue_to_string(val);
@@ -248,7 +246,7 @@ __getindiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	rptlocale();
 	if (seq)
 		namesort_indiseq(seq); /* in case uilocale != rptlocale */
-	if (val) delete_pvalue(val);
+	delete_pvalue(val);
 	assign_iden(stab, iident(arg), create_pvalue_from_set(seq));
 	return NULL;
 }
@@ -289,6 +287,7 @@ PVALUE __name (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		val = eval_and_coerce(PBOOL, arg2, stab, eflg);
 		if (*eflg) {
 			prog_var_error(node, stab, arg2, val, nonboox, "name", "2");
+			delete_pvalue(val);
 			return NULL;
 		}
 		caps = pvalue_to_bool(val);
@@ -329,6 +328,7 @@ __fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	val = eval_and_coerce(PBOOL, arg = inext(arg), stab, eflg);
 	if (*eflg) {
 		prog_var_error(node, stab, arg, val, nonboox, "fullname", "2");
+		delete_pvalue(val);
 		return NULL;
 	}
 	caps = pvalue_to_bool(val);
@@ -336,6 +336,7 @@ __fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	val = eval_and_coerce(PBOOL, arg = inext(arg), stab, eflg);
 	if (*eflg) {
 		prog_var_error(node, stab, arg, val, nonboox, "fullname", "3");
+		delete_pvalue(val);
 		return NULL;
 	}
 	myreg = pvalue_to_bool(val);
@@ -343,6 +344,7 @@ __fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	val = eval_and_coerce(PINT, arg = inext(arg), stab, eflg);
 	if (*eflg) {
 		prog_var_error(node, stab, arg, val, nonintx, "fullname", "4");
+		delete_pvalue(val);
 		return NULL;
 	}
 	len = pvalue_to_int(val);
@@ -417,15 +419,15 @@ PVALUE
 __strsoundex (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
-	PVALUE newval, val = evaluate(arg, stab, eflg);
+	PVALUE newval, val = NULL;
 	STRING str;
-	if (*eflg || !val || ptype(val) != PSTRING) {
-		*eflg = TRUE;
-		prog_var_error(node, stab, arg, NULL, nonstr1, "strsoundex");
+	val = eval_and_coerce(PSTRING, arg, stab, eflg);
+	if (*eflg) {
+		prog_var_error(node, stab, arg, val, nonstr1, "strsoundex");
+		delete_pvalue(val);
 		return NULL;
 	}
-	str = strsave(soundex(pvalue(val)));
-	/* TODO: Need to translate report to internal codeset */
+	str = soundex(pvalue_to_string(val));
 	newval = create_pvalue_from_string(str);
 	delete_pvalue(val);
 	return newval;
@@ -446,10 +448,9 @@ __bytecode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	INT offset;
 	ZSTR zstr=0;
 	if (*eflg) {
-		prog_var_error(node, stab, arg, NULL, nonstrx, "bytecode", "1");
+		prog_var_error(node, stab, arg, val, nonstrx, "bytecode", "1");
 		goto bytecode_exit;
 	}
-	arg = inext(arg);
 	if (arg) {
 		PVALUE val2 = eval_and_coerce(PSTRING, arg, stab, eflg);
 		if (*eflg) {
@@ -1685,7 +1686,7 @@ __strcmp (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (!str1) str1 = emp;
 	if (!str2) str2 = emp;
 
-	set_pvalue(val1, PINT, (VPTR)cmpstrloc(str1, str2));
+	set_pvalue_int(val1, cmpstrloc(str1, str2));
 	delete_pvalue(val2);
 	return val1;
 }
@@ -1739,7 +1740,7 @@ __eqstr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	str2 = pvalue_to_string(val2);
 	if (!str1) str1 = emp;
 	if (!str2) str2 = emp;
-	set_pvalue(val1, PBOOL, (VPTR)(eqstr(str1, str2) != 0));
+	set_pvalue_bool(val1, (eqstr(str1, str2) != 0));
 	delete_pvalue(val2);
 	return val1;
 }
@@ -1750,17 +1751,17 @@ __eqstr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __strtoint (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PVALUE val;
-	val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
-	if (*eflg || !val || ptype(val) != PSTRING) {
-		*eflg = TRUE;
-		prog_error(node, "the arg to strtoint is not a string");
+	PNODE arg = iargs(node);
+	PVALUE val=NULL;
+	STRING str=0;
+	val = eval_and_coerce(PSTRING, arg, stab, eflg);
+	if (*eflg) {
+		prog_var_error(node, stab, arg, val, nonstr1, "strtoint");
+		delete_pvalue(val);
 		return NULL;
 	}
-	if (!pvalue(val))
-		set_pvalue(val, PINT, 0);
-	else
-		set_pvalue(val, PINT, (VPTR)atoi(pvalue(val)));
+	str = pvalue_to_string(val);
+	set_pvalue_int(val, str ? atoi(pvalue(val)): 0);
 	return val;
 }
 /*============================+
@@ -1771,15 +1772,15 @@ PVALUE
 __list (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	LIST list;
-	PNODE var = (PNODE) iargs(node);
-	if (!iistype(var, IIDENT)) {
+	PNODE arg = (PNODE) iargs(node);
+	if (!iistype(arg, IIDENT)) {
+		prog_var_error(node, stab, arg, NULL, nonvar1, "list");
 		*eflg = TRUE;
-		prog_error(node, "the arg to list is not a variable");
 		return NULL;
 	}
 	*eflg = FALSE;
 	list = create_list();
-	assign_iden(stab, iident(var), create_pvalue(PLIST, (VPTR) list));
+	assign_iden(stab, iident(arg), create_pvalue(PLIST, (VPTR) list));
 	return NULL;
 }
 /*=======================================+
@@ -1793,9 +1794,9 @@ __push (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	LIST list;
 	PVALUE el;
 	PVALUE val = eval_and_coerce(PLIST, arg, stab, eflg);
-	if (*eflg || !val || ptype(val) != PLIST) {
-		*eflg = TRUE;
-		prog_error(node, "1st arg to push is not a list");
+	if (*eflg) {
+		prog_var_error(node, stab, arg, val, nonlst1, "1");
+		delete_pvalue(val);
 		return NULL;
 	}
 	el = evaluate(inext(arg), stab, eflg);
@@ -1821,9 +1822,9 @@ __inlist (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE el;
 	BOOLEAN bFound;
 	PVALUE val = eval_and_coerce(PLIST, arg, stab, eflg);
-	if (*eflg || !val || ptype(val) != PLIST) {
-		*eflg = TRUE;
-		prog_error(node, "1st arg to inlist is not a list");
+	if (*eflg) {
+		prog_var_error(node, stab, arg, val, nonlstx, "inlist", "1");
+		delete_pvalue(val);
 		return NULL;
 	}
 	el = evaluate(inext(arg), stab, eflg);
@@ -1849,9 +1850,9 @@ __enqueue (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	LIST list=NULL;
 	PVALUE el=NULL;
 	PVALUE val = eval_and_coerce(PLIST, arg, stab, eflg);
-	if (*eflg || !val || ptype(val) != PLIST) {
-		*eflg = TRUE;
-		prog_error(node, "1st arg to enqueue is not a list");
+	if (*eflg) {
+		prog_var_error(node, stab, arg, val, nonlstx, "enqueue", "1");
+		delete_pvalue(val);
 		return NULL;
 	}
 	el = evaluate(inext(arg), stab, eflg);
@@ -2042,7 +2043,7 @@ __length (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	list = pvalue_to_list(val);
-	set_pvalue(val, PINT, (VPTR)length_list(list));
+	set_pvalue_int(val, length_list(list));
 	return val;
 }
 /*==========================+
@@ -2089,7 +2090,7 @@ __strlen (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	if (pvalue(val))
 		len = strlen(pvalue(val));
-	set_pvalue(val, PINT, (VPTR)len);
+	set_pvalue_int(val, len);
 	return val;
 }
 /*=============================================+
@@ -3231,7 +3232,7 @@ __level (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		lev++;
 		ged = nparent(ged);
 	}
-	set_pvalue(val, PINT, (VPTR)lev);
+	set_pvalue_int(val, lev);
 	return val;
 }
 /*=================================+

@@ -18,6 +18,10 @@
 
 	Cleanup cache memory when closing db.
 
+	* ChangeLog src/interp/builtin.c src/interp/write.c:
+
+	Standardize more argument handling in interpreter.
+
 2003-02-01 Perry Rapp
 
 	* ChangeLog src/gedlib/node.c src/interp/interp.c

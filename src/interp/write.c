@@ -51,10 +51,11 @@
 PVALUE
 __createnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
+	PNODE arg = iargs(node);
 	NODE newnode=0;
-	STRING val, tag = (STRING) evaluate(iargs(node), stab, eflg);
+	STRING val, tag = (STRING) evaluate(arg, stab, eflg);
 	if (*eflg) return NULL;
-	val = (STRING) evaluate(inext((PNODE)iargs(node)), stab, eflg);
+	val = (STRING) evaluate(arg=inext(arg), stab, eflg);
 	if (*eflg) return NULL;
 	newnode = create_node(NULL, tag, val, NULL);
 	return create_pvalue_from_node(newnode);
