@@ -5,13 +5,13 @@
 
 noinst_LIBRARIES = libstdlib.a
 
-libstdlib_a_SOURCES = appendstr.c \
+libstdlib_a_SOURCES = appendstr.c array.c \
 	dirs.c environ.c fpattern.c icvt.c list.c \
-	listener.c lldate.c llstrcmp.c memalloc.c mystring.c \
+	listener.c lldate.c llstrcmp.c memalloc.c mystring.c object.c \
 	path.c proptbls.c sequence.c \
 	signals.c sprintpic.c stdlibi.h stdstrng.c \
 	stralloc.c strapp.c strcvt.c strset.c strutf8.c strwhite.c \
-	table.c warehouse.c zstr.c
+	table.c vtable.h warehouse.c zstr.c
 
 # $(top_srcdir)          for config.h
 # $(top_srcdir)/intl     for intl headers

@@ -17,6 +17,10 @@
 
 	Copy sorted array back in __sort.
 
+	* ChangeLog src/hdrs/Makefile.am src/stdlib/Makefile.am
+
+	Add new array.*, object.*, vtable.* files to automakefiles.
+
 2003-02-26 Perry Rapp
 
 	* ChangeLog po/sv.po
