@@ -98,7 +98,7 @@ BOOLEAN path_match(CNSTRING path1, CNSTRING path2);
 
 /* signals.c */
 void set_signals(void);
-void ll_abort(int);
+void ll_abort(STRING);
 
 /* stdstrng.c */
 BOOLEAN allwhite(STRING);

@@ -44,29 +44,28 @@
 #include "llstdlib.h"
 
 char *sig_msgs[] = {
-	"SIGNAL 0",
-	"HANGUP",
-	"INTERRUPT",
-	"QUIT",
-	"ILLEGAL INSTRUCTION",
-	"TRACE TRAP",
-	"ABORT",
-	"EMT INST",
-	"FLOATING POINT EXCEPTION",
-	"KILL",
-	"BUS ERROR",
-	"SEGMENTATION ERROR",
-	"SYSTEM CALL ERROR",
-	"PIPE WRITE",
-	"ALARM CLOCK",
-	"TEMINATE FROM KILL",
-	"USER SIGNAL 1",
-	"USER SIGNAL 2",
-	"DEATH OF CHILD",
-	"POWER-FAIL RESTART",
-	"WINDOW CHANGE",
+	N_("SIGNAL 0"),
+	N_("HANGUP"),
+	N_("INTERRUPT"),
+	N_("QUIT"),
+	N_("ILLEGAL INSTRUCTION"),
+	N_("TRACE TRAP"),
+	N_("ABORT"),
+	N_("EMT INST"),
+	N_("FLOATING POINT EXCEPTION"),
+	N_("KILL"),
+	N_("BUS ERROR"),
+	N_("SEGMENTATION ERROR"),
+	N_("SYSTEM CALL ERROR"),
+	N_("PIPE WRITE"),
+	N_("ALARM CLOCK"),
+	N_("TEMINATE FROM KILL"),
+	N_("USER SIGNAL 1"),
+	N_("USER SIGNAL 2"),
+	N_("DEATH OF CHILD"),
+	N_("POWER-FAIL RESTART"),
+	N_("WINDOW CHANGE"),
 };
-#define NUM_SIGNALS ARRSIZE(sig_msgs)
 
 static void on_signals(int);
 
@@ -108,37 +107,52 @@ on_signals (int sig)
 {
 	extern BOOLEAN progrunning;
 	extern PNODE Pnode;
-	char msg[160]="";
-	STRING ptr=msg;
+	char msg[100], signum[20];
+	STRING signame;
 
 	/* We don't know whether curses is up or not right now */
+	/* so we build the report msg, then close curses, then print it */
 
 	if (progrunning) {
-		snprintf(msg, sizeof(msg)
-			, "Looks like a program was running.\nCheck file %s around line %d.\n"
-			, ifname(Pnode), iline(Pnode));
+		char line[20];
+		snprintf(line, sizeof(line), "%d", iline(Pnode));
+		sprintpic2(msg, sizeof(msg)
+			, _("Looks like a program was running.\nCheck file %1 around line %2.\n")
+			, ifname(Pnode), line);
 	}
 
 	close_lifelines();
 	shutdown_ui(TRUE); /* pause */
+	/* now print report msg if we had one */
 	if (msg[0])
 		printf(msg);
-	printf("Exiting on signal %d:%s\n", sig, sig_msgs[sig]);
-	ll_abort(sig);
+	/* now build description of signal (# and name) */
+	/* name is not translated til sprint'd into msg */
+	snprintf(signum, sizeof(signum), "%d", sig);
+	if (sig>=0 && sig<=ARRSIZE(sig_msgs))
+		signame = sig_msgs[sig];
+	else
+		signame = N_("Unknown signal");
+	sprintpic2(msg, sizeof(msg), _("signal %1: %2"), signum
+		, _(signame)); 
+	ll_abort(msg);
 }
-
+/*================================
+ * ll_abort -- print msg & stop
+ *  caller translated msg
+ *===============================*/
 void
-ll_abort(int sig)
+ll_abort (STRING sigdesc)
 {
 	int c;
-	if (sig == -1)
-		fprintf(stdout,"\nAborting on signal %d\nCore dump? [y/n]", sig);
-	else
-		fprintf(stdout,"\nAborting on signal %d:%s\nCore dump? [y/n]",
-			sig, sig_msgs[sig]);
+	if (sigdesc)
+		printf(sigdesc);
+	printf(_("\nAborting now. Core dump? [y/n]"));
 	fflush(stdout);
 	c = getchar();
 	putchar(c);
+	/* TODO: how do we i18n this ? This getchar assumes that 
+	the answer is one byte */
 	if((c == 'y') || (c == 'Y')) abort();
 	exit(1);
 }

@@ -206,4 +206,14 @@ typedef struct lldate_s {
 typedef enum { RECORD_ERROR, RECORD_NOT_FOUND, RECORD_SUCCESS } 
 	RECORD_STATUS;
 
+/* null implementation of gettext, in preparation */
+/* _() is used for normally translated strings */
+#define _(String) (String)
+/* We can't use _N() for nonstranslated strings (eg "%d") -- TODO */
+/* N_() is used for strings needing translation elsewhere, eg static inits */
+#define N_(String) (String)
+#define textdomain(Domain)
+#define bindtextdomain(Package, Directory)
+
+
 #endif

@@ -70,7 +70,7 @@ __fatal (STRING file, int line, STRING details)
 	llwprintf("%s: line %d\n", file, line);
 	close_lifelines();
 	shutdown_ui(TRUE); /* pause */
-	ll_abort(-1);
+	ll_abort(_("ASSERT failure"));
 }
 /*===============================
  * __crashlog -- Details preceding a fatal error

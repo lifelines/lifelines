@@ -1,3 +1,14 @@
+2002-01-12 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/init.c hdrs/llstdlib.h hdrs/standard.h
+	interp/date.c interp/pvalue.c liflines/askprogram.c
+	liflines/error.c stdlib/signals.c:
+
+	Fix gettoday (was not revised correctly in date rewrite last month).
+	Remove system includes from askprogram.c.
+	Remove compiler warnings from pvalue.c & init.c.
+	Compiler cleanup & gettextify signals.c (change prototype of ll_abort).
+
 2002-01-11 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/charmaps.c hdrs/mystring.h hdrs/standard.h:
