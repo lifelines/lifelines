@@ -116,10 +116,11 @@ char * dcngettext_null(const char *, const char *, const char *, unsigned long i
 
 /* path.c */
 STRING check_file_for_unicode(FILE * fp);
-INT chop_path(STRING path, STRING dirs);
+INT chop_path(CNSTRING path, STRING dirs);
 void closefp(FILE **pfp);
 STRING compress_path(CNSTRING path, INT len);
 STRING concat_path(CNSTRING dir, CNSTRING file, STRING buffer, INT buflen);
+STRING concat_path_alloc(CNSTRING dir, CNSTRING file);
 BOOLEAN expand_special_fname_chars(STRING buffer, INT buflen);
 STRING filepath(CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING ext);
 FILE* fopenpath(STRING, STRING, STRING, STRING, STRING*);
@@ -128,6 +129,7 @@ BOOLEAN is_path_sep(char c);
 STRING lastpathname(CNSTRING);
 INT path_cmp(CNSTRING path1, CNSTRING path2);
 BOOLEAN path_match(CNSTRING path1, CNSTRING path2);
+
 
 /* signals.c */
 void set_signals(void);
@@ -147,6 +149,7 @@ BOOLEAN eqstr_ex(STRING s1, STRING s2);
 BOOLEAN isletter(INT);
 BOOLEAN islinebreak(INT c);
 BOOLEAN iswhite(INT);
+INT ll_atoi(STRING str, INT defval);
 INT ll_toupper(INT);
 INT ll_tolower(INT);
 char *llstrncat(char *dest, const char *src, size_t n, int utf8);
@@ -154,7 +157,6 @@ char *llstrncpy(char *dest, const char *src, size_t n, int utf8);
 char *llstrncpyf(char *dest, size_t n, int utf8, const char * fmt, ...);
 char *llstrncpyvf(char *dest, size_t n, int utf8, const char * fmt, va_list args);
 char *llstrncpyvf(char *dest, size_t n, int utf8, const char * fmt, va_list args);
-
 
 /* stralloc.c */
 void free_array_strings(INT n, STRING * arr);

@@ -259,3 +259,13 @@ llstrncat (char *dest, const char *src, size_t n, int utf8)
 	llstrncpy(dest+len, src, n, utf8);
 	return dest;
 }
+/*==================================
+ * ll_atoi -- Wrapper for atoi which handles NULL input
+ * Created: 2002/10/19, Perry Rapp
+ *================================*/
+INT
+ll_atoi (STRING str, INT defval)
+{
+	return str ? atoi(str) : defval;
+}
+

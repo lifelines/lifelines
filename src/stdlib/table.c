@@ -54,10 +54,10 @@ enum TB_VALTYPE
 
 /* alphabetical */
 static UNION* access_value_impl (TABLE tab, STRING key);
-static ENTRY fndentry(TABLE, STRING);
+static ENTRY fndentry(TABLE, CNSTRING);
 static void free_contents(ENTRY ent, INT whattofree);
 static void insert_table_impl(TABLE tab, STRING key, UNION uval);
-static INT hash(TABLE tab, STRING key);
+static INT hash(TABLE tab, CNSTRING key);
 static BOOLEAN next_element(TABLE_ITER tabit);
 static void replace_table_impl(TABLE tab, STRING key, UNION uval, INT whattofree);
 static UNION* valueofbool_impl(TABLE tab, STRING key);
@@ -71,7 +71,7 @@ static UNION* valueofbool_impl(TABLE tab, STRING key);
  * hash -- Hash function
  *====================*/
 static INT
-hash (TABLE tab, STRING key)
+hash (TABLE tab, CNSTRING key)
 {
 	INT hval = 0;
 	while (*key)
@@ -86,8 +86,7 @@ hash (TABLE tab, STRING key)
  * fndentry -- Find entry in table
  *==============================*/
 static ENTRY
-fndentry (TABLE tab,
-          STRING key)
+fndentry (TABLE tab, CNSTRING key)
 {
 	ENTRY entry;
 	if (!tab || !key) return NULL;
@@ -259,7 +258,7 @@ in_table (TABLE tab, STRING key)
  * Created: 2001/06/03 (Perry Rapp)
  *=============================*/
 VPTR
-valueof_ptr (TABLE tab, STRING key)
+valueof_ptr (TABLE tab, CNSTRING key)
 {
 	ENTRY entry;
 	if (!tab->count || !key) return NULL;
@@ -275,7 +274,7 @@ valueof_ptr (TABLE tab, STRING key)
  * Created: 2001/06/03 (Perry Rapp)
  *=============================*/
 INT
-valueof_int (TABLE tab, STRING key, INT defval)
+valueof_int (TABLE tab, CNSTRING key, INT defval)
 {
 	ENTRY entry;
 	if (!tab->count || !key) return defval;
@@ -290,7 +289,7 @@ valueof_int (TABLE tab, STRING key, INT defval)
  * Created: 2001/06/03 (Perry Rapp)
  *=============================*/
 STRING
-valueof_str (TABLE tab, STRING key)
+valueof_str (TABLE tab, CNSTRING key)
 {
 	ENTRY entry;
 	if (!tab->count || !key) return NULL;

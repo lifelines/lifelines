@@ -1,14 +1,13 @@
 /* 
-   Copyright (c) 2001-2002 Petter Reinholdtsen & Perry Rapp
+   Copyright (c) 2001-2002 Perry Rapp
    "The MIT license"
    Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
    The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 /*=============================================================
- * askprogram.c -- Construct list of lifelines programs & prompt user
- *  Completely refactored 2002-10-19 to be usable for GUI
- *  and to be reusable for GEDCOM files (this code pushed into proptbls.c)
+ * askgedc.c -- Construct list of GEDCOM files & prompt user
+ *  Imitation of askprogram.c
  *==============================================================*/
 
 #include "standard.h"
@@ -24,10 +23,10 @@
  *********************************************/
 
 /* alphabetical */
-static void add_program_props(TABLE fileprops);
-static void parse_programs(TABLE * fileprops);
-static int select_programs(const struct dirent *entry);
-static void set_programs_d0(TABLE * fileprops);
+static void add_gedcom_props(TABLE fileprops);
+static void parse_gedcoms(TABLE * fileprops);
+static int select_gedcoms(const struct dirent *entry);
+static void set_gedcom_d0(TABLE * fileprops);
 
 /* messages used */
 extern STRING qSextchoos;
@@ -36,53 +35,60 @@ extern STRING qSextchoos;
  * The supported meta-tags.
  *=======================*/
 
-enum { P_PROGNAME=0, P_VERSION=1, P_OUTPUT=4 };
+enum { P_SOUR=0, P_DATE=1 };
 
 static CNSTRING f_tags[] = {
-  "progname"    /* The name of the script */
-  , "version"     /* The version of the script */
-  , "author"      /* The author of the script */
-  , "category"    /* The category of the script */
-  , "output"      /* The output format produced by this script */
-  , "description" /* A description of purpose of the script */
+  "1 SOUR"
+  , "1 DATE"
 };
 
 
 /*===========================================================
- * select_programs -- choose files with the correct extention
+ * select_gedcoms -- choose files with the correct extention
  *==========================================================*/
 static int
-select_programs(const struct dirent *entry)
+select_gedcoms (const struct dirent *entry)
 {
-	CNSTRING goodext = ".ll";
+	CNSTRING goodexts[] = { ".ged", ".gedcom" };
+	INT i;
 	/* examine end of entry->d_name */
-	CNSTRING entext = entry->d_name + strlen(entry->d_name) - strlen(goodext);
-
-	/* is it what we want ? use platform correct comparison, from path.c */
-	if (path_match(goodext, entext))
-		return 1;
-
+	for (i=0; i<ARRSIZE(goodexts); ++i) {
+		CNSTRING entext = entry->d_name + strlen(entry->d_name) - strlen(goodexts[i]);
+		/* is it what we want ? use platform correct comparison, from path.c */
+		if (path_match(goodexts[i], entext))
+			return 1;
+	}
 	return 0;
 }
 /*==========================================================
- * add_program_props -- set properties for programs (parse program file for metainfo)
+ * add_gedcom_props -- set properties for gedcoms
  * Created: 2002/10/19, Perry Rapp
  *========================================================*/
 static void
-add_program_props (TABLE fileprops)
+add_gedcom_props (TABLE fileprops)
 {
 	STRING tagsfound[ARRSIZE(f_tags)];
 	FILE *fp;
 	char str[MAXLINELEN];
 	INT i;
-	INT dnum;
 	INT line=0;
+	struct stat sbuf;
 
 	/* first get full path & open file */
 	STRING fname = valueof_str(fileprops, "filename");
 	STRING dir = valueof_str(fileprops, "dir");
 	STRING filepath = concat_path_alloc(dir, fname);
-	dnum = 3;
+
+	if (!stat(filepath, &sbuf)) {
+		if (sbuf.st_size > 9999999)
+			sprintf(str, "%ldMb", sbuf.st_size/1000000);
+		else if (sbuf.st_size > 9999)
+			sprintf(str, "%ldKb", sbuf.st_size/1000);
+		else
+			sprintf(str, "%ldb", sbuf.st_size);
+
+		add_prop_dnum(fileprops, strdup("bytes"), strdup(str));
+	}
 
 	if (NULL == (fp = fopen(filepath, "r")))
 		goto end_add_program_props;
@@ -110,7 +116,7 @@ add_program_props (TABLE fileprops)
 				break;
 			}
 		}
-		if (strstr(str, "*/"))
+		if (!strncmp(str, "0 @", 3))
 			break;
 		++line;
 	}
@@ -130,51 +136,49 @@ end_add_program_props:
 	return;
 }
 /*===================================================
- * parse_programs -- parse lifelines report programs 
+ * parse_gedcoms -- parse gedcoms
  *  & record properties in property tables
  *  NB: must have NULL marker entry at end
  * Created: 2002/10/19, Perry Rapp
  *=================================================*/
 static void
-parse_programs (TABLE * fileprops)
+parse_gedcoms (TABLE * fileprops)
 {
 	INT i;
 	for (i=0; fileprops[i]; ++i) {
-		add_program_props(fileprops[i]);
+		add_gedcom_props(fileprops[i]);
 	}
 }
 /*===================================================
- * set_programs_d0 -- set display strings for programs from property tables
+ * set_gedcom_d0 -- set display strings for gedcom files from property tables
  *  NB: must have NULL marker entry at end
  * Created: 2002/10/19, Perry Rapp
  *=================================================*/
 static void
-set_programs_d0 (TABLE * fileprops)
+set_gedcom_d0 (TABLE * fileprops)
 {
 	INT i;
 	for (i=0; fileprops[i]; ++i) {
 		TABLE props = fileprops[i];
 		char buf[MAXLINELEN];
-		STRING program = valueof_str(props, (STRING)f_tags[P_PROGNAME]);
-		STRING version = valueof_str(props, (STRING)f_tags[P_VERSION]);
-		STRING output = valueof_str(props, (STRING)f_tags[P_OUTPUT]);
-		if (!program)
-			program = valueof_str(props, "filename");
-		if (!output)
-			output = "?";
-		if (!version)
-			version = "V?.?";
-		snprintf(buf, sizeof(buf), "%s (%s) [%s]"
-			, program, version, output);
+		STRING filename = valueof_str(props, "filename");
+		STRING sour = valueof_str(props, (STRING)f_tags[P_SOUR]);
+		STRING date = valueof_str(props, (STRING)f_tags[P_DATE]);
+		STRING bytes = valueof_str(props, "bytes");
+		if (!sour) sour="?";
+		if (!date) date="?";
+		if (!bytes) bytes="?";
+		snprintf(buf, sizeof(buf), "%s (%s - %s) [%s]"
+			, filename, date, bytes, sour);
 		set_prop_dnum(props, 0, strdup("prompt"), strdup(buf));
 	}
 }
 /*===================================================
- * ask_for_program -- Ask for program
+ * ask_for_gedcom -- Ask for gedcom file
  *  pfname: [OUT]  allocated on heap (name we tried to open)
  *=================================================*/
 BOOLEAN
-ask_for_program (STRING mode,
+ask_for_gedcom (STRING mode,
                  STRING ttl,
                  STRING *pfname,
                  STRING *pfullpath,
@@ -195,10 +199,10 @@ ask_for_program (STRING mode,
 		goto AskForString;
 	}
 
+	fileprops = get_proparray_of_files_in_path(path, select_gedcoms, &nfiles);
+	parse_gedcoms(fileprops);
+	set_gedcom_d0(fileprops);
 
-	fileprops = get_proparray_of_files_in_path(path, select_programs, &nfiles);
-	parse_programs(fileprops);
-	set_programs_d0(fileprops);
 	if (!nfiles) goto AskForString;
 
 	choices = (STRING *)stdalloc(sizeof(STRING)*(nfiles+1));
@@ -229,49 +233,4 @@ AskForString:
 	if (fp)
 		fclose(fp);
 	return fp != 0;
-}
-/*================================================
- * proparrdetails -- print details of a file using proparray
- * Callback from choose_from_array_x
- *  arrdets:  [IN]  package of list & current status
- *  param:    [IN]  the param we passed when we called choose_from_array_x
- * Created: 2001/12/15 (Perry Rapp)
- *==============================================*/
-void
-proparrdetails (ARRAY_DETAILS arrdets, void * param)
-{
-	TABLE * fileprops = (TABLE *)param;
-	TABLE props;
-	INT count = arrdets->count;
-	INT len = arrdets->maxlen;
-	INT index = arrdets->cur - 1; /* slot#0 used by choose string */
-	INT row=0;
-	INT scroll = arrdets->scroll;
-	INT i;
-	INT dnum;
-
-	if (index<0) return;
-
-	props = fileprops[index];
-	
-	dnum = ll_atoi(valueof_str(props, "dn"), 0);
-
-	/* print tags & values */
-	for (i=scroll; i<dnum && row<count; ++i, ++row) {
-		STRING ptr = arrdets->lines[row];
-		INT mylen = len;
-		char temp[20];
-		STRING name=0, value=0;
-		sprintf(temp, "d%d", i+1);
-		name = valueof_str(props, temp);
-		if (name) {
-			value = valueof_str(props, name);
-			appendstr(&ptr, &mylen, uu8, name);
-			appendstr(&ptr, &mylen, uu8, ": ");
-			if (value) {
-				appendstr(&ptr, &mylen, uu8, value);
-			}
-		}
-	}
-  /* TODO: read file header */
 }

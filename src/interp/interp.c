@@ -206,7 +206,6 @@ void
 interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 	, STRING ofile, BOOLEAN picklist)
 {
-	FILE *fp;
 	LIST plist=0, donelist=0;
 	SYMTAB stab = null_symtab();
 	PVALUE dummy;
@@ -240,9 +239,8 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 		struct pathinfo_s * pathinfo = 0;
 		STRING fname=0, fullpath=0;
 		STRING programsdir = getoptstr("LLPROGRAMS", ".");
-		fp = ask_for_program(LLREADTEXT, _(qSwhatrpt), &fname, &fullpath
-			, programsdir, ".ll", picklist);
-		if (fp == NULL) {
+		if (!ask_for_program(LLREADTEXT, _(qSwhatrpt), &fname, &fullpath
+			, programsdir, ".ll", picklist)) {
 			if (fname)  {
 				/* tried & failed to open report program */
 				llwprintf(_("Error: file <%s> not found"), fname);
@@ -251,7 +249,6 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 			strfree(&fullpath);
 			goto interp_program_exit;
 		}
-		fclose(fp);
 		progname = strsave(fullpath);
 		pathinfo = new_pathinfo(fname, fullpath);
 		strfree(&fname);
@@ -262,13 +259,8 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 
 	progparsing = TRUE;
 
-   /* Parse each file in the list -- don't reparse any file */
-	/* 
-	NB: filename handling is a bit mixed. For the first file on the list,
-	we already 	resolved its path (ask_for_programs did it). For later files
-	added to the list (by handle_include), they are not resolved when they're put
-	on the list. - Perry, 2002.06.18
-	*/
+	/* Parse each file in the list -- don't reparse any file */
+	/* (paths are resolved before files are enqueued, & stored in pathinfo) */
 
 	proctab = create_table();
 	create_symtab(&globtab);

@@ -1,6 +1,12 @@
-LifeLines Source Release, Version 3.0.21
+LifeLines Source Release, Version 3.0.21post
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
+
+New features added in 3.0.22
+============================
+
+- Redirected input works on Win32 version
+- New option R to choose from list of GEDCOM input files
 
 New features added in 3.0.21
 ============================

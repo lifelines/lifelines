@@ -646,10 +646,8 @@ get_dblist (STRING path, LIST * dblist, LIST * dbdesclist)
 	/* find directories in dirs & delimit with zeros */
 	ndirs = chop_path(path, dirs);
 	/* now process each directory */
-	for (p=dirs; ndirs>0; --ndirs) {
-		ASSERT(p);
+	for (p=dirs; *p; p+=strlen(p)+1) {
 		add_dbs_to_list(*dblist, *dbdesclist, p);
-		p += strlen(p)+1;
 	}
 	strfree(&dirs);
 	return llen(*dblist);

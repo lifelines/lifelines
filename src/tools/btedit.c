@@ -30,7 +30,6 @@
  *   3.0.2 - 10 Dec 94
  *===============================================================*/
 
-#include "sys_inc.h"
 #include "llstdlib.h"
 #include "standard.h"
 #include "btree.h"

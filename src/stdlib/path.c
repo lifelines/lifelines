@@ -30,7 +30,6 @@
  *   3.0.3 - 06 Sep 95
  *=====================================================*/
 
-#include "sys_inc.h"
 #include "llstdlib.h"
 
 /*===========================================
@@ -126,6 +125,19 @@ test_concat_path (void)
 	testpath = concat_path("/", NULL, buffer, sizeof(buffer));
 }
 #endif
+/*=============================================
+ * concat_path_alloc -- add file & directory together into newly alloc'd string & return
+ *  dir:  [IN]  directory (may be NULL)
+ *  file: [IN]  file (may be NULL)
+ * See concat_path
+ *===========================================*/
+STRING
+concat_path_alloc (CNSTRING dir, CNSTRING file)
+{
+	INT len = (dir ? strlen(dir) : 0) + (file ? strlen(file) : 0) +2;
+	STRING buffer = malloc(len);
+	return concat_path(dir, file, buffer, len);
+}
 /*=============================================
  * concat_path -- add file & directory together
  *  dir:  [IN]  directory (may be NULL)
@@ -400,10 +412,11 @@ check_file_for_unicode (FILE * fp)
  * NB: dirs should be one byte larger than path
  *================================================*/
 INT
-chop_path (STRING path, STRING dirs)
+chop_path (CNSTRING path, STRING dirs)
 {
 	INT ndirs;
-	STRING p, q;
+	STRING p;
+	CNSTRING q;
 	char c=0;
 	ndirs=0;
 	p = dirs;;

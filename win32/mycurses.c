@@ -44,6 +44,8 @@ static DWORD dwModeIn = 0;
 static DWORD dwModeOut = 0;
 static CONSOLE_SCREEN_BUFFER_INFO sScreenInfo = {0};
 static COORD cOrigin = {0,0};
+static int redirected_in = 0;
+static int redirected_out = 0;
 
 /* Others Windows environment data */
 
@@ -630,7 +632,8 @@ static int mycur_init(int fullscreen)
 			printf("Error opening console window for input\n");
 			return 0;
 		}
-		GetConsoleMode(hStdin, &dwModeIn);
+		if (!GetConsoleMode(hStdin, &dwModeIn))
+			redirected_in = 1;
 		dwModeIn &= ~(ENABLE_LINE_INPUT
 			| ENABLE_ECHO_INPUT
 			| ENABLE_MOUSE_INPUT
@@ -641,11 +644,21 @@ static int mycur_init(int fullscreen)
 		hStdout = GetStdHandle((DWORD)STD_OUTPUT_HANDLE);
 		if (hStdout == INVALID_HANDLE_VALUE)
 		{
-			printf("Error opening console window for input\n");
+			printf("Error opening console window for output\n");
 			return 0;
 		}
 
-		GetConsoleScreenBufferInfo(hStdout, &sScreenInfo);
+		if (!GetConsoleScreenBufferInfo(hStdout, &sScreenInfo)) {
+			redirected_out = 1;
+			sScreenInfo.dwSize.X = 80;
+			sScreenInfo.dwSize.Y = 25;
+			sScreenInfo.srWindow.Bottom = 25;
+			sScreenInfo.srWindow.Right = 80;
+			/*
+			TODO: What to do with console output functions when output redirected ?
+			2002-10-19, Perry
+			*/
+		}
 #ifdef DEBUG
 		fprintf(errfp, "Screen buffer: (%d,%d) pos=(%d,%d)\n",
 			sScreenInfo.dwSize.X, sScreenInfo.dwSize.Y,
@@ -720,7 +733,7 @@ static int mycur_getc(void)
 	static int numpadbase=0;
 	static int numpadval=0;
 
-	if (hStdin == INVALID_HANDLE_VALUE)
+	if (hStdin == INVALID_HANDLE_VALUE || redirected_in)
 		return getchar();
 
 	while (1)

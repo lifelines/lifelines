@@ -125,7 +125,7 @@ enum {
 */
 
 /* loadsave.c */
-void load_gedcom(void);
+void load_gedcom(BOOLEAN picklist);
 BOOLEAN save_gedcom(void);
 
 /* screen.c */

@@ -106,7 +106,8 @@ extern STRING qSmn_csrpt;
 extern STRING qSmn_csrpttl;
 extern STRING idsortttl,idloc;
 extern STRING qSmn_edttttl,qSmn_svttttl;
-extern STRING qSmn_utsave,qSmn_utread,qSmn_utkey,qSmn_utkpers,qSmn_utdbstat,qSmn_utmemsta;
+extern STRING qSmn_utsave,qSmn_utread,qSmn_utgdchoo;
+extern STRING qSmn_utkey,qSmn_utkpers,qSmn_utdbstat,qSmn_utmemsta;
 extern STRING qSmn_utplaces,qSmn_utusropt;
 extern STRING qSmn_xxbsour, qSmn_xxbeven, qSmn_xxbothr, qSmn_xxasour, qSmn_xxesour;
 extern STRING qSmn_xxaeven, qSmn_xxeeven, qSmn_xxaothr, qSmn_xxeothr;
@@ -182,7 +183,7 @@ static UIWINDOW create_uisubwindow(UIWINDOW parent, INT rows, INT cols, INT begy
 static void create_windows(void);
 static void deactivate_uiwin(void);
 static void deactivate_uiwin_and_touch_all(void);
-static void delete_uiwindow(UIWINDOW uiw);
+static void delete_uiwindow(UIWINDOW * uiw);
 static void destroy_windows(void);
 static void disp_trans_table_choice(UIWINDOW uiwin, INT row, INT col, STRING menuit, INT indx);
 static void display_status(STRING text);
@@ -482,10 +483,14 @@ create_boxed_newwin2 (INT rows, INT cols)
  * Created: 2002/01/23
  *========================================*/
 static void
-delete_uiwindow (UIWINDOW uiw)
+delete_uiwindow (UIWINDOW * uiw)
 {
-	delwin(uiw_win(uiw));
-	stdfree(uiw);
+	if (*uiw) {
+		UIWINDOW w = *uiw;
+		delwin(uiw_win(w));
+		stdfree(w);
+		*uiw = 0;
+	}
 }
 /*==========================================
  * create_newwin -- Create our WINDOW wrapper
@@ -524,8 +529,8 @@ create_uisubwindow (UIWINDOW parent, INT rows, INT cols, INT begy, INT begx)
 static void
 destroy_windows (void)
 {
-	delete_uiwindow(debug_win);
-	delete_uiwindow(stdout_win);
+	delete_uiwindow(&debug_win);
+	delete_uiwindow(&stdout_win);
 	/* TODO finish these */
 }
 /*==========================================
@@ -1300,26 +1305,23 @@ handle_list_cmds (listdisp * ld, INT code)
 static BOOLEAN
 handle_popup_list_resize (listdisp * ld, INT code)
 {
+	INT delta;
 	switch(code) {
 	case '[': /* shrink detail area */
-		if (ld->details > ld->details_minhgt) {
-			ld->details--;
-			ld->rectDetails.bottom--;
-			ld->rectList.top--;
+		if (ld->details) {
+			delta = (ld->details > ld->details_minhgt) ? 1 : ld->details;
+			ld->details -= delta;
+			ld->rectDetails.bottom -= delta;
+			ld->rectList.top -= delta;
 			return -1; /* handled & needs resize */
 		}
 		return 1; /* handled (nothing) */
 	case ']': /* enlarge detail area */
-		if (!ld->details) {
-			ld->details = ld->details_beginhgt;
-			ld->rectDetails.bottom = ld->rectDetails.top + ld->details - 1;
-			ld->rectList.top += ld->details;
-			return TRUE; /* handled */
-		}
-		else if (ld->details < ld->details_maxhgt) {
-			ld->details++;
-			ld->rectDetails.bottom++;
-			ld->rectList.top++;
+		if (ld->details < ld->details_maxhgt) {
+			delta = ld->details ? 1 : ld->details_beginhgt;
+			ld->details += delta;
+			ld->rectDetails.bottom += delta;
+			ld->rectList.top += delta;
 			return TRUE; /* handled */
 		}
 		return TRUE; /* handled (nothing) */
@@ -1372,7 +1374,7 @@ activate_popup_list_uiwin (listdisp * ld)
 	ld->rectMenu.right = LISTWIN_WIDTH-2;
 	ld->details_beginhgt = 4;
 	ld->details_maxhgt = POPUP_LINES-10;
-	ld->details_minhgt = 0;
+	ld->details_minhgt = 3;
 
 	activate_uiwin(ld->uiwin);
 	/* ensure cur is on-screen */
@@ -2055,7 +2057,7 @@ invoke_utils_menu (void)
 	WINDOW *win=0;
 
 	if (!utils_menu_win) {
-		utils_menu_win = create_newwin2(13, 66);
+		utils_menu_win = create_newwin2(14, 66);
 		/* paint it for the first & only time (it's static) */
 		repaint_utils_menu(utils_menu_win);
 	}
@@ -2064,13 +2066,14 @@ invoke_utils_menu (void)
 	activate_uiwin(uiwin);
 
 	wmove(win, 1, strlen(_(qSmn_uttl))+3);
-	code = interact(uiwin, "srkidmeocq", -1);
+	code = interact(uiwin, "srRkidmeocq", -1);
 	deactivate_uiwin_and_touch_all();
 
 	begin_action();
 	switch (code) {
 	case 's': save_gedcom(); break;
-	case 'r': load_gedcom(); break;
+	case 'r': load_gedcom(FALSE); break;
+	case 'R': load_gedcom(TRUE); break;
 	case 'k': key_util(); break;
 	case 'i': who_is_he_she(); break;
 	case 'd': show_database_stats(); break;
@@ -2569,7 +2572,7 @@ shw_array_of_strings (STRING *strings, listdisp * ld, DETAILFNC detfnc
 			mvwaddstr(win, row++, 4, buffer);
 			ptr += strlen(buffer);
 		}
-		count = ld->details-i;
+		count = ld->details-1;
 		if (count && detfnc) {
 			/* caller gave us a detail callback, so we set up the
 			data needed & call it */
@@ -2583,9 +2586,7 @@ shw_array_of_strings (STRING *strings, listdisp * ld, DETAILFNC detfnc
 			dets.list = strings;
 			dets.cur = ld->cur;
 			dets.lines = linestr;
-			dets.count = 4;
-			if (dets.count > ld->details-i)
-				dets.count = ld->details-i;
+			dets.count = count;
 			dets.maxlen = width;
 			(*detfnc)(&dets, param);
 			for (j=0 ; j<count; ++j) {
@@ -3413,6 +3414,7 @@ repaint_utils_menu (UIWINDOW uiwin)
 	mvwaddstr(win, row++, 2, _(qSmn_uttl));
 	mvwaddstr(win, row++, 4, _(qSmn_utsave));
 	mvwaddstr(win, row++, 4, _(qSmn_utread));
+	mvwaddstr(win, row++, 4, _(qSmn_utgdchoo));
 	mvwaddstr(win, row++, 4, _(qSmn_utkey));
 	mvwaddstr(win, row++, 4, _(qSmn_utkpers));
 	mvwaddstr(win, row++, 4, _(qSmn_utdbstat));
@@ -3494,8 +3496,8 @@ deactivate_uiwin (void)
 	active_uiwin = uiw_parent(active_uiwin);
 	uiw_parent(uiw)=0;
 	if (uiw_dynamic(uiw))
-		delete_uiwindow(uiw);
-	if (active_uiwin) {
+		delete_uiwindow(&uiw);
+	if (active_uiwin && uiw_child(active_uiwin)) {
 		ASSERT(uiw_child(active_uiwin)==uiw);
 		uiw_child(active_uiwin)=0;
 	}

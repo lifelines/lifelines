@@ -117,6 +117,10 @@ SOURCE=..\..\..\src\liflines\ask.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\liflines\askgedc.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\liflines\askprogram.c
 # End Source File
 # Begin Source File
@@ -390,6 +394,10 @@ SOURCE=..\..\..\src\gedlib\place.c
 # Begin Source File
 
 SOURCE=..\..\..\src\gedlib\property.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\stdlib\proptbls.c
 # End Source File
 # Begin Source File
 
@@ -732,5 +740,9 @@ SOURCE=..\..\..\src\hdrs\warehouse.h
 SOURCE=..\..\..\src\interp\yacc.h
 # End Source File
 # End Group
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\proptbls.h
+# End Source File
 # End Target
 # End Project

@@ -59,8 +59,14 @@ INT choose_one_from_indiseq(STRING, INDISEQ);
 INT display_list(STRING ttl, LIST list);
 void view_array(STRING ttl, INT no, STRING *pstrngs);
 
-/* from askprogram.c */
-FILE *ask_for_program(STRING mode, STRING ttl, STRING *pfname, STRING *pfullpath
+/* from askgedc.c */
+BOOLEAN ask_for_gedcom(STRING mode, STRING ttl, STRING *pfname, STRING *pfullpath
 	, STRING path, STRING ext, BOOLEAN picklist);
+
+/* from askprogram.c */
+BOOLEAN ask_for_program(STRING mode, STRING ttl, STRING *pfname, STRING *pfullpath
+	, STRING path, STRING ext, BOOLEAN picklist);
+void proparrdetails(ARRAY_DETAILS arrdets, void * param);
+
 
 #endif /* _LIFLINES_H */

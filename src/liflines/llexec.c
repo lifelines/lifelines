@@ -658,7 +658,7 @@ call_system_cmd (STRING cmd)
 	system(cmd);
 }
 extern STRING qSaskynq,qSaskynyn,qSaskyY,qSaskint;
-FILE *
+BOOLEAN
 ask_for_program (STRING mode,
                  STRING ttl,
                  STRING *pfname,
@@ -668,7 +668,7 @@ ask_for_program (STRING mode,
                  BOOLEAN picklist)
 {
 	/* TODO: We probably want to use the real implementation in askprogram.c */
-	return NULL;
+	return FALSE;
 }
 FILE *
 ask_for_output_file (STRING mode,

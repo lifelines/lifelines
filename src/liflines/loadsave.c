@@ -63,6 +63,7 @@ static void update_rec_count(INT pass, char ctype, STRING tag, INT count);
 
 extern STRING btreepath;
 extern STRING qSoutarc, qSoutfin;
+extern STRING qSwhatgedc;
 
 /*********************************************
  * local variables
@@ -194,17 +195,19 @@ export_saved_rec (char ctype, INT count)
  * load_gedcom -- have user select gedcom file & import it
  *==============================*/
 void
-load_gedcom (void)
+load_gedcom (BOOLEAN picklist)
 {
 	FILE *fp=NULL;
 	struct import_feedback ifeed;
 	STRING srcdir=NULL;
+	STRING fullpath=0;
 
 	srcdir = getoptstr("InputPath", ".");
-	fp = ask_for_input_file(LLREADTEXT
-		, _("Please enter the name of the GEDCOM file.")
-		, 0, 0, srcdir, ".ged");
-	if (!fp) return;
+	if (!ask_for_gedcom(LLREADTEXT, _(qSwhatgedc), 0, &fullpath, srcdir, ".ged", picklist)
+		|| !(fp = fopen(fullpath, LLREADTEXT))) {
+		strfree(&fullpath);
+		return;
+	}
 
 	memset(&ifeed, 0, sizeof(ifeed));
 	ifeed.validating_fnc = import_validating;
@@ -221,6 +224,7 @@ load_gedcom (void)
 	
 	import_from_gedcom_file(&ifeed, fp);
 	fclose(fp);
+	strfree(&fullpath);
 }
 
 /*================================

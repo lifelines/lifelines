@@ -88,6 +88,7 @@ scandir (const char *dir, struct dirent ***namelist,
 
   /* Now we know how many, we can alloc & make 2nd pass to copy them */
   names = (struct dirent**)malloc(sizeof(struct dirent*) * count);
+  memset(names, 0, sizeof(*names));
   handle = FindFirstFile(pattern, &file_data);
   if (handle == INVALID_HANDLE_VALUE)
     {

@@ -289,9 +289,10 @@ STRING noxref = SS "Line %d: This record has no cross reference value.";
 #endif
 
 	/* Option at bottom of list, if none in list are desired */
-ZST qSextrpt      = N_("<Choose outside this list>");
+ZST qSextchoos     = N_("<Choose outside this list>");
 	/* What report program to run ? */
 ZST qSwhatrpt     = N_("What is the name of the program?");
+ZST qSwhatgedc    = N_("Please enter the name of the GEDCOM file.");
 
 ZST qSwhtout      = N_("What is the name of the output file?");
 ZST qSopt2long    = N_("Malformed configuration file: line too long.");
@@ -498,6 +499,7 @@ ZST qSmn_mmex     = N_("x  Handle source, event and other records");
 ZST qSmn_uttl     = N_("What utility do you want to perform?");
 ZST qSmn_utsave   = N_("s  Save the database in a GEDCOM file");
 ZST qSmn_utread   = N_("r  Read in data from a GEDCOM file");
+ZST qSmn_utgdchoo = N_("R  Pick a GEDCOM file and read in");
 ZST qSmn_utkey    = N_("k  Find a person's key value");
 ZST qSmn_utkpers  = N_("i  Identify a person from key value");
 ZST qSmn_utdbstat = N_("d  Show database statistics");
