@@ -86,7 +86,7 @@ BOOLEAN prog_trace = FALSE;
 PVALUE
 __extractnames (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	LIST list, temp;
+	LIST list=0;
 	STRING str, str2;
 	INT len, sind;
 	PNODE nexp = (PNODE) iargs(node);
@@ -128,14 +128,15 @@ __extractnames (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	/* now create all the values, whether or not we found a NAME line */
 	*eflg = FALSE;
 	str = (line ? nval(line) : 0);
-	temp = create_list();
 	if (str && str[0]) {
+		LIST temp = create_list();
 		name_to_list(str, temp, &len, &sind);
 		/* list has string elements */
 		FORLIST(temp, el)
 			str2 = (STRING)el;
 			push_list(list, create_pvalue_from_string(str2));
 		ENDLIST
+		free_name_list(temp);
 	} else {
 		/* no NAME line or empty NAME line */
 		len = 0;

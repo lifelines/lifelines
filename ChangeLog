@@ -13,6 +13,10 @@
 	Encapsulated table & symbol table iterators into implementation
 	(behind typedef'd pointers TABLE_ITER and SYMTAB_ITER).
 
+	* ChangeLog src/interp/more.c
+
+	Fix list leak in __extractnames.
+
 2005-01-28, Perry Rapp
 
 	* ChangeLog src/interp/alloc.c
