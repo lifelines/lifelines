@@ -41,6 +41,9 @@
 
 #include "llinesi.h"
 
+extern INT listbadkeys;
+extern char badkeylist[];
+
 extern STRING ntchld, ntprnt, idfbrs, entnam, unknam, notone, ifone;
 extern STRING nofopn;
 
@@ -374,4 +377,42 @@ format_and_choose_spouse (INDISEQ seq,    /* sequence */
 	i = choose_one_from_indiseq_if_needed(seq, ask1, titl1, titln);
 	if (i == -1) return NULL;
 	return key_to_indi(skey(IData(seq)[i]));
+}
+/*===============================================================
+ * format_and_choose_generic -- Format sequence and have user choose
+ *   from it (any type)
+ * This is more complicated because it
+ *  handles bad pointers - if we had more stringing input verification
+ *  we wouldn't need this
+ *=============================================================*/
+NODE
+format_and_choose_generic (INDISEQ seq,    /* sequence */
+                           BOOLEAN ask1,   /* choose if len one? */
+                           STRING titl1,   /* title if len = one */
+                           STRING titln)   /* title if len > one */
+{
+	INT i = 0;
+	NODE node=0;
+	STRING skey;
+	format_indiseq(seq);
+	i = choose_one_from_indiseq_if_needed(seq, ask1, titl1, titln);
+	if (i == -1) return NULL;
+	listbadkeys=1;
+	if ((WORD)-1 == sval(IData(seq)[i])) /* invalid pointer */
+		badkeylist[0] = 0;
+	else
+	{
+		skey = skey(IData(seq)[i]);
+		node = key_to_type(skey, TRUE);
+	}
+	listbadkeys = 0;
+	if(!node) {
+		char buf[132];
+		if (badkeylist[0])
+			sprintf(buf, "WARNING: missing keys: %.40s", badkeylist);
+		else
+			sprintf(buf, "WARNING: invalid pointer");
+		message(buf);
+	}
+	return node;
 }

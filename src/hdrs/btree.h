@@ -94,7 +94,7 @@ typedef struct {
 	SHORT  i_nkeys;		/*num of keys in block*/
 	RKEY   i_rkeys[NORECS];	/*rkeys in block/file*/
 	INT    i_offs[NORECS];	/*offsets for data in file*/
-	INT    i_lens[NORECS];	/*lenghts for data in file*/
+	INT    i_lens[NORECS];	/*lengths for data in file*/
 } *BLOCK, BLOCKSTRUCT;
 
 /*============================================

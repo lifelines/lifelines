@@ -76,6 +76,25 @@ choose_spouse (NODE indi,
 	remove_indiseq(seq, FALSE);
 	return node;
 }
+/*========================================
+ * choose_source -- Choose any referenced source from some,
+ *  presumably top level, node
+ *======================================*/
+NODE
+choose_source (NODE what, STRING msg0, STRING msgn)
+{
+	INDISEQ seq;
+	NODE node;
+	INT i = 0;
+	if (!what) return NULL;
+	if (!(seq = node_to_sources(what))) {
+		message(msg0);
+		return NULL;
+	}
+	node = format_and_choose_generic(seq, TRUE, msgn, msgn);
+	remove_indiseq(seq, FALSE);
+	return node;
+}
 /*==========================================================
  * choose_family -- Choose family from person's FAMS/C lines
  *========================================================*/
@@ -88,7 +107,8 @@ choose_family (NODE indi,
 	NODE node;
 	INDISEQ seq = indi_to_families(indi, fams);
 	if (!seq) {
-		message(msg0);
+		if (msg0)
+			message(msg0);
 		return NULL;
 	}
 	node = format_and_choose_fam(seq, FALSE, NULL, msgn);

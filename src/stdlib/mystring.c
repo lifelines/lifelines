@@ -530,3 +530,24 @@ int main()
   return 0;
 }
 #endif
+
+void llstrcatn(char ** pdest, const char * src, int * len)
+{
+	char * dest = *pdest;
+	if (!(*len)) return;
+
+	while (1)
+	{
+		if (*len == 1)
+		{
+			*dest = 0;
+			(*len)--;
+			break;
+		}
+		*dest = *src;
+		(*len)--;
+		if (!src[0]) break;
+		dest++, src++;
+	}
+	*pdest = dest;
+}

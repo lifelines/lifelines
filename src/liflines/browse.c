@@ -323,6 +323,11 @@ browse_indi (NODE *pindi1,
 				else message(nopers);
 				break;
 			}
+		case '$':	/* Browse to sources */
+			node = choose_source(indi, nosour, idsour);
+			if (node)
+				edit_source(node);
+			break;
 		case 'q':
 		default:
 			return BROWSE_QUIT;
@@ -550,6 +555,11 @@ browse_fam (NODE *pindi,
 				else message(nofam);
 				break;
 			}
+		case '$':	/* Browse to sources */
+			node = choose_source(fam, nosour, idsour);
+			if (node)
+				edit_source(node);
+			break;
 		case 'q':
 		default:
 			return BROWSE_QUIT;
@@ -637,4 +647,64 @@ browse_pedigree (NODE *pindi,
 			return BROWSE_QUIT;
 		}
 	}
+}
+/*==================================================
+ * choose_any_source -- choose from list of all sources
+ *================================================*/
+NODE choose_any_source()
+{
+	INDISEQ seq;
+	NODE node;
+	seq = get_all_sour();
+	if (!seq)
+	{
+		message(nosour);
+		return 0;
+	}
+	node = format_and_choose_generic(seq, TRUE, idsour, idsour);
+	remove_indiseq(seq, FALSE);
+	return node;
+}
+/*==================================================
+ * browse_sources -- browse list of all sources
+ *================================================*/
+void browse_sources ()
+{
+	NODE node = choose_any_source();
+	if (node)
+		edit_source(node);
+}
+/*==================================================
+ * browse_events -- browse list of all events
+ *================================================*/
+void browse_events ()
+{
+	INDISEQ seq = get_all_even();
+	NODE node;
+	if (!seq)
+	{
+		message(noeven);
+		return;
+	}
+	node = format_and_choose_generic(seq, TRUE, ideven, ideven);
+	remove_indiseq(seq, FALSE);
+	if (node)
+		edit_event(node);
+}
+/*==================================================
+ * browse_others -- browse list of all sources
+ *================================================*/
+void browse_others ()
+{
+	INDISEQ seq = get_all_othe();
+	NODE node;
+	if (!seq)
+	{
+		message(noothe);
+		return;
+	}
+	node = format_and_choose_generic(seq, TRUE, idothe, idothe);
+	remove_indiseq(seq, FALSE);
+	if (node)
+		edit_other(node);
 }

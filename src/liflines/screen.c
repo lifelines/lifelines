@@ -447,7 +447,7 @@ create_windows (void)
 	del_menu_win = NEWWIN(7, 66);
 	trans_menu_win = NEWWIN(10,66);
 	utils_menu_win = NEWWIN(12, 66);
-	extra_menu_win = NEWWIN(10,66);
+	extra_menu_win = NEWWIN(13,66);
 	ask_win = NEWWIN(4, 73);
 	ask_msg_win = NEWWIN(5, 73);
 	choose_from_list_win = NEWWIN(15, 73);
@@ -517,6 +517,9 @@ init_all_windows (void)
 	win = extra_menu_win;
 	row = 1;
 	mvwaddstr(win, row++, 2, "What activity do you want to perform?");
+	mvwaddstr(win, row++, 4, "s  Browse source records");
+	mvwaddstr(win, row++, 4, "e  Browse event records");
+	mvwaddstr(win, row++, 4, "x  Browse other records");
 	mvwaddstr(win, row++, 4, "1  Add a source record to the database");
 	mvwaddstr(win, row++, 4, "2  Edit source record from the database");
 	mvwaddstr(win, row++, 4, "3  Add an event record to the database");
@@ -581,7 +584,7 @@ indi_browse (NODE indi)
 	show_person(indi, 1, PER_LINES);
 	display_screen(ONE_PER_SCREEN);
 	return interact(main_win,
-		"efmscoygubhirdpnaxtzqACFGMSU+-");
+		"efmscoygubhirdpnaxtzqACFGMSU$+-");
 }
 /*=======================================
  * fam_browse -- Handle fam_browse screen
@@ -593,7 +596,7 @@ fam_browse (NODE fam)
 	show_long_family(fam, 1, FAM_LINES);
 	display_screen(ONE_FAM_SCREEN);
 	return interact(main_win, 
-		"efmcnsardxtbzqABCFM+-");
+		"efmcnsardxtbzqABCFM$+-");
 }
 /*=============================================
  * tandem_browse -- Handle tandem_browse screen
@@ -630,7 +633,7 @@ ped_browse (NODE indi)
 	show_pedigree(indi);
 	display_screen(PED_SCREEN);
 	return interact(main_win,
-		"eifmscgb+-q");
+		"eifmscgb$+-q");
 }
 #ifdef UNUSED
 /*=======================================
@@ -911,10 +914,13 @@ extra_menu (void)
 	touchwin(extra_menu_win);
 	wmove(extra_menu_win, 1, 39);
 	wrefresh(extra_menu_win);
-	code = interact(extra_menu_win, "123456q");
+	code = interact(extra_menu_win, "sex123456q");
 	touchwin(main_win);
 	wrefresh(main_win);
 	switch (code) {
+	case 's': browse_sources(); break;
+	case 'e': browse_events(); break;
+	case 'x': browse_others(); break;
 	case '1': add_source(); break;
 	case '2': edit_source(NULL); break;
 	case '3': add_event(); break;

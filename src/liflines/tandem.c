@@ -46,12 +46,7 @@ extern STRING twohsb, twowif, idsbrs, idplst, idcbrs;
 /*=============================================
  * browse_tandem -- Two person browse operation
  *===========================================*/
-INT
-browse_tandem (NODE *pindi1,
-               NODE *pindi2,
-               NODE *pfam1,
-               NODE *pfam2,
-               INDISEQ *pseq)
+INT browse_tandem (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ *pseq)
 {
 	NODE node, indi1 = *pindi1, indi2 = *pindi2;
 	STRING key, name;
@@ -108,7 +103,7 @@ browse_tandem (NODE *pindi1,
 			*pfam1 = node;
 			return BROWSE_FAM;
 		case 'b': 	/* browse to new person list */
-			seq = ask_for_indiseq(idplst, &rc);
+			seq = (INDISEQ) ask_for_indiseq(idplst, &rc);
 			if (!seq) break;
 			if (length_indiseq(seq) == 1) {
 				element_indiseq(seq, 0, &key, &name);
@@ -128,12 +123,7 @@ browse_tandem (NODE *pindi1,
 /*==================================================
  * browse_2fam -- Handle two family browse operation
  *================================================*/
-INT
-browse_2fam (NODE *pindi1,
-             NODE *pindi2,
-             NODE *pfam1,
-             NODE *pfam2,
-             INDISEQ *pseq)
+INT browse_2fam (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ *pseq)
 {
 	NODE node, fam1 = *pfam1, fam2 = *pfam2;
 	INT c;

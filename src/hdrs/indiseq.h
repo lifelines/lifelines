@@ -109,12 +109,17 @@ INDISEQ indi_to_spouses(NODE);
 INDISEQ indi_to_families(NODE, BOOLEAN);
 INDISEQ name_to_indiseq(STRING);
 INDISEQ refn_to_indiseq(STRING);
+INDISEQ node_to_sources(NODE);
+INDISEQ get_all_sour ();
+INDISEQ get_all_even ();
+INDISEQ get_all_othe ();
 
 void write_nonlink_indi(NODE);
 void write_family(STRING, TABLE);
 void new_write_node(INT, NODE, BOOLEAN);
 
 BOOLEAN element_indiseq(INDISEQ, INT, STRING*, STRING*);
+BOOLEAN indiseq_elementval(INDISEQ, INT, STRING*, INT *, STRING*);
 void namesort_indiseq(INDISEQ);
 void keysort_indiseq(INDISEQ);
 void valuesort_indiseq(INDISEQ, BOOLEAN*);

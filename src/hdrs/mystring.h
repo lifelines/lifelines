@@ -36,4 +36,7 @@ extern const int my_ISO_Latin1_Finnish[];
 #define MY_STRNCMP(s1,s2,n) \
 	my_strncmp((const unsigned char *)(s1), \
 		   (const unsigned char *)(s2),(n),MY_SORT_TABLE)
+
+void llstrcatn(char ** pdest, const char * src, int * len);
+
 #endif

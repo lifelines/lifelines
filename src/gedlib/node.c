@@ -846,6 +846,21 @@ indi_to_title (NODE node,
 	if (!(node = find_tag(nchild(node), "TITL"))) return NULL;
 	return manip_name(nval(node), tt, FALSE, TRUE, len);
 }
+/*======================================
+ * node_to_tag -- Return a subtag of a node
+ * (presumably top level, but not necessarily)
+ *====================================*/
+STRING node_to_tag (NODE node, STRING tag, TRANTABLE tt, INT len)
+{
+	static unsigned char scratch[MAXNAMELEN+1];
+	STRING refn;
+	if (!node) return NULL;
+	if (!(node = find_tag(nchild(node), tag))) return NULL;
+	refn = nval(node);
+	if (len > sizeof(scratch)-1) len = sizeof(scratch)-1;
+	translate_string(tt, refn, scratch, sizeof(scratch));
+	return scratch;
+}
 /*==============================================
  * indi_to_event -- Convert event tree to string
  *============================================*/

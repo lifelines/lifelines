@@ -112,20 +112,72 @@ indi_to_list_string (NODE indi,
 		p += strlen(p);
 	}
 	if(indi) {
-		if(FAMC(indi)) hasparents = 1;
-		else hasparents = 0;
-		if(FAMS(indi)) hasfamily = 1;
-		else hasfamily = 0;
-		if(hasfamily || hasparents) {
-			*p++ = ' ';
-			*p++ = '[';
-			if(hasparents) *p++ = 'P';
-			if(hasfamily) *p++ = 'S';
-			*p++ = ']';
-			*p = '\0';
-		}
+	    if(FAMC(indi)) hasparents = 1;
+	    else hasparents = 0;
+	    if(FAMS(indi)) hasfamily = 1;
+	    else hasfamily = 0;
+	    if(hasfamily || hasparents) {
+		*p++ = ' ';
+		*p++ = '[';
+		if(hasparents) *p++ = 'P';
+		if(hasfamily) *p++ = 'S';
+		*p++ = ']';
+		*p = '\0';
+	    }
 	}
 	if ((INT)strlen(scratch) > len)
 		scratch[len] = 0;
+	return strsave(scratch);
+}
+/*================================================
+ * sour_to_list_string -- Return menu list string.
+ *==============================================*/
+STRING
+sour_to_list_string(NODE sour, INT len, STRING delim)
+{
+	char unsigned scratch[1024];
+	STRING name, p=scratch;
+	INT mylen=len;
+	TRANTABLE ttd = tran_tables[MINDS];
+	p[0]=0;
+	llstrcatn(&p, "(S", &mylen);
+	llstrcatn(&p, rmvat(nxref(sour))+1, &mylen);
+	llstrcatn(&p, ") ", &mylen);
+	name = node_to_tag(sour, "REFN", ttd, len);
+	if (name)
+		llstrcatn(&p, name, &mylen);
+	name = node_to_tag(sour, "TITL", ttd, len);
+	if (name && mylen > 20)
+	{
+		llstrcatn(&p, delim, &mylen);
+		llstrcatn(&p, name, &mylen);
+	}
+	name = node_to_tag(sour, "AUTH", ttd, len);
+	if (name && mylen > 20)
+	{
+		llstrcatn(&p, delim, &mylen);
+		llstrcatn(&p, name, &mylen);
+	}
+	return strsave(scratch);
+}
+/*================================================
+ * generic_to_list_string -- Return menu list string.
+ *==============================================*/
+STRING
+generic_to_list_string(NODE node, INT len, STRING delim)
+{
+	char unsigned scratch[1024];
+	STRING name, p=scratch;
+	INT mylen=len;
+	TRANTABLE ttd = tran_tables[MINDS];
+	p[0]=0;
+	llstrcatn(&p, "(X", &mylen);
+	llstrcatn(&p, rmvat(nxref(node))+1, &mylen);
+	llstrcatn(&p, ") (", &mylen);
+	llstrcatn(&p, ntag(node), &mylen);
+	llstrcatn(&p, ") ", &mylen);
+	name = node_to_tag(node, "REFN", ttd, len);
+	if (name)
+		llstrcatn(&p, name, &mylen);
 	return strsave(scratch);
 }

@@ -30,6 +30,7 @@ INT choose_one_from_indiseq(STRING, INDISEQ);
 NODE format_and_choose_indi(INDISEQ, BOOLEAN, STRING, STRING);
 NODE format_and_choose_spouse(INDISEQ, BOOLEAN, STRING, STRING);
 NODE format_and_choose_fam(INDISEQ, BOOLEAN, STRING, STRING);
+NODE format_and_choose_generic(INDISEQ, BOOLEAN, STRING, STRING);
 
 /* from main.c */
 void final_cleanup(void);

@@ -119,19 +119,18 @@ keynum_to_sour(int keynum)
 	return key_to_sour(keystr);
 }
 /*=====================================
- * key_to_type -- Convert key to specified type
+ * key_to_type -- Convert key to node
  *===================================*/
 NODE
-key_to_type (STRING key, STRING type, INT reportmode)
+key_to_type (STRING key, INT reportmode)
 {
-	if (eqstr(type, "INDI"))
-		return reportmode ? rkey_to_indi(key) : key_to_indi(key);
-	if (eqstr(type, "FAM"))
-		return reportmode ? rkey_to_fam(key) : key_to_fam(key);
-	if (eqstr(type, "EVEN"))
-		return reportmode ? rkey_to_even(key) : key_to_even(key);
-	if (eqstr(type, "SOUR"))
-		return reportmode ? rkey_to_sour(key) : key_to_sour(key);
+	switch(key[0])
+	{
+	case 'I': return reportmode ? rkey_to_indi(key) : key_to_indi(key);
+	case 'F': return reportmode ? rkey_to_fam(key) : key_to_fam(key);
+	case 'E': return reportmode ? rkey_to_even(key) : key_to_even(key);
+	case 'S': return reportmode ? rkey_to_sour(key) : key_to_sour(key);
+	}
 	return reportmode ? rkey_to_othr(key) : key_to_othr(key);
 }
 /*=====================================
@@ -450,34 +449,35 @@ add_to_direct (CACHE cache,
 #endif
 	ASSERT(cache && key);
 	node = NULL;
-	if ((record = retrieve_record(key, &len)))
-	  {
-	  if(reportmode && (len < 6))
-	      {
-	      stdfree(record);
-	      return(NULL);
-	      }
-	  node = string_to_node(record);
-	  }
+	if ((record = retrieve_record(key, &len))) 
+	{
+		if(reportmode && (len < 6))
+		{
+			stdfree(record);
+			return(NULL);
+		}
+		node = string_to_node(record);
+	}
 	if(node == NULL)
-	  {
-	  if(listbadkeys) {
-	      if(strlen(badkeylist) < 80 - strlen(key) - 2) {
-		  if(badkeylist[0]) strcat(badkeylist, ",");
-		  strcat(badkeylist, key);
-	      }
-	      return(NULL);
-	  }
-	  llwprintf("key %s is not in database. Use \"btedit <database> <key>\" to fix.\n", (char *) key);
-	  llwprintf("where <key> is probably one of the following:\n");
-	  for(i = 0; i < 10; i++)
-	    {
-	    j = keyidx + i;
-	    if(j >= 10) j -= 10;
-	    llwprintf(" %s", (char *)keybuf[j]);
-	    }
-	  llwprintf("\n");
-	  }
+	{
+		if(listbadkeys) {
+			if(strlen(badkeylist) < 80 - strlen(key) - 2) {
+				if(badkeylist[0]) strcat(badkeylist, ",");
+				strcat(badkeylist, key);
+			}
+			return(NULL);
+		}
+		if (reportmode) return(NULL);
+		llwprintf("key %s is not in database. Use \"btedit <database> <key>\" to fix.\n", (char *) key);
+		llwprintf("where <key> is probably one of the following:\n");
+		for(i = 0; i < 10; i++)
+		{
+			j = keyidx + i;
+			if(j >= 10) j -= 10;
+			llwprintf(" %s", (char *)keybuf[j]);
+		}
+		llwprintf("\n");
+	}
 	ASSERT(node);
 	ASSERT(csizedir(cache) < cmaxdir(cache));
 	cel = (CACHEEL) stdalloc(sizeof(*cel));

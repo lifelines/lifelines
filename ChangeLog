@@ -1,3 +1,16 @@
+2000-11-29 Perry Rapp <prapp@users.sourceforge.net>
+
+	* gedlib/choose.c gedlib/gstrings.c gedlib/indiseq.c
+	gedlib/keytonod.c gedlib/node.c
+	hdrs/btree.h hdrs/gedcom.h hdrs/indiseq.h 
+	hdrs/liflines.h hdrs/mystring.h
+	liflines/ask.c liflines/browse.c liflines/screen.c
+	liflines/tandem.c stdlib/mystring.c:
+	Added handling for generic sequences (mixed contents).
+	Added browse source, event, other lists (from extra menu).
+	Added $ cross-reference to sources.
+	(New functions include node_to_sources, browse_sources.)
+
 2000-11-28 Perry Rapp <prapp@users.sourceforge.net>
 
 	* gedlib/gstrings.c: Fixed some space indents
@@ -21,7 +34,6 @@
 	Fixed xrefval (I originally checked in wrong version).
 	Changed second arg of ask_indi & ask_indi_key to CONFIRMQ
 	typedef and added DOCONFIRM/NOCONFIRM values. 
-	
 
 2000-11-28  Marc Nozell  <marc@nozell.com>
 

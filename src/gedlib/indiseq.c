@@ -118,7 +118,13 @@ append_indiseq (INDISEQ seq,    /* sequence */
 	n = ISize(seq);
 	old = IData(seq);
 	if (!sure) {
-		if (*key == 'I' && !name) {
+		/* Perry, 2000/11/28 - I'm skipping dupcheck
+		for FAMs for compatibility, but I don't know
+		why FAM seqs didn't do dupcheck */
+		BOOLEAN dupcheck = (*key != 'F' && *key != 'I')
+			|| (*key == 'I' && !name);
+		if (dupcheck)
+		{
 			for (i = 0; i < n; i++) {
 				if (eqstr(key, skey(old[i]))) return;
 			}
@@ -233,6 +239,23 @@ element_indiseq (INDISEQ seq,    /* sequence */
 	*pkey = *pname = NULL;
 	if (!seq || index < 0 || index > ISize(seq) - 1) return FALSE;
 	*pkey =  skey(IData(seq)[index]);
+	*pname = snam(IData(seq)[index]);
+	return TRUE;
+}
+/*================================================
+ * indiseq_elementval -- Return element & value from sequence
+ *==============================================*/
+BOOLEAN
+indiseq_elementval (INDISEQ seq,    /* sequence */
+                    INT index,      /* index */
+                    STRING *pkey,   /* returned key */
+                    INT *pval,      /* returned val */
+                    STRING *pname)  /* returned name */
+{
+	*pkey = *pname = NULL;
+	if (!seq || index < 0 || index > ISize(seq) - 1) return FALSE;
+	*pkey =  skey(IData(seq)[index]);
+	*pval = sval(IData(seq)[index]);
 	*pname = snam(IData(seq)[index]);
 	return TRUE;
 }
@@ -1226,15 +1249,50 @@ name_to_indiseq (STRING name)
 }
 /*==================================================
  * format_indiseq -- Format print lines of sequence.
+ * This actually handles generic types
  *================================================*/
 void
 format_indiseq (INDISEQ seq)
 {
-	NODE indi, fam;
+	int fmt;
 	FORINDISEQ(seq, el, num)
-		indi = key_to_indi(skey(el));
-		fam = NULL;
-		sprn(el) = indi_to_list_string(indi, fam, 68);
+		fmt=0;
+		switch (skey(el)[0])
+		{
+		case 'I':
+			{
+				NODE indi = key_to_indi(skey(el));
+				sprn(el) = indi_to_list_string(indi, NULL, 68);
+				fmt=1;
+			}
+			break;
+		case 'S':
+			{
+				NODE sour = rkey_to_sour(skey(el));
+				if (sour)
+				{
+					sprn(el) = sour_to_list_string(sour, 68, ", ");
+					fmt=1;
+				}
+			}
+			break;
+		case 'E':
+			/* TO DO - any expected structure for events ? */
+			break;
+		case 'X':
+			{
+				NODE node = key_to_type(skey(el), TRUE);
+				if (node)
+				{
+					sprn(el) = generic_to_list_string(node, 68, ", ");
+					fmt=1;
+				}
+			}
+			/* TO DO - prefix tag name */
+			break;
+		}
+		if (!fmt)
+			sprn(el) = strsave(skey(el));
 	ENDINDISEQ
 }
 /*==================================================
@@ -1328,3 +1386,113 @@ str_to_indiseq (STRING name)
 	if (!seq) seq = name_to_indiseq(name);
 	return seq;
 }
+/*=======================================================
+ * append_all_tags -- append all tags of specified type
+ *  to indiseq (optionally recursive
+ *=====================================================*/
+void append_all_tags(INDISEQ seq, NODE node, STRING tagname, BOOLEAN recurse)
+{
+	if (eqstr(ntag(node), tagname))
+	{
+		STRING key;
+		int val;
+		key = nval(node);
+		if (key)
+		{
+			STRING skey = rmvat(key);
+			if (skey)
+				val = atoi(skey+1); /* PVALUE NEEDED */
+			else
+			{
+				skey = key; /* leave invalid sources alone, but mark invalid with val==-1 */
+				val = -1;
+			}
+			append_indiseq(seq, skey, NULL, (WORD)val, FALSE, FALSE);
+		}
+	}
+	if (nchild(node) && recurse )
+		append_all_tags(seq, nchild(node), tagname, recurse);
+	if (nsibling(node))
+		append_all_tags(seq, nsibling(node), tagname, recurse);
+
+}
+/*=======================================================
+ * node_to_sources -- Create sequence of all sources
+ *  inside a node record (at any level)
+ *=====================================================*/
+INDISEQ node_to_sources (NODE indi)
+{
+	INDISEQ seq;
+	if (!indi) return NULL;
+	seq = create_indiseq();
+	append_all_tags(seq, indi, "SOUR", TRUE);
+	if (!length_indiseq(seq))
+	{
+		remove_indiseq(seq, FALSE);
+		seq = NULL;
+	}
+	return seq;
+}
+/*=======================================================
+ * get_all_sour -- Create sequence of all sources
+ *=====================================================*/
+INDISEQ get_all_sour ()
+{
+	INDISEQ seq=NULL;
+	int i=0;
+	while (i=xref_nexts(i))
+	{
+		static char skey[10];
+		WORD val;
+		if (!seq)
+		{
+			seq = create_indiseq();
+		}
+		sprintf(skey, "S%d", i);
+		val = (WORD)i;
+		append_indiseq(seq, skey, NULL, val, TRUE, FALSE);
+	}
+	return seq;
+}		
+/*=======================================================
+ * get_all_even -- Create sequence of all event records
+ *=====================================================*/
+INDISEQ get_all_even ()
+{
+	INDISEQ seq=NULL;
+	int i=0;
+	while (i=xref_nexte(i))
+	{
+		static char skey[10];
+		WORD val;
+		if (!seq)
+		{
+			seq = create_indiseq();
+		}
+		sprintf(skey, "E%d", i);
+		val = (WORD)i;
+		append_indiseq(seq, skey, NULL, val, TRUE, FALSE);
+	}
+	return seq;
+}		
+/*=======================================================
+ * get_all_othe -- Create sequence of all other records
+ *=====================================================*/
+INDISEQ get_all_othe ()
+{
+	INDISEQ seq=NULL;
+	int i=0;
+	while (i=xref_nextx(i))
+	{
+		static char skey[10];
+		WORD val;
+		if (!seq)
+		{
+			seq = create_indiseq();
+		}
+		sprintf(skey, "X%d", i);
+		val = (WORD)i;
+		append_indiseq(seq, skey, NULL, val, TRUE, FALSE);
+	}
+	return seq;
+}		
