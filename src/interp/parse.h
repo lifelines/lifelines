@@ -18,7 +18,7 @@
 #define YYSTYPE void *
 
 /* must use these fields for the default bison location rule */
-/* otherwise must override YYLOC_DEFAULT */
+/* otherwise must override YYLLOC_DEFAULT */
 typedef struct yyltype
 {
   int first_line;

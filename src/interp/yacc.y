@@ -52,7 +52,7 @@ INT Yival;
 FLOAT Yfval;
 
 static void join (PNODE list, PNODE last);
-#define yyerror(msg) parse_error(pactx, &yyloc, msg)
+#define yyerror(msg) parse_error(pactx, &yylloc, msg)
 
 /* want token locations */
 #define YYLSP_NEEDED 1

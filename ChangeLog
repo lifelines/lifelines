@@ -1,3 +1,10 @@
+2002-07-27 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog interp/interp.c interp/parse.h interp/yacc.h
+	interp/yacc.y:
+
+	Fix typo in yacc.y (yyloc -> yylloc).
+
 2002-07-24 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog build/msvc6/llines/llines.rc hdrs/interp.h

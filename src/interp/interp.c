@@ -2029,7 +2029,7 @@ pa_handle_require (PACTX pactx, PNODE node)
 /*=============================================+
  * parse_error -- handle bison parse error
  *  pactx: [I/O] pointer to parseinfo structure (parse globals)
- *  yyloc: [IN]  token location
+ *  ploc:  [IN]  token location
  *  node:  [IN]  current parse node
  *=============================================*/
 void
