@@ -1,3 +1,9 @@
+2000-12-17 Perry Rapp <prapp@users.sourceforge.net>
+
+	Revised some function definitions as per prevailing style.
+	Renamed scroll variables to reduce confusion.
+	Reset scroll every time entering a new person/family.
+
 2000-12-12 Perry Rapp <prapp@users.sourceforge.net>
 
 	* gedlib/messages.c liflines/scan.c stdlib/stdstrng.c:

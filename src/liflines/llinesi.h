@@ -73,8 +73,9 @@ void show_aux_display(NODE, INT, INT);
 void show_sour_display(NODE, INT, INT);
 void show_short_family(NODE, INT, INT);
 void show_long_family(NODE, INT, INT);
-void show_scroll (INT delta);
-void show_scroll2 (INT delta);
+void show_reset_scroll();
+void show_scroll(INT delta);
+void show_scroll2(INT delta);
 void show_childnumbers();
 
 /* swap.c */

@@ -54,6 +54,7 @@ INT browse_tandem (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ
 	INT rc;
 
 	if (!indi1 || !indi2) return BROWSE_QUIT;
+	show_reset_scroll();
 	while (TRUE) {
 		switch (tandem_browse(indi1, indi2)) {
 		case 'e': 	/* edit top person */
@@ -128,6 +129,7 @@ INT browse_2fam (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ *
 	NODE node, fam1 = *pfam1, fam2 = *pfam2;
 	INT c;
 	ASSERT(fam1 && fam2);
+	show_reset_scroll();
 	while (TRUE) {
 		c = twofam_browse(fam1, fam2);
 		switch (c) {

@@ -42,16 +42,16 @@ typedef struct treenode_s *treenode;
 
 static int Gens = 4;
 static int Ancestors_mode = 1;
-static int Scroll = 0;
+static int Scrollp = 0;
 static int ScrollMax = 0;
 
 #define GENS_MAX 7
 #define GENS_MIN 2
 
 
-/*==================================================
+/*=================================================
  * add_children -- add children to tree recursively
- *================================================*/
+ *===============================================*/
 static treenode
 add_children (NODE indi, int gen, int maxgen, int * count)
 {
@@ -84,9 +84,9 @@ add_children (NODE indi, int gen, int maxgen, int * count)
 	}
 	return tn;
 }
-/*==================================================
+/*===============================================
  * add_parents -- add parents to tree recursively
- *================================================*/
+ *=============================================*/
 static treenode
 add_parents (NODE indi, int gen, int maxgen, int * count)
 {
@@ -107,9 +107,9 @@ add_parents (NODE indi, int gen, int maxgen, int * count)
 	}
 	return tn;
 }
-/*==================================================
+/*=====================================
  * print_to_buffer -- print output line
- *================================================*/
+ *===================================*/
 static void
 print_to_buffer (int keynum, int gen, int * row)
 {
@@ -120,10 +120,10 @@ print_to_buffer (int keynum, int gen, int * row)
 	WINDOW *w = main_win;
 	if (mylen > ll_cols-5)
 		mylen = ll_cols-5;
-	if (*row>Scroll && *row-Scroll<=ll_lines-10) {
-		if (*row==Scroll+1 && Scroll>0)
+	if (*row>Scrollp && *row-Scrollp<=ll_lines-10) {
+		if (*row==Scrollp+1 && Scrollp>0)
 			overflow=1;
-		if (*row-Scroll==ll_lines-10 && Scroll<ScrollMax)
+		if (*row-Scrollp==ll_lines-10 && Scrollp<ScrollMax)
 			overflow=1;
 		strcpy(ptr, "");
 		for (i=0; i<gen*6; i++)
@@ -131,14 +131,14 @@ print_to_buffer (int keynum, int gen, int * row)
 		if (keynum)
 			indi = keynum_to_indi(keynum);
 		llstrcatn(&ptr, indi_to_ped_fix(indi, mylen), &mylen);
-		put_out_line(w, *row-Scroll, 2, buffer, overflow);
+		put_out_line(w, *row-Scrollp, 2, buffer, overflow);
 	}
 	(*row)++;
 }
-/*==================================================
+/*=================================
  * trav_pre_print -- traverse tree,
  *  printing indis in inorder
- *================================================*/
+ *===============================*/
 static void
 trav_pre_print (treenode tn, int * row, int gen)
 {
@@ -147,10 +147,10 @@ trav_pre_print (treenode tn, int * row, int gen)
 	for (n0=tn->firstchild; n0; n0=n0->nextsib)
 		trav_pre_print(n0, row, gen+1);
 }
-/*==================================================
+/*===========================================
  * trav_bin_in_print -- traverse binary tree,
  *  printing indis in inorder
- *================================================*/
+ *=========================================*/
 static void
 trav_bin_in_print (treenode tn, int * row, int gen)
 {
@@ -160,10 +160,10 @@ trav_bin_in_print (treenode tn, int * row, int gen)
 	if (tn->firstchild && tn->firstchild->nextsib)
 		trav_bin_in_print(tn->firstchild->nextsib, row, gen+1);
 }
-/*==================================================
+/*======================================================
  * SetScrollMax -- compute max allowable scroll based on
  *  number of rows in this pedigree tree
- *================================================*/
+ *====================================================*/
 static void
 SetScrollMax (int row)
 {
@@ -171,9 +171,9 @@ SetScrollMax (int row)
 	if (ScrollMax<0)
 		ScrollMax=0;
 }
-/*==================================================
+/*=========================================================
  * show_descendants -- build descendant tree & print it out
- *================================================*/
+ *=======================================================*/
 static void
 show_descendants (NODE indi)
 {
@@ -187,9 +187,9 @@ show_descendants (NODE indi)
 	gen=0;
 	trav_pre_print(root, &row, gen);
 }
-/*==================================================
+/*=====================================================
  * show_ancestors -- build ancestor tree & print it out
- *================================================*/
+ *===================================================*/
 static void
 show_ancestors (NODE indi)
 {
@@ -203,10 +203,10 @@ show_ancestors (NODE indi)
 	gen=0;
 	trav_bin_in_print(root, &row, gen);
 }
-/*==================================================
+/*=============================================
  * pedigree_show -- display ancestors or
  *  descendants tree, depending on current mode
- *================================================*/
+ *===========================================*/
 void
 pedigree_show (NODE indi)
 {
@@ -215,19 +215,19 @@ pedigree_show (NODE indi)
 	else
 		show_descendants(indi);
 }
-/*==================================================
+/*===========================================
  * pedigree_toggle_mode -- toggle between 
  *  ancestral & descendant mode pedigree tree
- *================================================*/
+ *=========================================*/
 void
 pedigree_toggle_mode (void)
 {
 	Ancestors_mode = !Ancestors_mode;
 }
-/*==================================================
+/*======================================================
  * pedigree_increase_generations -- adjust # generations
  *  displayed in pedigree tree
- *================================================*/
+ *====================================================*/
 void
 pedigree_increase_generations (INT delta)
 {
@@ -237,23 +237,23 @@ pedigree_increase_generations (INT delta)
 	else if (Gens < GENS_MIN)
 		Gens = GENS_MIN;
 }
-/*==================================================
+/*===========================================================
  * pedigree_scroll -- scroll up/down rows of pedigree display
- *================================================*/
+ *=========================================================*/
 void
 pedigree_scroll (INT delta)
 {
-	Scroll += delta;
-	if (Scroll < 0)
-		Scroll = 0;
-	else if (Scroll > ScrollMax)
-		Scroll = ScrollMax;
+	Scrollp += delta;
+	if (Scrollp < 0)
+		Scrollp = 0;
+	else if (Scrollp > ScrollMax)
+		Scrollp = ScrollMax;
 }
-/*==================================================
+/*===============================================================
  * pedigree_reset_scroll -- clear scroll when entering a new indi
- *================================================*/
+ *=============================================================*/
 void
 pedigree_reset_scroll ()
 {
-	Scroll=0;
+	Scrollp=0;
 }

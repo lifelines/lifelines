@@ -60,7 +60,7 @@ static LINESTRING Spers, Sbirt, Sdeat, Sfath, Smoth, Smarr;
 static LINESTRING Shusb, Shbirt, Shdeat, Swife, Swbirt, Swdeat;
 static LINESTRING Sothers[MAXOTHERS];
 static INT Solen = 0;
-static INT Scroll = 0;
+static INT Scroll1 = 0;
 static INT Scroll2 = 0;
 static INT number_child_enable = 0;
 
@@ -177,20 +177,22 @@ show_person (NODE pers, /* person */
 		mvwaddch(main_win, row+i, ll_cols-1, ACS_VLINE);
 #endif
 	}
-	if (Scroll > Solen + 5 - hgt)
-		Scroll = Solen + 5 - hgt;
-	if (Scroll < 0)
-		Scroll = 0;
-	localrow = row - Scroll;
+	if (Scroll1) {
+		if (Scroll1 > Solen + 5 - hgt)
+			Scroll1 = Solen + 5 - hgt;
+		if (Scroll1 < 0)
+			Scroll1 = 0;
+	}
+	localrow = row - Scroll1;
 	mvwaddstr(main_win, row+0, 1, Spers);
 	mvwaddstr(main_win, row+1, 1, Sbirt);
 	mvwaddstr(main_win, row+2, 1, Sdeat);
 	mvwaddstr(main_win, row+3, 1, Sfath);
 	mvwaddstr(main_win, row+4, 1, Smoth);
-	for (i = Scroll; i < Solen && i < hgt-5+Scroll; i++)
+	for (i = Scroll1; i < Solen && i < hgt-5+Scroll1; i++)
 	{
-		overflow = ((i+1 == hgt-5+Scroll)&&(i+1 != Solen));
-		if (Scroll && (i == Scroll))
+		overflow = ((i+1 == hgt-5+Scroll1)&&(i+1 != Solen));
+		if (Scroll1 && (i == Scroll1))
 			overflow = 1;
 		put_out_line(main_win, localrow+5+i, 1, Sothers[i], overflow);
 	}
@@ -206,11 +208,11 @@ show_person (NODE pers, /* person */
  *============================*/
 void show_person2 (NODE pers, INT row, INT hgt)
 {
-	INT save = Scroll;
-	Scroll = Scroll2;
+	INT save = Scroll1;
+	Scroll1 = Scroll2;
 	show_person(pers, row, hgt);
-	Scroll2 = Scroll;
-	Scroll = save;
+	Scroll2 = Scroll1;
+	Scroll1 = save;
 }
 /*=============================================
  * add_spouse_line -- Add spouse line to others
@@ -325,11 +327,13 @@ show_long_family (NODE fam,
 		mvwaddch(main_win, row+i, ll_cols-1, ACS_VLINE);
 #endif
 	}
-	if (Scroll > Solen + 7 - hgt)
-		Scroll = Solen + 7 - hgt;
-	if (Scroll < 0)
-		Scroll = 0;
-	localrow = row - Scroll;
+	if (Scroll1) {
+		if (Scroll1 > Solen + 7 - hgt)
+			Scroll1 = Solen + 7 - hgt;
+		if (Scroll1 < 0)
+			Scroll1 = 0;
+	}
+	localrow = row - Scroll1;
 	mvwaddstr(main_win, row+0, 1, Shusb);
 	mvwaddstr(main_win, row+1, 1, Shbirt);
 	mvwaddstr(main_win, row+2, 1, Shdeat);
@@ -337,10 +341,10 @@ show_long_family (NODE fam,
 	mvwaddstr(main_win, row+4, 1, Swbirt);
 	mvwaddstr(main_win, row+5, 1, Swdeat);
 	mvwaddstr(main_win, row+6, 1, Smarr);
-	for (i = Scroll; i < Solen && i < hgt-7+Scroll; i++)
+	for (i = Scroll1; i < Solen && i < hgt-7+Scroll1; i++)
 	{
-		overflow = ((i+1 == hgt-7+Scroll)&&(i+1 != Solen));
-		if (Scroll && (i == Scroll))
+		overflow = ((i+1 == hgt-7+Scroll1)&&(i+1 != Solen));
+		if (Scroll1 && (i == Scroll1))
 			overflow = 1;
 		put_out_line(main_win, localrow+7+i, 1, Sothers[i]+1, overflow);
 	}
@@ -708,27 +712,38 @@ show_sour_display (NODE node,
 }
 #endif
 /*===============================================
- * individual_scroll - vertically scroll person display
+ * show_scroll - vertically scroll person display
  *=============================================*/
-void show_scroll (INT delta)
+void
+show_scroll (INT delta)
 {
-	Scroll += delta;
-	if (Scroll < 0)
-		Scroll = 0;
+	Scroll1 += delta;
+	if (Scroll1 < 0)
+		Scroll1 = 0;
 }
-/*===============================================
- * individual_scroll2 - scroll lower window (in tandem mode)
- *=============================================*/
-void show_scroll2 (INT delta)
+/*===================================
+ * show_scroll2 - scroll lower window
+ *  (in tandem mode)
+ *=================================*/
+void
+show_scroll2 (INT delta)
 {
 	Scroll2 += delta;
 	if (Scroll2 < 0)
 		Scroll2 = 0;
 }
-/*===============================================
+/*=================================
+ * show_reset_scroll - clear scroll
+ *===============================*/
+void show_reset_scroll()
+{
+	Scroll1 = 0;
+	Scroll2 = 0;
+}
+/*=====================================
  * put_out_line - move string to screen
  * but also append + at end if requested
- *=============================================*/
+ *====================================*/
 void
 put_out_line (WINDOW * win, INT x, INT y, STRING string, INT flag)
 {

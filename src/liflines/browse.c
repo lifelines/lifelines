@@ -150,6 +150,7 @@ browse_indi (NODE *pindi1,
 	addstrings[0] = crtcfm;
 	addstrings[1] = crtsfm;
 	if (!indi) return BROWSE_QUIT;
+	show_reset_scroll();
 	while (TRUE) {
 		c = indi_browse(indi);
 		if (c != 'a') save = NULL;
@@ -408,6 +409,7 @@ browse_fam (NODE *pindi,
 	TRANTABLE ttd = tran_tables[MINDS];
 
 	if (!fam) return BROWSE_QUIT;
+	show_reset_scroll();
 	while (TRUE) {
 		c = fam_browse(fam);
 		if (c != 'a' && c != 's') save = NULL;
