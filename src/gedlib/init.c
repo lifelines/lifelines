@@ -464,13 +464,11 @@ open_database_impl (LLDATABASE lldb, INT alteration)
 		int myerr=0;
 		c = bkfile(btree).k_ostat;
 		if (c < 0) {
-			myerr = BTERR_WRITER;
+			bterrno = BTERR_WRITER;
 		} else {
 			rdr_count = c-1;
-			myerr = BTERR_READERS;
+			bterrno = BTERR_READERS;
 		}
-		/* close_lldb may have set bterrno itself */
-		bterrno = myerr;
 		return FALSE;
 	}
 	return TRUE;
