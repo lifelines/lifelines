@@ -47,6 +47,7 @@
 #define LINESREQ 24
 #define COLSREQ  80
 #define MAXVIEWABLE 30
+/* center windows on real physical screen (LINES x COLS) */
 #define NEWWIN(r,c)   newwin(r,c,(LINES - (r))/2,(COLS - (c))/2)
 #define SUBWIN(w,r,c) subwin(w,r,c,(LINES - (r))/2,(COLS - (c))/2)
 #ifdef BSD
@@ -210,8 +211,8 @@ paint_main_screen(void)
 #endif
 	werase(win);
 	BOX(win, 0, 0);
-	show_horz_line(win, 4, 0, COLSREQ);
-	show_horz_line(win, ll_lines-3, 0, COLSREQ);
+	show_horz_line(win, 4, 0, ll_cols);
+	show_horz_line(win, ll_lines-3, 0, ll_cols);
 	wmove(win, 1, 2);
 #ifdef BETA
 	sprintf(buffer, "%s%s", version, betaversion);
@@ -244,8 +245,8 @@ paint_one_per_screen (void)
 	INT row, col;
 	werase(win);
 	BOX(win, 0, 0);
-	show_horz_line(win, ll_lines-12, 0, COLSREQ);
-	show_horz_line(win, ll_lines-3,  0, COLSREQ);
+	show_horz_line(win, ll_lines-12, 0, ll_cols);
+	show_horz_line(win, ll_lines-3,  0, ll_cols);
 	row = ll_lines - 11;
 	mvwaddstr(win, row, 2, plschs);
 	mvwaddstr(win, row++, 2+strlen(plschs)+3,
@@ -285,8 +286,8 @@ paint_one_fam_screen (void)
 	INT row, col;
 	werase(win);
 	BOX(win, 0, 0);
-	show_horz_line(win, ll_lines-10, 0, COLSREQ);
-	show_horz_line(win, ll_lines-3, 0, COLSREQ);
+	show_horz_line(win, ll_lines-10, 0, ll_cols);
+	show_horz_line(win, ll_lines-3, 0, ll_cols);
 	row = ll_lines - 9;
 	mvwaddstr(win, row, 2, plschs);
 	mvwaddstr(win, row++, 2+strlen(plschs)+6,
@@ -319,9 +320,9 @@ paint_two_per_screen (void)
 	INT row, col;
 	werase(win);
 	BOX(win, 0, 0);
-	show_horz_line(win, TANDEM_LINES+1, 0, COLSREQ);
-	show_horz_line(win, 2*TANDEM_LINES+2, 0, COLSREQ);
-	show_horz_line(win, ll_lines-3, 0, COLSREQ);
+	show_horz_line(win, TANDEM_LINES+1, 0, ll_cols);
+	show_horz_line(win, 2*TANDEM_LINES+2, 0, ll_cols);
+	show_horz_line(win, ll_lines-3, 0, ll_cols);
 	mvwaddstr(win, 2*TANDEM_LINES+3, 2, plschs);
 	row = 2*TANDEM_LINES+4; col = 3;
 	mvwaddstr(win, row++, col, "e  Edit top person");
@@ -349,9 +350,9 @@ paint_two_fam_screen (void)
 	INT row, col;
 	werase(win);
 	BOX(win, 0, 0);
-	show_horz_line(win, TANDEM_LINES+1, 0, COLSREQ);
-	show_horz_line(win, 2*TANDEM_LINES+2, 0, COLSREQ);
-	show_horz_line(win, ll_lines-3, 0, COLSREQ);
+	show_horz_line(win, TANDEM_LINES+1, 0, ll_cols);
+	show_horz_line(win, 2*TANDEM_LINES+2, 0, ll_cols);
+	show_horz_line(win, ll_lines-3, 0, ll_cols);
 	mvwaddstr(win, 2*TANDEM_LINES+3, 2, plschs);
 	row = 2*TANDEM_LINES+4; col = 3;
 	mvwaddstr(win, row++, col, "e  Edit top family");
@@ -375,8 +376,8 @@ paint_ped_screen (void)
 	INT row, col;
 	werase(win);
 	BOX(win, 0, 0);
-	show_horz_line(win, PED_LINES+1, 0, COLSREQ);
-	show_horz_line(win, ll_lines-3, 0, COLSREQ);
+	show_horz_line(win, PED_LINES+1, 0, ll_cols);
+	show_horz_line(win, ll_lines-3, 0, ll_cols);
 	mvwaddstr(win, PED_LINES+2, 2, plschs);
 	row = PED_LINES+3; col = 3;
 	mvwaddstr(win, row++, col, "e  Edit the person");
@@ -401,8 +402,8 @@ paint_list_screen (void)
 	INT row, col;
 	werase(win);
 	BOX(win, 0, 0);
-	show_horz_line(win, LIST_LINES+1, 0, COLSREQ);
-	show_horz_line(win, ll_lines-3, 0, COLSREQ);
+	show_horz_line(win, LIST_LINES+1, 0, ll_cols);
+	show_horz_line(win, ll_lines-3, 0, ll_cols);
 	show_vert_line(win, LIST_LINES+1, 52, 15);
 #ifndef BSD
 	mvwaddch(win, LIST_LINES+1, 52, ACS_TTEE);
@@ -432,8 +433,8 @@ paint_aux_screen (void)
 	INT row, col;
 	werase(win);
 	BOX(win, 0, 0);
-	show_horz_line(win, AUX_LINES+1, 0, COLSREQ);
-	show_horz_line(win, ll_lines-3, 0, COLSREQ);
+	show_horz_line(win, AUX_LINES+1, 0, ll_cols);
+	show_horz_line(win, ll_lines-3, 0, ll_cols);
 	mvwaddstr(win, AUX_LINES+2, 2, plschs);
 	row = AUX_LINES+3; col = 3;
 	mvwaddstr(win, row++, col, "e  Edit the record");
@@ -455,15 +456,15 @@ void
 create_windows (void)
 {
 	INT col;
-	stdout_box_win = NEWWIN(ll_lines-4, COLSREQ-4);
-	stdout_win = SUBWIN(stdout_box_win, ll_lines-6, COLSREQ-6);
+	stdout_box_win = NEWWIN(ll_lines-4, ll_cols-4);
+	stdout_win = SUBWIN(stdout_box_win, ll_lines-6, ll_cols-6);
 	scrollok(stdout_win, TRUE);
 	col = COLS/4;
-	debug_box_win = newwin(8, COLSREQ-col-2, 1, col);
-	debug_win = subwin(debug_box_win, 6, COLSREQ-col-4, 2, col+1);
+	debug_box_win = newwin(8, ll_cols-col-2, 1, col);
+	debug_win = subwin(debug_box_win, 6, ll_cols-col-4, 2, col+1);
 	scrollok(debug_win, TRUE);
 
- 	main_win = NEWWIN(ll_lines, COLSREQ);
+ 	main_win = NEWWIN(ll_lines, ll_cols);
 	add_menu_win = NEWWIN(8, 66);
 	del_menu_win = NEWWIN(7, 66);
 	trans_menu_win = NEWWIN(10,66);
@@ -1192,7 +1193,7 @@ vmprintf (STRING fmt, va_list args)
 	wmove(main_win, row = ll_lines-2, 2);
 	if (cur_screen != LIST_SCREEN) {
 		wclrtoeol(main_win);
-		mvwaddch(main_win, row, COLSREQ-1, ACS_VLINE);
+		mvwaddch(main_win, row, ll_cols-1, ACS_VLINE);
 	} else
 		mvwaddstr(main_win, row, 2, empstr);
 	wmove(main_win, row, 2);
@@ -1250,7 +1251,7 @@ INT arg1, arg2, arg3, arg4, arg5, arg6, arg7;
 	wmove(main_win, row = ll_lines-2, 2);
 	if (cur_screen != LIST_SCREEN) {
 		wclrtoeol(main_win);
-		mvwaddch(main_win, row, COLSREQ-1, ACS_VLINE);
+		mvwaddch(main_win, row, ll_cols-1, ACS_VLINE);
 	} else
 		mvwaddstr(main_win, row, 2, empstr);
 	wmove(main_win, row, 2);
@@ -1308,7 +1309,7 @@ place_std_msg (void)
 	wmove(main_win, row = ll_lines-2, 2);
 	if (cur_screen != LIST_SCREEN) {
 		wclrtoeol(main_win);
-		mvwaddch(main_win, row, COLSREQ-1, ACS_VLINE);
+		mvwaddch(main_win, row, ll_cols-1, ACS_VLINE);
 	} else
 		mvwaddstr(main_win, row, 2, empstr);
 	mvwaddstr(main_win, row, 2, str);
