@@ -316,8 +316,6 @@ free_nodes (NODE node)
 	NODE sib;
 	while (node) {
 		if (nchild(node)) free_nodes(nchild(node));
-		if (nxref(node)) stdfree(nxref(node));
-		if (nval(node)) stdfree(nval(node));
 		sib = nsibling(node);
 		free_node(node);
 		node = sib;
