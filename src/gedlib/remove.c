@@ -326,16 +326,16 @@ remove_any_xrefs_node_list (STRING xref, NODE list)
 	ASSERT(xref);
 
 	while (curr) {
+		NODE next = nsibling(curr);
 		if (eqstr(xref, nval(curr))) {
-			NODE next = nsibling(curr);
 			if (prev)
 				nsibling(prev) = next;
 			else
 				rtn = next;
 			nsibling(curr) = NULL;
 			free_nodes(curr);
-			curr = next;
 		}
+		curr = next;
 	}
 	return rtn;
 }
