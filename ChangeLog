@@ -1,3 +1,20 @@
+2001-09-25 Matt Emmerton <memmerto@users.sourceforge.net>
+
+	* ChangeLog	
+	* stdlib/lloptions.c stdlib/Makefile.am 
+	* tools/dbverify.c
+	* liflines/Makefile.am liflines/error.c lifelines/main.c
+	* hdrs/liflines.h hdrs/gedcom.h hdrs/llstdlib.h
+	* gedlib/Makefile.am gedlib/init.c
+	* (deleted) stdlib/assert.c gedlib/lloptions.c liflines/lloptions.c
+	* (added) liflines/error.c liflines/lloptions.c stdlib/lloptions.c
+
+	Three batches of commits to fix up a bunch of modularity violations.
+	1) moved lloptions stuff out of gedlib/ and into stdlib/
+	2) moved __fatal() and related routines out of stdlib/ and into
+	   liflines/ and tools/, so that each program can handle errors
+	   in an appropriate manner.
+
 2001-09-24 Matt Emmerton <memmerto@users.sourceforge.net>
 
         * ChangeLog tools/dbverify.c
