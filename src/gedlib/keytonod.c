@@ -186,7 +186,6 @@ keynum_to_node (char ntype, int keynum)
 	ASSERT(0);
 	return 0;
 }
-
 /*=====================================
  * key_to_type -- Convert key to node
  * TO DO - should become obsoleted by key_to_typ0
@@ -202,6 +201,15 @@ key_to_type (STRING key, INT reportmode)
 	case 'S': return reportmode ? qkey_to_sour(key) : key_to_sour(key);
 	}
 	return reportmode ? qkey_to_othr(key) : key_to_othr(key);
+}
+/*=====================================
+ * qkey_to_type -- Convert key to node
+ * Created: 2001/02/11, Perry Rapp (for naming consistency)
+ *===================================*/
+NODE
+qkey_to_type (STRING key)
+{
+	return key_to_type(key, TRUE);
 }
 /*=====================================
  * key_to_typ0 -- Convert key to nod0

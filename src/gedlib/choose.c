@@ -96,6 +96,26 @@ choose_source (NODE what, STRING msg0, STRING msgn)
 	remove_indiseq(seq, FALSE);
 	return node;
 }
+/*========================================
+ * choose_note -- Choose any referenced note from some,
+ *  presumably top level, node
+ *  always asks
+ * Created: 2001/02/11, Perry Rapp
+ *======================================*/
+NODE
+choose_note (NODE what, STRING msg0, STRING msgn)
+{
+	INDISEQ seq;
+	NODE node;
+	if (!what) return NULL;
+	if (!(seq = node_to_notes(what))) {
+		message(msg0);
+		return NULL;
+	}
+	node = nztop(choose_from_indiseq(seq, DOASK1, msgn, msgn));
+	remove_indiseq(seq, FALSE);
+	return node;
+}
 /*==========================================================
  * choose_family -- Choose family from person's FAMS/C lines
  *  asks if multiple

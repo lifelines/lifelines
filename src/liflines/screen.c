@@ -498,7 +498,9 @@ static void
 show_indi_mode (NODE indi, INT mode, INT row, INT hgt)
 {
 	if (mode=='g')
-		show_gedcom_main(indi, row, hgt);
+		show_gedcom_main(indi, GDVW_NORMAL, row, hgt);
+	else if (mode=='x')
+		show_gedcom_main(indi, GDVW_EXPANDED, row, hgt);
 	else if (mode=='a')
 		show_ancestors(indi, row, hgt);
 	else if (mode=='d')
@@ -513,7 +515,9 @@ static void
 show_fam_mode (NODE fam, INT mode, INT row, INT hgt, INT width)
 {
 	if (mode=='g')
-		show_gedcom_main(fam, row, hgt);
+		show_gedcom_main(fam, GDVW_NORMAL, row, hgt);
+	else if (mode=='x')
+		show_gedcom_main(fam, GDVW_EXPANDED, row, hgt);
 	else
 		show_long_family(fam, row, hgt, width);
 }
@@ -603,11 +607,11 @@ twofam_browse (NODE fam1, NODE fam2, INT mode)
  * Implemented: 2001/01/27, Perry Rapp
  *=====================================*/
 INT
-aux_browse (NODE node)
+aux_browse (NODE node, INT mode)
 {
 	INT screen = AUX_SCREEN;
 	INT lines = update_menu(screen);
-	show_aux_display(node, lines);
+	show_aux_display(node, mode, lines);
 	display_screen(screen);
 	return interact(main_win, NULL, screen);
 }
@@ -774,10 +778,11 @@ choose_one_from_indiseq (STRING ttl, INDISEQ seq)
 	char buffer[31];
 	char * ptr;
 	INT titlen;
+	INT elemwidth=68; /* TO DO - how wide can this be ? */
 	ASSERT(seq);
 	len = length_indiseq(seq);
 	if (len<50)
-		preprint_indiseq(seq);
+		preprint_indiseq(seq, elemwidth);
 		
 	scroll=0;
 	/*
@@ -881,10 +886,11 @@ choose_list_from_indiseq (STRING ttl,
 {
 	WINDOW *win;
 	INT len;
+	INT elemwidth=68; /* TO DO - how wide can this be ? */
 	ASSERT(seq);
 	len = length_indiseq(seq);
 	if (len<50)
-		preprint_indiseq(seq);
+		preprint_indiseq(seq, elemwidth);
 	win = choose_win(len+list_detail_lines, NULL);
 	werase(win);
 	BOX(win, 0, 0);
@@ -1265,6 +1271,8 @@ shw_list (WINDOW *win,
           INT *scroll)
 {
 	INT i, j, row, nrows, len, numdet;
+	/* TO DO - how big can we make buffer ?
+	ie, how wide can print element be ? */
 	char buffer[60];
 	len = length_indiseq(seq);
 	numdet = list_detail_lines;

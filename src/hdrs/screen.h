@@ -98,7 +98,7 @@ extern WINDOW *scan_menu_win;
 extern WINDOW *utils_menu_win;
 
 /* Function Prototype */
-INT aux_browse(NODE);
+INT aux_browse(NODE, INT mode);
 INT ask_for_char(STRING, STRING, STRING);
 INT ask_for_char_msg(STRING, STRING, STRING, STRING);
 STRING ask_for_input_filename (STRING ttl, STRING path, STRING prmpt);

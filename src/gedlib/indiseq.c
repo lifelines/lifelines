@@ -79,18 +79,18 @@ extern BOOLEAN opt_finnish;		/* Finnish language support */
 #define ISVAL_PTR 3
 #define ISVAL_NUL 4
 
-static STRING get_print_el (INDISEQ, INT);
+static STRING get_print_el(INDISEQ, INT i, INT len);
 static void append_all_tags(INDISEQ, NODE, STRING, BOOLEAN);
 
-static INT name_compare (SORTEL, SORTEL);
-static INT key_compare (SORTEL, SORTEL);
+static INT name_compare(SORTEL, SORTEL);
+static INT key_compare(SORTEL, SORTEL);
 static INT canonkey_order(char c);
 static INT canonkey_compare(SORTEL el1, SORTEL el2);
-static INT value_str_compare (SORTEL, SORTEL);
-static INDISEQ create_indiseq_impl (INT valtype);
-static void append_indiseq_impl (INDISEQ seq, STRING key, 
+static INT value_str_compare(SORTEL, SORTEL);
+static INDISEQ create_indiseq_impl(INT valtype);
+static void append_indiseq_impl(INDISEQ seq, STRING key, 
 	STRING name, UNION val, BOOLEAN sure, BOOLEAN alloc);
-static void check_indiseq_valtype (INDISEQ seq, INT valtype);
+static void check_indiseq_valtype(INDISEQ seq, INT valtype);
 
 /*===============================================
  * create_indiseq_ival -- Create sequence of INTs
@@ -1309,48 +1309,14 @@ name_to_indiseq (STRING name)
 /*===========================================
  * generic_print_el -- Format a print line of
  *  sequence of indis
+ *  returns heap-alloc'd string
  *=========================================*/
 static STRING
-generic_print_el (INDISEQ seq, INT i)
+generic_print_el (INDISEQ seq, INT i, INT len)
 {
-	STRING key, name, str;
+	STRING key, name;
 	element_indiseq(seq, i, &key, &name);
-
-	str=NULL; /* set to appropriate format */
-
-	switch (key[0])
-	{
-	case 'I':
-		{
-			NODE indi = key_to_indi(key);
-			str = indi_to_list_string(indi, NULL, 68);
-		}
-		break;
-	case 'S':
-		{
-			NODE sour = qkey_to_sour(key);
-			if (sour)
-			{
-				str = sour_to_list_string(sour, 68, ", ");
-			}
-		}
-		break;
-	case 'E':
-		/* TO DO - any expected structure for events ? */
-		break;
-	case 'X':
-		{
-			NODE node = key_to_type(key, TRUE);
-			if (node)
-			{
-				str = generic_to_list_string(node, 68, ", ");
-			}
-		}
-		break;
-	}
-	if (!str)
-		str = strsave(key);
-	return str;
+	return generic_to_list_string(NULL, key, len, ", ");
 }
 /*=============================================
  * spouseseq_print_el -- Format a print line of
@@ -1358,7 +1324,7 @@ generic_print_el (INDISEQ seq, INT i)
  * assume values are family keys
  *===========================================*/
 static STRING
-spouseseq_print_el (INDISEQ seq, INT i)
+spouseseq_print_el (INDISEQ seq, INT i, INT len)
 {
 	NODE indi, fam;
 	STRING key, name, str;
@@ -1366,7 +1332,7 @@ spouseseq_print_el (INDISEQ seq, INT i)
 	element_indiseq_ival(seq, i, &key, &val, &name);
 	indi = key_to_indi(key);
 	fam = keynum_to_fam(val);
-	str = indi_to_list_string(indi, fam, 68);
+	str = indi_to_list_string(indi, fam, len);
 	return str;
 }
 /*==========================================
@@ -1375,7 +1341,7 @@ spouseseq_print_el (INDISEQ seq, INT i)
  * assume values are spouse keys
  *========================================*/
 static STRING
-famseq_print_el (INDISEQ seq, INT i)
+famseq_print_el (INDISEQ seq, INT i, INT len)
 {
 	NODE fam, spouse;
 	STRING key, name, str;
@@ -1383,7 +1349,7 @@ famseq_print_el (INDISEQ seq, INT i)
 	element_indiseq_ival(seq, i, &key, &val, &name);
 	fam = key_to_fam(key);
 	spouse = ( val ? keynum_to_indi(val) : NULL);
-	str = indi_to_list_string(spouse, fam, 68);
+	str = indi_to_list_string(spouse, fam, len);
 	return str;
 }
 /*================================================
@@ -1391,13 +1357,13 @@ famseq_print_el (INDISEQ seq, INT i)
  *  one element of an indiseq
  *==============================================*/
 static STRING
-get_print_el (INDISEQ seq, INT i)
+get_print_el (INDISEQ seq, INT i, INT len)
 {
 	STRING str;
 	switch(IPrntype(seq)) {
-	case ISPRN_FAMSEQ: str = famseq_print_el(seq, i); break;
-	case ISPRN_SPOUSESEQ: str = spouseseq_print_el(seq, i); break;
-	default: str = generic_print_el(seq, i); break;
+	case ISPRN_FAMSEQ: str = famseq_print_el(seq, i, len); break;
+	case ISPRN_SPOUSESEQ: str = spouseseq_print_el(seq, i, len); break;
+	default: str = generic_print_el(seq, i, len); break;
 	}
 	return str;
 }
@@ -1422,7 +1388,7 @@ print_indiseq_element (INDISEQ seq, INT i, STRING buf, INT len)
 		 It would be more efficient not to strsave. This requires
 		 changing indi_to_list_string, etc.
 		*/
-		str = get_print_el(seq, i);
+		str = get_print_el(seq, i, len-1);
 		alloc=TRUE;
 	}
 	llstrcatn(&ptr, str, &len);
@@ -1433,10 +1399,10 @@ print_indiseq_element (INDISEQ seq, INT i, STRING buf, INT len)
  * preprint_indiseq -- Preformat print lines of indiseq
  *===================================================*/
 void
-preprint_indiseq (INDISEQ seq)
+preprint_indiseq (INDISEQ seq, INT len)
 {
 	FORINDISEQ(seq, el, num)
-		sprn(el) = get_print_el(seq, num);
+		sprn(el) = get_print_el(seq, num, len);
 	ENDINDISEQ
 }
 /*==============================================================
@@ -1530,12 +1496,32 @@ append_all_tags(INDISEQ seq, NODE node, STRING tagname, BOOLEAN recurse)
  * node_to_sources -- Create sequence of all sources
  *  inside a node record (at any level)
  *=====================================================*/
-INDISEQ node_to_sources (NODE indi)
+INDISEQ
+node_to_sources (NODE node)
 {
 	INDISEQ seq;
-	if (!indi) return NULL;
+	if (!node) return NULL;
 	seq = create_indiseq_ival();
-	append_all_tags(seq, indi, "SOUR", TRUE);
+	append_all_tags(seq, node, "SOUR", TRUE);
+	if (!length_indiseq(seq))
+	{
+		remove_indiseq(seq, FALSE);
+		seq = NULL;
+	}
+	return seq;
+}
+/*=======================================================
+ * node_to_notes -- Create sequence of all notes
+ *  inside a node record (at any level)
+ * 2001/02/11, Perry Rapp
+ *=====================================================*/
+INDISEQ
+node_to_notes (NODE node)
+{
+	INDISEQ seq;
+	if (!node) return NULL;
+	seq = create_indiseq_ival();
+	append_all_tags(seq, node, "NOTE", TRUE);
 	if (!length_indiseq(seq))
 	{
 		remove_indiseq(seq, FALSE);
@@ -1546,7 +1532,8 @@ INDISEQ node_to_sources (NODE indi)
 /*=======================================================
  * get_all_sour -- Create sequence of all sources
  *=====================================================*/
-INDISEQ get_all_sour (void)
+INDISEQ
+get_all_sour (void)
 {
 	INDISEQ seq=NULL;
 	int i=0;
@@ -1563,7 +1550,8 @@ INDISEQ get_all_sour (void)
 /*=======================================================
  * get_all_even -- Create sequence of all event records
  *=====================================================*/
-INDISEQ get_all_even (void)
+INDISEQ
+get_all_even (void)
 {
 	INDISEQ seq=NULL;
 	INT i=0;
@@ -1580,7 +1568,8 @@ INDISEQ get_all_even (void)
 /*=======================================================
  * get_all_othe -- Create sequence of all other records
  *=====================================================*/
-INDISEQ get_all_othe (void)
+INDISEQ
+get_all_othe (void)
 {
 	INDISEQ seq=NULL;
 	INT i=0;

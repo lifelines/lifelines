@@ -61,6 +61,7 @@ typedef struct indi_print_param_s
 typedef struct node_print_param_s
 {
 	NODE node;
+	INT gdvw;
 } *NODE_PRINT_PARAM;
 
 /*********************************************
@@ -80,7 +81,7 @@ static treenode add_parents(NODE indi, INT gen, INT maxgen, INT * count);
 static void print_to_screen(INT gen, INT * row, LINEPRINT_FNC, void *param, INT minrow, INT maxrow);
 static STRING indi_lineprint(INT width, void * param);
 static void trav_pre_print_tn(treenode tn, INT * row, INT gen, INT minrow, INT maxrow);
-static void trav_pre_print_nd(NODE node, INT * row, INT gen, INT minrow, INT maxrow);
+static void trav_pre_print_nd(NODE node, INT * row, INT gen, INT minrow, INT maxrow, INT gdvw);
 static void trav_bin_in_print_tn(treenode tn, INT * row, INT gen, INT minrow, INT maxrow);
 static void SetScrollMax(INT row, INT hgt);
 static void free_tree (treenode root);
@@ -250,6 +251,14 @@ node_lineprint (INT width, void * param)
 		llstrcatn(&ptr, nval(node), &mylen);
 		llstrcatn(&ptr, " ", &mylen);
 	}
+	if (npp->gdvw == GDVW_EXPANDED && nval(node)) {
+		STRING key = rmvat(nval(node)), str;
+		if (key) {
+			str = generic_to_list_string(NULL, key, mylen, ",");
+			llstrcatn(&ptr, " : ", &mylen);
+			llstrcatn(&ptr, str, &mylen);
+		}
+	}
 	return line;
 }
 /*=================================
@@ -275,14 +284,15 @@ trav_pre_print_tn (treenode tn, INT * row, INT gen,
  *===============================*/
 static void
 trav_pre_print_nd (NODE node, INT * row, INT gen, 
-	INT minrow, INT maxrow)
+	INT minrow, INT maxrow, INT gdvw)
 {
 	NODE child;
 	struct node_print_param_s npp;
 	npp.node = node;
+	npp.gdvw = gdvw;
 	print_to_screen(gen, row, &node_lineprint, &npp, minrow, maxrow);
 	for (child=nchild(node); child; child=nsibling(child))
-		trav_pre_print_nd(child, row, gen+1, minrow, maxrow);
+		trav_pre_print_nd(child, row, gen+1, minrow, maxrow, gdvw);
 }
 /*===========================================
  * trav_bin_in_print_tn -- traverse binary tree,
@@ -334,11 +344,11 @@ pedigree_draw_descendants (NODE indi, INT row, INT hgt)
 	free_tree(root);
 }
 /*=========================================================
- * show_gedcom -- print out gedcom node tree
+ * pedigree_draw_gedcom -- print out gedcom node tree
  * Created: 2001/01/27, Perry Rapp
  *=======================================================*/
 void
-pedigree_draw_gedcom (NODE node, INT row, INT hgt)
+pedigree_draw_gedcom (NODE node, INT gdvw, INT row, INT hgt)
 {
 	INT count, gen;
 	count=0;
@@ -346,7 +356,7 @@ pedigree_draw_gedcom (NODE node, INT row, INT hgt)
 	SetScrollMax(count, hgt);
 	/* inorder traversal */
 	gen=0;
-	trav_pre_print_nd(node, &row, gen, row, row+hgt-1);
+	trav_pre_print_nd(node, &row, gen, row, row+hgt-1, gdvw);
 }
 /*=====================================================
  * show_ancestors -- build ancestor tree & print it out

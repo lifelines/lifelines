@@ -79,6 +79,7 @@ get_child_strings (NODE fam,
 }
 /*================================================
  * indi_to_list_string -- Return menu list string.
+ *  returns heap-alloc'd string
  *==============================================*/
 STRING
 indi_to_list_string (NODE indi,
@@ -167,10 +168,10 @@ sour_to_list_string(NODE sour, INT len, STRING delim)
 	return strsave(scratch);
 }
 /*================================================
- * generic_to_list_string -- Return menu list string.
+ * other_to_list_string -- Return menu list string.
  *==============================================*/
 STRING
-generic_to_list_string(NODE node, INT len, STRING delim)
+other_to_list_string(NODE node, INT len, STRING delim)
 {
 	char unsigned scratch[1024];
 	STRING name, p=scratch;
@@ -188,6 +189,46 @@ generic_to_list_string(NODE node, INT len, STRING delim)
 	if (name)
 		llstrcatn(&p, name, &mylen);
 	return strsave(scratch);
+}
+/*===========================================
+ * generic_to_list_string -- Format a print line from
+ *  a top-level node of any type
+ * Caller may specify either node or key (& leave other NULL)
+ *  returns heap-alloc'd string
+ *=========================================*/
+STRING
+generic_to_list_string (NODE node, STRING key, INT len, STRING delim)
+{
+	STRING str;
+	str=NULL; /* set to appropriate format */
+	if (!node && key)
+		node = qkey_to_type(key);
+	if (!key && node)
+		key = rmvat(nval(node));
+	if (node) {
+		switch (key[0])
+		{
+		case 'I':
+			str = indi_to_list_string(node, NULL, len);
+			break;
+		case 'S':
+			str = sour_to_list_string(node, len, ", ");
+			break;
+		case 'E':
+			/* TO DO - any expected structure for events ? */
+			break;
+		case 'X':
+			str = other_to_list_string(node, len, ", ");
+			break;
+		}
+	}
+	if (!str) {
+		if (key)
+			str = strsave(key);
+		else
+			str = strsave("??");
+	}
+	return str;
 }
 /*=======================================================
  * set_displaykeys -- Enable/disable keys in list strings

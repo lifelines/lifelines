@@ -22,6 +22,7 @@ void browse(NODE);
 void browse_source_node(NODE sour);
 void browse_source(NOD0 sour);
 void browse_event(NOD0 even);
+void browse_other_node(NODE othr);
 void browse_other(NOD0 othr);
 void browse_sources(void);
 void browse_events(void);
@@ -71,9 +72,10 @@ BOOLEAN add_other(void);
 BOOLEAN add_source(void);
 
 /* pedigree.c */
+enum { GDVW_NORMAL, GDVW_EXPANDED };
 void pedigree_draw_ancestors(NODE indi, INT row, INT menuht);
 void pedigree_draw_descendants(NODE indi, INT row, INT menuht);
-void pedigree_draw_gedcom(NODE node, INT row, INT hgt);
+void pedigree_draw_gedcom(NODE node, INT gdvw, INT row, INT hgt);
 void pedigree_increase_generations(INT delta);
 void pedigree_reset_scroll(void);
 void pedigree_scroll(INT delta);
@@ -98,12 +100,12 @@ void toggle_menu(void);
 /* show.c */
 void display_cache_stats(void);
 void put_out_line(WINDOW * win, INT x, INT y, STRING string, INT width, INT flag);
-void show_aux_display(NODE, INT hgt);
+void show_aux_display(NODE, INT mode, INT hgt);
 void show_ancestors(NODE indi, INT row, INT hgt);
 void show_childnumbers(void);
 void show_descendants(NODE indi, INT row, INT hgt);
-void show_gedcom_main(NODE node, INT row, INT hgt);
-void show_gedcom_main2(NODE node, INT row, INT hgt);
+void show_gedcom_main(NODE node, INT gdvw, INT row, INT hgt);
+void show_gedcom_main2(NODE node, INT gdvw, INT row, INT hgt);
 void show_list(INDISEQ, INT, INT, INT);
 void show_long_family(NODE, INT row, INT hgt, INT width);
 void show_person(WINDOW *, NODE, INT row, INT hgt, INT width, INT *scroll);

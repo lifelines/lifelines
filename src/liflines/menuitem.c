@@ -62,7 +62,7 @@ struct CmdArray_s {
  *********************************************/
 
 static void setup_menu(INT screen, STRING Title, INT MenuRows
-	, INT MenuCols ,INT Size, MenuItem ** Menu, MenuItemOption ** MenuOptions);
+	, INT MenuCols ,INT Size, MenuItem ** Menu);
 static CMDARRAY create_cmd_array(INT alloc);
 static void grow_cmd_array(CMDARRAY cmds);
 static void copy_cmditem(CMDITEM dest, CMDITEM src);
@@ -78,9 +78,14 @@ static INT menuitem_find_cmd(CMDARRAY cmds, STRING cmd);
 
 ScreenInfo f_ScreenInfo[MAX_SCREEN];
 
-
+/*
+Note - these are hardcoded as "?" and "q" in menuitem_check_cmd
+ - 2001/02/11, Perry Rapp
+*/
 MenuItem g_MenuItemOther = { "?  Other menu choices", "?", CMD_MENU_MORE };
 MenuItem g_MenuItemQuit = { "q  Return to main menu", "q", CMD_QUIT };
+
+/* normal menu items */
 static MenuItem f_MenuItemEditIndi = { "e  Edit the person", "e", CMD_EDIT };
 static MenuItem f_MenuItemEditFamily = { "e  Edit the family", "e", CMD_EDIT };
 static MenuItem f_MenuItemEdit = { "e  Edit record", "e", CMD_EDIT };
@@ -132,11 +137,13 @@ static MenuItem f_MenuItemScrollUpBoth = { "(( Scroll both up", "((", CMD_SCROLL
 static MenuItem f_MenuItemScrollDownBoth = { ")) Scroll both down", "))", CMD_SCROLL_BOTH_DOWN };
 static MenuItem f_MenuItemToggleChildNos = { "#  Toggle childnos", "#", CMD_TOGGLE_CHILDNUMS };
 static MenuItem f_MenuItemModeGedcom = { "!g GEDCOM mode", "!g", CMD_MODE_GEDCOM };
+static MenuItem f_MenuItemModeGedcomX = { "!x GEDCOMX mode", "!x", CMD_MODE_GEDCOMX };
 static MenuItem f_MenuItemModeAncestors = { "!a Ancestors mode", "!a", CMD_MODE_ANCESTORS };
 static MenuItem f_MenuItemModeDescendants = { "!d Descendants mode", "!d", CMD_MODE_DESCENDANTS };
 static MenuItem f_MenuItemModeNormal = { "!n Normal mode", "!n", CMD_MODE_NORMAL };
 static MenuItem f_MenuItemModePedigree = { "p  Pedigree mode", "p", CMD_MODE_PEDIGREE };
 static MenuItem f_MenuItemModeCycle = { "!! Cycle mode", "!!", CMD_MODE_CYCLE };
+/* Note - f_MenuItemDigits has special handling, and must be 123456789 */
 static MenuItem f_MenuItemDigits = { "(1-9)  Browse to child", "123456789", CMD_CHILD_DIRECT0 };
 MenuItem f_MenuItemSyncMoves = { "y  Turn on sync", "y", CMD_NONE };
 static MenuItem f_MenuItemAdvanced = { "A  Advanced view", "A", CMD_ADVANCED };
@@ -164,11 +171,12 @@ static MenuItem f_MenuItemNameList = { "n  Name this list", "n", CMD_NONE };
 static MenuItem f_MenuItemBrowseNewPersons = { "b  Browse new persons", "b", CMD_NONE };
 static MenuItem f_MenuItemAddToList = { "a  Add to this list", "a", CMD_NONE };
 static MenuItem f_MenuItemSwapMarkCurrent = { "x  Swap mark/current", "x", CMD_NONE };
-static MenuItem f_MenuItemSources = { "$  List sources", "$", CMD_SOURCES };
+static MenuItem f_MenuItemSources = { "$s  List sources", "$s", CMD_SOURCES };
+static MenuItem f_MenuItemNotes = { "$n  List notes", "$n", CMD_NOTES };
+/*
 static MenuItemOption f_MenuItemOptionSources =
 	{ "$s  show sources", "$s  hide sources", "$S", CMD_SHOWSOURCES };
-static MenuItem f_MenuItemTest88 = { "88  Test 88", "88", CMD_TEST88 };
-static MenuItem f_MenuItemTest999 = { "999 Test 999", "999", CMD_TEST999 };
+*/
 static MenuItem f_MenuItemBrowseFamily = { "B  Browse new family", "B", CMD_BROWSE_FAM };
 
 
@@ -199,6 +207,7 @@ static MenuItem * f_MenuPerson[] =
 	&f_MenuItemToggleChildNos,
 	&f_MenuItemDigits,
 	&f_MenuItemModeGedcom,
+	&f_MenuItemModeGedcomX,
 	&f_MenuItemModeNormal,
 	&f_MenuItemModePedigree,
 	&f_MenuItemModeAncestors,
@@ -216,15 +225,18 @@ static MenuItem * f_MenuPerson[] =
 	&f_MenuItemEnlargeMenu,
 	&f_MenuItemShrinkMenu,
 	&f_MenuItemSources,
+	&f_MenuItemNotes,
 	&f_MenuItemNext,
 	&f_MenuItemPrev,
 	0
 };
+/*
 static MenuItemOption * f_MenuPersonOptions[] =
 {
 	&f_MenuItemOptionSources,
 	0
 };
+*/
 static MenuItem * f_MenuFamily[] =
 {
 	&f_MenuItemEditFamily,
@@ -246,6 +258,7 @@ static MenuItem * f_MenuFamily[] =
 	&f_MenuItemToggleChildNos,
 	&f_MenuItemDigits,
 	&f_MenuItemModeGedcom,
+	&f_MenuItemModeGedcomX,
 	&f_MenuItemModeNormal,
 	&f_MenuItemModeCycle,
 	&f_MenuItemAdvanced,
@@ -281,6 +294,7 @@ static MenuItem * f_Menu2Person[] =
 	&f_MenuItemMergeBottomToTop,
 	&f_MenuItemSwitchTopBottom,
 	&f_MenuItemModeGedcom,
+	&f_MenuItemModeGedcomX,
 	&f_MenuItemModeNormal,
 	&f_MenuItemModePedigree,
 	&f_MenuItemModeAncestors,
@@ -318,6 +332,7 @@ static MenuItem * f_Menu2Family[] =
 	&f_MenuItemMergeBottomToTop,
 	&f_MenuItemSwitchTopBottom,
 	&f_MenuItemModeGedcom,
+	&f_MenuItemModeGedcomX,
 	&f_MenuItemModeNormal,
 	&f_MenuItemModeCycle,
 	&f_MenuItemEnlargeMenu,
@@ -328,12 +343,12 @@ static MenuItem * f_Menu2Family[] =
 static MenuItem * f_MenuAux[] =
 {
 	&f_MenuItemEdit,
-	&f_MenuItemTest88,
-	&f_MenuItemTest999,
 	&f_MenuItemScrollUp,
 	&f_MenuItemScrollDown,
 	&f_MenuItemEnlargeMenu,
 	&f_MenuItemShrinkMenu,
+	&f_MenuItemModeGedcom,
+	&f_MenuItemModeGedcomX,
 	&f_MenuItemNext,
 	&f_MenuItemPrev,
 	0
@@ -370,7 +385,7 @@ static MenuItem * f_MenuListPersons[] =
  *==========================*/
 static void
 setup_menu (INT screen, STRING Title, INT MenuRows, INT MenuCols
-	, INT Size, MenuItem ** Menu, MenuItemOption ** MenuOptions)
+	, INT Size, MenuItem ** Menu)
 {
 	INT i, j;
 	CMDARRAY cmds = create_cmd_array(32);
@@ -538,8 +553,7 @@ menuitem_initialize (void)
 	MenuCols = 3;
 	MenuSize = sizeof(f_MenuPerson)/ItemSize-1;
 	Menu = f_MenuPerson;
-	MenuOpts = f_MenuPersonOptions;
-	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu, MenuOpts);
+	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu);
 
 	MenuOpts = 0;
 
@@ -549,7 +563,7 @@ menuitem_initialize (void)
 	MenuCols = 3;
 	MenuSize = sizeof(f_MenuFamily)/ItemSize-1;
 	Menu = f_MenuFamily;
-	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu, MenuOpts);
+	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu);
 
 	scr = TWO_PER_SCREEN;
 	Title = mn_tit2indi;
@@ -557,7 +571,7 @@ menuitem_initialize (void)
 	MenuCols = 3;
 	MenuSize = sizeof(f_Menu2Person)/ItemSize-1;
 	Menu = f_Menu2Person;
-	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu, MenuOpts);
+	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu);
 
 	scr = TWO_FAM_SCREEN;
 	Title = mn_tit2fam;
@@ -565,7 +579,7 @@ menuitem_initialize (void)
 	MenuCols = 3;
 	MenuSize = sizeof(f_Menu2Family)/ItemSize-1;
 	Menu = f_Menu2Family;
-	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu, MenuOpts);
+	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu);
 
 	scr = LIST_SCREEN;
 	Title = (STRING)"LifeLines -- List Browse Screen";
@@ -573,7 +587,7 @@ menuitem_initialize (void)
 	MenuCols = 1;
 	MenuSize = sizeof(f_MenuListPersons)/ItemSize-1;
 	Menu = f_MenuListPersons;
-	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu, MenuOpts);
+	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu);
 
 	scr = AUX_SCREEN;
 	Title = mn_titaux;
@@ -581,7 +595,7 @@ menuitem_initialize (void)
 	MenuCols = 3;
 	MenuSize = sizeof(f_MenuAux)/ItemSize-1;
 	Menu = f_MenuAux;
-	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu, MenuOpts);
+	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu);
 
 
 	for (i=1; i<MAX_SCREEN; i++)

@@ -54,6 +54,7 @@ NODE jumpnode; /* used by Ethel for direct navigation */
 
 extern STRING nochil, nopers, nofam, nosour, idsour, norec;
 extern STRING nosour, idsour, noeven, ideven, noothe, idothe;
+extern STRING nonote, idnote;
 extern STRING idsbrs, idsrmv, idfbrs, idcbrs, idcrmv, iscnew, issnew;
 extern STRING idfcop, ntprnt, nofath, nomoth, nospse, noysib, noosib;
 extern STRING noprnt, nohusb, nowife, hasbth, hasnei, nocinf, nocofp;
@@ -74,24 +75,25 @@ extern STRING spover, idfamk;
  * local function prototypes
  *********************************************/
 
-static INT browse_indi(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
-static void pick_remove_spouse_from_family(NODE fam);
-static void pick_add_spouse_to_family(NODE fam, NODE save);
-static void pick_add_child_to_fam(NODE fam, NODE save);
-static INT browse_fam(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
-static INT browse_pedigree(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
-static BOOLEAN handle_menu_commands_old(INT c);
-static NODE goto_indi_child(NODE indi, int childno);
-static NODE goto_fam_child(NODE fam, int childno);
-static NODE pick_create_new_family(NODE indi, NODE save, STRING * addstrings);
-static INT display_indi(NODE indi, INT mode);
-static INT browse_indi_modes(NODE *pindi1, NODE *pindi2, NODE *pfam1,
-	NODE *pfam2, INDISEQ *pseq, INT indimode);
-static INT display_aux(NODE node, INT mode);
+/* alphabetical */
 static INT browse_aux(NODE node);
 static INT browse_indi(NODE *pindi1, NODE *pindi2, NODE *pfam1,
 	NODE *pfam2, INDISEQ *pseq);
+static INT browse_fam(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
+static INT browse_indi_modes(NODE *pindi1, NODE *pindi2, NODE *pfam1,
+	NODE *pfam2, INDISEQ *pseq, INT indimode);
+static INT browse_pedigree(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
+static INT display_aux(NODE node, INT mode);
 static INT display_fam(NODE fam, INT fammode);
+static INT display_indi(NODE indi, INT mode);
+static NODE goto_fam_child(NODE fam, int childno);
+static NODE goto_indi_child(NODE indi, int childno);
+static BOOLEAN handle_aux_mode_cmds(INT c, INT * mode);
+static BOOLEAN handle_menu_commands_old(INT c);
+static void pick_add_child_to_fam(NODE fam, NODE save);
+static void pick_add_spouse_to_family(NODE fam, NODE save);
+static NODE pick_create_new_family(NODE indi, NODE save, STRING * addstrings);
+static void pick_remove_spouse_from_family(NODE fam);
 
 /*********************************************
  * local variables
@@ -504,6 +506,11 @@ browse_indi_modes (NODE *pindi1,
 			if (node)
 				browse_source_node(node);
 			break;
+		case CMD_NOTES:	/* Browse to notes */
+			node = choose_note(indi, nonote, idnote);
+			if (node)
+				browse_other_node(node);
+			break;
 		case CMD_QUIT:
 		default:
 			return BROWSE_QUIT;
@@ -541,6 +548,16 @@ browse_event (NOD0 even)
 {
 	browse_aux(nztop(even));
 }
+/*================================================
+ * browse_other_node -- Browse an other
+ * TO DO - should become obsoleted by browse_other
+ * Created: 2001/02/11, Perry Rapp
+ *==============================================*/
+void
+browse_other_node (NODE othr)
+{
+	browse_aux(othr);
+}
 /*=================================
  * browse_other -- Browse an other
  * Created: 2001/01/06, Perry Rapp
@@ -562,11 +579,7 @@ display_aux (NODE node, INT mode)
 	INT c;
 	cel = node_to_cacheel(node);
 	lock_cache(cel);
-	if (mode == 'x')
-		c = aux_browse(node);
-	else {
-		ASSERT(0); /* no other modes supported */
-	}
+	c = aux_browse(node, mode);
 	unlock_cache(cel);
 	return c;
 }
@@ -598,15 +611,10 @@ browse_aux (NODE node)
 		nkeyp = node_to_keynum(ntype, node);
 		auxmodep = auxmode;
 		if (!handle_menu_cmds(c)
-			&& !handle_scroll_cmds(c))
+			&& !handle_scroll_cmds(c)
+			&& !handle_aux_mode_cmds(c, &auxmode))
 			switch (c)
 		{
-		case CMD_TEST88:
-			message("Test88");
-			break;
-		case CMD_TEST999:
-			message("Test999");
-			break;
 		case CMD_EDIT:
 			switch(ntype) {
 			case 'S': edit_source(node); break;
@@ -1020,6 +1028,7 @@ handle_indi_mode_cmds (INT c, INT * mode)
 {
 	switch(c) {
 		case CMD_MODE_GEDCOM: *mode = 'g'; return TRUE;
+		case CMD_MODE_GEDCOMX: *mode = 'x'; return TRUE;
 		case CMD_MODE_PEDIGREE:
 			*mode = (*mode=='a')?'d':'a';
 			return TRUE;
@@ -1031,7 +1040,8 @@ handle_indi_mode_cmds (INT c, INT * mode)
 			case 'n': *mode = 'a'; break;
 			case 'a': *mode = 'd'; break;
 			case 'd': *mode = 'g'; break;
-			case 'g': *mode = 'n'; break;
+			case 'g': *mode = 'x'; break;
+			case 'x': *mode = 'n'; break;
 			}
 			return TRUE;
 	}
@@ -1046,28 +1056,34 @@ handle_fam_mode_cmds (INT c, INT * mode)
 {
 	switch(c) {
 		case CMD_MODE_GEDCOM: *mode = 'g'; return TRUE;
+		case CMD_MODE_GEDCOMX: *mode = 'x'; return TRUE;
 		case CMD_MODE_NORMAL: *mode = 'n'; return TRUE;
 		case CMD_MODE_CYCLE: 
 			switch(*mode) {
 			case 'n': *mode = 'g'; break;
-			case 'g': *mode = 'n'; break;
+			case 'g': *mode = 'x'; break;
+			case 'x': *mode = 'n'; break;
 			}
 			return TRUE;
 	}
 	return FALSE;
 }
 /*======================================================
- * handle_menu_commands_old -- Handle menuing commands
- * Created: 2001/01/31, Perry Rapp
+ * handle_aux_mode_cmds -- Handle aux modes
+ * Created: 2001/02/11, Perry Rapp
  *====================================================*/
-static BOOLEAN
-handle_menu_cmds_old (INT c)
+BOOLEAN
+handle_aux_mode_cmds (INT c, INT * mode)
 {
 	switch(c) {
-		case '<': adjust_menu_height(+1); return TRUE;
-		case '>': adjust_menu_height(-1); return TRUE;
-		case '?': cycle_menu(); return TRUE;
-		case '*': toggle_menu(); return TRUE;
+		case CMD_MODE_GEDCOM: *mode = 'g'; return TRUE;
+		case CMD_MODE_GEDCOMX: *mode = 'x'; return TRUE;
+		case CMD_MODE_CYCLE: 
+			switch(*mode) {
+			case 'g': *mode = 'x'; break;
+			case 'x': *mode = 'g'; break;
+			}
+			return TRUE;
 	}
 	return FALSE;
 }

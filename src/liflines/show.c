@@ -72,7 +72,7 @@ static void add_child_line(INT, NODE, INT width);
 static void add_spouse_line(INT, NODE, NODE, INT width);
 static void init_display_indi(NODE, INT width);
 static void init_display_fam(NODE, INT width);
-static void show_gedcom(WINDOW *w, NODE node, INT row, INT hgt);
+static void show_gedcom(WINDOW *w, NODE node, INT gdvw, INT row, INT hgt);
 static void wipe_window(WINDOW * w, INT row, INT hgt);
 
 /*********************************************
@@ -478,19 +478,19 @@ wipe_window (WINDOW * w, INT row, INT hgt)
  * Created: 2001/01/27, Perry Rapp
  *==============================================*/
 static void
-show_gedcom (WINDOW *w, NODE node, INT row, INT hgt)
+show_gedcom (WINDOW *w, NODE node, INT gdvw, INT row, INT hgt)
 {
 	wipe_window(w, row, hgt);
-	pedigree_draw_gedcom(node, row, hgt);
+	pedigree_draw_gedcom(node, gdvw, row, hgt);
 }
 /*================================================
  * show_gedcom_main -- Show node in gedcom format
  * Created: 2001/02/04, Perry Rapp
  *==============================================*/
 void
-show_gedcom_main (NODE node, INT row, INT hgt)
+show_gedcom_main (NODE node, INT gdvw, INT row, INT hgt)
 {
-	show_gedcom(main_win, node, row, hgt);
+	show_gedcom(main_win, node, gdvw, row, hgt);
 }
 /*================================================
  * switch_scrolls -- Interchange scroll1 & scroll2
@@ -631,9 +631,12 @@ show_list (INDISEQ seq,
  * show_aux_display -- Show source, event or other record
  *======================================================*/
 void
-show_aux_display (NODE node, INT hgt)
+show_aux_display (NODE node, INT mode, INT hgt)
 {
-	show_gedcom_main(node, 1, hgt);
+	if (mode == 'g')
+		show_gedcom_main(node, GDVW_NORMAL, 1, hgt);
+	else
+		show_gedcom_main(node, GDVW_EXPANDED, 1, hgt);
 }
 /*===============================================
  * show_scroll - vertically scroll person display

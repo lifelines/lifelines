@@ -1,3 +1,12 @@
+2001-02-11 Perry Rapp <puddle@users.sourceforge.net>
+
+	* gedlib/choose.c gedlib/gstrings.c gedlib/indiseq.c
+	gedlib/keytonod.c gedlib/messages.c hdrs/gedcom.h
+	hdrs/indiseq.h hdrs/menuitem.h hdrs/screen.h liflines/browse.c
+	liflines/llinesi.h liflines/menuitem.c liflines/pedigree.c
+	liflines/screen.c liflines/show.c:
+	Added expanded gedcom mode. Added cross-reference to notes.
+
 2001-02-10 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/node.c: bugfix for creating new NOD0s.
