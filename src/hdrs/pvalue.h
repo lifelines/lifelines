@@ -80,7 +80,6 @@ struct tag_pvalue {
 #define PARRAY    16  /* array */
 #define PMAXLIVE  PARRAY /* maximum live type */
 #define PFREED    99  /* returned to free list */
-#define PUNINT   100  /* just allocated */
 
 /* Handy PVALUE macros */
 #define ptype(p)        ((p)->type)     /* type of expression */

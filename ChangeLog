@@ -53,6 +53,10 @@
 
 	Fix NEWS now that missing record fixes are in dbverify not llines.
 
+	* ChangeLog src/hdrs/pvalue.h src/interp/pvalalloc.c
+
+	Remove PUNINT (use PNULL from the beginning).
+
 2005-02-04 Perry Rapp
 
 	* ChangeLog src/gedlib/node.c src/hdrs/gedcom.h

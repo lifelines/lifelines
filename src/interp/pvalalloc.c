@@ -130,7 +130,7 @@ alloc_pvalue_memory (void)
 		debug_check();
 	live_pvalues++;
 	/* set type to uninitialized - caller ought to set type */
-	ptype(val) = PUNINT;
+	ptype(val) = PNULL;
 	pvalvv(val) = 0;
 	return val;
 }
@@ -273,7 +273,5 @@ is_pvalue_or_freed (PVALUE pval)
 PVALUE
 create_new_pvalue (void)
 {
-	PVALUE val = alloc_pvalue_memory();
-	ptype(val) = PNULL;
-	return val;
+	return alloc_pvalue_memory();
 }
