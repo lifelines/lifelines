@@ -33,19 +33,19 @@
 #include "standard.h"
 #include "llstdlib.h"
 
-/*================================================
+/*===========================================
  * IS_PATH_SEP -- Is path separator character
  *  handle WIN32 characters
- *==============================================*/
+ *=========================================*/
 #ifdef WIN32
 #define IS_PATH_SEP(qq) ((qq) == LLCHRPATHSEPARATOR || (qq) == '/')
 #else
 #define IS_PATH_SEP(qq) ((qq) == LLCHRPATHSEPARATOR)
 #endif
-/*================================================
- * is_dir_sep -- Is directory separator character
+/*=================================================
+ * is_dir_sep -- Is directory separator character ?
  *  handle WIN32 characters
- *==============================================*/
+ *===============================================*/
 BOOLEAN
 is_dir_sep (char c)
 {
@@ -56,7 +56,8 @@ is_dir_sep (char c)
 #endif
 }
 /*===============================================
- * is_absolute_path -- Begins with directory info
+ * is_absolute_path -- Is this an absolute path ?
+ *  ie, does this begin with directory info
  *  handle WIN32 characters
  *=============================================*/
 static BOOLEAN
@@ -68,10 +69,10 @@ is_absolute_path (STRING dir)
 #endif
 	return FALSE;
 }
-/*=================================
- * path_match -- paths are the same
+/*=========================================
+ * path_match -- are paths the same ?
  *  handle WIN32 filename case insensitivity
- *===============================*/
+ *========================================*/
 static BOOLEAN
 path_match (STRING path1, STRING path2)
 {
@@ -81,6 +82,9 @@ path_match (STRING path1, STRING path2)
 	return !strcmp(path1, path2);
 #endif
 }
+/*=============================================
+ * test_concat_path -- test code for concat_path
+ *===========================================*/
 #if TEST_CODE
 static void
 test_concat_path (void)
@@ -102,6 +106,8 @@ test_concat_path (void)
  * concat_path -- add file & directory together
  *  returns static buffer
  *  handles NULL in either argument
+ *  handles trailing / in dir and/or leading / in file
+ *  (see test_concat_path above)
  *  returns no trailing / if file is NULL
  *  returns static buffer
  *===========================================*/
@@ -144,6 +150,8 @@ concat_path (STRING dir, STRING file)
 }
 /*===========================================
  * filepath -- Find file in sequence of paths
+ *  handles NULL in either argument
+ *  returns alloc'd buffer
  *=========================================*/
 STRING
 filepath (STRING name,
@@ -151,7 +159,7 @@ filepath (STRING name,
           STRING path,
           STRING  ext)
 {
-	unsigned char buf1[MAXLINELEN], buf2[MAXLINELEN];
+	char buf1[PATH_MAX], buf2[PATH_MAX];
 	STRING p, q;
 	INT c;
 	INT nlen, elen, dirs;
@@ -238,21 +246,14 @@ lastpathname (STRING path)
 	if (ISNULL(path)) return NULL;
 	len = strlen(path);
 	strcpy(p, path);
-	if (p[len-1] == LLCHRDIRSEPARATOR
-#ifdef WIN32
-	    || p[len-1] == '/'
-#endif
-		) {
+	if (is_dir_sep(p[len-1])) {
 		len--;
 		p[len] = 0;
 	}
 	q = p;
 	while ((c = *p++)) {
-		if (c == LLCHRDIRSEPARATOR
-#ifdef WIN32
-	    	    || c == '/'
-#endif
-			) q = p;
+		if (is_dir_sep((char)c))
+			q = p;
 	}
 	return q;
 }

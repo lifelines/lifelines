@@ -37,6 +37,7 @@
 
 /*========================================
  * addat -- Add @'s to both ends of string
+ *  returns static buffer
  *======================================*/
 STRING
 addat (STRING str)
@@ -49,10 +50,11 @@ addat (STRING str)
 	sprintf(p, "@%s@", str);
 	return p;
 }
-/*=============================================
- * rmvat_char -- Remove bracketing characters from around
- *  a string
- *===========================================*/
+/*===========================================
+ * rmvat_char -- Remove bracketing characters
+ *  from around a string
+ *  returns static buffer
+ *==========================================*/
 static STRING
 rmvat_char (STRING str, char c, char d)
 {
@@ -77,6 +79,7 @@ rmvat_char (STRING str, char c, char d)
 }
 /*=============================================
  * rmvat -- Remove @'s from both ends of string
+ *  returns static buffer
  *===========================================*/
 STRING
 rmvat (STRING str)
@@ -85,6 +88,7 @@ rmvat (STRING str)
 }
 /*=============================================
  * rmvbrackets -- Remove <>'s from around a string
+ *  returns static buffer
  *===========================================*/
 STRING
 rmvbrackets (STRING str)

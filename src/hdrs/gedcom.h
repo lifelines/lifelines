@@ -368,12 +368,30 @@ INT xrefval(STRING str, char ntype);
 #define DATE(evnt)   find_tag(nchild(evnt),"DATE")
 #define PLAC(evnt)   find_tag(nchild(evnt),"PLAC")
 
+/*=============================================
+ * indi_to_key, fam_to_key - return key of node
+ *  eg, "I21"
+ *  returns static buffer
+ *===========================================*/
 #define indi_to_key(indi)  (rmvat(nxref(indi)))
 #define fam_to_key(fam)    (rmvat(nxref(fam)))
+
+/*=============================================
+ * indi_to_keynum, fam_to_keynum, etc - 
+ *  return keynum of node, eg, 21
+ *===========================================*/
 #define indi_to_keynum(indi) (nod0_to_keynum(indi, 'I'))
 #define fam_to_keynum(fam)  (nod0_to_keynum(fam, 'F'))
 #define sour_to_keynum(sour) (nod0_to_keynum(sour, 'S'))
+
+/*=============================================
+ * num_families - count spouses of indi
+ *===========================================*/
 #define num_families(indi) (length_nodes(FAMS(indi)))
+
+ /*=============================================
+ * num_children - count children of indi
+ *===========================================*/
 #define num_children(fam)  (length_nodes(CHIL(fam)))
 
 #define FORCHILDREN(fam,child,num) \

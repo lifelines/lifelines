@@ -1182,22 +1182,6 @@ num_spouses_of_indi (NODE indi)
 	FORSPOUSES(indi, spouse, fam, nsp) ENDSPOUSES
 	return nsp;
 }
-
-#ifdef UNUSED_CODE
-/*==================================================
- * num_fams_of_indi -- Returns number of families of person
- *================================================*/
-INT
-num_fams_of_indi (NODE indi)
-{
-	INT num;
-	if (!indi) return 0;
-	FORFAMSS(indi, fam, spouse, num) ENDFAMSS
-	return num;
-}
-
-#endif
-
 /*===================================================
  * find_node -- Find node with specific tag and value
  *=================================================*/
