@@ -1,3 +1,9 @@
+2003-02-03 Matt Emmerton
+
+	* ChangeLog src/interp/write.c
+
+	Break links to parent/sibling NODEs during deletenode()
+
 2003-02-02 Matt Emmerton
 
 	* ChangeLog src/gedlib/node.c

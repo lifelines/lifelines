@@ -157,6 +157,8 @@ __deletenode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		else
 			nsibling(prev) = next;
 	}
+	nparent(dead) = NULL;
+	nsibling(dead) = NULL;
 	delete_pvalue(val); /* will destroy node if temp */
 	return NULL;
 }
