@@ -34,16 +34,12 @@
 #include "gedcom.h"
 #include "cache.h"
 #include "interp.h"
+#include "liflines.h"
 
 static char *ptypes[] = {
 	"PNONE", "PANY", "PINT", "PLONG", "PFLOAT", "PBOOL", "PSTRING",
 	"PGNODE", "PINDI", "PFAM", "PSOUR", "PEVEN", "POTHR", "PLIST",
 	"PTABLE", "PSET"};
-
-#ifndef _PROTO_H
-INT bool_to_int();
-FLOAT bool_to_float();
-#endif
 
 /*========================================
  * create_pvalue -- Create a program value
@@ -107,7 +103,7 @@ llwprintf("copy_pvalue: copying null pvalue\n");
 /*==================================
  * set_pvalue -- Set a program value
  *================================*/
-PVALUE set_pvalue (val, type, value)
+void set_pvalue (val, type, value)
 PVALUE val;
 INT type;
 WORD value;
@@ -134,7 +130,7 @@ PVALUE val;
 /*============================================================
  * num_conform_pvalues -- Make the types of two values conform
  *==========================================================*/
-num_conform_pvalues (val1, val2, eflg)
+void num_conform_pvalues (val1, val2, eflg)
 PVALUE val1, val2;
 BOOLEAN *eflg;
 {
@@ -156,7 +152,7 @@ BOOLEAN *eflg;
 /*===========================================================
  * eq_conform_pvalues -- Make the types of two values conform
  *=========================================================*/
-eq_conform_pvalues (val1, val2, eflg)
+void eq_conform_pvalues (val1, val2, eflg)
 PVALUE val1, val2;
 BOOLEAN *eflg;
 {
@@ -185,16 +181,18 @@ BOOLEAN *eflg;
 /*=========================================================
  * coerce_pvalue -- Convert PVALUE from one type to another
  *=======================================================*/
-coerce_pvalue (type, val, eflg)
+void coerce_pvalue (type, val, eflg)
 INT type;	/* type to convert to */
 PVALUE val;	/* old and new value */
 BOOLEAN *eflg;
 {
+#ifdef UNUSED_CODE
 	PVALUE new;
 	INT vint;
 	/*LONG vlong;*/
 	FLOAT vfloat;
 	BOOLEAN vbool;
+#endif
 	UNION u;
 
 #ifdef DEBUG
@@ -243,7 +241,13 @@ BOOLEAN *eflg;
 #endif
 	case PFLOAT:
 		switch (type) {
+#ifdef BROKEN_CODE
+/* This causes gcc -O to bail here.  I'm not exactly sure why. */
+/* Is there a way around it?  Perhaps...but it's risky. */
 		case PINT: u.i = u.f; break;
+#else
+		case PINT: u.i = (INT)u.w; break;
+#endif
 		case PLONG: /*u.l = float_to_long(u.w);*/ break;
 		case PFLOAT: return;
 		default: goto bad;
@@ -306,7 +310,7 @@ BOOLEAN b;
 /*===============================
  * add_pvalues -- Add two PVALUEs
  *=============================*/
-add_pvalues (val1, val2, eflg)
+void add_pvalues (val1, val2, eflg)
 PVALUE val1, val2;
 BOOLEAN *eflg;
 {
@@ -328,7 +332,7 @@ BOOLEAN *eflg;
 /*====================================
  * sub_pvalues -- Subtract two PVALUEs
  *==================================*/
-sub_pvalues (val1, val2, eflg)
+void sub_pvalues (val1, val2, eflg)
 PVALUE val1, val2;
 BOOLEAN *eflg;
 {
@@ -349,7 +353,7 @@ BOOLEAN *eflg;
 /*====================================
  * mul_pvalues -- Multiply two PVALUEs
  *==================================*/
-mul_pvalues (val1, val2, eflg)
+void mul_pvalues (val1, val2, eflg)
 PVALUE val1, val2;
 BOOLEAN *eflg;
 {
@@ -371,7 +375,7 @@ BOOLEAN *eflg;
 /*==================================
  * div_pvalues -- Divide two PVALUEs
  *================================*/
-div_pvalues (val1, val2, eflg)
+void div_pvalues (val1, val2, eflg)
 PVALUE val1, val2;
 BOOLEAN *eflg;
 {
@@ -397,7 +401,7 @@ BOOLEAN *eflg;
 /*===================================
  * mod_pvalues -- Modulus two PVALUEs
  *=================================*/
-mod_pvalues (val1, val2, eflg)
+void mod_pvalues (val1, val2, eflg)
 PVALUE val1, val2;
 BOOLEAN *eflg;
 {
@@ -421,9 +425,8 @@ BOOLEAN *eflg;
 /*===================================================================+
  * eqv_pvalues -- See if two PVALUEs are equal (no change to PVALUEs)
  *==================================================================*/
-BOOLEAN eqv_pvalues (val1, val2, eflg)
+BOOLEAN eqv_pvalues (val1, val2)
 PVALUE val1, val2;
-BOOLEAN *eflg;
 {
     STRING v1, v2;
     BOOLEAN rel = FALSE;
@@ -445,7 +448,7 @@ BOOLEAN *eflg;
 /*===========================================
  * eq_pvalues -- See if two PVALUEs are equal
  *=========================================*/
-eq_pvalues (val1, val2, eflg)
+void eq_pvalues (val1, val2, eflg)
 PVALUE val1, val2;
 BOOLEAN *eflg;
 {
@@ -472,7 +475,7 @@ BOOLEAN *eflg;
 /*===============================================
  * ne_pvalues -- See if two PVALUEs are not equal
  *=============================================*/
-ne_pvalues (val1, val2, eflg)
+void ne_pvalues (val1, val2, eflg)
 PVALUE val1, val2;
 BOOLEAN *eflg;
 {
@@ -513,7 +516,7 @@ BOOLEAN *eflg;
 /*================================================
  * le_pvalues -- Check <= relation between PVALUEs
  *==============================================*/
-le_pvalues (val1, val2, eflg)
+void le_pvalues (val1, val2, eflg)
 PVALUE val1, val2;
 BOOLEAN *eflg;
 {
@@ -531,7 +534,7 @@ BOOLEAN *eflg;
 /*================================================
  * ge_pvalues -- Check >= relation between PVALUEs
  *==============================================*/
-ge_pvalues (val1, val2, eflg)
+void ge_pvalues (val1, val2, eflg)
 PVALUE val1, val2;
 BOOLEAN *eflg;
 {
@@ -558,7 +561,7 @@ BOOLEAN *eflg;
 /*===============================================
  * lt_pvalues -- Check < relation between PVALUEs
  *=============================================*/
-lt_pvalues (val1, val2, eflg)
+void lt_pvalues (val1, val2, eflg)
 PVALUE val1, val2;
 BOOLEAN *eflg;
 {
@@ -595,7 +598,7 @@ BOOLEAN *eflg;
 /*===============================================
  * gt_pvalues -- Check > relation between PVALUEs
  *=============================================*/
-gt_pvalues (val1, val2, eflg)
+void gt_pvalues (val1, val2, eflg)
 PVALUE val1, val2;
 BOOLEAN *eflg;
 {
@@ -626,14 +629,14 @@ if (prog_debug) {
 /*==============================
  * exp_pvalues -- Exponentiation
  *============================*/
-exp_pvalues (val1, val2, eflg)
+void exp_pvalues (val1, val2, eflg)
 PVALUE val1, val2;
 BOOLEAN *eflg;
 {
 	UNION u;
 	INT xi, i, n;
 	FLOAT xf;
-	BOOLEAN rel;
+
 	if (*eflg) return;
 	coerce_pvalue(PINT, val2, eflg);
 	if (*eflg) return;
@@ -661,7 +664,7 @@ BOOLEAN *eflg;
 /*==================================
  * incr_pvalue -- Increment a PVALUE
  *================================*/
-incr_pvalue (val, eflg)
+void incr_pvalue (val, eflg)
 PVALUE val;
 BOOLEAN *eflg;
 {
@@ -679,7 +682,7 @@ BOOLEAN *eflg;
 /*==================================
  * decr_pvalue -- Decrement a PVALUE
  *================================*/
-decr_pvalue (val, eflg)
+void decr_pvalue (val, eflg)
 PVALUE val;
 BOOLEAN *eflg;
 {
@@ -696,7 +699,7 @@ BOOLEAN *eflg;
 /*============================
  * neg_pvalue -- Negate PVALUE
  *==========================*/
-neg_pvalue (val, eflg)
+void neg_pvalue (val, eflg)
 PVALUE val;
 BOOLEAN *eflg;
 {
@@ -728,7 +731,7 @@ PVALUE val;
 /*======================================================
  * insert_pvtable -- Update symbol table with new PVALUE
  *====================================================*/
-insert_pvtable (stab, iden, type, value)
+void insert_pvtable (stab, iden, type, value)
 TABLE stab;	/* symbol table */
 STRING iden;	/* variable in symbol table */
 INT type;	/* type of new value to assign to identifier */
@@ -742,7 +745,7 @@ WORD value;	/* new value of identifier */
 /*=================================================
  * zero_pventry -- zero the value of a symbol table 
  *================================================*/
-zero_pventry (ent)
+void zero_pventry (ent)
 ENTRY ent;	/* symbol table entry */
 {
     PVALUE val;
@@ -756,7 +759,7 @@ ENTRY ent;	/* symbol table entry */
  * remove_pvtable -- Remove symbol table 
  *======================================*/
 FILE *errfp = NULL;
-remove_pvtable (stab)
+void remove_pvtable (stab)
 TABLE stab;	/* symbol table */
 {
 #ifdef HOGMEMORYERROR
@@ -774,7 +777,7 @@ TABLE stab;	/* symbol table */
 /*=================================================
  * show_pvalue -- DEBUG routine that shows a PVALUE
  *===============================================*/
-show_pvalue (val)
+void show_pvalue (val)
 PVALUE val;
 {
 	NODE node;
@@ -851,7 +854,7 @@ PVALUE val;
 		sprintf(p, "%s>", nval(NAME(node)));
 		break;
 	default:
-		sprintf(p, "%d>", pvalue(val));
+		sprintf(p, "%p>", pvalue(val));
 		break;
 	}
 	return (STRING) scratch;
