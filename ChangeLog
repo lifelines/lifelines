@@ -12,6 +12,10 @@
 	Add zstr.*, and start replacing bfptr uses with ZSTR.
 	Fix some tricky fencepost errors in icvt.c involving UCS-2.
 
+	* ChangeLog src/hdrs/Makefile.am src/stdlib/Makefile.am:
+
+	Add zstr.* to Makefiles.
+
 2002-11-17 Perry Rapp
 
 	* ChangeLog src/gedlib/translat.c src/hdrs/translat.h:
