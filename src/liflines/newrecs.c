@@ -126,7 +126,7 @@ edit_add_record (STRING recstr, STRING redt, STRING redtopt, char ntype, STRING 
 	NODE node=0, refn;
 	STRING msg, key;
 	BOOLEAN emp;
-	TRANMAPPING ttmi = get_tranmapping(MEDIN);
+	XLAT ttmi = get_tranmapping(MEDIN);
 	STRING (*getreffnc)(void) = NULL; /* get next internal key */
 	void (*todbasefnc)(NODE) = NULL;  /* write record to dbase */
 	void (*tocachefnc)(NODE) = NULL;  /* write record to cache */
@@ -257,7 +257,7 @@ void
 write_node_to_editfile (NODE node)
 {
 	FILE *fp;
-	TRANMAPPING ttmo = get_tranmapping(MINED);
+	XLAT ttmo = get_tranmapping(MINED);
 
 	ASSERT(fp = fopen(editfile, LLWRITETEXT));
 	write_nodes(0, fp, ttmo, node,  TRUE, TRUE, TRUE);
@@ -281,7 +281,7 @@ edit_record (RECORD rec1, STRING idedt, INT letr, STRING redt, STRING redtopt
 	, BOOLEAN (*val)(NODE, STRING *, NODE)
 	, STRING cfrm, void (*todbase)(NODE), STRING gdmsg)
 {
-	TRANMAPPING ttmi = get_tranmapping(MEDIN);
+	XLAT ttmi = get_tranmapping(MEDIN);
 	STRING msg, key;
 	BOOLEAN emp;
 	NODE root0=0, root1=0, root2=0;

@@ -1562,8 +1562,8 @@ draw_tt_win (STRING prompt)
 static void
 disp_trans_table_choice (UIWINDOW uiwin, INT row, INT col, STRING menuit, INT indx)
 {
-	TRANMAPPING ttm = get_tranmapping(indx);
-	char line[120], count[20];
+	XLAT ttm = get_tranmapping(indx);
+	char line[120];
 	WINDOW * win = uiw_win(uiwin);
 	INT mylen = sizeof(line);
 	STRING ptr = line;
@@ -1574,16 +1574,10 @@ disp_trans_table_choice (UIWINDOW uiwin, INT row, INT col, STRING menuit, INT in
 	if (ttm) {
 		TRANTABLE tt = get_dbtrantable_from_tranmapping(ttm);
 		if (tt) {
-			if (tt->name[0]) {
-				llstrcatn(&ptr, "  :  ", &mylen);
-				llstrcatn(&ptr, tt->name, &mylen);
-			}
-			else {
-				llstrcatn(&ptr, "     (Unnamed table)", &mylen);
-			}
-			sprintf(count, " [%d]", tt->total);
-			if (mylen > (INT)strlen(count))
-				llstrcatn(&ptr, count, &mylen);
+			ZSTR zstr = get_trantable_desc(tt);
+			llstrcatn(&ptr, "  :  ", &mylen);
+			llstrcatn(&ptr, zs_str(zstr), &mylen);
+			zs_free(&zstr);
 		} else if (ttm->iconv_src && ttm->iconv_dest) {
 			llstrcatn(&ptr, " (iconv)", &mylen);
 			/* TODO: better description here, once these work */
@@ -1826,7 +1820,7 @@ invoke_cset_display (void)
 	enqueue_list(list, strsave(zs_str(zstr)));
 
 	for (i=0; i<NUM_TT_MAPS; ++i) {
-		TRANMAPPING ttm = get_tranmapping(i);
+		XLAT ttm = get_tranmapping(i);
 		if (!ttm->global_trans)
 			continue;
 		zs_setf(&zstr, "%s: %d global tts"
@@ -2431,7 +2425,7 @@ manufacture a listdisp here
 	STRING key, name;
 	NODE indi;
 	char scratch[200];
-	TRANMAPPING ttmd = get_tranmapping(MINDS);
+	XLAT ttmd = get_tranmapping(MINDS);
 	INT mode = 'n';
 	INT viewlines = 13;
 	BOOLEAN scrollable = (viewlines < len);

@@ -404,7 +404,7 @@ poutput (STRING str, BOOLEAN *eflg)
 	STRING p;
 	ZSTR zstr = 0;
 	INT c, len;
-	TRANMAPPING ttmr = get_tranmapping(MINRP);
+	XLAT ttmr = get_tranmapping(MINRP);
 	if (!str || (len = strlen(str)) <= 0) return;
 	zstr = translate_string_to_zstring(ttmr, str);
 	str = zs_str(zstr);

@@ -140,7 +140,7 @@ on_signals (int sig)
 {
 	extern BOOLEAN progrunning;
 	extern PNODE Pnode;
-	char msg[100], signum[20];
+	char msg[100]="", signum[20];
 	STRING signame;
 
 	/* Ok, we'll want the descriptive name of the signal */

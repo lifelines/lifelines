@@ -279,7 +279,7 @@ PVALUE __name (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	NODE name, indi = eval_indi(arg, stab, eflg, NULL);
 	BOOLEAN caps = TRUE;
 	PVALUE val;
-	TRANMAPPING ttmr = NULL; /* do not translate until output time */
+	XLAT ttmr = NULL; /* do not translate until output time */
 	if (*eflg) {
 		prog_var_error(node, stab, arg, NULL, nonindx, "name", "1");
 		return NULL;
@@ -318,7 +318,7 @@ __fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	BOOLEAN caps;
 	BOOLEAN myreg;
 	INT len;
-	TRANMAPPING ttmr = NULL; /* do not translate until output time */
+	XLAT ttmr = NULL; /* do not translate until output time */
 
 	indi = eval_indi(arg, stab, eflg, NULL);
 	if (*eflg || !indi) {
@@ -369,7 +369,7 @@ __surname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	NODE name, indi = eval_indi(arg, stab, eflg, NULL);
 	STRING str;
 	static char scratch[MAXGEDNAMELEN+1];
-	TRANMAPPING ttmr = NULL; /* do not translate until output time */
+	XLAT ttmr = NULL; /* do not translate until output time */
 	if (*eflg) {
 		prog_var_error(node, stab, arg, NULL, nonvar1, "surname");
 		return NULL;
@@ -542,7 +542,7 @@ __givens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	NODE name, indi = eval_indi(arg, stab, eflg, NULL);
 	STRING str;
 	static char scratch[MAXGEDNAMELEN+1];
-	TRANMAPPING ttmr = NULL; /* do not translate until output time */
+	XLAT ttmr = NULL; /* do not translate until output time */
 	if (*eflg) {
 		prog_var_error(node, stab, arg, NULL, _(nonindx), "givens", "1");
 		return NULL;
@@ -815,7 +815,7 @@ __long (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE arg = iargs(node);
 	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
 	NODE even;
-	TRANMAPPING ttmr = NULL; /* do not translate until output time */
+	XLAT ttmr = NULL; /* do not translate until output time */
 	STRING str;
 	if (*eflg) {
 		prog_var_error(node, stab, arg, val, nonnod1, "long");
@@ -841,7 +841,7 @@ __short (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
 	NODE even;
 	/* RFMT rfmt = NULL; */ /* currently no reformatting for reports */
-	TRANMAPPING ttmr = NULL; /* do not translate until output time */
+	XLAT ttmr = NULL; /* do not translate until output time */
 	STRING str;
 	if (*eflg) {
 		prog_var_error(node, stab, arg, val, nonnod1, "short");
@@ -2491,7 +2491,6 @@ __trimname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val;
 	NODE indi = eval_indi(arg, stab, eflg, (CACHEEL *) NULL);
 	STRING str;
-	/* TRANTABLE ttr = NULL; */ /* do not translate until output time */
 	if (*eflg) {
 		prog_error(node, nonindx, "trimname", "1");
 		return NULL;
@@ -2524,7 +2523,7 @@ PVALUE
 __date (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE line;
-	TRANMAPPING ttmr = NULL; /* do not translate until output time */
+	XLAT ttmr = NULL; /* do not translate until output time */
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
 	if (*eflg) {
 		prog_error(node, nonnod1, "date");

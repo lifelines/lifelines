@@ -1,31 +1,14 @@
 /* 
    Copyright (c) 1991-1999 Thomas T. Wetmore IV
-
-   Permission is hereby granted, free of charge, to any person
-   obtaining a copy of this software and associated documentation
-   files (the "Software"), to deal in the Software without
-   restriction, including without limitation the rights to use, copy,
-   modify, merge, publish, distribute, sublicense, and/or sell copies
-   of the Software, and to permit persons to whom the Software is
-   furnished to do so, subject to the following conditions:
-
-   The above copyright notice and this permission notice shall be
-   included in all copies or substantial portions of the Software.
-
-   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-   SOFTWARE.
+   "The MIT license"
+   Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*==========================================================
  * charmaps.c -- LifeLines character mapping feature
  * Copyright(c) 1994 by T.T. Wetmore IV; all rights reserved
- *   3.0.0 - 25 Jul 1994    3.0.2 - 09 Nov 1994
+ *   http://lifelines.sourceforge.net
  *========================================================*/
 
 #include "sys_inc.h"
@@ -37,6 +20,7 @@
 #include "liflines.h"
 #include "feedback.h"
 #include "lloptions.h"
+#include "zstr.h"
 
 /*********************************************
  * global/exported variables
@@ -56,6 +40,30 @@ const char *map_keys[NUM_TT_MAPS] = {
 extern STRING qSbaddec,qSbadhex,qSnorplc,qSbadesc,qSnoorig,qSmaperr;
 
 /*********************************************
+ * local types
+ *********************************************/
+
+/* nodes that make up the tree that is a custom character translation table */
+typedef struct xnode *XNODE;
+struct xnode {
+	XNODE parent;	/* parent node */
+	XNODE sibling;	/* next sib node */
+	XNODE child;	/* first child node */
+	SHORT achar;	/* my character */
+	SHORT count;	/* translation length */
+	STRING replace;	/* translation string */
+};
+
+/* root of a custom character translation table */
+struct trantable_s {
+	XNODE start[256];
+	char name[20];
+	INT total;
+};
+
+
+
+/*********************************************
  * local enums & defines
  *********************************************/
 
@@ -65,22 +73,28 @@ extern STRING qSbaddec,qSbadhex,qSnorplc,qSbadesc,qSnoorig,qSmaperr;
  *********************************************/
 
 /* alphabetical */
-static void check_for_user_charmaps(STRING basename, TRANMAPPING ttm, CNSTRING mapname);
+static void check_for_user_charmaps(STRING basename, XLAT ttm, CNSTRING mapname);
+static XNODE create_xnode(XNODE, INT, STRING);
 static void init_charmaps_if_needed(void);
 static BOOLEAN init_map_from_rec(INT, TRANTABLE*);
 static BOOLEAN init_map_from_str(STRING, CNSTRING mapname, TRANTABLE*);
 static void load_custom_db_mappings(void);
 static void load_global_char_mapping(void);
-static void load_user_charmap(CNSTRING ttpath, CNSTRING mapname, TRANMAPPING ttm);
+static void load_user_charmap(CNSTRING ttpath, CNSTRING mapname, XLAT ttm);
 static void maperror(CNSTRING mapname, INT entry, INT line, STRING errmsg);
+static void remove_xnodes(XNODE);
 static void set_zone_conversion(STRING optname, INT toint, INT fromint);
+static void show_xnode(XNODE node);
+static void show_xnodes(INT indent, XNODE node);
+static XNODE step_xnode(XNODE, INT);
+static INT translate_match(TRANTABLE tt, CNSTRING in, CNSTRING * out);
 
 /*********************************************
  * local variables
  *********************************************/
 
 /* custom translation tables embedded in the database */
-static struct tranmapping_s trans_maps[NUM_TT_MAPS]; /* init'd by init_charmaps */
+static struct xlat_s trans_maps[NUM_TT_MAPS]; /* init'd by init_charmaps */
 static CNSTRING map_names[] = {
 	"Editor to Internal"
 	,"Internal to Editor"
@@ -101,7 +115,158 @@ static CNSTRING map_names[] = {
  * body of module
  *********************************************/
 
-
+/*=============================================
+ * create_trantable -- Create translation table
+ *  lefts:  [IN]  patterns
+ *  rights: [IN]  replacements
+ *  n:      [IN]  num pairs
+ *  name:   [IN]  user-chosen name
+ *===========================================*/
+TRANTABLE
+create_trantable (STRING *lefts, STRING *rights, INT n, STRING name)
+{
+	TRANTABLE tt = (TRANTABLE) stdalloc(sizeof(*tt));
+	STRING left, right;
+	INT i, c;
+	XNODE node;
+	tt->name[0] = 0;
+	tt->total = n;
+	llstrncpy(tt->name, name, sizeof(tt->name), uu8);
+	for (i = 0; i < 256; i++)
+		tt->start[i] = NULL;
+	/* if empty, n==0, this is valid */
+	for (i = 0; i < n; i++) {
+		left = lefts[i];
+		right = rights[i];
+		ASSERT(left && *left && right);
+		c = (uchar) *left++;
+		if (tt->start[c] == NULL)
+			tt->start[c] = create_xnode(NULL, c, NULL);
+		node = tt->start[c];
+		while ((c = (uchar) *left++)) {
+			node = step_xnode(node, c);
+		}
+		node->count = strlen(right);
+		node->replace = right;
+	}
+	return tt;
+}
+/*=============================
+ * create_xnode -- Create XNODE
+ *  parent:  [in] parent of node to be created
+ *  achar:   [in] start substring represented by this node
+ *  string:  [in] replacement string for matches
+ *===========================*/
+static XNODE
+create_xnode (XNODE parent, INT achar, STRING string)
+{
+	XNODE node = (XNODE) stdalloc(sizeof(*node));
+	node->parent = parent;
+	node->sibling = NULL;
+	node->child = NULL;
+	node->achar = achar;
+	node->replace = string;
+	node->count = string ? strlen(string) : 0;
+	return node;
+}
+/*==========================================
+ * step_xnode -- Step to node from character
+ *========================================*/
+static XNODE
+step_xnode (XNODE node, INT achar)
+{
+	XNODE prev, node0 = node;
+	if (node->child == NULL)
+		return node->child = create_xnode(node0, achar, NULL);
+	prev = NULL;
+	node = node->child;
+	while (node) {
+		if (node->achar == achar) return node;
+		prev = node;
+		node = node->sibling;
+	}
+	return prev->sibling = create_xnode(node0, achar, NULL);
+}
+/*=============================================
+ * remove_trantable -- Remove translation table
+ *===========================================*/
+void
+remove_trantable (TRANTABLE tt)
+{
+	INT i;
+	if (!tt) return;
+	for (i = 0; i < 256; i++)
+		remove_xnodes(tt->start[i]);
+	stdfree(tt);
+}
+/*====================================
+ * remove_xnodes -- Remove xnodes tree
+ *==================================*/
+static void
+remove_xnodes (XNODE node)
+{
+	if (!node) return;
+	remove_xnodes(node->child);
+	remove_xnodes(node->sibling);
+	if (node->replace) stdfree(node->replace);
+	stdfree(node);
+}
+/*===================================================
+ * translate_match -- Find match for current point in string
+ *  tt:    [in] tran table
+ *  in:    [in] in string
+ *  match: [out] match string
+ * returns length of input matched
+ * match string output points directly into trans table
+ * memory, so it is longer-lived than a static buffer
+ * Created: 2001/07/21 (Perry Rapp)
+ *=================================================*/
+static INT
+translate_match (TRANTABLE tt, CNSTRING in, CNSTRING * out)
+{
+	XNODE node, chnode;
+	INT nxtch;
+	CNSTRING q = in;
+	node = tt->start[(uchar)*in];
+	if (!node) {
+		*out = "";
+		return 0;
+	}
+	q = in+1;
+/* Match as far as possible */
+	while (*q && node->child) {
+		nxtch = (uchar)*q;
+		chnode = node->child;
+		while (chnode && chnode->achar != nxtch)
+			chnode = chnode->sibling;
+		if (!chnode) break;
+		node = chnode;
+		q++;
+	}
+	while (TRUE) {
+		if (node->replace) {
+			/* replacing match */
+			*out = node->replace;
+			return q - in;
+		}
+		/* no replacement, only partial match,
+		climb back & keep looking - we might have gone past
+		a shorter but full (replacing) match */
+		if (node->parent) {
+			node = node->parent;
+			--q;
+			continue;
+		}
+		/*
+		no replacement matches
+		(climbed all the way back to start
+		*/
+		ASSERT(q == in+1);
+		*out = "";
+		return 0;
+	}
+	return 0;
+}
 /*========================================
  * init_charmaps_if_needed -- one time initialization
  *======================================*/
@@ -124,7 +289,7 @@ clear_char_mappings (void)
 	INT indx=-1;
 
 	for (indx = 0; indx < NUM_TT_MAPS; ++indx) {
-		TRANMAPPING ttm = &trans_maps[indx];
+		XLAT ttm = &trans_maps[indx];
 		TRANTABLE *ptt = &ttm->dbtrantbl;
 		remove_trantable(*ptt);
 		*ptt = 0;
@@ -168,7 +333,7 @@ load_global_char_mapping (void)
 
 	/* load any user-specified translation tables */
 	for (indx = 0; indx < NUM_TT_MAPS; indx++) {
-		TRANMAPPING ttm = &trans_maps[indx];
+		XLAT ttm = &trans_maps[indx];
 		if (ttm->after >= 0) {
 			char name[80];
 			CNSTRING keyname = map_keys[indx];
@@ -186,7 +351,7 @@ load_global_char_mapping (void)
  *  ttm:   [I/O] mapping data in which to add
  *======================================*/
 static void
-check_for_user_charmaps (STRING basename, TRANMAPPING ttm, CNSTRING mapname)
+check_for_user_charmaps (STRING basename, XLAT ttm, CNSTRING mapname)
 {
 	CNSTRING ttname=0;
 	INT i=1;
@@ -212,7 +377,7 @@ check_for_user_charmaps (STRING basename, TRANMAPPING ttm, CNSTRING mapname)
  *  custom translation table to the list
  *======================================*/
 static void
-load_user_charmap (CNSTRING ttpath, CNSTRING mapname, TRANMAPPING ttm)
+load_user_charmap (CNSTRING ttpath, CNSTRING mapname, XLAT ttm)
 {
 	TRANTABLE tt=0;
 	if (init_map_from_file(ttpath, mapname, &tt) && tt) {
@@ -279,7 +444,7 @@ load_custom_db_mappings (void)
 {
 	INT indx=-1;
 	for (indx = 0; indx < NUM_TT_MAPS; indx++) {
-		TRANMAPPING ttm = &trans_maps[indx];
+		XLAT ttm = &trans_maps[indx];
 		TRANTABLE *ptt = &ttm->dbtrantbl;
 		remove_trantable(*ptt);
 		*ptt = 0;
@@ -303,14 +468,14 @@ get_dbtrantable (INT ttnum)
  *  translation table of a tranmapping
  *======================================*/
 TRANTABLE
-get_dbtrantable_from_tranmapping (TRANMAPPING ttm)
+get_dbtrantable_from_tranmapping (XLAT ttm)
 {
 	return ttm ? ttm->dbtrantbl : 0;
 }
 /*========================================
  * get_tranmapping -- Access to a translation mapping
  *======================================*/
-TRANMAPPING
+XLAT
 get_tranmapping (INT ttnum)
 {
 	ASSERT(ttnum>=0 && ttnum<ARRSIZE(trans_maps));
@@ -655,4 +820,172 @@ get_map_name (INT ttnum)
 	ASSERT(ttnum>=0 && ttnum<NUM_TT_MAPS);
 	return map_names[ttnum];
 }
+#ifdef DEBUG
+/*=======================================================
+ * show_trantable -- DEBUG routine that shows a TRANTABLE
+ *=====================================================*/
+void
+show_trantable (TRANTABLE tt)
+{
+	INT i;
+	XNODE node;
+	if (tt == NULL) {
+		llwprintf("EMPTY TABLE\n");
+		return;
+	}
+	for (i = 0; i < 256; i++) {
+		node = tt->start[i];
+		if (node) {
+			show_xnodes(0, node);
+		}
+	}
+}
+#endif /* DEBUG */
 
+/*===============================================
+ * show_xnodes -- DEBUG routine that shows XNODEs
+ *=============================================*/
+static void
+show_xnodes (INT indent, XNODE node)
+{
+	INT i;
+	if (!node) return;
+	for (i = 0; i < indent; i++)
+		llwprintf("  ");
+	show_xnode(node);
+	show_xnodes(indent+1, node->child);
+	show_xnodes(indent,   node->sibling);
+}
+/*================================================
+ * show_xnode -- DEBUG routine that shows 1 XNODE
+ *==============================================*/
+static void
+show_xnode (XNODE node)
+{
+	llwprintf("%d(%c)", node->achar, node->achar);
+	if (node->replace) {
+		if (node->count)
+			llwprintf(" \"%s\"\n", node->replace);
+		else
+			llwprintf(" \"\"\n");
+	} else
+		llwprintf("\n");
+}
+/*===================================================
+ * custom_translate -- Translate string via custom translation table
+ *  zstr: [I/O] string to be translated (in-place)
+ *  tt:   [IN]  custom translation table
+ * returns translated string
+ *=================================================*/
+void
+custom_translate (ZSTR * pzstr, TRANTABLE tt)
+{
+	ZSTR zin = *pzstr;
+	ZSTR zout = zs_newn((unsigned int)(zs_len(zin)*1.3+2));
+	STRING p = zs_str(zin);
+	while (*p) {
+		CNSTRING tmp;
+		INT len = translate_match(tt, p, &tmp);
+		if (len) {
+			p += len;
+			zs_apps(&zout, tmp);
+		} else {
+			zs_appc(&zout, *p++);
+		}
+	}
+	zs_free(pzstr);
+	*pzstr = zout;
+}
+/*===================================================
+ * custom_sort -- Compare two strings with custom sort
+ * returns FALSE if no custom sort table
+ * otherwise sets *rtn correctly & returns TRUE
+ * Created: 2001/07/21 (Perry Rapp)
+ *=================================================*/
+BOOLEAN
+custom_sort (char *str1, char *str2, INT * rtn)
+{
+	TRANTABLE tts = get_dbtrantable(MSORT);
+	TRANTABLE ttc = get_dbtrantable(MCHAR);
+	CNSTRING rep1, rep2;
+	STRING ptr1=str1, ptr2=str2;
+	INT len1, len2;
+	if (!tts) return FALSE;
+/* This was an attempt at handling skip-over prefixes (eg, Mc) */
+#if 0 /* must be done earlier */
+	if (ptr1[0] && ptr2[0]) {
+		/* check for prefix skips */
+		len1 = translate_match(ttp, ptr1, &rep1);
+		len2 = translate_match(ttp, ptr2, &rep2);
+		if (len1 || len2) {
+		}
+		if (strchr(rep1,"s") && ptr1[len1]) {
+			ptr1 += len1;
+			len1 = translate_match(tts, ptr1, &rep1);
+		}
+		if (strchr(rep2,"s") && ptr2[len2]) {
+			ptr2 += len2;
+			len2 = translate_match(tts, ptr2, &rep1);
+		}
+	}
+#endif
+	/* main loop thru both strings looking for differences */
+	while (1) {
+		/* stop when exhaust either string */
+		if (!ptr1[0] || !ptr2[0]) {
+			/* only zero if both end simultaneously */
+			*rtn = ptr1[0] - ptr2[0];
+			return TRUE;
+		}
+		/* look up in sort table */
+		len1 = translate_match(tts, ptr1, &rep1);
+		len2 = translate_match(tts, ptr2, &rep2);
+		if (len1 && len2) {
+			/* compare sort table results */
+			*rtn = atoi(rep1) - atoi(rep2);
+			if (*rtn) return TRUE;
+			ptr1 += len1;
+			ptr2 += len2;
+		} else {
+			/* at least one not in sort table */
+			/* try comparing single chars */
+			*rtn = ptr1[0] - ptr2[0];
+			if (*rtn) return TRUE;
+			/* use charset to see how wide they are */
+			if (ttc) {
+				len1 = translate_match(ttc, ptr1, &rep1);
+				len2 = translate_match(ttc, ptr2, &rep2);
+				if (len1 || len2) {
+					/* compare to width of wider char */
+					*rtn = strncmp(ptr1, ptr2, len1>len2?len1:len2);
+				}
+			} else {
+				/* TO DO - can we use locale here ? ie, locale + custom sort */
+				len1 = len2 = 1;
+				*rtn = ptr1[0] - ptr2[0];
+			}
+			if (*rtn) return TRUE;
+			/* advance both by at least one */
+			ptr1 += len1 ? len1 : 1;
+			ptr2 += len2 ? len2 : 1;
+		}
+	}
+}
+/*===================================================
+ * get_trantable_desc -- Get description of trantable
+ * Created: 2002/11/26 (Perry Rapp)
+ *=================================================*/
+ZSTR
+get_trantable_desc (TRANTABLE tt)
+{
+	ZSTR zstr=zs_new();
+	char buffer[36];
+    if (tt->name[0]) {
+		zs_apps(&zstr, tt->name);
+	} else {
+		zs_apps(&zstr, "(Unnamed table)");
+	}
+	sprintf(buffer, " [%d]", tt->total);
+	zs_apps(&zstr, buffer);
+	return zstr;
+}

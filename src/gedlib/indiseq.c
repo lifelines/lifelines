@@ -1748,7 +1748,7 @@ INDISEQ
 str_to_indiseq (STRING name, char ctype)
 {
 	INDISEQ seq;
-	TRANMAPPING ttmg = get_tranmapping(MDSIN);
+	XLAT ttmg = get_tranmapping(MDSIN);
 	char intname[100];
 	translate_string(ttmg, name, intname, sizeof(intname)-1);
 	seq = find_named_seq(intname);

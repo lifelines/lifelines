@@ -63,13 +63,13 @@ struct trav_parm_s {
 
 /* alphabetical */
 static BOOLEAN archive(BTREE btree, BLOCK block, void * param);
-static void copy_and_translate(FILE *fo, INT len, struct trav_parm_s * travparm, INT c, TRANMAPPING ttm);
+static void copy_and_translate(FILE *fo, INT len, struct trav_parm_s * travparm, INT c, XLAT xlat);
 
 /*********************************************
  * local variables
  *********************************************/
 
-static TRANMAPPING tran_gedout; /* TODO: could do away with this via param to traverse */
+static XLAT xlat_gedout; /* TODO: could do away with this via param to traverse */
 static char *mabbv[] = {
 	"JAN", "FEB", "MAR", "APR", "MAY", "JUN",
 	"JUL", "AUG", "SEP", "OCT", "NOV", "DEC",
@@ -114,7 +114,7 @@ archive_in_file (struct export_feedback * efeed, FILE *fp)
 	str = getoptstr("HDR_CHAR", "1 CHAR ASCII");
 	fprintf(fp, "%s\n", str);
 	/* finished header */
-	tran_gedout = get_tranmapping(MINGD);
+	xlat_gedout = get_tranmapping(MINGD);
 	nindi = nfam = neven = nsour = nothr = 0;
 	memset(&travparm, 0, sizeof(travparm));
 	travparm.efeed = efeed;
@@ -146,7 +146,7 @@ archive (BTREE btree, BLOCK block, void * param)
 		if (fseek(fo, (long)(offs(block, i) + BUFLEN), 0))
 			FATAL();
 		if ((l = lens(block, i)) > 6)	/* filter deleted records */
-			copy_and_translate(fo, l, travparm, *key, tran_gedout);
+			copy_and_translate(fo, l, travparm, *key, xlat_gedout);
 	}
 	fclose(fo);
 	return TRUE;
@@ -155,7 +155,7 @@ archive (BTREE btree, BLOCK block, void * param)
  * copy_and_translate -- Copy record with translation
  *=================================================*/
 static void
-copy_and_translate (FILE *fo, INT len, struct trav_parm_s * travparm, INT c, TRANMAPPING ttm)
+copy_and_translate (FILE *fo, INT len, struct trav_parm_s * travparm, INT c, XLAT xlat)
 {
 	char in[BUFLEN];
 	char *inp;
@@ -170,7 +170,7 @@ copy_and_translate (FILE *fo, INT len, struct trav_parm_s * travparm, INT c, TRA
 		ASSERT(fread(inp, remlen, 1, fo) == 1);
 		len -= remlen;
 		remlen = (inp + remlen) - in;	/* amount in current buffer */
-		ASSERT(translate_write(ttm, in, &remlen, fn, (len <= 0)));
+		ASSERT(translate_write(xlat, in, &remlen, fn, (len <= 0)));
 		inp = in + remlen;		/* position for next read */
 		remlen = BUFLEN - remlen;	/* max for next read */
 	}

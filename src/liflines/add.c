@@ -74,7 +74,7 @@ add_indi_by_edit (void)
 	NODE indi=0;
 	STRING str, msg;
 	BOOLEAN emp;
-	TRANMAPPING ttmi = get_tranmapping(MEDIN);
+	XLAT ttmi = get_tranmapping(MEDIN);
 
 	if (readonly) {
 		message(_(qSronlya));
@@ -151,7 +151,7 @@ add_new_indi (RECORD indi0)
 	NODE name, refn, sex, body, dumb, node;
 	STRING key;
 	INT keynum;
-	TRANMAPPING ttmd = get_tranmapping(MINDS);
+	XLAT ttmd = get_tranmapping(MINDS);
 	NODE indi = nztop(indi0);
 
 	split_indi_old(indi, &name, &refn, &sex, &body, &dumb, &dumb);
@@ -230,7 +230,7 @@ NODE
 prompt_add_child (NODE child, NODE fam, RFMT rfmt)
 {
 	INT i;
-	TRANMAPPING ttmd = get_tranmapping(MINDS);
+	XLAT ttmd = get_tranmapping(MINDS);
 
 	if (readonly) {
 		message(_(qSronlye));
@@ -384,7 +384,7 @@ add_spouse_to_fam (NODE spouse, NODE fam, INT sex)
 {
 /* Add HUSB or WIFE node to family */
 	NODE husb, wife, chil, rest, fams, prev, fref, this, new;
-	TRANMAPPING ttmd = get_tranmapping(MINDS);
+	XLAT ttmd = get_tranmapping(MINDS);
 
 	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
 	if (sex == SEX_MALE) {
@@ -497,8 +497,8 @@ add_family (RECORD sprec1, RECORD sprec2, RECORD chrec)
 	NODE spouse1, spouse2, child;
 	NODE fam1, fam2=0, refn, husb, wife, chil, body;
 	NODE node;
-	TRANMAPPING ttmi = get_tranmapping(MEDIN);
-	TRANMAPPING ttmo = get_tranmapping(MINED);
+	XLAT ttmi = get_tranmapping(MEDIN);
+	XLAT ttmo = get_tranmapping(MINED);
 	STRING xref, msg, key, str;
 	BOOLEAN emp;
 	FILE *fp;
@@ -660,8 +660,8 @@ add_family_to_db (NODE spouse1, NODE spouse2, NODE child)
 	INT sex2 = spouse1 ? SEX(spouse2) : SEX_UNKNOWN;
 	NODE fam1, fam2, refn, husb, wife, chil, body;
 	NODE node;
-	TRANMAPPING ttmi = get_tranmapping(MEDIN);
-	TRANMAPPING ttmo = get_tranmapping(MINED);
+	XLAT ttmi = get_tranmapping(MEDIN);
+	XLAT ttmo = get_tranmapping(MINED);
 	STRING xref, msg, key;
 	BOOLEAN emp;
 	FILE *fp;

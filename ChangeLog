@@ -1,3 +1,26 @@
+2002-11-26 Perry Rapp
+
+	* ChangeLog src/gedlib/charmaps.c src/gedlib/editvtab.c
+	src/gedlib/gedcomi.h src/gedlib/gstrings.c
+	src/gedlib/indiseq.c src/gedlib/keytonod.c src/gedlib/names.c
+	src/gedlib/node.c src/gedlib/translat.c src/gedlib/valtable.c
+	src/hdrs/gedcom.h src/hdrs/icvt.h src/hdrs/standard.h
+	src/hdrs/translat.h src/hdrs/zstr.h src/interp/builtin.c
+	src/interp/interp.c src/interp/rassa.c src/liflines/add.c
+	src/liflines/browse.c src/liflines/edit.c
+	src/liflines/export.c src/liflines/import.c
+	src/liflines/merge.c src/liflines/miscutls.c
+	src/liflines/newrecs.c src/liflines/pedigree.c
+	src/liflines/screen.c src/liflines/show.c
+	src/liflines/valgdcom.c src/stdlib/icvt.c src/stdlib/signals.c
+	src/stdlib/zstr.c:
+
+	Rename TRANMAPPING to XLAT (will be main interface to codeset conversion).
+	Consolidate translation table code into charmaps.c.
+	Making file header license statements shorter (with Tom's permission).
+	Implement new XLAT chains for simple case of single iconv step chain.
+	Fix uninitialized string bug in signal handler code.
+
 2002-11-25 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp

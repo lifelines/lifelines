@@ -108,7 +108,7 @@ indi_to_list_string (NODE indi, NODE fam, INT len, RFMT rfmt)
 {
 	char scratch[MAXLINELEN];
 	STRING name, evt = NULL, p = scratch;
-	TRANMAPPING ttmd = get_tranmapping(MINDS);
+	XLAT ttmd = get_tranmapping(MINDS);
 	int hasparents;
 	int hasfamily;
 	if (len>(INT)sizeof(scratch))
@@ -164,23 +164,23 @@ sour_to_list_string (NODE sour, INT len, STRING delim)
 	char scratch[1024];
 	STRING name, p=scratch;
 	INT mylen=len;
-	TRANMAPPING ttmd = get_tranmapping(MINDS);
+	XLAT xlat = get_tranmapping(MINDS);
 	if (mylen>(INT)sizeof(scratch))
 		mylen=sizeof(scratch);
 	p[0]=0;
 	llstrcatn(&p, "(S", &mylen);
 	llstrcatn(&p, rmvat(nxref(sour))+1, &mylen);
 	llstrcatn(&p, ") ", &mylen);
-	name = node_to_tag(sour, "REFN", ttmd, len);
+	name = node_to_tag(sour, "REFN", xlat, len);
 	if (name)
 		llstrcatn(&p, name, &mylen);
-	name = node_to_tag(sour, "TITL", ttmd, len);
+	name = node_to_tag(sour, "TITL", xlat, len);
 	if (name && mylen > 20)
 	{
 		llstrcatn(&p, delim, &mylen);
 		llstrcatn(&p, name, &mylen);
 	}
-	name = node_to_tag(sour, "AUTH", ttmd, len);
+	name = node_to_tag(sour, "AUTH", xlat, len);
 	if (name && mylen > 20)
 	{
 		llstrcatn(&p, delim, &mylen);
@@ -198,7 +198,7 @@ even_to_list_string (NODE even, INT len, STRING delim)
 	char scratch[1024];
 	STRING name, p=scratch;
 	INT mylen=len;
-	TRANMAPPING ttmd = get_tranmapping(MINDS);
+	XLAT ttmd = get_tranmapping(MINDS);
 	delim=delim; /* unused */
 	if (mylen>(INT)sizeof(scratch))
 		mylen=sizeof(scratch);
@@ -230,7 +230,7 @@ fam_to_list_string (NODE fam, INT len, STRING delim)
 	char counts[32];
 	INT husbands=0, wives=0, children=0;
 	INT templen=0;
-	TRANMAPPING ttmd = get_tranmapping(MINDS);
+	XLAT ttmd = get_tranmapping(MINDS);
 	NODE refn, husb, wife, chil, rest, node;
 	if (mylen>(INT)sizeof(scratch))
 		mylen=sizeof(scratch);
@@ -285,7 +285,7 @@ other_to_list_string(NODE node, INT len, STRING delim)
 	char scratch[1024];
 	STRING name, p=scratch;
 	INT mylen=len;
-	TRANMAPPING ttmd = get_tranmapping(MINDS);
+	XLAT ttmd = get_tranmapping(MINDS);
 	NODE child;
 	delim=delim; /* unused */
 	if (mylen>(INT)sizeof(scratch))

@@ -79,11 +79,11 @@ static NODE alloc_node(void);
 static void assign_record(RECORD rec, char ntype, INT keynum);
 static BOOLEAN buffer_to_line (STRING p, INT *plev, STRING *pxref
 	, STRING *ptag, STRING *pval, STRING *pmsg);
-static RECORD convert_first_fp_to_record(FILE *fp, BOOLEAN list, TRANMAPPING ttm
+static RECORD convert_first_fp_to_record(FILE *fp, BOOLEAN list, XLAT ttm
 	, STRING *pmsg,  BOOLEAN *peof);
-static NODE do_first_fp_to_node(FILE *fp, BOOLEAN list, TRANMAPPING tt
+static NODE do_first_fp_to_node(FILE *fp, BOOLEAN list, XLAT tt
 	, STRING *pmsg,  BOOLEAN *peof);
-static RECORD do_first_fp_to_record(FILE *fp, BOOLEAN list, TRANMAPPING tt
+static RECORD do_first_fp_to_record(FILE *fp, BOOLEAN list, XLAT tt
 	, STRING *pmsg,  BOOLEAN *peof);
 static STRING fixup (STRING str);
 static STRING fixtag (STRING tag);
@@ -94,7 +94,7 @@ static BOOLEAN string_to_line(STRING *ps, INT *plev, STRING *pxref,
 	STRING *ptag, STRING *pval, STRING *pmsg);
 static STRING swrite_node(INT levl, NODE node, STRING p);
 static STRING swrite_nodes(INT levl, NODE node, STRING p);
-static void write_node(INT levl, FILE *fp, TRANMAPPING ttm,
+static void write_node(INT levl, FILE *fp, XLAT ttm,
 	NODE node, BOOLEAN indent);
 
 /*********************************************
@@ -335,7 +335,7 @@ free_nodes (NODE node)
  *========================================*/
 INT
 file_to_line (FILE *fp,
-              TRANMAPPING ttm,
+              XLAT ttm,
               INT *plev,
               STRING *pxref,
               STRING *ptag,
@@ -485,7 +485,7 @@ gettag:
  * pemp: [OUT] set true if file is empty
  *===============================================*/
 RECORD
-file_to_record (STRING fname, TRANMAPPING ttm, STRING *pmsg, BOOLEAN *pemp)
+file_to_record (STRING fname, XLAT ttm, STRING *pmsg, BOOLEAN *pemp)
 {
 	NODE node = file_to_node(fname, ttm, pmsg, pemp);
 	RECORD rec = 0;
@@ -504,7 +504,7 @@ file_to_record (STRING fname, TRANMAPPING ttm, STRING *pmsg, BOOLEAN *pemp)
  * TODO: When can we delete this ?
  *===============================================*/
 NODE
-file_to_node (STRING fname, TRANMAPPING ttm, STRING *pmsg, BOOLEAN *pemp)
+file_to_node (STRING fname, XLAT ttm, STRING *pmsg, BOOLEAN *pemp)
 {
 	FILE *fp;
 	NODE node;
@@ -539,7 +539,7 @@ static BOOLEAN ateof = FALSE;
  * TODO: revise import (restore_record) so can delete this
  *==============================================================*/
 NODE
-convert_first_fp_to_node (FILE *fp, BOOLEAN list, TRANMAPPING ttm,
+convert_first_fp_to_node (FILE *fp, BOOLEAN list, XLAT ttm,
 	STRING *pmsg,  BOOLEAN *peof)
 {
 	STRING unitype = check_file_for_unicode(fp);
@@ -562,7 +562,7 @@ convert_first_fp_to_node (FILE *fp, BOOLEAN list, TRANMAPPING ttm,
  * peof: [OUT] set true if file is at end of file
  *==============================================================*/
 static RECORD
-convert_first_fp_to_record (FILE *fp, BOOLEAN list, TRANMAPPING ttm,
+convert_first_fp_to_record (FILE *fp, BOOLEAN list, XLAT ttm,
 	STRING *pmsg,  BOOLEAN *peof)
 {
 	STRING unitype = check_file_for_unicode(fp);
@@ -587,7 +587,7 @@ convert_first_fp_to_record (FILE *fp, BOOLEAN list, TRANMAPPING ttm,
  * TODO: revise import (restore_record) so can delete this
  *==============================================================*/
 static NODE
-do_first_fp_to_node (FILE *fp, BOOLEAN list, TRANMAPPING ttm,
+do_first_fp_to_node (FILE *fp, BOOLEAN list, XLAT ttm,
 	STRING *pmsg,  BOOLEAN *peof)
 {
 	INT rc;
@@ -617,7 +617,7 @@ do_first_fp_to_node (FILE *fp, BOOLEAN list, TRANMAPPING ttm,
  * Called after unicode header processed
  *==============================================================*/
 static RECORD
-do_first_fp_to_record (FILE *fp, BOOLEAN list, TRANMAPPING ttm,
+do_first_fp_to_record (FILE *fp, BOOLEAN list, XLAT ttm,
 	STRING *pmsg,  BOOLEAN *peof)
 {
 	INT rc;
@@ -646,7 +646,7 @@ do_first_fp_to_record (FILE *fp, BOOLEAN list, TRANMAPPING ttm,
  *  peof: [OUT] set true if file is at end of file
  *============================================================*/
 RECORD
-next_fp_to_record (FILE *fp, BOOLEAN list, TRANMAPPING ttm,
+next_fp_to_record (FILE *fp, BOOLEAN list, XLAT ttm,
 	STRING *pmsg, BOOLEAN *peof)
 {
 	NODE node = next_fp_to_node(fp, list, ttm, pmsg, peof);
@@ -663,7 +663,7 @@ next_fp_to_record (FILE *fp, BOOLEAN list, TRANMAPPING ttm,
  * callers should probably be converted to calling next_fp_to_record
  *============================================================*/
 NODE
-next_fp_to_node (FILE *fp, BOOLEAN list, TRANMAPPING ttm,
+next_fp_to_node (FILE *fp, BOOLEAN list, XLAT ttm,
 	STRING *pmsg, BOOLEAN *peof)
 {
 	INT curlev, bcode, rc;
@@ -883,7 +883,7 @@ node_to_file (INT levl,       /* top level */
  * BOOLEAN indent: [in]indent?
  *======================================*/
 static void
-write_node (INT levl, FILE *fp, TRANMAPPING ttm, NODE node,
+write_node (INT levl, FILE *fp, XLAT ttm, NODE node,
 	BOOLEAN indent)
 {
 	char out[MAXLINELEN+1];
@@ -911,7 +911,7 @@ write_node (INT levl, FILE *fp, TRANMAPPING ttm, NODE node,
 void
 write_nodes (INT levl,       /* level */
              FILE *fp,       /* file */
-             TRANMAPPING ttm,   /* char map */
+             XLAT ttm,   /* char map */
              NODE node,      /* root */
              BOOLEAN indent, /* indent? */
              BOOLEAN kids,   /* output kids? */
@@ -1260,7 +1260,7 @@ indi_to_next_sib (RECORD irec)
  * indi_to_name -- Return name of person
  *====================================*/
 STRING
-indi_to_name (NODE node, TRANMAPPING ttm, INT len)
+indi_to_name (NODE node, XLAT ttm, INT len)
 {
 	if (node)
 		node = find_tag(nchild(node), "NAME");
@@ -1272,7 +1272,7 @@ indi_to_name (NODE node, TRANMAPPING ttm, INT len)
  * indi_to_title -- Return title of person
  *====================================*/
 STRING
-indi_to_title (NODE node, TRANMAPPING ttm, INT len)
+indi_to_title (NODE node, XLAT ttm, INT len)
 {
 	if (!node) return NULL;
 	if (!(node = find_tag(nchild(node), "TITL"))) return NULL;
@@ -1282,7 +1282,7 @@ indi_to_title (NODE node, TRANMAPPING ttm, INT len)
  * node_to_tag -- Return a subtag of a node
  * (presumably top level, but not necessarily)
  *====================================*/
-STRING node_to_tag (NODE node, STRING tag, TRANMAPPING ttm, INT len)
+STRING node_to_tag (NODE node, STRING tag, XLAT ttm, INT len)
 {
 	static char scratch[MAXGEDNAMELEN+1];
 	STRING refn;
@@ -1299,7 +1299,7 @@ STRING node_to_tag (NODE node, STRING tag, TRANMAPPING ttm, INT len)
  * indi_to_event -- Convert event tree to string
  *============================================*/
 STRING
-fam_to_event  (NODE node, TRANMAPPING ttm, STRING tag, STRING head
+fam_to_event  (NODE node, XLAT ttm, STRING tag, STRING head
 	, INT len, RFMT rfmt)
 {
 	return indi_to_event(node, ttm, tag, head, len, rfmt);
@@ -1316,7 +1316,7 @@ fam_to_event  (NODE node, TRANMAPPING ttm, STRING tag, STRING head
  *  else NULL
  *============================================*/
 STRING
-indi_to_event (NODE node, TRANMAPPING ttm, STRING tag, STRING head
+indi_to_event (NODE node, XLAT ttm, STRING tag, STRING head
 	, INT len, RFMT rfmt)
 {
 	static char scratch[200];
@@ -1377,7 +1377,7 @@ event_to_date_place (NODE node, STRING * date, STRING * plac)
  *  rfmt:  [IN]  reformatting info (may be NULL)
  *=========================================*/
 STRING
-event_to_string (NODE node, TRANMAPPING ttm, RFMT rfmt)
+event_to_string (NODE node, XLAT ttm, RFMT rfmt)
 {
 	static char scratch1[MAXLINELEN+1];
 	static char scratch2[MAXLINELEN+1];
@@ -1389,7 +1389,7 @@ event_to_string (NODE node, TRANMAPPING ttm, RFMT rfmt)
 		date = (*rfmt->rfmt_date)(date);
 	if (rfmt && plac && rfmt->rfmt_plac)
 		plac = (*rfmt->rfmt_plac)(plac);
-	if (date && date[0] && plac && plac[0]) {
+	if (rfmt && rfmt->combopic && date && date[0] && plac && plac[0]) {
 		sprintpic2(scratch1, sizeof(scratch1), uu8, rfmt->combopic, date, plac);
 	} else if (date && date[0]) {
 		llstrncpy(scratch1, date, sizeof(scratch1), uu8);
@@ -1408,7 +1408,7 @@ event_to_string (NODE node, TRANMAPPING ttm, RFMT rfmt)
  *  shrt: [IN]  flag - use short form if set
  *=====================================*/
 STRING
-event_to_date (NODE node, TRANMAPPING ttm, BOOLEAN shrt)
+event_to_date (NODE node, XLAT ttm, BOOLEAN shrt)
 {
 	static char scratch[MAXLINELEN+1];
 	if (!node) return NULL;

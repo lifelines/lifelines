@@ -67,7 +67,7 @@ init_valtab_from_rec (CNSTRING key, TABLE tab, INT sep, STRING *pmsg)
  *  pmsg:    [OUT] error message (set if returns FALSE)
  *==================================================*/
 BOOLEAN
-init_valtab_from_file (STRING fname, TABLE tab, TRANMAPPING ttm, INT sep, STRING *pmsg)
+init_valtab_from_file (STRING fname, TABLE tab, XLAT ttm, INT sep, STRING *pmsg)
 {
 	FILE *fp;
 	struct stat buf;

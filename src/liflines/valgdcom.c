@@ -123,7 +123,7 @@ validate_gedcom (struct import_feedback * ifeed, FILE *fp)
 	INT lev, rc, curlev = 0;
 	INT nindi, nfam, nsour, neven, nothr;
 	ELMNT el;
-	TRANMAPPING ttm = get_tranmapping(MGDIN);
+	XLAT xlat = get_tranmapping(MGDIN);
 	STRING xref, tag, val, msg;
 
 	nindi = nfam = nsour = neven = nothr = 0;
@@ -138,7 +138,7 @@ validate_gedcom (struct import_feedback * ifeed, FILE *fp)
 	convtab = create_table();
 
 
-	rc = file_to_line(fp, ttm, &lev, &xref, &tag, &val, &msg);
+	rc = file_to_line(fp, xlat, &lev, &xref, &tag, &val, &msg);
 	xref = xref ? rmvat(xref) : NULL;
 	rec_type = OTHR_REC;
 	while (rc != DONE)  {
@@ -149,7 +149,7 @@ validate_gedcom (struct import_feedback * ifeed, FILE *fp)
 				handle_err(ifeed, qSbadlev, flineno);
 			handle_value(val, flineno);
 			curlev = lev;
-			rc = file_to_line(fp, ttm, &lev, &xref, &tag, &val,
+			rc = file_to_line(fp, xlat, &lev, &xref, &tag, &val,
 			    &msg);
 			xref = xref ? rmvat(xref) : NULL;
 			continue;
@@ -157,7 +157,7 @@ validate_gedcom (struct import_feedback * ifeed, FILE *fp)
 		if (lev > 1) {
 			handle_value(val, flineno);
 			curlev = lev;
-			rc = file_to_line(fp, ttm, &lev, &xref, &tag, &val,
+			rc = file_to_line(fp, xlat, &lev, &xref, &tag, &val,
 			    &msg);
 			xref = xref ? rmvat(xref) : NULL;
 			continue;
@@ -209,7 +209,7 @@ validate_gedcom (struct import_feedback * ifeed, FILE *fp)
 				handle_value(val, flineno);
 		}
 		curlev = lev;
-		rc = file_to_line(fp, ttm, &lev, &xref, &tag, &val, &msg);
+		rc = file_to_line(fp, xlat, &lev, &xref, &tag, &val, &msg);
 		xref = xref ? rmvat(xref) : NULL;
 	}
 	if (rec_type == INDI_REC && !named)

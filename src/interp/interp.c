@@ -1945,24 +1945,15 @@ PNODE
 make_internal_string_node (PACTX pactx, STRING str)
 {
 	PNODE node = 0;
-	if (int_codeset && int_codeset[0] && str && str[0]) {
+	ZSTR zstr = zs_news(str);
+	if (str && str[0]) {
 		STRING fname = pactx->fullpath;
 		STRING rptcodeset = get_rptfile_prop(pactx, fname, "char_encoding");
-		if (rptcodeset && rptcodeset[0] && !eqstr(int_codeset, rptcodeset)) {
-			ZSTR zstr=0;
-			struct tranmapping_s tm;
-			memset(&tm, 0, sizeof(tm));
-			tm.iconv_src = rptcodeset;
-			tm.iconv_dest = int_codeset;
-
-			if (iconv_trans(rptcodeset, int_codeset, str, &zstr, "?"))
-				str = zs_str(zstr);
-			node = string_node(pactx, str);
-			zs_free(&zstr);
-		}
+		XLAT xlat = get_xlat_to_int(rptcodeset);
+		do_xlat(xlat, &zstr);
 	}
-	if (!node)
-		node = string_node(pactx, str);
+	node = string_node(pactx, zs_str(zstr));
+	zs_free(&zstr);
 	return node;
 }
 /*=============================================+

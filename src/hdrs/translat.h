@@ -44,33 +44,22 @@ Need translation chain
 */
 
 
-/* nodes that make up the tree that is a custom character translation table */
-typedef struct xnode *XNODE;
-struct xnode {
-	XNODE parent;	/* parent node */
-	XNODE sibling;	/* next sib node */
-	XNODE child;	/* first child node */
-	SHORT achar;	/* my character */
-	SHORT count;	/* translation length */
-	STRING replace;	/* translation string */
-};
-
-/* root of a custom character translation table */
-typedef struct {
-	XNODE start[256];
-	char name[20];
-	INT total;
-} *TRANTABLE;
+typedef struct trantable_s *TRANTABLE;
 
 /* a translation mapping, which may have a TRANTABLE, and may have iconv info */
-typedef struct tranmapping_s {
+typedef struct xlat_s *XLAT;
+struct xlat_s {
 	/* All members either NULL or heap-alloc'd */
 	TRANTABLE dbtrantbl; /* mappings embedded in active db */
 	STRING iconv_src;
 	STRING iconv_dest;
 	LIST global_trans; /* list of global mappings */
 	BOOLEAN after; /* do custom transtable after iconv ? */
-} *TRANMAPPING;
+	/* NEW 2002-11-25 */
+	CNSTRING src;
+	CNSTRING dest;
+	LIST steps;
+};
 
 
 /* Variables */
@@ -80,15 +69,23 @@ typedef struct tranmapping_s {
 
 TRANTABLE create_trantable(STRING *lefts, STRING *rights, INT n, STRING name);
 BOOLEAN custom_sort(char *str1, char *str2, INT * rtn);
-TRANMAPPING get_tranmapping(INT ttnum);
+XLAT get_tranmapping(INT ttnum);
 TRANTABLE get_dbtrantable(INT ttnum);
-TRANTABLE get_dbtrantable_from_tranmapping(TRANMAPPING ttm);
+TRANTABLE get_dbtrantable_from_tranmapping(XLAT ttm);
+ZSTR get_trantable_desc(TRANTABLE tt);
 void remove_trantable(TRANTABLE);
 void set_dbtrantable(INT ttnum, TRANTABLE tt);
-void translate_catn(TRANMAPPING ttm, STRING * pdest, CNSTRING src, INT * len);
-void translate_string(TRANMAPPING, CNSTRING in, STRING out, INT max);
-ZSTR translate_string_to_zstring(TRANMAPPING ttm, CNSTRING in);
-BOOLEAN translate_write(TRANMAPPING, STRING, INT*, FILE*, BOOLEAN);
+void translate_catn(XLAT ttm, STRING * pdest, CNSTRING src, INT * len);
+void translate_string(XLAT, CNSTRING in, STRING out, INT max);
+ZSTR translate_string_to_zstring(XLAT ttm, CNSTRING in);
+BOOLEAN translate_write(XLAT, STRING, INT*, FILE*, BOOLEAN);
+
+
+/*
+New system under development 2002-11-25
+*/
+XLAT get_xlat_to_int(CNSTRING codeset);
+BOOLEAN do_xlat(XLAT xlat, ZSTR * pzstr);
 
 
 #endif /* _TRANSLAT_H */

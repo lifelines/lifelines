@@ -1,32 +1,14 @@
 /* 
    Copyright (c) 1991-1999 Thomas T. Wetmore IV
-
-   Permission is hereby granted, free of charge, to any person
-   obtaining a copy of this software and associated documentation
-   files (the "Software"), to deal in the Software without
-   restriction, including without limitation the rights to use, copy,
-   modify, merge, publish, distribute, sublicense, and/or sell copies
-   of the Software, and to permit persons to whom the Software is
-   furnished to do so, subject to the following conditions:
-
-   The above copyright notice and this permission notice shall be
-   included in all copies or substantial portions of the Software.
-
-   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-   SOFTWARE.
+   "The MIT license"
+   Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*===========================================================
  * translat.c -- LifeLines character mapping functions
  * Copyright(c) 1994 by T.T. Wetmore IV; all rights reserved
- * pre-SourceForge version information:
- *   3.0.0 - 17 Jun 94    3.0.2 - 11 Nov 94
+ *   http://lifelines.sourceforge.net
  *=========================================================*/
 
 #include "llstdlib.h"
@@ -44,6 +26,7 @@
 #include "zstr.h"
 #include "icvt.h"
 #include "lloptions.h"
+#include "gedcomi.h"
 
 #ifdef max
 #	undef max
@@ -56,122 +39,36 @@
 STRING illegal_char = 0;
 
 /*********************************************
+ * local types
+ *********************************************/
+
+/* step of a translation, either iconv_src or trantble is NULL */
+struct xlat_step_s {
+	CNSTRING iconv_src;
+	CNSTRING iconv_dest;
+	TRANTABLE trantbl;
+};
+
+/*********************************************
  * local function prototypes
  *********************************************/
 
 /* alphabetical */
-static XNODE create_xnode(XNODE, INT, STRING);
-static void custom_translate(ZSTR * pzstr, TRANTABLE tt);
 static void global_translate(ZSTR * pzstr, LIST gtlist);
-static ZSTR iconv_trans_ttm(TRANMAPPING ttm, ZSTR zin, CNSTRING illegal);
-static void remove_xnodes(XNODE);
-static void show_xnode(XNODE node);
-static void show_xnodes(INT indent, XNODE node);
-static XNODE step_xnode(XNODE, INT);
-static INT translate_match(TRANTABLE tt, CNSTRING in, CNSTRING * out);
+static XLAT get_xlat(CNSTRING src, CNSTRING dest);
+static ZSTR iconv_trans_ttm(XLAT ttm, ZSTR zin, CNSTRING illegal);
 
+/*********************************************
+ * local variables
+ *********************************************/
+
+static LIST f_xlats=0;
 
 /*********************************************
  * local & exported function definitions
  * body of module
  *********************************************/
 
-/*=============================================
- * create_trantable -- Create translation table
- *  lefts:  [IN]  patterns
- *  rights: [IN]  replacements
- *  n:      [IN]  num pairs
- *  name:   [IN]  user-chosen name
- *===========================================*/
-TRANTABLE
-create_trantable (STRING *lefts, STRING *rights, INT n, STRING name)
-{
-	TRANTABLE tt = (TRANTABLE) stdalloc(sizeof(*tt));
-	STRING left, right;
-	INT i, c;
-	XNODE node;
-	tt->name[0] = 0;
-	tt->total = n;
-	llstrncpy(tt->name, name, sizeof(tt->name), uu8);
-	for (i = 0; i < 256; i++)
-		tt->start[i] = NULL;
-	/* if empty, n==0, this is valid */
-	for (i = 0; i < n; i++) {
-		left = lefts[i];
-		right = rights[i];
-		ASSERT(left && *left && right);
-		c = (uchar) *left++;
-		if (tt->start[c] == NULL)
-			tt->start[c] = create_xnode(NULL, c, NULL);
-		node = tt->start[c];
-		while ((c = (uchar) *left++)) {
-			node = step_xnode(node, c);
-		}
-		node->count = strlen(right);
-		node->replace = right;
-	}
-	return tt;
-}
-/*=============================
- * create_xnode -- Create XNODE
- *  parent:  [in] parent of node to be created
- *  achar:   [in] start substring represented by this node
- *  string:  [in] replacement string for matches
- *===========================*/
-static XNODE
-create_xnode (XNODE parent, INT achar, STRING string)
-{
-	XNODE node = (XNODE) stdalloc(sizeof(*node));
-	node->parent = parent;
-	node->sibling = NULL;
-	node->child = NULL;
-	node->achar = achar;
-	node->replace = string;
-	node->count = string ? strlen(string) : 0;
-	return node;
-}
-/*==========================================
- * step_xnode -- Step to node from character
- *========================================*/
-static XNODE
-step_xnode (XNODE node, INT achar)
-{
-	XNODE prev, node0 = node;
-	if (node->child == NULL)
-		return node->child = create_xnode(node0, achar, NULL);
-	prev = NULL;
-	node = node->child;
-	while (node) {
-		if (node->achar == achar) return node;
-		prev = node;
-		node = node->sibling;
-	}
-	return prev->sibling = create_xnode(node0, achar, NULL);
-}
-/*=============================================
- * remove_trantable -- Remove translation table
- *===========================================*/
-void
-remove_trantable (TRANTABLE tt)
-{
-	INT i;
-	if (!tt) return;
-	for (i = 0; i < 256; i++)
-		remove_xnodes(tt->start[i]);
-	stdfree(tt);
-}
-/*====================================
- * remove_xnodes -- Remove xnodes tree
- *==================================*/
-static void
-remove_xnodes (XNODE node)
-{
-	if (!node) return;
-	remove_xnodes(node->child);
-	remove_xnodes(node->sibling);
-	if (node->replace) stdfree(node->replace);
-	stdfree(node);
-}
 /*===================================================
  * translate_catn -- Translate & concatenate string
  *
@@ -181,7 +78,7 @@ remove_xnodes (XNODE node)
  * len:   address of space left in destination (will be decremented)
  *=================================================*/
 void
-translate_catn (TRANMAPPING ttm, STRING * pdest, CNSTRING src, INT * len)
+translate_catn (XLAT ttm, STRING * pdest, CNSTRING src, INT * len)
 {
 	INT added;
 	if (*len > 1)
@@ -193,62 +90,6 @@ translate_catn (TRANMAPPING ttm, STRING * pdest, CNSTRING src, INT * len)
 	*pdest += added;
 }
 /*===================================================
- * translate_match -- Find match for current point in string
- *  tt:    [in] tran table
- *  in:    [in] in string
- *  match: [out] match string
- * returns length of input matched
- * match string output points directly into trans table
- * memory, so it is longer-lived than a static buffer
- * Created: 2001/07/21 (Perry Rapp)
- *=================================================*/
-static INT
-translate_match (TRANTABLE tt, CNSTRING in, CNSTRING * out)
-{
-	XNODE node, chnode;
-	INT nxtch;
-	CNSTRING q = in;
-	node = tt->start[(uchar)*in];
-	if (!node) {
-		*out = "";
-		return 0;
-	}
-	q = in+1;
-/* Match as far as possible */
-	while (*q && node->child) {
-		nxtch = (uchar)*q;
-		chnode = node->child;
-		while (chnode && chnode->achar != nxtch)
-			chnode = chnode->sibling;
-		if (!chnode) break;
-		node = chnode;
-		q++;
-	}
-	while (TRUE) {
-		if (node->replace) {
-			/* replacing match */
-			*out = node->replace;
-			return q - in;
-		}
-		/* no replacement, only partial match,
-		climb back & keep looking - we might have gone past
-		a shorter but full (replacing) match */
-		if (node->parent) {
-			node = node->parent;
-			--q;
-			continue;
-		}
-		/*
-		no replacement matches
-		(climbed all the way back to start
-		*/
-		ASSERT(q == in+1);
-		*out = "";
-		return 0;
-	}
-	return 0;
-}
-/*===================================================
  * translate_string_to_zstring -- Translate string via TRANTABLE
  *  ttm: [IN]  tranmapping to apply
  *  in:  [IN]  string to translate
@@ -257,7 +98,7 @@ translate_match (TRANTABLE tt, CNSTRING in, CNSTRING * out)
  * uses dynamic buffer, so it can expand if necessary
  *=================================================*/
 ZSTR
-translate_string_to_zstring (TRANMAPPING ttm, CNSTRING in)
+translate_string_to_zstring (XLAT ttm, CNSTRING in)
 {
 	TRANTABLE ttdb = get_dbtrantable_from_tranmapping(ttm);
 	ZSTR zout = zs_newn((unsigned int)(strlen(in)*1.3+2));
@@ -290,31 +131,6 @@ translate_string_to_zstring (TRANMAPPING ttm, CNSTRING in)
 	return zout;
 }
 /*===================================================
- * custom_translate -- Translate string via custom translation table
- *  tt:  [IN]  custom translation table
- *  zin: [IN]  string to be translated & destroyed
- * returns translated string
- *=================================================*/
-static void
-custom_translate (ZSTR * pzstr, TRANTABLE tt)
-{
-	ZSTR zin = *pzstr;
-	ZSTR zout = zs_newn((unsigned int)(zs_len(zin)*1.3+2));
-	STRING p = zs_str(zin);
-	while (*p) {
-		CNSTRING tmp;
-		INT len = translate_match(tt, p, &tmp);
-		if (len) {
-			p += len;
-			zs_apps(&zout, tmp);
-		} else {
-			zs_appc(&zout, *p++);
-		}
-	}
-	zs_free(pzstr);
-	*pzstr = zout;
-}
-/*===================================================
  * iconv_trans_ttm -- Translate string via iconv  & transmapping
  *  ttm:  [IN]   transmapping
  *  in:   [IN]   string to translate (& delete)
@@ -322,7 +138,7 @@ custom_translate (ZSTR * pzstr, TRANTABLE tt)
  * Only called if HAVE_ICONV
  *=================================================*/
 static ZSTR
-iconv_trans_ttm (TRANMAPPING ttm, ZSTR zin, CNSTRING illegal)
+iconv_trans_ttm (XLAT ttm, ZSTR zin, CNSTRING illegal)
 {
 	CNSTRING dest=ttm->iconv_dest;
 	CNSTRING src = ttm->iconv_src;
@@ -352,7 +168,7 @@ global_translate (ZSTR * pzstr, LIST gtlist)
 	ENDLIST
 }
 /*===================================================
- * translate_string -- Translate string via TRANMAPPING
+ * translate_string -- Translate string via XLAT
  *  ttm:   [IN]  tranmapping
  *  in:    [IN]  in string
  *  out:   [OUT] string
@@ -361,7 +177,7 @@ global_translate (ZSTR * pzstr, LIST gtlist)
  * add_char & add_string.
  *=================================================*/
 void
-translate_string (TRANMAPPING ttm, CNSTRING in, STRING out, INT max)
+translate_string (XLAT ttm, CNSTRING in, STRING out, INT max)
 {
 	ZSTR zstr=0;
 	if (!in || !in[0]) {
@@ -386,7 +202,7 @@ translate_string (TRANMAPPING ttm, CNSTRING in, STRING out, INT max)
  * NB: If no translation table, entire string is always written
  *========================================================*/
 BOOLEAN
-translate_write(TRANMAPPING ttm, STRING in, INT *lenp
+translate_write(XLAT ttm, STRING in, INT *lenp
 	, FILE *ofp, BOOLEAN last)
 {
 	char intmp[MAXLINELEN+2];
@@ -435,130 +251,111 @@ translate_write(TRANMAPPING ttm, STRING in, INT *lenp
 	*lenp = 0;
 	return(TRUE);
 }
+/*==========================================================
+ * get_xlat_to_int -- Get translation to internal codeset
+ *  returns NULL if fails
+ * Created: 2002/11/25 (Perry Rapp)
+ *========================================================*/
+XLAT
+get_xlat_to_int (CNSTRING codeset)
+{
+	return get_xlat(codeset, int_codeset);
+}
+/*==========================================================
+ * create_xlat -- Create a new translation
+ * (also adds to cache)
+ * Created: 2002/11/25 (Perry Rapp)
+ *========================================================*/
+static XLAT
+create_xlat (CNSTRING src, CNSTRING dest)
+{
+	/* create & initialize new xlat */
+	XLAT xlat = (XLAT)malloc(sizeof(*xlat));
+	memset(xlat, 0, sizeof(*xlat));
+	xlat->steps = create_list();
+	xlat->src = strsave(src);
+	xlat->dest = strsave(dest);
+	/* add xlat to cache */
+	if (!f_xlats) {
+		f_xlats = create_list();
+	}
+	enqueue_list(f_xlats, xlat);
+	return xlat;
+}
+/*==========================================================
+ * get_xlat -- Find translation between specified codesets
+ *  returns NULL if fails
+ * Created: 2002/11/25 (Perry Rapp)
+ *========================================================*/
+static XLAT
+get_xlat (CNSTRING src, CNSTRING dest)
+{
+	XLAT xlat=0;
+	
+	if (!src || !src[0] || !dest || !dest[0])
+		return 0;
 
-#ifdef DEBUG
-/*=======================================================
- * show_trantable -- DEBUG routine that shows a TRANTABLE
- *=====================================================*/
-void
-show_trantable (TRANTABLE tt)
-{
-	INT i;
-	XNODE node;
-	if (tt == NULL) {
-		llwprintf("EMPTY TABLE\n");
-		return;
-	}
-	for (i = 0; i < 256; i++) {
-		node = tt->start[i];
-		if (node) {
-			show_xnodes(0, node);
-		}
-	}
-}
-#endif /* DEBUG */
-
-/*===============================================
- * show_xnodes -- DEBUG routine that shows XNODEs
- *=============================================*/
-static void
-show_xnodes (INT indent, XNODE node)
-{
-	INT i;
-	if (!node) return;
-	for (i = 0; i < indent; i++)
-		llwprintf("  ");
-	show_xnode(node);
-	show_xnodes(indent+1, node->child);
-	show_xnodes(indent,   node->sibling);
-}
-/*================================================
- * show_xnode -- DEBUG routine that shows 1 XNODE
- *==============================================*/
-static void
-show_xnode (XNODE node)
-{
-	llwprintf("%d(%c)", node->achar, node->achar);
-	if (node->replace) {
-		if (node->count)
-			llwprintf(" \"%s\"\n", node->replace);
-		else
-			llwprintf(" \"\"\n");
-	} else
-		llwprintf("\n");
-}
-/*===================================================
- * custom_sort -- Compare two strings with custom sort
- * returns FALSE if no custom sort table
- * otherwise sets *rtn correctly & returns TRUE
- * Created: 2001/07/21 (Perry Rapp)
- *=================================================*/
-BOOLEAN
-custom_sort (char *str1, char *str2, INT * rtn)
-{
-	TRANTABLE tts = get_dbtrantable(MSORT);
-	TRANTABLE ttc = get_dbtrantable(MCHAR);
-	CNSTRING rep1, rep2;
-	STRING ptr1=str1, ptr2=str2;
-	INT len1, len2;
-	if (!tts) return FALSE;
-/* This was an attempt at handling skip-over prefixes (eg, Mc) */
-#if 0 /* must be done earlier */
-	if (ptr1[0] && ptr2[0]) {
-		/* check for prefix skips */
-		len1 = translate_match(ttp, ptr1, &rep1);
-		len2 = translate_match(ttp, ptr2, &rep2);
-		if (len1 || len2) {
-		}
-		if (strchr(rep1,"s") && ptr1[len1]) {
-			ptr1 += len1;
-			len1 = translate_match(tts, ptr1, &rep1);
-		}
-		if (strchr(rep2,"s") && ptr2[len2]) {
-			ptr2 += len2;
-			len2 = translate_match(tts, ptr2, &rep1);
-		}
-	}
-#endif
-	/* main loop thru both strings looking for differences */
-	while (1) {
-		/* stop when exhaust either string */
-		if (!ptr1[0] || !ptr2[0]) {
-			/* only zero if both end simultaneously */
-			*rtn = ptr1[0] - ptr2[0];
-			return TRUE;
-		}
-		/* look up in sort table */
-		len1 = translate_match(tts, ptr1, &rep1);
-		len2 = translate_match(tts, ptr2, &rep2);
-		if (len1 && len2) {
-			/* compare sort table results */
-			*rtn = atoi(rep1) - atoi(rep2);
-			if (*rtn) return TRUE;
-			ptr1 += len1;
-			ptr2 += len2;
-		} else {
-			/* at least one not in sort table */
-			/* try comparing single chars */
-			*rtn = ptr1[0] - ptr2[0];
-			if (*rtn) return TRUE;
-			/* use charset to see how wide they are */
-			if (ttc) {
-				len1 = translate_match(ttc, ptr1, &rep1);
-				len2 = translate_match(ttc, ptr2, &rep2);
-				if (len1 || len2) {
-					/* compare to width of wider char */
-					*rtn = strncmp(ptr1, ptr2, len1>len2?len1:len2);
-				}
-			} else {
-				/* TO DO - can we use locale here ? ie, locale + custom sort */
-				len1 = len2 = 1;
-				*rtn = ptr1[0] - ptr2[0];
+	/* first check existing cache */
+	if (f_xlats) {
+		XLAT xlattemp;
+		FORLIST(f_xlats, el)
+			xlattemp = (XLAT)el;
+			if (eqstr(xlattemp->src, src) && eqstr(xlattemp->dest, dest)) {
+				return xlattemp;
 			}
-			if (*rtn) return TRUE;
-			/* advance both by at least one */
-			ptr1 += len1 ? len1 : 1;
-			ptr2 += len2 ? len2 : 1;
-		}
+		ENDLIST
 	}
+	/* check if identity */
+	if (eqstr(src, dest)) {
+		/* new empty xlat will work for identity */
+		return create_xlat(src, dest);
+	}
+	/*
+	TODO: 2002-11-25
+	check table of conversions in ttdir
+	*/
+	if (iconv_can_trans(src, dest)) {
+		struct xlat_step_s * xstep = 0;
+		/* create new xlat & fill it out */
+		xlat = create_xlat(src, dest);
+		/* create a single iconv step & fill it out*/
+		xstep = (struct xlat_step_s * )malloc(sizeof(*xstep));
+		xstep->iconv_dest = strsave(dest);
+		xstep->iconv_src = strsave(src);
+		xstep->trantbl = NULL;
+		/* put single iconv step into xlat */
+		enqueue_list(xlat->steps, xstep);
+		return xlat;
+	}
+	return xlat;
+}
+/*==========================================================
+ * do_xlat -- Perform a translation on a string
+ * Created: 2002/11/25 (Perry Rapp)
+ *========================================================*/
+BOOLEAN
+do_xlat (XLAT xlat, ZSTR * pzstr)
+{
+	BOOLEAN cvtd=FALSE;
+	struct xlat_step_s * xstep=0;
+	if (!xlat) return cvtd;
+	/* simply cycle through & perform each step */
+	FORLIST(xlat->steps, el)
+		xstep = (struct xlat_step_s *)el;
+		if (xstep->iconv_src) {
+			/* an iconv step */
+			ZSTR ztemp=0;
+			if (iconv_trans(xstep->iconv_src, xstep->iconv_dest, zs_str(*pzstr), &ztemp, "?")) {
+				cvtd=TRUE;
+				zs_free(pzstr);
+				*pzstr = ztemp;
+			} else { /* iconv failed, so clear it to avoid trying again later */
+				xstep->iconv_src = 0;
+			}
+		} else if (xstep->trantbl) {
+			/* a custom translation table step */
+			custom_translate(pzstr, xstep->trantbl);
+		}
+	ENDLIST
+	return cvtd;
 }

@@ -87,18 +87,18 @@ variable, and checked & resized at init_display_indi time */
 static void add_child_line(INT, RECORD, INT width);
 static void add_spouse_line(INT, NODE, NODE, INT width);
 static BOOLEAN append_event(STRING * pstr, STRING evt, INT * plen, INT minlen);
-static void family_events(STRING outstr, TRANMAPPING ttm, NODE indi, NODE fam, INT len);
-static void indi_events(STRING outstr, TRANMAPPING ttm, NODE indi, INT len);
+static void family_events(STRING outstr, XLAT ttm, NODE indi, NODE fam, INT len);
+static void indi_events(STRING outstr, XLAT ttm, NODE indi, INT len);
 static void init_display_indi(NODE, INT width);
 static void init_display_fam(NODE, INT width);
 static void pedigree_line(CANVASDATA canvas, INT x, INT y, STRING string, INT overflow);
 static STRING person_display(NODE, NODE, INT);
 static void put_out_line(UIWINDOW uiwin, INT x, INT y, STRING string, INT maxcol, INT flag);
-static STRING sh_fam_to_event_shrt(NODE node, TRANMAPPING ttm, STRING tag, STRING head
+static STRING sh_fam_to_event_shrt(NODE node, XLAT ttm, STRING tag, STRING head
 	, INT len);
-static STRING sh_indi_to_event_long(NODE node, TRANMAPPING ttm, STRING tag
+static STRING sh_indi_to_event_long(NODE node, XLAT ttm, STRING tag
 	, STRING head, INT len);
-static STRING sh_indi_to_event_shrt(NODE node, TRANMAPPING ttm, STRING tag
+static STRING sh_indi_to_event_shrt(NODE node, XLAT ttm, STRING tag
 	, STRING head, INT len);
 
 /*********************************************
@@ -177,7 +177,7 @@ init_display_indi (NODE pers, INT width)
 	STRING s,t;
 	NODE fth;
 	NODE mth;
-	TRANMAPPING ttmd = get_tranmapping(MINDS);
+	XLAT ttmd = get_tranmapping(MINDS);
 	CACHEEL icel;
 
 	ASSERT(width < ll_cols+1); /* size of Spers etc */
@@ -351,7 +351,7 @@ init_display_fam (NODE fam, INT width)
 	NODE wife;
 	STRING s, ik, fk;
 	INT len, nch, nm, wtemp;
-	TRANMAPPING ttmd = get_tranmapping(MINDS);
+	XLAT ttmd = get_tranmapping(MINDS);
 	STRING mother = _(qSdspl_moth);
 	STRING father = _(qSdspl_fath);
 	ASSERT(fam);
@@ -561,7 +561,7 @@ indi_to_ped_fix (NODE indi, INT len)
 	STRING bevt, devt, name, key;
 	static char scratch[100];
 	char tmp1[100];
-	TRANMAPPING ttmd = get_tranmapping(MINDS);
+	XLAT ttmd = get_tranmapping(MINDS);
 
 /*	return person_display(indi, 0, len); */
 
@@ -613,7 +613,7 @@ append_event (STRING * pstr, STRING evt, INT * plen, INT minlen)
  * Created: 2001/07/04 (Perry Rapp)
  *===========================================*/
 static void
-family_events (STRING outstr, TRANMAPPING ttmd, NODE indi, NODE fam, INT len)
+family_events (STRING outstr, XLAT ttmd, NODE indi, NODE fam, INT len)
 {
 	STRING evt = NULL;
 	STRING p = outstr;
@@ -665,7 +665,7 @@ family_events (STRING outstr, TRANMAPPING ttmd, NODE indi, NODE fam, INT len)
  * Created: 2001/07/04 (Perry Rapp)
  *===========================================*/
 static void
-indi_events (STRING outstr, TRANMAPPING ttmd, NODE indi, INT len)
+indi_events (STRING outstr, XLAT ttmd, NODE indi, INT len)
 {
 	STRING evt = NULL;
 	INT width = (len-2)/2;
@@ -721,7 +721,7 @@ person_display (NODE indi, NODE fam, INT len)
 	static char scratch1[120];
 	static char scratch2[100];
 	STRING p;
-	TRANMAPPING ttmd = get_tranmapping(MINDS);
+	XLAT ttmd = get_tranmapping(MINDS);
 	INT keyspace = max_keywidth() + 3; /* parentheses & leading space */
 	INT evlen, namelen, temp;
 	/* don't overflow scratch1, into which we catenate name & events */
@@ -883,7 +883,7 @@ display_cache_stats (void)
  *  using long display reformatting
  *==============================================*/
 static STRING
-sh_indi_to_event_long (NODE node, TRANMAPPING ttm, STRING tag
+sh_indi_to_event_long (NODE node, XLAT ttm, STRING tag
 	, STRING head, INT len)
 {
 	return indi_to_event(node, ttm, tag, head, len, &disp_long_rfmt);
@@ -893,7 +893,7 @@ sh_indi_to_event_long (NODE node, TRANMAPPING ttm, STRING tag
  *  using short display reformatting
  *==============================================*/
 static STRING
-sh_indi_to_event_shrt (NODE node, TRANMAPPING ttm, STRING tag
+sh_indi_to_event_shrt (NODE node, XLAT ttm, STRING tag
 	, STRING head, INT len)
 {
 	return indi_to_event(node, ttm, tag, head, len, &disp_shrt_rfmt);
@@ -903,7 +903,7 @@ sh_indi_to_event_shrt (NODE node, TRANMAPPING ttm, STRING tag
  *  using display reformatting
  *================================================*/
 static STRING
-sh_fam_to_event_shrt (NODE node, TRANMAPPING ttm, STRING tag, STRING head
+sh_fam_to_event_shrt (NODE node, XLAT ttm, STRING tag, STRING head
 	, INT len)
 {
 	return fam_to_event(node, ttm, tag, head, len, &disp_shrt_rfmt);

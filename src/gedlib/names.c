@@ -881,7 +881,7 @@ upsurname (STRING name)
  * returns static buffer
  *================================================*/
 STRING
-manip_name (STRING name, TRANMAPPING ttm, BOOLEAN caps, BOOLEAN regorder, INT len)
+manip_name (STRING name, XLAT ttm, BOOLEAN caps, BOOLEAN regorder, INT len)
 {
 	static char scratch[MAXGEDNAMELEN+1];
 	if (!name || *name == 0) return NULL;

@@ -93,7 +93,7 @@ BOOLEAN
 import_from_gedcom_file (struct import_feedback * ifeed, FILE *fp)
 {
 	NODE node, conv;
-	TRANMAPPING ttm = get_tranmapping(MGDIN);
+	XLAT ttm = get_tranmapping(MGDIN);
 	STRING msg;
 	BOOLEAN emp;
 	INT nindi = 0, nfam = 0, neven = 0;

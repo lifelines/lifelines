@@ -275,7 +275,7 @@ pick_create_new_family (RECORD current, RECORD save, STRING * addstrings)
 {
 	INT i;
 	RECORD rec=0;
-	TRANMAPPING ttmd = get_tranmapping(MINDS);
+	XLAT xlat = get_tranmapping(MINDS);
 
 	if (readonly) {
 		message(_(qSronlya));
@@ -286,7 +286,8 @@ pick_create_new_family (RECORD current, RECORD save, STRING * addstrings)
 	if (i == 0) rec = add_family(NULL, NULL, current);
 	else if (save) {
 		char scratch[100];
-		STRING name = indi_to_name(nztop(save), ttmd, 55);
+		/* TODO: move translation down to prompt */
+		STRING name = indi_to_name(nztop(save), xlat, 55);
 		llstrncpyf(scratch, sizeof(scratch), uu8, "%s%s", _(qSissnew), name);
 		if (keyflag) {
 			STRING key = rmvat(nxref(nztop(save)))+1;
@@ -832,7 +833,7 @@ prompt_add_spouse_with_candidate (RECORD fam, RECORD candidate)
 	NODE fref, husb, wife, chil, rest;
 	BOOLEAN confirm;
 	char scratch[100];
-	TRANMAPPING ttmd = get_tranmapping(MINDS);
+	XLAT ttmd = get_tranmapping(MINDS);
 	if (readonly) {
 		message(_(qSronlye));
 		return;
@@ -873,7 +874,7 @@ static void
 prompt_add_child_check_save (NODE fam, NODE save)
 {
 	char scratch[100];
-	TRANMAPPING ttmd = get_tranmapping(MINDS);
+	XLAT ttmd = get_tranmapping(MINDS);
 	if (readonly) {
 		message(_(qSronlye));
 		return;

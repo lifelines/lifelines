@@ -2,6 +2,7 @@
 #define _GEDCOM_PRIV_H
 
 /* from charmaps.c */
+void custom_translate(ZSTR * pzstr, TRANTABLE tt);
 BOOLEAN init_map_from_file(CNSTRING file, CNSTRING mapname, TRANTABLE*);
 
 /* from names.c */
