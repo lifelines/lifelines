@@ -467,6 +467,7 @@ PNODE children_node(PACTX pactx, PNODE, STRING, STRING, PNODE);
 void clear_rptinfos(void);
 PNODE continue_node(PACTX pactx);
 void debug_show_one_pnode(PNODE);
+CNSTRING get_pvalue_type_name(INT ptype);
 PVALUE evaluate(PNODE, SYMTAB, BOOLEAN*);
 BOOLEAN evaluate_cond(PNODE, SYMTAB, BOOLEAN*);
 PVALUE evaluate_func(PNODE, SYMTAB, BOOLEAN*);

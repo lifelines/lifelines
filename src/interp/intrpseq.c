@@ -89,6 +89,7 @@ __indiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	set_indiseq_value_funcs(newseq, &pvseq_fnctbl);
 	newval = create_pvalue_from_seq(newseq);
 	assign_iden(stab, iident(arg1), newval);
+	/* gave val1 to stab, so don't clear it */
 	return NULL;
 }
 /*==================================+

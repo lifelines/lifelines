@@ -121,6 +121,13 @@
 
 	Add code to check for leaked symbol tables.
 
+	* .linesrc ChangeLog lines.cfg src/hdrs/table.h
+	src/interp/interpi.h src/interp/intrpseq.c src/interp/pvalalloc.c
+	src/interp/pvalue.c src/interp/symtab.c src/stdlib/table.c
+
+	Add leak statistics and new option ReportLeakLog.
+	New function next_table_int.
+
 2005-02-05 Perry Rapp
 
 	* ChangeLog NEWS src/gedlib/xreffile.c

@@ -90,6 +90,7 @@ TABLE_ITER begin_table_iter(TABLE tab);
 BOOLEAN change_table_ptr(TABLE_ITER tabit, VPTR newptr);
 void end_table_iter(TABLE_ITER * ptabit);
 BOOLEAN next_table_ptr(TABLE_ITER tabit, CNSTRING *pkey, VPTR *pptr);
+BOOLEAN next_table_int(TABLE_ITER tabit, CNSTRING *pkey, INT * pival);
 
 
 #endif /* TABLE_H_INCLUDED */

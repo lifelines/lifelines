@@ -867,6 +867,19 @@ show_pvalue (PVALUE val)
 	llwprintf(zs_str(zstr));
 	zs_free(&zstr);
 }
+/*=================================================
+ * get_pvalue_type_name -- Return static string name of pvalue type
+ *  eg, get_pvalue_type_name(PTABLE) => "PTABLE"
+ *===============================================*/
+CNSTRING
+get_pvalue_type_name (INT ptype)
+{
+	if (ptype >= 0 && ptype <= ARRSIZE(ptypes)) {
+		return ptypes[ptype];
+	} else {
+		return "INVALID ptype";
+	}
+}
 /*======================================================
  * debug_pvalue_as_string -- DEBUG routine that shows a PVALUE
  *  returns static buffer
@@ -887,7 +900,7 @@ describe_pvalue (PVALUE val)
 	}
 	type = ptype(val);
 	zs_appc(zstr, '<');
-	zs_apps(zstr, ptypes[type]);
+	zs_apps(zstr, get_pvalue_type_name(type));
 	zs_appc(zstr, ',');
 	if (pvalvv(val) == NULL) {
 		zs_apps(zstr, "NULL>");

@@ -18,6 +18,7 @@
 #include "liflines.h"
 #include "feedback.h"
 #include "zstr.h"
+#include "lloptions.h"
 
 /*********************************************
  * local types
@@ -213,6 +214,8 @@ free_all_pvalues (void)
 	PV_BLOCK block;
 	INT found_leaks=0;
 	INT orig_leaks = live_pvalues;
+	TABLE leaktab = create_table();
+
 	/* Notes
 	live_pvalues is the count of leaked pvalues
 	We have to go through all blocks and free all pvalues
@@ -234,8 +237,13 @@ free_all_pvalues (void)
 				PVALUE val1=&block->values[i];
 				if (val1->type != PFREED) {
 					/* leaked */
+					CNSTRING typestr = get_pvalue_type_name(val1->type);
+					ZSTR zstr = describe_pvalue(val1);
+					/* zstr is just for debugging, we don't record it */
+					table_incr_int(leaktab, typestr);
 					delete_pvalue(val1);
 					++found_leaks;
+					zs_free(&zstr);
 				}
 			}
 		}
@@ -249,6 +257,26 @@ free_all_pvalues (void)
 		block_list = next;
 	}
 	free_list = 0;
+	if (found_leaks) {
+		STRING report_leak_path = getoptstr("ReportLeakLog", NULL);
+		FILE * fp=0;
+		if (report_leak_path)
+			fp = fopen(report_leak_path, "wt");
+		if (fp) {
+			TABLE_ITER tabit = begin_table_iter(leaktab);
+			CNSTRING key=0;
+			INT ival=0;
+			while (next_table_int(tabit, &key, &ival)) {
+				fprintf(fp, "%s: %d items\n", key, ival);
+			}
+			end_table_iter(&tabit);
+		}
+		if (fp) {
+			fclose(fp);
+			fp = 0;
+		}
+	}
+	destroy_table(leaktab);
 }
 /*======================================
  * check_pvalue_validity -- ASSERT that pvalue is valid

@@ -790,6 +790,36 @@ advance:
 	return TRUE;
 }
 /*=================================================
+ * next_table_int -- Advance to next int in table
+ * skips over any other types of table elements
+ * returns FALSE if runs out of table elements
+ *===============================================*/
+BOOLEAN
+next_table_int (TABLE_ITER tabit, CNSTRING *pkey, INT * pival)
+{
+advance:
+	if (!next_element(tabit)) {
+		*pkey = 0;
+		*pival = 0;
+		return FALSE;
+	}
+	if (!is_generic_null(&tabit->enext->generic)) {
+		if (is_generic_int(&tabit->enext->generic)) {
+			*pkey = tabit->enext->ekey;
+			*pival = get_generic_int(&tabit->enext->generic);
+			return TRUE;
+		} else {
+			/* wrong type of element, skip it */
+			goto advance;
+		}
+	} else {
+		/* TB_INT tables no longer exist */
+		/* so skip this element */
+		goto advance;
+	}
+	return TRUE;
+}
+/*=================================================
  * change_table_ptr -- User changing value in iteration
  * Created: 2002/06/17, Perry Rapp
  *===============================================*/
