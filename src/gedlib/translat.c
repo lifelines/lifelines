@@ -43,11 +43,12 @@ static XNODE step_xnode(XNODE, INT);
 
 /*=============================================
  * create_trantable -- Create translation table
+ *  lefts:  [in] patterns
+ *  rights: [in] replacements
+ *  n:      [in] num pairs
  *===========================================*/
 TRANTABLE
-create_trantable (STRING *lefts,        /* patterns */
-                  STRING *rights,       /* replacements */
-                  INT n)                /* num pairs */
+create_trantable (STRING *lefts, STRING *rights, INT n)
 {
 	TRANTABLE tt = (TRANTABLE) stdalloc(sizeof(*tt));
 	STRING left, right;
@@ -55,7 +56,7 @@ create_trantable (STRING *lefts,        /* patterns */
 	XNODE node;
 	for (i = 0; i < 256; i++)
 		tt->start[i] = NULL;
-	ASSERT(n > 0);
+	/* if empty, n==0, this is valid */
 	for (i = 0; i < n; i++) {
 		left = lefts[i];
 		right = rights[i];

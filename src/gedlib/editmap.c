@@ -21,9 +21,10 @@ extern STRING cmperr, aredit, ronlye, dataerr;
 
 /*==============================================
  * edit_mapping -- Edit character mapping record
+ *  code: [in] which translation table (see defn of map_keys)
  *============================================*/
 BOOLEAN
-edit_mapping (INT code) /* map code */
+edit_mapping (INT code)
 {
 	TRANTABLE tt;
 	BOOLEAN err;

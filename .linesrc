@@ -6,7 +6,7 @@
 #
 # These can be overridden by useroptions in db
 #
-# 2001/07/01
+# 2001/07/10
 
 # Email address available to report programs
 #EmailAddr=user@mailhost.org
@@ -47,3 +47,14 @@
 
 # Print more detailed call stack for each report error
 # FullReportCallStack=1
+
+# set to 1 for customized date display on screen
+# if set to 0, or unspecified, dates will be displayed
+# directly from GEDCOM data
+# CustomizeLongDate=1
+# see programmers reference for stddate for these
+# below example yields 2001/07/10
+#CustomizeLongDfmt=1
+#CustomizeLongMfmt=1
+#CustomizeLongYfmt=0
+#CustomizeLongSfmt=9

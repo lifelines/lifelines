@@ -34,10 +34,10 @@
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
-#include "liflines.h"
 #include "screen.h"
 #include "warehouse.h"
 #include "metadata.h"
+#include "lloptions.h"
 
 /*********************************************
  * global/exported variables
@@ -78,6 +78,7 @@ static void alloc_nod0_wh(NOD0 nod0, INT isnew);
 static NODE alloc_node(void);
 static BOOLEAN buffer_to_line (STRING p, INT *plev, STRING *pxref
 	, STRING *ptag, STRING *pval, STRING *pmsg);
+static STRING display_date(STRING date);
 static STRING fixup (STRING str);
 static STRING fixtag (STRING tag);
 static void load_nod0_wh(NOD0 nod0, char * whptr, INT whlen);
@@ -1175,7 +1176,8 @@ STRING node_to_tag (NODE node, STRING tag, TRANTABLE tt, INT len)
  *  len:  [in] max length output desired
  *  shrt: [in] flag indicating desire short form output
  * Searches node substree for desired tag
- *  returns formatted string if found, else NULL
+ *  returns formatted string (event_to_string) if found,
+ *  else NULL
  *============================================*/
 STRING
 indi_to_event (NODE node, TRANTABLE tt, STRING tag, STRING head
@@ -1228,6 +1230,8 @@ event_to_string (NODE node, TRANTABLE tt, BOOLEAN shrt)
 		date = shorten_date(date);
 		plac = shorten_plac(plac);
 		if (!date && !plac) return NULL;
+	} else {
+		date = display_date(date);
 	}
 	p[0] = 0;
 	if (date)
@@ -1242,11 +1246,12 @@ event_to_string (NODE node, TRANTABLE tt, BOOLEAN shrt)
 }
 /*=======================================
  * event_to_date -- Convert event to date
+ *  node: [in] event node
+ *  tt:   [in] translation table to apply
+ *  shrt: [in] flag - use short form if set
  *=====================================*/
 STRING
-event_to_date (NODE node,
-               TRANTABLE tt,
-               BOOLEAN shrt)
+event_to_date (NODE node, TRANTABLE tt, BOOLEAN shrt)
 {
 	static unsigned char scratch[MAXLINELEN+1];
 	if (!node) return NULL;
@@ -1308,6 +1313,19 @@ length_nodes (NODE node)
 		node = nsibling(node);
 	}
 	return len;
+}
+/*================================================
+ * display_date -- Convert date according to options
+ *==============================================*/
+static STRING
+display_date (STRING date)
+{
+	static unsigned char buffer[MAXLINELEN+1];
+	if (!date) return NULL;
+	if (!lloptions.date_customize_long) return date;
+	return format_date(date, lloptions.date_long_dfmt
+		, lloptions.date_long_mfmt, lloptions.date_long_yfmt
+		, lloptions.date_long_sfmt, TRUE);
 }
 /*================================================
  * shorten_date -- Return short form of date value

@@ -7,6 +7,13 @@
 	be passed to isxxxx family. Improved soundex routine (avoided copying
 	entire name first).
 
+	* .linesrc ChangeLog lines.cfg gedlib/charmaps.c
+	gedlib/editmap.c gedlib/lloptions.c gedlib/node.c
+	gedlib/translat.c hdrs/lloptions.h:
+	Bugfix to allow entering empty translation table, and more function
+	documentation. Additional config options allowing customized long
+	date display in browse screen.
+
 2001-07-08 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/names.c stdlib/environ.c:

@@ -80,10 +80,11 @@ init_mapping (void)
 }
 /*===================================================
  * init_map_from_rec -- Init single translation table
+ *  indx:  [in] which translation table (see defn of map_keys)
+ *  perr:  [out] flag set to TRUE if error
  *=================================================*/
 TRANTABLE
-init_map_from_rec (INT indx,
-                   BOOLEAN *perr)
+init_map_from_rec (INT indx, BOOLEAN *perr)
 {
 	STRING rec;
 	INT len;
@@ -98,11 +99,12 @@ init_map_from_rec (INT indx,
 }
 /*====================================================
  * init_map_from_file -- Init single translation table
+ *  file: [in] file from which to read translation table
+ *  indx: [in] which translation table (see defn of map_keys)
+ *  perr: [out] flag set to TRUE if error
  *==================================================*/
 TRANTABLE
-init_map_from_file (STRING file,
-                    INT indx,
-                    BOOLEAN *perr)
+init_map_from_file (STRING file, INT indx, BOOLEAN *perr)
 {
 	FILE *fp;
 	struct stat buf;
@@ -128,6 +130,10 @@ init_map_from_file (STRING file,
  * Translation table entries have the following foramt:
  *
  * <original><tab><translation>
+ *  str:  [in] input string to translate
+ *  indx: [in] which translation table (see defn of map_keys)
+ *  perr: [out] error flag set TRUE by function if error
+ * May return NULL
  *================================================*/
 TRANTABLE
 init_map_from_str (STRING str,
@@ -147,18 +153,18 @@ init_map_from_str (STRING str,
 	p = str;
 	n = 1;
 	while (*p) {
-	    /* skip blank lines and lines beginning with "##" */
-	    if((*p == '\r') || (*p == '\n') || ((*p =='#') && (p[1] == '#'))) {
+		/* skip blank lines and lines beginning with "##" */
+		if((*p == '\r') || (*p == '\n') || ((*p =='#') && (p[1] == '#'))) {
 		while(*p && (*p != '\n')) p++;
 		if(*p == '\n') p++;
-		continue;
-	    }
-	    while(*p) {
-		if (*p++ == '\n') {
-			n++;
-			break;
+			continue;
 		}
-	    }
+		while(*p) {
+			if (*p++ == '\n') {
+				n++;
+				break;
+			}
+		}
 	}
 	lefts = (STRING *) stdalloc(n*sizeof(STRING));
 	rights = (STRING *) stdalloc(n*sizeof(STRING));
@@ -173,13 +179,13 @@ init_map_from_str (STRING str,
 	n = 0;
 	while (!done && (n < maxn)) {
 		if (!*str) break;
-	        /* skip blank lines and lines beginning with "##" */
-	        if((*str == '\r') || (*str == '\n')
-		   || ((*str =='#') && (str[1] == '#'))) {
-		    while(*str && (*str != '\n')) str++;
-		    if(*str == '\n') str++;
-		    continue;
-	        }
+		/* skip blank lines and lines beginning with "##" */
+		if((*str == '\r') || (*str == '\n')
+			|| ((*str =='#') && (str[1] == '#'))) {
+			while(*str && (*str != '\n')) str++;
+			if(*str == '\n') str++;
+			continue;
+		}
 		p = scratch;
 		while (TRUE) {
 			c = *str++;
