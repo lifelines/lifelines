@@ -44,6 +44,11 @@ static STRING trans_edin(STRING input, INT len);
 static STRING trans_ined(STRING input, INT len);
 static BOOLEAN edit_valtab_impl(TABLE *ptab, INT sep, STRING ermsg, STRING (*validator)(TABLE tab));
 
+/*
+TODO
+ 2002-10-05, Perry: This file does I/O, so may need to be moved out of gedlib
+*/
+
 /*==============================================
  * edit_valtab_from_db -- Edit value table from database
  *  key:       [IN]  db key where record to edit is stored

@@ -42,10 +42,8 @@ INT msg_width(void);
 BOOLEAN ask_for_input_filename(STRING ttl, STRING path, STRING prmpt, STRING buffer, INT buflen);
 BOOLEAN ask_for_output_filename(STRING ttl, STRING path, STRING prmpt, STRING buffer, INT buflen);
 
-
 /* called by signal handler before invoking exit() */
 void shutdown_ui(BOOLEAN pause);
-
 
 /* called by edit routines for translation maps &
  edit routines for tables for user options & abbreviations */
@@ -59,4 +57,8 @@ BOOLEAN ask_for_string2(STRING ttl1, STRING ttl2, STRING prmpt, STRING buffer, I
 /* called by interp when finished */
 void refresh_stdout(void);
 
+/* for report interpreter engine */
+void call_system_cmd(STRING cmd);
+
 #endif /* _FEEDBACK_H */
+

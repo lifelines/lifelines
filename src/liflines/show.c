@@ -48,8 +48,6 @@
  * global/exported variables
  *********************************************/
 
-struct rfmt_s disp_long_rfmt; /* reformatting used for display long forms */
-struct rfmt_s disp_shrt_rfmt; /* reformatting used for display short forms */
 INT Scroll1=0;
 
 /*********************************************
@@ -89,12 +87,8 @@ variable, and checked & resized at init_display_indi time */
 static void add_child_line(INT, RECORD, INT width);
 static void add_spouse_line(INT, NODE, NODE, INT width);
 static BOOLEAN append_event(STRING * pstr, STRING evt, INT * plen, INT minlen);
-static STRING disp_long_format_date(STRING date);
-static STRING disp_shrt_format_date(STRING date);
-static STRING disp_shrt_format_plac(STRING plac);
 static void family_events(STRING outstr, TRANMAPPING ttm, NODE indi, NODE fam, INT len);
 static void indi_events(STRING outstr, TRANMAPPING ttm, NODE indi, INT len);
-static void init_disp_reformat(void);
 static void init_display_indi(NODE, INT width);
 static void init_display_fam(NODE, INT width);
 static void pedigree_line(CANVASDATA canvas, INT x, INT y, STRING string, INT overflow);
@@ -883,100 +877,6 @@ display_cache_stats (void)
 {
 	STRING stats = get_cache_stats();
 	msg_info(stats);
-}
-/*===============================================
- * init_disp_reformat -- Initialize reformatting for display
- * Set up format descriptions for both long & short display forms
- * Created: 2001/07/12 (Perry Rapp)
- *=============================================*/
-static void
-init_disp_reformat (void)
-{
-	/* Set up long formats */
-	memset(&disp_long_rfmt, 0, sizeof(disp_long_rfmt));
-	disp_long_rfmt.rfmt_date = &disp_long_format_date;
-	disp_long_rfmt.rfmt_plac = 0; /* use place as is */
-	disp_long_rfmt.combopic = "%1, %2";
-	/* Set up short formats */
-	memset(&disp_shrt_rfmt, 0, sizeof(disp_shrt_rfmt));
-	disp_shrt_rfmt.rfmt_date = &disp_shrt_format_date;
-	disp_shrt_rfmt.rfmt_plac = &disp_shrt_format_plac;
-	disp_shrt_rfmt.combopic = "%1, %2";
-}
-/*===========================================================
- * disp_long_format_date -- Convert date according to options
- *=========================================================*/
-static STRING
-disp_long_format_date (STRING date)
-{
-	INT dfmt=0,mfmt=0,yfmt=0,sfmt=0,efmt=0, cmplx;
-	INT n;
-	STRING fmts, pic;
-
-	if (!date) return NULL;
-
-	n = 0;
-	fmts = getoptstr("LongDisplayDate", NULL);
-	if (fmts) {
-		/* try to use user-specified format */
-		n = sscanf(fmts, "%d,%d,%d,%d,%d,%d" 
-			, &dfmt, &mfmt, &yfmt, &sfmt, &efmt, &cmplx);
-	}
-	if (n != 6) {
-		dfmt=mfmt=yfmt=sfmt=efmt=cmplx=0;
-		sfmt=14; /* GEDCOM as is */
-	}
-
-	pic = getoptstr("LongDisplayDatePic", NULL);
-	if (pic && pic[0])
-		set_date_pic(pic);
-	
-	return do_format_date(date, dfmt, mfmt, yfmt, sfmt, efmt, cmplx);
-}
-/*===============================================================
- * disp_shrt_format_date -- short form of date for display
- *  This is used for dates in option strings, and in single-line
- *  descriptions of people (ie, in event summaries).
- * Created: 2001/10/29 (Perry Rapp)
- *=============================================================*/
-static STRING
-disp_shrt_format_date (STRING date)
-{
-	INT dfmt=0,mfmt=0,yfmt=0,sfmt=0,efmt=0, cmplx;
-	INT n;
-	STRING fmts, pic;
-
-	if (!date) return NULL;
-
-	n = 0;
-	fmts = getoptstr("ShortDisplayDate", NULL);
-	if (fmts) {
-		/* try to use user-specified format */
-		n = sscanf(fmts, "%d,%d,%d,%d,%d,%d"
-			, &dfmt, &mfmt, &yfmt, &sfmt, &efmt, &cmplx);
-	}
-	if (n != 6) {
-		dfmt=mfmt=yfmt=sfmt=cmplx=0;
-		sfmt=12; /* old style short form -- year only */
-	}
-
-	pic = getoptstr("ShortDisplayDatePic", NULL);
-	if (pic && pic[0])
-		set_date_pic(pic);
-
-	return do_format_date(date, dfmt, mfmt, yfmt, sfmt, efmt, cmplx);
-}
-/*================================================================
- * disp_shrt_format_plac -- short form of place for display
- *  This is used for places in single-line descriptions of people
- *  (ie, in event summaries).
- * Created: 2001/10/29 (Perry Rapp)
- *==============================================================*/
-static STRING
-disp_shrt_format_plac (STRING plac)
-{
-	if (!plac) return NULL;
-	return shorten_plac(plac);
 }
 /*================================================
  * sh_indi_to_event -- Pass-thru to indi_to_event

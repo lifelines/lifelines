@@ -161,6 +161,10 @@ SOURCE=..\..\..\src\stdlib\dirs.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\gedlib\dispfmt.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\stdlib\double.c
 # End Source File
 # Begin Source File

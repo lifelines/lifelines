@@ -44,6 +44,7 @@
 #include "indiseq.h"
 #include "liflines.h"
 #include "lloptions.h"
+#include "feedback.h" /* call_system_cmd */
 
 /*********************************************
  * external/imported variables
@@ -744,6 +745,7 @@ __runsystem (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	STRING cmd;
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
 	if (*eflg) {
+		/* TODO: need to i18n strings around here -- there is a wrapper for type mismatches */
 		prog_error(node, "the arg to system must be a string");
 		return NULL;
 	}
@@ -752,17 +754,11 @@ __runsystem (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		delete_pvalue(val);
 		return NULL;
 	}
-	endwin();
-#ifndef WIN32
-	system("clear");
-#endif
 	if (!getoptint("DenySystemCalls", 0)) {
-		system(cmd);
+		call_system_cmd(cmd);
 	} else {
 		/* llwprintf("Suppressing system(%s) call", cmd); */
 	}
-	touchwin(curscr);
-	wrefresh(curscr);
 	delete_pvalue(val);
 	return NULL;
 }

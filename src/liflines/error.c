@@ -37,11 +37,15 @@
 static char f_crashfile[MAXPATHLEN]="";
 static char f_currentdb[MAXPATHLEN]="";
 
+/*
+ 2002/10/05
+ These routines do not depend on curses (llwprintf can be implemented w/o curses)
+ and so could move out of the liflines subdir. llexec is using this file.
+*/
+
 /*===============================
  * __fatal -- Fatal error routine
  *  handles null or empty details input
- * 2001/09/22, Perry: This uses llwprintf calls, so it belongs in the curses
- *  library (ie, in the liflines directory).
  *=============================*/
 void
 __fatal (STRING file, int line, STRING details)

@@ -755,7 +755,7 @@ interp_load_lang (void)
 	interp_locale = strsave(cur_locale);
 #else
 	if (interp_locale)
-		return
+		return;
 	interp_locale = strsave("C");
 #endif
 	clear_error_strings();

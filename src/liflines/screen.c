@@ -3570,6 +3570,21 @@ refresh_stdout (void)
 	wrefresh(uiw_win(stdout_win));
 }
 /*============================
+ * call_system_cmd -- 
+ *  execute a shell command (for report interpreter)
+ *==========================*/
+void
+call_system_cmd (STRING cmd)
+{
+	endwin();
+#ifndef WIN32
+	system("clear");
+#endif
+	system(cmd);
+	touchwin(curscr);
+	wrefresh(curscr);
+}
+/*============================
  * uierase -- erase window 
  *  handles manual erasing if broken_curses flag set
  *==========================*/

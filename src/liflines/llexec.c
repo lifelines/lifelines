@@ -1,35 +1,13 @@
 /* 
-   Copyright (c) 1991-1999 Thomas T. Wetmore IV
-
-   Permission is hereby granted, free of charge, to any person
-   obtaining a copy of this software and associated documentation
-   files (the "Software"), to deal in the Software without
-   restriction, including without limitation the rights to use, copy,
-   modify, merge, publish, distribute, sublicense, and/or sell copies
-   of the Software, and to permit persons to whom the Software is
-   furnished to do so, subject to the following conditions:
-
-   The above copyright notice and this permission notice shall be
-   included in all copies or substantial portions of the Software.
-
-   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-   SOFTWARE.
+   Copyright (c) 2000-2002 Perry Rapp
+   "The MIT license"
+   Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
- * main.c -- Main program of LifeLines
- * Copyright(c) 1992-95 by T.T. Wetmore IV; all rights reserved
- * pre-SourceForge version information:
- *   2.3.4 - 24 Jun 93    2.3.5 - 07 Aug 93
- *   2.3.6 - 02 Oct 93    3.0.0 - 11 Oct 94
- *   3.0.1 - 11 Oct 93    3.0.2 - 01 Jan 95
- *   3.0.3 - 02 Jul 96
+ * llexec.c -- Frontend code for lifelines report generator
+ * Copyright(c) 2002 by Perry Rapp; all rights reserved
  *===========================================================*/
 
 #include "llstdlib.h"
@@ -45,10 +23,8 @@
 #include "arch.h"
 #include "lloptions.h"
 #include "interp.h"
-
-#include "llinesi.h"
-#include "screen.h" /* calling initscr, noecho, ... */
-
+#include "feedback.h"
+#include "llexec.h"
 
 #ifdef HAVE_GETOPT
 #ifdef HAVE_GETOPT_H
@@ -70,7 +46,6 @@ extern INT csz_fam, icsz_fam;
 extern INT csz_sour, icsz_sour;
 extern INT csz_even, icsz_even;
 extern INT csz_othr, icsz_othr;
-extern INT winx, winy;
 
 extern int opterr;
 
@@ -103,6 +78,8 @@ STRING  ext_codeset = 0;       /* default codeset from locale */
  *********************************************/
 
 /* alphabetical */
+static void init_browse_module(void);
+static void init_show_module(void);
 static BOOLEAN is_unadorned_directory(STRING path);
 static void load_usage(void);
 static void main_db_notify(STRING db, BOOLEAN opening);
@@ -110,6 +87,8 @@ static BOOLEAN open_or_create_database(INT alteration, STRING dbrequested
 	, STRING *dbused);
 static void platform_init(void);
 static void show_open_error(INT dberr);
+static void term_browse_module(void);
+static void term_show_module(void);
 
 /*********************************************
  * local function definitions
@@ -235,9 +214,6 @@ main (INT argc, char **argv)
 		case 't': /* show lots of trace statements for debugging */
 			prog_trace = TRUE;
 			break;
-		case 'u': /* specify screen dimensions */
-			sscanf(optarg, "%d,%d", &winx, &winy);
-			break;
 		case 'x': /* execute program */
 			exprog = TRUE;
 			exprog_name = optarg;
@@ -265,12 +241,7 @@ prompt_for_db:
 	else
 		set_signals();
 
-	/* Initialize Curses UI */
-	if (!initscr())
-		goto finish;
 	platform_init();
-	noecho();
-	keypad(0, 1);
 	set_displaykeys(keyflag);
 	/* initialize options & misc. stuff */
 	if (!init_lifelines_global(configfile, &msg, &main_db_notify)) {
@@ -278,10 +249,7 @@ prompt_for_db:
 		goto finish;
 	}
 	/* setup crashlog in case init_screen fails (eg, bad menu shortcuts) */
-	crash_setcrashlog(getoptstr("CrashLog_llines", NULL));
-	/* initialize curses interface */
-	if (!init_screen(graphical))
-		goto finish;
+	crash_setcrashlog(getoptstr("CrashLog_llexec", NULL));
 	init_interpreter(); /* give interpreter its turn at initialization */
 
 	/* Validate Command-Line Arguments */
@@ -370,9 +338,7 @@ prompt_for_db:
 	if (exprog) {
 		interp_program("main", 0, NULL, 1, &exprog_name, progout, FALSE);
 	} else {
-		alldone = 0;
-		while (!alldone)
-			main_menu();
+		/* TODO: prompt for report filename */
 	}
 	term_show_module();
 	term_browse_module();
@@ -400,20 +366,12 @@ usage:
 	return !ok;
 }
 /*===================================================
- * shutdown_ui -- Do whatever is necessary to close GUI
- * Created: 2001/11/08, Perry Rapp
+ * shutdown_ui -- (Placeholder, we don't need it)
  *=================================================*/
 void
 shutdown_ui (BOOLEAN pause)
 {
-	term_screen();
-	if (pause) /* if error, give user a second to read it */
-		sleep(1);
-	/* TO DO - signals also calls into here -- how do we figure out
-	whether or not we should call endwin ? In case something happened
-	before curses was invoked, or after it already closed ? */
-	/* Terminate Curses UI */
-	endwin();
+	pause=pause; /* unused */
 }
 /*===================================================
  * show_open_error -- Display database opening error
@@ -432,12 +390,8 @@ show_open_error (INT dberr)
 static void
 platform_init (void)
 {
-#ifdef WIN32
-	char buffer[80];
-	STRING title = _(qSmtitle);
-	snprintf(buffer, sizeof(buffer), title, get_lifelines_version(sizeof(buffer)-1-strlen(title)));
-	wtitle(buffer);
-#endif
+	/* TODO: We could do wtitle just like llines, but its declaration needs
+	to be moved somewhere more sensible for that (ie, not in curses.h!) */
 }
 /*==================================================
  * is_unadorned_directory -- is it a bare directory name,
@@ -550,4 +504,208 @@ main_db_notify (STRING db, BOOLEAN opening)
 	else
 		crash_setdb("");
 }
-
+/*===============================================
+ * init_show_module -- (Stripped down version)
+ *=============================================*/
+static void
+init_show_module (void)
+{
+	init_disp_reformat();
+}
+/*===============================================
+ * term_show_module -- (Placeholder, we don't need it)
+ *=============================================*/
+static void
+term_show_module (void)
+{
+}
+/*==================================================
+ * init_browse_module -- (Placeholder, we don't need it)
+ *================================================*/
+static void
+init_browse_module (void)
+{
+}
+/*==================================================
+ * term_browse_module -- (Placeholder, we don't need it)
+ *================================================*/
+static void
+term_browse_module (void)
+{
+}
+/*=============================================================
+ * Implement all the required feedback functions as simple
+ * prints to sdtout
+ * Refer to feedback.h for information about these functions.
+ *===========================================================*/
+void
+llwprintf (char *fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	vprintf(fmt, args);
+	va_end(args);
+}
+void
+llvwprintf (STRING fmt, va_list args)
+{
+	vprintf(fmt, args);
+}
+void
+msg_error (char *fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	vprintf(fmt, args);
+	va_end(args);
+}
+void
+msg_info (char *fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	vprintf(fmt, args);
+	va_end(args);
+}
+void
+msg_status (char *fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	vprintf(fmt, args);
+	va_end(args);
+}
+void
+msg_output (MSG_LEVEL level, STRING fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	vprintf(fmt, args);
+	va_end(args);
+}
+/*=====================================
+ * msg_width -- get max width of msgs
+ *===================================*/
+INT
+msg_width (void)
+{
+	return 999;
+}
+/* some strange report UI stuff */
+void
+refresh_stdout (void)
+{
+	/* We don't need to do anything as we're using stdout */
+}
+void
+call_system_cmd (STRING cmd)
+{
+#ifndef WIN32
+	system("clear");
+#endif
+	system(cmd);
+}
+FILE *
+ask_for_program (STRING mode,
+                 STRING ttl,
+                 STRING *pfname,
+                 STRING *pfullpath,
+                 STRING path,
+                 STRING ext,
+                 BOOLEAN picklist)
+{
+	/* TODO: We probably want to use the real implementation in askprogram.c */
+	return NULL;
+}
+FILE *
+ask_for_output_file (STRING mode,
+                     STRING ttl,
+                     STRING *pfname,
+                     STRING *pfullpath,
+                     STRING path,
+                     STRING ext)
+{
+	/* TODO: Do we want to steal the existing one, but reimplement underneath ? */
+	return NULL;
+}
+/* TODO: some UI stuff that needs to be implemented */
+INT
+ask_for_int (STRING ttl)
+{
+	/* TODO */
+	return 0;
+}
+BOOLEAN
+ask_for_string (STRING ttl, STRING prmpt, STRING buffer, INT buflen)
+{
+	/* TODO */
+	return FALSE;
+}
+STRING
+ask_for_indi_key (STRING ttl,
+                  CONFIRMQ confirmq,
+                  ASK1Q ask1)
+{
+	/* TODO */
+	return "";
+}
+RECORD
+ask_for_fam (STRING pttl, STRING sttl)
+{
+	/* TODO */
+	return NULL;
+}
+INDISEQ
+ask_for_indi_list (STRING ttl,
+                   BOOLEAN reask)
+{
+	/* TODO */
+	return NULL;
+}
+RECORD
+choose_from_indiseq (INDISEQ seq, ASK1Q ask1, STRING titl1, STRING titln)
+{
+	/* TODO */
+	/* Ok, here is a problem, this implementation is not curses-specific,
+	but calls thru to something curses-specific */
+	return NULL;
+}
+BOOLEAN
+ask_yes_or_no_msg (STRING msg, STRING ttl)
+{
+	/* TODO */
+	return FALSE;
+}
+INT
+choose_from_array (STRING ttl, INT no, STRING *pstrngs)
+{
+	/* TODO */
+	/* Another one where we may want implementation, as it is above curses level */
+	return -1;
+}
+void
+view_array (STRING ttl, INT no, STRING *pstrngs)
+{
+	/* TODO */
+	/* Another one where we may want implementation, as it is above curses level */
+}
+INT
+choose_from_list (STRING ttl, LIST list)
+{
+	/* TODO */
+	/* Another one where we may want implementation, as it is above curses level */
+	return 0;
+}
+BOOLEAN
+ask_for_db_filename (STRING ttl, STRING prmpt, STRING basedir, STRING buffer, INT buflen)
+{
+	/* TODO */
+	return FALSE;
+}
+INT
+choose_list_from_indiseq (STRING ttl, INDISEQ seq)
+{
+	/* TODO */
+	/* Another one where we may want implementation, as it is above curses level */
+	return 0;
+}

@@ -15,6 +15,10 @@
 #include "feedback.h"
 #include "gedcomi.h"
 
+/*
+TODO
+ 2002-10-05, Perry: This file does I/O, so may need to be moved out of gedlib
+*/
 
 extern STRING map_keys[];
 extern STRING qScmperr,qSaredit,qSronlye,qSdataerr,qSbadttnum;

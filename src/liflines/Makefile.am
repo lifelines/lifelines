@@ -4,7 +4,7 @@
 # AUTOMAKE_OPTIONS = no-dependencies
 
 # what are we going to build?
-bin_PROGRAMS = llines
+bin_PROGRAMS = llines llexec
 
 # what goes into lines?
 llines_SOURCES = add.c advedit.c ask.c askprogram.c browse.c \
@@ -13,8 +13,16 @@ llines_SOURCES = add.c advedit.c ask.c askprogram.c browse.c \
 	newrecs.c pedigree.c scan.c show.c screen.c swap.c \
 	tandem.c valgdcom.c llinesi.h 
 
+# what goes into llexec ?
+llexec_SOURCES = error.c llexec.c
+
 # extra stuff for lines
 llines_LDADD = ../interp/libinterp.a ../gedlib/libgedcom.a \
+	../btree/libbtree.a ../stdlib/libstdlib.a ../arch/libarch.a \
+	@LIBINTL@ @LIBICONV@
+
+# extra stuff for llexec
+llexec_LDADD = ../interp/libinterp.a ../gedlib/libgedcom.a \
 	../btree/libbtree.a ../stdlib/libstdlib.a ../arch/libarch.a \
 	@LIBINTL@ @LIBICONV@
 
