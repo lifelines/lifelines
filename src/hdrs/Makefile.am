@@ -3,6 +3,7 @@
 AUTOMAKE_OPTIONS = no-dependencies
 
 EXTRA_DIST = btree.h cache.h gedcheck.h gedcom.h indiseq.h interp.h \
-	mystring.h screen.h sequence.h standard.h table.h translat.h
+	interpi.h liflines.h mystring.h screen.h sequence.h standard.h \
+	sys_inc.h table.h translat.h
 
 

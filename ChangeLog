@@ -1,3 +1,8 @@
+2000-11-07  Marc Nozell  <marc@nozell.com>
+
+	* hdrs/Makefile.am: include new interpi.h, liflines.h and
+	sys_inc.h.
+
 2000-11-07  Petter Reinholdtsen <pere@td.org.uit.no>
 
 	* configure.in interp/eval.c: Only use snprintf() when available.
