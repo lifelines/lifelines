@@ -49,6 +49,13 @@
 
 	Make blel into an object.
 
+	* ChangeLog src/gedlib/node.c src/hdrs/gedcom.h
+
+	Skip over invalid spouses in FORFAMSS without ASSERT.
+	Make next_spouse handle invalid spouses.
+	Skip over invalid spouses in FORSPOUSES without ASSERT.
+	Skip over invalid spouses in FORFAMSPOUSES without ASSERT.
+
 2005-02-02 Perry Rapp
 
 	* ChangeLog src/gedlib/gedcomi.h src/gedlib/keytonod.c

@@ -457,7 +457,7 @@ next_spouse (NODE *node, RECORD *spouse)
 		key = rmvat(nval(*node));
 		if (!key) return -1;
 		*spouse = key_to_irecord(key); /* ASSERT if fail */
-		return 1;
+		return (*spouse != 0);
 	    }
 	    *node = nsibling(*node);
 	}

@@ -701,7 +701,7 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 		    if (eqstr("HUSB",ntag(__node1)) || eqstr("WIFE",ntag(__node1))){\
 			__key = rmvat(nval(__node1));\
 			__node1 = nsibling(__node1);\
-			if (!__key || !(spouse = key_to_indi(__key))||spouse==indi){\
+			if (!__key || !(spouse = qkey_to_indi(__key))||spouse==indi){\
 			    continue;\
 			}\
 		    } else {\
@@ -766,7 +766,7 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 		    if (eqstr("HUSB",ntag(__node1)) || eqstr("WIFE",ntag(__node1))){\
 			__key = rmvat(nval(__node1));\
 			__node1 = nsibling(__node1);\
-			if (!__key || !(spouse = key_to_indi(__key))||spouse==indi){\
+			if (!__key || !(spouse = qkey_to_indi(__key))||spouse==indi){\
 			    continue;\
 			}\
 			first_sp = 1;\
@@ -881,7 +881,7 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 			continue;\
 		}\
 		__key = rmvat(nval(__node));\
-		if (!__key || !(spouse = key_to_indi(__key))) {\
+		if (!__key || !(spouse = qkey_to_indi(__key))) {\
 			++num;\
 			__node = nsibling(__node);\
 			continue;\
