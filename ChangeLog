@@ -1,3 +1,12 @@
+2002-06-04 Matt Emmerton <memmerto@users.sourceforge.net>
+
+	* ChangeLog gedlib/charmaps.c
+
+	Made tran_tables[] and map_keys[] ararys explicitly sized to
+	NUM_TT_TABLES.  Will force a compiler error when NUM_TT_TABLES
+	is increased and tran_tables/map_keys initialization isn't
+	adjusted.
+
 2002-06-04 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog liflines/lbrowse.c liflines/screen.c:
