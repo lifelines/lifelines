@@ -1,3 +1,8 @@
+2000-11-09  Marc Nozell  <marc@nozell.com>
+
+	* reports/least_related.ll: At the request of the author, the
+	script least_releated.ll.  Doesn't work as advertised.
+
 2000-11-09  Petter Reinholdtsen <pere@td.org.uit.no>
 
 	* configure.in hdrs/interpi.h interp/functab.c interp/heapused.c:
