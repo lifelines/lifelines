@@ -844,9 +844,11 @@ Please choose an operation:
 <SIMPARA>
 
 	The browse operation lets you browse the database and perform
-	many operations on the data. The add operation lets you add
+	many operations on the data. The search operation provides some
+	simple wildcard search capabilities, which lead into browsing
+	particular records. The add operation lets you add
 	new information, and the delete operation removes
-	information. The generate reports operation reads report
+	information. The report operations read report
 	programs and generates output reports. The modify character
 	translation tables operation changes the translation
 	tables. The miscellaneous utilities operation provides such
@@ -1050,10 +1052,12 @@ SCREEN EDITORS AND ENVIRONMENT VARIABLES
 	other genealogical programs where screens or forms are used to
 	gather the data.The default screen editor for
 	<APPLICATION>LifeLines</APPLICATION> is
-	<APPLICATION>vi</APPLICATION>. This can be overridden by the
+	<APPLICATION>vi</APPLICATION>. (The DOS/Windows version defaults
+	instead of notepad.exe.) This can be overridden by the
 	<ENVAR>ED</ENVAR>, <ENVAR>EDITOR</ENVAR> or
 	<ENVAR>LLEDITOR</ENVAR> environment variables. For example, if
-	you prefer the emacs screen editor, you may add the line:
+	you prefer the emacs screen editor, and if you use a bourne-compatible
+	shell, you may add the line:
 	<USERINPUT><ENVAR>ED</ENVAR>=<REPLACEABLE>emacs</REPLACEABLE></USERINPUT>
 	to your login profile file, and
 	<APPLICATION>LifeLines</APPLICATION> will use
@@ -1073,6 +1077,14 @@ SCREEN EDITORS AND ENVIRONMENT VARIABLES
 	<ENVAR>LLPROGRAMS</ENVAR> are <ACRONYM>UNIX</ACRONYM> path
 	list variables.
 
+</SIMPARA>
+
+<SIMPARA>
+	As of version 3.0.6, there is also a configuration file, and
+	entries in it may be used in lieu of environment variables.
+	It is ordinarily named .linesrc under UNIX, and lines.cfg under
+	DOS/Windows. A sample configuration file should have been
+	included in the distribution. 
 </SIMPARA>
 
 
@@ -1169,7 +1181,7 @@ BASICS OF BROWSING
 
 <SIMPARA>
 
-	You will use the browsing modes of
+	You will use the browsing screens of
 	<APPLICATION>LifeLines</APPLICATION> most of the time. When in
 	these modes you can quickly search for or browse through the
 	persons and families in the database. When you find a person
@@ -1182,11 +1194,11 @@ BASICS OF BROWSING
 
 <SIMPARA>
 
-	The browsing modes also allow you to add new persons and
+	The browsing screens also allow you to add new persons and
 	families to the database, add spouses to families, add
 	children to families, swap the order of spouses and children,
 	merge persons and merge families, and perform other
-	operations. The browsing modes also lets you remove spouses
+	operations. The browsing screens also lets you remove spouses
 	from families and remove children from families.
 
 </SIMPARA>
@@ -1195,16 +1207,50 @@ BASICS OF BROWSING
 
 <SIMPARA>
 
-	There are six browsing modes. The person and family modes
+	There are six browsing screens. The person and family screens 
 	concentrate on a single person and family, respectively. The
-	list mode allows you to browse through a list of persons. The
-	pedigree mode shows a four generation pedigree, the person
-	tandem mode shows two persons at once, and the family tandem
-	mode shows two families at once.
+	list screen allows you to browse through a list of persons. The
+	person tandem screen shows two persons at once, and the family
+	tandem screen shows two families at once. The auxiliary screen
+	is used browsing any other type of records (e.g., events, 
+	sources, notes). (The auxiliary screen is new with version 3.0.6.)
 
 </SIMPARA>
 
+<SIMPARA>
+	Beginning with version 3.0.6, each browsing screen has multiple
+	view modes. The view mode affects how the information is displayed
+	on the screen, but does not affect the menu choices available at
+	the bottom of the screen. Menu commands are available on each screen
+	to change amongst the view modes available for that screen.
+</SIMPARA>
 
+<SIMPARA>
+	The person screen has the most view modes. It has normal mode, 
+	which shows a summary of the vital records of the person. It (like
+	all other screens) has GEDCOM mode, which shows the actual GEDCOM
+	data of the record, and also expanded GEDCOM mode, which shows the
+	actual GEDCOM data, but augments it with information on each line
+	that contains a cross-reference (GEDCOM xref). It has two pedigree
+	or tree modes, one showing an ancestral tree and one showing a 
+	descendant tree. The depth of the pedigree trees shown may be 
+	adjusted via menu commands.
+</SIMPARA>
+
+<SIMPARA>
+	The tandem person screen has the same modes as the person screen.
+</SIMPARA>
+
+<SIMPARA>
+	The family screen and tandem family screen alike have normal mode
+	(showing a summary of vitals), GEDCOM mode, and expanded GEDCOM
+	mode. 
+</SIMPARA>
+
+<SIMPARA>
+	The auxiliary screen has only GEDCOM mode and expanded GEDCOM mode.
+	(The list screen has no view modes at present).
+</SIMPARA>
 
 </SECT1>
 
@@ -1294,8 +1340,10 @@ Example of using wildcard in browsing
 
 	<LITERALLAYOUT>*/wetmore</LITERALLAYOUT></EXAMPLE>matches all
 	persons with surname Wetmore. This is the only wildcard
-	feature supported in browsing. The search function provides
-	some simple wildcards for finding individual name fragments.
+	feature supported in browsing. (However, the search operation,
+	new with version 3.0.6, provides some simple wildcards for
+	finding individual name fragments, or searching by user-defined
+	reference keys.)
 
 </PARA>
 
@@ -1428,7 +1476,7 @@ Commands: j Move down k Move up i Select q Quit
 
 <SIMPARA>
 
-	Some browse modes provide the z command, which allows you to
+	Some browse screens provide the z command, which allows you to
 	browse to a new person using the zip style of identification
 	rather than the b style.
 
@@ -1454,11 +1502,11 @@ BROWSE DISPLAY BASICS
 
 <SIMPARA>
 
-	The screen display for each browsing mode is made up of
+	The screen display for each browsing screen is made up of
 	panels. At the bottom of each display is a message panel used
 	for one line messages. Each display contains one or two data
 	panels showing information from the database. And each display
-	has a panel with the operation menu available for that mode.
+	has a panel with the operation menu available for that screen.
 
 </SIMPARA>
 
@@ -1474,7 +1522,7 @@ BROWSE DISPLAY BASICS
 
 <TITLE>
 
-PERSON BROWSE MODE
+PERSON BROWSE SCREEN
 
 </TITLE>
 
@@ -1484,9 +1532,10 @@ PERSON BROWSE MODE
 
 	After you identify a person to browse to,
 	<APPLICATION>LifeLines</APPLICATION> enters the person browse
-	mode. The top panel in the display gives basic information
-	about the person. The middle panel provides a menu of
-	commands. For example:
+	screen. The top panel in the display gives basic information
+	about the person (in the normal, or vitals, mode, which is the 
+	default). The middle panel provides a menu of commands.
+	For example:
 
 <SCREEN>
 person: Thomas Trask WETMORE Sr (25)
@@ -1499,14 +1548,14 @@ person: Thomas Trask WETMORE Sr (25)
     child: Thomas Trask WETMORE, b. 1896, Conn., d. 1970, Conn. (17)
   spouse: Arleen M KEENEY, m. 1914, Conn. (75)
 _______________________________________________________________________
-Please choose an operation:
-  e Edit the person       g Browse to family   p Show pedigree
-  f Browse to father      u Browse to parents  n Create new person
-  m Browse to mother      b Browse to persons  a Create new family
-  s Browse to spouse/s    h Add as spouse      x Swap two families
-  c Browse to children    i Add as child       t Enter tandem mode
-  o Browse to older sib   r Remove as spouse   z Browse to person
-  y Browse to younger sib d Remove as child    q Return to main menu
+Please choose an operation:             (pg 1/3)
+  e  Edit the person       g  Browse to family    p  Show pedigree
+  f  Browse to father      u  Browse to parents   n  Create new person
+  m  Browse to mother      b  Browse to persons   a  Create new family
+  s  Browse to spouse/s    h  Add as spouse       x  Swap two families
+  c  Browse to children    i  Add as child        tt Enter tandem mode
+  o  Browse to older sib   r  Remove as spouse    ?  Other menu choices
+  y  Browse to younger sib d  Remove as child     q  Return to main menu
 _______________________________________________________________________
 LifeLines -- Person Browse Screen
 </SCREEN>
@@ -1754,15 +1803,12 @@ Remove the person as a child in an existing family.
 
 </SIMPARA>
 
-</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM><KEYCAP>z</KEYCAP> <ACTION>Browse to person.</ACTION></GLOSSTERM><GLOSSDEF>
+</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM><KEYCAP>?</KEYCAP> <ACTION>Other menu choices.</ACTION></GLOSSTERM><GLOSSDEF>
 
 <SIMPARA>
-
-	Zip browse to a new
-	person. <APPLICATION>LifeLines</APPLICATION> asks you to
-	identify a person by name or key value, and if you do so,
-	browses to that person.
-
+	Go to the next page of menu choices. This will have no effect on the 
+	upper (data) portion of the screen, but it allows you to page through
+	all available commands for this display screen.
 </SIMPARA>
 
 </GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM><KEYCAP>q</KEYCAP> <ACTION>Return to main menu.</ACTION></GLOSSTERM><GLOSSDEF>
@@ -1772,6 +1818,18 @@ Remove the person as a child in an existing family.
 	Return to the <APPLICATION>LifeLines</APPLICATION> main menu.
 
 </SIMPARA>
+
+</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM><KEYCAP>z</KEYCAP> <ACTION>Zip browse to person.</ACTION></GLOSSTERM><GLOSSDEF>
+
+<SIMPARA>
+
+        Zip browse to a new person.
+	<APPLICATION>LifeLines</APPLICATION> asks you to
+        identify a person by name or key value, and if you do so,
+        browses to that person.
+
+</SIMPARA>
+
 
 </GLOSSDEF></GLOSSENTRY></GLOSSLIST>
 
@@ -1785,7 +1843,7 @@ Remove the person as a child in an existing family.
 
 <TITLE>
 
-LIST BROWSE MODE
+LIST BROWSE SCREEN
 
 </TITLE>
 
@@ -1793,7 +1851,7 @@ LIST BROWSE MODE
 
 <PARA>
 
-	This browse mode handles lists of persons. The top panel shows
+	This browse screen handles lists of persons. The top panel shows
 	information about one person in the list.  The left panel
 	shows a list of up to 12 persons. The person shown in the top
 	panel is identified by the > character. The right panel is the
@@ -1861,7 +1919,7 @@ LifeLines -- List Browse Screen
 	record. <APPLICATION>LifeLines</APPLICATION> runs the editor
 	on the person's record. When you return from the editor,
 	<APPLICATION>LifeLines</APPLICATION> asks you to confirm any
-	changes, and then leaves you in the list browse mode.
+	changes, and then leaves you in the list browse screen.
 
 </SIMPARA>
 
@@ -1869,7 +1927,7 @@ LifeLines -- List Browse Screen
 
 <SIMPARA>
 
-	Change to the person browse mode with the current person.
+	Change to the person browse screen with the current person.
 
 </SIMPARA>
 
@@ -1967,7 +2025,7 @@ LifeLines -- List Browse Screen
 
 <TITLE>
 
-FAMILY BROWSE MODE
+FAMILY BROWSE SCREEN
 
 </TITLE>
 
@@ -1975,7 +2033,7 @@ FAMILY BROWSE MODE
 
 <PARA>
 
-	This browse mode displays information about a family. The top
+	This browse screen displays information about a family. The top
 	panel shows basic information about the family. The bottom
 	panel shows the menu of available commands.
 	
@@ -1998,7 +2056,7 @@ Please enter the next family browse operation
   c Browse to children  d Remove child from     q Return to main menu
   n Create new person   x Swap two children
 _______________________________________________________________________
-LifeLines - Family Browse Mode</SCREEN>
+LifeLines - Family Browse Screen</SCREEN>
 
 </PARA>
 
@@ -2023,7 +2081,7 @@ LifeLines - Family Browse Mode</SCREEN>
 <SIMPARA>
 
 	Browse to the father/husband of the family, switching to
-	person browse mode. If the father is not there, there is no change.
+	person browse screen. If the father is not there, there is no change.
 
 </SIMPARA>
 
@@ -2038,7 +2096,7 @@ LifeLines - Family Browse Mode</SCREEN>
 <SIMPARA>
 
 	Browse to the mother/wife of the family, switching to person
-	browse mode. If the mother is not there, there is no change.
+	browse screen. If the mother is not there, there is no change.
 
 </SIMPARA>
 
@@ -2047,7 +2105,7 @@ LifeLines - Family Browse Mode</SCREEN>
 <SIMPARA>
 
 	Browse to a child in the family, switching to the person
-	browse mode. If the family has more than one child,
+	browse screen. If the family has more than one child,
 	<APPLICATION>LifeLines</APPLICATION> asks you to identify a
 	specific child.
 
@@ -2141,9 +2199,9 @@ LifeLines - Family Browse Mode</SCREEN>
 <SIMPARA>
 
 	This command takes you to the tandem family browse
-	mode. <APPLICATION>LifeLines</APPLICATION> asks you to
+	screen. <APPLICATION>LifeLines</APPLICATION> asks you to
 	identify a second family, and then takes you to the tandem
-	family mode, displaying both the two families.
+	family screen, displaying both the two families.
 
 </SIMPARA>
 
@@ -2154,7 +2212,7 @@ LifeLines - Family Browse Mode</SCREEN>
 	Browse to a new person or list of persons. You can identify a
 	person or list by name, by key, or by list name. If you
 	successfully identify a new person or persons you will switch
-	into the person or list browse modes.
+	into the person or list browse screens.
 
 </SIMPARA>
 
@@ -2201,10 +2259,10 @@ TANDEM PERSON BROWSE MODE
 
 <PARA>
 
-	The tandem person browse mode displays information about two
+	The tandem person browse screen displays information about two
 	persons. Its main use it to support the person merging
 	operation. The top two panels show two persons in the format
-	used in the person and list mode displays. The bottom panel
+	used in the person and list screen displays. The bottom panel
 	gives the menu of available commands. For example:
 
 
@@ -2229,7 +2287,7 @@ Please choose an operation:
  f Browse top father  b Browse to persons     x Switch top/bottom
  m Browse top mother  d Copy top to bottom    q Return to main menu
 ______________________________________________________________________
-LifeLines - Two Person Browse Mode
+LifeLines - Two Person Browse Screen
 </SCREEN>
 
 
@@ -2374,7 +2432,7 @@ TANDEM FAMILY BROWSE MODE
 
 <PARA>
 
-The tandem family browse mode displays information about two families. Its main use it to support the
+The tandem family browse screen displays information about two families. Its main use it to support the
 family merging operation.The top two panels provide information about the two families you are
 browsing, and the bottom panel holds the menu of available commands. For example:
 <SCREEN>
@@ -2422,7 +2480,7 @@ is changed only if you answer yes.
 
 <SIMPARA>
 
-Change to the family browse mode with the top family the current family.
+Change to the family browse screen with the top family the current family.
 
 </SIMPARA>
 
@@ -2430,7 +2488,7 @@ Change to the family browse mode with the top family the current family.
 
 <SIMPARA>
 
-Change to the single family browse mode with the bottom family the current
+Change to the single family browse screen with the bottom family the current
 family.
 
 </SIMPARA>
@@ -2439,7 +2497,7 @@ family.
 
 <SIMPARA>
 
-Change to the tandem person mode with the fathers of the two
+Change to the tandem person screen with the fathers of the two
 families as the two persons.
 
 </SIMPARA>
@@ -2448,7 +2506,7 @@ families as the two persons.
 
 <SIMPARA>
 
-Change to the tandem person mode with the mothers of the two
+Change to the tandem person screen with the mothers of the two
 families as the two persons.
 
 </SIMPARA>
@@ -2504,7 +2562,7 @@ PEDIGREE BROWSE MODE
 
 <PARA>
 
-The pedigree browse mode displays a four-generation pedigree for the current person. The top panel
+The pedigree browse screen displays a four-generation pedigree for the current person. The top panel
 holds the pedigree, and the bottom panel holds the menu of available commands. For example:
 <SCREEN>
                   John WETMORE [1755-1848] (32)
