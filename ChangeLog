@@ -1,3 +1,11 @@
+2000-12-03 Perry Rapp <prapp@users.sourceforge.net>
+
+	* hdrs/win32/curses.h interp/pvalue.c liflines/main.c
+	liflines/screen.c win32/mycurses.c:
+	Modified win32 mycurses to work with different width terminals.
+	Modified screen.c & show.c & main.c to allow user chosen width
+	(new -u argument).
+
 2000-12-02 Perry Rapp <prapp@users.sourceforge.net>
 
 	* gedlib/spltjoin.c hdrs/gedcom.h liflines/edit.c:
