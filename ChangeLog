@@ -1,3 +1,8 @@
+2001-04-16 Petter Reinholdtsen <pere@td.org.uit.no>
+
+	* docs/lifelines.sgml: Correct SGML tags in getproperty
+	description.
+
 2001-04-15 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog NEWS interp/interp.c interp/pvalue.c:

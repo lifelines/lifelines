@@ -7608,30 +7608,46 @@ call.
 The <FUNCTION>getproperty</FUNCTION> function extracts system or user
 properties.  Properties are named group.subgroup.property or
 group.property.  The following keys are available at the moment:
-
-
-  user.fullname
-
-       The full name of the current user.  This is fetched from the
-       system when possible.
-
-  user.email
-
-       The email address of the current user.  This is fetched from
-       the system when possible.
-
-  user.address
-
-       Postal address of the current user.
-
-  user.url
-
-       URL to the users home page.
-
-These values can be changed by adding values to user options.
-[Miscellaneous utilities->Edit the user options file]
-
 </SIMPARA>
+
+      <GLOSSLIST>
+
+	<GLOSSENTRY>
+	  <GLOSSTERM><OPTION>user.fullname</OPTION></GLOSSTERM>
+	  <GLOSSDEF><SIMPARA>
+	    The full name of the current user.  This is fetched from the
+	    system when possible.
+	  </SIMPARA></GLOSSDEF>
+	</GLOSSENTRY>
+
+	<GLOSSENTRY>
+	  <GLOSSTERM><OPTION>user.email</OPTION></GLOSSTERM>
+	  <GLOSSDEF><SIMPARA>
+	    The email address of the current user.  This is fetched
+	    from the system when possible.
+	  </SIMPARA></GLOSSDEF>
+	</GLOSSENTRY>
+  
+	<GLOSSENTRY>
+	  <GLOSSTERM><OPTION>user.address</OPTION></GLOSSTERM>
+	  <GLOSSDEF><SIMPARA>
+	    Postal address of the current user.
+	  </SIMPARA></GLOSSDEF>
+	</GLOSSENTRY>
+  
+	<GLOSSENTRY>
+	  <GLOSSTERM><OPTION>user.url</OPTION></GLOSSTERM>
+	  <GLOSSDEF><SIMPARA>
+	    URL to the users home page.
+	  </SIMPARA></GLOSSDEF>
+	</GLOSSENTRY>
+
+      </GLOSSLIST>
+
+      <SIMPARA>
+	These values can be changed by adding values to user options.
+	[Miscellaneous utilities->Edit the user options file]
+      </SIMPARA>
 
 </SECT1>
 
