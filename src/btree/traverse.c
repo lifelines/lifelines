@@ -50,9 +50,9 @@ static BOOLEAN traverse_index(BTREE btree, INDEX index, RKEY lo, RKEY hi, BOOLEA
  * this calls readindex directly, so it skips the index cache
  *===================================================*/
 BOOLEAN
-traverse_index_blocks (BTREE btree, INDEX index,
-                       BOOLEAN (*ifunc)(BTREE, INDEX),
-                       BOOLEAN (*dfunc)(BTREE, BLOCK))
+traverse_index_blocks (BTREE btree, INDEX index, void *param
+                       , BOOLEAN (*ifunc)(BTREE, INDEX, void *param)
+                       , BOOLEAN (*dfunc)(BTREE, BLOCK, void *param))
 {
 	INDEX newdex;
 	STRING bdir = bbasedir(btree);
@@ -61,20 +61,20 @@ traverse_index_blocks (BTREE btree, INDEX index,
 		return FALSE;
 	if (ixtype(index) == BTINDEXTYPE) {
 		INT i, n;
-		if (ifunc != NULL && !(*ifunc)(btree, index))
+		if (ifunc != NULL && !(*ifunc)(btree, index, param))
 			return FALSE;
 		n = nkeys(index);
 		for (i = 0; i <= n; i++) {
 			BOOLEAN rc, robust=FALSE;
 			newdex = readindex(bdir, fkeys(index, i), robust);
-			rc = traverse_index_blocks(btree, newdex, ifunc, dfunc);
+			rc = traverse_index_blocks(btree, newdex, param, ifunc, dfunc);
 			stdfree(newdex);
 			if (!rc) return FALSE;
 		}
 		return TRUE;
 	}
 	if (dfunc != NULL)
-		return (*dfunc)(btree, (BLOCK)index);
+		return (*dfunc)(btree, (BLOCK)index, param);
 	return TRUE;
 }
 /*====================================================

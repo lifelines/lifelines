@@ -55,7 +55,7 @@ BOOLEAN edit_family(RECORD);
 BOOLEAN edit_indi(RECORD);
 
 /* export.c */
-BOOLEAN archive_in_file (void);
+BOOLEAN archive_in_file (struct export_feedback * efeed, FILE *fp);
 
 /* import.c */
 BOOLEAN import_from_gedcom_file(struct import_feedback * ifeed, FILE *fp);
@@ -65,6 +65,7 @@ INT browse_list(RECORD *prec1, RECORD *prec2, INDISEQ *pseq);
 
 /* loadsave.c */
 void load_gedcom(void);
+BOOLEAN save_gedcom(void);
 
 /* merge.c */
 RECORD merge_two_indis(NODE, NODE, BOOLEAN);

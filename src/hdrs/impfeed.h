@@ -27,5 +27,9 @@ struct import_feedback {
 	void (*added_rec_fnc)(char ctype, STRING tag, INT count);
 };
 
+struct export_feedback {
+	void (*added_rec_fnc)(char ctype, INT count);
+};
+
 #endif /* _IMPFEED_H */
 

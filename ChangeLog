@@ -13,6 +13,14 @@
 
 	Convert some use of NODE to RECORD. Work on ui separation.
 
+	* ChangeLog src/btree/traverse.c src/hdrs/btree.h
+	src/hdrs/impfeed.h src/hdrs/version.h src/interp/builtin.c
+	src/liflines/export.c src/liflines/import.c
+	src/liflines/llinesi.h src/liflines/loadsave.c
+	src/liflines/newrecs.c src/liflines/screen.c:
+
+	Pull curses UI out of export.c (into loadsave.c).
+
 2002-10-07 Perry Rapp
 
 	* ChangeLog src/hdrs/liflines.h src/interp/builtin.c

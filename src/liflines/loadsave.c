@@ -43,6 +43,8 @@
 
 /* alphabetical */
 static void clear_rec_counts(INT pass);
+static void export_beginning_export(STRING msg);
+static void export_saved_rec(char ctype, INT count);
 static void import_added_rec(char ctype, STRING tag, INT count);
 static void import_adding_unused_keys(void);
 static void import_beginning_import(STRING msg);
@@ -54,6 +56,13 @@ static void import_validating(void);
 static void import_validation_error(STRING msg);
 static void import_validation_warning(STRING msg);
 static void update_rec_count(INT pass, char ctype, STRING tag, INT count);
+
+/*********************************************
+ * external/imported variables
+ *********************************************/
+
+extern STRING btreepath;
+extern STRING qSoutarc, qSoutfin;
 
 /*********************************************
  * local variables
@@ -149,6 +158,12 @@ import_beginning_import (STRING msg)
 	clear_rec_counts(1);
 }
 static void
+export_beginning_export (STRING msg)
+{
+	wfield(9,  0, msg);
+	clear_rec_counts(0);
+}
+static void
 import_readonly (void)
 {
 	wfield(10, 0, _("The database is read-only; loading has been canceled."));
@@ -175,6 +190,11 @@ static void
 import_added_rec (char ctype, STRING tag, INT count)
 {
 	update_rec_count(1, ctype, tag, count);
+}
+static void
+export_saved_rec (char ctype, INT count)
+{
+	update_rec_count(0, ctype, "", count);
 }
 /*================================
  * load_gedcom -- have user select gedcom file & import it
@@ -207,4 +227,43 @@ load_gedcom (void)
 	
 	import_from_gedcom_file(&ifeed, fp);
 	fclose(fp);
+}
+
+/*================================
+ * save_gedcom -- save gedcom file
+ *==============================*/
+BOOLEAN
+save_gedcom (void)
+{
+	FILE *fp=NULL;
+	struct export_feedback efeed;
+	STRING srcdir=NULL, fname=0, fullpath=0;
+
+	srcdir = getoptstr("LLARCHIVES", ".");
+	fp = ask_for_output_file(LLWRITETEXT, _(qSoutarc), &fname, &fullpath, srcdir, ".ged");
+	if (!fp) {
+		strfree(&fname);
+		msg_error(_("The database was not saved."));
+		return FALSE; 
+	}
+
+	memset(&efeed, 0, sizeof(efeed));
+	efeed.added_rec_fnc = export_saved_rec;
+
+	llwprintf("Saving database in `%s' in file `%s'.", btreepath, fname);
+	wfield(2, 1, "     0 Persons");
+	wfield(3, 1, "     0 Families");
+	wfield(4, 1, "     0 Events");
+	wfield(5, 1, "     0 Sources");
+	wfield(6, 1, "     0 Others");
+	
+
+	archive_in_file(&efeed, fp);
+	fclose(fp);
+
+	wpos(7,0);
+	msg_info(_(qSoutfin), btreepath, fname);
+	strfree(&fname);
+	
+	return TRUE;
 }

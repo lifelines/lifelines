@@ -192,7 +192,6 @@ TODO: why were these here ?
 		addmissingkeys(SOUR_REC);
 		addmissingkeys(OTHR_REC);
 	}
-	if (ifeed && ifeed->adding_unused_keys_fnc)
 	succeeded = TRUE;
 
 end_import:

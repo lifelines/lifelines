@@ -2069,7 +2069,7 @@ invoke_utils_menu (void)
 
 	begin_action();
 	switch (code) {
-	case 's': archive_in_file(); break;
+	case 's': save_gedcom(); break;
 	case 'r': load_gedcom(); break;
 	case 'k': key_util(); break;
 	case 'i': who_is_he_she(); break;

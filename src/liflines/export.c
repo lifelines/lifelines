@@ -39,17 +39,30 @@
 #include "feedback.h"
 #include "lloptions.h"
 
-/* TODO: using wfield, instead make new function & put in feedback.h */
-#include "llinesi.h"
-#include "screen.h" /* calling wfield */
+#include "impfeed.h"
 
 /*********************************************
  * external/imported variables
  *********************************************/
 
-extern STRING btreepath;
 extern BTREE BTR;
-extern STRING qSoutarc,qSoutfin;
+
+/*********************************************
+ * local types
+ *********************************************/
+
+struct trav_parm_s {
+	struct export_feedback * efeed;
+	FILE * fp;
+};
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+/* alphabetical */
+static BOOLEAN archive(BTREE btree, BLOCK block, void * param);
+static void copy_and_translate(FILE *fo, INT len, struct trav_parm_s * travparm, INT c, TRANMAPPING ttm);
 
 /*********************************************
  * local variables
@@ -62,10 +75,7 @@ static char *mabbv[] = {
 };
 
 static INT nindi, nfam, neven, nsour, nothr;
-static FILE *fn = NULL;
 
-static void copy_and_translate (FILE*, INT, FILE*, INT, TRANMAPPING);
-static BOOLEAN archive(BTREE, BLOCK);
 
 /*********************************************
  * local & exported function definitions
@@ -76,65 +86,53 @@ static BOOLEAN archive(BTREE, BLOCK);
  * archive_in_file -- Archive database in GEDCOM file
  *=================================================*/
 BOOLEAN
-archive_in_file (void)
+archive_in_file (struct export_feedback * efeed, FILE *fp)
 {
 	char dat[30], tim[20];
 	struct tm *pt;
 	time_t curtime;
-	STRING fname, fullpath, str;
-	STRING archivesdir = getoptstr("LLARCHIVES", ".");
+	STRING str;
+	struct trav_parm_s travparm;
 
-	fn = ask_for_output_file(LLWRITETEXT, _(qSoutarc), &fname, &fullpath, archivesdir, ".ged");
-	if (!fn) {
-		strfree(&fname);
-		msg_error("The database was not saved.");
-		return FALSE; 
-	}
 	curtime = time(NULL);
 	pt = localtime(&curtime);
 	sprintf(dat, "%d %s %d", pt->tm_mday, mabbv[pt->tm_mon],
 	    1900 + pt->tm_year);
 	sprintf(tim, "%d:%.2d", pt->tm_hour, pt->tm_min);
-	fprintf(fn, "0 HEAD\n1 SOUR LIFELINES %s\n1 DEST ANY\n"
+	fprintf(fp, "0 HEAD\n1 SOUR LIFELINES %s\n1 DEST ANY\n"
 		, get_lifelines_version(80));
 	/* header date & time */
-	fprintf(fn, "1 DATE %s\n2 TIME %s\n", dat, tim);
+	fprintf(fp, "1 DATE %s\n2 TIME %s\n", dat, tim);
 	/* header submitter entry */
 	str = getoptstr("HDR_SUBM", "1 SUBM");
-	fprintf(fn, "%s\n", str);
+	fprintf(fp, "%s\n", str);
 	/* header gedcom version info */
 	str = getoptstr("HDR_GEDC", "1 GEDC\n2 VERS 5.5\n2 FORM LINEAGE-LINKED");
-	fprintf(fn, "%s\n", str);
+	fprintf(fp, "%s\n", str);
 	/* header character set info */
 	str = getoptstr("HDR_CHAR", "1 CHAR ASCII");
-	fprintf(fn, "%s\n", str);
+	fprintf(fp, "%s\n", str);
 	/* finished header */
 	tran_gedout = get_tranmapping(MINGD);
 	nindi = nfam = neven = nsour = nothr = 0;
-	llwprintf("Saving database in `%s' in file `%s'.", btreepath, fname);
-	wfield(2, 1, "     0 Persons");
-	wfield(3, 1, "     0 Families");
-	wfield(4, 1, "     0 Events");
-	wfield(5, 1, "     0 Sources");
-	wfield(6, 1, "     0 Others");
-	traverse_index_blocks(BTR, bmaster(BTR), NULL, archive);
-	fprintf(fn, "0 TRLR\n");
-	fclose(fn);
-	wpos(7,0);
-	msg_info(_(qSoutfin), btreepath, fname);
-	strfree(&fname);
+	memset(&travparm, 0, sizeof(travparm));
+	travparm.efeed = efeed;
+	travparm.fp = fp;
+	traverse_index_blocks(BTR, bmaster(BTR), &travparm, NULL, archive);
+	fprintf(fp, "0 TRLR\n");
 	return TRUE;
 }
 /*========================================================
  * archive -- Traverse function called on each btree block
  *======================================================*/
 static BOOLEAN
-archive (BTREE btree, BLOCK block)
+archive (BTREE btree, BLOCK block, void * param)
 {
 	INT i, n, l;
 	char scratch[100];
 	STRING key;
 	FILE *fo;
+	struct trav_parm_s * travparm = (struct trav_parm_s *)param;
 
 	sprintf(scratch, "%s/%s", bbasedir(btree), fkey2path(ixself(block)));
 	ASSERT(fo = fopen(scratch, LLREADBINARY));
@@ -147,7 +145,7 @@ archive (BTREE btree, BLOCK block)
 		if (fseek(fo, (long)(offs(block, i) + BUFLEN), 0))
 			FATAL();
 		if ((l = lens(block, i)) > 6)	/* filter deleted records */
-			copy_and_translate(fo, l, fn, *key, tran_gedout);
+			copy_and_translate(fo, l, travparm, *key, tran_gedout);
 	}
 	fclose(fo);
 	return TRUE;
@@ -156,16 +154,13 @@ archive (BTREE btree, BLOCK block)
  * copy_and_translate -- Copy record with translation
  *=================================================*/
 static void
-copy_and_translate (FILE *fo,
-                    INT len,
-                    FILE *fn,
-                    INT c,
-                    TRANMAPPING ttm)
+copy_and_translate (FILE *fo, INT len, struct trav_parm_s * travparm, INT c, TRANMAPPING ttm)
 {
 	char in[BUFLEN];
-	char scratch[10];
 	char *inp;
-	int remlen;
+	int remlen, num;
+	FILE * fn = travparm->fp;
+	struct export_feedback * efeed = travparm->efeed;
 	
 	inp = in;		/* location for next read */
 	remlen = BUFLEN;	/* max for next read */
@@ -179,25 +174,13 @@ copy_and_translate (FILE *fo,
 		remlen = BUFLEN - remlen;	/* max for next read */
 	}
 	switch (c) {
-	case 'I':
-		sprintf(scratch, "%6d", ++nindi);
-		wfield(2, 1, scratch);
-		break;
-	case 'F':
-		sprintf(scratch, "%6d", ++nfam);
-		wfield(3, 1, scratch);
-		break;
-	case 'E':
-		sprintf(scratch, "%6d", ++neven);
-		wfield(4, 1, scratch);
-		break;
-	case 'S':
-		sprintf(scratch, "%6d", ++nsour);
-		wfield(5, 1, scratch);
-		break;
-	case 'X':
-		sprintf(scratch, "%6d", ++nothr);
-		wfield(6, 1, scratch);
-		break;
+	case 'I': num = ++nindi; break;
+	case 'F': num = ++nfam;  break;
+	case 'E': num = ++neven; break;
+	case 'S': num = ++nsour; break;
+	case 'X': num = ++nothr; break;
+	default: FATAL();
 	}
+	if (efeed && efeed->added_rec_fnc)
+		efeed->added_rec_fnc((char)c, num);
 }

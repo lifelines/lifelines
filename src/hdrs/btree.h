@@ -172,7 +172,7 @@ BOOLEAN isrecord(BTREE, RKEY);
 RAWRECORD readrec(BTREE btree, BLOCK block, INT i, INT *plen);
 
 /* traverse.c */
-BOOLEAN traverse_index_blocks(BTREE, INDEX, BOOLEAN (*ifunc)(BTREE, INDEX), BOOLEAN (*dfunc)(BTREE, BLOCK));
+BOOLEAN traverse_index_blocks(BTREE, INDEX, void *, BOOLEAN (*ifunc)(BTREE, INDEX, void *), BOOLEAN (*dfunc)(BTREE, BLOCK, void *));
 void traverse_db_rec_rkeys(BTREE, RKEY lo, RKEY hi, BOOLEAN(*func)(RKEY, STRING, INT len, void *param), void *param);
 
 /* utils.c */
