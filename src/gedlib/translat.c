@@ -65,7 +65,9 @@
 static XNODE create_xnode(XNODE, INT, STRING);
 static void customlocale(STRING prefix);
 static STRING get_current_locale(INT category);
+#ifdef HAVE_ICONV
 static void iconv_trans(TRANMAPPING ttm, CNSTRING in, bfptr bfs);
+#endif
 static STRING llsetenv(STRING name, STRING value);
 static void notify_gettext_language_changed(void);
 static STRING setmsgs(STRING localename);
@@ -285,7 +287,7 @@ translate_string_to_buf (TRANMAPPING ttm, CNSTRING in, bfptr bfs)
 		bfCpy(bfs, in);
 		return;
 	}
-#if HAVE_ICONV
+#ifdef HAVE_ICONV
 	if (ttm->iconv_src && ttm->iconv_src[0] 
 		&& ttm->iconv_dest && ttm->iconv_dest[0]) {
 		iconv_trans(ttm, in, bfs);
@@ -320,7 +322,7 @@ translate_string_to_buf (TRANMAPPING ttm, CNSTRING in, bfptr bfs)
  *  bfs:  [I/O]  output buffer
  * Only called if HAVE_ICONV
  *=================================================*/
-#if HAVE_ICONV
+#ifdef HAVE_ICONV
 static void
 iconv_trans (TRANMAPPING ttm, CNSTRING in, bfptr bfs)
 {

@@ -27,6 +27,10 @@
 
 	More cleanup.
 
+	* ChangeLog gedlib/translat.c liflines/screen.c:
+
+	More cleanup.
+
 2002-06-16 Perry Rapp <puddle@users.sourceforge.net>
 
 	*? .linesrc ChangeLog lines.cfg gedlib/init.c interp/builtin.c:

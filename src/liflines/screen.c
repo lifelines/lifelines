@@ -197,7 +197,6 @@ static void invoke_utils_menu(void);
 static void output_menu(UIWINDOW uiwin, INT screen, INT bottom, INT width);
 void place_cursor(void);
 static void place_std_msg(void);
-static void reactivate_uiwin(UIWINDOW);
 static void refresh_main(void);
 static void print_list_title(char * buffer, INT len, const listdisp * ld, STRING ttl);
 static void repaint_add_menu(UIWINDOW uiwin);
@@ -3394,6 +3393,7 @@ activate_uiwin (UIWINDOW uiwin)
  *  and refresh it in any case
  * Created: 2001/12/22 (Perry Rapp)
  *==========================*/
+#ifdef UNUSED_CODE
 static void
 reactivate_uiwin (UIWINDOW uiwin)
 {
@@ -3405,6 +3405,7 @@ reactivate_uiwin (UIWINDOW uiwin)
 		wrefresh(win);
 	}
 }
+#endif
 /*============================
  * deactivate_uiwin -- Remove currently active
  *  and pop to its parent (if it has one)
