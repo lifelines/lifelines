@@ -1,5 +1,5 @@
 /*
- * @version        1.0
+ * @version        1.1 (2003-08-07)
  * @author         Perry Rapp
  * @category       self-test
  * @output         none

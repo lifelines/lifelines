@@ -1,3 +1,14 @@
+2003-08-07 Perry Rapp
+
+	* ChangeLog reports/st/st_aux.ll reports/st/st_collate.ll
+	reports/st/st_date.ll reports/st/st_db.ll
+	reports/st/st_list.ll reports/st/st_name.ll
+	reports/st/st_number.ll reports/st/st_string.ll
+	reports/st/st_string_UTF-8.ll
+
+	Fix carriage returns in tests. Bump version of st_string for yesterday's
+	fix.
+
 2003-08-06 Matt Emmerton
 
 	* ChangeLog src/stdlib/strcvt.c reports/st/st_string.ll
