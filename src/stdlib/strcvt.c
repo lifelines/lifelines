@@ -117,8 +117,7 @@ iswletter (wchar_t wch)
 	return (n>='a' && n<='z') || (n>='A' && n<='Z');
 #endif
 }
-static void
-wz_makelower (ZSTR zstr)
+#ifdef HAVE_TOWLOWER
 /*======================================
  * wz_makelower -- widechar lowercasing
  * Input/output holds wchar_t characters
@@ -139,6 +138,8 @@ wz_makelower (ZSTR zstr)
 		}
 	}
 }
+#endif
+#ifdef HAVE_TOWUPPER
 /*======================================
  * wz_makeupper -- widechar uppercasing
  * Input/output holds wchar_t characters
@@ -152,6 +153,7 @@ wz_makeupper (ZSTR zstr)
 		*wp = towupper(*wp);
 	}
 }
+#endif
 /*======================================
  * wz_makenarrow -- convert widechar to UTF-8
  * Done inplace

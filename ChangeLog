@@ -21,6 +21,10 @@
 
 	Added config test for iswalpha. Sync'd msvc6 versions of config.h.
 
+	* ChangeLog src/stdlib/strcvt.c
+
+	Fix compile guards for use of towlower & towupper.
+
 2003-05-09 Perry Rapp
 
 	* ChangeLog po/de.po
