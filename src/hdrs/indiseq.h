@@ -78,9 +78,27 @@ typedef struct  {
 
 #define length_indiseq(seq)  (ISize(seq))
 
+void append_indiseq(INDISEQ, STRING, STRING, WORD, BOOLEAN, BOOLEAN);
 INDISEQ create_indiseq(void);
 INDISEQ copy_indiseq(INDISEQ);
+void remove_indiseq(INDISEQ,BOOLEAN);
+BOOLEAN delete_indiseq(INDISEQ, STRING, STRING, INT);
+void rename_indiseq(INDISEQ, STRING);
 BOOLEAN in_indiseq(INDISEQ, STRING);
+INDISEQ union_indiseq(INDISEQ, INDISEQ);
+INDISEQ intersect_indiseq(INDISEQ, INDISEQ);
+INDISEQ difference_indiseq(INDISEQ, INDISEQ);
+INDISEQ parent_indiseq(INDISEQ);
+INDISEQ child_indiseq(INDISEQ);
+INDISEQ sibling_indiseq(INDISEQ, BOOLEAN);
+INDISEQ ancestor_indiseq(INDISEQ);
+INDISEQ spouse_indiseq(INDISEQ);
+INDISEQ descendent_indiseq(INDISEQ);
+INDISEQ name_to_indiseq(STRING);
+INDISEQ refn_to_indiseq(STRING);
+INDISEQ key_to_indiseq(STRING);
+INDISEQ str_to_indiseq(STRING);
+
 INDISEQ indi_to_children(NODE);
 INDISEQ indi_to_fathers(NODE);
 INDISEQ indi_to_mothers(NODE);
@@ -91,6 +109,20 @@ INDISEQ indi_to_spouses(NODE);
 INDISEQ indi_to_families(NODE, BOOLEAN);
 INDISEQ name_to_indiseq(STRING);
 INDISEQ refn_to_indiseq(STRING);
+
+void write_nonlink_indi(NODE);
+void write_family(STRING, TABLE);
+void new_write_node(INT, NODE, BOOLEAN);
+
+void add_browse_list(STRING, INDISEQ);
+INDISEQ find_named_seq(STRING);
+void remove_browse_list(STRING, INDISEQ);
+void update_browse_list(STRING, INDISEQ);
+
+void partition_sort(SORTEL*, INT, INT (*func)());
+void llqsort(INT, INT);
+INT partition(INT, INT, SORTEL);
+INT getpivot(INT, INT);
 
 #define FORINDISEQ(s,e,i)\
 	{	int i, _n;\

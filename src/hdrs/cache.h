@@ -73,9 +73,24 @@ typedef struct {
 #define cmaxind(c)   ((c)->c_maxind)
 #define csizedir(c)  ((c)->c_sizedir)
 
+CACHEEL even_to_cacheel(NODE);
+CACHEEL fam_to_cacheel(NODE);
+CACHEEL indi_to_cacheel(NODE);
+CACHEEL othr_to_cacheel(NODE);
+CACHEEL sour_to_cacheel(NODE);
+
 CACHEEL key_to_indi_cacheel(STRING);
 CACHEEL key_to_fam_cacheel(STRING);
-CACHEEL indi_to_cacheel(NODE);
-CACHEEL fam_to_cacheel(NODE);
+CACHEEL rkey_to_even_cacheel(STRING);
+CACHEEL rkey_to_fam_cacheel(STRING);
+CACHEEL rkey_to_indi_cacheel(STRING);
+CACHEEL rkey_to_sour_cacheel(STRING);
+CACHEEL rkey_to_othr_cacheel(STRING);
+
+void add_node_to_direct(CACHE, NODE);
+void lock_cache(CACHEEL);
+void node_to_cache(CACHE, NODE);
+void remove_from_cache(CACHE, STRING);
+void unlock_cache(CACHEEL);
 
 #endif /* _CACHE_H */
