@@ -1234,7 +1234,10 @@ void
 llvwprintf (STRING fmt,
             va_list args)
 {
+	if (!stdout_vis)
+		clearw();
 	vwprintw(stdout_win, fmt, args);
+	wrefresh(stdout_win);
 }
 /*=================================================
  * llwprintf -- Called as wprintf(fmt, arg, arg, ...)

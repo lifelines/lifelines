@@ -1,5 +1,8 @@
 2000-11-09  Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* liflines/screen.c: Make sure to flush output to make it visible
+	on errors.
+	
 	* interp/builtin.cinterp/pvalue.c: Give more debug info when
 	insert() fails because of wrong types.
 
