@@ -295,19 +295,24 @@ create_record_for_unkeyed_node (NODE node)
 	return rec;
 }
 /*===================================
- * free_rec -- record deallocator for unbound (non-cached) records
+ * free_rec -- record deallocator 
+ *  Works for both free records (not in cache, have own node tree)
+ *  and bound records (in cache, point to cache element)
  * Created: 2000/12/30, Perry Rapp
  *=================================*/
 void
 free_rec (RECORD rec)
 {
+	/* Must be either a free or a bound record */
+	ASSERT(rec->rec_cel || rec->rec_top);
+	/* Cannot be both free and bound */
 	ASSERT(!rec->rec_cel || !rec->rec_top);
-	/* only free node trees of records not in cache */
-	if (!rec->rec_cel && rec->rec_top) {
-		free_nodes(rec->rec_top);
-	}
 	rec->rec_top = 0;
 	strcpy(rec->rec_nkey.key, "");
+	/* only free node trees of records not in cache */
+	if (!rec->rec_cel) {
+		free_nodes(rec->rec_top);
+	}
 	stdfree(rec);
 }
 /*===================================

@@ -543,6 +543,7 @@ struct tag_node_iter {
 	NODE next;
 };
 typedef struct tag_node_iter * NODE_ITER;
+RECORD alloc_new_record(void);
 void begin_node_it(NODE node, NODE_ITER nodeit);
 INT fam_to_husb(RECORD frec, RECORD * prec);
 NODE fam_to_husb_node(NODE);

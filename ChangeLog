@@ -9,6 +9,12 @@
 
 	Clarified display of LOCALEDIR in u/c to "Locale Dir (default)".
 
+	* ChangeLog src/gedlib/gedcomi.h src/gedlib/node.c
+	src/hdrs/gedcom.h src/interp/pvalue.c
+
+	Allocate & copy RECORD pvalues, rather than (now incorrect)
+	bit-by-bit copy (in set_pvalue, just as PFLOAT & PSTRING).
+
 2003-11-26 Perry Rapp
 
 	* ChangeLog NEWS src/hdrs/pvalue.h src/interp/builtin.c

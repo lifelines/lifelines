@@ -56,6 +56,7 @@ static PVALUE create_pvalue_from_record(RECORD rec, INT ptype);
 static BOOLEAN eq_pstrings(PVALUE val1, PVALUE val2);
 static int float_to_int(float f);
 static void free_float_pvalue(PVALUE val);
+static BOOLEAN is_record_pvaltype(INT valtype);
 static OBJECT pvalue_copy(OBJECT obj, int deep);
 static void pvalue_destructor(VTABLE *obj);
 static void table_pvcleaner(ENTRY ent);
@@ -109,6 +110,9 @@ set_pvalue (PVALUE val, INT type, VPTR value)
 		/* self-assignment */
 		return;
 	}
+
+	/* record pvalues each have their own RECORD on the heap */
+
 	clear_pvalue(val);
 
 	/* sanity check */
@@ -119,22 +123,50 @@ set_pvalue (PVALUE val, INT type, VPTR value)
 		break;
 	}
 	/* types that don't simply assign pointer */
+	/* old refers to value passed in */
+	/* new refers to newly allocated copy to set */
 	switch(type) {
 	case PSTRING:
 		{
-		/* always copies string so caller doesn't have to */
-		if (value)
-			value = (VPTR) strsave((STRING) value);
+			/* always copies string so caller doesn't have to */
+			if (value) {
+				STRING strold = (STRING)value;
+				STRING strnew = strsave(strold);
+				value = strnew;
+			}
 		break;
 		}
 	case PFLOAT:
 		{
+			float valold, *ptrnew;
+			ASSERT(value);
 			/* floats don't fit into VPTR, so we're using heap copies */
-			float *ptr = (float *)stdalloc(sizeof(*ptr));
-			*ptr = *(float *)value;
-			value = ptr;
+			valold = *(float *)value;
+			/* allocate new pointer & copy float into place */
+			ptrnew = (float *)stdalloc(sizeof(*ptrnew));
+			*ptrnew = valold;
+			value = ptrnew;
 		}
 		break;
+	/* Also RECORD types don't simply assign pointer, handled just below this switch */
+	}
+	if (is_record_pvaltype(type)) {
+		if (value) {
+			RECORD recold = (RECORD)value;
+			RECORD recnew = alloc_new_record();
+			if (recold->rec_top) {
+				/* free record, owns its own nodes  */
+				/* duplicate node tree (copy children, not siblings) */
+				NODE newtree = copy_nodes(recold->rec_top, TRUE, FALSE);
+				recnew->rec_top = newtree;
+			} else {
+				/* bound record, just points into cache */
+				ASSERT(recold->rec_cel);
+				recnew->rec_cel = recold->rec_cel;
+			}
+			nkey_copy(&recold->rec_nkey, &recnew->rec_nkey);
+			value = recnew;
+		}
 	}
 
 	ptype(val) = type;
@@ -172,9 +204,6 @@ set_pvalue (PVALUE val, INT type, VPTR value)
 			}
 		}
 		break;
-	}
-	if (is_record_pvalue(val)) {
-		/* Used to lock its object in cache, but no longer 2003-11-22 */
 	}
 }
 /*========================================
@@ -232,7 +261,6 @@ clear_pvalue (PVALUE val)
 			}
 		}
 		return;
-	/* nodes from cache handled below switch - PINDI, PFAM, PSOUR, PEVEN, POTHR */
 	case PFLOAT:
 		free_float_pvalue(val);
 		return;
@@ -277,11 +305,12 @@ clear_pvalue (PVALUE val)
 			}
 		}
 		return;
+	/* record nodes handled below (PINDI, PFAM, PSOUR, PEVEN, POTHR) */
 	}
 	if (is_record_pvalue(val)) {
-		/*
-		don't worry about memory - it is owned by cache
-		*/
+		RECORD rec = pvalue_to_rec(val);
+		if (rec)
+			free_rec(rec);
 	}
 }
 /*========================================
@@ -675,7 +704,15 @@ which_pvalue_type (PVALUE val)
 BOOLEAN
 is_record_pvalue (PVALUE value)
 {
-	switch (ptype(value)) {
+	return is_record_pvaltype(ptype(value));
+}
+/*========================================
+ * is_record_pvaltype -- Does pvalue contain record ?
+ *======================================*/
+static BOOLEAN
+is_record_pvaltype (INT valtype)
+{
+	switch (valtype) {
 	case PINDI: case PFAM: case PSOUR: case PEVEN: case POTHR:
 		return TRUE;
 	}
