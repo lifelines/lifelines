@@ -51,7 +51,7 @@ static UNION pvseq_create_gen_value(INT gen, INT * valtype);
  * local variables
  *********************************************/
 
-static struct tag_indiseq_value_vtable pvseq_vtbl =
+static struct tag_indiseq_value_fnctable pvseq_fnctbl =
 {
 	&pvseq_copy_value
 	, &pvseq_delete_value
@@ -81,7 +81,7 @@ __indiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	*eflg = FALSE;
 	seq = create_indiseq_pval();
-	set_indiseq_value_funcs(seq, &pvseq_vtbl);
+	set_indiseq_value_funcs(seq, &pvseq_fnctbl);
 	assign_iden(stab, iident(var), create_pvalue(PSET, (VPTR) seq));
 	return NULL;
 }

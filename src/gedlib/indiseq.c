@@ -89,7 +89,7 @@ static INT canonkey_compare(SORTEL el1, SORTEL el2, VPTR param);
 static INT canonkey_order(char c);
 static void check_indiseq_valtype(INDISEQ seq, INT valtype);
 static UNION copyval(INDISEQ seq, UNION uval);
-static INDISEQ create_indiseq_impl(INT valtype, INDISEQ_VALUE_VTABLE vtable);
+static INDISEQ create_indiseq_impl(INT valtype, INDISEQ_VALUE_FNCTABLE fnctable);
 static void delete_el(INDISEQ seq, SORTEL el);
 static void deleteval(INDISEQ seq, UNION uval);
 static INDISEQ dupseq(INDISEQ seq);
@@ -105,7 +105,7 @@ static INT value_compare(SORTEL el1, SORTEL el2, VPTR param);
  * local variables
  *********************************************/
 
-static struct tag_indiseq_value_vtable def_valvtbl =
+static struct tag_indiseq_value_fnctable def_valfnctbl =
 {
 	&default_copy_value
 	, &default_delete_value
@@ -157,12 +157,12 @@ create_indiseq_sval (void)
 }
 /*=======================================
  * create_indiseq_impl -- Create sequence
- * vtable specifies the value vtable for the 
+ * fnctable specifies the value function table for the 
  * new seq, and is optional - if NULL, the default
  * one will be used
  *=====================================*/
 static INDISEQ
-create_indiseq_impl (INT valtype, INDISEQ_VALUE_VTABLE vtable)
+create_indiseq_impl (INT valtype, INDISEQ_VALUE_FNCTABLE fnctable)
 {
 	INDISEQ seq = (INDISEQ) stdalloc(sizeof *seq);
 	ISize(seq) = 0;
@@ -171,7 +171,7 @@ create_indiseq_impl (INT valtype, INDISEQ_VALUE_VTABLE vtable)
 	IFlags(seq) = 0;
 	IPrntype(seq) = ISPRN_NORMALSEQ;
 	IValtype(seq) = valtype;
-	IValvtbl(seq) = vtable ? vtable : &def_valvtbl;
+	IValfnctbl(seq) = fnctable ? fnctable : &def_valfnctbl;
 	return seq;
 }
 /*==================================
@@ -196,29 +196,29 @@ remove_indiseq (INDISEQ seq)
 	stdfree(seq);
 }
 /*==============================
- * copyval -- Copy a value using the value vtable
+ * copyval -- Copy a value using the value function table
  * Created: 2001/03/25, Perry Rapp
  * This takes care of the problem that report indiseqs
  * must use report-allocated values (pvalues) - and these
  * cannot be copied directly, a copy must be allocated.
- * This is a complication that is solved thru a vtable,
+ * This is a complication that is solved thru a function table,
  * because indiseq.c is in a layer lower than the interpreter,
  * and does not know about pvalues. The interpreter registers
- * a copy function in the seq's vtable to solve this.
+ * a copy function in the seq's function table to solve this.
  *============================*/
 static UNION
 copyval (INDISEQ seq, UNION uval)
 {
-	return (*IValvtbl(seq)->copy_fnc)(uval, IValtype(seq));
+	return (*IValfnctbl(seq)->copy_fnc)(uval, IValtype(seq));
 }
 /*==============================
- * deleteval -- Delete a value using the value vtable
+ * deleteval -- Delete a value using the value function table
  * Created: 2001/03/25, Perry Rapp
  *============================*/
 static void
 deleteval (INDISEQ seq, UNION uval)
 {
-	(*IValvtbl(seq)->delete_fnc)(uval, IValtype(seq));
+	(*IValfnctbl(seq)->delete_fnc)(uval, IValtype(seq));
 }
 /*==============================
  * creategenval -- Create a value for a new element
@@ -233,7 +233,7 @@ creategenval (INDISEQ seq, INT gen)
 {
 	UNION u;
 	INT valtype = IValtype(seq);
-	u = (*IValvtbl(seq)->create_gen_fnc)(gen, &valtype);
+	u = (*IValfnctbl(seq)->create_gen_fnc)(gen, &valtype);
 	if (valtype != IValtype(seq)) {
 		ASSERT(IValtype(seq) == ISVAL_NUL);
 		IValtype(seq) = valtype;
@@ -249,7 +249,7 @@ copy_indiseq (INDISEQ seq)
 	INDISEQ newseq;
 	UNION uval;
 	if (!seq) return NULL;
-	newseq = create_indiseq_impl(IValtype(seq), IValvtbl(seq));
+	newseq = create_indiseq_impl(IValtype(seq), IValfnctbl(seq));
 	FORINDISEQ(seq, el, num)
 		uval = copyval(seq, sval(el));
 		append_indiseq_impl(newseq, skey(el), snam(el), uval,
@@ -322,7 +322,7 @@ append_indiseq_pval (INDISEQ seq,    /* sequence */
  * append_indiseq_sval -- Append element to sequence
  *  with STRING value
  * (Should be alloc'd values, unless caller is using
- *  a custom value vtable)
+ *  a custom value function table)
  * Created: 2001/01/05, Perry Rapp
  *================================================*/
 void
@@ -641,7 +641,7 @@ value_compare (SORTEL el1, SORTEL el2, VPTR param)
 		}
 	} else if (valtype == ISVAL_PTR) {
 		VPTR ptr1=sval(el1).w, ptr2=sval(el2).w;
-		rel = (*IValvtbl(seq)->compare_val_fnc)(ptr1, ptr2, valtype);
+		rel = (*IValfnctbl(seq)->compare_val_fnc)(ptr1, ptr2, valtype);
 	} else {
 		/* nothing -- fall through to default to canonkey_compare */
 	}
@@ -871,7 +871,7 @@ dupseq (INDISEQ seq)
 		return NULL;
 
 	/* Create New Sequence */
-	newseq = create_indiseq_impl(IValtype(seq), IValvtbl(seq));
+	newseq = create_indiseq_impl(IValtype(seq), IValfnctbl(seq));
 	u = IData(seq);
 	n = length_indiseq(seq);
 
@@ -911,7 +911,7 @@ union_indiseq (INDISEQ one, INDISEQ two)
 	n = length_indiseq(one);
 	m = length_indiseq(two);
 	valtype = get_combined_valtype(one, two);
-	three = create_indiseq_impl(valtype, IValvtbl(one));
+	three = create_indiseq_impl(valtype, IValfnctbl(one));
 	i = j = 0;
 	u = IData(one);
 	v = IData(two);
@@ -980,7 +980,7 @@ intersect_indiseq (INDISEQ one, INDISEQ two)
 	n = length_indiseq(one);
 	m = length_indiseq(two);
 	valtype = get_combined_valtype(one, two);
-	three = create_indiseq_impl(valtype, IValvtbl(one));
+	three = create_indiseq_impl(valtype, IValfnctbl(one));
 	i = j = 0;
 	u = IData(one);
 	v = IData(two);
@@ -1027,7 +1027,7 @@ difference_indiseq (INDISEQ one, INDISEQ two)
 	n = length_indiseq(one);
 	m = length_indiseq(two);
 	valtype = get_combined_valtype(one, two);
-	three = create_indiseq_impl(valtype, IValvtbl(one));
+	three = create_indiseq_impl(valtype, IValfnctbl(one));
 	i = j = 0;
 	u = IData(one);
 	v = IData(two);
@@ -1071,7 +1071,7 @@ parent_indiseq (INDISEQ seq)
 	UNION uval;
 	if (!seq) return NULL;
 	tab = create_table();
-	par = create_indiseq_impl(IValtype(seq), IValvtbl(seq));
+	par = create_indiseq_impl(IValtype(seq), IValfnctbl(seq));
 	FORINDISEQ(seq, el, num)
 		indi = key_to_indi(skey(el));
 		fath = indi_to_fath(indi);
@@ -1107,7 +1107,7 @@ child_indiseq (INDISEQ seq)
 	UNION uval;
 	if (!seq) return NULL;
 	tab = create_table();
-	cseq = create_indiseq_impl(IValtype(seq), IValvtbl(seq));
+	cseq = create_indiseq_impl(IValtype(seq), IValfnctbl(seq));
 	FORINDISEQ(seq, el, num)
 		indi = key_to_indi(skey(el));
 		FORFAMSS(indi, fam, spouse, num1)
@@ -1361,7 +1361,7 @@ sibling_indiseq (INDISEQ seq,
 /*=========================================================
  * ancestor_indiseq -- Create ancestor sequence of sequence
  *  values are created with the generation number
- *  (via value vtable)
+ *  (via value function table)
  *=======================================================*/
 INDISEQ
 ancestor_indiseq (INDISEQ seq)
@@ -1380,7 +1380,7 @@ ancestor_indiseq (INDISEQ seq)
 		/* paired processing list - see comments in descendant_indiseq code */
 	anclist = create_list();
 	genlist = create_list();
-	anc = create_indiseq_impl(IValtype(seq), IValvtbl(seq));
+	anc = create_indiseq_impl(IValtype(seq), IValfnctbl(seq));
 	FORINDISEQ(seq, el, num)
 		enqueue_list(anclist, (VPTR)skey(el));
 		enqueue_list(genlist, (VPTR)0);
@@ -1447,7 +1447,7 @@ descendent_indiseq (INDISEQ seq)
 	deslist = create_list();
 	genlist = create_list();
 		/* result indiseq */
-	des = create_indiseq_impl(IValtype(seq), IValvtbl(seq));
+	des = create_indiseq_impl(IValtype(seq), IValfnctbl(seq));
 		/* add everyone from original seq to processing list */
 	FORINDISEQ(seq, el, num)
 		enqueue_list(deslist, (VPTR)skey(el));
@@ -1499,7 +1499,7 @@ spouse_indiseq (INDISEQ seq)
 	INT num1;
 	if (!seq) return NULL;
 	tab = create_table();
-	sps = create_indiseq_impl(IValtype(seq), IValvtbl(seq));
+	sps = create_indiseq_impl(IValtype(seq), IValfnctbl(seq));
 	FORINDISEQ(seq, el, num)
 		indi = key_to_indi(skey(el));
 		FORSPOUSES(indi, spouse, fam, num1)
@@ -1959,15 +1959,15 @@ get_indiseq_ival (INDISEQ seq, INT i)
 
 }
 /*=======================================================
- * set_indiseq_value_funcs -- Set the value vtable for an INDISEQ
+ * set_indiseq_value_funcs -- Set the value function table for an INDISEQ
  * This is to allow the report layer to register its functions to 
  * create, compare, or delete values (so it can work with pvalues)
  * Created: 2001/03/25, Perry Rapp
  *=====================================================*/
 void
-set_indiseq_value_funcs (INDISEQ seq, INDISEQ_VALUE_VTABLE valvtbl)
+set_indiseq_value_funcs (INDISEQ seq, INDISEQ_VALUE_FNCTABLE valfnctbl)
 {
-	IValvtbl(seq) = valvtbl;
+	IValfnctbl(seq) = valfnctbl;
 }
 /*=======================================================
  * default_copy_value -- copy a value

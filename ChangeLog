@@ -26,8 +26,16 @@
 	build/msvc6/llines/llines.rc build/rpm/lifelines.spec
 	src/hdrs/version.h
 
-	Bumped version to 3.0.25
+	Bumped version to 3.0.25.
 	Added notes in ChangeLog when 3.0.24b1, b2, and b3 were released.
+	Released 3.0.25.
+
+	* ChangeLog src/gedlib/indiseq.c src/hdrs/indiseq.h
+	src/interp/intrpseq.c
+
+	Renamed indiseq "vtbl" to "fnctbl" (it is a function table, not a
+	vtable; it is stored in the container, not in the objects). This is
+	preparatory to adding vtables to objects.
 
 2003-02-22 Perry Rapp
 

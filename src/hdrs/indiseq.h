@@ -70,7 +70,7 @@ typedef INT (*ELCMPFNC)(SORTEL, SORTEL, VPTR);
 #define ISVAL_NUL 4
 
 /*
-	value vtable functions for INDISEQ
+	value function table functions for INDISEQ
 	change with set_indiseq_value_funcs
 	Default ones (exposed as default_xxx below):
 		copy produces null values except for int type values
@@ -88,14 +88,14 @@ typedef void (*SEQ_DELETE_VALUE)(UNION uval, INT valtype);
 typedef UNION (*SEQ_CREATE_GEN_VALUE)(INT gen, INT * valtype);
 /* compare two values */
 typedef INT (*SEQ_COMPARE_VALUES)(VPTR ptr1, VPTR ptr2, INT valtype);
-/* vtable for handling values in INDISEQ */
-typedef struct tag_indiseq_value_vtable
+/* function table for handling values in INDISEQ */
+typedef struct tag_indiseq_value_fnctable
 {
 	SEQ_COPY_VALUE_FNC copy_fnc;
 	SEQ_DELETE_VALUE delete_fnc;
 	SEQ_CREATE_GEN_VALUE create_gen_fnc;
 	SEQ_COMPARE_VALUES compare_val_fnc;
-} * INDISEQ_VALUE_VTABLE;
+} * INDISEQ_VALUE_FNCTABLE;
 
 
 /*=================================================
@@ -110,7 +110,7 @@ struct tag_indiseq {
 	INT is_valtype; /* int, string, pointer */
 	INT is_refcnt; /* for interp */
 	STRING is_locale; /* used by namesort */
-	INDISEQ_VALUE_VTABLE is_valvtbl;
+	INDISEQ_VALUE_FNCTABLE is_valfnctbl;
 };
 #ifndef INDISEQ_type_defined
 typedef struct tag_indiseq *INDISEQ;
@@ -125,7 +125,7 @@ typedef struct tag_indiseq *INDISEQ;
 #define IValtype(s)  ((s)->is_valtype)
 #define IRefcnt(s)   ((s)->is_refcnt)
 #define ILocale(s)   ((s)->is_locale)
-#define IValvtbl(s)  ((s)->is_valvtbl)
+#define IValfnctbl(s) ((s)->is_valfnctbl)
 
 #define KEYSORT       (1<<0)
 #define NAMESORT      (1<<1)
@@ -200,7 +200,7 @@ INDISEQ refn_to_indiseq(STRING, INT letr, INT sort);
 void remove_browse_list(STRING, INDISEQ);
 void remove_indiseq(INDISEQ);
 void rename_indiseq(INDISEQ, STRING);
-void set_indiseq_value_funcs(INDISEQ seq, INDISEQ_VALUE_VTABLE valvtbl);
+void set_indiseq_value_funcs(INDISEQ seq, INDISEQ_VALUE_FNCTABLE valfnctbl);
 INDISEQ sibling_indiseq(INDISEQ, BOOLEAN);
 INDISEQ spouse_indiseq(INDISEQ);
 INDISEQ str_to_indiseq(STRING name, char ctype);
