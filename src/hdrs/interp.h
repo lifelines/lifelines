@@ -217,7 +217,10 @@ extern INT nobuiltins;
 
 /* external types */
 typedef struct pactx_s *PACTX;
+#ifndef INDISEQ_type_defined
 typedef struct indiseq_s *INDISEQ;
+#define INDISEQ_type_defined
+#endif
 
 /* PVALUE Arithmetic Functions */
 void add_pvalues(PVALUE, PVALUE, BOOLEAN*eflg, ZSTR * zerr);
@@ -256,7 +259,7 @@ PVALUE create_pvalue_from_indi_keynum(INT i);
 PVALUE create_pvalue_from_int(INT ival);
 PVALUE create_pvalue_from_node(NODE node);
 PVALUE create_pvalue_from_othr_keynum(INT i);
-PVALUE create_pvalue_from_set(VPTR seq);
+PVALUE create_pvalue_from_set(INDISEQ seq);
 PVALUE create_pvalue_from_sour_keynum(INT i);
 PVALUE create_pvalue_from_string(STRING str);
 ZSTR describe_pvalue(PVALUE);

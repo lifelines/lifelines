@@ -113,7 +113,10 @@ struct indiseq_s {
 	STRING is_locale; /* used by namesort */
 	INDISEQ_VALUE_VTABLE is_valvtbl;
 };
+#ifndef INDISEQ_type_defined
 typedef struct indiseq_s *INDISEQ;
+#define INDISEQ_type_defined
+#endif
 
 #define ISize(s)     ((s)->is_size)
 #define IMax(s)      ((s)->is_max)

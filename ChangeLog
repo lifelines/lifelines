@@ -1,3 +1,10 @@
+2003-02-07 Perry Rapp
+
+	* ChangeLog src/hdrs/indiseq.h src/hdrs/interp.h
+	src/interp/Makefile.am:
+
+	Fix some declaration errors, and add pvalalloc.c to makefile.
+
 2003-02-06 Perry Rapp
 
 	* ChangeLog src/gedlib/keytonod.c src/hdrs/cache.h
