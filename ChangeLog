@@ -1,3 +1,10 @@
+2002-11-07 Perry Rapp
+
+	* ChangeLog po/POTFILES.in po/de.po po/el.po po/fr.po po/it.po
+	po/sv.po src/stdlib/llstrcmp.c src/stdlib/strcvt.c:
+
+	Working on character handling code.
+
 2002-11-05 Perry Rapp
 
 	* ChangeLog src/gedlib/indiseq.c src/gedlib/names.c

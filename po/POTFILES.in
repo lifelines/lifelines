@@ -26,7 +26,9 @@ src/liflines/add.c
 src/liflines/ask.c
 src/liflines/askprogram.c
 src/liflines/browse.c
+src/liflines/brwsmenu.c
 src/liflines/delete.c
+src/liflines/dynmenu.c
 src/liflines/edit.c
 src/liflines/error.c
 src/liflines/export.c
@@ -34,7 +36,7 @@ src/liflines/import.c
 src/liflines/lbrowse.c
 src/liflines/loadsave.c
 src/liflines/main.c
-src/liflines/menuitem.c
+src/liflines/menuset.c
 src/liflines/merge.c
 src/liflines/miscutls.c
 src/liflines/newrecs.c

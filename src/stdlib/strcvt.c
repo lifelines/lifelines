@@ -32,8 +32,24 @@
 #include "bfs.h"
 #include "icvt.h"
 
+static const char * get_wchar_codeset_name(void);
+
 /*===================================================
- * makewide -- convert internal to wchar_t
+ * get_wchar_codeset_name -- name of wchar_t codeset
+ * (handles annoyance that MS-Windows wchar_t is small)
+ *=================================================*/
+static const char *
+get_wchar_codeset_name (void)
+{
+#ifdef _WIN32
+	/* MS-Windows can't handle UCS-4; could we use UTF-16 ? */
+	return "UCS-2-INTERNAL";
+#else
+	return "UCS-4-INTERNAL";
+#endif
+}
+/*===================================================
+ * makewide -- convert internal to wchar_t *
  * handling annoyance that MS-Windows wchar_t is small
  * This only succeeds if internal charset is UTF-8
  * Either returns 0 if fails, or a bfstr which actually
@@ -43,14 +59,8 @@ bfptr
 makewide (const char *str)
 {
 	bfptr bfs=0;
-#ifdef HAVE_WCSCOLL
 	if (uu8) {
-#ifdef _WIN32
-		/* MS-Windows can't handle UCS-4; could we use UTF-16 ? */
-		CNSTRING dest = "UCS-2-INTERNAL";
-#else
-		CNSTRING dest = "UCS-4-INTERNAL";
-#endif
+		CNSTRING dest = get_wchar_codeset_name();
 		BOOLEAN success;
 		bfs = bfNew(strlen(str)*4+3);
 		bfCpy(bfs, str);
@@ -59,13 +69,8 @@ makewide (const char *str)
 			bfDelete(bfs);
 			bfs = 0;
 		}
-
 		success = TRUE;
 	}
-#else
-	str=str; /* unused */
-#endif /* HAVE_WCSCOLL */
-
 	return bfs;
 }
 /*=========================================

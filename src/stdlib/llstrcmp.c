@@ -114,25 +114,19 @@ set_usersort (usersortfnc fnc)
 static BOOLEAN
 widecmp (char *str1, char *str2, INT *rtn)
 {
-	bfptr bfs1=0, bfs2=0;
+	bfptr wbfs1=0, wbfs2=0;
 	BOOLEAN success = FALSE;
 #ifdef HAVE_WCSCOLL
 	if (uu8) {
 		/* convert to wchar_t & use wide compare (wcscoll) */
-#ifdef _WIN32
-		/* MS-Windows really only handles UCS-2 */
-		CNSTRING dest = "UCS-2-INTERNAL";
-#else
-		CNSTRING dest = "UCS-4-INTERNAL";
-#endif
-		bfs1 = makewide(str1);
-		if (bfs1) {
-			bfs2 = makewide(str2);
+		wbfs1 = makewide(str1);
+		if (wbfs1) {
+			wbfs2 = makewide(str2);
 		}
 
-		if (bfs1 && bfs2) {
-			const wchar_t * wfs1 = (const wchar_t *)bfs1->str;
-			const wchar_t * wfs2 = (const wchar_t *)bfs2->str;
+		if (wbfs1 && wbfs2) {
+			const wchar_t * wfs1 = (const wchar_t *)wbfs1->str;
+			const wchar_t * wfs2 = (const wchar_t *)wbfs2->str;
 			*rtn = wcscoll(wfs1, wfs2);
 			success = TRUE;
 		}
@@ -143,9 +137,9 @@ widecmp (char *str1, char *str2, INT *rtn)
 	rtn=rtn; /* unused */
 #endif /* HAVE_WCSCOLL */
 
-	if (bfs1)
-		bfDelete(bfs1);
-	if (bfs2)
-		bfDelete(bfs2);
+	if (wbfs1)
+		bfDelete(wbfs1);
+	if (wbfs2)
+		bfDelete(wbfs2);
 	return success;
 }
