@@ -4051,6 +4051,17 @@ copy file contents to program output file
 
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>BOOLEAN <function>test</function></funcdef>
+<paramdef><parameter>STRING</parameter></paramdef>
+<paramdef><parameter>STRING</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+tests for characteristics of a file
+</para>
+
+</glossdef></glossentry>
+<glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>print</function></funcdef>
 <paramdef><parameter>STRING</parameter>,
 <parameter><replaceable>STRING</replaceable></parameter>
@@ -4112,6 +4123,21 @@ use <function>newfile</function>; if it is not used then <application>LifeLines<
 the name of a file; if the file name is not absolute nor relative, then the <envar>LLPROGRAMS</envar> environment
 variable, if set, will be used to search for the file; the file is opened and its contents copied to the report
 output file.
+</para>
+
+<para>
+<function>Test</function> will check for a specified property of the specified file.  The first argument is the property, the second argument is the filename.
+Supported properties are:
+r - file is readable
+w - file is writeable
+x - file is executable
+s - file has non-zero size
+z - file has zero size
+e - file exists
+f - check if argument is a file
+d - check if argument is a directory
+
+The return value is TRUE or FALSE, depending on whether the file had the specified property or not.
 </para>
 
 <para>

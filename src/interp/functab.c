@@ -238,6 +238,7 @@ BUILTINS builtins[] = {
 	{"system",          1,    1,    __runsystem},
 	{"table",           1,    1,    __table},
 	{"tag",             1,    1,    __tag},
+	{"test",            2,    2,    __test},
 	{"title",           1,    1,    __titl},
 	{"titlecase",       1,    1,    __titlcase},
 	{"trim",            2,    2,    __trim},

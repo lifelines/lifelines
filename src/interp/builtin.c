@@ -3579,3 +3579,81 @@ __int (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	return val;
 }
+/*=============================================+
+ * __test -- Perform tests on a file or
+ *           directory parameter.
+ *   usage: test(STRING, STRING) -> BOOL
+ *============================================*/
+PVALUE
+__test (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+	PNODE arg1, arg2;
+	PVALUE arg1val, arg2val, val = NULL;
+	STRING arg1str, arg2str;
+	struct stat statdata;
+	int rc;
+
+	arg1 = (PNODE) iargs(node);
+	arg1val = eval_and_coerce(PSTRING, arg1, stab, eflg);
+	if (*eflg) {
+		prog_var_error(node, stab, arg1, arg1val, nonstrx, "test", "1");
+		delete_pvalue(arg1val);
+		return NULL;
+	}
+	arg1str = pvalue_to_string(arg1val);
+
+	arg2 = (PNODE) inext(arg1);
+	arg2val = eval_and_coerce(PSTRING, arg2, stab, eflg);
+	if (*eflg) {
+		prog_var_error(node, stab, arg2, arg2val, nonstrx, "test", "2");
+		delete_pvalue(arg2val);
+		return NULL;
+	}
+	arg2str = pvalue_to_string(arg2val);
+	delete_pvalue(arg2val);
+
+	rc = stat(arg2str, &statdata);
+	if (rc) {
+		val = create_pvalue_from_bool(FALSE);
+		return val;
+	}
+
+	if (eqstr(arg1str,"r")) {
+		if (statdata.st_mode & S_IRUSR)
+			val = create_pvalue_from_bool(TRUE);
+
+	} else if (eqstr(arg1str,"w")) {
+		if (statdata.st_mode & S_IWUSR)
+			val = create_pvalue_from_bool(TRUE);
+
+	} else if (eqstr(arg1str,"x")) {
+		if (statdata.st_mode & S_IXUSR)
+			val = create_pvalue_from_bool(TRUE);
+
+	} else if (eqstr(arg1str,"e")) {
+			val = create_pvalue_from_bool(TRUE);
+
+	} else if (eqstr(arg1str,"z")) {
+		if (statdata.st_size == 0)
+			val = create_pvalue_from_bool(TRUE);
+
+	} else if (eqstr(arg1str,"s")) {
+		if (statdata.st_size != 0)
+			val = create_pvalue_from_bool(TRUE);
+
+	} else if (eqstr(arg1str,"f")) {
+		if ((statdata.st_mode & S_IFMT) & S_IFREG)
+			val = create_pvalue_from_bool(TRUE);
+
+	} else if (eqstr(arg1str,"d")) {
+		if ((statdata.st_mode & S_IFMT) & S_IFDIR)
+			val = create_pvalue_from_bool(TRUE);
+	} else {
+		prog_var_error(node, stab, arg1, arg1val, badargx, "test", "1");
+		delete_pvalue(arg1val);
+		return NULL;
+	}
+
+	delete_pvalue(arg1val);
+	return val;
+}
