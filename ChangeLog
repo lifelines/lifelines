@@ -13,6 +13,10 @@
 	Add node iterator to traverse node tree with iterator.
 	Modify various places to handle bad pointers gracefully.
 
+	* .linesrc ChangeLog NEWS
+
+	Add new option AnnotatePointers to NEWS.
+
 2003-09-18 Stephen Dum
         * ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf
 	docs/ll-reportmanual.txt docs/ll-reportmanual.xml

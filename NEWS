@@ -1,6 +1,10 @@
-LifeLines Source Release, Version 3.0.35
+LifeLines Source Release, Version 3.0.36
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
+
+New features added in 3.0.36
+============================
+- New option AnnotatePointers
 
 Bug fixes in 3.0.35
 ============================
