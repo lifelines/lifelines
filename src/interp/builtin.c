@@ -911,9 +911,9 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
-	if (*eflg) return;
+	if (*eflg) return NULL;
 	val2 = evaluate(inext(arg), stab, eflg);
-	if (*eflg) return;
+	if (*eflg) return NULL;
 	eq_pvalues(val1, val2, eflg);
 	if (*eflg) {
 		prog_error(node, "incorrect operands for eq");
@@ -955,9 +955,9 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
-	if (*eflg) return;
+	if (*eflg) return NULL;
 	val2 = evaluate(inext(arg), stab, eflg);
-	if (*eflg) return;
+	if (*eflg) return NULL;
 	le_pvalues(val1, val2, eflg);
 	if (*eflg) {
 		prog_error(node, "incorrect operands for le");
@@ -974,9 +974,9 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
-	if (*eflg) return;
+	if (*eflg) return NULL;
 	val2 = evaluate(inext(arg), stab, eflg);
-	if (*eflg) return;
+	if (*eflg) return NULL;
 	ge_pvalues(val1, val2, eflg);
 	if (*eflg) {
 		prog_error(node, "incorrect operands for ge");
@@ -994,9 +994,9 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
 /*llwprintf("__lt @ %d\n", iline(node));/*DEBUG*/
-	if (*eflg) return;
+	if (*eflg) return NULL;
 	val2 = evaluate(inext(arg), stab, eflg);
-	if (*eflg) return;
+	if (*eflg) return NULL;
 	lt_pvalues(val1, val2, eflg);
 	if (*eflg) {
 		prog_error(node, "incorrect operands for lt");
@@ -1013,9 +1013,9 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
-	if (*eflg) return;
+	if (*eflg) return NULL;
 	val2 = evaluate(inext(arg), stab, eflg);
-	if (*eflg) return;
+	if (*eflg) return NULL;
 	gt_pvalues(val1, val2, eflg);
 	if (*eflg) {
 show_pvalue(val1);/*DEBUG*/
@@ -1116,9 +1116,9 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
-	if (*eflg) return;
+	if (*eflg) return NULL;
 	val2 = evaluate(inext(arg), stab, eflg);
-	if (*eflg) return;
+	if (*eflg) return NULL;
 	sub_pvalues(val1, val2, eflg);
 	if (*eflg) {
 		prog_error(node, "incorrect operands for sub");
@@ -1156,9 +1156,9 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
-	if (*eflg) return;
+	if (*eflg) return NULL;
 	val2 = evaluate(inext(arg), stab, eflg);
-	if (*eflg) return;
+	if (*eflg) return NULL;
 	div_pvalues(val1, val2, eflg);
 	if (*eflg) {
 		prog_error(node, "incorrect operands for div");
@@ -1175,9 +1175,9 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
-	if (*eflg) return;
+	if (*eflg) return NULL;
 	val2 = evaluate(inext(arg), stab, eflg);
-	if (*eflg) return;
+	if (*eflg) return NULL;
 	mod_pvalues(val1, val2, eflg);
 	if (*eflg) {
 		prog_error(node, "incorrect operands for mod");
@@ -1196,7 +1196,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
 	if (*eflg) return NULL;
 	val2 = evaluate(inext(arg), stab, eflg);
-	if (*eflg) return;
+	if (*eflg) return NULL;
 	exp_pvalues(val1, val2, eflg);
 	if (*eflg) {
 		prog_error(node, "incorrect operands for exp");
