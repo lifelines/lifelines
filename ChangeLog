@@ -1,5 +1,8 @@
 2001-01-01 Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* hdrs/interpi.h interp/interpi.h: Move private header file into
+	library subdir.
+
 	* configure.in docs/lifelines.sgml gedlib/Makefile.am
 	gedlib/property.c hdrs/gedcom.h hdrs/interpi.h interp/functab.c
 	interp/more.c: Implement new report function getproperty() to make
