@@ -479,7 +479,8 @@ create_database (STRING dbrequested, STRING dbused)
 		return FALSE;
 	}
 	initxref();
-	store_record("VUOPT", props, strlen(props));
+	if (props)
+		store_record("VUOPT", props, strlen(props));
 	return TRUE;
 }
 /*===================================================

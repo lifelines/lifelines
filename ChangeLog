@@ -4,6 +4,10 @@
 
 	Bugfix for strdup(0) in update_options.
 
+	* ChangeLog gedlib/init.c:
+
+	Bugfix for strsave(0) creating new database.
+
 2002-06-21 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/nodeutls.c liflines/newrecs.c:
