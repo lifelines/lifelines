@@ -1032,6 +1032,7 @@ browse_fam (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 	fammodep = fammode;
 
 	while (TRUE) {
+		setrecord(&tmp, NULL);
 		if (nzkeynum(current) != nkeyp
 			|| fammode != fammodep) {
 			show_reset_scroll();

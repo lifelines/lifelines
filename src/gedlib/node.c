@@ -458,6 +458,7 @@ fam_to_spouse (NODE fam, NODE indi)
  * RECORD *spouse [out]     next spouse in family
  * returns 1 for success, -1 if next HUSB/WIFE record is invalid
  *         0 no more spouses found
+ * returns addref'd record in *spouse
  *=============================================*/
 int
 next_spouse (NODE *node, RECORD *spouse)
@@ -468,8 +469,9 @@ next_spouse (NODE *node, RECORD *spouse)
 	    if (eqstr(ntag(*node),"HUSB") || eqstr(ntag(*node),"WIFE")) {
 		key = rmvat(nval(*node));
 		if (!key) return -1;
-		*spouse = key_to_irecord(key); /* ASSERT if fail */
-		return (*spouse != 0);
+		*spouse = qkey_to_irecord(key);
+		if (!*spouse) return -1;
+		return 1;
 	    }
 	    *node = nsibling(*node);
 	}

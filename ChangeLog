@@ -9,6 +9,12 @@
 
 	Fix bug just introduced in goto_fam_child.
 
+	* ChangeLog src/gedlib/node.c src/liflines/browse.c
+	src/liflines/show.c
+
+	Fix next_spouse to not ASSERT on missing spouse.
+	Fix 2 record leaks (ihusb & iwife) in init_display_fam.
+
 2005-02-10 Perry Rapp
 
 	* ChangeLog src/gedlib/keytonod.c src/gedlib/node.c

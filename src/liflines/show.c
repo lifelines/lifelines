@@ -533,6 +533,8 @@ init_display_fam (RECORD frec, INT width)
 	FORCHILDREN(fam, chld, nm)
 		add_child_line(++nch, chld, width);
 	ENDCHILDREN
+	release_record(ihusb);
+	release_record(iwife);
 }
 /*===================================
  * show_fam_vitals -- Display family
