@@ -66,6 +66,7 @@ BOOLEAN begin_table(TABLE tab, TABLE_ITER tabit);
 BOOLEAN change_table_ptr(TABLE_ITER tabit, VPTR newptr);
 void copy_table(const TABLE src, TABLE dest, INT whattodup);
 TABLE create_table(INT whattofree);
+TABLE create_table_new(void);
 TABLE create_table_old(void);
 void delete_table(TABLE, STRING);
 void delref_table(TABLE tab, void (*tproc)(CNSTRING key, UNION uval));
@@ -75,6 +76,7 @@ BOOLEAN in_table(TABLE, CNSTRING);
 void insert_table_ptr(TABLE, CNSTRING key, VPTR);
 void insert_table_int(TABLE, CNSTRING key, INT);
 void insert_table_str(TABLE, CNSTRING key, STRING);
+void table_insert_string(TABLE tab, CNSTRING key, CNSTRING value);
 BOOLEAN next_table_ptr(TABLE_ITER tabit, STRING *pkey, VPTR *pptr);
 BOOLEAN next_table_str(TABLE_ITER tabit, STRING *pkey, STRING *pstr);
 void remove_table(TABLE, INT whattofree); /* TODO: remove this */

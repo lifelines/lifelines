@@ -64,7 +64,7 @@ init_generic_float (GENERIC *gen, FLOAT fval)
  * This routine dups the string, and frees its copy at destruction
  *===============================================*/
 void
-init_generic_string (GENERIC *gen, STRING sval)
+init_generic_string (GENERIC *gen, CNSTRING sval)
 {
 	init_generic(gen);
 	gen->selector = GENERIC_STRING;
@@ -138,7 +138,7 @@ set_generic_float (GENERIC *gen, FLOAT fval)
  * This routine dups the string, and frees its copy at destruction
  *===============================================*/
 void
-set_generic_string (GENERIC *gen, STRING sval)
+set_generic_string (GENERIC *gen, CNSTRING sval)
 {
 	/* check for self-assignment */
 	if (gen->selector == GENERIC_STRING

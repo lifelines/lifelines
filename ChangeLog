@@ -1,5 +1,13 @@
+2005-01-21 Perry Rapp
+
+	* ChangeLog src/gedlib/lloptions.c src/hdrs/generic.h
+	src/hdrs/table.h src/stdlib/generic.c src/stdlib/table.c
+
+	Continue converting tables to generics: new function create_table_new.
+
 2005-01-19 Stephen Dum
-        * ChangeLog INSTALL
+
+	* ChangeLog INSTALL
 	Add some text to INSTALL describing where to find doc generation
 	tools.
 

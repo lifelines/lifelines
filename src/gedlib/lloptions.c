@@ -155,9 +155,10 @@ load_config_file (STRING file, STRING * pmsg)
 	        free(thisdir);
 		return TRUE; /* no config file, that is ok */
         }
-	f_predef = create_table(FREEBOTH);
+	f_predef = create_table_new();
 
-	insert_table_str(f_predef, strsave("%thisdir%"), thisdir);
+	table_insert_string(f_predef, "%thisdir%", thisdir);
+	strfree(&thisdir);
 	/* read thru config file til done (or error) */
 	while (fgets(buffer, sizeof(buffer), fp)) {
 		noesc = FALSE;

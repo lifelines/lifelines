@@ -49,6 +49,7 @@ enum TB_VALTYPE
 		, TB_INT /* INT values */
 		, TB_STR /* STRING values */
 		, TB_NULL /* placeholder for newly created tables */
+		, TB_GENERIC /* new table holding only generics */
 	};
 
 /*
@@ -166,6 +167,8 @@ create_table (INT whattofree)
 	tab->entries = (ENTRY *)stdalloc(tab->maxhash*sizeof(ENTRY));
 	tab->count = 0;
 	tab->valtype = TB_NULL;
+	if (whattofree == -2)
+		tab->valtype = TB_GENERIC;
 	tab->whattofree = whattofree;
 	for (i = 0; i < tab->maxhash; i++)
 		tab->entries[i] = NULL;
@@ -173,11 +176,23 @@ create_table (INT whattofree)
 }
 /*=============================
  * create_table_old -- Create table
+ * Caller will specify whether keys or values are to be freed
+ * at remove_table time
  *===========================*/
 TABLE
 create_table_old (void)
 {
 	return create_table(-1);
+}
+/*=============================
+ * create_table_new -- Create table
+ * Will only use new generic elements (manage their own memory)
+ * All keys will be heap-allocated (to be freed by table)
+ *===========================*/
+TABLE
+create_table_new (void)
+{
+	return create_table(-2);
 }
 /*======================================
  * insert_table_impl -- Insert key & value into table
@@ -215,6 +230,7 @@ new_table_entry_impl (TABLE tab, CNSTRING key, GENERIC * generic)
 	entry->enext = tab->entries[hval];
 	tab->entries[hval] = entry;
 	++tab->count;
+	/* used by old-style tables which use generics for int values */
 }
 /*======================================
  * replace_table_impl -- Insert key & value into table
@@ -297,11 +313,34 @@ insert_table_str (TABLE tab, CNSTRING key, STRING str)
 {
 	UNION uval;
 	uval.w = str;
+	ASSERT(tab->whattofree != -2);
 	if (tab->valtype == TB_NULL)
 		tab->valtype = TB_STR;
 	/* table must be homogenous, not mixed-type */
 	ASSERT(tab->valtype == TB_STR);
 	insert_table_impl(tab, key, uval);
+}
+/*======================================
+ * table_insert_string -- Insert key & STRING value into table
+ * Table copies (allocates) both
+ *====================================*/
+void
+table_insert_string (TABLE tab, CNSTRING key, CNSTRING value)
+{
+	ENTRY entry = fndentry(tab, key);
+	ASSERT(tab->whattofree == -2 && tab->valtype == TB_GENERIC);
+	if (!entry) {
+		/* insert new entries as generics */
+		STRING newkey = strdup(key);
+		GENERIC gen;
+		init_generic_string(&gen, value);
+		new_table_entry_impl(tab, newkey, &gen);
+	} else {
+		/* Only new-style tables should call table_insert_string */
+		ASSERT(!is_generic_null(&entry->generic));
+		/* update existing value */
+		set_generic_string(&entry->generic, value);
+	}
 }
 /*======================================
  * replace_table_str -- Insert or replace
@@ -397,13 +436,23 @@ valueof_int (TABLE tab, CNSTRING key, INT defval)
 STRING
 valueof_str (TABLE tab, CNSTRING key)
 {
-	ENTRY entry;
 	if (!tab->count || !key) return NULL;
-	ASSERT(tab->valtype == TB_STR);
-	if ((entry = fndentry(tab, key)))
-		return entry->uval.w;
-	else
-		return NULL;
+	if (tab->valtype == TB_GENERIC) {
+		/* new-style table, uses generics */
+		ENTRY entry = fndentry(tab, key);
+		ASSERT(tab->whattofree == -2);
+		if (is_generic_string(&entry->generic))
+			return get_generic_string(&entry->generic);
+		else
+			return NULL;
+	} else {
+		ENTRY entry = fndentry(tab, key);
+		ASSERT(tab->valtype == TB_STR);
+		if (entry)
+			return entry->uval.w;
+		else
+			return NULL;
+	}
 }
 /*===================================
  * valueofbool_impl -- Find value of entry
@@ -728,6 +777,7 @@ destroy_table (TABLE tab)
 	the whattofree must have been set, so I plan to revise
 	all code to set it at creation time */
 	ASSERT(tab->whattofree != -1);
+	/* tab->whattofree == -2 for new generic tables */
 	remove_table(tab, tab->whattofree);
 }
 /*=================================================
