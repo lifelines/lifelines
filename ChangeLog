@@ -9,6 +9,10 @@
 
 	Plug some minor, one time per db, leaks.
 
+	* ChangeLog src/gedlib/nodeio.c:
+
+	Plug holes in error returns from string_to_node.
+
 2003-02-10 Perry Rapp
 
 	* ChangeLog src/hdrs/version.h:

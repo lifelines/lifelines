@@ -536,11 +536,11 @@ string_to_node (STRING str)
 	STRING val;
 
 	INT curlev;
-	NODE root, node, curnode;
+	NODE root=NULL, node, curnode;
 	STRING msg;
 	flineno = 0;
 	if (!string_to_line(&str, &lev, &xref, &tag, &val, &msg))
-		return NULL;
+		goto string_to_node_fail;
 	lev0 = curlev = lev;
 	root = curnode = create_node(xref, tag, val, NULL);
 	while (string_to_line(&str, &lev, &xref, &tag, &val, &msg)) {
@@ -557,7 +557,7 @@ string_to_node (STRING str)
 			if (lev < lev0) {
 				llwprintf("Error: line %d: illegal level",
 				    flineno);
-				return NULL;
+				goto string_to_node_fail;
 			}
 			while (lev < curlev) {
 				curnode = nparent(curnode);
@@ -568,10 +568,12 @@ string_to_node (STRING str)
 			curnode = node;
 		} else {
 			llwprintf("Error: line %d: illegal level", flineno);
-			return NULL;
+			goto string_to_node_fail;
 		}
 	}
-	if (!msg) return root;
+	if (!msg)
+		return root;
+string_to_node_fail:
 	free_nodes(root);
 	return NULL;
 }
