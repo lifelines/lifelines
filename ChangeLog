@@ -5,6 +5,10 @@
 	Fix record reference counts in goto_indi_child and 
 	goto_fam_child.
 
+	* ChangeLog src/liflines/browse.c
+
+	Fix bug just introduced in goto_fam_child.
+
 2005-02-10 Perry Rapp
 
 	* ChangeLog src/gedlib/keytonod.c src/gedlib/node.c

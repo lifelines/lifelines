@@ -278,7 +278,7 @@ goto_fam_child (RECORD frec, int childno)
 			akeynum = nzkeynum(chil);
 	ENDCHILDREN
 	if (akeynum) {
-		answer = keynum_to_frecord(akeynum);
+		answer = keynum_to_irecord(akeynum);
 		addref_record(answer);
 	}
 	return answer;
