@@ -1,3 +1,10 @@
+2003-02-06 Perry Rapp
+
+	* ChangeLog src/gedlib/keytonod.c src/hdrs/cache.h
+	src/hdrs/gedcom.h src/liflines/show.c:
+
+	Add lock counts to cache display (for debugging).
+
 2003-02-04 Perry Rapp
 
 	* ChangeLog src/gedlib/keytonod.c src/gedlib/node.c

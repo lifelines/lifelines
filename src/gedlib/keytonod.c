@@ -21,7 +21,6 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
-/* modified 06 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * keytonod.c -- Convert between keys and node trees
  * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
@@ -37,6 +36,7 @@
 #include "cache.h"
 #include "liflines.h"
 #include "feedback.h"
+#include "zstr.h"
 
 /*********************************************
  * global variables (no header)
@@ -50,9 +50,11 @@ int listbadkeys = 0;
  *********************************************/
 
 static void add_record_to_direct(CACHE cache, RECORD rec, STRING key);
+static void cache_get_lock_counts(CACHE ca, INT * locks, INT * semilocks);
 static CACHE create_cache(STRING name, INT dirsize, INT indsize);
 static void delete_cache(CACHE * pcache);
 static void dereference(CACHEEL);
+static ZSTR get_cache_stats(CACHE ca);
 static CACHEEL key_to_cacheel(CACHE cache, CNSTRING key, STRING tag, INT reportmode);
 static CACHEEL key_to_even_cacheel(CNSTRING key);
 static NODE key_typed_to_node(CACHE cache, CNSTRING key, STRING tag);
@@ -884,25 +886,49 @@ unsemilock_cache (CACHEEL cel)
 	csemilock(cel)--;
 }
 /*=========================================
+ * cache_get_lock_counts -- Fill in lock counts
+ *=======================================*/
+static void
+cache_get_lock_counts (CACHE ca, INT * locks, INT * semilocks)
+{
+	CACHEEL cel;
+	for (cel = cfirstdir(ca); cel; cel = cnext(cel)) {
+		if (cclock(cel) && locks) ++(*locks);
+		if (csemilock(cel) && semilocks) ++(*semilocks);
+	}
+}
+/*=========================================
  * get_cache_stats -- Calculate cache stats
  *  returns static buffer
  *=======================================*/
-STRING
-get_cache_stats (void)
+static ZSTR
+get_cache_stats (CACHE ca)
 {
-	static char buffer[64];
-	CACHE c = indicache;
-	CACHE f = famcache;
-	INT nlocks = 0, nsemilocks = 0;
-	CACHEEL cel;
-	for (cel = cfirstdir(c); cel; cel = cnext(cel)) {
-		if (cclock(cel)) nlocks++;
-		if (csemilock(cel)) nsemilocks++;
-	}
-	sprintf(buffer, "Cache contents -- I: %dD %d %dL; %dS; F: %dD  %dI",
-	    csizedir(c), csizeind(c), nlocks, nsemilocks
-			, csizedir(f), csizeind(f));
-	return buffer;
+	ZSTR zstr = zs_new();
+	INT lo=0, slo=0;
+	cache_get_lock_counts(ca, &lo, &slo);
+	zs_appf(zstr
+		, "d:%d/%d (l:%d),i:%d/%d (l:%d)"
+		, csizedir(ca), cmaxdir(ca), lo
+		, csizeind(ca), cmaxind(ca), slo
+		);
+	return zstr;
+}
+/*=========================================
+ * get_cache_stats_indi -- Return indi cache stats
+ *=======================================*/
+ZSTR
+get_cache_stats_indi (void)
+{
+	return get_cache_stats(indicache);
+}
+/*=========================================
+ * get_cache_stats_fam -- Return fam cache stats
+ *=======================================*/
+ZSTR
+get_cache_stats_fam (void)
+{
+	return get_cache_stats(famcache);
 }
 /*============================================
  * indi_to_cache -- Add person to person cache

@@ -946,8 +946,15 @@ show_childnumbers (void)
 void
 display_cache_stats (void)
 {
-	STRING stats = get_cache_stats();
-	msg_info(stats);
+	ZSTR zstr = zs_new();
+	ZSTR zstr_ind = get_cache_stats_indi();
+	ZSTR zstr_fam = get_cache_stats_fam();
+	zs_appf(zstr, _("Cached: I:%s; F:%s")
+		, zs_str(zstr_ind), zs_str(zstr_fam));
+	msg_info(zs_str(zstr));
+	zs_free(&zstr);
+	zs_free(&zstr_ind);
+	zs_free(&zstr_fam);
 }
 /*================================================
  * sh_indi_to_event -- Pass-thru to indi_to_event

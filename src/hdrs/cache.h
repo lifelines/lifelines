@@ -77,9 +77,9 @@ typedef struct {
 #define cfirstind(c) ((c)->c_firstind)
 #define clastind(c)  ((c)->c_lastind)
 #define cmaxdir(c)   ((c)->c_maxdir)
-#define csizeind(c)  ((c)->c_sizeind)
-#define cmaxind(c)   ((c)->c_maxind)
 #define csizedir(c)  ((c)->c_sizedir)
+#define cmaxind(c)   ((c)->c_maxind)
+#define csizeind(c)  ((c)->c_sizeind)
 
 CACHEEL even_to_cacheel(NODE);
 CACHEEL fam_to_cacheel(RECORD frec);
