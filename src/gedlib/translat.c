@@ -64,10 +64,9 @@
 /* alphabetical */
 static XNODE create_xnode(XNODE, INT, STRING);
 static void customlocale(STRING prefix);
+static bfptr custom_translate(TRANTABLE tt, bfptr bfsIn);
 static STRING get_current_locale(INT category);
-#ifdef HAVE_ICONV
-static void iconv_trans(TRANMAPPING ttm, CNSTRING in, bfptr bfs);
-#endif
+static bfptr iconv_trans(TRANMAPPING ttm, bfptr bfsIn);
 static STRING llsetenv(STRING name, STRING value);
 static void notify_gettext_language_changed(void);
 static STRING setmsgs(STRING localename);
@@ -273,47 +272,57 @@ translate_match (TRANTABLE tt, CNSTRING in, CNSTRING * out)
  * Copied from translate_string, except this version
  * uses dynamic buffer, so it can expand if necessary
  *=================================================*/
-void
-translate_string_to_buf (TRANMAPPING ttm, CNSTRING in, bfptr bfs)
+bfptr
+translate_string_to_buf (TRANMAPPING ttm, CNSTRING in)
 {
-	CNSTRING p, q;
-	TRANTABLE tt=0;
-	bfReserve(bfs, (int)(strlen(in)*1.3+2));
-	if (!in) {
-		bfCpy(bfs, NULL);
-		return;
+	TRANTABLE tt = get_trantable_from_tranmapping(ttm);
+	bfptr bfs = bfNew((int)(strlen(in)*1.3+2));
+	bfCpy(bfs, in);
+	if (!in || !ttm) {
+		return bfs;
 	}
-	if (!ttm) {
-		bfCpy(bfs, in);
-		return;
+	if (tt && !ttm->after) {
+		/* custom translation before iconv */
+		bfptr bf2 = custom_translate(tt, bfs);
+		bfDelete(bfs);
+		bfs = bf2;
 	}
-#ifdef HAVE_ICONV
 	if (ttm->iconv_src && ttm->iconv_src[0] 
 		&& ttm->iconv_dest && ttm->iconv_dest[0]) {
-		iconv_trans(ttm, in, bfs);
-		/* TODO: need to decide how to integrate simultaneous iconv & custom transl. */
-		return;
+		bfptr bf2 = iconv_trans(ttm, bfs);
+		bfDelete(bfs);
+		bfs = bf2;
 	}
-#endif
-	tt = get_trantable_from_tranmapping(ttm);
-	if (!tt) {
-		bfCpy(bfs, in);
-		return;
+	if (tt && ttm->after) {
+		/* custom translation after iconv */
+		bfptr bf2 = custom_translate(tt, bfs);
+		bfDelete(bfs);
+		bfs = bf2;
 	}
-	p = q = in;
+	return bfs;
+}
+/*===================================================
+ * custom_translate -- Translate string via custom translation table
+ *  tt:    [IN]  custom translation table
+ *  bfsIn: [IN]  string to be translated
+ * returns translated string
+ *=================================================*/
+static bfptr
+custom_translate (TRANTABLE tt, bfptr bfsIn)
+{
+	bfptr bfsOut = bfNew(bfsIn->size);
+	STRING p = bfsIn->str;
 	while (*p) {
 		CNSTRING tmp;
-		TRANTABLE tt = get_trantable_from_tranmapping(ttm);
 		INT len = translate_match(tt, p, &tmp);
 		if (len) {
 			p += len;
-			bfCat(bfs, tmp);
+			bfCat(bfsOut, tmp);
 		} else {
-			bfCatChar(bfs, *p++);
+			bfCatChar(bfsOut, *p++);
 		}
 	}
-	bfCatChar(bfs, 0);
-	return;
+	return bfsOut;
 }
 /*===================================================
  * iconv_trans -- Translate string via iconv
@@ -322,24 +331,31 @@ translate_string_to_buf (TRANMAPPING ttm, CNSTRING in, bfptr bfs)
  *  bfs:  [I/O]  output buffer
  * Only called if HAVE_ICONV
  *=================================================*/
-#ifdef HAVE_ICONV
-static void
-iconv_trans (TRANMAPPING ttm, CNSTRING in, bfptr bfs)
+static bfptr
+iconv_trans (TRANMAPPING ttm, bfptr bfsIn)
 {
+	bfptr bfsOut = bfNew(bfsIn->size);
+#ifdef HAVE_ICONV
 	/* TODO: Will have to modify this to use with iconv DLL */
 	iconv_t ict = iconv_open(ttm->iconv_dest, ttm->iconv_src);
-	const char * inptr = in;
-	char * outptr=bfStr(bfs);
-	size_t inleft=strlen(in), outleft=bfs->size-1, cvted=0;
+	const char * inptr = bfsIn->str;
+	char * outptr=bfStr(bfsOut);
+	size_t inleft=bfLen(bfsIn);
+	size_t outleft=bfsOut->size-1;
+	size_t cvted=0;
+
 	if (ict == (iconv_t)-1) {
-		bfCpy(bfs, in);
-		return;
+		/* if invalid translation, clear it to avoid trying again */
+		strfree(&ttm->iconv_src);
+		strfree(&ttm->iconv_dest);
+		bfCpy(bfsOut, bfsIn->str);
+		return bfsOut;
 	}
 cvting:
 	cvted = iconv (ict, &inptr, &inleft, &outptr, &outleft);
 	if (cvted == (size_t)-1) {
 		if (!outleft) {
-			bfReserveExtra(bfs, (int)(inleft * 1.3+2));
+			bfReserveExtra(bfsOut, (int)(inleft * 1.3+2));
 			goto cvting;
 		} else {
 			/* invalid multibyte sequence, but we don't know how long, so advance
@@ -350,8 +366,12 @@ cvting:
 	}
 	*outptr=0; /* iconv doesn't zero terminate */
 	iconv_close(ict);
-}
+#else
+	ttm=ttm; /* unused */
+	bfCpy(bfsOut, bfsIn->str);
 #endif /* HAVE_ICONV */
+	return bfsOut;
+}
 /*===================================================
  * translate_string -- Translate string via TRANMAPPING
  *  ttm:   [IN]  tranmapping
@@ -369,10 +389,8 @@ translate_string (TRANMAPPING ttm, CNSTRING in, STRING out, INT max)
 		out[0] = 0;
 		return;
 	}
-	bfs = bfNew((int)(strlen(in)*1.3));
-	translate_string_to_buf(ttm, in, bfs);
-	strncpy(out, bfStr(bfs), max-1);
-	out[max-1]=0;
+	bfs = translate_string_to_buf(ttm, in);
+	llstrncpy(out, bfStr(bfs), max);
 	bfDelete(bfs);
 }
 /*==========================================================

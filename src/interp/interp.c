@@ -49,20 +49,20 @@
  *********************************************/
 
 STRING Pfname = NULL;	/* file to read program from */
-TABLE filetab=0, proctab=0, functab=0;
+static TABLE filetab=0;
+TABLE proctab=0, functab=0;
 SYMTAB globtab; /* assume all zero is null SYMTAB */
-STRING progname = NULL;    /* starting program name */
-FILE *Pinfp  = NULL;       /* file to read program from */
-FILE *Poutfp = NULL;       /* file to write program output to */
-STRING Pinstr = NULL;      /* string to read program from */
-STRING Poutstr = NULL;	  /* string to write program output to */
+STRING progname = NULL;       /* starting program name */
+FILE *Pinfp  = NULL;          /* file to read program from */
+FILE *Poutfp = NULL;          /* file to write program output to */
+STRING Pinstr = NULL;         /* string to read program from */
+STRING Poutstr = NULL;	      /* string to write program output to */
 INT Plineno = 1;
 INT Perrors = 0;
-LIST Plist;                /* list of program files still to read */
-PNODE Pnode = NULL;        /* node being interpreted */
+static LIST Plist = NULL;     /* list of program files still to read */
+PNODE Pnode = NULL;           /* node being interpreted */
 BOOLEAN explicitvars = FALSE; /* all vars must be declared */
 STRING rpt_ccs = 0; /* character encoding for report file */
-STRING ierror = (STRING) "Error: file \"%s\": line %d: ";
 BOOLEAN rpt_cancelled = FALSE;
 
 /*********************************************
@@ -211,6 +211,12 @@ interp_program (STRING proc, INT nargs, VPTR *args, INT nifiles
 	progparsing = TRUE;
 
    /* Parse each file in the list -- don't reparse any file */
+	/* 
+	NB: filename handling is a bit mixed. For the first file on the list,
+	we already 	resolved its path (ask_for_programs did it). For later files
+	added to the list (by handle_include), they are not resolved when they're put
+	on the list. - Perry, 2002.06.18
+	*/
 
 	filetab = create_table();
 	proctab = create_table();
@@ -323,10 +329,12 @@ named in include statements */
 }
 /*======================================+
  * parse_file - Parse single program file
+ *  ifile: [IN]  file to parse
+ *  plist: [I/O] list of files still to parse
+ * Parse file (yyparse may wind up adding entries to plist, via include statements)
  *=====================================*/
 static void
-parse_file (STRING ifile,
-            LIST plist)
+parse_file (STRING ifile, LIST plist)
 {
 	STRING programsdir = getoptstr("LLPROGRAMS", ".");
 	Pfname = ifile;
@@ -1800,6 +1808,24 @@ handle_char_encoding (PNODE node)
 	ASSERT(ptype(pval)==PSTRING); /* grammar only allows strings */
 	ccs = pvalue(pval);
 	set_rptfile_prop(fname, strsave("char_encoding"), strsave(ccs));
+}
+/*=============================================+
+ * handle_include -- report command include("...")
+ * Created: 2002/06/17, Perry Rapp (pulled out of yacc.y)
+ *=============================================*/
+void
+handle_include (PNODE node)
+{
+	STRING fname = ifname(node); /* current file */
+	PVALUE pval = ivalue(node);
+	STRING newfname;
+	ASSERT(ptype(pval)==PSTRING); /* grammar only allows strings */
+	newfname = pvalue(pval);
+	/*
+	If we resolved the path now, we could try relative to the path of the
+	current report, and then fallback to regular programsdir rules.
+	*/
+	enqueue_list(Plist, newfname);
 }
 /*=============================================+
  * handle_require -- report command require("...")

@@ -1728,10 +1728,10 @@ invoke_cset_display (void)
 	LIST list = create_list();
 	char buffer[80];
 	set_list_type(list, LISTDOFREE);
-	if (int_utf8)
-		push_list(list, strsave(_("Internal codeset: UTF-8")));
-	else
-		push_list(list, strsave(_("Internal codeset: 8-bit")));
+
+	snprintf(buffer, sizeof(buffer), "%s: %s", _("Internal codeset")
+		, int_codeset ? int_codeset : "");
+	push_list(list, strsave(buffer));
 
 	if (are_locales_supported())
 		push_list(list, strsave(_("Locales are enabled.")));
@@ -1766,6 +1766,22 @@ invoke_cset_display (void)
 		, get_current_locale_msgs());
 	push_list(list, strsave(buffer));
 	
+	snprintf(buffer, sizeof(buffer), _("GUI codeset: %s")
+		, getoptstr("GuiCodeset",""));
+	push_list(list, strsave(buffer));
+
+	snprintf(buffer, sizeof(buffer), _("Editor codeset: %s")
+		, getoptstr("EditorCodeset",""));
+	push_list(list, strsave(buffer));
+
+	snprintf(buffer, sizeof(buffer), _("Report codeset: %s")
+		, getoptstr("ReportCodeset",""));
+	push_list(list, strsave(buffer));
+
+	snprintf(buffer, sizeof(buffer), _("GEDCOM codeset: %s")
+		, getoptstr("GedcomCodeset",""));
+	push_list(list, strsave(buffer));
+
 	display_list(_("Codeset information"), list);
 	make_list_empty(list);
 	remove_list(list, 0);
@@ -2060,9 +2076,10 @@ invoke_extra_menu (void)
 static STRING
 uopt_validate (TABLE tab)
 {
-	if (int_utf8 != get_utf8_from_uopts(tab)
-		&& num_indis()+num_fams()+num_sours()+num_evens()+num_othrs()) {
-		return _("Impermissible to change codeset to/from UTF-8 in a populated database");
+	STRING codeset = valueof_str(tab, "codeset");
+	if (!eqstr_ex(codeset, int_codeset)) {
+		if (num_indis()+num_fams()+num_sours()+num_evens()+num_othrs())
+			return _("Impermissible to change codeset in a populated database");
 	}
 	return 0;
 }

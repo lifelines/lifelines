@@ -9,7 +9,7 @@ AC_PREREQ(2.50)
 AC_REVISION([for lifelines, built with autoconf] AC_ACVERSION)
 AC_CANONICAL_HOST
 
-AM_INIT_AUTOMAKE(lifelines, 3.0.16)
+AM_INIT_AUTOMAKE(lifelines, 3.0.16p1)
 AM_CONFIG_HEADER(config.h)
 
 AC_PREFIX_DEFAULT($HOME)

@@ -400,14 +400,14 @@ void
 poutput (STRING str, BOOLEAN *eflg)
 {
 	STRING p;
-	static struct Buffer_s bfdata, *bfs = &bfdata; /* static init to all zeros is ok */
+	bfptr bfs = 0;
 	INT c, len;
 	TRANMAPPING ttmr = get_tranmapping(MINRP);
 	if (!str || (len = strlen(str)) <= 0) return;
-	bfCpy(bfs, "");
-	translate_string_to_buf(ttmr, str, bfs);
+	bfs = translate_string_to_buf(ttmr, str);
 	str = bfStr(bfs);
-	if ((len = strlen(str)) <= 0) return;
+	if ((len = strlen(str)) <= 0)
+		goto exit_poutput;
 	if (!Poutfp) {
 		if (!request_file(eflg))
 			goto exit_poutput;
@@ -459,7 +459,7 @@ poutput (STRING str, BOOLEAN *eflg)
 		FATAL();
 	}
 exit_poutput:
-	return; /* no longer need unified output */
+	bfDelete(bfs);
 }
 /*==================================================+
  * adjust_cols -- Adjust column after printing string

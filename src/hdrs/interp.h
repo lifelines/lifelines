@@ -345,6 +345,7 @@ void free_all_pnodes(void);
 void free_pnode_tree(PNODE);
 PNODE func_node(STRING, PNODE);
 void handle_char_encoding(PNODE node);
+void handle_include(PNODE node);
 void handle_global(STRING iden);
 void handle_option(PVALUE optval);
 void handle_require(PNODE node);

@@ -36,7 +36,8 @@
 /*********************************************
  * global/exported variables
  *********************************************/
-BOOLEAN int_utf8=0;        /* This is the internal codeset, not the user's. */
+BOOLEAN int_utf8=0;         /* This is the internal codeset, not the user's. */
+STRING  int_codeset=0;      /* This is the internal codeset, not the user's. */
 
 /*********************************************
  * external/imported variables
@@ -589,5 +590,24 @@ free_array_strings (INT n, STRING * arr)
 	for (i=0; i<n; ++i)
 	{
 		strfree(&arr[i]); /* frees & zeros pointer */
+	}
+}
+/*===============================
+ * eqstr_ex -- Are two strings equal ?
+ *  This is just eqstr extended to handle empty or null strings
+ *=============================*/
+BOOLEAN
+eqstr_ex (STRING s1, STRING s2)
+{
+	if (!s1 || !s1[0]) {
+		if (!s2 || !s2[0])
+			return TRUE;
+		else
+			return FALSE;
+	} else {
+		if (!s2 || !s2[0])
+			return FALSE;
+		else
+			return eqstr(s1, s2);
 	}
 }

@@ -79,7 +79,6 @@ STRING badargx     = 0;
  * external/imported variables
  *********************************************/
 
-extern STRING ierror;
 extern STRING Pfname;
 
 
@@ -629,7 +628,7 @@ func_node (STRING name, PNODE elist)
 	if (found) {
 		if ((n = num_params(elist)) < builtins[md].ft_nparms_min
 		    || n > builtins[md].ft_nparms_max) {
-			llwprintf(ierror, Pfname, Plineno);
+			llwprintf(_("Error: file \"%s\": line %d: "), Pfname, Plineno);
 			llwprintf("%s: must have %d to %d parameters (found with %d).\n"
 				, name, builtins[md].ft_nparms_min, builtins[md].ft_nparms_max
 				, n);

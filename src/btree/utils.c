@@ -55,7 +55,7 @@ rkey2str (RKEY rkey)
  * str2rkey -- Convert STRING to record key
  *=======================================*/
 RKEY
-str2rkey (STRING str)
+str2rkey (CNSTRING str)
 {
 	RKEY rkey;
 	SHORT i = 0, n = strlen(str);

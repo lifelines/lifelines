@@ -37,6 +37,7 @@
 
 /* This is not the user's codeset! This is the current internal codeset. */
 extern BOOLEAN int_utf8;
+extern STRING  int_codeset;
 
 
 /* assert.c */
@@ -102,13 +103,13 @@ char * dcngettext_null(const char *, const char *, const char *, unsigned long i
 /* path.c */
 STRING check_file_for_unicode(FILE * fp);
 INT chop_path(STRING path, STRING dirs);
-STRING compress_path(STRING path, INT len);
+STRING compress_path(CNSTRING path, INT len);
 STRING concat_path(CNSTRING dir, CNSTRING file);
 STRING filepath(CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING ext);
 FILE* fopenpath(STRING, STRING, STRING, STRING, STRING*);
 BOOLEAN is_dir_sep(char c);
 BOOLEAN is_path_sep(char c);
-STRING lastpathname(STRING);
+STRING lastpathname(CNSTRING);
 INT path_cmp(CNSTRING path1, CNSTRING path2);
 BOOLEAN path_match(CNSTRING path1, CNSTRING path2);
 
@@ -121,6 +122,7 @@ BOOLEAN allwhite(STRING);
 STRING capitalize(STRING);
 INT chartype(INT);
 void chomp(STRING);
+BOOLEAN eqstr_ex(STRING s1, STRING s2);
 STRING find_prev_char(STRING ptr, INT * width, STRING limit);
 void free_array_strings(INT n, STRING * arr);
 BOOLEAN isletter(INT);

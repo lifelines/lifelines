@@ -256,15 +256,19 @@ fopenpath (STRING name,
 }
 /*=================================================
  * lastpathname -- Return last component of a path
+ * returns static buffer
+ * (This returns a copy because if input was "xx/yy/"
+ *  return is "yy")
  *===============================================*/
 STRING
-lastpathname (STRING path)
+lastpathname (CNSTRING path)
 {
 	static char scratch[MAXLINELEN+1];
 	INT len, c;
 	STRING p = scratch, q;
 	if (ISNULL(path)) return NULL;
 	len = strlen(path);
+	ASSERT(len < (INT)sizeof(scratch));
 	strcpy(p, path);
 	if (is_dir_sep(p[len-1])) {
 		len--;
@@ -284,7 +288,7 @@ lastpathname (STRING path)
  * Created: 2001/12/22 (Perry Rapp)
  *======================================*/
 STRING
-compress_path (STRING path, INT len)
+compress_path (CNSTRING path, INT len)
 {
 	static char buf[120];
 	INT pathlen = strlen(path);
@@ -304,8 +308,8 @@ compress_path (STRING path, INT len)
 /*========================================================================
  * check_file_for_unicode -- Check for BOM (byte order mark) bytes
  *  return descriptive string if found, or 0 if not
+ *  eg, "UTF-8", or "UTF-16LE or UTF-32LE"
  *  return "?" if invalid BOM 
- * Currently we don't handle any unicode except UTF-8)
  * If found, advance file pointer past BOM.
  * It would be nice if someone clever made this less messy.
  *======================================================================*/

@@ -177,7 +177,7 @@ void traverse_db_rec_rkeys(BTREE, RKEY lo, RKEY hi, BOOLEAN(*func)(RKEY, STRING,
 
 /* utils.c */
 STRING rkey2str(RKEY);
-RKEY   str2rkey(STRING);
+RKEY   str2rkey(CNSTRING);
 STRING fkey2path(FKEY);
 
 extern INT bterrno;
@@ -200,6 +200,7 @@ enum {
 , BTERR_VERKF             /* wrong version key file */
 , BTERR_EXISTS            /* previous database found (create was specified) */
 , BTERR_READERS           /* db locked by readers (string in custom string) */
+, BTERR_BADPROPS          /* new db properties invalid */
 
 };
 

@@ -42,7 +42,8 @@
  * global/exported variables
  *********************************************/
 
-struct tranmapping_s tran_maps[NUM_TT_MAPS]; /* init'd by init_mapping */
+struct tranmapping_s tran_maps[NUM_TT_MAPS]; /* init'd by init_charmaps */
+static charmaps_inited=0;
 
 char *map_keys[NUM_TT_MAPS] = {
 	"MEDIN", "MINED", "MGDIN", "MINGD",
@@ -66,9 +67,11 @@ extern STRING qSbaddec,qSbadhex,qSnorplc,qSbadesc,qSnoorig,qSmaperr;
  *********************************************/
 
 /* alphabetical */
+static void init_charmaps_if_needed(void);
 static BOOLEAN init_map_from_rec(INT, TRANTABLE*);
 static BOOLEAN init_map_from_str(STRING, INT, TRANTABLE*);
 static void maperror(INT index, INT entry, INT line, STRING errmsg);
+static void set_zone_conversion(STRING optname, INT toint, INT fromint);
 
 /*********************************************
  * local variables
@@ -94,21 +97,81 @@ static char *map_names[] = {
  * body of module
  *********************************************/
 
+
 /*========================================
- * init_mapping -- Init translation tables
+ * init_charmaps_if_needed -- one time initialization
  *======================================*/
-void
-init_mapping (void)
+static void
+init_charmaps_if_needed (void)
 {
-	INT indx=-1;
-	char option_name[64];
-	STRING str=0;
 	/* Check that all tables have all entries */
 	ASSERT(NUM_TT_MAPS == ARRSIZE(tran_maps));
 	ASSERT(NUM_TT_MAPS == ARRSIZE(map_names));
 	ASSERT(NUM_TT_MAPS == ARRSIZE(map_keys));
 
 	memset(&tran_maps, 0, sizeof(tran_maps));
+}
+/*========================================
+ * load_global_char_mapping -- load char mapping info
+ *  that is independent of the database
+ *======================================*/
+void
+load_global_char_mapping (void)
+{
+	INT indx=-1;
+
+	init_charmaps_if_needed();
+
+	/* clear all translations */
+	for (indx = 0; indx < NUM_TT_MAPS; indx++) {
+		TRANMAPPING ttm = &tran_maps[indx];
+		strfree(&ttm->iconv_src);
+		strfree(&ttm->iconv_dest);
+	}
+
+	/* no translations without internal codeset */
+	if (!int_codeset || !int_codeset[0])
+		return;
+
+	set_zone_conversion("GuiCodeset", MDSIN, MINDS);
+	set_zone_conversion("EditorCodeset", MEDIN, MINED);
+	set_zone_conversion("GedcomCodeset", MGDIN, MINGD);
+	set_zone_conversion("ReportCodeset", -1, MINRP);
+}
+/*========================================
+ * set_zone_conversion -- Set conversions for one zone
+ *  based on user codeset option (if found)
+ * zones are GUI, Editor, GEDCOM, and report
+ * but we rely on caller to know the zones
+ *======================================*/
+static void
+set_zone_conversion (STRING optname, INT toint, INT fromint)
+{
+	STRING extcs = getoptstr(optname, "");
+	if (!extcs || !extcs[0] || !int_codeset || !int_codeset[0])
+		return;
+	if (toint >= 0) {
+		tran_maps[toint].iconv_src = strdup(extcs);
+		tran_maps[toint].iconv_dest = strdup(int_codeset);
+		tran_maps[toint].after = TRUE;
+	}
+	if (fromint >= 0) {
+		tran_maps[fromint].iconv_src = strdup(int_codeset);
+		tran_maps[fromint].iconv_dest = strdup(extcs);
+		tran_maps[toint].after = FALSE;
+	}
+}
+/*========================================
+ * load_db_char_mapping -- load db specific part of char mapping
+ *  This is the optional translation tables stored in the database
+ *======================================*/
+void
+load_db_char_mapping (void)
+{
+	INT indx=-1;
+
+	init_charmaps_if_needed();
+
 	for (indx = 0; indx < NUM_TT_MAPS; indx++) {
 		TRANMAPPING ttm = &tran_maps[indx];
 		TRANTABLE * tt = &ttm->trantbl;
@@ -116,15 +179,8 @@ init_mapping (void)
 			msg_error("Error initializing %s map.\n"
 				, map_names[indx]);
 		}
-		snprintf(option_name, sizeof(option_name), "Iconv.%s.src", map_keys[indx]);
-		if ((str = getoptstr(option_name, 0)) != 0) {
-			ttm->iconv_src = strdup(str);
-			snprintf(option_name, sizeof(option_name), "Iconv.%s.dest", map_keys[indx]);
-			if ((str = getoptstr(option_name, 0)) != 0) {
-				ttm->iconv_dest = strdup(str);
-			}
-		}
 	}
+	load_global_char_mapping();
 }
 /*========================================
  * get_trantable -- Access into the custom translation tables

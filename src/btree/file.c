@@ -75,7 +75,7 @@ addtextfile (BTREE btree, RKEY rkey, STRING file, TRANSLFNC translfnc)
 	return addfile_impl(btree, rkey, file, LLREADTEXT, translfnc);
 }
 /*=========================================
- * addfile -- Add record to btree from file
+ * addfile_impl -- Add record to btree from file
  *  btree:  [in] btree to add to
  *  rkey:   [in] key of new record
  *  file:   [in] file with new record

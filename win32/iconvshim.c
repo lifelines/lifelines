@@ -71,7 +71,7 @@ ICONVDECL iconv_t
 iconv_open (const char* tocode, const char* fromcode)
 {
 	if (!load_dll() || !f_iconv_fncs.iconv_open_x)
-		return 0;
+		return (iconv_t)-1;
 	return (*f_iconv_fncs.iconv_open_x)(tocode, fromcode);
 }
 
@@ -141,7 +141,7 @@ MyGetProcAddress (HMODULE hModule, LPCSTR lpProcName)
 		return 0;
 	lstrcpy(buffer, prefix);
 	lstrcat(buffer, lpProcName);
-	proc = GetProcAddress(hModule, lpProcName);
+	proc = GetProcAddress(hModule, buffer);
 	if (proc)
 		return proc;
 	return 0;

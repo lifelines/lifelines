@@ -1,5 +1,5 @@
 LifeLines installation for Windows
-  Edited: 2002/05/01 by Perry Rapp
+  Edited: 2002/06/18 by Perry Rapp
 
 1)
 Choose & create your directories, eg:
@@ -15,38 +15,28 @@ Place the LifeLines program (Lines.exe) &
  configuration file (lines.cfg) into the
  program directory (eg, \Program Files\LifeLines)
 
-3a)
-If you are on MS-Windows, check the web page to see
-if there is an appropriate zip of translation tables
-for your system codepages.
+3)
+Unzip the translation files under the program directory
+(eg, you get \Program Files\LifeLines\sv\LC_MESSAGES\lifelines.mo)
 
-If so, download & install the *.tt files into
-\My Documents\LifeLines\ttref
+4a)
+Edit lines.cfg and adjust your codepages as appropriate
+(Edit the entries GuiCodeset, EditorCodeset, ReportCodeset, and GedcomCodset)
 
-Note that if you plan to use a UTF-8 editor (and notepad
-under MS-Windows 2000 will function as a UTF-8 editor),
-you do not need four translation tables, but only two --
-just the two for translating display & input (in the
-console mode window).
+4b)
+Enable the UTF-8 setting in your lines.cfg
+(Edit the entry NewDbProps)
 
-(This step may be omitted if you only plan to use ascii data,
-but you should come back & do this before you start dealing
-with non-ascii data.)
+5)
+Optionally install any translation tables (eg, to allow you to enter
+letters that your editor will not create). Translation tables are still
+undergoing development, and more instructions will be added later.
 
-3b)
-Unzip the translations into subdirectories beneath the directory of
-step (2) (eg, \Program Files\LifeLines), so that you will wind up with,
-eg, \Program Files\LifeLines\sv\LC_MESSAGES\lifelines.mo
-for the Swedish translation message catalog.
-This will be used if (1) you have an environment variable set,
-or (2) you set an option in the configuration file like so:
-UiLocale=sv
-
-4)
+6)
 Edit the configuration file (lines.cfg) to reflect your
  directory choices from step (1)
 
-5)
+7)
 In a windows explorer window (eg, right-click on 
  My Computer and choose Explore), browse to your program
  directory of step (2) (eg, \Program Files\LifeLines),
@@ -56,7 +46,7 @@ In a windows explorer window (eg, right-click on
  right-click and choose Paste Shortcut. This is your
  desktop shortcut to run the program.
 
-6)
+8)
 Right-click on the new shortcut icon on your desktop,
 and choose Rename. Adjust the name as you like
 (eg, to LifeLines).

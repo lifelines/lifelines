@@ -71,6 +71,7 @@ static void add_dbs_to_list(LIST dblist, LIST dbdesclist, STRING dir);
 static STRING getdbdesc(STRING path);
 static void init_win32_gettext_shim(void);
 static void init_win32_iconv_shim(void);
+static void update_db_options(void);
 
 /*********************************************
  * local variables
@@ -117,7 +118,7 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 
 #if ENABLE_NLS
 
-	e = getoptstr("GuiOutputCharset", "");
+	e = getoptstr("GuiCodeset", "");
 	if (e && *e)
 		bind_textdomain_codeset(PACKAGE, e);
 	e = getoptstr("LocaleDir", "");
@@ -228,7 +229,7 @@ init_lifelines_db (void)
 	set_db_options(dbopts);
 	init_caches();
 	init_browse_lists();
-	init_mapping();
+	load_db_char_mapping();
 	if (!openxref(readonly))
 		return FALSE;
 	return TRUE;
@@ -442,6 +443,19 @@ open_database (BOOLEAN alteration, STRING dbrequested, STRING dbused)
 BOOLEAN
 create_database (STRING dbrequested, STRING dbused)
 {
+	/* first test that newdb props are legal */
+	STRING props = getoptstr("NewDbProps", 0);
+	if (props && props[0]) {
+		TABLE dbopts = create_table();
+		STRING msg=0;
+		if (!init_valtab_from_string(props, dbopts, '=', &msg)) {
+			bterrno = BTERR_BADPROPS;
+			remove_table(dbopts, FREEBOTH);
+			return FALSE;
+		}
+		remove_table(dbopts, FREEBOTH);
+	}
+
 	/* tentatively copy paths into gedlib module versions */
 	btreepath=strsave(dbrequested);
 	readpath=strsave(dbused);
@@ -456,6 +470,7 @@ create_database (STRING dbrequested, STRING dbused)
 		return FALSE;
 	}
 	initxref();
+	store_record("VUOPT", props, strlen(props));
 	return TRUE;
 }
 /*===================================================
@@ -467,81 +482,76 @@ create_database (STRING dbrequested, STRING dbused)
 void
 describe_dberror (INT dberr, STRING buffer, INT buflen)
 {
-	char localbuff[128];
-	STRING ptr = buffer;
-	STRING msg;
-	INT mylen = buflen;
-
 	if (dberr != BTERR_WRITER)
-		llstrcatn(&ptr, "Database error -- ", &mylen);
+		llstrncpy(buffer, _("Database error: -- "), buflen);
 
 	switch (dberr) {
 	case BTERR_NODB:
-		msg = "requested database does not exist.";
+		llstrapp(buffer, buflen, _("requested database does not exist."));
 		break;
 	case BTERR_DBBLOCKEDBYFILE:
-		msg = "db directory is file, not directory.";
+		llstrapp(buffer, buflen, _("db directory is file, not directory."));
 		break;
 	case BTERR_DBCREATEFAILED:
-		msg = "creation of new database failed.";
+		llstrapp(buffer, buflen, _("creation of new database failed."));
 		break;
 	case BTERR_DBACCESS:
-		msg = "error accessing database directory.";
+		llstrapp(buffer, buflen, _("error accessing database directory."));
 		break;
 	case BTERR_NOKEY:
-		msg = "no keyfile (directory does not appear to be a database.";
+		llstrapp(buffer, buflen, _("no keyfile (directory does not appear to be a database)."));
 		break;
 	case BTERR_INDEX:
-		msg = "could not open, read or write an index file.";
+		llstrapp(buffer, buflen,  _("could not open, read or write an index file."));
 		break;
 	case BTERR_KFILE:
-		msg = "could not open, read or write the key file.";
+		llstrapp(buffer, buflen,  _("could not open, read or write the key file."));
 		break;
 	case BTERR_BLOCK:
-		msg = "could not open, read or write a block file.";
+		llstrapp(buffer, buflen,  _("could not open, read or write a block file."));
 		break;
 	case BTERR_LNGDIR:
-		msg = "name of database is too long.";
+		llstrapp(buffer, buflen,  _("name of database is too long."));
 		break;
 	case BTERR_WRITER:
-		msg = "The database is already open for writing.";
+		llstrapp(buffer, buflen,  _("The database is already open for writing."));
 		break;
 	case BTERR_LOCKED:
-		msg = "The database is locked (no readwrite access).";
+		llstrapp(buffer, buflen,  _("The database is locked (no readwrite access)."));
 		break;
 	case BTERR_ILLEGKF:
-		msg = "keyfile is corrupt.";
+		llstrapp(buffer, buflen,  _("keyfile is corrupt."));
 		break;
 	case BTERR_ALIGNKF:
-		msg = "keyfile is wrong alignment.";
+		llstrapp(buffer, buflen,  _("keyfile is wrong alignment."));
 		break;
 	case BTERR_VERKF:
-		msg = "keyfile is wrong version.";
+		llstrapp(buffer, buflen,  _("keyfile is wrong version."));
 		break;
 	case BTERR_EXISTS:
-		msg = "Existing database found.";
+		llstrapp(buffer, buflen,  _("Existing database found."));
 		break;
 	case BTERR_READERS:
-		sprintf(localbuff
-			, "The database is already opened for read access by %d users.\n  "
+		llstrappf(buffer, buflen
+			, _("The database is already opened for read access by %d users.\n  ")
 			, rdr_count);
-		msg = localbuff;
+		break;
+	case BTERR_BADPROPS:
+		llstrapp(buffer, buflen,  _("Invalid properties set for new database"));
 		break;
 	default:
-		msg = "Undefined database error -- This can't happen.";
+		llstrapp(buffer, buflen,  _("Undefined database error -- fix program."));
 		break;
 	}
-	llstrcatn(&ptr, msg, &mylen);
 }
 /*===================================================
- * get_utf8_from_uopts -- Is UTF-8 option set in this option table ?
- * (This may not be the active global options table.)
+ * is_codeset_utf8 -- Is this the name of UTF-8 ?
  *=================================================*/
 BOOLEAN
-get_utf8_from_uopts (TABLE opttab)
+is_codeset_utf8 (STRING codename)
 {
-	STRING str = valueof_str(opttab, "codeset");
-	if (str && (eqstr("UTF-8", str)||eqstr("utf-8", str)||eqstr("65001", str)))
+	if (!codename || !codename[0]) return FALSE;
+	if (eqstr("UTF-8", codename)||eqstr("utf-8", codename)||eqstr("65001", codename))
 		return TRUE;
 	return FALSE;
 }
@@ -552,11 +562,26 @@ get_utf8_from_uopts (TABLE opttab)
 void
 update_useropts (void)
 {
-	TABLE opttab = create_table();
-	get_db_options(opttab);
-	int_utf8 = get_utf8_from_uopts(opttab);
-	remove_table(opttab, FREEBOTH);
+	update_db_options(); /* deal with db-specific options */
 	uilocale(); /* in case user changed locale */
+	load_global_char_mapping(); /* in case user changed codesets */
+}
+/*==================================================
+ * update_db_options -- 
+ *  check database-specific options for updates
+ *================================================*/
+static void
+update_db_options (void)
+{
+	TABLE opttab = create_table();
+	STRING str=0;
+	get_db_options(opttab);
+
+	strfree(&int_codeset);
+	int_codeset = strdup(valueof_str(opttab, "codeset"));
+	int_utf8 = is_codeset_utf8(int_codeset);
+	
+	remove_table(opttab, FREEBOTH);
 }
 /*==================================================
  * get_dblist -- find all dbs on path

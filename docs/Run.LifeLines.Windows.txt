@@ -1,5 +1,5 @@
 Running LifeLines for Windows
-  Edited: 2001/12/31 by Perry Rapp
+  Edited: 2002/06/18 by Perry Rapp
 
 (This presumes you have installed it, per the
 Install.LifeLines.Windows.txt document)
@@ -27,56 +27,6 @@ course you should not do this whilst you have
 that database open in LifeLines.
 
 3)
-At this point it would be good to load translation
-tables so as to use UTF-8 Unicode internally.
-However, we only have a limited set of translation
-tables prepared at the current time (as mentioned in
-the installation notes). If you installed
-an appropriate set, then now you may load them
-manually into your new database. 
-
-For the US English Windows (codepges 437 & 1252):
-
-From the main menu, choose c (character sets), 
-then t (translation tables), then l (load),
-then "Editor to Internal", then enter the filename
-1252-u.tt
-Then choose l (load), then "Internal to Editor",
-then enter the filename u-1252.tt
-Then choose l (load), then "Internal to Display",
-then enter the filename u-437.tt
-Then choose l (load), then "Display to Internal",
-then enter the filename 437-u.tt
-
-For Central European Latin script Windows (codepages 852 & 1250)
-
-From the main menu, choose c (character sets), 
-then t (translation tables), then l (load),
-then "Editor to Internal", then enter the filename
-1250-u.tt
-Then choose l (load), then "Internal to Editor",
-then enter the filename u-1250.tt
-Then choose l (load), then "Internal to Display",
-then enter the filename u-852.tt
-Then choose l (load), then "Display to Internal",
-then enter the filename 852-u.tt
-
-This use of UTF-8 Unicode for internal data storage
-will not have any affect on your ascii data (UTF-8 
-stores ascii as ascii), so it will not come into play
-until you start entering non-ascii data, or import
-some.
-
-This is an area of LifeLines still under development,
-and needs to be documented better in the manual, so
-please submit questions to the list if you are dealing
-with non-ascii data and have problems.
-
-(This step may be omitted if you only plan to use ascii data,
-but you should come back & do this before you start dealing
-with non-ascii data.)
-
-4)
 At this point, your best course of action is to
 connect to the Internet, browse to the LifeLines
 home page, and begin reading the LifeLines 3.0.7
@@ -96,7 +46,7 @@ You may also download a copy of the manual -- see
 the documentation links near the upper right-hand
 corner of the home page (http://lifelines.sourceforge.net).
 
-5)
+4)
 When adding a new record (eg, a new person to the 
 database), LifeLines will cause Notepad to appear.
 Enter your information in Notepad -- the following
@@ -115,8 +65,8 @@ asking whether or not you really wish to add the new
 person. Normally you respond y and add your new
 person.
 
-6)
-Note on menu items: LifeLines 3.0.7 has significantly
+5)
+Note on menu items: LifeLines 3.0.16 has significantly
 more menu choices in many screens than were present in
 LifeLines 3.0.2. Many screens cannot fit all choices
 on screen at one time. If you see the choice
@@ -134,7 +84,7 @@ such as
 to tell you that you are viewing the first page of 
 three pages of menu choices for the current screen.
 
-7) 
+6) 
 If you wish to change the colors in the console window
 (the "dos" window), here is how. (This is actually not
 part of LifeLines, but is general DOS on Windows trivia).

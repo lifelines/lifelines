@@ -46,7 +46,7 @@ INT display_list(STRING ttl, LIST list);
 void view_array(STRING ttl, INT no, STRING *pstrngs);
 
 /* from askprogram.c */
-FILE *ask_for_program (STRING mode, STRING ttl, STRING *pfname, STRING path
+FILE *ask_for_program(STRING mode, STRING ttl, STRING *pfname, STRING path
 	, STRING ext, BOOLEAN picklist);
 
 #endif /* _LIFLINES_H */

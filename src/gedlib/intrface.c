@@ -40,7 +40,7 @@ extern BTREE BTR;
  *  plen: [out] length of record returned
  *===============================================*/
 STRING
-retrieve_raw_record (STRING key, INT *plen)
+retrieve_raw_record (CNSTRING key, INT *plen)
 {
 	return getrecord(BTR, str2rkey(key), plen);
 }

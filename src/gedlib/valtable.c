@@ -35,21 +35,19 @@
 #include "gedcom.h"
 #include "bfs.h"
 
-static BOOLEAN init_valtab_from_string(STRING, TABLE, INT, STRING*);
-
 /*=====================================================
  * init_valtab_from_rec -- Init value table from record
- *  key:   [in] record key (in db)
- *  tab:   [in,out] hash table (values are strings)
- *  sep:   [in] separator char in each line between key & value
- *  pmsg:  [out] error message
+ *  key:   [IN]  record key (in db)
+ *  tab:   [I/O] hash table (values are strings)
+ *  sep:   [IN]  separator char in each line between key & value
+ *  pmsg:  [OUT] error message
  * Reads record from db, parses it into key/value strings
  * and inserts them into hash table provided (tab).
  * Do not need to translate, as record & table both kept
  * in internal format.
  *===================================================*/
 BOOLEAN
-init_valtab_from_rec (STRING key, TABLE tab, INT sep, STRING *pmsg)
+init_valtab_from_rec (CNSTRING key, TABLE tab, INT sep, STRING *pmsg)
 {
 	INT len;
 	STRING rawrec;
@@ -76,7 +74,7 @@ init_valtab_from_file (STRING fname, TABLE tab, TRANMAPPING ttm, INT sep, STRING
 	STRING str;
 	BOOLEAN rc;
 	INT siz;
-	bfptr bfs = bfNew(0);
+	bfptr bfs = 0;
 
 	if ((fp = fopen(fname, LLREADTEXT)) == NULL) return TRUE;
 	ASSERT(fstat(fileno(fp), &buf) == 0);
@@ -91,7 +89,7 @@ init_valtab_from_file (STRING fname, TABLE tab, TRANMAPPING ttm, INT sep, STRING
 	/* may not read full buffer on Windows due to CR/LF translation */
 	ASSERT(siz == buf.st_size || feof(fp));
 	fclose(fp);
-	translate_string_to_buf(ttm, str, bfs);
+	bfs = translate_string_to_buf(ttm, str);
 	stdfree(str); /* done with original record - we use translated record */
  	rc = init_valtab_from_string(bfStr(bfs), tab, sep, pmsg);
 	bfDelete(bfs);
@@ -99,10 +97,10 @@ init_valtab_from_file (STRING fname, TABLE tab, TRANMAPPING ttm, INT sep, STRING
 }
 /*========================================================
  * init_valtab_from_string -- Init value table from string
- *  str:     [in,modified] string holding all value/values
- *  tab:     [in,out] table in which to put key/value pairs
- *  sep:     [in] separator char
- *  pmsg:    [out] error message (set if returns FALSE)
+ *  str:     [IN]  string holding all value/values
+ *  tab:     [I/O] table in which to put key/value pairs
+ *  sep:     [IN]  separator between name & value
+ *  pmsg:    [OUT] error message (set if returns FALSE)
  *            pmsg points to static buffer
  * eg, "PA:Pennsylvania\nVA:Virginia"
  *  could be passed as str, with sep of :
@@ -110,10 +108,12 @@ init_valtab_from_file (STRING fname, TABLE tab, TRANMAPPING ttm, INT sep, STRING
  *  pairs inside str are always separated by \n
  *  sep is the separator between key & value
  *======================================================*/
-static BOOLEAN
-init_valtab_from_string (STRING str, TABLE tab, INT sep, STRING *pmsg)
+BOOLEAN
+init_valtab_from_string (CNSTRING str, TABLE tab, INT sep, STRING *pmsg)
 {
-	STRING tag, val, q, p = str;
+	STRING tag, val, q;
+	STRING strsrc = strdup(str);
+	STRING p = strsrc;
 	INT c;
 	static char errmsg[80];
 	INT n = 1;
@@ -130,7 +130,7 @@ init_valtab_from_string (STRING str, TABLE tab, INT sep, STRING *pmsg)
 		if (c == 0 || c =='\n') {
 			sprintf(errmsg, "line %d: no value", n);
 			*pmsg = errmsg;
-			return FALSE;
+			goto endinitvaltab;
 		}
 		*(q - 1) = 0;
 		striptrail(tag);
@@ -156,5 +156,8 @@ init_valtab_from_string (STRING str, TABLE tab, INT sep, STRING *pmsg)
 		insert_table_str(tab, strsave(tag), strsave(val));
 		if (c == 0) break;
 	}
-	return TRUE;
+
+endinitvaltab:
+	stdfree(strsrc);
+	return (*pmsg == 0);
 }

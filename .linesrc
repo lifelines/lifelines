@@ -4,7 +4,7 @@
 # As are blank lines
 # So all these lines are commented out...
 #
-# 2002/06/16
+# 2002/06/18
 #
 # All variables here are available to report programs
 # via the report language function getproperty, so, for
@@ -158,12 +158,25 @@
 #RptLocaleCollate=en
 # Default is normal deduction from environment
 
-# Charset for output to GUI
+# Coded charset name for GUI use
 # This is a libiconv charset name
 # And this is passed to gettext (libintl)
 # Default is none
-#GuiOutputCharset=ASCII//TRANSLIT
+#GuiCodeset=8859-1
 # NB: Do not append //TRANSLIT unless gettext-0.11.3-pre2 or better
+# Default is none
+
+# Coded charset name for editor use
+#EditorCodeset=8859-1
+# Default is none
+
+# Coded charset name for report output
+#ReportCodeset=8859-1
+# Default is none
+
+# Coded charset name for reading & writing GEDCOm files
+#GedcomCodeset=8859-1
+# Default is none
 
 # For systems experiencing faulty screen erases (eg, RedHat Linux)
 #ForceScreenErase=1

@@ -47,7 +47,6 @@
 
 extern TABLE proctab, functab;
 static PNODE this, prev;
-extern LIST Plist;
 INT Yival;
 FLOAT Yfval;
 
@@ -77,7 +76,7 @@ defn 	:	proc
 		}
 	|	IDEN '(' SCONS ')' {
 			if (eqstr("include", (STRING) $1))
-				enqueue_list(Plist, pvalue((PVALUE) ivalue((PNODE) $3)));
+				handle_include((PNODE) $3);
 			if (eqstr("option", (STRING) $1))
 				handle_option(ivalue((PNODE) $3));
 			if (eqstr("char_encoding", (STRING) $1))

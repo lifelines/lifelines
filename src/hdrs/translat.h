@@ -59,6 +59,7 @@ typedef struct tranmapping_s {
 	TRANTABLE trantbl;
 	STRING iconv_src;
 	STRING iconv_dest;
+	BOOLEAN after; /* do custom transtable after iconv ? */
 } *TRANMAPPING;
 
 /* forward declaration - real declaration in bfs.h */
@@ -81,7 +82,7 @@ void remove_xnodes(XNODE);
 void set_trantable(INT ttnum, TRANTABLE tt);
 void translate_catn(TRANMAPPING ttm, STRING * pdest, CNSTRING src, INT * len);
 void translate_string(TRANMAPPING, CNSTRING in, STRING out, INT max);
-void translate_string_to_buf(TRANMAPPING ttm, CNSTRING in, struct Buffer_s * bfs);
+struct Buffer_s * translate_string_to_buf(TRANMAPPING ttm, CNSTRING in);
 BOOLEAN translate_write(TRANMAPPING, STRING, INT*, FILE*, BOOLEAN);
 
 

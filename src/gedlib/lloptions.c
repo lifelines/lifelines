@@ -51,6 +51,7 @@ static void create_notification_list_if_needed(void);
 static void delete_notification_list_if_needed(void);
 static void free_optable(TABLE * ptab);
 static BOOLEAN load_config_file(STRING file, STRING * pmsg);
+static void send_notifications(void);
 
 /*********************************************
  * local variables
@@ -164,6 +165,7 @@ load_config_file (STRING file, STRING * pmsg)
 		*pmsg = strsave(_(qSopt2long));
 		return FALSE;
 	}
+	send_notifications();
 	return TRUE;
 }
 /*=================================
@@ -197,7 +199,7 @@ BOOLEAN
 load_global_options (STRING configfile, STRING * pmsg)
 {
 	*pmsg = NULL;
-	term_lloptions(); /* clear if exists */
+	free_optable(&f_global);
 	f_global= create_table();
 	create_notification_list_if_needed();
 	if (!load_config_file(configfile, pmsg))
@@ -215,6 +217,7 @@ set_db_options (TABLE dbopts)
 	free_optable(&f_db);
 	f_db = create_table();
 	copy_table(dbopts, f_db, FREEBOTH);
+	send_notifications();
 }
 /*=================================
  * get_db_options -- Copy db options to caller's table
@@ -331,6 +334,7 @@ setoptstr_fallback (STRING optname, STRING newval)
 	if (!f_fallback)
 		f_fallback = create_table();
 	replace_table_str(f_fallback, strsave(optname), newval, FREEBOTH);
+	send_notifications();
 }
 /*===============================================
  * register_notify -- Put notification on the callback list
@@ -363,4 +367,19 @@ unregister_notify (options_notify_fnc fncptr)
 	}
 	make_list_empty(lold);
 	remove_list(lold, 0);
+}
+/*===============================================
+ * send_notifications -- Send notifications to any registered listeners
+ * Created: 2002/06/18, Perry Rapp
+ *=============================================*/
+static void
+send_notifications (void)
+{
+	options_notify_fnc fncptr=0;
+	if (!f_notifications || is_empty_list(f_notifications))
+		return;
+	FORLIST(f_notifications, el)
+		fncptr=el;
+		(*fncptr)();
+	ENDLIST
 }

@@ -56,8 +56,7 @@ static STRING trans_ined(STRING input, INT len);
  * single character (the sep arg) between each key & value.
  *============================================*/
 BOOLEAN
-edit_valtab (STRING key, TABLE *ptab, INT sep, STRING ermsg
-	, STRING (*validator)(TABLE tab))
+edit_valtab (STRING key, TABLE *ptab, INT sep, STRING ermsg, STRING (*validator)(TABLE tab))
 {
 	TABLE tmptab = NULL;
 	STRING msg;
@@ -117,8 +116,7 @@ static STRING
 trans_edin (STRING input, INT len)
 {
 	TRANMAPPING ttmi = get_tranmapping(MEDIN);
-	bfptr bfs = bfNew((int)(len*1.3));
-	translate_string_to_buf(ttmi, input, bfs);
+	bfptr bfs = translate_string_to_buf(ttmi, input);
 	return bfDetachAndKill(&bfs);
 }
 /*==============================================
@@ -132,7 +130,6 @@ static STRING
 trans_ined (STRING input, INT len)
 {
 	TRANMAPPING ttmo = get_tranmapping(MINED);
-	bfptr bfs = bfNew((int)(len*1.2));
-	translate_string_to_buf(ttmo, input, bfs);
+	bfptr bfs = translate_string_to_buf(ttmo, input);
 	return bfDetachAndKill(&bfs);
 }

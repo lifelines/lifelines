@@ -1,3 +1,25 @@
+2002-06-18 Perry Rapp <puddle@users.sourceforge.net>
+
+	* .linesrc ChangeLog configure.in lines.cfg btree/file.c
+	btree/utils.c docs/Install.LifeLines.Windows.txt
+	docs/Run.LifeLines.Windows.txt gedlib/charmaps.c
+	gedlib/editvtab.c gedlib/init.c gedlib/intrface.c
+	gedlib/lloptions.c gedlib/translat.c gedlib/valtable.c
+	hdrs/btree.h hdrs/gedcom.h hdrs/interp.h hdrs/liflines.h
+	hdrs/llstdlib.h hdrs/translat.h hdrs/version.h interp/alloc.c
+	interp/interp.c interp/more.c interp/rassa.c interp/yacc.y
+	liflines/screen.c stdlib/path.c stdlib/stdstrng.c
+	win32/iconvshim.c win32/msvc6/dbverify/dbVerify.rc
+	win32/msvc6/dbverify/dbverifyCmd.dsp
+	win32/msvc6/llines/llines.rc:
+
+	New codeset options in config file (GuiCodeset etc).
+	New NewDbProps option to preload options in new databases.
+	Fix init_valtab_from_string to not change its argument string.
+	Fix notification code for options changes.
+	Rewrite translation code to combine iconv with custom translations.
+	Update windows docs to reflect codeset configuration.
+
 2002-06-17 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog README.LAYOUT gedlib/Makefile.am gedlib/init.c
