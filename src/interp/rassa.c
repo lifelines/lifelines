@@ -185,19 +185,16 @@ __newfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	name = pvalue_to_string(val);
-	if (!name[0]) {
+	if (!name || !name[0]) {
 		*eflg = TRUE;
 		prog_var_error(node, stab, arg, val, "1st arg to newfile must be a nonempty string.");
 		return NULL;
 	}
-	if (outfilename)
-		stdfree(outfilename);
-	outfilename = strsave(name);
+	strupdate(&outfilename, name);
 	delete_pvalue(val);
 	val = eval_and_coerce(PBOOL, arg=inext(arg), stab, eflg);
 	if (*eflg) {
 		prog_var_error(node, stab, arg, val, nonboox, "1");
-		prog_error(node, "2nd arg to newfile must be boolean.");
 		return NULL;
 	}
 	aflag = pvalue_to_bool(val);

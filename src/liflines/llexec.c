@@ -601,6 +601,11 @@ llwprintf (char *fmt, ...)
 	va_end(args);
 }
 void
+rpt_print (STRING str)
+{
+	printf(str);
+}
+void
 llvwprintf (STRING fmt, va_list args)
 {
 	vprintf(fmt, args);

@@ -5,6 +5,16 @@
 
 	Make program interpreter stop with error if output file cannot be opened.
 
+	* ChangeLog src/gedlib/xlat.c src/hdrs/feedback.h
+	src/interp/builtin.c src/interp/eval.c src/interp/interp.c
+	src/interp/rassa.c src/liflines/askprogram.c
+	src/liflines/llexec.c src/liflines/screen.c src/stdlib/path.c
+	src/stdlib/zstr.c:
+
+	Fix bug introduced earlier today. Change some malloc calls to stdalloc.
+	Plug leaks in zs_free & zs_move.
+	Plug leak in fopenpath.
+
 2003-01-31 Steve Dum
        * reports/Makefile.am reports/gen_index
 

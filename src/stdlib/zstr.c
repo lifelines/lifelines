@@ -168,8 +168,6 @@ zs_free (ZSTR * pzstr)
 	ZSTR zstr = *pzstr;
 	if  (!zstr) return;
 	DBGCHK(zstr);
-	memset(zstr->str, 0, zstr->max);
-	memset(zstr, 0, sizeof(*zstr));
 	free(zstr->str);
 	free(zstr);
 	*pzstr = NULL;
@@ -345,9 +343,9 @@ void
 zs_move (ZSTR zstr, ZSTR * pzsrc)
 {
 	DBGCHK(zstr);
-	zs_clear(zstr);
-	if (!pzsrc)
-		return;
+	ASSERT(pzsrc && *pzsrc);
+	free(zstr->str);
 	memcpy(zstr, (*pzsrc), sizeof(*zstr));
-	(*pzsrc)=0;
+	free(*pzsrc);
+	*pzsrc = 0;
 }

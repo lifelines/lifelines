@@ -265,10 +265,6 @@ __gettoday (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	stab=stab; /* unused */
 	eflg=eflg; /* unused */
 
-#ifdef DEBUG
-	llwprintf("__gettoday: called\n");
-#endif
-
 	nchild(prnt) = chil;
 	return create_pvalue_from_node(prnt);
 }
@@ -1038,10 +1034,6 @@ __f (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	sprintf(format, "%%.%df", prec);
 
-#ifdef DEBUG
-	llwprintf("format is %s\n", format);
-#endif
-
 	sprintf(scratch, format, u.f);
 	set_pvalue(val, PSTRING, (VPTR)scratch);
 	return val;
@@ -1693,14 +1685,6 @@ __strcmp (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (!str1) str1 = emp;
 	if (!str2) str2 = emp;
 
-#ifdef DEBUG
-	llwprintf("__strcmp: ");
-	show_pvalue(val1);
-	llwprintf(" ");
-	show_pvalue(val2);
-	llwprintf("\n");
-#endif
-
 	set_pvalue(val1, PINT, (VPTR)cmpstrloc(str1, str2));
 	delete_pvalue(val2);
 	return val1;
@@ -2292,9 +2276,11 @@ __print (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 			return NULL;
 		}
 		str = pvalue_to_string(val);
-		/* TODO: this has to be pushed higher, so llexec can handle this
-		also must switch to UI locale for this -- 2002-11-02 Perry */
-		if (str) llwprintf("%s", str);
+		if (str) {
+			uilocale();
+			rpt_print(str);
+			rptlocale();
+		}
 		delete_pvalue(val);
 		arg = inext(arg);
 	}
@@ -2503,21 +2489,12 @@ __insert (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	TABLE tab;
 	STRING str;
 
-#ifdef DEBUG
-	llwprintf("__insert:\n");
-#endif
-
 	if (*eflg || (pvalue(valtab) == NULL)) {
         *eflg = TRUE;
 		prog_var_error(node, stab, arg, valtab, nontabx, "insert", "1");
 		return NULL;
 	}
 	tab = (TABLE) pvalue(valtab);
-
-#ifdef DEBUG
-	show_pvalue(val);
-	llwprintf(" ");
-#endif
 
 	arg = inext(arg);
 	val = eval_and_coerce(PSTRING, arg, stab, eflg);
@@ -2529,22 +2506,12 @@ __insert (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	str = strsave(pvalue_to_string(val));
 	delete_pvalue(val);
 
-#ifdef DEBUG
-	show_pvalue(val);
-	llwprintf(" ");
-#endif
-
 	val = evaluate(inext(arg), stab, eflg);
 	if (*eflg || !val) {
 		*eflg = TRUE;
 		prog_error(node, "3rd arg to insert is in error");
 		return NULL;
 	}
-
-#ifdef DEBUG
-	show_pvalue(val);
-	llwprintf("\n");
-#endif
 
 	old = valueofbool_ptr(tab, str, &there);
 	if (there && old) delete_pvalue(old);
@@ -2572,10 +2539,6 @@ __lookup (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE newv, val;
 	TABLE tab;
 	STRING str;
-
-#ifdef DEBUG
-	llwprintf("lookup called\n");
-#endif
 
 	arg = (PNODE) iargs(node);
 	val = eval_and_coerce(PTABLE, arg, stab, eflg);
@@ -3425,12 +3388,6 @@ eval_indi (PNODE expr, SYMTAB stab, BOOLEAN *eflg, CACHEEL *pcel)
 	NODE indi;
 	CACHEEL cel;
 	PVALUE val = eval_and_coerce(PINDI, expr, stab, eflg);
-
-#ifdef DEBUG
-	llwprintf("eval_indi: val, eflg == ");
-	show_pvalue(val);
-	llwprintf(", %d\n",*eflg);
-#endif
 
 	if (*eflg || !val) {
 		if (val) {

@@ -39,6 +39,8 @@ void llwprintf(STRING fmt, ...);
 void llvwprintf(STRING fmt, va_list args);
 	/* how many characters available for msg_xxx strings (-1 if unlimited) */
 INT msg_width(void);
+	/* report language print function */
+void rpt_print(STRING str);
 
 /* called by ask.c */
 BOOLEAN ask_for_input_filename(STRING ttl, STRING path, STRING prmpt, STRING buffer, INT buflen);

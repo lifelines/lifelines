@@ -2740,6 +2740,15 @@ place_std_msg (void)
 		wrefresh(win); 
 	place_cursor();
 }
+/*==================================+
+ * rpt_print -- Implement report language print function
+ * Created: 2003-02-01 (Perry Rapp)
+ *=================================*/
+void
+rpt_print (STRING str)
+{
+	llwprintf(str);
+}
 /*=================================================
  * llvwprintf -- Called as wprintf(fmt, argp)
  *===============================================*/

@@ -133,6 +133,7 @@ trace_endl (void)
 }
 /*====================================+
  * evaluate_iden -- Evaluate identifier
+ * makes & returns copy
  *===================================*/
 PVALUE
 evaluate_iden (PNODE node, SYMTAB stab, BOOLEAN *eflg)
@@ -145,6 +146,7 @@ evaluate_iden (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 }
 /*=======================================+
  * valueof_iden - Find value of identifier
+ * makes & returns copy
  *======================================*/
 PVALUE
 valueof_iden (PNODE node, SYMTAB stab, STRING iden, BOOLEAN *eflg)

@@ -256,15 +256,16 @@ FILE *
 fopenpath (STRING name, STRING mode, STRING path, STRING ext, INT utf8
 	, STRING *pfname)
 {
+	FILE * fp;
 	STRING str;
 	if(pfname) *pfname = NULL;
 	if (!(str = filepath(name, mode, path, ext, utf8))) return NULL;
 	if(pfname) {
 		*pfname = str;
-	} else {
-		/* Are we leaking str here ? Perry, 2002-07-23 */
 	}
-	return fopen(str, mode);
+	fp = fopen(str, mode);
+	if (!pfname) stdfree(str);
+	return fp;
 }
 /*===========================================
  * closefp -- Close file pointer & set pointer to zero

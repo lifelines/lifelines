@@ -180,7 +180,7 @@ progmessage (MSG_LEVEL level, STRING msg)
 static struct pathinfo_s *
 new_pathinfo (STRING fname, STRING fullpath)
 {
-	struct pathinfo_s * pathinfo = (struct pathinfo_s *)malloc(sizeof(*pathinfo));
+	struct pathinfo_s * pathinfo = (struct pathinfo_s *)stdalloc(sizeof(*pathinfo));
 	memset(pathinfo, 0, sizeof(*pathinfo));
 	pathinfo->fname = strdup(fname);
 	pathinfo->fullpath = strdup(fullpath);
@@ -1835,7 +1835,7 @@ disp_symtab (STRING title, SYMTAB stab)
 	if (!n) return;
 	memset(&sdata, 0, sizeof(sdata));
 	sdata.count = n;
-	sdata.locals = (STRING *)malloc(bytes);
+	sdata.locals = (STRING *)stdalloc(bytes);
 	memset(sdata.locals, 0, bytes);
 	/* Now traverse & print the actual entries via disp_symtab_cb() */
 	if (begin_symtab(stab, &symtabits)) {

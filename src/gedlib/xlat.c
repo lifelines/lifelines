@@ -92,7 +92,7 @@ static XLAT
 create_null_xlat (void)
 {
 	/* create & initialize new xlat */
-	XLAT xlat = (XLAT)malloc(sizeof(*xlat));
+	XLAT xlat = (XLAT)stdalloc(sizeof(*xlat));
 	memset(xlat, 0, sizeof(*xlat));
 	xlat->steps = create_list();
 	xlat->valid = TRUE;
@@ -144,7 +144,7 @@ static XLSTEP
 create_iconv_step (CNSTRING src, CNSTRING dest)
 {
 	XLSTEP xstep;
-	xstep = (XLSTEP )malloc(sizeof(*xstep));
+	xstep = (XLSTEP) stdalloc(sizeof(*xstep));
 	memset(xstep, 0, sizeof(*xstep));
 	xstep->iconv_dest = strsave(dest);
 	xstep->iconv_src = strsave(src);
@@ -158,7 +158,7 @@ static XLSTEP
 create_dyntt_step (DYNTT dyntt)
 {
 	XLSTEP xstep;
-	xstep = (XLSTEP )malloc(sizeof(*xstep));
+	xstep = (XLSTEP) stdalloc(sizeof(*xstep));
 	memset(xstep, 0, sizeof(*xstep));
 	xstep->dyntt = dyntt;
 	return xstep;
@@ -170,7 +170,7 @@ create_dyntt_step (DYNTT dyntt)
 static DYNTT
 create_dyntt (TRANTABLE tt, STRING path)
 {
-	DYNTT dyntt = (DYNTT)malloc(sizeof(*dyntt));
+	DYNTT dyntt = (DYNTT)stdalloc(sizeof(*dyntt));
 	memset(dyntt, 0, sizeof(*dyntt));
 	dyntt->tt = tt;
 	dyntt->path = strsave(path);

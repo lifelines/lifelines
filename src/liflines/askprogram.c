@@ -104,7 +104,7 @@ add_program_props (TABLE fileprops)
 			while (*end && *end!='\"')
 				++end;
 			if (*end && end>start) {
-				charset=malloc(strlen(str));
+				charset=stdalloc(strlen(str));
 				llstrncpy(charset, start, end-start, 0);
 			}
 		}
