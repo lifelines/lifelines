@@ -27,7 +27,7 @@ to very large lists is very slow.  With these changes run time dropped to 10
 seconds. 
 
 Before using, there are a few variables that need to be customized for your
-own environment.  the changes need to be made in set_static_html_globals() 
+own environment.  The changes need to be made in set_static_html_globals() 
 below. Note: name and email address are obtained with getproperty() so add
 them to your .linesrc ( or for windows lines.cfg) file.
 

@@ -18,7 +18,7 @@ This program was inspired by similar efforts by Mitch Blank (mitch@ctrpnt.com)
 but without ever seeing the code he used to do a similar thing.
 
 Before using, there are a few variables that need to be customized for your
-own environment.  the changes need to be made in set_static_html_globals() 
+own environment.  The changes need to be made in set_static_html_globals() 
 below. Note: name and email address are obtained with getproperty() so add
 them to your .linesrc (or for windows lines.cfg) file.
 
