@@ -4,8 +4,6 @@
                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd"
 [<!ENTITY llversion '3.0.25'>]>
 
-
-
   <book id="docbook">
 
   <bookinfo>
@@ -174,44 +172,56 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
      </para>
      </note>
 
-
-
-
 </sect1>
-
 
 
 <sect1>
 
-
-
 <title>
-
 INSTALLATION
-
 </title>
 
+<para>
+You may be installing <application>LifeLines</application>
+from a source distribution package or as an executable program
+already prepared for your <acronym>UNIX</acronym>
+(or <acronym>MS-Windows</acronym>) system. The
+source distribution comes with the readme, build script and
+make files necessary to build
+<application>LifeLines</application>. Follow the instructions
+in the readme file.  A number of executables are built
+which can be put it in a
+directory in your execution path. If you get the program in
+executable form, follow whatever instructions came with it.
+</para>
+<glosslist>
+<glossentry><glossterm><command>llines</command></glossterm><glossdef>
+<para>
+the <application>LifeLines</application> program with full user interface
+</para>
+</glossdef></glossentry>
 
+<glossentry><glossterm><command>llexec</command></glossterm><glossdef>
+<para>
+a stripped down version of the
+<application>LifeLines</application> program, without the user interface
+for non-interactive processing of report programs
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><command>dbverify</command></glossterm><glossdef>
+<para>
+a utility program to verify <application>LifeLines</application> databases.
+</para>
+</glossdef></glossentry>
+</glosslist>
 
 <para>
-
-     You may be installing <application>LifeLines</application>
-     from a source distribution package or as an executable program
-     already prepared for your <acronym>UNIX</acronym>
-     (or <acronym>MS-Windows</acronym>) system. The
-     source distribution comes with the readme, build script and
-     make files necessary to build
-     <application>LifeLines</application>. Follow the instructions
-     in the readme file. The executable program will be named
-     <command>llines</command>. <command>llines</command> is the
-     <application>LifeLines</application> program; put it in a
-     directory in your execution path. If you get the program in
-     executable form, follow whatever instructions came with it.
-     The source distribution package also contains documentation
-     and some <application>LifeLines</application> programs.
-
+The source distribution package also contains documentation
+and some <application>LifeLines</application> programs.
+Included with these in the reports directory is a brief overview
+of the reports in the file index.html.
 </para>
-
 
 
 </sect1>
@@ -259,7 +269,7 @@ STARTING <application>LIFELINES</application> AND CREATING DATABASES
      <application>LifeLines</application> is:
 
      <synopsis>
-        <command>lines</command> <option>[-adkrwifmntcuxoC]</option><replaceable class="parameter">[database]</replaceable>
+        <command>lines</command> <option>[-acdfiklnortuwxzCFI]</option><replaceable class="parameter">[database]</replaceable>
      </synopsis>
 
 </para>
@@ -268,149 +278,145 @@ STARTING <application>LIFELINES</application> AND CREATING DATABASES
 
 <para>
 
-     The options mean the following:
+     The following options are supported:
 
 </para>
 
-    <glosslist>
-    <glossentry><glossterm>-C</glossterm><glossdef>
+<informaltable pgwide='0' frame='none'>
+<tgroup cols='2'>
+<colspec colwidth='0.5in'></colspec>
+<tbody>
 
-<para>
+<row>
+<entry>-C</entry>
+<entry>Specify configuration file location (e.g.
+-C/home/bill/lifelines/.linesrc2 )</entry>
+</row>
 
-     Specify config file location (eg, -C/home/bill/lifelines/.linesrc2)
+<row>
+<entry>-F</entry>
+<entry>Finnish option (only available if so compiled)
+</entry>
+</row>
 
-</para>
-</glossdef></glossentry>
+<row>
+<entry>-I</entry>
+<entry>
+Specify a user property (e.g. -ILLEDITOR=gvim )
+</entry>
+</row>
 
-<glossentry><glossterm>-F</glossterm><glossdef>
+<row>
+<entry>-a</entry>
+<entry>log dynamic memory operation (for debugging)</entry>
+</row>
 
-<para>
+<row>
+<entry>-c</entry>
+<entry>supply cache values (eg, -ci400,4000f400,4000 sets direct indi &amp; fam
+caches to 400, and indirect indi &amp; fam caches to 4000)
+</entry>
+</row>
 
-     Finnish option (only available if so compiled)
+<row>
+<entry>-d</entry>
+<entry>
+debug mode (signal protection disabled for convenience with breakpoints)
+</entry>
+</row>
 
-</para>
-</glossdef></glossentry>
+<row>
+<entry>-f</entry>
+<entry>
+force open the database - use only in emergency
+</entry>
+</row>
 
-<glossentry><glossterm>-a</glossterm><glossdef>
+<row>
+<entry>-i</entry>
+<entry>
+open database with immutable access (no protection against other
+access -- for use on read-only media)
+</entry>
+</row>
 
-<para>
+<row>
+<entry>-k</entry>
+<entry>
+always show keys (normally keys are suppressed if REFN available)
+</entry>
+</row>
 
-     log dynamic memory operation (for debugging)
+<row>
+<entry>-l</entry>
+<entry>
+lock (-ly) or unlock (-ln) a database for use with read only media
+(access to a locked database is treated as immutable)
+</entry>
+</row>
 
-</para>
+<row>
+<entry>-n</entry>
+<entry>
+do not use traditional family rules
+</entry>
+</row>
 
-</glossdef></glossentry><glossentry><glossterm>-c</glossterm><glossdef>
+<row>
+<entry>-o</entry>
+<entry>
+Specify program output directory (eg, -o/tmp/mytests)
+</entry>
+</row>
 
-<para>
+<row>
+<entry>-r</entry>
+<entry>
+open database with read-only access (protect against other
+writer access)
+</entry>
+</row>
 
-     supply cache values (eg, -ci400,4000f400,4000 sets direct indi &amp; fam
-     caches to 400, and indirect indi &amp; fam caches to 4000)
+<row>
+<entry>-t</entry>
+<entry>
+trace function calls in report programs (for debugging)
+</entry>
+</row>
 
-</para>
-</glossdef></glossentry>
+<row>
+<entry>-u</entry>
+<entry>
+specify window size (eg, -u120,34 specifies 120 columns by 34 rows)
+</entry>
+</row>
 
-<glossentry><glossterm>-d</glossterm><glossdef>
+<row>
+<entry>-w</entry>
+<entry>
+open database with writeable access (protect against other
+writer or reader access)
+</entry>
+</row>
 
-<para>
+<row>
+<entry>-x</entry>
+<entry>
+execute a single lifelines report program directly
+</entry>
+</row>
 
-     debug mode (signal protection disabled for convenience with breakpoints)
+<row>
+<entry>-z</entry>
+<entry>
+Use normal ASCII characters for drawing lines in user interface rather
+than the vt100 special characters.
+</entry>
+</row>
 
-</para>
-
-</glossdef></glossentry><glossentry><glossterm>-f</glossterm><glossdef>
-
-<para>
-
-     force open the database - use only in emergency
-
-</para>
-
-</glossdef></glossentry><glossentry><glossterm>-i</glossterm><glossdef>
-
-<para>
-
-     open database with immutable access (no protection against other
-     access -- for use on read-only media)
-
-</para>
-
-</glossdef></glossentry><glossentry><glossterm>-k</glossterm><glossdef>
-
-<para>
-
-     always show keys (normally keys are suppressed if REFN available)
-
-</para>
-
-</glossdef></glossentry><glossentry><glossterm>-l</glossterm><glossdef>
-
-<para>
-
-     lock (-ly) or unlock (-ln) a database for use with read only media
-     (access to a locked database is treated as immutable)
-
-</para>
-
-</glossdef></glossentry><glossentry><glossterm>-n</glossterm><glossdef>
-
-<para>
-
-     do not use traditional family rules
-
-</para>
-
-</glossdef></glossentry><glossentry><glossterm>-o</glossterm><glossdef>
-
-<para>
-
-     Specify program output directory (eg, -o/tmp/mytests)
-
-</para>
-</glossdef></glossentry><glossentry><glossterm>-r</glossterm><glossdef>
-
-<para>
-
-     open database with read-only access (protect against other
-     writer access)
-
-</para>
-
-</glossdef></glossentry><glossentry><glossterm>-t</glossterm><glossdef>
-
-<para>
-
-     trace function calls in report programs (for debugging)
-
-</para>
-
-</glossdef></glossentry><glossentry><glossterm>-u</glossterm><glossdef>
-
-<para>
-
-     specify window size (eg, -u120,34 specifies 120 columns by 34 rows)
-
-</para>
-</glossdef></glossentry>
-
-<glossentry><glossterm>-w</glossterm><glossdef>
-
-<para>
-
-     open database with writeable access (protect against other
-     writer or reader access)
-
-</para>
-</glossdef></glossentry>
-
-<glossentry><glossterm>-x</glossterm><glossdef>
-
-<para>
-
-     execute a single lifelines report program directly
-
-</para>
-</glossdef></glossentry>
-</glosslist>
+</tbody>
+</tgroup>
+</informaltable>
 
 <para>
 
@@ -446,7 +452,7 @@ STARTING <application>LIFELINES</application> AND CREATING DATABASES
      database; this will open the database and reset the mode
      mechanism. This is a dangerous feature; you can use it to open
      the same database with writeable access more than once; the
-     results are unpredictable and generally disasterous.
+     results are unpredictable and generally disastrous.
 
 </para>
 
@@ -1234,20 +1240,23 @@ SCREEN EDITORS AND ENVIRONMENT VARIABLES
      <envar>LLPROGRAMS</envar>, <envar>LLREPORTS</envar>,
      and <envar>LLNEWDBDIR</envar>. <envar>LLDATABASES</envar> and
      <envar>LLPROGRAMS</envar> are <acronym>UNIX</acronym> path
-     list variables.
+     list variables.  
 
 </para>
 
 <para>
      There is also a configuration file, and
      entries in it may be used in lieu of environment variables.
-     It is ordinarily named .linesrc under UNIX, and lines.cfg under
-     <acronym>MS-Windows</acronym>.
+     It is ordinarily named .linesrc under <acronym>UNIX</acronym>,
+     and lines.cfg under <acronym>MS-Windows</acronym>.
      A sample configuration file should have been included
      in the distribution.
 </para>
 
-
+<para>
+     See the section on System and User properties
+     for more details.
+</para>
 
 <para>
 
@@ -2263,7 +2272,8 @@ LifeLines -- Family Browse Screen (* toggles menu)
 
 <para>
 
-<glosslist><glossentry><glossterm><keycap>e</keycap> <action>Edit the family.</action></glossterm><glossdef>
+<glosslist>
+<glossentry><glossterm><keycap>e</keycap> <action>Edit the family.</action></glossterm><glossdef>
 
 <para>
 
@@ -3095,10 +3105,14 @@ Which character mapping do you want to edit?
 
 <para>
 
-<application>LifeLines</application> has little built-in knowledge of character codes. If you use 7-bit <acronym>ASCII</acronym> characters you will not
-encounter problems. However, many European and other languages require additional characters, and
-there are many 8-bit and other schemes for encoding those characters. <application>LifeLines</application> knows about none of
-them. However, <application>LifeLines</application> provides a number of character translation features you can use to manage
+<application>LifeLines</application> has little built-in knowledge of 
+character codes. If you use 7-bit <acronym>ASCII</acronym> characters you 
+will not encounter problems. However, many European and other languages 
+require additional characters, and
+there are many 8-bit and other schemes for encoding those characters. 
+<application>LifeLines</application> knows about none of
+them. However, <application>LifeLines</application> provides a number of 
+character translation features you can use to manage
 character translation.
 
 </para>
@@ -3108,42 +3122,39 @@ character translation.
 <para>
 
 <application>LifeLines</application> provides facilities for mapping between characters whenever a data record changes form.
-<application>LifeLines</application> supports four forms:<glosslist><glossentry><glossterm>internal</glossterm><glossdef>
+<application>LifeLines</application> supports four forms:
+</para>
+<glosslist>
+<glossentry><glossterm>internal</glossterm><glossdef>
 
 <para>
 
 for records in the database
 
 </para>
+</glossdef></glossentry>
 
-</glossdef></glossentry><glossentry><glossterm>editor</glossterm><glossdef>
+<glossentry><glossterm>editor</glossterm><glossdef>
 
 <para>
-
 for records being edited
-
 </para>
+</glossdef></glossentry>
 
-</glossdef></glossentry><glossentry><glossterm>display</glossterm><glossdef>
+<glossentry><glossterm>display</glossterm><glossdef>
 
 <para>
-
 for records being displayed
-
 </para>
+</glossdef></glossentry>
 
-</glossdef></glossentry><glossentry><glossterm>report</glossterm><glossdef>
+<glossentry><glossterm>report</glossterm><glossdef>
 
 <para>
-
 for records written to output file
-
 </para>
-
-</glossdef></glossentry></glosslist>
-
-</para>
-
+</glossdef></glossentry>
+</glosslist>
 
 
 <para>
@@ -3151,59 +3162,53 @@ for records written to output file
 When converting text from one form to another <application>LifeLines</application> normally does not convert characters codes.
 You may, however, override this default behavior by creating translation tables that <application>LifeLines</application> will
 use when converting between forms. There are six translation tables you may define. The following
-table shows the six tables and describes when they are applied:<glosslist><glossentry><glossterm>internal to editor</glossterm><glossdef>
+table shows the six tables and describes when they are applied:
+</para>
+
+<glosslist>
+<glossentry><glossterm>internal to editor</glossterm><glossdef>
 
 <para>
-
 when converting from internal, database form to editor form
-
 </para>
+</glossdef></glossentry>
 
-</glossdef></glossentry><glossentry><glossterm>editor to internal</glossterm><glossdef>
+<glossentry><glossterm>editor to internal</glossterm><glossdef>
 
 <para>
-
 when converting from editor form back to internal, database form
-
 </para>
+</glossdef></glossentry>
 
-</glossdef></glossentry><glossentry><glossterm><acronym>GEDCOM</acronym> to internal</glossterm><glossdef>
+<glossentry><glossterm><acronym>GEDCOM</acronym> to internal</glossterm><glossdef>
 
 <para>
-
-when reading <acronym>GEDCOM</acronym> input records and writing them to database
-
+when reading <acronym>GEDCOM</acronym> input records and writing them to 
+database
 </para>
+</glossdef></glossentry>
 
-</glossdef></glossentry><glossentry><glossterm>internal to <acronym>GEDCOM</acronym></glossterm><glossdef>
+<glossentry><glossterm>internal to <acronym>GEDCOM</acronym></glossterm><glossdef>
 
 <para>
-
 when writing internal database records to external <acronym>GEDCOM</acronym> file
-
 </para>
 
-</glossdef></glossentry><glossentry><glossterm>internal to display</glossterm><glossdef>
+</glossdef></glossentry>
+<glossentry><glossterm>internal to display</glossterm><glossdef>
 
 <para>
-
 when displaying a record in a browsing mode display screen
-
 </para>
+</glossdef></glossentry>
 
-</glossdef></glossentry><glossentry><glossterm>internal to report</glossterm><glossdef>
+<glossentry><glossterm>internal to report</glossterm><glossdef>
 
 <para>
-
 when writing internal database records to external report file
-
 </para>
-
-</glossdef></glossentry></glosslist>
-
-</para>
-
-
+</glossdef></glossentry>
+</glosslist>
 
 <para>
 
@@ -3219,52 +3224,47 @@ replacing them with the corresponding right patterns.
 
 
 <para>
+There are five escape mechanisms used in patterns:
+</para>
 
-There are five escape mechanisms used in patterns:<glosslist><glossentry><glossterm>#nnn</glossterm><glossdef>
+<glosslist>
+<glossentry><glossterm>#nnn</glossterm><glossdef>
 
 <para>
-
 nnn is a decimal character value
-
 </para>
+</glossdef></glossentry>
 
-</glossdef></glossentry><glossentry><glossterm>$hh</glossterm><glossdef>
+<glossentry><glossterm>$hh</glossterm><glossdef>
 
 <para>
-
 hh is a hexadecimal character value
-
 </para>
+</glossdef></glossentry>
 
-</glossdef></glossentry><glossentry><glossterm>\#</glossterm><glossdef>
+<glossentry><glossterm>\ #</glossterm><glossdef>
+<!-- note above has extra space between \ and # - without this 
+     conversion to pdf gets confused openjade does some tex processing...
+-->
 
 <para>
-
 represents the # character
-
 </para>
+</glossdef></glossentry>
 
-</glossdef></glossentry><glossentry><glossterm>\$</glossterm><glossdef>
+<glossentry><glossterm>\$</glossterm><glossdef>
 
 <para>
-
 represents the $ character
-
 </para>
+</glossdef></glossentry>
 
-</glossdef></glossentry><glossentry><glossterm>\\</glossterm><glossdef>
-
+<glossentry><glossterm>\\</glossterm><glossdef>
 <para>
-
 represents the \ character
-
 </para>
-
-</glossdef></glossentry></glosslist>
-
-</para>
-
-
+</glossdef></glossentry>
+</glosslist>
 
 <para>
 
@@ -3279,9 +3279,7 @@ implemented.
 
 
 
-<sect1>
-
-
+<sect1> 
 
 <title>
 
@@ -3312,11 +3310,8 @@ What utility do you want to perform?
 </para>
 
 
-
-<para>
-
-<glosslist><glossentry><glossterm><keycap>s</keycap> <action>Save the database in a GEDCOM file.</action></glossterm><glossdef>
-
+<glosslist>
+<glossentry><glossterm><keycap>s</keycap> <action>Save the database in a GEDCOM file.</action></glossterm><glossdef>
 <para>
 
 This command saves the complete <application>LifeLines</application> database in a
@@ -3340,8 +3335,9 @@ not add any records to the database. If there are no problems, <application>Life
 the file to the database (only header and trailer records are not stored in the database).
 
 </para>
+</glossdef></glossentry>
 
-</glossdef></glossentry><glossentry><glossterm><keycap>k</keycap> <action>Find a person's key value.</action></glossterm><glossdef>
+<glossentry><glossterm><keycap>k</keycap> <action>Find a person's key value.</action></glossterm><glossdef>
 
 <para>
 
@@ -3357,8 +3353,9 @@ This command identifies the person that has a particular internal
 key value.
 
 </para>
+</glossdef></glossentry>
 
-</glossdef></glossentry><glossentry><glossterm><keycap>d</keycap> <action>Show database statistics.</action></glossterm><glossdef>
+<glossentry><glossterm><keycap>d</keycap> <action>Show database statistics.</action></glossterm><glossdef>
 
 <para>
 
@@ -3366,16 +3363,18 @@ This command summarizes the contents of the current database. It
 displays the number of person, family, source, event and other records in the database.
 
 </para>
+</glossdef></glossentry>
 
-</glossdef></glossentry><glossentry><glossterm><keycap>m</keycap> <action>Show memory statistics.</action></glossterm><glossdef>
+<glossentry><glossterm><keycap>m</keycap> <action>Show memory statistics.</action></glossterm><glossdef>
 
 <para>
 
 This command is used by the author for debugging.
 
 </para>
+</glossdef></glossentry>
 
-</glossdef></glossentry><glossentry><glossterm><keycap>e</keycap> <action>Edit the place abbreviation file.</action></glossterm><glossdef>
+<glossentry><glossterm><keycap>e</keycap> <action>Edit the place abbreviation file.</action></glossterm><glossdef>
 
 <para>
 
@@ -3434,95 +3433,9 @@ by a brief explanation.
 </para>
 
 <para>
-    Following is a list of the options, current as version 3.0.7.
+The list of options can be found in the section 'System and User Properties'
+below.
 </para>
-
-<glosslist>
-<glossentry><glossterm>INDIREC</glossterm><glossdef>
-
-<para>
-
-Person record edit template
-
-</para>
-</glossdef></glossentry>
-
-<glossentry><glossterm>EVENREC</glossterm><glossdef>
-
-<para>
-
-Event record edit template
-
-</para>
-</glossdef></glossentry>
-
-<glossentry><glossterm>FAMRECBODY</glossterm><glossdef>
-
-<para>
-
-Family record body edit template (NB: Unlike the others, this should not
-include the 0 level FAM tag.)
-
-</para>
-</glossdef></glossentry>
-
-<glossentry><glossterm>SOURREC</glossterm><glossdef>
-
-<para>
-
-Source record edit template
-
-</para>
-</glossdef></glossentry>
-
-<glossentry><glossterm>OTHRREC</glossterm><glossdef>
-
-<para>
-
-Other record edit template
-
-</para>
-</glossdef></glossentry>
-
-<glossentry><glossterm>codeset</glossterm><glossdef>
-
-<para>
-
-String denoting code set in use in data. Special handling is provided
-for utf-8, which may be entered as "UTF-8", "utf-8", or "65001". (This is
-actually a code set issue and not a character set issue, as this only enables
-the processing of multibyte sequences, without regard to their semantic
-assignments).
-
-</para>
-</glossdef></glossentry>
-
-<glossentry><glossterm>HDR_GEDC</glossterm><glossdef>
-
-<para>
-
-String containing the GEDC block for the header record when exporting GEDCOM.
-
-</para>
-</glossdef></glossentry>
-
-<glossentry><glossterm>HDR_CHAR</glossterm><glossdef>
-
-<para>
-
-String containing the CHAR block for the header record when exporting GEDCOM.
-
-</para>
-</glossdef></glossentry>
-
-<glossentry><glossterm>HDR_SUBM</glossterm><glossdef>
-
-<para>
-
-String containing the SUBM block for the header record when exporting GEDCOM.
-
-</para>
-
 </glossdef></glossentry>
 </glosslist>
 
@@ -3564,18 +3477,15 @@ Example of replaced single line default person record template
 
 </para>
 
-</glossdef></glossentry><glossentry><glossterm><keycap>q</keycap> <action>Return to main menu.</action></glossterm><glossdef>
+<glosslist>
+<glossentry><glossterm><keycap>q</keycap> <action>Return to main menu.</action></glossterm><glossdef>
 
 <para>
-
 This command returns you to the main menu.
-
 </para>
 
-</glossdef></glossentry></glosslist>
-
-</para>
-
+</glossdef></glossentry>
+</glosslist>
 
 
 </sect1>
@@ -4385,7 +4295,476 @@ Example of adding a new person
 
 </para>
 
+</sect1>
 
+
+<sect1>
+
+
+
+<title>
+
+System and User Properties
+
+</title>
+
+<para>
+There are a number of properties that can be specified to customize
+the behavior of <application>LifeLines</application>.  These properties can 
+be specified in <application>LifeLines</application>
+customization files, in each <application>LifeLines</application> database 
+or in some cases by environment variables.
+</para>
+<para>
+<application>LifeLines</application> configuration files are look for 
+first in the directory specified by the HOME environment variable, assuming
+that it is set, and then in the current directory.  The name of the 
+configuration file is .linesrc on <acronym>UNIX</acronym> or linux systems 
+and lines.cfg on windows systems.
+
+</para>
+<para>
+A configuration file can also be specified using the -C option to
+<application>LifeLines</application>
+or by defining the environment variable "LLCONFIGFILE" with a value containing
+the full pathname of the configuration file.  If either of these
+mechanisms is used, <application>LifeLines</application> does not look for a 
+configuration file anywhere else.
+If a -C option is provided, the LLCONFIGFILE environment variable, if defined,
+is ignored.  If neither the -C option nor the environment variable
+LLCONFIGFILE is set, the above mentioned configuration file names are used.
+A configuration file is looked for in your home directory and is read in,
+if it exists, and then if a configuration file exists in the current
+directory it is read.  The values in this second file are used to replace
+or supplement values found in the first file.  
+</para>
+
+<para>
+When <application>LifeLines</application> searches for a property it looks for it as follows:
+</para>
+<glosslist>
+
+<glossentry><glossterm>cmdline table</glossterm><glossdef>
+
+<para>
+First, <application>LifeLines</application> looks in the cmdline table.  This table contains the
+values that have been specified using the -I option to
+<application>LifeLines</application>.
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>database table</glossterm><glossdef>
+
+<para> Next, <application>LifeLines</application> looks in the database table.  This table contains the
+values which have been stored in the current database.
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>global table</glossterm><glossdef>
+
+<para>
+Next, <application>LifeLines</application> looks in the global table.  This table contains the
+values found when reading in the configuration files.
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>environment table</glossterm><glossdef>
+
+<para>
+Finally, <application>LifeLines</application> looks in the environment table.  This table contains the
+values found in the environment variables, LLPROGRAMS, LLREPORTS,
+LLARCHIVES, LLDATABASES, LLNEWDBDIR, and LLEDITOR.
+</para>
+</glossdef></glossentry>
+</glosslist>
+
+
+<para>
+Properties are named group.subgroup.property or group.property, or even
+just property.
+The following keys are available at the moment: 
+</para>
+
+<glosslist>
+<glossentry><glossterm>LLPROGRAMS</glossterm><glossdef>
+
+<para>
+<envar>LLPROGRAMS</envar> is the search path for
+<application>LifeLines</application> report generating and
+other programs.
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>LLREPORTS</glossterm><glossdef>
+
+<para>
+<envar>LLREPORTS</envar> is used to select a directory where
+all generated reports and program outputs will be placed.
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>LLARCHIVES</glossterm><glossdef>
+
+<para>
+<envar>LLARCHIVES</envar> is used to select a
+directory where all database backup files will be stored
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>LLDATABASES</glossterm><glossdef>
+
+<para>
+<envar>LLDATABASES</envar> is a list of
+directories that contain database directories used to locate
+database directories themselves
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>LLNEWDBDIR</glossterm><glossdef>
+
+<para>
+<envar>LLNEWDBDIR</envar> a single directory where new databases
+specified without paths will be created.
+This is a convenience for users
+who generally put all their databases under a single common
+directory.
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>LLEDITOR</glossterm><glossdef>
+
+<para>
+Overrides the default screen editor
+</para>
+</glossdef></glossentry>
+</glosslist>
+
+<para>
+Codeset Information:
+</para>
+<para>
+For the following parameters related to codeset, the values are a 
+String denoting code set in use in data. Special handling is provided
+for utf-8, which may be entered as "UTF-8", "utf-8", or "65001". (This is
+actually a code set issue and not a character set issue, as this only enables
+the processing of multibyte sequences, without regard to their semantic
+assignments).
+</para>
+<glosslist>
+<glossentry><glossterm>GedcomCodeSet</glossterm><glossdef>
+
+<para>
+Specifies the Codeset to use when processing Gedcom files.
+There are actually 3 properties.
+<glossterm>GedcomCodeSetOut</glossterm> and <glossterm>GedcomCodeSetIn</glossterm>
+can be used to specify the codeset for output or input.  If either of these is
+not specified <glossterm>GedcomCodeSet</glossterm> is used.
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>EditorCodeSet</glossterm><glossdef>
+
+<para>
+Specifies the codeset to use for editing.  There are actually 3 properties.
+<glossterm>EditorCodeSetOut</glossterm> and <glossterm>EditorCodeSetIn</glossterm>
+can be used to specify the codeset for output or input.  If either of these is
+not specified <glossterm>EditorCodeSet</glossterm> is used.
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>ReportCodeSet</glossterm><glossdef>
+
+<para>
+Specifies the codeset to use for reports.  There are actually 3 properties.
+<glossterm>ReportCodeSetOut</glossterm> and <glossterm>ReportCodeSetIn</glossterm>
+can be used to specify the codeset for output or input.  If either of these is
+not specified <glossterm>ReportCodeSet</glossterm> is used.
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>LongDisplayDate</glossterm><glossdef>
+
+<para>
+Seven comma separated numbers. Specifing the format for
+days, months, years, sfmt, efmt, and cmplx.
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>LongDisplayDatePic</glossterm><glossdef>
+
+<para>
+a custom ymd date picture.  A string in which %y, %m and %d will be
+converted to the corresponding year, month and day.
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>ShortDisplayDate</glossterm><glossdef>
+
+<para>
+Seven comma separated numbers. Specifing the format for
+days, months, years, sfmt, efmt, and cmplx.
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>ShortDisplayDatePic</glossterm><glossdef>
+
+<para>
+a custom ymd date picture.  A string in which %y, %m and %d will be
+converted to the corresponding year, month and day.
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>LocaleDir</glossterm><glossdef>
+
+<para>
+run-time specification of locale directory
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>NewDbProps</glossterm><glossdef>
+
+<para>
+if specified, properties to add to a newly created database.
+The string is of the form "option1=value1\noption2=value2".
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>IllegalChar</glossterm><glossdef>
+
+<para>
+Apparently not used at this time.
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>UiLocaleCollate</glossterm><glossdef>
+
+<para>
+ui collating sequence
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>UiLocaleMessages</glossterm><glossdef>
+<para>
+ui messages locale
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>RptLocaleCollate</glossterm><glossdef>
+
+<para>
+Report Collating Sequence
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>RptLocaleMessages</glossterm><glossdef>
+
+<para>
+Report Messages Locale
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>ShortOmitString</glossterm><glossdef>
+
+<para>
+String prepended on an event converted to a string ???
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>TTPATH</glossterm><glossdef>
+
+<para>
+
+list of directories to search for translation table files (*.tt)
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>TTDIR</glossterm><glossdef>
+
+<para>
+Dir to look for Codeset information in ???
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>InputPath</glossterm><glossdef>
+
+<para>
+path to look for in when reading in gedcom files
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>INDIREC</glossterm><glossdef>
+
+<para>
+The default template to use whenever creating a new individual.
+If not specified, the concatenation of the following is used:
+<programlisting>
+"0 INDI\n1 NAME Fname/Surname\n1 SEX MF\n"
+"1 BIRT\n  2 DATE\n  2 PLAC\n"
+"1 DEAT\n  2 DATE\n  2 PLAC\n1 SOUR\n"
+</programlisting>
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>FAMRECBODY</glossterm><glossdef>
+
+<para>
+The default template to use whenever creating a new family.
+If not specified, the following is used:
+<programlisting>
+"1 MARR\n  2 DATE\n  2 PLAC\n  2 SOUR\n"
+</programlisting>
+Note: Unlike the others, this should not
+include the 0 level FAM tag.)
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>SOURREC</glossterm><glossdef>
+
+<para>
+The default template to use whenever creating a new source.
+If not specified, the following is used in english:
+<programlisting>
+"0 SOUR\n1 REFN\n1 TITL Title\n1 AUTH Author"
+</programlisting>
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>EVENREC</glossterm><glossdef>
+
+<para>
+The default template to use whenever creating a new event.
+If not specified, the following is used in english:
+<programlisting>
+"0 EVEN\n1 REFN\n1 DATE\n1 PLAC\n1 INDI\n  2 NAME\n  2 ROLE\n1 SOUR"
+</programlisting>
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>OTHR</glossterm><glossdef>
+
+<para>
+The default template to use whenever creating a new other record.
+If not specified, the following is used in english:
+<programlisting>
+"0 XXXX\n1 REFN"
+</programlisting>
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>HDR_SUBM</glossterm><glossdef>
+
+<para>
+string to use when writing gedcom files for the SUBM.
+Default is 
+<programlisting>
+"1 SUBM".
+</programlisting>
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>HDR_GEDC</glossterm><glossdef>
+
+<para>
+String containing the GEDC block for the header record when exporting GEDCOM.
+The default is 
+<programlisting>
+"1 GEDC\n2 VERS 5.5\n2 FORM LINEAGE-LINKED".
+</programlisting>
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>HDR_CHAR</glossterm><glossdef>
+
+<para>
+String containing the CHAR block for the header record when exporting GEDCOM.
+The default is 
+<programlisting>
+"1 CHAR ASCII".
+</programlisting>
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>ReportLog</glossterm><glossdef>
+
+<para>
+name of file to print report program errors to, if not specified
+use stdout curses window.
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>CrashLog_llexec</glossterm><glossdef>
+
+<para>
+file to write crash log into for llexec.
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>CrashLog_llines</glossterm><glossdef>
+
+<para>
+file to write crash log into for llines.
+</para>
+</glossdef></glossentry>
+<glossentry><glossterm>LLTTEXPORT</glossterm><glossdef>
+
+<para>
+directory to write translation tables to.  Default is the current
+directory.
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>ImportLog</glossterm><glossdef>
+
+<para>
+where to log errors found while importing a gedcom file.
+default is errs.log.
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>gettext.path</glossterm><glossdef>
+
+<para>
+for windows, if specified path to (re)load gettext dll
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>iconv.path</glossterm><glossdef>
+
+<para>
+for Windows, path to link dynamically to gettext and iconv
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>user.fullname</glossterm><glossdef>
+
+<para>
+The full name of the current user. If not found as a property it is fetched 
+from the system when possible. 
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>user.email</glossterm><glossdef>
+
+<para>
+The email address of the current user. If not found as a property it is 
+fetched from the system when possible. 
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>user.address</glossterm><glossdef>
+
+<para>
+Postal address of the current user. 
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>user.url</glossterm><glossdef>
+
+<para>
+URL to the users home page. 
+</para>
+</glossdef></glossentry>
+</glosslist>
 
 </sect1>
 

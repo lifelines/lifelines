@@ -193,8 +193,8 @@ BOOLEAN
 load_global_options (STRING configfile, STRING * pmsg)
 {
 	*pmsg = NULL;
-	free_optable(&f_global);
-	f_global= create_table(FREEBOTH);
+	if (!f_global) 
+		f_global= create_table(FREEBOTH);
 	if (!load_config_file(configfile, pmsg))
 		return FALSE;
 	return TRUE;

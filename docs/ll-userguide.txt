@@ -33,6 +33,7 @@ Thomas T. Wetmore , IV
         HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS
         FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES
         LINKING RECORDS TOGETHER AND USING THE REFN FEATURE
+        System and User Properties
      _____________________________________________________________
 
 Users' Manual
@@ -96,12 +97,26 @@ INSTALLATION
    or  as  an  executable  program already prepared for your UNIX (or
    MS-Windows) system. The source distribution comes with the readme,
    build  script  and make files necessary to build LifeLines. Follow
-   the  instructions  in the readme file. The executable program will
-   be  named  llines.  llines  is  the LifeLines program; put it in a
-   directory  in  your  execution  path.  If  you  get the program in
-   executable  form,  follow  whatever instructions came with it. The
-   source  distribution  package also contains documentation and some
-   LifeLines programs.
+   the  instructions  in the readme file. A number of executables are
+   built  which  can be put it in a directory in your execution path.
+   If  you  get  the  program  in  executable  form,  follow whatever
+   instructions came with it.
+
+   llines
+          the LifeLines program with full user interface
+
+   llexec
+          a  stripped  down version of the LifeLines program, without
+          the user interface for non-interactive processing of report
+          programs
+
+   dbverify
+          a utility program to verify LifeLines databases.
+
+   The  source  distribution  package also contains documentation and
+   some  LifeLines  programs.  Included  with  these  in  the reports
+   directory  is  a  brief  overview  of  the  reports  in  the  file
+   index.html.
      _____________________________________________________________
 
 STARTING LIFELINES AND CREATING DATABASES
@@ -118,68 +133,38 @@ STARTING LIFELINES AND CREATING DATABASES
    LifeLines by using the command llines instead.
 
    The full command line interface to LifeLines is:
-        lines [-adkrwifmntcuxoC][database]
+        lines [-acdfiklnortuwxzCFI][database]
 
-   The options mean the following:
+   The following options are supported:
 
-   -C
-          Specify config file location (eg,
-          -C/home/bill/lifelines/.linesrc2)
-
-   -F
-          Finnish option (only available if so compiled)
-
-   -a
-          log dynamic memory operation (for debugging)
-
-   -c
-          supply  cache  values (eg, -ci400,4000f400,4000 sets direct
-          indi & fam caches to 400, and indirect indi & fam caches to
-          4000)
-
-   -d
-          debug mode (signal protection disabled for convenience with
-          breakpoints)
-
-   -f
-          force open the database - use only in emergency
-
-   -i
-          open  database with immutable access (no protection against
-          other access -- for use on read-only media)
-
-   -k
-          always  show  keys  (normally  keys  are suppressed if REFN
-          available)
-
-   -l
-          lock  (-ly)  or  unlock  (-ln) a database for use with read
-          only  media  (access  to  a  locked  database is treated as
-          immutable)
-
-   -n
-          do not use traditional family rules
-
-   -o
-          Specify program output directory (eg, -o/tmp/mytests)
-
-   -r
-          open  database with read-only access (protect against other
-          writer access)
-
-   -t
-          trace function calls in report programs (for debugging)
-
-   -u
-          specify  window size (eg, -u120,34 specifies 120 columns by
-          34 rows)
-
-   -w
-          open  database with writeable access (protect against other
-          writer or reader access)
-
-   -x
-          execute a single lifelines report program directly
+   -C Specify configuration file location (e.g.
+   -C/home/bill/lifelines/.linesrc2 )
+   -F Finnish option (only available if so compiled)
+   -I Specify a user property (e.g. -ILLEDITOR=gvim )
+   -a log dynamic memory operation (for debugging)
+   -c  supply cache values (eg, -ci400,4000f400,4000 sets direct indi
+   & fam caches to 400, and indirect indi & fam caches to 4000)
+   -d  debug  mode  (signal  protection disabled for convenience with
+   breakpoints)
+   -f force open the database - use only in emergency
+   -i  open  database  with  immutable  access (no protection against
+   other access -- for use on read-only media)
+   -k  always  show  keys  (normally  keys  are  suppressed  if  REFN
+   available)
+   -l  lock  (-ly)  or unlock (-ln) a database for use with read only
+   media (access to a locked database is treated as immutable)
+   -n do not use traditional family rules
+   -o Specify program output directory (eg, -o/tmp/mytests)
+   -r  open  database  with  read-only  access (protect against other
+   writer access)
+   -t trace function calls in report programs (for debugging)
+   -u  specify  window size (eg, -u120,34 specifies 120 columns by 34
+   rows)
+   -w  open  database  with  writeable  access (protect against other
+   writer or reader access)
+   -x execute a single lifelines report program directly
+   -z Use normal ASCII characters for drawing lines in user interface
+   rather than the vt100 special characters.
 
    The  -r  option  opens the database with read-only access. When in
    this mode LifeLines will not let you modify the database; no other
@@ -201,7 +186,7 @@ STARTING LIFELINES AND CREATING DATABASES
    database  and  reset  the  mode  mechanism.  This  is  a dangerous
    feature;  you  can use it to open the same database with writeable
    access more than once; the results are unpredictable and generally
-   disasterous.
+   disastrous.
 
    The  multiuser  protection  supplied  by this reader/writer access
    mechanism  is provided via a flag setting in the database, so both
@@ -580,6 +565,8 @@ SCREEN EDITORS AND ENVIRONMENT VARIABLES
    in  lieu of environment variables. It is ordinarily named .linesrc
    under UNIX, and lines.cfg under MS-Windows. A sample configuration
    file should have been included in the distribution.
+
+   See the section on System and User properties for more details.
 
    LLDATABASES  can  be  set  to  a  list  of  directories  that hold
    LifeLines databases. When you execute the LifeLines program, these
@@ -1554,7 +1541,7 @@ Which character mapping do you want to edit?
    $hh
           hh is a hexadecimal character value
 
-   \#
+   \ #
           represents the # character
 
    \$
@@ -1666,71 +1653,31 @@ option=value
           information, see the sample configuration file; each option
           is preceded by a brief explanation.
 
-          Following  is  a  list  of  the options, current as version
-          3.0.7.
+          The list of options can be found in the section 'System and
+          User Properties' below.
 
-        INDIREC
-                Person record edit template
+   For example if you would like to replace the default person record
+   template with the following:
 
-        EVENREC
-                Event record edit template
-
-        FAMRECBODY
-                Family  record  body  edit  template  (NB: Unlike the
-                others, this should not include the 0 level FAM tag.)
-
-        SOURREC
-                Source record edit template
-
-        OTHRREC
-                Other record edit template
-
-        codeset
-                String  denoting  code  set  in  use in data. Special
-                handling  is provided for utf-8, which may be entered
-                as  "UTF-8", "utf-8", or "65001". (This is actually a
-                code set issue and not a character set issue, as this
-                only  enables  the processing of multibyte sequences,
-                without regard to their semantic assignments).
-
-        HDR_GEDC
-                String  containing  the  GEDC  block  for  the header
-                record when exporting GEDCOM.
-
-        HDR_CHAR
-                String  containing  the  CHAR  block  for  the header
-                record when exporting GEDCOM.
-
-        HDR_SUBM
-                String  containing  the  SUBM  block  for  the header
-                record when exporting GEDCOM.
-
-          For example if you would like to replace the default person
-          record template with the following:
-
-          Example  10. Example of replacing the default person record
-          template 
-
+   Example  10.  Example  of  replacing  the  default  person  record
+   template 
   0 INDI
   1 NAME //
   1 SEX
 
-          you would edit the user option file to contain:
+   you would edit the user option file to contain:
 
-          Example  11.  Example  of  replaced  default  person record
-          template 
+   Example 11. Example of replaced default person record template 
 
-          INDIREC=0 INDI\
-            1 NAME //\
-            1 SEX
+   INDIREC=0 INDI\
+     1 NAME //\
+     1 SEX
+   or, using the \n escape so as to keep the entry on one line:
 
-          or,  using  the  \n  escape  so as to keep the entry on one
-          line:
+   Example  12. Example of replaced single line default person record
+   template 
 
-          Example  12. Example of replaced single line default person
-          record template 
-
-          INDIREC=0 INDI\n1 NAME //\n1 SEX
+   INDIREC=0 INDI\n1 NAME //\n1 SEX
 
    q Return to main menu.
           This command returns you to the main menu.
@@ -2187,3 +2134,255 @@ LINKING RECORDS TOGETHER AND USING THE REFN FEATURE
    The REFN value may also be used when searching for person, source,
    event  and  user-defined records. You should not add more than one
    REFN line to a record, and every REFN value should be unique.
+     _____________________________________________________________
+
+System and User Properties
+
+   There  are  a  number  of  properties  that  can  be  specified to
+   customize  the  behavior  of  LifeLines.  These  properties can be
+   specified  in  LifeLines  customization  files,  in each LifeLines
+   database or in some cases by environment variables.
+
+   LifeLines  configuration files are look for first in the directory
+   specified  by  the  HOME environment variable, assuming that it is
+   set,   and  then  in  the  current  directory.  The  name  of  the
+   configuration  file  is  .linesrc  on  UNIX  or  linux systems and
+   lines.cfg on windows systems.
+
+   A  configuration file can also be specified using the -C option to
+   LifeLines  or  by defining the environment variable "LLCONFIGFILE"
+   with  a  value  containing  the full pathname of the configuration
+   file.  If  either  of these mechanisms is used, LifeLines does not
+   look  for  a  configuration  file anywhere else. If a -C option is
+   provided,  the  LLCONFIGFILE  environment variable, if defined, is
+   ignored.  If  neither  the  -C option nor the environment variable
+   LLCONFIGFILE  is set, the above mentioned configuration file names
+   are  used.  A  configuration  file  is  looked  for  in  your home
+   directory   and   is  read  in,  if  it  exists,  and  then  if  a
+   configuration file exists in the current directory it is read. The
+   values  in  this  second  file  are  used to replace or supplement
+   values found in the first file.
+
+   When LifeLines searches for a property it looks for it as follows:
+
+   cmdline table
+          First,  LifeLines  looks  in  the cmdline table. This table
+          contains  the  values that have been specified using the -I
+          option to LifeLines.
+
+   database table
+          Next,  LifeLines  looks  in  the database table. This table
+          contains  the  values which have been stored in the current
+          database.
+
+   global table
+          Next,  LifeLines  looks  in  the  global  table. This table
+          contains the values found when reading in the configuration
+          files.
+
+   environment table
+          Finally,  LifeLines  looks  in  the environment table. This
+          table   contains   the  values  found  in  the  environment
+          variables,  LLPROGRAMS, LLREPORTS, LLARCHIVES, LLDATABASES,
+          LLNEWDBDIR, and LLEDITOR.
+
+   Properties are named group.subgroup.property or group.property, or
+   even  just  property.  The  following  keys  are  available at the
+   moment:
+
+   LLPROGRAMS
+          LLPROGRAMS   is   the  search  path  for  LifeLines  report
+          generating and other programs.
+
+   LLREPORTS
+          LLREPORTS is used to select a directory where all generated
+          reports and program outputs will be placed.
+
+   LLARCHIVES
+          LLARCHIVES is used to select a directory where all database
+          backup files will be stored
+
+   LLDATABASES
+          LLDATABASES  is a list of directories that contain database
+          directories used to locate database directories themselves
+
+   LLNEWDBDIR
+          LLNEWDBDIR a single directory where new databases specified
+          without  paths  will  be created. This is a convenience for
+          users  who generally put all their databases under a single
+          common directory.
+
+   LLEDITOR
+          Overrides the default screen editor
+
+   Codeset Information:
+
+   For  the following parameters related to codeset, the values are a
+   String  denoting  code  set  in  use  in data. Special handling is
+   provided  for  utf-8, which may be entered as "UTF-8", "utf-8", or
+   "65001".  (This  is  actually a code set issue and not a character
+   set  issue,  as  this  only  enables  the  processing of multibyte
+   sequences, without regard to their semantic assignments).
+
+   GedcomCodeSet
+          Specifies  the Codeset to use when processing Gedcom files.
+          There  are  actually  3  properties.  GedcomCodeSetOut  and
+          GedcomCodeSetIn  can  be  used  to  specify the codeset for
+          output  or  input.  If  either  of  these  is not specified
+          GedcomCodeSet is used.
+
+   EditorCodeSet
+          Specifies  the  codeset  to  use  for  editing.  There  are
+          actually 3 properties. EditorCodeSetOut and EditorCodeSetIn
+          can  be used to specify the codeset for output or input. If
+          either of these is not specified EditorCodeSet is used.
+
+   ReportCodeSet
+          Specifies  the  codeset  to  use  for  reports.  There  are
+          actually 3 properties. ReportCodeSetOut and ReportCodeSetIn
+          can  be used to specify the codeset for output or input. If
+          either of these is not specified ReportCodeSet is used.
+
+   LongDisplayDate
+          Seven  comma  separated  numbers.  Specifing the format for
+          days, months, years, sfmt, efmt, and cmplx.
+
+   LongDisplayDatePic
+          a  custom ymd date picture. A string in which %y, %m and %d
+          will be converted to the corresponding year, month and day.
+
+   ShortDisplayDate
+          Seven  comma  separated  numbers.  Specifing the format for
+          days, months, years, sfmt, efmt, and cmplx.
+
+   ShortDisplayDatePic
+          a  custom ymd date picture. A string in which %y, %m and %d
+          will be converted to the corresponding year, month and day.
+
+   LocaleDir
+          run-time specification of locale directory
+
+   NewDbProps
+          if   specified,  properties  to  add  to  a  newly  created
+          database. The string is of the form
+          "option1=value1\noption2=value2".
+
+   IllegalChar
+          Apparently not used at this time.
+
+   UiLocaleCollate
+          ui collating sequence
+
+   UiLocaleMessages
+          ui messages locale
+
+   RptLocaleCollate
+          Report Collating Sequence
+
+   RptLocaleMessages
+          Report Messages Locale
+
+   ShortOmitString
+          String prepended on an event converted to a string ???
+
+   TTPATH
+          list  of  directories to search for translation table files
+          (*.tt)
+
+   TTDIR
+          Dir to look for Codeset information in ???
+
+   InputPath
+          path to look for in when reading in gedcom files
+
+   INDIREC
+          The  default  template  to  use  whenever  creating  a  new
+          individual.  If  not  specified,  the  concatenation of the
+          following is used:
+
+"0 INDI\n1 NAME Fname/Surname\n1 SEX MF\n"
+"1 BIRT\n  2 DATE\n  2 PLAC\n"
+"1 DEAT\n  2 DATE\n  2 PLAC\n1 SOUR\n"
+
+   FAMRECBODY
+          The default template to use whenever creating a new family.
+          If not specified, the following is used:
+
+"1 MARR\n  2 DATE\n  2 PLAC\n  2 SOUR\n"
+
+          Note:  Unlike  the  others,  this  should not include the 0
+          level FAM tag.)
+
+   SOURREC
+          The default template to use whenever creating a new source.
+          If not specified, the following is used in english:
+
+"0 SOUR\n1 REFN\n1 TITL Title\n1 AUTH Author"
+
+   EVENREC
+          The  default template to use whenever creating a new event.
+          If not specified, the following is used in english:
+
+"0 EVEN\n1 REFN\n1 DATE\n1 PLAC\n1 INDI\n  2 NAME\n  2 ROLE\n1 SOUR"
+
+   OTHR
+          The  default  template to use whenever creating a new other
+          record. If not specified, the following is used in english:
+
+"0 XXXX\n1 REFN"
+
+   HDR_SUBM
+          string  to  use  when  writing  gedcom  files for the SUBM.
+          Default is
+
+"1 SUBM".
+
+   HDR_GEDC
+          String containing the GEDC block for the header record when
+          exporting GEDCOM. The default is
+
+"1 GEDC\n2 VERS 5.5\n2 FORM LINEAGE-LINKED".
+
+   HDR_CHAR
+          String containing the CHAR block for the header record when
+          exporting GEDCOM. The default is
+
+"1 CHAR ASCII".
+
+   ReportLog
+          name  of  file  to  print  report program errors to, if not
+          specified use stdout curses window.
+
+   CrashLog_llexec
+          file to write crash log into for llexec.
+
+   CrashLog_llines
+          file to write crash log into for llines.
+
+   LLTTEXPORT
+          directory  to  write  translation tables to. Default is the
+          current directory.
+
+   ImportLog
+          where  to  log  errors found while importing a gedcom file.
+          default is errs.log.
+
+   gettext.path
+          for windows, if specified path to (re)load gettext dll
+
+   iconv.path
+          for Windows, path to link dynamically to gettext and iconv
+
+   user.fullname
+          The  full  name  of  the  current  user.  If not found as a
+          property it is fetched from the system when possible.
+
+   user.email
+          The  email  address  of the current user. If not found as a
+          property it is fetched from the system when possible.
+
+   user.address
+          Postal address of the current user.
+
+   user.url
+          URL to the users home page.

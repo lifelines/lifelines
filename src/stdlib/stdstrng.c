@@ -264,7 +264,7 @@ llstrncat (char *dest, const char *src, size_t n, int utf8)
 	size_t len = strlen(dest);
 	if (len > n-2) /* must fit trailing zero */
 		return dest;
-	llstrncpy(dest+len, src, n, utf8);
+	llstrncpy(dest+len, src, n-len, utf8);
 	return dest;
 }
 /*==================================

@@ -94,102 +94,102 @@ HREF="#AEN200"
 ></DT
 ><DT
 ><A
-HREF="#AEN309"
+HREF="#AEN310"
 >Expressions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN325"
+HREF="#AEN326"
 >Include Feature</A
 ></DT
 ><DT
 ><A
-HREF="#AEN340"
+HREF="#AEN341"
 >Built-in Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN349"
+HREF="#AEN350"
 >Value Types</A
 ></DT
 ><DT
 ><A
-HREF="#AEN441"
+HREF="#AEN442"
 >Arithmetic and Logic Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN672"
+HREF="#AEN673"
 >Person Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1113"
+HREF="#AEN1152"
 >Family Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1315"
+HREF="#AEN1354"
 >Other types of records</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1318"
+HREF="#AEN1388"
 >List Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1511"
+HREF="#AEN1582"
 >Table Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1554"
+HREF="#AEN1625"
 >GEDCOM Node Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1670"
+HREF="#AEN1753"
 >Event and Date Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1981"
+HREF="#AEN2064"
 >Value Extraction Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN2061"
+HREF="#AEN2144"
 >User Interaction Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN2201"
+HREF="#AEN2284"
 >String Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN2524"
+HREF="#AEN2607"
 >Output Mode Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN2701"
+HREF="#AEN2784"
 >Person Set Functions and GEDCOM Extraction</A
 ></DT
 ><DT
 ><A
-HREF="#AEN2974"
+HREF="#AEN3095"
 >Record Update Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN3044"
+HREF="#AEN3165"
 >Record Linking Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN3082"
+HREF="#AEN3204"
 >Miscellaneous Functions</A
 ></DT
 ></DL
@@ -669,7 +669,7 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="programlisting"
->&#13;while(indi, dequeue(ilist)) {
+>&#13;while (indi, dequeue(ilist)) {
   set(ahnen, dequeue(alist))
   d(ahnen) ". " name(indi) nl()
   if (e, birth(indi)) { " b. " long(e) nl() }
@@ -714,7 +714,7 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="programlisting"
->&#13;while(indi, dequeue(ilist)) {
+>&#13;while (indi, dequeue(ilist)) {
 </PRE
 ></TD
 ></TR
@@ -1450,7 +1450,10 @@ CLASS="programlisting"
 ></TABLE
 >
 
-will return true if there is a BIRT record, even if it is empty, but will return false if there is no BIRT record
+will return <SPAN
+CLASS="returnvalue"
+>true</SPAN
+> if there is a BIRT record, even if it is empty, but will return false if there is no BIRT record
 at all.
 
 </P
@@ -1784,7 +1787,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN309"
+NAME="AEN310"
 ></A
 >Expressions</H2
 ><P
@@ -1846,7 +1849,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN325"
+NAME="AEN326"
 ></A
 >Include Feature</H2
 ><P
@@ -1911,7 +1914,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN340"
+NAME="AEN341"
 ></A
 >Built-in Functions</H2
 ><P
@@ -1946,7 +1949,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN349"
+NAME="AEN350"
 ></A
 >Value Types</H2
 ><DIV
@@ -2229,7 +2232,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN441"
+NAME="AEN442"
 ></A
 >Arithmetic and Logic Functions</H2
 ><DIV
@@ -2240,7 +2243,7 @@ CLASS="glosslist"
 >&#13;	    <DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN446"
+NAME="AEN447"
 ></A
 ><P
 ></P
@@ -2289,7 +2292,7 @@ addition - two to 32 arguments
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN458"
+NAME="AEN459"
 ></A
 ><P
 ></P
@@ -2331,7 +2334,7 @@ subtraction
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN469"
+NAME="AEN470"
 ></A
 ><P
 ></P
@@ -2379,7 +2382,7 @@ multiplication - two to 32 arguments
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN481"
+NAME="AEN482"
 ></A
 ><P
 ></P
@@ -2421,7 +2424,7 @@ division
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN492"
+NAME="AEN493"
 ></A
 ><P
 ></P
@@ -2463,7 +2466,7 @@ modulus (remainder)
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN503"
+NAME="AEN504"
 ></A
 ><P
 ></P
@@ -2505,7 +2508,7 @@ exponentiation
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN514"
+NAME="AEN515"
 ></A
 ><P
 ></P
@@ -2541,7 +2544,7 @@ integer negation
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN524"
+NAME="AEN525"
 ></A
 ><P
 ></P
@@ -2577,7 +2580,7 @@ increment variable by one
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN534"
+NAME="AEN535"
 ></A
 ><P
 ></P
@@ -2613,7 +2616,7 @@ decrement variable by one
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN544"
+NAME="AEN545"
 ></A
 ><P
 ></P
@@ -2661,7 +2664,7 @@ logical and - two to 32 arguments
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN556"
+NAME="AEN557"
 ></A
 ><P
 ></P
@@ -2709,7 +2712,7 @@ logical or - two to 32 arguments
 > <DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN568"
+NAME="AEN569"
 ></A
 ><P
 ></P
@@ -2745,7 +2748,7 @@ logical not
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN578"
+NAME="AEN579"
 ></A
 ><P
 ></P
@@ -2787,7 +2790,7 @@ equality (not strings)
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN589"
+NAME="AEN590"
 ></A
 ><P
 ></P
@@ -2829,7 +2832,7 @@ non-equality
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN600"
+NAME="AEN601"
 ></A
 ><P
 ></P
@@ -2871,7 +2874,7 @@ less than
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN611"
+NAME="AEN612"
 ></A
 ><P
 ></P
@@ -2914,7 +2917,7 @@ greater than
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN622"
+NAME="AEN623"
 ></A
 ><P
 ></P
@@ -2956,7 +2959,7 @@ less than or equal
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN633"
+NAME="AEN634"
 ></A
 ><P
 ></P
@@ -3106,7 +3109,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN672"
+NAME="AEN673"
 ></A
 >Person Functions</H2
 ><DIV
@@ -3117,7 +3120,7 @@ CLASS="glosslist"
 >&#13;	    <DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN677"
+NAME="AEN678"
 ></A
 ><P
 ></P
@@ -3165,7 +3168,7 @@ default name of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN689"
+NAME="AEN690"
 ></A
 ><P
 ></P
@@ -3219,7 +3222,7 @@ many name forms of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN702"
+NAME="AEN703"
 ></A
 ><P
 ></P
@@ -3255,7 +3258,7 @@ surname of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN712"
+NAME="AEN713"
 ></A
 ><P
 ></P
@@ -3291,7 +3294,7 @@ given names of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN722"
+NAME="AEN723"
 ></A
 ><P
 ></P
@@ -3333,7 +3336,7 @@ trimmed name of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN733"
+NAME="AEN734"
 ></A
 ><P
 ></P
@@ -3369,7 +3372,7 @@ first birth event of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN743"
+NAME="AEN744"
 ></A
 ><P
 ></P
@@ -3405,7 +3408,7 @@ first death event of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN753"
+NAME="AEN754"
 ></A
 ><P
 ></P
@@ -3441,7 +3444,7 @@ first baptism event of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN763"
+NAME="AEN764"
 ></A
 ><P
 ></P
@@ -3477,7 +3480,7 @@ first burial event of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN773"
+NAME="AEN774"
 ></A
 ><P
 ></P
@@ -3513,7 +3516,7 @@ first father of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN783"
+NAME="AEN784"
 ></A
 ><P
 ></P
@@ -3549,7 +3552,7 @@ first mother of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN793"
+NAME="AEN794"
 ></A
 ><P
 ></P
@@ -3585,7 +3588,7 @@ next (younger) sibling of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN803"
+NAME="AEN804"
 ></A
 ><P
 ></P
@@ -3621,7 +3624,7 @@ previous (older) sibling of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN813"
+NAME="AEN814"
 ></A
 ><P
 ></P
@@ -3657,7 +3660,7 @@ sex of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN823"
+NAME="AEN824"
 ></A
 ><P
 ></P
@@ -3693,7 +3696,7 @@ male predicate
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN833"
+NAME="AEN834"
 ></A
 ><P
 ></P
@@ -3729,7 +3732,7 @@ female predicate
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN843"
+NAME="AEN844"
 ></A
 ><P
 ></P
@@ -3771,7 +3774,7 @@ pronoun referring to
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN854"
+NAME="AEN855"
 ></A
 ><P
 ></P
@@ -3807,7 +3810,7 @@ number of spouses of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN864"
+NAME="AEN865"
 ></A
 ><P
 ></P
@@ -3843,7 +3846,7 @@ number of families (as spouse/parent) of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN874"
+NAME="AEN875"
 ></A
 ><P
 ></P
@@ -3879,7 +3882,7 @@ first parents' family of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN884"
+NAME="AEN885"
 ></A
 ><P
 ></P
@@ -3915,7 +3918,7 @@ first title of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN894"
+NAME="AEN895"
 ></A
 ><P
 ></P
@@ -3962,7 +3965,7 @@ internal key of (work for families also)
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN906"
+NAME="AEN907"
 ></A
 ><P
 ></P
@@ -3998,7 +4001,7 @@ SOUNDEX code of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN916"
+NAME="AEN917"
 ></A
 ><P
 ></P
@@ -4034,7 +4037,7 @@ root GEDCOM node of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN926"
+NAME="AEN927"
 ></A
 ><P
 ></P
@@ -4070,7 +4073,7 @@ root GEDCOM node of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN936"
+NAME="AEN937"
 ></A
 ><P
 ></P
@@ -4106,7 +4109,7 @@ find person with key value
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN946"
+NAME="AEN947"
 ></A
 ><P
 ></P
@@ -4137,7 +4140,7 @@ first person in database in key order
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN955"
+NAME="AEN956"
 ></A
 ><P
 ></P
@@ -4168,7 +4171,7 @@ last person in database in key order
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN964"
+NAME="AEN965"
 ></A
 ><P
 ></P
@@ -4204,7 +4207,7 @@ next person in database in key order
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN974"
+NAME="AEN975"
 ></A
 ><P
 ></P
@@ -4376,6 +4379,154 @@ CLASS="replaceable"
 ><P
 >&#13;
 loop through all persons in database
+
+</P
+></DD
+><DT
+><B
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="synopsis"
+><B
+CLASS="command"
+>mothers</B
+> (<TT
+CLASS="replaceable"
+><I
+>INDI</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>INDI_V</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>FAM_V</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>INT</I
+></TT
+>) { <TT
+CLASS="replaceable"
+><I
+>commands</I
+></TT
+> }</PRE
+></TD
+></TR
+></TABLE
+></B
+></DT
+><DD
+><P
+>&#13;
+loop through all female parents of a person
+
+</P
+></DD
+><DT
+><B
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="synopsis"
+><B
+CLASS="command"
+>fathers</B
+> (<TT
+CLASS="replaceable"
+><I
+>INDI</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>INDI_V</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>FAM_V</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>INT</I
+></TT
+>) { <TT
+CLASS="replaceable"
+><I
+>commands</I
+></TT
+> }</PRE
+></TD
+></TR
+></TABLE
+></B
+></DT
+><DD
+><P
+>&#13;
+loop through all male parents of a person
+
+</P
+></DD
+><DT
+><B
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="synopsis"
+><B
+CLASS="command"
+>Parents</B
+> (<TT
+CLASS="replaceable"
+><I
+>INDI</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>FAM</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>INT</I
+></TT
+>) { <TT
+CLASS="replaceable"
+><I
+>commands</I
+></TT
+> }</PRE
+></TD
+></TR
+></TABLE
+></B
+></DT
+><DD
+><P
+>&#13;
+loop through all familes a person is a child of
 
 </P
 ></DD
@@ -4560,7 +4711,7 @@ the second parameter selects the type of pronoun:
 ><DIV
 CLASS="informaltable"
 ><A
-NAME="AEN1056"
+NAME="AEN1089"
 ></A
 ><P
 ></P
@@ -4762,12 +4913,9 @@ CLASS="command"
 second argument is a person variable that iterates through the first person's spouses. The third
 argument is a family variable that iterates through the families the person and each spouse are in.
 The fourth argument is an integer variable that counts the iterations.
-
-
 </P
 ><P
->&#13;
-<B
+>&#13;<B
 CLASS="command"
 >Families</B
 > is an iterator that loops through the families a person was a spouse/parent in. The first
@@ -4775,18 +4923,52 @@ argument is a person. The second argument is a family variable that iterates thr
 first person was a spouse/parent in. The third argument iterates through the spouses from the families;
 if there is no spouse in a particular family, the variable is set to null for that iteration. The fourth
 argument is an integer variable that counts the iterations.
-
-
 </P
 ><P
->&#13;
-<B
+>&#13;<B
 CLASS="command"
 >Forindi</B
-> is an iterator that loops through every person in the database in ascending key order. Its first
-parameter is a variable that iterates through the persons; its second parameter is an integer counter
+> is an iterator that loops through every person in
+the database in ascending key order. Its first
+parameter is a variable that iterates through the persons; its second 
+parameter is an integer counter
 variable that counts the persons starting at one.
-
+</P
+><P
+>&#13;<B
+CLASS="command"
+>mothers</B
+> is an iterator that loops through every female
+parent of the specified individual. 
+Its first parameter is a person;
+its third parameter is a family variable that iterates through the familes
+that the person is a child in;
+its second parameter is a person variable that is the female parent
+associated with the family in the third parameter;
+The fourth parameter is a variable that counts the families returned starting at one.
+</P
+><P
+>&#13;<B
+CLASS="command"
+>Parents</B
+> is an iterator that loops through every family
+of that a person is a child in.  Note: This iterator's name begins with a
+capital P.  There is another function of the same name that begins with a
+lower case p.
+Its first parameter is a person;
+its second parameter is a family variable that iterates through the familes
+that the person is a child in; and
+the third parameter is a variable that counts the families returned starting at one.
+</P
+><P
+>&#13;<B
+CLASS="command"
+>Forindi</B
+> is an iterator that loops through every person in
+the database in ascending key order. Its first
+parameter is a variable that iterates through the persons; its second 
+parameter is an integer counter
+variable that counts the persons starting at one.
 </P
 ></DIV
 ><DIV
@@ -4794,7 +4976,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1113"
+NAME="AEN1152"
 ></A
 >Family Functions</H2
 ><DIV
@@ -4805,7 +4987,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1118"
+NAME="AEN1157"
 ></A
 ><P
 ></P
@@ -4841,7 +5023,7 @@ first marriage event of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1128"
+NAME="AEN1167"
 ></A
 ><P
 ></P
@@ -4877,7 +5059,7 @@ first husband/father of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1138"
+NAME="AEN1177"
 ></A
 ><P
 ></P
@@ -4913,7 +5095,7 @@ first wife/mother of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1148"
+NAME="AEN1187"
 ></A
 ><P
 ></P
@@ -4949,7 +5131,7 @@ number of children in
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1158"
+NAME="AEN1197"
 ></A
 ><P
 ></P
@@ -4985,7 +5167,7 @@ first child of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1168"
+NAME="AEN1207"
 ></A
 ><P
 ></P
@@ -5021,7 +5203,7 @@ last child of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1178"
+NAME="AEN1217"
 ></A
 ><P
 ></P
@@ -5068,7 +5250,7 @@ internal key of (works for persons also)
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1190"
+NAME="AEN1229"
 ></A
 ><P
 ></P
@@ -5104,7 +5286,7 @@ root GEDCOM node of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1200"
+NAME="AEN1239"
 ></A
 ><P
 ></P
@@ -5140,7 +5322,7 @@ root GEDCOM node of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1210"
+NAME="AEN1249"
 ></A
 ><P
 ></P
@@ -5176,7 +5358,7 @@ find family from key
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1220"
+NAME="AEN1259"
 ></A
 ><P
 ></P
@@ -5207,7 +5389,7 @@ first family in database in key order
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1229"
+NAME="AEN1268"
 ></A
 ><P
 ></P
@@ -5238,7 +5420,7 @@ last family in database in key order
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1238"
+NAME="AEN1277"
 ></A
 ><P
 ></P
@@ -5274,7 +5456,7 @@ next family in database in key order
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1248"
+NAME="AEN1287"
 ></A
 ><P
 ></P
@@ -5495,8 +5677,7 @@ CLASS="function"
 
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Fam</TT
 > returns the family who's key is passed as an argument; if no family has the key <TT
@@ -5506,12 +5687,9 @@ CLASS="function"
 CLASS="returnvalue"
 >null</SPAN
 >.
-
-
 </P
 ><P
->&#13;
-<TT
+>&#13;<TT
 CLASS="function"
 >Firstfam</TT
 >, <TT
@@ -5533,8 +5711,6 @@ CLASS="function"
 >Prevfam</TT
 > returns the previous family before the argument family in key
 order.
-
-
 </P
 ><P
 >&#13;
@@ -5564,14 +5740,159 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1315"
+NAME="AEN1354"
 ></A
 >Other types of records</H2
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="synopsis"
+><B
+CLASS="command"
+>forsour</B
+> (<TT
+CLASS="replaceable"
+><I
+>NODE_V</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>INT</I
+></TT
+>) { <TT
+CLASS="replaceable"
+><I
+>commands</I
+></TT
+> }</PRE
+></TD
+></TR
+></TABLE
+></B
+></DT
+><DD
 ><P
 >&#13;
-There are not currently report language functions to access and iterate the other types of records (source, events,
-notes, etc) in a database.
+loop through all sources in database
 
+</P
+></DD
+><DT
+><B
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="synopsis"
+><B
+CLASS="command"
+>foreven</B
+> (<TT
+CLASS="replaceable"
+><I
+>NODE_V</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>INT</I
+></TT
+>) { <TT
+CLASS="replaceable"
+><I
+>commands</I
+></TT
+> }</PRE
+></TD
+></TR
+></TABLE
+></B
+></DT
+><DD
+><P
+>&#13;
+loop through all EVEN nodes in database
+
+</P
+></DD
+><DT
+><B
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="synopsis"
+><B
+CLASS="command"
+>forothr</B
+> (<TT
+CLASS="replaceable"
+><I
+>NODE_V</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>INT</I
+></TT
+>) { <TT
+CLASS="replaceable"
+><I
+>commands</I
+></TT
+> }</PRE
+></TD
+></TR
+></TABLE
+></B
+></DT
+><DD
+><P
+>&#13;
+loop through all other (notes, etc.) nodes in database
+
+</P
+></DD
+></DL
+></DIV
+><P
+>&#13;<B
+CLASS="command"
+>forsour</B
+> is an iterator that loops through all the Source
+nodes in the database.  Its first argument is the SOUR record and its
+second parameter is an integer counter variable that counts the sources
+elements starting at one.
+<B
+CLASS="command"
+>foreven</B
+> is an iterator that loops through all the Event
+nodes in the database.  Its first argument is the EVEN record and its
+second parameter is an integer counter variable that counts the events
+elements starting at one.
+<B
+CLASS="command"
+>forothr</B
+> is an iterator that loops through all the Other
+nodes in the database.  Its first argument is the record (NOTE, etc.) and its
+second parameter is an integer counter variable that counts the nodes
+starting at one.
 </P
 ></DIV
 ><DIV
@@ -5579,7 +5900,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1318"
+NAME="AEN1388"
 ></A
 >List Functions</H2
 ><DIV
@@ -5590,7 +5911,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1323"
+NAME="AEN1393"
 ></A
 ><P
 ></P
@@ -5626,7 +5947,7 @@ declare a list
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1333"
+NAME="AEN1403"
 ></A
 ><P
 ></P
@@ -5662,7 +5983,7 @@ check if list is empty
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1343"
+NAME="AEN1413"
 ></A
 ><P
 ></P
@@ -5697,7 +6018,7 @@ length of list
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1353"
+NAME="AEN1423"
 ></A
 ><P
 ></P
@@ -5739,7 +6060,7 @@ enqueue element on list
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1364"
+NAME="AEN1434"
 ></A
 ><P
 ></P
@@ -5775,7 +6096,7 @@ dequeue and return element from list
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1374"
+NAME="AEN1444"
 ></A
 ><P
 ></P
@@ -5817,7 +6138,7 @@ requeue an element on list
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1385"
+NAME="AEN1455"
 ></A
 ><P
 ></P
@@ -5859,7 +6180,7 @@ push element on list
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1396"
+NAME="AEN1466"
 ></A
 ><P
 ></P
@@ -5895,7 +6216,7 @@ pop and return element from list
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1406"
+NAME="AEN1476"
 ></A
 ><P
 ></P
@@ -5943,7 +6264,7 @@ array element assignment
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1418"
+NAME="AEN1488"
 ></A
 ><P
 ></P
@@ -5985,7 +6306,7 @@ array element selection
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1429"
+NAME="AEN1499"
 ></A
 ><P
 ></P
@@ -5993,20 +6314,14 @@ NAME="AEN1429"
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
+>BOOL <TT
 CLASS="function"
->deleteel</TT
+>inlist</TT
 ></CODE
 >(<TT
 CLASS="parameter"
 ><I
 >LIST</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INT</I
 ></TT
 >,
 <TT
@@ -6024,7 +6339,7 @@ CLASS="parameter"
 ><DD
 ><P
 >&#13;
-array element deletion
+is second argument in list.
 
 </P
 ></DD
@@ -6033,7 +6348,7 @@ array element deletion
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1441"
+NAME="AEN1510"
 ></A
 ><P
 ></P
@@ -6075,7 +6390,7 @@ sort list elements
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1452"
+NAME="AEN1521"
 ></A
 ><P
 ></P
@@ -6260,41 +6575,47 @@ pushed on the stack and can be of any type.
 <TT
 CLASS="function"
 >Setel</TT
->, <TT
+> and <TT
 CLASS="function"
 >getel</TT
->, and <TT
-CLASS="function"
->deleteel</TT
-> provide array access to a
-list.  <TT
+> provide array access to a list.  <TT
 CLASS="function"
 >Setel</TT
-> sets a value of an array element, and <TT
+>
+sets a value of an array element, and <TT
 CLASS="function"
 >getel</TT
-> returns the value of
-an array element. The first parameter to both is a list; the second parameter to both is an integer index into the
-array; and the third parameter to <TT
+> returns the value of an array element. The first
+parameter to both is a list; the second parameter to both is an integer index into the array; and the third parameter to
+<TT
 CLASS="function"
 >setel</TT
-> is the value to assign to the array element and can be of
-any type. Array elements are indexed starting at one. Unassigned elements are assumed to be
-<SPAN
+> is the value to assign to the array element and can be of any type. Array elements are
+indexed starting at one. Unassigned elements are assumed to be <SPAN
 CLASS="returnvalue"
 >null</SPAN
-> (<SPAN
+>
+(<SPAN
 CLASS="returnvalue"
 >0</SPAN
->). Arrays automatically grow in size to accommodate the
-largest index value that is used.  Passing 0 references the last element at the other end from 1, and -1 the one before
-it, etc. <TT
+>). Arrays automatically grow in size to accommodate the largest index value that is used.
+Passing 0 references the last element at the other end from 1, and -1 the one before it, etc. 
+
+
+</P
+><P
+>&#13;<TT
 CLASS="function"
->deleteel</TT
-> deletes the element at the specified index, shrinking the list accordingly.
-Arrays do not grow in size as a result of deleteel, even if the index is larger than the existing list.
-
-
+>inlist</TT
+> compares the second argument with each element
+in the list.  If it finds a match <TT
+CLASS="function"
+>inlist</TT
+> returns
+<SPAN
+CLASS="returnvalue"
+>true</SPAN
+>.
 </P
 ><P
 >&#13;
@@ -6328,7 +6649,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1511"
+NAME="AEN1582"
 ></A
 >Table Functions</H2
 ><DIV
@@ -6339,7 +6660,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1516"
+NAME="AEN1587"
 ></A
 ><P
 ></P
@@ -6375,7 +6696,7 @@ declare a table
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1526"
+NAME="AEN1597"
 ></A
 ><P
 ></P
@@ -6423,7 +6744,7 @@ insert entry in table
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1538"
+NAME="AEN1609"
 ></A
 ><P
 ></P
@@ -6502,7 +6823,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1554"
+NAME="AEN1625"
 ></A
 >GEDCOM Node Functions</H2
 ><DIV
@@ -6513,7 +6834,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1559"
+NAME="AEN1630"
 ></A
 ><P
 ></P
@@ -6549,7 +6870,7 @@ cross reference index of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1569"
+NAME="AEN1640"
 ></A
 ><P
 ></P
@@ -6585,7 +6906,7 @@ tag of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1579"
+NAME="AEN1650"
 ></A
 ><P
 ></P
@@ -6621,7 +6942,7 @@ value of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1589"
+NAME="AEN1660"
 ></A
 ><P
 ></P
@@ -6657,7 +6978,7 @@ parent node of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1599"
+NAME="AEN1670"
 ></A
 ><P
 ></P
@@ -6693,7 +7014,7 @@ first child of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1609"
+NAME="AEN1680"
 ></A
 ><P
 ></P
@@ -6729,7 +7050,7 @@ next sibling of
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1619"
+NAME="AEN1690"
 ></A
 ><P
 ></P
@@ -6798,6 +7119,47 @@ CLASS="replaceable"
 ><P
 >&#13;
 loop through child nodes
+
+</P
+></DD
+><DT
+><B
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="synopsis"
+><B
+CLASS="command"
+>fornotes</B
+> (<TT
+CLASS="replaceable"
+><I
+>ANY</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>STRING</I
+></TT
+>) { <TT
+CLASS="replaceable"
+><I
+>commands</I
+></TT
+> }</PRE
+></TD
+></TR
+></TABLE
+></B
+></DT
+><DD
+><P
+>&#13;
+loop through notes on a node
 
 </P
 ></DD
@@ -6933,7 +7295,18 @@ CLASS="acronym"
 > node. Its first argument is a
 node expression, and its second parameter is a variable that iterates through each direct child node of
 the first node.
-
+</P
+><P
+>&#13;<B
+CLASS="command"
+>Fornotes</B
+> is an iterator that loops through the NOTE nodes 
+of a <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> node. Its first argument is a
+node expression, and its second parameter is a variable that returns the
+value of the NOTE.  The value includes processed sub CONC and CONT records.
 
 </P
 ><P
@@ -6956,7 +7329,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1670"
+NAME="AEN1753"
 ></A
 >Event and Date Functions</H2
 ><DIV
@@ -6967,7 +7340,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1675"
+NAME="AEN1758"
 ></A
 ><P
 ></P
@@ -7008,7 +7381,7 @@ CLASS="structfield"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1686"
+NAME="AEN1769"
 ></A
 ><P
 ></P
@@ -7049,7 +7422,7 @@ CLASS="structfield"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1697"
+NAME="AEN1780"
 ></A
 ><P
 ></P
@@ -7090,7 +7463,7 @@ CLASS="structfield"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1708"
+NAME="AEN1791"
 ></A
 ><P
 ></P
@@ -7136,7 +7509,7 @@ CLASS="structfield"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1720"
+NAME="AEN1803"
 ></A
 ><P
 ></P
@@ -7172,7 +7545,7 @@ date and place of, abbreviated from
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1730"
+NAME="AEN1813"
 ></A
 ><P
 ></P
@@ -7203,7 +7576,7 @@ returns the `event' of the current date
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1739"
+NAME="AEN1822"
 ></A
 ><P
 ></P
@@ -7239,7 +7612,7 @@ set day format for stddate calls
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1749"
+NAME="AEN1832"
 ></A
 ><P
 ></P
@@ -7275,7 +7648,7 @@ set month format for stddate calls
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1759"
+NAME="AEN1842"
 ></A
 ><P
 ></P
@@ -7311,7 +7684,7 @@ set year format for stddate calls
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1769"
+NAME="AEN1852"
 ></A
 ><P
 ></P
@@ -7347,7 +7720,7 @@ set era format for stddate calls
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1779"
+NAME="AEN1862"
 ></A
 ><P
 ></P
@@ -7383,7 +7756,7 @@ set date format for stddate calls
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1789"
+NAME="AEN1872"
 ></A
 ><P
 ></P
@@ -7550,7 +7923,7 @@ CLASS="function"
 ><DIV
 CLASS="informaltable"
 ><A
-NAME="AEN1827"
+NAME="AEN1910"
 ></A
 ><P
 ></P
@@ -7611,7 +7984,7 @@ CLASS="function"
 ><DIV
 CLASS="informaltable"
 ><A
-NAME="AEN1842"
+NAME="AEN1925"
 ></A
 ><P
 ></P
@@ -7781,7 +8154,7 @@ CLASS="function"
 ><DIV
 CLASS="informaltable"
 ><A
-NAME="AEN1884"
+NAME="AEN1967"
 ></A
 ><P
 ></P
@@ -7843,7 +8216,7 @@ CLASS="function"
 ><DIV
 CLASS="informaltable"
 ><A
-NAME="AEN1899"
+NAME="AEN1982"
 ></A
 ><P
 ></P
@@ -7977,7 +8350,7 @@ CLASS="function"
 ><DIV
 CLASS="informaltable"
 ><A
-NAME="AEN1932"
+NAME="AEN2015"
 ></A
 ><P
 ></P
@@ -8179,7 +8552,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1981"
+NAME="AEN2064"
 ></A
 >Value Extraction Functions</H2
 ><DIV
@@ -8190,7 +8563,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1986"
+NAME="AEN2069"
 ></A
 ><P
 ></P
@@ -8244,7 +8617,7 @@ extract a date
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1999"
+NAME="AEN2082"
 ></A
 ><P
 ></P
@@ -8298,7 +8671,7 @@ extract a name
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2012"
+NAME="AEN2095"
 ></A
 ><P
 ></P
@@ -8346,7 +8719,7 @@ extract a place
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2024"
+NAME="AEN2107"
 ></A
 ><P
 ></P
@@ -8558,7 +8931,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN2061"
+NAME="AEN2144"
 ></A
 >User Interaction Functions</H2
 ><DIV
@@ -8569,7 +8942,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2066"
+NAME="AEN2149"
 ></A
 ><P
 ></P
@@ -8616,7 +8989,7 @@ identify person through user interface
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2078"
+NAME="AEN2161"
 ></A
 ><P
 ></P
@@ -8663,7 +9036,7 @@ identify set of persons through user interface
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2090"
+NAME="AEN2173"
 ></A
 ><P
 ></P
@@ -8699,7 +9072,7 @@ identify family through user interface
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2100"
+NAME="AEN2183"
 ></A
 ><P
 ></P
@@ -8746,7 +9119,7 @@ get integer through user interface
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2112"
+NAME="AEN2195"
 ></A
 ><P
 ></P
@@ -8793,7 +9166,7 @@ get string through user interface
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2124"
+NAME="AEN2207"
 ></A
 ><P
 ></P
@@ -8829,7 +9202,7 @@ select child of person/family thru user interface
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2134"
+NAME="AEN2217"
 ></A
 ><P
 ></P
@@ -8865,7 +9238,7 @@ select family person is in as spouse
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2144"
+NAME="AEN2227"
 ></A
 ><P
 ></P
@@ -8901,7 +9274,7 @@ select person from set of persons
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2154"
+NAME="AEN2237"
 ></A
 ><P
 ></P
@@ -8937,7 +9310,7 @@ select spouse of person
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2164"
+NAME="AEN2247"
 ></A
 ><P
 ></P
@@ -8973,7 +9346,7 @@ select a subset of persons from set of persons
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2174"
+NAME="AEN2257"
 ></A
 ><P
 ></P
@@ -9096,7 +9469,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN2201"
+NAME="AEN2284"
 ></A
 >String Functions</H2
 ><DIV
@@ -9107,7 +9480,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2206"
+NAME="AEN2289"
 ></A
 ><P
 ></P
@@ -9143,7 +9516,7 @@ convert to lower case
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2216"
+NAME="AEN2299"
 ></A
 ><P
 ></P
@@ -9179,7 +9552,7 @@ convert to upper case
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2226"
+NAME="AEN2309"
 ></A
 ><P
 ></P
@@ -9215,7 +9588,7 @@ capitalize first letter
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2236"
+NAME="AEN2319"
 ></A
 ><P
 ></P
@@ -9251,7 +9624,7 @@ capitalize first letter of each word
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2246"
+NAME="AEN2329"
 ></A
 ><P
 ></P
@@ -9293,7 +9666,7 @@ trim to length
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2257"
+NAME="AEN2340"
 ></A
 ><P
 ></P
@@ -9335,7 +9708,7 @@ right justify in field
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2268"
+NAME="AEN2351"
 ></A
 ><P
 ></P
@@ -9371,7 +9744,7 @@ save and return copy of string
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2278"
+NAME="AEN2361"
 ></A
 ><P
 ></P
@@ -9407,7 +9780,7 @@ same as save function
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2288"
+NAME="AEN2371"
 ></A
 ><P
 ></P
@@ -9465,7 +9838,7 @@ catenate two strings
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2302"
+NAME="AEN2385"
 ></A
 ><P
 ></P
@@ -9523,7 +9896,7 @@ catenate two strings
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2316"
+NAME="AEN2399"
 ></A
 ><P
 ></P
@@ -9559,7 +9932,7 @@ number of characters in string
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2326"
+NAME="AEN2409"
 ></A
 ><P
 ></P
@@ -9607,7 +9980,7 @@ substring function
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2338"
+NAME="AEN2421"
 ></A
 ><P
 ></P
@@ -9655,7 +10028,7 @@ index function
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2350"
+NAME="AEN2433"
 ></A
 ><P
 ></P
@@ -9691,7 +10064,7 @@ number as decimal string
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2360"
+NAME="AEN2443"
 ></A
 ><P
 ></P
@@ -9730,7 +10103,7 @@ CLASS="literal"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2371"
+NAME="AEN2454"
 ></A
 ><P
 ></P
@@ -9769,7 +10142,7 @@ CLASS="literal"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2382"
+NAME="AEN2465"
 ></A
 ><P
 ></P
@@ -9808,7 +10181,7 @@ CLASS="literal"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2393"
+NAME="AEN2476"
 ></A
 ><P
 ></P
@@ -9847,7 +10220,7 @@ CLASS="literal"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2404"
+NAME="AEN2487"
 ></A
 ><P
 ></P
@@ -9883,7 +10256,7 @@ find SOUNDEX value of arbitrary string
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2414"
+NAME="AEN2497"
 ></A
 ><P
 ></P
@@ -9919,7 +10292,7 @@ convert numeric string to integer
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2424"
+NAME="AEN2507"
 ></A
 ><P
 ></P
@@ -9955,7 +10328,7 @@ convert numeric string to integer
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2434"
+NAME="AEN2517"
 ></A
 ><P
 ></P
@@ -9997,7 +10370,7 @@ general string compare
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2445"
+NAME="AEN2528"
 ></A
 ><P
 ></P
@@ -10039,7 +10412,7 @@ compare strings for equality
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2456"
+NAME="AEN2539"
 ></A
 ><P
 ></P
@@ -10329,7 +10702,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN2524"
+NAME="AEN2607"
 ></A
 >Output Mode Functions</H2
 ><DIV
@@ -10340,7 +10713,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2529"
+NAME="AEN2612"
 ></A
 ><P
 ></P
@@ -10371,7 +10744,7 @@ use line output mode
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2538"
+NAME="AEN2621"
 ></A
 ><P
 ></P
@@ -10413,7 +10786,7 @@ use page output mode with given page size
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2549"
+NAME="AEN2632"
 ></A
 ><P
 ></P
@@ -10449,7 +10822,7 @@ position to column in output
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2559"
+NAME="AEN2642"
 ></A
 ><P
 ></P
@@ -10480,7 +10853,7 @@ get current column in output
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2568"
+NAME="AEN2651"
 ></A
 ><P
 ></P
@@ -10516,7 +10889,7 @@ position to row in output
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2578"
+NAME="AEN2661"
 ></A
 ><P
 ></P
@@ -10558,7 +10931,7 @@ position to (row, col) coordinate in output
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2589"
+NAME="AEN2672"
 ></A
 ><P
 ></P
@@ -10589,7 +10962,7 @@ output page buffer
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2598"
+NAME="AEN2681"
 ></A
 ><P
 ></P
@@ -10620,7 +10993,7 @@ newline character
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2607"
+NAME="AEN2690"
 ></A
 ><P
 ></P
@@ -10651,7 +11024,7 @@ space character
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2616"
+NAME="AEN2699"
 ></A
 ><P
 ></P
@@ -10682,7 +11055,7 @@ double quote character
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2625"
+NAME="AEN2708"
 ></A
 ><P
 ></P
@@ -10724,7 +11097,7 @@ send program output to this file
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2636"
+NAME="AEN2719"
 ></A
 ><P
 ></P
@@ -10755,7 +11128,7 @@ return name of current program output file
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2645"
+NAME="AEN2728"
 ></A
 ><P
 ></P
@@ -10791,7 +11164,7 @@ copy file contents to program output file
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2655"
+NAME="AEN2738"
 ></A
 ><P
 ></P
@@ -10998,7 +11371,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN2701"
+NAME="AEN2784"
 ></A
 >Person Set Functions and GEDCOM Extraction</H2
 ><DIV
@@ -11009,7 +11382,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2706"
+NAME="AEN2789"
 ></A
 ><P
 ></P
@@ -11045,7 +11418,7 @@ declare a set variable
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2716"
+NAME="AEN2799"
 ></A
 ><P
 ></P
@@ -11093,7 +11466,7 @@ add a person to a set
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2728"
+NAME="AEN2811"
 ></A
 ><P
 ></P
@@ -11141,7 +11514,7 @@ remove a person from a set
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2740"
+NAME="AEN2823"
 ></A
 ><P
 ></P
@@ -11177,7 +11550,7 @@ size of a set
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2750"
+NAME="AEN2833"
 ></A
 ><P
 ></P
@@ -11219,7 +11592,7 @@ union of two sets
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2761"
+NAME="AEN2844"
 ></A
 ><P
 ></P
@@ -11261,7 +11634,7 @@ intersection of two sets
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2772"
+NAME="AEN2855"
 ></A
 ><P
 ></P
@@ -11303,7 +11676,7 @@ difference of two sets
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2783"
+NAME="AEN2866"
 ></A
 ><P
 ></P
@@ -11339,7 +11712,7 @@ set of all parents
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2793"
+NAME="AEN2876"
 ></A
 ><P
 ></P
@@ -11375,7 +11748,7 @@ set of all children
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2803"
+NAME="AEN2886"
 ></A
 ><P
 ></P
@@ -11411,7 +11784,7 @@ set of all spouses
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2813"
+NAME="AEN2896"
 ></A
 ><P
 ></P
@@ -11447,7 +11820,7 @@ set of all siblings
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2823"
+NAME="AEN2906"
 ></A
 ><P
 ></P
@@ -11483,7 +11856,7 @@ set of all ancestors
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2833"
+NAME="AEN2916"
 ></A
 ><P
 ></P
@@ -11519,7 +11892,7 @@ set of all descendents
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2843"
+NAME="AEN2926"
 ></A
 ><P
 ></P
@@ -11555,7 +11928,7 @@ same as descendentset; spelling
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2853"
+NAME="AEN2936"
 ></A
 ><P
 ></P
@@ -11591,7 +11964,7 @@ remove duplicates from set
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2863"
+NAME="AEN2946"
 ></A
 ><P
 ></P
@@ -11627,7 +12000,7 @@ sort indiset by name
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2873"
+NAME="AEN2956"
 ></A
 ><P
 ></P
@@ -11663,7 +12036,7 @@ sort indiset by key values
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2883"
+NAME="AEN2966"
 ></A
 ><P
 ></P
@@ -11699,7 +12072,7 @@ sort indiset by auxiliary values
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2893"
+NAME="AEN2976"
 ></A
 ><P
 ></P
@@ -11741,7 +12114,52 @@ generate indiset from GEDCOM name string
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2904"
+NAME="AEN2987"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>BOOL <TT
+CLASS="function"
+>inset</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>SET</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>INDI</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;
+<SPAN
+CLASS="returnvalue"
+>true</SPAN
+> if the Individual is in the set.
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2999"
 ></A
 ><P
 ></P
@@ -11752,6 +12170,78 @@ CLASS="FUNCDEF"
 >VOID <TT
 CLASS="function"
 >gengedcom</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>SET</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;
+generate GEDCOM file from person set
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3009"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID <TT
+CLASS="function"
+>gengedcomweak</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>SET</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;
+generate GEDCOM file from person set
+
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3019"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID <TT
+CLASS="function"
+>gengedcomstrong</TT
 ></CODE
 >(<TT
 CLASS="parameter"
@@ -12017,19 +12507,49 @@ CLASS="function"
 >&#13;
 <TT
 CLASS="function"
->Gengedcom</TT
-> generates <SPAN
-CLASS="acronym"
->GEDCOM</SPAN
-> format output, to the report output file, of all persons in the argument
-person set. The output contains a person record for each person in the set, and all the family records that
-link at least two of the persons in the set together.
-
+>Inset</TT
+> returns <SPAN
+CLASS="returnvalue"
+>true</SPAN
+> if the
+the specified individual is in the SET.
 
 </P
 ><P
->&#13;
+>&#13;Three functions are available for to generate <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>
+format output to the report output file of all persons in the argument
+person set.
 <TT
+CLASS="function"
+>Gengedcom</TT
+> 
+output contains a person record for each person in the set,
+and all the family records that
+link at least two of the persons in the set together.
+This function is provided for backwards compatiblity. Source, Event and
+Other(X) record pointers are output unmodified, but none of their records
+are output - this yields an inconsistent output.
+</P
+><P
+>&#13;<TT
+CLASS="function"
+>Gengedcomweak</TT
+> 
+output does not contain Source, Event or Other(X) record pointers 
+or their records.
+<TT
+CLASS="function"
+>Gengedcomstrong</TT
+> includes 
+the Source, Event and Other(X) record pointers and all top-level nodes
+referenced by them.
+  
+</P
+><P
+>&#13;<TT
 CLASS="function"
 >Forindiset</TT
 > is an iterator that loops through each person in an indiset. The first parameter is an indiset.
@@ -12044,7 +12564,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN2974"
+NAME="AEN3095"
 ></A
 >Record Update Functions</H2
 ><DIV
@@ -12055,7 +12575,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2979"
+NAME="AEN3100"
 ></A
 ><P
 ></P
@@ -12097,7 +12617,7 @@ create a GEDCOM node
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2990"
+NAME="AEN3111"
 ></A
 ><P
 ></P
@@ -12145,7 +12665,7 @@ add a node to a GEDCOM tree
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3002"
+NAME="AEN3123"
 ></A
 ><P
 ></P
@@ -12181,7 +12701,7 @@ delete a node from a GEDCOM tree
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3012"
+NAME="AEN3133"
 ></A
 ><P
 ></P
@@ -12217,7 +12737,7 @@ write a person back to the database
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3022"
+NAME="AEN3143"
 ></A
 ><P
 ></P
@@ -12315,7 +12835,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN3044"
+NAME="AEN3165"
 ></A
 >Record Linking Functions</H2
 ><DIV
@@ -12326,7 +12846,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3049"
+NAME="AEN3170"
 ></A
 ><P
 ></P
@@ -12362,7 +12882,7 @@ determine if string is a cross reference
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3059"
+NAME="AEN3180"
 ></A
 ><P
 ></P
@@ -12398,7 +12918,7 @@ reference cross reference or key to node tree
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3069"
+NAME="AEN3190"
 ></A
 ><P
 ></P
@@ -12437,7 +12957,10 @@ These functions allow you to recognize values that are cross references and to r
 to. <TT
 CLASS="function"
 >Reference</TT
-> returns true if its string argument is a cross reference value, that is, the internal key of
+> returns <SPAN
+CLASS="returnvalue"
+>true</SPAN
+> if its string argument is a cross reference value, that is, the internal key of
 one of the records in the database. <TT
 CLASS="function"
 >Dereference</TT
@@ -12457,7 +12980,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN3082"
+NAME="AEN3204"
 ></A
 >Miscellaneous Functions</H2
 ><DIV
@@ -12468,7 +12991,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3087"
+NAME="AEN3209"
 ></A
 ><P
 ></P
@@ -12504,7 +13027,7 @@ lock a person or family in memory
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3097"
+NAME="AEN3219"
 ></A
 ><P
 ></P
@@ -12540,7 +13063,7 @@ unlock a person or family from memory
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3107"
+NAME="AEN3229"
 ></A
 ><P
 ></P
@@ -12571,7 +13094,7 @@ return name of current database
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3116"
+NAME="AEN3238"
 ></A
 ><P
 ></P
@@ -12602,7 +13125,7 @@ return name of current program
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3125"
+NAME="AEN3247"
 ></A
 ><P
 ></P
@@ -12636,7 +13159,7 @@ CLASS="application"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3135"
+NAME="AEN3257"
 ></A
 ><P
 ></P
@@ -12672,7 +13195,7 @@ execute string as a UNIX shell command
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3145"
+NAME="AEN3267"
 ></A
 ><P
 ></P
@@ -12772,68 +13295,10 @@ The <TT
 CLASS="function"
 >getproperty</TT
 > function extracts system or user
-properties.  Properties are named group.subgroup.property or
-group.property.  The following keys are available at the moment:
+properties.  Properties are named group.subgroup.property,
+group.property or even property.  The keys are available at the moment can 
+be found in the ll-userguide under System and User Properties.
 </P
-><DIV
-CLASS="glosslist"
-><DL
-><DT
-><B
-><TT
-CLASS="option"
->user.fullname</TT
-></B
-></DT
-><DD
-><P
->&#13;         The full name of the current user.  This is fetched from the
-         system when possible.
-       </P
-></DD
-><DT
-><B
-><TT
-CLASS="option"
->user.email</TT
-></B
-></DT
-><DD
-><P
->&#13;         The email address of the current user.  This is fetched
-         from the system when possible.
-       </P
-></DD
-><DT
-><B
-><TT
-CLASS="option"
->user.address</TT
-></B
-></DT
-><DD
-><P
->&#13;         Postal address of the current user.
-       </P
-></DD
-><DT
-><B
-><TT
-CLASS="option"
->user.url</TT
-></B
-></DT
-><DD
-><P
->&#13;         URL to the users home page.
-       </P
-></DD
-></DL
-></DIV
-><P
->&#13;     These values can be changed by adding values to user options.
-     [Miscellaneous utilities-&#62;Edit the user options file]
-      </P
 ></DIV
 ></DIV
 ></DIV

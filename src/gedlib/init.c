@@ -51,7 +51,6 @@
 TABLE tagtable=NULL;		/* table for tag strings */
 TABLE placabbvs=NULL;	/* table for place abbrevs */
 BTREE BTR=NULL;	/* database */
-static char svconfigfile[MAXPATHLEN]="";
 STRING editstr=NULL; /* edit command to run to edit (has editfile inside of it) */
 STRING editfile=NULL; /* file used for editing, name obtained via mktemp */
 
@@ -111,15 +110,36 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 
 	*pmsg = NULL;
 
-	if (!configfile || !configfile[0])
-		configfile = environ_determine_config_file();
 
-	llstrncpy(svconfigfile, configfile, sizeof(svconfigfile), uu8);
+	if (!configfile || !configfile[0]) {
+		STRING cfg_file;
+		char cfg_name[MAXPATHLEN];
 
-	if (!load_global_options(svconfigfile, pmsg)) {
-		suppress_reload = FALSE;
-		update_useropts(NULL);
-		return FALSE;
+		cfg_file = environ_determine_config_file();
+		/* first try $HOME/config_file */
+		llstrncpy(cfg_name,getenv("HOME") , sizeof(cfg_name), 0);
+		/*
+		llstrncat(cfg_name,"/",sizeof(cfg_name),0);
+		llstrncat(cfg_name,cfg_file,sizeof(cfg_name),0);
+		*/
+		llstrappc(cfg_name, sizeof(cfg_name), '/');
+		llstrapps(cfg_name, sizeof(cfg_name), 0, cfg_file);
+		if (!load_global_options(cfg_name, pmsg)) {
+			suppress_reload = FALSE;
+			update_useropts(NULL);
+			return FALSE;
+		}
+		if (!load_global_options(cfg_file, pmsg)) {
+			suppress_reload = FALSE;
+			update_useropts(NULL);
+			return FALSE;
+		}
+	} else {
+		if (!load_global_options(configfile, pmsg)) {
+			suppress_reload = FALSE;
+			update_useropts(NULL);
+			return FALSE;
+		}
 	}
 	/* now that codeset variables are set from config file, lets initialize codesets */
 	/* although int_codeset can't be determined yet, we need GUI codeset for gettext */
@@ -775,14 +795,6 @@ release_dblist (LIST dblist)
 		make_list_empty(dblist);
 		remove_list(dblist, 0);
 	}
-}
-/*====================================================
- * init_get_config_file -- return pointer to configfile
- *==================================================*/
-CNSTRING
-init_get_config_file (void)
-{
-	return svconfigfile;
 }
 /*====================================================
  * is_db_open -- 

@@ -163,7 +163,7 @@ enter name:
    alist.
 
    The rest of the program is:
-while(indi, dequeue(ilist)) {
+while (indi, dequeue(ilist)) {
   set(ahnen, dequeue(alist))
   d(ahnen) ". " name(indi) nl()
   if (e, birth(indi)) { " b. " long(e) nl() }
@@ -186,7 +186,7 @@ while(indi, dequeue(ilist)) {
    list is empty.
 
    The loop is a while loop statement. The line:
-   while(indi, dequeue(ilist)) {
+   while (indi, dequeue(ilist)) {
 
    removes  (via dequeue) a person from ilist, and assigns the person
    to  variable  indi. As long as there are persons on ilist, another
@@ -762,6 +762,18 @@ forindi (INDI, INT) { commands }
 
           loop through all persons in database
 
+mothers (INDI, INDI_V, FAM_V, INT) { commands }
+
+          loop through all female parents of a person
+
+fathers (INDI, INDI_V, FAM_V, INT) { commands }
+
+          loop through all male parents of a person
+
+Parents (INDI, FAM, INT) { commands }
+
+          loop through all familes a person is a child of
+
    These   functions   take  a  person  as  a  parameter  and  return
    information about him or her.
 
@@ -855,6 +867,27 @@ forindi (INDI, INT) { commands }
    spouse  in  a  particular  family, the variable is set to null for
    that  iteration.  The  fourth argument is an integer variable that
    counts the iterations.
+
+   Forindi  is  an  iterator  that  loops through every person in the
+   database in ascending key order. Its first parameter is a variable
+   that  iterates  through  the  persons;  its second parameter is an
+   integer counter variable that counts the persons starting at one.
+
+   mothers  is  an iterator that loops through every female parent of
+   the  specified  individual.  Its  first parameter is a person; its
+   third  parameter  is  a  family variable that iterates through the
+   familes  that  the person is a child in; its second parameter is a
+   person  variable  that  is  the  female parent associated with the
+   family  in the third parameter; The fourth parameter is a variable
+   that counts the families returned starting at one.
+
+   Parents  is  an iterator that loops through every family of that a
+   person  is  a  child  in. Note: This iterator's name begins with a
+   capital  P. There is another function of the same name that begins
+   with  a  lower case p. Its first parameter is a person; its second
+   parameter  is  a family variable that iterates through the familes
+   that  the  person  is  a  child  in;  and the third parameter is a
+   variable that counts the families returned starting at one.
 
    Forindi  is  an  iterator  that  loops through every person in the
    database in ascending key order. Its first parameter is a variable
@@ -975,9 +1008,29 @@ forfam (FAM_V, INT_V) { commands }
 
 Other types of records
 
-   There  are  not  currently report language functions to access and
-   iterate the other types of records (source, events, notes, etc) in
-   a database.
+forsour (NODE_V, INT) { commands }
+
+          loop through all sources in database
+
+foreven (NODE_V, INT) { commands }
+
+          loop through all EVEN nodes in database
+
+forothr (NODE_V, INT) { commands }
+
+          loop through all other (notes, etc.) nodes in database
+
+   forsour  is an iterator that loops through all the Source nodes in
+   the database. Its first argument is the SOUR record and its second
+   parameter  is  an integer counter variable that counts the sources
+   elements  starting  at  one.  foreven  is  an  iterator that loops
+   through all the Event nodes in the database. Its first argument is
+   the  EVEN  record  and  its second parameter is an integer counter
+   variable  that counts the events elements starting at one. forothr
+   is  an  iterator  that  loops  through  all the Other nodes in the
+   database.  Its  first  argument is the record (NOTE, etc.) and its
+   second  parameter  is  an integer counter variable that counts the
+   nodes starting at one.
      _____________________________________________________________
 
 List Functions
@@ -1022,9 +1075,9 @@ List Functions
 
           array element selection
 
-   VOID deleteel(LIST, INT, ANY);
+   BOOL inlist(LIST, ANY);
 
-          array element deletion
+          is second argument in list.
 
    VOID sort(LIST, LIST);
 
@@ -1061,19 +1114,19 @@ forlist (LIST, ANY_V, INT_V) { commands }
    both  is  a list, and the second parameter to push is the value to
    be pushed on the stack and can be of any type.
 
-   Setel,  getel,  and deleteel provide array access to a list. Setel
-   sets  a  value of an array element, and getel returns the value of
-   an  array  element.  The  first  parameter  to both is a list; the
-   second  parameter  to both is an integer index into the array; and
-   the  third  parameter to setel is the value to assign to the array
+   Setel and getel provide array access to a list. Setel sets a value
+   of  an  array  element,  and  getel  returns the value of an array
+   element.  The  first  parameter  to  both  is  a  list; the second
+   parameter  to  both  is  an  integer index into the array; and the
+   third  parameter  to  setel  is  the  value to assign to the array
    element  and  can  be  of  any  type.  Array  elements are indexed
    starting  at  one. Unassigned elements are assumed to be null (0).
    Arrays automatically grow in size to accommodate the largest index
    value  that  is used. Passing 0 references the last element at the
-   other  end from 1, and -1 the one before it, etc. deleteel deletes
-   the   element   at   the   specified  index,  shrinking  the  list
-   accordingly.  Arrays  do not grow in size as a result of deleteel,
-   even if the index is larger than the existing list.
+   other end from 1, and -1 the one before it, etc.
+
+   inlist compares the second argument with each element in the list.
+   If it finds a match inlist returns true.
 
    sort and rsort sort a list, using the elements of the second array
    to   determine  the  new  order.  Both  lists  are  reordered,  so
@@ -1151,6 +1204,10 @@ fornodes (NODE, NODE_V) { commands }
 
           loop through child nodes
 
+fornotes (ANY, STRING) { commands }
+
+          loop through notes on a node
+
 traverse (NODE, NODE_V, INT_V) { commands }
 
           loop through all descendent nodes
@@ -1178,6 +1235,11 @@ traverse (NODE, NODE_V, INT_V) { commands }
    GEDCOM  node.  Its  first  argument  is a node expression, and its
    second  parameter  is a variable that iterates through each direct
    child node of the first node.
+
+   Fornotes  is  an  iterator  that loops through the NOTE nodes of a
+   GEDCOM  node.  Its  first  argument  is a node expression, and its
+   second parameter is a variable that returns the value of the NOTE.
+   The value includes processed sub CONC and CONT records.
 
    Traverse  is an iterator providing a general method for traversing
    GEDCOM trees. Its first parameter is a node expression; its second
@@ -1822,7 +1884,19 @@ Person Set Functions and GEDCOM Extraction
 
           generate indiset from GEDCOM name string
 
+   BOOL inset(SET, INDI);
+
+          true if the Individual is in the set.
+
    VOID gengedcom(SET);
+
+          generate GEDCOM file from person set
+
+   VOID gengedcomweak(SET);
+
+          generate GEDCOM file from person set
+
+   VOID gengedcomstrong(SET);
 
           generate GEDCOM file from person set
 
@@ -1890,11 +1964,21 @@ forindiset( SET, INDI_V, ANY_V, INT_V ) { commands }
    algorithm  that  matches  names entered at the browse prompt or by
    the user interaction getindiset function.
 
-   Gengedcom  generates  GEDCOM  format  output, to the report output
-   file,  of  all  persons  in  the  argument  person set. The output
-   contains  a  person record for each person in the set, and all the
-   family  records  that  link at least two of the persons in the set
-   together.
+   Inset returns true if the the specified individual is in the SET.
+
+   Three functions are available for to generate GEDCOM format output
+   to  the  report  output file of all persons in the argument person
+   set.  Gengedcom output contains a person record for each person in
+   the  set, and all the family records that link at least two of the
+   persons  in  the  set  together.  This  function  is  provided for
+   backwards compatiblity. Source, Event and Other(X) record pointers
+   are output unmodified, but none of their records are output - this
+   yields an inconsistent output.
+
+   Gengedcomweak  output  does  not contain Source, Event or Other(X)
+   record  pointers  or  their  records. Gengedcomstrong includes the
+   Source, Event and Other(X) record pointers and all top-level nodes
+   referenced by them.
 
    Forindiset  is  an  iterator  that loops through each person in an
    indiset.  The  first parameter is an indiset. The second parameter
@@ -2015,22 +2099,6 @@ Miscellaneous Functions
    calls (via the DenySystemCalls user option).
 
    The  getproperty  function  extracts  system  or  user properties.
-   Properties  are  named  group.subgroup.property or group.property.
-   The following keys are available at the moment:
-
-   user.fullname
-          The full name of the current user. This is fetched from the
-          system when possible.
-
-   user.email
-          The email address of the current user. This is fetched from
-          the system when possible.
-
-   user.address
-          Postal address of the current user.
-
-   user.url
-          URL to the users home page.
-
-   These  values  can  be  changed  by adding values to user options.
-   [Miscellaneous utilities->Edit the user options file]
+   Properties  are  named  group.subgroup.property, group.property or
+   even  property.  The keys are available at the moment can be found
+   in the ll-userguide under System and User Properties.

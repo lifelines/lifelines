@@ -71,7 +71,7 @@ HREF="#AEN36"
 ></DT
 ><DT
 ><A
-HREF="#AEN47"
+HREF="#AEN64"
 >STARTING <TT
 CLASS="application"
 >LIFELINES</TT
@@ -79,7 +79,7 @@ CLASS="application"
 ></DT
 ><DT
 ><A
-HREF="#AEN161"
+HREF="#AEN171"
 >INTRODUCTION TO <SPAN
 CLASS="acronym"
 >GEDCOM</SPAN
@@ -87,103 +87,108 @@ CLASS="acronym"
 ></DT
 ><DT
 ><A
-HREF="#AEN332"
+HREF="#AEN342"
 >MAIN MENU</A
 ></DT
 ><DT
 ><A
-HREF="#AEN341"
+HREF="#AEN351"
 >ENTERING THE FIRST PERSON</A
 ></DT
 ><DT
 ><A
-HREF="#AEN384"
+HREF="#AEN394"
 >SCREEN EDITORS AND ENVIRONMENT VARIABLES</A
 ></DT
 ><DT
 ><A
-HREF="#AEN440"
+HREF="#AEN452"
 >BASICS OF BROWSING</A
 ></DT
 ><DT
 ><A
-HREF="#AEN451"
+HREF="#AEN463"
 >IDENTIFYING A PERSON OR LIST OF PERSONS TO BROWSE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN477"
+HREF="#AEN489"
 >ZIP IDENTIFYING A NEW PERSON</A
 ></DT
 ><DT
 ><A
-HREF="#AEN492"
+HREF="#AEN504"
 >BROWSE DISPLAY BASICS</A
 ></DT
 ><DT
 ><A
-HREF="#AEN495"
+HREF="#AEN507"
 >PERSON BROWSE SCREEN</A
 ></DT
 ><DT
 ><A
-HREF="#AEN664"
+HREF="#AEN676"
 >LIST BROWSE SCREEN</A
 ></DT
 ><DT
 ><A
-HREF="#AEN752"
+HREF="#AEN764"
 >FAMILY BROWSE SCREEN</A
 ></DT
 ><DT
 ><A
-HREF="#AEN862"
+HREF="#AEN874"
 >TANDEM PERSON BROWSE MODE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN949"
+HREF="#AEN961"
 >TANDEM FAMILY BROWSE MODE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1057"
+HREF="#AEN1069"
 >PEDIGREE BROWSE MODE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1120"
+HREF="#AEN1132"
 >ADD OPERATION</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1127"
+HREF="#AEN1139"
 >DELETE OPERATION</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1137"
+HREF="#AEN1149"
 >CHARACTER TRANSLATION</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1227"
+HREF="#AEN1239"
 >MISCELLANEOUS UTILITIES</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1362"
+HREF="#AEN1337"
 >HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1527"
+HREF="#AEN1502"
 >FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1536"
+HREF="#AEN1511"
 >LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</A
+></DT
+><DT
+><A
+HREF="#AEN1560"
+>System and User Properties</A
 ></DT
 ></DL
 ></DD
@@ -361,46 +366,90 @@ NAME="AEN36"
 ></A
 >INSTALLATION</H2
 ><P
->&#13;
-     You may be installing <TT
+>&#13;You may be installing <TT
 CLASS="application"
 >LifeLines</TT
 >
-     from a source distribution package or as an executable program
-     already prepared for your <SPAN
+from a source distribution package or as an executable program
+already prepared for your <SPAN
 CLASS="acronym"
 >UNIX</SPAN
 >
-     (or <SPAN
+(or <SPAN
 CLASS="acronym"
 >MS-Windows</SPAN
 >) system. The
-     source distribution comes with the readme, build script and
-     make files necessary to build
-     <TT
+source distribution comes with the readme, build script and
+make files necessary to build
+<TT
 CLASS="application"
 >LifeLines</TT
 >. Follow the instructions
-     in the readme file. The executable program will be named
-     <B
+in the readme file.  A number of executables are built
+which can be put it in a
+directory in your execution path. If you get the program in
+executable form, follow whatever instructions came with it.
+</P
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><B
 CLASS="command"
 >llines</B
->. <B
-CLASS="command"
->llines</B
-> is the
-     <TT
+></B
+></DT
+><DD
+><P
+>&#13;the <TT
 CLASS="application"
 >LifeLines</TT
-> program; put it in a
-     directory in your execution path. If you get the program in
-     executable form, follow whatever instructions came with it.
-     The source distribution package also contains documentation
-     and some <TT
+> program with full user interface
+</P
+></DD
+><DT
+><B
+><B
+CLASS="command"
+>llexec</B
+></B
+></DT
+><DD
+><P
+>&#13;a stripped down version of the
+<TT
+CLASS="application"
+>LifeLines</TT
+> program, without the user interface
+for non-interactive processing of report programs
+</P
+></DD
+><DT
+><B
+><B
+CLASS="command"
+>dbverify</B
+></B
+></DT
+><DD
+><P
+>&#13;a utility program to verify <TT
+CLASS="application"
+>LifeLines</TT
+> databases.
+</P
+></DD
+></DL
+></DIV
+><P
+>&#13;The source distribution package also contains documentation
+and some <TT
 CLASS="application"
 >LifeLines</TT
 > programs.
-
+Included with these in the reports directory is a brief overview
+of the reports in the file index.html.
 </P
 ></DIV
 ><DIV
@@ -408,7 +457,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN47"
+NAME="AEN64"
 ></A
 >STARTING <TT
 CLASS="application"
@@ -501,7 +550,7 @@ CLASS="command"
 >lines</B
 > <TT
 CLASS="option"
->[-adkrwifmntcuxoC]</TT
+>[-acdfiklnortuwxzCFI]</TT
 ><TT
 CLASS="replaceable"
 ><I
@@ -517,194 +566,248 @@ CLASS="replaceable"
 </P
 ><P
 >&#13;
-     The options mean the following:
+     The following options are supported:
 
 </P
 ><DIV
-CLASS="glosslist"
-><DL
-><DT
-><B
->-C</B
-></DT
-><DD
+CLASS="informaltable"
+><A
+NAME="AEN89"
+></A
 ><P
->&#13;
-     Specify config file location (eg, -C/home/bill/lifelines/.linesrc2)
-
-</P
-></DD
-><DT
-><B
->-F</B
-></DT
-><DD
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLSPACING="0"
+CELLPADDING="4"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-C</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Specify configuration file location (e.g.
+-C/home/bill/lifelines/.linesrc2 )</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-F</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Finnish option (only available if so compiled)
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-I</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;Specify a user property (e.g. -ILLEDITOR=gvim )
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-a</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>log dynamic memory operation (for debugging)</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-c</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>supply cache values (eg, -ci400,4000f400,4000 sets direct indi &#38; fam
+caches to 400, and indirect indi &#38; fam caches to 4000)
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-d</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;debug mode (signal protection disabled for convenience with breakpoints)
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-f</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;force open the database - use only in emergency
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-i</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;open database with immutable access (no protection against other
+access -- for use on read-only media)
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-k</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;always show keys (normally keys are suppressed if REFN available)
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-l</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;lock (-ly) or unlock (-ln) a database for use with read only media
+(access to a locked database is treated as immutable)
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-n</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;do not use traditional family rules
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-o</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;Specify program output directory (eg, -o/tmp/mytests)
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-r</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;open database with read-only access (protect against other
+writer access)
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-t</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;trace function calls in report programs (for debugging)
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-u</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;specify window size (eg, -u120,34 specifies 120 columns by 34 rows)
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-w</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;open database with writeable access (protect against other
+writer or reader access)
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-x</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;execute a single lifelines report program directly
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-z</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;Use normal ASCII characters for drawing lines in user interface rather
+than the vt100 special characters.
+</TD
+></TR
+></TBODY
+></TABLE
 ><P
->&#13;
-     Finnish option (only available if so compiled)
-
-</P
-></DD
-><DT
-><B
->-a</B
-></DT
-><DD
-><P
->&#13;
-     log dynamic memory operation (for debugging)
-
-</P
-></DD
-><DT
-><B
->-c</B
-></DT
-><DD
-><P
->&#13;
-     supply cache values (eg, -ci400,4000f400,4000 sets direct indi &#38; fam
-     caches to 400, and indirect indi &#38; fam caches to 4000)
-
-</P
-></DD
-><DT
-><B
->-d</B
-></DT
-><DD
-><P
->&#13;
-     debug mode (signal protection disabled for convenience with breakpoints)
-
-</P
-></DD
-><DT
-><B
->-f</B
-></DT
-><DD
-><P
->&#13;
-     force open the database - use only in emergency
-
-</P
-></DD
-><DT
-><B
->-i</B
-></DT
-><DD
-><P
->&#13;
-     open database with immutable access (no protection against other
-     access -- for use on read-only media)
-
-</P
-></DD
-><DT
-><B
->-k</B
-></DT
-><DD
-><P
->&#13;
-     always show keys (normally keys are suppressed if REFN available)
-
-</P
-></DD
-><DT
-><B
->-l</B
-></DT
-><DD
-><P
->&#13;
-     lock (-ly) or unlock (-ln) a database for use with read only media
-     (access to a locked database is treated as immutable)
-
-</P
-></DD
-><DT
-><B
->-n</B
-></DT
-><DD
-><P
->&#13;
-     do not use traditional family rules
-
-</P
-></DD
-><DT
-><B
->-o</B
-></DT
-><DD
-><P
->&#13;
-     Specify program output directory (eg, -o/tmp/mytests)
-
-</P
-></DD
-><DT
-><B
->-r</B
-></DT
-><DD
-><P
->&#13;
-     open database with read-only access (protect against other
-     writer access)
-
-</P
-></DD
-><DT
-><B
->-t</B
-></DT
-><DD
-><P
->&#13;
-     trace function calls in report programs (for debugging)
-
-</P
-></DD
-><DT
-><B
->-u</B
-></DT
-><DD
-><P
->&#13;
-     specify window size (eg, -u120,34 specifies 120 columns by 34 rows)
-
-</P
-></DD
-><DT
-><B
->-w</B
-></DT
-><DD
-><P
->&#13;
-     open database with writeable access (protect against other
-     writer or reader access)
-
-</P
-></DD
-><DT
-><B
->-x</B
-></DT
-><DD
-><P
->&#13;
-     execute a single lifelines report program directly
-
-</P
-></DD
-></DL
+></P
 ></DIV
 ><P
 >&#13;
@@ -770,7 +873,7 @@ CLASS="option"
      database; this will open the database and reset the mode
      mechanism. This is a dangerous feature; you can use it to open
      the same database with writeable access more than once; the
-     results are unpredictable and generally disasterous.
+     results are unpredictable and generally disastrous.
 
 </P
 ><P
@@ -840,7 +943,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN161"
+NAME="AEN171"
 ></A
 >INTRODUCTION TO <SPAN
 CLASS="acronym"
@@ -994,7 +1097,7 @@ CLASS="acronym"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN193"
+NAME="AEN203"
 ></A
 ><P
 ><B
@@ -1239,7 +1342,7 @@ CLASS="acronym"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN232"
+NAME="AEN242"
 ></A
 ><P
 ><B
@@ -1293,7 +1396,7 @@ CLASS="userinput"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN239"
+NAME="AEN249"
 ></A
 ><P
 ><B
@@ -1618,7 +1721,7 @@ CLASS="application"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN292"
+NAME="AEN302"
 ></A
 ><P
 ><B
@@ -1867,7 +1970,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN332"
+NAME="AEN342"
 ></A
 >MAIN MENU</H2
 ><P
@@ -1947,7 +2050,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN341"
+NAME="AEN351"
 ></A
 >ENTERING THE FIRST PERSON</H2
 ><P
@@ -1975,7 +2078,7 @@ CLASS="acronym"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN347"
+NAME="AEN357"
 ></A
 ><P
 ><B
@@ -2073,7 +2176,7 @@ CLASS="option"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN360"
+NAME="AEN370"
 ></A
 ><P
 ><B
@@ -2228,7 +2331,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN384"
+NAME="AEN394"
 ></A
 >SCREEN EDITORS AND ENVIRONMENT VARIABLES</H2
 ><P
@@ -2325,19 +2428,26 @@ CLASS="envar"
 CLASS="acronym"
 >UNIX</SPAN
 > path
-     list variables.
+     list variables.  
 
 </P
 ><P
 >&#13;     There is also a configuration file, and
      entries in it may be used in lieu of environment variables.
-     It is ordinarily named .linesrc under UNIX, and lines.cfg under
-     <SPAN
+     It is ordinarily named .linesrc under <SPAN
+CLASS="acronym"
+>UNIX</SPAN
+>,
+     and lines.cfg under <SPAN
 CLASS="acronym"
 >MS-Windows</SPAN
 >.
      A sample configuration file should have been included
      in the distribution.
+</P
+><P
+>&#13;     See the section on System and User properties
+     for more details.
 </P
 ><P
 >&#13;
@@ -2488,7 +2598,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN440"
+NAME="AEN452"
 ></A
 >BASICS OF BROWSING</H2
 ><P
@@ -2558,7 +2668,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN451"
+NAME="AEN463"
 ></A
 >IDENTIFYING A PERSON OR LIST OF PERSONS TO BROWSE</H2
 ><P
@@ -2616,7 +2726,7 @@ CLASS="application"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN459"
+NAME="AEN471"
 ></A
 ><P
 ><B
@@ -2646,7 +2756,7 @@ t/wtmr/iv<br>
 <DIV
 CLASS="example"
 ><A
-NAME="AEN463"
+NAME="AEN475"
 ></A
 ><P
 ><B
@@ -2742,7 +2852,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN477"
+NAME="AEN489"
 ></A
 >ZIP IDENTIFYING A NEW PERSON</H2
 ><P
@@ -2851,7 +2961,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN492"
+NAME="AEN504"
 ></A
 >BROWSE DISPLAY BASICS</H2
 ><P
@@ -2869,7 +2979,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN495"
+NAME="AEN507"
 ></A
 >PERSON BROWSE SCREEN</H2
 ><P
@@ -3481,7 +3591,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN664"
+NAME="AEN676"
 ></A
 >LIST BROWSE SCREEN</H2
 ><P
@@ -3811,7 +3921,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN752"
+NAME="AEN764"
 ></A
 >FAMILY BROWSE SCREEN</H2
 ><P
@@ -4222,7 +4332,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN862"
+NAME="AEN874"
 ></A
 >TANDEM PERSON BROWSE MODE</H2
 ><P
@@ -4533,7 +4643,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN949"
+NAME="AEN961"
 ></A
 >TANDEM FAMILY BROWSE MODE</H2
 ><P
@@ -4893,7 +5003,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1057"
+NAME="AEN1069"
 ></A
 >PEDIGREE BROWSE MODE</H2
 ><P
@@ -5124,7 +5234,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1120"
+NAME="AEN1132"
 ></A
 >ADD OPERATION</H2
 ><P
@@ -5171,7 +5281,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1127"
+NAME="AEN1139"
 ></A
 >DELETE OPERATION</H2
 ><P
@@ -5235,7 +5345,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1137"
+NAME="AEN1149"
 ></A
 >CHARACTER TRANSLATION</H2
 ><P
@@ -5274,19 +5384,23 @@ CLASS="screen"
 <TT
 CLASS="application"
 >LifeLines</TT
-> has little built-in knowledge of character codes. If you use 7-bit <SPAN
+> has little built-in knowledge of 
+character codes. If you use 7-bit <SPAN
 CLASS="acronym"
 >ASCII</SPAN
-> characters you will not
-encounter problems. However, many European and other languages require additional characters, and
-there are many 8-bit and other schemes for encoding those characters. <TT
+> characters you 
+will not encounter problems. However, many European and other languages 
+require additional characters, and
+there are many 8-bit and other schemes for encoding those characters. 
+<TT
 CLASS="application"
 >LifeLines</TT
 > knows about none of
 them. However, <TT
 CLASS="application"
 >LifeLines</TT
-> provides a number of character translation features you can use to manage
+> provides a number of 
+character translation features you can use to manage
 character translation.
 
 </P
@@ -5299,7 +5413,9 @@ CLASS="application"
 <TT
 CLASS="application"
 >LifeLines</TT
-> supports four forms:<DIV
+> supports four forms:
+</P
+><DIV
 CLASS="glosslist"
 ><DL
 ><DT
@@ -5319,9 +5435,7 @@ for records in the database
 ></DT
 ><DD
 ><P
->&#13;
-for records being edited
-
+>&#13;for records being edited
 </P
 ></DD
 ><DT
@@ -5330,9 +5444,7 @@ for records being edited
 ></DT
 ><DD
 ><P
->&#13;
-for records being displayed
-
+>&#13;for records being displayed
 </P
 ></DD
 ><DT
@@ -5341,16 +5453,11 @@ for records being displayed
 ></DT
 ><DD
 ><P
->&#13;
-for records written to output file
-
+>&#13;for records written to output file
 </P
 ></DD
 ></DL
 ></DIV
->
-
-</P
 ><P
 >&#13;
 When converting text from one form to another <TT
@@ -5362,7 +5469,9 @@ CLASS="application"
 >LifeLines</TT
 > will
 use when converting between forms. There are six translation tables you may define. The following
-table shows the six tables and describes when they are applied:<DIV
+table shows the six tables and describes when they are applied:
+</P
+><DIV
 CLASS="glosslist"
 ><DL
 ><DT
@@ -5371,9 +5480,7 @@ CLASS="glosslist"
 ></DT
 ><DD
 ><P
->&#13;
-when converting from internal, database form to editor form
-
+>&#13;when converting from internal, database form to editor form
 </P
 ></DD
 ><DT
@@ -5382,9 +5489,7 @@ when converting from internal, database form to editor form
 ></DT
 ><DD
 ><P
->&#13;
-when converting from editor form back to internal, database form
-
+>&#13;when converting from editor form back to internal, database form
 </P
 ></DD
 ><DT
@@ -5396,12 +5501,11 @@ CLASS="acronym"
 ></DT
 ><DD
 ><P
->&#13;
-when reading <SPAN
+>&#13;when reading <SPAN
 CLASS="acronym"
 >GEDCOM</SPAN
-> input records and writing them to database
-
+> input records and writing them to 
+database
 </P
 ></DD
 ><DT
@@ -5413,12 +5517,10 @@ CLASS="acronym"
 ></DT
 ><DD
 ><P
->&#13;
-when writing internal database records to external <SPAN
+>&#13;when writing internal database records to external <SPAN
 CLASS="acronym"
 >GEDCOM</SPAN
 > file
-
 </P
 ></DD
 ><DT
@@ -5427,9 +5529,7 @@ CLASS="acronym"
 ></DT
 ><DD
 ><P
->&#13;
-when displaying a record in a browsing mode display screen
-
+>&#13;when displaying a record in a browsing mode display screen
 </P
 ></DD
 ><DT
@@ -5438,16 +5538,11 @@ when displaying a record in a browsing mode display screen
 ></DT
 ><DD
 ><P
->&#13;
-when writing internal database records to external report file
-
+>&#13;when writing internal database records to external report file
 </P
 ></DD
 ></DL
 ></DIV
->
-
-</P
 ><P
 >&#13;
 After you select a translation table you are placed in the editor to edit the table. Translation tables are
@@ -5484,8 +5579,9 @@ replacing them with the corresponding right patterns.
 
 </P
 ><P
->&#13;
-There are five escape mechanisms used in patterns:<DIV
+>&#13;There are five escape mechanisms used in patterns:
+</P
+><DIV
 CLASS="glosslist"
 ><DL
 ><DT
@@ -5494,9 +5590,7 @@ CLASS="glosslist"
 ></DT
 ><DD
 ><P
->&#13;
-nnn is a decimal character value
-
+>&#13;nnn is a decimal character value
 </P
 ></DD
 ><DT
@@ -5505,20 +5599,16 @@ nnn is a decimal character value
 ></DT
 ><DD
 ><P
->&#13;
-hh is a hexadecimal character value
-
+>&#13;hh is a hexadecimal character value
 </P
 ></DD
 ><DT
 ><B
->\#</B
+>\ #</B
 ></DT
 ><DD
 ><P
->&#13;
-represents the # character
-
+>&#13;represents the # character
 </P
 ></DD
 ><DT
@@ -5527,9 +5617,7 @@ represents the # character
 ></DT
 ><DD
 ><P
->&#13;
-represents the $ character
-
+>&#13;represents the $ character
 </P
 ></DD
 ><DT
@@ -5538,16 +5626,11 @@ represents the $ character
 ></DT
 ><DD
 ><P
->&#13;
-represents the \ character
-
+>&#13;represents the \ character
 </P
 ></DD
 ></DL
 ></DIV
->
-
-</P
 ><P
 >&#13;
 The character translation feature is not fully tested, and not all translations are currently
@@ -5560,7 +5643,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1227"
+NAME="AEN1239"
 ></A
 >MISCELLANEOUS UTILITIES</H2
 ><P
@@ -5596,9 +5679,7 @@ CLASS="screen"
 
 
 </P
-><P
->&#13;
-<DIV
+><DIV
 CLASS="glosslist"
 ><DL
 ><DT
@@ -5803,7 +5884,7 @@ CLASS="replaceable"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1293"
+NAME="AEN1304"
 ></A
 ><P
 ><B
@@ -5889,113 +5970,8 @@ by a brief explanation.
 
 </P
 ><P
->&#13;    Following is a list of the options, current as version 3.0.7.
-</P
-><DIV
-CLASS="glosslist"
-><DL
-><DT
-><B
->INDIREC</B
-></DT
-><DD
-><P
->&#13;
-Person record edit template
-
-</P
-></DD
-><DT
-><B
->EVENREC</B
-></DT
-><DD
-><P
->&#13;
-Event record edit template
-
-</P
-></DD
-><DT
-><B
->FAMRECBODY</B
-></DT
-><DD
-><P
->&#13;
-Family record body edit template (NB: Unlike the others, this should not
-include the 0 level FAM tag.)
-
-</P
-></DD
-><DT
-><B
->SOURREC</B
-></DT
-><DD
-><P
->&#13;
-Source record edit template
-
-</P
-></DD
-><DT
-><B
->OTHRREC</B
-></DT
-><DD
-><P
->&#13;
-Other record edit template
-
-</P
-></DD
-><DT
-><B
->codeset</B
-></DT
-><DD
-><P
->&#13;
-String denoting code set in use in data. Special handling is provided
-for utf-8, which may be entered as "UTF-8", "utf-8", or "65001". (This is
-actually a code set issue and not a character set issue, as this only enables
-the processing of multibyte sequences, without regard to their semantic
-assignments).
-
-</P
-></DD
-><DT
-><B
->HDR_GEDC</B
-></DT
-><DD
-><P
->&#13;
-String containing the GEDC block for the header record when exporting GEDCOM.
-
-</P
-></DD
-><DT
-><B
->HDR_CHAR</B
-></DT
-><DD
-><P
->&#13;
-String containing the CHAR block for the header record when exporting GEDCOM.
-
-</P
-></DD
-><DT
-><B
->HDR_SUBM</B
-></DT
-><DD
-><P
->&#13;
-String containing the SUBM block for the header record when exporting GEDCOM.
-
+>&#13;The list of options can be found in the section 'System and User Properties'
+below.
 </P
 ></DD
 ></DL
@@ -6008,7 +5984,7 @@ record template with the following:
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1347"
+NAME="AEN1321"
 ></A
 ><P
 ><B
@@ -6036,7 +6012,7 @@ CLASS="programlisting"
 you would edit the user option file to contain:<DIV
 CLASS="example"
 ><A
-NAME="AEN1350"
+NAME="AEN1324"
 ></A
 ><P
 ><B
@@ -6055,7 +6031,7 @@ CLASS="literallayout"
 or, using the \n escape so as to keep the entry on one line:<DIV
 CLASS="example"
 ><A
-NAME="AEN1353"
+NAME="AEN1327"
 ></A
 ><P
 ><B
@@ -6070,7 +6046,9 @@ CLASS="literallayout"
 >
 
 </P
-></DD
+><DIV
+CLASS="glosslist"
+><DL
 ><DT
 ><B
 ><B
@@ -6083,23 +6061,18 @@ CLASS="action"
 ></DT
 ><DD
 ><P
->&#13;
-This command returns you to the main menu.
-
+>&#13;This command returns you to the main menu.
 </P
 ></DD
 ></DL
 ></DIV
->
-
-</P
 ></DIV
 ><DIV
 CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1362"
+NAME="AEN1337"
 ></A
 >HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</H2
 ><P
@@ -6358,7 +6331,7 @@ CLASS="structfield"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1407"
+NAME="AEN1382"
 ></A
 ><P
 ><B
@@ -7079,7 +7052,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1527"
+NAME="AEN1502"
 ></A
 >FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</H2
 ><P
@@ -7153,7 +7126,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1536"
+NAME="AEN1511"
 ></A
 >LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</H2
 ><P
@@ -7240,7 +7213,7 @@ CLASS="application"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1551"
+NAME="AEN1526"
 ></A
 ><P
 ><B
@@ -7363,7 +7336,7 @@ CLASS="structfield"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1569"
+NAME="AEN1544"
 ></A
 ><P
 ><B
@@ -7468,6 +7441,747 @@ CLASS="structfield"
 > value should be unique.
 
 </P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN1560"
+></A
+>System and User Properties</H2
+><P
+>&#13;There are a number of properties that can be specified to customize
+the behavior of <TT
+CLASS="application"
+>LifeLines</TT
+>.  These properties can 
+be specified in <TT
+CLASS="application"
+>LifeLines</TT
+>
+customization files, in each <TT
+CLASS="application"
+>LifeLines</TT
+> database 
+or in some cases by environment variables.
+</P
+><P
+>&#13;<TT
+CLASS="application"
+>LifeLines</TT
+> configuration files are look for 
+first in the directory specified by the HOME environment variable, assuming
+that it is set, and then in the current directory.  The name of the 
+configuration file is .linesrc on <SPAN
+CLASS="acronym"
+>UNIX</SPAN
+> or linux systems 
+and lines.cfg on windows systems.
+
+</P
+><P
+>&#13;A configuration file can also be specified using the -C option to
+<TT
+CLASS="application"
+>LifeLines</TT
+>
+or by defining the environment variable "LLCONFIGFILE" with a value containing
+the full pathname of the configuration file.  If either of these
+mechanisms is used, <TT
+CLASS="application"
+>LifeLines</TT
+> does not look for a 
+configuration file anywhere else.
+If a -C option is provided, the LLCONFIGFILE environment variable, if defined,
+is ignored.  If neither the -C option nor the environment variable
+LLCONFIGFILE is set, the above mentioned configuration file names are used.
+A configuration file is looked for in your home directory and is read in,
+if it exists, and then if a configuration file exists in the current
+directory it is read.  The values in this second file are used to replace
+or supplement values found in the first file.  
+</P
+><P
+>&#13;When <TT
+CLASS="application"
+>LifeLines</TT
+> searches for a property it looks for it as follows:
+</P
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+>cmdline table</B
+></DT
+><DD
+><P
+>&#13;First, <TT
+CLASS="application"
+>LifeLines</TT
+> looks in the cmdline table.  This table contains the
+values that have been specified using the -I option to
+<TT
+CLASS="application"
+>LifeLines</TT
+>.
+</P
+></DD
+><DT
+><B
+>database table</B
+></DT
+><DD
+><P
+> Next, <TT
+CLASS="application"
+>LifeLines</TT
+> looks in the database table.  This table contains the
+values which have been stored in the current database.
+</P
+></DD
+><DT
+><B
+>global table</B
+></DT
+><DD
+><P
+>&#13;Next, <TT
+CLASS="application"
+>LifeLines</TT
+> looks in the global table.  This table contains the
+values found when reading in the configuration files.
+</P
+></DD
+><DT
+><B
+>environment table</B
+></DT
+><DD
+><P
+>&#13;Finally, <TT
+CLASS="application"
+>LifeLines</TT
+> looks in the environment table.  This table contains the
+values found in the environment variables, LLPROGRAMS, LLREPORTS,
+LLARCHIVES, LLDATABASES, LLNEWDBDIR, and LLEDITOR.
+</P
+></DD
+></DL
+></DIV
+><P
+>&#13;Properties are named group.subgroup.property or group.property, or even
+just property.
+The following keys are available at the moment: 
+</P
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+>LLPROGRAMS</B
+></DT
+><DD
+><P
+>&#13;<TT
+CLASS="envar"
+>LLPROGRAMS</TT
+> is the search path for
+<TT
+CLASS="application"
+>LifeLines</TT
+> report generating and
+other programs.
+</P
+></DD
+><DT
+><B
+>LLREPORTS</B
+></DT
+><DD
+><P
+>&#13;<TT
+CLASS="envar"
+>LLREPORTS</TT
+> is used to select a directory where
+all generated reports and program outputs will be placed.
+</P
+></DD
+><DT
+><B
+>LLARCHIVES</B
+></DT
+><DD
+><P
+>&#13;<TT
+CLASS="envar"
+>LLARCHIVES</TT
+> is used to select a
+directory where all database backup files will be stored
+</P
+></DD
+><DT
+><B
+>LLDATABASES</B
+></DT
+><DD
+><P
+>&#13;<TT
+CLASS="envar"
+>LLDATABASES</TT
+> is a list of
+directories that contain database directories used to locate
+database directories themselves
+</P
+></DD
+><DT
+><B
+>LLNEWDBDIR</B
+></DT
+><DD
+><P
+>&#13;<TT
+CLASS="envar"
+>LLNEWDBDIR</TT
+> a single directory where new databases
+specified without paths will be created.
+This is a convenience for users
+who generally put all their databases under a single common
+directory.
+</P
+></DD
+><DT
+><B
+>LLEDITOR</B
+></DT
+><DD
+><P
+>&#13;Overrides the default screen editor
+</P
+></DD
+></DL
+></DIV
+><P
+>&#13;Codeset Information:
+</P
+><P
+>&#13;For the following parameters related to codeset, the values are a 
+String denoting code set in use in data. Special handling is provided
+for utf-8, which may be entered as "UTF-8", "utf-8", or "65001". (This is
+actually a code set issue and not a character set issue, as this only enables
+the processing of multibyte sequences, without regard to their semantic
+assignments).
+</P
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+>GedcomCodeSet</B
+></DT
+><DD
+><P
+>&#13;Specifies the Codeset to use when processing Gedcom files.
+There are actually 3 properties.
+<I
+CLASS="glossterm"
+>GedcomCodeSetOut</I
+> and <I
+CLASS="glossterm"
+>GedcomCodeSetIn</I
+>
+can be used to specify the codeset for output or input.  If either of these is
+not specified <I
+CLASS="glossterm"
+>GedcomCodeSet</I
+> is used.
+</P
+></DD
+><DT
+><B
+>EditorCodeSet</B
+></DT
+><DD
+><P
+>&#13;Specifies the codeset to use for editing.  There are actually 3 properties.
+<I
+CLASS="glossterm"
+>EditorCodeSetOut</I
+> and <I
+CLASS="glossterm"
+>EditorCodeSetIn</I
+>
+can be used to specify the codeset for output or input.  If either of these is
+not specified <I
+CLASS="glossterm"
+>EditorCodeSet</I
+> is used.
+</P
+></DD
+><DT
+><B
+>ReportCodeSet</B
+></DT
+><DD
+><P
+>&#13;Specifies the codeset to use for reports.  There are actually 3 properties.
+<I
+CLASS="glossterm"
+>ReportCodeSetOut</I
+> and <I
+CLASS="glossterm"
+>ReportCodeSetIn</I
+>
+can be used to specify the codeset for output or input.  If either of these is
+not specified <I
+CLASS="glossterm"
+>ReportCodeSet</I
+> is used.
+</P
+></DD
+><DT
+><B
+>LongDisplayDate</B
+></DT
+><DD
+><P
+>&#13;Seven comma separated numbers. Specifing the format for
+days, months, years, sfmt, efmt, and cmplx.
+</P
+></DD
+><DT
+><B
+>LongDisplayDatePic</B
+></DT
+><DD
+><P
+>&#13;a custom ymd date picture.  A string in which %y, %m and %d will be
+converted to the corresponding year, month and day.
+</P
+></DD
+><DT
+><B
+>ShortDisplayDate</B
+></DT
+><DD
+><P
+>&#13;Seven comma separated numbers. Specifing the format for
+days, months, years, sfmt, efmt, and cmplx.
+</P
+></DD
+><DT
+><B
+>ShortDisplayDatePic</B
+></DT
+><DD
+><P
+>&#13;a custom ymd date picture.  A string in which %y, %m and %d will be
+converted to the corresponding year, month and day.
+</P
+></DD
+><DT
+><B
+>LocaleDir</B
+></DT
+><DD
+><P
+>&#13;run-time specification of locale directory
+</P
+></DD
+><DT
+><B
+>NewDbProps</B
+></DT
+><DD
+><P
+>&#13;if specified, properties to add to a newly created database.
+The string is of the form "option1=value1\noption2=value2".
+</P
+></DD
+><DT
+><B
+>IllegalChar</B
+></DT
+><DD
+><P
+>&#13;Apparently not used at this time.
+</P
+></DD
+><DT
+><B
+>UiLocaleCollate</B
+></DT
+><DD
+><P
+>&#13;ui collating sequence
+</P
+></DD
+><DT
+><B
+>UiLocaleMessages</B
+></DT
+><DD
+><P
+>&#13;ui messages locale
+</P
+></DD
+><DT
+><B
+>RptLocaleCollate</B
+></DT
+><DD
+><P
+>&#13;Report Collating Sequence
+</P
+></DD
+><DT
+><B
+>RptLocaleMessages</B
+></DT
+><DD
+><P
+>&#13;Report Messages Locale
+</P
+></DD
+><DT
+><B
+>ShortOmitString</B
+></DT
+><DD
+><P
+>&#13;String prepended on an event converted to a string ???
+</P
+></DD
+><DT
+><B
+>TTPATH</B
+></DT
+><DD
+><P
+>&#13;
+list of directories to search for translation table files (*.tt)
+</P
+></DD
+><DT
+><B
+>TTDIR</B
+></DT
+><DD
+><P
+>&#13;Dir to look for Codeset information in ???
+</P
+></DD
+><DT
+><B
+>InputPath</B
+></DT
+><DD
+><P
+>&#13;path to look for in when reading in gedcom files
+</P
+></DD
+><DT
+><B
+>INDIREC</B
+></DT
+><DD
+><P
+>&#13;The default template to use whenever creating a new individual.
+If not specified, the concatenation of the following is used:
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;"0 INDI\n1 NAME Fname/Surname\n1 SEX MF\n"
+"1 BIRT\n  2 DATE\n  2 PLAC\n"
+"1 DEAT\n  2 DATE\n  2 PLAC\n1 SOUR\n"
+</PRE
+></TD
+></TR
+></TABLE
+>
+</P
+></DD
+><DT
+><B
+>FAMRECBODY</B
+></DT
+><DD
+><P
+>&#13;The default template to use whenever creating a new family.
+If not specified, the following is used:
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;"1 MARR\n  2 DATE\n  2 PLAC\n  2 SOUR\n"
+</PRE
+></TD
+></TR
+></TABLE
+>
+Note: Unlike the others, this should not
+include the 0 level FAM tag.)
+</P
+></DD
+><DT
+><B
+>SOURREC</B
+></DT
+><DD
+><P
+>&#13;The default template to use whenever creating a new source.
+If not specified, the following is used in english:
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;"0 SOUR\n1 REFN\n1 TITL Title\n1 AUTH Author"
+</PRE
+></TD
+></TR
+></TABLE
+>
+</P
+></DD
+><DT
+><B
+>EVENREC</B
+></DT
+><DD
+><P
+>&#13;The default template to use whenever creating a new event.
+If not specified, the following is used in english:
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;"0 EVEN\n1 REFN\n1 DATE\n1 PLAC\n1 INDI\n  2 NAME\n  2 ROLE\n1 SOUR"
+</PRE
+></TD
+></TR
+></TABLE
+>
+</P
+></DD
+><DT
+><B
+>OTHR</B
+></DT
+><DD
+><P
+>&#13;The default template to use whenever creating a new other record.
+If not specified, the following is used in english:
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;"0 XXXX\n1 REFN"
+</PRE
+></TD
+></TR
+></TABLE
+>
+</P
+></DD
+><DT
+><B
+>HDR_SUBM</B
+></DT
+><DD
+><P
+>&#13;string to use when writing gedcom files for the SUBM.
+Default is 
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;"1 SUBM".
+</PRE
+></TD
+></TR
+></TABLE
+>
+</P
+></DD
+><DT
+><B
+>HDR_GEDC</B
+></DT
+><DD
+><P
+>&#13;String containing the GEDC block for the header record when exporting GEDCOM.
+The default is 
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;"1 GEDC\n2 VERS 5.5\n2 FORM LINEAGE-LINKED".
+</PRE
+></TD
+></TR
+></TABLE
+>
+</P
+></DD
+><DT
+><B
+>HDR_CHAR</B
+></DT
+><DD
+><P
+>&#13;String containing the CHAR block for the header record when exporting GEDCOM.
+The default is 
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;"1 CHAR ASCII".
+</PRE
+></TD
+></TR
+></TABLE
+>
+</P
+></DD
+><DT
+><B
+>ReportLog</B
+></DT
+><DD
+><P
+>&#13;name of file to print report program errors to, if not specified
+use stdout curses window.
+</P
+></DD
+><DT
+><B
+>CrashLog_llexec</B
+></DT
+><DD
+><P
+>&#13;file to write crash log into for llexec.
+</P
+></DD
+><DT
+><B
+>CrashLog_llines</B
+></DT
+><DD
+><P
+>&#13;file to write crash log into for llines.
+</P
+></DD
+><DT
+><B
+>LLTTEXPORT</B
+></DT
+><DD
+><P
+>&#13;directory to write translation tables to.  Default is the current
+directory.
+</P
+></DD
+><DT
+><B
+>ImportLog</B
+></DT
+><DD
+><P
+>&#13;where to log errors found while importing a gedcom file.
+default is errs.log.
+</P
+></DD
+><DT
+><B
+>gettext.path</B
+></DT
+><DD
+><P
+>&#13;for windows, if specified path to (re)load gettext dll
+</P
+></DD
+><DT
+><B
+>iconv.path</B
+></DT
+><DD
+><P
+>&#13;for Windows, path to link dynamically to gettext and iconv
+</P
+></DD
+><DT
+><B
+>user.fullname</B
+></DT
+><DD
+><P
+>&#13;The full name of the current user. If not found as a property it is fetched 
+from the system when possible. 
+</P
+></DD
+><DT
+><B
+>user.email</B
+></DT
+><DD
+><P
+>&#13;The email address of the current user. If not found as a property it is 
+fetched from the system when possible. 
+</P
+></DD
+><DT
+><B
+>user.address</B
+></DT
+><DD
+><P
+>&#13;Postal address of the current user. 
+</P
+></DD
+><DT
+><B
+>user.url</B
+></DT
+><DD
+><P
+>&#13;URL to the users home page. 
+</P
+></DD
+></DL
+></DIV
 ></DIV
 ></DIV
 ></DIV

@@ -3,8 +3,6 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                  "http://www.oasis-open.org/docbook/xml/4.0/docbookx.dtd"
 [<!ENTITY llversion '3.0.26'>]>
-
-
 <book id="docbook">
 
   <bookinfo>
@@ -341,7 +339,7 @@ enter name:
 The rest of the program is:
 
 <programlisting>
-while(indi, dequeue(ilist)) {
+while (indi, dequeue(ilist)) {
   set(ahnen, dequeue(alist))
   d(ahnen) ". " name(indi) nl()
   if (e, birth(indi)) { " b. " long(e) nl() }
@@ -378,7 +376,7 @@ while(indi, dequeue(ilist)) {
 
      The loop is a <type>while</type> loop statement. The line:
 <programlisting>
-while(indi, dequeue(ilist)) {
+while (indi, dequeue(ilist)) {
 </programlisting>
 removes (via <function>dequeue</function>) a person from <varname>ilist</varname>, and assigns the person to variable <varname>indi</varname>. As long as there
 are persons on <varname>ilist</varname>, another iteration of the loop follows.
@@ -663,7 +661,7 @@ Note that <type>if</type> treats null strings as false, but empty strings as tru
 if (birth(indi))
 </programlisting>
 
-will return true if there is a BIRT record, even if it is empty, but will return false if there is no BIRT record
+will return <returnvalue>true</returnvalue> if there is a BIRT record, even if it is empty, but will return false if there is no BIRT record
 at all.
 
 </para>
@@ -1719,7 +1717,35 @@ loop through all persons in database
 
 </para>
 
-</glossdef></glossentry></glosslist>
+</glossdef></glossentry>
+<glossentry><glossterm><synopsis><command>mothers</command> (<replaceable>INDI</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>FAM_V</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
+
+<para>
+
+loop through all female parents of a person
+
+</para>
+
+</glossdef></glossentry>
+<glossentry><glossterm><synopsis><command>fathers</command> (<replaceable>INDI</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>FAM_V</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
+
+<para>
+
+loop through all male parents of a person
+
+</para>
+
+</glossdef></glossentry>
+<glossentry><glossterm><synopsis><command>Parents</command> (<replaceable>INDI</replaceable>, <replaceable>FAM</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
+
+<para>
+
+loop through all familes a person is a child of
+
+</para>
+
+</glossdef></glossentry>
+</glosslist>
 
 <para>
 
@@ -1894,31 +1920,53 @@ order.
 second argument is a person variable that iterates through the first person's spouses. The third
 argument is a family variable that iterates through the families the person and each spouse are in.
 The fourth argument is an integer variable that counts the iterations.
-
-
 </para>
 
-
-
 <para>
-
 <command>Families</command> is an iterator that loops through the families a person was a spouse/parent in. The first
 argument is a person. The second argument is a family variable that iterates through the families the
 first person was a spouse/parent in. The third argument iterates through the spouses from the families;
 if there is no spouse in a particular family, the variable is set to null for that iteration. The fourth
 argument is an integer variable that counts the iterations.
+</para>
 
+<para>
+<command>Forindi</command> is an iterator that loops through every person in
+the database in ascending key order. Its first
+parameter is a variable that iterates through the persons; its second 
+parameter is an integer counter
+variable that counts the persons starting at one.
+</para>
 
+<para>
+<command>mothers</command> is an iterator that loops through every female
+parent of the specified individual. 
+Its first parameter is a person;
+its third parameter is a family variable that iterates through the familes
+that the person is a child in;
+its second parameter is a person variable that is the female parent
+associated with the family in the third parameter;
+The fourth parameter is a variable that counts the families returned starting at one.
 </para>
 
 
+<para>
+<command>Parents</command> is an iterator that loops through every family
+of that a person is a child in.  Note: This iterator's name begins with a
+capital P.  There is another function of the same name that begins with a
+lower case p.
+Its first parameter is a person;
+its second parameter is a family variable that iterates through the familes
+that the person is a child in; and
+the third parameter is a variable that counts the families returned starting at one.
+</para>
 
 <para>
-
-<command>Forindi</command> is an iterator that loops through every person in the database in ascending key order. Its first
-parameter is a variable that iterates through the persons; its second parameter is an integer counter
+<command>Forindi</command> is an iterator that loops through every person in
+the database in ascending key order. Its first
+parameter is a variable that iterates through the persons; its second 
+parameter is an integer counter
 variable that counts the persons starting at one.
-
 </para>
 
 
@@ -2192,22 +2240,16 @@ wife/mother of the family, if any. Each returns <returnvalue>null</returnvalue> 
 
 
 <para>
-
 <function>Fam</function> returns the family who's key is passed as an argument; if no family has the key <function>fam</function> returns <returnvalue>null</returnvalue>.
-
-
 </para>
 
 
 
 <para>
-
 <function>Firstfam</function>, <function>nextfam</function> and <function>prevfam</function> allow you to iterate through all families in the database. <function>Firstfam</function>
 returns the first family in the database in key order. <function>Nextfam</function> returns the next family after the
 argument family in key order. <function>Prevfam</function> returns the previous family before the argument family in key
 order.
-
-
 </para>
 
 
@@ -2242,16 +2284,52 @@ variable that counts the families starting at one.
 
 
 <title>
-
 Other types of records
-
 </title>
+
+
+<glosslist>
+<glossentry><glossterm><synopsis><command>forsour</command> (<replaceable>NODE_V</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
 
-There are not currently report language functions to access and iterate the other types of records (source, events,
-notes, etc) in a database.
+loop through all sources in database
 
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><synopsis><command>foreven</command> (<replaceable>NODE_V</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
+
+<para>
+
+loop through all EVEN nodes in database
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><synopsis><command>forothr</command> (<replaceable>NODE_V</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
+
+<para>
+
+loop through all other (notes, etc.) nodes in database
+
+</para>
+</glossdef></glossentry>
+</glosslist>
+
+<para>
+<command>forsour</command> is an iterator that loops through all the Source
+nodes in the database.  Its first argument is the SOUR record and its
+second parameter is an integer counter variable that counts the sources
+elements starting at one.
+<command>foreven</command> is an iterator that loops through all the Event
+nodes in the database.  Its first argument is the EVEN record and its
+second parameter is an integer counter variable that counts the events
+elements starting at one.
+<command>forothr</command> is an iterator that loops through all the Other
+nodes in the database.  Its first argument is the record (NOTE, etc.) and its
+second parameter is an integer counter variable that counts the nodes
+starting at one.
 </para>
 
 </sect1>
@@ -2393,6 +2471,19 @@ array element selection
 </para>
 
 </glossdef></glossentry>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>BOOL <function>inlist</function></funcdef>
+<paramdef><parameter>LIST</parameter>,
+<parameter>ANY</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+is second argument in list.
+
+</para>
+
+</glossdef></glossentry>
 
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>sort</function></funcdef>
@@ -2490,6 +2581,11 @@ Passing 0 references the last element at the other end from 1, and -1 the one be
 
 </para>
 
+<para>
+<function>inlist</function> compares the second argument with each element
+in the list.  If it finds a match <function>inlist</function> returns
+<returnvalue>true</returnvalue>.
+</para>
 
 
 <para>
@@ -2693,13 +2789,22 @@ next sibling of
 copy a node structure
 
 </para>
-
 </glossdef></glossentry>
+
 <glossentry><glossterm><synopsis><command>fornodes</command> (<replaceable>NODE</replaceable>, <replaceable>NODE_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
 
 loop through child nodes
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><synopsis><command>fornotes</command> (<replaceable>ANY</replaceable>, <replaceable>STRING</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
+
+<para>
+
+loop through notes on a node
 
 </para>
 
@@ -2762,7 +2867,13 @@ Beware: the memory used to make the copy is never returned to the system.
 <command>Fornodes</command> is an iterator that loops through the child nodes of a <acronym>GEDCOM</acronym> node. Its first argument is a
 node expression, and its second parameter is a variable that iterates through each direct child node of
 the first node.
+</para>
 
+<para>
+<command>Fornotes</command> is an iterator that loops through the NOTE nodes 
+of a <acronym>GEDCOM</acronym> node. Its first argument is a
+node expression, and its second parameter is a variable that returns the
+value of the NOTE.  The value includes processed sub CONC and CONT records.
 
 </para>
 
@@ -4645,6 +4756,19 @@ generate indiset from GEDCOM name string
 
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>BOOL <function>inset</function></funcdef>
+<paramdef><parameter>SET</parameter>,
+<parameter>INDI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+<returnvalue>true</returnvalue> if the Individual is in the set.
+
+</para>
+
+</glossdef></glossentry>
+<glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>gengedcom</function></funcdef>
 <paramdef><parameter>SET</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
@@ -4656,6 +4780,30 @@ generate GEDCOM file from person set
 </para>
 
 </glossdef></glossentry>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>VOID <function>gengedcomweak</function></funcdef>
+<paramdef><parameter>SET</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+generate GEDCOM file from person set
+
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>VOID <function>gengedcomstrong</function></funcdef>
+<paramdef><parameter>SET</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+
+generate GEDCOM file from person set
+
+</para>
+</glossdef></glossentry>
+
 <glossentry><glossterm><synopsis><command>forindiset</command>( <replaceable>SET</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>ANY_V</replaceable>, <replaceable>INT_V</replaceable> ) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
@@ -4768,21 +4916,38 @@ the user interaction <function>getindiset</function> function.
 
 </para>
 
-
-
 <para>
 
-<function>Gengedcom</function> generates <acronym>GEDCOM</acronym> format output, to the report output file, of all persons in the argument
-person set. The output contains a person record for each person in the set, and all the family records that
+<function>Inset</function> returns <returnvalue>true</returnvalue> if the
+the specified individual is in the SET.
+
+</para>
+
+<para>
+Three functions are available for to generate <acronym>GEDCOM</acronym>
+format output to the report output file of all persons in the argument
+person set.
+<function>Gengedcom</function> 
+output contains a person record for each person in the set,
+and all the family records that
 link at least two of the persons in the set together.
-
-
+This function is provided for backwards compatiblity. Source, Event and
+Other(X) record pointers are output unmodified, but none of their records
+are output - this yields an inconsistent output.
+</para>
+<para>
+<function>Gengedcomweak</function> 
+output does not contain Source, Event or Other(X) record pointers 
+or their records.
+<function>Gengedcomstrong</function> includes 
+the Source, Event and Other(X) record pointers and all top-level nodes
+referenced by them.
+  
 </para>
 
 
 
 <para>
-
 <function>Forindiset</function> is an iterator that loops through each person in an indiset. The first parameter is an indiset.
 The second parameter is a variable that iterates through each person in the set. The third parameter
 iterates through the values associated with the persons. The fourth parameter is an integer variable
@@ -4961,7 +5126,7 @@ same as dereference
 <para>
 
 These functions allow you to recognize values that are cross references and to read the records they refer
-to. <function>Reference</function> returns true if its string argument is a cross reference value, that is, the internal key of
+to. <function>Reference</function> returns <returnvalue>true</returnvalue> if its string argument is a cross reference value, that is, the internal key of
 one of the records in the database. <function>Dereference</function> returns the node tree of the record referred to by its cross
 reference string argument. <function>Getrecord</function> is a synonym for <function>dereference</function>.
 
@@ -5064,7 +5229,8 @@ extract system or user property.  Function available after v3.0.5.
 
 </para>
 
-</glossdef></glossentry></glosslist>
+</glossdef></glossentry>
+</glosslist>
 
 <para>
 
@@ -5098,55 +5264,14 @@ chosen to disallow report system calls (via the DenySystemCalls user option).
 
 </para>
 
-
 <para>
 
 The <function>getproperty</function> function extracts system or user
-properties.  Properties are named group.subgroup.property or
-group.property.  The following keys are available at the moment:
+properties.  Properties are named group.subgroup.property,
+group.property or even property.  The keys are available at the moment can 
+be found in the ll-userguide under System and User Properties.
 </para>
-
-      <glosslist>
-
-     <glossentry>
-       <glossterm><option>user.fullname</option></glossterm>
-       <glossdef><para>
-         The full name of the current user.  This is fetched from the
-         system when possible.
-       </para></glossdef>
-     </glossentry>
-
-     <glossentry>
-       <glossterm><option>user.email</option></glossterm>
-       <glossdef><para>
-         The email address of the current user.  This is fetched
-         from the system when possible.
-       </para></glossdef>
-     </glossentry>
-
-     <glossentry>
-       <glossterm><option>user.address</option></glossterm>
-       <glossdef><para>
-         Postal address of the current user.
-       </para></glossdef>
-     </glossentry>
-
-     <glossentry>
-       <glossterm><option>user.url</option></glossterm>
-       <glossdef><para>
-         URL to the users home page.
-       </para></glossdef>
-     </glossentry>
-
-      </glosslist>
-
-      <para>
-     These values can be changed by adding values to user options.
-     [Miscellaneous utilities->Edit the user options file]
-      </para>
-
 </sect1>
-
 </chapter>
 </book>
 
