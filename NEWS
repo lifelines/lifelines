@@ -2,6 +2,10 @@ LifeLines Source Release, Version 3.0.39
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
+Bug fixes in 3.0.40
+============================
+- Fixed bug in src/liflines/Makefile.am failing compilation (finding libintl.h)
+
 New features added in 3.0.39
 ============================
 - New report function test(mode, file)

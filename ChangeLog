@@ -1,14 +1,18 @@
 2005-01-08 Perry Rapp
 
-	* ChangeLog src\gedlib\intrface.c src\gedlib\keytonod.c
-	src\gedlib\messages.c src\gedlib\names.c src\gedlib\refns.c
-	src\gedlib\remove.c src\gedlib\xreffile.c src\hdrs\gedcom.h
-	src\hdrs\uiprompts.h src\interp\more.c src\liflines\ask.c
-	src\liflines\delete.c src\liflines\llinesi.h src\liflines\merge.c
-	src\liflines\screen.c
+	* ChangeLog src/gedlib/intrface.c src/gedlib\keytonod.c
+	src/gedlib/messages.c src/gedlib/names.c src/gedlib/refns.c
+	src/gedlib/remove.c src/gedlib/xreffile.c src/hdrs/gedcom.h
+	src/hdrs/uiprompts.h src/interp/more.c src/liflines/ask.c
+	src/liflines/delete.c src/liflines/llinesi.h src/liflines/merge.c
+	src/liflines/screen.c
 
 	Add remove function for any records.
 	Cleanup of existing remove code & some const correct propagation.
+
+	* ChangeLog src/liflines/Makefile.am src/stdlib/Makefile.am
+
+	Fix typo in include for libintl.h.
 
 2005-01-08 lifelines beta 3.0.39 RELEASE
 
