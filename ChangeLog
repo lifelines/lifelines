@@ -1,4 +1,9 @@
 2004-07-18 Stephen Dum
+        src/btree/opnbtree.c src/gedlib/keytonod.c src/gedlib/names.c
+
+	Clean up some memory leaks.
+
+2004-07-18 Stephen Dum
 	More reports directory updates - Merging Vincent Broman's Changes
 	to reports. The following were added to the reports directory:
 	af-import.ll afn_match.ll ahnenliste.ll all_anc_lines.ll allfam10c.ll
