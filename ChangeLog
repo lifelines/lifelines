@@ -8,6 +8,10 @@
 
 	Remove extraneous codeset conversion in str_to_indiseq (fix bug 724761).
 
+	* ChangeLog build/msvc6/llines/llines.rc src/hdrs/version.h
+
+	Update for version 3.0.27p4.
+
 2003-04-19 Perry Rapp
 
 	* ChangeLog src/gedlib/date.c
