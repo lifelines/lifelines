@@ -81,6 +81,7 @@
  *=======================================*/
 /* wrapper for WINDOW */
 typedef struct uiwindow_s {
+	CNSTRING name;       /* non-heap name (for debugging) */
 	WINDOW * win;      /* curses window */
 	WINDOW * boxwin;   /* surrounding window just for boxing */
 	struct uiwindow_s * parent; /* fixed or dynamic parent */

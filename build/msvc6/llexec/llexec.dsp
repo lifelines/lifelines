@@ -300,6 +300,10 @@ SOURCE=..\..\..\src\gedlib\node.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\gedlib\nodeio.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\gedlib\nodeutls.c
 # End Source File
 # Begin Source File
@@ -321,6 +325,10 @@ SOURCE=..\..\..\src\arch\platform.c
 # Begin Source File
 
 SOURCE=..\..\..\src\gedlib\property.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\interp\pvalalloc.c
 # End Source File
 # Begin Source File
 
@@ -349,6 +357,10 @@ SOURCE=..\..\..\src\gedlib\remove.c
 # Begin Source File
 
 SOURCE=..\..\..\src\gedlib\replace.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\interp\rptui.c
 # End Source File
 # Begin Source File
 

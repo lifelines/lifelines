@@ -166,7 +166,6 @@ static INT array_interact(STRING ttl, INT len, STRING *strings
 static BOOLEAN ask_for_filename_impl(STRING ttl, STRING path, STRING prmpt
 	, STRING buffer, INT buflen);
 static void begin_action(void);
-static INT get_brwsmenu_size(INT screen);
 static void check_menu(DYNMENU dynmenu);
 static void check_stdout(void);
 static INT choose_one_or_list_from_indiseq(STRING ttl, INDISEQ seq, BOOLEAN multi);
@@ -177,7 +176,11 @@ static void clear_msgs(void);
 static void clear_status(void);
 static void clearw(void);
 static void color_hseg(WINDOW *win, INT row, INT x1, INT x2, char ch);
-static UIWINDOW create_uisubwindow(UIWINDOW parent, INT rows, INT cols, INT begy, INT begx);
+static UIWINDOW create_boxed_newwin2(CNSTRING name, INT rows, INT cols);
+static UIWINDOW create_newwin(CNSTRING name, INT rows, INT cols, INT begy, INT begx);
+static UIWINDOW create_newwin2(CNSTRING name, INT rows, INT cols);
+static UIWINDOW create_uisubwindow(CNSTRING name, UIWINDOW parent, INT rows, INT cols, INT begy, INT begx);
+static UIWINDOW create_uiwindow_impl(CNSTRING name, WINDOW * win, INT rows, INT cols);
 static void create_windows(void);
 static void deactivate_uiwin(void);
 static void deactivate_uiwin_and_touch_all(void);
@@ -191,6 +194,7 @@ static void edit_user_options(void);
 static void edit_place_table(void);
 static void end_action(void);
 BOOLEAN get_answer(UIWINDOW uiwin, INT row, INT col, STRING buffer, INT buflen);
+static INT get_brwsmenu_size(INT screen);
 static INT handle_list_cmds(listdisp * ld, INT code);
 static BOOLEAN handle_popup_list_resize(listdisp * ld, INT code);
 static INT interact(UIWINDOW uiwin, STRING str, INT screen);
@@ -425,10 +429,11 @@ paint_list_screen (void)
  * create_uiwindow_impl -- Create our WINDOW wrapper
  *========================================*/
 static UIWINDOW
-create_uiwindow_impl (WINDOW * win, INT rows, INT cols)
+create_uiwindow_impl (CNSTRING name, WINDOW * win, INT rows, INT cols)
 {
 	UIWINDOW uiwin = (UIWINDOW)stdalloc(sizeof(*uiwin));
 	memset(uiwin, 0, sizeof(*uiwin));
+	uiwin->name = name;
 	uiw_win(uiwin) = win;
 	uiw_rows(uiwin) = rows;
 	uiw_cols(uiwin) = cols;
@@ -439,7 +444,7 @@ create_uiwindow_impl (WINDOW * win, INT rows, INT cols)
  *  an auxiliary box window outside it
  *========================================*/
 static UIWINDOW
-create_boxed_newwin2 (INT rows, INT cols)
+create_boxed_newwin2 (CNSTRING name, INT rows, INT cols)
 {
 	INT begy = (LINES - rows)/2;
 	INT begx = (COLS - cols)/2;
@@ -449,7 +454,7 @@ create_boxed_newwin2 (INT rows, INT cols)
 	++begy;
 	++begx;
 	win = subwin(boxwin, rows-2, cols-2, begy, begx);
-	uiwin = create_uiwindow_impl(win, rows-2, cols-2);
+	uiwin = create_uiwindow_impl(name, win, rows-2, cols-2);
 	uiw_boxwin(uiwin) = boxwin;
 	return uiwin;
 }
@@ -471,29 +476,30 @@ delete_uiwindow (UIWINDOW * uiw)
  * create_newwin -- Create our WINDOW wrapper
  *========================================*/
 static UIWINDOW
-create_newwin (INT rows, INT cols, INT begy, INT begx)
+create_newwin (CNSTRING name, INT rows, INT cols, INT begy, INT begx)
 {
 	WINDOW * win = newwin(rows, cols, begy, begx);
-	return create_uiwindow_impl(win,rows,cols);
+	return create_uiwindow_impl(name, win,rows,cols);
 }
 /*==========================================
  * create_newwin2 -- Create our WINDOW wrapper
  *========================================*/
 static UIWINDOW
-create_newwin2 (INT rows, INT cols)
+create_newwin2 (CNSTRING name, INT rows, INT cols)
 {
 	WINDOW * win = NEWWIN(rows, cols);
-	return create_uiwindow_impl(win,rows,cols);
+	return create_uiwindow_impl(name, win,rows,cols);
 }
 /*==========================================
  * create_uisubwindow -- Create our WINDOW wrapper
  *  for a true (& permanent) subwindow
  *========================================*/
 static UIWINDOW
-create_uisubwindow (UIWINDOW parent, INT rows, INT cols, INT begy, INT begx)
+create_uisubwindow (CNSTRING name, UIWINDOW parent, INT rows, INT cols
+	, INT begy, INT begx)
 {
 	WINDOW * win = subwin(uiw_win(parent), rows, cols, begy, begx);
-	UIWINDOW uiwin = create_uiwindow_impl(win, rows, cols);
+	UIWINDOW uiwin = create_uiwindow_impl(name, win, rows, cols);
 	uiw_parent(uiwin) = parent;
 	uiw_permsub(uiwin) = TRUE;
 	return uiwin;
@@ -520,20 +526,20 @@ static void
 create_windows (void)
 {
 	INT col;
-	stdout_win = create_boxed_newwin2(ll_lines-4, ll_cols-4);
+	stdout_win = create_boxed_newwin2("stdout_win", ll_lines-4, ll_cols-4);
 	scrollok(uiw_win(stdout_win), TRUE);
 	col = COLS/4;
-	debug_box_win = create_newwin(8, ll_cols-col-2, 1, col);
-	debug_win = create_uisubwindow(debug_box_win, 6, ll_cols-col-4, 2, col+1);
+	debug_box_win = create_newwin("debug_box", 8, ll_cols-col-2, 1, col);
+	debug_win = create_uisubwindow("debug", debug_box_win, 6, ll_cols-col-4, 2, col+1);
 	scrollok(uiw_win(debug_win), TRUE);
 
 	MAINWIN_WIDTH = ll_cols;
 	LISTWIN_WIDTH = ll_cols-7;
- 	main_win = create_newwin2(ll_lines, MAINWIN_WIDTH);
-	tt_menu_win = create_newwin2(12,66);
-	ask_win = create_newwin2(4, 73);
-	ask_msg_win = create_newwin2(5, 73);
-	choose_from_list_win = create_newwin2(15, 73);
+ 	main_win = create_newwin2("main", ll_lines, MAINWIN_WIDTH);
+	tt_menu_win = create_newwin2("tt_menu", 12,66);
+	ask_win = create_newwin2("ask", 4, 73);
+	ask_msg_win = create_newwin2("ask_msg", 5, 73);
+	choose_from_list_win = create_newwin2("choose_from_list", 15, 73);
 
 	/* tt_menu_win is drawn dynamically */
 	draw_win_box(uiw_win(ask_win));
@@ -563,24 +569,51 @@ display_screen (INT new_screen)
 	switch_to_uiwin(uiwin);
 }
 /*=====================================
- * check_stdout -- Pause for stdout/err display
+ * do_check_stdout -- Pause for stdout/err display
  *  if it is up
+ *===================================*/
+static INT
+do_prompt_stdout (STRING prompt)
+{
+	INT ch=0;
+	llwprintf("\n%s\n", prompt);
+	crmode();
+	ch = wgetch(uiw_win(stdout_win));
+	nocrmode();
+	/* ok the status string was available until they struck a key */
+	clear_status();
+	return ch;
+}
+/*=====================================
+ * check_stdout -- If stdout populated,
+ *  prompt user to acknowledge, close & deactivate it
  *===================================*/
 static void
 check_stdout (void)
 {
 	if (active_uiwin == stdout_win) {
 		if (stdout_vis) {
-			llwprintf("\n%s\n", _(qShitkey));
-			crmode();
-			(void) wgetch(uiw_win(stdout_win));
-			nocrmode();
+			do_prompt_stdout(_(qShitkey));
 			stdout_vis = FALSE;
-			/* ok the status string was available until they struck a key */
-			clear_status();
 		}
 		deactivate_uiwin_and_touch_all();
 	}
+}
+/*=====================================
+ * prompt_stdout -- Prompt user in stdout
+ * This is like check_stdout, except it always
+ * prompts, and it returns the response char,
+ * and it doesn't clear stdout
+ *===================================*/
+INT
+prompt_stdout (STRING prompt)
+{
+	INT i;
+	if (active_uiwin != stdout_win)
+		activate_uiwin(stdout_win);
+	stdout_vis = TRUE;
+	i = do_prompt_stdout(prompt);
+	return i;
 }
 /*=====================================
  * main_menu -- Handle main_menu screen
@@ -649,15 +682,9 @@ main_menu (void)
 void
 run_report (BOOLEAN picklist)
 {
-	/*
-	Begin/End action doesn't work because the llwprintf statements
-	have a lot of embedded carriage returns
-	*/
-/*	begin_action();*/
+	begin_action();
 	interp_main(picklist);
-	if (!status_showing[0] && length_list(msg_list)<8)
-		clear_msgs();
-/*	end_action();*/
+	end_action(); /* displays any errors that happened */
 }
 /*=========================================
  * update_browse_menu -- redraw menu if needed
@@ -1360,7 +1387,7 @@ activate_popup_list_uiwin (listdisp * ld)
 
 	if (hgt>POPUP_LINES)
 		hgt = POPUP_LINES;
-	ld->uiwin = create_newwin2(hgt, LISTWIN_WIDTH);
+	ld->uiwin = create_newwin2("list", hgt, LISTWIN_WIDTH);
 	uiw_dynamic(ld->uiwin) = TRUE; /* delete when finished */
 	/* list is below details to nearly bottom */
 	ld->rectList.left = 1;
@@ -1596,7 +1623,7 @@ invoke_fullscan_menu (void)
 	BOOLEAN done=FALSE;
 
 	if (!fullscan_menu_win) {
-		fullscan_menu_win = create_newwin2(7,66);
+		fullscan_menu_win = create_newwin2("fullscan", 7,66);
 		/* paint it for the first & only time (it's static) */
 		repaint_fullscan_menu(fullscan_menu_win);
 	}
@@ -1645,7 +1672,7 @@ invoke_search_menu (void)
 	BOOLEAN done=FALSE;
 
 	if (!search_menu_win) {
-		search_menu_win = create_newwin2(7,66);
+		search_menu_win = create_newwin2("search_menu", 7,66);
 	}
 	/* repaint it every time, as history counts change */
 	repaint_search_menu(search_menu_win);
@@ -1692,7 +1719,7 @@ invoke_add_menu (void)
 	INT code;
 
 	if (!add_menu_win) {
-		add_menu_win = create_newwin2(8, 66);
+		add_menu_win = create_newwin2("add_menu", 8, 66);
 		/* paint it for the first & only time (it's static) */
 		repaint_add_menu(add_menu_win);
 	}
@@ -1725,7 +1752,7 @@ invoke_del_menu (void)
 	UIWINDOW uiwin=0;
 	WINDOW * win=0;
 	if (!del_menu_win) {
-		del_menu_win = create_newwin2(8, 66);
+		del_menu_win = create_newwin2("del_menu", 8, 66);
 		/* paint it for the first & only time (it's static) */
 		repaint_delete_menu(del_menu_win);
 	}
@@ -1913,7 +1940,7 @@ invoke_trans_menu (void)
 	BOOLEAN done=FALSE;
 
 	if (!trans_menu_win) {
-		trans_menu_win = create_newwin2(10,66);
+		trans_menu_win = create_newwin2("trans_menu", 10,66);
 	}
 	uiwin = trans_menu_win;
 
@@ -2061,7 +2088,7 @@ invoke_utils_menu (void)
 	WINDOW *win=0;
 
 	if (!utils_menu_win) {
-		utils_menu_win = create_newwin2(14, 66);
+		utils_menu_win = create_newwin2("utils_menu", 14, 66);
 		/* paint it for the first & only time (it's static) */
 		repaint_utils_menu(utils_menu_win);
 	}
@@ -2104,7 +2131,7 @@ invoke_extra_menu (void)
 	WINDOW *win=0;
 
 	if (!extra_menu_win) {
-		extra_menu_win = create_newwin2(13,66);
+		extra_menu_win = create_newwin2("extra_menu", 13,66);
 		/* paint it for the first & only time (it's static) */
 		repaint_extra_menu(extra_menu_win);
 	}
@@ -3216,7 +3243,7 @@ msg_outputv (MSG_LEVEL level, STRING fmt, va_list args)
 	/* update flag about whether we need to show msg list to user */
 	/* being careful in case we are currently *in* the msg list
 	show routine */
-	if (!viewing_msgs && length_list(msg_list)>1) {
+	if (!viewing_msgs && (length_list(msg_list)>1 || lock_std_msg)) {
 		msg_flag = TRUE;
 	}
 	/* now put it to status area if appropriate */
@@ -3224,8 +3251,11 @@ msg_outputv (MSG_LEVEL level, STRING fmt, va_list args)
 		if (strlen(buffer)>width) {
 			buffer[width-4]=0;
 			strcat(buffer, "...");
+/*
+TODO: This doesn't make sense until the msg list handles long strings
 			if (!viewing_msgs)
 				msg_flag = TRUE;
+*/
 		}
 		display_status(buffer);
 	}
@@ -3262,7 +3292,7 @@ void end_action (void)
 	/* pause for keypress for finish stdout/err if appropriate */
 	check_stdout();
 	/* put up list of errors if appropriate */
-	if (msg_flag) {
+	if (msg_flag && msg_list) {
 		STRING * strngs = (STRING *)stdalloc(length_list(msg_list)*sizeof(STRING));
 		INT i=0;
 		FORLIST(msg_list, el)

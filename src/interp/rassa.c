@@ -31,7 +31,6 @@
  *   3.0.3 - 19 Nov 95
  *===========================================================*/
 
-#include "sys_inc.h"
 #include "llstdlib.h"
 #include "table.h"
 #include "translat.h"
@@ -39,7 +38,7 @@
 #include "cache.h"
 #include "interp.h"
 #include "indiseq.h"
-#include "liflines.h"
+#include "rptui.h"
 #include "feedback.h"
 #include "lloptions.h"
 #include "zstr.h"
@@ -218,6 +217,7 @@ set_output_file (STRING outfname, BOOLEAN append)
 	rptdir = getoptstr("LLREPORTS", ".");
 	Poutfp = fopenpath(outfname, modestr, rptdir, NULL, uu8, NULL);
 	if (!Poutfp) {
+		/* TODO: need to forward this through rptui */
 		msg_error("Could not open file %s", outfname);
 		return FALSE;
 	}
@@ -234,8 +234,8 @@ request_file (BOOLEAN *eflg)
 {
 	STRING rptdir = getoptstr("LLREPORTS", ".");
 	STRING fname=0, fullpath=0;
-	Poutfp = ask_for_output_file(LLWRITETEXT, _(qSwhtout), &fname, &fullpath
-		, rptdir, NULL);
+	Poutfp = rptui_ask_for_output_file(LLWRITETEXT, _(qSwhtout), &fname
+		, &fullpath, rptdir, NULL);
 	if (!Poutfp || !fname || !fname[0])  {
 		if (fname)
 			prog_error(0, "Report stopping due to error opening output file");

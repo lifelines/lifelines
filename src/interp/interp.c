@@ -31,7 +31,7 @@
  *===========================================================*/
 
 #include <stdarg.h>
-#include "sys_inc.h"
+#include <time.h>
 #include "llstdlib.h"
 #include "table.h"
 #include "translat.h"
@@ -39,7 +39,7 @@
 #include "cache.h"
 #include "interpi.h"
 #include "indiseq.h"
-#include "liflines.h"
+#include "rptui.h"
 #include "feedback.h"
 #include "arch.h"
 #include "lloptions.h"
@@ -86,6 +86,7 @@ extern STRING qSunsupuniv;
  * local function prototypes
  *********************************************/
 
+static ZSTR approx_time(INT seconds);
 static STRING check_rpt_requires(PACTX pactx, STRING fname);
 static void disp_symtab(STRING title, SYMTAB stab);
 static BOOLEAN disp_symtab_cb(STRING key, PVALUE val, VPTR param);
@@ -93,6 +94,7 @@ static void enqueue_parse_error(const char * fmt, ...);
 static BOOLEAN find_program(STRING fname, STRING localdir, STRING *pfull);
 static void init_pactx(PACTX pactx);
 static void parse_file(PACTX pactx, STRING fname, STRING fullpath);
+static void print_report_duration(INT duration, INT uiduration);
 static void progmessage(MSG_LEVEL level, STRING);
 static void remove_tables(PACTX pactx);
 static STRING vprog_error(PNODE node, STRING fmt, va_list args);
@@ -251,7 +253,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 		struct pathinfo_s * pathinfo = 0;
 		STRING fname=0, fullpath=0;
 		STRING programsdir = getoptstr("LLPROGRAMS", ".");
-		if (!ask_for_program(LLREADTEXT, _(qSwhatrpt), &fname, &fullpath
+		if (!rptui_ask_for_program(LLREADTEXT, _(qSwhatrpt), &fname, &fullpath
 			, programsdir, ".ll", picklist)) {
 			if (fname)  {
 				/* tried & failed to open report program */
@@ -512,21 +514,68 @@ parse_file (PACTX pactx, STRING fname, STRING fullpath)
 	pactx->charpos = 0;
 }
 /*====================================+
+ * approx_time -- make time in seconds more legible
+ *===================================*/
+static ZSTR
+approx_time (INT seconds)
+{
+	ZSTR zti=zs_new();
+	INT minutes, hours, days, years;
+	minutes = seconds/60;
+	seconds = seconds - minutes*60;
+	hours = minutes/60;
+	minutes = minutes - hours*60;
+	days = hours/60;
+	hours = hours - days*24;
+	years = days/365.2425;
+	days = days - years*365.2425;
+	if (years) {
+		zs_setf(zti, _("%dy%03dd"), years, days);
+	} else if (days) {
+		zs_setf(zti, ("%dd%03dh"), days, hours);
+	} else if (hours) {
+		zs_setf(zti, ("%dh%03dm"), hours, minutes);
+	} else if (minutes) {
+		zs_setf(zti, _("%dm%03ds"), minutes, seconds);
+	} else {
+		zs_setf(zti, _("%02ds"), seconds);
+	}
+	return zti;
+}
+/*====================================+
+ * report_duration -- print report duration
+ *===================================*/
+static void
+print_report_duration (INT duration, INT uiduration)
+{
+	ZSTR zt1=approx_time(duration-uiduration), zt2=approx_time(uiduration);
+	llwprintf("\nReport duration %s (ui duration %s)\n", zs_str(zt1), zs_str(zt2));
+	zs_free(&zt1);
+	zs_free(&zt2);
+}
+/*====================================+
  * interp_main -- Interpreter main proc
  *===================================*/
 void
 interp_main (BOOLEAN picklist)
 {
+	time_t begin = time(NULL);
+	int elapsed, uitime;
 	/* whilst still in uilocale, check if we need to reload report strings
 	(in case first time or uilocale changed) */
 	interp_load_lang();
-
-	/* Note: various prompts including the one to choose report program wind up in
-	report locale now -- TODO */
+	prog_trace = FALSE; /* clear report debug flag */
+	dbg_mode = 0;
+	rptui_init(); /* clear ui time counter */
 
 	rptlocale();
 	interp_program_list("main", 0, NULL, NULL, NULL, picklist);
 	uilocale();
+	elapsed = time(NULL) - begin;
+	uitime = rptui_elapsed();
+
+	print_report_duration(elapsed, uitime);
+	
 	/*
 	TO DO: unlock all cache elements (2001/03/17, Perry)
 	in case any were left locked by report
@@ -1786,8 +1835,13 @@ prog_var_error (PNODE node, SYMTAB stab, PNODE arg, PVALUE val, STRING fmt, ...)
 	prog_error(node, zs_str(zstr));
 	zs_free(&zstr);
 
-	if (!getoptint("debugger", 0))
-		return;
+	if (dbg_mode != -99 && dbg_mode != 3) {
+		INT ch = 0;
+		while (!(ch=='d' || ch=='q'))
+			ch = rptui_prompt_stdout(_("Enter d for debugger, q to quit"));
+		if (ch == 'q')
+			dbg_mode = -99;
+	}
 
 	if (dbg_mode != -99) {
 		ZSTR zstr=zs_new();
@@ -1803,7 +1857,7 @@ prog_var_error (PNODE node, SYMTAB stab, PNODE arg, PVALUE val, STRING fmt, ...)
 		choices[i++] = strsave(_("Quit debugger"));
 		ASSERT(i==ARRSIZE(choices));
 dbgloop:
-		rtn = choose_from_array(_("Report debugger"), ARRSIZE(choices), choices);
+		rtn = rptui_choose_from_array(_("Report debugger"), ARRSIZE(choices), choices);
 		if (rtn == 3 || rtn == -1)
 			dbg_mode = -99;
 		else if (rtn == 0) {
@@ -1844,7 +1898,7 @@ disp_symtab (STRING title, SYMTAB stab)
 	}
 	/* Title of report debugger's list of local symbols */
 	/* TODO: 2003-01-19, we could allow drilldown on lists, tables & sets here */
-	view_array(title, n, sdata.locals);
+	rptui_view_array(title, n, sdata.locals);
 	free_array_strings(n, sdata.locals);
 }
 /*====================================================

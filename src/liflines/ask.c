@@ -384,8 +384,7 @@ ask_for_indi_list_once (STRING ttl,
  * used by both reports & interactive use
  *=================================================================*/
 INDISEQ
-ask_for_indi_list (STRING ttl,
-                   BOOLEAN reask)
+ask_for_indi_list (STRING ttl, BOOLEAN reask)
 {
 	while (TRUE) {
 		INT rc;

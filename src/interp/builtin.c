@@ -39,7 +39,7 @@
 #include "cache.h"
 #include "interp.h"
 #include "indiseq.h"
-#include "liflines.h"
+#include "rptui.h"
 #include "feedback.h"
 #include "lloptions.h"
 #include "date.h"
@@ -108,7 +108,7 @@ __getint (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	if (!msg)
 		msg = _("Enter integer for program");
-	if (!ask_for_int(msg, &num)) {
+	if (!rptui_ask_for_int(msg, &num)) {
 		*eflg = TRUE;
 		return NULL;
 	}
@@ -179,9 +179,7 @@ __getindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (!msg)
 		msg = _("Identify person for program:");
 	assign_iden(stab, iident(arg), create_pvalue_from_indi(NULL));
-	uilocale();
-	key = ask_for_indi_key(msg, NOCONFIRM, DOASK1);
-	rptlocale();
+	key = rptui_ask_for_indi_key(msg, NOCONFIRM, DOASK1);
 	if (key) {
 		assign_iden(stab, iident(arg)
 			, create_pvalue_from_indi_key(key));
@@ -204,10 +202,8 @@ __getfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	assign_iden(stab, iident(arg), NULL);
-	uilocale();
-	fam = nztop(ask_for_fam(_("Enter a spouse from family."),
+	fam = nztop(rptui_ask_for_fam(_("Enter a spouse from family."),
 	    _("Enter a sibling from family.")));
-	rptlocale();
 	assign_iden(stab, iident(arg), create_pvalue_from_fam(fam));
 	return NULL;
 }
@@ -241,9 +237,7 @@ __getindiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	if (!msg)
 		msg = _("Identify list of persons for program:");
-	uilocale();
-	seq = ask_for_indi_list(msg, TRUE);
-	rptlocale();
+	seq = rptui_ask_for_indi_list(msg, TRUE);
 	if (seq)
 		namesort_indiseq(seq); /* in case uilocale != rptlocale */
 	delete_pvalue(val);
@@ -2228,7 +2222,7 @@ __pn (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val;
 	PNODE arg = (PNODE) iargs(node);
 	NODE indi = eval_indi(arg, stab, eflg, NULL);
-	STRING str;
+	STRING str="";
 	if (*eflg || !indi) {
 		*eflg = TRUE;
 		prog_error(node, "1st arg to pn must be a person");
@@ -2242,7 +2236,8 @@ __pn (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	if (SEX(indi) == SEX_FEMALE) {
-		STRING str = _(fpns[typ]);
+		str = _(fpns[typ]);
+		/* disambiguation of object & possessive for l10n */
 		if (eqstr(str, "her_"))
 			str = "her";
 	} else {

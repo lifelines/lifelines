@@ -453,6 +453,10 @@ SOURCE=..\..\..\src\gedlib\replace.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\interp\rptui.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\liflines\scan.c
 # End Source File
 # Begin Source File
@@ -804,5 +808,9 @@ SOURCE=..\..\..\src\interp\yacc.h
 SOURCE=..\..\..\src\hdrs\zstr.h
 # End Source File
 # End Group
+# Begin Source File
+
+SOURCE=..\..\..\src\interp\rptui.h
+# End Source File
 # End Target
 # End Project

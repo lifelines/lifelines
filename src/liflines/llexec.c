@@ -714,6 +714,7 @@ interact (STRING ptrn)
 	STRING t;
 	while (1) {
 		fgets(buffer, sizeof(buffer), stdin);
+		if (!ptrn) return buffer[0];
 		for (t=ptrn; *t; ++t) {
 			if (buffer[0]==*t)
 				return buffer[0];
@@ -731,7 +732,7 @@ ask_for_char_msg (STRING msg, STRING ttl, STRING prmpt, STRING ptrn)
 {
 	INT rv;
 	if (msg) outputln(msg);
-	outputln(ttl);
+	if (ttl) outputln(ttl);
 	output(prmpt);
 	rv = interact(ptrn);
 	return rv;
@@ -846,3 +847,9 @@ choose_one_from_indiseq (STRING ttl, INDISEQ seq)
 {
 	return choose_one_or_list_from_indiseq(ttl, seq, FALSE);
 }
+INT
+prompt_stdout (STRING prompt)
+{
+	return ask_for_char(NULL, prompt, NULL);
+}
+

@@ -1,29 +1,50 @@
+2003-02-22 Perry Rapp
+
+	* ChangeLog build/msvc6/llexec/llexec.dsp
+	build/msvc6/llexec/llexec.rc build/msvc6/llines/llinesprj.dsp
+	src/gedlib/date.c src/gedlib/translat.c src/hdrs/liflines.h
+	src/hdrs/screen.h src/interp/Makefile.am src/interp/builtin.c
+	src/interp/eval.c src/interp/interp.c src/interp/interpi.h
+	jsrc/interp/rassa.c src/interp/write.c src/liflines/ask.c
+	src/liflines/llexec.c src/liflines/screen.c
+	*NEW src/interp/rptui.c
+	*NEW src/interp/rptui.h
+
+	Fix bug report flag not getting cleared after report.
+	Implement ui/rpt locale switching for ui functions.
+	Add report (& report ui) timing.
+	Put debugger prompt into stdout (so user can read error
+	before popup obscures it).
+	Prototype some existing static functions in screen.c at top.
+	Add names to all uiwindows (for debugging convenience).
+	Fix uninitialized bug in report pronoun function.
+
 2003-02-18 Perry Rapp
 
-	* ChangeLog src/gedlib/xlat.c:
+	* ChangeLog src/gedlib/xlat.c
 
 	Fix leak of zstring if iconv translation step fails.
 
-	* ChangeLog src/gedlib/xlat.c:
+	* ChangeLog src/gedlib/xlat.c
 
 	Fix bug creating iconv step of xlat.
 
 2003-02-17 Perry Rapp
 
-	* ChangeLog src/interp/builtin.c:
+	* ChangeLog src/interp/builtin.c
 
 	Fix crash if null first arg to extractdate.
 
 2003-02-12 Perry Rapp
 
 	* ChangeLog po/fr.po src/btree/record.c src/hdrs/version.h
-	src/interp/pvalalloc.c:
+	src/interp/pvalalloc.c
 
 	Compilation fixes. New French message catalog. Bump version to 3.0.24b10.
 
 2003-02-11 Perry Rapp
 
-	* ChangeLog src/gedlib/nodeio.c src/liflines/loadsave.c:
+	* ChangeLog src/gedlib/nodeio.c src/liflines/loadsave.c
 
 	Read gedcom files in binary mode, due to bug of MS-Windows.
 
@@ -32,24 +53,24 @@
 
 	Plug some minor, one time per db, leaks.
 
-	* ChangeLog src/gedlib/nodeio.c:
+	* ChangeLog src/gedlib/nodeio.c
 
 	Plug holes in error returns from string_to_node.
 
-	* ChangeLog src/liflines/screen.c:
+	* ChangeLog src/liflines/screen.c
 
 	Free some leaked uiwindows.
 
 	* ChangeLog src/btree/index.c src/btree/record.c
 	src/btree/utils.c src/gedlib/keytonod.c src/hdrs/standard.h
-	src/interp/builtin.c src/stdlib/lldate.c:
+	src/interp/builtin.c src/stdlib/lldate.c
 
 	Close some filehandles under error conditions.
 	More legible dates in logs.
 
 2003-02-10 Perry Rapp
 
-	* ChangeLog src/hdrs/version.h:
+	* ChangeLog src/hdrs/version.h
 
 	Bump version for new 3.0.24b9 beta release.
 

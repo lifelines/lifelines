@@ -93,7 +93,6 @@ enum { ZON_X, ZON_INT, ZON_GUI, ZON_EDI, ZON_RPT, ZON_GED, NUM_ZONES };
 static void clear_legacy_tt(INT trnum);
 static void clear_predefined_list(void);
 static struct conversion_s * getconvert(INT trnum);
-static void global_translate(ZSTR zstr, LIST gtlist);
 static BOOLEAN is_legacy_first(INT trnum);
 static void local_init(void);
 
@@ -172,20 +171,6 @@ translate_string_to_zstring (XLAT xlat, CNSTRING in)
 	ZSTR zstr = zs_news(in);
 	transl_xlat(xlat, zstr);
 	return zstr;
-}
-/*===================================================
- * global_translate -- Apply list of user global transforms
- *=================================================*/
-static void
-global_translate (ZSTR zstr, LIST gtlist)
-{
-	TRANTABLE ttx=0;
-	FORLIST(gtlist, tbel)
-		ttx = tbel;
-		ASSERT(ttx);
-		custom_translate(zstr, ttx);
-		ttx = 0;
-	ENDLIST
 }
 /*===================================================
  * translate_string -- Translate string via XLAT

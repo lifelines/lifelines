@@ -139,7 +139,7 @@ __detachnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	dead = pvalue_to_node(val);
-	if (prnt = nparent(dead)) {
+	if ((prnt = nparent(dead))) {
 		NODE prev = NULL, next;
 		NODE curs = nchild(prnt);
 		while (curs && curs != dead) {

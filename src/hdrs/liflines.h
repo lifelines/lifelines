@@ -57,6 +57,7 @@ INT choose_from_array_x(STRING ttl, INT count, STRING* list, DETAILFNC, void *);
 INT choose_list_from_indiseq(STRING, INDISEQ);
 INT choose_one_from_indiseq(STRING, INDISEQ);
 INT display_list(STRING ttl, LIST list);
+INT prompt_stdout(STRING prompt);
 void view_array(STRING ttl, INT no, STRING *pstrngs);
 
 /* from askgedc.c */
