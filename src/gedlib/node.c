@@ -1146,10 +1146,10 @@ traverse_nodes (NODE node,              /* root of tree to traverse */
 	return TRUE;
 }
 /*==================================================
- * num_spouses -- Returns number of spoues of person
+ * num_spouses_of_indi -- Returns number of spouses of person
  *================================================*/
 INT
-num_spouses (NODE indi)
+num_spouses_of_indi (NODE indi)
 {
 	INT nsp;
 	if (!indi) return 0;

@@ -233,7 +233,7 @@ STRING node_to_tag (NODE node, STRING tag, TRANTABLE tt, INT len);
 INT num_evens(void);
 INT num_fams(void);
 INT num_indis(void);
-INT num_spouses(NODE);
+INT num_spouses_of_indi(NODE);
 INT num_sours(void);
 INT num_othrs(void);
 BOOLEAN openxref(void);

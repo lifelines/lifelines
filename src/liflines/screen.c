@@ -41,6 +41,7 @@
 #include "interp.h"
 #include "screen.h"
 #include "liflines.h"
+#include "arch.h"
 
 #include "llinesi.h"
 
