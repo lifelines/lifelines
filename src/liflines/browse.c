@@ -63,8 +63,18 @@ extern STRING ronlye, ronlya, idhbrs, idwbrs;
 extern STRING id1sbr, id2sbr, id1fbr, id2fbr, id1cbr, id2cbr;
 extern STRING id1hbr, id2hbr, id1wbr, id2wbr;
 extern STRING spover, idfamk, nohist;
+/*
+	The history list is a circular buffer in hist_list.
+	hist_start points at the earliest entry, and 
+	hist_past_end points just past the latest entry.
+	If hist_start==hist_past_end the the buffer is full.
+	(If hist_start==-1, then there are no entries.)
+	(NB: CMD_HISTORY_FWD will go ahead to unused entries.)
+	-1 <= hist_start < ARRSIZE(hist_list)
+	0 <= hist_past_end < ARRSIZE(hist_list)
+*/
 static INT hist_start=-1, hist_past_end=0;
-static NKEY hist_list[4];
+static NKEY hist_list[20];
 
 /*********************************************
  * local enums & defines
@@ -1248,9 +1258,9 @@ history_record (NODE node)
 	NKEY nkey = nkey_zero();
 	INT last;
 	if (hist_start==-1) {
-		node_to_nkey(node, &hist_list[0]);
 		hist_start=hist_past_end;
-		hist_past_end = (hist_past_end== ARRSIZE(hist_list)-1) ? 0 : hist_past_end+1;
+		node_to_nkey(node, &hist_list[hist_start]);
+		hist_past_end = (hist_start+1) % ARRSIZE(hist_list);
 		/* hist_list[1+] are all zero because of static data initialization */
 		return;
 	}
@@ -1259,15 +1269,17 @@ history_record (NODE node)
 	if this is the same as our most recent (hist_list[last])
 	*/
 	node_to_nkey(node, &nkey);
-	last = hist_past_end ? hist_past_end-1 : ARRSIZE(hist_list)-1;
+	last = (hist_past_end-1) % ARRSIZE(hist_list);
 	if (nkey_eq(&nkey, &hist_list[last]))
 		return;
 	/* it is a new one so add it to circular list */
 	nkey_copy(&nkey, &hist_list[hist_past_end]);
 	if (hist_start == hist_past_end) {
-		hist_start = (hist_start== ARRSIZE(hist_list)-1) ? 0 : hist_start+1;
+		/* full buffer & we just overwrote the oldest */
+		hist_start = (hist_start+1) % ARRSIZE(hist_list);
 	}
-	hist_past_end = (hist_past_end== ARRSIZE(hist_list)-1) ? 0 : hist_past_end+1;
+	/* advance pointer to account for what we just added */
+	hist_past_end = (hist_past_end+1) % ARRSIZE(hist_list);
 }
 /*==================================================
  * history_back -- return prev NODE in history, if exists
@@ -1280,17 +1292,16 @@ history_back (void)
 	if (hist_start==-1)
 		return NULL;
 	/* back up from hist_past_end to current item */
-	last = hist_past_end ? hist_past_end-1 : ARRSIZE(hist_list)-1;
+	last = (hist_past_end-1) % ARRSIZE(hist_list);
 	while (last != hist_start) {
 		/* loop is to keep going over deleted ones */
 		/* now back up before current item */
-		last = last ? last-1 : ARRSIZE(hist_list)-1;
-		if (last == hist_start)
-			hist_start = -1; /* empty history */
-		hist_past_end = last; /* current will get written here */
+		last = (last-1) % ARRSIZE(hist_list);
 		nkey_to_node(&hist_list[last], &node);
-		if (node)
+		if (node) {
+			hist_past_end = (last+1) % ARRSIZE(hist_list);
 			return node;
+		}
 	}
 	return NULL;
 }
@@ -1302,7 +1313,7 @@ history_fwd (void)
 {
 	INT next;
 	NODE node;
-	if (hist_start == -1 && hist_past_end == hist_start)
+	if (hist_past_end == hist_start)
 		return NULL; /* at end of full history */
 	next = hist_past_end;
 	nkey_to_node(&hist_list[next], &node);
