@@ -69,7 +69,7 @@ extern STRING mon_fr12A,mon_fr12B,mon_fr13A,mon_fr13B;
  *********************************************/
 
 /* used in parsing dates -- 1st, 2nd, & 3rd numbers found */
-struct nums_s { INT num1; INT num2; INT num3; };
+struct nums_s { struct dnum_s num1; struct dnum_s num2; struct dnum_s num3; };
 
 /*********************************************
  * local function prototypes
@@ -79,25 +79,27 @@ struct nums_s { INT num1; INT num2; INT num3; };
 static void analyze_numbers(GDATEVAL, struct gdate_s *, struct nums_s *);
 static void analyze_word(GDATEVAL gdv, struct gdate_s * pdate
 	, struct nums_s * nums, INT ival, BOOLEAN * newdate);
+static void clear_dnum(struct dnum_s * dnum);
+static void clear_numbers(struct nums_s * nums);
 static void format_cal(INT cal, CNSTRING src, STRING output, INT len);
 static void format_complex(GDATEVAL gdv, STRING output, INT len, INT cmplx
 	, STRING ymd2, STRING ymd3);
-static void format_day(INT da, INT dfmt, STRING output);
-static STRING format_month(INT cal, INT mo, INT mfmt);
+static void format_day(struct dnum_s da, INT dfmt, STRING output);
+static STRING format_month(INT cal, struct dnum_s mo, INT mfmt);
 static void format_eratime(struct gdate_s * pdate, CNSTRING ymd, INT efmt
 	, STRING output, INT len);
-static STRING format_year(INT, INT);
+static STRING format_year(struct dnum_s yr, INT yfmt);
 static void format_ymd(STRING, STRING, STRING, INT, STRING*, INT *len);
-static INT get_date_tok(INT*, STRING*);
+static INT get_date_tok(struct dnum_s*);
 static void init_keywordtbl(void);
 static BOOLEAN is_date_delim(char c);
-static BOOLEAN is_valid_day(struct gdate_s * pdate, INT day);
-static BOOLEAN is_valid_month(struct gdate_s * pdate, INT month);
+static BOOLEAN is_valid_day(struct gdate_s * pdate, struct dnum_s day);
+static BOOLEAN is_valid_month(struct gdate_s * pdate, struct dnum_s month);
 static void load_lang(void);
 static void mark_freeform(GDATEVAL gdv);
 static void mark_invalid(GDATEVAL gdv);
 static void set_date_string(STRING);
-static void set_year(struct gdate_s * pdate, INT yr);
+static void assign_dnum(struct dnum_s * dest, struct dnum_s * src);
 
 /*********************************************
  * local types & variables
@@ -262,7 +264,9 @@ do_format_date (STRING str, INT dfmt, INT mfmt,
 	STRING p;
 	INT len;
 	GDATEVAL gdv = 0;
+	
 	if (!str) return NULL;
+
 	if (sfmt==12) {
 		/* This is what used to be the shrt flag */
 		return shorten_date(str);
@@ -294,7 +298,7 @@ do_format_date (STRING str, INT dfmt, INT mfmt,
 		gdv = extract_date(str);
 		format_day(gdv->date1.day, dfmt, daystr);
 		smo = format_month(gdv->date1.calendar, gdv->date1.month, mfmt);
-		syr = (gdv->date1.yearstr ? gdv->date1.yearstr 
+		syr = (gdv->date1.year.str ? gdv->date1.year.str 
 			: format_year(gdv->date1.year, yfmt));
 		p = ymd;
 		len = sizeof(ymd);
@@ -310,7 +314,7 @@ do_format_date (STRING str, INT dfmt, INT mfmt,
 			/* build 2nd date string into ymd2 */
 			format_day(gdv->date2.day, dfmt, daystr);
 			smo = format_month(gdv->date2.calendar, gdv->date2.month, mfmt);
-			syr = (gdv->date2.yearstr ? gdv->date2.yearstr 
+			syr = (gdv->date2.year.str ? gdv->date2.year.str 
 				: format_year(gdv->date2.year, yfmt));
 			p = ymd;
 			len = sizeof(ymd);
@@ -703,22 +707,23 @@ format_ymd (STRING syr, STRING smo, STRING sda, INT sfmt
  *                must be at least 3 characters
  *=====================================*/
 static void
-format_day (INT da, INT dfmt, STRING output)
+format_day (struct dnum_s da, INT dfmt, STRING output)
 {
 	STRING p;
-	if (da < 0 || da > 99 || dfmt < 0 || dfmt > 2) {
+	INT dayval = da.val; /* ignore complex days for now */
+	if (dayval < 0 || dayval > 99 || dfmt < 0 || dfmt > 2) {
 		output[0] = 0;
 		return;
 	}
 	strcpy(output, "  ");
-	if (da >= 10) {
+	if (dayval >= 10) {
 		/* dfmt irrelevant with 2-digit days */
-		output[0] = da/10 + '0';
-		output[1] = da%10 + '0';
+		output[0] = dayval/10 + '0';
+		output[1] = dayval%10 + '0';
 		return;
 	}
 	p = output;
-	if (da == 0) {
+	if (dayval == 0) {
 		if (dfmt == 2)
 			output[0] = 0;
 		return;
@@ -727,7 +732,7 @@ format_day (INT da, INT dfmt, STRING output)
 		p++; /* leading space */
 	else if (dfmt == 1)
 		*p++ = '0'; /* leading 0 */
-	*p++ = da + '0';
+	*p++ = dayval + '0';
 	*p = 0;
 }
 /*==========================
@@ -767,34 +772,35 @@ gedcom_month (INT cal, INT mo)
  *  returns static buffer or string constant or 0
  *=========================================*/
 static STRING
-format_month (INT cal, INT mo, INT mfmt)
+format_month (INT cal, struct dnum_s mo, INT mfmt)
 {
 	INT casing;
 	MONTH_NAMES * parr=0;
 	static char scratch[3];
-	if (mo < 0 || mo > 13 || mfmt < 0 || mfmt > 11) return NULL;
+	INT moval = mo.val; /* ignore complex months for now */
+	if (moval < 0 || moval > 13 || mfmt < 0 || mfmt > 11) return NULL;
 	if (mfmt <= 2)  {
 		format_day(mo, mfmt, scratch);
 		return scratch;
 	}
+	if (moval == 0) return (STRING) "   ";
 	if (mfmt == 9)
-		return gedcom_month(cal, mo);
+		return gedcom_month(cal, moval);
 	if (mfmt == 10)
-		return roman_lower[mo-1];
+		return roman_lower[moval-1];
 	if (mfmt == 11)
-		return roman_upper[mo-1];
-	if (mo == 0) return (STRING) "   ";
+		return roman_upper[moval-1];
 	casing = mfmt-3;
 	ASSERT(casing>=0 && casing<ARRSIZE(months_gj[0]));
 	switch (cal) {
 	case GDV_HEBREW: parr = months_heb; break;
 	case GDV_FRENCH: parr = months_fr; break;
 	default: 
-		if (mo>12) return "   ";
+		if (moval>12) return "   ";
 		parr = months_gj; break;
 	}
-	if (parr[mo-1][casing])
-		return parr[mo-1][casing];
+	if (parr[moval-1][casing])
+		return parr[moval-1][casing];
 	else
 		return "?";
 }
@@ -810,11 +816,12 @@ format_month (INT cal, INT mo, INT mfmt)
  *  returns static buffer or 0
  *=======================================*/
 static STRING
-format_year (INT yr, INT yfmt)
+format_year (struct dnum_s yr, INT yfmt)
 {
 	static char scratch[7];
 	STRING p;
-	if (yr > 9999 || yr < 0) {
+	INT yrval = yr.val; /* ignore complex years for now */
+	if (yrval > 9999 || yrval < 0) {
 		switch(yfmt) {
 		case 0:
 			return "    ";
@@ -824,18 +831,18 @@ format_year (INT yr, INT yfmt)
 			return NULL;
 		}
 	}
-	if (yr > 999 || yfmt == 2) {
-		sprintf(scratch, "%d", yr);
+	if (yrval > 999 || yfmt == 2) {
+		sprintf(scratch, "%d", yrval);
 		return scratch;
 	}
 	p = (yfmt==1 ? "000" : "   ");
-	if (yr < 10)
+	if (yrval < 10)
 		strcpy(scratch, p);
-	else if (yr < 100)
+	else if (yrval < 100)
 		llstrncpy(scratch, p, 2+1);
 	else
 		llstrncpy(scratch, p, 1+1);
-	sprintf(scratch+strlen(scratch), "%d", yr);
+	sprintf(scratch+strlen(scratch), "%d", yrval);
 	return scratch;
 }
 /*=====================================================
@@ -868,25 +875,25 @@ extract_date (STRING str)
 	/* we accumulate numbers to figure when we finish a
 	date (with a full period or range, we may finish the
 	first date partway thru) */
-	INT tok, ival;
-	struct nums_s nums = { BAD_YEAR, BAD_YEAR, BAD_YEAR };
-	STRING sval;
+	INT tok;
+	struct dnum_s dnum = {BAD_YEAR, 0, 0};
+	struct nums_s nums = { {BAD_YEAR, 0, 0}, {BAD_YEAR, 0, 0}, {BAD_YEAR, 0, 0} };
 	GDATEVAL gdv = create_gdateval();
 	struct gdate_s * pdate = &gdv->date1;
 	BOOLEAN newdate;
 	if (!str)
 		return gdv;
 	set_date_string(str);
-	while ((tok = get_date_tok(&ival, &sval))) {
+	while ((tok = get_date_tok(&dnum))) {
 		switch (tok) {
 		case MONTH_TOK:
-			if (!pdate->month) {
-				pdate->month = ival;
-				if (nums.num1 != BAD_YEAR) {
-					/* if number before month, it is a day if legal */
-					if (nums.num2 == BAD_YEAR && is_valid_day(pdate, nums.num1)) {
-						pdate->day = nums.num1;
-						nums.num1 = BAD_YEAR;
+			if (!pdate->month.val) {
+				assign_dnum(&pdate->month, &dnum);
+				if (nums.num1.val != BAD_YEAR) {
+					/* if single number before month, it is a day if legal */
+					if (nums.num2.val == BAD_YEAR 
+						&& is_valid_day(pdate, nums.num1)) {
+						assign_dnum(&pdate->day, &nums.num1);
 					} else {
 						mark_freeform(gdv);
 					}
@@ -897,15 +904,13 @@ extract_date (STRING str)
 			continue;
 		case CALENDAR_TOK:
 			if (!pdate->calendar)
-				pdate->calendar = ival;
+				pdate->calendar = dnum.val;
 			else
 				mark_invalid(gdv);
 			continue;
 		case YEAR_TOK:
-			if (pdate->year == BAD_YEAR) {
-				pdate->year = ival;
-				if (sval) /* alphanum year */
-					pdate->yearstr = strdup(sval);
+			if (pdate->year.val == BAD_YEAR) {
+				assign_dnum(&pdate->year, &dnum);
 			} else {
 				mark_invalid(gdv);
 			}
@@ -916,21 +921,21 @@ extract_date (STRING str)
 			mark_freeform(gdv);
 			continue;
 		case WORD_TOK:
-			analyze_word(gdv, pdate, &nums, ival, &newdate);
+			analyze_word(gdv, pdate, &nums, dnum.val, &newdate);
 			if (newdate) {
 				analyze_numbers(gdv, pdate, &nums);
-				nums.num1 = nums.num2 = nums.num3 = BAD_YEAR;
+				clear_numbers(&nums);
 				pdate = &gdv->date2;
 			}
 			continue;
 		case ICONS_TOK:
 			/* number */
-			if (nums.num1 == BAD_YEAR)
-				nums.num1 = ival;
-			else if (nums.num2 == BAD_YEAR)
-				nums.num2 = ival;
-			else if (nums.num3 == BAD_YEAR)
-				nums.num3 = ival;
+			if (nums.num1.val == BAD_YEAR)
+				assign_dnum(&nums.num1, &dnum);
+			else if (nums.num2.val == BAD_YEAR)
+				assign_dnum(&nums.num2, &dnum);
+			else if (nums.num3.val == BAD_YEAR)
+				assign_dnum(&nums.num3, &dnum);
 			else
 				mark_freeform(gdv);
 			continue;
@@ -940,6 +945,7 @@ extract_date (STRING str)
 	}
 	/* now analyze what numbers we got */
 	analyze_numbers(gdv, pdate, &nums);
+	clear_numbers(&nums);
 	gdv->text = strdup(str);
 	return gdv;
 }
@@ -1029,8 +1035,8 @@ analyze_word (GDATEVAL gdv, struct gdate_s * pdate, struct nums_s * nums
 			gdv->subtype = GDVP_FROM;
 			break;
 		case GD_TO:
-			if (pdate->day || pdate->month || pdate->year != BAD_YEAR
-				|| nums->num1 != BAD_YEAR) {
+			if (pdate->day.val || pdate->month.val || pdate->year.val != BAD_YEAR
+				|| nums->num1.val != BAD_YEAR) {
 				/* if we have a date before TO, switch to 2nd date */
 				/* (This is not legal GEDCOM syntax, however */
 				*newdate = TRUE;
@@ -1074,57 +1080,57 @@ analyze_word (GDATEVAL gdv, struct gdate_s * pdate, struct nums_s * nums
 static void
 analyze_numbers (GDATEVAL gdv, struct gdate_s * pdate, struct nums_s * nums)
 {
-	if (nums->num1 == BAD_YEAR) {
+	if (nums->num1.val == BAD_YEAR) {
 		/* if we have no numbers, we're done */
 		return;
 	}
 	/* we have at least 1 number */
-	if (pdate->day && pdate->month && pdate->year != BAD_YEAR) {
+	if (pdate->day.val && pdate->month.val && pdate->year.val != BAD_YEAR) {
 		/* if we already have day & month & year, we're done */
 		return;
 	}
 	/* we need something */
-	if (nums->num2 == BAD_YEAR) {
+	if (nums->num2.val == BAD_YEAR) {
 		/* if we only have 1 number */
-		if (pdate->year == BAD_YEAR) {
+		if (pdate->year.val == BAD_YEAR) {
 			/* if we need year, it is year */
-			set_year(pdate, nums->num1);
+			assign_dnum(&pdate->year, &nums->num1);
 			return;
 		}
-		if (pdate->month && is_valid_day(pdate, nums->num1)) {
+		if (pdate->month.val && is_valid_day(pdate, nums->num1)) {
 			/* if we only need day, it is day (if legal) */
-			pdate->day = nums->num1;
+			assign_dnum(&pdate->day, &nums->num1);
 			return;
 		}
 		/* otherwise give up (ignore it) */
 		return;
 	}
 	/* we have at least 2 numbers */
-	if (pdate->day && pdate->month) {
+	if (pdate->day.val && pdate->month.val) {
 		/* if all we need is year, then it is year */
-		set_year(pdate, nums->num1);
+		assign_dnum(&pdate->year, &nums->num1);
 		return;
 	}
 	/* we need at least day or month */
 	/* and we have at least 2 numbers */
 	mark_freeform(gdv);
-	if (pdate->month && pdate->year != BAD_YEAR) {
+	if (pdate->month.val && pdate->year.val != BAD_YEAR) {
 		/* if all we need is day, see if it can be day */
 		if (is_valid_day(pdate, nums->num1)) {
-			pdate->day = nums->num1;
+			assign_dnum(&pdate->day, &nums->num1);
 		}
 		return;
 	}
-	if (pdate->month) {
+	if (pdate->month.val) {
 		/* if we get here, we need day & year */
 		/* prefer first num for day, if legal */
 		if (is_valid_day(pdate, nums->num1)) {
-			pdate->day = nums->num1;
-			set_year(pdate, nums->num2);
+			assign_dnum(&pdate->day, &nums->num1);
+			assign_dnum(&pdate->year, &nums->num2);
 		} else {
-			set_year(pdate, nums->num1);
+			assign_dnum(&pdate->year, &nums->num1);
 			if (is_valid_day(pdate, nums->num2))
-				pdate->day = nums->num2;
+				assign_dnum(&pdate->day, &nums->num2);
 		}
 		return;
 	}
@@ -1133,43 +1139,43 @@ analyze_numbers (GDATEVAL gdv, struct gdate_s * pdate, struct nums_s * nums)
 	if we don't know month, then we don't know day either, as
 	we only recognize day during parsing if we see it before month
 	*/
-	ASSERT(!pdate->day);
+	ASSERT(!pdate->day.val);
 	/* so we need at least day & month, & have 2+ numbers */
 	
-	if (pdate->year != BAD_YEAR) {
+	if (pdate->year.val != BAD_YEAR) {
 		/* we need day & month, but not year, and have 2+ numbers */
 		/* can we interpret them unambiguously ? */
 		if (is_valid_month(pdate, nums->num1) 
 			&& !is_valid_month(pdate, nums->num2)
 			&& is_valid_day(pdate, nums->num2)) 
 		{
-			pdate->month = nums->num1;
-			pdate->day = nums->num2;
+			assign_dnum(&pdate->month, &nums->num1);
+			assign_dnum(&pdate->day, &nums->num2);
 			return;
 		}
 		if (is_valid_month(pdate, nums->num2) 
 			&& !is_valid_month(pdate, nums->num1)
 			&& is_valid_day(pdate, nums->num1)) 
 		{
-			pdate->month = nums->num2;
-			pdate->day = nums->num1;
+			assign_dnum(&pdate->month, &nums->num2);
+			assign_dnum(&pdate->day, &nums->num1);
 			return;
 		}
 		/* not unambiguous, so don't guess */
 		return;
 	}
 	/* if we get here, we need day, month, & year, and have 2+ numbers */
-	if (nums->num3 == BAD_YEAR) {
+	if (nums->num3.val == BAD_YEAR) {
 		/* we need day, month, & year, and have 2 numbers */
 		/* how about day, year ? */
 		if (is_valid_day(pdate, nums->num1)) {
-			pdate->day = nums->num1;
-			set_year(pdate, nums->num2);
+			assign_dnum(&pdate->day, &nums->num1);
+			assign_dnum(&pdate->year, &nums->num2);
 		}
 		/* how about year, day ? */
 		if (is_valid_day(pdate, nums->num2)) {
-			pdate->day = nums->num2;
-			set_year(pdate, nums->num1);
+			assign_dnum(&pdate->day, &nums->num2);
+			assign_dnum(&pdate->year, &nums->num1);
 		}
 		/* give up */
 		return;
@@ -1177,37 +1183,63 @@ analyze_numbers (GDATEVAL gdv, struct gdate_s * pdate, struct nums_s * nums)
 	/* we need day, month, & year, and have 3 numbers */
 	/* how about day, month, year ? */
 	if (is_valid_day(pdate, nums->num1) && is_valid_month(pdate, nums->num2)) {
-		pdate->day = nums->num1;
-		pdate->month = nums->num2;
-		set_year(pdate, nums->num3);
+		assign_dnum(&pdate->day, &nums->num1);
+		assign_dnum(&pdate->month, &nums->num2);
+		assign_dnum(&pdate->year, &nums->num3);
 	}
 	/* how about month, day, year ? */
 	if (is_valid_month(pdate, nums->num1) && is_valid_day(pdate, nums->num2)) {
-		pdate->day = nums->num2;
-		pdate->month = nums->num1;
-		set_year(pdate, nums->num3);
+		assign_dnum(&pdate->day, &nums->num2);
+		assign_dnum(&pdate->month, &nums->num1);
+		assign_dnum(&pdate->year, &nums->num3);
 	}
 	/* how about year, month, day ? */
 	if (is_valid_day(pdate, nums->num3) && is_valid_month(pdate, nums->num2)) {
-		pdate->day = nums->num3;
-		pdate->month = nums->num2;
-		set_year(pdate, nums->num1);
+		assign_dnum(&pdate->day, &nums->num3);
+		assign_dnum(&pdate->month, &nums->num2);
+		assign_dnum(&pdate->year, &nums->num1);
 	}
 	/* give up */
 }
 /*===============================================
- * set_year -- Helper to assign year number
- *  (fills in the year string also)
- *  pdate:  [I/O]  date we are building
- *  yr:     [IN]   new year number
- * Created: 2001/12/28 (Perry Rapp)
+ * clear_dnum -- Empty a dnums_s structure
+ *  nums:  [I/O]  date_val we are clearing
+ * Created: 2002/02/03 (Perry Rapp)
  *=============================================*/
 static void
-set_year (struct gdate_s * pdate, INT yr)
+clear_dnum (struct dnum_s * dnum)
 {
-	pdate->year = yr;
-	/* we leave yearstr as 0 because we have a normal numeric year */
-	pdate->yearstr = 0;
+	dnum->val = dnum->val2 = BAD_YEAR;
+	if (dnum->str) {
+		stdfree(dnum->str);
+		dnum->str = 0;
+	}
+}
+/*===============================================
+ * clear_numbers -- Empty a nums_s structure
+ *  nums:  [I/O]  date_val we are clearing
+ * Created: 2002/02/03 (Perry Rapp)
+ *=============================================*/
+static void
+clear_numbers (struct nums_s * nums)
+{
+	clear_dnum(&nums->num1);
+	clear_dnum(&nums->num2);
+	clear_dnum(&nums->num3);
+}
+/*===============================================
+ * assign_dnum -- Move dnum from one variable to another
+ * Created: 2002/02/03 (Perry Rapp)
+ *=============================================*/
+static void
+assign_dnum (struct dnum_s * dest, struct dnum_s * src)
+{
+	dest->val = src->val;
+	dest->val2 = src->val2;
+	dest->str = src->str;
+	src->str = 0; /* transferring string to dest */
+	src->val = BAD_YEAR;
+	src->val2 = BAD_YEAR;
 }
 /*===============================================
  * create_gdateval -- Create new, empty GEDCOM date_val
@@ -1218,11 +1250,22 @@ create_gdateval (void)
 {
 	GDATEVAL gdv = (GDATEVAL)stdalloc(sizeof(*gdv));
 	memset(gdv, 0, sizeof(*gdv));
-	gdv->date1.year = BAD_YEAR;
-	gdv->date2.year = BAD_YEAR;
+	gdv->date1.year.val = BAD_YEAR;
+	gdv->date2.year.val = BAD_YEAR;
 	gdv->valid = 1;
 	return gdv;
 
+}
+/*===============================================
+ * free_gdate -- Delete existing GEDCOM date
+ * Created: 2001/12/28 (Perry Rapp)
+ *=============================================*/
+void
+free_gdate (struct gdate_s * gdate)
+{
+	clear_dnum(&gdate->year);
+	clear_dnum(&gdate->month);
+	clear_dnum(&gdate->day);
 }
 /*===============================================
  * free_gdateval -- Delete existing GEDCOM date_val
@@ -1232,10 +1275,8 @@ void
 free_gdateval (GDATEVAL gdv)
 {
 	if (!gdv) return;
-	if (gdv->date1.yearstr)
-		stdfree(gdv->date1.yearstr);
-	if (gdv->date2.yearstr)
-		stdfree(gdv->date2.yearstr);
+	free_gdate(&gdv->date1);
+	free_gdate(&gdv->date2);
 	if (gdv->text)
 		stdfree(gdv->text);
 	stdfree(gdv);
@@ -1256,18 +1297,19 @@ set_date_string (STRING str)
 }
 /*==================================================
  * get_date_tok -- Return next date extraction token
- *  pival:   [OUT]  word enum value (eg, GD_AFT)
+ *  pdnum:   [OUT]  numeric value of token, if day/year number
+ *                  or numeric value of month or calendar or keyword
  *  psval:   [OUT]  pointer to (static) copy of original text
  *                   (only used for slash years)
  *================================================*/
 static INT
-get_date_tok (INT *pival, STRING *psval)
+get_date_tok (struct dnum_s *pdnum)
 {
-	static char scratch[30];
+	static char scratch[90];
 	STRING p = scratch;
 	INT c;
 	if (!sstr) return 0;
-	*psval = NULL;
+	if (strlen(sstr) > sizeof(scratch)-1) return 0;
 	while (iswhite((uchar)*sstr++))
 		;
 	sstr--;
@@ -1286,7 +1328,7 @@ get_date_tok (INT *pival, STRING *psval)
 		/* look it up in our big table of GEDCOM keywords */
 		i = valueof_int(keywordtbl, upper(scratch), 0);
 		if (i >= 2001 && i < 2000 + GDV_CALENDARS_IX) {
-			*pival = i - 2000;
+			pdnum->val = i - 2000;
 			return CALENDAR_TOK;
 		}
 		/* unrecognized word */
@@ -1306,43 +1348,71 @@ get_date_tok (INT *pival, STRING *psval)
 			return CHAR_TOK;
 		}
 		if ((i = valueof_int(keywordtbl, upper(scratch), 0)) > 0 && i <= 999) {
-			*pival = i % 100;
+			pdnum->val = i % 100;
 			/* TODO: we need to use the fact that calendar is i/100 */
+			/* That is, now we know what calendar this is in */
 			return MONTH_TOK;
 		}
-		*pival = 0;
+		pdnum->val = 0;
 		if (i >= 1001 && i < 1000 + GD_END2) {
-			*pival = i - 1000;
+			pdnum->val = i - 1000;
 			return WORD_TOK;
 		}
 		FATAL(); /* something unexpected is in the keywordtbl ? Find out what! */
 		return WORD_TOK;
 	}
 	if (chartype(*sstr) == DIGIT) {
-		INT j=BAD_YEAR, i=0; /* i is year value, j is slash year value */
-		*pival = *sstr;
+		INT j=BAD_YEAR, i=0; /* i is numeric value, j is 2nd value */
 		while (chartype(c = (uchar)(*p++ = *sstr++)) == DIGIT)
 			i = i*10 + c - '0';
 		if (i > 9999) {
 			/* 5+ digit numbers are not recognized */
 			return CHAR_TOK;
 		}
-		if (c == '/') {
+		/* c is the char after the last digit,
+		and sstr is the next char after that */
+		if (c=='/' || c=='-') {
 			INT modnum=1;
+			signed int delta;
 			STRING saves = sstr, savep = p;
+			char csave = c;
 			j=0;
 			while (chartype(c = (uchar)(*p++ = *sstr++)) == DIGIT) {
 				modnum *= 10;
 				j = j*10 + c - '0';
 			}
-			/* slash years only valid if differ by one year
-			and there is not another slash after slash year
-			(so we don't parse 8/9/1995 as a slash year */
-			if (*sstr=='/' || (j != (i+1) % modnum)) {
-				sstr = saves;
-				p = savep;
-				j = BAD_YEAR;
+			/* 2nd number must be larger than first (subject to mod)
+			eg, 1953-54 is ok, but not 1953-52
+			also must be followed by whitespace (or be at end) */
+			delta = j - i % modnum;
+			if (delta > 0 && (!c || iswhite((uchar)c))
+				&& (csave == '-' || delta == 1)) {
+
+				*--p = 0;
+				pdnum->val = i;
+				pdnum->val2 = i + delta;
+				pdnum->str = strdup(scratch);
+				if (is_valid_day(NULL, *pdnum))
+					return ICONS_TOK;
+				else
+					return YEAR_TOK;
 			}
+			/* pop back to before slash/hyphen, so it can be handled as
+			a number before a date delimiter */
+			sstr = saves;
+			p = savep;
+		} else if ((c == 's' || c == 'S')
+			&& (i % 10 == 0)
+			&& (!sstr[0] || iswhite((uchar)sstr[0]))) {
+			/* eg, 1850s -- this is English-specific */
+			p[1] = 0;
+			pdnum->val = i;
+			pdnum->val2 = i+9;
+			pdnum->str = strdup(scratch);
+			if (is_valid_day(NULL, *pdnum))
+				return ICONS_TOK;
+			else
+				return YEAR_TOK;
 		}
 		*--p = 0;
 		sstr--;
@@ -1350,18 +1420,16 @@ get_date_tok (INT *pival, STRING *psval)
 			/* number only valid if followed by date delimiter */
 			return CHAR_TOK;
 		}
-		*pival = i;
-		if (j != BAD_YEAR) {
-			*psval = scratch;
-			return YEAR_TOK;
-		}
+		pdnum->val = i;
+		pdnum->val2 = i;
+		pdnum->str = 0;
 		return ICONS_TOK;
 	}
 	if (*sstr == 0)  {
 		sstr = NULL;
 		return 0;
 	}
-	*pival = *sstr++;
+	++sstr;
 	return CHAR_TOK;
 }
 /*=========================================
@@ -1604,30 +1672,34 @@ gdateval_isdual (GDATEVAL gdv)
 }
 /*=============================
  * is_valid_day -- Is this day legal for this date ?
+ *  pdate:  [IN]  date in which day occurred (may be NULL)
+ *  day:    [IN]  candidate day number
  * Created: 2001/12/28 (Perry Rapp)
  *===========================*/
 static BOOLEAN
-is_valid_day (struct gdate_s * pdate, INT day)
+is_valid_day (struct gdate_s * pdate, struct dnum_s day)
 {
 	/* To consider: Fancy code with calendars */
 	/* for now, use max (all cals all months), which is 31 */
 	pdate=pdate; /* unused */
-	return (day>=1 && day<=31);
+	return (day.val>=1 && day.val2<=31);
 }
 /*=============================
  * is_valid_month -- Is this month legal for this date ?
+ *  pdate:  [IN]  date in which month occurred (may be NULL)
+ *  month:    [IN]  candidate month number
  * Created: 2001/12/28 (Perry Rapp)
  *===========================*/
 static BOOLEAN
-is_valid_month (struct gdate_s * pdate, INT month)
+is_valid_month (struct gdate_s * pdate, struct dnum_s month)
 {
 	INT cal = pdate ? pdate->calendar : 0;
 	switch (cal) {
 	case GDV_HEBREW:
 	case GDV_FRENCH:
-		return (month>=1 && month<=13);
+		return (month.val>=1 && month.val2<=13);
 	default:
-		return (month>=1 && month<=12);
+		return (month.val>=1 && month.val2<=12);
 	}
 }
 /*=============================
@@ -1641,7 +1713,7 @@ is_date_delim (char c)
 	if (iswhite((uchar)c))
 		return TRUE;
 	/* TODO: Any other characters here ? Do we internationalize it ? */
-	if (c=='/' || c=='-' || c=='.')
+	if (c=='/' || c=='-' || c=='.' || c==',')
 		return TRUE;
 	return FALSE;
 }

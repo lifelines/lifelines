@@ -8,6 +8,13 @@
 	in screen.c (need to be chtype, not char). Fix win32 curses
 	emulation to use chtype where appropriate (instead of char).
 
+	* hdrs/interp.h interp/builtin.c interp/date.c
+	reports/exercise.ll:
+
+	Modify date parser to recognize slash & hyphen dates. Modify date
+	structure for compound numbers for these. Add corresponding tests
+	to exercise.ll.
+
 2002-01-31 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog INSTALL hdrs/interp.h hdrs/screen.h

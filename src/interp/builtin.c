@@ -58,7 +58,7 @@ extern STRING badargs;
  * local function prototypes
  *********************************************/
 
-static INT normalize_year(INT yr);
+static INT normalize_year(struct dnum_s yr);
 
 /*********************************************
  * local variables
@@ -2332,11 +2332,12 @@ __date (PNODE node, SYMTAB stab, BOOLEAN *eflg)
  * historical behavior is that 0 is the return for unknown year
  *====================================================*/
 static INT
-normalize_year (INT yr)
+normalize_year (struct dnum_s yr)
 {
-	if (yr == BAD_YEAR)
-		yr = 0;
-	return yr;
+	if (yr.val == BAD_YEAR)
+		return 0;
+	else
+		return yr.val;
 }
 /*=====================================================+
  * __extractdate -- Extract date from EVENT or DATE NODE
@@ -2380,8 +2381,8 @@ __extractdate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	gdv = extract_date(str);
 	/* TODO: deal with date information */
 	mod = gdv->date1.mod;
-	da = gdv->date1.day;
-	mo = gdv->date1.month;
+	da = gdv->date1.day.val;
+	mo = gdv->date1.month.val;
 	yr = normalize_year(gdv->date1.year);
 	assign_iden(stab, iident(dvar), create_pvalue(PINT, (VPTR)da));
 	assign_iden(stab, iident(mvar), create_pvalue(PINT, (VPTR)mo));
@@ -2442,10 +2443,10 @@ __extractdatestr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	gdv = extract_date(str);
 	/* TODO: deal with date information */
 	mod = gdv->date1.mod;
-	da = gdv->date1.day;
-	mo = gdv->date1.month;
+	da = gdv->date1.day.val;
+	mo = gdv->date1.month.val;
 	yr = normalize_year(gdv->date1.year);
-	yrstr = gdv->date1.yearstr;
+	yrstr = gdv->date1.year.str;
 	if (!yrstr) yrstr="";
 	assign_iden(stab, iident(modvar), create_pvalue(PINT, (VPTR)mod));
 	assign_iden(stab, iident(dvar), create_pvalue(PINT, (VPTR)da));
@@ -2722,9 +2723,11 @@ __year (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		str = event_to_date(evnt, NULL, FALSE);
 	}
 	gdv = extract_date(str);
-	if (gdv->date1.yearstr && gdv->date1.yearstr[0]) {
-		str = gdv->date1.yearstr;
-	} else if (gdv->date1.year != BAD_YEAR) {
+	/* prefer year's string if it has one */
+	if (gdv->date1.year.str && gdv->date1.year.str[0]) {
+		str = gdv->date1.year.str;
+	} else if (gdv->date1.year.val != BAD_YEAR) {
+		/* no year string, so must have been a simple number */
 		snprintf(buff, sizeof(buff), "%d", gdv->date1.year);
 		str = buff;
 	} else

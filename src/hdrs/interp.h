@@ -197,14 +197,14 @@ extern INT nobuiltins;
 
 /* GEDCOM dates */
 enum { BAD_YEAR=-99999 };
+struct dnum_s { INT val; INT val2; STRING str; };
 struct gdate_s {
 	INT calendar;
-	INT year;
-	INT month;
-	INT day;
+	struct dnum_s year;
+	struct dnum_s month;
+	struct dnum_s day;
 	INT mod;
 	INT eratime; /* eg, AD, BC */
-	STRING yearstr;
 };
 struct gdateval_s {
 	struct gdate_s date1;

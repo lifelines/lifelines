@@ -1,6 +1,6 @@
 /*
  * @progname       exercise
- * @version        0.91 (2002/01/09)
+ * @version        0.93 (2002/02/03)
  * @author         Perry Rapp
  
  * @category       test
@@ -743,10 +743,29 @@ proc tdfb(src, dayfmt, monfmt, yrfmt, sfmt, ofmt, cfmt, dests, destc)
 /* Test parsing only, using year(), month(), and day() functions */
 proc tdparse(src, yr, mo, da)
 {
-	set(result, year(src))
+	set(result, strtoint(year(src)))
 	if (ne(result, yr)) 
 	{
-		call reportfail(concat("year(", src, ") failure: ", yr, "<>", result))
+		call reportfail(concat("year(", src, ") failure: ", d(yr), "<>", d(result)))
+	} else {
+		incr(testok)
+	}
+	extractdatestr(modvar, dvar, mvar, yvar, ystvar, src)
+	if (ne(yvar, yr))
+	{
+		call reportfail(concat("extractdatestr(", src, ").yr failure: ", d(yr), "<>", d(yvar)))
+	} else {
+		incr(testok)
+	}
+	if (ne(mvar, mo))
+	{
+		call reportfail(concat("extractdatestr(", src, ").mo failure: ", d(mo), "<>", d(mvar)))
+	} else {
+		incr(testok)
+	}
+	if (ne(dvar, da))
+	{
+		call reportfail(concat("extractdatestr(", src, ").da failure: ", d(da), "<>", d(dvar)))
 	} else {
 		incr(testok)
 	}
@@ -759,19 +778,33 @@ proc testDates()
 {
 	set(testok, 0)
 	set(testfail, 0)
+call tdparse("2 JAN 1950s", 1950, 1, 2)
 
 /* Test parsing only */
-	call tdparse("2 JAN 1953", "1953", "1", "2")
-	call tdparse("14 FEB 857", "857", "2", "14")
-	call tdparse("8/14/33", "33", "8", "14")
-	call tdparse("9/22/1", "1", "9", "22")
-	call tdparse("14 OCT 3 B.C.", "3", "9", "22")
-	call tdparse("9/22/1", "1", "9", "22")
-	call tdparse("AFT 3 SEP 1630", "1630", "9", "3")
-	call tdparse("FROM 30 SEP 1630 TO 1700", "1630", "9", "30")
-	call tdparse("@#DJULIAN@ 5 MAY 1204", "1204", "5", "5")
-	call tdparse("@#DHEBREW@ 1 ADR 3011", "3011", "7", "1")
-	call tdparse("@#DFRENCH R@ 1 VEND 11", "11", "1", "1")
+	call tdparse("2 JAN 1953", 1953, 1, 2)
+	call tdparse("14 FEB 857", 857, 2, 14)
+	call tdparse("8/14/33", 33, 8, 14)
+	call tdparse("9/22/1", 1, 9, 22)
+	call tdparse("14 OCT 3 B.C.", 3, 10, 14)
+	call tdparse("9/22/1", 1, 9, 22)
+	call tdparse("AFT 3 SEP 1630", 1630, 9, 3)
+	call tdparse("FROM 30 SEP 1630 TO 1700", 1630, 9, 30)
+	call tdparse("@#DJULIAN@ 5 MAY 1204", 1204, 5, 5)
+	call tdparse("@#DHEBREW@ 1 ADR 3011", 3011, 6, 1)
+	call tdparse("@#DFRENCH R@ 1 VEND 11", 11, 1, 1)
+	call tdparse("junk", 0, 0, 0)
+	call tdparse("15 ___ 1945", 1945, 0, 15)
+	call tdparse("__ ___ 1945", 1945, 0, 0)
+	call tdparse("_ ___ 1950", 1950, 0, 0)
+	call tdparse("_ ___ 90", 90, 0, 0)
+	call tdparse("2/3 JAN 1953", 1953, 1, 2)
+	call tdparse("2/3 JAN 1953/4", 1953, 1, 2)
+	call tdparse("2/3 JAN 1953/54", 1953, 1, 2)
+	call tdparse("2/3 JAN 1953/954", 1953, 1, 2)
+	call tdparse("FROM 2/3 JAN 1953/954 TO 2004", 1953, 1, 2)
+	call tdparse("2 JAN 1950s", 1950, 1, 2)
+	call tdparse("2-5 JAN 1950-1970", 1950, 1, 2)
+
 
 /* NB: We do not test all possible format combinations, as there are quite a lot
   (3 day formats, 11 month formats, 3 year formats, 14 combining formats,
