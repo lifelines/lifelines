@@ -5047,15 +5047,15 @@ are removed when the edit is finished and not stored in the database.
 <glossentry><glossterm>TTPATH</glossterm><glossdef>
 
 <para>
-
 list of directories to search for translation table files (*.tt)
 </para>
 </glossdef></glossentry>
 
-<glossentry><glossterm>TTDIR</glossterm><glossdef>
+<glossentry><glossterm>TTPATH.debug</glossterm><glossdef>
 
 <para>
-Dir to look for Codeset information in ???
+if defined, <application>LifeLines</application> outputs debug information
+related to translation table processing.
 </para>
 </glossdef></glossentry>
 

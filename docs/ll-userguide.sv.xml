@@ -4704,13 +4704,6 @@ teckenöversättningstabeller (*.tt).
 </para>
 </glossdef></glossentry>
 
-<glossentry><glossterm>TTDIR</glossterm><glossdef>
-
-<para>
-Katalog att leta i efter kodningsinformation?
-</para>
-</glossdef></glossentry>
-
 <glossentry><glossterm>InputPath</glossterm><glossdef>
 
 <para>

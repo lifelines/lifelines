@@ -2588,8 +2588,9 @@ System and User Properties
           list  of  directories to search for translation table files
           (*.tt)
 
-   TTDIR
-          Dir to look for Codeset information in ???
+   TTPATH.debug
+          if  defined, LifeLines outputs debug information related to
+          translation table processing.
 
    InputPath
           path to look for in when reading in gedcom files
