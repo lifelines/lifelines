@@ -1,5 +1,8 @@
 2000-11-11 Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* interp/yacc.y: Include yacc error string in syntax error
+	message.
+
 	* gedlib/Makefile.am liflines/Makefile.am stdlib/Makefile.am
 	interp/pvalue.c: Cleanup.  Split long lines.
 

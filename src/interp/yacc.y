@@ -323,6 +323,6 @@ yyerror (STRING str)
 	extern INT Plineno;
 	extern STRING Pfname;
 
-	llwprintf("Syntax Error: %s: line %d\n", Pfname, Plineno);
+	llwprintf("Syntax Error (%s): %s: line %d\n", str, Pfname, Plineno);
 	Perrors++;
 }
