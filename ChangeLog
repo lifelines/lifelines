@@ -21,6 +21,10 @@
 
 	Cosmetic: remove obsolete variables from remove_from_cache.
 
+	* ChangeLog src/interp/pvalue.c
+
+	Cosmetic: Remove (my) questioning comment in set_pvalue.
+
 2005-01-29, Perry Rapp
 
 	* ChangeLog src/hdrs/table.h src/stdlib/table.c

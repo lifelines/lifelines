@@ -111,7 +111,7 @@ set_pvalue (PVALUE val, INT type, VPTR value)
 {
 	if (type == ptype(val) && value == pvalvv(val)) {
 		/* self-assignment */
-		/* (Perry: 2003-12-09) For reference counted types, don't we need to fall through ? */
+		/* already have the value, or hold the pointer & reference */
 		return;
 	}
 
