@@ -2345,7 +2345,7 @@ __key (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_var_error(node, stab, arg, val, nonrecx, "key", "1");
 		return NULL;
 	}
-	cel = get_cel_from_pvalue(val); /* may return NULL */
+	cel = pvalue_to_cel(val); /* may return NULL */
 	delete_pvalue(val);
 	if (!cel) return create_pvalue_from_string("");
 	if (inext(arg)) {
@@ -2393,7 +2393,7 @@ __rot (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 BOOLEAN
 record_to_node (PVALUE val)
 {
- 	CACHEEL cel = get_cel_from_pvalue(val); /* may be NULL */
+ 	CACHEEL cel = pvalue_to_cel(val); /* may be NULL */
 	STRING key;
 	NODE gnode=0;
 
@@ -2486,7 +2486,7 @@ __insert (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_var_error(node, stab, arg, valtab, nontabx, "insert", "1");
 		return NULL;
 	}
-	tab = (TABLE) pvalue(valtab);
+	tab = pvalue_to_table(valtab);
 
 	arg = inext(arg);
 	val = eval_and_coerce(PSTRING, arg, stab, eflg);
@@ -2539,7 +2539,7 @@ __lookup (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "1st arg to lookup is not a table");
 		return NULL;
 	}
-	tab = (TABLE) pvalue(val);
+	tab = pvalue_to_table(val);
 	delete_pvalue(val);
 	val = eval_and_coerce(PSTRING, inext(arg), stab, eflg);
 	if (*eflg) {
@@ -3391,7 +3391,7 @@ eval_indi (PNODE expr, SYMTAB stab, BOOLEAN *eflg, CACHEEL *pcel)
 		}
 		return NULL;
 	}
-	cel = get_cel_from_pvalue(val);
+	cel = pvalue_to_cel(val);
 	delete_pvalue(val);
 	if (!cel) return NULL;
 	indi = cnode(cel);
@@ -3412,7 +3412,7 @@ eval_fam (PNODE expr, SYMTAB stab, BOOLEAN *eflg, CACHEEL *pcel)
 	CACHEEL cel;
 	PVALUE val = eval_and_coerce(PFAM, expr, stab, eflg);
 	if (*eflg || !val) return NULL;
-	cel = get_cel_from_pvalue(val);
+	cel = pvalue_to_cel(val);
 	delete_pvalue(val);
 	if (!cel) return NULL;
 	fam = cnode(cel);

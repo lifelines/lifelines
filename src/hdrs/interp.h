@@ -214,7 +214,9 @@ extern INT nobuiltins;
 		return NULL;\
 	}
 
+/* external types */
 typedef struct pactx_s *PACTX;
+typedef struct indiseq_s *INDISEQ;
 
 /* PVALUE Arithmetic Functions */
 void add_pvalues(PVALUE, PVALUE, BOOLEAN*eflg, ZSTR * zerr);
@@ -263,9 +265,10 @@ void delete_pvalue_ptr(PVALUE * valp);
 void delete_pvalue_wrapper(PVALUE);
 void delete_symtab(SYMTAB stab, STRING iden);
 void dolock_node_in_cache(NODE, BOOLEAN lock);
+void dosemilock_record_in_cache(RECORD rec, BOOLEAN lock);
 void eq_conform_pvalues(PVALUE, PVALUE, BOOLEAN*);
 BOOLEAN eqv_pvalues(VPTR, VPTR);
-CACHEEL get_cel_from_pvalue(PVALUE val);
+NODE get_node_from_pvalue(PVALUE val);
 BOOLEAN in_symtab(SYMTAB stab, STRING key);
 void insert_symtab(SYMTAB stab, STRING iden, PVALUE val);
 BOOLEAN is_numeric_pvalue(PVALUE);
@@ -277,12 +280,15 @@ SYMTAB null_symtab(void);
 void pvalues_begin(void);
 void pvalues_end(void);
 BOOLEAN pvalue_to_bool(PVALUE);
+CACHEEL pvalue_to_cel(PVALUE val);
 float pvalue_to_float(PVALUE val);
 INT pvalue_to_int(PVALUE);
 LIST pvalue_to_list(PVALUE val);
 NODE pvalue_to_node(PVALUE val);
 float* pvalue_to_pfloat(PVALUE);
 INT* pvalue_to_pint(PVALUE);
+RECORD pvalue_to_rec(PVALUE val);
+INDISEQ pvalue_to_seq(PVALUE val);
 STRING pvalue_to_string(PVALUE);
 TABLE pvalue_to_table(PVALUE val);
 void remove_symtab(SYMTAB *);

@@ -866,7 +866,7 @@ interp_children (PNODE node, SYMTAB stab, PVALUE *pval)
 		insert_symtab(stab, ichild(node), val);
 		insert_symtab(stab, inum(node), create_pvalue_from_int(nchil));
 		/* val should be real person, because it came from FORCHILDREN */
-		cel = get_cel_from_pvalue(val);
+		cel = pvalue_to_cel(val);
 		lock_cache(cel);
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		unlock_cache(cel);
@@ -917,9 +917,9 @@ interp_spouses (PNODE node, SYMTAB stab, PVALUE *pval)
 		nval = create_pvalue_from_int(nspouses);
 		insert_symtab(stab, inum(node), nval);
 		/* sval should be real person, because it came from FORSPOUSES */
-		scel = get_cel_from_pvalue(sval);
+		scel = pvalue_to_cel(sval);
 		/* fval should be real person, because it came from FORSPOUSES */
-		fcel = get_cel_from_pvalue(fval);
+		fcel = pvalue_to_cel(fval);
 		lock_cache(scel);
 		lock_cache(fcel);
 		irc = interpret((PNODE) ibody(node), stab, pval);
@@ -976,9 +976,9 @@ interp_families (PNODE node, SYMTAB stab, PVALUE *pval)
 		nval = create_pvalue_from_int(nfams);
 		insert_symtab(stab, inum(node), nval);
 		/* fval should be real person, because it came from FORFAMSS */
-		fcel = get_cel_from_pvalue(fval);
+		fcel = pvalue_to_cel(fval);
 		/* sval may not be a person -- so scel may be NULL */
-		scel = get_cel_from_pvalue(sval);
+		scel = pvalue_to_cel(sval);
 		lock_cache(fcel);
 		if (scel) lock_cache(scel);
 		irc = interpret((PNODE) ibody(node), stab, pval);
@@ -1030,10 +1030,10 @@ interp_fathers (PNODE node, SYMTAB stab, PVALUE *pval)
 	insert_symtab(stab, inum(node), create_pvalue_from_int(0));
 	FORFAMCS(indi, fam, husb, wife, nfams)
 		sval = create_pvalue_from_indi(husb);
-		scel = get_cel_from_pvalue(sval);
+		scel = pvalue_to_cel(sval);
 		if (!scel) goto dloop;
 		fval = create_pvalue_from_fam(fam);
-		fcel = get_cel_from_pvalue(fval);
+		fcel = pvalue_to_cel(fval);
 		insert_symtab(stab, ifamily(node), fval);
 		insert_symtab(stab, iiparent(node), create_pvalue_from_cel(scel));
 		insert_symtab(stab, inum(node), create_pvalue_from_int(ncount++));
@@ -1089,10 +1089,10 @@ interp_mothers (PNODE node, SYMTAB stab, PVALUE *pval)
 	insert_symtab(stab, inum(node), create_pvalue_from_int(0));
 	FORFAMCS(indi, fam, husb, wife, nfams)
 		sval = create_pvalue_from_indi(wife);
-		scel = get_cel_from_pvalue(sval);
+		scel = pvalue_to_cel(sval);
 		if (!scel) goto eloop;
 		fval = create_pvalue_from_fam(fam);
-		fcel = get_cel_from_pvalue(fval);
+		fcel = pvalue_to_cel(fval);
 		insert_symtab(stab, ifamily(node), fval);
 		insert_symtab(stab, iiparent(node), create_pvalue_from_cel(scel));
 		insert_symtab(stab, inum(node), create_pvalue_from_int(ncount++));
@@ -1147,7 +1147,7 @@ interp_parents (PNODE node, SYMTAB stab, PVALUE *pval)
 		fval = create_pvalue_from_fam(fam);
 		insert_symtab(stab, ifamily(node), fval);
 		insert_symtab(stab, inum(node), create_pvalue_from_int(nfams));
-		fcel = get_cel_from_pvalue(fval);
+		fcel = pvalue_to_cel(fval);
 		lock_cache(fcel);
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		unlock_cache(fcel);
@@ -1275,7 +1275,7 @@ interp_forindi (PNODE node, SYMTAB stab, PVALUE *pval)
 			goto ileave;
 		}
 		ival = create_pvalue_from_indi_keynum(count);
-		icel = get_cel_from_pvalue(ival);
+		icel = pvalue_to_cel(ival);
 		icount++;
 		lock_cache(icel); /* keep current indi in cache during loop body */
 		/* set loop variables */
@@ -1320,7 +1320,7 @@ interp_forsour (PNODE node, SYMTAB stab, PVALUE *pval)
 			goto sourleave;
 		}
 		sval = create_pvalue_from_sour_keynum(count);
-		scel = get_cel_from_pvalue(sval);
+		scel = pvalue_to_cel(sval);
 		scount++;
 		lock_cache(scel); /* keep current source in cache during loop body */
 		/* set loop variables */
@@ -1363,7 +1363,7 @@ interp_foreven (PNODE node, SYMTAB stab, PVALUE *pval)
 			goto evenleave;
 		}
 		eval = create_pvalue_from_even_keynum(count);
-		ecel = get_cel_from_pvalue(eval);
+		ecel = pvalue_to_cel(eval);
 		ecount++;
 		lock_cache(ecel); /* keep current event in cache during loop body */
 		/* set loop variables */
@@ -1406,7 +1406,7 @@ interp_forothr (PNODE node, SYMTAB stab, PVALUE *pval)
 			goto othrleave;
 		}
 		xval = create_pvalue_from_othr_keynum(count);
-		xcel = get_cel_from_pvalue(xval);
+		xcel = pvalue_to_cel(xval);
 		xcount++;
 		lock_cache(xcel); /* keep current source in cache during loop body */
 		/* set loop variables */
@@ -1448,7 +1448,7 @@ interp_forfam (PNODE node, SYMTAB stab, PVALUE *pval)
 			goto mleave;
 		}
 		fval = create_pvalue_from_fam_keynum(count);
-		fcel = get_cel_from_pvalue(fval);
+		fcel = pvalue_to_cel(fval);
 		fcount++;
 		lock_cache(fcel);
 		insert_symtab(stab, ielement(node), fval);
@@ -1485,7 +1485,7 @@ interp_indisetloop (PNODE node, SYMTAB stab, PVALUE *pval)
 		prog_error(node, "1st arg to forindiset must be set expr");
 		return INTERROR;
 	}
-	seq = (INDISEQ) pvalue(val);
+	seq = pvalue_to_seq(val);
 	if (!seq) {
 		delete_pvalue(val); /* delete temp evaluated val - may destruct seq */
 		return INTOKAY;

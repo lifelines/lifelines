@@ -202,7 +202,7 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 			current_seq = NULL;
 			return BROWSE_TAND;
 		case 'b':        /* Browse new persons */
-			newseq = (INDISEQ) ask_for_indiseq(_(qSidplst), 'I', &rc);
+			newseq = ask_for_indiseq(_(qSidplst), 'I', &rc);
 			if (!newseq) break;
 			/* TODO: should we free *pseq & repoint it to newseq ? */
 			current_seq = seq = newseq;
@@ -217,7 +217,7 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 			mark = -1;
 			break;
 		case 'a':        /* Add persons to current list */
-			newseq = (INDISEQ) ask_for_indiseq(_(qSlstpad), 'I', &rc);
+			newseq = ask_for_indiseq(_(qSlstpad), 'I', &rc);
 			if (!newseq) {
 				message(_(qSlstnad));
 				break;

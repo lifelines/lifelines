@@ -101,7 +101,7 @@ __addnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	prev = pvalue_to_node(val);
 	delete_pvalue_wrapper(val);
-	/* reparent node, but ensure its locking is only releative to new parent */
+	/* reparent node, but ensure its locking is only relative to new parent */
 	dolock_node_in_cache(newchild, FALSE);
 	nparent(newchild) = prnt;
 	set_temp_node(newchild, is_temp_node(prnt));

@@ -467,7 +467,7 @@ __chooseindi (PNODE node, SYMTAB stab, BOOLEAN * eflg)
 		prog_error(node, "the arg to chooseindi is not a set of persons");
 		return NULL;
 	}
-	seq = (INDISEQ) pvalue(val);
+	seq = pvalue_to_seq(val);
 	delete_pvalue(val);
 	if (!seq || length_indiseq(seq) < 1) return NULL;
 	indi = nztop(choose_from_indiseq(seq, DOASK1, _(qSifone), _(qSnotone)));
@@ -488,7 +488,7 @@ __choosesubset (PNODE node, SYMTAB stab, BOOLEAN * eflg)
 		prog_error(node, "the arg to choosesubset is not a set of persons");
 		return NULL;
 	}
-	seq = (INDISEQ) pvalue(val);
+	seq = pvalue_to_seq(val);
 	delete_pvalue(val);
 	if (!seq || length_indiseq(seq) < 1) return NULL;
 	newseq = copy_indiseq(seq);
@@ -517,7 +517,7 @@ __choosechild (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "the arg to choosechild must be a person or family");
 		return NULL;
 	}
-	cel = get_cel_from_pvalue(val);
+	cel = pvalue_to_cel(val);
 	delete_pvalue(val);
 	if (!cel) return create_pvalue_from_indi(NULL);
 	key = ckey(cel);
@@ -591,8 +591,6 @@ static void
 makestring (PVALUE val, STRING str, INT len, BOOLEAN *eflg)
 {
 	UNION u;
-	CACHEEL cel;
-	STRING txt;
 
 	str[0]=0;
 	/*
@@ -641,10 +639,9 @@ makestring (PVALUE val, STRING str, INT len, BOOLEAN *eflg)
 		case PEVEN:
 		case POTHR:
 			{
-				NODE node;
-				cel = get_cel_from_pvalue(val);
-				node = cnode(cel);
-				txt = generic_to_list_string(node, NULL, len, " ", NULL);
+				RECORD rec = pvalue_to_rec(val);
+				NODE node = nztop(rec);
+				STRING txt = generic_to_list_string(node, NULL, len, " ", NULL);
 				llstrapps(str, len, uu8, txt);
 			}
 			break;
@@ -999,7 +996,7 @@ __lock (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		  , _("the arg to lock must be a person or family"));
 		return NULL;
 	}
-	cel = get_cel_from_pvalue(val);
+	cel = pvalue_to_cel(val);
 	delete_pvalue(val);
 	if (cel) lock_cache(cel);
 /* TO DO - ought to ensure this gets freed */
@@ -1022,7 +1019,7 @@ __unlock (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		  , _("the arg to unlock must be a person or family"));
 		return NULL;
 	}
-	cel = get_cel_from_pvalue(val);
+	cel = pvalue_to_cel(val);
 	delete_pvalue(val);
 	if (cel) unlock_cache(cel);
 	return NULL;

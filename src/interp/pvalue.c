@@ -292,22 +292,38 @@ create_pvalue (INT type, VPTR value)
 	pvalue(val) = value;
 
 	if (ptype(val) == PGNODE) {
-		dolock_node_in_cache((NODE)value, TRUE);
+		dolock_node_in_cache(get_node_from_pvalue(val), TRUE);
 	}
 	if (is_record_pvalue(val)) {
 		/* lock any cache elements, and unlock in clear_pvalue */
-		CACHEEL cel = get_cel_from_pvalue(val);
 		/* a semilock holds the cache element, but not necessarily 
 		in direct cache -- it could fall to indirect cache -- the
 		element is still valid, but its contents aren't */
-		if (cel)
-			semilock_cache(cel);
+		dosemilock_record_in_cache(pvalue_to_rec(val), TRUE);
 	}
 	return val;
 }
 /*========================================
- * dolock_node_in_cache -- Find cache element
- *  (if available), and lock or unlock it
+ * dosemilock_record_in_cache -- semi-Lock/unlock record
+ *  (if possible)
+ * Created: 2003-02-06 (Perry Rapp)
+ *======================================*/
+void
+dosemilock_record_in_cache (RECORD rec, BOOLEAN lock)
+{
+	if (rec) {
+		CACHEEL cel = (CACHEEL)rec->dbh;
+		if (cel) {
+				if (lock)
+					semilock_cache(cel);
+				else
+					unsemilock_cache(cel);
+		}
+	}
+}
+/*========================================
+ * dolock_node_in_cache -- Lock/unlock node in cache
+ *  (if possible)
  * Created: 2003-02-04 (Perry Rapp)
  *======================================*/
 void
@@ -350,15 +366,14 @@ clear_pvalue (PVALUE val)
 	*/
 	case PGNODE:
 		{
-			NODE node = (NODE)pvalue(val);
+			NODE node = get_node_from_pvalue(val);
 			if (node) {
+				dolock_node_in_cache(node, FALSE);
 				--nrefcnt(node);
 				if (!nrefcnt(node) && is_temp_node(node)) {
 					free_temp_node_tree(node);
 				}
 			}
-			if (node)
-				dolock_node_in_cache(node, FALSE);
 		}
 		return;
 	/* nodes from cache handled below switch - PINDI, PFAM, PSOUR, PEVEN, POTHR */
@@ -374,7 +389,7 @@ clear_pvalue (PVALUE val)
 		return;
 	case PLIST:
 		{
-			LIST list = (LIST) pvalue(val);
+			LIST list = pvalue_to_list(val);
 			--lrefcnt(list);
 			if (!lrefcnt(list)) {
 				remove_list(list, delete_vptr_pvalue);
@@ -383,7 +398,7 @@ clear_pvalue (PVALUE val)
 		return;
 	case PTABLE:
 		{
-			TABLE table = (TABLE)pvalue(val);
+			TABLE table = pvalue_to_table(val);
 			--table->refcnt;
 			if (!table->refcnt) {
 				traverse_table(table, table_pvcleaner);
@@ -393,7 +408,7 @@ clear_pvalue (PVALUE val)
 		return;
 	case PSET:
 		{
-			INDISEQ seq = (INDISEQ)pvalue(val);
+			INDISEQ seq = pvalue_to_seq(val);
 			/* because of getindiset, seq might be NULL */
 			if (seq) {
 				--IRefcnt(seq);
@@ -410,9 +425,7 @@ clear_pvalue (PVALUE val)
 		unlock any cache elements
 		don't worry about memory - it is owned by cache
 		*/
-		CACHEEL cel = access_cel_from_pvalue(val);
-		if (cel)
-			unsemilock_cache(cel);
+		dosemilock_record_in_cache(pvalue_to_rec(val), FALSE);
 	}
 }
 /*========================================
@@ -551,7 +564,7 @@ copy_pvalue (PVALUE val)
 		break;
 	case PSET:
 		{
-			INDISEQ seq = (INDISEQ)pvalue(val);
+			INDISEQ seq = pvalue_to_seq(val);
 			/* because of getindiset, seq might be NULL */
 			if (seq) {
 				++IRefcnt(seq);
@@ -575,17 +588,41 @@ copy_pvalue (PVALUE val)
 	return create_pvalue(ptype(val), newval);
 }
 /*==================================
- * get_cel_from_pvalue -- Extract record from pvalue
+ * pvalue_to_cel -- Extract record from pvalue
  *  and load into direct
  * Might return NULL
  * Created: 2001/03/17, Perry Rapp
  *================================*/
 CACHEEL
-get_cel_from_pvalue (PVALUE val)
+pvalue_to_cel (PVALUE val)
 {
 	CACHEEL cel = access_cel_from_pvalue(val); /* may be NULL */
 	load_cacheel(cel); /* handles null cel ok */
 	return cel;
+}
+/*==================================
+ * pvalue_to_rec -- Extract record from pvalue
+ *  and load into direct
+ * Might return NULL
+ * Created: 2003-02-06, Perry Rapp
+ *================================*/
+RECORD
+pvalue_to_rec (PVALUE val)
+{
+	CACHEEL cel = pvalue_to_cel(val);
+	if (!cel) return NULL;
+	return crecord(cel);
+}
+/*==================================
+ * get_node_from_pvalue -- Extract node from pvalue
+ * Might return NULL
+ * Created: 2003-02-06, Perry Rapp
+ *================================*/
+NODE
+get_node_from_pvalue (PVALUE val)
+{
+	NODE node = (NODE)pvalue(val);
+	return node;
 }
 /*==================================
  * access_cel_from_pvalue -- Extract record from pvalue
@@ -988,7 +1025,7 @@ coerce_pvalue (INT type, PVALUE val, BOOLEAN *eflg)
 	case PINT:
 		if (type == PFLOAT) {
 			/* PINT is convertible to PFLOAT */
-			float flo = (float)pvalue_to_int(val);
+			float flo = pvalue_to_int(val);
 			set_pvalue_float(val, flo);
 			return;
 		} else {
@@ -1233,7 +1270,7 @@ show_pvalue (PVALUE val)
 		llwprintf("%s>", pvalue_to_string(val));
 		return;
 	case PINDI:
-		cel = get_cel_from_pvalue(val);
+		cel = pvalue_to_cel(val);
 		if (!cnode(cel))
 			cel = key_to_indi_cacheel(ckey(cel));
 		node = cnode(cel);
@@ -1292,21 +1329,21 @@ describe_pvalue (PVALUE val)
 		break;
 	case PLIST:
 		{
-			LIST list = (LIST) pvalue(val);
+			LIST list = pvalue_to_list(val);
 			INT n = length_list(list);
 			zs_appf(zstr, _pl("%d item", "%d items", n), n);
 		}
 		break;
 	case PTABLE:
 		{
-			TABLE table = (TABLE)pvalue(val);
+			TABLE table = pvalue_to_table(val);
 			INT n = get_table_count(table);
 			zs_appf(zstr, _pl("%d entry", "%d entries", n), n);
 		}
 		break;
 	case PSET:
 		{
-			INDISEQ seq = (INDISEQ)pvalue(val);
+			INDISEQ seq = pvalue_to_seq(val);
 			INT n = length_indiseq(seq);
 			zs_appf(zstr, _pl("%d record", "%d records", n), n);
 		}

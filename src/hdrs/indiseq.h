@@ -102,7 +102,7 @@ typedef struct indiseq_value_vtable_s
 /*=================================================
  * INDISEQ -- Data type for an entire indi sequence
  *===============================================*/
-typedef struct  {
+struct indiseq_s {
 	INT is_size;	/* current length of list  */
 	INT is_max;	/* max length before increment */
 	INT is_flags;	/* attribute flags */
@@ -112,7 +112,8 @@ typedef struct  {
 	INT is_refcnt; /* for interp */
 	STRING is_locale; /* used by namesort */
 	INDISEQ_VALUE_VTABLE is_valvtbl;
-} *INDISEQ;
+};
+typedef struct indiseq_s *INDISEQ;
 
 #define ISize(s)     ((s)->is_size)
 #define IMax(s)      ((s)->is_max)

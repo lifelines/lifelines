@@ -159,7 +159,7 @@ INT browse_tandem (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 			}
 			break;
 		case CMD_BROWSE: 	/* browse to new person list */
-			seq = (INDISEQ) ask_for_indiseq(_(qSidplst), 'I', &rc);
+			seq = ask_for_indiseq(_(qSidplst), 'I', &rc);
 			if (!seq) break;
 			if (length_indiseq(seq) == 1) {
 				element_indiseq(seq, 0, &key, &name);

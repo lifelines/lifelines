@@ -5,6 +5,13 @@
 
 	Add lock counts to cache display (for debugging).
 
+	* ChangeLog src/hdrs/indiseq.h src/hdrs/interp.h
+	src/interp/builtin.c src/interp/interp.c src/interp/intrpseq.c
+	src/interp/more.c src/interp/pvalue.c src/interp/write.c
+	src/liflines/lbrowse.c src/liflines/tandem.c:
+
+	Wrap a lot of pvalue access casts into functions (eg, pvalue_to_seq).
+
 2003-02-04 Perry Rapp
 
 	* ChangeLog src/gedlib/keytonod.c src/gedlib/node.c
