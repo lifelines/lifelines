@@ -38,8 +38,17 @@
 #include "liflines.h"
 #include "feedback.h"
 
+/*********************************************
+ * external/imported variables
+ *********************************************/
+
 extern STRING qShaslnk;
 
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+static NODE remove_any_xrefs_node_list(STRING xref, NODE list);
 
 /*================================================================
  * remove_indi -- Delete person and links; if this leaves families
@@ -52,42 +61,19 @@ void
 remove_indi (NODE indi)
 {
 	STRING key;
-	NODE name, refn, sex, body, famc, fams, this;
-	NODE node, husb, wife, chil, rest, fam, prev, next, fref;
-	INT isex, keyint;
-	BOOLEAN found;
+	NODE name, refn, sex, body, famc, fams;
+	NODE node, husb, wife, chil, rest, fam, fref;
+	INT keyint;
 
 	split_indi_old(indi, &name, &refn, &sex, &body, &famc, &fams);
-	if (!fams) goto checkfamc;
-	isex = val_to_sex(sex);
-	ASSERT(isex != SEX_UNKNOWN);
 
 /* Remove person from families he/she is in as a parent */
 
 	for (node = fams; node; node = nsibling(node)) {
 		fam = key_to_fam(rmvat(nval(node)));
 		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
-		prev = NULL;
-		if (isex == SEX_MALE) this = husb;
-		else this = wife;
-		found = FALSE;
-		while (this) {
-			if (eqstr(nxref(indi), nval(this))) {
-				found = TRUE;
-				break;
-			}
-			prev = this;
-			this = nsibling(this);
-		}
-		if(found) {
-			next = nsibling(this);
-			if (prev)
-				nsibling(prev) = next;
-			else if (isex == SEX_MALE) husb = next;
-			else wife = next;
-			nsibling(this) = NULL;
-			free_nodes(this);
-		}
+		husb = remove_any_xrefs_node_list(nxref(indi), husb);
+		wife = remove_any_xrefs_node_list(nxref(indi), wife);
 		join_fam(fam, fref, husb, wife, chil, rest);
 		if (husb || wife || chil)
 			fam_to_dbase(fam);
@@ -97,40 +83,26 @@ remove_indi (NODE indi)
 
 /* Remove person from families he/she is in as a child */
 
-checkfamc:
 	for (node = famc; node; node = nsibling(node)) { 
 		fam = key_to_fam(rmvat(nval(node)));
 		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
-		found = FALSE;
-		prev = NULL;
-		this = chil;
-		while (this) {
-			if (eqstr(nxref(indi), nval(this))) {
-				found = TRUE;
-				break;
-			}
-			prev = this;
-			this = nsibling(this);
-		}
-		if(found) {
-			next = nsibling(this);
-			if (prev)
-				nsibling(prev) = next;
-			else
-				chil = next;
-			nsibling(this) = NULL;
-			free_nodes(this);
-		}
+		chil = remove_any_xrefs_node_list(nxref(indi), chil);
 		join_fam(fam, fref, husb, wife, chil, rest);
 		if (husb || wife || chil)
 			fam_to_dbase(fam);
 		else
 			remove_empty_fam(fam);
 	}
+
+/* Add key to list of unused keys */
 	key = rmvat(nxref(indi));
 	keyint = atoi(key + 1);
 	addixref(keyint);
+
+/* Remove indi from cache */
 	remove_indi_cache(key);
+
+/* Remove any name and refn entries */
 	for (node = name; node; node = nsibling(node))
 		{
 		remove_name(nval(node), key);
@@ -142,10 +114,44 @@ checkfamc:
 			remove_refn(nval(node), key);
 			}
 		}
+/* Remove any entries in existing browse lists */
 	remove_from_browse_lists(key);
+
+/* Remove from on-disk database */
 	del_in_dbase(key);
+
+/* Delete the in-memory record we're holding (indi) */
 	join_indi(indi, name, refn, sex, body, famc, fams);
 	free_nodes(indi);
+}
+/*==========================================
+ * remove_any_xrefs_node_list -- 
+ *  Remove from list any occurrences of xref
+ * Eg, removing @I2@ from a husband list of a family
+ * Returns head of list (which might be different if first node removed)
+ *========================================*/
+static NODE
+remove_any_xrefs_node_list (STRING xref, NODE list)
+{
+	NODE prev = NULL;
+	NODE curr = list;
+	NODE rtn = list;
+
+	ASSERT(xref);
+
+	while (curr) {
+		if (eqstr(xref, nval(curr))) {
+			NODE next = nsibling(curr);
+			if (prev)
+				nsibling(prev) = next;
+			else
+				rtn = next;
+			nsibling(curr) = NULL;
+			free_nodes(curr);
+			curr = next;
+		}
+	}
+	return rtn;
 }
 /*==========================================
  * remove_empty_fam -- Delete family from database
