@@ -2,7 +2,7 @@
 
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" 
-[<!ENTITY llversion '3.0.15'>]> 
+[<!ENTITY llversion '3.0.25'>]> 
 
 
 
@@ -21,7 +21,7 @@
 _________________________________________________________
 
 <!DOCTYPE BOOK PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
-	<!entity llversion	"3.0.15">    
+	<!entity llversion	"3.0.25">    
 ]>	
 	
 <book id="docbook"> 
@@ -1227,13 +1227,12 @@ SCREEN EDITORS AND ENVIRONMENT VARIABLES
      <envar>LLPROGRAMS</envar>, <envar>LLREPORTS</envar>, 
      and <envar>LLNEWDBDIR</envar>. <envar>LLDATABASES</envar> and 
      <envar>LLPROGRAMS</envar> are <acronym>UNIX</acronym> path 
-     list variables. (<envar>LLNEWDBDIR</envar> was added in version 
-     3.0.6.) 
+     list variables.  
 
 </para> 
 
 <para> 
-     As of version 3.0.6, there is also a configuration file, and 
+     There is also a configuration file, and 
      entries in it may be used in lieu of environment variables. 
      It is ordinarily named .linesrc under UNIX, and lines.cfg under 
      <acronym>MS-Windows</acronym>. 
@@ -1316,7 +1315,7 @@ SCREEN EDITORS AND ENVIRONMENT VARIABLES
 
 <para> 
 
-     With version 3.0.6 or later, you may use the configuration file in 
+     You may use the configuration file in 
      lieu of environment variables. This is especially oriented towards 
      users on <acronym>MS-Windows</acronym> systems, on which 
      environment variables are not as common a configuration technique. 
@@ -1381,12 +1380,12 @@ BASICS OF BROWSING
      person tandem screen shows two persons at once, and the family 
      tandem screen shows two families at once. The auxiliary screen 
      is used browsing any other type of records (e.g., events,  
-     sources, notes). (The auxiliary screen is new with version 3.0.6.) 
+     sources, notes). 
 
 </para> 
 
 <para> 
-     Beginning with version 3.0.6, each browsing screen has multiple 
+     Each browsing screen has multiple 
      view modes. The view mode affects how the information is displayed 
      on the screen, but does not affect the menu choices available at 
      the bottom of the screen. Menu commands are available on each screen 
@@ -1508,8 +1507,8 @@ Example of using wildcard in browsing
 
      <literallayout>*/wetmore</literallayout></example>matches all 
      persons with surname Wetmore. This is the only wildcard 
-     feature supported in browsing. (However, the search operation, 
-     added in version 3.0.6, provides some simple wildcards for 
+     feature supported in browsing. (However, the search operation 
+     provides some simple wildcards for 
      finding individual name fragments, or searching by user-defined 
      reference keys. The search operation is accessed via a different
      choice off of the main menu.)

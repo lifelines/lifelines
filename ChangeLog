@@ -5,6 +5,13 @@
 	Fix fornodes (FORTAGVALUES) to get CONC & CONT both.
 	(sf.net bug#696779)
 
+	* ChangeLog docs/ll-reportmanual.xml docs/ll-userguide.xml
+
+	Removed "new in 3.0.6" references in ll-userguide.xml, and
+	changed version from 3.0.15 to 3.0.25. Changed version of
+	ll-reportmanual.xml from 3.0.25 to 3.0.26 (because it 
+	mentions sort functions, which are not in 3.0.25).
+
 2003-03-04 Steve Dum
 
          * ChangeLog docs/ll-reportmanual.xml  docs/ll-reportmanual.html
