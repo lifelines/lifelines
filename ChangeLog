@@ -17,6 +17,10 @@
 	* gedlib/misc.c gedlib/node.c hdrs/gedcom.h stdlib/path.c
 	More comments, and a little more win32 code isolation in path.c.
 
+	* liflines/main.c:
+	Delay use of llnewdbdir in readpath so current directory
+	is still checked.
+
 2001-01-04  Marc Nozell  <marc@nozell.com>
 
 	* configure.in: Fix UNIX build, Add check for pwd.h.
