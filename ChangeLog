@@ -13,6 +13,10 @@
 
 	New cscurses.* module to translate between internal & GUI codesets.
 
+	* ChangeLog build/msvc6/llines/llinesprj.dsp:
+
+	Add cscurses.* files to MSVC6 project.
+
 2002-12-02 Perry Rapp
 
 	* ChangeLog

@@ -157,6 +157,10 @@ SOURCE=..\..\..\src\gedlib\codesets.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\liflines\cscurses.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\gedlib\date.c
 # End Source File
 # Begin Source File
@@ -601,7 +605,15 @@ SOURCE=..\..\..\src\hdrs\cache.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\hdrs\codesets.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\config.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\cscurses.h
 # End Source File
 # Begin Source File
 
@@ -673,6 +685,10 @@ SOURCE=..\..\..\src\hdrs\win32\intlshim.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\hdrs\isolangs.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\hdrs\langinfz.h
 # End Source File
 # Begin Source File
@@ -741,6 +757,10 @@ SOURCE=..\..\..\src\hdrs\standard.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\stdlib\stdlibi.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\hdrs\sys_inc.h
 # End Source File
 # Begin Source File
@@ -765,6 +785,10 @@ SOURCE=..\..\..\src\hdrs\warehouse.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\hdrs\xlat.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\interp\yacc.h
 # End Source File
 # Begin Source File
@@ -772,9 +796,5 @@ SOURCE=..\..\..\src\interp\yacc.h
 SOURCE=..\..\..\src\hdrs\zstr.h
 # End Source File
 # End Group
-# Begin Source File
-
-SOURCE=..\..\..\src\hdrs\xlat.h
-# End Source File
 # End Target
 # End Project
