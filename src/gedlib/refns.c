@@ -624,7 +624,7 @@ is_orphaned_record (CNSTRING key)
 	if (!isrecord(BTR, str2rkey(key)))
 		return FALSE;
 	if ((rec = qkey_to_record(key))) {
-		delref_record(rec);
+		release_record(rec);
 		return FALSE;
 	}
 	return TRUE;

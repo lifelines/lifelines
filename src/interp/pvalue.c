@@ -296,7 +296,7 @@ clear_pvalue (PVALUE val)
 	}
 	if (is_record_pvalue(val)) {
 		RECORD rec = pvalue_to_record(val);
-		delref_record(rec);
+		release_record(rec);
 	}
 }
 /*========================================
@@ -549,7 +549,7 @@ create_pvalue_from_key_impl (CNSTRING key, INT ptype)
 	/* report mode, so may return NULL */
 	RECORD rec = qkey_to_record(key); /* addref'd record */
 	PVALUE val = create_pvalue_from_record(rec, ptype);
-	delref_record(rec); /* release our reference, now only pvalue holds */
+	release_record(rec); /* release our reference, now only pvalue holds */
 	return val;
 }
 /*==================================================

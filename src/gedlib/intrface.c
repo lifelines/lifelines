@@ -156,7 +156,7 @@ trav_rec_callback (CNSTRING key, STRING data, INT len, void * param)
 		return TRUE;
 	rec = string_to_record(data, key, len);
 	keepgoing = tparam->func(key, rec, tparam->param);
-	delref_record(rec);
+	release_record(rec);
 	return keepgoing;
 }
 /* see above */

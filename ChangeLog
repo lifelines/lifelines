@@ -37,6 +37,14 @@
 	Rename addref_obj to addref_object, and delref_obj to release_object.
 	Rename delref_table to release_table, and delref_list to release_list.
 
+	* ChangeLog src/gedlib/indiseq.c src/gedlib/intrface.c
+	src/gedlib/keytonod.c src/gedlib/record.c src/gedlib/refns.c
+	src/hdrs/gedcom.h src/interp/pvalue.c src/liflines/add.c
+	src/liflines/browse.c
+
+	Rename delref_record to release_record.
+	Initialize vtable of record objects.
+
 2005-02-02 Perry Rapp
 
 	* ChangeLog src/gedlib/gedcomi.h src/gedlib/keytonod.c

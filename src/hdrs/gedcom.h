@@ -234,7 +234,6 @@ NODE create_temp_node(STRING, STRING, STRING, NODE);
 void del_in_dbase(CNSTRING key);
 void delete_metarec(STRING key);
 void delete_orphaned_record(CNSTRING key);
-void delref_record(RECORD rec);
 BOOLEAN edit_mapping(INT);
 BOOLEAN edit_valtab_from_db(STRING, TABLE*, INT sep, STRING, STRING (*validator)(TABLE tab));
 BOOLEAN equal_tree(NODE, NODE);
@@ -415,6 +414,7 @@ NODE refn_to_record(STRING, INT);
 void register_uicodeset_callback(CALLBACK_FNC fncptr, VPTR uparm);
 void register_uilang_callback(CALLBACK_FNC fncptr, VPTR uparm);
 void release_dblist(LIST dblist);
+void release_record(RECORD rec);
 BOOLEAN remove_child(NODE indi, NODE fam);
 BOOLEAN remove_empty_fam(NODE);
 BOOLEAN remove_any_record(RECORD record);
@@ -651,7 +651,7 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 
 #define ENDCHILDRENx \
 		}\
-		delref_record(irec);\
+		release_record(irec);\
 		__node = nsibling(__node);\
 		if (__node && nestr(ntag(__node), "CHIL")) __node = NULL;\
 	}}
@@ -675,7 +675,7 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 
 #define ENDCHILDREN \
 		}\
-		delref_record(irec);\
+		release_record(irec);\
 		__node = nsibling(__node);\
 		if (__node && nestr(ntag(__node), "CHIL")) __node = NULL;\
 	}}
@@ -737,7 +737,7 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 
 #define ENDFAMS \
 		}\
-		delref_record(frec); \
+		release_record(frec); \
 		}\
 		__node = nsibling(__node);\
 		if (__node && nestr(ntag(__node), "FAMS")) __node = NULL;\
@@ -780,7 +780,7 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 #define ENDFAMSS \
 		}\
 	    }\
-		delref_record(frec); \
+		release_record(frec); \
 	}\
 	if (__node && nestr(ntag(__node), "FAMS")) __node = NULL;\
 	}}
@@ -810,7 +810,7 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 
 #define ENDFAMCS \
 		}\
-		delref_record(frec); \
+		release_record(frec); \
 		__node = nsibling(__node);\
 		if (__node && nestr(ntag(__node), "FAMC")) __node = NULL;\
 	}}

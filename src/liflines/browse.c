@@ -317,7 +317,7 @@ setrecord (RECORD * dest, RECORD * src)
 {
 	ASSERT(dest);
 	if (*dest) {
-		delref_record(*dest);
+		release_record(*dest);
 	}
 	if (src) {
 		*dest = *src;
@@ -703,13 +703,6 @@ exitbrowse:
 	setrecord(&current, NULL);
 	return rtn;
 }
-void
-delref_recptr (RECORD * prec)
-{
-	ASSERT(prec);
-	if (*prec) {
-	}
-}
 /*==========================================
  * display_aux -- Show aux node in current mode
  * Created: 2001/01/27, Perry Rapp
@@ -861,10 +854,7 @@ reprocess_aux_cmd:
 		}
 	}
 exitbrowse:
-	if (current) {
-		delref_record(current);
-		current = 0;
-	}
+	setrecord(&current, NULL);
 	return rtn;
 }
 /*================================================
@@ -1293,10 +1283,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 		}
 	}
 exitbrowse:
-	if (current) {
-		delref_record(current);
-		current = 0;
-	}
+	setrecord(&current, NULL);
 	return rtn;
 }
 /*======================================================

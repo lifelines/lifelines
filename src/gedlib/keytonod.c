@@ -901,7 +901,7 @@ static void
 ensure_cel_has_record (CACHEEL cel)
 {
 	RECORD rec = get_record_for_cel(cel); /* addref'd */
-	delref_record(rec);
+	release_record(rec);
 }
 /*============================================
  * add_new_indi_to_cache -- Add person to person cache
@@ -1158,7 +1158,7 @@ remove_cel_from_cache (CACHE cache, CACHEEL cel)
 		/* cel holds the original reference to the record */
 		RECORD rec = crecord(cel);
 		record_remove_cel(rec, cel);
-		delref_record(rec);
+		release_record(rec);
 		crecord(cel) = 0;
 	}
 	cacfree(cache) = cel;

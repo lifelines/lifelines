@@ -61,6 +61,7 @@ alloc_new_record (void)
 	rec = (RECORD)stdalloc(sizeof(*rec));
 	memset(rec, 0, sizeof(*rec));
 	/* these must be filled in by caller */
+	rec->vtable = &vtable_for_record;
 	strcpy(rec->rec_nkey.key, "");
 	rec->rec_nkey.keynum = 0;
 	rec->rec_nkey.ntype = 0;
@@ -296,16 +297,18 @@ void
 addref_record (RECORD rec)
 {
 	if (!rec) return;
+	ASSERT(rec->vtable == &vtable_for_record);
 	++rec->refcnt;
 }
 /*=================================================
- * delref_record -- decrement reference count of record
+ * release_record -- decrement reference count of record
  *  and free if appropriate (ref count hits zero)
  *===============================================*/
 void
-delref_record (RECORD rec)
+release_record (RECORD rec)
 {
 	if (!rec) return;
+	ASSERT(rec->vtable == &vtable_for_record);
 	--rec->refcnt;
 	if (!rec->refcnt) {
 		free_rec(rec);
