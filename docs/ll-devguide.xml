@@ -64,6 +64,16 @@ related to LifeLines, GEDCOM, or even genealogy.
     may be replaced by
       llstrappf(buffer, sizeof(buffer), ...
 
+    * appendstr
+    This is a family of functions similar in purpose to the strapp 
+    family, but which uses an additional level of indirection, advancing
+    pointers and decrementing counts. 
+
+      * NOTE: FUTURE DIRECTIONS
+      I put these in, and I would like to take them out, as I find them
+      less intuitive than the strapp family, and more bug-prone. They are
+      slightly faster, but I don't think it is worth it. -Perry. 
+
     * char functions
     There are character classification functions, which have handling
     particular to Latin-1 and to Finnish (if the Finnish compilation option
@@ -73,6 +83,27 @@ related to LifeLines, GEDCOM, or even genealogy.
       It would be very nice to see wchar-based functions, which handle
       unicode, replace these, and then we might be able to jettison the
       Latin-1 & Finnish specific character code.
+
+    * string allocation functions
+    TODO: (strsave, strfree, strupdate, strconcat, free_array_strings)
+
+    * string conversion functions
+    TODO: (isnumeric, lower, upper, capitalize, titlecase)
+
+    * string equality functions
+    TODO: (eqstr, eqstr_ex, nestr, cmpstr)
+
+    * string comparison function
+    TODO: (cmpstrloc)
+
+    * string whitespace functions
+    TODO: (trim, striptrail, striplead, allwhite, chomp)
+
+    * string UTF-8 functions
+    TODO: (utf8len, find_prev_char)
+
+    * printpic functions
+    TODO: (sprintpic0,1,2,3)
 
 * gedlib module
 This directory is a collection of routines for GEDCOM and for its use in
@@ -144,5 +175,8 @@ in yacc.y.
     date module already implements a date type internally, and it is
     exposed to the rest of the program (gdate & gdate_val, which correspond
     to GEDCOM date types), but not to the report language.
+
+* liflines module
+TODO:
 
 --!>
