@@ -1073,9 +1073,21 @@ check_set (INDISEQ seq, char ctype)
 			/* in synch */
 			i = xref_next(ctype, i);
 		} else { /* spri(el) < i */
+			CNSTRING key = element_skey(el);
 			report_error(ERR_DELETED
 				, _("Delete set contains valid record %s")
-				, element_skey(el));
+				, key);
+			if (todo.fix_deletes) {
+				if (mark_live_record_as_live(key)) {
+					report_fix(ERR_DELETED
+						, _("Fixed delete set contains valid record %s")
+						, key);
+				} else {
+					report_error(-1
+						, _("Failed to fix missing undeleted record %s")
+						, key);
+				}
+			}
 			/* fall thru and only advance seq */
 		}
 	ENDINDISEQ

@@ -208,3 +208,14 @@ mark_deleted_record_as_deleted (CNSTRING key)
 	if (!key || !key[0]) return FALSE;
 	return addxref_if_missing(key);
 }
+/*=================================================
+ * mark_live_record_as_live -- Fix a record which exists
+ * but is erroneously on the free list
+ * Ignores any invalid input
+ *===============================================*/
+BOOLEAN
+mark_live_record_as_live (CNSTRING key)
+{
+	if (!key || !key[0]) return FALSE;
+	return delete_xref_if_present(key);
+}

@@ -1236,8 +1236,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 		case CMD_NEXT:	/* Go to next fam in db */
 			{
 				i = xref_nextf(nkeyp);
-				if (i) {
-					tmp = keynum_to_frecord(i);
+				if (i && (tmp = qkeynum_to_frecord(i))) {
 					setrecord(&current, &tmp);
 				} else {
 					message(_(qSnofam));

@@ -31,7 +31,13 @@
 	* ChangeLog src/gedlib/intrface.c src/gedlib/xreffile.c
 	src/hdrs/gedcom.h src/tools/dbverify.c
 
-	Add code to fix unfreed but missing records.
+	dbverify: Add code to fix unfreed but missing records.
+
+	* ChangeLog src/gedlib/intrface.c src/gedlib/xreffile.c
+	src/hdrs/gedcom.h src/liflines/browse.c src/tools/dbverify.c
+
+	dbverify: Add code to fix live records marked as deleted.
+	Move some gedcom.h declarations to module areas.
 
 2005-02-04 Perry Rapp
 

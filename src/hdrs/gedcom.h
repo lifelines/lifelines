@@ -210,7 +210,6 @@ void addfxref(INT key);
 void addref_record(RECORD rec);
 void addsxref(INT key);
 void addxref(CNSTRING key);
-BOOLEAN addxref_if_missing (CNSTRING key);
 void addxxref(INT key);
 BOOLEAN add_refn(CNSTRING refn, CNSTRING key);
 BOOLEAN are_locales_supported(void);
@@ -234,9 +233,7 @@ NODE copy_nodes(NODE node, BOOLEAN kids, BOOLEAN sibs);
 BOOLEAN create_database(STRING dbused);
 NODE create_node(STRING, STRING, STRING, NODE);
 NODE create_temp_node(STRING, STRING, STRING, NODE);
-void del_in_dbase(CNSTRING key);
 void delete_metarec(STRING key);
-void delete_record_missing_data_entry(CNSTRING key);
 BOOLEAN edit_mapping(INT);
 BOOLEAN edit_valtab_from_db(STRING, TABLE*, INT sep, STRING, STRING (*validator)(TABLE tab));
 BOOLEAN equal_tree(NODE, NODE);
@@ -359,7 +356,6 @@ void load_char_mappings(void);
 BOOLEAN load_new_tt(CNSTRING filepath, INT ttnum);
 void locales_notify_language_change(void);
 void locales_notify_uicodeset_changes(void);
-BOOLEAN mark_deleted_record_as_deleted(CNSTRING key);
 STRING newexref(STRING, BOOLEAN);
 STRING newfxref(STRING, BOOLEAN);
 STRING newixref(STRING, BOOLEAN);
@@ -460,11 +456,8 @@ void split_indi_old(NODE, NODE*, NODE*, NODE*, NODE*, NODE*, NODE*);
 void split_othr(NODE node, NODE *prefn, NODE *prest);
 BOOLEAN store_file_to_db(STRING key, STRING file);
 BOOLEAN store_record(CNSTRING key, STRING rec, INT len);
-BOOLEAN store_text_file_to_db(STRING key, CNSTRING file, TRANSLFNC);
 RECORD string_to_record(STRING str, CNSTRING key, INT len);
 void termlocale(void);
-void traverse_db_key_recs(BOOLEAN(*func)(CNSTRING key, RECORD, void *param), void *param);
-void traverse_db_rec_keys(CNSTRING lo, CNSTRING hi, BOOLEAN(*func)(CNSTRING key, STRING data, INT, void *param), void * param);
 BOOLEAN traverse_nodes(NODE node, BOOLEAN (*func)(NODE, VPTR), VPTR param);
 void traverse_refns(BOOLEAN(*func)(CNSTRING key, CNSTRING refn, BOOLEAN newset, void *param), void *param);
 INT tree_strlen(INT, NODE);
@@ -488,35 +481,15 @@ BOOLEAN value_to_list(STRING, LIST, INT*, STRING);
 STRING value_to_xref(STRING);
 BOOLEAN writexrefs(void);
 void write_node_to_editfile(NODE); /* used by Ethel */
-INT xref_firste(void);
-INT xref_firstf(void);
-INT xref_firsti(void);
-INT xref_firsts(void);
-INT xref_firstx(void);
-INT xref_laste(void);
-INT xref_lastf(void);
-INT xref_lasti(void);
-INT xref_lasts(void);
-INT xref_lastx(void);
-INT xref_max_any(void);
-INT xref_max_indis(void);
-INT xref_max_evens (void);
-INT xref_max_fams (void);
-INT xref_max_othrs (void);
-INT xref_max_sours (void);
-INT xref_next(char ntype, INT i);
-INT xref_nexte(INT);
-INT xref_nextf(INT);
-INT xref_nexti(INT);
-INT xref_nexts(INT);
-INT xref_nextx(INT);
-INT xref_prev(char ntype, INT i);
-INT xref_preve(INT);
-INT xref_prevf(INT);
-INT xref_previ(INT);
-INT xref_prevs(INT);
-INT xref_prevx(INT);
-INT xrefval(char ntype, STRING str);
+
+/* interface.c */
+void del_in_dbase(CNSTRING key);
+void delete_record_missing_data_entry(CNSTRING key);
+BOOLEAN mark_deleted_record_as_deleted(CNSTRING key);
+BOOLEAN mark_live_record_as_live(CNSTRING key);
+BOOLEAN store_text_file_to_db(STRING key, CNSTRING file, TRANSLFNC);
+void traverse_db_rec_keys(CNSTRING lo, CNSTRING hi, BOOLEAN(*func)(CNSTRING key, STRING data, INT, void *param), void * param);
+void traverse_db_key_recs(BOOLEAN(*func)(CNSTRING key, RECORD, void *param), void *param);
 
 /* keytonod.c */
 void add_new_indi_to_cache(RECORD rec);
@@ -532,6 +505,9 @@ void lldb_adderror(LLDATABASE lldb, int errnum, CNSTRING errstr);
 LLDATABASE lldb_alloc(void);
 void lldb_close(LLDATABASE *plldb);
 void lldb_set_btree(LLDATABASE lldb, void * btree);
+
+/* misc.c */
+INT xrefval(char ntype, STRING str);
 
 /* names.c */
 void add_name(CNSTRING name, CNSTRING key);
@@ -578,6 +554,38 @@ void annotate_with_supplemental(NODE node, RFMT rfmt);
 CNSTRING trad_soundex(CNSTRING);
 INT soundex_count(void);
 CNSTRING soundex_get(INT i, CNSTRING name);
+
+/* xreffile.c */
+BOOLEAN addxref_if_missing (CNSTRING key);
+BOOLEAN delete_xref_if_present(CNSTRING key);
+INT xref_firste(void);
+INT xref_firstf(void);
+INT xref_firsti(void);
+INT xref_firsts(void);
+INT xref_firstx(void);
+INT xref_laste(void);
+INT xref_lastf(void);
+INT xref_lasti(void);
+INT xref_lasts(void);
+INT xref_lastx(void);
+INT xref_max_any(void);
+INT xref_max_indis(void);
+INT xref_max_evens (void);
+INT xref_max_fams (void);
+INT xref_max_othrs (void);
+INT xref_max_sours (void);
+INT xref_next(char ntype, INT i);
+INT xref_nexte(INT);
+INT xref_nextf(INT);
+INT xref_nexti(INT);
+INT xref_nexts(INT);
+INT xref_nextx(INT);
+INT xref_prev(char ntype, INT i);
+INT xref_preve(INT);
+INT xref_prevf(INT);
+INT xref_previ(INT);
+INT xref_prevs(INT);
+INT xref_prevx(INT);
 
 /*******************
  various Macros

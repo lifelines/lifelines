@@ -77,9 +77,11 @@ typedef struct deleteset_s *DELETESET;
  *********************************************/
 
 /* alphabetical */
-static void add_xref_to_set(INT key, DELETESET set);
+static void add_xref_to_set(INT keynum, DELETESET set);
 static BOOLEAN addxref_impl(CNSTRING key, BOOLEAN silent);
+static INT find_slot(INT keynum, DELETESET set);
 static void freexref(DELETESET set);
+static DELETESET get_deleteset_from_type(char ctype);
 static STRING getxref(DELETESET set);
 static void growxrefs(DELETESET set);
 static STRING newxref(STRING xrefp, BOOLEAN flag, DELETESET set);
@@ -252,8 +254,8 @@ sortxref (DELETESET set)
 				set->recs[j] = set->recs[i];
 				set->recs[i] = temp;
 			}
-			if (i==1 && !ct) return; /* already sorted */
 		}
+		if (i==1 && !ct) return; /* already sorted */
 	}
 }
 /*======================================
@@ -331,40 +333,53 @@ writexrefs (void)
 	return TRUE;
 }
 /*=====================================
+ * find_slot -- Find slot at which to add key
+ *===================================*/
+static INT
+find_slot (INT keynum, DELETESET set)
+{
+	INT lo=1;
+	INT hi=(set->n)-1;
+	/* binary search to find where to insert key */
+	while (lo<=hi) {
+		INT md = (lo + hi)/2;
+		if (keynum > (set->recs)[md])
+			hi=--md;
+		else if (keynum < (set->recs)[md])
+			lo=++md;
+		else {
+			return md;
+		}
+	}
+	return lo;
+}
+/*=====================================
  * add_xref_to_set_impl -- Add deleted key to xrefs.
  *  generic for all types
  *===================================*/
 static BOOLEAN
-add_xref_to_set_impl (INT key, DELETESET set, DUPS dups)
+add_xref_to_set_impl (INT keynum, DELETESET set, DUPS dups)
 {
-	INT lo,hi,md, i;
-	if (key <= 0 || !xreffp || (set->n) < 1) FATAL();
+	INT lo, i;
+	if (keynum <= 0 || !xreffp || (set->n) < 1) FATAL();
 	if (set->n >= set->max)
 		growxrefs(set);
 	ASSERT(set->n < set->max);
-	lo=1;
-	hi=(set->n)-1;
-	/* binary search to find where to insert key */
-	while (lo<=hi) {
-		md = (lo + hi)/2;
-		if (key>(set->recs)[md])
-			hi=--md;
-		else if (key<(set->recs)[md])
-			lo=++md;
-		else {
-			/* key is already free */
-			char msg[96];
-			if (dups==DUPSOK) 
-				return FALSE;
-			sprintf(msg, "Tried to add already-deleted record (%d) to xref (%c)!"
-				, key, set->ctype);
-			FATAL2(msg); /* deleting a deleted record! */
-		}
+
+	lo = find_slot(keynum, set);
+	if ((set->recs)[lo] == keynum) {
+		/* key is already free */
+		char msg[96];
+		if (dups==DUPSOK) 
+			return FALSE;
+		sprintf(msg, "Tried to add already-deleted record (%d) to xref (%c)!"
+			, keynum, set->ctype);
+		FATAL2(msg); /* deleting a deleted record! */
 	}
 	/* key replaces xrefs[lo] - push lo+ up */
 	for (i=set->n-1; i>=lo; --i)
 		(set->recs)[i+1] = (set->recs)[i];
-	(set->recs)[lo] = key;
+	(set->recs)[lo] = keynum;
 	(set->n)++;
 	ASSERT(writexrefs());
 	maxkeynum=-1;
@@ -451,6 +466,50 @@ growxrefs (DELETESET set)
 		stdfree(set->recs);
 	}
 	set->recs = newp;
+}
+/*==========================================
+ * get_deleteset_from_type -- Return deleteset
+ *  of type specified
+ *========================================*/
+static DELETESET
+get_deleteset_from_type (char ctype)
+{
+	switch(ctype) {
+	case 'I': return &irecs;
+	case 'F': return &frecs;
+	case 'S': return &srecs;
+	case 'E': return &erecs;
+	case 'X': return &xrecs;
+	}
+	ASSERT(0); return 0;
+}
+/*==========================================
+ * delete_xref_if_present -- If record is listed
+ *  as free, remove it from the free list
+ *========================================*/
+BOOLEAN
+delete_xref_if_present (CNSTRING key)
+{
+	DELETESET set=0;
+	INT keynum=0;
+	INT lo=0;
+	INT i=0;
+
+	ASSERT(key && key[0] && key[1]);
+	set = get_deleteset_from_type(key[0]);
+	keynum = atoi(key + 1);
+	ASSERT(keynum>0);
+	lo = find_slot(keynum, set);
+	if ((set->recs)[lo] != keynum)
+		return FALSE;
+	/* removing xrefs[lo] -- move lo+ down */
+	for (i=lo; i+1<set->n-1; ++i)
+		(set->recs)[i] = (set->recs)[i+1];
+	--(set->n);
+	ASSERT(writexrefs());
+	maxkeynum=-1;
+	return TRUE;
+
 }
 /*==========================================
  * freexref -- Free memory & clear xrefs array
@@ -737,4 +796,3 @@ xrefs_get_counts_from_unopened_db (CNSTRING path, INT *nindis, INT *nfams
 	fclose(fp);
 	return TRUE;
 }
-
