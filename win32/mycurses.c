@@ -42,7 +42,7 @@ static HANDLE hStdin = INVALID_HANDLE_VALUE;
 static HANDLE hStdout = INVALID_HANDLE_VALUE;
 static DWORD dwModeIn = 0;
 static DWORD dwModeOut = 0;
-static CONSOLE_SCREEN_BUFFER_INFO sScreenInfo = {0};
+static CONSOLE_SCREEN_BUFFER_INFO ConScreenBuffer = {0};
 static COORD cOrigin = {0,0};
 static int redirected_in = 0;
 static int redirected_out = 0;
@@ -661,12 +661,12 @@ static int mycur_init(int fullscreen)
 			return 0;
 		}
 
-		if (!GetConsoleScreenBufferInfo(hStdout, &sScreenInfo)) {
+		if (!GetConsoleScreenBufferInfo(hStdout, &ConScreenBuffer)) {
 			redirected_out = 1;
-			sScreenInfo.dwSize.X = 80;
-			sScreenInfo.dwSize.Y = 25;
-			sScreenInfo.srWindow.Bottom = 25;
-			sScreenInfo.srWindow.Right = 80;
+			ConScreenBuffer.dwSize.X = 80;
+			ConScreenBuffer.dwSize.Y = 25;
+			ConScreenBuffer.srWindow.Bottom = 25;
+			ConScreenBuffer.srWindow.Right = 80;
 			/*
 			TODO: What to do with console output functions when output redirected ?
 			2002-10-19, Perry
@@ -674,15 +674,15 @@ static int mycur_init(int fullscreen)
 		}
 #ifdef DEBUG
 		fprintf(errfp, "Screen buffer: (%d,%d) pos=(%d,%d)\n",
-			sScreenInfo.dwSize.X, sScreenInfo.dwSize.Y,
-			sScreenInfo.dwCursorPosition.X, sScreenInfo.dwCursorPosition.Y);
+			ConScreenBuffer.dwSize.X, ConScreenBuffer.dwSize.Y,
+			ConScreenBuffer.dwCursorPosition.X, ConScreenBuffer.dwCursorPosition.Y);
 		fprintf(errfp, "Window: (%d-%d,%d-%d) max=(%d,%d)\n",
-			sScreenInfo.srWindow.Left, sScreenInfo.srWindow.Right,
-			sScreenInfo.srWindow.Top, sScreenInfo.srWindow.Bottom,
-			sScreenInfo.dwMaximumWindowSize.X,
-			sScreenInfo.dwMaximumWindowSize.Y);
+			ConScreenBuffer.srWindow.Left, ConScreenBuffer.srWindow.Right,
+			ConScreenBuffer.srWindow.Top, ConScreenBuffer.srWindow.Bottom,
+			ConScreenBuffer.dwMaximumWindowSize.X,
+			ConScreenBuffer.dwMaximumWindowSize.Y);
 #endif
-		if (sScreenInfo.srWindow.Left || sScreenInfo.srWindow.Top)
+		if (ConScreenBuffer.srWindow.Left || ConScreenBuffer.srWindow.Top)
 		{
 			/* WARNING: this code will not work correctly with offset window */
 		}
@@ -690,18 +690,18 @@ static int mycur_init(int fullscreen)
 		cStartPos.Y = 0;
 		/* clear console (fill with blanks) */
 		FillConsoleOutputCharacter(hStdout, (TCHAR)' ',
-			(DWORD)(sScreenInfo.dwSize.X*sScreenInfo.dwSize.Y),
+			(DWORD)(ConScreenBuffer.dwSize.X*ConScreenBuffer.dwSize.Y),
 			cStartPos, &dwLen);
 		/* save size into curses globals LINES & COLS */
 		if (fullscreen)
 		{
-			LINES = sScreenInfo.dwSize.Y;
-			COLS = sScreenInfo.dwSize.X;
+			LINES = ConScreenBuffer.dwSize.Y;
+			COLS = ConScreenBuffer.dwSize.X;
 		}
 		else
 		{
-			LINES = sScreenInfo.srWindow.Bottom;
-			COLS = sScreenInfo.srWindow.Right;
+			LINES = ConScreenBuffer.srWindow.Bottom;
+			COLS = ConScreenBuffer.srWindow.Right;
 		}
 		adjust_linescols();
 	}

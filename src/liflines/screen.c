@@ -39,10 +39,10 @@
 #include "table.h"
 #include "liflines.h"
 #include "arch.h"
-#include "menuitem.h"
 #include "lloptions.h"
 #include "interp.h"
 #include "llinesi.h"
+#include "menuitem.h"
 #include "screen.h"
 #ifdef WIN32_ICONV_SHIM
 #include "iconvshim.h"
@@ -163,13 +163,16 @@ typedef struct listdisp_s
 /* alphabetical */
 static void activate_uiwin(UIWINDOW uiwin);
 static void add_shims_info(LIST list);
+static void adjust_menu_cols(MENUSET menu, INT delta);
+static void adjust_menu_height(MENUSET menu, INT delta);
 static void append_to_msg_list(STRING msg);
 static INT array_interact(STRING ttl, INT len, STRING *strings
 	, BOOLEAN selecting, DETAILFNC detfnc, void *param);
 static BOOLEAN ask_for_filename_impl(STRING ttl, STRING path, STRING prmpt
 	, STRING buffer, INT buflen);
 static void begin_action(void);
-static INT calculate_screen_lines(INT screen);
+static INT get_brwsmenu_size(INT screen);
+static void check_menu(DYNMENU dynmenu);
 static void check_stdout(void);
 static INT choose_one_or_list_from_indiseq(STRING ttl, INDISEQ seq, BOOLEAN multi);
 static INT choose_or_view_array (STRING ttl, INT no, STRING *pstrngs
@@ -181,6 +184,7 @@ static void clearw(void);
 static void color_hseg(WINDOW *win, INT row, INT x1, INT x2, char ch);
 static UIWINDOW create_uisubwindow(UIWINDOW parent, INT rows, INT cols, INT begy, INT begx);
 static void create_windows(void);
+static void cycle_menu(struct menuset_s * menu);
 static void deactivate_uiwin(void);
 static void deactivate_uiwin_and_touch_all(void);
 static void delete_uiwindow(UIWINDOW * uiw);
@@ -203,7 +207,7 @@ static INT invoke_extra_menu(void);
 static RECORD invoke_search_menu(void);
 static RECORD invoke_fullscan_menu(void);
 static void invoke_utils_menu(void);
-static void output_menu(UIWINDOW uiwin, INT screen, INT bottom, INT width);
+static void output_menu(UIWINDOW uiwin, DYNMENU dynmenu);
 void place_cursor(void);
 static void place_std_msg(void);
 static void refresh_main(void);
@@ -215,7 +219,6 @@ static void repaint_search_menu(UIWINDOW uiwin);
 /*static void repaint_tt_menu(UIWINDOW uiwin);*/
 static void repaint_utils_menu(UIWINDOW uiwin);
 static void repaint_extra_menu(UIWINDOW uiwin);
-static void repaint_footer_menu(INT screen);
 static void repaint_main_menu(UIWINDOW uiwin);
 static void run_report(BOOLEAN picklist);
 static void show_fam (UIWINDOW uiwin, NODE fam, INT mode, INT row, INT hgt, INT width, INT * scroll, BOOLEAN reuse);
@@ -228,19 +231,19 @@ static void shw_popup_list(INDISEQ seq, listdisp * ld);
 static void shw_recordlist_details(INDISEQ seq, listdisp * ld);
 static void shw_recordlist_list(INDISEQ seq, listdisp * ld);
 static void switch_to_uiwin(UIWINDOW uiwin);
+static void toggle_menu(MENUSET menu);
 static void touch_all(BOOLEAN includeCurrent);
 static INT translate_control_key(INT c);
 static INT translate_hdware_key(INT c);
 static void uicolor(UIWINDOW, LLRECT rect, char ch);
 static void uierase(UIWINDOW uiwin);
-static INT update_menu(INT screen);
+static INT update_browse_menu(INT screen);
 
 /*********************************************
  * local variables
  *********************************************/
 
 static INT menu_enabled = 1;
-static INT menu_dirty = 0;
 
 /* what is showing now in status bar */
 static char status_showing[150];
@@ -285,7 +288,6 @@ int
 init_screen (BOOLEAN graphical)
 {
 	int extralines;
-	INT cols;
 	if (winx) { /* user specified window size */
 		ll_lines = winy;
 		ll_cols = winx;
@@ -316,8 +318,7 @@ init_screen (BOOLEAN graphical)
 		POPUP_LINES += extralines;
 	}
 	create_windows();
-	cols = (ll_cols-5)/22; /* # of menu cols to start with */
-	menuitem_initialize(cols);
+	brwsmenu_initialize(ll_lines, ll_cols);
 
 	if (graphical) {
 		gr_btee = ACS_BTEE;
@@ -397,24 +398,6 @@ repaint_main_menu (UIWINDOW uiwin)
 	mvwaddstr(win, row++, 4, _(qSmn_mmex));
 	mvwaddstr(win, row++, 4, _(qSmn_changedb));
 	mvwaddstr(win, row++, 4, _(qSmn_exit));
-}
-/*================================================
- * repaint_footer_menu -- Paint footer menu for 
- *  whichever screen requested.
- *==============================================*/
-void
-repaint_footer_menu (INT screen)
-{
-	UIWINDOW uiwin = main_win;
-	WINDOW *win = uiw_win(uiwin);
-	INT bottom = LINESTOTAL-3; /* 3 rows below menu */
-	INT width = ll_cols;
-	uierase(uiwin);
-	draw_win_box(win);
-	show_horz_line(uiwin, ll_lines-3,  0, ll_cols);
-	if (!menu_enabled)
-		return;
-	output_menu(uiwin, screen, bottom, width);
 }
 /*==============================================
  * paint_list_screen -- Paint list browse screen
@@ -680,16 +663,41 @@ run_report (BOOLEAN picklist)
 /*	end_action();*/
 }
 /*=========================================
- * update_menu -- redraw menu if needed
- *  uses new menus
+ * update_browse_menu -- redraw menu if needed
+ *  This is browse menu using dynamic menu 
+ *  in rectangle at bottom of screen 
  *=======================================*/
 static INT
-update_menu (INT screen)
+update_browse_menu (INT screen)
 {
-	INT lines = calculate_screen_lines(screen);
-	if (menu_dirty || (cur_screen != screen))
-		repaint_footer_menu(screen);
-	menu_dirty = FALSE;
+	DYNMENU dynmenu = get_screen_dynmenu(screen);
+	INT lines = LINESTOTAL-OVERHEAD_MENU - get_brwsmenu_size(screen);
+	if (dynmenu->dirty || (cur_screen != screen)) {
+		UIWINDOW uiwin = main_win;
+		WINDOW *win = uiw_win(uiwin);
+		uierase(uiwin);
+		draw_win_box(win);
+		show_horz_line(uiwin, ll_lines-3,  0, ll_cols);
+		if (menu_enabled) {
+			/* display title */
+			INT bottom = LINESTOTAL-3; /* 3 rows below menu */
+			INT width = ll_cols;
+			char prompt[128];
+			check_menu(dynmenu);
+			/* display prompt immediately above menu */
+			llstrncpy(prompt, _(qSplschs), sizeof(prompt), uu8);
+			llstrapp(prompt, sizeof(prompt), uu8, "             ");
+			llstrappf(prompt, sizeof(prompt), uu8, _("(pg %d/%d)")
+				, dynmenu->page+1, dynmenu->pages);
+			/* display line across */
+			show_horz_line(uiwin, dynmenu->top-2, 0, width);
+			/* display prompt */
+			mvwaddstr(win, dynmenu->top-1, dynmenu->left-1, prompt);
+			/* draw menu */
+			output_menu(uiwin, dynmenu);
+		}
+	}
+	dynmenu->dirty = FALSE;
 	return lines;
 }
 /*=========================================
@@ -758,7 +766,7 @@ void
 display_indi (NODE indi, INT mode, BOOLEAN reuse)
 {
 	INT screen = ONE_PER_SCREEN;
-	INT lines = update_menu(screen);
+	INT lines = update_browse_menu(screen);
 	struct llrect_s rect;
 	/* leave room for box all around */
 	rect.top = 1;
@@ -785,7 +793,7 @@ display_fam (NODE fam, INT mode, BOOLEAN reuse)
 {
 	INT width = MAINWIN_WIDTH;
 	INT screen = ONE_FAM_SCREEN;
-	INT lines = update_menu(screen);
+	INT lines = update_browse_menu(screen);
 	show_fam(main_win, fam, mode, 1, lines, width, &Scroll1, reuse);
 	display_screen(screen);
 }
@@ -805,7 +813,7 @@ void
 display_2indi (NODE indi1, NODE indi2, INT mode)
 {
 	INT screen = TWO_PER_SCREEN;
-	INT lines = update_menu(screen);
+	INT lines = update_browse_menu(screen);
 	INT lines1,lines2;
 	BOOLEAN reuse = FALSE; /* can't reuse display strings in tandem */
 	struct llrect_s rect;
@@ -855,7 +863,7 @@ display_2fam (NODE fam1, NODE fam2, INT mode)
 	UIWINDOW uiwin = main_win;
 	INT width=MAINWIN_WIDTH;
 	INT screen = TWO_FAM_SCREEN;
-	INT lines = update_menu(screen);
+	INT lines = update_browse_menu(screen);
 	INT lines1,lines2;
 	BOOLEAN reuse = FALSE; /* can't reuse display strings in tandem */
 	lines--; /* for tandem line */
@@ -888,7 +896,7 @@ aux_browse (NODE node, INT mode, BOOLEAN reuse)
 {
 	UIWINDOW uiwin = main_win;
 	INT screen = AUX_SCREEN;
-	INT lines = update_menu(screen);
+	INT lines = update_browse_menu(screen);
 	struct llrect_s rect;
 	rect.top = 1;
 	rect.bottom = lines;
@@ -2212,6 +2220,7 @@ translate_control_key (INT c)
 }
 /*===============================
  * interact -- Interact with user
+ * This is just for browse screens (witness argument "screen")
  *=============================*/
 static INT
 interact (UIWINDOW uiwin, STRING str, INT screen)
@@ -2254,7 +2263,7 @@ interact (UIWINDOW uiwin, STRING str, INT screen)
 				buffer[1] = 0;
 				offset = 1;
 			}
-			cmdnum = menuitem_check_cmd(screen, buffer);
+			cmdnum = menuset_check_cmd(get_screen_menuset(screen), buffer);
 			if (cmdnum != CMD_NONE && cmdnum != CMD_PARTIAL)
 				return cmdnum;
 			if (cmdnum != CMD_PARTIAL) {
@@ -2716,7 +2725,7 @@ message_string (void)
 	if (cur_screen == MAIN_SCREEN)
 		return _("LifeLines -- Main Menu");
 	ASSERT(cur_screen >= 1 && cur_screen <= MAX_SCREEN);
-	return g_ScreenInfo[cur_screen].Title;
+	return get_screen_title(cur_screen);
 }
 /*=================================================
  * place_std_msg - Place standard message on screen
@@ -2911,154 +2920,124 @@ mvwaddstr_lim (WINDOW *wp, int x, int y, char *cp, INT maxlen)
 	}
 }
 /*================================================
+ * check_menu -- update menu layout info
+ *  (in case just resized)
+ * Created: 2002/10/24 (Perry Rapp)
+ *==============================================*/
+static void
+check_menu (DYNMENU dynmenu)
+{
+	/* (reserve spots for ? and q on each page) */
+	dynmenu->pageitems = dynmenu->rows*dynmenu->cols-2;
+	dynmenu->pages = (dynmenu->size-1)/dynmenu->pageitems+1;
+	if (dynmenu->size < dynmenu->pageitems + 1) { /* don't need ? if they fit */
+		dynmenu->pages = 1;
+		dynmenu->page = 0;
+	}
+}
+/*================================================
  * output_menu -- print menu array to screen
  * Caller specifies bottom row to use, & width
  * Menu structure contains all menu items & # of
  * columns to use
  *==============================================*/
 static void
-output_menu (UIWINDOW uiwin, INT screen, INT bottom, INT width)
+output_menu (UIWINDOW uiwin, DYNMENU dynmenu)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row;
 	INT icol=0;
 	INT col=3;
-	INT MenuRows = g_ScreenInfo[screen].MenuRows;
-	INT MenuSize = g_ScreenInfo[screen].MenuSize;
-	INT MenuCols = g_ScreenInfo[screen].MenuCols;
+	/* more legible names */
+	INT MenuRows = dynmenu->rows;
+	INT MenuSize = dynmenu->size;
+	INT MenuCols = dynmenu->cols;
+	INT MenuPage = dynmenu->page;
+	INT MenuPages = dynmenu->pages;
+	INT pageitems = dynmenu->pageitems;
+	MENUSET menuset = dynmenu_get_menuset(dynmenu);
+	MenuItem ** items = menuset_get_items(menuset);
+	INT width = dynmenu->width;
 	/* reserve 2 spaces at each end, and one space in front of each Col */
 	INT colwidth = (width-4)/MenuCols-1;
 	INT Item = 0;
-	INT page, pageitems, pages;
-	/* MenuRows includes the title row but not the horiz line */
-	INT top = bottom - (MenuRows+1);
-	char prompt[128];
-	MenuItem ** Menu = g_ScreenInfo[screen].Menu;
-	INT OnePageFlag = 0;
-	page = g_ScreenInfo[screen].MenuPage;
-	/* reserve 2 slots for q=quit and ?=more */
-	pageitems = (MenuRows-1)*MenuCols-2;
-	pages = (MenuSize-1)/pageitems+1;
-	if (MenuSize <= pageitems+1) /* don't need '?' if they fit */
-	{
-		OnePageFlag = 1;
-		page = 0;
-		pages = 1;
-	}
-	Item = page * pageitems;
+	Item = MenuPage * pageitems;
 	if (Item >= MenuSize)
 		Item = ((MenuSize-1)/pageitems)*pageitems;
 	icol = 0;
 	col = 3;
-	row = top;
-	/* display line across */
-	show_horz_line(uiwin, row++, 0, width);
-	/* display title */
-	llstrncpy(prompt, _(qSplschs), sizeof(prompt), uu8);
-	llstrapp(prompt, sizeof(prompt), uu8, "             ");
-	llstrappf(prompt, sizeof(prompt), uu8, _("(pg %d/%d)"), page+1, pages);
-	mvwaddstr(win, row++, 2, prompt);
+	row = dynmenu->top;
 	/* now display all the menu items we can fit on this page */
 	while (1)
 	{
-		mvwaddstr_lim(win, row, col, Menu[Item++]->LocalizedDisplay, colwidth);
+		mvwaddstr_lim(win, row, col, items[Item++]->LocalizedDisplay, colwidth);
 		if (Item == MenuSize)
 			break;
 		row++;
-		if (icol<MenuCols-1 && row==bottom)
+		if (icol<MenuCols-1 && row>dynmenu->bottom)
 		{
 			icol++;
 			col += colwidth+1;
-			row = LINESTOTAL-MenuRows-2;
+			row = dynmenu->top;
 			continue;
 		}
-		if (OnePageFlag) {
+		if (MenuPages == 1) {
 			/* one slot reserved for "q" */
-			if (icol==MenuCols-1 && row==bottom-1)
+			if (icol==MenuCols-1 && row==dynmenu->bottom)
 				break;
 		} else {
 			/* two slots reserved, "q" & "?" */
-			if (icol==MenuCols-1 && row==bottom-2)
+			if (icol==MenuCols-1 && row==dynmenu->bottom-1)
 				break;
 		}
 	}
 	/* print the "q" and "?" items */
-	row = bottom-2;
+	row = dynmenu->bottom-1;
 	col = 3+(MenuCols-1)*(colwidth+1);
-	if (!OnePageFlag)
+	if (dynmenu->pages > 1)
 		mvwaddstr_lim(win, row, col, g_MenuItemOther.LocalizedDisplay, colwidth);
 	mvwaddstr_lim(win, ++row, col, g_MenuItemQuit.LocalizedDisplay, colwidth);
 }
 /*==================================================================
- * toggle_menu() - toggle display of menu at bottom of screen
+ * toggle_browse_menu - toggle display of menu at bottom of screen
  *================================================================*/
 void
-toggle_menu (void)
+toggle_browse_menu (void)
 {
-	menu_enabled = !menu_enabled;
-	menu_dirty = 1;
+	dynmenu_toggle_menu(get_screen_dynmenu(cur_screen));
 }
 /*==================================================================
- * cycle_menu() - show other menu choices
+ * cycle_browse_menu() - show other menu choices on browse menu
  *================================================================*/
 void
-cycle_menu (void)
+cycle_browse_menu (void)
 {
-	INT MenuSize = g_ScreenInfo[cur_screen].MenuSize;
-	INT MenuRows = g_ScreenInfo[cur_screen].MenuRows;
-	INT cols = g_ScreenInfo[cur_screen].MenuCols;
-	INT pageitems = (MenuRows-1)*cols-2;
-	if (pageitems+1 == MenuSize)
-		return; /* only one page */
-	g_ScreenInfo[cur_screen].MenuPage++;
-	if (g_ScreenInfo[cur_screen].MenuPage > (MenuSize-1)/pageitems)
-		g_ScreenInfo[cur_screen].MenuPage = 0;
-        menu_dirty = 1;
+	dynmenu_next_page(get_screen_dynmenu(cur_screen));
 }
 /*==================================================================
- * adjust_menu_height() - Change height of menu on person screen
+ * adjust_browse_menu_height - Change height of current browse screen menu
  *================================================================*/
 void
-adjust_menu_height (INT delta)
+adjust_browse_menu_height (INT delta)
 {
-	INT min=4, max=10;
-	if (g_ScreenInfo[cur_screen].MenuCols == 1)
-	{
-		min = 5;
-		max = 14;
-	}
-	g_ScreenInfo[cur_screen].MenuRows += delta;
-	if (g_ScreenInfo[cur_screen].MenuRows<min)
-		g_ScreenInfo[cur_screen].MenuRows=min;
-	else if (g_ScreenInfo[cur_screen].MenuRows>max)
-		g_ScreenInfo[cur_screen].MenuRows=max;
-	menu_dirty = 1;
+	dynmenu_adjust_height(get_screen_dynmenu(cur_screen), delta);
 }
 /*==================================================================
- * adjust_menu_cols() - Change # of columsn in current menu
+ * adjust_browse_menu_cols - Change # of columns in current menu
  *================================================================*/
 void
-adjust_menu_cols (INT delta)
+adjust_browse_menu_cols (INT delta)
 {
-	INT min=1, max=7;
-	g_ScreenInfo[cur_screen].MenuCols += delta;
-	if (g_ScreenInfo[cur_screen].MenuCols<min)
-		g_ScreenInfo[cur_screen].MenuCols=min;
-	else if (g_ScreenInfo[cur_screen].MenuCols>max)
-		g_ScreenInfo[cur_screen].MenuCols=max;
-	menu_dirty = 1;
+	dynmenu_adjust_menu_cols(get_screen_dynmenu(cur_screen), delta);
 }
 /*=========================================
- * calculate_screen_lines -- How many lines above menu?
+ * get_brwsmenu_size -- How many lines does browse menu take ?
  *=======================================*/
 static INT
-calculate_screen_lines (INT screen)
+get_brwsmenu_size (INT screen)
 {
-	INT menu = g_ScreenInfo[screen].MenuRows;
-	INT lines;
-	if (!menu_enabled) menu = EMPTY_MENU;
-	lines = LINESTOTAL-OVERHEAD_MENU-menu;
-	return lines;
+	DYNMENU dynmenu = get_screen_dynmenu(screen);
+	return dynmenu->hidden ? EMPTY_MENU : dynmenu->rows;
 }
 /*=====================
  * clear_stdout_hseg -- clear a horizontal line segment on stdout win
@@ -3210,7 +3189,7 @@ msg_outputv (MSG_LEVEL level, STRING fmt, va_list args)
 			break;
 	}
 	/* now make string to show/put on msg list */
-	llstrncpyvf(ptr, sizeof(buffer), uu8, fmt, args);
+	llstrncpyvf(ptr, sizeof(buffer)-1, uu8, fmt, args);
 	/* first handle transitory/status messages */
 	if (level==MSG_STATUS) {
 		if (lock_std_msg)

@@ -38,9 +38,9 @@
 #include "indiseq.h"
 #include "liflines.h"
 #include "feedback.h"
-#include "menuitem.h"
-
 #include "llinesi.h"
+
+#include "menuitem.h"
 #include "screen.h"
 
 /*********************************************

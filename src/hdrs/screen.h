@@ -119,6 +119,7 @@ enum {
         , BROWSE_UNK
 };
 
+struct menuset_s;
 
 /*
   Function Prototypes, alphabetical by module
@@ -129,8 +130,8 @@ void load_gedcom(BOOLEAN picklist);
 BOOLEAN save_gedcom(void);
 
 /* screen.c */
-void adjust_menu_cols(INT delta);
-void adjust_menu_height(INT delta);
+void adjust_browse_menu_cols(INT delta);
+void adjust_browse_menu_height(INT delta);
 INT ask_for_char(STRING, STRING, STRING);
 INT ask_for_char_msg(STRING, STRING, STRING, STRING);
 BOOLEAN ask_for_db_filename(STRING ttl, STRING prmpt, STRING basedir, STRING buffer, INT buflen);
@@ -138,7 +139,7 @@ INT aux_browse(NODE, INT mode, BOOLEAN reuse);
 INT choose_one_from_indiseq(STRING, INDISEQ);
 void clear_hseg(WINDOW *, INT row, INT x1, INT x2);
 void clear_stdout_hseg(INT row, INT x1, INT x2);
-void cycle_menu(void);
+void cycle_browse_menu(void);
 void display_2fam(NODE fam1, NODE fam2, INT mode);
 void display_2indi(NODE indi1, NODE indi2, INT mode);
 void display_fam(NODE, INT mode, BOOLEAN reuse);
@@ -163,7 +164,7 @@ void show_indi(UIWINDOW uiwin, NODE indi, INT mode, LLRECT
 void show_indi_vitals(UIWINDOW uiwin, NODE, LLRECT, INT *scroll, BOOLEAN reuse);
 void show_vert_line(UIWINDOW, INT, INT, INT);
 void term_screen(void);
-void toggle_menu(void);
+void toggle_browse_menu(void);
 INT twofam_browse(NODE, NODE, INT mode);
 INT twoindi_browse(NODE, NODE, INT mode);
 void wfield(INT, INT, STRING);

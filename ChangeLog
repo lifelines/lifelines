@@ -1,3 +1,15 @@
+2002-10-28 Perry Rapp
+
+	* ChangeLog src/hdrs/menuitem.h src/hdrs/screen.h
+	src/liflines/Makefile.am src/liflines/browse.c
+	src/liflines/screen.c src/liflines/tandem.c win32/mycurses.c
+	NEW: src/liflines/brwsmenu.c
+	NEW: src/liflines/dynmenu.c
+	NEW: src/liflines/menuset.c
+	DELETED: src/liflines/menuitem.c:
+
+	Split dynamic menu code into three new files.
+
 2002-10-21 Perry Rapp
 
 	* .linesrc ChangeLog lines.cfg src/gedlib/lloptions.c

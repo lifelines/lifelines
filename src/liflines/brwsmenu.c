@@ -20,8 +20,6 @@
  * global/exported variables
  *********************************************/
 
-ScreenInfo g_ScreenInfo[MAX_SCREEN+1]; /* init'd by menuitem_initialize */
-
 /* These are not listed as part of the menus below, because these are
 added on-the-fly to every menu page displayed */
 MenuItem g_MenuItemOther = { N_("?  Other menu choices"), 0, CMD_MENU_MORE, 0 };
@@ -38,16 +36,9 @@ extern STRING qSttlauxbrw, qSttllstbrw;
  * local types
  *********************************************/
 
-struct CmdItem_s {
-	char c;
-	BOOLEAN direct; /* (T: command value, F: pointer) */
-	UNION value; /* command value, or pointer to CommandArray */
-};
-
-struct CmdArray_s {
-	INT alloc; /* size allocated */
-	INT used; /* size in use */
-	CMDITEM array;
+struct BrowseScreenInfo {
+	STRING title;
+	struct dynmenu_s dynmenu;
 };
 
 /*********************************************
@@ -55,26 +46,23 @@ struct CmdArray_s {
  *********************************************/
 
 /* alphabetical */
-static void add_menu_item(STRING Title, CMDARRAY cmds, MenuItem * mitem);
-static CMDARRAY create_cmd_array(INT alloc);
-static void copy_cmditem(CMDITEM dest, CMDITEM src);
-static BOOLEAN find_cmd(CMDARRAY cmds, char c, INT * pos);
-static void free_cmds(CMDARRAY cmds);
-static void get_menu_choice(STRING display, STRING choice, INT max);
-static void grow_cmd_array(CMDARRAY cmds);
-static void insert_cmd(STRING Title, CMDARRAY cmds, STRING str, INT cmdnum
-	, STRING display);
-static INT menuitem_find_cmd(CMDARRAY cmds, STRING cmd);
+static void browsescreen_init(struct BrowseScreenInfo * sinfo , STRING title, INT MenuRows, INT MenuCols
+	, INT MinCols, INT MaxCols
+	, INT MinRows, INT MaxRows
+	, INT MenuTop, INT MenuLeft, INT MenuWidth
+	, INT MenuSize, MenuItem ** MenuItems);
 static void on_lang_change(VPTR uparm);
-static void setup_menu(ScreenInfo * sinfo, STRING Title, INT MenuRows
-	, INT MenuCols ,INT Size, MenuItem ** Menu);
 
 /*********************************************
  * local variables
  *********************************************/
 
+struct BrowseScreenInfo f_BrowseScreenInfo[MAX_SCREEN+1]; /* init'd by brwsmenu_initialize */
 static BOOLEAN f_initialized=FALSE;
 static BOOLEAN f_reloading=FALSE;
+static INT f_screenheight;
+static INT f_screenwidth;
+static INT f_cols;
 
 /* normal menu items */
 static MenuItem f_MenuItemEditIndi = { N_("e  Edit the person"), 0, CMD_EDIT, 0 };
@@ -434,293 +422,153 @@ static MenuItem * f_MenuListPersons[] =
  *********************************************/
 
 /*============================
- * setup_menu - initialize runtime memory
- *  structures for one menu
- * Title is strsaved
- * Created: 2001/01/28, Perry Rapp
+ * browsescreen_init - initialize one browse screen
+ * title is strsaved inside here
+ * reentrant
+ * Created: 2002/10/27, Perry Rapp
  *==========================*/
 static void
-setup_menu (ScreenInfo * sinfo, STRING Title, INT MenuRows, INT MenuCols
-	, INT Size, MenuItem ** Menu)
+browsescreen_init (struct BrowseScreenInfo * sinfo , STRING title, INT MenuRows, INT MenuCols
+	, INT MinCols, INT MaxCols
+	, INT MinRows, INT MaxRows
+	, INT MenuTop, INT MenuLeft, INT MenuWidth
+	, INT MenuSize, MenuItem ** MenuItems)
 {
-	INT i;
-	CMDARRAY cmds = create_cmd_array(32);
+	DYNMENU dynmenu = &sinfo->dynmenu;
 
-	if (sinfo->Title)
-		stdfree(sinfo->Title);
-	sinfo->Title = strsave(Title);
-	sinfo->MenuRows = MenuRows;
-	sinfo->MenuCols = MenuCols;
-	sinfo->MenuSize = Size;
-	/* MenuPage set by caller */
-	sinfo->Menu = Menu;
-	sinfo->Commands = cmds;
-	for (i=0; i<Size; i++)
-		add_menu_item(Title, cmds, Menu[i]);
-	add_menu_item(Title, cmds, &g_MenuItemOther);
-	add_menu_item(Title, cmds, &g_MenuItemQuit);
+	strfree(&sinfo->title);
+	sinfo->title = strsave(title);
+	dynmenu_init(dynmenu, title, MenuRows, MenuCols
+		, MinCols, MaxCols
+		, MinRows, MaxRows
+		, MenuTop, MenuLeft, MenuWidth
+		, MenuSize, MenuItems);
 }
 /*============================
- * add_menu_item - add cmd for menu to cmdarray
- *  Title: [IN]  title of menu (only used for log msgs)
- *  cmds:  [I/O] cmdarray (tree used for command recognition)
- *  mitem: [IN]  new menu item to add to cmds
- * Created: 2002/01/24
- *==========================*/
-static void
-add_menu_item (STRING Title, CMDARRAY cmds, MenuItem * mitem)
-{
-	INT i;
-	char display[32];
-	/* now we translate the display string, because it was initialized in static
-	array at top of this file */
-	llstrncpy(display, _(mitem->Display), ARRSIZE(display), uu8);
-	if (mitem->LocalizedDisplay)
-		strfree(&mitem->LocalizedDisplay);
-	mitem->LocalizedDisplay = strsave(display);
-	if (mitem->Command == CMD_CHILD_DIRECT0) {
-		/* CMD_CHILD_DIRECT0 is always hooked up to digits */
-		for (i=1; i<=9; i++) {
-			char choice[2];
-			sprintf(choice, "%d", i);
-			insert_cmd(Title, cmds, choice, CMD_CHILD_DIRECT0+i, display);
-		}
-	} else {
-		char choice[9];
-		if (mitem->Choices)
-			strcpy(choice, mitem->Choices);
-		else
-			get_menu_choice(display, choice, sizeof(choice));
-		/* add to nested menu arrays (stored by choice keys */
-		insert_cmd(Title, cmds, choice, mitem->Command, display);
-	}
-}
-/*============================
- * get_menu_choice -- extract menu key sequence
- *  This must be first characters of display, ending with space
- * Created: 2001/12/23, Perry Rapp
- *==========================*/
-/* This will work now, but it will break if we add arrows, PageUp, ... */
-static void
-get_menu_choice (STRING display, STRING choice, INT max)
-{
-	INT i;
-	for (i=0; i<max && display[i] && display[i]!=' ' ; ++i) {
-		choice[i] = display[i];
-	}
-	if (i == max) {
-		msg_error(_("Menu choice sequence too long: %s"), display);
-		FATAL();
-	}
-	if (display[i] != ' ') {
-		msg_error(_("Menu item lacked choice sequence: %s"), display);
-		FATAL();
-	}
-	choice[i]=0;
-}
-/*============================
- * create_cmd_array -- create an empty array of commands
- * Created: 2001/02/01, Perry Rapp
- *==========================*/
-static CMDARRAY
-create_cmd_array (INT alloc)
-{
-	CMDARRAY cmds = (CMDARRAY)stdalloc(sizeof(*cmds));
-	cmds->alloc = alloc;
-	cmds->used = 0;
-	cmds->array = (CMDITEM)stdalloc(alloc * sizeof(cmds->array[0]));
-	return cmds;
-}
-/*============================
- * grow_cmd_array -- grow an array of commands
- * Created: 2001/02/01, Perry Rapp
- *==========================*/
-static void
-grow_cmd_array (CMDARRAY cmds)
-{
-	INT alloc = cmds->alloc + cmds->alloc/2;
-	CMDITEM old = cmds->array;
-	INT i;
-	cmds->alloc = alloc;
-	cmds->array = (CMDITEM)stdalloc(alloc * sizeof(cmds->array[0]));
-	for (i=0; i<cmds->used; i++)
-		copy_cmditem(&cmds->array[i], &old[i]);
-	stdfree(old);
-}
-/*============================
- * copy_cmditem -- copy a CmdItem_s struct
- * Created: 2001/02/01, Perry Rapp
- *==========================*/
-static void
-copy_cmditem (CMDITEM dest, CMDITEM src)
-{
-	dest->c = src->c;
-	dest->direct = src->direct;
-	dest->value = src->value;
-}
-/*============================
- * find_cmd -- search commands for command by character
- * Created: 2001/02/01, Perry Rapp
- *==========================*/
-static BOOLEAN
-find_cmd (CMDARRAY cmds, char c, INT * pos)
-{
-	INT lo=0, hi=cmds->used-1, i;
-	while (lo<=hi) {
-		i=(lo+hi)/2;
-		if (cmds->array[i].c < c)
-			lo=i+1;
-		else if (cmds->array[i].c > c)
-			hi=i-1;
-		else {
-			*pos = i;
-			return TRUE;
-		}
-	}
-	*pos = lo;
-	return FALSE;
-}
-/*============================
- * insert_cmd -- add cmd to array (recursive)
- *  Title:   [IN]  title of menu (for log msgs)
- *  cmds:    [I/O] cmd tree or subtree to which we add
- *  str:     [IN]  remaining part of cmd hotkey sequence
- *  cmdnum:  [IN]  cmd code to store (eg, CMD_QUIT)
- *  display: [IN]  menu item text (for log msgs)
- * Created: 2001/02/01, Perry Rapp
- *==========================*/
-static void
-insert_cmd (STRING Title, CMDARRAY cmds, STRING str, INT cmdnum, STRING display)
-{
-	INT len = strlen(str);
-	INT pos;
-	char c = str[0];
-	if (find_cmd(cmds, c, &pos)) {
-		if (len==1) {
-			crashlog(_("In menu: %s"), Title);
-			if (cmds->array[pos].direct) {
-				crashlog(_("Duplicate hotkey for item: %s")
-					, display);
-			} else {
-				crashlog(_("Clash with longer hotkey in item: %s")
-					, display);
-				
-			}
-		} else {
-			/* multicharacter new cmd */
-			if (cmds->array[pos].direct) {
-				crashlog(_("In menu: %s"), Title);
-				crashlog(_("Clash with shorter hotkey in item: %s")
-					, display);
-			} else {
-				CMDARRAY subarr = (CMDARRAY)cmds->array[pos].value.w;
-				insert_cmd(Title, subarr, &str[1], cmdnum, display);
-			}
-		}
-	} else {
-		INT i;
-		if (cmds->used == cmds->alloc)
-			grow_cmd_array(cmds);
-		/* not found */
-		for (i=cmds->used; i>pos; i--)
-			copy_cmditem(&cmds->array[i], &cmds->array[i-1]);
-		cmds->array[pos].c = c;
-		if (len==1) {
-			cmds->array[pos].direct = TRUE;
-			cmds->array[pos].value.i = cmdnum;
-		} else {
-			/* multicharacter new cmd */
-			CMDARRAY newcmds = create_cmd_array(8);
-			cmds->array[pos].direct = FALSE;
-			cmds->array[pos].value.w = newcmds;
-			insert_cmd(Title, newcmds, &str[1], cmdnum, display);
-		}
-		cmds->used++;
-	}
-}
-/*============================
- * menuitem_initialize -- set up menu arrays
+ * brwsmenu_initialize -- set up menu arrays
+ *  screenheightx:  [IN]  user's terminal width
+ *  screenweidthx:  [IN]  user's terminal height
+ *   (After the first time, these are passed as 0, meaning use earlier values)
  * Created: 2001/01/28, Perry Rapp
  *==========================*/
 void
-menuitem_initialize (INT cols)
+brwsmenu_initialize (INT screenheightx, INT screenwidthx)
 {
 	INT i;
 	INT scr;
-	INT MenuRows, MenuCols=cols, MenuSize;
-	MenuItem ** Menu;
-	INT ItemSize;
-	ScreenInfo * sinfo=0;
+	INT MenuRows, MenuCols, MenuSize;
+	MenuItem ** MenuItems;
+	struct BrowseScreenInfo * sinfo=0;
 	char title[120];
+	/* defaults used by all browse screens except list browse */
+	INT MinRows=4;
+	INT MaxRows=10;
+	INT MinCols=1;
+	INT MaxCols=7;
+	INT MenuTop=0;
+	INT MenuLeft=3;
+	INT MenuWidth=f_screenwidth-6;
+	if (screenheightx > 0)
+		f_screenheight = screenheightx;
+	if (screenwidthx > 0) {
+		f_screenwidth = screenwidthx;
+		f_cols = (f_screenwidth-5)/22; /* # of menu cols to start with */
+	}
+	MenuCols = f_cols;
 
-	ItemSize = sizeof(f_MenuPerson[0]);
 	if (!f_initialized) {
-		memset(g_ScreenInfo, 0, sizeof(g_ScreenInfo));
+		memset(f_BrowseScreenInfo, 0, sizeof(f_BrowseScreenInfo));
 		for (i=1; i<=MAX_SCREEN; i++)
 		{
-			memset(&g_ScreenInfo[i], 0, sizeof(g_ScreenInfo[i]));
-			g_ScreenInfo[i].Title = strsave(_("Missing title"));
-			g_ScreenInfo[i].MenuRows = 0;
-			g_ScreenInfo[i].MenuCols = cols;
-			g_ScreenInfo[i].MenuSize = 0;
-			g_ScreenInfo[i].Commands = NULL;
-			g_ScreenInfo[i].Menu = NULL;
+			DYNMENU dynmenu;
+			sinfo = &f_BrowseScreenInfo[i];
+			dynmenu = get_screen_dynmenu(i);
+			memset(sinfo, 0, sizeof(*sinfo));
+			sinfo->title = strsave(_("Missing title"));
 		}
 		f_initialized = TRUE;
 	}
 
 	scr = ONE_PER_SCREEN;
-	sinfo = &g_ScreenInfo[scr];
+	sinfo = &f_BrowseScreenInfo[scr];
 	llstrncpy(title, _(qSttlindibrw), ARRSIZE(title), uu8);
 	MenuRows = 8;
-	MenuSize = sizeof(f_MenuPerson)/ItemSize-1;
-	Menu = f_MenuPerson;
-	setup_menu(sinfo, title, MenuRows, MenuCols, MenuSize, Menu);
+	MenuTop = f_screenheight-MenuRows - 3;
+	MenuSize = ARRSIZE(f_MenuPerson)-1;
+	MenuItems = f_MenuPerson;
+	browsescreen_init(sinfo, title, MenuRows, MenuCols
+		, MinCols, MaxCols
+		, MinRows, MaxRows
+		, MenuTop, MenuLeft, MenuWidth
+		, MenuSize, MenuItems);
 
 	scr = ONE_FAM_SCREEN;
-	sinfo = &g_ScreenInfo[scr];
+	sinfo = &f_BrowseScreenInfo[scr];
 	llstrncpy(title, _(qSttlfambrw), ARRSIZE(title), uu8);
 	MenuRows = 6;
-	MenuSize = sizeof(f_MenuFamily)/ItemSize-1;
-	Menu = f_MenuFamily;
-	setup_menu(sinfo, title, MenuRows, MenuCols, MenuSize, Menu);
+	MenuTop = f_screenheight-MenuRows - 3;
+	MenuSize = ARRSIZE(f_MenuFamily)-1;
+	MenuItems = f_MenuFamily;
+	browsescreen_init(sinfo, title, MenuRows, MenuCols
+		, MinCols, MaxCols
+		, MinRows, MaxRows
+		, MenuTop, MenuLeft, MenuWidth
+		, MenuSize, MenuItems);
 
 	scr = TWO_PER_SCREEN;
-	sinfo = &g_ScreenInfo[scr];
+	sinfo = &f_BrowseScreenInfo[scr];
 	llstrncpy(title, _(qSttl2perbrw), ARRSIZE(title), uu8);
 	MenuRows = 5;
-	MenuSize = sizeof(f_Menu2Person)/ItemSize-1;
-	Menu = f_Menu2Person;
-	setup_menu(sinfo, title, MenuRows, MenuCols, MenuSize, Menu);
+	MenuTop = f_screenheight-MenuRows - 3;
+	MenuSize = ARRSIZE(f_Menu2Person)-1;
+	MenuItems = f_Menu2Person;
+	browsescreen_init(sinfo, title, MenuRows, MenuCols
+		, MinCols, MaxCols
+		, MinRows, MaxRows
+		, MenuTop, MenuLeft, MenuWidth
+		, MenuSize, MenuItems);
 
 	scr = TWO_FAM_SCREEN;
-	sinfo = &g_ScreenInfo[scr];
+	sinfo = &f_BrowseScreenInfo[scr];
 	llstrncpy(title, _(qSttl2fambrw), ARRSIZE(title), uu8);
 	MenuRows = 5;
-	MenuSize = sizeof(f_Menu2Family)/ItemSize-1;
-	Menu = f_Menu2Family;
-	setup_menu(sinfo, title, MenuRows, MenuCols, MenuSize, Menu);
+	MenuTop = f_screenheight-MenuRows - 3;
+	MenuSize = ARRSIZE(f_Menu2Family)-1;
+	MenuItems = f_Menu2Family;
+	browsescreen_init(sinfo, title, MenuRows, MenuCols
+		, MinCols, MaxCols
+		, MinRows, MaxRows
+		, MenuTop, MenuLeft, MenuWidth
+		, MenuSize, MenuItems);
 
 	scr = AUX_SCREEN;
-	sinfo = &g_ScreenInfo[scr];
+	sinfo = &f_BrowseScreenInfo[scr];
 	llstrncpy(title, _(qSttlauxbrw), ARRSIZE(title), uu8);
 	MenuRows = 4;
-	MenuSize = sizeof(f_MenuAux)/ItemSize-1;
-	Menu = f_MenuAux;
-	setup_menu(sinfo, title, MenuRows, MenuCols, MenuSize, Menu);
+	MenuTop = f_screenheight-MenuRows - 3;
+	MenuSize = ARRSIZE(f_MenuAux)-1;
+	MenuItems = f_MenuAux;
+	browsescreen_init(sinfo, title, MenuRows, MenuCols
+		, MinCols, MaxCols
+		, MinRows, MaxRows
+		, MenuTop, MenuLeft, MenuWidth
+		, MenuSize, MenuItems);
 
 	/* TO DO: this is not used right now */
 	scr = LIST_SCREEN;
-	sinfo = &g_ScreenInfo[scr];
+	sinfo = &f_BrowseScreenInfo[scr];
 	llstrncpy(title, _(qSttllstbrw), ARRSIZE(title), uu8);
 	MenuRows = 13;
 	MenuCols = 1;
-	MenuSize = sizeof(f_MenuListPersons)/ItemSize-1;
-	Menu = f_MenuListPersons;
-	setup_menu(sinfo, title, MenuRows, MenuCols, MenuSize, Menu);
-
-	for (i=1; i<=MAX_SCREEN; i++)
-		g_ScreenInfo[i].MenuPage = 0;
+	MenuSize = ARRSIZE(f_MenuListPersons)-1;
+	MenuItems = f_MenuListPersons;
+	MinRows = 5;
+	MaxRows = 14;
+	browsescreen_init(sinfo, title, MenuRows, MenuCols
+		, MinCols, MaxCols
+		, MinRows, MaxRows
+		, MenuTop, MenuLeft, MenuWidth
+		, MenuSize, MenuItems);
 
 	if (!f_reloading)
 		register_uilang_callback(on_lang_change, 0);
@@ -735,62 +583,11 @@ menuitem_terminate (void)
 	if (!f_reloading)
 		unregister_uilang_callback(on_lang_change, 0);
 	for (i=1; i<=MAX_SCREEN; i++) {
-		if (g_ScreenInfo[i].Commands) {
-			free_cmds(g_ScreenInfo[i].Commands);
-			g_ScreenInfo[i].Commands=0;
-		}
-		strfree(&g_ScreenInfo[i].Title);
+		struct BrowseScreenInfo * sinfo=&f_BrowseScreenInfo[i];
+		dynmenu_clear(&sinfo->dynmenu);
+		strfree(&sinfo->title);
 	}
 	f_initialized = FALSE;
-}
-/*============================
- * free_cmds -- free menu arrays
- * Created: 2001/02/01, Perry Rapp
- *==========================*/
-static void
-free_cmds (CMDARRAY cmds)
-{
-	INT i;
-	for (i=0; i<cmds->used; i++) {
-		if (!cmds->array[i].direct) {
-			CMDARRAY subarr = (CMDARRAY)cmds->array[i].value.w;
-			free_cmds(subarr);
-		}
-	}
-	stdfree(cmds->array);
-	stdfree(cmds);
-}
-/*============================
- * menuitem_check_cmd -- check input string & return cmd
- * Created: 2001/02/01, Perry Rapp
- *==========================*/
-INT
-menuitem_check_cmd (INT screen, STRING str)
-{
-	CMDARRAY cmds = g_ScreenInfo[screen].Commands;
-	if (*str == '*') return CMD_MENU_TOGGLE;
-	return menuitem_find_cmd(cmds, str);
-}
-/*============================
- * menuitem_find_cmd -- search cmd array for cmd
- *  recursive
- * Created: 2001/02/01, Perry Rapp
- *==========================*/
-static INT
-menuitem_find_cmd (CMDARRAY cmds, STRING str)
-{
-	INT pos;
-	if (!find_cmd(cmds, *str, &pos))
-		return CMD_NONE;
-	if (cmds->array[pos].direct) {
-		INT cmd = cmds->array[pos].value.i;
-		return cmd;
-	} else {
-		CMDARRAY subarr = (CMDARRAY)cmds->array[pos].value.w;
-		if (!str[1])
-			return CMD_PARTIAL;
-		return menuitem_find_cmd(subarr, &str[1]);
-	}
 }
 /*============================
  * on_lang_change -- UI language has changed
@@ -801,7 +598,34 @@ on_lang_change (VPTR uparm)
 	uparm = uparm; /* unused */
 	f_reloading = TRUE;
 	menuitem_terminate();
-	menuitem_initialize(3);
+	brwsmenu_initialize(0, 0); /* 0 means use stored values */
 	f_reloading = FALSE;
+}
+/*============================
+ * get_screen_menuset -- get menuset of specified browse screen
+ * Created: 2002/10/27, Perry Rapp
+ *==========================*/
+MENUSET
+get_screen_menuset (INT screen)
+{
+	return dynmenu_get_menuset(get_screen_dynmenu(screen));
+}
+/*============================
+ * get_screen_dynmenu -- get dynmenu of specified browse screen
+ * Created: 2002/10/27, Perry Rapp
+ *==========================*/
+DYNMENU
+get_screen_dynmenu (INT screen)
+{
+	return &f_BrowseScreenInfo[screen].dynmenu;
+}
+/*============================
+ * get_screen_title -- get title of specified browse screen
+ * Created: 2002/10/27, Perry Rapp
+ *==========================*/
+STRING
+get_screen_title (INT screen)
+{
+	return f_BrowseScreenInfo[screen].title;
 }
 

@@ -310,7 +310,7 @@ static INT
 browse_indi_modes (RECORD *prec1, RECORD *prec2, INDISEQ *pseq, INT indimode)
 {
 	RECORD current=0;
-	STRING key, name, addstrings[2];
+	STRING key, name;
 	INT i, c, rc;
 	BOOLEAN reuse=FALSE; /* flag to reuse same display strings */
 	INT nkeyp, indimodep;
@@ -325,8 +325,6 @@ browse_indi_modes (RECORD *prec1, RECORD *prec2, INDISEQ *pseq, INT indimode)
 	*prec1 = 0;
 	*prec2 = 0;
 
-	addstrings[0] = _(qScrtcfm);
-	addstrings[1] = _(qScrtsfm);
 	show_reset_scroll();
 	nkeyp = 0;
 	indimodep = indimode;
@@ -540,10 +538,15 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			current = tmp;
 			break;
 		case CMD_NEWFAMILY:	/* Add family for current person */
-			if ((tmp = pick_create_new_family(current, save, addstrings)) != 0) {
-				save = NULL;
-				*prec1 = tmp;
-				return BROWSE_FAM;
+			{
+				STRING addstrings[2];
+				addstrings[0] = _(qScrtcfm);
+				addstrings[1] = _(qScrtsfm);
+				if ((tmp = pick_create_new_family(current, save, addstrings)) != 0) {
+					save = NULL;
+					*prec1 = tmp;
+					return BROWSE_FAM;
+				}
 			}
 			break;
 		case CMD_ADD_SOUR: /* add source */
@@ -596,16 +599,16 @@ reprocess_indi_cmd: /* so one command can forward to another */
 				if (i)
 					current = keynum_to_irecord(i);
 				else message(_(qSnopers));
-				break;
 			}
+			break;
 		case CMD_PREV:	/* Go to prev indi in db */
 			{
 				i = xref_previ(nkeyp);
 				if (i)
 					current = keynum_to_irecord(i);
 				else message(_(qSnopers));
-				break;
 			}
+			break;
 		case CMD_SOURCES:	/* Browse to sources */
 			if ((tmp = choose_source(current, _(qSnosour), _(qSidsour))) != 0) {
 				*prec1 = tmp;
@@ -1163,12 +1166,12 @@ handle_menu_cmds (INT c, BOOLEAN * reuse)
 	/* if a menu command, then we CAN reuse the previous display strings */
 	*reuse = TRUE;
 	switch(c) {
-		case CMD_MENU_GROW: adjust_menu_height(+1); return TRUE;
-		case CMD_MENU_SHRINK: adjust_menu_height(-1); return TRUE;
-		case CMD_MENU_MORECOLS: adjust_menu_cols(+1); return TRUE;
-		case CMD_MENU_LESSCOLS: adjust_menu_cols(-1); return TRUE;
-		case CMD_MENU_MORE: cycle_menu(); return TRUE;
-		case CMD_MENU_TOGGLE: toggle_menu(); return TRUE;
+		case CMD_MENU_GROW: adjust_browse_menu_height(+1); return TRUE;
+		case CMD_MENU_SHRINK: adjust_browse_menu_height(-1); return TRUE;
+		case CMD_MENU_MORECOLS: adjust_browse_menu_cols(+1); return TRUE;
+		case CMD_MENU_LESSCOLS: adjust_browse_menu_cols(-1); return TRUE;
+		case CMD_MENU_MORE: cycle_browse_menu(); return TRUE;
+		case CMD_MENU_TOGGLE: toggle_browse_menu(); return TRUE;
 	}
 	*reuse = old;
 	return FALSE;

@@ -1,38 +1,15 @@
 /* 
    menuitem.h
-   Copyright (c) 1999-2001 Perry Rapp
-   Created: 1999/03 for private build of LifeLines
-   Brought into repository: 2001/01/28
-
-   Permission is hereby granted, free of charge, to any person
-   obtaining a copy of this software and associated documentation
-   files (the "Software"), to deal in the Software without
-   restriction, including without limitation the rights to use, copy,
-   modify, merge, publish, distribute, sublicense, and/or sell copies
-   of the Software, and to permit persons to whom the Software is
-   furnished to do so, subject to the following conditions:
-
-   The above copyright notice and this permission notice shall be
-   included in all copies or substantial portions of the Software.
-
-   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-   SOFTWARE.
+   Copyright (c) 1999-2002 Perry Rapp
+   "The MIT license"
+   Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 /*
- menuitem.h - header file for menu items
- Copyright (c) 1999-2001 by Perry Rapp; all rights reserved
+ menuitem.h - declarations for menuset, dynmenu, brwsmenu, & all command constants
   Created in 1999/03 private build of LifeLines
   Added to repository during 3.0.6 development
- 
- Menu layout code
- This is a reimplementation of the menus to move from
- fixed-size static menus, to paging, resizable menus.
 */
 
 #ifndef _MENUITEM_H
@@ -77,34 +54,86 @@ typedef struct MenuItemOption_struct {
 } MenuItemOption;
 */
 
+
 /* special menu items added on the fly */
 extern MenuItem g_MenuItemOther, g_MenuItemQuit;
 /* this is for navigating top & bottom simultaneously
 in tandem screens, and is not implemented in this version! */
 extern MenuItem f_MenuItemSyncMoves;
 
-typedef struct CmdItem_s * CMDITEM;
 typedef struct CmdArray_s * CMDARRAY;
 
-/* each screen has a lot of menu information */
-/* This menu system is only used by browse screens,
-and not the list screens nor the main menus */
-typedef struct ScreenInfo_struct {
-	STRING Title;    /* string at bottom of screen */
-	INT MenuRows;    /* height of menu (at start) */
-	INT MenuCols;    /* columns in this menu (3 for big, 1 for list) */
-	INT MenuSize;    /* total #items in this menu */
-	INT MenuPage;    /* which page of menu currently displayed */
+/* One set of menus */
+/* This is the dynamically resizable menu system */
+/* Currently used only by browse screens, not list screens or main menus */
+/* need to move most of this into layout structure, & out of here, as it is only for curses */
+struct menuset_s {
 	CMDARRAY Commands;
-	MenuItem ** Menu;  /* array of pointers to items */
-} ScreenInfo;
+	MenuItem ** items;  /* array of pointers to items */
+};
+typedef struct menuset_s *MENUSET;
+
+
+
+/* dynamically resizing & pageable menu */
+struct dynmenu_s {
+	struct menuset_s menuset;
+	INT rows;      /* height of menu (at start) */
+	INT cols;      /* (menu) columns in this menu (3 for big, 1 for list) */
+	INT size;      /* total #items in this menu */
+	INT page;      /* which page of menu currently displayed */
+	INT pages;     /* # of pages total */
+	INT pageitems; /* # of items per page */
+	INT mincols;   /* minimum width in colums*/
+	INT maxcols;   /* maximum width in columns */
+	INT minrows;   /* minimum height */
+	INT maxrows;   /* maximum height */
+	INT hidden;    /* for hideable menus */
+	INT dirty;     /* for repainting code */
+	/* character coordinates of menu size & location */
+	INT top;
+	INT bottom;
+	INT left;
+	INT width;
+};
+typedef struct dynmenu_s *DYNMENU;
+
 
 /*
 global array of menu information, produced by menuitem.c
 and used by both screen.c and menuitem.c
 */
-extern ScreenInfo g_ScreenInfo[];
+//extern ScreenInfo g_ScreenInfo[]; TODO
 
+/* menuset.c */
+void menuset_init(MENUSET menu, STRING title, MenuItem ** MenuItems, MenuItem ** extraItems);
+INT menuset_check_cmd(MENUSET menuset, STRING str);
+void menuset_clear(MENUSET menuset);
+MenuItem ** menuset_get_items(MENUSET menuset);
+
+/* dynmenu.c */
+void dynmenu_adjust_height(DYNMENU dynmenu, INT delta);
+void dynmenu_adjust_menu_cols(DYNMENU dynmenu, INT delta);
+void dynmenu_clear(DYNMENU dynmenu);
+MENUSET dynmenu_get_menuset(DYNMENU dynmenu);
+void dynmenu_init(DYNMENU dynmenu , STRING title, INT MenuRows, INT MenuCols
+	, INT MinCols, INT MaxCols
+	, INT MinRows, INT MaxRows
+	, INT MenuTop, INT MenuLeft, INT MenuWidth
+	, INT MenuSize, MenuItem ** MenuItems);
+void dynmenu_next_page(DYNMENU dynmenu);
+void dynmenu_toggle_menu(DYNMENU dynmenu);
+
+/* brwsmenu.c */
+MENUSET get_screen_menuset(INT screen);
+DYNMENU get_screen_dynmenu(INT screen);
+STRING get_screen_title(INT screen);
+void brwsmenu_initialize(INT screenheight, INT screenwidth);
+
+
+void menuitem_initialize(INT cols);
+void menuitem_terminate(void);
+INT menuitem_check_cmd(INT screen, STRING cmd);
 
 enum { 
 	CMD_NONE /* unrecognized or unimplemented */
@@ -151,9 +180,6 @@ enum {
 	, CMD_KY_ENTER
 };
 
-void menuitem_initialize(INT cols);
-void menuitem_terminate(void);
-INT menuitem_check_cmd(INT screen, STRING cmd);
 
 
 #endif /* _MENUITEM_H */

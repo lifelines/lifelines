@@ -8,8 +8,8 @@ bin_PROGRAMS = llines llexec
 
 # what goes into lines?
 llines_SOURCES = add.c advedit.c ask.c askgedc.c askprogram.c browse.c \
-	delete.c edit.c error.c export.c import.c lbrowse.c \
-	loadsave.c main.c menuitem.c merge.c miscutls.c \
+	brwsmenu.c delete.c dynmenu.c edit.c error.c export.c import.c \
+	lbrowse.c loadsave.c main.c menuset.c merge.c miscutls.c \
 	newrecs.c pedigree.c scan.c show.c screen.c swap.c \
 	tandem.c valgdcom.c llinesi.h 
 
