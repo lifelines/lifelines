@@ -48,8 +48,6 @@
  * to be used in a report program - pbm 17-Feb-97
  */
 
-extern INDISEQ find_named_seq();
-extern STRING *id_by_key();
 extern BOOLEAN opt_finnish;		/* Finnish language support */
 
 #define key_to_name(k)  nval(NAME(key_to_indi(k)))
@@ -1212,7 +1210,7 @@ print_indiseq_element (INDISEQ seq, INT i, STRING buf, INT len)
 		 If not precomputed, make print string on-the-fly .
 		 This is used for long seqs, when we don't want to keep
 		 all these strings in memory all the time.
-		/*
+		 *
 		 Note: The print_el functions return a strsave'd string.
 		 It would be more efficient not to strsave. This requires
 		 changing indi_to_list_string, etc.
