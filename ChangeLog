@@ -2,6 +2,14 @@
 
 	* ChangeLog configure.in
 
+	Updated the host detection logic for Darwin (Mac OS X) so that
+	libraries and headers installed using the Fink mechanism will
+	be detected by configure.
+
+2002-06-20 Matt Emmerton <memmerto@users.sourceforge.net>
+
+	* ChangeLog configure.in
+
 	Remove AC_DEFAULT_PREFIX($HOME) in order to prevent rogue
 	prefix changes during configure and resulting build problems.
 

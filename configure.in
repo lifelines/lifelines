@@ -49,9 +49,17 @@ if test "${ac_cv_prog_gcc}" = "yes"; then
   CFLAGS="${CFLAGS} -g"
 fi
 
-# Check for Cygwin Environment
+# OS-Specific Fixups
+# Cygwin - fixes linker problems
+# Darwin - will pick up Fink-installed headers and libraries
 case $host_os in
-  *cygwin*) CFLAGS="${CFLAGS} -DBROKEN_LINKER"
+  *pc-cygwin*)
+    CFLAGS="${CFLAGS} -DBROKEN_LINKER"
+    ;;  
+  *apple-darwin*)
+    CPPFLAGS="${CPPFLAGS} -I/sw/include";
+    LDFLAGS="${LDFLAGS} -L/sw/lib"
+    ;;
 esac
 
 # Shall we build the docs?
