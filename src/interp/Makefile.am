@@ -4,7 +4,7 @@
 
 noinst_LIBRARIES = libinterp.a
 
-libinterp_a_SOURCES = alloc.c builtin.c date.c eval.c functab.c heapused.c \
+libinterp_a_SOURCES = alloc.c builtin.c eval.c functab.c heapused.c \
 	interp.c intrpseq.c lex.c more.c pvalue.c pvalmath.c rassa.c \
 	symtab.c write.c  yacc.y
 
@@ -27,8 +27,6 @@ builtin.o: ../hdrs/standard.h
 builtin.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h
 builtin.o: ../hdrs/date.h ../hdrs/cache.h ../hdrs/interp.h ../hdrs/indiseq.h
 builtin.o: ../hdrs/translat.h ../hdrs/lloptions.h
-date.o: ../hdrs/date.h ../hdrs/standard.h
-date.o: ../hdrs/mystring.h ../hdrs/table.h
 eval.o: ../hdrs/standard.h
 eval.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h ../hdrs/interp.h
 functab.o: ../hdrs/standard.h

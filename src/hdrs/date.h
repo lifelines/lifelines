@@ -66,6 +66,7 @@ BOOLEAN gdateval_isdual(GDATEVAL);
 STRING get_todays_date(void);
 BOOLEAN set_cmplx_pic(INT ecmplx, STRING pic);
 void set_date_pic(STRING pic);
+STRING shorten_date(STRING);
 
 
 #endif /* _DATE_H */

@@ -35,7 +35,6 @@
 #include <time.h>
 #include "llstdlib.h"
 #include "table.h"
-#include "interp.h"
 #include "date.h"
 
 
@@ -1800,4 +1799,39 @@ date_update_lang (void)
 {
 	lang_changed = TRUE;
 }
-
+/*================================================
+ * shorten_date -- Return short form of date value
+ * Returns static buffer.
+ *==============================================*/
+STRING
+shorten_date (STRING date)
+{
+	static char buffer[3][MAXLINELEN+1];
+	static int dex = 0;
+	STRING p = date, q;
+	INT c, len;
+	/* Allow 3 or 4 digit years. The previous test for strlen(date) < 4
+	 * prevented dates consisting of only 3 digit years from being
+	 * returned. - pbm 12 oct 99 */
+	if (!date || (INT) strlen(date) < 3) return NULL;
+	if (++dex > 2) dex = 0;
+	q = buffer[dex];
+	while (TRUE) {
+		while ((c = (uchar)*p++) && chartype(c) != DIGIT)
+			;
+		if (c == 0) return NULL;
+		q = buffer[dex];
+		*q++ = c;
+		len = 1;
+		while ((c = (uchar)*p++) && chartype(c) == DIGIT) {
+			if (len < 6) {
+				*q++ = c;
+				len++;
+			}
+		}
+		*q = 0;
+		if (strlen(buffer[dex]) == 3 || strlen(buffer[dex]) == 4)
+			return buffer[dex];
+		if (c == 0) return NULL;
+	}
+}

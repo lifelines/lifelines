@@ -19,6 +19,13 @@
 	Suppress message language changes to current language.
 	Propagate message language changes to date.c.
 
+	* ChangeLog build/msvc6/llines/llinesprj.dsp gedlib/Makefile.am
+	gedlib/node.c hdrs/date.h hdrs/gedcom.h interp/Makefile.am
+	DELETED: interp/date.c
+	NEW: gedlib/date.c
+
+	Move interp/date.c to gedlib/date.c.
+
 2002-06-29 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog tools/Makefile.am:
