@@ -31,13 +31,8 @@
 #ifndef _SCREEN_H
 #define _SCREEN_H
 
-#ifndef _GEDCOM_H
 #include "gedcom.h"
-#endif
-
-#ifndef _INDISEQ_h
 #include "indiseq.h"
-#endif
 
 #undef TRUE
 #undef FALSE

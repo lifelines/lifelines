@@ -1,5 +1,7 @@
 2000-11-08  Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* hdrs/screen.h: Remove useless #ifdefs.
+
 	* hdrs/interp.h hdrs/liflines.h hdrs/screen.h liflines/add.c
 	liflines/advedit.c liflines/ask.c liflines/browse.c
 	liflines/delete.c liflines/edit.c liflines/export.c
