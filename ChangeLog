@@ -24,6 +24,17 @@
 	gen_gedcom rewrite (gengedcomweak & strong & original)
 	(includes new table functions).
 
+	* btree/traverse.c gedlib/intrface.c gedlib/messages.c
+	gedlib/names.c gedlib/refns.c gedlib/xreffile.c hdrs/arch.h
+	hdrs/btree.h hdrs/gedcom.h hdrs/sys_inc.h interp/more.c
+	interp/rassa.c liflines/delete.c liflines/llinesi.h
+	liflines/main.c liflines/scan.c liflines/screen.c
+	tools/btedit.c win32/mycurses.c:
+	Add refn traversal & refn scan (& refn checking in dbverify).
+	Move del_in_dbase from liflines to gedlib (interface.c).
+	Added <fcntl.h> to sys_inc.h for MSVC/Windows.
+	Added new tools/dbverify file.
+
 2000-12-31 Perry Rapp <puddle@users.sourceforge.net>
 
 	* btree/opnbtree.c gedlib/indiseq.c gedlib/keytonod.c
