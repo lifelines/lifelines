@@ -32,6 +32,11 @@
 
 	Cleanup: remove unused variables & no longer existing functions.
 
+	* ChangeLog src/stdlib/rbtree.c src/stdlib/rbtree.h
+
+	Add typedef for key & value types to rbtree, and reformat
+	function declarations lifelines-style.
+
 2005-02-16 Perry Rapp
 
 	* ChangeLog src/gedlib/xlat.c

@@ -29,8 +29,8 @@ struct rb_red_blk_tree {
 }; /* *RBTREE already declared in header */
 
 struct rb_red_blk_node {
-  void* key;
-  void* info;
+  RBKEY key;
+  RBVALUE info;
   int red; /* if red=0 then the node is black */
   RBNODE left;
   RBNODE right;
@@ -55,12 +55,12 @@ static void LeftRotate(RBTREE tree, RBNODE x);
 static void RbDeleteFixUp(RBTREE tree, RBNODE x);
 static void RightRotate(RBTREE tree, RBNODE y);
 static void * SafeMalloc(size_t size);
-static int TreeCompare(RBTREE tree, const void* key1, const void* key2);
+static int TreeCompare(RBTREE tree, RBKEY key1, RBKEY key2);
 static void TreeDestHelper(RBTREE tree, RBNODE x);
-static void TreeDestroyKeyInfo(RBTREE tree, void *key, void *info);
+static void TreeDestroyKeyInfo(RBTREE tree, RBKEY key, RBVALUE info);
 static void TreeInsertHelp(RBTREE tree, RBNODE z);
-static void TreePrintKey(RBTREE tree, const void* key, KeyPrintFuncType KeyPrintFunc);
-static void TreePrintInfo(RBTREE tree, void* info, InfoPrintFuncType InfoPrintFunc);
+static void TreePrintKey(RBTREE tree, RBKEY key, KeyPrintFuncType KeyPrintFunc);
+static void TreePrintInfo(RBTREE tree, RBVALUE info, InfoPrintFuncType InfoPrintFunc);
 
 
 /***********************************************************************
@@ -69,7 +69,8 @@ static void TreePrintInfo(RBTREE tree, void* info, InfoPrintFuncType InfoPrintFu
  * Store pointers to necessary infrastructure functions
  ***********************************************************************/
 
-void RbInitModule (void (*AssertFunc)(int assertion, const char* error),
+void
+RbInitModule (void (*AssertFunc)(int assertion, const char* error),
                   void * (*SafeMallocFunc)(size_t size))
 {
 	f_AssertFnc = AssertFunc;
@@ -95,7 +96,8 @@ void RbInitModule (void (*AssertFunc)(int assertion, const char* error),
 /*  Modifies Input: none */
 /***********************************************************************/
 
-RBTREE RbTreeCreate (KeyCompFuncType KeyCompFunc, KeyInfoDestFuncType KeyInfoDestFunc)
+RBTREE
+RbTreeCreate (KeyCompFuncType KeyCompFunc, KeyInfoDestFuncType KeyInfoDestFunc)
 {
   RBTREE newTree;
   RBNODE temp;
@@ -134,7 +136,8 @@ RBTREE RbTreeCreate (KeyCompFuncType KeyCompFunc, KeyInfoDestFuncType KeyInfoDes
 /*            accordingly. */
 /***********************************************************************/
 
-static void LeftRotate (RBTREE tree, RBNODE x)
+static void
+LeftRotate (RBTREE tree, RBNODE x)
 {
   RBNODE y;
   RBNODE nil=tree->nil;
@@ -190,7 +193,8 @@ static void LeftRotate (RBTREE tree, RBNODE x)
 /*            accordingly. */
 /***********************************************************************/
 
-static void RightRotate (RBTREE tree, RBNODE y)
+static void
+RightRotate (RBTREE tree, RBNODE y)
 {
   RBNODE x;
   RBNODE nil=tree->nil;
@@ -242,7 +246,8 @@ static void RightRotate (RBTREE tree, RBNODE y)
 /*            by the RbTreeInsert function and not by the user */
 /***********************************************************************/
 
-static void TreeInsertHelp (RBTREE tree, RBNODE z)
+static void
+TreeInsertHelp (RBTREE tree, RBNODE z)
 {
   /*  This function should only be called by InsertRbTree (see above) */
   RBNODE x;
@@ -293,7 +298,8 @@ static void TreeInsertHelp (RBTREE tree, RBNODE z)
 /*            info pointers and inserts it into the tree. */
 /***********************************************************************/
 
-RBNODE RbTreeInsert (RBTREE tree, void* key, void* info)
+RBNODE
+RbTreeInsert (RBTREE tree, RBKEY key, RBVALUE info)
 {
   RBNODE y;
   RBNODE x;
@@ -364,7 +370,8 @@ RBNODE RbTreeInsert (RBTREE tree, void* key, void* info)
 /*    Note:  uses the algorithm in _Introduction_To_Algorithms_ */
 /***********************************************************************/
   
-RBNODE RbTreeSuccessor (RBTREE tree,RBNODE x)
+RBNODE
+RbTreeSuccessor (RBTREE tree, RBNODE x)
 {
   RBNODE y;
   RBNODE nil=tree->nil;
@@ -400,7 +407,8 @@ RBNODE RbTreeSuccessor (RBTREE tree,RBNODE x)
 /*    Note:  uses the algorithm in _Introduction_To_Algorithms_ */
 /***********************************************************************/
 
-RBNODE RbTreePredecessor (RBTREE tree, RBNODE x)
+RBNODE
+RbTreePredecessor (RBTREE tree, RBNODE x)
 {
 	RBNODE y;
 	RBNODE nil=tree->nil;
@@ -437,7 +445,8 @@ RBNODE RbTreePredecessor (RBTREE tree, RBNODE x)
 /*    Note:    This function should only be called from RBTreePrint */
 /***********************************************************************/
 
-static void InorderTreePrint (RBTREE tree, RBNODE x, KeyPrintFuncType KeyPrintFunc, InfoPrintFuncType InfoPrintFunc)
+static void
+InorderTreePrint (RBTREE tree, RBNODE x, KeyPrintFuncType KeyPrintFunc, InfoPrintFuncType InfoPrintFunc)
 {
   RBNODE nil=tree->nil;
   RBNODE root=tree->root;
@@ -474,7 +483,8 @@ static void InorderTreePrint (RBTREE tree, RBNODE x, KeyPrintFuncType KeyPrintFu
 /*    Note:    This function should only be called by RbTreeDestroy */
 /***********************************************************************/
 
-static void TreeDestHelper (RBTREE tree, RBNODE x)
+static void
+TreeDestHelper (RBTREE tree, RBNODE x)
 {
   RBNODE nil=tree->nil;
   if (x != nil) {
@@ -499,7 +509,8 @@ static void TreeDestHelper (RBTREE tree, RBNODE x)
 /**/
 /***********************************************************************/
 
-void RbTreeDestroy (RBTREE tree)
+void
+RbTreeDestroy (RBTREE tree)
 {
   TreeDestHelper(tree,tree->root->left);
   free(tree->root);
@@ -522,7 +533,8 @@ void RbTreeDestroy (RBTREE tree)
 /**/
 /***********************************************************************/
 
-void RbTreePrint (RBTREE tree, KeyPrintFuncType KeyPrintFunc, InfoPrintFuncType InfoPrintFunc)
+void
+RbTreePrint (RBTREE tree, KeyPrintFuncType KeyPrintFunc, InfoPrintFuncType InfoPrintFunc)
 {
   InorderTreePrint(tree, tree->root->left, KeyPrintFunc, InfoPrintFunc);
 }
@@ -542,7 +554,8 @@ void RbTreePrint (RBTREE tree, KeyPrintFuncType KeyPrintFunc, InfoPrintFuncType 
 /**/
 /***********************************************************************/
   
-RBNODE RbExactQuery (RBTREE tree, void* q)
+RBNODE
+RbExactQuery (RBTREE tree, RBKEY q)
 {
   RBNODE x=tree->root->left;
   RBNODE nil=tree->nil;
@@ -578,7 +591,8 @@ RBNODE RbExactQuery (RBTREE tree, void* q)
 /*    The algorithm from this function is from _Introduction_To_Algorithms_ */
 /***********************************************************************/
 
-static void RbDeleteFixUp (RBTREE tree, RBNODE x)
+static void
+RbDeleteFixUp (RBTREE tree, RBNODE x)
 {
   RBNODE root=tree->root->left;
   RBNODE w;
@@ -658,7 +672,8 @@ static void RbDeleteFixUp (RBTREE tree, RBNODE x)
 /*    The algorithm from this function is from _Introduction_To_Algorithms_ */
 /***********************************************************************/
 
-void RbDeleteNode (RBTREE tree, RBNODE z)
+void
+RbDeleteNode (RBTREE tree, RBNODE z)
 {
   RBNODE y;
   RBNODE x;
@@ -720,7 +735,8 @@ void RbDeleteNode (RBTREE tree, RBNODE z)
 /*    Modifies Input: none */
 /***********************************************************************/
 
-STKSTACK RbEnumerate (RBTREE tree, void* low, void* high)
+STKSTACK
+RbEnumerate (RBTREE tree, RBKEY low, RBKEY high)
 {
 	STKSTACK enumResultStack=0;
 	RBNODE nil=tree->nil;
@@ -752,7 +768,8 @@ STKSTACK RbEnumerate (RBTREE tree, void* low, void* high)
  *
  ***********************************************************************/
 
-int RbTraverseDown (RBTREE tree, void *low, void *high, void *param, TraverseFuncType TraverseFunc)
+int
+RbTraverseDown (RBTREE tree, RBKEY low, RBKEY high, void *param, TraverseFuncType TraverseFunc)
 {
 	RBNODE nil=tree->nil;
 	RBNODE x=tree->root->left;
@@ -788,7 +805,8 @@ int RbTraverseDown (RBTREE tree, void *low, void *high, void *param, TraverseFun
  *
  ***********************************************************************/
 
-int RbTraverseUp (RBTREE tree, void *low, void *high, void *param, TraverseFuncType TraverseFunc)
+int
+RbTraverseUp (RBTREE tree, RBKEY low, RBKEY high, void *param, TraverseFuncType TraverseFunc)
 {
 	RBNODE nil=tree->nil;
 	RBNODE x=tree->root->left;
@@ -815,25 +833,29 @@ int RbTraverseUp (RBTREE tree, void *low, void *high, void *param, TraverseFuncT
 	return rtn;
 }
       
-int RbIsNil (RBTREE tree, RBNODE node)
+int
+RbIsNil (RBTREE tree, RBNODE node)
 {
 	return tree->nil == node;
 }
  
-RBNODE RbGetNil (RBTREE tree)
+RBNODE
+RbGetNil (RBTREE tree)
 {
 	Assert(tree!=0, "RbGetNil(NULL) called");
 	return tree->nil;
 }
 
 
-void * RbGetKey (RBNODE node)
+RBKEY
+RbGetKey (RBNODE node)
 {
 	Assert(node!=0, "RbGetKey(NULL) called");
 	return node->key;
 }
 
-void * RbGetInfo(RBNODE node)
+RBVALUE
+RbGetInfo(RBNODE node)
 {
 	Assert(node!=0, "RbGetInfo(NULL) called");
 	return node->info;
@@ -843,33 +865,39 @@ void * RbGetInfo(RBNODE node)
  * Wrappers to call the client-supplied utility functions
  ***********************************************************************/
 
-static int TreeCompare (RBTREE tree, const void* key1, const void* key2)
+static int
+TreeCompare (RBTREE tree, RBKEY key1, RBKEY key2)
 {
 	Assert(tree && tree->CompareFnc, "Bad argument to TreeCompare");
 	return (*tree->CompareFnc)(key1, key2);
 }
 
-static void TreeDestroyKeyInfo(RBTREE tree, void *key, void * info)
+static void
+TreeDestroyKeyInfo(RBTREE tree, RBKEY key, RBVALUE info)
 {
 	Assert(tree && tree->DestroyKeyInfoFnc, "Bad argument to TreeDestroyKeyInfo");
 	(*tree->DestroyKeyInfoFnc)(key, info);
 }
-static void TreePrintKey(RBTREE tree, const void* key, KeyPrintFuncType KeyPrintFunc)
+static void
+TreePrintKey(RBTREE tree, RBKEY key, KeyPrintFuncType KeyPrintFunc)
 {
 	Assert(tree && KeyPrintFunc, "Bad argument to TreePrintKey");
 	(*KeyPrintFunc)(key);
 }
-static void TreePrintInfo(RBTREE tree, void* info, InfoPrintFuncType InfoPrintFunc)
+static void
+TreePrintInfo(RBTREE tree, RBVALUE info, InfoPrintFuncType InfoPrintFunc)
 {
 	Assert(tree && InfoPrintFunc, "Bad argument to TreePrintInfo");
 	(*InfoPrintFunc)(info);
 }
-static void Assert(int assertion, char* error)
+static void
+Assert(int assertion, char* error)
 {
 	if (!f_AssertFnc) return;
 	(*f_AssertFnc)(assertion, error);
 }
-static void * SafeMalloc(size_t size)
+static void *
+SafeMalloc(size_t size)
 {
 	return (*f_SafeMallocFnc)(size);
 }
@@ -880,7 +908,8 @@ static void * SafeMalloc(size_t size)
  *  been defined
  ***********************************************************************/
 
-void NullFunction(void * junk)
+void
+NullFunction(void * junk)
 {
 	junk=junk; /* unused */
 }

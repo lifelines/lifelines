@@ -29,25 +29,27 @@
 
 typedef struct rb_red_blk_tree * RBTREE;
 typedef struct rb_red_blk_node * RBNODE;
+typedef const void * RBKEY;
+typedef void * RBVALUE;
 
 /**
  * Typedefs
  */
 
 /* A function which returns 1 if key1>key2, -1 if key1<key2, 0 if equivalent */
-typedef int (*KeyCompFuncType)(const void *key1, const void *key2);
+typedef int (*KeyCompFuncType)(RBKEY key1, RBKEY key2);
 
 /* A function to free both key & info */
-typedef void (*KeyInfoDestFuncType)(const void *key, const void *info);
+typedef void (*KeyInfoDestFuncType)(RBKEY key, RBVALUE info);
 
 /* A function to visit one node, during traversal (return 0 to stop traversal) */
-typedef int (*TraverseFuncType)(const void *key, const void *info, void *param);
+typedef int (*TraverseFuncType)(RBKEY key, RBVALUE info, void *param);
 
 /* A function to print a node key */
-typedef void (*KeyPrintFuncType)(const void *key);
+typedef void (*KeyPrintFuncType)(RBKEY key);
 
 /* A function to print a node info */
-typedef void (*InfoPrintFuncType)(void *info);
+typedef void (*InfoPrintFuncType)(RBVALUE info);
 
 /**
  * API
@@ -61,7 +63,7 @@ void RbInitModule(void (*AssertFunc)(int assertion, const char* error),
 RBTREE RbTreeCreate(KeyCompFuncType KeyCompFunc, KeyInfoDestFuncType KeyInfoDestFunc);
 
 /* Alter tree */
-RBNODE RbTreeInsert(RBTREE, void* key, void* info);
+RBNODE RbTreeInsert(RBTREE, RBKEY key, RBVALUE info);
 void RbDeleteNode(RBTREE, RBNODE);
 
 /* Delete tree */
@@ -71,18 +73,18 @@ void RbTreeDestroy(RBTREE);
 void RbTreePrint(RBTREE, KeyPrintFuncType KeyPrintFunc, InfoPrintFuncType InfoPrintFunc);
 RBNODE RbTreePredecessor(RBTREE,RBNODE);
 RBNODE RbTreeSuccessor(RBTREE,RBNODE);
-RBNODE RbExactQuery(RBTREE, void*);
-int RbTraverseUp(RBTREE, void *low, void *high, void *param, TraverseFuncType TraverseFunc);
-int RbTraverseDown(RBTREE, void *low, void *high, void *param, TraverseFuncType TraverseFunc);
+RBNODE RbExactQuery(RBTREE, RBKEY q);
+int RbTraverseUp(RBTREE, RBKEY low, RBKEY high, void *param, TraverseFuncType TraverseFunc);
+int RbTraverseDown(RBTREE, RBKEY low, RBKEY high, void *param, TraverseFuncType TraverseFunc);
 
 /* Fetch subset of tree in stack*/
-STKSTACK RbEnumerate(RBTREE tree,void* low, void* high);
+STKSTACK RbEnumerate(RBTREE tree, RBKEY low, RBKEY high);
 
 /* utility */
 RBNODE RbGetNil(RBTREE tree);
 int RbIsNil(RBTREE tree, RBNODE node);
-void * RbGetKey(RBNODE node);
-void * RbGetInfo(RBNODE node);
+RBKEY RbGetKey(RBNODE node);
+RBVALUE RbGetInfo(RBNODE node);
 void NullFunction(void*);
 
 #endif /* rbtree_h_included */
