@@ -23,8 +23,8 @@ AC_PROG_YACC
 AC_PROG_RANLIB
 AC_PROG_INSTALL
 
-dnl Saving these just as examples for each lib...
-dnl echo Looking for libraries
+echo Looking for libraries
+AC_CHECK_LIB(curses, main)
 dnl AC_CHECK_LIB(gdbm, gdbm_open)
 dnl AC_CHECK_LIB(nsl, inet_ntoa)
 dnl AC_CHECK_LIB(socket, getpeername)
@@ -33,18 +33,18 @@ dnl AC_CHECK_LIB(iberty, bzero)
 dnl AC_CHECK_LIB(gen, syslog)
 dnl AC_CHECK_LIB(bsd, revoke)
 dnl AC_CHECK_LIB(ucb, bzero)
-AC_CHECK_LIB(curses, main)
 
 echo Looking for header files
+AC_CHECK_HEADERS( getopt.h )
 dnl AC_HEADER_STDC
 dnl AC_CHECK_HEADERS( errno.h dirent.h fcntl.h getopt.h libgen.h pwd.h siginfo.h signal.h statbuf.h stdio.h stdlib.h string.h strings.h sys/stat.h sys/time.h sys/types.h unistd.h )
-dnl AC_CHECK_HEADERS( errno.h )
 
-echo Looking for typedefs, structures, and compiler characteristics.
+dnl echo Looking for typedefs, structures, and compiler characteristics.
 dnl AC_C_CONST
 dnl AC_HEADER_TIME
 
-dnl echo Looking for library functions
+echo Looking for library functions
+AC_CHECK_FUNCS( getopt )
 dnl AC_CHECK_FUNCS(strerror perror strsignal psignal getopt getopt_long random)
 dnl investigate using AC_MSG_ERROR for error reporting
 dnl echo Looking for OPTIONAL library functions

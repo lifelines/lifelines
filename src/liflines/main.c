@@ -40,6 +40,14 @@
 #include "config.h"
 #endif
 
+#ifdef HAVE_GETOPT_H
+#include <getopt.h>
+#else
+extern int optind;
+extern char *optarg;
+extern int getopt (int argc, char *const *argv, const char *shortopts);
+#endif
+
 extern STRING idldir, nodbse, crdbse, nocrdb, iddbse, usage;
 
 static STRING usage = (STRING) "lines [-akrwf] [database]";
@@ -67,8 +75,6 @@ main (argc, argv)
 INT argc;
 STRING *argv;
 {
-	extern STRING optarg;
-	extern int optind;
 	int c;
 
 	initscr();
@@ -76,7 +82,7 @@ STRING *argv;
 	init_screen();
 	set_signals();
 	opterr = 0;	/* turn off getopt's error message */
-	while ((c = getopt(argc, argv, "akrwfm")) != -1) {
+	while ((c = getopt(argc, (char**)argv, "akrwfm")) != -1) {
 		switch (c) {
 		case 'a':	/* debug allocation */
 			alloclog = TRUE;

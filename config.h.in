@@ -1,5 +1,11 @@
 /* config.h.in.  Generated automatically from configure.in by autoheader.  */
 
+/* Define if you have the getopt function.  */
+#undef HAVE_GETOPT
+
+/* Define if you have the <getopt.h> header file.  */
+#undef HAVE_GETOPT_H
+
 /* Define if you have the curses library (-lcurses).  */
 #undef HAVE_LIBCURSES
 
