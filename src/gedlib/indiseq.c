@@ -85,7 +85,7 @@ static void append_all_tags(INDISEQ, NODE, STRING tagname, BOOLEAN recurse, BOOL
 static void append_indiseq_impl(INDISEQ seq, STRING key, 
 	STRING name, UNION val, BOOLEAN sure, BOOLEAN alloc);
 static void calc_indiseq_name_el(INDISEQ seq, INT index);
-static INT canonkey_compare(SORTEL *pel1, SORTEL *pel2, VPTR param);
+static INT canonkey_compare(SORTEL el1, SORTEL el2, VPTR param);
 static INT canonkey_order(char c);
 static void check_indiseq_valtype(INDISEQ seq, INT valtype);
 static UNION copyval(INDISEQ seq, UNION uval);
@@ -95,12 +95,13 @@ static void deleteval(INDISEQ seq, UNION uval);
 static INDISEQ dupseq(INDISEQ seq);
 static STRING get_print_el(INDISEQ, INT i, INT len, RFMT rfmt);
 static BOOLEAN is_locale_current(INDISEQ seq);
-static INT key_compare(SORTEL *pel1, SORTEL *pel2, VPTR param);
-static INT name_compare(SORTEL *pel1, SORTEL *pel2, VPTR param);
-static INT partition(INT left, INT right, SORTEL * pivot);
+static INT key_compare(SORTEL el1, SORTEL el2, VPTR param);
+static INT name_compare(SORTEL el1, SORTEL el2, VPTR param);
+static void llqsort2(SORTEL *data, ELCMPFNC cmp, VPTR param, INT a, INT b);
+static void partition2(SORTEL *arr, ELCMPFNC cmp, VPTR param, INT a, INT b, INT *pi, INT *pj);
 static STRING qkey_to_name(STRING key);
 static void update_locale(INDISEQ seq);
-static INT value_compare(SORTEL *pel1, SORTEL *pel2, VPTR param);
+static INT value_compare(SORTEL el1, SORTEL el2, VPTR param);
 
 /*********************************************
  * local variables
@@ -562,10 +563,8 @@ element_indiseq_ival (INDISEQ seq, INT index, STRING *pkey, INT *pval
  * name_compare -- Compare two names
  *================================*/
 INT
-name_compare (SORTEL *pel1, SORTEL *pel2, VPTR param)
+name_compare (SORTEL el1, SORTEL el2, VPTR param)
 {
-	SORTEL el1 = *pel1;
-	SORTEL el2 = *pel2;
 	if (!snam(el2)) {
 		if (snam(el1))
 			return -1;
@@ -576,17 +575,15 @@ name_compare (SORTEL *pel1, SORTEL *pel2, VPTR param)
 		INT rel = namecmp(snam(el1), snam(el2));
 		if (rel) return rel;
 	}
-	return canonkey_compare(pel1, pel2, param);
+	return canonkey_compare(el1, el2, param);
 }
 /*================================
  * key_compare -- Compare two keys
  * also used for integer value sort
  *==============================*/
 INT
-key_compare (SORTEL *pel1, SORTEL *pel2, VPTR param)
+key_compare (SORTEL el1, SORTEL el2, VPTR param)
 {
-	SORTEL el1 = *pel1;
-	SORTEL el2 = *pel2;
 	param = param; /* unused */
 	return spri(el1) - spri(el2);
 }
@@ -612,10 +609,8 @@ canonkey_order (char c)
  * Created: 2001/01/06, Perry Rapp
  *==============================*/
 static INT
-canonkey_compare (SORTEL *pel1, SORTEL *pel2, VPTR param)
+canonkey_compare (SORTEL el1, SORTEL el2, VPTR param)
 {
-	SORTEL el1 = *pel1;
-	SORTEL el2 = *pel2;
 	char c1=skey(el1)[0], c2=skey(el2)[0];
 	param = param; /* unused */
 	if (c1 == c2)
@@ -626,10 +621,8 @@ canonkey_compare (SORTEL *pel1, SORTEL *pel2, VPTR param)
  * value_compare -- Compare two values as strings
  *=================================================*/
 static INT
-value_compare (SORTEL *pel1, SORTEL *pel2, VPTR param)
+value_compare (SORTEL el1, SORTEL el2, VPTR param)
 {
-	SORTEL el1 = *pel1;
-	SORTEL el2 = *pel2;
 	INDISEQ seq = (INDISEQ)param;
 	INT valtype = IValtype(seq);
 	INT rel = 0;
@@ -654,7 +647,7 @@ value_compare (SORTEL *pel1, SORTEL *pel2, VPTR param)
 		/* nothing -- fall through to default to canonkey_compare */
 	}
 	if (!rel)
-		rel = canonkey_compare(pel1, pel2, param);
+		rel = canonkey_compare(el1, el2, param);
 	return rel;
 }
 /*==========================================
@@ -746,10 +739,6 @@ valuesort_indiseq (INDISEQ seq, BOOLEAN *eflg)
 /*=========================================
  * partition_sort -- Partition (quick) sort
  *=======================================*/
-#define LNULL -1
-static SORTEL *ldata;
-static VPTR lparam;
-static ELCMPFNC lcmp;
 /*
  *  data:  [I/O] array of els to sort
  *  len:   [IN]  size of data
@@ -759,62 +748,95 @@ static ELCMPFNC lcmp;
 void
 partition_sort (SORTEL *data, INT len, ELCMPFNC cmp, VPTR param)
 {
-	ldata = data;
-	lcmp = cmp;
-	lparam = param;
-	llqsort(0, len-1);
+	llqsort2(data, cmp, param, 0, len-1);
 }
 /*======================================
- * llqsort -- Recursive core of quick sort
- *  sort from left to right
+ * llqsort2 -- Nonrecursive quicksort
+ *  median of three pivot
  *====================================*/
-void
-llqsort (INT left, INT right)
+/*======================================
+ * partition2 -- Median of three pivot
+ *  *pi is set to position of pivot
+ *  *pj is set to index of highest item before *pi not equal to pivot
+ *  (that is, anything between *pj and *pi has value of pivot)
+ *====================================*/
+#define CMP(qa, qb) ((*cmp)(qa, qb, param))
+static void
+partition2 (SORTEL *arr, ELCMPFNC cmp, VPTR param, INT a, INT b, INT *pi, INT *pj)
 {
-	INT pcur = getpivot(left, right);
-	if (pcur != LNULL) {
-		SORTEL * pivot = &ldata[pcur];
-		INT mid = partition(left, right, pivot);
-		llqsort(left, mid-1);
-		llqsort(mid, right);
+	INT i, j, c;
+	SORTEL pivot=0, t;
+
+	/* sort left, middle, and right items */
+	c = ((unsigned)a + (unsigned)b)/2;
+
+	if (CMP(arr[a],arr[c]) > 0) {
+		t = arr[a]; arr[a] = arr[c]; arr[c] = t;
 	}
-}
-/*====================================
- * partition -- Partition around pivot
- *==================================*/
-static INT
-partition (INT left, INT right, SORTEL * pivot)
-{
-	INT i = left, j = right;
-	do {
-		SORTEL tmp = ldata[i];
-		ldata[i] = ldata[j];
-		ldata[j] = tmp;
-		while ((*lcmp)(&ldata[i], pivot, lparam) < 0) {
-			if (!(i<right)) return right; /* bad compare routine */
-			i++;
-		}
-		while ((*lcmp)(&ldata[j], pivot, lparam) >= 0) {
-			if (!(j>left)) return left; /* bad compare routine */
-			j--;
-		}
-	} while (i <= j);
-	return i;
-}
-/*=============================
- * getpivot -- Choose key pivot
- *===========================*/
-INT
-getpivot (INT left, INT right)
-{
-	SORTEL * pivot = &ldata[left];
-	INT left0 = left, rel;
-	for (++left; left <= right; left++) {
-		SORTEL *pnext = &ldata[left];
-		if ((rel = (*lcmp)(pnext, pivot, lparam)) > 0) return left;
-		if (rel < 0) return left0;
+	if (CMP(arr[a],arr[b]) > 0) {
+		t = arr[a]; arr[a] = arr[b]; arr[b] = t;
 	}
-	return LNULL;
+	if (CMP(arr[c],arr[b]) > 0) {
+		t = arr[c]; arr[c] = arr[b]; arr[b] = t;
+	}
+
+	/* tuck the pivot, at arr[c], away */
+	pivot = arr[c]; arr[c] = arr[b-1]; arr[b-1] = pivot;
+	i = a; j = b-1;
+
+	/* swap up & down interval to actually partition it */
+	while (1) {
+		/* shrink interval from bottom while elements below pivot */
+		while (CMP(arr[++i], pivot) < 0)
+			;
+		/* shrink interval from top while elements above pivot */
+		while (CMP(arr[--j], pivot) > 0)
+			;
+		if (j < i) break;
+		/* have out-of-place elements that stopped climb & descent */
+		t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+	}
+
+	/* put pivot into final resting place */
+	pivot = arr[i]; arr[i] = arr[b-1]; arr[b-1] = pivot;
+
+	/* give caller the partition info */
+	*pi = i; *pj = j;
+}
+static void
+llqsort2 (SORTEL *data, ELCMPFNC cmp, VPTR param, INT a, INT b)
+{
+	INT stack[64];
+	INT i, j, top;
+
+	top = 0;
+
+	while (1) {
+		while (b > a+1) {
+			partition2(data, cmp, param, a, b, &i, &j);
+			/* loop to simulate tail recursion on smaller interval */
+			if (j-a > b-i) {
+				/* (i+1,b) is shorter interval than (a,j) */
+				/* do (i+1, b) now, and push (a,j) */
+				stack[top++] = a; stack[top++] = j;
+				a=i+1;
+			} else {
+				/* (a,j) is shorter interval than (i+1,b) */
+				/* do (a,j) now, and push (i+1,b) */
+				stack[top++] = i+1; stack[top++] = b;
+				b = j;
+			}
+		}
+		if (b > a) {
+			/* swap data[a] and data[b] if needed */
+			if (CMP(data[a], data[b])>0) {
+				SORTEL t = data[a]; data[a] = data[b]; data[b] = t;
+			}
+		}
+		if (top == 0) break;
+		/* pop & do whatever is on top of our stack */
+		b = stack[--top]; a = stack[--top];
+	}
 }
 /*==================================================================
  * unique_indiseq -- Remove identical (key, name) els from sequence

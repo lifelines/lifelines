@@ -21,24 +21,24 @@ struct tag_vtable {
 		/* for debugging convenience */
 	const char * vtable_class;
 		/* destroy object */
-	void (*destroy_fnc)(VTABLE * obj);
+	void (*destroy_fnc)(OBJECT obj);
 		/* returns 0 if not reference counted */
-	int (*isref_fnc)(VTABLE * obj);
-		/* increment reference count */
-		/* returns new reference count, or -1 if not reference counted */
-	int (*addref_fnc)(VTABLE * obj);
-		/* decrement reference count & delete if 0 */
-		/* returns new reference count, or -1 if not reference counted */
-	int (*delref_fnc)(VTABLE * obj);
+	int (*isref_fnc)(OBJECT obj);
+		/* increment refcount */
+		/* returns new refcount, or -1 if not refcounted */
+	int (*addref_fnc)(OBJECT obj);
+		/* decrement refcount & delete if 0 */
+		/* returns new refcount, or -1 if not refcounted */
+	int (*delref_fnc)(OBJECT obj);
 		/* returns a copy of object */
-	void * (*copy_fnc)(VTABLE * obj, int deep);
+	OBJECT (*copy_fnc)(OBJECT obj, int deep);
 		/* returns name of object type (doesn't need to be freed) */
-	const char * (*get_type_name_fnc)(VTABLE *obj);
+	const char * (*get_type_name_fnc)(OBJECT obj);
 };
 
 enum { VTABLE_MAGIC = 0x77999977 };
 
-/* to use the generic reference counting implementation below,
+/* to use the generic refcounting implementation below,
  the object must begin like this */
 struct tag_generic_ref_object {
 	VTABLE vtable;
@@ -46,13 +46,13 @@ struct tag_generic_ref_object {
 };
 
 /* for any object (content to use vtable_class) */
-const char * generic_get_type_name(VTABLE * obj);
-/* for nonrefcountable object */
-int nonrefcountable_isref(VTABLE * obj);
+const char * generic_get_type_name(OBJECT obj);
+/* for non-refcountable object */
+int nonrefcountable_isref(OBJECT obj);
 /* for refcountable object (with refcount right after vtable) */
-int refcountable_isref(VTABLE * obj);
-int refcountable_addref(VTABLE * obj);
-int refcountable_delref(VTABLE * obj);
+int refcountable_isref(OBJECT obj);
+int refcountable_addref(OBJECT obj);
+int refcountable_delref(OBJECT obj);
 
 #endif /* vtable_h_included */
 

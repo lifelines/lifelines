@@ -1130,6 +1130,7 @@ __debug (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PVALUE val = eval_and_coerce(PBOOL, iargs(node), stab, eflg);
 	prog_trace = pvalue_to_bool(val);
+	/* leaking val ? */
 	return NULL;
 }
 /*========================================
@@ -1153,10 +1154,11 @@ __getproperty(PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return val;
 }
 /*========================================
- * list_to_array -- create array out of list
+ * list_share_to_array -- create array out of list
+ *  but share pointers directly
  *======================================*/
-ARRAY
-list_to_array (LIST list)
+static ARRAY
+list_share_to_array (LIST list)
 {
 	ARRAY array = create_array_objval(length_list(list));
 	struct tag_list_iter listit;
@@ -1165,12 +1167,29 @@ list_to_array (LIST list)
 		VPTR vptr;
 		while (next_list_ptr(&listit, &vptr)) {
 			OBJECT obj = vptr;
-			if (obj)
-				addref_obj(obj);
+			/* share pointer directly */
 			set_array_obj(array, i++, obj);
 		}
 	}
 	return array;
+}
+/*========================================
+ * list_steal_back_from_array -- Move array object pointers 
+ *  directly over top of list object pointers
+ *======================================*/
+static void
+list_steal_back_from_array (LIST list, ARRAY array)
+{
+	struct tag_list_iter listit;
+	INT i=0;
+	VPTR ptr=0;
+	if (begin_list_rev(list, &listit)) {
+		while (next_list_ptr(&listit, &ptr)) {
+			change_list_ptr(&listit, get_array_obj(array, i));
+			set_array_obj(array, i, 0);
+			++i;
+		}
+	}
 }
 /*========================================
  * sort_array_by_array -- sort first array of pvalues
@@ -1196,81 +1215,133 @@ obj_lookup_comparator (OBJECT *pobj1, OBJECT *pobj2, VPTR param)
 		return pvalues_collate(val1, val2);
 	}
 }
-void
-sort_array_by_pvarray (ARRAY arr_vals, ARRAY arr_keys)
-{
-	struct array_by_pvarray_info info;
-	info.arr_keys = arr_keys;
-	info.arr_vals = arr_vals;
-	sort_array(arr_vals, obj_lookup_comparator, &info);
-}
 /*========================================
  * __sort -- sort first container [using second container as keys]
  *   usage: sort(LIST [, LIST]) -> VOID
  *======================================*/
+typedef struct tag_sortpair {
+	PVALUE value;
+	PVALUE key;
+} *SORTPAIR;
+static INT
+sortpaircmp (SORTEL el1, SORTEL el2, VPTR param)
+{
+	SORTPAIR sp1 = (SORTPAIR)el1;
+	SORTPAIR sp2 = (SORTPAIR)el2;
+	return pvalues_collate(sp1->value, sp2->value);
+}
 PVALUE
 __sort(PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
-	PVALUE val = eval_without_coerce(arg, stab, eflg);
-	LIST list_vals = 0;
+	PVALUE val1 = eval_without_coerce(arg, stab, eflg), val2;
+	LIST list_vals = 0, list_keys = 0;
 	ARRAY arr_vals = 0, arr_keys = 0;
-	BOOLEAN free_vals=FALSE, free_keys = FALSE;
-	if (ptype(val) == PLIST) {
-		list_vals = pvalue_to_list(val);
-		arr_vals = list_to_array(list_vals);
-		if (!arr_vals) {
-			prog_error(node, _("Error converting list to array for sort"));
-			*eflg = TRUE;
-			return NULL;
+	INT nsort = 0; /* size of array & index */
+	INT i=0;
+	struct tag_sortpair * array = 0;
+	SORTPAIR * index = 0;
+	if (ptype(val1) == PLIST) {
+		list_vals = pvalue_to_list(val1);
+		nsort = length_list(list_vals);
+		array = (SORTPAIR)stdalloc(nsort * sizeof(array[0]));
+		i=0;
+		FORLIST(list_vals, el)
+			array[i++].value = (PVALUE)el;
+		ENDLIST
+	} else if (ptype(val1) == PARRAY) {
+		arr_vals = pvalue_to_array(val1);
+		nsort = get_array_size(arr_vals);
+		array = (SORTPAIR)stdalloc(nsort * sizeof(array[0]));
+		for (i=0; i<nsort; ++i) {
+			array[i].value = (PVALUE)get_array_obj(arr_vals, i);
 		}
-		free_vals = TRUE;
-	} else if (ptype(val) == PARRAY) {
-		arr_vals = pvalue_to_array(val);
 	} else {
 		prog_error(node, _("First argument to sort must be list or array"));
 		*eflg = TRUE;
-		return NULL;
+		goto exit_sort;
 	}
 	arg = inext(arg);
 	if (arg) {
-		val = eval_without_coerce(arg, stab, eflg);
-		if (ptype(val) == PLIST) {
-			LIST list = pvalue_to_list(val);
-			arr_keys = list_to_array(list);
-			if (!arr_keys) {
-				prog_error(node, _("Error converting list to array for sort"));
+		val2 = eval_without_coerce(arg, stab, eflg);
+		if (ptype(val2) == PLIST) {
+			list_keys = pvalue_to_list(val2);
+			if (nsort != length_list(list_keys)) {
+				prog_error(node, _("Arguments to sort must be of same size"));
 				*eflg = TRUE;
-				return NULL;
+				goto exit_sort;
 			}
-			free_keys = TRUE;
-		} else if (ptype(val) == PARRAY) {
-			arr_keys = pvalue_to_array(val);
+			i=0;
+			FORLIST(list_keys, el)
+				array[i++].key = (PVALUE)el;
+			ENDLIST
+		} else if (ptype(val2) == PARRAY) {
+			arr_keys = pvalue_to_array(val2);
+			if (nsort != get_array_size(arr_keys)) {
+				prog_error(node, _("Arguments to sort must be of same size"));
+				*eflg = TRUE;
+				goto exit_sort;
+			}
+			for (i=0; i<nsort; ++i) {
+				PVALUE val = (PVALUE)get_array_obj(arr_keys, i);
+				array[i].key = val;
+			}
 		} else {
 			prog_error(node, _("Second argument to sort must be list or array"));
 			*eflg = TRUE;
 			return NULL;
 		}
 	}
-	/* else, no keys array, will use the value array itself */
-	if (arr_keys && get_array_size(arr_vals) > get_array_size(arr_keys)) {
-		prog_error(node, _("Keys to sort must contain at least as many elements as values"));
-		*eflg = TRUE;
-		return NULL;
-	}
-	sort_array_by_pvarray(arr_vals, arr_keys);
-	if (free_vals) {
-		struct tag_list_iter listit;
-		INT i=0;
-		VPTR ptr=0;
-		if (begin_list_rev(list_vals, &listit)) {
-			while (next_list_ptr(&listit, &ptr)) {
-				change_list_ptr(&listit, get_array_obj(arr_vals, i++));
-			}
+	if (!arr_keys && !list_keys) {
+		/* no key container, so use the value container itself */
+		for (i=0; i<nsort; ++i) {
+			array[i].key = array[i].value;
 		}
-		destroy_array(arr_vals);
 	}
-	if (free_keys)
-		destroy_array(arr_keys);
+	index = (SORTPAIR *)stdalloc(nsort * sizeof(index[0]));
+	for (i=0; i<nsort; ++i) {
+		index[i] = &array[i];
+	}
+	partition_sort((SORTEL *)index, nsort, sortpaircmp, 0);
+	if (list_vals) {
+		struct tag_list_iter listit;
+		VPTR ptr=0;
+		i=0;
+		begin_list_rev(list_vals, &listit);
+		while (next_list_ptr(&listit, &ptr)) {
+			change_list_ptr(&listit, index[i]->value);
+			++i;
+		}
+	} else {
+		ASSERT(arr_vals);
+		for (i=0; i<nsort; ++i) {
+			OBJECT obj = (OBJECT)index[i]->value;
+			set_array_obj(arr_vals, i, obj);
+		}
+	}
+	if (list_keys) {
+		struct tag_list_iter listit;
+		VPTR ptr=0;
+		i=0;
+		begin_list_rev(list_keys, &listit);
+		while (next_list_ptr(&listit, &ptr)) {
+			change_list_ptr(&listit, index[i]->key);
+			++i;
+		}
+	} else {
+		ASSERT(arr_keys);
+		for (i=0; i<nsort; ++i) {
+			OBJECT obj = (OBJECT)index[i]->key;
+			set_array_obj(arr_keys, i, obj);
+		}
+	}
+
+exit_sort:
+	delete_pvalue(val1);
+	delete_pvalue(val2);
+	if (array)
+		stdfree(array);
+	if (index)
+		stdfree(index);
 	return NULL;
 }

@@ -57,7 +57,7 @@ static PVALUE create_pvalue_from_record(RECORD rec, INT ptype);
 static BOOLEAN eq_pstrings(PVALUE val1, PVALUE val2);
 static int float_to_int(float f);
 static void free_float_pvalue(PVALUE val);
-static void * pvalue_copy(VTABLE *obj, int deep);
+static OBJECT pvalue_copy(OBJECT obj, int deep);
 static void pvalue_destructor(VTABLE *obj);
 static void table_pvcleaner(ENTRY ent);
 
@@ -74,9 +74,9 @@ static struct tag_vtable vtable_for_pvalue = {
 	VTABLE_MAGIC
 	, "pvalue"
 	, &pvalue_destructor
-	, &refcountable_isref
-	, &refcountable_addref
-	, &refcountable_delref
+	, &nonrefcountable_isref
+	, 0
+	, 0
 	, &pvalue_copy /* copy_fnc */
 	, &generic_get_type_name
 };
@@ -1090,13 +1090,18 @@ pvalue_destructor (VTABLE *obj)
 /*=================================================
  * value_copy -- copy for vtable
  *===============================================*/
-static void *
-pvalue_copy (VTABLE *obj, int deep)
+static OBJECT
+pvalue_copy (OBJECT obj, int deep)
 {
 	PVALUE val = (PVALUE)obj;
 	ASSERT((*obj)->vtable_class == vtable_for_pvalue.vtable_class);
-	/* TODO: cannot implement this until all the objects used by pvalue
-	implement copy */
+	if (deep) {
+		/* cannot implement deep copy until all objects implement copy */
+		ASSERT(0);
+	} else {
+		PVALUE newval = copy_pvalue(val);
+		return (OBJECT)newval;
+	}
 	return 0;
 }
 /*=============================================

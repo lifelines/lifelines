@@ -1,3 +1,14 @@
+2003-03-01 Perry Rapp
+
+	* ChangeLog src/gedlib/indiseq.c src/hdrs/array.h
+	src/hdrs/indiseq.h src/hdrs/interp.h src/hdrs/object.h
+	src/hdrs/vtable.h src/interp/more.c src/interp/pvalue.c
+	src/stdlib/array.c src/stdlib/object.c src/stdlib/vtable.c
+
+	Bugfix: pvalues were lacking refcount.
+	Also, __sort was completely broken.
+	Changed llqsort to use non-recursive quicksort with median3 pivot.
+
 2003-02-28 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp

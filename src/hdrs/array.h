@@ -14,7 +14,7 @@ struct tag_array {
 };
 typedef struct tag_array *ARRAY;
 
-typedef INT (*OBJCMPFNC)(OBJECT *pobj1, OBJECT *pobj2, VPTR param);
+typedef INT (*OBJCMPFNC)(OBJECT obj1, OBJECT obj2, VPTR param);
 
 #define ARefcnt(s)   ((s)->ar_refcnt)
 #define ASize(s)     ((s)->ar_size)

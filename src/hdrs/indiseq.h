@@ -53,7 +53,7 @@ typedef struct tag_sortel {
 #define sprn(s) ((s)->s_prn)
 #define spri(s) ((s)->s_pri)
 
-typedef INT (*ELCMPFNC)(SORTEL *pel1, SORTEL *pel2, VPTR param);
+typedef INT (*ELCMPFNC)(SORTEL el1, SORTEL el2, VPTR param);
 
 /*=================================================
  * Custom functions for caller-specified handling of values
@@ -184,7 +184,6 @@ BOOLEAN indiseq_is_valtype_null(INDISEQ);
 INDISEQ intersect_indiseq(INDISEQ, INDISEQ);
 INDISEQ key_to_indiseq(STRING name, char ctype);
 void keysort_indiseq(INDISEQ);
-void llqsort(INT, INT);
 INDISEQ name_to_indiseq(STRING);
 void namesort_indiseq(INDISEQ);
 void new_write_node(INT, NODE, BOOLEAN);

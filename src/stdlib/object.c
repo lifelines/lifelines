@@ -29,11 +29,38 @@ delete_obj (OBJECT obj)
 	ASSERT(vtable->vtable_magic == VTABLE_MAGIC);
 
 	if ((*vtable->isref_fnc)(obj)) {
-		/* reference counted */
+		/* refcounted */
 		(*vtable->delref_fnc)(obj);
 	} else {
-		/* not reference counted */
+		/* non-refcounted */
 		(*vtable->destroy_fnc)(obj);
+	}
+}
+/*=================================================
+ * copy_or_addref_obj -- addref or copy object (if possible)
+ * obj may be null
+ * returns null if object neither refcountable nor copyable
+ *===============================================*/
+OBJECT
+copy_or_addref_obj (OBJECT obj, int deep)
+{
+	VTABLE vtable;
+
+	if (!obj) return NULL;
+
+	vtable = (*obj);
+	ASSERT(vtable->vtable_magic == VTABLE_MAGIC);
+
+	if ((*vtable->isref_fnc)(obj)) {
+		/* refcounted */
+		(*vtable->addref_fnc)(obj);
+		return obj;
+	} else if (vtable->copy_fnc) {
+		/* not refcounted, but copyable */
+		return (*vtable->copy_fnc)(obj, deep);
+	} else {
+		/* not refcounted or copyable */
+		return NULL;
 	}
 }
 /*=================================================

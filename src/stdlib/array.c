@@ -22,7 +22,7 @@
 
 /* alphabetical */
 static void array_destructor(VTABLE *obj);
-static INT array_comparator(SORTEL *pel1, SORTEL *pel2, VPTR param);
+static INT array_comparator(SORTEL el1, SORTEL el2, VPTR param);
 
 /*********************************************
  * local variables
@@ -64,6 +64,7 @@ create_array_objval (INT size)
 	ASSERT(size >= 1);
 	array = (ARRAY)stdalloc(sizeof(*array));
 	memset(array, 0, sizeof(*array));
+	array->vtable = &vtable_for_array;
 	ASize(array) = 0;
 	AMax(array) = size;
 	AData(array) = (void **)stdalloc(size * sizeof(AData(array)[0]));
@@ -81,6 +82,7 @@ destroy_array (ARRAY array)
 		delete_obj(obj);
 	}
 	stdfree(AData(array));
+	AData(array) = 0;
 	stdfree(array);
 }
 /*=========================================================
@@ -146,12 +148,12 @@ struct tag_sort_array_info {
 	VPTR param;
 	OBJCMPFNC cmp;
 };
-static INT array_comparator(SORTEL *pel1, SORTEL *pel2, VPTR param)
+static INT array_comparator (SORTEL el1, SORTEL el2, VPTR param)
 {
-	OBJECT *pobj1 = (OBJECT *)pel1;
-	OBJECT *pobj2 = (OBJECT *)pel2;
+	OBJECT obj1 = (OBJECT)el1;
+	OBJECT obj2 = (OBJECT)el2;
 	struct tag_sort_array_info * info = (struct tag_sort_array_info *)param;
-	return (*info->cmp)(pobj1, pobj2, info->param);
+	return (*info->cmp)(obj1, obj2, info->param);
 }
 void
 sort_array (ARRAY array, OBJCMPFNC cmp, VPTR param)

@@ -9,6 +9,7 @@
  * vtable.c -- implement generic vtables for objects
  *============================================================*/
 
+#include "standard.h"
 #include "vtable.h"
 
 /*********************************************
@@ -41,7 +42,7 @@ static struct tag_generic_ref_object testobj = {
  * generic_get_type_name -- simple get_type_name for any object
  *===============================================*/
 const char *
-generic_get_type_name (VTABLE * obj)
+generic_get_type_name (OBJECT obj)
 {
 	return (*obj)->vtable_class;
 }
@@ -49,7 +50,7 @@ generic_get_type_name (VTABLE * obj)
  * nonrefcountable_isref -- simple isref for non-refcountable object
  *===============================================*/
 int
-nonrefcountable_isref (VTABLE * obj)
+nonrefcountable_isref (OBJECT obj)
 {
 	return 0;
 }
@@ -57,7 +58,7 @@ nonrefcountable_isref (VTABLE * obj)
  * refcountable_isref -- simple isref for generic refcountable object
  *===============================================*/
 int
-refcountable_isref (VTABLE * obj)
+refcountable_isref (OBJECT obj)
 {
 	GENERIC_REF_OBJECT rob = (GENERIC_REF_OBJECT)obj;
 	return 1;
@@ -66,7 +67,7 @@ refcountable_isref (VTABLE * obj)
  * refcountable_addref -- simple addref for generic refcountable object
  *===============================================*/
 int
-refcountable_addref (VTABLE * obj)
+refcountable_addref (OBJECT obj)
 {
 	GENERIC_REF_OBJECT rob = (GENERIC_REF_OBJECT)obj;
 	return ++rob->ref;
@@ -75,7 +76,7 @@ refcountable_addref (VTABLE * obj)
  * refcountable_delref -- simple delref for generic refcountable object
  *===============================================*/
 int
-refcountable_delref (VTABLE * obj)
+refcountable_delref (OBJECT obj)
 {
 	GENERIC_REF_OBJECT rob = (GENERIC_REF_OBJECT)obj;
 	int ref = --rob->ref;
