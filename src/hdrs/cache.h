@@ -56,13 +56,11 @@ CACHEEL qkey_to_indi_cacheel(STRING);
 CACHEEL qkey_to_sour_cacheel(STRING);
 CACHEEL qkey_to_othr_cacheel(STRING);
 
-void load_cacheel(CACHEEL);
 void lock_cache(CACHEEL);
 void semilock_cache(CACHEEL);
 void unlock_cache(CACHEEL);
 void unsemilock_cache(CACHEEL);
 
-RECORD cacheel_to_record(CACHEEL cel);
 CNSTRING cacheel_to_key(CACHEEL cel);
 NODE cacheel_to_node(CACHEEL cel);
 

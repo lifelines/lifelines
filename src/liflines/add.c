@@ -166,7 +166,7 @@ add_new_indi (RECORD indi0)
 	join_indi(indi, name, refn, sex, body, NULL, NULL);
 	resolve_refn_links(indi);
 	indi_to_dbase(indi);
-	indi_to_cache(indi0);
+	add_new_indi_to_cache(indi0);
 }
 /*================================================================
  * add_indi_no_cache -- Add new person to database

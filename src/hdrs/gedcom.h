@@ -70,8 +70,8 @@
  its NODE tree). (E.g., its parent might be a NODE representing
  "1 BIRT".)
 */
+typedef struct tag_cacheel *CACHEEL;
 typedef struct tag_node *NODE;
-typedef struct tag_record *RECORD;
 struct tag_node {
 	STRING n_xref;      /* cross ref */
 	STRING n_tag;       /* tag */
@@ -81,8 +81,7 @@ struct tag_node {
 	NODE   n_sibling;   /* sibling */
 	INT    n_flag;      /* eg, ND_TEMP */
 	int    n_refcnt;    /* refcount for temp nodes */
-	RECORD n_rec;       /* pointer to record (usually the cache record) */
-	                    /* Note that multiple records may share nodes */
+	CACHEEL n_cel;      /* pointer to cacheel, if node is inside cache */
 };
 #define nxref(n)    ((n)->n_xref)
 #define ntag(n)     ((n)->n_tag)
@@ -109,15 +108,16 @@ typedef struct tag_nkey NKEY;
  LifeLines is very RECORD-oriented.
 */
 
+typedef struct tag_record *RECORD;
 struct tag_record { /* RECORD */
-	NODE top;
-	NKEY nkey;
-	struct tag_cacheel * cel; /* cache wrapper */
+	NODE rec_top;           /* for non-cache records */
+	NKEY rec_nkey;
+	struct tag_cacheel * rec_cel; /* cache wrapper */
 };
-NODE nztop(RECORD); /* function so it can handle NULL input */
-#define nzkey(n)    ((n)->nkey.key)
-#define nzkeynum(n) ((n)->nkey.keynum)
-#define nztype(n)   ((n)->nkey.ntype)
+NODE nztop(RECORD); /* handles NULL, also reloads from cache */
+#define nzkey(n)    ((n)->rec_nkey.key)
+#define nzkeynum(n) ((n)->rec_nkey.keynum)
+#define nztype(n)   ((n)->rec_nkey.ntype)
 
 /*=====================================
  * LLDATABASE types -- LifeLines database
@@ -228,7 +228,6 @@ NODE convert_first_fp_to_node(FILE*, BOOLEAN, XLAT, STRING*, BOOLEAN*);
 NODE copy_node(NODE);
 NODE copy_nodes(NODE, BOOLEAN, BOOLEAN);
 BOOLEAN create_database(STRING dbused);
-RECORD create_record(NODE node);
 NODE create_node(STRING, STRING, STRING, NODE);
 NODE create_temp_node(STRING, STRING, STRING, NODE);
 void del_in_dbase(STRING key);
@@ -289,8 +288,6 @@ void growxxrefs(void);
 INT hexvalue(INT);
 BOOLEAN in_string(INT, STRING);
 void index_by_refn(NODE, STRING);
-void indi_to_cache(RECORD rec);
-void indi_to_cache_old(NODE);
 void indi_to_dbase(NODE);
 STRING indi_to_event(NODE, STRING tag, STRING head, INT len, RFMT);
 NODE indi_to_famc(NODE);
@@ -507,6 +504,10 @@ INT xref_previ(INT);
 INT xref_prevs(INT);
 INT xref_prevx(INT);
 INT xrefval(char ntype, STRING str);
+
+/* keytonod.c */
+void add_new_indi_to_cache(RECORD rec);
+RECORD create_record_for_cel(CACHEEL cel);
 
 /* gstrings.c */
 STRING generic_to_list_string(NODE node, STRING key, INT len, STRING delim, RFMT rfmt, BOOLEAN appkey);

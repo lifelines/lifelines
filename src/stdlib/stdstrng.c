@@ -267,7 +267,7 @@ llstrncpyvf (char *dest, size_t n, int utf8, const char * fmt, va_list args)
  * Created: 2002/10/19, Perry Rapp
  *================================*/
 INT
-ll_atoi (STRING str, INT defval)
+ll_atoi (CNSTRING str, INT defval)
 {
 	return str ? atoi(str) : defval;
 }

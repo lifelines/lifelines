@@ -43,11 +43,11 @@ extern STRING qSbaddb,qSdefttl,qSiddefpath;
 extern STRING qSaskynq,qSaskynyn,qSaskyY,qSaskint;
 extern STRING qSchlistx,qSvwlistx;
 
-extern INT csz_indi, icsz_indi;
-extern INT csz_fam, icsz_fam;
-extern INT csz_sour, icsz_sour;
-extern INT csz_even, icsz_even;
-extern INT csz_othr, icsz_othr;
+extern INT csz_indi;
+extern INT csz_fam;
+extern INT csz_sour;
+extern INT csz_even;
+extern INT csz_othr;
 
 extern int opterr;
 
@@ -149,18 +149,23 @@ main (INT argc, char **argv)
 				if(isasciiletter((uchar)*optarg) && isupper((uchar)*optarg))
 					*optarg = tolower((uchar)*optarg);
 				if(*optarg == 'i') {
+					INT icsz_indi=0;
 					sscanf(optarg+1, "%d,%d", &csz_indi, &icsz_indi);
 				}
 				else if(*optarg == 'f') {
+					INT icsz_fam=0;
 					sscanf(optarg+1, "%d,%d", &csz_fam, &icsz_fam);
 				}
 				else if(*optarg == 's') {
+					INT icsz_sour=0;
 					sscanf(optarg+1, "%d,%d", &csz_sour, &icsz_sour);
 				}
 				else if(*optarg == 'e') {
+					INT icsz_even=0;
 					sscanf(optarg+1, "%d,%d", &csz_even, &icsz_even);
 				}
 				else if((*optarg == 'o') || (*optarg == 'x')) {
+					INT icsz_othr=0;
 					sscanf(optarg+1, "%d,%d", &csz_othr, &icsz_othr);
 				}
 				optarg++;

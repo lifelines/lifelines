@@ -19,6 +19,7 @@
 #include "metadata.h"
 #include "date.h"
 #include "xlat.h"
+#include "cache.h"
 
 /*********************************************
  * global/exported variables
@@ -40,8 +41,6 @@ extern STRING qSrerbln, qSrernwt, qSrerilv, qSrerwlv, qSunsupunix, qSunsupuniv;
 static BOOLEAN buffer_to_line(STRING p, INT *plev, STRING *pxref
 	, STRING *ptag, STRING *pval, STRING *pmsg);
 static NODE do_first_fp_to_node(FILE *fp, BOOLEAN list, XLAT tt
-	, STRING *pmsg, BOOLEAN *peof);
-static RECORD do_first_fp_to_record(FILE *fp, BOOLEAN list, XLAT tt
 	, STRING *pmsg, BOOLEAN *peof);
 static BOOLEAN string_to_line(STRING *ps, INT *plev, STRING *pxref, 
 	STRING *ptag, STRING *pval, STRING *pmsg);
@@ -213,7 +212,8 @@ file_to_record (STRING fname, XLAT ttm, STRING *pmsg, BOOLEAN *pemp)
 	NODE node = file_to_node(fname, ttm, pmsg, pemp);
 	RECORD rec = 0;
 	if (node) {
-		rec = create_record(node);
+		CACHEEL cel = node_to_cacheel_old(node);
+		rec = create_record_for_cel(cel);
 	}
 	return rec;
 }
@@ -306,36 +306,6 @@ do_first_fp_to_node (FILE *fp, BOOLEAN list, XLAT ttm,
 	lahead = TRUE;
 	return next_fp_to_node(fp, list, ttm, pmsg, peof);
 }
-/*================================================================
- * do_first_fp_to_record -- Convert first GEDCOM record in file to tree
- *
- *  fp:    [IN]  file that holds GEDCOM record/s
- *  list:  [IN]  can be list at level 0?
- *  tt:    [IN]  character translation table
- *  *pmsg: [OUT] possible error message
- *  *peof: [OUT] set true if file is at end of file
- * Called after unicode header processed
- *==============================================================*/
-static RECORD
-do_first_fp_to_record (FILE *fp, BOOLEAN list, XLAT ttm,
-	STRING *pmsg,  BOOLEAN *peof)
-{
-	INT rc;
-	ateof = FALSE;
-	flineno = 0;
-	*pmsg = NULL;
-	*peof = FALSE;
-	rc = file_to_line(fp, ttm, &lev, &xref, &tag, &val, pmsg);
-	if (rc == DONE) {
-		*peof = ateof = TRUE;
-		*pmsg = _(qSfileof);
-		return NULL;
-	} else if (rc == ERROR)
-		return NULL;
-	lev0 = lev;
-	lahead = TRUE;
-	return next_fp_to_record(fp, list, ttm, pmsg, peof);
-}
 /*==============================================================
  * next_fp_to_record -- Convert next GEDCOM record in file to tree
  *
@@ -350,7 +320,7 @@ next_fp_to_record (FILE *fp, BOOLEAN list, XLAT ttm,
 	STRING *pmsg, BOOLEAN *peof)
 {
 	NODE node = next_fp_to_node(fp, list, ttm, pmsg, peof);
-	return create_record(node);
+	return create_record_from_new_node(node, 0);
 }
 /*==============================================================
  * next_fp_to_node -- Convert next GEDCOM record in file to tree
@@ -455,8 +425,6 @@ string_to_record (STRING str, CNSTRING key, INT len)
 	NODE node = 0;
 	len=len; /* unused */
 
-	/* create it now, & release it at bottom if we fail */
-	rec = alloc_new_record();
 	/* we must fill in the top field */
 
 	if (*str == '0') { /* traditional node, no metadata */
@@ -471,10 +439,7 @@ string_to_record (STRING str, CNSTRING key, INT len)
 		}
 	}
 	if (node) {
-		init_new_record_and_just_read_node(rec, node, key);
-	} else { /* node==0, we failed, clean up */
-		free_rec(rec);
-		rec = 0;
+		rec = create_record_from_new_node(node, key);
 	}
 	return rec;
 }

@@ -54,15 +54,10 @@ enum { NEW_RECORD, EXISTING_LACKING_WH_RECORD };
  * local function prototypes, alphabetical
  *********************************************/
 
-static RECORD alloc_record_from_key(STRING key);
 static NODE alloc_node(void);
-static void assign_record(RECORD rec, char ntype, INT keynum);
 static STRING fixup(STRING str);
 static STRING fixtag (STRING tag);
 static RECORD indi_to_prev_sib_impl(NODE indi);
-static void hook_node_to_rec_recurse(RECORD rec, NODE node);
-static void hook_record_to_root_node(RECORD rec, NODE node);
-
 static INT node_strlen(INT levl, NODE node);
 
 /*********************************************
@@ -168,7 +163,7 @@ create_node (STRING xref, STRING tag, STRING val, NODE prnt)
 	nval(node) = fixup(val);
 	nparent(node) = prnt;
 	if (prnt)
-		node->n_rec = prnt->n_rec;
+		node->n_cel = prnt->n_cel;
 	return node;
 }
 /*===========================
@@ -237,27 +232,16 @@ alloc_new_record (void)
 	rec = (RECORD)stdalloc(sizeof(*rec));
 	memset(rec, 0, sizeof(*rec));
 	/* these must be filled in by caller */
-	strcpy(rec->nkey.key, "");
-	rec->nkey.keynum = 0;
-	rec->nkey.ntype = 0;
-	return rec;
-}
-/*===================================
- * alloc_record_from_key -- allocate record for key
- * Created: 2001/01/25, Perry Rapp
- *=================================*/
-static RECORD
-alloc_record_from_key (STRING key)
-{
-	RECORD rec = alloc_new_record();
-	assign_record(rec, key[0], atoi(key+1));
+	strcpy(rec->rec_nkey.key, "");
+	rec->rec_nkey.keynum = 0;
+	rec->rec_nkey.ntype = 0;
 	return rec;
 }
 /*===================================
  * assign_record -- put key info into record
  * Created: 2001/02/04, Perry Rapp
  *=================================*/
-static void
+void
 assign_record (RECORD rec, char ntype, INT keynum)
 {
 	char xref[12];
@@ -265,10 +249,10 @@ assign_record (RECORD rec, char ntype, INT keynum)
 	NODE node;
 	sprintf(key, "%c%d", ntype, keynum);
 	sprintf(xref, "@%s@", key);
-	strcpy(rec->nkey.key, key);
-	rec->nkey.keynum = keynum;
-	rec->nkey.ntype = ntype;
-	if ((node = nztop(rec))) {
+	strcpy(rec->rec_nkey.key, key);
+	rec->rec_nkey.keynum = keynum;
+	rec->rec_nkey.ntype = ntype;
+	if ((node = rec->rec_top) != 0) {
 		if (nxref(node)) stdfree(nxref(node));
 		nxref(node) = strsave(xref);
 	}
@@ -284,54 +268,20 @@ init_new_record (RECORD rec, char ntype, INT keynum)
 	assign_record(rec, ntype, keynum);
 }
 /*===================================
- * create_record -- create record to wrap top node
- * Created: 2001/01/29, Perry Rapp
+ * create_record_from_new_node -- 
+ *  Given a node just read from disk, wrap it in an uncached record
  *=================================*/
 RECORD
-create_record (NODE node)
+create_record_from_new_node (NODE node, CNSTRING key)
 {
-	RECORD rec = 0;
-	if (nxref(node))
-		rec = alloc_record_from_key(node_to_key(node));
-	else
-		rec = alloc_new_record();
-	hook_record_to_root_node(rec, node);
+	RECORD rec = alloc_new_record();
+	INT keynum = 0;
+	if (!key)
+		key = nxref(node);
+	keynum = ll_atoi(&key[1], 0);
+	rec->rec_top = node;
+	init_new_record(rec, key[0], keynum);
 	return rec;
-}
-/*===================================
- * hook_record_to_root_node -- Connect record to node tree (& vice versa)
- * Created: 2003-02-04 (Perry Rapp)
- *=================================*/
-static void
-hook_record_to_root_node (RECORD rec, NODE node)
-{
-	rec->top = node;
-	hook_node_to_rec_recurse(rec, node);
-}
-/*===================================
- * hook_node_to_rec_recurse -- Connect node subtree to record
- * Created: 2003-02-04 (Perry Rapp)
- *=================================*/
-static void
-hook_node_to_rec_recurse (RECORD rec, NODE node)
-{
-	while (node) {
-		if (nchild(node))
-			hook_node_to_rec_recurse(rec, nchild(node));
-		node->n_rec = rec;
-		node = nsibling(node);
-	}
-}
-/*===================================
- * init_new_record_and_just_read_node -- 
- *  initializer used by nodeio, after having read a node
- * Created: 2003-02-04 (Perry Rapp)
- *=================================*/
-void
-init_new_record_and_just_read_node (RECORD rec, NODE node, CNSTRING key)
-{
-	hook_record_to_root_node(rec, node);
-	assign_record(rec, key[0], atoi(key+1));
 }
 /*===================================
  * free_rec -- record deallocator for unbound (non-cached) records
@@ -340,14 +290,13 @@ init_new_record_and_just_read_node (RECORD rec, NODE node, CNSTRING key)
 void
 free_rec (RECORD rec)
 {
-	/* unbound records not allowed to free cache memory */
-	if (!rec->cel)
-	{
-		if (rec->top)
-			free_nodes(rec->top);
+	ASSERT(!rec->rec_cel || !rec->rec_top);
+	/* only free node trees of records not in cache */
+	if (!rec->rec_cel && rec->rec_top) {
+		free_nodes(rec->rec_top);
 	}
-	rec->top = 0;
-	strcpy(rec->nkey.key, "");
+	rec->rec_top = 0;
+	strcpy(rec->rec_nkey.key, "");
 	stdfree(rec);
 }
 /*===================================
@@ -357,10 +306,8 @@ free_rec (RECORD rec)
 void
 free_cached_rec (RECORD rec)
 {
-	ASSERT(rec->cel);
-	if (rec->top)
-		free_nodes(rec->top);
-	strcpy(rec->nkey.key, "");
+	ASSERT(rec->rec_cel && !rec->rec_top);
+	strcpy(rec->rec_nkey.key, "");
 	stdfree(rec);
 }
 /*=====================================

@@ -111,7 +111,7 @@ PVALUE copy_pvalue(PVALUE);
 PVALUE create_pvalue(INT, VPTR);
 PVALUE create_pvalue_any(void);
 PVALUE create_pvalue_from_bool(BOOLEAN bval);
-PVALUE create_pvalue_from_cel(CACHEEL cel);
+PVALUE create_pvalue_from_cel(INT type, CACHEEL cel);
 PVALUE create_pvalue_from_float(float fval);
 PVALUE create_pvalue_from_even_keynum(INT i);
 PVALUE create_pvalue_from_fam(NODE fam);

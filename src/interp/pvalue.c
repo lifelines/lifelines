@@ -174,26 +174,7 @@ set_pvalue (PVALUE val, INT type, VPTR value)
 		break;
 	}
 	if (is_record_pvalue(val)) {
-		/* instead of reference counting records, we lock them */
-		dosemilock_record_in_cache(pvalue_to_rec(val), TRUE);
-	}
-}
-/*========================================
- * dosemilock_record_in_cache -- semi-Lock/unlock record
- *  (if possible)
- * Created: 2003-02-06 (Perry Rapp)
- *======================================*/
-void
-dosemilock_record_in_cache (RECORD rec, BOOLEAN lock)
-{
-	if (rec) {
-		CACHEEL cel = rec->cel;
-		if (cel) {
-				if (lock)
-					semilock_cache(cel);
-				else
-					unsemilock_cache(cel);
-		}
+		/* Used to lock its object in cache, but no longer 2003-11-22 */
 	}
 }
 /*========================================
@@ -299,10 +280,8 @@ clear_pvalue (PVALUE val)
 	}
 	if (is_record_pvalue(val)) {
 		/*
-		unlock any cache elements
 		don't worry about memory - it is owned by cache
 		*/
-		dosemilock_record_in_cache(pvalue_to_rec(val), FALSE);
 	}
 }
 /*========================================
@@ -400,8 +379,10 @@ copy_pvalue (PVALUE val)
 PVALUE
 create_pvalue_from_indi (NODE indi)
 {
-	CACHEEL cel = indi ? indi_to_cacheel_old(indi) : NULL;
-	return create_pvalue(PINDI, cel);
+	if (indi)
+		return create_pvalue_from_indi_key(indi_to_key(indi));
+	else
+		return create_pvalue(PINDI, 0);
 }
 /*=====================================================
  * create_pvalue_from_indi_key
@@ -418,9 +399,10 @@ create_pvalue_from_indi_key (STRING key)
  * Created: 2002/02/17, Perry Rapp
  *===================================================*/
 PVALUE
-create_pvalue_from_cel (CACHEEL cel)
+create_pvalue_from_cel (int type, CACHEEL cel)
 {
-	return create_pvalue(PINDI, cel);
+	RECORD rec = cel ? create_record_for_cel(cel) : 0;
+	return create_pvalue(type, rec);
 }
 /*=====================================================
  * create_pvalue_from_indi_keynum -- Return indi as pvalue
@@ -442,7 +424,7 @@ PVALUE
 create_pvalue_from_fam (NODE fam)
 {
 	CACHEEL cel = fam ? fam_to_cacheel_old(fam) : NULL;
-	return create_pvalue(PFAM, cel);
+	return create_pvalue_from_cel(PFAM, cel);
 }
 /*====================================================
  * create_pvalue_from_fam_keynum -- Return indi as pvalue
@@ -485,13 +467,13 @@ create_pvalue_from_othr_keynum (INT i)
 /*=====================================================
  * create_pvalue_from_record -- Create pvalue from any node
  *  handles NULL
- * Created: 2001/03/20, Perry Rapp
+ * If rec is not null, it is given to new pvalue to own
  *===================================================*/
 static PVALUE
 create_pvalue_from_record (RECORD rec, INT ptype)
 {
-	CACHEEL cel = rec ? record_to_cacheel(rec) : NULL;
-	return create_pvalue(ptype, cel);
+	// record pvalues simply point to their heap-alloc'd record
+	return create_pvalue(ptype, rec);
 }
 /*====================================================
  * create_pvalue_from_keynum_impl -- Create pvalue for any type
@@ -1032,21 +1014,19 @@ pvalue_to_list (PVALUE val)
 /*==================================
  * record pvalues (PINDI, PFAM, ...)
  *================================*/
-CACHEEL
-pvalue_to_cel (PVALUE val)
-{
-	/* also load record into direct cache */
-	CACHEEL cel = pvalue(val); /* may be NULL */
-	ASSERT(is_record_pvalue(val));
-	load_cacheel(cel); /* handles null cel ok */
-	return cel;
-}
 RECORD
 pvalue_to_rec (PVALUE val)
 {
-	CACHEEL cel = pvalue_to_cel(val);
-	RECORD rec = cacheel_to_record(cel);
+	RECORD rec = pvalue(val); /* may be NULL */
+	ASSERT(is_record_pvalue(val));
 	return rec;
+}
+CACHEEL
+pvalue_to_cel (PVALUE val)
+{
+	RECORD rec = pvalue_to_rec(val);
+	CACHEEL cel = rec ? rec->rec_cel : 0;
+	return cel;
 }
 /*==================================
  * PSET: pvalue containing a set (INDISEQ)

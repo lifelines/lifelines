@@ -453,7 +453,6 @@ extern INT nobuiltins;
 	}
 
 void dolock_node_in_cache(NODE, BOOLEAN lock);
-void dosemilock_record_in_cache(RECORD rec, BOOLEAN lock);
 
 /* Prototypes */
 void assign_iden(SYMTAB, STRING, PVALUE);

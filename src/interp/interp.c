@@ -1077,7 +1077,7 @@ interp_fathers (PNODE node, SYMTAB stab, PVALUE *pval)
 		fval = create_pvalue_from_fam(fam);
 		fcel = pvalue_to_cel(fval);
 		insert_symtab(stab, ifamily(node), fval);
-		insert_symtab(stab, iiparent(node), create_pvalue_from_cel(scel));
+		insert_symtab(stab, iiparent(node), create_pvalue_from_cel(PINDI, scel));
 		insert_symtab(stab, inum(node), create_pvalue_from_int(ncount++));
 		lock_cache(fcel);
 		lock_cache(scel);
@@ -1136,7 +1136,7 @@ interp_mothers (PNODE node, SYMTAB stab, PVALUE *pval)
 		fval = create_pvalue_from_fam(fam);
 		fcel = pvalue_to_cel(fval);
 		insert_symtab(stab, ifamily(node), fval);
-		insert_symtab(stab, iiparent(node), create_pvalue_from_cel(scel));
+		insert_symtab(stab, iiparent(node), create_pvalue_from_cel(PINDI, scel));
 		insert_symtab(stab, inum(node), create_pvalue_from_int(ncount++));
 		lock_cache(fcel);
 		lock_cache(scel);

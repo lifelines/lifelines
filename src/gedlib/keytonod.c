@@ -33,6 +33,7 @@
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
+#include "gedcomi.h"
 #include "cache.h"
 #include "liflines.h"
 #include "feedback.h"
@@ -52,21 +53,17 @@ int listbadkeys = 0;
  *=============================*/
 /* typedef struct tag_cacheel *CACHEEL; */
 struct tag_cacheel {
-	RECORD c_record;
-	NODE c_node;	/* root node */
-	CACHEEL c_prev;	/* previous el */
-	CACHEEL c_next;	/* next el */
-	STRING c_key;	/* record key */
-	INT c_lock;	/* locked? */
-	INT c_semilock; /* locked but can go to indirect cache */
+	NODE c_node;      /* root node */
+	CACHEEL c_prev;   /* previous el */
+	CACHEEL c_next;   /* next el */
+	STRING c_key;     /* record key */
+	INT c_lock;       /* locked? */
 };
-#define crecord(e) ((e)->c_record)
 #define cnode(e) ((e)->c_node)
 #define cprev(e) ((e)->c_prev)
 #define cnext(e) ((e)->c_next)
 #define ckey(e)  ((e)->c_key)
 #define cclock(e) ((e)->c_lock)
-#define csemilock(e) ((e)->c_semilock)
 /*==============================
  * CACHE -- Internal cache type.
  *============================*/
@@ -75,23 +72,19 @@ typedef struct {
 	TABLE c_data;        /* table of keys */
 	CACHEEL c_firstdir;  /* first direct */
 	CACHEEL c_lastdir;   /* last direct */
-	CACHEEL c_firstind;  /* first indirect */
-	CACHEEL c_lastind;   /* last indirect */
+	CACHEEL c_array;     /* big array of cacheels, all alloc'd in a block */
+	CACHEEL c_free;      /* root of free list */
 	INT c_maxdir;        /* max in direct */
 	INT c_sizedir;       /* cur in direct */
-	INT c_maxind;        /* max in indirect */
-	INT c_sizeind;       /* cur in indirect */
 } *CACHE;
-#define cname(c)     ((c)->c_name)
-#define cdata(c)     ((c)->c_data)
-#define cfirstdir(c) ((c)->c_firstdir)
-#define clastdir(c)  ((c)->c_lastdir)
-#define cfirstind(c) ((c)->c_firstind)
-#define clastind(c)  ((c)->c_lastind)
-#define cmaxdir(c)   ((c)->c_maxdir)
-#define csizedir(c)  ((c)->c_sizedir)
-#define cmaxind(c)   ((c)->c_maxind)
-#define csizeind(c)  ((c)->c_sizeind)
+#define cacname(c)     ((c)->c_name)
+#define cacdata(c)     ((c)->c_data)
+#define cacfirstdir(c) ((c)->c_firstdir)
+#define caclastdir(c)  ((c)->c_lastdir)
+#define cacarray(e) ((e)->c_array)
+#define cacfree(e) ((e)->c_free)
+#define cacmaxdir(c)   ((c)->c_maxdir)
+#define cacsizedir(c)  ((c)->c_sizedir)
 
 
 /*********************************************
@@ -99,9 +92,8 @@ typedef struct {
  *********************************************/
 
 static void add_record_to_direct(CACHE cache, RECORD rec, STRING key);
-static void cache_get_lock_counts(CACHE ca, INT * locks, INT * semilocks);
-static void connect_cel_to_rec(CACHEEL cel, RECORD rec);
-static CACHE create_cache(STRING name, INT dirsize, INT indsize);
+static void cache_get_lock_counts(CACHE ca, INT * locks);
+static CACHE create_cache(STRING name, INT dirsize);
 static void delete_cache(CACHE * pcache);
 static void dereference(CACHEEL);
 static ZSTR get_cache_stats(CACHE ca);
@@ -112,25 +104,19 @@ static RECORD key_to_record_impl(CNSTRING key, INT reportmode);
 static RECORD key_typed_to_record(CACHE cache, CNSTRING key, STRING tag);
 static CACHEEL key_to_othr_cacheel(CNSTRING key);
 static CACHEEL key_to_sour_cacheel(CNSTRING key);
-static void node_to_cache(CACHE, NODE);
-static void prepare_direct_space(CACHE cache);
+static CACHEEL node_to_cache(CACHE, NODE);
+static CACHEEL put_node_in_cache(CACHE cache, NODE node, STRING key);
 static NODE qkey_to_node(CACHE cache, CNSTRING key, STRING tag);
 static RECORD qkey_typed_to_record(CACHE cache, CNSTRING key, STRING tag);
-static void record_to_cache(CACHE cache, RECORD rec);
-static void release_all_in_cache(CACHE cache);
+static CACHEEL qkey_to_typed_cacheel(STRING key);
 static void remove_from_cache(CACHE, STRING);
 
 
 INT csz_indi = 200;		/* cache size for indi */
-INT icsz_indi = 3000;		/* indirect cache size for indi */
 INT csz_fam = 200;		/* cache size for fam */
-INT icsz_fam = 2000;		/* indirect cache size for fam */
 INT csz_sour = 200;		/* cache size for sour */
-INT icsz_sour = 2000;		/* indirect cache size for sour */
 INT csz_even = 200;		/* cache size for even */
-INT icsz_even = 2000;		/* indirect cache size for even */
 INT csz_othr = 200;		/* cache size for othr */
-INT icsz_othr = 2000;		/* indirect cache size for othr */
 
 /*********************************************
  * local variables
@@ -508,11 +494,11 @@ key_to_othr_cacheel (CNSTRING key)
 void
 init_caches (void)
 {
-	indicache = create_cache("INDI", csz_indi, icsz_indi);
-	famcache  = create_cache("FAM", csz_fam, icsz_fam);
-	evencache = create_cache("EVEN", csz_even, icsz_even);
-	sourcache = create_cache("SOUR", csz_sour, icsz_sour);
-	othrcache = create_cache("OTHR", csz_othr, icsz_othr);
+	indicache = create_cache("INDI", csz_indi);
+	famcache  = create_cache("FAM", csz_fam);
+	evencache = create_cache("EVEN", csz_even);
+	sourcache = create_cache("SOUR", csz_sour);
+	othrcache = create_cache("OTHR", csz_othr);
 }
 /*======================================
  * free_caches -- Release cache memory
@@ -531,24 +517,35 @@ free_caches (void)
  * create_cache -- Create cache
  *===========================*/
 static CACHE
-create_cache (STRING name, INT dirsize, INT indsize)
+create_cache (STRING name, INT dirsize)
 {
 	CACHE cache;
+	INT i;
 	if (dirsize < 1) dirsize = 1;
-	if (indsize < 1) indsize = 1;
 	cache = (CACHE) stdalloc(sizeof(*cache));
-	llstrncpy(cname(cache), name, sizeof(cname(cache)), uu8);
+	memset(cache, 0, sizeof(*cache));
+	llstrncpy(cacname(cache), name, sizeof(cacname(cache)), uu8);
 	/* 
 	It would be nice to set the table hash size larger for large 
 	caches, but right now (2003-10-08), tables do not expose a 
 	method to set their hash size.
 	*/
-	cdata(cache) = create_table(FREEKEY);
-	cfirstdir(cache) = clastdir(cache) = NULL;
-	cfirstind(cache) = clastind(cache) = NULL;
-	csizedir(cache) = csizeind(cache) = 0;
-	cmaxdir(cache) = dirsize;
-	cmaxind(cache) = indsize;
+	cacdata(cache) = create_table(FREEKEY);
+	cacfirstdir(cache) = caclastdir(cache) = NULL;
+	cacsizedir(cache) = 0;
+	cacmaxdir(cache) = dirsize;
+	/* Allocate all the cache elements in a big block */
+	cacarray(cache) = (CACHEEL) stdalloc(cacmaxdir(cache) * sizeof(cacarray(cache)[0]));
+	/* Link all the elements together on the free list */
+	for (i=1; i<cacmaxdir(cache); ++i) {
+		CACHEEL cel = &cacarray(cache)[i];
+		CACHEEL celnext = cacfree(cache);
+		if (celnext) {
+			cnext(cel) = celnext;
+			cprev(celnext) = cel;
+		}
+		cacfree(cache) = cel;
+	}
 	return cache;
 }
 /*=============================
@@ -557,10 +554,19 @@ create_cache (STRING name, INT dirsize, INT indsize)
 static void
 delete_cache (CACHE * pcache)
 {
+	INT i;
 	CACHE cache = *pcache;
 	if (!cache) return;
-	release_all_in_cache(cache);
-	destroy_table(cdata(cache));
+	/* Loop through all cache elements freeing any node trees */
+	for (i=0; i<cacmaxdir(cache); ++i) {
+		CACHEEL cel = &cacarray(cache)[i];
+		if (cnode(cel)) {
+			free_nodes(cnode(cel));
+			cnode(cel) = 0;
+		}
+	}
+	destroy_table(cacdata(cache));
+	stdfree(cacarray(cache));
 	stdfree(cache);
 	*pcache = 0;
 }
@@ -575,24 +581,9 @@ remove_direct (CACHE cache, CACHEEL cel)
 	ASSERT(cache && cel);
 	if (prev) cnext(prev) = next;
 	if (next) cprev(next) = prev;
-	if (!prev) cfirstdir(cache) = next;
-	if (!next) clastdir(cache) = prev;
-	csizedir(cache)--;
-}
-/*=====================================================
- * remove_indirect -- Unlink CACHEEL from indirect list
- *===================================================*/
-static void
-remove_indirect (CACHE cache, CACHEEL cel)
-{
-	CACHEEL prev = cprev(cel);
-	CACHEEL next = cnext(cel);
-	ASSERT(cache && cel);
-	if (prev) cnext(prev) = next;
-	if (next) cprev(next) = prev;
-	if (!prev) cfirstind(cache) = next;
-	if (!next) clastind(cache) = prev;
-	csizeind(cache)--;
+	if (!prev) cacfirstdir(cache) = next;
+	if (!next) caclastdir(cache) = prev;
+	cacsizedir(cache)--;
 }
 /*===========================================================
  * first_direct -- Make unlinked CACHEEL first in direct list
@@ -600,126 +591,25 @@ remove_indirect (CACHE cache, CACHEEL cel)
 static void
 first_direct (CACHE cache, CACHEEL cel)
 {
-	CACHEEL frst = cfirstdir(cache);
+	CACHEEL frst = cacfirstdir(cache);
 	ASSERT(cache && cel);
-	csizedir(cache)++;
+	cacsizedir(cache)++;
 	cprev(cel) = NULL;
 	cnext(cel) = frst;
 	if (frst) cprev(frst) = cel;
-	if (!frst) clastdir(cache) = cel;
-	cfirstdir(cache) = cel;
-}
-/*===============================================================
- * first_indirect -- Make unlinked CACHEEL first in indirect list
- *  Does not check for overflow (caller's responsibility)
- *=============================================================*/
-static void
-first_indirect (CACHE cache, CACHEEL cel)
-{
-	CACHEEL frst = cfirstind(cache);
-	ASSERT(cache && cel);
-	csizeind(cache)++;
-	cprev(cel) = NULL;
-	cnext(cel) = frst;
-	if (frst) cprev(frst) = cel;
-	if (!frst) clastind(cache) = cel;
-	cfirstind(cache) = cel;
-}
-/*=======================================================
- * remove_last -- Remove last indirect element from cache
- *=====================================================*/
-static void
-remove_last (CACHE cache)
-{
-	CACHEEL cel=0;
-	STRING key;
-	for (cel = clastind(cache); cel && csemilock(cel); cel = cprev(cel))
-		;
-	if (!cel) {
-		llwprintf("Indirect cache overflow! (cache=%s, size=%d)\n", cname(cache), cmaxind(cache));
-		ASSERT(cel);
-	}
-	ASSERT(!cclock(cel)); /* locked elements should never leave direct */
-	remove_indirect(cache, cel);
-	key = ckey(cel);
-	stdfree(cel);
-	delete_table(cdata(cache), key);
-	stdfree(key);
+	if (!frst) caclastdir(cache) = cel;
+	cacfirstdir(cache) = cel;
 }
 /*============================================================
  * direct_to_first -- Make direct CACHEEL first in direct list
  *==========================================================*/
 static void
-direct_to_first (CACHE cache,
-                 CACHEEL cel)
+direct_to_first (CACHE cache, CACHEEL cel)
 {
 	ASSERT(cache && cel);
-	if (cel == cfirstdir(cache)) return;
+	if (cel == cacfirstdir(cache)) return;
 	remove_direct(cache, cel);
 	first_direct(cache, cel);
-}
-/*==================================================================
- * indirect_to_first -- Make indirect CACHEEL first in direct list
- *================================================================*/
-static void
-indirect_to_first (CACHE cache,
-                   CACHEEL cel)
-{
-	ASSERT(cache && cel);
-	semilock_cache(cel);
-	prepare_direct_space(cache);
-	remove_indirect(cache, cel);
-	dereference(cel);
-	first_direct(cache, cel);
-	unsemilock_cache(cel);
-}
-/*==============================================================
- * direct_to_indirect -- Make last direct CACHEEL first indirect
- *============================================================*/
-static void
-direct_to_indirect (CACHE cache)
-{
-	CACHEEL cel = clastdir(cache);
-	for (cel = clastdir(cache); cel && cclock(cel); cel = cprev(cel))
-		;
-	if (!cel) {
-		llwprintf("Cache overflow! (Cache=%s, size=%d)\n", cname(cache), cmaxdir(cache));
-		ASSERT(cel);
-	}
-	remove_direct(cache, cel);
-	free_cached_rec(crecord(cel)); /* this frees the nodes */
-	connect_cel_to_rec(cel, NULL);
-	first_indirect(cache, cel);
-}
-/*=====================================================
- * connect_cel_to_rec -- Hook record to cache element holder
- * (rec may be NULL)
- *===================================================*/
-static void
-connect_cel_to_rec (CACHEEL cel, RECORD rec)
-{
-	if (cel) {
-		crecord(cel) = rec;
-		cnode(cel) = nztop(rec);
-	}
-	if (rec) {
-		rec->cel = cel;
-	}
-}
-/*=====================================================
- * dereference -- Dereference cel by reading its record
- *===================================================*/
-static void
-dereference (CACHEEL cel)
-{
-	STRING rawrec;
-	INT len;
-	RECORD rec;
-	ASSERT(cel);
-	ASSERT(rawrec = retrieve_raw_record(ckey(cel), &len));
-	ASSERT(rec = string_to_record(rawrec, ckey(cel), len));
-	connect_cel_to_rec(cel, rec);
-	stdfree(rawrec);
 }
 /*========================================================
  * add_to_direct -- Add new CACHEEL to direct part of cache
@@ -733,20 +623,19 @@ dereference (CACHEEL cel)
 static CACHEEL
 add_to_direct (CACHE cache, CNSTRING key, INT reportmode)
 {
-	STRING rawrec;
-	INT len;
-	CACHEEL cel;
-	RECORD rec;
+	STRING rawrec=0;
+	INT len=0;
+	CACHEEL cel=0;
+	RECORD rec=0;
 	int i, j;
-	STRING keycopy;
 
 #ifdef DEBUG
 	llwprintf("add_to_direct: key == %s\n", key);
 #endif
 	ASSERT(cache && key);
-	prepare_direct_space(cache);
 	rec = NULL;
 	if ((rawrec = retrieve_raw_record(key, &len))) 
+		/* 2003-11-22, we should use string_to_node here */
 		rec = string_to_record(rawrec, key, len);
 	if (!rec)
 	{
@@ -771,15 +660,10 @@ add_to_direct (CACHE cache, CNSTRING key, INT reportmode)
 		crashlog("\n");
 		/* deliberately fall through to let ASSERT(rec) fail */
 	}
-	ASSERT(rec);
-	ASSERT(csizedir(cache) < cmaxdir(cache));
-	cel = (CACHEEL) stdalloc(sizeof(*cel));
-	keycopy = strsave(key);
-	insert_table_ptr(cdata(cache), keycopy, cel);
-	connect_cel_to_rec(cel, rec);
-	ckey(cel) = keycopy;
-	cclock(cel) = 0;
-	csemilock(cel) = 0;
+	ASSERT(rec && rec->rec_top);
+	cel = node_to_cache(cache, rec->rec_top);
+	rec->rec_top = 0;
+	rec->rec_cel = cel;
 	first_direct(cache, cel);
 	stdfree(rawrec);
 	return cel;
@@ -796,11 +680,9 @@ key_to_cacheel (CACHE cache, CNSTRING key, STRING tag, INT reportmode)
 	keybuf[keyidx][31] = '\0';
 	keyidx++;
 	if(keyidx >= 10) keyidx = 0;
-	if ((cel = (CACHEEL) valueof_ptr(cdata(cache), key))) {
-		if (cnode(cel))
-			direct_to_first(cache, cel);
-		else
-			indirect_to_first(cache, cel);
+	if ((cel = (CACHEEL) valueof_ptr(cacdata(cache), key))) {
+		ASSERT(cnode(cel));
+		direct_to_first(cache, cel);
 		if (tag) {
 #ifdef DEBUG
 			llwprintf("BEFORE ASSERT: tag, ntag(cnode(cel)) = %s, %s\n", tag, ntag(cnode(cel)));
@@ -814,36 +696,6 @@ key_to_cacheel (CACHE cache, CNSTRING key, STRING tag, INT reportmode)
 		ASSERT(eqstr(tag, ntag(cnode(cel))));
 	}
 	return cel;
-}
-/*===============================================================
- * release_all_in_cache -- Release all entries in a cache
- * Created: 2003-02-02 (Perry Rapp)
- *=============================================================*/
-static void
-release_all_in_cache (CACHE cache)
-{
-	while (csizedir(cache)) {
-		CACHEEL cel = cfirstdir(cache);
-		remove_direct(cache, cel);
-		free_cached_rec(crecord(cel)); /* this frees the nodes */
-	}
-	while (csizeind(cache)) {
-		CACHEEL cel = cfirstind(cache);
-		remove_indirect(cache, cel);
-	}
-}
-/*===============================================================
- * prepare_direct_space -- Make space in direct
- *  Moves a direct entry to indirect if necessary
- *=============================================================*/
-static void
-prepare_direct_space (CACHE cache)
-{
-	if (csizedir(cache) >= cmaxdir(cache)) {
-		if (csizeind(cache) >= cmaxind(cache))
-			remove_last(cache);
-		direct_to_indirect(cache);
-	}
 }
 /*===============================================================
  * key_to_node -- Return tree from key; add to cache if not there
@@ -870,7 +722,29 @@ key_typed_to_record (CACHE cache, CNSTRING key, STRING tag)
 	ASSERT(cache && key);
 	if (!(cel = key_to_cacheel(cache, key, tag, FALSE)))
 		return NULL;
-	return crecord(cel);
+	return create_record_for_cel(cel);
+}
+/*===================================
+ * create_record_for_cel -- create new record from cacheel
+ *=================================*/
+RECORD
+create_record_for_cel (CACHEEL cel)
+{
+	RECORD rec=0;
+	NODE node=0;
+	STRING key=0;
+
+	ASSERT(cel);
+	ASSERT(cnode(cel));
+	node = cnode(cel);
+	ASSERT(nxref(node));
+
+	rec = alloc_new_record();
+	rec->rec_cel = cel;
+	key = node_to_key(node);
+
+	assign_record(rec, key[0], atoi(key+1));
+	return rec;
 }
 /*===============================================================
  * qkey_to_node -- Return tree from key; add to cache if not there
@@ -893,35 +767,14 @@ qkey_to_node (CACHE cache, CNSTRING key, STRING tag)
 static RECORD
 qkey_typed_to_record (CACHE cache, CNSTRING key, STRING tag)
 {
-	CACHEEL cel;
+	CACHEEL cel=0;
+	RECORD rec=0;
+
 	ASSERT(cache && key);
 	if (!(cel = key_to_cacheel(cache, key, tag, TRUE)))
 		return NULL;
-	return crecord(cel);
-}
-/*======================================
- * load_cacheel -- Load CACHEEL into direct cache
- *  if needed & valid
- * (ie, this handles null input, or input already in cache)
- *====================================*/
-void
-load_cacheel (CACHEEL cel)
-{
-	CACHE cache = NULL;
-	if (!cel || cnode(cel)) return;
-	switch (ckey(cel)[0]) {
-	case 'I': cache = indicache; break;
-	case 'F': cache = famcache; break;
-	case 'S': cache = sourcache; break;
-	case 'E': cache = evencache; break;
-	case 'X': cache = othrcache; break;
-	default: {
-		crashlog("Bad cacheel key: <%s>", ckey(cel) ? ckey(cel) : "<0>");
-		ASSERT(0);
-		break;
-		}
-	}
-	indirect_to_first(cache, cel);
+	rec = create_record_for_cel(cel);
+	return rec;
 }
 /*======================================
  * lock_cache -- Lock CACHEEL into direct cache
@@ -943,34 +796,15 @@ unlock_cache (CACHEEL cel)
 	ASSERT(cnode(cel));
 	cclock(cel)--;
 }
-/*======================================
- * semilock_cache -- Lock CACHEEL into cache (indirect is ok)
- *====================================*/
-void
-semilock_cache (CACHEEL cel)
-{
-	csemilock(cel)++;
-	ASSERT(csemilock(cel)>0);
-}
-/*==========================================
- * unsemilock_cache -- Unlock CACHEEL from cache (indirect is ok)
- *========================================*/
-void
-unsemilock_cache (CACHEEL cel)
-{
-	ASSERT(csemilock(cel)>0);
-	csemilock(cel)--;
-}
 /*=========================================
  * cache_get_lock_counts -- Fill in lock counts
  *=======================================*/
 static void
-cache_get_lock_counts (CACHE ca, INT * locks, INT * semilocks)
+cache_get_lock_counts (CACHE ca, INT * locks)
 {
 	CACHEEL cel;
-	for (cel = cfirstdir(ca); cel; cel = cnext(cel)) {
+	for (cel = cacfirstdir(ca); cel; cel = cnext(cel)) {
 		if (cclock(cel) && locks) ++(*locks);
-		if (csemilock(cel) && semilocks) ++(*semilocks);
 	}
 }
 /*=========================================
@@ -981,12 +815,11 @@ static ZSTR
 get_cache_stats (CACHE ca)
 {
 	ZSTR zstr = zs_new();
-	INT lo=0, slo=0;
-	cache_get_lock_counts(ca, &lo, &slo);
+	INT lo=0;
+	cache_get_lock_counts(ca, &lo);
 	zs_appf(zstr
-		, "d:%d/%d (l:%d),i:%d/%d (l:%d)"
-		, csizedir(ca), cmaxdir(ca), lo
-		, csizeind(ca), cmaxind(ca), slo
+		, "d:%d/%d (l:%d)"
+		, cacsizedir(ca), cacmaxdir(ca), lo
 		);
 	return zstr;
 }
@@ -1007,21 +840,16 @@ get_cache_stats_fam (void)
 	return get_cache_stats(famcache);
 }
 /*============================================
- * indi_to_cache -- Add person to person cache
+ * add_new_indi_to_cache -- Add person to person cache
  *==========================================*/
 void
-indi_to_cache (RECORD rec)
+add_new_indi_to_cache (RECORD rec)
 {
-	record_to_cache(indicache, rec);
-}
-/*============================================
- * indi_to_cache_old -- Add person to person cache
- *  should be obsoleted by indi_to_cache
- *==========================================*/
-void
-indi_to_cache_old (NODE node)
-{
-	node_to_cache(indicache, node);
+	CACHEEL cel=0;
+	ASSERT(rec->rec_top);
+	cel = node_to_cache(indicache, rec->rec_top);
+	rec->rec_cel = cel;
+	rec->rec_top = 0;
 }
 /*===========================================
  * fam_to_cache -- Add family to family cache
@@ -1057,57 +885,74 @@ othr_to_cache (NODE node)
 }
 /*========================================
  * node_to_cache -- Add node tree to cache
+ *  This is a high-level entry point, which validates
+ *  and delegates the work
+ *  node tree must be valid, and of the correct type
+ *  (INDI node trees may only be added to INDI cache, etc)
  *======================================*/
-static void
-node_to_cache (CACHE cache, NODE node)
-{
-	RECORD rec = create_record(node);
-	record_to_cache(cache, rec);
-}
-/*========================================
- * record_to_cache -- Add record to cache
- *  record expected to be valid
- *  INDI records may only be added to INDI cache, etc
- *======================================*/
-static void
-record_to_cache (CACHE cache, RECORD rec)
+static CACHEEL
+node_to_cache (CACHE cache, NODE top)
 {
 	STRING key;
-	NODE top;
-	ASSERT(cache && rec);
-	top = nztop(rec);
+	ASSERT(cache);
 	ASSERT(top);
-	if (nestr(cname(cache), "OTHR")) {
+	ASSERT(!nparent(top) && !nsibling(top)); /* should be a root */
+	if (nestr(cacname(cache), "OTHR")) {
 		/* only INDI records in INDI cache, etc */
-		if (!eqstr(cname(cache), ntag(top))) {
-			crashlog(_("Bad cache entry <%s> != <%s>"), cname(cache), ntag(top));
+		if (!eqstr(cacname(cache), ntag(top))) {
+			crashlog(_("Bad cache entry <%s> != <%s>"), cacname(cache), ntag(top));
 			ASSERT(0);
 		}
 	}
 	key = node_to_key(top);
 	ASSERT(key);
-	ASSERT(!valueof_ptr(cdata(cache), key));
-	prepare_direct_space(cache);
-	add_record_to_direct(cache, rec, key);
+	ASSERT(!valueof_ptr(cacdata(cache), key));
+	if (!cacsizedir(cache) >= cacmaxdir(cache)) {
+		llwprintf("Cache overflow! (Cache=%s, size=%d)\n", cacname(cache), cacmaxdir(cache));
+		ASSERT(0);
+	}
+	return put_node_in_cache(cache, top, key);
 }
 /*=======================================================
- * add_record_to_direct -- Add node to direct part of cache
+ * put_node_in_cache -- Low-level work of creating new cacheel
  *=====================================================*/
-static void
-add_record_to_direct (CACHE cache, RECORD rec, STRING key)
+static CACHEEL
+put_node_in_cache (CACHE cache, NODE node, STRING key)
 {
 	CACHEEL cel;
 	STRING keynew;
-	NODE node = nztop(rec);
+	BOOLEAN travdone = FALSE;
 	ASSERT(cache && node);
-	ASSERT(csizedir(cache) < cmaxdir(cache));
-	cel = (CACHEEL) stdalloc(sizeof(*cel));
-	insert_table_ptr(cdata(cache), keynew=strsave(key), cel);
-	crecord(cel) = rec;
+	ASSERT(cacsizedir(cache) < cacmaxdir(cache));
+	cel = cacfree(cache);
+	cacfree(cache) = cnext(cel);
+	if (cnext(cel))
+		cprev(cnext(cel)) = 0;
+	memset(cel, 0, sizeof(*cel));
+	insert_table_ptr(cacdata(cache), keynew=strsave(key), cel);
 	cnode(cel) = node;
 	ckey(cel) = keynew;
 	cclock(cel) = FALSE;
 	first_direct(cache, cel);
+	/* Now set all nodes in tree to point to cache record */
+	while (!travdone) {
+		node->n_cel = cel;
+		/* go to bottom of tree */
+		while (nchild(node)) {
+			node = nchild(node);
+			node->n_cel = cel;
+		}
+		/* find next node in traversal/ascent */
+		while (!nsibling(node)) {
+			if (!nparent(node)) {
+				travdone=TRUE;
+				break;
+			}
+			node = nparent(node);
+		}
+		node = nsibling(node);
+	}
+	return cel;
 }
 /*==============================================
  * remove_indi_cache -- Remove person from cache
@@ -1131,18 +976,19 @@ remove_fam_cache (STRING key)
 static void
 remove_from_cache (CACHE cache, STRING key)
 {
-	CACHEEL cel;
+	CACHEEL cel=0, celnext=0;
 	if (!key || *key == 0 || !cache)
 		return;
-	if (!(cel = (CACHEEL) valueof_ptr(cdata(cache), key)))
+	if (!(cel = (CACHEEL) valueof_ptr(cacdata(cache), key)))
 		return;
-	ASSERT(!cclock(cel) && !csemilock(cel));
-	if (cnode(cel))
-		remove_direct(cache, cel);
-	else
-		remove_indirect(cache, cel);
-	stdfree(cel);
-	delete_table(cdata(cache), key);
+	ASSERT(!cclock(cel));
+	ASSERT(cnode(cel));
+	remove_direct(cache, cel);
+	celnext = cacfree(cache);
+	cnext(cel) = celnext;
+	cprev(celnext) = cel;
+	cacfree(cache) = cel;
+	delete_table(cacdata(cache), key);
 }
 /*================================================================
  * value_to_xref -- Converts a string to a record key, if possible
@@ -1168,7 +1014,7 @@ indi_to_cacheel (RECORD indi)
 {
 	CACHEEL cel;
 	if (!indi || !nztop(indi)) return NULL;
-	if (indi->cel) return indi->cel;
+	if (indi->rec_cel) return indi->rec_cel;
 	/*
 	This is not efficient, rereading the record
 	But we can't just steal the record given us
@@ -1327,19 +1173,42 @@ CACHEEL qkey_to_othr_cacheel (STRING key)
 	return key_to_cacheel(othrcache, key, NULL, TRUE);
 }
 /*==============================================
+ * qkey_to_typed_cacheel -- Lookup/load key
+ *============================================*/
+static CACHEEL
+qkey_to_typed_cacheel (STRING key)
+{
+	char ntype;
+	ASSERT(key && key[0]);
+	ntype = key[0];
+	switch(ntype) {
+	case 'I': return qkey_to_indi_cacheel(key);
+	case 'F': return qkey_to_fam_cacheel(key);
+	case 'S': return qkey_to_even_cacheel(key);
+	case 'E': return qkey_to_sour_cacheel(key);
+	case 'X': return qkey_to_othr_cacheel(key);
+	}
+	ASSERT(0);
+}
+/*==============================================
  * is_record_loaded -- Check if record has its node tree
  *============================================*/
 BOOLEAN
 is_record_loaded (RECORD rec)
 {
-	INT len;
-	ASSERT(rec);
-	if (!rec->top || !nxref(rec->top)) 
+	CACHEEL cel=0;
+	INT len=0;
+	STRING xref=0;
+
+	if (!rec || !rec->rec_cel || !rec->rec_cel->c_node)
 		return FALSE;
-	ASSERT(nxref(rec->top)[0] == '@');
-	len = strlen(nxref(rec->top));
-	ASSERT(nxref(rec->top)[len-1] == '@');
-	if (!eqstrn(rec->nkey.key, &nxref(rec->top)[1], len-2))
+
+	xref = nxref(rec->rec_cel->c_node);
+
+	ASSERT(xref[0] == '@');
+	len = strlen(xref);
+	ASSERT(xref[len-1] == '@');
+	if (!eqstrn(rec->rec_nkey.key, &xref[1], len-2))
 		return FALSE;
 	return TRUE;
 }
@@ -1351,25 +1220,18 @@ NODE
 nztop (RECORD rec)
 {
 	if (!rec) return 0;
-	/* Check that we're pointing to the correct node tree */
+	if (rec->rec_top) {
+		/* This is only for records not in the cache */
+		ASSERT(!rec->rec_cel);
+		return rec->rec_top;
+	}
 	if (!is_record_loaded(rec)) {
 		/* Presumably we're out-of-date because our record fell out of cache */
 		/* Anyway, load via cache (actually just point to cache data) */
-		RECORD chrec = key_to_record(rec->nkey.key);
-		ASSERT(chrec);
-		rec->top = chrec->top;
+		CACHEEL cel = key_to_unknown_cacheel(rec->rec_nkey.key);
+		rec->rec_cel = cel;
 	}
-	return rec->top;
-}
-/*==============================================
- * cacheel_to_record -- Return record inside of cache element
- *  handle NULL input
- *============================================*/
-RECORD
-cacheel_to_record (CACHEEL cel)
-{
-	RECORD rec = cel ? crecord(cel) : 0;
-	return rec;
+	return cnode(rec->rec_cel);
 }
 /*==============================================
  * cacheel_to_key -- Return key of record inside of cache element

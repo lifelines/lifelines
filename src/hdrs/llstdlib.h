@@ -146,7 +146,7 @@ BOOLEAN isletter(INT);
 BOOLEAN islinebreak(INT c);
 BOOLEAN isnumch(INT c);
 BOOLEAN iswhite(INT);
-INT ll_atoi(STRING str, INT defval);
+INT ll_atoi(CNSTRING str, INT defval);
 INT ll_toupper(INT);
 INT ll_tolower(INT);
 char *llstrncat(char *dest, const char *src, size_t n, int utf8);
