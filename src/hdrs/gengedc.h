@@ -49,4 +49,4 @@ enum {
 
 void gen_gedcom (INDISEQ seq, int gengedcl);
 
-#endif _GENGEDC_H
+#endif /* _GENGEDC_H */
