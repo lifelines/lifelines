@@ -35,19 +35,31 @@
 #define	PARENTS	285
 #define	FCONS	286
 
-#line 31 "yacc.y"
+#line 36 "yacc.y"
 
-#define YACC_C
-#include "standard.h"
+/*#define YACC_C */
+#include "llstdlib.h"
 #include "table.h"
+#include "translat.h"
 #include "gedcom.h"
+#include "cache.h"
+#include "indiseq.h"
 #include "interp.h"
+#include "liflines.h"
+#include "screen.h"
+#include <stdlib.h>
 
 extern TABLE proctab, functab;
 static PNODE this, prev;
 extern LIST Plist;
 INT Yival;
 FLOAT Yfval;
+
+static void join (PNODE list, PNODE last);
+static void yyerror (STRING str);
+
+/* Make sure it can hold any pointer */
+#define YYSTYPE void *
 #ifndef YYSTYPE
 #define YYSTYPE int
 #endif
@@ -152,12 +164,12 @@ static const short yyrhs[] = {    39,
 
 #if YYDEBUG != 0
 static const short yyrline[] = { 0,
-    51,    52,    55,    56,    57,    61,    71,    75,    79,    82,
-    85,    88,    93,    96,   101,   106,   111,   116,   121,   126,
-   131,   136,   141,   146,   150,   154,   159,   164,   169,   173,
-   177,   193,   198,   202,   206,   210,   214,   218,   221,   225,
-   228,   233,   237,   240,   244,   248,   252,   255,   258,   262,
-   265,   269,   272,   277,   280,   284
+    69,    70,    73,    74,    75,    79,    89,    93,    97,   100,
+   103,   106,   111,   114,   119,   124,   129,   134,   139,   144,
+   149,   154,   159,   164,   168,   172,   177,   182,   187,   191,
+   195,   211,   216,   220,   224,   228,   232,   236,   239,   243,
+   246,   251,   255,   258,   262,   266,   270,   273,   276,   280,
+   283,   287,   290,   295,   298,   302
 };
 #endif
 
@@ -1009,14 +1021,14 @@ yyreduce:
   switch (yyn) {
 
 case 5:
-#line 57 "yacc.y"
+#line 75 "yacc.y"
 {
 			if (eqstr("global", (STRING) yyvsp[-3]))
-				insert_pvtable(globtab, yyvsp[-1], PANY, NULL);
+				insert_pvtable(globtab, (STRING)yyvsp[-1], PANY, NULL);
 		;
     break;}
 case 6:
-#line 61 "yacc.y"
+#line 79 "yacc.y"
 {
 			if (eqstr("include", (STRING) yyvsp[-3]))
 /*
@@ -1027,169 +1039,169 @@ enqueue_list(Plist, pvalue((PVALUE) ivalue((PNODE) yyvsp[-1])));
 		;
     break;}
 case 7:
-#line 71 "yacc.y"
+#line 89 "yacc.y"
 {
-			insert_table(proctab, yyvsp[-6], proc_node(yyvsp[-6], yyvsp[-4], yyvsp[-1]));
+			insert_table(proctab, (STRING)yyvsp[-6], (WORD)proc_node((STRING)yyvsp[-6], (PNODE)yyvsp[-4], (PNODE)yyvsp[-1]));
 		;
     break;}
 case 8:
-#line 75 "yacc.y"
+#line 93 "yacc.y"
 {
-			insert_table(functab, yyvsp[-6], fdef_node(yyvsp[-6], yyvsp[-4], yyvsp[-1]));
+			insert_table(functab, (STRING)yyvsp[-6], (WORD)fdef_node((STRING)yyvsp[-6], (PNODE)yyvsp[-4], (PNODE)yyvsp[-1]));
 		;
     break;}
 case 9:
-#line 79 "yacc.y"
+#line 97 "yacc.y"
 {
 			yyval = 0;
 		;
     break;}
 case 10:
-#line 82 "yacc.y"
+#line 100 "yacc.y"
 {
 			yyval = yyvsp[0];
 		;
     break;}
 case 11:
-#line 85 "yacc.y"
+#line 103 "yacc.y"
 {
-			yyval = (INT) iden_node(yyvsp[0]);
+			yyval = iden_node((STRING)yyvsp[0]);
 		;
     break;}
 case 12:
-#line 88 "yacc.y"
+#line 106 "yacc.y"
 {
-			yyval = (INT) iden_node(yyvsp[-2]);
+			yyval = iden_node((STRING)yyvsp[-2]);
 			inext(((PNODE)yyval)) = (PNODE) yyvsp[0];
 		;
     break;}
 case 13:
-#line 93 "yacc.y"
+#line 111 "yacc.y"
 {
 			yyval = yyvsp[0];
 		;
     break;}
 case 14:
-#line 96 "yacc.y"
+#line 114 "yacc.y"
 {
 			join((PNODE) yyvsp[-1], (PNODE) yyvsp[0]);
 			yyval = yyvsp[-1];
 		;
     break;}
 case 15:
-#line 102 "yacc.y"
+#line 120 "yacc.y"
 {
-			yyval = (INT) children_node(yyvsp[-8], yyvsp[-6], yyvsp[-4], yyvsp[-1]);
-			((PNODE)yyval)->i_line = yyvsp[-10];
+			yyval = children_node((PNODE)yyvsp[-8], (STRING)yyvsp[-6], (STRING)yyvsp[-4], (PNODE)yyvsp[-1]);
+			((PNODE)yyval)->i_line = (INT)yyvsp[-10];
 		;
     break;}
 case 16:
-#line 107 "yacc.y"
+#line 125 "yacc.y"
 {
-			yyval = spouses_node(yyvsp[-10], yyvsp[-8], yyvsp[-6], yyvsp[-4], yyvsp[-1]);
-			((PNODE)yyval)->i_line = yyvsp[-12];
+			yyval = spouses_node((PNODE)yyvsp[-10], (STRING)yyvsp[-8], (STRING)yyvsp[-6], (STRING)yyvsp[-4], (PNODE)yyvsp[-1]);
+			((PNODE)yyval)->i_line = (INT)yyvsp[-12];
 		;
     break;}
 case 17:
-#line 112 "yacc.y"
+#line 130 "yacc.y"
 {
-			yyval = families_node(yyvsp[-10], yyvsp[-8], yyvsp[-6], yyvsp[-4], yyvsp[-1]);
-			((PNODE)yyval)->i_line = yyvsp[-12];
+			yyval = families_node((PNODE)yyvsp[-10], (STRING)yyvsp[-8], (STRING)yyvsp[-6], (STRING)yyvsp[-4], (PNODE)yyvsp[-1]);
+			((PNODE)yyval)->i_line = (INT)yyvsp[-12];
 		;
     break;}
 case 18:
-#line 117 "yacc.y"
+#line 135 "yacc.y"
 {
-			yyval = fathers_node(yyvsp[-10], yyvsp[-8], yyvsp[-6], yyvsp[-4], yyvsp[-1]);
-			((PNODE)yyval)->i_line = yyvsp[-12];
+			yyval = fathers_node((PNODE)yyvsp[-10], (STRING)yyvsp[-8], (STRING)yyvsp[-6], (STRING)yyvsp[-4], (PNODE)yyvsp[-1]);
+			((PNODE)yyval)->i_line = (INT)yyvsp[-12];
 		;
     break;}
 case 19:
-#line 122 "yacc.y"
+#line 140 "yacc.y"
 {
-			yyval = mothers_node(yyvsp[-10], yyvsp[-8], yyvsp[-6], yyvsp[-4], yyvsp[-1]);
-			((PNODE)yyval)->i_line = yyvsp[-12];
+			yyval = mothers_node((PNODE)yyvsp[-10], (STRING)yyvsp[-8], (STRING)yyvsp[-6], (STRING)yyvsp[-4], (PNODE)yyvsp[-1]);
+			((PNODE)yyval)->i_line = (INT)yyvsp[-12];
 		;
     break;}
 case 20:
-#line 127 "yacc.y"
+#line 145 "yacc.y"
 {
-			yyval = parents_node(yyvsp[-8], yyvsp[-6], yyvsp[-4], yyvsp[-1]);
-			((PNODE)yyval)->i_line = yyvsp[-10];
+			yyval = parents_node((PNODE)yyvsp[-8], (STRING)yyvsp[-6], (STRING)yyvsp[-4], (PNODE)yyvsp[-1]);
+			((PNODE)yyval)->i_line = (INT)yyvsp[-10];
 		;
     break;}
 case 21:
-#line 132 "yacc.y"
+#line 150 "yacc.y"
 {
-			yyval = forindiset_node(yyvsp[-10], yyvsp[-8], yyvsp[-6], yyvsp[-4], yyvsp[-1]);
+			yyval = forindiset_node((PNODE)yyvsp[-10], (STRING)yyvsp[-8], (STRING)yyvsp[-6], (STRING)yyvsp[-4], (PNODE)yyvsp[-1]);
 			((PNODE)yyval)->i_line = (INT) yyvsp[-12];
 		;
     break;}
 case 22:
-#line 137 "yacc.y"
+#line 155 "yacc.y"
 {
-			yyval = forlist_node(yyvsp[-8], yyvsp[-6], yyvsp[-4], yyvsp[-1]);
+			yyval = forlist_node((PNODE)yyvsp[-8], (STRING)yyvsp[-6], (STRING)yyvsp[-4], (PNODE)yyvsp[-1]);
 			((PNODE)yyval)->i_line = (INT) yyvsp[-10];
 		;
     break;}
 case 23:
-#line 142 "yacc.y"
+#line 160 "yacc.y"
 {
-			yyval = forindi_node(yyvsp[-6], yyvsp[-4], yyvsp[-1]);
+			yyval = forindi_node((STRING)yyvsp[-6], (STRING)yyvsp[-4], (PNODE)yyvsp[-1]);
 			((PNODE)yyval)->i_line = (INT) yyvsp[-8];
 		;
     break;}
 case 24:
-#line 146 "yacc.y"
+#line 164 "yacc.y"
 {
-                        yyval = fornotes_node(yyvsp[-6], yyvsp[-4], yyvsp[-1]);
+                        yyval = fornotes_node((PNODE)yyvsp[-6], (STRING)yyvsp[-4], (PNODE)yyvsp[-1]);
                         ((PNODE)yyval)->i_line = (INT) yyvsp[-8];
                 ;
     break;}
 case 25:
-#line 150 "yacc.y"
+#line 168 "yacc.y"
 {
-			yyval = forfam_node(yyvsp[-6], yyvsp[-4], yyvsp[-1]);
+			yyval = forfam_node((STRING)yyvsp[-6], (STRING)yyvsp[-4], (PNODE)yyvsp[-1]);
 			((PNODE)yyval)->i_line = (INT) yyvsp[-8];
 		;
     break;}
 case 26:
-#line 155 "yacc.y"
+#line 173 "yacc.y"
 {
-			yyval = forsour_node(yyvsp[-6], yyvsp[-4], yyvsp[-1]);
+			yyval = forsour_node((STRING)yyvsp[-6], (STRING)yyvsp[-4], (PNODE)yyvsp[-1]);
 			((PNODE)yyval)->i_line = (INT) yyvsp[-8];
 		;
     break;}
 case 27:
-#line 160 "yacc.y"
+#line 178 "yacc.y"
 {
-			yyval = foreven_node(yyvsp[-6], yyvsp[-4], yyvsp[-1]);
+			yyval = foreven_node((STRING)yyvsp[-6], (STRING)yyvsp[-4], (PNODE)yyvsp[-1]);
 			((PNODE)yyval)->i_line = (INT) yyvsp[-8];
 		;
     break;}
 case 28:
-#line 165 "yacc.y"
+#line 183 "yacc.y"
 {
-			yyval = forothr_node(yyvsp[-6], yyvsp[-4], yyvsp[-1]);
+			yyval = forothr_node((STRING)yyvsp[-6], (STRING)yyvsp[-4], (PNODE)yyvsp[-1]);
 			((PNODE)yyval)->i_line = (INT) yyvsp[-8];
 		;
     break;}
 case 29:
-#line 169 "yacc.y"
+#line 187 "yacc.y"
 {
-			yyval = traverse_node(yyvsp[-8], yyvsp[-6], yyvsp[-4], yyvsp[-1]);
+			yyval = traverse_node((PNODE)yyvsp[-8], (STRING)yyvsp[-6], (STRING)yyvsp[-4], (PNODE)yyvsp[-1]);
 			((PNODE)yyval)->i_line = (INT) yyvsp[-10];
 		;
     break;}
 case 30:
-#line 173 "yacc.y"
+#line 191 "yacc.y"
 {
-			yyval = fornodes_node(yyvsp[-6], yyvsp[-4], yyvsp[-1]);
+			yyval = fornodes_node((PNODE)yyvsp[-6], (STRING)yyvsp[-4], (PNODE)yyvsp[-1]);
 			((PNODE)yyval)->i_line = (INT) yyvsp[-8];
 		;
     break;}
 case 31:
-#line 177 "yacc.y"
+#line 195 "yacc.y"
 {
 			inext(((PNODE)yyvsp[-7])) = (PNODE)yyvsp[-6];
 			prev = NULL;  this = (PNODE)yyvsp[-1];
@@ -1208,164 +1220,164 @@ case 31:
 		;
     break;}
 case 32:
-#line 193 "yacc.y"
+#line 211 "yacc.y"
 {
 			inext(((PNODE)yyvsp[-5])) = (PNODE)yyvsp[-4];
-			yyval = while_node(yyvsp[-5], yyvsp[-1]);
+			yyval = while_node((PNODE)yyvsp[-5], (PNODE)yyvsp[-1]);
 			((PNODE)yyval)->i_line = (INT) yyvsp[-7];
 		;
     break;}
 case 33:
-#line 198 "yacc.y"
+#line 216 "yacc.y"
 {
-			yyval = call_node(yyvsp[-4], yyvsp[-1]);
+			yyval = call_node((STRING)yyvsp[-4], (PNODE)yyvsp[-1]);
 			((PNODE)yyval)->i_line = (INT) yyvsp[-3];
 		;
     break;}
 case 34:
-#line 202 "yacc.y"
+#line 220 "yacc.y"
 {
 			yyval = break_node();
 			((PNODE)yyval)->i_line = (INT) yyvsp[-2];
 		;
     break;}
 case 35:
-#line 206 "yacc.y"
+#line 224 "yacc.y"
 {
 			yyval = continue_node();
 			((PNODE)yyval)->i_line = (INT) yyvsp[-2];
 		;
     break;}
 case 36:
-#line 210 "yacc.y"
+#line 228 "yacc.y"
 {
-			yyval = return_node(yyvsp[-1]);
+			yyval = return_node((PNODE)yyvsp[-1]);
 			((PNODE)yyval)->i_line = (INT) yyvsp[-3];
 		;
     break;}
 case 37:
-#line 214 "yacc.y"
+#line 232 "yacc.y"
 {
 			yyval = yyvsp[0];
 		;
     break;}
 case 38:
-#line 218 "yacc.y"
+#line 236 "yacc.y"
 {
 			yyval = 0;
 		;
     break;}
 case 39:
-#line 221 "yacc.y"
+#line 239 "yacc.y"
 {
 			yyval = yyvsp[0];
 		;
     break;}
 case 40:
-#line 225 "yacc.y"
+#line 243 "yacc.y"
 {
 			yyval = yyvsp[0];
 		;
     break;}
 case 41:
-#line 228 "yacc.y"
+#line 246 "yacc.y"
 {
 			ielse((PNODE)yyvsp[-1]) = (WORD)yyvsp[0];
 			yyval = yyvsp[-1];
 		;
     break;}
 case 42:
-#line 233 "yacc.y"
+#line 251 "yacc.y"
 {
 			inext(((PNODE)yyvsp[-5])) = (PNODE)yyvsp[-4];
 			yyval = if_node((PNODE)yyvsp[-5], (PNODE)yyvsp[-1], (PNODE)NULL);
 		;
     break;}
 case 43:
-#line 237 "yacc.y"
+#line 255 "yacc.y"
 {
 			yyval = 0;
 		;
     break;}
 case 44:
-#line 240 "yacc.y"
+#line 258 "yacc.y"
 {
 			yyval = yyvsp[-1];
 		;
     break;}
 case 45:
-#line 244 "yacc.y"
+#line 262 "yacc.y"
 {
-			yyval = (INT) iden_node(yyvsp[0]);
+			yyval = iden_node((STRING)yyvsp[0]);
 			iargs(((PNODE)yyval)) = NULL;
 		;
     break;}
 case 46:
-#line 248 "yacc.y"
+#line 266 "yacc.y"
 {
-			yyval = (INT) func_node(yyvsp[-4], yyvsp[-1]);
-			((PNODE)yyval)->i_line = yyvsp[-3];
+			yyval = func_node((STRING)yyvsp[-4], (PNODE)yyvsp[-1]);
+			((PNODE)yyval)->i_line = (INT)yyvsp[-3];
 		;
     break;}
 case 47:
-#line 252 "yacc.y"
+#line 270 "yacc.y"
 {
 			yyval = yyvsp[0];
 		;
     break;}
 case 48:
-#line 255 "yacc.y"
+#line 273 "yacc.y"
 {
-			yyval = (INT) icons_node(Yival);
+			yyval = icons_node(Yival);
 		;
     break;}
 case 49:
-#line 258 "yacc.y"
+#line 276 "yacc.y"
 {
-			yyval = (INT) fcons_node(Yfval);
+			yyval = fcons_node(Yfval);
 		;
     break;}
 case 50:
-#line 262 "yacc.y"
+#line 280 "yacc.y"
 {
 			yyval = 0;
 		;
     break;}
 case 51:
-#line 265 "yacc.y"
+#line 283 "yacc.y"
 {
 			yyval = yyvsp[0];
 		;
     break;}
 case 52:
-#line 269 "yacc.y"
+#line 287 "yacc.y"
 {
 			yyval = yyvsp[0];
 		;
     break;}
 case 53:
-#line 272 "yacc.y"
+#line 290 "yacc.y"
 {
 			inext(((PNODE)yyvsp[-2])) = (PNODE) yyvsp[0];
 			yyval = yyvsp[-2];
 		;
     break;}
 case 54:
-#line 277 "yacc.y"
+#line 295 "yacc.y"
 {
 			yyval = 0;
 		;
     break;}
 case 55:
-#line 280 "yacc.y"
+#line 298 "yacc.y"
 {
 			yyval = yyvsp[0];
 		;
     break;}
 case 56:
-#line 284 "yacc.y"
+#line 302 "yacc.y"
 {
-			yyval = Plineno;
+			yyval = (YYSTYPE)Plineno;
 		;
     break;}
 }
@@ -1590,11 +1602,12 @@ yyerrhandle:
     }
   return 1;
 }
-#line 287 "yacc.y"
+#line 305 "yacc.y"
 
 
-join (list, last)
-PNODE list, last;
+void
+join (PNODE list,
+      PNODE last)
 {
 	PNODE prev = NULL;
 	while (list) {
@@ -1605,12 +1618,12 @@ PNODE list, last;
 	inext(prev) = last;
 }
 
-yyerror (str)
-STRING str;
+void
+yyerror (STRING str)
 {
 	extern INT Plineno;
 	extern STRING Pfname;
 
-	llwprintf("Syntax Error: %s: line %d\n", Pfname, Plineno);
+	llwprintf("Syntax Error (%s): %s: line %d\n", str, Pfname, Plineno);
 	Perrors++;
 }
