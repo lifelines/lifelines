@@ -7,7 +7,7 @@ bin_PROGRAMS = llines
 # what goes into lines?
 llines_SOURCES = add.c advedit.c ask.c browse.c delete.c edit.c \
 	export.c import.c lbrowse.c main.c merge.c miscutls.c \
-	newrecs.c pedigree.c remove.c show.c screen.c swap.c \
+	newrecs.c pedigree.c remove.c scan.c show.c screen.c swap.c \
 	tandem.c valgdcom.c llinesi.h askprogram.c
 
 # extra stuff for lines
@@ -75,6 +75,8 @@ newrecs.o: ../hdrs/translat.h ../hdrs/btree.h
 pedigree.o: ../hdrs/llstdlib.h ../hdrs/screen.h ../hdrs/mystring.h
 remove.o: ../hdrs/standard.h
 remove.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h
+scan.o: ../hdrs/sys_inc.h ../hdrs/llstdlib.h ../hdrs/table.h ../hdrs/indiseq.h
+scan.o: ../hdrs/interp.h ../hdrs/screen.h ../hdrs/liflines.h llinesi.h
 screen.o: ../hdrs/standard.h
 screen.o: ../hdrs/mystring.h ../hdrs/screen.h
 screen.o: ../hdrs/table.h ../hdrs/gedcom.h ../hdrs/indiseq.h
