@@ -514,13 +514,16 @@ remove_table (TABLE tab, INT whattofree)
 static void
 free_contents (ENTRY ent, INT whattofree)
 {
-	if (whattofree==FREEBOTH || whattofree==FREEKEY)
-		stdfree(ent->ekey);
-	if (whattofree==FREEBOTH || whattofree==FREEVALUE) {
-		if (ent->uval.w)
-			stdfree(ent->uval.w);
+	if (!is_generic_null(&ent->generic)) {
+		clear_generic(&ent->generic);
+	} else {
+		if (whattofree==FREEBOTH || whattofree==FREEKEY)
+			stdfree(ent->ekey);
+		if (whattofree==FREEBOTH || whattofree==FREEVALUE) {
+			if (ent->uval.w)
+				stdfree(ent->uval.w);
+		}
 	}
-	clear_generic(&ent->generic);
 }
 /*=================================================
  * traverse_table -- Traverse table doing something
