@@ -2,7 +2,7 @@
 
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                  "http://www.oasis-open.org/docbook/xml/4.0/docbookx.dtd"
-[<!ENTITY llversion '3.0.28'>]>
+[<!ENTITY llversion '3.0.32'>]>
 <book id="docbook" lang="sv">
 
   <bookinfo>
@@ -18,7 +18,7 @@
 _________________________________________________________
 
 <!DOCTYPE BOOK PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
-	<!entity llversion	"3.0.28"> 
+	<!entity llversion	"3.0.32"> 
 ]>	
 	
 <book id="docbook" lang="sv">
@@ -2692,6 +2692,17 @@ sortera listelement i omvänd ordning
 </para>
 </glossdef></glossentry>
 
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>LISTA <function>dup</function></funcdef>
+<paramdef><parameter>LISTA</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+duplicera en lista
+</para>
+
+</glossdef></glossentry>
+
 <glossentry><glossterm><synopsis><command>forlist</command> (<replaceable>LISTA</replaceable>, <replaceable>VALFRI_V</replaceable>, <replaceable>HELTAL_V</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
 </glossterm><glossdef>
 
@@ -2712,8 +2723,9 @@ loopa igenom alla element i lista
 	<function>list</function> innan den kan användas. Att
 	återdeklarera en befintlig variabel med
 	<function>list</function> tömmer den och återställer den till
-	att vara en tom lista.
-
+	att vara en tom lista. Om argumentet till list() är namnet på
+	en parameter till den aktuella rutinen, så tas referensen till
+	de anropande rutinerna bort, och en ny lista skapas.
 
 </para>
 
@@ -2787,13 +2799,28 @@ loopa igenom alla element i lista
 
 <para>
 
-	<function>Sort</function> och <function>rsort</function>
+	<function>sort</function> och <function>rsort</function>
 	sorterar en lista, och använder elemententen i den andra
 	vektorn för att bestämma den nya ordningen. Båda listorna
 	ordnas om, så i grunden sorteras båda med användning av
 	sorteringsordningen i det andra argumentet. (Om bara ett
-	argument anges, så sorteras det mot sina egna element.) Rsort
+	argument anges, så sorteras det mot sina egna element.) rsort
 	sorterar i omvänd ordning mot sort.
+	Den ordning som sort skapar placerar det minsta elementet på
+	position 1, och det största elementet på slutet av listan, på
+	så sätt att <function>dequeue</function> kommer att ta bort
+	det minsta elementet.
+
+</para>
+
+<para>
+
+	<function>dup</function> skapar en kopia av en lista. Om b är
+	en lista, så gör funktionen set(a,b) variabeln a till en
+	referens till listan b. Om du vill skapa en ny lista, måste du
+	använda set(a,dup(b)).
+
+</para>
 
 </para>
 
@@ -5009,8 +5036,8 @@ deklarera en uppsättningsvariabel
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>SET <function>addtoset</function></funcdef>
 <paramdef><parameter>SET</parameter>,
-<parameter>INDI</parameter><parameter>,
-VALFRI</parameter></paramdef>
+<parameter>INDI</parameter>,
+<parameter>VALFRI</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>

@@ -2,7 +2,7 @@
 
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd"
-[<!ENTITY llversion '3.0.28'>]>
+[<!ENTITY llversion '3.0.32>]>
 
   <book id="docbook" lang="sv">
 
@@ -263,7 +263,7 @@ STARTA <application>LIFELINES</application> OCH SKAPA DATABASER
 	<application>LifeLines</application> är:
 
      <synopsis>
-        <command>lines</command> <option>[-acdfiklnortuwxzCFI]</option><replaceable class="parameter">[databas]</replaceable>
+        <command>lines</command> <option>[-acdfiklnortuwxzCFI]</option> <replaceable class="parameter">[databas]</replaceable>
      </synopsis>
 
 </para>
@@ -281,7 +281,7 @@ STARTA <application>LIFELINES</application> OCH SKAPA DATABASER
 
 <row>
 <entry>-C</entry>
-<entry>Ange plats för konfigurationsfil location (t. ex.
+<entry>Ange plats för konfigurationsfil (t. ex.
 -C/home/bill/lifelines/.linesrc2)</entry>
 </row>
 
@@ -489,7 +489,7 @@ i stället för specialtecknen för vt100.
      befintliga, så skriv in ett ensamt frågetecken och tryck enter
      när <application>LifeLines</application> frågar dig efter namnet
      på databasen. <application>LifeLines</application> kommer då att
-     visa en lista över alla databases som det kan finna, och du får
+     visa en lista över alla databaser som det kan finna, och du får
      välja en från listan.
 
 </para>
@@ -1296,11 +1296,11 @@ TEXTREDIGERARE OCH MILJÖVARIABLER
 
 <para>
 
-	Det finns fem andra
+	Det finns fyra andra
 	<application>LifeLines</application>specifika miljövariabler. De är
 	<envar>LLDATABASES</envar>, <envar>LLARCHIVES</envar>,
-	<envar>LLPROGRAMS</envar>, <envar>LLREPORTS</envar> och
-	<envar>LLNEWDBDIR</envar>. <envar>LLDATABASES</envar> och 
+	<envar>LLPROGRAMS</envar> och <envar>LLREPORTS</envar>.
+	<envar>LLDATABASES</envar> och 
 	<envar>LLPROGRAMS</envar> är sökvägslistvariabler för
 	<acronym>UNIX</acronym>.
 
@@ -1329,11 +1329,11 @@ TEXTREDIGERARE OCH MILJÖVARIABLER
 	<application>LifeLines</application> kommer dessa kataloger
 	att sökas igenom i tur och ordning efter den databas som nämns
 	på kommandoraden. Exempelvis indikerar
-	<userinput><envar>LLDATABASES</envar>=<replaceable>.:/home/ttw4/LifeLines/Databases</replaceable></userinput>
+	<userinput><envar>LLDATABASES</envar>=<replaceable>.:/home/ttw4/LifeLines/Databaser</replaceable></userinput>
 	att <application>LifeLines</application> ska söka efter
 	databaser i aktuell katalog först, och om den inte hittas där,
 	därefter söka i:
-	<filename>/home/ttw4/LifeLines/Databases</filename>
+	<filename>/home/ttw4/LifeLines/Databaser</filename>
 
 </para>
 
@@ -1369,11 +1369,10 @@ TEXTREDIGERARE OCH MILJÖVARIABLER
 
 <para>
 
-	<envar>LLNEWDBDIR</envar> kan användas för att ställa in en
-	enskild katalog - nya databaser utan sökvägar kommer då att
-	skapas där. Detta är förstås bekvämt för de användare som
-	vanligen placerar alla sina databaser i en enda gemensam
-	katalog.
+	Nya databaser utan angivna sökvägar kommer att skapas i den
+	första katalogen som listats i LLDATABASES-sökvägen. (Detta är
+	en ändring; versionerna från 3.0.6 till 3.0.31 använde en nu
+	obsolet variabel LLNEWDBDIR.
 
 </para>
 
