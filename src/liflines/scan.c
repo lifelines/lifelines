@@ -60,6 +60,8 @@ pattern_match (SCAN_PATTERN *patt, STRING name)
 	for (p1=patt->string,p2=name; *p1 || *p2; p1++,p2++) {
 		if (*p1 == '*' && *(p1+1) == 0)
 			return TRUE;
+		if (!(*p1) || !(*p2))
+			return FALSE;
 		if (*p1 != '.' && ll_toupper(*p1) != ll_toupper(*p2))
 			return FALSE;
 	}
