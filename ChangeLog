@@ -1,3 +1,17 @@
+2004-05-08 Perry Rapp
+
+	* ChangeLog LINGUAS
+	*NEW po/nl.po
+
+	Added new Dutch translation.
+
+	* ChangeLog INSTALL NEWS configure.in
+	build/msvc6/llines/llines.rc build/rpm/lifelines.spec
+	docs/ll-devguide.xml docs/ll-reportmanual.xml
+	docs/ll-userguide.xml src/hdrs/version.h
+
+	Updated all version numbers from 3.0.37 to 3.0.38.
+
 2004-04-14 Stephen Dum
         *  ChangeLog INSTALL docs/ll-userguide.xml src/hdrs/fpattern.h
 	   src/interp/pvalue.c src/stdlib/fpattern.c

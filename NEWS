@@ -1,14 +1,16 @@
-LifeLines Source Release, Version 3.?
+LifeLines Source Release, Version 3.0.38
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
-New features added in 3.?
+New features added in 3.0.38
 ============================
 - Two-stage tt conversion via UTF-8
 - No more indirect cache
 - Unlimited #people may be added to lists and tables (during reports)
+- Polish translation
+- Dutch translation
 
-Bug fixes in 3.?
+Bug fixes in 3.0.38
 ============================
 - Fix nspouses
 - Fix display of TTPATH in u/c
