@@ -4,6 +4,10 @@
 
 	Fix display of default TTPATH in u/c.
 
+	* ChangeLog src/liflines/screen.c
+
+	Better description of whether iconv/gettext support compiled in.
+
 2003-11-05 Perry Rapp
 
 	* ChangeLog src/liflines/screen.c

@@ -1811,21 +1811,21 @@ invoke_cset_display (void)
 		enqueue_list(list, strsave(_("Locales are disabled.")));
 	
 	if (is_nls_supported()) {
-		enqueue_list(list, strsave(_("NLS (National Language Support) is enabled.")));
+		enqueue_list(list, strsave(_("NLS (National Language Support) is compiled in.")));
 		zs_setf(zstr, "LOCALEDIR: %s", LOCALEDIR);
 		enqueue_list(list, strsave(zs_str(zstr)));
 		zs_setf(zstr,  "LocaleDir: %s", getoptstr("LocaleDir", ""));
 		enqueue_list(list, strsave(zs_str(zstr)));
 	} else {
-		enqueue_list(list, strsave(_("NLS (National Language Support) is disabled.")));
+		enqueue_list(list, strsave(_("NLS (National Language Support) is not compiled in.")));
 	}
 
 	add_shims_info(list);
 
 	if (is_iconv_supported())
-		enqueue_list(list, strsave(_("iconv (codeset conversion) is enabled.")));
+		enqueue_list(list, strsave(_("iconv (codeset conversion) is compiled in.")));
 	else
-		enqueue_list(list, strsave(_("iconv (codeset conversion) is disabled.")));
+		enqueue_list(list, strsave(_("iconv (codeset conversion) is not compiled in.")));
 	
 	zs_setf(zstr, _("Startup collate locale: %s"), get_original_locale_collate());
 	enqueue_list(list, strsave(zs_str(zstr)));
