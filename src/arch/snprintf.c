@@ -31,13 +31,15 @@
 #include "config.h"
 #endif
 
+#include <sys/types.h>
+#include <stdio.h>
 #include <stdarg.h>
 
 /*
  * Implemented using vsprintf(), and ignoring the size restriction.
  */
 int
-snprintf(char *str, size_t size, const  char  *format, ...);
+snprintf(char *str, size_t size, const char *format, ...)
 {
   int retval;
   va_list ap;
