@@ -117,7 +117,7 @@ interp_program (STRING proc,    /* proc to call */
                 STRING *ifiles, /* program files */
                 STRING ofile)   /* output file - can be NULL */
 {
-    	FILE *fp;
+	FILE *fp;
 	LIST plist = create_list();
 	TABLE stab;
 	PVALUE dummy;
@@ -133,13 +133,14 @@ interp_program (STRING proc,    /* proc to call */
 			enqueue_list(plist, strsave(ifiles[i]));
 		}
 	} else {
-	    	ifile = NULL;
-	    	fp = ask_for_program(LLREADTEXT, qrptname, &ifile,
-				     llprograms, ".ll");
-		if ((fp == NULL) || (ifile == NULL))  {
-		    	if(fp) fclose(fp);
-			llwprintf("Error: file \"%s\" not found.\n",
-				  (ifile ? (char*)ifile : ""));
+		ifile = NULL;
+		fp = ask_for_program(LLREADTEXT, qrptname, &ifile,
+			llprograms, ".ll");
+		if (fp == NULL) {
+			if (ifile != NULL)  {
+				/* tried & failed to open file */
+				llwprintf("Error: file \"%s\" not found.\n", ifile);
+			}
 			return;
 		}
 		fclose(fp);

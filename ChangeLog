@@ -1,3 +1,8 @@
+2000-11-19 Perry Rapp <puddle@users.sourceforge.net>
+	interp/interp.c liflines/askprogram.c:
+	Fixed bug in askprogram. It was saying File "" not found
+	if the user pressed Q to cancel the report menu.
+
 2000-11-18 Perry Rapp <puddle@users.sourceforge.net>
 	Added win32/hdrs/README
 

@@ -306,6 +306,10 @@ make_program_list(struct program_info *head,
 
 /*==================================================
  * get_choice -- Return file pointer for menu choice
+ * fill in pfname unless internal error
+ * return non-null FILE if file could be opened
+ * so if file could not be opened, pfname still can tell us
+ *  what file the user tried & failed to open
  *================================================*/
 FILE *
 get_choice(struct program_info *head,
@@ -314,12 +318,13 @@ get_choice(struct program_info *head,
 {
   struct program_info *cur;
   FILE *fp;
+  static unsigned char fname[MAXLINELEN];
   cur = head->next;
   while (NULL != cur && choice)
-    {
-      cur = cur->next;
-      choice--;
-    }
+  {
+    cur = cur->next;
+    choice--;
+  }
   if (0 != choice)
     return NULL;
 
@@ -329,13 +334,9 @@ get_choice(struct program_info *head,
    * The static string is ugly, but apparently this is how it is done
    * in ask_for_string()
    */
-  if (NULL != fp && cur->filename && pfname)
-    {
-      static unsigned char fname[MAXLINELEN];
-      strncpy(fname, cur->filename,sizeof(fname)-1);
-      fname[sizeof(fname)-1] = '\0';
-      *pfname = fname;
-    }
+  strncpy(fname, cur->filename,sizeof(fname)-1);
+  fname[sizeof(fname)-1] = '\0';
+  *pfname = fname;
 
   return fp;
 }
@@ -362,10 +363,11 @@ ask_for_program (STRING mode,
       choice = choose_from_list(ttl, len, list);
       if (choice < 0)
         {
-          message("Nothing choosen?");
+          message("Cancelled.");
           return NULL;
         }
       fp = get_choice(head, choice, pfname);
+      /* note that fp may be null now */
       free_program_list(head, list, len);
     }
   return fp;
