@@ -88,8 +88,8 @@ extern int opterr;
 #ifdef WIN32
 #ifdef _MSC_VER
 /* temporary hack by Perry */
-#define S_ISREG(qq) (qq & S_IFREG)
-#define S_ISDIR(qq) (qq & S_IFDIR)
+#define S_ISREG(qq) ((qq) & S_IFREG)
+#define S_ISDIR(qq) ((qq) & S_IFDIR)
 #endif
 #endif
 
