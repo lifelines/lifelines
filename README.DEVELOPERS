@@ -28,10 +28,14 @@ If you lack gettext or iconv, you need to use these four:
 
   aclocal -I m4; autoheader; automake; autoconf
 
-(NB: If you lack gettext or iconv, then if configure.in changes, you
+(Note#1: If you lack gettext or iconv, then if configure.in changes, you
 must manually run "aclocal -I m4". If the Makefile runs it for you,
 it will fail -- obviously and with error messages -- because it will
 not include the -I m4 options.)
+
+(Note#2: This dichotomous use is supposedly solved with automake 1.5,
+in which case everybody uses aclocal -I m4, but I don't personally
+have automake 1.5.)
 
 This list of commands *must* be run after freshly checking a copy of the
 project out of CVS -- the files generated automatically are no longer

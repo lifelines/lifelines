@@ -6,6 +6,7 @@
 # (gettext m4 files are there)
 # # ACLOCAL_AMFLAGS = -I m4
 # But we can't do this because it breaks on sytems with system gettext
+# and automake 1.4 or prior
 
 SUBDIRS = arch btree gedlib interp stdlib intl po liflines hdrs tools reports win32 @docs_dirs@
 
