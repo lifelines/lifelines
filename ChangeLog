@@ -1,3 +1,10 @@
+2000-01-09  Marc Nozell  <marc@nozell.com>
+
+	* fixed tools/Makefile.am to include stdlib/libstdlib.a when
+	linking btree
+
+	* Updated AUTHORS
+	
 05 Jan 2000 Paul B. McBride (pmcbride@tiac.net)
 	added stdlib/{llstrcmp.c,mystring.c}
 	modified stdlib/path.c

@@ -8,7 +8,7 @@ bin_PROGRAMS = btedit
 btedit_SOURCES = btedit.c wprintf.c
 
 # extra stuff for btedit
-btedit_LDADD = ../btree/libbtree.a
+btedit_LDADD = ../btree/libbtree.a ../stdlib/libstdlib.a
 
 # this is set up explicitly so btedit doesn't get $(LIBS) (doesn't need curses)
 btedit: $(btedit_OBJECTS) $(btedit_DEPENDENCIES)
