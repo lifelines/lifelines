@@ -14,8 +14,8 @@ indexing of the resulting data.
 Before running this program, you will want to customize some global values
 for your site. In the original release, they are set as follow:
 
-  set(db_owner, "Scott McGee")
-  set(owner_addr, "mailto:smcgee@microware.com")
+  set(db_owner, getproperty("user.fullname"))
+  set(owner_addr, getproperty("user.email"))
   set(use_image, 1)               
   set(genweb_image, "../../pics/genweb.gif")
   set(use_page, 1)                
@@ -23,9 +23,10 @@ for your site. In the original release, they are set as follow:
   set(page_name, "genweb page")   
   set(html_index, 0)
 
-which specifies me, Scott McGee, as the database owner and my mailto URL,
-mailto:smcgee@microware.com, as the contact url to contact the database
-owner. It also says to put an image at the top of each HTML file and specifies
+The first two sets will get your fullname and email address from the 
+corresponding user properties.  They do not require editing this file.
+The other customizations require editing of this file.
+It also says to put an image at the top of each HTML file and specifies
 that the image is called genweb.gif. Next, it specifies that a link to my
 base page be added to each HTML file, that the location of the base page is
 genweb.html, and that the text for the link be "genweb page". It also says
@@ -91,8 +92,8 @@ proc main () {
   indiset(out_set)
 
 /* customize these globals to customize the output to your site */
-  set(db_owner, "Scott McGee")
-  set(owner_addr, "mailto:smcgee@microware.com")
+  set(db_owner, getproperty("user.fullname"))
+  set(owner_addr, getproperty("user.email"))
   set(use_image, 1)                /* 1 to use image, 0 to not use image */
   set(genweb_image, "../../pics/genweb.gif")
   set(use_page, 1)                 /* 1 to use link to page, 0 if not */

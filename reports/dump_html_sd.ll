@@ -35,8 +35,8 @@ global(html_index)     /* put HTML <ISINDEX> tag in INDEX file (1=yes 0=no) */
 
 proc set_static_html_globals(){
 /* customize these globals to customize the output to your site */
-  set(db_owner, "Stephen Dum")
-  set(owner_addr, "mailto:steve_dum@mentor.com")
+  set(db_owner, getproperty("user.fullname"))
+  set(owner_addr, getproperty("user.email"))
   set(use_image, 0)                /* 1 to use image, 0 to not use image */
   set(genweb_image, "../../pics/genweb.gif")
   set(use_page, 0)                 /* 1 to use link to page, 0 if not */

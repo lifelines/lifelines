@@ -449,15 +449,30 @@ init_display_fam (RECORD frec, INT width)
 	STRING father = _(qSdspl_fath);
 	STRING mother = _(qSdspl_moth);
 	RECORD ihusb=0, iwife=0;
-	INT husbstatus = fam_to_husb(frec, &ihusb);
-	INT wifestatus = fam_to_wife(frec, &iwife);
+	INT husbstatus = 0;
+	INT wifestatus = 0;
+	NODE fnode;
 
-	husb = nztop(ihusb);
-	wife = nztop(iwife);
+	/* Get the first two spouses in the family and use them rather than
+	 * displaying first husband and first mother
+	 * This causes a more reasonable presentation of non-traditional
+	 * familes.  Also it will display first hustband and first wife
+	 * for traditional families (as there's only one) and the db routines
+	 * insert HUSB records before WIFE records.
+	 */
+	if (fam) {
+	    fnode = nchild(fam);
+	    husbstatus = next_spouse(&fnode,&ihusb);
+	    fnode = nsibling(fnode);
+	    wifestatus = next_spouse(&fnode,&iwife);
+
+	    husb = nztop(ihusb);
+	    wife = nztop(iwife);
+	}
 
 	if (husbstatus == 1) {
 		INT avail = width - zs_len(famkey) - 3;
-		disp_person_name(Shusb, father, ihusb, avail);
+		disp_person_name(Shusb, SEX(husb)==SEX_MALE?father:mother, ihusb, avail);
 	} else {
 		zs_setf(Shusb, "%s:", father);
 		if (husbstatus == -1)
@@ -475,7 +490,7 @@ init_display_fam (RECORD frec, INT width)
 
 	if (wifestatus == 1) {
 		INT avail = width;
-		disp_person_name(Swife, mother, iwife, avail);
+		disp_person_name(Swife, SEX(wife)==SEX_MALE?father:mother, iwife, avail);
 	} else {
 		zs_setf(Swife, "%s:", mother);
 		if (wifestatus == -1)

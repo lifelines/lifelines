@@ -530,6 +530,30 @@ fam_to_spouse (NODE fam, NODE indi)
 	ENDWIFES
 	return NULL;
 }
+/*===============================================
+ * next_spouse -- Return next spouse of family
+ * NODE *node     [in/out] pass in nchild(fam) to start
+ *                or nsibling(previous node returned from this routine) to continue
+ * RECORD *spouse [out]     next spouse in family
+ * returns 1 for success, -1 if next HUSB/WIFE record is invalid
+ *         0 no more spouses found
+ *=============================================*/
+int
+next_spouse (NODE *node, RECORD *spouse)
+{
+	CNSTRING key=0;
+	if (!node || !spouse) return 0;
+	while (*node) {
+	    if (eqstr(ntag(*node),"HUSB") || eqstr(ntag(*node),"WIFE")) {
+		key = rmvat(nval(*node));
+		if (!key) return -1;
+		*spouse = key_to_irecord(key); /* ASSERT if fail */
+		return 1;
+	    }
+	    *node = nsibling(*node);
+	}
+	return 0;
+}
 /*==================================================
  * fam_to_first_chil -- Return first child of family
  *================================================*/

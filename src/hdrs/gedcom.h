@@ -251,6 +251,7 @@ NODE fam_to_first_chil(NODE);
 NODE fam_to_last_chil(NODE);
 STRING fam_to_list_string(NODE fam, INT len, STRING delim);
 NODE fam_to_spouse(NODE, NODE);
+int next_spouse(NODE *node, RECORD *spouse);
 RECORD file_to_record(STRING fname, XLAT ttm, STRING *pmsg, BOOLEAN *pemp);
 NODE file_to_node(STRING, XLAT, STRING*, BOOLEAN*);
 INT file_to_line(FILE*, XLAT, INT*, STRING*, STRING*, STRING*, STRING*);
@@ -673,30 +674,45 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 #define FORSPOUSES(indi,spouse,fam,num) \
 	{\
 	NODE __node = FAMS(indi);\
-	INT __sex = SEX(indi);\
-	NODE spouse=0,fam=0;\
+	NODE __node1=0, spouse=0,fam=0;\
 	STRING __key=0;\
 	num = 0;\
 	while (__node) {\
+	    if (spouse == 0) {\
 		__key = rmvat(nval(__node));\
 		if (!__key || !(fam = qkey_to_fam(__key))) {\
 			++num;\
 			__node = nsibling(__node);\
 			continue;\
 		}\
-		if (__sex == SEX_MALE)\
-			spouse = fam_to_wife_node(fam);\
-		else if (__sex == SEX_FEMALE)\
-			spouse = fam_to_husb_node(fam);\
-		else    spouse = fam_to_spouse(fam, indi);\
-		if (spouse != NULL) {\
-			++num;\
-			{
+		__node1 = nchild(fam);\
+	    }\
+	    /* inline find_tag here to search for either husb or wife */\
+	    spouse = 0;\
+	    while (__node1) {\
+		if (eqstr("HUSB",ntag(__node1)) || eqstr("WIFE",ntag(__node1))) {\
+		    __key = rmvat(nval(__node1));\
+		    if (__key && (spouse = key_to_indi(__key))) {\
+			if (spouse != indi) {\
+			    break;\
+			} else {\
+			    spouse = 0;\
+			}\
+		    }\
+		}\
+		__node1 = nsibling(__node1);\
+	    }\
+	    if (spouse != NULL) {\
+		    ++num;\
+		    {
 
 #define ENDSPOUSES \
-		}}\
-		__node = nsibling(__node);\
-		if (__node && nestr(ntag(__node), "FAMS")) __node = NULL;\
+		    }\
+		    __node1 = nsibling(__node1);\
+	    } else {\
+		    __node = nsibling(__node);\
+		    if (__node && nestr(ntag(__node), "FAMS")) __node = NULL;\
+	    }\
 	}}
 
 #define FORFAMSS(indi,fam,spouse,num) \

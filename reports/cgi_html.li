@@ -53,8 +53,8 @@ global(is_indi_html)   /* signals if report generates an indi HTML file */
  **************************************************************************/
 proc set_cgi_html_globals(){
 /* customize these globals to customize the output to your site */
-  set(db_owner, "Scott McGee")
-  set(owner_addr, "mailto:smcgee@microware.com")
+  set(db_owner, getproperty("user.fullname"))
+  set(owner_addr, getproperty("user.email"))
   set(use_image, 1)                /* 1 to use image, 0 to not use image */
   set(genweb_image, "http://www.emcee.com/~smcgee/pics/genweb.gif")
   set(use_page, 1)                 /* 1 to use link to page, 0 if not */

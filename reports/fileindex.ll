@@ -207,11 +207,13 @@ proc nameout(person)
 }
 proc intro()
 {
+    set(db_owner, getproperty("user.fullname"))
+    set(owner_email, concat("mailto:",getproperty("user.email")))
  "<html>\n"
- "<title>Dennis Nicklaus Genealogy Article Index</title>\n"
+ "<title>" db_owner " Genealogy Article Index</title>\n"
  "<META NAME=\"keywords\" CONTENT=\"genealogy, obituary, index\" >\n"
  "<center> <h1>Family Article Index</h1></center>\n"
- "<center> <a href=\"mailto:nicklaus@fnal.gov\">Dennis J. Nicklaus nicklaus@fnal.gov</a><br></center>\n"
+ "<center> <a href=\"" owner_email "\">" db_owner " " owner_email "</a><br></center>\n"
  "<p>\n"
  "This is an index of the various obituaries, biographies, wedding announcements, \n"
  "wills, etc. that I have, sorted into those categories.  Selecting the name\n"

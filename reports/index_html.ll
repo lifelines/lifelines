@@ -28,9 +28,13 @@ global(nl)
 global(last_surname)
 global(name_count)
 global(surname_count)
+global(owner_email)
+global(db_owner)
 
 proc main()
 {
+     set(db_owner, getproperty("user.fullname"))
+     set(owner_email, getproperty("user.email"))
     set(FB, 0)
     set(nl, nl())
     set(last_surname, "ZZ")
@@ -123,7 +127,7 @@ proc html_header(isindex)
 {
     "<HTML>" nl
     "<HEAD>" nl
-    "<LINK rev=\"made\" HREF=\"mailto:smcgee@microware.com\">"
+    "<LINK rev=\"made\" HREF=\"mailto:" owner_email "\">"
     if(isindex) { "<ISINDEX>" nl }
     "<TITLE>Index of database - "
     database()
@@ -136,7 +140,7 @@ proc html_address()
     "<HR>" nl
     "<ADDRESS>Last update : "
     date(gettoday())
-    "<br>Scott McGee  //  smcgee@microware.com  </ADDRESS>" nl
+    "<br>" db_owner "  //  " owner_email " </ADDRESS>" nl
 }
 
 proc print_name (me, last)

@@ -114,8 +114,8 @@ proc init ()
 {
 	set(dbname,save(database()))
 	set(extension,".html")
-	set(personalname,"I am Sam")
-	set(email,"me@thisplace.com")
+	set(personalname,getproperty("user.fullname"))
+	set(email,getproperty("user.email"))
 	set(homepage,"http://www.yourplace.here")
 /*e.g.:	set(homepage,"http://www.geocities.com/dnicklaus/index.html")*/
 }
