@@ -12,6 +12,7 @@ EXTRA_DIST = arch.h array.h btree.h \
 	icvt.h impfeed.h indiseq.h \
 	isolangs.h interp.h \
 	langinfz.h liflines.h list.h llnls.h lloptions.h llstdlib.h \
+	log.h \
 	menuitem.h metadata.h mychar.h mystring.h object.h \
 	proptbls.h pvalue.h \
 	screen.h sequence.h standard.h sys_inc.h \

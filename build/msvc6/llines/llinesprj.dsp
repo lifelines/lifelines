@@ -345,6 +345,10 @@ SOURCE=..\..\..\src\gedlib\locales.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\stdlib\log.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\liflines\main.c
 # End Source File
 # Begin Source File
@@ -859,6 +863,10 @@ SOURCE=..\..\..\src\hdrs\zstr.h
 # Begin Source File
 
 SOURCE=..\..\..\ChangeLog
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\log.h
 # End Source File
 # End Target
 # End Project

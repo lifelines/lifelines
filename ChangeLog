@@ -1,3 +1,12 @@
+2003-11-21 Perry Rapp
+
+	* ChangeLog build/msvc6/llines/llinesprj.dsp src/gedlib/xlat.c
+	src/hdrs/Makefile.am src/stdlib/Makefile.am
+	*NEW src/hdrs/log.h
+	*NEW src/stdlib/log.c
+
+	Add TTPATH.debug (optional config variable) code.
+
 2003-11-17 Perry Rapp
 
 	* ChangeLog src/gedlib/charmaps.c src/gedlib/xlat.c

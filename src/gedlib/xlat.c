@@ -19,6 +19,9 @@
 #include "gedcomi.h"
 #include "xlat.h" 
 #include "arch.h"
+#include "lloptions.h"
+#include "log.h"
+
 
 /*********************************************
  * local types
@@ -315,6 +318,13 @@ get_conversion_dyntt (CNSTRING src, CNSTRING dest)
 	zs_appc(zttname, '_');
 	zs_apps(zttname, dest);
 	dyntt = (DYNTT)valueof_ptr(f_dyntts, zs_str(zttname));
+	if (getoptint("TTPATH.debug", 0)) {
+		log_outf("ttpath.dbg",
+			_("ttpath trying to convert from <%s> to <%s>: %s"),
+			src, dest,
+			dyntt ? _("succeeded") : _("failed")
+			);
+	}
 	zs_free(&zttname);
 	return dyntt;
 }
@@ -380,7 +390,7 @@ xl_do_xlat (XLAT xlat, ZSTR zstr)
 	return cvtd;
 }
 /*==========================================================
- * xl_load_all_tts -- Load internal list of available translation
+ * xl_load_all_dyntts -- Load internal list of available translation
  *  tables (based on *.tt files in TTPATH)
  * Created: 2002/11/27 (Perry Rapp)
  *========================================================*/
@@ -388,7 +398,14 @@ void
 xl_load_all_dyntts (CNSTRING ttpath)
 {
 	STRING dirs,p;
+	FILE * fp=0;
 	free_dyntts();
+	if (getoptint("TTPATH.debug", 0)) {
+		if (!ttpath ||  !ttpath[0])
+			log_outf("ttpath.dbg", _("No TTPATH config variable"));
+		else
+			log_outf("ttpath.dbg", "ttpath: %s", ttpath);
+	}
 	if (!ttpath ||  !ttpath[0])
 		return;
 	f_dyntts = create_table(FREEBOTH);
@@ -413,6 +430,9 @@ load_dynttlist_from_dir (STRING dir)
 	struct dirent **programs;
 	INT n = scandir(dir, &programs, select_tts, alphasort);
 	INT i;
+	if (getoptint("TTPATH.debug", 0)) {
+		log_outf("ttpath.dbg", _("ttpath checking dir <%s>"), dir);
+	}
 	for (i=0; i<n; ++i) {
 		CNSTRING ttfile = programs[i]->d_name;
 		/* filename without extension */
@@ -424,6 +444,9 @@ load_dynttlist_from_dir (STRING dir)
 			UTF-8_ISO-8859-1 (type 1; code conversion)
 			UTF-8__HTML (type 2; subcoding)
 		*/
+		if (getoptint("TTPATH.debug", 0)) {
+			log_outf("ttpath.dbg", _("ttpath file <%s> typed as %d"), ttfile, ntype);
+		}
 		if (ntype==1 || ntype==2) {
 			if (!valueof_ptr(f_dyntts, zs_str(zfile))) {
 				TRANTABLE tt=0; /* will be loaded when needed */
