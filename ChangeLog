@@ -1,3 +1,7 @@
+2001-02-07 Perry Rapp <puddle@users.sourceforge.net>
+	
+	* gedlib/lloptions.c: Change use of itoa to sprintf.
+
 2001-02-05 Perry Rapp <puddle@users.sourceforge.net>
 
 	* NEWS README gedlib/messages.c hdrs/gedcom.h hdrs/menuitem.h

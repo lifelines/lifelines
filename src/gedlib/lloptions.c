@@ -22,6 +22,10 @@
    SOFTWARE.
 */
 
+/*==========================================================
+ * lloptions.c -- Read options from config file (& db user options)
+ *   added in 3.0.6 by Perry Rapp
+ *========================================================*/
 
 #include "llstdlib.h"
 #include "screen.h"
@@ -90,6 +94,7 @@ static TABLE nodbopt=0;
 /*==========================================
  * read_lloptions_from_config -- Read options
  *  from global config file
+ * Created: 2001/02/04, Perry Rapp
  *========================================*/
 void
 read_lloptions_from_config (void)
@@ -120,6 +125,7 @@ read_lloptions_from_config (void)
 /*==========================================
  * read_lloptions_from_db -- Update options
  *  from database user options
+ * Created: 2001/02/04, Perry Rapp
  *========================================*/
 void
 read_lloptions_from_db (void)
@@ -131,6 +137,7 @@ read_lloptions_from_db (void)
 /*==========================================
  * term_lloptions -- clean up option memory
  * (for memory debugging)
+ * Created: 2001/02/04, Perry Rapp
  *========================================*/
 void
 term_lloptions (void)
@@ -141,16 +148,19 @@ term_lloptions (void)
 /*==========================================
  * numtostr -- Convert INT to STRING
  *  returns static buffer
+ * Created: 2001/02/04, Perry Rapp
  *========================================*/
 static STRING
 numtostr (INT num)
 {
 	static char buffer[33];
-	return itoa(num, buffer, 10);
+	sprintf(buffer, "%d", num);
+	return buffer;
 }
 /*==========================================
  * load_config_file -- read options in config file
  *  and load into table
+ * Created: 2001/02/04, Perry Rapp
  *========================================*/
 static void
 load_config_file (STRING file)
@@ -186,6 +196,7 @@ load_config_file (STRING file)
 /*==========================================
  * read_db_options -- read db user options
  *  and load into table
+ * Created: 2001/02/04, Perry Rapp
  *========================================*/
 static void
 read_db_options (void)
@@ -194,6 +205,7 @@ read_db_options (void)
 }
 /*==========================================
  * update_opt -- update one option from db user options
+ * Created: 2001/02/04, Perry Rapp
  *========================================*/
 static INT
 update_opt (ENTRY ent)
@@ -225,6 +237,7 @@ changeoptstr (STRING * str, STRING newval)
 /*==========================================
  * store_to_lloptions -- Update lloptions from
  *  opttab
+ * Created: 2001/02/04, Perry Rapp
  *========================================*/
 static void
 store_to_lloptions (void)
