@@ -6,6 +6,11 @@
 	Start using _pl macro for ngettext (plural gettext).
 	Cosmetic cleanup.
 
+	* .linesrc ChangeLog lines.cfg liflines/screen.c:
+
+	Add more info to utility codeset list.
+	List DbNewProps in config files.
+
 2002-06-25 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog configure.in:

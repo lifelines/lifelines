@@ -4,7 +4,7 @@
 # As are blank lines
 # So all these lines are commented out...
 #
-# 2002/06/25
+# 2002/06/26
 #
 # All variables here are available to report programs
 # via the report language function getproperty, so, for
@@ -217,3 +217,8 @@
 # This is disabled by default
 # Enable this to disambiguate databases in different paths
 # Disable this if your home directory is deep (eg, on MS-Windows)
+
+# Set default properties (user options) for new databases
+#NewDbProps=codeset=UTF-8
+# Default is none
+

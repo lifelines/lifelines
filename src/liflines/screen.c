@@ -1781,6 +1781,8 @@ invoke_cset_display (void)
 {
 	LIST list = create_list();
 	char buffer[80];
+	INT i;
+
 	set_list_type(list, LISTDOFREE);
 
 	llstrncpyf(buffer, sizeof(buffer), "%s: %s", _("Internal codeset")
@@ -1835,6 +1837,18 @@ invoke_cset_display (void)
 	llstrncpyf(buffer, sizeof(buffer), _("GEDCOM codeset: %s")
 		, getoptstr("GedcomCodeset",""));
 	push_list(list, strsave(buffer));
+
+	llstrncpyf(buffer, sizeof(buffer), "TTDIR: %s", getoptstr("TTDIR", ""));
+	push_list(list, strsave(buffer));
+
+	for (i=0; i<NUM_TT_MAPS; ++i) {
+		TRANMAPPING ttm = get_tranmapping(i);
+		if (!ttm->global_trans)
+			continue;
+		llstrncpyf(buffer, sizeof(buffer), "%s: %d global tts"
+			, get_map_name(i), length_list(ttm->global_trans));
+		push_list(list, strsave(buffer));
+	}
 
 	display_list(_("Codeset information"), list);
 	make_list_empty(list);
