@@ -380,6 +380,9 @@ closebtree (BTREE btree)
 exit_closebtree:
 	if (fp) fclose(fp);
 	if (btree) {
+		if(bmaster(btree)) {
+			stdfree(bmaster(btree));
+		}
 		stdfree(btree);
 	}
 	return result;

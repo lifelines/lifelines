@@ -342,8 +342,9 @@ prompt_for_db:
 	/* search for database */
 	/* search for file in lifelines path */
 	dbused = filepath(dbrequested, "r", dbdir, NULL, uu8);
-	if (!dbused) dbused = dbrequested;
-	dbused = strsave(dbused);
+	if (!dbused) {
+	    dbused = strsave(dbrequested);
+	}
 
 	if (!open_or_create_database(alteration, dbrequested, &dbused))
 		goto finish;
