@@ -1,3 +1,8 @@
+2000-12-11  Marc Nozell  <marc@nozell.com>
+
+	* liflines/scan.c: Fix broken build.  strcmpi (Windows) vs
+	strcasecmp (Posix)
+
 2000-12-10 Perry Rapp <prapp@users.sourceforge.net>
 
 	* btree/record.c btree/traverse.c gedlib/intrface.c

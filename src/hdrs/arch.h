@@ -35,4 +35,11 @@ extern int scandir(const char *dir, struct dirent ***namelist,
 extern int alphasort(const struct dirent **a, const struct dirent **b);
 #endif
 
+#ifndef HAVE_STRCMPI
+#ifdef HAVE_STRCASECMP
+#define strcmpi strcasecmp
+#endif /* HAVE_STRCASECMP */
+#endif /* HAVE_STRCMPI */
+
+
 #endif
