@@ -14,7 +14,7 @@ llines_SOURCES = add.c advedit.c ask.c askprogram.c browse.c \
 	tandem.c valgdcom.c llinesi.h 
 
 # what goes into llexec ?
-llexec_SOURCES = error.c llexec.c
+llexec_SOURCES = error.c llexec.c llexec.h
 
 # extra stuff for lines
 llines_LDADD = ../interp/libinterp.a ../gedlib/libgedcom.a \

@@ -12,9 +12,15 @@
 
 	Add -I argument to pass in properties from commandline (eg, -Iroot_indi=I1).
 
+	Include llexec.h as source for llexec.
+
 	* ChangeLog NEWS build/rpm/lifelines.spec
 
 	Add llexec to rpm. Mention new -I param in NEWS.
+
+	* ChangeLog src/liflines/Makefile.am:
+
+	Include llexec.h as source for llexec.
 
 2002-10-06 Perry Rapp
 
