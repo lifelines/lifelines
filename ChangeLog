@@ -4,6 +4,12 @@
 
 	Fix bug dropping subcoding files.
 
+	* ChangeLog
+	*NEW tt/UTF-8__html.tt
+	*NEW tt/UTF-8__unhtml.tt:
+
+	Add files for html subcoding (for output html reports).
+
 2002-12-15 Perry Rapp
 
 	* ChangeLog src/gedlib/codesets.c src/gedlib/init.c

@@ -1,0 +1,259 @@
+## Portions (c) International Organization for Standardization 1986
+## Permission to copy in any form is granted for use with
+## conforming SGML systems and applications as defined in
+## ISO 8879, provided this notice is included in all copies.
+##
+## Created by Perry Rapp, 2002-12-15
+##
+&nbsp;	$C2$A0	# u00a0 #no-break space = non-breaking space, U+00A0 ISOnum 
+&iexcl;	$C2$A1	# u00a1 #inverted exclamation mark, U+00A1 ISOnum 
+&cent;	$C2$A2	# u00a2 #cent sign, U+00A2 ISOnum 
+&pound;	$C2$A3	# u00a3 #pound sign, U+00A3 ISOnum 
+&curren;	$C2$A4	# u00a4 #currency sign, U+00A4 ISOnum 
+&yen;	$C2$A5	# u00a5 #yen sign = yuan sign, U+00A5 ISOnum 
+&brvbar;	$C2$A6	# u00a6 #broken bar = broken vertical bar, U+00A6 ISOnum 
+&sect;	$C2$A7	# u00a7 #section sign, U+00A7 ISOnum 
+&uml;	$C2$A8	# u00a8 #diaeresis = spacing diaeresis, U+00A8 ISOdia 
+&copy;	$C2$A9	# u00a9 #copyright sign, U+00A9 ISOnum 
+&ordf;	$C2$AA	# u00aa #feminine ordinal indicator, U+00AA ISOnum 
+&laquo;	$C2$AB	# u00ab #left-pointing double angle quotation mark = left pointing guillemet, U+00AB ISOnum 
+&not;	$C2$AC	# u00ac #not sign, U+00AC ISOnum 
+&shy;	$C2$AD	# u00ad #soft hyphen = discretionary hyphen, U+00AD ISOnum 
+&reg;	$C2$AE	# u00ae #registered sign = registered trade mark sign, U+00AE ISOnum 
+&macr;	$C2$AF	# u00af #macron = spacing macron = overline = APL overbar, U+00AF ISOdia 
+&deg;	$C2$B0	# u00b0 #degree sign, U+00B0 ISOnum 
+&plusmn;	$C2$B1	# u00b1 #plus-minus sign = plus-or-minus sign, U+00B1 ISOnum 
+&sup2;	$C2$B2	# u00b2 #superscript two = superscript digit two = squared, U+00B2 ISOnum 
+&sup3;	$C2$B3	# u00b3 #superscript three = superscript digit three = cubed, U+00B3 ISOnum 
+&acute;	$C2$B4	# u00b4 #acute accent = spacing acute, U+00B4 ISOdia 
+&micro;	$C2$B5	# u00b5 #micro sign, U+00B5 ISOnum 
+&para;	$C2$B6	# u00b6 #pilcrow sign = paragraph sign, U+00B6 ISOnum 
+&middot;	$C2$B7	# u00b7 #middle dot = Georgian comma = Greek middle dot, U+00B7 ISOnum 
+&cedil;	$C2$B8	# u00b8 #cedilla = spacing cedilla, U+00B8 ISOdia 
+&sup1;	$C2$B9	# u00b9 #superscript one = superscript digit one, U+00B9 ISOnum 
+&ordm;	$C2$BA	# u00ba #masculine ordinal indicator, U+00BA ISOnum 
+&raquo;	$C2$BB	# u00bb #right-pointing double angle quotation mark = right pointing guillemet, U+00BB ISOnum 
+&frac14;	$C2$BC	# u00bc #vulgar fraction one quarter = fraction one quarter, U+00BC ISOnum 
+&frac12;	$C2$BD	# u00bd #vulgar fraction one half = fraction one half, U+00BD ISOnum 
+&frac34;	$C2$BE	# u00be #vulgar fraction three quarters = fraction three quarters, U+00BE ISOnum 
+&iquest;	$C2$BF	# u00bf #inverted question mark = turned question mark, U+00BF ISOnum 
+&Agrave;	$C3$80	# u00c0 #latin capital letter A with grave = latin capital letter A grave, U+00C0 ISOlat1 
+&Aacute;	$C3$81	# u00c1 #latin capital letter A with acute, U+00C1 ISOlat1 
+&Acirc;	$C3$82	# u00c2 #latin capital letter A with circumflex, U+00C2 ISOlat1 
+&Atilde;	$C3$83	# u00c3 #latin capital letter A with tilde, U+00C3 ISOlat1 
+&Auml;	$C3$84	# u00c4 #latin capital letter A with diaeresis, U+00C4 ISOlat1 
+&Aring;	$C3$85	# u00c5 #latin capital letter A with ring above = latin capital letter A ring, U+00C5 ISOlat1 
+&AElig;	$C3$86	# u00c6 #latin capital letter AE = latin capital ligature AE, U+00C6 ISOlat1 
+&Ccedil;	$C3$87	# u00c7 #latin capital letter C with cedilla, U+00C7 ISOlat1 
+&Egrave;	$C3$88	# u00c8 #latin capital letter E with grave, U+00C8 ISOlat1 
+&Eacute;	$C3$89	# u00c9 #latin capital letter E with acute, U+00C9 ISOlat1 
+&Ecirc;	$C3$8A	# u00ca #latin capital letter E with circumflex, U+00CA ISOlat1 
+&Euml;	$C3$8B	# u00cb #latin capital letter E with diaeresis, U+00CB ISOlat1 
+&Igrave;	$C3$8C	# u00cc #latin capital letter I with grave, U+00CC ISOlat1 
+&Iacute;	$C3$8D	# u00cd #latin capital letter I with acute, U+00CD ISOlat1 
+&Icirc;	$C3$8E	# u00ce #latin capital letter I with circumflex, U+00CE ISOlat1 
+&Iuml;	$C3$8F	# u00cf #latin capital letter I with diaeresis, U+00CF ISOlat1 
+&ETH;	$C3$90	# u00d0 #latin capital letter ETH, U+00D0 ISOlat1 
+&Ntilde;	$C3$91	# u00d1 #latin capital letter N with tilde, U+00D1 ISOlat1 
+&Ograve;	$C3$92	# u00d2 #latin capital letter O with grave, U+00D2 ISOlat1 
+&Oacute;	$C3$93	# u00d3 #latin capital letter O with acute, U+00D3 ISOlat1 
+&Ocirc;	$C3$94	# u00d4 #latin capital letter O with circumflex, U+00D4 ISOlat1 
+&Otilde;	$C3$95	# u00d5 #latin capital letter O with tilde, U+00D5 ISOlat1 
+&Ouml;	$C3$96	# u00d6 #latin capital letter O with diaeresis, U+00D6 ISOlat1 
+&times;	$C3$97	# u00d7 #multiplication sign, U+00D7 ISOnum 
+&Oslash;	$C3$98	# u00d8 #latin capital letter O with stroke = latin capital letter O slash, U+00D8 ISOlat1 
+&Ugrave;	$C3$99	# u00d9 #latin capital letter U with grave, U+00D9 ISOlat1 
+&Uacute;	$C3$9A	# u00da #latin capital letter U with acute, U+00DA ISOlat1 
+&Ucirc;	$C3$9B	# u00db #latin capital letter U with circumflex, U+00DB ISOlat1 
+&Uuml;	$C3$9C	# u00dc #latin capital letter U with diaeresis, U+00DC ISOlat1 
+&Yacute;	$C3$9D	# u00dd #latin capital letter Y with acute, U+00DD ISOlat1 
+&THORN;	$C3$9E	# u00de #latin capital letter THORN, U+00DE ISOlat1 
+&szlig;	$C3$9F	# u00df #latin small letter sharp s = ess-zed, U+00DF ISOlat1 
+&agrave;	$C3$A0	# u00e0 #latin small letter a with grave = latin small letter a grave, U+00E0 ISOlat1 
+&aacute;	$C3$A1	# u00e1 #latin small letter a with acute, U+00E1 ISOlat1 
+&acirc;	$C3$A2	# u00e2 #latin small letter a with circumflex, U+00E2 ISOlat1 
+&atilde;	$C3$A3	# u00e3 #latin small letter a with tilde, U+00E3 ISOlat1 
+&auml;	$C3$A4	# u00e4 #latin small letter a with diaeresis, U+00E4 ISOlat1 
+&aring;	$C3$A5	# u00e5 #latin small letter a with ring above = latin small letter a ring, U+00E5 ISOlat1 
+&aelig;	$C3$A6	# u00e6 #latin small letter ae = latin small ligature ae, U+00E6 ISOlat1 
+&ccedil;	$C3$A7	# u00e7 #latin small letter c with cedilla, U+00E7 ISOlat1 
+&egrave;	$C3$A8	# u00e8 #latin small letter e with grave, U+00E8 ISOlat1 
+&eacute;	$C3$A9	# u00e9 #latin small letter e with acute, U+00E9 ISOlat1 
+&ecirc;	$C3$AA	# u00ea #latin small letter e with circumflex, U+00EA ISOlat1 
+&euml;	$C3$AB	# u00eb #latin small letter e with diaeresis, U+00EB ISOlat1 
+&igrave;	$C3$AC	# u00ec #latin small letter i with grave, U+00EC ISOlat1 
+&iacute;	$C3$AD	# u00ed #latin small letter i with acute, U+00ED ISOlat1 
+&icirc;	$C3$AE	# u00ee #latin small letter i with circumflex, U+00EE ISOlat1 
+&iuml;	$C3$AF	# u00ef #latin small letter i with diaeresis, U+00EF ISOlat1 
+&eth;	$C3$B0	# u00f0 #latin small letter eth, U+00F0 ISOlat1 
+&ntilde;	$C3$B1	# u00f1 #latin small letter n with tilde, U+00F1 ISOlat1 
+&ograve;	$C3$B2	# u00f2 #latin small letter o with grave, U+00F2 ISOlat1 
+&oacute;	$C3$B3	# u00f3 #latin small letter o with acute, U+00F3 ISOlat1 
+&ocirc;	$C3$B4	# u00f4 #latin small letter o with circumflex, U+00F4 ISOlat1 
+&otilde;	$C3$B5	# u00f5 #latin small letter o with tilde, U+00F5 ISOlat1 
+&ouml;	$C3$B6	# u00f6 #latin small letter o with diaeresis, U+00F6 ISOlat1 
+&divide;	$C3$B7	# u00f7 #division sign, U+00F7 ISOnum 
+&oslash;	$C3$B8	# u00f8 #latin small letter o with stroke, = latin small letter o slash, U+00F8 ISOlat1 
+&ugrave;	$C3$B9	# u00f9 #latin small letter u with grave, U+00F9 ISOlat1 
+&uacute;	$C3$BA	# u00fa #latin small letter u with acute, U+00FA ISOlat1 
+&ucirc;	$C3$BB	# u00fb #latin small letter u with circumflex, U+00FB ISOlat1 
+&uuml;	$C3$BC	# u00fc #latin small letter u with diaeresis, U+00FC ISOlat1 
+&yacute;	$C3$BD	# u00fd #latin small letter y with acute, U+00FD ISOlat1 
+&thorn;	$C3$BE	# u00fe #latin small letter thorn, U+00FE ISOlat1 
+&yuml;	$C3$BF	# u00ff #latin small letter y with diaeresis, U+00FF ISOlat1 
+&fnof;	$C6$92	# u0192 #latin small f with hook = function = florin, U+0192 ISOtech 
+&Alpha;	$CE$91	# u0391 #greek capital letter alpha, U+0391 
+&Beta;	$CE$92	# u0392 #greek capital letter beta, U+0392 
+&Gamma;	$CE$93	# u0393 #greek capital letter gamma, U+0393 ISOgrk3 
+&Delta;	$CE$94	# u0394 #greek capital letter delta, U+0394 ISOgrk3 
+&Epsilon;	$CE$95	# u0395 #greek capital letter epsilon, U+0395 
+&Zeta;	$CE$96	# u0396 #greek capital letter zeta, U+0396 
+&Eta;	$CE$97	# u0397 #greek capital letter eta, U+0397 
+&Theta;	$CE$98	# u0398 #greek capital letter theta, U+0398 ISOgrk3 
+&Iota;	$CE$99	# u0399 #greek capital letter iota, U+0399 
+&Kappa;	$CE$9A	# u039a #greek capital letter kappa, U+039A 
+&Lambda;	$CE$9B	# u039b #greek capital letter lambda, U+039B ISOgrk3 
+&Mu;	$CE$9C	# u039c #greek capital letter mu, U+039C 
+&Nu;	$CE$9D	# u039d #greek capital letter nu, U+039D 
+&Xi;	$CE$9E	# u039e #greek capital letter xi, U+039E ISOgrk3 
+&Omicron;	$CE$9F	# u039f #greek capital letter omicron, U+039F 
+&Pi;	$CE$A0	# u03a0 #greek capital letter pi, U+03A0 ISOgrk3 
+&Rho;	$CE$A1	# u03a1 #greek capital letter rho, U+03A1 
+&Sigma;	$CE$A3	# u03a3 #greek capital letter sigma, U+03A3 ISOgrk3 
+&Tau;	$CE$A4	# u03a4 #greek capital letter tau, U+03A4 
+&Upsilon;	$CE$A5	# u03a5 #greek capital letter upsilon, U+03A5 ISOgrk3 
+&Phi;	$CE$A6	# u03a6 #greek capital letter phi, U+03A6 ISOgrk3 
+&Chi;	$CE$A7	# u03a7 #greek capital letter chi, U+03A7 
+&Psi;	$CE$A8	# u03a8 #greek capital letter psi, U+03A8 ISOgrk3 
+&Omega;	$CE$A9	# u03a9 #greek capital letter omega, U+03A9 ISOgrk3 
+&alpha;	$CE$B1	# u03b1 #greek small letter alpha, U+03B1 ISOgrk3 
+&beta;	$CE$B2	# u03b2 #greek small letter beta, U+03B2 ISOgrk3 
+&gamma;	$CE$B3	# u03b3 #greek small letter gamma, U+03B3 ISOgrk3 
+&delta;	$CE$B4	# u03b4 #greek small letter delta, U+03B4 ISOgrk3 
+&epsilon;	$CE$B5	# u03b5 #greek small letter epsilon, U+03B5 ISOgrk3 
+&zeta;	$CE$B6	# u03b6 #greek small letter zeta, U+03B6 ISOgrk3 
+&eta;	$CE$B7	# u03b7 #greek small letter eta, U+03B7 ISOgrk3 
+&theta;	$CE$B8	# u03b8 #greek small letter theta, U+03B8 ISOgrk3 
+&iota;	$CE$B9	# u03b9 #greek small letter iota, U+03B9 ISOgrk3 
+&kappa;	$CE$BA	# u03ba #greek small letter kappa, U+03BA ISOgrk3 
+&lambda;	$CE$BB	# u03bb #greek small letter lambda, U+03BB ISOgrk3 
+&mu;	$CE$BC	# u03bc #greek small letter mu, U+03BC ISOgrk3 
+&nu;	$CE$BD	# u03bd #greek small letter nu, U+03BD ISOgrk3 
+&xi;	$CE$BE	# u03be #greek small letter xi, U+03BE ISOgrk3 
+&omicron;	$CE$BF	# u03bf #greek small letter omicron, U+03BF NEW 
+&pi;	$CF$80	# u03c0 #greek small letter pi, U+03C0 ISOgrk3 
+&rho;	$CF$81	# u03c1 #greek small letter rho, U+03C1 ISOgrk3 
+&sigmaf;	$CF$82	# u03c2 #greek small letter final sigma, U+03C2 ISOgrk3 
+&sigma;	$CF$83	# u03c3 #greek small letter sigma, U+03C3 ISOgrk3 
+&tau;	$CF$84	# u03c4 #greek small letter tau, U+03C4 ISOgrk3 
+&upsilon;	$CF$85	# u03c5 #greek small letter upsilon, U+03C5 ISOgrk3 
+&phi;	$CF$86	# u03c6 #greek small letter phi, U+03C6 ISOgrk3 
+&chi;	$CF$87	# u03c7 #greek small letter chi, U+03C7 ISOgrk3 
+&psi;	$CF$88	# u03c8 #greek small letter psi, U+03C8 ISOgrk3 
+&omega;	$CF$89	# u03c9 #greek small letter omega, U+03C9 ISOgrk3 
+&thetasym;	$CF$91	# u03d1 #greek small letter theta symbol, U+03D1 NEW 
+&upsih;	$CF$92	# u03d2 #greek upsilon with hook symbol, U+03D2 NEW 
+&piv;	$CF$96	# u03d6 #greek pi symbol, U+03D6 ISOgrk3 
+&bull;	$E2$80$A2	# u2022 #bullet = black small circle, U+2022 ISOpub 
+&hellip;	$E2$80$A6	# u2026 #horizontal ellipsis = three dot leader, U+2026 ISOpub 
+&prime;	$E2$80$B2	# u2032 #prime = minutes = feet, U+2032 ISOtech 
+&Prime;	$E2$80$B3	# u2033 #double prime = seconds = inches, U+2033 ISOtech 
+&oline;	$E2$80$BE	# u203e #overline = spacing overscore, U+203E NEW 
+&frasl;	$E2$81$84	# u2044 #fraction slash, U+2044 NEW 
+&weierp;	$E2$84$98	# u2118 #script capital P = power set = Weierstrass p, U+2118 ISOamso 
+&image;	$E2$84$91	# u2111 #blackletter capital I = imaginary part, U+2111 ISOamso 
+&real;	$E2$84$9C	# u211c #blackletter capital R = real part symbol, U+211C ISOamso 
+&trade;	$E2$84$A2	# u2122 #trade mark sign, U+2122 ISOnum 
+&alefsym;	$E2$84$B5	# u2135 #alef symbol = first transfinite cardinal, U+2135 NEW 
+&larr;	$E2$86$90	# u2190 #leftwards arrow, U+2190 ISOnum 
+&uarr;	$E2$86$91	# u2191 #upwards arrow, U+2191 ISOnum
+&rarr;	$E2$86$92	# u2192 #rightwards arrow, U+2192 ISOnum 
+&darr;	$E2$86$93	# u2193 #downwards arrow, U+2193 ISOnum 
+&harr;	$E2$86$94	# u2194 #left right arrow, U+2194 ISOamsa 
+&crarr;	$E2$86$B5	# u21b5 #downwards arrow with corner leftwards = carriage return, U+21B5 NEW 
+&lArr;	$E2$87$90	# u21d0 #leftwards double arrow, U+21D0 ISOtech 
+&uArr;	$E2$87$91	# u21d1 #upwards double arrow, U+21D1 ISOamsa 
+&rArr;	$E2$87$92	# u21d2 #rightwards double arrow, U+21D2 ISOtech 
+&dArr;	$E2$87$93	# u21d3 #downwards double arrow, U+21D3 ISOamsa 
+&hArr;	$E2$87$94	# u21d4 #left right double arrow, U+21D4 ISOamsa 
+&forall;	$E2$88$80	# u2200 #for all, U+2200 ISOtech 
+&part;	$E2$88$82	# u2202 #partial differential, U+2202 ISOtech 
+&exist;	$E2$88$83	# u2203 #there exists, U+2203 ISOtech 
+&empty;	$E2$88$85	# u2205 #empty set = null set = diameter, U+2205 ISOamso 
+&nabla;	$E2$88$87	# u2207 #nabla = backward difference, U+2207 ISOtech 
+&isin;	$E2$88$88	# u2208 #element of, U+2208 ISOtech 
+&notin;	$E2$88$89	# u2209 #not an element of, U+2209 ISOtech 
+&ni;	$E2$88$8B	# u220b #contains as member, U+220B ISOtech 
+&prod;	$E2$88$8F	# u220f #n-ary product = product sign, U+220F ISOamsb 
+&sum;	$E2$88$91	# u2211 #n-ary sumation, U+2211 ISOamsb 
+&minus;	$E2$88$92	# u2212 #minus sign, U+2212 ISOtech 
+&lowast;	$E2$88$97	# u2217 #asterisk operator, U+2217 ISOtech 
+&radic;	$E2$88$9A	# u221a #square root = radical sign, U+221A ISOtech 
+&prop;	$E2$88$9D	# u221d #proportional to, U+221D ISOtech 
+&infin;	$E2$88$9E	# u221e #infinity, U+221E ISOtech 
+&ang;	$E2$88$A0	# u2220 #angle, U+2220 ISOamso 
+&and;	$E2$88$A7	# u2227 #logical and = wedge, U+2227 ISOtech 
+&or;	$E2$88$A8	# u2228 #logical or = vee, U+2228 ISOtech 
+&cap;	$E2$88$A9	# u2229 #intersection = cap, U+2229 ISOtech 
+&cup;	$E2$88$AA	# u222a #union = cup, U+222A ISOtech 
+&int;	$E2$88$AB	# u222b #integral, U+222B ISOtech 
+&there4;	$E2$88$B4	# u2234 #therefore, U+2234 ISOtech 
+&sim;	$E2$88$BC	# u223c #tilde operator = varies with = similar to, U+223C ISOtech 
+&cong;	$E2$89$85	# u2245 #approximately equal to, U+2245 ISOtech 
+&asymp;	$E2$89$88	# u2248 #almost equal to = asymptotic to, U+2248 ISOamsr 
+&ne;	$E2$89$A0	# u2260 #not equal to, U+2260 ISOtech 
+&equiv;	$E2$89$A1	# u2261 #identical to, U+2261 ISOtech 
+&le;	$E2$89$A4	# u2264 #less-than or equal to, U+2264 ISOtech 
+&ge;	$E2$89$A5	# u2265 #greater-than or equal to, U+2265 ISOtech 
+&sub;	$E2$8A$82	# u2282 #subset of, U+2282 ISOtech 
+&sup;	$E2$8A$83	# u2283 #superset of, U+2283 ISOtech 
+&nsub;	$E2$8A$84	# u2284 #not a subset of, U+2284 ISOamsn 
+&sube;	$E2$8A$86	# u2286 #subset of or equal to, U+2286 ISOtech 
+&supe;	$E2$8A$87	# u2287 #superset of or equal to, U+2287 ISOtech 
+&oplus;	$E2$8A$95	# u2295 #circled plus = direct sum, U+2295 ISOamsb 
+&otimes;	$E2$8A$97	# u2297 #circled times = vector product, U+2297 ISOamsb 
+&perp;	$E2$8A$A5	# u22a5 #up tack = orthogonal to = perpendicular, U+22A5 ISOtech 
+&sdot;	$E2$8B$85	# u22c5 #dot operator, U+22C5 ISOamsb 
+&lceil;	$E2$8C$88	# u2308 #left ceiling = apl upstile, U+2308 ISOamsc 
+&rceil;	$E2$8C$89	# u2309 #right ceiling, U+2309 ISOamsc 
+&lfloor;	$E2$8C$8A	# u230a #left floor = apl downstile, U+230A ISOamsc 
+&rfloor;	$E2$8C$8B	# u230b #right floor, U+230B ISOamsc 
+&lang;	$E2$8C$A9	# u2329 #left-pointing angle bracket = bra, U+2329 ISOtech 
+&rang;	$E2$8C$AA	# u232a #right-pointing angle bracket = ket, U+232A ISOtech 
+&loz;	$E2$97$8A	# u25ca #lozenge, U+25CA ISOpub 
+&spades;	$E2$99$A0	# u2660 #black spade suit, U+2660 ISOpub 
+&clubs;	$E2$99$A3	# u2663 #black club suit = shamrock, U+2663 ISOpub 
+&hearts;	$E2$99$A5	# u2665 #black heart suit = valentine, U+2665 ISOpub 
+&diams;	$E2$99$A6	# u2666 #black diamond suit, U+2666 ISOpub 
+&quot;	$22	# u0022 #quotation mark = APL quote, U+0022 ISOnum 
+&amp;	$26	# u0026 #ampersand, U+0026 ISOnum 
+&lt;	$3C	# u003c #less-than sign, U+003C ISOnum 
+&gt;	$3E	# u003e #greater-than sign, U+003E ISOnum 
+&OElig;	$C5$92	# u0152 #latin capital ligature OE, U+0152 ISOlat2 
+&oelig;	$C5$93	# u0153 #latin small ligature oe, U+0153 ISOlat2 
+&Scaron;	$C5$A0	# u0160 #latin capital letter S with caron, U+0160 ISOlat2 
+&scaron;	$C5$A1	# u0161 #latin small letter s with caron, U+0161 ISOlat2 
+&Yuml;	$C5$B8	# u0178 #latin capital letter Y with diaeresis, U+0178 ISOlat2 
+&circ;	$CB$86	# u02c6 #modifier letter circumflex accent, U+02C6 ISOpub 
+&tilde;	$CB$9C	# u02dc #small tilde, U+02DC ISOdia 
+&ensp;	$E2$80$82	# u2002 #en space, U+2002 ISOpub 
+&emsp;	$E2$80$83	# u2003 #em space, U+2003 ISOpub 
+&thinsp;	$E2$80$89	# u2009 #thin space, U+2009 ISOpub 
+&zwnj;	$E2$80$8C	# u200c #zero width non-joiner, U+200C NEW RFC 2070 
+&zwj;	$E2$80$8D	# u200d #zero width joiner, U+200D NEW RFC 2070 
+&lrm;	$E2$80$8E	# u200e #left-to-right mark, U+200E NEW RFC 2070 
+&rlm;	$E2$80$8F	# u200f #right-to-left mark, U+200F NEW RFC 2070 
+&ndash;	$E2$80$93	# u2013 #en dash, U+2013 ISOpub 
+&mdash;	$E2$80$94	# u2014 #em dash, U+2014 ISOpub 
+&lsquo;	$E2$80$98	# u2018 #left single quotation mark, U+2018 ISOnum 
+&rsquo;	$E2$80$99	# u2019 #right single quotation mark, U+2019 ISOnum 
+&sbquo;	$E2$80$9A	# u201a #single low-9 quotation mark, U+201A NEW 
+&ldquo;	$E2$80$9C	# u201c #left double quotation mark, U+201C ISOnum 
+&rdquo;	$E2$80$9D	# u201d #right double quotation mark, U+201D ISOnum 
+&bdquo;	$E2$80$9E	# u201e #double low-9 quotation mark, U+201E NEW 
+&dagger;	$E2$80$A0	# u2020 #dagger, U+2020 ISOpub 
+&Dagger;	$E2$80$A1	# u2021 #double dagger, U+2021 ISOpub 
+&permil;	$E2$80$B0	# u2030 #per mille sign, U+2030 ISOtech 
+&lsaquo;	$E2$80$B9	# u2039 #single left-pointing angle quotation mark, U+2039 ISO proposed 
+&rsaquo;	$E2$80$BA	# u203a #single right-pointing angle quotation mark, U+203A ISO proposed 
+&euro;	$E2$82$AC	# u20ac #euro sign, U+20AC NEW 
