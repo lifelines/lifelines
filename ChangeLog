@@ -1,3 +1,8 @@
+2003-05-06 Steve Dum
+       * ChangeLog docs/ll-reportmanual* docs/ll-userguide*
+       roll version number for these docs to 3.0.28 and
+       generate html, pdf and txt forms.
+
 2003-05-06 Perry Rapp
 
 	* ChangeLog docs/dbverify.1

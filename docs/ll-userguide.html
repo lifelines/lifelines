@@ -37,7 +37,7 @@ CLASS="subtitle"
 ><TT
 CLASS="application"
 >LifeLines</TT
-> Version 3.0.27</H2
+> Version 3.0.28</H2
 ><H3
 CLASS="author"
 ><A
@@ -93,101 +93,106 @@ HREF="#AEN342"
 ><DT
 ><A
 HREF="#AEN351"
+>CODESET</A
+></DT
+><DT
+><A
+HREF="#AEN360"
 >ENTERING THE FIRST PERSON</A
 ></DT
 ><DT
 ><A
-HREF="#AEN394"
+HREF="#AEN404"
 >SCREEN EDITORS AND ENVIRONMENT VARIABLES</A
 ></DT
 ><DT
 ><A
-HREF="#AEN452"
+HREF="#AEN462"
 >BASICS OF BROWSING</A
 ></DT
 ><DT
 ><A
-HREF="#AEN463"
+HREF="#AEN473"
 >IDENTIFYING A PERSON OR LIST OF PERSONS TO BROWSE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN489"
+HREF="#AEN499"
 >ZIP IDENTIFYING A NEW PERSON</A
 ></DT
 ><DT
 ><A
-HREF="#AEN504"
+HREF="#AEN514"
 >BROWSE DISPLAY BASICS</A
 ></DT
 ><DT
 ><A
-HREF="#AEN507"
+HREF="#AEN517"
 >PERSON BROWSE SCREEN</A
 ></DT
 ><DT
 ><A
-HREF="#AEN676"
+HREF="#AEN686"
 >LIST BROWSE SCREEN</A
 ></DT
 ><DT
 ><A
-HREF="#AEN764"
+HREF="#AEN774"
 >FAMILY BROWSE SCREEN</A
 ></DT
 ><DT
 ><A
-HREF="#AEN874"
+HREF="#AEN884"
 >TANDEM PERSON BROWSE MODE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN961"
+HREF="#AEN971"
 >TANDEM FAMILY BROWSE MODE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1069"
+HREF="#AEN1079"
 >PEDIGREE BROWSE MODE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1132"
+HREF="#AEN1142"
 >ADD OPERATION</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1139"
+HREF="#AEN1149"
 >DELETE OPERATION</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1149"
->CHARACTER TRANSLATION</A
+HREF="#AEN1159"
+>CODESET CONVERSION</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1239"
+HREF="#AEN1254"
 >MISCELLANEOUS UTILITIES</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1337"
+HREF="#AEN1352"
 >HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1502"
+HREF="#AEN1517"
 >FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1511"
+HREF="#AEN1526"
 >LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1560"
+HREF="#AEN1575"
 >System and User Properties</A
 ></DT
 ></DL
@@ -2052,7 +2057,93 @@ CLASS="sect1"
 ><A
 NAME="AEN351"
 ></A
+>CODESET</H2
+><P
+>&#13;
+     After you have created a new database, and before you actually
+     add any data to it, is the time to set the codeset to be used
+     in the database.
+
+</P
+><P
+>&#13;
+     The codeset (or character encoding, to use precise Unicode
+     terminology) is the decision as to how letters will be represented
+     by the computer. If you have only ever used English letters in
+     computing, you may not have had to encounter this issue, because as
+     it happens, the English letters (a-z and A-Z) are stored numerically
+     in the same fashion in almost all codesets used by computers. However,
+     in the field of genealogy, you are especially likely to meet letters
+     outside of the English alphabet (for example, accented vowels).
+
+</P
+><P
+>&#13;
+     You have fundamentally three choices as to what codeset to use in your
+     database, listed below from easiest to most powerful.
+
+</P
+><P
+>&#13;
+     First, you may leave it entirely unspecified. This will give the 
+     traditional lifelines behavior. This is really only suitable if either
+     (a), you only use English (ASCII) data, or (b), you work in an 
+     environment that all uses the same 8-bit codeset (eg, a GNU/Linux box
+     which is all ISO-8859-15), and you only run lifelines in English.
+     If you use any non-English data on MS-Windows, this is not likely to 
+     be suitable, because the lifelines screens run in the console, but 
+     you are likely to use MS-Windows applications either for editing or 
+     for viewing output, and the MS-Windows console uses a different 
+     codeset from MS-Windows application. Also, if you use lifelines in a
+     different language than English, this may not be suitable, because 
+     the gettext message catalogs (for non-English interface) will not 
+     be converted into your codeset.
+
+</P
+><P
+>&#13;
+     Second, you may specify a particular 8-bit codeset. Assuming that you
+     have iconv and gettext installed (or you are using the MS-Windows version,
+     which comes with these), you may specify any 8-bit codeset supported by
+     iconv, and iconv supports quite many. A natural choice for Western European
+     languages would be ISO-8859-1, or (for MS-Windows only) CP-1252. With this
+     option, gettext language files will be converted to your codeset.
+
+</P
+><P
+>&#13;
+     Third, you may specify the use of UTF-8. This is a Unicode encoding, and is
+     by far the most powerful option. In fact, this is the only really convenient 
+     way to be able to store, for example, names in English, names in Russian, and
+     names in Greek, all in the same database, in their native scripts (alphabets).
+     In recent versions, lifelines has become more knowledgeable about handling 
+     UTF-8, so that, for example, upper &#38; lower casing only work correctly with
+     versions from 3.0.28 on.
+
+</P
+><P
+>&#13;
+     Further information about codeset conversion is found in the later chapter of
+     that name (for example, information about producing reports which make use of
+     HTML entity names for non-ASCII characters).
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN360"
+></A
 >ENTERING THE FIRST PERSON</H2
+><P
+>&#13;
+     Note: Before you add the first person to your database, you
+     specify internal codeset (review the Codeset chapter for
+     information).
+
+</P
 ><P
 >&#13;
      Normally you add persons to the database from the browsing
@@ -2078,7 +2169,7 @@ CLASS="acronym"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN357"
+NAME="AEN367"
 ></A
 ><P
 ><B
@@ -2176,7 +2267,7 @@ CLASS="option"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN370"
+NAME="AEN380"
 ></A
 ><P
 ><B
@@ -2331,7 +2422,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN394"
+NAME="AEN404"
 ></A
 >SCREEN EDITORS AND ENVIRONMENT VARIABLES</H2
 ><P
@@ -2598,7 +2689,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN452"
+NAME="AEN462"
 ></A
 >BASICS OF BROWSING</H2
 ><P
@@ -2668,7 +2759,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN463"
+NAME="AEN473"
 ></A
 >IDENTIFYING A PERSON OR LIST OF PERSONS TO BROWSE</H2
 ><P
@@ -2726,7 +2817,7 @@ CLASS="application"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN471"
+NAME="AEN481"
 ></A
 ><P
 ><B
@@ -2756,7 +2847,7 @@ t/wtmr/iv<br>
 <DIV
 CLASS="example"
 ><A
-NAME="AEN475"
+NAME="AEN485"
 ></A
 ><P
 ><B
@@ -2852,7 +2943,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN489"
+NAME="AEN499"
 ></A
 >ZIP IDENTIFYING A NEW PERSON</H2
 ><P
@@ -2961,7 +3052,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN504"
+NAME="AEN514"
 ></A
 >BROWSE DISPLAY BASICS</H2
 ><P
@@ -2979,7 +3070,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN507"
+NAME="AEN517"
 ></A
 >PERSON BROWSE SCREEN</H2
 ><P
@@ -3591,7 +3682,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN676"
+NAME="AEN686"
 ></A
 >LIST BROWSE SCREEN</H2
 ><P
@@ -3921,7 +4012,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN764"
+NAME="AEN774"
 ></A
 >FAMILY BROWSE SCREEN</H2
 ><P
@@ -4332,7 +4423,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN874"
+NAME="AEN884"
 ></A
 >TANDEM PERSON BROWSE MODE</H2
 ><P
@@ -4643,7 +4734,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN961"
+NAME="AEN971"
 ></A
 >TANDEM FAMILY BROWSE MODE</H2
 ><P
@@ -5003,7 +5094,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1069"
+NAME="AEN1079"
 ></A
 >PEDIGREE BROWSE MODE</H2
 ><P
@@ -5234,7 +5325,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1132"
+NAME="AEN1142"
 ></A
 >ADD OPERATION</H2
 ><P
@@ -5281,7 +5372,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1139"
+NAME="AEN1149"
 ></A
 >DELETE OPERATION</H2
 ><P
@@ -5345,9 +5436,53 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1149"
+NAME="AEN1159"
 ></A
->CHARACTER TRANSLATION</H2
+>CODESET CONVERSION</H2
+><P
+>&#13;
+     (This section was previously entitled CHARACTER TRANSLATION.)
+
+</P
+><P
+>&#13;
+     The intention is that you need only specify the internal codeset for
+     each database you create (and this step may be automated via the NewDbProps
+     property), and all else works pretty well without tuning. That is,
+     lifelines tries to guess the correct codeset for your environment (including
+     guessing the console and windows codesets when operating under MS-Windows,
+     which it should do fairly well).
+
+</P
+><P
+>&#13;
+     However, you may encounter situations where you wish to alter the codeset
+     behavior, or the codeset conversion is not operating correctly (in which case
+     we hope you will report the problem to the mailing list and/or sourceforge
+     bugs list).
+
+</P
+><P
+>&#13;
+     There are two ways to amend codeset conversion. The first method is by changing
+     configuration variables. For example, if you wish to generate an HTML report
+     of all your data, which includes names in Russian (in Cyrillic letters), for your
+     cousin, and you know that your cousin's computer has no font for Cyrillic letters,
+     you might wish to temporarily adjust your report output codeset so that you will
+     get interpolated ASCII letters for the Russian letters. You could do this by
+     temporarily altering the configuration variable ReportCodeSetOut to be "ASCII" 
+     (actually, if any of your data has characters in it that are reserved in HTML, 
+     such as the less than sign, or the ampersand, you would probaby want "ASCII//HTML").
+
+</P
+><P
+>&#13;
+     The second way to change codeset conversion, and the only way in lifelines 3.0.6,
+     is to edit the embedded character translation tables, in which you actually specify
+     the letters you want converted, letter by letter, and how you want them converted.
+     This method, unlike the first, even works in databases with no specified internal
+     codeset.
+</P
 ><P
 >&#13;
 If you choose the modify character translation tables operation from the main menu, <TT
@@ -5643,7 +5778,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1239"
+NAME="AEN1254"
 ></A
 >MISCELLANEOUS UTILITIES</H2
 ><P
@@ -5884,7 +6019,7 @@ CLASS="replaceable"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1304"
+NAME="AEN1319"
 ></A
 ><P
 ><B
@@ -5984,7 +6119,7 @@ record template with the following:
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1321"
+NAME="AEN1336"
 ></A
 ><P
 ><B
@@ -6012,7 +6147,7 @@ CLASS="programlisting"
 you would edit the user option file to contain:<DIV
 CLASS="example"
 ><A
-NAME="AEN1324"
+NAME="AEN1339"
 ></A
 ><P
 ><B
@@ -6031,7 +6166,7 @@ CLASS="literallayout"
 or, using the \n escape so as to keep the entry on one line:<DIV
 CLASS="example"
 ><A
-NAME="AEN1327"
+NAME="AEN1342"
 ></A
 ><P
 ><B
@@ -6072,7 +6207,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1337"
+NAME="AEN1352"
 ></A
 >HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</H2
 ><P
@@ -6331,7 +6466,7 @@ CLASS="structfield"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1382"
+NAME="AEN1397"
 ></A
 ><P
 ><B
@@ -7052,7 +7187,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1502"
+NAME="AEN1517"
 ></A
 >FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</H2
 ><P
@@ -7126,7 +7261,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1511"
+NAME="AEN1526"
 ></A
 >LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</H2
 ><P
@@ -7213,7 +7348,7 @@ CLASS="application"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1526"
+NAME="AEN1541"
 ></A
 ><P
 ><B
@@ -7336,7 +7471,7 @@ CLASS="structfield"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1544"
+NAME="AEN1559"
 ></A
 ><P
 ><B
@@ -7447,7 +7582,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1560"
+NAME="AEN1575"
 ></A
 >System and User Properties</H2
 ><P
@@ -7667,10 +7802,8 @@ directory.
 ><P
 >&#13;For the following parameters related to codeset, the values are a 
 String denoting code set in use in data. Special handling is provided
-for utf-8, which may be entered as "UTF-8", "utf-8", or "65001". (This is
-actually a code set issue and not a character set issue, as this only enables
-the processing of multibyte sequences, without regard to their semantic
-assignments).
+for UTF-8, which may be entered as "UTF-8", "utf-8", or "65001". (The
+official, and preferred, name is UTF-8.
 </P
 ><DIV
 CLASS="glosslist"
@@ -7681,7 +7814,7 @@ CLASS="glosslist"
 ></DT
 ><DD
 ><P
->&#13;Specifies the Codeset to use when processing Gedcom files.
+>&#13;Specifies the default Codeset to use when processing Gedcom files.
 There are actually 3 properties.
 <I
 CLASS="glossterm"
@@ -7694,7 +7827,11 @@ can be used to specify the codeset for output or input.  If either of these is
 not specified <I
 CLASS="glossterm"
 >GedcomCodeSet</I
-> is used.
+> is used. Most Gedcom files should
+contain a codeset property, so this is not usually relevant when reading a Gedcom
+file, unless the input Gedcom file lacks a codeset property. This is used, however,
+when writing out a Gedcom file. 
+NB: This is ignored if the database has no internal codeset specified.
 </P
 ></DD
 ><DT
@@ -7715,7 +7852,10 @@ can be used to specify the codeset for output or input.  If either of these is
 not specified <I
 CLASS="glossterm"
 >EditorCodeSet</I
-> is used.
+> is used. This property allows
+lifelines to convert from its internal codeset to the one you use in your editor, so
+this is important when your editor does not use the same codeset as your database.
+NB: This is ignored if the database has no internal codeset specified.
 </P
 ></DD
 ><DT
@@ -7736,7 +7876,26 @@ can be used to specify the codeset for output or input.  If either of these is
 not specified <I
 CLASS="glossterm"
 >ReportCodeSet</I
-> is used.
+> is used. Recently created
+reports may actually specify their codeset, in which case this is not used, but
+for reports which do not include a specification of codeset, the
+<I
+CLASS="glossterm"
+>ReportCodeSetIn</I
+> (or <I
+CLASS="glossterm"
+>ReportCodeSet</I
+>)
+specifies how the report will be understood. In any case, the output of a 
+report program will be written in the codeset given by
+<I
+CLASS="glossterm"
+>ReportCodeSetOut</I
+> (or <I
+CLASS="glossterm"
+>ReportCodeSet</I
+>).
+NB: This is ignored if the database has no internal codeset specified.
 </P
 ></DD
 ><DT

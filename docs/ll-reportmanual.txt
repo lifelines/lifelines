@@ -1,7 +1,7 @@
 
 THE LIFELINES PROGRAMMING SUBSYSTEM AND REPORT GENERATOR
 
-LifeLines Version 3.0.27
+LifeLines Version 3.0.28
 
 Thomas T. Wetmore , IV
      _____________________________________________________________
@@ -1988,8 +1988,10 @@ forindiset( SET, INDI_V, ANY_V, INT_V ) { commands }
    Union,   intersect  and  difference  return  the  set  union,  set
    intersection and set difference, respectively, of two person sets.
    Each  functions  takes  two person sets as arguments and returns a
-   third  person set. The functions do not affect the values of their
-   two argument sets.
+   third  person  set.  The  functions actually modify their argument
+   sets,  both  reordering them into canonical key order and removing
+   any duplicates (these operations are necessary to easily implement
+   these types of set functions).
 
    Parentset,  childset,  spouseset  and siblingset return the set of
    all  parents,  set  of all children, set of all spouses and set of
@@ -2172,7 +2174,7 @@ Miscellaneous Functions
    Database  returns  the  name  of  the  current database, useful in
    titling  reports.  program  returns the name of the current report
    program.  Version  returns  the  version  of the running LifeLines
-   program, eg, 3.0.27.
+   program, eg, 3.0.28.
 
    System  executes  its  string argument as a UNIX (or MS-Windows as
    appropriate)  shell  command,  by  invoking the system shell. This

@@ -38,7 +38,7 @@ CLASS="subtitle"
 ><TT
 CLASS="application"
 >LifeLines</TT
-> Version 3.0.27</H2
+> Version 3.0.28</H2
 ><H3
 CLASS="author"
 ><A
@@ -12317,9 +12317,12 @@ CLASS="function"
 > and <TT
 CLASS="function"
 >difference</TT
-> return the set union, set intersection and set difference, respectively,
-of two person sets. Each functions takes two person sets as arguments and returns a third person set. The
-functions do not affect the values of their two argument sets.
+>
+return the set union, set intersection and set difference, respectively, of two person sets.
+Each functions takes two person sets as arguments and returns a third person set. The
+functions actually modify their argument sets, both reordering them into canonical key order
+and removing any duplicates (these operations are necessary to easily implement these types
+of set functions).
 </P
 ><P
 >&#13;<TT
@@ -13377,7 +13380,7 @@ CLASS="application"
 >LifeLines</TT
 > program, eg, <TT
 CLASS="literal"
->3.0.27</TT
+>3.0.28</TT
 >.
 </P
 ><P

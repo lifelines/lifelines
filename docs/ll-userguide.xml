@@ -2,7 +2,7 @@
 
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd"
-[<!ENTITY llversion '3.0.25'>]>
+[<!ENTITY llversion '3.0.28'>]>
 
   <book id="docbook">
 
@@ -19,7 +19,7 @@
 _________________________________________________________
 
 <!DOCTYPE BOOK PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
-	<!entity llversion	"3.0.25">
+	<!entity llversion	"3.0.28">
 ]>	
 	
 <book id="docbook">
@@ -3221,14 +3221,14 @@ CODESET CONVERSION
 
 </para>
 
-</para>
+<para>
 
      The second way to change codeset conversion, and the only way in lifelines 3.0.6,
      is to edit the embedded character translation tables, in which you actually specify
      the letters you want converted, letter by letter, and how you want them converted.
      This method, unlike the first, even works in databases with no specified internal
      codeset.
-<para>
+</para>
 
 <para>
 
