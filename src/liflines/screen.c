@@ -176,6 +176,8 @@ static void clearw(void);
 static UIWINDOW create_uisubwindow(UIWINDOW parent, INT rows, INT cols, INT begy, INT begx);
 static UIWINDOW create_uisubwindow2(UIWINDOW parent, INT rows, INT cols);
 static void create_windows(void);
+static UIWINDOW create_uisubwindow (UIWINDOW parent, INT rows, INT cols, INT begy, INT begx);
+static UIWINDOW create_uisubwindow2 (UIWINDOW uiparent, INT rows, INT cols);
 static void deactivate_uiwin(void);
 static void disp_codeset(UIWINDOW uiwin, INT row, INT col, STRING menuit, INT codeset);
 static void disp_locale(UIWINDOW uiwin, INT row, INT col, STRING menuit);
@@ -213,6 +215,7 @@ static void repaint_main_menu(UIWINDOW uiwin);
 static void rpt_cset_menu(UIWINDOW wparent);
 static void run_report(BOOLEAN picklist);
 static void save_tt_menu(UIWINDOW wparent);
+static void show_fam (UIWINDOW uiwin, NODE fam, INT mode, INT row, INT hgt, INT width, INT * scroll, BOOLEAN reuse);
 static void show_tandem_line(UIWINDOW uiwin, INT row);
 static void shw_array_of_strings(STRING *strings, listdisp *ld
 	, DETAILFNC detfnc, void * param);
@@ -319,7 +322,7 @@ term_screen (void)
 /*=======================================
  * repaint_main_menu --
  *=====================================*/
-void
+static void
 repaint_main_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
@@ -455,7 +458,7 @@ create_uisubwindow (UIWINDOW parent, INT rows, INT cols, INT begy, INT begx)
  *  for a true (& permanent) subwindow
  * Created: 2001/11/24, Perry Rapp
  *========================================*/
-UIWINDOW
+static UIWINDOW
 create_uisubwindow2 (UIWINDOW uiparent, INT rows, INT cols)
 {
 	INT begy = (LINES - rows)/2;
@@ -662,7 +665,7 @@ show_indi (UIWINDOW uiwin, NODE indi, INT mode, INT row, INT hgt
  * [in] width: how many columns allowed
  * [in] reuse: flag to save recalculating display strings
  *=======================================*/
-void
+static void
 show_fam (UIWINDOW uiwin, NODE fam, INT mode, INT row, INT hgt
 	, INT width, INT * scroll, BOOLEAN reuse)
 {

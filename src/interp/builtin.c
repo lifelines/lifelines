@@ -652,7 +652,7 @@ __short (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
 	NODE even;
-	RFMT rfmt = NULL; /* currently no reformatting for reports */
+	/* RFMT rfmt = NULL; /* /* currently no reformatting for reports */
 	TRANTABLE ttr = NULL; /* do not translate until output time */
 	STRING str;
 	if (*eflg) {
@@ -2252,7 +2252,7 @@ __trimname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val;
 	NODE indi = eval_indi(arg, stab, eflg, (CACHEEL *) NULL);
 	STRING str;
-	TRANTABLE ttr = NULL; /* do not translate until output time */
+	/* TRANTABLE ttr = NULL; */ /* do not translate until output time */
 	if (*eflg) {
 		prog_error(node, "1st arg to trimname is not a person");
 		return NULL;

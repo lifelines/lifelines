@@ -40,7 +40,7 @@
  *********************************************/
 
 /* alphabetical */
-static void filecopy(FILE*fpsrc, STRING fnamesrc, INT len, FILE*fpdest, STRING fnamedest);
+static void filecopy(FILE*fpsrc, INT len, FILE*fpdest);
 static void movefiles(STRING, STRING);
 
 /*********************************************
@@ -176,7 +176,7 @@ addrecord (BTREE btree, RKEY rkey, RAWRECORD rec, INT len)
 	for (i = 0; i < lo; i++) {
 		if (fseek(fo, (long)(offs(old, i) + BUFLEN), 0))
 			FATAL();
-		filecopy(fo, scratch0, lens(old, i), fn1, scratch1);
+		filecopy(fo, lens(old, i), fn1);
 	}
 
 /* write new record to temp file */
@@ -192,7 +192,7 @@ addrecord (BTREE btree, RKEY rkey, RAWRECORD rec, INT len)
 	if (found) i++;
 	for ( ; i < n; i++) {
 		if (fseek(fo, (long)(offs(old, i)+BUFLEN), 0)) FATAL();
-		filecopy(fo, scratch0, lens(old, i), fn1, scratch1);
+		filecopy(fo, lens(old, i), fn1);
 	}
 
 /* make changes permanent in database */
@@ -226,7 +226,7 @@ splitting:
 		} else {
 			if (fseek(fo, (long)(offs(old, i) + BUFLEN), 0))
 				FATAL();
-			filecopy(fo, scratch0, lens(old, i), fn1, scratch1);
+			filecopy(fo, lens(old, i), fn1);
 			i++;
 		}
 	}
@@ -261,7 +261,7 @@ splitting:
 		} else {
 			if (fseek(fo, (long)(offs(old, i) + BUFLEN), 0))
 				FATAL();
-			filecopy(fo, scratch0, lens(old, i), fn2, scratch2);
+			filecopy(fo, lens(old, i), fn2);
 			i++;
 		}
 	}
@@ -288,7 +288,7 @@ splitting:
  * file (already opened).
  *====================================================*/
 static void
-filecopy (FILE* fpsrc, STRING fnamesrc, INT len, FILE* fpdest, STRING fnamedest)
+filecopy (FILE* fpsrc, INT len, FILE* fpdest)
 {
 	char buffer[BUFLEN];
 	INT blklen;

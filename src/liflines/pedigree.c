@@ -97,6 +97,7 @@ static void free_entire_tree(void);
 static STRING indi_lineprint(INT width, void * param);
 static STRING node_lineprint(INT width, void * param);
 static void print_to_screen(INT gen, INT * row, LINEPRINT_FNC, void *lpf_param, CANVASDATA canvas);
+static LIST text_to_list (STRING text, INT width);
 static STRING tn_lineprint(INT width, void * param);
 static void trav_bin_in_print_tn(DISPNODE tn, INT * row, INT gen, CANVASDATA canvas);
 static void trav_pre_print_nd(NODE node, INT * row, INT gen, CANVASDATA canvas, INT gdvw);
@@ -192,7 +193,7 @@ add_children (NODE indi, INT gen, INT maxgen, INT * count)
  *  each no more than width
  * Created: 2001/04/15, Perry Rapp
  *=========================*/
-LIST
+static LIST
 text_to_list (STRING text, INT width)
 {
 	LIST list = create_list();
@@ -324,7 +325,7 @@ add_dnodes (NODE node, INT gen, INT maxgen, INT * count, CANVASDATA canvas)
 	first one will be tn, which we return as our result
 	tn0 refers to previous one, for the nsibling links
 	*/
-	tn = tn0 = 0;
+	tn = tn0 = tn1 = 0;
 	FORLIST(list, el)
 		tn1 = alloc_displaynode();
 		if (!tn) {
@@ -443,7 +444,7 @@ print_to_screen (INT gen, INT * row, LINEPRINT_FNC fnc
 	STRING line;
 	int mylen = sizeof(buffer);
 	INT width = canvas->maxcol;
-	NODE indi = 0;
+	/* NODE indi = 0; */
 	INT drow = *row - canvas->scroll; /* effective display row */
 	int i, overflow=0;
 	if (mylen > width-2)
@@ -534,6 +535,7 @@ static STRING
 tn_lineprint (INT width, void * param)
 {
 	NODE_TEXT_PRINT_PARAM ntpp = (NODE_TEXT_PRINT_PARAM)param;
+
 	return ntpp->tn->str;
 }
 /*=================================
@@ -685,7 +687,7 @@ draw_gedcom_text (NODE node, CANVASDATA canvas, BOOLEAN reuse)
 	DISPNODE tn;
 	if (!reuse) {
 		INT count=0;
-		INT skip=0;
+		/* INT skip=0; */
 		free_entire_tree();
 		Root = add_dnodes(node, gen, Gens, &count, canvas);
 		set_scroll_max(canvas, count); 

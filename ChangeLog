@@ -1,3 +1,18 @@
+2001-12-18 Matt Emmerton <memmerto@users.sourceforge.net>
+
+	* ChangeLog btree/record.c stdlib/lldate.c gedlib/intrface.c
+	gedlib/translat.c interp/interp.c interp/builtin.c liflines/ask.c
+	liflines/menuitem.c liflines/pedigree.c liflines/tandem.c
+	liflines/screen.c
+
+	Staticize prototypes in record.c, pedigree.c and screen.c
+	Fix erroneous printfs in lldate.c and menuitem.c
+	Mark unused code in intrface.c
+	Comment out unused variables in builtin.c, menuitem.c, pedigree.c and ask.c
+	Use proper types in translat.c
+	Remove some ^M characters in interp.c
+	Initialize some variables in pedigree.c and tandem.c
+
 2001-12-16 Perry Rapp <puddle@users.sourceforge.net>
 
 	* .linesrc ChangeLog NEWS lines.cfg gedlib/charmaps.c

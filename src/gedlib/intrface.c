@@ -75,7 +75,7 @@ retrieve_to_textfile (STRING key, STRING file, TRANSLFNC translfnc)
  *  key:  [in] db key in which to store record
  *  file: [in] file from which to get record
  *===================================*/
-#ifndef UNUSED_CODE
+#ifdef UNUSED_CODE
 BOOLEAN
 store_file (STRING key, STRING file)
 {

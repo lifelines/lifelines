@@ -438,7 +438,8 @@ setup_menu (INT screen, STRING Title, INT MenuRows, INT MenuCols
 {
 	INT i, j;
 	CMDARRAY cmds = create_cmd_array(32);
-	STRING defaults = "q?";
+	/* STRING defaults = "q?"; */
+
 	g_ScreenInfo[screen].Title = Title;
 	g_ScreenInfo[screen].MenuRows = MenuRows;
 	g_ScreenInfo[screen].MenuCols = MenuCols;
@@ -451,7 +452,7 @@ setup_menu (INT screen, STRING Title, INT MenuRows, INT MenuCols
 			ASSERT(eqstr(Menu[i]->Choices, "123456789"));
 			for (j=1; j<=9; j++) {
 				char choice[2];
-				sprintf(choice, "%d", j);
+				sprintf(choice, "%d", j); /* don't need \0, sprintf does it */
 				insert_cmd(cmds, choice, CMD_CHILD_DIRECT0+j, Menu[i]->Display);
 			}
 		} else {

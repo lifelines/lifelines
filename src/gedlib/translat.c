@@ -265,7 +265,7 @@ translate_string_to_buf (TRANTABLE tt, CNSTRING in, bfptr bfs)
 	}
 	p = q = in;
 	while (*p) {
-		STRING tmp;
+		CNSTRING tmp;
 		INT len = translate_match(tt, p, &tmp);
 		if (len) {
 			p += len;
@@ -458,8 +458,8 @@ custom_sort (char *str1, char *str2, INT * rtn)
 {
 	TRANTABLE tts = tran_tables[MSORT];
 	TRANTABLE ttc = tran_tables[MCHAR];
-	TRANTABLE ttp = tran_tables[MPREF];
-	STRING rep1, rep2;
+	/* TRANTABLE ttp = tran_tables[MPREF]; */
+	CNSTRING rep1, rep2;
 	STRING ptr1=str1, ptr2=str2;
 	INT len1, len2;
 	if (!tts) return FALSE;

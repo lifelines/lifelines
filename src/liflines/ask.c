@@ -437,7 +437,7 @@ choose_from_indiseq (
 	/* which typed value indiseq is this ? */
 	if (!indiseq_is_valtype_ival(seq) && !indiseq_is_valtype_null(seq))
 	{
-		int debug=1; /* Can this happen ? */
+		/* int debug=1; */ /* Can this happen ? */
 	}
 	if (-1 == get_indiseq_ival(seq, i)) /* invalid pointer */
 		badkeylist[0] = 0;
