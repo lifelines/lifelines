@@ -1144,6 +1144,7 @@ interp_forindi (PNODE node, SYMTAB stab, PVALUE *pval)
 			goto ileave;
 		}
 		ival = create_pvalue_from_indi_keynum(count);
+// MTE - we're getting NULL here
 		icel = get_cel_from_pvalue(ival);
 		icount++;
 		lock_cache(icel);

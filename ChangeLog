@@ -1,3 +1,12 @@
+2001-09-06 matt Emmerton <memmerto@users.sourceforge.net>
+
+	* ChangeLog stdlib/assert.c btree/index.c btree/opnbtree.c
+	* btree/record.c gedlib/init.c gedlib/keytonod.c gedlib/messages.c
+	* interp/builtin.c interp/interp.c interp/pvalue.c liflines/main.c
+	* liflines/screen.c tools/btedit.c tools/dbverify.c:
+
+	Removed some MS-DOS newlines.
+
 2001-09-16 Matt Emmerton <memmerto@users.sourceforge.net>
 
 	* ChangeLog hdrs/btree.h hdrs/gedcom.h hdrs/llstdlib.h
