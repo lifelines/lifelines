@@ -1,3 +1,6 @@
+## Process this file with automake to produce Makefile.in
+## (configure will process the resulting Makefile.in to produce Makefile)
+
 # Makefile for the LifeLines stdlib area
 
 # AUTOMAKE_OPTIONS = no-dependencies
