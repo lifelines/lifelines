@@ -1,10 +1,9 @@
 # This makefile is for the lifelines reports
 
 AUTOMAKE_OPTIONS = no-dependencies
-
-EXTRA_DIST = \
-	CREDIT\
-	2ppage.ll 4gen1.ll 6gen1.ll 8gen1.ll CREDIT README	\
+pkgdir := $(pkgdatadir)/reports
+pkg_REPORTS = \
+	2ppage.ll 4gen1.ll 6gen1.ll 8gen1.ll \
 	ahnentafel.ll alive.ll alllines.ll alllines.sgml.ll	\
 	ancestors2.ll bias.ll bkdes16-1.ll cid.ll connect2.ll	\
 	count_anc.ll count_desc.ll count_paternal_desc.ll cousins.ll	\
@@ -25,3 +24,6 @@ EXTRA_DIST = \
 	soundex1.ll sources.ll stats.ll surname1.ll timeline1.ll	\
 	timeline2.ll tinytafel1.ll tinytafel2.ll verify.ll
 
+EXTRA_DIST = \
+	$(pkg_REPORTS) \
+	CREDIT README

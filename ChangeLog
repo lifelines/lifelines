@@ -1,5 +1,7 @@
 2000-11-02 Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* reports/Makefile.am: Install reports in $(pkgdatadir)/reports.
+
 	* interp/eval.c: Print undefined function name on call to
 	undefined function.
 
