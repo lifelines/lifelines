@@ -4,6 +4,10 @@
 
 	Noted that lifelines has been submitted to Free Translation Project.
 
+	* ChangeLog liflines/scan.c:
+
+	Sort results of search.
+
 2002-05-11 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/init.c:

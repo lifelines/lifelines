@@ -195,6 +195,7 @@ name_scan (INT scantype, STRING sts)
 	traverse_names(ns_callback, &patt);
 
 	if (length_indiseq(results_seq)) {
+		namesort_indiseq(results_seq);
 		indi = choose_from_indiseq(results_seq, DOASK1, _(qSscanrs), _(qSscanrs));
 	}
 	remove_indiseq(results_seq);
@@ -249,6 +250,8 @@ refn_scan (STRING sts)
 	traverse_refns(rs_callback, &patt);
 
 	if (length_indiseq(results_seq)) {
+		/* namesort uses canonkeysort for non-persons */
+		namesort_indiseq(results_seq);
 		rec = choose_from_indiseq(results_seq, DOASK1, _(qSscanrs), _(qSscanrs));
 	}
 	remove_indiseq(results_seq);
