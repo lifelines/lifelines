@@ -414,6 +414,7 @@ INT xref_lastf(void);
 INT xref_lasti(void);
 INT xref_lasts(void);
 INT xref_lastx(void);
+INT xref_max_any(void);
 INT xref_next(char ntype, INT i);
 INT xref_nexte(INT);
 INT xref_nextf(INT);

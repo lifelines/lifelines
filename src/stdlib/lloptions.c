@@ -321,13 +321,15 @@ void
 cleanup_lloptions (void)
 {
 	INT i;
-	/* free string values */
-	for (i=0; i<ARRSIZE(str_options); i++) {
-		STRING str = valueof_str(opttab, str_options[i].name);
-		STRING * pstr = str_options[i].value;
-		if (*pstr) {
-			stdfree(*pstr);
-			*pstr = NULL;
+	if (opttab) {
+		/* free string values */
+		for (i=0; i<ARRSIZE(str_options); i++) {
+			STRING str = valueof_str(opttab, str_options[i].name);
+			STRING * pstr = str_options[i].value;
+			if (*pstr) {
+				stdfree(*pstr);
+				*pstr = NULL;
+			}
 		}
 	}
 }

@@ -678,6 +678,26 @@ indi_events (STRING outstr, TRANTABLE ttd, NODE indi, INT len)
 		llstrcatn(&p, evt, &mylen);
 	}
 }
+/*==========================================================
+ * max_keywidth -- Figure the width of the widest extant key
+ *========================================================*/
+static INT
+max_keywidth (void)
+{
+	INT maxkey = xref_max_any();
+	if (maxkey>9999) {
+		if (maxkey>999999)
+			return 7;
+		if (maxkey>99999)
+			return 6;
+		return 5;
+	}
+	if (maxkey>999)
+		return 4;
+	if (maxkey>99)
+		return 3;
+	return 2;
+}
 /*=============================================
  * person_display -- Create person display line
  *  indi:  [in] whom to display
@@ -691,13 +711,21 @@ person_display (NODE indi, NODE fam, INT len)
 	static unsigned char scratch2[100];
 	STRING p;
 	TRANTABLE ttd = tran_tables[MINDS];
-	/* 10 for key, 2 for comma space, and split between name & events */
-	INT evlen = (len-12)/2;
+	INT keyspace = max_keywidth() + 3; /* parentheses & leading space */
+	/* keywidth for key, 2 for comma space, and split between name & events */
+	INT evlen = (len-2-keyspace)/2;
 	INT namelen;
 
 	if (!indi) return NULL;
 
-	if (evlen > ARRSIZE(scratch2)-1)
+	/* test to see if name is short */
+	p = indi_to_name(indi, ttd, 100);
+	if ((namelen = strlen(p)) < evlen) {
+		/* name is short, give extra to events */
+		evlen += (evlen - namelen);
+	}
+
+	if (evlen > ARRSIZE(scratch2)-1) /* be sure not to overflow buffer */
 		evlen = ARRSIZE(scratch2)-1;
 	if (fam) {
 		family_events(scratch2, ttd, indi, fam, evlen);
@@ -705,6 +733,8 @@ person_display (NODE indi, NODE fam, INT len)
 		indi_events(scratch2, ttd, indi, evlen);
 	}
 	namelen = len - strlen(scratch2);
+	if (namelen > ARRSIZE(scratch1)) /* be sure not to overflow buffer */
+		namelen = ARRSIZE(scratch1);
 	p = scratch1;
 	strcpy(p, indi_to_name(indi, ttd, namelen));
 	p += strlen(p);

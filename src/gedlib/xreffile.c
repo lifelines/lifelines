@@ -77,6 +77,8 @@ static struct deleteset_s irecs, frecs, srecs, erecs, xrecs;
 
 static FILE *xreffp=0;	/* open xref file pointer */
 
+static INT maxkeynum=-1; /* cache value of largest key extant (-1 means not sure) */
+
 /*==================================== 
  * initdset -- Initialize a delete set
  *==================================*/
@@ -155,6 +157,7 @@ getxrefnum (DELETESET set)
 	ASSERT(xreffp && set->n >= 1);
 	keynum = (set->n == 1) ? set->recs[0]++ : set->recs[--(set->n)];
 	ASSERT(writexrefs());
+	maxkeynum=-1;
 	return keynum;
 }
 /*=========================================
@@ -322,6 +325,7 @@ addxref (INT key, DELETESET set)
 	(set->recs)[lo] = key;
 	(set->n)++;
 	ASSERT(writexrefs());
+	maxkeynum=-1;
 }
 /*===================================================
  * add?xref -- Wrappers for each type to addxref (qv)
@@ -365,6 +369,39 @@ INT num_fams (void) { return num_set(&frecs); }
 INT num_sours (void) { return num_set(&srecs); }
 INT num_evens (void) { return num_set(&erecs); }
 INT num_othrs (void) { return num_set(&xrecs); }
+/*========================================================
+ * max_????s -- Return max key number of object type in db
+ * 5 symmetric versions
+ *======================================================*/
+static INT max_set (DELETESET set)
+{
+	return set->recs[0];
+}
+INT xref_max_indis (void) { return max_set(&irecs); }
+INT xref_max_fams (void) { return max_set(&frecs); }
+INT xref_max_sours (void) { return max_set(&srecs); }
+INT xref_max_evens (void) { return max_set(&erecs); }
+INT xref_max_othrs (void) { return max_set(&xrecs); }
+/*======================================================
+ * xref_max_any -- Return largest key number of any type
+ *====================================================*/
+INT
+xref_max_any (void)
+{
+	if (maxkeynum>=0)
+		return maxkeynum;
+	if (xref_max_indis() > maxkeynum)
+		maxkeynum = xref_max_indis();
+	if (xref_max_fams() > maxkeynum)
+		maxkeynum = xref_max_fams();
+	if (xref_max_sours() > maxkeynum)
+		maxkeynum = xref_max_sours();
+	if (xref_max_evens() > maxkeynum)
+		maxkeynum = xref_max_evens();
+	if (xref_max_othrs() > maxkeynum)
+		maxkeynum = xref_max_othrs();
+	return maxkeynum;
+}
 /*================================================
  * newxref -- Return original or next xref value
  * xrefp = key of the individual

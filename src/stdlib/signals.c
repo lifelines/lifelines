@@ -108,16 +108,29 @@ on_signals (int sig)
 {
 	extern BOOLEAN progrunning;
 	extern PNODE Pnode;
+	char msg[160]="";
+	STRING ptr=msg;
+	INT len=sizeof(msg);
+	ptr[0]=0;
+
+	/* We don't know whether curses is up or not right now */
 
 	if (progrunning) {
-		llwprintf("Looks like you were running a program.\n");
-		llwprintf("Check file \"%s\" around line %d.\n", ifname(Pnode),
-		    iline(Pnode));
+		char num[33];
+		llstrcatn(&ptr, "Looks like a program was running.\n", &len);
+		llstrcatn(&ptr, "Check file ", &len);
+		llstrcatn(&ptr, ifname(Pnode), &len);
+		llstrcatn(&ptr, "around line ", &len);
+		sprintf(num, "%d", iline(Pnode));
+		llstrcatn(&ptr, num, &len);
+		llstrcatn(&ptr, ".\n", &len);
 	}
 
-	llwprintf("Exiting on signal %d:%s\n", sig, sig_msgs[sig]);
 	close_lifelines();
 	endwin();
+	if (msg[0])
+		printf(msg);
+	printf("Existing on signal %d:%s\n", sig, sig_msgs[sig]);
 	ll_abort(sig);
 }
 

@@ -6,6 +6,12 @@
 
 	Bugfixes for alloc errorfile handling.
 
+	* ChangeLog gedlib/xreffile.c hdrs/gedcom.h liflines/show.c
+	stdlib/lloptions.c stdlib/signals.c
+
+	Modify signal handler to not assume curses is up.
+	Improve single-line person print to give more width to events for short names.
+
 2001-10-16 Matt Emmerton <memmerto@users.sourceforge.net)
 
 	* ChangeLog liflines/main.c
