@@ -29,6 +29,8 @@
 #ifndef _FEEDBACK_H
 #define _FEEDBACK_H
 
+#include <stdarg.h>
+
 /* Ways for engine & code to report to ui */
 	/* report an error */
 void msg_error(STRING fmt, ...);
