@@ -104,10 +104,6 @@ SOURCE=..\..\..\src\stdlib\appendstr.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\stdlib\bfs.c
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\src\btree\block.c
 # End Source File
 # Begin Source File
@@ -128,6 +124,10 @@ SOURCE=..\..\..\src\gedlib\choose.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\gedlib\codesets.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\gedlib\date.c
 # End Source File
 # Begin Source File
@@ -137,10 +137,6 @@ SOURCE=..\..\..\src\stdlib\dirs.c
 # Begin Source File
 
 SOURCE=..\..\..\src\gedlib\dispfmt.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\stdlib\double.c
 # End Source File
 # Begin Source File
 
@@ -240,6 +236,10 @@ SOURCE=..\..\..\src\interp\lex.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\stdlib\list.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\stdlib\listener.c
 # End Source File
 # Begin Source File
@@ -309,6 +309,10 @@ SOURCE=..\..\..\src\stdlib\path.c
 # Begin Source File
 
 SOURCE=..\..\..\src\gedlib\place.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\arch\platform.c
 # End Source File
 # Begin Source File
 
@@ -384,6 +388,10 @@ SOURCE=..\..\..\src\stdlib\strcvt.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\stdlib\strset.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\stdlib\strutf8.c
 # End Source File
 # Begin Source File
@@ -432,11 +440,19 @@ SOURCE=..\..\..\src\interp\write.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\gedlib\xlat.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\gedlib\xreffile.c
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\interp\yacc.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\stdlib\zstr.c
 # End Source File
 # End Group
 # Begin Group "Header Files"
