@@ -1,3 +1,9 @@
+2001-11-13 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog liflines/show.c:
+
+	Fix a few blank prototypes to (void).
+
 2001-11-12 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog liflines/llinesi.h liflines/pedigree.c

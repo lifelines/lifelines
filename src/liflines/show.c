@@ -86,7 +86,7 @@ static STRING disp_shrt_format_date(STRING date);
 static STRING disp_shrt_format_plac(STRING plac);
 static void family_events(STRING outstr, TRANTABLE tt, NODE indi, NODE fam, INT len);
 static void indi_events(STRING outstr, TRANTABLE tt, NODE indi, INT len);
-static void init_disp_reformat();
+static void init_disp_reformat(void);
 static void init_display_indi(NODE, INT width);
 static void init_display_fam(NODE, INT width);
 static void pedigree_line(CANVASDATA canvas, INT x, INT y, STRING string, INT overflow);
@@ -122,7 +122,7 @@ static INT number_child_enable = 0;
  * init_show_module -- Initialize display variables
  *=============================================*/
 void
-init_show_module ()
+init_show_module (void)
 {
 	INT i;
 	INT width = ll_cols+1;
@@ -904,7 +904,7 @@ put_out_line (WINDOW * win, INT x, INT y, STRING string, INT width, INT flag)
 	}
 }
 /*==================================================================
- * show_childnumbers() - toggle display of numbers for children
+ * show_childnumbers - toggle display of numbers for children
  *================================================================*/
 void
 show_childnumbers (void)
