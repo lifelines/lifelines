@@ -19,7 +19,8 @@
 
 	* gedlib/indiseq.c gedlib/keytonod.c hdrs/indiseq.h
 	hdrs/interpi.h hdrs/screen.h hdrs/table.h interp/functab.c
-	interp/intrpseq.c stdlib/table.c:
+	interp/intrpseq.c stdlib/table.c
+	NEW gedlib/gengedc.c hdrs/gengedc.h:
 	gen_gedcom rewrite (gengedcomweak & strong & original)
 	(includes new table functions).
 

@@ -27,6 +27,9 @@ equaliso.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h
 equaliso.o: ../hdrs/standard.h
 gedcom.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h
 gedcom.o: ../hdrs/sequence.h ../hdrs/gedcheck.h ../hdrs/standard.h
+gengedc.o: ../hdrs/sys_inc.h ../hdrs/llstdlib.h ../hdrs/table.h
+gengedc.o: ../hdrs/gedcom.h ../hdrs/indiseq.h ../hdrs/interp.h
+gengedc.o: ../hdrs/gengedc.h
 gstrings.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h
 gstrings.o: ../hdrs/standard.h ../hdrs/translat.h
 indiseq.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h
