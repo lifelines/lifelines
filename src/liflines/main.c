@@ -108,7 +108,6 @@ char *getenv();
 STRING lldatabases;
 STRING filepath();
 
-static void exit_it(INT);
 static void show_open_error(void);
 static BOOLEAN trytocreate(STRING);
 
@@ -121,7 +120,7 @@ main (INT argc,
 {
 	extern char *optarg;
 	extern int optind;
-	int c;
+	int c,code=1;
 
 #ifdef OS_LOCALE
 	setlocale(LC_ALL, "");
@@ -207,7 +206,7 @@ main (INT argc,
 	/* Validate Command-Line Arguments */
 	if (readonly && writeable) {
 		llwprintf("Select at most one of -r and -w options.");
-		exit_it(1);
+		goto finish;
 	}
 	c = argc - optind;
 	if (c > 1) {
@@ -219,7 +218,7 @@ main (INT argc,
 		btreepath = (STRING) ask_for_lldb(idldir, "enter path: ", lldatabases);
 		if (!btreepath || *btreepath == 0) {
 			llwprintf(iddbse);
-			exit_it(1);
+			goto finish;
 		}
 		btreepath = strsave(btreepath);
 	} else
@@ -241,19 +240,19 @@ main (INT argc,
 		if (stat(scratch, &sbuf) || !sbuf.st_mode&S_IFREG) {
 			llwprintf("Database error -- ");
 			llwprintf("could not open, read or write the key file.");
-			exit_it(1);
+			goto finish;
 		}
 		if (!(fp = fopen(scratch, LLREADBINARYUPDATE)) ||
 		    fread(&kfile, sizeof(KEYFILE), 1, fp) != 1) {
 			llwprintf("Database error -- ");
 			llwprintf("could not open, read or write the key file.");
-			exit_it(1);
+			goto finish;
 		}
 		if (fread(&kfilex, sizeof(kfilex), 1, fp) == 1) {
 			if (!validate_keyfilex(&kfilex)) {
 				llwprintf("Database error -- ");
 				llwprintf("Invalid keyfile!");
-				exit_it(1);
+				goto finish;
 			}
 		}
 		kfile.k_ostat = 0;
@@ -263,7 +262,7 @@ main (INT argc,
 			llwprintf("could not open, read or write the key file.");
 			printf("Cannot properly write the new key file.\n");
 			fclose(fp);
-	 		exit_it(1);
+	 		goto finish;
 		}
 		fclose(fp);
 	}
@@ -273,12 +272,12 @@ main (INT argc,
 		case BTERRKFILE:	/*NEW*/
 	    		if(!trytocreate(readpath)) {
 				show_open_error();
-				exit_it(1);
+				goto finish;
 			}
 			break;
 		default:
 			show_open_error();
-			exit_it(1);
+			goto finish;
 		}
 	}
 	readonly = !bwrite(BTR);
@@ -293,14 +292,14 @@ main (INT argc,
 			llwprintf("Try again later.");
 		}
 		close_lifelines();
-		exit_it(1);
+		goto finish;
 	}
 
 	/* Show Usage */
 	if (showusage) {
 		llwprintf(usage);
 		sleep(5);
-		exit_it(1);
+		goto finish;
 	}
 
 	/* Start Program */
@@ -308,10 +307,14 @@ main (INT argc,
 	while (!alldone)
 		main_menu();
 	close_lifelines();
+	code=0;
+
+finish:
+	/* Terminate Curses UI */
+	endwin();
 
 	/* Exit */
-	exit_it(0);
-	return(0); 	/* just to keep compiler happy */
+	return(code);
 }
 /*==========================================
  * trytocreate -- Try to create new database
@@ -327,16 +330,6 @@ trytocreate (STRING path)
 	}
 	initxref();
 	return TRUE;
-}
-/*====================
- * exit_it -- All done
- *==================*/
-static void
-exit_it (INT code)
-{
-	endwin();
-	sleep(1);
-	exit(code);
 }
 /*===================================================
  * show_open_error -- Describe database opening error
@@ -379,13 +372,4 @@ show_open_error (void)
 		break;
 	}
         sleep(5);
-}
-/*===============
- * final_cleanup
- *==============*/
-void
-final_cleanup (void)
-{
-	close_lifelines();
-	endwin();
 }
