@@ -25,7 +25,19 @@ AC_PROG_INSTALL
 
 dnl Add warning flags when using The GNU C Compiler
 if test "${ac_cv_prog_gcc}" = "yes"; then
-  CFLAGS="${CFLAGS} -W -Wall"
+  # -ansi breaks compile of liflines/askprogram.c [pere 2000-12-31]
+  for flag in \
+	-W \
+	-Wall \
+	-Wcast-align \
+	-Wmissing-declarations \
+	-Wmissing-prototypes \
+	-Wreturn-type \
+	-Wstrict-prototypes \
+	-pedantic
+  do
+    JAPHAR_GREP_CFLAGS($flag,    [ CFLAGS="$CFLAGS $flag"    ])
+  done
 
   dnl Add debugging as well
   CFLAGS="${CFLAGS} -g"

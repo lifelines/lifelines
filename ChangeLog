@@ -1,5 +1,10 @@
 2000-12-31 Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* acinclude.m4 configure.in: Add more warning flags (-pedantic
+	-Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations
+	-Wreturn-type -Wcast-align), to detect more errors and portability
+	problems in the code.
+
 	* btree/opnbtree.c liflines/main.c: Use POSIX S_ISREG() and
 	S_ISDIR() macros instead of S_IFREG and S_IFDIR flags to test
 	result from stat().  Required to get this to compile with -ansi on
