@@ -1084,20 +1084,21 @@ id_by_key (CNSTRING name, char ctype)
 /*============================================
  * name_to_list -- Convert name to string list
  *  name:  [IN]  GEDCOM name
- *  list:  [I/O] list (must exist)
  *  plen:  [OUT]  returned length
  *  psind: [OUT]  index (rel 1) of surname in list
  * Returns a list whose elements are strings
  *==========================================*/
-BOOLEAN
-name_to_list (CNSTRING name, LIST list, INT *plen, INT *psind)
+LIST
+name_to_list (CNSTRING name, INT *plen, INT *psind)
 {
 	INT i;
 	STRING str;
 	STRING parts[MAXPARTS];
-	if (!name || *name == 0 || !list) return FALSE;
-	make_list_empty(list);
-	set_list_type(list, LISTDOFREE);
+	LIST list = create_list2(LISTDOFREE);
+
+	if (!name || *name == 0)
+		return list;
+
 	*psind = 0;
 	name_to_parts(name, parts);
 	for (i = 0; i < MAXPARTS; i++) {
@@ -1112,7 +1113,7 @@ name_to_list (CNSTRING name, LIST list, INT *plen, INT *psind)
 		set_list_element(list, i + 1, str, NULL);
 	}
 	*plen = i;
-	return TRUE;
+	return list;
 }
 /*====================================================
  * free_string_el -- free alloc'd string element of list

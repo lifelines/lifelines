@@ -97,7 +97,6 @@ pattern_match (SCAN_PATTERN *patt, CNSTRING name)
 static BOOLEAN
 ns_callback (CNSTRING key, CNSTRING name, BOOLEAN newset, void *param)
 {
-	LIST list;
 	INT len, ind;
 	STRING piece;
 	SCAN_PATTERN * patt = (SCAN_PATTERN *)param;
@@ -109,8 +108,7 @@ ns_callback (CNSTRING key, CNSTRING name, BOOLEAN newset, void *param)
 		}
 	} else {
 		/* NAMESCAN_FRAG */
-		list = create_list();
-		name_to_list(name, list, &len, &ind);
+		LIST list = name_to_list(name, &len, &ind);
 		FORLIST(list, el)
 			piece = (STRING)el;
 			if (pattern_match(patt, piece)) {
@@ -120,7 +118,7 @@ ns_callback (CNSTRING key, CNSTRING name, BOOLEAN newset, void *param)
 				break;
 			}
 		ENDLIST
-		free_name_list(list);
+		destroy_list(list);
 	}
 	return TRUE;
 }

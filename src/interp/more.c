@@ -129,14 +129,13 @@ __extractnames (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	*eflg = FALSE;
 	str = (line ? nval(line) : 0);
 	if (str && str[0]) {
-		LIST temp = create_list();
-		name_to_list(str, temp, &len, &sind);
+		LIST temp = name_to_list(str, &len, &sind);
 		/* list has string elements */
 		FORLIST(temp, el)
 			str2 = (STRING)el;
 			push_list(list, create_pvalue_from_string(str2));
 		ENDLIST
-		free_name_list(temp);
+		destroy_list(temp);
 	} else {
 		/* no NAME line or empty NAME line */
 		len = 0;

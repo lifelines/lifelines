@@ -518,7 +518,7 @@ CNSTRING getasurname(CNSTRING);
 CNSTRING getsxsurname(CNSTRING);
 CNSTRING givens(CNSTRING);
 STRING manip_name(STRING name, SURCAPTYPE captype, SURORDER surorder, INT len);
-BOOLEAN name_to_list(CNSTRING, LIST, INT*, INT*);
+LIST name_to_list(CNSTRING name, INT *plen, INT *psind);
 STRING name_string(STRING);
 int namecmp(STRING, STRING);
 void remove_name(STRING name, CNSTRING key);

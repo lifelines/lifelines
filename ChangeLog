@@ -45,6 +45,11 @@
 
 	Remove unused traverse_table function. Fix dbverify compile.
 
+	* ChangeLog src/gedlib/names.c src/hdrs/gedcom.h
+	src/interp/more.c src/liflines/scan.c
+
+	Convert name_to_list to return new list (simplifying cleanup).
+
 2005-02-05 Perry Rapp
 
 	* ChangeLog NEWS src/gedlib/xreffile.c
