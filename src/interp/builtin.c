@@ -2309,18 +2309,19 @@ __trim (PNODE node,
 {
 	PNODE arg = (PNODE) iargs(node);
 	STRING str;
-	PVALUE val2, val1 = eval_and_coerce(PSTRING, arg, stab, eflg);
+	PVALUE val1, val2;
 	INT len;
+        val1 = eval_and_coerce(PSTRING, arg, stab, eflg);
 	if (*eflg) {
 		prog_error(node, "1st arg to trim is not a string");
 		return NULL;
 	}
-	str = (STRING) pvalue(val1);
 	val2 = eval_and_coerce(PINT, inext(arg), stab, eflg);
 	if (*eflg) {
 		prog_error(node, "2nd arg to trim is not an integer");
 		return NULL;
 	}
+	str = (STRING) pvalue(val1);
 	len = (INT) pvalue(val2);
 	set_pvalue(val2, PSTRING, (WORD)trim(str, len));
 	delete_pvalue(val1);
