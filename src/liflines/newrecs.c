@@ -187,6 +187,20 @@ edit_other (NODE node)
 	edit_record(node, idxedt, 'X', xredit, valid_othr_tree,
 	     cfxupt, NULL, othr_to_dbase, gdxmod);
 }
+/*========================================================
+ * write_node_to_editfile - write all parts of gedcom node
+ *  to a file for editing
+ *======================================================*/
+void
+write_node_to_editfile (NODE node)
+{
+	FILE *fp;
+	TRANTABLE tto = tran_tables[MINED];
+
+	ASSERT(fp = fopen(editfile, LLWRITETEXT));
+	write_nodes(0, fp, tto, node,  TRUE, TRUE, TRUE);
+	fclose(fp);
+}
 /*=======================================
  * edit_record -- Edit record in database
  *=====================================*/
@@ -201,9 +215,8 @@ edit_record (NODE node1,           /* record to edit, poss NULL */
              void (*todbase)(NODE),/* write record to dbase */
              STRING gdmsg)         /* success message */
 {
-	TRANTABLE tti = tran_tables[MEDIN], tto = tran_tables[MINED];
+	TRANTABLE tti = tran_tables[MEDIN];
 	STRING msg, newr, oldr, key;
-	FILE *fp;
 	BOOLEAN emp;
 	NODE refn, node2, temp;
 
@@ -217,9 +230,7 @@ edit_record (NODE node1,           /* record to edit, poss NULL */
 	oldr = refn ? nval(refn) : NULL;
 
 /* Have user edit record */
-	ASSERT(fp = fopen(editfile, LLWRITETEXT));
-	write_nodes(0, fp, tto, node1,  TRUE, TRUE, TRUE);
-	fclose(fp);
+	write_node_to_editfile(node1);
 	do_edit();
 	while (TRUE) {
 		node2 = file_to_node(editfile, tti, &msg, &emp);

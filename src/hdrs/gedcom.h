@@ -322,6 +322,7 @@ STRING value_to_xref(STRING);
 BOOLEAN writexrefs(void);
 void write_indi_to_editfile(NODE indi);
 void write_fam_to_editfile(NODE fam);
+void write_node_to_editfile(NODE); /* used by Ethel */
 void write_nodes(INT, FILE*, TRANTABLE, NODE, BOOLEAN, BOOLEAN, BOOLEAN);
 INT xref_firste(void);
 INT xref_firstf(void);
