@@ -74,7 +74,7 @@ typedef struct tag_rptinfo *RPTINFO;
 /* symbol table data is just table data */
 typedef struct tag_symtab {
 	TABLE tab;
-} SYMTAB;
+} *SYMTAB;
 
 /* symbol table iterator data is just table iterator data */
 typedef struct tag_symtab_iter {
@@ -82,13 +82,12 @@ typedef struct tag_symtab_iter {
 } *SYMTAB_ITER;
 
 BOOLEAN begin_symtab(SYMTAB stab, SYMTAB_ITER stabit);
-void create_symtab(SYMTAB * stab);
+SYMTAB create_symtab(void);
 void delete_symtab(SYMTAB stab, STRING iden);
 BOOLEAN in_symtab(SYMTAB stab, STRING key);
 void insert_symtab(SYMTAB stab, STRING iden, PVALUE val);
 BOOLEAN next_symtab_entry(SYMTAB_ITER tabit, STRING *pkey, PVALUE *ppval);
-SYMTAB null_symtab(void);
-void remove_symtab(SYMTAB *);
+void remove_symtab(SYMTAB stab);
 PVALUE symtab_valueofbool(SYMTAB, STRING, BOOLEAN*);
 
 /************************************************************************/

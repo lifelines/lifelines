@@ -231,7 +231,7 @@ evaluate_ufunc (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	STRING procname = (STRING) iname(node);
 	PNODE func, arg, parm;
-	SYMTAB newstab = null_symtab();
+	SYMTAB newstab = NULL;
 	PVALUE val=NULL;
 	INTERPTYPE irc;
 	INT count=0;
@@ -247,7 +247,7 @@ evaluate_ufunc (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		goto ufunc_leave;
 	}
 
-	create_symtab(&newstab);
+	newstab = create_symtab();
 	arg = (PNODE) iargs(node);
 	parm = (PNODE) iargs(func);
 	while (arg && parm) {
@@ -289,7 +289,8 @@ evaluate_ufunc (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	val=NULL;
 
 ufunc_leave:
-	remove_symtab(&newstab);
+	remove_symtab(newstab);
+	newstab = NULL;
 	return val;
 }
 /*=====================================

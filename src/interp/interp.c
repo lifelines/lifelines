@@ -63,14 +63,14 @@
  that parseinfo currently has
 */
 TABLE gproctab=0, gfunctab=0;
-SYMTAB globtab; /* assume all zero is null SYMTAB */
-PATHINFO cur_pathinfo = 0; /* program currently being parsed or run */
-FILE *Poutfp = NULL;          /* file to write program output to */
-STRING Poutstr = NULL;	      /* string to write program output to */
+SYMTAB globtab = NULL;
+PATHINFO cur_pathinfo = 0;	/* program currently being parsed or run */
+FILE *Poutfp = NULL;		/* file to write program output to */
+STRING Poutstr = NULL;		/* string to write program output to */
 INT Perrors = 0;
-LIST Plist = NULL;     /* list of program files still to read */
-PNODE Pnode = NULL;           /* node being interpreted */
-BOOLEAN explicitvars = FALSE; /* all vars must be declared */
+LIST Plist = NULL;		/* list of program files still to read */
+PNODE Pnode = NULL;		/* node being interpreted */
+BOOLEAN explicitvars = FALSE;	/* all vars must be declared */
 BOOLEAN rpt_cancelled = FALSE;
 
 /*********************************************
@@ -222,7 +222,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 	, STRING ofile, BOOLEAN picklist)
 {
 	LIST plist=0, donelist=0;
-	SYMTAB stab = null_symtab();
+	SYMTAB stab = NULL;
 	PVALUE dummy;
 	INT i;
 	INT nfiles = length_list(lifiles);
@@ -267,7 +267,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 			}
 			strfree(&fname);
 			strfree(&fullpath);
-			goto interp_program_exit;
+			goto interp_program_notfound;
 		}
 		pathinfo = new_pathinfo(fname, fullpath);
 		strfree(&fname);
@@ -283,7 +283,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 	/* (paths are resolved before files are enqueued, & stored in pathinfo) */
 
 	gproctab = create_table_old();
-	create_symtab(&globtab);
+	globtab = create_symtab();
 	gfunctab = create_table_old();
 	initinterp();
 
@@ -350,7 +350,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 			proc, num_params(parm), nargs);
 		goto interp_program_exit;
 	}
-	create_symtab(&stab);
+	stab = create_symtab();
 	for (i = 0; i < nargs; i++) {
 		insert_symtab(stab, iident(parm), args[0]);
 		parm = inext(parm);
@@ -384,9 +384,12 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 
 interp_program_exit:
 
-	
 	remove_tables(pactx);
-	remove_symtab(&stab);
+	remove_symtab(stab);
+	stab = NULL;
+
+interp_program_notfound:
+
 	pvalues_end();
 	wipe_pactx(pactx);
 
@@ -446,7 +449,8 @@ remove_tables (PACTX pactx)
 	traverse_table(gproctab, &freelistentry);
 	remove_table(gproctab, FREEBOTH); /* values are empty lists */
 	gproctab=NULL;
-	remove_symtab(&globtab);
+	remove_symtab(globtab);
+	globtab = NULL;
 	traverse_table(gfunctab, &freelistentry);
 	remove_table(gfunctab, FREEBOTH); /* values are PNODES */
 	gfunctab=NULL;
@@ -1688,7 +1692,7 @@ get_proc_node (CNSTRING procname, TABLE loctab, TABLE gtab, INT * count)
 INTERPTYPE
 interp_call (PNODE node, SYMTAB stab, PVALUE *pval)
 {
-	SYMTAB newstab=null_symtab();
+	SYMTAB newstab = NULL;
 	INTERPTYPE irc=INTERROR;
 	PNODE arg=NULL, parm=NULL, proc;
 	STRING procname = iname(node);
@@ -1703,7 +1707,7 @@ interp_call (PNODE node, SYMTAB stab, PVALUE *pval)
 		irc = INTERROR;
 		goto call_leave;
 	}
-	create_symtab(&newstab);
+	newstab = create_symtab();
 	arg = (PNODE) iargs(node);
 	parm = (PNODE) iargs(proc);
 	while (arg && parm) {
@@ -1737,7 +1741,8 @@ interp_call (PNODE node, SYMTAB stab, PVALUE *pval)
 	}
 
 call_leave:
-	remove_symtab(&newstab);
+	remove_symtab(newstab);
+	newstab = NULL;
 	return irc;
 }
 /*==============================================+
@@ -1849,10 +1854,10 @@ prog_var_error (PNODE node, SYMTAB stab, PNODE arg, PVALUE val, STRING fmt, ...)
 		ZSTR zstr=zs_new();
 		INT n=0,i=0;
 		/* report debugger: Option to display list of local symbols */
-		n = (stab.tab ? get_table_count(stab.tab) : 0);
+		n = (stab->tab ? get_table_count(stab->tab) : 0);
 		zs_setf(zstr, _("Display locals (%d)"), n);
 		choices[i++] = strsave(zs_str(zstr));
-		n = (globtab.tab ? get_table_count(globtab.tab) : 0);
+		n = (globtab->tab ? get_table_count(globtab->tab) : 0);
 		zs_setf(zstr, _("Display globals (%d)"), n);
 		choices[i++] = strsave(zs_str(zstr));
 		choices[i++] = strsave(_("Pop one level"));
@@ -1882,7 +1887,7 @@ static void
 disp_symtab (STRING title, SYMTAB stab)
 {
 	struct tag_symtab_iter symtabits;
-	INT n = (stab.tab ? get_table_count(stab.tab) : 0);
+	INT n = (stab->tab ? get_table_count(stab->tab) : 0);
 	struct dbgsymtab_s sdata;
 	INT bytes = n * sizeof(STRING);
 	if (!n) return;

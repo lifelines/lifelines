@@ -1,3 +1,12 @@
+2005-01-07 Matt Emmerton
+
+	* ChangeLog src/interp/interpi.h src/interp/interp.c
+	src/interp/eval.c src/interp/symtab.c
+
+	Convert SYMTAB data type to be a pointer.
+	Update create_symtab() and remove_symtab() as needed.
+	Remove null_symtab().
+
 2005-01-07 Perry Rapp
 
 	* ChangeLog src/liflines/show.c src/gedlib/remove.c

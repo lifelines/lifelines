@@ -52,9 +52,9 @@
 void
 insert_symtab (SYMTAB stab, STRING iden, PVALUE val)
 {
-	PVALUE oldval = (PVALUE) valueof_ptr(stab.tab, iden);
+	PVALUE oldval = (PVALUE) valueof_ptr(stab->tab, iden);
 	if (oldval) delete_pvalue(oldval);
-	insert_table_ptr(stab.tab, iden, val);
+	insert_table_ptr(stab->tab, iden, val);
 }
 /*======================================================
  * delete_symtab -- Delete a value from a symbol table
@@ -64,55 +64,50 @@ insert_symtab (SYMTAB stab, STRING iden, PVALUE val)
 void
 delete_symtab (SYMTAB stab, STRING iden)
 {
-	PVALUE val = (PVALUE) valueof_ptr(stab.tab, iden);
+	PVALUE val = (PVALUE) valueof_ptr(stab->tab, iden);
 	if (val) delete_pvalue(val);
-	delete_table(stab.tab, iden);
-}
-/*========================================
- * null_symtab -- Return null symbol table 
- *======================================*/
-SYMTAB
-null_symtab (void)
-{
-	SYMTAB stab;
-	stab.tab = NULL;
-	return stab;
+	delete_table(stab->tab, iden);
 }
 /*========================================
  * remove_symtab -- Remove symbol table 
- *  @stab:  symbol table
+ *  @stab:  [IN] symbol table to remove
  *======================================*/
 void
-remove_symtab (SYMTAB * stab)
+remove_symtab (SYMTAB stab)
 {
-	if (stab->tab)
+	STRING key=0;
+	VPTR ptr=0;
+	struct tag_table_iter tabits;
+	TABLE_ITER tabit = &tabits;
+
+	ASSERT(stab);
+
+	begin_table(stab->tab, tabit);
+	while (next_table_ptr(tabit, &key, &ptr))
 	{
-		STRING key=0;
-		VPTR ptr=0;
-		struct tag_table_iter tabits;
-		TABLE_ITER tabit = &tabits;
-		begin_table(stab->tab, tabit);
-		while (next_table_ptr(tabit, &key, &ptr)) {
-			if (ptr) {
-				PVALUE val = ptr;
-				ASSERT(is_pvalue(val));
-				delete_pvalue(val);
-				change_table_ptr(tabit, 0);
-			}
+		if (ptr) {
+			PVALUE val = ptr;
+			ASSERT(is_pvalue(val));
+			delete_pvalue(val);
+			change_table_ptr(tabit, 0);
 		}
-		remove_table(stab->tab, DONTFREE);
-		stab->tab = 0; /* same as *stab=null_symtab(); */
 	}
+	remove_table(stab->tab, DONTFREE);
+	stdfree(stab);
 }
 /*======================================================
  * create_symtab -- Create a symbol table
- *  @stab: [I/O] symbol table deleted (if appropriate) & recreated
+ *  returns allocated SYMTAB
  *====================================================*/
-void
-create_symtab (SYMTAB * stab)
+SYMTAB
+create_symtab (void)
 {
-	remove_symtab(stab);
-	stab->tab = create_table_old();
+	SYMTAB tmp;
+
+	tmp = stdalloc(sizeof(struct tag_symtab));
+	tmp->tab = create_table_old();
+
+	return tmp;
 }
 /*======================================================
  * in_symtab -- Does symbol table have this entry ?
@@ -122,7 +117,7 @@ create_symtab (SYMTAB * stab)
 BOOLEAN
 in_symtab (SYMTAB stab, STRING key)
 {
-	return in_table(stab.tab, key);
+	return in_table(stab->tab, key);
 }
 /*======================================================
  * symtab_valueofbool -- Convert pvalue to boolean if present
@@ -134,7 +129,7 @@ in_symtab (SYMTAB stab, STRING key)
 PVALUE
 symtab_valueofbool (SYMTAB stab, STRING key, BOOLEAN *there)
 {
-	return (PVALUE)valueofbool_ptr(stab.tab, key, there);
+	return (PVALUE)valueofbool_ptr(stab->tab, key, there);
 }
 /*======================================================
  * begin_symtab -- Begin iterating a symbol table
@@ -144,8 +139,11 @@ symtab_valueofbool (SYMTAB stab, STRING key, BOOLEAN *there)
 BOOLEAN
 begin_symtab (SYMTAB stab, SYMTAB_ITER stabit)
 {
+	/* MTE: Is the initialization neccesary? */
+	/* stabit->tabiters is the only element, */
+	/* and it is initialized in begin_table(). */
 	memset(stabit, 0, sizeof(*stabit));
-	return begin_table(stab.tab, &stabit->tabiters);
+	return begin_table(stab->tab, &stabit->tabiters);
 }
 /*======================================================
  * next_symtab_entry -- Continue iterating a symbol table
