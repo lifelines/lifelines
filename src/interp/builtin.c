@@ -2436,7 +2436,7 @@ __key (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val = evaluate(arg, stab, eflg);
 	CACHEEL cel;
 	BOOLEAN strip = FALSE;
-	STRING key;
+	CNSTRING key=0;
 	if (*eflg || !val || !is_record_pvalue(val)) {
 		*eflg = TRUE;
 		prog_var_error(node, stab, arg, val, nonrecx, "key", "1");
@@ -2454,7 +2454,7 @@ __key (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		strip = pvalue_to_bool(val);
 		delete_pvalue(val);
 	}
-	key = (STRING) ckey(cel);
+	key = cacheel_to_key(cel);
 	return create_pvalue_from_string(strip ? key + 1 : key);
 }
 /*==============================================+
@@ -3473,8 +3473,8 @@ __fam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 NODE
 eval_indi (PNODE expr, SYMTAB stab, BOOLEAN *eflg, CACHEEL *pcel)
 {
-	NODE indi;
-	CACHEEL cel;
+	NODE indi=0;
+	CACHEEL cel=0;
 	PVALUE val = eval_and_coerce(PINDI, expr, stab, eflg);
 
 	if (*eflg || !val) {
@@ -3487,7 +3487,7 @@ eval_indi (PNODE expr, SYMTAB stab, BOOLEAN *eflg, CACHEEL *pcel)
 	cel = pvalue_to_cel(val);
 	delete_pvalue(val);
 	if (!cel) return NULL;
-	indi = cnode(cel);
+	indi = cacheel_to_node(cel);
 	if (nestr("INDI", ntag(indi))) {
 		*eflg = TRUE;
 		return NULL;
@@ -3501,14 +3501,14 @@ eval_indi (PNODE expr, SYMTAB stab, BOOLEAN *eflg, CACHEEL *pcel)
 NODE
 eval_fam (PNODE expr, SYMTAB stab, BOOLEAN *eflg, CACHEEL *pcel)
 {
-	NODE fam;
-	CACHEEL cel;
+	NODE fam=0;
+	CACHEEL cel=0;
 	PVALUE val = eval_and_coerce(PFAM, expr, stab, eflg);
 	if (*eflg || !val) return NULL;
 	cel = pvalue_to_cel(val);
 	delete_pvalue(val);
 	if (!cel) return NULL;
-	fam = cnode(cel);
+	fam = cacheel_to_node(cel);
 	if (nestr("FAM", ntag(fam))) {
 		*eflg = TRUE;
 		return NULL;

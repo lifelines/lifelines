@@ -1,3 +1,10 @@
+2003-10-06 Perry Rapp
+
+	* ChangeLog src/gedlib/keytonod.c src/hdrs/cache.h
+	src/interp/builtin.c src/interp/more.c src/interp/pvalue.c
+
+	Encapsulate CACHEEL struct inside keytonode.c.
+
 2003-10-05 Perry Rapp
 
 	* ChangeLog src/gedlib/date.c src/hdrs/date.h src/hdrs/impfeed.h

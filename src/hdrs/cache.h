@@ -35,51 +35,7 @@
 
 #include "gedcom.h"
 
-/*===============================
- * CACHEEL -- Cache element type.
- *=============================*/
 typedef struct tag_cacheel *CACHEEL;
-struct tag_cacheel {
-	RECORD c_record;
-	NODE c_node;	/* root node */
-	CACHEEL c_prev;	/* previous el */
-	CACHEEL c_next;	/* next el */
-	STRING c_key;	/* record key */
-	INT c_lock;	/* locked? */
-	INT c_semilock; /* locked but can go to indirect cache */
-};
-#define crecord(e) ((e)->c_record)
-#define cnode(e) ((e)->c_node)
-#define cprev(e) ((e)->c_prev)
-#define cnext(e) ((e)->c_next)
-#define ckey(e)  ((e)->c_key)
-#define cclock(e) ((e)->c_lock)
-#define csemilock(e) ((e)->c_semilock)
-/*==============================
- * CACHE -- Internal cache type.
- *============================*/
-typedef struct {
-	char c_name[5];
-	TABLE c_data;		/* table of keys */
-	CACHEEL c_firstdir;	/* first direct */
-	CACHEEL c_lastdir;	/* last direct */
-	CACHEEL c_firstind;	/* first indirect */
-	CACHEEL c_lastind;	/* last indirect */
-	INT c_maxdir;		/* max in direct */
-	INT c_sizedir;		/* cur in direct */
-	INT c_maxind;		/* max in indirect */
-	INT c_sizeind;		/* cur in indirect */
-} *CACHE;
-#define cname(c)     ((c)->c_name)
-#define cdata(c)     ((c)->c_data)
-#define cfirstdir(c) ((c)->c_firstdir)
-#define clastdir(c)  ((c)->c_lastdir)
-#define cfirstind(c) ((c)->c_firstind)
-#define clastind(c)  ((c)->c_lastind)
-#define cmaxdir(c)   ((c)->c_maxdir)
-#define csizedir(c)  ((c)->c_sizedir)
-#define cmaxind(c)   ((c)->c_maxind)
-#define csizeind(c)  ((c)->c_sizeind)
 
 CACHEEL even_to_cacheel(NODE);
 CACHEEL fam_to_cacheel(RECORD frec);
@@ -107,5 +63,9 @@ void remove_from_cache(CACHE, STRING);
 void semilock_cache(CACHEEL);
 void unlock_cache(CACHEEL);
 void unsemilock_cache(CACHEEL);
+
+RECORD cacheel_to_record(CACHEEL cel);
+CNSTRING cacheel_to_key(CACHEEL cel);
+NODE cacheel_to_node(CACHEEL cel);
 
 #endif /* _CACHE_H */

@@ -22,7 +22,7 @@
    SOFTWARE.
 */
 /*=============================================================
- * keytonod.c -- Convert between keys and node trees
+ * keytonod.c -- Cache for lifelines custom btree database
  * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
  *   2.3.4 - 24 Jun 93    2.3.5 - 01 Sep 93
  *   3.0.0 - 08 May 94    3.0.2 - 23 Dec 94
@@ -44,6 +44,55 @@
 
 char badkeylist[100] = "";
 int listbadkeys = 0;
+
+
+
+/*===============================
+ * CACHEEL -- Cache element type.
+ *=============================*/
+/* typedef struct tag_cacheel *CACHEEL; */
+struct tag_cacheel {
+	RECORD c_record;
+	NODE c_node;	/* root node */
+	CACHEEL c_prev;	/* previous el */
+	CACHEEL c_next;	/* next el */
+	STRING c_key;	/* record key */
+	INT c_lock;	/* locked? */
+	INT c_semilock; /* locked but can go to indirect cache */
+};
+#define crecord(e) ((e)->c_record)
+#define cnode(e) ((e)->c_node)
+#define cprev(e) ((e)->c_prev)
+#define cnext(e) ((e)->c_next)
+#define ckey(e)  ((e)->c_key)
+#define cclock(e) ((e)->c_lock)
+#define csemilock(e) ((e)->c_semilock)
+/*==============================
+ * CACHE -- Internal cache type.
+ *============================*/
+typedef struct {
+	char c_name[5];
+	TABLE c_data;		/* table of keys */
+	CACHEEL c_firstdir;	/* first direct */
+	CACHEEL c_lastdir;	/* last direct */
+	CACHEEL c_firstind;	/* first indirect */
+	CACHEEL c_lastind;	/* last indirect */
+	INT c_maxdir;		/* max in direct */
+	INT c_sizedir;		/* cur in direct */
+	INT c_maxind;		/* max in indirect */
+	INT c_sizeind;		/* cur in indirect */
+} *CACHE;
+#define cname(c)     ((c)->c_name)
+#define cdata(c)     ((c)->c_data)
+#define cfirstdir(c) ((c)->c_firstdir)
+#define clastdir(c)  ((c)->c_lastdir)
+#define cfirstind(c) ((c)->c_firstind)
+#define clastind(c)  ((c)->c_lastind)
+#define cmaxdir(c)   ((c)->c_maxdir)
+#define csizedir(c)  ((c)->c_sizedir)
+#define cmaxind(c)   ((c)->c_maxind)
+#define csizeind(c)  ((c)->c_sizeind)
+
 
 /*********************************************
  * local function prototypes
@@ -1278,4 +1327,39 @@ NODE
 nztop (RECORD rec)
 {
 	return rec ? rec->top : 0;
+}
+/*==============================================
+ * cacheel_to_record -- Return record inside of cache element
+ *  handle NULL input
+ *============================================*/
+RECORD
+cacheel_to_record (CACHEEL cel)
+{
+	RECORD rec = cel ? crecord(cel) : 0;
+	return rec;
+}
+/*==============================================
+ * cacheel_to_key -- Return key of record inside of cache element
+ *  handle NULL input
+ *============================================*/
+CNSTRING
+cacheel_to_key (CACHEEL cel)
+{
+	CNSTRING key = cel ? ckey(cel) : 0;
+	return key;
+}
+/*==============================================
+ * cacheel_to_node -- Return root node of record inside of cache element
+ *  handle NULL input
+ *============================================*/
+NODE
+cacheel_to_node (CACHEEL cel)
+{
+	if (!cel) return NULL;
+	if (!cnode(cel)) {
+		CACHEEL cel2 = key_to_indi_cacheel(ckey(cel));
+		ASSERT(cel2 == cel);
+		ASSERT(cnode(cel));
+	}
+	return cnode(cel);
 }

@@ -881,12 +881,9 @@ describe_pvalue (PVALUE val)
 		break;
 	case PINDI:
 		{
-			NODE node;
 			CACHEEL cel = (CACHEEL) pvalue(val);
+			NODE node = cacheel_to_node(cel);
 			STRING nam;
-			if (!cnode(cel))
-				cel = key_to_indi_cacheel(ckey(cel));
-       		node = cnode(cel);
 			node = NAME(node);
 			nam = node ? nval(node) : _("{NoName}");
 			zs_appf(zstr, nam);
@@ -1048,8 +1045,8 @@ RECORD
 pvalue_to_rec (PVALUE val)
 {
 	CACHEEL cel = pvalue_to_cel(val);
-	if (!cel) return NULL;
-	return crecord(cel);
+	RECORD rec = cacheel_to_record(cel);
+	return rec;
 }
 /*==================================
  * PSET: pvalue containing a set (INDISEQ)

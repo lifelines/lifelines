@@ -508,9 +508,7 @@ PVALUE
 __choosechild (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INT type;
-	STRING key;
-	NODE indi, fam;
-	INDISEQ seq;
+	CNSTRING key=0;
 	CACHEEL cel;
 	PVALUE val = evaluate(iargs(node), stab, eflg);
 	if (*eflg || !val || ((type = which_pvalue_type(val)) != PINDI && type != PFAM)) {
@@ -521,18 +519,19 @@ __choosechild (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	cel = pvalue_to_cel(val);
 	delete_pvalue(val);
 	if (!cel) return create_pvalue_from_indi(NULL);
-	key = ckey(cel);
+	key = cacheel_to_key(cel);
 	if (*key == 'I') {
-		indi = cnode(cel);
-		seq = indi_to_children(indi);
+		NODE indi = cacheel_to_node(cel);
+		INDISEQ seq = indi_to_children(indi);
 		if (!seq || length_indiseq(seq) < 1)
 			return create_pvalue_from_indi(NULL);
 		indi = nztop(choose_from_indiseq(seq, DOASK1, _(qSifone), _(qSnotone)));
 		remove_indiseq(seq);
 		return create_pvalue_from_indi(indi); /* indi may be NULL */
 	} else if (*key == 'F') {
-		fam = key_to_fam(key);
-		seq = fam_to_children(fam);
+		NODE fam = key_to_fam(key);
+		NODE indi=0;
+		INDISEQ seq = fam_to_children(fam);
 		if (!seq || length_indiseq(seq) < 1)
 			return create_pvalue_from_indi(NULL);
 		indi = nztop(choose_from_indiseq(seq, DOASK1, _(qSifone), _(qSnotone)));
