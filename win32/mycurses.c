@@ -552,7 +552,7 @@ static void mycur_init(int fullscreen)
 		hStdout = GetStdHandle((DWORD)STD_OUTPUT_HANDLE);
 		if(hStdout != INVALID_HANDLE_VALUE)
 		{
-/*			{ // testing by Perry
+/*			{ 
 				COORD coord = { 100, 30 };
 				if (!SetConsoleScreenBufferSize(hStdout, coord))
 				{

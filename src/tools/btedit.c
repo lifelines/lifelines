@@ -49,7 +49,10 @@ main (int argc,
 	char *editor;
 	char *dbname, *key;
 
+#ifdef WIN32
+	/* TO DO - research if this is necessary */
 	_fmode = O_BINARY;	/* default to binary rather than TEXT mode */
+#endif
 
 	if (argc != 3) {
 		printf("usage: btedit <btree> <rkey>\n");

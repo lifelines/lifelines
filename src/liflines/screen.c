@@ -867,8 +867,9 @@ scan_menu (void)
 		break;
 	case 'r':
 		node = refn_scan();
-//		if (node) browse(node);
-		// have to switch on type
+/*		if (node) browse(node);
+		have to switch on type
+	*/
 		break;
 	case 'q': break;
 	}

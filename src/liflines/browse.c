@@ -452,11 +452,14 @@ static INT
 display_fam(NODE fam, INT mode)
 {
 	CACHEEL icel;
-	INT c;
+	INT c=0;
 	icel = fam_to_cacheel(fam);
 	lock_cache(icel);
 	if (mode == 0)
 		c = fam_browse(fam);
+	else {
+		ASSERT(0); /* no other modes added yet */
+	}
 	unlock_cache(icel);
 	return c;
 }

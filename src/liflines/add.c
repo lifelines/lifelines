@@ -57,7 +57,7 @@ NODE
 add_indi_by_edit (void)
 {
 	FILE *fp;
-	NODE indi;
+	NODE indi=0;
 	STRING str, msg;
 	BOOLEAN emp;
 	TRANTABLE tti = tran_tables[MEDIN];
@@ -450,7 +450,7 @@ add_family (NODE spouse1,
 {
 	INT sex1 = 0;
 	INT sex2 = 0;
-	NODE fam1, fam2, refn, husb, wife, chil, body;
+	NODE fam1, fam2=0, refn, husb, wife, chil, body;
 	NODE node;
 	TRANTABLE tti = tran_tables[MEDIN], tto = tran_tables[MINED];
 	STRING xref, msg, key;

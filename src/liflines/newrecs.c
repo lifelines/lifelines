@@ -114,7 +114,7 @@ add_record (STRING recstr,                        /* default record */
             void (*tocache)(NODE))                /* write record to cache */
 {
 	FILE *fp;
-	NODE node, refn;
+	NODE node=0, refn;
 	STRING msg, key;
 	BOOLEAN emp;
 	TRANTABLE tti = tran_tables[MEDIN];
@@ -218,7 +218,7 @@ edit_record (NODE node1,           /* record to edit, poss NULL */
 	TRANTABLE tti = tran_tables[MEDIN];
 	STRING msg, newr, oldr, key;
 	BOOLEAN emp;
-	NODE refn, node2, temp;
+	NODE refn, node2=0, temp;
 
 /* Identify record if need be */
 	if (!node1) node1 = ask_for_record(idedt, letr);
