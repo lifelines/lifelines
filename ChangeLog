@@ -30,6 +30,10 @@
 	Fix IDEN leak in forindi_node, fornotes_node, forfam_node,
 	forsour_node, foreven_node, forothr_node.
 
+	* ChangeLog NEWS
+
+	Added memory leak fixes to NEWS.
+
 2005-02-13 Stephen Dum
         * ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf 
 	docs/ll-userguide.html docs/ll-userguide.pdf reports/Makefile.am 
