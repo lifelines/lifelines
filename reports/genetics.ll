@@ -1,6 +1,6 @@
 /*
  * @progname       genetics
- * @version        2.0
+ * @version        2.0.1
  * @author         Eggert
  * @category       
  * @output         Text
@@ -10,6 +10,7 @@ genetics - a LifeLines report program to calculate degree of relatedness
         by Jim Eggert (eggertj@atc.ll.mit.edu)
         Version 1 (15 Sept 1995)
         Version 2 (19 Sept 1995)  added multiple identical birth capability
+        Version 2.0.1 (1 Jul 2002)  Fix to run with newer LifeLines (Perry Rapp)
 
 This LifeLines report program computes the degree of blood relatedness
 between any two people in a database.  It does this by finding all the
@@ -140,7 +141,9 @@ proc recur_anc(kp,anc_list,anc_table,stop_table) {
     while (ka,dequeue(keys)) {
         set(g,dequeue(gens))
         set(k,first_twin(ka))
-        set(stop,lookup(stop_table,k))
+        if (stop_table) {
+          set(stop,lookup(stop_table,k))
+        }
         if (or(not(stop_table),stop)) {
             if (ll,lookup(anc_table,k)) {
                 set(l,getel(ll,1))

@@ -26,6 +26,10 @@
 
 	Move interp/date.c to gedlib/date.c.
 
+	* ChangeLog reports/genetics.ll:
+
+	Fix genetics.ll to work with current LifeLines (tighter type-checking).
+
 2002-06-29 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog tools/Makefile.am:
