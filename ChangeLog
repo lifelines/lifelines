@@ -1,3 +1,20 @@
+2000-12-06 Perry Rapp <prapp@users.sourceforge.net>
+
+	* hdrs/gedcom.h liflines/Makefile.am liflines/browse.c
+	liflines/llinesi.h liflines/screen.c liflines/show.c:
+
+	added scrolling children (in INDI & FAM)
+
+	new scrolling pedigree with ancestors & descendants mode
+	and expandable generation depth
+	(added new liflines/pedigree.c)
+
+	dynamically sized buffers in show.c (eg, Spers) to use full
+	terminal width
+
+	Change extra_menu so the new browse functions return
+	to extra_menu when done
+
 2000-12-05 Perry Rapp <prapp@users.sourceforge.net>
 
 	* gedlib/misc.c gedlib/refns.c hdrs/gedcom.h:
