@@ -5,6 +5,8 @@
 	NEW hdrs/menuitem.h liflines/menuitem.c:
 	New paging & resizable menu system.
 
+	liflines/Makefile.am: Added menuitem.c.
+
 2001-01-27 Marc Nozell <marc@nozell.com>
 
 	* stdlib/Makefile.am: Fix UNIX build.
