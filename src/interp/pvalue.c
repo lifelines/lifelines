@@ -241,13 +241,7 @@ BOOLEAN *eflg;
 #endif
 	case PFLOAT:
 		switch (type) {
-#ifdef BROKEN_CODE
-/* This causes gcc -O to bail here.  I'm not exactly sure why. */
-/* Is there a way around it?  Perhaps...but it's risky. */
 		case PINT: u.i = u.f; break;
-#else
-		case PINT: u.i = (INT)u.w; break;
-#endif
 		case PLONG: /*u.l = float_to_long(u.w);*/ break;
 		case PFLOAT: return;
 		default: goto bad;
