@@ -1,9 +1,8 @@
 Table of Contents
 
 1) automake notes
-2) platform specific notes
-  a) cygwin
 
+***************************
 
 1) Some notes about using automake/autoconf:
 
@@ -34,14 +33,4 @@ Rob Fugina
 robf@geekthing.com
 
 
-2) Platform specific notes
-
-2a) cygwin
-
-I found that I can compile on cygwin (unix library for MS-Windows)
-if I add -DBSD to the CFLAGS line of the ./liflines/Makefile, so
-that the curses stuff compiles.
-- Perry Rapp, 2001/12/12.
-
-cygwin url: http://sources.redhat.com/cygwin/
 
