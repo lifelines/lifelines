@@ -41,7 +41,8 @@ index_mm.ll
 indiv2.r.ll
 indiv3.ll
 infant_mortality.ll
-least_related.ll
+least_related.ll [removed, incorrect script]
+lldb.ll -- report of all INDIs to import into a palm pilot
 longlines.ll
 marriages1.ll
 menu.ll

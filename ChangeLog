@@ -1,3 +1,8 @@
+2000-11-10  Marc Nozell  <nozell@dl360r6.ispworks.com>
+
+	* Added lldb.ll report; list of all INDIs suitable to import into
+	a palm pilot database
+
 2000-11-10  Petter Reinholdtsen <pere@td.org.uit.no>
 
 	* hdrs/btree.h btree/index.c: Get the source compiling again by
