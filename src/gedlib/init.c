@@ -128,6 +128,7 @@ init_lifelines_global (STRING * pmsg)
 		changeoptstr(&lloptions.lldatabases, strsave("."));
 	if (!lloptions.llnewdbdir[0])
 		changeoptstr(&lloptions.llnewdbdir, strsave("."));
+
 	return TRUE;
 }
 /*=================================

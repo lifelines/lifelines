@@ -569,6 +569,7 @@ __long (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
 	NODE even;
+	RFMT rfmt = NULL; /* currently no reformatting for reports */
 	TRANTABLE ttr = tran_tables[MINRP];
 	if (*eflg) {
 		prog_error(node, "the arg to long must be a record line");
@@ -576,7 +577,7 @@ __long (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	even = (NODE) pvalue(val);
 	delete_pvalue(val);
-	return create_pvalue(PSTRING, (VPTR)event_to_string(even, ttr, FALSE));
+	return create_pvalue(PSTRING, (VPTR)event_to_string(even, ttr, FALSE, rfmt));
 }
 /*=====================================+
  * __short -- Return short form of event
@@ -587,6 +588,7 @@ __short (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
 	NODE even;
+	RFMT rfmt = NULL; /* currently no reformatting for reports */
 	TRANTABLE ttr = tran_tables[MINRP];
 	if (*eflg) {
 		prog_error(node, "the arg to short must be a record line");
@@ -594,7 +596,7 @@ __short (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	even = (NODE) pvalue(val);
 	delete_pvalue(val);
-	return create_pvalue(PSTRING, (VPTR)event_to_string(even, ttr, TRUE));
+	return create_pvalue(PSTRING, (VPTR)event_to_string(even, ttr, TRUE, rfmt));
 }
 /*===============================+
  * __fath -- Find father of person

@@ -59,11 +59,13 @@ static BOOLEAN displaykeys=TRUE;
 /*===================================================================
  * get_child_strings -- Return children strings; each string has name
  *   and event info, if avail  
+ *  fam:   [in] family of interest
+ *  rfmt:  [in] reformatting functions
+ *  pnum:  [out] number of output strings
+ *  pkeys: [out] array of output strings (children descriptions)
  *=================================================================*/
 STRING *
-get_child_strings (NODE fam,
-                   INT *pnum,
-                   STRING **pkeys)
+get_child_strings (NODE fam, RFMT rfmt, INT *pnum, STRING **pkeys)
 {
 	NODE chil;
 	INT i;
@@ -86,7 +88,7 @@ get_child_strings (NODE fam,
 		maxchil = nchil + 5;
 	}
 	FORCHILDREN(fam,child,i)
-		chstrings[i-1] = indi_to_list_string(child, NULL, 66);
+		chstrings[i-1] = indi_to_list_string(child, NULL, 66, rfmt);
 		chkeys[i-1] = strsave(rmvat(nxref(child)));
 	ENDCHILDREN
 	*pnum = nchil;
@@ -96,11 +98,13 @@ get_child_strings (NODE fam,
 /*================================================
  * indi_to_list_string -- Return menu list string.
  *  returns heap-alloc'd string
+ *  indi:  [in] source person
+ *  fam:   [in] relevant family (used in spouse lists)
+ *  len:   [in] max length desired
+ *  rfmt:  [in] reformating functions (may be NULL)
  *==============================================*/
 STRING
-indi_to_list_string (NODE indi,
-                     NODE fam,
-                     INT len)
+indi_to_list_string (NODE indi, NODE fam, INT len, RFMT rfmt)
 {
 	char unsigned scratch[MAXLINELEN];
 	STRING name, evt = NULL, p = scratch;
@@ -115,11 +119,11 @@ indi_to_list_string (NODE indi,
 		name = unksps;
 	sprintf(p, "%s", name);
 	p += strlen(p);
-	if (fam)  evt = fam_to_event(fam, ttd, "MARR", dspa_mar, len, TRUE);
-	if (!evt) evt = indi_to_event(indi, ttd, "BIRT", dspa_bir, len, TRUE);
-	if (!evt) evt = indi_to_event(indi, ttd, "CHR", dspa_chr, len, TRUE);
-	if (!evt) evt = indi_to_event(indi, ttd, "DEAT", dspa_dea, len, TRUE);
-	if (!evt) evt = indi_to_event(indi, ttd, "BURI", dspa_bur, len, TRUE);
+	if (fam)  evt = fam_to_event(fam, ttd, "MARR", dspa_mar, len, TRUE, rfmt);
+	if (!evt) evt = indi_to_event(indi, ttd, "BIRT", dspa_bir, len, TRUE, rfmt);
+	if (!evt) evt = indi_to_event(indi, ttd, "CHR", dspa_chr, len, TRUE, rfmt);
+	if (!evt) evt = indi_to_event(indi, ttd, "DEAT", dspa_dea, len, TRUE, rfmt);
+	if (!evt) evt = indi_to_event(indi, ttd, "BURI", dspa_bur, len, TRUE, rfmt);
 	if (evt) {
 		sprintf(p, ", %s", evt);
 		p += strlen(p);
@@ -294,9 +298,14 @@ other_to_list_string(NODE node, INT len, STRING delim)
  * Caller must specify either node or key (or both)
  * Used in lists and in extended gedcom view
  * Created: 2001/02/12, Perry Rapp
+ *  node:  [in] node tree of indi or fam ... to be described
+ *  key:   [in] key of record specified by node
+ *  len:   [in] max description desired
+ *  delim: [in] separator to use between events
+ *  rfmt:  [in] reformatting information
  *=========================================*/
 STRING
-generic_to_list_string (NODE node, STRING key, INT len, STRING delim)
+generic_to_list_string (NODE node, STRING key, INT len, STRING delim, RFMT rfmt)
 {
 	STRING str;
 	str=NULL; /* set to appropriate format */
@@ -308,7 +317,7 @@ generic_to_list_string (NODE node, STRING key, INT len, STRING delim)
 		switch (key[0])
 		{
 		case 'I':
-			str = indi_to_list_string(node, NULL, len);
+			str = indi_to_list_string(node, NULL, len, rfmt);
 			break;
 		case 'S':
 			str = sour_to_list_string(node, len, ", ");

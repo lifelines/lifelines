@@ -136,15 +136,13 @@ init_map_from_file (STRING file, INT indx, BOOLEAN *perr)
  * May return NULL
  *================================================*/
 TRANTABLE
-init_map_from_str (STRING str,
-                   INT indx,
-                   BOOLEAN *perr)
+init_map_from_str (STRING str, INT indx, BOOLEAN *perr)
 {
 	INT i, n, maxn, line = 1, newc;
 	BOOLEAN done;
 	unsigned char c, scratch[50];
 	STRING p, *lefts, *rights;
-	TRANTABLE tt;
+	TRANTABLE tt=NULL;
 
 	ASSERT(str);
 
@@ -196,7 +194,7 @@ init_map_from_str (STRING str,
 					str += 3;
 				} else {
 					maperror(indx, line, baddec);
-					return NULL;
+					goto fail;
 				}
 			} else if (c == '$') {
 				newc = get_hexidecimal(str);
@@ -205,20 +203,20 @@ init_map_from_str (STRING str,
 					str += 2;
 				} else {
 					maperror(indx, line, badhex);
-					return NULL;
+					goto fail;
 				}
 			} else if ((c == '\n') || (c == '\r'))   {
 				maperror(indx, line, norplc);
-				return NULL;
+				goto fail;
 			} else if (c == 0) {
 				maperror(indx, line, norplc);
-				return NULL;
+				goto fail;
 			} else if (c == '\\') {
 				c = *str++;
 				if (c == '\t' || c == 0 || c == '\n'
 				    || c == '\r') {
 					maperror(indx, line, badesc);
-					return NULL;
+					goto fail;
 				}
 				*p++ = c;
 			} else if (c == '\t')
@@ -238,7 +236,7 @@ init_map_from_str (STRING str,
 					str += 3;
 				} else {
 					maperror(indx, line, baddec);
-					return NULL;
+					goto fail;
 				}
 			} else if (c == '$') {
 				newc = get_hexidecimal(str);
@@ -247,7 +245,7 @@ init_map_from_str (STRING str,
 					str += 2;
 				} else {
 					maperror(indx, line, badhex);
-					return NULL;
+					goto fail;
 				}
 			} else if (c == '\n') {
 				line++;
@@ -260,7 +258,7 @@ init_map_from_str (STRING str,
 				if (c == '\t' || c == 0 || c == '\n'
 				    || c == '\r') {
 					maperror(indx, line, badesc);
-					return NULL;
+					goto fail;
 				}
 				*p++ = c;
 			} else if (c == '\t') {
@@ -277,12 +275,18 @@ init_map_from_str (STRING str,
 		rights[n++] = strsave(scratch);
 	}
 	tt = create_trantable(lefts, rights, n);
+	*perr = FALSE;
+end:
 	for (i = 0; i < n; i++)		/* don't free rights */
 		stdfree(lefts[i]);
 	stdfree(lefts);
 	stdfree(rights);
-	*perr = FALSE;
 	return tt;
+
+fail:
+	for (i = 0; i < n; i++) /* rights not consumed by tt */
+		stdfree(rights[i]);
+	goto end;
 }
 /*==================================================
  * get_decimal -- Get decimal number from map string

@@ -79,6 +79,12 @@ NODE nztop(NOD0); /* function so it can handle NULL input */
 #define nzkeynum(n) ((n)->nkey.keynum)
 #define nztype(n)   ((n)->nkey.ntype)
 
+/* reformating functions - format context provided by client */
+struct rfmt_s {
+	STRING (*rfmt_date)(STRING); /* returns static buffer */
+};
+typedef struct rfmt_s *RFMT;
+
 /*==============================================
  * Option type enumerations (but we use defines)
  *============================================*/
@@ -185,7 +191,7 @@ void even_to_cache(NODE);
 void even_to_dbase(NODE);
 STRING event_to_date(NODE, TRANTABLE, BOOLEAN);
 STRING event_to_plac(NODE, BOOLEAN);
-STRING event_to_string(NODE, TRANTABLE, BOOLEAN);
+STRING event_to_string(NODE, TRANTABLE, BOOLEAN shrt, RFMT rfmt);
 void fam_to_cache(NODE);
 void fam_to_dbase(NODE);
 NODE fam_to_first_chil(NODE);
@@ -204,8 +210,8 @@ void free_nod0(NOD0);
 void free_node(NODE);
 void free_nodes(NODE);
 STRING full_value(NODE);
-STRING generic_to_list_string(NODE node, STRING key, INT len, STRING delim);
-STRING *get_child_strings(NODE, INT*, STRING**);
+STRING generic_to_list_string(NODE node, STRING key, INT len, STRING delim, RFMT rfmt);
+STRING *get_child_strings(NODE, RFMT, INT*, STRING**);
 INT get_decimal(STRING);
 INT get_hexidecimal(STRING);
 STRING get_lifelines_version(INT maxlen);
@@ -231,10 +237,10 @@ void index_by_refn(NODE, STRING);
 void indi0_to_cache(NOD0 nod0);
 void indi_to_cache(NODE);
 void indi_to_dbase(NODE);
-STRING indi_to_event(NODE, TRANTABLE, STRING, STRING, INT, BOOLEAN);
+STRING indi_to_event(NODE, TRANTABLE, STRING, STRING, INT, BOOLEAN, RFMT);
 NODE indi_to_famc(NODE);
 NODE indi_to_fath(NODE);
-STRING indi_to_list_string(NODE, NODE, INT);
+STRING indi_to_list_string(NODE, NODE, INT, RFMT);
 NODE indi_to_moth(NODE);
 STRING indi_to_name(NODE, TRANTABLE, INT);
 NODE indi_to_next_sib(NODE);

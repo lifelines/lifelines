@@ -601,7 +601,7 @@ makestring (PVALUE val, STRING str, INT len, BOOLEAN *eflg)
 				NODE node;
 				cel = get_cel_from_pvalue(val);
 				node = cnode(cel);
-				txt = generic_to_list_string(node, NULL, len, " ");
+				txt = generic_to_list_string(node, NULL, len, " ", NULL);
 				llstrncpy(str, txt, len);
 			}
 			break;

@@ -47,6 +47,7 @@ extern STRING idsadd, idsinf, kchild, iscinf, notopp, idsps1, idsps2;
 extern STRING nosex,  hashsb, haswif, idchld, gdfadd, cfcadd, iredit;
 extern STRING cfpadd, cfsadd, gdpadd, gdcadd, gdsadd, ronlya, ronlye;
 
+extern struct rfmt_s disprfmt; /* reformatting used for display */
 extern TRANTABLE tran_tables[];
 
 
@@ -167,15 +168,18 @@ add_linked_indi (NODE indi)
 /*========================================================
  * ask_child_order --  ask user in what order to put child
  * (with user interaction)
+ *  fam:     [in] children of this family
+ *  promptq: [in] what question to ask
+ *  rfmt:    [in] reformatting info
  *======================================================*/
 INT
-ask_child_order(NODE fam, PROMPTQ promptq)
+ask_child_order (NODE fam, PROMPTQ promptq, RFMT rfmt)
 {
 	INT i, nchildren;
 	STRING *childstrings, *childkeys;
 /* If first child in family, confirm and add */
 
-	childstrings = get_child_strings(fam, &nchildren, &childkeys);
+	childstrings = get_child_strings(fam, rfmt, &nchildren, &childkeys);
 	if (nchildren == 0) {
 		if (promptq == ALWAYS_PROMPT && !ask_yes_or_no(cfcadd))
 				return -1;
@@ -190,10 +194,11 @@ ask_child_order(NODE fam, PROMPTQ promptq)
 /*==================================
  * add_child --  Add child to family
  * (with user interaction)
+ *  child: [in] new child to add
+ *  fam:   [in] family to which to add
  *================================*/
 NODE
-add_child (NODE child,
-           NODE fam)
+add_child (NODE child, NODE fam)
 {
 	INT i;
 
@@ -212,7 +217,7 @@ add_child (NODE child,
 	if (!fam) fam = ask_for_fam(idprnt, idsbln);
 	if (!fam) return NULL;
 
-	i = ask_child_order(fam, ALWAYS_PROMPT);
+	i = ask_child_order(fam, ALWAYS_PROMPT, &disprfmt);
 	if (i == -1) return NULL;
 
 /* Add FAMC node to child */

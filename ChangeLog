@@ -1,3 +1,13 @@
+2007-07-12 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/charmaps.c gedlib/gstrings.c gedlib/indiseq.c
+	gedlib/init.c gedlib/node.c hdrs/gedcom.h hdrs/indiseq.h
+	hdrs/liflines.h interp/builtin.c interp/more.c liflines/add.c
+	liflines/browse.c liflines/pedigree.c liflines/screen.c
+	liflines/show.c:
+	Created reformatting context so gedcom doesn't directly call
+	format_date. Plugged memory leak in init_map_from_str.
+
 2007-07-11 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/charmaps.c gedlib/misc.c gedlib/names.c

@@ -78,7 +78,6 @@ static void alloc_nod0_wh(NOD0 nod0, INT isnew);
 static NODE alloc_node(void);
 static BOOLEAN buffer_to_line (STRING p, INT *plev, STRING *pxref
 	, STRING *ptag, STRING *pval, STRING *pmsg);
-static STRING display_date(STRING date);
 static STRING fixup (STRING str);
 static STRING fixtag (STRING tag);
 static void load_nod0_wh(NOD0 nod0, char * whptr, INT whlen);
@@ -1180,7 +1179,7 @@ STRING node_to_tag (NODE node, STRING tag, TRANTABLE tt, INT len)
  *============================================*/
 STRING
 indi_to_event (NODE node, TRANTABLE tt, STRING tag, STRING head
-	, INT len, BOOLEAN shrt)
+	, INT len, BOOLEAN shrt, RFMT rfmt)
 {
 	static unsigned char scratch[200];
 	STRING p = scratch;
@@ -1189,7 +1188,7 @@ indi_to_event (NODE node, TRANTABLE tt, STRING tag, STRING head
 	INT n;
 	if (!node) return NULL;
 	if (!(node = find_tag(nchild(node), tag))) return NULL;
-	event = event_to_string(node, tt, shrt);
+	event = event_to_string(node, tt, shrt, rfmt);
 	if (!event) return NULL;
 	p[0] = 0;
 	llstrcatn(&p, head, &mylen);
@@ -1207,9 +1206,13 @@ indi_to_event (NODE node, TRANTABLE tt, STRING tag, STRING head
  *  shrt:  [in] flag if caller wants short version
  * Finds DATE & PLACE nodes, and prints a string
  * representation of them.
+ *  node:  [in] node tree of event to describe
+ *  tt:    [in] translation table to use
+ *  shrt:  [in] flag for short description
+ *  rfmt:  [in] reformatting info (may be NULL)
  *=========================================*/
 STRING
-event_to_string (NODE node, TRANTABLE tt, BOOLEAN shrt)
+event_to_string (NODE node, TRANTABLE tt, BOOLEAN shrt, RFMT rfmt)
 {
 	static unsigned char scratch1[MAXLINELEN+1];
 	static unsigned char scratch2[MAXLINELEN+1];
@@ -1230,7 +1233,8 @@ event_to_string (NODE node, TRANTABLE tt, BOOLEAN shrt)
 		plac = shorten_plac(plac);
 		if (!date && !plac) return NULL;
 	} else {
-		date = display_date(date);
+		if (rfmt && rfmt->rfmt_date)
+			date = (*rfmt->rfmt_date)(date);
 	}
 	p[0] = 0;
 	if (date)
@@ -1312,19 +1316,6 @@ length_nodes (NODE node)
 		node = nsibling(node);
 	}
 	return len;
-}
-/*================================================
- * display_date -- Convert date according to options
- *==============================================*/
-static STRING
-display_date (STRING date)
-{
-	static unsigned char buffer[MAXLINELEN+1];
-	if (!date) return NULL;
-	if (!lloptions.date_customize_long) return date;
-	return format_date(date, lloptions.date_long_dfmt
-		, lloptions.date_long_mfmt, lloptions.date_long_yfmt
-		, lloptions.date_long_sfmt, TRUE);
 }
 /*================================================
  * shorten_date -- Return short form of date value

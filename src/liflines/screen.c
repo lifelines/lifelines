@@ -94,6 +94,7 @@ extern STRING abverr, uoperr;
 extern STRING mtitle, cright, plschs;
 extern STRING mn_unkcmd, ronlya, ronlyr;
 extern STRING askynq, askynyn, askyny;
+extern struct rfmt_s disprfmt; /* reformatting used for display */
 
 /*********************************************
  * local function prototypes
@@ -831,7 +832,7 @@ choose_one_from_indiseq (STRING ttl, INDISEQ seq)
 	ASSERT(seq);
 	len = length_indiseq(seq);
 	if (len<50)
-		preprint_indiseq(seq, elemwidth);
+		preprint_indiseq(seq, elemwidth, &disprfmt);
 		
 	scroll=0;
 	/*
@@ -930,10 +931,11 @@ resize_win:
  *   person sequence
  * returns input sequence, but may have deleted elements
  * called by both reports & interactive use
+ *  ttl:  [in] title/caption for choice list
+ *  seq:  [in] list from which to choose
  *========================================================*/
 INDISEQ
-choose_list_from_indiseq (STRING ttl,
-                          INDISEQ seq)
+choose_list_from_indiseq (STRING ttl, INDISEQ seq)
 {
 	WINDOW *win;
 	INT len;
@@ -941,7 +943,7 @@ choose_list_from_indiseq (STRING ttl,
 	ASSERT(seq);
 	len = length_indiseq(seq);
 	if (len<50)
-		preprint_indiseq(seq, elemwidth);
+		preprint_indiseq(seq, elemwidth, &disprfmt);
 	win = choose_win(len+list_detail_lines, NULL);
 	werase(win);
 	BOX(win, 0, 0);
@@ -1328,7 +1330,7 @@ shw_list (WINDOW *win,
 			i=j-numdet+top;
 			if (i<len) {
 				if (i == cur) mvwaddch(win, row, 3, '>');
-				print_indiseq_element(seq, i, buffer, sizeof(buffer));
+				print_indiseq_element(seq, i, buffer, sizeof(buffer), &disprfmt);
 				mvwaddstr(win, row, 4, buffer);
 			}
 		}

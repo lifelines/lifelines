@@ -90,7 +90,7 @@ static INDISEQ create_indiseq_impl(INT valtype, INDISEQ_VALUE_VTABLE vtable);
 static void delete_el(INDISEQ seq, SORTEL el);
 static void deleteval(INDISEQ seq, UNION uval);
 static INDISEQ dupseq(INDISEQ seq);
-static STRING get_print_el(INDISEQ, INT i, INT len);
+static STRING get_print_el(INDISEQ, INT i, INT len, RFMT rfmt);
 static INT key_compare(SORTEL, SORTEL);
 static INT name_compare(SORTEL, SORTEL);
 static INT value_str_compare(SORTEL, SORTEL);
@@ -1520,13 +1520,18 @@ name_to_indiseq (STRING name)
  * generic_print_el -- Format a print line of
  *  sequence of indis
  *  returns heap-alloc'd string
+ *
+ *  seq:  [in] sequence containing desired element
+ *  i:    [in] index of desired element
+ *  len:  [in] max width description desired
+ *  rfmt: [in] reformatting information
  *=========================================*/
 static STRING
-generic_print_el (INDISEQ seq, INT i, INT len)
+generic_print_el (INDISEQ seq, INT i, INT len, RFMT rfmt)
 {
 	STRING key, name;
 	element_indiseq(seq, i, &key, &name);
-	return generic_to_list_string(NULL, key, len, ", ");
+	return generic_to_list_string(NULL, key, len, ", ", rfmt);
 }
 /*=============================================
  * spouseseq_print_el -- Format a print line of
@@ -1534,7 +1539,7 @@ generic_print_el (INDISEQ seq, INT i, INT len)
  * assume values are family keys
  *===========================================*/
 static STRING
-spouseseq_print_el (INDISEQ seq, INT i, INT len)
+spouseseq_print_el (INDISEQ seq, INT i, INT len, RFMT rfmt)
 {
 	NODE indi, fam;
 	STRING key, name, str;
@@ -1542,7 +1547,7 @@ spouseseq_print_el (INDISEQ seq, INT i, INT len)
 	element_indiseq_ival(seq, i, &key, &val, &name);
 	indi = key_to_indi(key);
 	fam = keynum_to_fam(val);
-	str = indi_to_list_string(indi, fam, len);
+	str = indi_to_list_string(indi, fam, len, rfmt);
 	return str;
 }
 /*==========================================
@@ -1551,7 +1556,7 @@ spouseseq_print_el (INDISEQ seq, INT i, INT len)
  * assume values are spouse keys
  *========================================*/
 static STRING
-famseq_print_el (INDISEQ seq, INT i, INT len)
+famseq_print_el (INDISEQ seq, INT i, INT len, RFMT rfmt)
 {
 	NODE fam, spouse;
 	STRING key, name, str;
@@ -1559,7 +1564,7 @@ famseq_print_el (INDISEQ seq, INT i, INT len)
 	element_indiseq_ival(seq, i, &key, &val, &name);
 	fam = key_to_fam(key);
 	spouse = ( val ? keynum_to_indi(val) : NULL);
-	str = indi_to_list_string(spouse, fam, len);
+	str = indi_to_list_string(spouse, fam, len, rfmt);
 	return str;
 }
 /*================================================
@@ -1567,22 +1572,28 @@ famseq_print_el (INDISEQ seq, INT i, INT len)
  *  one element of an indiseq
  *==============================================*/
 static STRING
-get_print_el (INDISEQ seq, INT i, INT len)
+get_print_el (INDISEQ seq, INT i, INT len, RFMT rfmt)
 {
 	STRING str;
 	switch(IPrntype(seq)) {
-	case ISPRN_FAMSEQ: str = famseq_print_el(seq, i, len); break;
-	case ISPRN_SPOUSESEQ: str = spouseseq_print_el(seq, i, len); break;
-	default: str = generic_print_el(seq, i, len); break;
+	case ISPRN_FAMSEQ: str = famseq_print_el(seq, i, len, rfmt); break;
+	case ISPRN_SPOUSESEQ: str = spouseseq_print_el(seq, i, len, rfmt); break;
+	default: str = generic_print_el(seq, i, len, rfmt); break;
 	}
 	return str;
 }
 /*================================================
  * print_indiseq_element -- Format a print line of
  *  an indiseq (any type)
+ *
+ *  seq:  [in] indiseq of interest
+ *  i:    [in] index of desired element
+ *  buf:  [out] buffer to which to print description
+ *  len:  [in] max length of buffer
+ *  rfmt: [in] reformatting info
  *==============================================*/
 void
-print_indiseq_element (INDISEQ seq, INT i, STRING buf, INT len)
+print_indiseq_element (INDISEQ seq, INT i, STRING buf, INT len, RFMT rfmt)
 {
 	STRING str, ptr=buf;
 	BOOLEAN alloc=FALSE;
@@ -1598,7 +1609,7 @@ print_indiseq_element (INDISEQ seq, INT i, STRING buf, INT len)
 		 It would be more efficient not to strsave. This requires
 		 changing indi_to_list_string, etc.
 		*/
-		str = get_print_el(seq, i, len-1);
+		str = get_print_el(seq, i, len-1, rfmt);
 		alloc=TRUE;
 	}
 	llstrcatn(&ptr, str, &len);
@@ -1607,12 +1618,15 @@ print_indiseq_element (INDISEQ seq, INT i, STRING buf, INT len)
 }
 /*=====================================================
  * preprint_indiseq -- Preformat print lines of indiseq
+ *  seq:  [in] sequence to prepare (for display)
+ *  len:  [in] max line width desired
+ *  rfmt: [in] reformatting info
  *===================================================*/
 void
-preprint_indiseq (INDISEQ seq, INT len)
+preprint_indiseq (INDISEQ seq, INT len, RFMT rfmt)
 {
 	FORINDISEQ(seq, el, num)
-		sprn(el) = get_print_el(seq, num, len);
+		sprn(el) = get_print_el(seq, num, len, rfmt);
 	ENDINDISEQ
 }
 /*==============================================================
