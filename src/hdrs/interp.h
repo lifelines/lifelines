@@ -202,33 +202,6 @@ extern INT nobuiltins;
 		return NULL;\
 	}
 
-/* GEDCOM dates */
-enum { BAD_YEAR=-99999 };
-struct dnum_s { INT val; INT val2; STRING str; };
-struct gdate_s {
-	INT calendar;
-	struct dnum_s year;
-	struct dnum_s month;
-	struct dnum_s day;
-	INT mod;
-	INT eratime; /* eg, AD, BC */
-};
-struct gdateval_s {
-	struct gdate_s date1;
-	struct gdate_s date2; /* used by period/from_to & range/bet_and */
-	INT type;
-	INT subtype;
-	INT valid; /* -1=bad syntax, 0=freeform, 1=perfect GEDCOM date */
-	STRING text; /* copy of original */
-};
-typedef struct gdateval_s *GDATEVAL;
-enum { GDV_PERIOD=1, GDV_RANGE, GDV_DATE, GDV_APPROX  };
-enum { GDVP_FROM=1, GDVP_TO, GDVP_FROM_TO }; /* period subtype */
-enum { GDVR_BEF=1, GDVR_AFT, GDVR_BET, GDVR_BET_AND }; /* range subtype */
-enum { GDVA_ABT=1, GDVA_EST, GDVA_CAL }; /* approx subtype */
-enum { GDV_GREGORIAN=1, GDV_JULIAN, GDV_HEBREW, GDV_FRENCH, GDV_ROMAN, GDV_CALENDARS_IX };
-enum { GDV_AD=1, GDV_BC };
-
 
 /* PVALUE Arithmetic Functions */
 void add_pvalues(PVALUE, PVALUE, BOOLEAN*);
@@ -288,8 +261,10 @@ void pvalues_end(void);
 BOOLEAN pvalue_to_bool(PVALUE);
 float pvalue_to_float(PVALUE val);
 INT pvalue_to_int(PVALUE);
+LIST pvalue_to_list(PVALUE val);
 float* pvalue_to_pfloat(PVALUE);
 INT* pvalue_to_pint(PVALUE);
+STRING pvalue_to_string(PVALUE);
 void remove_symtab(SYMTAB *);
 void set_pvalue(PVALUE, INT, VPTR);
 void show_pvalue(PVALUE);
@@ -336,10 +311,8 @@ PNODE call_node(STRING, PNODE);
 PNODE children_node(PNODE, STRING, STRING, PNODE);
 PNODE children_node(PNODE, STRING, STRING, PNODE);
 PNODE continue_node(void);
-GDATEVAL create_gdateval(void);
 PNODE create_pnode(INT);
 void debug_show_one_pnode(PNODE);
-STRING do_format_date(STRING, INT, INT, INT, INT, INT, INT);
 PVALUE evaluate(PNODE, SYMTAB, BOOLEAN*);
 BOOLEAN evaluate_cond(PNODE, SYMTAB, BOOLEAN*);
 PVALUE evaluate_func(PNODE, SYMTAB, BOOLEAN*);
@@ -349,7 +322,6 @@ PVALUE eval_and_coerce(INT, PNODE, SYMTAB, BOOLEAN*);
 NODE eval_indi(PNODE, SYMTAB, BOOLEAN*, CACHEEL*);
 NODE eval_fam(PNODE, SYMTAB, BOOLEAN*, CACHEEL*);
 PVALUE eval_without_coerce(PNODE node, SYMTAB stab, BOOLEAN *eflg);
-GDATEVAL extract_date(STRING);
 PNODE families_node(PNODE, STRING, STRING, STRING, PNODE);
 PNODE fathers_node(PNODE, STRING, STRING, STRING, PNODE);
 PNODE fcons_node(FLOAT);
@@ -364,11 +336,8 @@ PNODE fornodes_node(PNODE, STRING, PNODE);
 PNODE fornotes_node(PNODE, STRING, PNODE);
 PNODE forothr_node(STRING, STRING, PNODE);
 void free_all_pnodes(void);
-void free_gdateval(GDATEVAL gdv);
 void free_pnode_tree(PNODE);
 PNODE func_node(STRING, PNODE);
-BOOLEAN gdateval_isdual(GDATEVAL);
-STRING get_todays_date(void);
 void handle_option(PVALUE optval);
 PNODE icons_node(INT);
 PNODE iden_node(STRING);
@@ -384,8 +353,6 @@ void prog_error(PNODE, STRING, ...);
 void prog_var_error(PNODE node, SYMTAB stab, PNODE arg, PVALUE val, STRING fmt, ...);
 BOOLEAN record_to_node(PVALUE val);
 PNODE return_node(PNODE);
-BOOLEAN set_cmplx_pic(INT ecmplx, STRING pic);
-void set_date_pic(STRING pic);
 void show_pnode(PNODE);
 void show_pnodes(PNODE);
 void shutdown_interpreter(void);

@@ -40,6 +40,7 @@
 #include "liflines.h"
 #include "feedback.h"
 #include "menuitem.h"
+#include "cache.h"
 
 #include "llinesi.h"
 

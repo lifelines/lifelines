@@ -27,7 +27,6 @@
 #define _LL_STDLIB_H
 
 #include "standard.h"	/* for INT, STRING, LIST, VPTR, BOOLEAN */
-#include "interp.h"	/* for PVALUE */
 
 /* assert.c */
 /*
@@ -53,7 +52,7 @@ VPTR dequeue_list(LIST);
 BOOLEAN empty_list(LIST);
 void enqueue_list(LIST, VPTR);
 VPTR get_list_element(LIST, INT);
-BOOLEAN in_list(LIST, VPTR, int (*func)(PVALUE, PVALUE));
+BOOLEAN in_list(LIST, VPTR, int (*func)(VPTR, VPTR));
 INT length_list(LIST);
 void make_list_empty(LIST);
 VPTR pop_list(LIST);

@@ -50,7 +50,7 @@
  *********************************************/
 
 extern STRING notone, ifone, progname;
-extern STRING nonlstx,nonvarx,nonnodx;
+extern STRING nonstr1,nonstrx,nonlstx,nonvarx,nonnodx;
 
 /*********************************************
  * local function prototypes
@@ -104,7 +104,7 @@ __extractnames (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, nonlstx, "extractnames", "2");
 		return NULL;
 	}
-	list = (LIST) pvalue(val);
+	list = pvalue_to_list(val);
 	delete_pvalue(val);
 	if (list)
 		make_list_empty(list);
@@ -170,7 +170,7 @@ __extractplaces (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, nonlstx, "extractplaces", "2");
 		return NULL;
 	}
-	list = (LIST) pvalue(val);
+	list = pvalue_to_list(val);
 	delete_pvalue(val);
 	if (list)
 		make_list_empty(list);
@@ -213,24 +213,24 @@ __extracttokens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val2, val1 = eval_and_coerce(PSTRING, sexp, stab, eflg);
 
 	if (*eflg) {
-		prog_error(node, "1st arg to extracttokens must be a string");
+		prog_error(node, nonstrx, "extracttokens", "1");
 		return NULL;
 	}
-	str = (STRING) pvalue(val1);
+	str = pvalue_to_string(val1);
 	val2 = eval_and_coerce(PLIST, lexp, stab, eflg);
 	if (*eflg) {
 		prog_error(node, "2nd arg to extracttokens must be a list");
 		return NULL;
 	}
-	list = (LIST) pvalue(val2);
+	list = pvalue_to_list(val2);
 	delete_pvalue(val2);
 	make_list_empty(list);
 	val2 = eval_and_coerce(PSTRING, dexp, stab, eflg);
 	if (*eflg) {
-		prog_error(node, "4th arg to extracttokens must be a string");
+		prog_error(node, nonstrx, "extracttokens", "4");
 		return NULL;
 	}
-	dlm = (STRING) pvalue(val2);
+	dlm = pvalue_to_string(val2);
 #ifdef DEBUG
 	llwprintf("dlm = %s\n", dlm);
 #endif
@@ -268,7 +268,7 @@ __database (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 			prog_error(node, "the arg to database is not boolean");
 			return NULL;
 		}
-		full = (BOOLEAN) pvalue(val);
+		full = pvalue_to_bool(val);
 		delete_pvalue(val);
 	}
 	return create_pvalue_from_string(
@@ -289,21 +289,21 @@ __index (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "1st arg to index is not a string");
 		return NULL;
 	}
-	str = (STRING) pvalue(val1);
+	str = pvalue_to_string(val1);
 	arg = inext(arg);
 	val2 = eval_and_coerce(PSTRING, arg, stab, eflg);
 	if (*eflg) {
 		prog_error(node, "2nd arg to index is not a string");
 		return NULL;
 	}
-	sub = (STRING) pvalue(val2);
+	sub = pvalue_to_string(val2);
 	arg = inext(arg);
 	val3 = eval_and_coerce(PINT, arg, stab, eflg);
 	if (*eflg) {
 		prog_error(node, "3rd arg to index is not an integer");
 		return NULL;
 	}
-	num = (INT) pvalue(val3);
+	num = pvalue_to_int(val3);
 	set_pvalue(val3, PINT, (VPTR) ll_index(str, sub, num));
 	delete_pvalue(val1);
 	delete_pvalue(val2);
@@ -324,14 +324,14 @@ __substring (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "1st arg to substring is not a string");
 		return NULL;
 	}
-	str = (STRING) pvalue(val1);
+	str = pvalue_to_string(val1);
 	arg = inext(arg);
 	val2 = eval_and_coerce(PINT, arg, stab, eflg);
 	if (*eflg) {
 		prog_error(node, "2nd arg to substring is not an integer");
 		return NULL;
 	}
-	lo = (INT) pvalue(val2);
+	lo = pvalue_to_int(val2);
 	delete_pvalue(val2);
 	arg = inext(arg);
 	val2 = eval_and_coerce(PINT, arg, stab, eflg);
@@ -339,7 +339,7 @@ __substring (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "3rd arg to substring is not an integer");
 		return NULL;
 	}
-	hi = (INT) pvalue(val2);
+	hi = pvalue_to_int(val2);
 	/* substr can handle str==NULL */
 	substr = allocsubstring(str, lo, hi);
 	set_pvalue(val2, PSTRING, substr);
@@ -685,7 +685,7 @@ __menuchoose (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INT i, j, len;
 	STRING msg, *strngs;
-	STRING ttl = (STRING) "Please choose from the following list.";
+	STRING ttl = _("Please choose from the following list.");
 	PNODE arg = (PNODE) iargs(node);
 	LIST list;
 	PVALUE vel, val;
@@ -696,7 +696,7 @@ __menuchoose (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "1st arg to menuchoose must be a list of strings");
 		return NULL;
 	}
-	list = (LIST) pvalue(val);
+	list = pvalue_to_list(val);
 	delete_pvalue(val);
 	val = NULL;
 	if (!list || length_list(list) < 1)
@@ -709,7 +709,7 @@ __menuchoose (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 			prog_error(node, "2nd arg to menuchoose must be a string");
 			return NULL;
 		}
-		msg = (STRING) pvalue(val);
+		msg = pvalue_to_string(val);
 	}
 	if (msg && *msg) ttl = msg;
 	len = length_list(list);
@@ -746,7 +746,7 @@ __runsystem (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "the arg to system must be a string");
 		return NULL;
 	}
-	cmd = (STRING) pvalue(val);
+	cmd = pvalue_to_string(val);
 	if (!cmd || *cmd == 0) {
 		delete_pvalue(val);
 		return NULL;
@@ -871,11 +871,12 @@ __nextfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __prevfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE fam = eval_fam(iargs(node), stab, eflg, NULL);
+	PNODE arg = iargs(node);
+	NODE fam = eval_fam(arg, stab, eflg, NULL);
 	static char key[10];
 	INT i;
 	if (*eflg) {
-		prog_error(node, "the arg to prevfam must be a family");
+		prog_var_error(node, stab, arg, NULL, "the arg to prevfam must be a family");
 		return NULL;
 	}
 	if (!fam)
@@ -907,19 +908,17 @@ PVALUE
 __getrecord (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	STRING key;
-	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
+	PNODE arg = iargs(node);
+	PVALUE val = eval_and_coerce(PSTRING, arg, stab, eflg);
 	INT len;
 	STRING rawrec = NULL;
 	NODE node2 = NULL;
 	if (*eflg) {
-		prog_error(node, "the arg to getrecord must be a string");
+		prog_var_error(node, stab, arg, val, nonstr1, "getrecord");
 		return NULL;
 	}
-	key = (STRING) pvalue(val);
+	key = pvalue_to_string(val);
 	if (*key == '@') key = rmvat(key);
-#ifdef DEBUG
-	llwprintf("__getrecord: key = %s\n", key);
-#endif
 	if (*key == 'I' || *key == 'F' || *key == 'S' ||
 	    *key == 'E' || *key == 'X') {
 		rawrec = retrieve_raw_record(key, &len);
@@ -940,12 +939,13 @@ __reference (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	STRING key;
 	BOOLEAN rc;
-	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
+	PNODE arg = iargs(node);
+	PVALUE val = eval_and_coerce(PSTRING, arg, stab, eflg);
 	if (*eflg) {
-		prog_error(node, "the arg to reference must be a string");
+		prog_var_error(node, stab, arg, val, nonstr1, "reference");
 		return NULL;
 	}
-	key = (STRING) pvalue(val);
+	key = pvalue_to_string(val);
 	rc = (key && *key && (strlen(key) > 2) && (*key == '@') &&
 	    (key[strlen(key)-1] == '@'));
 	set_pvalue(val, PBOOL, (VPTR) rc);
@@ -967,13 +967,13 @@ __rjustify (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "1st arg to rjustify must be a string");
 		return NULL;
 	}
-	str = (STRING) pvalue(val1);
+	str = pvalue_to_string(val1);
 	val2 = eval_and_coerce(PINT, larg, stab, eflg);
 	if (*eflg) {
 		prog_error(node, "2nd arg to rjustify must be an integer");
 		return NULL;
 	}
-	len = (INT) pvalue(val2);
+	len = pvalue_to_int(val2);
 	delete_pvalue(val2);
 	set_pvalue(val1, PSTRING, (VPTR) rightjustify(str, len));
 	return val1;
@@ -1072,7 +1072,7 @@ __genindiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "1st arg to genindiset must be a string");
 		return NULL;
 	}
-	name = (STRING) pvalue(val1);
+	name = pvalue_to_string(val1);
 	if(name) name = strsave(name);
 	delete_pvalue(val1);
 	arg = inext(arg);
@@ -1140,7 +1140,7 @@ PVALUE
 __debug (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PVALUE val = eval_and_coerce(PBOOL, iargs(node), stab, eflg);
-	prog_debug = (BOOLEAN) pvalue(val);
+	prog_debug = pvalue_to_bool(val);
 	return NULL;
 }
 /*========================================
@@ -1153,7 +1153,7 @@ __getproperty(PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
 	if (*eflg || !val || ptype(val) != PSTRING) {
 		*eflg = TRUE;
-		prog_error(node, "the arg to getproperty is not a string");
+		prog_error(node, nonstr1, "getproperty");
 		return NULL;
 	}
 	if (!pvalue(val))

@@ -75,9 +75,7 @@ remove_list (LIST list,
  * in_list -- see if in list
  *=========================*/
 BOOLEAN
-in_list (LIST list,
-         VPTR el,
-         int (*func)(PVALUE, PVALUE))
+in_list (LIST list, VPTR el, int (*func)(VPTR, VPTR))
 {
 	LNODE lnode;
 	if (!list) return FALSE;

@@ -144,7 +144,7 @@ evaluate_cond (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 #endif
 	if (var) assign_iden(stab, iident(node), copy_pvalue(val));
 	coerce_pvalue(PBOOL, val, eflg);
-	rc = (BOOLEAN) pvalue(val);
+	rc = pvalue_to_bool(val);
 	delete_pvalue(val);
 	return rc;
 }

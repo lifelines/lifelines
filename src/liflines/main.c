@@ -47,6 +47,7 @@
 #include "liflines.h"
 #include "arch.h"
 #include "lloptions.h"
+#include "interp.h"
 
 #include "llinesi.h"
 #include "screen.h" /* calling initscr, noecho, ... */

@@ -29,6 +29,7 @@
  *============================================================*/
 
 #include "llstdlib.h"
+#include "gedcom.h"
 #include "btree.h"
 
 extern BTREE BTR;

@@ -632,5 +632,9 @@ SOURCE=..\..\..\hdrs\warehouse.h
 SOURCE=..\..\..\interp\yacc.h
 # End Source File
 # End Group
+# Begin Source File
+
+SOURCE=..\..\..\hdrs\date.h
+# End Source File
 # End Target
 # End Project

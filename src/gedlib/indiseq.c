@@ -621,7 +621,7 @@ value_str_compare (SORTEL el1, SORTEL el2)
 	PVALUE val1, val2;
 	val1 = sval(el1).w;
 	val2 = sval(el2).w;
-	return cmpstrloc((STRING) pvalue(val1), (STRING) pvalue(val2));
+	return cmpstrloc(pvalue_to_string(val1), pvalue_to_string(val2));
 }
 /*==========================================
  * namesort_indiseq -- Sort sequence by name
@@ -726,7 +726,7 @@ valuesort_indiseq (INDISEQ seq, BOOLEAN *eflg)
 		if we got rid of this, we could set spri() to be
 		correct all the time, which would be more convenient
 		*/
-		if (settype == PINT) spri(el) = (INT)pvalue(val);
+		if (settype == PINT) spri(el) = pvalue_to_int(val);
 	ENDINDISEQ
 	if (settype == PINT)
 		partition_sort(IData(seq), ISize(seq), key_compare);

@@ -46,12 +46,36 @@
 
 #include "interpi.h"
 
+
+/*********************************************
+ * external/imported variables
+ *********************************************/
+
+extern STRING nonintx;
+
+/*********************************************
+ * local enums & defines
+ *********************************************/
+
 #define MAXPAGESIZE 65536
 #define MAXROWS 512
 #define MAXCOLS 512
-INT __cols = 0, __rows = 0;
-INT curcol = 1, currow = 1;
-INT outputmode = BUFFERED;
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+/* alphabetical */
+static void adjust_cols(STRING);
+static BOOLEAN request_file(BOOLEAN *eflg);
+
+/*********************************************
+ * local variables
+ *********************************************/
+
+static INT __cols = 0, __rows = 0;
+static INT curcol = 1, currow = 1;
+static INT outputmode = BUFFERED;
 
 static STRING pagebuffer = NULL;
 static char linebuffer[1024];
@@ -62,8 +86,10 @@ static STRING outfilename;
 extern STRING whtout;
 extern INT rpt_cancelled;
 
-static void adjust_cols(STRING);
-static BOOLEAN request_file(BOOLEAN *eflg);
+/*********************************************
+ * local function definitions
+ * body of module
+ *********************************************/
 
 /*======================================+
  * initrassa -- Initialize program output
@@ -102,14 +128,14 @@ __pagemode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "1st arg to pagemode must be an integer.");
 		return NULL;
 	}
-	rows = (INT) pvalue(val);
+	rows = pvalue_to_int(val);
 	delete_pvalue(val);
 	val = eval_and_coerce(PINT, inext((PNODE)iargs(node)), stab, eflg);
 	if (*eflg) {
 		prog_error(node, "2nd arg to pagemode must be an integer.");
 		return NULL;
 	}
-	cols = (INT) pvalue(val);
+	cols = pvalue_to_int(val);
 	delete_pvalue(val);
 	*eflg = TRUE;
 	if (cols < 1 || cols > MAXCOLS || rows < 1 || rows > MAXROWS) {
@@ -155,7 +181,7 @@ __newfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "1st arg to newfile must be a string.");
 		return NULL;
 	}
-	name = (STRING) pvalue(val);
+	name = pvalue_to_string(val);
 	if (!name || *name == 0) {
 		*eflg = TRUE;
 		prog_error(node, "1st arg to newfile must be a string.");
@@ -170,7 +196,7 @@ __newfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "2nd arg to newfile must be boolean.");
 		return NULL;
 	}
-	aflag = (BOOLEAN) pvalue(val);
+	aflag = pvalue_to_bool(val);
 	delete_pvalue(val);
 	set_output_file(outfilename, aflag);
 	return NULL;
@@ -249,17 +275,17 @@ __pos (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	INT col, row;
 	PVALUE val = eval_and_coerce(PINT, iargs(node), stab, eflg);
 	if (*eflg) {
-		prog_error(node, "1st arg to pos must be an integer.");
+		prog_error(node, nonintx, "pos", "1");
 		return NULL;
 	}
-	row = (INT) pvalue(val);
+	row = pvalue_to_int(val);
 	delete_pvalue(val);
 	val = eval_and_coerce(PINT, inext((PNODE) iargs(node)), stab, eflg);
 	if (*eflg) {
-		prog_error(node, "2nd arg to pos must be an integer.");
+		prog_error(node, nonintx, "pos", "1");
 		return NULL;
 	}
-	col = (INT) pvalue(val);
+	col = pvalue_to_int(val);
 	delete_pvalue(val);
 	if (outputmode != PAGEMODE || row < 1 || row > __rows ||
 	    col < 1 || col > __cols) {
@@ -285,7 +311,7 @@ __row (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	*eflg = TRUE;
-	row = (INT) pvalue(val);
+	row = pvalue_to_int(val);
 	delete_pvalue(val);
 	if (outputmode != PAGEMODE || row < 1 || row > __rows) {
 		prog_error(node, "the arg to row is in error.");
@@ -309,7 +335,7 @@ __col (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "the arg to col must be an integer.");
 		return NULL;
 	}
-	newcol = (INT) pvalue(val);
+	newcol = pvalue_to_int(val);
 	delete_pvalue(val);
 	if (newcol < 1) newcol = 1;
 	if (newcol > MAXCOLS) newcol = MAXCOLS;

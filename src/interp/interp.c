@@ -383,7 +383,7 @@ if (prog_debug) {
 				    iident(node));
 				goto interp_fail;
 			}
-			str = (STRING) pvalue(val);
+			str = pvalue_to_string(val);
 			if (str) {
 				poutput(str, &eflg);
 				if (eflg) {
@@ -1448,7 +1448,7 @@ interp_forlist (PNODE node, SYMTAB stab, PVALUE *pval)
 		prog_error(node, "1st arg to forlist is not a list");
 		return INTERROR;
 	}
-	list = (LIST) pvalue(val);
+	list = pvalue_to_list(val);
 	/* can't delete val until we're done with list */
 	if (!list) {
 		delete_pvalue(val); /* delete temp evaluated val - may destruct list */

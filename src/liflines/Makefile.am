@@ -91,7 +91,7 @@ screen.o: ../hdrs/menuitem.h
 show.o: ../hdrs/standard.h
 show.o: ../hdrs/mystring.h ../hdrs/screen.h
 show.o: ../hdrs/table.h ../hdrs/gedcom.h ../hdrs/indiseq.h ../hdrs/translat.h
-show.o: ../hdrs/cache.h
+show.o: ../hdrs/date.h ../hdrs/cache.h
 swap.o: ../hdrs/standard.h
 swap.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h
 tandem.o: ../hdrs/standard.h

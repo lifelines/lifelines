@@ -24,9 +24,9 @@ alloc.o: ../hdrs/standard.h
 alloc.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h ../hdrs/interp.h
 builtin.o: ../hdrs/standard.h
 builtin.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h
-builtin.o: ../hdrs/cache.h ../hdrs/interp.h ../hdrs/indiseq.h
+builtin.o: ../hdrs/date.h ../hdrs/cache.h ../hdrs/interp.h ../hdrs/indiseq.h
 builtin.o: ../hdrs/translat.h ../hdrs/lloptions.h
-date.o: ../hdrs/standard.h
+date.o: ../hdrs/date.h ../hdrs/standard.h
 date.o: ../hdrs/mystring.h ../hdrs/table.h
 eval.o: ../hdrs/standard.h
 eval.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h ../hdrs/interp.h

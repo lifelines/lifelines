@@ -39,6 +39,7 @@
 #include "cache.h"
 #include "liflines.h"
 #include "lloptions.h"
+#include "date.h"
 
 #include "llinesi.h"
 #include "screen.h"

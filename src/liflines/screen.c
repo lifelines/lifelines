@@ -45,7 +45,7 @@
 #include "arch.h"
 #include "menuitem.h"
 #include "lloptions.h"
-
+#include "interp.h"
 #include "llinesi.h"
 #include "screen.h"
 

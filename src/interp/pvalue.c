@@ -69,7 +69,6 @@ static int float_to_int(float f);
 static void free_all_pvalues(void);
 static void free_float_pvalue(PVALUE val);
 static BOOLEAN is_pvalue_or_freed(PVALUE pval);
-static void symtab_cleaner(ENTRY ent);
 static void table_pvcleaner(ENTRY ent);
 
 /*********************************************
@@ -730,6 +729,16 @@ pvalue_to_int (PVALUE val)
 {
 	return (INT)pvalue(val);
 }
+LIST
+pvalue_to_list (PVALUE val)
+{
+	return (LIST)pvalue(val);
+}
+STRING
+pvalue_to_string (PVALUE val)
+{
+	return (STRING)pvalue(val);
+}
 /*==================================
  * pvalue_to_pxxxx -- Access value for modification
  * These are for convenience of math functions in pvalmath.c
@@ -1144,7 +1153,7 @@ show_pvalue (PVALUE val)
 		llwprintf("%f>", pvalue_to_float(val));
 		break;
 	case PSTRING:
-		llwprintf("%s>", (STRING) pvalue(val));
+		llwprintf("%s>", pvalue_to_string(val));
 		return;
 	case PINDI:
 		cel = get_cel_from_pvalue(val);
@@ -1190,7 +1199,7 @@ debug_pvalue_as_string (PVALUE val)
 		snprintf(p, len, "%f>", pvalue_to_float(val));
 		break;
 	case PSTRING:
-		snprintf(p, len, "\"%s\">", (STRING) pvalue(val));
+		snprintf(p, len, "\"%s\">", pvalue_to_string(val));
 		break;
 	case PINDI:
 		cel = (CACHEEL) pvalue(val);

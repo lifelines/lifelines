@@ -42,6 +42,7 @@
 #include "liflines.h"
 #include "feedback.h"
 #include "lloptions.h"
+#include "date.h"
 
 #include "interpi.h"
 
@@ -81,24 +82,25 @@ PVALUE
 __getint (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
+	PNODE arg2;
 	INT val;
 	STRING msg = (STRING) "Enter integer for program";
 	PVALUE mval = NULL;
 	if (!iistype(arg, IIDENT)) {
-		prog_error(node, "1st arg to getint must be a variable");
+		prog_var_error(node, stab, arg, NULL, nonvarx, "getint", "1");
 		*eflg = TRUE;
 		return NULL;
 	}
-	if (inext(arg)) {
-		mval = evaluate(inext(arg), stab, eflg);
+	if ((arg2 = inext(arg)) != NULL) {
+		mval = evaluate(arg2, stab, eflg);
 		if (*eflg) return NULL;
 		if (ptype(mval) != PSTRING) {
 			*eflg = TRUE;
-			prog_error(node, "2nd arg to getint must be a string");
+			prog_var_error(node, stab, arg2, mval, nonstrx, "getint", "2");
 			delete_pvalue(mval);
 			return NULL;
 		}
-		msg = (STRING) pvalue(mval);
+		msg = pvalue_to_string(mval);
 	}
 	val = ask_for_int(msg);
 	assign_iden(stab, iident(arg), create_pvalue_from_int(val));
@@ -113,24 +115,25 @@ PVALUE
 __getstr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
+	PNODE arg2;
 	STRING val;
 	STRING msg = (STRING) "Enter string for program";
 	PVALUE mval = NULL;
 	if (!iistype(arg, IIDENT)) {
-		prog_error(node, "1st arg to getstr must be a variable");
+		prog_var_error(node, stab, arg, NULL, nonvarx, "getstr", "1");
 		*eflg = TRUE;
 		return NULL;
 	}
-	if (inext(arg)) {
-		mval = evaluate(inext(arg), stab, eflg);
+	if ((arg2 = inext(arg)) != NULL) {
+		mval = evaluate(arg2, stab, eflg);
 		if (*eflg) return NULL;
 		if (ptype(mval) != PSTRING) {
 			*eflg = TRUE;
-			prog_error(node, "2nd arg to getstr must be a string");
+			prog_var_error(node, stab, arg2, mval, nonstrx, "getstr", "2");
 			delete_pvalue(mval);
 			return NULL;
 		}
-		msg = (STRING) pvalue(mval);
+		msg = pvalue_to_string(mval);
 	}
 	val = ask_for_string(msg, "enter string: ");
 	assign_iden(stab, iident(arg), create_pvalue_from_string(val));
@@ -145,20 +148,21 @@ PVALUE
 __getindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
+	PNODE arg2;
 	STRING key, msg = (STRING) "Identify person for program:";
 	PVALUE val = NULL;
 	if (!iistype(arg, IIDENT)) {
-		prog_error(node, "1st arg to getindi must be a variable");
+		prog_var_error(node, stab, arg, NULL, nonvarx, "getindi", "1");
 		*eflg = TRUE;
 		return NULL;
 	}
-	if (inext(arg)) {
-		val = eval_and_coerce(PSTRING, inext(arg), stab, eflg);
+	if ((arg2 = inext(arg)) != 0) {
+		val = eval_and_coerce(PSTRING, arg2, stab, eflg);
 		if (*eflg) {
-			prog_error(node, "2nd arg to getindi must be a string");
+			prog_var_error(node, stab, arg2, val, nonstrx, "getindi", "2");
 			return NULL;
 		}
-		msg = (STRING) pvalue(val);
+		msg = pvalue_to_string(val);
 	}
 	assign_iden(stab, iident(arg), create_pvalue_from_indi(NULL));
 	uilocale();
@@ -181,7 +185,7 @@ __getfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE arg = (PNODE) iargs(node);
 	NODE fam;
 	if (!iistype(arg, IIDENT)) {
-		prog_error(node, "1st arg to getfam must be a variable");
+		prog_var_error(node, stab, arg, NULL, nonvar1, "getfam");
 		*eflg = TRUE;
 		return NULL;
 	}
@@ -203,25 +207,28 @@ PVALUE
 __getindiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
+	PNODE arg2;
 	INDISEQ seq;
 	STRING msg = (STRING) "Identify list of persons for program:";
 	PVALUE val = NULL;
 	if (!iistype(arg, IIDENT)) {
-		prog_error(node, "1st arg to getindiset must be a variable");
+		prog_var_error(node, stab, arg, NULL, nonvarx, "getindiset", "1");
 		*eflg = TRUE;
 		return NULL;
 	}
-	if (inext(arg)) {
-		val = eval_and_coerce(PSTRING, inext(arg), stab, eflg);
+	if ((arg2 = inext(arg)) != NULL) {
+		val = eval_and_coerce(PSTRING, arg2, stab, eflg);
 		if (*eflg) {
-			prog_error(node, "2nd arg to getindiset must be a string");
+			prog_var_error(node, stab, arg2, val, nonstrx, "getindiset", "2");
 			return NULL;
 		}
-		msg = (STRING) pvalue(val);
+		msg = pvalue_to_string(val);
 	}
 	uilocale();
 	seq = ask_for_indi_list(msg, TRUE);
 	rptlocale();
+	if (seq)
+		namesort_indiseq(seq); /* in case uilocale != rptlocale */
 	if (val) delete_pvalue(val);
 	assign_iden(stab, iident(arg), create_pvalue_from_set(seq));
 	return NULL;
@@ -258,17 +265,17 @@ PVALUE __name (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val;
 	TRANTABLE ttr = NULL; /* do not translate until output time */
 	if (*eflg) {
-		prog_error(node, _("1st arg to name must be a person"));
+		prog_var_error(node, stab, arg, NULL, nonindx, "name", "1");
 		return NULL;
 	}
 	if (!indi) return create_pvalue_from_string("");
-	if (inext(arg)) {
-		val = eval_and_coerce(PBOOL, inext(arg), stab, eflg);
+	if ((arg = inext(arg)) != NULL) {
+		val = eval_and_coerce(PBOOL, arg, stab, eflg);
 		if (*eflg) {
-			prog_error(node, _("2nd arg to name must be boolean"));
+			prog_var_error(node, stab, arg, val, nonboox, "name", "2");
 			return NULL;
 		}
-		caps = (BOOLEAN) pvalue(val);
+		caps = pvalue_to_bool(val);
 		delete_pvalue(val);
 	}
 	if (!(name = find_tag(nchild(indi), "NAME"))) {
@@ -308,21 +315,21 @@ __fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, nonboox, "fullname", "2");
 		return NULL;
 	}
-	caps = (BOOLEAN) pvalue(val);
+	caps = pvalue_to_bool(val);
 	delete_pvalue(val);
 	val = eval_and_coerce(PBOOL, arg = inext(arg), stab, eflg);
 	if (*eflg) {
 		prog_error(node, nonboox, "fullname", "3");
 		return NULL;
 	}
-	myreg = (BOOLEAN) pvalue(val);
+	myreg = pvalue_to_bool(val);
 	delete_pvalue(val);
 	val = eval_and_coerce(PINT, arg = inext(arg), stab, eflg);
 	if (*eflg) {
 		prog_error(node, nonintx, "fullname", "4");
 		return NULL;
 	}
-	len = (INT) pvalue(val);
+	len = pvalue_to_int(val);
 	delete_pvalue(val);
 	if (!(name = NAME(indi)) || !nval(name)) {
 		if (getoptint("RequireNames", 0)) {
@@ -808,7 +815,7 @@ __d (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "the arg to d is not an integer");
 		return NULL;
 	}
-	sprintf(scratch, "%d", (INT) pvalue(val));
+	sprintf(scratch, "%d", pvalue_to_int(val));
 	set_pvalue(val, PSTRING, (VPTR)scratch);
 	return val;
 }
@@ -837,7 +844,7 @@ __f (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 			prog_error(node, "2nd arg to f must be an integer");
 			return NULL;
 		}
-		prec = (INT) pvalue(val);
+		prec = pvalue_to_int(val);
 		if (prec < 0) prec = 0;
 		if (prec > 10) prec = 10;
 	}
@@ -863,7 +870,7 @@ ___alpha (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val = evaluate(iargs(node), stab, eflg);
 	if (*eflg) return NULL;
 	TYPE_CHECK(PINT, val);
-	i = (INT) pvalue(val);
+	i = pvalue_to_int(val);
 	delete_pvalue(val);
 	if (i < 1 || i > 26)
 		sprintf(scratch, "XX");
@@ -887,7 +894,7 @@ __ord (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val = evaluate(iargs(node), stab, eflg);
 	INT i;
 	TYPE_CHECK(PINT, val);
-	i = (INT) pvalue(val);
+	i = pvalue_to_int(val);
 	delete_pvalue(val);
 	if (*eflg || i < 1) return NULL;
 	if (i > 12)
@@ -913,7 +920,7 @@ __card (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	INT i;
 	if (*eflg) return NULL;
 	TYPE_CHECK(PINT, val);
-	i = (INT) pvalue(val);
+	i = pvalue_to_int(val);
 	delete_pvalue(val);
 	if (i < 0 || i > 12)
 		sprintf(scratch, "%d", i);
@@ -939,7 +946,7 @@ __roman (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	INT i;
 	if (*eflg) return NULL;
 	TYPE_CHECK(PINT, val);
-	i = (INT) pvalue(val);
+	i = pvalue_to_int(val);
 	delete_pvalue(val);
 	if (i < 1 || i >= 99)
 		sprintf(scratch, "%d", i);
@@ -1143,7 +1150,7 @@ __and (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "an arg to and is not boolean");
 		return NULL;
 	}
-	rc = rc && (BOOLEAN) pvalue(val1);
+	rc = rc && pvalue_to_bool(val1);
 
 #ifdef DEBUG
 	llwprintf("rc == %d\n", rc);
@@ -1161,7 +1168,7 @@ __and (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 				prog_error(node, "an arg to and is not boolean");
 				return NULL;
 			}
-			rc = rc && (BOOLEAN) pvalue(val2);
+			rc = rc && pvalue_to_bool(val2);
 			delete_pvalue(val2);
 		}
 	}
@@ -1181,7 +1188,7 @@ __or (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "an arg to or is not boolean");
 		return NULL;
 	}
-	rc = rc || (BOOLEAN) pvalue(val1);
+	rc = rc || pvalue_to_bool(val1);
 	delete_pvalue(val1);
 	while ((arg = inext(arg))) {
 		if (!rc) {
@@ -1405,8 +1412,8 @@ __strcmp (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "2nd arg to strcmp is not a string");
 		return NULL;
 	}
-	str1 = (STRING) pvalue(val1);
-	str2 = (STRING) pvalue(val2);
+	str1 = pvalue_to_string(val1);
+	str2 = pvalue_to_string(val2);
 	if (!str1) str1 = emp;
 	if (!str2) str2 = emp;
 
@@ -1441,8 +1448,8 @@ __nestr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "2nd arg to nestr is not a string");
 		return NULL;
 	}
-	str1 = (STRING) pvalue(val1);
-	str2 = (STRING) pvalue(val2);
+	str1 = pvalue_to_string(val1);
+	str2 = pvalue_to_string(val2);
 	if (!str1) str1 = emp;
 	if (!str2) str2 = emp;
 	set_pvalue(val1, PBOOL, (VPTR)(nestr(str1, str2) != 0));
@@ -1468,8 +1475,8 @@ __eqstr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "2nd arg to eqstr is not a string");
 		return NULL;
 	}
-	str1 = (STRING) pvalue(val1);
-	str2 = (STRING) pvalue(val2);
+	str1 = pvalue_to_string(val1);
+	str2 = pvalue_to_string(val2);
 	if (!str1) str1 = emp;
 	if (!str2) str2 = emp;
 	set_pvalue(val1, PBOOL, (VPTR)(eqstr(str1, str2) != 0));
@@ -1537,7 +1544,7 @@ __push (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "2nd arg to push is in error");
 		return NULL;
 	}
-	list = (LIST) pvalue(val);
+	list = pvalue_to_list(val);
 	delete_pvalue(val);
 	push_list(list, el);
 	return NULL;
@@ -1564,7 +1571,7 @@ __inlist (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "2nd arg to inlist is in error");
 		return NULL;
 	}
-	list = (LIST) pvalue(val);
+	list = pvalue_to_list(val);
 	set_pvalue(val, PBOOL, (VPTR)in_list(list, el, eqv_pvalues));
 	delete_pvalue(el);
 	return val;
@@ -1591,7 +1598,7 @@ __enqueue (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "2nd arg to enqueue is in error");
 		return NULL;
 	}
-	list = (LIST) pvalue(val);
+	list = pvalue_to_list(val);
 	delete_pvalue(val);
 	push_list(list, el);
 	return NULL;
@@ -1618,7 +1625,7 @@ __requeue (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "2nd arg to requeue is in error");
 		return NULL;
 	}
-	list = (LIST) pvalue(val);
+	list = pvalue_to_list(val);
 	delete_pvalue(val);
 	back_list(list, el);
 	return NULL;
@@ -1636,7 +1643,7 @@ __pop (PNODE node, SYMTAB stab, BOOLEAN  *eflg)
 		prog_error(node, "the arg to pop is not a list");
 		return NULL;
 	}
-	list = (LIST) pvalue(val);
+	list = pvalue_to_list(val);
 	delete_pvalue(val);
 	if (empty_list(list)) return create_pvalue_any();
 	return (PVALUE) pop_list(list);
@@ -1652,10 +1659,10 @@ __dequeue (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val = eval_and_coerce(PLIST, iargs(node), stab, eflg);
 	if (*eflg || !val || ptype(val) != PLIST) {
 		*eflg = TRUE;
-		prog_error(node, "the arg to pop is not a list");
+		prog_error(node, nonlst1, "dequeue");
 		return NULL;
 	}
-	list = (LIST) pvalue(val);
+	list = pvalue_to_list(val);
 	delete_pvalue(val);
 	val = (PVALUE) dequeue_list(list);
 	if (!val) return create_pvalue_any();
@@ -1675,7 +1682,7 @@ __empty (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "the arg to empty is not a list");
 		return NULL;
 	}
-	list = (LIST) pvalue(val);
+	list = pvalue_to_list(val);
 	set_pvalue(val, PBOOL, (VPTR)empty_list(list));
 	return val;
 }
@@ -1695,7 +1702,7 @@ __getel (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, nonlstx, "getel", "1");
 		return NULL;
 	}
-	list = (LIST) pvalue(val);
+	list = pvalue_to_list(val);
 	delete_pvalue(val);
 	val = eval_and_coerce(PINT, inext(arg), stab, eflg);
 	if (*eflg || !val || ptype(val) != PINT) {
@@ -1703,7 +1710,7 @@ __getel (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, nonintx, "getel", "2");
 		return NULL;
 	}
-	ind = (INT) pvalue(val);
+	ind = pvalue_to_int(val);
 	delete_pvalue(val);
 	if (!(val = (PVALUE) get_list_element(list, ind)))
 		return create_pvalue_any();
@@ -1724,7 +1731,7 @@ __setel (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "1st arg to setel is not a list");
 		return NULL;
 	}
-	list = (LIST) pvalue(val);
+	list = pvalue_to_list(val);
 	delete_pvalue(val);
 	arg = inext(arg);
 	val = eval_and_coerce(PINT, arg, stab, eflg);
@@ -1732,7 +1739,7 @@ __setel (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "2nd arg to setel is not an integer");
 		return NULL;
 	}
-	ind = (INT) pvalue(val);
+	ind = pvalue_to_int(val);
 	delete_pvalue(val);
 	val = evaluate(inext(arg), stab, eflg);
 	if (*eflg || !val) {
@@ -1758,7 +1765,7 @@ __length (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "the arg to length is not a list");
 		return NULL;
 	}
-	list = (LIST) pvalue(val);
+	list = pvalue_to_list(val);
 	set_pvalue(val, PINT, (VPTR)length_list(list));
 	return val;
 }
@@ -1774,7 +1781,7 @@ __not (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "the arg to not is not boolean");
 		return NULL;
 	}
-	set_pvalue(val, PBOOL, (VPTR)!((BOOLEAN) pvalue(val)));
+	set_pvalue(val, PBOOL, (VPTR)!pvalue_to_bool(val));
 	return val;
 }
 /*===============================+
@@ -1828,7 +1835,7 @@ __concat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 			prog_error(node, "an arg to concat is not a string");
 			return NULL;
 		}
-		if ((str = (STRING) pvalue(val))) {
+		if ((str = pvalue_to_string(val))) {
 			len += strlen(str);
 
 #ifdef DEBUG
@@ -1961,7 +1968,7 @@ __pn (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	val = eval_and_coerce(PINT, inext(arg), stab, eflg);
-	typ = (INT) pvalue(val);
+	typ = pvalue_to_int(val);
 	if (*eflg || typ < 0 || typ > 4) {
 		*eflg = TRUE;
 		prog_error(node, "2nd arg to pn must be between 0 and 4");
@@ -1983,13 +1990,15 @@ __print (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val;
 	while (arg) {
+		STRING str;
 		val = evaluate(arg, stab, eflg);
 		if (*eflg || !val || ptype(val) != PSTRING) {
 			*eflg = TRUE;
 			prog_error(node, "all args to print must be strings");
 			return NULL;
 		}
-		if (pvalue(val)) llwprintf("%s", (STRING) pvalue(val));
+		str = pvalue_to_string(val);
+		if (str) llwprintf("%s", str);
 		delete_pvalue(val);
 		arg = inext(arg);
 	}
@@ -2070,7 +2079,7 @@ __key (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 			prog_error(node, "2nd arg to key is not boolean");
 			return NULL;
 		}
-		strip = (BOOLEAN) pvalue(val);
+		strip = pvalue_to_bool(val);
 		delete_pvalue(val);
 	}
 	key = (STRING) ckey(cel);
@@ -2224,7 +2233,7 @@ __insert (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		           debug_pvalue_as_string(val));
 		return NULL;
 	}
-	str = strsave((STRING) pvalue(val));
+	str = strsave(pvalue_to_string(val));
 	delete_pvalue(val);
 
 #ifdef DEBUG
@@ -2281,7 +2290,7 @@ __lookup (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, nonstrx, "lookup", "2");
 		return NULL;
 	}
-	str = (STRING) pvalue(val);
+	str = pvalue_to_string(val);
 	newv = valueof_ptr(tab, str);
 	delete_pvalue(val);
 	newv = (newv ? copy_pvalue(newv) : create_pvalue_any());
@@ -2315,8 +2324,8 @@ __trim (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, nonintx, "trim", "2");
 		return NULL;
 	}
-	str = (STRING) pvalue(val1);
-	len = (INT) pvalue(val2);
+	str = pvalue_to_string(val1);
+	len = pvalue_to_int(val2);
 	set_pvalue(val2, PSTRING, (VPTR)trim(str, len));
 	delete_pvalue(val1);
 	return val2;
@@ -2353,7 +2362,7 @@ __trimname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, nonintx, "trimname", "2");
 		return NULL;
 	}
-	len = (INT) pvalue(val);
+	len = pvalue_to_int(val);
 	str = name_string(trim_name(nval(indi), len));
 	set_pvalue(val, PSTRING, (VPTR)str);
 	return val;
@@ -2486,7 +2495,7 @@ __extractdatestr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 			delete_pvalue(val);
 			return NULL;
 		}
-		str = (STRING) pvalue(val);
+		str = pvalue_to_string(val);
 	}
 	gdv = extract_date(str);
 	/* TODO: deal with date information */
@@ -2522,7 +2531,7 @@ __stddate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	STRING str=0;
 	PVALUE val = eval_without_coerce(iargs(node), stab, eflg);
 	if (ptype(val) == PSTRING) {
-		str = (STRING) pvalue(val);
+		str = pvalue_to_string(val);
 	} else {
 		NODE evnt;
 		coerce_pvalue(PGNODE, val, eflg);
@@ -2548,7 +2557,7 @@ __complexdate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	STRING str=0;
 	PVALUE val = eval_without_coerce(iargs(node), stab, eflg);
 	if (ptype(val) == PSTRING) {
-		str = (STRING) pvalue(val);
+		str = pvalue_to_string(val);
 	} else {
 		NODE evnt;
 		coerce_pvalue(PGNODE, val, eflg);
@@ -2577,7 +2586,7 @@ __dayformat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, nonint1, "dayformat");
 		return NULL;
 	}
-	value = (INT) pvalue(val);
+	value = pvalue_to_int(val);
 	delete_pvalue(val);
 	if (value < 0) value = 0;
 	if (value > 2) value = 2;
@@ -2598,7 +2607,7 @@ __monthformat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, nonint1, "monthformat");
 		return NULL;
 	}
-	value = (INT) pvalue(val);
+	value = pvalue_to_int(val);
 	delete_pvalue(val);
 	if (value < 0) value = 0;
 	if (value > 11) value = 8;
@@ -2620,7 +2629,7 @@ __yearformat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, nonint1, "yearformat");
 		return NULL;
 	}
-	value = (INT) pvalue(val);
+	value = pvalue_to_int(val);
 	delete_pvalue(val);
 	if (value < 0) value = 0;
 	yearcode = value;
@@ -2640,7 +2649,7 @@ __dateformat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, nonint1, "dateformat");
 		return NULL;
 	}
-	value = (INT) pvalue(val);
+	value = pvalue_to_int(val);
 	delete_pvalue(val);
 	if (value <  0) value = 0;
 	if (value > 14) value = 14;
@@ -2662,7 +2671,7 @@ __eraformat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, nonint1, "eraformat");
 		return NULL;
 	}
-	value = (INT) pvalue(val);
+	value = pvalue_to_int(val);
 	delete_pvalue(val);
 	if (value < 0) value = 0;
 	eratimecode = value;
@@ -2683,7 +2692,7 @@ __complexformat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, nonint1, "complexformat");
 		return NULL;
 	}
-	value = (INT) pvalue(val);
+	value = pvalue_to_int(val);
 	delete_pvalue(val);
 	if (value < 0) value = 0;
 	cmplxcode = value;
@@ -2704,7 +2713,7 @@ __datepic (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, nonstrx, "datepic", "1");
 		return NULL;
 	}
-	str = (STRING) pvalue(val);
+	str = pvalue_to_string(val);
 	set_date_pic(str);
 	delete_pvalue(val);
 	return NULL;
@@ -2729,14 +2738,14 @@ __complexpic (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, nonintx, "complexpic", "1");
 		return NULL;
 	}
-	ecmplx = (INT) pvalue(val);
+	ecmplx = pvalue_to_int(val);
 	delete_pvalue(val);
 	val = eval_and_coerce(PSTRING, arg = inext(arg), stab, eflg);
 	if (*eflg) {
 		prog_error(node, nonstrx, "complexpic", "2");
 		return NULL;
 	}
-	str = (STRING) pvalue(val);
+	str = pvalue_to_string(val);
 	ok = set_cmplx_pic(ecmplx, str);
 	delete_pvalue(val);
 	if (!ok) {
@@ -2759,7 +2768,7 @@ __year (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	GDATEVAL gdv;
 	PVALUE val = eval_without_coerce(iargs(node), stab, eflg);
 	if (ptype(val) == PSTRING) {
-		str = (STRING) pvalue(val);
+		str = pvalue_to_string(val);
 	} else {
 		NODE evnt;
 		coerce_pvalue(PGNODE, val, eflg);
@@ -2976,7 +2985,7 @@ __copyfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, nonstr1, "copyfile");
 		return NULL;
 	}
-	fname = (STRING) pvalue(val);
+	fname = pvalue_to_string(val);
 	if (!(cfp = fopenpath(fname, LLREADTEXT, programsdir
 		, (STRING)NULL, (STRING *)NULL))) {
 		*eflg = TRUE;
@@ -3043,7 +3052,7 @@ __indi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, nonstr1, "indi");
 		return NULL;
 	}
-	p = str = (STRING) pvalue(val);
+	p = str = pvalue_to_string(val);
 	while ((c = (uchar)*p++) && chartype(c) != DIGIT)
 		;
 	if (c == 0) {
@@ -3084,7 +3093,7 @@ __fam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, nonstr1, "fam");
 		return NULL;
 	}
-	p = str = (STRING) pvalue(val);
+	p = str = pvalue_to_string(val);
 	while ((c = (uchar)*p++) && chartype(c) != DIGIT)
 		;
 	if (c == 0) {

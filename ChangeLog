@@ -1,3 +1,16 @@
+2002-02-18 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/indiseq.c gedlib/intrface.c hdrs/Makefile.am
+	hdrs/interp.h hdrs/llstdlib.h interp/Makefile.am
+	interp/builtin.c interp/date.c interp/eval.c interp/interp.c
+	interp/intrpseq.c interp/more.c interp/pvalue.c interp/rassa.c
+	liflines/Makefile.am liflines/browse.c liflines/main.c
+	liflines/screen.c liflines/show.c stdlib/double.c
+	win32/msvc6/llines/llinesprj.dsp:
+
+	Moved date function declarations out of interp.h into new
+	date.h. Changed some calls to prog_error to new prog_var_error.
+
 2002-02-17 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/names.c hdrs/interp.h hdrs/llstdlib.h

@@ -221,7 +221,7 @@ __deletefromset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "3rd arg to deletefromset must be boolean.");
 		return NULL;
 	}
-	all = (BOOLEAN) pvalue(val);
+	all = pvalue_to_bool(val);
 	delete_pvalue(val);
 	do {
 		rc = delete_indiseq(seq, key, NULL, 0);
