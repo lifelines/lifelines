@@ -98,6 +98,7 @@ static int ScrollMax = 0;
 
 /*=================================================
  * add_children -- add children to tree recursively
+ * Created: 2000/12/07, Perry Rapp
  *===============================================*/
 static treenode
 add_children (NODE indi, INT gen, INT maxgen, INT * count)
@@ -133,6 +134,7 @@ add_children (NODE indi, INT gen, INT maxgen, INT * count)
 }
 /*=================================================
  * count_nodes -- count descendent nodes
+ * Created: 2001/01/27, Perry Rapp
  *===============================================*/
 static void
 count_nodes (NODE node, INT gen, INT maxgen, INT * count)
@@ -148,6 +150,7 @@ count_nodes (NODE node, INT gen, INT maxgen, INT * count)
 }
 /*===============================================
  * add_parents -- add parents to tree recursively
+ * Created: 2000/12/07, Perry Rapp
  *=============================================*/
 static treenode
 add_parents (NODE indi, INT gen, INT maxgen, INT * count)
@@ -172,6 +175,7 @@ add_parents (NODE indi, INT gen, INT maxgen, INT * count)
  * print_to_screen -- print output line
  *  using caller-supplied print function
  *  this routine handles scroll & indent
+ * Created: 2000/12/07, Perry Rapp
  *===================================*/
 static void
 print_to_screen (INT gen, INT * row, LINEPRINT_FNC fnc, void * param, INT menuht)
@@ -248,6 +252,7 @@ node_lineprint (INT width, void * param)
 /*=================================
  * trav_pre_print_tn -- traverse treenode tree,
  *  printing indis in preorder
+ * Created: 2000/12/07, Perry Rapp
  *===============================*/
 static void
 trav_pre_print_tn (treenode tn, INT * row, INT gen, INT menuht)
@@ -277,6 +282,7 @@ trav_pre_print_nd (NODE node, INT * row, INT gen, INT menuht)
 /*===========================================
  * trav_bin_in_print_tn -- traverse binary tree,
  *  printing indis in inorder
+ * Created: 2000/12/07, Perry Rapp
  *=========================================*/
 static void
 trav_bin_in_print_tn (treenode tn, INT * row, INT gen, INT menuht)
@@ -292,6 +298,7 @@ trav_bin_in_print_tn (treenode tn, INT * row, INT gen, INT menuht)
 /*======================================================
  * SetScrollMax -- compute max allowable scroll based on
  *  number of rows in this pedigree tree
+ * Created: 2000/12/07, Perry Rapp
  *====================================================*/
 static void
 SetScrollMax (INT row, INT menuht)
@@ -302,6 +309,7 @@ SetScrollMax (INT row, INT menuht)
 }
 /*=========================================================
  * show_descendants -- build descendant tree & print it out
+ * Created: 2000/12/07, Perry Rapp
  *=======================================================*/
 static void
 draw_descendants (NODE indi, INT menuht)
@@ -318,6 +326,7 @@ draw_descendants (NODE indi, INT menuht)
 }
 /*=========================================================
  * show_gedcom -- print out gedcom node tree
+ * Created: 2001/01/27, Perry Rapp
  *=======================================================*/
 void
 pedigree_draw_gedcom (NODE node, INT menuht)
@@ -333,6 +342,7 @@ pedigree_draw_gedcom (NODE node, INT menuht)
 }
 /*=====================================================
  * show_ancestors -- build ancestor tree & print it out
+ * Created: 2000/12/07, Perry Rapp
  *===================================================*/
 static void
 draw_ancestors (NODE indi, INT menuht)
@@ -350,6 +360,7 @@ draw_ancestors (NODE indi, INT menuht)
 /*=============================================
  * pedigree_draw_person -- display ancestors or
  *  descendants tree, depending on current mode
+ * Created: 2000/12/07, Perry Rapp
  *===========================================*/
 void
 pedigree_draw_person (NODE indi, INT menuht)
@@ -362,6 +373,7 @@ pedigree_draw_person (NODE indi, INT menuht)
 /*===========================================
  * pedigree_toggle_mode -- toggle between 
  *  ancestral & descendant mode pedigree tree
+ * Created: 2000/12/07, Perry Rapp
  *=========================================*/
 void
 pedigree_toggle_mode (void)
@@ -371,6 +383,7 @@ pedigree_toggle_mode (void)
 /*======================================================
  * pedigree_increase_generations -- adjust # generations
  *  displayed in pedigree tree
+ * Created: 2000/12/07, Perry Rapp
  *====================================================*/
 void
 pedigree_increase_generations (INT delta)
@@ -383,6 +396,7 @@ pedigree_increase_generations (INT delta)
 }
 /*===========================================================
  * pedigree_scroll -- scroll up/down rows of pedigree display
+ * Created: 2000/12/07, Perry Rapp
  *=========================================================*/
 void
 pedigree_scroll (INT delta)
@@ -395,6 +409,7 @@ pedigree_scroll (INT delta)
 }
 /*===============================================================
  * pedigree_reset_scroll -- clear scroll when entering a new indi
+ * Created: 2000/12/07, Perry Rapp
  *=============================================================*/
 void
 pedigree_reset_scroll (void)

@@ -7,6 +7,9 @@
 	Alphabetized screen.h.
 	Removed old (unused) pedigree code.
 
+	liflines/pedigree.c:
+	Annotate functions header comments.
+
 2001-01-24 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog btree/utils.c gedlib/intrface.c gedlib/keytonod.c
