@@ -31,6 +31,15 @@
 #include "config.h"
 #endif
 
+#ifdef _WIN32
+/* Petter this doesn't work on windows yet */
+int
+alphasort(const void *a, const void *b)
+{
+	return 0;
+}
+
+#else
 #include <dirent.h>
 
 int
@@ -39,3 +48,4 @@ alphasort(const void *a, const void *b)
   const struct dirent **s1 = a, **s2 = b;
   return strcmp((*s1)->d_name, (*s2)->d_name);
 }
+#endif
