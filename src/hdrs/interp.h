@@ -149,9 +149,9 @@ struct tag_pnode {
  * so the compiler will help find any misuse
  * Perry, 2002.02.17
  */
-/* pvalues need vtables */
 typedef struct tag_pvalue *PVALUE;
 struct tag_pvalue {
+	struct tag_vtable * vtable;
 	unsigned char type;	/* type of value */
 	VPTR value;	/* value */
 /*	UNION uval;*/

@@ -320,8 +320,10 @@ close_lldb ()
 		destroy_table(tagtable);
 	tagtable = 0;
 	/* TODO: reverse the rest of init_lifelines_db -- Perry, 2002.06.05 */
-	if (placabbvs)
+	if (placabbvs) {
 		destroy_table(placabbvs);
+		placabbvs = NULL;
+	}
 	free_caches();
 	closexref();
 	if (BTR) {

@@ -58,7 +58,7 @@ struct tag_entry {
 /* table object itself */
 struct tag_table {
 	struct tag_vtable *vtable;
-	INT refcnt; /* used by pvalues which share table pointers */
+	INT refcnt; /* ref-countable object */
 	ENTRY *entries;
 	INT count; /* #entries */
 	INT valtype; /* TB_VALTYPE enum in table.c */

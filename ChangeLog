@@ -1,3 +1,10 @@
+2003-02-24 Perry Rapp
+
+	*
+
+	Fix crash because placeabbrvs wasn't cleared.
+	Implement vtable for pvalues.
+
 2003-02-23 Perry Rapp
 
 	* ChangeLog src/gedlib/charmaps.c src/gedlib/date.c

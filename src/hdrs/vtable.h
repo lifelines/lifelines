@@ -16,6 +16,10 @@ struct tag_vtable;
 typedef struct tag_vtable *VTABLE;
 
 struct tag_vtable {
+		/* for sanity checking */
+	int vtable_magic; 
+		/* for debugging convenience */
+	const char * vtable_class;
 		/* destroy object */
 	void (*destroy_fnc)(VTABLE * obj);
 		/* returns 0 if not reference counted */
@@ -32,16 +36,23 @@ struct tag_vtable {
 	const char * (*get_type_name_fnc)(VTABLE *obj);
 };
 
+enum { VTABLE_MAGIC = 0x77999977 };
+
 /* to use the generic reference counting implementation below,
  the object must begin like this */
 struct tag_generic_ref_object {
 	VTABLE vtable;
 	int ref;
 };
-/* generic implementations of reference counting */
-int generic_isref(VTABLE * obj);
-int generic_addref(VTABLE * obj);
-int generic_delref(VTABLE * obj);
+
+/* for any object (content to use vtable_class) */
+const char * generic_get_type_name(VTABLE * obj);
+/* for nonrefcountable object */
+int nonrefcountable_isref(VTABLE * obj);
+/* for refcountable object (with refcount right after vtable) */
+int refcountable_isref(VTABLE * obj);
+int refcountable_addref(VTABLE * obj);
+int refcountable_delref(VTABLE * obj);
 
 #endif /* vtable_h_included */
 

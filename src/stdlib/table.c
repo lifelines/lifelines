@@ -49,6 +49,7 @@ enum TB_VALTYPE
 		, TB_STR /* STRING values */
 		, TB_NULL /* placeholder for newly created tables */
 	};
+
 /*********************************************
  * local function prototypes
  *********************************************/
@@ -61,8 +62,8 @@ static void insert_table_impl(TABLE tab, CNSTRING key, UNION uval);
 static INT hash(TABLE tab, CNSTRING key);
 static BOOLEAN next_element(TABLE_ITER tabit);
 static void replace_table_impl(TABLE tab, STRING key, UNION uval, INT whattofree);
-void table_destructor(VTABLE *obj);
-const char * table_get_type_name(VTABLE *obj);
+static void table_destructor(VTABLE *obj);
+static const char * table_get_type_name(VTABLE *obj);
 static UNION* valueofbool_impl(TABLE tab, STRING key);
 
 
@@ -71,12 +72,14 @@ static UNION* valueofbool_impl(TABLE tab, STRING key);
  *********************************************/
 
 static struct tag_vtable vtable_for_table = {
-	&table_destructor
-	, &generic_isref
-	, &generic_addref
-	, &generic_delref
+	VTABLE_MAGIC
+	, "table"
+	, &table_destructor
+	, &refcountable_isref
+	, &refcountable_addref
+	, &refcountable_delref
 	, 0 /* copy_fnc */
-	, &table_get_type_name
+	, &generic_get_type_name
 };
 
 /*********************************************
@@ -671,19 +674,12 @@ destroy_table (TABLE tab)
 	remove_table(tab, tab->whattofree);
 }
 /*=================================================
- * table_get_type_name -- get_type_name for vtable
- *===============================================*/
-static const char *
-table_get_type_name (VTABLE *obj)
-{
-	return "table";
-}
-/*=================================================
  * table_destructor -- destructor for vtable
  *===============================================*/
 static void
 table_destructor (VTABLE *obj)
 {
 	TABLE tab = (TABLE)obj;
+	ASSERT((*obj)->vtable_class == vtable_for_table.vtable_class);
 	destroy_table(tab);
 }

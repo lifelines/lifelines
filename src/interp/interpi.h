@@ -47,12 +47,14 @@ typedef struct tag_pathinfo {
 	STRING fullpath; /* fully qualified path */
 } *PATHINFO;
 
-
+/* pvalalloc.c */
 PVALUE alloc_pvalue_memory(void);
 void check_pvalue_validity(PVALUE val);
 PVALUE create_new_pvalue(void);
 void free_pvalue_memory(PVALUE val);
 void set_pvalue_node(PVALUE val, NODE node);
+/* pvalue.c */
+void init_pvalue_vtable(PVALUE val);
 
 
 

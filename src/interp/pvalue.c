@@ -39,6 +39,7 @@
 #include "liflines.h"
 #include "feedback.h"
 #include "zstr.h"
+#include "vtable.h"
 
 
 /*********************************************
@@ -56,6 +57,8 @@ static PVALUE create_pvalue_from_record(RECORD rec, INT ptype);
 static BOOLEAN eq_pstrings(PVALUE val1, PVALUE val2);
 static int float_to_int(float f);
 static void free_float_pvalue(PVALUE val);
+static void * pvalue_copy(VTABLE *obj, int deep);
+static void pvalue_destructor(VTABLE *obj);
 static void table_pvcleaner(ENTRY ent);
 
 /*********************************************
@@ -65,7 +68,18 @@ static void table_pvcleaner(ENTRY ent);
 static char *ptypes[] = {
 	"PNONE", "PANY", "PINT", "PLONG", "PFLOAT", "PBOOL", "PSTRING",
 	"PGNODE", "PINDI", "PFAM", "PSOUR", "PEVEN", "POTHR", "PLIST",
-	"PTABLE", "PSET"};
+	"PTABLE", "PSET"
+};
+static struct tag_vtable vtable_for_pvalue = {
+	VTABLE_MAGIC
+	, "pvalue"
+	, &pvalue_destructor
+	, &refcountable_isref
+	, &refcountable_addref
+	, &refcountable_delref
+	, &pvalue_copy /* copy_fnc */
+	, &generic_get_type_name
+};
 
 
 /*********************************************
@@ -1046,4 +1060,34 @@ TABLE
 pvalue_to_table (PVALUE val)
 {
 	return (TABLE)pvalue(val);
+}
+/*========================================
+ * init_pvalue_vtable -- set vtable (for allocator in pvalalloc.c)
+ *======================================*/
+void
+init_pvalue_vtable (PVALUE val)
+{
+	val->vtable = &vtable_for_pvalue;
+}
+/*=================================================
+ * pvalue_destructor -- destructor for vtable
+ *===============================================*/
+static void
+pvalue_destructor (VTABLE *obj)
+{
+	PVALUE val = (PVALUE)obj;
+	ASSERT((*obj)->vtable_class == vtable_for_pvalue.vtable_class);
+	delete_pvalue(val);
+}
+/*=================================================
+ * value_copy -- copy for vtable
+ *===============================================*/
+static void *
+pvalue_copy (VTABLE *obj, int deep)
+{
+	PVALUE val = (PVALUE)obj;
+	ASSERT((*obj)->vtable_class == vtable_for_pvalue.vtable_class);
+	/* TODO: cannot implement this until all the objects used by pvalue
+	implement copy */
+	return 0;
 }

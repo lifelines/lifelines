@@ -116,6 +116,7 @@ alloc_pvalue_memory (void)
 		/* add all pvalues in new block to free list */
 		for (i=0; i<(INT)BLOCK_VALUES; i++) {
 			PVALUE val1 = &new_block->values[i];
+			init_pvalue_vtable(val1);
 			val1->type = PFREED;
 			val1->value = free_list;
 			free_list = val1;
