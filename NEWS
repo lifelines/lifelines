@@ -11,6 +11,10 @@ Bug fixes in 3.0.6.1-dev
 - (Windows) Editing user options or trans tables could crash because
   of CR/LF translation causing fread to not report filesize number of bytes
 
+- Deep recursive search with children (or similar) could flush cache & crash
+  (Now it will report cache overflow & fail, instead of failing unpredictably
+  with no explanation)
+
 New Features Added in 3.0.6
 ===========================
 
