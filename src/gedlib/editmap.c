@@ -12,12 +12,12 @@
 #include "gedcom.h"
 #include "liflines.h"
 #include "screen.h"
+#include "gedcomi.h"
 
 #define NOMAPS 6
 
 extern STRING map_keys[];
 extern STRING cmperr, aredit, ronlye;
-extern TRANTABLE init_map_from_file();
 
 /*==============================================
  * edit_mapping -- Edit character mapping record
