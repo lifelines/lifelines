@@ -1,0 +1,67 @@
+/*
+ * @version        1.0
+ * @author         Perry Rapp
+ * @category       self-test
+ * @output         none
+ * @description    validate name functions
+*/
+
+char_encoding("ASCII")
+
+require("lifelines-reports.version:1.3")
+option("explicitvars") /* Disallow use of undefined variables */
+include("st_aux")
+
+/* entry point in case not invoked via st_all.ll */
+proc main()
+{
+	call testNames()
+}
+
+
+/*
+ test some name functions 
+ */
+proc testNames()
+{
+	set(testok, 0)
+	set(testfail, 0)
+
+	set(namestr, "Fyodor Nikolaievich Medvedev")
+	call testExtract(namestr, 3, 0)
+
+	set(namestr, "Jose Antonio Martinez de Garcia")
+	call testExtract(namestr, 5, 0)
+
+	set(namestr, "Jose Antonio /Martinez/ de Garcia")
+	call testExtract(namestr, 5, 3)
+
+	set(namestr, "Kara /Hattersley-Smith/")
+	call testExtract(namestr, 2, 2)
+
+	set(namestr, "L. /Vitellius/ Tancinus Cives Hisp. Caurie[n]sis")
+	call testExtract(namestr, 6, 2)
+
+	call reportSubsection("name tests")
+}
+
+/* test extractnames on passed string */
+proc testExtract(namestr, fragcount, surn)
+{
+	set(node, createnode("NAME", namestr))
+	list(namelist)
+	extractnames(node, namelist, count, surna)
+
+	if (ne(count, fragcount)) {
+		call reportfail(concat("extractnames failed count "
+			, d(count), "<>", d(fragcount), " on ", namestr))
+	}
+	else { incr(testok) }
+
+	if (ne(surna, surn)) {
+		call reportfail(concat("extractnames failed surname "
+			, d(surna), "<>", d(surn), " on ", namestr))
+	}
+	else { incr(testok) }
+}
+

@@ -17,6 +17,11 @@
 
 	New German message catalog from Frank Ellebrecht.
 
+	* reports/st/st_all.ll
+	*NEW reports/st/st_name.ll
+
+	Create self-test report for names.
+
 2003-06-18 Matt Emmerton
 
 	* ChangeLog src/interp/pvalue.c

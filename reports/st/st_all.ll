@@ -1,5 +1,5 @@
 /*
- * @version        1.12 (2002-12-16)
+ * @version        1.13 (2003-06-19)
  * @author         Perry Rapp
  * @category       self-test
  * @output         mixed
@@ -27,6 +27,7 @@ include("st_string")
 include("st_string_UTF-8")
 include("st_collate")
 include("st_date")
+include("st_name")
 include("st_number")
 include("st_convert")
 include("st_list")
@@ -57,6 +58,9 @@ proc main()
 	}
 	if (dostep(alltests, "Test numbers ? (0=no)")) {
 		call testNums()
+	}
+	if (dostep(alltests, "Test names ? (0=no)")) {
+		call testNames()
 	}
 	if (dostep(alltests, "Test dates ? (0=no)")) {
 		call testDates()
