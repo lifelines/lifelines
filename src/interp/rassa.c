@@ -229,8 +229,8 @@ static BOOLEAN
 request_file (BOOLEAN *eflg)
 {
 	STRING rptdir = getoptstr("LLREPORTS", ".");
-	STRING fname=0;
-	Poutfp = ask_for_output_file(LLWRITETEXT, _(qSwhtout), &fname
+	STRING fname=0, fullpath=0;
+	Poutfp = ask_for_output_file(LLWRITETEXT, _(qSwhtout), &fname, &fullpath
 		, rptdir, NULL);
 	if (!Poutfp || !fname || !fname[0])  {
 		if (fname)
@@ -246,7 +246,8 @@ request_file (BOOLEAN *eflg)
 	}
 	if (outfilename)
 		stdfree(outfilename);
-	outfilename = fname;
+	outfilename = fullpath;
+	strfree(&fname);
 	return TRUE;
 }
 /*====================================+

@@ -145,15 +145,17 @@ ask_for_int (STRING ttl)
 }
 /*======================================
  * ask_for_file_worker -- Ask for and open file
- *  ttl:    [IN]  title of question (1rst line)
- *  pfname: [OUT] optional output parameter (pass NULL if undesired)
- *              pfname is allocated on heap
+ *  ttl:       [IN]  title of question (1rst line)
+ *  pfname     [OUT] file as user entered it (optional param)
+ *  pfullpath  [OUT] file as found (optional param)
+ * pfname & pfulllpath are heap-allocated
  *====================================*/
 typedef enum { INPUT, OUTPUT } DIRECTION;
 static FILE *
 ask_for_file_worker (STRING mode,
                      STRING ttl,
                      STRING *pfname,
+                     STRING *pfullpath,
                      STRING path,
                      STRING ext,
                      DIRECTION direction)
@@ -171,7 +173,13 @@ ask_for_file_worker (STRING mode,
 	else
 		rtn = ask_for_output_filename(ttl, path, prompt, fname, sizeof(fname));
 	
-	if (pfname) *pfname = 0; /* 0 indicates we didn't try to open */
+	if (pfname) {
+		if (fname && fname[0])
+			*pfname = strdup(fname);
+		else
+			*pfname = 0;
+	}
+	if (pfullpath) *pfullpath = 0; /* 0 indicates we didn't try to open */
 
 	if (!rtn || !fname[0]) return NULL;
 
@@ -203,8 +211,7 @@ ask_for_file_worker (STRING mode,
 		return fp;
 	}
 
-	if (!(fp = fopenpath(fname, mode, path, ext, pfname))) {
-		if (pfname && (*pfname == NULL)) *pfname = strsave(fname);
+	if (!(fp = fopenpath(fname, mode, path, ext, pfullpath))) {
 		msg_error(_(qSnofopn), fname);
 		return NULL;
 	}
@@ -228,18 +235,19 @@ make_fname_prompt (STRING fnamebuf, INT len, STRING ext)
 }
 /*======================================
  * ask_for_input_file -- Ask for and open file for input
- *  ttl:   [IN]  title of question (1rst line)
- *  pfname [OUT] optional output parameter (pass NULL if undesired)
+ *  ttl:       [IN]  title of question (1rst line)
+ *  pfname     [OUT] file as user entered it (optional param)
+ *  pfullpath  [OUT] file as found (optional param)
  *====================================*/
 FILE *
 ask_for_input_file (STRING mode,
                     STRING ttl,
                     STRING *pfname,
+                    STRING *pfullpath,
                     STRING path,
                     STRING ext)
 {
-	return ask_for_file_worker(mode, ttl, pfname, path, ext,
-		INPUT);
+	return ask_for_file_worker(mode, ttl, pfname, pfullpath, path, ext, INPUT);
 }
 
 /*======================================
@@ -251,11 +259,11 @@ FILE *
 ask_for_output_file (STRING mode,
                      STRING ttl,
                      STRING *pfname,
+                     STRING *pfullpath,
                      STRING path,
                      STRING ext)
 {
-	return ask_for_file_worker(mode, ttl, pfname, path, ext,
-		OUTPUT);
+	return ask_for_file_worker(mode, ttl, pfname, pfullpath, path, ext, OUTPUT);
 }
 	/* RC_DONE means user just hit enter -- interpret as a cancel */
 #define RC_DONE     0

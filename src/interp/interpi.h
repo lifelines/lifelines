@@ -42,6 +42,10 @@ struct pactx_s {
 	INT charpos;     /* current offset on line (0-based) */
 };
 
+struct pathinfo_s {
+	STRING fname;    /* filename as user specified */
+	STRING fullpath; /* fully qualified path */
+};
 
 extern PVALUE ___alpha(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __add(PNODE, SYMTAB, BOOLEAN *);

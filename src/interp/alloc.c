@@ -209,14 +209,12 @@ static PNODE
 create_pnode (PACTX pactx, INT type)
 {
 	PNODE node = alloc_pnode_memory();
-	STRING ifile, fullpath;
-	ifile = pactx->ifile;
-	fullpath = pactx->fullpath;
 	itype(node) = type;
 	iprnt(node) = NULL;
 	inext(node) = NULL;
 	iline(node) = pactx->lineno;
-	ifname(node) = fullpath;
+	/* Assumption -- pactx->fullpath stays live longer than all pnodes */
+	ifname(node) = pactx->fullpath;
 	node->i_word1 = node->i_word2 = node->i_word3 = NULL;
 	node->i_word4 = node->i_word5 = NULL;
 	return node;
@@ -247,8 +245,7 @@ delete_pnode (PNODE node)
 }
 /*==================================
  * string_node -- Create string node
- *  This is called from lex.c, and str points to
- *  a static buffer
+ *  We copy the string memory.
  *================================*/
 PNODE
 string_node (PACTX pactx, STRING str)

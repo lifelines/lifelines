@@ -254,6 +254,7 @@ filepath (CNSTRING name,
 }
 /*===========================================
  * fopenpath -- Open file using path variable
+ *  pfname: [OUT]  stdalloc'd copy of full path found
  *=========================================*/
 FILE *
 fopenpath (STRING name,
@@ -265,7 +266,11 @@ fopenpath (STRING name,
 	STRING str;
 	if(pfname) *pfname = NULL;
 	if (!(str = filepath(name, mode, path, ext))) return NULL;
-	if(pfname) *pfname = str;
+	if(pfname) {
+		*pfname = str;
+	} else {
+		/* Are we leaking str here ? Perry, 2002-07-23 */
+	}
 	return fopen(str, mode);
 }
 /*===========================================

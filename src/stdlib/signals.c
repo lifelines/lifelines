@@ -151,7 +151,7 @@ on_signals (int sig)
 
 	if (progrunning) {
 		char line[20];
-		snprintf(line, sizeof(line), "%d", iline(Pnode));
+		snprintf(line, sizeof(line), "%d", iline(Pnode)+1);
 		sprintpic2(msg, sizeof(msg), uu8, _(qSprogsig), ifname(Pnode), line);
 	}
 

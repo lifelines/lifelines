@@ -1,6 +1,6 @@
 /*
  * @progname       exercise
- * @version        0.99 (2002/06/28)
+ * @version        0.100 (2002/07/23)
  * @author         Perry Rapp
  
  * @category       test
@@ -24,18 +24,13 @@ TODO: Flag date tests for gedcom legal vs illegal
 */
 
 
-/*
- 2002.02.26
- utf(...) is not correctly implemented yet (it is in collation tests)
- It does not translate to internal codeset, so it ONLY works
- if you are using UTF-8 as your internal codeset
-*/
-
-/* I'll use UTF-8 escapes instead of actually typing UTF-8 */
+/* This file is all ASCII, so we don't need to choose a codeset */
 /* char_encoding("UTF-8") */
 
 require("lifelines-reports.version:1.3")
 option("explicitvars") /* Disallow use of undefined variables */
+include("exer_UTF-8")
+include("exer_8859-1")
 
 global(dead)
 global(cutoff_yr)
@@ -47,63 +42,7 @@ global(testok)
 global(testfail)
 global(testskip)
 
-global(A)
-global(K)
-global(L)
-global(M)
-global(N)
-global(O)
-global(Ntilde)
-global(Z)
-global(Adia)
-global(Odia)
-global(Lstroke)
 
-proc setchars()
-{
-/* LAT. CAP. == LATIN CAPITAL LETTER */
-/* W/ == WITH */
-
-	set(A, "A")
-	set(K, "K")
-	set(L, "L")
-	set(M, "M")
-	set(N, "N")
-	set(O, "O")
-	set(Z, "Z")
-	set(Adia, utf8("$C3$84")) /* unicode("$C4") LAT. CAP. A W/ DIAERESIS */
-	set(Odia, utf8("$C3$96")) /* unicode("$D6")) LAT. CAP. O W/ DIAERESIS */
-	set(Lstroke, utf8("$C5$81")) /* unicode("0141")) LAT. CAP. L W/ STROKE */
-	set(Ntilde, utf8("$C3$91")) /* unicode("00D1")) LAT. CAP. N W/ TILDE */
-
-}
-proc finnish()
-{
-	if (not(set_and_check_locale("fi_FI", "Finnish"))) {
-		return()
-	}
-	call check_collate(A, Z, A, Z)
-	call check_collate(Z, Adia, Z, "Adia")
-	call check_collate(Adia, Odia, "Adia", "Odia")
-}
-proc polish()
-{
-	if (not(set_and_check_locale("pl_PL", "Polish"))) {
-		return()
-	}
-	call check_collate(A, Z, A, Z)
-	call check_collate(L, Lstroke, L, "Lstroke")
-	call check_collate(Lstroke, M, "Lstroke", M)
-}
-proc spanish()
-{
-	if (not(set_and_check_locale("es", "Spanish"))) {
-		return()
-	}
-	call check_collate(A, Z, A, Z)
-	call check_collate(N, Ntilde, N, "Ntilde")
-	call check_collate(Ntilde, O, "Ntilde", O)
-}
 proc check_collate(str1, str2, str1nam, str2nam)
 {
 	if (ge(strcmp(str1,str2),0)) {
@@ -122,10 +61,8 @@ func set_and_check_locale(locstr, locname)
 }
 proc testCollate()
 {
-	call setchars()
-	call finnish()
-	call polish()
-	call spanish()
+	call testCollate_UTF_8()
+	call testCollate_8859_1()
 }
 
 proc main()

@@ -184,12 +184,12 @@ load_gedcom (void)
 {
 	FILE *fp=NULL;
 	struct import_feedback ifeed;
-	STRING srcdir=NULL, fname=NULL;
+	STRING srcdir=NULL, fname=0, fullpath=0;
 
 	srcdir = getoptstr("InputPath", ".");
 	fp = ask_for_input_file(LLREADTEXT
-		, _("Please enter the name of the GEDCOM file."), &fname, srcdir, ".ged");
-	strfree(&fname);
+		, _("Please enter the name of the GEDCOM file.")
+		, 0, 0, srcdir, ".ged");
 	if (!fp) return;
 
 	memset(&ifeed, 0, sizeof(ifeed));

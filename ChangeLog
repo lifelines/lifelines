@@ -1,3 +1,16 @@
+2002-07-24 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog build/msvc6/llines/llines.rc hdrs/interp.h
+	hdrs/liflines.h interp/alloc.c interp/builtin.c interp/eval.c
+	interp/interp.c interp/interpi.h interp/rassa.c liflines/ask.c
+	liflines/askprogram.c liflines/export.c liflines/loadsave.c
+	reports/exercise.ll stdlib/path.c stdlib/signals.c:
+	NEW: reports/exer_8859-1.ll
+	NEW: reports/exer_UTF-8.ll:
+
+	Propagate both user-specified & opened path through program logic.
+	Convert report to internal codeset.
+
 2002-07-22 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog btree/addkey.c gedlib/charmaps.c gedlib/date.c

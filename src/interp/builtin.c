@@ -1224,7 +1224,7 @@ __lt (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
 
 #ifdef DEBUG
-	llwprintf("__lt @ %d\n", iline(node));
+	llwprintf("__lt @ %d\n", iline(node)+1);
 #endif
 
 	if (*eflg) return NULL;

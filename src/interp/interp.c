@@ -44,6 +44,8 @@
 #include "arch.h"
 #include "lloptions.h"
 #include "parse.h"
+#include "bfs.h"
+#include "icvt.h"
 
 /*********************************************
  * global/exported variables
@@ -64,7 +66,6 @@ INT Perrors = 0;
 LIST Plist = NULL;     /* list of program files still to read */
 PNODE Pnode = NULL;           /* node being interpreted */
 BOOLEAN explicitvars = FALSE; /* all vars must be declared */
-STRING rpt_ccs = 0; /* character encoding for report file */
 BOOLEAN rpt_cancelled = FALSE;
 
 /*********************************************
@@ -79,6 +80,7 @@ extern STRING nonnodstr1, nonind1, nonindx, nonfam1, nonfamx;
 extern STRING nonrecx, nonnod1;
 extern STRING nonnodx, nonvar1, nonvarx, nonboox, nonlst1, nonlstx;
 extern STRING badargs, badargx, nonrecx;
+extern STRING qSunsupuniv;
 
 /*********************************************
  * local function prototypes
@@ -87,8 +89,9 @@ extern STRING badargs, badargx, nonrecx;
 static STRING check_rpt_requires(PACTX pactx, STRING fname);
 static void disp_symtab(STRING title, SYMTAB stab);
 static BOOLEAN disp_symtab_cb(STRING key, PVALUE val, VPTR param);
+static BOOLEAN find_program(STRING fname, STRING *pfull);
 static void init_pactx(PACTX pactx);
-static void parse_file(PACTX pactx, STRING ifile, LIST plist);
+static void parse_file(PACTX pactx, STRING fname, STRING fullpath);
 static void progmessage(MSG_LEVEL level, STRING);
 static void remove_tables(PACTX pactx);
 static STRING vprog_error(PNODE node, STRING fmt, va_list args);
@@ -164,6 +167,33 @@ progmessage (MSG_LEVEL level, STRING msg)
 	msg_output(level, buf);
 }
 /*=============================================+
+ * new_pathinfo -- Return new, filled-out pathinfo object
+ *  all memory is newly heap-allocated
+ *============================================*/
+static struct pathinfo_s *
+new_pathinfo (STRING fname, STRING fullpath)
+{
+	struct pathinfo_s * pathinfo = (struct pathinfo_s *)malloc(sizeof(*pathinfo));
+	memset(pathinfo, 0, sizeof(*pathinfo));
+	pathinfo->fname = strdup(fname);
+	pathinfo->fullpath = strdup(fullpath);
+	return pathinfo;
+}
+/*=============================================+
+ * new_pathinfo -- Return new, filled-out pathinfo object
+ *  all memory is newly heap-allocated
+ *============================================*/
+static void
+delete_pathinfo (struct pathinfo_s ** pathinfo)
+{
+	if (pathinfo && *pathinfo) {
+		strfree(&(*pathinfo)->fname);
+		strfree(&(*pathinfo)->fullpath);
+		stdfree(*pathinfo);
+		*pathinfo = 0;
+	}
+}
+/*=============================================+
  * interp_program -- Interpret LifeLines program
  *  proc:     [IN]  proc to call
  *  nargs:    [IN]  number of arguments
@@ -178,11 +208,10 @@ interp_program (STRING proc, INT nargs, VPTR *args, INT nifiles
 	, STRING *ifiles, STRING ofile, BOOLEAN picklist) 
 {
 	FILE *fp;
-	LIST plist;
+	LIST plist=0, donelist=0;
 	SYMTAB stab = null_symtab();
 	PVALUE dummy;
 	INT i;
-	STRING ifile;
 	PNODE first, parm;
 	struct pactx_s pact;
 	PACTX pactx = &pact;
@@ -192,28 +221,42 @@ interp_program (STRING proc, INT nargs, VPTR *args, INT nifiles
 
    /* Get the initial list of program files */
 	plist = create_list();
-	set_list_type(plist, LISTDOFREE);
+	/* list of pathinfos finished */
+	donelist = create_list();
+
 	if (nifiles > 0) {
 		for (i = 0; i < nifiles; i++) {
-			enqueue_list(plist, strsave(ifiles[i]));
+			STRING * fullpath = 0;
+			if (find_program(ifiles[i], fullpath)) {
+				struct pathinfo_s * pathinfo = new_pathinfo(ifiles[i], *fullpath);
+				strfree(fullpath);
+				enqueue_list(plist, pathinfo);
+			} else {
+				/* what to do when file not found ? 2002-07-23, Perry */
+			}
 		}
 	} else {
+		struct pathinfo_s * pathinfo = 0;
+		STRING fname=0, fullpath=0;
 		STRING programsdir = getoptstr("LLPROGRAMS", ".");
-		ifile = NULL;
-		fp = ask_for_program(LLREADTEXT, _(qSwhatrpt), &ifile,
-			programsdir, ".ll", picklist);
+		fp = ask_for_program(LLREADTEXT, _(qSwhatrpt), &fname, &fullpath
+			, programsdir, ".ll", picklist);
 		if (fp == NULL) {
-			if (ifile != NULL)  {
+			if (fname)  {
 				/* tried & failed to open report program */
-				llwprintf(_("Error: file <%s> not found"), ifile);
+				llwprintf(_("Error: file <%s> not found"), fname);
 			}
-			strfree(&ifile);
+			strfree(&fname);
+			strfree(&fullpath);
 			goto interp_program_exit;
 		}
 		fclose(fp);
-		progname = ifile;
+		progname = strsave(fullpath);
+		pathinfo = new_pathinfo(fname, fullpath);
+		strfree(&fname);
+		strfree(&fullpath);
 
-		enqueue_list(plist, strsave(ifile));
+		enqueue_list(plist, pathinfo);
 	}
 
 	progparsing = TRUE;
@@ -231,23 +274,28 @@ interp_program (STRING proc, INT nargs, VPTR *args, INT nifiles
 	functab = create_table();
 	initinterp();
 	while (!is_empty_list(plist)) {
-		ifile = (STRING) dequeue_list(plist);
-		if (!in_table(pactx->filetab, ifile)) {
+		struct pathinfo_s * pathinfo = (struct pathinfo_s *)dequeue_list(plist);
+		if (!in_table(pactx->filetab, pathinfo->fullpath)) {
 			STRING str;
-			insert_table_ptr(pactx->filetab, ifile, 0);
+			insert_table_ptr(pactx->filetab, pathinfo->fullpath, 0);
 #ifdef DEBUG
-			llwprintf("About to parse file %s.\n", ifile);
+			llwprintf("About to parse file %s.\n", pathinfo->fname);
 #endif
-			parse_file(pactx, ifile, plist);
-			if ((str = check_rpt_requires(pactx, ifile)) != 0) {
+			Plist = plist;
+			parse_file(pactx, pathinfo->fname, pathinfo->fullpath);
+			if ((str = check_rpt_requires(pactx, pathinfo->fullpath)) != 0) {
 				progmessage(MSG_ERROR, str);
 				goto interp_program_exit;
 			}
 		} else {
-			stdfree(ifile);
+			/* can't delete pathinfo, because pnodes use those strings */
+			enqueue_list(donelist, pathinfo);
 		}
 	}
-	remove_list(plist, NULL); plist=NULL;
+	remove_list(plist, NULL);
+	plist=NULL;
+
+
 	if (Perrors) {
 		progmessage(MSG_ERROR, _("contains errors."));
 		goto interp_program_exit;
@@ -310,10 +358,24 @@ interp_program (STRING proc, INT nargs, VPTR *args, INT nifiles
 	Poutfp = NULL;
 
 interp_program_exit:
+
+	
 	remove_tables(pactx);
 	remove_symtab(&stab);
 	pvalues_end();
 	wipe_pactx(pactx);
+
+	/* kill any orphaned pathinfos */
+	while (!is_empty_list(plist)) {
+		struct pathinfo_s * pathinfo = (struct pathinfo_s *)dequeue_list(plist);
+		delete_pathinfo(&pathinfo);
+	}
+	/* Assumption -- pactx->fullpath stays live longer than all pnodes */
+	while (!is_empty_list(donelist)) {
+		struct pathinfo_s * pathinfo = (struct pathinfo_s *)dequeue_list(donelist);
+		delete_pathinfo(&pathinfo);
+	}
+	
 	return;
 }
 /*===============================================
@@ -353,34 +415,63 @@ remove_tables (PACTX pactx)
 	functab=NULL;
 }
 /*======================================+
+ * find_program - search for program file
+ *  fname: [IN]  filename desired
+ *  pfull: [OUT] full path found (stdalloc'd)
+ * Returns TRUE if found
+ *=====================================*/
+static BOOLEAN
+find_program (STRING fname, STRING *pfull)
+{
+	STRING programsdir = getoptstr("LLPROGRAMS", ".");
+	FILE * fp = 0;
+	if (!fname || *fname == 0) return FALSE;
+	fp = fopenpath(fname, LLREADTEXT, programsdir, ".ll", pfull);
+	if (fp) {
+		fclose(fp);
+		return TRUE;
+	}
+	return FALSE;
+}
+/*======================================+
  * parse_file - Parse single program file
  *  pactx: [I/O] pointer to global parsing context
  *  ifile: [IN]  file to parse
- *  plist: [I/O] list of files still to parse
  * Parse file (yyparse may wind up adding entries to plist, via include statements)
  *=====================================*/
 static void
-parse_file (PACTX pactx, STRING ifile, LIST plist)
+parse_file (PACTX pactx, STRING fname, STRING fullpath)
 {
-	STRING programsdir = getoptstr("LLPROGRAMS", ".");
-	STRING fullpath=0;
-	if (!ifile || *ifile == 0) return;
-	Plist = plist;
-	pactx->Pinfp = fopenpath(ifile, LLREADTEXT, programsdir, ".ll", &fullpath);
+	STRING unistr=0;
+
+	ASSERT(!pactx->Pinfp);
+	if (!fullpath || !fullpath[0]) return;
+	pactx->Pinfp = fopen(fullpath, LLREADTEXT);
 	if (!pactx->Pinfp) {
-		llwprintf(_("Error: file <%s> not found.\n"), ifile);
+		llwprintf(_("Error: file <%s> not found: %s\n"), fname, fullpath);
 		Perrors++;
 		return;
 	}
-	pactx->ifile = strdup(ifile);
-	pactx->fullpath = strdup(fullpath);
-	strfree(&fullpath);
+
+	if ((unistr=check_file_for_unicode(pactx->Pinfp)) && !eqstr(unistr, "UTF-8")) {
+		msg_error(_(qSunsupuniv), unistr);
+		Perrors++;
+		return;
+	}
+
+	/* Assumption -- pactx->fullpath stays live longer than all pnodes */
+	pactx->ifile = fname;
+	pactx->fullpath = fullpath;
+	pactx->lineno = 0;
+	pactx->charpos = 0;
 
 	yyparse(pactx);
 	
 	closefp(&pactx->Pinfp);
-	strfree(&pactx->ifile);
-	strfree(&pactx->fullpath);
+	pactx->ifile = 0;
+	pactx->fullpath = 0;
+	pactx->lineno = 0;
+	pactx->charpos = 0;
 }
 /*====================================+
  * interp_main -- Interpreter main proc
@@ -419,7 +510,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 	while (node) {
 		Pnode = node;
 		if (prog_debug) {
-			llwprintf("d%d: ", iline(node));
+			llwprintf("d%d: ", iline(node)+1);
 			debug_show_one_pnode(node);
 			llwprintf("\n");
 		}
@@ -701,7 +792,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 
 interp_fail:
 	if (getoptint("FullReportCallStack", 0) > 0) {
-		llwprintf("e%d: ", iline(node));
+		llwprintf("e%d: ", iline(node)+1);
 		debug_show_one_pnode(node);
 		llwprintf("\n");
 	}
@@ -1747,10 +1838,10 @@ vprog_error (PNODE node, STRING fmt, va_list args)
 		/* But always display the line & error */
 		if (progparsing)
 			llstrncpyf(msglineno, sizeof(msglineno), uu8
-				, _("Parsing Error at line %d: "), iline(node));
+				, _("Parsing Error at line %d: "), iline(node)+1);
 		else
 			llstrncpyf(msglineno, sizeof(msglineno), uu8
-				, _("Runtime Error at line %d: "), iline(node));
+				, _("Runtime Error at line %d: "), iline(node)+1);
 	} else {
 		llstrncpyf(msglineno, sizeof(msglineno), uu8, _("Aborting: "));
 	}
@@ -1827,6 +1918,22 @@ set_rptfile_prop (PACTX pactx, STRING fname, STRING key, STRING value)
 	
 }
 /*=============================================+
+ * get_rptfile_prop -- get a property for a report file
+ * These are stored in a table, hanging off the entry in the filetab
+ *=============================================*/
+STRING
+get_rptfile_prop (PACTX pactx, STRING fname, STRING key)
+{
+	VPTR * ptr = access_value_ptr(pactx->filetab, fname);
+	STRING value = 0;
+	TABLE tabprop;
+	if (ptr && *ptr) {
+		tabprop = (TABLE)(*ptr);
+		value = valueof_str(tabprop, key);
+	}
+	return value;
+}
+/*=============================================+
  * pa_handle_char_encoding -- report command char_encoding("...")
  *  parse-time handling of report command
  *  node:   [IN]  current parse node
@@ -1851,10 +1958,29 @@ pa_handle_char_encoding (PACTX pactx, PNODE node)
 PNODE
 make_internal_string_node (PACTX pactx, STRING str)
 {
-	/*
-	TODO: look up codeset of current report file
-	*/
-	return string_node(pactx, str);
+	PNODE node = 0;
+	if (int_codeset && int_codeset[0] && str && str[0]) {
+		STRING fname = pactx->fullpath;
+		STRING rcodeset = get_rptfile_prop(pactx, fname, "char_encoding");
+		if (rcodeset && rcodeset[0] && !eqstr(int_codeset, rcodeset)) {
+			bfptr bfs=0;
+			BOOLEAN success;
+			struct tranmapping_s tm;
+			memset(&tm, 0, sizeof(tm));
+			tm.iconv_src = rcodeset;
+			tm.iconv_dest = int_codeset;
+
+			bfs = bfNew(strlen(str)*4+3);
+			bfCpy(bfs, str);
+			bfs = iconv_trans(rcodeset, int_codeset, bfs, "?", &success);
+			node = string_node(pactx, bfStr(bfs));
+			bfDelete(bfs);
+			/* TODO - call iconv */
+		}
+	}
+	if (!node)
+		node = string_node(pactx, str);
+	return node;
 }
 /*=============================================+
  * pa_handle_include -- report command include("...")
@@ -1866,14 +1992,22 @@ pa_handle_include (PNODE node)
 	STRING fname = ifname(node); /* current file */
 	PVALUE pval = ivalue(node);
 	STRING newfname;
+	STRING fullpath;
+	struct pathinfo_s * pathinfo = 0;
 	ASSERT(ptype(pval)==PSTRING); /* grammar only allows strings */
 	newfname = pvalue(pval);
-	fname=fname; /* unused -- could be used if we resolved path now */
-	/*
-	If we resolved the path now, we could try relative to the path of the
-	current report, and then fallback to regular programsdir rules.
-	*/
-	enqueue_list(Plist, newfname);
+	
+	/* be nice to extract path from fname, and pass to find_program 
+	so we can search directory of current file */
+
+	if (find_program(newfname, &fullpath)) {
+		pathinfo = new_pathinfo(newfname, fullpath);
+		strfree(&fullpath);
+		enqueue_list(Plist, pathinfo);
+	} else {
+		prog_error(node, "included file not found: %s\n", newfname);
+		++Perrors;
+	}
 }
 /*=============================================+
  * pa_handle_require -- report command require("...")

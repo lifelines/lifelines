@@ -79,10 +79,10 @@ archive_in_file (void)
 	char dat[30], tim[20];
 	struct tm *pt;
 	time_t curtime;
-	STRING fname, str;
+	STRING fname, fullpath, str;
 	STRING archivesdir = getoptstr("LLARCHIVES", ".");
 
-	fn = ask_for_output_file(LLWRITETEXT, _(qSoutarc), &fname, archivesdir, ".ged");
+	fn = ask_for_output_file(LLWRITETEXT, _(qSoutarc), &fname, &fullpath, archivesdir, ".ged");
 	if (!fn) {
 		strfree(&fname);
 		msg_error("The database was not saved.");

@@ -341,6 +341,7 @@ PNODE forsour_node(PACTX pactx, STRING, STRING, PNODE);
 void free_all_pnodes(void);
 void free_pnode_tree(PNODE);
 PNODE func_node(PACTX pactx, STRING, PNODE);
+STRING get_rptfile_prop(PACTX pactx, STRING fname, STRING key);
 PNODE icons_node(PACTX pactx, INT ival);
 PNODE iden_node(PACTX pactx, STRING);
 PNODE if_node(PACTX pactx, PNODE, PNODE, PNODE);

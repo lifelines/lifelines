@@ -53,7 +53,7 @@ PVALUE
 evaluate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	if (prog_debug) {
-		llwprintf("%d: ", iline(node));
+		llwprintf("%d: ", iline(node)+1);
 		debug_show_one_pnode(node);
 		llwprintf("\n");
 	}
@@ -161,10 +161,10 @@ evaluate_func (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 #if 0
 	if (prog_debug)
 		llwprintf("evaluate_func called: %d: %s\n",
-		    iline(node), iname(node));
+		    iline(node)+1, iname(node));
 #endif
 	if (traceprogram) {
-		sprintf(trace, "%d: %s\n", iline(node), (char*)iname(node));
+		sprintf(trace, "%d: %s\n", iline(node)+1, (char*)iname(node));
 		poutput(trace, eflg);
 	}
 	val = (*(PFUNC)ifunc(node))(node, stab, eflg);

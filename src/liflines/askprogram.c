@@ -360,6 +360,7 @@ FILE *
 ask_for_program (STRING mode,
                  STRING ttl,
                  STRING *pfname,
+                 STRING *pfullpath,
                  STRING path,
                  STRING ext,
                  BOOLEAN picklist)
@@ -372,6 +373,7 @@ ask_for_program (STRING mode,
   static char fname[MAXLINELEN]; /* for returning path */
 
   if (pfname) *pfname = 0;
+  if (pfullpath) *pfullpath = 0;
 
   if (!picklist)
     {
@@ -416,17 +418,19 @@ ask_for_program (STRING mode,
         {
           fp = fopen(cur->filename, mode);
           /* give path to caller, whether or not we succeeded */
-		  /* TODO: fix for UTF-8 */
+           /* TODO: fix for UTF-8 */
           strncpy(fname, cur->filename,sizeof(fname)-1);
           fname[sizeof(fname)-1] = '\0';
+          /* TODO: we lost the user-specified filename */
           *pfname = strsave(fname);
+			 *pfullpath = strsave(fname);
         }
       free_program_list(head, list, len);
     }
   return fp;
 
 AskForString:
-  fp = ask_for_input_file(LLREADTEXT, _(qSwhatrpt), pfname, programsdir, ".ll");
+  fp = ask_for_input_file(LLREADTEXT, _(qSwhatrpt), pfname, pfullpath, programsdir, ".ll");
   return fp;
 }
 /*================================================
