@@ -2891,7 +2891,17 @@ calculate_screen_lines (INT screen)
 void
 clear_hseg (WINDOW *win, INT row, INT x1, INT x2)
 {
-	color_hseg(win, row, x1, x2, ' ');
+	/* workaround for curses bug with spacs */
+	if (getoptint("ForceScreenErase", 0) > 0) {
+		/* fill virtual output with dots */
+		color_hseg(win, row, x1, x2, '.');
+		wnoutrefresh(win);
+		/* now fill it back with spaces */
+		color_hseg(win, row, x1, x2, ' ');
+		wrefresh(win);
+	} else {
+		color_hseg(win, row, x1, x2, ' ');
+	}
 }
 /*=====================
  * color_hseg -- fill a horizontal line segment
@@ -3464,6 +3474,7 @@ refresh_stdout (void)
 static void
 uierase (UIWINDOW uiwin)
 {
+	/* workaround for curses bug with spacs */
 	if (getoptint("ForceScreenErase", 0) > 0) {
 		/* fill virtual output with dots */
 		uicolor(uiwin, '.');
