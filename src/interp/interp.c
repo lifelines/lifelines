@@ -226,10 +226,10 @@ interp_program (STRING proc, INT nargs, VPTR *args, INT nifiles
 
 	if (nifiles > 0) {
 		for (i = 0; i < nifiles; i++) {
-			STRING * fullpath = 0;
-			if (find_program(ifiles[i], fullpath)) {
-				struct pathinfo_s * pathinfo = new_pathinfo(ifiles[i], *fullpath);
-				strfree(fullpath);
+			STRING fullpath = 0;
+			if (find_program(ifiles[i], &fullpath)) {
+				struct pathinfo_s * pathinfo = new_pathinfo(ifiles[i], fullpath);
+				strfree(&fullpath);
 				enqueue_list(plist, pathinfo);
 			} else {
 				/* what to do when file not found ? 2002-07-23, Perry */
