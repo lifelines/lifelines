@@ -9,7 +9,7 @@ docdir = $(datadir)/doc/lifelines
 doc_DATA = $(EXTRA_DIST)
 
 
-all: simple fancy
+all: simple # fancy
 
 text: lifelines.txt
 
