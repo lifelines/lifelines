@@ -8,6 +8,10 @@
 	New function record_remove_cel.
 	Rename set_record_cache_info to record_set_cel;
 
+	* ChangeLog src/gedlib/keytonod.c
+
+	Add more ASSERTs to key_to_cacheel.
+
 2005-02-01 Perry Rapp
 
 	* ChangeLog src/stdlib/table.c

@@ -700,16 +700,17 @@ key_to_cacheel (CACHE cache, CNSTRING key, STRING tag, INT reportmode)
 		ASSERT(cnode(cel));
 		direct_to_first(cache, cel);
 		if (tag) {
-#ifdef DEBUG
-			llwprintf("BEFORE ASSERT: tag, ntag(cnode(cel)) = %s, %s\n", tag, ntag(cnode(cel)));
-#endif
 			ASSERT(eqstr(tag, ntag(cnode(cel))));
+			ASSERT(crecord(cel));
+			ASSERT(eqstr(key, nzkey(crecord(cel))));
 		}
 		return cel;
 	}
 	cel = add_to_direct(cache, key, reportmode);
 	if (cel && tag) {
 		ASSERT(eqstr(tag, ntag(cnode(cel))));
+		ASSERT(crecord(cel));
+		ASSERT(eqstr(key, nzkey(crecord(cel))));
 	}
 	return cel;
 }
