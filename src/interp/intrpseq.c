@@ -41,7 +41,7 @@
  * external/imported variables
  *********************************************/
 
-extern STRING nonindx,nonvar1,nonsetx;
+extern STRING nonindx,nonvar1,nonsetx,nonboox;
 
 /*********************************************
  * local function prototypes
@@ -164,12 +164,12 @@ __inset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE valr=0;
 	if (*eflg ||!val1 || !(seq = pvalue_to_seq(val1))) {
 		*eflg = TRUE;
-		prog_error(node, "1st arg to inset must be a set.");
+		prog_var_error(node, stab, arg1, val1, nonsetx, "inset", "1");
 		return NULL;
 	}
 	indi = eval_indi(arg2, stab, eflg, NULL);
 	if (*eflg) {
-		prog_error(node, "2nd arg to inset must be a person.");
+		prog_var_error(node, stab, arg2, NULL, nonindx, "inset", "2");
 		return NULL;
 	}
 	if (!indi) return create_pvalue_from_bool(FALSE);
@@ -201,13 +201,13 @@ __deletefromset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	PVALUE val3=0;
 	if (*eflg) {
-		prog_error(node, "1st arg to deletefromset must be a set.");
+		prog_var_error(node, stab, arg1, val1, nonsetx, "deletefromset", "1");
 		return NULL;
 	}
 	ASSERT(seq = pvalue_to_seq(val1));
 	indi = eval_indi(arg2, stab, eflg, NULL);
 	if (*eflg) {
-		prog_error(node, "2nd arg to deletefromset must be a person.");
+		prog_var_error(node, stab, arg2, NULL, nonindx, "deletefromset", "2");
 		return NULL;
 	}
 	if (!indi) return NULL;
@@ -219,7 +219,7 @@ __deletefromset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	*eflg = FALSE;
 	val3 = eval_and_coerce(PBOOL, arg3, stab, eflg);
 	if (*eflg) {
-		prog_error(node, "3rd arg to deletefromset must be boolean.");
+		prog_var_error(node, stab, arg2, NULL, nonboox, "deletefromset", "3");
 		return NULL;
 	}
 	all = pvalue_to_bool(val3);

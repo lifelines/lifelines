@@ -4184,7 +4184,7 @@ declare a set variable
 
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
-<funcdef>SET <function>addtoset</function></funcdef>
+<funcdef>VOID <function>addtoset</function></funcdef>
 <paramdef><parameter>SET</parameter>,
 <parameter>INDI</parameter>,
 <parameter>ANY</parameter></paramdef>
@@ -4196,7 +4196,7 @@ add a person to a set
 
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
-<funcdef>SET <function>deletefromset</function></funcdef>
+<funcdef>VOID <function>deletefromset</function></funcdef>
 <paramdef><parameter>SET</parameter>,
 <parameter>INDI</parameter>,
 <parameter>BOOL</parameter></paramdef>

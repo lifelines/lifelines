@@ -1,6 +1,6 @@
 /*
  * @progname       st_db.li
- * @version        1.1 [of 2005-01-23]
+ * @version        1.2 [of 2005-01-23]
  * @author         Perry Rapp
  * @category       self-test
  * @output         none
@@ -252,6 +252,12 @@ proc exerciseIndi(indi)
 	set(iancestors, ancestorset(iset))
 	set(idescendants, descendentset(iset))
 	uniqueset(iancestors)
+	indiset(jset)
+	addtoset(jset, indi, "first")
+	if (inset(jset, indi)) {
+		addtoset(jset, indi, "second")
+	}
+	deletefromset(jset, indi, 0)
 	set(p,99)
 	"name: " name(indi) nl()
 	"title: " title(indi) nl()

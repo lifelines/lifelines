@@ -24,6 +24,14 @@
 
 	Fix __addtoset to use prog_var_error (& therefore report debugger).
 
+	* ChangeLog docs/ll-reportmanual.xml reports/st/st_db.li
+	src/interp/intrpseq.c
+
+	Fix return values (VOID) of addtoset & deletefromset in manual.
+	Add inset and deletefromset calls to st_db.li.
+	Fix __inset to use prog_var_error (& therefore report debugger).
+	Fix __deletefromset to use prog_var_error (& therefore report debugger).
+
 2005-01-22 Perry Rapp
 
 	* ChangeLog src/stdlib/generic.c src/stdlib/table.c
