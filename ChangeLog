@@ -1,3 +1,13 @@
+2001-01-05 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/init.c hdrs/mystring.h hdrs/standard.h
+	hdrs/sys_inc.h hdrs/win32/curses.h liflines/screen.c
+	reports/exercise.ll stdlib/mystring.c stdlib/signals.c
+	win32/mycurses.c:
+
+	Added wgetnstr & mvwgetnstr to win32 curses emulation.
+	Revise get_answer to only use width of current window.
+
 2002-01-05 Matt Emmerton <memmerto@users.sourceforge.net>
 
 	* ChangeLog hdrs/screen.h

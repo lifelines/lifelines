@@ -1893,16 +1893,19 @@ interact (UIWINDOW uiwin, STRING str, INT screen)
  *  uiwin:   [IN] which window to use
  *  row:     [IN]  prompt location (vert)
  *  col:     [IN]  prompt location (horiz)
- *  returns static buffer <=100 length
+ *  returns static buffer <=MAXPATHLEN length
  *==========================================*/
 STRING
 get_answer (UIWINDOW uiwin, INT row, INT col)
 {
-	static char lcl[100];
+	static char lcl[MAXPATHLEN];
 	WINDOW *win = uiw_win(uiwin);
+	INT len=sizeof(lcl);
+	if (len > uiw_cols(uiwin)-col-1)
+		len = uiw_cols(uiwin)-col-1;
 
 	echo();
-	mvwgetnstr(win, row, col, lcl, sizeof(lcl));
+	mvwgetnstr(win, row, col, lcl, len);
 	noecho();
 
 	return lcl;

@@ -146,12 +146,12 @@ init_lifelines_db (void)
 STRING
 get_lifelines_version (INT maxlen)
 {
-	static char version[128];
+	static char version[48];
 	char *ptr=version;
 	INT len=sizeof(version);
 	if (len>maxlen)
 		len=maxlen;
-	llstrcatn(&ptr, LIFELINES_VERSION, &len);
+	snprintf(version, len, LIFELINES_VERSION);
 	return version;
 }
 /*===================================

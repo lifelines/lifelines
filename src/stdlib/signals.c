@@ -110,20 +110,13 @@ on_signals (int sig)
 	extern PNODE Pnode;
 	char msg[160]="";
 	STRING ptr=msg;
-	INT len=sizeof(msg);
-	ptr[0]=0;
 
 	/* We don't know whether curses is up or not right now */
 
 	if (progrunning) {
-		char num[33];
-		llstrcatn(&ptr, "Looks like a program was running.\n", &len);
-		llstrcatn(&ptr, "Check file ", &len);
-		llstrcatn(&ptr, ifname(Pnode), &len);
-		llstrcatn(&ptr, " around line ", &len);
-		sprintf(num, "%d", iline(Pnode));
-		llstrcatn(&ptr, num, &len);
-		llstrcatn(&ptr, ".\n", &len);
+		snprintf(msg, sizeof(msg)
+			, "Looks like a program was running.\nCheck file %s around line %d.\n"
+			, ifname(Pnode), iline(Pnode));
 	}
 
 	close_lifelines();

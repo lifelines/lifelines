@@ -27,6 +27,8 @@
 */
 
 #include "sys_inc.h"
+#include <stdarg.h>
+#include "arch.h"
 #include "mystring.h"
 
 
@@ -537,31 +539,54 @@ int main()
 }
 #endif
 /*==================================
- * llstrcatn -- Copy source string to destination
- *  advancing destination pointer, and decreasing length
- *  (nothing copied after len goes to zero)
+ * appendstr -- Append to string, subject to length limit
+ * Advance target pointer and decrease length.
+ * Safe to call after length goes to zero (nothing happens).
+ *  pdest:  [I/O] output buffer
+ *  len:    [I/O] bytes remaining in output
+ *  src:    [IN]  source to append
  * Created: 2000/11/29, Perry Rapp
+ * NB: Need one byte for terminating zero, so len==1 is same as len==0.
  *================================*/
 void
-llstrcatn (char ** pdest, const char * src, int * len)
+appendstr (char ** pdest, int * len, const char * src)
 {
-	char * dest = *pdest;
-	if (!(*len)) return;
+	int amount;
+	if (*len<1) { *len=0; return; }
 
-	while (1)
-	{
-		if (*len == 1)
-		{
-			*dest = 0;
-			(*len)--;
-			break;
-		}
-		*dest = *src;
-		if (!src[0]) break;
-		(*len)--;
-		dest++, src++;
-	}
-	*pdest = dest;
+	llstrncpy(*pdest, src, *len);
+	amount = strlen(*pdest);
+	*pdest += amount;
+	*len -= amount;
+	if (*len<1) *len=0;
+}
+/*==================================
+ * appendstrf -- sprintf style append to string,
+ * subject to length limit
+ * Advance target pointer and decrease length.
+ * Safe to call after length goes to zero (nothing happens).
+ *  pdest:  [I/O] output buffer
+ *  len:    [I/O] bytes remaining in output
+ *  fmt:    [IN]  sprintf style format string
+ * Created: 2002/01/05, Perry Rapp
+ * NB: Need one byte for terminating zero, so len==1 is same as len==0.
+ *================================*/
+void
+appendstrf (char ** pdest, int * len, const char * fmt, ...)
+{
+	va_list args;
+	int amount;
+	if (*len<1) { *len=0; return; }
+
+	va_start(args, fmt);
+	vsnprintf(*pdest, *len-1, fmt, args);
+	(*pdest)[*len-1]=0;
+	va_end(args);
+
+	amount = strlen(*pdest);
+	*pdest += amount;
+	*len -= amount;
+	if (*len<1) *len=0;
 }
 /*==================================
  * llstrncpy -- strncpy that always zero-terminates

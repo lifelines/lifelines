@@ -435,6 +435,13 @@ int mvwgetstr(WINDOW *wp, int y, int x, char *cp)
 	return(0);
 }
 
+int mvwgetnstr(WINDOW *wp, int y, int x, char *cp, int n)
+{
+	wmove(wp, y, x);
+	wgetnstr(wp, cp, n);
+	return(0);
+}
+
 
 int box(WINDOW *wp, chtype v, chtype h)
 {
@@ -486,14 +493,29 @@ int wgetch(WINDOW *wp)
 
 int wgetstr(WINDOW *wp, char *cp)
 {
+	return wgetnstr(wp, cp, -1);
+}
+
+int wgetnstr(WINDOW *wp, char *cp, int n)
+{
 	COORD cCursor;
 	char *bp;
 	int ch;
+	int overflowed=0, echoprev;
 
 	bp = cp;
-	while((ch = wgetch(wp)) != EOF)
+	while(1)
 	{
-		if((ch == '\n') || (ch == '\r')) break;
+		overflowed = (n>=0 && bp-cp>=n-1);
+		echoprev = echoing;
+		if(overflowed)
+			echoing = 0;
+		ch = wgetch(wp);
+		echoing = echoprev;
+		if(ch==EOF || ch=='\n' || ch=='\r') 
+		{
+			break;
+		}
 		else if(ch == '\b')
 		{
 			if(bp != cp)
@@ -510,7 +532,13 @@ int wgetstr(WINDOW *wp, char *cp)
 				}
 			}
 		}
-		else *bp++ = ch;
+		else
+		{
+			if(overflowed)
+				MessageBeep(MB_OK);
+			else
+				*bp++ = ch;
+		}
 	}
 	*bp = '\0';
 	return(0);
