@@ -17,6 +17,10 @@
 	null implementations in llnls.c if missing & needed.
 	Move NLS stuff from standard.h into llnls.h.
 
+	* ChangeLog liflines/Makefile.am tools/Makefile.am:
+
+	Add LIBICONV to link (needed if gettext doesn't pull it in).
+
 2002-06-13 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/editvtab.c gedlib/init.c gedlib/names.c

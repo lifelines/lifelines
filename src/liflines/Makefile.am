@@ -16,7 +16,7 @@ llines_SOURCES = add.c advedit.c ask.c askprogram.c browse.c \
 # extra stuff for lines
 llines_LDADD = ../interp/libinterp.a ../gedlib/libgedcom.a \
 	../btree/libbtree.a ../stdlib/libstdlib.a ../arch/libarch.a \
-	@LIBINTL@
+	@LIBINTL@ @LIBICONV@
 
 # Have to explicitly include .. after we put DEFS line in below for gettext
 # .. for config.h, hdrs for lots of stuff, ../intl for libgnuintl.h
