@@ -373,6 +373,14 @@ SOURCE=..\..\..\src\interp\more.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\stdlib\mychar_funcs.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\stdlib\mychar_tables.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\win32\mycurses.c
 # End Source File
 # Begin Source File
@@ -839,6 +847,10 @@ SOURCE=..\..\..\src\hdrs\zstr.h
 # Begin Source File
 
 SOURCE=..\..\..\ChangeLog
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\mychar.h
 # End Source File
 # End Target
 # End Project

@@ -1,3 +1,16 @@
+2003-11-12 Perry Rapp
+
+	* .linesrc ChangeLog lines.cfg build/msvc6/llines/llinesprj.dsp
+	src/gedlib/init.c src/hdrs/Makefile.am src/hdrs/mystring.h
+	src/liflines/llexec.c src/liflines/main.c
+	src/stdlib/Makefile.am src/stdlib/mystring.c
+	src/stdlib/stdstrng.c src/tools/btedit.c src/tools/dbverify.c
+	*NEW src/hdrs/mychar.h
+	*NEW src/stdlib/mychar_funcs.c
+	*NEW src/stdlib/mychar_tables.c
+
+	Add option CustomCharacterProperties.
+
 2003-11-11 Perry Rapp
 
 	* ChangeLog src/gedlib/indiseq.c src/stdlib/strcvt.c

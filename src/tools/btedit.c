@@ -41,6 +41,7 @@
 STRING readpath_file = NULL;
 STRING readpath = NULL;
 int opt_finnish = 0;
+int opt_mychar = 0;
 /* defined in gedlib/codesets.c */
 BOOLEAN uu8=0;            /* flag if internal codeset is UTF-8 */
 STRING int_codeset=0;     /* internal codeset */

@@ -44,6 +44,7 @@
 #include "zstr.h"
 #include "icvt.h"
 #include "date.h"
+#include "mychar.h"
 
 /*********************************************
  * global/exported variables
@@ -62,7 +63,7 @@ extern BOOLEAN writeable;
 extern STRING readpath,readpath_file;
 extern STRING qSdbrecstats;
 extern STRING illegal_char;
-
+extern INT opt_finnish, opt_mychar;
 
 /*********************************************
  * local function prototypes
@@ -203,6 +204,20 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 	set_usersort(custom_sort);
 	suppress_reload = FALSE;
 	update_useropts(0);
+
+	/* Finnish always uses custom character sets */
+	if (opt_finnish ) {
+		opt_mychar = TRUE;
+		mych_set_table(ISO_Latin1);
+	} else {
+		CNSTRING charprops = getoptstr("CustomCharacterProperties", "");
+		if (eqstr(charprops, "ISO-8859-1")) {
+			opt_mychar = TRUE;
+			mych_set_table(ISO_Latin1);
+		}
+	}
+	
+	
 	return TRUE;
 }
 /*=================================

@@ -33,12 +33,13 @@
 /* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
 #include "arch.h" /* vsnprintf */
 #include "mystring.h"
+#include "mychar.h"
 
 
 /*********************************************
  * external/imported variables
  *********************************************/
-extern BOOLEAN opt_finnish;
+extern BOOLEAN opt_mychar;
 
 /*********************************************
  * local variables
@@ -126,7 +127,7 @@ islinebreak (INT c)
 BOOLEAN
 isletter (INT c)
 {
-	if (opt_finnish) return lat1_isalpha(c);
+	if (opt_mychar) return mych_isalpha(c);
 #ifndef OS_NOCTYPE
 	return isalpha(c);
 #else
@@ -147,7 +148,7 @@ isasciiletter (INT c)
 INT
 ll_toupper (INT c)
 {
-	if (opt_finnish) return lat1_toupper(c);
+	if (opt_mychar) return mych_toupper(c);
 #ifndef OS_NOCTYPE
 	/* use run-time library */
 	if (islower(c)) return toupper(c);
@@ -163,7 +164,7 @@ ll_toupper (INT c)
 INT
 ll_tolower (INT c)
 {
-	if (opt_finnish) return lat1_tolower(c);
+	if (opt_mychar) return mych_tolower(c);
 #ifndef OS_NOCTYPE
 	/* use run-time library */
 	if (isupper(c)) return tolower(c);

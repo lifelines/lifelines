@@ -15,13 +15,6 @@
 int asc_tolower(const int c);
 int asc_toupper(const int c);
 int fi_chrcmp(const int s1, const int s2);
-int lat1_isalpha(const int c);
-int lat1_iscntrl(const int c);
-int lat1_islower(const int c);
-int lat1_isprint(const int c);
-int lat1_isupper(const int c);
-int lat1_tolower(const int c);
-int lat1_toupper(const int c);
 int my_strcmp(const char *s1, const char *s2, const int cmp_table[]);
 int my_strncmp(const char *s1,
                 const char *s2,

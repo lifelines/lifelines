@@ -81,6 +81,7 @@ extern int opterr;
 
 static STRING usage = "";      /* usage string */
 int opt_finnish  = FALSE;      /* Finnish Language sorting order if TRUE */
+int opt_mychar = FALSE;        /* Custom character set handling (bypass libc) */
 BOOLEAN debugmode = FALSE;     /* no signal handling, so we can get coredump */
 BOOLEAN opt_nocb  = FALSE;     /* no cb. data is displayed if TRUE */
 BOOLEAN keyflag   = TRUE;      /* show key values */
@@ -152,7 +153,6 @@ main (INT argc, char **argv)
 
 	save_original_locales();
 	load_usage();
-
 
 	/* Parse Command-Line Arguments */
 	opterr = 0;	/* turn off getopt's error message */
@@ -270,6 +270,7 @@ main (INT argc, char **argv)
 			break;
 		}
 	}
+
 prompt_for_db:
 
 	/* catch any fault, so we can close database */
