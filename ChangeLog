@@ -1,3 +1,10 @@
+2002-09-26 Perry Rapp
+
+	* ChangeLog src/gedlib/locales.c src/liflines/screen.c:
+
+	i18n menu page title.
+	Fix locales.c to call llsetlocale (for win32 fix for locale names).
+
 2002-09-25 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llines.rc src/hdrs/version.h

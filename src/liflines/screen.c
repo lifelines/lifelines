@@ -2952,8 +2952,9 @@ output_menu (UIWINDOW uiwin, INT screen, INT bottom, INT width)
 	/* display line across */
 	show_horz_line(uiwin, row++, 0, width);
 	/* display title */
-	sprintf(prompt, "%s            (pg %d/%d)", 
-		_(qSplschs), page+1, pages);
+	llstrncpy(prompt, _(qSplschs), sizeof(prompt), uu8);
+	llstrapp(prompt, sizeof(prompt), uu8, "             ");
+	llstrappf(prompt, sizeof(prompt), uu8, _("(pg %d/%d)"), page+1, pages);
 	mvwaddstr(win, row++, 2, prompt);
 	/* now display all the menu items we can fit on this page */
 	while (1)

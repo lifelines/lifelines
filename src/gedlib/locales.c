@@ -336,7 +336,7 @@ customlocale (STRING prefix)
 	str = getoptstr(option, 0);
 	if (str) {
 		customized_loc = TRUE;
-		str = setlocale(LC_COLLATE, str);
+		str = llsetlocale(LC_COLLATE, str);
 	}
 	if (!str) {
 		/* did user set, eg, UiLocale option ? */
@@ -344,11 +344,11 @@ customlocale (STRING prefix)
 		str = getoptstr(option, 0);
 		if (str) {
 			customized_loc = TRUE;
-			str = setlocale(LC_COLLATE, str);
+			str = llsetlocale(LC_COLLATE, str);
 		}
 		/* nothing set, so try to revert to startup value */
 		if (!str && customized_loc)
-			setlocale(LC_COLLATE, deflocale_coll);
+			llsetlocale(LC_COLLATE, deflocale_coll);
 	}
 #endif /* HAVE_SETLOCALE */
 
