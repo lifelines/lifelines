@@ -123,7 +123,7 @@ void
 initcache (BTREE btree, /* btree handle */
            INT n)       /* num cache blocks to allow */
 {
-	INT i;
+	INT i=0;
 	n = (n < 5) ? 5 : n;
 	bncache(btree) = n;
 	bcache(btree) = (INDEX *) stdalloc(n*sizeof(INDEX));
@@ -136,6 +136,14 @@ initcache (BTREE btree, /* btree handle */
 void
 freecache (BTREE btree)
 {
+	INT i=0;
+	INT n = bncache(btree);
+	for (i=0; i<n; ++i) {
+		if (bcache(btree)[i]) {
+			stdfree(bcache(btree)[i]);
+			bcache(btree)[i] = NULL;
+		}
+	}
 	stdfree(bcache(btree));
 }
 /*============================================

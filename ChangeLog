@@ -9,6 +9,10 @@
 
 	Modify __indi not to crash on empty string.
 
+	* ChangeLog src/btree/index.c
+
+	Free index cache blocks in freecache.
+
 2005-01-23 Perry Rapp
 
 	* ChangeLog src/gedlib/date.c src/stdlib/table.c
