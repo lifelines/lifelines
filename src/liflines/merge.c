@@ -177,7 +177,7 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 			break;
 		}
 		if (!valid_indi_old(indi4, &msg, indi3)) {
-			if (ask_yes_or_no_msg(msg, qSiredit)) {
+			if (ask_yes_or_no_msg(msg, _(qSiredit))) {
 				do_edit();
 				continue;
 			}

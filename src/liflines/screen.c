@@ -1963,7 +1963,7 @@ invoke_extra_menu (void)
 	activate_uiwin(uiwin);
 
 	while (1) {
-		wmove(win, 1, strlen(qSmn_xttl)+3);
+		wmove(win, 1, strlen(_(qSmn_xttl))+3);
 		code = interact(uiwin, "sex123456q", -1);
 		deactivate_uiwin();
 

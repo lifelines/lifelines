@@ -24,6 +24,10 @@
 
 	More i18n.
 
+	* ChangeLog liflines/merge.c liflines/screen.c stdlib/signals.c:
+
+	Pass 3 overlooked string constants to gettext.
+
 2002-04-25 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog interp/interp.c:

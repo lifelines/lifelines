@@ -167,7 +167,7 @@ on_signals (int sig)
 		signame = sig_msgs[sig];
 	else
 		signame = _(qSsigunk);
-	sprintpic2(msg, sizeof(msg), qSsignal, signum, signame); 
+	sprintpic2(msg, sizeof(msg), _(qSsignal), signum, signame); 
 	ll_abort(msg);
 }
 /*================================
