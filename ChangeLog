@@ -9,6 +9,10 @@
 	Capture user's most likely codeset at startup.
 	Add 'Q' option on main menu to select a new database.
 
+	*NEW arch/langinfo.c:
+
+	Implementation of nl_langinfo for platforms lacking such.
+
 2002-06-10 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog hdrs/standard.h:
