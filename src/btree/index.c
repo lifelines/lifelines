@@ -32,11 +32,13 @@
 #include "standard.h"
 #include "btree.h"
 
+static INT incache (BTREE, FKEY);
+
 /*======================================
  * crtindex - Create new index for btree
  *====================================*/
-INDEX crtindex (btree)
-BTREE btree;
+INDEX
+crtindex (BTREE btree)
 {
 	INDEX index;
 	ASSERT(bwrite(btree));
@@ -55,9 +57,9 @@ BTREE btree;
 /*=================================
  * readindex - Read index from file
  *===============================*/
-INDEX readindex (basedir, ikey)
-STRING basedir;  /* basedir of btree */
-FKEY ikey;       /* index file key */
+INDEX
+readindex (STRING basedir,  /* basedir of btree */
+           FKEY ikey)       /* index file key */
 {
 	FILE *fp;
 	INDEX index;
@@ -75,9 +77,9 @@ FKEY ikey;       /* index file key */
 /*=================================
  * writeindex - Write index to file
  *===============================*/
-void writeindex (basedir, index)
-STRING basedir; /* base directory of btree */
-INDEX index;    /* index block */
+void
+writeindex (STRING basedir, /* base directory of btree */
+            INDEX index)    /* index block */
 {
 	FILE *fp;
 	char scratch[200];
@@ -89,9 +91,9 @@ INDEX index;    /* index block */
 /*==============================================
  * initcache -- Initialize index cache for btree
  *============================================*/
-void initcache (btree, n)
-BTREE btree; /* btree handle */
-INT n;       /* num cache blocks to allow */
+void
+initcache (BTREE btree, /* btree handle */
+           INT n)       /* num cache blocks to allow */
 {
 	INT i;
 	n = (n < 5) ? 5 : n;
@@ -103,8 +105,9 @@ INT n;       /* num cache blocks to allow */
 /*============================================
  * cacheindex -- Place INDEX or BLOCK in cache
  *==========================================*/
-BOOLEAN cacheindex (BTREE btree, /* btree handle */
-		    INDEX index) /* INDEX or BLOCK */
+BOOLEAN
+cacheindex (BTREE btree, /* btree handle */
+            INDEX index) /* INDEX or BLOCK */
 {
 	INT n = bncache(btree);
 	INDEX *indices = bcache(btree);
@@ -124,9 +127,9 @@ BOOLEAN cacheindex (BTREE btree, /* btree handle */
 /*================================
  * getindex - Get index from btree
  *==============================*/
-INDEX getindex (btree, fkey)
-BTREE btree;
-FKEY fkey;
+INDEX
+getindex (BTREE btree,
+          FKEY fkey)
 {
 	INT j;
 	INDEX index;
@@ -142,9 +145,9 @@ FKEY fkey;
 /*=====================================
  * putindex -- Put out index - cache it
  *===================================*/
-void putindex (btree, index)
-BTREE btree;
-INDEX index;
+void
+putindex (BTREE btree,
+          INDEX index)
 {
 	writeindex(bbasedir(btree), index);
 	if (iself(index) == iself(bmaster(btree))) return;
@@ -153,18 +156,18 @@ INDEX index;
 /*=================================================
  * putheader -- Cache block header - don't write it
  *===============================================*/
-void putheader (btree, block)
-BTREE btree;
-BLOCK block;
+void
+putheader (BTREE btree,
+           BLOCK block)
 {
 	cacheindex(btree, (INDEX) block);
 }
 /*============================================================
  * incache -- If INDEX is in cache return index else return -1
  *==========================================================*/
-INT incache (btree, fkey)
-BTREE btree;
-FKEY fkey;
+static INT
+incache (BTREE btree,
+         FKEY fkey)
 {
 	INT i, n = bncache(btree);
 	INDEX index, *indices = bcache(btree);

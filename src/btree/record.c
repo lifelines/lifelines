@@ -37,11 +37,11 @@
 /*=================================
  * addrecord -- Add record to BTREE
  *===============================*/
-BOOLEAN addrecord (btree, rkey, record, len)
-BTREE btree;	/* btree to add record to */
-RKEY rkey;	/* key of record */
-RECORD record;	/* record to add */
-INT len;	/* record length */
+BOOLEAN
+addrecord (BTREE btree,         /* btree to add record to */
+           RKEY rkey,           /* key of record */
+           RECORD record,       /* record to add */
+           INT len)             /* record length */
 {
 	INDEX index;
 	BLOCK old, new, xtra;
@@ -255,9 +255,10 @@ splitting:
 /*======================================================
  * filecopy -- Copy record from one data file to another
  *====================================================*/
-void filecopy (fo, len, fn)
-FILE *fo, *fn;
-INT len;
+void
+filecopy (FILE *fo,
+          INT len,
+          FILE *fn)
 {
 	char buffer[BUFLEN];
 	while (len >= BUFLEN) {
@@ -273,10 +274,10 @@ INT len;
 /*===================================
  * getrecord -- Get record from BTREE
  *=================================*/
-RECORD getrecord (btree, rkey, plen)
-BTREE btree;
-RKEY rkey;
-INT *plen;
+RECORD
+getrecord (BTREE btree,
+           RKEY rkey,
+           INT *plen)
 {
 	INDEX index;
 	SHORT i, n, lo, hi;
@@ -343,8 +344,9 @@ INT *plen;
 /*=======================================
  * movefiles -- Move first file to second
  *=====================================*/
-void movefiles (from, to)
-STRING from, to;
+void
+movefiles (STRING from,
+           STRING to)
 {
 	unlink(to);
 	rename(from, to);
@@ -352,9 +354,9 @@ STRING from, to;
 /*====================================================
  * isrecord -- See if there is a record with given key
  *==================================================*/
-BOOLEAN isrecord (btree, rkey)
-BTREE btree;
-RKEY rkey;
+BOOLEAN
+isrecord (BTREE btree,
+          RKEY rkey)
 {
 	INDEX index;
 	SHORT i, n, lo, hi;

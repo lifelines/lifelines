@@ -26,18 +26,18 @@
 
 extern int opt_finnish;
 
-int ll_strcmp(str1, str2)
-	char *str1;
-	char *str2;
+int
+ll_strcmp(char *str1,
+          char *str2)
 {
 	if(opt_finnish) return(MY_STRCMP(str1, str2));
 	return(strcmp(str1, str2));
 }
 
-int ll_strncmp(str1, str2, len)
-	char *str1;
-	char *str2;
-	int len;
+int
+ll_strncmp(char *str1,
+           char *str2,
+           int len)
 {
 	if(opt_finnish) return(MY_STRNCMP(str1, str2, len));
 	return(strncmp(str1, str2, len));

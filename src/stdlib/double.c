@@ -34,7 +34,8 @@
 /*===========================
  * create_list -- Create list
  *=========================*/
-LIST create_list (void)
+LIST
+create_list (void)
 {
 	LIST list = (LIST) stdalloc(sizeof(*list));
 	lfirst(list) = llast(list) = NULL;
@@ -44,18 +45,18 @@ LIST create_list (void)
 /*===============================
  * set_list_type -- Set list type
  *=============================*/
-void set_list_type (list, type)
-LIST list;
-INT type;
+void
+set_list_type (LIST list,
+               int type)
 {
 	ltype(list) = type;
 }
 /*===========================
  * remove_list -- Remove list
  *=========================*/
-void remove_list (list, func)
-LIST list;
-int (*func)();
+void
+remove_list (LIST list,
+             int (*func)(WORD))
 {
 	LNODE lnode0, lnode;
 	if (!list) return;
@@ -71,10 +72,10 @@ int (*func)();
 /*===========================
  * in_list -- see if in list
  *=========================*/
-BOOLEAN in_list (list, el, func)
-LIST list;
-WORD el;
-int (*func)();
+BOOLEAN
+in_list (LIST list,
+         WORD el,
+         int (*func)(WORD, WORD))
 {
 	LNODE lnode;
 	if (!list) return FALSE;
@@ -88,8 +89,8 @@ int (*func)();
 /*===================================
  * make_list_empty -- Make list empty
  *=================================*/
-void make_list_empty (list)
-LIST list;
+void
+make_list_empty (LIST list)
 {
 	LNODE lnode0, lnode;
 	BOOLEAN free;
@@ -108,17 +109,17 @@ LIST list;
 /*===================================
  * empty_list -- Check for empty list
  *=================================*/
-BOOLEAN empty_list (list)
-LIST list;
+BOOLEAN
+empty_list (LIST list)
 {
 	return !lfirst(list);
 }
 /*==================================
  * push_list -- Push element on list
  *================================*/
-void push_list (list, el)
-LIST list;
-WORD el;
+void
+push_list (LIST list,
+           WORD el)
 {
 	LNODE node = (LNODE) stdalloc(sizeof(*node));
 	lelement(node) = el;
@@ -135,9 +136,9 @@ WORD el;
 /*=========================================
  * back_list -- Put element on back of list
  *=======================================*/
-void back_list (list, el)
-LIST list;
-WORD el;
+void
+back_list (LIST list,
+           WORD el)
 {
 	LNODE node = (LNODE) stdalloc(sizeof(*node));
 	lelement(node) = el;
@@ -154,8 +155,8 @@ WORD el;
 /*==================================
  * pop_list -- Pop element from list
  *================================*/
-WORD pop_list (list)
-LIST list;
+WORD
+pop_list (LIST list)
 {
 	LNODE node;
 	WORD el;
@@ -173,17 +174,17 @@ LIST list;
 /*========================================
  * enqueue_list -- Enqueue element on list
  *======================================*/
-void enqueue_list (list, el)
-LIST list;
-WORD el;
+void
+enqueue_list (LIST list,
+              WORD el)
 {
 	push_list(list, el);
 }
 /*==========================================
  * dequeue_list -- Dequeue element from list
  *========================================*/
-WORD dequeue_list (list)
-LIST list;
+WORD
+dequeue_list (LIST list)
 {
 	LNODE node;
 	WORD el;
@@ -201,9 +202,9 @@ LIST list;
 /*=================================================
  * nth_in_list -- Find nth node in list, relative 1
  *===============================================*/
-static LNODE nth_in_list (list, n)
-LIST list;
-INT n;
+static LNODE
+nth_in_list (LIST list,
+             INT n)
 {
 	INT i = 1;
 	LNODE node = llast(list);
@@ -219,10 +220,10 @@ INT n;
 /*==================================================
  * set_list_element - Set element using array access
  *================================================*/
-void set_list_element (list, ind, val)
-LIST list;
-INT ind;
-WORD val;
+void
+set_list_element (LIST list,
+                  INT ind,
+                  WORD val)
 {
 	LNODE node = nth_in_list(list, ind);
 	lelement(node) = val;
@@ -230,9 +231,9 @@ WORD val;
 /*=======================================================
  * get_list_element - Retrieve element using array access
  *=====================================================*/
-WORD get_list_element (list, ind)
-LIST list;
-INT ind;
+WORD
+get_list_element (LIST list,
+                  INT ind)
 {
 	LNODE node = nth_in_list(list, ind);
 	return lelement(node);
@@ -240,8 +241,8 @@ INT ind;
 /*==================================
  * length_list -- Return list length
  *================================*/
-INT length_list (list)
-LIST list;
+INT
+length_list (LIST list)
 {
 	LNODE node;
 	INT len = 0;

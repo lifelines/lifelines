@@ -33,7 +33,8 @@
 /*========================================
  * allocblock -- Allocate memory for BLOCK
  *======================================*/
-BLOCK allocblock (void)
+BLOCK
+allocblock (void)
 {
 	BLOCK block = (BLOCK) stdalloc(BUFLEN);
 	itype(block) = BTBLOCKTYPE;
@@ -45,8 +46,8 @@ BLOCK allocblock (void)
 /*=======================================
  * crtblock -- Create new BLOCK for BTREE
  *=====================================*/
-BLOCK crtblock (btree)
-BTREE btree;  /*btree handle*/
+BLOCK
+crtblock (BTREE btree)  /*btree handle*/
 {
 	BLOCK block;
 	ASSERT(bwrite(btree));

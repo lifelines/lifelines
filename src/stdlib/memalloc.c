@@ -35,14 +35,15 @@ static BOOLEAN logopen = FALSE;
 FILE *log = NULL;
 extern BOOLEAN alloclog;
 static char scratch[80];
+static void alloc_out(STRING str);
 
 /*=================================================
  * __allocate -- Allocate memory - used by sdtalloc
  *===============================================*/
-void *__allocate (len, file, line)
-int len;	/* num of bytes to alloc */
-STRING file;	/* file requesting */
-int line;	/* line num in file */
+void *
+__allocate (int len,       /* num of bytes to alloc */
+            STRING file,   /* file requesting */
+            int line)      /* line num in file */
 {
 	char *p;
 	int i;
@@ -64,10 +65,10 @@ int line;	/* line num in file */
 /*====================================================
  * __deallocate -- Deallocate memory - used by sdtfree
  *==================================================*/
-void __deallocate (ptr, file, line)
-void *ptr;	/* memory to return */
-STRING file;	/* file returning */
-int line;	/* line num in file */
+void
+__deallocate (void *ptr,      /* memory to return */
+              STRING file,    /* file returning */
+              int line)       /* line num in file */
 {
 	if (alloclog) {
 		sprintf(scratch, "%8p F %s\t%d", ptr, file, line);
@@ -78,8 +79,8 @@ int line;	/* line num in file */
 /*=======================================
  * alloc_out -- Output allocation message
  *=====================================*/
-void alloc_out (str)
-STRING str;
+static void
+alloc_out (STRING str)
 {
 	if (!alloclog) return;
 	if (!logopen) {

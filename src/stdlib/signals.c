@@ -65,12 +65,14 @@ char *sig_msgs[] = {
 };
 #define NUM_SIGNALS (sizeof(sig_msgs)/sizeof(sig_msgs[0]))
 
+static void on_signals();
+
 /*======================================
  * set_signals -- Install signal handler
  *====================================*/
-void set_signals (void)
+void
+set_signals (void)
 {
-	extern void on_signals();
 	if (signal(SIGINT, SIG_IGN) != SIG_IGN)
 		signal(SIGINT, on_signals);
 #ifdef SIGHUP
@@ -98,8 +100,8 @@ void set_signals (void)
 /*======================================
  * on_signals -- Catch and handle signal
  *====================================*/
-void on_signals (sig)
-int sig;
+static void
+on_signals (int sig)
 {
 	extern BOOLEAN progrunning;
 	extern PNODE Pnode;
@@ -116,8 +118,8 @@ int sig;
 	ll_abort(sig);
 }
 
-void ll_abort(sig)
-	int sig;
+void
+ll_abort(int sig)
 {
 	int c;
 	fprintf(stdout,"\nAborting on signal %d\nCore dump? [y/n]",sig);

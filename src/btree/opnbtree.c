@@ -41,10 +41,10 @@
 /*============================================
  * openbtree -- Alloc and init BTREE structure
  *==========================================*/
-BTREE openbtree (dir, cflag, writ)
-STRING dir;	/* btree base dir */
-BOOLEAN cflag;	/* create btree if no exist? */
-BOOLEAN writ;	/* requesting write access? */
+BTREE
+openbtree (STRING dir,          /* btree base dir */
+           BOOLEAN cflag,       /* create btree if no exist? */
+           BOOLEAN writ)        /* requesting write access? */
 {
 	BTREE btree;
 	char scratch[200];
@@ -128,8 +128,8 @@ BOOLEAN writ;	/* requesting write access? */
 /*==================================
  * initbtree -- Initialize new BTREE
  *================================*/
-BOOLEAN initbtree (basedir)
-STRING basedir;
+BOOLEAN
+initbtree (STRING basedir)
 {
 	KEYFILE kfile;
 	INDEX master;
@@ -206,8 +206,8 @@ STRING basedir;
 /*=====================================================
  * llmkdir -- Make directory (some UNIXes have a mkdir)
  *===================================================*/
-int llmkdir (dir)
-STRING dir;	/* dir to create */
+int
+llmkdir (STRING dir)    /* dir to create */
 {
 	static int status;
 #ifdef OBSOLETE_CODE
@@ -233,8 +233,8 @@ STRING dir;	/* dir to create */
  *=================================*/
 #define exists(p)  (!(*p) || access((p),00) == 0)
 
-BOOLEAN mkalldirs (path)
-char  *path;	/* path with dirs to be made */
+BOOLEAN
+mkalldirs (char  *path) /* path with dirs to be made */
 {
 	int i, n;
 	char *p = path;
@@ -254,8 +254,8 @@ char  *path;	/* path with dirs to be made */
 /*==========================
  * closebtree -- Close BTREE
  *========================*/
-BOOLEAN closebtree (btree)
-BTREE btree;
+BOOLEAN
+closebtree (BTREE btree)
 {
     FILE *fp;
     KEYFILE kfile;

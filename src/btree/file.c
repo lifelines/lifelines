@@ -35,10 +35,10 @@
 /*=========================================
  * addfile -- Add record to btree from file
  *=======================================*/
-BOOLEAN addfile (btree, rkey, file)
-BTREE btree;	/* btree to add to */
-RKEY rkey;	/* key of new record */
-STRING file;	/* file with new record */
+BOOLEAN
+addfile (BTREE btree,   /* btree to add to */
+         RKEY rkey,     /* key of new record */
+         STRING file)   /* file with new record */
 {
 	FILE *fp;
 	STRING mem = 0;
@@ -75,10 +75,10 @@ STRING file;	/* file with new record */
 /*===================================================
  * getfile -- Get record from btree and write to file
  *=================================================*/
-BOOLEAN getfile (btree, rkey, file)
-BTREE btree;	/* btree to get from */
-RKEY rkey;	/* key of record */
-STRING file;	/* file to write to */
+BOOLEAN
+getfile (BTREE btree,    /* btree to get from */
+         RKEY rkey,      /* key of record */
+         STRING file)    /* file to write to */
 {
 	FILE *fp;
 	INT len;

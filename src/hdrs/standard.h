@@ -194,7 +194,6 @@ void back_list(LIST, WORD);
 
 void *__allocate(int, STRING, int);
 void __deallocate(void*, STRING, int);
-void alloc_out(STRING);
 
 void ll_abort(int);
 

@@ -35,8 +35,11 @@
 /*===========================================
  * filepath -- Find file in sequence of paths
  *=========================================*/
-STRING filepath (name, mode, path, ext)
-STRING name, mode, path, ext;
+STRING
+filepath (STRING name,
+          STRING mode,
+          STRING path,
+          STRING  ext)
 {
 	unsigned char buf1[MAXLINELEN], buf2[MAXLINELEN];
 	STRING p, q;
@@ -109,9 +112,12 @@ STRING name, mode, path, ext;
 /*===========================================
  * fopenpath -- Open file using path variable
  *=========================================*/
-FILE *fopenpath (name, mode, path, ext, pfname)
-STRING name, mode, path, ext;
-STRING *pfname;
+FILE *
+fopenpath (STRING name,
+           STRING mode,
+           STRING path,
+           STRING ext,
+           STRING *pfname)
 {
 	STRING str;
 	if(pfname) *pfname = NULL;
@@ -122,8 +128,8 @@ STRING *pfname;
 /*=================================================
  * lastpathname -- Return last componenet of a path
  *===============================================*/
-STRING lastpathname (path)
-STRING path;
+STRING
+lastpathname (STRING path)
 {
 	static unsigned char scratch[MAXLINELEN+1];
 	INT len, c;

@@ -36,8 +36,8 @@ INT bterrno = 0;
 /*=========================================
  * rkey2str -- Convert record key to STRING
  *=======================================*/
-STRING rkey2str (rkey)
-RKEY rkey;
+STRING
+rkey2str (RKEY rkey)
 {
 	static unsigned char rbuf[9];
 	SHORT i;
@@ -51,8 +51,8 @@ RKEY rkey;
 /*=========================================
  * str2rkey -- Convert STRING to record key
  *=======================================*/
-RKEY str2rkey (str)
-STRING str;
+RKEY
+str2rkey (STRING str)
 {
 	RKEY rkey;
 	SHORT i = 0, n = strlen(str);
@@ -69,8 +69,8 @@ STRING str;
 /*======================================
  * path2fkey -- Convert path to file key
  *====================================*/
-FKEY path2fkey (path)
-STRING path;
+FKEY
+path2fkey (STRING path)
 {
 	SHORT hi = (path[0] -'a')*26 + path[1] - 'a';
 	SHORT lo = (path[3] -'a')*26 + path[4] - 'a';
@@ -79,8 +79,8 @@ STRING path;
 /*======================================
  * fkey2path -- Convert file key to path
  *====================================*/
-STRING fkey2path (fkey)
-FKEY fkey;
+STRING
+fkey2path (FKEY fkey)
 {
 	static unsigned char path[6];
 	SHORT hi = (fkey & 0xffff0000) >> 16;
@@ -96,8 +96,8 @@ FKEY fkey;
 /*==============================================
  * nextfkey -- Increment next file key for BTREE
  *============================================*/
-void nextfkey (btree)
-BTREE btree;
+void
+nextfkey (BTREE btree)
 {
 	FKEY fkey = btree->b_kfile.k_fkey;
 	SHORT hi = (fkey & 0xffff0000) >> 16;
@@ -121,9 +121,9 @@ BTREE btree;
 /*==========================================
  * newmaster -- Change master index of BTREE
  *========================================*/
-BOOLEAN newmaster (btree, master)
-BTREE btree;  /*btree handle*/
-INDEX master;
+BOOLEAN
+newmaster (BTREE btree,  /*btree handle*/
+           INDEX master)
 {
 	btree->b_kfile.k_mkey = iself(master);
 	rewind(btree->b_kfp);

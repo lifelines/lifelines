@@ -32,12 +32,14 @@
 #include "standard.h"
 #include "sequence.h"
 
+static BOOLEAN fndel (SEQUENCE seq, ELEMENT val, INT *loc);
+
 INT seqerr = NONE;
 /*==========================
  * crtseq -- Create sequence
  *========================*/
-SEQUENCE crtseq (inc)
-INT inc;	/* incr length */
+SEQUENCE
+crtseq (int inc) /* incr length */
 {
 	SEQUENCE seq = (SEQUENCE) stdalloc(sizeof *seq);
 	seqerr = NONE;
@@ -53,8 +55,8 @@ INT inc;	/* incr length */
 /*==========================
  * rmvseq -- Remove sequence
  *========================*/
-void rmvseq (seq)
-SEQUENCE seq;
+void
+rmvseq (SEQUENCE seq)
 {
 	stdfree(Data(seq));
 	stdfree(seq);
@@ -62,8 +64,8 @@ SEQUENCE seq;
 /*========================
  * cpyseq -- Copy sequence
  *======================*/
-SEQUENCE cpyseq (seq)
-SEQUENCE seq;
+SEQUENCE
+cpyseq (SEQUENCE seq)
 {
 	INT i, n;
 	SEQUENCE new = (SEQUENCE) stdalloc(sizeof *new);
@@ -78,10 +80,10 @@ SEQUENCE seq;
 /*=====================================
  * insseq -- Insert element in sequence
  *===================================*/
-SEQUENCE insseq (seq, idx, el)
-SEQUENCE seq;	/* sequence */
-INT idx;	/* index of el */
-ELEMENT el;	/* value of el */
+SEQUENCE
+insseq (SEQUENCE seq,   /* sequence */
+        INT idx,        /* index of el */
+        ELEMENT el)     /* value of el */
 {
 	INT i, n;
 	ELEMENT *d;
@@ -100,9 +102,9 @@ ELEMENT el;	/* value of el */
 /*======================================
  * elseq -- Select element from sequence
  *====================================*/
-ELEMENT elseq (seq, idx)
-SEQUENCE seq;	/* sequence */
-INT idx;	/* index */
+ELEMENT
+elseq (SEQUENCE seq,   /* sequence */
+       INT idx)        /* index */
 {
 	seqerr = NONE;
 	if (idx < 0 || idx >= Size(seq))  {
@@ -114,10 +116,10 @@ INT idx;	/* index */
 /*=====================================
  * altseq -- Change element in sequence
  *===================================*/
-SEQUENCE altseq (seq, idx, new)
-SEQUENCE seq;	/* sequence */
-INT idx;	/* index */
-ELEMENT new;	/* new value */
+SEQUENCE
+altseq (SEQUENCE seq,   /* sequence */
+        INT idx,        /* index */
+        ELEMENT new)    /* new value */
 {
 	seqerr = NONE;
 	if (idx < 0 || idx >= Size(seq))  {
@@ -130,9 +132,9 @@ ELEMENT new;	/* new value */
 /*==================================================
  * delseq -- Remove and return element from sequence
  *================================================*/
-ELEMENT delseq (seq, val)
-SEQUENCE seq;	/* sequence */
-ELEMENT val;	/* el value */
+ELEMENT
+delseq (SEQUENCE seq,   /* sequence */
+        ELEMENT val)    /* el value */
 {
 	INT i, n, loc;
 	ELEMENT el, *d;
@@ -152,9 +154,9 @@ ELEMENT val;	/* el value */
 /*===============================================
  * hinsseq -- Insert new element at sequence head
  *=============================================*/
-SEQUENCE hinsseq (seq, el)
-SEQUENCE seq;	/* sequence */
-ELEMENT el;	/* element */
+SEQUENCE
+hinsseq (SEQUENCE seq,   /* sequence */
+         ELEMENT el)     /* element */
 {
 	INT i, n;
 	ELEMENT *old = Data(seq);
@@ -177,9 +179,9 @@ ELEMENT el;	/* element */
 /*==================================================
  * tinsseq -- Insert new element at tail of sequence
  *================================================*/
-SEQUENCE tinsseq (seq, el)
-SEQUENCE seq;
-ELEMENT el;
+SEQUENCE
+tinsseq (SEQUENCE seq,
+         ELEMENT el)
 {
 	INT i, n;
 	ELEMENT *old = Data(seq);
@@ -198,8 +200,8 @@ ELEMENT el;
 /*=======================================================
  *  hdelseq -- Remove and return element at sequence head
  *=====================================================*/
-ELEMENT hdelseq (seq)
-SEQUENCE seq;
+ELEMENT
+hdelseq (SEQUENCE seq)
 {
 	INT i, n;
 	ELEMENT e, *d;
@@ -218,8 +220,8 @@ SEQUENCE seq;
 /*======================================================
  * tdelseq -- Remove and return element at sequence tail
  *====================================================*/
-ELEMENT tdelseq (seq)
-SEQUENCE seq;
+ELEMENT
+tdelseq (SEQUENCE seq)
 {
 	seqerr = NONE;
 	if (Size(seq) == 0)  {
@@ -231,9 +233,9 @@ SEQUENCE seq;
 /*======================================================
  * sinsseq -- Insert item to sorted location in sequence
  *====================================================*/
-SEQUENCE sinsseq (seq, el)
-SEQUENCE seq;	/* sequence */
-ELEMENT el;	/* element */
+SEQUENCE
+sinsseq (SEQUENCE seq,   /* sequence */
+         ELEMENT el)     /* element */
 {
 	INT i, *d;
 	(void) tinsseq(seq, (ELEMENT) 0);
@@ -249,10 +251,10 @@ ELEMENT el;	/* element */
 /*=====================================================
  * fndel -- Search sequence for value - return location
  *===================================================*/
-BOOLEAN fndel (seq, val, loc)
-SEQUENCE seq;	/* sequence */
-ELEMENT val;	/* element value */
-INT *loc;	/* index if found */
+static BOOLEAN
+fndel (SEQUENCE seq,   /* sequence */
+       ELEMENT val,    /* element value */
+       INT *loc)       /* index if found */
 {
 	INT i, n, *d;
 	d = Data(seq);
@@ -269,10 +271,10 @@ INT *loc;	/* index if found */
 /*===========================================================
  * sfndel -- Search sorted sequence for key - return location
  *=========================================================*/
-BOOLEAN sfndel (seq, key, loc)
-SEQUENCE seq;	/* sequence */
-ELEMENT key;	/* search key */
-INT *loc;	/* index if found */
+BOOLEAN
+sfndel (SEQUENCE seq,   /* sequence */
+        ELEMENT key,    /* search key */
+        INT *loc)       /* index if found */
 {
 	INT lo, hi, md, v;
 	ELEMENT *d = Data(seq);
@@ -294,8 +296,9 @@ INT *loc;	/* index if found */
 /*===============================================
  * joinseq -- Join two sequences - first modified
  *=============================================*/
-SEQUENCE joinseq (seq1, seq2)
-SEQUENCE seq1, seq2;
+SEQUENCE
+joinseq (SEQUENCE seq1,
+         SEQUENCE seq2)
 {
 	INT i, n = Size(seq2);
 	for (i = 0;  i < n;  i++)

@@ -1,5 +1,12 @@
 2000-11-06  Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* btree/addkey.c btree/block.c btree/file.c btree/index.c
+	btree/opnbtree.c btree/record.c btree/traverse.c btree/utils.c
+	hdrs/btree.h hdrs/standard.h stdlib/assert.c stdlib/double.c
+	stdlib/llstrcmp.c stdlib/memalloc.c stdlib/mystring.c
+	stdlib/path.c stdlib/sequence.c stdlib/signals.c stdlib/stdstrng.c
+	stdlib/table.c: Convert from K&R to ANSI C.
+
 	* btree/opnbtree.c gedlib/charmaps.c gedlib/choose.c
 	gedlib/editmap.c gedlib/gedcom.c gedlib/keytonod.c gedlib/node.c
 	gedlib/translat.c interp/alloc.c interp/builtin.c interp/eval.c

@@ -36,8 +36,8 @@
 /*======================
  * hash -- Hash function
  *====================*/
-static INT hash (key)
-STRING key;
+static INT
+hash (STRING key)
 {
 	INT hval = 0;
 	while (*key)
@@ -50,9 +50,9 @@ STRING key;
 /*================================
  * fndentry -- Find entry in table
  *==============================*/
-static ENTRY fndentry (tab, key)
-TABLE tab;
-STRING key;
+static ENTRY
+fndentry (TABLE tab,
+          STRING key)
 {
 	ENTRY entry;
 	if (!tab || !key) return NULL;
@@ -66,7 +66,8 @@ STRING key;
 /*=============================
  * create_table -- Create table
  *===========================*/
-TABLE create_table (void)
+TABLE
+create_table (void)
 {
 	TABLE tab = (TABLE) stdalloc(MAXHASH*sizeof(ENTRY));
 	INT i;
@@ -77,10 +78,10 @@ TABLE create_table (void)
 /*======================================
  * insert_table -- Insert entry in table
  *====================================*/
-void insert_table (tab, key, val)
-TABLE tab;
-STRING key;
-WORD val;
+void
+insert_table (TABLE tab,
+              STRING key,
+              WORD val)
 {
 	ENTRY entry = fndentry(tab, key);
 	if (entry)
@@ -97,9 +98,9 @@ WORD val;
 /*==========================================
  * delete_table -- Remove element from table
  *========================================*/
-void delete_table (tab, key)
-TABLE tab;
-STRING key;
+void
+delete_table (TABLE tab,
+              STRING key)
 {
 	INT hval = hash(key);
 	ENTRY prev = NULL;
@@ -118,18 +119,18 @@ STRING key;
 /*======================================
  * in_table() - Check for entry in table
  *====================================*/
-BOOLEAN in_table (tab, key)
-TABLE tab;
-STRING key;
+BOOLEAN
+in_table (TABLE tab,
+          STRING key)
 {
 	return fndentry(tab, key) != NULL;
 }
 /*===============================
  * valueof -- Find value of entry
  *=============================*/
-WORD valueof (tab, key)
-TABLE tab;
-STRING key;
+WORD
+valueof (TABLE tab,
+         STRING key)
 {
 	ENTRY entry;
 	if (!key) return NULL;
@@ -141,10 +142,10 @@ STRING key;
 /*===================================
  * valueofbool -- Find value of entry
  *=================================*/
-WORD valueofbool (tab, key, there)
-TABLE tab;
-STRING key;
-BOOLEAN *there;
+WORD
+valueofbool (TABLE tab,
+             STRING key,
+             BOOLEAN *there)
 {
 	ENTRY entry;
 	*there = FALSE;
@@ -158,9 +159,9 @@ BOOLEAN *there;
 /*=============================
  * remove_table -- Remove table
  *===========================*/
-void remove_table (tab, rcode)
-TABLE tab;
-INT rcode;
+void
+remove_table (TABLE tab,
+              INT rcode)
 {
 	INT i;
 	ENTRY ent, nxt;
@@ -187,9 +188,9 @@ INT rcode;
 /*=================================================
  * traverse_table -- Traverse table doing something
  *===============================================*/
-void traverse_table (tab, tproc)
-TABLE tab;
-INT (*tproc)();
+void
+traverse_table (TABLE tab,
+                INT (*tproc)(ENTRY))
 {
 	INT i;
 	ENTRY ent, nxt;

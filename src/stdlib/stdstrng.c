@@ -34,21 +34,24 @@
 #include <ctype.h>
 #endif
 
+#include "mystring.h"
+
 extern BOOLEAN opt_finnish;
 
 /*===============================
  * strsave -- Save copy of string
  *=============================*/
-STRING strsave (str)
-STRING str;
+STRING
+strsave (STRING str)
 {
 	return strcpy(stdalloc(strlen(str) + 1), str);
 }
 /*==================================
  * strconcat -- Catenate two strings
  *================================*/
-STRING strconcat (s1, s2)
-STRING s1, s2;
+STRING
+strconcat (STRING s1,
+           STRING s2)
 {
 	INT c, len;
 	STRING s3, p;
@@ -64,8 +67,8 @@ STRING s1, s2;
 /*==================================
  * chartype -- Return character type
  *================================*/
-INT chartype (c)
-INT c;
+INT
+chartype (INT c)
 {
 #ifndef OS_NOCTYPE
 	if ( isspace(c) )
@@ -96,8 +99,8 @@ INT c;
 /*=================================
  * iswhite -- Check for white space
  *===============================*/
-BOOLEAN iswhite (c)
-INT c;
+BOOLEAN
+iswhite (INT c)
 {
 #ifndef OS_NOCTYPE
 	return( isspace(c) );
@@ -109,8 +112,8 @@ INT c;
 /*=============================
  * isletter -- Check for letter
  *===========================*/
-BOOLEAN isletter (c)
-INT c;
+BOOLEAN
+isletter (INT c)
 {
     	if(opt_finnish) return(my_isalpha(c));
 #ifndef OS_NOCTYPE
@@ -124,8 +127,8 @@ INT c;
 /*=========================================
  * isnumeric -- Check string for all digits
  *=======================================*/
-BOOLEAN isnumeric (str)
-STRING str;
+BOOLEAN
+isnumeric (STRING str)
 {
 	INT c;
 	if (!str) return FALSE;
@@ -141,8 +144,8 @@ STRING str;
 /*======================================
  * lower -- Convert string to lower case
  *====================================*/
-STRING lower (str)
-STRING str;
+STRING
+lower (STRING str)
 {
 	static unsigned char scratch[MAXLINELEN+1];
 	STRING p = scratch;
@@ -155,8 +158,8 @@ STRING str;
 /*======================================
  * upper -- Convert string to upper case
  *====================================*/
-STRING upper (str)
-STRING str;
+STRING
+upper (STRING str)
 {
 	static unsigned char scratch[MAXLINELEN+1];
 	STRING p = scratch;
@@ -169,8 +172,8 @@ STRING str;
 /*================================
  * capitalize -- Capitalize string
  *==============================*/
-STRING capitalize (str)
-STRING str;
+STRING
+capitalize (STRING str)
 {
 	STRING p = lower(str);
 	*p = ll_toupper(*p);
@@ -179,8 +182,8 @@ STRING str;
 /*==========================================
  * ll_toupper -- Convert letter to uppercase
  *========================================*/
-INT ll_toupper (c)
-INT c;
+INT
+ll_toupper (INT c)
 {
         if(opt_finnish) return(my_toupper(c));
 #ifndef OS_NOCTYPE
@@ -194,8 +197,8 @@ INT c;
 /*==========================================
  * ll_tolower -- Convert letter to lowercase
  *========================================*/
-INT ll_tolower (c)
-INT c;
+INT
+ll_tolower (INT c)
 {
         if(opt_finnish) return(my_toupper(c));
 #ifndef OS_NOCTYPE
@@ -209,9 +212,8 @@ INT c;
 /*================================
  * trim -- Trim string if too long
  *==============================*/
-STRING trim (str, len)
-STRING str;
-INT len;
+STRING
+trim (STRING str, INT len)
 {
 	static unsigned char scratch[MAXLINELEN+1];
 	if (!str || strlen(str) > MAXLINELEN) return NULL;

@@ -348,38 +348,45 @@ const int my_ISO_Latin1_Finnish[] = {
 #define islat1(c) (0 <= (c) && (c) <= 255)
 
 
-int my_isalpha (const int c)
+int
+my_isalpha (const int c)
 {
   return (islat1(c) && (ISO_Latin1[c].isup || ISO_Latin1[c].islow));
 }
 
-int my_iscntrl (const int c)
+int
+my_iscntrl (const int c)
 {
   return (islat1(c) && ISO_Latin1[c].iscntrl);
 }
 
-int my_islower (const int c)
+int
+my_islower (const int c)
 {
   return (islat1(c) && ISO_Latin1[c].islow);
 }
 
-int my_isprint (const int c)
+int
+my_isprint (const int c)
 {
   return (islat1(c) && !ISO_Latin1[c].iscntrl);
 }
 
-int my_isupper (const int c)
+int
+my_isupper (const int c)
 {
   return (islat1(c) && ISO_Latin1[c].isup);
 }
 
-int my_tolower (const int c)
+int
+my_tolower (const int c)
 {
   if (islat1(c)) return (ISO_Latin1[c].tolow);
   return c;
 }
 
-int my_toupper (const int c)
+int
+my_toupper (const int c)
 {
   /* BUG: ß is not converted to SS. */
   /* Note that ÿ does not have an   */
@@ -389,7 +396,9 @@ int my_toupper (const int c)
 }
 
 
-int my_chrcmp (const int s1, const int s2)
+int
+my_chrcmp (const int s1,
+           const int s2)
 {
   if (islat1(s1) && islat1(s2)) {
     return (my_ISO_Latin1_Finnish[s1] - my_ISO_Latin1_Finnish[s2]);
@@ -400,9 +409,10 @@ int my_chrcmp (const int s1, const int s2)
 }
 
 
-int my_strcmp (const unsigned char *s1,
-               const unsigned char *s2,
-               const int cmp_table[])
+int
+my_strcmp (const unsigned char *s1,
+           const unsigned char *s2,
+           const int cmp_table[])
 {
   int i;
 
@@ -420,10 +430,11 @@ int my_strcmp (const unsigned char *s1,
   return (cmp_table[s1[i]] - cmp_table[s2[i]]);
 }
 
-int my_strncmp (const unsigned char *s1,
-                const unsigned char *s2,
-                const int n,
-                const int cmp_table[])
+int
+my_strncmp (const unsigned char *s1,
+            const unsigned char *s2,
+            const int n,
+            const int cmp_table[])
 {
   int i;
 
@@ -444,7 +455,9 @@ int my_strncmp (const unsigned char *s1,
 #include <stdio.h>
 #include <stdlib.h>
 
-int cmp (const void *s, const void *t)
+int
+cmp (const void *s,
+     const void *t)
 {
   const unsigned char **s1 = (const unsigned char **)s;
   const unsigned char **s2 = (const unsigned char **)t;

@@ -34,9 +34,9 @@
 /*===============================
  * __fatal -- Fatal error routine
  *=============================*/
-void __fatal (file, line)
-STRING file;
-int line;
+void
+__fatal (STRING file,
+         int line)
 {
 	llwprintf("FATAL: %s: line %d\n", file, line);
 	final_cleanup();
@@ -45,10 +45,10 @@ int line;
 /*============================
  * __assert -- Check assertion
  *==========================*/
-void __assert (exp, file, line)
-BOOLEAN exp;
-STRING file;
-int line;
+void
+__assert (BOOLEAN exp,
+          STRING file,
+          int line)
 {
 	if (exp) return;
 	__fatal(file, line);

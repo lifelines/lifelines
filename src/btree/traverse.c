@@ -30,11 +30,10 @@
 /*========================================
  * traverse - Traverse BTREE, doing things
  *======================================*/
-BOOLEAN traverse (btree, index, ifunc, dfunc)
-BTREE btree;
-INDEX index;
-BOOLEAN (*ifunc)();
-BOOLEAN (*dfunc)();
+BOOLEAN
+traverse (BTREE btree, INDEX index,
+          BOOLEAN (*ifunc)(BTREE, INDEX),
+          BOOLEAN (*dfunc)(BTREE, INDEX))
 {
 	INDEX newdex;
 	STRING bdir = bbasedir(btree);

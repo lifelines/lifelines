@@ -133,7 +133,6 @@ void   initcache(BTREE, INT);
 BOOLEAN cacheindex(BTREE, INDEX);
 void   putindex(BTREE, INDEX);
 void   putheader(BTREE, BLOCK);
-INT    incache(BTREE, FKEY);
 BOOLEAN initbtree(STRING);
 int    llmkdir(STRING);
 BOOLEAN mkalldirs(char *);
