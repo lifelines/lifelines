@@ -480,6 +480,9 @@ SOURCE=..\..\..\interp\yacc.c
 SOURCE=..\llines.ico
 # End Source File
 # End Group
+# Begin Group "Header Files"
+
+# PROP Default_Filter ""
 # Begin Source File
 
 SOURCE=..\..\..\hdrs\arch.h
@@ -499,6 +502,10 @@ SOURCE=..\..\..\btree\btreei.h
 # Begin Source File
 
 SOURCE=..\..\..\hdrs\cache.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\hdrs\win32\curses.h
 # End Source File
 # Begin Source File
 
@@ -523,6 +530,10 @@ SOURCE=..\..\..\gedlib\gedcomi.h
 # Begin Source File
 
 SOURCE=..\..\..\hdrs\gengedc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\hdrs\win32\getopt.h
 # End Source File
 # Begin Source File
 
@@ -612,5 +623,6 @@ SOURCE=..\..\..\hdrs\warehouse.h
 
 SOURCE=..\..\..\interp\yacc.h
 # End Source File
+# End Group
 # End Target
 # End Project
