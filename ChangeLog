@@ -6,6 +6,10 @@
 	Fixes sf bug#1097629 
 	 (Deleting an empty person who is a child will lead to an ASSERT)
 
+	* ChangeLog build/msvc6/llines/lines.rc
+
+	Set win32 version to 3.0.39.15007.
+
 2005-01-07 Matt Emmerton
 
 	* ChangeLog build/autotools/acinclude.m4
