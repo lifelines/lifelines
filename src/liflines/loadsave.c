@@ -85,8 +85,8 @@ static void
 update_rec_count (INT pass, char ctype, STRING tag, INT count)
 {
 	INT offset = 9*pass;
-	STRING numstr=0;
 	char msg[100];
+	STRING numstr=0;
 	INT row=0;
 
 	switch(ctype) {
@@ -152,11 +152,25 @@ import_error_invalid (STRING reason)
 static void
 import_validating (void)
 {
-	llwprintf(_("Checking GEDCOM file for errors.\n"));
+	char msg[100];
+	STRING numstr=0;
+	INT count=0;
+	INT row=0;
 
+	llwprintf(_("Checking GEDCOM file for errors.\n"));
 	clear_rec_counts(0);
-	wfield(6, 1, "     0 Errors");
-	wfield(7, 1, "     0 Warnings");
+
+	numstr = _pl("Error", "Errors", count);
+	row = 6;
+	snprintf(msg, sizeof(msg), "%6d %s", count, numstr);
+	clear_stdout_hseg(row, 1, 70);
+	wfield(row, 1, msg);
+
+	numstr = _pl("Warning", "Warnings", count);
+	row = 7;
+	snprintf(msg, sizeof(msg), "%6d %s", count, numstr);
+	clear_stdout_hseg(row, 1, 70);
+	wfield(row, 1, msg);
 }
 static void
 import_beginning_import (STRING msg)

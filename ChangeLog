@@ -1,12 +1,18 @@
+2005-01-13 Perry Rapp
+
+	* ChangeLog src/liflines/loadsave.c
+
+	Fix initial counts for save (row was wrong and lacked i18n).
+
+	* ChangeLog src/liflines/loadsave.c
+
+	i18n import_validating ("0 Warnings" and "0 Errors")
+
 2005-01-12 Perry Rapp
 
 	* ChangeLog src/gedlib/remove.c
 
 	Fix infinite loop in remove_any_xrefs_node_list.
-
-	* ChangeLog src/liflines/loadsave.c
-
-	Fix initial counts for save (row was wrong and lacked i18n).
 
 2005-01-12 Matt Emmerton
 
