@@ -1932,7 +1932,7 @@ win_list_init (void)
 /*=========================================
  * choose_win -- Choose window to hold list
  *  desiredhgt:  [IN]  would like window to hold this many lines
- *  actualhgt:   [OUT] actual heigth of returned window
+ *  actualhgt:   [OUT] actual height of returned window
  *  list_wins[0] is hgt==6
  *  list_wins[VIEWABLE-1] is hgt==VIEWABLE+5
  *=======================================*/
