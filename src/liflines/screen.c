@@ -1049,6 +1049,8 @@ trans_menu (void)
 {
 	INT code;
 	while (1) {
+		stdout_vis=FALSE;
+		wrefresh(main_win);
 		touchwin(trans_menu_win);
 		wmove(trans_menu_win, 1, 47);
 		wrefresh(trans_menu_win);
