@@ -17,6 +17,10 @@
 
 	Revise and extend user guide section on codesets.
 
+	* ChangeLog src/gedlib/keytonod.c
+
+	Cosmetic: remove obsolete variables from remove_from_cache.
+
 2005-01-29, Perry Rapp
 
 	* ChangeLog src/hdrs/table.h src/stdlib/table.c

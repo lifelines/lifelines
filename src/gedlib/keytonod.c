@@ -1095,8 +1095,7 @@ remove_from_cache_by_key (CNSTRING key)
 static void
 remove_from_cache (CACHE cache, CNSTRING key)
 {
-	CACHEEL cel=0, celnext=0;
-	NODE node=0;
+	CACHEEL cel=0;
 
 	if (!key || *key == 0 || !cache)
 		return;
