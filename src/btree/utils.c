@@ -96,7 +96,7 @@ FKEY fkey;
 /*==============================================
  * nextfkey -- Increment next file key for BTREE
  *============================================*/
-nextfkey (btree)
+void nextfkey (btree)
 BTREE btree;
 {
 	FKEY fkey = btree->b_kfile.k_fkey;
@@ -121,7 +121,7 @@ BTREE btree;
 /*==========================================
  * newmaster -- Change master index of BTREE
  *========================================*/
-newmaster (btree, master)
+BOOLEAN newmaster (btree, master)
 BTREE btree;  /*btree handle*/
 INDEX master;
 {

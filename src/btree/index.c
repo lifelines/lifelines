@@ -75,7 +75,7 @@ FKEY ikey;       /* index file key */
 /*=================================
  * writeindex - Write index to file
  *===============================*/
-writeindex (basedir, index)
+void writeindex (basedir, index)
 STRING basedir; /* base directory of btree */
 INDEX index;    /* index block */
 {
@@ -89,7 +89,7 @@ INDEX index;    /* index block */
 /*==============================================
  * initcache -- Initialize index cache for btree
  *============================================*/
-initcache (btree, n)
+void initcache (btree, n)
 BTREE btree; /* btree handle */
 INT n;       /* num cache blocks to allow */
 {
@@ -143,7 +143,7 @@ FKEY fkey;
 /*=====================================
  * putindex -- Put out index - cache it
  *===================================*/
-putindex (btree, index)
+void putindex (btree, index)
 BTREE btree;
 INDEX index;
 {
@@ -154,7 +154,7 @@ INDEX index;
 /*=================================================
  * putheader -- Cache block header - don't write it
  *===============================================*/
-putheader (btree, block)
+void putheader (btree, block)
 BTREE btree;
 BLOCK block;
 {

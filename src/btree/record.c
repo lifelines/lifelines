@@ -30,6 +30,7 @@
  *   3.0.3 - 07 May 95
  *===========================================================*/
 
+#include <unistd.h>
 #include "standard.h"
 #include "btree.h"
 
@@ -254,7 +255,7 @@ splitting:
 /*======================================================
  * filecopy -- Copy record from one data file to another
  *====================================================*/
-filecopy (fo, len, fn)
+void filecopy (fo, len, fn)
 FILE *fo, *fn;
 INT len;
 {
@@ -342,7 +343,7 @@ INT *plen;
 /*=======================================
  * movefiles -- Move first file to second
  *=====================================*/
-movefiles (from, to)
+void movefiles (from, to)
 STRING from, to;
 {
 	unlink(to);

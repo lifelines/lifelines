@@ -34,12 +34,14 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
-#include "standard.h"
-#include "btree.h"
+#include <sys/wait.h>
+#include <unistd.h>
 #ifdef WIN32
 #include <dir.h>
 #include <io.h>
 #endif
+#include "standard.h"
+#include "btree.h"
 
 /*============================================
  * openbtree -- Alloc and init BTREE structure
@@ -212,11 +214,11 @@ STRING basedir;
 int llmkdir (dir)
 STRING dir;	/* dir to create */
 {
-	static status;
+	static int status;
 #ifndef WIN32
-	register pid;
-	if (pid = fork())
-		while (wait(&status) != pid);
+	register int pid;
+	if ((pid = fork()))
+		while ((wait(&status) != pid));
 	else  {
 		close(2);
 		execl("/bin/mkdir", "mkdir", dir, 0);
