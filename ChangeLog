@@ -28,6 +28,10 @@
 
 	Move null nls implementations to arch.
 
+	* ChangeLog hdrs/llnls.h:
+
+	Fix declaration of gettext replacement implementations.
+
 2002-06-13 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/editvtab.c gedlib/init.c gedlib/names.c
