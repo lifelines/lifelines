@@ -1,4 +1,7 @@
 2000-11-18 Perry Rapp <puddle@users.sourceforge.net>
+	Added win32/hdrs/README
+
+2000-11-18 Perry Rapp <puddle@users.sourceforge.net>
 	gedlib/keytonod.c gedlib/messages.c gedlib/xreffile.c
 	hdrs/gedcom.h
 	liflines/browse.c liflines/screen.c:
